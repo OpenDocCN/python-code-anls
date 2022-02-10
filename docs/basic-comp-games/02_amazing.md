@@ -63,7 +63,7 @@ def get_possible_dirs(row, col, width, length, used):
 ```py
 # 获取某个位置的下一个已访问格子
 def get_next_used(row, col, used):
-    width, length = len(used), len(used[0])
+    length, width  = len(used), len(used[0])
     while True:
         if col != width - 1:
             col += 1
