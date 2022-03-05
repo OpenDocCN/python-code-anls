@@ -36,7 +36,9 @@
 > 
 > 协议：[CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 > 
-> 以斗争求团结则团结存，以妥协求团结则团结亡。——教员
+> 我们哪儿有时间搞这个啊？——片刻
+> 
+> 这好办。你的源码分析看起来不错，但它下一秒就是我的了。——飞龙
 
 * [在线阅读](https://{domain}.apachecn.org)
 * [在线阅读（Gitee）](https://apachecn.gitee.io/doc-template/)
