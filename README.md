@@ -3,34 +3,34 @@
     
     README.md
     
-        {name}：文档中文名
+        ApacheCN Python 源码分析：文档中文名
         {nameEn}：文档英文名
         {urlEn}：文档原始链接
-        {domain}：域名前缀
-        {adminName}：负责人名称
-        {adminUn}：负责人 Github 用户名
-        {adminQq}：负责人 QQ
-        {repo}：ApacheCN 的 Github 仓库名称
-        {dockerName}：DockerHub 仓库名称
-        {pypiName}：PYPI 包名称
-        {npmName}：NPM 包名称
+        pyca：域名前缀
+        飞龙：负责人名称
+        wizardforcel：负责人 Github 用户名
+        562826179：负责人 QQ
+        python-code-anal：ApacheCN 的 Github 仓库名称
+        python-code-anal：DockerHub 仓库名称
+        python-code-anal：PYPI 包名称
+        python-code-anal：NPM 包名称
     
     CNAME
     
-        {domain}：域名前缀
+        pyca：域名前缀
 
     index.html
     
-        {name}：文档中文名
-        {color}：显示颜色
-        {repo}：ApacheCN 的 Github 仓库名称
+        ApacheCN Python 源码分析：文档中文名
+        #b6459a：显示颜色
+        python-code-anal：ApacheCN 的 Github 仓库名称
 
     asset/docsify-apachecn-footer.js
     
-        {repo}：ApacheCN 的 Github 仓库名称
+        python-code-anal：ApacheCN 的 Github 仓库名称
 -->
 
-# {name}
+# ApacheCN Python 源码分析
 
 > 原文：[{nameEn}]({urlEn})
 > 
@@ -40,7 +40,7 @@
 > 
 > 这好办。你的源码分析看起来不错，但它下一秒就是我的了。——飞龙
 
-* [在线阅读](https://{domain}.apachecn.org)
+* [在线阅读](https://pyca.apachecn.org)
 * [在线阅读（Gitee）](https://apachecn.gitee.io/doc-template/)
 * [ApacheCN 学习资源](http://docs.apachecn.org/)
 
@@ -54,11 +54,11 @@
 
 ### 负责人
 
-* [{adminName}](https://github.com/{adminUn}): {adminQq}
+* [飞龙](https://github.com/wizardforcel): 562826179
 
 ### 其他
 
-*   在我们的 [apachecn/{repo}](https://github.com/apachecn/{repo}) github 上提 issue.
+*   在我们的 [apachecn/python-code-anal](https://github.com/apachecn/python-code-anal) github 上提 issue.
 *   发邮件到 Email: `apachecn@163.com`.
 *   在我们的 [组织学习交流群](https://www.apachecn.org/#/docs/join) 中联系群主/管理员即可.
 
@@ -67,24 +67,24 @@
 ### Docker
 
 ```
-docker pull apachecn0/{dockerName}
-docker run -tid -p <port>:80 apachecn0/{dockerName}
+docker pull apachecn0/python-code-anal
+docker run -tid -p <port>:80 apachecn0/python-code-anal
 # 访问 http://localhost:{port} 查看文档
 ```
 
 ### PYPI
 
 ```
-pip install {pypiName}
-{pypiName} <port>
+pip install python-code-anal
+python-code-anal <port>
 # 访问 http://localhost:{port} 查看文档
 ```
 
 ### NPM
 
 ```
-npm install -g {npmName}
-{npmName} <port>
+npm install -g python-code-anal
+python-code-anal <port>
 # 访问 http://localhost:{port} 查看文档
 ```
 
