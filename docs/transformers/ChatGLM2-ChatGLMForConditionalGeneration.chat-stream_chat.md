@@ -11,7 +11,7 @@ date: 2023-10-10 23:17:51
 
 调用分析：
 
-```
+```py
 In [1]: q = '你好'
 
 In [2]: r, his = model.chat(tokenizer, q)
@@ -34,11 +34,11 @@ Out[8]:
 [('你好', '你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'),
  ('你可以做什么？',
   '我是一个大型语言模型，可以进行自然语言处理和生成。具体来说，我可以：\n\n1\.  回答问题：像人类一样回答您的问题，或者提供相关信息 。\n\n2\.  提供建议：根据您的问题提供一些建议，或者提供一些参考信息。\n\n3\.  进行翻译：将一种语言翻译成另一种语言，或者将一种语言的文本翻译成另一种语言的文本。\n\n4\.  生成文本：根据您的问题生成一些文本，比如文章、故事、新闻报道等。\n\n5\.  自动文本摘要：自动概括文本的内容，并生成摘要。\n\n6\.  情感分析：判断文本中情感的程度，并返回相应的情感信息。\n\n7\.  智能对话：进行智能对话，与人类交流并完成任务。\n\n请注意，我是一个机器，我的回答可能不够准确，也可能会有所误导。')] 
-```py
+```
 
 源码：
 
-```
+```py
  @torch.inference_mode()
     def chat(self, tokenizer, query: str, history: List[Tuple[str, str]] = None, max_length: int = 8192, num_beams=1,
              do_sample=True, top_p=0.8, temperature=0.8, logits_processor=None, **kwargs):
@@ -91,13 +91,13 @@ Out[8]:
         inputs = tokenizer([prompt], return_tensors="pt")
         inputs = inputs.to(self.device)
         return inputs 
-```py
+```
 
 ### `.stream_chat`
 
 调用分析：
 
-```
+```py
 In [133]: q = '你好'
 
 In [134]: it = model.stream_chat(tokenizer, q)
@@ -135,11 +135,11 @@ In [138]: for r, his in it: print(r); print(his)
 [('你好', '你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'), ('你可以做什么？', '我是一款大型语言模型，可 以进行自然语言处理和生成，以及提供各种服务和咨询。我的目标是帮助人们更方便、高效地获取信息、解决问题和交流沟通。')]
 我是一款大型语言模型，可以进行自然语言处理和生成，以及提供各种服务和咨询。我的目标是帮助人们更方便、高效地获取信息、解决问题和交流沟通。
 [('你好', '你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'), ('你可以做什么？', '我是一款大型语言模型，可 以进行自然语言处理和生成，以及提供各种服务和咨询。我的目标是帮助人们更方便、高效地获取信息、解决问题和交流沟通。')] 
-```py
+```
 
 源码：
 
-```
+```py
  @torch.inference_mode()
     def stream_chat(self, tokenizer, query: str, history: List[Tuple[str, str]] = None, past_key_values=None,
                     max_length: int = 8192, do_sample=True, top_p=0.8, temperature=0.8, logits_processor=None,
