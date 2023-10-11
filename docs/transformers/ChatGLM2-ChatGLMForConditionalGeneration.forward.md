@@ -9,7 +9,7 @@ date: 2023-10-10 23:18:30
 
 ![](img/476eee5d905e6ea046e1ce692adf3ea6.png)
 
-```
+```py
 class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
     def __init__(self, config: ChatGLMConfig, empty_init=True, device=None):
         super().__init__(config)

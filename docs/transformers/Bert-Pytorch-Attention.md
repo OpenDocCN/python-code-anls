@@ -7,7 +7,7 @@ date: 2023-10-10 23:20:21
 
 > 来源：[https://blog.csdn.net/wizardforcel/article/details/131383685](https://blog.csdn.net/wizardforcel/article/details/131383685)
 
-```
+```py
  class Attention(nn.Module):
     """
     Compute 'Scaled Dot Product Attention

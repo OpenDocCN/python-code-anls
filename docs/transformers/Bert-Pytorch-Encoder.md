@@ -7,7 +7,7 @@ date: 2023-10-10 23:20:05
 
 > 来源：[https://blog.csdn.net/wizardforcel/article/details/131398331](https://blog.csdn.net/wizardforcel/article/details/131398331)
 
-```
+```py
  class BERT(nn.Module):
     """
     BERT model : Bidirectional Encoder Representations from Transformers.

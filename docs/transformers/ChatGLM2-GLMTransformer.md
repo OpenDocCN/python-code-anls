@@ -9,7 +9,7 @@ date: 2023-10-10 23:18:11
 
 ![](img/2ea40e9af6ba0cea7ff6349c92adf627.png)
 
-```
+```py
  class GLMTransformer(torch.nn.Module):
     """Transformer class."""
 

@@ -7,7 +7,7 @@ date: 2023-10-10 23:20:29
 
 > 来源：[https://blog.csdn.net/wizardforcel/article/details/131382024](https://blog.csdn.net/wizardforcel/article/details/131382024)
 
-```
+```py
  class TokenEmbedding(nn.Embedding):
     def __init__(self, vocab_size, embed_size=512):
         super().__init__(vocab_size, embed_size, padding_idx=0)

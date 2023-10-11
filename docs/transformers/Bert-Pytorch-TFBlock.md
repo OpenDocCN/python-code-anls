@@ -7,7 +7,7 @@ date: 2023-10-10 23:20:12
 
 > 来源：[https://blog.csdn.net/wizardforcel/article/details/131397186](https://blog.csdn.net/wizardforcel/article/details/131397186)
 
-```
+```py
  class PositionwiseFeedForward(nn.Module):
     "Implements FFN equation."
 

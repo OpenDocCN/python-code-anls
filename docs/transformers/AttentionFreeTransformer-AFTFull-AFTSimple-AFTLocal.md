@@ -13,7 +13,7 @@ date: 2023-10-10 23:19:28
 
 ![在这里插入图片描述](img/691f1d80e2eb93ffdacbb96ba3a52eb1.png)
 
-```
+```py
 class AFTFull(nn.Module):
     def __init__(self, max_seqlen, dim, hidden_dim=64):
         super().__init__()
@@ -58,7 +58,7 @@ class AFTFull(nn.Module):
 
 ![在这里插入图片描述](img/6be79581d4c5073765d0cfbf6a9c315d.png)
 
-```
+```py
 class AFTSimple(nn.Module):
     def __init__(self, max_seqlen, dim, hidden_dim=64):
         super().__init__()
@@ -99,7 +99,7 @@ class AFTSimple(nn.Module):
 
 ![在这里插入图片描述](img/a25e0a88b2036cc54c96b462fcceed80.png)
 
-```
+```py
 class AFTLocal(nn.Module):
     def __init__(self, max_seqlen, dim, hidden_dim=64, s=256):
         super().__init__()

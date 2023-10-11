@@ -9,7 +9,7 @@ date: 2023-10-10 23:19:05
 
 ![](img/bf7f9dd48c6ad01c8122796c369ec702.png)
 
-```
+```py
 class MLP(torch.nn.Module):
     """MLP.
 

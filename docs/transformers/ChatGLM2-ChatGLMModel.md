@@ -9,7 +9,7 @@ date: 2023-10-10 23:18:49
 
 ![](img/681cbb200d22bb96de14bd6d062ae521.png)
 
-```
+```py
  class ChatGLMModel(ChatGLMPreTrainedModel):
     def __init__(self, config: ChatGLMConfig, device=None, empty_init=True):
         super().__init__(config)

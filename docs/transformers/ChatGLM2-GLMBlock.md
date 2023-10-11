@@ -9,7 +9,7 @@ date: 2023-10-10 23:18:57
 
 ![](img/2c51b02f8b925c11f37558007c50752d.png)
 
-```
+```py
  class GLMBlock(torch.nn.Module):
     """A single transformer layer.
 
