@@ -82,18 +82,18 @@ class MultiHeadedAttention(nn.Module):
 
 ### 缩写表
 
-*   BS：批量大小，即一批数据中样本大小，训练集和测试集可能不同，那就是TBS和VBS
-*   ES：嵌入大小，嵌入向量空间的维数，也是注意力层的隐藏单元数量，GPT 中一般是 768
+*   BatchSize：批量大小，即一批数据中样本大小，训练集和测试集可能不同，那就是TBS和VBS
+*   HidSize：嵌入大小，嵌入向量空间的维数，也是注意力层的隐藏单元数量，GPT 中一般是 768
 *   ML：输入序列最大长度，一般是512或者1024，不够需要用`<pad>`填充
 *   HC：头部的数量，需要能够整除ES，因为每个头的输出拼接起来才是层的输出
-*   HS：头部大小，等于`ES // HC`
-*   VS：词汇表大小，也就是词的种类数量
+*   HeadSize：头部大小，等于`HidSize // HC`
+*   VocabSize：词汇表大小，也就是词的种类数量
 
 ### 尺寸备注
 
-*   嵌入层的矩阵尺寸应该是`VS * ES`
-*   注意力层的输入尺寸是`BS * ML * ES`
+*   嵌入层的矩阵尺寸应该是`VocabSize * HidSize`
+*   注意力层的输入尺寸是`BatchSize * ML * HidSize`
 *   输出以及 Q K V 和输入形状相同
-*   每个头的 QKV 尺寸为`BS * ML * HS`
-*   权重矩阵尺寸为`ES * ES`
-*   相关矩阵 S 尺寸为`BS * ML * ML`
+*   每个头的 QKV 尺寸为`BatchSize * ML * HeadSize`
+*   权重矩阵尺寸为`HidSize * HidSize`
+*   相关矩阵 S 尺寸为`BatchSize * ML * ML`
