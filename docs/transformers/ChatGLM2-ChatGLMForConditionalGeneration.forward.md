@@ -51,27 +51,33 @@ class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
         )
 
         hidden_states = transformer_outputs[0]
-
+        # `return_last_logit`表示只保留最后一个单词的
         if return_last_logit:
             hidden_states = hidden_states[-1:]
-
+        # 将编码器输出传入输出层得到单词概率
         lm_logits = self.transformer.output_layer(hidden_states)
-
+        # [SeqLen, BatchSize, ...] => [BatchSize, SeqLen, ...]
         lm_logits = lm_logits.transpose(0, 1).contiguous()
 
         loss = None
         if labels is not None:
             lm_logits = lm_logits.to(torch.float32)
 
+            # 让第 i 个词前面的单词预测第 i 个词
+            # 假如原文是 [A, B, C, D, E]
+            # logits = [A, B, C, D]，labels = [B, C, D, E]
             shift_logits = lm_logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
-
+            # 单词 Logits 变形为 [BatchSize * (SeqLen - 1), VocabSize]
+            # 标签变形为 [BatchSize * (SeqLen - 1)]
+            # 计算交叉熵
             loss_fct = CrossEntropyLoss(ignore_index=-100)
             loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
 
             lm_logits = lm_logits.to(hidden_states.dtype)
             loss = loss.to(hidden_states.dtype)
 
+        # 返回损失、单词 Logits、KV 缓存、编码器输出、以及编码器注意力矩阵
         if not return_dict:
             output = (lm_logits,) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
@@ -82,5 +88,5 @@ class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
             past_key_values=transformer_outputs.past_key_values,
             hidden_states=transformer_outputs.hidden_states,
             attentions=transformer_outputs.attentions,
-        ) 
+        )
 ```

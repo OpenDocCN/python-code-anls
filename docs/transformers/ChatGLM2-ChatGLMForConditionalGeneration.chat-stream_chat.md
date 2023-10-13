@@ -47,14 +47,14 @@ Out[8]:
         if logits_processor is None:
             logits_processor = LogitsProcessorList()
         logits_processor.append(InvalidScoreLogitsProcessor())
-
+        # 组织模型配置项
         gen_kwargs = {"max_length": max_length, "num_beams": num_beams, "do_sample": do_sample, "top_p": top_p,
                       "temperature": temperature, "logits_processor": logits_processor, **kwargs}
-
+        # 将历史问答和当前提问组成整个提问，然后传给分词器得到单词ID
         inputs = self.build_inputs(tokenizer, query, history=history)
-
+        # 提问的单词 ID 输入模型得到回答的单词概率
         outputs = self.generate(**inputs, **gen_kwargs)
-
+        # 取第一个回答，并截断回答中的提问部分
         '''
         prompt: '你好, output: tensor([[64790, 64792,   790, 30951,   517, 30910, 30939, 30996,    13,    13,
          54761, 31211, 39701,    13,    13, 55437, 31211, 36474, 54591,   243,
@@ -64,11 +64,11 @@ Out[8]:
         tokenizer.decode(output[0]): '[Round 1]\n\n问：你好\n\n答： 你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'
         '''
         outputs = outputs.tolist()[0][len(inputs["input_ids"][0]):]
-
+        # 单词概率解码得到单词
         response = tokenizer.decode(outputs)
-
+        # 裁剪空白，替换训练时间
         response = self.process_response(response)
-
+        # 记录历史问答
         history = history + [(query, response)]
         return response, history
 
@@ -90,7 +90,7 @@ Out[8]:
         '''
         inputs = tokenizer([prompt], return_tensors="pt")
         inputs = inputs.to(self.device)
-        return inputs 
+        return inputs
 ```
 
 ### `.stream_chat`
@@ -144,7 +144,7 @@ In [138]: for r, his in it: print(r); print(his)
     def stream_chat(self, tokenizer, query: str, history: List[Tuple[str, str]] = None, past_key_values=None,
                     max_length: int = 8192, do_sample=True, top_p=0.8, temperature=0.8, logits_processor=None,
                     return_past_key_values=False, **kwargs):
-
+        # 为历史和 logit 处理器设置默认值
         if history is None:
             history = []
         if logits_processor is None:
@@ -153,20 +153,21 @@ In [138]: for r, his in it: print(r); print(his)
         gen_kwargs = {"max_length": max_length, "do_sample": do_sample, "top_p": top_p,
                       "temperature": temperature, "logits_processor": logits_processor, **kwargs}
         if past_key_values is None and not return_past_key_values:
-
+            # 如果 PKV 为空，就需要使用完整的历史对话记录构建模型输入
             inputs = self.build_inputs(tokenizer, query, history=history)
         else:
-
+            # 如果 PKV 不为空，它是历史对话记录的 KV 缓存，
+            # 只需要使用当前问题构建模型输入
             inputs = self.build_stream_inputs(tokenizer, query, history=history)
         if past_key_values is not None:
-
+            # 得到之前输入的长度
             past_length = past_key_values[0][0].shape[0]
-
+            # 如果有PSL， 从中减去
             if self.transformer.pre_seq_len is not None:
                 past_length -= self.transformer.pre_seq_len
-
+            # 位置 ID 都后移指定长度
             inputs.position_ids += past_length
-
+            # attention_mask 前面添加 PL 个 1
             attention_mask = inputs.attention_mask
             attention_mask = torch.cat((attention_mask.new_ones(1, past_length), attention_mask), dim=1)
             inputs['attention_mask'] = attention_mask
@@ -174,7 +175,7 @@ In [138]: for r, his in it: print(r); print(his)
                                             return_past_key_values=return_past_key_values, **gen_kwargs):
             if return_past_key_values:
                 outputs, past_key_values = outputs
-
+            # 取第一个回答，并截断回答中的提问部分
             outputs = outputs.tolist()[0][len(inputs["input_ids"][0]):]
             '''
             q: '你好'
@@ -184,11 +185,11 @@ In [138]: for r, his in it: print(r); print(his)
             iterN response: '你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'
             '''
             response = tokenizer.decode(outputs)
-
+            # 如果回答最后一个字不是终止符
             if response and response[-1] != "�":
-
+                # 处理时间
                 response = self.process_response(response)
-
+                # 将问题和当前回答加入历史
                 new_history = history + [(query, response)]
                 if return_past_key_values:
                     yield response, new_history, past_key_values
@@ -196,9 +197,11 @@ In [138]: for r, his in it: print(r); print(his)
                     yield response, new_history
 
     def build_stream_inputs(self, tokenizer, query: str, history: List[Tuple[str, str]] = None):
-
+        # PKV 不为空的时候调用这个函数，使用当前问题构建输入
         if history:
-
+            # 历史不为空，只使用最后一轮的提问构建输入
+            # 为了和之前的问答历史衔接，需要添加换行符
+            # query = '你好', prompt = "\n\n[Round x]\n\n问：你好\n\n答："
             prompt = "\n\n[Round {}]\n\n问：{}\n\n答：".format(len(history) + 1, query)
             '''
             将 prompt 转成单词 ID，去掉开头的 ID64790、ID64792
@@ -208,7 +211,7 @@ In [138]: for r, his in it: print(r); print(his)
             Out[149]: [64790, 64792, 30910, 13, 13, 39701]
             '''
             input_ids = tokenizer.encode(prompt, add_special_tokens=False)
-
+            # 去掉开头的 ID30910 
             input_ids = input_ids[1:]
             '''
             为 input_ids 生成相应的 attention_mask 和 position_ids
@@ -225,9 +228,9 @@ In [138]: for r, his in it: print(r); print(his)
             '''
             inputs = tokenizer.batch_encode_plus([(input_ids, None)], return_tensors="pt", add_special_tokens=False)
         else:
-
+            # 历史为空，仅仅使用第一轮的提问构建输入
             prompt = "[Round {}]\n\n问：{}\n\n答：".format(len(history) + 1, query)
             inputs = tokenizer([prompt], return_tensors="pt")
         inputs = inputs.to(self.device)
-        return inputs 
+        return inputs
 ```

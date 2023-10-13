@@ -23,6 +23,8 @@ class MLP(torch.nn.Module):
 
         self.add_bias = config.add_bias_linear
 
+        # Project to 4h. If using swiglu double the output width, see https://arxiv.org/pdf/2002.05202.pdf
+        # LL1，最后一维 HidSize => 4ES
         self.dense_h_to_4h = nn.Linear(
             config.hidden_size,
             config.ffn_hidden_size * 2,
@@ -37,6 +39,7 @@ class MLP(torch.nn.Module):
 
         self.activation_func = swiglu
 
+        # LL2，最后一维 4ES => HidSize
         self.dense_4h_to_h = nn.Linear(
             config.ffn_hidden_size,
             config.hidden_size,
@@ -46,9 +49,9 @@ class MLP(torch.nn.Module):
         )
 
     def forward(self, hidden_states):
-
+        # 输入 -> LL1 -> swiglu -> LL2 -> 输出
         intermediate_parallel = self.dense_h_to_4h(hidden_states)
         intermediate_parallel = self.activation_func(intermediate_parallel)
         output = self.dense_4h_to_h(intermediate_parallel)
-        return output 
+        return output
 ```
