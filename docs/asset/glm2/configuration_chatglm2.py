@@ -31,21 +31,21 @@ class ChatGLMConfig(PretrainedConfig):
         prefix_projection=False,
         **kwargs
     ):
-        # LC，层数
+        # LayerCount，层数
         self.num_layers = num_layers
-        # VS，词表大小，也就是词嵌入数量
+        # VocabSize，词表大小，也就是词嵌入数量
         self.vocab_size = padded_vocab_size
         # 这个和上面一样
         self.padded_vocab_size = padded_vocab_size
-        # ES，词嵌入的长度
+        # HidSize，词嵌入的长度
         self.hidden_size = hidden_size
-        # FFS，FFN 层的中间那个嵌入的长度，一般是 4 * ES
+        # FFS，FFN 层的中间那个嵌入的长度，一般是 4 * HidSize
         self.ffn_hidden_size = ffn_hidden_size
-        # HS，每个头的长度
+        # HeadSize，每个头的长度
         self.kv_channels = kv_channels
-        # HC，头的个数，HS 和 HC 乘起来是投影大小 PS，并非ES
+        # HC，头的个数，HeadSize 和 HC 乘起来是投影大小 PS，并非ES
         self.num_attention_heads = num_attention_heads
-        # SL，单词最大长度
+        # SeqLen，单词最大长度
         self.seq_length = seq_length
         # FFN 层的dropout大小
         self.hidden_dropout = hidden_dropout

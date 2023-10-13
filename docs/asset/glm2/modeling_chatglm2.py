@@ -67,19 +67,19 @@ class PrefixEncoder(torch.nn.Module):
         super().__init__()
         self.prefix_projection = config.prefix_projection
         if self.prefix_projection:
-            # KVS = NL * HS * 2GC
+            # KVSize = LayerCount * HeadSize * 2GroupCount
             kv_size = config.num_layers * config.kv_channels * config.multi_query_group_num * 2
-            # Emb: [PSL, KVS]
+            # Emb: [PrefLen, KVSize]
             self.embedding = torch.nn.Embedding(config.pre_seq_len, kv_size)
-            # LL1: [KVS, ES]
-            # LL2: [ES, KVS]
+            # LL1: [KVSize, HidSize]
+            # LL2: [HidSize, KVSize]
             self.trans = torch.nn.Sequential(
                 torch.nn.Linear(kv_size, config.hidden_size),
                 torch.nn.Tanh(),
                 torch.nn.Linear(config.hidden_size, kv_size)
             )
         else:
-            # Emb: [PSL, KVS]
+            # Emb: [PrefLen, KVSize]
             self.embedding = torch.nn.Embedding(config.pre_seq_len,
                                                 config.num_layers * config.kv_channels * config.multi_query_group_num * 2)
 
@@ -324,11 +324,11 @@ class SelfAttention(torch.nn.Module):
     def __init__(self, config: ChatGLMConfig, layer_number, device=None):
         super(SelfAttention, self).__init__()
         self.layer_number = max(1, layer_number)
-        # PS = HS * HC
+        # PS = HeadSize * HC
         # 注意这个 PS 并不是嵌入向量的大小，每层输入经过这个投影来压缩，所以叫投影大小
         self.projection_size = config.kv_channels * config.num_attention_heads
 
-        # `hidden_size_per_attention_head`其实就是上面的`kv_channels`，统一记作 HS
+        # `hidden_size_per_attention_head`其实就是上面的`kv_channels`，统一记作 HeadSize
         self.hidden_size_per_attention_head = self.projection_size // config.num_attention_heads
         self.num_attention_heads_per_partition = config.num_attention_heads
 
@@ -336,13 +336,13 @@ class SelfAttention(torch.nn.Module):
         # 如果不启用 MQA，QKVS 是 QKV 连起来的最后一维大小，所以等于 3PS
         self.qkv_hidden_size = 3 * self.projection_size
         if self.multi_query_attention:
-            # 如果启用了 MQA，QKVS = PS + 2 * HS * GC
-            # 也就是把 QK 的 HC 换成了 GC
+            # 如果启用了 MQA，QKVS = PS + 2 * HeadSize * GroupCount
+            # 也就是把 QK 的 HC 换成了 GroupCount
             self.num_multi_query_groups_per_partition = config.multi_query_group_num
             self.qkv_hidden_size = (
                     self.projection_size + 2 * self.hidden_size_per_attention_head * config.multi_query_group_num
             )
-        # LLQKV 的权重 Wqkv，尺寸为 [ES, QKVS]，实际上是 Wq、Wk、Wv 按最后一维连起来
+        # LLQKV 的权重 Wqkv，尺寸为 [HidSize, QKVS]，实际上是 Wq、Wk、Wv 按最后一维连起来
         self.query_key_value = nn.Linear(config.hidden_size, self.qkv_hidden_size,
                                          bias=config.add_bias_linear or config.add_qkv_bias,
                                          device=device, **_config_to_kwargs(config)
@@ -350,7 +350,7 @@ class SelfAttention(torch.nn.Module):
 
         self.core_attention = CoreAttention(config, self.layer_number)
 
-        # LLO，权重为 Wo，尺寸 [PS, ES]，用于乘上核心注意力的输出
+        # LLO，权重为 Wo，尺寸 [PS, HidSize]，用于乘上核心注意力的输出
         self.dense = nn.Linear(self.projection_size, config.hidden_size, bias=config.add_bias_linear,
                                device=device, **_config_to_kwargs(config)
                                )
@@ -372,18 +372,18 @@ class SelfAttention(torch.nn.Module):
     def forward(
             self, hidden_states, attention_mask, rotary_pos_emb, kv_cache=None, use_cache=True
     ):
-        # `hidden_states`尺寸为 [SL, BS, ES]
-        # 话说一般 BS 都是数据集第一维，这样好不习惯
+        # `hidden_states`尺寸为 [SeqLen, BatchSize, HidSize]
+        # 话说一般 BatchSize 都是数据集第一维，这样好不习惯
 
 
-        # 将输入 X 传给 LLQKV，得到 QKV 的连接，尺寸为 [SL, BS, QKVS]
+        # 将输入 X 传给 LLQKV，得到 QKV 的连接，尺寸为 [SeqLen, BatchSize, QKVS]
         mixed_x_layer = self.query_key_value(hidden_states)
 
         if self.multi_query_attention:
-            # 如果启用了 MQA，那么 QKVS = PS + 2 * HS * GC
+            # 如果启用了 MQA，那么 QKVS = PS + 2 * HeadSize * GroupCount
             # 沿最后一维拆出 Q、K、V
-            # Q 的尺寸是 [SL, BS, PS]
-            # K 和 V 都是 [SL, BS, HS * GC]
+            # Q 的尺寸是 [SeqLen, BatchSize, PS]
+            # K 和 V 都是 [SeqLen, BatchSize, HeadSize * GroupCount]
             (query_layer, key_layer, value_layer) = mixed_x_layer.split(
                 [
                     self.num_attention_heads_per_partition * self.hidden_size_per_attention_head,
@@ -393,11 +393,11 @@ class SelfAttention(torch.nn.Module):
                 dim=-1,
             )
             # 将每个头的 Q、K、V 拆出来
-            # Q 转型为 [SL, BS, HC, HS]
+            # Q 转型为 [SeqLen, BatchSize, HC, HeadSize]
             query_layer = query_layer.view(
                 query_layer.size()[:-1] + (self.num_attention_heads_per_partition, self.hidden_size_per_attention_head)
             )
-            # K 和 V 转型为 [SL, BS, GC, HS]
+            # K 和 V 转型为 [SeqLen, BatchSize, GroupCount, HeadSize]
             key_layer = key_layer.view(
                 key_layer.size()[:-1] + (self.num_multi_query_groups_per_partition, self.hidden_size_per_attention_head)
             )
@@ -407,13 +407,13 @@ class SelfAttention(torch.nn.Module):
             )
         else:
             # 如果没有启用 MQA，那么 QKVS = 3 * PS
-            # 把 QKV 转型成 [SL, BS, HC, 3HS]
+            # 把 QKV 转型成 [SeqLen, BatchSize, HC, 3HS]
             new_tensor_shape = mixed_x_layer.size()[:-1] + \
                                (self.num_attention_heads_per_partition,
                                 3 * self.hidden_size_per_attention_head)
             mixed_x_layer = mixed_x_layer.view(*new_tensor_shape)
 
-            # 沿最后一维等分三份，将 Q、K、V 拆出来，每个尺寸都是 [SL, BS, HC, HS]
+            # 沿最后一维等分三份，将 Q、K、V 拆出来，每个尺寸都是 [SeqLen, BatchSize, HC, HeadSize]
             (query_layer, key_layer, value_layer) = split_tensor_along_last_dim(mixed_x_layer, 3)
 
         # 应用位置编码 RPE
@@ -432,15 +432,15 @@ class SelfAttention(torch.nn.Module):
             kv_cache = None
 
         if self.multi_query_attention:
-            # [SL, BS, GC, HS] => [SL, BS, GC, 1, HS]
+            # [SeqLen, BatchSize, GroupCount, HeadSize] => [SeqLen, BatchSize, GroupCount, 1, HeadSize]
             key_layer = key_layer.unsqueeze(-2)
-            # GS = HC // GC，每个组的头部数量
-            # [SL, BS, GC, 1 => GS, HS]
+            # GS = HC // GroupCount，每个组的头部数量
+            # [SeqLen, BatchSize, GroupCount, 1 => GS, HeadSize]
             # 注意每个组的所有头的 K 和 V 都是共享的
             key_layer = key_layer.expand(
                 -1, -1, -1, self.num_attention_heads_per_partition // self.num_multi_query_groups_per_partition, -1
             )
-            # [SL, BS, HC, HS]
+            # [SeqLen, BatchSize, HC, HeadSize]
             key_layer = key_layer.contiguous().view(
                 key_layer.size()[:2] + (self.num_attention_heads_per_partition, self.hidden_size_per_attention_head)
             )
@@ -453,10 +453,10 @@ class SelfAttention(torch.nn.Module):
                 value_layer.size()[:2] + (self.num_attention_heads_per_partition, self.hidden_size_per_attention_head)
             )
 
-        # 将 Q K V 传给核心注意力层，输出尺寸为 [SL, BS, PS]
+        # 将 Q K V 传给核心注意力层，输出尺寸为 [SeqLen, BatchSize, PS]
         context_layer = self.core_attention(query_layer, key_layer, value_layer, attention_mask)
 
-        # 核心注意力层的输出经过 LLO，得到最终输出，尺寸为 [SL, BS, ES]
+        # 核心注意力层的输出经过 LLO，得到最终输出，尺寸为 [SeqLen, BatchSize, HidSize]
         output = self.dense(context_layer)
 
         return output, kv_cache
@@ -483,7 +483,7 @@ class MLP(torch.nn.Module):
         self.add_bias = config.add_bias_linear
 
         # Project to 4h. If using swiglu double the output width, see https://arxiv.org/pdf/2002.05202.pdf
-        # LL1，最后一维 ES => 4ES
+        # LL1，最后一维 HidSize => 4ES
         self.dense_h_to_4h = nn.Linear(
             config.hidden_size,
             config.ffn_hidden_size * 2,
@@ -498,7 +498,7 @@ class MLP(torch.nn.Module):
 
         self.activation_func = swiglu
 
-        # LL2，最后一维 4ES => ES
+        # LL2，最后一维 4ES => HidSize
         self.dense_4h_to_h = nn.Linear(
             config.ffn_hidden_size,
             config.hidden_size,
@@ -612,7 +612,7 @@ class GLMTransformer(torch.nn.Module):
         self.fp32_residual_connection = config.fp32_residual_connection
         self.post_layer_norm = config.post_layer_norm
 
-        # LC
+        # LayerCount
         self.num_layers = config.num_layers
 
         # TFBlock 层
@@ -638,7 +638,7 @@ class GLMTransformer(torch.nn.Module):
             use_cache: Optional[bool] = True,
             output_hidden_states: Optional[bool] = False,
     ):
-        # 如果没有提供 KV 缓存，将其初始化为 [None] * LC 保持代码统一
+        # 如果没有提供 KV 缓存，将其初始化为 [None] * LayerCount 保持代码统一
         if not kv_caches:
             kv_caches = [None for _ in range(self.num_layers)]
         # `presents`保存每一层的 KV 的缓存
@@ -748,7 +748,7 @@ class Embedding(torch.nn.Module):
         super(Embedding, self).__init__()
 
         self.hidden_size = config.hidden_size
-        # 真正的嵌入层 [VS, ES]
+        # 真正的嵌入层 [VocabSize, HidSize]
         self.word_embeddings = nn.Embedding(
             config.padded_vocab_size,
             self.hidden_size,
@@ -761,7 +761,7 @@ class Embedding(torch.nn.Module):
         # 单词 ID 传给嵌入层得到词向量
         words_embeddings = self.word_embeddings(input_ids)
         embeddings = words_embeddings
-        # [BS, SL, ES] => [SL, BS, ES]
+        # [BatchSize, SeqLen, HidSize] => [SeqLen, BatchSize, HidSize]
         embeddings = embeddings.transpose(0, 1).contiguous()
         # 如果 FP32 标志开启的话，转成 FP32
         if self.fp32_residual_connection:
@@ -782,14 +782,14 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
             init_kwargs["device"] = device
         # 单词嵌入层
         self.embedding = init_method(Embedding, config, **init_kwargs)
-        # LC
+        # LayerCount
         self.num_layers = config.num_layers
-        # GC
+        # GroupCount
         self.multi_query_group_num = config.multi_query_group_num
-        # HS
+        # HeadSize
         self.kv_channels = config.kv_channels
 
-        # SL
+        # SeqLen
         self.seq_length = config.seq_length
         rotary_dim = (
             config.hidden_size // config.num_attention_heads if config.kv_channels is None else config.kv_channels
@@ -805,11 +805,11 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
         self.pre_seq_len = config.pre_seq_len
         self.prefix_projection = config.prefix_projection
         if self.pre_seq_len is not None:
-            # 如果设置了前缀序列长度（PSL）
+            # 如果设置了前缀序列长度（PrefLen）
             # 关闭所有参数的自动梯度
             for param in self.parameters():
                 param.requires_grad = False
-            # [0, 1, ..., PSL - 1]
+            # [0, 1, ..., PrefLen - 1]
             self.prefix_tokens = torch.arange(self.pre_seq_len).long()
             # 初始化前缀编码层和 Dropout
             self.prefix_encoder = PrefixEncoder(config)
@@ -819,12 +819,12 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
         return self.embedding.word_embeddings
 
     def get_prompt(self, batch_size, device, dtype=torch.half):
-        # prefix_tokens = [0, 1, ..., PSL - 1]
-        # [PSL] => [1, PSL] => [BS, PSL]
+        # prefix_tokens = [0, 1, ..., PrefLen - 1]
+        # [PrefLen] => [1, PrefLen] => [BatchSize, PrefLen]
         prefix_tokens = self.prefix_tokens.unsqueeze(0).expand(batch_size, -1).to(device)
-        # [BS, PSL, KVS=NL * HS * 2GC]
+        # [BatchSize, PrefLen, KVSize=LayerCount * HeadSize * 2GroupCount]
         past_key_values = self.prefix_encoder(prefix_tokens).type(dtype)
-        # [BS, PSL, KVS=NL * HS * 2GC] => [BS, PSL, 2NL, GC, HS]
+        # [BatchSize, PrefLen, KVSize=LayerCount * HeadSize * 2GroupCount] => [BatchSize, PrefLen, 2LayerCount, GroupCount, HeadSize]
         past_key_values = past_key_values.view(
             batch_size,
             self.pre_seq_len,
@@ -834,7 +834,7 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
         )
         
         past_key_values = self.dropout(past_key_values)
-        # [BS, PSL, 2NL, GC, HS] => [2NL, PSL, BS, GC, HS] => NL * [2, PSL, BS, GC, HS]
+        # [BatchSize, PrefLen, 2LayerCount, GroupCount, HeadSize] => [2LayerCount, PrefLen, BatchSize, GroupCount, HeadSize] => LayerCount * [2, PrefLen, BatchSize, GroupCount, HeadSize]
         past_key_values = past_key_values.permute([2, 1, 0, 3, 4]).split(2)
         return past_key_values
 
@@ -855,15 +855,15 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
         )
         use_cache = use_cache if use_cache is not None else self.config.use_cache
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 输入是单词 ID，的形状为 [BS, SL]
+        # 输入是单词 ID，的形状为 [BatchSize, SeqLen]
         batch_size, seq_length = input_ids.shape
         # 将单词 ID 传递给词嵌入层得到嵌入向量
         if inputs_embeds is None:
             inputs_embeds = self.embedding(input_ids)
 
-        # 如果设置了 PSL
+        # 如果设置了 PrefLen
         if self.pre_seq_len is not None:
-            # 如果没有提供 KV 缓存，初始化为前 PSL 个前缀的词嵌入
+            # 如果没有提供 KV 缓存，初始化为前 PrefLen 个前缀的词嵌入
             if past_key_values is None:
                 past_key_values = self.get_prompt(batch_size=batch_size, device=input_ids.device,
                                                   dtype=inputs_embeds.dtype)
@@ -879,12 +879,12 @@ class ChatGLMModel(ChatGLMPreTrainedModel):
         # 初始化位置编码层
         rotary_pos_emb = self.rotary_pos_emb(self.seq_length)
         # 如果提供了位置 ID 就是用它检索位置嵌入矩阵
-        # 如果没有，就返回嵌入矩阵的前 SL 个向量
+        # 如果没有，就返回嵌入矩阵的前 SeqLen 个向量
         if position_ids is not None:
             rotary_pos_emb = rotary_pos_emb[position_ids]
         else:
             rotary_pos_emb = rotary_pos_emb[None, :seq_length]
-        # [BS, SL, ES] => [SL, BS, ES]
+        # [BatchSize, SeqLen, HidSize] => [SeqLen, BatchSize, HidSize]
         rotary_pos_emb = rotary_pos_emb.transpose(0, 1).contiguous()
 
         # 将词嵌入和位置嵌入传给编码器得到编码器输出
@@ -1010,7 +1010,7 @@ class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
             hidden_states = hidden_states[-1:]
         # 将编码器输出传入输出层得到单词概率
         lm_logits = self.transformer.output_layer(hidden_states)
-        # [SL, BS, ...] => [BS, SL, ...]
+        # [SeqLen, BatchSize, ...] => [BatchSize, SeqLen, ...]
         lm_logits = lm_logits.transpose(0, 1).contiguous()
 
         loss = None
@@ -1022,8 +1022,8 @@ class ChatGLMForConditionalGeneration(ChatGLMPreTrainedModel):
             # logits = [A, B, C, D]，labels = [B, C, D, E]
             shift_logits = lm_logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
-            # 单词 Logits 变形为 [BS * (SL - 1), VS]
-            # 标签变形为 [BS * (SL - 1)]
+            # 单词 Logits 变形为 [BatchSize * (SeqLen - 1), VocabSize]
+            # 标签变形为 [BatchSize * (SeqLen - 1)]
             # 计算交叉熵
             loss_fct = CrossEntropyLoss(ignore_index=-100)
             loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))

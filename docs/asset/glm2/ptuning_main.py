@@ -106,7 +106,7 @@ def main():
         use_auth_token=True if model_args.use_auth_token else None,
     )
 
-    # 加载 GLM2 配置，设置 PSL 和前缀投影
+    # 加载 GLM2 配置，设置 PrefLen 和前缀投影
     config = AutoConfig.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
     config.pre_seq_len = model_args.pre_seq_len
     config.prefix_projection = model_args.prefix_projection
@@ -131,7 +131,7 @@ def main():
     if model_args.quantization_bit is not None:
         print(f"Quantized to {model_args.quantization_bit} bit")
         model = model.quantize(model_args.quantization_bit)
-    # 如果设置了 PSL，模型转为 FP16，但 PrefixEncoder 部分保持 FP32
+    # 如果设置了 PrefLen，模型转为 FP16，但 PrefixEncoder 部分保持 FP32
     # 否则全部是 FP32
     if model_args.pre_seq_len is not None:
         # P-tuning v2
