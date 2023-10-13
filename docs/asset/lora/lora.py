@@ -12,50 +12,70 @@ from typing import Optional, List
 class LoRALayer():
     def __init__(
         self, 
+        # lora 的三个基本配置
+        # Rank：较低的维度
         r: int, 
+        # Alpha / Rank 是缩放因子
         lora_alpha: int, 
+        # 前置 Dropout 的概率
         lora_dropout: float,
+        # 是否合并权重
         merge_weights: bool,
     ):
+        # 保存配置
         self.r = r
         self.lora_alpha = lora_alpha
-        # Optional dropout
+        # dropout 概率大于 0 时创建 Dropout 层
+        # 否则就创建一个无操作层
         if lora_dropout > 0.:
             self.lora_dropout = nn.Dropout(p=lora_dropout)
         else:
             self.lora_dropout = lambda x: x
-        # Mark the weight as unmerged
+        # 标记权重是未合并的
         self.merged = False
+        # 保存是否合并权重
         self.merge_weights = merge_weights
 
-
+# Lora 嵌入层，是二者的合并
 class Embedding(nn.Embedding, LoRALayer):
     # LoRA implemented in a dense layer
     def __init__(
         self,
+        # 嵌入层的主要配置
+        # 嵌入数量 EmbCount
         num_embeddings: int,
+        # 嵌入维度 Enb
         embedding_dim: int,
+        # Lora 的主要配置
         r: int = 0,
         lora_alpha: int = 1,
         merge_weights: bool = True,
         **kwargs
     ):
+        # 创建嵌入层的参数
         nn.Embedding.__init__(self, num_embeddings, embedding_dim, **kwargs)
+        # 设置 Lora 配置
         LoRALayer.__init__(self, r=r, lora_alpha=lora_alpha, lora_dropout=0,
                            merge_weights=merge_weights)
-        # Actual trainable parameters
+        
         if r > 0:
+            # 创建 LoraA 矩阵 [Rank, EmbCount]
             self.lora_A = nn.Parameter(self.weight.new_zeros((r, num_embeddings)))
+            # 创建 loraB 矩阵 [EmbSize, Rank]
             self.lora_B = nn.Parameter(self.weight.new_zeros((embedding_dim, r)))
+            # 创建缩放因子
             self.scaling = self.lora_alpha / self.r
-            # Freezing the pre-trained weight matrix
+            # 冻结原始参数
             self.weight.requires_grad = False
+        # 初始化所有参数
         self.reset_parameters()
 
     def reset_parameters(self):
+        # 初始化嵌入层相关参数
         nn.Embedding.reset_parameters(self)
         if hasattr(self, 'lora_A'):
-            # initialize A the same way as the default for nn.Linear and B to zero
+            # LoraA 初始化成正态分布，LoraB 初始化成全零
+            # 这里应该是写反了
             nn.init.zeros_(self.lora_A)
             nn.init.normal_(self.lora_B)
 
@@ -76,23 +96,31 @@ class Embedding(nn.Embedding, LoRALayer):
         
     def forward(self, x: torch.Tensor):
         if self.r > 0 and not self.merged:
+            # 首先计算出原始输出
             result = nn.Embedding.forward(self, x)
+            # 然后是Lora输出，用输入索引 LoraA
             after_A = F.embedding(
                 x, self.lora_A.transpose(0, 1), self.padding_idx, self.max_norm,
                 self.norm_type, self.scale_grad_by_freq, self.sparse
             )
+            # 再将中间结果乘以 LoraB.T，乘缩放因子，得到Lora输出后加到原始输出上
             result += (after_A @ self.lora_B.transpose(0, 1)) * self.scaling
+            # 返回结果
             return result
         else:
+            # 没有 Lora 的情况下只有原始输出
             return nn.Embedding.forward(self, x)
             
-
+# Lora 全连接层
 class Linear(nn.Linear, LoRALayer):
     # LoRA implemented in a dense layer
     def __init__(
         self, 
+        # 全连接层主要配置
+        # InDim 输入维度和 OutDim 输出维度
         in_features: int, 
         out_features: int, 
+        # Lora 主要配置
         r: int = 0, 
         lora_alpha: int = 1, 
         lora_dropout: float = 0.,
@@ -100,19 +128,26 @@ class Linear(nn.Linear, LoRALayer):
         merge_weights: bool = True,
         **kwargs
     ):
+        # 创建全连接层参数
         nn.Linear.__init__(self, in_features, out_features, **kwargs)
+        # 设置 Lora 配置
         LoRALayer.__init__(self, r=r, lora_alpha=lora_alpha, lora_dropout=lora_dropout,
                            merge_weights=merge_weights)
 
         self.fan_in_fan_out = fan_in_fan_out
         # Actual trainable parameters
         if r > 0:
+            # 创建 LoraA 矩阵 [Rank, InDim]
             self.lora_A = nn.Parameter(self.weight.new_zeros((r, in_features)))
+            # 创建 LoraB 矩阵 [OutDim, Rank]
             self.lora_B = nn.Parameter(self.weight.new_zeros((out_features, r)))
+            # 设置缩放因子
             self.scaling = self.lora_alpha / self.r
-            # Freezing the pre-trained weight matrix
+            # 冻结原始参数
             self.weight.requires_grad = False
+        # 初始化所有参数
         self.reset_parameters()
+        # 如果设置了`fan_in_fan_out`，交换原始权重中的 InDim 和 OutDim
         if fan_in_fan_out:
             self.weight.data = self.weight.data.transpose(0, 1)
 
@@ -141,6 +176,8 @@ class Linear(nn.Linear, LoRALayer):
                 self.merged = True       
 
     def forward(self, x: torch.Tensor):
+        # 如果设置了`fan_in_fan_out`，交换原始权重中的 InDim 和 OutDim
+        # 和构造器里那个好像重了
         def T(w):
             return w.transpose(0, 1) if self.fan_in_fan_out else w
         if self.r > 0 and not self.merged:
