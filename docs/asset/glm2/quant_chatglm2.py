@@ -477,20 +477,30 @@ class QuantizedLinear(torch.nn.Module):
     def __init__(self, weight_bit_width: int, weight, bias=None, device="cpu", dtype=None, empty_init=False, *args,
                  **kwargs):
         super().__init__()
+        # BitWid 4 或 8
         self.weight_bit_width = weight_bit_width
-
+        # 原始权重的形状，[OutDim, InDim]
         shape = weight.shape
 
         if weight is None or empty_init:
+            # 如果是空初始化，新权重为 [OutDim, NewInDim] 的矩阵
+            # 如果是8位量化，NewInDim不变，如果是四位量化，一个 int8 要存放两个 int4，所以 NewInDim 减半
             self.weight = torch.empty(shape[0], shape[1] * weight_bit_width // 8, dtype=torch.int8, device=device)
+            # 缩放因子也是空的
             self.weight_scale = torch.empty(shape[0], dtype=dtype, device=device)
         else:
             weight = weight.to(torch.cuda.current_device())
+            # 缩放因子是 OriMax / IntNMax
+            # OriMax 是原始值的最大值，这里按行量化，就是行最大值
+            # IntNMax 就是 2 ** (N - 1) - 1，比如8位是 127
             self.weight_scale = weight.abs().max(dim=-1).values / ((2 ** (weight_bit_width - 1)) - 1)
+            # 旧的权重除以缩放因子得到新的权重
             self.weight = torch.round(weight / self.weight_scale[:, None]).to(torch.int8)
+            # 如果是4位量化，需要做一些特殊处理
             if weight_bit_width == 4:
                 self.weight = compress_int4_weight(self.weight)
 
+        # 冻结权重、偏置和和缩放因子
         self.weight = Parameter(self.weight.to(device), requires_grad=False)
         self.weight_scale = Parameter(self.weight_scale.to(device), requires_grad=False)
         self.bias = Parameter(bias.to(device), requires_grad=False) if bias is not None else None
