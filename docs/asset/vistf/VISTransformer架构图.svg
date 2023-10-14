@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- 由 Microsoft Visio, SVG Export 生成 VISTransformer架构图.svg Page-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="14.7638in" height="20.6693in"
+		viewBox="0 0 1062.99 1488.19" xml:space="preserve" color-interpolation-filters="sRGB" class="st13">
+	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false">
+		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#ffffff;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.06299}
+		.st2 {fill:#314aa4;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.06299}
+		.st3 {fill:#ffffff;font-family:微软雅黑;font-size:0.666664em}
+		.st4 {font-family:Microsoft Sans Serif;font-size:1em}
+		.st5 {fill:#ffffff;font-family:Microsoft Sans Serif;font-size:0.708664em}
+		.st6 {font-size:1em}
+		.st7 {fill:#ffffff;font-family:微软雅黑;font-size:0.708664em}
+		.st8 {font-family:Calibri;font-size:1em}
+		.st9 {fill:#ffffff;font-family:微软雅黑;font-size:0.708344em}
+		.st10 {marker-end:url(#mrkr4-180);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.06299}
+		.st11 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.29667721518987}
+		.st12 {marker-end:url(#mrkr4-236);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.06299}
+		.st13 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Markers">
+		<g id="lend4">
+			<path d="M 2 1 L 0 0 L 2 -1 L 2 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr4-180" class="st11" v:arrowType="4" v:arrowSize="2" v:setback="6.74133" refX="-6.7413333333333"
+				orient="auto" markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(-3.3706666666667,-3.3706666666667) "/>
+		</marker>
+		<marker id="mrkr4-236" class="st11" v:arrowType="4" v:arrowSize="2" v:setback="0" refX="-0" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend4" transform="scale(-3.3706666666667,-3.3706666666667) "/>
+		</marker>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Page-1</title>
+		<v:pageProperties v:drawingScale="1" v:pageScale="1" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="Background" v:index="0"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape" v:layerMember="0" transform="translate(111.874,-93.9482)">
+			<title>矩形</title>
+			<rect x="0" y="1032.62" width="166.535" height="455.568" class="st1"/>
+		</g>
+		<g id="shape2-3" v:mID="2" v:groupContext="shape" v:layerMember="0" transform="translate(111.874,-827.669)">
+			<title>Shape.2</title>
+			<rect x="0" y="1192.95" width="166.535" height="295.235" class="st1"/>
+		</g>
+		<g id="shape3-5" v:mID="3" v:groupContext="shape" v:layerMember="0" transform="translate(111.874,-632.457)">
+			<title>流程</title>
+			<rect x="0" y="1379.06" width="166.535" height="109.134" class="st1"/>
+		</g>
+		<g id="shape4-7" v:mID="4" v:groupContext="shape" v:layerMember="0" transform="translate(136.677,-26.5511)">
+			<title>开始/结束</title>
+			<desc>输入图像 [BatchSize, ImgH=224, ImgW=224, ImgC=3]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="58.4646" cy="1458.43" width="102.76" height="59.5276"/>
+			<path d="M19.84 1428.66 L97.09 1428.66 C123.54 1428.66 123.54 1488.19 97.09 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="42.46" y="1451.26" class="st3" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>输入图像<v:newlineChar/><tspan
+						x="17.47" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">, </tspan><tspan
+						class="st4">ImgH</tspan><tspan class="st4">=</tspan><tspan class="st4">224</tspan><tspan class="st4">,<v:newlineChar/></tspan><tspan
+						x="21.61" dy="1.2em" class="st4">ImgW</tspan><tspan class="st4">=</tspan><tspan class="st4">224</tspan><tspan
+						class="st4">, </tspan><tspan class="st4">ImgC</tspan><tspan class="st4">=</tspan><tspan class="st4">3</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape5-25" v:mID="5" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-104.504)">
+			<title>Shape.5</title>
+			<desc>Conv2d (InC=3, OutC=768, K=16, S=16)</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="42.75" y="1451.48" class="st5" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>Conv2d<v:newlineChar/><tspan
+						x="21.53" dy="1.2em" class="st6">(</tspan>InC=3, OutC=768, <v:newlineChar/><tspan x="33.58" dy="1.2em"
+						class="st6">K</tspan>=16, S=16)</text>		</g>
+		<g id="shape6-30" v:mID="6" v:groupContext="shape" v:layerMember="0" transform="translate(132.071,-181.039)">
+			<title>Shape.6</title>
+			<desc>图像嵌入 [BatchSize, EmbH=14, EmbW=14, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="63.0709" cy="1458.43" width="111.97" height="59.5276"/>
+			<path d="M19.84 1428.66 L106.3 1428.66 C132.76 1428.66 132.76 1488.19 106.3 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="46.06" y="1450.81" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>图像嵌入<v:newlineChar/><tspan
+						x="20.2" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">, </tspan><tspan
+						class="st4">EmbH</tspan><tspan class="st4">=</tspan><tspan class="st4">14</tspan><tspan class="st4">, <v:newlineChar/></tspan><tspan
+						x="15.33" dy="1.2em" class="st4">EmbW</tspan><tspan class="st4">=</tspan><tspan class="st4">14</tspan><tspan
+						class="st4">, </tspan><tspan class="st4">HidSize</tspan><tspan class="st4">=</tspan><tspan class="st4">768</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape7-48" v:mID="7" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-264.661)">
+			<title>Shape.7</title>
+			<desc>展开 [BatchSize, SeqLen-1=196, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="48.9" y="1446.41" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>展开<v:newlineChar/><tspan
+						x="35.87" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">, <v:newlineChar/></tspan><tspan
+						x="28.2" dy="1.2em" class="st4">SeqLen</tspan><tspan class="st4">-</tspan><tspan class="st4">1</tspan><tspan
+						class="st4">=</tspan><tspan class="st4">196</tspan><tspan class="st4">, <v:newlineChar/></tspan><tspan
+						x="31.94" dy="1.2em" class="st4">HidSize</tspan><tspan class="st4">=</tspan><tspan class="st4">768</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape8-64" v:mID="8" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-346.866)">
+			<title>Shape.8</title>
+			<desc>添加&#60;CLS&#62; [1, 1, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="38.29" y="1456.65" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>添加<tspan class="st4">&#60;</tspan><tspan
+						class="st8" v:langID="1033">CLS</tspan><tspan class="st8">&#62;</tspan><tspan class="st8" v:langID="1033"> </tspan><tspan
+						x="25.27" dy="1.208em" class="st8" v:langID="1033">[</tspan><tspan class="st8">1</tspan><tspan class="st8"
+						v:langID="1033">, </tspan><tspan class="st8">1</tspan><tspan class="st8" v:langID="1033">, </tspan><tspan
+						class="st8" v:langID="1033">HidSize</tspan><tspan class="st8" v:langID="1033">=</tspan><tspan class="st8"
+						v:langID="1033">768</tspan><tspan class="st8" v:langID="1033">]</tspan></text>		</g>
+		<g id="shape9-80" v:mID="9" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-433.323)">
+			<title>Shape.9</title>
+			<desc>⊕ PosEmb [1, SeqLen=197, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="36.81" y="1451.52" class="st9" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>⊕<tspan class="st4"> </tspan><tspan
+						class="st4">PosEmb <v:newlineChar/></tspan><tspan x="26.14" dy="1.204em" class="st4">[</tspan><tspan
+						class="st4">1</tspan><tspan class="st4">, </tspan><tspan class="st4">SeqLen</tspan><tspan class="st4">=</tspan><tspan
+						class="st4">197</tspan><tspan class="st4">, <v:newlineChar/></tspan><tspan x="31.95" dy="1.2em" class="st4">HidSize</tspan><tspan
+						class="st4">=</tspan><tspan class="st4">768</tspan><tspan class="st4">]</tspan></text>		</g>
+		<g id="shape10-96" v:mID="10" v:groupContext="shape" v:layerMember="0" transform="translate(132.071,-556.63)">
+			<title>Shape.10</title>
+			<desc>图像嵌入 [BatchSize, SeqLen=197, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="63.0709" cy="1458.43" width="111.97" height="59.5276"/>
+			<path d="M19.84 1428.66 L106.3 1428.66 C132.76 1428.66 132.76 1488.19 106.3 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="46.06" y="1445.7" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>图像嵌入<v:newlineChar/><tspan
+						x="41.54" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">,<v:newlineChar/></tspan><tspan
+						x="37.65" dy="1.2em" class="st4">SeqLen</tspan><tspan class="st4">=</tspan><tspan class="st4">197</tspan><tspan
+						class="st4">, <v:newlineChar/></tspan><tspan x="37.61" dy="1.2em" class="st4">HidSize</tspan><tspan
+						class="st4">=</tspan><tspan class="st4">768</tspan><tspan class="st4">]</tspan></text>		</g>
+		<g id="shape11-110" v:mID="11" v:groupContext="shape" v:layerMember="0" transform="translate(134.906,-505.063)">
+			<title>Shape.11</title>
+			<desc>Dropout</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="60.2362" cy="1469.22" width="106.3" height="37.937"/>
+			<rect x="0" y="1450.25" width="120.472" height="37.937" class="st2"/>
+			<text x="45.11" y="1471.77" class="st5" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>Dropout</text>		</g>
+		<g id="shape12-113" v:mID="12" v:groupContext="shape" v:layerMember="0" transform="translate(134.906,-640.606)">
+			<title>Shape.12</title>
+			<desc>TFBlock x16</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="60.2362" cy="1469.06" width="106.3" height="38.2677"/>
+			<rect x="0" y="1449.92" width="120.472" height="38.2677" class="st2"/>
+			<text x="36.63" y="1471.61" class="st5" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>TFBlock x16</text>		</g>
+		<g id="shape13-116" v:mID="13" v:groupContext="shape" v:layerMember="0" transform="translate(134.906,-695.173)">
+			<title>Shape.13</title>
+			<desc>LayerNorm</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="60.2362" cy="1469.06" width="106.3" height="38.2677"/>
+			<rect x="0" y="1449.92" width="120.472" height="38.2677" class="st2"/>
+			<text x="39.21" y="1471.61" class="st5" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>LayerNorm</text>		</g>
+		<g id="shape14-119" v:mID="14" v:groupContext="shape" v:layerMember="0" transform="translate(132.071,-757.89)">
+			<title>Shape.14</title>
+			<desc>图像嵌入 [BatchSize, SeqLen=197, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="63.0709" cy="1458.43" width="111.97" height="59.5276"/>
+			<path d="M19.84 1428.66 L106.3 1428.66 C132.76 1428.66 132.76 1488.19 106.3 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="46.06" y="1445.7" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>图像嵌入<v:newlineChar/><tspan
+						x="41.54" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">,<v:newlineChar/></tspan><tspan
+						x="37.65" dy="1.2em" class="st4">SeqLen</tspan><tspan class="st4">=</tspan><tspan class="st4">197</tspan><tspan
+						class="st4">, <v:newlineChar/></tspan><tspan x="37.61" dy="1.2em" class="st4">HidSize</tspan><tspan
+						class="st4">=</tspan><tspan class="st4">768</tspan><tspan class="st4">]</tspan></text>		</g>
+		<g id="shape15-133" v:mID="15" v:groupContext="shape" v:layerMember="0" transform="translate(134.906,-834.779)">
+			<title>Shape.15</title>
+			<desc>Idx[:, 0]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="60.2362" cy="1469.06" width="106.3" height="38.2677"/>
+			<rect x="0" y="1449.92" width="120.472" height="38.2677" class="st2"/>
+			<text x="46.34" y="1471.61" class="st5" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>Idx[:, 0]</text>		</g>
+		<g id="shape16-136" v:mID="16" v:groupContext="shape" v:layerMember="0" transform="translate(132.071,-890.409)">
+			<title>Shape.16</title>
+			<desc>类别嵌入 [BatchSize, HidSize=768]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="63.0709" cy="1458.43" width="111.97" height="59.5276"/>
+			<path d="M19.84 1428.66 L106.3 1428.66 C132.76 1428.66 132.76 1488.19 106.3 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="46.06" y="1450.81" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>类别嵌入<v:newlineChar/><tspan
+						x="41.54" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">,<v:newlineChar/></tspan><tspan
+						x="37.61" dy="1.2em" class="st4">HidSize</tspan><tspan class="st4">=</tspan><tspan class="st4">768</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape17-146" v:mID="17" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-977.575)">
+			<title>Shape.17</title>
+			<desc>线性+tanh? [HidSize, HidSize]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="35.77" y="1456.62" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>线性<tspan class="st4">+</tspan><tspan
+						class="st4">tanh</tspan><tspan class="st4">? <v:newlineChar/></tspan><tspan x="23.33" dy="1.204em"
+						class="st4">[</tspan><tspan class="st4">HidSize</tspan><tspan class="st4">, </tspan><tspan class="st4">HidSize</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape18-157" v:mID="18" v:groupContext="shape" v:layerMember="0" transform="translate(137.74,-1056.24)">
+			<title>Shape.18</title>
+			<desc>线性+Softmax [HidSize, ClsCount]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="57.4016" cy="1459.13" width="100.63" height="58.1102"/>
+			<rect x="0" y="1430.08" width="114.803" height="58.1102" class="st2"/>
+			<text x="30.82" y="1456.62" class="st7" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>线性<tspan class="st4">+</tspan><tspan
+						class="st4">Softmax <v:newlineChar/></tspan><tspan x="20.51" dy="1.204em" class="st4">[</tspan><tspan
+						class="st4">HidSize</tspan><tspan class="st4">, </tspan><tspan class="st4">ClsCount</tspan><tspan
+						class="st4">]</tspan></text>		</g>
+		<g id="shape19-167" v:mID="19" v:groupContext="shape" v:layerMember="0" transform="translate(132.071,-1141.98)">
+			<title>Shape.19</title>
+			<desc>类别概率 [BatchSize, ClsCount]</desc>
+			<v:textBlock v:margins="rect(0,0,0,0)"/>
+			<v:textRect cx="63.0709" cy="1458.43" width="111.97" height="59.5276"/>
+			<path d="M19.84 1428.66 L106.3 1428.66 C132.76 1428.66 132.76 1488.19 106.3 1488.19 L19.84 1488.19 C-6.61 1488.19 -6.61
+						 1428.66 19.84 1428.66 Z" class="st2"/>
+			<text x="46.07" y="1455.91" class="st9" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>类别概率<v:newlineChar/><tspan
+						x="21.73" dy="1.204em" class="st4">[</tspan><tspan class="st4">BatchSize</tspan><tspan class="st4">, </tspan><tspan
+						class="st4">ClsCount</tspan><tspan class="st4">]</tspan></text>		</g>
+		<g id="shape20-175" v:mID="20" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-104.504)">
+			<title>linker</title>
+			<path d="M0 1506.61 L0 1497.4 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape21-181" v:mID="21" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-181.039)">
+			<title>Dynamic connector.21</title>
+			<path d="M0 1506.61 L0 1497.4 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape22-186" v:mID="22" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-264.661)">
+			<title>Dynamic connector.22</title>
+			<path d="M0 1512.28 L0 1500.24 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape23-191" v:mID="23" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-346.866)">
+			<title>Dynamic connector.23</title>
+			<path d="M0 1512.28 L0 1500.24 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape24-196" v:mID="24" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-433.323)">
+			<title>Dynamic connector.24</title>
+			<path d="M0 1516.54 L0 1502.36 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape25-201" v:mID="25" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-757.89)">
+			<title>Dynamic connector.25</title>
+			<path d="M0 1512.64 L-0 1495.35" class="st10"/>
+		</g>
+		<g id="shape26-206" v:mID="26" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-834.779)">
+			<title>Dynamic connector.26</title>
+			<path d="M0 1505.55 L0 1496.87 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape27-211" v:mID="27" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-890.409)">
+			<title>Dynamic connector.27</title>
+			<path d="M0 1505.55 L0 1496.87 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape28-216" v:mID="28" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-977.575)">
+			<title>Dynamic connector.28</title>
+			<path d="M0 1515.83 L0 1502.01 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape29-221" v:mID="29" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-1056.24)">
+			<title>Dynamic connector.29</title>
+			<path d="M0 1508.74 L0 1498.46 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape30-226" v:mID="30" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-1141.98)">
+			<title>Dynamic connector.30</title>
+			<path d="M0 1515.83 L0 1502.01 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape31-231" v:mID="31" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-505.063)">
+			<title>Dynamic connector.31</title>
+			<path d="M0 1501.82 L0 1495 L0 1488.19" class="st12"/>
+		</g>
+		<g id="shape32-237" v:mID="32" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-556.63)">
+			<title>Dynamic connector.32</title>
+			<path d="M0 1501.82 L0 1495 L0 1488.19" class="st12"/>
+		</g>
+		<g id="shape33-242" v:mID="33" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-640.606)">
+			<title>Dynamic connector.33</title>
+			<path d="M0 1512.64 L0 1495.35" class="st10"/>
+		</g>
+		<g id="shape34-247" v:mID="34" v:groupContext="shape" v:layerMember="0" transform="translate(195.142,-695.173)">
+			<title>Dynamic connector.34</title>
+			<path d="M0 1504.49 L0 1495.35" class="st10"/>
+		</g>
+	</g>
+</svg>
