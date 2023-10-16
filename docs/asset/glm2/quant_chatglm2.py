@@ -133,7 +133,8 @@ class CPUKernel:
         if (not kernel_file) or (not os.path.exists(kernel_file)):
             try:
                 if os.path.exists(source_code):
-                    kernel_file = source_code[:-2] + ".so"
+                    kernel_file = source_code[:-2] + \
+                        (".dll" if sys.platform == "win32" else ".so")
 
                     if compile_parallel_kernel:
                         if sys.platform != 'darwin':
