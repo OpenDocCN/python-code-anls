@@ -13,3 +13,4 @@
 +   [ChatGLM2 源码解析：`MLP`_绝不原创的飞龙的博客-CSDN博客](ChatGLM2-MLP.md)
 +   [KVCache原理简述-CSDN博客](KVCache.md)
 +   [VisionTransformer（ViT）详细架构图-CSDN博客](VisionTransformer.md)
++   [Whisper 整体架构图](Whisper.md)
