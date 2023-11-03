@@ -1,6 +1,6 @@
 # SDWebUI源码解析 2
 
-# `/opt/to-comment/stable-diffusion-webui/modules/sd_hijack.py`
+# `modules/sd_hijack.py`
 
 这段代码是一个PyTorch脚本，它实现了LDM（长距离依赖建模）模型的训练和测试。LDM模型是一种基于注意力机制的神经网络模型，主要用于自然语言处理任务，如机器翻译、问答系统等。
 
@@ -39,7 +39,7 @@
 这段代码的作用是实现一个基于Attention机制的LDM模型，可以用于自然语言处理任务，如机器翻译、问答系统等。
 
 
-```
+```py
 import os
 import sys
 import traceback
@@ -62,7 +62,7 @@ import ldm.modules.attention
 具体来说，这段代码接收一个输入序列`x`，以及一个 optional 的`context` 参数，用于控制输出的大小。函数首先将输入序列`x`转换为张量，并将其存储在变量`context`中或者直接设置为输入序列`x`。然后，它使用一些数学操作将输入序列`x`转换为另一个张量`context`，并且训练了输出序列`v`。接下来，函数实现了交叉注意力的前馈传播，将输入序列`x`与输出序列`v`相结合，使得每个时间步的结果是输入序列`x`和输出序列`v`的对应位置的加权乘积。最后，函数返回了经过前馈传播得到的输出序列`v`。
 
 
-```
+```py
 def split_cross_attention_forward(self, x, context=None, mask=None):
     h = self.heads
 
@@ -107,7 +107,7 @@ The function `iClip.create_model()` takes an optional `model_type` parameter, wh
 Finally, the function `iClip.create_model()` returns the model instance, which can be used for training and prediction by calling the `train()` and `predict()` methods.
 
 
-```
+```py
 class StableDiffusionModelHijack:
     ids_lookup = {}
     word_embeddings = {}
@@ -209,7 +209,7 @@ This is a function that uses a combination of custom tokenizers, model training,
 The function returns the output of the model, which is the sanitized, translated, and attention-weighted vector.
 
 
-```
+```py
 class FrozenCLIPEmbedderWithCustomWords(torch.nn.Module):
     def __init__(self, wrapped, hijack):
         super().__init__()
@@ -340,7 +340,7 @@ class FrozenCLIPEmbedderWithCustomWords(torch.nn.Module):
 最后，该函数返回经过处理的输入层嵌入值。
 
 
-```
+```py
 class EmbeddingsWithFixes(torch.nn.Module):
     def __init__(self, wrapped, embeddings):
         super().__init__()
@@ -372,7 +372,7 @@ class EmbeddingsWithFixes(torch.nn.Module):
 另外，该代码还将 `add_circular_option_to_conv_2d` 函数中的代码直接输出，但是不要在函数内部使用该函数，以免在函数内部也创建了一个新的 `StableDiffusionModelHijack` 实例。
 
 
-```
+```py
 def add_circular_option_to_conv_2d():
     conv2d_constructor = torch.nn.Conv2d.__init__
 
@@ -386,7 +386,7 @@ model_hijack = StableDiffusionModelHijack()
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/sd_samplers.py`
+# `modules/sd_samplers.py`
 
 这段代码的作用是定义了一个名为 SamplerData 的命名元组类型，该类型包含一个名为 name 的属性，用于指定数据源；一个名为 constructor 的属性，用于指定数据源的构造函数；以及一个名为 aliases 的属性，用于指定别名。
 
@@ -412,7 +412,7 @@ from ldm.models.diffusion.plms import PLM
 这些模块的作用是在后续的代码中进行图像处理、数据采样、模拟扩散等操作。
 
 
-```
+```py
 from collections import namedtuple
 import numpy as np
 import torch
@@ -442,7 +442,7 @@ SamplerData = namedtuple('SamplerData', ['name', 'constructor', 'aliases'])
 这段代码的主要目的是创建一个差分扩散数据集中每个数据点的采样器实例，以便对数据进行采样。通过使用给定的函数名称对数据进行采样，可以实现数据的随机化，这在机器学习领域中非常常见。
 
 
-```
+```py
 samplers_k_diffusion = [
     ('Euler a', 'sample_euler_ancestral', ['k_euler_a']),
     ('Euler', 'sample_euler', ['k_euler']),
@@ -471,7 +471,7 @@ samplers_data_k_diffusion = [
 总结起来，这段代码定义了一个函数 `sample_to_image`，该函数对给定的采样器返回的第一个样本进行处理，并返回一个 `Image` 对象。这个函数将被用于样本到图像的转换中。
 
 
-```
+```py
 samplers = [
     *samplers_data_k_diffusion,
     SamplerData('DDIM', lambda model: VanillaStableDiffusionSampler(ldm.models.diffusion.ddim.DDIMSampler, model), []),
@@ -497,7 +497,7 @@ def sample_to_image(samples):
 以下是 `p_sample_ddim_hook` 函数的代码，它是一个 hook，用于在采样 DDI（动态图像映射）模型的同时进行动态图像映射（DIM）处理的 Sampler 对象上进行处理。它接收一个 Sampler 对象 `sampler_wrapper`，以及一个或多个参数 `x_dec`、`cond` 和 `ts`，并对其进行处理。如果 `sampler_wrapper.mask` 存在，就可以从 Sampler 的初始化 latent 值中计算出采样图像，否则就将当前图像 `x_dec` 和图像掩码 `x_dec` 相加，并将其存储到 `shared.state.current_image` 中。最后，返回原始的 Sampler 对象。
 
 
-```
+```py
 def store_latent(decoded):
     state.current_latent = decoded
 
@@ -530,7 +530,7 @@ def p_sample_ddim_hook(sampler_wrapper, x_dec, cond, ts, *args, **kwargs):
 函数内部还定义了一个函数 `ddim.tqdm`，这个函数接收一个或多个参数，与 `extended_tdqm` 函数的参数相同，但是返回的参数是一个函数，接受一个或多个参数，返回的是一个迭代器 `yield`。这个函数将 `extended_tdqm` 函数作为参数传入，返回的迭代器与 `extended_tdqm` 函数返回的相同。
 
 
-```
+```py
 def extended_tdqm(sequence, *args, desc=None, **kwargs):
     state.sampling_steps = len(sequence)
     state.sampling_step = 0
@@ -564,7 +564,7 @@ If the `make_schedule` method raises an exception, the function falls back to us
 It is not clear from the code provided how the `Sampler` object is defined or what it does. It is possible that it is a custom implementation of a sample-from-dataset QNaA like node.
 
 
-```
+```py
 ldm.models.diffusion.plms.tqdm = lambda *args, desc=None, **kwargs: extended_tdqm(*args, desc=desc, **kwargs)
 
 
@@ -621,7 +621,7 @@ class VanillaStableDiffusionSampler:
 CFGDenoiser类的实例可以被存储为同一类中的许多个，例如使用GFGDenoiser类可以将多个训练数据集的denoised值存储为同一张GPU内存上，以便在多个batch计算时进行共享。
 
 
-```
+```py
 class CFGDenoiser(torch.nn.Module):
     def __init__(self, model):
         super().__init__()
@@ -657,7 +657,7 @@ The `样本图像2图像` function uses the `k_diffusion` library to sample from
 The `样本` function uses the `self.func` function to generate the denoised image. This function appears to take the denoised image, the diffusion model configuration, and a series of transformation parameters as input and returns the denoised image. The transformation parameters include the denoising strength, the conditioning strength, and the conditional scaling factor.
 
 
-```
+```py
 def extended_trange(count, *args, **kwargs):
     state.sampling_steps = count
     state.sampling_step = 0
@@ -714,7 +714,7 @@ class KDiffusionSampler:
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/shared.py`
+# `modules/shared.py`
 
 这段代码是一个基于PyTorch框架的机器学习项目，它的主要作用是编译和运行一个名为“my_project”的机器学习模型。这个模型使用了预训练的PyTorch模型，经过训练后可以在各种数据集上取得较好的表现。
 
@@ -743,7 +743,7 @@ class KDiffusionSampler:
 11. 通过运行my_project类的函数，用户可以训练my_project模型的指定数据集，也可以在测试集上查看模型的性能。
 
 
-```
+```py
 import sys
 import argparse
 import json
@@ -777,7 +777,7 @@ config_filename = "config.json"
 总的来说，这段代码是一个用于训练FPGA GAN的Python脚本，可以允许用户在运行时执行自定义脚本，以优化FPGA GAN的性能。
 
 
-```
+```py
 sd_model_file = os.path.join(script_path, 'model.ckpt')
 if not os.path.exists(sd_model_file):
     sd_model_file = "models/ldm/stable-diffusion-v1/model.ckpt"
@@ -804,7 +804,7 @@ parser.add_argument("--medvram", action='store_true', help="enable stable diffus
 此外，`--show-negative-prompt` 参数用于在训练过程中允许用户输入负采样率，从而提高模型性能。
 
 
-```
+```py
 parser.add_argument("--lowvram", action='store_true', help="enable stable diffusion model optimizations for sacrificing a lot of speed for very low VRM usage")
 parser.add_argument("--always-batch-cond-uncond", action='store_true', help="a workaround test; may help with speed if you use --lowvram")
 parser.add_argument("--unload-gfpgan", action='store_true', help="unload GFPGAN every time after processing images. Warning: seems to cause memory leaks")
@@ -829,7 +829,7 @@ if torch.has_cuda:
 最后，该代码将`State`实例的`interrupted`属性设置为`True`，这意味着当任务被中断时，此实例将`True`。
 
 
-```
+```py
 elif torch.has_mps:
     device = torch.device("mps")
 else:
@@ -870,7 +870,7 @@ class State:
 最后，它定义了一个名为 `find_any_font` 的函数，该函数将搜索计算机上可用的字体，并在字体存在时返回该字体。如果找不到任何字体，它将返回 "Arial.TTF"。
 
 
-```
+```py
 state = State()
 
 artist_db = modules.artists.ArtistsDatabase(os.path.join(script_path, 'artists.csv'))
@@ -904,7 +904,7 @@ The `face_restoration_model` option allows the user to specify the name of a pre
 The `maximum` and `step` options specify the maximum size and step size for the image that will be reconstructed.
 
 
-```
+```py
 class Options:
     class OptionInfo:
         def __init__(self, default=None, label="", component=None, component_args=None):
@@ -995,7 +995,7 @@ class Options:
 最后，代码创建了一个 `TotalTQDM` 实例，并在主循环中一直运行该实例，直到模型训练完成。
 
 
-```
+```py
 opts = Options()
 if os.path.exists(config_filename):
     opts.load(config_filename)
@@ -1041,17 +1041,17 @@ class TotalTQDM:
 如果这个数据框没有被传递给TotalTQDM函数，那么这段代码将无法运行，因为无法获取数据。
 
 
-```
+```py
 total_tqdm = TotalTQDM()
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/txt2img.py`
+# `modules/txt2img.py`
 
 这段代码是一个Python脚本，主要作用是实现将文本描述转换为图像的函数txt2img。txt2img接受一个或多个参数，包括一个提示文本、一个负提示文本、一个采样器指数、一个恢复面部外观的布尔值、一个图像处理层 sampling 的步长、一个图像处理层的配置缩放因子、一个种子号和一个图像的大小。函数使用StableDiffusionProcessingTxt2Img类将文本描述转换为图像，如果遇到错误，将返回一个Processed对象，否则将返回一个images, js 和 plaintext_to_html组成的元组。
 
 
-```
+```py
 import modules.scripts
 from modules.processing import StableDiffusionProcessing, Processed, StableDiffusionProcessingTxt2Img, StableDiffusionProcessingImg2Img, process_images
 from modules.shared import opts, cmd_opts
@@ -1094,7 +1094,7 @@ def txt2img(prompt: str, negative_prompt: str, steps: int, sampler_index: int, r
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/ui.py`
+# `modules/ui.py`
 
 这段代码的作用是：
 
@@ -1120,7 +1120,7 @@ def txt2img(prompt: str, negative_prompt: str, steps: int, sampler_index: int, r
 总之，这段代码将使用Python等编程语言，实现一个自动从新闻网站中自动抓取数据、进行标注和排序的过程，以提高网站的新闻推荐准确性。
 
 
-```
+```py
 import base64
 import html
 import io
@@ -1155,7 +1155,7 @@ from PIL import Image
 这段代码的作用是创建一个交互式图形界面，用于训练和评估不同的机器学习模型。通过调用不同的函数，用户可以选择不同的模型、训练或评估不同的指标，以及查看训练过程中的进展。
 
 
-```
+```py
 import gradio as gr
 import gradio.utils
 import gradio.routes
@@ -1187,7 +1187,7 @@ mimetypes.init()
 最后，通过 gr_show 函数，可以将定义的参数"visible=True"传递给 gradio，并在显示时执行该函数，从而更新可见性。
 
 
-```
+```py
 mimetypes.add_type('application/javascript', '.js')
 
 
@@ -1215,7 +1215,7 @@ sample_img2img = sample_img2img if os.path.exists(sample_img2img) else None
 3. `.meta-text { display:none!important; }`：这个部分定义了一个条件的 CSS 属性，它的值为 `display:none!important;`。这个属性 targets 所有的元素，如果这个元素被显示了，它会设置 `display` 属性为 `block`，否则会设置为 `none`。
 
 
-```
+```py
 css_hide_progressbar = """
 .wrap .m-12 svg { display:none!important; }
 .wrap .m-12::before { content:"Loading..." }
@@ -1254,7 +1254,7 @@ def image_from_url_text(filedata):
 这两个函数一起工作，用于将 Gradio 画廊中的图像下载到本地，并保存到指定的文件夹中。
 
 
-```
+```py
 def send_gradio_gallery_to_image(x):
     if len(x) == 0:
         return None
@@ -1311,7 +1311,7 @@ def save_files(js_data, images):
 由于 `wrap_gradio_call` 函数本身没有定义如何使用它，因此它的实际作用是将一个 Gradio 老子应用程序的函数包装成一个可以输出结果的函数，这个结果可以被 Gradio 用于显示性能数据。
 
 
-```
+```py
 def wrap_gradio_call(func):
     def f(*args, **kwargs):
         t = time.perf_counter()
@@ -1349,7 +1349,7 @@ def wrap_gradio_call(func):
 如果 opts.show_progressbar 设置为 True，函数将输出带有 progressbar 的信息；如果 opts.show_progress_every_n_steps 大于 0，则函数将每隔 n_steps 步输出一次 progress。函数的最终输出结果是一个元组，包含当前时间戳、progressbar 和一张预览图片。
 
 
-```
+```py
 def check_progress_call():
 
     if shared.state.job_count == 0:
@@ -1399,7 +1399,7 @@ def check_progress_call():
 该函数的作用是在给定的艺术家库中随机获取艺术家名称，并在给定的目录中递归地访问子目录。
 
 
-```
+```py
 def roll_artist(prompt):
     allowed_cats = set([x for x in shared.artist_db.categories() if len(opts.random_artist_categories)==0 or x in opts.random_artist_categories])
     artist = random.choice([x for x in shared.artist_db.artists if x.category in allowed_cats])
@@ -1428,7 +1428,7 @@ Finally, the script uses the loadsave function to save the game's settings to th
 Overall, it looks like the script is attempting to convert a simple text-based game to an interactive HTML game that can be rendered in a web browser.
 
 
-```
+```py
 def create_ui(txt2img, img2img, run_extras, run_pnginfo):
     with gr.Blocks(analytics_enabled=False) as txt2img_interface:
         with gr.Row():
@@ -1944,7 +1944,7 @@ def create_ui(txt2img, img2img, run_extras, run_pnginfo):
 具体来说，代码的作用是：读取一个名为"script.js"的文件，并将其内容存储在名为jsfile的文件对象中。然后，定义了一个名为template_response的函数，该函数使用gradio_routes_templates_response函数来获取模板文件的内容，并将其内容与JavaScript代码混合。最后，将生成的模板文件内容返回给调用者，并对其进行初始化。
 
 
-```
+```py
 with open(os.path.join(script_path, "script.js"), "r", encoding="utf8") as jsfile:
     javascript = jsfile.read()
 

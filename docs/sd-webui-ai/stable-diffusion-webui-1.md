@@ -1,6 +1,6 @@
 # SDWebUI源码解析 1
 
-# `/opt/to-comment/stable-diffusion-webui/modules/images.py`
+# `modules/images.py`
 
 这段代码的主要作用是定义了一个名为 `image_grid` 的函数，用于将给定的图像列表（`imgs`）加载到内存中，并按指定批次大小（`batch_size`）加载到网格中，最后返回网格对象（`grid`）。
 
@@ -17,7 +17,7 @@
 函数返回一个和输入图像大小相同的 `Image` 对象，其中包含按批次大小加载的图像的 `Image.new` 对象。
 
 
-```
+```py
 import math
 import os
 from collections import namedtuple
@@ -62,7 +62,7 @@ split_grid函数，接受一个图像对象和一个 tile_w 和 tile_h 参数，
 具体来说，这个函数首先计算出每个网格的列数和行数。以每个网格所需的非覆盖区域(也就是 tile_w 和 tile_h 减去 overlap 的值)作为网格的列宽和行高。然后，从 0 到 cols-1 进行步长计算，从 0 到 rows-1 进行步长计算。接下来，在网格中按行和列构建一个列表，包含该网格中所有像素点的信息。如果当前列数小于列宽，或者当前行数小于行高，就通过在四周扩展(dx 和 dy)来填充任何剩余的空间，使得所有网格都连接在一起。最后，返回由所有网格列表组成的元组。
 
 
-```
+```py
 Grid = namedtuple("Grid", ["tiles", "tile_w", "tile_h", "image_w", "image_h", "overlap"])
 
 
@@ -114,7 +114,7 @@ def split_grid(image, tile_w=512, tile_h=512, overlap=64):
 函数内部接着创建一个名为 `combined_image` 的 Image 对象，并使用一个循环来遍历网格中的每个元素，对于每个元素，首先创建一个高分辨率版本的合成图像，然后从低分辨率版本中下载该元素并将其下载到合成图像中。具体来说，对于每个元素，函数会将合成图像中的对应位置下载一个高分辨率版本的元素，然后下载一个低分辨率版本的元素，这两个版本会在合成图像中合并为一个元素。最后，函数返回生成的合成图像。
 
 
-```
+```py
 def combine_grid(grid):
     def make_mask_image(r):
         r = r * 255 / grid.overlap
@@ -177,7 +177,7 @@ def separate_text_boxes(image_path, text_thickness, max_width, min_width, rows, 
 这个函数需要一个前提条件：原始图像已经被处理过，提取出了所有文本框。这个函数处理文本框的方法是：对于每个文本框，首先绘制文本框的边框和内容文本，然后根据给定的文本框宽度计算出阴影的范围，最后将阴影部分和文本部分都变成白色。
 
 
-```
+```py
 class GridAnnotation:
     def __init__(self, text='', is_active=True):
         self.text = text
@@ -277,7 +277,7 @@ def modify_image(image, src_ratio):
 Note that this function modifies the original image by resizing it, and does not return the new image.
 
 
-```
+```py
 def draw_prompt_matrix(im, width, height, all_prompts):
     prompts = all_prompts[1:]
     boundary = math.ceil(len(prompts) / 2)
@@ -344,7 +344,7 @@ The function takes four arguments:
 The function first checks if the directory exists and creates it if it doesn't using the `os.makedirs` function. It then sets the directory structure and generates the PNG image according to the options passed.
 
 
-```
+```py
 invalid_filename_chars = '<>:"/\\|?*\n'
 
 
@@ -418,7 +418,7 @@ def save_image(image, path, basename, seed=None, prompt=None, extension='png', i
 在 "upscale" 方法中，如果图片的宽度和高度不匹配给定的宽度和高度，它会使用 "resize" 方法将图片的大小调整为符合宽度和高度的大小。这里的 "resize" 方法使用了 "LANCZOS" 模式来拉伸图片，这是一种基于约束的拉伸算法，可以平滑地拉伸图片以保持其质量。
 
 
-```
+```py
 class Upscaler:
     name = "Lanczos"
 
@@ -453,7 +453,7 @@ class Upscaler:
 通过这段代码，创建了一个 UpscalerNone 类，用于对图像进行放大。在代码中，通过直接重写父类的 upscale 方法，实现了创建一个副本并在需要时调用该方法。同时，在代码的末尾，将两个 UpscalerNone 对象添加到 shared.sd_upscalers 列表中，以便在需要时动态分配 UpscalerNone 对象。
 
 
-```
+```py
 class UpscalerNone(Upscaler):
     name = "None"
 
@@ -466,7 +466,7 @@ modules.shared.sd_upscalers.append(Upscaler())
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/img2img.py`
+# `modules/img2img.py`
 
 This script appears to be a command-line interface for upscaling images using a tesseract-based OCR model and a specified image upscaleer. The script takes several arguments:
 
@@ -490,7 +490,7 @@ This script appears to be a command-line interface for upscaling images using a 
 The script uses the `egsplitter` library to split the input image into tiles, and the `processing_images.py` and `psd_models.py` scripts from the `image_upscaleers` directory to perform the image upscaling. The `es_api.py` script from the `teslaScripts/models/` directory is used to train the teslaScripts AI model.
 
 
-```
+```py
 import math
 import cv2
 import numpy as np
@@ -672,14 +672,14 @@ def img2img(prompt: str, negative_prompt: str, init_img, init_img_with_mask, ste
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/lowvram.py`
+# `modules/lowvram.py`
 
 It looks like you're trying to build a neural network model using the PyTorch library and you're having trouble with the model's first and last stages, which are producing errors. Specifically, you're trying to use the "send\_me\_to\_gpu" function, which appears to be a function that sends the input data to the GPU.
 
 One possible solution would be to check the source code of the model to see if there's anything that's causing the errors. You might also want to check that the inputs to the model are the correct shape and size. Additionally, you may want to try using the `torch.no_grad` function to disable gradient calculation to see if that resolves the issue.
 
 
-```
+```py
 import torch
 
 module_in_gpu = None
@@ -759,7 +759,7 @@ def setup_for_low_vram(sd_model, use_medvram):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/paths.py`
+# `modules/paths.py`
 
 这段代码是一个 Python 脚本，用于在给定的目录中查找一个名为 "stable-diffusion" 的数据科学模型（即 MDP）的稳定扩散（即 DDP）文件。它使用了一些 Python 标准库函数和第三方库（如 argparse 和 os）。
 
@@ -768,7 +768,7 @@ def setup_for_low_vram(sd_model, use_medvram):
 这段代码可能是在一个名为 "find_stable_diffusion" 的命令行工具中使用的。这个工具可能将用户指定一个目录，然后搜索该目录中是否存在指定的数据科学模型和相关的依赖文件。
 
 
-```
+```py
 import argparse
 import os
 import sys
@@ -794,7 +794,7 @@ assert sd_path is not None, "Couldn't find Stable Diffusion in any of: " + possi
 对于每个 `path_dirs` 中的元素，代码首先尝试获取它的绝对路径。如果路径不存在，代码会打印一个警告消息。否则，代码会将 `path_dirs` 中的元素目录或文件名添加到 `paths` 字典中。这样，`paths` 字典中就会存储每个 `path_dirs` 元素所属的项目的路径。
 
 
-```
+```py
 path_dirs = [
     (sd_path, 'ldm', 'Stable Diffusion'),
     (os.path.join(sd_path, '../taming-transformers'), 'taming', 'Taming Transformers'),
@@ -814,7 +814,7 @@ for d, must_exist, what in path_dirs:
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/processing.py`
+# `modules/processing.py`
 
 这段代码的作用是实现一个图像处理工具，用于对图像进行各种处理，包括图像增强、图像压缩、图像分割等。
 
@@ -834,7 +834,7 @@ for d, must_exist, what in path_dirs:
 8. Utils module：用于支持工具箱中的其他工具类，如图像复原工具、图像查看工具等。
 
 
-```
+```py
 import contextlib
 import json
 import math
@@ -855,7 +855,7 @@ from modules.shared import opts, cmd_opts, state
 这段代码的作用是定义了几个变量，包括 opt_C 和 opt_f，以及一个名为 torch_gc 的函数。函数内部使用了一些选项，但有一些选项被认为是错误的，因此被从函数中省略了。 opt_C 和 opt_f 变量可能是用来在训练过程中对图像进行处理和优化设置的。而 torch_gc 函数则是在图像生成时对图像进行一些预处理操作，以提高模型的效果。
 
 
-```
+```py
 import modules.shared as shared
 import modules.face_restoration
 import modules.images as images
@@ -881,7 +881,7 @@ def torch_gc():
 该类的作用是，定义了如何设置生成图像的参数，包括扩散模型、生成的样本数量、采样步长等，以及如何生成图像。通过调用 `StableDiffusionProcessing` 类中的 `sample` 方法，可以生成具有良好结构和连贯性的图像。
 
 
-```
+```py
 class StableDiffusionProcessing:
     def __init__(self, sd_model=None, outpath_samples=None, outpath_grids=None, prompt="", seed=-1, sampler_index=0, batch_size=1, n_iter=1, steps=50, cfg_scale=7.0, width=512, height=512, restore_faces=False, tiling=False, do_not_save_samples=False, do_not_save_grid=False, extra_generation_params=None, overlay_images=None, negative_prompt=None):
         self.sd_model = sd_model
@@ -924,7 +924,7 @@ class StableDiffusionProcessing:
 在 `js` 函数中，将这些变量转换为字典类型，并将它们存储在一个名为 `obj` 的字典中。最后，使用 `json.dumps` 方法将 `obj` 对象转换为 JSON 格式的字符串，并返回这个字符串。这样，`Processed` 类就可以作为一个具有 `js` 函数的接口，用于在 `StableDiffusionProcessing` 中调用图像处理操作。
 
 
-```
+```py
 class Processed:
     def __init__(self, p: StableDiffusionProcessing, images_list, seed, info):
         self.images = images_list
@@ -962,7 +962,7 @@ set_seed()函数的作用是在给定一个种子（整数或浮点数）后，�
 综合来看，这段代码的作用是创建一组随机的二维张量，并使用给定的种子来控制每次运行时生成的随机张量。
 
 
-```
+```py
 def create_random_tensors(shape, seeds):
     xs = []
     for seed in seeds:
@@ -990,7 +990,7 @@ Next, it converts the image to an `Image` object and then it adds the image to t
 Finally, it checks if the `opts.samples_save` option is True and if not, it converts the image to an RGB color and saves it using the `images.save_image` method from the `PIL` module. Additionally, it also checks if the `opts.grid_only_if_multiple` option is True or not and if not, it converts the image to a grid and saves it using the `images.image_grid` method from the `PIL` module.
 
 
-```
+```py
 def process_images(p: StableDiffusionProcessing) -> Processed:
     """this is the main loop that both txt2img and img2img use; it calls func_init once inside all the scopes and func_sample once per batch"""
 
@@ -1140,7 +1140,7 @@ def process_images(p: StableDiffusionProcessing) -> Processed:
 这里 `StableDiffusionProcessingTxt2Img` 类中的方法都使用了给定的 sampler，因此这个类需要定义一个可以返回一个 sampler 的函数。在这个类中，`init` 方法用于设置 sampler,`sample` 方法用于返回采样结果，而 `get_crop_region` 方法则返回一个裁剪区域。
 
 
-```
+```py
 class StableDiffusionProcessingTxt2Img(StableDiffusionProcessing):
     sampler = None
 
@@ -1196,7 +1196,7 @@ def get_crop_region(mask, pad=0):
 最后，函数将 `image_mod.convert("RGB")` 并将图像返回。
 
 
-```
+```py
 def fill(image, mask):
     image_mod = Image.new('RGBA', (image.width, image.height))
 
@@ -1226,7 +1226,7 @@ The `ImageReinforcementLearning` class also has a method called `sample`, which 
 The code also includes some additional details for visualization and debugging, such as the display of the original image and the binary mask, and the use of numpy arrays instead of PIL Image objects.
 
 
-```
+```py
 class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
     sampler = None
 
@@ -1350,7 +1350,7 @@ class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/realesrgan_model.py`
+# `modules/realesrgan_model.py`
 
 这段代码的作用是实现了一个图像生成模型，属于Realesrgan系列。以下是对代码的详细解释：
 
@@ -1373,7 +1373,7 @@ class StableDiffusionProcessingImg2Img(StableDiffusionProcessing):
 9. 在代码的最后部分，可能还有一些其他代码，但无法确定，因为本回答只提供了部分代码。
 
 
-```
+```py
 import sys
 import traceback
 from collections import namedtuple
@@ -1403,7 +1403,7 @@ Finally, the have\_realesrgan variable is set to True, indicating that the Reale
 It's worth noting that there are several versions of the Real-ESRGAN model defined in the code, such as "4x plus anime 6B", "2x plus", and "anime 6B". It seems that these models have different specifications, such as the number of input and output channels, the feature points, and the number of blocks.
 
 
-```
+```py
 class UpscalerRealESRGAN(modules.images.Upscaler):
     def __init__(self, upscaling, model_index):
         self.upscaling = upscaling
@@ -1466,7 +1466,7 @@ def setup_realesrgan():
 最后，函数创建一个名为 `image` 的新的 `Image` 对象，并将 `upsampled` 图像转换为 `image` 对象，返回 `image`。
 
 
-```
+```py
 def upscale_with_realesrgan(image, RealESRGAN_upscaling, RealESRGAN_model_index):
     if not have_realesrgan or RealESRGANer_constructor is None:
         return image
@@ -1490,7 +1490,7 @@ def upscale_with_realesrgan(image, RealESRGAN_upscaling, RealESRGAN_model_index)
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/scripts.py`
+# `modules/scripts.py`
 
 
 
@@ -1515,7 +1515,7 @@ def upscale_with_realesrgan(image, RealESRGAN_upscaling, RealESRGAN_model_index)
 - `__setitem__`方法，用于设置该类实例对象的某个元素，例如索引为0的元素。
 
 
-```
+```py
 import os
 import sys
 import traceback
@@ -1560,7 +1560,7 @@ class Script:
 此外，该函数使用 `compile` 函数将文件内容编译成可执行代码，并使用 `ModuleType` 类将模块定义为 `ModuleType` 类，以便可以访问模块中的属性。在循环中，该函数使用 `__dict__` 获取模块中的所有属性，并使用 `type` 函数检查给定的属性类型是否为 `Script` 类。如果是，该函数将该属性值存储在 `scripts_data` 列表中。
 
 
-```
+```py
 scripts_data = []
 
 
@@ -1601,7 +1601,7 @@ When a user selects a script, the script's code is executed on the image data wi
 The script also handles command line arguments passed in when the script is run.
 
 
-```
+```py
 def wrap_call(func, filename, funcname, *args, default=None, **kwargs):
     try:
         res = func(*args, **kwargs)
@@ -1692,7 +1692,7 @@ class ScriptRunner:
 在这个例子中，ScriptRunner()是一个装饰器，用于运行一段Python代码并返回其结果。由于你需要运行相同的代码，因此你可以将上述函数赋予一个名称（如generate_images），并将其结果存储在需要时通过调用该函数获取。
 
 
-```
+```py
 scripts_txt2img = ScriptRunner()
 scripts_img2img = ScriptRunner()
 

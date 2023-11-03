@@ -1,6 +1,6 @@
 # SDWebUI源码解析 3
 
-# `/opt/to-comment/stable-diffusion-webui/modules/codeformer/codeformer_arch.py`
+# `modules/codeformer/codeformer_arch.py`
 
 这段代码的作用是定义了一个名为`calc_mean_std`的函数，它接受一个4D张量作为输入参数，并计算出该张量的均值和方差。
 
@@ -9,7 +9,7 @@
 具体来说，函数首先通过`math.cast`将输入张量的数据类型从long long to float，然后使用一个小的值`eps`来对计算结果进行四舍五入。接下来，函数创建了一个包含大小为`(batch_size, sequence_length, feature_dim)`的张量，将这个张量中的每个位置的值计算出来，并对这些值进行平方后再求均值和方差。最后，函数返回计算出的均值和方差。
 
 
-```
+```py
 # this file is copied from CodeFormer repository. Please see comment in modules/codeformer_model.py
 
 import math
@@ -47,7 +47,7 @@ def calc_mean_std(feat, eps=1e-5):
 具体来说，函数接受两个输入参数：内容特征和风格特征。函数内部首先计算内容特征和风格特征的均值和标准差，然后使用这些均值和标准差计算内容特征和风格特征的归一化特征。最后，函数将归一化特征与风格特征的均值和标准差相乘，然后加上风格特征的均值和标准差，从而得到一个新的特征，这个新特征可以帮助更好地适应不同的风格。
 
 
-```
+```py
 def adaptive_instance_normalization(content_feat, style_feat):
     """Adaptive instance normalization.
 
@@ -76,7 +76,7 @@ The model also has a normalization layer that normalizes the input image to have
 Note that this model is not implemented for continuous data, it is intended for discrete data (images). You may want to use this code as a starting point for implementing a custom image data积水层。
 
 
-```
+```py
 class PositionEmbeddingSine(nn.Module):
     """
     This is a more standard version of the position embedding, very similar to the one
@@ -130,7 +130,7 @@ The function `forward` is the main function for the model, which computes the fo
 The model also includes some custom components such as the normalization layers, which are used to transform the input data to have zero mean and unit variance.
 
 
-```
+```py
 def _get_activation_fn(activation):
     """Return an activation function given a string"""
     if activation == "relu":
@@ -188,7 +188,7 @@ class TransformerSALayer(nn.Module):
 数据块在 forward 方法中进行前向传播。首先将传入的 encoder 和 decoder 特征图拼接起来，然后将拼接好的前向特征图传递给第一个数据块中的一个 ResBlock 模块。接着，将 ResBlock 模块的输出送入第二个数据块中的一个 ResUnit（类似于 Group 中的一个成员）中。最后，对于每个数据包，都会执行一个 concatenate 操作，将输入的 decoder 部分和拼接好的部分拼接在一起，得到一个输出。最终的结果返回给目标变量。
 
 
-```
+```py
 class Fuse_sft_block(nn.Module):
     def __init__(self, in_ch, out_ch):
         super().__init__()
@@ -226,7 +226,7 @@ The training stage II loss for the generator is defined as the negative log loss
 It appears that the code also performs quantization of the input and output features to reduce the memory usage for the training process.
 
 
-```
+```py
 @ARCH_REGISTRY.register()
 class CodeFormer(VQAutoEncoder):
     def __init__(self, dim_embd=512, n_head=8, n_layers=9, 
@@ -346,7 +346,7 @@ class CodeFormer(VQAutoEncoder):
         return out, logits, lq_feat
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/codeformer/vqgan_arch.py`
+# `modules/codeformer/vqgan_arch.py`
 
 这段代码是一个基于Leunghishing VAE模型的修改版。它的主要目的是实现一个将文本转换为图像的模型。这个模型使用了来自CodeFormer项目的源代码，并在其基础上进行了修改。它主要用于研究和工作，以便更好地处理自然语言文本和图像之间的关系。
 
@@ -363,7 +363,7 @@ class CodeFormer(VQAutoEncoder):
 5. 在代码的最后，作者提供了一些开发指导，以便其他人可以理解和使用这个模型。
 
 
-```
+```py
 # this file is copied from CodeFormer repository. Please see comment in modules/codeformer_model.py
 
 '''
@@ -392,7 +392,7 @@ The model takes a parameter `self.codebook_size` which is the size of the codebo
 In the `get_codebook_feat` function, the minencoded latent vectors are retrieved for each input token by querying the codebook using the `index` of the input token. This function returns the quantized latent vectors, as well as some additional information that includes the perplexity of each input token.
 
 
-```
+```py
 def normalize(in_channels):
     return torch.nn.GroupNorm(num_groups=32, num_channels=in_channels, eps=1e-6, affine=True)
     
@@ -486,7 +486,7 @@ class VectorQuantizer(nn.Module):
 GumbelQuantizer 通过对自然语言文本数据进行 Gumbel 编码，实现对文本数据的标准化编码。这种编码方法在神经网络中有着广泛的应用，特别是在自然语言处理领域。通过将原始数据映射到密集向量，Gumbel 编码可以提高模型的容量，同时 Stranglong Through 算法可以有效地提高模型的安全性。
 
 
-```
+```py
 class GumbelQuantizer(nn.Module):
     def __init__(self, codebook_size, emb_dim, num_hiddens, straight_through=False, kl_weight=5e-4, temp_init=1.0):
         super().__init__()
@@ -528,7 +528,7 @@ Upsample 类在 `__init__` 方法中定义了一个包含一个卷积层的函�
 这两个类的 Downsample 和 Upsample 分别对输入图像 x 进行了不同的处理，使得输出图像可以插值到更大的尺寸上。其中，Downsample 的处理方式是对图像进行了等比例的缩放，而 Upsample 的处理方式是对图像进行了等比例的插值。
 
 
-```
+```py
 class Downsample(nn.Module):
     def __init__(self, in_channels):
         super().__init__()
@@ -560,7 +560,7 @@ class Upsample(nn.Module):
 在forward函数中，从前面的输入x_in开始，通过一系列卷积层和池化层，最终返回对输入图像块的加权和。在该函数中，还添加了一个输出卷积层，用于在图像块之间传递信息。该输出卷积层的参数是对于输入图像块的in_channels，而不是通过ResBlock计算得出的out_channels。因此，如果ResBlock初始化时未指定out_channels，该函数将使用默认的in_channels作为输出通道。
 
 
-```
+```py
 class ResBlock(nn.Module):
     def __init__(self, in_channels, out_channels=None):
         super(ResBlock, self).__init__()
@@ -596,7 +596,7 @@ The model uses a combination of convolutional and attention mechanisms to produc
 The output of the last convolutional layer is passed through a projection layer to produce the final output. The shape of the output is (batch\_size, input\_shape, h, w).
 
 
-```
+```py
 class AttnBlock(nn.Module):
     def __init__(self, in_channels):
         super().__init__()
@@ -666,7 +666,7 @@ This is a Python implementation of the YOLOv5 model architecture, specifically t
 It is worth noting that this implementation is not optimized or corrected for production use, and it may use some assumptions or experimental techniques.
 
 
-```
+```py
 class Encoder(nn.Module):
     def __init__(self, in_channels, nf, emb_dim, ch_mult, num_res_blocks, resolution, attn_resolutions):
         super().__init__()
@@ -725,7 +725,7 @@ The module also includes a normalization step, which applies the desired resolut
 Overall, this implementation is designed to improve the resolution of low-resolution images by providing a hierarchical fusion of features at different scales, and by ensuring that the low-resolution image is resolved to the same level of the high-resolution image.
 
 
-```
+```py
 class Generator(nn.Module):
     def __init__(self, nf, emb_dim, ch_mult, res_blocks, img_size, attn_resolutions):
         super().__init__()
@@ -792,7 +792,7 @@ This is a PyTorch implementation of a Variational Quantum Generator (VQG) model.
 这个模型是训练基于博弈论策略的，所以使用的量子化技术是 Gumbel 量子化技术。
 
 
-```
+```py
 @ARCH_REGISTRY.register()
 class VQAutoEncoder(nn.Module):
     def __init__(self, img_size, nf, ch_mult, quantizer="nearest", res_blocks=2, attn_resolutions=[16], codebook_size=1024, emb_dim=256,
@@ -879,7 +879,7 @@ The `self.main` function returns the output of the last convolutional layer.
 The model can be saved to a file using the `torch.save` function. The state dictionary can also be loaded using the similar `torch.load` function.
 
 
-```
+```py
 # patch based discriminator
 @ARCH_REGISTRY.register()
 class VQGANDiscriminator(nn.Module):
@@ -924,7 +924,7 @@ class VQGANDiscriminator(nn.Module):
         return self.main(x)
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/scripts/custom_code.py`
+# `scripts/custom_code.py`
 
 这段代码是一个Python脚本，它使用了Gradio库来创建一个交互式的图形界面。在这个脚本中，我们导入了两个模块，一个是Processed，另一个是shared。其中，Processed是一个处理图像数据的模块，shared是一个共同声明了几个变量的模块。我们还导入了两个函数，一个是Show函数，用来控制是否在界面上显示图像，另一个是run函数，用来执行实际的计算操作。
 
@@ -933,7 +933,7 @@ class VQGANDiscriminator(nn.Module):
 在执行机器码的过程中，我们会创建一个Processed对象，并将Processed对象传递给run函数。run函数的参数是p参数和一个或多个数字，它们会在运行脚本时传递给compiled函数。compiled函数会在运行脚本时执行代码，并返回一个Processed对象。
 
 
-```
+```py
 import modules.scripts as scripts
 import gradio as gr
 
@@ -977,7 +977,7 @@ class Script(scripts.Script):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/scripts/poor_mans_outpainting.py`
+# `scripts/poor_mans_outpainting.py`
 
 This is a Python function that performs an outpainting algorithm on a set of tiles. The function takes in a list of images, a list of tile data (RGB data), and a list of tile mask data (RGB data). The images and tile data are processed in parallel and the output is saved in a single combined image.
 
@@ -992,7 +992,7 @@ The function also initializes a variable called `initial_seed` to 0 and a variab
 The function then returns the `Processed` class object, which contains the processed images and additional metadata information.
 
 
-```
+```py
 import math
 
 import modules.scripts as scripts
@@ -1143,7 +1143,7 @@ class Script(scripts.Script):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/scripts/prompt_matrix.py`
+# `scripts/prompt_matrix.py`
 
 这段代码的主要作用是定义了一个名为 `draw_xy_grid` 的函数，用于在二维坐标系中绘制一个二倍角网格(也就是坐标轴)。该函数需要输入四个参数：`xs` 和 `ys` 分别表示网格中行数和列数，`x_label` 和 `y_label` 分别表示网格中每个子网格的标签，`cell` 是一个二元组，表示子网格的起始位置和结束位置(也就是左下角)。
 
@@ -1154,7 +1154,7 @@ class Script(scripts.Script):
 接下来，定义了一个 `draw_grid` 函数，该函数接收一个已经绘制的图像，以及一些参数，用于绘制网格。该函数将这个图像作为参数，并将其复制一份作为子图像，然后使用 `images.draw_grid_annotations` 函数在子图像上绘制网格注释。最后，将 `res` 和 `first_pocessed` 中的值返回给调用者。
 
 
-```
+```py
 import math
 from collections import namedtuple
 from copy import copy
@@ -1214,7 +1214,7 @@ Finally, the function displays or saves the image of the prompt matrix.
 Note that this function assumes that the `PromptMatrix` class has been defined and initialized before being called. Also, the `image_grid` and `draw_prompt_matrix` methods are from the `images` module of the `tensorflow-modelsim` library, and need to be imported before being used.
 
 
-```
+```py
 class Script(scripts.Script):
     def title(self):
         return "Prompt matrix"
@@ -1263,7 +1263,7 @@ class Script(scripts.Script):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/scripts/xy_grid.py`
+# `scripts/xy_grid.py`
 
 这段代码的作用是定义了一个名为 `apply_field` 的函数，用于对一个名为 `field` 的元组进行修改。
 
@@ -1276,7 +1276,7 @@ class Script(scripts.Script):
 最后，在 `scripts.py` 和 `gradio.py` 中定义了一些函数和类，用于将修改后的元组返回给客户端，并在客户端将修改后的元组保存。
 
 
-```
+```py
 from collections import namedtuple
 from copy import copy
 import random
@@ -1307,7 +1307,7 @@ def apply_field(field):
 `apply_sampler` 函数接收一个 `Terminal` 对象 `p`、一个 `Sequence` 对象 `xs` 和一个或多个 `Sequence` 对象 `xs`，然后它尝试从 `samplers_dict` 中获取指定的采样器，并将其索引存储在 `p.sampler_index` 属性中。如果 `samplers_dict` 中没有指定的采样器，函数将引发 `RuntimeError`，并错误地捕获到这个错误。
 
 
-```
+```py
 def apply_prompt(p, x, xs):
     p.prompt = p.prompt.replace(xs[0], x)
     p.negative_prompt = p.negative_prompt.replace(xs[0], x)
@@ -1343,7 +1343,7 @@ def apply_sampler(p, x, xs):
 另外，给定的`format_value_add_label`函数还被定义为`f"{opt.label}: {x}"`，这个格式字符串中的`{opt.label}`是上面定义的`AxisOption`中定义的标签，`{x}`是要格式化的参数。这个格式字符串将被插入到给定的字符串的末尾，生成一个新的字符串，其中`{opt.label}`和`{x}`都是带有标签的格式字符串。
 
 
-```
+```py
 def format_value_add_label(p, opt, x):
     return f"{opt.label}: {x}"
 
@@ -1373,7 +1373,7 @@ axis_options = [
 函数的作用是处理 `xs` 和 `ys` 中的每个元素，并将它们转化为 `images.GridAnnotation` 类中的 `grid` 对象。首先，对于每个 `x` 和 `y` 坐标，函数都会执行 `cell` 函数，并将处理结果添加到 `res` 列表中。然后，对于每个 `grid` 对象，函数将其添加到 `grid_res` 列表中。最后，函数将 `res` 列表中的所有元素返回，并将 `first_pocessed` 的图像添加到它上面。
 
 
-```
+```py
 def draw_xy_grid(xs, ys, x_label, y_label, cell):
     res = []
 
@@ -1423,7 +1423,7 @@ The `save_image` method saves the image to disk, with the filename being generat
 The `saved_images` list contains all the images that have been saved to disk.
 
 
-```
+```py
 re_range = re.compile(r"\s*([+-]?\s*\d+)\s*-\s*([+-]?\s*\d+)(?:\s*\(([+-]\d+)\s*\))?\s*")
 
 class Script(scripts.Script):

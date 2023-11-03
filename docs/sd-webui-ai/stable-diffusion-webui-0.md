@@ -95,7 +95,7 @@ A `webui-user.bat` file included into the repository does exactly this.
 
 Here is an example that runs the prgoram with `--opt-split-attention` argument:
 
-```commandline
+```pycommandline
 @echo off
 
 set COMMANDLINE_ARGS=--opt-split-attention
@@ -105,7 +105,7 @@ call webui.bat
 
 Another example, this file will run the program with custom python path, a different model named `a.ckpt` and without virtual environment:
 
-```commandline
+```pycommandline
 @echo off
 
 set PYTHON=b:/soft/Python310/Python.exe
@@ -159,7 +159,7 @@ and use Usada Pekora in prompt.
 
 After running once, a `ui-config.json` file appears in webui directory:
 
-```json
+```pyjson
 {
     "txt2img/Sampling Steps/value": 20,
     "txt2img/Sampling Steps/minimum": 1,
@@ -180,7 +180,7 @@ Edit values to your liking and the next time you launch the program they will be
 Alternatively, if you don't want to run webui.bat, here are instructions for installing
 everything by hand:
 
-```commandline
+```pycommandline
 :: install torch with CUDA support. See https://pytorch.org/get-started/locally/ for more instructions if this fails.
 pip install torch --extra-index-url https://download.pytorch.org/whl/cu113
 
@@ -233,19 +233,19 @@ After that the installation is finished.
 
 Run the command to start web ui:
 
-```
+```py
 python webui.py
 ```
 
 If you have a 4GB video card, run the command with either `--lowvram` or `--medvram` argument:
 
-```
+```py
 python webui.py --medvram
 ```
 
 After a while, you will get a message like this:
 
-```
+```py
 Running on local URL:  http://127.0.0.1:7860/
 ```
 
@@ -263,13 +263,13 @@ Open the URL in browser, and you are good to go.
 - (You)
 
 
-# `/opt/to-comment/stable-diffusion-webui/script.js`
+# `script.js`
 
 It looks like you are describing an image editing tool or script with a set of parameters and options for users to use. The parameters include options for controlling denoising, interrupting the processing of images, and saving the results. The options include some for customizing the image, such as specifying the resolution andupscaling, and the ability to save the results to a file. Is there anything else you'd like to know about this tool or script?
 
 
 
-```
+```py
 titles = {
     "Sampling steps": "How many times to improve the generated image iteratively; higher values take longer; very low values can produce bad results",
     "Sampling method": "Which algorithm to use to produce the image",
@@ -339,7 +339,7 @@ This appears to be JavaScript code that generates a preview of a转文本图片�
 需要注意的是，由于使用了MutationObserver进行元素变化观察，因此只有在元素发生变化时才会调用相应的函数，否则函数不会执行。另外，由于使用了gradioApp.get该方法获取图片元素，因此只有当图片元素存在于页面中时，该方法才会返回对应的元素对象。
 
 
-```
+```py
 function gradioApp(){
     return document.getElementsByTagName('gradio-app')[0].shadowRoot;
 }
@@ -408,7 +408,7 @@ function addTitles(root){
 4. 将mask_buttons数组中的元素添加到gradioApp的查询元素上。
 
 
-```
+```py
 tabNames =  {"txt2img": 1, "img2img": 1, "Extras": 1, "PNG Info": 1, "Settings": 1}
 processedTabs = {}
 
@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function() {
 `extract_image_from_gallery()` 函数接收一个 `gallery` 对象，该对象应该是一个画廊对象，其中包含一个或多个图片。如果 `gallery` 对象只有一个图片，该函数返回该图片的索引。否则，该函数使用 `selected_gallery_index()` 函数获取选择的照片的索引，然后返回该索引对应的图片。
 
 
-```
+```py
 function selected_gallery_index(){
     var gr = gradioApp()
     var buttons = gradioApp().querySelectorAll(".gallery-item")
@@ -483,7 +483,7 @@ function extract_image_from_gallery(gallery){
 请注意，这两个函数都使用了一个名为`window.setTimeout()`的JavaScript函数，该函数用于设置一个计时器，在一定时间后执行指定的代码。在这里，第一个函数设置了一个计时器，在500毫秒后执行`requestProgress()`函数。第二个函数在用户停止操作后每隔500毫秒执行一次`requestProgress()`函数，以便在用户操作过程中获取进度条的反馈。
 
 
-```
+```py
 function requestProgress(){
     btn = gradioApp().getElementById("check_progress");
     if(btn==null) return;
@@ -508,7 +508,7 @@ function submit(){
 具体来说，代码首先检查剪贴板中是否包含一个或多个文件，并检查文件数是否为1。如果是，则进入文件检查阶段。在文件检查阶段，代码遍历剪贴板中的所有文件，并检查文件类型是否为 "image/png" 或 "image/gif"。如果是，则将文件存储到剪贴板中的 "files" 数组中，并使用 DispatchEvent 方法触发一个名为 "change"的事件，该事件将通知所有挂载了该文件的输入框（如果存在）进行更改。最后，代码使用过滤器过滤出所有允许上传的文件，并使用 forEach 方法将文件存储到输入框中。
 
 
-```
+```py
 window.addEventListener('paste', e => {
     const files = e.clipboardData.files;
     if (!files || files.length !== 1) {
@@ -527,7 +527,7 @@ window.addEventListener('paste', e => {
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/webui.py`
+# `webui.py`
 
 这段代码的作用是定义了一个名为"example_threaded_executor"的线程池执行器，用于执行一个需要使用多线程并行计算的计算任务。具体来说，它实现了以下几个功能：
 
@@ -552,7 +552,7 @@ window.addEventListener('paste', e => {
 10. 从LDM.util模块中，使用instantiate_from_config函数，加载了计算任务的配置文件，包括配置文件中定义的选项和参数。
 
 
-```
+```py
 import os
 import threading
 
@@ -592,7 +592,7 @@ from modules.shared import opts, cmd_opts, state
        - `images.generative_algorithm`函数应用生成算法生成图像。
 
 
-```
+```py
 import modules.shared as shared
 import modules.ui
 from modules.ui import plaintext_to_html
@@ -623,7 +623,7 @@ import modules.img2img
 整个代码的主要作用是加载两个预训练的模型，设置一个新的GAN模型，并将FaceRestoration模型添加到共享恢复器中。
 
 
-```
+```py
 modules.codeformer_model.setup_codeformer()
 modules.gfpgan_model.setup_gfpgan()
 shared.face_restorers.append(modules.face_restoration.FaceRestoration())
@@ -661,7 +661,7 @@ If the `upscaling_resize` parameter is set to 1.0, the image is first upscaled t
 The function also includes a `next(iter(cached_images.keys()))` line to remove the first image from the `cached_images` dictionary, which is called automatically by the function when it is called. This is done to prevent the function from returning the first image in the `cached_images` dictionary.
 
 
-```
+```py
 cached_images = {}
 
 
@@ -734,7 +734,7 @@ def run_extras(image, gfpgan_visibility, codeformer_visibility, codeformer_weigh
 4. 返回元数据信息、字符串和信息。
 
 
-```
+```py
 def run_pnginfo(image):
     info = ''
     for key, text in image.info.items():
@@ -761,7 +761,7 @@ def run_pnginfo(image):
 函数 `wrap_gradio_call` 接收一个函数作为参数，并返回一个新的函数，该函数在每次运行时会获取到锁并执行指定的函数。这个新函数 `f` 通过在函数内部使用 `with queue_lock` 语句来获取锁，并在获取到锁后执行指定的函数。当函数返回时，它将释放锁并返回结果，这样下一个运行时的函数就可以访问到锁并继续执行。
 
 
-```
+```py
 queue_lock = threading.Lock()
 
 
@@ -801,7 +801,7 @@ def wrap_gradio_gpu_call(func):
 最后，代码将shared.sd_model变量复制到sd_config中指定的位置，并返回了sd_config。
 
 
-```
+```py
 modules.scripts.load_scripts(os.path.join(script_path, "scripts"))
 
 try:
@@ -828,7 +828,7 @@ shared.sd_model = (shared.sd_model if cmd_opts.no_half else shared.sd_model.half
 最后，创建一个WebUI，接收用户输入并返回一个画布图像，作为输入的demo模型是通过对GPU模型的Hijack得到的。
 
 
-```
+```py
 if cmd_opts.lowvram or cmd_opts.medvram:
     modules.lowvram.setup_for_low_vram(shared.sd_model, cmd_opts.medvram)
 else:
@@ -863,13 +863,13 @@ if __name__ == "__main__":
 这段代码的作用是：如果程序作为主程序运行，那么程序将执行 if 语句块内的代码。在这里，我们使用 webui() 函数作为程序的入口点。webui() 函数是一个模块，可能是一个 Web 框架（如 Django、Flask 等）中的入口函数，用于启动 Web 应用程序。因此，如果程序作为主程序运行，那么它将启动 Web 应用程序。
 
 
-```
+```py
 if __name__ == "__main__":
     webui()
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/artists.py`
+# `modules/artists.py`
 
 这段代码定义了一个名为 `ArtistsDatabase` 的类，用于保存艺术家及其得分的数据。这个类包含两个方法：`__init__` 和 `categories`。
 
@@ -880,7 +880,7 @@ if __name__ == "__main__":
 值得注意的是，这个类没有定义任何函数来读取或写入文件，因为它只是简单地将读取和写入的代码集成在一起。
 
 
-```
+```py
 import os.path
 import csv
 from collections import namedtuple
@@ -909,7 +909,7 @@ class ArtistsDatabase:
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/codeformer_model.py`
+# `modules/codeformer_model.py`
 
 这段代码的作用是引入一些常用的Python库和模块，用于在基于PyTorch的图像修复应用程序中进行face_restoration模型的开发和测试。具体来说，它包括以下几个主要部分：
 
@@ -930,7 +930,7 @@ class ArtistsDatabase:
 8. 从PyTorch中导入reload，以便在需要时动态加载和卸载相对应的模块。
 
 
-```
+```py
 import os
 import sys
 import traceback
@@ -957,7 +957,7 @@ The model also includes a code-based pre-training step using the pre-trained Cod
 Finally, the output image is returned, having been processed, normalized, and converted to the required format for the CodeFormer model.
 
 
-```
+```py
 pretrain_model_url = 'https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth'
 
 have_codeformer = False
@@ -1058,12 +1058,12 @@ def setup_codeformer():
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/esrgam_model_arch.py`
+# `modules/esrgam_model_arch.py`
 
 这段代码是一个ESRGAN模型的实现，ESRGAN是一种基于自注意力机制的图像生成模型，出自于github.com/xinntao/ESRGAN。主要作用是定义一个ESRGAN模型，通过make_layer函数可以定义模型的层数和每个层的具体组件。具体来说，这段代码定义了一个名为ESRGAN模型的类，其中`make_layer`函数定义了层数和每个层的组件。通过使用`import torch`和`import torch.nn`，可以实现对模型的引入和定义。
 
 
-```
+```py
 # this file is taken from https://github.com/xinntao/ESRGAN
 
 import functools
@@ -1090,7 +1090,7 @@ The output from the second `Conv2d` layer is then passed through a `LeakyReLU` a
 Finally, the output of the `Conv2d` layer is multiplied by 0.2 and added back to the input `x` to produce the final output.
 
 
-```
+```py
 class ResidualDenseBlock_5C(nn.Module):
     def __init__(self, nf=64, gc=32, bias=True):
         super(ResidualDenseBlock_5C, self).__init__()
@@ -1123,7 +1123,7 @@ class ResidualDenseBlock_5C(nn.Module):
 RRDB 的主要作用是将被训练的模型（在代码中没有定义）抵抗大小为 1 的攻击，即在需要保护的关键区域（在代码中没有定义）添加了 Residual，以便在面临深度伪造攻击时能够起到一定的作用。
 
 
-```
+```py
 class RRDB(nn.Module):
     '''Residual in Residual Dense Block'''
 
@@ -1153,7 +1153,7 @@ The model has a positive入境到 ResNet 的第一个隐藏层，RRDB 的三个�
 RRDNet 在 2021年的 ImageNet 挑战中获得了分类最佳成绩，是目前最先进的深度学习模型之一。
 
 
-```
+```py
 class RRDBNet(nn.Module):
     def __init__(self, in_nc, out_nc, nf, nb, gc=32):
         super(RRDBNet, self).__init__()
@@ -1183,7 +1183,7 @@ class RRDBNet(nn.Module):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/esrgan_model.py`
+# `modules/esrgan_model.py`
 
 This is a function that creates a CRTNet model from a pre-trained network and applies some transformations to it. The function takes a list of transformations as an input and returns a CRTNet model.
 
@@ -1200,7 +1200,7 @@ The function also applies some transformations to the convolutional layers of th
 It finally loads the state of the CRTNet model from the pre-trained network and returns it.
 
 
-```
+```py
 import os
 import sys
 import traceback
@@ -1289,7 +1289,7 @@ def load_model(filename):
 该函数的作用是实现图像的放大，而不会对图像进行插值或者tiling等操作。
 
 
-```
+```py
 def upscale_without_tiling(model, img):
     img = np.array(img)
     img = img[:, :, ::-1]
@@ -1316,7 +1316,7 @@ def upscale_without_tiling(model, img):
 最后，函数内部创建一个新的 grid，该 grid 包含 newrow 中所有的元素，并使用 `combine_grid` 函数将它们组合成一个图像，然后返回该图像。
 
 
-```
+```py
 def esrgan_upscale(model, img):
     if opts.ESRGAN_tile == 0:
         return upscale_without_tiling(model, img)
@@ -1348,7 +1348,7 @@ def esrgan_upscale(model, img):
 该代码的目的是实现将指定图像文件升缩到指定设备的 `ESRGAN` 模型。首先读取图像文件的路径和文件名，然后判断文件类型是否为`.pt`或`.pth`，如果不是，则加载并返回图像模型的 `UpscalerESRGAN` 实例。如果加载过程中出现错误，则输出错误信息并抛出异常。
 
 
-```
+```py
 class UpscalerESRGAN(modules.images.Upscaler):
     def __init__(self, filename, title):
         self.name = title
@@ -1376,7 +1376,7 @@ def load_models(dirname):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/face_restoration.py`
+# `modules/face_restoration.py`
 
 这段代码定义了一个名为 `FaceRestoration` 的类，该类有两个方法，一个名为 `name`，另一个名为 `restore`。
 
@@ -1389,7 +1389,7 @@ def load_models(dirname):
 修复后的图像可以比原始图像更清晰，但仍然可能存在一些损坏或不准确的问题。
 
 
-```
+```py
 from modules import shared
 
 
@@ -1412,7 +1412,7 @@ def restore_faces(np_image):
 
 ```
 
-# `/opt/to-comment/stable-diffusion-webui/modules/gfpgan_model.py`
+# `modules/gfpgan_model.py`
 
 这段代码的作用是调用了`GFPGAN`模型的预训练模型，并返回了该模型的文件路径。
 
@@ -1423,7 +1423,7 @@ def restore_faces(np_image):
 最后，需要注意，如果`GFPGAN`模型文件不存在，则函数将抛出一个异常，并打印错误信息。
 
 
-```
+```py
 import os
 import sys
 import traceback
@@ -1464,7 +1464,7 @@ def gfpgan_model_path():
 5. `gfpgan` 函数的具体实现主要依赖于 `gfpgan_constructor` 函数，该函数调用了 GFPGAN 模型的加载和预训练过程，将训练好的模型存储在 `loaded_gfpgan_model` 变量中，并在训练开始时将其返回。
 
 
-```
+```py
 loaded_gfpgan_model = None
 
 
@@ -1496,7 +1496,7 @@ def gfpgan():
 
 
 
-```
+```py
 def gfpgan_fix_faces(np_image):
     np_image_bgr = np_image[:, :, ::-1]
     cropped_faces, restored_faces, gfpgan_output_bgr = gfpgan().enhance(np_image_bgr, has_aligned=False, only_center_face=False, paste_back=True)
