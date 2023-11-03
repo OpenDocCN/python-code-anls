@@ -1,6 +1,6 @@
 # ArknightMower源码解析 7
 
-# `/opt/arknights-mower/arknights_mower/solvers/schedule.py`
+# `arknights_mower/solvers/schedule.py`
 
 这段代码的作用是定义了一个自定义的 `datetime` 类，用于在 Python 3600+ 中处理日期和时间。
 
@@ -25,7 +25,7 @@
 17. 在 `utils.recognize` 类中定义了一系列使用语音识别功能的方法，包括 `recognize_speech` 等，用于实现对语音识别的功能。
 
 
-```
+```py
 import datetime
 import time
 from collections.abc import Callable
@@ -54,7 +54,7 @@ from ..utils.recognize import Recognizer
 函数内部还使用 `for` 循环遍历执行计划中的所有计划，判断每个计划的优先级是否高于当前任务。如果当前计划高于所有优先级，则返回 `False`。
 
 
-```
+```py
 from ..utils.solver import BaseSolver
 from ..utils.typealias import ParamArgs
 from ..utils.yaml import yaml
@@ -89,7 +89,7 @@ def operation_one(args: ParamArgs = [], device: Device = None) -> bool:
 以上是一个Python语言写的Armed Server的Finish和Operation类，其中包含了Finish和Operation的相关逻辑。
 
 
-```
+```py
 @yaml_object(yaml)
 class Task(object):
     """
@@ -216,7 +216,7 @@ class Task(object):
 此外，还实现了森川流的算法，用于生成优先级。
 
 
-```
+```py
 def cmp_for_init(task_a: Task = None, task_b: Task = None) -> int:
     if task_a.start_up() and task_b.start_up():
         return 0
@@ -326,7 +326,7 @@ class ScheduleSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/shop.py`
+# `arknights_mower/solvers/shop.py`
 
 This is a class that inherits from the AbstractRecognizer. It inherits the functionality of the AbstractRecognizer, but with some added features and changes in behavior.
 
@@ -341,7 +341,7 @@ The `shop_credit` method is also added to the scene hierarchy, which allows the 
 Overall, this class implements the basic functionality of an image recognition system, which recognizes items in an image by highlighting the corresponding region in the image data. It also adds some additional features to the scene hierarchy and adds the ability to connect to a remote device.
 
 
-```
+```py
 from __future__ import annotations
 
 from ..data import shop_items
@@ -438,12 +438,12 @@ class ShopSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/__init__.py`
+# `arknights_mower/solvers/__init__.py`
 
 这段代码定义了7个不同的求解器类，包括基于构建的构造求解器、信证求解器、邮件求解器、任务求解器、操作求解器、招聘求解器和计划求解器。这些求解器类可以用来解决各种不同类型的数学问题。
 
 
-```
+```py
 from .base_construct import BaseConstructSolver
 from .credit import CreditSolver
 from .mail import MailSolver
@@ -462,7 +462,7 @@ from .shop import ShopSolver
 配置文件模板
 
 
-# `/opt/arknights-mower/arknights_mower/utils/asst.py`
+# `arknights_mower/utils/asst.py`
 
 该代码使用了多面骰，即CTypes库，用于在操作系统上执行Python字节码。具体而言，它们导入了以下模块：
 
@@ -481,7 +481,7 @@ from .shop import ShopSolver
 这些操作的具体实现可能因操作系统而异，但它们是在给定的系统上执行动作，以获取或设置特定实例选项类型的值。
 
 
-```
+```py
 import ctypes
 import os
 import pathlib
@@ -513,7 +513,7 @@ It looks like this is a Python class that has some utility functions for working
 * Asst.__lib.AsstSetTaskParams.argtypes: returns a tuple of the required argument types for the AsstTaskParams struct. The first return type is ctypes.c_void_p, which means that the setting
 
 
-```
+```py
 class Asst:
     CallBackType = ctypes.CFUNCTYPE(
         None, ctypes.c_int, ctypes.c_char_p, ctypes.c_void_p)
@@ -734,7 +734,7 @@ class Asst:
 这段代码定义了一个名为Message的枚举类型，并创建了一个枚举类型类。该类定义了回调消息的各种枚举值，如InternalError、ConnectionInfo、AllTasksCompleted、TaskChainError、TaskChainStart、TaskChainCompleted、TaskChainExtraInfo、TaskChainStopped、SubTaskError和SubTaskStart等。在这些枚举值中，有一些具有特殊的意义，如TaskChainError、TaskChainStart和TaskChainCompleted等，它们被设置为auto()，意味着它们将自动在代码中进行初始化。
 
 
-```
+```py
 @unique
 class Message(Enum):
     """
@@ -770,7 +770,7 @@ class Message(Enum):
     SubTaskStopped = auto()
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/character_recognize.py`
+# `arknights_mower/utils/character_recognize.py`
 
 这段代码是一个Python文件中的函数，主要作用是定义了一个名为“__future__”的模块，该模块引入了两个数据类型：在未来和属性。具体来说，这个模块中定义了两个函数，分别是：from __future__ import annotations 和 from __future__ import sq厂。
 
@@ -781,7 +781,7 @@ class Message(Enum):
 通过这两个函数，我们可以看出代码的用途是将未来的代码和定义的数据类型引入到当前文件中，以便我们可以使用这些数据类型和方法。
 
 
-```
+```py
 from __future__ import annotations
 
 import traceback
@@ -806,7 +806,7 @@ from .log import logger
 最后，定义了一个名为“origin_kp”的变量作为起始位置，一个名为“origin_des”的变量作为起始描述(即描述该位置的起始状态)，以及一个未定义的“origin_update”函数。
 
 
-```
+```py
 from .recognize import RecognizeError
 from ..ocr import ocrhandle
 
@@ -836,7 +836,7 @@ origin = origin_kp = origin_des = None
 最后，使用这些特征点来训练FLANN算法。
 
 
-```
+```py
 FLANN_INDEX_KDTREE = 0
 GOOD_DISTANCE_LIMIT = 0.7
 SIFT = cv2.SIFT_create()
@@ -890,7 +890,7 @@ The `cv2.drawMatches` function draws match rectangles around the detected matche
 The function returns the segmentation mask for the specified region.
 
 
-```
+```py
 def sift_recog(query, resolution, draw=False,bigfont = False):
     """
     使用 SIFT 提取特征点识别干员名称
@@ -966,7 +966,7 @@ This is a Python script that performs character recognition using the Tesseract 
 The script uses the `RecognizeError` class to handle errors, such as when the AI bot does not recognize a character. It also uses the `cv2` library to display images.
 
 
-```
+```py
 def agent(img, draw=False):
     """
     识别干员总览界面的干员名称
@@ -1087,7 +1087,7 @@ def agent(img, draw=False):
 如果函数在执行过程中出现任何异常，例如图像处理失败、OCR识别出错、SIFT匹配失败等，则相应的日志信息也会记录下来。
 
 
-```
+```py
 def agent_name(__img, height, draw: bool = False):
     query = cv2.cvtColor(np.array(__img), cv2.COLOR_RGB2GRAY)
     h, w= query.shape
@@ -1116,7 +1116,7 @@ def agent_name(__img, height, draw: bool = False):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/conf.py`
+# `arknights_mower/utils/conf.py`
 
 这段代码是一个Python脚本，主要作用是读取一个.yml格式的配置文件，将其解析为字典，并将字典存储为一个.yml格式的临时配置文件。
 
@@ -1127,7 +1127,7 @@ def agent_name(__img, height, draw: bool = False):
 最后，代码通过Path类对象将当前工作目录设置为包含`./templates/conf.yml`文件的目录，并在程序启动时调用__get_temp_conf`函数，读取并返回初始的conf字典。
 
 
-```
+```py
 import os
 import json
 from pathlib import Path
@@ -1157,7 +1157,7 @@ def save_conf(conf, path="./conf.yml"):
 最后，函数将temp_conf存储在函数自身中，并返回temp_conf，以便在需要时使用。
 
 
-```
+```py
 def load_conf(path="./conf.yml"):
     temp_conf = __get_temp_conf()
     if not os.path.isfile(path):
@@ -1183,7 +1183,7 @@ def load_conf(path="./conf.yml"):
 函数体中，首先读取文件内容并将其转换为JSON对象，然后使用该对象创建一个临时计划。接着，如果要保存的文件路径指定的文件存在，则创建一个新文件并将文件内容写入其中。最后，如果新版本的计划存储在`conf`键中，那么将新旧版本的内容进行更新，并在返回新版本的计划时，将`conf`键中的内容存储为新的计划。
 
 
-```
+```py
 def __get_temp_plan():
     with open(f'{__rootdir__}/templates/plan.json', 'r') as f:
         return json.loads(f.read())
@@ -1234,14 +1234,14 @@ print(json.dumps(write_plan({
 这段代码将 `write_plan` 函数的作用解释为：创建一个名为 `write_plan.json` 的文件，并将一个名为 `plan` 的字典对象写入到该文件中。
 
 
-```
+```py
 def write_plan(plan, path="./plan.json"):
     with open(path, 'w', encoding='utf8') as c:
         json.dump(plan, c, ensure_ascii=False)
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/config.py`
+# `arknights_mower/utils/config.py`
 
 这段代码是一个Python语义注释，它定义了一个函数 `from __future__ import annotations`。该注释表示该函数将来的定义，但不会输出任何内容。
 
@@ -1256,7 +1256,7 @@ def write_plan(plan, path="./plan.json"):
 最后，定义了一个函数 `__main__`，表示程序的入口点。函数的实现与 `__init__` 函数类似，但在 `__main__` 函数中需要进行一些额外的操作，如设置 `sys.path`、调用 `tp.configure` 函数等。这些操作是为了确保程序能够在不同的环境中正常运行。
 
 
-```
+```py
 from __future__ import annotations
 
 import shutil
@@ -1289,7 +1289,7 @@ from . import typealias as tp
 最后，脚本导入了自定义的`from .yaml import yaml`语句，以便在需要时动态导入YAML模块。
 
 
-```
+```py
 from .yaml import yaml
 
 # The lowest version supported
@@ -1332,7 +1332,7 @@ def __dig_mapping(path: str):
 3. 如果给定的路径对应的用户地图（例如 `path`）是有效的，并且路径中的元素都是 `CommentedSeq` 类型，那么返回这些元素的列表。否则，返回一个空列表。
 
 
-```
+```py
 def __get(path: str, default: Any = None):
     try:
         current_map, k = __dig_mapping(path)
@@ -1368,7 +1368,7 @@ def __get_list(path: str, default: Any = list()):
 另外，函数 `build_config(path: str, module: bool)` 用于构建应用程序的配置文件。它读取了一个名为 `config.yaml` 的模板文件，并将其内容赋值给一个名为 `__config` 的变量。然后在函数内部使用 `__set` 函数来设置游戏配置文件中的各种键的值，这些键的值都是通过调用 `__config` 变量中的键得出的。由于 `__config` 是一个全局变量，因此它的值是在函数第一次被调用时初始化的。
 
 
-```
+```py
 def __set(path: str, value: Any):
     try:
         current_map, k = __dig_mapping(path)
@@ -1400,7 +1400,7 @@ def build_config(path: str, module: bool) -> None:
 `save_config()`函数的接受参数与`load_config()`相反，它是一个空字符串，表示config文件应该保存到哪个文件中。函数使用一个`with`语句打开文件进行写入，并将config信息存储到文件中。
 
 
-```
+```py
 def load_config(path: str) -> None:
     """ load config from PATH """
     global __ydoc, PATH
@@ -1444,7 +1444,7 @@ The script has the following settings:
 The script uses the `__get` method to retrieve the values of these settings, meaning that if the setting is defined multiple times in the script, it will return the first occurrence. For example, `__get('debug/logfile/amount')` will return the value of the `amount` setting, regardless of how many times it has been defined.
 
 
-```
+```py
 def init_config() -> None:
     """ init config from __ydoc """
     global ADB_BINARY, ADB_DEVICE, ADB_CONNECT
@@ -1530,7 +1530,7 @@ def init_config() -> None:
 最后，在 `main` 函数中，我们创建了一个 `OperationPlan` 类，该类继承自 `tp.OpePlan` 类。我们创建了一个名为 `tp.OperationPlan` 的类，该类实现了 `OpePlan` 类，用于定义操作计划的元素。我们还创建了一个名为 `update_ope_plan` 的函数，用于实现更新操作计划的功能。
 
 
-```
+```py
 def update_ope_plan(plan: list[tp.OpePlan]) -> None:
     """ update operation plan """
     global OPE_PLAN
@@ -1578,7 +1578,7 @@ def init_debug(module: bool) -> None:
 2. 如果运行在Linux或Darwin上，则需要根据操作系统类型设置ADB_BUILDIN_DIR。
 
 
-```
+```py
 def init_adb_buildin() -> Path:
     """ init ADB_BUILDIN & ADB_BUILDIN_DIR """
     global ADB_BUILDIN_DIR, ADB_BUILDIN
@@ -1601,7 +1601,7 @@ def init_adb_buildin() -> Path:
 `init_config()` 函数在机器学习或深度学习任务中通常用于初始化配置文件。配置文件通常包含程序参数、层次结构、配置需求等信息。在这个函数中，可能是在读取或创建一个配置文件，然后根据需要对其进行修改或设置。具体作用可能因项目需求而异。
 
 
-```
+```py
 init_config()
 
 ```

@@ -76,7 +76,7 @@
 </div>
 
 
-# `/opt/arknights-mower/server.py`
+# `server.py`
 
 这是一个使用 Flask 框架创建的一个 WebSocket 服务器应用程序。以下是该应用程序的主要功能和模块：
 
@@ -92,7 +92,7 @@
 10. 启动应用程序：通过 `main` 函数来启动应用程序，然后进入游戏循环，接收和处理游戏中的消息。
 
 
-```
+```py
 #!/usr/bin/env python3
 from arknights_mower.solvers import record
 from arknights_mower.utils.conf import load_conf, save_conf, load_plan, write_plan
@@ -134,7 +134,7 @@ import os
 7. 将解析得到的信息发送到指定手机号码，以实现短信发送功能。
 
 
-```
+```py
 import multiprocessing
 import subprocess
 from threading import Thread
@@ -177,7 +177,7 @@ from functools import wraps
 21. `@app.route("/static/<path_string>")`：创建了一个名为"static_page"的路由，从"/static/"目录中获取静态文件，并将其返回给客户端。
 
 
-```
+```py
 mimetypes.add_type("text/html", ".html")
 mimetypes.add_type("text/css", ".css")
 mimetypes.add_type("application/javascript", ".js")
@@ -204,7 +204,7 @@ operators = {}
 另外，`require_token` 函数返回的 `decorated_function` 接收两个参数 `args` 和 `kwargs`，这些参数用于作为 `f` 函数的参数。
 
 
-```
+```py
 log_lines = []
 ws_connections = []
 
@@ -229,7 +229,7 @@ def require_token(f):
 该代码中的 `conf` 变量是一个全局变量，它的初始值是从服务器上下载的配置文件。在第一次调用 `load_config` 函数时，它会读取现有的配置文件并返回。在后续的调用中，函数将更新现有的配置文件以反映客户端的请求。
 
 
-```
+```py
 def serve_index():
     return send_from_directory("dist", "index.html")
 
@@ -263,7 +263,7 @@ def load_config():
 另外，函数中还使用了 `require_token` 装饰器，用于验证 HTTP 令牌是否已经过期。
 
 
-```
+```py
 @app.route("/plan", methods=["GET", "POST"])
 @require_token
 def load_plan_from_json():
@@ -315,7 +315,7 @@ def load_plan_from_json():
   这一步的作用是，如果上述两种情况中任何一种不成立，则抛出一个自定义的异常。
 
 
-```
+```py
 @app.route("/operator")
 def operator_list():
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
@@ -356,7 +356,7 @@ def operator_list():
 5. 检查是否使用了 '__init__' 包。如果是，则执行模块初始化操作。
 
 
-```
+```py
 @app.route("/shop")
 def shop_list():
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
@@ -399,7 +399,7 @@ def shop_list():
 3. `update_conf` 函数用于接收服务器发送的 "update_conf" 消息。它用于更新服务器客户端的配置信息，并将其存储在 `conf` 变量中。
 
 
-```
+```py
 def read_log(conn):
     global operators
     global mower_process
@@ -433,7 +433,7 @@ def read_log(conn):
 2. 启动路由（/start）需要一个 JSON 密钥 `conf`、一个名为 `plan` 的计划文件和一个名为 `operators` 的操作员列表。函数内部读取 `conf` 和 `plan` 两个文件，并启动一个名为 `main` 的函数作为割草进程的入口。由于 `mower_process` 已经启动，所以该路由会返回 "Mower is already running."。在函数内部使用 `multiprocessing.Pipe()` 方法将读取和写入的管道建立起来，并启动 `main` 函数。最后，启动了 `mower_process` 进程，并将 `log_lines` 作为管道通道发送出去，接收方代码没有做任何处理，直接将 `read` 和 `plan` 两个文件发送过去。
 
 
-```
+```py
 @app.route("/running")
 def running():
     global mower_process
@@ -507,7 +507,7 @@ def start():
 15. `@app.route("/")`是一个装饰器，用于告诉 Flask应用程序在路由 / 路径根上处理 HTTP GET 请求。
 
 
-```
+```py
 @app.route("/stop")
 @require_token
 def stop():
@@ -538,7 +538,7 @@ def stop():
 5. 如果连接已关闭，使用 `ws_connections.remove(ws)` 方法从列表中删除连接。
 
 
-```
+```py
 def log(ws):
     global ws_connections
     global log_lines
@@ -565,7 +565,7 @@ def log(ws):
 在另一个函数 `open_folder_dialog` 中，同样调用 `window.create_file_dialog` 方法，传递 `dialog_type` 参数，得到一个 `folder_path` 参数。如果文件夹路径不为空，则返回该文件夹路径，否则返回一个空字符串。
 
 
-```
+```py
 @require_token
 def open_file_dialog():
     window = webview.active_window()
@@ -600,7 +600,7 @@ def open_folder_dialog():
 7. 如果出现异常，则返回 "Maa加载失败：" + str(e) 的消息。
 
 
-```
+```py
 @app.route("/check-maa")
 @require_token
 def get_maa_adb_version():
@@ -627,7 +627,7 @@ def get_maa_adb_version():
 最后，代码通过 `return` 函数将 `presets` 列表返回给调用者，以便他们进行后续操作。
 
 
-```
+```py
 @app.route("/maa-conn-preset")
 @require_token
 def get_maa_conn_presets():
@@ -654,7 +654,7 @@ def get_maa_conn_presets():
 在这个例子中，假设 `conf` 中包含了电子邮件配置对象，比如 `SMTP_SSL_HOST`、`SMTP_SSL_PORT`、`SMTP_SSL_USERNAME`、`SMTP_SSL_PASSWORD` 等。
 
 
-```
+```py
 @app.route("/record/getMoodRatios")
 def get_mood_ratios():
     return record.get_mood_ratios()
@@ -677,7 +677,7 @@ def test_email():
 
 ```
 
-# `/opt/arknights-mower/setup.py`
+# `setup.py`
 
 该代码使用了Python的setuptools库来安装arknights_mower库。具体来说，它通过运行 `import setuptools` 来导入setup工具，并通过 `setuptools.setup(...)` 来设置arknights_mower库的元数据和版本信息。
 
@@ -686,7 +686,7 @@ def test_email():
 最后，它通过循环遍历所有的类来定义arknights_mower库中的函数和类，并在setup.py文件中包含它们。
 
 
-```
+```py
 import setuptools
 import arknights_mower
 from pathlib import Path
@@ -729,7 +729,7 @@ setuptools.setup(
 
 ```
 
-# `/opt/arknights-mower/webview_ui.py`
+# `webview_ui.py`
 
 这段代码是一个Python脚本，它具有以下几个主要部分：
 
@@ -746,7 +746,7 @@ setuptools.setup(
 11. 在脚本中创建一个MenuItem对象，该对象可能用于将菜单项添加到菜单中。
 
 
-```
+```py
 #!/usr/bin/env python3
 
 import webview
@@ -771,7 +771,7 @@ from pystray import Icon, Menu, MenuItem
 此外，代码还定义了一个`quit_app`变量，用于控制客户端是否通过按下`Quit`按钮而退出。如果这个变量为`True`，那么在客户端发送最后一个数据包后，程序将终止运行。
 
 
-```
+```py
 import socket
 import tkinter
 from tkinter import messagebox
@@ -800,7 +800,7 @@ def on_resized(w, h):
 最后，定义了一个名为 `destroy_window` 的函数，它会全局地修改 `quit_app` 变量，将其设置为 `True`，并全局地修改 `window` 对象的值，将其销毁。这个函数通常在应用程序结束时被调用，以释放其资源并清理退出。
 
 
-```
+```py
 def toggle_window():
     global window
     global display
@@ -833,7 +833,7 @@ def destroy_window():
 4. 启动 Mower 游戏并运行时使用客户端提供的 token 进行身份验证。
 
 
-```
+```py
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(("localhost", port)) == 0
@@ -918,7 +918,7 @@ if __name__ == "__main__":
 
 ```
 
-# `/opt/arknights-mower/纯跑单.py`
+# `纯跑单.py`
 
 这段代码是一个 Python 程序，它导入了多个第三方库，如 `copy`、`ctypes`、`cv2`、`inspect`、`json`、`os`、`pystray`、`smtplib`、`sys`、`threading`、`time`、`warnings` 和 `datetime`。它还定义了一系列函数，用于从不同来源获取数据，并将它们组合在一起，形成一个完整的程序。
 
@@ -956,7 +956,7 @@ if __name__ == "__main__":
 * `os.path.isfile()`：检查文件是否属于一个特定的文件类型。
 
 
-```
+```py
 from __future__ import annotations
 import copy
 import ctypes
@@ -995,7 +995,7 @@ from email.mime.multipart import MIMEMultipart
 15. 从 `Pillow` 库中导入 `Image` 类，用于显示游戏中的角色图片。
 
 
-```
+```py
 from email.mime.text import MIMEText
 from enum import Enum
 from tkinter import *
@@ -1026,7 +1026,7 @@ from arknights_mower.utils.digit_reader import DigitReader
 `warn` 函数的作用是在运行任务时发出警告。在没有警告的情况下，代码会继续执行。警告可以通过运行 `python -m warnings.warn` 来开启。
 
 
-```
+```py
 from arknights_mower.utils.log import init_fhlr, logger, save_screenshot
 from arknights_mower.utils.operators import Operator, Operators
 from arknights_mower.utils.pipe import push_operators
@@ -1055,7 +1055,7 @@ from paddleocr import PaddleOCR
 7. 在游戏过程中，使用Solver类提供的算法来处理游戏逻辑，包括自动切换干员，加入或退出游戏联盟等等。
 
 
-```
+```py
 from arknights_mower.strategy import Solver
 
 官方服务器 = 'com.hypergryph.arknights'
@@ -1082,7 +1082,7 @@ Bilibili服务器 = 'com.hypergryph.arknights.bilibili'
 最后，它还设置了一个名为 "每种截图的最大保存数量" 的整数变量，用于限制每个截图文件保存的数量。当两个跑单干员都处于休息状态时，程序将退出游戏。
 
 
-```
+```py
 # 设置贸易站的房间以及跑单干员的具体位置
 # 请注意手动换班后记得重新运行程序
 跑单位置设置 = {
@@ -1110,7 +1110,7 @@ Bilibili服务器 = 'com.hypergryph.arknights.bilibili'
 接下来，设置邮件设置，包括发信邮箱、授权码和收件人邮箱等。发信邮箱的设置为“qqqqqqqqqq@qq.com”，授权码为从QQ邮箱“账户设置-账户-开启SMTP服务”中获得的授权码，而收件人邮箱则设置为多个邮箱地址，如“name@example.com”。
 
 
-```
+```py
 跑单弹窗提醒开关 = True
 
 # 悬浮字幕窗口设置
@@ -1138,7 +1138,7 @@ Bilibili服务器 = 'com.hypergryph.arknights.bilibili'
 此处设置了四个开关的配置，第一个开关是集成战略，用于开启或关闭 MAA 的集成战略。第二个开关是生息演算，用于开启或关闭 MAA 的生息演算。第三个开关是保全派驻，用于开启或关闭 MAA 的保全派驻。第四个开关是周计划，用于指定每周的每天需要进行哪些关卡演算，如果开关处于打开状态，则会自动根据 MAA 路径遍历所有的关卡并进行演算。应急理智药用于指定在演算过程中如果出现异常需要手动干预的药物数量。
 
 
-```
+```py
 MAA设置 = {
     'MAA路径': 'K:/MAA',  # 请设置为存放 dll 文件及资源的路径
     'MAA_adb路径': 'C:/Program Files/BlueStacks_bgp64/./HD-Adb.exe',  # 请设置为模拟器的 adb 应用程序路径
@@ -1169,7 +1169,7 @@ The `__init__` method initializes the device and sets up some defaults. The `dis
 The `check_current_focus` method appears to check if the application is currently in the foreground. If it's not, it launches the application.
 
 
-```
+```py
 ################################################################################################
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ################################################################################################
@@ -1323,7 +1323,7 @@ class 设备控制(object):
 最后，代码还创建了一个名为“工作状态”的整型变量，并将其初始化为1，将其存储到了干员排序方式位置的键中，以便后续枚举类型的成员变量引用。
 
 
-```
+```py
 class 干员排序方式(Enum):
     工作状态 = 1
     技能 = 2
@@ -1353,7 +1353,7 @@ The scheduler has several features:
 The scheduler is run in the background, and it is accessible through the `run_tasks` function.
 
 
-```
+```py
 def 调试输出():
     logger.handlers[0].setLevel('DEBUG')
 
@@ -2308,7 +2308,7 @@ The scheduler then handles the game loop by constantly updating the game state a
 Finally, the scheduler can send a notification of an error, a runout of tasks, or a failure when a task cannot be completed. It can also enable debug mode, which will send debug messages to log.
 
 
-```
+```py
 def 初始化(任务列表, scheduler=None):
     config.ADB_DEVICE = MAA设置['MAA_adb地址']
     config.ADB_CONNECT = MAA设置['MAA_adb地址']
@@ -2373,7 +2373,7 @@ def 初始化(任务列表, scheduler=None):
 最后，如果当前任务结束后 Mower 仍然存在，但是 MAA 已经启动，则 MAA 调用任务规划后，当前项目将重新进入索引。
 
 
-```
+```py
 class 线程(threading.Thread):
 
     def __init__(self, *args, **kwargs):
@@ -2471,7 +2471,7 @@ class 线程(threading.Thread):
 总之，该函数的主要目的是在需要时报告线程终止导致的错误，并在尝试重新设置线程异常类型时进行清理。
 
 
-```
+```py
 def 终止线程报错(tid, exctype):
     """raises the exception, performs cleanup if needed"""
     tid = ctypes.c_long(tid)
@@ -2498,7 +2498,7 @@ def 终止线程报错(tid, exctype):
 第三个函数 `拖动窗口(event)` 接受一个 `event` 参数，其中包括 `event.x_root` 和 `event.y_root` 两个坐标值，这些值表示鼠标相对于窗口左上角边的 X 和 Y 坐标。函数通过 `geometry` 方法调整窗口的位置，将窗口从左上角拖动到指定位置。
 
 
-```
+```py
 def 显示字幕():
     窗口.deiconify()
 
@@ -2523,7 +2523,7 @@ def 拖动窗口(event):
 “缩放字幕”函数的作用是根据用户与字幕窗口交互的时间间隔来控制字幕的字号。具体来说，它使用event参数中的delta值来计算用户与窗口之间的距离，然后根据这个距离变化来调整字幕的字号。如果用户与窗口的交互时间间隔大于0，那么字幕字号会增加1；如果交互时间间隔小于0，那么字号会减少1。此外，函数还设置了一个默认值，即当拼音字号小于1时将字号设置为1，当拼音字号大于90时将字号设置为90。
 
 
-```
+```py
 def 关闭窗口(icon: pystray.Icon):
     窗口.withdraw()
 
@@ -2549,7 +2549,7 @@ def 缩放字幕(event):
 第二个函数 `重新运行Mower`，与第一个函数的作用相反，该函数的作用是重新启动名为 `Mower` 的机器人，并让它开始运行。它使用了一个名为 `Mower` 的全局变量，该变量在代码的其他部分中被定义为来自 `Mower.ident` 的线程实例。函数尝试通过调用 `Mower._stop_event.set` 方法来停止运行中的机器人，并处理可能的异常。如果这个方法不能停止机器人，则函数会尝试通过调用 `Mower.start` 方法来启动机器人。
 
 
-```
+```py
 def 跑单任务查询(icon: pystray.Icon):
     icon.notify(任务提示, "Mower跑单任务列表")
 
@@ -2574,7 +2574,7 @@ def 重新运行Mower():
 退出程序函数接收两个参数：一个“icon”对象和一个“item”参数。首先，调用“stop”方法来停止Mower对象的运行。然后，获取当前进程ID，并使用“taskkill”命令来杀死后台进程。不过，这个命令可能无法杀死所有进程，因为有些程序会隐藏其进程。
 
 
-```
+```py
 def 停止运行Mower():
     Mower._stop_event.set()
     终止线程报错(Mower.ident, SystemExit)
@@ -2602,7 +2602,7 @@ def 退出程序(icon, item):
 然后，函数使用“label.config(text=字幕， font=(字幕字体 + ' ' + 字幕字号), bg=字幕颜色， fg=处分颜色[:6] + str(int(字幕颜色[5] == '0'))）”设置了一个标签的显示文本、字体、背景和前景颜色，并在文本上添加了一个“？”符号。最后，函数使用了“window.after(100, 更新字幕)”来定期更新标签的文本，即每100毫秒更新一次标签的文本。
 
 
-```
+```py
 def 更新字幕():
     global 字幕
     任务倒计时 = int((下个任务开始时间 - datetime.now()).total_seconds() / 60)
@@ -2630,7 +2630,7 @@ def 更新字幕():
 接下来，添加一个悬浮的标签小部件，设置标签在窗口的顶部，宽度为窗口宽度的一半，高度为窗口高度的75%，同时使用窗口的属性来设置标签的颜色。最后，添加三个事件处理程序，用于绑定窗口的关闭、拖动和鼠标旋转事件。
 
 
-```
+```py
 托盘 = pystray.Icon("Mower 纯跑单", Image.open("logo.png"), "Mower 纯跑单", 托盘菜单)
 if 悬浮字幕开关:
     窗口.geometry("%dx%d+%d+%d" % (窗口宽度, 窗口高度,
@@ -2664,7 +2664,7 @@ if 悬浮字幕开关:
 “Mower”线程的行为是通过调用“run”函数来实现的，该函数的具体实现不在代码中给出。
 
 
-```
+```py
 if __name__ == "__main__":
     日志设置()
     threading.Thread(target=托盘.run, daemon=False).start()

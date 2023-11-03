@@ -1,6 +1,6 @@
 # ArknightMower源码解析 12
 
-# `/opt/arknights-mower/packaging/network.py`
+# `packaging/network.py`
 
 这段代码是一个用于在 Python 中执行异步 I/O 操作的库 `aiohttp` 的源代码。它定义了一个名为 `asyncio` 的类，该类被用于编写需要使用 `asyncio` 的高并发 Python 代码。
 
@@ -9,7 +9,7 @@
 这段代码的主要目的是让用户在遵循 `License` 的前提下自由地使用 `aiohttp` 库，并且允许用户在需要时通过 `aiohttp` 官网获取 `License` 的详细信息。
 
 
-```
+```py
 # copyright (c) 2020 PaddlePaddle Authors. All Rights Reserve.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,7 @@ import os
 下载过程中，如果遇到问题，将记录错误并返回 0。
 
 
-```
+```py
 import sys
 import tarfile
 import requests
@@ -81,7 +81,7 @@ def download_with_progressbar(url, save_path):
 7. 最后，删除下载的压缩包，以免对系统造成无用文件。
 
 
-```
+```py
 def maybe_download(model_storage_directory, url):
     # using custom model
     tar_file_name_list = ['.pdiparams', '.pdiparams.info', '.pdmodel']
@@ -119,7 +119,7 @@ def maybe_download(model_storage_directory, url):
 `confirm_model_dir_url()` 函数接收两个参数：`model_dir` 和 `default_model_dir`，`default_url`。首先，它使用 `is_link()` 函数检查给定的 `model_dir` 是否为 `None` 或以 "http" 开头的字符串。如果是，它将 `default_url` 赋给 `model_dir`，否则，它将 `default_model_dir` 赋给 `model_dir`，并将 `model_dir` 加入 `default_url` 的路径中。最后，它返回 `model_dir` 和 `default_url`。
 
 
-```
+```py
 def is_link(s):
     return s is not None and s.startswith('http')
 
@@ -136,7 +136,7 @@ def confirm_model_dir_url(model_dir, default_model_dir, default_url):
 
 ```
 
-# `/opt/arknights-mower/packaging/paddleocr.py`
+# `packaging/paddleocr.py`
 
 这段代码是一个Python脚本，它将解释为`numpy-client`库的依赖包。`numpy-client`库是一个用于Numpy编程的Python库，它允许用户通过Numpy接口访问Numpy数组和函数。
 
@@ -151,7 +151,7 @@ def confirm_model_dir_url(model_dir, default_model_dir, default_url):
 4. 下面的内容：定义了一个名为`import os`的函数，它用于将`os`模块中的函数和变量导入到当前命名空间中。这个函数通常用于在程序中执行操作系统相关操作，例如获取文件和目录路径，或设置环境变量。
 
 
-```
+```py
 # Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,7 +186,7 @@ import os
 总之，这段代码的主要目的是定义了一个函数，该函数可以加载一个名为`辛普森dataset`的` paddle.dataset.dataset`对象，并将`cv2`库和`logging`库设置为输出标准，以便在需要时可以输出图像数据。
 
 
-```
+```py
 import sys
 import importlib
 
@@ -222,7 +222,7 @@ from io import BytesIO
 总之，这段代码定义了一系列函数和类，用于实现 PPCO-R 在训练和预测过程中的相关任务。
 
 
-```
+```py
 from PIL import Image
 
 tools = importlib.import_module('.', 'tools')
@@ -251,7 +251,7 @@ The given code is a JSON object that defines the structure of the国务院办公
 文本json中的数据来源于韩国进行范围评估测试使用声明，从Horizontalion Accessible Cultural Data的表格数据中获取。该声明的数据被分为两个部分：一部分用于从 Picodet 的 LCNet 模型中获取表格的布局，另一部分用于从 CDLA 模型中获取表格的布局。布局JSON中的所有URL都是来源于Picodet和CDLA的官方文件，这些文件可能需要提前从Horizontalion Accessible Cultural Data的GitHub仓库中获取。
 
 
-```
+```py
 __all__ = [
     'PaddleOCR', 'PPStructure', 'draw_ocr', 'draw_structure_result',
     'save_structure_res', 'download_with_progressbar', 'to_excel'
@@ -533,7 +533,7 @@ MODEL_URLS = {
 最后，函数返回一个名为 `args` 的命名对象，该对象包含 `inference_args_dict`，它是通过 `parser.parse_args` 方法解析出来的参数的命名对象。如果 `mMain` 为真，则函数返回 `args`，否则返回 `argparse.Namespace` 对象。
 
 
-```
+```py
 def parse_args(mMain=True):
     import argparse
     parser = init_args()
@@ -586,7 +586,7 @@ The `lang` variable is initialized to an empty string. The value of the `lang` v
 The `trec_model_path` and `trec_data_path` variables appear to be variables defined in the `trec.py` module. The former variable is used to specify the path to a pre-trained detection model for a given language, while the latter is used to specify the path to a pre-trained data set for that language. These variables could be used to train the OCR model using the pre-trained detection model.
 
 
-```
+```py
 def parse_lang(lang):
     latin_lang = [
         'af', 'az', 'bs', 'cs', 'cy', 'da', 'de', 'es', 'et', 'fr', 'ga', 'hr',
@@ -641,7 +641,7 @@ def parse_lang(lang):
 如果参数类型和版本控制都正确，函数将返回一个模型URL，该URL对应于指定模型类型和版本的训练语料库链接。
 
 
-```
+```py
 def get_model_config(type, version, model_type, lang):
     if type == 'OCR':
         DEFAULT_MODEL_VERSION = DEFAULT_OCR_MODEL_VERSION
@@ -692,7 +692,7 @@ The `check_img_function` takes an image file and returns an image object. It per
 Note: This function assumes that the required libraries, such as `cv2` and `PIL`, are already installed in your system.
 
 
-```
+```py
 def img_decode(content: bytes):
     np_arr = np.frombuffer(content, dtype=np.uint8)
     return cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
@@ -745,7 +745,7 @@ This is a Python script that uses multi-scale image detection (MUS) and text det
 The script first checks if the classifier is initialized correctly. If not, it will not use the classifier for
 
 
-```
+```py
 class PaddleOCR(predict_system.TextSystem):
     def __init__(self, **kwargs):
         """
@@ -902,7 +902,7 @@ class TableModel:
 你需要在 `__init__` 方法中读取模型配置文件，并初始化字体和图片。`__call__` 方法将在做图像处理之后返回处理后的结果。
 
 
-```
+```py
 class PPStructure(StructureSystem):
     def __init__(self, **kwargs):
         params = parse_args(mMain=False)
@@ -978,7 +978,7 @@ It has a few functions: `convert_poisson_map_to_pdf`, `create_pdf_image_path`, `
 It also imports several modules: `ppstructure`, `cv2`, `os`, and `numpy`.
 
 
-```
+```py
 def main():
     # for cmd
     args = parse_args(mMain=True)
@@ -1076,7 +1076,7 @@ def main():
 
 ```
 
-# `/opt/arknights-mower/ui/auto-imports.d.ts`
+# `ui/auto-imports.d.ts`
 
 It looks like you're trying to compare the different types of controls in Vue.js.
 
@@ -1110,7 +1110,7 @@ The types.json file is a file that defines the types of the Vue.js objects and f
 * watchSyncEffect: a type of function that is used to perform side effects in the component, such as fetching data or updating the DOM in a synchronous way
 
 
-```
+```py
 /* eslint-disable */
 /* prettier-ignore */
 // @ts-nocheck
@@ -1183,7 +1183,7 @@ declare global {
 这个声明的主要作用是告诉 TypeScript 编译器，Vue 中定义了哪些数据结构和类型，以便 TypeScript 能够正确地理解和处理这些类型的变量。
 
 
-```
+```py
 // for type re-export
 declare global {
   // @ts-ignore
@@ -1192,7 +1192,7 @@ declare global {
 
 ```
 
-# `/opt/arknights-mower/ui/components.d.ts`
+# `ui/components.d.ts`
 
 This is a TypeScript interface that defines the default export of the `MaaWeekly` component. The `MaaWeekly` component appears to be a data visualization component that displays a table of data with a specified columns and rows.
 
@@ -1201,7 +1201,7 @@ The default export of the `MaaWeekly` component includes several types such as `
 The `MaaWeekly` component is also expected to have a method `refreshData` which is expected to be a function that updates the `tableData` property with the latest data.
 
 
-```
+```py
 /* eslint-disable */
 /* prettier-ignore */
 // @ts-nocheck
@@ -1267,14 +1267,14 @@ Mower 的新界面。短期目标是 Mower 继续保持桌面应用的形态，�
 
 安装依赖：
 
-```bash
+```pybash
 pip install -r requirements.txt
 pip install Flask flask-cors flask-sock pywebview
 ```
 
 运行后端：
 
-```bash
+```pybash
 flask --app server run --port=8000 --reload
 ```
 
@@ -1284,13 +1284,13 @@ flask --app server run --port=8000 --reload
 
 安装依赖：
 
-```bash
+```pybash
 npm install
 ```
 
 运行前端的开发服务器：
 
-```bash
+```pybash
 npm run dev
 ```
 
@@ -1298,7 +1298,7 @@ npm run dev
 
 在开发时，前端默认会访问本地 `8000` 端口以连接后端。可以建立 `.env.development.local` 文件，通过 `VITE_HTTP_URL` 指定连接其它地址。例如连接本地的 5000 端口：
 
-```plaintext
+```pyplaintext
 VITE_HTTP_URL="http://localhost:5000"
 ```
 
@@ -1306,13 +1306,13 @@ VITE_HTTP_URL="http://localhost:5000"
 
 此时无需运行前端的开发服务器，前端构建生产版本的静态文件：
 
-```bash
+```pybash
 npm run build
 ```
 
 将生成的 `dist` 文件夹复制到 `arknights-mower` 的目录中。此时运行后端：
 
-```运行
+```py运行
 flask --app server run --port=8000
 ```
 
@@ -1322,20 +1322,20 @@ flask --app server run --port=8000
 
 安装依赖：
 
-```bash
+```pybash
 pip install pyinstaller
 ```
 
 使用 `pyinstaller` 打包：
 
-```bash
+```pybash
 pyinstaller menu.spec
 ```
 
 生成的 `mower.exe` 在 `dist` 文件夹中。
 
 
-# `/opt/arknights-mower/ui/vite.config.js`
+# `ui/vite.config.js`
 
 该代码使用了 Vite 开发服务器，并且导入了两个插件：vue 和 AutoImport。vue 是一个用于构建 Vue.js 应用程序的插件，而 AutoImport 是一个用于自动导入 Vue.js 组件的插件。
 
@@ -1344,7 +1344,7 @@ pyinstaller menu.spec
 最后，通过 defineConfig() 函数设置了 Vite 开发服务器的一些配置，包括别名(alias)、模块 resolve(使用 webpack 提供的 resolve 函数)以及将当前目录(即项目根目录)映射到 Vue.js 安装目录(使用 fileURLToPath)。
 
 
-```
+```py
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
@@ -1379,7 +1379,7 @@ export default defineConfig({
 
 ```
 
-# `/opt/arknights-mower/ui/src/main.js`
+# `ui/src/main.js`
 
 这段代码使用了Vue和Pinia库来实现了一个Web应用程序。它主要的作用是创建一个Vue应用程序实例，并使用该实例来加载和配置Vue组件。
 
@@ -1394,7 +1394,7 @@ export default defineConfig({
 7. 使用`app.mount`方法将Vue应用程序实例挂载到一个HTML元素上，使其可以被访问到 JavaScript 代码中。
 
 
-```
+```py
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
@@ -1410,12 +1410,12 @@ app.mount('#app')
 
 ```
 
-# `/opt/arknights-mower/ui/src/stores/config.js`
+# `ui/src/stores/config.js`
 
 The code you provided is a script for the Android game, `Minecraft`. The script uses the Admin Shell (`adb`) and the Minecraft Forge (`maa_mall`) API to interact with the game. The script is deep-level configured and has a number of features, such as the ability to customize the game with themes, sound effects, and screen effects. The script can also be customized by editing the `build_config` file, which is a configuration file provided by the Minecraft Forge.
 
 
-```
+```py
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import axios from 'axios'

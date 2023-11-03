@@ -1,6 +1,6 @@
 # ArknightMower源码解析 9
 
-# `/opt/arknights-mower/arknights_mower/utils/param.py`
+# `arknights_mower/utils/param.py`
 
 这段代码定义了一个名为`ParamError`的类，该类继承自`ValueError`类，用于表示在函数中参数值无效的情况。
 
@@ -13,7 +13,7 @@
 如果参数中包含其他操作符或没有有效的参数，就尝试从参数中提取出有效的参数，并将其存储到`params`字典中。如果发生异常，就通过`raise ParamError`方法抛出参数错误，并返回参数级别、时间戳、药方、起源和消除状态中的最低值。
 
 
-```
+```py
 from .typealias import ParamArgs
 
 
@@ -66,14 +66,14 @@ def parse_operation_params(args: ParamArgs = []):
 这个函数的作用是获取传递给它的参数列表，并返回其中参数的数量。
 
 
-```
+```py
 def operation_times(args: ParamArgs = []) -> int:
     _, times, _, _, _ = parse_operation_params(args)
     return times
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/pipe.py`
+# `arknights_mower/utils/pipe.py`
 
 这段代码定义了一个名为`push_operators`的函数，它接受一个函数作为参数(函数内部定义了一个内部函数`func_dec`)，并将内部函数作为参数传入。
 
@@ -82,7 +82,7 @@ def operation_times(args: ParamArgs = []) -> int:
 整个函数的作用是创建一个新的函数，允许将`func`中定义的操作符及其传递给新函数的参数一起传递给新函数。这个新函数可以在需要时被调用，无论`func`是否正在执行。
 
 
-```
+```py
 def push_operators(func):
     def func_dec(s,*args):
         r=func(s,*args)
@@ -101,7 +101,7 @@ class Pipe:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/priority_queue.py`
+# `arknights_mower/utils/priority_queue.py`
 
 这段代码定义了一个名为 PriorityQueue 的类，该类实现了一个基于 heapq 的优先队列。该类的构造函数创建了一个空队列，并提供了 push 和 pop 方法来添加元素到队列中或从队列中移除元素。
 
@@ -128,7 +128,7 @@ print(pq.pop())  # 输出 1
 这将输出 [1, 2, 3]，说明在 pq 中的优先级顺序是 3 > 2 > 1。
 
 
-```
+```py
 import heapq
 
 
@@ -150,7 +150,7 @@ class PriorityQueue(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/recognize.py`
+# `arknights_mower/utils/recognize.py`
 
 这段代码是一个Python程序，它从未来的趋势中导入了一个名为“annotations”的模块。然后，它导入了time模块、cv2.pycv2模块（用于处理计算机视觉中的图像）和一个名为“typing”的模块（用于定义可交换类型变量）。
 
@@ -169,7 +169,7 @@ class PriorityQueue(object):
 最后，它从名为“Matcher”的目录中导入了一个名为“Matcher”的类，然后从函数开始定义了这些函数。
 
 
-```
+```py
 from __future__ import annotations
 
 import time
@@ -200,7 +200,7 @@ The `crop` method takes an image resource file name and a two-dimensional croppi
 The `__init__` method sets the root directory of the image resources and defines the `find`, `score`, and `crop` methods. The `__rootdir__` attribute is a directive to tell Python to look for image resources in the specified directory.
 
 
-```
+```py
 from .scene import Scene, SceneComment
 
 
@@ -523,7 +523,7 @@ class Recognizer(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/recruit.py`
+# `arknights_mower/utils/recruit.py`
 
 这段代码是一个Python函数，名为`filter_result`，属于`recruit.py`文件。其目的是对给定的 `tag_list` 和 `result_list` 进行处理，并将处理结果返回。
 
@@ -532,7 +532,7 @@ class Recognizer(object):
 函数的实现中，通过调用 `logger.debug` 函数来输出日志信息，输出格式为：`tag`（标签） `level`（级别） `产阶级`（bors） 。这里，`temp_list` 中的元素是按照 `level` 升序排序的，所以，`temp_list` 中的第一个元素，一定是最小的。
 
 
-```
+```py
 #!Environment yolov8_Env
 # -*- coding: UTF-8 -*-
 """
@@ -573,7 +573,7 @@ def filter_result(tag_list, result_list, type=0):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/scene.py`
+# `arknights_mower/utils/scene.py`
 
 这段代码的作用是创建了一个Scene类和一个SceneComment字典。
 
@@ -584,7 +584,7 @@ def filter_result(tag_list, result_list, type=0):
 最后，将场景ID和评论存储到`SceneComment`字典中。这样，每当场景ID被调用时，程序都会返回该场景对象的评论。
 
 
-```
+```py
 from ..data import scene_list
 
 
@@ -604,7 +604,7 @@ for scene in scene_list.keys():
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/scheduler_task.py`
+# `arknights_mower/utils/scheduler_task.py`
 
 这段代码定义了一个名为 `SchedulerTask` 的类，用于在命令行游戏 `SwordCraft` 中执行定时任务。这个类的实例可以包含以下信息：
 
@@ -622,7 +622,7 @@ for scene in scene_list.keys():
 `__eq__` 方法用于比较两个 `SchedulerTask` 实例是否相等。如果它们具有相同的 `task_type`、`meta_flag` 和 `time_offset`，则返回 `True`，否则返回 `False`。
 
 
-```
+```py
 from datetime import datetime, timedelta
 import copy
 from arknights_mower.utils.datetime import the_same_time
@@ -659,7 +659,7 @@ class SchedulerTask:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/segment.py`
+# `arknights_mower/utils/segment.py`
 
 这段代码是一个带有未来时注解的函数，从Python 2.7开始引入。它主要是导入自在未来可能要引入的一些模块和函数。接下来，它导入了一个名为“traceback”的模块，以及一个名为“cv2”的模块，用于从摄像头获取图像。然后，它导入了一个名为“numpy”的模块，用于从列表中索引，接着导入了一个名为“torchvision”的模块，可能用于图像处理和计算机视觉任务。
 
@@ -670,7 +670,7 @@ class SchedulerTask:
 最后，它定义了一个函数“__main__”，这个函数似乎是执行一系列图像处理和计算机视觉任务的通用步骤。
 
 
-```
+```py
 from __future__ import annotations
 
 import traceback
@@ -701,7 +701,7 @@ Finally, the function uses the OpenCV library to draw the regions in the image a
 It is important to note that the function is not very readable and it is not clear what it does without the parameters passed.
 
 
-```
+```py
 class FloodCheckFailed(Exception):
     pass
 
@@ -814,7 +814,7 @@ Finally, the function returns the polygon image.
 It is important to note that this function assumes that the input image is in RGB format and that the polygon threshold is set appropriately to avoid false positives. Additionally, the function may have other bugs or issues that need to be addressed before it can be used for production purposes.
 
 
-```
+```py
 def recruit(img: tp.Image, draw: bool = False) -> list[ tp.Scope ]:
     """
     公招特供的图像分割算法
@@ -911,7 +911,7 @@ Finally, the function checks if the image should be drawn on top of the segmente
 This function may have potential issues with accurate segmentation, as the room shapes are not well defined.
 
 
-```
+```py
 def base(img: tp.Image, central: tp.Scope, draw: bool = False) -> dict[ str, tp.Rectangle ]:
     """
     基建布局的图像分割算法
@@ -1006,7 +1006,7 @@ The `remove_button` function takes a list of polygons detected by the current wo
 The `segment_worker` function uses the `segment_py` module to detect polygons in the input image. It also uses the `get_poly` function to get the x- and y-coordinates of each polygon detected by the current worker. This allows the current worker to compare the newly detected polygons to the previously detected ones to determine if they belong to the same object or not.
 
 
-```
+```py
 def worker(img: tp.Image, draw: bool = False) -> tuple[ list[ tp.Rectangle ], tp.Rectangle, bool ]:
     """
     进驻总览的图像分割算法
@@ -1097,7 +1097,7 @@ The `detect_objects.py` function takes an input image and returns a list of reco
 The `recognize_objects.py` function takes an input image and a hyperparameter `gap` and returns the recognized agent names and the bounding boxes around each recognized agent. It also
 
 
-```
+```py
 def agent(img, draw=False):
     """
     干员总览的图像分割算法
@@ -1218,7 +1218,7 @@ This is a Python implementation of the segmentation algorithm you described, usi
 The `RecognizeError` class is raised if any of the inputs or conditions inside the loop are not met.
 
 
-```
+```py
 def free_agent(img, draw=False):
     """
     识别未在工作中的干员
@@ -1290,7 +1290,7 @@ def free_agent(img, draw=False):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/simulator.py`
+# `arknights_mower/utils/simulator.py`
 
 这段代码的作用是实现了一个模拟器，可以模拟Nox和MuMu12两种不同的情况。具体来说，代码中定义了一个名为Simulator_Type的枚举类型，用于指定要模拟的模拟器类型。然后，定义了一个名为Restart_Simulator的函数，用于重启指定的模拟器。
 
@@ -1311,7 +1311,7 @@ MuMuManager.exe api -v shutdown_player {data["index"]} -wait 25
 在执行完命令后，函数都会等待一段时间，然后继续等待2秒钟，以确保模拟器已经正常关闭。如果模拟器无法正常关闭，函数会输出一条警告信息并停止执行。
 
 
-```
+```py
 import subprocess
 from enum import Enum
 from arknights_mower.utils.log import logger
@@ -1363,7 +1363,7 @@ def restart_simulator(data):
 如果 `cmd` 运行的时间超过 2 秒钟，函数将使用 `subprocess.TimeoutExpired` 异常来捕获。在这种情况下，函数将杀死进程并返回。
 
 
-```
+```py
 def exec_cmd(cmd, folder_path):
     try:
         process = subprocess.Popen(cmd, shell=True, cwd=folder_path, stdout=subprocess.PIPE,
@@ -1375,7 +1375,7 @@ def exec_cmd(cmd, folder_path):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/solver.py`
+# `arknights_mower/utils/solver.py`
 
 这段代码的作用是定义了一个名为“邮件推送”的类，通过调用邮件推送类中的方法，实现发送电子邮件的功能。下面按照代码的作用，逐步解释：
 
@@ -1398,7 +1398,7 @@ def exec_cmd(cmd, folder_path):
 9. 最后定义了“EmailPush”类，其中包含了所有邮件推送所需的功能和属性，包括设置邮件主题、发送邮件、处理异常等。
 
 
-```
+```py
 from __future__ import annotations
 
 import smtplib
@@ -1437,7 +1437,7 @@ send_email.send_email('你是中国吗', '我来自88Dollars', 'plain')
 
 
 
-```
+```py
 class StrategyError(Exception):
     """ Strategy Error """
     pass

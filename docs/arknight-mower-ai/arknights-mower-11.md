@@ -1,6 +1,6 @@
 # ArknightMower源码解析 11
 
-# `/opt/arknights-mower/arknights_mower/utils/device/minitouch/session.py`
+# `arknights_mower/utils/device/minitouch/session.py`
 
 This is a simple implementation of a minimap protocol that establishes a connection to a remote device. The `Minitouch` class is a simple class that wraps the connection and provides a `send` method to send data and a `close` method to close the connection.
 
@@ -13,7 +13,7 @@ The `send` method sends data to the remote device by calling the `sendall` metho
 Note that this implementation is just a simple example and does not handle errors, security, or other important considerations that are typically important in a production-level implementation.
 
 
-```
+```py
 from __future__ import annotations
 
 import socket
@@ -75,17 +75,17 @@ class Session(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/minitouch/__init__.py`
+# `arknights_mower/utils/device/minitouch/__init__.py`
 
 这段代码定义了一个名为 "Client" 的类，继承自 "MiniTouch" 类。这个类的具体作用在代码中没有明确说明，但可以推测它是一个用于与某个系统进行交互的客户端，用于在 MiniTouch 类中实现一些核心功能。
 
 
-```
+```py
 from .core import Client as MiniTouch
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/scrcpy/const.py`
+# `arknights_mower/utils/device/scrcpy/const.py`
 
 这段代码定义了一个模块中的所有常量，包括项目中共用到的常量。
 
@@ -108,7 +108,7 @@ KEYCODE_BACK表示退行键。
 该模块中的常量可以被用来在程序中读取和设置键盘输入。
 
 
-```
+```py
 """
 This module includes all consts used in this project
 """
@@ -159,7 +159,7 @@ KEYCODE_POUND：一个字符，代表#，用于表示一个特殊的ASCII码，�
 KEYCODE_DPAD_UP：一个字符，代表^，用于表示一个特殊的ASCII码，用于在特定应用程序之间传递用户输入信息。
 
 
-```
+```py
 KEYCODE_CALL = 5
 KEYCODE_ENDCALL = 6
 KEYCODE_0 = 7
@@ -193,7 +193,7 @@ KEYCODE_DPAD_UP = 19
 这些快捷键代码用于在 Android 应用程序中实现一些常见的功能。
 
 
-```
+```py
 KEYCODE_DPAD_DOWN = 20
 KEYCODE_DPAD_LEFT = 21
 KEYCODE_DPAD_RIGHT = 22
@@ -214,7 +214,7 @@ KEYCODE_F = 34
 以上代码定义了20个不同的 `KEYCODE_` 常量，每个常量都有一个唯一的数字，用于表示特定的快捷键。这些常量将作为 Python 程序中的键，用于启动特定的功能或操作。
 
 
-```
+```py
 KEYCODE_G = 35
 KEYCODE_H = 36
 KEYCODE_I = 37
@@ -235,7 +235,7 @@ KEYCODE_U = 49
 以上代码定义了16个自定义键盘键（KEYCODE_V through KEYCODE_X），每个键的编号都是从50开始递增的。这些键被用于在应用程序中实现键盘输入。例如，你可以将KEYCODE_V用于在屏幕上输出"V"符号。
 
 
-```
+```py
 KEYCODE_V = 50
 KEYCODE_W = 51
 KEYCODE_X = 52
@@ -272,7 +272,7 @@ KEYCODE_EXPLORER = 64
 - KEYCODE_HEADSETHOOK：用于在文本编辑器中执行操作系统命令，通常是用于显示文件或目录的属性。
 
 
-```
+```py
 KEYCODE_ENVELOPE = 65
 KEYCODE_ENTER = 66
 KEYCODE_DEL = 67
@@ -293,7 +293,7 @@ KEYCODE_HEADSETHOOK = 79
 这段代码定义了八个不同的KEYCODE常量，用于识别用户与设备之间的交互操作。每个KEYCODE都有一个对应的数字，这些数字用于识别不同的用户交互操作。例如，KEYCODE_PLUS 对应于按下 Plus 按钮（通常是回退键）所触发的操作。
 
 
-```
+```py
 KEYCODE_PLUS = 81
 KEYCODE_MENU = 82
 KEYCODE_NOTIFICATION = 83
@@ -331,7 +331,7 @@ KEYCODE_BUTTON_B = 97
 - KEYCODE_FORWARD_DEL = 112：这是浏览器中前进删除键。
 
 
-```
+```py
 KEYCODE_BUTTON_C = 98
 KEYCODE_BUTTON_X = 99
 KEYCODE_BUTTON_Y = 100
@@ -352,7 +352,7 @@ KEYCODE_FORWARD_DEL = 112
 这是一段定义了多个键盘键的常量，包括：KEYCODE_CTRL_LEFT（左CTRL键）、KEYCODE_CTRL_RIGHT（右CTRL键）、KEYCODE_CAPS_LOCK（CAPS锁定键）、KEYCODE_SCROLL_LOCK（SCROLL锁定键）、KEYCODE_META_LEFT（左META键）、KEYCODE_META_RIGHT（右META键）、KEYCODE_FUNCTION（FUNCTION键）、KEYCODE_SYSRQ（SYSRQ键）、KEYCODE_BREAK（BREAK键）、KEYCODE_MOVE_HOME（HOME键）、KEYCODE_MOVE_END（END键）、KEYCODE_INSERT（INSERT键）、KEYCODE_FORWARD（FORWARD键）、KEYCODE_MEDIA_PLAY（PLAY键）、KEYCODE_MEDIA_PAUSE（PAUSE键）。这些常量用于识别和处理键盘输入。
 
 
-```
+```py
 KEYCODE_CTRL_LEFT = 113
 KEYCODE_CTRL_RIGHT = 114
 KEYCODE_CAPS_LOCK = 115
@@ -373,7 +373,7 @@ KEYCODE_MEDIA_PAUSE = 127
 以上代码定义了12个自定义按键，包括媒体键(KEYCODE_MEDIA_CLOSE、KEYCODE_MEDIA_EJECT、KEYCODE_MEDIA_RECORD等)以及F1至F12键(KEYCODE_F1至KEYCODE_F12)。这些自定义按键可以在应用程序中用来执行各种操作。
 
 
-```
+```py
 KEYCODE_MEDIA_CLOSE = 128
 KEYCODE_MEDIA_EJECT = 129
 KEYCODE_MEDIA_RECORD = 130
@@ -394,7 +394,7 @@ KEYCODE_F12 = 142
 这段代码定义了几个常量，它们似乎用于某种编程语言中的锁相关操作。KEYCODE_NUM_LOCK，KEYCODE_NUMPAD_0，KEYCODE_NUMPAD_1，KEYCODE_NUMPAD_2，KEYCODE_NUMPAD_3，KEYCODE_NUMPAD_4，KEYCODE_NUMPAD_5，KEYCODE_NUMPAD_6，KEYCODE_NUMPAD_7，KEYCODE_NUMPAD_8，KEYCODE_NUMPAD_9，KEYCODE_NUMPAD_DIVIDE，KEYCODE_NUMPAD_MULTIPLY和KEYCODE_NUMPAD_SUBTRACT似乎都是与数字锁或密码相关操作有关的常量。
 
 
-```
+```py
 KEYCODE_NUM_LOCK = 143
 KEYCODE_NUMPAD_0 = 144
 KEYCODE_NUMPAD_1 = 145
@@ -433,7 +433,7 @@ KEYCODE_NUMPAD_ADD = 157
 - KEYCODE_GUIDE：用于NumPy中的指南（GUIDE）键。
 
 
-```
+```py
 KEYCODE_NUMPAD_DOT = 158
 KEYCODE_NUMPAD_COMMA = 159
 KEYCODE_NUMPAD_ENTER = 160
@@ -454,7 +454,7 @@ KEYCODE_GUIDE = 172
 这是一段定义了多个常量的Python代码。这些常量用数字表示，包括KEYCODE_DVR、KEYCODE_BOOKMARK、KEYCODE_CAPTIONS、KEYCODE_SETTINGS、KEYCODE_TV_POWER、KEYCODE_TV_INPUT、KEYCODE_STB_POWER、KEYCODE_STB_INPUT、KEYCODE_AVR_POWER和KEYCODE_AVR_INPUT。它们用于表示不同的电视设置，包括节目表、频道、开关机、亮度等。
 
 
-```
+```py
 KEYCODE_DVR = 173
 KEYCODE_BOOKMARK = 174
 KEYCODE_CAPTIONS = 175
@@ -475,7 +475,7 @@ KEYCODE_APP_SWITCH = 187
 以上代码是一个嵌套循环，用于给16个按钮绑定不同的键盘码。具体来说，外层循环遍历16个键盘码，内层循环从键盘码中获取对应的按钮编号，然后将按钮编号存储到一个名为KEYCODE_BUTTON_的变量中。
 
 
-```
+```py
 KEYCODE_BUTTON_1 = 188
 KEYCODE_BUTTON_2 = 189
 KEYCODE_BUTTON_3 = 190
@@ -496,7 +496,7 @@ KEYCODE_BUTTON_15 = 202
 以上代码定义了216个自定义键的代码，用于应用程序中的UI元素，如按钮、开关、模式等。这些代码按照字母顺序排列，以便于程序中代码的编写和维护。
 
 
-```
+```py
 KEYCODE_BUTTON_16 = 203
 KEYCODE_LANGUAGE_SWITCH = 204
 KEYCODE_MANNER_MODE = 205
@@ -517,7 +517,7 @@ KEYCODE_RO = 217
 这是一段定义了232个按键代码的Python代码。这些按键代码用于控制多媒体应用程序中的功能。例如，可以使用这些按键来打开应用程序中的菜单、播放音量、静音电视等等。每个按键代码都由一个数字和一个大写或小写字母组成。这些数字表示了日本字典表中的一个键，例如，数字218对应的是“コード(建設)”键。
 
 
-```
+```py
 KEYCODE_KANA = 218
 KEYCODE_ASSIST = 219
 KEYCODE_BRIGHTNESS_DOWN = 220
@@ -540,7 +540,7 @@ KEYCODE_TV_RADIO_SERVICE = 232
 它定义了一个名为KEYCODE_TV_TELETEXT的常量，一个名为KEYCODE_TV_NUMBER_ENTRY的常量，四个名为KEYCODE_TV_TERRESTRIAL_ANALOG, KEYCODE_TV_TERRESTRIAL_DIGITAL, KEYCODE_TV_SATELLITE和KEYCODE_TV_SATELLITE_BS的常量。还包括KEYCODE_TV_SATELLITE_CS和KEYCODE_TV_SATELLITE_SERVICE常量。同时定义了KEYCODE_TV_NETWORK和KEYCODE_TV_ANTENNA_CABLE常量。最后还包括了四个名为KEYCODE_TV_INPUT_HDMI_1, KEYCODE_TV_INPUT_HDMI_2, KEYCODE_TV_INPUT_HDMI_3, and KEYCODE_TV_INPUT_HDMI_4的常量和一个名为KEYCODE_TV_INPUT_COMPOSITE_1的常量。
 
 
-```
+```py
 KEYCODE_TV_TELETEXT = 233
 KEYCODE_TV_NUMBER_ENTRY = 234
 KEYCODE_TV_TERRESTRIAL_ANALOG = 235
@@ -579,7 +579,7 @@ KEYCODE_NAVIGATE_IN = 262
 这些KeyCode值用于在应用程序中识别电视机输入组件，如音量调节、频道设置、输入源选择等。
 
 
-```
+```py
 KEYCODE_TV_INPUT_COMPOSITE_2 = 248
 KEYCODE_TV_INPUT_COMPONENT_1 = 249
 KEYCODE_TV_INPUT_COMPONENT_2 = 250
@@ -630,7 +630,7 @@ KEYCODE_SOFT_SLEEP = 276表示“省电锁屏”主题键，用于在应用程�
 KEYCODE_CUT = 277表示“剪切”主题键，用于在应用程序中的剪切板中保存和复制文本、图像和其他内容。
 
 
-```
+```py
 KEYCODE_NAVIGATE_OUT = 263
 KEYCODE_STEM_PRIMARY = 264
 KEYCODE_STEM_1 = 265
@@ -653,7 +653,7 @@ KEYCODE_CUT = 277
 具体来说，KEYCODE_COPY事件处理程序会将一个或多个应用程序的启动或恢复的关键码复制粘贴到剪贴板。KEYCODE_PASTE事件处理程序将在应用程序启动或恢复时将剪贴板的内容 pastebin 成当前应用程序。KEYCODE_SYSTEM_NAVIGATION_UP、KEYCODE_SYSTEM_NAVIGATION_DOWN、KEYCODE_SYSTEM_NAVIGATION_LEFT 和 KEYCODE_SYSTEM_NAVIGATION_RIGHT 事件处理程序分别用于当用户在设备的方向键上向上、向下、向左或向右移动时，如何改变应用程序的导航菜单。KEYCODE_KEYCODE_ALL_APPS 事件处理程序用于在应用程序启动时自动运行所有应用程序。KEYCODE_KEYCODE_REFRESH 事件处理程序用于在应用程序发生崩溃后重新启动应用程序。KEYCODE_KEYCODE_THUMBS_UP 和 KEYCODE_KEYCODE_THUMBS_DOWN 事件处理程序用于在设备的箭头键上向上和向下移动时，如何更改应用程序的设置。
 
 
-```
+```py
 KEYCODE_COPY = 278
 KEYCODE_PASTE = 279
 KEYCODE_SYSTEM_NAVIGATION_UP = 280
@@ -674,7 +674,7 @@ EVENT_FRAME = "frame"
 这段代码定义了 Android 的原生组件中可以使用的键、文本和触摸事件的类型标识。其中，KEYCODE 枚举类型定义了 Android 键的 ideation 键，比如按下设置 home 键时的空前键(padding key)、 back 键和通过侧边栏开关机键等。TEXT 枚举类型定义了 Android 文本框的输入和输出事件。TOUCH_EVENT 和 SCROLL_EVENT 枚举类型定义了 Android 触摸事件的类型，包括按下、拖放和滑动等。BACK_OR_SCREEN_ON 和 EXPAND_PANELS 枚举类型定义了通知栏和扩展屏幕模式。CLIPBOARD 和 SET_CLIPBOARD 枚举类型定义了如何从主屏幕的剪贴板中复制或粘贴内容。ROTATE_DEVICE 枚举类型定义了如何旋转设备。最后，COPY_KEY_NONE 枚举类型定义了是否可以从通知栏中复制键。
 
 
-```
+```py
 # Type
 TYPE_INJECT_KEYCODE = 0
 TYPE_INJECT_TEXT = 1
@@ -706,7 +706,7 @@ COPY_KEY_NONE = 0
 10. POWER_MODE_NORMAL：一个整数，表示设备的电源管理模式为正常。它的值从2开始，具体取决于设备上的实际设置。
 
 
-```
+```py
 COPY_KEY_COPY = 1
 COPY_KEY_CUT = 2
 
@@ -724,7 +724,7 @@ POWER_MODE_NORMAL = 2
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/scrcpy/control.py`
+# `arknights_mower/utils/device/scrcpy/control.py`
 
 这段代码定义了一个名为 `inject` 的函数，用于将控制代码(也称为事件)注入到远程主机的控制进程中。
 
@@ -735,7 +735,7 @@ POWER_MODE_NORMAL = 2
 最后，`wrapper` 函数将 `inner` 函数包装起来，这样就可以通过调用 `inject` 函数来注入控制代码了。
 
 
-```
+```py
 import functools
 import socket
 import struct
@@ -780,7 +780,7 @@ The `move_steps_delay` argument is the time of a delay between each step of the 
 Overall, this class provides a basic touch interaction functionality, but can be expanded and customized further to meet the specific needs of a touch screen.
 
 
-```
+```py
 class ControlSender:
     def __init__(self, parent):
         self.parent = parent
@@ -1012,14 +1012,14 @@ class ControlSender:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/scrcpy/core.py`
+# `arknights_mower/utils/device/scrcpy/core.py`
 
 这段代码是一个用于创建一个名为"my_program"的程序的Python装饰函数。具体来说，它从未来的函数中导入了一个名为"annotations"的模块，然后使用该模块中的函数来装饰函数代码。
 
 从代码中可以看出，该程序的主要作用是创建一个名为"my_program"的程序，并运行该程序。具体来说，它将当前程序的根目录（即"__rootdir__"）设置为当前目录，然后使用一个名为"my_program"的函数来替换原来程序的名称。接着，它将使用该函数创建一个ADB客户端对象，并在客户端对象上发送一些我们希望监听的网络流量。最后，程序将一直运行，直到被强制停止。
 
 
-```
+```py
 from __future__ import annotations
 
 import functools
@@ -1046,7 +1046,7 @@ The class also has a function called `tap(x:int, y:int)` which simulates a tap g
 The `tap()` and `swipe()` functions are not安全的 to use in production and should not be called by other code in派的层。 The `adb_alive()` function should also not be used in production, as it can potentially cause the device to hang or freeze.
 
 
-```
+```py
 from ..adb_client.socket import Socket
 from . import const
 from .control import ControlSender
@@ -1255,12 +1255,12 @@ class Client:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/scrcpy/__init__.py`
+# `arknights_mower/utils/device/scrcpy/__init__.py`
 
 这段代码是导入了一个名为"Client"的类，该类属于一个名为"core"的模块。这个类的定义应该在代码的其他部分给出，但目前我没有获取到更多的上下文，所以无法提供确切的解释。请注意，这段代码没有进行任何实际的操作，因此它不会产生任何输出。
 
 
-```
+```py
 from .core import Client as Scrcpy
 
 ```
@@ -1278,14 +1278,14 @@ from .core import Client as Scrcpy
 - 依赖更新 (#1) (Thanks @UserName)
 
 
-# `/opt/arknights-mower/packaging/image.py`
+# `packaging/image.py`
 
 这段代码是一个Python文件，其中定义了一些图像预处理的基本接口。具体来说，这段代码声明了一个名为“image_preprocess”的函数组，该函数组可以作为其他函数或模块的子模块。
 
 这段代码的作用是提供一个通用的接口，让开发人员可以使用同一个函数组来处理他们的图像数据。这个接口包含了一些通用的图像处理函数，如图像尺寸调整、图像增强、图像分割等。使用这个接口，开发人员可以更轻松地构建出符合他们特定需求的图像预处理过程。
 
 
-```
+```py
 #   Copyright (c) 2018 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -1306,7 +1306,7 @@ This file contains some common interfaces for image preprocess.
 这段代码描述了一个图像布局的介绍，其中包括通道（CHW）、图像高度（H）、宽度（W）以及图像打开时默认的布局（HWC）。接着，它解释了CHW布局的具体含义，并表示PaddlePaddle只支持CHW布局。同时，指出OPENCV使用BGR颜色格式，而PIL使用RGB颜色格式。这两个格式都可以用于训练，但在培训和推理期间应该保持一致。
 
 
-```
+```py
 Many users are confused about the image layout. We introduce
 the image layout as follows.
 
@@ -1327,7 +1327,7 @@ the image layout as follows.
 这段代码是一个用于打印特定数字的Python函数。具体来说，这个函数将打印数字1到给定的整数（通过调用 six.print_function() 实现），并在数字1前添加了一个参数字符'F'，使得这个函数在Python 3中更易于阅读。
 
 
-```
+```py
 """
 
 from __future__ import print_function
@@ -1391,7 +1391,7 @@ cv2 = cv2.CaptureC基准库
 如果上述步骤成功安装了 Python 和相应的库，则退出 `cv2.CaptureC基准库`。否则，如果 retcode 不等于 0，则说明安装失败，将返回一个 None 值。
 
 
-```
+```py
 #     if sys.platform == 'win32' and 'python.exe' not in interpreter:
 #         interpreter = sys.exec_prefix + os.sep + 'python.exe'
 #     import_cv2_proc = subprocess.Popen([interpreter, "-c", "import cv2"],
@@ -1422,7 +1422,7 @@ cv2 = cv2.CaptureC基准库
 7. 在函数外部，通过调用 __all__ 列表中的所有库，来检测是否安装了 OpenCV 库。
 
 
-```
+```py
 try:
     import cv2
 except ImportError:
@@ -1461,7 +1461,7 @@ It then creates a dictionary with the label and data, and writes it to the `meta
 Finally, it returns the `meta_file` so that it can be used later.
 
 
-```
+```py
 def batch_images_from_tar(data_file,
                           dataset_name,
                           img2label,
@@ -1530,7 +1530,7 @@ def batch_images_from_tar(data_file,
 函数的作用是加载一个字节数组中的图像，并返回一个图像对象。它通过调用 `cv2.imdecode` 函数来加载图像，这个函数接受一个字节数组，并将其转换为灰度图像。如果参数 `is_color` 为真，函数将加载一个颜色图像；否则，它将加载一个灰度图像。
 
 
-```
+```py
 def load_image_bytes(bytes, is_color=True):
     """
     Load an color or gray image from bytes array.
@@ -1566,7 +1566,7 @@ def load_image_bytes(bytes, is_color=True):
 最后，函数使用 `cv2.imread()` 函数来加载图像，并返回图像对象。
 
 
-```
+```py
 def load_image(file, is_color=True):
     """
     Load an color or gray image from the file path.
@@ -1614,7 +1614,7 @@ def load_image(file, is_color=True):
 2. 使用 `cv2.resize` 函数对调整后的图像进行大小调整，并返回调整后的图像。注意，函数使用了参数 `(w_new, h_new)`，表示调整后的图像的大小为 `(w_new, h_new)`。
 
 
-```
+```py
 def resize_short(im, size):
     """
     Resize an image so that the length of shorter edge is size.
@@ -1659,7 +1659,7 @@ im = to_chw((im))
 这段代码首先读取 `cat.jpg` 图片，然后将其尺寸调整为 256x256，最后将图像转换为 CHW 格式并保存。
 
 
-```
+```py
 def to_chw(im, order=(2, 0, 1)):
     """
     Transpose the input image order. The image layout is HWC format
@@ -1689,7 +1689,7 @@ def to_chw(im, order=(2, 0, 1)):
 这段代码定义了一个名为 `center_crop` 的函数，它接受一个输入图像 `im`，以及一个大小 `size` 和一个布尔值 `is_color` 作为参数。函数的作用是在保持图像的上下文不变的情况下，将输入图像的左下角和右上角的区域提取出来，如果输入图像是有颜色的，则只提取像素值不为 0 的区域。最终返回提取的图像区域。
 
 
-```
+```py
 def center_crop(im, size, is_color=True):
     """
     Crop the center of image with size.
@@ -1723,7 +1723,7 @@ def center_crop(im, size, is_color=True):
 这段代码定义了一个名为 `random_crop` 的函数，它接受一个输入图像 `im`，一个指定的大小 `size`，和一个布尔选项 `is_color`，表示是否截取彩色图像。函数的作用是随机地从输入图像中裁剪出一个指定大小的子图像，并将裁剪出来的图像转换为灰度图像，如果 `is_color` 为 `True`，则裁剪操作仅限于颜色空间，否则只裁剪非颜色部分。最终，函数返回裁剪后的图像。
 
 
-```
+```py
 def random_crop(im, size, is_color=True):
     """
     Randomly crop input image with size.
@@ -1761,7 +1761,7 @@ def random_crop(im, size, is_color=True):
 需要注意的是，`left_right_flip` 函数在创建翻转后的图像时，仅在水平和垂直方向上进行翻转，而不会对图像的深度方向进行操作。
 
 
-```
+```py
 def left_right_flip(im, is_color=True):
     """
     Flip an image along the horizontal direction.
@@ -1799,7 +1799,7 @@ The `to_chw` function converts the image to the required format for a channel-wi
 If `mean` is not `None`, it is converted to a NumPy array and divided by the batch size to obtain the mean values per channel. The mean values are then divided by the scale of the input image to obtain the scaling factors for each channel.
 
 
-```
+```py
 def simple_transform(im,
                      resize_size,
                      crop_size,
@@ -1865,7 +1865,7 @@ def simple_transform(im,
 函数的最后一层返回语句返回对 `simple_transform` 函数的输出图像，这个输出图像的大小是 `(filename, resize_size, crop_size, is_train, is_color, mean.shape[1])`，其中 `mean` 参数的含义会在后面详细解释。
 
 
-```
+```py
 def load_and_transform(filename,
                        resize_size,
                        crop_size,

@@ -1,6 +1,6 @@
 # ArknightMower源码解析 8
 
-# `/opt/arknights-mower/arknights_mower/utils/datetime.py`
+# `arknights_mower/utils/datetime.py`
 
 这段代码定义了两个函数，分别名为`the_same_day`和`the_same_time`，它们接受两个参数，均为`datetime`类型。这两个函数用于比较两个日期或时间是否相同。
 
@@ -11,7 +11,7 @@
 总之，这两个函数用于比较日期和时间是否相同，是Python中非常常用的函数。
 
 
-```
+```py
 from datetime import datetime
 import pytz
 
@@ -37,13 +37,13 @@ def the_same_time(a: datetime = None, b: datetime = None) -> bool:
 该函数的输出将是 0 或 1，而不是函数本身。
 
 
-```
+```py
 def get_server_weekday():
     return datetime.now(pytz.timezone('Asia/Dubai')).weekday()
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/detector.py`
+# `arknights_mower/utils/detector.py`
 
 This is a Python class that uses the OpenCV library that implements the确认(confirmation) and contour detection algorithm.
 
@@ -62,7 +62,7 @@ If the corner is detected, it is returned as a tuple of the coordinates (width /
 If the corner is not detected within the pre-defined time or if the parameters of the `confirm` method are not correct, an None is returned.
 
 
-```
+```py
 import cv2
 import numpy as np
 
@@ -129,7 +129,7 @@ def confirm(img: tp.Image) -> tp.Coordinate:
 函数的作用是检测图像中是否包含 blue通知（即设施内存在某种指示性的颜色）。为了达到这个目的，函数在前置条件满足（即图片已经位于设施内）的情况下，从图片的右上角开始，扫描并处理每一列的像素值，直到找到第一个像素值大于100的位置。接下来，函数将从上到下扫描，处理与之前扫描行同一列的像素值。通过这种方式，如果图片中某个位置的三个相邻像素都小于100，那么函数就可以判定该位置一定存在 blue通知，函数将返回该位置的坐标。如果循环遍历所有位置仍然没有找到 blue通知，函数将返回 None。
 
 
-```
+```py
 def infra_notification(img: tp.Image) -> tp.Coordinate:
     """
     检测基建内是否存在蓝色通知
@@ -183,7 +183,7 @@ def infra_notification(img: tp.Image) -> tp.Coordinate:
 这个函数的作用是用于图像识别领域中的关闭按钮检测，可以帮助开发者判断图像中是否包含关闭按钮，并根据按钮位置给出相关信息。
 
 
-```
+```py
 def announcement_close(img: tp.Image) -> tp.Coordinate:
     """
     检测「关闭公告」按钮
@@ -236,7 +236,7 @@ def announcement_close(img: tp.Image) -> tp.Coordinate:
 该函数可以被理解为在图像中找到按钮的位置，并返回该位置的坐标。
 
 
-```
+```py
 def visit_next(img: tp.Image) -> tp.Coordinate:
     """
     检测「访问下位」按钮
@@ -286,7 +286,7 @@ def visit_next(img: tp.Image) -> tp.Coordinate:
 此外，代码还定义了一个 `is_on_shift` 的函数，它的实现与上述函数类似，只是检测的图片是 `distracted` 而不是 `on_shift`。
 
 
-```
+```py
 on_shift = loadimg(f'{__rootdir__}/resources/agent_on_shift.png', True)
 distracted = loadimg(f'{__rootdir__}/resources/distracted.png', True)
 resting = loadimg(f'{__rootdir__}/resources/agent_resting.png', True)
@@ -310,7 +310,7 @@ def is_on_shift(img: tp.Image) -> bool:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/digit_reader.py`
+# `arknights_mower/utils/digit_reader.py`
 
 
 
@@ -349,7 +349,7 @@ res_template = {
 The class also defines some utility methods such as `get_time()` and `drone_part()`, which are used in the `res_template` class.
 
 
-```
+```py
 import cv2 as cv
 import numpy as np
 from pathlib import Path
@@ -427,7 +427,7 @@ class DigitReader:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/email.py`
+# `arknights_mower/utils/email.py`
 
 这段代码使用了Jinja2框架来生成动态HTML模板。它主要做了以下几件事情：
 
@@ -439,7 +439,7 @@ class DigitReader:
 6. 加载模板目录下的所有文件。
 
 
-```
+```py
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os
 import sys
@@ -488,7 +488,7 @@ else:
 10. `recruit_rarity = env.get_template("recruit_rarity.html")`: 将上面获取的模板保存为 `recruit_rarity`。
 
 
-```
+```py
 env = Environment(
     loader=FileSystemLoader(template_dir),
     autoescape=select_autoescape(),
@@ -501,7 +501,7 @@ recruit_rarity = env.get_template("recruit_rarity.html")
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/image.py`
+# `arknights_mower/utils/image.py`
 
 这段代码定义了一个名为 "bytes2img" 的函数，它接受一个名为 "data" 的字节数组，并返回一个名为 "image" 的图像类型。
 
@@ -510,7 +510,7 @@ recruit_rarity = env.get_template("recruit_rarity.html")
 函数返回一个 "Union" 类型的对象，"Union" 是一个类型兼容的类型，允许函数返回多种类型的之一。在这个函数中，它允许返回两个参数之一，"image" 或者 "grayImage"。
 
 
-```
+```py
 from typing import Union
 
 import cv2
@@ -542,7 +542,7 @@ def bytes2img(data: bytes, gray: bool = False) -> Union[tp.Image, tp.GrayImage]:
 3. `thres2` 函数接收一个灰度图像对象（img），和一个阈值（thresh），并返回一个新的灰度图像。具体操作是通过调用 `cv2.threshold()` 函数，将图像阈值以下的部分设置为黑色，并将阈值以上（不包括阈值）的部分设置为白色。函数返回一个新的灰度图像，其中黑色部分被设置为 `thresh`，白色部分被设置为 `255 - thresh`。
 
 
-```
+```py
 def img2bytes(img) -> bytes:
     """ bytes -> image """
     return cv2.imencode('.png', img)[1]
@@ -586,7 +586,7 @@ def thres2(img: tp.GrayImage, thresh: int) -> tp.GrayImage:
 函数的作用是保留图像中所有满足条件的像素点，从而实现去除图像中不符合要求的像素点的功能。
 
 
-```
+```py
 # def thres0(img: tp.Image, thresh: int) -> tp.Image:
 #     """ delete pixel, filter: value > thresh """
 #     ret = img.copy()
@@ -613,7 +613,7 @@ def thres2(img: tp.GrayImage, thresh: int) -> tp.GrayImage:
 3. `scope2slice(scope: tp.Scope) -> tp.Slice` 是一个非空函数，接收一个 tp.Scope 类型的对象作为参数。函数的作用是在给定scope对象的范围内，返回一个左闭右开区间的切片。其中，切片区间的左端点是scope对象的左边界，右端点是scope对象的右边界，左闭右开表示左端点不包含在切片范围内，右闭左开表示右端点不包含在切片范围内。
 
 
-```
+```py
 # def thres0(img: tp.Image, thresh: int) -> tp.Image:  # not support multichannel image
 #     """ delete pixel which > thresh """
 #     _, ret = cv2.threshold(img, thresh, 255, cv2.THRESH_TOZERO)
@@ -641,7 +641,7 @@ def scope2slice(scope: tp.Scope) -> tp.Slice:
 "saveimg" 函数接收一个名为 "img" 的 Image 对象和一个名为 "folder" 的字符串参数，用于保存截图到指定的文件夹中。函数的具体实现是，将 `img` 对象转换为 bytes 类型，然后使用 `cv2.cvtColor` 函数将其转换为 RGB 颜色空间。接着，使用 `subdir` 参数指定文件保存目录，并将转换后的图像保存到指定的文件夹中。
 
 
-```
+```py
 def cropimg(img: tp.Image, scope: tp.Scope) -> tp.Image:
     """ crop image """
     return img[scope2slice(scope)]
@@ -655,7 +655,7 @@ def saveimg(img, folder='failure'):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/log.py`
+# `arknights_mower/utils/log.py`
 
 这段代码的作用是创建一个日志记录器（logger），用于记录当前目录（Path.current）中文件的访问日志。
 
@@ -668,7 +668,7 @@ def saveimg(img, folder='failure'):
 最后，通过创建一个BasicFormatter对象和一个RotatingFileHandler对象，设置日志记录器的格式为BASIC_FORMAT，然后将日志记录器与当前目录（Path.current）的文件访问进行关联。这样，每当文件被访问时，就会创建一个新的日志记录，并使用BASIC_FORMAT格式来打印日志信息。
 
 
-```
+```py
 import logging
 import os
 import sys
@@ -695,7 +695,7 @@ basic_formatter = logging.Formatter(BASIC_FORMAT, DATE_FORMAT)
 而 "PackagePathFilter = logging.Filter()" 行代码创建了一个 "logging.Filter" 对象，该对象用于在日志记录中过滤文件路径。具体来说，该类中的 "filter" 方法将在每个日志记录中检查路径是否以 "package" 为前缀。如果是，则该方法将记录的 "relativepath" 属性设置为路径相对于当前包的路径，并将 "abs_sys_paths" 数组中的路径与 "path" 比较，以获取与 "path" 比较的最后一个路径。这段代码将在每个日志记录中使用 "colorlog" 模块中的 "ColoredFormatter" 将日志信息与颜色相关联，并在 "logging.StreamHandler" 实例中使用颜色。
 
 
-```
+```py
 color_formatter = colorlog.ColoredFormatter(COLOR_FORMAT, DATE_FORMAT)
 
 
@@ -730,7 +730,7 @@ class PackagePathFilter(logging.Filter):
 在`emit`方法中，该类将`record`对象转换为JSON格式，并将其作为JSON对象发送到源代码流的结尾。
 
 
-```
+```py
 class MaxFilter(object):
     def __init__(self, max_level: int) -> None:
         self.max_level = max_level
@@ -761,7 +761,7 @@ ehlr将输出格式设置为和一个颜色格式器，然后设置日志级别�
 最后，logger创建了一个日志实例，设置了一个DEBUG级别的级别，并将chlr和ehlr添加为它的两个处理器。这样做后，每个输出都会经过chlr和ehlr的过滤，然后输出到logger。
 
 
-```
+```py
 chlr = logging.StreamHandler(stream=sys.stdout)
 chlr.setFormatter(color_formatter)
 chlr.setLevel('INFO')
@@ -796,7 +796,7 @@ logger.addHandler(ehlr)
 函数最后通过 `logger.addHandler` 方法将创建的 `RotatingFileHandler` 和过滤器添加到正在运行的日志应用程序中。如果传递给函数的 `pipe` 参数为 `None`，则函数将直接写入日志文件而不是使用管道流来写入日志。
 
 
-```
+```py
 def init_fhlr(pipe=None) -> None:
     """ initialize log file """
     if config.LOGFILE_PATH is None:
@@ -828,7 +828,7 @@ def init_fhlr(pipe=None) -> None:
 2. `save_screenshot()` 函数用于保存 screenshot。函数的原型为 `def save_screenshot(img: bytes, subdir: str = '') -> None:`，表示接收一个 bytes 类型的图像数据（即 screenshot）和一个子目录参数（可选，默认为当前工作目录）。函数内部首先检查 `config.SCREENSHOT_PATH` 是否已经被创建，如果没有，则创建一个子目录并创建一个保存 screenshot 的文件夹。接着，函数创建一个文件夹，并将 `config.SCREENSHOT_PATH` 和 `subdir` 作为参数传递给文件夹创建操作。然后，函数使用 `list()` 方法遍历 `config.SCREENSHOT_PATH` 目录下的所有文件，并将它们按名称排序。接下来，如果 `subdir` 参数中文件数量超过 `config.SCREENSHOT_MAXNUM`，函数会将列表的前 `config.SCREENSHOT_MAXNUM` 个文件从列表中删除。然后，函数使用 `time.strftime()` 方法创建一个文件名，并使用 `with` 语句打开一个写入文件，将 `img` 数据写入文件中。最后，函数输出保存 screenshot 的文件名。
 
 
-```
+```py
 def set_debug_mode() -> None:
     """ set debud mode on """
     if config.DEBUG_MODE:
@@ -867,7 +867,7 @@ def save_screenshot(img: bytes, subdir: str = '') -> None:
 "run" 方法中包含一个无限循环，该循环从管道中读取一行数据并打印到日誌文件中。在循环的每次迭代中，使用 self.pipe.readline().strip() 方法读取一行的数据，然后使用 Python 标准库中的 "logger.debug" 函数来打印该数据并包含一个带有 self.process 变量的字符串。
 
 
-```
+```py
 class log_sync(threading.Thread):
     """ recv output from subprocess """
 
@@ -888,7 +888,7 @@ class log_sync(threading.Thread):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/matcher.py`
+# `arknights_mower/utils/matcher.py`
 
 这段代码是一个带有未来时注语的函数，它表示当前导入的函数都使用未来时。接着，它导入了pickle模块、traceback模块和typing模块，这三个模块用于异步操作、模块导入和类型声明。
 
@@ -901,7 +901,7 @@ class log_sync(threading.Thread):
 最后，定义了一个名为"export_images"的函数，这个函数将上面定义的"image"和"structural_similarity"函数的结果存储到两个变量中，然后使用pickle模块将结果存储到硬盘上。
 
 
-```
+```py
 from __future__ import annotations
 
 import pickle
@@ -936,7 +936,7 @@ from .image import cropimg
 最后，实现了 FLANN 算法中的 SIFT 算法，以及用于图像特征匹配和分割的函数。
 
 
-```
+```py
 from .log import logger
 
 MATCHER_DEBUG = False
@@ -958,7 +958,7 @@ def getHash(data: list[float]) -> tp.Hash:
 This is a Python function that appears to perform image matching and analysis on KAKAI退格数据集中的训练样本。其接受四个参数：query（查询图像，2D张量，可以是坐标或者张量，这里以张量形式接收），rect（矩形区域，可以是已知的矩形区域或者是用户输入的矩形区域，以numpy数组形式接收），orientation（orientation，指的是对象的朝向，可以是北东、南西、北南、东南西北中的一个或者多个，以字符串形式接收），score（得分，可以是integer、float或者double，以float形式接收）。函数返回四个结果：good_matches_rate（正确匹配的样本数占总样本数的比例，可以是float或者integer，以float形式接收），good_area_rate（正确匹配的矩形区域面积与总面积的比率，可以是float或者integer，以float形式接收），hash（两个图像的相似度，以float形式接收），ssim（两个图像的结构相似度，以float形式接收，这里采用multichannel=True的方式计算），以及根据函数计算出来的其他得分。函数使用了OpenCV的cropimg、cv2.resize、plt.imshow、compare_ssim等函数，以及AdaHash算法。
 
 
-```
+```py
 def hammingDistance(hash1: tp.Hash, hash2: tp.Hash) -> int:
     """ calc Hamming distance between two hash """
     return np.count_nonzero(hash1 != hash2)
@@ -1158,7 +1158,7 @@ class Matcher(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/operators.py`
+# `arknights_mower/utils/operators.py`
 
 
 
@@ -1281,7 +1281,7 @@ def assign_dorm(name, max_resting_count):
 上述代码实现了上述代码的主要功能。如果分配宿舍房间时，有满休息室的情况，
 
 
-```
+```py
 from datetime import datetime, timedelta
 from ..data import agent_list
 from ..solvers.record import save_action_to_sqlite_decorator
@@ -1645,7 +1645,7 @@ The `__repr__` method is used for representation and is generated by `repr()` fu
 You can use this `Operator` class to check if a student is in a certain room, if they are not, you can set the room to be in the dorm, and you can also set the mood of the student, among other things.
 
 
-```
+```py
 class Dormitory(object):
 
     def __init__(self, position, name='', time=None):

@@ -1,6 +1,6 @@
 # ArknightMower源码解析 13
 
-# `/opt/arknights-mower/ui/src/stores/mower.js`
+# `ui/src/stores/mower.js`
 
 This is a Node.js server that allows users to interact with a task scheduler. The scheduler takes tasks from a list and sends them to the specified endpoint with a specified format. The endpoint can also return the current running tasks.
 
@@ -13,7 +13,7 @@ The server is able to be configured to use a custom Logger and the file system f
 It also has a `get_running` function that retrieves the current running tasks from the API.
 
 
-```
+```py
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import ReconnectingWebSocket from 'reconnecting-websocket'
@@ -93,7 +93,7 @@ export const useMowerStore = defineStore('mower', () => {
 
 ```
 
-# `/opt/arknights-mower/ui/src/stores/plan.js`
+# `ui/src/stores/plan.js`
 
 This is a JavaScript script that appears to be for building a后端API. It does this by:
 
@@ -104,7 +104,7 @@ This is a JavaScript script that appears to be for building a后端API. It does 
 5. 定义groups，其值是plan.value中每个子计划的group的集合，使用es6的computed方法，根据step3的计算结果动态的增加了一个exhaust_require的判断条件，并在groups中增加exhaust_require为true的组。
 
 
-```
+```py
 import { defineStore } from 'pinia'
 import { ref, watch, computed } from 'vue'
 import axios from 'axios'
@@ -273,7 +273,7 @@ export const usePlanStore = defineStore('plan', () => {
 
 ```
 
-# `/opt/arknights-mower/ui/src/stores/record.js`
+# `ui/src/stores/record.js`
 
 这段代码使用了 Pinia，一个 Vue 3 的 store 库，主要作用是提供了一个 centralized 的 store 机制，用于在整个 application 中统一管理状态。
 
@@ -288,7 +288,7 @@ export const usePlanStore = defineStore('plan', () => {
 最终，该代码返回了一个 store 对象，其中包含一个名为 "getMoodRatios" 的方法，用于获取情感分数。
 
 
-```
+```py
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
@@ -305,7 +305,7 @@ export const useRecordStore = defineStore('record', () => {
 
 ```
 
-# `/opt/arknights-mower/ui/src/utils/dialog.js`
+# `ui/src/utils/dialog.js`
 
 这两个函数使用了 `axios` 库来发送 HTTP GET 请求获取文件或文件夹的路径。它们的作用是分别从服务器端获取一个文件夹和一个文件的路径，用于弹出对话框让用户选择文件或文件夹。
 
@@ -314,7 +314,7 @@ export const useRecordStore = defineStore('record', () => {
 这两个函数的实现依赖于 `import.meta.env.VITE_HTTP_URL` 环境变量，它是一个预设的环境变量，表示服务器端的 HTTP 请求 URL。在这个例子中，`VITE_HTTP_URL` 可能是一个预设的 URL，用于在开发模式下发送 HTTP 请求。
 
 
-```
+```py
 import axios from 'axios'
 
 export async function file_dialog() {

@@ -1,6 +1,6 @@
 # ArknightMower源码解析 5
 
-# `/opt/arknights-mower/arknights_mower/solvers/base_schedule.py`
+# `arknights_mower/solvers/base_schedule.py`
 
 这段代码是一个 Python 程序，它的作用是接受来自用户的一些信息，然后根据用户的需求执行不同的操作。接下来，我将分步解释这段代码的作用。
 
@@ -61,7 +61,7 @@
 接下来是一个函数 `send_email` 的代码。这个函数的作用不是很明确，它看起来是一个发送电子邮件的函数，但是它还需要更多的信息来确定具体的实现。
 
 
-```
+```py
 from __future__ import annotations
 import copy
 import subprocess
@@ -104,7 +104,7 @@ import cv2
 
 
 
-```
+```py
 from ..utils.digit_reader import DigitReader
 from ..utils.operators import Operators, Operator, Dormitory
 from ..utils.recruit import filter_result
@@ -139,7 +139,7 @@ import cv2
 总之，这段代码是一个用于处理Maa标准Order的游戏脚本，它通过调用archernights_mower.utils.asst和archernights_mower.utils.email模块中的函数，实现了与游戏逻辑相关的功能，包括生成招募邮件模板。
 
 
-```
+```py
 from arknights_mower.__main__ import format_time
 
 ## Maa
@@ -167,7 +167,7 @@ ArrangeOrder类型的对象包含三个参数：STATUS、SKILL和FEELING，分�
 另外，这段代码还包含两个字典类型的成员变量，stage_drop和recruit_drop，它们都包含了一个空字典(stage_drop={},recruit_drop={})，但似乎没有被使用过。
 
 
-```
+```py
 arrange_order_res = {
     ArrangeOrder.STATUS: (1560 / 2496, 96 / 1404),
     ArrangeOrder.SKILL: (1720 / 2496, 96 / 1404),
@@ -196,7 +196,7 @@ recruit_special_tags = {}
 - `logger.info` 函数，用于记录到日志中的信息。它将消息类型作为参数，并将 `format_time` 和 `MIMEText` 对象作为新的 `MIMEText` 对象的副本。
 
 
-```
+```py
 class BaseSchedulerSolver(BaseSolver):
     """
     收集基建的产物：物资、赤金、信赖

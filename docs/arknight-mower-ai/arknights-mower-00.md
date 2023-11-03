@@ -1,6 +1,6 @@
 # ArknightMower源码解析 0
 
-# `/opt/arknights-mower/data_update.py`
+# `data_update.py`
 
 这段代码的主要作用是获取并上传游戏数据到服务器，并将数据存储在本地文件夹中。以下是具体步骤解释：
 
@@ -1248,7 +1248,7 @@ def upload_data(data, filename, headers):
 
 
 
-```
+```py
 import json
 import os
 
@@ -1272,7 +1272,7 @@ def dump(data, filename):
 具体来说，代码首先使用 requests.get() 方法向 GitHub URL 加上路径的 URL 发送请求，并使用代理（proxies）来防止 IP 被封。然后，它使用 requests.text() 方法获取返回的 JSON 数据，并将其转换为字符串。接着，代码遍历从 JSON 数据中获取的所有角色的名称，并将它们存储到 agent 列表中。最后，代码将 agent 列表和所有不包含显示编号的角色名称存储到两个名为 agent_charset 和 Chinese 的字典中，并将这些字典中的所有名称导出为 JSON 文件。
 
 
-```
+```py
 def requests_get(path):
     return requests.get(GitHubURL + path, proxies=proxies).text
 
@@ -1300,7 +1300,7 @@ for c in agent_charset:
 最后，代码使用os.system函数执行了一个命令，如果该命令的返回值是False，则会引发一个异常并捕获异常信息。
 
 
-```
+```py
 with open('build/Chinese.txt', 'w') as f:
     f.write(''.join(Chinese))
 with open('build/unChinese.txt', 'w') as f:
@@ -1341,7 +1341,7 @@ font.generate(otf_file)
 10. `chapterIndex=-1`：将`zone_table`中的章节索引设置为-1，表示当前章节没有对应的级别。
 
 
-```
+```py
 font.close()
 
 
@@ -1409,7 +1409,7 @@ python
 2. 如果chapterIndex为None，则执行next(pageNumber)
 
 
-```
+```py
 for x in zone_table['zones'].values():
     if x['type'] == 'MAINLINE':
         if x['zoneIndex'] == 0:
@@ -1441,7 +1441,7 @@ for x in zone_table['zones'].values():
 最后，代码再次使用`requests`库发起HTTP GET请求，获取一个名为`retro_table.json`的JSON文件数据，并将其存储在变量`retro_table`中。
 
 
-```
+```py
 stage_table = json.loads(requests_get('excel/stage_table.json'))
 for x in stage_table['stages'].values():
     if (
@@ -1468,7 +1468,7 @@ retro_table = json.loads(requests_get('excel/retro_table.json'))
 总结起来，这段代码的作用是根据元素的类型创建了一个字典，存储了每个元素的retroId键值对。其中，retroId是元素在retro_table列表中的编号，字典的键是retroId，值是该元素的type类型的字典。
 
 
-```
+```py
 for x in retro_table['retroActList'].values():
     if x['type'] == 1:
         zone[x['retroId']] = {
@@ -1498,7 +1498,7 @@ for x in retro_table['retroActList'].values():
 最后，将 `zone` 和 `level` 字典分别保存到 JSON 文件中。
 
 
-```
+```py
 zoneToRetro = retro_table['zoneToRetro']
 for x in retro_table['stageList'].values():
     if x['hardStagedId'] is None and x['canBattleReplay'] and x['zoneId'].endswith('1') and x['zoneId'] in zoneToRetro.keys():

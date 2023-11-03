@@ -1,6 +1,6 @@
 # ArknightMower源码解析 10
 
-# `/opt/arknights-mower/arknights_mower/utils/typealias.py`
+# `arknights_mower/utils/typealias.py`
 
 这段代码定义了一个Image类和一个Recognizer类。
 
@@ -11,7 +11,7 @@ Recognizer类有两个类型参数，一个是表示图像范围内像素数量�
 这段代码的主要作用是定义一个简单的图像处理库，可以用于图像处理和分析任务。
 
 
-```
+```py
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
@@ -36,7 +36,7 @@ Coordinate = Tuple[int, int]
 接着定义了一个操作计划类型（OpePlan）类型，用于表示如何根据给定的参数找到匹配项。最后定义了一个基于范围的操作计划（BaseConstruct Plan）类型，用于表示如何根据给定的参数找到最匹配的元素。最后，定义了一个基建设置计划（BasePlan）类型，用于存储另一个字典类型（Dict）类型的基础构建计划。
 
 
-```
+```py
 Scope = Tuple[Coordinate, Coordinate]
 Slice = Tuple[Range, Range]
 Rectangle = Tuple[Coordinate, Coordinate, Coordinate, Coordinate]
@@ -59,13 +59,13 @@ BasePlan = Dict[str, List[str]]
 具体来说，这段代码定义了一个名为ParamArgs的列表类型，这个列表类型的每个元素都是str类型的字符串。这个列表类型的参数可以用来传递给函数或方法，在函数或方法内部，这个列表类型的元素被用作参数。例如，如果一个函数需要接收一个字符串和一个整数作为参数，可以传递一个名为ParamArgs的列表类型的参数，这个列表类型包含一个字符串类型和一个整数类型。函数在内部可以访问这个列表类型的元素，并根据需要进行相应的操作。
 
 
-```
+```py
 # Parameter
 ParamArgs = List[str]
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/update.py`
+# `arknights_mower/utils/update.py`
 
 这段代码是一个批处理脚本，名为“upgrade.bat”。它实现了两个主要功能：1）用新的程序替换掉旧的程序；2）在替换掉旧的程序后，等待5秒钟并显示更新完成的过程。
 
@@ -93,7 +93,7 @@ start old_program.bat
 这段代码的第一个参数是“new_program.bat”和“old_program.bat”两个文件名，它们分别是新旧程序的名称。函数使用os.system函数启动升级程序，并且在成功替换程序后，会等待5秒钟并显示更新完成的过程。最后，使用start函数启动升级程序，该函数的参数是“升级.bat”，这里应该是一个批处理文件名，具体是哪个程序需要根据实际情况而定。
 
 
-```
+```py
 import logging
 import os
 import zipfile
@@ -130,7 +130,7 @@ def __write_restart_cmd(new_name, old_name):
 接着，函数对列表 `v1` 和 `v2` 进行排序，并对它们进行比较。如果两个列表相等，函数返回 `None`，表示不需要更新。否则，函数返回最新的版本号（若需要更新）。
 
 
-```
+```py
 def compere_version():
     """
         与github上最新版比较
@@ -182,7 +182,7 @@ def compere_version():
   - 将下载的版本信息存储在变量 "tag_name"。
 
 
-```
+```py
 def update_version():
     if os.path.isfile("upgrade.bat"):
         os.remove("upgrade.bat")
@@ -225,7 +225,7 @@ def download_version(version):
 具体来说，这段代码首先检查“升级.bat”文件是否存在。如果文件存在，程序会使用os.remove()函数删除该文件。然后，会使用__write_restart_cmd()函数在当前目录下创建并运行一个名为“newVersion.exe”的新程序。在新程序运行时，会自动调用该函数，并将“newVersion.exe”和“Version.exe”作为参数传递给它，这样新程序就可以卸载旧程序了。
 
 
-```
+```py
 def main():
     # 新程序启动时，删除旧程序制造的脚本
     if os.path.isfile("upgrade.bat"):
@@ -238,33 +238,33 @@ if __name__ == '__main__':
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/yaml.py`
+# `arknights_mower/utils/yaml.py`
 
 这段代码使用了ruamel.yaml库中的YAML函数，创建了一个YAML对象。这个YAML对象(ruamel.yaml.YAML()或yaml)可以用来读取、修改和输出YAML文件和数据。具体来说，这个代码会在当前目录下创建一个名为test.yml的YAML文件，并向其中读取内容，然后将其转换为Python对象。最后，代码将test.yml文件的内容输出到控制台。
 
 
-```
+```py
 import ruamel.yaml
 
 yaml = ruamel.yaml.YAML()
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/__init__.py`
+# `arknights_mower/utils/__init__.py`
 
 我需要更具体的上下文来回答你的问题。可以请你提供更多背景和信息，以便我能够帮助你更好地解释代码的作用。
 
 
-```
+```py
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/device.py`
+# `arknights_mower/utils/device/device.py`
 
 `Main`类是应用的主程序，负责调用所有子程序的函数。主要用
 
 
-```
+```py
 from __future__ import annotations
 
 import time
@@ -423,7 +423,7 @@ class Device(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/utils.py`
+# `arknights_mower/utils/device/utils.py`
 
 这段代码是一个异步函数，用于下载一个文件到临时文件夹中，并返回该文件的文件名。
 
@@ -432,7 +432,7 @@ class Device(object):
 此函数的作用是用于在下载文件后，自动将其保存到系统的临时文件夹中，因此它需要运行在 `__system__` 函数中或者在脚本的开始时定义。
 
 
-```
+```py
 from __future__ import annotations
 
 import http
@@ -465,7 +465,7 @@ def download_file(target_url: str) -> str:
 总的来说，这段代码的作用是判断端口是否被占用，并尝试连接到该端口，如果连接成功则返回 0。
 
 
-```
+```py
 # def is_port_using(host: str, port: int) -> bool:
 #     """ if port is using by others, return True. else return False """
 #     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -480,7 +480,7 @@ def download_file(target_url: str) -> str:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/__init__.py`
+# `arknights_mower/utils/device/__init__.py`
 
 这段代码定义了两个类：KeyCode 和 Device。KeyCode 是一个枚举类型，定义了四种不同的按键类型，分别为：
 
@@ -504,13 +504,13 @@ enum KeyCode {
 Device 类是一个抽象类，没有具体的数据成员。它继承自 Device 的父类，并重写了两个子类：Device 和屏幕相关的类。
 
 
-```
+```py
 from .adb_client.const import KeyCode
 from .device import Device
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/const.py`
+# `arknights_mower/utils/device/adb_client/const.py`
 
 在一些编程语言中，可以使用下列代码来获取当前时间的 Unix 时间戳（从 1970 年 1 月 1 日 00:00:00 UTC 到 2022 年 2 月 18 日 18:22:48 UTC 的总共 43 年 10 个月 19 天 9 小时 59 分钟 8 秒）。注意，这里的时间戳不包括闰年和时区。
 python
@@ -531,7 +531,7 @@ print("获取当前时间的 Unix 时间戳：", timestamp)
 
 
 
-```
+```py
 class KeyCode:
     """ https://developer.android.com/reference/android/view/KeyEvent.html """
 
@@ -636,7 +636,7 @@ class KeyCode:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/core.py`
+# `arknights_mower/utils/device/adb_client/core.py`
 
 This is a class that appears to be a part of the Android SDK for Python package, specifically the Android shell (adb_shell) and Android process (adb).
 
@@ -653,7 +653,7 @@ The class provides methods for running various commands and interacting with And
 The class also provides methods for getting the Android version and pushing a file's contents to the device.
 
 
-```
+```py
 from __future__ import annotations
 
 import socket
@@ -844,7 +844,7 @@ class Client(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/session.py`
+# `arknights_mower/utils/device/adb_client/session.py`
 
 
 
@@ -859,7 +859,7 @@ The `push` method takes a string representing the target file path and a byte ar
 Note that the `connect`, `disconnect`, and `push` methods are marked as "private" and have a docstring that does not provide any information about their parameters.
 
 
-```
+```py
 from __future__ import annotations
 
 import socket
@@ -990,7 +990,7 @@ class Session(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/socket.py`
+# `arknights_mower/utils/device/adb_client/socket.py`
 
 以上代码是一个Python的网络库中的`Socket`类，它的`recv`方法接受一个字节数组（`Buffer`类）和一个接收缓冲区（`MemoryView`类）作为参数。该方法返回一个字节数组，其中包含服务器发送给客户端的数据。
 
@@ -1075,7 +1075,7 @@ class Socket:
 `
 
 
-```
+```py
 from __future__ import annotations
 
 import socket
@@ -1174,7 +1174,7 @@ class Socket(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/utils.py`
+# `arknights_mower/utils/device/adb_client/utils.py`
 
 这段代码是一个Python语法的引入，用于支持未来版本的Python2.x版本。这个函数将来的引入将包括一个名为“annotations”的类型声明。
 
@@ -1195,7 +1195,7 @@ class Socket(object):
 - `download_file`：定义了一个内部函数，用于下载文件。
 
 
-```
+```py
 from __future__ import annotations
 
 import shutil
@@ -1226,7 +1226,7 @@ ADB_BUILDIN_FILELIST = {
 最后，函数会将下载的文件复制到ADB_BUILDIN文件夹中，并设置ADB_BUILDIN文件夹的权限为744。
 
 
-```
+```py
 def adb_buildin() -> None:
     """ download adb_bin """
     folder = config.init_adb_buildin()
@@ -1253,7 +1253,7 @@ def adb_buildin() -> None:
 如果`decode`参数为真，函数将尝试使用`r.decode`方法解码`r`的输出，并将其存储在`r_decoded`变量中。最后，函数返回`r`或`r_decoded`中的一个值。
 
 
-```
+```py
 def run_cmd(cmd: list[str], decode: bool = False) -> Union[bytes, str]:
     logger.debug(f"run command: {cmd}")
     try:
@@ -1267,19 +1267,19 @@ def run_cmd(cmd: list[str], decode: bool = False) -> Union[bytes, str]:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/adb_client/__init__.py`
+# `arknights_mower/utils/device/adb_client/__init__.py`
 
 这段代码定义了一个名为 "Client" 的类，继承自 "core" 模块中的 "Client" 类。这个 "Client" 类的作用是在 Android 设备上执行各种自动化任务，比如使用 Android 自带的 Android 自动化库来模拟用户操作，比如打开应用程序、获取屏幕上的元素、编写自动化测试脚本等等。
 
 由于这段代码并没有提供完整的代码，因此我无法提供更多有关这个代码的更具体信息。
 
 
-```
+```py
 from .core import Client as ADBClient
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/minitouch/command.py`
+# `arknights_mower/utils/device/minitouch/command.py`
 
 This is a Python class that defines a `CommandBuilder` class for building Minitouch commands. The `CommandBuilder` class has several methods for appending content to the command, including a `wait` method for adding a delay, a `commit` method for adding the `/` character to the command to indicate a new command, and a `publish` method to apply the current commands to the device. The `CommandBuilder` class also has methods for appending content to the command using the `append` method, which adds a new line of content to the end of the existing command, and the `up` and `down` methods, which add a `<` followed by the `<contact_id>` and `<content>` parameters to the command.
 
@@ -1288,7 +1288,7 @@ The `CommandBuilder` class inherits from the `Object` class and has a `__init__`
 The `CommandBuilder` class can be实例iated to create a `CommandBuilder` object, which can then be used to build a `Command` object by calling the `CommandBuilder` object's `append`, `commit`, and `publish` methods. The `Command` object can then be passed to the `send` method of the `Session` class to apply the command to the device.
 
 
-```
+```py
 from __future__ import annotations
 
 import time
@@ -1344,7 +1344,7 @@ class CommandBuilder(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/utils/device/minitouch/core.py`
+# `arknights_mower/utils/device/minitouch/core.py`
 
 这段代码是一个Python程序，它从第三方包中导入了一些在未来可能被定义的函数类型。它还引入了os、time、random、typing、config、log_sync、logger、adb_client、download_file、utils和命令模块的一些成员。
 
@@ -1359,7 +1359,7 @@ class CommandBuilder(object):
 7. 在导入了一些第三方包后，定义了一些变量，包括MNT_PREBUILT_URL，用于下载预构建文件。
 
 
-```
+```py
 from __future__ import annotations
 
 import os
@@ -1388,7 +1388,7 @@ The function then specifies the display frames, the pressure on each point, the 
 Note that this implementation does not handle the case where the touch point is too far away or the user does not specify a valid display to use.
 
 
-```
+```py
 MNT_PREBUILT_URL = 'https://oss.nano.ac/arknights_mower/minitouch'
 MNT_PATH = '/data/local/tmp/minitouch'
 

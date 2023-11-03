@@ -1,6 +1,6 @@
 # ArknightMower源码解析 6
 
-# `/opt/arknights-mower/arknights_mower/solvers/credit.py`
+# `arknights_mower/solvers/credit.py`
 
 CreditSolver 是信元转译模式中的一个 solver，用于通过线索交换自动收集信用。CreditSolver 中使用了一个自定义的 Run 方法，在每次运行开始时会调用一次。在 Run 方法的体内，通过调用 super().run() 来运行 solver 的核心逻辑。
 
@@ -9,7 +9,7 @@ CreditSolver 是信元转译模式中的一个 solver，用于通过线索交换
 CreditSolver 通过循环调用 transition 方法来不断进行场景切换，并在场景结束时调用 back_to_index 方法返回索引。
 
 
-```
+```py
 from ..utils import detector
 from ..utils.device import Device
 from ..utils.log import logger
@@ -61,7 +61,7 @@ class CreditSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/mail.py`
+# `arknights_mower/solvers/mail.py`
 
 这段代码是一个名为 `MailSolver` 的类，它继承自 `BaseSolver` 类。这个类的目的是完成一个邮件的收取，包括收取邮件中的信息并将其显示给用户。
 
@@ -78,7 +78,7 @@ class CreditSolver(BaseSolver):
 5. 在 `__call__` 方法中，初始化邮件收取功能，并调用 `run` 方法开始收取邮件。
 
 
-```
+```py
 from ..utils.device import Device
 from ..utils.log import logger
 from ..utils.recognize import RecognizeError, Recognizer, Scene
@@ -125,7 +125,7 @@ class MailSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/mission.py`
+# `arknights_mower/solvers/mission.py`
 
 
 
@@ -274,7 +274,7 @@ This class also contains methods for other game scenes, including some scenes th
 Additionally, this class contains methods for integrating the game with the X Python library and the `游戏` module, as well as initializing the game with arguments and keyword arguments.
 
 
-```
+```py
 from ..utils.device import Device
 from ..utils.log import logger
 from ..utils.recognize import RecognizeError, Recognizer, Scene
@@ -347,7 +347,7 @@ class MissionSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/operation.py`
+# `arknights_mower/solvers/operation.py`
 
 这段代码是一个 Python 程序，从未来时代的一个包中导入了一些注解（from __future__ import annotations）。
 
@@ -358,7 +358,7 @@ class MissionSolver(BaseSolver):
 最后，这个程序似乎定义了一些常量（BOTTOM_TAP_NUMER）。
 
 
-```
+```py
 from __future__ import annotations
 
 import time
@@ -387,7 +387,7 @@ The output image is then processed by resizing it to a larger size and convertin
 The OCR process is repeated until the expected image is obtained or the Tw test indicates that the image is not an expected image.
 
 
-```
+```py
 class LevelUnopenError(Exception):
     pass
 
@@ -890,7 +890,7 @@ class OpeSolver(BaseSolver):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/record.py`
+# `arknights_mower/solvers/record.py`
 
 这是一个相对复杂的函数，因为它需要使用 SQLite 数据库来存储数据。在这个函数中，我们使用 SQLite3 库连接到一个数据库，并创建了一个 'agent_action' 表格来存储干员的行动。
 
@@ -903,7 +903,7 @@ class OpeSolver(BaseSolver):
 整个函数的逻辑非常复杂，因为它需要使用多个模块(包括 SQLite 数据库和其他辅助函数)来完成。此外，这个函数可能会在较复杂的系统中作为关键组件出现，因此需要进行充分的测试和调试以确保其可靠性。
 
 
-```
+```py
 # 用于记录Mower操作行为
 import sqlite3
 import os
@@ -979,7 +979,7 @@ The processed data is then stored in the 'processed_data' dictionary. The 'group
 Finally, the code returns the processed data.
 
 
-```
+```py
 def get_work_rest_ratios():
     # TODO 整理数据计算工休比
     database_path = os.path.join('tmp', 'data.db')
@@ -1104,7 +1104,7 @@ for row in current_group.cursor():
    current_user_channel_data_with_time_array = current
 
 
-```
+```py
 # 整理心情曲线
 def get_mood_ratios():
     database_path = os.path.join('tmp', 'data.db')
@@ -1197,7 +1197,7 @@ def get_mood_ratios():
 该代码还会调用另一个名为 `__main__` 的函数，该函数在代码中没有定义，因此不会对程序产生任何影响。
 
 
-```
+```py
 def calculate_time_difference(start_time, end_time):
     time_format = '%Y-%m-%d %H:%M:%S.%f'
     start_datetime = datetime.strptime(start_time, time_format)
@@ -1213,7 +1213,7 @@ __main__()
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/solvers/recruit.py`
+# `arknights_mower/solvers/recruit.py`
 
 This code defines a class RecruitPoss, which appears to be a combination of RecruitAgent and RecruitTag objects. RecruitPoss似乎用于招募两栖动物(可能是青蛙)，并具有以下功能：
 
@@ -1228,7 +1228,7 @@ This code defines a class RecruitPoss, which appears to be a combination of Recr
 总而言之， RecruitPoss 似乎是一个用于招募青蛙的 AI 系统，可以从 OCR 文本、分词、识别和求解问题等方面进行操作。
 
 
-```
+```py
 from __future__ import annotations
 
 from itertools import combinations
@@ -1257,7 +1257,7 @@ from ..utils.solver import BaseSolver
 最后，该类的实例还定义了一个方法 __str__(self)，用于打印输出实例的对象，返回的信息包括当前实例的所有变量。
 
 
-```
+```py
 #     """ 记录公招标签组合的可能性数据 """
 #
 #     def __init__(self, choose: int, max: int = 0, min: int = 7) -> None:
@@ -1282,7 +1282,7 @@ The robot can also send emails to the chat history，告知用户有哪些五星
 This class is in charge of the basic logic for the robot, and can be further developed to support more complex features.
 
 
-```
+```py
 #
 #     def __repr__(self) -> str:
 #         return "%s,%s,%s,%s,%s" % (self.choose, self.max, self.min, self.poss, self.ls)

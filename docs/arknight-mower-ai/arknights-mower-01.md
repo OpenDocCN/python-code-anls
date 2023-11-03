@@ -1,6 +1,6 @@
 # ArknightMower源码解析 1
 
-# `/opt/arknights-mower/diy.py`
+# `diy.py`
 
 这段代码是一个用于解决Arknights Mower游戏的AI的脚本。它实现了以下功能：
 
@@ -23,7 +23,7 @@
 17. 使用电子邮件模板发送游戏中的提醒。
 
 
-```
+```py
 import time
 from datetime import datetime
 import atexit
@@ -58,7 +58,7 @@ from arknights_mower.utils.operators import Operators, Operator, Dormitory
 這個字典也定義了該 squad 的其他屬性，如 "sleep_min" 和 "sleep_max"，以及 "weekly_plan"。weekly_plan 是一個列表，其中包含一個 s汽油 的 weekly_plan 屬性。每個周期都包含一個 stage 和一個 roles，並指定要執行的 task。
 
 
-```
+```py
 from arknights_mower.utils.scheduler_task import SchedulerTask
 
 email_config= {
@@ -154,7 +154,7 @@ maa_config = {
 此外，代码中还定义了一个名为 "UpperLimit" 的变量，用于干员宿舍回复阈值。这里需要说明的是，这个阈值只是一个默认值，具体值会在 agent-base.json 文件中进行修改。
 
 
-```
+```py
 # 模拟器相关设置
 simulator= {
     "name":"夜神",
@@ -195,7 +195,7 @@ if 语句的条件是：“如果需要无人机加速其他房间则可以修�
 接下来，程序进入了一个 if 语句。如果列表为空，则说明没有找到 "贸易站"，程序将执行一个 if 语句，并将变量 trade_room 的值设置为 0。程序还会执行一个 if 语句，并将变量 drone_execution_gap 的值设置为 0。
 
 
-```
+```py
 resting_threshold = 0.5
 
 # 跑单如果all in 贸易站则 不需要修改设置
@@ -237,7 +237,7 @@ timezone_offset = 0
 10. 菲亚梅塔会从replacemt中找最低心情的进行充能：根据replacemt中最低心情的干员进行充能。
 
 
-```
+```py
 # 全自动基建排班计划：
 # 这里定义了一套全自动基建的排班计划 plan_1
 # agent 为常驻高效组的干员名
@@ -262,7 +262,7 @@ timezone_offset = 0
 这看起来像是一个匹配地图的AI程序。在这个地图中，房间1到4分别代表不同的区域。每个房间都有一个AI作为替代者，用于在玩家无法进入这个房间时代替玩家。此外，地图中还包括一个 substring，可能是正在寻找另一个AI 模型。
 
 
-```
+```py
 plan = {
     # 阶段 1
     "default": "plan_1",
@@ -342,7 +342,7 @@ For example, "During Flaw, F竟可以突破重圆的技能攻击，直接咏唱�
 This object can be used for various purposes such as managing the team's strategy, preparing for boss fights, and understanding the current party's capabilities.
 
 
-```
+```py
 # UpperLimit、LowerLimit：心情上下限
 # ExhaustRequire：是否强制工作到红脸再休息
 # ArrangeOrder：指定在宿舍外寻找干员的方式
@@ -407,7 +407,7 @@ savelog() 函数的作用是指定日志和截屏的保存位置，方便调试�
 总的来说，这两个函数都是在为开发者在调试和报错过程中提供方便的工具和信息。
 
 
-```
+```py
 def debuglog():
     '''
     在屏幕上输出调试信息，方便调试和报错
@@ -450,7 +450,7 @@ scheduler是 Dragoneer 的核心调度器，负责处理 Dragoneer 任务的调�
 调度器的核心实现是 `base_scheduler`，这个类继承自 `scheduler` 类，并覆盖了一些方法，如 `scheduler.device`、`scheduler.recog`、`scheduler.tasks` 等。具体的实现主要在 `base_scheduler.py` 文件中。
 
 
-```
+```py
 def inialize(tasks, scheduler=None):
     device = Device()
     cli = Solver(device)
@@ -495,7 +495,7 @@ def inialize(tasks, scheduler=None):
 load_state()函数首先检查state_file_name文件是否存在。如果不存在，则返回None。如果文件存在，则将其读取并返回其中的state字典。接下来，遍历state字典中的所有键值对，并将其存储为operators字典。然后，对于每个字典中的键，如果其time_stamp字段未被设置为None，则将其转换为datetime.datetime类型，并将其时间戳设置为当前时间戳。如果time_stamp已被设置为None，则将该字典的time_stamp设置为None。最后，返回operators字典。
 
 
-```
+```py
 def save_state():
     with open(state_file_name, 'w') as f:
         if base_scheduler is not None and base_scheduler.op_data is not None:
@@ -529,7 +529,7 @@ The `base_scheduler` variable is an instance of a class that represents the core
 The `op
 
 
-```
+```py
 def simulate():
     '''
     具体调用方法可见各个函数的参数说明
@@ -631,7 +631,7 @@ def simulate():
 4. `simulate()`是一个Python函数，用于模拟程序的运行。这个函数内部可能调用了`atexit`注册的运维操作，例如打印调试信息、保存状态等，但是这个函数的具体实现不在我的知识范围内，我无法解释它的作用。
 
 
-```
+```py
 # debuglog()
 atexit.register(save_state)
 savelog()
@@ -639,7 +639,7 @@ simulate()
 
 ```
 
-# `/opt/arknights-mower/main.py`
+# `main.py`
 
 这段代码是一个Python脚本，它的作用是定义了一个名为`main`的函数，该函数是`arknights_mower`包的唯一实例。
 
@@ -657,7 +657,7 @@ simulate()
    g. 在`if`语句外，执行`os.system('pause')`，即暂停操作系统并等待一段时间（此操作通常是用于在终端窗口中等待用户输入以便取消提示）。
 
 
-```
+```py
 import os
 import traceback
 
@@ -677,7 +677,7 @@ if __name__ == '__main__':
 
 ```
 
-# `/opt/arknights-mower/menu.py`
+# `menu.py`
 
 这段代码使用了多个Python库，包括Multiprocessing、PySimpleGUI和ruamel.yaml库。它主要用于处理和处理机器人生成器和任务的数据，并执行一些操作，如加载和保存配置文件、生成计划和更新版本号等。
 
@@ -692,7 +692,7 @@ if __name__ == '__main__':
 7. 通过使用compere_version和download_version函数，从远程服务器下载更新版本的游戏。
 
 
-```
+```py
 import json
 from multiprocessing import Pipe, Process, freeze_support
 import time
@@ -817,7 +817,7 @@ def view_plans(plans):
    window.print_id
 
 
-```
+```py
 # confUrl = './conf.yml'
 conf = {}
 plan = {}
@@ -866,7 +866,7 @@ def build_plan(url):
 这段文字游戏脚本的具体玩法，还需要您根据实际游戏环境进行调整。
 
 
-```
+```py
 # 主页面
 def menu():
     global window
@@ -1193,7 +1193,7 @@ def menu():
 此外，这段代码还实现了一个键盘绑定脚本，用于将用户的键盘输入与游戏逻辑进行绑定。这个脚本可以接受用户的输入，并将用户的输入与游戏逻辑进行交互，从而实现游戏的响应。
 
 
-```
+```py
 def start():
     global main_thread, child_conn
     window['on'].update(visible=False)
@@ -1234,7 +1234,7 @@ def bind_scirpt():
 5. 如果`drag_task`的`step`不等于2，直接清除之前创建的按钮。
 
 
-```
+```py
 def run_script(event, drag_task):
     # logger.info(f"{event}:{drag_task}")
     if event.endswith('-motion'):  # 拖拽事件，标志拖拽开始
@@ -1266,7 +1266,7 @@ def run_script(event, drag_task):
 最后，代码调用两个函数`write_plan`和`build_plan`，将用户选择的计划和当前计划写入文件中，以便将新的计划应用到任务中。
 
 
-```
+```py
 def switch_plan(drag_task):
     key1 = drag_task.btn[4:]
     key2 = drag_task.new_btn[4:]
@@ -1349,7 +1349,7 @@ def switch_plan(drag_task):
        30. `window['replacement' + str(i)].update(', '.join(plans[i - 1]['replacement']))`：设置设施干员需求的替换描述。
 
 
-```
+```py
 def init_btn(event):
     room_key = event[4:]
     station_name = current_plan[room_key]['name'] if room_key in current_plan.keys() else ''
@@ -1395,7 +1395,7 @@ def init_btn(event):
 接下来，函数使用 `current_plan` 字典将计划保存到指定的文件中。最后，函数调用 `write_plan` 和 `build_plan` 函数来将计划保存到实际文件中。
 
 
-```
+```py
 def save_btn(btn):
     plan1 = {'name': window['station_type'].get(), 'plans': []}
     for i in range(1, 6):
@@ -1428,7 +1428,7 @@ def save_btn(btn):
 4. `logger.error(e)` 函数用于记录并输出异常信息。
 
 
-```
+```py
 def clear_btn(btn):
     if btn[4:] in current_plan:
         current_plan.pop(btn[4:])
@@ -1463,7 +1463,7 @@ def check_update():
 3. `try`/`except` 块：该块用于处理可能出现的 `EOFError` 异常。如果读取到结束-of-file（EOF）错误，函数会关闭传入的 `pipe` 对象。
 
 
-```
+```py
 # 接收推送
 def recv(pipe):
     try:
@@ -1507,7 +1507,7 @@ def println(msg):
 最后，定义了一个名为 `__repr__` 的成员函数，用于返回该对象的引用。
 
 
-```
+```py
 # 清空输出栏
 def clear():
     global buffer
@@ -1547,7 +1547,7 @@ class DragTask:
 综上所述，这段代码的作用是：在程序作为主程序运行时，动态地加载和使用freeze_support()函数。虽然函数的作用还不确定，但我们可以根据freeze_support()函数的特性，推测它可能与模块的加载和卸载有关。
 
 
-```
+```py
 if __name__ == '__main__':
     freeze_support()
     menu()

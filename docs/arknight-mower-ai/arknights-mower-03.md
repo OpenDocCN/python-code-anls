@@ -4,7 +4,7 @@
 
 ## Install
 
-```bash
+```pybash
 git config core.hooksPath `git rev-parse --show-toplevel`/.github/git-hooks
 ```
 
@@ -34,7 +34,7 @@ git config core.hooksPath `git rev-parse --show-toplevel`/.github/git-hooks
 
 ## Install
 
-```bash
+```pybash
 git config gitflow.path.hooks `git rev-parse --show-toplevel`/.github/gitflow-hooks
 ```
 
@@ -50,14 +50,14 @@ git config gitflow.path.hooks `git rev-parse --show-toplevel`/.github/gitflow-ho
 - Version tag prefix: `v`
 
 
-# `/opt/arknights-mower/arknights_mower/command.py`
+# `arknights_mower/command.py`
 
 这段代码是一个Python函数，名为`mail`，使用了Python 2.75及更高版本中的annotation特性。函数接收两个参数，一个是接收者列表（类型为列表类型），另一个是收件人设备（类型为Device类型）。函数的作用是调用一个名为`MailSolver`的类实例的`run`方法，该实例在`mail.py`文件中定义。
 
 具体来说，这段代码的作用是调用`MailSolver`类的一个`run`方法，该方法会执行一系列的邮件收取操作，并将结果打印出来。由于邮件收取操作在`mail.py`文件中定义，因此运行该函数时会自动调用`MailSolver`类中的`run`方法，从而实现自动收取邮件的功能。
 
 
-```
+```py
 from __future__ import annotations
 
 from . import __version__
@@ -81,7 +81,7 @@ def mail(args: list[str] = [], device: Device = None):
 这是一个程序，可以自动收集线索并使用菲亚梅塔恢复特定房间干员心情。收集线索的条件是自动，消耗无人机在1-3层，房间编号在1-3层。使用菲亚梅塔恢复特定房间干员心情时，可以自动消耗无人机，恢复后房间编号不变，工作位置也不变。同时，房间编号也可以在命令行中输入。
 
 
-```
+```py
 def base(args: list[str] = [], device: Device = None):
     """
     base [plan] [-c] [-d[F][N]] [-f[F][N]]
@@ -139,7 +139,7 @@ def base(args: list[str] = [], device: Device = None):
 这两个函数的作用是帮助用户实现自动访友和自动前往商店消费信用点等功能。其中，credit函数会将device作为参数传递给device.run()方法，然后运行type(device).run(config.SHOP_PRIORITY)方法，这个方法会使用配置文件中定义的优先级顺序，来决定先购买哪些物品。而shop函数则会将device作为参数传递给device.run(config.SHOP_PRIORITY)方法，然后运行ShopSolver(device).run(args)方法，这个方法会使用传入的args参数中的物品优先级顺序，来决定先购买哪些物品。
 
 
-```
+```py
 def credit(args: list[str] = [], device: Device = None):
     """
     credit
@@ -191,7 +191,7 @@ def mission(args: list[str] = [], device: Device = None):
 这段代码的作用是收集代理人每日和每周任务奖励，这个奖励是通过`MissionSolver`类来控制的，同样也应该是在外部定义的，而且这个函数都会使用这个类。
 
 
-```
+```py
 def recruit(args: list[str] = [], email_config={}, maa_config={},device: Device = None):
     """
     recruit [agents ...]
@@ -229,7 +229,7 @@ operation 函数首先定义了一个名为 OpeSolver 的类，该类可能是�
 operation 函数的具体实现可能还涉及到从 args 参数中提取未完成的每周剿灭等信息，以便在 OpeSolver 的 run 方法中进行更复杂的操作。
 
 
-```
+```py
 def operation(args: list[str] = [], device: Device = None):
     """
     operation [level] [n] [-r[N]] [-R[N]] [-e|-E]
@@ -267,7 +267,7 @@ def operation(args: list[str] = [], device: Device = None):
 这两个函数是通过 `global_cmds` 获取全局可执行命令列表中的所有命令，然后分别定义了如何使用这些命令。通过调用 `help` 函数，用户可以选择使用命令的选项，例如 `arknights-mower`，而通过调用 `version` 函数，用户可以获取到版本信息。
 
 
-```
+```py
 def version(args: list[str] = [], device: Device = None):
     """
     version
@@ -299,7 +299,7 @@ def help(args: list[str] = [], device: Device = None):
 这段代码定义了一个函数 `add_tasks`，用于为 `ScheduleSolver` 类添加任务。函数接受两个参数：`solver` 和 `tag`。函数内部首先从配置文件中获取特定标签的计划，然后遍历该计划中的所有任务。对于每个任务，函数使用 `match_cmd` 函数查找该任务在计划中的指令，如果找到，则使用 `add_task` 函数将该任务添加到 `ScheduleSolver` 的任务列表中。如果匹配失败，函数将记录错误并返回。
 
 
-```
+```py
 """
 commands for schedule
 operation will be replaced by operation_one in ScheduleSolver
@@ -344,7 +344,7 @@ def add_tasks(solver: ScheduleSolver = None, tag: str = ''):
 7. 如果之前的中断任务完成后，仍然有计划任务未完成，则重复执行步骤 6，直到所有计划任务都完成。
 
 
-```
+```py
 def schedule(args: list[str] = [], device: Device = None):
     """
     schedule
@@ -386,7 +386,7 @@ def schedule(args: list[str] = [], device: Device = None):
 最后，函数内部使用一个简单的循环来处理匹配的命令。如果找到了匹配的命令，函数将返回该命令的名称，否则将打印一条消息并返回 `None`。
 
 
-```
+```py
 # all available commands
 global_cmds = [base, credit, mail, mission, shop,
                recruit, operation, version, help, schedule]
@@ -407,7 +407,7 @@ def match_cmd(prefix: str, avail_cmds: list[str] = global_cmds):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/strategy.py`
+# `arknights_mower/strategy.py`
 
 This is a class that simulates the game SystemShotter.py. It has methods for recruiting, operating, and shopping.
 
@@ -422,7 +422,7 @@ The Mail method sends the player a message.
 The Index method allows the player to access the index of their character.
 
 
-```
+```py
 from __future__ import annotations
 
 import functools
@@ -500,7 +500,7 @@ class Solver(object):
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/__init__.py`
+# `arknights_mower/__init__.py`
 
 这段代码的作用是设置一个名为“arknights_mower”的包的根目录。具体来说，它实现了以下操作：
 
@@ -519,7 +519,7 @@ class Solver(object):
 6. 如果 `__pyinstall__` 和 `sys.frozen`、`sys._MEIPASS` 都不存在，则执行命令行模式。
 
 
-```
+```py
 import platform
 import sys
 from pathlib import Path
@@ -553,13 +553,13 @@ __cli__ = not (__pyinstall__ and not sys.argv[1:])
 6. 在(__sys__, '__version__') 这对圆括号中，前者是一个字符串，后者是一个变量，存储了当前操作系统的版本号。
 
 
-```
+```py
 __system__ = platform.system().lower()
 __version__ = 'v3.4.3'
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/__main__.py`
+# `arknights_mower/__main__.py`
 
 这段代码的作用是创建一个名为 "arrangement.py" 的文件，用于定义 "ArrowKnight simulator" 的 arrangement。它包含以下几部分：
 
@@ -690,7 +690,7 @@ __version__ = 'v3.4.3'
 125. 创建 " 自定义声音 "：custom
 
 
-```
+```py
 import atexit
 import os
 import time
@@ -711,7 +711,7 @@ plan = {}
 It seems like the text you provided is a Python code, but it's hard to tell without the imports and other context. If you could provide more information about what this code is doing, I might be able to give you a more detailed explanation.
 
 
-```
+```py
 operators = {}
 
 
@@ -778,7 +778,7 @@ def main(c, p, o={}, child_conn=None):
 函数的作用是隐藏密码，具体实现方式是：对密码进行深度复制，并删除密码中所有字母、数字和特殊字符。
 
 
-```
+```py
 #newbing说用这个来定义休息时间省事
 def format_time(seconds):
     # 计算小时和分钟
@@ -818,7 +818,7 @@ def hide_password(conf):
 8. `return conf`：函数返回设置，但没有做任何实际工作。
 
 
-```
+```py
 def update_conf():
     logger.debug("运行中更新设置")
 
@@ -847,7 +847,7 @@ The function logs a message to the console with the new Maa configuration.
 Overall, this function is useful for updating the Maa configuration of an operator in case it has been modified.
 
 
-```
+```py
 def set_maa_options(base_scheduler):
     conf = update_conf()
 
@@ -906,7 +906,7 @@ scheduler类的方法有：
 该类的方法可以用于定时器或无限循环中，用于不断处理队列中的任务。
 
 
-```
+```py
 def initialize(tasks, scheduler=None):
     from arknights_mower.solvers.base_schedule import BaseSchedulerSolver
     from arknights_mower.strategy import Solver
@@ -987,7 +987,7 @@ The scheduler can send emails using the `send_email` method, which takes a messa
 The scheduler runs in a continuous loop and calls the `run` method for each task. The `run` method executes the code of the task in a separate thread and sends emails using the `send_email` method if necessary.
 
 
-```
+```py
 def simulate():
     '''
     具体调用方法可见各个函数的参数说明
@@ -1103,7 +1103,7 @@ def simulate():
 总的来说，这两个函数都在对不同的操作系统数据类型进行操作，并根据给定的参数返回相应的结果。
 
 
-```
+```py
 def save_state(op_data, file='state.json'):
     if not os.path.exists('tmp'):
         os.makedirs('tmp')
@@ -1132,7 +1132,7 @@ def load_state(file='state.json'):
 调料包主要包括许多不同种类的调料，以及它们的组合。不同的调料可以用
 
 
-```
+```py
 agent_base_config = {}
 maa_config = {}
 
@@ -1199,7 +1199,7 @@ def __init_params__():
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/data/__init__.py`
+# `arknights_mower/data/__init__.py`
 
 这段代码的作用是读取并解析了两个JSON文件，将它们的数据存储在内存中，并定义了一个名为"agent"的列表，这个列表包含了所有房间的模型。
 
@@ -1210,7 +1210,7 @@ def __init_params__():
 最后，代码定义了一个名为"base-room-list"的列表，这个列表包含了所有房间的模型设置。这些模型设置存储在"data/base.json"文件中，并且包含了一个Python字典，这个字典的键是房间的名称，值是设置为真的值。
 
 
-```
+```py
 import json
 from pathlib import Path
 
@@ -1243,7 +1243,7 @@ base_room_list = json.loads(
 通过这些 JSON 文件的读取，代码可以获取到游戏中的各种信息，从而实现了猜谜游戏的基本功能。
 
 
-```
+```py
 # the camps to which the clue belongs
 clue_name = json.loads(
     Path(f'{__rootdir__}/data/clue.json').read_text('utf-8'))
@@ -1271,7 +1271,7 @@ chapter_list = json.loads(
 最后，代码读取了同目录下的`data/scene.json`文件，同样将其内容解析为JSON格式。这个列表中存储了场景名称和场景定义等信息。
 
 
-```
+```py
 # list of supported levels
 level_list = json.loads(
     Path(f'{__rootdir__}/data/level.json').read_text('utf-8'))
@@ -1295,7 +1295,7 @@ scene_list = json.loads(
 接下来，代码按标签分组组合干员信息，将每个标签作为键，并将包含该标签的干员信息作为值，存储到一个字典中。最后，代码将`recruit_agent_list`和`rarity_tags`分别存储为`recruit_agent_list`和`rarity_tags`。
 
 
-```
+```py
 # recruit database
 recruit_agent = json.loads(
     Path(f'{__rootdir__}/data/recruit.json').read_text('utf-8'))
@@ -1317,7 +1317,7 @@ rarity_tags = []
 这段代码的作用是针对一个字典 `recruit_tag` 中的每个键，将其值赋给另一个字典 `recruit_agent_list`。具体来说，代码首先遍历 `recruit_tag` 字典中的每个键，然后在其下创建一个字典，包含两个键值对，第一个键是 `min_level`，第二个键是一个列表 `agent`。然后，代码遍历 `recruit_agent` 字典中的每个键，检查当前键是否存在于 `recruit_agent_list` 字典中的键中。如果是，并且该键在字典中的键的 `tags` 键中，那么将该键在 `recruit_agent_list` 字典中的键中的 `min_level` 键的值设置为当前键中 `min_level` 键的值。如果是，那么将当前键在 `recruit_agent_list` 字典中的键中的 `agent` 列表中添加一个新的字典，包含一个 `name` 键和一个 `level` 键，其中 `name` 是 `recruit_agent` 字典中当前键对应的人名，`level` 是 `recruit_agent` 字典中当前键对应的人的等级。最后，`recruit_agent_list` 字典中的键会被更新为当前键中 `min_level` 键的值，并且 `recruit_agent_list` 字典中的 `agent` 列表会被更新为当前键在 `recruit_agent` 字典中的 `name` 和 `level` 键。
 
 
-```
+```py
 for key in recruit_tag:
     recruit_agent_list[key] = {
         "min_level": 7,
@@ -1338,7 +1338,7 @@ for key in recruit_tag:
 这段代码的作用是获取招募代理列表中的所有稀有度级别（rarity level）且最小等级（min_level）大于或等于5的键（key）。这将创建一个名为rarity_tags的列表，其中包含这些稀有度级别。
 
 
-```
+```py
 # 保底5星的tag
 rarity_tags = []
 for key in recruit_agent_list:
@@ -1367,14 +1367,14 @@ CRNN 的轻量型模型文件，负责识别图像中的文字
 SVM 分类器的模型文件，负责图像匹配判定
 
 
-# `/opt/arknights-mower/arknights_mower/ocr/config.py`
+# `arknights_mower/ocr/config.py`
 
 这段代码的作用是引入一个名为"dbnet"的模型，它可以从两个路径中选择一个： "dbnet.onnx" 或 "crnn_lite_lstm.onnx"。具体来说，"dbnet.onnx"是下载自清华大学 KEG 实验室和智谱AI训练的大型预训练模型，而"crnn_lite_lstm.onnx"是一个轻量级的 CRNN 模型，由清华大学 KEG 实验室提出，可用于检测和分割各种物体。
 
 在 PyTorch 框架中，`__rootdir__`是一个变量，表示当前工作目录的路径。因此，`from .. import __rootdir__`就是将当前工作目录路径中的 models 目录下的两个模型文件引入到函数内部，以便于在函数中使用这些模型。
 
 
-```
+```py
 from .. import __rootdir__
 
 dbnet_model_path = f'{__rootdir__}/models/dbnet.onnx'
@@ -1382,7 +1382,7 @@ crnn_model_path = f'{__rootdir__}/models/crnn_lite_lstm.onnx'
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/ocr/crnn.py`
+# `arknights_mower/ocr/crnn.py`
 
 这段代码是一个图像预处理和图像分类的PyTorch实现。它有两个函数：`predict_gaussian` 和 `predict_rbg`。这两个函数都是基于Gaussian方法和RGB方法进行图像分类的。
 
@@ -1393,7 +1393,7 @@ crnn_model_path = f'{__rootdir__}/models/crnn_lite_lstm.onnx'
 这两个函数都使用了一个预训练好的图像尺寸（32x32，224x224）作为图像的输入，并在其训练集中搜索网络的初始位置。然后，它们使用图像的灰度值和尺寸来搜索网络的初始位置，并返回一个类概率分布。
 
 
-```
+```py
 import numpy as np
 import onnxruntime as rt
 from PIL import Image
@@ -1451,7 +1451,7 @@ class CRNNHandle:
 
 ```
 
-# `/opt/arknights-mower/arknights_mower/ocr/dbnet.py`
+# `arknights_mower/ocr/dbnet.py`
 
 这是一个使用 OpenCV 和 RT（RPA）库的图像分割应用程序，其目的是对输入图像中的物体进行检测和分割。该应用程序使用基于 RT 库的 InferenceSession 和其自定义的 SegmentDetectorRepresenter 类对图像进行处理。下面是应用程序的主要步骤：
 
@@ -1464,7 +1464,7 @@ class CRNNHandle:
 代码示例：
 
 
-```
+```py
 import cv2
 import numpy as np
 import onnxruntime as rt
