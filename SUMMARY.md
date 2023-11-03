@@ -5,3 +5,4 @@
 +   [ArknightMower 源码解析](docs/arknight-mower-ai/README.md)
 +   [Yolov5DNF 源码解析](docs/yolov5-dnf-ai/README.md)
 +   [SDWebUI 源码解析](docs/sd-webui-ai/README.md)
++   [AutoGPT 源码解析](docs/AutoGPT-ai/README.md)
