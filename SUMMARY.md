@@ -8,3 +8,4 @@
 +   [AutoGPT 源码解析](docs/AutoGPT-ai/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [BasicComputerGames 源码解析](docs/basic-comp-games-ai/README.md)
++   [BertVITS2 源码解析](docs/bert-vits2-ai/README.md)
