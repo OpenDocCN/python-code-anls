@@ -7,3 +7,4 @@
 +   [SDWebUI 源码解析](docs/sd-webui-ai/README.md)
 +   [AutoGPT 源码解析](docs/AutoGPT-ai/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
++   [BasicComputerGames 源码解析](docs/basic-comp-games-ai/README.md)

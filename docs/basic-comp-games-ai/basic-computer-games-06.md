@@ -1,320 +1,24 @@
-# BasicComputerGames源码解析 0
+# BasicComputerGames源码解析 6
 
-# How to run the games
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
 
-The games in this repository have been translated into a number of different languages. How to run them depends on the target language.
+Conversion to [MiniScript](https://miniscript.org).
 
-## csharp
+Ways to play:
 
-### dotnet command-line
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
-The best cross-platform method for running the csharp examples is with the `dotnet` command-line tool. This can be downloaded for **MacOS**, **Windows** and **Linux** from [dotnet.microsoft.com](https://dotnet.microsoft.com/).
+```
+	miniscript life.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
-From there, the program can be run by
-
-1. Opening a terminal window
-1. Navigating to the corresponding directory
-1. Starting with `dotnet run`
-
-### Visual Studio
-
-Alternatively, for non-dotnet compatible translations, you will need [Visual Studio](https://visualstudio.microsoft.com/vs/community/) which can be used to both open the project and run the example.
-
-1. Open the corresponding `.csproj` or `.sln` file
-1. Click `Run` from within the Visual Studio IDE
-
-## java
-
-The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
-
-To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [Open JDK](https://openjdk.java.net/)).
-
-1. Navigate to the corresponding directory.
-1. Compile the program with `javac`:
-   * eg. `javac AceyDuceyGame.java`
-1. Run the compiled program with `java`:
-   * eg. `java AceyDuceyGame`
-
-or if you are **using JDK11 or later** you can now execute a self contained java file that has a main method directly with `java <filename>.java`.
-
-## javascript
-
-There are two ways of javascript implementations:
-
-### browser
-
-The html examples can be run from within your web browser. Simply open the corresponding `.html` file from your web browser.
-
-### node.js
-
-Some games are implemented as a [node.js](https://nodejs.org/) script. In this case there is no `*.html` file in the folder.
-
-1. [install node.js](https://nodejs.org/en/download/) for your system.
-1. change directory to the root of this repository (e.g. `cd basic-computer-games`).
-1. from a terminal call the script you want to run (e.g. `node 78_Sine_Wave/javascript/sinewave.mjs`).
-
-_Hint: Normally javascript files have a `*.js` extension. We are using `*.mjs` to let node know , that we are using [ES modules](https://nodejs.org/docs/latest/api/esm.html#modules-ecmascript-modules) instead of [CommonJS](https://nodejs.org/docs/latest/api/modules.html#modules-commonjs-modules)._
-
-## kotlin
-
-Kotlin programs are compiled with the Kotlin compiler, and run with the java runtime, just like java programs.
-In addition to the java runtime you will need the `kotlinc` compiler, which can be installed using [these instructions](https://kotlinlang.org/docs/command-line.html).
-
-1. Navigate to the corresponding directory.
-1. Compile the program with `kotlinc`:
-   * eg. `kotlinc AceyDuceyGame.kt -include-runtime -d AceyDuceyGame.jar`
-1. Run the compiled program with `java`:
-   * eg. `java -jar AceyDuceyGame.jar`
-
-## pascal
-
-The pascal examples can be run using [Free Pascal](https://www.freepascal.org/). Additionally, `.lsi` project files can be opened with the [Lazarus Project IDE](https://www.lazarus-ide.org/).
-
-The pascal examples include both *simple* (single-file) and *object-oriented* (in the `/object-pascal`directories) examples.
-
-1. You can compile the program from the command line with the `fpc` command.
-   * eg. `fpc amazing.pas`
-1. The output is an executable file that can be run directly.
-
-## perl
-
-The perl translations can be run using a perl interpreter (a copy can be downloaded from [perl.org](https://www.perl.org/)) if not already installed.
-
-1. From the command-line, navigate to the corresponding directory.
-1. Invoke with the `perl` command.
-   * eg. `perl aceyducey.pl`
-
-## python
-
-The python translations can be run from the command line by using the `py` interpreter. If not already installed, a copy can be downloaded from [python.org](https://www.python.org/downloads/) for **Windows**, **MacOS** and **Linux**.
-
-1. From the command-line, navigate to the corresponding directory.
-1. Invoke with the `py` or `python` interpreter (depending on your python version).
-   * eg. `py acey_ducey_oo.py`
-   * eg. `python aceyducey.py`
-
-**Note**
-
-Some translations include multiple versions for python, such as `acey ducey` which features versions for Python 2 (`aceyducey.py`) and Python 3 (`acey_ducey.py`) as well as an extra object-oriented version (`acey_ducey_oo.py`).
-
-You can manage and use different versions of python with [pip](https://pypi.org/project/pip/).
-
-## ruby
-
-If you don't already have a ruby interpreter, you can download it from the [ruby project site](https://www.ruby-lang.org/en/).
-
-1. From the command-line, navigate to the corresponding directory.
-1. Invoke with the `ruby` tool.
-   * eg. `ruby aceyducey.rb`
-
-## vbnet
-
-Follow the same steps as for the [csharp](#csharp) translations. This can be run with `dotnet` or `Visual Studio`.
-
-## rust
-
-If you don't already have Rust on your computer, you can follow the instruction on [Rust Book](https://doc.rust-lang.org/book/ch01-01-installation.html)
-
-1. From the command-line, navigate to the corresponding directory.
-2. Run the following command.
-   * `cargo run`
-
-
-### What are we doing?
-
-We’re updating the first million selling computer book, [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games), for 2022 and beyond!
-
-- [Read the original book](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf) (pdf)
-- [Play the original games in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html)
-
-### Where can we discuss it?
-
-Please see [the discussion here](https://discourse.codinghorror.com/t/-/7927) for a worklog and conversation around this project.
-
-### Project structure
-
-I have moved all [the original BASIC source code](http://www.vintage-basic.net/games.html) into a folder for each project in the original book (first volume). Note that Lyle Kopnicky has generously normalized all the code (thanks Lyle!) to run against [Vintage Basic](http://www.vintage-basic.net/download.html) circa 2009:
-
-> I’ve included all the games here for your tinkering pleasure. I’ve tested and tweaked each one of them to make sure they’ll run with Vintage BASIC, though you may see a few oddities. That’s part of the fun of playing with BASIC: it never works quite the same on two machines. The games will play better if you keep CAPS LOCK on, as they were designed to be used with capital-letter input.
-
-Each project has subfolders corresponding to the languages we’d like to see the games ported to. This is based on the [2022 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _**memory safe**_ and _**general purpose scripting languages**_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
-
-1. C# 
-2. Java
-3. JavaScript
-4. Kotlin
-5. Lua
-6. Perl
-7. Python
-8. Ruby
-9. Rust
-10. VB.NET
-
-> 📢 Note that in March 2022 we removed Pascal / Object Pascal and replaced it with Rust as we couldn’t determine if Pascal is effectively memory safe. We’ve also added Lua, as it made the top 20 in TIOBE (as of 2022) and it is both memory safe and a scripting language. The Pascal ports were moved to the alternate languages folder.
-
-> ⚠️ Please note that we have decided, as a project, that we **do not want any IDE-specific or build-specific files in the repository.** Please refrain from committing any files to the repository that only exist to work with a specific IDE or a specific build system.
-
-### Alternate Languages
-
-If you wish to port one of the programs to a language not in our list – that is, a language which is either not memory safe, or not a general purpose scripting language, you can do so via the `00_Alternate_Languages` folder. Place your port in the appropriate game subfolder, in a subfolder named for the language. Please note that these ports are appreciated, but they will not count toward the donation total at the end of the project.
-
-### Project goals
-
-Feel free to begin converting these classic games into the above list of modern, memory safe languages. In fact, courtesy of @mojoaxel, you can even view the JavaScript versions in your web browser at
-
-https://coding-horror.github.io/basic-computer-games/
-
-But first, a few guidelines:
-
-- **These are very old games**. They date from the mid-70s so they’re not exactly examples of what kids (or anyone, really?) would be playing these days. Consider them more like classic programming exercises to teach programming.  We’re paying it forward by converting them into modern languages, so the next generation can learn from the programs in this classic book – and compare implementations across common modern languages.
-
-- **Stay true to the original program**. These are mostly unsophisticated, simple command line / console games, so we should strive to replicate the command line / console output and behavior illustrated in the original book. See the README in the project folder for links to the original scanned source input and output. Try [running the game in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html). Avoid the impulse to add features; keep it simple, _except_ for modern conventions, see next item 👇
-
-- **Please DO update for modern coding conventions**. Support uppercase and lowercase. Use structured programming. Use subroutines. Try to be an example of good, modern coding practices!
-
-- **Use lots of comments to explain what is going on**. Comment liberally! If there were clever tricks in the original code, decompose those tricks into simpler (even if more verbose) code, and use comments to explain what’s happening and why. If there is something particularly tricky about a program, edit the **Porting Notes** section of the `readme.md` to let everyone know. Those `GOTO`s can be very pesky..
-
-- **Please don’t get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable – the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks, or big system "enterprise" coding techniques designed for thousands of lines of code.
-
-- **Please don't check in any build specific or IDE specific files**. We want the repository to be simple and clean, so we have ruled out including any IDE or build system specific files from the repository. Git related files are OK, as we are using Git and this is GitHub. 😉
-
-### Emulation and Bugfixes
-
-We want the general behavior of the original programs to be preserved, _however_, we also want to update them, specifically:
-
-- allow both UPPERCASE and lowercase input and display
-- incorporate any bugfixes to the original programs; see the `readme.md` in the game folder
-- improved error handling for bad or erroneous input
-
-Please note that on the back of the Basic Computer Games book it says **Microsoft 8K Basic, Rev 4.0 was the version David Ahl used to test**, so that is the level of compatibility we are looking for.  QBasic on the DOS emulation is a later version of Basic but one that retains downwards compatibility so far in our testing. To verify behavior, try [running the programs in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html) with [JS BASIC, effectively Applesoft BASIC](https://github.com/inexorabletash/jsbasic/).
-
-### Have fun!
-
-Thank you for taking part in this project to update a classic programming book – one of the most influential programming books in computing history – for 2022 and beyond!
-
-NOTE: per [the official blog post announcement](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/), I will be **donating $5 for each contributed program in the 10 agreed upon languages to [Girls Who Code](https://girlswhocode.com/)**.
-
-### Current Progress
-
-<details><summary>toggle for game by language table</summary>
-
-| Name                   | csharp | java | javascript | kotlin | lua | perl | python | ruby | rust | vbnet |
-| ---------------------- | ------ | ---- | ---------- | ------ | --- | ---- | ------ | ---- | ---- | ----- |
-| 01_Acey_Ducey          | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
-| 02_Amazing             | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 03_Animal              | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
-| 04_Awari               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 05_Bagels              | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
-| 06_Banner              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 08_Batnum              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 09_Battle              | x      | x    | x          |        |     |      | x      |      |      | x     |
-| 10_Blackjack           | x      | x    | x          |        |     |      | x      | x    | x    | x     |
-| 11_Bombardment         | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 12_Bombs_Away          | x      | x    | x          |        | x   | x    | x      |      |      | x     |
-| 13_Bounce              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 14_Bowling             | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 15_Boxing              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 16_Bug                 | x      | x    | x          |        |     |      | x      | x    |      | x     |
-| 17_Bullfight           | x      |      | x          | x      |     |      | x      |      |      | x     |
-| 18_Bullseye            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 19_Bunny               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 20_Buzzword            | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
-| 21_Calendar            | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 22_Change              | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 23_Checkers            | x      |      | x          |        |     | x    | x      | x    |      | x     |
-| 24_Chemist             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 25_Chief               | x      | x    | x          |        | x   | x    | x      | x    |      | x     |
-| 26_Chomp               | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 27_Civil_War           | x      | x    | x          |        |     |      | x      |      |      | x     |
-| 28_Combat              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 29_Craps               | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
-| 30_Cube                | x      | x    | x          |        |     |      | x      | x    | x    | x     |
-| 31_Depth_Charge        | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 32_Diamond             | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
-| 33_Dice                | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
-| 34_Digits              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 35_Even_Wins           | x      |      | x          |        |     | x    | x      |      | x    | x     |
-| 36_Flip_Flop           | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 37_Football            | x      |      | x          |        |     |      | x      |      |      | x     |
-| 38_Fur_Trader          | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 39_Golf                | x      |      | x          |        |     |      | x      |      |      | x     |
-| 40_Gomoko              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 41_Guess               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 42_Gunner              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 43_Hammurabi           | x      | x    | x          |        |     |      | x      |      |      | x     |
-| 44_Hangman             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 45_Hello               | x      | x    | x          |        | x   | x    | x      | x    |      | x     |
-| 46_Hexapawn            | x      |      |            |        |     |      | x      |      |      | x     |
-| 47_Hi-Lo               | x      |      | x          | x      | x   | x    | x      | x    | x    | x     |
-| 48_High_IQ             | x      | x    | x          |        |     |      | x      |      |      | x     |
-| 49_Hockey              | x      |      | x          |        |     |      | x      |      |      | x     |
-| 50_Horserace           | x      |      | x          |        |     |      |        |      | x    | x     |
-| 51_Hurkle              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 52_Kinema              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 53_King                | x      |      | x          |        |     |      | x      |      | x    | x     |
-| 54_Letter              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 55_Life                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 56_Life_for_Two        | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 57_Literature_Quiz     | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 58_Love                | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 59_Lunar_LEM_Rocket    | x      |      | x          |        |     |      | x      |      | x    | x     |
-| 60_Mastermind          | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 61_Math_Dice           | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 62_Mugwump             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 63_Name                | x      | x    | x          | x      |     | x    | x      | x    |      | x     |
-| 64_Nicomachus          | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 65_Nim                 | x      |      | x          |        |     |      | x      | x    | x    | x     |
-| 66_Number              | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 67_One_Check           | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 68_Orbit               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 69_Pizza               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 70_Poetry              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 71_Poker               | x      | x    | x          |        |     |      |        |      |      | x     |
-| 72_Queen               | x      |      | x          |        |     | x    | x      |      | x    | x     |
-| 73_Reverse             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 74_Rock_Scissors_Paper | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
-| 75_Roulette            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 76_Russian_Roulette    | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
-| 77_Salvo               | x      |      | x          |        |     |      | x      |      |      | x     |
-| 78_Sine_Wave           | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
-| 79_Slalom              | x      |      | x          |        |     |      | x      |      |      | x     |
-| 80_Slots               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 81_Splat               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 82_Stars               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 83_Stock_Market        | x      | x    | x          |        |     |      | x      |      |      | x     |
-| 84_Super_Star_Trek     | x      | x    | x          |        |     |      | x      |      | x    | x     |
-| 85_Synonym             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 86_Target              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 87_3-D_Plot            | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 88_3-D_Tic-Tac-Toe     | x      |      | x          |        |     |      | x      |      |      | x     |
-| 89_Tic-Tac-Toe         | x      | x    | x          | x      |     | x    | x      |      | x    | x     |
-| 90_Tower               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 91_Train               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 92_Trap                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 93_23_Matches          | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 94_War                 | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
-| 95_Weekday             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
-| 96_Word                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-
-</details>
-
-
-#### Alternate Languages
-
-This folder contains implementations of each program in alternate languages which are _not_ one of the agreed upon 10 languages.
-
-Implementations here are NOT bound to these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-So for example, (here only) C or PASCAL are allowed. Please still remain faithful to original look-and-feel (console applications).
-Try to keep your code portable (unless it is not possible, and then be very explicit about this limitation in your
-README and your folder naming).
-
-We welcome additional ports in whatever language you prefer, but these additional ports are for educational purposes only, and do not count towards the donation total at the end of the project.
+```
+	load "life"
+	run
+```
 
 
 Please refer to the `readme.md` in the parent folder. 
@@ -327,60 +31,1138 @@ Each subfolder represents a port of this program to a language which is _not_ on
 
 We welcome additional ports, but these additional ports are for educational purposes only.
 
-#### External Links
- - Common Lisp: https://github.com/koalahedron/lisp-computer-games/blob/master/01%20Acey%20Ducey/common-lisp/acey-deucy.lisp
- - PowerShell: https://github.com/eweilnau/basic-computer-games-powershell/blob/main/AceyDucey.ps1
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
 
+Conversion to [MiniScript](https://miniscript.org).  The only liberty I took with the original design is that, when prompting each player for their turn, I include a reminder of what symbol (* or #) represents their pieces on the board.
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript lifefortwo.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "lifefortwo"
+	run
+```
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of litquiz.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript litquiz.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "litquiz"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of love.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript love.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "love"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).  Note that there are three different programs in this folder, all variations on the "land the LEM on the Moon" idea.
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the desired program with a command such as:
+
+```
+	miniscript lem.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "lem"	// (or "lunar" or "rocket")
+	run
+```
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript mastermind.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "mastermind"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of mathdice.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript mathdice.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "mathdice"
+	run
+```
 
 Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
 
-Conversion to [C++14](https://en.wikipedia.org/wiki/C%2B%2B14)
+Conversion to [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language))
 
-The build folder are executables for x86 and x64 systems. Compiled and built using Visual Studio.
+##### Translator Notes:
+I tried to preserve as much of the original layout and flow of the code
+as possible.  I added a procedure for the printing of the die-face; and
+another to read an integer from the player, as I was unhappy with the runtime
+error message spat out when a non-number is given to readln(<integer>).
+
+I was torn between using the correct singular term "die" instead of "dice".
+In the end I used a (poor?) combination of both.
+
+krt@krt.com.au 2020-10-12
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of mathdice.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript mathdice.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "mathdice"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of name.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript name.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "name"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript nicomachus.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "nicomachus"
+	run
+```
+3. "Try-It!" page on the web:
+Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of nicomachus.ms, and click the "Run Script" button.
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript nim.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "nim"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript number.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "number"
+	run
+```
+3. "Try-It!" page on the web:
+Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of number.ms, and click the "Run Script" button.
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript onecheck.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "onecheck"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript orbit.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "orbit"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript pizza.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "pizza"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript poetry.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "poetry"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript poker.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "poker"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript queen.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "queen"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+	miniscript reverse.ms
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+	load "reverse"
+	run
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of rockscissors.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript rockscissors.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "rockscissors"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript roulette.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "roulette"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+0. Try-It! Page:
+Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of russianroulette.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript russianroulette.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "russianroulette"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript salvo.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "salvo"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
+
+Conversion to [C++17](https://en.wikipedia.org/wiki/C%2B%2B17)
+
+# `00_Alternate_Languages/78_Sine_Wave/C++/sinewave.cpp`
+
+这段代码的主要目的是输出一个包含一些文字和一些数学公式的字符串。
+
+具体来说，代码中包含了一些标准库头文件：iostream、string、sin、cmath，它们分别用于输入输出、字符串操作、三角函数、数学计算等。
+
+在main函数中，首先定义了一个变量b，它的初始值为true。
+
+接着，代码使用一个for循环，从0到40进行迭代，每次迭代时先计算出sin函数的值，再将结果加到变量a中。
+
+a的值将用于输出，具体是通过std::string(a, ' ')来实现的，其中a的值作为字符串的一部分进行输出。在循环内部，还通过std::string(30, ' ')和std::string(15, ' ')输出了一些字符串。
+
+最后，在输出语句中，使用了bool条件语句，根据b的值输出不同的字符，当b为false时输出"COMPUTING"，当b为true时输出"CREATIVE"。
+
+
+```
+#include <iostream> // std::cout, std::endl
+#include <string>	// std::string(size_t n, char c)
+#include <cmath>	// std::sin(double x)
+
+int main()
+{
+	std::cout << std::string(30, ' ') << "SINE WAVE" << std::endl;
+	std::cout << std::string(15, ' ') << "CREATIVE COMPUTING MORRISTOWN, NEW JERSEY" << std::endl;
+	std::cout << std::string(5, '\n');
+
+	bool b = true;
+
+	for (double t = 0.0; t <= 40.0; t += 0.25)
+	{
+		int a = int(26 + 25 * std::sin(t));
+		std::cout << std::string(a, ' ') << (b ? "CREATIVE" : "COMPUTING") << std::endl;
+		b = !b;
+	}
+
+	return 0;
+}
+
+```
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+```
+	miniscript sinewave.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+```
+	load "sinewave"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript slalom.ms
+```
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "slalom"
+	run
+```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+	miniscript slots.ms
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+	load "slots"
+	run
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+	miniscript splat.ms
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+	load "splat"
+	run
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+
+	miniscript stars.ms
+
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+
+	load "stars"
+	run
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript synonym.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "synonym"
+	run
+```
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
+
+Conversion to [MiniScript](https://miniscript.org).
+
+Ways to play:
+
+1. Command-Line MiniScript:
+Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
+```
+	miniscript target.ms
+```
+2. Mini Micro:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
+```
+	load "target"
+	run
+```
+
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
 
 Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html)
 
 Converted to [D](https://dlang.org/) by [Bastiaan Veelo](https://github.com/veelo).
 
-Two versions are supplied that are functionally equivalent, but differ in source layout:
-
-<dl>
-  <dt><tt>aceyducey_literal.d</tt></dt>
-  <dd>A largely literal transcription of the original Basic source. All unnecessary uglyness is preserved.</dd>
-  <dt><tt>aceyducey.d</tt></dt>
-  <dd>An idiomatic D refactoring of the original, with a focus on increasing the readability and robustness.
-      Memory-safety <A href="https://dlang.org/spec/memory-safe-d.html">is ensured by the language</a>, thanks to the
-      <tt>@safe</tt> annotation.</dd>
-</dl>
-
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
 ```shell
-dmd -run aceyducey.d
+dmd -dip1000 -run threedeeplot.d
 ```
 
 [Other compilers](https://dlang.org/download.html) also exist.
 
-Note that there are compiler switches related to memory-safety (`-preview=dip25` and `-preview=dip1000`) that are not
-used here because they are unnecessary in this case. What these do is to make the analysis more thorough, so that with
-them some code that needed to be `@system` can then be inferred to be in fact `@safe`. [Code that compiles without
-these switches is just as safe as when compiled with them]
-(https://forum.dlang.org/post/dftgjalswvwfjpyushgn@forum.dlang.org).
+## On rounding floating point values to integer values
 
+The D equivalent of Basic `INT` is [`floor`](https://dlang.org/phobos/std_math_rounding.html#.floor),
+which rounds towards negative infinity. If you change occurrences of `floor` to
+[`lrint`](https://dlang.org/phobos/std_math_rounding.html#.lrint), you'll see that the plots show a bit more detail,
+as is done in the bonus below.
 
-# Acey Ducey
+## Bonus: Self-writing programs
 
-This is an Elm implementation of the `Basic Compouter Games` Game Acey Ducey.
+With a small modification to the source, the program can be extended to **plot a random function**, and **print its formula**.
 
-## Build App
-
-- install elm
-
-```bash
-yarn
-yarn build
+```shell
+rdmd -dip1000 threedeeplot_random.d
 ```
+(`rdmd` caches the executable, which results in speedy execution when the source does not change.)
+
+### Example output
+```
+                                    3D Plot
+              (After Creative Computing  Morristown, New Jersey)
+
+
+                           f(z) = 30 * sin(z / 10.0)
+
+                             *
+                      *      *    * *
+                *         *      *    * *
+                    *         *      *    * *
+            *           *        *       *   *  *
+               *           *         *      *   *  *
+                  *           *         *     *    * **
+       *             *           *        *      *   *  *
+         *              *           *       *     *   *  **
+            *              *          *       *    *   *  * *
+              *              *          *      *   *   *  *  *
+                *              *          *     *  *  *   *   **
+                  *              *         *    * *  *   *    * *
+   *                *             *        *    ** *    *     * *
+    *                *             *        *  **     *      *   *
+     *                 *            *       * *     *       *    *
+      *                 *            *      * *   *         *    *
+       *                *             *     ** *           *     **
+        *                *            *     **            *      **
+        *                *            *     *            *       **
+        *                *            *     *            *       **
+        *                *            *     *            *       **
+        *                *            *     **            *      **
+       *                *             *     ** *           *     **
+      *                 *            *      * *   *         *    *
+     *                 *            *       * *     *       *    *
+    *                *             *        *  **     *      *   *
+   *                *             *        *    ** *    *     * *
+                  *              *         *    * *  *   *    * *
+                *              *          *     *  *  *   *   **
+              *              *          *      *   *   *  *  *
+            *              *          *       *    *   *  * *
+         *              *           *       *     *   *  **
+       *             *           *        *      *   *  *
+                  *           *         *     *    * **
+               *           *         *      *   *  *
+            *           *        *       *   *  *
+                    *         *      *    * *
+                *         *      *    * *
+                      *      *    * *
+                             *
+```
+
+### Breakdown of differences
+
+Have a look at the relevant differences between `threedeeplot.d` and `threedeeplot_random.d`.
+This is the original function with the single expression that is evaluated for the plot:
+```d
+    static float fna(float z)
+    {
+        return 30.0 * exp(-z * z / 100.0);
+    }
+```
+Here `static` means that the nested function does not need acces to its enclosing scope.
+
+Now, by inserting the following:
+```d
+    enum functions = ["30.0 * exp(-z * z / 100.0)",
+                      "sqrt(900.01 - z * z) * .9 - 2",
+                      "30 * (cos(z / 16.0) + .5)",
+                      "30 - 30 * sin(z / 18.0)",
+                      "30 * exp(-cos(z / 16.0)) - 30",
+                      "30 * sin(z / 10.0)"];
+
+    size_t index = uniform(0, functions.length);
+    writeln(center("f(z) = " ~ functions[index], width), "\n");
+```
+and changing the implementation of `fna` to
+```d
+    float fna(float z)
+    {
+        final switch (index)
+        {
+            static foreach (i, f; functions)
+                case i:
+                    mixin("return " ~ f ~ ";");
+        }
+    }
+```
+we unlock some very special abilities of D. Let's break it down:
+
+```d
+    enum functions = ["30.0 * exp(-z * z / 100.0)", /*...*/];
+```
+This defines an array of strings, each containing a mathematical expression. Due to the `enum` keyword, this is an
+array that really only exists at compile-time.
+
+```d
+    size_t index = uniform(0, functions.length);
+```
+This defines a random index into the array. `functions.length` is evaluated at compile-time, due to D's compile-time
+function evaluation (CTFE).
+
+```d
+    writeln(center("f(z) = " ~ functions[index], width), "\n");
+```
+Unmistakenly, this prints the formula centered on a line. What happens behind the scenes is that `functions` (which
+only existed at compile-time before now) is pasted in, so that an instance of that array actually exists at run-time
+at this spot, and is instantly indexed.
+
+```d
+    float fna(float z)
+    {
+        final switch (index)
+        {
+            // ...
+        }
+    }
+```
+`static` has been dropped from the nested function because we want to evaluate `index` inside it. The function contains
+an ordinary `switch`, with `final` providing some extra robustness. It disallows a `default` case and produces an error
+when the switch doesn't handle all cases. The `switch` body is where the magic happens and consists of these three
+lines:
+```d
+            static foreach (i, f; functions)
+                case i:
+                    mixin("return " ~ f ~ ";");
+```
+The `static foreach` iterates over `functions` at compile-time, producing one `case` for every element in `functions`.
+`mixin` takes a string, which is constructed at compile-time, and pastes it right into the source.
+
+In effect, the implementation of `float fna(float z)` unrolls itself into
+```d
+    float fna(float z)
+    {
+        final switch (index)
+        {
+            case 0:
+                return 30.0 * exp(-z * z / 100.0);
+            case 1:
+                return sqrt(900.01 - z * z) * .9 - 2;
+            case 2:
+                return 30 * (cos(z / 16.0) + .5);
+            case 3:
+                return 30 - 30 * sin(z / 18.0);
+            case 4:
+                return 30 * exp(-cos(z / 16.0)) - 30;
+            case 5:
+                return 30 * sin(z / 10.0)";
+        }
+    }
+```
+
+So if you feel like adding another function, all you need to do is append it to the `functions` array, and the rest of
+the program *rewrites itself...*
 
 
 Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
@@ -393,30 +1175,169 @@ Ways to play:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
 ```
-	miniscript aceyducey.ms
+	miniscript number.ms
 ```
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
 ```
-	load "aceyducey"
+	load "number"
 	run
 ```
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
+
+Please refer to the `readme.md` in the parent folder. 
+
+Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+
+1. Popular (by TIOBE index)
+2. Memory safe
+3. Generally considered a 'scripting' language
+
+We welcome additional ports, but these additional ports are for educational purposes only.
 
 Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
 
-Conversion to [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) by Gustavo Carreno [gcarreno@github](https://github.com/gcarreno)
+Conversion to [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language))
 
 
-Please refer to the `readme.md` in the parent folder. 
+# `00_Alternate_Languages/89_Tic-Tac-Toe/go/src/tictactoe1.go`
 
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
+This is a program written in the Go programming language that simulates a game of Connect-the-Dot. The program takes four arguments: a space for each position on the board, the row and column indices for each piece, and the index of the piece that has been read by the user. The row and column indices are 0 to 7, with 8 and 9 for the computer's piece.
 
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
+The program starts by printing a blank board and asking the user to choose a piece to read. Next, the program reads the user's move by calling the `readYourMove` function. The program then makes the computer's move by calling the `computerMoves` function, passing in the row and column indices for the chosen piece.
 
-We welcome additional ports, but these additional ports are for educational purposes only.
+The program then enters a loop that reads the user's move again until the game is over (either when the player wins or when the computer wins). When the game is over, the program displays a message indicating which player won and prints the appropriate message. If the game is still ongoing, the program displays a "draw" message and then makes the computer's move.
+
+The program also has a `computerMoves` function that takes a row and column index for a piece and moves the piece to the given position on the board.
+
+
+```
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+	// Print text on the screen with 30 spaces before text
+	fmt.Printf("%30s\n", "TIC TAC TOE")
+	// Print text on screen with 15 spaces before text
+	// And print three lines break on screen
+	fmt.Printf("%15s\n\n\n\n", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+	// THIS PROGRAM PLAYS TIC TAC TOE
+	fmt.Printf("THE GAME BOARD IS NUMBERED:\n\n")
+	fmt.Println("1  2  3")
+	fmt.Println("8  9  4")
+	fmt.Println("7  6  5")
+
+	// Main program
+	for {
+		var (
+			a, b, c, d, e int
+			p, q, r, s    int
+		)
+		a = 9
+		fmt.Printf("\n\n")
+		// THE MACHINE GOES FIRST
+		computerMoves(a)
+		p = readYourMove()
+		b = move(p + 1)
+		computerMoves(b)
+		q = readYourMove()
+		if q == move(b+4) {
+			c = move(b + 2)
+			computerMoves(c)
+			r = readYourMove()
+			if r == move(c+4) {
+				if p%2 != 0 {
+					d = move(c + 3)
+					computerMoves(d)
+					s = readYourMove()
+					if s == move(d+4) {
+						e = move(d + 6)
+						computerMoves(e)
+						fmt.Println("THE GAME IS A DRAW.")
+					} else {
+						e = move(d + 4)
+						computerMoves(e)
+						fmt.Println("AND WINS ********")
+					}
+				} else {
+					d = move(c + 7)
+					computerMoves(d)
+					fmt.Println("AND WINS ********")
+				}
+			} else {
+				d = move(c + 4)
+				computerMoves(d)
+				fmt.Println("AND WINS ********")
+			}
+		} else {
+			c = move(b + 4)
+			computerMoves(c)
+			fmt.Println("AND WINS ********")
+		}
+	}
+}
+```
+
+这两段代码定义了两个函数，主要作用是帮助人们编写计算机程序。
+
+`func computerMoves(move int)` 函数接收一个整数参数 `move`，然后输出 "COMPUTER MOVES %v"。这里的 `%v` 是格式化字符串，表示输出一个字符串和一个变量的引用。函数内部并没有做任何计算或移动，仅仅是为了让程序输出 "COMPUTER MOVES" 和一个变量的值。
+
+`func readYourMove() int` 函数主要用来读取用户输入的一行字符。函数内部使用了一个无限循环，每当用户输入一行字符，程序会输出一个 "YOUR MOVE?" 提示，然后循环等待用户输入一行字符并将其转换成整数类型。如果输入的字符不含有数字，那么函数会输出一个错误信息。函数返回读取到的整数，以便在接下来的计算机移动中使用。
+
+
+```
+func computerMoves(move int) {
+	fmt.Printf("COMPUTER MOVES %v\n", move)
+}
+
+func readYourMove() int {
+	for {
+		fmt.Printf("YOUR MOVE?")
+		var input string
+		fmt.Scan(&input)
+		number, err := strconv.Atoi(input)
+		if err == nil {
+			return number
+		}
+	}
+}
+
+```
+
+这段代码定义了一个名为 move 的函数，它接受一个整数参数 number。
+
+函数的作用是计算 number 与 8 的商，然后用这个商乘以 8，接着用 number 减去这个乘积，最后得到一个整数类型的结果。
+
+函数的具体实现可以分为以下几个步骤：
+
+1. 计算 number 与 8 的商，并将其存储在 number / 8 中。
+2. 计算 number 与 8 的商，并将其存储在 number / 8 的下标为 1 的位置中。
+3. 计算 number - 8 * number / 8，将其存储在 result 中。
+4. 返回 result。
+
+由于函数接受一个整数类型的参数，因此它会确保 number 不会是负数。
+
+
+```
+func move(number int) int {
+	return number - 8*(int)((number-1)/8)
+}
+
+```
 
 Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
 
@@ -427,281 +1348,13 @@ Ways to play:
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
-```
-	miniscript amazing.ms
-```
-Note that because this program imports "listUtil", you will need to have a the standard MiniScript libraries somewhere in your import path.
+	miniscript tictactoe.ms
 
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
-```
-	load "amazing"
+	load "tictactoe"
 	run
-```
-
-Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
-
-Conversion to [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) by Gustavo Carreno [gcarreno@github](https://github.com/gcarreno)
-
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript animal.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "animal"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-# Awari
-
-This is an Elm implementation of the `Basic Compouter Games` Game Awari.
-
-## Build App
-
-- install elm
-
-```bash
-yarn
-yarn build
-```
-
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript awari.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "awari"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bagels.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bagels"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript banner.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "banner"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript basketball.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "basketball"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript batnum.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "batnum"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-NOTE: One feature has been added to the original game.  At the "??" prompt, instead of entering coordinates, you can enter "?" (a question mark) to reprint the fleet disposition code.
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript battle.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "battle"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript blackjack.ms
-```
-But note that the current release (1.2.1) of command-line MiniScript does not properly flush the output buffer when line breaks are suppressed, as this program does when prompting for your next action after a Hit.  So, method 2 (below) is recommended for now.
-
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "blackjack"
-	run
-```
 
 Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
 
@@ -727,16 +1380,13 @@ Ways to play:
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
-```
-	miniscript bombardment.ms
-```
+	miniscript tower.ms
+
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
-```
-	load "bombardment"
+	load "tower"
 	run
-```
 
 Please refer to the `readme.md` in the parent folder. 
 
@@ -758,666 +1408,17 @@ Ways to play:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
 ```
-	miniscript bombsaway.ms
+	miniscript train.ms
 ```
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
 ```
-	load "bombsaway"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bounce.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bounce"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bowling.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bowling"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript boxing.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "boxing"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bug.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bug"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bull.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bull"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of bullseye.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bullseye.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bullseye"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of bunny.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bunny.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bunny"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of bunny.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript bunny.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "bunny"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript calendar.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "calendar"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of change.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript change.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "change"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript checkers.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "checkers"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of chemist.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript chemist.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "chemist"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-NOTE: I have added `wait` statements before and while printing the lightning bolt, without which it appears too quickly to be properly dramatic.
-
-Ways to play:
-
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of chief.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript chief.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "chief"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript chomp.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "chomp"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript civilwar.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "civilwar"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript combat.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "combat"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript craps.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "craps"
-	run
-```
-
-#### External Links
- - Common Lisp: https://github.com/koalahedron/lisp-computer-games/blob/master/01%20Acey%20Ducey/common-lisp/acey-deucy.lisp
- - PowerShell: https://github.com/eweilnau/basic-computer-games-powershell/blob/main/AceyDucey.ps1
-
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript cube.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "cube"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript depthcharge.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "depthcharge.ms"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript diamond.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "diamond"
-	run
-```
-
-Please refer to the `readme.md` in the parent folder. 
-
-Each subfolder represents a port of this program to a language which is _not_ one of the agreed upon 10 languages, which are intended to meet these three criteria:
-
-1. Popular (by TIOBE index)
-2. Memory safe
-3. Generally considered a 'scripting' language
-
-We welcome additional ports, but these additional ports are for educational purposes only.
-
-Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
-
-Conversion to [Python](https://www.julialang.org/)
-
-Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
-
-Conversion to [MiniScript](https://miniscript.org).
-
-Ways to play:
-
-1. Command-Line MiniScript:
-Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
-
-```
-	miniscript dice.ms
-```
-2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
-
-```
-	load "dice"
+	load "train"
 	run
 ```
 3. "Try-It!" page on the web:
-Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of dice.ms, and click the "Run Script" button.
+Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of train.ms, and click the "Run Script" button.
 
 
 Please refer to the `readme.md` in the parent folder. 
@@ -1440,13 +1441,13 @@ Ways to play:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
 ```
-	miniscript digits.ms
+	miniscript trap.ms
 ```
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
 ```
-	load "digits"
+	load "trap"
 	run
 ```
 
@@ -1464,35 +1465,18 @@ Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/gam
 
 Conversion to [MiniScript](https://miniscript.org).
 
-Note that this folder (like the original BASIC programs) contains TWO different programs based on the same idea.  evenwins.ms plays deterministically; gameofevenwins.ms learns from its failures over multiple games.
-
 Ways to play:
 
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
-```
-	miniscript evenwins.ms
-```
-or
-
-```
-	miniscript gameofevenwins.ms
-```
+	miniscript 23matches.ms
 
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
-```
-	load "evenwins"
+	load "23matches"
 	run
-```
-or
-
-```
-	load "gameofevenwins"
-	run
-```
 
 Please refer to the `readme.md` in the parent folder. 
 
@@ -1503,3 +1487,129 @@ Each subfolder represents a port of this program to a language which is _not_ on
 3. Generally considered a 'scripting' language
 
 We welcome additional ports, but these additional ports are for educational purposes only.
+
+﻿Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html)
+
+Converted to [D](https://dlang.org/) by [Bastiaan Veelo](https://github.com/veelo).
+
+## Running the code
+
+Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
+```shell
+dmd -preview=dip1000 -run war.d
+```
+
+[Other compilers](https://dlang.org/download.html) also exist.
+
+## Specialties explained
+
+This game code contains some specialties that you might want to know more about. Here goes.
+
+### Suits
+
+Most modern consoles are capable of displaying more than just ASCII, and so I have chosen to display the actual ♠, ♥, ♦
+and ♣ instead of substituting them by letters like the BASIC original did. Only the Windows console needs a nudge in
+the right direction with these instructions:
+```d
+SetConsoleOutputCP(CP_UTF8); // Set code page
+SetConsoleOutputCP(GetACP);  // Restore the default
+```
+Instead of cluttering the `main()` function with these lesser important details, we can move them into a
+[module constructor and module destructor](https://dlang.org/spec/module.html#staticorder), which run before and after
+`main()` respectively. And because order of declaration is irrelevant in a D module, we can push those all the way
+down to the bottom of the file. This is of course only necessary on Windows (and won't even work anywhere else) so
+we'll need to wrap this in a `version (Windows)` conditional code block:
+```d
+version (Windows)
+{
+    import core.sys.windows.windows;
+
+    shared static this() @trusted
+    {
+        SetConsoleOutputCP(CP_UTF8);
+    }
+
+    shared static ~this() @trusted
+    {
+        SetConsoleOutputCP(GetACP);
+    }
+}
+```
+Although it doesn't matter much in this single-threaded program, the `shared` attribute makes that these
+constructors/destructors are run once per program invocation; non-shared module constructors and module destructors are
+run for every thread. The `@trusted` annotation is necessary because these are system API calls; The compiler cannot
+check these for memory-safety, and so we must indicate that we have reviewed the safety manually.
+
+### Uniform Function Call Syntax
+
+In case you wonder why this line works:
+```d
+if ("Do you want instructions?".yes)
+    // ...
+```
+then it is because this is equivalent to
+```d
+if (yes("Do you want instructions?"))
+    // ...
+```
+where `yes()` is a Boolean function that is defined below `main()`. This is made possible by the language feature that
+is called [uniform function call syntax (UFCS)](https://dlang.org/spec/function.html#pseudo-member). UFCS works by
+passing what is in front of the dot as the first parameter to the function, and it was invented to make it possible to
+call free functions on objects as if they were member functions. UFCS can also be used to obtain a more natural order
+of function calls, such as this line inside `yes()`:
+```d
+return trustedReadln.strip.toLower.startsWith("y");
+```
+which reads easier than the equivalent
+```d
+return startsWith(toLower(strip(trustedReadln())), "y");
+```
+
+### Type a lot or not?
+
+It would have been straight forward to define the `cards` array explicitly like so:
+```d
+const cards = ["2♠", "2♥", "2♦", "2♣", "3♠", "3♥", "3♦", "3♣",
+               "4♠", "4♥", "4♦", "4♣", "5♠", "5♥", "5♦", "5♣",
+               "6♠", "6♥", "6♦", "6♣", "7♠", "7♥", "7♦", "7♣",
+               "8♠", "8♥", "8♦", "8♣", "9♠", "9♥", "9♦", "9♣",
+               "10♠", "10♥", "10♦", "10♣", "J♥", "J♦", "J♣", "J♣",
+               "Q♠", "Q♥", "Q♦", "Q♣", "K♠", "K♥", "K♦", "K♣",
+               "A♠", "A♥", "A♦", "A♣"];
+```
+but that's tedious, difficult to spot errors in (*can you?*) and looks like something a computer can automate. Indeed
+it can:
+```d
+static const cards = cartesianProduct(["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
+                                      ["♠", "♥", "♦", "♣"]).map!(a => a.expand.only.join).array;
+```
+The function [`cartesianProduct`](https://dlang.org/phobos/std_algorithm_setops.html#cartesianProduct) takes two
+ranges, like the horizontal and vertical headers of a spreadsheet, and fills the table with the combinations that form
+the coordinates of the cells. But the output of that function is in the form of an array of
+[`Tuple`](https://dlang.org/phobos/std_typecons.html#Tuple)s, which looks like `[Tuple!(string, string)("2", "♠"),
+Tuple!(string, string)("2", "♥"), ... etc]`. [`map`](https://dlang.org/phobos/std_algorithm_iteration.html#map)
+comes to the rescue, converting each Tuple to a string, by calling
+[`expand`](https://dlang.org/phobos/std_typecons.html#.Tuple.expand), then
+[`only`](https://dlang.org/phobos/std_range.html#only) and then [`join`](https://dlang.org/phobos/std_array.html#join)
+on them. The result is a lazily evaluated range of strings. Finally,
+[`array`](https://dlang.org/phobos/std_array.html#array) turns the range into a random access array. The `static`
+attribute makes that all this is performed at compile-time, so the result is exactly the same as the manually entered
+data, but without the typo's.
+
+### Shuffle the cards or not?
+
+The original BASIC code works with a constant array of cards, ordered by increasing numerical value, and indexing it
+with indices that have been shuffled. This is efficient because in comparing who wins, the indices can be compared
+directly, since a higher index correlates to a card with a higher numerical value (when divided by the number of suits,
+4). Some of the other reimplementations in other languages have been written in a lesser efficient way by shuffling the
+array of cards itself. This then requires the use of a lookup table or searching for equality in an auxiliary array
+when comparing cards.
+
+I find the original more elegant, so that's what you see here:
+```d
+const indices = iota(0, cards.length).array.randomShuffle;
+```
+[`iota`](https://dlang.org/phobos/std_range.html#iota) produces a range of integers, in this case starting at 0 and
+increasing up to the number of cards in the deck (exclusive). [`array`](https://dlang.org/phobos/std_array.html#array)
+turns the range into an array, so that [`randomShuffle`](https://dlang.org/phobos/std_random.html#randomShuffle) can
+do its work.
