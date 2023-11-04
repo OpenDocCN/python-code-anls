@@ -6,3 +6,4 @@
 +   [Yolov5DNF 源码解析](docs/yolov5-dnf-ai/README.md)
 +   [SDWebUI 源码解析](docs/sd-webui-ai/README.md)
 +   [AutoGPT 源码解析](docs/AutoGPT-ai/README.md)
++   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
