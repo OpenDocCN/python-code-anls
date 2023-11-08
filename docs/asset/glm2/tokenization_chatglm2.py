@@ -6,7 +6,7 @@ from transformers import PreTrainedTokenizer
 from transformers.utils import logging, PaddingStrategy
 from transformers.tokenization_utils_base import EncodedInput, BatchEncoding
 
-
+# 底层的分词器，也就是 SP 模型的包装
 class SPTokenizer:
     def __init__(self, model_path: str):
         # reload tokenizer
@@ -80,7 +80,7 @@ class SPTokenizer:
         # 否则转发给底层模型的`IdToPiece`
         return self.sp_model.IdToPiece(index)
 
-
+# 用户直接使用的分词器
 class ChatGLMTokenizer(PreTrainedTokenizer):
     # 定义词表名称
     vocab_files_names = {"vocab_file": "tokenizer.model"}
@@ -296,31 +296,46 @@ class ChatGLMTokenizer(PreTrainedTokenizer):
         # Load from model defaults
         assert self.padding_side == "left"
 
+        # `encoded_inputs`是个字典，`input_ids`包含模型的输入单词ID数组
+        # `attention_mask`是掩码数组，`position_ids`是位置 ID 数组
+        # `required_input`是输入单词 ID 数组
         required_input = encoded_inputs[self.model_input_names[0]]
+        # `seq_length`是输入长度
         seq_length = len(required_input)
 
+        # 如果策略是按最长填充，因为只有一个输入，最大长度就是它的长度
         if padding_strategy == PaddingStrategy.LONGEST:
             max_length = len(required_input)
 
+        # 如果提供了最大长度和`pad_to_multiple_of`
+        # 将最大长度设为不小于它的`pad_to_multiple_of`的倍数
         if max_length is not None and pad_to_multiple_of is not None and (max_length % pad_to_multiple_of != 0):
             max_length = ((max_length // pad_to_multiple_of) + 1) * pad_to_multiple_of
 
+        # 如果策略不是不填充，并且最大长度
+        # 和输入长度不相等，就需要填充
         needs_to_be_padded = padding_strategy != PaddingStrategy.DO_NOT_PAD and len(required_input) != max_length
 
-        # Initialize attention mask if not present.
+        # 如果没有掩码，初始化为全 1 长度为 SeqLen 的数组
         if "attention_mask" not in encoded_inputs:
             encoded_inputs["attention_mask"] = [1] * seq_length
 
+        # 如果没有位置 ID，初始化为 [0, ..., SeqLen - 1]
         if "position_ids" not in encoded_inputs:
             encoded_inputs["position_ids"] = list(range(seq_length))
 
+        
         if needs_to_be_padded:
+            # 如果需要填充，计算填充字符个数，也就是最大长度和输入的差值
             difference = max_length - len(required_input)
 
+            #  如果存在掩码，在掩码前方插入 diff 个 0
             if "attention_mask" in encoded_inputs:
                 encoded_inputs["attention_mask"] = [0] * difference + encoded_inputs["attention_mask"]
+            # 如果存在位置 ID，同样前方插入 diff 个 0
             if "position_ids" in encoded_inputs:
                 encoded_inputs["position_ids"] = [0] * difference + encoded_inputs["position_ids"]
+            # 在输入 IDS 前方插入 diff 个 PAD ID
             encoded_inputs[self.model_input_names[0]] = [self.pad_token_id] * difference + required_input
 
         return encoded_inputs
