@@ -91,8 +91,10 @@ class ChatGLMTokenizer(PreTrainedTokenizer):
         super().__init__(padding_side=padding_side, clean_up_tokenization_spaces=False, **kwargs)
         self.name = "GLMTokenizer"
         
+        # 在属性中保存词表路径
         # 这个文件是和词表本身放一起的，所以路径就只是文件名
         self.vocab_file = vocab_file
+        # 创建底层的分词器，传入词表路径
         self.tokenizer = SPTokenizer(vocab_file)
         # 定义特殊单词 BOS、EOS、PAD
         # 建立单词文本到ID的映射
@@ -190,20 +192,24 @@ class ChatGLMTokenizer(PreTrainedTokenizer):
             `Tuple(str)`: Paths to the files saved.
         """
         if os.path.isdir(save_directory):
-            # 如果`save_directory`是个目录
-            # 就
+            # 如果传入路径是个目录，那么文件名就是之前定义的默认文件名
+            # 把传入路径和文件名拼接好作为保存路径
             vocab_file = os.path.join(
                 save_directory, self.vocab_files_names["vocab_file"]
             )
         else:
+            # 否则保存路径就是传入路径
             vocab_file = save_directory
 
+        # 根据属性中的词表路径，读入词表
         with open(self.vocab_file, 'rb') as fin:
             proto_str = fin.read()
 
+        # 把词表写到保存路径中
         with open(vocab_file, "wb") as writer:
             writer.write(proto_str)
-
+        
+        # 返回保存路径
         return (vocab_file,)
 
     # 获取前缀单词列表，即 GMASK 和 SOP
