@@ -10,3 +10,4 @@
 +   [BasicComputerGames 源码解析](docs/basic-comp-games-ai/README.md)
 +   [BertVITS2 源码解析](docs/bert-vits2-ai/README.md)
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
++   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
