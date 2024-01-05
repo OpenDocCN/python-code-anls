@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\80_Slots\python\slots.py`
+# `80_Slots\python\slots.py`
 
 ```
 这部分代码是一个注释块，用于说明程序的功能和背景信息。它描述了老虎机的工作原理和历史，以及一些相关的历史背景信息。这些注释并不直接与代码功能相关，而是提供了一些背景知识。

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\java\oop\Wheel.java`
+# `75_Roulette\java\oop\Wheel.java`
 
 ```
 import java.util.Arrays; // 导入 Arrays 类，用于操作数组

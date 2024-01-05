@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\76_Russian_Roulette\java\src\RussianRoulette.java`
+# `76_Russian_Roulette\java\src\RussianRoulette.java`
 
 ```
 # 导入 java.util.Arrays 包

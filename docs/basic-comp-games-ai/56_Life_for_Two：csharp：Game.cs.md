@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\csharp\Game.cs`
+# `56_Life_for_Two\csharp\Game.cs`
 
 ```
 internal class Game

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\GermanySide.cs`
+# `12_Bombs_Away\csharp\BombsAwayGame\GermanySide.cs`
 
 ```
 /// <summary>

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\csharp\tictactoe1\Program.cs`
+# `89_Tic-Tac-Toe\csharp\tictactoe1\Program.cs`
 
 ```
 # See https://aka.ms/new-console-template for more information

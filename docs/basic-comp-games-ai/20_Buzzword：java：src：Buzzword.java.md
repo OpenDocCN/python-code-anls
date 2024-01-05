@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\20_Buzzword\java\src\Buzzword.java`
+# `20_Buzzword\java\src\Buzzword.java`
 
 ```
 # 导入 Scanner 类

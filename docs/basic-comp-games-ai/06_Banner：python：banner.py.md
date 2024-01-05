@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\06_Banner\python\banner.py`
+# `06_Banner\python\banner.py`
 
 ```
 #!/usr/bin/env python3

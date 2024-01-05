@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\GameSeries.cs`
+# `46_Hexapawn\csharp\GameSeries.cs`
 
 ```
 using System.Collections.Generic; // 导入用于定义和操作泛型集合的命名空间

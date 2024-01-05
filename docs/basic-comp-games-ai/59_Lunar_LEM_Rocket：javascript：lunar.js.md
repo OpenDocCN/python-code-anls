@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\59_Lunar_LEM_Rocket\javascript\lunar.js`
+# `59_Lunar_LEM_Rocket\javascript\lunar.js`
 
 ```
 // 创建一个新的 Promise 对象，用于处理异步操作

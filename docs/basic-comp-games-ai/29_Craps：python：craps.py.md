@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\29_Craps\python\craps.py`
+# `29_Craps\python\craps.py`
 
 ```
 #!/usr/bin/env python3

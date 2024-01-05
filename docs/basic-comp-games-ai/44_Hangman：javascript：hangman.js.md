@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\44_Hangman\javascript\hangman.js`
+# `44_Hangman\javascript\hangman.js`
 
 ```
 // HANGMAN

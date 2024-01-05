@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\csharp\GameBase.cs`
+# `05_Bagels\csharp\GameBase.cs`
 
 ```
 # 使用 System 命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Players\Player.cs`
+# `71_Poker\csharp\Players\Player.cs`
 
 ```
 using Poker.Cards;  # 导入Poker.Cards模块

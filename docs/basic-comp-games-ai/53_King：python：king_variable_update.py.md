@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\python\king_variable_update.py`
+# `53_King\python\king_variable_update.py`
 
 ```
 bio = BytesIO(open(fname, 'rb').read())  # 根据 ZIP 文件名读取其二进制，封装成字节流

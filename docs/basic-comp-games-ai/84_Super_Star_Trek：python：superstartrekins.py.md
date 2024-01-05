@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\python\superstartrekins.py`
+# `84_Super_Star_Trek\python\superstartrekins.py`
 
 ```
 """

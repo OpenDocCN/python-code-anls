@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\76_Russian_Roulette\javascript\russianroulette.js`
+# `76_Russian_Roulette\javascript\russianroulette.js`
 
 ```
 # RUSSIAN ROULETTE

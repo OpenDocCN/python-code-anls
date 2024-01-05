@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\48_High_IQ\java\src\HighIQ.java`
+# `48_High_IQ\java\src\HighIQ.java`
 
 ```
 # 导入所需的模块

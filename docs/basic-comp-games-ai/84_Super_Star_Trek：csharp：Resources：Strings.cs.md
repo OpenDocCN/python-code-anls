@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Resources\Strings.cs`
+# `84_Super_Star_Trek\csharp\Resources\Strings.cs`
 
 ```
 # 使用 System.IO 命名空间中的类来操作文件和目录

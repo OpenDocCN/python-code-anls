@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\Angle.cs`
+# `86_Target\csharp\Angle.cs`
 
 ```
 namespace Target

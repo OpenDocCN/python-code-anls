@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\32_Diamond\csharp\Pattern.cs`
+# `32_Diamond\csharp\Pattern.cs`
 
 ```
 using System.Text;  # 导入 System.Text 模块，用于处理文本数据

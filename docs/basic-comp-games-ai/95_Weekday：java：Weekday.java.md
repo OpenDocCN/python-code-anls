@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\95_Weekday\java\Weekday.java`
+# `95_Weekday\java\Weekday.java`
 
 ```
 import java.util.Scanner;  // 导入 Scanner 类，用于从控制台读取输入

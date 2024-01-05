@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\18_Bullseye\python\bullseye.py`
+# `18_Bullseye\python\bullseye.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

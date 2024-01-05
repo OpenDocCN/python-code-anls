@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\python\war.py`
+# `94_War\python\war.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本的解释器为 Python3

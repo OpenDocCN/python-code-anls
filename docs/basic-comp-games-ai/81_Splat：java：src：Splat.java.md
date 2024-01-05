@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\81_Splat\java\src\Splat.java`
+# `81_Splat\java\src\Splat.java`
 
 ```
 import java.util.*;  // 导入 Java 的工具包

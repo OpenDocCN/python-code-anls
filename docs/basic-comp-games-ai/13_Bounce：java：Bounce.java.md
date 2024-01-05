@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\java\Bounce.java`
+# `13_Bounce\java\Bounce.java`
 
 ```
 import java.util.Scanner;  # 导入 Scanner 类，用于用户输入

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Extensions\RandomExtensions.cs`
+# `77_Salvo\csharp\Extensions\RandomExtensions.cs`
 
 ```
 namespace Games.Common.Randomness;

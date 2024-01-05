@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\57_Literature_Quiz\csharp\litquiz.cs`
+# `57_Literature_Quiz\csharp\litquiz.cs`
 
 ```
 # 导入系统模块

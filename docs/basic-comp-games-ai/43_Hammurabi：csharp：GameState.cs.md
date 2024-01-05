@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\GameState.cs`
+# `43_Hammurabi\csharp\GameState.cs`
 
 ```
         public int PopulationIncrease { get; init; }

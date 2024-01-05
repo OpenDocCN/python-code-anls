@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\ValidityTest.cs`
+# `53_King\csharp\ValidityTest.cs`
 
 ```
 namespace King;  # 命名空间声明

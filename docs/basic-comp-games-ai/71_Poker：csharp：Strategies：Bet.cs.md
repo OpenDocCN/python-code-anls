@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Strategies\Bet.cs`
+# `71_Poker\csharp\Strategies\Bet.cs`
 
 ```
 # 命名空间为Poker.Strategies

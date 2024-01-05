@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\csharp\Program.cs`
+# `01_Acey_Ducey\csharp\Program.cs`
 
 ```
 # 创建一个名为AceyDucey的命名空间

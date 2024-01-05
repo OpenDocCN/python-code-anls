@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\csharp\ConsoleUtils.cs`
+# `27_Civil_War\csharp\ConsoleUtils.cs`
 
 ```
 # 引入命名空间

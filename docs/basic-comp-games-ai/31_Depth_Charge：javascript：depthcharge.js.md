@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\31_Depth_Charge\javascript\depthcharge.js`
+# `31_Depth_Charge\javascript\depthcharge.js`
 
 ```
 # DEPTH CHARGE

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Strategies\Check.cs`
+# `71_Poker\csharp\Strategies\Check.cs`
 
 ```
 namespace Poker.Strategies;  # 命名空间声明，表示该类属于Poker.Strategies命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Winner.cs`
+# `77_Salvo\csharp\Winner.cs`
 
 ```
 # 定义名为 Salvo 的命名空间

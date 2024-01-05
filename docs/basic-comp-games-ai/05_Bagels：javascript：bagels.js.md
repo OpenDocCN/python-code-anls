@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\javascript\bagels.js`
+# `05_Bagels\javascript\bagels.js`
 
 ```
 // BAGELS

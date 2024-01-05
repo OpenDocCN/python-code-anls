@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\93_23_Matches\java\TwentyThreeMatches.java`
+# `93_23_Matches\java\TwentyThreeMatches.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

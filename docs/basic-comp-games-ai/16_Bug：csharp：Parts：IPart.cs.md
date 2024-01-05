@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\IPart.cs`
+# `16_Bug\csharp\Parts\IPart.cs`
 
 ```
 # 定义命名空间 BugGame.Parts

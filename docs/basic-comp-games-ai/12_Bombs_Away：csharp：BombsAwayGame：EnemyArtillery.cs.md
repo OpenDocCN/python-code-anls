@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\EnemyArtillery.cs`
+# `12_Bombs_Away\csharp\BombsAwayGame\EnemyArtillery.cs`
 
 ```
 # 创建一个内部记录类，表示敌方炮兵

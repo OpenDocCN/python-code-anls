@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\JapanSide.cs`
+# `12_Bombs_Away\csharp\BombsAwayGame\JapanSide.cs`
 
 ```
 // 命名空间声明，指明该类所属的命名空间

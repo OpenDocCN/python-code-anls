@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\11_Bombardment\javascript\bombardment.js`
+# `11_Bombardment\javascript\bombardment.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出文本

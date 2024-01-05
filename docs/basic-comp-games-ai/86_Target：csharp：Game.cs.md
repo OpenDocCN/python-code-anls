@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\Game.cs`
+# `86_Target\csharp\Game.cs`
 
 ```
 using System;  // 导入 System 命名空间

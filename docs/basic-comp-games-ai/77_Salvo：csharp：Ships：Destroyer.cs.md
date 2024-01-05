@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Ships\Destroyer.cs`
+# `77_Salvo\csharp\Ships\Destroyer.cs`
 
 ```
 namespace Salvo.Ships;  // 命名空间声明，表示该类属于Salvo.Ships命名空间

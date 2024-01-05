@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Program.cs`
+# `46_Hexapawn\csharp\Program.cs`
 
 ```
 # 导入 Games.Common.IO 模块中的所有内容

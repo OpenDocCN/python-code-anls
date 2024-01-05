@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Players\Computer.cs`
+# `71_Poker\csharp\Players\Computer.cs`
 
 ```
 using Poker.Cards;  // 导入Poker.Cards命名空间，以便使用其中的类

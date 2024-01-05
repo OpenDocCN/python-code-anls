@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\python\chomp.py`
+# `26_Chomp\python\chomp.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本解释器为 Python3

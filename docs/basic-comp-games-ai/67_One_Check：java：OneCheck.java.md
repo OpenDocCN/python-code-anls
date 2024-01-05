@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\67_One_Check\java\OneCheck.java`
+# `67_One_Check\java\OneCheck.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包

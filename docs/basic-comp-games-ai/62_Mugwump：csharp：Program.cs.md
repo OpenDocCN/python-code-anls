@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\Program.cs`
+# `62_Mugwump\csharp\Program.cs`
 
 ```
 # 导入 System 命名空间

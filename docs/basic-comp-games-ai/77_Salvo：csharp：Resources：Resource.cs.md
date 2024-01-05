@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Resources\Resource.cs`
+# `77_Salvo\csharp\Resources\Resource.cs`
 
 ```
 # 导入系统反射和运行时编译服务

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\76_Russian_Roulette\csharp\Program.cs`
+# `76_Russian_Roulette\csharp\Program.cs`
 
 ```
 // 打印游戏标题

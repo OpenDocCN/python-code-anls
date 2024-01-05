@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\javascript\chomp.js`
+# `26_Chomp\javascript\chomp.js`
 
 ```
 # 定义函数print，用于在页面上输出字符串

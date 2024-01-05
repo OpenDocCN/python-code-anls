@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\92_Trap\java\src\Trap.java`
+# `92_Trap\java\src\Trap.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

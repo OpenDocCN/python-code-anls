@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\src\Card.java`
+# `10_Blackjack\java\src\Card.java`
 
 ```
 /**

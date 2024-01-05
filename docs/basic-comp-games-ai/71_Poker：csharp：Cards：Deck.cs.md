@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\Deck.cs`
+# `71_Poker\csharp\Cards\Deck.cs`
 
 ```
 using static Poker.Cards.Rank;  # 导入Poker.Cards.Rank命名空间中的所有静态成员

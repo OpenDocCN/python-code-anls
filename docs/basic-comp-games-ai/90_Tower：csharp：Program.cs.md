@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\Program.cs`
+# `90_Tower\csharp\Program.cs`
 
 ```
 # 导入所需的命名空间和类

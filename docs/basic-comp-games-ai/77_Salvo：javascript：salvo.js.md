@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\javascript\salvo.js`
+# `77_Salvo\javascript\salvo.js`
 
 ```
 # SALVO

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfo.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\PortInfo.cs`
 
 ```
 // 使用静态类别名引入 System.IO.Directory 命名空间

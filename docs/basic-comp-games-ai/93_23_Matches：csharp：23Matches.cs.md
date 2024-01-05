@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\93_23_Matches\csharp\23Matches.cs`
+# `93_23_Matches\csharp\23Matches.cs`
 
 ```
 # Initialize 3 public variables so that they can be accessed anywhere in the code

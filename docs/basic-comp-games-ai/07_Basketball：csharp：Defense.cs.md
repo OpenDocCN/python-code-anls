@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Defense.cs`
+# `07_Basketball\csharp\Defense.cs`
 
 ```
 namespace Basketball;  # 命名空间声明，用于定义代码的作用域

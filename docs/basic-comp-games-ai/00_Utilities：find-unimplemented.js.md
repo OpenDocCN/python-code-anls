@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\find-unimplemented.js`
+# `00_Utilities\find-unimplemented.js`
 
 ```
 # Program to show unimplemented games by language, optionally filtered by language

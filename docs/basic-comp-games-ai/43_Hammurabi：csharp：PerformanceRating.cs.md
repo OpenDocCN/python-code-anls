@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\PerformanceRating.cs`
+# `43_Hammurabi\csharp\PerformanceRating.cs`
 
 ```
 // 命名空间 Hammurabi

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\View.cs`
+# `83_Stock_Market\csharp\View.cs`
 
 ```
 // 引入命名空间

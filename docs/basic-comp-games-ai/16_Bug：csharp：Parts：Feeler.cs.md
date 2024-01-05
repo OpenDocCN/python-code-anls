@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Feeler.cs`
+# `16_Bug\csharp\Parts\Feeler.cs`
 
 ```
 namespace BugGame.Parts;  // 声明命名空间 BugGame.Parts

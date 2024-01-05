@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\csharp\Matrix.cs`
+# `34_Digits\csharp\Matrix.cs`
 
 ```
 namespace Digits;

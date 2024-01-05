@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\MatchCompleted.cs`
+# `17_Bullfight\csharp\Events\MatchCompleted.cs`
 
 ```
 // 在 Game.Events 命名空间下定义了一个记录类型 MatchCompleted，表示战斗已经完成

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\ActionResult.cs`
+# `17_Bullfight\csharp\ActionResult.cs`
 
 ```
 // 引入命名空间

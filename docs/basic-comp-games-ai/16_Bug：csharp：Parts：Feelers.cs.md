@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Feelers.cs`
+# `16_Bug\csharp\Parts\Feelers.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，用于使用 StringBuilder 类

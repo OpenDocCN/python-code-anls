@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\68_Orbit\csharp\program.cs`
+# `68_Orbit\csharp\program.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间

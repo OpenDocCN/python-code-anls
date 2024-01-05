@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\Game.cs`
+# `62_Mugwump\csharp\Game.cs`
 
 ```
         # 显示游戏介绍

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Action.cs`
+# `17_Bullfight\csharp\Action.cs`
 
 ```
 /// <summary>

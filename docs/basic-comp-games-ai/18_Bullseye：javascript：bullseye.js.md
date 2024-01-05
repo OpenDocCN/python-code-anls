@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\18_Bullseye\javascript\bullseye.js`
+# `18_Bullseye\javascript\bullseye.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出内容

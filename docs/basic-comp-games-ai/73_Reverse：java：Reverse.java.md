@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\java\Reverse.java`
+# `73_Reverse\java\Reverse.java`
 
 ```
 import java.util.Scanner;  # 导入 Scanner 类，用于用户输入

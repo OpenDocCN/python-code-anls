@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\63_Name\csharp\StringExtensions.cs`
+# `63_Name\csharp\StringExtensions.cs`
 
 ```
         // 设置默认控制台宽度为120

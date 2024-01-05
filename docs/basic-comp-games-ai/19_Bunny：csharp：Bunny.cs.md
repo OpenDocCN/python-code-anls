@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\19_Bunny\csharp\Bunny.cs`
+# `19_Bunny\csharp\Bunny.cs`
 
 ```
 namespace Bunny

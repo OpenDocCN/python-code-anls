@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\java\Chomp.java`
+# `26_Chomp\java\Chomp.java`
 
 ```
 import java.util.Scanner;  # 导入 Scanner 类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\java\Poetry.java`
+# `70_Poetry\java\Poetry.java`
 
 ```
 /**

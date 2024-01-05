@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\IO\InsufficientInputException.cs`
+# `00_Common\dotnet\Games.Common\IO\InsufficientInputException.cs`
 
 ```
 # 定义命名空间为 Games.Common.IO

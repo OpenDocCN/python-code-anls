@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\76_Russian_Roulette\python\russianroulette.py`
+# `76_Russian_Roulette\python\russianroulette.py`
 
 ```
 """

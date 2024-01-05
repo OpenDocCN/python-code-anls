@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\Point.cs`
+# `86_Target\csharp\Point.cs`
 
 ```
         # 定义 Point 类，包含私有属性 _angleFromX、_angleFromZ、_x、_y、_z 和 _estimateCount

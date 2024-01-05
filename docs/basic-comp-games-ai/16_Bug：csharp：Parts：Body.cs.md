@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Body.cs`
+# `16_Bug\csharp\Parts\Body.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，用于处理字符串和文本

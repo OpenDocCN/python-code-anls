@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\81_Splat\csharp\Program.cs`
+# `81_Splat\csharp\Program.cs`
 
 ```
 // 命名空间 Splat

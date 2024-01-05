@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\python\bombs_away.py`
+# `12_Bombs_Away\python\bombs_away.py`
 
 ```
 """

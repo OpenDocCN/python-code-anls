@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\csharp\Reverse.Tests\TestReverser.cs`
+# `73_Reverse\csharp\Reverse.Tests\TestReverser.cs`
 
 ```
 # 定义一个内部类 TestReverser，继承自 Reverser 类

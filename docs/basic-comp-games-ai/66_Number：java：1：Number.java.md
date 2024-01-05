@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\66_Number\java\1\Number.java`
+# `66_Number\java\1\Number.java`
 
 ```
 import java.time.temporal.ValueRange;  // 导入 java.time.temporal.ValueRange 类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\42_Gunner\java\Gunner.java`
+# `42_Gunner\java\Gunner.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

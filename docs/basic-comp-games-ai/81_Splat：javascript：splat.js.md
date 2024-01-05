@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\81_Splat\javascript\splat.js`
+# `81_Splat\javascript\splat.js`
 
 ```
 // 定义一个名为print的函数，用于在页面上输出字符串

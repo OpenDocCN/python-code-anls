@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\24_Chemist\csharp\Program.cs`
+# `24_Chemist\csharp\Program.cs`
 
 ```
 // 常量定义，表示最大生命值

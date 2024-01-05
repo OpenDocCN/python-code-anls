@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\44_Hangman\csharp\Graphic.cs`
+# `44_Hangman\csharp\Graphic.cs`
 
 ```
             {

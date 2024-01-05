@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Extensions\RandomExtensions.cs`
+# `83_Stock_Market\csharp\Extensions\RandomExtensions.cs`
 
 ```
         /// The exclusive upper bound of the range to generate.

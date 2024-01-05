@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\88_3-D_Tic-Tac-Toe\javascript\qubit.js`
+# `88_3-D_Tic-Tac-Toe\javascript\qubit.js`
 
 ```
 // 创建一个名为print的函数，用于向页面输出字符串

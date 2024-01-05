@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\python\hamurabi.py`
+# `43_Hammurabi\python\hamurabi.py`
 
 ```
 from random import random, seed  # 从 random 模块中导入 random 和 seed 函数

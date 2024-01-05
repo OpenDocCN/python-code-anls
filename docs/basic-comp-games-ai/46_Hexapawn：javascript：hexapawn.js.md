@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\javascript\hexapawn.js`
+# `46_Hexapawn\javascript\hexapawn.js`
 
 ```
 // HEXAPAWN

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\javascript\target.js`
+# `86_Target\javascript\target.js`
 
 ```
 // 定义一个名为print的函数，用于在页面上输出文本

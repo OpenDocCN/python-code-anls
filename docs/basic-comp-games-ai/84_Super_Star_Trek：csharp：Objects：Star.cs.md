@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Objects\Star.cs`
+# `84_Super_Star_Trek\csharp\Objects\Star.cs`
 
 ```
 namespace SuperStarTrek.Objects;  # 命名空间声明，指定类所属的命名空间

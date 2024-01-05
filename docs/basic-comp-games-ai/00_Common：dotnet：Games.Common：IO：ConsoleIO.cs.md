@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\IO\ConsoleIO.cs`
+# `00_Common\dotnet\Games.Common\IO\ConsoleIO.cs`
 
 ```
 using System;  // 导入 System 命名空间，包含了 Console 类等

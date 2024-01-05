@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\Controller.cs`
+# `43_Hammurabi\csharp\Controller.cs`
 
 ```
         /// <param name="validator">

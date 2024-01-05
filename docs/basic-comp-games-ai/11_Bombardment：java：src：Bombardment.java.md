@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\11_Bombardment\java\src\Bombardment.java`
+# `11_Bombardment\java\src\Bombardment.java`
 
 ```
 import java.util.HashSet;  // 导入 HashSet 类

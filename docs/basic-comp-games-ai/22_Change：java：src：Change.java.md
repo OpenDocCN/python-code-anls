@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\22_Change\java\src\Change.java`
+# `22_Change\java\src\Change.java`
 
 ```
 import java.util.Arrays;

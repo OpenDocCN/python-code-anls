@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\java\oop\Roulette.java`
+# `75_Roulette\java\oop\Roulette.java`
 
 ```
 # 导入所需的包

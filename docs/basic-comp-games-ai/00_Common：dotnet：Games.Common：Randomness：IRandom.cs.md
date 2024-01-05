@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\Randomness\IRandom.cs`
+# `00_Common\dotnet\Games.Common\Randomness\IRandom.cs`
 
 ```
 namespace Games.Common.Randomness;

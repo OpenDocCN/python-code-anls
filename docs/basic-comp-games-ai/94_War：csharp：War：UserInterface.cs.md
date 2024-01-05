@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\csharp\War\UserInterface.cs`
+# `94_War\csharp\War\UserInterface.cs`
 
 ```
 // This class is responsible for displaying text to the user and handling user input.

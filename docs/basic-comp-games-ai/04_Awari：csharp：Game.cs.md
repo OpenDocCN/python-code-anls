@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\04_Awari\csharp\Game.cs`
+# `04_Awari\csharp\Game.cs`
 
 ```
 namespace Awari;

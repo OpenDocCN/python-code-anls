@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\78_Sine_Wave\java\src\SineWave.java`
+# `78_Sine_Wave\java\src\SineWave.java`
 
 ```
 /**

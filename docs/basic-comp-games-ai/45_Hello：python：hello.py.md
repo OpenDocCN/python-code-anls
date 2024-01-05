@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\45_Hello\python\hello.py`
+# `45_Hello\python\hello.py`
 
 ```
 """

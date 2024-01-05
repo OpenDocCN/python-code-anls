@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\csharp\Reverse.Tests\Generators\PositiveIntegerGenerator.cs`
+# `73_Reverse\csharp\Reverse.Tests\Generators\PositiveIntegerGenerator.cs`
 
 ```
 # 使用FsCheck库

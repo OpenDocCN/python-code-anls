@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\59_Lunar_LEM_Rocket\python\lunar.py`
+# `59_Lunar_LEM_Rocket\python\lunar.py`
 
 ```
 """

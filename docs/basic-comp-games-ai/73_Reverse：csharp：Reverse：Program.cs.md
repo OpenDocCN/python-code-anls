@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\csharp\Reverse\Program.cs`
+# `73_Reverse\csharp\Reverse\Program.cs`
 
 ```
 # 定义一个静态变量，表示数组的长度为9

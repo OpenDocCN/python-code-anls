@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\UI\Prompt.cs`
+# `90_Tower\csharp\UI\Prompt.cs`
 
 ```
 using System.Collections.Generic; // 导入 System.Collections.Generic 命名空间，用于使用 HashSet 类型

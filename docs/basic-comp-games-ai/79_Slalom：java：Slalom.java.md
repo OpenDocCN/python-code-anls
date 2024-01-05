@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\79_Slalom\java\Slalom.java`
+# `79_Slalom\java\Slalom.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

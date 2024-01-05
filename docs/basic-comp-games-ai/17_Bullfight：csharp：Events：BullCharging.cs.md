@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\BullCharging.cs`
+# `17_Bullfight\csharp\Events\BullCharging.cs`
 
 ```
 // 在 Game.Events 命名空间下定义了一个记录类型 BullCharging，表示公牛正在冲向玩家

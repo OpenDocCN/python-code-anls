@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\HandRank.cs`
+# `71_Poker\csharp\Cards\HandRank.cs`
 
 ```
 namespace Poker.Cards;

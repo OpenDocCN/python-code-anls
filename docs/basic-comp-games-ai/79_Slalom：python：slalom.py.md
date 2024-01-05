@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\79_Slalom\python\slalom.py`
+# `79_Slalom\python\slalom.py`
 
 ```
 from random import random  # 从 random 模块中导入 random 函数

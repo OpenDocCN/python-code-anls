@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\31_Depth_Charge\java\DepthCharge.java`
+# `31_Depth_Charge\java\DepthCharge.java`
 
 ```
 import java.util.Scanner;  # 导入 java.util.Scanner 包，用于用户输入

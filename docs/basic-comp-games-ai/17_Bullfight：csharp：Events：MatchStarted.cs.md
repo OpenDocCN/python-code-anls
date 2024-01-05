@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\MatchStarted.cs`
+# `17_Bullfight\csharp\Events\MatchStarted.cs`
 
 ```
 // 命名空间声明，指定了该类所属的命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\csharp\Resources\Resource.cs`
+# `75_Roulette\csharp\Resources\Resource.cs`
 
 ```
 # 导入所需的模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\54_Letter\csharp\Game.cs`
+# `54_Letter\csharp\Game.cs`
 
 ```
         /// <summary>

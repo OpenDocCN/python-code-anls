@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Commands\CommandExtensions.cs`
+# `84_Super_Star_Trek\csharp\Commands\CommandExtensions.cs`
 
 ```
 # 使用 System.Reflection 和 System.ComponentModel 模块

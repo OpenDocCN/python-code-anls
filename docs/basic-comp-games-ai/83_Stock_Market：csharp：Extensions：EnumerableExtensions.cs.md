@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Extensions\EnumerableExtensions.cs`
+# `83_Stock_Market\csharp\Extensions\EnumerableExtensions.cs`
 
 ```
         /// The type of the result elements.

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Bug.cs`
+# `16_Bug\csharp\Bug.cs`
 
 ```
 # 导入所需的模块

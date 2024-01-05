@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\csharp\StringBuilderExtensions.cs`
+# `58_Love\csharp\StringBuilderExtensions.cs`
 
 ```
 # 导入 BytesIO 类

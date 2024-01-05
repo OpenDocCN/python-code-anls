@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\csharp\Cookie.cs`
+# `26_Chomp\csharp\Cookie.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，以便在代码中使用其中的类和方法

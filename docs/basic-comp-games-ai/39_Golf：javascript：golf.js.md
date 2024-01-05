@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\39_Golf\javascript\golf.js`
+# `39_Golf\javascript\golf.js`
 
 ```
 # GOLF

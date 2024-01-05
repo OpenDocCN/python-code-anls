@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\64_Nicomachus\java\src\Nicomachus.java`
+# `64_Nicomachus\java\src\Nicomachus.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包

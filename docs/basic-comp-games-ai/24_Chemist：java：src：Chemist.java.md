@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\24_Chemist\java\src\Chemist.java`
+# `24_Chemist\java\src\Chemist.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包

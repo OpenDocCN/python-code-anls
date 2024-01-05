@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Systems\PhaserControl.cs`
+# `84_Super_Star_Trek\csharp\Systems\PhaserControl.cs`
 
 ```
 using System.Linq;  // 导入 System.Linq 命名空间，用于 LINQ 查询

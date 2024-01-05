@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\python\battle.py`
+# `09_Battle\python\battle.py`
 
 ```
         continue  # 继续循环直到找到非零向量

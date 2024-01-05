@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\11_Bombardment\go\main.go`
+# `00_Alternate_Languages\11_Bombardment\go\main.go`
 
 ```
 package main  // 声明当前文件属于 main 包

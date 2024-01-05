@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\57_Literature_Quiz\python\litquiz.py`
+# `57_Literature_Quiz\python\litquiz.py`
 
 ```
 """

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\csharp\Deck.cs`
+# `10_Blackjack\csharp\Deck.cs`
 
 ```
         # 创建一个新的牌堆对象

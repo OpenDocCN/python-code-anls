@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Extensions\IOExtensions.cs`
+# `77_Salvo\csharp\Extensions\IOExtensions.cs`
 
 ```
 namespace Games.Common.IO;  # 命名空间声明，指定代码所在的命名空间

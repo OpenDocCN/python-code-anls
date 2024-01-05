@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Cell.cs`
+# `46_Hexapawn\csharp\Cell.cs`
 
 ```
 // 使用 System 命名空间

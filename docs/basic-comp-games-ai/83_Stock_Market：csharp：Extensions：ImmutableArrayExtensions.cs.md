@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
+# `83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
 
 ```
         /// The source immutable array.

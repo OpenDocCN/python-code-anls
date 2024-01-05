@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\java\Battle.java`
+# `09_Battle\java\Battle.java`
 
 ```
 import java.io.IOException;  // 导入处理输入输出异常的类

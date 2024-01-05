@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\IRandomExtensions.cs`
+# `07_Basketball\csharp\IRandomExtensions.cs`
 
 ```
 using Games.Common.Randomness;  # 导入 Games.Common.Randomness 命名空间，以便使用其中的类和方法

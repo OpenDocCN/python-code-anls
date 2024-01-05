@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\33_Dice\python\dice.py`
+# `33_Dice\python\dice.py`
 
 ```
 # 定义一个名为 Dice 的字符串

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\javascript\war.js`
+# `94_War\javascript\war.js`
 
 ```
 // 定义一个名为print的函数，用于将字符串输出到页面上

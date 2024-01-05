@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Company.cs`
+# `83_Stock_Market\csharp\Company.cs`
 
 ```
         public decimal SharePrice { get; }

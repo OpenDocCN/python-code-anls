@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\javascript\mugwump.js`
+# `62_Mugwump\javascript\mugwump.js`
 
 ```
 # 定义函数print，用于在页面上输出字符串

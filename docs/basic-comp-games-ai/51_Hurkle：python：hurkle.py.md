@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\python\hurkle.py`
+# `51_Hurkle\python\hurkle.py`
 
 ```
 #!/usr/bin/env python3

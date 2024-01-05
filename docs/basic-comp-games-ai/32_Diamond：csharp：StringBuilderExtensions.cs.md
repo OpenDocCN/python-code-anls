@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\32_Diamond\csharp\StringBuilderExtensions.cs`
+# `32_Diamond\csharp\StringBuilderExtensions.cs`
 
 ```
 # 使用 System.Text 命名空间

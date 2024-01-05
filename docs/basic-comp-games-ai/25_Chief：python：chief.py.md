@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\25_Chief\python\chief.py`
+# `25_Chief\python\chief.py`
 
 ```
 def print_lightning_bolt() -> None:

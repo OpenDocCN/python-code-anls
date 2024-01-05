@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Scoreboard.cs`
+# `07_Basketball\csharp\Scoreboard.cs`
 
 ```
 using Basketball.Resources;  // 导入篮球资源

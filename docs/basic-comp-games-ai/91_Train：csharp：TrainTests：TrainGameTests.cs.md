@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\91_Train\csharp\TrainTests\TrainGameTests.cs`
+# `91_Train\csharp\TrainTests\TrainGameTests.cs`
 
 ```
 using Train;  // 导入 Train 命名空间，以便使用 TrainGame 类

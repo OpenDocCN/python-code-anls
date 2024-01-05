@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\92_Trap\python\trap.py`
+# `92_Trap\python\trap.py`
 
 ```
 #!/usr/bin/env python3

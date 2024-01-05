@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\64_Nicomachus\csharp\program.cs`
+# `64_Nicomachus\csharp\program.cs`
 
 ```
             # 显示提示信息

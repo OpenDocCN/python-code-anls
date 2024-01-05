@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Shot.cs`
+# `07_Basketball\csharp\Shot.cs`
 
 ```
 namespace Basketball;  # 命名空间声明，定义了代码所在的命名空间

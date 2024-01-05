@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\32_Diamond\javascript\diamond.js`
+# `32_Diamond\javascript\diamond.js`
 
 ```
 // 创建一个名为print的函数，用于在页面上输出文本

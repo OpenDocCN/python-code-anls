@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\96_Word\csharp\Program.cs`
+# `96_Word\csharp\Program.cs`
 
 ```
         // 在这里列出了可能被选为获胜单词的潜在单词列表。

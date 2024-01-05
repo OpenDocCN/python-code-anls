@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\06_Banner\java\Banner.java`
+# `06_Banner\java\Banner.java`
 
 ```
 import java.util.Scanner;  # 导入 Scanner 类，用于用户输入

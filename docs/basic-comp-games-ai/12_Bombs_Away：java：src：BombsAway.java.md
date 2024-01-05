@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\java\src\BombsAway.java`
+# `12_Bombs_Away\java\src\BombsAway.java`
 
 ```
 import java.util.Scanner;

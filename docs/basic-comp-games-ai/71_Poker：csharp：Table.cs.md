@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Table.cs`
+# `71_Poker\csharp\Table.cs`
 
 ```
 using Poker.Cards;  # 导入Poker.Cards模块，用于处理扑克牌相关的操作

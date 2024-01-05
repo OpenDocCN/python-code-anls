@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\java\Mastermind.java`
+# `60_Mastermind\java\Mastermind.java`
 
 ```
 # 导入所需的 Java 类库

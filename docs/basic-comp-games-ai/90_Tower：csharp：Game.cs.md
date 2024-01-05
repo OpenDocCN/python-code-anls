@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\Game.cs`
+# `90_Tower\csharp\Game.cs`
 
 ```
 # 导入必要的模块

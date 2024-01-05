@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\04_Awari\python\awari.py`
+# `04_Awari\python\awari.py`
 
 ```
 """

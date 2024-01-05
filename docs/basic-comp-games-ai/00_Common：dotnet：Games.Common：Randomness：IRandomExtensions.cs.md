@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\Randomness\IRandomExtensions.cs`
+# `00_Common\dotnet\Games.Common\Randomness\IRandomExtensions.cs`
 
 ```
 using System; // 导入 System 命名空间

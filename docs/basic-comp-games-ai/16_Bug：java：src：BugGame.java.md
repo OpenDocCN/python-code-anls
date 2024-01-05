@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\java\src\BugGame.java`
+# `16_Bug\java\src\BugGame.java`
 
 ```
 # 定义 BugGame 类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Program.cs`
+# `17_Bullfight\csharp\Program.cs`
 
 ```
 // 创建一个 Mediator 实例

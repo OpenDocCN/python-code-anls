@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Quality.cs`
+# `17_Bullfight\csharp\Quality.cs`
 
 ```
 // 声明一个枚举类型，用于列举游戏中不同的质量级别

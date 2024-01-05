@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\02_Amazing\csharp\Amazing.cs`
+# `02_Amazing\csharp\Amazing.cs`
 
 ```
             # 使用逗号分隔文本，将其分割成字符串数组

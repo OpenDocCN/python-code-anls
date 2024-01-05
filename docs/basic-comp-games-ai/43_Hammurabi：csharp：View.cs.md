@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\View.cs`
+# `43_Hammurabi\csharp\View.cs`
 
 ```
 // 命名空间 Hammurabi

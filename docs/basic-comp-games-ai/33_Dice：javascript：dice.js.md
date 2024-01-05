@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\33_Dice\javascript\dice.js`
+# `33_Dice\javascript\dice.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出字符串

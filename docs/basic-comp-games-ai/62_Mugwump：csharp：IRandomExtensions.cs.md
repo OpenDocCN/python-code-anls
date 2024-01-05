@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\IRandomExtensions.cs`
+# `62_Mugwump\csharp\IRandomExtensions.cs`
 
 ```
 # 定义命名空间 Mugwump

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\csharp\Resources\Resource.cs`
+# `70_Poetry\csharp\Resources\Resource.cs`
 
 ```
 # 导入必要的模块

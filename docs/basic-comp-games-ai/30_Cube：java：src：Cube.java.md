@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\30_Cube\java\src\Cube.java`
+# `30_Cube\java\src\Cube.java`
 
 ```
 import java.io.PrintStream;  # 导入打印流类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\AttackStrategy.cs`
+# `15_Boxing\csharp\AttackStrategy.cs`
 
 ```
     // 定义一个名为 Boxing 的命名空间

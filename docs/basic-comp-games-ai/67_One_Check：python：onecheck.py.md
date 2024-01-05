@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\67_One_Check\python\onecheck.py`
+# `67_One_Check\python\onecheck.py`
 
 ```
 """

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\java\src\ComputerBug.java`
+# `16_Bug\java\src\ComputerBug.java`
 
 ```
 public class ComputerBug extends Insect {

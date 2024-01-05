@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.h`
+# `00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.h`
 
 ```
 #pragma once  // 防止头文件被多次包含

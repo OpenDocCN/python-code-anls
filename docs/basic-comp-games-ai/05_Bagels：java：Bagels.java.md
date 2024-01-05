@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\java\Bagels.java`
+# `05_Bagels\java\Bagels.java`
 
 ```
 # 打开一个 ZIP 文件并读取其中的内容，返回文件名到数据的字典

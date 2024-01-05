@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\csharp\Program.cs`
+# `27_Civil_War\csharp\Program.cs`
 
 ```
 var options = GameOptions.Input(); // 从用户输入获取游戏选项

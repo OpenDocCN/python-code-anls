@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\02_Amazing\java\Amazing.java`
+# `02_Amazing\java\Amazing.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

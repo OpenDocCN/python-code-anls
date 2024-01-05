@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\javascript\tictactoe1.js`
+# `89_Tic-Tac-Toe\javascript\tictactoe1.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出文本

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\47_Hi-Lo\go\main.go`
+# `00_Alternate_Languages\47_Hi-Lo\go\main.go`
 
 ```
 package main  // 声明包名为 main

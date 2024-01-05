@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\IO\IReadWrite.cs`
+# `00_Common\dotnet\Games.Common\IO\IReadWrite.cs`
 
 ```
 using Games.Common.Numbers; // 导入 Games.Common.Numbers 命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\csharp\Resources\Resource.cs`
+# `72_Queen\csharp\Resources\Resource.cs`
 
 ```
 # 导入必要的模块

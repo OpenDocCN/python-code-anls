@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Resources\Resource.cs`
+# `07_Basketball\csharp\Resources\Resource.cs`
 
 ```
 # 引入必要的模块

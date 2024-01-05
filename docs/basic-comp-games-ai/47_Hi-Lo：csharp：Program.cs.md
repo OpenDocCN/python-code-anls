@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\47_Hi-Lo\csharp\Program.cs`
+# `47_Hi-Lo\csharp\Program.cs`
 
 ```
 // 输出一行空格和"HI LO"字符串

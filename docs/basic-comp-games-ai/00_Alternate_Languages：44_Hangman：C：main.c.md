@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\44_Hangman\C\main.c`
+# `00_Alternate_Languages\44_Hangman\C\main.c`
 
 ```
 #include <stdio.h>  // 包含标准输入输出库

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\python\acey_ducey_oo.py`
+# `01_Acey_Ducey\python\acey_ducey_oo.py`
 
 ```
 """

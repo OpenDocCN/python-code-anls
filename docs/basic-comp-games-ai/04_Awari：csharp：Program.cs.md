@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\04_Awari\csharp\Program.cs`
+# `04_Awari\csharp\Program.cs`
 
 ```
 # 使用 Awari 命名空间中的 Tab 方法打印 AWARI 字样

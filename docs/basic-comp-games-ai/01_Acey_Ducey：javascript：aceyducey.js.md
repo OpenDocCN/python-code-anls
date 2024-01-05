@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\javascript\aceyducey.js`
+# `01_Acey_Ducey\javascript\aceyducey.js`
 
 ```
 // UTILITY VARIABLES

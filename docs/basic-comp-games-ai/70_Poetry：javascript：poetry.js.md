@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\javascript\poetry.js`
+# `70_Poetry\javascript\poetry.js`
 
 ```
 // 定义一个名为 print 的函数，用于向页面输出内容

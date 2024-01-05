@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\javascript\tower.js`
+# `90_Tower\javascript\tower.js`
 
 ```
 // 定义名为print的函数，用于向页面输出内容

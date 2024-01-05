@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\25_Chief\java\src\Chief.java`
+# `25_Chief\java\src\Chief.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包

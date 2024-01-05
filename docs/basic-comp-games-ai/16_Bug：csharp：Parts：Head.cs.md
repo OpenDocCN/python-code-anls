@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Head.cs`
+# `16_Bug\csharp\Parts\Head.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，用于使用其中的类和方法

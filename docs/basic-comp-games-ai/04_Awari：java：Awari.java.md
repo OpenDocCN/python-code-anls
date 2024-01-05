@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\04_Awari\java\Awari.java`
+# `04_Awari\java\Awari.java`
 
 ```
 import java.util.Scanner;  // 导入 Scanner 类，用于接收用户输入

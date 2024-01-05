@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\PartCollection.cs`
+# `16_Bug\csharp\Parts\PartCollection.cs`
 
 ```
 # 使用 System.Text 和 BugGame.Resources 命名空间

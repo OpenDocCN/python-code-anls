@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\csharp\GameResults.cs`
+# `14_Bowling\csharp\GameResults.cs`
 
 ```
 # 创建一个名为 GameResults 的类

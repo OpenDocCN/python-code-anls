@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\python\mugwump.py`
+# `62_Mugwump\python\mugwump.py`
 
 ```
 from math import sqrt  # 导入 sqrt 函数，用于计算平方根

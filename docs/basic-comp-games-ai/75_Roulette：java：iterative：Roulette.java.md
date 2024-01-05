@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\java\iterative\Roulette.java`
+# `75_Roulette\java\iterative\Roulette.java`
 
 ```
 import java.io.InputStream;  // 导入用于处理输入流的类

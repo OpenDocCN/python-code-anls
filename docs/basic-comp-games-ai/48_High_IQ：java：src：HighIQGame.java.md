@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\48_High_IQ\java\src\HighIQGame.java`
+# `48_High_IQ\java\src\HighIQGame.java`
 
 ```
 import java.util.Scanner;  // 导入 Scanner 类，用于从控制台读取输入

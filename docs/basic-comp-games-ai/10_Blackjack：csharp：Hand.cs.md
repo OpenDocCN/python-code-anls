@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\csharp\Hand.cs`
+# `10_Blackjack\csharp\Hand.cs`
 
 ```
         // 使用给定的卡片添加到手牌中

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\32_Diamond\java\Diamond.java`
+# `32_Diamond\java\Diamond.java`
 
 ```
 import java.util.Scanner;  # 导入 java.util.Scanner 包

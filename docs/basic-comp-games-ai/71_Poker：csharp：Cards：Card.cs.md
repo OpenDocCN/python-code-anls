@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\Card.cs`
+# `71_Poker\csharp\Cards\Card.cs`
 
 ```
 namespace Poker.Cards;  // 声明命名空间为Poker.Cards，用于组织和管理代码

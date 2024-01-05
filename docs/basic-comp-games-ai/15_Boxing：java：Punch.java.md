@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\java\Punch.java`
+# `15_Boxing\java\Punch.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包，用于操作数组

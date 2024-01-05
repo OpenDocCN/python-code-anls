@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\python\bug.py`
+# `16_Bug\python\bug.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

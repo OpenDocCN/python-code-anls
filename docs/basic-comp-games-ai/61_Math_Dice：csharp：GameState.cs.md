@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\61_Math_Dice\csharp\GameState.cs`
+# `61_Math_Dice\csharp\GameState.cs`
 
 ```
 # 定义一个名为 MathDice 的命名空间

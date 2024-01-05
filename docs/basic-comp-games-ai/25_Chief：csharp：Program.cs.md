@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\25_Chief\csharp\Program.cs`
+# `25_Chief\csharp\Program.cs`
 
 ```
 # 导入 Games.Common.IO 模块

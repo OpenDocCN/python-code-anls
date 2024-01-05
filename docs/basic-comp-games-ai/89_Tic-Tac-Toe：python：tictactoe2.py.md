@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\python\tictactoe2.py`
+# `89_Tic-Tac-Toe\python\tictactoe2.py`
 
 ```
 #!/usr/bin/env python3  # 指定使用 Python3 解释器来执行该脚本

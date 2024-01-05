@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\python\Digits.py`
+# `34_Digits\python\Digits.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

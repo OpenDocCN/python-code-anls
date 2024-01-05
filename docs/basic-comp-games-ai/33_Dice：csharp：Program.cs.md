@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\33_Dice\csharp\Program.cs`
+# `33_Dice\csharp\Program.cs`
 
 ```
 // 命名空间 BasicComputerGames.Dice

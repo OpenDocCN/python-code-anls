@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\31_Depth_Charge\csharp\View.cs`
+# `31_Depth_Charge\csharp\View.cs`
 
 ```
 // 使用System命名空间

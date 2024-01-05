@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Commands\Command.cs`
+# `84_Super_Star_Trek\csharp\Commands\Command.cs`
 
 ```
 using System.ComponentModel;  # 导入 System.ComponentModel 模块

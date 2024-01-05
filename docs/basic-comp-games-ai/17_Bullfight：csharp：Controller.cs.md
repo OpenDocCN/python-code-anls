@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Controller.cs`
+# `17_Bullfight\csharp\Controller.cs`
 
 ```
 // 使用 System 命名空间

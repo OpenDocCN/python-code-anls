@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\95_Weekday\javascript\weekday.js`
+# `95_Weekday\javascript\weekday.js`
 
 ```
 // WEEKDAY

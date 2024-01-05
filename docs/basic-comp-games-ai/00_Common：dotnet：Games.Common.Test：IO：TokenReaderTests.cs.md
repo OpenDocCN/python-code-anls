@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenReaderTests.cs`
+# `00_Common\dotnet\Games.Common.Test\IO\TokenReaderTests.cs`
 
 ```
 # 导入所需的模块

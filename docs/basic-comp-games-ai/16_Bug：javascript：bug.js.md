@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\javascript\bug.js`
+# `16_Bug\javascript\bug.js`
 
 ```
 # BUG

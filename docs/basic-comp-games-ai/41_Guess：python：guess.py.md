@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\41_Guess\python\guess.py`
+# `41_Guess\python\guess.py`
 
 ```
 """

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\78_Sine_Wave\csharp\Program.cs`
+# `78_Sine_Wave\csharp\Program.cs`
 
 ```
 // 输出"Sine Wave"标题

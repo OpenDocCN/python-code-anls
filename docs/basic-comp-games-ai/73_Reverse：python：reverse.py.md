@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\python\reverse.py`
+# `73_Reverse\python\reverse.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本的解释器为 Python3

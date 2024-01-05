@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\Event.cs`
+# `17_Bullfight\csharp\Events\Event.cs`
 
 ```
 // 命名空间声明，指定代码所属的命名空间

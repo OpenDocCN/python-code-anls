@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\csharp\SourceCharacters.cs`
+# `58_Love\csharp\SourceCharacters.cs`
 
 ```
 using System;  # 导入 System 模块

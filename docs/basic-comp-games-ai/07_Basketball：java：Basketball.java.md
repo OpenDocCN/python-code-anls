@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\java\Basketball.java`
+# `07_Basketball\java\Basketball.java`
 
 ```
 # 导入 java.lang.Math 包

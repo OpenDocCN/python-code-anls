@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\36_Flip_Flop\javascript\flipflop.js`
+# `36_Flip_Flop\javascript\flipflop.js`
 
 ```
 # FLIPFLOP

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\test\DeckTest.java`
+# `10_Blackjack\java\test\DeckTest.java`
 
 ```
 import static org.junit.jupiter.api.Assertions.assertEquals;  // 导入静态的 assertEquals 方法

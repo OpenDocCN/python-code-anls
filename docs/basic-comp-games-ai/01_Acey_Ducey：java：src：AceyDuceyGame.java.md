@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\java\src\AceyDuceyGame.java`
+# `01_Acey_Ducey\java\src\AceyDuceyGame.java`
 
 ```
 /**

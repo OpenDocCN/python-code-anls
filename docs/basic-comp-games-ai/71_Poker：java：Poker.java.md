@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\java\Poker.java`
+# `71_Poker\java\Poker.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

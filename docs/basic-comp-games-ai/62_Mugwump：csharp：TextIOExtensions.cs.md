@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\TextIOExtensions.cs`
+# `62_Mugwump\csharp\TextIOExtensions.cs`
 
 ```
 namespace Mugwump; // 命名空间声明

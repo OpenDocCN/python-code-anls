@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenizerTests.cs`
+# `00_Common\dotnet\Games.Common.Test\IO\TokenizerTests.cs`
 
 ```
     using System.Linq;  # 导入 System.Linq 模块，用于对集合进行查询和操作

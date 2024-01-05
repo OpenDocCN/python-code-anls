@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\csharp\Program.cs`
+# `26_Chomp\csharp\Program.cs`
 
 ```
 # 引入 Games.Common.IO 命名空间

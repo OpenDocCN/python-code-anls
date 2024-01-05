@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\java\src\Board.java`
+# `89_Tic-Tac-Toe\java\src\Board.java`
 
 ```
         // 在指定位置上放置玩家的标记

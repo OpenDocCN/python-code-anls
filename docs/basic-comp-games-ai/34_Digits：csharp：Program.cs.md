@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\csharp\Program.cs`
+# `34_Digits\csharp\Program.cs`
 
 ```
 # 导入 Digits 命名空间

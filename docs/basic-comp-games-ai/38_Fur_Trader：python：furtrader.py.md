@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\python\furtrader.py`
+# `38_Fur_Trader\python\furtrader.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本解释器为 Python3

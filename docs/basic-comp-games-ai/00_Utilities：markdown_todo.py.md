@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\markdown_todo.py`
+# `00_Utilities\markdown_todo.py`
 
 ```
     checklist = checklist_orig.copy()  # 复制输入的检查列表

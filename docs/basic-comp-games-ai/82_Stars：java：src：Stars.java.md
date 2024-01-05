@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\82_Stars\java\src\Stars.java`
+# `82_Stars\java\src\Stars.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\Resources\Strings.cs`
+# `90_Tower\csharp\Resources\Strings.cs`
 
 ```
 // 引入命名空间

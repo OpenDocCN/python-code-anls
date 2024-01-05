@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\javascript\hurkle.js`
+# `51_Hurkle\javascript\hurkle.js`
 
 ```
 // BATNUM

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\Boxer.cs`
+# `15_Boxing\csharp\Boxer.cs`
 
 ```
     // 设置拳击手的姓名

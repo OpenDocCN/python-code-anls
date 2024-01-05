@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Team.cs`
+# `07_Basketball\csharp\Team.cs`
 
 ```
 using Basketball.Plays;  # 导入 Basketball.Plays 模块

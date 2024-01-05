@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\69_Pizza\python\pizza.py`
+# `69_Pizza\python\pizza.py`
 
 ```
 """

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\IReadWriteExtensions.cs`
+# `13_Bounce\csharp\IReadWriteExtensions.cs`
 
 ```
 namespace Bounce;  # 命名空间声明，定义了代码所在的命名空间

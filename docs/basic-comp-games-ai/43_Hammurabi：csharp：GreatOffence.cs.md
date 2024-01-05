@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\GreatOffence.cs`
+# `43_Hammurabi\csharp\GreatOffence.cs`
 
 ```
 # 创建一个新的命名空间 Hammurabi

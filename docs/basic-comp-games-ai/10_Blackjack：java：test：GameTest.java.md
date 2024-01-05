@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\test\GameTest.java`
+# `10_Blackjack\java\test\GameTest.java`
 
 ```
 # 导入 JUnit 的测试相关类

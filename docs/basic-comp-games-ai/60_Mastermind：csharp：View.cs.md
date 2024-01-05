@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\csharp\View.cs`
+# `60_Mastermind\csharp\View.cs`
 
 ```
 # 引入所需的模块

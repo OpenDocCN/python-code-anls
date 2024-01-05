@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\csharp\Bet.cs`
+# `75_Roulette\csharp\Bet.cs`
 
 ```
 namespace Roulette;  # 命名空间声明，用于组织和管理代码

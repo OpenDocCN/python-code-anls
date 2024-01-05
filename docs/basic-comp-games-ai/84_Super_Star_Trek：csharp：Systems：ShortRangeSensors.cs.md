@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Systems\ShortRangeSensors.cs`
+# `84_Super_Star_Trek\csharp\Systems\ShortRangeSensors.cs`
 
 ```
 {

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\IReadWriteExtensions.cs`
+# `71_Poker\csharp\IReadWriteExtensions.cs`
 
 ```
 using Poker.Strategies;  # 导入Poker.Strategies模块

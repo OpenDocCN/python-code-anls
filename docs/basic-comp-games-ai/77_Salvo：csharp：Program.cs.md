@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Program.cs`
+# `77_Salvo\csharp\Program.cs`
 
 ```
 # 导入 System 模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\Utils.cs`
+# `15_Boxing\csharp\Utils.cs`
 
 ```
 // 命名空间声明

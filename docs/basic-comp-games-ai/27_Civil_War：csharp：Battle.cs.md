@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\csharp\Battle.cs`
+# `27_Civil_War\csharp\Battle.cs`
 
 ```
     // 声明一个枚举类型，表示战争的一方

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\36_Flip_Flop\java\FlipFlop.java`
+# `36_Flip_Flop\java\FlipFlop.java`
 
 ```
 import java.util.Scanner;  # 导入 java.util.Scanner 包

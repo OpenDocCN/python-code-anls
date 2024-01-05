@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\Graph.cs`
+# `13_Bounce\csharp\Graph.cs`
 
 ```
 using System.Text; // 导入 System.Text 命名空间，提供对字符串操作的支持

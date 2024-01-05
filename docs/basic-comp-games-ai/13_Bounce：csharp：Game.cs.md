@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\Game.cs`
+# `13_Bounce\csharp\Game.cs`
 
 ```
 using static Bounce.Resources.Resource;  # 导入 Bounce 资源中的 Resource 类

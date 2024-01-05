@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\23_Checkers\javascript\checkers.js`
+# `23_Checkers\javascript\checkers.js`
 
 ```
 // 定义一个名为print的函数，用于在页面上输出字符串

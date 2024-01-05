@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\79_Slalom\javascript\slalom.js`
+# `79_Slalom\javascript\slalom.js`
 
 ```
 // SLALOM

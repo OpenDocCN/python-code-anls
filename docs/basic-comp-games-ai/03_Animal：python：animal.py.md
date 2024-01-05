@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\03_Animal\python\animal.py`
+# `03_Animal\python\animal.py`
 
 ```
 # 定义一个函数，根据 ZIP 文件名读取内容，返回其中文件名到数据的字典

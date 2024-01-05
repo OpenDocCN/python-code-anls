@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\java\BagelGame.java`
+# `05_Bagels\java\BagelGame.java`
 
 ```
 /******************************************************************************

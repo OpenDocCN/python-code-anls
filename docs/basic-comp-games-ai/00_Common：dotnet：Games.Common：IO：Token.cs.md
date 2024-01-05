@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\IO\Token.cs`
+# `00_Common\dotnet\Games.Common\IO\Token.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，用于操作字符串和文本

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\38_Fur_Trader\c\furtrader.c`
+# `00_Alternate_Languages\38_Fur_Trader\c\furtrader.c`
 
 ```
 /*

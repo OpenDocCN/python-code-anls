@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\88_3-D_Tic-Tac-Toe\csharp\Qubic.cs`
+# `88_3-D_Tic-Tac-Toe\csharp\Qubic.cs`
 
 ```
     //  - AI: the AI moved here.

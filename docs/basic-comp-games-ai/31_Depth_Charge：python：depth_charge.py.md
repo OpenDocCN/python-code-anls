@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\31_Depth_Charge\python\depth_charge.py`
+# `31_Depth_Charge\python\depth_charge.py`
 
 ```
 """

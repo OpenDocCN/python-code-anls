@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\javascript\queen.js`
+# `72_Queen\javascript\queen.js`
 
 ```
 # QUEEN

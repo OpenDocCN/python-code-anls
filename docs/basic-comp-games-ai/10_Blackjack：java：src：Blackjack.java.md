@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\src\Blackjack.java`
+# `10_Blackjack\java\src\Blackjack.java`
 
 ```
 import java.io.InputStreamReader; // 导入 InputStreamReader 类，用于读取字节流并将其解码为字符流

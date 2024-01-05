@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\IReadWriteExtensions.cs`
+# `07_Basketball\csharp\IReadWriteExtensions.cs`
 
 ```
 using Games.Common.IO;  // 导入 Games.Common.IO 命名空间

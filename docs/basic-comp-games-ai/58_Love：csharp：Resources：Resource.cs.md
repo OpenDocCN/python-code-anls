@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\csharp\Resources\Resource.cs`
+# `58_Love\csharp\Resources\Resource.cs`
 
 ```
 using System.IO;  // 导入 IO 类库，用于处理文件和流

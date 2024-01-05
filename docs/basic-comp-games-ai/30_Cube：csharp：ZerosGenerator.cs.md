@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\30_Cube\csharp\ZerosGenerator.cs`
+# `30_Cube\csharp\ZerosGenerator.cs`
 
 ```
 namespace Cube;  // 命名空间声明，定义了代码所在的命名空间

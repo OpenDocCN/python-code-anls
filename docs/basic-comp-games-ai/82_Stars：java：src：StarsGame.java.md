@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\82_Stars\java\src\StarsGame.java`
+# `82_Stars\java\src\StarsGame.java`
 
 ```
 # 导入 java.lang.reflect.AnnotatedType 模块

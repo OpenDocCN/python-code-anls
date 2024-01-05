@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\47_Hi-Lo\java\src\HiLo.java`
+# `47_Hi-Lo\java\src\HiLo.java`
 
 ```
 import java.util.Scanner; // 导入 Scanner 类，用于从控制台读取输入

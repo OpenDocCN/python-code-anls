@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\JumpShot.cs`
+# `07_Basketball\csharp\JumpShot.cs`
 
 ```
 # 命名空间 Basketball

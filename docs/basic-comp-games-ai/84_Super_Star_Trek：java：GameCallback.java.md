@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\java\GameCallback.java`
+# `84_Super_Star_Trek\java\GameCallback.java`
 
 ```
 /**

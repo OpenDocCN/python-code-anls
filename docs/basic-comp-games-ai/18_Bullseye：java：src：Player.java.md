@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\18_Bullseye\java\src\Player.java`
+# `18_Bullseye\java\src\Player.java`
 
 ```
     /**

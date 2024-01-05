@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\93_23_Matches\java\Messages.java`
+# `93_23_Matches\java\Messages.java`
 
 ```
 # This is a utility class and contains only static members.

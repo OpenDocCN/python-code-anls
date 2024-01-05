@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\44_Hangman\python\hangman.py`
+# `44_Hangman\python\hangman.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本的解释器为 Python 3

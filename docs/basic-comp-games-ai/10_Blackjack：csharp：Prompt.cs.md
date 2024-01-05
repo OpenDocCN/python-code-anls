@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\csharp\Prompt.cs`
+# `10_Blackjack\csharp\Prompt.cs`
 
 ```
 using System;  # 导入 System 模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\54_Letter\python\letter.py`
+# `54_Letter\python\letter.py`
 
 ```
 """

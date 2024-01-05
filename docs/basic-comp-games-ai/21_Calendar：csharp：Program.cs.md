@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\21_Calendar\csharp\Program.cs`
+# `21_Calendar\csharp\Program.cs`
 
 ```
                 //准备一个空字符串

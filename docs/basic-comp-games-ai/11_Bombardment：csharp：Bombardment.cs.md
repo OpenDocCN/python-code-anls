@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\11_Bombardment\csharp\Bombardment.cs`
+# `11_Bombardment\csharp\Bombardment.cs`
 
 ```
 # 导入系统模块

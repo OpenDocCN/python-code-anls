@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Board.cs`
+# `46_Hexapawn\csharp\Board.cs`
 
 ```
 # 导入所需的模块

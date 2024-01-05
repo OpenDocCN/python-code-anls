@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\LossViewModel.cs`
+# `51_Hurkle\csharp\LossViewModel.cs`
 
 ```
 namespace hurkle

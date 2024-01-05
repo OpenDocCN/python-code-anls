@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.cpp`
+# `00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.cpp`
 
 ```
 #include <iostream>

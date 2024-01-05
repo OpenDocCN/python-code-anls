@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\87_3-D_Plot\javascript\3dplot.js`
+# `87_3-D_Plot\javascript\3dplot.js`
 
 ```
 // 3D PLOT

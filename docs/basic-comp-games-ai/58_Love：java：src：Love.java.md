@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\java\src\Love.java`
+# `58_Love\java\src\Love.java`
 
 ```
 # 导入所需的模块

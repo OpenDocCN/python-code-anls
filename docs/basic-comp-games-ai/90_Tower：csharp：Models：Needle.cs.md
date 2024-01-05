@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\Models\Needle.cs`
+# `90_Tower\csharp\Models\Needle.cs`
 
 ```
         }

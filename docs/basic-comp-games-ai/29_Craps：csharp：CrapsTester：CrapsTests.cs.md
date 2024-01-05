@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\29_Craps\csharp\CrapsTester\CrapsTests.cs`
+# `29_Craps\csharp\CrapsTester\CrapsTests.cs`
 
 ```
 using Craps;  # 导入 Craps 模块

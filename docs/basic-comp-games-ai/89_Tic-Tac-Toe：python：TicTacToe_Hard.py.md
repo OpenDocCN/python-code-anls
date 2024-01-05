@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\python\TicTacToe_Hard.py`
+# `89_Tic-Tac-Toe\python\TicTacToe_Hard.py`
 
 ```
 from typing import List, Tuple, Union  # 导入类型提示模块

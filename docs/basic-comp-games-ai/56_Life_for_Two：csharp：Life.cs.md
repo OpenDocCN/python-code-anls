@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\csharp\Life.cs`
+# `56_Life_for_Two\csharp\Life.cs`
 
 ```
     // 获取当前代的结果

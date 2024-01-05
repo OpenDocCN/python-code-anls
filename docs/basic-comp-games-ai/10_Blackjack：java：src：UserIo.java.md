@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\src\UserIo.java`
+# `10_Blackjack\java\src\UserIo.java`
 
 ```
 import java.io.BufferedReader; // 导入用于读取字符流的类

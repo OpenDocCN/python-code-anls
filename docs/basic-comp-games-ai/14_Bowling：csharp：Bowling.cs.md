@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\csharp\Bowling.cs`
+# `14_Bowling\csharp\Bowling.cs`
 
 ```
 # 创建一个名为Bowling的命名空间

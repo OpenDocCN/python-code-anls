@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\csharp\Reverse.Tests\ReverserTests.cs`
+# `73_Reverse\csharp\Reverse.Tests\ReverserTests.cs`
 
 ```
 using FsCheck.Xunit;  # 导入 FsCheck.Xunit 模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\javascript\batnum.js`
+# `08_Batnum\javascript\batnum.js`
 
 ```
 // BATNUM

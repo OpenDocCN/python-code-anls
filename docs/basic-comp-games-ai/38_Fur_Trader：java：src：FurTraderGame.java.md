@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\java\src\FurTraderGame.java`
+# `38_Fur_Trader\java\src\FurTraderGame.java`
 
 ```
 # 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典

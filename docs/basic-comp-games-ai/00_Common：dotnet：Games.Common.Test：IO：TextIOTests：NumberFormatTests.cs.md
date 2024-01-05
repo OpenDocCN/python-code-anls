@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TextIOTests\NumberFormatTests.cs`
+# `00_Common\dotnet\Games.Common.Test\IO\TextIOTests\NumberFormatTests.cs`
 
 ```
 # 导入所需的模块

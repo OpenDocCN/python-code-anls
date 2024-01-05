@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\55_Life\java\src\java\Life.java`
+# `55_Life\java\src\java\Life.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

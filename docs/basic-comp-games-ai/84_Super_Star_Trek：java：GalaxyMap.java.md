@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\java\GalaxyMap.java`
+# `84_Super_Star_Trek\java\GalaxyMap.java`
 
 ```
 import java.util.stream.IntStream;  // 导入 Java 的 IntStream 类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\82_Stars\javascript\stars.js`
+# `82_Stars\javascript\stars.js`
 
 ```
 // 创建一个新的输入元素

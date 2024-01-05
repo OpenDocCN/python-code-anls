@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\csharp\ColorInfo.cs`
+# `60_Mastermind\csharp\ColorInfo.cs`
 
 ```
 // 声明一个命名空间 Game

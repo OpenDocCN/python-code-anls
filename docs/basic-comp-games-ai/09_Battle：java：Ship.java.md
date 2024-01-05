@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\java\Ship.java`
+# `09_Battle\java\Ship.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

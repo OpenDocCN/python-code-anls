@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\85_Synonym\javascript\synonym.js`
+# `85_Synonym\javascript\synonym.js`
 
 ```
 # 定义函数print，用于向页面输出内容

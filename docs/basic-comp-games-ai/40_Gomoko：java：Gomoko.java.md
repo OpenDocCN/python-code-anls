@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\40_Gomoko\java\Gomoko.java`
+# `40_Gomoko\java\Gomoko.java`
 
 ```
 import java.util.Arrays;  # 导入 Arrays 类，用于操作数组

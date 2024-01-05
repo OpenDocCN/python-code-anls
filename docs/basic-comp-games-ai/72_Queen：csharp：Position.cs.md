@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\csharp\Position.cs`
+# `72_Queen\csharp\Position.cs`
 
 ```
     {

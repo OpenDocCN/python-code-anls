@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\49_Hockey\python\hockey.py`
+# `49_Hockey\python\hockey.py`
 
 ```
 """

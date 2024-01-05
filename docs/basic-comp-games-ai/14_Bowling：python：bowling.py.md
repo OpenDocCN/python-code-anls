@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\python\bowling.py`
+# `14_Bowling\python\bowling.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

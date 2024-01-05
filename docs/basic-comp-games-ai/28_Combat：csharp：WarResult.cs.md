@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\WarResult.cs`
+# `28_Combat\csharp\WarResult.cs`
 
 ```
 // 命名空间 Game

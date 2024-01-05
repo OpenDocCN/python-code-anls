@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\44_Hangman\java\Hangman.java`
+# `44_Hangman\java\Hangman.java`
 
 ```
 import java.util.Arrays; // 导入 Arrays 类，用于操作数组

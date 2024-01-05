@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\FiringRange.cs`
+# `86_Target\csharp\FiringRange.cs`
 
 ```
 using Games.Common.Randomness;  # 导入 Games.Common.Randomness 命名空间，以便使用其中的类和方法

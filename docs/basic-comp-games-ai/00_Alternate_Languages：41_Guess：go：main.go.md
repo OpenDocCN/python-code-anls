@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\41_Guess\go\main.go`
+# `00_Alternate_Languages\41_Guess\go\main.go`
 
 ```
 # 导入所需的包

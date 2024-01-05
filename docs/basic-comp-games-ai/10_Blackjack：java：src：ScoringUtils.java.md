@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\src\ScoringUtils.java`
+# `10_Blackjack\java\src\ScoringUtils.java`
 
 ```
 import java.util.List;  // 导入 List 类

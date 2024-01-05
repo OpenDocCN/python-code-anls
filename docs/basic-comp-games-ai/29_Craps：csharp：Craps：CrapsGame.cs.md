@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\29_Craps\csharp\Craps\CrapsGame.cs`
+# `29_Craps\csharp\Craps\CrapsGame.cs`
 
 ```
 // 创建一个名为 Craps 的命名空间

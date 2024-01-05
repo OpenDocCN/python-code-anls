@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\41_Guess\javascript\guess.js`
+# `41_Guess\javascript\guess.js`
 
 ```
 # GUESS

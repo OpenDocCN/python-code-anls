@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\java\SuperStarTrekInstructions.java`
+# `84_Super_Star_Trek\java\SuperStarTrekInstructions.java`
 
 ```
 import java.io.BufferedReader; // 导入用于读取输入流的 BufferedReader 类

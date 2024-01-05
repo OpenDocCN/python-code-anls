@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\36_Flip_Flop\csharp\FlipFlop.cs`
+# `36_Flip_Flop\csharp\FlipFlop.cs`
 
 ```
 # Flip Flop Game

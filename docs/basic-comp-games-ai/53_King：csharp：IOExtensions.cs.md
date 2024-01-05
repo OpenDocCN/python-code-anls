@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\IOExtensions.cs`
+# `53_King\csharp\IOExtensions.cs`
 
 ```
 # 导入所需的模块

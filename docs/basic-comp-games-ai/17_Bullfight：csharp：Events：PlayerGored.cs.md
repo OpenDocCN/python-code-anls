@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\PlayerGored.cs`
+# `17_Bullfight\csharp\Events\PlayerGored.cs`
 
 ```
 // 在 Game.Events 命名空间下定义了一个事件记录，表示玩家被公牛顶到了

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\41_Guess\csharp\Resources\Resource.cs`
+# `41_Guess\csharp\Resources\Resource.cs`
 
 ```
 # 使用 System.Reflection 和 System.Runtime.CompilerServices 模块

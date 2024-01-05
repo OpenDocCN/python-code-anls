@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\35_Even_Wins\javascript\gameofevenwins.js`
+# `35_Even_Wins\javascript\gameofevenwins.js`
 
 ```
 // GAME OF EVEN WINS

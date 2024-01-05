@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\Ceasefire.cs`
+# `28_Combat\csharp\Ceasefire.cs`
 
 ```
 // 声明一个命名空间为 Game

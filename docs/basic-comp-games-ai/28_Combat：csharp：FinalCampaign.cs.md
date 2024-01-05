@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\FinalCampaign.cs`
+# `28_Combat\csharp\FinalCampaign.cs`
 
 ```
 // 命名空间 Game，表示游戏的命名空间

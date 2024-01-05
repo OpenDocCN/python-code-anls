@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Part.cs`
+# `16_Bug\csharp\Parts\Part.cs`
 
 ```
 using BugGame.Resources;  # 导入 BugGame.Resources 命名空间

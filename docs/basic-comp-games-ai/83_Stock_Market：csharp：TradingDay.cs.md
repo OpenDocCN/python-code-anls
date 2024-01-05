@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\TradingDay.cs`
+# `83_Stock_Market\csharp\TradingDay.cs`
 
 ```
 // 使用不可变集合命名空间

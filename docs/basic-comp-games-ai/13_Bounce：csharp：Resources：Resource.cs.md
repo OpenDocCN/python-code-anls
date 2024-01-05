@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\Resources\Resource.cs`
+# `13_Bounce\csharp\Resources\Resource.cs`
 
 ```
 # 导入必要的模块

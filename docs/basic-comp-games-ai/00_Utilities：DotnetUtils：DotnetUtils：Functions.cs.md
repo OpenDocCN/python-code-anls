@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Functions.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\Functions.cs`
 
 ```
 // 引入 System.Xml.Linq 命名空间

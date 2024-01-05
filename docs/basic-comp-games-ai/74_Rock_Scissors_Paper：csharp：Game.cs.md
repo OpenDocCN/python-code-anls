@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\csharp\Game.cs`
+# `74_Rock_Scissors_Paper\csharp\Game.cs`
 
 ```
             # 获取计算机的随机选择

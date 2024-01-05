@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\03_Animal\java\src\Animal.java`
+# `03_Animal\java\src\Animal.java`
 
 ```
 # 导入所需的模块

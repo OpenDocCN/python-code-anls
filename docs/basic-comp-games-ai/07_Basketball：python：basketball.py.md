@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\python\basketball.py`
+# `07_Basketball\python\basketball.py`
 
 ```
 # 导入 random 模块，用于生成随机数

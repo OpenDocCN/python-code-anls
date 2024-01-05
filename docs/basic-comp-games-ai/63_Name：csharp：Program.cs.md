@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\63_Name\csharp\Program.cs`
+# `63_Name\csharp\Program.cs`
 
 ```
 using System;

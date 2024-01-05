@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\21_Calendar\javascript\calendar.js`
+# `21_Calendar\javascript\calendar.js`
 
 ```
 // CALENDAR

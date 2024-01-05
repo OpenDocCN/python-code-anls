@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Program.cs`
+# `71_Poker\csharp\Program.cs`
 
 ```
 # 导入 Games.Common.IO 模块

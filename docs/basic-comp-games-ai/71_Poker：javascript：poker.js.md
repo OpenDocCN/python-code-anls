@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\javascript\poker.js`
+# `71_Poker\javascript\poker.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出内容

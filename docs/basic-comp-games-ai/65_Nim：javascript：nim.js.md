@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\65_Nim\javascript\nim.js`
+# `65_Nim\javascript\nim.js`
 
 ```
 // NIM

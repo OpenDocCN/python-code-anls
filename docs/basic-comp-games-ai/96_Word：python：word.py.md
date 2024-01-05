@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\96_Word\python\word.py`
+# `96_Word\python\word.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本的解释器为 Python 3

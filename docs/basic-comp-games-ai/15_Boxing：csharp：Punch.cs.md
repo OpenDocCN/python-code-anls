@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\Punch.cs`
+# `15_Boxing\csharp\Punch.cs`
 
 ```
 namespace Boxing;  # 命名空间声明，用于定义代码的作用域

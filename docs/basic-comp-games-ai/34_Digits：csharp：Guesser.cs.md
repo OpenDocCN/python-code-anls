@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\csharp\Guesser.cs`
+# `34_Digits\csharp\Guesser.cs`
 
 ```
 namespace Digits;  # 命名空间声明，定义了代码所在的命名空间

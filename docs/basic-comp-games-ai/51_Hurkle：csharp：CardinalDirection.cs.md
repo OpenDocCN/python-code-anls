@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\CardinalDirection.cs`
+# `51_Hurkle\csharp\CardinalDirection.cs`
 
 ```
 # 定义一个名为 hurkle 的命名空间

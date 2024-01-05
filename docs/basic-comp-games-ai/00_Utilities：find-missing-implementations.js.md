@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\find-missing-implementations.js`
+# `00_Utilities\find-missing-implementations.js`
 
 ```
 # Program to find games that are missing solutions in a given language

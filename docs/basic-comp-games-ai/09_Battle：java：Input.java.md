@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\java\Input.java`
+# `09_Battle\java\Input.java`
 
 ```
 import java.io.BufferedReader;  // 导入用于读取输入的 BufferedReader 类

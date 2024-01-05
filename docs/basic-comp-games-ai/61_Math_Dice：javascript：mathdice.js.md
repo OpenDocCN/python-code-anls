@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\61_Math_Dice\javascript\mathdice.js`
+# `61_Math_Dice\javascript\mathdice.js`
 
 ```
 // MATH DICE

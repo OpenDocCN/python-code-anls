@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\41_Guess\csharp\Game.cs`
+# `41_Guess\csharp\Game.cs`
 
 ```
 namespace Guess;  # 命名空间声明

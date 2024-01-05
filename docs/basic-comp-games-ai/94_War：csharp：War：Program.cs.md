@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\csharp\War\Program.cs`
+# `94_War\csharp\War\Program.cs`
 
 ```
             // 创建一个 UserInterface 对象

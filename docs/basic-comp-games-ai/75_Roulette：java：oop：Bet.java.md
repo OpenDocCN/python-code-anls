@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\java\oop\Bet.java`
+# `75_Roulette\java\oop\Bet.java`
 
 ```
 /* A bet has a target (the code entered, which is 1-36, or special values for

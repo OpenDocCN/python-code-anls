@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\Program.cs`
+# `28_Combat\csharp\Program.cs`
 
 ```
             // 显示游戏横幅

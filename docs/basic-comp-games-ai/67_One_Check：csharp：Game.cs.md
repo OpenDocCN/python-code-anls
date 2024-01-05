@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\67_One_Check\csharp\Game.cs`
+# `67_One_Check\csharp\Game.cs`
 
 ```
 namespace OneCheck;  # 命名空间声明

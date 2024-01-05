@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Offset.cs`
+# `77_Salvo\csharp\Offset.cs`
 
 ```
 namespace Salvo;  // 命名空间声明

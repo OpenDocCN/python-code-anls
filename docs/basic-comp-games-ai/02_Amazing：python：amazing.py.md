@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\02_Amazing\python\amazing.py`
+# `02_Amazing\python\amazing.py`
 
 ```
 import enum  # 导入枚举类型模块

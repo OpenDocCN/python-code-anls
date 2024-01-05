@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\87_3-D_Plot\java\Plot3D.java`
+# `87_3-D_Plot\java\Plot3D.java`
 
 ```
 import java.lang.Math;  # 导入 java.lang.Math 包，用于数学计算

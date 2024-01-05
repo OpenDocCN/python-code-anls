@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfos.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\PortInfos.cs`
 
 ```
 # 获取程序入口的程序集，获取其父目录的完整路径

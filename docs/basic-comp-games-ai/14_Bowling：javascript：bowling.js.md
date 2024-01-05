@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\javascript\bowling.js`
+# `14_Bowling\javascript\bowling.js`
 
 ```
 // 创建一个名为print的函数，用于向页面输出指定的字符串

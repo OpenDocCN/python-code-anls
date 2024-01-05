@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\csharp\Program.cs`
+# `56_Life_for_Two\csharp\Program.cs`
 
 ```
 global using Games.Common.IO;  // 导入 Games.Common.IO 命名空间

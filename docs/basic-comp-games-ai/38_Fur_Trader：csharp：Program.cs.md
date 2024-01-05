@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\csharp\Program.cs`
+# `38_Fur_Trader\csharp\Program.cs`
 
 ```
 // 导入 System 命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\csharp\GameOptions.cs`
+# `27_Civil_War\csharp\GameOptions.cs`
 
 ```
             if (Yes("Do you want instructions?"))

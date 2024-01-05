@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\35_Even_Wins\go\evenwins.go`
+# `00_Alternate_Languages\35_Even_Wins\go\evenwins.go`
 
 ```
 package main  // 声明当前文件属于 main 包

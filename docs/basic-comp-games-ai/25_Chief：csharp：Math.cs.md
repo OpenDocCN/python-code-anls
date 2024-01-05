@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\25_Chief\csharp\Math.cs`
+# `25_Chief\csharp\Math.cs`
 
 ```
 using static Chief.Resources.Resource;  // 导入 Chief.Resources.Resource 命名空间中的所有静态成员

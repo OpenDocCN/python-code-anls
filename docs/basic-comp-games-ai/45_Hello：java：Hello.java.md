@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\45_Hello\java\Hello.java`
+# `45_Hello\java\Hello.java`
 
 ```
 import java.util.Scanner;  # 导入 java.util.Scanner 包，用于接收用户输入

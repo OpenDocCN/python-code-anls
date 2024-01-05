@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\python\king.py`
+# `53_King\python\king.py`
 
 ```
 """

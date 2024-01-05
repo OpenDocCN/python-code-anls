@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Broker.cs`
+# `83_Stock_Market\csharp\Broker.cs`
 
 ```
 /// <summary>

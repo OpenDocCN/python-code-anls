@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\19_Bunny\java\src\Bunny.java`
+# `19_Bunny\java\src\Bunny.java`
 
 ```
 import java.util.ArrayList;  # 导入 ArrayList 类

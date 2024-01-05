@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\python\bounce.py`
+# `13_Bounce\python\bounce.py`
 
 ```
 """

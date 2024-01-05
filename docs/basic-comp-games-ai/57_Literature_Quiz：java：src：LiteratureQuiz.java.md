@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\57_Literature_Quiz\java\src\LiteratureQuiz.java`
+# `57_Literature_Quiz\java\src\LiteratureQuiz.java`
 
 ```
 import java.util.Arrays;

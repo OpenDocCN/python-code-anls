@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\67_One_Check\csharp\Board.cs`
+# `67_One_Check\csharp\Board.cs`
 
 ```
 namespace OneCheck;

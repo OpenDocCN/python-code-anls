@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\python\blackjack.py`
+# `10_Blackjack\python\blackjack.py`
 
 ```
 """

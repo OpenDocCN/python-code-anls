@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Game.cs`
+# `07_Basketball\csharp\Game.cs`
 
 ```
 using Basketball.Plays;  # 导入篮球比赛战术的相关代码

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\csharp\Game.cs`
+# `26_Chomp\csharp\Game.cs`
 
 ```
 namespace Chomp;  # 命名空间声明

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Ships\Ship.cs`
+# `77_Salvo\csharp\Ships\Ship.cs`
 
 ```
     // 声明一个私有的位置列表，用于存储船的位置信息

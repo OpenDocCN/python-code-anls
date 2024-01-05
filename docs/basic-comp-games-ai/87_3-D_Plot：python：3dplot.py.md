@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\87_3-D_Plot\python\3dplot.py`
+# `87_3-D_Plot\python\3dplot.py`
 
 ```
 #!/usr/bin/env python3

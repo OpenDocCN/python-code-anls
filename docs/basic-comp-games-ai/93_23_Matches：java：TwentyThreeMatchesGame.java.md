@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\93_23_Matches\java\TwentyThreeMatchesGame.java`
+# `93_23_Matches\java\TwentyThreeMatchesGame.java`
 
 ```
 /**

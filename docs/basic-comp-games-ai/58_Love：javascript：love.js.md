@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\javascript\love.js`
+# `58_Love\javascript\love.js`
 
 ```
 // 定义名为print的函数，用于向页面输出文本

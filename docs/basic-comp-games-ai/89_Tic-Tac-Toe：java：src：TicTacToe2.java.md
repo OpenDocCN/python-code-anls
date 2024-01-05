@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\java\src\TicTacToe2.java`
+# `89_Tic-Tac-Toe\java\src\TicTacToe2.java`
 
 ```
 import java.util.Scanner;  // 导入 Scanner 类，用于接收用户输入

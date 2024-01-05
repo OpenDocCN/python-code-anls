@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\82_Stars\csharp\Resources\Resource.cs`
+# `82_Stars\csharp\Resources\Resource.cs`
 
 ```
 # 使用 System.IO 命名空间中的类

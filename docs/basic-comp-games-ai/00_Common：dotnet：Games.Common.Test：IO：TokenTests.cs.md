@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenTests.cs`
+# `00_Common\dotnet\Games.Common.Test\IO\TokenTests.cs`
 
 ```
     # 使用 FluentAssertions 库进行断言

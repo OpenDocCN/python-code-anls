@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\HurkleGame.cs`
+# `51_Hurkle\csharp\HurkleGame.cs`
 
 ```
 using System;  # 导入系统命名空间

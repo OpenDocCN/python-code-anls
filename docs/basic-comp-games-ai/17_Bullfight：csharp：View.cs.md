@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\View.cs`
+# `17_Bullfight\csharp\View.cs`
 
 ```
 # 创建一个名为 View 的静态类，包含用于向用户显示信息的函数

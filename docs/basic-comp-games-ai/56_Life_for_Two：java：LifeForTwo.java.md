@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\java\LifeForTwo.java`
+# `56_Life_for_Two\java\LifeForTwo.java`
 
 ```
 import java.util.*;  // 导入 Java 的工具包

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\VictoryViewModel.cs`
+# `51_Hurkle\csharp\VictoryViewModel.cs`
 
 ```
 # 定义名为 hurkle 的命名空间

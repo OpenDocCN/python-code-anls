@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\Rules.cs`
+# `43_Hammurabi\csharp\Rules.cs`
 
 ```
 using System;  // 导入 System 命名空间

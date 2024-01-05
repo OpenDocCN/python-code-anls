@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\42_Gunner\python\gunner.py`
+# `42_Gunner\python\gunner.py`
 
 ```
 #!/usr/bin/env python3

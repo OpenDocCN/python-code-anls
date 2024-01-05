@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\java\SuperStarTrekGame.java`
+# `84_Super_Star_Trek\java\SuperStarTrekGame.java`
 
 ```
 import java.util.stream.IntStream;  // 导入 Java 中的 IntStream 类

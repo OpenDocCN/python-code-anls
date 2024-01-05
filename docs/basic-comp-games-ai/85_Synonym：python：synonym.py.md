@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\85_Synonym\python\synonym.py`
+# `85_Synonym\python\synonym.py`
 
 ```
 """

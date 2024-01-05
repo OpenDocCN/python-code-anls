@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\java\StockMarket.java`
+# `83_Stock_Market\java\StockMarket.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

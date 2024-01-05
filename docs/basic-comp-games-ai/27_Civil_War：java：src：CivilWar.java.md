@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\java\src\CivilWar.java`
+# `27_Civil_War\java\src\CivilWar.java`
 
 ```
 import java.io.PrintStream;  // 导入打印流类，用于输出结果

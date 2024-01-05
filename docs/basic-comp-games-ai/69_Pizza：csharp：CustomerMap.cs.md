@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\69_Pizza\csharp\CustomerMap.cs`
+# `69_Pizza\csharp\CustomerMap.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间

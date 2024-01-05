@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\80_Slots\javascript\slots.js`
+# `80_Slots\javascript\slots.js`
 
 ```
 // 定义一个名为print的函数，用于在页面上输出字符串

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\java\src\PlayerBug.java`
+# `16_Bug\java\src\PlayerBug.java`
 
 ```
 // 创建一个名为PlayerBug的类，继承自Insect类

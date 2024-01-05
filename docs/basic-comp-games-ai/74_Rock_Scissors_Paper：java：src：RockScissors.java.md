@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\java\src\RockScissors.java`
+# `74_Rock_Scissors_Paper\java\src\RockScissors.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

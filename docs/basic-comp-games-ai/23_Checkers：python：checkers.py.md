@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\23_Checkers\python\checkers.py`
+# `23_Checkers\python\checkers.py`
 
 ```
 """

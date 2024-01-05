@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\95_Weekday\csharp\Program.cs`
+# `95_Weekday\csharp\Program.cs`
 
 ```
 # 使用 System.Text 命名空间

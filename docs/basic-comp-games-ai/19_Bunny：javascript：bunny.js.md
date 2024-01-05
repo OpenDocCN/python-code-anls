@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\19_Bunny\javascript\bunny.js`
+# `19_Bunny\javascript\bunny.js`
 
 ```
 // BUNNY

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\92_Trap\javascript\trap.js`
+# `92_Trap\javascript\trap.js`
 
 ```
 # TRAP

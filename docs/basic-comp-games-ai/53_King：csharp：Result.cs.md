@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\Result.cs`
+# `53_King\csharp\Result.cs`
 
 ```
 namespace King;  # 命名空间声明，定义了代码所在的命名空间

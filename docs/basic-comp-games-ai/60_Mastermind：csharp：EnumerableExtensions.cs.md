@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\csharp\EnumerableExtensions.cs`
+# `60_Mastermind\csharp\EnumerableExtensions.cs`
 
 ```
         /// </param>

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\python\salvo.py`
+# `77_Salvo\python\salvo.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

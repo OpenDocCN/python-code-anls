@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\Resources\Resource.cs`
+# `53_King\csharp\Resources\Resource.cs`
 
 ```
 using System.Reflection;  // 导入 System.Reflection 命名空间，用于获取程序集信息

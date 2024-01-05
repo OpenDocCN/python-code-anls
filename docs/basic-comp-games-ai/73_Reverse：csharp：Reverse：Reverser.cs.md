@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\73_Reverse\csharp\Reverse\Reverser.cs`
+# `73_Reverse\csharp\Reverse\Reverser.cs`
 
 ```
 # 创建一个随机数组

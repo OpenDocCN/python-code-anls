@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\csharp\LovePattern.cs`
+# `58_Love\csharp\LovePattern.cs`
 
 ```
 using System.IO;  // 导入 System.IO 命名空间，用于文件操作

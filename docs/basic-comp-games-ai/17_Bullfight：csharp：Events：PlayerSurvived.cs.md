@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Events\PlayerSurvived.cs`
+# `17_Bullfight\csharp\Events\PlayerSurvived.cs`
 
 ```
 // 在 Game.Events 命名空间下定义了一个事件记录，表示玩家成功躲过了公牛的攻击

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\40_Gomoko\python\Gomoko.py`
+# `40_Gomoko\python\Gomoko.py`
 
 ```
 import random  # 导入 random 模块

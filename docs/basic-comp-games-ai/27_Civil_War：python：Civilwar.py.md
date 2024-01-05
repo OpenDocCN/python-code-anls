@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\python\Civilwar.py`
+# `27_Civil_War\python\Civilwar.py`
 
 ```
 """

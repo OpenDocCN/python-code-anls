@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\35_Even_Wins\python\evenwins.py`
+# `35_Even_Wins\python\evenwins.py`
 
 ```
 # 导入 dataclasses 模块中的 dataclass 类

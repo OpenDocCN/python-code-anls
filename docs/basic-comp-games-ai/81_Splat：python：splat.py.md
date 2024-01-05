@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\81_Splat\python\splat.py`
+# `81_Splat\python\splat.py`
 
 ```
 """

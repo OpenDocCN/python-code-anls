@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\29_Craps\java\src\Craps.java`
+# `29_Craps\java\src\Craps.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

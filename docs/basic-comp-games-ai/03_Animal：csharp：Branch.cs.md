@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\03_Animal\csharp\Branch.cs`
+# `03_Animal\csharp\Branch.cs`
 
 ```
 // 命名空间声明，表示该类属于 Animal 命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\java\Digits.java`
+# `34_Digits\java\Digits.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

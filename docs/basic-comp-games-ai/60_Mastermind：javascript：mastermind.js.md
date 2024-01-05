@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\javascript\mastermind.js`
+# `60_Mastermind\javascript\mastermind.js`
 
 ```
 // 创建一个名为print的函数，用于在页面上输出文本

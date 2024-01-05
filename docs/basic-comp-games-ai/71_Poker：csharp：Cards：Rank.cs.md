@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\Rank.cs`
+# `71_Poker\csharp\Cards\Rank.cs`
 
 ```
     public static Rank King = new(13, "King");

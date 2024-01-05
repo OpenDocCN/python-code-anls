@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\csharp\Choice.cs`
+# `74_Rock_Scissors_Paper\csharp\Choice.cs`
 
 ```
 namespace RockScissorsPaper

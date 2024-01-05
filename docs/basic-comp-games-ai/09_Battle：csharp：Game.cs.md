@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\csharp\Game.cs`
+# `09_Battle\csharp\Game.cs`
 
 ```
                 # 清空游戏场地，重新初始化为 7x7 的二维数组

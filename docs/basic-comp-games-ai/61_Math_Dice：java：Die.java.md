@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\61_Math_Dice\java\Die.java`
+# `61_Math_Dice\java\Die.java`
 
 ```
 import java.util.Random;  # 导入 Random 类

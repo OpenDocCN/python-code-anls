@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\GamePoint.cs`
+# `51_Hurkle\csharp\GamePoint.cs`
 
 ```
 namespace hurkle

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\javascript\boxing.js`
+# `15_Boxing\javascript\boxing.js`
 
 ```
 // 创建一个名为print的函数，用于将字符串输出到指定的HTML元素中

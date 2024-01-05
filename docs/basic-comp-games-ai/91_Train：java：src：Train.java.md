@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\91_Train\java\src\Train.java`
+# `91_Train\java\src\Train.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 包，用于操作数组

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\52_Kinema\java\src\Kinema.java`
+# `52_Kinema\java\src\Kinema.java`
 
 ```
 import java.util.Arrays;  # 导入 Arrays 类

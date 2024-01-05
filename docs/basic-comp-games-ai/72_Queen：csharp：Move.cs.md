@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\csharp\Move.cs`
+# `72_Queen\csharp\Move.cs`
 
 ```
 namespace Queen;  // 命名空间声明

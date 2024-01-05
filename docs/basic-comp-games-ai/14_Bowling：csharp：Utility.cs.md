@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\csharp\Utility.cs`
+# `14_Bowling\csharp\Utility.cs`
 
 ```
 # 导入所需的命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\python\tower.py`
+# `90_Tower\python\tower.py`
 
 ```
     # 检查磁盘列表是否为空，返回布尔值

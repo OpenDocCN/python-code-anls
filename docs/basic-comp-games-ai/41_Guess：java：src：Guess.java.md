@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\41_Guess\java\src\Guess.java`
+# `41_Guess\java\src\Guess.java`
 
 ```
 import java.util.Arrays;

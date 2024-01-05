@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\python\combat.py`
+# `28_Combat\python\combat.py`
 
 ```
 MAX_UNITS = 72000  # 设置最大单位数为72000

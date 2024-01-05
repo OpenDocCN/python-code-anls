@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\build-index.js`
+# `00_Utilities\build-index.js`
 
 ```
 #!/usr/bin/env node

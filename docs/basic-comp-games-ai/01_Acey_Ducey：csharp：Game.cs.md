@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\csharp\Game.cs`
+# `01_Acey_Ducey\csharp\Game.cs`
 
 ```
 // 命名空间 AceyDucey

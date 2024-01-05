@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\50_Horserace\javascript\horserace.js`
+# `50_Horserace\javascript\horserace.js`
 
 ```
 # HORSERACE

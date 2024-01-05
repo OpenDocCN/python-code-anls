@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\52_Kinema\python\kinema.py`
+# `52_Kinema\python\kinema.py`
 
 ```
 """

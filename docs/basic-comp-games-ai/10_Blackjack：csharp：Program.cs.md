@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\csharp\Program.cs`
+# `10_Blackjack\csharp\Program.cs`
 
 ```
 # 输出游戏标题

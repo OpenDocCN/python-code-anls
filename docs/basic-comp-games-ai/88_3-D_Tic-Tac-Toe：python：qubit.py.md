@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\88_3-D_Tic-Tac-Toe\python\qubit.py`
+# `88_3-D_Tic-Tac-Toe\python\qubit.py`
 
 ```
 #!/usr/bin/env python3  # 指定脚本的解释器为 Python 3

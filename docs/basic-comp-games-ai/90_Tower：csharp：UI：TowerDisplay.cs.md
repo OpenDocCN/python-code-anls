@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\UI\TowerDisplay.cs`
+# `90_Tower\csharp\UI\TowerDisplay.cs`
 
 ```
             # 对每个元素进行遍历，将其添加到字符串构建器中

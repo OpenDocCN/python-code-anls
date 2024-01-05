@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\Distance.cs`
+# `62_Mugwump\csharp\Distance.cs`
 
 ```
 namespace Mugwump;  // 命名空间声明，用于组织和管理代码

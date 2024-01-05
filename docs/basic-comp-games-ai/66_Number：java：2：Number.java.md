@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\66_Number\java\2\Number.java`
+# `66_Number\java\2\Number.java`
 
 ```
 import java.util.Scanner;  // 导入 Scanner 类，用于从控制台读取用户输入

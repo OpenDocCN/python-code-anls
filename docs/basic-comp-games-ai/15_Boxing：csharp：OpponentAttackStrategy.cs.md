@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\OpponentAttackStrategy.cs`
+# `15_Boxing\csharp\OpponentAttackStrategy.cs`
 
 ```
 // 使用静态类 GameUtils 中的方法和属性，无需通过类名引用

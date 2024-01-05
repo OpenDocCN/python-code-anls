@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Game.cs`
+# `46_Hexapawn\csharp\Game.cs`
 
 ```
 using System;  # 导入系统模块

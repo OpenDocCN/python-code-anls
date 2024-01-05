@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\03_Animal\csharp\Program.cs`
+# `03_Animal\csharp\Program.cs`
 
 ```
 # 导入必要的模块

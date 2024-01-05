@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\csharp\CodeFactory.cs`
+# `60_Mastermind\csharp\CodeFactory.cs`
 
 ```
         public int Positions { get; }

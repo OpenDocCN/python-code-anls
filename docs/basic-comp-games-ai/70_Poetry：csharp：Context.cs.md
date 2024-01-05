@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\csharp\Context.cs`
+# `70_Poetry\csharp\Context.cs`
 
 ```
     // 声明私有变量 _io 用于读写操作

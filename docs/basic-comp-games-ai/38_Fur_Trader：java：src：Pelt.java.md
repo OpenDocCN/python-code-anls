@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\java\src\Pelt.java`
+# `38_Fur_Trader\java\src\Pelt.java`
 
 ```
 # 定义一个名为 Pelt 的类，用于跟踪玩家拥有的特定皮毛类型的名称和数量

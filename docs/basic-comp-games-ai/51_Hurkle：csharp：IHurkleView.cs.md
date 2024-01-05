@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\IHurkleView.cs`
+# `51_Hurkle\csharp\IHurkleView.cs`
 
 ```
 # 定义命名空间 hurkle

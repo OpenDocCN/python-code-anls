@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\csharp\BagelNumber.cs`
+# `05_Bagels\csharp\BagelNumber.cs`
 
 ```
 # 定义枚举类型 BagelValidation，包含 Valid、WrongLength、NotUnique、NonDigit 四种取值

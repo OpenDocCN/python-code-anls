@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\85_Synonym\java\src\SynonymList.java`
+# `85_Synonym\java\src\SynonymList.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

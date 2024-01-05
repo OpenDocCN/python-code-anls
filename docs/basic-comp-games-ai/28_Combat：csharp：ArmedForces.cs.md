@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\ArmedForces.cs`
+# `28_Combat\csharp\ArmedForces.cs`
 
 ```
 // 引入 System 命名空间

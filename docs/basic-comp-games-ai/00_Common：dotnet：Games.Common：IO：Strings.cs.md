@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\IO\Strings.cs`
+# `00_Common\dotnet\Games.Common\IO\Strings.cs`
 
 ```
 namespace Games.Common.IO;  # 命名空间声明，用于定义代码的作用域

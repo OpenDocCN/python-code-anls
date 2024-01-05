@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\19_Bunny\csharp\Program.cs`
+# `19_Bunny\csharp\Program.cs`
 
 ```
 # 引入所需的模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\javascript\bombsaway.js`
+# `12_Bombs_Away\javascript\bombsaway.js`
 
 ```
 # 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典

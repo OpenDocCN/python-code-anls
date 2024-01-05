@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\Round.cs`
+# `15_Boxing\csharp\Round.cs`
 
 ```
     // 声明私有变量，用于存储玩家和对手的信息

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Game.cs`
+# `77_Salvo\csharp\Game.cs`
 
 ```
 namespace Salvo;

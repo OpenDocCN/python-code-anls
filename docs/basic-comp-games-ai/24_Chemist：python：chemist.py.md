@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\24_Chemist\python\chemist.py`
+# `24_Chemist\python\chemist.py`
 
 ```
 """

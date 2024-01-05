@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\37_Football\javascript\football.js`
+# `37_Football\javascript\football.js`
 
 ```
 // 创建一个新的 Promise 对象，用于处理异步操作

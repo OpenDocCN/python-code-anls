@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayConsole\Program.cs`
+# `12_Bombs_Away\csharp\BombsAwayConsole\Program.cs`
 
 ```
     // 如果用户选择不再玩游戏，则显示消息并返回 false

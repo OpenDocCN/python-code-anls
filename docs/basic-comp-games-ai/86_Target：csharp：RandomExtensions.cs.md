@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\RandomExtensions.cs`
+# `86_Target\csharp\RandomExtensions.cs`
 
 ```
 using Games.Common.Randomness;  // 导入 Games.Common.Randomness 命名空间，以便使用其中的类和接口

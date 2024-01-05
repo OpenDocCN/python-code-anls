@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\test\ScoringUtilsTest.java`
+# `10_Blackjack\java\test\ScoringUtilsTest.java`
 
 ```
 import org.junit.jupiter.api.Test;  // 导入 JUnit 的 Test 类

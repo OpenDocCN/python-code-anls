@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\csharp\Phrase.cs`
+# `70_Poetry\csharp\Phrase.cs`
 
 ```
 namespace Poetry;  // 命名空间声明

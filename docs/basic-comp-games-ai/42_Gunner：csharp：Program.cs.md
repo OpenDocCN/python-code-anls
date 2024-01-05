@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\42_Gunner\csharp\Program.cs`
+# `42_Gunner\csharp\Program.cs`
 
 ```
             // 打印游戏介绍

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\GameResult.cs`
+# `43_Hammurabi\csharp\GameResult.cs`
 
 ```
 // 存储最终游戏结果的记录

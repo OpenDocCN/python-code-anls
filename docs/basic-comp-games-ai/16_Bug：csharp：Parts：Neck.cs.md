@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\Neck.cs`
+# `16_Bug\csharp\Parts\Neck.cs`
 
 ```
 using System.Text;  # 导入 System.Text 模块

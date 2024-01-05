@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\javascript\civilwar.js`
+# `27_Civil_War\javascript\civilwar.js`
 
 ```
 # 定义函数print，用于在页面上输出字符串

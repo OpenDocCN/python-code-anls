@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\20_Buzzword\java\src\UserInterface.java`
+# `20_Buzzword\java\src\UserInterface.java`
 
 ```
 import java.io.PrintStream;  // 导入打印流类，用于输出信息

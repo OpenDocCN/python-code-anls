@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\68_Orbit\javascript\orbit.js`
+# `68_Orbit\javascript\orbit.js`
 
 ```
 // 创建一个新的 Promise 对象，用于处理异步操作

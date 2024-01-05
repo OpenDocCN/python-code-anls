@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\54_Letter\csharp\Program.cs`
+# `54_Letter\csharp\Program.cs`
 
 ```
 # 导入Letter模块

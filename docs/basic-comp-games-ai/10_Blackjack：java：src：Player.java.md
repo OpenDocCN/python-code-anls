@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\src\Player.java`
+# `10_Blackjack\java\src\Player.java`
 
 ```
 import java.util.Collections; // 导入 Collections 类，用于操作集合

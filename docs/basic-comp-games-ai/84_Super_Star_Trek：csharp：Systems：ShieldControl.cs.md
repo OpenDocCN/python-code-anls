@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Systems\ShieldControl.cs`
+# `84_Super_Star_Trek\csharp\Systems\ShieldControl.cs`
 
 ```
 using Games.Common.IO;  # 导入 Games.Common.IO 模块

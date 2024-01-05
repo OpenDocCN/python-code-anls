@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\java\Bowling.java`
+# `14_Bowling\java\Bowling.java`
 
 ```
 import java.util.Scanner;  # 导入 Scanner 类，用于用户输入

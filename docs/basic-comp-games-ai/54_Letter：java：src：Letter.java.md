@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\54_Letter\java\src\Letter.java`
+# `54_Letter\java\src\Letter.java`
 
 ```
 import java.awt.*;  # 导入 java.awt 包

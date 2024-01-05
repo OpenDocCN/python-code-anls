@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\Suit.cs`
+# `71_Poker\csharp\Cards\Suit.cs`
 
 ```
 # 定义一个名为Poker.Cards的命名空间

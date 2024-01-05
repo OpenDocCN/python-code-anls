@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\javascript\blackjack.js`
+# `10_Blackjack\javascript\blackjack.js`
 
 ```
 // 创建一个名为BLACKJACK的函数

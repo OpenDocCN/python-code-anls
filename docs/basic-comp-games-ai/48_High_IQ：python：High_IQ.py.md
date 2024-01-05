@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\48_High_IQ\python\High_IQ.py`
+# `48_High_IQ\python\High_IQ.py`
 
 ```
 from typing import Dict  # 导入 Dict 类型，用于声明返回值类型为字典

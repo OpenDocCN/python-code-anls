@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\UI\Input.cs`
+# `90_Tower\csharp\UI\Input.cs`
 
 ```
 using System;  // 导入 System 命名空间，包含了基本的系统类型和基本类

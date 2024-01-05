@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\Year.cs`
+# `53_King\csharp\Year.cs`
 
 ```
 using System.Text;  # 导入 System.Text 模块

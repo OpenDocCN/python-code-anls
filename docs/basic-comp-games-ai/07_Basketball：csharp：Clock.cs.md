@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Clock.cs`
+# `07_Basketball\csharp\Clock.cs`
 
 ```
 using Basketball.Resources;  // 导入Basketball.Resources命名空间，用于访问资源文件

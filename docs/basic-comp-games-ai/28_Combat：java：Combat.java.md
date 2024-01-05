@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\java\Combat.java`
+# `28_Combat\java\Combat.java`
 
 ```
 import java.lang.Math;  // 导入 java.lang.Math 类，用于数学运算

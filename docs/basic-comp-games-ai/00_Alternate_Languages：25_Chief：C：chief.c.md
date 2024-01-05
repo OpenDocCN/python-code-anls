@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\25_Chief\C\chief.c`
+# `00_Alternate_Languages\25_Chief\C\chief.c`
 
 ```
 #include <stdio.h>  // 包含标准输入输出库

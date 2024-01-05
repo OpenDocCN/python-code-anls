@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\csharp\Program.cs`
+# `43_Hammurabi\csharp\Program.cs`
 
 ```
 # 导入必要的命名空间

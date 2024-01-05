@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\Program.cs`
+# `15_Boxing\csharp\Program.cs`
 
 ```
 // 引入 Boxing 命名空间

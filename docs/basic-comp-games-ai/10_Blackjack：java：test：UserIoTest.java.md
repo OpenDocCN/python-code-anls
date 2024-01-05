@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\java\test\UserIoTest.java`
+# `10_Blackjack\java\test\UserIoTest.java`
 
 ```
 import static org.junit.jupiter.api.Assertions.assertEquals;  # 导入断言方法，用于断言测试结果是否符合预期

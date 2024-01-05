@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\26_Chomp\csharp\PlayerNumber.cs`
+# `26_Chomp\csharp\PlayerNumber.cs`
 
 ```
 namespace Chomp;

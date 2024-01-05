@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\ConsoleHurkleView.cs`
+# `51_Hurkle\csharp\ConsoleHurkleView.cs`
 
 ```
             // 打印猜测的次数

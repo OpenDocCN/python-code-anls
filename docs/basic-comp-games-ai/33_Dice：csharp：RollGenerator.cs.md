@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\33_Dice\csharp\RollGenerator.cs`
+# `33_Dice\csharp\RollGenerator.cs`
 
 ```
 // 引入命名空间

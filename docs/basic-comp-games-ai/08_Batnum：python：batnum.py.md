@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\python\batnum.py`
+# `08_Batnum\python\batnum.py`
 
 ```
 from enum import IntEnum  # 导入 IntEnum 枚举类

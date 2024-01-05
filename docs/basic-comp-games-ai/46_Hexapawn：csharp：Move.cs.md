@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Move.cs`
+# `46_Hexapawn\csharp\Move.cs`
 
 ```
 using static Hexapawn.Pawn;  # 导入 Hexapawn.Pawn 命名空间中的所有静态成员

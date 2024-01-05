@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\StringExtensions.cs`
+# `84_Super_Star_Trek\csharp\StringExtensions.cs`
 
 ```
 # 定义命名空间 SuperStarTrek

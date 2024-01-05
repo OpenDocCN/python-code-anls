@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\Controller.cs`
+# `28_Combat\csharp\Controller.cs`
 
 ```
             // BUG: This loop allows the player to assign negative values to

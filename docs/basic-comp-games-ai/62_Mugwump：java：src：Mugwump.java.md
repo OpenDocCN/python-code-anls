@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\java\src\Mugwump.java`
+# `62_Mugwump\java\src\Mugwump.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

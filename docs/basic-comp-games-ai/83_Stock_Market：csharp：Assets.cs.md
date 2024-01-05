@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\csharp\Assets.cs`
+# `83_Stock_Market\csharp\Assets.cs`
 
 ```
 // 引入不可变数组的命名空间

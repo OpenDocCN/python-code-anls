@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\20_Buzzword\java\src\BuzzwordSupplier.java`
+# `20_Buzzword\java\src\BuzzwordSupplier.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

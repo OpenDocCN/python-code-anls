@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\python\rockscissors.py`
+# `74_Rock_Scissors_Paper\python\rockscissors.py`
 
 ```
 #!/usr/bin/env python3

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\java\src\FurTrader.java`
+# `38_Fur_Trader\java\src\FurTrader.java`
 
 ```
 import java.util.ArrayList;  # 导入 ArrayList 类

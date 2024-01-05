@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\48_High_IQ\javascript\highiq.js`
+# `48_High_IQ\javascript\highiq.js`
 
 ```
 // 创建一个新的 Promise 对象，用于处理输入操作

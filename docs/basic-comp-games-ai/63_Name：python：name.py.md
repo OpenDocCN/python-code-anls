@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\63_Name\python\name.py`
+# `63_Name\python\name.py`
 
 ```
 """

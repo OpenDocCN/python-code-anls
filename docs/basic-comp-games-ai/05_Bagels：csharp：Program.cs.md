@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\csharp\Program.cs`
+# `05_Bagels\csharp\Program.cs`
 
 ```
 # 创建一个名为 Bagels 的命名空间

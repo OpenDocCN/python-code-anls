@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\61_Math_Dice\csharp\StringExtensions.cs`
+# `61_Math_Dice\csharp\StringExtensions.cs`
 
 ```
 // 命名空间 MathDice，定义了一个静态类 StringExtensions

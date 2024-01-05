@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\69_Pizza\csharp\PizzaGame.cs`
+# `69_Pizza\csharp\PizzaGame.cs`
 
 ```
 // 命名空间 Pizza

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\50_Horserace\python\horserace.py`
+# `50_Horserace\python\horserace.py`
 
 ```
 import math  # 导入 math 模块，用于数学运算

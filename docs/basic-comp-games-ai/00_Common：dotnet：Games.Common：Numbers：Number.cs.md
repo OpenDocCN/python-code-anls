@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common\Numbers\Number.cs`
+# `00_Common\dotnet\Games.Common\Numbers\Number.cs`
 
 ```
 namespace Games.Common.Numbers;

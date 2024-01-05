@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\22_Change\csharp\Program.cs`
+# `22_Change\csharp\Program.cs`
 
 ```
 # 引入系统模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\csharp\GameState.cs`
+# `01_Acey_Ducey\csharp\GameState.cs`
 
 ```
         internal int HighestMoney { get; set; }

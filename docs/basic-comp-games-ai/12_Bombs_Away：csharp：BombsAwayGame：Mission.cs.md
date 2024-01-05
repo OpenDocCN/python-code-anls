@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\Mission.cs`
+# `12_Bombs_Away\csharp\BombsAwayGame\Mission.cs`
 
 ```
 # 定义一个名为 Mission 的记录类，表示可以由 MissionSide 飞行的任务

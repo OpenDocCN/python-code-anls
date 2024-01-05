@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\89_Tic-Tac-Toe\csharp\tictactoe2\Program.cs`
+# `89_Tic-Tac-Toe\csharp\tictactoe2\Program.cs`
 
 ```
 // 创建一个长度为10的字符数组，用于表示游戏棋盘

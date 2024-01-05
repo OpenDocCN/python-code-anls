@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\83_Stock_Market\python\Stock_Market.py`
+# `83_Stock_Market\python\Stock_Market.py`
 
 ```
 import random  # 导入 random 模块

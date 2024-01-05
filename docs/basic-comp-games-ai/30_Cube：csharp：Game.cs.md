@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\30_Cube\csharp\Game.cs`
+# `30_Cube\csharp\Game.cs`
 
 ```
 namespace Cube;  // 命名空间声明

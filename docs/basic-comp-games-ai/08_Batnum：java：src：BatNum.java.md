@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\java\src\BatNum.java`
+# `08_Batnum\java\src\BatNum.java`
 
 ```
 import java.util.Arrays;  # 导入 java.util.Arrays 模块

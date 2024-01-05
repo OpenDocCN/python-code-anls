@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\12_Bombs_Away\csharp\BombsAwayConsole\ConsoleUserInterface.cs`
+# `12_Bombs_Away\csharp\BombsAwayConsole\ConsoleUserInterface.cs`
 
 ```
 /// <param name="choices">List of choices to display.</param>

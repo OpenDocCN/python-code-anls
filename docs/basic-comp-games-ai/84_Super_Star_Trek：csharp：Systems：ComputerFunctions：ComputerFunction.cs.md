@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\ComputerFunction.cs`
+# `84_Super_Star_Trek\csharp\Systems\ComputerFunctions\ComputerFunction.cs`
 
 ```
 # 导入 Games.Common.IO 和 SuperStarTrek.Space 模块

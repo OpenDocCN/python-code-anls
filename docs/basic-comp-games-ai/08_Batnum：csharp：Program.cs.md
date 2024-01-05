@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\csharp\Program.cs`
+# `08_Batnum\csharp\Program.cs`
 
 ```
 // 使用 Batnum 命名空间

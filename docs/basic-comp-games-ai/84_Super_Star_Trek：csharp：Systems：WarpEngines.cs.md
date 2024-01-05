@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Systems\WarpEngines.cs`
+# `84_Super_Star_Trek\csharp\Systems\WarpEngines.cs`
 
 ```
 using System;  // 导入 System 命名空间，包含了常用的基本类和数据类型

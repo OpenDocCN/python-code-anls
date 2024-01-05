@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\java\War.java`
+# `94_War\java\War.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

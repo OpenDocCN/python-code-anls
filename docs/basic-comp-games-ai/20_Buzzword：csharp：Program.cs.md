@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\20_Buzzword\csharp\Program.cs`
+# `20_Buzzword\csharp\Program.cs`
 
 ```
 // 引入 System 命名空间

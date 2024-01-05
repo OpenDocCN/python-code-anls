@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Methods.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\Methods.cs`
 
 ```
 # 导入 System.Diagnostics 模块

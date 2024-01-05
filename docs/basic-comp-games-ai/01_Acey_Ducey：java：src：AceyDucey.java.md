@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\java\src\AceyDucey.java`
+# `01_Acey_Ducey\java\src\AceyDucey.java`
 
 ```
 import java.util.Scanner;

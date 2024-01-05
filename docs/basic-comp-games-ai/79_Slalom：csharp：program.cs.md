@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\79_Slalom\csharp\program.cs`
+# `79_Slalom\csharp\program.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间，以便在代码中使用其中的类和方法

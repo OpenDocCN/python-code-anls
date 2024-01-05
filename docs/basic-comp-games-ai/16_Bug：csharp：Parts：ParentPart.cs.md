@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\csharp\Parts\ParentPart.cs`
+# `16_Bug\csharp\Parts\ParentPart.cs`
 
 ```
 using BugGame.Resources;  # 导入 BugGame 资源模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\32_Diamond\python\diamond.py`
+# `32_Diamond\python\diamond.py`
 
 ```
 # 定义函数print_diamond，接受begin_width, end_width, step, width, count五个参数，返回空值

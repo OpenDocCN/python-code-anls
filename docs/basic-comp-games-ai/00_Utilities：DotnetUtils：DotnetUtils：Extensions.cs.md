@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Extensions.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\Extensions.cs`
 
 ```
 // 命名空间 DotnetUtils

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\38_Fur_Trader\csharp\GameState.cs`
+# `38_Fur_Trader\csharp\GameState.cs`
 
 ```
 # 命名空间声明

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\csharp\IOExtensions.cs`
+# `34_Digits\csharp\IOExtensions.cs`
 
 ```
 namespace Digits;  # 命名空间声明

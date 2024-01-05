@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Targetting\ComputerShotSelector.cs`
+# `77_Salvo\csharp\Targetting\ComputerShotSelector.cs`
 
 ```
 namespace Salvo.Targetting;  // 命名空间声明，表示该类所属的命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\05_Bagels\csharp\Game.cs`
+# `05_Bagels\csharp\Game.cs`
 
 ```
 # 导入所需的模块

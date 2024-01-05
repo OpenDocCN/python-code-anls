@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\TurnHandler.cs`
+# `77_Salvo\csharp\TurnHandler.cs`
 
 ```
 using Salvo.Targetting;  # 导入 Salvo.Targetting 模块

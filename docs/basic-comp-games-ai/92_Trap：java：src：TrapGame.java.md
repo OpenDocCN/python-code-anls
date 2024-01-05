@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\92_Trap\java\src\TrapGame.java`
+# `92_Trap\java\src\TrapGame.java`
 
 ```
 # 定义一个名为TrapGame的公共类

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\62_Mugwump\csharp\Grid.cs`
+# `62_Mugwump\csharp\Grid.cs`
 
 ```
 using System.Collections.Generic;  // 导入 System.Collections.Generic 命名空间，用于使用泛型集合类

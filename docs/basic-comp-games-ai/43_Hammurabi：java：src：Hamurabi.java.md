@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\43_Hammurabi\java\src\Hamurabi.java`
+# `43_Hammurabi\java\src\Hamurabi.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\21_Calendar\java\Calendar.java`
+# `21_Calendar\java\Calendar.java`
 
 ```
 /**

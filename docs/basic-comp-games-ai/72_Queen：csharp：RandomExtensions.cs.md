@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\csharp\RandomExtensions.cs`
+# `72_Queen\csharp\RandomExtensions.cs`
 
 ```
 namespace Queen;  # 命名空间声明，定义了代码所在的命名空间

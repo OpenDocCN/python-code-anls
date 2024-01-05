@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\30_Cube\python\cube.py`
+# `30_Cube\python\cube.py`
 
 ```
 #!/usr/bin/env python3  # 指定使用 Python3 解释器来执行脚本

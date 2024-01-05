@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\javascript\roulette.js`
+# `75_Roulette\javascript\roulette.js`
 
 ```
 # 定义一个名为print的函数，用于将字符串输出到指定的HTML元素中

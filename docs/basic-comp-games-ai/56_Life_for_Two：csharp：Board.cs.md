@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\csharp\Board.cs`
+# `56_Life_for_Two\csharp\Board.cs`
 
 ```
     // 使用 System.Collections 命名空间

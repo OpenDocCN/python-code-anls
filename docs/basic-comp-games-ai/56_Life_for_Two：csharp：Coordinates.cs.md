@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\56_Life_for_Two\csharp\Coordinates.cs`
+# `56_Life_for_Two\csharp\Coordinates.cs`
 
 ```
 namespace LifeforTwo;  # 命名空间声明

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\58_Love\python\love.py`
+# `58_Love\python\love.py`
 
 ```
 # 这是一个多行注释，用三个双引号包裹起来

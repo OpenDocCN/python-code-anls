@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\85_Synonym\csharp\Synonym.cs`
+# `85_Synonym\csharp\Synonym.cs`
 
 ```
 using System.Text;  // 导入 System.Text 命名空间

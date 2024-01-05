@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\29_Craps\csharp\Craps\Program.cs`
+# `29_Craps\csharp\Craps\Program.cs`
 
 ```
             // 创建用户界面对象

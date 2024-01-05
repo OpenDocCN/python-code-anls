@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\16_Bug\java\src\Insect.java`
+# `16_Bug\java\src\Insect.java`
 
 ```
 # 导入必要的模块

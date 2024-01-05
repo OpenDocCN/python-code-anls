@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\95_Weekday\python\weekday.py`
+# `95_Weekday\python\weekday.py`
 
 ```
 """

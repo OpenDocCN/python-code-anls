@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\csharp\IOExtensions.cs`
+# `72_Queen\csharp\IOExtensions.cs`
 
 ```
 # 定义一个命名空间 Queen

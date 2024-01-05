@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\61_Math_Dice\python\mathdice.py`
+# `61_Math_Dice\python\mathdice.py`
 
 ```
 from random import randint  # 从 random 模块中导入 randint 函数

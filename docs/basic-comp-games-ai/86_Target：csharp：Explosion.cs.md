@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\csharp\Explosion.cs`
+# `86_Target\csharp\Explosion.cs`
 
 ```
 namespace Target

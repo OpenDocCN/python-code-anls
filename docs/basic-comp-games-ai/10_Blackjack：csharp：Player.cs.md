@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\10_Blackjack\csharp\Player.cs`
+# `10_Blackjack\csharp\Player.cs`
 
 ```
 namespace Blackjack

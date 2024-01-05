@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\csharp\Slot.cs`
+# `75_Roulette\csharp\Slot.cs`
 
 ```
 using System.Collections.Immutable;  // 导入不可变集合的命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\75_Roulette\csharp\IOExtensions.cs`
+# `75_Roulette\csharp\IOExtensions.cs`
 
 ```
 {

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Cards\Hand.cs`
+# `71_Poker\csharp\Cards\Hand.cs`
 
 ```
 using System.Text; // 导入 System.Text 命名空间，用于处理字符串和文本数据

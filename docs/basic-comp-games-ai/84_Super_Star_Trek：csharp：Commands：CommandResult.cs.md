@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Commands\CommandResult.cs`
+# `84_Super_Star_Trek\csharp\Commands\CommandResult.cs`
 
 ```
 namespace SuperStarTrek.Commands;  # 命名空间声明

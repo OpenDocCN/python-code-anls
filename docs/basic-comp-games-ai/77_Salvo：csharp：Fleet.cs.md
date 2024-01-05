@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\77_Salvo\csharp\Fleet.cs`
+# `77_Salvo\csharp\Fleet.cs`
 
 ```
 # 导入必要的模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\78_Sine_Wave\C++\sinewave.cpp`
+# `00_Alternate_Languages\78_Sine_Wave\C++\sinewave.cpp`
 
 ```
 #include <iostream> // 包含输入输出流库

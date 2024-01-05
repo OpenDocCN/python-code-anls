@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Pawn.cs`
+# `46_Hexapawn\csharp\Pawn.cs`
 
 ```
 namespace Hexapawn;

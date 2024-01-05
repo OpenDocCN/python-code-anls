@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\60_Mastermind\python\mastermind.py`
+# `60_Mastermind\python\mastermind.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\07_Basketball\csharp\Probably.cs`
+# `07_Basketball\csharp\Probably.cs`
 
 ```
 using Games.Common.Randomness;  // 导入 Games.Common.Randomness 命名空间

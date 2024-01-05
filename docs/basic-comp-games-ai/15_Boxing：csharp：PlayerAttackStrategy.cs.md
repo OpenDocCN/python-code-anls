@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\csharp\PlayerAttackStrategy.cs`
+# `15_Boxing\csharp\PlayerAttackStrategy.cs`
 
 ```
 // 使用静态类 GameUtils 中的 GetPunch 方法

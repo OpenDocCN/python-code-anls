@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\25_Chief\csharp\IReadWriteExtensions.cs`
+# `25_Chief\csharp\IReadWriteExtensions.cs`
 
 ```
 namespace Chief;  # 命名空间声明，定义了代码的作用域

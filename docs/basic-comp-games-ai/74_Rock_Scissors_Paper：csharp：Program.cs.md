@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\csharp\Program.cs`
+# `74_Rock_Scissors_Paper\csharp\Program.cs`
 
 ```
 # 导入 System 命名空间

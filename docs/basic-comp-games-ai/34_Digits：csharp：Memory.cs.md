@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\34_Digits\csharp\Memory.cs`
+# `34_Digits\csharp\Memory.cs`
 
 ```
 namespace Digits;  # 命名空间声明

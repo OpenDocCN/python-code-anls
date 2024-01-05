@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\15_Boxing\java\GameSession.java`
+# `15_Boxing\java\GameSession.java`
 
 ```
 /**

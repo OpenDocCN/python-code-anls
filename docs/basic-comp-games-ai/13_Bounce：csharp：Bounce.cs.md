@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\Bounce.cs`
+# `13_Bounce\csharp\Bounce.cs`
 
 ```
 namespace Bounce; // 命名空间声明

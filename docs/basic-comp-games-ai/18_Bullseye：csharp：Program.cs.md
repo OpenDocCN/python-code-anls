@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\18_Bullseye\csharp\Program.cs`
+# `18_Bullseye\csharp\Program.cs`
 
 ```
 # 创建一个名为Bullseye的命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\13_Bounce\csharp\Program.cs`
+# `13_Bounce\csharp\Program.cs`
 
 ```
 # 导入 Games.Common.IO 和 Games.Common.Numbers 模块

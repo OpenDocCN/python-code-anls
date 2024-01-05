@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\javascript\battle.js`
+# `09_Battle\javascript\battle.js`
 
 ```
 // 定义一个名为print的函数，用于向页面输出内容

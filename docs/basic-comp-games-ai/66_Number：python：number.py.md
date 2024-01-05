@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\66_Number\python\number.py`
+# `66_Number\python\number.py`
 
 ```
 """

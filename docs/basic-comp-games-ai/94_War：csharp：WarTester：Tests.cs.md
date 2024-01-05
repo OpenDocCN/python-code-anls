@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\94_War\csharp\WarTester\Tests.cs`
+# `94_War\csharp\WarTester\Tests.cs`
 
 ```
         {

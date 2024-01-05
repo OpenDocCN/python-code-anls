@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Program.cs`
+# `00_Utilities\DotnetUtils\DotnetUtils\Program.cs`
 
 ```
 // 使用 System.Xml.Linq 命名空间

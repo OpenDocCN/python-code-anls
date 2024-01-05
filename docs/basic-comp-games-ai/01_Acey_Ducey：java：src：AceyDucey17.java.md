@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\01_Acey_Ducey\java\src\AceyDucey17.java`
+# `01_Acey_Ducey\java\src\AceyDucey17.java`
 
 ```
 import java.util.Random;  // 导入 Random 类，用于生成随机数

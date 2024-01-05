@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\59_Lunar_LEM_Rocket\javascript\lem.js`
+# `59_Lunar_LEM_Rocket\javascript\lem.js`
 
 ```
 # 定义函数print，用于向页面输出内容

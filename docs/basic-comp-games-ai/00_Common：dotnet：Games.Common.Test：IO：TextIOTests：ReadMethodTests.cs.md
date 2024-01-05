@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TextIOTests\ReadMethodTests.cs`
+# `00_Common\dotnet\Games.Common.Test\IO\TextIOTests\ReadMethodTests.cs`
 
 ```
 using System;  # 导入 System 模块

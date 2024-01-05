@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\go\main.go`
+# `00_Alternate_Languages\01_Acey_Ducey\go\main.go`
 
 ```
 package main  # 导入 main 包

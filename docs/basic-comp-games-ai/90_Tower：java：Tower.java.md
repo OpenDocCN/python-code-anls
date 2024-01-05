@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\java\Tower.java`
+# `90_Tower\java\Tower.java`
 
 ```
 import java.lang.Math;  // 导入 java.lang.Math 类，用于执行数学运算

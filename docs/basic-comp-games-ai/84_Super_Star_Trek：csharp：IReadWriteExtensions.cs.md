@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\IReadWriteExtensions.cs`
+# `84_Super_Star_Trek\csharp\IReadWriteExtensions.cs`
 
 ```
 using System;  # 导入 System 模块

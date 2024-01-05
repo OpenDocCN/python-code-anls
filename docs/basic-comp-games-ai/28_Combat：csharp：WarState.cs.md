@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\28_Combat\csharp\WarState.cs`
+# `28_Combat\csharp\WarState.cs`
 
 ```
 /// <summary>

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\68_Orbit\java\Orbit.java`
+# `68_Orbit\java\Orbit.java`
 
 ```
 import java.lang.Integer;  # 导入 Integer 类，用于处理整数

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\51_Hurkle\csharp\Program.cs`
+# `51_Hurkle\csharp\Program.cs`
 
 ```
             // 设置变量 N 的值为 5

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\65_Nim\python\Traditional_NIM.py`
+# `65_Nim\python\Traditional_NIM.py`
 
 ```
 import random  # 导入 random 模块，用于生成随机数

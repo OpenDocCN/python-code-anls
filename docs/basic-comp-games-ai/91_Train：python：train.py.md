@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\91_Train\python\train.py`
+# `91_Train\python\train.py`
 
 ```
     # 设置汽车速度为一个40到65之间的随机整数

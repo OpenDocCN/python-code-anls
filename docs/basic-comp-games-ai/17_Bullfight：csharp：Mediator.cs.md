@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\csharp\Mediator.cs`
+# `17_Bullfight\csharp\Mediator.cs`
 
 ```
 // 命名空间 Game

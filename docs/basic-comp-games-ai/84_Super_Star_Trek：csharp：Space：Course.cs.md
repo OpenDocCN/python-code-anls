@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Space\Course.cs`
+# `84_Super_Star_Trek\csharp\Space\Course.cs`
 
 ```
 // 使用System和System.Collections.Generic命名空间

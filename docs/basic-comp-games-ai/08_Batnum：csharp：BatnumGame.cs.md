@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\csharp\BatnumGame.cs`
+# `08_Batnum\csharp\BatnumGame.cs`
 
 ```
 // 引入命名空间

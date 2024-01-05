@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\87_3-D_Plot\csharp\Function.cs`
+# `87_3-D_Plot\csharp\Function.cs`
 
 ```
 using System;  // 导入 System 命名空间，包含常用的基本类和数据类型

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\Program.cs`
+# `84_Super_Star_Trek\csharp\Program.cs`
 
 ```
 # SUPER STARTREK - MAY 16,1978 - REQUIRES 24K MEMORY

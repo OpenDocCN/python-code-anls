@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Alternate_Languages\30_Cube\C\cube.c`
+# `00_Alternate_Languages\30_Cube\C\cube.c`
 
 ```
 #include <stdio.h>  // 包含标准输入输出库

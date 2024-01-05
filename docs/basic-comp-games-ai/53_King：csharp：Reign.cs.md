@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\53_King\csharp\Reign.cs`
+# `53_King\csharp\Reign.cs`
 
 ```
     _country = country;

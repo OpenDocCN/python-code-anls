@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\09_Battle\java\Sea.java`
+# `09_Battle\java\Sea.java`
 
 ```
 // 跟踪海洋的内容

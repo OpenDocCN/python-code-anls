@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\71_Poker\csharp\Resources\Resource.cs`
+# `71_Poker\csharp\Resources\Resource.cs`
 
 ```
 # 导入所需的模块

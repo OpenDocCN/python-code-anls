@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\68_Orbit\python\orbit.py`
+# `68_Orbit\python\orbit.py`
 
 ```
 """

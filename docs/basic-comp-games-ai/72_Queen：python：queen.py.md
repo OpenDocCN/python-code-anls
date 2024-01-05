@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\72_Queen\python\queen.py`
+# `72_Queen\python\queen.py`
 
 ```
 #!/usr/bin/env python3

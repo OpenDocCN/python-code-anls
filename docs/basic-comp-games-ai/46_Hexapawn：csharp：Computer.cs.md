@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\csharp\Computer.cs`
+# `46_Hexapawn\csharp\Computer.cs`
 
 ```
 using System;  // 导入 System 命名空间，包含常用的数据类型和基本类库

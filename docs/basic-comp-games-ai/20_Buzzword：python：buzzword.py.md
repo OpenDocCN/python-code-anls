@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\20_Buzzword\python\buzzword.py`
+# `20_Buzzword\python\buzzword.py`
 
 ```
 # 这是一个 Buzzword 生成器的程序，用于生成教育技术演讲和简报的流行词汇

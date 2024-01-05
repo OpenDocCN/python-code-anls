@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\64_Nicomachus\javascript\nicomachus.js`
+# `64_Nicomachus\javascript\nicomachus.js`
 
 ```
 # NICOMACHUS

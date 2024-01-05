@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\74_Rock_Scissors_Paper\csharp\Choices.cs`
+# `74_Rock_Scissors_Paper\csharp\Choices.cs`
 
 ```
 using System;  // 导入 System 命名空间，以便使用其中的类和方法

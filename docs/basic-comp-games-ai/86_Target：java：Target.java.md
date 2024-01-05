@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\86_Target\java\Target.java`
+# `86_Target\java\Target.java`
 
 ```
 import java.util.Scanner; // 导入 Scanner 类，用于从控制台读取输入

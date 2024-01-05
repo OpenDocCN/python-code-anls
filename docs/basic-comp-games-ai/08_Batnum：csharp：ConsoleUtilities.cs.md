@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\csharp\ConsoleUtilities.cs`
+# `08_Batnum\csharp\ConsoleUtilities.cs`
 
 ```
         // Ask the user a question and expects a comma separated pair of numbers representing a number range in response

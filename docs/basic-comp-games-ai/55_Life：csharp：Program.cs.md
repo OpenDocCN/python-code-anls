@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\55_Life\csharp\Program.cs`
+# `55_Life\csharp\Program.cs`
 
 ```
 // 设置最大宽度和最大高度的常量

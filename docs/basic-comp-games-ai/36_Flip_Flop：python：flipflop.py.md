@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\36_Flip_Flop\python\flipflop.py`
+# `36_Flip_Flop\python\flipflop.py`
 
 ```
 # Flip Flop

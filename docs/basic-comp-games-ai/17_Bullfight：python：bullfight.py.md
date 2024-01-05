@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\17_Bullfight\python\bullfight.py`
+# `17_Bullfight\python\bullfight.py`
 
 ```
     job_quality_factor = 0.7

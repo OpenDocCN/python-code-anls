@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\27_Civil_War\csharp\Army.cs`
+# `27_Civil_War\csharp\Army.cs`
 
 ```
 # 引入所需的模块

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\90_Tower\csharp\Models\Towers.cs`
+# `90_Tower\csharp\Models\Towers.cs`
 
 ```
 using System;  // 导入 System 命名空间

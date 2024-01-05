@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\18_Bullseye\java\src\Bullseye.java`
+# `18_Bullseye\java\src\Bullseye.java`
 
 ```
 import java.util.ArrayList;  // 导入 ArrayList 类

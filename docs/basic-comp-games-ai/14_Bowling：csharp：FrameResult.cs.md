@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\14_Bowling\csharp\FrameResult.cs`
+# `14_Bowling\csharp\FrameResult.cs`
 
 ```
 # 定义 FrameResult 类，用于表示一轮保龄球比赛的结果

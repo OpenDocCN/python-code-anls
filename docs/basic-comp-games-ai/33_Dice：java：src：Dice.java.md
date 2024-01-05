@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\33_Dice\java\src\Dice.java`
+# `33_Dice\java\src\Dice.java`
 
 ```
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组

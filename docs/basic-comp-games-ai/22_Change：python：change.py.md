@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\22_Change\python\change.py`
+# `22_Change\python\change.py`
 
 ```
 """

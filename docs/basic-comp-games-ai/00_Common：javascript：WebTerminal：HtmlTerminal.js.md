@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\00_Common\javascript\WebTerminal\HtmlTerminal.js`
+# `00_Common\javascript\WebTerminal\HtmlTerminal.js`
 
 ```
 /**

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\70_Poetry\csharp\Poem.cs`
+# `70_Poetry\csharp\Poem.cs`
 
 ```
 using static Poetry.Resources.Resource;  # 导入 Poetry 资源中的 Resource 类

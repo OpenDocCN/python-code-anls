@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\67_One_Check\javascript\onecheck.js`
+# `67_One_Check\javascript\onecheck.js`
 
 ```
 // 创建一个名为print的函数，用于在页面上输出文本

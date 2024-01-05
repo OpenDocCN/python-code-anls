@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\63_Name\java\Name.java`
+# `63_Name\java\Name.java`
 
 ```
 # 导入 java.util.Arrays 和 java.util.Scanner 类

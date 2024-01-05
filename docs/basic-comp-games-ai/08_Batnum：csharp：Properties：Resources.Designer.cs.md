@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\08_Batnum\csharp\Properties\Resources.Designer.cs`
+# `08_Batnum\csharp\Properties\Resources.Designer.cs`
 
 ```
 //------------------------------------------------------------------------------

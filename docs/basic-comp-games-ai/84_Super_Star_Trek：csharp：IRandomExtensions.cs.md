@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\84_Super_Star_Trek\csharp\IRandomExtensions.cs`
+# `84_Super_Star_Trek\csharp\IRandomExtensions.cs`
 
 ```
 using Games.Common.Randomness; // 导入 Games.Common.Randomness 命名空间

@@ -1,4 +1,4 @@
-# `d:/src/tocomm/basic-computer-games\46_Hexapawn\python\hexapawn.py`
+# `46_Hexapawn\python\hexapawn.py`
 
 ```
 """
