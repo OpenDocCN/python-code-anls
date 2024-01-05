@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Entity.py`
+# `Code\Entity.py`
 
 ```
 # 从 cmath 模块中导入 rect 函数

@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Magic.py`
+# `Code\Magic.py`
 
 ```
 # 导入pygame模块

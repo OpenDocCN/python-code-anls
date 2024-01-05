@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Support.py`
+# `Code\Support.py`
 
 ```
 # 从 csv 模块中导入 reader 函数

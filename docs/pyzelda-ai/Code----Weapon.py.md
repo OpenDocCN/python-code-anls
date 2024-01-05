@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Weapon.py`
+# `Code\Weapon.py`
 
 ```
 # 导入 os 模块和 pygame 模块

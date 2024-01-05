@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Enemy.py`
+# `Code\Enemy.py`
 
 ```
 # 导入pygame模块

@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Level.py`
+# `Code\Level.py`
 
 ```
 # 导入 pygame 模块

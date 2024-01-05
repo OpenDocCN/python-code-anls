@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Settings.py`
+# `Code\Settings.py`
 
 ```
 # 导入 os 模块

@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Upgrade.py`
+# `Code\Upgrade.py`
 
 ```
 # 导入模块

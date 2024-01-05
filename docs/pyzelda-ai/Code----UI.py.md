@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\UI.py`
+# `Code\UI.py`
 
 ```
 # 导入pygame模块

@@ -1,4 +1,4 @@
-# `.\Zelda-with-Python\Code\Debug.py`
+# `Code\Debug.py`
 
 ```
 # 导入pygame和os模块
