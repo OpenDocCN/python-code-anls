@@ -11,3 +11,4 @@
 +   [BertVITS2 源码解析](docs/bert-vits2-ai/README.md)
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
 +   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
++   [QLora 源码解析](docs/qlora-ai/README.md)
