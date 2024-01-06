@@ -12,3 +12,4 @@
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
 +   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
 +   [QLora 源码解析](docs/qlora-ai/README.md)
++   [QLoraTransformerVQ 源码解析](docs/transformer-vq-ai/README.md)
