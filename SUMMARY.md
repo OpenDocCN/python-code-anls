@@ -14,3 +14,4 @@
 +   [QLora 源码解析](docs/qlora-ai/README.md)
 +   [TransformerVQ 源码解析](docs/transformer-vq-ai/README.md)
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
++   [KubiScan 源码解析](docs/kubiscan-ai/README.md)
