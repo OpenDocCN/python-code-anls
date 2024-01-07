@@ -1,0 +1,99 @@
+# `Bert-VITS2\text\chinese_bert.py`
+
+```
+
+# 导入必要的库
+import sys
+import torch
+from transformers import AutoModelForMaskedLM, AutoTokenizer
+from config import config
+
+# 设置本地路径
+LOCAL_PATH = "./bert/chinese-roberta-wwm-ext-large"
+
+# 从本地路径加载预训练的tokenizer
+tokenizer = AutoTokenizer.from_pretrained(LOCAL_PATH)
+
+# 创建模型字典
+models = dict()
+
+# 定义获取BERT特征的函数
+def get_bert_feature(
+    text,
+    word2ph,
+    device=config.bert_gen_config.device,
+    style_text=None,
+    style_weight=0.7,
+):
+    # 根据系统平台和设备可用性调整设备
+    if (
+        sys.platform == "darwin"
+        and torch.backends.mps.is_available()
+        and device == "cpu"
+    ):
+        device = "mps"
+    if not device:
+        device = "cuda"
+    # 如果设备不在模型字典中，则加载模型到该设备
+    if device not in models.keys():
+        models[device] = AutoModelForMaskedLM.from_pretrained(LOCAL_PATH).to(device)
+    # 使用torch.no_grad()上下文，避免梯度计算
+    with torch.no_grad():
+        # 使用tokenizer将文本转换为模型输入
+        inputs = tokenizer(text, return_tensors="pt")
+        for i in inputs:
+            inputs[i] = inputs[i].to(device)
+        # 获取模型输出的隐藏状态
+        res = models[device](**inputs, output_hidden_states=True)
+        res = torch.cat(res["hidden_states"][-3:-2], -1)[0].cpu()
+        # 如果有样式文本，则计算样式特征
+        if style_text:
+            style_inputs = tokenizer(style_text, return_tensors="pt")
+            for i in style_inputs:
+                style_inputs[i] = style_inputs[i].to(device)
+            style_res = models[device](**style_inputs, output_hidden_states=True)
+            style_res = torch.cat(style_res["hidden_states"][-3:-2], -1)[0].cpu()
+            style_res_mean = style_res.mean(0)
+    # 断言确保word2ph的长度等于text的长度加2
+    assert len(word2ph) == len(text) + 2
+    word2phone = word2ph
+    phone_level_feature = []
+    # 对每个词的每个音素计算特征
+    for i in range(len(word2phone)):
+        if style_text:
+            repeat_feature = (
+                res[i].repeat(word2phone[i], 1) * (1 - style_weight)
+                + style_res_mean.repeat(word2phone[i], 1) * style_weight
+            )
+        else:
+            repeat_feature = res[i].repeat(word2phone[i], 1)
+        phone_level_feature.append(repeat_feature)
+
+    phone_level_feature = torch.cat(phone_level_feature, dim=0)
+
+    return phone_level_feature.T
+
+# 如果作为独立脚本运行，则执行以下代码
+if __name__ == "__main__":
+    # 创建随机的word_level_feature和word2phone
+    word_level_feature = torch.rand(38, 1024)  # 12个词,每个词1024维特征
+    word2phone = [
+        1, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1
+    ]
+
+    # 计算总帧数
+    total_frames = sum(word2phone)
+    print(word_level_feature.shape)
+    print(word2phone)
+    phone_level_feature = []
+    for i in range(len(word2phone)):
+        print(word_level_feature[i].shape)
+
+        # 对每个词的特征重复word2phone[i]次
+        repeat_feature = word_level_feature[i].repeat(word2phone[i], 1)
+        phone_level_feature.append(repeat_feature)
+
+    phone_level_feature = torch.cat(phone_level_feature, dim=0)
+    print(phone_level_feature.shape)  # torch.Size([36, 1024])
+
+```
