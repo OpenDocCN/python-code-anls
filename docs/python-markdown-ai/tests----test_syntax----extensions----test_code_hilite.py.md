@@ -1,0 +1,22 @@
+# `markdown\tests\test_syntax\extensions\test_code_hilite.py`
+
+```
+"""
+这段代码是一个关于Python Markdown的模块的文档和声明部分。
+
+从markdown.test_tools模块中导入TestCase类
+从markdown.extensions.codehilite模块中导入CodeHiliteExtension和CodeHilite类
+从markdown模块中导入extensions和treeprocessors
+导入os模块
+从xml.etree.ElementTree模块中导入etree类
+
+尝试导入pygments模块，如果导入失败则将has_pygments设置为False
+定义required_pygments_version变量，用于指定测试所需的pygments版本
+
+定义一个名为_ExtensionThatAddsAnEmptyCodeTag的类，继承自extensions.Extension类
+在该类中定义extendMarkdown方法，注册_AddCodeTagTreeprocessor类为treeprocessor
+
+定义一个名为_AddCodeTagTreeprocessor的类，继承自treeprocessors.Treeprocessor类
+在该类中定义run方法，向root元素中添加一个空的code标签
+"""
+```
