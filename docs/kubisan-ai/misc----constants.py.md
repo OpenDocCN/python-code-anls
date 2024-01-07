@@ -1,7 +1,8 @@
 # `KubiScan\misc\constants.py`
 
 ```
-# 定义常量，表示不安全的命名空间
+
+# 定义常量，表示风险命名空间
 RISKY_NAMESPACE = 'risky-namespace'
 # 定义常量，表示角色
 ROLE_KIND = 'Role'
@@ -17,4 +18,5 @@ USER_KIND = 'User'
 GROUP_KIND = 'Group'
 # 定义常量，表示服务账号
 SERVICEACCOUNT_KIND = 'ServiceAccount'
+
 ```

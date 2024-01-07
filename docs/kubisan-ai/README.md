@@ -1,5 +1,3 @@
-# KubiScan 源码解析
-
 [![GitHub release][release-img]][release]
 [![License][license-img]][license]
 
