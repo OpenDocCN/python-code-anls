@@ -1,21 +1,30 @@
-# `58_Love\csharp\Resources\Resource.cs`
+# `basic-computer-games\58_Love\csharp\Resources\Resource.cs`
 
 ```
-using System.IO;  // 导入 IO 类库，用于处理文件和流
-using System.Reflection;  // 导入 Reflection 类库，用于获取程序集信息
-using System.Runtime.CompilerServices;  // 导入 CompilerServices 类库，用于调用者成员名称的特性
 
-namespace Love.Resources;  // 命名空间声明
+// 引入需要使用的命名空间
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-internal static class Resource  // 声明一个内部静态类 Resource
+// 声明命名空间
+namespace Love.Resources
 {
-    internal static class Streams  // 声明一个内部静态类 Streams
+    // 声明内部静态类 Resource
+    internal static class Resource
     {
-        public static Stream Intro => GetStream();  // 声明一个公共静态属性 Intro，返回 GetStream() 方法的结果
+        // 声明内部静态类 Streams
+        internal static class Streams
+        {
+            // 声明公共静态属性 Intro，返回 GetStream 方法的结果
+            public static Stream Intro => GetStream();
+        }
+
+        // 声明私有静态方法 GetStream，使用 CallerMemberName 特性获取调用者的名称，默认为 null
+        private static Stream GetStream([CallerMemberName] string name = null)
+            // 返回当前程序集的嵌入资源流
+            => Assembly.GetExecutingAssembly().GetManifestResourceStream($"Love.Resources.{name}.txt");
     }
-
-    private static Stream GetStream([CallerMemberName] string name = null)  // 声明一个私有静态方法 GetStream，参数为调用者成员名称，默认值为 null
-        => Assembly.GetExecutingAssembly().GetManifestResourceStream($"Love.Resources.{name}.txt");  // 获取当前执行的程序集的资源流
-
 }
+
 ```

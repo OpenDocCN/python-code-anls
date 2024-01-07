@@ -1,25 +1,41 @@
-# `26_Chomp\csharp\IOExtensions.cs`
+# `basic-computer-games\26_Chomp\csharp\IOExtensions.cs`
 
 ```
-namespace Chomp;  # 命名空间声明
 
-internal static class IOExtensions  # 声明一个内部静态类 IOExtensions
+# 命名空间 Chomp 下的内部静态类 IOExtensions
+namespace Chomp;
+
+internal static class IOExtensions
 {
-    public static (float, int, int) ReadParameters(this IReadWrite io)  # 声明一个静态方法 ReadParameters，接收一个 IReadWrite 类型的参数，并返回一个元组
+    # 读取参数的扩展方法，返回一个元组包含三个值：浮点数、整数、整数
+    public static (float, int, int) ReadParameters(this IReadWrite io)
         => (
-            (int)io.ReadNumber(Resource.Prompts.HowManyPlayers),  # 调用 io 对象的 ReadNumber 方法，传入 HowManyPlayers 资源作为参数，并将结果转换为整数
-            io.ReadNumberWithMax(Resource.Prompts.HowManyRows, 9, Resource.Strings.TooManyRows),  # 调用 io 对象的 ReadNumberWithMax 方法，传入 HowManyRows 资源、最大值 9 和 TooManyRows 资源作为参数
-            io.ReadNumberWithMax(Resource.Prompts.HowManyColumns, 9, Resource.Strings.TooManyColumns)  # 调用 io 对象的 ReadNumberWithMax 方法，传入 HowManyColumns 资源、最大值 9 和 TooManyColumns 资源作为参数
+            # 调用 ReadNumber 方法读取玩家数量
+            (int)io.ReadNumber(Resource.Prompts.HowManyPlayers),
+            # 调用 ReadNumberWithMax 方法读取行数，限制最大值为9
+            io.ReadNumberWithMax(Resource.Prompts.HowManyRows, 9, Resource.Strings.TooManyRows),
+            # 调用 ReadNumberWithMax 方法读取列数，限制最大值为9
+            io.ReadNumberWithMax(Resource.Prompts.HowManyColumns, 9, Resource.Strings.TooManyColumns)
         );
 
-    private static int ReadNumberWithMax(this IReadWrite io, string initialPrompt, int max, string reprompt)  # 声明一个私有静态方法 ReadNumberWithMax，接收一个 IReadWrite 类型的参数、一个字符串 initialPrompt、一个整数 max 和一个字符串 reprompt，并返回一个整数
+    # 读取带有最大值限制的数字的私有方法
+    private static int ReadNumberWithMax(this IReadWrite io, string initialPrompt, int max, string reprompt)
     {
-        var prompt = initialPrompt;  # 初始化一个字符串变量 prompt，赋值为 initialPrompt
+        # 初始化提示信息
+        var prompt = initialPrompt;
 
-        while (true)  # 进入无限循环
+        # 循环直到输入的数字小于等于9
+        while (true)
         {
-            var response = io.ReadNumber(prompt);  # 调用 io 对象的 ReadNumber 方法，传入 prompt 变量作为参数，并将结果赋值给 response
-            if (response <= 9) { return (int)response; }  # 如果 response 小于等于 9，则将其转换为整数并返回
-# 创建一个新的字符串 prompt，其值为 reprompt 和 initialPrompt 转换为小写后的字符串的拼接
-prompt = $"{reprompt} {initialPrompt.ToLowerInvariant()}";
+            # 调用 ReadNumber 方法读取用户输入的数字
+            var response = io.ReadNumber(prompt);
+            # 如果输入的数字小于等于9，则返回该数字
+            if (response <= 9) { return (int)response; }
+
+            # 更新提示信息，要求用户重新输入
+            prompt = $"{reprompt} {initialPrompt.ToLowerInvariant()}";
+        }
+    }
+}
+
 ```

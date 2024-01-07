@@ -1,20 +1,31 @@
-# `46_Hexapawn\csharp\Resources\Resource.cs`
+# `basic-computer-games\46_Hexapawn\csharp\Resources\Resource.cs`
 
 ```
-# 导入所需的模块
-import zipfile
-from io import BytesIO
 
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
+// 引入所需的命名空间
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// 命名空间 Hexapawn.Resources
+namespace Hexapawn.Resources
+{
+    // 内部静态类 Resource
+    internal static class Resource
+    {
+        // 内部静态类 Streams
+        internal static class Streams
+        {
+            // 获取指令流
+            public static Stream Instructions => GetStream();
+            // 获取标题流
+            public static Stream Title => GetStream();
+        }
+
+        // 获取流的私有静态方法
+        private static Stream GetStream([CallerMemberName] string name = null)
+            => Assembly.GetExecutingAssembly().GetManifestResourceStream($"Hexapawn.Resources.{name}.txt");
+    }
+}
+
 ```

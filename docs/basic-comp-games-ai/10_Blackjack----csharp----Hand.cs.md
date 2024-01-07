@@ -1,63 +1,87 @@
-# `10_Blackjack\csharp\Hand.cs`
+# `basic-computer-games\10_Blackjack\csharp\Hand.cs`
 
 ```
-        // 使用给定的卡片添加到手牌中
+
+// 引入系统和集合类库
+using System;
+using System.Collections.Generic;
+
+// 命名空间为Blackjack
+namespace Blackjack
+{
+    // 定义一个名为Hand的公共类
+    public class Hand
+    {
+        // 创建一个私有的名为_cards的Card类型列表，初始容量为12
+        private readonly List<Card> _cards = new List<Card>(12);
+        // 创建一个私有的整型变量_cachedTotal，初始值为0
+
+        // 添加一张卡片到手牌中
         public Card AddCard(Card card)
         {
-            _cards.Add(card); // 将卡片添加到手牌列表中
-            _cachedTotal = 0; // 重置缓存的总点数
+            _cards.Add(card); // 将卡片添加到_cards列表中
+            _cachedTotal = 0; // 重置_cachedTotal为0
             return card; // 返回添加的卡片
         }
 
-        // 丢弃手牌中的所有卡片到牌堆中
+        // 丢弃手牌中的卡片
         public void Discard(Deck deck)
         {
-            deck.Discard(_cards); // 将手牌中的所有卡片丢弃到牌堆中
-            _cards.Clear();  # 清空_cards列表中的所有元素
-            _cachedTotal = 0;  # 将_cachedTotal变量的值设为0
+            deck.Discard(_cards); // 调用Deck类的Discard方法，将_cards列表中的卡片丢弃
+            _cards.Clear(); // 清空_cards列表
+            _cachedTotal = 0; // 重置_cachedTotal为0
         }
 
+        // 分牌
         public void SplitHand(Hand secondHand)
         {
-            if (Count != 2 || secondHand.Count != 0)  # 如果当前手牌数量不等于2或者第二手牌数量不等于0
-                throw new InvalidOperationException();  # 抛出无效操作异常
-            secondHand.AddCard(_cards[1]);  # 将当前手牌的第二张牌添加到第二手牌中
-            _cards.RemoveAt(1);  # 移除当前手牌的第二张牌
-            _cachedTotal = 0;  # 将_cachedTotal变量的值设为0
+            // 如果手牌数量不为2或者第二手牌数量不为0，则抛出InvalidOperationException异常
+            if (Count != 2 || secondHand.Count != 0)
+                throw new InvalidOperationException();
+            secondHand.AddCard(_cards[1]); // 将_cards列表中的第二张卡片添加到第二手牌中
+            _cards.RemoveAt(1); // 移除_cards列表中的第二张卡片
+            _cachedTotal = 0; // 重置_cachedTotal为0
         }
 
-        public IReadOnlyList<Card> Cards => _cards;  # 返回_cards列表的只读版本
+        // 获取_cards列表的只读副本
+        public IReadOnlyList<Card> Cards => _cards;
 
-        public int Count => _cards.Count;  # 返回_cards列表中元素的数量
+        // 获取_cards列表的数量
+        public int Count => _cards.Count;
 
-        public bool Exists => _cards.Count > 0;  # 返回_cards列表中是否存在元素
+        // 判断_cards列表是否存在卡片
+        public bool Exists => _cards.Count > 0;
 
-        public int Total  # 定义一个名为Total的属性
+        // 计算手牌的总点数
+        public int Total
         {
             get
             {
-                if (_cachedTotal == 0)  # 如果缓存的总数为0
+                if (_cachedTotal == 0)
                 {
-                    var aceCount = 0;  # 初始化A的数量为0
-                    foreach (var card in _cards)  # 遍历_cards列表中的每张牌
+                    var aceCount = 0; // 创建一个名为aceCount的变量，初始值为0
+                    foreach (var card in _cards) // 遍历_cards列表中的每张卡片
                     {
-                        _cachedTotal += card.Value;  # 将每张牌的点数加到缓存的总数中
-                        if (card.IsAce)  # 如果这张牌是A
-                            aceCount++;  # A的数量加1
+                        _cachedTotal += card.Value; // 将卡片的点数加到_cachedTotal中
+                        if (card.IsAce) // 如果卡片是Ace
+                            aceCount++; // aceCount加1
                     }
-                    while (_cachedTotal > 21 && aceCount > 0)  # 当缓存的总数大于21且A的数量大于0时
+                    while (_cachedTotal > 21 && aceCount > 0) // 当_cachedTotal大于21且aceCount大于0时
                     {
-                        _cachedTotal -= 10;  # 缓存的总数减去10
-                        aceCount--;  # A的数量减1
+                        _cachedTotal -= 10; // _cachedTotal减去10
+                        aceCount--; // aceCount减1
                     }
                 }
-                return _cachedTotal;  # 返回缓存的总数
+                return _cachedTotal; // 返回_cachedTotal
             }
-        }  # 结束类定义
+        }
 
-        public bool IsBlackjack => Total == 21 && Count == 2;  # 如果牌的总点数为21且牌的数量为2，返回true，否则返回false
+        // 判断手牌是否为21点
+        public bool IsBlackjack => Total == 21 && Count == 2;
 
-        public bool IsBusted => Total > 21;  # 如果牌的总点数大于21，返回true，否则返回false
+        // 判断手牌是否爆牌
+        public bool IsBusted => Total > 21;
     }
 }
+
 ```

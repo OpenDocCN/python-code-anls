@@ -1,79 +1,68 @@
-# `86_Target\csharp\Point.cs`
+# `basic-computer-games\86_Target\csharp\Point.cs`
 
 ```
-        # 定义 Point 类，包含私有属性 _angleFromX、_angleFromZ、_x、_y、_z 和 _estimateCount
-        # 构造函数，接受 angleFromX、angleFromZ 和 distance 作为参数
-        # 将 angleFromX、angleFromZ 和 distance 分别赋值给 _angleFromX、_angleFromZ 和 Distance
-```
-```python
-            _x = distance * Math.Sin(angleFromX.Radians) * Math.Cos(angleFromZ.Radians);
-            _y = distance * Math.Sin(angleFromX.Radians) * Math.Sin(angleFromZ.Radians);
-            _z = distance * Math.Cos(angleFromX.Radians);
+
+// 引入 System 命名空间
+using System;
+
+// 定义 Target 命名空间
+namespace Target
+{
+    // 定义 Point 类
+    internal class Point
+    {
+        // 声明私有只读字段 _angleFromX 和 _angleFromZ
+        private readonly float _angleFromX;
+        private readonly float _angleFromZ;
+
+        // 声明私有只读字段 _x、_y 和 _z
+        private readonly float _x;
+        private readonly float _y;
+        private readonly float _z;
+
+        // 声明私有字段 _estimateCount
+        private int _estimateCount;
+
+        // 定义 Point 类的构造函数，接受 Angle 对象和距离作为参数
+        public Point(Angle angleFromX, Angle angleFromZ, float distance)
+        {
+            // 初始化字段值
+            _angleFromX = angleFromX;
+            _angleFromZ = angleFromZ;
+            Distance = distance;
+
+            // 根据角度和距离计算坐标值
+            _x = distance * (float)Math.Sin(_angleFromZ) * (float)Math.Cos(_angleFromX);
+            _y = distance * (float)Math.Sin(_angleFromZ) * (float)Math.Sin(_angleFromX);
+            _z = distance * (float)Math.Cos(_angleFromZ);
         }
-```
-```python
-        # 定义构造函数内的计算过程，根据给定的 angleFromX、angleFromZ 和 distance 计算出 x、y、z 坐标
-```
-```python
+
+        // 声明 Distance 属性
         public float Distance { get; }
-        # 定义 Distance 属性，只读
-```
-```python
-        public int EstimateCount
-        {
-            get { return _estimateCount; }
-            set { _estimateCount = value; }
-        }
-        # 定义 EstimateCount 属性，可读可写
-```
-```python
-        public float X => _x;
-        public float Y => _y;
-        public float Z => _z;
-        # 定义 X、Y、Z 属性，只读
-```
-```python
-        public float AngleFromX => _angleFromX.Degrees;
-        public float AngleFromZ => _angleFromZ.Degrees;
-        # 定义 AngleFromX、AngleFromZ 属性，只读，返回角度值
-```
-```python
-        public override string ToString()
-        {
-            return $"X: {_x}, Y: {_y}, Z: {_z}";
-        }
-        # 重写 ToString 方法，返回 Point 对象的 x、y、z 坐标信息
-    }
-}
-```
-```python
-# 定义 Point 类的 ToString 方法，返回 Point 对象的 x、y、z 坐标信息
-            _x = distance * (float)Math.Sin(_angleFromZ) * (float)Math.Cos(_angleFromX);  // 计算 x 坐标
-            _y = distance * (float)Math.Sin(_angleFromZ) * (float)Math.Sin(_angleFromX);  // 计算 y 坐标
-            _z = distance * (float)Math.Cos(_angleFromZ);  // 计算 z 坐标
-        }
 
-        public float Distance { get; }  // 获取距离属性
-
-        public float EstimateDistance() =>  // 估算距离
-            ++_estimateCount switch  // 递增估算次数并进行判断
+        // 定义 EstimateDistance 方法，返回估计距离
+        public float EstimateDistance() =>
+            ++_estimateCount switch
             {
-                1 => EstimateDistance(20),  // 估算距离，精度为 20
-                2 => EstimateDistance(10),  // 估算距离，精度为 10
-                3 => EstimateDistance(5),   // 估算距离，精度为 5
-                4 => EstimateDistance(1),   // 估算距离，精度为 1
-                _ => Distance  // 默认返回实际距离
+                1 => EstimateDistance(20),
+                2 => EstimateDistance(10),
+                3 => EstimateDistance(5),
+                4 => EstimateDistance(1),
+                _ => Distance
             };
 
-        public float EstimateDistance(int precision) => (float)Math.Floor(Distance / precision) * precision;  // 根据给定精度估算距离
-        // 返回当前点的与 X 轴和 Z 轴的夹角（弧度）
+        // 定义 EstimateDistance 方法，接受精度参数，返回估计距离
+        public float EstimateDistance(int precision) => (float)Math.Floor(Distance / precision) * precision;
+
+        // 定义 GetBearing 方法，返回坐标的方位角
         public string GetBearing() => $"Radians from X axis = {_angleFromX}   from Z axis = {_angleFromZ}";
 
-        // 返回当前点的坐标信息
+        // 重写 ToString 方法，返回坐标的字符串表示
         public override string ToString() => $"X= {_x}   Y = {_y}   Z= {_z}";
 
-        // 重载减法运算符，实现两个点的坐标相减
+        // 定义 Point 类的减法运算符重载，返回坐标的偏移量
         public static Offset operator -(Point p1, Point p2) => new (p1._x - p2._x, p1._y - p2._y, p1._z - p2._z);
     }
 }
+
 ```

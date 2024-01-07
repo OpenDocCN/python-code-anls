@@ -1,17 +1,25 @@
-# `16_Bug\csharp\Parts\Legs.cs`
+# `basic-computer-games\16_Bug\csharp\Parts\Legs.cs`
 
 ```
-using System.Text;  // 导入 System.Text 命名空间，用于使用 StringBuilder 类
-using BugGame.Resources;  // 导入 BugGame.Resources 命名空间，用于使用 Message 类
 
-namespace BugGame.Parts;  // 声明 BugGame.Parts 命名空间
-internal class Legs : PartCollection  // 声明 Legs 类，继承自 PartCollection 类
+# 导入 System.Text 和 BugGame.Resources 命名空间
+using System.Text;
+using BugGame.Resources;
+
+# 声明 Legs 类，继承自 PartCollection 类
+namespace BugGame.Parts
 {
-    public Legs()  // 声明 Legs 类的构造函数
-        : base(6, Message.LegAdded, Message.LegsFull)  // 调用基类 PartCollection 的构造函数，传入参数 6, Message.LegAdded, Message.LegsFull
+    internal class Legs : PartCollection
     {
-    }
+        # 构造函数，初始化 Legs 类，调用基类的构造函数，传入参数 6, Message.LegAdded, Message.LegsFull
+        public Legs()
+            : base(6, Message.LegAdded, Message.LegsFull)
+        {
+        }
 
-    public void AppendTo(StringBuilder builder) => AppendTo(builder, 6, 2, 'L');  // 声明 AppendTo 方法，将参数传递给另一个重载的 AppendTo 方法
+        # 定义 AppendTo 方法，将部件信息追加到 StringBuilder 对象中，传入参数为 builder, 6, 2, 'L'
+        public void AppendTo(StringBuilder builder) => AppendTo(builder, 6, 2, 'L');
+    }
 }
+
 ```

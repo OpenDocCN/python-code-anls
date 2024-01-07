@@ -1,14 +1,16 @@
-# `51_Hurkle\csharp\FailedGuessViewModel.cs`
+# `basic-computer-games\51_Hurkle\csharp\FailedGuessViewModel.cs`
 
 ```
+
+# 定义了一个名为hurkle的命名空间
 namespace hurkle
 {
-    // 命名空间 hurkle
+    # 定义了一个内部类FailedGuessViewModel
     internal class FailedGuessViewModel
     {
-        // 定义一个内部类 FailedGuessViewModel
-        // 公共属性 Direction，类型为 CardinalDirection，只能在初始化时赋值
+        # 声明了一个公共属性Direction，用于获取和初始化方向值
         public CardinalDirection Direction { get; init; }
     }
 }
+
 ```

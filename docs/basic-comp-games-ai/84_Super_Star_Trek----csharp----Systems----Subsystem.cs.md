@@ -1,51 +1,62 @@
-# `84_Super_Star_Trek\csharp\Systems\Subsystem.cs`
+# `basic-computer-games\84_Super_Star_Trek\csharp\Systems\Subsystem.cs`
 
 ```
-using Games.Common.IO;  # 导入 Games.Common.IO 模块
-using SuperStarTrek.Commands;  # 导入 SuperStarTrek.Commands 模块
-using SuperStarTrek.Space;  # 导入 SuperStarTrek.Space 模块
 
-namespace SuperStarTrek.Systems;  # 定义 SuperStarTrek.Systems 命名空间
+// 引入所需的命名空间
+using Games.Common.IO;
+using SuperStarTrek.Commands;
+using SuperStarTrek.Space;
 
-internal abstract class Subsystem  # 定义抽象类 Subsystem
+// 定义一个抽象的子系统类
+namespace SuperStarTrek.Systems;
+internal abstract class Subsystem
 {
-    private readonly IReadWrite _io;  # 声明私有只读字段 _io，类型为 IReadWrite 接口
+    // 声明私有的 IReadWrite 接口类型的变量 _io
+    private readonly IReadWrite _io;
 
-    protected Subsystem(string name, Command command, IReadWrite io)  # 定义构造函数，接受 name、command 和 io 三个参数
+    // 子系统的构造函数，初始化名称、命令和 IReadWrite 接口
+    protected Subsystem(string name, Command command, IReadWrite io)
     {
-        Name = name;  # 初始化 Name 属性
-        Command = command;  # 初始化 Command 属性
-        Condition = 0;  # 初始化 Condition 属性为 0
-        _io = io;  # 初始化 _io 字段
+        Name = name;
+        Command = command;
+        Condition = 0;
+        _io = io;
     }
 
-    internal string Name { get; }  # 声明内部可访问的只读属性 Name
-    internal float Condition { get; private set; }  // 声明一个内部的浮点型属性 Condition，只能在类内部进行设置
+    // 子系统的名称属性
+    internal string Name { get; }
 
-    internal bool IsDamaged => Condition < 0;  // 声明一个内部的布尔型属性 IsDamaged，根据 Condition 的值判断是否损坏
+    // 子系统的状态属性
+    internal float Condition { get; private set; }
 
-    internal Command Command { get; }  // 声明一个内部的 Command 类型属性 Command，只能进行获取操作
+    // 子系统是否受损的属性
+    internal bool IsDamaged => Condition < 0;
 
-    protected virtual bool CanExecuteCommand() => true;  // 声明一个受保护的虚拟方法 CanExecuteCommand，返回值为 true
+    // 子系统的命令属性
+    internal Command Command { get; }
 
-    protected bool IsOperational(string notOperationalMessage)  // 声明一个受保护的方法 IsOperational，接受一个字符串参数
+    // 判断是否可以执行命令的方法
+    protected virtual bool CanExecuteCommand() => true;
+
+    // 判断子系统是否正常运行的方法
+    protected bool IsOperational(string notOperationalMessage)
     {
-        if (IsDamaged)  // 如果 IsDamaged 为 true
+        if (IsDamaged)
         {
-            _io.WriteLine(notOperationalMessage.Replace("{name}", Name));  // 在控制台输出替换了{name}的消息
-            return false;  // 返回 false
+            _io.WriteLine(notOperationalMessage.Replace("{name}", Name));
+            return false;
         }
-
-        return true;  // 返回 true
+        return true;
     }
 
-    internal CommandResult ExecuteCommand(Quadrant quadrant)  // 声明一个内部的方法 ExecuteCommand，接受一个 Quadrant 参数
+    // 执行命令的方法
+    internal CommandResult ExecuteCommand(Quadrant quadrant)
         => CanExecuteCommand() ? ExecuteCommandCore(quadrant) : CommandResult.Ok;
-        # 如果CanExecuteCommand()返回true，则执行ExecuteCommandCore(quadrant)，否则返回CommandResult.Ok
 
+    // 执行命令核心逻辑的抽象方法
     protected abstract CommandResult ExecuteCommandCore(Quadrant quadrant);
-    # 抽象方法，用于执行具体的命令，返回命令执行的结果
 
+    // 修复子系统的方法
     internal virtual void Repair()
     {
         if (IsDamaged)
@@ -53,8 +64,8 @@ internal abstract class Subsystem  # 定义抽象类 Subsystem
             Condition = 0;
         }
     }
-    # 内部虚方法，用于修复设备，如果设备受损，则将Condition设置为0
 
+    // 进行修复工作的方法
     internal virtual bool Repair(float repairWorkDone)
     {
         if (IsDamaged)
@@ -65,15 +76,11 @@ internal abstract class Subsystem  # 定义抽象类 Subsystem
                 Condition = -0.1f;
             }
         }
-    }
-    # 内部虚方法，用于修复设备，根据修复工作的完成度来更新设备的Condition，并在Condition的值在一定范围内时进行修正
-            }
-        }
-        # 返回是否受损的布尔值
         return !IsDamaged;
     }
 
-    # 减少条件值来表示受到伤害
+    // 受到伤害的方法
     internal void TakeDamage(float damage) => Condition -= damage;
 }
+
 ```

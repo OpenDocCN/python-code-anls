@@ -1,76 +1,89 @@
-# `61_Math_Dice\java\Die.java`
+# `basic-computer-games\61_Math_Dice\java\Die.java`
 
 ```
-import java.util.Random;  # 导入 Random 类
 
-public class Die {  # 定义 Die 类
-    private static final int DEFAULT_SIDES = 6;  # 定义默认的骰子面数为 6
-    private int faceValue;  # 定义骰子的当前面值
-    private int sides;  # 定义骰子的面数
-    private Random generator = new Random();  # 创建一个 Random 对象用于生成随机数
+// 导入 java.util.Random 类
+import java.util.Random;
+
+// 定义 Die 类
+public class Die {
+    // 定义默认的骰子面数
+    private static final int DEFAULT_SIDES = 6;
+    // 定义骰子的当前面值和面数
+    private int faceValue;
+    private int sides;
+    // 创建 Random 对象用于生成随机数
+    private Random generator = new Random();
 
     /**
-     * Construct a new Die with default sides
+     * 构造一个具有默认面数的新骰子
      */
-    public Die() {  # Die 类的构造函数
-        this.sides = DEFAULT_SIDES;  # 将骰子的面数设为默认面数
-        this.faceValue = 1 + generator.nextInt(sides);  # 生成一个随机数作为骰子的初始面值
+    public Die() {
+        this.sides = DEFAULT_SIDES;
+        // 生成一个介于 1 和 sides 之间的随机数，并存储在 faceValue 中
+        this.faceValue = 1 + generator.nextInt(sides);
     }
 
     /**
-     * Generate a new random number between 1 and sides to be stored in faceValue
+     * 生成一个介于 1 和 sides 之间的随机数，并存储在 faceValue 中
      */
-    private void throwDie() {  # throwDie 方法用于生成一个新的随机数作为骰子的面值
-        this.faceValue = 1 + generator.nextInt(sides);  # 生成一个1到骰子面数之间的随机数，并将其赋值给骰子的当前面值
-
+    private void throwDie() {
+        this.faceValue = 1 + generator.nextInt(sides);
     }
 
     /**
-     * @return the faceValue  # 返回当前骰子的面值
+     * 返回当前骰子的面值
+     * @return the faceValue
      */
     public int getFaceValue() {
         return faceValue;
     }
 
+    // 打印骰子的图形表示
     public void printDie() {
-        throwDie();  # 掷骰子，生成一个随机的面值
-        int x = this.getFaceValue();  # 获取当前骰子的面值
+        // 抛骰子，获取当前面值
+        throwDie();
+        int x = this.getFaceValue();
 
-        System.out.println(" ----- ");  # 打印分隔线
+        System.out.println(" ----- ");
 
-        if(x==4||x==5||x==6) {  # 如果骰子的面值为4、5或6
-            printTwo();  # 打印数字2的图案
-        } else if(x==2||x==3) {  # 如果 x 等于 2 或者等于 3
-            System.out.println("| *   |");  # 打印 "| *   |"
-        } else {  # 否则
-            printZero();  # 调用 printZero() 函数
+        // 根据面值打印不同的图形表示
+        if(x==4||x==5||x==6) {
+            printTwo();
+        } else if(x==2||x==3) {
+            System.out.println("| *   |");
+        } else {
+            printZero();
         }
 
-        if(x==1||x==3||x==5) {  # 如果 x 等于 1 或者等于 3 或者等于 5
-            System.out.println("|  *  |");  # 打印 "|  *  |"
-        } else if(x==2||x==4) {  # 否则如果 x 等于 2 或者等于 4
-            printZero();  # 调用 printZero() 函数
-        } else {  # 否则
-            printTwo();  # 调用 printTwo() 函数
+        if(x==1||x==3||x==5) {
+            System.out.println("|  *  |");
+        } else if(x==2||x==4) {
+            printZero();
+        } else {
+            printTwo();
         }
 
-        if(x==4||x==5||x==6) {  # 如果 x 等于 4 或者等于 5 或者等于 6
-            printTwo();  # 调用 printTwo() 函数
-        } else if(x==2||x==3) {  # 否则如果 x 等于 2 或者等于 3
-            System.out.println("|   * |");  # 打印 "|   * |"
-        } else {  # 否则
-            printZero();  # 调用 printZero() 函数
-        }  # 结束 printTwo 方法的定义
+        if(x==4||x==5||x==6) {
+            printTwo();
+        } else if(x==2||x==3) {
+            System.out.println("|   * |");
+        } else {
+            printZero();
+        }
 
-        System.out.println(" ----- ");  # 打印一行横线
+        System.out.println(" ----- ");
     }
 
-    private void printZero() {  # 定义一个名为 printZero 的私有方法
-        System.out.println("|     |");  # 打印一个空格
+    // 打印空白图形
+    private void printZero() {
+        System.out.println("|     |");
     }
 
-    private void printTwo() {  # 定义一个名为 printTwo 的私有方法
-        System.out.println("| * * |");  # 打印一个带有星号的图案
+    // 打印带有 * 的图形
+    private void printTwo() {
+        System.out.println("| * * |");
     }
 }
+
 ```

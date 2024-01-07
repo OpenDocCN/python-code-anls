@@ -1,24 +1,34 @@
-# `34_Digits\csharp\IOExtensions.cs`
+# `basic-computer-games\34_Digits\csharp\IOExtensions.cs`
 
 ```
-namespace Digits;  # 命名空间声明
 
-internal static class IOExtensions  # 声明一个内部静态类 IOExtensions
+# 创建名为Digits的命名空间
+namespace Digits;
+
+# 创建名为IOExtensions的静态类
+internal static class IOExtensions
 {
-    internal static IEnumerable<int> Read10Digits(this IReadWrite io, string prompt, Stream retryText)  # 声明一个内部静态方法 Read10Digits，接受一个 IReadWrite 类型的参数 io，一个字符串类型的参数 prompt，一个 Stream 类型的参数 retryText，并返回一个 IEnumerable<int> 类型的结果
+    # 创建名为Read10Digits的静态方法，接收io、prompt和retryText三个参数，返回一个整数序列
+    internal static IEnumerable<int> Read10Digits(this IReadWrite io, string prompt, Stream retryText)
     {
-        while (true)  # 进入一个无限循环
+        # 创建一个无限循环
+        while (true)
         {
-            var numbers = new float[10];  # 声明一个包含 10 个元素的浮点数数组 numbers
-            io.ReadNumbers(prompt, numbers);  # 调用 io 对象的 ReadNumbers 方法，传入 prompt 和 numbers 数组
+            # 创建一个包含10个浮点数的数组
+            var numbers = new float[10];
+            # 调用io对象的ReadNumbers方法，传入prompt和numbers数组
+            io.ReadNumbers(prompt, numbers);
 
-            if (numbers.All(n => n == 0 || n == 1 || n == 2))  # 如果 numbers 数组中的所有元素都等于 0、1 或 2
+            # 如果所有的数字都是0、1或2，则将浮点数转换为整数并返回
+            if (numbers.All(n => n == 0 || n == 1 || n == 2))
             {
-                return numbers.Select(n => (int)n);  # 返回将 numbers 数组中的每个元素转换为整数后的结果
+                return numbers.Select(n => (int)n);
             }    
 
-            io.Write(retryText);  # 调用 io 对象的 Write 方法，传入 retryText
+            # 调用io对象的Write方法，传入retryText
+            io.Write(retryText);
         }
     }
 }
+
 ```

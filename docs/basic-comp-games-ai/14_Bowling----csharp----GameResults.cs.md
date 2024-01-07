@@ -1,16 +1,37 @@
-# `14_Bowling\csharp\GameResults.cs`
+# `basic-computer-games\14_Bowling\csharp\GameResults.cs`
 
 ```
-# 创建一个名为 GameResults 的类
-class GameResults:
-    # 定义一个名为 FramesPerGame 的静态只读变量，值为 10
-    FramesPerGame = 10
-    # 定义一个名为 Results 的属性，用于存储 FrameResult 对象的数组
-    Results = []
 
-    # 定义一个构造函数，初始化 Results 数组，每个元素都是一个 FrameResult 对象
-    def __init__(self):
-        # 初始化 Results 数组，长度为 FramesPerGame，每个元素都是一个 FrameResult 对象
-        self.Results = [FrameResult() for _ in range(self.FramesPerGame)]
-抱歉，给定的代码片段不完整，无法为其添加注释。
+// 引入命名空间
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+// 声明 Bowling 命名空间
+namespace Bowling
+{
+    // 声明 GameResults 类
+    public class GameResults
+    {
+        // 声明 FramesPerGame 常量，表示每局游戏的帧数
+        public static readonly int FramesPerGame = 10;
+        // 声明 Results 属性，表示每帧的比赛结果
+        public FrameResult[] Results { get; set; }
+
+        // 声明 GameResults 类的构造函数
+        public GameResults()
+        {
+            // 初始化 Results 数组，长度为 FramesPerGame
+            Results = new FrameResult[FramesPerGame];
+            // 遍历 Results 数组，初始化每个元素为新的 FrameResult 对象
+            for (int i = 0; i < FramesPerGame; ++i)
+            {
+                Results[i] = new FrameResult();
+            }
+        }
+    }
+}
+
 ```

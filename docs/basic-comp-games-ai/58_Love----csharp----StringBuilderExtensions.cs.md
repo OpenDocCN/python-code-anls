@@ -1,21 +1,28 @@
-# `58_Love\csharp\StringBuilderExtensions.cs`
+# `basic-computer-games\58_Love\csharp\StringBuilderExtensions.cs`
 
 ```
-# 导入 BytesIO 类
-from io import BytesIO
-# 导入 zipfile 模块
-import zipfile
 
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
+# 引入 System.Text 命名空间
+using System.Text;
+
+# 声明名为 Love 的命名空间
+namespace Love;
+
+# 声明名为 StringBuilderExtensions 的静态类
+internal static class StringBuilderExtensions
+{
+    # 声明名为 AppendLines 的静态方法，接受 StringBuilder 对象和行数作为参数
+    internal static StringBuilder AppendLines(this StringBuilder builder, int count)
+    {
+        # 循环 count 次，每次在 StringBuilder 对象中追加一个换行符
+        for (int i = 0; i < count; i++)
+        {
+            builder.AppendLine();
+        }
+
+        # 返回追加了换行符后的 StringBuilder 对象
+        return builder;
+    }
+}
+
 ```

@@ -1,53 +1,76 @@
-# `74_Rock_Scissors_Paper\csharp\Game.cs`
+# `basic-computer-games\74_Rock_Scissors_Paper\csharp\Game.cs`
 
 ```
-            # 获取计算机的随机选择
-            computerChoice = Choices.GetRandom()
-            # 获取玩家的选择
-            humanChoice = GetHumanChoice()
 
-            # 打印计算机的选择
-            print("This is my choice...")
-            print("...{0}".format(computerChoice.Name)
+// 引入 System 和 System.Linq 命名空间
+using System;
+using System.Linq;
 
-            # 如果玩家的选择击败了计算机的选择
-            if humanChoice.Beats(computerChoice):
-            {
-                Console.WriteLine("You win!!!");  # 如果玩家赢了，打印“你赢了！”
-                HumanWins++;  # 玩家赢的次数加一
-            }
-            else if (computerChoice.Beats(humanChoice))  # 如果电脑赢了
-            {
-                Console.WriteLine("Wow!  I win!!!");  # 打印“哇！我赢了！”
-                ComputerWins++;  # 电脑赢的次数加一
-            }
-            else  # 如果是平局
-            {
-                Console.WriteLine("Tie game.  No winner.");  # 打印“平局，没有赢家。”
-                TieGames++;  # 平局次数加一
-            }
-        }
+// 创建 RockScissorsPaper 命名空间
+namespace RockScissorsPaper
+{
+    // 创建 Game 类
+    public class Game
+    {
+        // 创建 ComputerWins、HumanWins 和 TieGames 属性，用于记录游戏结果
+        public int ComputerWins { get; private set; }
+        public int HumanWins { get; private set; }
+        public int TieGames { get; private set; }
 
-        public void WriteFinalScore()  # 定义一个方法用来打印最终得分
+        // 创建 PlayGame 方法，用于进行游戏
+        public void PlayGame()
         {
-            Console.WriteLine();  # 打印空行
-            Console.WriteLine("Here is the final game score:");  # 打印“这是最终得分：”
-            Console.WriteLine("I have won {0} game(s).", ComputerWins);  // 打印计算机赢得游戏的次数
-            Console.WriteLine("You have one {0} game(s).", HumanWins);  // 打印玩家赢得游戏的次数
-            Console.WriteLine("And {0} game(s) ended in a tie.", TieGames);  // 打印游戏以平局结束的次数
+            // 获取计算机的选择
+            var computerChoice = Choices.GetRandom();
+            // 获取玩家的选择
+            var humanChoice = GetHumanChoice();
+
+            // 输出计算机的选择
+            Console.WriteLine("This is my choice...");
+            Console.WriteLine("...{0}", computerChoice.Name);
+
+            // 判断游戏结果并更新对应的属性
+            if (humanChoice.Beats(computerChoice))
+            {
+                Console.WriteLine("You win!!!");
+                HumanWins++;
+            }
+            else if (computerChoice.Beats(humanChoice))
+            {
+                Console.WriteLine("Wow!  I win!!!");
+                ComputerWins++;
+            }
+            else
+            {
+                Console.WriteLine("Tie game.  No winner.");
+                TieGames++;
+            }
         }
 
+        // 创建 WriteFinalScore 方法，用于输出最终游戏得分
+        public void WriteFinalScore()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Here is the final game score:");
+            Console.WriteLine("I have won {0} game(s).", ComputerWins);
+            Console.WriteLine("You have one {0} game(s).", HumanWins);
+            Console.WriteLine("And {0} game(s) ended in a tie.", TieGames);
+        }
+
+        // 创建 GetHumanChoice 方法，用于获取玩家的选择
         public Choice GetHumanChoice()
         {
             while (true)
             {
-                Console.WriteLine("3=Rock...2=Scissors...1=Paper");  // 打印游戏选项
-                Console.WriteLine("1...2...3...What's your choice");  // 提示玩家进行选择
-                if (Choices.TryGetBySelector(Console.ReadLine(), out var choice))  // 从玩家输入中获取选择
-                    return choice;  // 返回玩家的选择
-                Console.WriteLine("Invalid.");  // 如果选择无效，则打印错误信息
+                Console.WriteLine("3=Rock...2=Scissors...1=Paper");
+                Console.WriteLine("1...2...3...What's your choice");
+                // 尝试获取玩家输入的选择，并返回对应的 Choice 对象
+                if (Choices.TryGetBySelector(Console.ReadLine(), out var choice))
+                    return choice;
+                Console.WriteLine("Invalid.");
             }
         }
     }
 }
+
 ```

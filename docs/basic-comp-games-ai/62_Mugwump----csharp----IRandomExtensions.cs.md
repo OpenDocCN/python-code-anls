@@ -1,15 +1,17 @@
-# `62_Mugwump\csharp\IRandomExtensions.cs`
+# `basic-computer-games\62_Mugwump\csharp\IRandomExtensions.cs`
 
 ```
-# 定义命名空间 Mugwump
+
+# 创建一个名为Mugwump的命名空间
 namespace Mugwump;
 
-# 定义一个内部静态类 IRandomExtensions
+# 创建一个名为IRandomExtensions的静态类，用于扩展IRandom接口
 internal static class IRandomExtensions
 {
-    # 定义一个内部静态方法 NextPosition，接收一个 IRandom 对象和两个整数参数，返回一个 Position 对象
+    # 创建一个名为NextPosition的静态方法，用于生成一个Position对象
     internal static Position NextPosition(this IRandom random, int maxX, int maxY) =>
-        # 创建一个新的 Position 对象，其 x 坐标为 random.Next(maxX)，y 坐标为 random.Next(maxY)
+        # 使用IRandom接口的Next方法生成一个随机X坐标和一个随机Y坐标，创建一个Position对象并返回
         new(random.Next(maxX), random.Next(maxY));
 }
+
 ```

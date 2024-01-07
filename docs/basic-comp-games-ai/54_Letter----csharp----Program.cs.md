@@ -1,9 +1,11 @@
-# `54_Letter\csharp\Program.cs`
+# `basic-computer-games\54_Letter\csharp\Program.cs`
 
 ```
-# 导入Letter模块
+
+# 导入Letter模块，以便使用其中的功能
 import Letter
 
-# 调用Letter模块中的Game类的Play方法
-Letter.Game.Play()
+# 调用Game模块中的Play函数，开始游戏
+Game.Play()
+
 ```

@@ -1,38 +1,49 @@
-# `16_Bug\csharp\Parts\Part.cs`
+# `basic-computer-games\16_Bug\csharp\Parts\Part.cs`
 
 ```
-using BugGame.Resources;  # 导入 BugGame.Resources 命名空间
 
-namespace BugGame.Parts;  # 声明 BugGame.Parts 命名空间
+// 使用 BugGame.Resources 命名空间
+using BugGame.Resources;
 
-internal class Part : IPart  # 声明 Part 类，并实现 IPart 接口
+// 声明 BugGame.Parts 命名空间下的 Part 类，实现 IPart 接口
+internal class Part : IPart
 {
-    private readonly Message _addedMessage;  # 声明私有只读字段 _addedMessage，类型为 Message
-    private readonly Message _duplicateMessage;  # 声明私有只读字段 _duplicateMessage，类型为 Message
+    // 声明私有的 Message 类型的_addedMessage和_duplicateMessage字段
+    private readonly Message _addedMessage;
+    private readonly Message _duplicateMessage;
 
-    public Part(Message addedMessage, Message duplicateMessage)  # 声明 Part 类的构造函数，接受两个 Message 类型的参数
+    // Part 类的构造函数，接受两个 Message 类型的参数
+    public Part(Message addedMessage, Message duplicateMessage)
     {
-        _addedMessage = addedMessage;  # 将构造函数参数 addedMessage 赋值给 _addedMessage 字段
-        _duplicateMessage = duplicateMessage;  # 将构造函数参数 duplicateMessage 赋值给 _duplicateMessage 字段
+        // 初始化_addedMessage和_duplicateMessage字段
+        _addedMessage = addedMessage;
+        _duplicateMessage = duplicateMessage;
     }
 
-    public virtual bool IsComplete => IsPresent;  # 声明虚属性 IsComplete，返回 IsPresent 的值
+    // 声明虚拟属性 IsComplete，返回 IsPresent 属性的值
+    public virtual bool IsComplete => IsPresent;
 
-    protected bool IsPresent { get; private set; }  # 声明受保护的属性 IsPresent，可读写
+    // 声明受保护的 IsPresent 属性，可读可写
+    protected bool IsPresent { get; private set; }
 
-    public string Name => GetType().Name;  # 实现 Name 属性，返回当前对象的类型名
-    # 尝试向对象中添加消息，如果对象已经存在消息，则返回失败并返回重复消息
-    def TryAdd(self, message):
-        # 如果对象已经存在消息
-        if self.IsPresent:
-            # 将重复消息赋值给传入的消息变量
-            message = self._duplicateMessage
-            # 返回失败
-            return False
-        # 将添加消息赋值给传入的消息变量
-        message = self._addedMessage
-        # 将对象的存在状态设置为True
-        self.IsPresent = True
-        # 返回成功
-        return True
+    // 声明 Name 属性，返回当前对象的类型名
+    public string Name => GetType().Name;
+
+    // 声明 TryAdd 方法，尝试添加部件，返回是否添加成功，并通过 out 参数返回相应的消息
+    public bool TryAdd(out Message message)
+    {
+        // 如果部件已存在，则返回重复消息并返回 false
+        if (IsPresent)
+        {
+            message = _duplicateMessage;
+            return false;
+        }
+
+        // 否则返回添加成功消息，将 IsPresent 设置为 true，并返回 true
+        message = _addedMessage;
+        IsPresent = true;
+        return true;
+    }
+}
+
 ```

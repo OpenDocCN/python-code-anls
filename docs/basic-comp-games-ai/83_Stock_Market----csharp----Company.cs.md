@@ -1,32 +1,42 @@
-# `83_Stock_Market\csharp\Company.cs`
+# `basic-computer-games\83_Stock_Market\csharp\Company.cs`
 
 ```
-        public decimal SharePrice { get; }
+
+// 命名空间声明，表示代码所属的命名空间
+namespace Game
+{
+    /// <summary>
+    /// 表示一个公司。
+    /// </summary>
+    // 定义一个记录类型 Company
+    public record Company
+    {
+        /// <summary>
+        /// 获取公司的名称。
+        /// </summary>
+        // 公开的字符串属性 Name，用于获取公司名称
+        public string Name { get; }
 
         /// <summary>
-        /// Initializes a new instance of the Company class.
+        /// 获取公司的三个字母的股票代码。
         /// </summary>
-        /// <param name="name">The company's name.</param>
-        /// <param name="stockSymbol">The company's stock symbol.</param>
-        /// <param name="sharePrice">The company's share price.</param>
-        public Company(string name, string stockSymbol, decimal sharePrice)
-        {
-            // 设置公司名称
-            Name = name;
-            // 设置公司股票代码
-            StockSymbol = stockSymbol;
-            // 设置公司股价
-            SharePrice = sharePrice;
-        }
-    }
-}
-        public double SharePrice { get; init; }  // 定义一个公共的双精度类型属性SharePrice，可以被获取和初始化
+        // 公开的字符串属性 StockSymbol，用于获取公司的股票代码
+        public string StockSymbol { get; }
 
         /// <summary>
-        /// Initializes a new Company record.
+        /// 获取公司的当前股价。
         /// </summary>
+        // 公开的双精度浮点数属性 SharePrice，用于获取公司的股价，并且可以进行初始化
+        public double SharePrice { get; init; }
+
+        /// <summary>
+        /// 初始化一个新的 Company 记录。
+        /// </summary>
+        // 公开的构造函数，用于初始化 Company 记录
         public Company(string name, string stockSymbol, double sharePrice) =>
-            (Name, StockSymbol, SharePrice) = (name, stockSymbol, sharePrice);  // 创建一个Company类的构造函数，用于初始化公司的名称、股票代码和股价
+            // 使用元组赋值语法初始化属性值
+            (Name, StockSymbol, SharePrice) = (name, stockSymbol, sharePrice);
     }
 }
+
 ```

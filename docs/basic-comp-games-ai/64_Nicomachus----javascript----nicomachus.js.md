@@ -1,127 +1,107 @@
-# `64_Nicomachus\javascript\nicomachus.js`
+# `basic-computer-games\64_Nicomachus\javascript\nicomachus.js`
 
 ```
-# NICOMACHUS
-# 
-# Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
-# 
 
-# 定义一个打印函数，将字符串添加到输出元素中
-def print(str):
-    document.getElementById("output").appendChild(document.createTextNode(str))
-
-# 定义一个输入函数，返回一个 Promise 对象
-def input():
-    var input_element
-    var input_str
-
-    return new Promise(function (resolve):
-                       # 创建一个输入元素
-                       input_element = document.createElement("INPUT")
-
-                       # 在输出元素中打印提示符
-                       print("? ")
-
-                       # 设置输入元素的类型为文本
-                       input_element.setAttribute("type", "text")
-# 设置输入元素的长度为50
-input_element.setAttribute("length", "50");
-# 将输入元素添加到 id 为 "output" 的元素中
-document.getElementById("output").appendChild(input_element);
-# 让输入元素获得焦点
-input_element.focus();
-# 初始化输入字符串为 undefined
-input_str = undefined;
-# 添加键盘按下事件监听器，当按下回车键时执行相应操作
-input_element.addEventListener("keydown", function (event) {
-    # 如果按下的键是回车键
-    if (event.keyCode == 13) {
-        # 将输入元素的值赋给输入字符串
-        input_str = input_element.value;
-        # 从 id 为 "output" 的元素中移除输入元素
-        document.getElementById("output").removeChild(input_element);
-        # 打印输入字符串
-        print(input_str);
-        # 打印换行符
-        print("\n");
-        # 解析并返回输入字符串
-        resolve(input_str);
-    }
-});
-# 结束键盘按下事件监听器的添加
-});
+// 定义一个打印函数，将字符串输出到指定的元素中
+function print(str)
+{
+    document.getElementById("output").appendChild(document.createTextNode(str));
 }
 
-# 定义一个函数，用于生成指定数量的空格
+// 定义一个输入函数，返回一个 Promise 对象
+function input()
+{
+    var input_element;
+    var input_str;
+
+    return new Promise(function (resolve) {
+                       // 创建一个输入框元素
+                       input_element = document.createElement("INPUT");
+
+                       // 输出提示符
+                       print("? ");
+                       input_element.setAttribute("type", "text");
+                       input_element.setAttribute("length", "50");
+                       document.getElementById("output").appendChild(input_element);
+                       input_element.focus();
+                       input_str = undefined;
+                       // 监听键盘事件，当按下回车键时，将输入的值传递给 resolve 函数
+                       input_element.addEventListener("keydown", function (event) {
+                                                      if (event.keyCode == 13) {
+                                                      input_str = input_element.value;
+                                                      document.getElementById("output").removeChild(input_element);
+                                                      print(input_str);
+                                                      print("\n");
+                                                      resolve(input_str);
+                                                      }
+                                                      });
+                       });
+}
+
+// 定义一个生成指定数量空格的函数
 function tab(space)
 {
     var str = "";
-    # 当 space 大于 0 时，循环添加空格到 str 中
     while (space-- > 0)
-        str += " ";  # 将空格添加到字符串末尾
-    return str;  # 返回修改后的字符串
+        str += " ";
+    return str;
+}
 
-var str;  # 声明变量str
-var b;  # 声明变量b
+var str;
+var b;
 
 // 主程序
 async function main()
 {
-    print(tab(33) + "NICOMA\n");  # 在输出中打印"NICOMA"，并在前面添加33个空格
-    print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");  # 在输出中打印"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"，并在前面添加15个空格
-    print("\n");  # 打印一个空行
-    print("\n");  # 打印一个空行
-    print("\n");  # 打印一个空行
-    print("BOOMERANG PUZZLE FROM ARITHMETICA OF NICOMACHUS -- A.D. 90!\n");  # 在输出中打印"BOOMERANG PUZZLE FROM ARITHMETICA OF NICOMACHUS -- A.D. 90!"
-    while (1) {  # 进入无限循环
-        print("\n");  # 打印一个空行
-        print("PLEASE THINK OF A NUMBER BETWEEN 1 AND 100.\n");  # 在输出中打印"PLEASE THINK OF A NUMBER BETWEEN 1 AND 100."
-        print("YOUR NUMBER DIVIDED BY 3 HAS A REMAINDER OF");  # 在输出中打印"YOUR NUMBER DIVIDED BY 3 HAS A REMAINDER OF"
-        # 从用户输入中获取整数并赋值给变量a
+    // 输出标题
+    print(tab(33) + "NICOMA\n");
+    print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
+    print("\n");
+    print("\n");
+    print("\n");
+    print("BOOMERANG PUZZLE FROM ARITHMETICA OF NICOMACHUS -- A.D. 90!\n");
+    while (1) {
+        print("\n");
+        print("PLEASE THINK OF A NUMBER BETWEEN 1 AND 100.\n");
+        print("YOUR NUMBER DIVIDED BY 3 HAS A REMAINDER OF");
+        // 获取用户输入的值并转换为整数
         a = parseInt(await input());
-        # 打印提示信息
         print("YOUR NUMBER DIVIDED BY 5 HAS A REMAINDER OF");
-        # 从用户输入中获取整数并赋值给变量b
+        // 获取用户输入的值并转换为整数
         b = parseInt(await input());
-        # 打印提示信息
         print("YOUR NUMBER DIVIDED BY 7 HAS A REMAINDER OF");
-        # 从用户输入中获取整数并赋值给变量c
+        // 获取用户输入的值并转换为整数
         c = parseInt(await input());
-        # 打印换行
         print("\n");
-        # 打印提示信息
         print("LET ME THINK A MOMENT...\n");
-        # 打印换行
         print("\n");
-        # 根据给定的公式计算d的值
+        // 根据用户输入的值进行计算
         d = 70 * a + 21 * b + 15 * c;
-        # 当d大于105时，循环减去105，直到d小于等于105
         while (d > 105)
             d -= 105;
-        # 打印结果
+        // 输出计算结果
         print("YOUR NUMBER WAS " + d + ", RIGHT");
-        # 无限循环，等待用户输入
         while (1) {
-            # 从用户输入中获取字符串并赋值给变量str
+            // 获取用户输入的值
             str = await input();
-            # 打印换行
             print("\n");
-            # 如果用户输入为"YES"，打印提示信息并跳出循环
+            // 根据用户输入的值进行不同的处理
             if (str == "YES") {
                 print("HOW ABOUT THAT!!\n");
                 break;
-            # 如果用户输入为"NO"，打印提示信息
             } else if (str == "NO") {
                 print("I FEEL YOUR ARITHMETIC IS IN ERROR.\n");
-                break;  # 如果用户输入的是 YES 或 NO 之外的内容，跳出循环
+                break;
             } else {
-                print("EH?  I DON'T UNDERSTAND '" + str + "'  TRY 'YES' OR 'NO'.\n");  # 如果用户输入的不是 YES 或 NO，打印提示信息
+                print("EH?  I DON'T UNDERSTAND '" + str + "'  TRY 'YES' OR 'NO'.\n");
             }
         }
-        print("\n");  # 打印空行
-        print("LET'S TRY ANOTHER.\n");  # 提示用户尝试另一个选项
+        print("\n");
+        print("LET'S TRY ANOTHER.\n");
     }
 }
 
-main();  # 调用主函数
+// 调用主程序
+main();
+
 ```

@@ -1,5 +1,3 @@
-# BasicComputerGames 源码解析
-
 ### What are we doing?
 
 We’re updating the first million selling computer book, [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games), for 2022 and beyond!
@@ -88,7 +86,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 06_Banner              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
 | 08_Batnum              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 09_Battle              | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 09_Battle              | x      | x    | x          |        |     |      | x      |      | x    | x     |
 | 10_Blackjack           | x      | x    | x          |        |     |      | x      | x    | x    | x     |
 | 11_Bombardment         | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 12_Bombs_Away          | x      | x    | x          |        | x   | x    | x      |      |      | x     |

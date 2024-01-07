@@ -1,38 +1,43 @@
-# `75_Roulette\csharp\Game.cs`
+# `basic-computer-games\75_Roulette\csharp\Game.cs`
 
 ```
-namespace Roulette;  // 命名空间声明
 
-internal class Game  // 内部类 Game
+// 命名空间 Roulette，包含了游戏相关的类
+namespace Roulette;
+
+// 游戏类，包含了游戏的逻辑
+internal class Game
 {
-    private readonly IReadWrite _io;  // 只读字段 _io，类型为 IReadWrite 接口
-    private readonly IRandom _random;  // 只读字段 _random，类型为 IRandom 接口
-    private readonly Table _table;  // 只读字段 _table，类型为 Table 类
-    private readonly Croupier _croupier;  // 只读字段 _croupier，类型为 Croupier 类
+    // 私有成员变量，用于输入输出、随机数生成、游戏桌、荷官
+    private readonly IReadWrite _io;
+    private readonly IRandom _random;
+    private readonly Table _table;
+    private readonly Croupier _croupier;
 
-    public Game(IReadWrite io, IRandom random)  // Game 类的构造函数，接受 IReadWrite 和 IRandom 接口类型的参数
+    // 游戏类的构造函数，初始化输入输出和随机数生成，创建游戏桌和荷官
+    public Game(IReadWrite io, IRandom random)
     {
-        _io = io;  // 将传入的 io 参数赋值给 _io 字段
-        _random = random;  // 将传入的 random 参数赋值给 _random 字段
-        _croupier = new();  // 实例化 Croupier 类并赋值给 _croupier 字段
-        _table = new(_croupier, io, random);  // 实例化 Table 类并赋值给 _table 字段，传入 _croupier, io, random 参数
+        _io = io;
+        _random = random;
+        _croupier = new(); // 创建荷官对象
+        _table = new(_croupier, io, random); // 创建游戏桌对象
     }
 
-    public void Play()  // Play 方法
+    // 游戏进行方法
+    public void Play()
     {
-        _io.Write(Streams.Title);  // 调用 _io 的 Write 方法，传入 Streams.Title 参数
-```
-        # 如果用户输入的字符串不是以 'n' 开头，就执行下面的代码块
+        _io.Write(Streams.Title); // 输出游戏标题
+
+        // 如果玩家不想阅读游戏说明，则直接开始游戏
         if (!_io.ReadString(Prompts.Instructions).ToLowerInvariant().StartsWith('n'))
         {
-            # 向用户输出游戏指令
-            _io.Write(Streams.Instructions);
+            _io.Write(Streams.Instructions); // 输出游戏说明
         }
 
-        # 当玩家还有钱时，一直执行下面的代码块
+        // 循环进行游戏直到游戏结束
         while (_table.Play());
 
-        # 如果玩家破产了，向用户输出最后一句话并结束游戏
+        // 如果玩家破产，输出破产信息并结束游戏
         if (_croupier.PlayerIsBroke)
         {
             _io.Write(Streams.LastDollar);
@@ -40,16 +45,15 @@ internal class Game  // 内部类 Game
             return;
         }
 
-        # 如果庄家破产了，向用户输出庄家破产的消息
+        // 如果庄家破产，输出庄家破产信息
         if (_croupier.HouseIsBroke)
         {
             _io.Write(Streams.BrokeHouse);
         }
 
-        # 让庄家结账
+        // 结算游戏结果
         _croupier.CutCheck(_io, _random);
     }
-```
+}
 
-这部分代码是一个缩进错误，应该删除。
 ```

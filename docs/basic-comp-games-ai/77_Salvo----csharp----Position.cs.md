@@ -1,30 +1,38 @@
-# `77_Salvo\csharp\Position.cs`
+# `basic-computer-games\77_Salvo\csharp\Position.cs`
 
 ```
-namespace Salvo;  // 命名空间声明
 
-internal record struct Position(Coordinate X, Coordinate Y)  // 定义名为 Position 的记录结构，包含 X 和 Y 两个坐标属性
+namespace Salvo;
+
+// 定义一个内部的记录结构 Position，包含 X 和 Y 坐标
+internal record struct Position(Coordinate X, Coordinate Y)
 {
-    public bool IsInRange => X.IsInRange && Y.IsInRange;  // 定义 IsInRange 属性，判断 X 和 Y 坐标是否都在范围内
-    public bool IsOnDiagonal => X == Y;  // 定义 IsOnDiagonal 属性，判断 X 和 Y 坐标是否在对角线上
+    // 判断位置是否在范围内
+    public bool IsInRange => X.IsInRange && Y.IsInRange;
+    // 判断位置是否在对角线上
+    public bool IsOnDiagonal => X == Y;
 
-    public static Position Create((float X, float Y) coordinates) => new(coordinates.X, coordinates.Y);  // 定义静态方法 Create，根据给定的坐标创建 Position 对象
+    // 根据给定的坐标创建一个 Position 对象
+    public static Position Create((float X, float Y) coordinates) => new(coordinates.X, coordinates.Y);
 
-    public static bool TryCreateValid((float X, float Y) coordinates, out Position position)  // 定义静态方法 TryCreateValid，尝试根据给定的坐标创建有效的 Position 对象
+    // 尝试根据给定的坐标创建一个有效的 Position 对象
+    public static bool TryCreateValid((float X, float Y) coordinates, out Position position)
     {
-        if (Coordinate.TryCreateValid(coordinates.X, out var x) && Coordinate.TryCreateValid(coordinates.Y, out var y))  // 如果 X 和 Y 坐标都能成功创建有效的 Coordinate 对象
+        if (Coordinate.TryCreateValid(coordinates.X, out var x) && Coordinate.TryCreateValid(coordinates.Y, out var y))
         {
-            position = new(x, y);  // 创建新的 Position 对象
-            return true;  // 返回 true，表示创建成功
+            position = new(x, y);
+            return true;
         }
 
-        position = default;  // 否则将 position 设置为默认值
-        return false;  // 返回 false，表示创建失败
+        position = default;
+        return false;
     }
+
+    // 获取所有可能的 Position 对象
     public static IEnumerable<Position> All
         => Coordinate.Range.SelectMany(x => Coordinate.Range.Select(y => new Position(x, y)));
-    # 返回一个包含所有可能位置的可枚举集合
 
+    // 获取邻居位置的集合
     public IEnumerable<Position> Neighbours
     {
         get
@@ -36,24 +44,27 @@ internal record struct Position(Coordinate X, Coordinate Y)  // 定义名为 Pos
             }
         }
     }
-    # 返回当前位置的所有邻居位置的可枚举集合
 
+    // 计算到另一个位置的距离
     internal float DistanceTo(Position other)
     {
         var (deltaX, deltaY) = (X - other.X, Y - other.Y);
         return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
-    # 返回当前位置到另一个位置的距离
-    }  # 结束 BringIntoRange 方法的定义
 
+    // 将位置带入范围内
     internal Position BringIntoRange(IRandom random)
-        => IsInRange ? this : new(X.BringIntoRange(random), Y.BringIntoRange(random));  # 如果当前位置在范围内，则返回当前位置，否则返回一个在范围内的新位置
+        => IsInRange ? this : new(X.BringIntoRange(random), Y.BringIntoRange(random));
 
+    // 重载 + 运算符，实现位置的偏移
     public static Position operator +(Position position, Offset offset) 
-        => new(position.X + offset.X, position.Y + offset.Y);  # 重载加法运算符，实现位置和偏移量的相加
+        => new(position.X + offset.X, position.Y + offset.Y);
 
-    public static implicit operator Position(int value) => new(value, value);  # 隐式转换，将整数转换为位置对象
+    // 隐式转换，将整数转换为 Position 对象
+    public static implicit operator Position(int value) => new(value, value);
 
-    public override string ToString() => $"{X}{Y}";  # 重写 ToString 方法，返回位置的 X 和 Y 值组成的字符串
+    // 重写 ToString 方法，返回位置的字符串表示
+    public override string ToString() => $"{X}{Y}";
 }
+
 ```

@@ -1,10 +1,12 @@
-# `71_Poker\csharp\Strategies\Fold.cs`
+# `basic-computer-games\71_Poker\csharp\Strategies\Fold.cs`
 
 ```
-namespace Poker.Strategies; // 声明命名空间为Poker.Strategies
 
-internal class Fold : Strategy // 声明一个内部类Fold，继承自Strategy类
+# 命名空间为Poker.Strategies，表示该类属于Poker命名空间下的Strategies子命名空间
+internal class Fold : Strategy
 {
-    public override int Value => -1; // 重写父类的Value属性，返回-1
+    # 重写父类的Value属性，返回-1，表示该策略的价值为-1
+    public override int Value => -1;
 }
+
 ```

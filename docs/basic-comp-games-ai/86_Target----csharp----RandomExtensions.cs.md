@@ -1,16 +1,25 @@
-# `86_Target\csharp\RandomExtensions.cs`
+# `basic-computer-games\86_Target\csharp\RandomExtensions.cs`
 
 ```
-using Games.Common.Randomness;  // 导入 Games.Common.Randomness 命名空间，以便使用其中的类和接口
 
-namespace Target  // 声明一个名为 Target 的命名空间
+# 导入 Games.Common.Randomness 包
+using Games.Common.Randomness;
+
+# 定义名为 Target 的命名空间
+namespace Target
 {
-    internal static class RandomExtensions  // 声明一个名为 RandomExtensions 的静态类
+    # 定义名为 RandomExtensions 的静态类
+    internal static class RandomExtensions
     {
-        public static Point NextPosition(this IRandom rnd) => new (  // 声明一个名为 NextPosition 的扩展方法，接收一个实现了 IRandom 接口的对象作为参数，并返回一个 Point 对象
-            Angle.InRotations(rnd.NextFloat()),  // 调用 Angle.InRotations 方法，传入 rnd.NextFloat() 的返回值作为参数
-            Angle.InRotations(rnd.NextFloat()),  // 调用 Angle.InRotations 方法，传入 rnd.NextFloat() 的返回值作为参数
-            100000 * rnd.NextFloat() + rnd.NextFloat());  // 计算 100000 * rnd.NextFloat() + rnd.NextFloat() 的值，并作为参数创建一个新的 Point 对象
+        # 定义名为 NextPosition 的扩展方法，接收一个实现了 IRandom 接口的对象，并返回一个 Point 对象
+        public static Point NextPosition(this IRandom rnd) => new (
+            # 使用随机数生成器生成一个浮点数，并将其转换为角度
+            Angle.InRotations(rnd.NextFloat()),
+            # 使用随机数生成器生成一个浮点数，并将其转换为角度
+            Angle.InRotations(rnd.NextFloat()),
+            # 使用随机数生成器生成两个浮点数，计算它们的和并乘以 100000，然后返回结果
+            100000 * rnd.NextFloat() + rnd.NextFloat());
     }
 }
+
 ```

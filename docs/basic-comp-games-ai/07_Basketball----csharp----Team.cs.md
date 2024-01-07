@@ -1,14 +1,21 @@
-# `07_Basketball\csharp\Team.cs`
+# `basic-computer-games\07_Basketball\csharp\Team.cs`
 
 ```
-using Basketball.Plays;  # 导入 Basketball.Plays 模块
 
-namespace Basketball;  # 声明命名空间 Basketball
+# 使用篮球战术库中的 Plays 命名空间
+using Basketball.Plays;
 
-internal record Team(string Name, Play PlayResolver)  # 声明一个内部记录类型 Team，包含名称和 PlayResolver 属性
+# 声明一个命名空间 Basketball
+namespace Basketball;
+
+# 声明一个内部的记录类型 Team，包含球队名称和战术解析器
+internal record Team(string Name, Play PlayResolver)
 {
-    public override string ToString() => Name;  # 重写 ToString 方法，返回球队名称
+    # 重写 ToString 方法，返回球队名称
+    public override string ToString() => Name;
 
-    public bool ResolvePlay(Scoreboard scoreboard) => PlayResolver.Resolve(scoreboard);  # 定义 ResolvePlay 方法，使用 PlayResolver 解析比赛情况
+    # 声明一个方法 ResolvePlay，接受一个 Scoreboard 对象，调用 PlayResolver 解析战术
+    public bool ResolvePlay(Scoreboard scoreboard) => PlayResolver.Resolve(scoreboard);
 }
+
 ```

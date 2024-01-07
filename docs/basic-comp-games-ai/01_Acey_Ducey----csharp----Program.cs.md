@@ -1,7 +1,12 @@
-# `01_Acey_Ducey\csharp\Program.cs`
+# `basic-computer-games\01_Acey_Ducey\csharp\Program.cs`
 
 ```
-# 创建一个名为AceyDucey的命名空间
+
+// 引入命名空间
+using System;
+using System.Threading;
+
+// 定义应用程序的入口点
 namespace AceyDucey
 {
     /// <summary>
@@ -9,18 +14,19 @@ namespace AceyDucey
     /// </summary>
     class Program
     {
-
         /// <summary>
-        /// 当应用程序启动时，此函数将自动被调用
+        /// 当应用程序启动时，将自动调用此函数
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            // 创建我们主要的Game类的实例
+            // 创建主游戏类的实例
             Game game = new Game();
-            // 调用它的GameLoop函数。这将在循环中无限地播放游戏，直到玩家选择退出。
+
+            // 调用其 GameLoop 函数。这将在循环中无休止地播放游戏，直到玩家选择退出。
             game.GameLoop();
         }
     }
 }
+
 ```

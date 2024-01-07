@@ -1,28 +1,33 @@
-# `00_Common\dotnet\Games.Common\Numbers\Number.cs`
+# `basic-computer-games\00_Common\dotnet\Games.Common\Numbers\Number.cs`
 
 ```
+
+// 命名空间声明，表示该代码属于 Games.Common.Numbers 命名空间
 namespace Games.Common.Numbers;
 
 /// <summary>
-/// A single-precision floating-point number with string formatting equivalent to the BASIC interpreter.
+/// 表示一个具有与 BASIC 解释器等效的字符串格式的单精度浮点数。
 /// </summary>
+// 定义一个名为 Number 的结构体
 public struct Number
 {
-    private readonly float _value; // 声明一个私有的单精度浮点数变量 _value
+    // 只读字段，存储单精度浮点数的值
+    private readonly float _value;
 
-    public Number (float value) // 构造函数，用于初始化 _value
+    // 构造函数，用于初始化 Number 结构体的值
+    public Number (float value)
     {
         _value = value;
     }
 
-    public static implicit operator float(Number value) => value._value; // 定义从 Number 到 float 的隐式转换
+    // 隐式转换操作符，将 Number 结构体转换为 float 类型
+    public static implicit operator float(Number value) => value._value;
 
-    public static implicit operator Number(float value) => new Number(value); // 定义从 float 到 Number 的隐式转换
+    // 隐式转换操作符，将 float 类型转换为 Number 结构体
+    public static implicit operator Number(float value) => new Number(value);
 
-    public override string ToString() => _value < 0 ? $"{_value} " : $" {_value} "; // 重写 ToString 方法，根据 _value 的值返回对应的字符串
+    // 重写 ToString 方法，根据 _value 的值返回对应的字符串
+    public override string ToString() => _value < 0 ? $"{_value} " : $" {_value} ";
 }
-bio = BytesIO(open(fname, 'rb').read())  # 根据 ZIP 文件名读取其二进制，封装成字节流
-zip = zipfile.ZipFile(bio, 'r')  # 使用字节流里面内容创建 ZIP 对象
-fdict = {n:zip.read(n) for n in zip.namelist()}  # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-zip.close()  # 关闭 ZIP 对象
+
 ```

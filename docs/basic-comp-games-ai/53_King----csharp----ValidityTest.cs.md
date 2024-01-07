@@ -1,33 +1,32 @@
-# `53_King\csharp\ValidityTest.cs`
+# `basic-computer-games\53_King\csharp\ValidityTest.cs`
 
 ```
-namespace King;  # 命名空间声明
 
-internal class ValidityTest  # 内部类 ValidityTest 声明
+namespace King; // 命名空间声明
+
+internal class ValidityTest // 内部类 ValidityTest 声明
 {
-    private readonly Predicate<float> _isValid;  # 只读字段 _isValid，类型为 Predicate<float>
-    private readonly Func<string> _getError;  # 只读字段 _getError，类型为 Func<string>
+    private readonly Predicate<float> _isValid; // 只读字段，存储 float 类型的断言
+    private readonly Func<string> _getError; // 只读字段，存储返回字符串的函数
 
-    public ValidityTest(Predicate<float> isValid, string error)  # ValidityTest 类的构造函数，接受 Predicate<float> 和 string 类型的参数
-        : this(isValid, () => error)  # 调用另一个构造函数
+    public ValidityTest(Predicate<float> isValid, string error) // 构造函数，接受断言和错误信息
+        : this(isValid, () => error) // 调用另一个构造函数
     {
     }
 
-    public ValidityTest(Predicate<float> isValid, Func<string> getError)  # ValidityTest 类的构造函数，接受 Predicate<float> 和 Func<string> 类型的参数
+    public ValidityTest(Predicate<float> isValid, Func<string> getError) // 构造函数，接受断言和返回错误信息的函数
     {
-        _isValid = isValid;  # 将参数 isValid 赋值给 _isValid 字段
-        _getError = getError;  # 将参数 getError 赋值给 _getError 字段
+        _isValid = isValid; // 将传入的断言赋值给 _isValid
+        _getError = getError; // 将传入的返回错误信息的函数赋值给 _getError
     }
 
-    public bool IsValid(float value, IReadWrite io)  # 公共方法 IsValid，接受 float 和 IReadWrite 类型的参数
+    public bool IsValid(float value, IReadWrite io) // 公共方法，用于检查值的有效性
     {
-        # 如果值有效，则返回 true
-        if (_isValid(value)) { return true; }
+        if (_isValid(value)) { return true; } // 如果值有效，返回 true
         
-        # 向输出流写入错误信息
-        io.Write(_getError());
-        # 返回 false
-        return false;
+        io.Write(_getError()); // 否则，将错误信息写入 IReadWrite 接口
+        return false; // 返回 false
     }
 }
+
 ```

@@ -1,25 +1,29 @@
-# `16_Bug\java\src\ComputerBug.java`
+# `basic-computer-games\16_Bug\java\src\ComputerBug.java`
 
 ```
+
+// 创建一个名为ComputerBug的类，继承自Insect类
+
 public class ComputerBug extends Insect {
 
-    // Create messages specific to the computer player.
+    // 创建特定于计算机玩家的消息
 
+    // 构造函数，调用父类的构造函数进行初始化
     public ComputerBug() {
-        // 调用父类构造函数进行初始化
         super();
-        // 为感觉器官添加消息
+        // 添加关于触角的消息
         addMessages(new String[]{"I GET A FEELER.", "I HAVE " + MAX_FEELERS + " FEELERS ALREADY.", "I DO NOT HAVE A HEAD."}, PARTS.FEELERS);
-        // 为头部添加消息
+        // 添加关于头部的消息
         addMessages(new String[]{"I NEEDED A HEAD.", "I DO NOT NEED A HEAD.", "I DO NOT HAVE A NECK."}, PARTS.HEAD);
-        // 为颈部添加消息
+        // 添加关于颈部的消息
         addMessages(new String[]{"I NOW HAVE A NECK.", "I DO NOT NEED A NECK.", "I DO NOT HAVE A BODY."}, PARTS.NECK);
-        // 为身体添加消息
+        // 添加关于身体的消息
         addMessages(new String[]{"I NOW HAVE A BODY.", "I DO NOT NEED A BODY."}, PARTS.BODY);
-        // 为尾部添加消息
+        // 添加关于尾部的消息
         addMessages(new String[]{"I NOW HAVE A TAIL.", "I DO NOT NEED A TAIL.", "I DO NOT HAVE A BODY."}, PARTS.TAIL);
-        // 为腿部添加消息
+        // 添加关于腿部的消息
         addMessages(new String[]{"I NOW HAVE ^^^" + " LEG", "I HAVE " + MAX_LEGS + " FEET.", "I DO NOT HAVE A BODY."}, PARTS.LEGS);
     }
 }
+
 ```

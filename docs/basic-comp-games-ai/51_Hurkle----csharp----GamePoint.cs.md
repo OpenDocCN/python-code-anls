@@ -1,61 +1,88 @@
-# `51_Hurkle\csharp\GamePoint.cs`
+# `basic-computer-games\51_Hurkle\csharp\GamePoint.cs`
 
 ```
+
+// 定义名为 hurkle 的命名空间
 namespace hurkle
 {
+    // 定义名为 GamePoint 的内部类
     internal class GamePoint
     {
-        public int X {get;init;}  // 定义一个公共属性 X，用于存储游戏点的横坐标
-        public int Y {get;init;}  // 定义一个公共属性 Y，用于存储游戏点的纵坐标
+        // 定义具有 get 和 init 访问器的 X 属性
+        public int X {get;init;}
+        // 定义具有 get 和 init 访问器的 Y 属性
+        public int Y {get;init;}
 
-        public CardinalDirection GetDirectionTo(GamePoint target)  // 定义一个方法，用于获取当前点到目标点的方向
+        // 根据目标点返回方向
+        public CardinalDirection GetDirectionTo(GamePoint target)
         {
-            if(X == target.X)  // 如果当前点的横坐标等于目标点的横坐标
+            // 如果当前点的 X 坐标与目标点的 X 坐标相等
+            if(X == target.X)
             {
-                if(Y > target.Y)  // 如果当前点的纵坐标大于目标点的纵坐标
+                // 如果当前点的 Y 坐标大于目标点的 Y 坐标
+                if(Y > target.Y)
                 {
-                    return CardinalDirection.South;  // 返回南方向
+                    // 返回南方向
+                    return CardinalDirection.South;
                 }
-                else if(Y < target.Y)  // 如果当前点的纵坐标小于目标点的纵坐标
+                // 如果当前点的 Y 坐标小于目标点的 Y 坐标
+                else if(Y < target.Y)
                 {
-                    return CardinalDirection.North;  // 返回北方向
+                    // 返回北方向
+                    return CardinalDirection.North;
                 }
-                else  // 如果当前点的纵坐标等于目标点的纵坐标
+                // 如果当前点的 Y 坐标与目标点的 Y 坐标相等
+                else
                 {
-                    return CardinalDirection.None;  # 如果X和Y均等于目标点的坐标，则返回None
+                    // 返回无方向
+                    return CardinalDirection.None;
                 }
             }
-            else if(X > target.X)  # 如果X大于目标点的X坐标
+            // 如果当前点的 X 坐标大于目标点的 X 坐标
+            else if(X > target.X)
             {
-                if(Y == target.Y)  # 如果Y等于目标点的Y坐标
+                // 如果当前点的 Y 坐标与目标点的 Y 坐标相等
+                if(Y == target.Y)
                 {
-                    return CardinalDirection.West;  # 返回West
+                    // 返回西方向
+                    return CardinalDirection.West;
                 }
-                else if(Y > target.Y)  # 如果Y大于目标点的Y坐标
+                // 如果当前点的 Y 坐标大于目标点的 Y 坐标
+                else if(Y > target.Y)
                 {
-                    return CardinalDirection.SouthWest;  # 返回SouthWest
+                    // 返回西南方向
+                    return CardinalDirection.SouthWest;
                 }
-                else  # 如果Y小于目标点的Y坐标
+                // 如果当前点的 Y 坐标小于目标点的 Y 坐标
+                else
                 {
-                    return CardinalDirection.NorthWest;  # 返回NorthWest
+                    // 返回西北方向
+                    return CardinalDirection.NorthWest;
                 }
             }
-            else  # 如果X小于目标点的X坐标
-# 如果当前位置的 Y 坐标等于目标位置的 Y 坐标
-if(Y == target.Y)
-{
-    # 返回东方作为方向
-    return CardinalDirection.East;
+            // 如果当前点的 X 坐标小于目标点的 X 坐标
+            else
+            {
+                // 如果当前点的 Y 坐标与目标点的 Y 坐标相等
+                if(Y == target.Y)
+                {
+                    // 返回东方向
+                    return CardinalDirection.East;
+                }
+                // 如果当前点的 Y 坐标大于目标点的 Y 坐标
+                else if(Y > target.Y)
+                {
+                    // 返回东南方向
+                    return CardinalDirection.SouthEast;
+                }
+                // 如果当前点的 Y 坐标小于目标点的 Y 坐标
+                else{
+                    // 返回东北方向
+                    return CardinalDirection.NorthEast;
+                }
+            }
+        }
+    }
 }
-# 如果当前位置的 Y 坐标大于目标位置的 Y 坐标
-else if(Y > target.Y)
-{
-    # 返回东南方作为方向
-    return CardinalDirection.SouthEast;
-}
-# 如果当前位置的 Y 坐标小于目标位置的 Y 坐标
-else{
-    # 返回东北方作为方向
-    return CardinalDirection.NorthEast;
-}
+
 ```

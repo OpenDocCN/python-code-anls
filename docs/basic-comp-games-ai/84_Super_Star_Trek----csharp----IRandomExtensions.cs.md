@@ -1,20 +1,25 @@
-# `84_Super_Star_Trek\csharp\IRandomExtensions.cs`
+# `basic-computer-games\84_Super_Star_Trek\csharp\IRandomExtensions.cs`
 
 ```
-using Games.Common.Randomness; // 导入 Games.Common.Randomness 命名空间
-using SuperStarTrek.Space; // 导入 SuperStarTrek.Space 命名空间
 
-namespace SuperStarTrek; // 定义 SuperStarTrek 命名空间
+// 引入随机数生成和空间坐标的命名空间
+using Games.Common.Randomness;
+using SuperStarTrek.Space;
 
-internal static class IRandomExtensions // 定义 IRandomExtensions 静态类
+// 定义静态类 IRandomExtensions
+namespace SuperStarTrek;
+
+internal static class IRandomExtensions
 {
-    internal static Coordinates NextCoordinate(this IRandom random) => // 定义 NextCoordinate 方法，返回 Coordinates 类型
-        new Coordinates(random.Next1To8Inclusive() - 1, random.Next1To8Inclusive() - 1); // 使用 random.Next1To8Inclusive() 方法获取坐标值
+    // 扩展方法，用于生成下一个坐标
+    internal static Coordinates NextCoordinate(this IRandom random) =>
+        new Coordinates(random.Next1To8Inclusive() - 1, random.Next1To8Inclusive() - 1);
 
-    // Duplicates the algorithm used in the original code to get an integer value from 1 to 8, inclusive:
+    // 重复了原始代码中用于获取1到8之间整数值的算法：
     //     475 DEF FNR(R)=INT(RND(R)*7.98+1.01)
-    // Returns a value from 1 to 8, inclusive.
-    // Note there's a slight bias away from the extreme values, 1 and 8.
-    internal static int Next1To8Inclusive(this IRandom random) => (int)(random.NextFloat() * 7.98 + 1.01); // 定义 Next1To8Inclusive 方法，返回一个介于1到8之间的整数值
+    // 返回一个1到8之间的值，包括1和8
+    // 注意，对于极端值1和8有轻微的偏差
+    internal static int Next1To8Inclusive(this IRandom random) => (int)(random.NextFloat() * 7.98 + 1.01);
 }
+
 ```

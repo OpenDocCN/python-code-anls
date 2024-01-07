@@ -1,49 +1,67 @@
-# `84_Super_Star_Trek\csharp\Systems\LibraryComputer.cs`
+# `basic-computer-games\84_Super_Star_Trek\csharp\Systems\LibraryComputer.cs`
 
 ```
-using Games.Common.IO;  // 导入 Games.Common.IO 包，用于输入输出操作
-using SuperStarTrek.Commands;  // 导入 SuperStarTrek.Commands 包，用于命令操作
-using SuperStarTrek.Space;  // 导入 SuperStarTrek.Space 包，用于空间操作
-using SuperStarTrek.Systems.ComputerFunctions;  // 导入 SuperStarTrek.Systems.ComputerFunctions 包，用于计算机功能
 
-namespace SuperStarTrek.Systems;  // 声明 SuperStarTrek.Systems 命名空间
+// 引入所需的命名空间
+using Games.Common.IO;
+using SuperStarTrek.Commands;
+using SuperStarTrek.Space;
+using SuperStarTrek.Systems.ComputerFunctions;
 
-internal class LibraryComputer : Subsystem  // 声明 LibraryComputer 类，继承自 Subsystem 类
+// 定义名为 LibraryComputer 的内部类，继承自 Subsystem
+namespace SuperStarTrek.Systems;
+internal class LibraryComputer : Subsystem
 {
-    private readonly IReadWrite _io;  // 声明私有成员变量 _io，类型为 IReadWrite 接口
-    private readonly ComputerFunction[] _functions;  // 声明私有成员变量 _functions，类型为 ComputerFunction 数组
+    // 声明私有字段 _io 和 _functions
+    private readonly IReadWrite _io;
+    private readonly ComputerFunction[] _functions;
 
-    internal LibraryComputer(IReadWrite io, params ComputerFunction[] functions)  // 声明 LibraryComputer 类的构造函数，接受 IReadWrite 类型的参数 io 和可变长度的 ComputerFunction 类型参数 functions
-        : base("Library-Computer", Command.COM, io)  // 调用父类 Subsystem 的构造函数，传入字符串 "Library-Computer"、Command.COM 和 io
+    // 定义构造函数，接受 IReadWrite 类型的参数 io 和可变数量的 ComputerFunction 类型的参数 functions
+    // 调用基类 Subsystem 的构造函数，传入指定的参数
+    internal LibraryComputer(IReadWrite io, params ComputerFunction[] functions)
+        : base("Library-Computer", Command.COM, io)
     {
-        _io = io;  // 将参数 io 赋值给成员变量 _io
-        _functions = functions;  // 将参数 functions 赋值给成员变量 _functions
+        // 初始化私有字段 _io 和 _functions
+        _io = io;
+        _functions = functions;
     }
 
-    protected override bool CanExecuteCommand() => IsOperational("Computer disabled");  // 重写父类的 CanExecuteCommand 方法，判断计算机是否可执行命令，返回布尔值
-}
+    // 重写基类的 CanExecuteCommand 方法，判断是否可以执行命令
+    protected override bool CanExecuteCommand() => IsOperational("Computer disabled");
+
+    // 重写基类的 ExecuteCommandCore 方法，执行命令的核心逻辑
     protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
     {
-        var index = GetFunctionIndex(); // 调用 GetFunctionIndex 方法获取函数索引
-        _io.WriteLine(); // 在控制台输出空行
+        // 获取要执行的功能的索引
+        var index = GetFunctionIndex();
+        // 写入空行
+        _io.WriteLine();
 
-        _functions[index].Execute(quadrant); // 调用 _functions 数组中索引为 index 的函数的 Execute 方法，传入 quadrant 参数
+        // 执行指定索引的功能
+        _functions[index].Execute(quadrant);
 
-        return CommandResult.Ok; // 返回 CommandResult.Ok
+        // 返回命令执行结果
+        return CommandResult.Ok;
     }
 
+    // 定义私有方法 GetFunctionIndex，用于获取要执行的功能的索引
     private int GetFunctionIndex()
     {
+        // 循环直到获取有效的功能索引
         while (true)
         {
-            var index = (int)_io.ReadNumber("Computer active and waiting command"); // 从控制台读取一个整数作为函数索引
-            if (index >= 0 && index <= 5) { return index; } // 如果索引在合法范围内，返回该索引值
+            // 读取用户输入的功能索引
+            var index = (int)_io.ReadNumber("Computer active and waiting command");
+            // 如果索引在有效范围内，则返回索引值
+            if (index >= 0 && index <= 5) { return index; }
 
-            for (int i = 0; i < _functions.Length; i++) // 遍历 _functions 数组
+            // 如果索引无效，则显示可用的功能列表
+            for (int i = 0; i < _functions.Length; i++)
             {
-# 遍历 _functions 列表，将每个元素的索引和描述信息输出到控制台
-for i in range(len(_functions)):
-    # 输出索引和描述信息
-    _io.WriteLine($"   {i} = {_functions[i].Description}");
-# 结束 for 循环
+                _io.WriteLine($"   {i} = {_functions[i].Description}");
+            }
+        }
+    }
+}
+
 ```

@@ -1,27 +1,28 @@
-# `01_Acey_Ducey\java\src\AceyDuceyGame.java`
+# `basic-computer-games\01_Acey_Ducey\java\src\AceyDuceyGame.java`
 
 ```
+
 /**
  * This class is used to invoke the game.
- * It contains the main method to start the game.
+ * 该类用于调用游戏。
  */
 public class AceyDuceyGame {
 
     public static void main(String[] args) {
 
-        boolean keepPlaying; // Declare a boolean variable to control the game loop
-        AceyDucey game = new AceyDucey(); // Create a new instance of the AceyDucey game
+        boolean keepPlaying; // 声明一个布尔变量，用于判断是否继续游戏
+        AceyDucey game = new AceyDucey(); // 创建 AceyDucey 游戏对象
 
         // Keep playing game until infinity or the player loses
+        // 循环进行游戏，直到无限循环或玩家输掉游戏
         do {
-            game.play(); // Call the play method of the game to play a round
-            System.out.println(); // Print an empty line for formatting
-            System.out.println(); // Print an empty line for formatting
-            System.out.println(); // Print an empty line for formatting
-            keepPlaying = game.playAgain(); // Check if the player wants to play again
-        } while (keepPlaying); // Continue the loop if the player wants to keep playing
+            game.play(); // 调用游戏对象的 play 方法进行游戏
+            System.out.println(); // 输出空行
+            System.out.println(); // 输出空行
+            System.out.println(); // 输出空行
+            keepPlaying = game.playAgain(); // 调用游戏对象的 playAgain 方法判断是否继续游戏
+        } while (keepPlaying); // 当 keepPlaying 为 true 时继续循环
     }
 }
-# 关闭 ZIP 对象
-zip.close()  # 关闭 ZIP 对象，释放资源，避免内存泄漏。
+
 ```

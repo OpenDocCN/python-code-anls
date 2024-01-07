@@ -1,67 +1,84 @@
-# `17_Bullfight\csharp\Program.cs`
+# `basic-computer-games\17_Bullfight\csharp\Program.cs`
 
 ```
-// 创建一个 Mediator 实例
-var mediator = new Mediator();
 
-// 遍历 BullFight.Begin(mediator) 返回的事件
-foreach (var evt in BullFight.Begin(mediator))
+// 命名空间声明，表示该类属于 Game 命名空间
+namespace Game
 {
-    // 根据不同的事件类型进行不同的处理
-    switch (evt)
+    // 程序入口点
+    class Program
     {
-        // 如果是比赛开始事件
-        case Events.MatchStarted matchStarted:
-            // 调用 View 类的 ShowStartingConditions 方法显示比赛开始的条件
-            View.ShowStartingConditions(matchStarted);
-            break;
+        static void Main()
+        {
+            // 调用 Controller 类的 StartGame 方法开始游戏
+            Controller.StartGame();
 
-        // 如果是公牛冲锋事件
-        case Events.BullCharging bullCharging:
-            // 调用 View 类的 ShowStartOfPass 方法显示通行开始
-            View.ShowStartOfPass(bullCharging.PassNumber);
-            // 调用 Controller 类的 GetPlayerIntention 方法获取玩家的意图和风险水平
-            var (action, riskLevel) = Controller.GetPlayerIntention(bullCharging.PassNumber);
-                        switch (action)  # 开始一个 switch 语句，根据 action 的值进行不同的操作
-                        {
-                            case Action.Dodge:  # 如果 action 的值是 Dodge
-                                mediator.Dodge(riskLevel);  # 调用 mediator 的 Dodge 方法，传入 riskLevel 参数
-                                break;  # 结束当前 case
-                            case Action.Kill:  # 如果 action 的值是 Kill
-                                mediator.Kill(riskLevel);  # 调用 mediator 的 Kill 方法，传入 riskLevel 参数
-                                break;  # 结束当前 case
-                            case Action.Panic:  # 如果 action 的值是 Panic
-                                mediator.Panic();  # 调用 mediator 的 Panic 方法
-                                break;  # 结束当前 case
-                        }
-                        break;  # 结束 switch 语句
-
-                    case Events.PlayerGored playerGored:  # 如果事件是 PlayerGored
-                        View.ShowPlayerGored(playerGored.Panicked, playerGored.FirstGoring);  # 调用 View 的 ShowPlayerGored 方法，传入 playerGored.Panicked 和 playerGored.FirstGoring 参数
-                        break;  # 结束当前 case
-
-                    case Events.PlayerSurvived:  # 如果事件是 PlayerSurvived
-                        View.ShowPlayerSurvives();  # 调用 View 的 ShowPlayerSurvives 方法
-                        # 如果玩家从比赛中逃跑
-                        if (Controller.GetPlayerRunsFromRing())
-                            # 调用中介者的逃跑方法
-                            mediator.RunFromRing();
-                        # 否则
-                        else
-                            # 调用中介者的继续战斗方法
-                            mediator.ContinueFighting();
-                        # 结束当前的事件处理
+            // 创建中介者对象
+            var mediator = new Mediator();
+            // 遍历 BullFight 类的 Begin 方法返回的事件集合
+            foreach (var evt in BullFight.Begin(mediator))
+            {
+                // 根据事件类型进行不同的处理
+                switch (evt)
+                {
+                    // 比赛开始事件
+                    case Events.MatchStarted matchStarted:
+                        // 调用 View 类的 ShowStartingConditions 方法显示比赛开始的条件
+                        View.ShowStartingConditions(matchStarted);
                         break;
 
-                    # 如果事件是比赛完成事件
+                    // 公牛冲锋事件
+                    case Events.BullCharging bullCharging:
+                        // 调用 View 类的 ShowStartOfPass 方法显示冲锋开始
+                        View.ShowStartOfPass(bullCharging.PassNumber);
+                        // 调用 Controller 类的 GetPlayerIntention 方法获取玩家意图
+                        var (action, riskLevel) = Controller.GetPlayerIntention(bullCharging.PassNumber);
+                        // 根据玩家意图进行不同的处理
+                        switch (action)
+                        {
+                            case Action.Dodge:
+                                // 调用中介者对象的 Dodge 方法进行躲避
+                                mediator.Dodge(riskLevel);
+                                break;
+                            case Action.Kill:
+                                // 调用中介者对象的 Kill 方法进行击杀
+                                mediator.Kill(riskLevel);
+                                break;
+                            case Action.Panic:
+                                // 调用中介者对象的 Panic 方法进行恐慌
+                                mediator.Panic();
+                                break;
+                        }
+                        break;
+
+                    // 玩家被公牛刺伤事件
+                    case Events.PlayerGored playerGored:
+                        // 调用 View 类的 ShowPlayerGored 方法显示玩家被刺伤情况
+                        View.ShowPlayerGored(playerGored.Panicked, playerGored.FirstGoring);
+                        break;
+
+                    // 玩家幸存事件
+                    case Events.PlayerSurvived:
+                        // 调用 View 类的 ShowPlayerSurvives 方法显示玩家幸存
+                        View.ShowPlayerSurvives();
+                        // 根据玩家是否逃离斗牛场进行不同的处理
+                        if (Controller.GetPlayerRunsFromRing())
+                            // 调用中介者对象的 RunFromRing 方法逃离斗牛场
+                            mediator.RunFromRing();
+                        else
+                            // 调用中介者对象的 ContinueFighting 方法继续战斗
+                            mediator.ContinueFighting();
+                        break;
+
+                    // 比赛结束事件
                     case Events.MatchCompleted matchCompleted:
-                        # 显示最终结果，包括比赛结果、极端勇气和奖励
+                        // 调用 View 类的 ShowFinalResult 方法显示比赛最终结果
                         View.ShowFinalResult(matchCompleted.Result, matchCompleted.ExtremeBravery, matchCompleted.Reward);
-                        # 结束当前的事件处理
                         break;
                 }
             }
         }
     }
 }
+
 ```

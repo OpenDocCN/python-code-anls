@@ -1,19 +1,22 @@
-# `77_Salvo\csharp\Program.cs`
+# `basic-computer-games\77_Salvo\csharp\Program.cs`
 
 ```
-# 导入 System 模块
-import System
-# 导入 Games.Common.IO 模块
-import Games.Common.IO
-# 导入 Games.Common.Randomness 模块
-import Games.Common.Randomness
-# 导入 Salvo 模块
-import Salvo
-# 导入 Salvo.Ships 模块
-import Salvo.Ships
-# 导入 Salvo.Resources.Resource 模块中的所有内容
-from Salvo.Resources.Resource import *
 
-# 创建一个新的游戏对象，使用 ConsoleIO() 作为输入输出，使用 DataRandom() 作为随机数生成器，并开始游戏
-Game(ConsoleIO(), DataRandom()).Play()
+// 引入 System 命名空间
+global using System;
+// 引入 Games.Common.IO 命名空间
+global using Games.Common.IO;
+// 引入 Games.Common.Randomness 命名空间
+global using Games.Common.Randomness;
+// 引入 Salvo 命名空间
+global using Salvo;
+// 引入 Salvo.Ships 命名空间
+global using Salvo.Ships;
+// 引入 Salvo.Resources.Resource 类的静态成员
+global using static Salvo.Resources.Resource;
+
+// 创建一个新的游戏对象，使用控制台输入输出和随机数生成器作为参数，然后开始游戏
+//new Game(new ConsoleIO(), new RandomNumberGenerator()).Play();
+new Game(new ConsoleIO(), new DataRandom()).Play();
+
 ```

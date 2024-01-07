@@ -1,14 +1,18 @@
-# `30_Cube\csharp\ZerosGenerator.cs`
+# `basic-computer-games\30_Cube\csharp\ZerosGenerator.cs`
 
 ```
-namespace Cube;  // 命名空间声明，定义了代码所在的命名空间
 
-internal class ZerosGenerator : IRandom  // 定义了一个内部类 ZerosGenerator，实现了接口 IRandom
+# 在 Cube 命名空间下定义一个内部类 ZerosGenerator，实现了 IRandom 接口
+internal class ZerosGenerator : IRandom
 {
-    public float NextFloat() => 0;  // 实现了接口方法 NextFloat，返回值为 0
+    # 实现接口方法，返回下一个随机浮点数，这里始终返回 0
+    public float NextFloat() => 0;
 
-    public float PreviousFloat() => 0;  // 实现了接口方法 PreviousFloat，返回值为 0
+    # 实现接口方法，返回上一个随机浮点数，这里始终返回 0
+    public float PreviousFloat() => 0;
 
-    public void Reseed(int seed) { }  // 实现了接口方法 Reseed，但是方法体为空
+    # 实现接口方法，重新设置随机数种子，这里不做任何操作
+    public void Reseed(int seed) { }
 }
+
 ```

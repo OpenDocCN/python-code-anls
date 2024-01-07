@@ -1,23 +1,33 @@
-# `75_Roulette\csharp\Slot.cs`
+# `basic-computer-games\75_Roulette\csharp\Slot.cs`
 
 ```
-using System.Collections.Immutable;  // 导入不可变集合的命名空间
 
-namespace Roulette  // 命名空间定义
+# 使用不可变集合命名空间
+using System.Collections.Immutable;
+
+# 创建名为Roulette的命名空间
+namespace Roulette;
+
+# 创建名为Slot的内部类
+internal class Slot
 {
-    internal class Slot  // 定义名为Slot的内部类
+    # 创建只读的不可变的BetType集合_coveringBets
+    private readonly ImmutableHashSet<BetType> _coveringBets;
+
+    # 创建Slot类的构造函数，接受名称和覆盖下注类型的参数
+    public Slot (string name, params BetType[] coveringBets)
     {
-        private readonly ImmutableHashSet<BetType> _coveringBets;  // 声明一个只读的不可变集合_coveringBets，存储BetType类型的对象
-
-        public Slot (string name, params BetType[] coveringBets)  // 构造函数，接受一个名为name的字符串和一个或多个BetType类型的coveringBets参数
-        {
-            Name = name;  // 初始化Name属性为传入的name参数
-            _coveringBets = coveringBets.ToImmutableHashSet();  // 将传入的coveringBets参数转换为不可变集合并赋值给_coveringBets
-        }
-
-        public string Name { get; }  // 只读属性Name，用于获取Slot的名称
-
-        public bool IsCoveredBy(Bet bet) => _coveringBets.Contains(bet.Type);  // 方法IsCoveredBy，用于判断传入的Bet对象的Type是否包含在_coveringBets中
+        # 设置名称属性
+        Name = name;
+        # 将传入的覆盖下注类型参数转换为不可变的集合并赋值给_coveringBets
+        _coveringBets = coveringBets.ToImmutableHashSet();
     }
+
+    # 创建只读的名称属性
+    public string Name { get; }
+
+    # 创建IsCoveredBy方法，用于检查下注是否被覆盖
+    public bool IsCoveredBy(Bet bet) => _coveringBets.Contains(bet.Type);
 }
+
 ```

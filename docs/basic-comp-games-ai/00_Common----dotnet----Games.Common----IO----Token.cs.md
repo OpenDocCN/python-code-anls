@@ -1,62 +1,88 @@
-# `00_Common\dotnet\Games.Common\IO\Token.cs`
+# `basic-computer-games\00_Common\dotnet\Games.Common\IO\Token.cs`
 
 ```
-using System.Text;  // 导入 System.Text 命名空间，用于操作字符串和文本
-using System.Text.RegularExpressions;  // 导入 System.Text.RegularExpressions 命名空间，用于正则表达式匹配
 
-namespace Games.Common.IO;  // 声明 Games.Common.IO 命名空间
+// 使用 System.Text 和 System.Text.RegularExpressions 命名空间
+using System.Text;
+using System.Text.RegularExpressions;
 
-internal class Token  // 声明 Token 类
+// 声明 Games.Common.IO 命名空间
+namespace Games.Common.IO
 {
-    private static readonly Regex _numberPattern = new(@"^[+\-]?\d*(\.\d*)?([eE][+\-]?\d*)?");  // 声明一个静态只读的正则表达式对象，用于匹配数字模式
-
-    internal Token(string value)  // 声明 Token 类的构造函数，接受一个字符串参数
+    // 声明 Token 类，为内部类
+    internal class Token
     {
-        String = value;  // 将传入的字符串赋值给 Token 对象的 String 属性
+        // 声明静态只读的 _numberPattern 正则表达式对象
+        private static readonly Regex _numberPattern = new(@"^[+\-]?\d*(\.\d*)?([eE][+\-]?\d*)?");
 
-        var match = _numberPattern.Match(String);  // 使用正则表达式匹配传入的字符串
-
-        IsNumber = float.TryParse(match.Value, out var number);  // 尝试将匹配到的字符串转换为浮点数，判断是否为数字并赋值给 IsNumber 属性
-        Number = (IsNumber, number) switch  // 使用元组模式匹配判断 IsNumber 和 number 的值
+        // Token 类的构造函数，接受一个字符串参数
+        internal Token(string value)
         {
-            (false, _) => float.NaN,  // 如果不是数字，则将 Number 属性赋值为 float.NaN
-            (true, float.PositiveInfinity) => float.MaxValue,  // 如果是正无穷大，则将 Number 属性赋值为 float.MaxValue
-            (true, float.NegativeInfinity) => float.MinValue,  // 如果条件为真且值为负无穷大，则返回float.MinValue
-            (true, _) => number  // 如果条件为真，则返回number
-        };
-    }
+            // 将参数值赋给 String 属性
+            String = value;
 
-    public string String { get; }  // 获取字符串属性
-    public bool IsNumber { get; }  // 获取是否为数字属性
-    public float Number { get; }  // 获取数字属性
+            // 使用正则表达式匹配字符串
+            var match = _numberPattern.Match(String);
 
-    public override string ToString() => String;  // 重写ToString方法，返回字符串属性的值
-
-    internal class Builder  // 内部类Builder
-    {
-        private readonly StringBuilder _builder = new();  // 创建StringBuilder对象
-        private bool _isQuoted;  // 是否引用的标志
-        private int _trailingWhiteSpaceCount;  // 尾部空白字符计数
-
-        public Builder Append(char character)  // 在字符串构建器中追加字符
-        {
-            _builder.Append(character);
-            _trailingWhiteSpaceCount = char.IsWhiteSpace(character) ? _trailingWhiteSpaceCount + 1 : 0;  // 如果当前字符是空白字符，则将_trailingWhiteSpaceCount加1，否则设为0
-
-            return this;  // 返回当前的Builder对象
+            // 判断匹配结果是否为数字，如果是则转换为 float 类型
+            IsNumber = float.TryParse(match.Value, out var number);
+            Number = (IsNumber, number) switch
+            {
+                // 根据匹配结果设置 Number 属性的值
+                (false, _) => float.NaN,
+                (true, float.PositiveInfinity) => float.MaxValue,
+                (true, float.NegativeInfinity) => float.MinValue,
+                (true, _) => number
+            };
         }
 
-        public Builder SetIsQuoted()  // 设置是否为引用
-        {
-            _isQuoted = true;  // 将_isQuoted标记设为true
-            return this;  // 返回当前的Builder对象
-        }
+        // 声明 String 属性，存储 Token 的字符串值
+        public string String { get; }
+        // 声明 IsNumber 属性，表示 Token 是否为数字
+        public bool IsNumber { get; }
+        // 声明 Number 属性，存储 Token 的数字值
+        public float Number { get; }
 
-        public Token Build()  // 构建Token对象
+        // 重写 ToString 方法，返回 Token 的字符串值
+        public override string ToString() => String;
+
+        // 声明 Builder 内部类
+        internal class Builder
         {
-            if (!_isQuoted) { _builder.Length -= _trailingWhiteSpaceCount; }  // 如果不是引用，则从_builder中减去_trailingWhiteSpaceCount个字符
-            return new Token(_builder.ToString());  // 返回一个新的Token对象，其内容为_builder的字符串表示
+            // 声明 StringBuilder 对象 _builder
+            private readonly StringBuilder _builder = new();
+            // 声明 _isQuoted 变量，表示 Token 是否被引号引用
+            private bool _isQuoted;
+            // 声明 _trailingWhiteSpaceCount 变量，表示末尾空白字符的数量
+            private int _trailingWhiteSpaceCount;
+
+            // 声明 Append 方法，向 Token 中添加字符
+            public Builder Append(char character)
+            {
+                _builder.Append(character);
+
+                // 判断添加的字符是否为空白字符，更新 _trailingWhiteSpaceCount
+                _trailingWhiteSpaceCount = char.IsWhiteSpace(character) ? _trailingWhiteSpaceCount + 1 : 0;
+
+                return this;
+            }
+
+            // 声明 SetIsQuoted 方法，设置 Token 为被引号引用
+            public Builder SetIsQuoted()
+            {
+                _isQuoted = true;
+                return this;
+            }
+
+            // 声明 Build 方法，构建 Token 对象
+            public Token Build()
+            {
+                // 如果 Token 没有被引号引用，则移除末尾空白字符
+                if (!_isQuoted) { _builder.Length -= _trailingWhiteSpaceCount; }
+                return new Token(_builder.ToString());
+            }
         }
     }
 }
+
 ```

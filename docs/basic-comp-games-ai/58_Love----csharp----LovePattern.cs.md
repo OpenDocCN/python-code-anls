@@ -1,64 +1,70 @@
-# `58_Love\csharp\LovePattern.cs`
+# `basic-computer-games\58_Love\csharp\LovePattern.cs`
 
 ```
-using System.IO;  // 导入 System.IO 命名空间，用于文件操作
-using System.Text;  // 导入 System.Text 命名空间，用于处理字符串
 
-namespace Love  // 命名空间 Love
+// 引入命名空间
+using System.IO;
+using System.Text;
+
+// 声明 LovePattern 类
+namespace Love
 {
-    internal class LovePattern  // 定义内部类 LovePattern
+    // 声明 LovePattern 类为内部类
+    internal class LovePattern
     {
-        private const int _lineLength = 60;  // 定义常量 _lineLength，值为 60
-        private readonly int[] _segmentLengths = new[] {  // 定义只读整型数组 _segmentLengths
-            // 数组元素省略
+        // 声明私有常量 _lineLength，并赋值为 60
+        private const int _lineLength = 60;
+        // 声明只读整型数组 _segmentLengths，并初始化为一组整数
+        private readonly int[] _segmentLengths = new[] {
+            // 数组包含一系列整数
         };
-    }
-}
-# 定义一个整型数组，用于存储一系列数字
-private readonly int[] _segmentLengths = {
-    12, 5, 1, 11, 8, 13, 27, 1, 11, 8, 13, 27, 1, 60
-};
-# 定义一个 StringBuilder 对象，用于存储生成的模式
-private readonly StringBuilder _pattern = new();
+        // 声明只读 StringBuilder 对象 _pattern
+        private readonly StringBuilder _pattern = new();
 
-# 定义一个构造函数，接受一个字符串参数
-public LovePattern(string message)
-{
-    # 调用 Fill 方法，传入一个 SourceCharacters 对象
-    Fill(new SourceCharacters(_lineLength, message));
-}
-
-# 定义一个填充模式的方法，接受一个 SourceCharacters 对象作为参数
-private void Fill(SourceCharacters source)
-{
-    # 初始化一个变量 lineLength 用于存储当前行的长度
-    var lineLength = 0;
-
-    # 遍历 _segmentLengths 数组中的每个数字
-    foreach (var segmentLength in _segmentLengths)
-    {
-        # 从 source 中获取指定长度的字符，并添加到 _pattern 中
-        foreach (var character in source.GetCharacters(segmentLength))
+        // 声明 LovePattern 类的构造函数，接受一个字符串参数 message
+        public LovePattern(string message)
         {
-            _pattern.Append(character);
+            // 调用 Fill 方法，传入 SourceCharacters 对象
+            Fill(new SourceCharacters(_lineLength, message));
         }
-        # 更新当前行的长度
-        lineLength += segmentLength;
-    }
-}
-            if (lineLength >= _lineLength)
+
+        // 声明私有方法 Fill，接受 SourceCharacters 对象 source 作为参数
+        private void Fill(SourceCharacters source)
+        {
+            // 声明并初始化变量 lineLength 为 0
+            var lineLength = 0;
+
+            // 遍历 _segmentLengths 数组
+            foreach (var segmentLength in _segmentLengths)
             {
-                _pattern.AppendLine();  // 如果行长度大于等于指定的行长度，就在模式中添加一个换行符
-                lineLength = 0;  // 重置行长度为0
+                // 遍历 source.GetCharacters(segmentLength) 返回的字符集合
+                foreach (var character in source.GetCharacters(segmentLength))
+                {
+                    // 将字符追加到 _pattern 中
+                    _pattern.Append(character);
+                }
+                // 更新 lineLength
+                lineLength += segmentLength;
+                // 如果 lineLength 大于等于 _lineLength
+                if (lineLength >= _lineLength)
+                {
+                    // 在 _pattern 中添加换行符
+                    _pattern.AppendLine();
+                    // 重置 lineLength 为 0
+                    lineLength = 0;
+                }
             }
         }
-    }
 
-    public override string ToString() =>
-        new StringBuilder()
-            .AppendLines(10)  // 在字符串构建器中添加10个空行
-            .Append(_pattern)  // 在字符串构建器中添加模式
-            .AppendLines(10)  // 在字符串构建器中再次添加10个空行
-            .ToString();  // 将字符串构建器转换为最终的字符串并返回
+        // 重写 ToString 方法
+        public override string ToString() =>
+            // 创建新的 StringBuilder 对象，追加空行、_pattern、再追加空行，并返回字符串
+            new StringBuilder()
+                .AppendLines(10)
+                .Append(_pattern)
+                .AppendLines(10)
+                .ToString();
+    }
 }
+
 ```

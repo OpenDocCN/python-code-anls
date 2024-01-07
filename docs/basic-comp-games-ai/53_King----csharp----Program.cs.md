@@ -1,17 +1,19 @@
-# `53_King\csharp\Program.cs`
+# `basic-computer-games\53_King\csharp\Program.cs`
 
 ```
-# 导入 Games.Common.IO 模块
+
+# 引入 Games.Common.IO 命名空间
 global using Games.Common.IO;
-# 导入 Games.Common.Randomness 模块
+# 引入 Games.Common.Randomness 命名空间
 global using Games.Common.Randomness;
-# 导入 King.Resources 模块
+# 引入 King.Resources 命名空间
 global using King.Resources;
-# 导入 King.Resources.Resource 模块中的所有静态成员
+# 引入 King.Resources.Resource 类的静态成员
 global using static King.Resources.Resource;
-# 导入 King 模块
+# 引入 King 命名空间
 using King;
 
-# 创建一个新的游戏对象，使用 ConsoleIO 类和 RandomNumberGenerator 类作为参数，然后开始游戏
+# 创建一个新的游戏对象，使用 ConsoleIO 类处理输入输出，使用 RandomNumberGenerator 类生成随机数，并开始游戏
 new Game(new ConsoleIO(), new RandomNumberGenerator()).Play();
+
 ```

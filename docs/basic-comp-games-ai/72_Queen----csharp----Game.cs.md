@@ -1,70 +1,86 @@
-# `72_Queen\csharp\Game.cs`
+# `basic-computer-games\72_Queen\csharp\Game.cs`
 
 ```
-namespace Queen;  # 命名空间声明
 
-internal class Game  # 内部类 Game 声明
+namespace Queen;
+
+// Queen 命名空间下的 Game 类
+internal class Game
 {
-    private readonly IReadWrite _io;  # 声明私有只读字段 _io，类型为 IReadWrite 接口
-    private readonly IRandom _random;  # 声明私有只读字段 _random，类型为 IRandom 接口
-    private readonly Computer _computer;  # 声明私有只读字段 _computer，类型为 Computer 类
+    // 私有成员变量，用于读写和随机数生成
+    private readonly IReadWrite _io;
+    private readonly IRandom _random;
+    private readonly Computer _computer;
 
-    public Game(IReadWrite io, IRandom random)  # Game 类的构造函数，接受 IReadWrite 和 IRandom 接口类型的参数
+    // Game 类的构造函数，接受 IReadWrite 和 IRandom 接口实例
+    public Game(IReadWrite io, IRandom random)
     {
-        _io = io;  # 将传入的 io 参数赋值给 _io 字段
-        _random = random;  # 将传入的 random 参数赋值给 _random 字段
-        _computer = new Computer(random);  # 使用传入的 random 参数创建一个新的 Computer 对象，并赋值给 _computer 字段
+        _io = io;
+        _random = random;
+        _computer = new Computer(random);
     }
 
-    internal void PlaySeries()  # 内部方法 PlaySeries 声明
+    // PlaySeries 方法，用于进行游戏系列
+    internal void PlaySeries()
     {
-        _io.Write(Streams.Title);  # 使用 _io 对象的 Write 方法，输出 Streams.Title 的内容
-        if (_io.ReadYesNo(Prompts.Instructions)) { _io.Write(Streams.Instructions); }  # 使用 _io 对象的 ReadYesNo 方法，根据返回值决定是否输出 Streams.Instructions 的内容
-        while (true)  # 创建一个无限循环，直到条件为false才会退出循环
-        {
-            var result = PlayGame();  # 调用PlayGame()函数，并将返回值赋给result变量
-            _io.Write(result switch  # 使用result的值进行条件判断
-            {
-                Result.HumanForfeits => Streams.Forfeit,  # 如果result为Result.HumanForfeits，则写入Streams.Forfeit
-                Result.HumanWins => Streams.Congratulations,  # 如果result为Result.HumanWins，则写入Streams.Congratulations
-                Result.ComputerWins => Streams.IWin,  # 如果result为Result.ComputerWins，则写入Streams.IWin
-                _ => throw new InvalidOperationException($"Unexpected result {result}")  # 如果result为其他值，则抛出异常
-            });
+        // 输出游戏标题
+        _io.Write(Streams.Title);
+        // 如果玩家选择阅读游戏说明，则输出游戏说明
+        if (_io.ReadYesNo(Prompts.Instructions)) { _io.Write(Streams.Instructions); }
 
-            if (!_io.ReadYesNo(Prompts.Anyone)) { break; }  # 调用ReadYesNo()函数，根据返回值判断是否继续循环
-        }
-
-        _io.Write(Streams.Thanks);  # 循环结束后，写入Streams.Thanks
-    }
-
-    private Result PlayGame()  # 定义一个名为PlayGame的私有函数，返回类型为Result
-    {
-        _io.Write(Streams.Board);  # 写入Streams.Board
-        # 从输入输出对象中读取人类玩家的位置，如果位置为起始位置则重复提示直到输入有效
-        var humanPosition = _io.ReadPosition(Prompts.Start, p => p.IsStart, Streams.IllegalStart, repeatPrompt: true);
-        # 如果人类玩家位置为零，则返回人类玩家放弃的结果
-        if (humanPosition.IsZero) { return Result.HumanForfeits; }
-
-        # 无限循环，直到游戏结束
+        // 循环进行游戏
         while (true)
         {
-            # 计算计算机玩家的下一步位置
+            // 进行游戏并获取结果
+            var result = PlayGame();
+            // 根据游戏结果输出不同的消息
+            _io.Write(result switch
+            {
+                Result.HumanForfeits => Streams.Forfeit,
+                Result.HumanWins => Streams.Congratulations,
+                Result.ComputerWins => Streams.IWin,
+                _ => throw new InvalidOperationException($"Unexpected result {result}")
+            });
+
+            // 如果玩家选择继续游戏，则继续循环，否则跳出循环
+            if (!_io.ReadYesNo(Prompts.Anyone)) { break; }
+        }
+
+        // 输出感谢消息
+        _io.Write(Streams.Thanks);
+    }
+
+    // PlayGame 方法，用于进行单局游戏
+    private Result PlayGame()
+    {
+        // 输出游戏棋盘
+        _io.Write(Streams.Board);
+        // 玩家选择起始位置
+        var humanPosition = _io.ReadPosition(Prompts.Start, p => p.IsStart, Streams.IllegalStart, repeatPrompt: true);
+        // 如果玩家选择放弃，则返回 HumanForfeits 结果
+        if (humanPosition.IsZero) { return Result.HumanForfeits; }
+
+        // 循环进行游戏
+        while (true)
+        {
+            // 计算计算机的移动位置
             var computerPosition = _computer.GetMove(humanPosition);
-            # 输出计算机玩家的移动位置
+            // 输出计算机的移动位置
             _io.Write(Strings.ComputerMove(computerPosition));
-            # 如果计算机玩家位置为终点，则返回计算机玩家获胜的结果
+            // 如果计算机到达终点，则返回 ComputerWins 结果
             if (computerPosition.IsEnd) { return Result.ComputerWins; }
 
-            # 从输入输出对象中读取人类玩家的下一步位置，直到输入有效
+            // 玩家选择移动位置
             humanPosition = _io.ReadPosition(Prompts.Move, p => (p - computerPosition).IsValid, Streams.IllegalMove);
-            # 如果人类玩家位置为零，则返回人类玩家放弃的结果
+            // 如果玩家选择放弃，则返回 HumanForfeits 结果
             if (humanPosition.IsZero) { return Result.HumanForfeits; }
-            # 如果人类玩家位置为终点，则返回人类玩家获胜的结果
+            // 如果玩家到达终点，则返回 HumanWins 结果
             if (humanPosition.IsEnd) { return Result.HumanWins; }
         }
     }
 
-    # 定义游戏结果的枚举类型
+    // 游戏结果枚举
     private enum Result { ComputerWins, HumanWins, HumanForfeits };
 }
+
 ```

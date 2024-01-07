@@ -1,15 +1,15 @@
-# `71_Poker\csharp\Cards\Suit.cs`
+# `basic-computer-games\71_Poker\csharp\Cards\Suit.cs`
 
 ```
-# 定义一个名为Poker.Cards的命名空间
-namespace Poker.Cards;
 
-# 定义一个名为Suit的枚举类型，包含四个成员：Clubs、Diamonds、Hearts、Spades
+# 命名空间为Poker.Cards，表示这个枚举类型属于Poker.Cards命名空间
 internal enum Suit
 {
-    Clubs,
-    Diamonds,
-    Hearts,
+    # 定义四种花色：梅花、方块、红桃、黑桃
+    Clubs, 
+    Diamonds, 
+    Hearts, 
     Spades
 }
+
 ```

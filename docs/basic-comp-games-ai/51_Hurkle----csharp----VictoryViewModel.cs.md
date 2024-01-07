@@ -1,14 +1,16 @@
-# `51_Hurkle\csharp\VictoryViewModel.cs`
+# `basic-computer-games\51_Hurkle\csharp\VictoryViewModel.cs`
 
 ```
-# 定义名为 hurkle 的命名空间
+
+# 定义了一个名为 hurkle 的命名空间
 namespace hurkle
 {
-    # 定义名为 VictoryViewModel 的类
+    # 定义了一个名为 VictoryViewModel 的内部类
     internal class VictoryViewModel
     {
-        # 定义名为 CurrentGuessNumber 的公共属性，可读写，只能在初始化时设置
+        # 定义了一个公共属性 CurrentGuessNumber，用于存储当前猜测的数字，并且只能在初始化时赋值
         public int CurrentGuessNumber {get; init;}
     }
 }
+
 ```

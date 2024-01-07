@@ -1,19 +1,29 @@
-# `71_Poker\csharp\Strategies\Strategy.cs`
+# `basic-computer-games\71_Poker\csharp\Strategies\Strategy.cs`
 
 ```
-namespace Poker.Strategies;  // 命名空间声明，表示该类属于Poker.Strategies命名空间
 
-internal abstract class Strategy  // 声明一个内部的抽象类Strategy
+// 命名空间为Poker.Strategies，表示该类属于Poker.Strategies命名空间
+internal abstract class Strategy
 {
-    public static Strategy None = new None();  // 声明一个静态的Strategy对象None，并初始化为None类的实例
-    public static Strategy Fold = new Fold();  // 声明一个静态的Strategy对象Fold，并初始化为Fold类的实例
-    public static Strategy Check = new Check();  // 声明一个静态的Strategy对象Check，并初始化为Check类的实例
-    public static Strategy Raise = new Raise();  // 声明一个静态的Strategy对象Raise，并初始化为Raise类的实例
-    public static Strategy Bet(float amount) => new Bet((int)amount);  // 声明一个静态的Strategy对象Bet，接受一个浮点数参数amount，并返回一个Bet类的实例
-    public static Strategy Bet(int amount) => new Bet(amount);  // 声明一个静态的Strategy对象Bet，接受一个整数参数amount，并返回一个Bet类的实例
-    public static Strategy Bluff(int amount, int? keepMask = null) => new Bluff(amount, keepMask);  // 声明一个静态的Strategy对象Bluff，接受一个整数参数amount和一个可空的整数参数keepMask，并返回一个Bluff类的实例
+    // 定义静态字段None，表示没有任何策略
+    public static Strategy None = new None();
+    // 定义静态字段Fold，表示放弃策略
+    public static Strategy Fold = new Fold();
+    // 定义静态字段Check，表示检查策略
+    public static Strategy Check = new Check();
+    // 定义静态字段Raise，表示加注策略
+    public static Strategy Raise = new Raise();
+    // 定义静态方法Bet，表示下注策略，参数为浮点数金额，返回下注策略对象
+    public static Strategy Bet(float amount) => new Bet((int)amount);
+    // 定义静态方法Bet，表示下注策略，参数为整数金额，返回下注策略对象
+    public static Strategy Bet(int amount) => new Bet(amount);
+    // 定义静态方法Bluff，表示虚张声势策略，参数为金额和保留掩码，返回虚张声势策略对象
+    public static Strategy Bluff(int amount, int? keepMask = null) => new Bluff(amount, keepMask);
 
-    public abstract int Value { get; }  // 声明一个抽象的整数属性Value，表示策略的价值
-    public virtual int? KeepMask { get; }  // 声明一个虚拟的可空整数属性KeepMask，表示保留的牌的掩码
+    // 抽象属性Value，表示策略的价值
+    public abstract int Value { get; }
+    // 虚属性KeepMask，表示保留掩码
+    public virtual int? KeepMask { get; }
 }
+
 ```

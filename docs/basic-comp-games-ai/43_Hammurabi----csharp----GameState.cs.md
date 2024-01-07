@@ -1,141 +1,80 @@
-# `43_Hammurabi\csharp\GameState.cs`
+# `basic-computer-games\43_Hammurabi\csharp\GameState.cs`
 
 ```
+
+// 命名空间 Hammurabi
+namespace Hammurabi
+{
+    /// <summary>
+    /// 存储游戏的状态。
+    /// </summary>
+    public record GameState
+    {
+        /// <summary>
+        /// 获取当前游戏年份。
+        /// </summary>
+        public int Year { get; init; }
+
+        /// <summary>
+        /// 获取城市的人口。
+        /// </summary>
+        public int Population { get; init; }
+
+        /// <summary>
+        /// 获取今年的人口增长。
+        /// </summary>
         public int PopulationIncrease { get; init; }
 
         /// <summary>
-        /// Gets the amount of bushels of grain in storage.
-        /// </summary>
-        public int BushelsInStorage { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain harvested per acre.
-        /// </summary>
-        public int BushelsPerAcre { get; init; }
-
-        /// <summary>
-        /// Gets the number of acres of land owned by the city.
-        /// </summary>
-        public int AcresOwned { get; init; }
-
-        /// <summary>
-        /// Gets the price of land per acre.
-        /// </summary>
-        public int PricePerAcre { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain eaten by rats.
-        /// </summary>
-        public int BushelsEatenByRats { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain given to the people.
-        /// </summary>
-        public int BushelsGivenToPeople { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain sold to the people.
-        /// </summary>
-        public int BushelsSoldToPeople { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain fed to the people's horses.
-        /// </summary>
-        public int BushelsFedToHorses { get; init; }
-
-        /// <summary>
-        /// Gets the amount of people who starved this year.
-        /// </summary>
-        public int PeopleStarved { get; init; }
-
-        /// <summary>
-        /// Gets the amount of people who immigrated to the city this year.
-        /// </summary>
-        public int Immigrants { get; init; }
-
-        /// <summary>
-        /// Gets the amount of acres of land bought this year.
-        /// </summary>
-        public int AcresBought { get; init; }
-
-        /// <summary>
-        /// Gets the amount of acres of land sold this year.
-        /// </summary>
-        public int AcresSold { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain planted this year.
-        /// </summary>
-        public int BushelsPlanted { get; init; }
-
-        /// <summary>
-        /// Gets the amount of acres of land harvested this year.
-        /// </summary>
-        public int AcresHarvested { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain harvested this year.
-        /// </summary>
-        public int BushelsHarvested { get; init; }
-
-        /// <summary>
-        /// Gets the amount of bushels of grain eaten by the people.
-        /// </summary>
-        public int BushelsEatenByPeople { get; init; }
-    }
-}
-        // 表示人口增长的属性
-        public int PopulationIncrease { get; init; }
-
-        /// <summary>
-        /// 获取饥饿人口的数量。
+        /// 获取挨饿的人数。
         /// </summary>
         public int Starvation { get; init; }
 
         /// <summary>
-        /// 获取城市的面积（单位：英亩）。
+        /// 获取城市的土地面积（英亩）。
         /// </summary>
         public int Acres { get; init; }
 
         /// <summary>
-        /// 获取每英亩土地的价格（以蒲式耳为单位）。
+        /// 获取每英亩土地的价格（以蒲式耳计）。
         /// </summary>
         public int LandPrice { get; init; }
 
         /// <summary>
-        /// 获取城市仓库中的粮食数量（以蒲式耳为单位）。
+        /// 获取城市仓库中的粮食数量（以蒲式耳计）。
         /// </summary>
-        public int Stores { get; init; }  # 定义一个属性，表示存储的数量
+        public int Stores { get; init; }
 
         /// <summary>
-        /// Gets the amount of food distributed to the people.
+        /// 获取分发给人民的食物数量。
         /// </summary>
-        public int FoodDistributed { get; init; }  # 定义一个属性，表示分发给人们的食物数量
+        public int FoodDistributed { get; init; }
 
         /// <summary>
-        /// Gets the number of acres that were planted.
+        /// 获取种植的土地面积。
         /// </summary>
-        public int AcresPlanted { get; init; }  # 定义一个属性，表示种植的土地面积
+        public int AcresPlanted { get; init; }
 
         /// <summary>
-        /// Gets the number of bushels produced per acre.
+        /// 获取每英亩土地的产量。
         /// </summary>
-        public int Productivity { get; init; }  # 定义一个属性，表示每英亩产出的蒲式耳数量
+        public int Productivity { get; init; }
 
         /// <summary>
-        /// Gets the amount of food lost to rats.
+        /// 获取被老鼠吃掉的粮食数量。
         /// </summary>
-        public int Spoilage { get; init; }  // 定义一个公共整数属性Spoilage，用于表示损坏程度
+        public int Spoilage { get; init; }
 
         /// <summary>
-        /// Gets a flag indicating whether the current year is a plague year.
+        /// 获取一个指示当前年份是否为瘟疫年的标志。
         /// </summary>
-        public bool IsPlagueYear { get; init; }  // 定义一个公共布尔属性IsPlagueYear，用于表示当前年份是否为瘟疫年
+        public bool IsPlagueYear { get; init; }
 
         /// <summary>
-        /// Gets a flag indicating whether the player has been impeached.
+        /// 获取一个指示玩家是否被弹劾的标志。
         /// </summary>
-        public bool IsPlayerImpeached { get; init; }  // 定义一个公共布尔属性IsPlayerImpeached，用于表示玩家是否被弹劾
+        public bool IsPlayerImpeached { get; init; }
     }
 }
+
 ```

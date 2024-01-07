@@ -1,32 +1,40 @@
-# `46_Hexapawn\csharp\Human.cs`
+# `basic-computer-games\46_Hexapawn\csharp\Human.cs`
 
 ```
-using System;  # 导入 System 模块
-using System.Linq;  # 导入 System 模块中的 Linq 功能
-using Games.Common.IO;  # 导入 Games.Common.IO 模块
-using static Hexapawn.Cell;  # 导入 Hexapawn.Cell 模块中的所有内容
-using static Hexapawn.Move;  # 导入 Hexapawn.Move 模块中的所有内容
-using static Hexapawn.Pawn;  # 导入 Hexapawn.Pawn 模块中的所有内容
 
-namespace Hexapawn;  # 定义 Hexapawn 命名空间
+// 引入所需的命名空间
+using System;
+using System.Linq;
+using Games.Common.IO;
+using static Hexapawn.Cell;
+using static Hexapawn.Move;
+using static Hexapawn.Pawn;
 
-internal class Human  # 定义 Human 类
+// 定义 Hexapawn 命名空间
+namespace Hexapawn;
+
+// 定义 Human 类
+internal class Human
 {
-    private readonly TextIO _io;  # 声明私有变量 _io，类型为 TextIO
+    // 声明私有字段 _io，用于处理文本输入输出
+    private readonly TextIO _io;
 
-    public Human(TextIO io)  # 定义 Human 类的构造函数，参数为 io
+    // Human 类的构造函数，接受 TextIO 对象作为参数
+    public Human(TextIO io)
     {
-        _io = io;  # 将传入的 io 参数赋值给私有变量 _io
+        _io = io;
     }
 
-    public void Move(Board board)  # 定义 Move 方法，参数为 board
+    // 定义 Move 方法，用于玩家进行移动
+    public void Move(Board board)
     {
+        // 循环，直到玩家输入合法的移动
         while (true)
         {
-            // 从输入输出对象中读取玩家的移动
+            // 从玩家输入中读取移动
             var move = _io.ReadMove("Your move");
 
-            // 尝试在棋盘上执行移动，如果成功则返回
+            // 尝试执行移动，如果成功则返回
             if (TryExecute(board, move)) { return; }
 
             // 如果移动非法，则输出提示信息
@@ -34,43 +42,53 @@ internal class Human  # 定义 Human 类
         }
     }
 
-    // 检查是否存在合法的移动
+    // 判断玩家是否有合法的移动
     public bool HasLegalMove(Board board)
     {
-        // 遍历所有大于3的单元格
+        // 遍历所有白色棋子的位置
         foreach (var from in AllCells.Where(c => c > 3))
         {
-            // 如果该单元格上的棋子不是白色，则继续下一个单元格
+            // 如果当前位置没有白色棋子，则继续下一次循环
             if (board[from] != White) { continue; }
 
-            // 如果该单元格上的棋子是白色，并且存在合法的移动，则返回true
+            // 如果当前位置有合法的移动，则返回 true
             if (HasLegalMove(board, from))
             {
                 return true;
             }
-    }
-
-    return false;
-}
-```
-
-这段代码是一个C#程序中的一些方法。下面是对每个方法的注释：
-
-1. private bool HasLegalMove(Board board, Cell from) =>
-   - 这是一个私有方法，用于检查给定的棋盘和起始位置是否有合法的移动。它返回一个布尔值。
-
-2. public bool HasNoPawns(Board board) => board.All(c => c != White);
-   - 这是一个公共方法，用于检查给定的棋盘上是否没有白色的棋子。它返回一个布尔值。
-
-3. public bool TryExecute(Board board, Move move)
-   - 这是一个公共方法，用于尝试在给定的棋盘上执行移动。它接受一个棋盘和一个移动作为参数，并返回一个布尔值。
-
-在这段代码中，缺少了一些注释，因此无法准确地解释每个语句的作用。
-            move.Execute(board);  # 调用移动对象的Execute方法，传入棋盘参数，执行移动操作
-            return true;  # 返回true，表示移动操作成功
         }
 
-        return false;  # 如果没有匹配的移动操作，返回false
+        // 如果没有找到合法的移动，则返回 false
+        return false;
+    }
+
+    // 判断特定位置的棋子是否有合法的移动
+    private bool HasLegalMove(Board board, Cell from) =>
+        Right(from).IsRightDiagonalToCapture(board) ||
+        Straight(from).IsStraightMoveToEmptySpace(board) ||
+        from > 4 && Left(from).IsLeftDiagonalToCapture(board);
+
+    // 判断棋盘上是否没有白色棋子
+    public bool HasNoPawns(Board board) => board.All(c => c != White);
+
+    // 尝试执行移动，如果移动合法则执行并返回 true，否则返回 false
+    public bool TryExecute(Board board, Move move)
+    {
+        // 如果移动的起始位置没有白色棋子，则返回 false
+        if (board[move.From] != White) { return false; }
+
+        // 如果移动是直线移动到空位、左斜线吃子或右斜线吃子，则执行移动并返回 true
+        if (move.IsStraightMoveToEmptySpace(board) ||
+            move.IsLeftDiagonalToCapture(board) ||
+            move.IsRightDiagonalToCapture(board))
+        {
+            move.Execute(board);
+            return true;
+        }
+
+        // 如果移动非法，则返回 false
+        return false;
     }
 }
+
 ```

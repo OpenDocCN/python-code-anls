@@ -1,55 +1,50 @@
-# `46_Hexapawn\csharp\IReadWriteExtensions.cs`
+# `basic-computer-games\46_Hexapawn\csharp\IReadWriteExtensions.cs`
 
 ```
-# 导入所需的模块
-import System
-import Linq
-import Games.Common.IO
 
-# 命名空间
-namespace Hexapawn;
+// 引入命名空间
+using System;
+using System.Linq;
+using Games.Common.IO;
 
-# 提供模拟 BASIC 解释器键盘输入例程的输入方法
+// 创建名为 IReadWriteExtensions 的静态类，提供模拟 BASIC 解释器键盘输入例程的输入方法
 internal static class IReadWriteExtensions
 {
-    # 获取用户输入的是 Yes 还是 No
+    // 创建名为 GetYesNo 的扩展方法，接收 IReadWrite 对象和提示信息作为参数，返回一个字符
     internal static char GetYesNo(this IReadWrite io, string prompt)
     {
-        # 循环直到用户输入有效的 Yes 或 No
+        // 循环直到条件满足
         while (true)
         {
-            # 从输入流中读取用户输入的第一个字符
+            // 从输入中获取第一个字符
             var response = io.ReadString($"{prompt} (Y-N)").FirstOrDefault();
-            # 如果用户输入的是 Y、y、N 或 n 中的一个
+            // 如果输入的字符是 Y、y、N 或 n 中的一个，则返回大写形式的该字符
             if ("YyNn".Contains(response))
             {
-                # 返回大写形式的用户输入
                 return char.ToUpperInvariant(response);
             }
         }
     }
-}
-    // 定义一个名为ReadMove的静态方法，接受一个IReadWrite类型的参数io和一个字符串类型的参数prompt
+
+    // 创建名为 ReadMove 的扩展方法，接收 IReadWrite 对象和提示信息作为参数，返回一个 Move 对象
     internal static Move ReadMove(this IReadWrite io, string prompt)
     {
-        // 创建一个无限循环，直到条件满足才会退出循环
+        // 循环直到条件满足
         while(true)
         {
-            // 调用io的Read2Numbers方法，传入prompt作为参数，将返回的两个数字分别赋值给from和to
+            // 从输入中获取两个数字
             var (from, to) = io.Read2Numbers(prompt);
 
-            // 调用Move类的TryCreate方法，传入from和to作为参数，如果返回true，则表示成功创建了一个Move对象，将其赋值给move并返回
+            // 如果可以创建移动对象，则返回该对象
             if (Move.TryCreate(from, to, out var move))
             {
                 return move;
             }
 
-            // 如果TryCreate方法返回false，则输出"Illegal Coordinates."
+            // 输出错误信息
             io.WriteLine("Illegal Coordinates.");
         }
     }
-    }
-```
+}
 
-这部分代码是一个缩进错误，应该删除。
 ```

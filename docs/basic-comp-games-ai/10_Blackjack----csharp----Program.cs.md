@@ -1,27 +1,41 @@
-# `10_Blackjack\csharp\Program.cs`
+# `basic-computer-games\10_Blackjack\csharp\Program.cs`
 
 ```
-# 输出游戏标题
-Console.WriteLine("{0}BLACK JACK", new string(' ', 31));
-# 输出游戏信息
-Console.WriteLine("{0}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY", new string(' ', 15));
-# 输出空行
-Console.WriteLine();
-Console.WriteLine();
-Console.WriteLine();
 
-# 提供游戏说明
-OfferInstructions();
+// 导入 System 命名空间
+using System;
 
-# 提示用户输入玩家数量，限定在1到6之间
-var numberOfPlayers = Prompt.ForInteger("Number of players?", 1, 6);
-# 创建游戏对象
-var game = new Game(numberOfPlayers);
-# 开始游戏
-game.PlayGame();
+// 定义静态类 Program
+namespace Blackjack
+{
+    static class Program
+    {
+        // 程序入口
+        static void Main(string[] args)
+        {
+            // 输出游戏标题
+            Console.WriteLine("{0}BLACK JACK", new string(' ', 31));
+            // 输出游戏信息
+            Console.WriteLine("{0}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY", new string(' ', 15));
+            // 输出空行
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            // 提供游戏说明
+            OfferInstructions();
+
+            // 提示用户输入玩家数量
+            var numberOfPlayers = Prompt.ForInteger("Number of players?", 1, 6);
+            // 创建游戏对象并开始游戏
+            var game = new Game(numberOfPlayers);
+            game.PlayGame();
+        }
+
+        // 提供游戏说明
         private static void OfferInstructions()
         {
-            // 如果用户不想要说明，则直接返回
+            // 如果用户不需要游戏说明，则直接返回
             if (!Prompt.ForYesNo("Do you want instructions?"))
                 return;
 
@@ -40,6 +54,6 @@ game.PlayGame();
             Console.WriteLine("Blackjack, the initial response should be 'S'.");
         }
     }
-# 关闭 ZIP 对象
-zip.close()  # 关闭 ZIP 对象，释放资源，避免内存泄漏。
+}
+
 ```

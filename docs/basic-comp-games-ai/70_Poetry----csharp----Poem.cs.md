@@ -1,36 +1,53 @@
-# `70_Poetry\csharp\Poem.cs`
+# `basic-computer-games\70_Poetry\csharp\Poem.cs`
 
 ```
-using static Poetry.Resources.Resource;  # 导入 Poetry 资源中的 Resource 类
 
-namespace Poetry;  # 声明 Poetry 命名空间
+# 使用 Poetry 资源中的 Resource 类
+using static Poetry.Resources.Resource;
 
-internal class Poem  # 内部类 Poem
+# 命名空间为 Poetry
+namespace Poetry;
+
+# 内部类 Poem
+internal class Poem
 {
-    internal static void Compose(IReadWrite io, IRandom random)  # 定义静态方法 Compose，接受 IReadWrite 和 IRandom 接口类型的参数
+    # 静态方法 Compose，接受 IReadWrite 和 IRandom 接口
+    internal static void Compose(IReadWrite io, IRandom random)
     {
-        io.Write(Streams.Title);  # 使用 io 接口的 Write 方法输出 Streams.Title 的内容
+        # 使用 io 接口写入标题
+        io.Write(Streams.Title);
 
-        var context = new Context(io, random);  # 创建 Context 对象，传入 io 和 random 参数
+        # 创建 Context 对象，传入 io 和 random
+        var context = new Context(io, random);
 
-        while (true)  # 进入无限循环
+        # 无限循环
+        while (true)
         {
-            context.WritePhrase();  # 调用 Context 对象的 WritePhrase 方法
-            context.MaybeWriteComma();  # 调用 Context 对象的 MaybeWriteComma 方法
-            context.WriteSpaceOrNewLine();  # 调用 Context 对象的 WriteSpaceOrNewLine 方法
+            # 写入诗句
+            context.WritePhrase();
+            # 可能写入逗号
+            context.MaybeWriteComma();
+            # 写入空格或换行
 
-            while (true)  # 进入内部无限循环
+            # 内部循环
+            while (true)
             {
-                context.Update(random);  // 更新上下文信息，传入随机数
-                context.MaybeIndent();  // 可能进行缩进处理
+                # 更新上下文
+                context.Update(random);
+                # 可能缩进
+                context.MaybeIndent();
 
-                if (context.GroupNumberIsValid) { break; }  // 如果上下文中的组号有效，则跳出循环
+                # 如果组号有效，则跳出内部循环
+                if (context.GroupNumberIsValid) { break; }
 
-                context.ResetGroup();  // 重置上下文中的组信息
+                # 重置组
+                context.ResetGroup();
 
-                if (context.MaybeCompleteStanza()) { break; }  // 如果可能完成一个段落的处理，则跳出循环
+                # 可能完成一节诗
+                if (context.MaybeCompleteStanza()) { break; }
             }
         }
     }
 }
+
 ```

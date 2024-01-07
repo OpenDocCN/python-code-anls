@@ -1,42 +1,43 @@
-# `83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
+# `basic-computer-games\83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
 
 ```
-        /// The source immutable array.
+
+// 命名空间 Game.Extensions 包含了 ImmutableArrayExtensions 类
+namespace Game.Extensions
+{
+    /// <summary>
+    /// 为 ImmutableArray<T> 类提供额外的方法
+    /// </summary>
+    public static class ImmutableArrayExtensions
+    {
+        /// <summary>
+        /// 将不可变数组中的每个元素映射到一个新值
+        /// </summary>
+        /// <typeparam name="TSource">
+        /// 源数组中元素的类型
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// 结果数组中元素的类型
+        /// </typeparam>
+        /// <param name="source">
+        /// 源数组
         /// </param>
         /// <param name="selector">
-        /// A function to apply to each element in the array.
+        /// 接收源数组中的元素和其索引，并返回结果元素的函数
         /// </param>
-        /// <returns>
-        /// An immutable array that contains the result of applying the function to each element in the source array.
-        /// </returns>
-        public static ImmutableArray<TResult> Map<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector)
+        public static ImmutableArray<TResult> Map<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, int, TResult> selector)
         {
-            // Create a new array to store the mapped elements
+            // 创建一个结果数组的构建器
             var builder = ImmutableArray.CreateBuilder<TResult>(source.Length);
-            
-            // Iterate through each element in the source array and apply the selector function
-            foreach (var item in source)
-            {
-                // Add the result of the selector function to the new array
-                builder.Add(selector(item));
-            }
-            
-            // Return the new immutable array
-            return builder.ToImmutable();
+
+            // 遍历源数组，将经过 selector 函数处理后的元素添加到结果数组中
+            for (var i = 0; i < source.Length; ++i)
+                builder.Add(selector(source[i], i));
+
+            // 将构建器中的内容转换为不可变数组并返回
+            return builder.MoveToImmutable();
         }
     }
 }
-# 定义一个静态扩展方法，用于对不可变数组进行映射操作
-public static ImmutableArray<TResult> Map<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, int, TResult> selector)
-{
-    # 创建一个不可变数组构建器，用于构建结果数组
-    var builder = ImmutableArray.CreateBuilder<TResult>(source.Length);
 
-    # 遍历源数组，对每个元素调用传入的 selector 函数，并将结果添加到构建器中
-    for (var i = 0; i < source.Length; ++i)
-        builder.Add(selector(source[i], i));
-
-    # 将构建器中的内容转换为不可变数组并返回
-    return builder.MoveToImmutable();
-}
 ```

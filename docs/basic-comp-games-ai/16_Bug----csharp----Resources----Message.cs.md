@@ -1,59 +1,72 @@
-# `16_Bug\csharp\Resources\Message.cs`
+# `basic-computer-games\16_Bug\csharp\Resources\Message.cs`
 
 ```
-using BugGame.Parts;  // 导入 BugGame.Parts 命名空间
 
-namespace BugGame.Resources;  // 声明 BugGame.Resources 命名空间
+// 使用 BugGame.Parts 命名空间
+using BugGame.Parts;
 
-internal class Message  // 声明一个内部类 Message
+// BugGame.Resources 命名空间下的内部类 Message
+internal class Message
 {
-    public static Message Rolled = new("rolled a {0}");  // 声明并初始化一个静态的 Message 对象 Rolled
+    // 静态字段 Rolled，表示滚动的消息
+    public static Message Rolled = new("rolled a {0}");
 
-    public static Message BodyAdded = new("now have a body.");  // 声明并初始化一个静态的 Message 对象 BodyAdded
-    public static Message BodyNotNeeded = new("do not need a body.");  // 声明并初始化一个静态的 Message 对象 BodyNotNeeded
+    // 静态字段 BodyAdded，表示添加身体的消息
+    public static Message BodyAdded = new("now have a body.");
+    // 静态字段 BodyNotNeeded，表示不需要身体的消息
+    public static Message BodyNotNeeded = new("do not need a body.");
 
-    public static Message NeckAdded = new("now have a neck.");  // 声明并初始化一个静态的 Message 对象 NeckAdded
-    public static Message NeckNotNeeded = new("do not need a neck.");  // 声明并初始化一个静态的 Message 对象 NeckNotNeeded
+    // 静态字段 NeckAdded，表示添加脖子的消息
+    public static Message NeckAdded = new("now have a neck.");
+    // 静态字段 NeckNotNeeded，表示不需要脖子的消息
+    public static Message NeckNotNeeded = new("do not need a neck.");
 
-    public static Message HeadAdded = new("needed a head.");  // 声明并初始化一个静态的 Message 对象 HeadAdded
-    public static Message HeadNotNeeded = new("I do not need a head.", "You have a head.");  // 声明并初始化一个静态的 Message 对象 HeadNotNeeded
+    // 静态字段 HeadAdded，表示添加头部的消息
+    public static Message HeadAdded = new("needed a head.");
+    // 静态字段 HeadNotNeeded，表示不需要头部的消息
+    public static Message HeadNotNeeded = new("I do not need a head.", "You have a head.");
 
-    public static Message TailAdded = new("I now have a tail.", "I now give you a tail.");  // 声明并初始化一个静态的 Message 对象 TailAdded
-    public static Message TailNotNeeded = new("I do not need a tail.", "You already have a tail.");  // 声明并初始化一个静态的 Message 对象 TailNotNeeded
-}
-    # 创建一个静态的 Message 对象 FeelerAdded，包含两个消息字符串
+    // 静态字段 TailAdded，表示添加尾巴的消息
+    public static Message TailAdded = new("I now have a tail.", "I now give you a tail.");
+    // 静态字段 TailNotNeeded，表示不需要尾巴的消息
+    public static Message TailNotNeeded = new("I do not need a tail.", "You already have a tail.");
+
+    // 静态字段 FeelerAdded，表示添加触角的消息
     public static Message FeelerAdded = new("I get a feeler.", "I now give you a feeler");
-    # 创建一个静态的 Message 对象 FeelersFull，包含两个消息字符串
+    // 静态字段 FeelersFull，表示触角已满的消息
     public static Message FeelersFull = new("I have 2 feelers already.", "You have two feelers already");
 
-    # 创建一个静态的 Message 对象 LegAdded，包含一个消息字符串
+    // 静态字段 LegAdded，表示添加腿的消息
     public static Message LegAdded = new("now have {0} legs");
-    # 创建一个静态的 Message 对象 LegsFull，包含两个消息字符串
+    // 静态字段 LegsFull，表示腿已满的消息
     public static Message LegsFull = new("I have 6 feet.", "You have 6 feet already");
 
-    # 创建一个静态的 Message 对象 Complete，包含一个消息字符串
+    // 静态字段 Complete，表示昆虫已完成的消息
     public static Message Complete = new("bug is finished.");
 
-    # 定义一个私有的构造函数，接受一个 common 字符串参数
+    // 私有构造函数，接受一个 common 参数
     private Message(string common)
-        # 调用另一个构造函数，传入拼接后的消息字符串
         : this("I " + common, "You " + common)
     {
     }
 
-    # 定义一个私有的构造函数，接受两个字符串参数
+    // 私有构造函数，接受两个参数 i 和 you
     private Message(string i, string you)
     {
-        # 将参数赋值给对象的属性
         I = i;
         You = you;
     }
 
-    # 定义一个只读属性 I，用于获取消息的第一个字符串
+    // 只读属性 I，表示消息的第一人称形式
     public string I { get; }
-    public string You { get; }  # 定义一个公共属性 You，用于获取值
+    // 只读属性 You，表示消息的第二人称形式
+    public string You { get; }
 
-    public static Message DoNotHaveA(Part part) => new($"do not have a {part.Name}");  # 定义一个静态方法 DoNotHaveA，用于返回一个 Message 对象，内容为 "do not have a {part.Name}"
+    // 静态方法 DoNotHaveA，接受一个 Part 参数，表示没有某个部位的消息
+    public static Message DoNotHaveA(Part part) => new($"do not have a {part.Name}");
 
-    public Message ForValue(int quantity) => new(string.Format(I, quantity), string.Format(You, quantity));  # 定义一个方法 ForValue，用于返回一个 Message 对象，内容为 string.Format(I, quantity) 和 string.Format(You, quantity)
+    // 实例方法 ForValue，接受一个 quantity 参数，表示根据数量返回消息
+    public Message ForValue(int quantity) => new(string.Format(I, quantity), string.Format(You, quantity));
+}
+
 ```

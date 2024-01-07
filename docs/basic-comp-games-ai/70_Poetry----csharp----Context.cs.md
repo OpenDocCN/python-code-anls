@@ -1,136 +1,134 @@
-# `70_Poetry\csharp\Context.cs`
+# `basic-computer-games\70_Poetry\csharp\Context.cs`
 
 ```
-    // 声明私有变量 _io 用于读写操作
-    private readonly IReadWrite _io;
-    // 声明私有变量 _random 用于生成随机数
-    private readonly IRandom _random;
-    // 声明私有变量 _phraseNumber 用于存储短语数量
-    private int _phraseNumber;
-    // 声明私有变量 _groupNumber 用于存储组数量
-    private int _groupNumber;
-    // 声明私有变量 _skipComma 用于标记是否跳过逗号
-    private bool _skipComma;
-    // 声明私有变量 _lineCount 用于存储行数
-    private int _lineCount;
-    // 声明私有变量 _useGroup2 用于标记是否使用第二组
-    private bool _useGroup2;
-    // 声明私有变量 _atStartOfLine 用于标记是否在行的起始位置
 
-    // 构造函数，接受 IReadWrite 和 IRandom 接口实例作为参数
+// 命名空间声明，表示代码所属的命名空间为Poetry
+namespace Poetry;
+
+// 内部类声明，表示Context类只能在当前程序集内部访问
+internal class Context
+{
+    // 私有字段声明，表示Context类的私有成员变量
+    private readonly IReadWrite _io; // 用于读写操作的接口
+    private readonly IRandom _random; // 用于生成随机数的接口
+    private int _phraseNumber; // 短语编号
+    private int _groupNumber; // 组编号
+    private bool _skipComma; // 是否跳过逗号
+    private int _lineCount; // 行数计数
+    private bool _useGroup2; // 是否使用第二组
+    private bool _atStartOfLine = true; // 是否在行的起始位置
+
+    // 构造函数，初始化Context类的实例
     public Context(IReadWrite io, IRandom random)
     {
-        // 将传入的 io 赋值给私有变量 _io
-        _io = io;
-        // 将传入的 random 赋值给私有变量 _random
-        _random = random;
+        _io = io; // 初始化_io字段
+        _random = random; // 初始化_random字段
     }
 
-    // 只读属性，返回 _phraseNumber 减去 1 的值，如果小于 0 则返回 0
+    // 只读属性，表示短语编号
     public int PhraseNumber => Math.Max(_phraseNumber - 1, 0); 
+
+    // 可读写属性，表示组编号
     public int GroupNumber 
     { 
         get
         {
-            // 如果_useGroup2为true，则返回2，否则返回_groupNumber
-            var value = _useGroup2 ? 2 : _groupNumber;
-            // 将_useGroup2设置为false
-            _useGroup2 = false;
-            // 返回value-1和0中的较大值
-            return Math.Max(value - 1, 0);
+            var value = _useGroup2 ? 2 : _groupNumber; // 根据_useGroup2的值确定返回值
+            _useGroup2 = false; // 重置_useGroup2的值
+            return Math.Max(value - 1, 0); // 返回组编号的最大值
         }
     }
 
-    // 获取或设置短语数量
+    // 可读写属性，表示短语计数
     public int PhraseCount { get; set; }
-    // 检查_groupNumber是否小于5
+
+    // 只读属性，表示组编号是否有效
     public bool GroupNumberIsValid => _groupNumber < 5;
 
-    // 写入短语
+    // 方法，用于写入短语
     public void WritePhrase()
     {
-        // 获取短语并写入_io
-        Phrase.GetPhrase(this).Write(_io, this);
-        // 将_atStartOfLine设置为false
-        _atStartOfLine = false;
-    }
-    public void MaybeWriteComma()
-    {
-        // 检查是否需要写逗号
-        if (!_skipComma && _random.NextFloat() <= 0.19F && PhraseCount != 0)
-        {
-            // 写入逗号并更新短语计数
-            _io.Write(",");
-            PhraseCount = 2;
-        }
-        // 重置跳过逗号的标志
-        _skipComma = false;
+        Phrase.GetPhrase(this).Write(_io, this); // 调用Phrase类的GetPhrase方法并写入_io
+        _atStartOfLine = false; // 设置_atStartOfLine为false
     }
 
+    // 方法，用于可能写入逗号
+    public void MaybeWriteComma()
+    {
+        if (!_skipComma && _random.NextFloat() <= 0.19F && PhraseCount != 0)
+        {
+            _io.Write(","); // 写入逗号
+            PhraseCount = 2; // 设置短语计数为2
+        }
+        _skipComma = false; // 重置_skipComma的值
+    }
+
+    // 方法，用于写入空格或换行
     public void WriteSpaceOrNewLine()
     {
-        // 写入空格或换行符
         if (_random.NextFloat() <= 0.65F)
         {
-            _io.Write(" ");
-            // 更新短语计数
-            PhraseCount += 1;
+            _io.Write(" "); // 写入空格
+            PhraseCount += 1; // 短语计数加1
         }
         else
         {
-            // 调用EndLine方法，换行
-            EndLine();
-        }
-    }
-            PhraseCount = 0;  // 重置短语计数器为0
+            EndLine(); // 调用EndLine方法
+            PhraseCount = 0; // 重置短语计数为0
         }
     }
 
+    // 方法，用于更新短语和组编号
     public void Update(IRandom random)
     {
-        _phraseNumber = random.Next(1, 6);  // 生成一个1到6之间的随机数，赋值给_phraseNumber
-        _groupNumber += 1;  // _groupNumber增加1
-        _lineCount += 1;  // _lineCount增加1
+        _phraseNumber = random.Next(1, 6); // 随机生成短语编号
+        _groupNumber += 1; // 组编号加1
+        _lineCount += 1; // 行数计数加1
     }
 
+    // 方法，用于可能缩进
     public void MaybeIndent()
     {
-        if (PhraseCount == 0 && _groupNumber % 2 == 0)  // 如果PhraseCount为0且_groupNumber是偶数
+        if (PhraseCount == 0 && _groupNumber % 2 == 0)
         {
-            _io.Write("     ");  // 在输出流中写入5个空格，用于缩进
+            _io.Write("     "); // 写入4个空格
         }
     }
     
-    public void ResetGroup()  // 重置组的方法
+    // 方法，用于重置组编号
+    public void ResetGroup()
     {
-        _groupNumber = 0;  # 将_groupNumber变量设置为0
-        EndLine();  # 调用EndLine函数
+        _groupNumber = 0; // 重置组编号为0
+        EndLine(); // 调用EndLine方法
     }
 
-    public bool MaybeCompleteStanza()  # 定义一个公共的函数MaybeCompleteStanza，返回布尔值
+    // 方法，用于可能完成诗节
+    public bool MaybeCompleteStanza()
     {
-        if (_lineCount > 20)  # 如果_lineCount大于20
+        if (_lineCount > 20)
         {
-            _io.WriteLine();  # 在_io中写入一个空行
-            PhraseCount = _lineCount = 0;  # 将PhraseCount和_lineCount都设置为0
-            _useGroup2 = true;  # 将_useGroup2变量设置为true
-            return true;  # 返回true
+            _io.WriteLine(); // 写入换行
+            PhraseCount = _lineCount = 0; // 重置短语计数和行数计数为0
+            _useGroup2 = true; // 设置_useGroup2为true
+            return true; // 返回true
         }
 
-        return false;  # 返回false
+        return false; // 返回false
     }
 
-    internal string MaybeCapitalise(string text) =>  # 定义一个内部的函数MaybeCapitalise，接受一个字符串参数并返回一个字符串
-        _atStartOfLine ? (char.ToUpper(text[0]) + text[1..]) : text;  # 如果_atStartOfLine为真，则将text的第一个字符转换为大写并返回，否则返回原始text
-# 跳过下一个逗号
-public void SkipNextComma() => _skipComma = true;
+    // 内部方法，用于可能大写首字母
+    internal string MaybeCapitalise(string text) =>
+        _atStartOfLine ? (char.ToUpper(text[0]) + text[1..]) : text;
 
-# 结束当前行
-public void EndLine()
-{
-    # 写入换行符
-    _io.WriteLine();
-    # 设置在行的起始位置
-    _atStartOfLine = true;
+    // 方法，用于跳过下一个逗号
+    public void SkipNextComma() => _skipComma = true;
+
+    // 方法，用于结束行
+    public void EndLine()
+    {
+        _io.WriteLine(); // 写入换行
+        _atStartOfLine = true; // 设置_atStartOfLine为true
+    }
 }
+
 ```

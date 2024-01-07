@@ -1,20 +1,23 @@
-# `58_Love\csharp\Program.cs`
+# `basic-computer-games\58_Love\csharp\Program.cs`
 
 ```
-# 导入所需的模块
-import Games.Common.IO
-import Love
-import Love.Resources
 
-# 创建控制台输入输出对象
-io = new ConsoleIO()
+# 引入 Games.Common.IO 命名空间，以便使用其中的 ConsoleIO 类
+# 引入 Love 命名空间，以便使用其中的 Resources 类
+using Games.Common.IO;
+using Love;
+using Love.Resources;
 
-# 输出介绍信息
-io.Write(Resource.Streams.Intro)
+# 创建一个 ConsoleIO 对象
+var io = new ConsoleIO();
 
-# 从控制台读取用户输入的消息
-message = io.ReadString("Your message, please")
+# 从资源中读取并输出 Intro 流
+io.Write(Resource.Streams.Intro);
 
-# 将用户输入的消息转换成 Love 模式并输出
-io.Write(new LovePattern(message))
+# 从控制台输入一个消息
+var message = io.ReadString("Your message, please");
+
+# 创建一个 LovePattern 对象，并将输入的消息作为参数传入
+io.Write(new LovePattern(message));
+
 ```

@@ -1,15 +1,16 @@
-# `51_Hurkle\csharp\GuessViewModel.cs`
+# `basic-computer-games\51_Hurkle\csharp\GuessViewModel.cs`
 
 ```
+
+# 定义了一个名为hurkle的命名空间
 namespace hurkle
 {
-    // 创建名为 hurkle 的命名空间
+    # 定义了一个名为GuessViewModel的内部类
     internal class GuessViewModel
     {
-        // 创建名为 GuessViewModel 的类，并设置为内部访问权限
-        // 创建名为 CurrentGuessNumber 的公共属性，用于存储当前猜测的数字，具有 get 和 init 访问器
+        # 定义了一个公共属性CurrentGuessNumber，用于存储当前猜测的数字，并且只能在构造函数中初始化
         public int CurrentGuessNumber {get;init;}
-        // 使用 int 类型创建名为 CurrentGuessNumber 的属性，用于存储当前猜测的数字，具有 get 和 init 访问器
     }
 }
+
 ```

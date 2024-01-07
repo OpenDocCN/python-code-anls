@@ -1,42 +1,47 @@
-# `32_Diamond\csharp\Resources\Resource.cs`
+# `basic-computer-games\32_Diamond\csharp\Resources\Resource.cs`
 
 ```
-# 使用 System.Reflection 和 System.Runtime.CompilerServices 模块
+
+// 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-# 定义 Diamond 资源的命名空间
+// 声明 Diamond.Resources 命名空间
 namespace Diamond.Resources;
 
-# 定义 Resource 类
+// 声明 Resource 类
 internal static class Resource
 {
-    # 定义 Streams 类
+    // 声明 Streams 类
     internal static class Streams
     {
-        # 定义 Introduction 属性，返回流对象
+        // 声明 Introduction 属性，返回流
         public static Stream Introduction => GetStream();
     }
 
-    # 定义 Prompts 类
+    // 声明 Prompts 类
     internal static class Prompts
     {
-        # 定义 TypeNumber 属性，返回字符串
+        // 声明 TypeNumber 属性，返回字符串
         public static string TypeNumber => GetString();
     }
 
-    # 定义 GetString 方法，用于获取字符串
+    // 声明 GetString 方法，根据调用者的成员名获取流并返回其内容
     private static string GetString([CallerMemberName] string? name = null)
     {
-        # 使用 GetStream 方法获取流对象
+        // 使用流获取器获取流
         using var stream = GetStream(name);
-        using var reader = new StreamReader(stream);  # 使用 StreamReader 类创建一个从流中读取数据的对象
-        return reader.ReadToEnd();  # 读取 StreamReader 对象中的所有数据并返回
-
+        // 使用流读取器读取流内容并返回
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
     }
 
-    private static Stream GetStream([CallerMemberName] string? name = null) =>  # 创建一个私有的静态方法，返回一个流对象，方法名为调用者的成员名
-        Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")  # 获取当前执行程序集中嵌入资源的流对象，资源名称由 Resource 类的命名空间和传入的方法名组成
-            ?? throw new Exception($"Could not find embedded resource stream '{name}'.");  # 如果找不到指定的嵌入资源流，则抛出异常
+    // 声明 GetStream 方法，根据调用者的成员名获取嵌入资源流
+    private static Stream GetStream([CallerMemberName] string? name = null) =>
+        // 使用反射获取当前程序集的嵌入资源流
+        Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+            // 如果找不到资源流，则抛出异常
+            ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
 }
+
 ```

@@ -1,16 +1,22 @@
-# `13_Bounce\csharp\IReadWriteExtensions.cs`
+# `basic-computer-games\13_Bounce\csharp\IReadWriteExtensions.cs`
 
 ```
-namespace Bounce;  # 命名空间声明，定义了代码所在的命名空间
 
-internal static class IReadWriteExtensions  # 定义了一个静态类 IReadWriteExtensions，该类包含了一些扩展方法
+# 命名空间 Bounce 下的内部静态类 IReadWriteExtensions
+namespace Bounce;
 
+internal static class IReadWriteExtensions
 {
-    internal static float ReadParameter(this IReadWrite io, string parameter)  # 定义了一个扩展方法 ReadParameter，接收一个 IReadWrite 类型的参数 io 和一个 string 类型的参数 parameter，返回一个 float 类型的值
+    # 为 IReadWrite 接口添加一个扩展方法，用于读取参数并返回浮点数
+    internal static float ReadParameter(this IReadWrite io, string parameter)
     {
-        var value = io.ReadNumber(parameter);  # 调用 io 对象的 ReadNumber 方法，将返回值赋给变量 value
-        io.WriteLine();  # 调用 io 对象的 WriteLine 方法
-        return value;  # 返回变量 value 的值
+        # 调用 IReadWrite 接口的 ReadNumber 方法读取参数的数值
+        var value = io.ReadNumber(parameter);
+        # 调用 IReadWrite 接口的 WriteLine 方法
+        io.WriteLine();
+        # 返回读取的参数值
+        return value;
     }
 }
+
 ```

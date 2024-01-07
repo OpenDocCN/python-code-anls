@@ -1,89 +1,84 @@
-# `47_Hi-Lo\csharp\Program.cs`
+# `basic-computer-games\47_Hi-Lo\csharp\Program.cs`
 
 ```
-// 输出一行空格和"HI LO"字符串
+
+// 输出带有34个空格的字符串，然后输出"HI LO"
 Console.WriteLine(Tab(34) + "HI LO");
-// 输出一行空格和"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"字符串
+// 输出带有15个空格的字符串，然后输出"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
 Console.WriteLine(Tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
 // 输出空行
 Console.WriteLine();
 Console.WriteLine();
 Console.WriteLine();
-// 输出"THIS IS THE GAME OF HI LO."
+// 输出以下内容
 Console.WriteLine("THIS IS THE GAME OF HI LO.");
-// 输出空行
 Console.WriteLine();
-// 输出"YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE"字符串
 Console.WriteLine("YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE");
-// 输出"HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU"字符串
 Console.WriteLine("HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU");
-// 输出"GUESS THE AMOUNT, YOU WIN ALL THE MONEY IN THE JACKPOT!"字符串
 Console.WriteLine("GUESS THE AMOUNT, YOU WIN ALL THE MONEY IN THE JACKPOT!");
-// 输出"THEN YOU GET ANOTHER CHANCE TO WIN MORE MONEY.  HOWEVER,"字符串
 Console.WriteLine("THEN YOU GET ANOTHER CHANCE TO WIN MORE MONEY.  HOWEVER,");
-// 输出"IF YOU DO NOT GUESS THE AMOUNT, THE GAME ENDS."字符串
 Console.WriteLine("IF YOU DO NOT GUESS THE AMOUNT, THE GAME ENDS.");
-// 输出空行
 Console.WriteLine();
 
-// rnd 是我们的随机数生成器
-// 创建一个新的随机数生成器对象
-Random rnd = new Random();
+// 创建一个随机数生成器对象
+Random rnd = new();
 
-// playAgain 是一个布尔类型的变量，用于表示是否再玩一次的标志
+// 初始化变量
 bool playAgain = false;
-int totalWinnings = 0; // 初始化总奖金为0
+int totalWinnings = 0;
 
-do // 游戏循环
+// 游戏循环
+do
 {
-    int jackpot = rnd.Next(100) + 1; // 生成1到100之间的随机数作为奖池
-    int guess = 1; // 初始化猜测次数为1
+    // 生成1到100之间的随机数作为奖池金额
+    int jackpot = rnd.Next(100) + 1;
+    int guess = 1;
 
-    while (true) // 猜测循环
+    // 猜数循环
+    while (true)
     {
-        Console.WriteLine(); // 输出空行
-        int amount = ReadInt("YOUR GUESS "); // 读取用户输入的猜测数
+        Console.WriteLine();
+        // 从用户输入中读取一个整数
+        int amount = ReadInt("YOUR GUESS ");
 
-        if (amount == jackpot) // 如果猜中了
+        if (amount == jackpot)
         {
-            Console.WriteLine($"GOT IT!!!!!!!!!!   YOU WIN {jackpot} DOLLARS."); // 输出猜中奖池金额的消息
-            totalWinnings += jackpot; // 将奖金累加到总奖金中
-            Console.WriteLine($"YOUR TOTAL WINNINGS ARE NOW {totalWinnings} DOLLARS."); // 输出当前总奖金
-            break; // 退出猜测循环
+            Console.WriteLine($"GOT IT!!!!!!!!!!   YOU WIN {jackpot} DOLLARS.");
+            totalWinnings += jackpot;
+            Console.WriteLine($"YOUR TOTAL WINNINGS ARE NOW {totalWinnings} DOLLARS.");
+            break;
         }
-        else if (amount > jackpot) // 如果猜测数大于奖池金额
+        else if (amount > jackpot)
         {
-            Console.WriteLine("YOUR GUESS IS TOO HIGH.");  # 如果猜测的数字太高，则输出提示信息
+            Console.WriteLine("YOUR GUESS IS TOO HIGH.");
         }
         else
         {
-            Console.WriteLine("YOUR GUESS IS TOO LOW.");   # 如果猜测的数字太低，则输出提示信息
+            Console.WriteLine("YOUR GUESS IS TOO LOW.");
         }
 
-        guess++;  # 猜测次数加一
-        if (guess > 6)  # 如果猜测次数超过6次
+        guess++;
+        if (guess > 6)
         {
-            Console.WriteLine($"YOU BLEW IT...TOO BAD...THE NUMBER WAS {jackpot}");  # 输出猜测次数超过6次的提示信息，并显示正确数字
-            break;  # 结束循环
+            Console.WriteLine($"YOU BLEW IT...TOO BAD...THE NUMBER WAS {jackpot}");
+            break;
         }
     }
 
-    Console.WriteLine();  # 输出空行
-    Console.Write("PLAY AGAIN (YES OR NO) ");  # 提示用户是否再次玩游戏
-    playAgain = Console.ReadLine().ToUpper().StartsWith("Y");  # 读取用户输入并转换为大写，判断是否以"Y"开头，将结果赋值给playAgain变量
+    Console.WriteLine();
+    Console.Write("PLAY AGAIN (YES OR NO) ");
+    // 读取用户输入并判断是否继续游戏
+    playAgain = Console.ReadLine().ToUpper().StartsWith("Y");
+
 } while (playAgain);
-// 使用 do-while 循环来实现游戏再次进行的逻辑
 
 Console.WriteLine();
 Console.WriteLine("SO LONG.  HOPE YOU ENJOYED YOURSELF!!!");
-// 输出结束语句
 
-// Tab(n) returns n spaces
-// 定义一个函数，返回 n 个空格的字符串
+// Tab(n) 返回n个空格组成的字符串
+static string Tab(int n) => new String(' ', n);
 
-// ReadInt asks the user to enter a number
-// 定义一个函数，提示用户输入一个数字
-
+// ReadInt 要求用户输入一个数字
 static int ReadInt(string question)
 {
     while (true)
@@ -95,9 +90,7 @@ static int ReadInt(string question)
             return value;
         }
         Console.WriteLine("!Invalid Number Entered.");
-        // 如果用户输入的不是数字，则输出错误信息
     }
-```
+}
 
-这部分代码是一个缩进错误，应该删除。
 ```

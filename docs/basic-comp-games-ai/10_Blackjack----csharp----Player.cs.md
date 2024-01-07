@@ -1,39 +1,47 @@
-# `10_Blackjack\csharp\Player.cs`
+# `basic-computer-games\10_Blackjack\csharp\Player.cs`
 
 ```
+
+// 命名空间为Blackjack，定义了一个名为Player的公共类
 namespace Blackjack
 {
+    // 定义了一个名为Player的公共类
     public class Player
     {
-        // 构造函数，初始化玩家的索引
+        // 构造函数，接受一个整数参数index
         public Player(int index)
         {
+            // 设置Index属性为传入的index值
             Index = index;
-            // 根据索引设置玩家的名字
+            // 设置Name属性为index加1后转换为字符串
             Name = (index + 1).ToString();
-            // 初始化玩家的手牌
+            // 初始化Hand属性为一个新的Hand对象
             Hand = new Hand();
-            // 初始化玩家的第二手牌
+            // 初始化SecondHand属性为一个新的Hand对象
             SecondHand = new Hand();
         }
 
-        // 玩家的索引属性
+        // 只读属性，获取Index值
         public int Index { get; private set; }
 
-        // 玩家的名字属性
+        // 只读属性，获取Name值
         public string Name { get; private set; }
 
-        // 玩家的手牌属性
+        // 只读属性，获取Hand值
         public Hand Hand { get; private set; }
 
-        // 玩家的第二手牌属性
+        // 只读属性，获取SecondHand值
         public Hand SecondHand { get; private set;}
-# 定义一个公共整型属性 RoundBet，用于存储每轮的下注金额
-public int RoundBet { get; set; }
 
-# 定义一个公共整型属性 RoundWinnings，用于存储每轮的赢取金额
-public int RoundWinnings { get; set; }
+        // 可读写属性，获取或设置RoundBet值
+        public int RoundBet { get; set; }
 
-# 定义一个公共整型属性 TotalWinnings，用于存储总的赢取金额
-public int TotalWinnings { get; set; }
+        // 可读写属性，获取或设置RoundWinnings值
+        public int RoundWinnings { get; set; }
+
+        // 可读写属性，获取或设置TotalWinnings值
+        public int TotalWinnings { get; set; }
+    }
+}
+
 ```

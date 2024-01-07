@@ -1,31 +1,44 @@
-# `77_Salvo\csharp\Extensions\IOExtensions.cs`
+# `basic-computer-games\77_Salvo\csharp\Extensions\IOExtensions.cs`
 
 ```
-namespace Games.Common.IO;  # 命名空间声明，指定代码所在的命名空间
 
-internal static class IOExtensions  # 声明一个内部静态类 IOExtensions
+// 命名空间 Games.Common.IO
+namespace Games.Common.IO;
+
+// 内部静态类，包含 IO 扩展方法
+internal static class IOExtensions
 {
-    internal static Position ReadPosition(this IReadWrite io) => Position.Create(io.Read2Numbers(""));  # 声明一个内部静态方法 ReadPosition，接受一个 IReadWrite 参数，返回一个 Position 对象
+    // 从 IReadWrite 接口中读取位置信息
+    internal static Position ReadPosition(this IReadWrite io) => Position.Create(io.Read2Numbers(""));
 
-    internal static Position ReadValidPosition(this IReadWrite io)  # 声明一个内部静态方法 ReadValidPosition，接受一个 IReadWrite 参数，返回一个 Position 对象
+    // 从 IReadWrite 接口中读取有效的位置信息
+    internal static Position ReadValidPosition(this IReadWrite io)
     {
-        while (true)  # 进入一个无限循环
+        // 循环直到读取到有效的位置信息
+        while (true)
         {
-            if (Position.TryCreateValid(io.Read2Numbers(""), out var position))  # 调用 Position 类的 TryCreateValid 方法，尝试创建一个有效的 Position 对象
+            // 尝试从 IReadWrite 接口中读取有效的位置信息
+            if (Position.TryCreateValid(io.Read2Numbers(""), out var position)) 
             { 
-                return position;  # 如果成功创建，则返回该 Position 对象
+                return position; 
             }
-            io.Write(Streams.Illegal);  # 如果创建失败，则调用 io 对象的 Write 方法，输出 Streams.Illegal
+            // 如果位置信息非法，则写入 Streams.Illegal
+            io.Write(Streams.Illegal);
         }
     }
 
-    internal static IEnumerable<Position> ReadPositions(this IReadWrite io, string shipName, int shipSize)  # 声明一个内部静态方法 ReadPositions，接受一个 IReadWrite 参数，一个字符串参数 shipName 和一个整数参数 shipSize，返回一个 Position 对象的集合
+    // 从 IReadWrite 接口中读取位置信息的集合
+    internal static IEnumerable<Position> ReadPositions(this IReadWrite io, string shipName, int shipSize)
     {
-        io.WriteLine(shipName);  # 输出船的名称
-        for (var i = 0; i < shipSize; i++)  # 使用循环遍历船的大小
+        // 写入船只名称
+        io.WriteLine(shipName);
+        // 循环读取指定数量的位置信息
+        for (var i = 0; i < shipSize; i++)
         {
-             yield return io.ReadPosition();  # 返回每个位置的信息
+             // 返回从 IReadWrite 接口中读取的位置信息
+             yield return io.ReadPosition();
         }
     }
 }
+
 ```

@@ -1,35 +1,48 @@
-# `84_Super_Star_Trek\csharp\Commands\Command.cs`
+# `basic-computer-games\84_Super_Star_Trek\csharp\Commands\Command.cs`
 
 ```
-using System.ComponentModel;  # 导入 System.ComponentModel 模块
-namespace SuperStarTrek.Commands;  # 定义 SuperStarTrek.Commands 命名空间
-internal enum Command  # 定义一个枚举类型 Command
+
+// 声明一个枚举类型，表示游戏中的各种指令
+namespace SuperStarTrek.Commands;
+
+// 声明一个枚举类型，表示游戏中的各种指令
+internal enum Command
 {
-    [Description("To set course")]  # 为枚举值 NAV 添加描述信息
+    // 设置航向指令
+    [Description("To set course")]
     NAV,
 
-    [Description("For short range sensor scan")]  # 为枚举值 SRS 添加描述信息
+    // 进行短程传感器扫描指令
+    [Description("For short range sensor scan")]
     SRS,
 
-    [Description("For long range sensor scan")]  # 为枚举值 LRS 添加描述信息
+    // 进行长程传感器扫描指令
+    [Description("For long range sensor scan")]
     LRS,
 
-    [Description("To fire phasers")]  # 为枚举值 PHA 添加描述信息
+    // 发射相位炮指令
+    [Description("To fire phasers")]
     PHA,
 
-    [Description("To fire photon torpedoes")]  # 为枚举值 TOR 添加描述信息
+    // 发射光子鱼雷指令
+    [Description("To fire photon torpedoes")]
     TOR,
-```
-```python
-# 创建一个枚举类型，每个枚举值都有一个描述
-class Commands(Enum):
-    # 用于升起或降低护盾
+
+    // 升降护盾指令
+    [Description("To raise or lower shields")]
     SHE,
-    # 用于损坏控制报告
+
+    // 损伤控制报告指令
+    [Description("For damage control reports")]
     DAM,
-    # 用于调用图书馆计算机
+
+    // 调用图书计算机指令
+    [Description("To call on library-computer")]
     COM,
-    # 用于辞去指挥权
+
+    // 辞职指令
+    [Description("To resign your command")]
     XXX
 }
+
 ```

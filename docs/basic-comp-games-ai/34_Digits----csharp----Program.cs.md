@@ -1,15 +1,17 @@
-# `34_Digits\csharp\Program.cs`
+# `basic-computer-games\34_Digits\csharp\Program.cs`
 
 ```
-# 导入 Digits 命名空间
+
+# 使用 Digits 命名空间中的类和方法
 global using Digits;
-# 导入 Games.Common.IO 命名空间
+# 使用 Games.Common.IO 命名空间中的类和方法
 global using Games.Common.IO;
-# 导入 Games.Common.Randomness 命名空间
+# 使用 Games.Common.Randomness 命名空间中的类和方法
 global using Games.Common.Randomness;
-# 导入 Digits.Resources.Resource 中的所有静态成员
+# 使用 Digits 命名空间中的资源文件
 global using static Digits.Resources.Resource;
 
-# 创建一个新的 GameSeries 对象，使用 ConsoleIO 和 RandomNumberGenerator 的实例作为参数，然后调用 Play 方法开始游戏
+# 创建一个新的游戏系列对象，使用控制台输入输出和随机数生成器作为参数
 new GameSeries(new ConsoleIO(), new RandomNumberGenerator()).Play();
+
 ```

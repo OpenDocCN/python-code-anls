@@ -1,24 +1,26 @@
-# `12_Bombs_Away\csharp\BombsAwayGame\GermanySide.cs`
+# `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\GermanySide.cs`
 
 ```
-/// <summary>
-/// Germany protagonist. Can fly missions to Russia, England, and France.
-/// </summary>
+
+// 定义德国方的任务类，继承自 MissionSide 类
 internal class GermanySide : MissionSide
 {
+    // 构造函数，接受用户界面对象作为参数
     public GermanySide(IUserInterface ui)
-        : base(ui) // 调用父类的构造函数，传入用户界面对象
+        : base(ui)
     {
     }
 
-    protected override string ChooseMissionMessage => "A NAZI, EH?  OH WELL.  ARE YOU GOING FOR"; // 重写父类的属性，返回选择任务的消息
+    // 选择任务的提示信息
+    protected override string ChooseMissionMessage => "A NAZI, EH?  OH WELL.  ARE YOU GOING FOR";
 
-    protected override IList<Mission> AllMissions => new Mission[] // 重写父类的属性，返回所有任务的列表
+    // 所有可选任务的列表
+    protected override IList<Mission> AllMissions => new Mission[]
     {
-        new("RUSSIA", "YOU'RE NEARING STALINGRAD."), // 创建新的任务对象，传入任务名称和描述
-        new("ENGLAND", "NEARING LONDON.  BE CAREFUL, THEY'VE GOT RADAR."), // 创建新的任务对象，传入任务名称和描述
-        new("FRANCE", "NEARING VERSAILLES.  DUCK SOUP.  THEY'RE NEARLY DEFENSELESS.") // 创建新的任务对象，传入任务名称和描述
+        new("RUSSIA", "YOU'RE NEARING STALINGRAD."),
+        new("ENGLAND", "NEARING LONDON.  BE CAREFUL, THEY'VE GOT RADAR."),
+        new("FRANCE", "NEARING VERSAILLES.  DUCK SOUP.  THEY'RE NEARLY DEFENSELESS.")
     };
-# 关闭 ZIP 对象
-zip.close()  # 关闭 ZIP 对象，释放资源，避免内存泄漏。
+}
+
 ```

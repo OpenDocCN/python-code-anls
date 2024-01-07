@@ -1,66 +1,68 @@
-# `53_King\csharp\Game.cs`
+# `basic-computer-games\53_King\csharp\Game.cs`
 
 ```
-namespace King;  // 命名空间声明
 
-internal class Game  // 内部类声明
+namespace King;
+
+// 内部游戏类
+internal class Game
 {
-    const int TermOfOffice = 8;  // 声明常量
+    // 在任期内的年限
+    const int TermOfOffice = 8;
 
-    private readonly IReadWrite _io;  // 声明私有只读字段
-    private readonly IRandom _random;  // 声明私有只读字段
+    // 读写接口
+    private readonly IReadWrite _io;
+    // 随机数接口
+    private readonly IRandom _random;
 
-    public Game(IReadWrite io, IRandom random)  // 构造函数，接受 IReadWrite 和 IRandom 接口类型的参数
+    // 游戏构造函数
+    public Game(IReadWrite io, IRandom random)
     {
-        _io = io;  // 初始化私有字段
-        _random = random;  // 初始化私有字段
+        _io = io;
+        _random = random;
     }
 
-    public void Play()  // 公共方法声明
+    // 游戏开始
+    public void Play()
     {
-        _io.Write(Title);  // 调用 _io 对象的 Write 方法，传入 Title 参数
+        // 输出游戏标题
+        _io.Write(Title);
 
-        var reign = SetUpReign();  // 调用 SetUpReign 方法，将返回值赋给变量 reign
-```
-```csharp
-        // 其他代码...
-    }
-}
-        # 如果reign不为空
+        // 设置统治
+        var reign = SetUpReign();
+        // 如果设置成功，则进行游戏循环
         if (reign != null)
         {
-            # 当reign的PlayYear方法返回true时循环执行
             while (reign.PlayYear());
         }
 
-        # 输出空行
+        // 输出空行
         _io.WriteLine();
-        # 输出空行
         _io.WriteLine();
     }
 
-    # 设置Reign对象的方法
+    // 设置统治
     private Reign? SetUpReign()
     {
-        # 从用户输入中读取字符串并转换为大写
+        // 读取用户输入并转换为大写
         var response = _io.ReadString(InstructionsPrompt).ToUpper();
 
-        # 如果用户输入是"Again"，不区分大小写
+        // 如果用户输入为"Again"，则尝试读取游戏数据，否则返回空
         if (response.Equals("Again", StringComparison.InvariantCultureIgnoreCase))
         {
-            # 尝试从随机数和输入输出对象中读取游戏数据，如果成功则返回reign，否则返回null
             return _io.TryReadGameData(_random, out var reign) ? reign : null;
         }
         
-        # 如果用户输入不是以"N"开头，不区分大小写
+        // 如果用户输入不以"N"开头，则输出任期说明
         if (!response.StartsWith("N", StringComparison.InvariantCultureIgnoreCase))
         {
-# 写入任期指令文本到 _io 流中
-_io.Write(InstructionsText(TermOfOffice));
+            _io.Write(InstructionsText(TermOfOffice));
+        }
 
-# 在 _io 流中写入换行符
-_io.WriteLine();
+        // 输出空行
+        _io.WriteLine();
+        return new Reign(_io, _random);
+    }
+}
 
-# 返回一个新的 Reign 对象，传入 _io 流和 _random 对象
-return new Reign(_io, _random);
 ```

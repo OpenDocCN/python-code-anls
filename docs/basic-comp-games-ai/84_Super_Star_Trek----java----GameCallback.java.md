@@ -1,4 +1,4 @@
-# `84_Super_Star_Trek\java\GameCallback.java`
+# `basic-computer-games\84_Super_Star_Trek\java\GameCallback.java`
 
 ```
 /**

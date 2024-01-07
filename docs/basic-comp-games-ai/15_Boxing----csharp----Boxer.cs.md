@@ -1,43 +1,72 @@
-# `15_Boxing\csharp\Boxer.cs`
+# `basic-computer-games\15_Boxing\csharp\Boxer.cs`
 
 ```
-    // 设置拳击手的姓名
+
+// 命名空间声明
+namespace Boxing;
+
+// Boxer 类
+public class Boxer
+{
+    // 私有字段 _wins
+    private int _wins;
+
+    // 公共属性 Name，可读可写，初始值为空字符串
+    private string Name { get; set; } = string.Empty;
+
+    // 公共属性 BestPunch，可读可写
+    public Punch BestPunch { get; set; }
+
+    // 公共属性 Vulnerability，可读可写
+    public Punch Vulnerability { get; set; }
+
+    // 设置拳击手姓名的方法
     public void SetName(string prompt)
     {
         // 输出提示信息
         Console.WriteLine(prompt);
-        // 声明一个可空的字符串变量
+        // 声明可空字符串变量 name
         string? name;
-        // 循环直到输入的姓名不为空或者不只包含空格
+        // 循环直到输入的姓名不为空
         do
         {
-            // 从控制台读取输入的姓名
             name = Console.ReadLine();
         } while (string.IsNullOrWhiteSpace(name));
+        // 将输入的姓名赋值给 Name 属性
+        Name = name;
     }
-        Name = name;  # 设置属性 Name 的值为参数 name
 
-    public int DamageTaken { get; set; }  # 定义属性 DamageTaken，可读可写
+    // 公共属性 DamageTaken，可读可写
+    public int DamageTaken { get; set; }
 
-    public void ResetForNewRound() => DamageTaken = 0;  # 重置 DamageTaken 属性为 0
+    // 重置伤害值的方法
+    public void ResetForNewRound() => DamageTaken = 0;
 
-    public void RecordWin() => _wins += 1;  # 记录胜利次数，_wins 属性加 1
+    // 记录胜利次数的方法
+    public void RecordWin() => _wins += 1;
 
-    public bool IsWinner => _wins >= 2;  # 判断是否胜利，_wins 属性大于等于 2 返回 true
+    // 判断是否获胜的属性
+    public bool IsWinner => _wins >= 2;
 
-    public override string ToString() => Name;  # 重写 ToString 方法，返回 Name 属性的值
-
+    // 重写 ToString 方法，返回姓名
+    public override string ToString() => Name;
 }
 
-public class Opponent : Boxer  # 创建 Opponent 类，继承自 Boxer 类
+// Opponent 类，继承自 Boxer 类
+public class Opponent : Boxer
 {
-    public void SetRandomPunches()  # 定义方法 SetRandomPunches
+    // 设置随机拳的方法
+    public void SetRandomPunches()
     {
-        do  # 开始 do-while 循环
+        // 循环直到最佳拳和弱点拳不相同
+        do
         {
-            BestPunch = (Punch) GameUtils.Roll(4); // 用 GameUtils.Roll(4) 方法随机生成一个 Punch 对象，并赋值给 BestPunch
-            Vulnerability = (Punch) GameUtils.Roll(4); // 用 GameUtils.Roll(4) 方法随机生成一个 Punch 对象，并赋值给 Vulnerability
-        } while (BestPunch == Vulnerability); // 当 BestPunch 等于 Vulnerability 时，继续循环
+            // 将随机数转换为 Punch 枚举类型，赋值给 BestPunch 属性
+            BestPunch = (Punch) GameUtils.Roll(4); // B1
+            // 将随机数转换为 Punch 枚举类型，赋值给 Vulnerability 属性
+            Vulnerability = (Punch) GameUtils.Roll(4); // D1
+        } while (BestPunch == Vulnerability);
     }
 }
+
 ```

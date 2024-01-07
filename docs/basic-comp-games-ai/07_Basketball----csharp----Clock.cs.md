@@ -1,28 +1,41 @@
-# `07_Basketball\csharp\Clock.cs`
+# `basic-computer-games\07_Basketball\csharp\Clock.cs`
 
 ```
-using Basketball.Resources;  // 导入Basketball.Resources命名空间，用于访问资源文件
-using Games.Common.IO;  // 导入Games.Common.IO命名空间，用于访问输入输出相关的功能
 
-namespace Basketball;  // 声明Basketball命名空间
+// 使用 Basketball.Resources 命名空间
+// 使用 Games.Common.IO 命名空间
+namespace Basketball;
 
-internal class Clock  // 声明Clock类，表示比赛计时器
+// Clock 类，用于管理比赛时间
+internal class Clock
 {
-    private readonly IReadWrite _io;  // 声明私有成员变量_io，类型为IReadWrite接口
-    private int time;  // 声明私有成员变量time，表示比赛时间
+    // 用于读写操作的接口
+    private readonly IReadWrite _io;
+    // 当前时间
+    private int time;
 
-    public Clock(IReadWrite io) => _io = io;  // Clock类的构造函数，接受一个IReadWrite类型的参数io，并将其赋值给成员变量_io
+    // 构造函数，接受一个 IReadWrite 接口实例作为参数
+    public Clock(IReadWrite io) => _io = io;
 
-    public bool IsHalfTime => time == 50;  // 声明IsHalfTime属性，表示是否是半场时间，当time等于50时返回true
-    public bool IsFullTime => time >= 100;  // 声明IsFullTime属性，表示是否是全场时间，当time大于等于100时返回true
-    public bool TwoMinutesLeft => time == 92;  // 声明TwoMinutesLeft属性，表示是否还剩两分钟，当time等于92时返回true
+    // 判断是否是半场结束
+    public bool IsHalfTime => time == 50;
+    // 判断是否是比赛结束
+    public bool IsFullTime => time >= 100;
+    // 判断是否还剩两分钟
+    public bool TwoMinutesLeft => time == 92;
 
-    public void Increment(Scoreboard scoreboard)  // 声明Increment方法，接受一个Scoreboard类型的参数scoreboard
+    // 时间增加一秒，并根据条件执行相应操作
+    public void Increment(Scoreboard scoreboard)
     {
-        time += 1;  // 时间加1
-        if (IsHalfTime) { scoreboard.Display(Resource.Formats.EndOfFirstHalf); }  // 如果是半场时间，调用scoreboard的Display方法显示半场结束的信息
-        if (TwoMinutesLeft) { _io.Write(Resource.Streams.TwoMinutesLeft); }  // 如果剩余时间为两分钟，则向输出流写入两分钟剩余的资源数据
+        time += 1;
+        // 如果是半场结束，显示相应信息
+        if (IsHalfTime) { scoreboard.Display(Resource.Formats.EndOfFirstHalf); }
+        // 如果还剩两分钟，写入相应信息
+        if (TwoMinutesLeft) { _io.Write(Resource.Streams.TwoMinutesLeft); }
     }
 
-    public void StartOvertime() => time = 93;  // 开始加时赛，将时间设置为93分钟
+    // 开始加时赛，时间设为 93
+    public void StartOvertime() => time = 93;
+}
+
 ```

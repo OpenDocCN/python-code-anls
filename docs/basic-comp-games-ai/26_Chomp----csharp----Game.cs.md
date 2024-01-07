@@ -1,69 +1,70 @@
-# `26_Chomp\csharp\Game.cs`
+# `basic-computer-games\26_Chomp\csharp\Game.cs`
 
 ```
-namespace Chomp;  # 命名空间声明
 
-internal class Game  # 内部类 Game 声明
+namespace Chomp;
+
+internal class Game
 {
-    private readonly IReadWrite _io;  # 声明私有只读字段 _io，类型为 IReadWrite 接口
+    private readonly IReadWrite _io; // 声明一个私有的 IReadWrite 接口类型的变量_io
 
-    public Game(IReadWrite io)  # Game 类的构造函数，接受一个 IReadWrite 类型的参数 io
+    public Game(IReadWrite io) // 构造函数，接受一个 IReadWrite 接口类型的参数io
     {
-        _io = io;  # 将传入的 io 参数赋值给 _io 字段
+        _io = io; // 将参数io赋值给成员变量_io
     }
 
-    internal void Play()  # Play 方法声明
+    internal void Play() // 定义一个内部方法Play
     {
-        _io.Write(Resource.Streams.Introduction);  # 使用 _io 对象的 Write 方法输出 Resource.Streams.Introduction 的内容
-        if (_io.ReadNumber("Do you want the rules (1=Yes, 0=No!)") != 0)  # 使用 _io 对象的 ReadNumber 方法读取用户输入，如果不等于 0
+        _io.Write(Resource.Streams.Introduction); // 使用_io对象的Write方法输出介绍信息
+        if (_io.ReadNumber("Do you want the rules (1=Yes, 0=No!)") != 0) // 使用_io对象的ReadNumber方法读取用户输入，如果不等于0
         {
-            _io.Write(Resource.Streams.Rules);  # 输出 Resource.Streams.Rules 的内容
+            _io.Write(Resource.Streams.Rules); // 输出游戏规则
         }
 
-        while (true)  # 进入无限循环
+        while (true) // 进入无限循环
         {
-            _io.Write(Resource.Streams.HereWeGo);  # 输出游戏开始的提示信息
+            _io.Write(Resource.Streams.HereWeGo); // 输出游戏开始提示
 
-            var (playerCount, rowCount, columnCount) = _io.ReadParameters();  # 从输入流中读取玩家数量、行数和列数
+            var (playerCount, rowCount, columnCount) = _io.ReadParameters(); // 使用_io对象的ReadParameters方法读取玩家数量、行数和列数
 
-            var loser = Play(new Cookie(rowCount, columnCount), new PlayerNumber(playerCount));  # 调用Play方法进行游戏，并获取失败的玩家编号
+            var loser = Play(new Cookie(rowCount, columnCount), new PlayerNumber(playerCount)); // 调用Play方法进行游戏，并将返回的失败者赋值给loser
 
-            _io.WriteLine(string.Format(Resource.Formats.YouLose, loser));  # 输出失败玩家的信息
+            _io.WriteLine(string.Format(Resource.Formats.YouLose, loser)); // 使用_io对象的WriteLine方法输出失败者信息
 
-            if (_io.ReadNumber("Again (1=Yes, 0=No!)") != 1) { break; }  # 从输入流中读取是否再次进行游戏的选择，如果不是1则跳出循环
-        }
-    }
-
-    private PlayerNumber Play(Cookie cookie, PlayerNumber player)
-    {
-        while (true)
-        {
-            _io.WriteLine(cookie);  # 输出当前饼干的状态
-
-            var poisoned = Chomp(cookie, player);  # 调用Chomp方法进行游戏，获取是否有毒饼干被吃掉
-            if (poisoned) { return player; }  # 如果被毒死了，就返回当前玩家
-            player++;  # 玩家数加一
+            if (_io.ReadNumber("Again (1=Yes, 0=No!)") != 1) { break; } // 使用_io对象的ReadNumber方法读取用户输入，如果不等于1则跳出循环
         }
     }
 
-    private bool Chomp(Cookie cookie, PlayerNumber player)  # 定义一个名为Chomp的方法，接受Cookie和PlayerNumber作为参数
+    private PlayerNumber Play(Cookie cookie, PlayerNumber player) // 定义一个私有方法Play，接受Cookie对象和PlayerNumber对象作为参数
     {
-        while (true)  # 进入一个无限循环
+        while (true) // 进入无限循环
         {
-            _io.WriteLine(string.Format(Resource.Formats.Player, player));  # 输出当前玩家的信息
+            _io.WriteLine(cookie); // 使用_io对象的WriteLine方法输出cookie信息
 
-            var (row, column) = _io.Read2Numbers(Resource.Prompts.Coordinates);  # 从输入中读取两个数字，分别赋值给row和column
+            var poisoned = Chomp(cookie, player); // 调用Chomp方法进行游戏，将返回值赋值给poisoned
 
-            if (cookie.TryChomp((int)row, (int)column, out char chomped))  # 调用cookie对象的TryChomp方法，传入row和column作为参数，并将结果赋值给chomped
+            if (poisoned) { return player; } // 如果poisoned为true，则返回当前玩家
+
+            player++; // 玩家数加一
+        }
+    }
+
+    private bool Chomp(Cookie cookie, PlayerNumber player) // 定义一个私有方法Chomp，接受Cookie对象和PlayerNumber对象作为参数
+    {
+        while (true) // 进入无限循环
+        {
+            _io.WriteLine(string.Format(Resource.Formats.Player, player)); // 使用_io对象的WriteLine方法输出当前玩家信息
+
+            var (row, column) = _io.Read2Numbers(Resource.Prompts.Coordinates); // 使用_io对象的Read2Numbers方法读取用户输入的行和列
+
+            if (cookie.TryChomp((int)row, (int)column, out char chomped)) // 调用cookie对象的TryChomp方法，尝试进行游戏
             {
-                return chomped == 'P';  # 如果chomped等于'P'，返回true，否则返回false
+                return chomped == 'P'; // 如果被吃的是毒药，则返回true
             }
-# 创建一个字节流对象，用于写入资源流
-_io.Write(Resource.Streams.NoFair);
-# 结束当前的命名空间
+
+            _io.Write(Resource.Streams.NoFair); // 输出公平提示
+        }
+    }
 }
-# 结束当前的类定义
-}
-# 结束当前的命名空间
-}
+
 ```

@@ -1,16 +1,18 @@
-# `46_Hexapawn\csharp\Pawn.cs`
+# `basic-computer-games\46_Hexapawn\csharp\Pawn.cs`
 
 ```
+
+// 命名空间声明，表示代码所属的命名空间
 namespace Hexapawn;
 
-// 表示棋盘上一个单元格的内容
+// 表示棋盘上一个格子的内容
 internal class Pawn
 {
     // 表示黑色棋子的静态实例
     public static readonly Pawn Black = new('X');
     // 表示白色棋子的静态实例
     public static readonly Pawn White = new('O');
-    // 表示空单元格的静态实例
+    // 表示空格的静态实例
     public static readonly Pawn None = new('.');
 
     // 棋子的符号
@@ -25,4 +27,5 @@ internal class Pawn
     // 重写 ToString 方法，返回棋子的符号
     public override string ToString() => _symbol.ToString();
 }
+
 ```

@@ -1,65 +1,79 @@
-# `26_Chomp\csharp\Resources\Resource.cs`
+# `basic-computer-games\26_Chomp\csharp\Resources\Resource.cs`
 
 ```
-# 导入必要的模块
-import System.Reflection
-import System.Runtime.CompilerServices
 
-# 定义命名空间 Chomp.Resources
+// 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+// 声明 Chomp.Resources 命名空间
 namespace Chomp.Resources;
 
-# 定义内部静态类 Resource
+// 声明 Resource 类
 internal static class Resource
 {
-    # 定义内部静态类 Streams
+    // 声明 Streams 类
     internal static class Streams
     {
-        # 定义静态属性 HereWeGo，返回一个流对象
+        // 声明 HereWeGo 属性，返回一个流
         public static Stream HereWeGo => GetStream();
-        # 定义静态属性 Introduction，返回一个流对象
+        // 声明 Introduction 属性，返回一个流
         public static Stream Introduction => GetStream();
-        # 定义静态属性 Rules，返回一个流对象
+        // 声明 Rules 属性，返回一个流
         public static Stream Rules => GetStream();
-        # 定义静态属性 NoFair，返回一个流对象
+        // 声明 NoFair 属性，返回一个流
         public static Stream NoFair => GetStream();
     }
 
-    # 定义内部静态类 Formats
+    // 声明 Formats 类
     internal static class Formats
     {
-        # 定义静态属性 Player，返回一个字符串
+        // 声明 Player 属性，返回一个字符串
         public static string Player => GetString();
-        # 定义静态属性 YouLose，返回一个字符串
+        // 声明 YouLose 属性，返回一个字符串
         public static string YouLose => GetString();
     }
-}
+
+    // 声明 Prompts 类
     internal static class Prompts
     {
-        public static string Coordinates => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
-        public static string HowManyPlayers => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
-        public static string HowManyRows => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
-        public static string HowManyColumns => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
-        public static string TooManyColumns => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
+        // 声明 Coordinates 属性，返回一个字符串
+        public static string Coordinates => GetString();
+        // 声明 HowManyPlayers 属性，返回一个字符串
+        public static string HowManyPlayers => GetString();
+        // 声明 HowManyRows 属性，返回一个字符串
+        public static string HowManyRows => GetString();
+        // 声明 HowManyColumns 属性，返回一个字符串
+        public static string HowManyColumns => GetString();
+        // 声明 TooManyColumns 属性，返回一个字符串
+        public static string TooManyColumns => GetString();
     }
 
+    // 声明 Strings 类
     internal static class Strings
     {
-        public static string TooManyColumns => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
-        public static string TooManyRows => GetString();  # 定义一个静态属性，返回调用 GetString() 方法的结果
+        // 声明 TooManyColumns 属性，返回一个字符串
+        public static string TooManyColumns => GetString();
+        // 声明 TooManyRows 属性，返回一个字符串
+        public static string TooManyRows => GetString();
     }
 
-    private static string GetString([CallerMemberName] string? name = null)  # 定义一个私有方法，使用了 CallerMemberName 特性，返回值为字符串
+    // 声明 GetString 方法，返回一个字符串，使用 CallerMemberName 特性
+    private static string GetString([CallerMemberName] string? name = null)
     {
-        using var stream = GetStream(name);  # 使用 GetStream 方法获取一个流对象，并使用 using 语句进行资源管理
-        using var reader = new StreamReader(stream);  # 使用流对象创建一个 StreamReader 对象，并使用 using 语句进行资源管理
+        // 使用 GetStream 方法获取流
+        using var stream = GetStream(name);
+        // 使用 StreamReader 读取流内容并返回
+        using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
-```
-这行代码的作用是读取流中的所有内容并返回。
+    }
 
-```
+    // 声明 GetStream 方法，返回一个流，使用 CallerMemberName 特性
     private static Stream GetStream([CallerMemberName] string? name = null) =>
+        // 使用 Assembly.GetExecutingAssembly().GetManifestResourceStream 获取嵌入资源流
         Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+            // 如果找不到资源流，则抛出异常
             ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
-```
-这段代码定义了一个私有的静态方法GetStream，它接受一个可选的参数name，并使用该参数来获取嵌入资源的流。如果找不到对应的资源流，则抛出一个异常。
+}
+
 ```

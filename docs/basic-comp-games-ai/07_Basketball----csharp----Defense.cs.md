@@ -1,16 +1,23 @@
-# `07_Basketball\csharp\Defense.cs`
+# `basic-computer-games\07_Basketball\csharp\Defense.cs`
 
 ```
-namespace Basketball;  # 命名空间声明，用于定义代码的作用域
 
-internal class Defense  # 定义一个内部类 Defense
+# 命名空间 Basketball 下的内部类 Defense
+namespace Basketball;
+
+internal class Defense
 {
-    private float _value;  # 声明一个私有的浮点型变量 _value
+    # 私有属性 _value，用于存储防守值
+    private float _value;
 
-    public Defense(float value) => Set(value);  # 定义一个构造函数，接受一个浮点型参数并调用 Set 方法
+    # 构造函数，接受一个参数 value，并调用 Set 方法进行赋值
+    public Defense(float value) => Set(value);
 
-    public void Set(float value) => _value = value;  # 定义一个公共方法 Set，用于设置 _value 的值
+    # 公有方法，用于设置防守值
+    public void Set(float value) => _value = value;
 
-    public static implicit operator float(Defense defense) => defense._value;  # 定义一个隐式转换操作符，将 Defense 类型转换为浮点型
+    # 隐式转换操作符，将 Defense 类型转换为 float 类型
+    public static implicit operator float(Defense defense) => defense._value;
 }
+
 ```

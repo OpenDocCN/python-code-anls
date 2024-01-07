@@ -1,70 +1,86 @@
-# `77_Salvo\csharp\Targetting\SearchPatternShotSelector.cs`
+# `basic-computer-games\77_Salvo\csharp\Targetting\SearchPatternShotSelector.cs`
 
 ```
-namespace Salvo.Targetting;
 
+// 命名空间 Salvo.Targetting 下的内部类 SearchPatternShotSelectionStrategy 继承自 ShotSelectionStrategy
 internal class SearchPatternShotSelectionStrategy : ShotSelectionStrategy
 {
-    private const int MaxSearchPatternAttempts = 100; // 定义最大搜索模式尝试次数
-    private readonly IRandom _random; // 声明一个私有的随机数生成器接口
-    private readonly SearchPattern _searchPattern = new(); // 声明一个搜索模式对象
-    private readonly List<Position> _shots = new(); // 声明一个位置列表用于存储射击位置
+    // 声明常量 MaxSearchPatternAttempts 并赋值为 100
+    private const int MaxSearchPatternAttempts = 100;
+    // 声明私有变量 _random 和 _searchPattern，并初始化为 IRandom 接口的实例和 SearchPattern 类的实例
+    private readonly IRandom _random;
+    private readonly SearchPattern _searchPattern = new();
+    // 声明私有变量 _shots，并初始化为 Position 类的列表
+    private readonly List<Position> _shots = new();
 
+    // 构造函数，接受 ShotSelector 和 IRandom 参数，并调用基类的构造函数
     internal SearchPatternShotSelectionStrategy(ShotSelector shotSelector, IRandom random) 
-        : base(shotSelector) // 调用基类的构造函数
+        : base(shotSelector)
     {
-        _random = random; // 初始化随机数生成器
+        // 将传入的 random 参数赋值给 _random
+        _random = random;
     }
 
-    internal override IEnumerable<Position> GetShots(int numberOfShots) // 重写基类的获取射击位置的方法
+    // 重写基类的 GetShots 方法
+    internal override IEnumerable<Position> GetShots(int numberOfShots)
     {
-        _shots.Clear(); // 清空射击位置列表
-        while(_shots.Count < numberOfShots) // 当射击位置列表中的位置数量小于指定的射击数量时执行循环
+        // 清空 _shots 列表
+        _shots.Clear();
+        // 循环直到 _shots 列表中包含的元素数量达到 numberOfShots
+        while(_shots.Count < numberOfShots)
         {
-            // 生成随机种子和船的方向
+            // 从 _random 中获取下一个船的位置，并调用 SearchFrom 方法
             var (seed, _) = _random.NextShipPosition();
-            // 从生成的随机种子位置开始搜索
             SearchFrom(numberOfShots, seed);
         }
-        // 返回搜索到的射击位置
+        // 返回 _shots 列表
         return _shots;
     }
 
-    // 从候选射击位置开始搜索
+    // 定义私有方法 SearchFrom，接受 numberOfShots 和 candidateShot 作为参数
     private void SearchFrom(int numberOfShots, Position candidateShot)
     {
-        // 设置最大搜索尝试次数
+        // 初始化 attemptsLeft 变量为 MaxSearchPatternAttempts
         var attemptsLeft = MaxSearchPatternAttempts;
-        // 循环搜索
+        // 无限循环
         while (true)
         {
-            // 重置搜索模式
+            // 重置 _searchPattern
             _searchPattern.Reset();
-            // 如果尝试次数用尽，则返回
+            // 如果 attemptsLeft 减到 0，则返回
             if (attemptsLeft-- == 0) { return; }
-            // 将候选射击位置调整到合适的范围内
+            // 将 candidateShot 限制在范围内
             candidateShot = candidateShot.BringIntoRange(_random);
-            // 查找有效的射击位置
+            // 如果找到有效的射击位置，则返回
             if (FindValidShots(numberOfShots, ref candidateShot)) { return; }
         }
     }
 
-    // 查找有效的射击位置
+    // 定义私有方法 FindValidShots，接受 numberOfShots 和 candidateShot 的引用作为参数
     private bool FindValidShots(int numberOfShots, ref Position candidateShot)
     {
-        while (true)  # 进入一个无限循环
+        // 无限循环
+        while (true)
         {
-            if (IsValidShot(candidateShot))  # 如果候选射击位置有效
+            // 如果 candidateShot 是有效的射击位置
+            if (IsValidShot(candidateShot))
             {
-                _shots.Add(candidateShot);  # 将候选射击位置添加到射击列表中
-                if (_shots.Count == numberOfShots) { return true; }  # 如果射击列表中的射击数量达到预定数量，则返回true
+                // 将 candidateShot 添加到 _shots 列表中
+                _shots.Add(candidateShot);
+                // 如果 _shots 列表中的元素数量达到 numberOfShots，则返回 true
+                if (_shots.Count == numberOfShots) { return true; }
             }
-            if (!_searchPattern.TryGetOffset(out var offset)) { return false; }  # 如果搜索模式无法获取偏移量，则返回false
-            candidateShot += offset;  # 将候选射击位置增加偏移量
+            // 如果无法获取偏移量，则返回 false
+            if (!_searchPattern.TryGetOffset(out var offset)) { return false; }
+            // 将 candidateShot 加上偏移量
+            candidateShot += offset;
         }
     }
 
-    private bool IsValidShot(Position candidate)  # 定义一个私有方法，用于判断候选射击位置是否有效
-        => candidate.IsInRange && !WasSelectedPreviously(candidate) && !_shots.Contains(candidate);  # 候选射击位置必须在有效范围内，并且之前没有被选择过，并且不在射击列表中
+    // 定义私有方法 IsValidShot，接受 candidate 作为参数
+    private bool IsValidShot(Position candidate)
+        // 返回 candidate 是否在范围内，并且之前没有被选择过，并且不在 _shots 列表中
+        => candidate.IsInRange && !WasSelectedPreviously(candidate) && !_shots.Contains(candidate);
 }
+
 ```

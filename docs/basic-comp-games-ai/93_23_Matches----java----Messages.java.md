@@ -1,56 +1,83 @@
-# `93_23_Matches\java\Messages.java`
+# `basic-computer-games\93_23_Matches\java\Messages.java`
 
 ```
-# This is a utility class and contains only static members.
-# Utility classes are not meant to be instantiated.
-# 创建一个工具类，只包含静态成员，不应该被实例化
-# 当尝试实例化该类时，抛出异常
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
-    // 提示用户输入要移除的火柴数量
-    public static final String REMOVE_MATCHES_QUESTION = "HOW MANY DO YOU WISH TO REMOVE? ";
 
-    // 提示用户剩余的火柴数量
-    public static final String REMAINING_MATCHES = """
-            THERE ARE NOW %d MATCHES REMAINING.
-            """;
+// 这是一个工具类，只包含静态成员。
+// 工具类不应该被实例化。
+private Messages() {
+    throw new IllegalStateException("Utility class");
+}
 
-    // 提示用户输入无效
-    public static final String INVALID = """
-            VERY FUNNY! DUMMY!
-            DO YOU WANT TO PLAY OR GOOF AROUND?
-            NOW, HOW MANY MATCHES DO YOU WANT?
-            """;
+// 游戏介绍信息
+public static final String INTRO = """
+                                      23 MATCHES
+                      CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
 
-    // 提示用户获胜
-    public static final String WIN = """
-            YOU WON, FLOPPY EARS !
-            THINK YOU'RE PRETTY SMART !
-            LETS PLAY AGAIN AND I'LL BLOW YOUR SHOES OFF !!
-            """;
 
-    // 提示轮到电脑操作
-    public static final String CPU_TURN = """
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
+
+         THIS IS A GAME CALLED '23 MATCHES'.
+
+        WHEN IT IS YOUR TURN, YOU MAY TAKE ONE, TWO, OR THREE
+        MATCHES. THE OBJECT OF THE GAME IS NOT TO HAVE TO TAKE
+        THE LAST MATCH.
+
+        LET'S FLIP A COIN TO SEE WHO GOES FIRST.
+        IF IT COMES UP HEADS, I WILL WIN THE TOSS.
+        """;
+
+// 头部信息，如果是正面
+public static final String HEADS = """
+        HEADS! I WIN! HA! HA!
+        PREPARE TO LOSE, MEATBALL-NOSE!!
+
+        I TAKE 2 MATCHES
+        """;
+
+// 头部信息，如果是反面
+public static final String TAILS = """
+        TAILS! YOU GO FIRST.
+        """;
+
+// 剩余火柴数量信息
+public static final String MATCHES_LEFT = """
+        THE NUMBER OF MATCHES IS NOW %d
+
+        YOUR TURN -- YOU MAY TAKE 1, 2 OR 3 MATCHES.
+        """;
+
+// 询问要移除多少火柴
+public static final String REMOVE_MATCHES_QUESTION = "HOW MANY DO YOU WISH TO REMOVE? ";
+
+// 剩余火柴数量信息
+public static final String REMAINING_MATCHES = """
+        THERE ARE NOW %d MATCHES REMAINING.
+        """;
+
+// 无效输入信息
+public static final String INVALID = """
+        VERY FUNNY! DUMMY!
+        DO YOU WANT TO PLAY OR GOOF AROUND?
+        NOW, HOW MANY MATCHES DO YOU WANT?
+        """;
+
+// 胜利信息
+public static final String WIN = """
+        YOU WON, FLOPPY EARS !
+        THINK YOU'RE PRETTY SMART !
+        LETS PLAY AGAIN AND I'LL BLOW YOUR SHOES OFF !!
+        """;
+
+// 电脑回合信息
+public static final String CPU_TURN = """
+        MY TURN ! I REMOVE %d MATCHES.
+        """;
+
+// 失败信息
+public static final String LOSE = """
+        YOU POOR BOOB! YOU TOOK THE LAST MATCH! I GOTCHA!!
+        HA ! HA ! I BEAT YOU !!!
+
+        GOOD BYE LOSER!
+        """;
+
 ```

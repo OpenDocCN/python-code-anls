@@ -1,6 +1,7 @@
-# `82_Stars\python\stars.py`
+# `basic-computer-games\82_Stars\python\stars.py`
 
 ```
+
 """
 Stars
 
@@ -22,100 +23,101 @@ From: BASIC Computer Games (1978)
 
 Python port by Jeff Jetton, 2019
 """
-import random  # 导入 random 模块
+
+
+import random
 
 # Some contants
-MAX_NUM = 100  # 定义最大数为 100
-MAX_GUESSES = 7  # 定义最大猜测次数为 7
+MAX_NUM = 100  # 设置最大的随机数
+MAX_GUESSES = 7  # 设置最大的猜测次数
 
 
 def print_instructions() -> None:
-    """Instructions on how to play"""  # 打印游戏说明的函数注释
-    print("I am thinking of a whole number from 1 to %d" % MAX_NUM)  # 打印游戏规则
-    print("Try to guess my number.  After you guess, I")  # 打印游戏规则
-    print("will type one or more stars (*).  The more")  # 打印游戏规则
-    print("stars I type, the closer you are to my number.")  # 打印游戏规则
-    print("one star (*) means far away, seven stars (*******)")  # 打印游戏规则
-    print("means really close!  You get %d guesses." % MAX_GUESSES)  # 打印游戏规则
+    """Instructions on how to play"""
+    # 打印游戏玩法说明
+    print("I am thinking of a whole number from 1 to %d" % MAX_NUM)
+    print("Try to guess my number.  After you guess, I")
+    print("will type one or more stars (*).  The more")
+    print("stars I type, the closer you are to my number.")
+    print("one star (*) means far away, seven stars (*******)")
+    print("means really close!  You get %d guesses." % MAX_GUESSES)
+
+
 def print_stars(secret_number, guess) -> None:
-    # 计算猜测值与秘密数字的差值
+    # 打印星星，表示猜测的接近程度
     diff = abs(guess - secret_number)
     stars = ""
-    # 根据差值生成星号字符串
     for i in range(8):
         if diff < 2**i:
             stars += "*"
-    # 打印星号字符串
     print(stars)
 
 
 def get_guess(prompt: str) -> int:
-    # 循环直到用户输入有效的猜测值
+    # 获取玩家的猜测
     while True:
         guess_str = input(prompt)
-        # 检查用户输入是否为数字
         if guess_str.isdigit():
             guess = int(guess_str)
             return guess
 
 
 def main() -> None:
-    # 显示介绍文本
+    # Display intro text
+    # 显示游戏介绍
     print("\n                   Stars")
-    print("Creative Computing  Morristown, New Jersey")  # 打印 Creative Computing  Morristown, New Jersey
-    print("\n\n")  # 打印两个空行
-    # "*** Stars - People's Computer Center, MenloPark, CA"  # 注释，说明这是一条注释
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
+    # "*** Stars - People's Computer Center, MenloPark, CA"
 
-    response = input("Do you want instructions? ")  # 获取用户输入，询问是否需要说明
-    if response.upper()[0] == "Y":  # 将用户输入转换为大写并取第一个字符，判断是否为Y
-        print_instructions()  # 如果用户需要说明，则打印说明
+    response = input("Do you want instructions? ")
+    if response.upper()[0] == "Y":
+        print_instructions()
 
-    still_playing = True  # 设置游戏状态为正在进行
-    while still_playing:  # 进入游戏循环
+    still_playing = True
+    while still_playing:
 
-        # "*** Computer thinks of a number"  # 注释，说明计算机正在想一个数字
-        secret_number = random.randint(1, MAX_NUM)  # 生成一个1到MAX_NUM之间的随机数作为秘密数字
-        print("\n\nOK, I am thinking of a number, start guessing.")  # 打印提示信息，开始猜数字
+        # "*** Computer thinks of a number"
+        # 计算机随机选择一个数字
+        secret_number = random.randint(1, MAX_NUM)
+        print("\n\nOK, I am thinking of a number, start guessing.")
 
-        # Init/start guess loop  # 初始化/开始猜数字循环
-        guess_number = 0  # 初始化猜测次数
-        player_has_won = False  # 初始化玩家是否获胜的状态为False
-        while (guess_number < MAX_GUESSES) and not player_has_won:  # 进入猜数字循环，条件是猜测次数小于最大猜测次数且玩家未获胜
-            # 打印空行
+        # Init/start guess loop
+        # 初始化/开始猜测循环
+        guess_number = 0
+        player_has_won = False
+        while (guess_number < MAX_GUESSES) and not player_has_won:
+
             print()
-            # 获取玩家猜测的数字
             guess = get_guess("Your guess? ")
-            # 猜测次数加一
             guess_number += 1
 
-            # 如果猜对了
             if guess == secret_number:
-                # 标记玩家已经赢了
+                # "*** We have a winner"
+                # 玩家猜中了
                 player_has_won = True
-                # 打印祝贺信息
                 print("**************************************************!!!")
                 print(f"You got it in {guess_number} guesses!!!")
 
-            # 如果猜错了
             else:
-                # 打印星号提示
                 print_stars(secret_number, guess)
 
-            # 猜测循环结束
+            # End of guess loop
 
-        # 如果玩家没有赢
+        # "*** Did not guess in [MAX_GUESS] guesses"
+        # 玩家没有在规定次数内猜中
         if not player_has_won:
-            # 打印未猜中的提示信息
             print(f"\nSorry, that's {guess_number} guesses, number was {secret_number}")
 
+        # Keep playing?
         # 继续游戏？
-        response = input("\nPlay again? ")  # 询问用户是否要再玩一次游戏，并将用户输入的内容赋值给变量response
-        if response.upper()[0] != "Y":  # 如果用户输入的内容的大写形式的第一个字符不是Y
-            still_playing = False  # 将变量still_playing设置为False，结束游戏
+        response = input("\nPlay again? ")
+        if response.upper()[0] != "Y":
+            still_playing = False
 
 
-if __name__ == "__main__":  # 如果当前文件被直接运行
-    main()  # 调用main函数
+if __name__ == "__main__":
+    main()
 
 ######################################################################
 #
@@ -123,20 +125,21 @@ if __name__ == "__main__":  # 如果当前文件被直接运行
 #
 #   The original program never exited--it just kept playing rounds
 #   over and over.  This version asks to continue each time.
-#   原始程序从未退出--它只是一直重复玩游戏。这个版本每次都会询问是否继续。
 #
 #
 # Ideas for Modifications
 #
 #   Let the player know how many guesses they have remaining after
 #   each incorrect guess.
-#   让玩家在每次猜错后知道他们还剩下多少次猜测的机会。
-# 询问玩家在游戏开始时选择技能级别，这将影响 MAX_NUM 和 MAX_GUESSES 的值。
-# 例如：
 #
-#   简单 = 8 次猜测，1 到 50
-#   中等 = 7 次猜测，1 到 100
-#   困难 = 6 次猜测，1 到 200
+#   Ask the player to select a skill level at the start of the game,
+#   which will affect the values of MAX_NUM and MAX_GUESSES.
+#   For example:
 #
-# ######################################################################
+#       Easy   = 8 guesses, 1 to 50
+#       Medium = 7 guesses, 1 to 100
+#       Hard   = 6 guesses, 1 to 200
+#
+######################################################################
+
 ```

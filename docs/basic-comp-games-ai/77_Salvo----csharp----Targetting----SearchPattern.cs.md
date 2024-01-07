@@ -1,27 +1,36 @@
-# `77_Salvo\csharp\Targetting\SearchPattern.cs`
+# `basic-computer-games\77_Salvo\csharp\Targetting\SearchPattern.cs`
 
 ```
-using System.Collections.Immutable;  // 导入不可变集合的命名空间
 
-namespace Salvo.Targetting;  // 声明命名空间 Salvo.Targetting
+// 使用不可变数组存储偏移量
+using System.Collections.Immutable;
 
-internal class SearchPattern  // 声明内部类 SearchPattern
+namespace Salvo.Targetting;
+
+// 定义搜索模式类
+internal class SearchPattern
 {
-    private static readonly ImmutableArray<Offset> _offsets =  // 声明不可变集合 _offsets，存储 Offset 类型的元素
-        ImmutableArray.Create<Offset>(new(1, 1), new(-1, 1), new(1, -3), new(1, 1), new(0, 2), new(-1, 1));  // 初始化 _offsets
+    // 静态只读字段，存储偏移量数组
+    private static readonly ImmutableArray<Offset> _offsets =
+        ImmutableArray.Create<Offset>(new(1, 1), new(-1, 1), new(1, -3), new(1, 1), new(0, 2), new(-1, 1));
 
-    private int _nextIndex;  // 声明私有整型变量 _nextIndex
+    // 下一个偏移量的索引
+    private int _nextIndex;
 
-    internal bool TryGetOffset(out Offset offset)  // 声明内部方法 TryGetOffset，返回布尔值，参数为输出参数 offset
+    // 尝试获取下一个偏移量
+    internal bool TryGetOffset(out Offset offset)
     {
-        offset = default;  // 将 offset 初始化为默认值
-        if (_nextIndex >= _offsets.Length) { return false; }  // 如果 _nextIndex 大于等于 _offsets 的长度，则返回 false
+        offset = default;
+        // 如果下一个偏移量的索引超出数组长度，则返回false
+        if (_nextIndex >= _offsets.Length) { return false; }
         
-        offset = _offsets[_nextIndex++];  // 将 _offsets 中的元素赋值给 offset，并将 _nextIndex 自增
-        return true;  // 返回 true
+        // 获取下一个偏移量，并将索引加1
+        offset = _offsets[_nextIndex++];
+        return true;
     }
+
+    // 重置偏移量索引
+    internal void Reset() => _nextIndex = 0;
 }
-    # 重置 _nextIndex 变量的值为 0
-    def reset(self):
-        self._nextIndex = 0
+
 ```

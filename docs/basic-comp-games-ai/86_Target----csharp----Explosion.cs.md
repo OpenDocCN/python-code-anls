@@ -1,28 +1,38 @@
-# `86_Target\csharp\Explosion.cs`
+# `basic-computer-games\86_Target\csharp\Explosion.cs`
 
 ```
+
+// 命名空间 Target，包含爆炸类
 namespace Target
 {
+    // 爆炸类，包含位置信息
     internal class Explosion
     {
-        private readonly Point _position; // 保存爆炸位置的私有变量
+        // 爆炸位置
+        private readonly Point _position;
 
-        public Explosion(Point position, Offset targetOffset) // 构造函数，接受位置和目标偏移作为参数
+        // 构造函数，初始化爆炸位置和目标偏移量
+        public Explosion(Point position, Offset targetOffset)
         {
-            _position = position; // 将传入的位置赋值给私有变量
-            FromTarget = targetOffset; // 将传入的目标偏移赋值给属性
-            DistanceToTarget = targetOffset.Distance; // 将目标偏移的距离赋值给属性
+            _position = position;
+            FromTarget = targetOffset;
+            DistanceToTarget = targetOffset.Distance;
         }
 
-        public Point Position => _position; // 获取爆炸位置的属性
-        public Offset FromTarget { get; } // 获取目标偏移的属性
-        public float DistanceToTarget { get; } // 获取到目标的距离的属性
-        public string GetBearing() => _position.GetBearing(); // 获取爆炸位置的方位
+        // 获取爆炸位置
+        public Point Position => _position;
+        // 获取目标偏移量
+        public Offset FromTarget { get; }
+        // 获取到目标的距离
+        public float DistanceToTarget { get; }
+        // 获取爆炸位置相对于目标的方向
+        public string GetBearing() => _position.GetBearing();
 
-        public bool IsHit => DistanceToTarget <= 20; // 判断是否击中目标
-        public bool IsTooClose => _position.Distance < 20; // 判断爆炸位置是否离目标太近
+        // 判断是否击中目标
+        public bool IsHit => DistanceToTarget <= 20;
+        // 判断爆炸位置是否离目标太近
+        public bool IsTooClose => _position.Distance < 20;
     }
-```
+}
 
-这部分代码是一个缩进错误，应该删除这两行代码。
 ```

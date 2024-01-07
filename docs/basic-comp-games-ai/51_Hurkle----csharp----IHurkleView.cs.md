@@ -1,20 +1,22 @@
-# `51_Hurkle\csharp\IHurkleView.cs`
+# `basic-computer-games\51_Hurkle\csharp\IHurkleView.cs`
 
 ```
-# 定义命名空间 hurkle
+
+# 定义了一个名为hurkle的命名空间
 namespace hurkle
 {
-    # 定义 IHurkleView 接口
+    # 定义了一个名为IHurkleView的接口
     internal interface IHurkleView
     {
-        # 定义 GetGuess 方法，接收 GuessViewModel 对象并返回 GamePoint 对象
+        # 定义了一个方法，用于获取猜测的游戏点
         GamePoint GetGuess(GuessViewModel guessViewModel);
-        # 定义 ShowVictory 方法，接收 VictoryViewModel 对象并无返回值
+        # 定义了一个方法，用于展示获胜的视图模型
         void ShowVictory(VictoryViewModel victoryViewModel);
-        # 定义 ShowDirection 方法，接收 FailedGuessViewModel 对象并无返回值
+        # 定义了一个方法，用于展示猜测错误的方向
         void ShowDirection(FailedGuessViewModel failedGuessViewModel);
-        # 定义 ShowLoss 方法，接收 LossViewModel 对象并无返回值
+        # 定义了一个方法，用于展示失败的视图模型
         void ShowLoss(LossViewModel lossViewModel);
     }
 }
+
 ```

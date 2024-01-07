@@ -1,29 +1,43 @@
-# `77_Salvo\csharp\Offset.cs`
+# `basic-computer-games\77_Salvo\csharp\Offset.cs`
 
 ```
-namespace Salvo;  // 命名空间声明
 
-internal record struct Offset(int X, int Y)  // 定义名为 Offset 的结构体，包含 X 和 Y 两个整型字段
+namespace Salvo;
+
+// 定义一个命名空间 Salvo
+
+internal record struct Offset(int X, int Y)
 {
-    public static readonly Offset Zero = 0;  // 定义名为 Zero 的静态只读 Offset 对象，值为 0
+    // 定义一个内部的结构体 Offset，包含 X 和 Y 两个整型字段
 
-    public static Offset operator *(Offset offset, int scale) => new(offset.X * scale, offset.Y * scale);  // 定义名为 * 的运算符重载，实现 Offset 对象与整数的乘法操作
+    // 定义一个静态的只读的 Offset 对象 Zero，值为 (0, 0)
+    public static readonly Offset Zero = 0;
 
-    public static implicit operator Offset(int value) => new(value, value);  // 定义隐式转换操作符，将整数转换为 Offset 对象
+    // 定义一个重载运算符 *，实现 Offset 对象与整数的乘法操作
+    public static Offset operator *(Offset offset, int scale) => new(offset.X * scale, offset.Y * scale);
 
-    public static IEnumerable<Offset> Units  // 定义名为 Units 的静态属性，返回 Offset 对象的集合
+    // 定义一个隐式转换，将整数转换为 Offset 对象
+    public static implicit operator Offset(int value) => new(value, value);
+
+    // 定义一个静态属性 Units，返回一个包含九个 Offset 对象的 IEnumerable
+    public static IEnumerable<Offset> Units
     {
         get
         {
-            for (int x = -1; x <= 1; x++)  // 循环遍历 x 值
+            // 遍历 -1 到 1 的 x 值
+            for (int x = -1; x <= 1; x++)
             {
-                for (int y = -1; y <= 1; y++)  // 循环遍历 y 值
+                // 遍历 -1 到 1 的 y 值
+                for (int y = -1; y <= 1; y++)
                 {
-                    var offset = new Offset(x, y);  // 创建新的 Offset 对象
-                    if (offset != Zero) { yield return offset; }  // 如果 offset 不等于 Zero，则将其返回
+                    // 创建一个新的 Offset 对象
+                    var offset = new Offset(x, y);
+                    // 如果 offset 不等于 Zero，则将其返回
+                    if (offset != Zero) { yield return offset; }
                 }
             }
         }
     }
-抱歉，给定的代码片段不完整，无法为其添加注释。
+}
+
 ```

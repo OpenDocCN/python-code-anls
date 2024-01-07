@@ -1,40 +1,38 @@
-# `20_Buzzword\java\src\UserInterface.java`
+# `basic-computer-games\20_Buzzword\java\src\UserInterface.java`
 
 ```
-import java.io.PrintStream;  // 导入打印流类，用于输出信息
-import java.util.Scanner;  // 导入扫描器类，用于接收用户输入
-import java.util.function.Supplier;  // 导入供应商函数接口，用于提供一个值或者生成一个值
+
+// 导入所需的类
+import java.io.PrintStream;
+import java.util.Scanner;
+import java.util.function.Supplier;
+
 /**
- * A command line user interface that outputs a buzzword every
- * time the user requests a new one.
+ * 一个命令行用户界面，每次用户请求时输出一个流行词。
  */
-public class UserInterface implements Runnable {  // 创建一个用户界面类，实现可运行接口
+public class UserInterface implements Runnable {
 
 	/**
-	 * Input from the user.
+	 * 用户输入
 	 */
-	private final Scanner input;  // 用户输入的扫描器对象
+	private final Scanner input;
 
 	/**
-	 * Output to the user.
+	 * 用户输出
 	 */
-	private final PrintStream output;  // 用户输出的打印流对象
+	private final PrintStream output;
+
 	/**
-	 * The buzzword generator.
-	 * 生成流行语的供应商
+	 * 流行词生成器
 	 */
 	private final Supplier<String> buzzwords;
 
 	/**
-	 * Create a new user interface.
-	 * 创建一个新的用户界面
+	 * 创建一个新的用户界面。
 	 *
-	 * @param input The input scanner with which the user gives commands.
-	 *              用户输入命令的输入扫描器
-	 * @param output The output to show messages to the user.
-	 *               用于向用户显示消息的输出
-	 * @param buzzwords The buzzword supplier.
-	 *                  流行语供应商
+	 * @param input 用户输入扫描器，用户用它给出命令。
+	 * @param output 用于向用户显示消息的输出。
+	 * @param buzzwords 流行词供应商。
 	 */
 	public UserInterface(final Scanner input,
 			final PrintStream output,
@@ -43,17 +41,14 @@ public class UserInterface implements Runnable {  // 创建一个用户界面类
 		this.output = output;
 		this.buzzwords = buzzwords;
 	}
+
 	@Override
-	// 重写 run 方法
 	public void run() {
-		// 输出标题
 		output.println("              BUZZWORD GENERATOR");
-		// 输出创意计算的地点
 		output.println("   CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
 		output.println();
 		output.println();
 		output.println();
-		// 输出程序介绍
 		output.println("THIS PROGRAM PRINTS HIGHLY ACCEPTABLE PHRASES IN");
 		output.println("'EDUCATOR-SPEAK' THAT YOU CAN WORK INTO REPORTS");
 		output.println("AND SPEECHES.  WHENEVER A QUESTION MARK IS PRINTED,");
@@ -62,18 +57,15 @@ public class UserInterface implements Runnable {  // 创建一个用户界面类
 		output.println();
 		output.println("HERE'S THE FIRST PHRASE:");
 
-		// 循环生成短语
+		// 循环直到用户输入 'N'
 		do {
-			// 输出短语
-			output.println(buzzwords.get());
+			output.println(buzzwords.get()); // 输出一个流行词
 			output.println();
-			// 提示用户输入
-			output.print("?");
-		} while ("Y".equals(input.nextLine().toUpperCase()));  // 当用户输入为Y时继续循环
+			output.print("?"); // 提示用户输入
+		} while ("Y".equals(input.nextLine().toUpperCase())); // 当用户输入不是 'Y' 时结束循环
+
+		output.println("COME BACK WHEN YOU NEED HELP WITH ANOTHER REPORT!");
 	}
-# 输出提示信息到控制台
-output.println("COME BACK WHEN YOU NEED HELP WITH ANOTHER REPORT!")
-# 结束程序
-```
-这段代码是在Java中，用于输出一条提示信息到控制台，并结束程序。
+}
+
 ```

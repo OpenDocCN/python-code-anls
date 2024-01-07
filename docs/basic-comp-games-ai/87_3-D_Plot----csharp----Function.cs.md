@@ -1,47 +1,59 @@
-# `87_3-D_Plot\csharp\Function.cs`
+# `basic-computer-games\87_3-D_Plot\csharp\Function.cs`
 
 ```
-using System;  // 导入 System 命名空间，包含常用的基本类和数据类型
-using System.Collections.Generic;  // 导入 System.Collections.Generic 命名空间，包含泛型集合类
 
-namespace Plot  // 命名空间 Plot
+// 引入系统和集合类库
+using System;
+using System.Collections.Generic;
+
+// 定义名为 Plot 的命名空间
+namespace Plot
 {
-    internal static class Function  // 内部静态类 Function
+    // 定义名为 Function 的静态类
+    internal static class Function
     {
-        internal static IEnumerable<IEnumerable<int>> GetRows()  // 返回一个 IEnumerable 类型的嵌套集合
+        // 返回一个包含整数集合的集合
+        internal static IEnumerable<IEnumerable<int>> GetRows()
         {
-            for (var x = -30f; x <= 30f; x += 1.5f)  // 循环，从 -30 到 30，每次增加 1.5
+            // 从 -30 到 30，以 1.5 为步长，生成 x 值，并返回对应的值集合
+            for (var x = -30f; x <= 30f; x += 1.5f)
             {
-                yield return GetValues(x);  // 返回 GetValues 方法的结果
+                yield return GetValues(x);
             }
         }
 
-        private static IEnumerable<int> GetValues(float x)  // 返回一个 IEnumerable 类型的整数集合，参数为浮点数 x
+        // 根据给定的 x 值，返回对应的整数集合
+        private static IEnumerable<int> GetValues(float x)
         {
-            var zPrevious = 0;  // 声明并初始化变量 zPrevious 为 0
-            var yLimit = 5 * (int)(Math.Sqrt(900 - x * x) / 5);  // 声明并初始化变量 yLimit 为一个计算结果
-# 循环，从yLimit开始递减到-yLimit，每次递减5
-for (var y = yLimit; y >= -yLimit; y -= 5)
-{
-    # 调用GetValue函数，传入x和y的值，将结果赋给z
-    var z = GetValue(x, y);
+            // 初始化前一个 z 值为 0
+            var zPrevious = 0;
+            // 计算 y 的取值范围
+            var yLimit = 5 * (int)(Math.Sqrt(900 - x * x) / 5);
 
-    # 如果z大于zPrevious
-    if (z > zPrevious)
-    {
-        # 将z赋给zPrevious
-        zPrevious = z;
-        # 返回z的值
-        yield return z;
+            // 从 yLimit 开始，以 -5 为步长，生成 y 值，并返回对应的 z 值集合
+            for (var y = yLimit; y >= -yLimit; y -= 5)
+            {
+                // 计算当前 x、y 对应的 z 值
+                var z = GetValue(x, y);
+
+                // 如果当前 z 值大于前一个 z 值，则更新前一个 z 值，并返回当前 z 值
+                if (z > zPrevious)
+                {
+                    zPrevious = z;
+                    yield return z;
+                }
+            }
+        }
+
+        // 根据给定的 x、y 值，计算并返回对应的整数值
+        private static int GetValue(float x, float y)
+        {
+            // 计算 x、y 对应的极坐标半径
+            var r = (float)Math.Sqrt(x * x + y * y);
+            // 根据极坐标半径和 y 值计算 z 值
+            return (int)(25 + 30 * Math.Exp(-r * r / 100) - 0.7f * y);
+        }
     }
 }
 
-# 定义一个名为GetValue的私有静态函数，接受两个float类型的参数x和y
-private static int GetValue(float x, float y)
-{
-    # 计算r的值，使用Math.Sqrt计算x的平方加上y的平方的平方根
-    var r = (float)Math.Sqrt(x * x + y * y);
-    # 返回一个整数值，计算公式为25 + 30 * e^(-r^2 / 100) - 0.7 * y
-    return (int)(25 + 30 * Math.Exp(-r * r / 100) - 0.7f * y);
-}
 ```

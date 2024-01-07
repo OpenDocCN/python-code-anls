@@ -1,39 +1,45 @@
-# `77_Salvo\csharp\Targetting\ShotSelector.cs`
+# `basic-computer-games\77_Salvo\csharp\Targetting\ShotSelector.cs`
 
 ```
-namespace Salvo.Targetting;  # 命名空间声明
 
-internal abstract class ShotSelector  # 声明一个内部抽象类 ShotSelector
+// 命名空间 Salvo.Targetting，表示该类在 Salvo.Targetting 命名空间下
+internal abstract class ShotSelector
 {
-    private readonly Fleet _source;  # 声明一个私有只读字段 _source，类型为 Fleet
-    private readonly Dictionary<Position, int> _previousShots = new();  # 声明一个私有只读字段 _previousShots，类型为 Position 到 int 的字典
+    // 私有字段 _source，表示射击选择器的来源舰队
+    private readonly Fleet _source;
+    // 私有字段 _previousShots，表示之前的射击位置和对应的回合数
+    private readonly Dictionary<Position, int> _previousShots = new();
 
-    internal ShotSelector(Fleet source)  # 声明一个内部构造函数 ShotSelector，参数为 source
+    // 构造函数，初始化射击选择器的来源舰队
+    internal ShotSelector(Fleet source)
     {
-        _source = source;  # 将参数 source 赋值给字段 _source
+        _source = source;
     }
 
-    internal int NumberOfShots => _source.Ships.Sum(s => s.Shots);  # 声明一个内部属性 NumberOfShots，返回 _source 中所有船只的射击次数之和
-    internal bool CanTargetAllRemainingSquares => NumberOfShots >= 100 - _previousShots.Count;  # 声明一个内部属性 CanTargetAllRemainingSquares，返回是否可以瞄准所有剩余的方块
+    // 属性 NumberOfShots，表示剩余射击次数
+    internal int NumberOfShots => _source.Ships.Sum(s => s.Shots);
+    // 属性 CanTargetAllRemainingSquares，表示是否可以瞄准所有剩余的方格
+    internal bool CanTargetAllRemainingSquares => NumberOfShots >= 100 - _previousShots.Count;
 
-    internal bool WasSelectedPreviously(Position position) => _previousShots.ContainsKey(position);  # 声明一个内部方法 WasSelectedPreviously，返回是否之前已选择过指定位置的方块
+    // 方法 WasSelectedPreviously，判断指定位置是否之前已经选择过
+    internal bool WasSelectedPreviously(Position position) => _previousShots.ContainsKey(position);
 
-    internal bool WasSelectedPreviously(Position position, out int turn)  # 声明一个内部方法 WasSelectedPreviously，返回是否之前已选择过指定位置的方块，并将选择的轮次赋值给参数 turn
-        => _previousShots.TryGetValue(position, out turn);  # 尝试从 _previousShots 中获取指定位置的值，并将结果赋值给参数 turn
-}
+    // 方法 WasSelectedPreviously，判断指定位置是否之前已经选择过，并返回对应的回合数
+    internal bool WasSelectedPreviously(Position position, out int turn)
+        => _previousShots.TryGetValue(position, out turn);
+
+    // 方法 GetShots，获取射击位置，并记录对应的回合数
     internal IEnumerable<Position> GetShots(int turnNumber)
     {
-        // 从 GetShots() 方法中获取射击位置的集合
         foreach (var shot in GetShots())
         {
-            // 将射击位置和回合数添加到 _previousShots 字典中
             _previousShots.Add(shot, turnNumber);
-            // 返回当前射击位置
             yield return shot;
         }
     }
 
-    // 定义一个抽象方法，用于获取射击位置的集合
+    // 抽象方法 GetShots，获取射击位置的抽象方法，具体实现由子类实现
     protected abstract IEnumerable<Position> GetShots();
 }
+
 ```

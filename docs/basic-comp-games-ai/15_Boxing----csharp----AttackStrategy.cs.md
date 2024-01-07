@@ -1,68 +1,75 @@
-# `15_Boxing\csharp\AttackStrategy.cs`
+# `basic-computer-games\15_Boxing\csharp\AttackStrategy.cs`
 
 ```
-    // 定义一个名为 Boxing 的命名空间
-    namespace Boxing;
 
-    // 定义一个名为 AttackStrategy 的抽象类
-    public abstract class AttackStrategy
+// 命名空间声明
+namespace Boxing;
+
+// 抽象类 AttackStrategy
+public abstract class AttackStrategy
+{
+    // 受保护的常量，表示击倒对手所需的伤害阈值
+    protected const int KnockoutDamageThreshold = 35;
+    // 受保护的只读字段，表示对手
+    protected readonly Boxer Other;
+    // 受保护的只读字段，表示工作栈
+    protected readonly Stack<Action> Work;
+    // 私有的只读字段，表示游戏结束通知
+    private readonly Action _notifyGameEnded;
+
+    // 构造函数，初始化对手、工作栈和游戏结束通知
+    public AttackStrategy(Boxer other, Stack<Action> work, Action notifyGameEnded)
     {
-        // 定义一个名为 KnockoutDamageThreshold 的常量，表示击倒对手所需的伤害阈值
-        protected const int KnockoutDamageThreshold = 35;
-        // 定义一个名为 Other 的只读字段，表示另一个拳击手
-        protected readonly Boxer Other;
-        // 定义一个名为 Work 的只读字段，表示拳击手的工作栈
-        protected readonly Stack<Action> Work;
-        // 定义一个名为 _notifyGameEnded 的只读字段，表示游戏结束时的通知动作
-        private readonly Action _notifyGameEnded;
+        Other = other;
+        Work = work;
+        _notifyGameEnded = notifyGameEnded;
+    }
 
-        // 定义一个构造函数，接受另一个拳击手、工作栈和游戏结束通知动作作为参数
-        public AttackStrategy(Boxer other, Stack<Action> work, Action notifyGameEnded)
+    // 攻击方法
+    public void Attack()
+    {
+        // 获取拳击动作
+        var punch = GetPunch();
+        // 如果是最佳拳击动作，对手受到额外伤害
+        if (punch.IsBestPunch)
         {
-            Other = other;
-            Work = work;
-            _notifyGameEnded = notifyGameEnded;
-        }
-
-        // 定义一个名为 Attack 的方法
-        public void Attack()
-        {
-            // 获取拳击动作
-            var punch = GetPunch();
-            // 如果拳击动作是最佳拳击动作
-        {
-            # 增加其他伤害值
             Other.DamageTaken += 2;
         }
 
-        # 将拳击动作推入工作队列
+        // 将拳击动作推入工作栈
         Work.Push(punch.Punch switch
         {
-            Punch.FullSwing => FullSwing,  # 如果是全力摆动，则执行 FullSwing 方法
-            Punch.Hook => Hook,  # 如果是钩拳，则执行 Hook 方法
-            Punch.Uppercut => Uppercut,  # 如果是上勾拳，则执行 Uppercut 方法
-            _ => Jab  # 如果是其他情况，则执行 Jab 方法
+            Punch.FullSwing => FullSwing,
+            Punch.Hook => Hook,
+            Punch.Uppercut => Uppercut,
+            _ => Jab
         });
     }
 
-    # 获取拳击动作
+    // 抽象方法，获取拳击动作
     protected abstract AttackPunch GetPunch();
-    # 执行全力摆动动作
+    // 抽象方法，全力摆动拳击动作
     protected abstract void FullSwing();
-    # 执行钩拳动作
+    // 抽象方法，钩拳拳击动作
     protected abstract void Hook();
-    # 执行上勾拳动作
+    // 抽象方法，上勾拳拳击动作
     protected abstract void Uppercut();
-    # 执行普通直拳动作
+    // 抽象方法，快速出拳拳击动作
     protected abstract void Jab();
 
-    # 注册击倒信息
+    // 注册击倒对手
     protected void RegisterKnockout(string knockoutMessage)
     {
-        Work.Clear();  # 清空工作内容
-        _notifyGameEnded();  # 通知游戏结束
-        Console.WriteLine(knockoutMessage);  # 在控制台打印击倒信息
+        // 清空工作栈
+        Work.Clear();
+        // 触发游戏结束通知
+        _notifyGameEnded();
+        // 打印击倒信息
+        Console.WriteLine(knockoutMessage);
     }
 
-    protected record AttackPunch(Punch Punch, bool IsBestPunch);  # 定义攻击拳击动作的记录类型，包括拳击动作和是否是最佳拳击动作的标志
+    // 定义攻击拳击动作的记录类型
+    protected record AttackPunch(Punch Punch, bool IsBestPunch);
+}
+
 ```

@@ -1,60 +1,64 @@
-# `56_Life_for_Two\csharp\Resources\Resource.cs`
+# `basic-computer-games\56_Life_for_Two\csharp\Resources\Resource.cs`
 
 ```
-# 导入所需的模块
-import System.Reflection
-import System.Runtime.CompilerServices
 
-# 声明命名空间
-namespace LifeforTwo.Resources;
+// 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-# 声明内部静态类 Resource
-internal static class Resource
+// LifeforTwo.Resources 命名空间
+namespace LifeforTwo.Resources
 {
-    # 声明内部静态类 Streams
-    internal static class Streams
+    // Resource 类
+    internal static class Resource
     {
-        # 声明静态属性 Title，返回一个流对象
-        public static Stream Title => GetStream();
-        # 声明静态属性 IllegalCoords，返回一个流对象
-        public static Stream IllegalCoords => GetStream();
-        # 声明静态属性 SameCoords，返回一个流对象
-        public static Stream SameCoords => GetStream();
-    }
+        // Streams 类
+        internal static class Streams
+        {
+            // 获取标题流
+            public static Stream Title => GetStream();
+            // 获取非法坐标流
+            public static Stream IllegalCoords => GetStream();
+            // 获取相同坐标流
+            public static Stream SameCoords => GetStream();
+        }
 
-    # 声明内部静态类 Formats
-    internal static class Formats
-    {
-        # 声明静态属性 InitialPieces，返回一个字符串
-        public static string InitialPieces => GetString();
-        # 声明静态属性 Player，返回一个字符串
-        public static string Player => GetString();
-        # 声明静态属性 Winner，返回一个字符串
-        public static string Winner => GetString();
+        // Formats 类
+        internal static class Formats
+        {
+            // 获取初始棋子格式
+            public static string InitialPieces => GetString();
+            // 获取玩家格式
+            public static string Player => GetString();
+            // 获取获胜者格式
+            public static string Winner => GetString();
+        }
+
+        // Strings 类
+        internal static class Strings
+        {
+            // 获取平局字符串
+            public static string Draw => GetString();
+        }
+
+        // 根据成员名获取字符串
+        private static string GetString([CallerMemberName] string? name = null)
+        {
+            // 获取流
+            using var stream = GetStream(name);
+            // 使用流创建读取器
+            using var reader = new StreamReader(stream);
+            // 读取并返回字符串
+            return reader.ReadToEnd();
+        }
+
+        // 根据成员名获取流
+        private static Stream GetStream([CallerMemberName] string? name = null) =>
+            // 获取嵌入资源流
+            Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+                // 如果找不到资源流，则抛出异常
+                ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
     }
 }
-    internal static class Strings
-    {
-        // 定义一个静态属性 Draw，其值为调用 GetString 方法的结果
-        public static string Draw => GetString();
-    }
 
-    // 定义一个私有的静态方法 GetString，接受一个可选的参数 name，类型为 string，使用 CallerMemberName 特性
-    private static string GetString([CallerMemberName] string? name = null)
-    {
-        // 使用 using 声明一个变量 stream，调用 GetStream 方法获取流
-        using var stream = GetStream(name);
-        // 使用 using 声明一个变量 reader，使用 stream 初始化 StreamReader
-        using var reader = new StreamReader(stream);
-        // 返回 reader 读取的所有内容
-        return reader.ReadToEnd();
-    }
-
-    // 定义一个私有的静态方法 GetStream，接受一个可选的参数 name，类型为 string，使用 CallerMemberName 特性
-    private static Stream GetStream([CallerMemberName] string? name = null) =>
-        // 使用 Assembly.GetExecutingAssembly().GetManifestResourceStream 方法获取嵌入资源流
-        Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
-            // 如果获取的流为空，则抛出异常
-            ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
-}
 ```

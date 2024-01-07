@@ -1,43 +1,55 @@
-# `58_Love\csharp\SourceCharacters.cs`
+# `basic-computer-games\58_Love\csharp\SourceCharacters.cs`
 
 ```
-using System;  # 导入 System 模块
 
-namespace Love;  # 命名空间为 Love
+// 命名空间声明
+using System;
 
-internal class SourceCharacters  # 定义名为 SourceCharacters 的类
+// 声明内部类 SourceCharacters
+namespace Love
 {
-    private readonly int _lineLength;  # 定义只读整型变量 _lineLength
-    private readonly char[][] _chars;  # 定义只读二维字符数组 _chars
-    private int _currentRow;  # 定义整型变量 _currentRow
-    private int _currentIndex;  # 定义整型变量 _currentIndex
-
-    public SourceCharacters(int lineLength, string message)  # 定义名为 SourceCharacters 的构造函数，接受 lineLength 和 message 两个参数
+    internal class SourceCharacters
     {
-        _lineLength = lineLength;  # 将参数 lineLength 赋值给 _lineLength
-        _chars = new[] { new char[lineLength], new char[lineLength] };  # 创建一个包含两个长度为 lineLength 的字符数组的二维数组
+        // 声明私有只读字段 _lineLength 和 _chars
+        private readonly int _lineLength;
+        private readonly char[][] _chars;
+        // 声明私有字段 _currentRow 和 _currentIndex
+        private int _currentRow;
+        private int _currentIndex;
 
-        for (int i = 0; i < lineLength; i++)  # 循环 lineLength 次
+        // 构造函数，初始化 _lineLength 和 _chars
+        public SourceCharacters(int lineLength, string message)
         {
-            _chars[0][i] = message[i % message.Length];  # 将 message 中的字符赋值给 _chars[0] 中的对应位置
-            _chars[1][i] = ' ';  # 将空格赋值给 _chars[1] 中的对应位置
-    public ReadOnlySpan<char> GetCharacters(int count)
-    {
-        // 创建一个只读的字符 Span，从 _chars 数组中的 _currentRow 行和 _currentIndex 列开始，长度为 count
-        var span = new ReadOnlySpan<char>(_chars[_currentRow], _currentIndex, count);
+            _lineLength = lineLength;
+            _chars = new[] { new char[lineLength], new char[lineLength] };
 
-        // 更新 _currentRow 和 _currentIndex 的值
-        _currentRow = 1 - _currentRow;
-        _currentIndex += count;
-
-        // 如果 _currentIndex 大于等于 _lineLength，则将 _currentIndex 和 _currentRow 重置为 0
-        if (_currentIndex >= _lineLength)
-        {
-            _currentIndex = _currentRow = 0;
+            // 使用 message 初始化 _chars[0]
+            for (int i = 0; i < lineLength; i++)
+            {
+                _chars[0][i] = message[i % message.Length];
+                _chars[1][i] = ' ';
+            }
         }
 
-        // 返回创建的 Span
-        return span;
+        // 方法，返回指定数量的字符
+        public ReadOnlySpan<char> GetCharacters(int count)
+        {
+            // 创建只读字符范围 span
+            var span = new ReadOnlySpan<char>(_chars[_currentRow], _currentIndex, count);
+
+            // 更新 _currentRow 和 _currentIndex
+            _currentRow = 1 - _currentRow;
+            _currentIndex += count;
+            // 如果 _currentIndex 大于等于 _lineLength，则重置 _currentIndex 和 _currentRow
+            if (_currentIndex >= _lineLength)
+            {
+                _currentIndex = _currentRow = 0;
+            }
+
+            // 返回 span
+            return span;
+        }
     }
 }
+
 ```

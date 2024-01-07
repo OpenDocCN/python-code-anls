@@ -1,6 +1,7 @@
-# `18_Bullseye\csharp\Player.cs`
+# `basic-computer-games\18_Bullseye\csharp\Player.cs`
 
 ```
+
 namespace Bullseye
 {
     /// <summary>
@@ -23,12 +24,15 @@ namespace Bullseye
         /// <summary>
         /// Name of the player
         /// </summary>
-        public string Name { get; private set; }  // 声明一个公共的字符串类型的属性 Name，只能在类的内部进行设置
+        // 获取玩家的名字
+        public string Name { get; private set; }
 
         /// <summary>
         /// Current score of the player
         /// </summary>
-        public int Score { get; set; }  // 声明一个公共的整数类型的属性 Score，可以在类的内外进行设置
+        // 获取或设置玩家的分数
+        public int Score { get; set; }
     }
 }
+
 ```

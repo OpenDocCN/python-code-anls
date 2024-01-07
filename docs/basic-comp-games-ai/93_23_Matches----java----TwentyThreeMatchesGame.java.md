@@ -1,4 +1,4 @@
-# `93_23_Matches\java\TwentyThreeMatchesGame.java`
+# `basic-computer-games\93_23_Matches\java\TwentyThreeMatchesGame.java`
 
 ```
 /**
@@ -24,11 +24,9 @@ public class TwentyThreeMatchesGame {
 
     // 显示游戏介绍
     private static void showIntro() {
+        System.out.println(Messages.INTRO);
+    }
+
+}
 */
-# 打印消息INTRO到控制台
-System.out.println(Messages.INTRO);
-# 结束类定义
-}
-# 结束类定义
-}
 ```

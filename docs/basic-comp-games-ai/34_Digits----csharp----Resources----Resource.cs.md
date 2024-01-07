@@ -1,60 +1,74 @@
-# `34_Digits\csharp\Resources\Resource.cs`
+# `basic-computer-games\34_Digits\csharp\Resources\Resource.cs`
 
 ```
-# 导入必要的模块
-import System.Reflection
-import System.Runtime.CompilerServices
 
-# 定义命名空间
-namespace Digits.Resources;
+// 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-# 定义内部静态类 Resource
-internal static class Resource
+// 声明 Digits.Resources 命名空间
+namespace Digits.Resources
 {
-    # 定义内部静态类 Streams
-    internal static class Streams
+    // 声明 Resource 类
+    internal static class Resource
     {
-        # 定义静态属性 Introduction，返回 GetStream() 方法的结果
-        public static Stream Introduction => GetStream()
-        # 定义静态属性 Instructions，返回 GetStream() 方法的结果
-        public static Stream Instructions => GetStream()
-        # 定义静态属性 TryAgain，返回 GetStream() 方法的结果
-        public static Stream TryAgain => GetStream()
-        # 定义静态属性 ItsATie，返回 GetStream() 方法的结果
-        public static Stream ItsATie => GetStream()
-        # 定义静态属性 IWin，返回 GetStream() 方法的结果
-        public static Stream IWin => GetStream()
-        # 定义静态属性 YouWin，返回 GetStream() 方法的结果
-        public static Stream YouWin => GetStream()
-        # 定义静态属性 Thanks，返回 GetStream() 方法的结果
-        public static Stream Thanks => GetStream()
-        # 定义静态属性 Headings，返回 GetStream() 方法的结果
-        public static Stream Headings => GetStream()
+        // 声明 Streams 类
+        internal static class Streams
+        {
+            // 声明 Introduction 属性，返回流
+            public static Stream Introduction => GetStream();
+            // 声明 Instructions 属性，返回流
+            public static Stream Instructions => GetStream();
+            // 声明 TryAgain 属性，返回流
+            public static Stream TryAgain => GetStream();
+            // 声明 ItsATie 属性，返回流
+            public static Stream ItsATie => GetStream();
+            // 声明 IWin 属性，返回流
+            public static Stream IWin => GetStream();
+            // 声明 YouWin 属性，返回流
+            public static Stream YouWin => GetStream();
+            // 声明 Thanks 属性，返回流
+            public static Stream Thanks => GetStream();
+            // 声明 Headings 属性，返回流
+            public static Stream Headings => GetStream();
+        }
+
+        // 声明 Prompts 类
+        internal static class Prompts
+        {
+            // 声明 ForInstructions 属性，返回字符串
+            public static string ForInstructions => GetString();
+            // 声明 TenNumbers 属性，返回字符串
+            public static string TenNumbers => GetString();
+            // 声明 WantToTryAgain 属性，返回字符串
+            public static string WantToTryAgain => GetString();
+        }
+
+        // 声明 Formats 类
+        internal static class Formats
+        {
+            // 声明 GuessResult 属性，返回字符串
+            public static string GuessResult => GetString();
+        }
+
+        // 声明 GetString 方法，返回字符串，使用 CallerMemberName 特性
+        private static string GetString([CallerMemberName] string? name = null)
+        {
+            // 获取流
+            using var stream = GetStream(name);
+            // 使用流创建读取器
+            using var reader = new StreamReader(stream);
+            // 读取并返回流内容
+            return reader.ReadToEnd();
+        }
+
+        // 声明 GetStream 方法，返回流，使用 CallerMemberName 特性
+        private static Stream GetStream([CallerMemberName] string? name = null) =>
+            // 获取当前程序集的嵌入资源流
+            Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+                // 如果找不到资源流，抛出异常
+                ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
     }
+}
 
-    # 定义内部静态类 Prompts
-    internal static class Prompts
-    {
-        public static string ForInstructions => GetString();  # 返回指示的字符串
-        public static string TenNumbers => GetString();  # 返回包含十个数字的字符串
-        public static string WantToTryAgain => GetString();  # 返回提示再次尝试的字符串
-    }
-
-    internal static class Formats
-    {
-        public static string GuessResult => GetString();  # 返回猜测结果的字符串
-    }
-
-    private static string GetString([CallerMemberName] string? name = null)  # 定义一个方法，根据调用者的成员名获取对应的字符串
-    {
-        using var stream = GetStream(name);  # 使用获取流的方法获取对应的流
-        using var reader = new StreamReader(stream);  # 使用流创建一个读取器
-        return reader.ReadToEnd();  # 读取并返回流中的所有内容
-    }
-
-
-    private static Stream GetStream([CallerMemberName] string? name = null) =>  # 定义一个方法，根据调用者的成员名获取对应的流
-# 使用 Assembly 类的 GetExecutingAssembly 方法获取当前执行的程序集，再使用 GetManifestResourceStream 方法获取嵌入资源的流
-# 参数为嵌入资源的命名空间和文件名
-# 如果找不到嵌入资源的流，则抛出异常
 ```

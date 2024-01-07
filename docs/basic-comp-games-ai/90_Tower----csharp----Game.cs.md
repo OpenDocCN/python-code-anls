@@ -1,93 +1,90 @@
-# `90_Tower\csharp\Game.cs`
+# `basic-computer-games\90_Tower\csharp\Game.cs`
 
 ```
-# 导入必要的模块
+
+// 引入所需的命名空间
 using System;
 using Tower.Models;
 using Tower.Resources;
 using Tower.UI;
 
+// 定义游戏类
 namespace Tower
 {
     internal class Game
     {
-        # 初始化游戏对象的属性
-        private readonly Towers _towers;  # 创建一个名为_towers的Towers对象
-        private readonly TowerDisplay _display;  # 创建一个名为_display的TowerDisplay对象
-        private readonly int _optimalMoveCount;  # 创建一个名为_optimalMoveCount的整数属性
-        private int _moveCount;  # 创建一个名为_moveCount的整数属性
+        // 声明私有字段
+        private readonly Towers _towers; // 声明一个 Towers 类型的字段
+        private readonly TowerDisplay _display; // 声明一个 TowerDisplay 类型的字段
+        private readonly int _optimalMoveCount; // 声明一个整型的字段，用于存储最佳移动次数
+        private int _moveCount; // 声明一个整型的字段，用于存储当前移动次数
 
-        # 初始化游戏对象的构造函数
+        // 构造函数，初始化游戏
         public Game(int diskCount)
         {
-            _towers = new Towers(diskCount);  # 使用传入的diskCount参数创建一个Towers对象并赋值给_towers属性
-            _display = new TowerDisplay(_towers);  # 使用_towers属性创建一个TowerDisplay对象并赋值给_display属性
-            _optimalMoveCount = (1 << diskCount) - 1;  # 根据传入的diskCount计算出最佳移动次数并赋值给_optimalMoveCount属性
+            _towers = new Towers(diskCount); // 初始化 Towers 对象
+            _display = new TowerDisplay(_towers); // 初始化 TowerDisplay 对象
+            _optimalMoveCount = (1 << diskCount) - 1; // 计算最佳移动次数
         }
+
+        // 游戏主逻辑
         public bool Play()
         {
-            // 打印游戏说明
-            Console.Write(Strings.Instructions);
+            Console.Write(Strings.Instructions); // 输出游戏指令
 
-            // 打印当前游戏状态
-            Console.Write(_display);
+            Console.Write(_display); // 输出当前游戏状态
 
-            // 游戏循环
             while (true)
             {
-                // 读取用户输入的要移动的盘子号码
-                if (!Input.TryReadNumber(Prompt.Disk, out int disk)) { return false; }
+                if (!Input.TryReadNumber(Prompt.Disk, out int disk)) { return false; } // 读取用户输入的盘子编号
 
-                // 查找要移动的盘子是否存在，如果不存在则打印错误信息并继续下一轮循环
-                if (!_towers.TryFindDisk(disk, out var from, out var message))
+                if (!_towers.TryFindDisk(disk, out var from, out var message)) // 查找盘子所在的柱子
                 {
-                    Console.WriteLine(message);
+                    Console.WriteLine(message); // 输出错误信息
                     continue;
                 }
 
-                // 读取用户输入的目标柱子号码
-                if (!Input.TryReadNumber(Prompt.Needle, out var to)) { return false; }
+                if (!Input.TryReadNumber(Prompt.Needle, out var to)) { return false; } // 读取用户输入的目标柱子编号
 
-                // 尝试移动盘子，如果移动失败则继续下一轮循环
-                if (!_towers.TryMoveDisk(from, to))
+                if (!_towers.TryMoveDisk(from, to)) // 尝试移动盘子
                 {
-                    Console.Write(Strings.IllegalMove);  # 输出非法移动的提示信息
-                    continue;  # 继续下一次循环
+                    Console.Write(Strings.IllegalMove); // 输出非法移动信息
+                    continue;
                 }
 
-                Console.Write(_display);  # 输出当前棋盘状态
+                Console.Write(_display); // 输出移动后的游戏状态
 
-                var result = CheckProgress();  # 调用CheckProgress()函数，将返回值赋给result变量
-                if (result.HasValue) { return result.Value; }  # 如果result有值，则返回该值
+                var result = CheckProgress(); // 检查游戏进度
+                if (result.HasValue) { return result.Value; } // 如果游戏结束，返回结果
             }
         }
 
-        private bool? CheckProgress()  # 定义一个返回可空布尔值的函数CheckProgress()
+        // 检查游戏进度
+        private bool? CheckProgress()
         {
-            _moveCount++;  # 棋盘移动次数加1
+            _moveCount++; // 移动次数加一
 
-            if (_moveCount == 128)  # 如果移动次数等于128
+            if (_moveCount == 128) // 如果移动次数达到128次
             {
-                Console.Write(Strings.TooManyMoves);  # 输出移动次数过多的提示信息
-                return false;  # 返回false
+                Console.Write(Strings.TooManyMoves); // 输出移动次数过多的信息
+                return false; // 返回游戏失败
             }
-            # 如果所有塔都已经完成移动
-            if (_towers.Finished)
+
+            if (_towers.Finished) // 如果游戏结束
             {
-                # 如果移动次数等于最佳移动次数
-                if (_moveCount == _optimalMoveCount)
+                if (_moveCount == _optimalMoveCount) // 如果移动次数等于最佳移动次数
                 {
-                    # 输出祝贺消息
-                    Console.Write(Strings.Congratulations);
+                    Console.Write(Strings.Congratulations); // 输出祝贺信息
                 }
-                # 输出任务完成消息和移动次数
-                Console.WriteLine(Strings.TaskFinished, _moveCount);
-                # 返回true表示任务完成
-                return true;
+
+                Console.WriteLine(Strings.TaskFinished, _moveCount); // 输出游戏结束信息
+
+                return true; // 返回游戏成功
             }
-            # 如果还有未完成的塔，返回默认值
-            return default;
+
+            return default; // 返回默认值
         }
     }
 }
+
 ```

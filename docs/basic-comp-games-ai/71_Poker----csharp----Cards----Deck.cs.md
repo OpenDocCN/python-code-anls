@@ -1,32 +1,46 @@
-# `71_Poker\csharp\Cards\Deck.cs`
+# `basic-computer-games\71_Poker\csharp\Cards\Deck.cs`
 
 ```
-using static Poker.Cards.Rank;  # 导入Poker.Cards.Rank命名空间中的所有静态成员
 
-namespace Poker.Cards;  # 声明Poker.Cards命名空间
+// 使用静态引用导入 Rank 类
+using static Poker.Cards.Rank;
 
-internal class Deck  # 声明一个内部类Deck
+// 声明 Poker.Cards 命名空间
+namespace Poker.Cards;
+
+// 声明 Deck 类，并设置为 internal 访问权限
+internal class Deck
 {
-    private readonly Card[] _cards;  # 声明一个只读的Card类型数组_cards
-    private int _nextCard;  # 声明一个私有的整型变量_nextCard
+    // 声明私有只读字段 _cards，用于存储卡牌
+    private readonly Card[] _cards;
+    // 声明私有字段 _nextCard，用于记录下一张要发的卡牌的索引
+    private int _nextCard;
 
-    public Deck()  # 声明一个公共的构造函数Deck
+    // 声明 Deck 类的构造函数
+    public Deck()
     {
-        _cards = Ranks.SelectMany(r => Enum.GetValues<Suit>().Select(s => new Card(r, s))).ToArray();  # 使用LINQ语句生成一副扑克牌的所有组合，并存储在_cards数组中
+        // 使用 LINQ 生成一副完整的扑克牌
+        _cards = Ranks.SelectMany(r => Enum.GetValues<Suit>().Select(s => new Card(r, s))).ToArray();
     }
 
-    public void Shuffle(IRandom _random)  # 声明一个公共的无返回值的Shuffle方法，接受一个IRandom类型的参数_random
+    // 声明 Shuffle 方法，用于洗牌
+    public void Shuffle(IRandom _random)
     {
-        for (int i = 0; i < _cards.Length; i++)  # 循环_cards数组的长度次
+        // 遍历卡牌数组，随机交换位置
+        for (int i = 0; i < _cards.Length; i++)
         {
-            var j = _random.Next(_cards.Length);  # 生成一个随机数j，范围在0到_cards数组的长度之间
-            (_cards[i], _cards[j]) = (_cards[j], _cards[i]);  # 交换_cards数组中索引为i和j的元素
+            var j = _random.Next(_cards.Length);
+            (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
         }
-        _nextCard = 0;  # 重置下一张要发的卡牌的索引为0
+        // 重置下一张要发的卡牌的索引
+        _nextCard = 0;
     }
 
-    public Card DealCard() => _cards[_nextCard++];  # 发一张卡牌并返回，同时将下一张要发的卡牌索引加1
+    // 声明 DealCard 方法，用于发牌
+    public Card DealCard() => _cards[_nextCard++];
 
-    public Hand DealHand() => new Hand(Enumerable.Range(0, 5).Select(_ => DealCard()));  # 发一手牌（5张），通过调用DealCard()方法来获取每张牌
+    // 声明 DealHand 方法，用于发五张牌组成一手牌
+    public Hand DealHand() => new Hand(Enumerable.Range(0, 5).Select(_ => DealCard()));
 }
+
 ```

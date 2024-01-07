@@ -1,36 +1,36 @@
-# `00_Common\dotnet\Games.Common\Randomness\IRandom.cs`
+# `basic-computer-games\00_Common\dotnet\Games.Common\Randomness\IRandom.cs`
 
 ```
+
+// 命名空间声明，表示该接口属于 Games.Common.Randomness 命名空间
 namespace Games.Common.Randomness;
 
 /// <summary>
-/// Provides access to a random number generator
+/// 提供对随机数生成器的访问
 /// </summary>
+// 定义一个接口 IRandom
 public interface IRandom
 {
     /// <summary>
-    /// Gets a random <see cref="float" /> such that 0 &lt;= n &lt; 1.
+    /// 获取一个随机的 <see cref="float" />，使得 0 &lt;= n &lt; 1.
     /// </summary>
-    /// <returns>The random number.</returns>
-    float NextFloat(); // 定义一个方法，返回一个介于0和1之间的随机浮点数
+    /// <returns>随机数。</returns>
+    // 定义一个方法 NextFloat，返回一个随机的浮点数
+    float NextFloat();
 
     /// <summary>
-    /// Gets the <see cref="float" /> returned by the previous call to <see cref="NextFloat" />.
+    /// 获取上一次调用 <see cref="NextFloat" /> 返回的 <see cref="float" />。
     /// </summary>
-    /// <returns>The previous random number.</returns>
-    float PreviousFloat(); // 定义一个方法，返回上一次调用NextFloat方法返回的随机浮点数
+    /// <returns>上一个随机数。</returns>
+    // 定义一个方法 PreviousFloat，返回上一次生成的随机浮点数
+    float PreviousFloat();
 
     /// <summary>
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
+    /// 重新设置随机数生成器的种子。
+    /// </summary>
+    /// <param name="seed">种子。</param>
+    // 定义一个方法 Reseed，重新设置随机数生成器的种子
+    void Reseed(int seed);
+}
+
 ```

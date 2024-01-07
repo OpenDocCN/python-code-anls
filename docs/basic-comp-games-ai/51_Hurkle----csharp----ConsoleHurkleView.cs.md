@@ -1,80 +1,67 @@
-# `51_Hurkle\csharp\ConsoleHurkleView.cs`
+# `basic-computer-games\51_Hurkle\csharp\ConsoleHurkleView.cs`
 
 ```
-            // 打印猜测的次数
-            Console.WriteLine($"You missed! The hurkle is {failedGuessViewModel.Direction} of your guess.");
+
+// 引入 System 命名空间
+using System;
+
+// 定义 ConsoleHurkleView 类，实现 IHurkleView 接口
+namespace hurkle
+{
+    internal class ConsoleHurkleView : IHurkleView
+    {
+        // 获取玩家猜测的坐标
+        public GamePoint GetGuess(GuessViewModel guessViewModel)
+        {
+            // 输出当前猜测的序号
+            Console.WriteLine($"GUESS #{guessViewModel.CurrentGuessNumber}");
+            // 读取玩家输入的坐标
+            var inputLine = Console.ReadLine();
+            // 根据逗号分隔输入的坐标，并去除空格
+            var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
+            // 创建 GamePoint 对象，保存玩家猜测的坐标
+            var guessPoint = new GamePoint{
+                X = int.Parse(seperateStrings[0]),
+                Y = int.Parse(seperateStrings[1])
+            };
+
+            return guessPoint; // 返回玩家猜测的坐标
         }
 
-        public void ShowWin()
+        // 显示猜测失败时的方向
+        public void ShowDirection(FailedGuessViewModel failedGuessViewModel)
         {
-            // 打印玩家获胜的消息
-            Console.WriteLine("Congratulations! You found the hurkle!");
+            Console.Write("GO ");
+            // 根据失败猜测的方向输出相应信息
+            switch(failedGuessViewModel.Direction)
+            {
+                case CardinalDirection.East:
+                    Console.WriteLine("EAST");
+                    break;
+                case CardinalDirection.North:
+                    Console.WriteLine("NORTH");
+                    break;
+                // 其他方向的处理类似
+            }
+
+            Console.WriteLine(); // 输出空行
         }
 
-        public void ShowLose()
+        // 显示游戏失败信息
+        public void ShowLoss(LossViewModel lossViewModel)
         {
-            // 打印玩家失败的消息
-            Console.WriteLine("Sorry, you didn't find the hurkle. Better luck next time!");
+            Console.WriteLine(); // 输出空行
+            Console.WriteLine($"SORRY, THAT'S {lossViewModel.MaxGuesses} GUESSES"); // 输出失败信息和最大猜测次数
+            Console.WriteLine($"THE HURKLE IS AT {lossViewModel.HurkleLocation.X},{lossViewModel.HurkleLocation.Y}"); // 输出 Hurkle 的位置
+        }
+
+        // 显示游戏胜利信息
+        public void ShowVictory(VictoryViewModel victoryViewModel)
+        {
+            Console.WriteLine(); // 输出空行
+            Console.WriteLine($"YOU FOUND HIM IN {victoryViewModel.CurrentGuessNumber} GUESSES!"); // 输出胜利信息和猜测次数
         }
     }
 }
-# 输出"GO "到控制台
-Console.Write("GO ");
-# 根据 failedGuessViewModel 的 Direction 属性进行不同的操作
-switch(failedGuessViewModel.Direction)
-{
-    # 如果 Direction 为 East，则输出"EAST"到控制台
-    case CardinalDirection.East:
-        Console.WriteLine("EAST");
-        break;
-    # 如果 Direction 为 North，则输出"NORTH"到控制台
-    case CardinalDirection.North:
-        Console.WriteLine("NORTH");
-        break;
-    # 如果 Direction 为 South，则输出"SOUTH"到控制台
-    case CardinalDirection.South:
-        Console.WriteLine("SOUTH");
-        break;
-    # 如果 Direction 为 West，则输出"WEST"到控制台
-    case CardinalDirection.West:
-        Console.WriteLine("WEST");
-        break;
-    # 如果 Direction 为 NorthEast，则输出"NORTHEAST"到控制台
-    case CardinalDirection.NorthEast:
-        Console.WriteLine("NORTHEAST");
-        break;
-    # 如果 Direction 为 NorthWest，则输出"NORTHWEST"到控制台
-    case CardinalDirection.NorthWest:
-                    Console.WriteLine("NORTHWEST");  // 打印"NORTHWEST"，表示方向为西北
-                    break;  // 跳出 switch 语句
-                case CardinalDirection.SouthEast:  // 当方向为东南时
-                    Console.WriteLine("SOUTHEAST");  // 打印"SOUTHEAST"，表示方向为东南
-                    break;  // 跳出 switch 语句
-                case CardinalDirection.SouthWest:  // 当方向为西南时
-                    Console.WriteLine("SOUTHWEST");  // 打印"SOUTHWEST"，表示方向为西南
-                    break;  // 跳出 switch 语句
-            }
 
-            Console.WriteLine();  // 打印空行
-
-        }
-
-        public void ShowLoss(LossViewModel lossViewModel)
-        {
-            Console.WriteLine();  // 打印空行
-            Console.WriteLine($"SORRY, THAT'S {lossViewModel.MaxGuesses} GUESSES");  // 打印"SORRY, THAT'S {lossViewModel.MaxGuesses} GUESSES"，表示猜测次数已用完
-            Console.WriteLine($"THE HURKLE IS AT {lossViewModel.HurkleLocation.X},{lossViewModel.HurkleLocation.Y}");  // 打印"THE HURKLE IS AT {lossViewModel.HurkleLocation.X},{lossViewModel.HurkleLocation.Y}"，表示 HURKLE 的位置坐标
-        }
-# 定义一个公共方法，用于展示游戏胜利的信息，接受一个 VictoryViewModel 对象作为参数
-public void ShowVictory(VictoryViewModel victoryViewModel)
-{
-    # 在控制台输出空行
-    Console.WriteLine();
-    # 使用字符串插值输出玩家猜测的次数
-    Console.WriteLine($"YOU FOUND HIM IN {victoryViewModel.CurrentGuessNumber} GUESSES!");
-}
-# 结束方法定义
-}
-# 结束类定义
-}
 ```

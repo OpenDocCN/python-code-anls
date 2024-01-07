@@ -1,6 +1,7 @@
-# `85_Synonym\python\synonym.py`
+# `basic-computer-games\85_Synonym\python\synonym.py`
 
 ```
+
 """
 SYNONYM
 
@@ -9,29 +10,26 @@ Vocabulary quiz
 Ported by Dave LeCompte
 """
 
-import random  # 导入 random 模块，用于生成随机数
+import random  # 导入 random 模块
 
 PAGE_WIDTH = 64  # 设置页面宽度为 64
 
-# 定义一个函数，用于打印居中的文本
-def print_centered(msg: str) -> None:
-    spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)  # 计算需要添加的空格数，使得文本居中
-    print(spaces + msg)  # 打印居中的文本
 
-# 定义一个函数，用于打印标题
-def print_header(title: str) -> None:
-    print_centered(title)  # 调用 print_centered 函数打印标题
-    # 打印居中对齐的文本
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    # 打印空行
-    print()
-    print()
-    print()
+def print_centered(msg: str) -> None:  # 定义一个打印居中文本的函数，参数为字符串，返回类型为 None
+    spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)  # 计算居中需要的空格数
+    print(spaces + msg)  # 打印居中文本
 
 
-def print_instructions() -> None:
-    # 打印游戏说明
-    print("A SYNONYM OF A WORD MEANS ANOTHER WORD IN THE ENGLISH")
+def print_header(title: str) -> None:  # 定义一个打印标题的函数，参数为字符串，返回类型为 None
+    print_centered(title)  # 调用打印居中文本的函数打印标题
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")  # 打印固定文本
+    print()  # 打印空行
+    print()  # 打印空行
+    print()  # 打印空行
+
+
+def print_instructions() -> None:  # 定义一个打印游戏说明的函数，返回类型为 None
+    print("A SYNONYM OF A WORD MEANS ANOTHER WORD IN THE ENGLISH")  # 打印游戏说明
     print("LANGUAGE WHICH HAS THE SAME OR VERY NEARLY THE SAME MEANING.")
     print("I CHOOSE A WORD -- YOU TYPE A SYNONYM.")
     print("IF YOU CAN'T THINK OF A SYNONYM, TYPE THE WORD 'HELP'")
@@ -39,67 +37,69 @@ def print_instructions() -> None:
     print()
 
 
-right_words = ["RIGHT", "CORRECT", "FINE", "GOOD!", "CHECK"]
+right_words = ["RIGHT", "CORRECT", "FINE", "GOOD!", "CHECK"]  # 定义正确答案的单词列表
 
-synonym_words = [
-    # 同义词列表
+synonym_words = [  # 定义需要测试的单词及其同义词列表
     ["FIRST", "START", "BEGINNING", "ONSET", "INITIAL"],
     ["SIMILAR", "ALIKE", "SAME", "LIKE", "RESEMBLING"],
-    ["MODEL", "PATTERN", "PROTOTYPE", "STANDARD", "CRITERION"],  # 创建一个包含同义词的列表
-    ["SMALL", "INSIGNIFICANT", "LITTLE", "TINY", "MINUTE"],  # 创建一个包含同义词的列表
-    ["STOP", "HALT", "STAY", "ARREST", "CHECK", "STANDSTILL"],  # 创建一个包含同义词的列表
-    ["HOUSE", "DWELLING", "RESIDENCE", "DOMICILE", "LODGING", "HABITATION"],  # 创建一个包含同义词的列表
-    ["PIT", "HOLE", "HOLLOW", "WELL", "GULF", "CHASM", "ABYSS"],  # 创建一个包含同义词的列表
-    ["PUSH", "SHOVE", "THRUST", "PROD", "POKE", "BUTT", "PRESS"],  # 创建一个包含同义词的列表
-    ["RED", "ROUGE", "SCARLET", "CRIMSON", "FLAME", "RUBY"],  # 创建一个包含同义词的列表
-    ["PAIN", "SUFFERING", "HURT", "MISERY", "DISTRESS", "ACHE", "DISCOMFORT"],  # 创建一个包含同义词的列表
+    ["MODEL", "PATTERN", "PROTOTYPE", "STANDARD", "CRITERION"],
+    ["SMALL", "INSIGNIFICANT", "LITTLE", "TINY", "MINUTE"],
+    ["STOP", "HALT", "STAY", "ARREST", "CHECK", "STANDSTILL"],
+    ["HOUSE", "DWELLING", "RESIDENCE", "DOMICILE", "LODGING", "HABITATION"],
+    ["PIT", "HOLE", "HOLLOW", "WELL", "GULF", "CHASM", "ABYSS"],
+    ["PUSH", "SHOVE", "THRUST", "PROD", "POKE", "BUTT", "PRESS"],
+    ["RED", "ROUGE", "SCARLET", "CRIMSON", "FLAME", "RUBY"],
+    ["PAIN", "SUFFERING", "HURT", "MISERY", "DISTRESS", "ACHE", "DISCOMFORT"],
 ]
 
 
-def print_right() -> None:
-    print(random.choice(right_words))  # 从同义词列表中随机选择一个词并打印出来
+def print_right() -> None:  # 定义一个打印正确提示的函数，返回类型为 None
+    print(random.choice(right_words))  # 随机打印正确提示中的一个单词
 
 
-def ask_question(question_number: int) -> None:
-    words = synonym_words[question_number]  # 从同义词列表中获取指定索引的同义词列表
+def ask_question(question_number: int) -> None:  # 定义一个提问的函数，参数为整数，返回类型为 None
+    words = synonym_words[question_number]  # 获取需要测试的单词及其同义词列表
     clues = words[:]  # 复制同义词列表
-    base_word = clues.pop(0)  # 从复制的同义词列表中移除第一个词，并将其赋值给base_word
-    while True:  # 创建一个无限循环，直到条件被满足才会退出循环
-        question = f"     WHAT IS A SYNONYM OF {base_word}? "  # 创建一个包含base_word的问题字符串
-        response = input(question).upper()  # 获取用户输入的答案并转换为大写
+    base_word = clues.pop(0)  # 弹出同义词列表的第一个单词作为基准单词
 
-        if response == "HELP":  # 如果用户输入的是"HELP"
-            clue = random.choice(clues)  # 从clues列表中随机选择一个线索
-            print(f"**** A SYNONYM OF {base_word} IS {clue}.")  # 打印出base_word的一个同义词
+    while True:  # 进入循环
+        question = f"     WHAT IS A SYNONYM OF {base_word}? "  # 构造问题
+        response = input(question).upper()  # 获取用户输入并转换为大写
+
+        if response == "HELP":  # 如果用户输入为 "HELP"
+            clue = random.choice(clues)  # 随机选择一个提示
+            print(f"**** A SYNONYM OF {base_word} IS {clue}.")  # 打印提示
             print()
 
             # remove the clue from available clues
-            clues.remove(clue)  # 从可用的线索中移除选中的线索
-            continue  # 继续下一次循环
+            clues.remove(clue)  # 从可用提示中移除已经使用的提示
+            continue  # 继续下一轮循环
 
-        if (response != base_word) and (response in words):  # 如果用户输入的不是base_word且在words列表中
-            print_right()  # 调用print_right函数
-            return  # 退出当前函数
+        if (response != base_word) and (response in words):  # 如果用户输入不是基准单词且在同义词列表中
+            print_right()  # 调用打印正确提示的函数
+            return  # 结束函数
 
-def finish() -> None:  # 定义一个名为finish的函数，不返回任何值
+
+def finish() -> None:  # 定义一个结束游戏的函数，返回类型为 None
     print()  # 打印空行
-    print("SYNONYM DRILL COMPLETED.")  # 打印提示信息，表示同义词练习已完成
+    print("SYNONYM DRILL COMPLETED.")  # 打印游戏结束提示
 
 
-def main() -> None:
-    print_header("SYNONYM")  # 调用打印标题的函数，打印“SYNONYM”
-    print_instructions()  # 调用打印指令的函数，打印练习指令
+def main() -> None:  # 定义主函数，返回类型为 None
+    print_header("SYNONYM")  # 调用打印标题的函数打印游戏标题
+    print_instructions()  # 调用打印游戏说明的函数打印游戏说明
 
-    num_questions = len(synonym_words)  # 获取同义词列表的长度，即问题的数量
-    word_indices = list(range(num_questions))  # 创建一个包含问题数量的索引列表
-    random.shuffle(word_indices)  # 随机打乱索引列表顺序
+    num_questions = len(synonym_words)  # 获取需要测试的单词数量
+    word_indices = list(range(num_questions))  # 生成单词索引列表
+    random.shuffle(word_indices)  # 随机打乱单词索引列表
 
-    for word_number in word_indices:  # 遍历打乱后的索引列表
-        ask_question(word_number)  # 调用提问函数，提问对应索引的问题
+    for word_number in word_indices:  # 遍历打乱后的单词索引列表
+        ask_question(word_number)  # 调用提问的函数进行测试
 
-    finish()  # 调用结束函数，表示练习结束
+    finish()  # 调用结束游戏的函数
 
 
-if __name__ == "__main__":
-    main()  # 如果当前脚本作为主程序运行，则调用主函数
+if __name__ == "__main__":  # 如果当前脚本为主程序
+    main()  # 调用主函数开始游戏
+
 ```

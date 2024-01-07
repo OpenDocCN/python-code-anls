@@ -1,16 +1,17 @@
-# `92_Trap\java\src\TrapGame.java`
+# `basic-computer-games\92_Trap\java\src\TrapGame.java`
 
 ```
-# 定义一个名为TrapGame的公共类
+
+# 定义名为TrapGame的公共类
 public class TrapGame {
 
-    # 定义一个名为main的公共静态方法，参数为字符串数组args
+    # 主方法
     public static void main(String[] args) {
-
-        # 创建一个名为trap的Trap类的实例
+        # 创建Trap对象
         Trap trap = new Trap();
-        # 调用trap实例的play方法
+        # 调用Trap对象的play方法开始游戏
         trap.play();
     }
 }
+
 ```

@@ -1,51 +1,64 @@
-# `13_Bounce\csharp\Game.cs`
+# `basic-computer-games\13_Bounce\csharp\Game.cs`
 
 ```
-using static Bounce.Resources.Resource;  # 导入 Bounce 资源中的 Resource 类
-namespace Bounce;  # 声明 Bounce 命名空间
 
-internal class Game  # 内部类 Game
+# 引入 Bounce.Resources.Resource 命名空间下的静态资源
+using static Bounce.Resources.Resource;
+
+# 声明 Bounce 命名空间
+namespace Bounce;
+
+# 声明 Game 类，内部可见
+internal class Game
 {
-    private readonly IReadWrite _io;  # 声明私有只读字段 _io，类型为 IReadWrite 接口
+    # 声明私有只读字段 _io，类型为 IReadWrite 接口
+    private readonly IReadWrite _io;
 
-    public Game(IReadWrite io)  # Game 类的构造函数，参数为 io
+    # Game 类的构造函数，接受一个 IReadWrite 类型的参数 io
+    public Game(IReadWrite io)
     {
-        _io = io;  # 将参数 io 赋值给 _io 字段
+        # 将参数 io 赋值给私有字段 _io
+        _io = io;
     }
 
-    public void Play(Func<bool> playAgain)  # Play 方法，参数为 playAgain 函数
+    # Play 方法，接受一个返回布尔值的委托 playAgain
+    public void Play(Func<bool> playAgain)
     {
-        _io.Write(Streams.Title);  # 调用 _io 对象的 Write 方法，传入 Streams.Title 参数
-        _io.Write(Streams.Instructions);  # 调用 _io 对象的 Write 方法，传入 Streams.Instructions 参数
+        # 使用 _io 输出标题
+        _io.Write(Streams.Title);
+        # 使用 _io 输出说明
+        _io.Write(Streams.Instructions);
 
-        while (playAgain.Invoke())  # while 循环，条件为调用 playAgain 函数的结果
+        # 当 playAgain 委托返回 true 时循环执行以下代码块
+        while (playAgain.Invoke())
         {
-            // 从输入输出对象中读取时间增量参数
+            # 从 _io 读取时间增量参数
             var timeIncrement = _io.ReadParameter("Time increment (sec)");
-            // 从输入输出对象中读取速度参数
+            # 从 _io 读取速度参数
             var velocity = _io.ReadParameter("Velocity (fps)");
-            // 从输入输出对象中读取弹性系数参数
+            # 从 _io 读取弹性系数参数
             var elasticity = _io.ReadParameter("Coefficient");
 
-            // 创建一个弹跳对象，传入速度参数
+            # 创建一个新的 Bounce 对象，传入速度参数
             var bounce = new Bounce(velocity);
-            // 计算弹跳次数，根据图表行宽度、时间增量和弹跳持续时间计算得出
+            # 计算弹跳次数
             var bounceCount = (int)(Graph.Row.Width * timeIncrement / bounce.Duration);
-            // 创建一个图表对象，传入最大高度和时间增量参数
+            # 创建一个新的 Graph 对象，传入最大高度和时间增量参数
             var graph = new Graph(bounce.MaxHeight, timeIncrement);
 
-            // 初始化时间为0
+            # 初始化时间为 0
             var time = 0f;
-            // 循环进行弹跳次数次的弹跳操作
+            # 循环执行弹跳次数次以下代码块
             for (var i = 0; i < bounceCount; i++, bounce = bounce.Next(elasticity))
             {
-                // 在图表上绘制弹跳轨迹，并更新时间
+                # 调用 bounce 对象的 Plot 方法，传入 graph 和时间参数，并更新时间
                 time = bounce.Plot(graph, time);
             }
 
-            // 将图表输出到输入输出对象
+            # 使用 _io 输出 graph
             _io.WriteLine(graph);
         }
     }
 }
+
 ```

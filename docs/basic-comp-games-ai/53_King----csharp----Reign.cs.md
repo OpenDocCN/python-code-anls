@@ -1,65 +1,51 @@
-# `53_King\csharp\Reign.cs`
+# `basic-computer-games\53_King\csharp\Reign.cs`
 
 ```
-    _country = country;
-    _yearNumber = year;
-}
 
-public void StartReign()
+namespace King; // 命名空间声明，定义了代码所属的命名空间
+
+internal class Reign // 定义了一个内部类 Reign
 {
-    // 检查是否已经达到最大任期
-    if (_yearNumber >= MaxTerm)
+    public const int MaxTerm = 8; // 定义了一个常量 MaxTerm，表示最大任期为8
+
+    private readonly IReadWrite _io; // 声明了一个私有只读字段 _io，类型为 IReadWrite
+    private readonly IRandom _random; // 声明了一个私有只读字段 _random，类型为 IRandom
+    private readonly Country _country; // 声明了一个私有只读字段 _country，类型为 Country
+    private float _yearNumber; // 声明了一个私有字段 _yearNumber，类型为 float
+
+    public Reign(IReadWrite io, IRandom random) // 定义了一个构造函数，接受 IReadWrite 和 IRandom 类型的参数
+        : this(io, random, new Country(io, random), 1) // 调用另一个构造函数，并传入默认参数
     {
-        _io.WriteLine("The reign has reached its maximum term.");
-        return;
     }
 
-    // 开始统治
-    _io.WriteLine("The reign has begun.");
-
-    // 进行统治的相关操作，这里省略具体代码
-
-    // 增加统治年限
-    _yearNumber += 1;
-}
-
-public void EndReign()
-{
-    // 结束统治
-    _io.WriteLine("The reign has ended.");
-
-    // 进行统治结束的相关操作，这里省略具体代码
-}
-
-public float GetYearNumber()
-{
-    return _yearNumber;
-}
-```
-
-希望以上注释对你有所帮助。
-        _country = country;  # 将传入的国家赋值给私有变量_country
-        _yearNumber = year;  # 将传入的年份赋值给私有变量_yearNumber
+    public Reign(IReadWrite io, IRandom random, Country country, float year) // 定义了一个构造函数，接受 IReadWrite、IRandom、Country 和 float 类型的参数
+    {
+        _io = io; // 将参数 io 赋值给私有字段 _io
+        _random = random; // 将参数 random 赋值给私有字段 _random
+        _country = country; // 将参数 country 赋值给私有字段 _country
+        _yearNumber = year; // 将参数 year 赋值给私有字段 _yearNumber
     }
 
-    public bool PlayYear()  # 定义一个公共方法PlayYear，返回布尔值
+    public bool PlayYear() // 定义了一个公共方法 PlayYear，返回布尔值
     {
-        var year = new Year(_country, _random, _io);  # 创建一个新的Year对象，传入_country、_random和_io参数
+        var year = new Year(_country, _random, _io); // 创建了一个 Year 对象，传入 _country、_random 和 _io 参数
 
-        _io.Write(year.Status);  # 使用_io对象的Write方法输出year对象的Status属性值
+        _io.Write(year.Status); // 调用 _io 的 Write 方法，传入 year.Status 参数
 
-        var result = year.GetPlayerActions() ?? year.EvaluateResults() ?? IsAtEndOfTerm();  # 使用年份对象的GetPlayerActions方法，如果返回值为空则使用EvaluateResults方法，如果还是为空则调用IsAtEndOfTerm方法，并将结果赋值给result
-        if (result.IsGameOver)  # 如果result的IsGameOver属性为true
+        var result = year.GetPlayerActions() ?? year.EvaluateResults() ?? IsAtEndOfTerm(); // 使用空合并运算符获取结果
+        if (result.IsGameOver) // 如果结果为游戏结束
         {
-            _io.WriteLine(result.Message);  # 使用_io对象的WriteLine方法输出result的Message属性值
-            return false;  # 返回false
+            _io.WriteLine(result.Message); // 调用 _io 的 WriteLine 方法，传入 result.Message 参数
+            return false; // 返回 false
         }
 
-        return true;  # 返回true
+        return true; // 返回 true
     }
-private Result IsAtEndOfTerm()  # 定义一个私有方法IsAtEndOfTerm，用于判断是否到达学期末尾
-    => _yearNumber == MaxTerm  # 使用箭头函数判断当前年数是否等于最大学期数
-        ? Result.GameOver(EndCongratulations(MaxTerm))  # 如果是最后一个学期，则返回游戏结束的结果，并传入最大学期数作为参数
-        : Result.Continue;  # 如果不是最后一个学期，则返回继续游戏的结果
+
+    private Result IsAtEndOfTerm()  // 定义了一个私有方法 IsAtEndOfTerm，返回 Result 类型
+        => _yearNumber == MaxTerm  // 如果 _yearNumber 等于 MaxTerm
+            ? Result.GameOver(EndCongratulations(MaxTerm))  // 返回游戏结束的结果，调用 EndCongratulations 方法
+            : Result.Continue; // 否则返回继续游戏的结果
 }
+
 ```

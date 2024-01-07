@@ -1,24 +1,23 @@
-# `84_Super_Star_Trek\csharp\Commands\CommandExtensions.cs`
+# `basic-computer-games\84_Super_Star_Trek\csharp\Commands\CommandExtensions.cs`
 
 ```
-# 使用 System.Reflection 和 System.ComponentModel 模块
-using System.Reflection;
-using System.ComponentModel;
 
-# 将命令扩展为静态类
+// 使用 System.Reflection 命名空间，获取程序集中的类型信息
+// 使用 System.ComponentModel 命名空间，获取描述特性
 namespace SuperStarTrek.Commands;
 
+// 创建一个静态类 CommandExtensions
 internal static class CommandExtensions
 {
-    # 将命令的描述作为扩展方法
+    // 创建一个静态方法，用于获取命令的描述信息
     internal static string GetDescription(this Command command) =>
-        # 获取 Command 类型的字段
+        // 获取 Command 类型的字段信息
         typeof(Command)
-            # 获取特定命令的字段
             .GetField(command.ToString())
-            # 获取字段的 DescriptionAttribute 自定义属性
+            // 获取字段上的 DescriptionAttribute 特性
             .GetCustomAttribute<DescriptionAttribute>()
-            # 返回 DescriptionAttribute 的描述
+            // 获取 DescriptionAttribute 特性的描述信息
             .Description;
 }
+
 ```

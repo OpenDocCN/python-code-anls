@@ -1,39 +1,36 @@
-# `00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.cpp`
+# `basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.cpp`
 
 ```
-#include <iostream>
-#include <time.h>
-#include "Aceyducey.h"  # 包含自定义的头文件 "Aceyducey.h"
+
+#include <iostream> // 包含输入输出流库
+#include <time.h> // 包含时间库
+#include "Aceyducey.h" // 包含自定义的Aceyducey头文件
 
 int main()
 {
-    //Setting Seed for the Random Generator  # 设置随机数生成器的种子
-    srand((unsigned int)time(NULL));  # 使用当前时间作为种子初始化随机数生成器
-    bool isPlaying(true);  # 初始化变量 isPlaying 为 true
-    Money = 100;  # 初始化 Money 变量为 100
-    WelcomeMessage();  # 调用自定义函数 WelcomeMessage()
-    while (isPlaying)  # 进入循环，条件为 isPlaying 为 true
+    // 设置随机数生成器的种子
+    srand((unsigned int)time(NULL));
+    bool isPlaying(true); // 初始化游戏状态为正在进行
+    Money = 100; // 初始化玩家的初始资金为100
+    WelcomeMessage(); // 调用欢迎消息函数
+    while (isPlaying) // 当游戏正在进行时
     {
-        Play(isPlaying);  # 调用自定义函数 Play()，并传入 isPlaying 变量
+        Play(isPlaying); // 调用游戏进行函数
     }
-    printf("O.K., HOPE YOU HAD FUN!\n");  # 打印消息 "O.K., HOPE YOU HAD FUN!"
+    printf("O.K., HOPE YOU HAD FUN!\n"); // 打印游戏结束消息
 }
 
-void WelcomeMessage()  # 定义自定义函数 WelcomeMessage()
+void WelcomeMessage()
 {
-    // 打印空格
     for (int i = 0; i < 25; i++)
     {
-        printf(" ");
+        printf(" "); // 打印空格
     }
-    // 打印游戏标题
-    printf("ACEY DUCEY CARD GAME\n");
-    // 打印空格
+    printf("ACEY DUCEY CARD GAME\n"); // 打印游戏标题
     for (int i = 0; i < 14; i++)
     {
-        printf(" ");
+        printf(" "); // 打印空格
     }
-    // 打印游戏信息
     printf("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\nACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER \n");
     printf("THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP\nYOU HAVE AN OPTION TO BET OR NOT BET DEPENDING\n");
     printf("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE\nA VALUE BETWEEN THE FIRST TWO.\n");
@@ -42,96 +39,90 @@ void WelcomeMessage()  # 定义自定义函数 WelcomeMessage()
 
 void Play(bool& isPlaying)
 {
-    // 创建一个包含两个元素的整型数组，用于存储庄家的两张牌
-    short int DealerCards[2];
-    // 玩家的赌注
-    int Bet;
-    // 声明一个短整型变量 CurrentCard
-    short int CurrentCard;
-    // 打印玩家当前的金额
-    printf("YOU NOW HAVE %d DOLLARS.\n\n", Money);
-    // 打印玩家接下来的两张牌
+    short int DealerCards[2]; // 创建两张庄家的牌
+    int Bet; // 玩家的赌注
+    short int CurrentCard; // 玩家当前的牌
+    printf("YOU NOW HAVE %d DOLLARS.\n\n", Money); // 打印玩家当前的资金
     printf("HERE ARE YOUR NEXT TWO CARDS: \n");
 
-    // 绘制庄家的牌
-    DrawCard(DealerCards[0]);
+    //Draw Dealers Cards
+    DrawCard(DealerCards[0]); // 绘制庄家的第一张牌
     printf("\n");
-    DrawCard(DealerCards[1]);
+    DrawCard(DealerCards[1]); // 绘制庄家的第二张牌
     printf("\n\n\n");
 
-    // 检查下注是否有效
+    //Check if Bet is Valid
     do {
-        // 提示玩家输入下注金额
-        printf("WHAT IS YOUR BET: ");
-        std::cin >> Bet;
-        // 如果下注金额为0，则打印"CHICKEN!!"
+        printf("WHAT IS YOUR BET: "); // 提示玩家输入赌注
+        std::cin >> Bet; // 读取玩家输入的赌注
         if (Bet == 0)
         {
-            printf("CHICKEN!!\n\n");
+            printf("CHICKEN!!\n\n"); // 如果玩家输入0，则打印提示信息
         }
-    } while (Bet > Money || Bet < 0);  // 当下注金额大于玩家金额或者小于0时，继续循环
-    // 绘制玩家的卡片
-    DrawCard(CurrentCard);
+    } while (Bet > Money || Bet < 0); // 当赌注大于玩家资金或小于0时，继续循环
+
+    //Draw Players Card
+    DrawCard(CurrentCard); // 绘制玩家的牌
     printf("\n");
-    // 如果当前卡片大于庄家的第一张卡片并且小于庄家的第二张卡片
-    if (CurrentCard > DealerCards[0] && CurrentCard < DealerCards[1])
+    if (CurrentCard > DealerCards[0] && CurrentCard < DealerCards[1]) // 如果玩家的牌在庄家的两张牌之间
     {
-        printf("YOU WIN!!!\n");
-        Money += Bet;
+        printf("YOU WIN!!!\n"); // 打印玩家获胜消息
+        Money += Bet; // 玩家赢得赌注
         return;
     }
     else
     {
-        printf("SORRY, YOU LOSE\n");
-        Money -= Bet;
+        printf("SORRY, YOU LOSE\n"); // 打印玩家失败消息
+        Money -= Bet; // 玩家失去赌注
     }
-    // 如果游戏结束
-    if (isGameOver())
+    if (isGameOver()) // 如果游戏结束
     {
-        printf("TRY AGAIN (YES OR NO)\n\n");
-        std::string response;
-        std::cin >> response;
-        // 如果回答不是"YES"
+        printf("TRY AGAIN (YES OR NO)\n\n"); // 提示玩家是否再玩一次
+        std::string response; // 创建字符串变量用于存储玩家的回答
+        std::cin >> response; // 读取玩家的回答
+        if (response != "YES") // 如果玩家回答不是YES
         {
-            isPlaying = false;  # 将变量 isPlaying 设置为 false，表示游戏结束
+            isPlaying = false; // 设置游戏状态为结束
         }
-        Money = 100;  # 初始化变量 Money 为 100
+        Money = 100; // 重置玩家的资金为100
     }
 }
 
-bool isGameOver()  # 定义函数 isGameOver，用于判断游戏是否结束
+bool isGameOver()
 {
-    if (Money <= 0)  # 如果 Money 小于等于 0
+    if (Money <= 0) // 如果玩家的资金小于等于0
     {
-        printf("\n\n");  # 输出两个换行符
-        printf("SORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n\n");  # 输出提示信息
-        return true;  # 返回 true，表示游戏结束
+        printf("\n\n");
+        printf("SORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n\n"); // 打印玩家破产消息
+        return true; // 返回游戏结束
     }
-    return false;  # 返回 false，表示游戏未结束
+    return false; // 返回游戏未结束
 }
 
-void DrawCard(short int& Card)  # 定义函数 DrawCard，用于抽取一张卡片
-    # 生成两个随机数，第一个在2-11之间，第二个在0-3之间
-    RandomNum1 = (rand() % 10) + 2
-    RandomNum2 = rand() % 4
-    Card = RandomNum1 + RandomNum2
+void DrawCard(short int& Card)
+{
+    //Basically generate 2 numbers first one is between 2-11 and second one 0-3
+    short int RandomNum1 = (rand() % 10) + 2; // 生成2-11之间的随机数
+    short int RandomNum2 = rand() % 4; // 生成0-3之间的随机数
+    Card = RandomNum1 + RandomNum2; // 计算牌的点数
 
-    # 根据生成的随机数判断卡片的类型并打印出来
-    switch (Card):
-        case 11:
-            printf("JACK")
-            break
-        case 12:
-            printf("QUEEN")
-            break
-        case 13:
-            printf("KING")
-            break
-        case 14:
-            printf("ACE")
-            break
-        default:
-        printf("%d", Card);  # 打印变量 Card 的值
-    }  # 结束内层循环
-}  # 结束外层循环
+    switch (Card)
+    {
+    case 11:
+        printf("JACK"); // 如果牌点数为11，打印JACK
+        break;
+    case 12:
+        printf("QUEEN"); // 如果牌点数为12，打印QUEEN
+        break;
+    case 13:
+        printf("KING"); // 如果牌点数为13，打印KING
+        break;
+    case 14:
+        printf("ACE"); // 如果牌点数为14，打印ACE
+        break;
+    default:
+        printf("%d", Card); // 否则打印牌的点数
+    }
+}
+
 ```

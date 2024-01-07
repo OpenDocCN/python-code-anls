@@ -1,12 +1,38 @@
-# `51_Hurkle\csharp\Program.cs`
+# `basic-computer-games\51_Hurkle\csharp\Program.cs`
 
 ```
-            // 设置变量 N 的值为 5
-            int N = 5;
-            // 设置变量 G 的值为 10
-            int G = 10;
-            var N=5; // 定义变量N为5，表示玩家有5次尝试的机会
-            var G=10; // 定义变量G为10，表示游戏的网格大小为10*10
+
+// 引入 System 命名空间
+using System;
+
+// 定义 hurkle 命名空间
+namespace hurkle
+{
+    // 定义 Program 类
+    class Program
+    {
+        // 程序入口
+        static void Main(string[] args)
+        {
+            /*
+            Original source transscription
+            10 PRINT TAB(33);"HURKLE"
+            20 PRINT TAB(15);"CREATIVE COMPUTING NORRISTOWN, NEW JERSEY"
+            30 PRINT;PRINT;PRINT
+            */
+            // 输出字符串 "HURKLE"，使用空格填充到指定长度
+            Console.WriteLine(new string(' ', 33) + @"HURKLE");
+            // 输出字符串 "CREATIVE COMPUTING NORRISTOWN, NEW JERSEY"，使用空格填充到指定长度
+            Console.WriteLine(new string(' ', 15) + @"CREATIVE COMPUTING NORRISTOWN, NEW JERSEY");
+            
+            /*
+            110 N=5
+            120 G=10
+            */
+            // 定义变量 N 和 G，并赋值
+            var N=5;
+            var G=10;
+            
             /*
             210 PRINT
             220 PRINT "A HURKLE IS HIDING ON A";G;"BY";G;"GRID. HOMEBASE"
@@ -17,29 +43,41 @@
             270 PRINT "DIRECTION TO GO TO LOOK FOR THE HURKLE."
             280 PRINT
             */
-            // 使用字符串格式化通过'$'字符串
-            Console.WriteLine(); // 输出空行
-            Console.WriteLine($"A HURKLE IS HIDING ON A {G} BY {G} GRID. HOMEBASE"); // 输出游戏提示信息，包括网格大小
-            Console.WriteLine(@"ON THE GRID IS POINT 0,0 AND ANY GRIDPOINT IS A"); // 输出游戏提示信息
-            Console.WriteLine(@"PAIR OF WHOLE NUMBERS SEPERATED BY A COMMA. TRY TO"); // 输出游戏提示信息
-            Console.WriteLine($"GUESS THE HURKLE'S GRIDPOINT. YOU GET {N} TRIES."); // 输出游戏提示信息，包括玩家的尝试次数
-            Console.WriteLine(@"AFTER EACH TRY, I WILL TELL YOU THE APPROXIMATE"); // 输出游戏提示信息
-            Console.WriteLine(@"DIRECTION TO GO TO LOOK FOR THE HURKLE."); // 输出游戏提示信息
-            Console.WriteLine();  # 输出空行
+            // 输出多行字符串
+            Console.WriteLine();
+            Console.WriteLine($"A HURKLE IS HIDING ON A {G} BY {G} GRID. HOMEBASE");
+            Console.WriteLine(@"ON THE GRID IS POINT 0,0 AND ANY GRIDPOINT IS A");
+            Console.WriteLine(@"PAIR OF WHOLE NUMBERS SEPERATED BY A COMMA. TRY TO");
+            Console.WriteLine($"GUESS THE HURKLE'S GRIDPOINT. YOU GET {N} TRIES.");
+            Console.WriteLine(@"AFTER EACH TRY, I WILL TELL YOU THE APPROXIMATE");
+            Console.WriteLine(@"DIRECTION TO GO TO LOOK FOR THE HURKLE.");
+            Console.WriteLine();
 
-            var view = new ConsoleHurkleView();  # 创建一个控制台视图对象
-            var hurkle = new HurkleGame(N,G, view);  # 创建一个 Hurkle 游戏对象，传入参数 N、G 和视图对象
-            while(true):  # 进入无限循环
-                hurkle.PlayGame();  # 调用 Hurkle 游戏对象的 PlayGame 方法
+            // 创建 ConsoleHurkleView 和 HurkleGame 对象
+            var view = new ConsoleHurkleView();
+            var hurkle = new HurkleGame(N,G, view);
+            
+            // 游戏循环
+            while(true)
+            {
+                hurkle.PlayGame();
 
-                Console.WriteLine("PLAY AGAIN? (Y)ES/(N)O");  # 输出提示信息
-                var playAgainResponse = Console.ReadLine();  # 读取用户输入的响应
-                if(playAgainResponse.Trim().StartsWith("y", StringComparison.InvariantCultureIgnoreCase)):  # 如果用户输入以 "y" 开头（不区分大小写）
-                    Console.WriteLine();  # 输出空行
-                    Console.WriteLine("LET'S PLAY AGAIN. HURKLE IS HIDING");  # 输出提示信息
-                    Console.WriteLine();  # 输出空行
-                else:  # 如果用户输入不以 "y" 开头
-                    Console.WriteLine("THANKS FOR PLAYING!");  # 输出感谢信息
-                    break  # 退出循环
-抱歉，给定的代码片段不完整，无法为每个语句添加注释。如果您有完整的代码片段需要解释，请提供完整的代码片段。谢谢！
+                // 提示用户是否再玩一次
+                Console.WriteLine("PLAY AGAIN? (Y)ES/(N)O");
+                var playAgainResponse = Console.ReadLine();
+                if(playAgainResponse.Trim().StartsWith("y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("LET'S PLAY AGAIN. HURKLE IS HIDING");
+                    Console.WriteLine();
+                }else{
+                    Console.WriteLine("THANKS FOR PLAYING!");
+                    break;
+                }
+
+            }
+        }
+    }
+}
+
 ```

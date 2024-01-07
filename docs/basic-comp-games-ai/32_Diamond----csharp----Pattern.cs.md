@@ -1,62 +1,85 @@
-# `32_Diamond\csharp\Pattern.cs`
+# `basic-computer-games\32_Diamond\csharp\Pattern.cs`
 
 ```
-using System.Text;  # 导入 System.Text 模块，用于处理文本数据
-using static Diamond.Resources.Resource;  # 导入 Diamond.Resources.Resource 模块的所有内容
 
-namespace Diamond;  # 定义 Diamond 命名空间
+// 使用 System.Text 命名空间
+// 使用 Diamond.Resources.Resource 中的静态资源
+namespace Diamond;
 
-internal class Pattern  # 定义内部类 Pattern
+// Pattern 类
+internal class Pattern
 {
-    private readonly IReadWrite _io;  # 声明私有成员变量 _io，类型为 IReadWrite 接口
+    // 只读字段 _io，类型为 IReadWrite 接口
+    private readonly IReadWrite _io;
 
-    public Pattern(IReadWrite io)  # 定义构造函数，参数为 io
+    // Pattern 类的构造函数，接受一个 IReadWrite 类型的参数 io
+    public Pattern(IReadWrite io)
     {
-        _io = io;  # 将参数 io 赋值给成员变量 _io
-        io.Write(Streams.Introduction);  # 调用 io 对象的 Write 方法，将 Streams.Introduction 写入
+        // 将参数 io 赋值给字段 _io
+        _io = io;
+        // 调用 io 的 Write 方法，传入 Streams.Introduction 参数
+        io.Write(Streams.Introduction);
     }
 
-    public void Draw()  # 定义 Draw 方法
+    // Draw 方法
+    public void Draw()
     {
-        var diamondSize = _io.ReadNumber(Prompts.TypeNumber);  # 调用 _io 对象的 ReadNumber 方法，将结果赋值给 diamondSize
-        _io.WriteLine();  # 调用 _io 对象的 WriteLine 方法
-```
-```python
-        var diamondCount = (int)(60 / diamondSize);  # 计算钻石的数量，根据给定的钻石大小
+        // 从 io 中读取一个数字，提示为 Prompts.TypeNumber
+        var diamondSize = _io.ReadNumber(Prompts.TypeNumber);
+        // 写入一个空行
+        _io.WriteLine();
 
-        var diamondLines = new List<string>(GetDiamondLines(diamondSize)).AsReadOnly();  # 获取钻石的线条，并将其转换为只读列表
+        // 计算 diamondCount，即 60 除以 diamondSize 的整数部分
+        var diamondCount = (int)(60 / diamondSize);
 
-        for (int patternRow = 0; patternRow < diamondCount; patternRow++)  # 遍历钻石的行数
+        // 创建一个只读的字符串列表 diamondLines，内容为 GetDiamondLines(diamondSize) 的结果
+        var diamondLines = new List<string>(GetDiamondLines(diamondSize)).AsReadOnly();
+
+        // 循环 diamondCount 次
+        for (int patternRow = 0; patternRow < diamondCount; patternRow++)
         {
-            for (int diamondRow = 0; diamondRow < diamondLines.Count; diamondRow++)  # 遍历每一行的钻石线条
+            // 循环 diamondLines 的长度次
+            for (int diamondRow = 0; diamondRow < diamondLines.Count; diamondRow++)
             {
-                var line = new StringBuilder();  # 创建一个新的字符串构建器
-                for (int patternColumn = 0; patternColumn < diamondCount; patternColumn++)  # 遍历钻石的列数
+                // 创建一个 StringBuilder 对象 line
+                var line = new StringBuilder();
+                // 循环 diamondCount 次
+                for (int patternColumn = 0; patternColumn < diamondCount; patternColumn++)
                 {
-                    line.PadToLength((int)(patternColumn * diamondSize)).Append(diamondLines[diamondRow]);  # 在行末尾添加钻石线条
+                    // 在 line 后面添加 (patternColumn * diamondSize) 个空格，再添加 diamondLines[diamondRow]
+                    line.PadToLength((int)(patternColumn * diamondSize)).Append(diamondLines[diamondRow]);
                 }
-                _io.WriteLine(line);  # 输出每一行的钻石图案
+                // 在 io 中写入 line
+                _io.WriteLine(line);
             }
         }
     }
 
-    public static IEnumerable<string> GetDiamondLines(float size)  # 定义一个方法，用于获取钻石的线条
-# 从1开始，每隔2个取一个数，调用GetLine函数并返回结果
-for (var i = 1; i <= size; i += 2)
-{
-    yield return GetLine(i);
+    // 静态方法 GetDiamondLines，返回一个字符串列表
+    public static IEnumerable<string> GetDiamondLines(float size)
+    {
+        // 循环，i 从 1 开始，每次增加 2，直到 i 大于等于 size
+        for (var i = 1; i <= size; i += 2)
+        {
+            // 返回 GetLine(i) 的结果
+            yield return GetLine(i);
+        }
+
+        // 循环，i 从 size - 2 开始，每次减少 2，直到 i 大于等于 1
+        for (var i = size - 2; i >= 1; i -= 2)
+        {
+            // 返回 GetLine(i) 的结果
+            yield return GetLine(i);
+        }
+
+        // 定义 GetLine 方法，接受一个 float 类型的参数 i
+        string GetLine(float i) =>
+            // 返回一个字符串，内容为 (size - i) / 2 个空格，Math.Min(i, 2) 个 'C'，Math.Max(0, i - 2) 个 '!'
+            string.Concat(
+                new string(' ', (int)(size - i) / 2),
+                new string('C', Math.Min((int)i, 2)),
+                new string('!', Math.Max(0, (int)i - 2)));
+    }
 }
 
-# 从size-2开始，每隔2个取一个数，调用GetLine函数并返回结果
-for (var i = size - 2; i >= 1; i -= 2)
-{
-    yield return GetLine(i);
-}
-
-# 定义GetLine函数，接受一个浮点数i作为参数，返回一个字符串
-string GetLine(float i) =>
-    string.Concat(
-        new string(' ', (int)(size - i) / 2),  # 创建由空格组成的字符串，长度为(size - i) / 2
-        new string('C', Math.Min((int)i, 2)),  # 创建由字符'C'组成的字符串，长度为i和2的最小值
-        new string('!', Math.Max(0, (int)i - 2)));  # 创建由字符'!'组成的字符串，长度为i-2和0的最大值
 ```

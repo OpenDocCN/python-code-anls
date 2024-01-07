@@ -1,74 +1,72 @@
-# `12_Bombs_Away\csharp\BombsAwayGame\Game.cs`
+# `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\Game.cs`
 
 ```
+
+// 命名空间声明，指定代码所属的命名空间
+namespace BombsAwayGame;
+
 /// <summary>
-/// Plays the Bombs Away game using a supplied <see cref="IUserInterface"/>.
+/// 使用提供的 <see cref="IUserInterface"/> 执行 Bombs Away 游戏。
 /// </summary>
+// 定义 Game 类
 public class Game
 {
-    private readonly IUserInterface _ui; // 声明私有变量 _ui，用于存储 IUserInterface 接口的实例
+    // 保存 IUserInterface 实例的私有字段
+    private readonly IUserInterface _ui;
 
     /// <summary>
-    /// Create game instance using the given UI.
+    /// 使用给定的 UI 创建游戏实例。
     /// </summary>
-    /// <param name="ui">UI to use for game.</param>
-    public Game(IUserInterface ui) // 构造函数，接受一个 IUserInterface 接口的实例作为参数
+    /// <param name="ui">用于游戏的 UI。</param>
+    // Game 类的构造函数
+    public Game(IUserInterface ui)
     {
-        _ui = ui; // 将传入的 IUserInterface 实例赋值给私有变量 _ui
+        _ui = ui;
     }
 
     /// <summary>
-    /// Play game. Choose a side and play the side's logic.
+    /// 进行游戏。选择一方并执行该方的逻辑。
     /// </summary>
+    // Play 方法
     public void Play()
     {
-        // 输出提示信息
         _ui.Output("YOU ARE A PILOT IN A WORLD WAR II BOMBER.");
-        // 选择阵营
         Side side = ChooseSide();
-        // 开始游戏
         side.Play();
     }
 
+    // 定义一个记录类型 SideDescriptor
     /// <summary>
-    /// Represents a <see cref="Side"/>.
+    /// 表示一个 <see cref="Side"/>。
     /// </summary>
-    /// <param name="Name">Name of side.</param>
-    /// <param name="CreateSide">Create instance of side that this descriptor represents.</param>
-    // 定义一个记录类型，表示阵营的描述符，包括名称和创建该阵营实例的函数
+    /// <param name="Name">方的名称。</param>
+    /// <param name="CreateSide">创建该描述符表示的方的实例。</param>
     private record class SideDescriptor(string Name, Func<Side> CreateSide);
 
     /// <summary>
-    /// Choose side and return a new instance of that side.
+    /// 选择一方并返回该方的新实例。
     /// </summary>
-    /// <returns>New instance of side that was chosen.</returns>
-    // 选择阵营并返回该阵营的新实例
+    /// <returns>选择的方的新实例。</returns>
+    // ChooseSide 方法
     private Side ChooseSide()
     {
-        // 获取所有边描述符
         SideDescriptor[] sides = AllSideDescriptors;
-        // 获取所有边的名称
         string[] sideNames = sides.Select(a => a.Name).ToArray();
-        // 通过用户界面选择边的索引
         int index = _ui.Choose("WHAT SIDE", sideNames);
-        // 根据选择的索引创建对应的边对象并返回
         return sides[index].CreateSide();
     }
 
     /// <summary>
-    /// All side descriptors.
+    /// 所有方的描述符。
     /// </summary>
-    // 获取所有边描述符的私有属性
+    // AllSideDescriptors 属性
     private SideDescriptor[] AllSideDescriptors => new SideDescriptor[]
     {
-        // 创建意大利边描述符
         new("ITALY", () => new ItalySide(_ui)),
-        // 创建盟军边描述符
         new("ALLIES", () => new AlliesSide(_ui)),
-        // 创建日本边描述符
         new("JAPAN", () => new JapanSide(_ui)),
-        // 创建德国边描述符
         new("GERMANY", () => new GermanySide(_ui)),
     };
 }
+
 ```

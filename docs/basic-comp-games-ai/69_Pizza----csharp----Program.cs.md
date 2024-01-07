@@ -1,6 +1,7 @@
-# `69_Pizza\csharp\Program.cs`
+# `basic-computer-games\69_Pizza\csharp\Program.cs`
 
 ```
+
 // 命名空间 Pizza
 namespace Pizza
 {
@@ -12,9 +13,10 @@ namespace Pizza
         {
             // 创建 PizzaGame 对象
             var pizzaGame = new PizzaGame();
-            // 调用 PizzaGame 对象的 Play 方法
+            // 调用 Play 方法开始游戏
             pizzaGame.Play();
         }
     }
 }
+
 ```

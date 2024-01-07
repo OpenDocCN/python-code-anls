@@ -1,11 +1,17 @@
-# `00_Common\dotnet\Games.Common\IO\Strings.cs`
+# `basic-computer-games\00_Common\dotnet\Games.Common\IO\Strings.cs`
 
 ```
-namespace Games.Common.IO;  # 命名空间声明，用于定义代码的作用域
 
-internal static class Strings  # 定义一个静态类 Strings
+# 命名空间声明，表示代码所属的命名空间
+namespace Games.Common.IO;
+
+# 内部静态类，用于存储常量字符串
+internal static class Strings
 {
-    internal const string NumberExpected = "!Number expected - retry input line";  # 定义一个常量字符串 NumberExpected，表示需要输入数字
-    internal const string ExtraInput = "!Extra input ignored";  # 定义一个常量字符串 ExtraInput，表示忽略额外的输入
+    # 内部常量字符串，表示期望输入数字但未输入数字时的提示信息
+    internal const string NumberExpected = "!Number expected - retry input line";
+    # 内部常量字符串，表示忽略额外输入时的提示信息
+    internal const string ExtraInput = "!Extra input ignored";
 }
+
 ```

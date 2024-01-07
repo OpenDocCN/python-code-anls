@@ -1,95 +1,72 @@
-# `77_Salvo\csharp\Fleet.cs`
+# `basic-computer-games\77_Salvo\csharp\Fleet.cs`
 
 ```
-# 导入必要的模块
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 
-# 定义命名空间
-namespace Salvo;
+using System.Collections.Immutable; // 导入不可变集合的命名空间
+using System.Diagnostics.CodeAnalysis; // 导入排除分析的命名空间
 
-# 定义内部类 Fleet
-internal class Fleet
+namespace Salvo; // 命名空间声明
+
+internal class Fleet // 内部舰队类
 {
-    # 声明私有成员变量 _ships，用于存储船只对象
-    private readonly List<Ship> _ships;
+    private readonly List<Ship> _ships; // 私有的船只列表
 
-    # 定义构造函数，接受一个 IReadWrite 类型的参数 io
-    internal Fleet(IReadWrite io)
+    internal Fleet(IReadWrite io) // 内部舰队构造函数，接受 IReadWrite 接口类型的参数
     {
-        # 调用 io 对象的 WriteLine 方法，输出提示信息 "Coordinates"
-        io.WriteLine(Prompts.Coordinates);
-        # 初始化 _ships 列表，包含四艘船只对象：一艘战舰、一艘巡洋舰、两艘驱逐舰
-        _ships = new()
+        io.WriteLine(Prompts.Coordinates); // 使用 IReadWrite 接口的 WriteLine 方法输出坐标提示
+        _ships = new() // 初始化船只列表
         {
-            new Battleship(io),
-            new Cruiser(io),
-            new Destroyer("A", io),
-            new Destroyer("B", io)
+            new Battleship(io), // 添加一个战舰对象到船只列表
+            new Cruiser(io), // 添加一个巡洋舰对象到船只列表
+            new Destroyer("A", io), // 添加一个以"A"命名的驱逐舰对象到船只列表
+            new Destroyer("B", io) // 添加一个以"B"命名的驱逐舰对象到船只列表
         };
     }
-```
-```python
-    # 创建一个内部的 Fleet 类，接受一个 IRandom 接口类型的参数 random
-    internal Fleet(IRandom random)
+
+    internal Fleet(IRandom random) // 内部舰队构造函数，接受 IRandom 接口类型的参数
     {
-        # 初始化一个空的船队列表
-        _ships = new();
-        # 无限循环，直到成功生成船队
-        while (true)
+        _ships = new(); // 初始化船只列表
+        while (true) // 无限循环
         {
-            # 向船队列表中添加一艘战舰
-            _ships.Add(new Battleship(random));
-            # 尝试放置巡洋舰和两艘驱逐舰，如果成功则返回
-            if (TryPositionShip(() => new Cruiser(random)) &&
-                TryPositionShip(() => new Destroyer("A", random)) &&
-                TryPositionShip(() => new Destroyer("B", random)))
+            _ships.Add(new Battleship(random)); // 向船只列表添加一个随机生成的战舰对象
+            if (TryPositionShip(() => new Cruiser(random)) && // 尝试定位巡洋舰
+                TryPositionShip(() => new Destroyer("A", random)) && // 尝试定位以"A"命名的驱逐舰
+                TryPositionShip(() => new Destroyer("B", random))) // 尝试定位以"B"命名的驱逐舰
             {
-                return;
+                return; // 如果成功定位所有船只，则结束循环
             } 
-            # 如果放置失败，则清空船队列表，重新尝试生成船队
-            _ships.Clear();
+            _ships.Clear(); // 清空船只列表
         }
 
-        # 尝试放置一艘船的方法，接受一个返回 Ship 类型对象的函数作为参数
-        bool TryPositionShip(Func<Ship> shipFactory)
+        bool TryPositionShip(Func<Ship> shipFactory) // 尝试定位船只的方法，接受一个返回 Ship 对象的委托
         {
-            # 初始化放置船的尝试次数
-            var shipGenerationAttempts = 0;
-            # 无限循环，直到成功放置船或者放置尝试次数超过限制
-            while (true)
+            var shipGenerationAttempts = 0; // 船只生成尝试次数
+            while (true) // 无限循环
             {
-                // 调用 shipFactory 创建一个新的船只对象
-                var ship = shipFactory.Invoke();
-                // 增加船只生成尝试次数
-                shipGenerationAttempts++;
-                // 如果船只生成尝试次数超过 25 次，则返回 false
-                if (shipGenerationAttempts > 25) { return false; }
-                // 如果船只与现有船只的最小距离大于等于 3.59，则将船只添加到船只列表中并返回 true
-                if (_ships.Min(ship.DistanceTo) >= 3.59)
+                var ship = shipFactory.Invoke(); // 通过委托生成船只对象
+                shipGenerationAttempts++; // 尝试次数加一
+                if (shipGenerationAttempts > 25) { return false; } // 如果尝试次数超过25次，则返回失败
+                if (_ships.Min(ship.DistanceTo) >= 3.59) // 如果船只与已有船只的最小距离大于等于3.59
                 {
-                    _ships.Add(ship);
-                    return true; 
+                    _ships.Add(ship); // 向船只列表添加船只
+                    return true; // 返回成功
                 }
             }
         }
     }
 
-    // 返回船只列表的可枚举集合
-    internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
+    internal IEnumerable<Ship> Ships => _ships.AsEnumerable(); // 返回船只列表的可枚举接口
 
-    // 接收射击位置的集合，并根据射击结果调用 reportHit 方法
-    internal void ReceiveShots(IEnumerable<Position> shots, Action<Ship> reportHit)
+    internal void ReceiveShots(IEnumerable<Position> shots, Action<Ship> reportHit) // 接收射击的方法，接受射击位置列表和报告击中的委托
     {
-        // 遍历射击位置集合
-        foreach (var position in shots)
+        foreach (var position in shots) // 遍历射击位置列表
         {
-            // 查找第一个被击中的船只，并调用 reportHit 方法
-            var ship = _ships.FirstOrDefault(s => s.IsHit(position));
-            if (ship == null) { continue; }  # 如果船为空，跳过当前循环，继续下一次循环
-            if (ship.IsDestroyed) { _ships.Remove(ship); }  # 如果船被摧毁，从船列表中移除该船
-            reportHit(ship);  # 报告船被击中
+            var ship = _ships.FirstOrDefault(s => s.IsHit(position)); // 查找被击中的船只
+            if (ship == null) { continue; } // 如果没有被击中的船只，则继续下一次循环
+            if (ship.IsDestroyed) { _ships.Remove(ship); } // 如果船只被摧毁，则从船只列表中移除
+            reportHit(ship); // 报告击中的船只
         }
     }
 }
+
 ```

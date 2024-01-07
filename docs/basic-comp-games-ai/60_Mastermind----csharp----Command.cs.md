@@ -1,34 +1,22 @@
-# `60_Mastermind\csharp\Command.cs`
+# `basic-computer-games\60_Mastermind\csharp\Command.cs`
 
 ```
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())
-    # 使用字节流里面内容创建 ZIP 对象
-    zip = zipfile.ZipFile(bio, 'r')
-    # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    fdict = {n:zip.read(n) for n in zip.namelist()}
-    # 关闭 ZIP 对象
-    zip.close()
-    # 返回结果字典
-    return fdict
-```
 
-需要注释的代码：
-
-```csharp
+// 命名空间 Game，用于组织和管理相关的类和枚举
 namespace Game
 {
     /// <summary>
-    /// Enumerates the different commands that the user can issue during
-    /// the game.
+    /// 枚举用户在游戏中可以发出的不同命令
     /// </summary>
     public enum Command
     {
-        MakeGuess,  // 用户可以发出的猜测命令
-        ShowBoard,  // 用户可以发出的显示游戏板命令
-        Quit        // 用户可以发出的退出游戏命令
+        // 猜测命令
+        MakeGuess,
+        // 显示游戏板命令
+        ShowBoard,
+        // 退出游戏命令
+        Quit
     }
 }
+
 ```

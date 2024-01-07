@@ -1,51 +1,81 @@
-# `62_Mugwump\csharp\Game.cs`
+# `basic-computer-games\62_Mugwump\csharp\Game.cs`
 
 ```
-        # 显示游戏介绍
-        DisplayIntro()
 
-        # 当playAgain函数存在且返回值为True时，继续游戏
+// 使用 System.Reflection 命名空间
+using System.Reflection;
+
+// 定义 Mugwump 命名空间
+namespace Mugwump;
+
+// 定义 Game 类
+internal class Game
+{
+    // 私有字段，用于输入输出
+    private readonly TextIO _io;
+    // 私有字段，用于生成随机数
+    private readonly IRandom _random;
+
+    // 构造函数，接受输入输出和随机数生成器
+    internal Game(TextIO io, IRandom random)
+    {
+        _io = io;
+        _random = random;
+    }
+
+    // 游戏主循环，接受一个可选的再玩一次的函数
+    internal void Play(Func<bool> playAgain = null)
+    {
+        // 显示游戏介绍
+        DisplayIntro();
+
+        // 当再玩一次的函数返回 true 时，继续游戏
         while (playAgain?.Invoke() ?? true)
         {
-            // 调用 Play 方法，传入一个 Grid 对象和一个 Random 对象
+            // 开始游戏
             Play(new Grid(_io, _random));
 
-            // 输出空行
+            // 输出提示信息
             _io.WriteLine();
-            // 输出提示信息
             _io.WriteLine("That was fun! Let's play again.......");
-            // 输出提示信息
             _io.WriteLine("Four more mugwumps are now in hiding.");
         }
     }
 
+    // 显示游戏介绍
     private void DisplayIntro()
     {
-        // 使用 Assembly.GetExecutingAssembly().GetManifestResourceStream 方法获取资源文件 "Mugwump.Strings.Intro.txt" 的流
+        // 使用 Assembly.GetExecutingAssembly() 获取当前程序集，然后获取资源文件流
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mugwump.Strings.Intro.txt");
 
-        // 将流内容输出到控制台
+        // 输出资源文件流内容
         _io.Write(stream);
     }
 
+    // 开始游戏
     private void Play(Grid grid)
     {
-        // 循环进行游戏，共进行 10 次
+        // 进行 10 轮游戏
         for (int turn = 1; turn <= 10; turn++)
         {
-            var guess = _io.ReadGuess($"Turn no. {turn} -- what is your guess");  // 从输入流中读取玩家的猜测，并将其存储在变量 guess 中
+            // 读取玩家猜测
+            var guess = _io.ReadGuess($"Turn no. {turn} -- what is your guess");
 
-            if (grid.Check(guess))  // 检查玩家的猜测是否正确
+            // 检查玩家猜测是否正确
+            if (grid.Check(guess))
             {
-                _io.WriteLine();  // 在输出流中打印空行
-                _io.WriteLine($"You got them all in {turn} turns!");  // 在输出流中打印玩家猜中所有位置所用的轮次
-                return;  // 结束当前函数的执行
+                // 输出猜中信息并结束游戏
+                _io.WriteLine();
+                _io.WriteLine($"You got them all in {turn} turns!");
+                return;
             }
         }
 
-        _io.WriteLine();  // 在输出流中打印空行
-        _io.WriteLine("Sorry, that's 10 tries.  Here is where they're hiding:");  // 在输出流中打印消息，表示玩家已经用完了10次猜测机会
-        grid.Reveal();  // 调用 grid 对象的 Reveal 方法，显示所有位置的真实值
+        // 输出未猜中信息并显示隐藏位置
+        _io.WriteLine();
+        _io.WriteLine("Sorry, that's 10 tries.  Here is where they're hiding:");
+        grid.Reveal();
     }
 }
+
 ```

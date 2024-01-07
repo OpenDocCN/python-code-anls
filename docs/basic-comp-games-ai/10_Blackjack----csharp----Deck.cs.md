@@ -1,59 +1,75 @@
-# `10_Blackjack\csharp\Deck.cs`
+# `basic-computer-games\10_Blackjack\csharp\Deck.cs`
 
 ```
-        # 创建一个新的牌堆对象
-        def __init__(self):
-            # 创建一个私有的静态只读的随机数生成器对象
-            self._random = Random()
-            # 创建一个包含52张卡牌的列表对象
-            self._cards = List[Card](52)
-            # 创建一个包含52张弃牌的列表对象
-            self._discards = List[Card](52)
 
-            # 循环12次，表示12种不同的牌面
-            for index in range(12):
-                # 循环4次，表示4种不同的花色
-                for suit in range(4):
-                    # 将新创建的卡牌对象添加到弃牌列表中
-                    self._discards.append(Card(index))
-            }
-            Reshuffle();  # 调用Reshuffle()方法，重新洗牌
-        }
+// 引入系统和集合类库
+using System;
+using System.Collections.Generic;
 
-        private void Reshuffle()  # 定义一个私有方法Reshuffle()，用于重新洗牌
+// 命名空间为Blackjack
+namespace Blackjack
+{
+    // 定义Deck类
+    public class Deck
+    {
+        // 创建一个静态只读的Random对象
+        private static readonly Random _random = new Random();
+
+        // 创建一个包含52张卡牌的列表和一个用于存放弃牌的列表
+        private readonly List<Card> _cards = new List<Card>(52);
+        private readonly List<Card> _discards = new List<Card>(52);
+
+        // 构造函数，初始化卡牌并洗牌
+        public Deck()
         {
-            Console.WriteLine("Reshuffling");  # 在控制台打印输出"Reshuffling"
-
-            _cards.AddRange(_discards);  # 将_discards列表中的牌添加到_cards列表中
-            _discards.Clear();  # 清空_discards列表
-
-            for (var index1 = _cards.Count - 1; index1 > 0; index1--)  # 从最后一张牌开始向前遍历_cards列表
+            for (var index = 0; index < 12; index++)
             {
-                var index2 = _random.Next(0, index1);  # 生成一个随机数index2，范围在0到index1之间
-                var swapCard = _cards[index1];  # 将_cards[index1]的值赋给swapCard
-                _cards[index1] = _cards[index2];  # 将_cards[index2]的值赋给_cards[index1]
-                _cards[index2] = swapCard;  # 将swapCard的值赋给_cards[index2]
+                for (var suit = 0; suit < 4; suit++)
+                {
+                    _discards.Add(new Card(index));
+                }
+            }
+            Reshuffle();
+        }
+
+        // 洗牌方法
+        private void Reshuffle()
+        {
+            Console.WriteLine("Reshuffling");
+
+            // 将弃牌列表中的卡牌加入到卡牌列表中，并清空弃牌列表
+            _cards.AddRange(_discards);
+            _discards.Clear();
+
+            // 遍历卡牌列表，随机交换卡牌的位置
+            for (var index1 = _cards.Count - 1; index1 > 0; index1--)
+            {
+                var index2 = _random.Next(0, index1);
+                var swapCard = _cards[index1];
+                _cards[index1] = _cards[index2];
+                _cards[index2] = swapCard;
             }
         }
+
+        // 抽牌方法
         public Card DrawCard()
         {
-            // 如果牌堆中的牌少于2张，则重新洗牌
+            // 如果卡牌列表中的卡牌数量小于2，则重新洗牌
             if (_cards.Count < 2)
                 Reshuffle();
 
-            // 从牌堆中取出最后一张牌
+            // 抽取最后一张卡牌并从列表中移除，然后返回该卡牌
             var card = _cards[_cards.Count - 1];
-            // 从牌堆中移除最后一张牌
             _cards.RemoveAt(_cards.Count - 1);
-            // 返回取出的牌
             return card;
         }
 
+        // 弃牌方法，将一组卡牌加入到弃牌列表中
         public void Discard(IEnumerable<Card> cards)
         {
-            // 将要弃掉的牌添加到弃牌堆中
             _discards.AddRange(cards);
         }
     }
 }
+
 ```

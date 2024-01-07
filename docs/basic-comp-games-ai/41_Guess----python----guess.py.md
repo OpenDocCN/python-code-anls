@@ -1,6 +1,7 @@
-# `41_Guess\python\guess.py`
+# `basic-computer-games\41_Guess\python\guess.py`
 
 ```
+
 """
 Guess
 
@@ -20,93 +21,86 @@ From: Basic Computer Games (1978)
   by Walt Koetke of Lexington High School, Lexington,
   Massaschusetts.
 """
-# 上面是一个多行注释，用三个双引号包裹起来，用于解释程序的功能和来源。
-# 导入 log 和 random 模块
-from math import log
-from random import random
-# 导入 Tuple 类型
-from typing import Tuple
 
-# 定义一个没有返回值的函数，用于在控制台输出多个空行
-def insert_whitespaces() -> None:
+# Altough the introduction says that the computer chooses
+# a number between 0 and any limit, it actually chooses
+# a number between 1 and any limit. This due to the fact that
+# for computing the number of digits the limit has in binary
+# representation, it has to use log.
+
+from math import log  # 导入log函数
+from random import random  # 导入random函数
+from typing import Tuple  # 导入Tuple类型
+
+
+def insert_whitespaces() -> None:  # 定义函数，打印空行
     print("\n\n\n\n\n")
 
-# 定义一个返回元组的函数，用于设置猜测数字的范围
-def limit_set() -> Tuple[int, int]:
-    print("                   Guess")
-    print("Creative Computing  Morristown, New Jersey")
-    print("\n\n\n")
-    print("This is a number guessing game. I'll think")
-    print("of a number between 1 and any limit you want.\n")  # 打印提示信息
-    print("Then you have to guess what it is\n")  # 打印提示信息
-    print("What limit do you want?")  # 打印提示信息
 
-    limit = int(input())  # 从用户输入中获取限制值并转换为整数
+def limit_set() -> Tuple[int, int]:  # 定义函数，设置限制
+    print("                   Guess")  # 打印标题
+    print("Creative Computing  Morristown, New Jersey")  # 打印作者信息
+    print("\n\n\n")  # 打印空行
+    print("This is a number guessing game. I'll think")  # 打印游戏介绍
+    print("of a number between 1 and any limit you want.\n")
+    print("Then you have to guess what it is\n")
+    print("What limit do you want?")
 
-    while limit <= 0:  # 当限制值小于等于0时
-        print("Please insert a number greater or equal to 1")  # 打印提示信息
-        limit = int(input())  # 重新从用户输入中获取限制值并转换为整数
+    limit = int(input())  # 获取用户输入的限制
+
+    while limit <= 0:  # 如果限制小于等于0
+        print("Please insert a number greater or equal to 1")  # 提示用户输入大于等于1的数字
+        limit = int(input())  # 获取用户输入的限制
 
     # limit_goal = Number of digits "limit" in binary has
-    limit_goal = int((log(limit) / log(2)) + 1)  # 计算限制值在二进制中的位数
+    limit_goal = int((log(limit) / log(2)) + 1)  # 计算限制在二进制表示中的位数
 
-    return limit, limit_goal  # 返回限制值和计算得到的位数
+    return limit, limit_goal  # 返回限制和限制在二进制表示中的位数
 
 
-def main() -> None:  # 主函数声明
-    limit, limit_goal = limit_set()  # 调用limit_set函数获取限制值和计算得到的位数
+def main() -> None:  # 定义主函数
+    limit, limit_goal = limit_set()  # 获取限制和限制在二进制表示中的位数
     while True:  # 无限循环
-        guess_count = 1  # 初始化猜测次数为1
-        still_guessing = True  # 初始化变量still_guessing为True，表示猜测游戏仍在进行中
-        won = False  # 初始化变量won为False，表示游戏尚未获胜
-        my_guess = int(limit * random() + 1)  # 生成一个1到limit之间的随机整数作为程序员所猜的数字
+        guess_count = 1  # 猜测次数初始化为1
+        still_guessing = True  # 是否继续猜测的标志初始化为True
+        won = False  # 是否猜中的标志初始化为False
+        my_guess = int(limit * random() + 1)  # 生成计算机的猜测数字
 
-        print(f"I'm thinking of a number between 1 and {limit}")  # 打印程序员所思考的数字范围
-        print("Now you try to guess what it is.")  # 提示玩家开始猜数字
+        print(f"I'm thinking of a number between 1 and {limit}")  # 打印计算机思考的范围
+        print("Now you try to guess what it is.")  # 提示用户猜测数字
 
-        while still_guessing:  # 进入循环，直到猜测游戏结束
-            n = int(input())  # 从用户输入中获取一个整数作为猜测的数字
+        while still_guessing:  # 循环直到不再猜测
+            n = int(input())  # 获取用户输入的猜测数字
 
-            if n < 0:  # 如果用户输入的数字小于0
+            if n < 0:  # 如果猜测数字小于0
                 break  # 退出循环
 
-            insert_whitespaces()  # 调用insert_whitespaces函数，可能是用于插入空白字符
-            if n < my_guess:  # 如果用户猜测的数字小于程序员所猜的数字
-                print("Too low. Try a bigger answer")  # 提示用户猜测的数字太小
+            insert_whitespaces()  # 调用打印空行的函数
+            if n < my_guess:  # 如果猜测数字小于计算机的猜测数字
+                print("Too low. Try a bigger answer")  # 提示猜测数字过小
                 guess_count += 1  # 猜测次数加1
-            elif n > my_guess:  # 如果用户猜测的数字大于程序员所猜的数字
-                print("Too high. Try a smaller answer")  # 提示用户猜测的数字太大
+            elif n > my_guess:  # 如果猜测数字大于计算机的猜测数字
+                print("Too high. Try a smaller answer")  # 提示猜测数字过大
                 guess_count += 1  # 猜测次数加1
-            else:
-                # 打印猜对的次数，并结束猜词游戏
-                print(f"That's it! You got it in {guess_count} tries")
-                won = True
-                still_guessing = False
+            else:  # 如果猜测数字等于计算机的猜测数字
+                print(f"That's it! You got it in {guess_count} tries")  # 提示猜中了，并显示猜测次数
+                won = True  # 设置猜中标志为True
+                still_guessing = False  # 设置继续猜测的标志为False
 
-        if won:
-            # 如果猜对了
-            if guess_count < limit_goal:
-                # 如果猜对的次数小于目标次数，打印"Very good."
-                print("Very good.")
-            elif guess_count == limit_goal:
-                # 如果猜对的次数等于目标次数，打印"Good."
-                print("Good.")
-            else:
-                # 如果猜对的次数大于目标次数，打印应该只需要多少次猜对
-                print(f"You should have been able to get it in only {limit_goal}")
-            # 插入空行
-            insert_whitespaces()
-        else:
-            # 如果没有猜对，插入空行并设置新的猜词游戏限制
-            insert_whitespaces()
-            limit, limit_goal = limit_set()
+        if won:  # 如果猜中了
+            if guess_count < limit_goal:  # 如果猜测次数小于限制在二进制表示中的位数
+                print("Very good.")  # 提示猜测次数很好
+            elif guess_count == limit_goal:  # 如果猜测次数等于限制在二进制表示中的位数
+                print("Good.")  # 提示猜测次数还行
+            else:  # 如果猜测次数大于限制在二进制表示中的位数
+                print(f"You should have been able to get it in only {limit_goal}")  # 提示应该能在指定次数内猜中
+            insert_whitespaces()  # 调用打印空行的函数
+        else:  # 如果没有猜中
+            insert_whitespaces()  # 调用打印空行的函数
+            limit, limit_goal = limit_set()  # 重新设置限制和限制在二进制表示中的位数
 
 
-if __name__ == "__main__":
-    # 调用主函数
-    main()
-bio = BytesIO(open(fname, 'rb').read())  # 根据 ZIP 文件名读取其二进制，封装成字节流
-zip = zipfile.ZipFile(bio, 'r')  # 使用字节流里面内容创建 ZIP 对象
-fdict = {n:zip.read(n) for n in zip.namelist()}  # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-zip.close()  # 关闭 ZIP 对象
+if __name__ == "__main__":  # 如果是主程序入口
+    main()  # 调用主函数
+
 ```

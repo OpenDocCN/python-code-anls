@@ -1,12 +1,16 @@
-# `38_Fur_Trader\java\src\FurTraderGame.java`
+# `basic-computer-games\38_Fur_Trader\java\src\FurTraderGame.java`
 
 ```
-# 根据 ZIP 文件名读取内容，返回其中文件名到数据的字典
-def read_zip(fname):
-    # 根据 ZIP 文件名读取其二进制，封装成字节流
-    bio = BytesIO(open(fname, 'rb').read())  # 从文件名读取二进制内容，并封装成字节流
-    zip = zipfile.ZipFile(bio, 'r')  # 使用字节流里面内容创建 ZIP 对象
-    fdict = {n:zip.read(n) for n in zip.namelist()}  # 遍历 ZIP 对象所包含文件的文件名，读取文件数据，组成文件名到数据的字典
-    zip.close()  # 关闭 ZIP 对象
-    return fdict  # 返回结果字典
+
+# 定义名为FurTraderGame的公共类
+public class FurTraderGame {
+    # 定义名为main的公共静态方法，参数为字符串数组args
+    public static void main(String[] args) {
+        # 创建FurTrader对象
+        FurTrader furTrader = new FurTrader();
+        # 调用FurTrader对象的play方法
+        furTrader.play();
+    }
+}
+
 ```

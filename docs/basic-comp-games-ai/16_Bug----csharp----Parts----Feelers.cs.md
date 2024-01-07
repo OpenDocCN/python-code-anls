@@ -1,18 +1,26 @@
-# `16_Bug\csharp\Parts\Feelers.cs`
+# `basic-computer-games\16_Bug\csharp\Parts\Feelers.cs`
 
 ```
-using System.Text;  // 导入 System.Text 命名空间，用于使用 StringBuilder 类
-using BugGame.Resources;  // 导入 BugGame.Resources 命名空间，用于使用 Message 类
 
-namespace BugGame.Parts;  // 声明 BugGame.Parts 命名空间
+// 使用 System.Text 命名空间中的类
+using System.Text;
+// 使用 BugGame.Resources 命名空间中的资源
+using BugGame.Resources;
 
-internal class Feelers : PartCollection  // 声明 Feelers 类，继承自 PartCollection 类
+// 声明 Feelers 类，继承自 PartCollection 类
+namespace BugGame.Parts
 {
-    public Feelers()  // 声明 Feelers 类的构造函数
-        : base(2, Message.FeelerAdded, Message.FeelersFull)  // 调用基类 PartCollection 的构造函数，传入参数 2, Message.FeelerAdded, Message.FeelersFull
+    internal class Feelers : PartCollection
     {
-    }
+        // Feelers 类的构造函数，调用基类的构造函数，传入参数 2, Message.FeelerAdded, Message.FeelersFull
+        public Feelers()
+            : base(2, Message.FeelerAdded, Message.FeelersFull)
+        {
+        }
 
-    public void AppendTo(StringBuilder builder, char character) => AppendTo(builder, 10, 4, character);  // 声明 AppendTo 方法，接受 StringBuilder 和 char 类型的参数，并调用另一个重载的 AppendTo 方法
+        // 定义 AppendTo 方法，将字符追加到 StringBuilder 对象中
+        public void AppendTo(StringBuilder builder, char character) => AppendTo(builder, 10, 4, character);
+    }
 }
+
 ```

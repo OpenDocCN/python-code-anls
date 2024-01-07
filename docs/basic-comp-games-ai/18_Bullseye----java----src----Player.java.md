@@ -1,35 +1,38 @@
-# `18_Bullseye\java\src\Player.java`
+# `basic-computer-games\18_Bullseye\java\src\Player.java`
 
 ```
-    /**
-     * Constructor for Player class, initializes the name and score of the player
-     * @param name - the name of the player
-     */
+
+/**
+ * 玩家类，包含玩家姓名和分数
+ */
+public class Player {
+
+    // 玩家姓名，一旦赋值后不可更改
+    private final String name;
+
+    // 玩家分数
+    private int score;
+
+    // 构造函数，初始化玩家姓名和分数
     Player(String name) {
-        this.name = name; // Assign the input name to the player's name
-        this.score = 0; // Initialize the player's score to 0
+        this.name = name;
+        this.score = 0;
     }
 
-    /**
-     * Method to add the input score to the player's current score
-     * @param score - the score to be added
-     */
+    // 增加玩家分数
     public void addScore(int score) {
-        this.score += score; // Add the input score to the player's current score
+        this.score += score;
     }
 
-    /**
-     * Method to get the name of the player
-     * @return the name of the player
-     */
+    // 获取玩家姓名
     public String getName() {
-        return name; // Return the name of the player
-    }
-        return name;  # 返回name变量的值
+        return name;
     }
 
-    public int getScore() {  # 定义一个公共的整型方法getScore
-        return score;  # 返回score变量的值
+    // 获取玩家分数
+    public int getScore() {
+        return score;
     }
 }
+
 ```
