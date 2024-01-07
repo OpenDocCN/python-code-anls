@@ -1,6 +1,7 @@
-# `Code\Tile.py`
+# `.\Zelda-with-Python\Code\Tile.py`
 
 ```
+
 # 导入pygame模块
 import pygame
 # 从Settings模块中导入所有内容
@@ -32,4 +33,5 @@ class Tile(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft = pos)
         # 设置精灵的碰撞框
         self.hitbox = self.rect.inflate(0, y_offset)
+
 ```
