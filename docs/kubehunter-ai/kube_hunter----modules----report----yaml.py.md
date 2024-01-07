@@ -1,6 +1,7 @@
-# `kubehunter\kube_hunter\modules\report\yaml.py`
+# `.\kubehunter\kube_hunter\modules\report\yaml.py`
 
 ```
+
 # 从 io 模块中导入 StringIO 类
 from io import StringIO
 # 从 ruamel.yaml 模块中导入 YAML 类
@@ -22,4 +23,5 @@ class YAMLReporter(BaseReporter):
         yaml.dump(report, output)
         # 返回 output 中的内容
         return output.getvalue()
+
 ```

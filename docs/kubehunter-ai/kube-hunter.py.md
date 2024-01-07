@@ -1,5 +1,5 @@
-# `kubehunter\kube-hunter.py`
+# `.\kubehunter\kube-hunter.py`
 
 ```
-这是一个文件路径，指向kube_hunter工具的主要程序文件。
+这不是完整的代码，只是一个文件路径。如果你能提供完整的代码，我可以帮你添加注释。
 ```

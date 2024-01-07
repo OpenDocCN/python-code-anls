@@ -1,51 +1,55 @@
-# `kubehunter\kube_hunter\modules\report\factory.py`
+# `.\kubehunter\kube_hunter\modules\report\factory.py`
 
 ```
-# 导入所需的模块和类
+
+# 从 kube_hunter.modules.report.json 模块中导入 JSONReporter 类
 from kube_hunter.modules.report.json import JSONReporter
+# 从 kube_hunter.modules.report.yaml 模块中导入 YAMLReporter 类
 from kube_hunter.modules.report.yaml import YAMLReporter
+# 从 kube_hunter.modules.report.plain 模块中导入 PlainReporter 类
 from kube_hunter.modules.report.plain import PlainReporter
+# 从 kube_hunter.modules.report.dispatchers 模块中导入 STDOUTDispatcher 和 HTTPDispatcher 类
 from kube_hunter.modules.report.dispatchers import STDOUTDispatcher, HTTPDispatcher
 
-# 导入日志模块
+# 导入 logging 模块
 import logging
 
-# 获取当前模块的日志记录器
+# 获取当前模块的 logger
 logger = logging.getLogger(__name__)
 
-# 设置默认的报告格式为 plain
+# 设置默认的报告格式为 "plain"
 DEFAULT_REPORTER = "plain"
-# 创建报告格式和对应的报告类的映射关系
+# 创建报告格式到对应类的映射字典
 reporters = {
     "yaml": YAMLReporter,
     "json": JSONReporter,
     "plain": PlainReporter,
 }
 
-# 设置默认的报告分发方式为 stdout
+# 设置默认的分发器为 "stdout"
 DEFAULT_DISPATCHER = "stdout"
-# 创建报告分发方式和对应的分发类的映射关系
+# 创建分发器到对应类的映射字典
 dispatchers = {
     "stdout": STDOUTDispatcher,
     "http": HTTPDispatcher,
 }
-# 获取指定名称的报告生成器，如果不存在则返回默认报告生成器
+
+# 根据报告格式名称获取对应的报告类实例
 def get_reporter(name):
     try:
-        # 尝试从报告生成器字典中获取对应名称的生成器并返回
         return reporters[name.lower()]()
     except KeyError:
-        # 如果名称不存在，则记录警告并返回默认报告生成器
-        logger.warning(f'Unknown reporter "{name}", using f{DEFAULT_REPORTER}')
+        # 如果报告格式名称不存在，则记录警告并使用默认的报告格式
+        logger.warning(f'Unknown reporter "{name}", using {DEFAULT_REPORTER}')
         return reporters[DEFAULT_REPORTER]()
 
-# 获取指定名称的调度器，如果不存在则返回默认调度器
+# 根据分发器名称获取对应的分发器类实例
 def get_dispatcher(name):
     try:
-        # 尝试从调度器字典中获取对应名称的调度器并返回
         return dispatchers[name.lower()]()
     except KeyError:
-        # 如果名称不存在，则记录警告并返回默认调度器
+        # 如果分发器名称不存在，则记录警告并使用默认的分发器
         logger.warning(f'Unknown dispatcher "{name}", using {DEFAULT_DISPATCHER}')
         return dispatchers[DEFAULT_DISPATCHER]()
+
 ```

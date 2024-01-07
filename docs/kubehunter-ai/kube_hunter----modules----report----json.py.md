@@ -1,6 +1,7 @@
-# `kubehunter\kube_hunter\modules\report\json.py`
+# `.\kubehunter\kube_hunter\modules\report\json.py`
 
 ```
+
 # 导入json模块，用于处理JSON格式的数据
 import json
 # 导入BaseReporter类，用于创建JSONReporter类的子类
@@ -14,4 +15,5 @@ class JSONReporter(BaseReporter):
         report = super().get_report(**kwargs)
         # 将报告数据转换为JSON格式的字符串
         return json.dumps(report)
+
 ```
