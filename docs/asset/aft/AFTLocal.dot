@@ -7,7 +7,7 @@ digraph AFTLocal {
 		fillcolor="#30638e", 
 		fontname="SimHei",
 		fontsize=32,
-		width=3, height=1.5,
+		width=5, height=2,
 	]
 
     inp [label="输入\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
@@ -19,10 +19,10 @@ digraph AFTLocal {
     q [label="Q\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
     k [label="K\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
     v [label="V\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
-    σ [label="Sigmoid", shape="box"]
+    σ [label="Sigmoid", shape="box", width=3]
     atten_op [label="exp(W) @ (exp(K) * V)\n/ exp(W) * exp(K)", shape="box"]
     atten [label="[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
-    mul [label="*", shape="box"]
+    mul [label="*", shape="box", width=3]
     llo [label="LinearO\n[ProjSize, HidSize]", shape="box"]
     oup [label="输出\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
     

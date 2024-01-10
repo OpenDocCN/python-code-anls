@@ -7,7 +7,7 @@ digraph AFTSimple {
 		fillcolor="#30638e", 
 		fontname="SimHei",
 		fontsize=32,
-		width=3, height=1.5,
+		width=5, height=2,
 	]
 
     inp [label="输入\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
@@ -17,10 +17,10 @@ digraph AFTSimple {
     q [label="Q\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
     k [label="K\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
     v [label="V\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
-    σ [label="Sigmoid", shape="box"]
+    σ [label="Sigmoid", shape="box", width=3]
     atten_op [label="sum(softmax(K, 1) * V, 1)", shape="box"]
     atten [label="[BatchSize, 1, ProjSize]", shape="Mrecord"]
-    mul [label="*", shape="box"]
+    mul [label="*", shape="box", width=3]
     llo [label="LinearO\n[ProjSize, HidSize]", shape="box"]
     oup [label="输出\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
     
