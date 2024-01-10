@@ -1,8 +1,7 @@
 # `basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.h`
 
 ```
-
-// 使用 #pragma once 指令确保头文件只被编译一次
+// 防止头文件被重复包含
 #pragma once
 
 // 声明欢迎消息函数
@@ -11,9 +10,8 @@ void WelcomeMessage();
 void DrawCard(short int& Card);
 // 声明游戏进行函数，参数为引用类型的布尔变量
 void Play(bool& isPlaying);
-// 声明判断游戏是否结束的函数
+// 声明判断游戏是否结束的函数，返回布尔类型
 bool isGameOver();
-// 声明整型变量 Money，用于存储游戏中的金钱数额
+// 声明整型变量 Money
 int Money;
-
 ```

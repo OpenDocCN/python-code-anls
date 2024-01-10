@@ -1,121 +1,140 @@
 # `basic-computer-games\77_Salvo\csharp\TurnHandler.cs`
 
 ```
-
-// 使用 Salvo.Targetting 命名空间
-using Salvo.Targetting;
-
-// 声明 Salvo 命名空间
-namespace Salvo;
-
-// 定义 TurnHandler 类
-internal class TurnHandler
 {
-    // 声明私有字段
-    private readonly IReadWrite _io;
-    private readonly Fleet _humanFleet;
-    private readonly Fleet _computerFleet;
-    private readonly bool _humanStarts;
-    private readonly HumanShotSelector _humanShotSelector;
-    private readonly ComputerShotSelector _computerShotSelector;
-    private readonly Func<Winner?> _turnAction;
-    private int _turnNumber;
-
-    // TurnHandler 类的构造函数
-    public TurnHandler(IReadWrite io, IRandom random)
+    // 命名空间 Salvo 下的内部类 TurnHandler
+    internal class TurnHandler
     {
-        // 初始化私有字段
-        _io = io;
-        _computerFleet = new Fleet(random);
-        _humanFleet = new Fleet(io);
-        _turnAction = AskWhoStarts()
-            ? () => PlayHumanTurn() ?? PlayComputerTurn()
-            : () => PlayComputerTurn() ?? PlayHumanTurn();
-        _humanShotSelector = new HumanShotSelector(_humanFleet, io);
-        _computerShotSelector = new ComputerShotSelector(_computerFleet, random, io);
-    }
+        // 私有字段，用于读写操作
+        private readonly IReadWrite _io;
+        // 私有字段，表示玩家的舰队
+        private readonly Fleet _humanFleet;
+        // 私有字段，表示计算机的舰队
+        private readonly Fleet _computerFleet;
+        // 私有字段，表示玩家是否先手
+        private readonly bool _humanStarts;
+        // 私有字段，表示玩家的射击选择器
+        private readonly HumanShotSelector _humanShotSelector;
+        // 私有字段，表示计算机的射击选择器
+        private readonly ComputerShotSelector _computerShotSelector;
+        // 私有字段，表示执行回合动作的函数
+        private readonly Func<Winner?> _turnAction;
+        // 私有字段，表示回合数
+        private int _turnNumber;
 
-    // PlayTurn 方法
-    public Winner? PlayTurn()
-    {
-        // 输出当前回合数
-        _io.Write(Strings.Turn(++_turnNumber));
-        // 调用 _turnAction 委托
-        return _turnAction.Invoke();
-    }
-
-    // AskWhoStarts 方法
-    private bool AskWhoStarts()
-    {
-        // 循环询问谁先开始
-        while (true)
+        // 公共构造函数，接受读写操作和随机数生成器
+        public TurnHandler(IReadWrite io, IRandom random)
         {
-            var startResponse = _io.ReadString(Prompts.Start);
-            if (startResponse.Equals(Strings.WhereAreYourShips, StringComparison.InvariantCultureIgnoreCase))
+            // 初始化读写操作字段
+            _io = io;
+            // 初始化计算机舰队对象
+            _computerFleet = new Fleet(random);
+            // 初始化玩家舰队对象
+            _humanFleet = new Fleet(io);
+            // 根据询问结果确定先手玩家，并设置回合动作函数
+            _turnAction = AskWhoStarts()
+                ? () => PlayHumanTurn() ?? PlayComputerTurn()
+                : () => PlayComputerTurn() ?? PlayHumanTurn();
+            // 初始化玩家射击选择器
+            _humanShotSelector = new HumanShotSelector(_humanFleet, io);
+            // 初始化计算机射击选择器
+            _computerShotSelector = new ComputerShotSelector(_computerFleet, random, io);
+        }
+
+        // 公共方法，执行回合并返回胜利者
+        public Winner? PlayTurn()
+        {
+            // 输出回合数
+            _io.Write(Strings.Turn(++_turnNumber));
+            // 执行回合动作函数并返回结果
+            return _turnAction.Invoke();
+        }
+
+        // 私有方法，询问谁先手
+        private bool AskWhoStarts()
+        {
+            // 无限循环，直到得到有效的回答
+            while (true)
             {
-                // 如果回答是 "Where are your ships?"，则展示计算机舰队的船只
-                foreach (var ship in _computerFleet.Ships)
+                // 询问玩家谁先手
+                var startResponse = _io.ReadString(Prompts.Start);
+                // 如果回答是查看计算机舰队的指令
+                if (startResponse.Equals(Strings.WhereAreYourShips, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _io.WriteLine(ship);
+                    // 输出计算机舰队的船只信息
+                    foreach (var ship in _computerFleet.Ships)
+                    {
+                        _io.WriteLine(ship);
+                    }
+                }
+                else
+                {
+                    // 返回玩家是否选择先手
+                    return startResponse.Equals("yes", StringComparison.InvariantCultureIgnoreCase);
                 }
             }
-            else
-            {
-                // 如果回答是 "yes"，则返回 true，否则返回 false
-                return startResponse.Equals("yes", StringComparison.InvariantCultureIgnoreCase);
-            }
         }
-    }
 
-    // PlayComputerTurn 方法
-    private Winner? PlayComputerTurn()
+        // 私有方法，执行计算机回合并返回胜利者
+        private Winner? PlayComputerTurn()
     {
-        // 获取计算机的射击次数
+        // 获取计算机射击次数
         var numberOfShots = _computerShotSelector.NumberOfShots;
+        // 输出计算机射击次数
         _io.Write(Strings.IHaveShots(numberOfShots));
-        // 如果射击次数为 0，则返回人类获胜
+        // 如果计算机射击次数为0，则返回人类获胜
         if (numberOfShots == 0) { return Winner.Human; }
-        // 如果计算机可以瞄准所有剩余的方格，则返回计算机获胜
+        // 如果计算机可以瞄准所有剩余的方块
         if (_computerShotSelector.CanTargetAllRemainingSquares)
         {
+            // 输出计算机拥有更多的射击次数
             _io.Write(Streams.IHaveMoreShotsThanSquares);
+            // 返回计算机获胜
             return Winner.Computer;
         }
-
-        // 计算机舰队接收射击
+    
+        // 人类舰队接收射击
         _humanFleet.ReceiveShots(
+            // 获取人类射击选择器的射击
             _computerShotSelector.GetShots(_turnNumber),
+            // 如果击中船只，则输出击中信息，并记录击中
             ship =>
             { 
                 _io.Write(Strings.IHit(ship.Name));
                 _computerShotSelector.RecordHit(ship, _turnNumber);
             });
-
+    
+        // 返回空值
         return null;
     }
-
-    // PlayHumanTurn 方法
+    
+    // 进行人类回合
     private Winner? PlayHumanTurn()
     {
-        // 获取人类的射击次数
+        // 获取人类射击次数
         var numberOfShots = _humanShotSelector.NumberOfShots;
+        // 输出人类射击次数
         _io.Write(Strings.YouHaveShots(numberOfShots));
-        // 如果射击次数为 0，则返回计算机获胜
+        // 如果人类射击次数为0，则返回计算机获胜
         if (numberOfShots == 0) { return Winner.Computer; }
-        // 如果人类可以瞄准所有剩余的方格，则返回人类获胜
+        // 如果人类可以瞄准所有剩余的方块
         if (_humanShotSelector.CanTargetAllRemainingSquares) 
         { 
+            // 输出人类拥有更多的射击次数
             _io.WriteLine(Streams.YouHaveMoreShotsThanSquares);
+            // 返回人类获胜
             return Winner.Human;
         }
         
-        // 人类舰队接收射击
+        // 计算机舰队接收射击
         _computerFleet.ReceiveShots(
+            // 获取计算机射击选择器的射击
             _humanShotSelector.GetShots(_turnNumber), 
+            // 如果击中船只，则输出击中信息
             ship => _io.Write(Strings.YouHit(ship.Name)));
         
+        // 返回空值
         return null;
     }
-}
-
+# 闭合前面的函数定义
 ```

@@ -1,7 +1,6 @@
 # `basic-computer-games\03_Animal\python\animal.py`
 
 ```
-
 """
 Animal
 
@@ -75,46 +74,84 @@ def parse_input(message: str, check_list: bool, root_node: Optional[Node]) -> st
             token = inp[0].lower()
         else:
             token = ""
-
+    # 返回变量 token 的值
     return token
-
-
+# 避免空输入，要求用户输入非空字符串
 def avoid_void_input(message: str) -> str:
     answer = ""
     while answer == "":
         answer = input(message)
     return answer
 
-
+# 打印游戏介绍
 def print_intro() -> None:
     print(" " * 32 + "Animal")
     print(" " * 15 + "Creative Computing Morristown, New Jersey\n")
     print("Play ´Guess the Animal´")
     print("Think of an animal and the computer will try to guess it.\n")
 
+# 主函数
+def main() -> None:
+    # 初始化树
+    yes_child = Node("Fish", None, None)
+    no_child = Node("Bird", None, None)
+    root = Node("Does it swim?", yes_child, no_child)
 
-########################################################
-# Porting Notes
-#
-#   The data structure used for storing questions and
-#   animals is a binary tree where each non-leaf node
-#   has a question, while the leafs store the animals.
-#
-#   As the original program, this program doesn't store
-#   old questions and animals. A good modification would
-#   be to add a database to store the tree.
-#    Also as the original program, this one can be easily
-#   modified to not only make guesses about animals, by
-#   modyfing the initial data of the tree, the questions
-#   that are asked to the user and the initial message
-#   function  (Lines 120 to 130, 135, 158, 160, 168, 173)
+    # 游戏的主循环
+    print_intro()
+    # 解析用户输入，判断是否继续游戏
+    keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
+    # 当继续游戏时
+    while keep_playing:
+        # 继续询问
+        keep_asking = True
+        # 从根节点开始遍历树
+        actual_node: Node = root
 
-########################################################
+        # 当需要继续询问时
+        while keep_asking:
 
+            # 如果当前节点不是叶子节点
+            if not actual_node.is_leaf():
+
+                # 我们需要继续询问，即遍历节点
+                answer = parse_input(actual_node.text, False, None)
+
+                # 由于这是一个内部节点，两个子节点都不是空的
+                if answer == "y":
+                    assert actual_node.yes_node is not None
+                    actual_node = actual_node.yes_node
+                else:
+                    assert actual_node.no_node is not None
+                    actual_node = actual_node.no_node
+            else:
+                # 我们已经到达可能的答案
+                answer = parse_input(f"Is it a {actual_node.text}? ", False, None)
+                if answer == "n":
+                    # 将新动物添加到树中
+                    new_animal = avoid_void_input(
+                        "The animal you were thinking of was a ? "
+                    )
+                    new_question = avoid_void_input(
+                        "Please type in a question that would distinguish a "
+                        f"{new_animal} from a {actual_node.text}: "
+                    )
+                    answer_new_question = parse_input(
+                        f"for a {new_animal} the answer would be: ", False, None
+                    )
+
+                    actual_node.update_node(
+                        new_question + "?", answer_new_question, new_animal
+                    )
+
+                else:
+                    print("Why not try another animal?")
+
+                keep_asking = False
+
+        # 当玩家继续游戏时，询问是否在想着一个动物
+        keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
+# 如果当前脚本被直接执行，则执行 main() 函数
 if __name__ == "__main__":
     main()
-
-
-
-注释：这段代码是一个关于动物猜测的程序。它使用了二叉树数据结构来存储问题和动物，其中非叶节点存储问题，叶节点存储动物。程序包括了一些函数，如更新节点、列出已知动物、解析输入等。同时，还包括了一些关于程序修改和扩展的说明。最后，通过`if __name__ == "__main__":`来调用主函数`main()`。
 ```

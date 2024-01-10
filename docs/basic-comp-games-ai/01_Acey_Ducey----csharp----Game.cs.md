@@ -1,15 +1,19 @@
 # `basic-computer-games\01_Acey_Ducey\csharp\Game.cs`
 
 ```
-
-# 引入命名空间 System，包含了常用的系统类
+// 引入命名空间 System、System.Collections.Generic、System.Text
 using System;
-# 引入命名空间 System.Collections.Generic，包含了泛型集合类
 using System.Collections.Generic;
-# 引入命名空间 System.Text，包含了常用的字符串操作类
 using System.Text;
-# 声明 AceyDucey 命名空间
-namespace AceyDucey
-# 缺少左大括号，应该为 {
 
+// 声明命名空间 AceyDucey
+namespace AceyDucey
+{
+    /// <summary>
+    /// 实现所有游戏逻辑的主要类
+    /// </summary>
+    // 声明内部类 Game
+    internal class Game
+    }
+}
 ```

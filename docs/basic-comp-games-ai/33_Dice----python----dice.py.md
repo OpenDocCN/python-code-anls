@@ -1,7 +1,6 @@
 # `basic-computer-games\33_Dice\python\dice.py`
 
 ```
-
 """
 Dice
 
@@ -48,78 +47,64 @@ def main() -> None:
     print("a long time.  In particular, numbers over 5000.")
 
     still_playing = True
+    # 当仍在玩游戏时执行以下操作
     while still_playing:
+        # 打印空行
         print()
+        # 获取用户输入的掷骰子次数
         n = int(input("How many rolls? "))
 
-        # Roll the dice n times
+        # 掷骰子 n 次
         for _ in range(n):
-            # Generate random numbers for two dice
+            # 随机生成两个骰子的点数
             die1 = random.randint(1, 6)
             die2 = random.randint(1, 6)
-            # Calculate the total of the two dice
+            # 计算两个骰子的点数总和
             roll_total = die1 + die2
-            # Update the frequency list with the roll outcome
+            # 更新点数总和的频率
             freq[roll_total] += 1
 
-        # Display final results
+        # 显示最终结果
         print("\nTotal Spots   Number of Times")
         for i in range(2, 13):
-            # Print the roll outcome and its frequency
+            # 打印点数总和及其出现次数
             print(" %-14d%d" % (i, freq[i]))
 
-        # Keep playing?
+        # 继续游戏？
         print()
         response = input("Try again? ")
+        # 如果用户输入的是以 Y 开头的字符串，则执行以下操作
         if len(response) > 0 and response.upper()[0] == "Y":
-            # Clear out the frequency list if the user wants to play again
+            # 清空频率列表
             freq = [0] * 13
         else:
-            # Exit the game loop if the user doesn't want to play again
+            # 退出游戏循环
             still_playing = False
-
-
+# 如果当前脚本被直接执行，则调用 main() 函数
 if __name__ == "__main__":
-    # Call the main function to start the program
     main()
 
 ########################################################
 #
 # Porting Notes
 #
-#   A fairly straightforward port.  The only change is
-#   in the handling of the user's "try again" response.
-#   The original program only continued if the user
-#   entered "YES", whereas this version will continue
-#   if any word starting with "Y" or "y" is given.
+#   一个相当直接的移植。唯一的变化在于处理用户的“再试一次”响应。
+#   原始程序只有在用户输入“YES”时才继续，而这个版本将在给出以“Y”或“y”开头的任何单词时继续。
 #
-#   The instruction text--which, like all these ports,
-#   was taken verbatim from the original listing--is
-#   charmingly quaint in its dire warning against
-#   setting the number of rolls too high.  At the time
-#   of this writing, on a fairly slow computer, a
-#   5000-roll run typically clocks in at well under
-#   1/10 of a second!
+#   指令文本--像所有这些移植一样，都是从原始清单中逐字摘录--在对设置摇动次数过高发出严重警告时，具有迷人的古雅风味。
+#   在撰写本文时，一个相当慢的计算机上，5000次摇动通常在不到1/10秒的时间内完成！
 #
 #
 # Ideas for Modifications
 #
-#   Have the results include a third column showing
-#   the percent of rolls each count represents.  Or
-#   (better yet) print a low-fi bar graph using
-#   rows of asterisks to represent relative values,
-#   with each asterisk representing one percent,
-#   for example.
+#   让结果包括第三列，显示每个计数所代表的百分比。或者（更好的是）使用星号的行来打印低保真条形图，表示相对值，每个星号代表1%，
+#   例如。
 #
-#   Add a column showing the theoretically expected
-#   percentage, for comparison.
+#   添加一列显示理论上预期的百分比，以供比较。
 #
-#   Keep track of how much time the series of rolls
-#   takes and add that info to the final report.
+#   跟踪一系列摇动所花费的时间，并将该信息添加到最终报告中。
 #
-#   What if three (or four, or five...) dice were
-#   rolled each time?
+#   如果每次摇动三个（或四个，或五个...）骰子会怎样？
 #
 ########################################################
-
 ```

@@ -1,14 +1,15 @@
 # `basic-computer-games\61_Math_Dice\python\mathdice.py`
 
 ```
-
 # 从 random 模块中导入 randint 函数
 from random import randint
 
-# 打印游戏标题和 GitHub 仓库链接
+# 打印标题和来源信息
 print("Math Dice")
 print("https://github.com/coding-horror/basic-computer-games")
 print()
+
+# 打印游戏规则说明
 print(
     """This program generates images of two dice.
 When two dice and an equals sign followed by a question
@@ -28,10 +29,10 @@ def print_dice(n: int) -> None:
     def print_2() -> None:
         print("| * * |")
 
-    # 打印骰子的上半部分
+    # 打印骰子图像的上边框
     print(" ----- ")
 
-    # 根据骰子点数打印不同的图案
+    # 根据骰子点数打印不同的图像
     if n in [4, 5, 6]:
         print_2()
     elif n in [2, 3]:
@@ -53,11 +54,12 @@ def print_dice(n: int) -> None:
     else:
         print_0()
 
-    # 打印骰子的下半部分
+    # 打印骰子图像的下边框
     print(" ----- ")
 
-# 定义主程序函数
+# 定义主函数
 def main() -> None:
+
     # 无限循环，直到用户输入 0 结束程序
     while True:
         # 随机生成两个骰子的点数
@@ -78,9 +80,11 @@ def main() -> None:
             if tries == 1:
                 print("No, count the spots and give another answer.")
             try:
+                # 获取用户输入的猜测值
                 guess = int(input())
             except ValueError:
                 print("That's not a number!")
+            # 如果用户输入 0，则退出程序
             if guess == 0:
                 exit()
             tries += 1
@@ -93,8 +97,7 @@ def main() -> None:
 
         print("The dice roll again....")
 
-# 如果当前脚本被直接执行，则调用主程序函数
+# 如果当前脚本被直接执行，则调用主函数
 if __name__ == "__main__":
     main()
-
 ```

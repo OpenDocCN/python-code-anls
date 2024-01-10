@@ -1,16 +1,21 @@
 # `basic-computer-games\60_Mastermind\csharp\Controller.cs`
 
 ```
-
-# 引入命名空间，用于声明程序中要使用的类、接口和其他成员
+// 引入命名空间 System
 using System;
+// 引入不可变集合的命名空间
 using System.Collections.Immutable;
+// 引入 LINQ 的命名空间
 using System.Linq;
 
-# 声明命名空间，用于组织和管理代码，将代码组织成一个逻辑单元
+// 命名空间 Game
 namespace Game
 {
-    # 在命名空间中定义游戏类和相关成员
+    /// <summary>
+    /// 包含从最终用户获取输入的函数
+    /// </summary>
+    // 声明一个静态类 Controller
+    public static class Controller
+    }
 }
-
 ```

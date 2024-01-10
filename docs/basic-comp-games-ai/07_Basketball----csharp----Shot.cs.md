@@ -1,41 +1,45 @@
 # `basic-computer-games\07_Basketball\csharp\Shot.cs`
 
 ```
+namespace Basketball;
 
-namespace Basketball; // 命名空间声明，定义了类的作用域
-
-public class Shot // 定义名为 Shot 的公共类
+public class Shot
 {
-    private readonly string _name; // 声明一个私有的只读字符串变量 _name
+    private readonly string _name;
 
-    public Shot(string name) // Shot 类的构造函数，接受一个字符串参数 name
+    public Shot(string name)
     {
-        _name = name; // 将传入的 name 参数赋值给 _name 变量
+        _name = name;
     }
 
-    public static bool TryGet(int shotNumber, out Shot? shot) // 定义一个静态方法 TryGet，接受一个整数参数 shotNumber 和一个 Shot 类型的可空输出参数 shot
+    // 尝试获取投篮动作对象
+    public static bool TryGet(int shotNumber, out Shot? shot)
     {
-        shot = shotNumber switch // 使用 switch 语句根据 shotNumber 的值进行匹配
+        // 使用 switch 语句根据投篮编号获取对应的投篮动作对象
+        shot = shotNumber switch
         {
-            0 => null, // 当 shotNumber 为 0 时，将 shot 赋值为 null
-            <= 2 => new JumpShot(), // 当 shotNumber 小于等于 2 时，创建一个 JumpShot 对象并赋值给 shot
-            3 => new Shot("Lay up"), // 当 shotNumber 为 3 时，创建一个名称为 "Lay up" 的 Shot 对象并赋值给 shot
-            4 => new Shot("Set shot"), // 当 shotNumber 为 4 时，创建一个名称为 "Set shot" 的 Shot 对象并赋值给 shot
-            _ => null // 其他情况下，将 shot 赋值为 null
+            // 虽然游戏说明提到了两种不同的跳投动作，但原始游戏代码将它们视为相同，只是打印“跳投”
+            0 => null,
+            <= 2 => new JumpShot(),
+            3 => new Shot("Lay up"),
+            4 => new Shot("Set shot"),
+            _ => null
         };
-        return shotNumber == 0 || shot is not null; // 返回一个布尔值，判断 shotNumber 是否为 0 或者 shot 是否不为 null
+        // 返回是否成功获取投篮动作对象的布尔值
+        return shotNumber == 0 || shot is not null;
     }
 
-    public static Shot Get(float shotNumber) => // 定义一个静态方法 Get，接受一个浮点数参数 shotNumber
-        shotNumber switch // 使用 switch 语句根据 shotNumber 的值进行匹配
+    // 根据浮点数获取投篮动作对象
+    public static Shot Get(float shotNumber) =>
+        shotNumber switch
         {
-            <= 2 => new JumpShot(), // 当 shotNumber 小于等于 2 时，创建一个 JumpShot 对象并返回
-            > 3 => new Shot("Set shot"), // 当 shotNumber 大于 3 时，创建一个名称为 "Set shot" 的 Shot 对象并返回
-            > 2 => new Shot("Lay up"), // 当 shotNumber 大于 2 时，创建一个名称为 "Lay up" 的 Shot 对象并返回
-            _ => throw new Exception("Unexpected value") // 其他情况下，抛出一个异常
+            <= 2 => new JumpShot(),
+            > 3 => new Shot("Set shot"),
+            > 2 => new Shot("Lay up"),
+            _ => throw new Exception("Unexpected value")
         };
 
-    public override string ToString() => _name; // 重写 ToString 方法，返回 _name 变量的值
+    // 重写 ToString 方法，返回投篮动作的名称
+    public override string ToString() => _name;
 }
-
 ```

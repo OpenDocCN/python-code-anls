@@ -1,29 +1,25 @@
 # `basic-computer-games\87_3-D_Plot\csharp\Program.cs`
 
 ```
-
-// 引入 System 命名空间
-using System;
-
-// 定义 Plot 类
+// 命名空间声明
 namespace Plot
 {
-    // 定义 Program 类
+    // 类声明
     class Program
     {
-        // 程序入口
+        // 主函数
         static void Main(string[] args)
         {
-            // 调用 PrintTitle 方法打印标题
+            // 调用打印标题函数
             PrintTitle();
 
-            // 遍历 Function.GetRows() 返回的行
+            // 遍历每一行
             foreach (var row in Function.GetRows())
             {
-                // 遍历行中的元素
+                // 遍历每个元素
                 foreach (var z in row)
                 {
-                    // 调用 Plot 方法绘制图形
+                    // 调用绘制函数
                     Plot(z);
                 }
                 // 换行
@@ -31,10 +27,10 @@ namespace Plot
             }
         }
 
-        // 打印标题
+        // 打印标题函数
         private static void PrintTitle()
         {
-            // 打印标题信息
+            // 打印标题
             Console.WriteLine("                                3D Plot");
             Console.WriteLine("               Creative Computing  Morristown, New Jersey");
             Console.WriteLine();
@@ -43,16 +39,16 @@ namespace Plot
             Console.WriteLine();
         }
 
-        // 绘制图形
+        // 绘制函数
         private static void Plot(int z)
         {
             // 获取当前光标位置的行数
             var x = Console.GetCursorPosition().Top;
-            // 设置光标位置并打印 *
+            // 设置光标位置
             Console.SetCursorPosition(z, x);
+            // 在指定位置打印*
             Console.Write("*");
         }
     }
 }
-
 ```

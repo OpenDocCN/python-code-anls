@@ -1,7 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Resources\Resource.cs`
 
 ```
-
 // 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -23,14 +22,13 @@ namespace BugGame.Resources
             public static Stream PlayAgain => GetStream();
         }
 
-        // 声明 GetStream 方法，使用 CallerMemberName 特性获取方法名，默认为 null
+        // 声明 GetStream 方法，参数为调用者的成员名，默认为 null
         private static Stream GetStream([CallerMemberName] string? name = null) =>
             // 获取当前执行程序集，获取嵌入资源流
             Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream($"Bug.Resources.{name}.txt")
-                // 如果找不到资源流，抛出异常
+                // 如果找不到嵌入资源流，抛出异常
                 ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
     }
 }
-
 ```

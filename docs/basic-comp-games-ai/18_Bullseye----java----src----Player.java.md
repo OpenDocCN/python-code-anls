@@ -1,13 +1,13 @@
 # `basic-computer-games\18_Bullseye\java\src\Player.java`
 
 ```
-
 /**
- * 玩家类，包含玩家姓名和分数
+ * 游戏中的玩家 - 包括姓名和分数
+ *
  */
 public class Player {
 
-    // 玩家姓名，一旦赋值后不可更改
+    // 玩家姓名，一旦赋值就不可更改
     private final String name;
 
     // 玩家分数
@@ -34,5 +34,4 @@ public class Player {
         return score;
     }
 }
-
 ```

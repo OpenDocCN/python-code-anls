@@ -1,14 +1,14 @@
 # `basic-computer-games\38_Fur_Trader\csharp\Game.cs`
 
 ```
-
-# 引入System命名空间，其中包含了常用的系统类和方法
+# 引入 System 命名空间
 using System;
 
-# 声明一个名为FurTrader的命名空间
+# 定义 FurTrader 命名空间
 namespace FurTrader
 {
-    # 代码块的开始
+    # 定义 Game 类
+    public class Game
+    }
 }
-
 ```

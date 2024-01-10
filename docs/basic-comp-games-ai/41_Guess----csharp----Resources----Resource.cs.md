@@ -1,18 +1,17 @@
 # `basic-computer-games\41_Guess\csharp\Resources\Resource.cs`
 
 ```
-
 // 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-// 定义 Guess.Resources 命名空间
+// 声明 Guess.Resources 命名空间
 namespace Guess.Resources
 {
-    // 定义 Resource 类
+    // 声明 Resource 类
     internal static class Resource
     {
-        // 定义 Streams 类
+        // 声明 Streams 类
         internal static class Streams
         {
             // 获取 Introduction 的流
@@ -25,7 +24,7 @@ namespace Guess.Resources
             public static Stream BlankLines => GetStream();
         }
 
-        // 定义 Formats 类
+        // 声明 Formats 类
         internal static class Formats
         {
             // 获取 Thinking 的字符串
@@ -36,14 +35,14 @@ namespace Guess.Resources
             public static string ShouldHave => GetString();
         }
 
-        // 定义 Prompts 类
+        // 声明 Prompts 类
         internal static class Prompts
         {
             // 获取 Limit 的字符串
             public static string Limit => GetString();
         }
 
-        // 定义 Strings 类
+        // 声明 Strings 类
         internal static class Strings
         {
             // 获取 Good 的字符串
@@ -55,7 +54,7 @@ namespace Guess.Resources
         // 根据成员名获取字符串
         private static string GetString([CallerMemberName] string? name = null)
         {
-            // 获取对应成员名的流
+            // 使用成员名获取流
             using var stream = GetStream(name);
             // 使用流创建读取器
             using var reader = new StreamReader(stream);
@@ -65,11 +64,10 @@ namespace Guess.Resources
 
         // 根据成员名获取流
         private static Stream GetStream([CallerMemberName] string? name = null) =>
-            // 获取当前程序集的嵌入资源流
+            // 获取嵌入资源流
             Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
-                // 如果找不到对应的嵌入资源流，则抛出异常
+                // 如果找不到资源流，则抛出异常
                 ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
     }
 }
-
 ```

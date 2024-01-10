@@ -1,7 +1,6 @@
 # `basic-computer-games\38_Fur_Trader\csharp\Program.cs`
 
 ```
-
 // 引入 System 命名空间
 using System;
 
@@ -14,7 +13,8 @@ namespace FurTrader
         /// <summary>
         /// 当应用程序启动时，此函数将自动被调用
         /// </summary>
-        /// <param name="args">命令行参数</param>
+        /// <param name="args"></param>
+        // 声明 Main 函数，参数为字符串数组
         public static void Main(string[] args)
         {
             // 创建主游戏类的实例
@@ -25,5 +25,4 @@ namespace FurTrader
         }
     }
 }
-
 ```

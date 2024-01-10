@@ -1,10 +1,14 @@
 # `basic-computer-games\22_Change\csharp\Program.cs`
 
 ```
+# 引入 System 命名空间
+using System;
 
-# 命名空间声明，定义一个命名空间叫做Change
+# 定义 Change 命名空间
 namespace Change
 {
-    # 这里应该是一个左大括号，用于开始命名空间的定义
-
+    # 定义 Program 类
+    class Program
+    }
+}
 ```

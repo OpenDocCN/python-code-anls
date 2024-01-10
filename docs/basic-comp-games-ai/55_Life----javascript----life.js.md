@@ -1,7 +1,6 @@
 # `basic-computer-games\55_Life\javascript\life.js`
 
 ```
-
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
@@ -20,18 +19,25 @@ function input()
 
                        // 打印提示符
                        print("? ");
+                       // 设置输入框类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
-                       // 监听键盘事件，当按下回车键时，将输入的值添加到输出元素中，并解析输入的值
+                       // 监听输入框的按键事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 当按下回车键时，获取输入框的值
                                                       input_str = input_element.value;
+                                                      // 从输出元素中移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的值
                                                       print(input_str);
                                                       print("\n");
+                                                      // 解析输入的值
                                                       resolve(input_str);
                                                       }
                                                       });
@@ -61,11 +67,12 @@ async function main()
     print("\n");
     print("\n");
     print("ENTER YOUR PATTERN:\n");
-    // 初始化一些变量
+    // 初始化坐标
     x1 = 1;
     y1 = 1;
     x2 = 24;
     y2 = 70;
+    // 初始化数组
     for (c = 1; c <= 24; c++) {
         bs[c] = "";
         a[c] = [];
@@ -73,28 +80,37 @@ async function main()
             a[c][d] = 0;
     }
     c = 1;
-    // 循环获取输入，直到输入为 "DONE"
+}
+    # 进入无限循环，直到条件不满足
     while (1) {
+        # 从输入中获取数据，存入数组 bs 的第 c 个位置
         bs[c] = await input();
+        # 如果输入为 "DONE"，则清空 bs[c] 并跳出循环
         if (bs[c] == "DONE") {
             bs[c] = "";
             break;
         }
+        # 如果 bs[c] 的第一个字符是 "."，则将其替换为空格
         if (bs[c].substr(0, 1) == ".")
             bs[c] = " " + bs[c].substr(1);
+        # c 自增
         c++;
     }
+    # c 减一
     c--;
+    # 初始化变量 l 为 0
     l = 0;
-    // 计算输入中最长的行的长度
+    # 遍历 bs 数组，找出最长的字符串长度，存入 l
     for (x = 1; x <= c - 1; x++) {
         if (bs[x].length > l)
             l = bs[x].length;
     }
+    # 根据 c 和 l 计算出 x1 和 y1 的值
     x1 = 11 - (c >> 1);
     y1 = 33 - (l >> 1);
+    # 初始化变量 p 为 0
     p = 0;
-    // 根据输入的模式，设置初始状态
+    # 遍历 bs 数组，将非空格字符的位置标记为 1，并统计非空格字符的个数
     for (x = 1; x <= c; x++) {
         for (y = 1; y <= bs[x].length; y++) {
             if (bs[x][y - 1] != " ") {
@@ -103,101 +119,18 @@ async function main()
             }
         }
     }
-    // 循环进行生命游戏的计算和展示
+    # 打印三个空行
+    print("\n");
+    print("\n");
+    print("\n");
+    # 初始化变量 i9 为 false
     i9 = false;
+    # 初始化变量 g 为 0
     g = 0;
-    while (g < 100) {
-        print("GENERATION: " + g + " POPULATION: " + p + " ");
-        if (i9)
-            print("INVALID!");
-        x3 = 24;
-        y3 = 70;
-        x4 = 1;
-        y4 = 1;
-        p = 0;
-        g++;
-        for (x = 1; x <= x1 - 1; x++)
-            print("\n");
-        for (x = x1; x <= x2; x++) {
-            print("\n");
-            str = "";
-            for (y = y1; y <= y2; y++) {
-                if (a[x][y] == 2) {
-                    a[x][y] = 0;
-                    continue;
-                } else if (a[x][y] == 3) {
-                    a[x][y] = 1;
-                } else if (a[x][y] != 1) {
-                    continue;
-                }
-                while (str.length < y)
-                    str += " ";
-                str += "*";
-                if (x < x3)
-                    x3 = x;
-                if (x > x4)
-                    x4 = x;
-                if (y < y3)
-                    y3 = y;
-                if (y > y4)
-                    y4 = y;
-            }
-            print(str);
-        }
-        for (x = x2 + 1; x <= 24; x++)
-            print("\n");
-        x1 = x3;
-        x2 = x4;
-        y1 = y3;
-        y2 = y4;
-        if (x1 < 3) {
-            x1 = 3;
-            i9 = true;
-        }
-        if (x2 > 22) {
-            x2 = 22;
-            i9 = true;
-        }
-        if (y1 < 3) {
-            y1 = 3;
-            i9 = true;
-        }
-        if (y2 > 68) {
-            y2 = 68;
-            i9 = true;
-        }
-        p = 0;
-        for (x = x1 - 1; x <= x2 + 1; x++) {
-            for (y = y1 - 1; y <= y2 + 1; y++) {
-                c = 0;
-                for (i = x - 1; i <= x + 1; i++) {
-                    for (j = y - 1; j <= y + 1; j++) {
-                        if (a[i][j] == 1 || a[i][j] == 2)
-                            c++;
-                    }
-                }
-                if (a[x][y] == 0) {
-                    if (c == 3) {
-                        a[x][y] = 3;
-                        p++;
-                    }
-                } else {
-                    if (c < 3 || c > 4) {
-                        a[x][y] = 2;
-                    } else {
-                        p++;
-                    }
-                }
-            }
-        }
-        x1--;
-        y1--;
-        x2++;
-        y2++;
     }
+# 结束 main 函数的定义
 }
 
-// 调用主程序
+# 调用 main 函数
 main();
-
 ```

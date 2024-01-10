@@ -1,13 +1,14 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\EnemyArtillery.cs`
 
 ```
+// 命名空间声明，表示该类属于BombsAwayGame命名空间
+namespace BombsAwayGame;
 
-// 声明名为 EnemyArtillery 的内部记录类，表示敌方炮火
 /// <summary>
-/// 表示敌方炮火。
+/// 表示敌方炮兵
 /// </summary>
-/// <param name="Name">炮火类型的名称。</param>
-/// <param name="Accuracy">炮火的准确度。这是原始BASIC中的变量`T`。</param>
+/// <param name="Name">炮兵类型的名称</param>
+/// <param name="Accuracy">炮兵的准确度。这是原始BASIC中的变量`T`。</param>
+// 内部记录类声明，表示EnemyArtillery类是一个记录类，包含名称和准确度两个属性
 internal record class EnemyArtillery(string Name, int Accuracy);
-
 ```

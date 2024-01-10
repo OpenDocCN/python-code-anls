@@ -1,41 +1,50 @@
 # `basic-computer-games\40_Gomoko\javascript\gomoko.js`
 
 ```
-
-// 函数用于在页面上打印字符串
+// 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
     document.getElementById("output").appendChild(document.createTextNode(str));
 }
 
-// 函数用于获取用户输入
+// 定义一个输入函数，返回一个 Promise 对象
 function input()
 {
     var input_element;
     var input_str;
 
     return new Promise(function (resolve) {
+                       // 创建一个输入框元素
                        input_element = document.createElement("INPUT");
 
+                       // 打印提示符
                        print("? ");
+                       // 设置输入框类型为文本，长度为50
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
+                       // 监听键盘按下事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 获取输入框的值
                                                       input_str = input_element.value;
+                                                      // 移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的值
                                                       print(input_str);
                                                       print("\n");
+                                                      // 解析 Promise 对象
                                                       resolve(input_str);
                                                       }
                                                       });
                        });
 }
 
-// 函数用于生成指定数量的空格字符串
+// 定义一个制表函数，返回指定空格数的字符串
 function tab(space)
 {
     var str = "";
@@ -44,51 +53,58 @@ function tab(space)
     return str;
 }
 
-// 重置游戏统计数据
+// 重置统计数据
 function reset_stats()
 {
     for (var j = 1; j <= 4; j++)
         f[j] = 0;
 }
 
+// 定义一个数组和三个变量
 var a = [];
 var x;
 var y;
 var n;
 
-// 打印游戏棋盘
+// *** 打印棋盘 ***
 function print_board()
 {
     for (i = 1; i <= n; i++) {
         for (j = 1; j <= n; j++) {
+            // 打印棋盘上每个位置的值
             print(" " + a[i][j] + " ");
         }
+        // 换行
         print("\n");
     }
+    // 打印空行
     print("\n");
 }
 
-// 检查移动是否合法
+// 检查移动是否有效
 function is_valid()
 {
     if (x < 1 || x > n || y < 1 || y > n)
         return false;
-    return true;
-}
-
+    # 返回布尔值 True
+    return True;
 // 主程序
 async function main()
 {
+    // 打印游戏标题
     print(tab(33) + "GOMOKO\n");
+    // 打印游戏信息
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
     print("\n");
     print("\n");
     print("\n");
+    // 初始化游戏棋盘
     for (i = 0; i <= 19; i++) {
         a[i] = [];
         for (j = 0; j <= 19; j++)
             a[i][j] = 0;
     }
+    // 打印游戏规则
     print("WELCOME TO THE ORIENTAL GAME OF GOMOKO.\n");
     print("\n");
     print("THE GAME IS PLAYED ON AN N BY N GRID OF A SIZE\n");
@@ -101,79 +117,8 @@ async function main()
     print("THE COMPUTER DOES NOT KEEP TRACK OF WHO HAS WON.\n");
     print("TO END THE GAME, TYPE -1,-1 FOR YOUR MOVE.\n");
     print("\n");
-    while (1) {
-        print("WHAT IS YOUR BOARD SIZE (MIN 7/ MAX 19)");
-        while (1) {
-            n = parseInt(await input());
-            if (n >= 7 && n<= 19)
-                break;
-            print("I SAID, THE MINIMUM IS 7, THE MAXIMUM IS 19.\n");
-        }
-        for (i = 1; i <= n; i++) {
-            for (j = 1; j <= n; j++) {
-                a[i][j] = 0;
-            }
-        }
-        print("\n");
-        print("WE ALTERNATE MOVES.  YOU GO FIRST...\n");
-        print("\n");
-        while (1) {
-            print("YOUR PLAY (I,J)");
-            str = await input();
-            i = parseInt(str);
-            j = parseInt(str.substr(str.indexOf(",") + 1));
-            print("\n");
-            if (i == -1)
-                break;
-            x = i;
-            y = j;
-            if (!is_valid()) {
-                print("ILLEGAL MOVE.  TRY AGAIN...\n");
-                continue;
-            }
-            if (a[i][j] != 0) {
-                print("SQUARE OCCUPIED.  TRY AGAIN...\n");
-                continue;
-            }
-            a[i][j] = 1;
-            // *** Computer tries an intelligent move ***
-            found = false;
-            for (e = -1; e <= 1; e++) {
-                for (f = -1; f <= 1; f++) {
-                    if (e + f - e * f == 0)
-                        continue;
-                    x = i + f;
-                    y = j + f;
-                    if (!is_valid())
-                        continue;
-                    if (a[x][y] == 1) {
-                        x = i - e;
-                        y = j - f;
-                        if (is_valid() || a[x][y] == 0)
-                            found = true;
-                        break;
-                    }
-                }
-            }
-            if (!found) {
-                // *** Computer tries a random move ***
-                do {
-                    x = Math.floor(n * Math.random() + 1);
-                    y = Math.floor(n * Math.random() + 1);
-                } while (!is_valid() || a[x][y] != 0) ;
-            }
-            a[x][y] = 2;
-            print_board();
-        }
-        print("\n");
-        print("THANKS FOR THE GAME!!\n");
-        print("PLAY AGAIN (1 FOR YES, 0 FOR NO)");
-        q = parseInt(await input());
-        if (q != 1)
-            break;
     }
 }
 
 main();
-
 ```

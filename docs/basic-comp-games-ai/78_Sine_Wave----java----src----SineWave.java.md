@@ -13,20 +13,20 @@
 public class SineWave {
 
     public static void main(String[] args) {
-        // 打印程序标题
+        // 打印标题
         System.out.println("""
            SINE WAVE
            CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
            """);
         // 初始化变量isCreative为true
         var isCreative = true;
-        // 循环计算正弦值并输出相应的单词
+        // 循环40次，每次增加0.25
         for(var t = 0d; t<40; t += .25) {
             // 计算缩进量
             var indentations = 26 + (int) (25 * Math.sin(t));
-            // 打印相应数量的空格
+            // 打印空格，实现缩进
             System.out.print(" ".repeat(indentations));
-            // 根据isCreative的值选择输出单词
+            // 根据isCreative的值选择输出不同的单词
             var word = isCreative ? "CREATIVE" : "COMPUTING";
             System.out.println(word);
             // 切换isCreative的值
@@ -34,5 +34,4 @@ public class SineWave {
         }
     }
 }
-*/
 ```

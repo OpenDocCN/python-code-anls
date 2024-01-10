@@ -1,17 +1,16 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Space\QuadrantInfo.cs`
 
 ```
-
 // 使用 Games.Common.Randomness 命名空间
-namespace SuperStarTrek.Space;
+using Games.Common.Randomness;
 
-// 定义 QuadrantInfo 类
+// 定义 SuperStarTrek.Space 命名空间下的 QuadrantInfo 类
 internal class QuadrantInfo
 {
-    // 是否已知信息
+    // 私有字段，表示该象限是否已知
     private bool _isKnown;
 
-    // 私有构造函数，初始化坐标、名称、克林贡数量、星球数量、是否有星舰基地
+    // 私有构造函数，初始化象限信息
     private QuadrantInfo(Coordinates coordinates, string name, int klingonCount, int starCount, bool hasStarbase)
     {
         Coordinates = coordinates;
@@ -33,10 +32,10 @@ internal class QuadrantInfo
     // 是否有星舰基地属性
     internal bool HasStarbase { get; private set; }
 
-    // 星球数量属性
+    // 星星数量属性
     internal int StarCount { get; }
 
-    // 创建 QuadrantInfo 实例的静态方法
+    // 创建象限信息的静态方法
     internal static QuadrantInfo Create(Coordinates coordinates, string name, IRandom random)
     {
         // 根据随机数确定克林贡数量
@@ -49,33 +48,33 @@ internal class QuadrantInfo
         };
         // 根据随机数确定是否有星舰基地
         var hasStarbase = random.NextFloat() > 0.96f;
-        // 根据随机数确定星球数量
+        // 根据随机数确定星星数量
         var starCount = random.Next1To8Inclusive();
 
-        // 返回新的 QuadrantInfo 实例
+        // 返回新的象限信息对象
         return new QuadrantInfo(coordinates, name, klingonCount, starCount, hasStarbase);
     }
 
-    // 增加克林贡数量
+    // 增加克林贡数量的方法
     internal void AddKlingon() => KlingonCount += 1;
 
-    // 增加星舰基地
+    // 增加星舰基地的方法
     internal void AddStarbase() => HasStarbase = true;
 
-    // 标记为已知
+    // 标记为已知的方法
     internal void MarkAsKnown() => _isKnown = true;
 
-    // 扫描方法
+    // 扫描象限的方法
     internal string Scan()
     {
         _isKnown = true;
         return ToString();
     }
 
-    // 覆盖 ToString 方法
+    // 重写 ToString 方法
     public override string ToString() => _isKnown ? $"{KlingonCount}{(HasStarbase ? 1 : 0)}{StarCount}" : "***";
 
-    // 减少克林贡数量
+    // 减少克林贡数量的方法
     internal void RemoveKlingon()
     {
         if (KlingonCount > 0)
@@ -84,8 +83,7 @@ internal class QuadrantInfo
         }
     }
 
-    // 移除星舰基地
+    // 移除星舰基地的方法
     internal void RemoveStarbase() => HasStarbase = false;
 }
-
 ```

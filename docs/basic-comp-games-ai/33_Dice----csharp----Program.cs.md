@@ -1,23 +1,21 @@
 # `basic-computer-games\33_Dice\csharp\Program.cs`
 
 ```
-
-// 命名空间 BasicComputerGames.Dice
+// 命名空间声明，表示该类属于BasicComputerGames.Dice命名空间
 namespace BasicComputerGames.Dice
 {
-    // 定义一个名为 Program 的类
+    // 定义一个公共类Program
     public class Program
     {
-        // 程序的入口点
+        // 定义一个静态的Main方法，程序的入口
         public static void Main(string[] args)
         {
-            // 创建一个 Game 类的实例
+            // 创建一个Game类的实例
             Game game = new Game();
 
-            // 调用 GameLoop 函数，这将在循环中无限地玩游戏，直到玩家选择退出
+            // 调用GameLoop方法，这将在循环中无限地播放游戏，直到玩家选择退出
             game.GameLoop();
         }
     }
 }
-
 ```

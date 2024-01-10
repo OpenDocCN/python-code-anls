@@ -1,16 +1,23 @@
 # `basic-computer-games\05_Bagels\csharp\BagelNumber.cs`
 
 ```
-
-# 引入命名空间，包括了一些基本的计算机游戏的类和方法
+# 引入命名空间
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-# 定义命名空间 BasicComputerGames.Bagels
+# 定义枚举类型，表示Bagel验证的结果
 namespace BasicComputerGames.Bagels
 {
-    # 在这里应该有一些类和方法的定义，但是代码中缺少了具体的内容
+    public enum BagelValidation
+    {
+        Valid,          # 表示验证通过
+        WrongLength,    # 表示长度错误
+        NotUnique,      # 表示不唯一
+        NonDigit        # 表示包含非数字字符
+    };
+    # 定义BagelNumber类
+    public class BagelNumber
+    }
 }
-
 ```

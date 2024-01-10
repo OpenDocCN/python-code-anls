@@ -1,43 +1,32 @@
 # `basic-computer-games\90_Tower\csharp\Program.cs`
 
 ```
+using System;  // 导入系统命名空间
+using Tower.Resources;  // 导入 Tower.Resources 命名空间
+using Tower.UI;  // 导入 Tower.UI 命名空间
 
-// 引入命名空间
-using System;
-using Tower.Resources;
-using Tower.UI;
-
-// 定义程序类
-namespace Tower
+namespace Tower  // 定义 Tower 命名空间
 {
-    class Program
+    class Program  // 定义 Program 类
     {
-        // 主函数
-        static void Main(string[] args)
+        static void Main(string[] args)  // 定义程序入口方法
         {
-            // 输出标题字符串
-            Console.Write(Strings.Title);
+            Console.Write(Strings.Title);  // 在控制台输出标题字符串
 
-            // 循环进行游戏
-            do
+            do  // 开始 do-while 循环
             {
-                // 输出游戏介绍字符串
-                Console.Write(Strings.Intro);
+                Console.Write(Strings.Intro);  // 在控制台输出介绍字符串
 
-                // 尝试读取输入的数字作为盘子数量
-                if (!Input.TryReadNumber(Prompt.DiskCount, out var diskCount)) { return; }
+                if (!Input.TryReadNumber(Prompt.DiskCount, out var diskCount)) { return; }  // 尝试读取输入的数字，如果失败则返回
 
-                // 创建游戏对象
-                var game = new Game(diskCount);
+                var game = new Game(diskCount);  // 创建一个新的游戏对象
 
-                // 进行游戏，如果游戏结束则退出循环
-                if (!game.Play()) { return; }
-            } while (Input.ReadYesNo(Strings.PlayAgainPrompt, Strings.YesNoPrompt)); // 循环条件为是否继续游戏
+                if (!game.Play()) { return; }  // 如果游戏无法进行，则返回
 
-            // 输出感谢字符串
-            Console.Write(Strings.Thanks);
+            } while (Input.ReadYesNo(Strings.PlayAgainPrompt, Strings.YesNoPrompt));  // 循环直到输入不再是肯定的
+
+            Console.Write(Strings.Thanks);  // 在控制台输出感谢字符串
         }
     }
 }
-
 ```

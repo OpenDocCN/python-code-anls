@@ -1,11 +1,10 @@
 # `basic-computer-games\69_Pizza\csharp\StringBuilderExtensions.cs`
 
 ```
-
-// 命名空间 Pizza
+// 命名空间 Pizza 中的内部静态类 StringBuilderExtensions
 namespace Pizza
 {
-    // 内部静态类 StringBuilderExtensions
+    // StringBuilderExtensions 类的静态方法扩展
     internal static class StringBuilderExtensions
     {
         /// <summary>
@@ -24,5 +23,4 @@ namespace Pizza
         }
     }
 }
-
 ```

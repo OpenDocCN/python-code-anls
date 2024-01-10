@@ -1,7 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Extensions\RandomExtensions.cs`
 
 ```
-
 // 命名空间 Game.Extensions 包含了 RandomExtensions 类
 namespace Game.Extensions
 {
@@ -20,14 +19,14 @@ namespace Game.Extensions
         /// 要生成的范围的包含下限
         /// </param>
         /// <param name="max">
-        /// 要生成的范围的不包含上限
+        /// 要生成的范围的排除上限
         /// </param>
         /// <returns>
         /// 在范围 [min, max) 内的无限随机整数序列
         /// </returns>
         /// <remarks>
         /// <para>
-        /// 我们使用不包含上限的方式，尽管有点令人困惑，是为了与 Random.Next 保持一致。
+        /// 我们使用排除上限，尽管有点令人困惑，为了与 Random.Next 保持一致性。
         /// </para>
         /// <para>
         /// 由于序列是无限的，典型的用法是使用类似 Enumerable.Take 的函数来限制结果。例如，
@@ -39,10 +38,10 @@ namespace Game.Extensions
         /// </remarks>
         public static IEnumerable<int> Integers(this Random random, int min, int max)
         {
+            // 无限循环，不断返回随机数
             while (true)
                 yield return random.Next(min, max);
         }
     }
 }
-
 ```

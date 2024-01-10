@@ -1,18 +1,14 @@
 # `basic-computer-games\61_Math_Dice\csharp\GameState.cs`
 
 ```
-
-# 命名空间 MathDice
+# 命名空间 MathDice 中定义了一个枚举类型 GameState
 namespace MathDice
 {
-    # 定义枚举类型 GameState
+    # 枚举类型 GameState 包含两个枚举成员 FirstAttempt 和 SecondAttempt，分别对应数值 0 和 1
     public enum GameState
     {
-        # 枚举成员 FirstAttempt 的值为 0
         FirstAttempt = 0,
-        # 枚举成员 SecondAttempt 的值为 1
         SecondAttempt = 1,
     }
 }
-
 ```

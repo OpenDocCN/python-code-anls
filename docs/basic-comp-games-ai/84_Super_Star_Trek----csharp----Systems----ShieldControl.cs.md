@@ -1,7 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ShieldControl.cs`
 
 ```
-
 // 引入所需的命名空间
 using Games.Common.IO;
 using SuperStarTrek.Commands;
@@ -18,7 +17,7 @@ namespace SuperStarTrek.Systems
         private readonly Enterprise _enterprise;
         private readonly IReadWrite _io;
 
-        // ShieldControl 类的构造函数，初始化 _enterprise 和 _io
+        // ShieldControl 类的构造函数，接受 Enterprise 和 IReadWrite 对象作为参数
         internal ShieldControl(Enterprise enterprise, IReadWrite io)
             : base("Shield Control", Command.SHE, io)
         {
@@ -29,18 +28,18 @@ namespace SuperStarTrek.Systems
         // 声明 ShieldEnergy 属性，用于设置和获取护盾能量值
         internal float ShieldEnergy { get; set; }
 
-        // 重写 CanExecuteCommand 方法，判断是否可以执行命令
+        // 重写父类的 CanExecuteCommand 方法，判断是否可以执行命令
         protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
 
-        // 重写 ExecuteCommandCore 方法，执行核心命令
+        // 重写父类的 ExecuteCommandCore 方法，执行核心命令逻辑
         protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
             // 输出可用能量值
             _io.WriteLine($"Energy available = {_enterprise.TotalEnergy}");
-            // 读取用户输入的护盾能量值
+            // 从用户输入读取护盾能量值
             var requested = _io.ReadNumber($"Number of units to shields");
 
-            // 验证用户输入的护盾能量值
+            // 验证用户输入的护盾能量值，并作出相应处理
             if (Validate(requested))
             {
                 ShieldEnergy = requested;
@@ -66,12 +65,11 @@ namespace SuperStarTrek.Systems
             return requested >= 0 && requested != ShieldEnergy;
         }
 
-        // 护盾吸收攻击
+        // 用于处理护盾吸收攻击的方法
         internal void AbsorbHit(int hitStrength) => ShieldEnergy -= hitStrength;
 
-        // 关闭护盾
+        // 用于关闭护盾的方法
         internal void DropShields() => ShieldEnergy = 0;
     }
 }
-
 ```

@@ -1,40 +1,39 @@
 # `basic-computer-games\58_Love\csharp\LovePattern.cs`
 
 ```
-
-// 引入命名空间
+// 引入命名空间 System.IO 和 System.Text
 using System.IO;
 using System.Text;
 
-// 声明 LovePattern 类
+// 声明命名空间 Love
 namespace Love
 {
-    // 声明 LovePattern 类为内部类
+    // 声明内部类 LovePattern
     internal class LovePattern
     {
-        // 声明私有常量 _lineLength，并赋值为 60
+        // 声明私有常量 _lineLength，赋值为 60
         private const int _lineLength = 60;
-        // 声明只读整型数组 _segmentLengths，并初始化为一组整数
+        // 声明只读整型数组 _segmentLengths，包含一系列整数
         private readonly int[] _segmentLengths = new[] {
-            // 数组包含一系列整数
+            // 数组包含大量整数，表示每个段落的长度
         };
-        // 声明只读 StringBuilder 对象 _pattern
+        // 声明只读字符串构建器 _pattern
         private readonly StringBuilder _pattern = new();
 
-        // 声明 LovePattern 类的构造函数，接受一个字符串参数 message
+        // 声明公共构造函数 LovePattern，接受字符串参数 message
         public LovePattern(string message)
         {
             // 调用 Fill 方法，传入 SourceCharacters 对象
             Fill(new SourceCharacters(_lineLength, message));
         }
 
-        // 声明私有方法 Fill，接受 SourceCharacters 对象 source 作为参数
+        // 声明私有方法 Fill，接受 SourceCharacters 类型的参数 source
         private void Fill(SourceCharacters source)
         {
-            // 声明并初始化变量 lineLength 为 0
+            // 声明整型变量 lineLength，赋值为 0
             var lineLength = 0;
 
-            // 遍历 _segmentLengths 数组
+            // 遍历 _segmentLengths 数组中的每个元素
             foreach (var segmentLength in _segmentLengths)
             {
                 // 遍历 source.GetCharacters(segmentLength) 返回的字符集合
@@ -58,7 +57,7 @@ namespace Love
 
         // 重写 ToString 方法
         public override string ToString() =>
-            // 创建新的 StringBuilder 对象，追加空行、_pattern、再追加空行，并返回字符串
+            // 创建新的字符串构建器，追加空行、_pattern、再追加空行，返回字符串
             new StringBuilder()
                 .AppendLines(10)
                 .Append(_pattern)
@@ -66,5 +65,4 @@ namespace Love
                 .ToString();
     }
 }
-
 ```

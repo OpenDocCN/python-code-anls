@@ -1,24 +1,38 @@
 # `basic-computer-games\43_Hammurabi\csharp\ActionResult.cs`
 
 ```
-
-// 声明一个枚举类型，用于列举游戏中尝试各种行动的不同可能结果
-public enum ActionResult
+// 命名空间 Hammurabi
+namespace Hammurabi
 {
-    // 行动成功
-    Success,
+    /// <summary>
+    /// 枚举了尝试游戏中各种行动的不同可能结果。
+    /// </summary>
+    public enum ActionResult
+    {
+        /// <summary>
+        /// 行动成功。
+        /// </summary>
+        Success,
 
-    // 城市粮食储备不足，无法完成行动
-    InsufficientStores,
+        /// <summary>
+        /// 由于城市没有足够的谷物，无法完成行动。
+        /// </summary>
+        InsufficientStores,
 
-    // 城市土地面积不足，无法完成行动
-    InsufficientLand,
+        /// <summary>
+        /// 由于城市土地不足，无法完成行动。
+        /// </summary>
+        InsufficientLand,
 
-    // 城市人口不足，无法完成行动
-    InsufficientPopulation,
+        /// <summary>
+        /// 由于城市人口不足，无法完成行动。
+        /// </summary>
+        InsufficientPopulation,
 
-    // 请求的行动冒犯了城市的官员
-    Offense
+        /// <summary>
+        /// 请求的行动冒犯了城市管家。
+        /// </summary>
+        Offense
+    }
 }
-
 ```

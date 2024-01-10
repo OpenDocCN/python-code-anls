@@ -1,10 +1,9 @@
 # `basic-computer-games\89_Tic-Tac-Toe\csharp\tictactoe1\Program.cs`
 
 ```
-
-// 打印文本在屏幕上，文本前面有30个空格
+// 在屏幕上打印文本，文本前面有30个空格
 Console.WriteLine("TIC TAC TOE".PadLeft(30));
-// 打印文本在屏幕上，文本前面有15个空格
+// 在屏幕上打印文本，文本前面有15个空格
 Console.WriteLine("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY".PadLeft(15));
 // 在屏幕上打印三个空行
 Console.WriteLine("\n\n\n");
@@ -63,22 +62,24 @@ while(true) {
 
 // 机器走的函数
 void computerMoves(int move) {
-    Console.WriteLine("COMPUTER MOVES " + move);
+        Console.WriteLine("COMPUTER MOVES " + move);
 }
 // 读取你的走法
 int readYourMove() {
+    # 进入循环，等待用户输入
     while(true) {
+        # 提示用户输入他们的移动
         Console.Write("YOUR MOVE?");
+        # 读取用户输入的字符串
         string input = Console.ReadLine();
+        # 尝试将输入的字符串转换为整数，如果成功则返回该整数
         if (int.TryParse(input, out int number)) {
             return number;
         }
     }
-}
-
-// 走法函数
+# 定义一个名为move的函数，接受一个整数参数
 int move(int number) {
+    # 返回参数减去8的倍数，即取余数为1时的值
     return number - 8 * (int)((number - 1) / 8);
 }
-
 ```

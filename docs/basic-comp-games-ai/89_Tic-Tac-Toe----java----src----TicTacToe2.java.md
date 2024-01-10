@@ -1,16 +1,17 @@
 # `basic-computer-games\89_Tic-Tac-Toe\java\src\TicTacToe2.java`
 
 ```
-
-# 导入 Scanner 和 Random 类
+# 导入 Scanner 类和 Random 类
 import java.util.Scanner;
 import java.util.Random;
 
-# 创建一个注释，指明作者
+# 创建一个名为 TicTacToe2 的类
 /**
  * @author Ollie Hensman-Crook
  */
-# 闭合了一个没有打开的大括号，可能是一个错误
+public class TicTacToe2 {
+    # 程序的入口点
+    public static void main(String[] args) {
+    }
 }
-
 ```

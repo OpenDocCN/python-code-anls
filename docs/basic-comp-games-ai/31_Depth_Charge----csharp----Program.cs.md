@@ -1,20 +1,16 @@
 # `basic-computer-games\31_Depth_Charge\csharp\Program.cs`
 
 ```
-
-// 引入 System 命名空间
-using System;
-
-// 定义 DepthCharge 类
+// 命名空间定义
 namespace DepthCharge
 {
-    // 定义 Program 类
+    // 程序入口
     class Program
     {
-        // 程序入口
+        // 主函数
         static void Main(string[] args)
         {
-            // 创建随机数生成器对象
+            // 创建随机数生成器
             var random = new Random();
 
             // 显示游戏横幅
@@ -44,7 +40,7 @@ namespace DepthCharge
                 {
                     // 输入猜测坐标
                     guess = Controller.InputCoordinates(trailNumber);
-                    // 如果猜测错误，显示猜测结果
+                    // 如果猜测错误，显示猜测位置
                     if (guess != submarineCoordinates)
                         View.ShowGuessPlacement(submarineCoordinates, guess);
                 }
@@ -58,15 +54,14 @@ namespace DepthCharge
             // 显示结束语
             View.ShowFarewell();
 
-            // 计算最大猜测次数
+            // 计算最大猜测次数的函数
             int CalculateMaximumGuesses() =>
                 (int)Math.Log2(dimension) + 1;
 
-            // 随机放置潜艇的坐标
+            // 随机放置潜艇的函数
             (int x, int y, int depth) PlaceSubmarine() =>
                 (random.Next(dimension), random.Next(dimension), random.Next(dimension));
         }
     }
 }
-
 ```

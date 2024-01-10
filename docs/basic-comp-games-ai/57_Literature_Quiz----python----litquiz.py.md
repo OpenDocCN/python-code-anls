@@ -1,7 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\python\litquiz.py`
 
 ```
-
 """
 LITQUIZ
 
@@ -25,7 +24,7 @@ class Question(NamedTuple):
     incorrect_message: str
     correct_message: str
 
-    # 提问并返回是否回答正确
+    # 定义问题类的方法，用于提问并返回是否回答正确
     def ask(self) -> bool:
         print(self.question)
 
@@ -33,8 +32,10 @@ class Question(NamedTuple):
         options = [f"{i+1}){self.answer_list[i]}" for i in range(len(self.answer_list))]
         print(", ".join(options))
 
+        # 获取用户输入
         response = int(input())
 
+        # 判断用户输入是否正确
         if response == self.correct_number:
             print(self.correct_message)
             return True
@@ -76,7 +77,7 @@ questions = [
 ]
 
 
-# 打印居中文本
+# 定义居中打印函数
 def print_centered(msg: str) -> None:
     spaces = " " * ((64 - len(msg)) // 2)
     print(spaces + msg)
@@ -92,28 +93,33 @@ def print_instructions() -> None:
     print("GOOD LUCK!")
     print()
     print()
-
-
-# 主函数
+# 定义主函数，不返回任何结果
 def main() -> None:
+    # 居中打印标题
     print_centered("LITERATURE QUIZ")
+    # 居中打印副标题
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    # 打印空行
     print()
     print()
     print()
 
+    # 打印游戏说明
     print_instructions()
 
+    # 初始化得分
     score = 0
 
-    # 遍历问题列表并提问
+    # 遍历问题列表
     for q in questions:
+        # 如果问题被回答正确，得分加一
         if q.ask():
             score += 1
+        # 打印空行
         print()
         print()
 
-    # 根据得分打印结果
+    # 根据得分情况打印不同的结果
     if score == len(questions):
         print("WOW!  THAT'S SUPER!  YOU REALLY KNOW YOUR NURSERY")
         print("YOUR NEXT QUIZ WILL BE ON 2ND CENTURY CHINESE")
@@ -126,8 +132,7 @@ def main() -> None:
         print("READING THE NURSERY GREATS.")
 
 
-# 如果是主程序，则执行主函数
+# 如果当前脚本被直接执行，则调用主函数
 if __name__ == "__main__":
     main()
-
 ```

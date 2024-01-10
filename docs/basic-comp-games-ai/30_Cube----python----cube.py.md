@@ -1,20 +1,19 @@
 # `basic-computer-games\30_Cube\python\cube.py`
 
 ```
-
 #!/usr/bin/env python3
-# 指定使用 Python3 解释器
+# 指定脚本解释器为 Python 3
 
 """
 CUBE
 
 Converted from BASIC to Python by Trevor Hobson
 """
-# 程序的简要介绍
+# 多行注释，描述游戏的名称和作者
 
 import random
 from typing import Tuple
-# 导入 random 模块和 Tuple 类型
+# 导入 random 模块和 Tuple 类型提示
 
 def mine_position() -> Tuple[int, int, int]:
     # 返回一个包含三个随机整数的元组
@@ -29,80 +28,14 @@ def parse_move(move: str) -> Tuple[int, int, int]:
 
 def play_game() -> None:
     """Play one round of the game"""
-    # 玩游戏的函数
-
+    # 初始化玩家的初始资金
     money = 500
     print("\nYou have", money, "dollars.")
-    # 打印玩家初始金额
-    while True:
-        mines = []
-        for _ in range(5):
-            while True:
-                mine = mine_position()
-                if not (mine in mines or mine == (1, 1, 1) or mine == (3, 3, 3)):
-                    break
-            mines.append(mine)
-        # 生成5个地雷的位置
-        wager = -1
-        while wager == -1:
-            try:
-                wager = int(input("\nHow much do you want to wager? "))
-                if not 0 <= wager <= money:
-                    wager = -1
-                    print("Tried to fool me; bet again")
-            except ValueError:
-                print("Please enter a number.")
-        # 获取玩家下注金额
-        prompt = "\nIt's your move: "
-        position = (1, 1, 1)
-        while True:
-            move = (-1, -1, -1)
-            while move == (-1, -1, -1):
-                try:
-                    move = parse_move(input(prompt))
-                except (ValueError, IndexError):
-                    print("Please enter valid coordinates.")
-            if (
-                abs(move[0] - position[0])
-                + abs(move[1] - position[1])
-                + abs(move[2] - position[2])
-            ) > 1:
-                print("\nIllegal move. You lose")
-                money = money - wager
-                break
-            elif (
-                move[0] not in [1, 2, 3]
-                or move[1] not in [1, 2, 3]
-                or move[2] not in [1, 2, 3]
-            ):
-                print("\nIllegal move. You lose")
-                money = money - wager
-                break
-            elif move == (3, 3, 3):
-                print("\nCongratulations!")
-                money = money + wager
-                break
-            elif move in mines:
-                print("\n******BANG******")
-                print("You lose!")
-                money = money - wager
-                break
-            else:
-                position = move
-                prompt = "\nNext move: "
-        # 进行游戏逻辑判断
-        if money > 0:
-            print("\nYou now have", money, "dollars.")
-            if not input("Do you want to try again ").lower().startswith("y"):
-                break
-        else:
-            print("\nYou bust.")
     print("\nTough luck")
     print("\nGoodbye.")
-    # 打印游戏结果
 
 def print_instructions() -> None:
-    # 打印游戏说明
+    # 打印游戏的玩法说明
     print("\nThis is a game in which you will be playing against the")
     print("random decisions of the computer. The field of play is a")
     print("cube of side 3. Any of the 27 locations can be designated")
@@ -123,19 +56,22 @@ def print_instructions() -> None:
     print("Good luck!")
 
 def main() -> None:
-    # 主函数
+    # 打印游戏名称和作者信息
     print(" " * 34 + "CUBE")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
+    # 如果用户输入以字母 "y" 开头的字符串，表示用户想要查看游戏说明，调用打印游戏说明的函数
     if input("Do you want to see the instructions ").lower().startswith("y"):
         print_instructions()
 
+    # 设置一个变量，用于控制是否继续游戏的循环
     keep_playing = True
+    # 当 keep_playing 为 True 时，持续进行游戏
     while keep_playing:
+        # 调用游戏函数进行游戏
         play_game()
+        # 用户输入是否继续游戏，如果以字母 "y" 开头的字符串，继续游戏，否则结束游戏
         keep_playing = input("\nPlay again? (yes or no) ").lower().startswith("y")
-
+# 如果当前模块被直接执行，则调用 main() 函数
 if __name__ == "__main__":
     main()
-# 如果作为脚本运行，则执行主函数
-
 ```

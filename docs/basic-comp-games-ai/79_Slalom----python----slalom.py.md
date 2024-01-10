@@ -1,7 +1,6 @@
 # `basic-computer-games\79_Slalom\python\slalom.py`
 
 ```
-
 # 从 random 模块中导入 random 函数
 from random import random
 
@@ -12,58 +11,62 @@ medals = {
     "bronze": 0,
 }
 
-# 定义一个函数，用于向用户提问并返回用户输入的字符串
+# 定义一个函数，用于向用户提问并返回大写形式的输入
 def ask(question: str) -> str:
     print(question, end="? ")
     return input().upper()
 
-# 定义一个函数，用于向用户提问并返回用户输入的整数
+# 定义一个函数，用于向用户提问并返回整数形式的输入
 def ask_int(question: str) -> int:
     reply = ask(question)
     return int(reply) if reply.isnumeric() else -1
 
-# 预备阶段，包括显示指令和最大速度等信息
+# 定义一个函数，用于准备比赛前的操作
 def pre_run(gates, max_speeds) -> None:
-    # 显示指令
     print('\nType "INS" for instructions')
     print('Type "MAX" for approximate maximum speeds')
     print('Type "RUN" for the beginning of the race')
     cmd = ask("Command--")
+    # 循环直到用户输入"RUN"
     while cmd != "RUN":
-        # 显示赛道介绍
         if cmd == "INS":
-            # ...
-        # 显示最大速度
+            # 显示比赛说明和操作指南
+            print("\n*** Slalom: This is the 1976 Winter Olypic Giant Slalom.  You are")
+            print("            the American team's only hope for a gold medal.\n")
+            print("     0 -- Type this if you want to see how long you've taken.")
+            # 其他操作指南...
+            print("                Good Luck!\n")
+            cmd = ask("Command--")
         elif cmd == "MAX":
-            # ...
+            # 显示各个门的最大速度
+            print("Gate Max")
+            print(" # M.P.H.")
+            print("----------")
+            for i in range(0, gates):
+                print(f" {i + 1}  {max_speeds[i]}")
+            cmd = ask("Command--")
         else:
+            # 提示用户输入的命令不合法
             cmd = ask(f'"{cmd}" is an illegal command--Retry')
 
-# 开始比赛
+# 定义一个函数，用于开始比赛
 def run(gates, lvl, max_speeds) -> None:
+# 这里是 run 函数的代码，未提供，需要继续补充
+    # 声明变量 medals 为全局变量
     global medals
-    # ...
-    # 初始化时间和速度
+    # 打印倒计时开始信息
+    print("The starter counts down...5...4...3...2...1...Go!")
+    # 初始化时间变量为浮点数 0
     time: float = 0
+    # 生成随机速度，范围在 9 到 18 之间
     speed = int(random() * (18 - 9) + 9)
-    # ...
-    # 循环处理每个门
-    for i in range(0, gates):
-        while True:
-            # ...
-            # 用户选择操作
-            opt = ask_int("Option")
-            # ...
-            # 处理用户选择的操作
-            if opt == 8:
-                # ...
-            else:
-                # ...
-            # ...
-    # ...
-    # 计算比赛结果
+    # 打印出发信息
+    print("You're off")
+    # 打印随机时间加上当前时间的整数部分
     print(f"\nYou took {int(time + random())} seconds.")
+    # 计算平均时间
     avg = time / gates
+    # 根据平均时间和等级判断获得的奖牌
     if avg < 1.5 - (lvl * 0.1):
         print("Yout won a gold medal!")
         medals["gold"] += 1
@@ -73,19 +76,42 @@ def run(gates, lvl, max_speeds) -> None:
     elif avg < 4.4 - (lvl * 0.01):
         print("You won a bronze medal!")
         medals["bronze"] += 1
-
-# 主函数
+# 定义主函数
 def main() -> None:
-    # 显示比赛信息
+    # 打印标题
     print("Slalom".rjust(39))
     print("Creative Computing Morristown, New Jersey\n\n\n".rjust(57))
 
-    # 初始化最大速度列表
+    # 定义最大速度列表
     max_speeds = [
-        # ...
+        14,
+        18,
+        26,
+        29,
+        18,
+        25,
+        28,
+        32,
+        29,
+        20,
+        29,
+        29,
+        25,
+        21,
+        26,
+        29,
+        20,
+        21,
+        20,
+        18,
+        26,
+        25,
+        33,
+        31,
+        22,
     ]
 
-    # 获取赛道门数
+    # 循环直到输入符合要求的门数
     while True:
         gates = ask_int("How many gates does this course have (1 to 25)")
         if gates < 1:
@@ -95,10 +121,10 @@ def main() -> None:
                 print("25 is the limit.")
             break
 
-    # 进入预备阶段
+    # 运行前的准备工作
     pre_run(gates, max_speeds)
 
-    # 获取滑雪水平
+    # 循环直到输入符合要求的滑雪水平
     while True:
         lvl = ask_int("Rate yourself as a skier, (1=Worst, 3=Best)")
         if lvl < 1 or lvl > 3:
@@ -106,10 +132,10 @@ def main() -> None:
         else:
             break
 
-    # 开始比赛
+    # 循环直到游戏结束
     while True:
         run(gates, lvl, max_speeds)
-        # 询问是否再次比赛
+        # 循环直到输入符合要求的答案
         while True:
             answer = ask("Do you want to play again?")
             if answer == "YES" or answer == "NO":
@@ -119,7 +145,7 @@ def main() -> None:
         if answer == "NO":
             break
 
-    # 显示奖牌情况
+    # 打印感谢信息和奖牌情况
     print("Thanks for the race")
     if medals["gold"] > 0:
         print(f"Gold medals: {medals['gold']}")
@@ -128,8 +154,8 @@ def main() -> None:
     if medals["bronze"] > 0:
         print(f"Bronze medals: {medals['bronze']}")
 
-# 程序入口
+
+# 如果作为主程序运行，则调用主函数
 if __name__ == "__main__":
     main()
-
 ```

@@ -1,85 +1,92 @@
 # `basic-computer-games\71_Poker\csharp\Players\Player.cs`
 
 ```
-
-// 使用扑克牌命名空间中的卡牌类
-using Poker.Cards;
-
-// 定义扑克牌玩家命名空间
-namespace Poker.Players;
-
-// 内部抽象类 Player
-internal abstract class Player
+// 使用 Poker.Cards 命名空间
+namespace Poker.Players
 {
-    // 私有字段 _table，表示玩家所在的桌子
-    private Table? _table;
-    // 私有字段 _hasFolded，表示玩家是否已经弃牌
-    private bool _hasFolded;
-
-    // 受保护的构造函数，初始化玩家手牌为空，余额为指定的初始金额
-    protected Player(int bank)
+    // 内部抽象类 Player
+    internal abstract class Player
     {
-        Hand = Hand.Empty;
-        Balance = bank;
-    }
+        // 私有字段 _table，可空类型
+        private Table? _table;
+        // 私有字段 _hasFolded
+        private bool _hasFolded;
 
-    // 公共属性 Hand，表示玩家手牌
-    public Hand Hand { get; set; }
-    // 公共属性 Balance，表示玩家余额
-    public int Balance { get; set; }
-    // 公共属性 HasBet，表示玩家是否已下注
-    public bool HasBet { get; set; }
-    // 公共属性 Bet，表示玩家的下注金额
-    public int Bet { get; set; }
-    // 公共只读属性 HasFolded，表示玩家是否已经弃牌
-    public bool HasFolded => _hasFolded;
-    // 公共属性 IsBroke，表示玩家是否破产
-    public bool IsBroke { get; protected set; }
+        // 受保护的构造函数，传入初始银行金额
+        protected Player(int bank)
+        {
+            // 初始化 Hand 为空手牌
+            Hand = Hand.Empty;
+            // 初始化余额为银行金额
+            Balance = bank;
+        }
 
-    // 受保护的 Table 属性，表示玩家所在的桌子
-    protected Table Table =>
-        _table ?? throw new InvalidOperationException("The player must be sitting at the table.");
+        // 公共属性 Hand
+        public Hand Hand { get; set; }
+        // 公共属性 Balance
+        public int Balance { get; set; }
+        // 公共属性 HasBet
+        public bool HasBet { get; set; }
+        // 公共属性 Bet
+        public int Bet { get; set; }
+        // 公共只读属性 HasFolded
+        public bool HasFolded => _hasFolded;
+        // 公共属性 IsBroke，受保护的设置器
+        public bool IsBroke { get; protected set; }
 
-    // 公共方法 Sit，让玩家坐下到指定的桌子
-    public void Sit(Table table) => _table = table;
+        // 受保护的 Table 属性，如果为空则抛出异常
+        protected Table Table =>
+            _table ?? throw new InvalidOperationException("The player must be sitting at the table.");
 
-    // 虚拟方法 NewHand，表示开始新一轮游戏
-    public virtual void NewHand()
-    {
-        Bet = 0;
-        Hand = Table.Deck.DealHand();
-        _hasFolded = false;
-    }
+        // 公共方法 Sit，传入 Table 对象
+        public void Sit(Table table) => _table = table;
 
-    // AnteUp 方法，表示玩家下底注
-    public int AnteUp()
-    {
-        Balance -= Table.Ante;
-        return Table.Ante;
-    }
+        // 虚拟方法 NewHand
+        public virtual void NewHand()
+        {
+            // 下注金额归零
+            Bet = 0;
+            // 发牌给玩家
+            Hand = Table.Deck.DealHand();
+            // 重置 _hasFolded 为 false
+            _hasFolded = false;
+        }
 
-    // DrawCards 方法，表示玩家摸牌
-    public void DrawCards()
-    {
-        Bet = 0;
-        DrawCards(Table.Deck);
-    }
+        // 公共方法 AnteUp，返回下注金额
+        public int AnteUp()
+        {
+            // 余额减去底注
+            Balance -= Table.Ante;
+            // 返回底注
+            return Table.Ante;
+        }
 
-    // 受保护的抽象方法 DrawCards，表示玩家摸牌
-    protected abstract void DrawCards(Deck deck);
+        // 公共方法 DrawCards
+        public void DrawCards()
+        {
+            // 下注金额归零
+            Bet = 0;
+            // 从牌堆中抽牌
+            DrawCards(Table.Deck);
+        }
 
-    // 虚拟方法 TakeWinnings，表示玩家获得赢利
-    public virtual void TakeWinnings()
-    {
-        Balance += Table.Pot;
-        Table.Pot = 0;
-    }
+        // 受保护的抽象方法 DrawCards，传入 Deck 对象
+        protected abstract void DrawCards(Deck deck);
 
-    // Fold 方法，表示玩家弃牌
-    public void Fold()
-    {
-        _hasFolded = true;
+        // 虚拟方法 TakeWinnings
+        public virtual void TakeWinnings()
+        {
+            // 余额增加奖池金额
+            Balance += Table.Pot;
+            // 奖池金额归零
+            Table.Pot = 0;
+        }
+
+        // 公共方法 Fold，设置 _hasFolded 为 true
+        public void Fold()
+        {
+            _hasFolded = true;
+        }
     }
 }
-
 ```

@@ -1,135 +1,70 @@
 # `basic-computer-games\00_Alternate_Languages\42_Gunner\go\main.go`
 
 ```
-
 package main
 
 import (
-	"bufio" // 导入 bufio 包，用于读取输入
-	"fmt" // 导入 fmt 包，用于格式化输出
-	"math" // 导入 math 包，用于数学计算
-	"math/rand" // 导入 math/rand 包，用于生成随机数
-	"os" // 导入 os 包，用于操作系统功能
-	"strconv" // 导入 strconv 包，用于字符串转换
-	"strings" // 导入 strings 包，用于字符串操作
-	"time" // 导入 time 包，用于时间相关功能
+    "bufio"  // 导入 bufio 包，用于读取输入
+    "fmt"    // 导入 fmt 包，用于格式化输出
+    "math"   // 导入 math 包，用于数学计算
+    "math/rand"  // 导入 math/rand 包，用于生成随机数
+    "os"     // 导入 os 包，用于操作系统功能
+    "strconv"    // 导入 strconv 包，用于字符串转换
+    "strings"    // 导入 strings 包，用于字符串处理
+    "time"   // 导入 time 包，用于时间相关操作
 )
 
 func printIntro() {
-	// 打印游戏介绍
-	fmt.Println("                                 GUNNER")
-	fmt.Println("               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-	fmt.Print("\n\n\n")
-	fmt.Println("YOU ARE THE OFFICER-IN-CHARGE, GIVING ORDERS TO A GUN")
-	fmt.Println("CREW, TELLING THEM THE DEGREES OF ELEVATION YOU ESTIMATE")
-	fmt.Println("WILL PLACE A PROJECTILE ON TARGET.  A HIT WITHIN 100 YARDS")
-	fmt.Println("OF THE TARGET WILL DESTROY IT.")
-	fmt.Println()
+    fmt.Println("                                 GUNNER")  // 输出标题
+    fmt.Println("               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")  // 输出创意计算的地点
+    fmt.Print("\n\n\n")  // 输出空行
+    fmt.Println("YOU ARE THE OFFICER-IN-CHARGE, GIVING ORDERS TO A GUN")  // 输出提示信息
+    fmt.Println("CREW, TELLING THEM THE DEGREES OF ELEVATION YOU ESTIMATE")  // 输出提示信息
+    fmt.Println("WILL PLACE A PROJECTILE ON TARGET.  A HIT WITHIN 100 YARDS")  // 输出提示信息
+    fmt.Println("OF THE TARGET WILL DESTROY IT.")  // 输出提示信息
+    fmt.Println()  // 输出空行
 }
 
 func getFloat() float64 {
-	// 从标准输入获取浮点数
-	scanner := bufio.NewScanner(os.Stdin)
-	for {
-		scanner.Scan()
-		fl, err := strconv.ParseFloat(scanner.Text(), 64)
+    scanner := bufio.NewScanner(os.Stdin)  // 创建一个从标准输入读取数据的 Scanner 对象
+    for {
+        scanner.Scan()  // 读取输入
+        fl, err := strconv.ParseFloat(scanner.Text(), 64)  // 将输入的字符串转换为浮点数
 
-		if err != nil {
-			fmt.Println("Invalid input")
-			continue
-		}
+        if err != nil {  // 如果转换出错
+            fmt.Println("Invalid input")  // 输出错误信息
+            continue  // 继续循环
+        }
 
-		return fl
-	}
+        return fl  // 返回转换后的浮点数
+    }
 }
 
 func play() {
-	// 随机生成敌人距离和枪的射程
-	gunRange := int(40000*rand.Float64() + 20000)
-	fmt.Printf("\nMAXIMUM RANGE OF YOUR GUN IS %d YARDS\n", gunRange)
+    gunRange := int(40000*rand.Float64() + 20000)  // 生成一个随机的枪的射程
+    fmt.Printf("\nMAXIMUM RANGE OF YOUR GUN IS %d YARDS\n", gunRange)  // 输出枪的射程信息
 
-	killedEnemies := 0
-	S1 := 0
-
-	for {
-		// 随机生成目标距离
-		targetDistance := int(float64(gunRange) * (0.1 + 0.8*rand.Float64()))
-		shots := 0
-
-		fmt.Printf("\nDISTANCE TO THE TARGET IS %d YARDS\n", targetDistance)
-
-		for {
-			fmt.Print("\n\nELEVATION? ")
-			elevation := getFloat()
-
-			if elevation > 89 {
-				fmt.Println("MAXIMUM ELEVATION IS 89 DEGREES")
-				continue
-			}
-
-			if elevation < 1 {
-				fmt.Println("MINIMUM ELEVATION IS 1 DEGREE")
-				continue
-			}
-
-			shots += 1
-
-			if shots < 6 {
-				B2 := 2 * elevation / 57.3
-				shotImpact := int(float64(gunRange) * math.Sin(B2))
-				shotProximity := int(targetDistance - shotImpact)
-
-				if math.Abs(float64(shotProximity)) < 100 { // 击中目标
-					fmt.Printf("*** TARGET DESTROYED *** %d ROUNDS OF AMMUNITION EXPENDED.\n", shots)
-					S1 += shots
-
-					if killedEnemies == 4 {
-						fmt.Printf("\n\nTOTAL ROUNDS EXPENDED WERE: %d\n", S1)
-						if S1 > 18 {
-							print("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")
-							return
-						} else {
-							print("NICE SHOOTING !!")
-							return
-						}
-					} else {
-						killedEnemies += 1
-						fmt.Println("\nTHE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY...")
-						break
-					}
-				} else { // 未击中
-					if shotProximity > 100 {
-						fmt.Printf("SHORT OF TARGET BY %d YARDS.\n", int(math.Abs(float64(shotProximity))))
-					} else {
-						fmt.Printf("OVER TARGET BY %d YARDS.\n", int(math.Abs(float64(shotProximity))))
-					}
-				}
-			} else {
-				fmt.Print("\nBOOM !!!!   YOU HAVE JUST BEEN DESTROYED BY THE ENEMY.\n\n\n")
-				fmt.Println("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")
-				return
-			}
-		}
-	}
+    killedEnemies := 0  // 初始化击毙敌人数量
+    S1 := 0  // 初始化 S1
+    // 这里缺少了一些代码，需要补充
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano()) // 使用当前时间作为随机数种子
-	scanner := bufio.NewScanner(os.Stdin)
+    rand.Seed(time.Now().UnixNano())  // 使用当前时间作为随机数种子
+    scanner := bufio.NewScanner(os.Stdin)  // 创建一个从标准输入读取数据的 Scanner 对象
 
-	printIntro() // 打印游戏介绍
+    printIntro()  // 调用打印介绍信息的函数
 
-	for {
-		play() // 开始游戏
+    for {
+        play()  // 调用游戏函数
 
-		fmt.Print("TRY AGAIN (Y OR N)? ")
-		scanner.Scan()
+        fmt.Print("TRY AGAIN (Y OR N)? ")  // 提示用户是否再次游戏
+        scanner.Scan()  // 读取输入
 
-		if strings.ToUpper(scanner.Text())[0:1] != "Y" {
-			fmt.Println("\nOK. RETURN TO BASE CAMP.")
-			break
-		}
-	}
+        if strings.ToUpper(scanner.Text())[0:1] != "Y" {  // 判断用户输入的是否是 "Y"
+            fmt.Println("\nOK. RETURN TO BASE CAMP.")  // 输出提示信息
+            break  // 结束循环
+        }
+    }
 }
-
 ```

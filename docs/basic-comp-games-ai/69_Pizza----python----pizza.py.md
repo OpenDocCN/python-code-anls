@@ -1,7 +1,6 @@
 # `basic-computer-games\69_Pizza\python\pizza.py`
 
 ```
-
 """
 PIZZA
 
@@ -10,99 +9,123 @@ A pizza delivery simulation
 Ported by Dave LeCompte
 """
 
-import random  # 导入 random 模块，用于生成随机数
+# 导入 random 模块
+import random
 
-PAGE_WIDTH = 64  # 定义页面宽度常量
+# 页面宽度
+PAGE_WIDTH = 64
 
-customer_names = [chr(65 + x) for x in range(16)]  # 生成包含 16 个顾客名字的列表
-street_names = [str(n) for n in range(1, 5)]  # 生成包含 1 到 4 的街道名字的列表
-
-
-def print_centered(msg: str) -> None:  # 定义一个打印居中文本的函数
-    spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)  # 计算居中需要的空格数
-    print(spaces + msg)  # 打印居中文本
-
-
-def print_header(title: str) -> None:  # 定义一个打印标题的函数
-    print_centered(title)  # 打印居中标题
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")  # 打印居中副标题
-    print()  # 打印空行
-    print()  # 打印空行
-    print()  # 打印空行
+# 顾客姓名列表
+customer_names = [chr(65 + x) for x in range(16)]
+# 街道名称列表
+street_names = [str(n) for n in range(1, 5)]
 
 
-def print_ticks() -> None:  # 定义一个打印分隔线的函数
-    for _ in range(4):  # 循环打印 4 条分隔线
-        print("-")  # 打印分隔线
+# 打印居中文本
+def print_centered(msg: str) -> None:
+    spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
+    print(spaces + msg)
 
 
-def print_ruler() -> None:  # 定义一个打印标尺的函数
-    print(" -----1-----2-----3-----4-----")  # 打印标尺
+# 打印标题
+def print_header(title: str) -> None:
+    print_centered(title)
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print()
+    print()
+    print()
 
 
-def print_street(i: int) -> None:  # 定义一个打印街道信息的函数
-    street_number = 3 - i  # 计算街道编号
-    street_name = street_names[street_number]  # 获取街道名字
-    line = street_name  # 初始化打印行
-
-    space = " " * 5  # 初始化空格
-    for customer_index in range(4):  # 遍历每个街道的 4 个顾客
-        line += space  # 添加空格
-        customer_name = customer_names[4 * street_number + customer_index]  # 获取顾客名字
-        line += customer_name  # 添加顾客名字
-    line += space  # 添加空格
-    line += street_name  # 添加街道名字
-    print(line)  # 打印街道信息
+# 打印分隔线
+def print_ticks() -> None:
+    for _ in range(4):
+        print("-")
 
 
-def print_map() -> None:  # 定义一个打印地图的函数
-    print("MAP OF THE CITY OF HYATTSVILLE")  # 打印城市地图标题
-    print()  # 打印空行
-    print_ruler()  # 打印标尺
-    for i in range(4):  # 遍历 4 条街道
-        print_ticks()  # 打印分隔线
-        print_street(i)  # 打印每条街道信息
-    print_ticks()  # 打印分隔线
-    print_ruler()  # 打印标尺
-    print()  # 打印空行
+# 打印标尺
+def print_ruler() -> None:
+    print(" -----1-----2-----3-----4-----")
 
 
-def print_instructions() -> str:  # 定义一个打印游戏说明的函数
-    print("PIZZA DELIVERY GAME")  # 打印游戏标题
-    print()  # 打印空行
-    print("WHAT IS YOUR FIRST NAME?")  # 提示输入玩家名字
-    player_name = input()  # 获取玩家名字
-    print()  # 打印空行
-    print(f"HI, {player_name}.  IN THIS GAME YOU ARE TO TAKE ORDERS")  # 打印欢迎信息
-    print("FOR PIZZAS.  THEN YOU ARE TO TELL A DELIVERY BOY")  # 打印游戏说明
+# 打印街道信息
+def print_street(i: int) -> None:
+    street_number = 3 - i
+
+    street_name = street_names[street_number]
+    line = street_name
+
+    space = " " * 5
+    for customer_index in range(4):
+        line += space
+        customer_name = customer_names[4 * street_number + customer_index]
+        line += customer_name
+    line += space
+    line += street_name
+    print(line)
+
+
+# 打印地图
+def print_map() -> None:
+    print("MAP OF THE CITY OF HYATTSVILLE")
+    print()
+    print_ruler()
+    for i in range(4):
+        print_ticks()
+        print_street(i)
+    print_ticks()
+    print_ruler()
+    print()
+
+
+# 打印游戏说明
+def print_instructions() -> str:
+    print("PIZZA DELIVERY GAME")
+    print()
+    print("WHAT IS YOUR FIRST NAME?")
+    player_name = input()
+    print()
+    print(f"HI, {player_name}.  IN THIS GAME YOU ARE TO TAKE ORDERS")
+    print("FOR PIZZAS.  THEN YOU ARE TO TELL A DELIVERY BOY")
     print("WHERE TO DELIVER THE ORDERED PIZZAS.")
-    print()  # 打印空行
-    print_map()  # 打印地图
-    print("THE OUTPUT IS A MAP OF THE HOMES WHERE")  # 打印游戏说明
+    print()
+    print()
+
+    print_map()
+
+    print("THE OUTPUT IS A MAP OF THE HOMES WHERE")
     print("YOU ARE TO SEND PIZZAS.")
-    print()  # 打印空行
-    print("YOUR JOB IS TO GIVE A TRUCK DRIVER")  # 打印游戏说明
+    print()
+    print("YOUR JOB IS TO GIVE A TRUCK DRIVER")
     print("THE LOCATION OR COORDINATES OF THE")
     print("HOME ORDERING THE PIZZA.")
-    print()  # 打印空行
-    return player_name  # 返回玩家名字
+    print()
+
+    return player_name
 
 
-def yes_no_prompt(msg: str) -> bool:  # 定义一个提示输入 yes 或 no 的函数
-    while True:  # 循环直到输入合法的值
-        print(msg)  # 打印提示信息
-        response = input().upper()  # 获取用户输入并转换为大写
+# 是/否提示
+def yes_no_prompt(msg: str) -> bool:
+    # 无限循环，直到条件被满足才会退出
+    while True:
+        # 打印消息
+        print(msg)
+        # 获取用户输入并转换为大写
+        response = input().upper()
 
-        if response == "YES":  # 如果输入是 YES
-            return True  # 返回 True
-        elif response == "NO":  # 如果输入是 NO
-            return False  # 返回 False
-        print("'YES' OR 'NO' PLEASE, NOW THEN,")  # 提示重新输入
-
-
-def print_more_directions(player_name: str) -> None:  # 定义一个打印更多游戏说明的函数
-    print()  # 打印空行
-    print("SOMEBODY WILL ASK FOR A PIZZA TO BE")  # 打印游戏说明
+        # 如果用户输入为"YES"，则返回True
+        if response == "YES":
+            return True
+        # 如果用户输入为"NO"，则返回False
+        elif response == "NO":
+            return False
+        # 如果用户输入既不是"YES"也不是"NO"，则打印提示信息
+        print("'YES' OR 'NO' PLEASE, NOW THEN,")
+# 定义一个函数，用于打印更多的指示信息，参数为玩家的名字，返回空值
+def print_more_directions(player_name: str) -> None:
+    # 打印空行
+    print()
+    # 打印提示信息
+    print("SOMEBODY WILL ASK FOR A PIZZA TO BE")
     print("DELIVERED.  THEN A DELIVERY BOY WILL")
     print("ASK YOU FOR THE LOCATION.")
     print("     EXAMPLE:")
@@ -112,77 +135,99 @@ def print_more_directions(player_name: str) -> None:  # 定义一个打印更多
     print()
 
 
-def calculate_customer_index(x: int, y: int) -> int:  # 定义一个计算顾客索引的函数
-    return 4 * (y - 1) + x - 1  # 返回顾客索引
+# 定义一个函数，用于计算顾客的索引，参数为 x 和 y 坐标，返回顾客的索引
+def calculate_customer_index(x: int, y: int) -> int:
+    return 4 * (y - 1) + x - 1
 
 
-def deliver_to(customer_index, customer_name, player_name) -> bool:  # 定义一个派送披萨的函数
-    print(f"  DRIVER TO {player_name}:  WHERE DOES {customer_name} LIVE?")  # 提示输入顾客位置
+# 定义一个函数，用于将披萨送到顾客那里，参数为顾客的索引、顾客的名字和玩家的名字，返回布尔值
+def deliver_to(customer_index, customer_name, player_name) -> bool:
+    # 打印送货员询问的信息
+    print(f"  DRIVER TO {player_name}:  WHERE DOES {customer_name} LIVE?")
 
-    coords = input()  # 获取输入的坐标
-    xc, yc = (int(c) for c in coords.split(","))  # 解析坐标
-    delivery_index = calculate_customer_index(xc, yc)  # 计算派送位置的顾客索引
-    if delivery_index == customer_index:  # 如果派送位置和顾客索引一致
-        print(f"HELLO {player_name}.  THIS IS {customer_name}, THANKS FOR THE PIZZA.")  # 打印派送成功信息
-        return True  # 返回 True
-    else:  # 如果派送位置和顾客索引不一致
-        delivery_name = customer_names[delivery_index]  # 获取派送位置的顾客名字
-        print(f"THIS IS {delivery_name}.  I DID NOT ORDER A PIZZA.")  # 打印派送失败信息
-        print(f"I LIVE AT {xc},{yc}")  # 打印派送位置
-        return False  # 返回 False
+    # 获取玩家输入的坐标
+    coords = input()
+    xc, yc = (int(c) for c in coords.split(","))
+    # 计算送货的索引
+    delivery_index = calculate_customer_index(xc, yc)
+    # 判断送货的索引是否与顾客的索引相同
+    if delivery_index == customer_index:
+        print(f"HELLO {player_name}.  THIS IS {customer_name}, THANKS FOR THE PIZZA.")
+        return True
+    else:
+        delivery_name = customer_names[delivery_index]
+        print(f"THIS IS {delivery_name}.  I DID NOT ORDER A PIZZA.")
+        print(f"I LIVE AT {xc},{yc}")
+        return False
 
 
-def play_game(num_turns, player_name) -> None:  # 定义一个游戏进行函数
-    for _turn in range(num_turns):  # 循环进行游戏
-        x = random.randint(1, 4)  # 随机生成 x 坐标
-        y = random.randint(1, 4)  # 随机生成 y 坐标
-        customer_index = calculate_customer_index(x, y)  # 计算顾客索引
-        customer_name = customer_names[customer_index]  # 获取顾客名字
+# 定义一个函数，用于玩游戏，参数为回合数和玩家的名字，返回空值
+def play_game(num_turns, player_name) -> None:
+    # 循环进行指定回合数的游戏
+    for _turn in range(num_turns):
+        # 随机生成顾客的坐标
+        x = random.randint(1, 4)
+        y = random.randint(1, 4)
+        # 计算顾客的索引和名字
+        customer_index = calculate_customer_index(x, y)
+        customer_name = customer_names[customer_index]
 
-        print()  # 打印空行
+        # 打印顾客的信息
+        print()
         print(
             f"HELLO {player_name}'S PIZZA.  THIS IS {customer_name}.  PLEASE SEND A PIZZA."
-        )  # 打印顾客点单信息
-        while True:  # 循环直到派送成功
-            success = deliver_to(customer_index, customer_name, player_name)  # 进行派送
-            if success:  # 如果派送成功
-                break  # 结束循环
+        )
+        # 循环进行送货，直到成功为止
+        while True:
+            success = deliver_to(customer_index, customer_name, player_name)
+            if success:
+                break
 
 
-def main() -> None:  # 定义主函数
-    print_header("PIZZA")  # 打印游戏标题
+# 定义一个函数，用于主程序逻辑，无参数，返回空值
+def main() -> None:
+    # 打印游戏标题
+    print_header("PIZZA")
 
-    player_name = print_instructions()  # 打印游戏说明并获取玩家名字
+    # 打印游戏说明，获取玩家名字
+    player_name = print_instructions()
 
-    more_directions = yes_no_prompt("DO YOU NEED MORE DIRECTIONS?")  # 提示是否需要更多游戏说明
+    # 询问玩家是否需要更多指示信息
+    more_directions = yes_no_prompt("DO YOU NEED MORE DIRECTIONS?")
+    # 如果有更多的指示，打印更多的指示给玩家
+    if more_directions:
+        print_more_directions(player_name)
 
-    if more_directions:  # 如果需要更多游戏说明
-        print_more_directions(player_name)  # 打印更多游戏说明
+        # 询问玩家是否理解指示
+        understand = yes_no_prompt("UNDERSTAND?")
 
-        understand = yes_no_prompt("UNDERSTAND?")  # 提示是否理解了游戏说明
+        # 如果玩家不理解，打印提示信息并结束游戏
+        if not understand:
+            print("THIS JOB IS DEFINITELY TOO DIFFICULT FOR YOU. THANKS ANYWAY")
+            return
 
-        if not understand:  # 如果没有理解
-            print("THIS JOB IS DEFINITELY TOO DIFFICULT FOR YOU. THANKS ANYWAY")  # 提示工作太难了
-            return  # 结束游戏
+    # 打印提示信息，玩家准备好开始接受订单
+    print("GOOD.  YOU ARE NOW READY TO START TAKING ORDERS.")
+    print()
+    print("GOOD LUCK!!")
+    print()
 
-    print("GOOD.  YOU ARE NOW READY TO START TAKING ORDERS.")  # 提示准备好开始接单
-    print()  # 打印空行
-    print("GOOD LUCK!!")  # 祝好运
-    print()  # 打印空行
+    # 循环进行游戏
+    while True:
+        # 设置游戏回合数为5
+        num_turns = 5
+        # 进行游戏
+        play_game(num_turns, player_name)
 
-    while True:  # 循环进行游戏
-        num_turns = 5  # 设置游戏轮数
-        play_game(num_turns, player_name)  # 进行游戏
-
-        print()  # 打印空行
-        more = yes_no_prompt("DO YOU WANT TO DELIVER MORE PIZZAS?")  # 提示是否继续派送披萨
-        if not more:  # 如果不继续
-            print(f"O.K. {player_name}, SEE YOU LATER!")  # 打印再见信息
-            print()  # 打印空行
-            return  # 结束游戏
-
-
-if __name__ == "__main__":  # 如果是主程序入口
-    main()  # 调用主函数
-
+        print()
+        # 询问玩家是否想要继续送比萨
+        more = yes_no_prompt("DO YOU WANT TO DELIVER MORE PIZZAS?")
+        # 如果不想继续，打印提示信息并结束游戏
+        if not more:
+            print(f"O.K. {player_name}, SEE YOU LATER!")
+            print()
+            return
+# 如果当前模块被直接执行，则调用 main() 函数
+if __name__ == "__main__":
+    main()
 ```

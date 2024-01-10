@@ -1,19 +1,15 @@
 # `basic-computer-games\73_Reverse\python\reverse.py`
 
 ```
-
 #!/usr/bin/env python3
-# 指定使用 Python3 解释器
-
 import random
 import textwrap
-# 导入 random 和 textwrap 模块
 
 NUMCNT = 9  # How many numbers are we playing with?
-# 定义全局变量 NUMCNT，表示游戏中使用的数字个数
+
 
 def main() -> None:
-    # 主函数，打印游戏标题和规则，然后进入游戏循环
+    # 打印游戏标题
     print("REVERSE".center(72))
     print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY".center(72))
     print()
@@ -21,71 +17,81 @@ def main() -> None:
     print("REVERSE -- A GAME OF SKILL")
     print()
 
+    # 如果用户想要查看规则，则打印规则
     if not input("DO YOU WANT THE RULES? (yes/no) ").lower().startswith("n"):
         print_rules()
-    # 如果用户需要规则，则打印规则
 
+    # 游戏循环
     while True:
         game_loop()
-        # 进入游戏循环
 
+        # 如果用户不想再玩了，则退出游戏
         if not input("TRY AGAIN? (yes/no) ").lower().startswith("y"):
             return
-        # 如果用户不想再玩了，则退出游戏
+
 
 def game_loop() -> None:
     """Play the main game."""
-    # 主游戏循环函数
+    # 生成1到NUMCNT的随机数列表
     numbers = list(range(1, NUMCNT + 1))
     random.shuffle(numbers)
-    # 生成一个包含 1 到 NUMCNT 的随机排列列表
 
+    # 打印原始列表并开始游戏
     print()
     print("HERE WE GO ... THE LIST IS:")
     print_list(numbers)
-    # 打印初始列表
 
     turns = 0
     while True:
         try:
+            # 获取用户输入的要反转的数字个数
             howmany = int(input("HOW MANY SHALL I REVERSE? "))
             assert howmany >= 0
         except (ValueError, AssertionError):
             continue
-        # 获取用户输入的翻转数量，确保输入合法
 
         if howmany == 0:
             return
-        # 如果用户输入 0，则退出游戏
 
         if howmany > NUMCNT:
             print("OOPS! WRONG! I CAN REVERSE AT MOST", NUMCNT)
             continue
-        # 如果用户输入的翻转数量超过了 NUMCNT，则提示错误
 
         turns += 1
 
+        # 反转用户指定数量的数字
         newnums = numbers[0:howmany]
         newnums.reverse()
         newnums.extend(numbers[howmany:])
         numbers = newnums
-        # 翻转列表中指定数量的数字
 
         print_list(numbers)
-        # 打印翻转后的列表
 
+        # 检查是否获胜
         if all(numbers[i] == i + 1 for i in range(NUMCNT)):
             print(f"YOU WON IT IN {turns} MOVES!")
             print()
             return
-        # 检查是否获胜，如果是则打印获胜信息并退出游戏
+
 
 def print_list(numbers) -> None:
-    print(" ".join(map(str, numbers))
-    # 打印列表
+    # 打印数字列表
+    print(" ".join(map(str, numbers)))
+
 
 def print_rules() -> None:
     # 打印游戏规则
+    rules = """
+    The game of REVERSE consists of a row of 9 squares, numbered 1 to 9.  The
+    computer selects a random arrangement of the numbers and you try to get
+    them back in order by repeatedly telling the computer how many numbers to
+    reverse.  The computer complies and shows you the new arrangement.  You
+    continue until you get them in order.  If you can do it in 6 moves, you're
+    a genius.  7 or 8 moves is good.  9 moves is O.K.  10 moves is poor.  More
+    than 10 moves and you're a dunce.
+    """
+    print(textwrap.fill(rules, width=72))
+    # 使用 textwrap.dedent() 方法创建多行字符串，用于存储游戏规则说明
     help = textwrap.dedent(
         """
         THIS IS THE GAME OF "REVERSE".  TO WIN, ALL YOU HAVE
@@ -110,14 +116,16 @@ def print_rules() -> None:
             NUMCNT
         )
     )
+    # 打印游戏规则说明
     print(help)
+    # 打印空行
     print()
-    # 打印游戏规则
-
+# 如果当前模块被直接执行，则执行 main 函数
 if __name__ == "__main__":
+    # 尝试执行 main 函数
     try:
         main()
+    # 捕获键盘中断异常，不做任何处理
     except KeyboardInterrupt:
         pass
-    # 如果程序被中断，则捕获异常并退出```
 ```

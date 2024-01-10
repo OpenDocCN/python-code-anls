@@ -1,14 +1,24 @@
 # `basic-computer-games\79_Slalom\csharp\program.cs`
 
 ```
-
-# 使用 System.Text 命名空间，该命名空间包含了处理文本的类和方法
+# 导入 System.Text 命名空间
 using System.Text;
 
-# 命名空间 Slalom，用于组织和管理相关的类和方法
+# 定义 Slalom 类，属于 Slalom 命名空间
 namespace Slalom
 {
-# 代码中缺少了一对大括号，需要添加以修复语法错误
+    # 定义 Slalom 类
+    class Slalom
+    } # 缺少左大括号，语法错误
+    # 定义 Program 类
+    class Program
+    {
+        # 定义程序入口方法
+        static void Main(string[] args)
+        {
+            # 创建 Slalom 对象并调用 PlayTheGame 方法
+            new Slalom().PlayTheGame();
+        }
+    }
 }
-
 ```

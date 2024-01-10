@@ -1,49 +1,49 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfo.cs`
 
 ```
-
-// 引入静态类，简化代码中对 Directory 和 Path 的调用
+// 使用静态导入来简化代码，可以直接使用 Directory 和 Path 类的方法
 using static System.IO.Directory;
 using static System.IO.Path;
-// 引入全局变量
+// 使用静态导入来简化代码，可以直接使用 DotnetUtils.Globals 类的方法
 using static DotnetUtils.Globals;
 
 // 命名空间 DotnetUtils
-namespace DotnetUtils;
+namespace DotnetUtils
+{
+    // 定义记录类型 PortInfo，包含多个属性
+    public record PortInfo(
+        string GamePath, string FolderName, int Index, string GameName,
+        string LangPath, string Lang, string Ext, string ProjExt,
+        string[] CodeFiles, string[] Slns, string[] Projs
+    ) {
+        // 创建静态只读的枚举选项对象，用于设置文件遍历的选项
+        private static readonly EnumerationOptions enumerationOptions = new() {
+            RecurseSubdirectories = true,
+            MatchType = MatchType.Simple,
+            MatchCasing = MatchCasing.CaseInsensitive
+        };
 
-// 定义 PortInfo 记录类型，包含游戏路径、文件夹名称、索引、游戏名称、语言路径、语言、扩展名、项目扩展名、代码文件数组、解决方案数组、项目数组
-public record PortInfo(
-    string GamePath, string FolderName, int Index, string GameName,
-    string LangPath, string Lang, string Ext, string ProjExt,
-    string[] CodeFiles, string[] Slns, string[] Projs
-) {
-    // 定义枚举选项
-    private static readonly EnumerationOptions enumerationOptions = new() {
-        RecurseSubdirectories = true,
-        MatchType = MatchType.Simple,
-        MatchCasing = MatchCasing.CaseInsensitive
-    };
-
-    // 特殊游戏名称映射表
-    private static readonly Dictionary<string, string> specialGameNames = new() {
-        { "3-D_Plot", "Plot" },
-        { "3-D_Tic-Tac-Toe", "ThreeDTicTacToe" },
-        { "23_Matches", "TwentyThreeMatches"}
-    };
-
-    // 创建 PortInfo 实例的静态方法
+        // 创建静态只读的特殊游戏名称字典，用于将以数字开头的游戏名称映射到特定字符串
+        private static readonly Dictionary<string, string> specialGameNames = new() {
+            { "3-D_Plot", "Plot" },
+            { "3-D_Tic-Tac-Toe", "ThreeDTicTacToe" },
+            { "23_Matches", "TwentyThreeMatches"}
+        };
+    }
+}
+    // 创建一个静态方法，用于根据游戏路径和语言关键词创建 PortInfo 对象
     public static PortInfo? Create(string gamePath, string langKeyword) {
         // 获取游戏路径中的文件夹名称
         var folderName = GetFileName(gamePath);
-        // 将文件夹名称按下划线分割成两部分
+        // 使用下划线分割文件夹名称，获取索引和游戏名称
         var parts = folderName.Split('_', 2);
 
-        // 如果分割后的部分数量小于等于1，则返回空
+        // 如果分割后的部分长度小于等于1，则返回空
         if (parts.Length <= 1) { return null; }
 
-        // 解析索引和游戏名称
+        // 使用元组解构，尝试解析索引和游戏名称
         var (index, gameName) = (
-            int.TryParse(parts[0], out var n) && n > 0 ? // 忽略 utilities 文件夹
+            int.TryParse(parts[0], out var n) && n > 0 ? // 忽略工具文件夹
                 n :
                 (int?)null,
             specialGameNames.TryGetValue(parts[1], out var specialName) ?
@@ -54,17 +54,17 @@ public record PortInfo(
         // 如果索引或游戏名称为空，则返回空
         if (index is null || gameName is null) { return null; }
 
-        // 获取语言关键字对应的扩展名和项目扩展名
+        // 使用元组解构，获取语言数据中的扩展名和项目文件扩展名
         var (ext, projExt) = LangData[langKeyword];
-        // 拼接语言路径
+        // 组合游戏路径和语言路径
         var langPath = Combine(gamePath, langKeyword);
-        // 获取语言路径下的代码文件数组
+        // 获取语言路径下的代码文件
         var codeFiles =
             GetFiles(langPath, $"*.{ext}", enumerationOptions)
                 .Where(x => !x.Contains("\\bin\\") && !x.Contains("\\obj\\"))
                 .ToArray();
 
-        // 返回 PortInfo 实例
+        // 返回一个新的 PortInfo 对象
         return new PortInfo(
             gamePath, folderName, index.Value, gameName,
             langPath, langKeyword, ext, projExt,
@@ -73,6 +73,5 @@ public record PortInfo(
             GetFiles(langPath, $"*.{projExt}", enumerationOptions)
         );
     }
-}
-
+# 闭合前面的函数定义
 ```

@@ -1,31 +1,35 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Choices.cs`
 
 ```
-
-// 引入 System 命名空间
 using System;
 
-// 定义 Choices 类
 namespace RockScissorsPaper
 {
     public class Choices
     {
-        // 定义 Rock、Scissors、Paper 三个选择，并初始化它们的值
+        // 创建 Rock 对象，表示石头
         public static readonly Choice Rock = new Choice("3", "Rock");
+        // 创建 Scissors 对象，表示剪刀
         public static readonly Choice Scissors = new Choice("2", "Scissors");
+        // 创建 Paper 对象，表示布
         public static readonly Choice Paper = new Choice("1", "Paper");
 
-        // 定义私有静态成员变量 _allChoices 和 _random
+        // 创建私有静态 Choice 数组 _allChoices
         private static readonly Choice[] _allChoices;
+        // 创建私有静态 Random 对象 _random
         private static readonly Random _random = new Random();
 
-        // 静态构造函数，初始化 Rock、Scissors、Paper 之间的关系和 _allChoices 数组
+        // 静态构造函数，初始化对象之间的关系和所有选择
         static Choices()
         {
+            // 设置石头可以战胜剪刀
             Rock.CanBeat = Scissors;
+            // 设置剪刀可以战胜布
             Scissors.CanBeat = Paper;
+            // 设置布可以战胜石头
             Paper.CanBeat = Rock;
 
+            // 初始化所有选择的数组
             _allChoices = new[] { Rock, Scissors, Paper };
         }
 
@@ -35,7 +39,7 @@ namespace RockScissorsPaper
             return _allChoices[_random.Next(_allChoices.GetLength(0))];
         }
 
-        // 根据选择器获取选择，如果存在则返回 true，并将选择赋值给 choice，否则返回 false
+        // 根据选择器获取选择，返回是否成功
         public static bool TryGetBySelector(string selector, out Choice choice)
         {
             foreach (var possibleChoice in _allChoices)
@@ -51,5 +55,4 @@ namespace RockScissorsPaper
         }
     }
 }
-
 ```

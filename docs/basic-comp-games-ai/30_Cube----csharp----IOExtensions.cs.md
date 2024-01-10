@@ -1,34 +1,33 @@
 # `basic-computer-games\30_Cube\csharp\IOExtensions.cs`
 
 ```
-
-# 命名空间 Cube 下的内部静态类 IOExtensions
+# 创建名为 Cube 的命名空间，并定义一个内部静态类 IOExtensions
 namespace Cube;
 
 internal static class IOExtensions
 {
-    # 读取赌注的扩展方法，接受一个 IReadWrite 接口和余额作为参数
+    # 定义一个扩展方法 ReadWager，接收一个 IReadWrite 类型的参数 io 和一个浮点数类型的参数 balance
     internal static float? ReadWager(this IReadWrite io, float balance)
     {
-        # 写入赌注流
+        # 调用 io 对象的 Write 方法，传入 Streams.Wager 作为参数
         io.Write(Streams.Wager);
-        # 如果读取的数字为 0，则返回空值
+        # 如果调用 io 对象的 ReadNumber 方法返回值为 0，则返回空值
         if (io.ReadNumber("") == 0) { return null; }
 
-        # 设置赌注提示
+        # 定义一个字符串变量 prompt，赋值为 Prompts.HowMuch
         var prompt = Prompts.HowMuch;
 
-        # 循环直到条件不满足
+        # 进入无限循环
         while(true)
         {
-            # 读取赌注，如果小于等于余额则返回赌注
+            # 调用 io 对象的 ReadNumber 方法，传入 prompt 作为参数，将返回值赋给变量 wager
             var wager = io.ReadNumber(prompt);
+            # 如果 wager 小于等于 balance，则返回 wager
             if (wager <= balance) { return wager; }
 
-            # 更新提示为重新下注
+            # 将 prompt 的值更新为 Prompts.BetAgain
             prompt = Prompts.BetAgain;
         }
     }
 }
-
 ```

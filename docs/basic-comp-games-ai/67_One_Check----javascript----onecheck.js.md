@@ -1,7 +1,6 @@
 # `basic-computer-games\67_One_Check\javascript\onecheck.js`
 
 ```
-
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
@@ -20,18 +19,25 @@ function input()
 
                        // 打印提示符
                        print("? ");
+                       // 设置输入框类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
-                       // 监听键盘事件，当按下回车键时，将输入的值添加到输出元素中，并解析为输入字符串
+                       // 监听键盘按下事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 获取输入的字符串
                                                       input_str = input_element.value;
+                                                      // 从输出元素中移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的字符串
                                                       print(input_str);
                                                       print("\n");
+                                                      // 解析 Promise 对象
                                                       resolve(input_str);
                                                       }
                                                       });
@@ -50,7 +56,7 @@ function tab(space)
 // 定义一个空数组
 var a = [];
 
-// 主程序，使用 async 函数定义
+// 主程序
 async function main()
 {
     // 打印标题
@@ -59,21 +65,35 @@ async function main()
     print("\n");
     print("\n");
     print("\n");
-    // 初始化数组 a
+    // 初始化数组
     for (i = 0; i <= 64; i++)
         a[i] = 0;
     // 打印游戏说明
     print("SOLITAIRE CHECKER PUZZLE BY DAVID AHL\n");
-    // ...（以下为打印游戏规则和操作提示的部分，略）
-
-    // 主循环
-    while (1) {
-        // ...（以下为游戏逻辑的部分，略）
+    print("\n");
+    print("48 CHECKERS ARE PLACED ON THE 2 OUTSIDE SPACES OF A\n");
+}
+    # 打印标准的 64 方格棋盘，目标是通过对角跳吃掉尽可能多的棋子
+    print("STANDARD 64-SQUARE CHECKERBOARD.  THE OBJECT IS TO\n");
+    # 打印游戏规则说明
+    print("REMOVE AS MANY CHECKERS AS POSSIBLE BY DIAGONAL JUMPS\n");
+    print("(AS IN STANDARD CHECKERS).  USE THE NUMBERED BOARD TO\n");
+    print("INDICATE THE SQUARE YOU WISH TO JUMP FROM AND TO.  ON\n");
+    print("THE BOARD PRINTED OUT ON EACH TURN '1' INDICATES A\n");
+    print("CHECKER AND '0' AN EMPTY SQUARE.  WHEN YOU HAVE NO\n");
+    print("POSSIBLE JUMPS REMAINING, INPUT A '0' IN RESPONSE TO\n");
+    print("QUESTION 'JUMP FROM ?'\n");
+    print("\n");
+    # 打印数字棋盘
+    print("HERE IS THE NUMERICAL BOARD:\n");
+    print("\n");
     }
-    // ...（以下为游戏结束后的部分，略）
+    # 打印结束语
+    print("\n");
+    print("O.K.  HOPE YOU HAD FUN!!\n");
+# 结束 main 函数的定义
 }
 
-// 调用主程序
+# 调用 main 函数
 main();
-
 ```

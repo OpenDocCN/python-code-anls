@@ -1,18 +1,22 @@
 # `basic-computer-games\83_Stock_Market\csharp\View.cs`
 
 ```
-
-# 引入系统命名空间
+// 引入命名空间
 using System;
 using System.Collections.Generic;
 using System.Linq;
-# 引入自定义的扩展方法命名空间
+// 引入自定义扩展方法的命名空间
 using Game.Extensions;
 
-# 定义游戏命名空间
+// 命名空间 Game
 namespace Game
 {
-    # 代码内容
+    /// <summary>
+    /// 包含用于向用户显示信息的函数
+    /// </summary>
+    public static class View
+    {
+        // 类定义结束
+    }
 }
-
 ```

@@ -1,78 +1,76 @@
 # `basic-computer-games\72_Queen\csharp\Resources\Resource.cs`
 
 ```
-
-// 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
-using System.Reflection;
-using System.Runtime.CompilerServices;
-
-// Queen.Resources 命名空间
+// 声明命名空间 Queen.Resources
 namespace Queen.Resources
 {
-    // Resource 类
+    // 声明内部静态类 Resource
     internal static class Resource
     {
-        // Streams 类
+        // 声明内部静态类 Streams
         internal static class Streams
         {
-            // 获取标题流
+            // 声明静态属性 Title，返回 GetStream() 方法的结果
             public static Stream Title => GetStream();
-            // 获取说明流
+            // 声明静态属性 Instructions，返回 GetStream() 方法的结果
             public static Stream Instructions => GetStream();
-            // 获取YesOrNo流
+            // 声明静态属性 YesOrNo，返回 GetStream() 方法的结果
             public static Stream YesOrNo => GetStream();
-            // 获取棋盘流
+            // 声明静态属性 Board，返回 GetStream() 方法的结果
             public static Stream Board => GetStream();
-            // 获取非法开始流
+            // 声明静态属性 IllegalStart，返回 GetStream() 方法的结果
             public static Stream IllegalStart => GetStream();
-            // 获取非法移动流
+            // 声明静态属性 IllegalMove，返回 GetStream() 方法的结果
             public static Stream IllegalMove => GetStream();
-            // 获取放弃流
+            // 声明静态属性 Forfeit，返回 GetStream() 方法的结果
             public static Stream Forfeit => GetStream();
-            // 获取我赢了流
+            // 声明静态属性 IWin，返回 GetStream() 方法的结果
             public static Stream IWin => GetStream();
-            // 获取祝贺流
+            // 声明静态属性 Congratulations，返回 GetStream() 方法的结果
             public static Stream Congratulations => GetStream();
-            // 获取感谢流
+            // 声明静态属性 Thanks，返回 GetStream() 方法的结果
             public static Stream Thanks => GetStream();
         }
 
-        // Prompts 类
+        // 声明内部静态类 Prompts
         internal static class Prompts
         {
-            // 获取说明提示
+            // 声明静态属性 Instructions，返回 GetPrompt() 方法的结果
             public static string Instructions => GetPrompt();
-            // 获取开始提示
+            // 声明静态属性 Start，返回 GetPrompt() 方法的结果
             public static string Start => GetPrompt();
-            // 获取移动提示
+            // 声明静态属性 Move，返回 GetPrompt() 方法的结果
             public static string Move => GetPrompt();
-            // 获取任何人提示
+            // 声明静态属性 Anyone，返回 GetPrompt() 方法的结果
             public static string Anyone => GetPrompt();
         }
 
-        // Strings 类
+        // 声明内部静态类 Strings
         internal static class Strings
         {
-            // 获取计算机移动字符串
+            // 声明静态方法 ComputerMove，接受 Position 参数，返回 GetString() 方法的结果
             public static string ComputerMove(Position position) => string.Format(GetString(), position);
         }
 
-        // 获取提示
+        // 声明私有静态方法 GetPrompt，接受可空的 string 类型参数 name，默认值为 null，返回 GetString() 方法的结果
         private static string GetPrompt([CallerMemberName] string? name = null) => GetString($"{name}Prompt");
 
-        // 获取字符串
+        // 声明私有静态方法 GetString，接受可空的 string 类型参数 name，默认值为 null，返回读取嵌入资源流的结果
         private static string GetString([CallerMemberName] string? name = null)
         {
+            // 使用嵌入资源流创建 StreamReader 对象
             using var stream = GetStream(name);
             using var reader = new StreamReader(stream);
+            // 返回读取的文本内容
             return reader.ReadToEnd();
         }
 
-        // 获取流
+        // 声明私有静态方法 GetStream，接受可空的 string 类型参数 name，默认值为 null，返回嵌入资源流
         private static Stream GetStream([CallerMemberName] string? name = null) =>
+            // 获取当前执行程序集的嵌入资源流
             Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+                // 如果找不到嵌入资源流，则抛出异常
                 ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
     }
 }
-
 ```

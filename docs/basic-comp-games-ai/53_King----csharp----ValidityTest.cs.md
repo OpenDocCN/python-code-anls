@@ -1,32 +1,42 @@
 # `basic-computer-games\53_King\csharp\ValidityTest.cs`
 
 ```
-
-namespace King; // 命名空间声明
-
-internal class ValidityTest // 内部类 ValidityTest 声明
+// 命名空间 King 下的 ValidityTest 类
+namespace King
 {
-    private readonly Predicate<float> _isValid; // 只读字段，存储 float 类型的断言
-    private readonly Func<string> _getError; // 只读字段，存储返回字符串的函数
-
-    public ValidityTest(Predicate<float> isValid, string error) // 构造函数，接受断言和错误信息
-        : this(isValid, () => error) // 调用另一个构造函数
+    // ValidityTest 类
+    internal class ValidityTest
     {
-    }
+        // 只读字段，用于存储 float 类型的断言函数
+        private readonly Predicate<float> _isValid;
+        // 只读字段，用于存储返回错误信息的函数
+        private readonly Func<string> _getError;
 
-    public ValidityTest(Predicate<float> isValid, Func<string> getError) // 构造函数，接受断言和返回错误信息的函数
-    {
-        _isValid = isValid; // 将传入的断言赋值给 _isValid
-        _getError = getError; // 将传入的返回错误信息的函数赋值给 _getError
-    }
+        // 构造函数，接受一个断言函数和一个错误信息字符串
+        public ValidityTest(Predicate<float> isValid, string error)
+            : this(isValid, () => error)
+        {
+        }
 
-    public bool IsValid(float value, IReadWrite io) // 公共方法，用于检查值的有效性
-    {
-        if (_isValid(value)) { return true; } // 如果值有效，返回 true
-        
-        io.Write(_getError()); // 否则，将错误信息写入 IReadWrite 接口
-        return false; // 返回 false
+        // 构造函数，接受一个断言函数和一个返回错误信息的函数
+        public ValidityTest(Predicate<float> isValid, Func<string> getError)
+        {
+            // 将传入的断言函数赋值给 _isValid 字段
+            _isValid = isValid;
+            // 将传入的返回错误信息的函数赋值给 _getError 字段
+            _getError = getError;
+        }
+
+        // 判断给定的值是否有效
+        public bool IsValid(float value, IReadWrite io)
+        {
+            // 如果断言函数返回 true，则返回 true
+            if (_isValid(value)) { return true; }
+            
+            // 否则，将错误信息写入 IReadWrite 对象，并返回 false
+            io.Write(_getError());
+            return false;
+        }
     }
 }
-
 ```

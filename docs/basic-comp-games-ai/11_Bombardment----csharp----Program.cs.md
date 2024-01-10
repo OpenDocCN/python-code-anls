@@ -1,25 +1,23 @@
 # `basic-computer-games\11_Bombardment\csharp\Program.cs`
 
 ```
-
-// 引入 System 命名空间
+# 引入 System 命名空间
 using System;
 
-// 命名空间 Bombardment
+# 定义 Bombardment 命名空间
 namespace Bombardment
 {
-    // 程序类
+    # 定义 Program 类
     class Program
     {
-        // 主函数
+        # 定义程序入口 Main 方法，参数为字符串数组
         static void Main(string[] args)
         {
-            // 创建 Bombardment 对象
+            # 创建 Bombardment 对象
             var bombardment = new Bombardment();
-            // 调用 Play 方法开始游戏
+            # 调用 Bombardment 对象的 Play 方法
             bombardment.Play();
         }
     }
 }
-
 ```

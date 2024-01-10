@@ -1,7 +1,7 @@
 # `basic-computer-games\58_Love\python\love.py`
 
 ```
-
+# 程序的介绍和版权信息
 """
 LOVE
 
@@ -22,116 +22,111 @@ From: BASIC Computer Games (1978)
 Python port by Jeff Jetton, 2019
 """
 
-
-# Image data. Each top-level element is a row. Each row element
-# contains alternating character and blank run lengths.
-# 图像数据。每个顶层元素是一行。每行元素包含交替的字符和空白运行长度。
+# 图像数据，每个顶层元素是一行，每行元素包含交替的字符和空白的长度
 DATA = [
     [
         60,
     ],
     [1, 12, 26, 9, 12],
     [3, 8, 24, 17, 8],
-    # ... (more data)
+    ...
+    # 省略部分数据
+    ...
+    [11, 8, 13, 27, 1],
     [
         60,
     ],
 ]
 
-
-# Assume that the total length of the first element
-# is the line length used by every row
-# 假设第一个元素的总长度是每行使用的行长度
+# 假设第一个元素的总长度是每行使用的长度
 ROW_LEN = sum(DATA[0])
 
-
+# 主函数
 def main() -> None:
-    # Display intro text
     # 显示介绍文本
     print("\n                  Love")
     print("Creative Computing  Morristown, New Jersey")
+    # 打印空行
     print("\n\n")
+    # 打印关于美国艺术家Robert Indiana的致敬词
     print("A tribute to the great American artist, Robert Indiana.")
+    # 打印关于他作品的描述
     print("His great work will be reproduced with a message of")
     print("your choice up to 60 characters.  If you can't think of")
     print("a message, simple type the word 'love'\n")  # (sic)
-
-    # Get message from user
+    
     # 从用户获取消息
     message = input("Your message, please? ")
+    # 如果用户没有输入消息，则默认为"LOVE"
     if message == "":
         message = "LOVE"
-
-    # Repeat the message until we get at least one line's worth
-    # 重复消息，直到我们至少得到一行的长度
+    
+    # 重复消息直到至少有一行的长度
     while len(message) < ROW_LEN:
         message += message
-
-    # Display image
+    
     # 显示图像
     print("\n" * 9)
+    # 遍历数据中的每一行
     for row in DATA:
+        # 初始化打印消息标志和位置
         print_message = True
         position = 0
         line_text = ""
+        # 遍历每一行中的长度
         for length in row:
+            # 如果需要打印消息
             if print_message:
+                # 从消息中获取对应长度的文本
                 text = message[position : (position + length)]
                 print_message = False
             else:
+                # 否则填充空格
                 text = " " * length
                 print_message = True
+            # 将文本添加到行文本中
             line_text += text
             position += length
+        # 打印行文本
         print(line_text)
-
+    
     print()
-
-
+# 如果当前脚本被直接执行，则调用 main() 函数
 if __name__ == "__main__":
     main()
 
 
 ######################################################################
 #
-# Porting Notes
+# 移植说明
 #
-#   Not too different from the original, logic-wise. The image was
-#   originally encoded as a series of BASIC "DATA" lines. Here,
-#   we've converted it to a more Pythonic nested list structure.
-#   Other changes include reducing some of the vertical spacing
-#   (since we'll probably be showing this on a screen rather than
-#   the sort of tractor-feed printer the program was written for)
-#   and having the message default to LOVE when no input is given.
+#   逻辑上与原始版本并没有太大不同。图像最初被编码为一系列BASIC的“DATA”行。在这里，
+#   我们将其转换为更符合Python风格的嵌套列表结构。其他更改包括减少一些垂直间距
+#   （因为我们可能会在屏幕上显示，而不是程序最初编写的拖拉机进纸打印机上），
+#   并在没有输入时将消息默认为LOVE。
 #
-#   This program uses a simple version of run-length encoding to
-#   compress a 60 x 36 image (2,160 characters) into just 252 DATA
-#   values.  That's about an 8.5-to-1 data compression ratio,
-#   which is pretty good!
+#   该程序使用简单的游程编码版本，将60 x 36的图像（2,160个字符）压缩为仅252个DATA值。
+#   这大约是8.5比1的数据压缩比，相当不错！
 #
 #
-# Ideas for Modifications
+# 修改的想法
 #
-#   Process the user's message input to remove spaces and change
-#   to uppercase.
+#   处理用户输入的消息以删除空格并转换为大写。
 #
-#   Encode other images in a similar fashion and let the user choose
-#   which one they'd like to use to display their message.
+#   以类似的方式编码其他图像，并让用户选择他们想要用来显示消息的图像。
 #
-#   To help with the above step, create a program that reads in a
-#   text file of any sort of similar character/space art and produces
-#   the Python code to initialize the correct nested list of values.
+#   为了帮助上述步骤，创建一个程序，读取任何类似字符/空格艺术的文本文件，并生成
+#   初始化正确嵌套值的Python代码。
 #
-#   For example, if the input file were:
+#   例如，如果输入文件是：
 #
 #     *****
 #     *  **
 #     **  *
 #
-#   Your program would output:
+#   您的程序将输出：
 #
 #    ((5, ), (1, 1, 2), (2, 1, 1))
 #
 ######################################################################
-
 ```

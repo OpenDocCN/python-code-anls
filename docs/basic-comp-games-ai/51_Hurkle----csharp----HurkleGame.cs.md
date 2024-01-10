@@ -1,71 +1,52 @@
 # `basic-computer-games\51_Hurkle\csharp\HurkleGame.cs`
 
 ```
-
-// 引入 System 命名空间
 using System;
 
-// 定义 hurkle 命名空间
 namespace hurkle
 {
-    // 定义 HurkleGame 类
     internal class HurkleGame
     {
-        // 声明私有的 Random 对象 _random
-        private readonly Random _random = new Random();
-        // 声明私有的 IHurkleView 对象 _view
-        private readonly IHurkleView _view;
-        // 声明私有的整型变量 guesses
-        private readonly int guesses;
-        // 声明私有的整型变量 gridSize
-        private readonly int gridSize;
+        private readonly Random _random = new Random();  // 创建一个随机数生成器对象
+        private readonly IHurkleView _view;  // 创建一个 IHurkleView 接口类型的私有变量
+        private readonly int guesses;  // 创建一个整型的只读变量 guesses
+        private readonly int gridSize;  // 创建一个整型的只读变量 gridSize
 
-        // 定义 HurkleGame 类的构造函数
         public HurkleGame(int guesses, int gridSize, IHurkleView view)
         {
-            // 初始化 _view
-            _view = view;
-            // 初始化 this.guesses
-            this.guesses = guesses;
-            // 初始化 this.gridSize
-            this.gridSize = gridSize;
+            _view = view;  // 将传入的 view 参数赋值给私有变量 _view
+            this.guesses = guesses;  // 将传入的 guesses 参数赋值给只读变量 guesses
+            this.gridSize = gridSize;  // 将传入的 gridSize 参数赋值给只读变量 gridSize
         }
 
-        // 定义 PlayGame 方法
         public void PlayGame()
         {
-            // 生成随机的 hurklePoint 对象
-            var hurklePoint = new GamePoint{
-                X = _random.Next(0, gridSize),
-                Y = _random.Next(0, gridSize)
+            // BASIC program was generating a float between 0 and 1
+            // then multiplying by the size of the grid to to a number
+            // between 1 and 10. C# allows you to do that directly.
+            var hurklePoint = new GamePoint{  // 创建一个 GamePoint 对象，并初始化 X 和 Y 属性
+                X = _random.Next(0, gridSize),  // 生成一个 0 到 gridSize 之间的随机整数，并赋值给 X 属性
+                Y = _random.Next(0, gridSize)  // 生成一个 0 到 gridSize 之间的随机整数，并赋值给 Y 属性
             };
 
-            // 循环进行猜测
-            for(var K=1;K<=guesses;K++)
+            for(var K=1;K<=guesses;K++)  // 循环执行猜测的次数
             {
-                // 获取玩家的猜测点
-                var guessPoint = _view.GetGuess(new GuessViewModel{CurrentGuessNumber = K});
+                var guessPoint = _view.GetGuess(new GuessViewModel{CurrentGuessNumber = K});  // 通过视图对象获取玩家的猜测点
 
-                // 获取猜测点到 hurklePoint 的方向
-                var direction = guessPoint.GetDirectionTo(hurklePoint);
-                // 根据方向进行不同的处理
-                switch(direction)
+                var direction = guessPoint.GetDirectionTo(hurklePoint);  // 获取玩家猜测点与隐藏点之间的方向
+                switch(direction)  // 根据方向进行判断
                 {
-                    // 如果方向为 None，显示胜利信息并返回
-                    case CardinalDirection.None:
-                        _view.ShowVictory(new VictoryViewModel{CurrentGuessNumber = K});
-                        return;
-                    // 否则显示方向信息并继续下一轮猜测
-                    default:
-                        _view.ShowDirection(new FailedGuessViewModel{Direction = direction});
-                        continue;
+                    case CardinalDirection.None:  // 如果方向为 None
+                        _view.ShowVictory(new VictoryViewModel{CurrentGuessNumber = K});  // 在视图上显示胜利信息
+                        return;  // 结束游戏
+                    default:  // 如果方向不为 None
+                        _view.ShowDirection(new FailedGuessViewModel{Direction = direction});  // 在视图上显示猜测方向
+                        continue;  // 继续下一次循环
                 }
             }
 
-            // 显示失败信息
-            _view.ShowLoss(new LossViewModel{MaxGuesses = guesses, HurkleLocation = hurklePoint } );
+            _view.ShowLoss(new LossViewModel{MaxGuesses = guesses, HurkleLocation = hurklePoint } );  // 在视图上显示失败信息和隐藏点的位置
         }
     }
 }
-
 ```

@@ -1,10 +1,9 @@
 # `basic-computer-games\38_Fur_Trader\java\src\FurTraderGame.java`
 
 ```
-
 # 定义名为FurTraderGame的公共类
 public class FurTraderGame {
-    # 定义名为main的公共静态方法，参数为字符串数组args
+    # 定义名为main的公共静态方法，参数为字符串数组
     public static void main(String[] args) {
         # 创建FurTrader对象
         FurTrader furTrader = new FurTrader();
@@ -12,5 +11,4 @@ public class FurTraderGame {
         furTrader.play();
     }
 }
-
 ```

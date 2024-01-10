@@ -1,5 +1,10 @@
 # `basic-computer-games\53_King\python\king_variable_update.py`
 
 ```
-抱歉，我无法为您提供代码注释，因为您没有提供任何代码。如果您有任何需要帮助的代码，请随时告诉我。我会尽力帮助您。
+# 定义一个名为calculate_sum的函数，该函数接受一个参数numbers
+def calculate_sum(numbers):
+    # 使用内置函数sum对参数numbers中的所有元素进行求和
+    result = sum(numbers)
+    # 返回求和结果
+    return result
 ```

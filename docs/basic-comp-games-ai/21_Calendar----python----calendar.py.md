@@ -1,7 +1,6 @@
 # `basic-computer-games\21_Calendar\python\calendar.py`
 
 ```
-
 """
 Calendar
 
@@ -47,7 +46,7 @@ def parse_input() -> Tuple[int, bool]:
     correct_day_input = False
     while not correct_day_input:
         weekday = input("INSERT THE STARTING DAY OF THE WEEK OF THE YEAR:")
-        # 获取用户输入的起始星期几，并将其转换为对应的数字表示
+        # 根据输入的星期几，确定初始星期几的数字表示
         for day_k in days_mapping.keys():
             if weekday.lower() in day_k:
                 day = days_mapping[day_k]
@@ -56,7 +55,7 @@ def parse_input() -> Tuple[int, bool]:
 
     while True:
         leap = input("IS IT A LEAP YEAR?:")
-        # 获取用户输入的是否为闰年，并将其转换为布尔值
+        # 判断是否是闰年
         if "y" in leap.lower():
             leap_day = True
             break
@@ -81,11 +80,12 @@ def calendar(weekday: int, leap_year: bool) -> None:
     sep = "*" * 59
     years_day = 365
     d = weekday
-
+    # 如果是闰年，则将二月的天数修改为29
     if leap_year:
         months_days[2] = 29
         years_day = 366
 
+    # 月份名称列表
     months_names = [
         " JANUARY ",
         " FEBRUARY",
@@ -103,9 +103,11 @@ def calendar(weekday: int, leap_year: bool) -> None:
 
     days_count = 0  # S in the original program
 
-    # main loop
+    # 主循环
     for n in range(1, 13):
+        # 累加每个月的天数
         days_count += months_days[n - 1]
+        # 打印月份信息和剩余天数
         print(
             f"** {days_count} ****************** {months_names[n - 1]} "
             f"****************** {years_day - days_count} **\n"
@@ -113,54 +115,62 @@ def calendar(weekday: int, leap_year: bool) -> None:
         print(days)
         print(sep)
 
+        # 打印日历
         for _ in range(1, 7):
             print("\n")
             for g in range(1, 8):  # noqa
                 d += 1
                 d2 = d - days_count
 
+                # 如果超过了本月的天数，则跳出循环
                 if d2 > months_days[n]:
                     break
 
+                # 如果日期小于等于0，则打印空格
                 if d2 <= 0:
                     print("  ", end="       ")
+                # 如果日期小于10，则在前面补空格
                 elif d2 < 10:
                     print(f" {d2}", end="       ")
                 else:
                     print(f"{d2}", end="       ")
             print()
 
+            # 如果日期超过了本月的天数，则跳出循环
             if d2 >= months_days[n]:
                 break
 
+        # 如果日期超过了本月的天数，则回退日期
         if d2 > months_days[n]:
             d -= g
 
         print("\n")
 
     print("\n")
-
-
+# 定义主函数
 def main() -> None:
+    # 打印日历标题
     print(" " * 32 + "CALENDAR")
+    # 打印创意计算的地点
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    # 打印11个空行
     print("\n" * 11)
 
+    # 解析用户输入的第一天和是否是闰年
     day, leap_year = parse_input()
+    # 调用日历函数
     calendar(day, leap_year)
 
 
+# 如果当前脚本被直接执行，则调用主函数
 if __name__ == "__main__":
     main()
 
 ########################################################
 #
-# Porting notes:
+# 移植说明:
 #
-# It has been added an input at the beginning of the
-# program so the user can specify the first day of the
-# week of the year and if the year is leap or not.
+# 在程序开头添加了一个输入，用户可以指定一年中的第一天是星期几，以及这一年是否是闰年。
 #
 ########################################################
-
 ```

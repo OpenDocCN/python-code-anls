@@ -1,15 +1,13 @@
 # `basic-computer-games\77_Salvo\csharp\Winner.cs`
 
 ```
-
-# 命名空间 Salvo 中的内部枚举类型 Winner
+# 在 Salvo 命名空间内部定义 Winner 枚举类型
 namespace Salvo;
 
-# 内部枚举类型 Winner 包含 Human 和 Computer 两个枚举值，表示人类和计算机的胜利者
+# 定义 Winner 枚举类型，包含 Human 和 Computer 两个成员
 internal enum Winner
 {
     Human,
     Computer
 }
-
 ```

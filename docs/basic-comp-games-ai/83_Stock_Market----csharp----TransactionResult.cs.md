@@ -1,12 +1,11 @@
 # `basic-computer-games\83_Stock_Market\csharp\TransactionResult.cs`
 
 ```
-
-// 命名空间 Game，用于组织和管理相关的类和枚举
+// 命名空间 Game
 namespace Game
 {
     /// <summary>
-    /// 枚举了应用交易时可能出现的不同结果
+    /// 枚举了应用交易的不同可能结果
     /// </summary>
     public enum TransactionResult
     {
@@ -16,7 +15,7 @@ namespace Game
         Ok,
 
         /// <summary>
-        /// 交易失败，因为卖家试图出售比其拥有的股份更多的股份
+        /// 交易失败，因为卖家试图出售比自己拥有的股份更多的股份
         /// </summary>
         Oversold,
 
@@ -26,5 +25,4 @@ namespace Game
         Overspent
     }
 }
-
 ```

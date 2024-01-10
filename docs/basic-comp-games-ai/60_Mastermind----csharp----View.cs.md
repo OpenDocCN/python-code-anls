@@ -1,18 +1,23 @@
 # `basic-computer-games\60_Mastermind\csharp\View.cs`
 
 ```
-
-# 引入命名空间 System，包含了常用的系统类和数据类型
+// 引入命名空间 System
 using System;
-# 引入命名空间 System.Collections.Generic，包含了泛型集合类
+// 引入命名空间 System.Collections.Generic
 using System.Collections.Generic;
-# 引入命名空间 System.Linq，包含了 LINQ 查询操作
+// 引入命名空间 System.Linq
 using System.Linq;
 
-# 声明命名空间 Game，用于组织和管理相关的类和资源
+// 命名空间 Game
 namespace Game
 {
-    # 在此处应该有类、接口或其他成员的定义，但是代码中缺少了这部分内容
+    /// <summary>
+    /// 包含用于向最终用户显示信息的函数。
+    /// </summary>
+    // 声明一个静态类 View
+    public static class View
+    {
+        // 结束大括号缺失，应该为 public static class View {
+    }
 }
-
 ```

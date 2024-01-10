@@ -1,23 +1,22 @@
 # `basic-computer-games\75_Roulette\csharp\Wheel.cs`
 
 ```
+# 使用不可变集合命名空间
+using System.Collections.Immutable;
 
-// 使用不可变数组存储轮盘上的所有槽位
-private static readonly ImmutableArray<Slot> _slots = ImmutableArray.Create(
-    // 创建每个槽位对象，包括槽位名称和对应的数字
-    new Slot(Strings.Red(1), 1, 37, 40, 43, 46, 47),
-    new Slot(Strings.Black(2), 2, 37, 41, 43, 45, 48),
-    // ... 其他槽位对象的创建
-    new Slot("0", 49),
-    new Slot("00", 50));
+# 创建名为Roulette的命名空间
+namespace Roulette;
 
-// 轮盘类，包含一个随机数生成器
-private readonly IRandom _random;
+# 创建名为Wheel的内部类
+internal class Wheel
+{
+    # 声明只读字段_random，类型为IRandom接口
+    private readonly IRandom _random;
 
-// 构造函数，初始化随机数生成器
-public Wheel(IRandom random) => _random = random;
+    # 构造函数，接受一个IRandom类型的参数，并将其赋值给_random字段
+    public Wheel(IRandom random) => _random = random;
 
-// 旋转轮盘，返回随机选择的槽位
-public Slot Spin() => _slots[_random.Next(_slots.Length)];
-
+    # 定义一个名为Spin的公共方法，返回类型为Slot
+    public Slot Spin() => _slots[_random.Next(_slots.Length)];
+}
 ```

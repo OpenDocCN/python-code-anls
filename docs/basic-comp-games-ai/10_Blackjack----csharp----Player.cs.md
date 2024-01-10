@@ -1,47 +1,44 @@
 # `basic-computer-games\10_Blackjack\csharp\Player.cs`
 
 ```
-
-// 命名空间为Blackjack，定义了一个名为Player的公共类
 namespace Blackjack
 {
-    // 定义了一个名为Player的公共类
+    // 定义一个名为 Player 的命名空间
     public class Player
     {
-        // 构造函数，接受一个整数参数index
+        // 构造函数，初始化玩家的索引、名称、手牌和第二手牌
         public Player(int index)
         {
-            // 设置Index属性为传入的index值
+            // 设置玩家的索引
             Index = index;
-            // 设置Name属性为index加1后转换为字符串
+            // 设置玩家的名称为索引加一的字符串形式
             Name = (index + 1).ToString();
-            // 初始化Hand属性为一个新的Hand对象
+            // 初始化玩家的手牌
             Hand = new Hand();
-            // 初始化SecondHand属性为一个新的Hand对象
+            // 初始化玩家的第二手牌
             SecondHand = new Hand();
         }
 
-        // 只读属性，获取Index值
+        // 玩家的索引属性，只读
         public int Index { get; private set; }
 
-        // 只读属性，获取Name值
+        // 玩家的名称属性，只读
         public string Name { get; private set; }
 
-        // 只读属性，获取Hand值
+        // 玩家的手牌属性，只读
         public Hand Hand { get; private set; }
 
-        // 只读属性，获取SecondHand值
+        // 玩家的第二手牌属性，只读
         public Hand SecondHand { get; private set;}
 
-        // 可读写属性，获取或设置RoundBet值
+        // 玩家在本轮下注的筹码数，可读写
         public int RoundBet { get; set; }
 
-        // 可读写属性，获取或设置RoundWinnings值
+        // 玩家在本轮赢得的筹码数，可读写
         public int RoundWinnings { get; set; }
 
-        // 可读写属性，获取或设置TotalWinnings值
+        // 玩家总共赢得的筹码数，可读写
         public int TotalWinnings { get; set; }
     }
 }
-
 ```

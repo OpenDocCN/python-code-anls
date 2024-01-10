@@ -1,68 +1,52 @@
 # `basic-computer-games\29_Craps\csharp\Craps\Program.cs`
 
 ```
+using System.Diagnostics; // 导入系统诊断命名空间
 
-// 引入 System.Diagnostics 命名空间
-using System.Diagnostics;
-
-// 命名空间 Craps
 namespace Craps
 {
-    // 程序类
     class Program
     {
-        // 主函数
         static void Main(string[] args)
         {
-            // 创建用户界面对象
-            var ui = new UserInterface();
-            // 创建 Craps 游戏对象，并传入用户界面对象的引用
-            var game = new CrapsGame(ref ui);
-            // 初始化赢得的奖金为 0
-            int winnings = 0;
+            var ui = new UserInterface(); // 创建用户界面对象
+            var game = new CrapsGame(ref ui); // 创建 Craps 游戏对象，并传入用户界面对象的引用
+            int winnings = 0; // 初始化赢得的奖金为 0
 
-            // 显示游戏介绍
-            ui.Intro();
+            ui.Intro(); // 调用用户界面对象的 Intro 方法，显示游戏介绍
 
-            // 游戏循环
             do
             {
-                // 用户下注
-                var bet = ui.PlaceBet();
-                // 进行游戏，并返回游戏结果和骰子点数
-                var result = game.Play(out int diceRoll);
+                var bet = ui.PlaceBet(); // 调用用户界面对象的 PlaceBet 方法，获取玩家下注金额
+                var result = game.Play(out int diceRoll); // 调用游戏对象的 Play 方法，获取游戏结果和骰子点数
 
-                // 根据游戏结果进行奖金计算
-                switch (result)
+                switch (result) // 根据游戏结果进行不同的处理
                 {
-                    case Result.naturalWin:
-                        winnings += bet;
+                    case Result.naturalWin: // 如果是自然胜利
+                        winnings += bet; // 奖金增加下注金额
                         break;
 
-                    case Result.naturalLoss:
-                    case Result.snakeEyesLoss:
-                    case Result.pointLoss:
-                        winnings -= bet;
+                    case Result.naturalLoss: // 如果是自然失败
+                    case Result.snakeEyesLoss: // 如果是蛇眼失败
+                    case Result.pointLoss: // 如果是点数失败
+                        winnings -= bet; // 奖金减少下注金额
                         break;
 
-                    case Result.pointWin:
-                        winnings += (2 * bet);
+                    case Result.pointWin: // 如果是点数胜利
+                        winnings += (2 * bet); // 奖金增加下注金额的两倍
                         break;
 
-                    // 包含默认情况，以便在枚举值发生变化时提醒我们添加新值的处理代码
+                    // 包含一个默认情况，以便在枚举值发生变化时收到警告，并且忘记添加处理新值的代码
                     default:
-                        Debug.Assert(false); // 我们不应该到达这里
+                        Debug.Assert(false); // 断言，如果程序执行到这里，会触发断言错误
                         break;
                 }
 
-                // 显示游戏结果
-                ui.ShowResult(result, diceRoll, bet);
-            } while (ui.PlayAgain(winnings)); // 判断是否再玩一次
+                ui.ShowResult(result, diceRoll, bet); // 调用用户界面对象的 ShowResult 方法，显示游戏结果、骰子点数和下注金额
+            } while (ui.PlayAgain(winnings)); // 调用用户界面对象的 PlayAgain 方法，判断是否继续游戏
 
-            // 显示结束语
-            ui.GoodBye(winnings);
+            ui.GoodBye(winnings); // 调用用户界面对象的 GoodBye 方法，显示结束语并展示最终奖金
         }
     }
 }
-
 ```

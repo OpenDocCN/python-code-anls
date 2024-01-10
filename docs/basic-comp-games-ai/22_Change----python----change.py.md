@@ -1,7 +1,6 @@
 # `basic-computer-games\22_Change\python\change.py`
 
 ```
-
 """
 CHANGE
 
@@ -10,7 +9,7 @@ Change calculator
 Port by Dave LeCompte
 """
 
-# 设置页面宽度
+# 页面宽度
 PAGE_WIDTH = 64
 
 
@@ -93,22 +92,24 @@ def compute_change() -> None:
     if j > 0:
         print(f"{j} NICKEL(S)")
     change_in_pennies -= j * 5
-
+    # 如果找零大于0，打印找零的数量和单位
     if change_in_pennies > 0:
         print(f"{change_in_pennies} PENNY(S)")
-
-
-# 主函数
+# 定义主函数，没有返回值
 def main() -> None:
+    # 打印标题为"CHANGE"
     print_header("CHANGE")
+    # 打印介绍信息
     print_introduction()
 
+    # 进入循环，持续执行以下操作
     while True:
+        # 计算找零
         compute_change()
+        # 打印感谢信息
         print("THANK YOU, COME AGAIN.\n\n")
 
-
+# 如果当前脚本作为主程序执行，则调用主函数
 if __name__ == "__main__":
     main()
-
 ```

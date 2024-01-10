@@ -1,11 +1,14 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse\Program.cs`
 
 ```
+# 引入 System 命名空间
+using System;
 
-# 命名空间声明，定义一个命名空间
+# 定义 Reverse 命名空间
 namespace Reverse
 {
-    # 声明一个类或者其他类型
+    # 定义 Program 类
+    class Program
+    }
 }
-
 ```

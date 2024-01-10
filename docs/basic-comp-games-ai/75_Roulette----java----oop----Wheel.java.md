@@ -1,7 +1,6 @@
 # `basic-computer-games\75_Roulette\java\oop\Wheel.java`
 
 ```
-
 // 导入必要的类
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,7 +29,7 @@ public class Wheel {
 
     // 将轮盘旋转到新的随机值。
     public void spin() {
-        // 保持旋转一段时间
+        // 不断旋转一段时间
         do {
             try {
                 // 1秒延迟。停在哪里，谁也不知道
@@ -65,12 +64,11 @@ public class Wheel {
         else return pocket;
     }
 
-    // 要么是ZERO，要么是BLACK，要么是RED
+    // ZERO、BLACK或RED
     public int color() {
         if (zero()) return ZERO;
         else if (black.contains(pocket)) return BLACK;
         else return RED;
     }
 }
-
 ```

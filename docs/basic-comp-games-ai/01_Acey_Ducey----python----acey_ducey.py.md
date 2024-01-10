@@ -1,7 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\python\acey_ducey.py`
 
 ```
-
 #!/usr/bin/env python3
 """
 Play the Acey-Ducey game
@@ -11,7 +10,6 @@ https://www.atariarchives.org/basicgames/showpage.php?page=2
 import random
 
 
-# 定义扑克牌的字典，键为牌面数字，值为对应的牌面名称
 cards = {
     2: "2",
     3: "3",
@@ -29,71 +27,69 @@ cards = {
 }
 
 
-# 定义游戏函数
 def play_game() -> None:
-    cash = 100  # 初始金额为100
-    while cash > 0:  # 当金额大于0时循环进行游戏
-        print(f"You now have {cash} dollars\n")  # 打印当前金额
-        print("Here are you next two cards")  # 提示下两张牌
-        round_cards = list(cards.keys())  # 从字典中获取所有牌面数字
-        card_a = random.choice(round_cards)  # 随机选择一张牌
-        card_b = card_a  # 复制第一张牌，避免第二张牌与第一张相同
-        while (card_a == card_b):  # 如果两张牌相同，则重新选择第二张牌
+    # 初始化玩家的现金
+    cash = 100
+    # 当玩家还有现金时，循环进行游戏
+    while cash > 0:
+        print(f"You now have {cash} dollars\n")
+        print("Here are you next two cards")
+        round_cards = list(cards.keys())  # 从字典中获取卡片
+        card_a = random.choice(round_cards)  # 随机选择一张卡片
+        card_b = card_a  # 克隆第一张卡片，以避免第二张卡片与第一张相同
+        while (card_a == card_b):  # 如果两张卡片相同，则选择另一张卡片
             card_b = random.choice(round_cards)
-        card_c = random.choice(round_cards)  # 随机选择第三张牌
-        if card_a > card_b:  # 如果第一张牌大于第二张牌，则交换它们的位置
+        card_c = random.choice(round_cards)  # 选择最后一张卡片
+        if card_a > card_b:  # 如果第一张卡片大于第二张卡片，则交换它们的位置
             card_a, card_b = card_b, card_a
-        print(f" {cards[card_a]}")  # 打印第一张牌的名称
-        print(f" {cards[card_b]}\n")  # 打印第二张牌的名称
+        print(f" {cards[card_a]}")
+        print(f" {cards[card_b]}\n")
         while True:
             try:
-                bet = int(input("What is your bet? "))  # 输入赌注
-                if bet < 0:  # 如果赌注小于0，则抛出异常
-                    raise ValueError("Bet must be more than zero")
-                if bet == 0:  # 如果赌注为0，则提示“CHICKEN!!”
-                    print("CHICKEN!!\n")
-                if bet > cash:  # 如果赌注大于当前金额，则提示赌注过大
-                    print("Sorry, my friend but you bet too much")
+                bet = int(input("What is your bet? "))  # 获取玩家的赌注
+                if bet < 0:
+                    raise ValueError("Bet must be more than zero")  # 如果赌注小于零，则引发异常
+                if bet == 0:
+                    print("CHICKEN!!\n")  # 如果赌注为零，则输出提示信息
+                if bet > cash:
+                    print("Sorry, my friend but you bet too much")  # 如果赌注大于现金数，则输出提示信息
                     print(f"You only have {cash} dollars to bet")
                     continue
                 cash -= bet  # 扣除赌注金额
                 break
 
             except ValueError:
-                print("Please enter a positive number")  # 输入非正数时提示重新输入
-        print(f" {cards[card_c]}")  # 打印第三张牌的名称
-        if bet > 0:  # 如果赌注大于0
-            if card_a <= card_c <= card_b:  # 如果第三张牌的数字在第一张和第二张牌之间
-                print("You win!!!")  # 赢得游戏
-                cash += bet * 2  # 赢得的赌注翻倍
+                print("Please enter a positive number")  # 如果输入不是正数，则输出提示信息
+        print(f" {cards[card_c]}")
+        if bet > 0:
+            if card_a <= card_c <= card_b:  # 如果第一张卡片小于等于第三张卡片小于等于第二张卡片
+                print("You win!!!")  # 输出赢得游戏的提示信息
+                cash += bet * 2  # 增加现金数
             else:
-                print("Sorry, you lose")  # 输掉游戏
+                print("Sorry, you lose")  # 输出输掉游戏的提示信息
 
-    print("Sorry, friend, but you blew your wad")  # 当金额为0时，游戏结束
+    print("Sorry, friend, but you blew your wad")  # 输出玩家输光所有现金的提示信息
 
 
-# 主函数
 def main() -> None:
-    print(
-        """
-Acey-Ducey is played in the following manner
-The dealer (computer) deals two cards face up
-You have an option to bet or not bet depending
-on whether or not you feel the card will have
-a value between the first two.
-If you do not want to bet, input a 0
-  """
-    )  # 打印游戏规则
-    keep_playing = True  # 设置继续游戏的标志为True
+    # 打印三个双引号，用于多行注释的起始
+# Acey-Ducey 游戏规则说明
+# 庄家（计算机）发两张牌，正面朝上
+# 你可以选择下注或不下注，取决于你是否认为第三张牌的值会介于前两张之间
+# 如果你不想下注，输入 0
+# 游戏保持进行的标志
+keep_playing = True
 
-    while keep_playing:  # 当继续游戏的标志为True时循环进行游戏
-        play_game()  # 进行游戏
-        keep_playing = input("Try again? (yes or no) ").lower().startswith("y")  # 询问是否继续游戏
-    print("Ok hope you had fun")  # 结束游戏后打印提示信息
+# 当游戏保持进行时，循环执行游戏
+while keep_playing:
+    play_game()  # 执行游戏
+    keep_playing = input("Try again? (yes or no) ").lower().startswith("y")  # 询问是否继续游戏，如果以 "y" 开头则继续
 
+# 打印结束语
+print("Ok hope you had fun")
 
+# 如果作为主程序运行，则初始化随机数种子并执行主函数
 if __name__ == "__main__":
     random.seed()  # 初始化随机数种子
-    main()  # 调用主函数进行游戏
-
+    main()  # 执行主函数
 ```

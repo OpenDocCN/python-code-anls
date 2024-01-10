@@ -1,14 +1,13 @@
 # `basic-computer-games\17_Bullfight\csharp\Controller.cs`
 
 ```
-
-# 引入 System 命名空间
-using System;
-
-# 声明 Game 命名空间
+// 命名空间 Game 包含了获取用户输入的函数
 namespace Game
 {
-    # 在此处应该有类、方法或其他代码，但是缺少了，需要补充
+    /// <summary>
+    /// 包含了从用户获取输入的函数
+    /// </summary>
+    public static class Controller
+    }
 }
-
 ```

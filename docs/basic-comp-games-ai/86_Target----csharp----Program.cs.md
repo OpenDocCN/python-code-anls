@@ -1,7 +1,6 @@
 # `basic-computer-games\86_Target\csharp\Program.cs`
 
 ```
-
 // 引入命名空间
 using System;
 using System.Reflection;
@@ -25,13 +24,13 @@ namespace Target
             Play(game, io, () => true);
         }
 
-        // 游戏进行函数
+        // 游戏进行函数，接受游戏对象、输入输出对象和再玩一次的函数
         public static void Play(Game game, TextIO io, Func<bool> playAgain)
         {
-            // 显示标题和说明
+            // 显示游戏标题和说明
             DisplayTitleAndInstructions(io);
 
-            // 循环进行游戏
+            // 当再玩一次的函数返回 true 时，循环进行游戏
             while (playAgain())
             {
                 // 进行游戏
@@ -48,15 +47,14 @@ namespace Target
             }
         }
 
-        // 显示标题和说明函数
+        // 显示游戏标题和说明
         private static void DisplayTitleAndInstructions(TextIO io)
         {
-            // 从程序嵌入资源中获取标题和说明文本流，并输出到控制台
+            // 使用程序集中的资源文件流来显示标题和说明
             using var stream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("Target.Strings.TitleAndInstructions.txt");
             io.Write(stream);
         }
     }
 }
-
 ```

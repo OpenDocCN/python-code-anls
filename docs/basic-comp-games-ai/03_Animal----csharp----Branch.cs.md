@@ -1,7 +1,6 @@
 # `basic-computer-games\03_Animal\csharp\Branch.cs`
 
 ```
-
 // 命名空间 Animal
 namespace Animal
 {
@@ -27,5 +26,4 @@ namespace Animal
         }
     }
 }
-
 ```

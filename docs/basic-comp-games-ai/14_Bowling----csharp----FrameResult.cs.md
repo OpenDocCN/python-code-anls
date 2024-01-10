@@ -1,37 +1,35 @@
 # `basic-computer-games\14_Bowling\csharp\FrameResult.cs`
 
 ```
-
-// 引入命名空间
+# 引入所需的命名空间
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// 声明 Bowling 命名空间
+# 命名空间定义
 namespace Bowling
 {
-    // 声明 FrameResult 类
+    # 定义名为 FrameResult 的公共类
     public class FrameResult
     {
-        // 声明 Points 枚举类型，包括 None, Error, Spare, Strike 四个值
+        # 定义枚举类型 Points，包括 None, Error, Spare, Strike 四个取值
         public enum Points { None, Error, Spare, Strike };
 
-        // 声明 PinsBall1 和 PinsBall2 属性，用于表示球1和球2的击倒的瓶数
+        # 定义整型属性 PinsBall1，用于存储球1击倒的瓶数
         public int PinsBall1 { get; set; }
+        # 定义整型属性 PinsBall2，用于存储球2击倒的瓶数
         public int PinsBall2 { get; set; }
-        
-        // 声明 Score 属性，用于表示该帧的得分情况
+        # 定义枚举类型属性 Score，用于存储该帧的得分情况
         public Points Score { get; set; }
 
-        // 声明 Reset 方法，用于重置帧的数据
+        # 定义重置方法，将球1和球2的瓶数重置为0，得分情况重置为None
         public void Reset()
         {
-            PinsBall1 = PinsBall2 = 0; // 重置球1和球2的瓶数
-            Score = Points.None; // 重置得分情况为 None
+            PinsBall1 = PinsBall2 = 0;
+            Score = Points.None;
         }
     }
 }
-
 ```

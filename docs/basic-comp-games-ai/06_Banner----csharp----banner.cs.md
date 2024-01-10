@@ -1,16 +1,26 @@
 # `basic-computer-games\06_Banner\csharp\banner.cs`
 
 ```
-
-# 引入命名空间，使得代码可以使用其中定义的类和方法
+# 引入命名空间
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-# 定义命名空间为banner，用于组织和管理代码
+# 定义名为Banner的类
 namespace banner
 {
-    # 在此处应该有类或方法的定义，但是代码缺少了具体的内容
-}
+    class Banner
+    }
 
+    # 定义名为Program的类
+    class Program
+    {
+        # 定义名为Main的静态方法，参数为字符串数组
+        static void Main(string[] args)
+        {
+            # 创建Banner类的实例并调用Play方法
+            new Banner().Play();
+        }
+    }
+}
 ```

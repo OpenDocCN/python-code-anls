@@ -1,23 +1,22 @@
 # `basic-computer-games\07_Basketball\csharp\Defense.cs`
 
 ```
-
-# 命名空间 Basketball 下的内部类 Defense
+# 创建名为Basketball的命名空间
 namespace Basketball;
 
+# 创建名为Defense的内部类
 internal class Defense
 {
-    # 私有属性 _value，用于存储防守值
+    # 创建名为_value的私有浮点型变量
     private float _value;
 
-    # 构造函数，接受一个参数 value，并调用 Set 方法进行赋值
+    # 创建接受浮点型参数的构造函数，调用Set方法
     public Defense(float value) => Set(value);
 
-    # 公有方法，用于设置防守值
+    # 创建接受浮点型参数的Set方法，将参数值赋给_value变量
     public void Set(float value) => _value = value;
 
-    # 隐式转换操作符，将 Defense 类型转换为 float 类型
+    # 创建将Defense对象隐式转换为浮点型的方法，返回_value变量的值
     public static implicit operator float(Defense defense) => defense._value;
 }
-
 ```

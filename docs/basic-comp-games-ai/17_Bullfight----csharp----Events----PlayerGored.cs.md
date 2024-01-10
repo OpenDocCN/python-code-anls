@@ -1,10 +1,13 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\PlayerGored.cs`
 
 ```
-
-// 在 Game.Events 命名空间下定义了一个事件记录，表示玩家被公牛顶到了。
-// 该记录包含了玩家是否处于恐慌状态和是否是第一次被顶到的信息。
-// 该记录被声明为 sealed，表示不可继承。
-public sealed record PlayerGored(bool Panicked, bool FirstGoring) : Event;
-
+// 声明在游戏事件命名空间下的玩家被公牛顶到的事件
+namespace Game.Events
+{
+    /// <summary>
+    /// 表示玩家被公牛顶到的事件
+    /// </summary>
+    // 声明一个不可变的记录类型，记录玩家是否处于恐慌状态和是否是第一次被顶到
+    public sealed record PlayerGored(bool Panicked, bool FirstGoring) : Event;
+}
 ```

@@ -1,126 +1,166 @@
 # `basic-computer-games\26_Chomp\python\chomp.py`
 
 ```
-
 #!/usr/bin/env python3
-# 指定解释器为 Python3
-
 """
 CHOMP
 
 Converted from BASIC to Python by Trevor Hobson
 """
-# 程序的简要介绍
 
 class Canvas:
     """For drawing the cookie"""
-    # 用于绘制饼干的类
 
     def __init__(self, width=9, height=9, fill="*") -> None:
-        # 初始化方法，设置默认宽度、高度和填充字符
+        # 初始化画布，创建一个二维数组作为画布，填充为指定字符
         self._buffer = []
-        # 创建一个空列表
         for _ in range(height):
-            # 循环遍历高度
             line = []
             for _ in range(width):
-                # 循环遍历宽度
                 line.append(fill)
-                # 将填充字符添加到行中
             self._buffer.append(line)
-            # 将行添加到缓冲区中
+        # 将左上角的字符设置为 "P"
         self._buffer[0][0] = "P"
-        # 将缓冲区的第一个元素设置为"P"
 
     def render(self) -> str:
-        # 渲染方法，返回字符串
+        # 渲染画布，将画布内容转换为字符串形式
         lines = ["       1 2 3 4 5 6 7 8 9"]
-        # 创建包含列号的列表
         for row, line in enumerate(self._buffer, start=1):
-            # 遍历缓冲区中的行
             lines.append(" " + str(row) + " " * 5 + " ".join(line))
-            # 将行号和行内容添加到列表中
         return "\n".join(lines)
-        # 返回包含所有行的字符串
 
     def chomp(self, r, c) -> str:
-        # chomp 方法，接受行和列参数，返回字符串
+        # 根据给定的行和列进行 "CHOMP" 操作
         if not 1 <= r <= len(self._buffer) or not 1 <= c <= len(self._buffer[0]):
-            # 如果行或列超出范围
             return "Empty"
-            # 返回"Empty"
         elif self._buffer[r - 1][c - 1] == " ":
-            # 如果指定位置为空
             return "Empty"
-            # 返回"Empty"
         elif self._buffer[r - 1][c - 1] == "P":
-            # 如果指定位置为"P"
             return "Poison"
-            # 返回"Poison"
         else:
-            # 否则
             for row in range(r - 1, len(self._buffer)):
-                # 遍历行
                 for column in range(c - 1, len(self._buffer[row])):
-                    # 遍历列
                     self._buffer[row][column] = " "
-                    # 将指定位置及其右下方的位置设置为空
             return "Chomp"
-            # 返回"Chomp"
 
 def play_game() -> None:
     """Play one round of the game"""
-    # 玩游戏的方法
-
+    players = 0
+    while players == 0:
+        try:
+            players = int(input("How many players "))
+        except ValueError:
+            print("Please enter a number.")
+    rows = 0
+    while rows == 0:
+        try:
+            rows = int(input("How many rows "))
+            if rows > 9 or rows < 1:
+                rows = 0
+                print("Too many rows (9 is maximum).")
+        except ValueError:
+            print("Please enter a number.")
+    columns = 0
+    while columns == 0:
+        try:
+            columns = int(input("How many columns "))
+            if columns > 9 or columns < 1:
+                columns = 0
+                print("Too many columns (9 is maximum).")
+        except ValueError:
+            print("Please enter a number.")
+    # 创建一个指定宽度和高度的画布对象
+    cookie = Canvas(width=columns, height=rows)
+    # 初始化玩家编号为0
+    player = 0
+    # 初始化玩家存活状态为True
+    alive = True
+    # 当玩家存活时执行循环
+    while alive:
+        # 打印空行
+        print()
+        # 打印画布对象的渲染结果
+        print(cookie.render())
+        # 打印空行
+        print()
+        # 玩家编号加1
+        player += 1
+        # 如果玩家编号超过玩家总数，则重置为1
+        if player > players:
+            player = 1
+        # 无限循环，直到玩家输入有效坐标
+        while True:
+            # 打印当前玩家编号
+            print("Player", player)
+            # 初始化玩家行和列为-1
+            player_row = -1
+            player_column = -1
+            # 当玩家行或列为-1时，继续循环
+            while player_row == -1 or player_column == -1:
+                try:
+                    # 获取玩家输入的坐标，并转换为整数列表
+                    coordinates = [
+                        int(item)
+                        for item in input("Coordinates of chomp (Row, Column) ").split(
+                            ","
+                        )
+                    ]
+                    # 将玩家输入的行和列分别赋值给对应变量
+                    player_row = coordinates[0]
+                    player_column = coordinates[1]
+                # 捕获值错误和索引错误异常
+                except (ValueError, IndexError):
+                    # 提示玩家输入有效坐标
+                    print("Please enter valid coordinates.")
+            # 调用画布对象的chomp方法，传入玩家行和列，获取结果
+            result = cookie.chomp(player_row, player_column)
+            # 如果结果为"Empty"，提示玩家不能吃空格
+            if result == "Empty":
+                print("No fair. You're trying to chomp on empty space!")
+            # 如果结果为"Poison"，提示玩家输掉游戏，并将存活状态设为False
+            elif result == "Poison":
+                print("\nYou lose player", player)
+                alive = False
+                break
+            # 如果结果不是"Empty"或"Poison"，跳出内层循环
+            else:
+                break
+# 定义主函数，没有返回值
 def main() -> None:
-    # 主方法
-    print(" " * 33 + "CHOMP")
     # 打印游戏标题
+    print(" " * 33 + "CHOMP")
+    # 打印游戏信息
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
-    # 打印创意计算公司信息
     print("THIS IS THE GAME OF CHOMP (SCIENTIFIC AMERICAN, JAN 1973)")
-    # 打印游戏介绍
+    # 如果用户需要规则，则打印游戏规则
     if input("Do you want the rules (1=Yes, 0=No!) ") != "0":
-        # 如果用户需要游戏规则
         print("Chomp is for 1 or more players (Humans only).\n")
-        # 打印游戏玩家数量限制
         print("Here's how a board looks (This one is 5 by 7):")
-        # 打印游戏板示例
-        example = Canvas(width=7, height=5)
         # 创建一个示例游戏板
-        print(example.render())
+        example = Canvas(width=7, height=5)
         # 打印示例游戏板
+        print(example.render())
         print("\nThe board is a big cookie - R rows high and C columns")
-        # 打印游戏板说明
         print("wide. You input R and C at the start. In the upper left")
-        # 打印游戏板说明
         print("corner of the cookie is a poison square (P). The one who")
-        # 打印游戏板说明
         print("chomps the poison square loses. To take a chomp, type the")
-        # 打印游戏板说明
         print("row and column of one of the squares on the cookie.")
-        # 打印游戏板说明
         print("All of the squares below and to the right of that square")
-        # 打印游戏板说明
         print("(Including that square, too) disappear -- CHOMP!!")
-        # 打印游戏板说明
         print("No fair chomping squares that have already been chomped,")
-        # 打印游戏板说明
         print("or that are outside the original dimensions of the cookie.\n")
-        # 打印游戏板说明
         print("Here we go...")
 
+    # 初始化游戏继续标志
     keep_playing = True
-    # 设置继续游戏标志为True
+    # 循环进行游戏
     while keep_playing:
-        # 当继续游戏标志为True时
         play_game()
-        # 进行游戏
+        # 根据用户输入判断是否继续游戏
         keep_playing = input("\nAgain (1=Yes, 0=No!) ") == "1"
-        # 根据用户输入更新继续游戏标志
 
+
+# 如果当前脚本为主程序，则执行主函数
 if __name__ == "__main__":
     main()
-    # 如果是主程序，则执行主方法
-
 ```

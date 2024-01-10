@@ -1,7 +1,6 @@
 # `basic-computer-games\72_Queen\python\queen.py`
 
 ```
-
 #!/usr/bin/env python3
 """
 Implementation of Queens game in Python 3.
@@ -57,15 +56,13 @@ YOU GO FIRST AND PLACE THE QUEEN IN ANY ONE OF THE SQUARES
 ON THE TOP ROW OR RIGHT HAND COLUMN.
 THAT WILL BE YOUR FIRST MOVE.
 WE ALTERNATE MOVES.
-YOU MAY FORFEIT BY TYPING '0' AS YOUR MOVE.
-BE SURE TO PRESS THE RETURN KEY AFTER EACH RESPONSE.
+# 你可能会输掉游戏，如果你在你的移动中输入'0'。
+# 确保在每次回应后按下回车键。
 
 """
 
-
-WIN_MSG: Final[
-    str
-] = """C O N G R A T U L A T I O N S . . .
+# 赢得游戏的消息
+WIN_MSG: Final[str] = """C O N G R A T U L A T I O N S . . .
 
 YOU HAVE WON--VERY WELL PLAYED.
 IT LOOKS LIKE I HAVE MET MY MATCH.
@@ -73,9 +70,8 @@ THANKS FOR PLAYING---I CAN'T WIN ALL THE TIME.
 
 """
 
-LOSE_MSG: Final[
-    str
-] = """
+# 输掉游戏的消息
+LOSE_MSG: Final[str] = """
 NICE TRY, BUT IT LOOKS LIKE I HAVE WON.
 THANKS FOR PLAYING.
 
@@ -83,7 +79,7 @@ THANKS FOR PLAYING.
 
 
 def loc_to_num(location: Tuple[int, int], fix_align: bool = False) -> str:
-    """Convert a position given by row, column into a space number."""
+    """将由行、列给出的位置转换为空格号码。"""
     row, col = location
     out_str: str = f"{row + 8 - col}{row + 1}"
     if not fix_align or len(out_str) == 3:
@@ -92,6 +88,7 @@ def loc_to_num(location: Tuple[int, int], fix_align: bool = False) -> str:
         return out_str + " "
 
 
+# 游戏板
 GAME_BOARD: Final[str] = (
     "\n"
     + "\n\n\n".join(
@@ -103,17 +100,16 @@ GAME_BOARD: Final[str] = (
 
 
 def num_to_loc(num: int) -> Tuple[int, int]:
-    """Convert a space number into a position given by row, column."""
+    """将空格号码转换为由行、列给出的位置。"""
     row: int = num % 10 - 1
     col: int = row + 8 - (num - row - 1) // 10
     return row, col
 
 
-# The win location
+# 赢得游戏的位置
 WIN_LOC: Final[Tuple[int, int]] = (7, 0)
 
-# These are the places (other than the win condition) that the computer will always
-# try to move into.
+# 除了赢得游戏的条件之外，计算机总是会尝试移动到的位置
 COMPUTER_SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = frozenset(
     [
         (2, 3),
@@ -123,13 +119,12 @@ COMPUTER_SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = frozenset(
     ]
 )
 
-# These are the places that the computer will always try to move into.
+# 计算机总是会尝试移动到的位置
 COMPUTER_PREF_MOVES: Final[
     FrozenSet[Tuple[int, int]]
 ] = COMPUTER_SAFE_SPOTS | frozenset([WIN_LOC])
 
-# These are the locations (not including the win location) from which either player can
-# force a win (but the computer will always choose one of the COMPUTER_PREF_MOVES).
+# 这些是位置（不包括赢得游戏的位置），任何玩家都可以强制赢得游戏（但计算机总是会选择其中一个COMPUTER_PREF_MOVES）。
 SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = COMPUTER_SAFE_SPOTS | frozenset(
     [
         (0, 4),
@@ -139,127 +134,135 @@ SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = COMPUTER_SAFE_SPOTS | frozenset(
 
 
 def intro() -> None:
-    """Print the intro and print instructions if desired."""
+    """打印介绍，并在需要时打印说明。"""
+    # 在屏幕上打印空格和"Queen"，总共33个空格
     print(" " * 33 + "Queen")
+    # 在屏幕上打印空格和"Creative Computing  Morristown, New Jersey"，总共15个空格
     print(" " * 15 + "Creative Computing  Morristown, New Jersey")
+    # 在屏幕上打印两个空行
     print("\n" * 2)
+    # 如果用户选择了要求指令的话
     if ask("DO YOU WANT INSTRUCTIONS"):
+        # 打印指令文本
         print(INSTR_TXT)
-
-
 def get_move(current_loc: Optional[Tuple[int, int]]) -> Tuple[int, int]:
     """Get the next move from the player."""
-    prompt: str
-    player_resp: str
-    move_raw: int
-    new_row: int
-    new_col: int
-    if current_loc is None:  # It's the first turn
-        prompt = "WHERE WOULD YOU LIKE TO START? "
+    prompt: str  # 用于存储提示信息的字符串变量
+    player_resp: str  # 用于存储玩家输入的字符串变量
+    move_raw: int  # 用于存储玩家输入的整数变量
+    new_row: int  # 用于存储新的行坐标变量
+    new_col: int  # 用于存储新的列坐标变量
+    if current_loc is None:  # 如果当前位置为空（即第一轮）
+        prompt = "WHERE WOULD YOU LIKE TO START? "  # 设置提示信息
     else:
-        prompt = "WHAT IS YOUR MOVE? "
-        row, col = current_loc
-    while True:
-        player_resp = input(prompt).strip()
+        prompt = "WHAT IS YOUR MOVE? "  # 设置提示信息
+        row, col = current_loc  # 获取当前位置的行列坐标
+    while True:  # 进入循环，直到玩家输入合法的移动
+        player_resp = input(prompt).strip()  # 获取玩家输入并去除首尾空格
         try:
-            move_raw = int(player_resp)
-            if move_raw == 0:  # Forfeit
-                return 8, 8
-            new_row, new_col = num_to_loc(move_raw)
-            if current_loc is None:
+            move_raw = int(player_resp)  # 尝试将玩家输入的字符串转换为整数
+            if move_raw == 0:  # 如果玩家选择放弃
+                return 8, 8  # 返回特定的行列坐标
+            new_row, new_col = num_to_loc(move_raw)  # 将玩家输入的整数转换为新的行列坐标
+            if current_loc is None:  # 如果当前位置为空（即第一轮）
                 if (new_row == 0 or new_col == 7) and (
                     not FIX_BOARD_BUG or (new_col >= 0 and new_row < 8)
                 ):
-                    return new_row, new_col
+                    return new_row, new_col  # 返回新的行列坐标
                 else:
                     prompt = (
                         "PLEASE READ THE DIRECTIONS AGAIN.\n"
                         "YOU HAVE BEGUN ILLEGALLY.\n\n"
                         "WHERE WOULD YOU LIKE TO START? "
-                    )
+                    )  # 设置提示信息
             else:
                 if (
-                    (new_row == row and new_col < col)  # move left
-                    or (new_col == col and new_row > row)  # move down
-                    or (new_row - row == col - new_col)  # move diag left and down
+                    (new_row == row and new_col < col)  # 如果向左移动
+                    or (new_col == col and new_row > row)  # 如果向下移动
+                    or (new_row - row == col - new_col)  # 如果向左下对角线移动
                 ) and (not FIX_BOARD_BUG or (new_col >= 0 and new_row < 8)):
-                    return new_row, new_col
+                    return new_row, new_col  # 返回新的行列坐标
                 else:
-                    prompt = "Y O U   C H E A T . . .  TRY AGAIN? "
+                    prompt = "Y O U   C H E A T . . .  TRY AGAIN? "  # 设置提示信息
 
         except ValueError:
-            prompt = "!NUMBER EXPECTED - RETRY INPUT LINE\n? "
+            prompt = "!NUMBER EXPECTED - RETRY INPUT LINE\n? "  # 设置提示信息
 
 
 def random_computer_move(location: Tuple[int, int]) -> Tuple[int, int]:
     """Make a random move."""
-    row, col = location
-    if (z := random()) > 0.6:
+    row, col = location  # 获取计算机当前位置的行列坐标
+    if (z := random()) > 0.6:  # 如果随机数大于0.6
         # Move down one space
-        return row + 1, col
-    elif z > 0.3:
+        return row + 1, col  # 返回向下移动后的新的行列坐标
+    elif z > 0.3:  # 如果随机数大于0.3
         # Move diagonaly (left and down) one space
-        return row + 1, col - 1
+        return row + 1, col - 1  # 返回向左下对角线移动后的新的行列坐标
     else:
-        # Move left one space
+        # 如果不满足上述条件，向左移动一个位置
         return row, col - 1
-
-
 def computer_move(location: Tuple[int, int]) -> Tuple[int, int]:
     """Get the computer's move."""
-    # If the player has made an optimal move, then choose a random move
+    # 如果玩家已经做出了最佳移动，那么选择一个随机移动
     if location in SAFE_SPOTS:
         return random_computer_move(location)
-    # We don't need to implmement the logic of checking for the player's win,
-    # because that is checked before this function is called.
+    # 我们不需要实现检查玩家是否获胜的逻辑，因为在调用此函数之前已经检查过了。
     row, col = location
     for k in range(7, 0, -1):
-        # If the computer can move left k spaces and end in up in a safe spot or win,
-        # do it.
+        # 如果计算机可以向左移动 k 步并最终到达一个安全点或获胜，那么就这样做。
         if (new_loc := (row, col - k)) in COMPUTER_PREF_MOVES:
             return new_loc
-        # If the computer can move down k spaces and end up in a safe spot or win, do it.
+        # 如果计算机可以向下移动 k 步并最终到达一个安全点或获胜，那么就这样做。
         if (new_loc := (row + k, col)) in COMPUTER_PREF_MOVES:
             return new_loc
-        # If the computer can move diagonally k spaces and end up in a safe spot or win,
-        # do it.
+        # 如果计算机可以斜向移动 k 步并最终到达一个安全点或获胜，那么就这样做。
         if (new_loc := (row + k, col - k)) in COMPUTER_PREF_MOVES:
             return new_loc
-        # As a fallback, do a random move. (NOTE: This shouldn't actally happen--it
-        # should always be possible to make an optimal move if the player doesn't play
-        # in a location in SAFE_SPOTS.
+        # 作为备用，进行随机移动。（注意：这实际上不应该发生——如果玩家没有在 SAFE_SPOTS 中的位置上玩，应该总是能够做出最佳移动。）
     return random_computer_move(location)
 
 
 def main_game() -> None:
     """Execute the main game."""
     game_over: bool = False
-    location: Optional[Tuple[int, int]] = None  # Indicate it is the first turn
+    location: Optional[Tuple[int, int]] = None  # 表示这是第一次移动
+    # 当游戏未结束时执行循环
     while not game_over:
+        # 获取玩家移动的位置
         location = get_move(location)
-        if location == (8, 8):  # (8, 8) is returned when the player enters 0
+        # 如果玩家输入 (8, 8)，表示玩家放弃游戏
+        if location == (8, 8):  
+            # 打印玩家放弃游戏的消息
             print("\nIT LOOKS LIKE I HAVE WON BY FORFEIT.\n")
+            # 设置游戏结束标志为 True
             game_over = True
-        elif location == WIN_LOC:  # Player wins (in lower left corner)
+        # 如果玩家移动到了胜利的位置
+        elif location == WIN_LOC:  
+            # 打印玩家胜利的消息
             print(WIN_MSG)
+            # 设置游戏结束标志为 True
             game_over = True
+        # 如果玩家未胜利，计算机进行移动
         else:
             location = computer_move(location)
+            # 打印计算机移动到的位置
             print(f"COMPUTER MOVES TO SQUARE {loc_to_num(location)}")
-            if location == WIN_LOC:  # Computer wins (in lower left corner)
+            # 如果计算机移动到了胜利的位置
+            if location == WIN_LOC:  
+                # 打印计算机胜利的消息
                 print(LOSE_MSG)
+                # 设置游戏结束标志为 True
                 game_over = True
-        # The default behavior is not to show the board each turn, but
-        # this can be modified by changing a flag at the start of the file.
+        # 默认行为是不在每一轮显示游戏棋盘，但可以通过修改文件开头的标志来修改这一行为
         if not game_over and SHOW_BOARD_ALWAYS:
+            # 如果游戏未结束且需要始终显示游戏棋盘，则打印游戏棋盘
             print(GAME_BOARD)
-
-
 def ask(prompt: str) -> bool:
     """Ask a yes/no question until user gives an understandable response."""
     inpt: str
     while True:
         # Normalize input to uppercase, no whitespace, then get first character
+        # 询问用户问题，并将用户输入的内容转换成大写，去除空格，然后取第一个字符
         inpt = input(prompt + "? ").upper().strip()[0]
         print()
         if inpt == "Y":
@@ -278,8 +281,4 @@ if __name__ == "__main__":
         main_game()
         still_playing = ask("ANYONE ELSE CARE TO TRY")
     print("\nOK --- THANKS AGAIN.")
-
-
-
-注释：以上是一个Python 3实现的皇后游戏。代码中包含了游戏的配置、介绍、玩家和计算机的移动逻辑以及游戏的主要执行逻辑。整个代码通过注释和函数名称清晰地展现了游戏的逻辑和实现细节。
 ```

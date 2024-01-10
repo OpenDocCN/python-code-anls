@@ -1,14 +1,13 @@
 # `basic-computer-games\62_Mugwump\csharp\Position.cs`
 
 ```
-
-namespace Mugwump; // 命名空间声明，用于组织和管理代码
-
-internal record struct Position(float X, float Y) // 定义一个名为 Position 的结构体，包含两个 float 类型的字段 X 和 Y
+# 在Mugwump命名空间下定义一个内部的记录结构Position，包含X和Y两个浮点数属性
+internal record struct Position(float X, float Y)
 {
-    public override string ToString() => $"( {X} , {Y} )"; // 重写 ToString 方法，返回包含 X 和 Y 值的字符串
+    # 重写ToString方法，返回位置的字符串表示形式
+    public override string ToString() => $"( {X} , {Y} )";
 
-    public static Distance operator -(Position p1, Position p2) => new(p1.X - p2.X, p1.Y - p2.Y); // 定义重载运算符 -，用于计算两个 Position 对象之间的距离，并返回一个 Distance 对象
+    # 定义Position类型的减法运算符，计算两个位置之间的距离并返回Distance类型
+    public static Distance operator -(Position p1, Position p2) => new(p1.X - p2.X, p1.Y - p2.Y);
 }
-
 ```

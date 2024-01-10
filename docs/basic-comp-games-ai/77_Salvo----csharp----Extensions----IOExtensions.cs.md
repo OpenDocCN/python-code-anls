@@ -1,44 +1,39 @@
 # `basic-computer-games\77_Salvo\csharp\Extensions\IOExtensions.cs`
 
 ```
-
-// 命名空间 Games.Common.IO
+# 命名空间 Games.Common.IO 下的内部静态类 IOExtensions
 namespace Games.Common.IO;
 
-// 内部静态类，包含 IO 扩展方法
 internal static class IOExtensions
 {
-    // 从 IReadWrite 接口中读取位置信息
+    # 从 IReadWrite 接口中读取两个数字，创建 Position 对象并返回
     internal static Position ReadPosition(this IReadWrite io) => Position.Create(io.Read2Numbers(""));
 
-    // 从 IReadWrite 接口中读取有效的位置信息
+    # 从 IReadWrite 接口中读取有效的位置，如果位置无效则一直循环直到读取到有效位置
     internal static Position ReadValidPosition(this IReadWrite io)
     {
-        // 循环直到读取到有效的位置信息
         while (true)
         {
-            // 尝试从 IReadWrite 接口中读取有效的位置信息
+            # 尝试从 IReadWrite 接口中读取两个数字，创建有效的 Position 对象并返回
             if (Position.TryCreateValid(io.Read2Numbers(""), out var position)) 
             { 
                 return position; 
             }
-            // 如果位置信息非法，则写入 Streams.Illegal
+            # 如果位置无效，则向接口写入 "Illegal" 字符串
             io.Write(Streams.Illegal);
         }
     }
 
-    // 从 IReadWrite 接口中读取位置信息的集合
+    # 从 IReadWrite 接口中读取船只名称和大小，返回一个包含位置的可枚举集合
     internal static IEnumerable<Position> ReadPositions(this IReadWrite io, string shipName, int shipSize)
     {
-        // 写入船只名称
+        # 向接口写入船只名称
         io.WriteLine(shipName);
-        // 循环读取指定数量的位置信息
+        # 遍历船只大小次数，每次从接口中读取位置并返回
         for (var i = 0; i < shipSize; i++)
         {
-             // 返回从 IReadWrite 接口中读取的位置信息
              yield return io.ReadPosition();
         }
     }
 }
-
 ```

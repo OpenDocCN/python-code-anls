@@ -1,7 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Game.cs`
 
 ```
-
 // 使用 System.Reflection 命名空间
 using System.Reflection;
 
@@ -11,71 +10,77 @@ namespace Mugwump;
 // 定义 Game 类
 internal class Game
 {
-    // 私有字段，用于输入输出
+    // 声明私有的 TextIO 类型变量 _io
     private readonly TextIO _io;
-    // 私有字段，用于生成随机数
+    // 声明私有的 IRandom 类型变量 _random
     private readonly IRandom _random;
 
-    // 构造函数，接受输入输出和随机数生成器
+    // Game 类的构造函数，接受 TextIO 和 IRandom 类型的参数
     internal Game(TextIO io, IRandom random)
     {
+        // 将传入的 io 赋值给 _io
         _io = io;
+        // 将传入的 random 赋值给 _random
         _random = random;
     }
 
-    // 游戏主循环，接受一个可选的再玩一次的函数
+    // Play 方法，接受一个返回布尔值的委托 playAgain
     internal void Play(Func<bool> playAgain = null)
     {
         // 显示游戏介绍
         DisplayIntro();
 
-        // 当再玩一次的函数返回 true 时，继续游戏
+        // 当 playAgain 不为空且返回值为 true 时循环执行以下代码块
         while (playAgain?.Invoke() ?? true)
         {
-            // 开始游戏
+            // 调用 Play 方法，传入一个新的 Grid 对象
             Play(new Grid(_io, _random));
 
-            // 输出提示信息
+            // 输出空行
             _io.WriteLine();
+            // 输出提示信息
             _io.WriteLine("That was fun! Let's play again.......");
             _io.WriteLine("Four more mugwumps are now in hiding.");
         }
     }
 
-    // 显示游戏介绍
+    // DisplayIntro 方法，用于显示游戏介绍
     private void DisplayIntro()
     {
-        // 使用 Assembly.GetExecutingAssembly() 获取当前程序集，然后获取资源文件流
+        // 使用 Assembly.GetExecutingAssembly() 获取当前执行的程序集，再使用 GetManifestResourceStream 方法获取资源文件流
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mugwump.Strings.Intro.txt");
 
-        // 输出资源文件流内容
+        // 将资源文件流输出到 _io
         _io.Write(stream);
     }
 
-    // 开始游戏
+    // Play 方法，接受一个 Grid 类型的参数 grid
     private void Play(Grid grid)
     {
-        // 进行 10 轮游戏
+        // 循环执行 10 次
         for (int turn = 1; turn <= 10; turn++)
         {
-            // 读取玩家猜测
+            // 从 _io 读取玩家的猜测
             var guess = _io.ReadGuess($"Turn no. {turn} -- what is your guess");
 
-            // 检查玩家猜测是否正确
+            // 检查玩家的猜测是否正确
             if (grid.Check(guess))
             {
-                // 输出猜中信息并结束游戏
+                // 输出空行
                 _io.WriteLine();
+                // 输出玩家猜中的信息
                 _io.WriteLine($"You got them all in {turn} turns!");
+                // 结束方法
                 return;
             }
         }
 
-        // 输出未猜中信息并显示隐藏位置
+        // 输出空行
         _io.WriteLine();
+        // 输出未猜中的信息
         _io.WriteLine("Sorry, that's 10 tries.  Here is where they're hiding:");
+        // 显示所有 mugwumps 的位置
         grid.Reveal();
     }
 }
-
 ```

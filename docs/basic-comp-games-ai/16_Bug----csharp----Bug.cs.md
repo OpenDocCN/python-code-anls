@@ -1,39 +1,37 @@
 # `basic-computer-games\16_Bug\csharp\Bug.cs`
 
 ```
-
 // 使用 System.Text 命名空间中的 StringBuilder 类
 using System.Text;
-// 引用 BugGame.Parts 和 BugGame.Resources 命名空间
+// 引用 BugGame.Parts 和 BugGame.Resources 命名空间中的内容
 using BugGame.Parts;
 using BugGame.Resources;
 
-// 声明 Bug 类，属于 BugGame 命名空间
+// Bug 类定义在 BugGame 命名空间中
 namespace BugGame
 {
-    // Bug 类是 internal 类型，只能在当前程序集中访问
+    // Bug 类被定义为 internal 类型，只能在当前程序集中访问
     internal class Bug
     {
-        // 声明一个只读的 Body 对象 _body，并初始化为一个新的 Body 实例
+        // Bug 类的私有字段 _body，类型为 Body，使用默认构造函数初始化
         private readonly Body _body = new();
 
-        // 声明 IsComplete 属性，返回 _body 的 IsComplete 属性值
+        // Bug 类的公共属性 IsComplete，返回 _body 的 IsComplete 属性值
         public bool IsComplete => _body.IsComplete;
 
-        // 声明 TryAdd 方法，尝试向 _body 中添加一个部件，返回是否添加成功，并将消息存储在 out 参数 message 中
+        // Bug 类的公共方法 TryAdd，尝试向 _body 中添加部件，返回是否添加成功以及消息
         public bool TryAdd(IPart part, out Message message) => _body.TryAdd(part, out message);
 
-        // 声明 ToString 方法，返回一个包含 pronoun 和 feelerCharacter 的 Bug 字符串
+        // Bug 类的公共方法 ToString，返回 Bug 的字符串表示，包括代词和 feelerCharacter
         public string ToString(string pronoun, char feelerCharacter)
         {
-            // 创建一个 StringBuilder 对象 builder，初始化为包含 pronoun 的 Bug 字符串
+            // 创建 StringBuilder 对象，初始化 Bug 的字符串表示
             var builder = new StringBuilder($"*****{pronoun} Bug*****").AppendLine().AppendLine().AppendLine();
-            // 将 _body 的内容添加到 builder 中，使用 feelerCharacter 作为参数
+            // 将 _body 的内容添加到 StringBuilder 中，使用指定的 feelerCharacter
             _body.AppendTo(builder, feelerCharacter);
-            // 返回 builder 转换为字符串的结果
+            // 返回 StringBuilder 的字符串表示
             return builder.ToString();
         }
     }
 }
-
 ```

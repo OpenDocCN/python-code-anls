@@ -1,28 +1,26 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse.Tests\TestReverser.cs`
 
 ```
-
-// 命名空间 Reverse.Tests，用于组织和管理类
+// 声明命名空间为 Reverse.Tests
 namespace Reverse.Tests
 {
-    // TestReverser 类继承自 Reverser 类
+    // 声明 TestReverser 类，继承自 Reverser 类
     internal class TestReverser : Reverser
     {
-        // 构造函数，接受一个整数参数作为数组大小，并调用基类的构造函数进行初始化
+        // 声明 TestReverser 类的构造函数，接受一个整数参数 arraySize，并调用基类 Reverser 的构造函数
         public TestReverser(int arraySize) : base(arraySize) { }
 
-        // 获取数组的方法，返回私有成员变量 _array
+        // 声明 GetArray 方法，用于获取私有成员变量 _array
         public int[] GetArray()
         {
             return _array;
         }
 
-        // 设置数组的方法，接受一个整型数组作为参数，并将私有成员变量 _array 设置为该数组
+        // 声明 SetArray 方法，用于设置私有成员变量 _array
         public void SetArray(int[] array)
         {
             _array = array;
         }
     }
 }
-
 ```

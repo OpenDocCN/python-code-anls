@@ -1,19 +1,18 @@
 # `basic-computer-games\75_Roulette\csharp\Croupier.cs`
 
 ```
-
 // 命名空间 Roulette 下的内部类 Croupier
 internal class Croupier
 {
-    // 初始的庄家和玩家的初始资金
+    // 初始的庄家和玩家的资金
     private const int _initialHouse = 100_000;
     private const int _initialPlayer = 1_000;
 
-    // 庄家和玩家当前的资金
+    // 庄家和玩家的当前资金
     private int _house = _initialHouse;
     private int _player = _initialPlayer;
 
-    // 返回当前庄家和玩家的资金情况
+    // 返回庄家和玩家的当前资金情况
     public string Totals => Strings.Totals(_house, _player);
     // 判断玩家是否破产
     public bool PlayerIsBroke => _player <= 0;
@@ -35,7 +34,7 @@ internal class Croupier
         return Strings.Win(bet);
     }
 
-    // 玩家输掉赌注，更新庄家和玩家的资金情况
+    // 庄家赢得赌注，更新庄家和玩家的资金情况
     internal string Take(Bet bet)
     {
         _house += bet.Wager;
@@ -44,12 +43,13 @@ internal class Croupier
         return Strings.Lose(bet);
     }
 
-    // 发放支票，根据随机数和玩家的资金情况输出支票信息
+    // 发放支票给玩家
     public void CutCheck(IReadWrite io, IRandom random)
     {
+        // 从输入输出对象中读取玩家姓名
         var name = io.ReadString(Prompts.Check);
+        // 输出支票信息
         io.Write(Strings.Check(random, name, _player));
     }
 }
-
 ```

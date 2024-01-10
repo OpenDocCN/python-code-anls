@@ -1,11 +1,13 @@
 # `basic-computer-games\43_Hammurabi\csharp\View.cs`
 
 ```
-
-# 命名空间声明，指定代码所属的命名空间
+// 命名空间 Hammurabi
 namespace Hammurabi
 {
-    # 代码的主体部分
+    /// <summary>
+    /// 提供各种方法来向用户呈现信息。
+    /// </summary>
+    public static class View
+    }
 }
-
 ```

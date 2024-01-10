@@ -1,13 +1,13 @@
 # `basic-computer-games\94_War\csharp\War\Program.cs`
 
 ```
-
-// 命名空间 War
+// 命名空间声明，定义了代码所在的命名空间
 namespace War
 {
-    // 程序入口
+    // 定义了程序的入口类
     class Program
     {
+        // 主函数，程序的入口
         static void Main(string[] args)
         {
             // 创建用户界面对象
@@ -19,7 +19,7 @@ namespace War
             var deck = new Deck();
             deck.Shuffle();
 
-            // 初始化玩家和电脑的分数，以及是否使用完所有的牌
+            // 初始化玩家和电脑的分数，以及标记是否用完了所有的牌
             int yourScore = 0;
             int computersScore = 0;
             bool usedAllCards = true;
@@ -31,12 +31,13 @@ namespace War
                 var yourCard = deck.GetCard(i);
                 var computersCard = deck.GetCard(i + 1);
 
-                // 输出比赛结果，并更新分数
+                // 输出比赛结果，并更新玩家和电脑的分数
                 ui.WriteAResult(yourCard, computersCard, ref computersScore, ref yourScore);
 
                 // 询问玩家是否继续游戏
                 if (!ui.AskAQuestion("DO YOU WANT TO CONTINUE? "))
                 {
+                    // 如果玩家选择不继续，标记为未用完所有牌，并跳出循环
                     usedAllCards = false;
                     break;
                 }
@@ -47,5 +48,4 @@ namespace War
         }
     }
 }
-
 ```

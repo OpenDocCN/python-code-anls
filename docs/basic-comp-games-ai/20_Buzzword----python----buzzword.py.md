@@ -1,7 +1,6 @@
 # `basic-computer-games\20_Buzzword\python\buzzword.py`
 
 ```
-
 """
 Buzzword Generator
 
@@ -26,7 +25,6 @@ import random
 
 
 def main() -> None:
-    # 定义包含各个部分单词的列表
     words = [
         [
             "Ability",
@@ -75,39 +73,53 @@ def main() -> None:
         ],
     ]
 
-    # 显示介绍文本
+    # Display intro text
+    # 打印程序介绍文本
     print("\n           Buzzword Generator")
     print("Creative Computing  Morristown, New Jersey")
     print("\n\n")
     print("This program prints highly acceptable phrases in")
     print("'educator-speak' that you can work into reports")
+    # 打印提示信息
     print("and speeches.  Whenever a question mark is printed,")
+    # 打印提示信息
     print("type a 'Y' for another phrase or 'N' to quit.")
+    # 打印提示信息
     print("\n\nHere's the first phrase:")
 
+    # 设置一个标志，用于控制循环是否继续运行
     still_running = True
+    # 当标志为真时，执行循环
     while still_running:
+        # 初始化一个空字符串用于存储生成的短语
         phrase = ""
-        # 从每个部分随机选择一个单词，拼接成短语
+        # 遍历单词列表
         for section in words:
+            # 如果短语长度大于0，则在短语后面添加一个空格
             if len(phrase) > 0:
                 phrase += " "
+            # 从当前单词列表中随机选择一个单词添加到短语中
             phrase += section[random.randint(0, len(section) - 1)]
 
+        # 打印生成的短语
         print(phrase)
+        # 打印空行
         print()
 
+        # 获取用户输入
         response = input("? ")
+        # 尝试处理用户输入
         try:
-            # 如果用户输入的第一个字符不是Y，则停止循环
+            # 如果用户输入的第一个字符转换为大写后不是"Y"，则将标志设置为假
             if response.upper()[0] != "Y":
                 still_running = False
+        # 捕获异常
         except Exception:
+            # 将标志设置为假
             still_running = False
 
+    # 打印结束语
     print("Come back when you need help with another report!\n")
-
-
 if __name__ == "__main__":
     main()
 
@@ -143,6 +155,4 @@ if __name__ == "__main__":
 #   choose a field and pick the buzzwords accordingly.
 #
 ######################################################################
-
-
 ```

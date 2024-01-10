@@ -1,19 +1,21 @@
 # `basic-computer-games\75_Roulette\csharp\BetType.cs`
 
 ```
-
-namespace Roulette; // 命名空间声明，定义了代码所在的命名空间
-
-internal record struct BetType(int Value) // 定义了一个内部的记录结构体 BetType，包含一个整数类型的属性 Value
+# 命名空间 Roulette 下的内部记录结构 BetType，包含一个整数值
+internal record struct BetType(int Value)
 {
-    public static implicit operator BetType(int value) => new(value); // 定义了一个隐式转换操作符，将整数类型转换为 BetType 类型
+    # 定义一个从整数到 BetType 的隐式转换操作符
+    public static implicit operator BetType(int value) => new(value);
 
-    public int Payout => Value switch // 定义了一个只读属性 Payout，根据 Value 的值返回不同的赔率
+    # 根据不同的值计算赔付金额
+    public int Payout => Value switch
         {
-            <= 36 or >= 49 => 35, // 当 Value 小于等于 36 或大于等于 49 时，返回 35
-            <= 42 => 2, // 当 Value 小于等于 42 时，返回 2
-            <= 48 => 1 // 当 Value 小于等于 48 时，返回 1
+            # 如果值小于等于 36 或者大于等于 49，则赔付金额为 35
+            <= 36 or >= 49 => 35,
+            # 如果值小于等于 42，则赔付金额为 2
+            <= 42 => 2,
+            # 如果值小于等于 48，则赔付金额为 1
+            <= 48 => 1
         };
 }
-
 ```

@@ -1,7 +1,6 @@
 # `basic-computer-games\61_Math_Dice\java\MathDice.java`
 
 ```
-
 // 导入 Scanner 类
 import java.util.Scanner;
 
@@ -19,7 +18,7 @@ public class MathDice {
         int guess = 1;
         int answer;
 
-        // 打印欢迎信息
+        // 输出游戏标题和说明
         System.out.println("Math Dice");
         System.out.println("https://github.com/coding-horror/basic-computer-games");
         System.out.println();
@@ -30,13 +29,14 @@ public class MathDice {
 
         // 游戏循环
         while (true) {
-            // 打印两个骰子的点数
+            // 打印第一个骰子
             dieOne.printDie();
             System.out.println("   +");
+            // 打印第二个骰子
             dieTwo.printDie();
             System.out.println("   =");
+            // 初始化尝试次数和答案
             int tries = 0;
-            // 计算答案
             answer = dieOne.getFaceValue() + dieTwo.getFaceValue();
 
             // 猜测循环
@@ -51,14 +51,14 @@ public class MathDice {
                     in.nextLine();
                 }
 
-                // 如果用户输入 0，则退出程序
+                // 如果猜测值为 0，则退出程序
                 if (guess == 0)
                     System.exit(0);
 
                 tries++;
             }
 
-            // 判断猜测结果
+            // 判断猜测结果并输出相应信息
             if (guess != answer) {
                 System.out.println("No, the answer is " + answer + "!");
             } else {
@@ -69,5 +69,4 @@ public class MathDice {
     }
 
 }
-
 ```

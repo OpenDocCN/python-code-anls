@@ -1,12 +1,14 @@
 # `basic-computer-games\83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
 
 ```
+// 命名空间声明，定义了类的作用域
+using System;
+using System.Collections.Immutable;
 
-// 命名空间 Game.Extensions 包含了 ImmutableArrayExtensions 类
 namespace Game.Extensions
 {
     /// <summary>
-    /// 为 ImmutableArray<T> 类提供额外的方法
+    /// 为 <see cref="ImmutableArray{T}"/> 类提供额外的方法
     /// </summary>
     public static class ImmutableArrayExtensions
     {
@@ -30,14 +32,13 @@ namespace Game.Extensions
             // 创建一个结果数组的构建器
             var builder = ImmutableArray.CreateBuilder<TResult>(source.Length);
 
-            // 遍历源数组，将经过 selector 函数处理后的元素添加到结果数组中
+            // 遍历源数组，将经过 selector 函数处理后的元素添加到结果数组的构建器中
             for (var i = 0; i < source.Length; ++i)
                 builder.Add(selector(source[i], i));
 
-            // 将构建器中的内容转换为不可变数组并返回
+            // 将构建器中的结果数组转换为不可变数组并返回
             return builder.MoveToImmutable();
         }
     }
 }
-
 ```

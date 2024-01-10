@@ -1,172 +1,211 @@
 # `basic-computer-games\00_Alternate_Languages\05_Bagels\go\main.go`
 
 ```
-
 package main
 
 import (
-	"bufio" // 导入 bufio 包，用于读取输入
-	"fmt" // 导入 fmt 包，用于格式化输出
-	"math/rand" // 导入 math/rand 包，用于生成随机数
-	"os" // 导入 os 包，用于操作系统功能
-	"strconv" // 导入 strconv 包，用于字符串和数字之间的转换
-	"strings" // 导入 strings 包，用于处理字符串
-	"time" // 导入 time 包，用于处理时间
+    "bufio"  // 导入 bufio 包，提供读取输入的功能
+    "fmt"    // 导入 fmt 包，提供格式化输入输出的功能
+    "math/rand"  // 导入 math/rand 包，提供生成随机数的功能
+    "os"     // 导入 os 包，提供操作系统功能
+    "strconv"    // 导入 strconv 包，提供字符串和基本数据类型之间的转换功能
+    "strings"    // 导入 strings 包，提供处理字符串的功能
+    "time"   // 导入 time 包，提供时间相关的功能
 )
 
-const MAXGUESSES int = 20 // 定义常量 MAXGUESSES，表示最大猜测次数为 20
+const MAXGUESSES int = 20  // 定义常量 MAXGUESSES，表示最大猜测次数为 20 次
 
-func printWelcome() {
-	fmt.Println("\n                Bagels") // 打印欢迎信息
-	fmt.Println("Creative Computing  Morristown, New Jersey") // 打印创意计算的信息
-	fmt.Println()
-}
-func printRules() {
-	fmt.Println() // 打印空行
-	fmt.Println("I am thinking of a three-digit number.  Try to guess") // 打印游戏规则
-	fmt.Println("my number and I will give you clues as follows:") // 打印游戏规则
-	fmt.Println("   PICO   - One digit correct but in the wrong position") // 打印游戏规则
-	fmt.Println("   FERMI  - One digit correct and in the right position") // 打印游戏规则
-	fmt.Println("   BAGELS - No digits correct") // 打印游戏规则
+func printWelcome() {  // 定义函数 printWelcome，用于打印欢迎信息
+    fmt.Println("\n                Bagels")  // 打印 Bagels
+    fmt.Println("Creative Computing  Morristown, New Jersey")  // 打印 Creative Computing  Morristown, New Jersey
+    fmt.Println()  // 打印空行
 }
 
-func getNumber() []string {
-	numbers := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"} // 创建包含数字字符串的切片
-	rand.Shuffle(len(numbers), func(i, j int) { numbers[i], numbers[j] = numbers[j], numbers[i] }) // 打乱切片中的数字顺序
-
-	return numbers[:3] // 返回打乱顺序后的前三个数字
+func printRules() {  // 定义函数 printRules，用于打印游戏规则
+    fmt.Println()  // 打印空行
+    fmt.Println("I am thinking of a three-digit number.  Try to guess")  // 打印游戏规则说明
+    fmt.Println("my number and I will give you clues as follows:")  // 打印游戏规则说明
+    fmt.Println("   PICO   - One digit correct but in the wrong position")  // 打印游戏规则说明
+    fmt.Println("   FERMI  - One digit correct and in the right position")  // 打印游戏规则说明
+    fmt.Println("   BAGELS - No digits correct")  // 打印游戏规则说明
 }
 
-func getValidGuess(guessNumber int) string {
-	var guess string // 定义变量 guess，用于存储玩家的猜测
-	scanner := bufio.NewScanner(os.Stdin) // 创建用于读取输入的 Scanner 对象
-	valid := false // 定义变量 valid，表示猜测是否有效
-	for !valid {
-		fmt.Printf("Guess # %d?\n", guessNumber) // 提示玩家输入猜测
-		scanner.Scan() // 读取玩家输入
-		guess = strings.TrimSpace(scanner.Text()) // 去除输入字符串两端的空格
+func getNumber() []string {  // 定义函数 getNumber，用于生成一个三位数的随机数字
+    numbers := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}  // 创建包含数字字符的切片
+    rand.Shuffle(len(numbers), func(i, j int) { numbers[i], numbers[j] = numbers[j], numbers[i] })  // 对数字字符切片进行随机打乱
 
-		// 确保猜测为三个字符
-		if len(guess) == 3 {
-			// 确保猜测为数字
-			_, err := strconv.Atoi(guess) // 尝试将猜测转换为数字
-			if err != nil {
-				fmt.Println("What?") // 如果转换失败，提示玩家重新输入
-			} else {
-				// 确保猜测中的数字唯一
-				if (guess[0:1] != guess[1:2]) && (guess[0:1] != guess[2:3]) && (guess[1:2] != guess[2:3]) {
-					valid = true // 如果猜测有效，设置 valid 为 true
-				} else {
-					fmt.Println("Oh, I forgot to tell you that the number I have in mind") // 如果猜测中有重复数字，提示玩家重新输入
-					fmt.Println("has no two digits the same.")
-				}
-			}
-		} else {
-			fmt.Println("Try guessing a three-digit number.") // 如果猜测不是三个字符，提示玩家重新输入
-		}
-	}
-
-	return guess // 返回有效的猜测
+    return numbers[:3]  // 返回打乱后的前三个数字字符
 }
 
+func getValidGuess(guessNumber int) string {  // 定义函数 getValidGuess，用于获取有效的猜测数字
+    var guess string  // 声明变量 guess，用于存储猜测数字
+    scanner := bufio.NewScanner(os.Stdin)  // 创建用于读取输入的 Scanner 对象
+    valid := false  // 声明变量 valid，表示猜测数字是否有效
+    for !valid {  // 循环直到猜测数字有效
+        fmt.Printf("Guess # %d?\n", guessNumber)  // 打印猜测次数提示
+        scanner.Scan()  // 读取用户输入
+        guess = strings.TrimSpace(scanner.Text())  // 去除用户输入的首尾空格，并存储到 guess 变量中
+
+        // 确保猜测数字为三位数
+        if len(guess) == 3 {
+            // 确保猜测数字为数字字符
+            _, err := strconv.Atoi(guess)
+            if err != nil {
+                fmt.Println("What?")  // 打印提示信息
+            } else {
+                // 确保猜测数字的每个数字字符都不相同
+# 检查猜测的数字是否有重复的数字，如果没有则设置valid为true
+if (guess[0:1] != guess[1:2]) && (guess[0:1] != guess[2:3]) && (guess[1:2] != guess[2:3]) {
+    valid = true
+} else {
+    # 如果猜测的数字有重复的数字，则输出提示信息
+    fmt.Println("Oh, I forgot to tell you that the number I have in mind")
+    fmt.Println("has no two digits the same.")
+}
+
+# 如果猜测的数字不是三位数，则输出提示信息
+} else {
+    fmt.Println("Try guessing a three-digit number.")
+}
+
+# 返回猜测的数字
+return guess
+}
+
+# 构建结果字符串
 func buildResultString(num []string, guess string) string {
-	result := "" // 定义变量 result，用于存储猜测结果
+    result := ""
 
-	// 正确数字但位置错误
-	for i := 0; i < 2; i++ {
-		if num[i] == guess[i+1:i+2] {
-			result += "PICO " // 如果数字正确但位置错误，添加 PICO 到结果中
-		}
-		if num[i+1] == guess[i:i+1] {
-			result += "PICO " // 如果数字正确但位置错误，添加 PICO 到结果中
-		}
-	}
-	if num[0] == guess[2:3] {
-		result += "PICO " // 如果数字正确但位置错误，添加 PICO 到结果中
-	}
-	if num[2] == guess[0:1] {
-		result += "PICO " // 如果数字正确但位置错误，添加 PICO 到结果中
-	}
+    # 检查数字中正确但位置错误的数字
+    for i := 0; i < 2; i++ {
+        if num[i] == guess[i+1:i+2] {
+            result += "PICO "
+        }
+        if num[i+1] == guess[i:i+1] {
+            result += "PICO "
+        }
+    }
+    if num[0] == guess[2:3] {
+        result += "PICO "
+    }
+    if num[2] == guess[0:1] {
+        result += "PICO "
+    }
 
-	// 正确数字且位置正确
-	for i := 0; i < 3; i++ {
-		if num[i] == guess[i:i+1] {
-			result += "FERMI " // 如果数字正确且位置正确，添加 FERMI 到结果中
-		}
-	}
+    # 检查数字中正确且位置正确的数字
+    for i := 0; i < 3; i++ {
+        if num[i] == guess[i:i+1] {
+            result += "FERMI "
+        }
+    }
 
-	// 没有正确的数字
-	if result == "" {
-		result = "BAGELS" // 如果没有正确的数字，设置结果为 BAGELS
-	}
+    # 如果没有任何数字正确，则设置结果为"BAGELS"
+    if result == "" {
+        result = "BAGELS"
+    }
 
-	return result // 返回猜测结果
+    return result
 }
 
+# 主函数
 func main() {
-	rand.Seed(time.Now().UnixNano()) // 使用当前时间作为随机数种子
-	scanner := bufio.NewScanner(os.Stdin) // 创建用于读取输入的 Scanner 对象
+    rand.Seed(time.Now().UnixNano())
+    scanner := bufio.NewScanner(os.Stdin)
 
-	printWelcome() // 打印欢迎信息
+    printWelcome()
 
-	fmt.Println("Would you like the rules (Yes or No)? ") // 提示玩家是否需要游戏规则
-	scanner.Scan() // 读取玩家输入
-	response := scanner.Text() // 获取玩家输入的响应
-	if len(response) > 0 {
-		if strings.ToUpper(response[0:1]) != "N" { // 如果玩家不想要游戏规则
-			printRules() // 打印游戏规则
-		}
-	} else {
-		printRules() // 打印游戏规则
-	}
-
-	gamesWon := 0 // 定义变量 gamesWon，用于存储赢得的游戏次数
-	stillRunning := true // 定义变量 stillRunning，表示游戏是否继续进行
-
-	for stillRunning {
-		num := getNumber() // 获取一个三位数作为目标数字
-		numStr := strings.Join(num, "") // 将目标数字转换为字符串
-		guesses := 1 // 定义变量 guesses，表示猜测次数
-
-		fmt.Println("\nO.K.  I have a number in mind.") // 提示玩家开始猜测
-		guessing := true // 定义变量 guessing，表示是否在猜测中
-		for guessing {
-			guess := getValidGuess(guesses) // 获取有效的玩家猜测
-
-			if guess == numStr { // 如果猜测正确
-				fmt.Println("You got it!!") // 提示玩家猜对了
-				gamesWon++ // 赢得的游戏次数加一
-				guessing = false // 结束猜测
-			} else {
-				fmt.Println(buildResultString(num, guess)) // 打印猜测结果
-				guesses++ // 猜测次数加一
-				if guesses > MAXGUESSES { // 如果猜测次数超过最大次数
-					fmt.Println("Oh well") // 提示玩家猜测失败
-					fmt.Printf("That's %d guesses. My number was %s\n", MAXGUESSES, numStr) // 打印目标数字
-					guessing = false // 结束猜测
-				}
-			}
-		}
-
-		validRespone := false // 定义变量 validRespone，表示玩家响应是否有效
-		for !validRespone {
-			fmt.Println("Play again (Yes or No)?") // 提示玩家是否继续游戏
-			scanner.Scan() // 读取玩家输入
-			response := scanner.Text() // 获取玩家输入的响应
-			if len(response) > 0 {
-				validRespone = true // 设置玩家响应为有效
-				if strings.ToUpper(response[0:1]) != "Y" { // 如果玩家不想继续游戏
-					stillRunning = false // 结束游戏
-				}
-			}
-		}
-	}
-
-	if gamesWon > 0 {
-		fmt.Printf("\nA %d point Bagels buff!!\n", gamesWon) // 打印赢得的游戏次数
-	}
-
-	fmt.Println("Hope you had fun.  Bye") // 结束游戏，打印结束语
+    fmt.Println("Would you like the rules (Yes or No)? ")
+}
+# 扫描输入
+scanner.Scan()
+# 获取输入的文本
+response := scanner.Text()
+# 如果输入的文本长度大于0
+if len(response) > 0 {
+    # 如果输入的文本的第一个字符不是"N"，则打印规则
+    if strings.ToUpper(response[0:1]) != "N" {
+        printRules()
+    }
+} else {
+    # 如果输入的文本长度为0，则打印规则
+    printRules()
 }
 
+# 初始化变量gamesWon为0
+gamesWon := 0
+# 初始化变量stillRunning为true
+stillRunning := true
+
+# 当stillRunning为true时执行循环
+for stillRunning {
+    # 获取一个数字
+    num := getNumber()
+    # 将数字转换为字符串
+    numStr := strings.Join(num, "")
+    # 初始化变量guesses为1
+    guesses := 1
+
+    # 打印消息
+    fmt.Println("\nO.K.  I have a number in mind.")
+    # 初始化变量guessing为true
+    guessing := true
+    # 当guessing为true时执行循环
+    for guessing {
+        # 获取有效的猜测
+        guess := getValidGuess(guesses)
+
+        # 如果猜测等于数字字符串
+        if guess == numStr {
+            # 打印消息
+            fmt.Println("You got it!!")
+            # 增加游戏获胜次数
+            gamesWon++
+            # 将guessing设置为false
+            guessing = false
+        } else {
+            # 打印猜测结果
+            fmt.Println(buildResultString(num, guess))
+            # 增加猜测次数
+            guesses++
+            # 如果猜测次数大于最大猜测次数
+            if guesses > MAXGUESSES {
+                # 打印消息
+                fmt.Println("Oh well")
+                fmt.Printf("That's %d guesses. My number was %s\n", MAXGUESSES, numStr)
+                # 将guessing设置为false
+                guessing = false
+            }
+        }
+    }
+
+    # 初始化变量validRespone为false
+    validRespone := false
+    # 当validRespone为false时执行循环
+    for !validRespone {
+        # 打印消息
+        fmt.Println("Play again (Yes or No)?")
+        # 扫描输入
+        scanner.Scan()
+        # 获取输入的文本
+        response := scanner.Text()
+# 如果响应的长度大于0
+if len(response) > 0 {
+    # 设置validRespone为true
+    validRespone = true
+    # 如果响应的第一个字符不是大写的Y
+    if strings.ToUpper(response[0:1]) != "Y" {
+        # 设置stillRunning为false
+        stillRunning = false
+    }
+}
+
+# 如果gamesWon大于0
+if gamesWon > 0 {
+    # 打印获得的分数
+    fmt.Printf("\nA %d point Bagels buff!!\n", gamesWon)
+}
+
+# 打印结束语
+fmt.Println("Hope you had fun.  Bye")
+}
 ```

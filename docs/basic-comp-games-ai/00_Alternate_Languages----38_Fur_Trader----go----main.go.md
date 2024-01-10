@@ -1,112 +1,212 @@
 # `basic-computer-games\00_Alternate_Languages\38_Fur_Trader\go\main.go`
 
 ```
-
 package main
 
 import (
-	"bufio" // 导入 bufio 包，用于读取输入
-	"fmt" // 导入 fmt 包，用于格式化输出
-	"log" // 导入 log 包，用于记录日志
-	"math/rand" // 导入 math/rand 包，用于生成随机数
-	"os" // 导入 os 包，用于操作系统功能
-	"strconv" // 导入 strconv 包，用于字符串和基本数据类型之间的转换
-	"strings" // 导入 strings 包，用于处理字符串
-	"time" // 导入 time 包，用于时间相关操作
+    "bufio"  // 导入用于读取输入的包
+    "fmt"    // 导入用于格式化输出的包
+    "log"    // 导入用于记录日志的包
+    "math/rand"  // 导入用于生成随机数的包
+    "os"     // 导入操作系统功能的包
+    "strconv"    // 导入字符串转换功能的包
+    "strings"    // 导入处理字符串的包
+    "time"   // 导入处理时间的包
 )
 
 const (
-	MAXFURS    = 190 // 定义最大毛皮数量
-	STARTFUNDS = 600 // 定义初始资金
+    MAXFURS    = 190  // 定义最大毛皮数量
+    STARTFUNDS = 600  // 定义初始资金
 )
 
-type Fur int8 // 定义毛皮类型
+type Fur int8  // 定义毛皮类型
 
 const (
-	FUR_MINK Fur = iota // 定义不同种类的毛皮
-	FUR_BEAVER
-	FUR_ERMINE
-	FUR_FOX
+    FUR_MINK Fur = iota   // 定义不同种类的毛皮
+    FUR_BEAVER
+    FUR_ERMINE
+    FUR_FOX
 )
 
-type Fort int8 // 定义堡垒类型
+type Fort int8  // 定义据点类型
 
 const (
-	FORT_MONTREAL Fort = iota // 定义不同的堡垒
-	FORT_QUEBEC
-	FORT_NEWYORK
+    FORT_MONTREAL Fort = iota   // 定义不同的据点
+    FORT_QUEBEC
+    FORT_NEWYORK
 )
 
-type GameState int8 // 定义游戏状态类型
+type GameState int8  // 定义游戏状态类型
 
 const (
-	STARTING GameState = iota // 定义游戏的不同状态
-	TRADING
-	CHOOSINGFORT
-	TRAVELLING
+    STARTING GameState = iota   // 定义游戏的不同状态
+    TRADING
+    CHOOSINGFORT
+    TRAVELLING
 )
 
-func FURS() []string { // 定义函数返回毛皮类型的字符串切片
-	return []string{"MINK", "BEAVER", "ERMINE", "FOX"}
+func FURS() []string {
+    return []string{"MINK", "BEAVER", "ERMINE", "FOX"}  // 返回毛皮类型的字符串切片
 }
 
-func FORTS() []string { // 定义函数返回堡垒名称的字符串切片
-	return []string{"HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"}
+func FORTS() []string {
+    return []string{"HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"}  // 返回据点名称的字符串切片
 }
 
-type Player struct { // 定义玩家结构体
-	funds float32 // 玩家资金
-	furs  []int // 玩家拥有的不同种类毛皮数量
+type Player struct {
+    funds float32  // 玩家资金
+    furs  []int    // 玩家拥有的毛皮数量
 }
 
-func NewPlayer() Player { // 定义创建新玩家的函数
-	p := Player{} // 创建新玩家
-	p.funds = STARTFUNDS // 设置玩家初始资金
-	p.furs = make([]int, 4) // 初始化玩家拥有的不同种类毛皮数量
-	return p // 返回新玩家
+func NewPlayer() Player {
+    p := Player{}  // 创建新的玩家对象
+    p.funds = STARTFUNDS  // 设置初始资金
+    p.furs = make([]int, 4)  // 初始化毛皮数量
+    return p
 }
 
-func (p *Player) totalFurs() int { // 定义计算玩家总毛皮数量的方法
-	f := 0 // 初始化总毛皮数量
-	for _, v := range p.furs { // 遍历玩家拥有的不同种类毛皮数量
-		f += v // 累加毛皮数量
-	}
-	return f // 返回总毛皮数量
+func (p *Player) totalFurs() int {
+    f := 0  // 初始化总毛皮数量
+    for _, v := range p.furs {  // 遍历玩家拥有的毛皮数量
+        f += v  // 累加毛皮数量
+    }
+    return f  // 返回总毛皮数量
 }
 
-func (p *Player) lostFurs() { // 定义清空玩家毛皮数量的方法
-	for f := 0; f < len(p.furs); f++ { // 遍历玩家拥有的不同种类毛皮数量
-		p.furs[f] = 0 // 清空毛皮数量
-	}
+func (p *Player) lostFurs() {
+    for f := 0; f < len(p.furs); f++ {  // 遍历玩家拥有的毛皮数量
+        p.furs[f] = 0  // 将毛皮数量设置为0
+    }
 }
 
-func printTitle() { // 定义打印游戏标题的函数
-	fmt.Println("                               FUR TRADER") // 打印游戏标题
-	fmt.Println("               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY") // 打印游戏信息
-	fmt.Println() // 打印空行
-	fmt.Println() // 打印空行
-	fmt.Println() // 打印空行
+func printTitle() {
+    fmt.Println("                               FUR TRADER")  // 打印游戏标题
+    fmt.Println("               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")  // 打印游戏信息
+    fmt.Println()  // 打印空行
+    fmt.Println()  // 打印空行
+    fmt.Println()  // 打印空行
 }
 
-func printIntro() { // 定义打印游戏介绍的函数
-	fmt.Println("YOU ARE THE LEADER OF A FRENCH FUR TRADING EXPEDITION IN ") // 打印游戏介绍
-	// 其他打印类似
+func printIntro() {
+    fmt.Println("YOU ARE THE LEADER OF A FRENCH FUR TRADING EXPEDITION IN ")  // 打印游戏介绍
+    fmt.Println("1776 LEAVING THE LAKE ONTARIO AREA TO SELL FURS AND GET")
+    fmt.Println("SUPPLIES FOR THE NEXT YEAR.  YOU HAVE A CHOICE OF THREE")
+    fmt.Println("FORTS AT WHICH YOU MAY TRADE.  THE COST OF SUPPLIES")
+    fmt.Println("AND THE AMOUNT YOU RECEIVE FOR YOUR FURS WILL DEPEND")
+    fmt.Println("ON THE FORT THAT YOU CHOOSE.")
+    fmt.Println()
 }
 
-func getFortChoice() Fort { // 定义获取玩家选择堡垒的函数
-	// 实现获取玩家输入并返回选择的堡垒
+func getFortChoice() Fort {
+    scanner := bufio.NewScanner(os.Stdin)  // 创建用于读取输入的扫描器
+    // 无限循环，直到用户输入有效的选项
+    for {
+        // 打印提示信息
+        fmt.Println()
+        fmt.Println("YOU MAY TRADE YOUR FURS AT FORT 1, FORT 2,")
+        fmt.Println("OR FORT 3.  FORT 1 IS FORT HOCHELAGA (MONTREAL)")
+        fmt.Println("AND IS UNDER THE PROTECTION OF THE FRENCH ARMY.")
+        fmt.Println("FORT 2 IS FORT STADACONA (QUEBEC) AND IS UNDER THE")
+        fmt.Println("PROTECTION OF THE FRENCH ARMY.  HOWEVER, YOU MUST")
+        fmt.Println("MAKE A PORTAGE AND CROSS THE LACHINE RAPIDS.")
+        fmt.Println("FORT 3 IS FORT NEW YORK AND IS UNDER DUTCH CONTROL.")
+        fmt.Println("YOU MUST CROSS THROUGH IROQUOIS LAND.")
+        fmt.Println("ANSWER 1, 2, OR 3.")
+        fmt.Print(">> ")
+        // 读取用户输入
+        scanner.Scan()
+
+        // 将用户输入的字符串转换为整数
+        f, err := strconv.Atoi(scanner.Text())
+        // 如果转换出错或者输入不在1到3之间，提示用户重新输入
+        if err != nil || f < 1 || f > 3 {
+            fmt.Println("Invalid input, Try again ... ")
+            continue
+        }
+        // 返回用户选择的短语
+        return Fort(f)
+    }
+}
+// 打印对应要塞的评论
+func printFortComment(f Fort) {
+    fmt.Println()
+    switch f {
+    case FORT_MONTREAL:
+        fmt.Println("YOU HAVE CHOSEN THE EASIEST ROUTE.  HOWEVER, THE FORT")
+        fmt.Println("IS FAR FROM ANY SEAPORT.  THE VALUE")
+        fmt.Println("YOU RECEIVE FOR YOUR FURS WILL BE LOW AND THE COST")
+        fmt.Println("OF SUPPLIES HIGHER THAN AT FORTS STADACONA OR NEW YORK.")
+    case FORT_QUEBEC:
+        fmt.Println("YOU HAVE CHOSEN A HARD ROUTE.  IT IS, IN COMPARSION,")
+        fmt.Println("HARDER THAN THE ROUTE TO HOCHELAGA BUT EASIER THAN")
+        fmt.Println("THE ROUTE TO NEW YORK.  YOU WILL RECEIVE AN AVERAGE VALUE")
+        fmt.Println("FOR YOUR FURS AND THE COST OF YOUR SUPPLIES WILL BE AVERAGE.")
+    case FORT_NEWYORK:
+        fmt.Println("YOU HAVE CHOSEN THE MOST DIFFICULT ROUTE.  AT")
+        fmt.Println("FORT NEW YORK YOU WILL RECEIVE THE HIGHEST VALUE")
+        fmt.Println("FOR YOUR FURS.  THE COST OF YOUR SUPPLIES")
+        fmt.Println("WILL BE LOWER THAN AT ALL THE OTHER FORTS.")
+    }
+    fmt.Println()
 }
 
-func printFortComment(f Fort) { // 定义根据选择的堡垒打印评论的函数
-	// 根据选择的堡垒打印不同的评论
+// 获取用户输入的是YES还是NO
+func getYesOrNo() string {
+    scanner := bufio.NewScanner(os.Stdin)
+    for {
+        fmt.Println("ANSWER YES OR NO")
+        scanner.Scan()
+        if strings.ToUpper(scanner.Text())[0:1] == "Y" {
+            return "Y"
+        } else if strings.ToUpper(scanner.Text())[0:1] == "N" {
+            return "N"
+        }
+    }
 }
 
-func getYesOrNo() string { // 定义获取玩家输入是或否的函数
-	// 实现获取玩家输入并返回是或否
+// 获取用户购买的毛皮数量
+func getFursPurchase() []int {
+    scanner := bufio.NewScanner(os.Stdin)
+    fmt.Printf("YOUR %d FURS ARE DISTRIBUTED AMONG THE FOLLOWING\n", MAXFURS)
+    fmt.Println("KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX.")
+    fmt.Println()
+
+    purchases := make([]int, 4)
+
+    for i, f := range FURS() {
+    retry:
+        fmt.Printf("HOW MANY %s DO YOU HAVE: ", f)
+        scanner.Scan()
+        count, err := strconv.Atoi(scanner.Text())
+        if err != nil {
+            fmt.Println("INVALID INPUT, TRY AGAIN ...")
+            goto retry
+        }
+        purchases[i] = count
+    }
+
+    return purchases
 }
 
-func getFursPurchase() []int { // 定义获取玩家购买毛皮数量的函数
-	// 实现获取玩家输入并返回购买的毛皮数量
-}
+func main() {
+    # 使用当前时间的纳秒数作为随机数种子
+    rand.Seed(time.Now().UnixNano())
 
+    # 打印游戏标题
+    printTitle()
+
+    # 初始化游戏状态为 STARTING
+    gameState := STARTING
+    # 初始化要前往的堡垒为 FORT_NEWYORK
+    whichFort := FORT_NEWYORK
+    # 初始化四种动物皮的价格变量
+    var (
+        minkPrice   int
+        erminePrice int
+        beaverPrice int
+        foxPrice    int
+    )
+    # 创建一个新的玩家对象
+    player := NewPlayer()
+# 闭合前面的函数定义
 ```

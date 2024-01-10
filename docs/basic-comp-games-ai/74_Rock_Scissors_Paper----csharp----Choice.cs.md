@@ -1,32 +1,30 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Choice.cs`
 
 ```
-
-// 命名空间 RockScissorsPaper
+# 定义名为 RockScissorsPaper 的命名空间
 namespace RockScissorsPaper
 {
-    // Choice 类
+    # 定义名为 Choice 的公共类
     public class Choice
     {
-        // Selector 属性，可读不可写
+        # 定义 Selector 属性，可供外部获取，但只能在类内部设置
         public string Selector {get; private set; }
-        // Name 属性，可读不可写
+        # 定义 Name 属性，可供外部获取，但只能在类内部设置
         public string Name { get; private set; }
-        // CanBeat 属性，内部可设置
+        # 定义内部 CanBeat 属性，可在类内部设置
         internal Choice CanBeat { get; set; }
 
-        // Choice 类的构造函数，接受选择器和名称作为参数
+        # 定义构造函数，初始化 Selector 和 Name 属性
         public Choice(string selector, string name) {
             Selector = selector;
             Name = name;
         }
 
-        // Beats 方法，判断当前选择是否能战胜传入的选择
+        # 定义 Beats 方法，判断当前 Choice 对象是否能击败传入的 Choice 对象
         public bool Beats(Choice choice)
         {
             return choice == CanBeat;
         }
     }
 }
-
 ```

@@ -1,36 +1,33 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfos.cs`
 
 ```
+// 声明命名空间 DotnetUtils
+namespace DotnetUtils
+{
+    // 声明公共静态类 PortInfos
+    public static class PortInfos
+    {
+        // 声明只读的根目录路径
+        public static readonly string Root;
 
-// 引入命名空间和静态类
-using System.Reflection;
-using static System.IO.Directory;
-using static DotnetUtils.Globals;
+        // 静态构造函数
+        static PortInfos()
+        {
+            // 获取程序集的父目录的完整路径并赋值给 Root
+            Root = GetParent(Assembly.GetEntryAssembly()!.Location)!.FullName;
+            // 截取 Root 目录路径，去掉 \00_Utilities 部分
+            Root = Root[..Root.IndexOf(@"\00_Utilities")];
 
-namespace DotnetUtils;
+            // 获取所有子目录的路径，并根据 LangData 的关键字创建 PortInfo 对象数组
+            Get = GetDirectories(Root)
+                .SelectMany(gamePath => LangData.Keys.Select(keyword => (gamePath, keyword)))
+                .SelectT((gamePath, keyword) => PortInfo.Create(gamePath, keyword))
+                .Where(x => x is not null)
+                .ToArray()!;
+        }
 
-// 定义端口信息类
-public static class PortInfos {
-    // 定义根目录
-    public static readonly string Root;
-
-    // 静态构造函数
-    static PortInfos() {
-        // 获取程序集的父目录的全名作为根目录
-        Root = GetParent(Assembly.GetEntryAssembly()!.Location)!.FullName;
-        // 截取根目录直到"\00_Utilities"之前的部分
-        Root = Root[..Root.IndexOf(@"\00_Utilities")];
-
-        // 获取根目录下的子目录，根据语言数据的关键字创建端口信息对象
-        Get = GetDirectories(Root)
-            .SelectMany(gamePath => LangData.Keys.Select(keyword => (gamePath, keyword)))
-            .SelectT((gamePath, keyword) => PortInfo.Create(gamePath, keyword))
-            .Where(x => x is not null)
-            .ToArray()!;
+        // 声明只读的 PortInfo 数组
+        public static readonly PortInfo[] Get;
     }
-
-    // 获取端口信息数组
-    public static readonly PortInfo[] Get;
 }
-
 ```

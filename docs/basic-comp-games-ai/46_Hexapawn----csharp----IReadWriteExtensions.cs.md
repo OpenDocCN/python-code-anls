@@ -1,24 +1,26 @@
 # `basic-computer-games\46_Hexapawn\csharp\IReadWriteExtensions.cs`
 
 ```
-
 // 引入命名空间
 using System;
 using System.Linq;
 using Games.Common.IO;
 
-// 创建名为 IReadWriteExtensions 的静态类，提供模拟 BASIC 解释器键盘输入例程的输入方法
+// 声明命名空间 Hexapawn
+namespace Hexapawn;
+
+// 提供模拟 BASIC 解释器键盘输入例程的输入方法
 internal static class IReadWriteExtensions
 {
-    // 创建名为 GetYesNo 的扩展方法，接收 IReadWrite 对象和提示信息作为参数，返回一个字符
+    // 获取用户输入的是 Yes 还是 No
     internal static char GetYesNo(this IReadWrite io, string prompt)
     {
-        // 循环直到条件满足
+        // 循环直到用户输入有效的 Yes 或 No
         while (true)
         {
-            // 从输入中获取第一个字符
+            // 读取用户输入的第一个字符，并转换为大写
             var response = io.ReadString($"{prompt} (Y-N)").FirstOrDefault();
-            // 如果输入的字符是 Y、y、N 或 n 中的一个，则返回大写形式的该字符
+            // 如果用户输入的是 Y、y、N 或 n，则返回对应的大写字符
             if ("YyNn".Contains(response))
             {
                 return char.ToUpperInvariant(response);
@@ -26,25 +28,24 @@ internal static class IReadWriteExtensions
         }
     }
 
-    // 创建名为 ReadMove 的扩展方法，接收 IReadWrite 对象和提示信息作为参数，返回一个 Move 对象
+    // 读取用户输入的移动坐标
     internal static Move ReadMove(this IReadWrite io, string prompt)
     {
-        // 循环直到条件满足
+        // 循环直到用户输入有效的移动坐标
         while(true)
         {
-            // 从输入中获取两个数字
+            // 读取用户输入的两个数字
             var (from, to) = io.Read2Numbers(prompt);
 
-            // 如果可以创建移动对象，则返回该对象
+            // 如果输入的坐标可以构成有效的移动，则返回移动对象
             if (Move.TryCreate(from, to, out var move))
             {
                 return move;
             }
 
-            // 输出错误信息
+            // 如果输入的坐标无法构成有效的移动，则提示用户输入非法坐标
             io.WriteLine("Illegal Coordinates.");
         }
     }
 }
-
 ```

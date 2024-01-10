@@ -1,39 +1,29 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\CumulativeGalacticRecord.cs`
 
 ```
+using System.Collections.Generic; // 导入 System.Collections.Generic 命名空间，用于使用泛型集合类
+using System.Linq; // 导入 System.Linq 命名空间，用于使用 LINQ 查询
+using Games.Common.IO; // 导入 Games.Common.IO 命名空间，用于输入输出操作
+using SuperStarTrek.Space; // 导入 SuperStarTrek.Space 命名空间，用于访问太空相关的类
 
-// 引入命名空间
-using System.Collections.Generic;
-using System.Linq;
-using Games.Common.IO;
-using SuperStarTrek.Space;
-
-// 定义 CumulativeGalacticRecord 类，继承自 GalacticReport 类
-namespace SuperStarTrek.Systems.ComputerFunctions;
-
-internal class CumulativeGalacticRecord : GalacticReport
+namespace SuperStarTrek.Systems.ComputerFunctions // 定义 SuperStarTrek.Systems.ComputerFunctions 命名空间
 {
-    // 构造函数，接受 IReadWrite 和 Galaxy 对象作为参数
-    internal CumulativeGalacticRecord(IReadWrite io, Galaxy galaxy)
-        : base("Cumulative galactic record", io, galaxy)
+    internal class CumulativeGalacticRecord : GalacticReport // 定义 CumulativeGalacticRecord 类，继承自 GalacticReport 类
     {
-    }
+        internal CumulativeGalacticRecord(IReadWrite io, Galaxy galaxy) // 定义 CumulativeGalacticRecord 类的构造函数，接受 IReadWrite 和 Galaxy 类型的参数
+            : base("Cumulative galactic record", io, galaxy) // 调用基类 GalacticReport 的构造函数，传入指定的参数
+        {
+        }
 
-    // 重写 WriteHeader 方法
-    protected override void WriteHeader(Quadrant quadrant)
-    {
-        // 输出空行
-        IO.WriteLine();
-        // 输出当前象限的计算机记录
-        IO.WriteLine($"Computer record of galaxy for quadrant {quadrant.Coordinates}");
-        // 输出空行
-        IO.WriteLine();
-    }
+        protected override void WriteHeader(Quadrant quadrant) // 重写基类 GalacticReport 的 WriteHeader 方法，接受 Quadrant 类型的参数
+        {
+            IO.WriteLine(); // 输出空行
+            IO.WriteLine($"Computer record of galaxy for quadrant {quadrant.Coordinates}"); // 输出指定格式的字符串
+            IO.WriteLine(); // 输出空行
+        }
 
-    // 重写 GetRowData 方法，返回一个字符串列表
-    protected override IEnumerable<string> GetRowData() =>
-        // 获取 Galaxy 对象中每个象限的数据，并以空格分隔连接成字符串
-        Galaxy.Quadrants.Select(row => " " + string.Join("   ", row));
+        protected override IEnumerable<string> GetRowData() => // 重写基类 GalacticReport 的 GetRowData 方法，返回 IEnumerable<string> 类型的数据
+            Galaxy.Quadrants.Select(row => " " + string.Join("   ", row)); // 使用 LINQ 查询获取每个象限的数据，并返回结果
+    }
 }
-
 ```

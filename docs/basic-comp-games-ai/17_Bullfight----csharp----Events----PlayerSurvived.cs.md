@@ -1,7 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\PlayerSurvived.cs`
 
 ```
-
 // 声明一个命名空间 Game.Events，用于组织和管理事件相关的类
 namespace Game.Events
 {
@@ -11,5 +10,4 @@ namespace Game.Events
     // 声明一个不可变的记录类型 PlayerSurvived，继承自 Event 类
     public sealed record PlayerSurvived() : Event;
 }
-
 ```

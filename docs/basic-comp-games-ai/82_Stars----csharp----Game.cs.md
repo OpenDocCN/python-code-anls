@@ -1,133 +1,79 @@
 # `basic-computer-games\82_Stars\csharp\Game.cs`
 
 ```
+namespace Stars;
+# 创建名为 Stars 的命名空间
 
-// 引入命名空间
-using System;
-using Games.Common.IO;
-using Games.Common.Randomness;
-using Stars.Resources;
+internal class Game
+# 创建名为 Game 的内部类
 
-// 定义 Game 类
-namespace Stars
-{
-    // Game 类
-    internal class Game
+private readonly TextIO _io;
+private readonly IRandom _random;
+private readonly int _maxNumber;
+private readonly int _maxGuessCount;
+# 声明私有变量 _io、_random、_maxNumber、_maxGuessCount，并初始化为只读
+
+public Game(TextIO io, IRandom random, int maxNumber, int maxGuessCount)
+# Game 类的构造函数，接受 TextIO 对象、IRandom 对象、最大数字和最大猜测次数作为参数
+
+internal void Play(Func<bool> playAgain)
+# Play 方法，接受一个返回布尔值的委托作为参数
+
+private void DisplayIntroduction()
+# DisplayIntroduction 方法，用于显示游戏介绍
+
+private void Play()
+# Play 方法，用于开始游戏
+
+private void AcceptGuesses(int target)
+# AcceptGuesses 方法，用于接受玩家的猜测
+
+private void DisplayStars(int target, float guess)
+# DisplayStars 方法，用于显示猜测结果
     {
-        // 私有字段
-        private readonly TextIO _io;
-        private readonly IRandom _random;
-        private readonly int _maxNumber;
-        private readonly int _maxGuessCount;
-
-        // 构造函数
-        public Game(TextIO io, IRandom random, int maxNumber, int maxGuessCount)
+        // 根据猜测和目标之间的差值确定星号的数量，用于显示猜测的准确性
+        var stars = Math.Abs(guess - target) switch
         {
-            _io = io;
-            _random = random;
-            _maxNumber = maxNumber;
-            _maxGuessCount = maxGuessCount;
-        }
+            // 如果差值大于等于64，显示1个星号
+            >= 64 => "*",
+            // 如果差值大于等于32，显示2个星号
+            >= 32 => "**",
+            // 如果差值大于等于16，显示3个星号
+            >= 16 => "***",
+            // 如果差值大于等于8，显示4个星号
+            >= 8  => "****",
+            // 如果差值大于等于4，显示5个星号
+            >= 4  => "*****",
+            // 如果差值大于等于2，显示6个星号
+            >= 2  => "******",
+            // 其他情况，显示7个星号
+            _     => "*******"
+        };
 
-        // Play 方法
-        internal void Play(Func<bool> playAgain)
-        {
-            // 显示游戏介绍
-            DisplayIntroduction();
-
-            // 循环游戏直到玩家选择退出
-            do
-            {
-                Play();
-            } while (playAgain.Invoke());
-        }
-
-        // 显示游戏介绍
-        private void DisplayIntroduction()
-        {
-            _io.Write(Resource.Streams.Title);
-
-            // 如果玩家选择不需要说明，则直接返回
-            if (_io.ReadString("Do you want instructions").Equals("N", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return;
-            }
-
-            // 显示游戏说明
-            _io.WriteLine(Resource.Formats.Instructions, _maxNumber, _maxGuessCount);
-        }
-
-        // 游戏主体
-        private void Play()
-        {
-            _io.WriteLine();
-            _io.WriteLine();
-
-            // 生成目标数字
-            var target = _random.Next(_maxNumber) + 1;
-
-            _io.WriteLine("Ok, I am thinking of a number.  Start guessing.");
-
-            // 接受玩家猜测
-            AcceptGuesses(target);
-        }
-
-        // 接受玩家猜测
-        private void AcceptGuesses(int target)
-        {
-            for (int guessCount = 1; guessCount <= _maxGuessCount; guessCount++)
-            {
-                _io.WriteLine();
-                var guess = _io.ReadNumber("Your guess");
-
-                // 如果猜对了，显示胜利信息并返回
-                if (guess == target)
-                {
-                    DisplayWin(guessCount);
-                    return;
-                }
-
-                // 否则显示猜测结果
-                DisplayStars(target, guess);
-            }
-
-            // 如果猜测次数用完，显示失败信息
-            DisplayLoss(target);
-        }
-
-        // 根据猜测结果显示星星
-        private void DisplayStars(int target, float guess)
-        {
-            var stars = Math.Abs(guess - target) switch
-            {
-                >= 64 => "*",
-                >= 32 => "**",
-                >= 16 => "***",
-                >= 8  => "****",
-                >= 4  => "*****",
-                >= 2  => "******",
-                _     => "*******"
-            };
-
-            _io.WriteLine(stars);
-        }
-
-        // 显示胜利信息
-        private void DisplayWin(int guessCount)
-        {
-            _io.WriteLine();
-            _io.WriteLine(new string('*', 79));
-            _io.WriteLine();
-            _io.WriteLine($"You got it in {guessCount} guesses!!!  Let's play again...");
-        }
-
-        // 显示失败信息
-        private void DisplayLoss(int target)
-        {
-            _io.WriteLine();
-            _io.WriteLine($"Sorry, that's {_maxGuessCount} guesses. The number was {target}.");
-        }
+        // 输出星号
+        _io.WriteLine(stars);
     }
-}
 
+    // 显示猜对的消息
+    private void DisplayWin(int guessCount)
+    {
+        // 输出空行
+        _io.WriteLine();
+        // 输出79个星号
+        _io.WriteLine(new string('*', 79));
+        // 输出空行
+        _io.WriteLine();
+        // 输出猜对的消息和猜测次数
+        _io.WriteLine($"You got it in {guessCount} guesses!!!  Let's play again...");
+    }
+
+    // 显示猜错的消息
+    private void DisplayLoss(int target)
+    {
+        // 输出空行
+        _io.WriteLine();
+        // 输出猜错的消息和目标数字
+        _io.WriteLine($"Sorry, that's {_maxGuessCount} guesses. The number was {target}.");
+    }
+# 闭合前面的函数定义
 ```

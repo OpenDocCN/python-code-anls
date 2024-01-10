@@ -1,100 +1,71 @@
 # `basic-computer-games\76_Russian_Roulette\python\russianroulette.py`
 
 ```
-
-"""
-Russian Roulette
-
-From Basic Computer Games (1978)
-
-   In this game, you are given by the computer a
-  revolver loaded with one bullet and five empty
-  chambers. You spin the chamber and pull the trigger
-  by inputting a "1", or, if you want to quit, input
-  a "2". You win if you play ten times and are still
-  alive.
-   Tom Adametx wrote this program while a student at
-  Curtis Jr. High School in Sudbury, Massachusetts.
-"""
-
-
+# 导入 random 模块
 from random import random
 
-NUMBER_OF_ROUNDS = 9  # 设置游戏的轮数
+# 定义常量，表示游戏进行的轮数
+NUMBER_OF_ROUNDS = 9
 
-
+# 打印游戏的初始信息
 def initial_message() -> None:
     print(" " * 28 + "Russian Roulette")
     print(" " * 15 + "Creative Computing  Morristown, New Jersey\n\n\n")
     print("This is a game of >>>>>>>>>>Russian Roulette.\n")
     print("Here is a Revolver.")
 
-
+# 解析用户输入的函数
 def parse_input() -> int:
     while True:
         try:
-            i = int(input("? "))  # 获取用户输入的数字
+            i = int(input("? "))  # 将用户输入转换为整数
             return i
         except ValueError:
-            print("Number expected...")  # 如果输入不是数字，则提示用户重新输入
+            print("Number expected...")  # 捕获输入不是数字的异常并提示用户重新输入
 
-
+# 游戏的主函数
 def main() -> None:
-    initial_message()  # 打印游戏初始信息
+    initial_message()  # 打印初始信息
     while True:
-        dead = False
-        n = 0
+        dead = False  # 标记玩家是否死亡
+        n = 0  # 记录玩家进行的轮数
         print("Type '1' to Spin chamber and pull trigger")
         print("Type '2' to Give up")
         print("Go")
         while not dead:
-            i = parse_input()  # 获取用户输入
+            i = parse_input()  # 解析用户输入
 
             if i == 2:  # 如果用户输入2，退出游戏
                 break
 
-            if random() > 0.8333333333333334:  # 生成随机数，如果大于0.8333333333333334，表示开枪
+            if random() > 0.8333333333333334:  # 生成随机数，如果大于指定值，玩家死亡
                 dead = True
             else:
-                print("- CLICK -\n")  # 否则打印“CLICK”
+                print("- CLICK -\n")  # 如果未死亡，打印触发扳机的声音
+                n += 1  # 轮数加一
 
-                n += 1  # 计数器加1
-
-            if n > NUMBER_OF_ROUNDS:  # 如果计数器大于设定的轮数，退出游戏
+            if n > NUMBER_OF_ROUNDS:  # 如果轮数超过设定值，退出游戏
                 break
         if dead:
-            print("BANG!!!!!   You're Dead!")  # 打印玩家死亡信息
+            print("BANG!!!!!   You're Dead!")  # 如果死亡，打印死亡信息
             print("Condolences will be sent to your relatives.\n\n\n")
-            print("...Next victim...")
+            print("...Next victim...")  # 打印下一个受害者信息
         else:
-            if n > NUMBER_OF_ROUNDS:  # 如果计数器大于设定的轮数，玩家获胜
+            if n > NUMBER_OF_ROUNDS:  # 如果未死亡且轮数超过设定值，玩家获胜
                 print("You win!!!!!")
                 print("Let someone else blow his brain out.\n")
             else:
-                print("     Chicken!!!!!\n\n\n")  # 否则打印“Chicken”
-                print("...Next victim....")
+                print("     Chicken!!!!!\n\n\n")  # 如果未死亡且轮数未超过设定值，打印玩家胆小的信息
+                print("...Next victim....")  # 打印下一个受害者信息
 
-
+# 执行主函数
 if __name__ == "__main__":
     main()
-
-########################################################
-# Porting Notes
-#
-#    Altough the description says that accepts "1" or "2",
-#   the original game accepts any number as input, and
-#   if it's different of "2" the program considers
-#   as if the user had passed "1". That feature was
-#   kept in this port.
-#    Also, in the original game you must "pull the trigger"
-#   11 times instead of 10 in orden to win,
-#   given that N=0 at the beginning and the condition to
-#   win is "IF N > 10 THEN  80". That was fixed in this
-#   port, asking the user to pull the trigger only ten
-#   times, tough the number of round can be set changing
-#   the constant NUMBER_OF_ROUNDS.
+# 虽然描述说接受 "1" 或 "2"，但原始游戏接受任何数字作为输入，
+# 如果不是 "2"，程序会将其视为用户输入了 "1"。这个特性在这个移植版本中保留了。
+# 此外，在原始游戏中，你必须"扳动扳机"11次而不是10次才能赢得游戏，
+# 因为在开始时 N=0，赢得游戏的条件是 "IF N > 10 THEN  80"。这个问题在这个移植版本中得到了修复，
+# 要求用户只扳动扳机十次，尽管回合数可以通过更改常量 NUMBER_OF_ROUNDS 来设置。
 #
 ########################################################
-
-注释：以上是一个俄罗斯轮盘赌的游戏程序，根据用户的输入来模拟开枪的过程。程序会根据用户的输入来判断是否开枪，直到达到设定的轮数或者用户选择退出游戏。程序会根据用户的表现来判断输赢，并且有一些额外的说明和注释。
 ```

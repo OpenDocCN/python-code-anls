@@ -1,53 +1,52 @@
 # `basic-computer-games\70_Poetry\csharp\Poem.cs`
 
 ```
-
-# 使用 Poetry 资源中的 Resource 类
+// 使用 Poetry.Resources.Resource 命名空间下的 Resource 类
 using static Poetry.Resources.Resource;
 
-# 命名空间为 Poetry
-namespace Poetry;
-
-# 内部类 Poem
-internal class Poem
+// 声明 Poetry 命名空间
+namespace Poetry
 {
-    # 静态方法 Compose，接受 IReadWrite 和 IRandom 接口
-    internal static void Compose(IReadWrite io, IRandom random)
+    // 声明 Poem 类，访问权限为 internal
+    internal class Poem
     {
-        # 使用 io 接口写入标题
-        io.Write(Streams.Title);
-
-        # 创建 Context 对象，传入 io 和 random
-        var context = new Context(io, random);
-
-        # 无限循环
-        while (true)
+        // 声明 Compose 方法，参数为 IReadWrite 类型的 io 和 IRandom 类型的 random
+        internal static void Compose(IReadWrite io, IRandom random)
         {
-            # 写入诗句
-            context.WritePhrase();
-            # 可能写入逗号
-            context.MaybeWriteComma();
-            # 写入空格或换行
+            // 调用 io 对象的 Write 方法，输出 Streams.Title 的内容
+            io.Write(Streams.Title);
 
-            # 内部循环
+            // 创建 Context 对象，传入 io 和 random 对象
+            var context = new Context(io, random);
+
+            // 进入无限循环
             while (true)
             {
-                # 更新上下文
-                context.Update(random);
-                # 可能缩进
-                context.MaybeIndent();
+                // 调用 Context 对象的 WritePhrase 方法
+                context.WritePhrase();
+                // 调用 Context 对象的 MaybeWriteComma 方法
+                context.MaybeWriteComma();
+                // 调用 Context 对象的 WriteSpaceOrNewLine 方法
 
-                # 如果组号有效，则跳出内部循环
-                if (context.GroupNumberIsValid) { break; }
+                // 进入内层无限循环
+                while (true)
+                {
+                    // 调用 Context 对象的 Update 方法，传入 random 对象
+                    context.Update(random);
+                    // 调用 Context 对象的 MaybeIndent 方法
+                    context.MaybeIndent();
 
-                # 重置组
-                context.ResetGroup();
+                    // 如果 context.GroupNumberIsValid 为真，则跳出内层循环
+                    if (context.GroupNumberIsValid) { break; }
 
-                # 可能完成一节诗
-                if (context.MaybeCompleteStanza()) { break; }
+                    // 重置 context 的组
+                    context.ResetGroup();
+
+                    // 如果 context.MaybeCompleteStanza() 为真，则跳出内层循环
+                    if (context.MaybeCompleteStanza()) { break; }
+                }
             }
         }
     }
 }
-
 ```

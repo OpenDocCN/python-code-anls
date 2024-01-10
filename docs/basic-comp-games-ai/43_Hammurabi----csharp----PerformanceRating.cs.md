@@ -1,7 +1,6 @@
 # `basic-computer-games\43_Hammurabi\csharp\PerformanceRating.cs`
 
 ```
-
 // 命名空间 Hammurabi
 namespace Hammurabi
 {
@@ -10,11 +9,10 @@ namespace Hammurabi
     /// </summary>
     public enum PerformanceRating
     {
-        Disgraceful,  // 可耻的
-        Bad,          // 糟糕的
-        Ok,           // 还行
-        Terrific      // 极好的
+        Disgraceful,  // 可耻的表现
+        Bad,          // 糟糕的表现
+        Ok,           // 良好的表现
+        Terrific      // 极好的表现
     }
 }
-
 ```

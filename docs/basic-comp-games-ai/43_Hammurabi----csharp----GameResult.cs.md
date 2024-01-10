@@ -1,8 +1,7 @@
 # `basic-computer-games\43_Hammurabi\csharp\GameResult.cs`
 
 ```
-
-// 储存最终游戏结果的记录
+// 存储最终游戏结果的记录
 public record GameResult
 {
     // 获取玩家的表现评级
@@ -26,5 +25,4 @@ public record GameResult
     // 获取一个指示玩家是否因为饿死太多人而被弹劾的标志
     public bool WasPlayerImpeached { get; init; }
 }
-
 ```

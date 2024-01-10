@@ -1,20 +1,20 @@
 # `basic-computer-games\71_Poker\csharp\Players\Human.cs`
 
 ```
-
-// 引入扑克牌和策略相关的命名空间
+// 引入扑克牌和策略命名空间
 using Poker.Cards;
 using Poker.Strategies;
 
-// 定义一个名为 Human 的内部类，继承自 Player 类
+// 定义 Human 类，继承自 Player 类
 namespace Poker.Players
 {
+    // 声明 Human 类为内部类
     internal class Human : Player
     {
-        // 声明一个只读的 IReadWrite 接口类型的字段 _io
+        // 声明私有字段 _io，类型为 IReadWrite 接口
         private readonly IReadWrite _io;
 
-        // 构造函数，初始化 Human 类的实例
+        // Human 类的构造函数，接受银行金额和 IReadWrite 接口实例作为参数
         public Human(int bank, IReadWrite io)
             : base(bank)
         {
@@ -24,20 +24,20 @@ namespace Poker.Players
             _io = io;
         }
 
-        // 声明一个公共的属性 HasWatch
+        // 声明 HasWatch 属性，可读可写
         public bool HasWatch { get; set; }
 
-        // 重写父类的 DrawCards 方法
+        // 重写父类的 DrawCards 方法，接受 Deck 对象作为参数
         protected override void DrawCards(Deck deck)
         {
-            // 从玩家输入中读取要抽取的牌的数量
+            // 从玩家输入中读取要抽取的卡片数量
             var count = _io.ReadNumber("How many cards do you want", 3, "You can't draw more than three cards.");
             // 如果 count 为 0，则直接返回
             if (count == 0) { return; }
 
-            // 输出提示信息
+            // 输出提示信息，要求玩家输入要抽取的卡片的数字
             _io.WriteLine("What are their numbers:");
-            // 循环读取玩家输入的牌号，并替换手中的牌
+            // 循环抽取卡片，并替换手中的卡片
             for (var i = 1; i <= count; i++)
             {
                 Hand = Hand.Replace((int)_io.ReadNumber(), deck.DealCard());
@@ -48,7 +48,7 @@ namespace Poker.Players
             _io.Write(Hand);
         }
 
-        // 内部方法，设置赌注
+        // 设置赌注的方法
         internal bool SetWager()
         {
             // 从玩家输入中读取策略
@@ -56,15 +56,17 @@ namespace Poker.Players
             // 如果策略是 Bet 或者 Check
             if (strategy is Strategies.Bet or Check)
             {
-                // 如果下注加上策略值小于电脑的赌注，则输出提示信息并返回 false
+                // 如果下注加上策略值小于电脑的下注
                 if (Bet + strategy.Value < Table.Computer.Bet)
                 {
+                    // 输出提示信息，要求玩家跟注或者弃牌
                     _io.WriteLine("If you can't see my bet, then fold.");
                     return false;
                 }
-                // 如果余额减去下注和策略值大于等于 0，则设置 HasBet 为 true，增加赌注，并返回 true
+                // 如果余额减去下注和策略值大于等于 0
                 if (Balance - Bet - strategy.Value >= 0)
                 {
+                    // 设置 HasBet 为 true，增加下注金额，并返回 true
                     HasBet = true;
                     Bet += strategy.Value;
                     return true;
@@ -74,7 +76,7 @@ namespace Poker.Players
             }
             else
             {
-                // 调用 Fold 方法，收集赌注
+                // 弃牌，并收集赌注
                 Fold();
                 Table.CollectBets();
             }
@@ -84,41 +86,45 @@ namespace Poker.Players
         // 增加资金的方法
         public void RaiseFunds()
         {
-            // 输出提示信息
+            // 输出空行和提示信息
             _io.WriteLine();
             _io.WriteLine("You can't bet with what you haven't got.");
 
             // 如果电脑尝试购买手表成功，则直接返回
             if (Table.Computer.TryBuyWatch()) { return; }
 
-            // 设置 IsBroke 为 true
+            // 标记玩家破产
             IsBroke = true;
         }
 
-        // 接收手表的方法
+        // 收到手表的方法
         public void ReceiveWatch()
         {
-            // 将 HasWatch 属性设置为 true
+            // 在原始代码中，玩家收到手表时不需要支付任何费用
+            // 设置 HasWatch 为 true
             HasWatch = true;
-        }
-
-        // 出售手表的方法
-        public void SellWatch(int amount)
-        {
-            // 将 HasWatch 属性设置为 false，增加余额
-            HasWatch = false;
-            Balance += amount;
-        }
-
-        // 重写父类的 TakeWinnings 方法
-        public override void TakeWinnings()
-        {
-            // 输出提示信息
-            _io.WriteLine("You win.");
-            // 调用父类的 TakeWinnings 方法
-            base.TakeWinnings();
         }
     }
 }
+    # 结束 SellWatch 方法的定义
+    }
 
+    # 出售手表的方法，接受一个参数 amount
+    public void SellWatch(int amount)
+    {
+        # 将 HasWatch 设为 false，表示手表已售出
+        HasWatch = false;
+        # 增加余额
+        Balance += amount;
+    }
+
+    # 重写 TakeWinnings 方法
+    public override void TakeWinnings()
+    {
+        # 输出 "You win." 到输出流
+        _io.WriteLine("You win.");
+        # 调用基类的 TakeWinnings 方法
+        base.TakeWinnings();
+    }
+# 闭合前面的函数定义
 ```

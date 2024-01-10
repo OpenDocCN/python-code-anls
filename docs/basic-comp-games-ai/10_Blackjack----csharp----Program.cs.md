@@ -1,16 +1,13 @@
 # `basic-computer-games\10_Blackjack\csharp\Program.cs`
 
 ```
-
-// 导入 System 命名空间
-using System;
-
-// 定义静态类 Program
+// 定义名为 Blackjack 的命名空间
 namespace Blackjack
 {
+    // 定义名为 Program 的静态类
     static class Program
     {
-        // 程序入口
+        // 程序的入口方法
         static void Main(string[] args)
         {
             // 输出游戏标题
@@ -22,17 +19,18 @@ namespace Blackjack
             Console.WriteLine();
             Console.WriteLine();
 
-            // 提供游戏说明
+            // 调用 OfferInstructions 方法，提供游戏说明
             OfferInstructions();
 
-            // 提示用户输入玩家数量
+            // 提示用户输入玩家数量，并限定在1到6之间
             var numberOfPlayers = Prompt.ForInteger("Number of players?", 1, 6);
-            // 创建游戏对象并开始游戏
+            // 创建游戏对象
             var game = new Game(numberOfPlayers);
+            // 开始游戏
             game.PlayGame();
         }
 
-        // 提供游戏说明
+        // 提供游戏说明的方法
         private static void OfferInstructions()
         {
             // 如果用户不需要游戏说明，则直接返回
@@ -55,5 +53,4 @@ namespace Blackjack
         }
     }
 }
-
 ```

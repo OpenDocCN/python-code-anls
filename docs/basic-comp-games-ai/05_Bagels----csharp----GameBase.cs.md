@@ -1,17 +1,11 @@
 # `basic-computer-games\05_Bagels\csharp\GameBase.cs`
 
 ```
-
-// 引入 System 命名空间
-using System;
-
-// 定义 Bagels 命名空间下的 GameBase 类
 namespace BasicComputerGames.Bagels
 {
-    // 定义 GameBase 类
     public class GameBase
     {
-        // 创建一个 Random 对象，用于生成随机数
+        // 创建一个随机数生成器对象，用于生成随机数
         protected Random Rnd { get; } = new Random();
 
         /// <summary>
@@ -20,16 +14,18 @@ namespace BasicComputerGames.Bagels
         /// <returns>如果玩家想再次尝试，则返回 true，如果他们已经完成游戏，则返回 false。</returns>
         protected bool TryAgain()
         {
-            // 设置控制台前景色为白色，显示提示信息
+            // 设置控制台前景色为白色
             Console.ForegroundColor = ConsoleColor.White;
+            // 输出提示信息
             Console.WriteLine("Would you like to try again? (Press 'Y' for yes or 'N' for no)");
 
-            // 设置控制台前景色为黄色，显示输入提示符
+            // 设置控制台前景色为黄色
             Console.ForegroundColor = ConsoleColor.Yellow;
+            // 输出提示符号
             Console.Write("> ");
 
             char pressedKey;
-            // 循环直到获得一个被识别的输入
+            // 继续循环直到获得一个被识别的输入
             do
             {
                 // 读取一个键，不在屏幕上显示
@@ -41,11 +37,10 @@ namespace BasicComputerGames.Bagels
             // 在屏幕上显示结果
             Console.WriteLine(pressedKey);
 
-            // 如果玩家按下 'Y'，则返回 true，否则返回 false
+            // 如果玩家按下 'Y'，则返回 true，否则返回 false。
             return (pressedKey == 'Y');
         }
 
     }
 }
-
 ```

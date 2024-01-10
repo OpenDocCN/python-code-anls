@@ -1,7 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\Resources\Resource.cs`
 
 ```
-
 // 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -29,5 +28,4 @@ namespace Bounce.Resources
                 ?? throw new ArgumentException($"Resource stream {name} does not exist", nameof(name));
     }
 }
-
 ```

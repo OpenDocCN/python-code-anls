@@ -1,89 +1,77 @@
 # `basic-computer-games\61_Math_Dice\java\Die.java`
 
 ```
-
-// 导入 java.util.Random 类
 import java.util.Random;
 
-// 定义 Die 类
 public class Die {
-    // 定义默认的骰子面数
-    private static final int DEFAULT_SIDES = 6;
-    // 定义骰子的当前面值和面数
-    private int faceValue;
-    private int sides;
-    // 创建 Random 对象用于生成随机数
-    private Random generator = new Random();
+    private static final int DEFAULT_SIDES = 6;  // 默认骰子的面数
+    private int faceValue;  // 骰子当前的点数
+    private int sides;  // 骰子的面数
+    private Random generator = new Random();  // 生成随机数的对象
 
     /**
-     * 构造一个具有默认面数的新骰子
+     * Construct a new Die with default sides
      */
     public Die() {
-        this.sides = DEFAULT_SIDES;
-        // 生成一个介于 1 和 sides 之间的随机数，并存储在 faceValue 中
-        this.faceValue = 1 + generator.nextInt(sides);
+        this.sides = DEFAULT_SIDES;  // 使用默认的面数初始化骰子
+        this.faceValue = 1 + generator.nextInt(sides);  // 生成随机点数
     }
 
     /**
-     * 生成一个介于 1 和 sides 之间的随机数，并存储在 faceValue 中
+     * Generate a new random number between 1 and sides to be stored in faceValue
      */
     private void throwDie() {
-        this.faceValue = 1 + generator.nextInt(sides);
+        this.faceValue = 1 + generator.nextInt(sides);  // 生成新的随机点数
     }
 
+
     /**
-     * 返回当前骰子的面值
      * @return the faceValue
      */
     public int getFaceValue() {
-        return faceValue;
+        return faceValue;  // 返回当前骰子的点数
     }
 
-    // 打印骰子的图形表示
+
     public void printDie() {
-        // 抛骰子，获取当前面值
-        throwDie();
-        int x = this.getFaceValue();
+        throwDie();  // 抛骰子，生成新的点数
+        int x = this.getFaceValue();  // 获取当前骰子的点数
 
-        System.out.println(" ----- ");
+        System.out.println(" ----- ");  // 打印骰子的上边框
 
-        // 根据面值打印不同的图形表示
         if(x==4||x==5||x==6) {
-            printTwo();
+            printTwo();  // 打印包含两个点的行
         } else if(x==2||x==3) {
-            System.out.println("| *   |");
+            System.out.println("| *   |");  // 打印包含一个点的行
         } else {
-            printZero();
+            printZero();  // 打印空行
         }
 
         if(x==1||x==3||x==5) {
-            System.out.println("|  *  |");
+            System.out.println("|  *  |");  // 打印包含一个点的行
         } else if(x==2||x==4) {
-            printZero();
+            printZero();  // 打印空行
         } else {
-            printTwo();
+            printTwo();  // 打印包含两个点的行
         }
 
         if(x==4||x==5||x==6) {
-            printTwo();
+            printTwo();  // 打印包含两个点的行
         } else if(x==2||x==3) {
-            System.out.println("|   * |");
+            System.out.println("|   * |");  // 打印包含一个点的行
         } else {
-            printZero();
+            printZero();  // 打印空行
         }
 
-        System.out.println(" ----- ");
+        System.out.println(" ----- ");  // 打印骰子的下边框
     }
 
-    // 打印空白图形
     private void printZero() {
-        System.out.println("|     |");
+        System.out.println("|     |");  // 打印空行
     }
 
-    // 打印带有 * 的图形
     private void printTwo() {
-        System.out.println("| * * |");
+        System.out.println("| * * |");  // 打印包含两个点的行
     }
 }
-
 ```

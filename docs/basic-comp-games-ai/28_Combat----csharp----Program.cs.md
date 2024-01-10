@@ -1,14 +1,10 @@
 # `basic-computer-games\28_Combat\csharp\Program.cs`
 
 ```
-
-// 命名空间声明，表示该类属于Game命名空间
 namespace Game
 {
-    // 程序的入口点
     class Program
     {
-        // 主函数
         static void Main()
         {
             // 显示游戏横幅
@@ -23,7 +19,7 @@ namespace Game
 
             // 创建初始战役状态
             var state = (WarState) new InitialCampaign(computerForces, playerForces);
-            // 标记是否第一回合
+            // 标记是否是第一回合
             var isFirstTurn = true;
 
             // 当战争状态没有最终结果时循环
@@ -49,5 +45,4 @@ namespace Game
         }
     }
 }
-
 ```

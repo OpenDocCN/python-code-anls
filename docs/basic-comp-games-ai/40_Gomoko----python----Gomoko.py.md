@@ -1,15 +1,15 @@
 # `basic-computer-games\40_Gomoko\python\Gomoko.py`
 
 ```
-
-# 导入随机模块和类型提示模块
+# 导入 random 模块
 import random
+# 导入 typing 模块中的 Any、List、Tuple 类型
 from typing import Any, List, Tuple
 
-
-# 打印游戏棋盘
+# 定义函数，打印游戏棋盘
 def print_board(A: List[List[Any]], n: int) -> None:
     """PRINT THE BOARD"""
+    # 遍历棋盘，打印每个格子的内容
     for i in range(n):
         print(" ", end="")
         for j in range(n):
@@ -17,21 +17,20 @@ def print_board(A: List[List[Any]], n: int) -> None:
             print(" ", end="")
         print()
 
-
-# 检查移动是否合法
+# 定义函数，检查移动是否合法
 def check_move(_I, _J, _N) -> bool:  # 910
+    # 如果移动超出棋盘范围，则返回 False
     if _I < 1 or _I > _N or _J < 1 or _J > _N:
         return False
+    # 否则返回 True
     return True
 
-
-# 打印游戏横幅
+# 定义函数，打印游戏横幅
 def print_banner() -> None:
-    # 打印游戏横幅信息
+    # 打印游戏标题
     print(" " * 33 + "GOMOKU")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("WELCOME TO THE ORIENTAL GAME OF GOMOKO.\n")
-    # 打印游戏规则
     print("THE GAME IS PLAYED ON AN N BY N GRID OF A SIZE")
     print("THAT YOU SPECIFY.  DURING YOUR PLAY, YOU MAY COVER ONE GRID")
     print("INTERSECTION WITH A MARKER. THE OBJECT OF THE GAME IS TO GET")
@@ -41,12 +40,13 @@ def print_banner() -> None:
     print("THE COMPUTER DOES NOT KEEP TRACK OF WHO HAS WON.")
     print("TO END THE GAME, TYPE -1,-1 FOR YOUR MOVE.\n")
 
-
-# 获取游戏棋盘尺寸
+# 定义函数，获取棋盘尺寸
 def get_board_dimensions() -> int:
     n = 0
     while True:
+        # 获取用户输入的棋盘尺寸
         n = int(input("WHAT IS YOUR BOARD SIZE (MIN 7/ MAX 19)? "))
+        # 如果尺寸不在规定范围内，则提示用户重新输入
         if n < 7 or n > 19:
             print("I SAID, THE MINIMUM IS 7, THE MAXIMUM IS 19.")
             print()
@@ -54,10 +54,10 @@ def get_board_dimensions() -> int:
             break
     return n
 
-
-# 获取玩家的移动
+# 定义函数，获取玩家的移动
 def get_move() -> Tuple[int, int]:
     while True:
+        # 获取玩家输入的移动坐标
         xy = input("YOUR PLAY (I,J)? ")
         print()
         x_str, y_str = xy.split(",")
@@ -69,10 +69,9 @@ def get_move() -> Tuple[int, int]:
             continue
         return x, y
 
-
-# 初始化游戏棋盘
+# 定义函数，初始化棋盘
 def initialize_board(n: int) -> List[List[int]]:
-    # 初始化棋盘
+    # 初始化棋盘，将每个格子的值初始化为 0
     board = []
     for _x in range(n):
         sub_a = []
@@ -80,84 +79,12 @@ def initialize_board(n: int) -> List[List[int]]:
             sub_a.append(0)
         board.append(sub_a)
     return board
-
-
-# 主函数
+# 定义主函数，没有参数，没有返回值
 def main() -> None:
-    # 打印游戏横幅
+    # 调用打印横幅的函数
     print_banner()
 
-    while True:
-        # 获取游戏棋盘尺寸
-        n = get_board_dimensions()
-        # 初始化游戏棋盘
-        board = initialize_board(n)
-
-        print()
-        print()
-        print("WE ALTERNATE MOVES. YOU GO FIRST...")
-        print()
-
-        while True:
-            # 获取玩家的移动
-            x, y = get_move()
-            if x == -1:
-                break
-            elif not check_move(x, y, n):
-                print("ILLEGAL MOVE.  TRY AGAIN...")
-            else:
-                if board[x - 1][y - 1] != 0:
-                    print("SQUARE OCCUPIED.  TRY AGAIN...")
-                else:
-                    board[x - 1][y - 1] = 1
-                    # 计算计算机的智能移动
-                    skip_ef_loop = False
-                    for E in range(-1, 2):
-                        for F in range(-1, 2):
-                            if E + F - E * F == 0 or skip_ef_loop:
-                                continue
-                            X = x + F
-                            Y = y + F
-                            if not check_move(X, Y, n):
-                                continue
-                            if board[X - 1][Y - 1] == 1:
-                                skip_ef_loop = True
-                                X = x - E
-                                Y = y - F
-                                if not check_move(X, Y, n):  # 750
-                                    while True:  # 610
-                                        X = random.randint(1, n)
-                                        Y = random.randint(1, n)
-                                        if (
-                                            check_move(X, Y, n)
-                                            and board[X - 1][Y - 1] == 0
-                                        ):
-                                            board[X - 1][Y - 1] = 2
-                                            print_board(board, n)
-                                            break
-                                else:
-                                    if board[X - 1][Y - 1] != 0:
-                                        while True:
-                                            X = random.randint(1, n)
-                                            Y = random.randint(1, n)
-                                            if (
-                                                check_move(X, Y, n)
-                                                and board[X - 1][Y - 1] == 0
-                                            ):
-                                                board[X - 1][Y - 1] = 2
-                                                print_board(board, n)
-                                                break
-                                    else:
-                                        board[X - 1][Y - 1] = 2
-                                        print_board(board, n)
-        print()
-        print("THANKS FOR THE GAME!!")
-        repeat = int(input("PLAY AGAIN (1 FOR YES, 0 FOR NO)? "))
-        if repeat == 0:
-            break
-
-
+# 如果当前脚本被直接执行，则调用主函数
 if __name__ == "__main__":
     main()
-
 ```

@@ -1,103 +1,105 @@
 # `basic-computer-games\87_3-D_Plot\java\Plot3D.java`
 
 ```
-
-// 导入 java.lang.Math 包，用于数学计算
 import java.lang.Math;
 
 /**
- * 3-D Plot 游戏
+ * Game of 3-D Plot
  * <p>
- * 基于 BASIC 游戏 3-D Plot，链接在这里
+ * Based on the BASIC game of 3-D Plot here
  * https://github.com/coding-horror/basic-computer-games/blob/main/87%203-D%20Plot/3dplot.bas
  * <p>
- * 注意：这个想法是在 Java 中创建一个 1970 年代 BASIC 游戏的版本，没有引入新功能 - 没有添加额外的文本、错误检查等。
+ * Note:  The idea was to create a version of the 1970's BASIC game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
  *
- * 由 Darren Cardenas 从 BASIC 转换为 Java。
+ * Converted from BASIC to Java by Darren Cardenas.
  */
 
-// Java 类名不能以字母开头，所以不能使用类名 3dplot
+// Java class names cannot begin with a letter, so class name 3dplot cannot be used
 public class Plot3D {
 
 
   public void play() {
 
-    showIntro(); // 调用显示游戏介绍的方法
-    startGame(); // 调用开始游戏的方法
+    showIntro();
+    startGame();
 
   }  // End of method play
 
 
   private void showIntro() {
 
-    System.out.println(" ".repeat(31) + "3D PLOT"); // 打印游戏标题
-    System.out.println(" ".repeat(14) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"); // 打印创意计算的信息
-    System.out.println("\n\n\n"); // 打印空行
+    // 打印游戏介绍
+    System.out.println(" ".repeat(31) + "3D PLOT");
+    System.out.println(" ".repeat(14) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+    System.out.println("\n\n\n");
 
   }  // End of method showIntro
 
 
   private void startGame() {
 
-    float row = 0; // 初始化行数
-    int column = 0; // 初始化列数
-    int limit = 0; // 初始化限制值
-    int plotVal = 0; // 初始化绘图值
-    int root = 0; // 初始化根值
+    float row = 0;
+    int column = 0;
+    int limit = 0;
+    int plotVal = 0;
+    int root = 0;
 
-    String lineContent = ""; // 初始化行内容字符串
+    String lineContent = "";
 
-    // 开始循环遍历所有行
+    // Begin loop through all rows
     for (row = -30; row <= 30; row += 1.5) {
 
-      limit = 0; // 重置限制值
+      limit = 0;
 
-      root = 5 * (int) Math.floor((Math.sqrt(900 - row * row) / 5)); // 计算根值
+      root = 5 * (int) Math.floor((Math.sqrt(900 - row * row) / 5));
 
-      // 开始循环遍历所有列
+      // Begin loop through all columns
       for (column = root; column >= -root; column += -5) {
 
-        plotVal = 25 + (int) Math.floor(func(Math.sqrt(row * row + column * column)) - 0.7 * column); // 计算绘图值
+        plotVal = 25 + (int) Math.floor(func(Math.sqrt(row * row + column * column)) - 0.7 * column);
 
         if (plotVal > limit) {
 
-          limit = plotVal; // 更新限制值
+          limit = plotVal;
 
-          // 添加空格
+          // Add whitespace
           while (lineContent.length() < (plotVal-1)) {
             lineContent += " ";
           }
 
-          lineContent += "*"; // 添加星号
+          lineContent += "*";
 
         }
 
       }  // End loop through all columns
 
-      System.out.println(lineContent); // 打印行内容
+      // 打印每一行的内容
+      System.out.println(lineContent);
 
-      lineContent = ""; // 重置行内容字符串
+      lineContent = "";
 
     }  // End loop through all rows
 
   }  // End of method startGame
 
 
-  // 要绘制的函数
+  // Function to be plotted
+  // 定义要绘制的函数
   public double func(double inputVal) {
 
-    return (30 * Math.exp(-inputVal * inputVal / 100)); // 返回计算结果
+    return (30 * Math.exp(-inputVal * inputVal / 100));
 
   }
 
 
   public static void main(String[] args) {
-
-    Plot3D plot = new Plot3D(); // 创建 Plot3D 对象
-    plot.play(); // 调用 play 方法开始游戏
+    // 创建一个名为plot的3D绘图对象
+    Plot3D plot = new Plot3D();
+    // 调用plot对象的play方法，开始播放3D绘图
+    plot.play();
 
   }  // End of method main
-
+# 结束 Plot3D 类的定义
 }  // End of class Plot3D
-
 ```

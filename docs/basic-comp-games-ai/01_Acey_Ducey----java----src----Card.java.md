@@ -1,7 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\java\src\Card.java`
 
 ```
-
 /**
  * 一副牌中的一张牌 - 值在2-14之间，覆盖了2-9的牌和J、Q、K、A
  */
@@ -32,7 +31,7 @@ public class Card {
                     this.name = "Ace";
                     break;
                 default:
-                    this.name = "Unknown";
+                    this.name = "Unknown"; // 默认为未知
             }
         }
     }
@@ -45,5 +44,4 @@ public class Card {
         return name;
     }
 }
-
 ```

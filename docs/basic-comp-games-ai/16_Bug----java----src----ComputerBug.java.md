@@ -1,15 +1,12 @@
 # `basic-computer-games\16_Bug\java\src\ComputerBug.java`
 
 ```
-
-// 创建一个名为ComputerBug的类，继承自Insect类
-
 public class ComputerBug extends Insect {
 
-    // 创建特定于计算机玩家的消息
+    // 创建特定于计算机玩家的消息。
 
-    // 构造函数，调用父类的构造函数进行初始化
     public ComputerBug() {
+        // 调用超类构造函数进行初始化。
         super();
         // 添加关于触角的消息
         addMessages(new String[]{"I GET A FEELER.", "I HAVE " + MAX_FEELERS + " FEELERS ALREADY.", "I DO NOT HAVE A HEAD."}, PARTS.FEELERS);
@@ -25,5 +22,4 @@ public class ComputerBug extends Insect {
         addMessages(new String[]{"I NOW HAVE ^^^" + " LEG", "I HAVE " + MAX_LEGS + " FEET.", "I DO NOT HAVE A BODY."}, PARTS.LEGS);
     }
 }
-
 ```

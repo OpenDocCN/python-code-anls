@@ -1,15 +1,18 @@
 # `basic-computer-games\17_Bullfight\csharp\BullFight.cs`
 
 ```
-
-# 引入 System 命名空间和 Collections.Generic 命名空间
+// 引入命名空间
 using System;
 using System.Collections.Generic;
 
-# 声明一个名为 Game 的命名空间
+// 命名空间 Game
 namespace Game
 {
-    # 在此处应该有其他代码，但是缺少了，需要补充
+    /// <summary>
+    /// 提供模拟斗牛的方法
+    /// </summary>
+    // 静态类 BullFight
+    public static class BullFight
+    }
 }
-
 ```

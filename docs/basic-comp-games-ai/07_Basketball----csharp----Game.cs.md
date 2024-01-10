@@ -1,97 +1,77 @@
 # `basic-computer-games\07_Basketball\csharp\Game.cs`
 
 ```
+using Basketball.Plays;  # 导入篮球比赛中的战术类
+using Basketball.Resources;  # 导入篮球比赛中的资源类
+using Games.Common.IO;  # 导入通用游戏输入输出类
+using Games.Common.Randomness;  # 导入通用游戏随机数类
 
-// 引入篮球比赛中需要使用的类和资源
-using Basketball.Plays;
-using Basketball.Resources;
-using Games.Common.IO;
-using Games.Common.Randomness;
+namespace Basketball;  # 命名空间篮球
 
-namespace Basketball;
-
-// 定义篮球比赛的类
-internal class Game
+internal class Game  # 内部类 Game
 {
-    // 定义私有变量，用于存储比赛中的时钟、记分牌、文本输入输出和随机数生成器
-    private readonly Clock _clock;
-    private readonly Scoreboard _scoreboard;
-    private readonly TextIO _io;
-    private readonly IRandom _random;
+    private readonly Clock _clock;  # 只读时钟对象
+    private readonly Scoreboard _scoreboard;  # 只读记分牌对象
+    private readonly TextIO _io;  # 只读文本输入输出对象
+    private readonly IRandom _random;  # 只读随机数对象
 
-    // 构造函数，用于初始化比赛中的时钟、记分牌、文本输入输出和随机数生成器
-    private Game(Clock clock, Scoreboard scoreboard, TextIO io, IRandom random)
+    private Game(Clock clock, Scoreboard scoreboard, TextIO io, IRandom random)  # Game 类的构造函数
     {
-        _clock = clock;
-        _scoreboard = scoreboard;
-        _io = io;
-        _random = random;
+        _clock = clock;  # 初始化时钟对象
+        _scoreboard = scoreboard;  # 初始化记分牌对象
+        _io = io;  # 初始化文本输入输出对象
+        _random = random;  # 初始化随机数对象
     }
 
-    // 创建比赛实例的静态方法，用于初始化比赛并返回比赛实例
-    public static Game Create(TextIO io, IRandom random)
+    public static Game Create(TextIO io, IRandom random)  # 创建 Game 对象的静态方法
     {
-        // 输出比赛介绍
-        io.Write(Resource.Streams.Introduction);
+        io.Write(Resource.Streams.Introduction);  # 输出游戏介绍
 
-        // 初始化防守策略和时钟
-        var defense = new Defense(io.ReadDefense("Your starting defense will be"));
-        var clock = new Clock(io);
+        var defense = new Defense(io.ReadDefense("Your starting defense will be"));  # 创建防守对象
+        var clock = new Clock(io);  # 创建时钟对象
 
-        io.WriteLine();
+        io.WriteLine();  # 输出空行
 
-        // 初始化记分牌和两支球队
-        var scoreboard = new Scoreboard(
-            new Team("Dartmouth", new HomeTeamPlay(io, random, clock, defense)),
-            new Team(io.ReadString("Choose your opponent"), new VisitingTeamPlay(io, random, clock, defense)),
+        var scoreboard = new Scoreboard(  # 创建记分牌对象
+            new Team("Dartmouth", new HomeTeamPlay(io, random, clock, defense)),  # 主队
+            new Team(io.ReadString("Choose your opponent"), new VisitingTeamPlay(io, random, clock, defense)),  # 客队
             io);
 
-        // 返回初始化后的比赛实例
-        return new Game(clock, scoreboard, io, random);
+        return new Game(clock, scoreboard, io, random);  # 返回新的 Game 对象
     }
 
-    // 进行比赛的方法
-    public void Play()
+    public void Play()  # 游戏进行方法
     {
-        // 初始化控球比赛
-        var ballContest = new BallContest(0.4f, "{0} controls the tap", _io, _random);
+        var ballContest = new BallContest(0.4f, "{0} controls the tap", _io, _random);  # 创建球权争夺对象
 
-        // 循环进行比赛
-        while (true)
+        while (true)  # 无限循环
         {
-            // 输出比赛开始信息并解决控球比赛
-            _io.WriteLine("Center jump");
-            ballContest.Resolve(_scoreboard);
+            _io.WriteLine("Center jump");  # 输出中心跳球
+            ballContest.Resolve(_scoreboard);  # 解决球权争夺
 
-            _io.WriteLine();
+            _io.WriteLine();  # 输出空行
 
-            // 循环进行比赛的每个阶段
-            while (true)
+            while (true)  # 无限循环
             {
-                // 解决进攻阶段并判断比赛是否结束
-                var isFullTime = _scoreboard.Offense.ResolvePlay(_scoreboard);
-                if (isFullTime && IsGameOver()) { return; }
-                if (_clock.IsHalfTime) { break; }
+                var isFullTime = _scoreboard.Offense.ResolvePlay(_scoreboard);  # 解决进攻
+                if (isFullTime && IsGameOver()) { return; }  # 如果比赛结束，返回
+                if (_clock.IsHalfTime) { break; }  # 如果是中场休息，跳出循环
             }
         }
     }
 
-    // 判断比赛是否结束的方法
-    private bool IsGameOver()
+    private bool IsGameOver()  # 判断游戏是否结束的方法
     {
-        _io.WriteLine();
-        // 如果比分相等，则进入加时赛
-        if (_scoreboard.ScoresAreEqual)
+        _io.WriteLine();  # 输出空行
+        if (_scoreboard.ScoresAreEqual)  # 如果比分相等
         {
-            _scoreboard.Display(Resource.Formats.EndOfSecondHalf);
-            _clock.StartOvertime();
-            return false;
+            _scoreboard.Display(Resource.Formats.EndOfSecondHalf);  # 显示比赛结束的格式
+            _clock.StartOvertime();  # 开始加时赛
+            return false;  # 返回假
         }
 
-        // 输出比赛结束信息并返回比赛结束
-        _scoreboard.Display(Resource.Formats.EndOfGame);
-        return true;
+        _scoreboard.Display(Resource.Formats.EndOfGame);  # 显示比赛结束的格式
+        return true;  # 返回真
     }
 }
-
 ```

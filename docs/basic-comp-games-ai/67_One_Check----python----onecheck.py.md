@@ -1,7 +1,6 @@
 # `basic-computer-games\67_One_Check\python\onecheck.py`
 
 ```
-
 """
 ONE CHECK
 
@@ -12,7 +11,7 @@ from typing import Tuple
 
 
 def main() -> None:
-    # 打印初始指令
+    # Initial instructions
     print(" " * 30 + "ONE CHECK")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("SOLITAIRE CHECKER PUZZLE BY DAVID AHL\n")
@@ -47,13 +46,14 @@ def main() -> None:
 
 
 def play_game() -> Tuple[str, str]:
-    # 初始化棋盘
-    # 给予超过64个元素以适应基于1的索引
+    # Initialize board
+    # Give more than 64 elements to accomodate 1-based indexing
     board = [1] * 70
     for j in range(19, 44, 8):
         for i in range(j, j + 4):
             board[i] = 0
     jumps = 0
+    # 无限循环，直到条件被打破
     while True:
         # 打印棋盘
         for j in range(1, 64, 8):
@@ -62,13 +62,17 @@ def play_game() -> Tuple[str, str]:
             print(board[j + 7])
         print()
 
+        # 再次无限循环，直到条件被打破
         while True:
             print("JUMP FROM", end=" ")
+            # 获取输入的起始位置
             f_str = input()
             f = int(f_str)
+            # 如果输入为0，跳出循环
             if f == 0:
                 break
             print("TO", end=" ")
+            # 获取输入的目标位置
             t_str = input()
             t = int(t_str)
             print()
@@ -93,31 +97,40 @@ def play_game() -> Tuple[str, str]:
                 continue
             break
 
+        # 如果起始位置为0，跳出循环
         if f == 0:
             break
+        # 更新棋盘状态
         board[t] = 1
         board[f] = 0
         board[(t + f) // 2] = 0
         jumps = jumps + 1
 
+    # 计算剩余的棋子数量
     left = 0
     for i in range(1, 64 + 1):
         left = left + board[i]
+    # 返回跳跃次数和剩余棋子数量的字符串形式
     return (str(jumps), str(left))
-
-
+# 定义一个函数，用于询问用户是否要再次尝试
 def try_again() -> bool:
+    # 打印提示信息
     print("TRY AGAIN", end=" ")
+    # 获取用户输入并转换为大写
     answer = input().upper()
+    # 如果用户输入为"YES"，返回True
     if answer == "YES":
         return True
+    # 如果用户输入为"NO"，返回False
     elif answer == "NO":
         return False
+    # 如果用户输入既不是"YES"也不是"NO"，打印提示信息
     print("PLEASE ANSWER 'YES' OR 'NO'.")
+    # 递归调用try_again函数，直到用户输入为"YES"或"NO"
     return try_again()
 
 
+# 如果当前脚本作为主程序运行，则调用main函数
 if __name__ == "__main__":
     main()
-
 ```

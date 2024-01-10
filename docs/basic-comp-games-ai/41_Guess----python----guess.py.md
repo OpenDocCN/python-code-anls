@@ -1,7 +1,6 @@
 # `basic-computer-games\41_Guess\python\guess.py`
 
 ```
-
 """
 Guess
 
@@ -28,27 +27,27 @@ From: Basic Computer Games (1978)
 # for computing the number of digits the limit has in binary
 # representation, it has to use log.
 
-from math import log  # 导入log函数
-from random import random  # 导入random函数
-from typing import Tuple  # 导入Tuple类型
+from math import log  # 导入 log 函数
+from random import random  # 导入 random 函数
+from typing import Tuple  # 导入 Tuple 类型
 
 
-def insert_whitespaces() -> None:  # 定义函数，打印空行
-    print("\n\n\n\n\n")
+def insert_whitespaces() -> None:  # 定义函数，不返回任何值
+    print("\n\n\n\n\n")  # 打印空行
 
 
-def limit_set() -> Tuple[int, int]:  # 定义函数，设置限制
+def limit_set() -> Tuple[int, int]:  # 定义函数，返回元组类型
     print("                   Guess")  # 打印标题
     print("Creative Computing  Morristown, New Jersey")  # 打印作者信息
     print("\n\n\n")  # 打印空行
     print("This is a number guessing game. I'll think")  # 打印游戏介绍
     print("of a number between 1 and any limit you want.\n")
     print("Then you have to guess what it is\n")
-    print("What limit do you want?")
+    print("What limit do you want?")  # 提示用户输入限制
 
     limit = int(input())  # 获取用户输入的限制
 
-    while limit <= 0:  # 如果限制小于等于0
+    while limit <= 0:  # 当限制小于等于0时
         print("Please insert a number greater or equal to 1")  # 提示用户输入大于等于1的数字
         limit = int(input())  # 获取用户输入的限制
 
@@ -58,49 +57,63 @@ def limit_set() -> Tuple[int, int]:  # 定义函数，设置限制
     return limit, limit_goal  # 返回限制和限制在二进制表示中的位数
 
 
-def main() -> None:  # 定义主函数
-    limit, limit_goal = limit_set()  # 获取限制和限制在二进制表示中的位数
-    while True:  # 无限循环
-        guess_count = 1  # 猜测次数初始化为1
-        still_guessing = True  # 是否继续猜测的标志初始化为True
-        won = False  # 是否猜中的标志初始化为False
-        my_guess = int(limit * random() + 1)  # 生成计算机的猜测数字
+def main() -> None:  # 定义函数，不返回任何值
+    limit, limit_goal = limit_set()  # 调用函数获取限制和限制在二进制表示中的位数
+    # 无限循环，直到猜对为止
+    while True:
+        # 猜测次数初始化为1
+        guess_count = 1
+        # 是否还在猜测的标志
+        still_guessing = True
+        # 是否赢了的标志
+        won = False
+        # 生成一个1到limit之间的随机数作为猜测的数字
+        my_guess = int(limit * random() + 1)
 
-        print(f"I'm thinking of a number between 1 and {limit}")  # 打印计算机思考的范围
-        print("Now you try to guess what it is.")  # 提示用户猜测数字
+        # 打印提示信息，告诉用户要猜的数字范围
+        print(f"I'm thinking of a number between 1 and {limit}")
+        print("Now you try to guess what it is.")
 
-        while still_guessing:  # 循环直到不再猜测
-            n = int(input())  # 获取用户输入的猜测数字
+        # 进入猜测循环
+        while still_guessing:
+            # 获取用户输入的猜测数字
+            n = int(input())
 
-            if n < 0:  # 如果猜测数字小于0
-                break  # 退出循环
+            # 如果用户输入的是负数，则退出猜测循环
+            if n < 0:
+                break
 
-            insert_whitespaces()  # 调用打印空行的函数
-            if n < my_guess:  # 如果猜测数字小于计算机的猜测数字
-                print("Too low. Try a bigger answer")  # 提示猜测数字过小
-                guess_count += 1  # 猜测次数加1
-            elif n > my_guess:  # 如果猜测数字大于计算机的猜测数字
-                print("Too high. Try a smaller answer")  # 提示猜测数字过大
-                guess_count += 1  # 猜测次数加1
-            else:  # 如果猜测数字等于计算机的猜测数字
-                print(f"That's it! You got it in {guess_count} tries")  # 提示猜中了，并显示猜测次数
-                won = True  # 设置猜中标志为True
-                still_guessing = False  # 设置继续猜测的标志为False
+            # 调用insert_whitespaces函数
+            insert_whitespaces()
+            # 判断用户猜测的数字与随机数的大小关系，并给出相应提示
+            if n < my_guess:
+                print("Too low. Try a bigger answer")
+                guess_count += 1
+            elif n > my_guess:
+                print("Too high. Try a smaller answer")
+                guess_count += 1
+            else:
+                # 猜对了，打印提示信息，更新标志位
+                print(f"That's it! You got it in {guess_count} tries")
+                won = True
+                still_guessing = False
 
-        if won:  # 如果猜中了
-            if guess_count < limit_goal:  # 如果猜测次数小于限制在二进制表示中的位数
-                print("Very good.")  # 提示猜测次数很好
-            elif guess_count == limit_goal:  # 如果猜测次数等于限制在二进制表示中的位数
-                print("Good.")  # 提示猜测次数还行
-            else:  # 如果猜测次数大于限制在二进制表示中的位数
-                print(f"You should have been able to get it in only {limit_goal}")  # 提示应该能在指定次数内猜中
-            insert_whitespaces()  # 调用打印空行的函数
-        else:  # 如果没有猜中
-            insert_whitespaces()  # 调用打印空行的函数
-            limit, limit_goal = limit_set()  # 重新设置限制和限制在二进制表示中的位数
-
-
-if __name__ == "__main__":  # 如果是主程序入口
-    main()  # 调用主函数
-
+        # 判断是否赢了
+        if won:
+            # 根据猜测次数给出不同的评价
+            if guess_count < limit_goal:
+                print("Very good.")
+            elif guess_count == limit_goal:
+                print("Good.")
+            else:
+                print(f"You should have been able to get it in only {limit_goal}")
+            # 调用insert_whitespaces函数
+            insert_whitespaces()
+        else:
+            # 调用limit_set函数，更新limit和limit_goal的值
+            insert_whitespaces()
+            limit, limit_goal = limit_set()
+# 如果当前模块被直接执行，则调用 main() 函数
+if __name__ == "__main__":
+    main()
 ```

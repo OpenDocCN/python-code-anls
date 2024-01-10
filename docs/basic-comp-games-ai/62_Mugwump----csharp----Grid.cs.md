@@ -1,61 +1,61 @@
 # `basic-computer-games\62_Mugwump\csharp\Grid.cs`
 
 ```
-
 // 引入必要的命名空间
 using System.Collections.Generic;
 using System.Linq;
 
-// 定义 Mugwump 命名空间
-namespace Mugwump;
-
-// 定义 Grid 类
-internal class Grid
+// 命名空间Mugwump下的Grid类
+namespace Mugwump
 {
-    // 声明私有变量 _io 和 _mugwumps
-    private readonly TextIO _io;
-    private readonly List<Mugwump> _mugwumps;
-
-    // 定义 Grid 类的构造函数，接受 TextIO 和 IRandom 对象作为参数
-    public Grid(TextIO io, IRandom random)
+    // Grid类
+    internal class Grid
     {
-        // 初始化 _io 变量
-        _io = io;
-        // 使用 Enumerable 生成 1 到 4 的序列，对每个序列元素创建一个 Mugwump 对象，并将其添加到 _mugwumps 列表中
-        _mugwumps = Enumerable.Range(1, 4).Select(id => new Mugwump(id, random.NextPosition(10, 10))).ToList();
-    }
+        // 私有字段，用于输入输出
+        private readonly TextIO _io;
+        // 私有字段，用于存储Mugwump对象的列表
+        private readonly List<Mugwump> _mugwumps;
 
-    // 定义 Check 方法，接受一个 Position 对象作为参数，返回布尔值
-    public bool Check(Position guess)
-    {
-        // 遍历 _mugwumps 列表中的每个 Mugwump 对象
-        foreach (var mugwump in _mugwumps.ToList())
+        // 构造函数，接受TextIO对象和IRandom对象作为参数
+        public Grid(TextIO io, IRandom random)
         {
-            // 调用 Mugwump 对象的 FindFrom 方法，返回找到的标志和距离
-            var (found, distance) = mugwump.FindFrom(guess);
-
-            // 根据找到的标志和距离输出不同的信息
-            _io.WriteLine(found ? $"You have found {mugwump}" : $"You are {distance} units from {mugwump}");
-            // 如果找到了 Mugwump 对象，则从 _mugwumps 列表中移除该对象
-            if (found)
-            {
-                _mugwumps.Remove(mugwump);
-            }
+            // 初始化_io字段
+            _io = io;
+            // 使用Enumerable生成1到4的序列，对每个元素生成一个Mugwump对象，并存储在_mugwumps列表中
+            _mugwumps = Enumerable.Range(1, 4).Select(id => new Mugwump(id, random.NextPosition(10, 10))).ToList();
         }
 
-        // 返回 _mugwumps 列表是否为空的布尔值
-        return _mugwumps.Count == 0;
-    }
-
-    // 定义 Reveal 方法，用于显示每个 Mugwump 对象的信息
-    public void Reveal()
-    {
-        // 遍历 _mugwumps 列表中的每个 Mugwump 对象，调用其 Reveal 方法并输出信息
-        foreach (var mugwump in _mugwumps)
+        // 检查玩家猜测的位置是否有Mugwump
+        public bool Check(Position guess)
         {
-            _io.WriteLine(mugwump.Reveal());
+            // 遍历_mugwumps列表的副本
+            foreach (var mugwump in _mugwumps.ToList())
+            {
+                // 调用Mugwump对象的FindFrom方法，返回是否找到和距离
+                var (found, distance) = mugwump.FindFrom(guess);
+
+                // 根据找到与否输出不同的消息
+                _io.WriteLine(found ? $"You have found {mugwump}" : $"You are {distance} units from {mugwump}");
+                // 如果找到了Mugwump，则从_mugwumps列表中移除该Mugwump对象
+                if (found)
+                {
+                    _mugwumps.Remove(mugwump);
+                }
+            }
+
+            // 返回_mugwumps列表是否为空，即是否所有Mugwump都已找到
+            return _mugwumps.Count == 0;
+        }
+
+        // 显示所有Mugwump的位置
+        public void Reveal()
+        {
+            // 遍历_mugwumps列表，依次调用每个Mugwump对象的Reveal方法并输出位置信息
+            foreach (var mugwump in _mugwumps)
+            {
+                _io.WriteLine(mugwump.Reveal());
+            }
         }
     }
 }
-
 ```

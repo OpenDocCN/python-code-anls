@@ -1,8 +1,7 @@
 # `basic-computer-games\76_Russian_Roulette\javascript\russianroulette.js`
 
 ```
-
-// 定义一个打印函数，用于在页面上输出文本
+// 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
     document.getElementById("output").appendChild(document.createTextNode(str));
@@ -18,27 +17,36 @@ function input()
                        // 创建一个输入框元素
                        input_element = document.createElement("INPUT");
 
-                       // 在页面上输出提示符
+                       // 打印提示符
                        print("? ");
+                       // 设置输入框类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
-                       // 监听键盘事件，当按下回车键时，将输入的值传递给 resolve 函数
+                       // 监听输入框的按键事件
                        input_element.addEventListener("keydown", function (event) {
+                                                      // 如果按下的是回车键
                                                       if (event.keyCode == 13) {
+                                                      // 获取输入框的值
                                                       input_str = input_element.value;
+                                                      // 移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的值
                                                       print(input_str);
+                                                      // 打印换行符
                                                       print("\n");
+                                                      // 解析输入的值
                                                       resolve(input_str);
                                                       }
                                                       });
                        });
 }
 
-// 定义一个生成指定数量空格的函数
+// 定义一个制表符函数，返回指定数量的空格字符串
 function tab(space)
 {
     var str = "";
@@ -47,59 +55,68 @@ function tab(space)
     return str;
 }
 
-// 主程序，使用 async 函数定义，可以使用 await 关键字等待 Promise 对象的解析
+// 主程序
 async function main()
 {
-    // 输出游戏标题
+    // 打印游戏标题
     print(tab(28) + "RUSSIAN ROULETTE\n");
+    // 打印游戏信息
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
     print("\n");
     print("\n");
     print("\n");
+    // 打印游戏说明
     print("THIS IS A GAME OF >>>>>>>>>>RUSSIAN ROULETTE.\n");
+    // 设置重启标志为 true
     restart = true;
+    # 进入无限循环，直到条件不满足
     while (1) {
+        # 如果需要重新开始游戏，则重置标志位并打印提示信息
         if (restart) {
             restart = false;
             print("\n");
             print("HERE IS A REVOLVER.\n");
         }
+        # 打印游戏选项
         print("TYPE '1' TO SPIN CHAMBER AND PULL TRIGGER.\n");
         print("TYPE '2' TO GIVE UP.\n");
         print("GO");
+        # 初始化计数器
         n = 0;
+        # 进入内层循环，直到条件不满足
         while (1) {
-            // 等待输入，使用 parseInt 将输入的字符串转换为整数
+            # 获取用户输入并转换为整数
             i = parseInt(await input());
+            # 如果用户选择放弃，则打印提示信息并跳出内层循环
             if (i == 2) {
                 print("     CHICKEN!!!!!\n");
                 break;
             }
+            # 增加计数器
             n++;
-            // 使用 Math.random() 生成随机数，如果大于 0.833333，则表示触发了“死亡”，游戏结束
+            # 如果随机数大于0.833333，则打印游戏失败的提示信息并跳出内层循环
             if (Math.random() > 0.833333) {
                 print("     BANG!!!!!   YOU'RE DEAD!\n");
                 print("CONDOLENCES WILL BE SENT TO YOUR RELATIVES.\n");
                 break;
             }
-            // 如果尝试次数超过 10 次，则表示玩家获胜
+            # 如果计数器大于10，则打印游戏胜利的提示信息，并设置重新开始标志位，然后跳出内层循环
             if (n > 10) {
                 print("YOU WIN!!!!!\n");
                 print("LET SOMEONE ELSE BLOW HIS BRAINS OUT.\n");
                 restart = true;
                 break;
             }
+            # 否则打印扳机声音的提示信息
             print("- CLICK -\n");
             print("\n");
         }
+        # 打印游戏结束的提示信息
         print("\n");
         print("\n");
         print("\n");
         print("...NEXT VICTIM...\n");
     }
-}
-
-// 调用主程序
+# 调用名为main的函数
 main();
-
 ```

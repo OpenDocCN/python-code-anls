@@ -1,15 +1,10 @@
 # `basic-computer-games\75_Roulette\csharp\Bet.cs`
 
 ```
-
-// 命名空间为Roulette
-namespace Roulette;
-
-// 内部的记录结构体Bet，包含下注类型、数字和赌注
+# 在 Roulette 命名空间下定义一个内部的记录结构 Bet，包含下注类型、数字和赌注
 internal record struct Bet(BetType Type, int Number, int Wager)
 {
-    // 获取赔付金额，赔付金额为赌注乘以下注类型的赔率
+    # 定义一个公共的属性 Payout，用于计算赔付金额，赔付金额等于赌注乘以下注类型的赔率
     public int Payout => Wager * Type.Payout;
 }
-
 ```

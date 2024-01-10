@@ -1,7 +1,6 @@
 # `basic-computer-games\63_Name\javascript\name.js`
 
 ```
-
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
@@ -28,20 +27,25 @@ function input()
                        // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
-                       // 监听键盘事件，当按下回车键时，获取输入值并解析 Promise
+                       // 监听输入框的键盘事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 当按下回车键时，获取输入框的值
                                                       input_str = input_element.value;
+                                                      // 从输出元素中移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的字符串
                                                       print(input_str);
+                                                      // 打印换行符
                                                       print("\n");
+                                                      // 解析 Promise 对象
                                                       resolve(input_str);
                                                       }
                                                       });
                        });
 }
 
-// 生成指定数量的空格字符串
+// 定义一个生成指定数量空格的函数
 function tab(space)
 {
     var str = "";
@@ -56,42 +60,57 @@ var b;
 // 主程序
 async function main()
 {
-    // 打印名称和信息
+    // 打印名称
     print(tab(34) + "NAME\n");
+    // 打印创意计算的地址
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
+    // 打印多个换行符
     print("\n");
     print("\n");
     print("\n");
+    // 打印问候语
     print("HELLO.\n");
+    // 打印计算机的名称
     print("MY NAME IS CREATIVE COMPUTER.\n");
+    // 打印提示信息，要求输入名字
     print("WHAT'S YOUR NAME (FIRST AND LAST)");
-    // 获取用户输入的名字
+    // 获取输入的名字
     str = await input();
+    // 获取名字的长度
     l = str.length;
+    // 打印感谢信息
     print("\n");
     print("THANK YOU, ");
-    // 倒序打印用户输入的名字
+}
+    # 逆序打印字符串中的字符
     for (i = l; i >= 1; i--)
         print(str[i - 1]);
+    # 打印句号
     print(".\n");
+    # 打印提示信息
     print("OOPS!  I GUESS I GOT IT BACKWARDS.  A SMART\n");
     print("COMPUTER LIKE ME SHOULDN'T MAKE A MISTAKE LIKE THAT!\n");
     print("\n");
+    # 打印提示信息
     print("BUT I JUST NOTICED YOUR LETTERS ARE OUT OF ORDER.\n");
     print("LET'S PUT THEM IN ORDER LIKE THIS: ");
+    # 创建空数组
     b = [];
-    // 将用户输入的名字转换为 ASCII 码并排序
+    # 将字符串中每个字符的 ASCII 码存入数组 b
     for (i = 1; i <= l; i++)
         b[i - 1] = str.charCodeAt(i - 1);
+    # 对数组 b 进行排序
     b.sort();
+    # 将排序后的字符打印出来
     for (i = 1; i <= l; i++)
-        // 打印排序后的字符
         print(String.fromCharCode(b[i - 1]));
     print("\n");
     print("\n");
+    # 提示用户是否喜欢排序后的字符顺序
     print("DON'T YOU LIKE THAT BETTER");
-    // 获取用户输入
+    # 等待用户输入
     ds = await input();
+    # 根据用户输入进行不同的输出
     if (ds == "YES") {
         print("\n");
         print("I KNEW YOU'D AGREE!!\n");
@@ -100,11 +119,12 @@ async function main()
         print("I'M SORRY YOU DON'T LIKE IT THAT WAY.\n");
     }
     print("\n");
+    # 打印结束语
     print("I REALLY ENJOYED MEETING YOU " + str + ".\n");
     print("HAVE A NICE DAY!\n");
+# 结束当前的函数定义
 }
 
-// 调用主程序
+# 调用名为main的函数
 main();
-
 ```

@@ -1,7 +1,6 @@
 # `basic-computer-games\33_Dice\javascript\dice.js`
 
 ```
-
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
@@ -20,18 +19,25 @@ function input()
 
                        // 打印提示符
                        print("? ");
+                       // 设置输入框类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
-                       // 监听键盘事件，当按下回车键时，将输入的值添加到输出元素中，并解析为字符串，然后返回
+                       // 监听键盘按下事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 获取输入的字符串
                                                       input_str = input_element.value;
+                                                      // 移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的字符串
                                                       print(input_str);
                                                       print("\n");
+                                                      // 解析输入的字符串
                                                       resolve(input_str);
                                                       }
                                                       });
@@ -47,7 +53,7 @@ function tab(space)
     return str;
 }
 
-// 主程序，使用 async 函数定义
+// 主程序
 async function main()
 {
     // 打印标题
@@ -56,43 +62,48 @@ async function main()
     print("\n");
     print("\n");
     print("\n");
+    // 初始化数组 f
     f = [];
-    // 打印说明
+    // 打印提示信息
     print("THIS PROGRAM SIMULATES THE ROLLING OF A\n");
     print("PAIR OF DICE.\n");
     print("YOU ENTER THE NUMBER OF TIMES YOU WANT THE COMPUTER TO\n");
     print("'ROLL' THE DICE.  WATCH OUT, VERY LARGE NUMBERS TAKE\n");
+}
+    # 打印提示信息
     print("A LONG TIME.  IN PARTICULAR, NUMBERS OVER 5000.\n");
+    # 循环开始
     do {
-        // 初始化数组 f
+        # 初始化数组 f 的值为 0
         for (q = 1; q <= 12; q++)
             f[q] = 0;
+        # 打印提示信息，获取用户输入并转换为整数
         print("\n");
         print("HOW MANY ROLLS");
-        // 获取用户输入的次数
         x = parseInt(await input());
+        # 循环生成随机数并计算点数总和
         for (s = 1; s <= x; s++) {
-            // 模拟掷骰子，计算点数并统计次数
             a = Math.floor(Math.random() * 6 + 1);
             b = Math.floor(Math.random() * 6 + 1);
             r = a + b;
             f[r]++;
         }
+        # 打印点数和出现次数
         print("\n");
         print("TOTAL SPOTS\tNUMBER OF TIMES\n");
-        // 打印点数和次数
         for (v = 2; v <= 12; v++) {
             print("\t" + v + "\t" + f[v] + "\n");
         }
+        # 打印提示信息，获取用户输入
         print("\n");
         print("\n");
         print("TRY AGAIN");
-        // 获取用户输入，如果以 "Y" 开头则继续循环
         str = await input();
+    # 当用户输入以 "Y" 开头时继续循环
     } while (str.substr(0, 1) == "Y") ;
+# 结束当前的函数定义
 }
 
-// 调用主程序
+# 调用名为main的函数
 main();
-
 ```

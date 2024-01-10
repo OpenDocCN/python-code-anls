@@ -1,7 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\Command.cs`
 
 ```
-
 // 命名空间 Game，用于组织和管理相关的类和枚举
 namespace Game
 {
@@ -18,5 +17,4 @@ namespace Game
         Quit
     }
 }
-
 ```

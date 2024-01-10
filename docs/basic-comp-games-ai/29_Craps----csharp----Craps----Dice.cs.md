@@ -1,7 +1,6 @@
 # `basic-computer-games\29_Craps\csharp\Craps\Dice.cs`
 
 ```
-
 // 引入 System 命名空间
 using System;
 
@@ -22,7 +21,7 @@ namespace Craps
             sides = 6;
         }
 
-        // 有参构造函数，接受 sides 参数并赋值给 this.sides
+        // 有参构造函数，接受 sides 参数并初始化
         public Dice(int sides)
         {
             this.sides = sides;
@@ -32,5 +31,4 @@ namespace Craps
         public int Roll() => rand.Next(1, sides + 1);
     }
 }
-
 ```

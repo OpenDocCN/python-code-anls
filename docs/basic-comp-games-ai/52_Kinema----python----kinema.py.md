@@ -1,7 +1,6 @@
 # `basic-computer-games\52_Kinema\python\kinema.py`
 
 ```
-
 """
 KINEMA
 
@@ -22,6 +21,7 @@ g = 10  # 设置重力加速度为10米/秒^2
 # correct answer. This isn't rocket science.
 
 EXPECTED_ACCURACY_PERCENT = 15  # 设置预期答案的精度为15%
+
 
 def do_quiz() -> None:
     print()
@@ -55,9 +55,9 @@ def do_quiz() -> None:
 
 def ask_player(question: str, answer) -> int:
     print(question)
-    player_answer = float(input())  # 获取玩家输入的答案
+    player_answer = float(input())  # 获取玩家的答案
 
-    accuracy_frac = EXPECTED_ACCURACY_PERCENT / 100.0
+    accuracy_frac = EXPECTED_ACCURACY_PERCENT / 100.0  # 计算精度的分数
     if abs((player_answer - answer) / answer) < accuracy_frac:  # 判断玩家答案是否在预期精度范围内
         print("CLOSE ENOUGH.")
         score = 1
@@ -79,5 +79,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 ```

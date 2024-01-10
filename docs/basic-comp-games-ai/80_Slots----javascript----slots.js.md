@@ -1,7 +1,6 @@
 # `basic-computer-games\80_Slots\javascript\slots.js`
 
 ```
-
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
@@ -11,46 +10,42 @@ function print(str)
 // 定义一个输入函数，返回一个 Promise 对象
 function input()
 {
-    // 声明变量
     var input_element;
     var input_str;
 
-    // 返回一个 Promise 对象
     return new Promise(function (resolve) {
-                       // 创建一个输入框元素
+                       // 创建一个输入元素
                        input_element = document.createElement("INPUT");
 
                        // 打印提示符
                        print("? ");
-                       // 设置输入框类型和长度
+                       // 设置输入元素类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
-                       // 将输入框添加到输出元素中
+                       // 将输入元素添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
-                       // 输入框获取焦点
+                       // 让输入元素获得焦点
                        input_element.focus();
-                       // 初始化输入字符串
                        input_str = undefined;
-                       // 监听键盘事件
+                       // 监听键盘按下事件
                        input_element.addEventListener("keydown", function (event) {
-                                                      // 如果按下回车键
                                                       if (event.keyCode == 13) {
                                                       // 获取输入的字符串
                                                       input_str = input_element.value;
-                                                      // 移除输入框
+                                                      // 从输出元素中移除输入元素
                                                       document.getElementById("output").removeChild(input_element);
                                                       // 打印输入的字符串
                                                       print(input_str);
-                                                      // 打印换行
+                                                      // 打印换行符
                                                       print("\n");
-                                                      // 解析输入的字符串并返回
+                                                      // 解析 Promise 对象
                                                       resolve(input_str);
                                                       }
                                                       });
                        });
 }
 
-// 定义一个制表符函数，返回指定长度的空格字符串
+// 定义一个生成指定数量空格的函数
 function tab(space)
 {
     var str = "";
@@ -59,7 +54,7 @@ function tab(space)
     return str;
 }
 
-// 定义一个包含不同图案的数组
+// 定义一个数组，包含了几种水果的名称
 var figures = [, "BAR", "BELL", "ORANGE", "LEMON", "PLUM", "CHERRY"];
 
 // 主程序
@@ -71,50 +66,57 @@ async function main()
     print("\n");
     print("\n");
     print("\n");
-    // 打印提示信息
+    // 打印说明信息
     print("YOU ARE IN THE H&M CASINO,IN FRONT ON ONE OF OUR\n");
+}
+    # 打印赌博游戏的提示信息
     print("ONE-ARM BANDITS. BET FROM $1 TO $100.\n");
+    # 打印拉杆机的提示信息
     print("TO PULL THE ARM, PUNCH THE RETURN KEY AFTER MAKING YOUR BET.\n");
-    // 初始化变量
+    # 初始化玩家的赌注
     p = 0;
-    // 循环
+    // 无限循环，直到用户选择退出
     while (1) {
+        // 无限循环，直到用户输入有效的赌注
         while (1) {
-            // 打印提示信息
+            // 打印空行和提示用户输入赌注
             print("\n");
             print("YOUR BET");
-            // 获取输入的赌注
+            // 将用户输入的赌注转换为整数
             m = parseInt(await input());
-            // 检查赌注是否符合要求
+            // 如果赌注大于100，提示用户超出了赌注上限
             if (m > 100) {
                 print("HOUSE LIMITS ARE $100\n");
-            } else if (m < 1) {
+            } else if (m < 1) {  // 如果赌注小于1，提示用户低于最低赌注
                 print("MINIMUM BET IS $1\n");
             } else {
-                break;
+                break;  // 跳出循环，赌注有效
             }
         }
-        // 生成随机数
+        // 未实现的功能：GOSUB 1270 十次钟声
+        print("\n");
+        // 生成1到6之间的随机整数
         x = Math.floor(6 * Math.random() + 1);
         y = Math.floor(6 * Math.random() + 1);
         z = Math.floor(6 * Math.random() + 1);
-        // 打印图案
         print("\n");
+        // 未实现的功能：GOSUB 1310 在x和y之后七次钟声
+        // 打印三个骰子的结果
         print(figures[x] + " " + figures[y] + " " + figures[z] + "\n");
-        // 初始化变量
         lost = false;
-        // 判断输赢
-        if (x == y && y == z) {  // 三个相同图案
+        if (x == y && y == z) {  // 三个相同的数字
             print("\n");
             if (z != 1) {
                 print("**TOP DOLLAR**\n");
+                // 计算赢得的金额并更新玩家的余额
                 p += ((10 * m) + m);
             } else {
                 print("***JACKPOT***\n");
+                // 计算赢得的金额并更新玩家的余额
                 p += ((100 * m) + m);
             }
             print("YOU WON!\n");
-        } else if (x == y || y == z || x == z) {
+        } else if (x == y || y == z || x == z) {  // 两个相同的数字
             if (x == y)
                 c = x;
             else
@@ -123,11 +125,13 @@ async function main()
                 print("\n");
                 print("*DOUBLE BAR*\n");
                 print("YOU WON\n");
+                // 计算赢得的金额并更新玩家的余额
                 p += ((5 * m) + m);
             } else if (x != z) {
                 print("\n");
                 print("DOUBLE!!\n");
                 print("YOU WON!\n");
+                // 计算赢得的金额并更新玩家的余额
                 p += ((2 * m) + m);
             } else {
                 lost = true;
@@ -135,33 +139,34 @@ async function main()
         } else {
             lost = true;
         }
-        // 处理输赢
         if (lost) {
             print("\n");
             print("YOU LOST.\n");
+            // 扣除赌注金额
             p -= m;
         }
-        // 打印当前金额
+        // 打印玩家的余额
         print("YOUR STANDINGS ARE $" + p + "\n");
         print("AGAIN");
-        // 获取输入的字符串
+        // 等待用户输入是否再次进行游戏
         str = await input();
-        // 如果输入的字符串不是以"Y"开头，则跳出循环
         if (str.substr(0, 1) != "Y")
-            break;
+            break;  // 如果用户输入不是以Y开头，则退出循环
     }
-    // 打印最终结果
     print("\n");
+    # 如果赌注小于0，则输出要求支付赌注的信息
     if (p < 0) {
         print("PAY UP!  PLEASE LEAVE YOUR MONEY ON THE TERMINAL.\n");
+    # 如果赌注等于0，则输出平局的信息
     } else if (p == 0) {
         print("HEY, YOU BROKE EVEN.\n");
+    # 如果赌注大于0，则输出赢得赌注的信息
     } else {
         print("COLLECT YOUR WINNINGS FROM THE H&M CASHIER.\n");
     }
+# 结束当前的函数定义
 }
 
-// 调用主程序
+# 调用名为main的函数
 main();
-
 ```

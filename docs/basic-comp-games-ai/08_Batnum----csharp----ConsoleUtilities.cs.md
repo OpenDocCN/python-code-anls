@@ -1,11 +1,17 @@
 # `basic-computer-games\08_Batnum\csharp\ConsoleUtilities.cs`
 
 ```
+# 引入命名空间，包含了一些常用的类和方法
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-// 声明命名空间 Batnum，用于组织和管理相关的类和成员
+# 定义一个静态类，用于提供控制台相关的实用方法
 namespace Batnum
 {
-    // 这里应该是大括号的开头，但是缺少了大括号的开头，需要添加
+    public static class ConsoleUtilities
+    }
 }
-
 ```

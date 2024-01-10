@@ -1,7 +1,6 @@
 # `basic-computer-games\33_Dice\csharp\RollGenerator.cs`
 
 ```
-
 // 引入命名空间
 using System;
 using System.Collections.Generic;
@@ -23,10 +22,10 @@ namespace BasicComputerGames.Dice
             // 无限循环，生成骰子点数的元组
             while (true)
             {
+                // 返回一个随机生成的骰子点数的元组
                 yield return (_rnd.Next(1, 7), _rnd.Next(1, 7));
             }
         }
     }
 }
-
 ```

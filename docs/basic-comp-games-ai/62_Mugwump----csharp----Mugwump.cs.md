@@ -1,25 +1,33 @@
 # `basic-computer-games\62_Mugwump\csharp\Mugwump.cs`
 
 ```
+# 定义了一个名为Mugwump的命名空间
+namespace Mugwump;
 
-namespace Mugwump; // 命名空间声明
-
-internal class Mugwump // 内部类 Mugwump 声明
+# 定义了一个名为Mugwump的内部类
+internal class Mugwump
 {
-    private readonly int _id; // 声明私有只读整型变量 _id
-    private readonly Position _position; // 声明私有只读 Position 类型变量 _position
+    # 声明了一个私有的整型变量_id
+    private readonly int _id;
+    # 声明了一个私有的Position类型变量_position
+    private readonly Position _position;
 
-    public Mugwump(int id, Position position) // Mugwump 类的构造函数，接受 id 和 position 参数
+    # 定义了一个构造函数，接受id和position作为参数
+    public Mugwump(int id, Position position)
     {
-        _id = id; // 将 id 参数赋值给 _id 变量
-        _position = position; // 将 position 参数赋值给 _position 变量
+        # 将传入的id赋值给_id
+        _id = id;
+        # 将传入的position赋值给_position
+        _position = position;
     }
 
-    public (bool, Distance) FindFrom(Position guess) => (guess == _position, guess - _position); // 查找方法，返回一个元组，包含布尔值和距离
+    # 定义了一个FindFrom方法，接受guess作为参数，返回一个元组(bool, Distance)
+    public (bool, Distance) FindFrom(Position guess) => (guess == _position, guess - _position);
 
-    public string Reveal() => $"{this} is at {_position}"; // 揭示方法，返回字符串，包含对象信息和位置信息
+    # 定义了一个Reveal方法，返回一个字符串，表示Mugwump的位置
+    public string Reveal() => $"{this} is at {_position}";
 
-    public override string ToString() => $"Mugwump {_id}"; // 重写 ToString 方法，返回对象信息
+    # 重写了ToString方法，返回Mugwump的id
+    public override string ToString() => $"Mugwump {_id}";
 }
-
 ```

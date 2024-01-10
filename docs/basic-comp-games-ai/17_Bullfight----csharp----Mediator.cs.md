@@ -1,55 +1,57 @@
 # `basic-computer-games\17_Bullfight\csharp\Mediator.cs`
 
 ```
-
-// 命名空间 Game，包含 Mediator 类
 namespace Game
 {
     /// <summary>
-    /// 便于在两个游戏循环之间发送消息。
+    /// Facilitates sending messages between the two game loops.
     /// </summary>
     /// <remarks>
-    /// 这个类作为主程序循环和斗牛协程之间的一小段粘合剂。当主程序调用其方法时，中介者创建适当的输入数据，斗牛协程稍后使用 <see cref="GetInput{T}"/> 检索。
+    /// This class serves as a little piece of glue in between the main program
+    /// loop and the bull fight coroutine.  When the main program calls one of
+    /// its methods, the mediator creates the appropriate input data that the
+    /// bull fight coroutine later retrieves with <see cref="GetInput{T}"/>.
     /// </remarks>
     public class Mediator
     {
-        private object? m_input; // 用于存储输入数据的私有成员变量
+        private object? m_input;
 
-        // 设置闪避动作和风险级别的输入数据
+        // 设置闪避动作及风险级别
         public void Dodge(RiskLevel riskLevel) =>
             m_input = (Action.Dodge, riskLevel);
 
-        // 设置击杀动作和风险级别的输入数据
+        // 设置击杀动作及风险级别
         public void Kill(RiskLevel riskLevel) =>
             m_input = (Action.Kill, riskLevel);
 
-        // 设置恐慌动作的输入数据
+        // 设置恐慌动作
         public void Panic() =>
             m_input = (Action.Panic, default(RiskLevel));
 
-        // 设置逃离斗技场的输入数据
+        // 设置逃离擂台动作
         public void RunFromRing() =>
             m_input = true;
 
-        // 设置继续战斗的输入数据
+        // 设置继续战斗动作
         public void ContinueFighting() =>
             m_input = false;
 
         /// <summary>
-        /// 获取用户的下一个输入。
+        /// Gets the next input from the user.
         /// </summary>
         /// <typeparam name="T">
-        /// 要接收的输入类型。
+        /// The type of input to receive.
         /// </typeparam>
         public T GetInput<T>()
         {
-            Debug.Assert(m_input is not null, "未收到输入");
-            Debug.Assert(m_input.GetType() == typeof(T), "收到无效输入");
+            // 断言确保已接收到输入
+            Debug.Assert(m_input is not null, "No input received");
+            // 断言确保接收到的输入类型与期望类型相符
+            Debug.Assert(m_input.GetType() == typeof(T), "Invalid input received");
             var result = (T)m_input;
             m_input = null;
             return result;
         }
     }
 }
-
 ```

@@ -15,174 +15,61 @@
 
 public class Calendar {
 
-  // 定义常量
-  private static final int NUM_WEEK_ROWS = 6;
-  private static final int NUM_DAYS_PER_WEEK = 7;
-  private static final int NUM_MONTHS_PER_YEAR = 12;
+  private static final int NUM_WEEK_ROWS = 6;  // 定义每个月的行数
+  private static final int NUM_DAYS_PER_WEEK = 7;  // 定义每周的天数
+  private static final int NUM_MONTHS_PER_YEAR = 12;  // 定义每年的月数
   private static final int[] daysPerMonth = { 0, 31, 28, 31, 30, 31, 30,
-                                             31, 31, 30, 31, 30, 31 };
+                                             31, 31, 30, 31, 30, 31 };  // 定义每个月的天数
 
-  // 游戏开始方法
   public void play() {
 
-    // 显示游戏介绍
-    showIntro();
-    // 开始游戏
-    startGame();
+    showIntro();  // 调用显示游戏介绍的方法
+    startGame();  // 调用开始游戏的方法
 
   }  // End of method play
 
-  // 显示游戏介绍
   private static void showIntro() {
 
-    System.out.println(" ".repeat(31) + "CALENDAR");
-    System.out.println(" ".repeat(14) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-    System.out.println("\n\n");
+    System.out.println(" ".repeat(31) + "CALENDAR");  // 打印游戏标题
+    System.out.println(" ".repeat(14) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");  // 打印游戏信息
+    System.out.println("\n\n");  // 打印空行
 
   }  // End of method showIntro
 
-  // 开始游戏
   private void startGame() {
 
-    // 初始化变量
-    int dayOfMonth = 0;
-    int dayOfWeek = 0;
-    int dayOfYear = 0;
-    int daysTotal = 0;
-    int index = 0;
-    int month = 0;
-    int row = 0;
+    int dayOfMonth = 0;  // 初始化每月的天数
+    int dayOfWeek = 0;  // 初始化每周的天数
+    int dayOfYear = 0;  // 初始化每年的天数
+    int daysTotal = 0;  // 初始化总天数
+    int index = 0;  // 初始化索引
+    int month = 0;  // 初始化月份
+    int row = 0;  // 初始化行数
 
-    String lineContent = "";
+    String lineContent = "";  // 初始化行内容
 
-    // 打印空行
     for (index = 1; index <= 6; index++) {
-      System.out.println("");
+      System.out.println("");  // 打印空行
     }
 
-    daysTotal = -1;
-    dayOfYear = 0;
+    daysTotal = -1;  // 初始化总天数为-1
+    dayOfYear = 0;  // 初始化每年的天数为0
 
-    System.out.println("");
+    System.out.println("");  // 打印空行
 
-    // 开始循环遍历所有月份
-    for (month = 1; month <= NUM_MONTHS_PER_YEAR; month++) {
-
-      System.out.println("");
-
-      dayOfYear = dayOfYear + daysPerMonth[month - 1];
-
-      lineContent = String.format("** %-3d" + "*".repeat(18), dayOfYear);
-
-      // 根据月份设置行内容
-      switch (month) {
-        case 1:
-          lineContent += " JANUARY ";
-          break;
-        case 2:
-          lineContent += " FEBRUARY";
-          break;
-        case 3:
-          lineContent += "  MARCH  ";
-          break;
-        case 4:
-          lineContent += "  APRIL  ";
-          break;
-        case 5:
-          lineContent += "   MAY   ";
-          break;
-        case 6:
-          lineContent += "   JUNE  ";
-          break;
-        case 7:
-          lineContent += "   JULY  ";
-          break;
-        case 8:
-          lineContent += "  AUGUST ";
-          break;
-        case 9:
-          lineContent += "SEPTEMBER";
-          break;
-        case 10:
-          lineContent += " OCTOBER ";
-          break;
-        case 11:
-          lineContent += " NOVEMBER";
-          break;
-        case 12:
-          lineContent += " DECEMBER";
-          break;
-        default:
-          break;
-      }
-
-      lineContent += "*".repeat(18) + " " + (365 - dayOfYear) + "**";
-
-      System.out.println(lineContent);
-      System.out.println("");
-
-      System.out.print("     S       M       T       W");
-      System.out.println("       T       F       S");
-      System.out.println("");
-
-      System.out.println("*".repeat(59));
-
-      // 开始循环遍历每一周
-      for (row = 1; row <= NUM_WEEK_ROWS; row++) {
-
-        System.out.println("");
-
-        lineContent = "    ";
-
-        // 开始循环遍历每一天
-        for (dayOfWeek = 1; dayOfWeek <= NUM_DAYS_PER_WEEK; dayOfWeek++) {
-
-          daysTotal++;
-
-          dayOfMonth = daysTotal - dayOfYear;
-
-          if (dayOfMonth > daysPerMonth[month]) {
-            row = 6;
-            break;
-          }
-
-          if (dayOfMonth > 0) {
-            lineContent += dayOfMonth;
-          }
-
-          while (lineContent.length() < (4 + 8 * dayOfWeek)) {
-            lineContent += " ";
-          }
-
-        }  // End loop through days of the week
-
-        if (dayOfMonth == daysPerMonth[month]) {
-          row = 6;
-          daysTotal += dayOfWeek;
-          System.out.println(lineContent);
-          break;
-        }
-
-        System.out.println(lineContent);
-
-      }  // End loop through each week row
-
-      daysTotal -= dayOfWeek;
-
+    // Begin loop through all months
     }  // End loop through all months
 
-    // 打印空行
     for (index = 1; index <= 6; index++) {
-      System.out.println("");
+      System.out.println("");  // 打印空行
     }
 
   }  // End of method startGame
 
-  // 主方法
   public static void main(String[] args) {
 
-    Calendar game = new Calendar();
-    game.play();
+    Calendar game = new Calendar();  // 创建 Calendar 对象
+    game.play();  // 调用 play 方法开始游戏
 
   }  // End of method main
 

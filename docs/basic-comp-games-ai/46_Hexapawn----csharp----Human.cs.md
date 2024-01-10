@@ -1,8 +1,7 @@
 # `basic-computer-games\46_Hexapawn\csharp\Human.cs`
 
 ```
-
-// 引入所需的命名空间
+// 引入必要的命名空间
 using System;
 using System.Linq;
 using Games.Common.IO;
@@ -25,7 +24,7 @@ internal class Human
         _io = io;
     }
 
-    // 定义 Move 方法，用于玩家进行移动
+    // 定义 Move 方法，用于处理玩家移动
     public void Move(Board board)
     {
         // 循环，直到玩家输入合法的移动
@@ -48,7 +47,7 @@ internal class Human
         // 遍历所有白色棋子的位置
         foreach (var from in AllCells.Where(c => c > 3))
         {
-            // 如果当前位置没有白色棋子，则继续下一次循环
+            // 如果当前位置没有白色棋子，则继续下一个位置
             if (board[from] != White) { continue; }
 
             // 如果当前位置有合法的移动，则返回 true
@@ -71,7 +70,7 @@ internal class Human
     // 判断棋盘上是否没有白色棋子
     public bool HasNoPawns(Board board) => board.All(c => c != White);
 
-    // 尝试执行移动，如果移动合法则执行并返回 true，否则返回 false
+    // 尝试执行玩家的移动
     public bool TryExecute(Board board, Move move)
     {
         // 如果移动的起始位置没有白色棋子，则返回 false
@@ -90,5 +89,4 @@ internal class Human
         return false;
     }
 }
-
 ```

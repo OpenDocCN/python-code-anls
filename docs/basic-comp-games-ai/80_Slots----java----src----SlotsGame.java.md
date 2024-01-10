@@ -1,16 +1,14 @@
 # `basic-computer-games\80_Slots\java\src\SlotsGame.java`
 
 ```
-
-# 定义一个名为SlotsGame的公共类
+# 定义名为SlotsGame的公共类
 public class SlotsGame {
-    # 主方法，程序的入口
+    # 定义名为main的公共静态方法，参数为字符串数组
     public static void main(String[] args) {
-        # 创建一个名为slots的Slots对象
+        # 创建Slots类的实例对象
         Slots slots = new Slots();
-        # 调用Slots对象的play方法开始游戏
+        # 调用Slots类的play方法
         slots.play();
     }
 }
-
 ```

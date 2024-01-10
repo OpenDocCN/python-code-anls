@@ -1,7 +1,6 @@
 # `basic-computer-games\82_Stars\python\stars.py`
 
 ```
-
 """
 Stars
 
@@ -28,8 +27,8 @@ Python port by Jeff Jetton, 2019
 import random
 
 # Some contants
-MAX_NUM = 100  # 设置最大的随机数
-MAX_GUESSES = 7  # 设置最大的猜测次数
+MAX_NUM = 100  # 定义最大数值为100
+MAX_GUESSES = 7  # 定义最大猜测次数为7
 
 
 def print_instructions() -> None:
@@ -54,7 +53,7 @@ def print_stars(secret_number, guess) -> None:
 
 
 def get_guess(prompt: str) -> int:
-    # 获取玩家的猜测
+    # 获取用户输入的猜测
     while True:
         guess_str = input(prompt)
         if guess_str.isdigit():
@@ -64,7 +63,7 @@ def get_guess(prompt: str) -> int:
 
 def main() -> None:
     # Display intro text
-    # 显示游戏介绍
+    # 显示游戏介绍文本
     print("\n                   Stars")
     print("Creative Computing  Morristown, New Jersey")
     print("\n\n")
@@ -75,71 +74,64 @@ def main() -> None:
         print_instructions()
 
     still_playing = True
+    # 当仍在玩游戏时执行以下代码块
     while still_playing:
 
-        # "*** Computer thinks of a number"
-        # 计算机随机选择一个数字
+        # 电脑随机生成一个数字
         secret_number = random.randint(1, MAX_NUM)
         print("\n\nOK, I am thinking of a number, start guessing.")
 
-        # Init/start guess loop
         # 初始化/开始猜测循环
         guess_number = 0
         player_has_won = False
         while (guess_number < MAX_GUESSES) and not player_has_won:
 
             print()
+            # 获取玩家的猜测
             guess = get_guess("Your guess? ")
             guess_number += 1
 
             if guess == secret_number:
-                # "*** We have a winner"
-                # 玩家猜中了
+                # 玩家猜对了
                 player_has_won = True
                 print("**************************************************!!!")
                 print(f"You got it in {guess_number} guesses!!!")
 
             else:
+                # 打印星号提示玩家
                 print_stars(secret_number, guess)
 
-            # End of guess loop
+            # 猜测循环结束
 
-        # "*** Did not guess in [MAX_GUESS] guesses"
-        # 玩家没有在规定次数内猜中
+        # 玩家未在最大猜测次数内猜对
         if not player_has_won:
             print(f"\nSorry, that's {guess_number} guesses, number was {secret_number}")
 
-        # Keep playing?
-        # 继续游戏？
+        # 继续玩游戏？
         response = input("\nPlay again? ")
         if response.upper()[0] != "Y":
             still_playing = False
-
-
+# 如果当前模块是主程序，则执行 main() 函数
 if __name__ == "__main__":
     main()
 
 ######################################################################
 #
-# Porting Notes
+# 程序移植注意事项
 #
-#   The original program never exited--it just kept playing rounds
-#   over and over.  This version asks to continue each time.
+#   原始程序从不退出--它只是一直循环播放回合。这个版本在每次询问后都会要求继续。
 #
 #
-# Ideas for Modifications
+# 修改的想法
 #
-#   Let the player know how many guesses they have remaining after
-#   each incorrect guess.
+#   每次猜错后让玩家知道他们还有多少次猜测机会。
 #
-#   Ask the player to select a skill level at the start of the game,
-#   which will affect the values of MAX_NUM and MAX_GUESSES.
-#   For example:
+#   在游戏开始时要求玩家选择一个技能级别，这将影响 MAX_NUM 和 MAX_GUESSES 的值。
+#   例如：
 #
-#       Easy   = 8 guesses, 1 to 50
-#       Medium = 7 guesses, 1 to 100
-#       Hard   = 6 guesses, 1 to 200
+#       简单   = 8 次猜测，1 到 50
+#       中等 = 7 次猜测，1 到 100
+#       困难   = 6 次猜测，1 到 200
 #
 ######################################################################
-
 ```

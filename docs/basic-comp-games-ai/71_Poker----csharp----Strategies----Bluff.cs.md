@@ -1,20 +1,17 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\Bluff.cs`
 
 ```
-
-# 命名空间为Poker.Strategies，表示这个类属于Poker.Strategies命名空间
+# 命名空间为Poker.Strategies，表示该类属于Poker.Strategies命名空间
 internal class Bluff : Bet
 {
-    # 构造函数，接受一个amount参数和一个可空的keepMask参数，调用基类的构造函数
+    # 构造函数，接受赌注金额和保留掩码作为参数
     public Bluff(int amount, int? keepMask)
-        : base(amount)
+        : base(amount)  # 调用基类Bet的构造函数，传入赌注金额
     {
-        # 设置当前类的KeepMask属性为传入的keepMask参数
-        KeepMask = keepMask;
+        KeepMask = keepMask;  # 设置保留掩码
     }
 
-    # 重写基类的KeepMask属性，表示当前类的保留掩码
+    # 重写基类的KeepMask属性，表示保留掩码
     public override int? KeepMask { get; }
 }
-
 ```

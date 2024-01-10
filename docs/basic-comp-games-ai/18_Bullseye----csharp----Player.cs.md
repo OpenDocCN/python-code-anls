@@ -1,7 +1,6 @@
 # `basic-computer-games\18_Bullseye\csharp\Player.cs`
 
 ```
-
 namespace Bullseye
 {
     /// <summary>
@@ -24,15 +23,12 @@ namespace Bullseye
         /// <summary>
         /// Name of the player
         /// </summary>
-        // 获取玩家的名字
         public string Name { get; private set; }
 
         /// <summary>
         /// Current score of the player
         /// </summary>
-        // 获取或设置玩家的分数
         public int Score { get; set; }
     }
 }
-
 ```

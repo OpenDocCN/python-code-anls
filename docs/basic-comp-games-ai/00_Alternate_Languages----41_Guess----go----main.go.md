@@ -1,111 +1,104 @@
 # `basic-computer-games\00_Alternate_Languages\41_Guess\go\main.go`
 
 ```
-
 package main
 
 import (
-	"bufio" // 导入 bufio 包，用于读取输入
-	"fmt" // 导入 fmt 包，用于格式化输出
-	"math" // 导入 math 包，用于数学计算
-	"math/rand" // 导入 math/rand 包，用于生成随机数
-	"os" // 导入 os 包，用于操作系统功能
-	"strconv" // 导入 strconv 包，用于字符串和基本数据类型之间的转换
-	"time" // 导入 time 包，用于时间相关操作
+    "bufio"  // 导入用于读取输入的包
+    "fmt"    // 导入用于格式化输出的包
+    "math"   // 导入数学函数的包
+    "math/rand"  // 导入随机数生成的包
+    "os"     // 导入操作系统功能的包
+    "strconv"  // 导入字符串转换为数字的包
+    "time"   // 导入时间相关的包
 )
 
 func printIntro() {
-	// 打印游戏介绍信息
-	fmt.Println("                   Guess")
-	fmt.Println("Creative Computing  Morristown, New Jersey")
-	fmt.Println()
-	fmt.Println()
-	fmt.Println()
-	fmt.Println("This is a number guessing game. I'll think")
-	fmt.Println("of a number between 1 and any limit you want.")
-	fmt.Println("Then you have to guess what it is")
+    fmt.Println("                   Guess")  // 输出游戏标题
+    fmt.Println("Creative Computing  Morristown, New Jersey")  // 输出游戏信息
+    fmt.Println()  // 输出空行
+    fmt.Println()  // 输出空行
+    fmt.Println()  // 输出空行
+    fmt.Println("This is a number guessing game. I'll think")  // 输出游戏说明
+    fmt.Println("of a number between 1 and any limit you want.")  // 输出游戏说明
+    fmt.Println("Then you have to guess what it is")  // 输出游戏说明
 }
 
 func getLimit() (int, int) {
-	// 获取用户输入的限制值
-	scanner := bufio.NewScanner(os.Stdin)
+    scanner := bufio.NewScanner(os.Stdin)  // 创建用于读取输入的扫描器
 
-	for {
-		fmt.Println("What limit do you want?")
-		scanner.Scan()
+    for {
+        fmt.Println("What limit do you want?")  // 提示用户输入限制值
+        scanner.Scan()  // 读取用户输入
 
-		// 将用户输入的字符串转换为整数
-		limit, err := strconv.Atoi(scanner.Text())
-		if err != nil || limit < 0 {
-			fmt.Println("Please enter a number greater or equal to 1")
-			continue
-		}
+        limit, err := strconv.Atoi(scanner.Text())  // 将用户输入的字符串转换为整数
+        if err != nil || limit < 0 {  // 如果转换出错或者输入值小于0
+            fmt.Println("Please enter a number greater or equal to 1")  // 提示用户重新输入
+            continue  // 继续循环
+        }
 
-		// 根据用户输入的限制值计算猜测次数的目标值
-		limitGoal := int((math.Log(float64(limit)) / math.Log(2)) + 1)
-		return limit, limitGoal
-	}
+        limitGoal := int((math.Log(float64(limit)) / math.Log(2)) + 1)  // 计算猜测次数的上限
+        return limit, limitGoal  // 返回限制值和猜测次数的上限
+    }
 
 }
 
 func main() {
-	// 设置随机数种子
-	rand.Seed(time.Now().UnixNano())
-	// 打印游戏介绍
-	printIntro()
+    rand.Seed(time.Now().UnixNano())  // 使用当前时间作为随机数种子
+    printIntro()  // 调用打印游戏介绍的函数
 
-	// 获取用户输入的限制值和猜测次数的目标值
-	scanner := bufio.NewScanner(os.Stdin)
-	limit, limitGoal := getLimit()
+    scanner := bufio.NewScanner(os.Stdin)  // 创建用于读取输入的扫描器
 
-	// 初始化猜测次数、是否继续猜测、是否赢得游戏、计算机猜测的数字
-	guessCount := 1
-	stillGuessing := true
-	won := false
-	myGuess := int(float64(limit)*rand.Float64() + 1)
+    limit, limitGoal := getLimit()  // 调用获取限制值的函数
 
-	// 打印计算机思考的数字范围
-	fmt.Printf("I'm thinking of a number between 1 and %d\n", limit)
-	fmt.Println("Now you try to guess what it is.")
+    guessCount := 1  // 初始化猜测次数为1
+    stillGuessing := true  // 初始化是否继续猜测的标志为true
+    won := false  // 初始化是否猜中的标志为false
+    myGuess := int(float64(limit)*rand.Float64() + 1)  // 生成一个随机数作为答案
 
-	// 循环进行猜测
-	for stillGuessing {
-		scanner.Scan()
-		n, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			fmt.Println("Please enter a number greater or equal to 1")
-			continue
-		}
+    fmt.Printf("I'm thinking of a number between 1 and %d\n", limit)  // 输出提示猜测范围
+    fmt.Println("Now you try to guess what it is.")  // 输出提示玩家开始猜测
 
-		if n < 0 {
-			break
-		}
+    for stillGuessing {  // 进入猜测循环
+        scanner.Scan()  // 读取用户输入
+        n, err := strconv.Atoi(scanner.Text())  // 将用户输入的字符串转换为整数
+        if err != nil {  // 如果转换出错
+            fmt.Println("Please enter a number greater or equal to 1")  // 提示用户重新输入
+            continue  // 继续循环
+        }
 
-		fmt.Print("\n\n\n")
-		if n < myGuess {
-			fmt.Println("Too low. Try a bigger answer")
-			guessCount += 1
-		} else if n > myGuess {
-			fmt.Println("Too high. Try a smaller answer")
-			guessCount += 1
-		} else {
-			fmt.Printf("That's it! You got it in %d tries\n", guessCount)
-			won = true
-			stillGuessing = false
-		}
-	}
+        if n < 0 {  // 如果输入值小于0
+            break  // 退出循环
+        }
 
-	// 根据猜测次数判断游戏结果
-	if won {
-		if guessCount < limitGoal {
-			fmt.Println("Very good.")
-		} else if guessCount == limitGoal {
-			fmt.Println("Good.")
-		} else {
-			fmt.Printf("You should have been able to get it in only %d guesses.\n", limitGoal)
-		}
-		fmt.Print("\n\n\n")
-	}
-}
-
+        fmt.Print("\n\n\n")  // 输出空行
+        if n < myGuess {  // 如果猜测值小于答案
+            fmt.Println("Too low. Try a bigger answer")  // 提示猜测值过小
+            guessCount += 1  // 猜测次数加1
+        } else if n > myGuess {  // 如果猜测值大于答案
+            fmt.Println("Too high. Try a smaller answer")  // 提示猜测值过大
+            guessCount += 1  // 猜测次数加1
+        } else {  // 如果猜测值等于答案
+            fmt.Printf("That's it! You got it in %d tries\n", guessCount)  // 输出猜中提示和猜测次数
+            won = true  // 设置猜中标志为true
+            stillGuessing = false  // 设置继续猜测标志为false
+        }
+    }
+    # 如果游戏胜利
+    if won:
+        # 如果猜测次数小于目标次数
+        if guessCount < limitGoal:
+            # 打印"非常好"
+            fmt.Println("Very good.")
+        # 如果猜测次数等于目标次数
+        else if guessCount == limitGoal:
+            # 打印"好"
+            fmt.Println("Good.")
+        # 如果猜测次数大于目标次数
+        else:
+            # 打印"你应该只需要%d次猜测就能猜中"
+            fmt.Printf("You should have been able to get it in only %d guesses.\n", limitGoal)
+        # 打印空行
+        fmt.Print("\n\n\n")
+# 闭合前面的函数定义
 ```

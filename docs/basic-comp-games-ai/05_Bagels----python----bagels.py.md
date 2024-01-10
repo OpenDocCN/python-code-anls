@@ -1,7 +1,6 @@
 # `basic-computer-games\05_Bagels\python\bagels.py`
 
 ```
-
 """
 Bagels
 
@@ -50,8 +49,8 @@ def print_rules() -> None:
 
 
 def pick_number() -> List[str]:
-    # 选择一个三位数作为游戏的目标数字
-    # 注意：此处返回的是一个包含每个数字的单独字符串的列表，而不是一个整数或字符串
+    # 选择一个三位数作为秘密数字
+    # 注意：这里返回的是一个包含每个数字的单独字符串的列表，而不是一个整数或字符串
     numbers = list(range(10))
     random.shuffle(numbers)
     num = numbers[0:3]
@@ -60,35 +59,41 @@ def pick_number() -> List[str]:
 
 
 def get_valid_guess(guesses: int) -> str:
-    # 获取玩家的猜测并验证其有效性
+    # 获取有效的猜测
     valid = False
+    # 当猜测不正确时，进入循环
     while not valid:
+        # 获取用户输入的猜测值，并显示猜测次数
         guess = input(f"Guess # {guesses}     ? ")
+        # 去除输入值两端的空格
         guess = guess.strip()
-        # 猜测必须是三个字符
+        # 猜测值必须是三个字符
         if len(guess) == 3:
             # 并且它们应该是数字
             if guess.isnumeric():
-                # 并且数字必须是唯一的
+                # 并且这些数字必须是唯一的
                 if len(set(guess)) == 3:
+                    # 猜测值有效，退出循环
                     valid = True
                 else:
+                    # 打印错误消息，提示用户猜测值中不能有相同的数字
                     print("Oh, I forgot to tell you that the number I have in mind")
                     print("has no two digits the same.")
             else:
+                # 打印错误消息，提示用户输入必须是数字
                 print("What?")
         else:
+            # 打印错误消息，提示用户猜测值必须是三位数
             print("Try guessing a three-digit number.")
 
+    # 返回有效的猜测值
     return guess
-
-
 def build_result_string(num: List[str], guess: str) -> str:
-    # 根据玩家的猜测和目标数字构建结果字符串
     result = ""
 
-    # 正确的数字但位置错误
+    # Correct digits in wrong place
     for i in range(2):
+        # 检查数字是否在错误的位置
         if num[i] == guess[i + 1]:
             result += "PICO "
         if num[i + 1] == guess[i]:
@@ -98,12 +103,13 @@ def build_result_string(num: List[str], guess: str) -> str:
     if num[2] == guess[0]:
         result += "PICO "
 
-    # 正确的数字且位置正确
+    # Correct digits in right place
     for i in range(3):
+        # 检查数字是否在正确的位置
         if num[i] == guess[i]:
             result += "FERMI "
 
-    # 没有一个数字正确？
+    # Nothing right?
     if result == "":
         result = "BAGELS"
 
@@ -111,11 +117,11 @@ def build_result_string(num: List[str], guess: str) -> str:
 
 
 def main() -> None:
-    # 游戏介绍
+    # Intro text
     print("\n                Bagels")
     print("Creative Computing  Morristown, New Jersey\n\n")
 
-    # 除了N*之外的任何输入都会显示规则
+    # Anything other than N* will show the rules
     response = input("Would you like the rules (Yes or No)? ")
     if len(response) > 0:
         if response.upper()[0] != "N":
@@ -127,7 +133,7 @@ def main() -> None:
     still_running = True
     while still_running:
 
-        # 新的回合
+        # New round
         num = pick_number()
         num_str = "".join(num)
         guesses = 1
@@ -157,13 +163,13 @@ def main() -> None:
                 valid_response = True
                 if response.upper()[0] != "Y":
                     still_running = False
-
+    # 如果赢得的游戏数大于0，则打印出获得的积分加成信息
     if games_won > 0:
         print(f"\nA {games_won} point Bagels buff!!")
 
+    # 打印结束语
     print("Hope you had fun.  Bye.\n")
-
-
+# 如果当前模块是主程序，则执行 main() 函数
 if __name__ == "__main__":
     main()
 
@@ -171,21 +177,14 @@ if __name__ == "__main__":
 #
 # Porting Notes
 #
-#   The original program did an unusually good job of validating the
-#   player's input (compared to many of the other programs in the
-#   book). Those checks and responses have been exactly reproduced.
+#   原始程序在验证玩家输入方面做得非常出色（与本书中许多其他程序相比）。这些检查和响应已经完全复制。
 #
 #
 # Ideas for Modifications
 #
-#   It should probably mention that there's a maximum of MAX_NUM
-#   guesses in the instructions somewhere, shouldn't it?
+#   可能应该在说明中提到最大的猜测次数是 MAX_NUM，不是吗？
 #
-#   Could this program be written to use anywhere from, say 2 to 6
-#   digits in the number to guess? How would this change the routine
-#   that creates the "result" string?
+#   这个程序能否被编写成使用从2到6位数字来猜测？这将如何改变创建“result”字符串的程序？
 #
 ######################################################################
-
-
 ```

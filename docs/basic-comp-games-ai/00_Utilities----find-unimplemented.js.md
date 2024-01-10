@@ -38,41 +38,40 @@ const getFilesRecursive = async (path, extension) => { // 异步函数，递归�
   });
 };
 
-const getPuzzleFolders = () => { // 获取谜题文件夹
+const getPuzzleFolders = () => { // 获取谜题文件夹列表
   return fs
-    .readdirSync(ROOT_PATH, { withFileTypes: true }) // 同步读取指定目录下的文件
+    .readdirSync(ROOT_PATH, { withFileTypes: true }) // 同步读取根目录下的文件和文件夹
     .filter((dirEntry) => dirEntry.isDirectory()) // 过滤出文件夹
     .filter(
       (dirEntry) =>
         ![".git", "node_modules", "00_Utilities", "buildJvm"].includes(dirEntry.name) // 过滤掉特定的文件夹
     )
-    .map((dirEntry) => dirEntry.name); // 映射出文件夹名
+    .map((dirEntry) => dirEntry.name); // 映射出文件夹名列表
 };
 
 (async () => { // 异步自执行函数
   const result = {}; // 存储结果的对象
   if (process.argv.length > 2) { // 如果命令行参数大于2
-    languages = languages.filter((language) => process.argv.slice(2).includes(language.name)); // 过滤出指定的编程语言
+    languages = languages.filter((language) => process.argv.slice(2).includes(language.name)); // 根据命令行参数过滤语言列表
   }
-  for (const { name: language } of languages) { // 遍历编程语言
+  for (const { name: language } of languages) { // 遍历语言列表
     result[language] = []; // 初始化结果对象
   }
 
-  const puzzleFolders = getPuzzleFolders(); // 获取谜题文件夹
-  for (const puzzleFolder of puzzleFolders) { // 遍历谜题文件夹
-    for (const { name: language, extension } of languages) { // 遍历编程语言
-      const files = await getFilesRecursive( // 获取指定路径下指定扩展名的文件
+  const puzzleFolders = getPuzzleFolders(); // 获取谜题文件夹列表
+  for (const puzzleFolder of puzzleFolders) { // 遍历谜题文件夹列表
+    for (const { name: language, extension } of languages) { // 遍历语言列表
+      const files = await getFilesRecursive( // 获取指定路径下指定扩展名的文件列表
         `${ROOT_PATH}/${puzzleFolder}/${language}`, extension
       );
-      if (files.length === 0) { // 如果文件数量为0
-        result[language].push(puzzleFolder); // 将文件夹名加入对应编程语言的结果数组
+      if (files.length === 0) { // 如果文件列表为空
+        result[language].push(puzzleFolder); // 将文件夹名加入对应语言的结果列表
       }
     }
   }
-  console.log('Unimplementation by language:') // 打印提示信息
-  console.dir(result); // 打印结果对象
+  console.log('Unimplementation by language:') // 输出提示信息
+  console.dir(result); // 输出结果对象
 })();
 
-return; // 返回结果对象
-*/
+return; // 返回
 ```

@@ -1,42 +1,51 @@
 # `basic-computer-games\59_Lunar_LEM_Rocket\javascript\lunar.js`
 
 ```
-
-// 定义一个打印函数，将字符串输出到指定的元素中
+// 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {
     document.getElementById("output").appendChild(document.createTextNode(str));
 }
 
-// 定义一个输入函数，返回一个 Promise 对象，当用户输入完成时，Promise 对象状态变为 resolved
+// 定义一个输入函数，返回一个 Promise 对象
 function input()
 {
     var input_element;
     var input_str;
 
     return new Promise(function (resolve) {
+                       // 创建一个输入框元素
                        input_element = document.createElement("INPUT");
 
-                       // 输出提示符
+                       // 打印提示符
                        print("? ");
+                       // 设置输入框类型和长度
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
+                       // 将输入框添加到输出元素中
                        document.getElementById("output").appendChild(input_element);
+                       // 让输入框获得焦点
                        input_element.focus();
                        input_str = undefined;
+                       // 监听键盘事件
                        input_element.addEventListener("keydown", function (event) {
                                                       if (event.keyCode == 13) {
+                                                      // 获取输入的字符串
                                                       input_str = input_element.value;
+                                                      // 从输出元素中移除输入框
                                                       document.getElementById("output").removeChild(input_element);
+                                                      // 打印输入的字符串
                                                       print(input_str);
+                                                      // 打印换行符
                                                       print("\n");
+                                                      // 解析输入的字符串
                                                       resolve(input_str);
                                                       }
                                                       });
                        });
 }
 
-// 生成指定数量的空格字符串
+// 定义一个生成指定数量空格的函数
 function tab(space)
 {
     var str = "";
@@ -60,7 +69,7 @@ var g;
 var z;
 var d;
 
-// 定义一系列公式函数
+// 定义一个函数，设置一组公式
 function formula_set_1()
 {
     l = l + s;
@@ -70,134 +79,51 @@ function formula_set_1()
     v = j;
 }
 
+// 定义另一组公式
 function formula_set_2()
 {
     q = s * k / m;
     j = v + g * s + z * (-q - q * q / 2 - Math.pow(q, 3) / 3 - Math.pow(q, 4) / 4 - Math.pow(q, 5) / 5);
+    # 计算变量 i 的值
     i = a - g * s * s / 2 - v * s + z * s * (q / 2 + Math.pow(q, 2) / 6 + Math.pow(q, 3) / 12 + Math.pow(q, 4) / 20 + Math.pow(q, 5) / 30);
-}
-
+// 定义函数 formula_set_3，计算并更新变量 s 直到其小于 5e-3
 function formula_set_3()
 {
+    // 当 s 大于等于 5e-3 时执行循环
     while (s >= 5e-3) {
+        // 根据给定公式计算 d
         d = v + Math.sqrt(v * v + 2 * a * (g - z * k / m));
+        // 根据给定公式计算 s
         s = 2 * a / d;
+        // 调用 formula_set_2 函数
         formula_set_2();
+        // 调用 formula_set_1 函数
         formula_set_1();
     }
 }
 
-// 主程序，使用 async 函数定义
+// 主程序
 async function main()
 {
-    // 输出标题
+    // 打印标题
     print(tab(33) + "LUNAR\n");
+    // 打印信息
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
+    // 打印空行
     print("\n");
     print("\n");
     print("\n");
+    // 打印模拟信息
     print("THIS IS A COMPUTER SIMULATION OF AN APOLLO LUNAR\n");
     print("LANDING CAPSULE.\n");
+    // 打印空行
     print("\n");
     print("\n");
+    // 打印故障信息
     print("THE ON-BOARD COMPUTER HAS FAILED (IT WAS MADE BY\n");
     print("XEROX) SO YOU HAVE TO LAND THE CAPSULE MANUALLY.\n");
-    while (1) {
-        // 输出提示信息
-        print("\n");
-        print("SET BURN RATE OF RETRO ROCKETS TO ANY VALUE BETWEEN\n");
-        print("0 (FREE FALL) AND 200 (MAXIMUM BURN) POUNDS PER SECOND.\n");
-        print("SET NEW BURN RATE EVERY 10 SECONDS.\n");
-        print("\n");
-        print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,000 LBS.\n");
-        print("\n");
-        print("\n");
-        print("\n");
-        print("GOOD LUCK\n");
-        // 初始化一系列变量
-        l = 0;
-        print("\n");
-        print("SEC\tMI + FT\t\tMPH\tLB FUEL\tBURN RATE\n");
-        print("\n");
-        a = 120;
-        v = 1;
-        m = 32500;
-        n = 16500;
-        g = 1e-3;
-        z = 1.8;
-        while (1) {
-            // 输出当前状态信息
-            print(l + "\t" + Math.floor(a) + " + " + Math.floor(5280 * (a - Math.floor(a))) + " \t" + Math.floor(3600 * v * 100) / 100 + "\t" + (m - n) + "\t");
-            k = parseFloat(await input());
-            t = 10;
-            should_exit = false;
-            while (1) {
-                if (m - n < 1e-3)
-                    break;
-                if (t < 1e-3)
-                    break;
-                s = t;
-                if (m < n + s * k)
-                    s = (m - n) / k;
-                formula_set_2();
-                if (i <= 0) {
-                    formula_set_3();
-                    should_exit = true;
-                    break;
-                }
-                if (v > 0) {
-                    if (j < 0) {
-                        do {
-                            w = (1 - m * g / (z * k)) / 2;
-                            s = m * v / (z * k * (w + Math.sqrt(w * w + v / z))) + 0.05;
-                            formula_set_2();
-                            if (i <= 0) {
-                                formula_set_3();
-                                should_exit = true;
-                                break;
-                            }
-                            formula_set_1();
-                            if (j > 0)
-                                break;
-                        } while (v > 0) ;
-                        if (should_exit)
-                            break;
-                        continue;
-                    }
-                }
-                formula_set_1();
-            }
-            if (should_exit)
-                break;
-            if (m - n < 1e-3) {
-                print("FUEL OUT AT " + l + " SECOND\n");
-                s = (-v * Math.sqrt(v * v + 2 * a * g)) / g;
-                v = v + g * s;
-                l = l + s;
-                break;
-            }
-        }
-        w = 3600 * v;
-        print("ON MOON AT " + l + " SECONDS - IMPACT VELOCITY " + w + " MPH\n");
-        if (w <= 1.2) {
-            print("PERFECT LANDING!\n");
-        } else if (w <= 10) {
-            print("GOOD LANDING (COULD BE BETTER)\n");
-        } else if (w <= 60) {
-            print("CRAFT DAMAGE... YOU'RE STRANDED HERE UNTIL A RESCUE\n");
-            print("PARTY ARRIVES. HOPE YOU HAVE ENOUGH OXYGEN!\n");
-        } else {
-            print("SORRY THERE WERE NO SURVIVORS. YOU BLEW IT!\n");
-            print("IN FACT, YOU BLASTED A NEW LUNAR CRATER " + (w * 0.227) + " FEET DEEP!\n");
-        }
-        print("\n");
-        print("\n");
-        print("\n");
-        print("TRY AGAIN??\n");
-    }
 }
 
 // 调用主程序
 main();
-
 ```

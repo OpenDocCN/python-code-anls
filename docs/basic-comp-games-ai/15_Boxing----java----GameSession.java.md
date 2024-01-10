@@ -1,51 +1,55 @@
 # `basic-computer-games\15_Boxing\java\GameSession.java`
 
 ```
-
 /**
  * Game Session
  * The session store the state of the game
  */
 public class GameSession {
-    // 存储玩家和对手的信息
+    // 玩家对象
     private final Player player;
+    // 对手对象
     private final Player opponent;
-    // 对手和玩家的回合获胜次数
+    // 对手获胜回合数
     private int opponentRoundWins = 0;
+    // 玩家获胜回合数
     private int playerRoundWins = 0;
 
-    // 玩家和对手的得分
+    // 玩家得分
     int playerPoints = 0;
+    // 对手得分
     int opponentPoints = 0;
-    // 玩家是否被击倒
+    // 是否被击倒
     boolean knocked = false;
 
-    // 构造函数，初始化玩家和对手
+    // 游戏会话构造函数
     GameSession(Player player, Player opponent) {
         this.player = player;
         this.opponent = opponent;
     }
 
-    // 获取玩家和对手的方法
+    // 获取玩家对象
     public Player getPlayer() { return player;}
+    // 获取对手对象
     public Player getOpponent() { return opponent;}
 
-    // 设置玩家被击倒的方法
+    // 设置被击倒状态
     public void setKnocked() {
         knocked = true;
     }
 
-    // 重置玩家和对手的得分
+    // 重置得分
     public void resetPoints() {
         playerPoints = 0;
         opponentPoints = 0;
     }
 
-    // 增加玩家和对手的得分
+    // 增加玩家得分
     public void addPlayerPoints(int ptos) { playerPoints+=ptos;}
+    // 增加对手得分
     public void addOpponentPoints(int ptos) { opponentPoints+=ptos;}
 
-    // 获取玩家和对手的得分
+    // 获取玩家得分或对手得分
     public int getPoints(Player player) {
         if(player.isPlayer())
             return playerPoints;
@@ -53,7 +57,7 @@ public class GameSession {
             return opponentPoints;
     }
 
-    // 增加玩家和对手的回合获胜次数
+    // 增加获胜回合数
     public void addRoundWind(Player player) {
         if(player.isPlayer()) playerRoundWins++; else opponentRoundWins++;
     }
@@ -63,7 +67,7 @@ public class GameSession {
         return (opponentRoundWins >= 2 || playerRoundWins >= 2);
     }
 
-    // 判断当前回合的赢家
+    // 判断当前回合是否获胜
     public boolean isRoundWinner(Player player) {
         if (player.isPlayer())
             return playerPoints > opponentPoints;
@@ -71,7 +75,7 @@ public class GameSession {
             return opponentPoints > playerPoints;
     }
 
-    // 判断游戏的赢家
+    // 判断游戏是否获胜
     public boolean isGameWinner(Player player) {
         if (player.isPlayer())
             return playerRoundWins > 2;
@@ -84,5 +88,4 @@ public class GameSession {
         return knocked;
     }
 }
-
 ```

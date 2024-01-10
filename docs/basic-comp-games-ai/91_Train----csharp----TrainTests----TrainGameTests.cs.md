@@ -1,68 +1,56 @@
 # `basic-computer-games\91_Train\csharp\TrainTests\TrainGameTests.cs`
 
 ```
+using Train;  // 导入Train命名空间
+using Xunit;  // 导入Xunit测试框架
 
-# 引入Train命名空间
-using Train;
-# 引入Xunit测试框架
-using Xunit;
-
-# 定义TrainGameTests类
-namespace TrainTests
+namespace TrainTests  // 声明TrainTests命名空间
 {
-    public class TrainGameTests
+    public class TrainGameTests  // 声明TrainGameTests类
     {
-        # 测试生成的随机数是否大于等于给定的最小值
-        [Fact]
-        public void MiniumRandomNumber()
+        [Fact]  // 声明测试方法
+        public void MiniumRandomNumber()  // 测试生成的随机数是否大于等于10
         {
-            TrainGame game = new TrainGame();
-            Assert.True(game.GenerateRandomNumber(10, 10) >= 10);
+            TrainGame game = new TrainGame();  // 创建TrainGame对象
+            Assert.True(game.GenerateRandomNumber(10, 10) >= 10);  // 断言生成的随机数是否大于等于10
         }
 
-        # 测试生成的随机数是否小于等于给定的最大值
-        [Fact]
-        public void MaximumRandomNumber()
+        [Fact]  // 声明测试方法
+        public void MaximumRandomNumber()  // 测试生成的随机数是否小于等于110
         {
-            TrainGame game = new TrainGame();
-            Assert.True(game.GenerateRandomNumber(10, 10) <= 110);
+            TrainGame game = new TrainGame();  // 创建TrainGame对象
+            Assert.True(game.GenerateRandomNumber(10, 10) <= 110);  // 断言生成的随机数是否小于等于110
         }
 
-        # 测试输入是否为"y"时返回true
-        [Fact]
-        public void IsInputYesWhenY()
+        [Fact]  // 声明测试方法
+        public void IsInputYesWhenY()  // 测试输入是否为"y"时返回true
         {
-            Assert.True(TrainGame.IsInputYes("y"));
+            Assert.True(TrainGame.IsInputYes("y"));  // 断言输入为"y"时返回true
         }
 
-        # 测试输入不为"y"时返回false
-        [Fact]
-        public void IsInputYesWhenNotY()
+        [Fact]  // 声明测试方法
+        public void IsInputYesWhenNotY()  // 测试输入不为"y"时返回false
         {
-            Assert.False(TrainGame.IsInputYes("a"));
+            Assert.False(TrainGame.IsInputYes("a"));  // 断言输入不为"y"时返回false
         }
 
-        # 测试计算车辆行程时间
-        [Fact]
-        public void CarDurationTest()
+        [Fact]  // 声明测试方法
+        public void CarDurationTest()  // 测试计算车辆行程时间
         {
-            Assert.Equal(1, TrainGame.CalculateCarJourneyDuration(30, 1, 15) );
+            Assert.Equal(1, TrainGame.CalculateCarJourneyDuration(30, 1, 15) );  // 断言计算得到的行程时间是否等于1
         }
 
-        # 测试两个数值是否在允许的误差范围内
-        [Fact]
-        public void IsWithinAllowedDifference()
+        [Fact]  // 声明测试方法
+        public void IsWithinAllowedDifference()  // 测试两个数是否在允许的误差范围内
         {
-            Assert.True(TrainGame.IsWithinAllowedDifference(5,5));
+            Assert.True(TrainGame.IsWithinAllowedDifference(5,5));  // 断言两个数是否在允许的误差范围内
         }
 
-        # 测试两个数值是否不在允许的误差范围内
-        [Fact]
-        public void IsNotWithinAllowedDifference()
+        [Fact]  // 声明测试方法
+        public void IsNotWithinAllowedDifference()  // 测试两个数是否不在允许的误差范围内
         {
-            Assert.False(TrainGame.IsWithinAllowedDifference(6, 5));
+            Assert.False(TrainGame.IsWithinAllowedDifference(6, 5));  // 断言两个数是否不在允许的误差范围内
         }
     }
 }
-
 ```

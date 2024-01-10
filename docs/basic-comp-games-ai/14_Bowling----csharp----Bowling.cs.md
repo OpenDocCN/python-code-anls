@@ -1,18 +1,18 @@
 # `basic-computer-games\14_Bowling\csharp\Bowling.cs`
 
 ```
-
-// 引入命名空间
+# 引入所需的命名空间
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// 声明命名空间
+# 命名空间 Bowling
 namespace Bowling
 {
-    // 在此处添加类、方法和其他代码
+    # 定义 Bowling 类
+    public class Bowling
+    }
 }
-
 ```
