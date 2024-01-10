@@ -2,56 +2,56 @@
 
 ```
 # 导入必要的库
-import chex  # 强化型检查库
-import flax.linen as nn  # Flax库中的神经网络模块
-import jax  # 用于自动微分和并行计算的库
-import jax.numpy as jnp  # JAX库中的NumPy接口
+import chex
+import flax.linen as nn
+import jax
+import jax.numpy as jnp
+# 导入自定义的数据类型 Dtype
+from transformer_vq.nn.types import Dtype
 
-from transformer_vq.nn.types import Dtype  # 从自定义模块中导入数据类型
-
-# 定义LayerNorm类，继承自nn.Module
+# 定义 LayerNorm 类，继承自 nn.Module
 class LayerNorm(nn.Module):
-    input_dim: int  # 输入维度
-    param_dtype: Dtype  # 参数数据类型
-    center: bool = False  # 默认为rms层归一化
-    norm: bool = True  # 是否进行归一化
-    gain: bool = True  # 是否进行增益
-    bias: bool = True  # 是否进行偏置
+    # 初始化函数，接受输入维度和参数数据类型
+    input_dim: int
+    param_dtype: Dtype
+    center: bool = False  # 默认情况下为 rms 层归一化
+    norm: bool = True
+    gain: bool = True
+    bias: bool = True
 
-    # 设置初始化方法
+    # 设置函数，用于初始化参数
     def setup(self):
         # 初始化参数的参数列表
         initializer_args = [[self.input_dim], self.param_dtype]
-        # 如果需要增益
+        # 如果需要 gain 参数，则初始化参数 g
         if self.gain:
-            # 初始化增益参数g
             self.g = self.param("g", jax.nn.initializers.ones, *initializer_args)
-# 如果存在偏置项，根据参数创建偏置参数b
-if self.bias:
-    self.b = self.param("b", jax.nn.initializers.zeros, *initializer_args)
+        # 如果需要 bias 参数，则初始化参数 b
+        if self.bias:
+            self.b = self.param("b", jax.nn.initializers.zeros, *initializer_args)
 
-# 定义类的调用方法，对输入x进行处理
-def __call__(self, x, eps=1e-6):
-    # 检查输入x的形状是否符合要求
-    chex.assert_shape(x, (..., self.input_dim))
-    # 获取输入x的数据类型
-    dtype = x.dtype
-    # 将输入x转换为float32类型
-    x = x.astype(jnp.float32)
-    # 如果需要中心化处理
-    if self.center:
-        x -= jnp.mean(x, axis=-1, keepdims=True)
-    # 如果需要归一化处理
-    if self.norm:
-        x *= jax.lax.rsqrt(eps + jnp.mean(jnp.square(x), axis=-1, keepdims=True))
-    # 构建广播形状
-    broadcast_shape = [1 for _ in range(x.ndim - 1)] + [self.input_dim]
-    # 如果存在增益项，对输入x进行增益处理
-    if self.gain:
-        x *= jnp.reshape(self.g, broadcast_shape)
-    # 如果存在偏置项，对输入x进行偏置处理
-    if self.bias:
-        x += jnp.reshape(self.b, broadcast_shape)
-    # 将处理后的x转换为原始数据类型并返回
-    return x.astype(dtype)
+    # 调用函数，实现 LayerNorm 的前向传播
+    def __call__(self, x, eps=1e-6):
+        # 检查输入 x 的形状是否符合要求
+        chex.assert_shape(x, (..., self.input_dim))
+        # 获取输入 x 的数据类型
+        dtype = x.dtype
+        # 将输入 x 转换为 jnp.float32 类型
+        x = x.astype(jnp.float32)
+        # 如果需要 center 参数，则对 x 进行中心化处理
+        if self.center:
+            x -= jnp.mean(x, axis=-1, keepdims=True)
+        # 如果需要 norm 参数，则对 x 进行归一化处理
+        if self.norm:
+            x *= jax.lax.rsqrt(eps + jnp.mean(jnp.square(x), axis=-1, keepdims=True))
+        # 构造广播形状
+        broadcast_shape = [1 for _ in range(x.ndim - 1)] + [self.input_dim]
+        # 如果需要 gain 参数，则对 x 进行缩放处理
+        if self.gain:
+            x *= jnp.reshape(self.g, broadcast_shape)
+        # 如果需要 bias 参数，则对 x 进行偏置处理
+        if self.bias:
+            x += jnp.reshape(self.b, broadcast_shape)
+        # 返回数据类型为 dtype 的 x
+        return x.astype(dtype)
 ```

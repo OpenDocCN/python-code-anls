@@ -11,9 +11,8 @@ def flattened_traversal(fn):
     def mask(tree):
         # 将树形结构展平为字典
         flat = flax.traverse_util.flatten_dict(tree)
-        # 对展平后的字典中的每个键值对应用传入的函数 fn，并重新构建成树形结构
+        # 将展平后的字典中的每个键值对传入参数函数 fn，并将结果重新组装成树形结构
         return flax.traverse_util.unflatten_dict({k: fn(k, v) for k, v in flat.items()})
-
     # 返回内部函数 mask
     return mask
 ```
