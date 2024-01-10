@@ -1,0 +1,43 @@
+digraph AFTFull {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=3, height=1.5,
+	]
+
+    inp [label="输入\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
+    llq [label="LinearQ\n[HidSize, ProjSize]", shape="box"]
+    llk [label="LinearK\n[HidSize, ProjSize]", shape="box"]
+    llv [label="LinearV\n[HidSize, ProjSize]", shape="box"]
+	w [label="W:Param\n[SeqLen, SeqLen]", shape="Mrecord"]
+    q [label="Q\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
+    k [label="K\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
+    v [label="V\n[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
+    σ [label="Sigmoid", shape="box"]
+    atten_op [label="exp(W) @ (exp(K) * V)\n/ exp(W) * exp(K)", shape="box"]
+    atten [label="[BatchSize,\n SeqLen,\n ProjSize]", shape="Mrecord"]
+    mul [label="*", shape="box"]
+    llo [label="LinearO\n[ProjSize, HidSize]", shape="box"]
+    oup [label="输出\n[BatchSize,\n SeqLen,\n HidSize]", shape="Mrecord"]
+    
+	inp -> llq
+	inp -> llk
+	inp -> llv
+	llq -> q
+	llk -> k
+	llv -> v
+	q -> σ
+	w -> atten_op
+	k -> atten_op
+	v -> atten_op
+	atten_op -> atten
+	σ -> mul
+	atten -> mul
+	mul -> llo
+	llo -> oup
+}
