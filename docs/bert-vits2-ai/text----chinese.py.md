@@ -1,89 +1,159 @@
 # `Bert-VITS2\text\chinese.py`
 
 ```
+# 导入 os 模块
+import os
+# 导入 re 模块
+import re
 
-# 导入所需的模块
-import os  # 导入操作系统模块
-import re  # 导入正则表达式模块
-import cn2an  # 导入中文数字和阿拉伯数字转换模块
-from pypinyin import lazy_pinyin, Style  # 从 pypinyin 模块中导入 lazy_pinyin 和 Style
-from text.symbols import punctuation  # 从 text.symbols 模块中导入标点符号列表
-from text.tone_sandhi import ToneSandhi  # 从 text.tone_sandhi 模块中导入 ToneSandhi 类
+# 导入 cn2an 模块
+import cn2an
+# 从 pypinyin 模块中导入 lazy_pinyin 和 Style
+from pypinyin import lazy_pinyin, Style
 
-# 获取当前文件路径
+# 从 text.symbols 模块中导入 punctuation
+from text.symbols import punctuation
+# 从 text.tone_sandhi 模块中导入 ToneSandhi
+from text.tone_sandhi import ToneSandhi
+
+# 获取当前文件所在路径
 current_file_path = os.path.dirname(__file__)
-# 从文件中读取拼音到符号的映射关系，存储在 pinyin_to_symbol_map 中
+# 读取 opencpop-strict.txt 文件中的内容，创建拼音到符号的映射字典
 pinyin_to_symbol_map = {
     line.split("\t")[0]: line.strip().split("\t")[1]
     for line in open(os.path.join(current_file_path, "opencpop-strict.txt")).readlines()
 }
 
-# 导入 jieba 分词模块
+# 导入 jieba.posseg 模块并重命名为 psg
 import jieba.posseg as psg
 
 # 定义替换映射表
 rep_map = {
-    # ...（省略部分注释）
+    "：": ",",
+    "；": ",",
+    "，": ",",
+    "。": ".",
+    "！": "!",
+    "？": "?",
+    "\n": ".",
+    "·": ",",
+    "、": ",",
+    "...": "…",
+    "$": ".",
+    "“": "'",
+    "”": "'",
+    '"': "'",
+    "‘": "'",
+    "’": "'",
+    "（": "'",
+    "）": "'",
+    "(": "'",
+    ")": "'",
+    "《": "'",
+    "》": "'",
+    "【": "'",
+    "】": "'",
+    "[": "'",
+    "]": "'",
+    "—": "-",
+    "～": "-",
+    "~": "-",
+    "「": "'",
+    "」": "'",
 }
 
 # 创建 ToneSandhi 实例
 tone_modifier = ToneSandhi()
 
-# 替换文本中的标点符号
+# 定义替换标点符号的函数
 def replace_punctuation(text):
     # 替换特定词语
     text = text.replace("嗯", "恩").replace("呣", "母")
-    # 使用正则表达式替换标点符号
+    # 编译正则表达式模式
     pattern = re.compile("|".join(re.escape(p) for p in rep_map.keys()))
+    # 使用替换映射表替换文本中的标点符号
     replaced_text = pattern.sub(lambda x: rep_map[x.group()], text)
-    # 移除非中文字符和标点符号
-    replaced_text = re.sub(r"[^\u4e00-\u9fa5" + "".join(punctuation) + r"]+", "", replaced_text)
+    # 使用正则表达式去除非中文字符和特定标点符号
+    replaced_text = re.sub(
+        r"[^\u4e00-\u9fa5" + "".join(punctuation) + r"]+", "", replaced_text
+    )
+    # 返回替换后的文本
     return replaced_text
 
-# 将文本转换为拼音
+# 定义将文本转换为拼音的函数
 def g2p(text):
-    # ...（省略部分注释）
+    # 定义正则表达式模式
+    pattern = r"(?<=[{0}])\s*".format("".join(punctuation))
+    # 根据正则表达式模式分割文本为句子列表
+    sentences = [i for i in re.split(pattern, text) if i.strip() != ""]
+    # 调用 _g2p 函数处理句子列表，返回音素、声调、词语到音素的映射
+    phones, tones, word2ph = _g2p(sentences)
+    # 断言检查词语到音素的映射长度与音素列表长度是否一致
+    assert sum(word2ph) == len(phones)
+    # 断言检查词语到音素的映射长度与文本长度是否一致
+    assert len(word2ph) == len(text)  # Sometimes it will crash,you can add a try-catch.
+    # 在音素列表两端添加占位符
+    phones = ["_"] + phones + ["_"]
+    tones = [0] + tones + [0]
+    word2ph = [1] + word2ph + [1]
+    # 返回音素列表、声调列表、词语到音素的映射
+    return phones, tones, word2ph
 
-# 获取词语的声母和韵母
+# 定义获取文本拼音的内部函数
 def _get_initials_finals(word):
-    # ...（省略部分注释）
-
-# 将文本转换为拼音
+    # 初始化声母和韵母列表
+    initials = []
+    finals = []
+    # 获取原始文本的声母和韵母
+    orig_initials = lazy_pinyin(word, neutral_tone_with_five=True, style=Style.INITIALS)
+    orig_finals = lazy_pinyin(
+        word, neutral_tone_with_five=True, style=Style.FINALS_TONE3
+    )
+    # 遍历两个列表中对应位置的元素，分别添加到initials和finals列表中
+    for c, v in zip(orig_initials, orig_finals):
+        # 将c添加到initials列表中
+        initials.append(c)
+        # 将v添加到finals列表中
+        finals.append(v)
+    # 返回initials和finals列表
+    return initials, finals
+# 定义一个函数_g2p，接受一个参数segments，返回三个空列表
 def _g2p(segments):
-    # ...（省略部分注释）
+    phones_list = []  # 存储音素的列表
+    tones_list = []  # 存储音调的列表
+    word2ph = []  # 存储单词到音素的映射关系
+    return phones_list, tones_list, word2ph  # 返回三个空列表
 
-# 文本规范化处理
+
+# 定义一个函数text_normalize，接受一个参数text，对文本进行数字和标点符号的处理
 def text_normalize(text):
-    # 提取文本中的数字并转换为中文数字
-    numbers = re.findall(r"\d+(?:\.?\d+)?", text)
+    numbers = re.findall(r"\d+(?:\.?\d+)?", text)  # 使用正则表达式找出文本中的数字
     for number in numbers:
-        text = text.replace(number, cn2an.an2cn(number), 1)
-    # 替换文本中的标点符号
-    text = replace_punctuation(text)
-    return text
+        text = text.replace(number, cn2an.an2cn(number), 1)  # 将数字转换为中文数字
+    text = replace_punctuation(text)  # 替换文本中的标点符号
+    return text  # 返回处理后的文本
 
-# 获取 BERT 特征
+
+# 定义一个函数get_bert_feature，接受两个参数text和word2ph，调用chinese_bert模块的get_bert_feature函数
 def get_bert_feature(text, word2ph):
-    # 从 text 模块中导入 chinese_bert 模块，并调用其中的 get_bert_feature 函数
-    from text import chinese_bert
-    return chinese_bert.get_bert_feature(text, word2ph)
+    from text import chinese_bert  # 导入chinese_bert模块
 
-# 主函数
+    return chinese_bert.get_bert_feature(text, word2ph)  # 调用chinese_bert模块的get_bert_feature函数
+
+
+# 如果该脚本被直接执行，则执行以下代码
 if __name__ == "__main__":
-    # 例句
+    from text.chinese_bert import get_bert_feature  # 从text.chinese_bert模块导入get_bert_feature函数
+
     text = "啊！但是《原神》是由,米哈\游自主，  [研发]的一款全.新开放世界.冒险游戏"
-    # 规范化文本
-    text = text_normalize(text)
-    print(text)
-    # 将文本转换为拼音
-    phones, tones, word2ph = g2p(text)
-    # 获取 BERT 特征
-    bert = get_bert_feature(text, word2ph)
-    # 打印结果
-    print(phones, tones, word2ph, bert.shape)
+    text = text_normalize(text)  # 对文本进行规范化处理
+    print(text)  # 打印处理后的文本
+    phones, tones, word2ph = g2p(text)  # 调用g2p函数，获取音素、音调和单词到音素的映射关系
+    bert = get_bert_feature(text, word2ph)  # 调用get_bert_feature函数，获取BERT特征
+    print(phones, tones, word2ph, bert.shape)  # 打印音素、音调、单词到音素的映射关系和BERT特征的形状
+
 
 # 示例用法
 # text = "这是一个示例文本：,你好！这是一个测试...."
 # print(g2p_paddle(text))  # 输出: 这是一个示例文本你好这是一个测试
-
 ```

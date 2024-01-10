@@ -1,7 +1,6 @@
 # `Bert-VITS2\resample.py`
 
 ```
-
 # 导入所需的模块
 import os
 import argparse
@@ -13,6 +12,7 @@ from tqdm import tqdm
 
 from config import config
 
+
 # 定义处理函数，处理音频文件
 def process(item):
     spkdir, wav_name, args = item
@@ -20,10 +20,11 @@ def process(item):
     wav_path = os.path.join(args.in_dir, spkdir, wav_name)
     # 如果音频文件存在且是.wav格式
     if os.path.exists(wav_path) and wav_path.lower().endswith(".wav"):
-        # 使用librosa库加载音频文件
+        # 使用librosa加载音频文件
         wav, sr = librosa.load(wav_path, sr=args.sr)
-        # 将重采样后的音频文件写入目标目录
+        # 将处理后的音频文件写入目标目录
         soundfile.write(os.path.join(args.out_dir, spkdir, wav_name), wav, sr)
+
 
 # 主程序入口
 if __name__ == "__main__":
@@ -76,7 +77,7 @@ if __name__ == "__main__":
             os.makedirs(spk_dir_out, exist_ok=True)
         # 遍历文件
         for filename in filenames:
-            # 如果是.wav文件，则添加到任务列表中
+            # 如果是.wav文件，则添加到任务列表
             if filename.lower().endswith(".wav"):
                 twople = (spk_dir, filename, args)
                 tasks.append(twople)
@@ -91,7 +92,6 @@ if __name__ == "__main__":
     pool.close()
     pool.join()
 
-    # 打印处理完成的消息
+    # 输出处理完成的提示信息
     print("音频重采样完毕!")
-
 ```

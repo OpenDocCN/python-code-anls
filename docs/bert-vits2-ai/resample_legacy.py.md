@@ -1,7 +1,6 @@
 # `Bert-VITS2\resample_legacy.py`
 
 ```
-
 # 导入所需的模块
 import os
 import argparse
@@ -13,18 +12,20 @@ from tqdm import tqdm
 
 from config import config
 
+
 # 定义处理函数，用于处理音频文件
 def process(item):
     # 获取音频文件名和参数
     wav_name, args = item
-    # 构建音频文件路径
+    # 拼接音频文件路径
     wav_path = os.path.join(args.in_dir, wav_name)
     # 如果音频文件存在且是.wav格式
     if os.path.exists(wav_path) and wav_path.lower().endswith(".wav"):
-        # 使用librosa库加载音频文件
+        # 使用librosa加载音频文件
         wav, sr = librosa.load(wav_path, sr=args.sr)
-        # 将处理后的音频文件写入目标目录
+        # 将处理后的音频文件写入指定目录
         soundfile.write(os.path.join(args.out_dir, wav_name), wav, sr)
+
 
 # 主程序入口
 if __name__ == "__main__":
@@ -65,19 +66,21 @@ if __name__ == "__main__":
     # 创建进程池
     pool = Pool(processes=processes)
 
+    # 存储任务列表
     tasks = []
 
-    # 遍历源目录下的所有.wav文件
+    # 遍历输入目录下的所有文件
     for dirpath, _, filenames in os.walk(args.in_dir):
-        # 如果目标目录不存在，则创建目标目录
+        # 如果输出目录不存在，则创建输出目录
         if not os.path.isdir(args.out_dir):
             os.makedirs(args.out_dir, exist_ok=True)
+        # 遍历文件列表
         for filename in filenames:
-            # 将.wav文件添加到任务列表中
+            # 如果文件是.wav格式，则添加到任务列表中
             if filename.lower().endswith(".wav"):
                 tasks.append((filename, args))
 
-    # 使用进度条展示处理进度
+    # 使用进度条显示并行处理任务的进度
     for _ in tqdm(
         pool.imap_unordered(process, tasks),
     ):
@@ -85,10 +88,9 @@ if __name__ == "__main__":
 
     # 关闭进程池
     pool.close()
-    # 等待所有进程结束
+    # 等待所有任务完成
     pool.join()
 
     # 打印处理完成的提示信息
     print("音频重采样完毕!")
-
 ```

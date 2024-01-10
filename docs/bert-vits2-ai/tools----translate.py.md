@@ -1,14 +1,13 @@
 # `Bert-VITS2\tools\translate.py`
 
 ```
-
 """
 翻译api
 """
 # 从config模块中导入config对象
 from config import config
 
-# 导入所需的模块
+# 导入random、hashlib、requests模块
 import random
 import hashlib
 import requests
@@ -26,7 +25,7 @@ def translate(Sentence: str, to_Language: str = "jp", from_Language: str = ""):
     # 从config对象中获取app_key和secret_key
     appid = config.translate_config.app_key
     key = config.translate_config.secret_key
-    # 如果app_key或secret_key为空，返回提示信息
+    # 如果app_key或secret_key为空，则返回提示信息
     if appid == "" or key == "":
         return "请开发者在config.yml中配置app_key与secret_key"
     # 设置百度翻译API的URL
@@ -34,7 +33,7 @@ def translate(Sentence: str, to_Language: str = "jp", from_Language: str = ""):
     # 将待翻译语句按行分割
     texts = Sentence.splitlines()
     outTexts = []
-    # 遍历每行待翻译的文本
+    # 遍历每行待翻译语句
     for t in texts:
         if t != "":
             # 生成随机数作为盐值
@@ -44,10 +43,10 @@ def translate(Sentence: str, to_Language: str = "jp", from_Language: str = ""):
             hs = hashlib.md5()
             hs.update(signString.encode("utf-8"))
             signString = hs.hexdigest()
-            # 如果未指定待翻译语言，则默认为自动检测语言
+            # 如果未指定待翻译语句语言，则默认为自动检测
             if from_Language == "":
                 from_Language = "auto"
-            # 设置请求头和请求体
+            # 设置请求头和请求参数
             headers = {"Content-Type": "application/x-www-form-urlencoded"}
             payload = {
                 "q": t,
@@ -63,7 +62,7 @@ def translate(Sentence: str, to_Language: str = "jp", from_Language: str = ""):
                     url=url, data=payload, headers=headers, timeout=3
                 )
                 response = response.json()
-                # 如果返回结果中包含翻译结果，则将翻译结果添加到输出列表中
+                # 解析响应数据，获取翻译结果
                 if "trans_result" in response.keys():
                     result = response["trans_result"][0]
                     if "dst" in result.keys():
@@ -74,7 +73,6 @@ def translate(Sentence: str, to_Language: str = "jp", from_Language: str = ""):
                 return Sentence
         else:
             outTexts.append(t)
-    # 将翻译结果列表拼接成字符串并返回
+    # 将翻译结果按行连接成字符串并返回
     return "\n".join(outTexts)
-
 ```

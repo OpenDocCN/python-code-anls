@@ -1,7 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\text\__init__.py`
 
 ```
-
 # 导入 symbols 模块中的所有内容
 from .symbols import *
 
@@ -24,30 +23,36 @@ def cleaned_text_to_sequence(cleaned_text, tones, language):
     # 根据语言的映射关系，将语言转换为对应的 ID
     lang_id = language_id_map[language]
     lang_ids = [lang_id for i in phones]
+    # 返回符号序列、音调序列和语言 ID 序列
     return phones, tones, lang_ids
 
 # 获取 BERT 特征的函数
 def get_bert(norm_text, word2ph, language, device):
-    # 根据语言选择对应的 BERT 特征获取函数
+    # 导入中文 BERT 模块中的 get_bert_feature 函数
     from .chinese_bert import get_bert_feature as zh_bert
+    # 导入英文 BERT 模块中的 get_bert_feature 函数
     from .english_bert_mock import get_bert_feature as en_bert
+    # 导入日文 BERT 模块中的 get_bert_feature 函数
     from .japanese_bert import get_bert_feature as jp_bert
 
+    # 创建一个语言到对应 BERT 特征函数的映射关系
     lang_bert_func_map = {"ZH": zh_bert, "EN": en_bert, "JP": jp_bert}
-    # 调用对应语言的 BERT 特征获取函数
+    # 根据语言调用对应的 BERT 特征函数，并返回结果
     bert = lang_bert_func_map[language](norm_text, word2ph, device)
     return bert
 
 # 获取修正后的 BERT 特征的函数
 def get_bert_fix(norm_text, word2ph, language, device):
-    # 根据语言选择对应的 BERT 特征获取函数
+    # 导入中文 BERT 模块中的 get_bert_feature 函数
     from .chinese_bert import get_bert_feature as zh_bert
+    # 导入英文 BERT 模块中的 get_bert_feature 函数
     from .english_bert_mock import get_bert_feature as en_bert
+    # 导入修正后的日文 BERT 模块中的 get_bert_feature 函数
     from .fix.japanese_bert import get_bert_feature as jp_bert
 
+    # 创建一个语言到对应 BERT 特征函数的映射关系
     lang_bert_func_map = {"ZH": zh_bert, "EN": en_bert, "JP": jp_bert}
-    # 调用对应语言的 BERT 特征获取函数
+    # 根据语言调用对应的 BERT 特征函数，并返回结果
     bert = lang_bert_func_map[language](norm_text, word2ph, device)
     return bert
-
 ```
