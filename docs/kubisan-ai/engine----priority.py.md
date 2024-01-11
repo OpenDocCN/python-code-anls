@@ -1,7 +1,6 @@
 # `KubiScan\engine\priority.py`
 
 ```
-
 # 导入枚举类型模块
 from enum import Enum
 
@@ -22,5 +21,4 @@ def get_priority_by_name(priority):
         Priority.LOW.name: Priority.LOW,
         Priority.NONE.name: Priority.NONE,
     }[priority]
-
 ```

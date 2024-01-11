@@ -1,7 +1,6 @@
 # `KubiScan\static_risky_roles.py`
 
 ```
-
 # 从 engine.role 模块中导入 Role 类
 from engine.role import Role
 # 从 engine.rule 模块中导入 Rule 类
@@ -21,30 +20,29 @@ STATIC_RISKY_ROLES = []
 def set_risky_roles_from_yaml(items):
     # 遍历传入的角色列表
     for role in items:
-        # 创建一个空列表 rules
+        # 定义一个空列表 rules
         rules = []
-        # 遍历角色的规则列表
+        # 遍历每个角色的规则
         for rule in role['rules']:
-            # 创建一个 Rule 对象，并添加到 rules 列表中
+            # 创建 Rule 对象并添加到 rules 列表中
             rule_obj = Rule(resources=rule['resources'], verbs=rule['verbs'])
             rules.append(rule_obj)
 
-            # 创建一个 Role 对象，并添加到 STATIC_RISKY_ROLES 列表中
+            # 创建 Role 对象并添加到 STATIC_RISKY_ROLES 列表中
             STATIC_RISKY_ROLES.append(Role(role['metadata']['name'],
                                            get_priority_by_name(role['metadata']['priority']),
                                            rules,
                                            namespace=RISKY_NAMESPACE)
                                       )
 
-# 打开 risky_roles.yaml 文件，并读取其中的内容
+# 打开 risky_roles.yaml 文件
 with open(os.path.dirname(os.path.realpath(__file__)) + '/risky_roles.yaml', 'r') as stream:
     try:
-        # 使用 yaml.safe_load 加载 YAML 文件内容
+        # 加载 YAML 文件内容
         loaded_yaml = yaml.safe_load(stream)
         # 调用 set_risky_roles_from_yaml 函数，传入加载的 YAML 内容中的 items
         set_risky_roles_from_yaml(loaded_yaml['items'])
-    # 捕获 yaml.YAMLError 异常并打印错误信息
+    # 捕获 YAML 解析错误并打印异常信息
     except yaml.YAMLError as exc:
         print(exc)
-
 ```

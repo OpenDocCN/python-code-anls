@@ -1,22 +1,20 @@
 # `KubiScan\misc\constants.py`
 
 ```
-
-# 定义常量，表示风险命名空间
+# 定义风险命名空间常量
 RISKY_NAMESPACE = 'risky-namespace'
-# 定义常量，表示角色
+# 定义角色类型常量
 ROLE_KIND = 'Role'
-# 定义常量，表示集群角色
+# 定义集群角色类型常量
 CLUSTER_ROLE_KIND = 'ClusterRole'
-# 定义常量，表示角色绑定
+# 定义角色绑定类型常量
 ROLE_BINDING_KIND = 'RoleBinding'
-# 定义常量，表示集群角色绑定
+# 定义集群角色绑定类型常量
 CLUSTER_ROLE_BINDING_KIND = 'ClusterRoleBinding'
-# 定义常量，表示用户
+# 定义用户类型常量
 USER_KIND = 'User'
-# 定义常量，表示用户组
+# 定义用户组类型常量
 GROUP_KIND = 'Group'
-# 定义常量，表示服务账号
+# 定义服务账号类型常量
 SERVICEACCOUNT_KIND = 'ServiceAccount'
-
 ```
