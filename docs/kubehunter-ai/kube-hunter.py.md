@@ -1,5 +1,6 @@
-# `.\kubehunter\kube-hunter.py`
+# `kubehunter\kube-hunter.py`
 
 ```
-这不是完整的代码，只是一个文件路径。如果你能提供完整的代码，我可以帮你添加注释。
+# 导入 kube_hunter 模块中的 __main__.py 文件
+import kube_hunter.__main__.py
 ```

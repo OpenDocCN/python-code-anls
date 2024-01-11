@@ -1,12 +1,10 @@
-# `.\kubehunter\kube_hunter\core\events\__init__.py`
+# `kubehunter\kube_hunter\core\events\__init__.py`
 
 ```
-
-# 从handler模块中导入EventQueue和handler类
+# 从 handler 模块中导入 EventQueue 和 handler
+# 从 types 模块中导入所有内容
 from .handler import EventQueue, handler
-# 从types模块中导入所有内容
 from . import types
-# 将EventQueue, handler, types添加到__all__列表中，表示它们是可以被导入的模块内容
+# 将 EventQueue, handler, types 添加到 __all__ 列表中，表示它们是可以被导入的模块
 __all__ = [EventQueue, handler, types]
-
 ```

@@ -1,25 +1,24 @@
-# `.\kubehunter\kube_hunter\modules\hunting\__init__.py`
+# `kubehunter\kube_hunter\modules\hunting\__init__.py`
 
 ```
-
 # 从当前目录中导入以下模块
 from . import (
-    aks,  # 导入名为 aks 的模块
-    apiserver,  # 导入名为 apiserver 的模块
-    arp,  # 导入名为 arp 的模块
-    capabilities,  # 导入名为 capabilities 的模块
-    certificates,  # 导入名为 certificates 的模块
-    cves,  # 导入名为 cves 的模块
-    dashboard,  # 导入名为 dashboard 的模块
-    dns,  # 导入名为 dns 的模块
-    etcd,  # 导入名为 etcd 的模块
-    kubelet,  # 导入名为 kubelet 的模块
-    mounts,  # 导入名为 mounts 的模块
-    proxy,  # 导入名为 proxy 的模块
-    secrets,  # 导入名为 secrets 的模块
+    aks,  # 导入 aks 模块
+    apiserver,  # 导入 apiserver 模块
+    arp,  # 导入 arp 模块
+    capabilities,  # 导入 capabilities 模块
+    certificates,  # 导入 certificates 模块
+    cves,  # 导入 cves 模块
+    dashboard,  # 导入 dashboard 模块
+    dns,  # 导入 dns 模块
+    etcd,  # 导入 etcd 模块
+    kubelet,  # 导入 kubelet 模块
+    mounts,  # 导入 mounts 模块
+    proxy,  # 导入 proxy 模块
+    secrets,  # 导入 secrets 模块
 )
 
-# 将以上导入的模块添加到 __all__ 列表中
+# 将所有导入的模块添加到 __all__ 列表中
 __all__ = [
     aks,  # 将 aks 模块添加到 __all__ 列表中
     apiserver,  # 将 apiserver 模块添加到 __all__ 列表中
@@ -35,5 +34,4 @@ __all__ = [
     proxy,  # 将 proxy 模块添加到 __all__ 列表中
     secrets,  # 将 secrets 模块添加到 __all__ 列表中
 ]
-
 ```

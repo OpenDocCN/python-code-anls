@@ -1,28 +1,30 @@
-# `.\kubehunter\setup.py`
+# `kubehunter\setup.py`
 
 ```
-
 # 导入需要的模块
 from subprocess import check_call
 from pkg_resources import parse_requirements
 from configparser import ConfigParser
 from setuptools import setup, Command
 
-# 自定义命令类，用于列出依赖项
+# 自定义命令，用于列出依赖项
 class ListDependenciesCommand(Command):
     """A custom command to list dependencies"""
 
-    description = "list package dependencies"  # 描述命令的作用
-    user_options = []  # 用户选项为空列表
+    description = "list package dependencies"
+    user_options = []
 
+    # 初始化选项
     def initialize_options(self):
         pass
 
+    # 完成选项
     def finalize_options(self):
         pass
 
+    # 运行命令
     def run(self):
-        # 读取 setup.cfg 文件
+        # 读取配置文件
         cfg = ConfigParser()
         cfg.read("setup.cfg")
         # 获取安装依赖项
@@ -30,24 +32,27 @@ class ListDependenciesCommand(Command):
         # 打印依赖项
         print(requirements)
 
-# 自定义命令类，用于运行 PyInstaller 构建独立可执行文件
+# 自定义命令，用于运行 PyInstaller 构建独立可执行文件
 class PyInstallerCommand(Command):
     """A custom command to run PyInstaller to build standalone executable."""
 
-    description = "run PyInstaller on kube-hunter entrypoint"  # 描述命令的作用
-    user_options = []  # 用户选项为空列表
+    description = "run PyInstaller on kube-hunter entrypoint"
+    user_options = []
 
+    # 初始化选项
     def initialize_options(self):
         pass
 
+    # 完成选项
     def finalize_options(self):
         pass
 
+    # 运行命令
     def run(self):
-        # 读取 setup.cfg 文件
+        # 读取配置文件
         cfg = ConfigParser()
         cfg.read("setup.cfg")
-        # 定义 PyInstaller 命令
+        # 构建 PyInstaller 命令
         command = [
             "pyinstaller",
             "--clean",
@@ -62,15 +67,14 @@ class PyInstallerCommand(Command):
         for r in requirements:
             command.extend(["--hidden-import", r.key])
         command.append("kube_hunter/__main__.py")
-        # 打印 PyInstaller 命令
+        # 打印构建命令
         print(" ".join(command))
-        # 调用 PyInstaller 命令
+        # 调用命令行执行构建命令
         check_call(command)
 
 # 设置
 setup(
-    use_scm_version={"fallback_version": "noversion"},  # 使用 SCM 版本
-    cmdclass={"dependencies": ListDependenciesCommand, "pyinstaller": PyInstallerCommand},  # 自定义命令类
+    use_scm_version={"fallback_version": "noversion"},
+    cmdclass={"dependencies": ListDependenciesCommand, "pyinstaller": PyInstallerCommand},
 )
-
 ```

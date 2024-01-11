@@ -1,15 +1,14 @@
-# `.\kubehunter\kube_hunter\modules\discovery\etcd.py`
+# `kubehunter\kube_hunter\modules\discovery\etcd.py`
 
 ```
-
 # 从 kube_hunter.core.events 模块中导入 handler 函数
-from kube_hunter.core.events import handler
 # 从 kube_hunter.core.events.types 模块中导入 Event, OpenPortEvent, Service 类
-from kube_hunter.core.events.types import Event, OpenPortEvent, Service
 # 从 kube_hunter.core.types 模块中导入 Discovery 类
+from kube_hunter.core.events import handler
+from kube_hunter.core.events.types import Event, OpenPortEvent, Service
 from kube_hunter.core.types import Discovery
 
-# 创建 EtcdAccessEvent 类，继承自 Service 和 Event 类
+# 创建 EtcdAccessEvent 类，继承自 Service 类和 Event 类
 class EtcdAccessEvent(Service, Event):
     """Etcd is a DB that stores cluster's data, it contains configuration and current
     state information, and might contain secrets"""
@@ -36,5 +35,4 @@ class EtcdRemoteAccess(Discovery):
     def execute(self):
         # 发布 EtcdAccessEvent 事件
         self.publish_event(EtcdAccessEvent())
-
 ```

@@ -1,7 +1,6 @@
-# `.\kubehunter\tests\discovery\test_apiserver.py`
+# `kubehunter\tests\discovery\test_apiserver.py`
 
 ```
-
 # 导入requests_mock和time模块
 import requests_mock
 import time
@@ -18,106 +17,104 @@ counter = 0
 
 # 定义测试函数test_ApiServer
 def test_ApiServer():
-    # 在函数内部声明counter为全局变量
+    # 使用全局变量counter
     global counter
-    # 重置counter为0
+    # 将counter重置为0
     counter = 0
-    # 使用requests_mock创建一个Mocker对象，并使用with语句进行上下文管理
+    # 使用requests_mock模拟HTTP请求
     with requests_mock.Mocker() as m:
-        # 对"https://mockOther:443"发起GET请求，返回文本"elephant"
+        # 模拟GET请求返回文本"elephant"
         m.get("https://mockOther:443", text="elephant")
-        # 对"https://mockKubernetes:443"发起GET请求，返回文本'{"code":403}'，状态码为403
+        # 模拟GET请求返回状态码403和JSON格式的数据'{"code":403}'
         m.get("https://mockKubernetes:443", text='{"code":403}', status_code=403)
-        # 对"https://mockKubernetes:443/version"发起GET请求，返回文本'{"major": "1.14.10"}'，状态码为200
+        # 模拟GET请求返回状态码200和JSON格式的数据'{"major": "1.14.10"}'
         m.get(
             "https://mockKubernetes:443/version", text='{"major": "1.14.10"}', status_code=200,
         )
 
-        # 创建一个Event对象e，并设置其protocol为"https"，port为443，host为"mockOther"
+        # 创建Event对象e，并设置protocol、port和host属性
         e = Event()
         e.protocol = "https"
         e.port = 443
         e.host = "mockOther"
 
-        # 创建一个ApiServiceDiscovery对象a，并执行其execute方法
+        # 创建ApiServiceDiscovery对象a，并执行execute方法
         a = ApiServiceDiscovery(e)
         a.execute()
 
-        # 修改Event对象e的host为"mockKubernetes"，并再次执行ApiServiceDiscovery对象a的execute方法
+        # 修改Event对象e的host属性
         e.host = "mockKubernetes"
+        # 再次执行ApiServiceDiscovery对象a的execute方法
         a.execute()
 
-    # 等待一段时间以便事件被处理，只有对mockKubernetes的请求应该触发一个事件
+    # 等待1秒，以便事件被处理。只有对mockKubernetes的请求应该触发一个事件
     time.sleep(1)
     # 断言counter的值为1
     assert counter == 1
 
 # 定义测试函数test_ApiServerWithServiceAccountToken
 def test_ApiServerWithServiceAccountToken():
-    # 在函数内部声明counter为全局变量
+    # 使用全局变量counter
     global counter
-    # 重置counter为0
+    # 将counter重置为0
     counter = 0
-    # 使用requests_mock创建一个Mocker对象，并使用with语句进行上下文管理
+    # 使用 requests_mock 创建一个模拟器对象，并进入上下文管理器
     with requests_mock.Mocker() as m:
-        # 对"https://mockKubernetes:443"发起GET请求，请求头包含Authorization字段，返回文本'{"code":200}'
+        # 模拟发送带有特定请求头的 GET 请求，并返回指定的文本内容和状态码
         m.get(
             "https://mockKubernetes:443", request_headers={"Authorization": "Bearer very_secret"}, text='{"code":200}',
         )
-        # 对"https://mockKubernetes:443"发起GET请求，返回文本'{"code":403}'，状态码为403
+        # 模拟发送 GET 请求，并返回指定的文本内容和状态码
         m.get("https://mockKubernetes:443", text='{"code":403}', status_code=403)
-        # 对"https://mockKubernetes:443/version"发起GET请求，返回文本'{"major": "1.14.10"}'，状态码为200
+        # 模拟发送 GET 请求，并返回指定的文本内容和状态码
         m.get(
             "https://mockKubernetes:443/version", text='{"major": "1.14.10"}', status_code=200,
         )
-        # 对"https://mockOther:443"发起GET请求，返回文本"elephant"
+        # 模拟发送 GET 请求，并返回指定的文本内容
         m.get("https://mockOther:443", text="elephant")
 
-        # 创建一个Event对象e，并设置其protocol为"https"，port为443
+        # 创建一个事件对象
         e = Event()
+        # 设置事件对象的协议和端口
         e.protocol = "https"
         e.port = 443
 
-        # 无论是否有token，我们都应该发现一个API Server
-        # 设置Event对象e的host为"mockKubernetes"，创建一个ApiServiceDiscovery对象a，并执行其execute方法
+        # 设置事件对象的主机名，创建一个 ApiServiceDiscovery 对象并执行
         e.host = "mockKubernetes"
         a = ApiServiceDiscovery(e)
         a.execute()
-        # 等待一段时间
+        # 等待 0.1 秒
         time.sleep(0.1)
-        # 断言counter的值为1
+        # 断言计数器的值为 1
         assert counter == 1
 
-        # 设置Event对象e的auth_token为"very_secret"，创建一个ApiServiceDiscovery对象a，并执行其execute方法
+        # 设置事件对象的认证令牌，创建一个 ApiServiceDiscovery 对象并执行
         e.auth_token = "very_secret"
         a = ApiServiceDiscovery(e)
         a.execute()
-        # 等待一段时间
+        # 等待 0.1 秒
         time.sleep(0.1)
-        # 断言counter的值为2
+        # 断言计数器的值为 2
         assert counter == 2
 
-        # 但是如果我们没有看到错误代码或在/version中找到'major'，我们不应该生成事件
-        # 设置Event对象e的host为"mockOther"，创建一个ApiServiceDiscovery对象a，并执行其execute方法
+        # 设置事件对象的主机名为 "mockOther"，创建一个 ApiServiceDiscovery 对象并执行
         e.host = "mockOther"
         a = ApiServiceDiscovery(e)
         a.execute()
-        # 等待一段时间
+        # 等待 0.1 秒
         time.sleep(0.1)
-        # 断言counter的值为2
+        # 断言计数器的值为 2
         assert counter == 2
-
-# 定义测试函数test_InsecureApiServer
+# 定义一个名为 test_InsecureApiServer 的函数
 def test_InsecureApiServer():
-    # 在函数内部声明counter为全局变量
+    # 声明 counter 变量为全局变量，并初始化为 0
     global counter
-    # 重置counter为0
     counter = 0
-    # 使用requests_mock创建一个Mocker对象，并使用with语句进行上下文管理
+    # 使用 requests_mock 创建一个 Mock 对象，并命名为 m
     with requests_mock.Mocker() as m:
-        # 对"http://mockOther:8080"发起GET请求，返回文本"elephant"
+        # 模拟对 "http://mockOther:8080" 的 GET 请求，返回文本 "elephant"
         m.get("http://mockOther:8080", text="elephant")
-        # 对"http://mockKubernetes:8080"发起GET请求，返回指定的JSON文本
+        # 模拟对 "http://mockKubernetes:8080" 的 GET 请求，返回指定的 JSON 文本
         m.get(
             "http://mockKubernetes:8080",
             text="""{
@@ -131,41 +128,40 @@ def test_InsecureApiServer():
     "/apis/apiextensions.k8s.io"
   ]}""",
         )
-        # 对"http://mockKubernetes:8080/version"发起GET请求，返回文本'{"major": "1.14.10"}'
+        # 模拟对 "http://mockKubernetes:8080/version" 的 GET 请求，返回指定的 JSON 文本
         m.get("http://mockKubernetes:8080/version", text='{"major": "1.14.10"}')
-        # 对"http://mockOther:8080/version"发起GET请求，返回状态码404
+        # 模拟对 "http://mockOther:8080/version" 的 GET 请求，返回状态码 404
         m.get("http://mockOther:8080/version", status_code=404)
-
-        # 创建一个Event对象e，并设置其protocol为"http"，port为8080，host为"mockOther"
+        # 创建一个 Event 对象
         e = Event()
+        # 设置 Event 对象的 protocol 属性为 "http"
         e.protocol = "http"
+        # 设置 Event 对象的 port 属性为 8080
         e.port = 8080
+        # 设置 Event 对象的 host 属性为 "mockOther"
         e.host = "mockOther"
-
-        # 创建一个ApiServiceDiscovery对象a，并执行其execute方法
+        # 创建一个 ApiServiceDiscovery 对象，并传入 Event 对象，执行相关操作
         a = ApiServiceDiscovery(e)
         a.execute()
-
-        # 修改Event对象e的host为"mockKubernetes"，并再次执行ApiServiceDiscovery对象a的execute方法
+        # 修改 Event 对象的 host 属性为 "mockKubernetes"
         e.host = "mockKubernetes"
+        # 再次执行 ApiServiceDiscovery 对象的相关操作
         a.execute()
-
-    # 等待一段时间以便事件被处理，只有对mockKubernetes的请求应该触发一个事件
+    # 等待一段时间，以便事件被处理。只有针对 mockKubernetes 的事件应该触发一个事件
     time.sleep(0.1)
-    # 断言counter的值为1
+    # 断言 counter 的值为 1
+    assert counter == 1
 
-# 使用handler.subscribe装饰器订阅ApiServer事件
+# 使用 handler.subscribe 装饰器，订阅 ApiServer 事件，并定义一个名为 testApiServer 的类
 @handler.subscribe(ApiServer)
-# 定义testApiServer类
 class testApiServer(object):
-    # 初始化方法，接受一个event参数
+    # 初始化方法，接收一个 event 参数
     def __init__(self, event):
-        # 打印"Event"
+        # 打印 "Event" 字符串
         print("Event")
-        # 断言event的host属性为"mockKubernetes"
+        # 断言 event 的 host 属性为 "mockKubernetes"
         assert event.host == "mockKubernetes"
-        # 全局变量counter加1
+        # 声明 counter 变量为全局变量，并增加 1
         global counter
         counter += 1
-
 ```

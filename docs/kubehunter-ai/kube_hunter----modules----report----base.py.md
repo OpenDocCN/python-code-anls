@@ -1,7 +1,6 @@
-# `.\kubehunter\kube_hunter\modules\report\base.py`
+# `kubehunter\kube_hunter\modules\report\base.py`
 
 ```
-
 # 导入必要的模块和类
 from kube_hunter.core.types import Discovery
 from kube_hunter.modules.report.collector import (
@@ -65,22 +64,22 @@ class BaseReporter(object):
                     {"name": name, "description": doc, "vulnerabilities": hunter.publishedVulnerabilities}
                 )
         return hunters_data
-
-    # 获取报告
+    # 定义一个方法，获取报告
     def get_report(self, *, statistics, **kwargs):
+        # 创建一个报告字典，包括节点、服务和漏洞信息
         report = {
-            "nodes": self.get_nodes(),
-            "services": self.get_services(),
-            "vulnerabilities": self.get_vulnerabilities(),
+            "nodes": self.get_nodes(),  # 获取节点信息
+            "services": self.get_services(),  # 获取服务信息
+            "vulnerabilities": self.get_vulnerabilities(),  # 获取漏洞信息
         }
 
-        # 如果需要统计信息，获取猎人统计信息
+        # 如果需要统计信息
         if statistics:
-            report["hunter_statistics"] = self.get_hunter_statistics()
+            report["hunter_statistics"] = self.get_hunter_statistics()  # 获取猎人统计信息
 
-        # 返回报告
+        # 设置报告中的 KBURL
         report["kburl"] = "https://aquasecurity.github.io/kube-hunter/kb/{vid}"
 
+        # 返回报告
         return report
-
 ```

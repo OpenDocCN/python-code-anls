@@ -1,8 +1,7 @@
-# `.\kubehunter\tests\core\test_cloud.py`
+# `kubehunter\tests\core\test_cloud.py`
 
 ```
-
-# 导入requests_mock模块和json模块
+# 导入requests_mock和json模块
 import requests_mock
 import json
 
@@ -25,16 +24,15 @@ def test_getcloud():
     fake_host = "1.2.3.4"
     # 预期的云类型为"Azure"
     expected_cloud = "Azure"
-    # 模拟API返回的结果
+    # 模拟的API响应结果
     result = {"cloud": expected_cloud}
 
     # 使用requests_mock模拟HTTP请求
     with requests_mock.mock() as m:
-        # 模拟GET请求返回结果
+        # 模拟GET请求的响应结果
         m.get(f"https://api.azurespeed.com/api/region?ipOrUrl={fake_host}", text=json.dumps(result))
         # 创建NewHostEvent对象，设置主机IP
         hostEvent = NewHostEvent(host=fake_host)
         # 断言主机的云类型与预期的云类型相等
         assert hostEvent.cloud == expected_cloud
-
 ```

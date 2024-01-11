@@ -1,14 +1,14 @@
-# `.\kubehunter\kube_hunter\modules\report\dispatchers.py`
+# `kubehunter\kube_hunter\modules\report\dispatchers.py`
 
 ```
-
-# 导入 logging、os 和 requests 模块
+# 导入日志、操作系统和请求模块
 import logging
 import os
 import requests
 
-# 获取当前模块的 logger 对象
+# 获取当前模块的日志记录器
 logger = logging.getLogger(__name__)
+
 
 # 定义 HTTPDispatcher 类
 class HTTPDispatcher(object):
@@ -16,8 +16,9 @@ class HTTPDispatcher(object):
     def dispatch(self, report):
         # 记录调试信息
         logger.debug("Dispatching report via HTTP")
-        # 获取环境变量中的 HTTP 发送方法和 URL
+        # 获取环境变量中的 HTTP 发送方法，默认为 POST
         dispatch_method = os.environ.get("KUBEHUNTER_HTTP_DISPATCH_METHOD", "POST").upper()
+        # 获取环境变量中的 HTTP 发送地址，默认为 https://localhost/
         dispatch_url = os.environ.get("KUBEHUNTER_HTTP_DISPATCH_URL", "https://localhost/")
         try:
             # 发送 HTTP 请求
@@ -26,24 +27,25 @@ class HTTPDispatcher(object):
             )
             # 如果请求返回错误状态码，则抛出异常
             r.raise_for_status()
-            # 记录信息日志
+            # 记录信息日志，报告已发送至哪个地址
             logger.info(f"Report was dispatched to: {dispatch_url}")
+            # 记录调试信息，显示响应状态码和内容
             logger.debug(f"Dispatch responded {r.status_code} with: {r.text}")
 
-        # 捕获 requests.HTTPError 异常
+        # 如果请求返回 HTTP 错误，则记录异常信息
         except requests.HTTPError:
             logger.exception(f"Failed making HTTP {dispatch_method} to {dispatch_url}, " f"status code {r.status_code}")
-        # 捕获其他异常
+        # 如果发生其他异常，则记录异常信息
         except Exception:
             logger.exception(f"Could not dispatch report to {dispatch_url}")
 
+
 # 定义 STDOUTDispatcher 类
 class STDOUTDispatcher(object):
-    # 定义 dispatch 方法，用于将报告输出到标准输出
+    # 定义 dispatch 方法，用于在标准输出中打印报告
     def dispatch(self, report):
         # 记录调试信息
         logger.debug("Dispatching report via stdout")
-        # 将报告输出到标准输出
+        # 在标准输出中打印报告
         print(report)
-
 ```

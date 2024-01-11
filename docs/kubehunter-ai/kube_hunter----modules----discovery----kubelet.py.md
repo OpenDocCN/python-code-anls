@@ -1,52 +1,49 @@
-# `.\kubehunter\kube_hunter\modules\discovery\kubelet.py`
+# `kubehunter\kube_hunter\modules\discovery\kubelet.py`
 
 ```
-
-# 导入日志、请求、urllib3模块以及枚举类型
+# 导入日志、请求和禁用警告的模块
 import logging
 import requests
 import urllib3
 from enum import Enum
 
-# 导入kube_hunter包中的配置、发现类型和事件处理器
+# 导入自定义配置、发现类型和事件处理器
 from kube_hunter.conf import config
 from kube_hunter.core.types import Discovery
 from kube_hunter.core.events import handler
 from kube_hunter.core.events.types import OpenPortEvent, Event, Service
 
-# 禁用urllib3的不安全请求警告
+# 禁用不安全请求警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-# 获取logger对象
+# 获取日志记录器
 logger = logging.getLogger(__name__)
 
 """ Services """
 
-# 定义只读kubelet事件类，继承自Service和Event类
+# 定义只读的 Kubelet 事件
 class ReadOnlyKubeletEvent(Service, Event):
     """The read-only port on the kubelet serves health probing endpoints,
     and is relied upon by many kubernetes components"""
 
     def __init__(self):
-        # 初始化只读kubelet事件对象
         Service.__init__(self, name="Kubelet API (readonly)")
 
-# 定义安全kubelet事件类，继承自Service和Event类
+# 定义安全的 Kubelet 事件
 class SecureKubeletEvent(Service, Event):
     """The Kubelet is the main component in every Node, all pod operations goes through the kubelet"""
 
     def __init__(self, cert=False, token=False, anonymous_auth=True, **kwargs):
-        # 初始化安全kubelet事件对象
         self.cert = cert
         self.token = token
         self.anonymous_auth = anonymous_auth
         Service.__init__(self, name="Kubelet API", **kwargs)
 
-# 定义kubelet端口的枚举类型
+# 定义 Kubelet 端口的枚举
 class KubeletPorts(Enum):
     SECURED = 10250
     READ_ONLY = 10255
 
-# 订阅OpenPortEvent事件，当端口为10250或10255时触发KubeletDiscovery事件
+# 订阅端口打开事件，检查是否存在 Kubelet 服务和其开放的端口
 @handler.subscribe(OpenPortEvent, predicate=lambda x: x.port in [10250, 10255])
 class KubeletDiscovery(Discovery):
     """Kubelet Discovery
@@ -54,7 +51,6 @@ class KubeletDiscovery(Discovery):
     """
 
     def __init__(self, event):
-        # 初始化KubeletDiscovery对象
         self.event = event
 
     # 获取只读访问权限
@@ -64,11 +60,13 @@ class KubeletDiscovery(Discovery):
         r = requests.get(endpoint, timeout=config.network_timeout)
         if r.status_code == 200:
             self.publish_event(ReadOnlyKubeletEvent())
-
-    # 获取安全访问权限
+    # 获取安全访问权限的方法
     def get_secure_access(self):
+        # 记录调试信息
         logger.debug("Attempting to get kubelet secure access")
+        # 调用 ping_kubelet 方法获取响应状态码
         ping_status = self.ping_kubelet()
+        # 根据响应状态码发布不同的事件
         if ping_status == 200:
             self.publish_event(SecureKubeletEvent(secure=False))
         elif ping_status == 403:
@@ -76,20 +74,24 @@ class KubeletDiscovery(Discovery):
         elif ping_status == 401:
             self.publish_event(SecureKubeletEvent(secure=True, anonymous_auth=False))
 
-    # ping kubelet服务
+    # 发送请求到 kubelet 获取响应状态码的方法
     def ping_kubelet(self):
+        # 构建请求的端点
         endpoint = f"https://{self.event.host}:{self.event.port}/pods"
+        # 记录调试信息
         logger.debug("Attempting to get pods info from kubelet")
         try:
+            # 发送请求并返回响应状态码
             return requests.get(endpoint, verify=False, timeout=config.network_timeout).status_code
         except Exception:
+            # 记录异常信息
             logger.debug(f"Failed pinging https port on {endpoint}", exc_info=True)
 
-    # 执行事件处理
+    # 执行方法
     def execute(self):
+        # 根据端口号调用不同的访问方法
         if self.event.port == KubeletPorts.SECURED.value:
             self.get_secure_access()
         elif self.event.port == KubeletPorts.READ_ONLY.value:
             self.get_read_only_access()
-
 ```

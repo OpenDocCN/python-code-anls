@@ -1,58 +1,67 @@
-# `.\kubehunter\kube_hunter\modules\hunting\certificates.py`
+# `kubehunter\kube_hunter\modules\hunting\certificates.py`
 
 ```
-
 # 导入所需的模块
-import ssl  # 用于处理 SSL/TLS 连接
-import logging  # 用于记录日志
-import base64  # 用于处理 base64 编码
-import re  # 用于处理正则表达式
+import ssl
+import logging
+import base64
+import re
 
-# 导入自定义模块
-from kube_hunter.core.types import Hunter, KubernetesCluster, InformationDisclosure  # 导入自定义类型
-from kube_hunter.core.events import handler  # 导入事件处理器
-from kube_hunter.core.events.types import Vulnerability, Event, Service  # 导入自定义事件类型
+# 从 kube_hunter.core.types 模块中导入 Hunter, KubernetesCluster, InformationDisclosure 类
+from kube_hunter.core.types import Hunter, KubernetesCluster, InformationDisclosure
+# 从 kube_hunter.core.events 模块中导入 handler
+from kube_hunter.core.events import handler
+# 从 kube_hunter.core.events.types 模块中导入 Vulnerability, Event, Service 类
+from kube_hunter.core.events.types import Vulnerability, Event, Service
 
-# 获取日志记录器
+# 获取 logger 对象
 logger = logging.getLogger(__name__)
-
-# 定义正则表达式模式，用于匹配邮箱地址
+# 定义邮箱地址的正则表达式模式
 email_pattern = re.compile(r"([a-z0-9]+@[a-z0-9]+\.[a-z0-9]+)")
 
-# 定义一个自定义事件类，表示证书中包含邮箱地址的漏洞
+
+# 定义 CertificateEmail 类，继承自 Vulnerability 和 Event 类
 class CertificateEmail(Vulnerability, Event):
     """Certificate includes an email address"""
 
     def __init__(self, email):
-        # 初始化漏洞信息
+        # 调用父类的构造函数
         Vulnerability.__init__(
             self, KubernetesCluster, "Certificate Includes Email Address", category=InformationDisclosure, khv="KHV021",
         )
-        self.email = email  # 保存邮箱地址
-        self.evidence = "email: {}".format(self.email)  # 保存证据信息
+        # 设置邮箱地址
+        self.email = email
+        # 设置证据信息
+        self.evidence = "email: {}".format(self.email)
 
-# 定义一个事件处理器类，用于检测证书中是否包含邮箱地址
+
+# 使用 handler.subscribe 装饰器注册 Service 类
 @handler.subscribe(Service)
+# 定义 CertificateDiscovery 类，继承自 Hunter 类
 class CertificateDiscovery(Hunter):
     """Certificate Email Hunting
     Checks for email addresses in kubernetes ssl certificates
     """
 
     def __init__(self, event):
-        self.event = event  # 保存事件信息
+        # 初始化函数，接收 event 参数
+        self.event = event
 
     def execute(self):
         try:
+            # 尝试获取服务器证书
             logger.debug("Passive hunter is attempting to get server certificate")
-            addr = (str(self.event.host), self.event.port)  # 获取服务器地址和端口
-            cert = ssl.get_server_certificate(addr)  # 获取服务器证书
+            addr = (str(self.event.host), self.event.port)
+            cert = ssl.get_server_certificate(addr)
         except ssl.SSLError:
-            # 如果服务器在该端口上不提供 SSL，则无法获取证书
+            # 如果服务器在该端口上不提供 SSL，则不会得到证书
             return
-        c = cert.strip(ssl.PEM_HEADER).strip(ssl.PEM_FOOTER)  # 去除证书头尾部信息
-        certdata = base64.decodebytes(c)  # 解码证书数据
-        emails = re.findall(email_pattern, certdata)  # 查找证书数据中的邮箱地址
+        # 去除证书的头部和尾部，并解码为字节数据
+        c = cert.strip(ssl.PEM_HEADER).strip(ssl.PEM_FOOTER)
+        certdata = base64.decodebytes(c)
+        # 使用正则表达式在证书数据中查找邮箱地址
+        emails = re.findall(email_pattern, certdata)
+        # 遍历找到的邮箱地址，发布 CertificateEmail 事件
         for email in emails:
-            self.publish_event(CertificateEmail(email=email))  # 发布证书中包含邮箱地址的事件
-
+            self.publish_event(CertificateEmail(email=email))
 ```
