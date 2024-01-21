@@ -1,0 +1,67 @@
+digraph Attention {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+        shape="Rect",
+	]
+
+    inp [label="输入\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    LinearQ [label="LinearQ\n[HidSize, HidSize]"]
+    LinearK [label="LinearK\n[HidSize, HidSize]"]
+    LinearV [label="LinearV\n[HidSize, HidSize]"]
+    Q [label="Q\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    K [label="K\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    V [label="V\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    SplitHeadReshape [label="reshape\n[BatchSize, SeqLen,\nHeadCount, HeadSize]", width=16]
+    SplitHeadTranspose [label = "transpose(1, 2)", width=16]
+    QHead [label="Q\n[BatchSize, HeadCount,\nSeqLen, HeadSize]", shape="Mrecord"]
+    KHead [label="K\n[BatchSize, HeadCount,\nSeqLen, HeadSize]", shape="Mrecord"]
+    VHead [label="V\n[BatchSize, HeadCount,\nSeqLen, HeadSize]", shape="Mrecord"]
+    CalcAttn [label="Q @ K.transpose(-2, -1) / sqrt(HeadSize)", width=11]
+    Mask [label="* mask\n[BatchSize, 1, SeqLen, SeqLen]"]
+    Softmax [label="Softmax(dims=-1)"]
+    Dropout
+    Attn [label="Attention\n[BatchSize, HeadCount,\nSeqLen, SeqLen]", shape="Mrecord"]
+    matmul [label="@"]
+    OHead [label="[BatchSize, HeadCount,\nSeqLen, HeadSize]", shape="Mrecord"]
+    MergeHeadTranspose [label = "transpose(1, 2)"]
+    MergeHeadReshape [label="reshape\n[BatchSize,\nSeqLen,\nHidSize]"]
+    O [label="[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    LinearO [label="LinearQ\n[HidSize, HidSize]"]
+    oup [label="输出\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+
+    inp -> LinearQ
+    inp -> LinearK
+    inp -> LinearV
+    LinearQ -> Q
+    LinearK -> K
+    LinearV -> V
+    Q -> SplitHeadReshape
+    K -> SplitHeadReshape
+    V -> SplitHeadReshape
+    SplitHeadReshape -> SplitHeadTranspose
+    SplitHeadTranspose -> QHead
+    SplitHeadReshape -> KHead
+    SplitHeadTranspose -> VHead
+    QHead -> CalcAttn
+    VHead -> CalcAttn
+    CalcAttn -> Mask
+    Mask -> Softmax
+    Softmax -> Dropout
+    Dropout -> Attention
+    Attention -> matmul
+    VHead -> matmul
+    matmul -> OHead
+    OHead -> MergeHeadTranspose
+    MergeHeadTranspose -> MergeHeadReshape
+    MergeHeadReshape -> O
+    O -> LinearO
+    LinearO -> oup
+
+}
