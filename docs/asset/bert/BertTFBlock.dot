@@ -1,0 +1,40 @@
+digraph TFBlock {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+        shape="Rect",
+	]
+
+    inp [label="输入\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    LayerNorm1
+    Attention 
+    Dropout1 
+    add1 [label="+", width=3]
+    mid [label="中间结果\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    LayerNorm2
+    FFN
+    Dropout2
+    add2 [label="+", width=3]
+    oup [label="输出\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    
+    inp -> LayerNorm1
+    LayerNorm1 -> Attention
+    Attention -> Dropout1
+    Dropout1 -> add1
+    inp -> add1
+    add1 -> mid
+    mid -> LayerNorm2
+    LayerNorm2 -> FFN
+    FFN -> Dropout2
+    Dropout2 -> add2
+    mid -> add2
+    add2 -> oup
+
+
+}

@@ -1,4 +1,4 @@
-digraph AFTFull {
+digraph Bert {
 	rankdir=BT
     node [
 		style=filled, 
@@ -10,7 +10,7 @@ digraph AFTFull {
 		width=5, height=2,
 	]
 
-    inp [label = "单词 ID（输入）\n[BatchSize,\nSeqLen]", shape="Mrecord"]
+    inp [label = "单词 ID（输入）\n[BatchSize, SeqLen]", shape="Mrecord"]
     WordEmb [label="词嵌入\n[VocabSize, HidSize]", shape="Rect"]
     TypeEmb [label="句子嵌入\n[3, HidSize]", shape="Rect"]
     PosEmb [label="位置嵌入\n[SeqLen, HidSize]", shape="Rect"]
