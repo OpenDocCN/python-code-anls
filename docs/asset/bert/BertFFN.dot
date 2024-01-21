@@ -1,0 +1,27 @@
+digraph FFN {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+        shape="Rect",
+	]
+
+    inp [label="输入\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+    Linear1 [label="Linear1\n[HidSize, 4HidSize]"]
+    GELU
+    Dropout
+    Linear2 [label="Linear2\n[4HidSize, HidSize]"]
+    oup [label="输出\n[BatchSize,\nSeqLen,\nHidSize]", shape="Mrecord"]
+
+    inp -> Linear1
+    Linear1 -> GELU
+    GELU -> Dropout
+    Dropout -> Linear2
+    Linear2 -> oup
+
+}
