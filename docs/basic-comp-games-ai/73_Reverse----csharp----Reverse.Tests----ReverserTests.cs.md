@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse.Tests\ReverserTests.cs`
 
-```
+```py
 # 导入 FsCheck.Xunit 模块
 using FsCheck.Xunit;
 # 导入 Reverse.Tests.Generators 模块

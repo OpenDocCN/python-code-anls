@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Piece.cs`
 
-```
+```py
 // 使用不可变集合命名空间
 using System.Collections.Immutable;
 // 使用排除分析命名空间

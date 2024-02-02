@@ -1,6 +1,6 @@
 # `arknights-mower\setup.py`
 
-```
+```py
 # 导入 setuptools 模块
 import setuptools
 # 导入 arknights_mower 模块

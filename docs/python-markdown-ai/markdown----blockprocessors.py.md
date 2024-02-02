@@ -1,6 +1,6 @@
 # `markdown\markdown\blockprocessors.py`
 
-```
+```py
 
 # Python Markdown
 

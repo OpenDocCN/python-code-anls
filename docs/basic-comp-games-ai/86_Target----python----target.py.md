@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\python\target.py`
 
-```
+```py
 """
 TARGET
 

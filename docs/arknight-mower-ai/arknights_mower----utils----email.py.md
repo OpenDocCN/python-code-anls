@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\email.py`
 
-```
+```py
 # 导入所需的模块
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import os

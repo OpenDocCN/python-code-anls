@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\direction_move.py`
 
-```
+```py
 # 导入时间和随机模块
 import time
 import random

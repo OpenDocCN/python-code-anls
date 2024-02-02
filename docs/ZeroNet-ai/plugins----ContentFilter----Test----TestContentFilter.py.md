@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\ContentFilter\Test\TestContentFilter.py`
 
-```
+```py
 # 导入 pytest 模块
 import pytest
 # 从 ContentFilter 模块中导入 ContentFilterPlugin 类

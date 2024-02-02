@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\VictoryViewModel.cs`
 
-```
+```py
 # 定义了一个名为 hurkle 的命名空间
 namespace hurkle
 {

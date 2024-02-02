@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\pyaes\util.py`
 
-```
+```py
 # 定义一个函数，用于将二进制数据转换为可缓冲的对象
 def to_bufferable(binary):
     return binary

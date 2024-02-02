@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\CryptMessage\CryptMessagePlugin.py`
 
-```
+```py
 # 导入 base64 模块
 import base64
 # 导入 os 模块

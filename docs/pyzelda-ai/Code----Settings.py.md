@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Settings.py`
 
-```
+```py
 
 # 导入 os 模块
 import os

@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\Angle.cs`
 
-```
+```py
 namespace Target
 {
     internal class Angle

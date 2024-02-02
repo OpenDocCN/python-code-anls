@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\abbr.py`
 
-```
+```py
 
 # Abbreviation Extension for Python-Markdown
 # ==========================================

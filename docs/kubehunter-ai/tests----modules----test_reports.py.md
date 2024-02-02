@@ -1,6 +1,6 @@
 # `kubehunter\tests\modules\test_reports.py`
 
-```
+```py
 # 从 kube_hunter.modules.report 模块中导入 get_reporter 和 get_dispatcher 函数
 from kube_hunter.modules.report import get_reporter, get_dispatcher
 # 从 kube_hunter.modules.report.factory 模块中导入 YAMLReporter, JSONReporter, PlainReporter, HTTPDispatcher, STDOUTDispatcher 类

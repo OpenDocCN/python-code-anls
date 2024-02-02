@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\OptionalManager\UiWebsocketPlugin.py`
 
-```
+```py
 # 导入正则表达式、时间、HTML处理和操作系统模块
 import re
 import time

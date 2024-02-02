@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\java\LifeForTwo.java`
 
-```
+```py
 import java.util.*;
 import java.util.stream.IntStream;
 

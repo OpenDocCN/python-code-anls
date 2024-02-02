@@ -1,6 +1,6 @@
 # `basic-computer-games\19_Bunny\javascript\bunny.js`
 
-```
+```py
 // 定义一个打印函数，将字符串添加到指定 id 的元素中
 function print(str)
 {

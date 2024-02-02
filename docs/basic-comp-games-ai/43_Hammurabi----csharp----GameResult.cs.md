@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\csharp\GameResult.cs`
 
-```
+```py
 // 存储最终游戏结果的记录
 public record GameResult
 {

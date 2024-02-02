@@ -5,7 +5,7 @@ Converted to [D](https://dlang.org/) by [Bastiaan Veelo](https://github.com/veel
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
-```shell
+```py
 dmd -dip1000 -run highiq.d
 ```
 
@@ -17,7 +17,7 @@ dmd -dip1000 -run highiq.d
 The original BASIC game code made use of calculus and clever choises of field IDs to determine the validity of moves.
 This is the original layout of IDs over the board:
 
-```
+```py
           13   14   15
 
           22   23   24
@@ -47,7 +47,7 @@ Fact of the matter is, however, that checking for difference is sufficient and t
 there is no need for the peculiar distribution of field IDs. Therefore I have chosen the following more logical
 distribution:
 
-```
+```py
           13   14   15
 
           23   24   25
@@ -73,7 +73,7 @@ illegal moves.
 
 ## Demo
 
-```
+```py
                       H-I-Q
 (After Creative Computing  Morristown, New Jersey)
 

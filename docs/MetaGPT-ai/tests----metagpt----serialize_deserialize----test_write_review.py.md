@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_write_review.py`
 
-```
+```py
 
 # 设置文件编码为 utf-8
 # 导入 pytest 模块

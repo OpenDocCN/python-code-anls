@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\csharp\Resources\Resource.cs`
 
-```
+```py
 // 引入需要使用的命名空间
 using System.IO;
 using System.Reflection;

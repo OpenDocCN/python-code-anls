@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Croupier.cs`
 
-```
+```py
 // 命名空间 Roulette 下的内部类 Croupier
 internal class Croupier
 {

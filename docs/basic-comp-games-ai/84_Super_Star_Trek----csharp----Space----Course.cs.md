@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Space\Course.cs`
 
-```
+```py
 // 命名空间 SuperStarTrek.Space 中的 Course 类，实现了原始代码中的航向计算
 internal class Course
 {

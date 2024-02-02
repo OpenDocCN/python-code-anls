@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_infer.py`
 
-```
+```py
 # 导入OnnxInferenceSession类和numpy库
 from onnx_modules.V220_OnnxInference import OnnxInferenceSession
 import numpy as np

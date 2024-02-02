@@ -1,6 +1,6 @@
 # `so-vits-svc\cluster\train_cluster.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 import logging

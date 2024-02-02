@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\java\src\AceyDucey.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

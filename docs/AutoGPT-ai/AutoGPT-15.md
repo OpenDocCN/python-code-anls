@@ -265,7 +265,7 @@ __all__ = ["TextToSpeechProvider", "TTSConfig"]
 # `autogpts/autogpt/autogpt/url_utils/validators.py`
 
 这段代码定义了一个名为 validate_url 的函数，其参数为一个函数类型，该函数需要接受一个字符串参数，并通过一系列验证规则检查该 URL 是否有效。以下是该函数的实际实现：
-```pypython
+```py
 import functools
 import re
 from typing import Any, Callable, ParamSpec, TypeVar
@@ -1203,7 +1203,7 @@ def test_execute_python_file_not_found(agent: Agent):
 
 以上代码使用了Python的pytest库进行单元测试，具体解释如下：
 
-```pypython
+```py
 # 定义测试函数
 def test_execute_shell(random_string: str, agent: Agent):
    # 执行 shell 命令并获取输出结果

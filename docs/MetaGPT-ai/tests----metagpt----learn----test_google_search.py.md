@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\learn\test_google_search.py`
 
-```
+```py
 
 # 导入异步 I/O 模块
 import asyncio

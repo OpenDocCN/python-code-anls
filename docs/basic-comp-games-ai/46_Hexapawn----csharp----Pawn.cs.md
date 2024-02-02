@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Pawn.cs`
 
-```
+```py
 // 命名空间声明，表示代码所在的命名空间
 namespace Hexapawn;
 

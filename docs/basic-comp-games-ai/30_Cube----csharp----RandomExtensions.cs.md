@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\csharp\RandomExtensions.cs`
 
-```
+```py
 # 创建一个名为 Cube 的命名空间，并定义一个内部静态类 RandomExtensions
 namespace Cube;
 

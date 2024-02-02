@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\RateLimit.py`
 
-```
+```py
 # 导入时间、gevent和日志模块
 import time
 import gevent

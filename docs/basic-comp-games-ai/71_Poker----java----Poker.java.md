@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\java\Poker.java`
 
-```
+```py
 import java.util.Random;  // 导入 Random 类
 import java.util.Scanner;  // 导入 Scanner 类
 import static java.lang.System.out;  // 静态导入 System 类的 out 对象

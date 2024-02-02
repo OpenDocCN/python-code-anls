@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Queen.Resources
 namespace Queen.Resources
 {

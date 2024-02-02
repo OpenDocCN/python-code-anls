@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\java\Reverse.java`
 
-```
+```py
 // 导入 Scanner 类和 Math 类
 import java.util.Scanner;
 import java.lang.Math;

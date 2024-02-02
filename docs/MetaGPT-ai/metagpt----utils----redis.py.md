@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\redis.py`
 
-```
+```py
 
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-

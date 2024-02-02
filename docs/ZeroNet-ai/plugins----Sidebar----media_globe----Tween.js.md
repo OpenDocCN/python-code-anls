@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\media_globe\Tween.js`
 
-```
+```py
 // 定义 TWEEN 对象，如果已经存在则使用已有的对象，否则创建一个新的空对象
 var TWEEN=TWEEN||function(){
     // 定义局部变量 a, e, c, d, f，其中 f 为数组

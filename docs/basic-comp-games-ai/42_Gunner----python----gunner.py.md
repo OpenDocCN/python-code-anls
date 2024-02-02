@@ -1,6 +1,6 @@
 # `basic-computer-games\42_Gunner\python\gunner.py`
 
-```
+```py
 #!/usr/bin/env python3
 #
 # Ported to Python by @iamtraction

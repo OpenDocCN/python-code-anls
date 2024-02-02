@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\test_general_api_base.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 命名空间
 global using Games.Common.IO;
 # 引入 Chomp.Resources 命名空间

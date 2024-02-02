@@ -20,7 +20,7 @@ API
 All keys may be 128 bits (16 bytes), 192 bits (24 bytes) or 256 bits (32 bytes) long.
 
 To generate a random key use:
-```python
+```py
 import os
 
 # 128 bit, 192 bit and 256 bit keys
@@ -37,7 +37,7 @@ To generate keys from simple-to-remember passwords, consider using a _password-b
 There are many modes of operations, each with various pros and cons. In general though, the **CBC** and **CTR** modes are recommended. The **ECB is NOT recommended.**, and is included primarily for completeness.
 
 Each of the following examples assumes the following key:
-```python
+```py
 import pyaes
 
 # A 256 bit (32 byte) key
@@ -51,7 +51,7 @@ iv = "InitializationVe"
 
 #### Counter Mode of Operation (recommended)
 
-```python
+```py
 aes = pyaes.AESModeOfOperationCTR(key)
 plaintext = "Text may be any length you wish, no padding is required"
 ciphertext = aes.encrypt(plaintext)
@@ -83,7 +83,7 @@ print repr(ciphertext)
 
 #### Cipher-Block Chaining (recommended)
 
-```python
+```py
 aes = pyaes.AESModeOfOperationCBC(key, iv = iv)
 plaintext = "TextMustBe16Byte"
 ciphertext = aes.encrypt(plaintext)
@@ -104,7 +104,7 @@ print decrypted == plaintext
 
 #### Cipher Feedback
 
-```python
+```py
 # Each block into the mode of operation must be a multiple of the segment
 # size. For this example we choose 8 bytes.
 aes = pyaes.AESModeOfOperationCFB(key, iv = iv, segment_size = 8)
@@ -128,7 +128,7 @@ print decrypted == plaintext
 
 #### Output Feedback Mode of Operation
 
-```python
+```py
 aes = pyaes.AESModeOfOperationOFB(key, iv = iv)
 plaintext = "Text may be any length you wish, no padding is required"
 ciphertext = aes.encrypt(plaintext)
@@ -150,7 +150,7 @@ print decrypted == plaintext
 
 #### Electronic Codebook (NOT recommended)
 
-```python
+```py
 aes = pyaes.AESModeOfOperationECB(key)
 plaintext = "TextMustBe16Byte"
 ciphertext = aes.encrypt(plaintext)
@@ -174,7 +174,7 @@ Since most of the modes of operations require data in specific block-sized or se
 
 The BlockFeeder class is meant to make life easier for you, by buffering bytes across multiple calls and returning bytes as they are available, as well as padding or stripping the output when finished, if necessary.
 
-```python
+```py
 import pyaes
 
 # Any mode of operation can be used; for this example CBC
@@ -206,7 +206,7 @@ print file('/etc/passwd').read() == decrypted
 
 This is meant to make it even easier to encrypt and decrypt streams and large files.
 
-```python
+```py
 import pyaes
 
 # Any mode of operation can be used; for this example CTR
@@ -235,7 +235,7 @@ Generally you should use one of the modes of operation above. This may however b
 
 The block cipher requires exactly one block of data to encrypt or decrypt, and each block should be an array with each element an integer representation of a byte.
 
-```python
+```py
 import pyaes
 
 # 16 byte block of plain text
@@ -272,7 +272,7 @@ Often, you wish to provide a password of arbitrary length, for example, somethin
 
 Here is an example, using the popular (possibly obsolete?) *crypt* PBKDF:
 
-```
+```py
 # See: https://www.dlitz.net/software/python-pbkdf2/
 import pbkdf2
 
@@ -289,7 +289,7 @@ key_32 = key[:32]
 
 The [scrypt](https://github.com/ricmoo/pyscrypt) PBKDF is intentionally slow, to make it more difficult to brute-force guess a password:
 
-```
+```py
 # See: https://github.com/ricmoo/pyscrypt
 import pyscrypt
 
@@ -313,7 +313,7 @@ key_32 = pyscrypt.hash(password, salt, N, r, p, 32)
 
 Another possibility, is to use a hashing function, such as SHA256 to hash the password, but this method may be vulnerable to [Rainbow Attacks](http://en.wikipedia.org/wiki/Rainbow_table), unless you use a [salt](http://en.wikipedia.org/wiki/Salt_(cryptography)).
 
-```python
+```py
 import hashlib
 
 password = "HelloWorld"

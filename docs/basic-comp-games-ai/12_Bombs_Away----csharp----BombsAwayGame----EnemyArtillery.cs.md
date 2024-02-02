@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\EnemyArtillery.cs`
 
-```
+```py
 // 命名空间声明，表示该类属于BombsAwayGame命名空间
 namespace BombsAwayGame;
 

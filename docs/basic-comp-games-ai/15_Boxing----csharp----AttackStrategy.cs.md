@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\AttackStrategy.cs`
 
-```
+```py
 // 命名空间声明
 namespace Boxing;
 

@@ -1,6 +1,6 @@
 # `markdown\scripts\gen_ref_nav.py`
 
-```
+```py
 
 """Generate the code reference pages and navigation."""
 

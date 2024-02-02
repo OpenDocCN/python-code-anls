@@ -1,6 +1,6 @@
 # `basic-computer-games\42_Gunner\csharp\Program.cs`
 
-```
+```py
 # 声明命名空间 Gunner
 namespace Gunner
 {

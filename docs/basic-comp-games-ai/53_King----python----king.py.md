@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\python\king.py`
 
-```
+```py
 """
 KING
 

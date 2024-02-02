@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\python\Stock_Market.py`
 
-```
+```py
 import random  # 导入 random 模块
 from typing import Any, Dict, List  # 导入类型提示模块
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Extensions\RandomExtensions.cs`
 
-```
+```py
 # 命名空间 Games.Common.Randomness 下的内部静态类 RandomExtensions
 internal static class RandomExtensions
 {

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-StemPort\StemPortPlugin.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入异常追踪模块

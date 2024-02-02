@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Game.cs`
 
-```
+```py
 // 命名空间 Salvo 中的内部类 Game
 internal class Game 
 {

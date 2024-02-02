@@ -2,7 +2,7 @@
 
 ### 使用MetaGPT镜像
 
-```bash
+```py
 # 步骤1: 下载metagpt官方镜像并准备好config.yaml
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
@@ -37,7 +37,7 @@ $ metagpt "Write a cli snake game"
 
 ### 自己构建镜像
 
-```bash
+```py
 # 您也可以自己构建metagpt镜像
 git clone https://github.com/geekan/MetaGPT.git
 cd MetaGPT && docker build -t metagpt:custom .

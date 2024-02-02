@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\csharp\Program.cs`
 
-```
+```py
 // 命名空间声明，定义了代码所在的命名空间
 namespace BasicComputerGames.Bagels
 {

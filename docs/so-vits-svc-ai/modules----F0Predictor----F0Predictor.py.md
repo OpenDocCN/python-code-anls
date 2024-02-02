@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\F0Predictor.py`
 
-```
+```py
 # 定义 F0Predictor 类，用于预测音频信号的基频
 class F0Predictor(object):
     # 计算音频信号的基频

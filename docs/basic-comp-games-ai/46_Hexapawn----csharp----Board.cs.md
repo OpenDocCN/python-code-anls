@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Board.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System;
 using System.Collections;

@@ -1,6 +1,6 @@
 # `basic-computer-games\47_Hi-Lo\python\hilo.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 设置 Python 脚本的解释器为 Python 3
 

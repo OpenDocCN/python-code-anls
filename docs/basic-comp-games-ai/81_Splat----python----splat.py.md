@@ -1,6 +1,6 @@
 # `basic-computer-games\81_Splat\python\splat.py`
 
-```
+```py
 # 导入所需的数学函数和随机函数
 from math import sqrt
 from random import choice, random, uniform

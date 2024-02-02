@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\java\src\Bullseye.java`
 
-```
+```py
 import java.util.ArrayList;  // 导入 ArrayList 类
 import java.util.Scanner;  // 导入 Scanner 类
 

@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\prob.py`
 
-```
+```py
 import jax  # 导入 jax 库
 import jax.numpy as jnp  # 导入 jax 库中的 numpy 模块，并重命名为 jnp
 

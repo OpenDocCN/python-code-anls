@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\HurkleGame.cs`
 
-```
+```py
 using System;
 
 namespace hurkle

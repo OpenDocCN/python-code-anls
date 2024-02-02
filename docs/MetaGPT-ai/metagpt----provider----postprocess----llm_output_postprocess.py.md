@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\postprocess\llm_output_postprocess.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

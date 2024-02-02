@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 和 Games.Common.Numbers 模块
 global using Games.Common.IO;
 global using Games.Common.Numbers;

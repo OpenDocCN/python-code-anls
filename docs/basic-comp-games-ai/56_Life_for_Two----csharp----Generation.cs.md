@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Generation.cs`
 
-```
+```py
 internal class Generation
 {
     private readonly Board _board;  // 声明私有变量_board，用于存储游戏板信息

@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Cube.Resources
 namespace Cube.Resources
 {

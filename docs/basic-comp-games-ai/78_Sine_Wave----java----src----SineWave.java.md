@@ -1,6 +1,6 @@
 # `basic-computer-games\78_Sine_Wave\java\src\SineWave.java`
 
-```
+```py
 /**
  * Sine Wave
  *

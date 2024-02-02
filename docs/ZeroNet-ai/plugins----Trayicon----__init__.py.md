@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Trayicon\__init__.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

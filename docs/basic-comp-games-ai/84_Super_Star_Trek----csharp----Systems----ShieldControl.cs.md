@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ShieldControl.cs`
 
-```
+```py
 // 引入所需的命名空间
 using Games.Common.IO;
 using SuperStarTrek.Commands;

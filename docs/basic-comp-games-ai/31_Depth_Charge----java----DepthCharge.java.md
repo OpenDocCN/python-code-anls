@@ -1,6 +1,6 @@
 # `basic-computer-games\31_Depth_Charge\java\DepthCharge.java`
 
-```
+```py
 import java.util.Scanner;  // 导入 Scanner 类，用于用户输入
 import java.lang.Math;  // 导入 Math 类，用于数学计算
 

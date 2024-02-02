@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Result.cs`
 
-```
+```py
 # 命名空间 King
 namespace King;
 

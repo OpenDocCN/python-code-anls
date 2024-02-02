@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\AnnounceShare\AnnounceSharePlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入操作系统模块

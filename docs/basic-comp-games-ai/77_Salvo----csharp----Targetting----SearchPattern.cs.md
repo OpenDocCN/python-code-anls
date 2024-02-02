@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\SearchPattern.cs`
 
-```
+```py
 // 使用不可变数组存储搜索模式的偏移量
 using System.Collections.Immutable;
 

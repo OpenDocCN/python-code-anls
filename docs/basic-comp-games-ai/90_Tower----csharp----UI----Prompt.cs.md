@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\UI\Prompt.cs`
 
-```
+```py
 using System.Collections.Generic;  // 导入 System.Collections.Generic 命名空间，用于使用泛型集合
 using System.Linq;  // 导入 System.Linq 命名空间，用于使用 LINQ 查询
 using static Tower.Resources.Strings;  // 导入 Tower.Resources.Strings 类中的静态成员

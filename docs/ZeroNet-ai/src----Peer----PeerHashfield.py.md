@@ -1,6 +1,6 @@
 # `ZeroNet\src\Peer\PeerHashfield.py`
 
-```
+```py
 # 导入 array 和 time 模块
 import array
 import time

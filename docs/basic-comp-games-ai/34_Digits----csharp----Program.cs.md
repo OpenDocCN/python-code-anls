@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Program.cs`
 
-```
+```py
 # 使用 Digits 命名空间中的全局成员
 global using Digits;
 # 使用 Games.Common.IO 命名空间中的全局成员

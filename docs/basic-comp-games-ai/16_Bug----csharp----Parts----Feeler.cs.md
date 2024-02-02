@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Parts\Feeler.cs`
 
-```
+```py
 # 定义了一个名为 Feeler 的内部类，实现了 IPart 接口
 internal class Feeler : IPart
 {

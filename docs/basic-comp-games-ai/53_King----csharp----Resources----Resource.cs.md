@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明一个命名空间 King.Resources
 namespace King.Resources
 {

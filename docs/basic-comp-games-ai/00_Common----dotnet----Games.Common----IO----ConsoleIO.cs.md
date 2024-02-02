@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\ConsoleIO.cs`
 
-```
+```py
 // 使用 System 命名空间
 using System;
 

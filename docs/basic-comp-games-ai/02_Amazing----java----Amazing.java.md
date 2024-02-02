@@ -1,6 +1,6 @@
 # `basic-computer-games\02_Amazing\java\Amazing.java`
 
-```
+```py
 # 导入所需的类
 import java.util.ArrayList;
 import java.util.Arrays;

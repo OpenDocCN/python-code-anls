@@ -1,6 +1,6 @@
 # `ZeroNet\src\Plugin\PluginManager.py`
 
-```
+```py
 import logging  # 导入日志模块
 import os  # 导入操作系统模块
 import sys  # 导入系统模块

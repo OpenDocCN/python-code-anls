@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\project_management_an.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

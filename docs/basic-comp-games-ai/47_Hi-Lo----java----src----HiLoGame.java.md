@@ -1,6 +1,6 @@
 # `basic-computer-games\47_Hi-Lo\java\src\HiLoGame.java`
 
-```
+```py
 // 创建名为HiLoGame的公共类
 public class HiLoGame {
 

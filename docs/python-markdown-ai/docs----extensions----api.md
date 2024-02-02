@@ -35,7 +35,7 @@ should return its processed list of Unicode strings, one per line.
 
 This simple example removes any lines with 'NO RENDER' before processing:
 
-```python
+```py
 from markdown.preprocessors import Preprocessor
 import re
 
@@ -134,7 +134,7 @@ it does nothing.
 
 Our code, like most block processors, is longer than other examples:
 
-```python
+```py
 def test_block_processor():
     class BoxBlockProcessor(BlockProcessor):
         RE_FENCE_START = r'^ *!{3,} *\n' # start line, e.g., `   !!!! `
@@ -181,7 +181,7 @@ Second Paragraph of **wrapped** text.
 !!!!!
 
 Another regular paragraph of text.
-```
+```py
 
 The fenced text adds one node with two children to the tree:
 
@@ -244,7 +244,7 @@ class MyTreeprocessor(Treeprocessor):
     def run(self, root):
         root.text = 'modified content'
         # No return statement is same as `return None`
-```
+```py
 
 #### Usages
 
@@ -323,7 +323,7 @@ class DelExtension(Extension):
     def extendMarkdown(self, md):
         DEL_PATTERN = r'--(.*?)--'  # like --del--
         md.inlinePatterns.register(DelInlineProcessor(DEL_PATTERN, md), 'del', 175)
-```
+```py
 
 Use this input example:
 
@@ -332,7 +332,7 @@ First line of the block.
 This is --strike one--.
 This is --strike two--.
 End of the block.
-```
+```py
 
 The example output might display as follows:
 
@@ -373,7 +373,7 @@ from markdown.extensions import Extension
 class DelExtension(Extension):
     def extendMarkdown(self, md):
         md.inlinePatterns.register(SimpleTagInlineProcessor(r'()--(.*?)--', 'del'), 'del', 175)
-```
+```py
 
 
 ##### Usages
@@ -453,7 +453,7 @@ class EmphasisPattern(Pattern):
         el = etree.Element('em')
         el.text = m.group(2)
         return el
-```
+```py
 
 As discussed in [Integrating Your Code Into Markdown][], an instance of this class will need to be provided to
 Markdown. That instance would be created like so:
@@ -463,7 +463,7 @@ Markdown. That instance would be created like so:
 MYPATTERN = r'\*([^*]+)\*'
 # pass in pattern and create instance
 emphasis = EmphasisPattern(MYPATTERN)
-```
+```py
 
 ### Postprocessors {: #postprocessors }
 
@@ -487,7 +487,7 @@ class ShowActualHtmlPostprocesor(Postprocessor):
     """ Wrap entire output in <pre> tags as a diagnostic. """
     def run(self, text):
         return '<pre>\n' + re.sub('<', '&lt;', text) + '</pre>\n'
-```
+```py
 
 #### Usages
 
@@ -516,7 +516,7 @@ First, import the ElementTree module:
 
 ```python
 import xml.etree.ElementTree as etree
-```
+```py
 Sometimes you may want text inserted into an element to be parsed by [Inline Patterns][]. In such a situation, simply
 insert the text as you normally would and the text will be automatically run through the Inline Patterns. However, if
 you do *not* want some text to be parsed by Inline Patterns, then insert the text as an `AtomicString`.
@@ -524,7 +524,7 @@ you do *not* want some text to be parsed by Inline Patterns, then insert the tex
 ```python
 from markdown.util import AtomicString
 some_element.text = AtomicString(some_text)
-```
+```py
 
 Here's a basic example which creates an HTML table (note that the contents of the second cell (`td2`) will be run
 through Inline Patterns latter):
@@ -538,7 +538,7 @@ td1.text = markdown.util.AtomicString("Cell content") # Add plain text content
 td2 = etree.SubElement(tr, "td")                   # Add second td to tr
 td2.text = "*text* with **inline** formatting."    # Add markup text
 table.tail = "Text after table"                    # Add text after table
-```
+```py
 
 You can also manipulate an existing tree. Consider the following example which adds a `class` attribute to `<a>`
 elements:
@@ -549,7 +549,7 @@ def set_link_class(self, element):
         if child.tag == "a":
               child.set("class", "myclass") #set the class attribute
         set_link_class(child) # run recursively on children
-```
+```py
 
 For more information about working with ElementTree see the [ElementTree
 Documentation][ElementTree].
@@ -568,7 +568,7 @@ processing steps from modifying the HTML data. For example,
 html = "<p>This is some <em>raw</em> HTML data</p>"
 el = etree.Element("div")
 el.text = self.md.htmlStash.store(html)
-```
+```py
 
 For the global `htmlStash` instance to be available from a processor, the `markdown.Markdown` instance must
 be passed to the processor from [extendMarkdown](#extendmarkdown) and will be available as `self.md.htmlStash`.
@@ -632,7 +632,7 @@ class MyExtension(Extension):
     def extendMarkdown(self, md):
         # Register instance of 'mypattern' with a priority of 175
         md.inlinePatterns.register(MyPattern(md), 'mypattern', 175)
-```
+```py
 
 ### registerExtension {: #registerextension }
 
@@ -644,7 +644,7 @@ md = markdown.Markdown(extensions=['footnotes'])
 html1 = md.convert(text_with_footnote)
 md.reset()
 html2 = md.convert(text_without_footnote)
-```
+```py
 
 Without calling `reset`, the footnote definitions from the first document will be inserted into the second document as
 they are still stored within the class instance. Therefore the `Extension` class needs to define a `reset` method that
@@ -657,7 +657,7 @@ To register an extension, call `md.registerExtension` from within your `extendMa
 def extendMarkdown(self, md):
     md.registerExtension(self)
     # insert processors and patterns here
-```
+```py
 
 Then, each time `reset` is called on the `markdown.Markdown` instance, the `reset` method of each registered extension
 will be called as well. You should also note that `reset` will be called on each registered extension after it is
@@ -676,14 +676,14 @@ class MyExtension(markdown.extensions.Extension):
             'option2' : ['value2', 'description2']
         }
         super(MyExtension, self).__init__(**kwargs)
-```
+```py
 
 When implemented this way the configuration parameters can be over-ridden at run time (thus the call to `super`). For
 example:
 
 ```python
 markdown.Markdown(extensions=[MyExtension(option1='other value')])
-```
+```py
 
 Note that if a keyword is passed in that is not already defined in `self.config`, then a `KeyError` is raised.
 
@@ -725,7 +725,7 @@ For example:
 import markdown
 from path.to.module import MyExtension
 md = markdown.Markdown(extensions=[MyExtension(option='value')])
-```
+```py
 
 However, Markdown also accepts "named" third party extensions for those occasions when it is impractical to import an
 extension directly (from the command line or from within templates). A "name" can either be a registered [entry
@@ -746,14 +746,14 @@ setup(
         'markdown.extensions': ['myextension = path.to.module:MyExtension']
     }
 )
-```
+```py
 
 After a user installs your extension using the above script, they could then call the extension using the
 `myextension` string name like this:
 
 ```python
 markdown.markdown(text, extensions=['myextension'])
-```
+```py
 
 Note that if two or more entry points within the same group are assigned the same name, Python-Markdown will only ever
 use the first one found and ignore all others. Therefore, be sure to give your extension a unique name.
@@ -771,13 +771,13 @@ Therefore, if you were to import the class like this:
 
 ```python
 from path.to.module import MyExtension
-```
+```py
 
 Then the extension can be loaded as follows:
 
 ```python
 markdown.markdown(text, extensions=['path.to.module:MyExtension'])
-```
+```py
 
 You do not need to do anything special to support this feature. As long as your extension class is able to be
 imported, a user can include it with the above syntax.
@@ -795,7 +795,7 @@ class MyExtension(markdown.extensions.Extension)
 
 def makeExtension(**kwargs):
     return MyExtension(**kwargs)
-```
+```py
 
 When `markdown.Markdown` is passed the "name" of your extension as a dot notation string that does not include a class
 (for example `path.to.module`), it will import the module and call the `makeExtension` function to initiate your
@@ -825,7 +825,7 @@ registry.register(SomeItem(), 'itemname', 20)
 item = registry[0]
 # Get the item by name
 item = registry['itemname']
-```
+```py
 
 When checking that the registry contains an item, you may use either the string-based "name", or a reference to the
 actual item. For example:

@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\python\blackjack.py`
 
-```
+```py
 """
 Blackjack
 

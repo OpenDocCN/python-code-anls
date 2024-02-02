@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\Bet.cs`
 
-```
+```py
 # 命名空间为Poker.Strategies，表示该类属于Poker.Strategies命名空间
 internal class Bet : Strategy
 {

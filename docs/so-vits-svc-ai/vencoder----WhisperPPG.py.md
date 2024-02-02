@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\WhisperPPG.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

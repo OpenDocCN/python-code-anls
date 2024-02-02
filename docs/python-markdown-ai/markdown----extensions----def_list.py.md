@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\def_list.py`
 
-```
+```py
 
 # Definition List Extension for Python-Markdown
 # =============================================

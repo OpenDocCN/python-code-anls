@@ -1,6 +1,6 @@
 # `basic-computer-games\92_Trap\csharp\Program.cs`
 
-```
+```py
 // 命名空间声明
 namespace trap_cs
 {

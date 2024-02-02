@@ -1,6 +1,6 @@
 # `Bert-VITS2\compress_model.py`
 
-```
+```py
 # 从 collections 模块中导入 OrderedDict 类
 from collections import OrderedDict
 # 从 text.symbols 模块中导入 symbols 列表

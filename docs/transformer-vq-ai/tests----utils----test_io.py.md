@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\test_io.py`
 
-```
+```py
 # 导入所需的库
 import os
 import tempfile

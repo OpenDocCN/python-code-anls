@@ -1,6 +1,6 @@
 # `basic-computer-games\67_One_Check\csharp\Board.cs`
 
-```
+```py
 namespace OneCheck;
 
 internal class Board

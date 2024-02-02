@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\java\src\TicTacToe2.java`
 
-```
+```py
 # 导入 Scanner 类和 Random 类
 import java.util.Scanner;
 import java.util.Random;

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\schedule.py`
 
-```
+```py
 # 导入 datetime 模块
 import datetime
 # 导入 time 模块

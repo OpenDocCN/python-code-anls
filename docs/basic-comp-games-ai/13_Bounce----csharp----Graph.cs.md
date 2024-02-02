@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\Graph.cs`
 
-```
+```py
 {
     /// <summary>
     /// 提供支持绘制高度 vs 时间的图表，并将其渲染为字符串。

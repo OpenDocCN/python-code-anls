@@ -1,6 +1,6 @@
 # `so-vits-svc\preprocess_flist_config.py`
 
-```
+```py
 # 导入必要的模块
 import argparse
 import json

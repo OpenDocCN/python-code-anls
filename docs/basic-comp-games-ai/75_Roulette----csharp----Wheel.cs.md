@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Wheel.cs`
 
-```
+```py
 # 使用不可变集合命名空间
 using System.Collections.Immutable;
 

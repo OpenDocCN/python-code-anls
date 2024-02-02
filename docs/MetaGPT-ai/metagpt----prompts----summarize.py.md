@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\prompts\summarize.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

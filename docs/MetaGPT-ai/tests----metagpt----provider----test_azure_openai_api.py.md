@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\test_azure_openai_api.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定使用 Python 解释器来执行脚本

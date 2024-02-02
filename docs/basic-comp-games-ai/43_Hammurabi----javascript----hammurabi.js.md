@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\javascript\hammurabi.js`
 
-```
+```py
 // 输出函数，将字符串添加到指定元素中
 function print(str)
 {

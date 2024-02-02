@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\Side.cs`
 
-```
+```py
 // 表示游戏中的主角
 internal abstract class Side
 {

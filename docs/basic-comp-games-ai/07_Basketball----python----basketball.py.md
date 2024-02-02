@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\python\basketball.py`
 
-```
+```py
 """
 The basketball class is a computer game that allows you to play as
 Dartmouth College's captain and playmaker

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\mode\markdown.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）定义模块
 (function(mod) {
   // 如果是 CommonJS 环境

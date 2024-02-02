@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Salvo.Resources
 namespace Salvo.Resources
 {

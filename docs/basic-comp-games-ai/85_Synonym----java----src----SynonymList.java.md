@@ -1,6 +1,6 @@
 # `basic-computer-games\85_Synonym\java\src\SynonymList.java`
 
-```
+```py
 // 导入 ArrayList 和 Arrays 类
 import java.util.ArrayList;
 import java.util.Arrays;

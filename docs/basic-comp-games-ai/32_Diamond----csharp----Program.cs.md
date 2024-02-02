@@ -1,6 +1,6 @@
 # `basic-computer-games\32_Diamond\csharp\Program.cs`
 
-```
+```py
 # 导入 Games.Common.IO 模块
 global using Games.Common.IO;
 # 导入 Diamond 模块

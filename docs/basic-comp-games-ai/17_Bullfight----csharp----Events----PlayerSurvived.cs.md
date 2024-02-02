@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\PlayerSurvived.cs`
 
-```
+```py
 // 声明一个命名空间 Game.Events，用于组织和管理事件相关的类
 namespace Game.Events
 {

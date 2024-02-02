@@ -1,6 +1,6 @@
 # `basic-computer-games\80_Slots\java\src\SlotsGame.java`
 
-```
+```py
 # 定义名为SlotsGame的公共类
 public class SlotsGame {
     # 定义名为main的公共静态方法，参数为字符串数组

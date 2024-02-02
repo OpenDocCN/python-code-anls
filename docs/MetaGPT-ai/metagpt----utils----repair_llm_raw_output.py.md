@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\repair_llm_raw_output.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

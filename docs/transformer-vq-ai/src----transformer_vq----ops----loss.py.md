@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\ops\loss.py`
 
-```
+```py
 # 导入 jax 库中的 numpy 模块，并重命名为 jnp
 import jax.numpy as jnp
 

@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V220\attentions_onnx.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 导入 torch 模块

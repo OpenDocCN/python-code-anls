@@ -1,6 +1,6 @@
 # `ChatRWKV\run_lm_eval.py`
 
-```
+```py
 # 导入所需的库
 import os, sys, types, json, math, time
 import numpy as np

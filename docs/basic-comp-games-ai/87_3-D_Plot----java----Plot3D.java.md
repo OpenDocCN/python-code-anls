@@ -1,6 +1,6 @@
 # `basic-computer-games\87_3-D_Plot\java\Plot3D.java`
 
-```
+```py
 import java.lang.Math;
 
 /**

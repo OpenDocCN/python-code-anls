@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\azure_tts.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

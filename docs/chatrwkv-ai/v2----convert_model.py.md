@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\convert_model.py`
 
-```
+```py
 # 导入必要的模块
 import os, sys, argparse
 # 获取当前文件所在目录的绝对路径

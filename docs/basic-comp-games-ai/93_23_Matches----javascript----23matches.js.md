@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\javascript\23matches.js`
 
-```
+```py
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {

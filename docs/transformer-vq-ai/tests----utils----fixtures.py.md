@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\fixtures.py`
 
-```
+```py
 # 导入所需的模块
 import os
 import pytest

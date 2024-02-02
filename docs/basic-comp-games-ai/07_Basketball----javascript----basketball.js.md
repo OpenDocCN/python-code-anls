@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\javascript\basketball.js`
 
-```
+```py
 // BASKETBALL
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

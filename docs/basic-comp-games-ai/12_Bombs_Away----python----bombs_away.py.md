@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\python\bombs_away.py`
 
-```
+```py
 """
 Bombs away
 

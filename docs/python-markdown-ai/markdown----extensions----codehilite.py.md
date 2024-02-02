@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\codehilite.py`
 
-```
+```py
 
 # CodeHilite Extension for Python-Markdown
 # ========================================

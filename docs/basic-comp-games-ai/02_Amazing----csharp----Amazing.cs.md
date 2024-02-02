@@ -1,6 +1,6 @@
 # `basic-computer-games\02_Amazing\csharp\Amazing.cs`
 
-```
+```py
 # 引入命名空间 System 和 System.Collections.Generic
 using System;
 using System.Collections.Generic;

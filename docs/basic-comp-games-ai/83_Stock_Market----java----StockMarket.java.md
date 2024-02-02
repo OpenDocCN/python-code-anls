@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\java\StockMarket.java`
 
-```
+```py
 # 导入所需的 Java 类
 import java.util.ArrayList;
 import java.util.InputMismatchException;

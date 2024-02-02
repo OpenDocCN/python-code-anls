@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Defense.cs`
 
-```
+```py
 # 创建名为Basketball的命名空间
 namespace Basketball;
 

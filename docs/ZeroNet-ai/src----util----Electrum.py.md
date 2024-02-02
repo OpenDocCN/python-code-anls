@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Electrum.py`
 
-```
+```py
 # 导入 hashlib 模块，用于生成哈希值
 # 导入 struct 模块，用于处理字节流
 import hashlib

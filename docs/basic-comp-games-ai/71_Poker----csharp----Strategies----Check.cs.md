@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\Check.cs`
 
-```
+```py
 # 创建一个名为Check的内部类，继承自Strategy类
 internal class Check : Strategy
 {

@@ -1,6 +1,6 @@
 # `Bert-VITS2\data_utils.py`
 
-```
+```py
 # 导入所需的库
 import os
 import random

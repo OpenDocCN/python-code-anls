@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\prompts\metagpt_sample.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

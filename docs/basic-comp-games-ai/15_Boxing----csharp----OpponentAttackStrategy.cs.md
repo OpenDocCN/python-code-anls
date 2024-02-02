@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\OpponentAttackStrategy.cs`
 
-```
+```py
 // 使用静态导入来引入 GameUtils 和 Console 类
 using static Boxing.GameUtils;
 using static System.Console;

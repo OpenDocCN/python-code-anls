@@ -1,6 +1,6 @@
 # `basic-computer-games\21_Calendar\python\calendar.py`
 
-```
+```py
 """
 Calendar
 

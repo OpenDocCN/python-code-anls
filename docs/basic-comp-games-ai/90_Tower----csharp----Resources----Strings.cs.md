@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\Resources\Strings.cs`
 
-```
+```py
 // 命名空间 Tower.Resources，包含了静态类 Strings
 namespace Tower.Resources
 {

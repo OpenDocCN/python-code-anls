@@ -1,6 +1,6 @@
 # `basic-computer-games\76_Russian_Roulette\python\russianroulette.py`
 
-```
+```py
 # 导入 random 模块
 from random import random
 

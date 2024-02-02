@@ -35,7 +35,7 @@
 ## 安装
 ### Pip安装
 
-```bash
+```py
 # 第 1 步：确保您的系统上安装了 Python 3.9+。您可以使用以下命令进行检查：
 # 可以使用conda来初始化新的python环境
 #     conda create -n metagpt python=3.9
@@ -62,7 +62,7 @@ sudo npm install -g @mermaid-js/mermaid-cli
 ### Docker安装
 > 注意：在Windows中，你需要将 "/opt/metagpt" 替换为Docker具有创建权限的目录，比如"D:\Users\x\metagpt"
 
-```bash
+```py
 # 步骤1: 下载metagpt官方镜像并准备好config.yaml
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
@@ -123,7 +123,7 @@ https://github.com/geekan/MetaGPT/assets/34952977/34345016-5d13-489d-b9f9-b82ace
 
 引用 [arXiv paper](https://arxiv.org/abs/2308.00352):
 
-```bibtex
+```py
 @misc{hong2023metagpt,
       title={MetaGPT: Meta Programming for Multi-Agent Collaborative Framework},
       author={Sirui Hong and Xiawu Zheng and Jonathan Chen and Yuheng Cheng and Jinlin Wang and Ceyao Zhang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu},

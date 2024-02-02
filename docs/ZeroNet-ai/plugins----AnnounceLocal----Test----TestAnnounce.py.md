@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\AnnounceLocal\Test\TestAnnounce.py`
 
-```
+```py
 # 导入所需的模块
 import time
 import copy

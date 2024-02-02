@@ -1,6 +1,6 @@
 # `Bert-VITS2\monotonic_align\core.py`
 
-```
+```py
 # 导入 numba 模块
 import numba
 

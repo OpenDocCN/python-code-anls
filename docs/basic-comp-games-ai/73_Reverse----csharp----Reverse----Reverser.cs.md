@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse\Reverser.cs`
 
-```
+```py
 // 命名空间 Reverse，包含 Reverser 类
 namespace Reverse
 {

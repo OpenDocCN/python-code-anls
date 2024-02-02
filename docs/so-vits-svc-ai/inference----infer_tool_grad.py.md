@@ -1,6 +1,6 @@
 # `so-vits-svc\inference\infer_tool_grad.py`
 
-```
+```py
 # 导入所需的库
 import io
 import logging

@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\ComputerFunction.cs`
 
-```
+```py
 # 导入 Games.Common.IO 和 SuperStarTrek.Space 模块
 using Games.Common.IO;
 using SuperStarTrek.Space;

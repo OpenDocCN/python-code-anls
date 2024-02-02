@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\edit\continuelist.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）将模块封装起来，避免变量污染全局作用域
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 引入 CodeMirror 模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\19_Bunny\java\src\Bunny.java`
 
-```
+```py
 // 导入必要的类
 import java.util.ArrayList;
 import java.util.Arrays;

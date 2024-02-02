@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\chinese.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 # 导入正则表达式模块

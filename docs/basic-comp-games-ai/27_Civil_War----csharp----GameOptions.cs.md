@@ -1,6 +1,6 @@
 # `basic-computer-games\27_Civil_War\csharp\GameOptions.cs`
 
-```
+```py
 // 引入命名空间 System，用于访问系统类库
 using System;
 // 引入 CivilWar.ConsoleUtils 命名空间，用于访问控制台工具类

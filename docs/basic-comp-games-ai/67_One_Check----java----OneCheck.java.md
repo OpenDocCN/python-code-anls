@@ -1,6 +1,6 @@
 # `basic-computer-games\67_One_Check\java\OneCheck.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类，用于操作数组
 import java.util.Scanner;  // 导入 Scanner 类，用于接收用户输入
 

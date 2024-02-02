@@ -1,6 +1,6 @@
 # `basic-computer-games\23_Checkers\python\checkers.py`
 
-```
+```py
 """
 CHECKERS
 

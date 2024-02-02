@@ -1,6 +1,6 @@
 # `basic-computer-games\38_Fur_Trader\java\src\FurTrader.java`
 
-```
+```py
 // 导入所需的类
 import java.util.ArrayList;
 import java.util.Arrays;

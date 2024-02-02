@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\benchmark.py`
 
-```
+```py
 # 导入所需的库
 import os, sys, types, json, math, time
 # 获取当前文件所在路径

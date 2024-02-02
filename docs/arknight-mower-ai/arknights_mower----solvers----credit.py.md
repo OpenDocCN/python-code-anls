@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\credit.py`
 
-```
+```py
 # 从工具包中导入检测器
 from ..utils import detector
 # 从工具包中导入设备类

@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\IReadWriteExtensions.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System;
 using System.Linq;

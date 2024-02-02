@@ -1,6 +1,6 @@
 # `basic-computer-games\35_Even_Wins\javascript\gameofevenwins.js`
 
-```
+```py
 // 定义一个打印函数，将字符串输出到指定的元素中
 function print(str)
 {

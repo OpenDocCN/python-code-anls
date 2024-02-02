@@ -1,6 +1,6 @@
 # `basic-computer-games\11_Bombardment\java\src\BombardmentGame.java`
 
-```
+```py
 // 定义名为BombardmentGame的公共类
 public class BombardmentGame {
 

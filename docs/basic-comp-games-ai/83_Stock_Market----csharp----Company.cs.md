@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Company.cs`
 
-```
+```py
 // 命名空间声明，表示代码所属的命名空间
 namespace Game
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\TurnHandler.cs`
 
-```
+```py
 {
     // 命名空间 Salvo 下的内部类 TurnHandler
     internal class TurnHandler

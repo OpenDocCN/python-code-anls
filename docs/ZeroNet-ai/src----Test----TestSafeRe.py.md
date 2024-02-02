@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestSafeRe.py`
 
-```
+```py
 # 导入 SafeRe 模块
 from util import SafeRe
 # 导入 pytest 模块

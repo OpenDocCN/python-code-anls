@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\inline\test_raw_html.py`
 
-```
+```py
 """
 这段代码是关于 Python Markdown 的文档和测试用例。
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\HandRank.cs`
 
-```
+```py
 // 定义一个命名空间为 Poker.Cards 的内部类 HandRank
 internal class HandRank
 {

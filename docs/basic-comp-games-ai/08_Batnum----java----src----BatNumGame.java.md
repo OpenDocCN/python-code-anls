@@ -1,6 +1,6 @@
 # `basic-computer-games\08_Batnum\java\src\BatNumGame.java`
 
-```
+```py
 # 定义一个名为BatNumGame的公共类
 public class BatNumGame {
 

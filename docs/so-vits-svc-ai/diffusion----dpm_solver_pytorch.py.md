@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\dpm_solver_pytorch.py`
 
-```
+```py
 import torch
 
 class NoiseScheduleVP:
@@ -110,7 +110,7 @@ def model_wrapper(
             Note that the score function and the noise prediction model follows a simple relationship:
             ```
                 noise(x_t, t) = -sigma_t * score(x_t, t)
-            ```
+            ```py
     """
     # 我们支持三种类型的 DPM 引导采样，通过设置 `guidance_type`：
         # 1. "uncond": 无条件 DPM 采样。

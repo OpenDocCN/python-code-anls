@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestUpnpPunch.py`
 
-```
+```py
 # 导入所需的模块
 import socket
 from urllib.parse import urlparse

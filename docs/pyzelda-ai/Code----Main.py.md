@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Main.py`
 
-```
+```py
 
 # 导入pygame和sys模块
 import pygame, sys

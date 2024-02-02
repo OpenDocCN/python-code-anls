@@ -9,7 +9,7 @@
 3. 在ai_profile对象上应用配置文件中的设置，包括override_name、override_role、replace_directives、resources和constraints等，同时使用最佳实践进行调整。
 4. 接下来，测试apply_overrides_to_ai_settings函数，其作用是应用配置文件中的设置，将override_name、override_role、resources和constraints等设置应用到指定的AIProfile上。
 5. 最后，通过断言确保对AIProfile的修改是正确的，例如：
-```pydiff
+```py
    assert ai_profile.ai_name == "New AI"
    assert ai_profile.ai_role == "New Role"
    assert directories.resources == ["NewResource"]
@@ -582,7 +582,7 @@ def function_based(arg1: int, arg2: str) -> str:
 
 # `autogpts/autogpt/tests/unit/test_ai_profile.py`
 
-```pyyaml
+```py
    """
 
    ai_profile = AIProfile()

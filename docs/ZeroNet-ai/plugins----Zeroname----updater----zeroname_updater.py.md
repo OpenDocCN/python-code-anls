@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Zeroname\updater\zeroname_updater.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import print_function
 import time

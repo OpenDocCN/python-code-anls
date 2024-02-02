@@ -1134,7 +1134,7 @@ Additionally, you may want to consider the following improvements:
 3. You may also want to consider adding support for `assistant_thoughts_plan` and `assistant_thoughts_criticism` keys to indicate that they are expected to be strings.
 
 Here's an updated version of the `remove_ansi_escape` function with these improvements:
-```pypython
+```py
 def remove_ansi_escape(text):
    # Remove ANSI escape codes that are not truly ANSI escape codes
    return "".join(
@@ -1142,7 +1142,7 @@ def remove_ansi_escape(text):
    )
 ```
 And here's an updated version of the `print_attribute` function with the added docstring:
-```pypython
+```py
 def print_attribute(title, text, **kwargs):
    # Format the text using the given title and any additional options.
    # Add a few more options to the present implementation.
@@ -1460,19 +1460,19 @@ def print_ai_settings(
 This is a simple Python class called `Spinner` that initializes a spinner with a specified message, delay between updates, and whether or not to display the spinner. The spinner is updated using a cycle of characters, and the message is printed to the console after each update.
 
 To use the `Spinner` class, you first need to import it, like this:
-```pypython
+```py
 import spinner
 ```
 Then, you can call the `Spinner` class like this:
-```pypython
+```py
 spinner_class = spinner.Spinner("This is a test message", 0.2, True)
 ```
 This creates a new `Spinner` object called `spinner_class` with the given message, delay, and whether or not to display the spinner. The `Spinner` object can then be used to spin the spinner like this:
-```pypython
+```py
 spinner_class.spin()
 ```
 This will start the spinner, which will print the message to the console after each update, with a delay of 0.2 seconds between each update. The spinner will also display the character `"-"` to indicate that it is running. Once you are done using the `Spinner` object, you should call the `stop` method on it, like this:
-```pypython
+```py
 spinner_class.stop()
 ```
 This will stop the spinner and print the message to the console after the last update.

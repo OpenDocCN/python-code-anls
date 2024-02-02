@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\media_globe\Detector.js`
 
-```
+```py
 // 作者信息
 // alteredq / http://alteredqualia.com/
 // mr.doob / http://mrdoob.com/

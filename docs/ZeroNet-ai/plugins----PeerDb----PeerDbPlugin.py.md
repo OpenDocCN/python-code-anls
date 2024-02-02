@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\PeerDb\PeerDbPlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 SQLite3 模块

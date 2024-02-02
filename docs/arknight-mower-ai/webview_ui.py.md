@@ -1,6 +1,6 @@
 # `arknights-mower\webview_ui.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 导入 webview 模块

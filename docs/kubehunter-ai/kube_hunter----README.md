@@ -205,7 +205,7 @@ To alter event attributes, return a new event, based on the `self.event` after y
 __Make sure to return the event from the execute method, or the event will not get published__  
  
 For example, if you don't want to hunt services found on a localhost IP, you can create the following module, in the `kube_hunter/modules/report/`
-```python
+```py
 from kube_hunter.core.events import handler
 from kube_hunter.core.events.types import Service, EventFilterBase
 
@@ -221,7 +221,7 @@ The following filter will filter out any Service found on a localhost IP. Those 
 That means other Hunters that are subscribed to this Service will not get triggered.
 That opens up a wide variety of possible operations, as this not only can __filter out__ events, but you can actually __change event attributes__, for example:
 
-```python
+```py
 from kube_hunter.core.events import handler
 from kube_hunter.core.types import InformationDisclosure
 from kube_hunter.core.events.types import Vulnerability, EventFilterBase
@@ -244,6 +244,6 @@ __Note: In filters, you should not change attributes in the event.previous. This
 ## Tests
 Although we haven't been rigorous about this in the past, please add tests to support your code changes. Tests are executed like this: 
 
-```bash
+```py
 pytest
 ```

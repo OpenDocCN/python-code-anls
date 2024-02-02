@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\python\bullseye.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 从 dataclasses 模块中导入 dataclass 装饰器

@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Game.cs`
 
-```
+```py
 using Basketball.Plays;  # 导入篮球比赛中的战术类
 using Basketball.Resources;  # 导入篮球比赛中的资源类
 using Games.Common.IO;  # 导入通用游戏输入输出类

@@ -1,6 +1,6 @@
 # `basic-computer-games\14_Bowling\csharp\GameResults.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Collections.Generic;

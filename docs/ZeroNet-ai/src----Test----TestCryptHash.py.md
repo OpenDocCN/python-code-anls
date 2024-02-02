@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestCryptHash.py`
 
-```
+```py
 # 导入 base64 模块
 import base64
 

@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\libsecp256k1message\libsecp256k1message.py`
 
-```
+```py
 # 导入所需的模块
 import hashlib
 import base64

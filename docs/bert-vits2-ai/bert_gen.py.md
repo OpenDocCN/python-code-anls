@@ -1,6 +1,6 @@
 # `Bert-VITS2\bert_gen.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 multiprocessing 库中导入 Pool 类

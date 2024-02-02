@@ -1,6 +1,6 @@
 # `yolov5-DNF\direction_move.py`
 
-```
+```py
 # 导入时间模块
 import time
 

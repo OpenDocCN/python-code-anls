@@ -18,7 +18,7 @@ By default, all headers will automatically have unique `id` attributes
 generated based upon the text of the header. Note this example, in which all
 three headers would have the same `id`:
 
-```md
+```py
 #Header
 #Header
 #Header
@@ -26,7 +26,7 @@ three headers would have the same `id`:
 
 Results in:
 
-```html
+```py
 <h1 id="header">Header</h1>
 <h1 id="header_1">Header</h1>
 <h1 id="header_2">Header</h1>
@@ -36,7 +36,7 @@ Place a marker in the document where you would like the Table of Contents to
 appear. Then, a nested list of all the headers in the document will replace the
 marker. The marker defaults to `[TOC]` so the following document:
 
-```md
+```py
 [TOC]
 
 # Header 1
@@ -46,7 +46,7 @@ marker. The marker defaults to `[TOC]` so the following document:
 
 would generate the following output:
 
-```html
+```py
 <div class="toc">
   <ul>
     <li><a href="#header-1">Header 1</a></li>
@@ -64,7 +64,7 @@ Table of Contents is available as an attribute (`toc`) on the Markdown class.
 This allows one to insert the Table of Contents elsewhere in their page
 template. For example:
 
-```pycon
+```py
 >>> md = markdown.Markdown(extensions=['toc'])
 >>> html = md.convert(text)
 >>> page = render_some_template(context={'body': html, 'toc': md.toc})
@@ -74,7 +74,7 @@ The `toc_tokens` attribute is also available on the Markdown class and contains
 a nested list of dict objects. For example, the above document would result in
 the following object at `md.toc_tokens`:
 
-```python
+```py
 [
     {
         'level': 1,
@@ -102,7 +102,7 @@ For example, the following Markdown:
 
 [Attribute Lists Extension]: attr_list.md
 
-```md
+```py
 [TOC]
 
 # Functions
@@ -111,7 +111,7 @@ For example, the following Markdown:
 ```
 would generate the following output:
 
-```html
+```py
 <div class="toc">
   <ul>
     <li><a href="#functions">Functions</a></li>
@@ -239,6 +239,6 @@ The following options are provided to configure the output:
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['toc'])
 ```

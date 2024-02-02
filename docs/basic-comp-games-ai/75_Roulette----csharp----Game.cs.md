@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Game.cs`
 
-```
+```py
 // 命名空间 Roulette 下的内部类 Game
 internal class Game
 {

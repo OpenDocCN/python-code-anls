@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\diffusion_onnx.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 从 collections 模块中导入 deque 类

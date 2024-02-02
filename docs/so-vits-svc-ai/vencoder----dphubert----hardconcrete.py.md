@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\dphubert\hardconcrete.py`
 
-```
+```py
 # 导入必要的库
 import math
 import torch

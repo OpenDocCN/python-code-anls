@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\DioF0Predictor.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 import pyworld  # 导入 pyworld 库，用于声码器相关功能
 

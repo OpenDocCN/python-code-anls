@@ -1,6 +1,6 @@
 # `basic-computer-games\39_Golf\csharp\Program.cs`
 
-```
+```py
 // 定义 Golf 类，实现高尔夫游戏的逻辑
 class Golf
 {

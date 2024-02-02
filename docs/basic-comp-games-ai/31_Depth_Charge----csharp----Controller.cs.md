@@ -1,6 +1,6 @@
 # `basic-computer-games\31_Depth_Charge\csharp\Controller.cs`
 
-```
+```py
 // 命名空间定义，包含了 DepthCharge 程序的相关内容
 namespace DepthCharge
 {

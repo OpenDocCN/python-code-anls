@@ -1,6 +1,6 @@
 # `basic-computer-games\63_Name\java\Name.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类，用于对数组进行排序
 import java.util.Scanner;  // 导入 Scanner 类，用于接收用户输入
 

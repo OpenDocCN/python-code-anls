@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_role.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # @Date    : 11/23/2023 4:49 PM

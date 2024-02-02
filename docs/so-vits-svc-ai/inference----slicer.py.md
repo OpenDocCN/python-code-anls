@@ -1,6 +1,6 @@
 # `so-vits-svc\inference\slicer.py`
 
-```
+```py
 # 导入 librosa 库，用于音频处理
 import librosa
 # 导入 torch 库，用于深度学习

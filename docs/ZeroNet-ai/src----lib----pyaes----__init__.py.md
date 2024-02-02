@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\pyaes\__init__.py`
 
-```
+```py
 # 这是对 AES 算法和 AES 常见操作模式的纯 Python 实现
 
 # 参见：https://en.wikipedia.org/wiki/Advanced_Encryption_Standard

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestEvent.py`
 
-```
+```py
 # 导入名为 util 的模块
 import util
 

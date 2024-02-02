@@ -33,7 +33,7 @@ We present the dev results on SQuAD 2.0 and MNLI tasks.
 
 #### Fine-tuning with HF transformers
 
-```bash
+```py
 #!/bin/bash
 
 cd transformers/examples/pytorch/text-classification/
@@ -79,7 +79,7 @@ If you find DeBERTa useful for your work, please cite the following papers:
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }
-```
+```py
 
 ``` latex
 @inproceedings{

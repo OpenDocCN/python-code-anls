@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\java\src\Mugwump.java`
 
-```
+```py
 import java.util.Arrays;
 import java.util.Scanner;
 

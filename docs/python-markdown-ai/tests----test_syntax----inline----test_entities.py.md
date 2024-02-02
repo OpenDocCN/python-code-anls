@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\inline\test_entities.py`
 
-```
+```py
 
 # 导入markdown.test_tools模块中的TestCase类
 from markdown.test_tools import TestCase

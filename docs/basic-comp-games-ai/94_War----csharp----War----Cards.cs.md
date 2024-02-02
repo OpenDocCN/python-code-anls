@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\csharp\War\Cards.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Collections.Generic;

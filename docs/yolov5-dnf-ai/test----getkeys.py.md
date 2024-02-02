@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\getkeys.py`
 
-```
+```py
 # 导入 win32api 库并重命名为 wapi
 import win32api as wapi
 

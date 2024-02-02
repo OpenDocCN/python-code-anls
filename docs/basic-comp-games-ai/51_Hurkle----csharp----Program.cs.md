@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\Program.cs`
 
-```
+```py
 # 引入 System 模块
 using System;
 

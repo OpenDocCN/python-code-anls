@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\UI\TowerDisplay.cs`
 
-```
+```py
 using System;
 using System.Text;
 using Tower.Models;

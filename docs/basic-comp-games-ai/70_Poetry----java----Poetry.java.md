@@ -1,6 +1,6 @@
 # `basic-computer-games\70_Poetry\java\Poetry.java`
 
-```
+```py
 /**
  * Game of Poetry
  * <p>

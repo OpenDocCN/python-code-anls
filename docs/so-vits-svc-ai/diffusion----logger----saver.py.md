@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\logger\saver.py`
 
-```
+```py
 '''
 author: wayn391@mastertones
 '''

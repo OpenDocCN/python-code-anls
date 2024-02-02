@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\ValidityTest.cs`
 
-```
+```py
 // 命名空间 King 下的 ValidityTest 类
 namespace King
 {

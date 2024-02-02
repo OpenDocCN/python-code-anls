@@ -1,6 +1,6 @@
 # `KubiScan\engine\priority.py`
 
-```
+```py
 # 导入枚举类型模块
 from enum import Enum
 

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\planner\test_action_planner.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Fleet.cs`
 
-```
+```py
 // 使用不可变集合和可空引用类型
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;

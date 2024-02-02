@@ -1,6 +1,6 @@
 # `markdown\markdown\postprocessors.py`
 
-```
+```py
 
 # Python Markdown
 

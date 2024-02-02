@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\RMVPEF0Predictor.py`
 
-```
+```py
 # 导入必要的模块
 from typing import Union
 import numpy as np

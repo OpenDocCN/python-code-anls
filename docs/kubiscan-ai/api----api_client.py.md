@@ -1,6 +1,6 @@
 # `KubiScan\api\api_client.py`
 
-```
+```py
 # 导入所需的模块
 from kubernetes import client, config
 from shutil import copyfile

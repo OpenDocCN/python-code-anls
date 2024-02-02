@@ -1,6 +1,6 @@
 # `Bert-VITS2\resample.py`
 
-```
+```py
 # 导入所需的模块
 import os
 import argparse

@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\arp.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 从 scapy.all 模块中导入所需的类和函数

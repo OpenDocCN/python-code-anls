@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\__init__.py`
 
-```
+```py
 # 从不同的模块中导入特定的类或函数
 from .base_construct import BaseConstructSolver
 from .credit import CreditSolver

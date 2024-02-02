@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\selection\active-line.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）来封装代码，防止变量污染全局作用域
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 导入 CodeMirror 模块

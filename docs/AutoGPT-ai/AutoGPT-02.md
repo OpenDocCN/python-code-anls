@@ -720,7 +720,7 @@ class PlanningAgent(ContextMixin, FileWorkspaceMixin, BaseAgent):
                 pass
             case "action":
                 # TODO: need to insert the functions here again?
-                response_format = """```ts
+                response_format = """```py
                 interface Response {
                     thoughts: {
                         // Thoughts
@@ -740,7 +740,7 @@ class PlanningAgent(ContextMixin, FileWorkspaceMixin, BaseAgent):
                 pass
             case "evaluate":
                 # TODO: insert latest action (with reasoning) + result + evaluation instructions
-                response_format = f"""```ts
+                response_format = f"""```py
                 interface Response {{
                     thoughts: {{
                         // Thoughts
@@ -900,7 +900,7 @@ class PlanningAgent(ContextMixin, FileWorkspaceMixin, BaseAgent):
         )
         return response
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agents/__init__.py`
 
@@ -919,7 +919,7 @@ from .base import AgentThoughts, BaseAgent, CommandArgs, CommandName
 
 __all__ = ["BaseAgent", "Agent", "CommandName", "CommandArgs", "AgentThoughts"]
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agents/features/context.py`
 
@@ -972,7 +972,7 @@ class AgentContext:
         return "\n\n".join([f"{i}. {c.fmt()}" for i, c in enumerate(self.items, 1)])
 
 
-```
+```py
 
 这段代码定义了一个名为 ContextMixin 的类，用于在 BaseAgent 子类中添加对上下文的支持。在 mixin 的初始化方法中，创建了一个名为 `AgentContext` 的上下文对象，并将其设置为实例的初始化参数。
 
@@ -1021,7 +1021,7 @@ class ContextMixin:
         )  # type: ignore
 
 
-```
+```py
 
 这段代码定义了一个名为 `get_agent_context` 的函数，它接受一个名为 `agent` 的参数，并返回一个名为 `AgentContext` 或 `None` 的对象。
 
@@ -1037,7 +1037,7 @@ def get_agent_context(agent: BaseAgent) -> AgentContext | None:
 
     return None
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agents/features/file_workspace.py`
 
@@ -1096,7 +1096,7 @@ class FileWorkspaceMixin:
         return res
 
 
-```
+```py
 
 该代码定义了两个函数，分别是`_setup_workspace`和`get_agent_workspace`。它们的作用如下：
 
@@ -1122,7 +1122,7 @@ def get_agent_workspace(agent: BaseAgent) -> FileWorkspace | None:
 
     return None
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agents/features/watchdog.py`
 
@@ -1154,7 +1154,7 @@ from ..base import BaseAgent
 logger = logging.getLogger(__name__)
 
 
-```
+```py
 
 This is a class called `WatchdogMixin` that inherits from `BaseAgent`. It appears to be a mixin of several other classes, including `BaseAgent`, `AnotherClass`, `SmartLLM`, `ExitStack`, and `ProductiveMixin`.
 
@@ -1227,7 +1227,7 @@ class WatchdogMixin:
 
         return command_name, command_args, thoughts
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agents/prompt_strategies/one_shot.py`
 
@@ -1261,7 +1261,7 @@ if TYPE_CHECKING:
     from autogpt.agents.agent import Agent
     from autogpt.models.action_history import Episode
 
-```
+```py
 
 这段代码是一个自定义的Python程序，它的目的是在使用Autogpt库时处理异常情况。这个程序定义了一个名为InvalidAgentResponseError的异常类，用于表示当一个Agent在响应AIDirective时出现异常的情况。
 
@@ -1288,7 +1288,7 @@ from autogpt.core.resource.model_providers.schema import (
 )
 from autogpt.core.utils.json_schema import JSONSchema
 from autogpt.json_utils.utilities import extract_dict_from_response
-```
+```py
 
 This is a Python class that defines a `UserConfigurable` object for a JSON Schema.
 
@@ -1405,7 +1405,7 @@ class OneShotAgentPromptConfiguration(SystemConfiguration):
     # )
 
 
-```
+```py
 
 This is a class definition for an `Agent` that uses the text-based assisting AI platform `Aurora`. This class provides methods for generating responses to user commands, validating the responses against a response schema, and extracting the command name and arguments from the `assistant_reply_dict`.
 
@@ -1690,7 +1690,7 @@ class OneShotAgentPromptStrategy(PromptStrategy):
         return command_name, arguments, assistant_reply_dict
 
 
-```
+```py
 
 The command name and arguments can be parsed from the `assistant_reply_json` object if the `use_openai_functions_api` flag is `True`. If `use_openai_functions_api` is `True`, the function name and arguments can be extracted from the `function_call` field in the `assistant_reply` object. If the function name or arguments are not present in the `assistant_reply_json` object, a `JsonDecodeError` will be raised.
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\java\src\Player.java`
 
-```
+```py
 /**
  * 游戏中的玩家 - 包括姓名和分数
  *

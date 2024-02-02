@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\java\src\BombsAway.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

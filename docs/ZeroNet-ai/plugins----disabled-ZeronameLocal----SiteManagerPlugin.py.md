@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-ZeronameLocal\SiteManagerPlugin.py`
 
-```
+```py
 # 导入所需的模块
 import logging, json, os, re, sys, time, socket
 from Plugin import PluginManager

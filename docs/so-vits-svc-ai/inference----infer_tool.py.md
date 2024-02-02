@@ -1,6 +1,6 @@
 # `so-vits-svc\inference\infer_tool.py`
 
-```
+```py
 # 导入所需的库
 import gc  # 垃圾回收模块
 import hashlib  # 哈希算法模块

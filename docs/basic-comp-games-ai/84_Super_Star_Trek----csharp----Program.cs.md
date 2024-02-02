@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Program.cs`
 
-```
+```py
 // 引入所需的命名空间和模块
 using Games.Common.IO;
 using Games.Common.Randomness;

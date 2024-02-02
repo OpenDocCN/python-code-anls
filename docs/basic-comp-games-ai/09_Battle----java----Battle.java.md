@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\java\Battle.java`
 
-```
+```py
 import java.io.IOException;  // 导入处理输入输出异常的类
 import java.util.ArrayList;  // 导入用于存储对象的动态数组类
 import java.util.Arrays;      // 导入用于操作数组的类

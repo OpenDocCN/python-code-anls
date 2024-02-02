@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\diffusion.py`
 
-```
+```py
 # 导入所需的库
 from collections import deque
 from functools import partial

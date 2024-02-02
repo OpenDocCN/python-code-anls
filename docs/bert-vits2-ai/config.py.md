@@ -1,6 +1,6 @@
 # `Bert-VITS2\config.py`
 
-```
+```py
 """
 @Desc: 全局配置文件读取
 """

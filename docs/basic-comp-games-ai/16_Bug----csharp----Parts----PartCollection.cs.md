@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Parts\PartCollection.cs`
 
-```
+```py
 using System.Text;
 using BugGame.Resources;
 

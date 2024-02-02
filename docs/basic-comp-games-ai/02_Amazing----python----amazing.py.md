@@ -1,6 +1,6 @@
 # `basic-computer-games\02_Amazing\python\amazing.py`
 
-```
+```py
 # 导入必要的模块和类
 import enum
 import random

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_attr_list.py`
 
-```
+```py
 """
 这段代码是一个Python Markdown测试用例，用于测试Markdown的属性列表功能。
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\python\cube.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本解释器为 Python 3
 

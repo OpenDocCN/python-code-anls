@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Program.cs`
 
-```
+```py
 # 导入Games.Common.IO模块，用于处理输入输出
 # 导入Games.Common.Randomness模块，用于生成随机数
 # 导入Hexapawn模块，用于进行游戏

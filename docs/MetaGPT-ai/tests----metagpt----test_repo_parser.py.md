@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\test_repo_parser.py`
 
-```
+```py
 
 # 从 pathlib 模块中导入 Path 类
 from pathlib import Path

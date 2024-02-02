@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\MissionSide.cs`
 
-```
+```py
 // 表示一个选择标准（非敢死队）任务的主角
 internal abstract class MissionSide : Side
 {

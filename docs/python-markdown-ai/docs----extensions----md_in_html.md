@@ -32,7 +32,7 @@ The following tags have the `block` behavior by default: `article`, `aside`, `bl
 
 For example, the following:
 
-```
+```py
 <div markdown="1">
 This is a *Markdown* Paragraph.
 </div>
@@ -44,7 +44,7 @@ This is a *Markdown* Paragraph.
 <div>
 <p>This is a <em>Markdown</em> Paragraph.</p>
 </div>
-```
+```py
 
 The following tags have the `span` behavior by default: `address`, `dd`, `dt`, `h[1-6]`, `legend`, `li`, `p`, `td`,
 and `th`.
@@ -55,7 +55,7 @@ For example, the following:
 <p markdown="1">
 This is not a *Markdown* Paragraph.
 </p>
-```
+```py
 
 ... is rendered as:
 
@@ -63,7 +63,7 @@ This is not a *Markdown* Paragraph.
 <p>
 This is not a <em>Markdown</em> Paragraph.
 </p>
-```
+```py
 
 ### `markdown="block"` { #block }
 
@@ -85,7 +85,7 @@ A *Markdown* paragraph.
 * A second list item.
 
 </section>
-```
+```py
 
 ... is rendered as:
 
@@ -98,7 +98,7 @@ A *Markdown* paragraph.
 <li>A second list item.</li>
 </ul>
 </section>
-```
+```py
 
 !!! warning
 
@@ -121,7 +121,7 @@ For example, the following:
 <div markdown="span">
 # *Not* a header
 </div>
-```
+```py
 
 ... is rendered as:
 
@@ -129,7 +129,7 @@ For example, the following:
 <div>
 # <em>Not</em> a header
 </div>
-```
+```py
 
 ### Ignored Elements
 
@@ -166,7 +166,7 @@ A Markdown paragraph.
 </section>
 
 </article>
-```
+```py
 
 ... is rendered as:
 
@@ -183,7 +183,7 @@ A Markdown paragraph.
 <p><strong>Markdown</strong> content.</p>
 </section>
 </article>
-```
+```py
 
 When the value of an element's `markdown` attribute is more permissive that its parent, then the parent's stricter
 behavior is enforced. For example, a `block` element nested within a `span` element will be parsed using the `span`
@@ -200,7 +200,7 @@ While the default behavior is for Markdown to not alter raw HTML, as this extens
 <p markdown="1">A Markdown paragraph with *no* closing tag.
 <p>A raw paragraph with *no* closing tag.
 </div>
-```
+```py
 
 ... is rendered as:
 
@@ -211,7 +211,7 @@ While the default behavior is for Markdown to not alter raw HTML, as this extens
 <p>A raw paragraph with *no* closing tag.
 </p>
 </div>
-```
+```py
 
 Notice that the parser properly recognizes that an unclosed  `<p>` tag ends when another `<p>` tag begins or when the
 parent element ends. In both cases, a closing `</p>` was added to the end of the element, regardless of whether a

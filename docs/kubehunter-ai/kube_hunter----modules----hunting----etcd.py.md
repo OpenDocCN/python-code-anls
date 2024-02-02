@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\etcd.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 导入 requests 模块

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\crnn.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import onnxruntime as rt

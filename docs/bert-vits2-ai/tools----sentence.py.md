@@ -1,6 +1,6 @@
 # `Bert-VITS2\tools\sentence.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 

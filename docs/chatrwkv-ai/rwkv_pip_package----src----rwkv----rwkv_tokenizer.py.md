@@ -1,6 +1,6 @@
 # `ChatRWKV\rwkv_pip_package\src\rwkv\rwkv_tokenizer.py`
 
-```
+```py
 # 定义了一个名为TRIE的类，用于实现字典树数据结构
 class TRIE:
     # 使用__slots__定义类的属性，以节省内存空间

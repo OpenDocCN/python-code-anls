@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\action_node.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

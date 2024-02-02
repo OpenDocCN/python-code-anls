@@ -1,6 +1,6 @@
 # `basic-computer-games\69_Pizza\java\src\PizzaGame.java`
 
-```
+```py
 # 定义名为 PizzaGame 的公共类
 public class PizzaGame {
 

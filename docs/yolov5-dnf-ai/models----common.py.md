@@ -1,6 +1,6 @@
 # `yolov5-DNF\models\common.py`
 
-```
+```py
 # 导入数学模块
 import math
 

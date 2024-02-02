@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Guesser.cs`
 
-```
+```py
 namespace Digits;
 
 internal class Guesser

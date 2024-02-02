@@ -1,6 +1,6 @@
 # `yolov5-DNF\main2.py`
 
-```
+```py
 # 导入需要的库
 import random
 import time

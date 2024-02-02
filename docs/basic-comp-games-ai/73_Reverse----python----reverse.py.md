@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\python\reverse.py`
 
-```
+```py
 #!/usr/bin/env python3
 import random
 import textwrap

@@ -1,6 +1,6 @@
 # `KubiScan\engine\pod.py`
 
-```
+```py
 # TODO: 添加一个优先级字段，该字段将从容器中具有最高优先级
 class Pod:
     def __init__(self, name, namespace, containers):

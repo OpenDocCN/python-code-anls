@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\41_Guess\go\main.go`
 
-```
+```py
 package main
 
 import (

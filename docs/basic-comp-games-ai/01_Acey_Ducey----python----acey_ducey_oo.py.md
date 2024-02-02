@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\python\acey_ducey_oo.py`
 
-```
+```py
 """
 AceyDuchy
 From: BASIC Computer Games (1978)

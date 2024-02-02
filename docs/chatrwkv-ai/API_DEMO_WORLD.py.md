@@ -1,6 +1,6 @@
 # `ChatRWKV\API_DEMO_WORLD.py`
 
-```
+```py
 # 导入 RWKV 语言模型相关的库
 import os, re
 

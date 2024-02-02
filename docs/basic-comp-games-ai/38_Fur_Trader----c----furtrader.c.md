@@ -1,6 +1,6 @@
 # `basic-computer-games\38_Fur_Trader\c\furtrader.c`
 
-```
+```py
 /*
  * 将 furtrader.bas 移植到 ANSI C (C99) 语言，作者为 krt@krt.com.au
  *

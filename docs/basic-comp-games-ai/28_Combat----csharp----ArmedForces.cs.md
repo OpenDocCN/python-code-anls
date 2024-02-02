@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\ArmedForces.cs`
 
-```
+```py
 // 命名空间 Game，表示游戏
 namespace Game
 {

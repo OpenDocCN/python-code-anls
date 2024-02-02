@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\roles\teacher.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

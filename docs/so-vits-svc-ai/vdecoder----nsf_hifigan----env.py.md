@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\nsf_hifigan\env.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 shutil 模块

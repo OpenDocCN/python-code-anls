@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Position.cs`
 
-```
+```py
 # 在Mugwump命名空间下定义一个内部的记录结构Position，包含X和Y两个浮点数属性
 internal record struct Position(float X, float Y)
 {

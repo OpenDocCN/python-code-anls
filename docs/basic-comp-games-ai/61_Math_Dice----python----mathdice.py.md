@@ -1,6 +1,6 @@
 # `basic-computer-games\61_Math_Dice\python\mathdice.py`
 
-```
+```py
 # 从 random 模块中导入 randint 函数
 from random import randint
 

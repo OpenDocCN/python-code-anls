@@ -5,7 +5,7 @@ Converted to [D](https://dlang.org/) by [Bastiaan Veelo](https://github.com/veel
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
-```shell
+```py
 dmd -dip1000 -run threedeeplot.d
 ```
 
@@ -22,13 +22,13 @@ as is done in the bonus below.
 
 With a small modification to the source, the program can be extended to **plot a random function**, and **print its formula**.
 
-```shell
+```py
 rdmd -dip1000 threedeeplot_random.d
 ```
 (`rdmd` caches the executable, which results in speedy execution when the source does not change.)
 
 ### Example output
-```
+```py
                                     3D Plot
               (After Creative Computing  Morristown, New Jersey)
 
@@ -82,7 +82,7 @@ rdmd -dip1000 threedeeplot_random.d
 
 Have a look at the relevant differences between `threedeeplot.d` and `threedeeplot_random.d`.
 This is the original function with the single expression that is evaluated for the plot:
-```d
+```py
     static float fna(float z)
     {
         return 30.0 * exp(-z * z / 100.0);
@@ -91,7 +91,7 @@ This is the original function with the single expression that is evaluated for t
 Here `static` means that the nested function does not need acces to its enclosing scope.
 
 Now, by inserting the following:
-```d
+```py
     enum functions = ["30.0 * exp(-z * z / 100.0)",
                       "sqrt(900.01 - z * z) * .9 - 2",
                       "30 * (cos(z / 16.0) + .5)",
@@ -103,7 +103,7 @@ Now, by inserting the following:
     writeln(center("f(z) = " ~ functions[index], width), "\n");
 ```
 and changing the implementation of `fna` to
-```d
+```py
     float fna(float z)
     {
         final switch (index)
@@ -116,26 +116,26 @@ and changing the implementation of `fna` to
 ```
 we unlock some very special abilities of D. Let's break it down:
 
-```d
+```py
     enum functions = ["30.0 * exp(-z * z / 100.0)", /*...*/];
 ```
 This defines an array of strings, each containing a mathematical expression. Due to the `enum` keyword, this is an
 array that really only exists at compile-time.
 
-```d
+```py
     size_t index = uniform(0, functions.length);
 ```
 This defines a random index into the array. `functions.length` is evaluated at compile-time, due to D's compile-time
 function evaluation (CTFE).
 
-```d
+```py
     writeln(center("f(z) = " ~ functions[index], width), "\n");
 ```
 Unmistakenly, this prints the formula centered on a line. What happens behind the scenes is that `functions` (which
 only existed at compile-time before now) is pasted in, so that an instance of that array actually exists at run-time
 at this spot, and is instantly indexed.
 
-```d
+```py
     float fna(float z)
     {
         final switch (index)
@@ -148,7 +148,7 @@ at this spot, and is instantly indexed.
 an ordinary `switch`, with `final` providing some extra robustness. It disallows a `default` case and produces an error
 when the switch doesn't handle all cases. The `switch` body is where the magic happens and consists of these three
 lines:
-```d
+```py
             static foreach (i, f; functions)
                 case i:
                     mixin("return " ~ f ~ ";");
@@ -157,7 +157,7 @@ The `static foreach` iterates over `functions` at compile-time, producing one `c
 `mixin` takes a string, which is constructed at compile-time, and pastes it right into the source.
 
 In effect, the implementation of `float fna(float z)` unrolls itself into
-```d
+```py
     float fna(float z)
     {
         final switch (index)

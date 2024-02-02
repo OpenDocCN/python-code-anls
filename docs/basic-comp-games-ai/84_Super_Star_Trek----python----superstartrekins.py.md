@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\python\superstartrekins.py`
 
-```
+```py
 """
 SUPER STARTREK INSTRUCTIONS
 MAR 5, 1978

@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\csharp\Craps\CrapsGame.cs`
 
-```
+```py
 // 定义名为 Result 的枚举类型，表示掷骰子游戏的结果
 namespace Craps
 {

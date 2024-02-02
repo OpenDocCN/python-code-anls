@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\attr_list.py`
 
-```
+```py
 
 # Attribute List Extension for Python-Markdown
 # ============================================

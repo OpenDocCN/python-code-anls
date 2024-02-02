@@ -5,7 +5,7 @@
 - 在 `config/key.yaml / config/config.yaml / env` 中配置您的 `OPENAI_API_KEY`
 - 优先级顺序：`config/key.yaml > config/config.yaml > env`
 
-```bash
+```py
 # 复制配置文件并进行必要的修改
 cp config/config.yaml config/key.yaml
 ```
@@ -17,7 +17,7 @@ cp config/config.yaml config/key.yaml
 
 ### 示例：启动一个创业公司
 
-```shell
+```py
 metagpt "写一个命令行贪吃蛇"
 # 开启code review模式会花费更多的金钱, 但是会提升代码质量和成功率
 metagpt "写一个命令行贪吃蛇" --code_review
@@ -28,13 +28,13 @@ metagpt "写一个命令行贪吃蛇" --code_review
 ### 平台或工具的倾向性
 可以在阐述需求时说明想要使用的平台或工具。
 例如：
-```shell
+```py
 metagpt "写一个基于pygame的命令行贪吃蛇"
 ```
 
 ### 使用
 
-```
+```py
 名称
     metagpt - 我们是一家AI软件创业公司。通过投资我们，您将赋能一个充满无限可能的未来。
 

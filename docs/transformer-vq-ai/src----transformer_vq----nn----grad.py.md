@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\grad.py`
 
-```
+```py
 # 导入 flax.linen 库中的 nn 模块，并重命名为 nn
 import flax.linen as nn
 # 导入 jax 库

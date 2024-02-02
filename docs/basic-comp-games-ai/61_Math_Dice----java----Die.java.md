@@ -1,6 +1,6 @@
 # `basic-computer-games\61_Math_Dice\java\Die.java`
 
-```
+```py
 import java.util.Random;
 
 public class Die {

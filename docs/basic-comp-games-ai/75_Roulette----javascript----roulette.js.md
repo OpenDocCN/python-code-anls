@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\javascript\roulette.js`
 
-```
+```py
 // ROULETTE
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

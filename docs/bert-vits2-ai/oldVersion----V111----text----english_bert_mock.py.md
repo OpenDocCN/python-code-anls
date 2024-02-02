@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\text\english_bert_mock.py`
 
-```
+```py
 # 导入 torch 模块
 import torch
 

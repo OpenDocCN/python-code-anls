@@ -41,7 +41,7 @@ other `unittest` style tests within the same test class.
 
 An example Markdown test might look like this:
 
-```python
+```py
 from markdown.test_tools import TestCase
 
 class TestHr(TestCase):
@@ -114,7 +114,7 @@ and output files.
 
 The definition of an example set of tests might look like this:
 
-```python
+```py
 from markdown.test_tools import LegacyTestCase, Kwargs
 import os
 
@@ -155,7 +155,7 @@ As all of the tests for the `markdown` library are unit tests, standard
 Python-Markdown's tests, from the root of the git repository, run the following
 command:
 
-```sh
+```py
 python -m unittest discover tests
 ```
 

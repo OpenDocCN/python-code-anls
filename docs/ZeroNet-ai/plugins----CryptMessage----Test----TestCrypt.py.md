@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\CryptMessage\Test\TestCrypt.py`
 
-```
+```py
 # 导入 pytest 模块
 import pytest
 # 导入 base64 模块

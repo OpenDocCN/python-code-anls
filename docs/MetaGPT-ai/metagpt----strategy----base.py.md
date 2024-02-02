@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\strategy\base.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # @Date    : 12/25/2023 9:16 PM

@@ -1,6 +1,6 @@
 # `KubiScan\engine\jwt_token.py`
 
-```
+```py
 # 导入 base64 模块
 
 # 解码 base64 编码的 JWT 令牌

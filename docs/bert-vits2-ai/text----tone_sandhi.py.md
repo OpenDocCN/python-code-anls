@@ -1,6 +1,6 @@
 # `Bert-VITS2\text\tone_sandhi.py`
 
-```
+```py
 # 版权声明
 # 2021年PaddlePaddle作者保留所有权利。
 #

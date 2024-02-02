@@ -1,6 +1,6 @@
 # `Bert-VITS2\attentions.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 PyTorch 库

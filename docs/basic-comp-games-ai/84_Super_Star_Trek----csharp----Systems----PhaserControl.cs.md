@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\PhaserControl.cs`
 
-```
+```py
 using System.Linq; // 导入 LINQ 扩展方法
 using Games.Common.IO; // 导入通用输入输出类
 using Games.Common.Randomness; // 导入通用随机数生成类

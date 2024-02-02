@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_legacy_em.py`
 
-```
+```py
 
 """
 Python Markdown

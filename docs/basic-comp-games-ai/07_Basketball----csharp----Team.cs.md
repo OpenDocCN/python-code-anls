@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Team.cs`
 
-```
+```py
 # 使用篮球战术库中的 Plays 命名空间
 using Basketball.Plays;
 

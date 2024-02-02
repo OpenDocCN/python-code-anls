@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\Program.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Grid.cs`
 
-```
+```py
 // 引入必要的命名空间
 using System.Collections.Generic;
 using System.Linq;

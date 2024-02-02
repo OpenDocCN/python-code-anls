@@ -1,6 +1,6 @@
 # `basic-computer-games\33_Dice\csharp\Program.cs`
 
-```
+```py
 // 命名空间声明，表示该类属于BasicComputerGames.Dice命名空间
 namespace BasicComputerGames.Dice
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\WarpEngines.cs`
 
-```
+```py
 // 引入系统命名空间
 using System;
 // 引入游戏通用输入输出命名空间

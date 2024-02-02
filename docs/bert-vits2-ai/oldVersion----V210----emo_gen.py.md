@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V210\emo_gen.py`
 
-```
+```py
 # 导入所需的库
 import librosa
 import numpy as np

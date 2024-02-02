@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V200\text\bert_utils.py`
 
-```
+```py
 # 从 pathlib 模块中导入 Path 类
 from pathlib import Path
 # 从 huggingface_hub 模块中导入 hf_hub_download 函数

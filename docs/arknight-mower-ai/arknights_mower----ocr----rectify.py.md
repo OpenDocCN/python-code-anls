@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\rectify.py`
 
-```
+```py
 # 从上级目录的 data 模块中导入 ocr_error 对象
 from ..data import ocr_error
 # 从上级目录的 utils 模块中导入 config 对象

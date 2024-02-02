@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestRateLimit.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入协程模块

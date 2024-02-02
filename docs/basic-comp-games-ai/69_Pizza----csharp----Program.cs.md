@@ -1,6 +1,6 @@
 # `basic-computer-games\69_Pizza\csharp\Program.cs`
 
-```
+```py
 # 命名空间 Pizza
 namespace Pizza
 {

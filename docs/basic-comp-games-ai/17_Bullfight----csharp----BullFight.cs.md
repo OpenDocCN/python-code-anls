@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\BullFight.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 # `basic-computer-games\44_Hangman\java\Hangman.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.LinkedHashSet;  // 导入 LinkedHashSet 类
 import java.util.List;  // 导入 List 类

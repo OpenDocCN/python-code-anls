@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Reign.cs`
 
-```
+```py
 namespace King;
 
 internal class Reign

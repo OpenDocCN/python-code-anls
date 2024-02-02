@@ -1,6 +1,6 @@
 # `ZeroNet\src\Connection\Connection.py`
 
-```
+```py
 # 导入 socket 和 time 模块
 import socket
 import time

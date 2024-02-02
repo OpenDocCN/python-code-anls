@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Stats\StatsPlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 HTML 模块

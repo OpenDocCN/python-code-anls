@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\MatchCompleted.cs`
 
-```
+```py
 // 声明在游戏事件命名空间下的比赛完成事件
 namespace Game.Events
 {

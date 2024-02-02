@@ -1,6 +1,6 @@
 # `basic-computer-games\24_Chemist\python\chemist.py`
 
-```
+```py
 """
 CHEMIST
 

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Worker\WorkerTaskManager.py`
 
-```
+```py
 # 导入 bisect 模块，用于插入排序
 import bisect
 # 导入 MutableSequence 抽象基类，用于创建自定义排序列表

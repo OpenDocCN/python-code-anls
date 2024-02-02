@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\prompt\default\Chinese-2.py`
 
-```
+```py
 # 定义界面符号为冒号
 interface = ":"
 

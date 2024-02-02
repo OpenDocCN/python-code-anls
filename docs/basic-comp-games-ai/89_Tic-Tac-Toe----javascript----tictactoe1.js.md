@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\javascript\tictactoe1.js`
 
-```
+```py
 // TIC TAC TOE 1
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

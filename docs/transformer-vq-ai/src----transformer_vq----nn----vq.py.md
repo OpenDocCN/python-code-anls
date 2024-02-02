@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\vq.py`
 
-```
+```py
 """
 Helper class for VQ Attention.
 

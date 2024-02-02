@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Bet.cs`
 
-```
+```py
 # 在 Roulette 命名空间下定义一个内部的记录结构 Bet，包含下注类型、数字和赌注
 internal record struct Bet(BetType Type, int Number, int Wager)
 {

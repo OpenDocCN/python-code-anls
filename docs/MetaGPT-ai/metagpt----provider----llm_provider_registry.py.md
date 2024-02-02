@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\llm_provider_registry.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

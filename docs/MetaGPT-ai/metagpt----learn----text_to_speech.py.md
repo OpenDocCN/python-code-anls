@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\learn\text_to_speech.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

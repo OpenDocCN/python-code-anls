@@ -28,7 +28,7 @@ More resources by HFL: https://github.com/ymcui/HFL-Anthology
 ## Citation
 If you find the technical report or resource is useful, please cite the following technical report in your paper.
 - Primary: https://arxiv.org/abs/2004.13922
-```
+```py
 @inproceedings{cui-etal-2020-revisiting,
     title = "Revisiting Pre-Trained Models for {C}hinese Natural Language Processing",
     author = "Cui, Yiming  and
@@ -47,7 +47,7 @@ If you find the technical report or resource is useful, please cite the followin
 }
 ```
 - Secondary: https://arxiv.org/abs/1906.08101
-```
+```py
 @article{chinese-bert-wwm,
   title={Pre-Training with Whole Word Masking for Chinese BERT},
   author={Cui, Yiming and Che, Wanxiang and Liu, Ting and Qin, Bing and Yang, Ziqing and Wang, Shijin and Hu, Guoping},

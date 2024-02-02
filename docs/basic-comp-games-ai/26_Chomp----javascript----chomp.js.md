@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\javascript\chomp.js`
 
-```
+```py
 // CHOMP 游戏的Javascript版本，由Oscar Toledo G. (nanochess) 从BASIC转换而来
 
 // 打印输出到页面

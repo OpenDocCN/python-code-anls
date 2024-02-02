@@ -1,6 +1,6 @@
 # `basic-computer-games\82_Stars\csharp\Resources\Resource.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System.IO;
 using System.Reflection;

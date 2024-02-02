@@ -1,6 +1,6 @@
 # `Bert-VITS2\preprocess_text.py`
 
-```
+```py
 # 导入所需的模块
 import json
 from collections import defaultdict

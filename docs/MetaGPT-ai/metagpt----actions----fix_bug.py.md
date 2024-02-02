@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\fix_bug.py`
 
-```
+```py
 
 # 设置文件编码为 UTF-8
 # 设置文件的创建时间为 2023 年 12 月 12 日

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\blocks\test_headers.py`
 
-```
+```py
 """
 这段代码是一个Python Markdown测试类，用于测试Markdown的渲染效果。
 

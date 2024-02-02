@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\dphubert\pruning_utils.py`
 
-```
+```py
 # 用于修剪的实用函数
 
 from typing import Union

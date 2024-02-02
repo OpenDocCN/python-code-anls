@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\Token.cs`
 
-```
+```py
 using System.Text;
 using System.Text.RegularExpressions;
 

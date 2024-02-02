@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\types.py`
 
-```
+```py
 # 导入必要的模块和类型
 from dataclasses import fields
 from typing import Any

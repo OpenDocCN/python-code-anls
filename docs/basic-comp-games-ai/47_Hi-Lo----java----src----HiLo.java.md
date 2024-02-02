@@ -1,6 +1,6 @@
 # `basic-computer-games\47_Hi-Lo\java\src\HiLo.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

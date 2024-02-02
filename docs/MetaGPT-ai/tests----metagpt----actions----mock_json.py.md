@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\actions\mock_json.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

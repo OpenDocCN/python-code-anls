@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\java\src\Board.java`
 
-```
+```py
 /**
  * @author Ollie Hensman-Crook
  */

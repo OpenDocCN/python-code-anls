@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\base_llm.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 python，使得脚本可以直接执行

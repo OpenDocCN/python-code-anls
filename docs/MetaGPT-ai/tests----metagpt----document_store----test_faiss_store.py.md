@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\document_store\test_faiss_store.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

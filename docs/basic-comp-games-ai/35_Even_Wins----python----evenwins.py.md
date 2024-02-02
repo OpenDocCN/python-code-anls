@@ -1,6 +1,6 @@
 # `basic-computer-games\35_Even_Wins\python\evenwins.py`
 
-```
+```py
 """
 This version of evenwins.bas based on game decscription and does *not*
 follow the source. The computer chooses marbles at random.

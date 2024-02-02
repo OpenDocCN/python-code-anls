@@ -436,7 +436,7 @@ Input:
 
 Example:
 
-```pyjson
+```py
 {
   "category": ["basic"],
   "task": "Print the the capital of America to a .txt file",

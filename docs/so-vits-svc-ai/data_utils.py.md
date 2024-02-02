@@ -1,6 +1,6 @@
 # `so-vits-svc\data_utils.py`
 
-```
+```py
 # 导入必要的库
 import os
 import random

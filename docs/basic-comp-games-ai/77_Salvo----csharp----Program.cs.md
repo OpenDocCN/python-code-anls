@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Program.cs`
 
-```
+```py
 # 导入 System 命名空间
 global using System;
 # 导入 Games.Common.IO 命名空间

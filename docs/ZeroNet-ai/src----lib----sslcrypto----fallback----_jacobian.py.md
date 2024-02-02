@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\fallback\_jacobian.py`
 
-```
+```py
 # 导入 _util 模块中的 inverse 函数
 from ._util import inverse
 

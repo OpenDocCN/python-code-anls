@@ -1,6 +1,6 @@
 # `ZeroNet\src\Connection\ConnectionServer.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入时间模块

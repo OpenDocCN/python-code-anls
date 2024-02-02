@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\test_openai.py`
 
-```
+```py
 
 # 从 unittest.mock 模块中导入 Mock 类
 from unittest.mock import Mock

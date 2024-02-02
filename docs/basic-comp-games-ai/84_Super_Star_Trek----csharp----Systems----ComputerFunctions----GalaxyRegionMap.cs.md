@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\GalaxyRegionMap.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System.Collections.Generic;
 using System.Linq;

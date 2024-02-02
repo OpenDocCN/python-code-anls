@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_web_browser_engine.py`
 
-```
+```py
 """
 # 添加修改信息，标明修改人和日期，移除全局配置`CONFIG`，启用业务隔离的配置支持
 

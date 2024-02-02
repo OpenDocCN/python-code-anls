@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Memory.cs`
 
-```
+```py
 namespace Digits;
 
 public class Memory

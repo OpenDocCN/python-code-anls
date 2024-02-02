@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\utils\datasets.py`
 
-```
+```py
 """
 Dataset definitions.
 """

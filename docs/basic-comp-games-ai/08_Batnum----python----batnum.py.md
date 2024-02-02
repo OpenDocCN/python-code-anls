@@ -1,6 +1,6 @@
 # `basic-computer-games\08_Batnum\python\batnum.py`
 
-```
+```py
 # 导入需要的模块
 from enum import IntEnum
 from typing import Any, Tuple

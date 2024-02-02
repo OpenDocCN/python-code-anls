@@ -1,6 +1,6 @@
 # `ZeroNet\src\Debug\DebugReloader.py`
 
-```
+```py
 # 导入日志、时间和操作系统模块
 import logging
 import time

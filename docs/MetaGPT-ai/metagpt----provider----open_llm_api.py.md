@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\open_llm_api.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

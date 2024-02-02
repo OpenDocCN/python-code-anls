@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestUser.py`
 
-```
+```py
 # 导入 pytest 模块
 import pytest
 

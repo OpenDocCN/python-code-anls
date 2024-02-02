@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\Numbers\Number.cs`
 
-```
+```py
 // 声明一个命名空间，用于组织代码
 namespace Games.Common.Numbers;
 

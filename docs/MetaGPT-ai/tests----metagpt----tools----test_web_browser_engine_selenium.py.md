@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_web_browser_engine_selenium.py`
 
-```
+```py
 """
 @Modified By: mashenquan, 2023/8/20. Remove global configuration `CONFIG`, enable configuration support for business isolation.
 """

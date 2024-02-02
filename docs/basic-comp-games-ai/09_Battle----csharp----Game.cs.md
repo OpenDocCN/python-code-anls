@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\csharp\Game.cs`
 
-```
+```py
 # 引入 System 命名空间，包含了常用的系统类和方法
 using System;
 # 引入 LINQ 命名空间，包含了 LINQ 查询和操作方法

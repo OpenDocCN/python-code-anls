@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Program.cs`
 
-```
+```py
 using System;  // 引入 System 命名空间
 using System.Collections.Immutable;  // 引入 Immutable 命名空间
 using System.Linq;  // 引入 Linq 命名空间

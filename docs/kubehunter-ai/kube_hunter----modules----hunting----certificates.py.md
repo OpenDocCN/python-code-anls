@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\certificates.py`
 
-```
+```py
 # 导入所需的模块
 import ssl
 import logging

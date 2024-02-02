@@ -1,6 +1,6 @@
 # `basic-computer-games\54_Letter\java\src\LetterGame.java`
 
-```
+```py
 # 定义名为LetterGame的公共类
 public class LetterGame {
 

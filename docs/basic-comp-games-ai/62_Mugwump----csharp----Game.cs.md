@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Game.cs`
 
-```
+```py
 // 使用 System.Reflection 命名空间
 using System.Reflection;
 

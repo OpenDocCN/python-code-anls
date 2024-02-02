@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Resources\Resource.cs`
 
-```
+```py
 // 使用 System.Reflection 和 System.Runtime.CompilerServices 命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;

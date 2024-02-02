@@ -1,6 +1,6 @@
 # `yolov5-DNF\image_grab.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr  8 09:45:04 2020

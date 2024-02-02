@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\csharp\CrapsTester\CrapsTests.cs`
 
-```
+```py
 # 导入 Craps 模块
 using Craps;
 # 导入 Microsoft.VisualStudio.TestTools.UnitTesting 模块

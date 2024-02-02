@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\subtl\subtl.py`
 
-```
+```py
 '''
 Based on the specification at http://bittorrent.org/beps/bep_0015.html
 '''

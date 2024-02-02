@@ -693,7 +693,7 @@ class AgentProfileGeneratorConfiguration(SystemConfiguration):
     )
 
 
-```
+```py
 
 This is a class that defines a chatbot that can be used to extract information from users using an AI model. The chatbot has a user interface that the user can interact with by typing a message and the chatbot will return a response. The chatbot can be configured through a `ChatPrompt` class that inherits from the `ChatFramework` class. The `ChatPrompt` class has a `build_prompt` method that builds the prompt message and a `parse_response_content` method that parses the AI model's response to the user's input. The AI model is defined using the `model_classification` attribute, which is an instance of `LanguageModelClassification`.
 
@@ -765,7 +765,7 @@ class AgentProfileGenerator(PromptStrategy):
         return ai_profile, ai_directives
 
 
-```
+```py
 
 这段代码定义了一个名为 `generate_agent_profile_for_task` 的异步函数，它接受一个任务（string）、一个应用程序配置（Config）和一个聊天模型提供商（ChatModelProvider）作为参数。
 
@@ -808,7 +808,7 @@ async def generate_agent_profile_for_task(
 
     return ai_profile, ai_directives
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agent_manager/agent_manager.py`
 
@@ -874,7 +874,7 @@ class AgentManager:
         state.agent_data_dir = agent_dir
         return state
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/agent_manager/__init__.py`
 
@@ -892,7 +892,7 @@ print(agent_manager.get_agent_id())
 
 # 使用 agent_manager 对象中的方法来获取更多信息
 agent_manager.do_something()
-```
+```py
 
 由于 `AgentManager` 类被导入了 `__all__` 列表中，因此可以使用上述代码来访问和使用该类中的所有成员。
 
@@ -902,7 +902,7 @@ from .agent_manager import AgentManager
 
 __all__ = ["AgentManager"]
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/app/agent_protocol_server.py`
 
@@ -940,7 +940,7 @@ from forge.sdk.db import AgentDB
 from forge.sdk.errors import NotFoundError
 from forge.sdk.middlewares import AgentMiddleware
 from forge.sdk.routes.agent_protocol import base_router
-```
+```py
 
 这段代码是一个Python程序，它实现了Forge.SDK.Schema库中的几个类，用于定义任务、步骤、任务元数据等概念。具体来说，它包括：Artifact（作品）、Step（步骤）、StepRequestBody（步骤请求主体）、Task（任务）、TaskArtifactsListResponse（任务元数据列表响应）、TaskListResponse（任务列表响应）、TaskRequestBody（任务请求主体）和TaskStepsListResponse（任务步骤列表响应）。
 
@@ -963,7 +963,7 @@ from hypercorn.config import Config as HypercornConfig
 
 from autogpt.agent_factory.configurators import configure_agent_with_state
 from autogpt.agent_factory.generators import generate_agent_for_task
-```
+```py
 
 
 
@@ -1328,7 +1328,7 @@ class AgentProtocolServer:
         )
 
 
-```
+```py
 
 这段代码定义了一个名为 `task_agent_id` 的函数，它接收一个名为 `task_id` 的参数，并返回一个字符串。函数的实现主要通过使用 Python 的字符串格式化操作，将 `task_id` 参数与一个名为 `AutoGPT-` 的前缀字符串相结合，并将结果返回。
 
@@ -1356,7 +1356,7 @@ def get_task_agent_file_workspace(
     )
 
 
-```
+```py
 
 这段代码定义了一个名为 `fmt_kwargs` 的函数，它接受一个名为 `kwargs` 的字典参数，并返回一个字符串，该字符串表示了所有在 `kwargs` 中定义的参数的名称和值。
 
@@ -1369,7 +1369,7 @@ def get_task_agent_file_workspace(
 def fmt_kwargs(kwargs: dict) -> str:
     return ", ".join(f"{n}={repr(v)}" for n, v in kwargs.items())
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/app/cli.py`
 
@@ -1398,7 +1398,7 @@ def cli(ctx: click.Context):
         ctx.invoke(run)
 
 
-```
+```py
 
 这段代码是一个命令行工具的多行选项。具体来说，它有以下几个选项：
 
@@ -1442,7 +1442,7 @@ def cli(ctx: click.Context):
         " root directory. Will also automatically skip the re-prompt."
     ),
 )
-```
+```py
 
 这段代码定义了一系列命令行选项，包括：
 
@@ -1502,7 +1502,7 @@ def cli(ctx: click.Context):
 @click.option("--speak", is_flag=True, help="Enable Speak Mode")
 @click.option("--debug", is_flag=True, help="Enable Debug Mode")
 @click.option("--gpt3only", is_flag=True, help="Enable GPT3.5 Only Mode")
-```
+```py
 
 这段代码是一个 Click 选项对象，用于在命令行工具中提供一系列选项。具体来说，它有以下几个选项：
 
@@ -1555,7 +1555,7 @@ def cli(ctx: click.Context):
     is_flag=True,
     help="Dangerous: Allows AutoGPT to download files natively.",
 )
-```
+```py
 
 这段代码是一个命令行工具的选项设置，其中包括三个选项：
 
@@ -1587,7 +1587,7 @@ def cli(ctx: click.Context):
     is_flag=True,
     help="Installs external dependencies for 3rd party plugins.",
 )
-```
+```py
 
 这段代码使用了 Click 库定义了三个选项，分别是 `--ai-name`、`--ai-role` 和 `--constraint`。
 
@@ -1618,7 +1618,7 @@ def cli(ctx: click.Context):
         " may be used multiple times to pass multiple constraints"
     ),
 )
-```
+```py
 
 这段代码定义了两个 Click 选项选项，分别是 `--resource` 和 `--best-practice`。
 
@@ -1648,7 +1648,7 @@ def cli(ctx: click.Context):
         " may be used multiple times to pass multiple best practices"
     ),
 )
-```
+```py
 
 This is a function that sets up and runs an agent based on the task specified by the user, or resumes an existing agent. It takes in several parameters, including the AI settings, prompt settings, and other preferences, such as whether to speak, how to use PromptGLM, and whether to enable or disable GPT. It also takes in additional parameters related to the AI, such as the AI name, role, and resource.
 
@@ -1717,7 +1717,7 @@ def run(
     )
 
 
-```
+```py
 
 这段代码是一个命令行工具的CLI选项。它定义了一系列CLI选项，包括：
 
@@ -1787,7 +1787,7 @@ def run(
     type=str,
     help="Defines which Memory backend to use",
 )
-```
+```py
 
 这段代码使用了 Click 库，是一个 Python 命令行工具，用于自动化和简化命令行操作。
 
@@ -1832,7 +1832,7 @@ def run(
     is_flag=True,
     help="Installs external dependencies for 3rd party plugins.",
 )
-```
+```py
 
 这段代码定义了一个名为 `serve` 的函数，它接受一个名为 `prompt_settings` 的可选参数，一个表示 `debug` 变量为真值的布尔值，一个表示只使用 GPT3 的布尔值，一个表示只使用 GPT4 的布尔值，一个表示使用哪种内存类型的布尔值，一个表示是否允许下载的布尔值，和一个可选的参数 `browser_name`。
 
@@ -1869,7 +1869,7 @@ def serve(
     )
 
 
-```
+```py
 
 这段代码是一个if语句，它会判断当前脚本是否作为主程序运行。如果是，那么执行if语句块内的内容，否则跳过if语句块。
 

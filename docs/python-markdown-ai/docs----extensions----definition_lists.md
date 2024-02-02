@@ -21,7 +21,7 @@ Definition lists are defined using the syntax established in
 
 Thus, the following text (taken from the above referenced PHP documentation):
 
-```md
+```py
 Apple
 :   Pomaceous fruit of plants of the genus Malus in
     the family Rosaceae.
@@ -32,7 +32,7 @@ Orange
 
 will be rendered as:
 
-```html
+```py
 <dl>
 <dt>Apple</dt>
 <dd>Pomaceous fruit of plants of the genus Malus in
@@ -53,6 +53,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['def_list'])
 ```

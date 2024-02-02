@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\text.py`
 
-```
+```py
 
 # 导入必要的模块
 from typing import Generator, Sequence

@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Game.cs`
 
-```
+```py
 # 导入 BugGame.Parts、BugGame.Resources、Games.Common.IO、Games.Common.Randomness 模块
 using BugGame.Parts;
 using BugGame.Resources;

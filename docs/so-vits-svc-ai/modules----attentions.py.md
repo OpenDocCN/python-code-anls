@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\attentions.py`
 
-```
+```py
 # 导入数学库
 import math
 

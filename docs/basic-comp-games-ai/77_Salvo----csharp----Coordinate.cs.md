@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Coordinate.cs`
 
-```
+```py
 // 命名空间 Salvo
 namespace Salvo
 {

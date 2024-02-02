@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\apiserver.py`
 
-```
+```py
 # 导入日志、JSON、请求和唯一标识模块
 import logging
 import json

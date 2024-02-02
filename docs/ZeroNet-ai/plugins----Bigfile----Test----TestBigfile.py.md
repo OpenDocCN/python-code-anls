@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Bigfile\Test\TestBigfile.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入io模块

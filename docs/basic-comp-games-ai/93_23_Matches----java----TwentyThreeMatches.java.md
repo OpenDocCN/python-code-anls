@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\java\TwentyThreeMatches.java`
 
-```
+```py
 # 导入 java.util 包中的 Random 和 Scanner 类
 import java.util.Random;
 import java.util.Scanner;

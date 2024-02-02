@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\csharp\View.cs`
 
-```
+```py
 // 命名空间 Hammurabi
 namespace Hammurabi
 {

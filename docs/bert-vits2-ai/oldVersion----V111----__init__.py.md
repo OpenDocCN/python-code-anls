@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\__init__.py`
 
-```
+```py
 """
 1.1.1版本兼容
 https://github.com/fishaudio/Bert-VITS2/releases/tag/1.1.1

@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Program.cs`
 
-```
+```py
 // 命名空间 Game
 namespace Game
 {

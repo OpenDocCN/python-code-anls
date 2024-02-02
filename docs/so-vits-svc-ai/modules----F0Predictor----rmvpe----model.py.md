@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\model.py`
 
-```
+```py
 # 导入 torch 模块中的 nn 类
 from torch import nn
 

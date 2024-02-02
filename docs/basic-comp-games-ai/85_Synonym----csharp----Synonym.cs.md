@@ -1,6 +1,6 @@
 # `basic-computer-games\85_Synonym\csharp\Synonym.cs`
 
-```
+```py
 # 引入 System.Text 命名空间
 using System.Text;
 

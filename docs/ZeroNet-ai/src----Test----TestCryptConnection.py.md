@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestCryptConnection.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

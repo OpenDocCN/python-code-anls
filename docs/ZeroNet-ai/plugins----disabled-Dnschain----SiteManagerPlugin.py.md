@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Dnschain\SiteManagerPlugin.py`
 
-```
+```py
 # 导入所需的模块
 import logging, json, os, re, sys, time
 import gevent

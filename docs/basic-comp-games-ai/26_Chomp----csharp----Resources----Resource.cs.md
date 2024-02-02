@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Chomp.Resources
 namespace Chomp.Resources
 {

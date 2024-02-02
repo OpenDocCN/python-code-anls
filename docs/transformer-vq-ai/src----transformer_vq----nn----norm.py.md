@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\norm.py`
 
-```
+```py
 # 导入必要的库
 import chex
 import flax.linen as nn

@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\Suit.cs`
 
-```
+```py
 # 定义一个内部的枚举类型 Suit，表示扑克牌的花色
 internal enum Suit
 {

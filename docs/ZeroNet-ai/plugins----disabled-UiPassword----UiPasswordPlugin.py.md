@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-UiPassword\UiPasswordPlugin.py`
 
-```
+```py
 # 导入必要的模块
 import string
 import random

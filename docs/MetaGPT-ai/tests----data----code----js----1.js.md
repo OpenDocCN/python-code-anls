@@ -1,6 +1,6 @@
 # `MetaGPT\tests\data\code\js\1.js`
 
-```
+```py
 
 # 定义一个名为 WRMCB 的函数，用于处理批量脚本运行时的错误
 WRMCB=function(e){var c=console;if(c&&c.log&&c.error){c.log('Error running batched script.');c.error(e);}}

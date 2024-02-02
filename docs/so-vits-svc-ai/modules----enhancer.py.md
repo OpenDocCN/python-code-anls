@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\enhancer.py`
 
-```
+```py
 import numpy as np  # 导入 numpy 库，用于数值计算
 import torch  # 导入 torch 库，用于构建神经网络
 import torch.nn.functional as F  # 导入 torch 中的神经网络函数

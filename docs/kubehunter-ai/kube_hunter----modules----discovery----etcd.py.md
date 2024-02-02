@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\etcd.py`
 
-```
+```py
 # 从 kube_hunter.core.events 模块中导入 handler 函数
 # 从 kube_hunter.core.events.types 模块中导入 Event, OpenPortEvent, Service 类
 # 从 kube_hunter.core.types 模块中导入 Discovery 类

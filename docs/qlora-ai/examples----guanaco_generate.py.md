@@ -1,6 +1,6 @@
 # `qlora\examples\guanaco_generate.py`
 
-```
+```py
 # 导入必要的库
 import os
 from os.path import exists, join, isdir

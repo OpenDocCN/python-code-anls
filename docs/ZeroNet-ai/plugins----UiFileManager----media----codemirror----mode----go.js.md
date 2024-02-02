@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\mode\go.js`
 
-```
+```py
 // 使用立即调用函数表达式（IIFE）来定义模块
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 引入 CodeMirror

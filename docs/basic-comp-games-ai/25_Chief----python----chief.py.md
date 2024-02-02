@@ -1,6 +1,6 @@
 # `basic-computer-games\25_Chief\python\chief.py`
 
-```
+```py
 # 打印闪电形状
 def print_lightning_bolt() -> None:
     # 打印一行星号

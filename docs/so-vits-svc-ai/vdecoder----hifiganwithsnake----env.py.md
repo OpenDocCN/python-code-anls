@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifiganwithsnake\env.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 shutil 模块

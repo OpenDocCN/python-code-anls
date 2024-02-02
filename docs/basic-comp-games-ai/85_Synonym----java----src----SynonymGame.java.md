@@ -1,6 +1,6 @@
 # `basic-computer-games\85_Synonym\java\src\SynonymGame.java`
 
-```
+```py
 # 定义一个名为SynonymGame的公共类
 public class SynonymGame {
     # 定义一个名为main的静态方法，参数为字符串数组

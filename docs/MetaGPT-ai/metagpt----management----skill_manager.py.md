@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\management\skill_manager.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `basic-computer-games\24_Chemist\java\src\Chemist.java`
 
-```
+```py
 // 导入必要的类
 import java.util.Arrays;
 import java.util.Scanner;

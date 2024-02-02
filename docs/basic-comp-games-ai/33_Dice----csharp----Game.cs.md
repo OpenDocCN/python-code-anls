@@ -1,6 +1,6 @@
 # `basic-computer-games\33_Dice\csharp\Game.cs`
 
-```
+```py
 # 引入System命名空间，包含了常用的数据类型和基本类库
 using System;
 # 引入System.Linq命名空间，包含了LINQ（Language Integrated Query）功能

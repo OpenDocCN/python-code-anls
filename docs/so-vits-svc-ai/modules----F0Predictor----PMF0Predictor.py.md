@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\PMF0Predictor.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于处理数组和矩阵
 import parselmouth  # 导入 parselmouth 库，用于音频分析
 

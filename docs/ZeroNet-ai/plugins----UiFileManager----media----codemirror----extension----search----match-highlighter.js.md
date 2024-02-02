@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\search\match-highlighter.js`
 
-```
+```py
 // 定义一个匿名函数，传入一个 mod 参数
 (function(mod) {
   // 如果是 CommonJS 环境

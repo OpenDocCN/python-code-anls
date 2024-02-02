@@ -1,6 +1,6 @@
 # `basic-computer-games\91_Train\csharp\TrainTests\TrainGameTests.cs`
 
-```
+```py
 using Train;  // 导入Train命名空间
 using Xunit;  // 导入Xunit测试框架
 

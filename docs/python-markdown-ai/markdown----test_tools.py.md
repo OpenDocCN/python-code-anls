@@ -1,6 +1,6 @@
 # `markdown\markdown\test_tools.py`
 
-```
+```py
 
 # Python Markdown
 
@@ -116,7 +116,7 @@ class recursionlimit:
     ``` python
     with recursionlimit(20):
         # test code here
-    ```
+    ```py
 
     See <https://stackoverflow.com/a/50120316/866026>.
     """

@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\cves.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 从 packaging 模块中导入 version 类

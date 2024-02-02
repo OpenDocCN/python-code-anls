@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\legacy_em.py`
 
-```
+```py
 
 # Legacy Em Extension for Python-Markdown
 # =======================================

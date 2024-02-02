@@ -897,7 +897,7 @@ def test_load_config(config: Config):
 
 # `autogpts/autogpt/tests/unit/test_prompt_config.py`
 
-```pypython
+```py
    environment:
      - OfTest：要做测试用例
      -要做测试用例

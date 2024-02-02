@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\ContentFilter\ContentFilterStorage.py`
 
-```
+```py
 import os  # 导入操作系统模块
 import json  # 导入 JSON 模块
 import logging  # 导入日志模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\49_Hockey\python\hockey.py`
 
-```
+```py
 """
 HOCKEY
 

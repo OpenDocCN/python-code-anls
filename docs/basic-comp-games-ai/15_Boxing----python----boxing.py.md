@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\python\boxing.py`
 
-```
+```py
     # 设置可执行文件的路径
     #!/usr/bin/env python3
     # 导入 json 模块

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\adb_client\const.py`
 
-```
+```py
 class KeyCode:
     """ https://developer.android.com/reference/android/view/KeyEvent.html """
 

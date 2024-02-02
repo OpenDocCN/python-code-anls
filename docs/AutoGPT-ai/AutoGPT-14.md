@@ -52,7 +52,7 @@ class ContextItem(ABC):
         )
 
 
-```
+```py
 
 这段代码定义了一个名为 FileContextItem 的类，继承自 BaseModel 和 ContextItem 两个模型。
 
@@ -83,7 +83,7 @@ class FileContextItem(BaseModel, ContextItem):
         return read_textual_file(self.file_path, logger)
 
 
-```
+```py
 
 这段代码定义了一个名为FolderContextItem的类，继承自BaseModel和ContextItem类。FolderContextItem包含两个属性：path_in_workspace和workspace_path，分别表示 workspace 中包含此 folder 的路径和 workspace 的路径。
 
@@ -124,7 +124,7 @@ class FolderContextItem(BaseModel, ContextItem):
         return "\n".join(items)
 
 
-```
+```py
 
 这段代码定义了一个名为 `StaticContextItem` 的类，继承自 `BaseModel` 和 `ContextItem` 类。这个类的实例包含了以下字段：
 
@@ -141,7 +141,7 @@ class StaticContextItem(BaseModel, ContextItem):
     item_source: Optional[str] = Field(alias="source")
     item_content: str = Field(alias="content")
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/models/__init__.py`
 
@@ -150,7 +150,7 @@ class StaticContextItem(BaseModel, ContextItem):
 
 ```py
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/plugins/plugins_config.py`
 
@@ -293,7 +293,7 @@ class PluginsConfig(BaseModel):
             f.write(yaml.dump(base_config))
             return base_config
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/plugins/plugin_config.py`
 
@@ -319,7 +319,7 @@ class PluginConfig(BaseModel):
     enabled: bool = False
     config: dict[str, Any] = None
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/plugins/__init__.py`
 
@@ -370,7 +370,7 @@ from typing import TYPE_CHECKING, List
 from urllib.parse import urlparse
 from zipimport import zipimporter
 
-```
+```py
 
 这段代码使用了多个第三方库，包括 openapi_python_client、requests 和 auto_gpt_plugin_template。其中，openapi_python_client 是用于与 OpenAPI 文档交互的库，requests 是用于发送 HTTP 请求的库，auto_gpt_plugin_template 是用于自动生成 OpenAPI 文档的库。
 
@@ -424,7 +424,7 @@ def inspect_zip_for_modules(zip_path: str, debug: bool = False) -> list[str]:
     return result
 
 
-```
+```py
 
 This is a function that retrieves an AI plugin from an OpenAPI specification. The function takes a URL as an input and returns a dictionary containing the plugin's manifest and OpenAPI specification.
 
@@ -509,7 +509,7 @@ def fetch_openai_plugins_manifest_and_spec(config: Config) -> dict:
     return manifests
 
 
-```
+```py
 
 这段代码定义了一个名为 `create_directory_if_not_exists` 的函数，它接受一个名为 `directory_path` 的字符串参数。函数的作用是在给定的目录路径是否存在时，创建该目录（如果目录不存在）。
 
@@ -540,7 +540,7 @@ def create_directory_if_not_exists(directory_path: str) -> bool:
         return True
 
 
-```
+```py
 
 This is a function that creates an OpenAPI client for an application based on the specified manifest and specification. It uses the `openai` package to create the directory for the client if it does not already exist.
 
@@ -604,7 +604,7 @@ def initialize_openai_plugins(
     return manifests_specs
 
 
-```
+```py
 
 这段代码定义了一个名为`instantiate_openai_plugin_clients`的函数，它接受三个参数：`manifests_specs_clients`、`config`和`debug`。函数内部使用这两个参数来创建每个OpenAI插件的实例，并将它们存储在`plugins`字典中。
 
@@ -635,7 +635,7 @@ def instantiate_openai_plugin_clients(
     return plugins
 
 
-```
+```py
 
 This is a Python implementation of the `auto_api.plugins.PluginRegistry` class from the AutoGPT and OpenAI提醒大家插件系统的自动补全编程指南。
 
@@ -772,7 +772,7 @@ def scan_plugins(config: Config, debug: bool = False) -> List[AutoGPTPluginTempl
         logger.info(f"{plugin._name}: {plugin._version} - {plugin._description}")
     return loaded_plugins
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/processing/html.py`
 
@@ -805,7 +805,7 @@ def extract_hyperlinks(soup: BeautifulSoup, base_url: str) -> list[tuple[str, st
     ]
 
 
-```
+```py
 
 这段代码定义了一个名为 `format_hyperlinks` 的函数，它接受一个名为 `hyperlinks` 的列表参数。函数的作用是将传入的 `hyperlinks` 列表中的每个链接字符串格式化为字符串形式，其中链接字符串和链接 URL 分别存储在 `link_text` 和 `link_url` 变量中。最终返回一个新的列表，其中包含所有格式化后的链接字符串。
 
@@ -822,7 +822,7 @@ def format_hyperlinks(hyperlinks: list[tuple[str, str]]) -> list[str]:
     """
     return [f"{link_text.strip()} ({link_url})" for link_text, link_url in hyperlinks]
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/processing/text.py`
 
@@ -858,7 +858,7 @@ from autogpt.core.resource.model_providers import (
     ModelTokenizer,
 )
 
-```
+```py
 
 这段代码定义了一个名为 "logger" 的日志输出类和一个名为 "T" 的抽象类型变量。接下来定义了一个名为 "batch" 的函数，该函数接受一个包含多个 "T" 类型元素的列表 "sequence"，以及一个最大批处理长度 "max_batch_length" 和一个默认为 0 的 overlap 设置。
 
@@ -882,7 +882,7 @@ def batch(
         yield sequence[i : i + max_batch_length]
 
 
-```
+```py
 
 这段代码定义了一个名为 `chunk_content` 的函数，用于将给定文本内容拆分成等长度的片段。
 
@@ -920,7 +920,7 @@ def chunk_content(
         yield tokenizer.decode(token_batch), len(token_batch)
 
 
-```
+```py
 
 This is a Python implementation of a `llm_provider` that can provide summaries of text messages using the language model provided by the `llm_provider.rollib` package. The `summarization_prompt` is a message that the user must provide before the text can be summarized. The `text` is the text message that the user wants to summarize.
 
@@ -1039,7 +1039,7 @@ async def summarize_text(
     ]
 
 
-```
+```py
 
 This code appears to be a Python implementation of a text chunking algorithm. It is specifically designed to handle long sentences that contain multiple long words, with the goal of being able to efficiently splits such sentences into smaller chunks while preserving the meaning of the sentences.
 
@@ -1147,7 +1147,7 @@ def split_text(
     if current_chunk:
         yield " ".join(current_chunk), current_chunk_length
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/processing/__init__.py`
 
@@ -1156,7 +1156,7 @@ def split_text(
 
 ```py
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/prompts/default_prompts.py`
 
@@ -1188,7 +1188,7 @@ Description: a professional digital marketer AI that assists Solopreneurs in gro
 Goals:
 - Engage in effective problem-solving, prioritization, planning, and supporting execution to address your marketing needs as your virtual Chief Marketing Officer.
 
-```
+```py
 
 This code appears to be a Python script that responds to user prompts or tasks by providing自动化的、具体的、简洁的提示和建议，以帮助用户做出明智的决策，而无需使用套话或过于冗长的解释。它的目的是提供一个清晰的、易于理解的输出，以回答用户的问题或指导他们完成任务。
 
@@ -1220,7 +1220,7 @@ DEFAULT_TASK_PROMPT_AICONFIG_AUTOMATIC = (
 
 DEFAULT_USER_DESIRE_PROMPT = "Write a wikipedia style article about the project: https://github.com/significant-gravitas/AutoGPT"  # Default prompt
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/prompts/prompt.py`
 
@@ -1242,7 +1242,7 @@ DEFAULT_TRIGGERING_PROMPT = (
     "and respond using the JSON schema specified previously:"
 )
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/prompts/utils.py`
 
@@ -1267,7 +1267,7 @@ def indent(content: str, indentation: int | str = 4) -> str:
         indentation = " " * indentation
     return indentation + content.replace("\n", f"\n{indentation}")  # type: ignore
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/prompts/__init__.py`
 
@@ -1276,7 +1276,7 @@ def indent(content: str, indentation: int | str = 4) -> str:
 
 ```py
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/speech/base.py`
 
@@ -1341,7 +1341,7 @@ class VoiceBase:
             text (str): The text to play.
         """
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/speech/eleven_labs.py`
 
@@ -1390,7 +1390,7 @@ from .base import VoiceBase
 
 logger = logging.getLogger(__name__)
 
-```
+```py
 
 This is a class that uses Eleven Labs.io's API to convert text to speech. It has a number of methods for controlling the output, including the ability to specify a custom voice by passing a voice ID to the `_use_custom_voice` method. The class also has a `speech` method that uses Eleven Labs.io's API to speak the text passed to it.
 
@@ -1475,7 +1475,7 @@ class ElevenLabsSpeech(VoiceBase):
             logger.info("Response content:", response.content)
             return False
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/speech/gtts.py`
 

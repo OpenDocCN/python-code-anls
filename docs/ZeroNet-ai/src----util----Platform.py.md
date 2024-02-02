@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Platform.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 导入 logging 模块

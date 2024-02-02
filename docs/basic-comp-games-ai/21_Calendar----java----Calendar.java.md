@@ -1,6 +1,6 @@
 # `basic-computer-games\21_Calendar\java\Calendar.java`
 
-```
+```py
 /**
  * Game of Calendar
  * <p>

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\__main__.py`
 
-```
+```py
 # 导入模块
 import atexit
 import os

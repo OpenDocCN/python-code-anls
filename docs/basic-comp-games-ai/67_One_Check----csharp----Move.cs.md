@@ -1,6 +1,6 @@
 # `basic-computer-games\67_One_Check\csharp\Move.cs`
 
-```
+```py
 internal class Move
 {
     // 表示棋子移动的起始位置

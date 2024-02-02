@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\csharp\Deck.cs`
 
-```
+```py
 using System;
 using System.Collections.Generic;
 

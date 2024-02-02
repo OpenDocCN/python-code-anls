@@ -1,6 +1,6 @@
 # `ZeroNet\src\Debug\Debug.py`
 
-```
+```py
 # 导入系统、操作系统、正则表达式和配置模块
 import sys
 import os

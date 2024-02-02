@@ -1,6 +1,6 @@
 # `basic-computer-games\54_Letter\csharp\Game.cs`
 
-```
+```py
 # 声明一个命名空间 Letter
 namespace Letter
 {

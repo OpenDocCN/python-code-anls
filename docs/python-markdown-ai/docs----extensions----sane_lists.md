@@ -18,7 +18,7 @@ Sane Lists do not allow the mixing of list types. In other words, an ordered
 list will not continue when an unordered list item is encountered and
 vice versa. For example:
 
-```md
+```py
 1. Ordered item 1
 2. Ordered item 2
 
@@ -28,7 +28,7 @@ vice versa. For example:
 
 will result in the following output:
 
-```html
+```py
 <ol>
   <li>Ordered item 1</li>
   <li>Ordered item 2</li>
@@ -46,7 +46,7 @@ Note that, unlike the default Markdown behavior, if a blank line is not
 included between list items, the different list type is ignored completely.
 This corresponds to the behavior of paragraphs. For example:
 
-```md
+```py
 A Paragraph.
 * Not a list item.
 
@@ -56,7 +56,7 @@ A Paragraph.
 
 With this extension the above will result in the following output:
 
-```html
+```py
 <p>A Paragraph.
 * Not a list item.</p>
 
@@ -69,7 +69,7 @@ With this extension the above will result in the following output:
 Sane lists also recognize the number used in ordered lists. Given the following
 list:
 
-```md
+```py
 4. Apples
 5. Oranges
 6. Pears
@@ -79,7 +79,7 @@ By default markdown will ignore the fact that the first line started
 with item number "4" and the HTML list will start with a number "1".
 This extension will result in the following HTML output:
 
-```html
+```py
 <ol start="4">
   <li>Apples</li>
   <li>Oranges</li>
@@ -99,6 +99,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['sane_lists'])
 ```

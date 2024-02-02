@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\recruit.py`
 
-```
+```py
 #!Environment yolov8_Env
 # 指定代码运行环境为yolov8_Env
 # -*- coding: UTF-8 -*-

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\data\code\python\1.py`
 
-```
+```py
 
 # 导入需要的库
 import matplotlib.pyplot as plt

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\base_schedule.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import annotations
 import copy

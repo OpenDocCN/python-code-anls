@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\scroll\simplescrollbars.js`
 
-```
+```py
 // 定义一个立即执行函数，传入一个 mod 参数
 (function(mod) {
   // 如果是 CommonJS 环境，使用 mod 函数引入 CodeMirror

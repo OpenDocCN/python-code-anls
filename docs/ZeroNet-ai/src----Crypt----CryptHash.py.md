@@ -1,6 +1,6 @@
 # `ZeroNet\src\Crypt\CryptHash.py`
 
-```
+```py
 # 导入 hashlib 模块，用于计算哈希值
 # 导入 os 模块，用于生成随机字节流
 # 导入 base64 模块，用于编码和解码 base64 数据

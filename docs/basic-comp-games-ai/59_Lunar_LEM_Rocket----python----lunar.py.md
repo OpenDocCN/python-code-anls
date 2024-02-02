@@ -1,6 +1,6 @@
 # `basic-computer-games\59_Lunar_LEM_Rocket\python\lunar.py`
 
-```
+```py
 """
 LUNAR
 

@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\nl2br.py`
 
-```
+```py
 # `NL2BR` Extension
 # ===============
 

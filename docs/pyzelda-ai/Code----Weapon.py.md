@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Weapon.py`
 
-```
+```py
 
 # 导入必要的模块
 import os

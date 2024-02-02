@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V220\text\cleaner.py`
 
-```
+```py
 # 导入中文、日文、英文和文本清洗到序列的模块
 from . import chinese, japanese, english, cleaned_text_to_sequence
 

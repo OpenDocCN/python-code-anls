@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\learn\google_search.py`
 
-```
+```py
 
 # 从 metagpt.tools.search_engine 模块中导入 SearchEngine 类
 from metagpt.tools.search_engine import SearchEngine

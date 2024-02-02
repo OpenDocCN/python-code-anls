@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\azure_openai_api.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 """

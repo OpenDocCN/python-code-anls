@@ -1,6 +1,6 @@
 # `ZeroNet\src\Ui\media\all.js`
 
-```
+```py
 # 定义一个匿名函数，用于限制函数的调用频率
 (function() {
   # 定义一个空对象，用于存储函数的调用限制

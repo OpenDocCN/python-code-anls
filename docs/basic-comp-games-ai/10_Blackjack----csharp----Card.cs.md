@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\csharp\Card.cs`
 
-```
+```py
 namespace Blackjack
 {
     // 定义一个扑克牌类

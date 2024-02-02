@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\csharp\Player.cs`
 
-```
+```py
 namespace Bullseye
 {
     /// <summary>

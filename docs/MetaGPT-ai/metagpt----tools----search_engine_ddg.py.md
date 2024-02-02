@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\search_engine_ddg.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定使用的 Python 解释器

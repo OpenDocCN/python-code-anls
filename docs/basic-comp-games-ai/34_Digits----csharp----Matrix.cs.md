@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Matrix.cs`
 
-```
+```py
 // 命名空间为Digits，表示这个类在Digits命名空间下
 namespace Digits;
 

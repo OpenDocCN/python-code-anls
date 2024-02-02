@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\strategy\examples\creative_writing.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # @Date    : 12/25/2023 1:06 PM

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\js\all.js`
 
-```
+```py
 /* ---- lib/Animation.coffee ---- */
 
 // 创建一个名为 Animation 的类

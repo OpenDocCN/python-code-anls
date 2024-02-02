@@ -1,6 +1,6 @@
 # `ZeroNet\src\Crypt\Crypt.py`
 
-```
+```py
 # 从Config模块中导入config对象
 from Config import config
 # 从util模块中导入ThreadPool类

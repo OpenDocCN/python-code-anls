@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\metagpt_api.py`
 
-```
+```py
 
 # 设置文件编码为 UTF-8
 # 设置文件的作者、时间、描述等信息

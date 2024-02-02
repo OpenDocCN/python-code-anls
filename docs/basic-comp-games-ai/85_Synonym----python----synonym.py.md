@@ -1,6 +1,6 @@
 # `basic-computer-games\85_Synonym\python\synonym.py`
 
-```
+```py
 # 定义了一个多义词词汇测试程序
 """
 SYNONYM

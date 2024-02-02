@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\dependency_file.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\models.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 PyTorch 库

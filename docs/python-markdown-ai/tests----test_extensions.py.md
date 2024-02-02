@@ -1,6 +1,6 @@
 # `markdown\tests\test_extensions.py`
 
-```
+```py
 
 # 导入 unittest 和 markdown 模块
 import unittest

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\document_store\qdrant_store.py`
 
-```
+```py
 
 # 导入必要的模块和类
 from dataclasses import dataclass

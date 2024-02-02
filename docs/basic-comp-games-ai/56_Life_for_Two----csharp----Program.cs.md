@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 命名空间
 global using Games.Common.IO;
 # 引入 LifeforTwo.Resources.Resource 命名空间

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfo.cs`
 
-```
+```py
 // 使用静态导入来简化代码，可以直接使用 Directory 和 Path 类的方法
 using static System.IO.Directory;
 using static System.IO.Path;

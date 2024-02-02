@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\Game.cs`
 
-```
+```py
 namespace Queen;
 
 internal class Game

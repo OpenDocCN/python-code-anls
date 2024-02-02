@@ -20,7 +20,7 @@ Wav2Vec2-Large-Robust](https://huggingface.co/facebook/wav2vec2-large-robust) on
 
 # Usage
 
-```python
+```py
 import numpy as np
 import torch
 import torch.nn as nn

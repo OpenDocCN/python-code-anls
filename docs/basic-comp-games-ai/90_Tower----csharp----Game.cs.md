@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\Game.cs`
 
-```
+```py
 using System;
 using Tower.Models;
 using Tower.Resources;

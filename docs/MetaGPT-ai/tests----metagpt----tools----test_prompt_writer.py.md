@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_prompt_writer.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

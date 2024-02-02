@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\Program.cs`
 
-```
+```py
 using System;  // 导入系统命名空间
 using Tower.Resources;  // 导入 Tower.Resources 命名空间
 using Tower.UI;  // 导入 Tower.UI 命名空间

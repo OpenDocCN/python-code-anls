@@ -1,6 +1,6 @@
 # `so-vits-svc\cluster\kmeans.py`
 
-```
+```py
 # 从 time 模块中导入 time 函数
 from time import time
 

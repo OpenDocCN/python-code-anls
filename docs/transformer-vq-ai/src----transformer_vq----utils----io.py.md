@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\utils\io.py`
 
-```
+```py
 # 导入 TensorFlow 库
 import tensorflow as tf
 # 从 flax.training 模块中导入 checkpoints 函数

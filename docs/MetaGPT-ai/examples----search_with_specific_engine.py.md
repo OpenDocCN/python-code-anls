@@ -1,6 +1,6 @@
 # `MetaGPT\examples\search_with_specific_engine.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

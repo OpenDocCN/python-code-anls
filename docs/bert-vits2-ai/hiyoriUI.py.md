@@ -1,6 +1,6 @@
 # `Bert-VITS2\hiyoriUI.py`
 
-```
+```py
 """
 api服务，网页后端 多版本多模型 fastapi实现
 原 server_fastapi

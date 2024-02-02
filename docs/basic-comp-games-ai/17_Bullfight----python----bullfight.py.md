@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\python\bullfight.py`
 
-```
+```py
 # 导入 math、random、Dict、List、Literal、Tuple、Union 模块
 import math
 import random

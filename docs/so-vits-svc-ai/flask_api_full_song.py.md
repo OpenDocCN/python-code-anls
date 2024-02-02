@@ -1,6 +1,6 @@
 # `so-vits-svc\flask_api_full_song.py`
 
-```
+```py
 # 导入所需的库
 import io
 import numpy as np

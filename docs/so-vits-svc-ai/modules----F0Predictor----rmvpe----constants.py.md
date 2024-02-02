@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\constants.py`
 
-```
+```py
 # 定义采样率为16000
 SAMPLE_RATE = 16000
 

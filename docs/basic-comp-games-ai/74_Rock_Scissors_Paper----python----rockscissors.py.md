@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\python\rockscissors.py`
 
-```
+```py
 #!/usr/bin/env python3
 # ROCKSCISSORS
 #

@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\csharp\Craps\Program.cs`
 
-```
+```py
 using System.Diagnostics; // 导入系统诊断命名空间
 
 namespace Craps

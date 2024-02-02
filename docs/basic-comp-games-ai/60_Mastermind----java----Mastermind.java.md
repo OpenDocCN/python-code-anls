@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\java\Mastermind.java`
 
-```
+```py
 import java.util.ArrayList;  // 导入 ArrayList 类
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.BitSet;  // 导入 BitSet 类

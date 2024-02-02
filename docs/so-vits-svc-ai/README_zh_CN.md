@@ -61,7 +61,7 @@
 
 + 可通过修改 4.0 模型的 config.json 对 4.0 的模型进行支持，需要在 config.json 的 model 字段中添加 speech_encoder 字段，具体见下
 
-```
+```py
   "model": {
     .........
     "ssl_dim": 256,
@@ -94,7 +94,7 @@
 + contentvec ：[hubert_base.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt)
   + 将文件名改为`checkpoint_best_legacy_500.pt`后，放在`pretrain`目录下
 
-```shell
+```py
 # contentvec
 wget -P pretrain/ https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -O checkpoint_best_legacy_500.pt
 # 也可手动下载放在 pretrain 目录
@@ -163,7 +163,7 @@ wget -P pretrain/ https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/mai
 + 预训练的 NSF-HIFIGAN 声码器 ：[nsf_hifigan_20221211.zip](https://github.com/openvpi/vocoders/releases/download/nsf-hifigan-v1/nsf_hifigan_20221211.zip)
   + 解压后，将四个文件放在`pretrain/nsf_hifigan`目录下
 
-```shell
+```py
 # nsf_hifigan
 wget -P pretrain/ https://github.com/openvpi/vocoders/releases/download/nsf-hifigan-v1/nsf_hifigan_20221211.zip
 unzip -od pretrain/nsf_hifigan pretrain/nsf_hifigan_20221211.zip
@@ -197,7 +197,7 @@ unzip -od pretrain/nsf_hifigan pretrain/nsf_hifigan_20221211.zip
 
 仅需要以以下文件结构将数据集放入 dataset_raw 目录即可。
 
-```
+```py
 dataset_raw
 ├───speaker0
 │   ├───xxx1-xxx1.wav
@@ -212,7 +212,7 @@ dataset_raw
 
 可以自定义说话人名称
 
-```
+```py
 dataset_raw
 └───suijiSUI
     ├───1.wav
@@ -236,7 +236,7 @@ dataset_raw
 
 ### 1. 重采样至 44100Hz 单声道
 
-```shell
+```py
 python resample.py
 ```
 
@@ -244,19 +244,19 @@ python resample.py
 
 虽然本项目拥有重采样、转换单声道与响度匹配的脚本 resample.py，但是默认的响度匹配是匹配到 0db。这可能会造成音质的受损。而 python 的响度匹配包 pyloudnorm 无法对电平进行压限，这会导致爆音。所以建议可以考虑使用专业声音处理软件如`adobe audition`等软件做响度匹配处理。若已经使用其他软件做响度匹配，可以在运行上述命令时添加`--skip_loudnorm`跳过响度匹配步骤。如：
 
-```shell
+```py
 python resample.py --skip_loudnorm
 ```
 
 ### 2. 自动划分训练集、验证集，以及自动生成配置文件
 
-```shell
+```py
 python preprocess_flist_config.py --speech_encoder vec768l12
 ```
 
 speech_encoder 拥有以下选择
 
-```
+```py
 vec768l12
 vec256l9
 hubertsoft
@@ -273,7 +273,7 @@ wavlmbase+
 
 若使用响度嵌入，需要增加`--vol_aug`参数，比如：
 
-```shell
+```py
 python preprocess_flist_config.py --speech_encoder vec768l12 --vol_aug
 ```
 使用后训练出的模型将匹配到输入源响度，否则为训练集响度。
@@ -304,20 +304,20 @@ python preprocess_flist_config.py --speech_encoder vec768l12 --vol_aug
 
 ##### **声码器列表**
 
-```
+```py
 nsf-hifigan
 nsf-snake-hifigan
 ```
 
 ### 3. 生成 hubert 与 f0
 
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio
 ```
 
 f0_predictor 拥有以下选择
 
-```
+```py
 crepe
 dio
 pm
@@ -332,13 +332,13 @@ fcpe
 
 尚若需要浅扩散功能（可选），需要增加--use_diff 参数，比如
 
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio --use_diff
 ```
 
 **加速预处理**
 如若您的数据集比较大，可以尝试添加`--num_processes`参数：
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio --use_diff --num_processes 8
 ```
 所有的Workers会被自动分配到多个线程上
@@ -349,7 +349,7 @@ python preprocess_hubert_f0.py --f0_predictor dio --use_diff --num_processes 8
 
 ### 主模型训练
 
-```shell
+```py
 python train.py -c configs/config.json -m 44k
 ```
 
@@ -357,7 +357,7 @@ python train.py -c configs/config.json -m 44k
 
 尚若需要浅扩散功能，需要训练扩散模型，扩散模型训练方法为：
 
-```shell
+```py
 python train_diff.py -c configs/diffusion.yaml
 ```
 
@@ -367,7 +367,7 @@ python train_diff.py -c configs/diffusion.yaml
 
 使用 [inference_main.py](inference_main.py)
 
-```shell
+```py
 # 例
 python inference_main.py -m "logs/44k/G_30400.pth" -c "configs/config.json" -n "君の知らない物語-src.wav" -t 0 -s "nen"
 ```
@@ -433,7 +433,7 @@ python inference_main.py -m "logs/44k/G_30400.pth" -c "configs/config.json" -n "
 + 训练过程：
   首先需要在生成 hubert 与 f0 后执行：
 
-```shell
+```py
 python train_index.py -c configs/config.json
 ```
 
@@ -451,7 +451,7 @@ python train_index.py -c configs/config.json
 
 使用 [compress_model.py](compress_model.py)
 
-```shell
+```py
 # 例
 python compress_model.py -c="configs/config.json" -i="logs/44k/G_30400.pth" -o="logs/44k/release.pth"
 ```

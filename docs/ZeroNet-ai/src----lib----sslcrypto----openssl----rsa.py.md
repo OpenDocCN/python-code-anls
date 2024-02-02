@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\openssl\rsa.py`
 
-```
+```py
 # 禁用 pylint 对于过少公共方法的警告
 
 # 从当前目录下的 library 模块中导入 openssl_backend

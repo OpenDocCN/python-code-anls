@@ -1,6 +1,6 @@
 # `so-vits-svc\train.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入多进程模块

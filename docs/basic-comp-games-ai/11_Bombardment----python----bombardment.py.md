@@ -1,6 +1,6 @@
 # `basic-computer-games\11_Bombardment\python\bombardment.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入 random 模块
 import random

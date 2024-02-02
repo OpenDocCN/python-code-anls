@@ -1,6 +1,6 @@
 # `so-vits-svc\flask_api.py`
 
-```
+```py
 # 导入所需的库
 import io
 import logging

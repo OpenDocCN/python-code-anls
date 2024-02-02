@@ -1,6 +1,6 @@
 # `basic-computer-games\22_Change\python\change.py`
 
-```
+```py
 """
 CHANGE
 

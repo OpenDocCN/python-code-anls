@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\environment.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

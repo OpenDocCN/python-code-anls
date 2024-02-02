@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 命名空间
 global using Games.Common.IO;
 # 引入 Games.Common.Randomness 命名空间

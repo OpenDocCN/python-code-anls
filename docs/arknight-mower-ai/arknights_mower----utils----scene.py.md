@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\scene.py`
 
-```
+```py
 # 从上级目录的 data 模块中导入 scene_list 数据
 from ..data import scene_list
 

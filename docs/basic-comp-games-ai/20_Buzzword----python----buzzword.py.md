@@ -1,6 +1,6 @@
 # `basic-computer-games\20_Buzzword\python\buzzword.py`
 
-```
+```py
 """
 Buzzword Generator
 

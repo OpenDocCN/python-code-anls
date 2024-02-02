@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\java\Bagels.java`
 
-```
+```py
 // 导入 Scanner 类，用于接收用户输入
 import java.util.Scanner;
 

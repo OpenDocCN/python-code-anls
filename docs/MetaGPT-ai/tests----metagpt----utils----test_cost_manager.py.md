@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_cost_manager.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

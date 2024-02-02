@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\ShotSelectionStrategy.cs`
 
-```
+```py
 # 命名空间 Salvo.Targetting 下的抽象类 ShotSelectionStrategy
 internal abstract class ShotSelectionStrategy
 {

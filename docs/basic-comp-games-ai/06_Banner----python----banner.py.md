@@ -1,6 +1,6 @@
 # `basic-computer-games\06_Banner\python\banner.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本解释器为 Python3
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\Player.java`
 
-```
+```py
 /**
  * The Player class model the user and compuer player
  */

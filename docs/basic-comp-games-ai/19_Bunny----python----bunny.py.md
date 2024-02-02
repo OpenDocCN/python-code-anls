@@ -1,6 +1,6 @@
 # `basic-computer-games\19_Bunny\python\bunny.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 导入 json 模块

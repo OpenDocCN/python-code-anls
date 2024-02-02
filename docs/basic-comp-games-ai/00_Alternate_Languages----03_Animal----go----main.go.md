@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\03_Animal\go\main.go`
 
-```
+```py
 package main
 
 import (

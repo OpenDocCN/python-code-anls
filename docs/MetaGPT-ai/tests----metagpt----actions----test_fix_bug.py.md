@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\actions\test_fix_bug.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

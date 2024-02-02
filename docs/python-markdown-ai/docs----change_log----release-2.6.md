@@ -25,13 +25,13 @@ using bleach.
 
 If your code previously looked like this:
 
-```python
+```py
 html = markdown.markdown(text, safe_mode=True)
 ```
 
 Then it is recommended that you change your code to read something like this:
 
-```python
+```py
 import bleach
 from bleach_whitelist import markdown_tags, markdown_attrs
 html = bleach.clean(markdown.markdown(text), markdown_tags, markdown_attrs)
@@ -41,7 +41,7 @@ If you are not interested in sanitizing untrusted text, but simply desire to
 escape raw HTML, then that can be accomplished through an extension which
 removes HTML parsing:
 
-```python
+```py
 from markdown.extensions import Extension
 
 class EscapeHtml(Extension):
@@ -67,13 +67,13 @@ Using positional arguments will raise a **`DeprecationWarning`** in 2.6 and an
 error in the next release. Only keyword arguments should be used. For example,
 if your code previously looked like this:
 
-```python
+```py
 html = markdown.markdown(text, [SomeExtension()])
 ```
 
 Then it is recommended that you change it to read something like this:
 
-```python
+```py
 html = markdown.markdown(text, extensions=[SomeExtension()])
 ```
 
@@ -94,26 +94,26 @@ special treatment. This behavior is deprecated and will raise a
 that you always use the full path to your extensions. For example, if you
 previously did the following:
 
-```python
+```py
 markdown.markdown(text, extensions=['extra'])
 ```
 
 You should change your code to the following:
 
-```python
+```py
 markdown.markdown(text, extensions=['markdown.extensions.extra'])
 ```
 
 The same applies to the command line:
 
-```python
+```py
 python -m markdown -x markdown.extensions.extra input.txt
 ```
 
 Similarly, if you have used a third party extension (for example `mdx_math`),
 previously you might have called it like this:
 
-```python
+```py
 markdown.markdown(text, extensions=['math'])
 ```
 
@@ -121,7 +121,7 @@ As the `"mdx"` prefix will no longer be appended, you will need to change your
 code as follows (assuming the file `mdx_math.py` is installed at the root of
 your PYTHONPATH):
 
-```python
+```py
 markdown.markdown(text, extensions=['mdx_math'])
 ```
 
@@ -161,13 +161,13 @@ individual configuration option should be passed to the class as a keyword/value
 pair. For example. one might have previously initiated an extension subclass
 like this:
 
-```python
+```py
 ext = SomeExtension(configs={'somekey': 'somevalue'})
 ```
 
 That code should be updated to pass in the options directly:
 
-```python
+```py
 ext = SomeExtension(somekey='somevalue')
 ```
 
@@ -175,14 +175,14 @@ Extension authors will want to note that this affects the `makeExtension`
 function as well. Previously it was common for the function to be defined as
 follows:
 
-```python
+```py
 def makeExtension(configs=None):
     return SomeExtension(configs=configs)
 ```
 
 Extension authors will want to update their code to the following instead:
 
-```python
+```py
 def makeExtension(**kwargs):
     return SomeExtension(**kwargs)
 ```
@@ -196,7 +196,7 @@ In the event that an `markdown.extension.Extension` subclass overrides the
 may not apply. However, it is recommended that the subclass still calls the
 parent `__init__` method to handle configuration options like so:
 
-```python
+```py
 class SomeExtension(markdown.extension.Extension):
     def __init__(**kwargs):
         # Do pre-config stuff here

@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\java\src\RockScissors.java`
 
-```
+```py
 // 导入必要的类
 import java.util.Arrays;
 import java.util.Scanner;

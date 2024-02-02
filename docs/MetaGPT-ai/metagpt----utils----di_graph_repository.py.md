@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\di_graph_repository.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\directInput.py`
 
-```
+```py
 # 导入需要的库
 import pyautogui
 import pydirectinput

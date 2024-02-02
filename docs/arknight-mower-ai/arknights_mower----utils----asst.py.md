@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\asst.py`
 
-```
+```py
 # 导入 ctypes 模块，用于调用 C 语言的函数库
 import ctypes
 # 导入 os 模块，用于与操作系统交互

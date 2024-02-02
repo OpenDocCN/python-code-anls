@@ -1,6 +1,6 @@
 # `yolov5-DNF\utils\google_utils.py`
 
-```
+```py
 # 这个文件包含了谷歌的工具：https://cloud.google.com/storage/docs/reference/libraries
 # 通过 pip 安装最新版本的 google-cloud-storage
 # from google.cloud import storage

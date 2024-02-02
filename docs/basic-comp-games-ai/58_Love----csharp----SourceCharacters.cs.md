@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\csharp\SourceCharacters.cs`
 
-```
+```py
 // 命名空间声明，定义了 Love 命名空间
 namespace Love
 {

@@ -1,6 +1,6 @@
 # `ChatRWKV\API_DEMO.py`
 
-```
+```py
 # 打印 RWKV 语言模型的 GitHub 链接
 print('\nChatRWKV https://github.com/BlinkDL/ChatRWKV\n')
 

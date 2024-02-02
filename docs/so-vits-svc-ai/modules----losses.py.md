@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\losses.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

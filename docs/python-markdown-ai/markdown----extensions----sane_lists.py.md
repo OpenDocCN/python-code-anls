@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\sane_lists.py`
 
-```
+```py
 
 # Sane List Extension for Python-Markdown
 # =======================================

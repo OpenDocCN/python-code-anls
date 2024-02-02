@@ -1,6 +1,6 @@
 # `basic-computer-games\41_Guess\python\guess.py`
 
-```
+```py
 """
 Guess
 

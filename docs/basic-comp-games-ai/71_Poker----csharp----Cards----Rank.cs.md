@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\Rank.cs`
 
-```
+```py
 # 定义一个内部的结构体 Rank，实现了 IComparable 接口
 internal struct Rank : IComparable<Rank>
 {

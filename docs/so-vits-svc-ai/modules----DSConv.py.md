@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\DSConv.py`
 
-```
+```py
 import torch.nn as nn  # 导入 PyTorch 中的神经网络模块
 from torch.nn.utils import remove_weight_norm, weight_norm  # 从 PyTorch 中的神经网络工具模块导入去除权重归一化和权重归一化函数
 

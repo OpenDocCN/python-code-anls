@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\constant.py`
 
-```
+```py
 
 # 定义了一个通用函数的模式，用于描述执行代码的函数
 GENERAL_FUNCTION_SCHEMA = {

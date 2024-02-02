@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_text.py`
 
-```
+```py
 
 # 导入 pytest 模块
 import pytest

@@ -1,6 +1,6 @@
 # `arknights-mower\packaging\paddleocr.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 # 导入系统模块

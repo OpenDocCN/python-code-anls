@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\java\Basketball.java`
 
-```
+```py
 // 导入数学类和相关工具类
 import java.lang.Math;
 import java.util.*;

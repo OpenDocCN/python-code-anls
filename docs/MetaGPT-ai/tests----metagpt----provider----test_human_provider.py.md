@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\test_human_provider.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 python

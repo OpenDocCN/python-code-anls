@@ -104,7 +104,7 @@ configuration option to `True` when enabling the extension.
 
 For example, to configure the old `align` behavior:
 
-```python
+```py
 from markdown.extensions.tables import TableExtension
 
 markdown.markdown(src, extensions=[TableExtension(use_align_attribute=True)])
@@ -270,7 +270,7 @@ configuration option of either the `fenced_code` or `codehilite` extensions.
 
 For example, to configure `fenced_code` to not apply any prefix (the previous behavior), set the option to an empty string:
 
-```python
+```py
 from markdown.extensions.fenced_code import FencedCodeExtension
 
 markdown.markdown(src, extensions=[FencedCodeExtension(lang_prefix='')])
@@ -562,13 +562,13 @@ bleach.
 
 If your code previously looked like this:
 
-```python
+```py
 html = markdown.markdown(text, safe_mode=True)
 ```
 
 Then it is recommended that you change your code to read something like this:
 
-```python
+```py
 import bleach
 from bleach_whitelist import markdown_tags, markdown_attrs
 html = bleach.clean(markdown.markdown(text), markdown_tags, markdown_attrs)
@@ -578,7 +578,7 @@ If you are not interested in sanitizing untrusted text, but simply desire to
 escape raw HTML, then that can be accomplished through an extension which
 removes HTML parsing:
 
-```python
+```py
 from markdown.extensions import Extension
 
 class EscapeHtml(Extension):
@@ -600,13 +600,13 @@ all except the `text` argument on the `markdown.markdown()` wrapper function.
 Using positional arguments will raise an error. Only keyword arguments should be
 used. For example, if your code previously looked like this:
 
-```python
+```py
 html = markdown.markdown(text, [SomeExtension()])
 ```
 
 Then it is recommended that you change it to read something like this:
 
-```python
+```py
 html = markdown.markdown(text, extensions=[SomeExtension()])
 ```
 

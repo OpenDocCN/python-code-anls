@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\javascript\bounce.js`
 
-```
+```py
 // BOUNCE
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

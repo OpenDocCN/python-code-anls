@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\conf\parser.py`
 
-```
+```py
 # 导入 ArgumentParser 类
 from argparse import ArgumentParser
 

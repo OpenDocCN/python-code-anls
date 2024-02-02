@@ -1,6 +1,6 @@
 # `transformer_vq\tests\common.py`
 
-```
+```py
 """
 Pytest fixtures. Due to the heterogeneity between tests, most fixtures are factories.
 """

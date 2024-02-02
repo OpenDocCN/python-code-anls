@@ -1,6 +1,6 @@
 # `kubehunter\tests\core\test_handler.py`
 
-```
+```py
 # 从 kube_hunter.core.events.handler 模块导入 handler 函数
 from kube_hunter.core.events.handler import handler
 # 从 kube_hunter.modules.discovery.apiserver 模块导入 ApiServiceDiscovery 类

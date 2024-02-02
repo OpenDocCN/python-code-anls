@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Life.cs`
 
-```
+```py
 // 定义一个名为 Life 的类，实现了 IEnumerable 接口，泛型参数为 Generation 类型
 internal class Life : IEnumerable<Generation>
 {

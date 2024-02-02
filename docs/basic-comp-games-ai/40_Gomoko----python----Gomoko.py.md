@@ -1,6 +1,6 @@
 # `basic-computer-games\40_Gomoko\python\Gomoko.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 导入 typing 模块中的 Any、List、Tuple 类型

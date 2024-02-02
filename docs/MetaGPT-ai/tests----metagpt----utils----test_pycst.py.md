@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_pycst.py`
 
-```
+```py
 
 # 从metagpt.utils模块中导入pycst工具
 from metagpt.utils import pycst

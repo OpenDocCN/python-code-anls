@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\find-unimplemented.js`
 
-```
+```py
 /**
  * Program to show unimplemented games by language, optionally filtered by
  * language

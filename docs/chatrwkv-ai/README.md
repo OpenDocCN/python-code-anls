@@ -29,7 +29,7 @@ Our latest version is **RWKV-6**, which is easily Mamba level, and simpler ;) ht
 Use v2/convert_model.py to convert a model for a strategy, for faster loading & saves CPU RAM.
 
 Note RWKV_CUDA_ON will build a CUDA kernel (much faster & saves VRAM). Here is how to build it ("pip install ninja" first):
-```
+```py
 # How to build in Linux: set these and run v2/chat.py
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
@@ -87,7 +87,7 @@ https://github.com/josStorer/RWKV-Runner cool GUI
 More RWKV projects: https://github.com/search?o=desc&q=rwkv&s=updated&type=Repositories
 
 ChatRWKV v2: with "stream" and "split" strategies, and INT8. 3G VRAM is enough to run RWKV 14B :) https://github.com/BlinkDL/ChatRWKV/tree/main/v2
-```python
+```py
 os.environ["RWKV_JIT_ON"] = '1'
 os.environ["RWKV_CUDA_ON"] = '0' # if '1' then use CUDA kernel for seq mode (much faster)
 from rwkv.model import RWKV                         # pip install rwkv
@@ -112,7 +112,7 @@ When you build a RWKV chatbot, always check the text corresponding to the state,
 **(For v4-raven models, use Bob/Alice. For v4/v5/v6-world models, use User/Assistant)**
 
 2. The best chat format (check whether your text is of this format):
-```Bob: xxxxxxxxxxxxxxxxxx\n\nAlice: xxxxxxxxxxxxx\n\nBob: xxxxxxxxxxxxxxxx\n\nAlice:```
+```Bob: xxxxxxxxxxxxxxxxxx\n\nAlice: xxxxxxxxxxxxx\n\nBob: xxxxxxxxxxxxxxxx\n\nAlice:```py
 
 * There should not be any space after the final "Alice:". The generation result will have a space in the beginning, and you can simply strip it.
 * You can use \n in xxxxx, but avoid \n\n. So simply do ```xxxxx = xxxxx.strip().replace('\r\n','\n').replace('\n\n','\n')```

@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\extra.py`
 
-```
+```py
 
 # Python-Markdown Extra Extension
 # ===============================

@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\_ecc.py`
 
-```
+```py
 # 导入哈希算法库
 import hashlib
 # 导入结构处理库

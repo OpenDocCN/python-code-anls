@@ -1,6 +1,6 @@
 # `Bert-VITS2\webui_preprocess.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 # 导入 webbrowser、os、json、subprocess、shutil 库

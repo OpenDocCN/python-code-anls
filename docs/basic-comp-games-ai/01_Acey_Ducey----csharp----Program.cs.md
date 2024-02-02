@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\csharp\Program.cs`
 
-```
+```py
 // 引入必要的命名空间
 using System;
 using System.Threading;

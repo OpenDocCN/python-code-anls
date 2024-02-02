@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_docstring.py`
 
-```
+```py
 
 """Code Docstring Generator.
 

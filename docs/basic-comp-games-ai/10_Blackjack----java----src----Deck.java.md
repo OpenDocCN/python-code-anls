@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\src\Deck.java`
 
-```
+```py
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

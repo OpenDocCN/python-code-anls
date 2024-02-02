@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\javascript\stockmarket.js`
 
-```
+```py
 // STOCKMARKET
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

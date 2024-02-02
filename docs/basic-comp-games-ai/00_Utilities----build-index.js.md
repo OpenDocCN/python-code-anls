@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\build-index.js`
 
-```
+```py
 #!/usr/bin/env node
 /**
  * This script creates an "index.html" file in the root of the directory.

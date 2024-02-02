@@ -1,6 +1,6 @@
 # `yolov5-DNF\small_recgonize.py`
 
-```
+```py
 # 导入 OpenCV 库并重命名为 cv，导入 NumPy 库并重命名为 np
 import cv2 as cv
 import numpy as np

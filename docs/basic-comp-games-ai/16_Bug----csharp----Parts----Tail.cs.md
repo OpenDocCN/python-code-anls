@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Parts\Tail.cs`
 
-```
+```py
 # 导入 System.Text 命名空间
 using System.Text;
 # 导入 BugGame.Resources 命名空间

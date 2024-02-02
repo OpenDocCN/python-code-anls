@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\symbols.py`
 
-```
+```py
 # 定义标点符号列表
 punctuation = ["!", "?", "…", ",", ".", "'", "-"]
 # 将标点符号列表与额外的字符串"SP"和"UNK"合并成一个新的列表

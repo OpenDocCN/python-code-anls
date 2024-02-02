@@ -1,6 +1,6 @@
 # `basic-computer-games\03_Animal\csharp\Program.cs`
 
-```
+```py
 // 引入必要的命名空间
 using System;
 using System.Collections.Generic;

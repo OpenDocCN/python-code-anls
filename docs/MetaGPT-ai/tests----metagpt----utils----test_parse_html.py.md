@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_parse_html.py`
 
-```
+```py
 
 # 从metagpt.utils中导入parse_html模块
 from metagpt.utils import parse_html

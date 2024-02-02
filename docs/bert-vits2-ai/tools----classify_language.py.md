@@ -1,6 +1,6 @@
 # `Bert-VITS2\tools\classify_language.py`
 
-```
+```py
 # 导入 regex 库，用于正则表达式操作
 import regex as re
 

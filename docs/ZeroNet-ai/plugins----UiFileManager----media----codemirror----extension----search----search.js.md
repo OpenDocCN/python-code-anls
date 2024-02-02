@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\search\search.js`
 
-```
+```py
 // CodeMirror, 版权归 Marijn Haverbeke 和其他人所有
 // 根据 MIT 许可证分发：https://codemirror.net/LICENSE
 

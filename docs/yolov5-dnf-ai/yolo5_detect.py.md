@@ -1,6 +1,6 @@
 # `yolov5-DNF\yolo5_detect.py`
 
-```
+```py
 # 导入所需的库
 import random
 import time

@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\Point.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

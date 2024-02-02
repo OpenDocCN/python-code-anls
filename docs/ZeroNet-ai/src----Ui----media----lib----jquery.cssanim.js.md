@@ -1,6 +1,6 @@
 # `ZeroNet\src\Ui\media\lib\jquery.cssanim.js`
 
-```
+```py
 # 将自定义的scale属性添加到jQuery的cssHooks对象中
 jQuery.cssHooks['scale'] = {
     # 获取元素的scale属性值

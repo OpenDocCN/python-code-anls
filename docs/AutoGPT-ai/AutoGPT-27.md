@@ -39,7 +39,7 @@ Creates a task for the agent.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -106,7 +106,7 @@ Download a specified artifact.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -173,7 +173,7 @@ Execute a step in the specified agent task.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -242,7 +242,7 @@ Get details about a specified agent task.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -308,7 +308,7 @@ Get details about a specified task step.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -376,7 +376,7 @@ List all artifacts that have been created for the given task.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -442,7 +442,7 @@ List all steps for the specified task.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -507,7 +507,7 @@ List all tasks that have been created for the agent.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -569,7 +569,7 @@ Upload an artifact for the specified task.
 
 ### Example
 
-```pypython
+```py
 import time
 import os
 import agent_protocol_client
@@ -757,7 +757,7 @@ from __future__ import annotations
 
 ```
 
-这段代码使用了Python的pydantic库来实现JSON的序列化和解析，同时使用了re库实现了正则表达式。主要作用是定义了一个名为Artifacts的类，该类基于Python的BaseModel类，用于定义了Artifacts模型类，将该类定义为```pypython
+这段代码使用了Python的pydantic库来实现JSON的序列化和解析，同时使用了re库实现了正则表达式。主要作用是定义了一个名为Artifacts的类，该类基于Python的BaseModel类，用于定义了Artifacts模型类，将该类定义为```py
    class Artifacts(BaseModel):
        """
        Artifacts that the task has produced.

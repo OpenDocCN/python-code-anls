@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\mission.py`
 
-```
+```py
 # 从utils目录中导入Device类
 from ..utils.device import Device
 # 从utils目录中导入logger对象

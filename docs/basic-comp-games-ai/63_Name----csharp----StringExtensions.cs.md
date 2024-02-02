@@ -1,6 +1,6 @@
 # `basic-computer-games\63_Name\csharp\StringExtensions.cs`
 
-```
+```py
 // 命名空间定义
 namespace Name
 {

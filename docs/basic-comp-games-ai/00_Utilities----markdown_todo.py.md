@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\markdown_todo.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 Dict 和 List 类型提示

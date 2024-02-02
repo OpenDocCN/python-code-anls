@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Ships\Ship.cs`
 
-```
+```py
 // 命名空间 Salvo.Ships 下的抽象类 Ship
 internal abstract class Ship
 {

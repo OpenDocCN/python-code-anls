@@ -1,6 +1,6 @@
 # `basic-computer-games\44_Hangman\csharp\Program.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System;
 using System.Collections.Generic;

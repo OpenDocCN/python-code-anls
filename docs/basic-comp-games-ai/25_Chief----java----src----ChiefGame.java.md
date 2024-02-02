@@ -1,6 +1,6 @@
 # `basic-computer-games\25_Chief\java\src\ChiefGame.java`
 
-```
+```py
 # 定义名为 ChiefGame 的公共类
 public class ChiefGame {
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\04_Awari\csharp\Program.cs`
 
-```
+```py
 // 输出游戏标题
 Console.WriteLine(Tab(34) + "AWARI");
 // 输出游戏信息

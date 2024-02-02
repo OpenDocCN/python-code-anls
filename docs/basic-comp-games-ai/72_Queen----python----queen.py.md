@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\python\queen.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Implementation of Queens game in Python 3.

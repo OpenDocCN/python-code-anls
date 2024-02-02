@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_action.py`
 
-```
+```py
 
 # 导入 pytest 模块
 import pytest

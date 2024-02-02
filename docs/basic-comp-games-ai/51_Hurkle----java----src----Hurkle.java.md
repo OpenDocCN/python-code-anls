@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\java\src\Hurkle.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

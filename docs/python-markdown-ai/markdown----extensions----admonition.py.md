@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\admonition.py`
 
-```
+```py
 
 # Admonition extension for Python-Markdown
 # ========================================

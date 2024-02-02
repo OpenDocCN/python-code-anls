@@ -1,6 +1,6 @@
 # `basic-computer-games\80_Slots\python\slots.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 导入 Counter 类

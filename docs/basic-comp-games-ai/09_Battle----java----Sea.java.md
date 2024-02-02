@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\java\Sea.java`
 
-```
+```py
 // 跟踪海洋的内容
 class Sea {
     // 海洋是一个方形网格，由瓦片组成。它是一个一维数组，这个类将x和y坐标映射到数组索引

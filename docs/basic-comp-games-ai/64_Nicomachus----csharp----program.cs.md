@@ -1,6 +1,6 @@
 # `basic-computer-games\64_Nicomachus\csharp\program.cs`
 
-```
+```py
 # 引入 System.Text 和 System.Threading 命名空间
 using System.Text;
 using System.Threading;

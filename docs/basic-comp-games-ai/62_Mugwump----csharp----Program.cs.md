@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Program.cs`
 
-```
+```py
 # 全局引用 System 命名空间
 global using System;
 # 全局引用 Games.Common.IO 命名空间

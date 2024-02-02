@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\Models\Needle.cs`
 
-```
+```py
 // 引入命名空间
 using System.Collections;
 using System.Collections.Generic;

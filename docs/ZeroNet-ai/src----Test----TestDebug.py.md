@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestDebug.py`
 
-```
+```py
 # 导入 Debug 模块
 from Debug import Debug
 # 导入 gevent 模块

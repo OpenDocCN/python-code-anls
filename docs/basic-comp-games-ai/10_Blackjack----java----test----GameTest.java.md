@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\test\GameTest.java`
 
-```
+```py
 # 导入测试相关的包
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;

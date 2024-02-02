@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\AnnounceZero\AnnounceZeroPlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入迭代工具模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\41_Guess\java\src\GuessGame.java`
 
-```
+```py
 # 定义名为GuessGame的公共类
 public class GuessGame {
     # 定义名为main的公共静态方法，参数为字符串数组

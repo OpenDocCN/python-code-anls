@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\31_Depth_Charge\go\main.go`
 
-```
+```py
 package main
 
 import (

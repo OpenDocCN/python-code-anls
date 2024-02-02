@@ -1,6 +1,6 @@
 # `basic-computer-games\50_Horserace\python\horserace.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 导入 random 模块

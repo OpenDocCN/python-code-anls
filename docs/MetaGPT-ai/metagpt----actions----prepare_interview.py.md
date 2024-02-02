@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\prepare_interview.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

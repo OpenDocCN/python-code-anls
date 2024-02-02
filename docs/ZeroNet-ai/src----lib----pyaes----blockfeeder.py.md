@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\pyaes\blockfeeder.py`
 
-```
+```py
 # 导入所需的模块和函数
 from .aes import AESBlockModeOfOperation, AESSegmentModeOfOperation, AESStreamModeOfOperation
 from .util import append_PKCS7_padding, strip_PKCS7_padding, to_bufferable

@@ -1,6 +1,6 @@
 # `so-vits-svc\train_index.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 import os  # 用于处理文件路径

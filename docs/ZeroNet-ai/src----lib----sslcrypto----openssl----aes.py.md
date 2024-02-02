@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\openssl\aes.py`
 
-```
+```py
 # 导入 ctypes 模块
 import ctypes
 # 导入 threading 模块

@@ -559,20 +559,20 @@ if __name__ == "__main__":
 
 这段代码定义了一个名为 "ShipPlacement" 的模型，该模型通过 `ABC` 和 `abstractmethod` 进行包装。这个模型使用 `typing.Optional` 类型来指示可能存在的值得类型。
 
-```pypython
+```py
 from abc import ABC, abstractmethod
 from typing import Optional
 ```
 
 这个代码片段中定义了两个方法，一个名为 `ABC` 的接口，一个名为 `abstractmethod` 的接口。这些接口用于定义模型，确保模型具有某些共同特征，但不具体指定这些特征。
 
-```pypython
+```py
 from pydantic import BaseModel, validator
 ```
 
 这个代码片段中引入了 `pydantic` 包，它是用于定义 Pydantic 模型类的前缀。通过 `BaseModel` 类，可以定义一个通用的 Pydantic 模型类，其中包含一些默认的方法，比如 `parse_raw` 和 `validator`。
 
-```pypython
+```py
 
 class ShipPlacement(BaseModel):
    ship_type: str
@@ -582,7 +582,7 @@ class ShipPlacement(BaseModel):
 
 这个代码片段中定义了一个名为 `ShipPlacement` 的模型类。在这个类中，定义了一个 `ship_type` 字段，它是模型中声明的所有字段之一。还定义了一个 `start` 字段，它是模型中声明的所有字段之一。它的 `row` 和 `column` 属性通过 `getter` 方法从 `start` 字典中获取。最后还定义了一个 `direction` 字段，它是模型中声明的所有字段之一。
 
-```pypython
+```py
    @validator("start")
    def validate_start(cls, start):
        row, column = start.get("row"), start.get("column")
@@ -598,7 +598,7 @@ class ShipPlacement(BaseModel):
 
 这个代码片段中定义了一个名为 `validate_start` 的验证函数。这个函数接受一个 `start` 字典作为参数，并获取其中的 `row` 和 `column` 属性。然后，根据获取的 `row` 和 `column` 值，检查 `row` 是否在 1 到 10 之间，`column` 是否在 "A" 到 "J" 的列表中。如果不在允许的范围内，就 raise 异常。函数返回 `start` 字典。
 
-```pyruby
+```py
    @validator("start")
    def validate_start(cls, start):
        row, column = start.get("row"), start.get("column")

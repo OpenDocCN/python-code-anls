@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestDiff.py`
 
-```
+```py
 # 导入 io 模块
 import io
 # 从 util 模块中导入 Diff 类

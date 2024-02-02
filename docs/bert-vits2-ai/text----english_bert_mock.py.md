@@ -1,6 +1,6 @@
 # `Bert-VITS2\text\english_bert_mock.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

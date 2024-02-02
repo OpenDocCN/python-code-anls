@@ -1,6 +1,6 @@
 # `basic-computer-games\25_Chief\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Chief.Resources
 namespace Chief.Resources
 {

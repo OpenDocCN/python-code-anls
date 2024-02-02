@@ -1,6 +1,6 @@
 # `basic-computer-games\88_3-D_Tic-Tac-Toe\csharp\Qubic.cs`
 
-```
+```py
 // 使用 System.Text 命名空间
 namespace ThreeDTicTacToe
 {

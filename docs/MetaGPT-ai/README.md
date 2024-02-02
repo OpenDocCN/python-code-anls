@@ -44,7 +44,7 @@
 
 ### Pip installation
 
-```bash
+```py
 # Step 1: Ensure that Python 3.9+ is installed on your system. You can check this by using:
 # You can use conda to initialize a new python env
 #     conda create -n metagpt python=3.9
@@ -75,7 +75,7 @@ detail installation please refer to [cli_install](https://docs.deepwisdom.ai/mai
 ### Docker installation
 > Note: In the Windows, you need to replace "/opt/metagpt" with a directory that Docker has permission to create, such as "D:\Users\x\metagpt"
 
-```bash
+```py
 # Step 1: Download metagpt official image and prepare config.yaml
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
@@ -136,7 +136,7 @@ We will respond to all questions within 2-3 business days.
 
 For now, cite the [arXiv paper](https://arxiv.org/abs/2308.00352):
 
-```bibtex
+```py
 @misc{hong2023metagpt,
       title={MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework}, 
       author={Sirui Hong and Mingchen Zhuge and Jonathan Chen and Xiawu Zheng and Yuheng Cheng and Ceyao Zhang and Jinlin Wang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu and Jürgen Schmidhuber},

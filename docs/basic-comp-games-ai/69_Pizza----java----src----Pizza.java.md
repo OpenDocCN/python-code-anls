@@ -1,6 +1,6 @@
 # `basic-computer-games\69_Pizza\java\src\Pizza.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

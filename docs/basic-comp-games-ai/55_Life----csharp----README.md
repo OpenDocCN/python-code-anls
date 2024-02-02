@@ -27,7 +27,7 @@ Spaces represent empty cells. Asterisks represent alive cells.
 
 After entering the pattern, you need to enter the word "DONE". It is not case sensitive. An example of pattern would be:
 
-```
+```py
  *
 ***
 DONE
@@ -35,22 +35,22 @@ DONE
 
 ### Some patterns you could try
 
-```
+```py
  *
 ***
 ```
 
-```
+```py
 *
 ***
 ```
 
-```
+```py
 **
 **
 ```
 
-```
+```py
   *
  *
 *
@@ -58,7 +58,7 @@ DONE
 
 This one is known as **glider**:
 
-```
+```py
 ***
 *
  *

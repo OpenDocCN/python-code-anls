@@ -1,6 +1,6 @@
 # `basic-computer-games\44_Hangman\csharp\Graphic.cs`
 
-```
+```py
 // 使用 System 命名空间
 using System;
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\92_Trap\javascript\trap.js`
 
-```
+```py
 // TRAP
 //
 // 由Oscar Toledo G. (nanochess)将BASIC转换为Javascript

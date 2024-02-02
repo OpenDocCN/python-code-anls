@@ -9,7 +9,7 @@
 
 ### 详细安装
 
-```bash
+```py
 # 第 1 步：确保您的系统上安装了 NPM。并使用npm安装mermaid-js
 npm --version
 sudo npm install -g @mermaid-js/mermaid-cli
@@ -29,13 +29,13 @@ pip install -e.
 
 - 一些人在全局安装此工具时遇到问题。在本地安装是替代解决方案，
 
-    ```bash
+    ```py
     npm install @mermaid-js/mermaid-cli
     ```
 
 - 不要忘记在config.yml中为mmdc配置配置，
 
-    ```yml
+    ```py
     PUPPETEER_CONFIG: "./config/puppeteer-config.json"
     MMDC: "./node_modules/.bin/mmdc"
     ```

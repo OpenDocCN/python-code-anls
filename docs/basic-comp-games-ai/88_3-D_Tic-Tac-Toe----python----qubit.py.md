@@ -1,6 +1,6 @@
 # `basic-computer-games\88_3-D_Tic-Tac-Toe\python\qubit.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 # 从 BASIC 计算机游戏中的 3D 井字棋源代码移植而来

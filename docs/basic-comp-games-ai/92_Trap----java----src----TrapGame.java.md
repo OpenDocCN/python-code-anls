@@ -1,6 +1,6 @@
 # `basic-computer-games\92_Trap\java\src\TrapGame.java`
 
-```
+```py
 # 定义名为TrapGame的公共类
 public class TrapGame {
 

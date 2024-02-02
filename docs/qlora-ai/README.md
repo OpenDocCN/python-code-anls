@@ -34,19 +34,19 @@ You can access [the model response Colab here](https://colab.research.google.com
 
 ## Installation
 To load models in 4bits with transformers and bitsandbytes, you have to install accelerate and transformers from source and make sure you have the latest version of the bitsandbytes library. After installing PyTorch (follow instructions [here](https://pytorch.org/get-started/locally/)), you can achieve the above with the following command:
-```bash
+```py
 pip install -U -r requirements.txt
 ```
 
 ## Getting Started
 The `qlora.py` code is a starting point for finetuning and inference on various datasets.
 Basic command for finetuning a baseline model on the Alpaca dataset:
-```bash
+```py
 python qlora.py --model_name_or_path <path_or_name>
 ```
 
 For models larger than 13B, we recommend adjusting the learning rate:
-```bash
+```py
 python qlora.py –learning_rate 0.0001 --model_name_or_path <path_or_name>
 ```
 
@@ -69,7 +69,7 @@ Quantization parameters are controlled from the `BitsandbytesConfig` ([see HF do
 - Nested quantization is activated through `bnb_4bit_use_double_quant`
 - The datatype used for qunatization is specified with `bnb_4bit_quant_type`. Note that there are two supported quantization datatypes `fp4` (four bit float) and `nf4` (normal four bit float). The latter is theoretically optimal for normally distributed weights and we recommend using `nf4`.
 
-```python
+```py
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path='/name/or/path/to/your/model',
         load_in_4bit=True,
@@ -98,11 +98,11 @@ We include scripts to reproduce the hyperparameters of Guanaco model training fo
 You can specify the path to your dataset using the `--dataset` argument. If the `--dataset_format` argument is not set, it will default to the Alpaca format. Here are a few examples:
 
 - Training with an *alpaca* format dataset:
-  ```bash
+  ```py
   python qlora.py --dataset="path/to/your/dataset"
   ```
 - Training with a *self-instruct* format dataset:
-   ```bash
+   ```py
    python qlora.py --dataset="path/to/your/dataset" --dataset_format="self-instruct"
    ```
 
@@ -110,7 +110,7 @@ You can specify the path to your dataset using the `--dataset` argument. If the 
 Multi GPU training and inference work out-of-the-box with Hugging Face's Accelerate. Note that the `per_device_train_batch_size` and `per_device_eval_batch_size` arguments are  global batch sizes unlike what their name suggest.
 
 When loading a model for training or inference on multiple GPUs you should pass something like the following to `AutoModelForCausalLM.from_pretrained()`:
-```python
+```py
 device_map = "auto"
 max_memory = {i: '46000MB' for i in range(torch.cuda.device_count())}
 ```
@@ -144,7 +144,7 @@ Here a list of known issues and bugs. If your issue is not reported here, please
 
 ## Citation
 
-```bibtex
+```py
 @article{dettmers2023qlora,
   title={QLoRA: Efficient Finetuning of Quantized LLMs},
   author={Dettmers, Tim and Pagnoni, Artidoro and Holtzman, Ari and Zettlemoyer, Luke},

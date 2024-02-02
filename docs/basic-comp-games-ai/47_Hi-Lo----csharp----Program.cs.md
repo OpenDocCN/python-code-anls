@@ -1,6 +1,6 @@
 # `basic-computer-games\47_Hi-Lo\csharp\Program.cs`
 
-```
+```py
 // 输出带有空格的字符串 "HI LO"
 Console.WriteLine(Tab(34) + "HI LO");
 // 输出带有空格的字符串 "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"

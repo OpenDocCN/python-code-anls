@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\text\cleaner.py`
 
-```
+```py
 # 从当前目录中导入 chinese, japanese, cleaned_text_to_sequence 模块
 from . import chinese, japanese, cleaned_text_to_sequence
 # 从 fix 模块中导入 japanese 模块并重命名为 japanese_fix

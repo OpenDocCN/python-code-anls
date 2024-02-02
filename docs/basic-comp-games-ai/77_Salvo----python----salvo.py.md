@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\python\salvo.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 导入 re 模块

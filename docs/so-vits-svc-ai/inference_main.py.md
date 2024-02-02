@@ -1,6 +1,6 @@
 # `so-vits-svc\inference_main.py`
 
-```
+```py
 import logging  # 导入日志模块
 import soundfile  # 导入音频文件处理模块
 from inference import infer_tool  # 从推断模块中导入推断工具

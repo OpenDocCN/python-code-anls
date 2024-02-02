@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\java\iterative\Roulette.java`
 
-```
+```py
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.time.LocalDateTime;

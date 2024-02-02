@@ -1,6 +1,6 @@
 # `so-vits-svc\edgetts\tts.py`
 
-```
+```py
 # 导入必要的模块
 import asyncio
 import random

@@ -1,6 +1,6 @@
 # `basic-computer-games\66_Number\java\2\Number.java`
 
-```
+```py
 // 导入 Scanner 类
 import java.util.Scanner;
 

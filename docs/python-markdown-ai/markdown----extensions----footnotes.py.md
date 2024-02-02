@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\footnotes.py`
 
-```
+```py
 
 # Footnotes Extension for Python-Markdown
 # =======================================

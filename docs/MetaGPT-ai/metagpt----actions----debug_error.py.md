@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\debug_error.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

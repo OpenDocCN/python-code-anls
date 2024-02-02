@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\utils\pipeline.py`
 
-```
+```py
 # 导入所需的库
 import time
 from typing import Iterator

@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayConsole\ConsoleUserInterface.cs`
 
-```
+```py
 // 实现了 IUserInterface 接口，通过控制台进行输入输出
 internal class ConsoleUserInterface : BombsAwayGame.IUserInterface
 {

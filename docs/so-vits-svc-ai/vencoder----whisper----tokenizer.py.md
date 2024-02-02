@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\whisper\tokenizer.py`
 
-```
+```py
 # 导入必要的库
 import os
 from dataclasses import dataclass

@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\prompt\default\English-4.py`
 
-```
+```py
 # 定义对话界面的分隔符
 interface = ":"
 # 定义用户名称

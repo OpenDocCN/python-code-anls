@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Commands\CommandExtensions.cs`
 
-```
+```py
 # 引入 System.Reflection 和 System.ComponentModel 命名空间
 using System.Reflection;
 using System.ComponentModel;

@@ -1,6 +1,6 @@
 # `basic-computer-games\52_Kinema\java\src\Kinema.java`
 
-```
+```py
 // 导入 java.util.Arrays 包，用于数组操作
 // 导入 java.util.Scanner 包，用于键盘输入
 /**

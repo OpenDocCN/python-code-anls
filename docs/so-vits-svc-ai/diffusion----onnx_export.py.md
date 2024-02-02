@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\onnx_export.py`
 
-```
+```py
 # 导入所需的库
 import os
 import numpy as np

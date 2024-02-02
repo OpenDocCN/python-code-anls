@@ -1,6 +1,6 @@
 # `markdown\markdown\inlinepatterns.py`
 
-```
+```py
 
 # Python Markdown
 

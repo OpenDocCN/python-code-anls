@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\find-missing-implementations.js`
 
-```
+```py
 /**
  * Program to find games that are missing solutions in a given language
  *

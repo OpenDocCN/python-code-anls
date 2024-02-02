@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_search_engine_meilisearch.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

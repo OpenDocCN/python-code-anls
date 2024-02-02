@@ -1,6 +1,6 @@
 # `basic-computer-games\08_Batnum\csharp\Program.cs`
 
-```
+```py
 // 引入 Batnum 命名空间
 using Batnum;
 // 引入 Batnum.Properties 命名空间

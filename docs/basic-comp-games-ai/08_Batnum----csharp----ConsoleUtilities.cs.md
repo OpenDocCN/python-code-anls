@@ -1,6 +1,6 @@
 # `basic-computer-games\08_Batnum\csharp\ConsoleUtilities.cs`
 
-```
+```py
 # 引入命名空间，包含了一些常用的类和方法
 using System;
 using System.Collections.Generic;

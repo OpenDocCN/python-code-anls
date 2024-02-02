@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Shot.cs`
 
-```
+```py
 namespace Basketball;
 
 public class Shot

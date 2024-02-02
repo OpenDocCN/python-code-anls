@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\nsf_hifigan\utils.py`
 
-```
+```py
 # 导入所需的模块
 import glob
 import os

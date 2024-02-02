@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestThreadPool.py`
 
-```
+```py
 # 导入必要的模块
 import time
 import threading

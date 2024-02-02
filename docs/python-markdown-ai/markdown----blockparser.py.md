@@ -1,6 +1,6 @@
 # `markdown\markdown\blockparser.py`
 
-```
+```py
 
 # Python Markdown
 

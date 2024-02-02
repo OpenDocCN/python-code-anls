@@ -1,6 +1,6 @@
 # `basic-computer-games\14_Bowling\python\bowling.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 导入 List 类型

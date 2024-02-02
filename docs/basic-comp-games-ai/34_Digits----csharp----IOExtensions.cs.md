@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\IOExtensions.cs`
 
-```
+```py
 # 创建名为Digits的命名空间，并定义一个内部静态类IOExtensions
 namespace Digits;
 

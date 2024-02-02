@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Enemy.py`
 
-```
+```py
 
 # 导入 pygame 模块
 import pygame

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-DonationMessage\DonationMessagePlugin.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 从 Plugin 模块中导入 PluginManager 类

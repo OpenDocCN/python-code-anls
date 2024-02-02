@@ -1,6 +1,6 @@
 # `basic-computer-games\14_Bowling\csharp\Pins.cs`
 
-```
+```py
 namespace Bowling
 {
     public class Pins

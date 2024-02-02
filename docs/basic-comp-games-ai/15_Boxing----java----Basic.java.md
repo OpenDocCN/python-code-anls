@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\Basic.java`
 
-```
+```py
 # 导入 Scanner 类
 import java.util.Scanner;
 

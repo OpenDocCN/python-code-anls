@@ -15,7 +15,7 @@ You need to run a namecoin node.
 You will need to start it as a RPC server.
 
 Example of `~/.namecoin/namecoin.conf` minimal setup:
-```
+```py
 daemon=1
 rpcuser=your-name
 rpcpassword=your-password
@@ -34,14 +34,14 @@ You can start your node : `./namecoind`
 You will also need to create a site `python zeronet.py createSite` and regitser the info.
 
 In the site you will need to create a file `./data/<your-site>/data/names.json` with this is it:
-```
+```py
 {}
 ```
 
 ### `zeroname_config.json` file
 
 In `~/.namecoin/zeroname_config.json`
-```
+```py
 {
   "lastprocessed": 223910,
   "zeronet_path": "/root/ZeroNet", # Update with your path

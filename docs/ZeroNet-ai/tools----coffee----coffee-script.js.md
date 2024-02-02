@@ -1,6 +1,6 @@
 # `ZeroNet\tools\coffee\coffee-script.js`
 
-```
+```py
 /**
  * CoffeeScript Compiler v1.12.6
  * http://coffeescript.org

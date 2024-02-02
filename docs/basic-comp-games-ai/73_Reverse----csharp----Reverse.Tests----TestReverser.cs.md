@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse.Tests\TestReverser.cs`
 
-```
+```py
 // 声明命名空间为 Reverse.Tests
 namespace Reverse.Tests
 {

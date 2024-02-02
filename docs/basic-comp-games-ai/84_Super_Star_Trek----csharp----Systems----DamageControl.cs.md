@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\DamageControl.cs`
 
-```
+```py
 using Games.Common.IO;  // 导入 Games.Common.IO 命名空间
 using SuperStarTrek.Commands;  // 导入 SuperStarTrek.Commands 命名空间
 using SuperStarTrek.Objects;  // 导入 SuperStarTrek.Objects 命名空间

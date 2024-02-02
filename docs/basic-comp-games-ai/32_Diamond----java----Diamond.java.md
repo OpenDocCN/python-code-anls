@@ -1,6 +1,6 @@
 # `basic-computer-games\32_Diamond\java\Diamond.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

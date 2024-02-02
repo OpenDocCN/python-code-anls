@@ -1,6 +1,6 @@
 # `MetaGPT\examples\research.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定使用 python 解释器来执行脚本

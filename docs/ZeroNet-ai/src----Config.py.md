@@ -1,6 +1,6 @@
 # `ZeroNet\src\Config.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 import sys  # 用于与 Python 解释器交互

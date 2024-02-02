@@ -1,6 +1,6 @@
 # `basic-computer-games\04_Awari\csharp\Game.cs`
 
-```
+```py
 namespace Awari;
 
 public class Game

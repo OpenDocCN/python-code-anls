@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\roles\test_product_manager.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为python

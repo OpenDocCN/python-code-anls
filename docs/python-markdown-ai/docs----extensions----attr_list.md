@@ -19,7 +19,7 @@ The basic syntax was inspired by Maruku's Attribute Lists feature (see [web arch
 
 An example attribute list might look like this:
 
-```text
+```py
 {: #someid .someclass somekey='some value' }
 ```
 
@@ -33,13 +33,13 @@ A key/value pair (`somekey='some value'`) will assign that pair to the element.
 Be aware that while the dot syntax will add to a class, using key/value pairs
 will always override the previously defined attribute. Consider the following:
 
-```text
+```py
 {: #id1 .class1 id=id2 class="class2 class3" .class4 }
 ```
 
 The above example would result in the following attributes being defined:
 
-```text
+```py
 id="id2" class="class2 class3 class4"
 ```
 
@@ -49,7 +49,7 @@ list `{: checked }` would result in `checked` if the [output format](../referenc
 
 Curly braces can be backslash escaped to avoid being identified as an attribute list.
 
-```text
+```py
 \{ not an attribute list }
 ```
 
@@ -59,7 +59,7 @@ not. Additionally, any attribute lists which are not located in the specific loc
 The colon after the opening brace is optional, but is supported to maintain consistency with other implementations.
 Therefore, the following is also a valid attribute list:
 
-```text
+```py
 { #someid .someclass somekey='some value' }
 ```
 
@@ -76,20 +76,20 @@ characters are reduced to a single underscore.
 To define attributes for a block level element, the attribute list should
 be defined on the last line of the block by itself.
 
-```text
+```py
 This is a paragraph.
 {: #an_id .a_class }
 ```
 
 The above results in the following output:
 
-```html
+```py
 <p id="an_id" class="a_class">This is a paragraph.</p>
 ```
 
 An exception is headers, as they are only ever allowed on one line.
 
-```text
+```py
 A setext style header {: #setext}
 =================================
 
@@ -98,7 +98,7 @@ A setext style header {: #setext}
 
 The above results in the following output:
 
-```html
+```py
 <h1 id="setext">A setext style header</h1>
 <h3 id="hash">A hash style header</h3>
 ```
@@ -112,13 +112,13 @@ The above results in the following output:
 To define attributes on inline elements, the attribute list should be defined
 immediately after the inline element with no white space.
 
-```text
+```py
 [link](http://example.com){: class="foo bar" title="Some title!" }
 ```
 
 The above results in the following output:
 
-```html
+```py
 <p><a href="http://example.com" class="foo bar" title="Some title!">link</a></p>
 ```
 
@@ -127,7 +127,7 @@ attributes for an inline element from attributes for the containing cell, the at
 the content by at least one space and be defined at the end of the cell content. As table cells can only ever be on
 a single line, the attribute list must remain on the same line as the content of the cell.
 
-```text
+```py
 | set on td    | set on em   |
 |--------------|-------------|
 | *a* { .foo } | *b*{ .foo } |
@@ -135,7 +135,7 @@ a single line, the attribute list must remain on the same line as the content of
 
 The above example results in the following output:
 
-```html
+```py
 <table>
   <thead>
     <tr>
@@ -197,6 +197,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['attr_list'])
 ```

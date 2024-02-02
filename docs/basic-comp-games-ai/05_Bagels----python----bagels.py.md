@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\python\bagels.py`
 
-```
+```py
 """
 Bagels
 

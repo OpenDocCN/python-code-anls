@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\python\TicTacToe_Hard.py`
 
-```
+```py
 from typing import List, Tuple, Union
 
 # 定义一个井字游戏的类

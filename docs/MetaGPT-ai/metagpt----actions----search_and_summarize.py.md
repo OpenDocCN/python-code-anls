@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\search_and_summarize.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

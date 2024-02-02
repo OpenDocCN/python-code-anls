@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 命名空间，用于处理输入输出
 using Games.Common.IO;
 # 引入 Love 命名空间，用于创建 LovePattern 对象

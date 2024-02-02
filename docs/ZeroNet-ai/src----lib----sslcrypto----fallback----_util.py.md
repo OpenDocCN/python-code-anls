@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\fallback\_util.py`
 
-```
+```py
 # 将整数转换为字节数组，指定长度
 def int_to_bytes(raw, length):
     data = []

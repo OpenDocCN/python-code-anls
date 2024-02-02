@@ -8,7 +8,7 @@ actual source files.
 
 To use an extension, pass it to markdown with the `extensions` keyword.
 
-```python
+```py
 markdown.markdown(some_text, extensions=[MyExtClass(), 'myext', 'path.to.my.ext:MyExtClass'])
 ```
 
@@ -16,7 +16,7 @@ See the [Library Reference](../reference.md#extensions) for more details.
 
 From the command line, specify an extension with the `-x` option.
 
-```bash
+```py
 python -m markdown -x myext -x path.to.module:MyExtClass input.txt > output.html
 ```
 

@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\conf\__init__.py`
 
-```
+```py
 # 从 kube_hunter.conf.parser 模块中导入 parse_args 函数
 from kube_hunter.conf.parser import parse_args
 # 从 kube_hunter.conf.logging 模块中导入 setup_logger 函数

@@ -1,6 +1,6 @@
 # `so-vits-svc\onnxexport\model_onnx_speaker_mix.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

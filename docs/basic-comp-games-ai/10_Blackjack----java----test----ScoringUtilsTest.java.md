@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\test\ScoringUtilsTest.java`
 
-```
+```py
 import org.junit.jupiter.api.Test;  // 导入 JUnit 的 Test 类
 import org.junit.jupiter.api.DisplayName;  // 导入 JUnit 的 DisplayName 类
 import static org.junit.jupiter.api.Assertions.assertEquals;  // 导入 JUnit 的 assertEquals 静态方法

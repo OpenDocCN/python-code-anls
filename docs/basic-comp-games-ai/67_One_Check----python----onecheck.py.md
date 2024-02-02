@@ -1,6 +1,6 @@
 # `basic-computer-games\67_One_Check\python\onecheck.py`
 
-```
+```py
 """
 ONE CHECK
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\27_Civil_War\csharp\ConsoleUtils.cs`
 
-```
+```py
 // 引入命名空间 System，System.Collections.Generic，System.Linq，System.Text
 using System;
 using System.Collections.Generic;

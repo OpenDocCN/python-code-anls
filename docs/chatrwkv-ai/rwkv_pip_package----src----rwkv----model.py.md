@@ -1,6 +1,6 @@
 # `ChatRWKV\rwkv_pip_package\src\rwkv\model.py`
 
-```
+```py
 # The RWKV Language Model - https://github.com/BlinkDL/RWKV-LM
 # 导入所需的库
 from typing import Optional

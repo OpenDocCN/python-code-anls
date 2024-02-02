@@ -1,6 +1,6 @@
 # `basic-computer-games\81_Splat\java\src\Splat.java`
 
-```
+```py
 # 导入 java.util 包
 import java.util.*;
 

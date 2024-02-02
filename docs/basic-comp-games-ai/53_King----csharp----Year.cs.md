@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Year.cs`
 
-```
+```py
 using System.Text;
 
 namespace King;

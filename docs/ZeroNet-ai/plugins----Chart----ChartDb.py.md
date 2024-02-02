@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Chart\ChartDb.py`
 
-```
+```py
 # 从Config模块中导入config变量
 from Config import config
 # 从Db模块中导入Db类

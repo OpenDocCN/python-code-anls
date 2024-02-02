@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiPluginManager\media\js\lib\maquette.js`
 
-```
+```py
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // 如果支持 AMD 规范，则注册为匿名模块

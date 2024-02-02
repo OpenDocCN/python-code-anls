@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\tables.py`
 
-```
+```py
 
 # Tables Extension for Python-Markdown
 # ====================================

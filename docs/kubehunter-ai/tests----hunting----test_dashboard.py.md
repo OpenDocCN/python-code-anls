@@ -1,6 +1,6 @@
 # `kubehunter\tests\hunting\test_dashboard.py`
 
-```
+```py
 # 导入 json 模块
 import json
 

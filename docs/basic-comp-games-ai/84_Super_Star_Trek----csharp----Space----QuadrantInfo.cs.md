@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Space\QuadrantInfo.cs`
 
-```
+```py
 // 使用 Games.Common.Randomness 命名空间
 using Games.Common.Randomness;
 

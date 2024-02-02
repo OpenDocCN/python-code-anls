@@ -1,6 +1,6 @@
 # `basic-computer-games\38_Fur_Trader\python\furtrader.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 import random  # 用于生成随机数

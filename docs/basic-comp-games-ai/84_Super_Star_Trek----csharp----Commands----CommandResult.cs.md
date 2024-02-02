@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Commands\CommandResult.cs`
 
-```
+```py
 # 定义命名空间 SuperStarTrek 中的命令类
 namespace SuperStarTrek.Commands;
 

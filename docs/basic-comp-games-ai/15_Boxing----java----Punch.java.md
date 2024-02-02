@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\Punch.java`
 
-```
+```py
 # 导入 java.util.Arrays 包
 import java.util.Arrays;
 

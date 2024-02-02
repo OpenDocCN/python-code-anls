@@ -1,6 +1,6 @@
 # `so-vits-svc\cluster\__init__.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 sklearn 库中导入 KMeans 类

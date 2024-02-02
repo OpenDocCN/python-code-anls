@@ -16,7 +16,7 @@ Two versions are supplied that are functionally equivalent, but differ in source
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
-```shell
+```py
 dmd -run aceyducey.d
 ```
 

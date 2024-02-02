@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\__init__.py`
 
-```
+```py
 # 从 constants 模块中导入所有内容
 from .constants import *  # noqa: F403
 # 从 inference 模块中导入 RMVPE 类

@@ -1,6 +1,6 @@
 # `Bert-VITS2\spec_gen.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 tqdm 库中导入 tqdm 函数

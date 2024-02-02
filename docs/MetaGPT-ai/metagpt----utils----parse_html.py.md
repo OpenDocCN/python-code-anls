@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\parse_html.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定脚本的解释器为 Python

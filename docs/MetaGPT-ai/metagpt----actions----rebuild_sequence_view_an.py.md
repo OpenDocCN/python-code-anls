@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\rebuild_sequence_view_an.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 python

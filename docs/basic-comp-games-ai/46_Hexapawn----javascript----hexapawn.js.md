@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\javascript\hexapawn.js`
 
-```
+```py
 // HEXAPAWN
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

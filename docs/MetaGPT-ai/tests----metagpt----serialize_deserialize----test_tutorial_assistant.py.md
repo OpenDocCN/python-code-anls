@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_tutorial_assistant.py`
 
-```
+```py
 
 # 设置文件编码为 UTF-8
 # 导入 pytest 模块

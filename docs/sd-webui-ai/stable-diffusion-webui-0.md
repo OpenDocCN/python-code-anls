@@ -95,7 +95,7 @@ A `webui-user.bat` file included into the repository does exactly this.
 
 Here is an example that runs the prgoram with `--opt-split-attention` argument:
 
-```pycommandline
+```py
 @echo off
 
 set COMMANDLINE_ARGS=--opt-split-attention
@@ -105,7 +105,7 @@ call webui.bat
 
 Another example, this file will run the program with custom python path, a different model named `a.ckpt` and without virtual environment:
 
-```pycommandline
+```py
 @echo off
 
 set PYTHON=b:/soft/Python310/Python.exe
@@ -159,7 +159,7 @@ and use Usada Pekora in prompt.
 
 After running once, a `ui-config.json` file appears in webui directory:
 
-```pyjson
+```py
 {
     "txt2img/Sampling Steps/value": 20,
     "txt2img/Sampling Steps/minimum": 1,
@@ -180,7 +180,7 @@ Edit values to your liking and the next time you launch the program they will be
 Alternatively, if you don't want to run webui.bat, here are instructions for installing
 everything by hand:
 
-```pycommandline
+```py
 :: install torch with CUDA support. See https://pytorch.org/get-started/locally/ for more instructions if this fails.
 pip install torch --extra-index-url https://download.pytorch.org/whl/cu113
 

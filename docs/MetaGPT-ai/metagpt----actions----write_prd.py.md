@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_prd.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

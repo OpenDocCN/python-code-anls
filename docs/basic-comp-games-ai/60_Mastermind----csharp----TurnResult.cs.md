@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\TurnResult.cs`
 
-```
+```py
 // 命名空间 Game，存储了玩家回合的结果
 namespace Game
 {

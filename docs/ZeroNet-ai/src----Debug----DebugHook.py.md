@@ -1,6 +1,6 @@
 # `ZeroNet\src\Debug\DebugHook.py`
 
-```
+```py
 # 导入系统模块
 import sys
 # 导入日志模块

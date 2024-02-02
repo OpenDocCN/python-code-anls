@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_teaching_plan.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

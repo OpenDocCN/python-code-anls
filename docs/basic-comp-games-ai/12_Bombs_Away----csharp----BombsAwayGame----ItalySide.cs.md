@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\ItalySide.cs`
 
-```
+```py
 // 定义意大利方面的类，继承自任务方面的基类
 internal class ItalySide : MissionSide
 {

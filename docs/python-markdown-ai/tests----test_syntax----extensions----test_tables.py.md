@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_tables.py`
 
-```
+```py
 """
 # 导入模块
 from markdown.test_tools import TestCase

@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Extensions\IOExtensions.cs`
 
-```
+```py
 # 命名空间 Games.Common.IO 下的内部静态类 IOExtensions
 namespace Games.Common.IO;
 

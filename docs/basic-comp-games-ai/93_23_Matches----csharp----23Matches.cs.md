@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\csharp\23Matches.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

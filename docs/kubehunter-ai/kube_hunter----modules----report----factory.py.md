@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\factory.py`
 
-```
+```py
 # 从 kube_hunter.modules.report.json 模块中导入 JSONReporter 类
 from kube_hunter.modules.report.json import JSONReporter
 # 从 kube_hunter.modules.report.yaml 模块中导入 YAMLReporter 类

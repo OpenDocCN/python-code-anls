@@ -1,6 +1,6 @@
 # `arknights-mower\menu.py`
 
-```
+```py
 # 导入 json 模块
 import json
 # 从 multiprocessing 模块中导入 Pipe, Process, freeze_support

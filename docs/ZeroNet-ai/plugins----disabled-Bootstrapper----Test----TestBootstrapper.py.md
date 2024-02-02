@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Bootstrapper\Test\TestBootstrapper.py`
 
-```
+```py
 # 导入 hashlib 模块
 import hashlib
 # 导入 os 模块

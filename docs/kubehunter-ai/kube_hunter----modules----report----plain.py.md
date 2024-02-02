@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\plain.py`
 
-```
+```py
 # 从未来导入 print_function，确保代码在 Python 2 和 Python 3 中都能正常工作
 from __future__ import print_function
 

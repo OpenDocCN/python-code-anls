@@ -1,6 +1,6 @@
 # `Bert-VITS2\for_deploy\infer_utils.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\__init__.py`
 
-```
+```py
 
 # 设置文件编码格式为 UTF-8
 # 设置日期和时间为 11/22/2023 11:48 AM

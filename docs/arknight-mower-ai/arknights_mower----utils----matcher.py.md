@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\matcher.py`
 
-```
+```py
 # 从 __future__ 模块中导入 annotations 特性
 from __future__ import annotations
 

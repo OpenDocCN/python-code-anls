@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\PortInfos.cs`
 
-```
+```py
 // 声明命名空间 DotnetUtils
 namespace DotnetUtils
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\45_Hello\python\hello.py`
 
-```
+```py
 """
 HELLO
 

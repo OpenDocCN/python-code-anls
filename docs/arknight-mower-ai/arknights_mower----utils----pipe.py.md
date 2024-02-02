@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\pipe.py`
 
-```
+```py
 # 定义装饰器函数，用于向管道发送操作符数据
 def push_operators(func):
     # 定义装饰器函数的内部函数，接收参数s和*args

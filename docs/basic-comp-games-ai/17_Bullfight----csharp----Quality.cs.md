@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Quality.cs`
 
-```
+```py
 // 命名空间 Game，定义游戏中不同质量级别的枚举类型
 namespace Game
 {

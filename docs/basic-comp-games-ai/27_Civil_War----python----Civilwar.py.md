@@ -1,6 +1,6 @@
 # `basic-computer-games\27_Civil_War\python\Civilwar.py`
 
-```
+```py
 """
 Original game design: Cram, Goodie, Hibbard Lexington H.S.
 Modifications: G. Paul, R. Hess (Ties), 1973

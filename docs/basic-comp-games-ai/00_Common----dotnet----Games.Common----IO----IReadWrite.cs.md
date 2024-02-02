@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\IReadWrite.cs`
 
-```
+```py
 using Games.Common.Numbers;  // 导入 Games.Common.Numbers 命名空间
 
 namespace Games.Common.IO;  // 声明 Games.Common.IO 命名空间

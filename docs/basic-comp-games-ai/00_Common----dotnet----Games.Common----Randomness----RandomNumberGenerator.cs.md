@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\Randomness\RandomNumberGenerator.cs`
 
-```
+```py
 using System;
 
 namespace Games.Common.Randomness;

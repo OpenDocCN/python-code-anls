@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_product_manager.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-  # 设置文件编码格式为 UTF-8
 # @Date    : 11/26/2023 2:07 PM  # 代码编写日期和时间

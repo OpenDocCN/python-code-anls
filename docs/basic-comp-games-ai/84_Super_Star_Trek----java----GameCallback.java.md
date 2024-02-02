@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\java\GameCallback.java`
 
-```
+```py
 /**
  * 用于将控制反转从GalaxyMap和Enterprise解耦到游戏类的接口。
  */

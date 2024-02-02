@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Resources\Resource.cs`
 
-```
+```py
 // 声明命名空间 Digits.Resources
 namespace Digits.Resources
 {

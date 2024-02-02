@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\core\types.py`
 
-```
+```py
 # 定义一个名为 HunterBase 的类，继承自 object 类
 class HunterBase(object):
     # 定义类变量 publishedVulnerabilities，表示已发布的漏洞数量

@@ -1,6 +1,6 @@
 # `so-vits-svc\compress_model.py`
 
-```
+```py
 # 从 collections 模块中导入 OrderedDict 类
 from collections import OrderedDict
 

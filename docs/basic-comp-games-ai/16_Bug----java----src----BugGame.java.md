@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\java\src\BugGame.java`
 
-```
+```py
 # 定义 BugGame 类
 public class BugGame {
 

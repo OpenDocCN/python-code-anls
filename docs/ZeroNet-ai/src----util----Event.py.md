@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Event.py`
 
-```
+```py
 # 定义一个名为 Event 的类，继承自 list 类
 class Event(list):
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Parts\Part.cs`
 
-```
+```py
 // 使用 BugGame.Resources 命名空间
 using BugGame.Resources;
 

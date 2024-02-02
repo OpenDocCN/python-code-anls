@@ -58,7 +58,7 @@ https://github.com/geekan/MetaGPT/assets/34952977/34345016-5d13-489d-b9f9-b82ace
 
 ### 伝統的なインストール
 
-```bash
+```py
 # ステップ 1: Python 3.9+ がシステムにインストールされていることを確認してください。これを確認するには:
 python3 --version
 
@@ -84,13 +84,13 @@ Chromium のダウンロードをスキップすることができます。
 
 - このツールをグローバルにインストールする[問題を抱えている](https://github.com/mermaidjs/mermaid.cli/issues/15)人もいます。ローカルにインストールするのが代替の解決策です、
 
-  ```bash
+  ```py
   npm install @mermaid-js/mermaid-cli
   ```
 
 - config.yml に mmdc のコンフィグを記述するのを忘れないこと
 
-  ```yml
+  ```py
   PUPPETEER_CONFIG: "./config/puppeteer-config.json"
   MMDC: "./node_modules/.bin/mmdc"
   ```
@@ -102,7 +102,7 @@ Chromium のダウンロードをスキップすることができます。
   - Playwright
     - **Playwright のインストール**
 
-    ```bash
+    ```py
     pip install playwright
     ```
 
@@ -110,7 +110,7 @@ Chromium のダウンロードをスキップすることができます。
 
     PDF変換をサポートするには、Chrominumをインストールしてください。
 
-    ```bash
+    ```py
     playwright install --with-deps chromium
     ```
 
@@ -118,14 +118,14 @@ Chromium のダウンロードをスキップすることができます。
 
     config.yaml から MERMAID_ENGINE のコメントを外し、`playwright` に変更する
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: playwright
     ```
 
   - pyppeteer
     - **pyppeteer のインストール**
 
-    ```bash
+    ```py
     pip install pyppeteer
     ```
 
@@ -133,13 +133,13 @@ Chromium のダウンロードをスキップすることができます。
 
     pyppeteer を使えばインストールされているブラウザを使うことができます、以下の環境を設定してください
 
-    ```bash
+    ```py
     export PUPPETEER_EXECUTABLE_PATH = /path/to/your/chromium or edge or chrome
     ```
 
     ブラウザのインストールにこのコマンドを使わないでください、これは古すぎます
 
-    ```bash
+    ```py
     pyppeteer-install
     ```
 
@@ -147,7 +147,7 @@ Chromium のダウンロードをスキップすることができます。
 
     config.yaml から MERMAID_ENGINE のコメントを外し、`pyppeteer` に変更する
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: pyppeteer
     ```
 
@@ -156,7 +156,7 @@ Chromium のダウンロードをスキップすることができます。
 
     config.yaml から MERMAID_ENGINE のコメントを外し、`ink` に変更する
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: ink
     ```
 
@@ -165,7 +165,7 @@ Chromium のダウンロードをスキップすることができます。
 ### Docker によるインストール
 > Windowsでは、"/opt/metagpt"をDockerが作成する権限を持つディレクトリに置き換える必要があります。例えば、"D:\Users\x\metagpt"などです。
 
-```bash
+```py
 # ステップ 1: metagpt 公式イメージをダウンロードし、config.yaml を準備する
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
@@ -200,7 +200,7 @@ $ metagpt "Write a cli snake game"
 
 ### 自分でイメージをビルドする
 
-```bash
+```py
 # また、自分で metagpt イメージを構築することもできます。
 git clone https://github.com/geekan/MetaGPT.git
 cd MetaGPT && docker build -t metagpt:custom .
@@ -211,7 +211,7 @@ cd MetaGPT && docker build -t metagpt:custom .
 - `OPENAI_API_KEY` を `config/key.yaml / config/config.yaml / env` のいずれかで設定します。
 - 優先順位は: `config/key.yaml > config/config.yaml > env` の順です。
 
-```bash
+```py
 # 設定ファイルをコピーし、必要な修正を加える。
 cp config/config.yaml config/key.yaml
 ```
@@ -223,7 +223,7 @@ cp config/config.yaml config/key.yaml
 
 ## チュートリアル: スタートアップの開始
 
-```shell
+```py
 # スクリプトの実行
 metagpt "Write a cli snake game"
 # プロジェクトの実施にエンジニアを雇わないこと
@@ -238,13 +238,13 @@ metagpt "Write a cli snake game" --code_review
 
 要件を述べるときに、どのプラットフォームまたはツールを使用するかを指定できます。
 
-```shell
+```py
 metagpt "pygame をベースとした cli ヘビゲームを書く"
 ```
 
 ### 使用方法
 
-```
+```py
 会社名
     metagpt - 私たちは AI で構成されたソフトウェア・スタートアップです。私たちに投資することは、無限の可能性に満ちた未来に力を与えることです。
 
@@ -274,7 +274,7 @@ metagpt "pygame をベースとした cli ヘビゲームを書く"
 
 ### コードウォークスルー
 
-```python
+```py
 from metagpt.team import Team
 from metagpt.roles import ProjectManager, ProductManager, Architect, Engineer
 
@@ -302,7 +302,7 @@ Hugging Face Space で試す
 
 現時点では、[arXiv 論文](https://arxiv.org/abs/2308.00352)を引用してください:
 
-```bibtex
+```py
 @misc{hong2023metagpt,
       title={MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework}, 
       author={Sirui Hong and Mingchen Zhuge and Jonathan Chen and Xiawu Zheng and Yuheng Cheng and Ceyao Zhang and Jinlin Wang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu and Jürgen Schmidhuber},

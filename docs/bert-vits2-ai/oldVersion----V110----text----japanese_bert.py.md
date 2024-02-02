@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V110\text\japanese_bert.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 transformers 库中导入 AutoTokenizer 和 AutoModelForMaskedLM

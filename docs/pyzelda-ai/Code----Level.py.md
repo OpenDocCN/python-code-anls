@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Level.py`
 
-```
+```py
 
 # 导入pygame模块
 import pygame

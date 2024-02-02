@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\JapanSide.cs`
 
-```
+```py
 // 定义了日本方的飞机，执行特殊的神风特攻任务
 internal class JapanSide : Side
 {

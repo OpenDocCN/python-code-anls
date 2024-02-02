@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V220\__init__.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import torch

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\edit\trailingspace.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）将代码封装在闭包中，避免全局作用域污染
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 引入 CodeMirror 模块

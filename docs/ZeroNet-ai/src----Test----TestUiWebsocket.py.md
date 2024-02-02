@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestUiWebsocket.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 导入 pytest 模块

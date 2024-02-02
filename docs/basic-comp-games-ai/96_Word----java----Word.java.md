@@ -1,6 +1,6 @@
 # `basic-computer-games\96_Word\java\Word.java`
 
-```
+```py
 // 导入必要的类
 import java.util.Arrays;
 import java.util.Scanner;

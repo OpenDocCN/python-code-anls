@@ -1,6 +1,6 @@
 # `Bert-VITS2\losses.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torchaudio 库

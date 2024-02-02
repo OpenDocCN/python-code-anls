@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\java\src\Craps.java`
 
-```
+```py
 import java.util.Random;  // 导入 Random 类
 import java.util.Scanner;  // 导入 Scanner 类
 

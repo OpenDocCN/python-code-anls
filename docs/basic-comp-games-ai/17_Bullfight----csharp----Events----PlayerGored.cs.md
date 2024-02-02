@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\PlayerGored.cs`
 
-```
+```py
 // 声明在游戏事件命名空间下的玩家被公牛顶到的事件
 namespace Game.Events
 {

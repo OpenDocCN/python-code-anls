@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_write_prd.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-  # 设置文件编码格式为 UTF-8
 # @Date    : 11/22/2023 1:47 PM  # 代码编写日期和时间

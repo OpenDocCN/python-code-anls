@@ -1,6 +1,6 @@
 # `basic-computer-games\25_Chief\csharp\IReadWriteExtensions.cs`
 
-```
+```py
 # 定义了一个命名空间 Chief，包含了一个内部静态类 IReadWriteExtensions
 namespace Chief;
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\python\chomp.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 CHOMP

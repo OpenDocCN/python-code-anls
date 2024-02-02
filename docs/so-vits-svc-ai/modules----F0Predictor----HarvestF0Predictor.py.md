@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\HarvestF0Predictor.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于处理数组和矩阵运算
 import pyworld  # 导入 pyworld 库，用于声学参数提取
 

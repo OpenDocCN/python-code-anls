@@ -1,6 +1,6 @@
 # `basic-computer-games\22_Change\java\src\ChangeGame.java`
 
-```
+```py
 # 定义名为 ChangeGame 的公共类
 public class ChangeGame {
     # 定义名为 main 的公共静态方法，参数为字符串数组

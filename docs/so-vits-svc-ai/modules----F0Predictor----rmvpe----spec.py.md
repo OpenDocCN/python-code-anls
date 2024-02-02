@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\spec.py`
 
-```
+```py
 # 导入 numpy 库，并使用别名 np
 import numpy as np
 # 导入 torch 库

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\mmdc_pyppeteer.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `basic-computer-games\70_Poetry\csharp\Poem.cs`
 
-```
+```py
 // 使用 Poetry.Resources.Resource 命名空间下的 Resource 类
 using static Poetry.Resources.Resource;
 

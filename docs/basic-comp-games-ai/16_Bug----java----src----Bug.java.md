@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\java\src\Bug.java`
 
-```
+```py
 // 导入必要的类
 import java.util.ArrayList;
 import java.util.Scanner;

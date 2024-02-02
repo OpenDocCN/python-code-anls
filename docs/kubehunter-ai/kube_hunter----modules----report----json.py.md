@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\json.py`
 
-```
+```py
 # 导入 json 模块
 import json
 # 从 kube_hunter.modules.report.base 模块中导入 BaseReporter 类

@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\Game.cs`
 
-```
+```py
 // 命名空间声明，定义了代码所属的命名空间
 namespace BombsAwayGame;
 

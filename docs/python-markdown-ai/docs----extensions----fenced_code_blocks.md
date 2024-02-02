@@ -18,19 +18,19 @@ Fenced code blocks begin with three or more backticks (` ``` `) or tildes (`~~~`
 a matching set of backticks or tildes on a line by themselves. The closing set must contain the same number and type
 of characters as the opening set. It is recommended that a blank line be placed before and after the code block.
 
-````md
+````py
 A paragraph before the code block.
 
 ```
 a one-line code block
-```
+```py
 
 A paragraph after the code block.
 ````
 
 While backticks seem to be more popular among users, tildes may be used as well.
 
-````md
+````py
 ~~~
 a one-line code block
 ~~~
@@ -39,22 +39,22 @@ a one-line code block
 To include a set of backticks (or tildes) within a code block, use a different number of backticks for the
 delimiters.
 
-`````md
+`````py
 ````
-```
+```py
 ````
-`````
+`````py
 
 Fenced code blocks can have a blank line as the first and/or last line of the code block and those lines will be
 preserved.
 
 ````md
-```
+```py
 
 a three-line code block
 
 ```
-````
+````py
 
 Unlike indented code blocks, a fenced code block can immediately follow a list item without becoming
 part of the list.
@@ -62,10 +62,10 @@ part of the list.
 ````md
 * A list item.
 
-```
+```py
 not part of the list
 ```
-````
+````py
 
 !!! warning
 
@@ -83,7 +83,7 @@ separated by a space.
 ````md
 ``` { attributes go here }
 a code block with attributes
-```
+```py
 ````
 
 How those attributes will affect the output will depend on various factors as described below.
@@ -93,23 +93,23 @@ How those attributes will affect the output will depend on various factors as de
 The language of the code within a code block can be specified for use by syntax highlighters, etc. The language should
 be prefixed with a dot and not contain any whitespace (`.language-name`).
 
-````md
+````py
 ``` { .html }
 <p>HTML Document</p>
-```
+```py
 ````
 
 So long as the language is the only option specified, the curly brackets and/or the dot may be excluded:
 
-````md
+````py
 ``` html
 <p>HTML Document</p>
-```
+```py
 ````
 
 Either of the above examples will output the following HTML:
 
-```html
+```py
 <pre><code class="language-html">&lt;p&gt;HTML Document&lt;/p&gt;
 </code></pre>
 ```
@@ -123,10 +123,10 @@ Specification). While `language` is the default prefix, the prefix may be overri
 
 In addition to the language, additional classes may be defined by prefixing them with a dot, just like the language.
 
-````md
+````py
 ``` { .html .foo .bar }
 <p>HTML Document</p>
-```
+```py
 ````
 
 When defining multiple classes, only the first class will be used as the "language" for the code block. All others are
@@ -135,7 +135,7 @@ the language class if more than one class is defined.
 
 The above example will output the following HTML:
 
-```html
+```py
 <pre class="foo bar"><code class="language-html">&lt;p&gt;HTML Document&lt;/p&gt;
 </code></pre>
 ```
@@ -145,15 +145,15 @@ The above example will output the following HTML:
 An `id` can be defined for a code block, which would allow a link to point directly to the code block using a URL
 hash. IDs must be prefixed with a hash character (`#`) and only contain characters permitted in HTML `id` attributes.
 
-````md
+````py
 ``` { #example }
 A linkable code block
-```
+```py
 ````
 
 The `id` attribute is assigned to the `<pre>` tag of the output. The above example will output the following HTML:
 
-```html
+```py
 <pre id="example"><code>A linkable code block
 </code></pre>
 ```
@@ -163,10 +163,10 @@ From elsewhere within the same document, one could link to the code block with `
 IDs may be defined along with the language, other classes, or any other supported attributes. The order of items does
 not matter.
 
-````md
+````py
 ``` { #example .lang .foo .bar }
 A linkable code block
-```
+```py
 ````
 
 #### Key/Value Pairs
@@ -176,15 +176,15 @@ the attribute list. So long as code highlighting is not enabled (see below), the
 attributes on the `<code>` tag in the output. Key/value pairs must be defined using the syntax documented for the
 `attr_list` extension (for example, values with whitespace must be wrapped in quotes).
 
-````md
+````py
 ``` { .lang #example style="color: #333; background: #f8f8f8;" }
 A code block with inline styles. Fancy!
-```
+```py
 ````
 
 The above example will output the following HTML:
 
-```html
+```py
 <pre id="example"><code class="language-lang"  style="color: #333; background: #f8f8f8;">A code block with inline styles. Fancy!
 </code></pre>
 ```
@@ -201,10 +201,10 @@ language guessing is not disabled for the `codehilite` extension, then the langu
 The `codehilite` extension uses the [Pygments] engine to do syntax highlighting. Any valid Pygments options can be
 defined as key/value pairs in the attribute list and will be passed on to Pygments.
 
-````md
+````py
 ``` { .lang linenos=true linenostart=42 hl_lines="43-44 50" title="An Example Code Block" }`
 A truncated code block...
-```
+```py
 ````
 
 Valid options include any option accepted by Pygments' [`HTMLFormatter`][HTMLFormatter] except for the `full` option,
@@ -250,7 +250,7 @@ The following option is provided to configure the output:
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['fenced_code'])
 ```
 

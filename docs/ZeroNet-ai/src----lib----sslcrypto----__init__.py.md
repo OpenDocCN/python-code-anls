@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\__init__.py`
 
-```
+```py
 # 定义一个包含 "aes", "ecc", "rsa" 的列表，表示这些模块是公开的接口
 __all__ = ["aes", "ecc", "rsa"]
 

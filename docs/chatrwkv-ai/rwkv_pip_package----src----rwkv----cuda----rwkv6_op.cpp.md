@@ -1,6 +1,6 @@
 # `ChatRWKV\rwkv_pip_package\src\rwkv\cuda\rwkv6_op.cpp`
 
-```
+```py
 #include <torch/extension.h>
 #include "ATen/ATen.h"
 #include <c10/cuda/CUDAGuard.h>

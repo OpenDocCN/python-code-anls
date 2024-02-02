@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-StemPort\__init__.py`
 
-```
+```py
 # 尝试导入 stem.control 模块，如果成功则将 stem_found 设置为 True
 try:
     from stem.control import Controller

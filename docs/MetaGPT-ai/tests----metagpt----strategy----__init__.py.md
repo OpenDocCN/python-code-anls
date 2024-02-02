@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\strategy\__init__.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器路径，使得系统可以找到正确的 Python 解释器来执行脚本

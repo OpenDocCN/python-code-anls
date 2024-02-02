@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\java\SuperStarTrekInstructions.java`
 
-```
+```py
 // 导入所需的类
 import java.io.BufferedReader;
 import java.io.IOException;

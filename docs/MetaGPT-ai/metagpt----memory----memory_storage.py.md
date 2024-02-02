@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\memory\memory_storage.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `Bert-VITS2\text\__init__.py`
 
-```
+```py
 # 导入 symbols 模块中的所有内容
 from text.symbols import *
 

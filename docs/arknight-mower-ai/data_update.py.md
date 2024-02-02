@@ -1,6 +1,6 @@
 # `arknights-mower\data_update.py`
 
-```
+```py
 # 导入所需的模块
 import json
 import os

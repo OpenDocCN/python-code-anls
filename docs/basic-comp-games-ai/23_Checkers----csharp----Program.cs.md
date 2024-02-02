@@ -1,6 +1,6 @@
 # `basic-computer-games\23_Checkers\csharp\Program.cs`
 
-```
+```py
 /*********************************************************************************
  * CHECKERS
  * ported from BASIC https://www.atariarchives.org/basicgames/showpage.php?page=41

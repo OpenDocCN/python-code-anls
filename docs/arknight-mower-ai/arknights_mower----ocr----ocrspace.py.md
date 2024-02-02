@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\ocrspace.py`
 
-```
+```py
 # 导入必要的模块
 import base64
 import traceback

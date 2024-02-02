@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\adb_client\session.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 import socket

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\mail.py`
 
-```
+```py
 from ..utils.device import Device  # 从指定路径导入 Device 类
 from ..utils.log import logger  # 从指定路径导入 logger 对象
 from ..utils.recognize import RecognizeError, Recognizer, Scene  # 从指定路径导入 RecognizeError, Recognizer, Scene

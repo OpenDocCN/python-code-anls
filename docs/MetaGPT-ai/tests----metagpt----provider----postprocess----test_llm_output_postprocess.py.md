@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\postprocess\test_llm_output_postprocess.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 Python

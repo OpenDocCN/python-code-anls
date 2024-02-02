@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\blocks\test_html_blocks.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # 定义文件编码格式为 UTF-8

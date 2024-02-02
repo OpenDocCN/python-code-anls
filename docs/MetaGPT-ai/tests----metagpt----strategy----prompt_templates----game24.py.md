@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\strategy\prompt_templates\game24.py`
 
-```
+```py
 
 # 5-shot
 # 定义标准提示，要求使用数字和基本算术运算（+ - * /）得到24

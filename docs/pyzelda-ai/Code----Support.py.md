@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Support.py`
 
-```
+```py
 
 # 从csv模块中导入reader函数
 from csv import reader

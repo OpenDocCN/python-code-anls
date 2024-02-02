@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Multiuser\UserPlugin.py`
 
-```
+```py
 # 从Config模块中导入config变量
 from Config import config
 # 从Plugin模块中导入PluginManager类

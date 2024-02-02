@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\document_store\faiss_store.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

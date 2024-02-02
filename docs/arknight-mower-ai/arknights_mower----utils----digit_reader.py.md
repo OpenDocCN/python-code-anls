@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\digit_reader.py`
 
-```
+```py
 # 导入需要的库
 import cv2 as cv
 import numpy as np

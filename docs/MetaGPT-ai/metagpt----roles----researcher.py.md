@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\roles\researcher.py`
 
-```
+```py
 
 #!/usr/bin/env python
 """

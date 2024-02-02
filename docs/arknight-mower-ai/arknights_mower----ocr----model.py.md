@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\model.py`
 
-```
+```py
 # 导入copy模块，用于复制对象
 import copy
 # 导入traceback模块，用于追踪异常

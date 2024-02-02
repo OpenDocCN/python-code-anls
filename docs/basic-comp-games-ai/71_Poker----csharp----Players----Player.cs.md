@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Players\Player.cs`
 
-```
+```py
 // 使用 Poker.Cards 命名空间
 namespace Poker.Players
 {

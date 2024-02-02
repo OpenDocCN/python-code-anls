@@ -11,7 +11,7 @@ its constructor so it can be wired up in unit tests to test gameplay scenarios.
 * `ConsoleIO` derives from `TextIO` and binds it to `System.Console.In` and `System.Console.Out`.
 * `IReadWrite` is an interface implemented by `TextIO` which may be useful in some test scenarios.
 
-```csharp
+```py
 public interface IReadWrite
 {
     // Reads a float value from input.
@@ -59,7 +59,7 @@ public interface IReadWrite
 * `IRandomExtensions` provides convenience extension methods for obtaining random numbers as `int` and also within a
   given range.
 
-```csharp
+```py
 public interface IRandom
 {
     // Like RND(1), gets a random float such that 0 <= n < 1.
@@ -75,7 +75,7 @@ public interface IRandom
 
 Extension methods on `IRandom`:
 
-```csharp
+```py
 // Gets a random float such that 0 <= n < exclusiveMaximum.
 float NextFloat(this IRandom random, float exclusiveMaximum);
 
@@ -112,7 +112,7 @@ int Previous(this IRandom random, int inclusiveMinimum, int exclusiveMaximum);
 Add the `Games.Common` project as a reference to the game project. For example, here's the reference from the C\# port
 of `86_Target`:
 
-```xml
+```py
 <ItemGroup>
   <ProjectReference Include="..\..\00_Common\dotnet\Games.Common\Games.Common.csproj" />
 </ItemGroup>
@@ -122,7 +122,7 @@ of `86_Target`:
 
 A game can be encapsulated in a class which takes a `TextIO` instance in it's constructor:
 
-```csharp
+```py
 public class Game
 {
     private readonly TextIO _io;
@@ -140,14 +140,14 @@ public class Game
 
 Then the entry point of the game program would look something like:
 
-```csharp
+```py
 var game = new Game(new ConsoleIO());
 game.Play();
 ```
 
 ### C# Random Number Generator usage
 
-```csharp
+```py
 var io = new ConsoleIO();
 var rng = new RandomNumberGenerator();
 io.WriteLine(rng.NextFloat());           // 0.1234, for example
@@ -161,7 +161,7 @@ io.WriteLine(rng.PreviousFloat(0, 10));  // 6,   repeats previous value, but sca
 `TextIO` can be initialised with a `StringReader` and `StringWriter` to enable testing. For example, given the `Game`
 class above:
 
-```csharp
+```py
 var reader = new StringReader("Joe Bloggs\r\n4\n\r5");
 var writer = new StringWriter();
 var game = new Game(new TextIO(reader, writer))

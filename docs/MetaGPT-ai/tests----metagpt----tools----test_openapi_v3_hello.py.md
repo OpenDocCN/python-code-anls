@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_openapi_v3_hello.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

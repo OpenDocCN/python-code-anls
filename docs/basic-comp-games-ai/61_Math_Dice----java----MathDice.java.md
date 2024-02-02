@@ -1,6 +1,6 @@
 # `basic-computer-games\61_Math_Dice\java\MathDice.java`
 
-```
+```py
 // 导入 Scanner 类
 import java.util.Scanner;
 

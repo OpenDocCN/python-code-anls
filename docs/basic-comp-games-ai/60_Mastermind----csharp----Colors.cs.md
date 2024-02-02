@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\Colors.cs`
 
-```
+```py
 namespace Game
 {
     /// <summary>

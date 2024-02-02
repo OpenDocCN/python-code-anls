@@ -1,6 +1,6 @@
 # `transformer_vq\setup.py`
 
-```
+```py
 # 导入所需的模块
 from io import open
 from setuptools import find_packages

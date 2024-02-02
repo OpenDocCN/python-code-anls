@@ -1,6 +1,6 @@
 # `KubiScan\api\api_client_temp.py`
 
-```
+```py
 # 临时的 API 客户端类，用于绕过 bug https://github.com/kubernetes-client/python/issues/577
 # 当 bug 被解决后，可以删除这部分代码，并在 utils.py 中使用原始的 API 调用
 # 它仅用于 list_cluster_role_binding()

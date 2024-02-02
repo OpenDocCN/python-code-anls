@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\__init__.py`
 
-```
+```py
 # 从当前目录中导入以下模块
 from . import (
     apiserver,  # 导入 apiserver 模块

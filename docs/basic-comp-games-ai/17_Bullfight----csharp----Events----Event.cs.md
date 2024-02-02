@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\Event.cs`
 
-```
+```py
 # 命名空间声明，表示该类所属的命名空间是 Game.Events
 namespace Game.Events
 {

@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\mode\xml.js`
 
-```
+```py
 // CodeMirror, 版权由 Marijn Haverbeke 和其他人持有
 // 根据 MIT 许可证分发：https://codemirror.net/LICENSE
 

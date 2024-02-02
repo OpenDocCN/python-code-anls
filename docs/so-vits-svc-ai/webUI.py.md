@@ -1,6 +1,6 @@
 # `so-vits-svc\webUI.py`
 
-```
+```py
 # 导入所需的库
 import glob  # 用于查找匹配的文件路径名
 import json  # 用于处理 JSON 数据

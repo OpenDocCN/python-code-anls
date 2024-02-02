@@ -1,6 +1,6 @@
 # `Bert-VITS2\for_deploy\infer.py`
 
-```
+```py
 """
 版本管理、兼容推理及模型加载实现。
 版本说明：

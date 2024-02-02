@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\Strategy.cs`
 
-```
+```py
 # 定义一个名为 Strategy 的命名空间，用于存放不同的扑克策略类
 internal abstract class Strategy
 {

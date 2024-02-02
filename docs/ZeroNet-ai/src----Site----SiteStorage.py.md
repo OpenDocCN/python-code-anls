@@ -1,6 +1,6 @@
 # `ZeroNet\src\Site\SiteStorage.py`
 
-```
+```py
 # 导入所需的模块
 import os  # 操作系统相关的功能
 import re  # 正则表达式

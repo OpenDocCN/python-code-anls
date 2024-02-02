@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_write_tutorial.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # @Desc    : 设置文件编码和描述信息

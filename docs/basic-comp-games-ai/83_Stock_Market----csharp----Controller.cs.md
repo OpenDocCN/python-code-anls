@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Controller.cs`
 
-```
+```py
 # 引入命名空间 System，System.Collections.Generic 和 System.Linq
 using System;
 using System.Collections.Generic;

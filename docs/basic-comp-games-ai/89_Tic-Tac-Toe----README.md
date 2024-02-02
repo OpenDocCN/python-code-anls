@@ -1,7 +1,7 @@
 ### Tic-Tac-Toe
 
 The game of tic-tac-toe hardly needs any introduction. In this one, you play versus the computer. Moves are entered by number:
-```
+```py
 1   2   3
 
 4   5   6

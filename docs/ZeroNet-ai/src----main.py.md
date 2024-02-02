@@ -1,6 +1,6 @@
 # `ZeroNet\src\main.py`
 
-```
+```py
 # Included modules
 # 导入所需的模块
 import os

@@ -1,6 +1,6 @@
 # `yolov5-DNF\opencv\bgra.py`
 
-```
+```py
 # 导入 OpenCV 库
 import cv2
 

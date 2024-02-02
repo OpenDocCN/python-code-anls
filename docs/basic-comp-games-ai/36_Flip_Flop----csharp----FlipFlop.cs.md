@@ -1,6 +1,6 @@
 # `basic-computer-games\36_Flip_Flop\csharp\FlipFlop.cs`
 
-```
+```py
 // 打印游戏信息
 PrintGameInfo();
 

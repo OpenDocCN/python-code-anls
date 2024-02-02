@@ -1,6 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\java\src\LiteratureQuiz.java`
 
-```
+```py
 import java.util.Arrays;
 import java.util.Scanner;
 

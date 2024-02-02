@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifigan\utils.py`
 
-```
+```py
 # 导入glob和os模块
 import glob
 import os

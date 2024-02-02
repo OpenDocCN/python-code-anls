@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\conf\logging.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 

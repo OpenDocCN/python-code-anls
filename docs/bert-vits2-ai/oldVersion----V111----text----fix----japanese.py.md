@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\text\fix\japanese.py`
 
-```
+```py
 # 导入所需的模块
 import re
 import unicodedata

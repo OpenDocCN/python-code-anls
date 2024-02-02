@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\MergerSite\MergerSitePlugin.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 # 导入 time 模块，用于时间操作

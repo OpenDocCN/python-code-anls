@@ -1,6 +1,6 @@
 # `basic-computer-games\25_Chief\csharp\Game.cs`
 
-```
+```py
 # 引入 Chief.Resources.Resource 命名空间中的静态资源
 using static Chief.Resources.Resource;
 

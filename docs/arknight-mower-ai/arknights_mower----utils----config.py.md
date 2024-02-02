@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\config.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 import shutil

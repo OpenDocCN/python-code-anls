@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\java\src\Insect.java`
 
-```
+```py
 import java.util.ArrayList;
 import java.util.Arrays;
 

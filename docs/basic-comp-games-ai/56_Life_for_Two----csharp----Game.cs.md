@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Game.cs`
 
-```
+```py
 # 定义一个内部类 Game
 internal class Game
 {

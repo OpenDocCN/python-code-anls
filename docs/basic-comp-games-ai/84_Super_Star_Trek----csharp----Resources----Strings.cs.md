@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Resources\Strings.cs`
 
-```
+```py
 # 引入命名空间，用于处理文件和目录路径
 using System.IO;
 # 引入命名空间，用于获取有关程序集的信息

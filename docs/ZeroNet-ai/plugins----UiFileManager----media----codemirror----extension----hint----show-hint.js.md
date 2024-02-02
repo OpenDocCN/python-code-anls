@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\hint\show-hint.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）来定义模块
 (function(mod) {
   // 如果是 CommonJS 环境，则使用 require 导入 CodeMirror 模块

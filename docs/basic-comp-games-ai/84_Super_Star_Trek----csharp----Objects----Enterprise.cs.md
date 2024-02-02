@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Objects\Enterprise.cs`
 
-```
+```py
 using System;
 using System.Collections.Generic;
 using System.Linq;

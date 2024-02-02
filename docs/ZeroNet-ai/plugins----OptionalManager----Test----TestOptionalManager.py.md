@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\OptionalManager\Test\TestOptionalManager.py`
 
-```
+```py
 # 导入 copy 模块
 import copy
 # 导入 pytest 模块

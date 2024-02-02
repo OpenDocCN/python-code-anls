@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\csharp\War\Program.cs`
 
-```
+```py
 // 命名空间声明，定义了代码所在的命名空间
 namespace War
 {

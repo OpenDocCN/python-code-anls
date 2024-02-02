@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Players\Human.cs`
 
-```
+```py
 // 引入扑克牌和策略命名空间
 using Poker.Cards;
 using Poker.Strategies;

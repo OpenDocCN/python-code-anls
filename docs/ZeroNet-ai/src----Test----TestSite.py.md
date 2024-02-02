@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestSite.py`
 
-```
+```py
 # 导入shutil和os模块
 import shutil
 import os

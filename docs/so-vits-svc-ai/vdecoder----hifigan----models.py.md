@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifigan\models.py`
 
-```
+```py
 # 导入所需的库
 import json
 import os

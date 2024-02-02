@@ -4,7 +4,7 @@ ORBIT challenges you to visualize spacial positions in polar coordinates. The ob
 
 The planet can be replaced by a point at its center (called the origin); then the ship’s position can be given as a distance form the origin and an angle between its position and the eastern edge of the planet.
 
-```
+```py
 direction
 of orbit    <       ^ ship
               \     ╱
@@ -22,14 +22,14 @@ of orbit    <       ^ ship
 
 The distance of the bomb from the ship is computed using the law of cosines. The law of cosines states:
 
-```
+```py
 D = SQUAREROOT( R**2 + D1**2 - 2*R*D1*COS(A-A1) )
 ```
 
 Where D is the distance between the ship and the bomb, R is the altitude of the ship, D1 is the altitude of the bomb, and A-A1 is the angle between the ship and the bomb.
 
 
-```
+```py
                  bomb  <
                         ╲                   ^ ship
                          ╲                  ╱

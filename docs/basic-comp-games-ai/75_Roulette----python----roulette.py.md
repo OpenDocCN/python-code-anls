@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\python\roulette.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 从 datetime 模块中导入 date 类

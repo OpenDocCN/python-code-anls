@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\javascript\bagels.js`
 
-```
+```py
 // 定义一个打印函数，将字符串输出到指定元素
 function print(str)
 {

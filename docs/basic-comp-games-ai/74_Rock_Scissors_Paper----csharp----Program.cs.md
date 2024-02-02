@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Program.cs`
 
-```
+```py
 // 命名空间 RockScissorsPaper
 namespace RockScissorsPaper
 {

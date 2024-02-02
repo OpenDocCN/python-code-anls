@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\csharp\Program.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

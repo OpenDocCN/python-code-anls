@@ -1,6 +1,6 @@
 # `basic-computer-games\68_Orbit\java\Orbit.java`
 
-```
+```py
 import java.lang.Integer;
 import java.lang.Math;
 import java.util.Scanner;

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestContentUser.py`
 
-```
+```py
 # 导入 json 模块
 import json
 # 导入 io 模块

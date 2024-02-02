@@ -16,7 +16,7 @@ Python-Markdown's command line script takes advantage of Python's `-m` flag.
 Therefore, assuming the python executable is on your system path, use the
 following format:
 
-```bash
+```py
 python -m markdown [options] [args]
 ```
 
@@ -24,20 +24,20 @@ That will run the module as a script with the options and arguments provided.
 
 At its most basic usage, one would simply pass in a file name as the only argument:
 
-```bash
+```py
 python -m markdown input_file.txt
 ```
 
 Piping input and output (on `STDIN` and `STDOUT`) is fully supported as well.
 For example:
 
-```bash
+```py
 echo "Some **Markdown** text." | python -m markdown > output.html
 ```
 
 Use the `--help` option for a list all available options and arguments:
 
-```bash
+```py
 python -m markdown --help
 ```
 
@@ -96,19 +96,19 @@ Usage
 
 To use `markdown_py` from the command line, run it as
 
-```bash
+```py
 markdown_py input_file.txt
 ```
 
 or
 
-```bash
+```py
 markdown_py input_file.txt > output_file.html
 ```
 
 For a complete list of options, run
 
-```bash
+```py
 markdown_py --help
 ```
 
@@ -124,19 +124,19 @@ notation to point to an extension
 For example, to load an extension with the assigned entry point name `myext`,
 run the following command:
 
-```bash
+```py
 python -m markdown -x myext input.txt
 ```
 
 And to load an extension with Python's dot notation:
 
-```bash
+```py
 python -m markdown -x path.to.module:MyExtClass input.txt
 ```
 
 To load multiple extensions, specify an `-x` option for each extension:
 
-```bash
+```py
 python -m markdown -x myext -x path.to.module:MyExtClass input.txt
 ```
 
@@ -144,7 +144,7 @@ If the extension supports configuration options (see the documentation for the
 extension you are using to determine what settings it supports, if any), you
 can pass them in as well:
 
-```bash
+```py
 python -m markdown -x myext -c config.yml input.txt
 ```
 
@@ -154,7 +154,7 @@ map to a Python Dictionary in the format required by the
 [`extension_configs`][ec] keyword of the `markdown.Markdown` class. Therefore,
 the file `config.yaml` referenced in the above example might look like this:
 
-```yaml
+```py
 myext:
     option1: 'value1'
     option2: True
@@ -162,7 +162,7 @@ myext:
 
 Similarly, a JSON configuration file might look like this:
 
-```json
+```py
 {
   "myext":
   {

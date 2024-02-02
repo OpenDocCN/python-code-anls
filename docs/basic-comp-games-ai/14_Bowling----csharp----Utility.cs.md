@@ -1,6 +1,6 @@
 # `basic-computer-games\14_Bowling\csharp\Utility.cs`
 
-```
+```py
 // 命名空间 Bowling，包含 Bowling 相关的类和方法
 namespace Bowling
 {

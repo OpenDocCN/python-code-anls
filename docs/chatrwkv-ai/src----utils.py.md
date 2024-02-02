@@ -1,6 +1,6 @@
 # `ChatRWKV\src\utils.py`
 
-```
+```py
 # 导入所需的库和模块
 import json, time, random, os
 import numpy as np

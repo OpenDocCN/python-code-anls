@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Plays\HomeTeamPlay.cs`
 
-```
+```py
 // 引入所需的命名空间
 using Games.Common.IO;
 using Games.Common.Randomness;

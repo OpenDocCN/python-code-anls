@@ -1,6 +1,6 @@
 # `transformer_vq\tests\nn\test_vq.py`
 
-```
+```py
 # 导入 functools 模块
 import functools
 # 导入 os 模块

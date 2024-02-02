@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\testdata\1TeSTvb4w2PWE81S2rEELgmX2GCCExQGT-original\js\all.js`
 
-```
+```py
 /* ---- data/1BLogC9LN4oPDcruNz3qo1ysa133E9AGg8/js/lib/00-jquery.min.js ---- */
 /*! jQuery v2.1.3 | (c) 2005, 2014 jQuery Foundation, Inc. | jquery.org/license */
 

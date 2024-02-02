@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\web_browser_engine_playwright.py`
 
-```
+```py
 
 #!/usr/bin/env python
 """

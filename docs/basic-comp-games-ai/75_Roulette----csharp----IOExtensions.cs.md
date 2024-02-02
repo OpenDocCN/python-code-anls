@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\IOExtensions.cs`
 
-```
+```py
 # 命名空间 Roulette 下的内部静态类 IOExtensions
 internal static class IOExtensions
 {

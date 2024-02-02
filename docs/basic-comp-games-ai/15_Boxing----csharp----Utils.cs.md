@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\Utils.cs`
 
-```
+```py
 // 命名空间声明
 namespace Boxing;
 // 声明一个静态类 GameUtils

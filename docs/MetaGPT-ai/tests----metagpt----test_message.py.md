@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\test_message.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

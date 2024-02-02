@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestSiteDownload.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 pytest 模块

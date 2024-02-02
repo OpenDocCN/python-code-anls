@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Ships\Cruiser.cs`
 
-```
+```py
 # 在 Salvo.Ships 命名空间下定义一个内部密封类 Cruiser，继承自 Ship 类
 internal sealed class Cruiser : Ship
 {

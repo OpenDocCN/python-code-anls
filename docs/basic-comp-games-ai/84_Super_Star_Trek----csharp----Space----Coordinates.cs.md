@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Space\Coordinates.cs`
 
-```
+```py
 // 使用 System 命名空间
 using System;
 // 使用 SuperStarTrek.Utils 命名空间

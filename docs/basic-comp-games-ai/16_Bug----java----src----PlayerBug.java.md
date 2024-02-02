@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\java\src\PlayerBug.java`
 
-```
+```py
 public class PlayerBug extends Insect {
 
     // 为玩家创建特定的消息

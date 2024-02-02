@@ -2,7 +2,7 @@
 
 ### Use default MetaGPT image
 
-```bash
+```py
 # Step 1: Download metagpt official image and prepare config.yaml
 docker pull metagpt/metagpt:latest
 mkdir -p /opt/metagpt/{config,workspace}
@@ -37,7 +37,7 @@ The command `docker run ...` do the following things:
 
 ### Build image by yourself
 
-```bash
+```py
 # You can also build metagpt image by yourself.
 git clone https://github.com/geekan/MetaGPT.git
 cd MetaGPT && docker build -t metagpt:custom .

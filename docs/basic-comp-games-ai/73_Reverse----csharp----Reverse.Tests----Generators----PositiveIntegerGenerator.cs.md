@@ -1,6 +1,6 @@
 # `basic-computer-games\73_Reverse\csharp\Reverse.Tests\Generators\PositiveIntegerGenerator.cs`
 
-```
+```py
 # 导入 FsCheck 模块
 using FsCheck;
 

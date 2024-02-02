@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_fenced_code.py`
 
-```
+```py
 
 """
 Python Markdown

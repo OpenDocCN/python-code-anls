@@ -22,7 +22,7 @@ Syntax
 Meta-data consists of a series of keywords and values defined at the beginning
 of a markdown document like this:
 
-```md
+```py
 Title:   My Document
 Summary: A brief description of my document.
 Authors: Waylan Limberg
@@ -62,7 +62,7 @@ of the extension.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['meta'])
 ```
 
@@ -72,7 +72,7 @@ Accessing the Meta-Data
 The meta-data is made available as a python Dict in the `Meta` attribute of an
 instance of the Markdown class. For example, using the above document:
 
-```pycon
+```py
 >>> md = markdown.Markdown(extensions = ['meta'])
 >>> html = md.convert(text)
 >>> # Meta-data has been stripped from output

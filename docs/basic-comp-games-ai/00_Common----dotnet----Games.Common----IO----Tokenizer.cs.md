@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\Tokenizer.cs`
 
-```
+```py
 // 命名空间声明，定义了代码所在的命名空间
 using System;
 using System.Collections.Generic;

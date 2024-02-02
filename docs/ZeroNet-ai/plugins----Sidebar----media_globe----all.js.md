@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\media_globe\all.js`
 
-```
+```py
 /* ---- plugins/Sidebar/media_globe/Detector.js ---- */
 
 /**

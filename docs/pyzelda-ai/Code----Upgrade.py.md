@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Upgrade.py`
 
-```
+```py
 
 # 导入必要的模块
 import imp  # 引入模块

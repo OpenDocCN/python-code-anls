@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\image.py`
 
-```
+```py
 # 导入必要的模块
 from typing import Union
 import cv2

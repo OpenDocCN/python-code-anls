@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\java\src\Cube.java`
 
-```
+```py
 import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Random;

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\scrcpy\control.py`
 
-```
+```py
 import functools  # 导入 functools 模块
 import socket  # 导入 socket 模块
 import struct  # 导入 struct 模块

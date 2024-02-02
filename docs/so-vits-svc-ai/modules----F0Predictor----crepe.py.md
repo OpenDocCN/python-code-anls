@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\crepe.py`
 
-```
+```py
 # 导入必要的类型提示
 from typing import Optional, Union
 

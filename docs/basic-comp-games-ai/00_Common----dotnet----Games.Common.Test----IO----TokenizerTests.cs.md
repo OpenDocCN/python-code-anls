@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenizerTests.cs`
 
-```
+```py
 // 引入 LINQ 和 FluentAssertions 库
 using System.Linq;
 using FluentAssertions;

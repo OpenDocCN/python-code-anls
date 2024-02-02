@@ -1,6 +1,6 @@
 # `basic-computer-games\04_Awari\java\Awari.java`
 
-```
+```py
 import java.util.Scanner;  // 导入 Scanner 类，用于接收用户输入
 import java.util.Random;   // 导入 Random 类，用于生成随机数
 

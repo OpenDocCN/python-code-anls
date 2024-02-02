@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_write_design.py`
 
-```
+```py
 
 # 设置文件编码和作者信息
 # 导入 pytest 模块

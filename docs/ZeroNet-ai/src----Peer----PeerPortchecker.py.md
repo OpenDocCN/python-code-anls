@@ -1,6 +1,6 @@
 # `ZeroNet\src\Peer\PeerPortchecker.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 导入 urllib.request 模块

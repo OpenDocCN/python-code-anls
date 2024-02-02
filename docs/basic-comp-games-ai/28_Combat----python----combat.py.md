@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\python\combat.py`
 
-```
+```py
 # 设置最大单位数
 MAX_UNITS = 72000
 # 初始化飞机坠毁标志

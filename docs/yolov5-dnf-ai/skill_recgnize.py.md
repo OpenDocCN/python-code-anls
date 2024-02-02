@@ -1,6 +1,6 @@
 # `yolov5-DNF\skill_recgnize.py`
 
-```
+```py
 import cv2 as cv  # 导入 OpenCV 库，重命名为 cv
 
 # 计算图像中像素值大于 127 的比例

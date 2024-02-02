@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\java\Combat.java`
 
-```
+```py
     // 导入 java.lang.Math 包，用于数学计算
     import java.lang.Math;
     // 导入 java.util.Scanner 包，用于用户输入

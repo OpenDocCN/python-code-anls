@@ -8,7 +8,7 @@ This document describes how to interact with the project's CLI (Command Line Int
 
 Running the `./run` command without any parameters will display the help message, which provides a list of available commands and options. Additionally, you can append `--help` to any command to view help information specific to that command.
 
-```pysh
+```py
 ./run
 ```
 
@@ -28,7 +28,7 @@ Commands:
 
 If you need assistance with any command, simply add the `--help` parameter to the end of your command, like so:
 
-```pysh
+```py
 ./run COMMAND --help
 ```
 
@@ -36,7 +36,7 @@ This will display a detailed help message regarding that specific command, inclu
 
 ### 2. Setup Command
 
-```pysh
+```py
 ./run setup
 ```
 
@@ -53,7 +53,7 @@ This command initializes the setup of the project.
 
 **a. List All Agents**
 
-```pysh
+```py
 ./run agent list
 ```
 
@@ -1452,7 +1452,7 @@ Run the following command in Powershell or Command Prompt to:
 3. Set WSL 2 as the default.
 4. Download and install the Ubuntu Linux distribution (a reboot may be required).
 
-```pyshell
+```py
 wsl --install
 ```
 
@@ -1463,7 +1463,7 @@ When you run `./run setup`, if you encounter errors like `No such file or direct
 
 To resolve this, you can use the `dos2unix` utility to convert the line endings in your script from CRLF to LF. Here’s how to install and run `dos2unix` on the script:
 
-```pyshell
+```py
 sudo apt update
 sudo apt install dos2unix
 dos2unix ./run
@@ -1492,7 +1492,7 @@ If you continue to experience issues, consider storing your project files within
    ![Enter the Arena](docs/content/imgs/quickstart/008_enter_arena.png)
 
    > Note: for adavanced yours, create a new branch and create a file called YOUR_AGENT_NAME.json in the arena directory. Then commit this and create a PR to merge into the main repo. Only single file entries will be permitted. The json file needs the following format. 
-   ```pyjson
+   ```py
    {
     "github_repo_url": "https://github.com/Swiftyos/YourAgentName",
     "timestamp": "2023-09-18T10:03:38.051498",
@@ -1530,7 +1530,7 @@ If you are having issues and want to ensure the agent has been stopped there is 
 
 The benchmarking system can also be accessed using the cli too:
 
-```pybash
+```py
 agpt % ./run benchmark
 Usage: cli.py benchmark [OPTIONS] COMMAND [ARGS]...
 
@@ -1567,7 +1567,7 @@ Commands:
 ```
 
 The benchmark has been split into different categories of skills you can test your agent on. You can see what categories are available with
-```pybash
+```py
 ./run benchmark categories list
 # And what tests are available with
 ./run benchmark tests list
@@ -1578,7 +1578,7 @@ The benchmark has been split into different categories of skills you can test yo
 
 Finally you can run the benchmark with
 
-```pybash
+```py
 ./run benchmark start YOUR_AGENT_NAME
 
 ```

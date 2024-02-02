@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\capabilities.py`
 
-```
+```py
 # 导入 socket 模块
 import socket
 # 导入 logging 模块

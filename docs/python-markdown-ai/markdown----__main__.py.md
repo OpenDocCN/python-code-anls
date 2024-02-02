@@ -1,6 +1,6 @@
 # `markdown\markdown\__main__.py`
 
-```
+```py
 
 # Python Markdown
 

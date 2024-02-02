@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\csharp\GameState.cs`
 
-```
+```py
 # 命名空间声明，指定代码所属的命名空间
 namespace Hammurabi
 {

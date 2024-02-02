@@ -19,7 +19,7 @@ Tables are defined using the syntax established in [PHP Markdown Extra][php].
 
 Thus, the following text (taken from the above referenced PHP documentation):
 
-```md
+```py
 First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
@@ -28,7 +28,7 @@ Content Cell  | Content Cell
 
 will be rendered as:
 
-```html
+```py
 <table>
   <thead>
     <tr>
@@ -70,7 +70,7 @@ The following options are provided to change the default behavior:
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['tables'])
 ```
 
@@ -79,7 +79,7 @@ markdown.markdown(some_text, extensions=['tables'])
 For an example, let us suppose that alignment should be controlled by the legacy `align`
 attribute.
 
-```pycon
+```py
 >>> from markdown.extensions.tables import TableExtension
 >>> html = markdown.markdown(text,
 ...                 extensions=[TableExtension(use_align_attribute=True)]

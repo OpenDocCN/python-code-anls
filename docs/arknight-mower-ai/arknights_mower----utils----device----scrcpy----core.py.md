@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\scrcpy\core.py`
 
-```
+```py
 # 从未来版本中导入注解功能
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\make_sk_kernel.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

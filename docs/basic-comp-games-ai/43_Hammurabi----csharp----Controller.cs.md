@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\csharp\Controller.cs`
 
-```
+```py
 # 命名空间声明，定义了一个命名空间 Hammurabi
 namespace Hammurabi
 {

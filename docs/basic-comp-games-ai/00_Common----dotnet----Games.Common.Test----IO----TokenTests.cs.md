@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenTests.cs`
 
-```
+```py
 // 引入 FluentAssertions 和 Xunit 库
 using FluentAssertions;
 using Xunit;

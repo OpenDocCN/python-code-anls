@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\dispatchers.py`
 
-```
+```py
 # 导入日志、操作系统和请求模块
 import logging
 import os

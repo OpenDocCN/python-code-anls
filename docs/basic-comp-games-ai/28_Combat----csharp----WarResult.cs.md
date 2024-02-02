@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\WarResult.cs`
 
-```
+```py
 // 命名空间声明，表示该代码属于 Game 命名空间
 namespace Game
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\csharp\ZerosGenerator.cs`
 
-```
+```py
 # 在 Cube 命名空间下定义一个内部类 ZerosGenerator，实现了 IRandom 接口
 internal class ZerosGenerator : IRandom
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\StockMarket.cs`
 
-```
+```py
 // 引入必要的命名空间
 using System;
 using System.Collections.Generic;

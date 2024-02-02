@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Chart\ChartCollector.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入系统模块

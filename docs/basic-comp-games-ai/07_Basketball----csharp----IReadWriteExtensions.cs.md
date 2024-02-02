@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\IReadWriteExtensions.cs`
 
-```
+```py
 // 使用 Games.Common.IO 命名空间
 using Games.Common.IO;
 

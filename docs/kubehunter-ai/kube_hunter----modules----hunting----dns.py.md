@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\dns.py`
 
-```
+```py
 # 导入所需的模块
 import re
 import logging

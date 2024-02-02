@@ -1,6 +1,6 @@
 # `basic-computer-games\95_Weekday\csharp\Program.cs`
 
-```
+```py
 # 引入 System.Text 命名空间
 using System.Text;
 

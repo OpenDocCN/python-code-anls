@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\human_provider.py`
 
-```
+```py
 
 # 导入必要的模块
 from typing import Optional

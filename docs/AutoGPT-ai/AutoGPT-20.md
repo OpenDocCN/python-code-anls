@@ -1028,15 +1028,15 @@ async def test_updating_step():
 我已经测试了这两个函数，但是根据问题，我需要提供一个完整的测试来验证。因此，我将为您提供一个测试，该测试将模拟使用 `Client` 和 `ClientSession`，以模拟在客户端与服务端之间进行通信。该测试将包括模拟请求并使用 `requests` 库来模拟客户端请求和响应，以及模拟响应中的 JSON 解析。
 
 为了在本地运行这个测试，您需要安装 `requests` 和 `pytest-mock` 库。首先，请确保您已安装了以下命令：
-```pybash
+```py
 pip install requests pytest-mock
 ```
 然后，您可以运行以下命令来安装 `requests` 和 `pytest-mock` 库：
-```pybash
+```py
 pip install requests pytest-mock --pip-辣椒酯
 ```
 最后，您可以运行以下命令以运行测试：
-```pybash
+```py
 pytest-system-server benchmarks/test_client_server.py --cov=protected/__init__.py --cov-report=json
 ```
 这将使用 `pytest-system-server` 运行测试，并生成一个名为 `protected/__init__.py` 的文件夹，其中包含 `requests` 和 `pytest-mock` 两个库的 `protected/` 目录。这个测试将在 `protected/` 目录下生成一个名为 `test_client_server.py` 的文件，并覆盖 `__init__.py` 文件。

@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\QueryJson.py`
 
-```
+```py
 # 导入 json 模块
 import json
 # 导入 re 模块

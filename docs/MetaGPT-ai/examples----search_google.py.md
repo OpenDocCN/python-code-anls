@@ -1,6 +1,6 @@
 # `MetaGPT\examples\search_google.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 python

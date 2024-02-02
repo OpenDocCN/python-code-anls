@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\data\__init__.py`
 
-```
+```py
 # 导入 json 模块
 import json
 # 从 pathlib 模块中导入 Path 类

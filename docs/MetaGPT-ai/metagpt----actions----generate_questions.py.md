@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\generate_questions.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

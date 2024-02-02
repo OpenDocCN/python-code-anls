@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Country.cs`
 
-```
+```py
 namespace King;
 
 internal class Country

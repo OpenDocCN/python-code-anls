@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\IReadWriteExtensions.cs`
 
-```
+```py
 // 使用扑克策略命名空间中的策略
 using Poker.Strategies;
 // 使用不区分大小写的字符串比较

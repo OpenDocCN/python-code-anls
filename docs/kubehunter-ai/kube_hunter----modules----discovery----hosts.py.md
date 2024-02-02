@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\hosts.py`
 
-```
+```py
 # 导入所需的模块
 import os  # 导入操作系统模块
 import logging  # 导入日志记录模块

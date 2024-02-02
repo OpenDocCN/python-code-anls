@@ -1,6 +1,6 @@
 # `Bert-VITS2\export_onnx.py`
 
-```
+```py
 # 从 onnx_modules 模块中导入 export_onnx 函数
 from onnx_modules import export_onnx
 # 导入 os 模块

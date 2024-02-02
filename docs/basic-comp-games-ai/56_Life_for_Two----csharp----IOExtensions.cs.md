@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\IOExtensions.cs`
 
-```
+```py
 # 定义一个静态类，包含一些 IO 操作的扩展方法
 internal static class IOExtensions
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Mugwump.cs`
 
-```
+```py
 # 定义了一个名为Mugwump的命名空间
 namespace Mugwump;
 

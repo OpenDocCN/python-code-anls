@@ -1,6 +1,6 @@
 # `yolov5-DNF\opencv\basic.py`
 
-```
+```py
 # 导入 OpenCV 库
 import cv2
 # 导入 NumPy 库

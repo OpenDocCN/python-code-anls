@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\actions\test_write_teaching_plan.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为python，使得脚本可以直接执行

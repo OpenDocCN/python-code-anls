@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Multiuser\Test\TestMultiuser.py`
 
-```
+```py
 # 导入 pytest 模块
 import pytest
 # 导入 json 模块

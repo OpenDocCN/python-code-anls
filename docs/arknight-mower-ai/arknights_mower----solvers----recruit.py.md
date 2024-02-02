@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\recruit.py`
 
-```
+```py
 # 导入未来版本的注解特性
 from __future__ import annotations
 

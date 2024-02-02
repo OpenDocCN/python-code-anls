@@ -1,6 +1,6 @@
 # `basic-computer-games\39_Golf\python\golf.py`
 
-```
+```py
 # 定义了一个 ASCII 艺术风格的高尔夫球场图案
 '''
 Despite being a text based game, the code uses simple geometry to simulate a course.

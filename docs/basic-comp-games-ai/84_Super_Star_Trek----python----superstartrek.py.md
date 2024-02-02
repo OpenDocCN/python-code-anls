@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\python\superstartrek.py`
 
-```
+```py
 """
 ****        **** STAR TREK ****        ****
 **** SIMULATION OF A MISSION OF THE STARSHIP ENTERPRISE,

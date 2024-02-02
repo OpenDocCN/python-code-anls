@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestTranslate.py`
 
-```
+```py
 # 导入 Translate 模块
 from Translate import Translate
 

@@ -1,6 +1,6 @@
 # `markdown\markdown\util.py`
 
-```
+```py
 
 # Python Markdown
 
@@ -108,7 +108,7 @@ def deprecated(message: str, stacklevel: int = 2):
     @deprecated("This method will be removed in version X; use Y instead.")
     def some_method():
         pass
-    ```
+    ```py
     """
     def wrapper(func):
         @wraps(func)

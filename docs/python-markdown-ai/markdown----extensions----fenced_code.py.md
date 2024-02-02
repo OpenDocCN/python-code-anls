@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\fenced_code.py`
 
-```
+```py
 
 # Fenced Code Extension for Python Markdown
 # =========================================

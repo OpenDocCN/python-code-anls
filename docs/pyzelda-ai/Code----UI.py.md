@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\UI.py`
 
-```
+```py
 
 # 导入pygame模块
 import pygame

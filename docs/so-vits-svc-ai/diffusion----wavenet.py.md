@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\wavenet.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 从 math 模块中导入 sqrt 函数

@@ -62,7 +62,7 @@ The singing voice conversion model uses SoftVC content encoder to extract speech
 
 - To support the 4.0 model and incorporate the speech encoder, you can make modifications to the `config.json` file. Add the `speech_encoder` field to the "model" section as shown below:
 
-```
+```py
   "model": {
     .........
     "ssl_dim": 256,
@@ -95,7 +95,7 @@ Or download the following ContentVec, which is only 199MB in size but has the sa
 - ContentVec: [hubert_base.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt)
   - Change the file name to `checkpoint_best_legacy_500.pt` and place it in the `pretrain` directory
 
-```shell
+```py
 # contentvec
 wget -P pretrain/ https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -O checkpoint_best_legacy_500.pt
 # Alternatively, you can manually download and place it in the hubert directory
@@ -164,7 +164,7 @@ If you are using the `NSF-HIFIGAN enhancer` or `shallow diffusion`, you will nee
 - Pre-trained NSF-HIFIGAN Vocoder: [nsf_hifigan_20221211.zip](https://github.com/openvpi/vocoders/releases/download/nsf-hifigan-v1/nsf_hifigan_20221211.zip)
   - Unzip and place the four files under the `pretrain/nsf_hifigan` directory
 
-```shell
+```py
 # nsf_hifigan
 wget -P pretrain/ https://github.com/openvpi/vocoders/releases/download/nsf-hifigan-v1/nsf_hifigan_20221211.zip
 unzip -od pretrain/nsf_hifigan pretrain/nsf_hifigan_20221211.zip
@@ -195,7 +195,7 @@ If you are using the `fcpe` F0 Predictor, you will need to download the pre-trai
 
 Simply place the dataset in the `dataset_raw` directory with the following file structure:
 
-```
+```py
 dataset_raw
 ├───speaker0
 │   ├───xxx1-xxx1.wav
@@ -210,7 +210,7 @@ There are no specific restrictions on the format of the name for each audio file
 
 You can customize the speaker's name as showed below:
 
-```
+```py
 dataset_raw
 └───suijiSUI
     ├───1.wav
@@ -234,7 +234,7 @@ After slicing, it is recommended to remove any audio clips that are excessively 
 
 ### 1. Resample to 44100Hz and mono
 
-```shell
+```py
 python resample.py
 ```
 
@@ -242,19 +242,19 @@ python resample.py
 
 Although this project has resample.py scripts for resampling, mono and loudness matching, the default loudness matching is to match to 0db. This can cause damage to the sound quality. While python's loudness matching package pyloudnorm does not limit the level, this can lead to sonic boom. Therefore, it is recommended to consider using professional sound processing software, such as `adobe audition` for loudness matching. If you are already using other software for loudness matching, add the parameter `-skip_loudnorm` to the run command:
 
-```shell
+```py
 python resample.py --skip_loudnorm
 ```
 
 ### 2. Automatically split the dataset into training and validation sets, and generate configuration files.
 
-```shell
+```py
 python preprocess_flist_config.py --speech_encoder vec768l12
 ```
 
 speech_encoder has the following options
 
-```
+```py
 vec768l12
 vec256l9
 hubertsoft
@@ -271,7 +271,7 @@ If the speech_encoder argument is omitted, the default value is `vec768l12`
 
 Add `--vol_aug` if you want to enable loudness embedding:
 
-```shell
+```py
 python preprocess_flist_config.py --speech_encoder vec768l12 --vol_aug
 ```
 
@@ -301,20 +301,20 @@ After enabling loudness embedding, the trained model will match the loudness of 
 
 ##### **List of Vocoders**
 
-```
+```py
 nsf-hifigan
 nsf-snake-hifigan
 ```
 
 ### 3. Generate hubert and f0
 
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio
 ```
 
 f0_predictor has the following options
 
-```
+```py
 crepe
 dio
 pm
@@ -329,7 +329,7 @@ If the f0_predictor parameter is omitted, the default value is `rmvpe`
 
 If you want shallow diffusion (optional), you need to add the `--use_diff` parameter, for example:
 
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio --use_diff
 ```
 
@@ -337,7 +337,7 @@ python preprocess_hubert_f0.py --f0_predictor dio --use_diff
 
 If your dataset is pretty large,you can increase the param `--num_processes` like that:
 
-```shell
+```py
 python preprocess_hubert_f0.py --f0_predictor dio --num_processes 8
 ```
 All the worker will be assigned to different GPU if you have more than one GPUs.
@@ -348,7 +348,7 @@ After completing the above steps, the dataset directory will contain the preproc
 
 ### Sovits Model
 
-```shell
+```py
 python train.py -c configs/config.json -m 44k
 ```
 
@@ -356,7 +356,7 @@ python train.py -c configs/config.json -m 44k
 
 If the shallow diffusion function is needed, the diffusion model needs to be trained. The diffusion model training method is as follows:
 
-```shell
+```py
 python train_diff.py -c configs/diffusion.yaml
 ```
 
@@ -366,7 +366,7 @@ During training, the model files will be saved to `logs/44k`, and the diffusion 
 
 Use [inference_main.py](https://github.com/svc-develop-team/so-vits-svc/blob/4.0/inference_main.py)
 
-```shell
+```py
 # Example
 python inference_main.py -m "logs/44k/G_30400.pth" -c "configs/config.json" -n "君の知らない物語-src.wav" -t 0 -s "nen"
 ```
@@ -433,7 +433,7 @@ Introduction: As with the clustering scheme, the timbre leakage can be reduced, 
 - Training process: 
   First, it needs to be executed after generating hubert and f0: 
 
-```shell
+```py
 python train_index.py -c configs/config.json
 ```
 
@@ -448,7 +448,7 @@ The output of the model will be in `logs/44k/feature_and_index.pkl`
 
 The generated model contains data that is needed for further training. If you confirm that the model is final and not be used in further training, it is safe to remove these data to get smaller file size (about 1/3).
 
-```shell
+```py
 # Example
 python compress_model.py -c="configs/config.json" -i="logs/44k/G_30400.pth" -o="logs/44k/release.pth"
 ```

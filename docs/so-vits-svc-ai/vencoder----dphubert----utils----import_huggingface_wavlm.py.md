@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\dphubert\utils\import_huggingface_wavlm.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入类型提示模块

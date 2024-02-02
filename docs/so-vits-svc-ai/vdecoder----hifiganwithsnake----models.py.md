@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifiganwithsnake\models.py`
 
-```
+```py
 # 导入所需的库
 import json
 import os

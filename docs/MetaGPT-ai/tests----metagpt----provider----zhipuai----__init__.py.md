@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\zhipuai\__init__.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 Python，并且使用环境中的 python 解释器

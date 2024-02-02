@@ -1,6 +1,6 @@
 # `basic-computer-games\66_Number\python\number.py`
 
-```
+```py
 """
 NUMBER
 

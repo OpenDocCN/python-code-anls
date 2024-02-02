@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifiganwithsnake\alias\resample.py`
 
-```
+```py
 # 从 https://github.com/junjun3518/alias-free-torch 中的 Apache License 2.0 下进行了修改
 #   LICENSE 在 incl_licenses 目录中。
 

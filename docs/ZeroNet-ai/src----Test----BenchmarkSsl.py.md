@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\BenchmarkSsl.py`
 
-```
+```py
 #!/usr/bin/python2
 # 指定脚本解释器为 Python2
 

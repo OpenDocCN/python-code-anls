@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\TranslateSite\TranslateSitePlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 

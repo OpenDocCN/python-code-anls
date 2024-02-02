@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Benchmark\BenchmarkDb.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import json

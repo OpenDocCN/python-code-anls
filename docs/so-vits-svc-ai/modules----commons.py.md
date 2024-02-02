@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\commons.py`
 
-```
+```py
 import math  # 导入 math 模块
 
 import torch  # 导入 torch 模块

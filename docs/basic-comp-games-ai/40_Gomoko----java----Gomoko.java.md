@@ -1,6 +1,6 @@
 # `basic-computer-games\40_Gomoko\java\Gomoko.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.InputMismatchException;  // 导入 InputMismatchException 类
 import java.util.Scanner;  // 导入 Scanner 类

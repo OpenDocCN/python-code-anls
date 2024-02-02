@@ -1,6 +1,6 @@
 # `KubiScan\engine\utils.py`
 
-```
+```py
 # 导入 requests 模块
 import requests
 

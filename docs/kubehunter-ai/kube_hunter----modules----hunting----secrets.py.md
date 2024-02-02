@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\secrets.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 导入 os 模块

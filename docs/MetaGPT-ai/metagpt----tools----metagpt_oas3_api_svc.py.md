@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\metagpt_oas3_api_svc.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

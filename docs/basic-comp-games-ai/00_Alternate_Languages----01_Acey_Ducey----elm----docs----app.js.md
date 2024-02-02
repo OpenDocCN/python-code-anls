@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\elm\docs\app.js`
 
-```
+```py
 // 在给定的参数、函数和包装器的基础上创建一个新的函数对象
 function F(arity, fun, wrapper) {
   wrapper.a = arity; // 设置包装器的参数个数

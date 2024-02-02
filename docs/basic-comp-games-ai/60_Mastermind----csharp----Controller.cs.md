@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\Controller.cs`
 
-```
+```py
 // 引入命名空间 System
 using System;
 // 引入不可变集合的命名空间

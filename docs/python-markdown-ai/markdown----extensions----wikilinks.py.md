@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\wikilinks.py`
 
-```
+```py
 
 # WikiLinks Extension for Python-Markdown
 # ======================================

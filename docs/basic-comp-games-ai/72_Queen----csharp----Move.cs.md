@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\Move.cs`
 
-```
+```py
 namespace Queen;
 
 // 定义一个命名空间 Queen

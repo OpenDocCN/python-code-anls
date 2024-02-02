@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Bootstrapper\BootstrapperDb.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入正则表达式模块

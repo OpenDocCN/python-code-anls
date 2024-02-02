@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\Boxing.java`
 
-```
+```py
 /**
  * 拳击游戏
  *

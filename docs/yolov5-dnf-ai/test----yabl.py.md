@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\yabl.py`
 
-```
+```py
 # 导入随机模块
 import random
 # 导入opencv模块

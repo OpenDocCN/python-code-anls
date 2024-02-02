@@ -1,6 +1,6 @@
 # `basic-computer-games\32_Diamond\csharp\Pattern.cs`
 
-```
+```py
 using System.Text;
 using static Diamond.Resources.Resource;
 

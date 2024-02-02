@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\java\GalaxyMap.java`
 
-```
+```py
 import java.util.stream.IntStream;
 
 /**

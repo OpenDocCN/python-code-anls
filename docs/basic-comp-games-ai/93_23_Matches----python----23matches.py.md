@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\python\23matches.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本解释器为 Python 3
 # 23 Matches

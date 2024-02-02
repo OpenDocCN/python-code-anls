@@ -1,6 +1,6 @@
 # `ChatRWKV\rwkv_pip_package\src\rwkv\cuda\gemm_fp16_cublas.cpp`
 
-```
+```py
 // 包含 CUDA 相关的头文件
 #include <cublas_v2.h>
 #include <cuda.h>

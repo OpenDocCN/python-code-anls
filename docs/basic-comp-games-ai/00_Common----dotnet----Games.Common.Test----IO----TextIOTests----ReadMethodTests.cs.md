@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TextIOTests\ReadMethodTests.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System;
 using System.Collections.Generic;

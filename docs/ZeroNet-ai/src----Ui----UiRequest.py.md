@@ -1,6 +1,6 @@
 # `ZeroNet\src\Ui\UiRequest.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入正则表达式模块

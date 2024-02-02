@@ -1,6 +1,6 @@
 # `Bert-VITS2\text\japanese.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入unicodedata模块，用于处理Unicode字符

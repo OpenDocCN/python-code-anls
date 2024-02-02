@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\JumpShot.cs`
 
-```
+```py
 # 在 Basketball 命名空间下定义 JumpShot 类，继承自 Shot 类
 namespace Basketball;
 

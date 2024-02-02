@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Ships\Destroyer.cs`
 
-```
+```py
 # 在 Salvo.Ships 命名空间下定义 Destroyer 类，继承自 Ship 类
 internal sealed class Destroyer : Ship
 {

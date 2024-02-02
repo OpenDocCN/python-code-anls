@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\wavlm\modules.py`
 
-```
+```py
 # --------------------------------------------------------
 # WavLM: Large-Scale Self-Supervised  Pre-training  for Full Stack Speech Processing (https://arxiv.org/abs/2110.13900.pdf)
 # Github source: https://github.com/microsoft/unilm/tree/master/wavlm

@@ -1,6 +1,6 @@
 # `basic-computer-games\66_Number\java\1\Number.java`
 
-```
+```py
 # 导入 java.time.temporal.ValueRange 类
 import java.time.temporal.ValueRange;
 # 导入 java.util.Arrays 类

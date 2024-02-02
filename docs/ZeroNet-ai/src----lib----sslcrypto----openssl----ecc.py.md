@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\openssl\ecc.py`
 
-```
+```py
 # 导入 ctypes 模块，用于调用 C 语言编写的库函数
 import ctypes
 # 导入 hmac 模块，用于生成消息认证码

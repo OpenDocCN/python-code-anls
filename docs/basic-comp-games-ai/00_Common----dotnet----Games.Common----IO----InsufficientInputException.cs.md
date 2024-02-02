@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\InsufficientInputException.cs`
 
-```
+```py
 // 声明一个命名空间 Games.Common.IO
 namespace Games.Common.IO;
 

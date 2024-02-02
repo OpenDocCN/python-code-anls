@@ -1,6 +1,6 @@
 # `basic-computer-games\82_Stars\python\stars.py`
 
-```
+```py
 """
 Stars
 

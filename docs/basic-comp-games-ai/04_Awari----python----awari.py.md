@@ -1,6 +1,6 @@
 # `basic-computer-games\04_Awari\python\awari.py`
 
-```
+```py
 """
 AWARI
 

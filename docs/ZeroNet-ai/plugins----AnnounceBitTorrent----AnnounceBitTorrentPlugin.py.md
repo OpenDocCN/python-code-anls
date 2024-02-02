@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\AnnounceBitTorrent\AnnounceBitTorrentPlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 urllib.request 模块

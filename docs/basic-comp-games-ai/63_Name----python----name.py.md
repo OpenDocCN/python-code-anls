@@ -1,6 +1,6 @@
 # `basic-computer-games\63_Name\python\name.py`
 
-```
+```py
 """
 NAME
 

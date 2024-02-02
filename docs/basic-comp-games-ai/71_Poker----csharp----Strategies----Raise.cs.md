@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\Raise.cs`
 
-```
+```py
 # 在Poker.Strategies命名空间下定义一个内部类Raise，继承自Bet类
 internal class Raise : Bet
 {

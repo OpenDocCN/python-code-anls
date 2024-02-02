@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V200\text\chinese.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 re 模块

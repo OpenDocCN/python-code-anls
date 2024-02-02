@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V210\__init__.py`
 
-```
+```py
 """
 @Desc: 2.1版本兼容 对应版本 v2.1 Emo and muti-lang optimize
 """

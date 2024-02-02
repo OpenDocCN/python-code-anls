@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\CryptMessage\CryptMessage.py`
 
-```
+```py
 # 导入 hashlib 模块，用于加密哈希算法
 import hashlib
 # 导入 base64 模块，用于编解码 base64 数据

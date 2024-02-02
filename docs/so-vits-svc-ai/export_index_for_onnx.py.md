@@ -1,6 +1,6 @@
 # `so-vits-svc\export_index_for_onnx.py`
 
-```
+```py
 # 导入操作系统和 pickle 模块
 import os
 import pickle

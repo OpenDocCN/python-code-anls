@@ -822,7 +822,7 @@ def safe_google_results(results: str | list) -> str:
 
 2. is_browser_supported（def函数，实际上是一个装饰器，通过该装饰器判断当前系统是否支持浏览器）：
 
-```pypython
+```py
 def is_browser_supported():
    return True
 
@@ -834,7 +834,7 @@ def log(info):
 
 3. search_engine(def函数，实际上是一个装饰器，用于给命令对象添加搜索引擎支持）：
 
-```pypython
+```py
 def search_engine(func):
    def wrapper(*args, **kwargs):
        try:
@@ -851,7 +851,7 @@ def log(info):
 
 4. download(def函数，实际上是一个装饰器，用于给命令对象添加下载功能）：
 
-```pypython
+```py
 def download(func):
    def wrapper(*args, **kwargs):
        try:
@@ -868,7 +868,7 @@ def log(info):
 
 5. save_page(def函数，实际上是一个装饰器，用于给命令对象添加保存页面功能）：
 
-```pypython
+```py
 def save_page(func):
    def wrapper(*args, **kwargs):
        try:
@@ -885,7 +885,7 @@ def log(info):
 
 6. select_page(def函数，实际上是一个装饰器，用于给命令对象添加选择页面功能）：
 
-```pypython
+```py
 def select_page(url, **kwargs):
    return url.split('/')[-1]
 
@@ -911,7 +911,7 @@ def log(info):
 
 7. url_parse(def函数，实际上是一个装饰器，用于给命令对象添加解析URL功能）：
 
-```pypython
+```py
 def url_parse(url):
    return urllib.parse.urlparse(url)
 
@@ -937,7 +937,7 @@ def log(info):
 
 8. sort_page_chunks(def函数，实际上是一个装饰器，用于给命令对象添加分割页面功能）：
 
-```pypython
+```py
 def sort_page_chunks(url, chunk_size=10, **kwargs):
    return [url.split('/')[i:i+chunk_size] for i in range(0, len(url.split('/')), chunk_size)]
 
@@ -963,7 +963,7 @@ def log(info):
 
 9. download_images(def函数，实际上是一个装饰器，用于给命令对象添加下载图片功能）：
 
-```pypython
+```py
 def download_images(url, save_path=None):
    return save_path.rstrip('/') + '.' + url.split('/')[-1]
 
@@ -1042,7 +1042,7 @@ from selenium.webdriver.support import expected_conditions as EC
 3. 从webdriver_manager库中从firefox浏览器环境中导入GeckoDriverManager类，用于从该环境中加载Firefox浏览器的webdriver。
 4. 从webdriver_manager.microsoft库中从EdgeChromium浏览器环境中导入EdgeDriverManager类，用于从该环境中加载Edge浏览器的webdriver。
 5. 在当前目录下创建一个名为py.吃苦.txt的文件，并将以下内容添加到其中：
-```pylua
+```py
 from selenium.webdriver.common.exceptions import ActionNotSupportedException
 from selenium.webdriver.remote.webdriver import WebDriverRemote
 from selenium.webdriver.remote.强调 importwd
@@ -1268,7 +1268,7 @@ def scrape_links_with_selenium(driver: WebDriver, base_url: str) -> list[str]:
 This is a Python script that uses the WebDriverInstaller library to install the required web-browser drivers for a specific version of the WebDriver API. It then sets up the WebDriver to use either Gecko, Edge, or Safari, depending on the value of a configuration parameter (selenium\_web\_browser).
 
 The script is testing a WebDriver-based application on Linux and reports that it was built with the following比的Linux Inside:
-```pysql
+```py
 537.36 WebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.49 Safari/537.36
 ```
 It also reports that the script was built with the ChromeDriver installer and that it was compiled with the `--no-sandbox` option.

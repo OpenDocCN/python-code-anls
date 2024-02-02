@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\csharp\WarTester\Tests.cs`
 
-```
+```py
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using War;

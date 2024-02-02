@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\sd_engine.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 # @Date    : 2023/7/19 16:28

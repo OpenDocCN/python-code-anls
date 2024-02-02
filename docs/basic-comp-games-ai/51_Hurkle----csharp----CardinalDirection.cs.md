@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\CardinalDirection.cs`
 
-```
+```py
 # 定义名为hurkle的命名空间
 namespace hurkle
 {

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Functions.cs`
 
-```
+```py
 // 引入 System.Xml.Linq 命名空间和 System.Console 类
 using System.Xml.Linq;
 using static System.Console;

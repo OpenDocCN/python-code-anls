@@ -1,6 +1,6 @@
 # `yolov5-DNF\grabscreen.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 创建时间为 2020 年 4 月 8 日 12 点 14 分 29 秒
 # 作者为 analoganddigital，GitHub 用户名为 analoganddigital

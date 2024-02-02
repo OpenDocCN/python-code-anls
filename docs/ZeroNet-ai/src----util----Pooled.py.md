@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Pooled.py`
 
-```
+```py
 # 导入 gevent.pool 模块
 import gevent.pool
 

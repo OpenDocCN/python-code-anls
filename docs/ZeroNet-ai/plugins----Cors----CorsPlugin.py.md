@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Cors\CorsPlugin.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 # 导入 html 模块，用于 HTML 转义操作

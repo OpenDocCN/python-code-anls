@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.cpp`
 
-```
+```py
 #include <iostream> // 包含输入输出流库
 #include <time.h> // 包含时间库
 #include "Aceyducey.h" // 包含自定义的Aceyducey头文件

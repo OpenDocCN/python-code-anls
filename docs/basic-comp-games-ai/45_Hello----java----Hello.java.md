@@ -1,6 +1,6 @@
 # `basic-computer-games\45_Hello\java\Hello.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

@@ -29,7 +29,7 @@ The CSS rules either need to be defined in or linked from the header of your
 HTML templates. Pygments can generate CSS rules for you. Just run the following
 command from the command line:
 
-```bash
+```py
 pygmentize -S default -f html -a .codehilite > styles.css
 ```
 
@@ -42,7 +42,7 @@ If you would like to use a different theme, swap out `default` for the desired
 theme. For a list of themes installed on your system (additional themes can be
 installed via Pygments plugins), run the following command:
 
-```bash
+```py
 pygmentize -L style
 ```
 
@@ -87,7 +87,7 @@ code block contains and each one has a different result.
 If the first line of the code block contains a shebang, the language is derived
 from that and line numbers are used.
 
-```md
+```py
     #!/usr/bin/python
     # Code goes here ...
 ```
@@ -103,7 +103,7 @@ If the first line contains a shebang, but the shebang line does not contain a
 path (a single `/` or even a space), then that line is removed from the code
 block before processing. Line numbers are used.
 
-```md
+```py
     #!python
     # Code goes here ...
 ```
@@ -119,7 +119,7 @@ If the first line begins with three or more colons, the text following the
 colons identifies the language. The first line is removed from the code block
 before processing and line numbers are not used.
 
-```md
+```py
     :::python
     # Code goes here ...
 ```
@@ -133,7 +133,7 @@ Certain lines can be selected for emphasis with the colon syntax. When
 using Pygments' default CSS styles, emphasized lines have a yellow background.
 This is useful to direct the reader's attention to specific lines.
 
-```md
+```py
     :::python hl_lines="1 3"
     # This line is emphasized
     # This line isn't
@@ -156,7 +156,7 @@ CodeHilite is completely backwards compatible so that if a code block is
 encountered that does not define a language, the block is simply wrapped in
 `<pre>` tags and output.
 
-```md
+```py
     # Code goes here ...
 ```
 
@@ -166,7 +166,7 @@ Will result in:
 
 Lets see the source for that:
 
-```html
+```py
 <div class="codehilite"><pre><code># Code goes here ...
 </code></pre></div>
 ```
@@ -254,14 +254,14 @@ The following options are provided to configure the output:
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['codehilite'])
 ```
 
 To keep the code block's language in the Pygments generated HTML output, one can provide a custom Pygments formatter
 that takes the `lang_str` option. For example,
 
-```python
+```py
 from pygments.formatters import HtmlFormatter
 from markdown.extensions.codehilite import CodeHiliteExtension
 
@@ -292,7 +292,7 @@ markdown.markdown(
 
 The formatter above will output the following HTML structure for a code block:
 
-```html
+```py
 <div class="codehilite">
     <pre>
         <code class="language-python">

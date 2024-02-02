@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\s3.py`
 
-```
+```py
 
 # 导入需要的模块
 import base64  # 用于base64编解码

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\strategy\prompt_templates\creative_writing.py`
 
-```
+```py
 
 # 定义一个标准的提示文本，包含一个占位符 {input}，用于生成一段连贯的短文
 standard_prompt = """

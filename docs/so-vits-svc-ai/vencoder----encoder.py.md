@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\encoder.py`
 
-```
+```py
 # 定义一个名为SpeechEncoder的类
 class SpeechEncoder(object):
     # 初始化方法，设置默认的vec_path和device参数

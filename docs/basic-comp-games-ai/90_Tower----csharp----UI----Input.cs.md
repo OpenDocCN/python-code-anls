@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\UI\Input.cs`
 
-```
+```py
 # 引入 System 命名空间，包含了基本的数据类型和通用功能
 using System;
 # 引入 System.Collections.Generic 命名空间，包含了泛型集合类

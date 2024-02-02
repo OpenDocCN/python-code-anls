@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\roles\customer_service.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\postprocess\test_base_postprocess_plugin.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

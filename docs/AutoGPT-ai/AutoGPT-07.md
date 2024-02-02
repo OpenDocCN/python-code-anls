@@ -1082,12 +1082,12 @@ This will launch a webserver and then start the client cli application to commun
 
 这段代码定义了一个自定义的ABC类，包含两个静态成员变量：
 
-```pypython
+```py
 class AbilityResult:
    pass
 ```
 
-```pypython
+```py
 class P做了Slash() {
    // There's a reference to the `typing.Tuple` type in the
    // `T` parameter, but the `Any` type is used in the `type`

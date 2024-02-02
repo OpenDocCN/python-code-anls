@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\Hand.cs`
 
-```
+```py
 using System.Text;
 using static Poker.Cards.HandRank;
 namespace Poker.Cards;

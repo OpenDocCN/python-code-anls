@@ -1,6 +1,6 @@
 # `basic-computer-games\70_Poetry\csharp\Context.cs`
 
-```
+```py
 namespace Poetry;
 
 internal class Context

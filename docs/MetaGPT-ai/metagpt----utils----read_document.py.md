@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\read_document.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

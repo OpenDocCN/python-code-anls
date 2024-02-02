@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestDbQuery.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

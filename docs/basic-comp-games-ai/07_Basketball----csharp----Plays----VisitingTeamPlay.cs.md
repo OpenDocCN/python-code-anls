@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Plays\VisitingTeamPlay.cs`
 
-```
+```py
 using Games.Common.IO;  // 导入 Games.Common.IO 命名空间
 using Games.Common.Randomness;  // 导入 Games.Common.Randomness 命名空间
 

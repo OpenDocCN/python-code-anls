@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\yaml.py`
 
-```
+```py
 # 从 io 模块中导入 StringIO 类
 from io import StringIO
 # 从 ruamel.yaml 模块中导入 YAML 类

@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\java\Input.java`
 
-```
+```py
 # 导入需要的类
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

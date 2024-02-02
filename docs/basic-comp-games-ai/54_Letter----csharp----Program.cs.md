@@ -1,6 +1,6 @@
 # `basic-computer-games\54_Letter\csharp\Program.cs`
 
-```
+```py
 # 导入Letter模块中的所有内容
 import Letter
 

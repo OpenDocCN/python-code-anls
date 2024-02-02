@@ -1,6 +1,6 @@
 # `basic-computer-games\44_Hangman\python\hangman.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 """

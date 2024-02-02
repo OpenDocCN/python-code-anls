@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\operators.py`
 
-```
+```py
 # 从 datetime 模块中导入 datetime 和 timedelta 类
 from datetime import datetime, timedelta
 # 从 ..data 模块中导入 agent_list

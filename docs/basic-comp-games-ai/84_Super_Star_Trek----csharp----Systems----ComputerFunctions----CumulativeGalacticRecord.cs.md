@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\CumulativeGalacticRecord.cs`
 
-```
+```py
 using System.Collections.Generic; // 导入 System.Collections.Generic 命名空间，用于使用泛型集合类
 using System.Linq; // 导入 System.Linq 命名空间，用于使用 LINQ 查询
 using Games.Common.IO; // 导入 Games.Common.IO 命名空间，用于输入输出操作

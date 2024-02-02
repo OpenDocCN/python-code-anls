@@ -1,6 +1,6 @@
 # `KubiScan\engine\role.py`
 
-```
+```py
 # 从 kubernetes 模块中导入 client 和 config 模块
 
 # 定义 Role 类，用于表示集群角色

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\89_Tic-Tac-Toe\go\src\tictactoe1.go`
 
-```
+```py
 package main
 
 import (

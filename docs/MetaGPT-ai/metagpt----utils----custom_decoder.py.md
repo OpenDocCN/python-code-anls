@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\custom_decoder.py`
 
-```
+```py
 
 # 导入json和re模块
 import json

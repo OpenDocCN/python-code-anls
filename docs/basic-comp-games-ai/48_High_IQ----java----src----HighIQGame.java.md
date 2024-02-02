@@ -1,6 +1,6 @@
 # `basic-computer-games\48_High_IQ\java\src\HighIQGame.java`
 
-```
+```py
 // 导入 Scanner 类
 import java.util.Scanner;
 

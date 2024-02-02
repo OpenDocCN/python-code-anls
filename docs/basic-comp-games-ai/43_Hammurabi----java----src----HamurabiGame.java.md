@@ -1,6 +1,6 @@
 # `basic-computer-games\43_Hammurabi\java\src\HamurabiGame.java`
 
-```
+```py
 # 定义名为 HamurabiGame 的公共类
 public class HamurabiGame {
     # 定义名为 main 的静态方法，参数为字符串数组

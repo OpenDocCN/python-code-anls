@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\GameSeries.cs`
 
-```
+```py
 using System.Collections.Generic; // 导入泛型集合类
 using System.Linq; // 导入 LINQ 查询
 using Games.Common.IO; // 导入自定义的 IO 类

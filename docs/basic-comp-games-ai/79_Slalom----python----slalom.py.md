@@ -1,6 +1,6 @@
 # `basic-computer-games\79_Slalom\python\slalom.py`
 
-```
+```py
 # 从 random 模块中导入 random 函数
 from random import random
 

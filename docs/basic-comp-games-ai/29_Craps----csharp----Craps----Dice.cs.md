@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\csharp\Craps\Dice.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

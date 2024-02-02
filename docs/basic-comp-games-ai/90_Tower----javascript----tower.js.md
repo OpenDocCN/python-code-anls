@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\javascript\tower.js`
 
-```
+```py
 // TOWER
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\Spy.py`
 
-```
+```py
 # 导入日志模块
 import logging
 

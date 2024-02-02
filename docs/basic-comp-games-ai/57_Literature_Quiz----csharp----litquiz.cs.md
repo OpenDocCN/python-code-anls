@@ -1,6 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\csharp\litquiz.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

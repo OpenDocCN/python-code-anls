@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\CodeFactory.cs`
 
-```
+```py
 // 引入命名空间 System
 using System;
 // 引入命名空间 System.Collections.Generic

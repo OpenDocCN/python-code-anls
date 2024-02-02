@@ -1,6 +1,6 @@
 # `basic-computer-games\54_Letter\python\letter.py`
 
-```
+```py
 """
 LETTER
 

@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\chinese_bert.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 import sys  # 导入系统相关的库
 from transformers import AutoTokenizer, AutoModelForMaskedLM  # 从 transformers 库中导入 AutoTokenizer 和 AutoModelForMaskedLM 类

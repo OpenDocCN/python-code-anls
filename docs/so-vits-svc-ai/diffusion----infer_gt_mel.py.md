@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\infer_gt_mel.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn.functional 模块，并使用别名 F

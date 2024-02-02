@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\java\oop\Wheel.java`
 
-```
+```py
 // 导入必要的类
 import java.util.Arrays;
 import java.util.HashSet;

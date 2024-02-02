@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\java\Ship.java`
 
-```
+```py
 # 导入需要的 Java 类
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\View.cs`
 
-```
+```py
 // 命名空间 Game 包含了用于向用户显示信息的函数
 namespace Game
 {

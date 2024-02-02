@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 模块
 global using Games.Common.IO;
 # 引入 Games.Common.Randomness 模块

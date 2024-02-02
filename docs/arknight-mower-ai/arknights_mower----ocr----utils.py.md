@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\utils.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

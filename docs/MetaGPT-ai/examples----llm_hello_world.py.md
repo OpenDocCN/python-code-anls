@@ -1,6 +1,6 @@
 # `MetaGPT\examples\llm_hello_world.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

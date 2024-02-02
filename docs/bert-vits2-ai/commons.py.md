@@ -1,6 +1,6 @@
 # `Bert-VITS2\commons.py`
 
-```
+```py
 # 导入 math 和 torch 模块
 import math
 import torch

@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\report\base.py`
 
-```
+```py
 # 导入必要的模块和类
 from kube_hunter.core.types import Discovery
 from kube_hunter.modules.report.collector import (

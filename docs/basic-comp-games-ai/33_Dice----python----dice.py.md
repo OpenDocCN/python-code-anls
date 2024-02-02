@@ -1,6 +1,6 @@
 # `basic-computer-games\33_Dice\python\dice.py`
 
-```
+```py
 """
 Dice
 

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\inline\test_autolinks.py`
 
-```
+```py
 """
 这段代码是一个测试用例，用于测试自动链接的功能。
 

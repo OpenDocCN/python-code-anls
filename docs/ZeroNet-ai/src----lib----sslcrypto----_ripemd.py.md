@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\_ripemd.py`
 
-```
+```py
 # 版权声明，版权归 Markus Friedl 所有
 #
 # 在源代码和二进制形式下的再发布和使用，无论是否经过修改，都需要满足以下条件：

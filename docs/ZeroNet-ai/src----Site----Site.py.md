@@ -1,6 +1,6 @@
 # `ZeroNet\src\Site\Site.py`
 
-```
+```py
 # 导入所需的模块
 import os
 import json

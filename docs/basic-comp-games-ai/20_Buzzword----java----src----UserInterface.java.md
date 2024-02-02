@@ -1,6 +1,6 @@
 # `basic-computer-games\20_Buzzword\java\src\UserInterface.java`
 
-```
+```py
 import java.io.PrintStream;  // 导入打印流类
 import java.util.Scanner;  // 导入扫描器类
 import java.util.function.Supplier;  // 导入供应商函数接口

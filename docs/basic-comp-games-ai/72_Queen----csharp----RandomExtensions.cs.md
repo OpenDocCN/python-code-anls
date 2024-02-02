@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\RandomExtensions.cs`
 
-```
+```py
 # 命名空间 Queen 下的内部静态类 RandomExtensions
 namespace Queen;
 

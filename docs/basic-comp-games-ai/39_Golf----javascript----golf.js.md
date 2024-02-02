@@ -1,6 +1,6 @@
 # `basic-computer-games\39_Golf\javascript\golf.js`
 
-```
+```py
 // 定义一个打印函数，将字符串输出到指定的元素上
 function print(str)
 {

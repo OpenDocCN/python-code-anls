@@ -1,6 +1,6 @@
 # `KubiScan\unit_test.py`
 
-```
+```py
 # 导入单元测试模块
 import unittest
 # 从 engine 模块中导入 utils 和 privleged_containers

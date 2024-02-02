@@ -1,6 +1,6 @@
 # `so-vits-svc\onnx_export_old.py`
 
-```
+```py
 # 导入 torch 模块
 import torch
 

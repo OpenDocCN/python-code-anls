@@ -30,7 +30,7 @@ KubiScan gathers information about risky roles\clusterroles, rolebindings\cluste
 ### Container
 
 You can run it like that:  
-```
+```py
 ./docker_run.sh <kube_config_file>
 # For example: ./docker_run.sh ~/.kube/config
 ```
@@ -38,7 +38,7 @@ You can run it like that:
 It will copy all the files linked inside the config file into the container and spwan a shell into the container.
 
 To build the Docker image run:  
-```
+```py
 docker build -t kubiscan .
 ```
 
@@ -51,7 +51,7 @@ docker build -t kubiscan .
 -	__openssl__ (built-in in ubuntu) - used only for join token
 
 #### Example for installation on Ubuntu:
-```
+```py
 apt-get update  
 apt-get install -y python3 python3-pip 
 pip3 install -r requirements.txt  
@@ -74,7 +74,7 @@ Some functionality requires a **privileged** service account with the following 
 
 But most of the functionalities are not, so you can use this settings for limited service account:  
 It can be created by running:
-```
+```py
 kubectl apply -f - << EOF
 apiVersion: v1
 kind: ServiceAccount
@@ -120,7 +120,7 @@ Before 1.24, you can remove the `Secret` object from the above commands and save
 `kubectl get secrets $(kubectl get sa kubiscan-sa -o=jsonpath='{.secrets[0].name}') -o=jsonpath='{.data.token}' | base64 -d > token`
 
 From 1.24, you don't need to change anything and save the token like that:  
-```
+```py
 kubectl get secrets kubiscan-sa-secret -o=jsonpath='{.data.token}' | base64 -d > token  
 ```
 
@@ -128,18 +128,18 @@ After saving the token into the file, you can use it like that:
 `python3 ./KubiScan.py -ho <master_ip:master_port> -t /token <command>`  
 
 For example:   
-```
+```py
 alias kubiscan='python3 /<KubiScan_folder>/KubiScan.py
 kubiscan -ho 192.168.21.129:8443 -t /token -rs
 ```
 
 Notice that you can also use the certificate authority (ca.crt) to verify the SSL connection:    
-```
+```py
 kubiscan -ho <master_ip:master_port> -t /token -c /ca.crt <command>
 ```
 
 To remove the privileged service account, run the following commands: 
-```
+```py
 kubectl delete clusterroles kubiscan-clusterrole  
 kubectl delete clusterrolebindings kubiscan-clusterrolebinding   
 kubectl delete sa kubiscan-sa  

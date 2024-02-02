@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V210\text\japanese.py`
 
-```
+```py
 # 导入所需的库和模块
 # 从正则表达式模块导入 re
 # 从 unicodedata 模块导入 unicodedata

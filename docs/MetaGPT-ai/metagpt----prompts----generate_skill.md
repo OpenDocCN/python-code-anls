@@ -6,7 +6,7 @@ Try to summarize the class/function in no more than 6 sentences.
 Your answer should be in one line of text.
 For instance, if the context is:
 
-```python
+```py
 from typing import Optional
 from abc import ABC
 from metagpt.llm import LLM # Large language model, similar to GPT

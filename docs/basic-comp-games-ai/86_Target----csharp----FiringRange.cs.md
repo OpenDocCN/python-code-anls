@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\FiringRange.cs`
 
-```
+```py
 // 使用 Games.Common.Randomness 命名空间中的 Randomness 接口
 using Games.Common.Randomness;
 

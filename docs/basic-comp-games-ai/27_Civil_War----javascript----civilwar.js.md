@@ -1,6 +1,6 @@
 # `basic-computer-games\27_Civil_War\javascript\civilwar.js`
 
-```
+```py
 // CIVIL WAR
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

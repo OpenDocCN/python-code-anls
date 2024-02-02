@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\csharp\Models\Towers.cs`
 
-```
+```py
 # 引入系统和自定义的命名空间
 using System;
 using System.Collections;

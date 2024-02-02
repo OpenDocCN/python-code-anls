@@ -1,6 +1,6 @@
 # `basic-computer-games\88_3-D_Tic-Tac-Toe\csharp\Program.cs`
 
-```
+```py
 # 命名空间声明，定义了代码所在的命名空间
 namespace ThreeDTicTacToe
 {

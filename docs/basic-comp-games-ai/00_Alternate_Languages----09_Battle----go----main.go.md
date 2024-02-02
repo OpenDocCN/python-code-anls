@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\09_Battle\go\main.go`
 
-```
+```py
 package main
 
 import (

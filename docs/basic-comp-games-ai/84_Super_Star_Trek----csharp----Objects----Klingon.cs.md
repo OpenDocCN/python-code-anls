@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Objects\Klingon.cs`
 
-```
+```py
 // 引入 Games.Common.Randomness 命名空间
 using Games.Common.Randomness;
 // 引入 SuperStarTrek.Commands 命名空间

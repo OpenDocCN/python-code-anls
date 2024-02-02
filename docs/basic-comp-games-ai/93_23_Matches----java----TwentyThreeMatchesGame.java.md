@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\java\TwentyThreeMatchesGame.java`
 
-```
+```py
 /**
  * Game of 23 Matches
  * <p>

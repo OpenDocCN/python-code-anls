@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\22_Change\go\main.go`
 
-```
+```py
 package main
 // 导入所需的包
 import (

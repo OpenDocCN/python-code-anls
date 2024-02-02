@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\typealias.py`
 
-```
+```py
 # 导入必要的类型注解模块
 from typing import Dict, List, Tuple, Union
 

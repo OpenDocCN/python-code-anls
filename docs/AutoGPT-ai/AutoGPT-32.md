@@ -4,7 +4,7 @@
 
 这段代码定义了一个名为 "BaseModelBenchmark" 的类，该类继承自 "BaseModel" 类。通过 `from typing import Dict, List` 引入了 "typing" 和 "pydantic" 两个库。
 
-```pypython
+```py
 class BaseModelBenchmark(BaseModel):
    class Config:
        extra = "forbid"
@@ -12,7 +12,7 @@ class BaseModelBenchmark(BaseModel):
 
 在这里定义了一个名为 "Config" 的类，其中 `extra = "forbid"` 表示禁用任何额外配置，以使该类更简洁。
 
-```pypython
+```py
 class TaskInfo(BaseModelBenchmark):
    data_path: str
    is_regression: bool | None
@@ -24,34 +24,34 @@ class TaskInfo(BaseModelBenchmark):
 
 在这里定义了一个名为 "TaskInfo" 的类，该类继承自 "BaseModelBenchmark" 类。
 
-```pypython
+```py
 from datetime import datetime
 from pydantic import BaseModel, constr
 ```
 
 在这里引入了 "datetime" 和 "pydantic" 两个库，分别用于日期时间处理和 Pydantic 类型定义。
 
-```pypython
+```py
 from typing import Dict, List
 ```
 
 在这里再次引入了 "typing" 库，用于提供类型声明。
 
-```pypython
+```py
 class Benchmark(BaseModel):
    datetime_format: str = constr(datetime.date.format, "%d-%b-%Y %H:%M:%S %20:00:00")
 ```
 
 在这里定义了一个名为 "Benchmark" 的类，该类继承自 "BaseModel" 类。通过 `datetime.date.format` 函数将日期时间格式化为 Pydantic 需要的格式，然后将其设置为 `datetime_format` 变量。
 
-```pypython
+```py
    class Config:
        extra = "forbid"
 ```
 
 在这里定义了一个名为 "Config" 的类，其中 `extra = "forbid"` 表示禁用任何额外配置，以使该类更简洁。
 
-```pypython
+```py
    class TaskInfo(BaseModel):
        data_path: str
        is_regression: bool | None
@@ -63,14 +63,14 @@ class Benchmark(BaseModel):
 
 在这里定义了一个名为 "TaskInfo" 的类，该类继承自 "BaseModel" 类。
 
-```pypython
+```py
    class Config:
        extra = "forbid"
 ```
 
 在这里定义了一个名为 "Config" 的类，其中 `extra = "forbid"` 表示禁用任何额外配置，以使该类更简洁。
 
-```pypython
+```py
    class Benchmark(BaseModel):
        class Config:
            extra = "forbid"
@@ -79,13 +79,13 @@ class Benchmark(BaseModel):
 
 在这里定义了一个名为 "Benchmark" 的类，该类继承自 "BaseModel" 类。通过 `datetime.date.format` 函数将日期时间格式化为 Pydantic 需要的格式，然后将其设置为 `datetime_format` 变量。最后将 `extra = "forbid"` 设置为 `Config` 的额外配置，以禁止任何额外的配置。
 
-```pypython
+```py
    benchmarks: List[Benchmark] = []
 ```
 
 在这里创建了一个名为 "benchmarks" 的列表，用于存储基准测试。
 
-```pypython
+```py
    for task in TaskInfo.CATEGORIES:
        benchmarks.append(Benchmark(
            data_path=task_info.data_path,
@@ -99,7 +99,7 @@ class Benchmark(BaseModel):
 
 在这里遍历了 "TaskInfo" 类中定义的类别的所有元素，并使用 `Benchmark` 类创建了一个基准测试实例，然后将其添加到 "benchmarks" 列表中。
 
-```pypython
+```py
    print(f"Total benchmarks: {len(benchmarks)}")
 ```
 

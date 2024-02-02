@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\Explosion.cs`
 
-```
+```py
 namespace Target
 {
     internal class Explosion

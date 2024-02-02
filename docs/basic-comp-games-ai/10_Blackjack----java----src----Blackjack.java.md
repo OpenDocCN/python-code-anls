@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\src\Blackjack.java`
 
-```
+```py
 # 导入所需的 Java 类
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;

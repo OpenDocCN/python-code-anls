@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Action.cs`
 
-```
+```py
 // 命名空间 Game，定义游戏中玩家在每一轮战斗中可以采取的不同动作
 namespace Game
 {

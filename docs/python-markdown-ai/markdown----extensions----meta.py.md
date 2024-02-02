@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\meta.py`
 
-```
+```py
 
 # Meta Data Extension for Python-Markdown
 # =======================================

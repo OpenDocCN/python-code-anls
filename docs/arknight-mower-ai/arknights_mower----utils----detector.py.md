@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\detector.py`
 
-```
+```py
 import cv2  # 导入 OpenCV 库
 import numpy as np  # 导入 NumPy 库
 

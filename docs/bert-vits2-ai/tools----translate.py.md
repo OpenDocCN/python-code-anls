@@ -1,6 +1,6 @@
 # `Bert-VITS2\tools\translate.py`
 
-```
+```py
 """
 翻译api
 """

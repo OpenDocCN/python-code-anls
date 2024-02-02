@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\priority_queue.py`
 
-```
+```py
 # 导入 heapq 模块，用于实现优先队列
 import heapq
 

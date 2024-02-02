@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\RandomExtensions.cs`
 
-```
+```py
 # 导入Games.Common.Randomness命名空间中的IRandom接口
 using Games.Common.Randomness;
 

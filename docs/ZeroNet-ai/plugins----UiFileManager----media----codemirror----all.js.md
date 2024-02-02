@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\all.js`
 
-```
+```py
 // 定义一个立即执行函数，传入全局对象和工厂函数
 (function (global, factory) {
   // 如果是 CommonJS 环境，将工厂函数的返回值赋给 module.exports

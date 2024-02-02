@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\python\love.py`
 
-```
+```py
 # 程序的介绍和版权信息
 """
 LOVE

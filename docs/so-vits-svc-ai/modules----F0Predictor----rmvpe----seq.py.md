@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\seq.py`
 
-```
+```py
 # 导入 PyTorch 中的神经网络模块
 import torch.nn as nn
 

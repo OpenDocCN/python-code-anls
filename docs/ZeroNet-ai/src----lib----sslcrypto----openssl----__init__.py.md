@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\openssl\__init__.py`
 
-```
+```py
 # 从当前目录中导入 aes 模块
 from .aes import aes
 # 从当前目录中导入 ecc 模块

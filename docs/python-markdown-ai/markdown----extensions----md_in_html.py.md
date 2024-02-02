@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\md_in_html.py`
 
-```
+```py
 
 # Python-Markdown Markdown in HTML Extension
 # ===============================

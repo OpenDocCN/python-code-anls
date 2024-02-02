@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\java\src\Love.java`
 
-```
+```py
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;

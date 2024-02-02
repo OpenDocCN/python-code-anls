@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\gevent_ws\__init__.py`
 
-```
+```py
 # 导入需要的模块
 from gevent.pywsgi import WSGIHandler, _InvalidClientInput
 from gevent.queue import Queue

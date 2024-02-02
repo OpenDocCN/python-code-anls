@@ -83,7 +83,7 @@ but it should probably be:
 
 On basic line 1390 the income from tourism is calculated:
 
-```
+```py
 1390 A=INT(A+Q)
 1400 V1=INT(((B-P1)*22)+(RND(1)*500))
 1405 V2=INT((2000-D)*15)

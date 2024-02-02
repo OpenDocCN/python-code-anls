@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\OptionalManager\ContentDbPlugin.py`
 
-```
+```py
 # 导入时间、集合、迭代器、正则表达式模块
 import time
 import collections

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\segment.py`
 
-```
+```py
 # 导入必要的模块和类
 from __future__ import annotations
 import traceback

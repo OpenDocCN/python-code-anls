@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\execute_task.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 Python

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\35_Even_Wins\go\evenwins.go`
 
-```
+```py
 package main
 
 import (

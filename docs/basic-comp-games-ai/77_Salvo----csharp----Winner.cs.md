@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Winner.cs`
 
-```
+```py
 # 在 Salvo 命名空间内部定义 Winner 枚举类型
 namespace Salvo;
 

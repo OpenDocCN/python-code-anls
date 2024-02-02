@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\javascript\craps.js`
 
-```
+```py
 // CRAPS
 //
 // 由Oscar Toledo G. (nanochess)从BASIC转换为Javascript

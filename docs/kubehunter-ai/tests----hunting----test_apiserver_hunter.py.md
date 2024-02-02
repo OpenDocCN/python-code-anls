@@ -1,6 +1,6 @@
 # `kubehunter\tests\hunting\test_apiserver_hunter.py`
 
-```
+```py
 # 导入requests_mock和time模块
 import requests_mock
 import time

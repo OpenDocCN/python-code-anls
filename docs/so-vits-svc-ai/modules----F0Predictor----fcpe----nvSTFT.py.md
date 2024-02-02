@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\fcpe\nvSTFT.py`
 
-```
+```py
 # 导入所需的库
 import os
 import librosa

@@ -1,6 +1,6 @@
 # `MetaGPT\examples\build_customized_multi_agents.py`
 
-```
+```py
 
 """
 Filename: MetaGPT/examples/build_customized_multi_agents.py

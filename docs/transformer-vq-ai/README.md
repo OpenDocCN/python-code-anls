@@ -9,7 +9,7 @@ Official implementation of 'Transformer-VQ: Linear-Time Transformers via Vector 
 The scripts use [W&B](https://wandb.ai/) for logging; it is free for personal and academic use.
 
 Clone the repo and install the dependencies:
-```
+```py
 git clone https://github.com/transformer-vq/transformer_vq/;
 cd transformer_vq;
 ##### CPU or GPU
@@ -19,7 +19,7 @@ pip3 install -e '.[tpu]' -f https://storage.googleapis.com/jax-releases/libtpu_r
 ```
 
 To launch an experiment, run
-```
+```py
 export WANDB_API_KEY=WB_KEY;
 chmod +x ./scripts/lm_DATASET.sh;
 ./scripts/lm_DATASET.sh \
@@ -40,10 +40,10 @@ chmod +x ./scripts/lm_DATASET.sh;
     [-w WB_RUN_ID]
 ```
 where 
-- ```DATASET``` is one of ```{enwik8,pg19,imagenet64}```
-- ```COMMAND``` is one of ```{train_vocab,train,val,test,sample}```
+- ```DATASET``` is one of ```{enwik8,pg19,imagenet64}```py
+- ```COMMAND``` is one of ```{train_vocab,train,val,test,sample}```py
 - ```RNG_SEED``` is the experiment seed or sampling seed
-- ```PRECISION``` is one of ```{float32,bfloat16}```
+- ```PRECISION``` is one of ```{float32,bfloat16}```py
 - ```SEQUENCE_LEN``` is the sequence length
 - ```BLOCK_LEN``` is an integer divisor of the sequence length and update length
 - ```MEM_LEN``` is the uncompressed key/value cache length (set to ```BLOCK_LEN``` in our experiments) 
@@ -55,7 +55,7 @@ where
 - ```OUTPUT_CHECKPOINT_DIR``` is a folder name for saving checkpoints
 - ```DATASETS_DIR``` is a path for saving downloaded datasets locally or in Google Cloud Storage
 - ```VOCAB_PATH``` is a path for a sentencepiece vocabulary, used for the PG-19 model
-- ```WB_KEY``` can be obtained from ```https://wandb.ai/authorize```
+- ```WB_KEY``` can be obtained from ```https://wandb.ai/authorize```py
 - ```WB_RUN_ID``` should be the run ID from the W&B run URL, if resuming a run
 
 ### Training a vocabulary
@@ -69,7 +69,7 @@ To use the PG-19 model, you need a [SentencePiece](https://github.com/google/sen
 ## Multi-Host Launch - TPU Pod Slice
 
 To launch on a TPU pod or pod slice, all commands can be run remotely as follows: 
-```
+```py
 ##### switch to the correct project
 ##### 
 gcloud config set project PROJECT_ID
@@ -112,11 +112,11 @@ The last line uses ```-x``` as a flag for the control script ```lm_DATASET.sh```
 
 ### Attaching and detaching tmux sessions
 To view the script output, you can SSH into any of the TPU hosts
-```
+```py
 gcloud compute tpus tpu-vm ssh TPU_POD_SLICE_NAME --zone ZONE --worker=WORKER_ID
 ```
 Then attach the tmux session with
-```
+```py
 tmux attach -t transformer_vq_session
 ```
 To return the session to detached mode, allowing it to continue running after you leave the ssh session, type Ctrl+b, then type d. 
@@ -125,12 +125,12 @@ To return the session to detached mode, allowing it to continue running after yo
 
 To kill the script running in the tmux session on all hosts, you can run the following on your local machine: it will SSH to each host and kill the script.
 
-```
+```py
 ./scripts/kill.sh -n TPU_POD_SLICE_NAME -z ZONE -c NUM_HOSTS
 ```
 
 To kill the tmux session you can run
-```
+```py
 gcloud compute tpus tpu-vm ssh TPU_POD_SLICE_NAME \
   --zone ZONE \
   --worker=all \
@@ -139,7 +139,7 @@ gcloud compute tpus tpu-vm ssh TPU_POD_SLICE_NAME \
 
 ### Deleting the instance
 You can delete the pod/slice instance as follows:
-```
+```py
 gcloud compute tpus tpu-vm delete TPU_POD_SLICE_NAME --zone ZONE
 ```
 

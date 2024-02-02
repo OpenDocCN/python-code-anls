@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\25_Chief\C\chief.c`
 
-```
+```py
 #include <stdio.h>  // 包含标准输入输出库
 #include <stdlib.h>  // 包含标准库
 #include <string.h>  // 包含字符串处理库

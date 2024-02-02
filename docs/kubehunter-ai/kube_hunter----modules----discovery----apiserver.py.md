@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\apiserver.py`
 
-```
+```py
 # 导入requests模块，用于发送HTTP请求
 import requests
 # 导入logging模块，用于记录日志

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\strategy\__init__.py`
 
-```
+```py
 
 # 设置文件编码格式为 UTF-8
 # 设置日期和时间为 12/23/2023 4:51 PM

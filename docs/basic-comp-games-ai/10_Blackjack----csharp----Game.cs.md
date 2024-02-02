@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\csharp\Game.cs`
 
-```
+```py
 # 引入系统命名空间
 using System;
 # 引入集合和LINQ命名空间

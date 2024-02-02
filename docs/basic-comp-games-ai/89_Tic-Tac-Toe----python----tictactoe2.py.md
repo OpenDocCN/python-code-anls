@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\python\tictactoe2.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入枚举类型模块
 from enum import Enum

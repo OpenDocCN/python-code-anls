@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\cssvendor\cssvendor.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

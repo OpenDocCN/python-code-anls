@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\PlayerAttackStrategy.cs`
 
-```
+```py
 // 使用静态导入 GameUtils 类中的方法和 Console 类中的 WriteLine 方法
 using static Boxing.GameUtils;
 using static System.Console;

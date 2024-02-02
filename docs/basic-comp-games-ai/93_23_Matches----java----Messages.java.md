@@ -1,6 +1,6 @@
 # `basic-computer-games\93_23_Matches\java\Messages.java`
 
-```
+```py
 public class Messages {
 
     // 这是一个实用类，只包含静态成员。

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\cost_manager.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 """

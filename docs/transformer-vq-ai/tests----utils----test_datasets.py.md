@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\test_datasets.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import pytest

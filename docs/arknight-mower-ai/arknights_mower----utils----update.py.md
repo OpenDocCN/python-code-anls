@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\update.py`
 
-```
+```py
 # 导入日志、操作系统、压缩文件、网络请求模块
 import logging
 import os

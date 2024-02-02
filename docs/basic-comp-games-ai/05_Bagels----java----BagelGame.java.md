@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\java\BagelGame.java`
 
-```
+```py
 /******************************************************************************
 *
 * Encapsulates all the state and game logic for one single game of Bagels

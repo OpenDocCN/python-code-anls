@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Utils\DirectionAndDistance.cs`
 
-```
+```py
 # 引入 System 命名空间，包含了常用的基本类和数据类型
 using System;
 # 引入 SuperStarTrek.Space 命名空间，包含了与太空相关的类和方法

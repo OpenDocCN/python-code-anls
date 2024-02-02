@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestNoparallel.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 gevent 模块

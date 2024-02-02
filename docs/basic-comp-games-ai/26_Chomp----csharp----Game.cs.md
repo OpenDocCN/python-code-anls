@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\csharp\Game.cs`
 
-```
+```py
 namespace Chomp;
 
 internal class Game

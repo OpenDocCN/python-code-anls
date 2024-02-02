@@ -1,6 +1,6 @@
 # `ZeroNet\src\User\User.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入 JSON 模块

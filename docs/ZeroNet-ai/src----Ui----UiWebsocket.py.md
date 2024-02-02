@@ -1,6 +1,6 @@
 # `ZeroNet\src\Ui\UiWebsocket.py`
 
-```
+```py
 # 导入所需的模块
 import json
 import time

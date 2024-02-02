@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\python\acey_ducey.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Play the Acey-Ducey game

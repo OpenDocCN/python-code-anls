@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\__init__.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 Python，使用环境变量中的 python

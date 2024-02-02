@@ -1,6 +1,6 @@
 # `ZeroNet\src\Tor\TorManager.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入正则表达式模块

@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\kubelet.py`
 
-```
+```py
 # 导入日志、请求和禁用警告的模块
 import logging
 import requests

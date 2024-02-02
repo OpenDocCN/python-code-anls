@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\media\Scrollable.js`
 
-```
+```py
 // 初始化滚动条功能
 window.initScrollable = function () {
 

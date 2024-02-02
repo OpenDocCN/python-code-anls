@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Trayicon\lib\winfolders.py`
 
-```
+```py
 # 导入 ctypes 库，并使用 _syntax 来遮盖它们，以避免自动补全 IDE 的干扰
 import ctypes as _ctypes
 # 从 ctypes 中导入 create_unicode_buffer 函数，并使用 _cub 来遮盖它

@@ -1,6 +1,6 @@
 # `basic-computer-games\87_3-D_Plot\javascript\3dplot.js`
 
-```
+```py
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {

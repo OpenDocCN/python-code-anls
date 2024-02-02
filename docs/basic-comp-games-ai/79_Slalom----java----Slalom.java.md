@@ -1,6 +1,6 @@
 # `basic-computer-games\79_Slalom\java\Slalom.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.InputMismatchException;  // 导入 InputMismatchException 类
 import java.util.Random;  // 导入 Random 类

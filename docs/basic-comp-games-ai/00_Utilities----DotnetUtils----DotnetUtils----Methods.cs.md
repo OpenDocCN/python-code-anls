@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Methods.cs`
 
-```
+```py
 // 命名空间定义了一个名为 DotnetUtils 的命名空间
 namespace DotnetUtils;
 

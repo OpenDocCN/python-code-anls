@@ -1,6 +1,6 @@
 # `MetaGPT\examples\debate.py`
 
-```
+```py
 
 """
 Filename: MetaGPT/examples/debate.py

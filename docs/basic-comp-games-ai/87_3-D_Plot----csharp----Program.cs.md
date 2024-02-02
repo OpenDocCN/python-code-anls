@@ -1,6 +1,6 @@
 # `basic-computer-games\87_3-D_Plot\csharp\Program.cs`
 
-```
+```py
 // 命名空间声明
 namespace Plot
 {

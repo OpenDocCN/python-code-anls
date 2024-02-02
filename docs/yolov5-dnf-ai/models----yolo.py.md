@@ -1,6 +1,6 @@
 # `yolov5-DNF\models\yolo.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 import logging  # 用于记录日志

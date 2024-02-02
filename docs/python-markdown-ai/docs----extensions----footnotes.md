@@ -23,7 +23,7 @@ the output.
 
 Example:
 
-```md
+```py
 Footnotes[^1] have a label[^@#$%] and the footnote's content.
 
 [^1]: This is a footnote content.
@@ -46,7 +46,7 @@ When working with multiple blocks, it may be helpful to start the content on a
 separate line from the label which defines the content. This way the entire block
 is indented consistently and any errors are more easily discernible by the author.
 
-```md
+```py
 [^1]:
     The first paragraph of the definition.
 
@@ -100,7 +100,7 @@ The following options are provided to configure the output:
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['footnotes'])
 ```
 
@@ -125,7 +125,7 @@ the second document is rendered.
 
 An example of calling `reset`:
 
-```python
+```py
 md = markdown.Markdown(extensions=['footnotes'])
 html1 = md.convert(text_with_footnote)
 md.reset()

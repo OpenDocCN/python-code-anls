@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\fcpe\model.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 import torch  # 导入 PyTorch 库，用于深度学习
 import torch.nn as nn  # 导入 PyTorch 中的神经网络模块

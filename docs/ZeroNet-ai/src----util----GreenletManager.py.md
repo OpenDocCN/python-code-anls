@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\GreenletManager.py`
 
-```
+```py
 # 导入 gevent 模块
 import gevent
 # 从 Debug 模块中导入 Debug 类

@@ -1,6 +1,6 @@
 # `basic-computer-games\33_Dice\java\src\DiceGame.java`
 
-```
+```py
 # 定义名为DiceGame的公共类
 public class DiceGame {
     # 主方法

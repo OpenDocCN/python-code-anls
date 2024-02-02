@@ -31,7 +31,7 @@ The text input/output behaviour can be investigated using a basic program such a
 
 **`BASIC_Tests/InputTest.bas`**
 
-```basic
+```py
 10 INPUT "Enter 3 numbers";A,B,C
 20 PRINT "You entered: ";A;B;C
 30 PRINT "--------------------------"
@@ -41,7 +41,7 @@ The text input/output behaviour can be investigated using a basic program such a
 The following transcript shows the use of this program, and some interesting behaviours of the BASIC interpreter INPUT
 routine. There are some other behaviours which can be seen in the unit tests for the C# library implementation.
 
-```dos
+```py
 Enter 3 numbers? -1,2,3.141             <-- multiple numbers are separated by commas
 You entered: -1  2  3.141
 --------------------------
@@ -117,14 +117,14 @@ Additional formatting rules can be seen by running this program:
 
 **`BASIC_Tests/OutputTest.bas`**
 
-```basic
+```py
 10 A=1: B=-2: C=0.7: D=123456789: E=-0.0000000001
 20 PRINT "|";A;"|";B;"|";C;"|";D;"|";E;"|"
 ```
 
 The output is:
 
-```dos
+```py
 | 1 |-2 | .7 | 1.2345679E+8 |-1.E-10 |
 ```
 
@@ -156,7 +156,7 @@ This behaviour can be shown by the program:
 
 **`BASIC_Tests/RndTest.bas`**
 
-```basic
+```py
 10 PRINT "1: ";RND(1);RND(1);RND(0);RND(0);RND(1)
 20 PRINT "2: ";RND(-2);RND(1);RND(1);RND(1)
 30 PRINT "3: ";RND(-5);RND(1);RND(1);RND(1)
@@ -165,7 +165,7 @@ This behaviour can be shown by the program:
 
 The output of this program is:
 
-```dos
+```py
 1:  .97369444  .44256502  .44256502  .44256502  .28549057    <-- Repeated values due to RND(0)
 2:  .4986506  4.4510484E-2  .96231  .35997057
 3:  .8113741  .13687313  6.1034977E-2  .7874807

@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Diff.py`
 
-```
+```py
 # 导入 io 模块
 import io
 # 导入 difflib 模块

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Worker\WorkerManager.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入日志模块

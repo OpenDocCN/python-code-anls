@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\document_store\base_store.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

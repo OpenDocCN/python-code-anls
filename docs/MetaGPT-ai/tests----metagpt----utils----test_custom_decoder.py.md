@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_custom_decoder.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

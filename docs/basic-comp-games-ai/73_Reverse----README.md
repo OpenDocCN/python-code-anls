@@ -1,12 +1,12 @@
 ### Reverse
 
 The game of REVERSE requires you to arrange a list of numbers in numerical order from left to right. To move, you tell the computer how many numbers (counting from the left) to reverse. For example, if the current list is:
-```
+```py
     2 3 4 5 1 6 7 8 9
 ```
 
 and you reverse 4, the result will be:
-```
+```py
     5 4 3 2 1 6 7 8 9
 ```
 Now if you reverse 5, you win!

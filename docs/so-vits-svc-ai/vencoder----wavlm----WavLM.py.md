@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\wavlm\WavLM.py`
 
-```
+```py
 # 导入所需的库
 import logging
 import math

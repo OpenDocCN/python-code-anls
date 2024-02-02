@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\subscription.py`
 
-```
+```py
 
 # 导入必要的模块
 import asyncio

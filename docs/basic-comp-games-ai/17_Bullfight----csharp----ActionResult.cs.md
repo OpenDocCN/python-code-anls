@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\ActionResult.cs`
 
-```
+```py
 // 命名空间 Game 包含了游戏相关的类和枚举
 namespace Game
 {

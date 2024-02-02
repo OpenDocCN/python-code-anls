@@ -1,6 +1,6 @@
 # `basic-computer-games\21_Calendar\javascript\calendar.js`
 
-```
+```py
 // 定义一个打印函数，将字符串添加到指定元素中
 function print(str)
 {

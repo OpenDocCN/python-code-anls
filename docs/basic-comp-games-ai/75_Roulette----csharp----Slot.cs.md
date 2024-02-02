@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Slot.cs`
 
-```
+```py
 # 引入不可变集合的命名空间
 using System.Collections.Immutable;
 

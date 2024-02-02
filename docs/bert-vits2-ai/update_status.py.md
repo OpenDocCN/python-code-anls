@@ -1,6 +1,6 @@
 # `Bert-VITS2\update_status.py`
 
-```
+```py
 # 导入 os 模块和 gradio 模块
 import os
 import gradio as gr

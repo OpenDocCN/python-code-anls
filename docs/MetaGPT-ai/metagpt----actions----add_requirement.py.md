@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\add_requirement.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定 Python 解释器路径，使得脚本可以在不同环境中运行

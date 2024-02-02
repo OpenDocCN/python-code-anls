@@ -1,6 +1,6 @@
 # `basic-computer-games\95_Weekday\java\Weekday.java`
 
-```
+```py
 import java.util.Scanner;
 
 /**

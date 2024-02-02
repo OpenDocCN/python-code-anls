@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\python\war.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定脚本解释器为 Python 3
 

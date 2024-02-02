@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\78_Sine_Wave\C++\sinewave.cpp`
 
-```
+```py
 #include <iostream> // 包含输入输出流库
 #include <string>    // 包含字符串库，用于创建字符串
 #include <cmath>    // 包含数学库，用于计算正弦值

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Globals.cs`
 
-```
+```py
 # 声明 DotnetUtils 命名空间
 namespace DotnetUtils;
 

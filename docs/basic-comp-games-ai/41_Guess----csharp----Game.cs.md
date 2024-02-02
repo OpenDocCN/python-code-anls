@@ -1,6 +1,6 @@
 # `basic-computer-games\41_Guess\csharp\Game.cs`
 
-```
+```py
 namespace Guess;
 
 internal class Game

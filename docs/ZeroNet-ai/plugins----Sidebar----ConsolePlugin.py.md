@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\ConsolePlugin.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 # 导入 logging 模块，用于记录日志

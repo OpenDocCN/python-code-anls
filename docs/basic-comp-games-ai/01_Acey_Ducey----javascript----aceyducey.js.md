@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\javascript\aceyducey.js`
 
-```
+```py
 // UTILITY VARIABLES
 
 // 默认情况下：

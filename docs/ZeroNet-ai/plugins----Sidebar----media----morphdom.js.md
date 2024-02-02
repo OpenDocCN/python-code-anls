@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Sidebar\media\morphdom.js`
 
-```
+```py
 // 定义一个立即执行函数，用于导出 morphdom 模块
 (function(f){
     // 如果是 CommonJS 环境，则导出模块

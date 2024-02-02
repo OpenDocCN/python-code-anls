@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\edit\matchtags.js`
 
-```
+```py
 // 将整个代码块包裹在一个立即执行的匿名函数中，传入CodeMirror对象
 (function(mod) {
   // 如果是CommonJS环境，使用require引入依赖

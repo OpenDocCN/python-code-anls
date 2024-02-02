@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\core\events\handler.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入时间模块

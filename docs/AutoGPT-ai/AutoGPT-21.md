@@ -1188,7 +1188,7 @@ from ..registry import ability
 这段代码定义了一个名为 `list_files` 的异步函数，它接受一个 `agent` 对象、一个任务 ID 和一个文件夹路径参数。它的作用是返回 agent 对象的工作区目录中所有文件的列表。
 
 函数的实现非常简单，直接调用了 `agent.workspace.list` 方法，传入参数 `task_id` 和 `path`，然后返回返回结果。这个函数可以在异步上下文中使用，比如使用 `asyncio` 库的 `list_files` 函数可以写成：
-```pybash
+```py
 import asyncio
 
 async def list_files(agent, task_id: str, path: str) -> List[str]:
@@ -1861,7 +1861,7 @@ async def read_webpage(agent, task_id: str, url: str, question: str = "") -> Tup
 具体来说，这个函数接受一个参数`driver`，它是一个`WebDriver`对象，表示要操作的浏览器窗口。函数内部通过调用`execute_script`方法获取网页的DOM内容，并使用`BeautifulSoup`库将DOM内容转换为XML解析器可以处理的格式。然后函数遍历XML文档中的所有`script`和`style`标签，并提取出每个标签的`src`属性的值，最终返回文本内容。
 
 函数的实现大致如下：
-```pyscss
+```py
 def scrape_text_with_selenium(driver: WebDriver) -> str:
    text = driver.execute_script("return document.body.outerHTML;")
    soup = BeautifulSoup(text, "html.parser")

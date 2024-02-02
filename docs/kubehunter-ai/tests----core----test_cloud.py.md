@@ -1,6 +1,6 @@
 # `kubehunter\tests\core\test_cloud.py`
 
-```
+```py
 # 导入requests_mock和json模块
 import requests_mock
 import json

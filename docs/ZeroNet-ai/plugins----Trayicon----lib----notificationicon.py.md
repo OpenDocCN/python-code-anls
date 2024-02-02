@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Trayicon\lib\notificationicon.py`
 
-```
+```py
 # 导入 ctypes 库，用于操作 Windows 窗口任务栏通知图标
 # 导入 os、uuid、time、gevent、threading 库
 import ctypes

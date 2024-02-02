@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\python\tower.py`
 
-```
+```py
 import sys
 from typing import List, Optional
 

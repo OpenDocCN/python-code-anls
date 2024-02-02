@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Flag.py`
 
-```
+```py
 # 导入 defaultdict 类
 from collections import defaultdict
 

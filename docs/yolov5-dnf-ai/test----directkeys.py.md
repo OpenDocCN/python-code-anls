@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\directkeys.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 导入win32api模块
 # 导入win32con模块

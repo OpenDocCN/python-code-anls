@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\__main__.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 import logging  # 导入日志模块

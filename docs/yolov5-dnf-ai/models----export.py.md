@@ -1,6 +1,6 @@
 # `yolov5-DNF\models\export.py`
 
-```
+```py
 """Exports a YOLOv5 *.pt model to ONNX and TorchScript formats
 
 Usage:

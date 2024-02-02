@@ -1,6 +1,6 @@
 # `arknights-mower\diy.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 从 datetime 模块中导入 datetime 类

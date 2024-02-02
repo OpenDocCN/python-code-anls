@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\ops\evaluate.py`
 
-```
+```py
 # 导入 functools 模块
 import functools
 

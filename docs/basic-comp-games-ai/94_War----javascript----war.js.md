@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\javascript\war.js`
 
-```
+```py
 // WAR
 //
 // Original conversion from BASIC to Javascript by Oscar Toledo G. (nanochess)

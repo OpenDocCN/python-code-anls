@@ -1,6 +1,6 @@
 # `basic-computer-games\89_Tic-Tac-Toe\csharp\tictactoe1\Program.cs`
 
-```
+```py
 // 在屏幕上打印文本，文本前面有30个空格
 Console.WriteLine("TIC TAC TOE".PadLeft(30));
 // 在屏幕上打印文本，文本前面有15个空格

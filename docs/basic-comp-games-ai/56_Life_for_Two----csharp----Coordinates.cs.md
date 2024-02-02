@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Coordinates.cs`
 
-```
+```py
 // 命名空间声明
 namespace LifeforTwo;
 

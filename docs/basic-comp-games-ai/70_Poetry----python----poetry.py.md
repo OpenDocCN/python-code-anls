@@ -1,6 +1,6 @@
 # `basic-computer-games\70_Poetry\python\poetry.py`
 
-```
+```py
 """
 POETRY
 

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_md_in_html.py`
 
-```
+```py
 
 # -*- coding: utf-8 -*-
 """

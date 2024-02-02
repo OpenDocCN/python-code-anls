@@ -1,6 +1,6 @@
 # `basic-computer-games\31_Depth_Charge\python\depth_charge.py`
 
-```
+```py
 """
 Original BASIC version as published in Basic Computer Games (1978)
 https://www.atariarchives.org/basicgames/showpage.php?page=55

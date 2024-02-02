@@ -1607,7 +1607,7 @@ def run_benchmark(
 
 这段代码使用了 Click 库来实现命令行脚本的选项。具体来说，它是一个带有几个选项的命令行选项函数，用于在命令行脚本运行时提供选项。
 
-```pypython
+```py
 @click.group(invoke_without_command=True)
 @click.option("--backend", is_flag=True, help="If it's being run from the cli")
 @click.option("-c", "--category", multiple=True, help="Specific category to run")

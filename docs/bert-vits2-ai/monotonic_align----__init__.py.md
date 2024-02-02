@@ -1,6 +1,6 @@
 # `Bert-VITS2\monotonic_align\__init__.py`
 
-```
+```py
 # 从 numpy 库中导入 zeros, int32, float32 方法
 # 从 torch 库中导入 from_numpy 方法
 from numpy import zeros, int32, float32

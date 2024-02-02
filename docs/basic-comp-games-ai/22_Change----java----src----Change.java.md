@@ -1,6 +1,6 @@
 # `basic-computer-games\22_Change\java\src\Change.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.Scanner;  // 导入 Scanner 类
 

@@ -1,6 +1,6 @@
 # `KubiScan\misc\constants.py`
 
-```
+```py
 # 定义风险命名空间常量
 RISKY_NAMESPACE = 'risky-namespace'
 # 定义角色类型常量

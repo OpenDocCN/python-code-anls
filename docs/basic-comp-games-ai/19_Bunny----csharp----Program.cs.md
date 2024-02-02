@@ -1,6 +1,6 @@
 # `basic-computer-games\19_Bunny\csharp\Program.cs`
 
-```
+```py
 # 引入命名空间 System，包含了常用的类和方法
 using System;
 # 引入命名空间 System.Collections.Generic，包含了泛型集合类

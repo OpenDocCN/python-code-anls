@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\_compat.py`
 
-```
+```py
 
 # 导入 platform 模块，用于获取系统信息
 import platform

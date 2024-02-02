@@ -154,7 +154,7 @@ article](https://wiki.archlinux.org/index.php/ZeroNet) для дальнейше
 
 Завершите работу zeronet, если он запущен
 
-```bash
+```py
 $ zeronet.py siteCreate
 ...
 - Site private key (Приватный ключ сайта): 23DKQpzxhbVBrAtvLEc2uvk7DZweh4qL3fn3jpM3LgHDczMK2TtYUq
@@ -176,7 +176,7 @@ $ zeronet.py
 * Измените файлы расположенные в data/13DNDkMUExRf9Xa9ogwPKqp7zyHFEqbhC2 директории.
   Когда закончите с изменением:
 
-```bash
+```py
 $ zeronet.py siteSign 13DNDkMUExRf9Xa9ogwPKqp7zyHFEqbhC2
 - Signing site (Подпись сайта): 13DNDkMUExRf9Xa9ogwPKqp7zyHFEqbhC2...
 Private key (Приватный ключ) (input hidden):
@@ -184,7 +184,7 @@ Private key (Приватный ключ) (input hidden):
 
 * Введите секретный ключ, который вы получили при создании сайта, потом:
 
-```bash
+```py
 $ zeronet.py sitePublish 13DNDkMUExRf9Xa9ogwPKqp7zyHFEqbhC2
 ...
 Site:13DNDk..bhC2 Publishing to 3/10 peers...

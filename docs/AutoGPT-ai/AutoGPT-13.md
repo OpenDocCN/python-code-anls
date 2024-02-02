@@ -739,7 +739,7 @@ class ErrorInfo(BaseModel):
         return self.repr
 
 
-```
+```py
 
 这段代码定义了一个名为 ActionErrorResult 的类，其继承自 BaseModel 类(可能是某个具体库中的模型类)。
 
@@ -769,7 +769,7 @@ class ActionErrorResult(BaseModel):
         return f"Action failed: '{self.reason}'"
 
 
-```
+```py
 
 这段代码定义了一个名为 "ActionInterruptedByHuman" 的类，继承自 "BaseModel" 类。该类包含一个 "feedback" 字段，一个名为 "status"，其值为 "interrupted_by_human"。
 
@@ -802,7 +802,7 @@ class Episode(BaseModel):
         return executed_action + action_result
 
 
-```
+```py
 
 This is a class that appears to organize the steps of a process, such as a computation or a conversation. It has a current_episode member variable that is a list of episodes, which are themselves objects that represent the steps of the process. It also has a number_of_episodes member variable that is the number of episodes in the current cycle.
 
@@ -897,7 +897,7 @@ class EpisodicActionHistory(BaseModel):
 
         return "\n\n".join(steps)
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/models/base_open_ai_plugin.py`
 
@@ -906,7 +906,7 @@ This is a chatbot skeleton implementation using NLTK, spaCy, and the chatbot fra
 First, we need to install the required packages by running the following command:
 ```pydiff
 !pip install nltk spaCy chatbot-fr-api
-```
+```py
 The `!pip install` command installs the required packages for this project. `nlter` is the chatbot library that provides the chatbot framework. `spaCy` is a popular natural language processing library. `chatbot-fr-api` is a chatbot API library for France.
 
 After installing the required packages, we can create a new chatbot object and initialize its components as follows:
@@ -917,12 +917,12 @@ from nltk.tokenize import word_tokenize
 from spaCy import Text
 from spaCy.notify import和我聊
 from chatbot_fr_api import Chatbot
-```
+```py
 The `spaCy` and `chatbot_fr_api` objects are initialized with their respective APIs. `Text` is a class to represent text documents. `和我聊` is a class to handle the user's message.
 
 Now, we can create a new chatbot object by passing the required parameters to the `Chatbot` constructor:
 ```py
-```
+```py
 
 
 ```py
@@ -1178,7 +1178,7 @@ class BaseOpenAIPlugin(AutoGPTPluginTemplate):
             message (str): The message to report.
         """
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/models/command.py`
 
@@ -1210,7 +1210,7 @@ CommandReturnValue = Any
 CommandOutput = CommandReturnValue | tuple[CommandReturnValue, ContextItem]
 
 
-```
+```py
 
 This is a class definition for a `Command` object that has a method for executing a specified function and a list of parameters. The method has an optional `disabled_reason` parameter to specify why the command is disabled, and an `available` parameter to specify whether the command is available to the agent. The method also has a `__call__` method that is a special method in the class that allows the command to be executed. The class has a `__init__` method that is used to initialize the command object with the given parameters and options. The class also defines a property `is_async` that indicates whether the method is an asynchronous function.
 
@@ -1269,7 +1269,7 @@ class Command:
         ]
         return f"{self.name}: {self.description.rstrip('.')}. Params: ({', '.join(params)})"
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/models/command_parameter.py`
 
@@ -1298,7 +1298,7 @@ class CommandParameter:
     def __repr__(self):
         return f"CommandParameter('{self.name}', '{self.spec.type}', '{self.spec.description}', {self.spec.required})"
 
-```
+```py
 
 # `autogpts/autogpt/autogpt/models/command_registry.py`
 
@@ -1343,7 +1343,7 @@ if TYPE_CHECKING:
 
 
 from autogpt.command_decorator import AUTO_GPT_COMMAND_IDENTIFIER
-```
+```py
 
 This is a Python class that provides a method for registering command plugins in an application.
 

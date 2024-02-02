@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\utils.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 从 functools 模块中导入 reduce 函数

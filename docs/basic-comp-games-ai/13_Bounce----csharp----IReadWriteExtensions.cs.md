@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\IReadWriteExtensions.cs`
 
-```
+```py
 # 创建名为Bounce的命名空间
 namespace Bounce;
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\Randomness\IRandomExtensions.cs`
 
-```
+```py
 // 提供对 <see cref="IRandom" /> 的扩展方法，以在给定范围内提供随机数
 public static class IRandomExtensions
 {

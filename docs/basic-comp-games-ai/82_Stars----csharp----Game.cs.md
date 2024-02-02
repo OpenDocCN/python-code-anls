@@ -1,6 +1,6 @@
 # `basic-computer-games\82_Stars\csharp\Game.cs`
 
-```
+```py
 namespace Stars;
 # 创建名为 Stars 的命名空间
 

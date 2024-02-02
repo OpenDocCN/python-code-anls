@@ -1,6 +1,6 @@
 # `KubiScan\engine\subject.py`
 
-```
+```py
 # 定义一个主题类，用于表示三种类型的主题：用户、组和服务账户
 # 参考链接：https://github.com/kubernetes-client/python/blob/master/kubernetes/docs/V1Subject.md
 class Subject:

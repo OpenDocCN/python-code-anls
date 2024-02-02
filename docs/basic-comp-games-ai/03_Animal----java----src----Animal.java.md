@@ -1,6 +1,6 @@
 # `basic-computer-games\03_Animal\java\src\Animal.java`
 
-```
+```py
 import java.util.ArrayList;  // 导入 ArrayList 类
 import java.util.List;  // 导入 List 接口
 import java.util.Locale;  // 导入 Locale 类

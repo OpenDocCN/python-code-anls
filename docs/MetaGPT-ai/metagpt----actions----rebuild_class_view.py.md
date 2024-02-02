@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\rebuild_class_view.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

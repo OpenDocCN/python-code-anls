@@ -1,6 +1,6 @@
 # `basic-computer-games\54_Letter\java\src\Letter.java`
 
-```
+```py
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;

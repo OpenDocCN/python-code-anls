@@ -1,6 +1,6 @@
 # `MetaGPT\examples\use_off_the_shelf_agent.py`
 
-```
+```py
 """
 Filename: MetaGPT/examples/use_off_the_shelf_agent.py
 Created Date: Tuesday, September 19th 2023, 6:52:25 pm

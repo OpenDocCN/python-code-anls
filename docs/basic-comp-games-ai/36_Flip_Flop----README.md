@@ -2,13 +2,13 @@
 
 The object of this game is to change a row of ten X’s
 
-```
+```py
 X X X X X X X X X X
 ```
 
 to a row of ten 0’s
 
-```
+```py
 0 0 0 0 0 0 0 0 0 0
 ```
 

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Site\SiteManager.py`
 
-```
+```py
 # 导入所需的模块
 import json
 import logging

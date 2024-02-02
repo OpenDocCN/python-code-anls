@@ -1,6 +1,6 @@
 # `basic-computer-games\11_Bombardment\java\src\Bombardment.java`
 
-```
+```py
 import java.util.HashSet;
 import java.util.Scanner;
 

@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\HubertSoft_Onnx.py`
 
-```
+```py
 # 导入 onnxruntime 库
 import onnxruntime
 # 导入 torch 库

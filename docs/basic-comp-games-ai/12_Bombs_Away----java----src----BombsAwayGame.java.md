@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\java\src\BombsAwayGame.java`
 
-```
+```py
 // 定义名为BombsAwayGame的公共类
 public class BombsAwayGame {
 

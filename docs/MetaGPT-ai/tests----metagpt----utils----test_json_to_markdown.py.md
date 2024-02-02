@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\utils\test_json_to_markdown.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

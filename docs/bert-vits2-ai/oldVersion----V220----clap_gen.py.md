@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V220\clap_gen.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 from multiprocessing import Pool, cpu_count

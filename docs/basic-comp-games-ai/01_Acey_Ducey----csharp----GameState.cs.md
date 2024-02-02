@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\csharp\GameState.cs`
 
-```
+```py
 namespace AceyDucey
 {
     /// <summary>

@@ -1,6 +1,6 @@
 # `basic-computer-games\55_Life\csharp\Program.cs`
 
-```
+```py
 // 设置最大宽度和最大高度的常量
 const int maxWidth = 70;
 const int maxHeight = 24;

@@ -1,6 +1,6 @@
 # `basic-computer-games\03_Animal\python\animal.py`
 
-```
+```py
 """
 Animal
 

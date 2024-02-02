@@ -1,6 +1,6 @@
 # `basic-computer-games\55_Life\python\life.py`
 
-```
+```py
 """
 LIFE
 

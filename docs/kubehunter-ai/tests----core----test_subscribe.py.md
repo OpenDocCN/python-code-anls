@@ -1,6 +1,6 @@
 # `kubehunter\tests\core\test_subscribe.py`
 
-```
+```py
 # 导入时间模块
 import time
 

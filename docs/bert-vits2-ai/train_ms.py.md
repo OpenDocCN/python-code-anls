@@ -1,6 +1,6 @@
 # `Bert-VITS2\train_ms.py`
 
-```
+```py
 # flake8: noqa: E402
 # 导入必要的库
 import platform

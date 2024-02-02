@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\whisper\model.py`
 
-```
+```py
 # 从 dataclasses 模块中导入 dataclass 装饰器
 # 从 typing 模块中导入 Dict, Iterable, Optional 类型
 import numpy as np

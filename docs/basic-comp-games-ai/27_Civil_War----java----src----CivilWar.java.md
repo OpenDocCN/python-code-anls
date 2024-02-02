@@ -1,6 +1,6 @@
 # `basic-computer-games\27_Civil_War\java\src\CivilWar.java`
 
-```
+```py
 // 导入所需的类
 import java.io.PrintStream;
 import java.util.InputMismatchException;

@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\fallback\ecc.py`
 
-```
+```py
 # 导入 hmac、os 模块，以及当前目录下的 _jacobian 模块、上一级目录下的 _ecc 模块、当前目录下的 aes 模块、当前目录下的 _util 模块
 import hmac
 import os

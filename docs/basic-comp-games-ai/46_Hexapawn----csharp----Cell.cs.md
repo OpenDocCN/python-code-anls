@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Cell.cs`
 
-```
+```py
 // 引入 System 和 System.Collections.Generic 命名空间
 using System;
 using System.Collections.Generic;

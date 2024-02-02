@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Choices.cs`
 
-```
+```py
 using System;
 
 namespace RockScissorsPaper

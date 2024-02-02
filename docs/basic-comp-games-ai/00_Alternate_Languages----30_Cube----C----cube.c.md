@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\30_Cube\C\cube.c`
 
-```
+```py
 #include <stdio.h>  // 包含标准输入输出头文件
 #include <stdlib.h>  // 包含标准库头文件
 #include <time.h>  // 包含时间头文件

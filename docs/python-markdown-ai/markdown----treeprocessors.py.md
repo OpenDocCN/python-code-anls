@@ -1,6 +1,6 @@
 # `markdown\markdown\treeprocessors.py`
 
-```
+```py
 
 # Python Markdown
 

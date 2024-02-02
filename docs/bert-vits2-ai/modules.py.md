@@ -1,6 +1,6 @@
 # `Bert-VITS2\modules.py`
 
-```
+```py
 import math  # 导入 math 模块
 import torch  # 导入 torch 模块
 from torch import nn  # 从 torch 模块中导入 nn 模块

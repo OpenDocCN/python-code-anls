@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\iflytek_tts.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

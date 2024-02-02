@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_code_hilite.py`
 
-```
+```py
 """
 这段代码是一个关于Python Markdown的模块的文档和声明部分。
 

@@ -1,6 +1,6 @@
 # `ZeroNet\src\Crypt\CryptRsa.py`
 
-```
+```py
 # 导入 base64 和 hashlib 模块
 import base64
 import hashlib

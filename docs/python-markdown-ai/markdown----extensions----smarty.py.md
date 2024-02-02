@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\smarty.py`
 
-```
+```py
 
 # Smarty extension for Python-Markdown
 # ====================================

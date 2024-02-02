@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\Game.cs`
 
-```
+```py
 namespace King;
 
 internal class Game

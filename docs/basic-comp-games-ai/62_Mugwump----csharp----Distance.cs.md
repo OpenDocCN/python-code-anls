@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\Distance.cs`
 
-```
+```py
 # 在Mugwump命名空间下定义一个内部结构Distance
 namespace Mugwump;
 

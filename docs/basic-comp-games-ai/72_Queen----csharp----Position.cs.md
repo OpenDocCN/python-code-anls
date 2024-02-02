@@ -1,6 +1,6 @@
 # `basic-computer-games\72_Queen\csharp\Position.cs`
 
-```
+```py
 # 命名空间 Queen 下的内部记录结构 Position，包含对角线和行两个整数属性
 internal record struct Position(int Diagonal, int Row)
 {

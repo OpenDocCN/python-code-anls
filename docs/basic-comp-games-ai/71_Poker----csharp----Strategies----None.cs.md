@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Strategies\None.cs`
 
-```
+```py
 # 创建一个名为None的内部类，继承自Strategy类
 internal class None : Strategy
 {

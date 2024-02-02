@@ -1,6 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\javascript\litquiz.js`
 
-```
+```py
 // 定义一个打印函数，将字符串输出到指定的元素中
 function print(str)
 {

@@ -11,12 +11,12 @@ The `generation` folder has outputs from the models studied in our paper. This i
 The `ratings-gpt4` and `ratings-human` have the automated and human ratings described in our paper.
 
 We use the following naming conventions files with generations from the models we train: 
-```
+```py
 <model size>-<model name>-[oa or vicuna]-generations-topp0.9-temp0.7.jsonl
 ```
 
 For automated comparisons, we use the convention:
-```
+```py
 <generation file name 1>-vs-<generation file name 2>-<reviewer>-reviewer.jsonl
 ```
 We note that pairwise comparisons also have the additional `-threeclass` term in their name. Finally OpenAI models and baselines from other papers might have slightly different naming styles.
@@ -25,7 +25,7 @@ We note that pairwise comparisons also have the additional `-threeclass` term in
 ## Generating Responses
 After adding the OpenAI key as an evnironment variable, you can generate responses for both Vicuna and OA benchmarks using OpenAI models with the command below. Note that you can use `MODEL` to change between `gpt-4` and `gpt-3.5-turbo`.
 
-```bash
+```py
 python qa_baseline_gpt35.py --question prompts/oa_questions.jsonl --output generations/answer_gpt35.jsonl
 ```
 
@@ -34,7 +34,7 @@ In our paper we explore using GPT-4 to rate generations automatically. Note that
 
 The ratings for the Vicuna benchmark can be obtained with the following command:
 
-```bash
+```py
 python eval_gpt_review.py \
     -a generations/vicuna/answer_gpt35.jsonl generations/vicuna/65b-guanaco-vicuna-generations-topp0.9-beam1.jsonl \
     -q prompts/vicuna_questions.jsonl \
@@ -46,7 +46,7 @@ python eval_gpt_review.py \
 
 The ratings for the OA benchmark can be obtained with the following command:
 
-```bash
+```py
 python eval_gpt_review.py \
     -a generations/oa/gpt-3.5-oa-generations.jsonl generations/oa/65b-guanaco-oa-generations-topp0.9-beam1.jsonl \
     -q prompts/oa_questions.jsonl \

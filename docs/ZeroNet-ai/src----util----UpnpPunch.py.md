@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\UpnpPunch.py`
 
-```
+```py
 import re  # 导入正则表达式模块
 import urllib.request  # 导入用于发送 HTTP 请求的模块
 import http.client  # 导入用于处理 HTTP 连接的模块

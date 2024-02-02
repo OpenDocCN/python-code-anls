@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\AnnounceLocal\AnnounceLocalPlugin.py`
 
-```
+```py
 # 导入时间模块
 import time
 

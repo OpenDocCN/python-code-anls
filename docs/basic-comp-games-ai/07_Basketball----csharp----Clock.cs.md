@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Clock.cs`
 
-```
+```py
 // 使用 Basketball.Resources 命名空间
 // 使用 Games.Common.IO 命名空间
 namespace Basketball

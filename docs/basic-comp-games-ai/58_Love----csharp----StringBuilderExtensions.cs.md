@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\csharp\StringBuilderExtensions.cs`
 
-```
+```py
 # 使用 System.Text 命名空间
 using System.Text;
 

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\roles\test_project_manager.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\japanese.py`
 
-```
+```py
 # 从指定 URL 修改而来，导入所需的模块
 import re  # 导入正则表达式模块
 import sys  # 导入系统模块

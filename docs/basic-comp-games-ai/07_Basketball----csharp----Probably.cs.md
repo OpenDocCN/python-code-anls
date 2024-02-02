@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Probably.cs`
 
-```
+```py
 using Games.Common.Randomness;  // 导入随机数生成器接口
 
 namespace Basketball;  // 命名空间声明

@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ComputerFunctions\GalacticReport.cs`
 
-```
+```py
 // 引入命名空间
 using System.Collections.Generic;
 using System.Linq;

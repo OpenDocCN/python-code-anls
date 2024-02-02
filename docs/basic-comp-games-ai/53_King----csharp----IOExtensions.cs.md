@@ -1,6 +1,6 @@
 # `basic-computer-games\53_King\csharp\IOExtensions.cs`
 
-```
+```py
 // 引入命名空间 System.Diagnostics.CodeAnalysis，用于指定代码中的非空引用和可空引用的行为
 using System.Diagnostics.CodeAnalysis;
 // 引入 King.Resources.Resource 命名空间下的 Resource 类

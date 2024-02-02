@@ -1,6 +1,6 @@
 # `basic-computer-games\61_Math_Dice\csharp\GameState.cs`
 
-```
+```py
 # 命名空间 MathDice 中定义了一个枚举类型 GameState
 namespace MathDice
 {

@@ -1,6 +1,6 @@
 # `qlora\eval\eval_gpt_review.py`
 
-```
+```py
 # 从指定链接中导入所需的库
 import argparse  # 导入命令行参数解析模块
 import json  # 导入处理 JSON 数据的模块

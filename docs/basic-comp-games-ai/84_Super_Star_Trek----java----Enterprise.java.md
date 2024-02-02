@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\java\Enterprise.java`
 
-```
+```py
 # 导入 java.util.stream.IntStream 类
 import java.util.stream.IntStream;
 

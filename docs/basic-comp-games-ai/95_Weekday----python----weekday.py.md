@@ -1,6 +1,6 @@
 # `basic-computer-games\95_Weekday\python\weekday.py`
 
-```
+```py
 """
 WEEKDAY
 

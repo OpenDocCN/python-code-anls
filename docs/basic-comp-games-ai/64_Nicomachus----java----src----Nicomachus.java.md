@@ -1,6 +1,6 @@
 # `basic-computer-games\64_Nicomachus\java\src\Nicomachus.java`
 
-```
+```py
 import java.util.Arrays;  // 导入 Arrays 类
 import java.util.Scanner;  // 导入 Scanner 类
 

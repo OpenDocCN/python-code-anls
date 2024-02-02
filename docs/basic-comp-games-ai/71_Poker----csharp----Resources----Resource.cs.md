@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Resources\Resource.cs`
 
-```
+```py
 // 引入系统反射和运行时编译服务命名空间
 using System.Reflection;
 using System.Runtime.CompilerServices;

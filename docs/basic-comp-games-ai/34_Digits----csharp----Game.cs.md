@@ -1,6 +1,6 @@
 # `basic-computer-games\34_Digits\csharp\Game.cs`
 
-```
+```py
 namespace Digits;
 
 internal class GameSeries

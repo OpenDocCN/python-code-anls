@@ -249,7 +249,7 @@ The `AssistantChatPrompt` class has the following methods:
 * `_create_plan_function(agents: List[str], capabilities: List[str], system_info: List[str]) -> None`: A function for creating a plan based on the given capabilities and system information.
 
 This class can be used in an `Assistant` class as follows:
-```pyscss
+```py
 assistant = Assistant(
    __name__ = "assistant_name",
    agent_name = "assistant_agent_name",
@@ -1310,7 +1310,7 @@ def to_numbered_list(
 
 如果 `ast.parse()` 函数成功解析 JSON，则返回解析后的数据，否则会执行下面的代码：
 
-```pypython
+```py
 try:
    print(f"json decode error {e}. trying literal eval")
    return ast.literal_eval(json_str)

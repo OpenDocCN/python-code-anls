@@ -1,6 +1,6 @@
 # `kubehunter\setup.py`
 
-```
+```py
 # 导入需要的模块
 from subprocess import check_call
 from pkg_resources import parse_requirements

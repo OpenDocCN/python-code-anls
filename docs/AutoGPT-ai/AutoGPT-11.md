@@ -744,7 +744,7 @@ logger = logging.getLogger(__name__)
 def extract_dict_from_response(response_content: str) -> dict[str, Any]:
     # Sometimes the response includes the JSON in a code block with ```
     if response_content.startswith("```py") and response_content.endswith("```"):
-        # Discard the first and last ```py, then re-join in case the response naturally included ```
+        # Discard the first and last ```py, then re-join in case the response naturally included ```py
         response_content = "```py".join(response_content.split("```")[1:-1])
 
     # response content comes from OpenAI as a Python `str(content_dict)`, literal_eval reverses this

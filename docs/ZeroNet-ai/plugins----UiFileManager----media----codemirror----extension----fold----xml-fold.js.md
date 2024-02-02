@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\fold\xml-fold.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）包装代码，传入 CodeMirror 对象
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 引入 CodeMirror 模块

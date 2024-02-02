@@ -1,6 +1,6 @@
 # `basic-computer-games\22_Change\javascript\change.js`
 
-```
+```py
 // 定义一个打印函数，将字符串添加到输出元素中
 function print(str)
 {

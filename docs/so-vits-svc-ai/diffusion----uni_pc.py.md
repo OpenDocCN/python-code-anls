@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\uni_pc.py`
 
-```
+```py
 import math  # 导入数学库
 import torch  # 导入PyTorch库
 

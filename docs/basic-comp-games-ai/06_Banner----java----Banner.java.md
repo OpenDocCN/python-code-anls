@@ -1,6 +1,6 @@
 # `basic-computer-games\06_Banner\java\Banner.java`
 
-```
+```py
 import java.util.Scanner;  // 导入 Scanner 类，用于用户输入
 import java.util.HashMap;  // 导入 HashMap 类，用于创建符号数据的映射
 import java.util.Map;  // 导入 Map 接口，用于存储符号数据的映射

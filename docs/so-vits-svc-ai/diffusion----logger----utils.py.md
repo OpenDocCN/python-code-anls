@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\logger\utils.py`
 
-```
+```py
 # 导入 json、os、torch 和 yaml 模块
 import json
 import os

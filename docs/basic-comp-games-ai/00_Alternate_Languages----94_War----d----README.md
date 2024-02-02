@@ -5,7 +5,7 @@ Converted to [D](https://dlang.org/) by [Bastiaan Veelo](https://github.com/veel
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
-```shell
+```py
 dmd -preview=dip1000 -run war.d
 ```
 
@@ -20,7 +20,7 @@ This game code contains some specialties that you might want to know more about.
 Most modern consoles are capable of displaying more than just ASCII, and so I have chosen to display the actual ♠, ♥, ♦
 and ♣ instead of substituting them by letters like the BASIC original did. Only the Windows console needs a nudge in
 the right direction with these instructions:
-```d
+```py
 SetConsoleOutputCP(CP_UTF8); // Set code page
 SetConsoleOutputCP(GetACP);  // Restore the default
 ```
@@ -29,7 +29,7 @@ Instead of cluttering the `main()` function with these lesser important details,
 `main()` respectively. And because order of declaration is irrelevant in a D module, we can push those all the way
 down to the bottom of the file. This is of course only necessary on Windows (and won't even work anywhere else) so
 we'll need to wrap this in a `version (Windows)` conditional code block:
-```d
+```py
 version (Windows)
 {
     import core.sys.windows.windows;
@@ -53,12 +53,12 @@ check these for memory-safety, and so we must indicate that we have reviewed the
 ### Uniform Function Call Syntax
 
 In case you wonder why this line works:
-```d
+```py
 if ("Do you want instructions?".yes)
     // ...
 ```
 then it is because this is equivalent to
-```d
+```py
 if (yes("Do you want instructions?"))
     // ...
 ```
@@ -67,18 +67,18 @@ is called [uniform function call syntax (UFCS)](https://dlang.org/spec/function.
 passing what is in front of the dot as the first parameter to the function, and it was invented to make it possible to
 call free functions on objects as if they were member functions. UFCS can also be used to obtain a more natural order
 of function calls, such as this line inside `yes()`:
-```d
+```py
 return trustedReadln.strip.toLower.startsWith("y");
 ```
 which reads easier than the equivalent
-```d
+```py
 return startsWith(toLower(strip(trustedReadln())), "y");
 ```
 
 ### Type a lot or not?
 
 It would have been straight forward to define the `cards` array explicitly like so:
-```d
+```py
 const cards = ["2♠", "2♥", "2♦", "2♣", "3♠", "3♥", "3♦", "3♣",
                "4♠", "4♥", "4♦", "4♣", "5♠", "5♥", "5♦", "5♣",
                "6♠", "6♥", "6♦", "6♣", "7♠", "7♥", "7♦", "7♣",
@@ -89,7 +89,7 @@ const cards = ["2♠", "2♥", "2♦", "2♣", "3♠", "3♥", "3♦", "3♣",
 ```
 but that's tedious, difficult to spot errors in (*can you?*) and looks like something a computer can automate. Indeed
 it can:
-```d
+```py
 static const cards = cartesianProduct(["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"],
                                       ["♠", "♥", "♦", "♣"]).map!(a => a.expand.only.join).array;
 ```
@@ -116,7 +116,7 @@ array of cards itself. This then requires the use of a lookup table or searching
 when comparing cards.
 
 I find the original more elegant, so that's what you see here:
-```d
+```py
 const indices = iota(0, cards.length).array.randomShuffle;
 ```
 [`iota`](https://dlang.org/phobos/std_range.html#iota) produces a range of integers, in this case starting at 0 and

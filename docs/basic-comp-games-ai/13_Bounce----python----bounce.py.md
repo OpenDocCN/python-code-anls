@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\python\bounce.py`
 
-```
+```py
 """
 BOUNCE
 

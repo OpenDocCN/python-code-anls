@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\cleaner.py`
 
-```
+```py
 # 从当前目录中导入 chinese 模块和 cleaned_text_to_sequence 函数
 from . import chinese, cleaned_text_to_sequence
 

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_toc.py`
 
-```
+```py
 """
 这段代码是一个多行注释，用三个双引号包裹起来，用于对整个模块进行说明和文档化。
 

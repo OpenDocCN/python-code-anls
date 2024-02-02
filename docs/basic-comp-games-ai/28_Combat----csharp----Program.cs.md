@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\Program.cs`
 
-```
+```py
 namespace Game
 {
     class Program

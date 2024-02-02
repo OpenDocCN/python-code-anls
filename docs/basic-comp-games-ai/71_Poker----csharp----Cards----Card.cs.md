@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\Card.cs`
 
-```
+```py
 # 在Poker.Cards命名空间下定义一个内部的记录结构Card，包含Rank和Suit两个属性
 internal record struct Card (Rank Rank, Suit Suit)
 {

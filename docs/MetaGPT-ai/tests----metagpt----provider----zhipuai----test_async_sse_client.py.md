@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\provider\zhipuai\test_async_sse_client.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # 指定解释器为 python

@@ -1,6 +1,6 @@
 # `basic-computer-games\52_Kinema\python\kinema.py`
 
-```
+```py
 """
 KINEMA
 

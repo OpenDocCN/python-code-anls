@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\CrepeF0Predictor.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

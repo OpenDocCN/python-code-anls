@@ -1,6 +1,6 @@
 # `ZeroNet\src\Worker\Worker.py`
 
-```
+```py
 # 导入时间模块
 import time
 

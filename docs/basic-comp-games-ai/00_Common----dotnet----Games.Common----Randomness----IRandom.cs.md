@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\Randomness\IRandom.cs`
 
-```
+```py
 // 命名空间声明，表示该接口属于 Games.Common.Randomness 命名空间
 namespace Games.Common.Randomness;
 

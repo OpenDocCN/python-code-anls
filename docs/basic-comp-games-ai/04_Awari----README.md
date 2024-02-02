@@ -12,7 +12,7 @@ When either side is empty, the game is finished. The player with the most beans 
 
 In the computer version, the board is printed as 14 numbers representing the 14 pits.
 
-```
+```py
     3   3   3   3   3   3
 0                           0
     3   3   3   3   3   3

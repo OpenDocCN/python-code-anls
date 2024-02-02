@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_legacy_attrs.py`
 
-```
+```py
 """
 这段代码是一个测试用例，用于测试Python Markdown中的legacy_attrs扩展。它包含了一些Markdown格式的文本和对应的预期输出，以及一些测试相关的设置。
 

@@ -1,6 +1,6 @@
 # `yolov5-DNF\utils\general.py`
 
-```
+```py
 # 导入所需的库
 import glob  # 用于查找文件路径模式匹配
 import logging  # 用于记录日志信息

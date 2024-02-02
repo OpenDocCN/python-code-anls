@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\emb.py`
 
-```
+```py
 # 导入必要的模块
 import dataclasses
 import flax.linen as nn

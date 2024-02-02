@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestCryptBitcoin.py`
 
-```
+```py
 # 导入 CryptBitcoin 模块
 from Crypt import CryptBitcoin
 

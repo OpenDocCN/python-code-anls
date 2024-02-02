@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifiganwithsnake\alias\__init__.py`
 
-```
+```py
 # 从 https://github.com/junjun3518/alias-free-torch 中适配而来，使用 Apache License 2.0
 #   LICENSE 文件在 incl_licenses 目录中。
 

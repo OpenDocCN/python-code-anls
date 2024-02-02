@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Extensions\ImmutableArrayExtensions.cs`
 
-```
+```py
 // 命名空间声明，定义了类的作用域
 using System;
 using System.Collections.Immutable;

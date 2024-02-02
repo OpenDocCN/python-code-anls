@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\__init__.py`
 
-```
+```py
 # 从 utils 模块中导入 get_hparams_from_file 和 load_checkpoint 函数
 from utils import get_hparams_from_file, load_checkpoint
 # 导入 json 模块

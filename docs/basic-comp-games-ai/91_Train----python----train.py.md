@@ -1,6 +1,6 @@
 # `basic-computer-games\91_Train\python\train.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 设置脚本的解释器为 Python3
 

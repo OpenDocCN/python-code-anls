@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\prompt\default\Japanese-2.py`
 
-```
+```py
 # 定义接口符号
 interface = ":"
 # 定义用户名称

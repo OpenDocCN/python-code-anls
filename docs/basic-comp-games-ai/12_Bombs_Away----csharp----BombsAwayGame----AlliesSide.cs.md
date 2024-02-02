@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\AlliesSide.cs`
 
-```
+```py
 /// <summary>
 /// 盟军方。可以在解放者、B-29、B-17或兰开斯特飞行任务。
 /// </summary>

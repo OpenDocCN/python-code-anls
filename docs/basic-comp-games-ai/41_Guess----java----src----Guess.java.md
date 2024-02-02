@@ -1,6 +1,6 @@
 # `basic-computer-games\41_Guess\java\src\Guess.java`
 
-```
+```py
 // 导入必要的类
 import java.util.Arrays;
 import java.util.Scanner;

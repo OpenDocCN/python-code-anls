@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestHelper.py`
 
-```
+```py
 # 导入 socket 模块
 import socket
 # 导入 struct 模块

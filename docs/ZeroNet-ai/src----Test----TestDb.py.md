@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestDb.py`
 
-```
+```py
 import io  # 导入io模块
 
 

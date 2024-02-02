@@ -1,6 +1,6 @@
 # `basic-computer-games\69_Pizza\python\pizza.py`
 
-```
+```py
 """
 PIZZA
 

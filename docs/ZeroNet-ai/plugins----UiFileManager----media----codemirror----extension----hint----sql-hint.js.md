@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\hint\sql-hint.js`
 
-```
+```py
 // 使用立即执行函数表达式（IIFE）来创建一个模块化的作用域
 (function(mod) {
   // 如果是 CommonJS 环境，则使用 require 导入依赖模块

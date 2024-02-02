@@ -1,6 +1,6 @@
 # `Bert-VITS2\webui.py`
 
-```
+```py
 # 禁用 flake8 对 E402 错误的检查
 # 导入必要的模块
 import os

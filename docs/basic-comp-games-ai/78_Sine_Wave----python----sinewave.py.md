@@ -1,6 +1,6 @@
 # `basic-computer-games\78_Sine_Wave\python\sinewave.py`
 
-```
+```py
 # 导入 math 和 time 模块
 import math
 import time

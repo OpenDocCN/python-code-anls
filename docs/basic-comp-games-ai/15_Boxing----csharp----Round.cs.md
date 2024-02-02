@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\Round.cs`
 
-```
+```py
 namespace Boxing;
 
 class Round

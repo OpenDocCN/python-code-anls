@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\csharp\Program.cs`
 
-```
+```py
 // 输出标题
 WriteLine(new string('\t', 33) + "BOXING");
 // 输出创意计算的信息

@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Plays\BallContest.cs`
 
-```
+```py
 // 使用 Games.Common.IO 命名空间中的 IReadWrite 接口
 // 使用 Games.Common.Randomness 命名空间中的 IRandom 接口
 using Games.Common.IO;

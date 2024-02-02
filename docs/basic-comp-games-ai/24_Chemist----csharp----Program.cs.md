@@ -1,6 +1,6 @@
 # `basic-computer-games\24_Chemist\csharp\Program.cs`
 
-```
+```py
 // 定义最大生命值
 const int maxLives = 9;
 

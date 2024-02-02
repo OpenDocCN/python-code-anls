@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\GermanySide.cs`
 
-```
+```py
 /// <summary>
 /// 德国方面的主角。可以执行对俄罗斯、英格兰和法国的任务。
 /// </summary>

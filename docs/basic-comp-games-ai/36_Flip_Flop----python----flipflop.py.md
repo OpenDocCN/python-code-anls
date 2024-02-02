@@ -1,6 +1,6 @@
 # `basic-computer-games\36_Flip_Flop\python\flipflop.py`
 
-```
+```py
 # Flip Flop
 #
 # The object of this game is to change a row of ten X's

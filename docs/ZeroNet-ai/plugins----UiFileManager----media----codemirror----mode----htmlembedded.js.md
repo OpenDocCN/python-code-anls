@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\mode\htmlembedded.js`
 
-```
+```py
 # 导入模块
 (function(mod) {
   # 如果是 CommonJS 环境

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_def_list.py`
 
-```
+```py
 """
 这段代码是一个多行注释，用三个双引号包裹起来。
 它提供了关于Python Markdown的信息，包括文档链接、GitHub链接和PyPI链接。

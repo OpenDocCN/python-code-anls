@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\GameSession.java`
 
-```
+```py
 /**
  * Game Session
  * The session store the state of the game

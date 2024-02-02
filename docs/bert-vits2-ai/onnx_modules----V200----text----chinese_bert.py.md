@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V200\text\chinese_bert.py`
 
-```
+```py
 # 导入sys模块
 import sys
 

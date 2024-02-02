@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Game.cs`
 
-```
+```py
 using System;
 using System.Linq;
 

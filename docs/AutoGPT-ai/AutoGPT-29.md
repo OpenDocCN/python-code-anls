@@ -1188,7 +1188,7 @@ def get_ethereum_price() -> float:
        return data["ethereum"]["usd"]
    else:
        raise Exception(f"Failed to fetch data: {response.status_code}")
-```
+```py
 
 这段代码中，首先导入了 `requests` 模块，然后定义了一个名为 `get_ethereum_price` 的函数，该函数包含以下步骤：
 
@@ -1214,7 +1214,7 @@ def get_ethereum_price() -> float:
     else:
         raise Exception(f"Failed to fetch data: {response.status_code}")
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/library/ethereum/check_price/artifacts_out/test.py`
 
@@ -1260,7 +1260,7 @@ def test_get_ethereum_price() -> None:
     print("Matches")
 
 
-```
+```py
 
 这段代码是一个if语句，判断当前程序是否为__main__函数。如果当前程序是__main__函数，那么程序会执行if语句块内的代码。
 
@@ -1273,7 +1273,7 @@ if语句块之外，是一个简单的输出语句，输出一个字符串"Hello
 if __name__ == "__main__":
     test_get_ethereum_price()
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/library/ethereum/check_price/artifacts_out/__init__.py`
 
@@ -1282,7 +1282,7 @@ if __name__ == "__main__":
 
 ```py
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/1_three_sum/artifacts_out/sample_code.py`
 
@@ -1320,7 +1320,7 @@ def three_sum(nums: List[int], target: int) -> Optional[List[int]]:
                 return indices
     return None
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/1_three_sum/artifacts_out/__init__.py`
 
@@ -1329,7 +1329,7 @@ def three_sum(nums: List[int], target: int) -> Optional[List[int]]:
 
 ```py
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/1_three_sum/custom_python/test.py`
 
@@ -1372,7 +1372,7 @@ if __name__ == "__main__":
     expected_result = [0, 2, 3]
     test_three_sum(nums, target, expected_result)
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/2_password_generator/artifacts_out/password_generator.py`
 
@@ -1406,7 +1406,7 @@ def generate_password(length: int) -> str:
     return "".join(password)
 
 
-```
+```py
 
 这段代码定义了一个if语句，条件是__name__ == "__main__"，表示当程序作为主程序运行时（即，程序通过调用“__main__”函数时），执行if语句内的代码。
 
@@ -1424,7 +1424,7 @@ if __name__ == "__main__":
     password_length = random.randint(8, 16)
     print(generate_password(password_length))
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/2_password_generator/artifacts_out/__init__.py`
 
@@ -1433,7 +1433,7 @@ if __name__ == "__main__":
 
 ```py
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/2_password_generator/custom_python/test.py`
 
@@ -1474,7 +1474,7 @@ class TestPasswordGenerator(unittest.TestCase):
         self.assertTrue(any(c in password_generator.string.punctuation for c in password))
 
 
-```
+```py
 
 这段代码是一个条件判断语句，它的作用是在程序运行时检查是否符合执行程序的名字（通常是 "main"）。如果程序的名字与 "__main__" 相等，那么这段代码会执行 Unittest.main() 函数，否则不会执行。
 
@@ -1485,7 +1485,7 @@ class TestPasswordGenerator(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-```
+```py
 
 # `benchmark/agbenchmark/challenges/verticals/code/3_file_organizer/artifacts_out/organize_files.py`
 
@@ -1527,7 +1527,7 @@ def organize_files(directory_path):
                         shutil.move(old_path, new_path)
 
 
-```
+```py
 
 这段代码是一个Python程序，它的作用是组织指定目录中文件的数量和类型，根据程序的帮助信息，这段代码使用了Python的argparse模块来解析用户输入的命令行参数。
 

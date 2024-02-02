@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\ports.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 从 socket 模块中导入 socket 类

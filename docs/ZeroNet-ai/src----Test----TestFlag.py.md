@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestFlag.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 pytest 模块

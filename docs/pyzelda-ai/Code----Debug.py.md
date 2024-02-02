@@ -1,6 +1,6 @@
 # `.\Zelda-with-Python\Code\Debug.py`
 
-```
+```py
 
 # 导入pygame和os模块
 import pygame

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\extensions\test_smarty.py`
 
-```
+```py
 
 # 设置文件编码为 utf-8
 # Python Markdown

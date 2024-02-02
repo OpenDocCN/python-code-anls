@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\csharp\IOExtensions.cs`
 
-```
+```py
 // 命名空间 Chomp 下的内部静态类 IOExtensions
 namespace Chomp
 {

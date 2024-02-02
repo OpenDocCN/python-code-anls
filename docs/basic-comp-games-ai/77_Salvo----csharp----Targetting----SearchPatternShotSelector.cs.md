@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\SearchPatternShotSelector.cs`
 
-```
+```py
 // 命名空间 Salvo.Targetting 下的内部类 SearchPatternShotSelectionStrategy 继承自 ShotSelectionStrategy
 internal class SearchPatternShotSelectionStrategy : ShotSelectionStrategy
 {

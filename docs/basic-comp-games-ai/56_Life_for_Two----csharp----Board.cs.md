@@ -1,6 +1,6 @@
 # `basic-computer-games\56_Life_for_Two\csharp\Board.cs`
 
-```
+```py
 {
     // 命名空间 LifeforTwo 中定义了 Board 类，实现了 IEnumerable 接口
     internal class Board : IEnumerable<Coordinates>

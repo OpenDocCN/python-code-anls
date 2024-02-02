@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\Resources\Resource.cs`
 
-```
+```py
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Games.Common.Randomness;

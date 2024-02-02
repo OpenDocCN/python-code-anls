@@ -8,11 +8,11 @@ This C# implementation of slots was done using a [C# script](https://github.com/
 [.NET Core SDK (i.e., .NET 6.0)](https://dotnet.microsoft.com/en-us/download)
 
 Install dotnet-script.  On the command line run:
-```
+```py
 dotnet tool install -g dotnet-script
 ```
 
 # Run
-```
+```py
 dotnet script .\slots.csx
 ```

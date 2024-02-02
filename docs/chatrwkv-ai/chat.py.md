@@ -1,6 +1,6 @@
 # `ChatRWKV\chat.py`
 
-```
+```py
 # 导入所需的库
 import os, copy, types, gc, sys
 import numpy as np

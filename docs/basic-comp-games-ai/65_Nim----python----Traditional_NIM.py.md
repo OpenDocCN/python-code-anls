@@ -1,6 +1,6 @@
 # `basic-computer-games\65_Nim\python\Traditional_NIM.py`
 
-```
+```py
 # 导入 random 模块和 typing 模块中的 Tuple 类型
 import random
 from typing import Tuple

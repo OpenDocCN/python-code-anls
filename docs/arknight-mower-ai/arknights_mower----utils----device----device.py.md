@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\device.py`
 
-```
+```py
 # 导入未来的注解特性
 from __future__ import annotations
 

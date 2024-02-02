@@ -1,6 +1,6 @@
 # `basic-computer-games\02_Amazing\java\AmazingGame.java`
 
-```
+```py
 # 定义名为AmazingGame的公共类
 public class AmazingGame {
     # 定义名为main的静态方法，参数为字符串数组args

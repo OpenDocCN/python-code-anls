@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Game.cs`
 
-```
+```py
 // 引入命名空间 System 和 Games.Common.IO
 using System;
 using Games.Common.IO;

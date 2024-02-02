@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\python\mastermind.py`
 
-```
+```py
 # 导入 random 模块
 import random
 # 导入 sys 模块

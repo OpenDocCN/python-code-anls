@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\attn.py`
 
-```
+```py
 # 导入必要的模块
 import dataclasses
 import chex

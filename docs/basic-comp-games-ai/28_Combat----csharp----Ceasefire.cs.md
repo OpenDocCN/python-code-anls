@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\Ceasefire.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

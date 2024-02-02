@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\OpensslFindPatch.py`
 
-```
+```py
 # 导入日志、操作系统和系统相关的模块
 import logging
 import os

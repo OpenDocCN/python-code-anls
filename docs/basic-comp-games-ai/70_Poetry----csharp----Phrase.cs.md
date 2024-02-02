@@ -1,6 +1,6 @@
 # `basic-computer-games\70_Poetry\csharp\Phrase.cs`
 
-```
+```py
 namespace Poetry;
 
 internal class Phrase

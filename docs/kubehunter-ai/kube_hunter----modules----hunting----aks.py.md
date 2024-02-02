@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\aks.py`
 
-```
+```py
 # 导入所需的模块
 import json
 import logging

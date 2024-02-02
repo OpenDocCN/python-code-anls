@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\java\src\AceyDuceyGame.java`
 
-```
+```py
 /**
  * This class is used to invoke the game.
  *

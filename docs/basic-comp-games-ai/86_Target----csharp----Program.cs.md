@@ -1,6 +1,6 @@
 # `basic-computer-games\86_Target\csharp\Program.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Reflection;

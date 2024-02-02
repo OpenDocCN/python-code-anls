@@ -1,6 +1,6 @@
 # `MetaGPT\setup.py`
 
-```
+```py
 
 """Setup script for MetaGPT."""
 # 导入所需的模块

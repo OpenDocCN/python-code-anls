@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\Subsystem.cs`
 
-```
+```py
 // 引入命名空间 Games.Common.IO，SuperStarTrek.Commands，SuperStarTrek.Space
 using Games.Common.IO;
 using SuperStarTrek.Commands;

@@ -1,6 +1,6 @@
 # `basic-computer-games\58_Love\csharp\LovePattern.cs`
 
-```
+```py
 // 引入命名空间 System.IO 和 System.Text
 using System.IO;
 using System.Text;

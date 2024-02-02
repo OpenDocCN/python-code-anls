@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\_InternalsVisibleTo.cs`
 
-```
+```py
 # 使用 System.Runtime.CompilerServices 命名空间
 using System.Runtime.CompilerServices;
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\python\hurkle.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 """Ported to Python by @iamtraction"""

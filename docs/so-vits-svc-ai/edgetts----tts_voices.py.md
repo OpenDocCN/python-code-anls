@@ -1,6 +1,6 @@
 # `so-vits-svc\edgetts\tts_voices.py`
 
-```
+```py
 # 支持的语音列表，以语音名称为键，语言代码为值
 SUPPORTED_VOICES = {
     'zh-CN-XiaoxiaoNeural': 'zh-CN',  # 中文普通话小小

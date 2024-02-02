@@ -1,6 +1,6 @@
 # `yolov5-DNF\json2yolo.py`
 
-```
+```py
 import json  # 导入json模块
 import os  # 导入os模块
 

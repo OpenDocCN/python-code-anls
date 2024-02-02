@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Game.cs`
 
-```
+```py
 using System;  # 导入系统命名空间
 using Games.Common.IO;  # 导入游戏通用输入输出命名空间
 using Games.Common.Randomness;  # 导入游戏通用随机数生成命名空间

@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\mel_processing.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.utils.data 模块

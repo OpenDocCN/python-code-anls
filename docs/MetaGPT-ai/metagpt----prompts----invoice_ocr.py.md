@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\prompts\invoice_ocr.py`
 
-```
+```py
 
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_

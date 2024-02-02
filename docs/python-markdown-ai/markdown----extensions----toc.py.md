@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\toc.py`
 
-```
+```py
 
 # Table of Contents Extension for Python-Markdown
 # ===============================================

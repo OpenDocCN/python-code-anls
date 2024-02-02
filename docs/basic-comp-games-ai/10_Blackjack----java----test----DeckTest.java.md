@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\test\DeckTest.java`
 
-```
+```py
 import static org.junit.jupiter.api.Assertions.assertEquals;  // 导入静态的断言方法，用于断言测试结果是否符合预期
 import static org.junit.jupiter.api.Assertions.assertAll;  // 导入静态的断言方法，用于同时验证多个断言
 import org.junit.jupiter.api.Test;  // 导入 JUnit 的测试注解

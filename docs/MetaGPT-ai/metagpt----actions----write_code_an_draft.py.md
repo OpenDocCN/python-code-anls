@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_code_an_draft.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -65,7 +65,7 @@ ACTIONS = ActionNode(
                    # Update the game state only if a move was successful
                    self.render()
        return True
-   ```
+   ```py
 """,
 )
 
@@ -538,6 +538,6 @@ CODE_REVIEW_SAMPLE = """
        // ...
        this.addRandomTile();
    }
-   ```
+   ```py
 2. Integrate the `Storage` class methods to handle the best
 ```

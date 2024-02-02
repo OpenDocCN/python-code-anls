@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\discovery\kubectl.py`
 
-```
+```py
 # 导入日志和子进程模块
 import logging
 import subprocess

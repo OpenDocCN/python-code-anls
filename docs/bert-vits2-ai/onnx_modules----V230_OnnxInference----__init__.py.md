@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V230_OnnxInference\__init__.py`
 
-```
+```py
 # 导入 numpy 库，并重命名为 np
 import numpy as np
 # 导入 onnxruntime 库，并重命名为 ort

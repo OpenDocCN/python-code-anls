@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\fold\comment-fold.js`
 
-```
+```py
 // 将代码包装在自执行函数中，传入 CodeMirror 对象
 (function(mod) {
   // 如果是 CommonJS 环境，使用 require 引入 CodeMirror

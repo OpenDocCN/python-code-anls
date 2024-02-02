@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\LongRangeSensors.cs`
 
-```
+```py
 using System.Linq; // 导入 LINQ 扩展方法
 using Games.Common.IO; // 导入通用游戏输入输出命名空间
 using SuperStarTrek.Commands; // 导入超级星际远征命令

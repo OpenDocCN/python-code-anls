@@ -6,7 +6,7 @@ This is an Elm implementation of the `Basic Compouter Games` Game Acey Ducey.
 
 - install elm
 
-```bash
+```py
 yarn
 yarn build
 ```

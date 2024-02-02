@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\java\src\Card.java`
 
-```
+```py
 /**
  * 这是 Java 中的一个“record”类的示例。这只是一种说法，即属性（value 和 suit）在对象创建后不能更改（它没有 'setter' 方法，并且属性隐式为 'final'）。
  *

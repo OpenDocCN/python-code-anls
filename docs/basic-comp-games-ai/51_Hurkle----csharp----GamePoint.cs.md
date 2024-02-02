@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\GamePoint.cs`
 
-```
+```py
 namespace hurkle
 {
     internal class GamePoint

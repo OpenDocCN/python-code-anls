@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\javascript\mugwump.js`
 
-```
+```py
 // 定义一个打印函数，将字符串输出到指定元素
 function print(str)
 {

@@ -1,6 +1,6 @@
 # `markdown\tests\test_syntax\__init__.py`
 
-```
+```py
 """
 这段代码是一个多行注释，用于描述 Python Markdown 的实现和相关信息。
 

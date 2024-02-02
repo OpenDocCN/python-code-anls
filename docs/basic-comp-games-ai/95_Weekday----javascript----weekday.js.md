@@ -1,6 +1,6 @@
 # `basic-computer-games\95_Weekday\javascript\weekday.js`
 
-```
+```py
 // WEEKDAY
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

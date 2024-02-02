@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\javascript\poker.js`
 
-```
+```py
 // POKER
 //
 // 由 Oscar Toledo G. (nanochess) 将 BASIC 转换为 Javascript

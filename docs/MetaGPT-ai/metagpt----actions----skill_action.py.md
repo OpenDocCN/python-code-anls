@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\skill_action.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

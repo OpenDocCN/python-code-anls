@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\javascript\WebTerminal\HtmlTerminal.js`
 
-```
+```py
 /**
  * @class HtmlTerminal
  * 

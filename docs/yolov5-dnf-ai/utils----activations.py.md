@@ -1,6 +1,6 @@
 # `yolov5-DNF\utils\activations.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 import torch.nn as nn

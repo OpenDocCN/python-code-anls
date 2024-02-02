@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiFileManager\media\codemirror\extension\search\matchesonscrollbar.js`
 
-```
+```py
 // 将代码封装在立即执行函数中，传入 CodeMirror 对象
 (function(mod) {
   // 如果是 CommonJS 环境

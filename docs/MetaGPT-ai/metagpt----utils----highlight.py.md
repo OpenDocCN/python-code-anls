@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\highlight.py`
 
-```
+```py
 
 # 导入需要的模块
 from pygments import highlight as highlight_

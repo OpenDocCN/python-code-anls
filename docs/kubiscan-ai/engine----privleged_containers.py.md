@@ -1,6 +1,6 @@
 # `KubiScan\engine\privleged_containers.py`
 
-```
+```py
 # 导入所需的模块
 import engine.capabilities.capabilities as caps
 from api import api_client

@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\RiskLevel.cs`
 
-```
+```py
 // 命名空间声明，表示该代码属于 Game 命名空间
 namespace Game
 {

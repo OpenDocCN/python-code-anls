@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Commands\Command.cs`
 
-```
+```py
 // 声明一个枚举类型，表示游戏中可用的指令
 namespace SuperStarTrek.Commands;
 

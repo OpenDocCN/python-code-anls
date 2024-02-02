@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\prompt\default\Chinese-1.py`
 
-```
+```py
 # 定义一个字符串变量，表示界面的分隔符
 interface = ":"
 # 定义一个字符串变量，表示用户的标识

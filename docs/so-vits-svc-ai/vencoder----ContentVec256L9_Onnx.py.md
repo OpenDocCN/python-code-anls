@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\ContentVec256L9_Onnx.py`
 
-```
+```py
 # 导入 onnxruntime 和 torch 库
 import onnxruntime
 import torch

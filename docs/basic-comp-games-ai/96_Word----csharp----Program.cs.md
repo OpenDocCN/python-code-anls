@@ -1,6 +1,6 @@
 # `basic-computer-games\96_Word\csharp\Program.cs`
 
-```
+```py
 # 引入系统、LINQ和文本编码命名空间
 using System;
 using System.Linq;

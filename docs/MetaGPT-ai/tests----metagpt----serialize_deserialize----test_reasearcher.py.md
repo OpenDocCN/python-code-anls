@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_reasearcher.py`
 
-```
+```py
 
 # 设置文件编码为 utf-8
 # @Desc    : 用于描述测试用例

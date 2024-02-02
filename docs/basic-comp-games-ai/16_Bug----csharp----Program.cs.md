@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Program.cs`
 
-```
+```py
 # 导入BugGame模块
 using BugGame;
 # 导入Games.Common.IO模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\67_One_Check\csharp\Program.cs`
 
-```
+```py
 # 引入 Games.Common.IO 命名空间
 global using Games.Common.IO;
 # 引入 OneCheck.Resources.Resource 类的静态成员

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\33_Dice\C\dice.c`
 
-```
+```py
 #include <stdio.h>  // 包含标准输入输出库
 #include <stdlib.h>  // 包含标准库
 #include <time.h>    // 包含时间库

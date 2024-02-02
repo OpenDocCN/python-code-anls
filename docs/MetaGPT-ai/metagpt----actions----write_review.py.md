@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_review.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

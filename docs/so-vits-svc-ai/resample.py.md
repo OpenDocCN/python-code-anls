@@ -1,6 +1,6 @@
 # `so-vits-svc\resample.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 import concurrent.futures  # 用于并发执行任务

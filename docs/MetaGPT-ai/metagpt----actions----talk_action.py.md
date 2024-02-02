@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\talk_action.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

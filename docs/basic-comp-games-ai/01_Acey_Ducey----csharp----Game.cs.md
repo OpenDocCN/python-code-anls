@@ -1,6 +1,6 @@
 # `basic-computer-games\01_Acey_Ducey\csharp\Game.cs`
 
-```
+```py
 // 引入命名空间 System、System.Collections.Generic、System.Text
 using System;
 using System.Collections.Generic;

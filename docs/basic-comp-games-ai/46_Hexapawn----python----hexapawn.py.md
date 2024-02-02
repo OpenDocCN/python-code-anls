@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\python\hexapawn.py`
 
-```
+```py
 """
 HEXAPAWN
 

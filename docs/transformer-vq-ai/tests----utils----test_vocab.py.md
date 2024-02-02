@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\test_vocab.py`
 
-```
+```py
 # 导入 TensorFlow 模块
 import tensorflow as tf
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\java\src\BullseyeGame.java`
 
-```
+```py
 // 定义 BullseyeGame 类
 public class BullseyeGame {
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Cards\Deck.cs`
 
-```
+```py
 using static Poker.Cards.Rank;
 // 导入 Rank 枚举的静态成员
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Mediator.cs`
 
-```
+```py
 namespace Game
 {
     /// <summary>

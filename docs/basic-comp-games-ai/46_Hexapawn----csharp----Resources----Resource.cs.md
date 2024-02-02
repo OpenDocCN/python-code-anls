@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Resources\Resource.cs`
 
-```
+```py
 // 使用 System.IO 命名空间，包含文件和流操作相关的类
 // 使用 System.Reflection 命名空间，包含程序集和反射相关的类
 // 使用 System.Runtime.CompilerServices 命名空间，包含用于编译器服务的类

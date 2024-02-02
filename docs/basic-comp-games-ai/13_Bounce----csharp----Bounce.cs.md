@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\Bounce.cs`
 
-```
+```py
 /// <summary>
 /// 表示球的弹跳，计算持续时间、高度和时间内的位置。
 /// </summary>

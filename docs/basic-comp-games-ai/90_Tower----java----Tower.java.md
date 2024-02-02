@@ -1,6 +1,6 @@
 # `basic-computer-games\90_Tower\java\Tower.java`
 
-```
+```py
 import java.lang.Math;
 import java.util.Scanner;
 

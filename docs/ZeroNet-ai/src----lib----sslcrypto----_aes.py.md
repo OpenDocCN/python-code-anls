@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\_aes.py`
 
-```
+```py
 # 禁用 pylint 对于 import 位于模块顶层的警告
 
 # 定义 AES 类

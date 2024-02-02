@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\test_tree.py`
 
-```
+```py
 # 从transformer_vq.utils.tree模块中导入flattened_traversal函数
 from transformer_vq.utils.tree import flattened_traversal
 

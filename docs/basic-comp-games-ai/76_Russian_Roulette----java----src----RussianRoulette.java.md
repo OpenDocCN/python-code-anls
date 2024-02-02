@@ -1,6 +1,6 @@
 # `basic-computer-games\76_Russian_Roulette\java\src\RussianRoulette.java`
 
-```
+```py
 // 导入必要的类库
 import java.util.Arrays;
 import java.util.Scanner;

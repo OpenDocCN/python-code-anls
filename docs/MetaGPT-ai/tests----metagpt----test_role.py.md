@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\test_role.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

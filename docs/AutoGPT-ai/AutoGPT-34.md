@@ -427,7 +427,7 @@ It is for these reasons that executing python scripts is explicitly disabled whe
 
 To configure plugins, you can create or edit the `plugins_config.yaml` file in the root directory of AutoGPT. This file allows you to enable or disable plugins as desired. For specific configuration instructions, please refer to the documentation provided for each plugin. The file should be formatted in YAML. Here is an example for your reference:
 
-```pyyaml
+```py
 plugin_a:
   config:
     api_key: my-api-key
@@ -481,14 +481,14 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 1. Make sure you have Docker installed, see [requirements](#requirements)
 2. Create a project directory for AutoGPT
 
-    ```pyshell
+    ```py
     mkdir AutoGPT
     cd AutoGPT
     ```
 
 3. In the project directory, create a file called `docker-compose.yml` with the following contents:
 
-    ```pyyaml
+    ```py
     version: "3.9"
     services:
       auto-gpt:
@@ -515,7 +515,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
     templates in the [repository].
 5. Pull the latest image from [Docker Hub]
 
-    ```pyshell
+    ```py
     docker pull significantgravitas/auto-gpt
     ```
 
@@ -540,13 +540,13 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 
 1. Clone the repository
 
-    ```pyshell
+    ```py
     git clone https://github.com/Significant-Gravitas/AutoGPT.git
     ```
 
 2. Navigate to the directory where you downloaded the repository
 
-    ```pyshell
+    ```py
     cd AutoGPT/autogpts/autogpt
     ```
 
@@ -588,7 +588,7 @@ Get your OpenAI API key from: [https://platform.openai.com/account/api-keys](htt
 
     Example:
 
-    ```pyyaml
+    ```py
     # Please specify all of these values as double-quoted strings
     # Replace string in angled brackets (<>) to your own deployment Name
     azure_model_map:
@@ -614,7 +614,7 @@ Easiest is to use `docker compose`.
 Important: Docker Compose version 1.29.0 or later is required to use version 3.9 of the Compose file format.
 You can check the version of Docker Compose installed on your system by running the following command:
 
-```pyshell
+```py
 docker compose version
 ```
 
@@ -626,13 +626,13 @@ Once you have a recent version of Docker Compose, run the commands below in your
 
 1. Build the image. If you have pulled the image from Docker Hub, skip this step (NOTE: You *will* need to do this if you are modifying requirements.txt to add/remove dependencies like Python libs/frameworks) 
 
-    ```pyshell
+    ```py
     docker compose build auto-gpt
     ```
         
 2. Run AutoGPT
 
-    ```pyshell
+    ```py
     docker compose run --rm auto-gpt
     ```
 
@@ -644,13 +644,13 @@ Once you have a recent version of Docker Compose, run the commands below in your
 
 You can pass extra arguments, e.g. running with `--gpt3only` and `--continuous`:
 
-```pyshell
+```py
 docker compose run --rm auto-gpt --gpt3only --continuous
 ```
 
 If you dare, you can also build and run it with "vanilla" docker commands:
 
-```pyshell
+```py
 docker build -t auto-gpt .
 docker run -it --env-file=.env -v $PWD:/app auto-gpt
 docker run -it --env-file=.env -v $PWD:/app --rm auto-gpt --gpt3only --continuous
@@ -674,7 +674,7 @@ docker run -it --env-file=.env -v $PWD:/app --rm auto-gpt --gpt3only --continuou
 
 Create a virtual environment to run in.
 
-```pyshell
+```py
 python -m venv .venv
 source .venv/bin/activate
 pip3 install --upgrade pip
@@ -688,13 +688,13 @@ packages and launch AutoGPT.
 
 - On Linux/MacOS:
 
-    ```pyshell
+    ```py
     ./run.sh
     ```
 
 - On Windows:
 
-    ```pyshell
+    ```py
     .\run.bat
     ```
 
@@ -712,7 +712,7 @@ Activity, Error, and Debug logs are located in `./logs`
 
 To print out debug logs:
 
-```pyshell
+```py
 ./run.sh --debug     # on Linux / macOS
 
 .\run.bat --debug    # on Windows
@@ -760,13 +760,13 @@ You can name your tag any way you want.
 
 To run all tests, use the following command:
 
-```pyshell
+```py
 pytest
 ```
 
 If `pytest` is not found:
 
-```pyshell
+```py
 python -m pytest
 ```
 
@@ -774,19 +774,19 @@ python -m pytest
 
 - To run without integration tests:
 
-```pyshell
+```py
 pytest --without-integration
 ```
 
 - To run without *slow* integration tests:
 
-```pyshell
+```py
 pytest --without-slow-integration
 ```
 
 - To run tests and see coverage:
 
-```pyshell
+```py
 pytest --cov=autogpt --without-integration --without-slow-integration
 ```
 
@@ -798,13 +798,13 @@ See the [flake8 rules](https://www.flake8rules.com/) for more information.
 
 To run the linter:
 
-```pyshell
+```py
 flake8 .
 ```
 
 Or:
 
-```pyshell
+```py
 python -m flake8 .
 ```
 
@@ -814,7 +814,7 @@ python -m flake8 .
 ## Command Line Arguments
 Running with `--help` lists all the possible command line arguments you can pass:
 
-```pyshell
+```py
 ./run.sh --help     # on Linux / macOS
 
 .\run.bat --help    # on Windows
@@ -824,7 +824,7 @@ Running with `--help` lists all the possible command line arguments you can pass
     For use with Docker, replace the script in the examples with
     `docker compose run --rm auto-gpt`:
 
-    ```pyshell
+    ```py
     docker compose run --rm auto-gpt --help
     docker compose run --rm auto-gpt --ai-settings <filename>
     ```
@@ -836,19 +836,19 @@ Here are some common arguments you can use when running AutoGPT:
 
 * Run AutoGPT with a different AI Settings file
 
-```pyshell
+```py
 ./run.sh --ai-settings <filename>
 ```
 
 * Run AutoGPT with a different Prompt Settings file
 
-```pyshell
+```py
 ./run.sh --prompt-settings <filename>
 ```
 
 * Specify a memory backend
 
-```pyshell
+```py
 ./run.sh --use-memory  <memory-backend>
 ```
 
@@ -860,7 +860,7 @@ Here are some common arguments you can use when running AutoGPT:
 
 Enter this command to use TTS _(Text-to-Speech)_ for AutoGPT
 
-```pyshell
+```py
 ./run.sh --speak
 ```
 
@@ -871,7 +871,7 @@ Continuous mode is NOT recommended.
 It is potentially dangerous and may cause your AI to run forever or carry out actions you would not usually authorize.
 Use at your own risk.
 
-```pyshell
+```py
 ./run.sh --continuous
 ```
 
@@ -885,7 +885,7 @@ Running Self-Feedback will **INCREASE** token use and thus cost more. This featu
 
 If you don't have access to GPT-4, this mode allows you to use AutoGPT!
 
-```pyshell
+```py
 ./run.sh --gpt3only
 ```
 
@@ -896,7 +896,7 @@ You can achieve the same by setting `SMART_LLM` in `.env` to `gpt-3.5-turbo`.
 If you have access to GPT-4, this mode allows you to use AutoGPT solely with GPT-4.
 This may give your bot increased intelligence.
 
-```pyshell
+```py
 ./run.sh --gpt4only
 ```
 
@@ -914,7 +914,7 @@ Activity, Error, and Debug logs are located in `./logs`
 
 To print out debug logs:
 
-```pyshell
+```py
 ./run.sh --debug     # on Linux / macOS
 
 .\run.bat --debug    # on Windows
@@ -928,7 +928,7 @@ If you want to selectively disable some command groups, you can use the `DISABLE
 
 For example, to disable coding related features, set it to the value below:
 
-```pyini
+```py
 DISABLED_COMMAND_CATEGORIES=autogpt.commands.execute_code
 ```
 
@@ -979,7 +979,7 @@ Go to https://github.com/Significant-Gravitas/AutoGPT/blob/master/autogpts/autog
 
 Create your agent fixture.
 
-```pypython
+```py
 def kubernetes_agent(
     agent_test_config, memory_json_file, workspace: Workspace
 ):
@@ -1017,7 +1017,7 @@ Go to `tests/challenges`and create a file that is called `test_your_test_descrip
 
 Your test could look something like this 
 
-```pypython
+```py
 import contextlib
 from functools import wraps
 from typing import Generator
@@ -1127,7 +1127,7 @@ We look forward to your contributions and the exciting solutions that the commun
     
     We're slowly transitioning to agbenchmark. agbenchmark is a simpler way to improve AutoGPT. Simply run:
     
-    ```
+    ```py
     agbenchmark
     ```py
     
@@ -1165,7 +1165,7 @@ If you're looking to contribute by working on an existing challenge, check out [
 
 **Command to try**:
 
-```
+```py
 pytest -s tests/challenges/information_retrieval/test_information_retrieval_challenge_a.py --level=2
 ```py
 
@@ -1190,7 +1190,7 @@ The objective of this challenge is to test the agent's ability to retrieve infor
 
 **Command to try**:
 
-```
+```py
 pytest -s tests/challenges/information_retrieval/test_information_retrieval_challenge_b.py
 ```py
 
@@ -1260,7 +1260,7 @@ The objective of this challenge is to test the agent's ability to follow instruc
 
 **Command to try**: 
 
-```shell
+```py
 pytest -s tests/challenges/memory/test_memory_challenge_b.py --level=3
 ```py
 
@@ -1306,7 +1306,7 @@ The objective of this challenge is to test the agent's ability to follow instruc
 
 **Command to try**: 
 
-```shell
+```py
 pytest -s tests/challenges/memory/test_memory_challenge_c.py --level=2
 ```py
 
@@ -1325,7 +1325,7 @@ The challenge involves a series of text files containing instructions and silly 
 
 The current phrase is 
 
-```
+```py
 The purple elephant danced on a rainbow while eating a taco.\n[NOISE intended to confuse the agent]
 ```py
 
@@ -1336,7 +1336,7 @@ Read the file `instructions_2.txt` using the read_file command.
 
 The current phrase is 
 
-```
+```py
 The sneaky toaster stole my socks and ran away to Hawaii.\n[NOISE intended to confuse the agent]
 ```py
 
@@ -1349,7 +1349,7 @@ Read the file instructions_3.txt using the read_file command.
 
 The current phrase is 
 
-```
+```py
 My pet rock sings better than Beyoncé on Tuesdays.
 ```py
 
@@ -1369,7 +1369,7 @@ This is presumably harder than task ids as the phrases are longer and more likel
 
 **Command to try**: 
 
-```shell
+```py
 pytest -s tests/challenges/memory/test_memory_challenge_d.py --level=1
 ```py
 
@@ -1396,14 +1396,14 @@ The test runs for levels up to the maximum level that the AI has successfully be
 
 - `instructions_1.txt`
 
-```
+```py
 Sally has a marble (marble A) and she puts it in her basket (basket S), then leaves the room. Anne moves marble A from Sally's basket (basket S) to her own basket (basket A).
 ```py
 
 
 - `instructions_2.txt`
 
-```
+```py
 Sally gives a new marble (marble B) to Bob who is outside with her. Bob goes into the room and places marble B into Anne's basket (basket A). Anne tells Bob to tell Sally that he lost the marble b. Bob leaves the room and speaks to Sally about the marble B. Meanwhile, after Bob left the room, Anne moves marble A into the green box, but tells Charlie to tell Sally that marble A is under the sofa. Charlie leaves the room and speak to Sally about the marble A as instructed by Anne.
 ```py
 
@@ -1413,7 +1413,7 @@ Sally gives a new marble (marble B) to Bob who is outside with her. Bob goes int
 
 The expected believes of every characters are given in a list:
 
-```json
+```py
 expected_beliefs = {
     1: {
         'Sally': {
@@ -1462,7 +1462,7 @@ The goal of memory challenges is to improve an agent's performance in tasks that
 
 In `.env`, make sure `IMAGE_PROVIDER` is commented (or set to `dalle`):
 
-```pyini
+```py
 # IMAGE_PROVIDER=dalle    # this is the default
 ```
 
@@ -1479,7 +1479,7 @@ Link to the appropriate settings page: [Hugging Face > Settings > Tokens](https:
 
 Once you have an API token, uncomment and adjust these variables in your `.env`:
 
-```pyini
+```py
 IMAGE_PROVIDER=huggingface
 HUGGINGFACE_API_TOKEN=your-huggingface-api-token
 ```
@@ -1496,7 +1496,7 @@ Further optional configuration:
 
 It is possible to use your own self-hosted Stable Diffusion WebUI with AutoGPT:
 
-```pyini
+```py
 IMAGE_PROVIDER=sdwebui
 ```
 
@@ -1512,6 +1512,6 @@ Further optional configuration:
 
 ## Selenium
 
-```pyshell
+```py
 sudo Xvfb :10 -ac -screen 0 1024x768x24 & DISPLAY=:10 <YOUR_CLIENT>
 ```

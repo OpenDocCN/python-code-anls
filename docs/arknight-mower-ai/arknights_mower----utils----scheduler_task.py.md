@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\scheduler_task.py`
 
-```
+```py
 # 导入 datetime 和 timedelta 模块
 from datetime import datetime, timedelta
 # 导入 copy 模块

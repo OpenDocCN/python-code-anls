@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Human.cs`
 
-```
+```py
 // 引入必要的命名空间
 using System;
 using System.Linq;

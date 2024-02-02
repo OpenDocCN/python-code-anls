@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\prompt\default\English-2.py`
 
-```
+```py
 # 定义对话界面的符号
 interface = ":"
 # 定义用户的名字

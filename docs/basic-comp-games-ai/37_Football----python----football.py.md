@@ -1,6 +1,6 @@
 # `basic-computer-games\37_Football\python\football.py`
 
-```
+```py
 """
 FOOTBALL
 

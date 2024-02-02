@@ -1,6 +1,6 @@
 # `basic-computer-games\28_Combat\csharp\InitialCampaign.cs`
 
-```
+```py
 // 命名空间 Game，表示游戏相关的代码
 namespace Game
 {

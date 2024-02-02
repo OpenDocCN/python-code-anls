@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\param.py`
 
-```
+```py
 # 导入ParamArgs类型别名
 from .typealias import ParamArgs
 

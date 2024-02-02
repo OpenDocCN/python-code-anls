@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\Events\MatchStarted.cs`
 
-```
+```py
 // 声明在 Game.Events 命名空间下的 MatchStarted 事件记录，表示一场新比赛开始
 namespace Game.Events
 {

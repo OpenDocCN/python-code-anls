@@ -1,6 +1,6 @@
 # `basic-computer-games\31_Depth_Charge\csharp\View.cs`
 
-```
+```py
 # 引入 System 命名空间
 using System;
 

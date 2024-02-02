@@ -1,6 +1,6 @@
 # `basic-computer-games\26_Chomp\csharp\PlayerNumber.cs`
 
-```
+```py
 namespace Chomp;
 
 internal class PlayerNumber

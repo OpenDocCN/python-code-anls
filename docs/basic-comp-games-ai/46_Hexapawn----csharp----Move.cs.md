@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Move.cs`
 
-```
+```py
 // 使用 Hexapawn.Pawn 命名空间下的静态成员
 using static Hexapawn.Pawn;
 

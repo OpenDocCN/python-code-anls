@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\log.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入操作系统模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\java\src\LiteratureQuizGame.java`
 
-```
+```py
 // 创建一个名为LiteratureQuizGame的公共类
 public class LiteratureQuizGame {
 

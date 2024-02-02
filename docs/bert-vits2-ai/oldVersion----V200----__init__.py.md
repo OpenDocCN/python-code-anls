@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V200\__init__.py`
 
-```
+```py
 """
 @Desc: 2.0版本兼容 对应2.0.1 2.0.2-fix
 """

@@ -1,6 +1,6 @@
 # `Bert-VITS2\tools\log.py`
 
-```
+```py
 """
 logger封装
 """

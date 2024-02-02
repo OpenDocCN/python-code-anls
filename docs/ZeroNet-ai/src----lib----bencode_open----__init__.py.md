@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\bencode_open\__init__.py`
 
-```
+```py
 def loads(data):
     # 检查输入的数据类型是否为字节流，如果不是则抛出类型错误异常
     if not isinstance(data, bytes):

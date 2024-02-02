@@ -1,6 +1,6 @@
 # `basic-computer-games\18_Bullseye\java\src\Shot.java`
 
-```
+```py
 /**
  * This class records the percentage chance of a given type of shot
  * scoring specific points

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\actions\test_write_docstring.py`
 
-```
+```py
 
 # 导入 pytest 模块
 import pytest

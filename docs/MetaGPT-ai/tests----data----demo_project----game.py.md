@@ -1,6 +1,6 @@
 # `MetaGPT\tests\data\demo_project\game.py`
 
-```
+```py
 
 ## game.py
 

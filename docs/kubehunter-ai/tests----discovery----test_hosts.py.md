@@ -1,6 +1,6 @@
 # `kubehunter\tests\discovery\test_hosts.py`
 
-```
+```py
 # 导入所需的模块
 import requests_mock
 import pytest

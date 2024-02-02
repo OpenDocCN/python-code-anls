@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\csharp\IOExtensions.cs`
 
-```
+```py
 # 创建名为 Cube 的命名空间，并定义一个内部静态类 IOExtensions
 namespace Cube;
 

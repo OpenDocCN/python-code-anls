@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\fcpe\pcmer.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 functools 库中导入 partial 函数

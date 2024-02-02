@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\serialize_deserialize\test_prepare_interview.py`
 
-```
+```py
 
 # 设置文件编码为 UTF-8
 # @Desc    : 用于描述代码的作用

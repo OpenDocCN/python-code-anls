@@ -1,6 +1,6 @@
 # `basic-computer-games\30_Cube\csharp\Game.cs`
 
-```
+```py
 namespace Cube;
 
 internal class Game

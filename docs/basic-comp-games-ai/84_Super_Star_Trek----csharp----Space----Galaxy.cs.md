@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Space\Galaxy.cs`
 
-```
+```py
 using System.Collections.Generic;  // 导入 System.Collections.Generic 命名空间
 using System.Linq;  // 导入 System.Linq 命名空间
 using Games.Common.Randomness;  // 导入 Games.Common.Randomness 命名空间

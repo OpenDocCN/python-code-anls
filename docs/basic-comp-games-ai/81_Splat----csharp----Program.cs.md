@@ -1,6 +1,6 @@
 # `basic-computer-games\81_Splat\csharp\Program.cs`
 
-```
+```py
 # 引入命名空间 System.Collections 和 System.Text
 using System.Collections;
 using System.Text;

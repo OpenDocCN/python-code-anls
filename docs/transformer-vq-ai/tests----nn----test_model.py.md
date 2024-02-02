@@ -1,6 +1,6 @@
 # `transformer_vq\tests\nn\test_model.py`
 
-```
+```py
 # 导入需要的库
 import jax
 import jax.numpy as jnp

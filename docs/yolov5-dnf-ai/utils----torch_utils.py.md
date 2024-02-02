@@ -1,6 +1,6 @@
 # `yolov5-DNF\utils\torch_utils.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入数学模块

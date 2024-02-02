@@ -1,6 +1,6 @@
 # `basic-computer-games\29_Craps\python\craps.py`
 
-```
+```py
 #!/usr/bin/env python3
 """This game simulates the games of craps played according to standard Nevada craps table rules.
 

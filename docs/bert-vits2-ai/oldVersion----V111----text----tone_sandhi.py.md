@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V111\text\tone_sandhi.py`
 
-```
+```py
 # 导入必要的模块
 from typing import List
 from typing import Tuple

@@ -1,6 +1,6 @@
 # `basic-computer-games\68_Orbit\python\orbit.py`
 
-```
+```py
 # 定义了一个多行字符串，用于描述游戏的背景和玩法
 """
 ORBIT

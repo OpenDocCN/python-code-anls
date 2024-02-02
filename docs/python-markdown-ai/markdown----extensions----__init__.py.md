@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\__init__.py`
 
-```
+```py
 
 # Python Markdown
 
@@ -51,7 +51,7 @@ class Extension:
     config = {
         'key': ['value', 'description']
     }
-    ```
+    ```py
 
     Note that [`setConfig`][markdown.extensions.Extension.setConfig] will raise a [`KeyError`][]
     if a default is not set for each option.

@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V200\text\symbols.py`
 
-```
+```py
 # 定义标点符号列表
 punctuation = ["!", "?", "…", ",", ".", "'", "-"]
 # 将标点符号列表与额外的符号列表合并

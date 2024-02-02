@@ -1,12 +1,12 @@
 ### MasterMind
 
 In that Match-April 1976 issue of _Creative_ we published a computerized version of Master Mind, a logic game. Master Mind is played by two people—one is called the code-maker; the other, the code-breaker. At the beginning of the game the code-maker forms a code, or combination of colored pegs. He hides these from the code-breaker. The code-breaker then attempts to deduce the code, by placing his own guesses, one at a time, on the board. After he makes a guess (by placing a combination of colored pegs on the board) the code-maker then gives the code-breaker clues to indicate how close the guess was to the code. For every peg in the guess that’s the right color but not in the right position, the code-breaker gets a white peg. Note that these black and white pegs do not indicate _which_ pegs in the guess are correct, but merely that they exist. For example, if the code was:
-```
+```py
 Yellow Red Red Green
 ```
 
 and my guess was
-```
+```py
 Red Red Yellow Black
 ```
 I would receive two white pegs and one black peg for the guess. I wouldn’t know (except by comparing previous guesses) which one of the pegs in my guess was the right color in the right position.

@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\ocr\dbnet.py`
 
-```
+```py
 import cv2  # 导入 OpenCV 库
 import numpy as np  # 导入 NumPy 库
 import onnxruntime as rt  # 导入 ONNX 运行时库

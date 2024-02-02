@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\Bigfile\BigfilePiecefield.py`
 
-```
+```py
 # 导入 array 模块
 
 import array

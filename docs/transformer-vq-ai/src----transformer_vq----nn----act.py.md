@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\nn\act.py`
 
-```
+```py
 # 导入 jax 库
 import jax
 # 导入 jax 库中的 numpy 模块，并重命名为 jnp

@@ -1,6 +1,6 @@
 # `basic-computer-games\64_Nicomachus\python\nicomachus.py`
 
-```
+```py
 """
 NICOMACHUS
 

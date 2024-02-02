@@ -1,6 +1,6 @@
 # `basic-computer-games\15_Boxing\java\BoxingGame.java`
 
-```
+```py
 # 定义名为 BoxingGame 的公共类
 public class BoxingGame {
 

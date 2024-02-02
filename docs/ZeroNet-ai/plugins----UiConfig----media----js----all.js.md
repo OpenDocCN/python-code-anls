@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\UiConfig\media\js\all.js`
 
-```
+```py
 # 定义一个 Class 类
 (function() {
   var Class,

@@ -8,7 +8,7 @@
 |   Ubuntu 22.04 |    python 3.9   |    Yes    |
 
 ### Detail Installation
-```bash
+```py
 # Step 1: Ensure that NPM is installed on your system. Then install mermaid-js. (If you don't have npm in your computer, please go to the Node.js official website to install Node.js https://nodejs.org/ and then you will have npm tool in your computer.)
 npm --version
 sudo npm install -g @mermaid-js/mermaid-cli
@@ -29,13 +29,13 @@ pip install -e.
 
 - Some people are [having issues](https://github.com/mermaidjs/mermaid.cli/issues/15) installing this tool globally. Installing it locally is an alternative solution,
 
-  ```bash
+  ```py
   npm install @mermaid-js/mermaid-cli
   ```
 
 - don't forget to the configuration for mmdc in config.yml
 
-  ```yml
+  ```py
   PUPPETEER_CONFIG: "./config/puppeteer-config.json"
   MMDC: "./node_modules/.bin/mmdc"
   ```
@@ -47,7 +47,7 @@ pip install -e.
   - Playwright
     - **Install Playwright**
 
-    ```bash
+    ```py
     pip install playwright
     ```
 
@@ -55,7 +55,7 @@ pip install -e.
 
     to support PDF conversion, please install Chrominum.
 
-    ```bash
+    ```py
     playwright install --with-deps chromium
     ```
 
@@ -63,14 +63,14 @@ pip install -e.
 
     uncomment MERMAID_ENGINE from config.yaml and change it to `playwright`
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: playwright
     ```
 
   - pyppeteer
     - **Install pyppeteer**
 
-    ```bash
+    ```py
     pip install pyppeteer
     ```
 
@@ -78,13 +78,13 @@ pip install -e.
 
     pyppeteer allows you use installed browsers,  please set the following envirment
     
-    ```bash
+    ```py
     export PUPPETEER_EXECUTABLE_PATH = /path/to/your/chromium or edge or chrome
     ```
 
     please do not use this command to install browser, it is too old
 
-    ```bash
+    ```py
     pyppeteer-install
     ```
 
@@ -92,7 +92,7 @@ pip install -e.
 
     uncomment MERMAID_ENGINE from config.yaml and change it to `pyppeteer`
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: pyppeteer
     ```
 
@@ -101,7 +101,7 @@ pip install -e.
 
     uncomment MERMAID_ENGINE from config.yaml and change it to `ink`
 
-    ```yaml
+    ```py
     MERMAID_ENGINE: ink
     ```  
 

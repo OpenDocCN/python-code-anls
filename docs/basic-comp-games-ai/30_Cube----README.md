@@ -30,7 +30,7 @@ It's remotely possible that these are clever solutions the user is intended to f
 The BASIC code uses an interesting technique for choosing the random coordinates for the mines. The first coordinate is
 chosen like this:
 
-```basic
+```py
 380 LET A=INT(3*(RND(X)))
 390 IF A<>0 THEN 410
 400 LET A=3

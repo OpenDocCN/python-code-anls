@@ -1,6 +1,6 @@
 # `basic-computer-games\55_Life\java\src\java\Life.java`
 
-```
+```py
 import java.util.ArrayList;  // 导入 ArrayList 类
 import java.util.List;  // 导入 List 接口
 import java.util.Scanner;  // 导入 Scanner 类

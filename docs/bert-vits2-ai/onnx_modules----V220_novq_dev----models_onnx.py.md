@@ -1,6 +1,6 @@
 # `Bert-VITS2\onnx_modules\V220_novq_dev\models_onnx.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 PyTorch 库

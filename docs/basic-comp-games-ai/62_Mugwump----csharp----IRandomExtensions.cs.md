@@ -1,6 +1,6 @@
 # `basic-computer-games\62_Mugwump\csharp\IRandomExtensions.cs`
 
-```
+```py
 # 创建一个名为Mugwump的命名空间，用于组织相关的类和接口
 namespace Mugwump;
 

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\actions\write_code_review.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -93,7 +93,7 @@ FORMAT_EXAMPLE = """
                    # Update the game state only if a move was successful
                    self.render()
        return True
-   ```
+   ```py
 2. Implement function B
 
 ## Code Review Result

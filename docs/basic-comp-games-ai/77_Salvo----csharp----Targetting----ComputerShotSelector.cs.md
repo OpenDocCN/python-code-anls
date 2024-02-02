@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\ComputerShotSelector.cs`
 
-```
+```py
 // 命名空间 Salvo.Targetting 下的内部类 ComputerShotSelector，继承自 ShotSelector
 internal class ComputerShotSelector : ShotSelector
 {

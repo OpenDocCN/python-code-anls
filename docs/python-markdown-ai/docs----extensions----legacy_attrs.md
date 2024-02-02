@@ -16,39 +16,39 @@ users who have existing documents which use the syntax.
 Attributes are defined by including the following within the element you wish to
 assign the attributes to:
 
-```md
+```py
 {@key=value}
 ```
 
 For example, to define a class to a paragraph:
 
-```md
+```py
 A paragraph with the attribute defined {@class=foo}anywhere within.
 ```
 
 Which results in the following output:
 
-```html
+```py
 <p class="foo">A paragraph with the attribute defined anywhere within.</p>
 ```
 
 The same applies for inline elements:
 
-```md
+```py
 Some *emphasized{@id=bar}* text.
 ```
 
-```html
+```py
 <p>Some <em id="bar">emphasized</em> text.</p>
 ```
 
 You can also define attributes in images:
 
-```md
+```py
 ![Alt text{@id=baz}](path/to/image.jpg)
 ```
 
-```html
+```py
 <p><img alt="Alt text" id="baz" src="path/to/image.jpg" /></p>
 ```
 
@@ -61,6 +61,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['legacy_attrs'])
 ```

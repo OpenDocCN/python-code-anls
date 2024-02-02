@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\datetime.py`
 
-```
+```py
 # 导入 datetime 模块中的 datetime 类
 # 导入 pytz 模块
 from datetime import datetime

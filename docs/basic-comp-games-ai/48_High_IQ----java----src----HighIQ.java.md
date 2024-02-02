@@ -1,6 +1,6 @@
 # `basic-computer-games\48_High_IQ\java\src\HighIQ.java`
 
-```
+```py
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;

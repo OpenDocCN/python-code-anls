@@ -1,6 +1,6 @@
 # `ZeroNet\plugins\disabled-Multiuser\MultiuserPlugin.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 # 导入 sys 模块，用于系统相关操作

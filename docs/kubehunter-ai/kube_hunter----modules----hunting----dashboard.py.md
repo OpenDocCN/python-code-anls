@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\dashboard.py`
 
-```
+```py
 # 导入日志、JSON 和请求模块
 import logging
 import json

@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Alternate_Languages\01_Acey_Ducey\c++\source\Aceyducey.h`
 
-```
+```py
 // 防止头文件被重复包含
 #pragma once
 

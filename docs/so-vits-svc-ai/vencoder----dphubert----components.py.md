@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\dphubert\components.py`
 
-```
+```py
 """Building blocks for speech SSL models supporting pruning.
 
 Originally from:

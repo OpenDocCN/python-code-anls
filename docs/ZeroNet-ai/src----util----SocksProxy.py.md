@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\SocksProxy.py`
 
-```
+```py
 # 导入 socket 模块
 import socket
 

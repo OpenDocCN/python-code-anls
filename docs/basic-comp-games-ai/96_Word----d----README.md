@@ -8,7 +8,7 @@ This version does not replicate that limitation, and the test for that requireme
 ## Running the code
 
 Assuming the reference [dmd](https://dlang.org/download.html#dmd) compiler:
-```shell
+```py
 dmd -dip1000 -run word.d
 ```
 

@@ -1,6 +1,6 @@
 # `basic-computer-games\94_War\csharp\War\UserInterface.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

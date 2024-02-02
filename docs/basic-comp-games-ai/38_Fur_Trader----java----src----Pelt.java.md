@@ -1,6 +1,6 @@
 # `basic-computer-games\38_Fur_Trader\java\src\Pelt.java`
 
-```
+```py
 /**
  * Pelt object - tracks the name and number of pelts the player has for this pelt type
  */

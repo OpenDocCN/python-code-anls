@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\IRandomExtensions.cs`
 
-```
+```py
 # 使用 Games.Common.Randomness 命名空间
 using Games.Common.Randomness;
 

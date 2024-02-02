@@ -1,6 +1,6 @@
 # `so-vits-svc\diffusion\vocoder.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torchaudio.transforms 模块中导入 Resample 类

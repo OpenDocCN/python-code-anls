@@ -1,6 +1,6 @@
 # `MetaGPT\examples\debate_simple.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Bug.cs`
 
-```
+```py
 // 使用 System.Text 命名空间中的 StringBuilder 类
 using System.Text;
 // 引用 BugGame.Parts 和 BugGame.Resources 命名空间中的内容

@@ -1,6 +1,6 @@
 # `KubiScan\static_risky_roles.py`
 
-```
+```py
 # 从 engine.role 模块中导入 Role 类
 from engine.role import Role
 # 从 engine.rule 模块中导入 Rule 类

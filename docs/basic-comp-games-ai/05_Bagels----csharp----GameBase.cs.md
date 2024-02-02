@@ -1,6 +1,6 @@
 # `basic-computer-games\05_Bagels\csharp\GameBase.cs`
 
-```
+```py
 namespace BasicComputerGames.Bagels
 {
     public class GameBase

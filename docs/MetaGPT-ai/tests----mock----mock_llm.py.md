@@ -1,6 +1,6 @@
 # `MetaGPT\tests\mock\mock_llm.py`
 
-```
+```py
 
 # 从 typing 模块中导入 Optional 类型
 from typing import Optional

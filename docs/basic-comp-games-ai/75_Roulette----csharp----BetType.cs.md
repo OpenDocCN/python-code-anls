@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\csharp\BetType.cs`
 
-```
+```py
 # 命名空间 Roulette 下的内部记录结构 BetType，包含一个整数值
 internal record struct BetType(int Value)
 {

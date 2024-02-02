@@ -1,6 +1,6 @@
 # `markdown\markdown\extensions\legacy_attrs.py`
 
-```
+```py
 
 # Python Markdown
 

@@ -5,7 +5,7 @@
 - Configure your `OPENAI_API_KEY` in any of `config/key.yaml / config/config.yaml / env`
 - Priority order: `config/key.yaml > config/config.yaml > env`
 
-```bash
+```py
 # Copy the configuration file and make the necessary modifications.
 cp config/config.yaml config/key.yaml
 ```
@@ -17,7 +17,7 @@ cp config/config.yaml config/key.yaml
 
 ### Initiating a startup
 
-```shell
+```py
 # Run the script
 metagpt "Write a cli snake game"
 # Do not hire an engineer to implement the project
@@ -32,13 +32,13 @@ After running the script, you can find your new project in the `workspace/` dire
 
 You can tell which platform or tool you want to use when stating your requirements.
 
-```shell
+```py
 metagpt "Write a cli snake game based on pygame"
 ```
 
 ### Usage
 
-```
+```py
 NAME
     metagpt - We are a software startup comprised of AI. By investing in us, you are empowering a future filled with limitless possibilities.
 

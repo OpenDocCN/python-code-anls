@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\KnownHitsShotSelectionStrategy.cs`
 
-```
+```py
 namespace Salvo.Targetting;
 
 internal class KnownHitsShotSelectionStrategy : ShotSelectionStrategy

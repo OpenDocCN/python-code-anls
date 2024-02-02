@@ -1,6 +1,6 @@
 # `arknights-mower\packaging\network.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权声明和许可证信息
 # 版权声明和许可证信息

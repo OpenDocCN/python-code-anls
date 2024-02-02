@@ -388,7 +388,7 @@ def memstore():
 
 这两函数是在测试中用测试数据存儲器(memstore)进行操作。
 
-```pypython
+```py
 def test_add(memstore):
    # 在memstore中添加一个名为"test_task"的任务，一个名为"This is a test document."的文档，以及一个名为"test_metadata"的元数据。
    task_id = "test_task"
@@ -401,7 +401,7 @@ def test_add(memstore):
 
 这段代码模拟了一个向测试数据存储器中添加文档、元数据和创建集合操作。它创建了一个名为"test_task"的任务，将一个名为"This is a test document."的文档和名为"test_metadata"的元数据添加到了任务中。然后，它计算了文档的哈希值并将其存储到了名为"doc_id"的变量中。最后，它使用memstore的client方法获取名为"test_task"的集合，并检查返回的集合中包含的文档数量是否为1。
 
-```pypython
+```py
 def test_query(memstore):
    # 在memstore中添加一个名为"test_task"的任务，一个名为"This is a test document."的文档，以及一个名为"test_metadata"的元数据。
    task_id = "test_task"
@@ -894,7 +894,7 @@ It has the following methods:
 * `raise_internal_server_error`: Raises an `InternalServerError` if the server raises an error.
 
 Example usage:
-```pyscss
+```py
 async def fetch_task_steps(task_id, page, page_size):
    response = await client.get(
        f"https://example.com/agent/tasks/{task_id}",
@@ -1371,7 +1371,7 @@ Follow the on-screen instructions to complete the process.
 Next, clone your newly forked repository to your local system. Ensure you have Git installed to proceed with this step. You can download Git from [here](https://git-scm.com/downloads). Then clone the repo using the following command and the url for your repo. You can find the correct url by clicking on the green Code button on your repos main page.
 ![img_1.png](../../../docs/content/imgs/quickstart/003A_clone.png)
 
-```pybash
+```py
 # replace the url with the one for your forked repo
 git clone https://github.com/<YOUR REPO PATH HERE>
 ```
@@ -1381,7 +1381,7 @@ git clone https://github.com/<YOUR REPO PATH HERE>
 ### Setting up the Project
 
 Once you have clone the project change your directory to the newly cloned project:
-```pybash
+```py
 # The name of the directory will match the name you gave your fork. The default is AutoGPT
 cd AutoGPT
 ```
@@ -1396,7 +1396,7 @@ Choose a suitable name for your agent. It should be unique and descriptive. Exam
 
 Create your agent template using the command:
 
-```pybash
+```py
  ./run agent create YOUR_AGENT_NAME
  ```
  Replacing YOUR_AGENT_NAME with the name you chose in the previous step.
@@ -1408,7 +1408,7 @@ The Arena is a collection of all AutoGPT agents ranked by performance on our ben
 
 Officially enter the Arena by executing the command:
 
-```pybash
+```py
 ./run arena enter YOUR_AGENT_NAME
 ```
 
@@ -1418,7 +1418,7 @@ Officially enter the Arena by executing the command:
 
 Begin by starting your agent using the command:
 
-```pybash
+```py
 ./run agent start YOUR_AGENT_NAME
 ```
 This will initiate the agent on `http://localhost:8000/`.
@@ -1433,7 +1433,7 @@ Access the frontend at `http://localhost:8000/` and log in using a Google or Git
 
 ### Stopping and Restarting Your Agent
 When needed, use Ctrl+C to end the session or use the stop command:
-```pybash
+```py
 ./run agent stop
 ``` 
 This command forcefully stops the agent. You can also restart it using the start command.

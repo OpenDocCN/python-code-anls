@@ -1,6 +1,6 @@
 # `basic-computer-games\19_Bunny\csharp\BasicData.cs`
 
-```
+```py
 // 引入命名空间
 using System;
 using System.Collections.Generic;

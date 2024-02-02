@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\scrcpy\const.py`
 
-```
+```py
 """
 This module includes all consts used in this project
 """

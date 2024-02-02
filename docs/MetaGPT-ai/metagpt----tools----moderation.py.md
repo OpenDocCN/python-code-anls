@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\moderation.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

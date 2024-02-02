@@ -1,6 +1,6 @@
 # `so-vits-svc\modules\F0Predictor\rmvpe\deepunet.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn 模块

@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_search_engine.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

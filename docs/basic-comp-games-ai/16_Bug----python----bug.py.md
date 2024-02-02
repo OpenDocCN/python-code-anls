@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\python\bug.py`
 
-```
+```py
 # 导入随机数模块
 import random
 # 导入时间模块

@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\Assets.cs`
 
-```
+```py
 // 引入不可变集合的命名空间
 using System.Collections.Immutable;
 

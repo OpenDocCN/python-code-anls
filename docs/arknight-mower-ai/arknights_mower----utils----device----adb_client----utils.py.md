@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\device\adb_client\utils.py`
 
-```
+```py
 # 导入必要的模块和类型提示
 from __future__ import annotations
 import shutil

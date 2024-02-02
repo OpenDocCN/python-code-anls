@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Utilities\DotnetUtils\DotnetUtils\Program.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System.Xml.Linq;
 using DotnetUtils;

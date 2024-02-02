@@ -1,6 +1,6 @@
 # `kubehunter\tests\conf\test_logging.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 从 kube_hunter.conf.logging 模块中导入 setup_logger 函数

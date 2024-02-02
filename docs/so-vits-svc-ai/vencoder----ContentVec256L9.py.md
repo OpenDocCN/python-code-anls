@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\ContentVec256L9.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 fairseq 库中导入 checkpoint_utils 模块

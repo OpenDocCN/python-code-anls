@@ -1,6 +1,6 @@
 # `basic-computer-games\10_Blackjack\csharp\Program.cs`
 
-```
+```py
 // 定义名为 Blackjack 的命名空间
 namespace Blackjack
 {

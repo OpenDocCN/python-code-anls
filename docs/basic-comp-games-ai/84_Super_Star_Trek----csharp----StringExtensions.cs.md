@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\StringExtensions.cs`
 
-```
+```py
 # 创建名为 SuperStarTrek 的命名空间，并定义一个内部静态类 StringExtensions
 namespace SuperStarTrek;
 

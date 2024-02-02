@@ -21,7 +21,7 @@ Abbreviations are defined using the syntax established in
 
 Thus, the following text (taken from the above referenced PHP documentation):
 
-```md
+```py
 The HTML specification
 is maintained by the W3C.
 
@@ -31,7 +31,7 @@ is maintained by the W3C.
 
 will be rendered as:
 
-```html
+```py
 <p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification
 is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p>
 ```
@@ -46,6 +46,6 @@ This extension does not accept any special configuration options.
 
 A trivial example:
 
-```python
+```py
 markdown.markdown(some_text, extensions=['abbr'])
 ```

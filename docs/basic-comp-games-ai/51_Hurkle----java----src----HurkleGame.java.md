@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\java\src\HurkleGame.java`
 
-```
+```py
 # 定义名为 HurkleGame 的公共类
 public class HurkleGame {
 

@@ -1,6 +1,6 @@
 # `kubehunter\tests\hunting\test_cvehunting.py`
 
-```
+```py
 # 导入时间模块
 import time
 

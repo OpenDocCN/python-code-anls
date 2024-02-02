@@ -1,6 +1,6 @@
 # `basic-computer-games\64_Nicomachus\javascript\nicomachus.js`
 
-```
+```py
 // NICOMACHUS
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)

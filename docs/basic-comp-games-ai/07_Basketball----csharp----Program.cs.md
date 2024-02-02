@@ -1,6 +1,6 @@
 # `basic-computer-games\07_Basketball\csharp\Program.cs`
 
-```
+```py
 # 导入篮球游戏模块
 using Basketball;
 # 导入通用输入输出模块

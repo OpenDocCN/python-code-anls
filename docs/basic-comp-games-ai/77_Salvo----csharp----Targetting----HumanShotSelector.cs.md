@@ -1,6 +1,6 @@
 # `basic-computer-games\77_Salvo\csharp\Targetting\HumanShotSelector.cs`
 
-```
+```py
 // 命名空间 Salvo.Targetting 下的内部类 HumanShotSelector，继承自 ShotSelector 类
 internal class HumanShotSelector : ShotSelector
 {

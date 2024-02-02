@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\TradingDay.cs`
 
-```
+```py
 // 引入不可变集合和 LINQ 查询
 using System.Collections.Immutable;
 using System.Linq;

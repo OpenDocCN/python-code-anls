@@ -1,6 +1,6 @@
 # `basic-computer-games\20_Buzzword\java\src\BuzzwordSupplier.java`
 
-```
+```py
 import java.util.Random;
 import java.util.function.Supplier;
 

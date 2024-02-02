@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestCached.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 从util模块中导入Cached类

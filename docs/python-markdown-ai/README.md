@@ -36,10 +36,10 @@ supported by the [Available Extensions][].
 Documentation
 -------------
 
-```bash
+```py
 pip install markdown
 ```
-```python
+```py
 import markdown
 html = markdown.markdown(your_text_string)
 ```

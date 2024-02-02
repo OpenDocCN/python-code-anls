@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common.Test\IO\TokenReaderTests.cs`
 
-```
+```py
 // 引入所需的命名空间
 using System;
 using System.IO;

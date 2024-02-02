@@ -140,7 +140,7 @@ distinguish itself as a continuation line. The closing parenthesis, bracket or
 brace should be on a line by itself and should line up under the first character
 of the line that starts the multi-line construct.
 
-```python
+```py
 my_list = [
     1, 2, 3,
     4, 5, 6,
@@ -155,7 +155,7 @@ When the conditional part of an `if`-statement is long enough to require that it
 be written across multiple lines, extra indentation should be included on the
 conditional continuation line.
 
-```python
+```py
 if (this_is_one_thing
         and that_is_another_thing):
     do_something()
@@ -186,13 +186,13 @@ documentation.
 
 Headers should use the hash style. For example:
 
-```md
+```py
 ## Some important topic
 ```
 
 The underline style should not be used. Don't do this:
 
-```md
+```py
 Some important topic
 ====================
 ```
@@ -202,7 +202,7 @@ Some important topic
 Links should always use the reference style, with the referenced hyperlinks kept
 at the end of the document.
 
-```md
+```py
 Here is a link to [some other thing][other-thing].
 
 More text...
@@ -217,7 +217,7 @@ you should use a relative link, and link to the `.md` suffix. If applicable, it
 is preferred that the link includes a hash fragment pointing to the specific
 section of the page. For example:
 
-```md
+```py
 [authentication]: reference.md#Markdown
 ```
 
@@ -231,7 +231,7 @@ converted into regular links which point to the built HTML pages.
 If you want to draw attention to a note or warning, use the syntax defined in
 Python-Markdown's [Admonition Extension]:
 
-```md
+```py
 !!! note
 
     This is the content of the note.
@@ -290,7 +290,7 @@ environment], which isolates any experimental code from the general system. To
 create a virtual environment, use the following command from the root of the
 local working copy of your GitHub fork:
 
-```sh
+```py
 virtualenv venv
 ```
 
@@ -302,13 +302,13 @@ very reason.
 On Posix systems (Linux, BSD, MacOS, etc.), use the following command to
 activate the environment:
 
-```sh
+```py
 source venv/bin/activate
 ```
 
 On Windows, use this command instead:
 
-```sh
+```py
 venv/Scripts/activate
 ```
 
@@ -318,7 +318,7 @@ To be able to run the Markdown library directly while working on it, install the
 working copy into the environment in [Development Mode] after activating the
 virtual environment for the first time:
 
-```sh
+```py
 pip install -e .
 ```
 
@@ -327,46 +327,46 @@ environment.
 
 You can run the command line script with the following command:
 
-```sh
+```py
 python -m markdown
 ```
 
 Before building the documentation for the first time, you will need to install
 some optional dependencies with the command:
 
-```sh
+```py
 pip install -e .[docs]
 ```
 
 To build the documentation and serve it locally on a development server, run:
 
-```sh
+```py
 mkdocs serve
 ```
 
 Then point your browser at `http://127.0.0.1:8000/`. For a complete list of
 options available, view MkDocs' help with the command:
 
-```sh
+```py
 mkdocs --help
 ```
 
 Before running tests for the first time, you will need to install some optional
 dependencies with the command:
 
-```sh
+```py
 pip install -e .[testing]
 ```
 
 And you can directly run the tests with:
 
-```sh
+```py
 python -m unittest discover tests
 ```
 
 To get a coverage report after running the tests, use these commands instead:
 
-```sh
+```py
 coverage run --source=markdown -m unittest discover tests
 coverage report --show-missing
 ```
@@ -389,7 +389,7 @@ tests for the continuous integration server to run when a pull request is
 submitted, for more advanced changes, you may want to run those tests locally.
 To do so, simply install tox:
 
-```sh
+```py
 pip install tox
 ```
 

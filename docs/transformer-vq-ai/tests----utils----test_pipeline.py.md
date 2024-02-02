@@ -1,6 +1,6 @@
 # `transformer_vq\tests\utils\test_pipeline.py`
 
-```
+```py
 # 导入需要的库
 import jax
 import numpy as np

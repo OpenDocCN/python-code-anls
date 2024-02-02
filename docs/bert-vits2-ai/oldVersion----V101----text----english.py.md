@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V101\text\english.py`
 
-```
+```py
 # 导入 pickle、os、re 和 G2p 模块
 import pickle
 import os

@@ -1,6 +1,6 @@
 # `basic-computer-games\83_Stock_Market\csharp\TransactionResult.cs`
 
-```
+```py
 // 命名空间 Game
 namespace Game
 {

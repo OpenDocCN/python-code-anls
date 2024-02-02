@@ -1,6 +1,6 @@
 # `basic-computer-games\71_Poker\csharp\Game.cs`
 
-```
+```py
 // 引入所需的命名空间
 using Poker.Cards;
 using Poker.Players;

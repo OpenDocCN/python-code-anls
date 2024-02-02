@@ -1,6 +1,6 @@
 # `basic-computer-games\17_Bullfight\csharp\View.cs`
 
-```
+```py
 # 命名空间声明，定义了一个名为 Game 的命名空间
 namespace Game
 {

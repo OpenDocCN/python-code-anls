@@ -1,6 +1,6 @@
 # `transformer_vq\src\transformer_vq\utils\tree.py`
 
-```
+```py
 # 导入 flax 模块
 import flax
 

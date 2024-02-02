@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\fallback\aes.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 pyaes 模块

@@ -1,6 +1,6 @@
 # `qlora\eval\qa_baseline_gpt.py`
 
-```
+```py
 # 从 https://github.com/lm-sys/FastChat/blob/b3c8bd71637d6c88206a360be436e7941b4fffb4/fastchat/eval/qa_baseline_gpt35.py 改编而来，用于使用 GPT-3.5 生成答案
 """Generate answers with GPT-3.5"""
 # 注意：你需要使用 OpenAI Python v0.27.0 才能让下面的代码正常工作

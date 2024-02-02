@@ -1,6 +1,6 @@
 # `ChatRWKV\v2\chat.py`
 
-```
+```py
 # 导入必要的库和模块
 import os, copy, types, gc, sys
 # 获取当前文件所在路径

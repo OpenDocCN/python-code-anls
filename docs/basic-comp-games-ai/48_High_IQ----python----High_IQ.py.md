@@ -1,6 +1,6 @@
 # `basic-computer-games\48_High_IQ\python\High_IQ.py`
 
-```
+```py
 # 导入类型提示模块 Dict
 from typing import Dict
 

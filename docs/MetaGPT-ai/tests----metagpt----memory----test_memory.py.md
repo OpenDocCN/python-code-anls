@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\memory\test_memory.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

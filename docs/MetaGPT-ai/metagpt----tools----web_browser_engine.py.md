@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\tools\web_browser_engine.py`
 
-```
+```py
 
 #!/usr/bin/env python
 """

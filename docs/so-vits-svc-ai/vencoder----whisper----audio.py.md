@@ -1,6 +1,6 @@
 # `so-vits-svc\vencoder\whisper\audio.py`
 
-```
+```py
 # 导入必要的模块和库
 from functools import lru_cache
 from typing import Union

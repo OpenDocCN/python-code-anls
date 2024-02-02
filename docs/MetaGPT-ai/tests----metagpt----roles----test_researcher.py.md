@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\roles\test_researcher.py`
 
-```
+```py
 
 # 导入所需的模块
 from pathlib import Path

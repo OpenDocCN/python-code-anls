@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\Cached.py`
 
-```
+```py
 import time  # 导入时间模块
 
 

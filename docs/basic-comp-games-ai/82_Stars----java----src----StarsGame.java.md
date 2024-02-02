@@ -1,6 +1,6 @@
 # `basic-computer-games\82_Stars\java\src\StarsGame.java`
 
-```
+```py
 # 导入 java.lang.reflect.AnnotatedType 类
 import java.lang.reflect.AnnotatedType;
 

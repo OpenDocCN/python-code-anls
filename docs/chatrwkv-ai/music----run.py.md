@@ -1,6 +1,6 @@
 # `ChatRWKV\music\run.py`
 
-```
+```py
 # The RWKV Language Model - https://github.com/BlinkDL/RWKV
 # 导入所需的库
 import os, sys

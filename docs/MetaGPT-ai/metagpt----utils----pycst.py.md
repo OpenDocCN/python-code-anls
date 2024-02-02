@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\pycst.py`
 
-```
+```py
 
 # 导入必要的模块和类型
 from __future__ import annotations

@@ -1,6 +1,6 @@
 # `ZeroNet\src\lib\sslcrypto\fallback\rsa.py`
 
-```
+```py
 # 禁用 pylint 对于过少公共方法的警告
 # 定义 RSA 类
 class RSA:

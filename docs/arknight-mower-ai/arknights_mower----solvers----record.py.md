@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\solvers\record.py`
 
-```
+```py
 # 导入sqlite3模块，用于操作SQLite数据库
 import sqlite3
 # 导入os模块，用于提供与操作系统交互的功能

@@ -1,6 +1,6 @@
 # `markdown\markdown\htmlparser.py`
 
-```
+```py
 
 # Python Markdown
 

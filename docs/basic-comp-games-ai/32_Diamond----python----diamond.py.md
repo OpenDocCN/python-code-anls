@@ -1,6 +1,6 @@
 # `basic-computer-games\32_Diamond\python\diamond.py`
 
-```
+```py
 """
 DIAMOND
 

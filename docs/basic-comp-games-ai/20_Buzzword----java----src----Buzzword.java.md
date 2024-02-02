@@ -1,6 +1,6 @@
 # `basic-computer-games\20_Buzzword\java\src\Buzzword.java`
 
-```
+```py
 import java.util.Scanner;
 
 public class Buzzword {

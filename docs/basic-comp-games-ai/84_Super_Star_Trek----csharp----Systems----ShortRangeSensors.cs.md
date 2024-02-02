@@ -1,6 +1,6 @@
 # `basic-computer-games\84_Super_Star_Trek\csharp\Systems\ShortRangeSensors.cs`
 
-```
+```py
 {
     // 定义 ShortRangeSensors 类，继承自 Subsystem 类
     private readonly Enterprise _enterprise; // 保存 Enterprise 对象的引用

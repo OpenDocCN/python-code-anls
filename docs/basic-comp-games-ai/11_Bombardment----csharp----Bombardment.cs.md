@@ -1,6 +1,6 @@
 # `basic-computer-games\11_Bombardment\csharp\Bombardment.cs`
 
-```
+```py
 // 引入系统和集合类库
 using System;
 using System.Collections.Generic;

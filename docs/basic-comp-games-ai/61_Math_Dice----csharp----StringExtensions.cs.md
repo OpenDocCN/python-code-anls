@@ -1,6 +1,6 @@
 # `basic-computer-games\61_Math_Dice\csharp\StringExtensions.cs`
 
-```
+```py
 # 命名空间 MathDice 中定义了一个静态类 StringExtensions
 namespace MathDice
 {

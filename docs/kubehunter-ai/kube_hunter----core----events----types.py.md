@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\core\events\types.py`
 
-```
+```py
 # 导入 threading 模块，用于支持多线程编程
 import threading
 # 导入 requests 模块，用于发送 HTTP 请求

@@ -1,6 +1,6 @@
 # `basic-computer-games\75_Roulette\java\oop\Roulette.java`
 
-```
+```py
 // 导入所需的类
 import java.io.BufferedReader;
 import java.io.IOException;

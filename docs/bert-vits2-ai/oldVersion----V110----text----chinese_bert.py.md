@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V110\text\chinese_bert.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 sys 库

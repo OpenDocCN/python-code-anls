@@ -7,7 +7,7 @@ Ways to play:
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
-```
+```py
 	miniscript amazing.ms
 ```
 Note that because this program imports "listUtil", you will need to have a the standard MiniScript libraries somewhere in your import path.
@@ -15,7 +15,7 @@ Note that because this program imports "listUtil", you will need to have a the s
 2. Mini Micro:
 Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
-```
+```py
 	load "amazing"
 	run
 ```

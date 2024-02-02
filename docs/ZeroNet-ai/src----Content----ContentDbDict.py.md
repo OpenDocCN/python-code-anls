@@ -1,6 +1,6 @@
 # `ZeroNet\src\Content\ContentDbDict.py`
 
-```
+```py
 # 导入时间和操作系统模块
 import time
 import os

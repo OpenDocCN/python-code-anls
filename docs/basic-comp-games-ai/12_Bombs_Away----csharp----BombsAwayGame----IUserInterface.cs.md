@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayGame\IUserInterface.cs`
 
-```
+```py
 // 命名空间声明，表示BombsAwayGame命名空间
 namespace BombsAwayGame;
 

@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\utils\special_tokens.py`
 
-```
+```py
 
 # 定义用于在 WriteCode 消息内容中分隔不同代码消息的标记
 MSG_SEP = "#*000*#"

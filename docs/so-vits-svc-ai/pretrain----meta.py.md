@@ -1,6 +1,6 @@
 # `so-vits-svc\pretrain\meta.py`
 
-```
+```py
 # 定义一个函数，返回一个包含多个模型下载信息的字典
 def download_dict():
     return {

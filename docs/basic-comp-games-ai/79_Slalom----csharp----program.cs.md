@@ -1,6 +1,6 @@
 # `basic-computer-games\79_Slalom\csharp\program.cs`
 
-```
+```py
 # 导入 System.Text 命名空间
 using System.Text;
 

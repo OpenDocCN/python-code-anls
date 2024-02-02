@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\__init__.py`
 
-```
+```py
 # 导入 platform 模块
 import platform
 # 导入 sys 模块

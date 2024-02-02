@@ -1,6 +1,6 @@
 # `basic-computer-games\09_Battle\python\battle.py`
 
-```
+```py
 #!/usr/bin/env python3
 from random import randrange
 from typing import List, Tuple

@@ -1,6 +1,6 @@
 # `Bert-VITS2\oldVersion\V220\text\japanese_bert.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

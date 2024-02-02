@@ -1,6 +1,6 @@
 # `basic-computer-games\87_3-D_Plot\csharp\Function.cs`
 
-```
+```py
 using System;
 using System.Collections.Generic;
 

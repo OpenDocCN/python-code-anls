@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\java\Bounce.java`
 
-```
+```py
 // 导入 Scanner 类和 Math 类
 import java.util.Scanner;
 import java.lang.Math;

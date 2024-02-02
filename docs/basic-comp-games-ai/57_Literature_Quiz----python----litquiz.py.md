@@ -1,6 +1,6 @@
 # `basic-computer-games\57_Literature_Quiz\python\litquiz.py`
 
-```
+```py
 """
 LITQUIZ
 

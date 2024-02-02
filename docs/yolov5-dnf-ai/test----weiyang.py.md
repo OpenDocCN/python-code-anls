@@ -1,6 +1,6 @@
 # `yolov5-DNF\test\weiyang.py`
 
-```
+```py
 # 导入需要的库
 import cv2
 import numpy as np

@@ -1,6 +1,6 @@
 # `KubiScan\engine\capabilities\capabilities.py`
 
-```
+```py
 # 定义一个包含能力名称和对应数值的字典
 caps_list = {
   "CHOWN": 1,  # 更改文件所有者

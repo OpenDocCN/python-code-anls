@@ -1,6 +1,6 @@
 # `basic-computer-games\74_Rock_Scissors_Paper\csharp\Choice.cs`
 
-```
+```py
 # 定义名为 RockScissorsPaper 的命名空间
 namespace RockScissorsPaper
 {

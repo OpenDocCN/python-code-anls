@@ -1,6 +1,6 @@
 # `basic-computer-games\78_Sine_Wave\csharp\Program.cs`
 
-```
+```py
 // 输出标题
 Console.WriteLine(Tab(30) + "Sine Wave");
 // 输出作者信息

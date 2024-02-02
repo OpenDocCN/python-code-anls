@@ -1,6 +1,6 @@
 # `kubehunter\kube_hunter\modules\hunting\mounts.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 导入 re 模块，用于正则表达式操作

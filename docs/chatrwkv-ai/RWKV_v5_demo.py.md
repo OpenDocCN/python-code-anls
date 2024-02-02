@@ -1,6 +1,6 @@
 # `ChatRWKV\RWKV_v5_demo.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 np.set_printoptions(precision=4, suppress=True, linewidth=200)

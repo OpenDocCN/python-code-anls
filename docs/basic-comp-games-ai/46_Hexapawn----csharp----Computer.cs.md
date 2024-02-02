@@ -1,6 +1,6 @@
 # `basic-computer-games\46_Hexapawn\csharp\Computer.cs`
 
-```
+```py
 using System; // 导入系统命名空间
 using System.Collections.Generic; // 导入集合类命名空间
 using System.Linq; // 导入 LINQ 命名空间

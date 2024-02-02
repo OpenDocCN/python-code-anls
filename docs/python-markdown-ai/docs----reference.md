@@ -9,7 +9,7 @@ used by various projects to convert Markdown syntax into HTML.
 
 To use markdown as a module:
 
-```python
+```py
 import markdown
 html = markdown.markdown(your_text_string)
 ```
@@ -237,7 +237,7 @@ argument of the [`markdown.markdown`](#markdown) function.
 You should also use this method if you want to process multiple strings
 without creating a new instance of the class for each string.
 
-```python
+```py
 md = markdown.Markdown()
 html1 = md.convert(text1)
 html2 = md.convert(text2)
@@ -246,7 +246,7 @@ html2 = md.convert(text2)
 Depending on which options and/or extensions are being used, the parser may
 need its state reset between each call to `convert`.
 
-```python
+```py
 html1 = md.convert(text1)
 md.reset()
 html2 = md.convert(text2)
@@ -254,7 +254,7 @@ html2 = md.convert(text2)
 
 To make this easier, you can also chain calls to `reset` together:
 
-```python
+```py
 html3 = md.reset().convert(text3)
 ```
 

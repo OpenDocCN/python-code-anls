@@ -1,6 +1,6 @@
 # `so-vits-svc\vdecoder\hifiganwithsnake\alias\filter.py`
 
-```
+```py
 # 导入所需的库
 import math
 import torch

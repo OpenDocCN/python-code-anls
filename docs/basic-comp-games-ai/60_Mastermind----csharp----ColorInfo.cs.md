@@ -1,6 +1,6 @@
 # `basic-computer-games\60_Mastermind\csharp\ColorInfo.cs`
 
-```
+```py
 // 引入 System 命名空间
 using System;
 

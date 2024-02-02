@@ -1,6 +1,6 @@
 # `basic-computer-games\16_Bug\csharp\Resources\Message.cs`
 
-```
+```py
 // BugGame.Parts 命名空间的引用
 using BugGame.Parts;
 

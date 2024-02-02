@@ -1,6 +1,6 @@
 # `ZeroNet\src\util\__init__.py`
 
-```
+```py
 # 从当前目录中导入 Cached 模块
 from .Cached import Cached
 # 从当前目录中导入 Event 模块

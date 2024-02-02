@@ -1,6 +1,6 @@
 # `ZeroNet\src\Test\TestWeb.py`
 
-```
+```py
 # 导入 urllib.request 模块
 import urllib.request
 

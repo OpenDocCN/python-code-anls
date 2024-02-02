@@ -1,6 +1,6 @@
 # `MetaGPT\metagpt\provider\zhipuai_api.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

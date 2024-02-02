@@ -5,7 +5,7 @@ This program produces random verse which might loosely be considered in the Japa
 The phrases in POETRY are somewhat suggestive of Edgar Allen Poe. Try it with phrases from computer technology, from love and romance, from four-year-old children, or from some other project. Send us the output.
 
 Here are some phrases from nature to try:
-```
+```py
 Carpet of ferns     Mighty Oaks
 Morning dew         Grace and beauty
 Tang of dawn        Silently singing

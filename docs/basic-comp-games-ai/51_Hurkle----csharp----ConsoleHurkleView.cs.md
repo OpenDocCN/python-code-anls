@@ -1,6 +1,6 @@
 # `basic-computer-games\51_Hurkle\csharp\ConsoleHurkleView.cs`
 
-```
+```py
 # 引入 System 命名空间
 using System;
 

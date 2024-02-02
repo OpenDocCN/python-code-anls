@@ -1,6 +1,6 @@
 # `arknights-mower\arknights_mower\utils\simulator.py`
 
-```
+```py
 # 导入子进程模块
 import subprocess
 # 导入枚举类型模块

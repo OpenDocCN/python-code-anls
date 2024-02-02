@@ -1,6 +1,6 @@
 # `basic-computer-games\00_Common\dotnet\Games.Common\IO\Strings.cs`
 
-```
+```py
 # 声明一个命名空间为 Games.Common.IO
 namespace Games.Common.IO;
 

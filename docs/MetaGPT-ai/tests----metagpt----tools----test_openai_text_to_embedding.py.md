@@ -1,6 +1,6 @@
 # `MetaGPT\tests\metagpt\tools\test_openai_text_to_embedding.py`
 
-```
+```py
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

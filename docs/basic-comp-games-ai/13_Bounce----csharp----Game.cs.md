@@ -1,6 +1,6 @@
 # `basic-computer-games\13_Bounce\csharp\Game.cs`
 
-```
+```py
 // 引用 Bounce.Resources.Resource 中的静态成员
 using static Bounce.Resources.Resource;
 

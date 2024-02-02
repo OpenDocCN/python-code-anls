@@ -1,6 +1,6 @@
 # `ZeroNet\src\Crypt\CryptBitcoin.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入 base64 编码模块

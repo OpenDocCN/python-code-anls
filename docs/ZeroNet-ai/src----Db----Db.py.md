@@ -1,6 +1,6 @@
 # `ZeroNet\src\Db\Db.py`
 
-```
+```py
 # 导入所需的模块
 import sqlite3
 import json

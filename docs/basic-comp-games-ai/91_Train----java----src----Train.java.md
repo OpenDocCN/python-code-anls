@@ -1,6 +1,6 @@
 # `basic-computer-games\91_Train\java\src\Train.java`
 
-```
+```py
 import java.util.Arrays;
 import java.util.Scanner;
 

@@ -53,13 +53,13 @@ Links to memory backends
 
 1. Launch Redis container
 
-    ```pyshell
+    ```py
     docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
     ```
 
 3. Set the following settings in `.env`
 
-    ```pyshell
+    ```py
     MEMORY_BACKEND=redis
     REDIS_HOST=localhost
     REDIS_PORT=6379
@@ -161,7 +161,7 @@ To enable it, set `USE_WEAVIATE_EMBEDDED` to `True` and make sure you `poetry ad
 
 Install the Weaviate client before usage.
 
-```pyshell
+```py
 $ poetry add weaviate-client
 ```
 
@@ -169,7 +169,7 @@ $ poetry add weaviate-client
 
 In your `.env` file set the following:
 
-```pyini
+```py
 MEMORY_BACKEND=weaviate
 WEAVIATE_HOST="127.0.0.1" # the IP or domain of the running Weaviate instance
 WEAVIATE_PORT="8080" 
@@ -199,7 +199,7 @@ View memory usage by using the `--debug` flag :)
 
 Memory pre-seeding allows you to ingest files into memory and pre-seed it before running AutoGPT.
 
-```pyshell
+```py
 $ python data_ingestion.py -h 
 usage: data_ingestion.py [-h] (--file FILE | --dir DIR) [--init] [--overlap OVERLAP] [--max_length MAX_LENGTH]
 
@@ -352,7 +352,7 @@ _Remember that your free daily custom search quota allows only up to 100 searche
 
 Enter this command to use TTS _(Text-to-Speech)_ for AutoGPT
 
-```pyshell
+```py
 python -m autogpt --speak
 ```
 
@@ -1169,7 +1169,7 @@ async function downloadOffline() {
 该函数旨在在从离线缓存中下载资源之前尝试从互联网上下载资源。它使用了 fetch 函数来发起一个 HTTP 请求，并在请求返回时将其缓存到名为 CACHE_NAME 的缓存中。如果从缓存中已下载了资源，该函数将直接返回该资源，否则会使用 cache.match() 函数尝试从互联网上下载该资源。如果从互联网上下载成功，它将返回该资源，否则会捕获并处理任何错误。
 
 以下是函数的示例用法：
-```pyjavascript
+```py
 // 事件监听器，用于处理从窗口注册的 onload 事件
 window.addEventListener('onload', onlineFirst);
 ```

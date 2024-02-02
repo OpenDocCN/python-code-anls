@@ -1,6 +1,6 @@
 # `basic-computer-games\12_Bombs_Away\csharp\BombsAwayConsole\Program.cs`
 
-```
+```py
 /// 使用 ConsoleUserInterface 创建并玩游戏
 PlayGameWhileUserWantsTo(new ConsoleUserInterface());
 
