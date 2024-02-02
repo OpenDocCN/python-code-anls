@@ -15,3 +15,4 @@
 +   [TransformerVQ 源码解析](docs/transformer-vq-ai/README.md)
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
 +   [KubiScan 源码解析](docs/kubiscan-ai/README.md)
++   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
