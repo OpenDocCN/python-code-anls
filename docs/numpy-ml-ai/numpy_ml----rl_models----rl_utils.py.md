@@ -1,0 +1,496 @@
+# `numpy-ml\numpy_ml\rl_models\rl_utils.py`
+
+```
+# 导入警告模块
+import warnings
+# 导入 product 函数和 defaultdict 类
+from itertools import product
+from collections import defaultdict
+
+# 导入 numpy 库
+import numpy as np
+
+# 导入自定义的 DependencyWarning 类
+from numpy_ml.utils.testing import DependencyWarning
+# 导入 tiles 和 IHT 函数
+from numpy_ml.rl_models.tiles.tiles3 import tiles, IHT
+
+# 初始化 NO_PD 变量为 False
+NO_PD = False
+# 尝试导入 pandas 库，如果导入失败则将 NO_PD 设置为 True
+try:
+    import pandas as pd
+except ModuleNotFoundError:
+    NO_PD = True
+
+# 尝试导入 gym 库，如果导入失败则发出警告
+try:
+    import gym
+except ModuleNotFoundError:
+    fstr = (
+        "Agents in `numpy_ml.rl_models` use the OpenAI gym for training. "
+        "To install the gym environments, run `pip install gym`. For more"
+        " information, see https://github.com/openai/gym."
+    )
+    warnings.warn(fstr, DependencyWarning)
+
+# 定义一个简单的环境模型类
+class EnvModel(object):
+    """
+    A simple tabular environment model that maintains the counts of each
+    reward-outcome pair given the state and action that preceded them. The
+    model can be queried with
+
+        >>> M = EnvModel()
+        >>> M[(state, action, reward, next_state)] += 1
+        >>> M[(state, action, reward, next_state)]
+        1
+        >>> M.state_action_pairs()
+        [(state, action)]
+        >>> M.outcome_probs(state, action)
+        [(next_state, 1)]
+    """
+
+    # 初始化方法
+    def __init__(self):
+        super(EnvModel, self).__init__()
+        # 使用 defaultdict 创建一个嵌套字典作为环境模型
+        self._model = defaultdict(lambda: defaultdict(lambda: 0))
+
+    # 设置方法，设置环境模型中的值
+    def __setitem__(self, key, value):
+        """Set self[key] to value"""
+        s, a, r, s_ = key
+        self._model[(s, a)][(r, s_)] = value
+
+    # 获取方法，获取环境模型中的值
+    def __getitem__(self, key):
+        """Return the value associated with key"""
+        s, a, r, s_ = key
+        return self._model[(s, a)][(r, s_)]
+
+    # 包含方法，判断环境模型是否包含某个键
+    def __contains__(self, key):
+        """True if EnvModel contains `key`, else False"""
+        s, a, r, s_ = key
+        # 判断状态-动作对和奖励-下一个状态对是否在环境模型中
+        p1 = (s, a) in self.state_action_pairs()
+        p2 = (r, s_) in self.reward_outcome_pairs()
+        return p1 and p2
+    # 返回环境模型中所有状态和动作对
+    def state_action_pairs(self):
+        """Return all (state, action) pairs in the environment model"""
+        return list(self._model.keys())
+
+    # 返回在状态`s`中采取动作`a`时关联的所有奖励和下一个状态对
+    def reward_outcome_pairs(self, s, a):
+        """
+        Return all (reward, next_state) pairs associated with taking action `a`
+        in state `s`.
+        """
+        return list(self._model[(s, a)].keys())
+
+    # 返回在状态`s`中采取动作`a`后每个可能结果状态的环境模型概率
+    def outcome_probs(self, s, a):
+        """
+        Return the probability under the environment model of each outcome
+        state after taking action `a` in state `s`.
+
+        Parameters
+        ----------
+        s : int as returned by ``self._obs2num``
+            The id for the state/observation.
+        a : int as returned by ``self._action2num``
+            The id for the action taken from state `s`.
+
+        Returns
+        -------
+        outcome_probs : list of (state, prob) tuples
+            A list of each possible outcome and its associated probability
+            under the model.
+        """
+        items = list(self._model[(s, a)].items())
+        total_count = np.sum([c for (_, c) in items])
+        outcome_probs = [c / total_count for (_, c) in items]
+        outcomes = [p for (p, _) in items]
+        return list(zip(outcomes, outcome_probs))
+
+    # 返回所有具有在当前模型下产生`outcome`的非零概率的状态和动作对
+    def state_action_pairs_leading_to_outcome(self, outcome):
+        """
+        Return all (state, action) pairs that have a nonzero probability of
+        producing `outcome` under the current model.
+
+        Parameters
+        ----------
+        outcome : int
+            The outcome state.
+
+        Returns
+        -------
+        pairs : list of (state, action) tuples
+            A list of all (state, action) pairs with a nonzero probability of
+            producing `outcome` under the model.
+        """
+        pairs = []
+        for sa in self.state_action_pairs():
+            outcomes = [o for (r, o) in self.reward_outcome_pairs(*sa)]
+            if outcome in outcomes:
+                pairs.append(sa)
+        return pairs
+# 定义一个函数，用于将环境生成的连续观测编码为状态空间的一组重叠瓦片
+def tile_state_space(
+    env,  # 环境对象，openAI环境
+    env_stats,  # 环境统计信息
+    n_tilings,  # 使用的重叠瓦片数量，应为2的幂，决定离散化瓦片编码状态向量的维度
+    obs_max=None,  # 观测空间的最大值，用于计算网格宽度，默认为None，使用env.observation_space.high
+    obs_min=None,  # 观测空间的最小值，用于计算网格宽度，默认为None，使用env.observation_space.low
+    state_action=False,  # 是否使用瓦片编码来编码状态-动作值（True）或仅状态值（False），默认为False
+    grid_size=(4, 4),  # 瓦片的粗糙度列表，每个瓦片由一个4x4的网格组成，默认为[4, 4]
+):
+    """
+    Return a function to encode the continous observations generated by `env`
+    in terms of a collection of `n_tilings` overlapping tilings (each with
+    dimension `grid_size`) of the state space.
+
+    Arguments
+    ---------
+    env : ``gym.wrappers.time_limit.TimeLimit`` instance
+        An openAI environment.
+    n_tilings : int
+        The number of overlapping tilings to use. Should be a power of 2. This
+        determines the dimension of the discretized tile-encoded state vector.
+    obs_max : float or np.ndarray
+        The value to treat as the max value of the observation space when
+        calculating the grid widths. If None, use
+        ``env.observation_space.high``. Default is None.
+    obs_min : float or np.ndarray
+        The value to treat as the min value of the observation space when
+        calculating the grid widths. If None, use
+        ``env.observation_space.low``. Default is None.
+    state_action : bool
+        Whether to use tile coding to encode state-action values (True) or just
+        state values (False). Default is False.
+    grid_size : list of length 2
+        A list of ints representing the coarseness of the tilings. E.g., a
+        `grid_size` of [4, 4] would mean each tiling consisted of a 4x4 tile
+        grid. Default is [4, 4].
+
+    Returns
+    -------
+    encode_obs_as_tile : function
+        A function which takes as input continous observation vector and
+        returns a set of the indices of the active tiles in the tile coded
+        observation space.
+    n_states : int
+        An integer reflecting the total number of unique states possible under
+        this tile coding regimen.
+    """
+    # 如果obs_max为None，则将env.observation_space.high转换为数值，否则保持obs_max不变
+    obs_max = np.nan_to_num(env.observation_space.high) if obs_max is None else obs_max
+    # 如果obs_min为None，则将env.observation_space.low转换为数值，否则保持obs_min不变
+    obs_min = np.nan_to_num(env.observation_space.low) if obs_min is None else obs_min
+    # 如果状态动作存在
+    if state_action:
+        # 如果环境统计中包含元组动作
+        if env_stats["tuple_action"]:
+            # 计算每个动作空间的数量
+            n = [space.n - 1.0 for space in env.action_spaces.spaces]
+        else:
+            # 获取环境动作空间的数量
+            n = [env.action_space.n]
+
+        # 更新观测最大值和最小值
+        obs_max = np.concatenate([obs_max, n])
+        obs_min = np.concatenate([obs_min, np.zeros_like(n)])
+
+    # 计算观测范围
+    obs_range = obs_max - obs_min
+    # 计算缩放比例
+    scale = 1.0 / obs_range
+
+    # 定义缩放观测向量的函数
+    scale_obs = lambda obs: obs * scale  # noqa: E731
+
+    # 计算总瓦片数和总状态数
+    n_tiles = np.prod(grid_size) * n_tilings
+    n_states = np.prod([n_tiles - i for i in range(n_tilings)])
+    # 创建指示器哈希表
+    iht = IHT(16384)
+
+    # 定义将观测编码为瓦片的函数
+    def encode_obs_as_tile(obs):
+        # 缩放观测向量
+        obs = scale_obs(obs)
+        return tuple(tiles(iht, n_tilings, obs))
+
+    # 返回编码观测为瓦片的函数和总状态数
+    return encode_obs_as_tile, n_states
+# 返回所有有效的 OpenAI ``gym`` 环境的 ID 列表
+def get_gym_environs():
+    return [e.id for e in gym.envs.registry.all()]
+
+
+# 返回一个包含环境 ID 的 pandas DataFrame
+def get_gym_stats():
+    df = []
+    # 遍历所有 gym 环境
+    for e in gym.envs.registry.all():
+        # 打印环境 ID
+        print(e.id)
+        # 获取环境统计信息并添加到 DataFrame 中
+        df.append(env_stats(gym.make(e.id)))
+    cols = [
+        "id",
+        "continuous_actions",
+        "continuous_observations",
+        "action_dim",
+        #  "action_ids",
+        "deterministic",
+        "multidim_actions",
+        "multidim_observations",
+        "n_actions_per_dim",
+        "n_obs_per_dim",
+        "obs_dim",
+        #  "obs_ids",
+        "seed",
+        "tuple_actions",
+        "tuple_observations",
+    ]
+    # 如果没有安装 pandas，则返回列表，否则返回 DataFrame
+    return df if NO_PD else pd.DataFrame(df)[cols]
+
+
+# 检查环境的动作和观察空间是否为 ``gym.spaces.Tuple`` 或 ``gym.spaces.Dict``
+def is_tuple(env):
+    tuple_space, dict_space = gym.spaces.Tuple, gym.spaces.dict.Dict
+    # 检查动作空间是否为 Tuple 或 Dict
+    tuple_action = isinstance(env.action_space, (tuple_space, dict_space))
+    # 检查观察空间是否为 Tuple 或 Dict
+    tuple_obs = isinstance(env.observation_space, (tuple_space, dict_space))
+    return tuple_action, tuple_obs
+
+
+# 检查环境的动作和观察空间是否为多维空间或 ``Tuple`` 空间
+def is_multidimensional(env):
+    # 多维空间是指动作/观察空间中有多个元素的空间，包括 ``Tuple`` 空间
+    includes single action/observation spaces with several dimensions.
+
+    Parameters
+    ----------
+    env : ``gym.wrappers`` or ``gym.envs`` instance
+        The environment to evaluate.
+
+    Returns
+    -------
+    md_action : bool
+        Whether the `env`'s action space is multidimensional.
+    md_obs : bool
+        Whether the `env`'s observation space is multidimensional.
+    tuple_action : bool
+        Whether the `env`'s action space is a ``Tuple`` instance.
+    tuple_obs : bool
+        Whether the `env`'s observation space is a ``Tuple`` instance.
+    """
+    # 初始化变量，假设环境的动作空间和观测空间都是多维的
+    md_action, md_obs = True, True
+    # 检查环境的动作空间和观测空间是否为元组类型
+    tuple_action, tuple_obs = is_tuple(env)
+    # 如果动作空间不是元组类型
+    if not tuple_action:
+        # 从动作空间中随机采样一个动作
+        act = env.action_space.sample()
+        # 判断采样的动作是否为列表、元组或者 NumPy 数组，并且长度大于1
+        md_action = isinstance(act, (list, tuple, np.ndarray)) and len(act) > 1
+
+    # 如果观测空间不是元组类型
+    if not tuple_obs:
+        # 获取观测空间对象
+        OS = env.observation_space
+        # 如果观测空间对象有 'low' 属性，则获取 'low' 属性值，否则随机采样一个观测
+        obs = OS.low if "low" in dir(OS) else OS.sample()  # sample causes problems
+        # 判断采样的观测是否为列表、元组或者 NumPy 数组，并且长度大于1
+        md_obs = isinstance(obs, (list, tuple, np.ndarray)) and len(obs) > 1
+    # 返回动作空间是否多维、观测空间是否多维、动作空间是否为元组、观测空间是否为元组的结果
+    return md_action, md_obs, tuple_action, tuple_obs
+# 检查环境的观测和动作空间是否连续
+def is_continuous(env, tuple_action, tuple_obs):
+    # 导入 gym 库中的相关模块
+    Continuous = gym.spaces.box.Box
+    # 如果观测空间是元组类型
+    if tuple_obs:
+        # 获取环境的观测空间
+        spaces = env.observation_space.spaces
+        # 检查所有子空间是否为连续空间
+        cont_obs = all(isinstance(s, Continuous) for s in spaces)
+    else:
+        # 检查观测空间是否为连续空间
+        cont_obs = isinstance(env.observation_space, Continuous)
+
+    # 如果动作空间是元组类型
+    if tuple_action:
+        # 获取环境的动作空间
+        spaces = env.action_space.spaces
+        # 检查所有子空间是否为连续空间
+        cont_action = all(isinstance(s, Continuous) for s in spaces)
+    else:
+        # 检查动作空间是否为连续空间
+        cont_action = isinstance(env.action_space, Continuous)
+    # 返回动作空间是否连续和观测空间是否连续的布尔值
+    return cont_action, cont_obs
+
+
+# 获取关于环境动作空间的信息
+def action_stats(env, md_action, cont_action):
+    # 参数 md_action 表示动作空间是否为多维的
+    # 参数 cont_action 表示动作空间是否为连续的
+    # 返回值 n_actions_per_dim 表示每个维度的动作空间可能的动作数量
+    # 返回值 action_ids 表示空间内所有有效动作的列表，如果 cont_action 为 True，则为 None
+    # 返回值 action_dim 表示单个动作的维度数量
+    # 如果需要考虑动作，则初始化动作维度为1，动作ID为空，每个维度的动作数量为无穷大
+    if cont_action:
+        action_dim = 1
+        action_ids = None
+        n_actions_per_dim = [np.inf]
+
+        # 如果需要考虑多维动作，则获取环境中动作空间的维度
+        if md_action:
+            action_dim = env.action_space.shape[0]
+            n_actions_per_dim = [np.inf for _ in range(action_dim)]
+    # 如果不需要考虑动作
+    else:
+        # 如果需要考虑多维动作
+        if md_action:
+            # 获取每个维度的动作数量，如果动作空间有属性"n"则获取其值，否则为无穷大
+            n_actions_per_dim = [
+                space.n if hasattr(space, "n") else np.inf
+                for space in env.action_space.spaces
+            ]
+            # 如果动作数量不为无穷大，则生成动作ID列表
+            action_ids = (
+                None
+                if np.inf in n_actions_per_dim
+                else list(product(*[range(i) for i in n_actions_per_dim]))
+            )
+            # 动作维度为动作数量列表的长度
+            action_dim = len(n_actions_per_dim)
+        # 如果不需要考虑多维动作
+        else:
+            # 初始化动作维度为1，每个维度的动作数量为环境中动作空间的数量，生成动作ID列表
+            action_dim = 1
+            n_actions_per_dim = [env.action_space.n]
+            action_ids = list(range(n_actions_per_dim[0]))
+    # 返回每个维度的动作数量列表，动作ID列表，动作维度
+    return n_actions_per_dim, action_ids, action_dim
+# 获取环境的观测空间信息
+def obs_stats(env, md_obs, cont_obs):
+    """
+    Get information on the observation space for `env`.
+
+    Parameters
+    ----------
+    env : ``gym.wrappers`` or ``gym.envs`` instance
+        The environment to evaluate.
+    md_obs : bool
+        Whether the `env`'s action space is multidimensional.
+    cont_obs : bool
+        Whether the `env`'s observation space is multidimensional.
+
+    Returns
+    -------
+    n_obs_per_dim : list of length (obs_dim,)
+        The number of possible observation classes for each dimension of the
+        observation space.
+    obs_ids : list or None
+        A list of all valid observations within the space. If `cont_obs` is
+        True, this value will be None.
+    obs_dim : int or None
+        The number of dimensions in a single observation.
+    """
+    # 如果观测空间是连续的
+    if cont_obs:
+        # 观测空间的观测值列表设为 None
+        obs_ids = None
+        # 观测空间的维度设为观测空间的第一个维度
+        obs_dim = env.observation_space.shape[0]
+        # 每个维度的可能观测类别数设为无穷大
+        n_obs_per_dim = [np.inf for _ in range(obs_dim)]
+    else:
+        # 如果观测空间不是连续的
+        if md_obs:
+            # 对于每个子空间，获取可能的观测类别数
+            n_obs_per_dim = [
+                space.n if hasattr(space, "n") else np.inf
+                for space in env.observation_space.spaces
+            ]
+            # 如果观测类别数中包含无穷大，则观测值列表设为 None，否则生成所有可能的观测值组合
+            obs_ids = (
+                None
+                if np.inf in n_obs_per_dim
+                else list(product(*[range(i) for i in n_obs_per_dim]))
+            )
+            # 观测空间的维度为子空间的数量
+            obs_dim = len(n_obs_per_dim)
+        else:
+            # 如果观测空间是单维度的
+            obs_dim = 1
+            # 观测空间的可能观测类别数为观测空间的类别数
+            n_obs_per_dim = [env.observation_space.n]
+            # 观测值列表为所有可能的观测值
+            obs_ids = list(range(n_obs_per_dim[0])
+
+    # 返回观测空间信息
+    return n_obs_per_dim, obs_ids, obs_dim
+
+
+# 计算当前环境的统计信息
+def env_stats(env):
+    """
+    Compute statistics for the current environment.
+
+    Parameters
+    ----------
+    env : ``gym.wrappers`` or ``gym.envs`` instance
+        The environment to evaluate.
+
+    Returns
+    -------
+    env_info : dict
+        A dictionary containing information about the action and observation
+        spaces of `env`.
+    """
+    # 检查环境是否是多维度的，获取动作和观测空间的信息
+    md_action, md_obs, tuple_action, tuple_obs = is_multidimensional(env)
+    # 检查环境是否具有连续动作和连续观测
+    cont_action, cont_obs = is_continuous(env, tuple_action, tuple_obs)
+
+    # 获取动作的统计信息，包括每个维度的动作数量、动作的 ID 和动作的维度
+    n_actions_per_dim, action_ids, action_dim = action_stats(
+        env, md_action, cont_action,
+    )
+    
+    # 获取观测的统计信息，包括每个维度的观测数量、观测的 ID 和观测的维度
+    n_obs_per_dim, obs_ids, obs_dim = obs_stats(env, md_obs, cont_obs)
+
+    # 构建环境信息字典，包括环境的 ID、种子、是否确定性环境、动作和观测的类型、维度等信息
+    env_info = {
+        "id": env.spec.id,
+        "seed": env.spec.seed if "seed" in dir(env.spec) else None,
+        "deterministic": bool(~env.spec.nondeterministic),
+        "tuple_actions": tuple_action,
+        "tuple_observations": tuple_obs,
+        "multidim_actions": md_action,
+        "multidim_observations": md_obs,
+        "continuous_actions": cont_action,
+        "continuous_observations": cont_obs,
+        "n_actions_per_dim": n_actions_per_dim,
+        "action_dim": action_dim,
+        "n_obs_per_dim": n_obs_per_dim,
+        "obs_dim": obs_dim,
+        "action_ids": action_ids,
+        "obs_ids": obs_ids,
+    }
+
+    # 返回环境信息字典
+    return env_info
+```
