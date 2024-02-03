@@ -1,6 +1,6 @@
 # `.\segment-anything\demo\configs\webpack\prod.js`
 
-```
+```py
 // 引入 webpack-merge 模块，用于合并配置
 // 引入 path 模块的 resolve 方法，用于处理路径
 // 引入 dotenv-webpack 模块，用于加载环境变量

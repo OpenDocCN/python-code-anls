@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\utils\onnx.py`
 
-```
+```py
 # 导入 torch 库中的相关模块
 import torch
 # 导入 torch 中的神经网络模块

@@ -1,6 +1,6 @@
 # `.\segment-anything\demo\configs\webpack\dev.js`
 
-```
+```py
 // 引入 webpack-merge 模块，用于合并配置
 const { merge } = require("webpack-merge");
 // 引入通用配置

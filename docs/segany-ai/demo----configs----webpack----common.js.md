@@ -1,6 +1,6 @@
 # `.\segment-anything\demo\configs\webpack\common.js`
 
-```
+```py
 // 引入所需的模块
 const { resolve } = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");

@@ -8,13 +8,13 @@ This **front-end only** React based web demo shows how to load a fixed image and
 
 Install Yarn
 
-```
+```py
 npm install --g yarn
 ```
 
 Build and run:
 
-```
+```py
 yarn && yarn start
 ```
 
@@ -28,7 +28,7 @@ In the [ONNX Model Example notebook](https://github.com/facebookresearch/segment
 
 Initialize the predictor:
 
-```python
+```py
 checkpoint = "sam_vit_h_4b8939.pth"
 model_type = "vit_h"
 sam = sam_model_registry[model_type](checkpoint=checkpoint)
@@ -38,7 +38,7 @@ predictor = SamPredictor(sam)
 
 Set the new image and export the embedding:
 
-```
+```py
 image = cv2.imread('src/assets/dogs.jpg')
 predictor.set_image(image)
 image_embedding = predictor.get_image_embedding().cpu().numpy()
@@ -55,7 +55,7 @@ Run the cell in the notebook which saves the `sam_onnx_quantized_example.onnx` f
 
 Here is a snippet of the export/quantization code:
 
-```
+```py
 onnx_model_path = "sam_onnx_example.onnx"
 onnx_model_quantized_path = "sam_onnx_quantized_example.onnx"
 quantize_dynamic(
@@ -86,7 +86,7 @@ To use multithreading, the appropriate headers need to be set to create a cross 
 
 The headers below are set in `configs/webpack/dev.js`:
 
-```js
+```py
 headers: {
     "Cross-Origin-Opener-Policy": "same-origin",
     "Cross-Origin-Embedder-Policy": "credentialless",

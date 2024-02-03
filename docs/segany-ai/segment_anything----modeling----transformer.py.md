@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\transformer.py`
 
-```
+```py
 # 导入 torch 库中的相关模块
 import torch
 # 从 torch 库中导入 Tensor 和 nn 模块

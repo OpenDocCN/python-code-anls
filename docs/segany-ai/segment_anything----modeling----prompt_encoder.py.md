@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\prompt_encoder.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import torch

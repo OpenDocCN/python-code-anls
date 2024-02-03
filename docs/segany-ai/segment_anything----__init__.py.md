@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\__init__.py`
 
-```
+```py
 # 导入构建 SAM 模型的函数和 SAM 预测器类
 from .build_sam import (
     build_sam,

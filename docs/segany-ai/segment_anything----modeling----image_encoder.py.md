@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\image_encoder.py`
 
-```
+```py
 # 导入 torch 库中的相关模块
 import torch
 import torch.nn as nn

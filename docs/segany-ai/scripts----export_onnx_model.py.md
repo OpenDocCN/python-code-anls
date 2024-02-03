@@ -1,6 +1,6 @@
 # `.\segment-anything\scripts\export_onnx_model.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

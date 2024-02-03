@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\utils\__init__.py`
 
-```
+```py
 # 版权声明，版权归 Meta Platforms, Inc. 及其关联公司所有
 # 保留所有权利
 

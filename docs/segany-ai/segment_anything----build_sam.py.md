@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\build_sam.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\automatic_mask_generator.py`
 
-```
+```py
 # 导入所需的库和模块
 import numpy as np
 import torch

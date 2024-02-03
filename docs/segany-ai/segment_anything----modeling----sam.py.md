@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\sam.py`
 
-```
+```py
 # 导入所需的库
 import torch
 from torch import nn

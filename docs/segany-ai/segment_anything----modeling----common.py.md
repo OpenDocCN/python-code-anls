@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\common.py`
 
-```
+```py
 # 导入 torch 库和 torch.nn 模块
 import torch
 import torch.nn as nn

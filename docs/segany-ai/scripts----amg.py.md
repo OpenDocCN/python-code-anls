@@ -1,6 +1,6 @@
 # `.\segment-anything\scripts\amg.py`
 
-```
+```py
 # 导入所需的库
 import cv2  # type: ignore
 from segment_anything import SamAutomaticMaskGenerator, sam_model_registry

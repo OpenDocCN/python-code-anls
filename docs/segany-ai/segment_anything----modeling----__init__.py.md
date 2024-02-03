@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\modeling\__init__.py`
 
-```
+```py
 # 导入自定义模块
 from .sam import Sam
 from .image_encoder import ImageEncoderViT

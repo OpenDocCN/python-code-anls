@@ -1,6 +1,6 @@
 # `.\segment-anything\segment_anything\predictor.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 import torch
