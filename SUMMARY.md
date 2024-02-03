@@ -16,3 +16,4 @@
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
 +   [KubiScan 源码解析](docs/kubiscan-ai/README.md)
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
++   [BitsAndBytes 源码解析](docs/bitsandbytes-ai/README.md)
