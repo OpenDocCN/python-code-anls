@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\models\vae.py`
 
-```
+```py
 # 从 time 模块中导入 time 函数
 # 从 collections 模块中导入 OrderedDict 类
 # 从 numpy 模块中导入 np 别名

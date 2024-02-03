@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\windows.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 

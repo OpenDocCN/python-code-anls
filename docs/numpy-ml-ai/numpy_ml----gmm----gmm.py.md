@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\gmm\gmm.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 

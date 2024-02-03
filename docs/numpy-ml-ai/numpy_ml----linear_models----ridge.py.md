@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\linear_models\ridge.py`
 
-```
+```py
 # 导入 numpy 库
 import numpy as np
 

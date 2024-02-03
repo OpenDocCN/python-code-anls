@@ -1,6 +1,6 @@
 # `numpy-ml\setup.py`
 
-```
+```py
 # 禁用 flake8 检查
 from codecs import open
 # 导入 setup 和 find_packages 函数

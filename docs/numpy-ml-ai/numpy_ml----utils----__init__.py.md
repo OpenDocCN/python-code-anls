@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\__init__.py`
 
-```
+```py
 # 导入测试模块
 from . import testing
 # 导入数据结构模块

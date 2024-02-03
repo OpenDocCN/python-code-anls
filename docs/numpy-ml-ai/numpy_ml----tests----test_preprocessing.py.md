@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_preprocessing.py`
 
-```
+```py
 # 禁用 flake8 检查
 from collections import Counter
 

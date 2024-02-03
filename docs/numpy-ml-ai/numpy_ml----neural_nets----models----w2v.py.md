@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\models\w2v.py`
 
-```
+```py
 # 从 time 模块中导入 time 函数
 from time import time
 

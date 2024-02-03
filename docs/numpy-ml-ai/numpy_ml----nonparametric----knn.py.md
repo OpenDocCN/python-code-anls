@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\nonparametric\knn.py`
 
-```
+```py
 # 一个用于分类和回归的 k-最近邻（KNN）模型
 from collections import Counter
 import numpy as np

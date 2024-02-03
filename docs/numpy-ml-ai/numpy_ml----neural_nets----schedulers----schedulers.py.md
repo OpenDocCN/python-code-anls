@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\schedulers\schedulers.py`
 
-```
+```py
 from copy import deepcopy
 from abc import ABC, abstractmethod
 

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\linear_models\bayesian_regression.py`
 
-```
+```py
 # 导入必要的库：numpy 和 scipy.stats
 import numpy as np
 import scipy.stats as stats

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\initializers\initializers.py`
 
-```
+```py
 # 导入所需的模块和类
 import re
 from functools import partial

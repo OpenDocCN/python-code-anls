@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\nn_activations_plots.py`
 
-```
+```py
 # 禁用 flake8 的警告
 import numpy as np
 import matplotlib.pyplot as plt

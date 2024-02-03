@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\models\wgan_gp.py`
 
-```
+```py
 # 导入所需的模块和库
 from time import time
 from collections import OrderedDict

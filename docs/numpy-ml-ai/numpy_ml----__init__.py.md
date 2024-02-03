@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\__init__.py`
 
-```
+```py
 # noqa
 """Common ML and ML-adjacent algorithms implemented in NumPy"""
 

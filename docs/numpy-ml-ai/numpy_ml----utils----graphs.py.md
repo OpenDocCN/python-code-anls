@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\graphs.py`
 
-```
+```py
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from itertools import combinations, permutations

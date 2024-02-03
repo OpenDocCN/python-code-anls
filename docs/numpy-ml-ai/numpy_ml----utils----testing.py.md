@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\testing.py`
 
-```
+```py
 # 导入必要的库
 import numbers
 import numpy as np

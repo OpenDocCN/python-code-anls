@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_nonparametric.py`
 
-```
+```py
 # 禁用 flake8 的警告
 # 导入 numpy 库并重命名为 np
 import numpy as np

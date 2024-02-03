@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\nonparametric\gp.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 导入 numpy 库并重命名为 np

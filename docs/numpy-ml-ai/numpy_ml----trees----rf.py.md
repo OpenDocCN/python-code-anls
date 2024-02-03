@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\trees\rf.py`
 
-```
+```py
 # 导入 numpy 库并重命名为 np
 import numpy as np
 # 从当前目录下的 dt 模块中导入 DecisionTree 类

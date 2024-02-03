@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\utils\__init__.py`
 
-```
+```py
 """
 神经网络特定的常见辅助函数。
 

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\preprocessing\general.py`
 
-```
+```py
 import json
 import hashlib
 import warnings

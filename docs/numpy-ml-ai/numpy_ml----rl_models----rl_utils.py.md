@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\rl_models\rl_utils.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 导入 product 函数和 defaultdict 类

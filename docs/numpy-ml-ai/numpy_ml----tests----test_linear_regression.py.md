@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_linear_regression.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入 numpy 库并重命名为 np
 import numpy as np

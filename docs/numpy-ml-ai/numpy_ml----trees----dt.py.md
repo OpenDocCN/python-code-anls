@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\trees\dt.py`
 
-```
+```py
 # 导入 NumPy 库
 import numpy as np
 

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_trees.py`
 
-```
+```py
 # 禁用 flake8 检查
 import numpy as np
 

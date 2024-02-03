@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\linear_models\__init__.py`
 
-```
+```py
 # 一个包含各种线性模型的模块
 
 # 导入 Ridge 回归模型

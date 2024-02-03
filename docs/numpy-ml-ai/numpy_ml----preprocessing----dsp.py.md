@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\preprocessing\dsp.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 from numpy.lib.stride_tricks import as_strided

@@ -18,3 +18,4 @@
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
 +   [BitsAndBytes 源码解析](docs/bitsandbytes-ai/README.md)
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
++   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)

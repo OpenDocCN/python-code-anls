@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\hmm\hmm.py`
 
-```
+```py
 # 隐马尔可夫模型模块
 import numpy as np
 # 导入 logsumexp 函数

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\rl_models\tiles\tiles3.py`
 
-```
+```py
 """
 Tile Coding Software version 3.0beta
 by Rich Sutton

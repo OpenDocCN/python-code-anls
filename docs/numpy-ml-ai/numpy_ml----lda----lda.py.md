@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\lda\lda.py`
 
-```
+```py
 import numpy as np
 from scipy.special import digamma, polygamma, gammaln
 

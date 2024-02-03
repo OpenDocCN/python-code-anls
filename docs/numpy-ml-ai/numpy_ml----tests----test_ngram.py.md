@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_ngram.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入临时文件模块
 import tempfile

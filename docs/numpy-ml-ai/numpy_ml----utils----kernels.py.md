@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\kernels.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 # 导入 ABC 抽象基类和 abstractmethod 装饰器
 import re

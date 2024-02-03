@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\bandits\policies.py`
 
-```
+```py
 # 一个包含各种多臂赌博问题探索策略的模块
 from abc import ABC, abstractmethod
 from collections import defaultdict

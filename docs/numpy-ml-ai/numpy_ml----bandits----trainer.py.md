@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\bandits\trainer.py`
 
-```
+```py
 # 为执行和比较多臂赌博（MAB）策略而创建的训练器/运行器对象
 import warnings
 import os.path as op

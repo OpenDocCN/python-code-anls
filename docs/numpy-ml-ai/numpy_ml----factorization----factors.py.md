@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\factorization\factors.py`
 
-```
+```py
 # 包含了用于近似矩阵分解的算法
 from copy import deepcopy
 # 导入 numpy 库并重命名为 np

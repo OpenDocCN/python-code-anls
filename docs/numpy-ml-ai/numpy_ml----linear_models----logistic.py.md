@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\linear_models\logistic.py`
 
-```
+```py
 """Logistic regression module"""
 import numpy as np
 

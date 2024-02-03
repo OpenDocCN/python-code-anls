@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\__init__.py`
 
-```
+```py
 # 导入神经网络构建的基本模块
 from . import utils
 # 导入损失函数模块

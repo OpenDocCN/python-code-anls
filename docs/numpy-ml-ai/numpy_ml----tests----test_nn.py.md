@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_nn.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入时间模块
 import time

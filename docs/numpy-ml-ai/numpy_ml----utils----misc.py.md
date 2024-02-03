@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\misc.py`
 
-```
+```py
 # 导入 numpy 库
 import numpy as np
 

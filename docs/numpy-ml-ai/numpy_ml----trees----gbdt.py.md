@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\trees\gbdt.py`
 
-```
+```py
 # 导入 numpy 库并重命名为 np
 import numpy as np
 

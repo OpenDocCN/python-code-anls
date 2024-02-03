@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\rl_models\agents.py`
 
-```
+```py
 # 引入必要的库
 from abc import ABC, abstractmethod
 from collections import defaultdict

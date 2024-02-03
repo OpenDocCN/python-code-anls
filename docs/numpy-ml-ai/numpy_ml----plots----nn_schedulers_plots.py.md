@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\nn_schedulers_plots.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入所需的库
 import time

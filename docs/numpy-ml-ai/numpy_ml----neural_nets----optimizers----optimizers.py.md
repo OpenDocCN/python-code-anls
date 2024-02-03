@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\optimizers\optimizers.py`
 
-```
+```py
 # 从 copy 模块中导入 deepcopy 函数
 # 从 abc 模块中导入 ABC 和 abstractmethod 装饰器
 import numpy as np

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\bandits\bandits.py`
 
-```
+```py
 # 导入必要的模块
 from abc import ABC, abstractmethod
 # 导入 numpy 库

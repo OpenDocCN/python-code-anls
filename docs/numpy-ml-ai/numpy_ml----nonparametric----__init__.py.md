@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\nonparametric\__init__.py`
 
-```
+```py
 """
 Popular nonparameteric regression and classification models.
 

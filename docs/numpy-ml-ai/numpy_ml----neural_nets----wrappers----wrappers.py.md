@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\wrappers\wrappers.py`
 
-```
+```py
 """
 A collection of objects thats can wrap / otherwise modify arbitrary neural
 network layers.

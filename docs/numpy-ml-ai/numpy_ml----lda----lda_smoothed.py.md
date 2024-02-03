@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\lda\lda_smoothed.py`
 
-```
+```py
 import numpy as np
 
 # 定义 SmoothedLDA 类

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\nonparametric\kernel_regression.py`
 
-```
+```py
 from ..utils.kernels import KernelInitializer
 # 导入 KernelInitializer 模块
 

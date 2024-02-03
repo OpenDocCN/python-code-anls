@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\activations\activations.py`
 
-```
+```py
 # 用于构建神经网络的激活函数对象集合
 from math import erf
 from abc import ABC, abstractmethod

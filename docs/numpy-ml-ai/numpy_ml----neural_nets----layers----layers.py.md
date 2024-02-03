@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\layers\layers.py`
 
-```
+```py
 """A collection of composable layer objects for building neural networks"""
 # 导入必要的库和模块
 from abc import ABC, abstractmethod

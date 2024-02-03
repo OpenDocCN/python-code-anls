@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\ngram\ngram.py`
 
-```
+```py
 # 导入文本包装、抽象基类和计数器模块
 import textwrap
 from abc import ABC, abstractmethod

@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\lda_plots.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入 numpy 库，并使用别名 np
 import numpy as np

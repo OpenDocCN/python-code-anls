@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\trees\__init__.py`
 
-```
+```py
 # 从当前目录中导入 losses 模块
 from . import losses
 # 从当前目录中导入 dt 模块中的所有内容

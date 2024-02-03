@@ -1,3 +1,5 @@
+# NumPyML 源码解析
+
 # numpy-ml
 Ever wish you had an inefficient but somewhat legible collection of machine
 learning algorithms implemented exclusively in NumPy? No?
@@ -7,7 +9,7 @@ learning algorithms implemented exclusively in NumPy? No?
 ### For rapid experimentation
 To use this code as a starting point for ML prototyping / experimentation, just clone the repository, create a new [virtualenv](https://pypi.org/project/virtualenv/), and start hacking:
 
-```sh
+```py
 $ git clone https://github.com/ddbourgin/numpy-ml.git
 $ cd numpy-ml && virtualenv npml && source npml/bin/activate
 $ pip3 install -r requirements-dev.txt

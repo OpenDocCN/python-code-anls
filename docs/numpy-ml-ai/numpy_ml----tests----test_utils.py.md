@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\test_utils.py`
 
-```
+```py
 # 禁用 flake8 的警告
 import numpy as np
 

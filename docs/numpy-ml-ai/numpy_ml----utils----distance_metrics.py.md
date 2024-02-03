@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\distance_metrics.py`
 
-```
+```py
 import numpy as np
 
 # 计算两个实向量之间的欧几里德（L2）距离

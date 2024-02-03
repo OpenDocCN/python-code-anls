@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\losses\__init__.py`
 
-```
+```py
 """
 Common neural network loss functions.
 

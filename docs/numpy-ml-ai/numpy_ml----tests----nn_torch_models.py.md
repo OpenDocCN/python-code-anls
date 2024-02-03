@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\tests\nn_torch_models.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入 PyTorch 库
 import torch

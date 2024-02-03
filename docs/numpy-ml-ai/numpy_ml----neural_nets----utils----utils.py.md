@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\utils\utils.py`
 
-```
+```py
 import numpy as np
 
 #######################################################################

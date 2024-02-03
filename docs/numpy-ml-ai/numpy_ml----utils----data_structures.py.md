@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\utils\data_structures.py`
 
-```
+```py
 # 导入 heapq 模块，用于实现优先队列
 import heapq
 # 从 copy 模块中导入 copy 函数

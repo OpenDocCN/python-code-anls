@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\neural_nets\losses\losses.py`
 
-```
+```py
 # 从 abc 模块导入 ABC 和 abstractmethod 装饰器
 from abc import ABC, abstractmethod
 

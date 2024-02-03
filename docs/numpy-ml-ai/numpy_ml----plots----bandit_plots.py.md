@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\bandit_plots.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 

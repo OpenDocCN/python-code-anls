@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\trees_plots.py`
 
-```
+```py
 # 禁用 flake8 的警告
 # 导入 NumPy 库，并使用 np 别名
 import numpy as np

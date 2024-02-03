@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\rl_plots.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入 gym 库
 import gym

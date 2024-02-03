@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\rl_models\trainer.py`
 
-```
+```py
 from time import time
 import numpy as np
 

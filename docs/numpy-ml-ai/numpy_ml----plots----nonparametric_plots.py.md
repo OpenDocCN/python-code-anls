@@ -1,6 +1,6 @@
 # `numpy-ml\numpy_ml\plots\nonparametric_plots.py`
 
-```
+```py
 # 禁用 flake8 检查
 # 导入 numpy 库并重命名为 np
 import numpy as np
