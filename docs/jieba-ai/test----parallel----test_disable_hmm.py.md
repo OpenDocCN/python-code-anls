@@ -1,6 +1,6 @@
 # `jieba\test\parallel\test_disable_hmm.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 导入必要的库
 from __future__ import print_function

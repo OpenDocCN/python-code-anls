@@ -1,6 +1,6 @@
 # `jieba\test\test_cut_for_search.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 导入未来版本的 print 函数
 import sys

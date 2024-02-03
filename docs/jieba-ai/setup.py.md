@@ -1,6 +1,6 @@
 # `jieba\setup.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 setup 函数
 from distutils.core import setup

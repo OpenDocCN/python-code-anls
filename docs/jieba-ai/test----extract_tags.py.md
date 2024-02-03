@@ -1,6 +1,6 @@
 # `jieba\test\extract_tags.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 将上级目录添加到 sys.path 中

@@ -1,6 +1,6 @@
 # `jieba\test\test_bug.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入未来版本的 print 函数
 import sys

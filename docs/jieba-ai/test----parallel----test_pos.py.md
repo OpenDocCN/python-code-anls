@@ -1,6 +1,6 @@
 # `jieba\test\parallel\test_pos.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 导入print_function模块
 from __future__ import print_function

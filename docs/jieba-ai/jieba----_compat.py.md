@@ -1,6 +1,6 @@
 # `jieba\jieba\_compat.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 导入 logging 模块
 # 导入 os 模块

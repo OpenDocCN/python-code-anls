@@ -1,6 +1,6 @@
 # `jieba\test\test_pos_file.py`
 
-```
+```py
 # 导入 Python 未来支持的 print 函数
 from __future__ import print_function
 # 导入 sys 模块

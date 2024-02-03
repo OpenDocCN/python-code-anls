@@ -1,3 +1,5 @@
+# Jieba 源码解析
+
 jieba
 ========
 “结巴”中文分词：做最好的 Python 中文分词组件
@@ -48,7 +50,7 @@ jieba
 
 代码示例
 
-```python
+```py
 # encoding=utf-8
 import jieba
 
@@ -93,7 +95,7 @@ print(", ".join(seg_list))
 
 **例如：**
 
-```
+```py
 创新办 3 i
 云计算 5
 凱特琳 nz
@@ -122,7 +124,7 @@ print(", ".join(seg_list))
 
 代码示例：
 
-```pycon
+```py
 >>> print('/'.join(jieba.cut('如果放到post中将出错。', HMM=False)))
 如果/放到/post/中将/出错/。
 >>> jieba.suggest_freq(('中', '将'), True)
@@ -196,7 +198,7 @@ https://github.com/fxsjy/jieba/blob/master/test/extract_tags.py
 * 除了jieba默认分词模式，提供paddle模式下的词性标注功能。paddle模式采用延迟加载方式，通过enable_paddle()安装paddlepaddle-tiny，并且import相关代码；
 * 用法示例
 
-```pycon
+```py
 >>> import jieba
 >>> import jieba.posseg as pseg
 >>> words = pseg.cut("我爱北京天安门") #jieba默认模式
@@ -245,13 +247,13 @@ paddle模式词性和专名类别标签集合如下表，其中词性标签 24 �
 * 注意，输入参数只接受 unicode
 * 默认模式
 
-```python
+```py
 result = jieba.tokenize(u'永和服装饰品有限公司')
 for tk in result:
     print("word %s\t\t start: %d \t\t end:%d" % (tk[0],tk[1],tk[2]))
 ```
 
-```
+```py
 word 永和                start: 0                end:2
 word 服装                start: 2                end:4
 word 饰品                start: 4                end:6
@@ -261,13 +263,13 @@ word 有限公司            start: 6                end:10
 
 * 搜索模式
 
-```python
+```py
 result = jieba.tokenize(u'永和服装饰品有限公司', mode='search')
 for tk in result:
     print("word %s\t\t start: %d \t\t end:%d" % (tk[0],tk[1],tk[2]))
 ```
 
-```
+```py
 word 永和                start: 0                end:2
 word 服装                start: 2                end:4
 word 饰品                start: 4                end:6
@@ -530,7 +532,7 @@ Main Functions
 
 **Code example: segmentation**
 
-```python
+```py
 #encoding=utf-8
 import jieba
 
@@ -570,7 +572,7 @@ Output:
 
 **For example:**
 
-```
+```py
 创新办 3 i
 云计算 5
 凱特琳 nz
@@ -600,7 +602,7 @@ Output:
 
 Example:
 
-```pycon
+```py
 >>> print('/'.join(jieba.cut('如果放到post中将出错。', HMM=False)))
 如果/放到/post/中将/出错/。
 >>> jieba.suggest_freq(('中', '将'), True)
@@ -656,7 +658,7 @@ Note that it filters POS by default.
 * Tags the POS of each word after segmentation, using labels compatible with ictclas.
 * Example:
 
-```pycon
+```py
 >>> import jieba.posseg as pseg
 >>> words = pseg.cut("我爱北京天安门")
 >>> for w in words:
@@ -688,13 +690,13 @@ Note that it filters POS by default.
 * The input must be unicode
 * Default mode
 
-```python
+```py
 result = jieba.tokenize(u'永和服装饰品有限公司')
 for tk in result:
     print("word %s\t\t start: %d \t\t end:%d" % (tk[0],tk[1],tk[2]))
 ```
 
-```
+```py
 word 永和                start: 0                end:2
 word 服装                start: 2                end:4
 word 饰品                start: 4                end:6
@@ -704,13 +706,13 @@ word 有限公司            start: 6                end:10
 
 * Search mode
 
-```python
+```py
 result = jieba.tokenize(u'永和服装饰品有限公司',mode='search')
 for tk in result:
     print("word %s\t\t start: %d \t\t end:%d" % (tk[0],tk[1],tk[2]))
 ```
 
-```
+```py
 word 永和                start: 0                end:2
 word 服装                start: 2                end:4
 word 饰品                start: 4                end:6

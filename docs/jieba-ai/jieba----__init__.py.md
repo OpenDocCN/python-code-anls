@@ -1,6 +1,6 @@
 # `jieba\jieba\__init__.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import absolute_import, unicode_literals
 # 定义当前代码版本和许可证

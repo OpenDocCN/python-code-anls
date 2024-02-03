@@ -1,6 +1,6 @@
 # `jieba\test\parallel\test_pos_file.py`
 
-```
+```py
 # 导入未来版本的 print_function，确保代码在 Python 2 和 Python 3 中兼容
 from __future__ import print_function
 # 导入 sys 和 time 模块

@@ -1,6 +1,6 @@
 # `jieba\jieba\lac_small\creator.py`
 
-```
+```py
 # -*- coding: UTF-8 -*-
 #   Copyright (c) 2019 PaddlePaddle Authors. All Rights Reserved.
 #

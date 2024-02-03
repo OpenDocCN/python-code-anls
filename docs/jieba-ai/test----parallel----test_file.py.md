@@ -1,6 +1,6 @@
 # `jieba\test\parallel\test_file.py`
 
-```
+```py
 # 导入 sys 模块，用于处理命令行参数和系统路径
 import sys
 # 导入 time 模块，用于时间相关操作

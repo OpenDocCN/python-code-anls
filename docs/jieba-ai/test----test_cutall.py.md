@@ -1,6 +1,6 @@
 # `jieba\test\test_cutall.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 导入print_function函数
 from __future__ import print_function

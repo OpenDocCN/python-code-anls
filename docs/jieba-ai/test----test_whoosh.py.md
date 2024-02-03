@@ -1,6 +1,6 @@
 # `jieba\test\test_whoosh.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入必要的模块
 from __future__ import unicode_literals

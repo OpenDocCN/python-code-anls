@@ -1,6 +1,6 @@
 # `jieba\test\test_pos_no_hmm.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 导入print_function模块
 from __future__ import print_function

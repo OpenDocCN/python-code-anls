@@ -1,6 +1,6 @@
 # `jieba\test\test_pos.py`
 
-```
+```py
 #encoding=utf-8
 # 导入必要的库
 from __future__ import print_function

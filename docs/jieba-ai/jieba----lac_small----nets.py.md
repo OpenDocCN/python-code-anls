@@ -1,6 +1,6 @@
 # `jieba\jieba\lac_small\nets.py`
 
-```
+```py
 #   Copyright (c) 2019 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

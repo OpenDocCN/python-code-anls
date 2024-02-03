@@ -1,6 +1,6 @@
 # `jieba\jieba\analyse\analyzer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 from __future__ import unicode_literals
 # 导入所需的分词器、过滤器和词干处理器

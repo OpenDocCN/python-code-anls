@@ -1,6 +1,6 @@
 # `jieba\test\parallel\test_cut_for_search.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 导入print_function函数
 from __future__ import print_function

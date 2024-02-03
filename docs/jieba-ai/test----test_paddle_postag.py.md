@@ -1,6 +1,6 @@
 # `jieba\test\test_paddle_postag.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 导入 sys 模块
 import sys

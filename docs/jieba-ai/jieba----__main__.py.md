@@ -1,6 +1,6 @@
 # `jieba\jieba\__main__.py`
 
-```
+```py
 """Jieba command line interface."""
 # 导入必要的库和模块
 import sys

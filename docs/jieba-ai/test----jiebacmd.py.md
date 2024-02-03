@@ -1,6 +1,6 @@
 # `jieba\test\jiebacmd.py`
 
-```
+```py
 '''
 usage example (find top 100 words in abc.txt):
 

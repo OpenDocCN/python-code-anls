@@ -1,6 +1,6 @@
 # `jieba\jieba\analyse\tfidf.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入绝对引入的未来特性
 import os

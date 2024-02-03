@@ -1,6 +1,6 @@
 # `jieba\test\test_tokenize.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 导入print_function和unicode_literals功能
 from __future__ import print_function, unicode_literals

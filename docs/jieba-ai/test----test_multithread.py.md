@@ -1,6 +1,6 @@
 # `jieba\test\test_multithread.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 导入sys模块
 # 导入threading模块

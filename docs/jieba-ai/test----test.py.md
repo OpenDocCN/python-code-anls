@@ -1,6 +1,6 @@
 # `jieba\test\test.py`
 
-```
+```py
 # 导入编码模块
 # 导入系统模块
 import sys

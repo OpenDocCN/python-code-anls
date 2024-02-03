@@ -1,6 +1,6 @@
 # `jieba\test\test_change_dictpath.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 导入未来版本的print函数
 import sys

@@ -1,6 +1,6 @@
 # `jieba\test\test_paddle.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 导入sys模块
 import sys

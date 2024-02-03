@@ -1,6 +1,6 @@
 # `jieba\test\test_userdict.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 导入必要的库
 from __future__ import print_function, unicode_literals

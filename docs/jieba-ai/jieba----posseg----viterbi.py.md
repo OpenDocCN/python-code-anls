@@ -1,6 +1,6 @@
 # `jieba\jieba\posseg\viterbi.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 导入 operator 模块

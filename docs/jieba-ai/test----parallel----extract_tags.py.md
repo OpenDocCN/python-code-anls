@@ -1,6 +1,6 @@
 # `jieba\test\parallel\extract_tags.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 将相对路径添加到系统路径中

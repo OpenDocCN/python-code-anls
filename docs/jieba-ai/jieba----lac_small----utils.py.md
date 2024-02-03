@@ -1,6 +1,6 @@
 # `jieba\jieba\lac_small\utils.py`
 
-```
+```py
 # 版权声明，版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证，版本 2.0 进行许可；

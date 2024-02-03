@@ -1,6 +1,6 @@
 # `jieba\test\test_file.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入系统模块

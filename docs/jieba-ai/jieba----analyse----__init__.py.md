@@ -1,6 +1,6 @@
 # `jieba\jieba\analyse\__init__.py`
 
-```
+```py
 # 导入绝对路径的未来特性
 from __future__ import absolute_import
 # 从当前目录下的 tfidf 模块中导入 TFIDF 类
