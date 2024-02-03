@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\sophgo\python\infer.py`
 
-```
+```py
 # 导入fastdeploy库，cv2库和os库
 import fastdeploy as fd
 import cv2

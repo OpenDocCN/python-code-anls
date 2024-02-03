@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\editinlist.py`
 
-```
+```py
 # 导入必要的模块
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtWidgets import QListWidget

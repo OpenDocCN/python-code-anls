@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\loggers\wandb_logger.py`
 
-```
+```py
 # 导入 os 模块
 # 从当前目录下的 base_logger 模块中导入 BaseLogger 类
 import os

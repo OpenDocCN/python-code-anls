@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\paddlestructure.cpp`
 
-```
+```py
 // 版权声明，告知代码版权归属及使用许可
 // 引入必要的头文件和命名空间
 #include <include/args.h>

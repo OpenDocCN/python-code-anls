@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\ocr_metric\icdar2015\detection\icdar2013.py`
 
-```
+```py
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 

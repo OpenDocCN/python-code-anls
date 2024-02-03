@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\avh\convert_image.py`
 
-```
+```py
 # 导入所需的库
 import os
 import pathlib

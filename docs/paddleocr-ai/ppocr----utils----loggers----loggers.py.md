@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\loggers\loggers.py`
 
-```
+```py
 # 导入WandbLogger类
 from .wandb_logger import WandbLogger
 

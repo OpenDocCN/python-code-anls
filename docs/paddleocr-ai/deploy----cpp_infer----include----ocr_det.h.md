@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\include\ocr_det.h`
 
-```
+```py
 // 版权声明，告知代码版权归属
 // 根据 Apache License, Version 2.0 许可证使用代码
 // 获取许可证的链接

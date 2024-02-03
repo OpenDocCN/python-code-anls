@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\test_hubserving.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

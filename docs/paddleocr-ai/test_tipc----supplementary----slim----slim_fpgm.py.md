@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\slim\slim_fpgm.py`
 
-```
+```py
 # 导入 paddleslim 模块
 import paddleslim
 # 导入 paddle 模块

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\cal_recall\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 设置时间为 1/16/19 6:40 AM
 # 设置作者为 zhoujun

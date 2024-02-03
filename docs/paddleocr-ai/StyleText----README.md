@@ -42,7 +42,7 @@ After these three steps, you can quickly realize the image text style transfer. 
 1. Please refer the [QUICK INSTALLATION](../doc/doc_en/installation_en.md) to install PaddlePaddle. Python3 environment is strongly recommended.
 2. Download the pretrained models and unzip:
 
-```bash
+```py
 cd StyleText
 wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/style_text/style_text_models.zip
 unzip style_text_models.zip
@@ -50,7 +50,7 @@ unzip style_text_models.zip
 
 If you save the model in another location, please modify the address of the model file in `configs/config.yml`, and you need to modify these three configurations at the same time:
 
-```
+```py
 bg_generator:
   pretrain: style_text_models/bg_generator
 ...
@@ -68,7 +68,7 @@ fusion_generator:
 
 1. You can run `tools/synth_image` and generate the demo image, which is saved in the current folder.
 
-```python
+```py
 python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_images/2.jpg --text_corpus PaddleOCR --language en
 ```
 
@@ -125,7 +125,7 @@ In actual application scenarios, it is often necessary to synthesize pictures in
 
 
 Example of corpus file:
-```
+```py
 PaddleOCR
 飞桨文字识别
 StyleText
@@ -142,7 +142,7 @@ We provide a general dataset containing Chinese, English and Korean (50,000 imag
 
    ``` bash
    python3 tools/synth_dataset.py -c configs/dataset_config.yml
-   ```
+   ```py
 
 We also provide example corpus and images in `examples` folder.
     <div align="center">

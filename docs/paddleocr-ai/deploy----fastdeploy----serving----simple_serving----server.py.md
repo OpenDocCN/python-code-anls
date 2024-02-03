@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\serving\simple_serving\server.py`
 
-```
+```py
 # 导入 fastdeploy 库中的模块并重命名为 fd
 import fastdeploy as fd
 # 从 fastdeploy.serving.server 模块中导入 SimpleServer 类

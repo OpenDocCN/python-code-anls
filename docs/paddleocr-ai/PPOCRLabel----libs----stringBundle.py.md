@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\stringBundle.py`
 
-```
+```py
 # 版权声明，允许在特定条件下使用和分发软件
 # 获取本程序文件路径
 __dir__ = os.path.dirname(os.path.abspath(__file__))

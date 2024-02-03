@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\hubserving\ocr_rec\params.py`
 
-```
+```py
 # 版权声明
 # 2022年PaddlePaddle作者保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\tools\synth_image.py`
 
-```
+```py
 # 版权声明
 #
 # 本代码版权归 PaddlePaddle 作者所有。保留所有权利。

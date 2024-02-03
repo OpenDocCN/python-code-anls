@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\post_processing\seg_detector_representer.py`
 
-```
+```py
 # 导入需要的库
 import cv2
 import numpy as np

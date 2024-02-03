@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\postprocess\picodet_postprocess.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 from scipy.special import softmax

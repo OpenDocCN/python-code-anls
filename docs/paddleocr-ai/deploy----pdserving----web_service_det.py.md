@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\web_service_det.py`
 
-```
+```py
 # 导入所需的模块和库
 from paddle_serving_server.web_service import WebService, Op
 import logging

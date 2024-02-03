@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\settings.py`
 
-```
+```py
 # 版权声明，允许任何人免费获取和使用该软件，但需包含版权声明和许可声明
 # 导入所需的模块
 import pickle

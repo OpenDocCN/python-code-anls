@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\labelColor.py`
 
-```
+```py
 import PIL.Image
 import numpy as np
 

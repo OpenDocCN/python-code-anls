@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\data\pubtab_dataset.py`
 
-```
+```py
 # 版权声明，版权所有 (c) 2021 PaddlePaddle 作者。保留所有权利。
 #
 # 根据 Apache 许可证 2.0 版本（“许可证”）许可;

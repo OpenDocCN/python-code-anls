@@ -25,7 +25,7 @@ PDF2Word是PaddleOCR社区开发者 [whjdark](https://github.com/whjdark) 基于
 
 首次运行需要将切换路径到PaddleOCR文件目录 ，然后运行代码
 
-```
+```py
 cd ./ppstructure/pdf2word
 python pdf2word.py
 ```

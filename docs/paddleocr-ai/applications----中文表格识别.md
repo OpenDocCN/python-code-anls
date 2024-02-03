@@ -42,13 +42,13 @@
 ### 2.1 环境准备
 
 
-```python
+```py
 # 下载PaddleOCR代码
 ! git clone -b dygraph https://gitee.com/paddlepaddle/PaddleOCR
 ```
 
 
-```python
+```py
 # 安装PaddleOCR环境
 ! pip install -r PaddleOCR/requirements.txt --force-reinstall
 ! pip install protobuf==3.19
@@ -61,7 +61,7 @@
 使用如下命令对数据集进行解压，并查看数据集大小
 
 
-```python
+```py
 ! cd data/data165849 && tar -xf table_gen_dataset.tar && cd -
 ! wc -l data/data165849/table_gen_dataset/gt.txt
 ```
@@ -71,7 +71,7 @@
 使用下述命令将数据集划分为训练集和测试集, 这里将90%划分为训练集，10%划分为测试集
 
 
-```python
+```py
 import random
 with open('/home/aistudio/data/data165849/table_gen_dataset/gt.txt') as f:
     lines = f.readlines()
@@ -97,7 +97,7 @@ with open('/home/aistudio/val.txt','w',encoding='utf-8') as f:
 #### 2.2.2 查看数据集
 
 
-```python
+```py
 import cv2
 import os, json
 import numpy as np
@@ -206,7 +206,7 @@ SLANet是PP-StructureV2全新推出的表格识别模型，相比PP-StructureV1�
 进行训练之前先使用如下命令下载预训练模型
 
 
-```python
+```py
 # 进入PaddleOCR工作目录
 os.chdir('/home/aistudio/PaddleOCR')
 # 下载英文预训练模型
@@ -235,7 +235,7 @@ os.chdir('/home/aistudio/PaddleOCR')
 已经修改好的配置存储在 `/home/aistudio/SLANet_ch.yml`
 
 
-```python
+```py
 import os
 os.chdir('/home/aistudio/PaddleOCR')
 ! python3 tools/train.py -c /home/aistudio/SLANet_ch.yml
@@ -248,7 +248,7 @@ os.chdir('/home/aistudio/PaddleOCR')
 训练完成后，可使用如下命令在测试集上评估最优模型的精度
 
 
-```python
+```py
 ! python3 tools/eval.py -c /home/aistudio/SLANet_ch.yml -o Global.checkpoints=/home/aistudio/PaddleOCR/output/SLANet_ch/best_accuracy.pdparams
 ```
 
@@ -256,13 +256,13 @@ os.chdir('/home/aistudio/PaddleOCR')
 使用如下命令可使用训练引擎对单张图片进行推理
 
 
-```python
+```py
 import os;os.chdir('/home/aistudio/PaddleOCR')
 ! python3 tools/infer_table.py -c /home/aistudio/SLANet_ch.yml -o Global.checkpoints=/home/aistudio/PaddleOCR/output/SLANet_ch/best_accuracy.pdparams Global.infer_img=/home/aistudio/data/data165849/table_gen_dataset/img/no_border_18298_G7XZH93DDCMATGJQ8RW2.jpg
 ```
 
 
-```python
+```py
 import cv2
 from matplotlib import pyplot as plt
 %matplotlib inline
@@ -285,7 +285,7 @@ plt.show()
 使用如下命令可将模型导出为inference模型
 
 
-```python
+```py
 ! python3 tools/export_model.py -c /home/aistudio/SLANet_ch.yml -o Global.checkpoints=/home/aistudio/PaddleOCR/output/SLANet_ch/best_accuracy.pdparams Global.save_inference_dir=/home/aistudio/SLANet_ch/infer
 ```
 
@@ -294,7 +294,7 @@ plt.show()
 
 
 
-```python
+```py
 os.chdir('/home/aistudio/PaddleOCR/ppstructure')
 ! python3 table/predict_structure.py \
     --table_model_dir=/home/aistudio/SLANet_ch/infer \
@@ -304,7 +304,7 @@ os.chdir('/home/aistudio/PaddleOCR/ppstructure')
 ```
 
 
-```python
+```py
 # 显示原图
 show_img = cv2.imread('/home/aistudio/data/data165849/table_gen_dataset/img/no_border_18298_G7XZH93DDCMATGJQ8RW2.jpg')
 plt.figure(figsize=(15,15))
@@ -325,7 +325,7 @@ plt.show()
 首先下载PP-OCRv3文字检测识别模型
 
 
-```python
+```py
 # 下载PP-OCRv3文本检测识别模型并解压
 ! wget  -nc -P  ./inference/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.tar --no-check-certificate
 ! wget  -nc -P  ./inference/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.tar --no-check-certificate
@@ -335,7 +335,7 @@ plt.show()
 模型下载完成后，使用如下命令进行表格识别
 
 
-```python
+```py
 import os;os.chdir('/home/aistudio/PaddleOCR/ppstructure')
 ! python3 table/predict_table.py \
     --det_model_dir=inference/ch_PP-OCRv3_det_slim_infer \
@@ -348,7 +348,7 @@ import os;os.chdir('/home/aistudio/PaddleOCR/ppstructure')
 ```
 
 
-```python
+```py
 # 显示原图
 show_img = cv2.imread('/home/aistudio/data/data165849/table_gen_dataset/img/no_border_18298_G7XZH93DDCMATGJQ8RW2.jpg')
 plt.figure(figsize=(15,15))
@@ -367,7 +367,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 
 
 
-```python
+```py
 ! git clone -b develop https://gitee.com/paddlepaddle/PaddleClas
 ```
 
@@ -375,7 +375,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 其次，我们需要安装训练PaddleClas相关的依赖包
 
 
-```python
+```py
 ! pip install -r PaddleClas/requirements.txt --force-reinstall
 ! pip install protobuf==3.20.0
 ```
@@ -390,7 +390,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 这里，我们提供了一个表格属性的demo子集，可以快速迭代体验。下载方式如下：
 
 
-```python
+```py
 %cd PaddleClas/dataset
 !wget https://paddleclas.bj.bcebos.com/data/PULC/table_attribute.tar
 !tar -xf table_attribute.tar
@@ -410,7 +410,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 当准备好相关的数据之后，可以一键启动表格属性的训练，训练代码如下：
 
 
-```python
+```py
 
 !python tools/train.py -c ./ppcls/configs/PULC/table_attribute/PPLCNet_x1_0.yaml -o Global.device=cpu -o Global.epochs=10
 ```
@@ -420,7 +420,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 当训练好模型之后，需要将模型转换为推理模型进行部署。转换脚本如下：
 
 
-```python
+```py
 !python tools/export_model.py -c ppcls/configs/PULC/table_attribute/PPLCNet_x1_0.yaml -o Global.pretrained_model=output/PPLCNet_x1_0/best_model
 ```
 
@@ -431,21 +431,21 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 
 
 
-```python
+```py
 !pip install https://paddleclas.bj.bcebos.com/whl/paddleclas-0.0.0-py3-none-any.whl
 ```
 
 进入`deploy`目录下即可对模型进行推理
 
 
-```python
+```py
 %cd deploy/
 ```
 
 推理命令如下：
 
 
-```python
+```py
 !python python/predict_cls.py -c configs/PULC/table_attribute/inference_table_attribute.yaml -o Global.inference_model_dir="../inference" -o Global.infer_imgs="../dataset/table_attribute/Table_val/val_9.jpg"
 !python python/predict_cls.py -c configs/PULC/table_attribute/inference_table_attribute.yaml -o Global.inference_model_dir="../inference" -o Global.infer_imgs="../dataset/table_attribute/Table_val/val_3253.jpg"
 ```
@@ -455,7 +455,7 @@ display(HTML('<html><body><table><tr><td colspan="5">alleadersh</td><td rowspan=
 ![](https://user-images.githubusercontent.com/45199522/190596141-74f4feda-b082-46d7-908d-b0bd5839b430.png)
 
 预测结果如下：
-```
+```py
 val_9.jpg:	 {'attributes': ['Scanned', 'Little', 'Black-and-White', 'Clear', 'Without-Obstacles', 'Horizontal'], 'output': [1, 1, 1, 1, 1, 1]}
 ```
 
@@ -465,7 +465,7 @@ val_9.jpg:	 {'attributes': ['Scanned', 'Little', 'Black-and-White', 'Clear', 'Wi
 ![](https://user-images.githubusercontent.com/45199522/190597086-2e685200-22d0-4042-9e46-f61f24e02e4e.png)
 
 预测结果如下：
-```
+```py
 val_3253.jpg:	 {'attributes': ['Photo', 'Little', 'Black-and-White', 'Blurry', 'Without-Obstacles', 'Tilted'], 'output': [0, 1, 1, 0, 1, 0]}
 ```
 

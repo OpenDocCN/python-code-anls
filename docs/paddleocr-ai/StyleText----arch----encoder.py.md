@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\arch\encoder.py`
 
-```
+```py
 # 导入 paddle 库中的 nn 模块
 import paddle
 import paddle.nn as nn

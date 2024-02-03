@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\paddleocr.cpp`
 
-```
+```py
 // 包含版权声明和许可信息
 // 根据 Apache 许可证 2.0 版本使用此文件
 // 如果不遵守许可证，不得使用此文件

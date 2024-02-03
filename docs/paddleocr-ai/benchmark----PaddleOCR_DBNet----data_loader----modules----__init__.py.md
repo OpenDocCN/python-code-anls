@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\data_loader\modules\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 设置时间为 2019年12月4日 10点53分
 # 设置作者为 zhoujun

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\neck\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 设置时间为 2020年6月5日11点34分
 # 设置作者为 zhoujun

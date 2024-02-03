@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\postprocess\vqa_token_ser_layoutlm_postprocess.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import paddle

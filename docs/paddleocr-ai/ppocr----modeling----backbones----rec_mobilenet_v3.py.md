@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\backbones\rec_mobilenet_v3.py`
 
-```
+```py
 # 导入 paddle.nn 模块
 from paddle import nn
 

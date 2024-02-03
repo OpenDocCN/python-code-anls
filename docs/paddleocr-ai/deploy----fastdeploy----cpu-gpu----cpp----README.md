@@ -77,7 +77,7 @@ wget https://gitee.com/paddlepaddle/PaddleOCR/raw/release/2.6/ppocr/utils/ppocr_
 
 # 在CPU上,单独使用文字识别模型部署
 ./infer_rec ./ch_PP-OCRv3_rec_infer ./ppocr_keys_v1.txt ./12.jpg 0
-```
+```py
 
 运行完成可视化结果如下图所示
 <div  align="center">  
@@ -118,7 +118,7 @@ auto ppocr_v2 = fastdeploy::pipeline::PPOCRv2(&det_model, &cls_model, &rec_model
 // 建议如下修改, 需要把 H 维度改为32, W 纬度按需修改.
 rec_option.SetTrtInputShape("x", {1, 3, 32, 10}, {rec_batch_size, 3, 32, 320},
                                 {rec_batch_size, 3, 32, 2304});
-```
+```py
 ### 6.2 如何在PP-OCRv2/v3系列模型中, 关闭文字方向分类器的使用.
 
 在PP-OCRv3/v2中, 文字方向分类器是可选的, 用户可以按照以下方式, 来决定自己是否使用方向分类器.
@@ -130,7 +130,7 @@ auto ppocr_v3 = fastdeploy::pipeline::PPOCRv3(&det_model, &cls_model, &rec_model
 auto ppocr_v3 = fastdeploy::pipeline::PPOCRv3(&det_model, &rec_model);
 
 // 当不使用Cls模型时, 请删掉或者注释掉相关代码
-```
+```py
 
 ### 6.3 如何修改前后处理超参数.
 在示例代码中, 我们展示出了修改前后处理超参数的接口,并设置为默认值,其中, FastDeploy提供的超参数的含义与文档[PaddleOCR推理模型参数解释](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/doc/doc_ch/inference_args.md)是相同的. 如果用户想要进行更多定制化的开发, 请阅读[PP-OCR系列 C++ API查阅](https://www.paddlepaddle.org.cn/fastdeploy-api-doc/cpp/html/namespacefastdeploy_1_1vision_1_1ocr.html)

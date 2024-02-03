@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\__init__.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import paddle

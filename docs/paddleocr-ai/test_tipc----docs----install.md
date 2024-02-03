@@ -12,7 +12,7 @@
 ## 2. Docker 镜像安装
 
 推荐docker镜像安装，按照如下命令创建镜像，当前目录映射到镜像中的`/paddle`目录下
-```
+```py
 nvidia-docker run --name paddle -it -v $PWD:/paddle paddlepaddle/paddle:latest-dev-cuda10.1-cudnn7-gcc82 /bin/bash
 cd /paddle
 
@@ -39,7 +39,7 @@ pip3.7 install https://paddle-wheel.bj.bcebos.com/with-trt/2.1.3/linux-gpu-cuda1
 - cuDNN Code Samples，如：libcudnn8-samples_8.1.0.77-1+cuda10.2_amd64.deb
 
 deb安装可以参考[官方文档](https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#installlinux-deb)，安装方式如下
-```
+```py
 # x.x.x表示下载的版本号
 # $HOME为工作目录
 sudo dpkg -i libcudnn8_x.x.x-1+cudax.x_arm64.deb
@@ -55,7 +55,7 @@ make clean && make
 ./mnistCUDNN
 ```
 如果运行mnistCUDNN完后提示运行成功，则表示安装成功。如果运行后出现freeimage相关的报错，需要按照提示安装freeimage库:
-```
+```py
 sudo apt-get install libfreeimage-dev
 sudo apt-get install libfreeimage
 ```
@@ -65,7 +65,7 @@ sudo apt-get install libfreeimage
 首先，从[Nvidia官网TensorRT板块](https://developer.nvidia.com/tensorrt-getting-started)下载TensorRT，这里选择7.1.3.4版本的TensorRT，注意选择适合自己系统版本和CUDA版本的TensorRT，另外建议下载TAR package的安装包。
 
 以Ubuntu16.04+CUDA10.2为例，下载并解压后可以参考[官方文档](https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-713/install-guide/index.html#installing-tar)的安装步骤，按照如下步骤安装:
-```
+```py
 # 以下安装命令中 '${version}' 为下载的TensorRT版本，如7.1.3.4
 # 设置环境变量，<TensorRT-${version}/lib> 为解压后的TensorRT的lib目录
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<TensorRT-${version}/lib>
@@ -83,14 +83,14 @@ cd TensorRT-${version}/graphsurgeon
 
 下载支持TensorRT版本的Paddle安装包，注意安装包的TensorRT版本需要与本地TensorRT一致，下载[链接](https://paddleinference.paddlepaddle.org.cn/user_guides/download_lib.html#python)
 选择下载 linux-cuda10.2-trt7-gcc8.2 Python3.7版本的Paddle：
-```
+```py
 # 从下载链接中可以看到是paddle2.1.1-cuda10.2-cudnn8.1版本
 wget  https://paddle-wheel.bj.bcebos.com/with-trt/2.1.1-gpu-cuda10.2-cudnn8.1-mkl-gcc8.2/paddlepaddle_gpu-2.1.1-cp37-cp37m-linux_x86_64.whl
 pip3.7 install -U paddlepaddle_gpu-2.1.1-cp37-cp37m-linux_x86_64.whl
 ```
 
 ## 4. 安装PaddleOCR依赖
-```
+```py
 # 安装AutoLog
 git clone https://github.com/LDOUBLEV/AutoLog
 cd AutoLog
@@ -105,7 +105,7 @@ git clone https://github.com/PaddlePaddle/PaddleOCR
 ```
 
 安装PaddleOCR依赖：
-```
+```py
 cd PaddleOCR
 pip3.7 install -r requirements.txt
 ```
@@ -115,7 +115,7 @@ Q. You are using Paddle compiled with TensorRT, but TensorRT dynamic library is 
 
 A. 问题一般是当前安装paddle版本带TRT，但是本地环境找不到TensorRT的预测库，需要下载TensorRT库，解压后设置环境变量LD_LIBRARY_PATH;
 如：
-```
+```py
 export LD_LIBRARY_PATH=/usr/local/python3.7.0/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/paddle/package/TensorRT-6.0.1.5/lib
 ```
 或者问题是下载的TensorRT版本和当前paddle中编译的TRT版本不匹配，需要下载版本相符的TensorRT重新安装。

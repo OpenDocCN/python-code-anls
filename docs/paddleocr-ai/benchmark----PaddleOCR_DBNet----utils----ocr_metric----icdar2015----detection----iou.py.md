@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\ocr_metric\icdar2015\detection\iou.py`
 
-```
+```py
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 导入必要的库

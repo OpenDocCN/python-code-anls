@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\PPOCRLabel.py`
 
-```
+```py
 # 版权声明，允许在特定条件下使用和分发软件
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\unique_label_qlist_widget.py`
 
-```
+```py
 # -*- encoding: utf-8 -*-
 
 # 导入所需的模块

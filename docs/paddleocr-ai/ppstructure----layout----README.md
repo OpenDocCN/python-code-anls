@@ -38,7 +38,7 @@ PP-Structure currently provides layout analysis models in Chinese, English and t
 
 - **（1) Install PaddlePaddle**
 
-```bash
+```py
 python3 -m pip install --upgrade pip
 
 # GPU Install
@@ -53,13 +53,13 @@ For more requirements, please refer to the instructions in the [Install file](ht
 
 - **（1）Download PaddleDetection Source code**
 
-```bash
+```py
 git clone https://github.com/PaddlePaddle/PaddleDetection.git
 ```
 
 - **（2）Install third-party libraries**
 
-```bash
+```py
 cd PaddleDetection
 python3 -m pip install -r requirements.txt
 ```
@@ -72,7 +72,7 @@ If you want to experience the prediction process directly, you can skip data pre
 
 Download document analysis data set [PubLayNet](https://developer.ibm.com/exchanges/data/all/publaynet/)（Dataset 96G），contains 5 classes：`{0: "Text", 1: "Title", 2: "List", 3:"Table", 4:"Figure"}`
 
-```
+```py
 # Download data
 wget https://dax-cdn.cdn.appdomain.cloud/dax-publaynet/1.0.0/publaynet.tar.gz
 # Decompress data
@@ -81,7 +81,7 @@ tar -xvf publaynet.tar.gz
 
 Uncompressed **directory structure：**
 
-```
+```py
 |-publaynet
   |- test
      |- PMC1277013_00004.jpg
@@ -119,7 +119,7 @@ The JSON file contains the annotations of all images, and the data is stored in 
 
 - images，represents the list of image information in the annotation file，each element is the information of an image。The information of one of the images is as follows:
 
-  ```
+  ```py
   {
       'file_name': 'PMC4055390_00006.jpg',    # file_name
       'height': 601,                      # image height
@@ -130,7 +130,7 @@ The JSON file contains the annotations of all images, and the data is stored in 
 
 - annotations， represents the list of annotation information of the target object in the annotation file，each element is the annotation information of a target object。The following is the annotation information of one of the target objects:
 
-  ```
+  ```py
   {
 
       'segmentation':             # Segmentation annotation of objects
@@ -162,7 +162,7 @@ Training scripts, evaluation scripts, and prediction scripts are provided, and t
 
 If you do not want training and directly experience the following process of model evaluation, prediction, motion to static, and inference, you can download the provided pre-trained model (PubLayNet dataset) and skip this part.
 
-```
+```py
 mkdir pretrained_model
 cd pretrained_model
 # Download PubLayNet pre-training model（Direct experience model evaluates, predicts, and turns static）
@@ -184,7 +184,7 @@ If you want to train your own data set, you need to modify the data configuratio
 
 Using 'configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml' as an example, the change is as follows:
 
-```yaml
+```py
 metric: COCO
 # Number of categories
 num_classes: 5
@@ -216,7 +216,7 @@ TestDataset:
 
 * Start training. During training, PP picodet pre training model will be downloaded by default. There is no need to download in advance.
 
-```bash
+```py
 # GPU training supports single-card and multi-card training
 # The training log is automatically saved to the log directory
 
@@ -237,7 +237,7 @@ python3 -m paddle.distributed.launch --gpus '0,1,2,3'  tools/train.py \
 
 After starting training normally, you will see the following log output:
 
-```
+```py
 [08/15 04:02:30] ppdet.utils.checkpoint INFO: Finish loading model weights: /root/.cache/paddle/weights/LCNet_x1_0_pretrained.pdparams
 [08/15 04:02:46] ppdet.engine INFO: Epoch: [0] [   0/1929] learning_rate: 0.040000 loss_vfl: 1.216707 loss_bbox: 1.142163 loss_dfl: 0.544196 loss: 2.903065 eta: 17 days, 13:50:26 batch_cost: 15.7452 data_cost: 2.9112 ips: 1.5243 images/s
 [08/15 04:03:19] ppdet.engine INFO: Epoch: [0] [  20/1929] learning_rate: 0.064000 loss_vfl: 1.180627 loss_bbox: 0.939552 loss_dfl: 0.442436 loss: 2.628206 eta: 2 days, 12:18:53 batch_cost: 1.5770 data_cost: 0.0008 ips: 15.2184 images/s
@@ -255,7 +255,7 @@ PaddleDetection supports FGD-based [Focal and Global Knowledge Distillation for 
 
 Change the dataset and modify the data configuration and number of categories in the [TODO] configuration, referring to 4.1. Start training:
 
-```bash
+```py
 # Single Card Training
 export CUDA_VISIBLE_DEVICES=0
 python3 tools/train.py \
@@ -273,7 +273,7 @@ python3 tools/train.py \
 
  Model parameters in training are saved by default in `output/picodet_ Lcnet_ X1_ 0_ Under the layout` directory. When evaluating indicators, you need to set `weights` to point to the saved parameter file.Assessment datasets can be accessed via `configs/picodet/legacy_ Model/application/layout_ Analysis/picodet_ Lcnet_ X1_ 0_ Layout. Yml` . Modify `EvalDataset`  : `img_dir`,`anno_ Path`and`dataset_dir` setting.
 
-```bash
+```py
 # GPU evaluation, weights as weights to be measured
 python3 tools/eval.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
@@ -301,7 +301,7 @@ The following information will be printed out, such as mAP, AP0.5, etc.
 
 If you use the provided pre-training model for evaluation or the FGD distillation training model, replace the `weights` model path and execute the following command for evaluation:
 
-```
+```py
 python3 tools/eval.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -319,7 +319,7 @@ The profile predicted to be used must be consistent with the training, for examp
 
 With  trained PaddleDetection model, you can use the following commands to make model predictions.
 
-```bash
+```py
 python3 tools/infer.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     -o weights='output/picodet_lcnet_x1_0_layout/best_model.pdparams' \
@@ -334,7 +334,7 @@ python3 tools/infer.py \
 
 If you use the provided pre-training model for prediction or the FGD distillation training model, change the `weights` model path and execute the following command to make the prediction:
 
-```
+```py
 python3 tools/infer.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -358,7 +358,7 @@ Compared with the checkpoints model, the inference model will additionally save 
 
 Layout analysis model to inference model steps are as follows：
 
-```bash
+```py
 python3 tools/export_model.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     -o weights=output/picodet_lcnet_x1_0_layout/best_model \
@@ -370,7 +370,7 @@ python3 tools/export_model.py \
 
 After successful conversion, there are three files in the directory:
 
-```
+```py
 output_inference/picodet_lcnet_x1_0_layout/
     ├── model.pdiparams         # inference Parameter file for model
     ├── model.pdiparams.info    # inference Model parameter information, ignorable
@@ -379,7 +379,7 @@ output_inference/picodet_lcnet_x1_0_layout/
 
 If you change the `weights` model path using the provided pre-training model to the Inference model, or using the FGD distillation training model, the model to inference model steps are as follows:
 
-```bash
+```py
 python3 tools/export_model.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -391,7 +391,7 @@ python3 tools/export_model.py \
 
 Replace model_with the provided inference training model for inference or the FGD distillation training `model_dir`Inference model path, execute the following commands for inference:
 
-```bash
+```py
 python3 deploy/python/infer.py \
     --model_dir=output_inference/picodet_lcnet_x1_0_layout/ \
     --image_file=docs/images/layout.jpg \
@@ -402,7 +402,7 @@ python3 deploy/python/infer.py \
 
 When model inference is complete, you will see the following log output:
 
-```
+```py
 ------------------------------------------
 -----------  Model Configuration -----------
 Model Arch: PicoDet
@@ -445,7 +445,7 @@ The result of visualization layout is shown in the following figure
 
 ## Citations
 
-```
+```py
 @inproceedings{zhong2019publaynet,
   title={PubLayNet: largest dataset ever for document layout analysis},
   author={Zhong, Xu and Tang, Jianbin and Yepes, Antonio Jimeno},

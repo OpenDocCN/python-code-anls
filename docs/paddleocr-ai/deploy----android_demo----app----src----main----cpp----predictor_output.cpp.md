@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\predictor_output.cpp`
 
-```
+```py
 namespace ppredictor {
 // 返回浮点数据的指针
 const float *PredictorOutput::get_float_data() const {

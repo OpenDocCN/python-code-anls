@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\ocr_metric\__init__.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/12/5 15:36
 # @Author  : zhoujun

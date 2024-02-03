@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ppredictor.cpp`
 
-```
+```py
 namespace ppredictor {
 // 定义 PPredictor 类的构造函数，初始化成员变量
 PPredictor::PPredictor(int use_opencl, int thread_num, int net_flag,

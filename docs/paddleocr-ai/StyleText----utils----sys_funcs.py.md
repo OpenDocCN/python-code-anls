@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\utils\sys_funcs.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # 本代码版权归 PaddlePaddle 作者所有。保留所有权利。

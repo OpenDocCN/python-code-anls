@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\losses\__init__.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 定义文件编码格式为 UTF-8
 # @Time    : 2020/6/5 11:36

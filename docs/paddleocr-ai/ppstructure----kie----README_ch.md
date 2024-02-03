@@ -113,7 +113,7 @@ PP-Structure中关键信息抽取模块的主要特性如下：
 
 使用下面的命令安装运行SER与RE关键信息抽取的依赖。
 
-```bash
+```py
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
 cd PaddleOCR
 pip install -r requirements.txt
@@ -128,7 +128,7 @@ pip install paddleocr -U
 
 #### 4.2.1 准备数据
 
-```bash
+```py
 mkdir train_data
 cd train_data
 # 下载与解压数据
@@ -140,7 +140,7 @@ cd ..
 
 首先下载模型。
 
-```bash
+```py
 mkdir pretrained_model
 cd pretrained_model
 # 下载并解压SER预训练模型
@@ -152,7 +152,7 @@ wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layou
 
 如果希望使用OCR引擎，获取端到端的预测结果，可以使用下面的命令进行预测。
 
-```bash
+```py
 # 仅预测SER模型
 python3 tools/infer_kie_token_ser.py \
   -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml \
@@ -177,7 +177,7 @@ python3 ./tools/infer_kie_token_ser_re.py \
 
 如果希望加载标注好的文本检测与识别结果，仅预测可以使用下面的命令进行预测。
 
-```bash
+```py
 # 仅预测SER模型
 python3 tools/infer_kie_token_ser.py \
   -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml \
@@ -199,7 +199,7 @@ python3 ./tools/infer_kie_token_ser_re.py \
 
 首先下载SER和RE的推理模型。
 
-```bash
+```py
 mkdir inference
 cd inference
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_infer.tar && tar -xf ser_vi_layoutxlm_xfund_infer.tar
@@ -211,7 +211,7 @@ cd ..
 
 执行下面的命令进行预测。
 
-```bash
+```py
 cd ppstructure
 python3 kie/predict_kie_token_ser.py \
   --kie_algorithm=LayoutXLM \
@@ -228,7 +228,7 @@ python3 kie/predict_kie_token_ser.py \
 
 执行下面的命令进行预测。
 
-```bash
+```py
 cd ppstructure
 python3 kie/predict_kie_token_ser_re.py \
   --kie_algorithm=LayoutXLM \

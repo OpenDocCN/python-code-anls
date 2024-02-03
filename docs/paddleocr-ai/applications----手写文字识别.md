@@ -44,7 +44,7 @@ PP-OCRv3的识别模块是基于文本识别算法[SVTR](https://arxiv.org/abs/2
 ## 4. 安装环境
 
 
-```python
+```py
 # 首先git官方的PaddleOCR项目，安装需要的依赖
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
 cd PaddleOCR
@@ -55,7 +55,7 @@ pip install -r requirements.txt
 本项目使用公开的手写文本识别数据集，包含Chinese OCR, 中科院自动化研究所-手写中文数据集[CASIA-HWDB2.x](http://www.nlpr.ia.ac.cn/databases/handwriting/Download.html)，以及由中科院手写数据和网上开源数据合并组合的[数据集](https://aistudio.baidu.com/aistudio/datasetdetail/102884/0)等，该项目已经挂载处理好的数据集，可直接下载使用进行训练。
 
 
-```python
+```py
 下载并解压数据
 tar -xf hw_data.tar
 ```
@@ -65,7 +65,7 @@ tar -xf hw_data.tar
 首先需要下载我们需要的PP-OCRv3识别预训练模型，更多选择请自行选择其他的[文字识别模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.5/doc/doc_ch/models_list.md#2-%E6%96%87%E6%9C%AC%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B)
 
 
-```python
+```py
 # 使用该指令下载需要的预训练模型
 wget -P ./pretrained_models/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
 # 解压预训练模型文件
@@ -75,7 +75,7 @@ tar -xf ./pretrained_models/ch_PP-OCRv3_rec_train.tar -C pretrained_models
 ### 6.2 修改配置文件
 我们使用`configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml`，主要修改训练轮数和学习率参相关参数，设置预训练模型路径，设置数据集路径。 另外，batch_size可根据自己机器显存大小进行调整。 具体修改如下几个地方：
 
-```
+```py
   epoch_num: 100 # 训练epoch数
   save_model_dir: ./output/ch_PP-OCR_v3_rec
   save_epoch_step: 10
@@ -130,7 +130,7 @@ Eval:
     num_workers: 4
 ```
 由于数据集大多是长文本，因此需要**注释**掉下面的数据增广策略，以便训练出更好的模型。
-```
+```py
 - RecConAug:
     prob: 0.5
     ext_data_num: 2
@@ -142,7 +142,7 @@ Eval:
 我们使用上面修改好的配置文件`configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml`，预训练模型，数据集路径，学习率，训练轮数等都已经设置完毕后，可以使用下面命令开始训练。
 
 
-```python
+```py
 # 开始训练识别模型
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml
 
@@ -153,11 +153,11 @@ python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml
 
 
 
-```python
+```py
 # 评估预训练模型
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model="./pretrained_models/ch_PP-OCRv3_rec_train/best_accuracy"
 ```
-```
+```py
 [2022/07/14 10:46:22] ppocr INFO: load pretrain successful from ./pretrained_models/ch_PP-OCRv3_rec_train/best_accuracy
 eval model:: 100%|████████████████████████████| 687/687 [03:29<00:00,  3.27it/s]
 [2022/07/14 10:49:52] ppocr INFO: metric eval ***************
@@ -173,14 +173,14 @@ eval model:: 100%|████████████████████�
 
 
 
-```python
+```py
 # 评估finetune效果
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_rec/best_accuracy"
 
 ```
 
 评估结果如下，可以看出识别准确率为54.3%。
-```
+```py
 [2022/07/14 10:54:06] ppocr INFO: metric eval ***************
 [2022/07/14 10:54:06] ppocr INFO: acc:0.5430100180913
 [2022/07/14 10:54:06] ppocr INFO: norm_edit_dis:0.9203322593158589
@@ -204,7 +204,7 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o
 
 
 
-```python
+```py
 # 转化为推理模型
 python tools/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_rec/best_accuracy" Global.save_inference_dir="./inference/rec_ppocrv3/"
 
@@ -215,18 +215,18 @@ python tools/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillatio
 
 
 
-```python
+```py
 # 推理预测
 python tools/infer/predict_rec.py --image_dir="train_data/handwrite/HWDB2.0Test_images/104-P16_4.jpg" --rec_model_dir="./inference/rec_ppocrv3/Student"
 ```
 
-```
+```py
 [2022/07/14 10:55:56] ppocr INFO: In PP-OCRv3, rec_image_shape parameter defaults to '3, 48, 320', if you are using recognition model with PP-OCRv2 or an older version, please set --rec_image_shape='3,32,320
 [2022/07/14 10:55:58] ppocr INFO: Predicts of train_data/handwrite/HWDB2.0Test_images/104-P16_4.jpg:('品结构,差异化的多品牌渗透使欧莱雅确立了其在中国化妆', 0.9904912114143372)
 ```
 
 
-```python
+```py
 # 可视化文字识别图片
 from PIL import Image  
 import matplotlib.pyplot as plt

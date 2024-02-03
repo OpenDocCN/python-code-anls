@@ -13,7 +13,7 @@
 将Paddle模型转换为SOPHGO bmodel模型, 转换步骤参考[文档](../README.md)  
 
 ### 2.2 开始部署
-```bash
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/sophgo/python

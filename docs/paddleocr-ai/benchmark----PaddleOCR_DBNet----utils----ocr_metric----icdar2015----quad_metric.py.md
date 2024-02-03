@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\ocr_metric\icdar2015\quad_metric.py`
 
-```
+```py
 import numpy as np
 
 from .detection.iou import DetectionIoUEvaluator

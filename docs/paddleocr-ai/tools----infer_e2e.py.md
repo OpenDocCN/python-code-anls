@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer_e2e.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 import os

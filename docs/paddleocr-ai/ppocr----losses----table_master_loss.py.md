@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\table_master_loss.py`
 
-```
+```py
 # 版权声明，告知代码版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证 2.0 版本使用此文件

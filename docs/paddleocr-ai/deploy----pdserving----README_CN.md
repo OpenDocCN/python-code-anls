@@ -43,7 +43,7 @@ AIStudio演示案例可参考 [基于PaddleServing的OCR服务化部署实战](h
 
 - 准备PaddleOCR的运行环境[链接](../../doc/doc_ch/installation.md)
 
-    ```
+    ```py
     git clone https://github.com/PaddlePaddle/PaddleOCR
 
     # 进入到工作目录
@@ -52,7 +52,7 @@ AIStudio演示案例可参考 [基于PaddleServing的OCR服务化部署实战](h
 
 - 准备PaddleServing的运行环境，步骤如下
 
-```bash
+```py
 # 安装serving，用于启动服务
 wget https://paddle-serving.bj.bcebos.com/test-dev/whl/paddle_serving_server_gpu-0.8.3.post102-py3-none-any.whl
 pip3 install paddle_serving_server_gpu-0.8.3.post102-py3-none-any.whl
@@ -78,7 +78,7 @@ pip3 install paddle_serving_app-0.8.3-py3-none-any.whl
 
 首先，下载PP-OCR的[inference模型](https://github.com/PaddlePaddle/PaddleOCR#pp-ocr-series-model-listupdate-on-september-8th)
 
-```bash
+```py
 # 下载并解压 OCR 文本检测模型
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar -O ch_PP-OCRv3_det_infer.tar && tar -xf ch_PP-OCRv3_det_infer.tar
 # 下载并解压 OCR 文本识别模型
@@ -87,7 +87,7 @@ wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar 
 
 接下来，用安装的paddle_serving_client把下载的inference模型转换成易于server部署的模型格式。
 
-```bash
+```py
 # 转换检测模型
 python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_det_infer/ \
                                          --model_filename inference.pdmodel          \
@@ -104,7 +104,7 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
 ```
 
 检测模型转换完成后，会在当前文件夹多出`ppocr_det_v3_serving` 和`ppocr_det_v3_client`的文件夹，具备如下格式：
-```
+```py
 |- ppocr_det_v3_serving/
   |- __model__  
   |- __params__
@@ -124,7 +124,7 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
 1. 确认工作目录下文件结构：
 
     pdserver目录包含启动pipeline服务和发送预测请求的代码，包括：
-    ```
+    ```py
     __init__.py
     config.yml            # 启动服务的配置文件
     ocr_reader.py         # OCR模型预处理和后处理的代码实现
@@ -133,7 +133,7 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
     ```
 
 2. 启动服务可运行如下命令：
-    ```
+    ```py
     # 启动服务，运行日志保存在log.txt
     python3 web_service.py --config=config.yml &>log.txt &
     ```
@@ -141,14 +141,14 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
     ![](./imgs/start_server.png)
 
 3. 发送服务请求：
-    ```
+    ```py
     python3 pipeline_http_client.py
     ```
     成功运行后，模型预测的结果会打印在cmd窗口中，结果示例为：
     ![](./imgs/pipeline_result.png)
 
     调整 config.yml 中的并发个数获得最大的QPS, 一般检测和识别的并发数为2：1
-    ```
+    ```py
     det:
         #并发数，is_thread_op=True时，为线程并发；否则为进程并发
         concurrency: 8
@@ -164,7 +164,7 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
 
     在200张真实图片上测试，把检测长边限制为960。T4 GPU 上 QPS 均值可达到23左右：
 
-    ```
+    ```py
     2021-05-13 03:42:36,895 ==================== TRACER ======================
     2021-05-13 03:42:36,975 Op(rec):
     2021-05-13 03:42:36,976         in[14.472382882882883 ms]
@@ -213,7 +213,7 @@ C++ 服务部署在环境搭建和数据准备阶段与 python 相同，区别�
 
 首先需要下载Serving代码库, 把OCR文本检测预处理相关代码替换到Serving库中
 
-```
+```py
 git clone https://github.com/PaddlePaddle/Serving
 
 cp -rf general_detection_op.cpp Serving/core/general-server/op
@@ -228,7 +228,7 @@ cp -rf general_detection_op.cpp Serving/core/general-server/op
 
 一个服务启动两个模型串联，只需要在--model后依次按顺序传入模型文件夹的相对路径，且需要在--op后依次传入自定义C++OP类名称：
 
-    ```
+    ```py
     # 启动服务，运行日志保存在log.txt
     python3 -m paddle_serving_server.serve --model ppocr_det_v3_serving ppocr_rec_v3_serving --op GeneralDetectionOp GeneralInferOp --port 8181 &>log.txt &
     ```
@@ -239,7 +239,7 @@ cp -rf general_detection_op.cpp Serving/core/general-server/op
 
    由于需要在C++Server部分进行前后处理，为了加速传入C++Server的仅仅是图片的base64编码的字符串，故需要手动修改
    ppocr_det_v3_client/serving_client_conf.prototxt 中 feed_type 字段 和 shape 字段，修改成如下内容：
-   ```
+   ```py
     feed_var {
     name: "x"
     alias_name: "x"
@@ -249,7 +249,7 @@ cp -rf general_detection_op.cpp Serving/core/general-server/op
     }
    ```
    启动客户端
-   ```
+   ```py
     python3 ocr_cpp_client.py ppocr_det_v3_client ppocr_rec_v3_client
    ```
 
@@ -271,14 +271,14 @@ Windows用户不能使用上述的启动方式，需要使用Web Service，详�
 **WINDOWS只能使用0.5.0版本的CPU模式**
 
 准备阶段：
-```
+```py
 pip3 install paddle-serving-server==0.5.0
 pip3 install paddle-serving-app==0.3.1
 ```
 
 1. 启动服务端程序
 
-```
+```py
 cd win
 python3 ocr_web_server.py gpu(使用gpu方式)
 或者
@@ -287,7 +287,7 @@ python3 ocr_web_server.py cpu(使用cpu方式)
 
 2. 发送服务请求
 
-```
+```py
 python3 ocr_web_client.py
 ```
 
@@ -297,7 +297,7 @@ python3 ocr_web_client.py
 **Q1**： 发送请求后没有结果返回或者提示输出解码报错
 
 **A1**： 启动服务和发送请求时不要设置代理，可以在启动服务前和发送请求前关闭代理，关闭代理的命令是：
-```
+```py
 unset https_proxy
 unset http_proxy
 ```

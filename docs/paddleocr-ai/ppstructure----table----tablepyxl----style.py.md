@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\table\tablepyxl\style.py`
 
-```
+```py
 # 这里处理将 CSS 样式转换为 openpyxl 样式，并在 DOM 中从父级传递到子级。
 
 from openpyxl.cell import cell

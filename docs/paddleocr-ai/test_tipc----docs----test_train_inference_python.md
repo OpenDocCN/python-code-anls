@@ -38,15 +38,15 @@ Linux端基础训练预测功能测试的主程序为`test_train_inference_pytho
 ### 2.1 安装依赖
 - 安装PaddlePaddle >= 2.3
 - 安装PaddleOCR依赖
-    ```
+    ```py
     pip3 install  -r ../requirements.txt
     ```
 - 安装autolog（规范化日志输出工具）
-    ```
+    ```py
     pip3 install https://paddleocr.bj.bcebos.com/libs/auto_log-1.2.0-py3-none-any.whl
     ```
 - 安装PaddleSlim (可选)
-   ```
+   ```py
    # 如果要测试量化、裁剪等功能，需要安装PaddleSlim
    pip3 install paddleslim
    ```
@@ -60,19 +60,19 @@ Linux端基础训练预测功能测试的主程序为`test_train_inference_pytho
 `test_train_inference_python.sh`包含基础链条的4种运行模式，每种模式的运行数据不同，分别用于测试速度和精度，分别是：
 
 - 模式1：lite_train_lite_infer，使用少量数据训练，用于快速验证训练到预测的走通流程，不验证精度和速度；
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'lite_train_lite_infer'
 bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'lite_train_lite_infer'
 ```  
 
 - 模式2：lite_train_whole_infer，使用少量数据训练，一定量数据预测，用于验证训练后的模型执行预测，预测速度是否合理；
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt  'lite_train_whole_infer'
 bash test_tipc/test_train_inference_python.sh ../test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'lite_train_whole_infer'
 ```  
 
 - 模式3：whole_infer，不训练，全量数据预测，走通开源模型评估、动转静，检查inference model预测时间和精度;
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'whole_infer'
 # 用法1:
 bash test_tipc/test_train_inference_python.sh ../test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'whole_infer'
@@ -81,13 +81,13 @@ bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_ppocr_mobil
 ```  
 
 - 模式4：whole_train_whole_infer，CE： 全量数据训练，全量数据预测，验证模型训练精度，预测精度，预测速度；
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'whole_train_whole_infer'
 bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_ppocr_mobile_v2_0_det/train_infer_python.txt 'whole_train_whole_infer'
 ```  
 
 运行相应指令后，在`test_tipc/output`文件夹下自动会保存运行日志。如'lite_train_lite_infer'模式下，会运行训练+inference的链条，因此，在`test_tipc/output`文件夹有以下文件：
-```
+```py
 test_tipc/output/model_name/lite_train_lite_infer/
 |- results_python.log    # 运行指令状态的日志
 |- norm_train_gpus_0_autocast_null/  # GPU 0号卡上正常单机单卡训练的训练日志和模型保存文件夹
@@ -99,7 +99,7 @@ test_tipc/output/model_name/lite_train_lite_infer/
 ```
 
 其中`results_python.log`中包含了每条指令的运行状态，如果运行成功会输出：
-```
+```py
 [33m Run successfully with command - ch_ppocr_mobile_v2_0_det - python3.7 tools/train.py -c configs/det/ch_ppocr_v2_0/ch_det_mv3_db_v2_0.yml -o Global.pretrained_model=./pretrain_models/MobileNetV3_large_x0_5_pretrained Global.use_gpu=True  Global.save_model_dir=./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/norm_train_gpus_0_autocast_null Global.epoch_num=100     Train.loader.batch_size_per_card=2     !  [0m
 [33m Run successfully with command - ch_ppocr_mobile_v2_0_det - python3.7 tools/export_model.py -c configs/det/ch_ppocr_v2_0/ch_det_mv3_db_v2_0.yml -o  Global.checkpoints=./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/norm_train_gpus_0_autocast_null/latest Global.save_inference_dir=./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/norm_train_gpus_0_autocast_null > ./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/norm_train_gpus_0_autocast_null_nodes_1_export.log 2>&1 !  [0m
 [33m Run successfully with command - ch_ppocr_mobile_v2_0_det - python3.7 tools/infer/predict_det.py --use_gpu=True --use_tensorrt=False --precision=fp32 --det_model_dir=./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/norm_train_gpus_0_autocast_null --rec_batch_num=1 --image_dir=./train_data/icdar2015/text_localization/ch4_test_images/ --benchmark=True     > ./test_tipc/output/ch_ppocr_mobile_v2_0_det/lite_train_lite_infer/python_infer_gpu_usetrt_False_precision_fp32_batchsize_1.log 2>&1 !  [0m
@@ -107,7 +107,7 @@ test_tipc/output/model_name/lite_train_lite_infer/
 ......
 ```
 如果运行失败，会输出：
-```
+```py
 Run failed with command - python3.7 tools/train.py -c tests/configs/det_mv3_db.yml -o Global.pretrained_model=./pretrain_models/MobileNetV3_large_x0_5_pretrained Global.use_gpu=True  Global.save_model_dir=./tests/output/norm_train_gpus_0_autocast_null Global.epoch_num=1     Train.loader.batch_size_per_card=2   !
 Run failed with command - python3.7 tools/export_model.py -c tests/configs/det_mv3_db.yml -o  Global.pretrained_model=./tests/output/norm_train_gpus_0_autocast_null/latest Global.save_inference_dir=./tests/output/norm_train_gpus_0_autocast_null!
 ......
@@ -118,7 +118,7 @@ Run failed with command - python3.7 tools/export_model.py -c tests/configs/det_m
 此外，`test_train_inference_python.sh`还包含PACT在线量化模式，命令如下：
 以ch_PP-OCRv2_det为例，如需测试其他模型更换配置即可。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_pact_infer_python.txt 'lite_train_lite_infer'
 bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_pact_infer_python.txt 'lite_train_lite_infer'
 ```  
@@ -126,7 +126,7 @@ bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_PP-OCRv2_de
 此外，`test_train_inference_python.sh`还包含混合精度训练模式，命令如下：
 以ch_PP-OCRv2_det为例，如需测试其他模型更换配置即可。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_linux_gpu_normal_amp_infer_python_linux_gpu_cpu.txt 'lite_train_lite_infer'
 bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_linux_gpu_normal_amp_infer_python_linux_gpu_cpu.txt 'lite_train_lite_infer'
 ```  
@@ -140,7 +140,7 @@ bash test_tipc/test_train_inference_python.sh ./test_tipc/configs/ch_PP-OCRv2_de
 
 #### 使用方式
 运行命令：
-```shell
+```py
 python3.7 test_tipc/compare_results.py --gt_file=./test_tipc/results/python_*.txt  --log_file=./test_tipc/output/python_*.log --atol=1e-3 --rtol=1e-3
 ```
 

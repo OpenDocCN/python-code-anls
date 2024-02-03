@@ -52,7 +52,7 @@
 
 ### 2.1 安装PaddlePaddle
 
-```bash
+```py
 python3 -m pip install --upgrade pip
 
 # 您的机器安装的是CUDA9或CUDA10，请运行以下命令安装
@@ -71,7 +71,7 @@ python3 -m pip install "paddlepaddle" -i https://mirror.baidu.com/pypi/simple
 
 - **（1）下载版面恢复源码**
 
-```bash
+```py
 【推荐】git clone https://github.com/PaddlePaddle/PaddleOCR
 
 # 如果因为网络问题无法pull成功，也可选择使用码云上的托管：
@@ -86,13 +86,13 @@ git clone https://gitee.com/paddlepaddle/PaddleOCR
 
 通过如下命令安装全部库：
 
-```bash
+```py
 python3 -m pip install -r ppstructure/recovery/requirements.txt
 ```
 
 使用pdf2docx库解析的方式恢复文档需要安装优化的pdf2docx。
 
-```bash
+```py
 wget https://paddleocr.bj.bcebos.com/whl/pdf2docx-0.0.0-py3-none-any.whl
 pip3 install pdf2docx-0.0.0-py3-none-any.whl
 ```
@@ -103,7 +103,7 @@ pip3 install pdf2docx-0.0.0-py3-none-any.whl
 
 `use_pdf2docx_api`表示使用PDF解析的方式进行版面恢复，通过whl包的形式方便快速使用，代码如下，更多信息详见 [quickstart](../docs/quickstart.md)。
 
-```bash
+```py
 # 安装 paddleocr，推荐使用2.6版本
 pip3 install "paddleocr>=2.6"
 paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --recovery=true --use_pdf2docx_api=true
@@ -111,7 +111,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 
 通过命令行的方式：
 
-```bash
+```py
 python3 predict_system.py \
     --image_dir=ppstructure/recovery/UnrealText.pdf \
     --recovery=True \
@@ -134,7 +134,7 @@ python3 predict_system.py \
 
 提供如下代码实现版面恢复，也提供了whl包的形式方便快速使用，代码如下，更多信息详见 [quickstart](../docs/quickstart.md)。
 
-```bash
+```py
 # 安装 paddleocr，推荐使用2.6版本
 pip3 install "paddleocr>=2.6"
 # 中文测试图
@@ -151,7 +151,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 
 如果输入为英文文档类型，下载OCR检测和识别、版面分析、表格识别的英文模型
 
-```bash
+```py
 cd PaddleOCR/ppstructure
 
 # 下载模型
@@ -179,7 +179,7 @@ cd ..
 
 使用下载的模型恢复给定文档的版面，以英文模型为例，执行如下命令：
 
-```bash
+```py
 python3 predict_system.py \
     --image_dir=./docs/table/1.png \
     --det_model_dir=inference/en_PP-OCRv3_det_infer \

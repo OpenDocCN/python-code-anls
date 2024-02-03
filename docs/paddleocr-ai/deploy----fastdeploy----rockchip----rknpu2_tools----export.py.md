@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\rockchip\rknpu2_tools\export.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 导入所需的库
 import os

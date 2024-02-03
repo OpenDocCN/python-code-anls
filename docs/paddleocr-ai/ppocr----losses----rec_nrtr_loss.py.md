@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\rec_nrtr_loss.py`
 
-```
+```py
 import paddle
 from paddle import nn
 import paddle.nn.functional as F

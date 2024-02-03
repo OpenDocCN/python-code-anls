@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\data.py`
 
-```
+```py
 # 导入 numpy 和 paddle 模块
 import numpy as np
 import paddle

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\hubserving\ocr_system\params.py`
 
-```
+```py
 # 定义一个 Config 类，用于存储配置信息
 class Config(object):
     pass

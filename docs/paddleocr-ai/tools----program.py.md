@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\program.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 该代码版权归 PaddlePaddle 作者所有，遵循 Apache License, Version 2.0 许可证
 # 可以在遵守许可证的前提下使用该文件

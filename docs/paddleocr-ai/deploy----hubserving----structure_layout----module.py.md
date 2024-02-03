@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\hubserving\structure_layout\module.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 该代码版权归 PaddlePaddle 作者所有，仅限于遵守 Apache 许可证 2.0 使用
 # 可以在 http://www.apache.org/licenses/LICENSE-2.0 获取许可证副本

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\utility.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include <dirent.h>
 #include <include/utility.h>

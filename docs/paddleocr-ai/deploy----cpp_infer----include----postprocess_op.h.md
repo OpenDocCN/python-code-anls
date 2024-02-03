@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\include\postprocess_op.h`
 
-```
+```py
 // 版权声明，告知代码版权归属于 PaddlePaddle Authors
 // 根据 Apache 许可证 2.0 版本授权，限制使用条件和责任限制
 // 获取许可证的链接

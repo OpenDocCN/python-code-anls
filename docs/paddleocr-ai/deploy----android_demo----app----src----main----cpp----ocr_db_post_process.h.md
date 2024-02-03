@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_db_post_process.h`
 
-```
+```py
 // 源文件的创建日期和作者信息
 // Created by fujiayi on 2020/7/2.
 // 防止头文件被重复包含

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\data_loader\modules\make_shrink_map.py`
 
-```
+```py
 import numpy as np
 import cv2
 

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\metrics\cls_metric.py`
 
-```
+```py
 # 定义一个类 ClsMetric，用于计算分类任务的指标
 class ClsMetric(object):
     # 初始化函数，设置主要指标为准确率，初始化 eps 为 1e-5，并调用 reset 函数

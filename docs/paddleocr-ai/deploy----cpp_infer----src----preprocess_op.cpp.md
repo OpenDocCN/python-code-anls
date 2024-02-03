@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\preprocess_op.cpp`
 
-```
+```py
 // 包含版权声明和许可信息
 
 #include <include/preprocess_op.h>  // 包含预处理操作的头文件

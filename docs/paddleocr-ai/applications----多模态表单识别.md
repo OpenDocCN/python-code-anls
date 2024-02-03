@@ -53,19 +53,19 @@
 下载PaddleOCR源码，上述AIStudio项目中已经帮大家打包好的PaddleOCR(已经修改好配置文件)，无需下载解压即可，只需安装依赖环境~
 
 
-```python
+```py
 unzip -q PaddleOCR.zip
 ```
 
 
-```python
+```py
 # 如仍需安装or安装更新，可以执行以下步骤
 # git clone https://github.com/PaddlePaddle/PaddleOCR.git -b dygraph
 # git clone https://gitee.com/PaddlePaddle/PaddleOCR
 ```
 
 
-```python
+```py
 # 安装依赖包
 pip install -U pip
 pip install -r /home/aistudio/PaddleOCR/requirements.txt
@@ -95,7 +95,7 @@ pip install xlsxwriter
 <center>图3 下载数据集</center>
 
 
-```python
+```py
 wget https://paddleocr.bj.bcebos.com/dataset/XFUND.tar
 tar -xf XFUND.tar
 
@@ -108,7 +108,7 @@ tar -xf XFUND.tar
 
 运行上述指令后在 /home/aistudio/PaddleOCR/ppstructure/vqa/XFUND 目录下有2个文件夹，目录结构如下所示：
 
-```bash
+```py
 /home/aistudio/PaddleOCR/ppstructure/vqa/XFUND
   └─ zh_train/        		 	训练集
       ├── image/				图片存放文件夹
@@ -121,7 +121,7 @@ tar -xf XFUND.tar
 
 该数据集的标注格式为
 
-```bash
+```py
 {
     "height": 3508, # 图像高度
     "width": 2480,  # 图像宽度
@@ -162,7 +162,7 @@ json.dumps编码前的图像标注信息是包含多个字典的list，字典中
 
 - **文本识别** 标注文件的格式如下， txt文件中默认请将图片路径和图片标签用'\t'分割，如用其他方式分割将造成训练报错。
 
-```
+```py
 " 图像文件名                 图像标注信息 "
 
 train_data/rec/train/word_001.jpg   简单可依赖
@@ -173,14 +173,14 @@ train_data/rec/train/word_002.jpg   用科技让复杂的世界更简单
 
 
 
-```python
+```py
 unzip -q /home/aistudio/data/data140302/XFUND_ori.zip -d /home/aistudio/data/data140302/
 ```
 
 已经提供转换脚本，执行如下代码即可转换成功：
 
 
-```python
+```py
 %cd /home/aistudio/
 python trans_xfund_data.py
 ```
@@ -219,7 +219,7 @@ PaddleOCR已经提供了PP-OCR系列模型，部分模型展示如下表所示�
 
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/pretrain/
 wget https://paddleocr.bj.bcebos.com/PP-OCRv2/chinese/ch_PP-OCRv2_det_distill_train.tar
 tar -xf ch_PP-OCRv2_det_distill_train.tar && rm -rf ch_PP-OCRv2_det_distill_train.tar
@@ -233,7 +233,7 @@ tar -xf ch_PP-OCRv2_det_distill_train.tar && rm -rf ch_PP-OCRv2_det_distill_trai
 
 接着使用下载的超轻量检测模型在XFUND验证集上进行评估，由于蒸馏需要包含多个网络，甚至多个Student网络，在计算指标的时候只需要计算一个Student网络的指标即可，key字段设置为Student则表示只计算Student网络的精度。
 
-```
+```py
 Metric:
   name: DistillationMetric
   base_metric_name: DetMetric
@@ -241,7 +241,7 @@ Metric:
   key: "Student"
 ```
 首先修改配置文件`configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_distill.yml`中的以下字段：
-```
+```py
 Eval.dataset.data_dir：指向验证集图片存放目录
 Eval.dataset.label_file_list：指向验证集标注文件
 ```
@@ -250,7 +250,7 @@ Eval.dataset.label_file_list：指向验证集标注文件
 然后在XFUND验证集上进行评估，具体代码如下：
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR
 python tools/eval.py \
     -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_distill.yml \
@@ -269,7 +269,7 @@ python tools/eval.py \
 
 PaddleOCR提供的蒸馏预训练模型包含了多个模型的参数，我们提取Student模型的参数，在XFUND数据集上进行finetune，可以参考如下代码：
 
-```python
+```py
 import paddle
 # 加载预训练模型
 all_params = paddle.load("pretrain/ch_PP-OCRv2_det_distill_train/best_accuracy.pdparams")
@@ -290,7 +290,7 @@ paddle.save(s_params, "pretrain/ch_PP-OCRv2_det_distill_train/student.pdparams")
 
 
 修改配置文件`configs/det/ch_PP-OCRv2_det_student.yml`中的以下字段：
-```
+```py
 Global.pretrained_model：指向预训练模型路径
 Train.dataset.data_dir：指向训练集图片存放目录
 Train.dataset.label_file_list：指向训练集标注文件
@@ -306,7 +306,7 @@ Eval.dataset.transforms.DetResizeForTest：评估尺寸，添加如下参数
 执行下面命令启动训练：
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
         -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_student.yml
 ```
@@ -325,7 +325,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 将下载或训练完成的模型放置在对应目录下即可完成模型评估
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 python tools/eval.py \
     -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_student.yml \
@@ -335,7 +335,7 @@ python tools/eval.py \
 同时我们提供了未finetuen的模型，配置文件参数(`pretrained_model`设置为空，`learning_rate` 设置为0.001)
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 python tools/eval.py \
     -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_student.yml \
@@ -359,7 +359,7 @@ python tools/eval.py \
 在模型训练过程中保存的模型文件是包含前向预测和反向传播的过程，在实际的工业部署则不需要反向传播，因此需要将模型进行导成部署需要的模型格式。 执行下面命令，即可导出模型。
 
 
-```python
+```py
 # 加载配置文件`ch_PP-OCRv2_det_student.yml`，从`pretrain/ch_db_mv3-student1600-finetune`目录下加载`best_accuracy`模型
 # inference模型保存在`./output/det_db_inference`目录下
 %cd /home/aistudio/PaddleOCR/
@@ -370,7 +370,7 @@ python tools/export_model.py \
 ```
 
 转换成功后，在目录下有三个文件：
-```
+```py
 /inference/rec_crnn/
     ├── inference.pdiparams         # 识别inference模型的参数文件
     ├── inference.pdiparams.info    # 识别inference模型的参数信息，可忽略
@@ -384,7 +384,7 @@ python tools/export_model.py \
 
 加载上面导出的模型，执行如下命令对验证集或测试集图片进行预测：
 
-```
+```py
 det_model_dir：预测模型
 image_dir：测试图片路径
 use_gpu：是否使用GPU
@@ -393,7 +393,7 @@ use_gpu：是否使用GPU
 检测可视化结果保存在`/home/aistudio/inference_results/`目录下，查看检测效果。
 
 
-```python
+```py
 %pwd
 !python tools/infer/predict_det.py \
     --det_algorithm="DB" \
@@ -429,7 +429,7 @@ use_gpu：是否使用GPU
 我们使用PP-OCRv2中英文超轻量文本识别模型，下载并解压预训练模型：
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/pretrain/
 wget https://paddleocr.bj.bcebos.com/PP-OCRv2/chinese/ch_PP-OCRv2_rec_train.tar
 tar -xf ch_PP-OCRv2_rec_train.tar && rm -rf ch_PP-OCRv2_rec_train.tar
@@ -444,7 +444,7 @@ tar -xf ch_PP-OCRv2_rec_train.tar && rm -rf ch_PP-OCRv2_rec_train.tar
 
 首先修改配置文件`configs/det/ch_PP-OCRv2/ch_PP-OCRv2_rec_distillation.yml`中的以下字段：
 
-```
+```py
 Eval.dataset.data_dir：指向验证集图片存放目录
 Eval.dataset.label_file_list：指向验证集标注文件
 ```
@@ -452,7 +452,7 @@ Eval.dataset.label_file_list：指向验证集标注文件
 我们使用下载的预训练模型进行评估：
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR
 CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
     -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec_distillation.yml \
@@ -472,7 +472,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
 同检测模型，我们提取Student模型的参数，在XFUND数据集上进行finetune，可以参考如下代码：
 
 
-```python
+```py
 import paddle
 # 加载预训练模型
 all_params = paddle.load("pretrain/ch_PP-OCRv2_rec_train/best_accuracy.pdparams")
@@ -493,7 +493,7 @@ paddle.save(s_params, "pretrain/ch_PP-OCRv2_rec_train/student.pdparams")
 
 修改配置文件`configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml`中的以下字段：
 
-```
+```py
 Global.pretrained_model：指向预训练模型路径
 Global.character_dict_path: 字典路径
 Optimizer.lr.values：学习率
@@ -504,7 +504,7 @@ Eval.dataset.label_file_list：指向验证集标注文件
 ```
 执行如下命令启动训练：
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
         -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml
@@ -519,7 +519,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 使用训练好的模型进行评估，更新模型路径`Global.checkpoints`，这里为大家提供训练好的模型`./pretrain/rec_mobile_pp-OCRv2-student-finetune/best_accuracy`
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
     -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml \
@@ -546,7 +546,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
 
 在上述`XFUND数据集+finetune`实验中修改配置文件`configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml`的基础上，继续修改以下字段：
 
-```
+```py
 Train.dataset.label_file_list：指向真实识别训练集图片存放目录
 Train.dataset.ratio_list：动态采样
 ```
@@ -554,7 +554,7 @@ Train.dataset.ratio_list：动态采样
 
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 CUDA_VISIBLE_DEVICES=0 python tools/train.py \
         -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml
@@ -569,7 +569,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py \
 使用训练好的模型进行评估，更新模型路径`Global.checkpoints`。
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
     -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml \
     -o Global.checkpoints=./pretrain/rec_mobile_pp-OCRv2-student-realdata/best_accuracy
@@ -591,7 +591,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
 导出模型只保留前向预测的过程：
 
 
-```python
+```py
 !python tools/export_model.py \
     -c configs/rec/ch_PP-OCRv2/ch_PP-OCRv2_rec.yml \
     -o Global.pretrained_model=pretrain/rec_mobile_pp-OCRv2-student-realdata/best_accuracy  \
@@ -607,7 +607,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
 加载上面导出的模型，执行如下命令对验证集或测试集图片进行预测，检测可视化结果保存在`/home/aistudio/inference_results/`目录下，查看检测、识别效果。需要通过`--rec_char_dict_path`指定使用的字典路径
 
 
-```python
+```py
 python tools/infer/predict_system.py \
     --image_dir="./doc/vqa/input/zh_val_21.jpg" \
     --det_model_dir="./output/det_db_inference/" \
@@ -633,7 +633,7 @@ PaddleOCR中DOC-VQA系列算法基于PaddleNLP自然语言处理算法库实现L
 如果希望直接体验预测过程，可以下载我们提供的预训练模型，跳过训练过程，直接预测即可。
 
 
-```python
+```py
 %cd pretrain
 #下载SER模型
 wget https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar && tar -xvf ser_LayoutXLM_xfun_zh.tar
@@ -672,7 +672,7 @@ SER: 语义实体识别 (Semantic Entity Recognition）, 可以完成对图像�
 
 
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR/
 CUDA_VISIBLE_DEVICES=0 python tools/train.py -c configs/vqa/ser/layoutxlm.yml
 ```
@@ -690,7 +690,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py -c configs/vqa/ser/layoutxlm.yml
 
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
     -c configs/vqa/ser/layoutxlm.yml \
     -o Architecture.Backbone.checkpoints=pretrain/ser_LayoutXLM_xfun_zh/
@@ -710,7 +710,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/eval.py \
 使用如下命令即可完成`OCR引擎 + SER`的串联预测, 以SER预训练模型为例:
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python tools/infer_vqa_token_ser.py \
     -c configs/vqa/ser/layoutxlm.yml  \
     -o Architecture.Backbone.checkpoints=pretrain/ser_LayoutXLM_xfun_zh/ \
@@ -720,7 +720,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/infer_vqa_token_ser.py \
 最终会在`config.Global.save_res_path`字段所配置的目录下保存预测结果可视化图像以及预测结果文本文件，预测结果文本文件名为`infer_results.txt`。通过如下命令查看预测图片：
 
 
-```python
+```py
 import cv2
 from matplotlib import pyplot as plt
 # 在notebook中使用matplotlib.pyplot绘图时，需要添加该命令进行显示
@@ -755,7 +755,7 @@ plt.imshow(img)
 
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python3 tools/train.py -c configs/vqa/re/layoutxlm.yml
 ```
 
@@ -770,7 +770,7 @@ CUDA_VISIBLE_DEVICES=0 python3 tools/train.py -c configs/vqa/re/layoutxlm.yml
 我们使用下载的预训练模型进行评估，如果使用自己训练好的模型进行评估，将待评估的模型所在文件夹路径赋值给 `Architecture.Backbone.checkpoints` 字段即可。
 
 
-```python
+```py
 CUDA_VISIBLE_DEVICES=0 python3 tools/eval.py \
     -c configs/vqa/re/layoutxlm.yml \
     -o Architecture.Backbone.checkpoints=pretrain/re_LayoutXLM_xfun_zh/
@@ -792,7 +792,7 @@ CUDA_VISIBLE_DEVICES=0 python3 tools/eval.py \
 最终会在config.Global.save_res_path字段所配置的目录下保存预测结果可视化图像以及预测结果文本文件，预测结果文本文件名为infer_results.txt。
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR
 CUDA_VISIBLE_DEVICES=0 python3 tools/infer_vqa_token_ser_re.py \
     -c configs/vqa/re/layoutxlm.yml \
@@ -804,13 +804,13 @@ CUDA_VISIBLE_DEVICES=0 python3 tools/infer_vqa_token_ser_re.py \
 
 最终会在config.Global.save_res_path字段所配置的目录下保存预测结果可视化图像以及预测结果文本文件，预测结果文本文件名为infer_results.txt, 每一行表示一张图片的结果，每张图片的结果如下所示，前面表示测试图片路径，后面为测试结果：key字段及对应的value字段。
 
-```
+```py
 test_imgs/t131.jpg	{"政治面税": "群众", "性别": "男", "籍贯": "河北省邯郸市", "婚姻状况": "亏末婚口已婚口已娇", "通讯地址": "邯郸市阳光苑7号楼003", "民族": "汉族", "毕业院校": "河南工业大学", "户口性质": "口农村城镇", "户口地址": "河北省邯郸市", "联系电话": "13288888888", "健康状况": "健康", "姓名": "小六", "好高cm": "180", "出生年月": "1996年8月9日", "文化程度": "本科", "身份证号码": "458933777777777777"}
 ````
 
 展示预测结果
 
-```python
+```py
 import cv2
 from matplotlib import pyplot as plt
 %matplotlib inline
@@ -826,7 +826,7 @@ plt.imshow(img)
 <center>图27 导出Excel</center>
 
 为了输出信息匹配对，我们修改`tools/infer_vqa_token_ser_re.py`文件中的`line 194-197`。
-```
+```py
  fout.write(img_path + "\t" + json.dumps(
                 {
                     "ser_result": result,
@@ -834,7 +834,7 @@ plt.imshow(img)
 
 ```
 更改为
-```
+```py
 result_key = {}
 for ocr_info_head, ocr_info_tail in result:
     result_key[ocr_info_head['text']] = ocr_info_tail['text']
@@ -849,7 +849,7 @@ fout.write(img_path + "\t" + json.dumps(
 <center>图28 Excel效果图</center>
 
 
-```python
+```py
 import json
 import xlsxwriter as xw
 

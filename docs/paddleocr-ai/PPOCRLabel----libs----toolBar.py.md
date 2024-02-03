@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\toolBar.py`
 
-```
+```py
 # 版权声明，允许任何人免费获取并使用此软件，需包含版权声明和许可声明
 try:
     # 尝试导入 PyQt5 库中的模块

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\autoDialog.py`
 
-```
+```py
 # 尝试导入 PyQt5 库中的模块，如果导入失败则导入 PyQt4 库中的模块
 try:
     from PyQt5.QtGui import *

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\pipeline_http_client.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import requests

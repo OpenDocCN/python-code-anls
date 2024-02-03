@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer_kie_token_ser_re.py`
 
-```
+```py
 # 版权声明，版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证 2.0 版本授权使用本文件

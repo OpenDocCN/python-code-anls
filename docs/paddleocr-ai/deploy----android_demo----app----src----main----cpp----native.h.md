@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\native.h`
 
-```
+```py
 // 包含头文件 common.h
 // 包含 Android Bitmap 相关头文件
 // 包含 JNI 相关头文件

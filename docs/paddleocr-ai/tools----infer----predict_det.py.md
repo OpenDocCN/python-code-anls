@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer\predict_det.py`
 
-```
+```py
 # 版权声明
 # Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
 #

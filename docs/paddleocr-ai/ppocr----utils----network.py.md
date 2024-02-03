@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\network.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # 版权所有 (c) 2020 PaddlePaddle 作者。保留所有权利。

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\data_loader\modules\make_border_map.py`
 
-```
+```py
 import cv2
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\losses\basic_loss.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/12/4 14:39
 # @Author  : zhoujun

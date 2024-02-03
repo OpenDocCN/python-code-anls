@@ -19,7 +19,7 @@ C++预测功能测试的主程序为`test_inference_cpp.sh`，可以测试基于
 ### 2.1 功能测试
 先运行`prepare.sh`准备数据和模型，然后运行`test_inference_cpp.sh`进行测试，最终在```test_tipc/output/{model_name}/cpp_infer```目录下生成`cpp_infer_*.log`后缀的日志文件。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_rec/model_linux_gpu_normal_normal_infer_cpp_linux_gpu_cpu.txt "cpp_infer"
 
 # 用法1:
@@ -30,7 +30,7 @@ bash test_tipc/test_inference_cpp.sh test_tipc/configs/ch_PP-OCRv2_rec/model_lin
 
 运行预测指令后，在`test_tipc/output`文件夹下自动会保存运行日志，包括以下文件：
 
-```shell
+```py
 test_tipc/output/
 |- results_cpp.log    # 运行指令状态的日志
 |- cpp_infer_cpu_usemkldnn_False_threads_6_precision_fp32_batchsize_6.log  # CPU上不开启Mkldnn，线程数设置为6，测试batch_size=6条件下的预测运行日志
@@ -39,13 +39,13 @@ test_tipc/output/
 ```
 其中results_cpp.log中包含了每条指令的运行状态，如果运行成功会输出：
 
-```
+```py
 [33m Run successfully with command - ch_PP-OCRv2_rec - ./deploy/cpp_infer/build/ppocr --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt --rec_img_h=32 --use_gpu=True --use_tensorrt=False --precision=fp32 --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --rec_batch_num=6 --image_dir=./inference/rec_inference/ --benchmark=True --det=False --rec=True --cls=False --use_angle_cls=False   > ./test_tipc/output/ch_PP-OCRv2_rec/cpp_infer/cpp_infer_gpu_usetrt_False_precision_fp32_batchsize_6.log 2>&1 !  [0m
 [33m Run successfully with command - ch_PP-OCRv2_rec - ./deploy/cpp_infer/build/ppocr --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt --rec_img_h=32 --use_gpu=False --enable_mkldnn=False --cpu_threads=6 --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --rec_batch_num=6 --image_dir=./inference/rec_inference/ --benchmark=True --det=False --rec=True --cls=False --use_angle_cls=False   > ./test_tipc/output/ch_PP-OCRv2_rec/cpp_infer/cpp_infer_cpu_usemkldnn_False_threads_6_precision_fp32_batchsize_6.log 2>&1 !  [0m
 ......
 ```
 如果运行失败，会输出：
-```
+```py
 Run failed with command - ch_PP-OCRv2_rec - ./deploy/cpp_infer/build/ppocr --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt --rec_img_h=32 --use_gpu=True --use_tensorrt=False --precision=fp32 --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --rec_batch_num=6 --image_dir=./inference/rec_inference/ --benchmark=True --det=False --rec=True --cls=False --use_angle_cls=False   > ./test_tipc/output/ch_PP-OCRv2_rec/cpp_infer/cpp_infer_gpu_usetrt_False_precision_fp32_batchsize_6.log 2>&1 !
 Run failed with command - ch_PP-OCRv2_rec - ./deploy/cpp_infer/build/ppocr --rec_char_dict_path=./ppocr/utils/ppocr_keys_v1.txt --rec_img_h=32 --use_gpu=False --enable_mkldnn=False --cpu_threads=6 --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --rec_batch_num=6 --image_dir=./inference/rec_inference/ --benchmark=True --det=False --rec=True --cls=False --use_angle_cls=False   > ./test_tipc/output/ch_PP-OCRv2_rec/cpp_infer/cpp_infer_cpu_usemkldnn_False_threads_6_precision_fp32_batchsize_6.log 2>&1 !
 ......
@@ -62,7 +62,7 @@ Run failed with command - ch_PP-OCRv2_rec - ./deploy/cpp_infer/build/ppocr --rec
 
 #### 使用方式
 运行命令：
-```shell
+```py
 python3.7 test_tipc/compare_results.py --gt_file=./test_tipc/results/cpp_*.txt  --log_file=./test_tipc/output/cpp_*.log --atol=1e-3 --rtol=1e-3
 ```
 

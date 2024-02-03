@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\rec_sar_loss.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import absolute_import
 from __future__ import division

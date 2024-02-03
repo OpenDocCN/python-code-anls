@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\web\jest.config.js`
 
-```
+```py
 // Jest 配置文件，用于配置 Jest 测试框架的各种参数
 module.exports = {
     // 使用 jest-puppeteer 预设

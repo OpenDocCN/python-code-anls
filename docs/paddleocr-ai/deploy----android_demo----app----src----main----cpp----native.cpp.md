@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\native.cpp`
 
-```
+```py
 // 包含必要的头文件
 #include "native.h"
 #include "ocr_ppredictor.h"

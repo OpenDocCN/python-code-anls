@@ -28,7 +28,7 @@ PP-OCRv3由det(检测)、cls(分类)和rec(识别)三个模型组成.
 ## 3. 服务端的使用
 
 ### 3.1 下载模型并使用服务化Docker
-```bash
+```py
 # 下载仓库代码
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
@@ -70,13 +70,13 @@ docker exec -it -u root fastdeploy bash
 ```
 
 ### 3.2 安装(在docker内)
-```bash
+```py
 ldconfig
 apt-get install libgl1
 ```
 
 #### 3.3 启动服务端(在docker内)
-```bash
+```py
 fastdeployserver --model-repository=/ocr_serving/models
 ```
 
@@ -89,12 +89,12 @@ fastdeployserver --model-repository=/ocr_serving/models
 
 ## 4. 客户端的使用
 ### 4.1 安装
-```bash
+```py
 pip3 install tritonclient[all]
 ```
 
 ### 4.2 发送请求
-```bash
+```py
 python3 client.py
 ```
 
@@ -105,13 +105,13 @@ python3 client.py
 
 - 使用PP-OCRv2进行服务化部署, 除了自行准备PP-OCRv2模型之外, 只需手动添加一行代码即可.
 在[model.py](./models/det_postprocess/1/model.py#L109)文件**109行添加以下代码**：
-```
+```py
 self.rec_preprocessor.cls_image_shape[1] = 32
 ```
 
 - [使用 VisualDL 进行 Serving 可视化部署](https://github.com/PaddlePaddle/FastDeploy/blob/develop/serving/docs/zh_CN/vdl_management.md)
 通过VisualDL的可视化界面对PP-OCRv3进行服务化部署只需要如下三步：
-```text
+```py
 1. 载入模型库：./vision/ocr/PP-OCRv3/serving
 2. 下载模型资源文件：点击det_runtime模型，点击版本号1添加预训练模型，选择文字识别模型ch_PP-OCRv3_det进行下载。点击cls_runtime模型，点击版本号1添加预训练模型，选择文字识别模型ch_ppocr_mobile_v2.0_cls进行下载。点击rec_runtime模型，点击版本号1添加预训练模型，选择文字识别模型ch_PP-OCRv3_rec进行下载。点击rec_postprocess模型，点击版本号1添加预训练模型，选择文字识别模型ch_PP-OCRv3_rec进行下载。
 3. 启动服务：点击启动服务按钮，输入启动参数。

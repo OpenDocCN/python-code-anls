@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\postprocess\vqa_token_re_layoutlm_postprocess.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 2021年PaddlePaddle作者保留所有权利。
 # 根据Apache许可证2.0版（“许可证”）获得许可；

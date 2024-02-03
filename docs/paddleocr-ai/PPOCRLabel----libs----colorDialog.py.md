@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\colorDialog.py`
 
-```
+```py
 # 导入必要的模块，根据 PyQt 版本选择不同的模块
 try:
     from PyQt5.QtGui import *

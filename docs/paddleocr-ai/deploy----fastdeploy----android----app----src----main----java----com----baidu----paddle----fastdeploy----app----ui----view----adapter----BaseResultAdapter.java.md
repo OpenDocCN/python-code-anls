@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\ui\view\adapter\BaseResultAdapter.java`
 
-```
+```py
 package com.baidu.paddle.fastdeploy.app.ui.view.adapter;
 
 import android.content.Context;

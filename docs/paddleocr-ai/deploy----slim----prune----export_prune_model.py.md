@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\slim\prune\export_prune_model.py`
 
-```
+```py
 # 版权声明
 # 从未来模块导入绝对路径、除法和打印函数
 from __future__ import absolute_import

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\setup.py`
 
-```
+```py
 # 导入需要的模块
 from setuptools import setup
 from io import open

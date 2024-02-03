@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\tools\eval.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2018/6/11 15:54
 # @Author  : zhoujun

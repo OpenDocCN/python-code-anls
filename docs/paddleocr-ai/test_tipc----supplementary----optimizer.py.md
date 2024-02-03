@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\optimizer.py`
 
-```
+```py
 # 导入 sys 模块，用于访问与 Python 解释器交互的变量和函数
 import sys
 # 导入 math 模块，提供数学函数

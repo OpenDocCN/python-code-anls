@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\ocr_rec.cpp`
 
-```
+```py
 // 包含 OCR 识别器的头文件
 #include <include/ocr_rec.h>
 

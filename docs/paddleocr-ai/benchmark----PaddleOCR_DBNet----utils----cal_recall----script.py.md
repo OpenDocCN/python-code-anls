@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\cal_recall\script.py`
 
-```
+```py
 # 指定 Python 解释器路径和编码格式
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

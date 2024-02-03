@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\tools\predict.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 定义文件编码格式为 utf-8
 # @Time    : 2019/8/24 12:06

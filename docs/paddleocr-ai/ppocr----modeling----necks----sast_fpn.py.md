@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\necks\sast_fpn.py`
 
-```
+```py
 # 版权声明
 #
 # 版权所有 (c) 2019 PaddlePaddle 作者。保留所有权利。

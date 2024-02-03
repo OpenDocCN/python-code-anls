@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer\predict_e2e.py`
 
-```
+```py
 # 版权声明和许可信息
 # 该代码版权归 PaddlePaddle 作者所有，遵循 Apache License, Version 2.0
 # 只有在遵守许可证的情况下才能使用该文件

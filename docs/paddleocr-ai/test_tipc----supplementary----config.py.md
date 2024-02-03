@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\config.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 import os

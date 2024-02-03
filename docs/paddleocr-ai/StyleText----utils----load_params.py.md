@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\utils\load_params.py`
 
-```
+```py
 # 版权声明和许可信息
 # 2020年PaddlePaddle作者保留所有权利。
 #

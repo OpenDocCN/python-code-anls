@@ -40,7 +40,7 @@ Case 3: If the demo is not run in the ci_cpu Docker container, then you will nee
   - [CMSIS](https://github.com/ARM-software/CMSIS_5)
 - The python libraries listed in the requirements.txt of this directory
   - These can be installed by running the following from the current directory:
-    ```bash
+    ```py
     pip install -r ./requirements.txt
     ```
 
@@ -48,7 +48,7 @@ In case2 and case3:
     
 You will need to update your PATH environment variable to include the path to cmake 3.19.5 and the FVP.
 For example if you've installed these in ```/opt/arm``` , then you would do the following:
-```bash
+```py
 export PATH=/opt/arm/FVP_Corstone_SSE-300/models/Linux64_GCC-6.4:/opt/arm/cmake/bin:$PATH
 ```
 
@@ -65,20 +65,20 @@ Running the demo application
 ----------------------------
 Type the following command to run the bare metal text recognition application ([src/demo_bare_metal.c](./src/demo_bare_metal.c)):
 
-```bash
+```py
 ./run_demo.sh
 ```
 
 If you are not able to use Arm Virtual Hardware Amazon Machine Image(AMI) instance hosted by AWS/AWS China, specify argument --enable_FVP to 1 to make the application run on local Fixed Virtual Platforms (FVPs) executables.
 
-```bash
+```py
 ./run_demo.sh --enable_FVP 1
 ```
 
 If the Ethos(TM)-U platform and/or CMSIS have not been installed in /opt/arm/ethosu then
 the locations for these can be specified as arguments to run_demo.sh, for example:
 
-```bash
+```py
 ./run_demo.sh --cmsis_path /home/tvm-user/cmsis \
 --ethosu_platform_path /home/tvm-user/ethosu/core_platform
 ```
@@ -100,7 +100,7 @@ image to be converted into an array of bytes for consumption by the model.
 
 The demo can be modified to use an image of your choice by changing the following line in run_demo.sh
 
-```bash
+```py
 python3 ./convert_image.py path/to/image
 ```
 

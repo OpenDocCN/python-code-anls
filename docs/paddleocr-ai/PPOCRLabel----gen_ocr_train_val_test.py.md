@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\gen_ocr_train_val_test.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入操作系统、文件操作、文件夹操作、随机数生成、命令行参数解析模块
 import os

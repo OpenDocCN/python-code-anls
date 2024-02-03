@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\canvas.py`
 
-```
+```py
 # 版权声明，允许在特定条件下使用和分发软件
 # 导入所需的库和模块
 import copy

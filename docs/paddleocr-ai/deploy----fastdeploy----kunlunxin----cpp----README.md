@@ -10,7 +10,7 @@
 在部署前, 请准备好您所需要运行的推理模型, 您可以在[FastDeploy支持的PaddleOCR模型列表](../README.md)中下载所需模型.
 
 ## 3.运行部署示例
-```
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/kunlunxin/cpp

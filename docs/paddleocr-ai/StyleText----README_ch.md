@@ -35,7 +35,7 @@ Style-Text数据合成工具是基于百度和华科合作研发的文本编辑�
 1. 参考[快速安装](../doc/doc_ch/installation.md)，安装PaddleOCR。
 2. 进入`StyleText`目录，下载模型，并解压：
 
-```bash
+```py
 cd StyleText
 wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/style_text/style_text_models.zip
 unzip style_text_models.zip
@@ -43,7 +43,7 @@ unzip style_text_models.zip
 
 如果您将模型保存再其他位置，请在`configs/config.yml`中修改模型文件的地址，修改时需要同时修改这三个配置：
 
-```
+```py
 bg_generator:
   pretrain: style_text_models/bg_generator
 ...
@@ -60,7 +60,7 @@ fusion_generator:
 #### 合成单张图
 输入一张风格图和一段文字语料，运行tools/synth_image，合成单张图片，结果图像保存在当前目录下：
 
-```python
+```py
 python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_images/2.jpg --text_corpus PaddleOCR --language en
 ```
 * 注1：语言选项和语料相对应，目前支持英文(en)、简体中文(ch)和韩语(ko)。
@@ -109,7 +109,7 @@ python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_
      * `corpus_file`: 语料文件路径。语料文件应使用文本文件。语料生成器首先会将语料按行切分，之后每次随机选取一行。
 
    语料文件格式示例：
-   ```
+   ```py
    PaddleOCR
    飞桨文字识别
    StyleText
@@ -129,7 +129,7 @@ python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_
 
    ``` bash
    python3 tools/synth_dataset.py -c configs/dataset_config.yml
-   ```
+   ```py
    我们在examples目录下提供了样例图片和语料。
     <div align="center">
         <img src="examples/style_images/1.jpg" width="300">

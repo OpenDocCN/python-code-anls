@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\ui\view\CameraSurfaceView.java`
 
-```
+```py
 package com.baidu.paddle.fastdeploy.app.ui.view;
 
 import android.content.Context;

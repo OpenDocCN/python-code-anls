@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\hubserving\ocr_cls\params.py`
 
-```
+```py
 # 版权声明和许可信息
 # 本代码版权归 PaddlePaddle 作者所有，保留所有权利。
 # 根据 Apache 许可证 2.0 版本授权

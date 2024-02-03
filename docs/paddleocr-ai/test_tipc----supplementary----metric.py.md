@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\metric.py`
 
-```
+```py
 import paddle
 import paddle.nn.functional as F
 from collections import OrderedDict

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\general_detection_op.cpp`
 
-```
+```py
 // 版权声明和许可证信息
 // 该代码受 Apache 许可证版本 2.0 保护
 // 请在遵守许可证的情况下使用该文件

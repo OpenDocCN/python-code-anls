@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\androidTest\java\com\baidu\paddle\fastdeploy\ExampleInstrumentedTest.java`
 
-```
+```py
 /**
  * 导入必要的类库
  */

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\necks\intracl.py`
 
-```
+```py
 # 导入 paddle 库
 import paddle
 # 从 paddle 库中导入 nn 模块

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\export_model.py`
 
-```
+```py
 # 导入所需的库
 import os
 import sys

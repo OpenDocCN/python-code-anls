@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\kunlunxin\python\infer.py`
 
-```
+```py
 # 导入所需的库
 import fastdeploy as fd
 import cv2

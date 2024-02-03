@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\end2end\draw_html.py`
 
-```
+```py
 # 导入所需的库
 import os
 import argparse

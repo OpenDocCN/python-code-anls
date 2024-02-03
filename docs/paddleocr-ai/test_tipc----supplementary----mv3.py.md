@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\mv3.py`
 
-```
+```py
 # 版权声明
 # 2020年PaddlePaddle作者保留所有权利。
 #

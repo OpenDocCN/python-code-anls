@@ -39,7 +39,7 @@ PP-Structure目前提供了中文、英文、表格三类文档版面分析模�
 
 - **（1) 安装PaddlePaddle**
 
-```bash
+```py
 python3 -m pip install --upgrade pip
 
 # GPU安装
@@ -54,13 +54,13 @@ python3 -m pip install "paddlepaddle>=2.3" -i https://mirror.baidu.com/pypi/simp
 
 - **（1）下载PaddleDetection源码**
 
-```bash
+```py
 git clone https://github.com/PaddlePaddle/PaddleDetection.git
 ```
 
 - **（2）安装其他依赖**
 
-```bash
+```py
 cd PaddleDetection
 python3 -m pip install -r requirements.txt
 ```
@@ -73,7 +73,7 @@ python3 -m pip install -r requirements.txt
 
 下载文档分析数据集[PubLayNet](https://developer.ibm.com/exchanges/data/all/publaynet/)（数据集96G），包含5个类：`{0: "Text", 1: "Title", 2: "List", 3:"Table", 4:"Figure"}`
 
-```
+```py
 # 下载数据
 wget https://dax-cdn.cdn.appdomain.cloud/dax-publaynet/1.0.0/publaynet.tar.gz
 # 解压数据
@@ -82,7 +82,7 @@ tar -xvf publaynet.tar.gz
 
 解压之后的**目录结构：**
 
-```
+```py
 |-publaynet
   |- test
      |- PMC1277013_00004.jpg
@@ -120,7 +120,7 @@ json文件包含所有图像的标注，数据以字典嵌套的方式存放，�
 
 - images，表示标注文件中图像信息列表，每个元素是一张图像的信息。如下为其中一张图像的信息：
 
-  ```
+  ```py
   {
       'file_name': 'PMC4055390_00006.jpg',    # file_name
       'height': 601,                      # image height
@@ -131,7 +131,7 @@ json文件包含所有图像的标注，数据以字典嵌套的方式存放，�
 
 - annotations，表示标注文件中目标物体的标注信息列表，每个元素是一个目标物体的标注信息。如下为其中一个目标物体的标注信息：
 
-  ```
+  ```py
   {
 
       'segmentation':             # 物体的分割标注
@@ -163,7 +163,7 @@ json文件包含所有图像的标注，数据以字典嵌套的方式存放，�
 
 如果不希望训练，直接体验后面的模型评估、预测、动转静、推理的流程，可以下载提供的预训练模型(PubLayNet数据集)，并跳过5.1和5.2。
 
-```
+```py
 mkdir pretrained_model
 cd pretrained_model
 # 下载PubLayNet预训练模型（直接体验模型评估、预测、动转静）
@@ -185,7 +185,7 @@ wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_
 
 以`configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml` 为例，修改的内容如下所示。
 
-```yaml
+```py
 metric: COCO
 # 类别数
 num_classes: 5
@@ -217,7 +217,7 @@ TestDataset:
 
 * 开始训练，在训练时，会默认下载PP-PicoDet预训练模型，这里无需预先下载。
 
-```bash
+```py
 # GPU训练 支持单卡，多卡训练
 # 训练日志会自动保存到 log 目录中
 
@@ -238,7 +238,7 @@ python3 -m paddle.distributed.launch --gpus '0,1,2,3'  tools/train.py \
 
 正常启动训练后，会看到以下log输出：
 
-```
+```py
 [08/15 04:02:30] ppdet.utils.checkpoint INFO: Finish loading model weights: /root/.cache/paddle/weights/LCNet_x1_0_pretrained.pdparams
 [08/15 04:02:46] ppdet.engine INFO: Epoch: [0] [   0/1929] learning_rate: 0.040000 loss_vfl: 1.216707 loss_bbox: 1.142163 loss_dfl: 0.544196 loss: 2.903065 eta: 17 days, 13:50:26 batch_cost: 15.7452 data_cost: 2.9112 ips: 1.5243 images/s
 [08/15 04:03:19] ppdet.engine INFO: Epoch: [0] [  20/1929] learning_rate: 0.064000 loss_vfl: 1.180627 loss_bbox: 0.939552 loss_dfl: 0.442436 loss: 2.628206 eta: 2 days, 12:18:53 batch_cost: 1.5770 data_cost: 0.0008 ips: 15.2184 images/s
@@ -256,7 +256,7 @@ PaddleDetection支持了基于FGD([Focal and Global Knowledge Distillation for D
 
 更换数据集，修改【TODO】配置中的数据配置、类别数，具体可以参考4.1。启动训练：
 
-```bash
+```py
 # 单卡训练
 export CUDA_VISIBLE_DEVICES=0
 python3 tools/train.py \
@@ -274,7 +274,7 @@ python3 tools/train.py \
 
 训练中模型参数默认保存在`output/picodet_lcnet_x1_0_layout`目录下。在评估指标时，需要设置`weights`指向保存的参数文件。评估数据集可以通过 `configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml`  修改`EvalDataset`中的 `image_dir`、`anno_path`和`dataset_dir` 设置。
 
-```bash
+```py
 # GPU 评估， weights 为待测权重
 python3 tools/eval.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
@@ -302,7 +302,7 @@ python3 tools/eval.py \
 
 若使用**提供的预训练模型进行评估**，或使用**FGD蒸馏训练的模型**，更换`weights`模型路径，执行如下命令进行评估：
 
-```
+```py
 python3 tools/eval.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -320,7 +320,7 @@ python3 tools/eval.py \
 
 使用 PaddleDetection 训练好的模型，您可以使用如下命令进行模型预测。
 
-```bash
+```py
 python3 tools/infer.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     -o weights='output/picodet_lcnet_x1_0_layout/best_model.pdparams' \
@@ -335,7 +335,7 @@ python3 tools/infer.py \
 
 若使用**提供的预训练模型进行预测**，或使用**FGD蒸馏训练的模型**，更换`weights`模型路径，执行如下命令进行预测：
 
-```
+```py
 python3 tools/infer.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -355,7 +355,7 @@ inference 模型（`paddle.jit.save`保存的模型） 一般是模型训练，�
 
 版面分析模型转inference模型步骤如下：
 
-```bash
+```py
 python3 tools/export_model.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     -o weights=output/picodet_lcnet_x1_0_layout/best_model \
@@ -367,7 +367,7 @@ python3 tools/export_model.py \
 
 转换成功后，在目录下有三个文件：
 
-```
+```py
 output_inference/picodet_lcnet_x1_0_layout/
     ├── model.pdiparams         # inference模型的参数文件
     ├── model.pdiparams.info    # inference模型的参数信息，可忽略
@@ -376,7 +376,7 @@ output_inference/picodet_lcnet_x1_0_layout/
 
 若使用**提供的预训练模型转Inference模型**，或使用**FGD蒸馏训练的模型**，更换`weights`模型路径，模型转inference模型步骤如下：
 
-```bash
+```py
 python3 tools/export_model.py \
     -c configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml \
     --slim_config configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layout.yml \
@@ -390,7 +390,7 @@ python3 tools/export_model.py \
 
 若使用**提供的推理训练模型推理**，或使用**FGD蒸馏训练的模型**，更换`model_dir`推理模型路径，执行如下命令进行推理：
 
-```bash
+```py
 python3 deploy/python/infer.py \
     --model_dir=output_inference/picodet_lcnet_x1_0_layout/ \
     --image_file=docs/images/layout.jpg \
@@ -401,7 +401,7 @@ python3 deploy/python/infer.py \
 
 模型推理完成，会看到以下log输出
 
-```
+```py
 ------------------------------------------
 -----------  Model Configuration -----------
 Model Arch: PicoDet
@@ -444,7 +444,7 @@ preprocess_time(ms): 2172.50, inference_time(ms): 11.90, postprocess_time(ms): 1
 
 ## Citations
 
-```
+```py
 @inproceedings{zhong2019publaynet,
   title={PubLayNet: largest dataset ever for document layout analysis},
   author={Zhong, Xu and Tang, Jianbin and Yepes, Antonio Jimeno},

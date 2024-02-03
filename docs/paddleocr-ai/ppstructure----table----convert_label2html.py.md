@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\table\convert_label2html.py`
 
-```
+```py
 # 版权声明
 # 2022年PaddlePaddle作者保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\custom_op\test.py`
 
-```
+```py
 # 导入 PaddlePaddle 深度学习框架相关模块
 import paddle
 import paddle.nn as nn

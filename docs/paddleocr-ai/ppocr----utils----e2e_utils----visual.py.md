@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\e2e_utils\visual.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import cv2

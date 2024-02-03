@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\metrics.py`
 
-```
+```py
 # 导入 numpy 库
 import numpy as np
 

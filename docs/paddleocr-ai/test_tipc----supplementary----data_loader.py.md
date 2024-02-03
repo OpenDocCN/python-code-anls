@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\data_loader.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 from paddle.vision.datasets import Cifar100

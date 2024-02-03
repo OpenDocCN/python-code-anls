@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\loggers\__init__.py`
 
-```
+```py
 # 从当前目录中导入VDLLogger类
 from .vdl_logger import VDLLogger
 # 从当前目录中导入WandbLogger类

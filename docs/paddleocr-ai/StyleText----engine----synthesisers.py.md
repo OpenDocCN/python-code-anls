@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\engine\synthesisers.py`
 
-```
+```py
 # 版权声明，版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证，除非符合许可证的规定，否则不得使用此文件

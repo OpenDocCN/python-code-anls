@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\include\ocr_cls.h`
 
-```
+```py
 // 版权声明，告知代码版权信息
 // 根据 Apache 许可证 2.0 版本规定使用此文件
 // 获取许可证的链接

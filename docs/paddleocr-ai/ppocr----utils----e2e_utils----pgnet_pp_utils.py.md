@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\e2e_utils\pgnet_pp_utils.py`
 
-```
+```py
 # 版权声明和许可信息
 # 从未来导入绝对路径
 # 导入 paddle 库

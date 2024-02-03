@@ -64,7 +64,7 @@
 ## 3. 测试工具简介
 ### 目录介绍
 
-```shell
+```py
 test_tipc/
 ├── configs/  # 配置文件目录
     ├── ch_ppocr_mobile_v2.0_det    # ch_ppocr_mobile_v2.0_det模型的测试配置文件目录
@@ -107,7 +107,7 @@ test_tipc/
 3. 用`compare_results.py`对比log中的预测结果和预存在results目录下的结果，判断预测精度是否符合预期（在误差范围内）。
 
 测试单项功能仅需两行命令，**如需测试不同模型/功能，替换配置文件即可**，命令格式如下：
-```shell
+```py
 # 功能：准备数据
 # 格式：bash + 运行脚本 + 参数1: 配置文件选择 + 参数2: 模式选择
 bash test_tipc/prepare.sh  configs/[model_name]/[params_file_name]  [Mode]
@@ -118,7 +118,7 @@ bash test_tipc/test_train_inference_python.sh configs/[model_name]/[params_file_
 ```
 
 例如，测试基本训练预测功能的`lite_train_lite_infer`模式，运行：
-```shell
+```py
 # 准备数据
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_ppocr_mobile_v2.0_det/train_infer_python.txt 'lite_train_lite_infer'
 # 运行测试

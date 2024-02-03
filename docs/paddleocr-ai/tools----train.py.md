@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\train.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 从未来模块导入绝对导入、除法和打印函数
 from __future__ import absolute_import

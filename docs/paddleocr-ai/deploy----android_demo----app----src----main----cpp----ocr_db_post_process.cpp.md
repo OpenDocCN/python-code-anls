@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_db_post_process.cpp`
 
-```
+```py
 // 包含版权声明和许可信息
 // 引入所需的头文件
 #include "ocr_clipper.hpp"

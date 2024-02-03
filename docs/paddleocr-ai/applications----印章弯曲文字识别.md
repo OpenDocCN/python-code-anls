@@ -44,28 +44,28 @@
 ## 2.1 准备PaddleDetection环境
 
 下载PaddleDetection代码：
-```
+```py
 !git clone https://github.com/PaddlePaddle/PaddleDetection.git
 # 如果克隆github代码较慢，请从gitee上克隆代码
 #git clone https://gitee.com/PaddlePaddle/PaddleDetection.git
 ```
 
 安装PaddleDetection依赖
-```
+```py
 !cd PaddleDetection && pip install -r requirements.txt
 ```
 
 ## 2.2 准备PaddleOCR环境
 
 下载PaddleOCR代码：
-```
+```py
 !git clone https://github.com/PaddlePaddle/PaddleOCR.git
 # 如果克隆github代码较慢，请从gitee上克隆代码
 #git clone https://gitee.com/PaddlePaddle/PaddleOCR.git
 ```
 
 安装PaddleOCR依赖
-```
+```py
 !cd PaddleOCR && git checkout dygraph  && pip install -r requirements.txt
 ```
 
@@ -93,7 +93,7 @@ PPOCRlabel标注印章数据步骤：
 ![](https://ai-studio-static-online.cdn.bcebos.com/f5acbc4f50dd401a8f535ed6a263f94b0edff82c1aed4285836a9ead989b9c13)
 
 数据标注完成后，标签中包含印章检测的标注和印章文字识别的标注，如下所示：
-```
+```py
 img/1.png    [{"transcription": "印章区域", "points": [[87, 245], [214, 245], [214, 369], [87, 369]], "difficult": false}, {"transcription": "国家税务总局泸水市税务局第二税务分局", "points": [[110, 314], [116, 290], [131, 275], [152, 273], [170, 277], [181, 289], [186, 303], [186, 312], [201, 311], [198, 289], [189, 272], [175, 259], [152, 252], [124, 257], [100, 280], [94, 312]], "difficult": false}, {"transcription": "征税专用章", "points": [[117, 334], [183, 334], [183, 352], [117, 352]], "difficult": false}]
 ```
 标注中包含表示'印章区域'的坐标和'印章文字'坐标以及文字内容。
@@ -111,7 +111,7 @@ img/1.png    [{"transcription": "印章区域", "points": [[87, 245], [214, 245]
 
 标签文件'/home/aistudio/work/seal_labeled_datas/Label.txt'中的标注内容如下：
 
-```
+```py
 img/test1.png   [{"transcription": "待识别", "points": [[408, 232], [537, 232], [537, 352], [408, 352]], "difficult": false}, {"transcription": "电子回单", "points": [[437, 305], [504, 305], [504, 322], [437, 322]], "difficult": false}, {"transcription": "云南省农村信用社", "points": [[417, 290], [434, 295], [438, 281], [446, 267], [455, 261], [472, 258], [489, 264], [498, 277], [502, 295], [526, 289], [518, 267], [503, 249], [475, 232], [446, 239], [429, 255], [418, 275]], "difficult": false}, {"transcription": "专用章", "points": [[437, 319], [503, 319], [503, 338], [437, 338]], "difficult": false}]
 ```
 
@@ -119,7 +119,7 @@ img/test1.png   [{"transcription": "待识别", "points": [[408, 232], [537, 232
 为了方便训练，我们需要通过python代码将用于训练印章检测和训练印章文字识别的标注区分开。
 
 
-```
+```py
 import numpy as np
 import json
 import cv2
@@ -421,7 +421,7 @@ if __name__ == "__main__":
 ```
 
 处理完成后，生成的文件如下：
-```
+```py
 ├── seal_img_crop/
 │   ├── 0_0.jpg
 │   ├── ...
@@ -436,13 +436,13 @@ if __name__ == "__main__":
 
 ```
 其中`seal_img_crop/label.txt`文件为印章识别标签文件，其内容格式为：
-```
+```py
 0_0.jpg    [{"transcription": "\u7535\u5b50\u56de\u5355", "points": [[29, 73], [96, 73], [96, 90], [29, 90]], "ignore_tag": false}, {"transcription": "\u4e91\u5357\u7701\u519c\u6751\u4fe1\u7528\u793e", "points": [[9, 58], [26, 63], [30, 49], [38, 35], [47, 29], [64, 26], [81, 32], [90, 45], [94, 63], [118, 57], [110, 35], [95, 17], [67, 0], [38, 7], [21, 23], [10, 43]], "ignore_tag": false}, {"transcription": "\u4e13\u7528\u7ae0", "points": [[29, 87], [95, 87], [95, 106], [29, 106]], "ignore_tag": false}]
 ```
 可以直接用于PaddleOCR的PGNet算法的训练。
 
 `seal_ppocr_gt/seal_det_img.txt`为印章检测标签文件，其内容格式为：
-```
+```py
 img/test1.png    [{"polys": [[408, 232], [537, 232], [537, 352], [408, 352]], "cls": 1}]
 ```
 为了使用PaddleDetection工具完成印章检测模型的训练，需要将`seal_det_img.txt`转换为COCO或者VOC的数据标注格式。
@@ -450,7 +450,7 @@ img/test1.png    [{"polys": [[408, 232], [537, 232], [537, 352], [408, 352]], "c
 可以直接使用下述代码将印章检测标注转换成VOC格式。
 
 
-```
+```py
 import numpy as np
 import json
 import cv2
@@ -567,7 +567,7 @@ gen_xml_label('valid')
 
 数据处理完成后，转换为VOC格式的印章检测数据存储在~/data/seal_VOC目录下，目录组织结构为：
 
-```
+```py
 ├── Annotations/
 ├── ImageSets/
 │   └── Main/
@@ -606,7 +606,7 @@ PaddleDetection中有许多检测算法可以选择，考虑到每条数据中�
 配置文件中的默认数据路径是COCO，
 需要修改为印章检测的数据路径，主要修改如下:
 在配置文件'configs/ppyolo/ppyolo_mbv3_large.yml'末尾增加如下内容：
-```
+```py
 metric: VOC
 map_type: 11point
 num_classes: 2
@@ -632,12 +632,12 @@ TestDataset:
 
 配置文件中设置的数据路径在PaddleDetection/dataset目录下，我们可以将处理后的印章检测训练数据移动到PaddleDetection/dataset目录下或者创建一个软连接。
 
-```
+```py
 !ln -s seal_VOC ./PaddleDetection/dataset/
 ```
 
 另外图象中印章数量比较少，可以调整NMS后处理的检测框数量，即keep_top_k，nms_top_k 从100，1000，调整为10，100。在配置文件'configs/ppyolo/ppyolo_mbv3_large.yml'末尾增加如下内容完成后处理参数的调整
-```
+```py
 BBoxPostProcess:
   decode:
     name: YOLOBox
@@ -655,7 +655,7 @@ BBoxPostProcess:
 
 
 修改完成后，需要在PaddleDetection中增加印章数据的处理代码，即在PaddleDetection/ppdet/data/source/目录下创建seal.py文件，文件中填充如下代码：
-```
+```py
 import os
 import numpy as np
 from ppdet.core.workspace import register, serializable
@@ -794,7 +794,7 @@ class SealDataSet(DetDataset):
 **启动训练**
 
 启动单卡训练的命令为：
-```
+```py
 !python3  tools/train.py  -c configs/ppyolo/ppyolo_mbv3_large.yml  --eval
 
 # 分布式训练命令为：
@@ -803,7 +803,7 @@ class SealDataSet(DetDataset):
 
 训练完成后，日志中会打印模型的精度：
 
-```
+```py
 [07/05 11:42:09] ppdet.engine INFO: Eval iter: 0
 [07/05 11:42:14] ppdet.metrics.metrics INFO: Accumulating evaluatation results...
 [07/05 11:42:14] ppdet.metrics.metrics INFO: mAP(0.50, 11point) = 99.31%
@@ -813,7 +813,7 @@ class SealDataSet(DetDataset):
 
 
 我们可以使用训练好的模型观察预测结果：
-```
+```py
 !python3 tools/infer.py -c configs/ppyolo/ppyolo_mbv3_large.yml -o weights=./output/ppyolo_mbv3_large/model_final.pdparams  --img_dir=./test.jpg
 ```
 预测结果如下：
@@ -851,7 +851,7 @@ PGNet属于端对端的文字检测识别算法，在PaddleOCR中的配置文件
 PGNet默认配置文件的数据路径为totaltext数据集路径，本次训练中，需要修改为上一节数据处理后得到的标签文件和数据目录：
 
 训练数据配置修改后如下：
-```
+```py
 Train:
   dataset:
     name: PGDataSet
@@ -860,7 +860,7 @@ Train:
     ratio_list: [1.0]
 ```
 测试数据集配置修改后如下：
-```
+```py
 Eval:
   dataset:
     name: PGDataSet
@@ -869,7 +869,7 @@ Eval:
 ```
 
 启动训练的命令为:
-```
+```py
 !python3 tools/train.py -c configs/e2e/e2e_r50_vd_pg.yml
 ```
 模型训练完成后，可以得到最终的精度为47.4%。数据量较少，以及数据质量较差会影响模型的训练精度，如果有更多的数据参与训练，精度将进一步提升。
@@ -892,7 +892,7 @@ PaddleOCR中发布的db++文字检测算法模型是英文文本检测模型，�
 中的数据路径：
 
 
-```
+```py
 Train:
   dataset:
     name: SimpleDataSet
@@ -901,7 +901,7 @@ Train:
     ratio_list: [1.0]
 ```
 测试数据集配置修改后如下：
-```
+```py
 Eval:
   dataset:
     name: SimpleDataSet
@@ -911,7 +911,7 @@ Eval:
 
 
 启动训练：
-```
+```py
 !python3 tools/train.py  -c  configs/det/det_r50_db++_icdar15.yml -o Global.epoch_num=100
 ```
 
@@ -930,7 +930,7 @@ Eval:
 
 在启动训练之前，需要准备印章文字识别需要的数据集，需要使用如下代码，将印章中的文字区域剪切出来构建训练集。
 
-```
+```py
 import cv2
 import numpy as np
 
@@ -997,7 +997,7 @@ def run(data_dir, label_file, save_dir):
 数据处理完成后，即可配置训练的配置文件。SVTR配置文件选择[configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml)
 修改SVTR配置文件中的训练数据部分如下：
 
-```
+```py
 Train:
   dataset:
     name: SimpleDataSet
@@ -1007,7 +1007,7 @@ Train:
 ```
 
 修改预测部分配置文件：
-```
+```py
 Train:
   dataset:
     name: SimpleDataSet
@@ -1018,7 +1018,7 @@ Train:
 
 启动训练：
 
-```
+```py
 !python3 tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml
 
 ```

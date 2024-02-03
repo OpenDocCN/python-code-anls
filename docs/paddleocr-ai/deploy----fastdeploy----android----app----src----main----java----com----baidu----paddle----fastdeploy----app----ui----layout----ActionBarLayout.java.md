@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\ui\layout\ActionBarLayout.java`
 
-```
+```py
 package com.baidu.paddle.fastdeploy.app.ui.layout;
 
 import android.content.Context;

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_crnn_process.cpp`
 
-```
+```py
 // 包含版权声明和许可证信息
 // 根据 Apache 许可证 2.0 版本使用此文件
 // 如果不符合许可证要求，不得使用此文件

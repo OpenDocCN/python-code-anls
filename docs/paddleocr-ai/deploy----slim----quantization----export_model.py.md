@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\slim\quantization\export_model.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

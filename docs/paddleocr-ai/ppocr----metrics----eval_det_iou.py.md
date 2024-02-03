@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\metrics\eval_det_iou.py`
 
-```
+```py
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 导入必要的库

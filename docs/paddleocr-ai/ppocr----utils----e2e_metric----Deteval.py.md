@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\e2e_metric\Deteval.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 本代码版权归 PaddlePaddle 作者所有，保留所有权利。
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证规定，否则不得使用此文件。

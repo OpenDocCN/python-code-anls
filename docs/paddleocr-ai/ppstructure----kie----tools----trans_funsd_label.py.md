@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\kie\tools\trans_funsd_label.py`
 
-```
+```py
 # 版权声明
 #
 # 版权所有 (c) 2022 PaddlePaddle 作者。保留所有权利。

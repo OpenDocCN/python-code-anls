@@ -20,7 +20,7 @@ PaddleServing预测功能测试的主程序为`test_serving_infer_python.sh`和`
 **python serving**
 先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_python.sh`进行测试，最终在```test_tipc/output/{model_name}/serving_infer/python```目录下生成`python_*.log`后缀的日志文件。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal_normal_serving_python_linux_gpu_cpu.txt "serving_infer"
 
 # 用法:
@@ -29,7 +29,7 @@ bash test_tipc/test_serving_infer_python.sh ./test_tipc/configs/ch_PP-OCRv2/mode
 **cpp serving**
 先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_cpp.sh`进行测试，最终在```test_tipc/output/{model_name}/serving_infer/cpp```目录下生成`cpp_*.log`后缀的日志文件。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal_normal_serving_cpp_linux_gpu_cpu.txt "serving_infer"
 
 # 用法:
@@ -41,7 +41,7 @@ bash test_tipc/test_serving_infer_cpp.sh ./test_tipc/configs/ch_PP-OCRv2/model_l
 各测试的运行情况会打印在 `test_tipc/output/{model_name}/serving_infer/python(cpp)/results_python(cpp)_serving.log` 中：
 运行成功时会输出：
 
-```
+```py
 Run successfully with command - ch_PP-OCRv2_rec - nohup python3.7 web_service_rec.py --config=config.yml --opt op.rec.concurrency="1" op.det.local_service_conf.devices= op.det.local_service_conf.use_mkldnn=False op.det.local_service_conf.thread_num=6 op.rec.local_service_conf.model_config=ppocr_rec_v2_serving > ./test_tipc/output/ch_PP-OCRv2_rec/serving_infer/python/python_server_cpu_usemkldnn_False_threads_6.log 2>&1 &!
 Run successfully with command - ch_PP-OCRv2_rec - python3.7 pipeline_http_client.py --det=False --image_dir=../../inference/rec_inference > ./test_tipc/output/ch_PP-OCRv2_rec/serving_infer/python/python_client_cpu_pipeline_http_usemkldnn_False_threads_6_batchsize_1.log 2>&1 !
 ...
@@ -49,7 +49,7 @@ Run successfully with command - ch_PP-OCRv2_rec - nohup python3.7 web_service_re
 
 运行失败时会输出：
 
-```
+```py
 Run failed with command - ch_PP-OCRv2_rec - nohup python3.7 web_service_rec.py --config=config.yml --opt op.rec.concurrency="1" op.det.local_service_conf.devices= op.det.local_service_conf.use_mkldnn=False op.det.local_service_conf.thread_num=6 op.rec.local_service_conf.model_config=ppocr_rec_v2_serving > ./test_tipc/output/ch_PP-OCRv2_rec/serving_infer/python/python_server_cpu_usemkldnn_False_threads_6.log 2>&1 &!
 Run failed with command - ch_PP-OCRv2_rec - python3.7 pipeline_http_client.py --det=False --image_dir=../../inference/rec_inference > ./test_tipc/output/ch_PP-OCRv2_rec/serving_infer/python/python_client_cpu_pipeline_http_usemkldnn_False_threads_6_batchsize_1.log 2>&1 !
 ...

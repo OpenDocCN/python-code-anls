@@ -9,7 +9,7 @@ PP-OCRv3模型web demo使用[**参考文档**](https://github.com/PaddlePaddle/F
 
 ## 2. PP-OCRv3 js接口
 
-```
+```py
 import * as ocr from "@paddle-js-models/ocr";
 await ocr.init(detConfig, recConfig);
 const res = await ocr.recognize(img, option, postConfig);

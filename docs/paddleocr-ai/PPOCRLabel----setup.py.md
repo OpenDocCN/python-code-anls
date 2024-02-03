@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\setup.py`
 
-```
+```py
 # 导入设置安装包的函数
 from setuptools import setup
 # 导入打开文件的函数

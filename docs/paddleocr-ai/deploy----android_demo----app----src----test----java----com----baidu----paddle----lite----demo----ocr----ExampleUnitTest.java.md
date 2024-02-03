@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\test\java\com\baidu\paddle\lite\demo\ocr\ExampleUnitTest.java`
 
-```
+```py
 /**
  * 导入所需的包
  */

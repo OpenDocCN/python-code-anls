@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\web\index.test.js`
 
-```
+```py
 # 导入 expect.json 文件中的数据
 const expectData = require('./expect.json');
 

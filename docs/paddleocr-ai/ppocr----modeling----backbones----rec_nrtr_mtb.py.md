@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\backbones\rec_nrtr_mtb.py`
 
-```
+```py
 # 导入 paddle.nn 模块
 from paddle import nn
 # 导入 paddle 模块

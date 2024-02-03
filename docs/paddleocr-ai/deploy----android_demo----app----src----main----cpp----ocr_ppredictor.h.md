@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_ppredictor.h`
 
-```
+```py
 //
 // Created by fujiayi on 2020/7/1.
 //

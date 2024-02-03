@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\data\multi_scale_sampler.py`
 
-```
+```py
 # 导入需要的模块
 from paddle.io import Sampler
 import paddle.distributed as dist

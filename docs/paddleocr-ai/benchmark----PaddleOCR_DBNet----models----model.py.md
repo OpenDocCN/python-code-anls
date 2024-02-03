@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\model.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/8/23 21:57
 # @Author  : zhoujun

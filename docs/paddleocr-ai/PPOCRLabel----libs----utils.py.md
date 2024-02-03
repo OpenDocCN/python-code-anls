@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\utils.py`
 
-```
+```py
 # 版权声明，允许在遵守条件下自由使用软件
 # 导入所需的库和模块
 import hashlib

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_crnn_process.h`
 
-```
+```py
 //
 // Created by fujiayi on 2020/7/3.
 //

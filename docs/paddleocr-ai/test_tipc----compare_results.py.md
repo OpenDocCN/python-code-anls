@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\compare_results.py`
 
-```
+```py
 import numpy as np
 import os
 import subprocess

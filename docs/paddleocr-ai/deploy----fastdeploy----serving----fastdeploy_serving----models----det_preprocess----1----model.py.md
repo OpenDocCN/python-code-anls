@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\serving\fastdeploy_serving\models\det_preprocess\1\model.py`
 
-```
+```py
 # 版权声明，版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证 2.0 版本授权

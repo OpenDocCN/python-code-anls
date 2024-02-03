@@ -20,3 +20,4 @@
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
 +   [SegAny 源码解析](docs/segany-ai/README.md)
++   [PaddleOCR 源码解析](docs/paddleocr-ai/README.md)

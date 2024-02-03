@@ -21,7 +21,7 @@
 
 ### 1. 安装PaddleSlim
 
-```bash
+```py
 git clone https://github.com/PaddlePaddle/PaddleSlim.git
 cd PaddleSlim
 git checkout develop
@@ -35,7 +35,7 @@ python3 setup.py install
 
 加载预训练模型后，通过对现有模型的每个网络层进行敏感度分析，得到敏感度文件：sen.pickle，可以通过PaddleSlim提供的[接口](https://github.com/PaddlePaddle/PaddleSlim/blob/9b01b195f0c4bc34a1ab434751cb260e13d64d9e/paddleslim/dygraph/prune/filter_pruner.py#L75)加载文件，获得各网络层在不同裁剪比例下的精度损失。从而了解各网络层冗余度，决定每个网络层的裁剪比例。
 敏感度文件内容格式：
-```
+```py
 sen.pickle(Dict){
             'layer_weight_name_0': sens_of_each_ratio(Dict){'pruning_ratio_0': acc_loss, 'pruning_ratio_1': acc_loss}
             'layer_weight_name_1': sens_of_each_ratio(Dict){'pruning_ratio_0': acc_loss, 'pruning_ratio_1': acc_loss}
@@ -51,14 +51,14 @@ sen.pickle(Dict){
 加载敏感度文件后会返回一个字典，字典中的keys为网络模型参数模型的名字，values为一个字典，里面保存了相应网络层的裁剪敏感度信息。例如在例子中，conv10_expand_weights所对应的网络层在裁掉10%的卷积核后模型性能相较原模型会下降0.65%，详细信息可见[PaddleSlim](https://github.com/PaddlePaddle/PaddleSlim/blob/develop/docs/zh_cn/algo/algo.md#2-%E5%8D%B7%E7%A7%AF%E6%A0%B8%E5%89%AA%E8%A3%81%E5%8E%9F%E7%90%86)
 
 进入PaddleOCR根目录，通过以下命令对模型进行敏感度分析训练：
-```bash
+```py
 python3.7 deploy/slim/prune/sensitivity_anal.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model="your trained model" Global.save_model_dir=./output/prune_model/
 ```
 
 ### 4. 导出模型、预测部署
 
 在得到裁剪训练保存的模型后，我们可以将其导出为inference_model：
-```bash
+```py
 pytho3.7 deploy/slim/prune/export_prune_model.py -c configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml -o Global.pretrained_model=./output/det_db/best_accuracy  Global.save_inference_dir=./prune/prune_inference_model
 ```
 

@@ -57,7 +57,7 @@ The following takes the Chinese table recognition model as an example to introdu
 
 Use the following commands to quickly complete the identification of a table.
 
-```python
+```py
 cd PaddleOCR/ppstructure
 
 # download model
@@ -98,18 +98,18 @@ The training, evaluation and inference process of the table recognition model ca
 ### 4.3 Calculate TEDS
 
 The table uses [TEDS(Tree-Edit-Distance-based Similarity)](https://github.com/ibm-aur-nlp/PubTabNet/tree/master/src) as the evaluation metric of the model. Before the model evaluation, the three models in the pipeline need to be exported as inference models (we have provided them), and the gt for evaluation needs to be prepared. Examples of gt are as follows:
-```txt
+```py
 PMC5755158_010_01.png    <html><body><table><thead><tr><td></td><td><b>Weaning</b></td><td><b>Week 15</b></td><td><b>Off-test</b></td></tr></thead><tbody><tr><td>Weaning</td><td>–</td><td>–</td><td>–</td></tr><tr><td>Week 15</td><td>–</td><td>0.17 ± 0.08</td><td>0.16 ± 0.03</td></tr><tr><td>Off-test</td><td>–</td><td>0.80 ± 0.24</td><td>0.19 ± 0.09</td></tr></tbody></table></body></html>
 ```
 Each line in gt consists of the file name and the html string of the table. The file name and the html string of the table are separated by `\t`.
 
 You can also use the following command to generate an evaluation gt file from the annotation file:
-```python
+```py
 python3 ppstructure/table/convert_label2html.py --ori_gt_path /path/to/your_label_file --save_path /path/to/save_file
 ```
 
 Use the following command to evaluate. After the evaluation is completed, the teds indicator will be output.
-```python
+```py
 python3 table/eval_table.py \
     --det_model_dir=path/to/det_model_dir \
     --rec_model_dir=path/to/rec_model_dir \
@@ -124,7 +124,7 @@ python3 table/eval_table.py \
 
 Evaluate on the PubLatNet dataset using the English model
 
-```bash
+```py
 cd PaddleOCR/ppstructure
 # Download the model
 mkdir inference && cd inference
@@ -150,7 +150,7 @@ python3 table/eval_table.py \
 ```
 
 output is
-```bash
+```py
 teds: 95.89
 ```
 

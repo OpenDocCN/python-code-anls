@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\java\com\baidu\paddle\lite\demo\ocr\Predictor.java`
 
-```
+```py
 package com.baidu.paddle.lite.demo.ocr;
 
 import android.content.Context;

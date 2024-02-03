@@ -36,7 +36,7 @@
 
 [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)提供了适用于通用场景的高精轻量模型，提供数据预处理-模型推理-后处理全流程，支持pip安装：
 
-```
+```py
 python -m pip install paddleocr
 ```
 
@@ -48,7 +48,7 @@ python -m pip install paddleocr
 
 使用中文检测+识别模型提取文本，实例化PaddleOCR类：
 
-```
+```py
 from paddleocr import PaddleOCR, draw_ocr
 
 # paddleocr目前支持中英文、英文、法语、德语、韩语、日语等80个语种，可以通过修改lang参数进行切换
@@ -57,7 +57,7 @@ ocr = PaddleOCR(use_angle_cls=False, lang="ch")  # need to run only once to down
 
 一行命令启动预测，预测结果包括`检测框`和`文本识别内容`:
 
-```
+```py
 img_path = "./test_img/hetong2.jpg"
 result = ocr.ocr(img_path, cls=False)
 for line in result:
@@ -79,7 +79,7 @@ im_show.show()
 
 通过上图可视化结果可以看到，印章部分造成的文本遮盖，影响了文本识别结果，因此可以考虑通道提取，去除图片中的红色印章：
 
-```
+```py
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -99,7 +99,7 @@ cv2.imwrite('red_channel.jpg',Rch)
 
 经过2.1.3的预处理后，合同照片的红色通道被分离，获得了一张相对更干净的图片，此时可以再次使用ppocr模型提取文本内容：
 
-```
+```py
 import numpy as np
 import cv2
 
@@ -122,7 +122,7 @@ im_show.show()
 
 忽略检测框内容，提取完整的合同文本：
 
-```
+```py
 txts = [line[1][0] for line in result]
 all_context = "\n".join(txts)
 print(all_context)
@@ -137,7 +137,7 @@ print(all_context)
 安装PaddleNLP
 
 
-```
+```py
 pip install --upgrade pip
 pip install --upgrade paddlenlp
 ```
@@ -151,7 +151,7 @@ PaddleNLP 使用 Taskflow 统一管理多场景任务的预测功能，其中`in
 
 将使用OCR提取好的文本作为输入，使用三行命令可以对上文中提取到的合同文本进行关键信息抽取：
 
-```
+```py
 from paddlenlp import Taskflow
 schema = ["甲方","乙方","总价"]
 ie = Taskflow('information_extraction', schema=schema)
@@ -174,7 +174,7 @@ ie(all_context)
 
 直接进行预测：
 
-```
+```py
 img_path = "./test_img/hetong3.jpg"
 # 预测结果
 result = ocr.ocr(img_path, cls=False)
@@ -194,7 +194,7 @@ im_show.show()
 - 开启`use_dilatiion=True` 膨胀分割区域
 - 调小`det_db_box_thresh`阈值
 
-```
+```py
 # 重新实例化 PaddleOCR
 ocr = PaddleOCR(use_angle_cls=False, lang="ch", det_db_box_thresh=0.3, use_dilation=True)
 
@@ -214,7 +214,7 @@ im_show.show()
 
 可以看到漏检问题被很好的解决，提取完整的文本内容：
 
-```
+```py
 txts = [line[1][0] for line in result]
 context = "\n".join(txts)
 print(context)
@@ -232,7 +232,7 @@ UIE通过大量有标签样本进行训练，得到了一个开箱即用的高�
 **修改schema**
 
 Prompt和原文描述越像，抽取效果越好，例如
-```
+```py
 三：合同价格：总价为人民币大写：参拾玖万捌仟伍佰
 元，小写：398500.00元。总价中包括站房工程建设、安装
 及相关避雷、消防、接地、电力、材料费、检验费、安全、
@@ -240,7 +240,7 @@ Prompt和原文描述越像，抽取效果越好，例如
 ```
 schema = ["总金额"] 时无法准确抽取，与原文描述差异较大。 修改 schema = ["总价"] 再次尝试：
 
-```
+```py
 from paddlenlp import Taskflow
 # schema = ["总金额"]
 schema = ["总价"]

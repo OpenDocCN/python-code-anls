@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\serving\fastdeploy_serving\client.py`
 
-```
+```py
 # 导入 logging 模块，用于记录日志
 import logging
 # 导入 numpy 模块，用于科学计算

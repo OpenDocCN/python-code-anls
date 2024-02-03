@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\postprocess_op.cpp`
 
-```
+```py
 // 包含 PaddleOCR 的后处理操作的头文件
 #include <include/postprocess_op.h>
 

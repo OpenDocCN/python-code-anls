@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\loss.py`
 
-```
+```py
 # 导入 paddle 库
 import paddle
 # 导入 paddle 中的神经网络函数模块

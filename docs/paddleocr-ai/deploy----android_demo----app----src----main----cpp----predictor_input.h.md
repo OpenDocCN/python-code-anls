@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\predictor_input.h`
 
-```
+```py
 #pragma once
 // 防止头文件被重复包含
 

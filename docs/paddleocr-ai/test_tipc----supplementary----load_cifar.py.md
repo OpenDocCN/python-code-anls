@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\load_cifar.py`
 
-```
+```py
 # 导入 pickle 库并重命名为 p
 import pickle as p
 # 导入 numpy 库并重命名为 np

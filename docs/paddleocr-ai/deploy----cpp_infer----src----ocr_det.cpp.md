@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\ocr_det.cpp`
 
-```
+```py
 // 包含 PaddleOCR 的头文件 ocr_det.h
 #include <include/ocr_det.h>
 

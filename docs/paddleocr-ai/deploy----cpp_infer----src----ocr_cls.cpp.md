@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\ocr_cls.cpp`
 
-```
+```py
 // 包含版权声明和许可信息
 // 版权所有 (c) 2020 PaddlePaddle 作者。保留所有权利。
 // 根据 Apache 许可证 2.0 版本许可

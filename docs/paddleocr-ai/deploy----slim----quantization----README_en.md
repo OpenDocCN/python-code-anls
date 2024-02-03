@@ -24,7 +24,7 @@ After training, if you want to further compress the model size and accelerate th
 
 ### 1. Install PaddleSlim
 
-```bash
+```py
 pip3 install paddleslim==2.3.2
 ```
 
@@ -40,7 +40,7 @@ Online quantization training is more effective. It is necessary to load the pre-
 After the quantization strategy is defined, the model can be quantified.
 
 The code for quantization training is located in `slim/quantization/quant.py`. For example, the training instructions of slim PPOCRv3 detection model are as follows:
-```
+```py
 # download provided model
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
 tar xf ch_PP-OCRv3_det_distill_train.tar
@@ -54,7 +54,7 @@ If you want to quantify the text recognition model, you can modify the configura
 
 Once we got the model after pruning and fine-tuning, we can export it as an inference model for the deployment of predictive tasks:
 
-```bash
+```py
 python deploy/slim/quantization/export_model.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.checkpoints=output/quant_model/best_accuracy Global.save_inference_dir=./output/quant_inference_model
 ```
 

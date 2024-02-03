@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\include\structure_layout.h`
 
-```
+```py
 // 版权声明，告知代码版权归属及使用许可
 // 根据 Apache 许可证 2.0 版本使用本文件
 // 获取许可证的链接

@@ -48,13 +48,13 @@ aistudio项目链接: [基于PaddleOCR的轻量级车牌识别范例](https://ai
 
 下载 PaddleOCR代码
 
-```bash
+```py
 git clone -b dygraph https://github.com/PaddlePaddle/PaddleOCR
 ```
 
 安装依赖库
 
-```bash
+```py
 pip install -r PaddleOCR/requirements.txt
 ```
 
@@ -77,7 +77,7 @@ pip install -r PaddleOCR/requirements.txt
 
 下载好数据集后对数据集进行解压
 
-```bash
+```py
 unzip -d /home/aistudio/data /home/aistudio/data/data101595/CCPD2020.zip
 ```
 
@@ -105,7 +105,7 @@ CPPD数据集的图片文件名具有特殊规则，详细可查看：https://gi
 
 - 15：车牌区域的模糊度。15 (15%)
 
-```python
+```py
 provinces = ["皖", "沪", "津", "渝", "冀", "晋", "蒙", "辽", "吉", "黑", "苏", "浙", "京", "闽", "赣", "鲁", "豫", "鄂", "湘", "粤", "桂", "琼", "川", "贵", "云", "藏", "陕", "甘", "青", "宁", "新", "警", "学", "O"]
 alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W','X', 'Y', 'Z', 'O']
 ads = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X','Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'O']
@@ -116,7 +116,7 @@ ads = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q'
 在开始训练之前，可使用如下代码制作符合PP-OCR训练格式的标注文件。
 
 
-```python
+```py
 import cv2
 import os
 import json
@@ -241,7 +241,7 @@ for phase in ['train','val','test']:
 
 使用如下命令下载预训练模型
 
-```bash
+```py
 mkdir models
 cd models
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
@@ -260,7 +260,7 @@ cd /home/aistudio/PaddleOCR
 上述字段均为必须修改的字段，可以通过修改配置文件的方式改动，也可在不需要修改配置文件的情况下，改变训练的参数。这里使用不改变配置文件的方式 。使用如下命令进行PP-OCRv3文本检测预训练模型的评估
 
 
-```bash
+```py
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=models/ch_PP-OCRv3_det_distill_train/student.pdparams \
     Eval.dataset.data_dir=/home/aistudio/data/CCPD2020/ccpd_green \
@@ -295,7 +295,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
 
 使用如下代码即可启动在CCPD车牌数据集上的fine-tune。
 
-```bash
+```py
 python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=models/ch_PP-OCRv3_det_distill_train/student.pdparams \
     Global.save_model_dir=output/CCPD/det \
@@ -317,7 +317,7 @@ python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o 
 训练完成后使用如下命令进行评估
 
 
-```bash
+```py
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=output/CCPD/det/best_accuracy.pdparams \
     Eval.dataset.data_dir=/home/aistudio/data/CCPD2020/ccpd_green \
@@ -339,7 +339,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
 
 量化训练可通过如下命令启动:
 
-```bash
+```py
 python3.7 deploy/slim/quantization/quant.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=output/CCPD/det/best_accuracy.pdparams \
     Global.save_model_dir=output/CCPD/det_quant \
@@ -369,13 +369,13 @@ python3.7 deploy/slim/quantization/quant.py -c configs/det/ch_PP-OCRv3/ch_PP-OCR
 使用如下命令可以将训练好的模型进行导出
 
 * 非量化模型
-```bash
+```py
 python tools/export_model.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=output/CCPD/det/best_accuracy.pdparams \
     Global.save_inference_dir=output/det/infer
 ```
 * 量化模型
-```bash
+```py
 python deploy/slim/quantization/export_model.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o \
     Global.pretrained_model=output/CCPD/det_quant/best_accuracy.pdparams \
     Global.save_inference_dir=output/det/infer
@@ -392,7 +392,7 @@ python deploy/slim/quantization/export_model.py -c configs/det/ch_PP-OCRv3/ch_PP
 
 使用如下命令下载预训练模型
 
-```bash
+```py
 mkdir models
 cd models
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
@@ -402,7 +402,7 @@ cd /home/aistudio/PaddleOCR
 
 PaddleOCR提供的PP-OCRv3识别模型采用蒸馏训练策略，因此提供的预训练模型中会包含`Teacher`和`Student`模型的参数，详细信息可参考[knowledge_distillation.md](../doc/doc_ch/knowledge_distillation.md)。 因此，模型下载完成后需要使用如下代码提取`Student`模型的参数：
 
-```python
+```py
 import paddle
 # 加载预训练模型
 all_params = paddle.load("models/ch_PP-OCRv3_rec_train/best_accuracy.pdparams")
@@ -426,7 +426,7 @@ paddle.save(s_params, "models/ch_PP-OCRv3_rec_train/student.pdparams")
 
 使用如下命令进行PP-OCRv3文本识别预训练模型的评估
 
-```bash
+```py
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=models/ch_PP-OCRv3_rec_train/student.pdparams \
     Eval.dataset.data_dir=/home/aistudio/data/CCPD2020/PPOCR \
@@ -440,7 +440,7 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
 
 
 评估部分日志如下：
-```bash
+```py
 [2022/05/12 19:52:02] ppocr INFO: load pretrain successful from models/ch_PP-OCRv3_rec_train/best_accuracy
 eval model:: 100%|██████████████████████████████| 40/40 [00:15<00:00,  2.57it/s]
 [2022/05/12 19:52:17] ppocr INFO: metric eval ***************
@@ -460,14 +460,14 @@ eval model:: 100%|████████████████████�
 从评估日志中可以看到，直接使用PP-OCRv3预训练模型进行评估，acc非常低，但是norm_edit_dis很高。因此，我们猜测是模型大部分文字识别是对的，只有少部分文字识别错误。使用如下命令进行infer查看模型的推理结果进行验证：
 
 
-```bash
+```py
 python tools/infer_rec.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=models/ch_PP-OCRv3_rec_train/student.pdparams \
     Global.infer_img=/home/aistudio/data/CCPD2020/PPOCR/test/crop_imgs/0_0_0_3_32_30_31_30_30.jpg
 ```
 
 输出部分日志如下：
-```bash
+```py
 [2022/05/01 08:51:57] ppocr INFO: train with paddle 2.2.2 and device CUDAPlace(0)
 W0501 08:51:57.127391 11326 device_context.cc:447] Please NOTE: device: 0, GPU Compute Capability: 7.0, Driver API Version: 11.0, Runtime API Version: 10.1
 W0501 08:51:57.132315 11326 device_context.cc:465] device: 0, cuDNN Version: 7.6.
@@ -484,7 +484,7 @@ W0501 08:51:57.132315 11326 device_context.cc:465] device: 0, cuDNN Version: 7.6
 #### 4.2.2 预训练模型直接预测+改动后处理
 
 直接通过后处理去掉多识别的`·`，在后处理的改动比较简单，只需在 [ppocr/postprocess/rec_postprocess.py](../ppocr/postprocess/rec_postprocess.py) 文件的76行添加如下代码:
-```python
+```py
 text = text.replace('·','')
 ```
 
@@ -518,7 +518,7 @@ text = text.replace('·','')
 
 使用如下命令启动 fine-tune
 
-```bash
+```py
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=models/ch_PP-OCRv3_rec_train/student.pdparams \
     Global.save_model_dir=output/CCPD/rec/ \
@@ -536,7 +536,7 @@ python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
 
 训练完成后使用如下命令进行评估
 
-```bash
+```py
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=output/CCPD/rec/best_accuracy.pdparams \
     Eval.dataset.data_dir=/home/aistudio/data/CCPD2020/PPOCR \
@@ -559,7 +559,7 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
 
 量化训练可通过如下命令启动:
 
-```bash
+```py
 python3.7 deploy/slim/quantization/quant.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=output/CCPD/rec/best_accuracy.pdparams \
     Global.save_model_dir=output/CCPD/rec_quant/ \
@@ -589,13 +589,13 @@ python3.7 deploy/slim/quantization/quant.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_
 使用如下命令可以将训练好的模型进行导出。
 
 * 非量化模型
-```bash
+```py
 python tools/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=output/CCPD/rec/best_accuracy.pdparams \
     Global.save_inference_dir=output/CCPD/rec/infer
 ```
 * 量化模型
-```bash
+```py
 python deploy/slim/quantization/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml -o \
     Global.pretrained_model=output/CCPD/rec_quant/best_accuracy.pdparams \
     Global.save_inference_dir=output/CCPD/rec_quant/infer
@@ -609,7 +609,7 @@ python deploy/slim/quantization/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OC
 
 通过如下命令进行模型的导出。注意，量化模型导出时，需要配置eval数据集
 
-```bash
+```py
 # 检测模型
 
 # 预训练模型
@@ -654,7 +654,7 @@ python deploy/slim/quantization/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OC
 
 此处，分别使用PP-OCRv3预训练模型，fintune模型和量化模型对测试集的所有图像进行预测，命令如下：
 
-```bash
+```py
 # PP-OCRv3中英文超轻量检测预训练模型，PP-OCRv3中英文超轻量识别预训练模型
 python3 tools/infer/predict_system.py --det_model_dir=models/ch_PP-OCRv3_det_distill_train/infer --rec_model_dir=models/ch_PP-OCRv3_rec_train/infer --det_limit_side_len=736 --det_limit_type=min --image_dir=/home/aistudio/data/CCPD2020/ccpd_green/test/ --draw_img_save_dir=infer/pretrain --use_dilation=true
 
@@ -669,7 +669,7 @@ python3 tools/infer/predict_system.py --det_model_dir=output/CCPD/det_quant/infe
 
 将gt和上一步保存的预测结果转换为端对端评测需要的数据格式，并根据转换后的数据进行端到端指标计算
 
-```bash
+```py
 python3 tools/end2end/convert_ppocr_label.py --mode=gt --label_path=/home/aistudio/data/CCPD2020/PPOCR/test/det.txt --save_folder=end2end/gt
 
 # PP-OCRv3中英文超轻量检测预训练模型，PP-OCRv3中英文超轻量识别预训练模型 结果转换和评估
@@ -691,7 +691,7 @@ python3 tools/end2end/eval_end2end.py end2end/gt end2end/quant
 ```
 
 日志如下:
-```bash
+```py
 The convert label saved in end2end/gt
 The convert label saved in end2end/pretrain
 start testing...
@@ -745,7 +745,7 @@ fmeasure: 87.36%
 在之前的端到端预测结果中，可以看到很多不符合车牌标注的文字被识别出来, 因此可以进行简单的过滤来提升precision
 
 为了快速评估，我们在 ` tools/end2end/convert_ppocr_label.py` 脚本的 58 行加入如下代码，对非8个字符的结果进行过滤
-```python
+```py
 if len(txt) != 8: # 车牌字符串长度为8
     continue
 ```
@@ -775,7 +775,7 @@ if len(txt) != 8: # 车牌字符串长度为8
 
 检测模型和识别模型分别 fine-tune 并导出为inference模型之后，可以使用如下命令基于 Paddle Inference 进行端到端推理并对结果进行可视化。
 
-```bash
+```py
 python tools/infer/predict_system.py \
     --det_model_dir=output/CCPD/det/infer/ \
     --rec_model_dir=output/CCPD/rec/infer/ \

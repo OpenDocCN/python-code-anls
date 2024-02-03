@@ -48,7 +48,7 @@ PaddleOCR operating environment and Paddle Serving operating environment are nee
 2. The steps of PaddleServing operating environment prepare are as follows:
 
 
-```bash
+```py
 # Install serving which used to start the service
 wget https://paddle-serving.bj.bcebos.com/test-dev/whl/paddle_serving_server_gpu-0.8.3.post102-py3-none-any.whl
 pip3 install paddle_serving_server_gpu-0.8.3.post102-py3-none-any.whl
@@ -74,14 +74,14 @@ pip3 install paddle_serving_app-0.8.3-py3-none-any.whl
 When using PaddleServing for service deployment, you need to convert the saved inference model into a serving model that is easy to deploy.
 
 Firstly, download the [inference model](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.3/README_ch.md#pp-ocr%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8%E6%9B%B4%E6%96%B0%E4%B8%AD) of PPOCR
-```
+```py
 # Download and unzip the OCR text detection model
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar -O ch_PP-OCRv3_det_infer.tar && tar -xf ch_PP-OCRv3_det_infer.tar
 # Download and unzip the OCR text recognition model
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar -O ch_PP-OCRv3_rec_infer.tar &&  tar -xf ch_PP-OCRv3_rec_infer.tar
 ```
 Then, you can use installed paddle_serving_client tool to convert inference model to mobile model.
-```
+```py
 #  Detection model conversion
 python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_det_infer/ \
                                          --model_filename inference.pdmodel          \
@@ -99,7 +99,7 @@ python3 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_rec_infer/ \
 ```
 
 After the detection model is converted, there will be additional folders of `ppocr_det_v3_serving` and `ppocr_det_v3_client` in the current folder, with the following format:
-```
+```py
 |- ppocr_det_v3_serving/
   |- __model__  
   |- __params__
@@ -117,7 +117,7 @@ The recognition model is the same.
 ## Paddle Serving pipeline deployment
 
 1. Download the PaddleOCR code, if you have already downloaded it, you can skip this step.
-    ```
+    ```py
     git clone https://github.com/PaddlePaddle/PaddleOCR
 
     # Enter the working directory  
@@ -125,7 +125,7 @@ The recognition model is the same.
     ```
 
     The pdserver directory contains the code to start the pipeline service and send prediction requests, including:
-    ```
+    ```py
     __init__.py
     config.yml # Start the service configuration file
     ocr_reader.py # OCR model pre-processing and post-processing code implementation
@@ -134,7 +134,7 @@ The recognition model is the same.
     ```
 
 2. Run the following command to start the service.
-    ```
+    ```py
     # Start the service and save the running log in log.txt
     python3 web_service.py --config=config.yml &>log.txt &
     ```
@@ -142,7 +142,7 @@ The recognition model is the same.
     ![](./imgs/start_server.png)
 
 3. Send service request
-    ```
+    ```py
     python3 pipeline_http_client.py
     ```
     After successfully running, the predicted result of the model will be printed in the cmd window. An example of the result is:
@@ -150,7 +150,7 @@ The recognition model is the same.
 
     Adjust the number of concurrency in config.yml to get the largest QPS. Generally, the number of concurrent detection and recognition is 2:1
 
-    ```
+    ```py
     det:
         concurrency: 8
         ...
@@ -165,7 +165,7 @@ The recognition model is the same.
 
     Tested on 200 real pictures, and limited the detection long side to 960. The average QPS on T4 GPU can reach around 23:
 
-    ```
+    ```py
 
     2021-05-13 03:42:36,895 ==================== TRACER ======================
     2021-05-13 03:42:36,975 Op(rec):
@@ -215,7 +215,7 @@ The C++ service deployment is the same as python in the environment setup and da
    To improve predictive performance, C++ services also provide multiple model concatenation services. Unlike Python Pipeline services, multiple model concatenation requires the pre - and post-model processing code to be written on the server side, so local recompilation is required to generate serving. Specific may refer to the official document: [how to compile Serving](https://github.com/PaddlePaddle/Serving/blob/v0.8.3/doc/Compile_EN.md)
 
 2. Run the following command to start the service.
-    ```
+    ```py
     # Start the service and save the running log in log.txt
     python3 -m paddle_serving_server.serve --model ppocr_det_v3_serving ppocr_rec_v3_serving --op GeneralDetectionOp GeneralInferOp --port 8181 &>log.txt &
     ```
@@ -227,7 +227,7 @@ The C++ service deployment is the same as python in the environment setup and da
    Due to the need for pre and post-processing in the C++Server part, in order to speed up the input to the C++Server is only the base64 encoded string of the picture, it needs to be manually modified
    Change the feed_type field and shape field in ppocr_det_v3_client/serving_client_conf.prototxt to the following:
 
-   ```
+   ```py
     feed_var {
     name: "x"
     alias_name: "x"
@@ -239,7 +239,7 @@ The C++ service deployment is the same as python in the environment setup and da
 
    start the client:
 
-    ```
+    ```py
     python3 ocr_cpp_client.py ppocr_det_v3_client ppocr_rec_v3_client
     ```
     After successfully running, the predicted result of the model will be printed in the cmd window. An example of the result is:
@@ -254,14 +254,14 @@ Windows does not support Pipeline Serving, if we want to lauch paddle serving on
 
 **Prepare Stage:**
 
-```
+```py
 pip3 install paddle-serving-server==0.5.0
 pip3 install paddle-serving-app==0.3.1
 ```
 
 1. Start Server
 
-```
+```py
 cd win
 python3 ocr_web_server.py gpu(for gpu user)
 or
@@ -270,7 +270,7 @@ python3 ocr_web_server.py cpu(for cpu user)
 
 2. Client Send Requests
 
-```
+```py
 python3 ocr_web_client.py
 ```
 
@@ -279,7 +279,7 @@ python3 ocr_web_client.py
 **Q1**: No result return after sending the request.
 
 **A1**: Do not set the proxy when starting the service and sending the request. You can close the proxy before starting the service and before sending the request. The command to close the proxy is:
-```
+```py
 unset https_proxy
 unset http_proxy
 ```  

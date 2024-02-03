@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\data_loader\modules\random_crop_data.py`
 
-```
+```py
 # 导入 random 模块
 import random
 

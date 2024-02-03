@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\include\preprocess_op.h`
 
-```
+```py
 // 版权声明，告知代码版权归属及使用许可
 // 根据 Apache 许可证 2.0 版本使用此文件
 // 只有在遵守许可证的情况下才能使用此文件

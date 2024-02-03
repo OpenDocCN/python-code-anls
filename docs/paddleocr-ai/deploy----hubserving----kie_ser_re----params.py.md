@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\hubserving\kie_ser_re\params.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 从未来的模块导入绝对导入、除法和打印函数
 from deploy.hubserving.ocr_system.params import read_params as pp_ocr_read_params

@@ -39,7 +39,7 @@ PPOCRLabel是一款适用于OCR领域的半自动化图形标注工具，内置P
 ## 1. 安装与运行
 
 ### 1.1 安装PaddlePaddle
-```bash
+```py
 pip3 install --upgrade pip
 
 # 如果您的机器安装的是CUDA9或CUDA10，请运行以下命令安装
@@ -59,7 +59,7 @@ PPOCRLabel可通过whl包与Python脚本两种方式启动，whl包形式启动�
 
 ##### Windows
 
-```bash
+```py
 pip install PPOCRLabel  # 安装
 
 # 选择标签模式来启动
@@ -69,7 +69,7 @@ PPOCRLabel --lang ch --kie True  # 启动 【KIE 模式】，用于打【检测+
 > 注意：通过whl包安装PPOCRLabel会自动下载 `paddleocr` whl包，其中shapely依赖可能会出现 `[winRrror 126] 找不到指定模块的问题。` 的错误，建议从[这里](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)下载并安装
 ##### Ubuntu Linux
 
-```bash
+```py
 pip3 install PPOCRLabel
 pip3 install trash-cli
 
@@ -79,7 +79,7 @@ PPOCRLabel --lang ch --kie True  # 启动 【KIE 模式】，用于打【检测+
 ```
 
 ##### MacOS
-```bash
+```py
 pip3 install PPOCRLabel
 pip3 install opencv-contrib-python-headless==4.2.0.32 # 如果下载过慢请添加"-i https://mirror.baidu.com/pypi/simple"
 
@@ -94,7 +94,7 @@ PPOCRLabel --lang ch --kie True  # 启动 【KIE 模式】，用于打【检测+
 
 如果您对PPOCRLabel文件有所更改（例如指定新的内置模型），通过Python脚本运行会更加方便的看到更改的结果。如果仍然需要通过whl包启动，则需要先卸载当前环境中的whl包，然后参考下节重新编译whl包。
 
-```bash
+```py
 cd ./PPOCRLabel  # 切换到PPOCRLabel目录
 python PPOCRLabel.py --lang ch
 ```
@@ -103,7 +103,7 @@ python PPOCRLabel.py --lang ch
 
 编译与安装新的whl包，其中0.0.0为版本号，可在 `setup.py` 中指定新版本。
 
-```bash
+```py
 cd ./PPOCRLabel
 python3 setup.py bdist_wheel
 pip3 install dist/PPOCRLabel-0.0.0-py2.py3-none-any.whl -i https://mirror.baidu.com/pypi/simple
@@ -211,7 +211,7 @@ PPOCRLabel支持三种导出方式：
 
 在终端中输入以下命令执行数据集划分脚本：
 
-```
+```py
 cd ./PPOCRLabel # 将目录切换到PPOCRLabel文件夹下
 python gen_ocr_train_val_test.py --trainValTestRatio 6:2:2 --datasetRootPath ../train_data
 ```
@@ -221,7 +221,7 @@ python gen_ocr_train_val_test.py --trainValTestRatio 6:2:2 --datasetRootPath ../
 - `trainValTestRatio` 是训练集、验证集、测试集的图像数量划分比例，根据实际情况设定，默认是`6:2:2`
 
 - `datasetRootPath` 是PPOCRLabel标注的完整数据集存放路径。默认路径是 `PaddleOCR/train_data` 分割数据集前应有如下结构：
-  ```
+  ```py
   |-train_data
     |-crop_img
       |- word_001_crop_0.png
@@ -243,17 +243,17 @@ python gen_ocr_train_val_test.py --trainValTestRatio 6:2:2 --datasetRootPath ../
 - PPOCRLabel**不支持对中文文件名**的图片进行自动标注。
 
 - 针对Linux用户：如果您在打开软件过程中出现**objc[XXXXX]**开头的错误，证明您的opencv版本太高，建议安装4.2版本：
-    ```
+    ```py
     pip install opencv-python==4.2.0.32
     ```
 
 - 如果出现 ```Missing string id``` 开头的错误，需要重新编译资源：
-    ```
+    ```py
     pyrcc5 -o libs/resources.py resources.qrc
     ```
 
 - 如果出现``` module 'cv2' has no attribute 'INTER_NEAREST'```错误，需要首先删除所有opencv相关包，然后重新安装4.2.0.32版本的headless opencv
-    ```
+    ```py
     pip install opencv-contrib-python-headless==4.2.0.32
     ```
 

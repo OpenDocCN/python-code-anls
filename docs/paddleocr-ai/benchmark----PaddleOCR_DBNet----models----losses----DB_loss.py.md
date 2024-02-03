@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\losses\DB_loss.py`
 
-```
+```py
 import paddle
 from models.losses.basic_loss import BalanceCrossEntropyLoss, MaskL1Loss, DiceLoss
 

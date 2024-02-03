@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\ui\Utils.java`
 
-```
+```py
 // 定义一个名为 Utils 的类，包含一些常用的工具方法
 public class Utils {
     // 定义一个 TAG 常量，用于在日志中标识该类

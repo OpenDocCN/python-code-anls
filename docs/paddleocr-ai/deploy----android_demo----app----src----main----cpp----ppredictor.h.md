@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ppredictor.h`
 
-```
+```py
 #pragma once
 
 #include "paddle_api.h"

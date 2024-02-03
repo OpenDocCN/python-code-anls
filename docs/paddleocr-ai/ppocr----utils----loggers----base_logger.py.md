@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\loggers\base_logger.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 从 abc 模块中导入 ABC 和 abstractmethod

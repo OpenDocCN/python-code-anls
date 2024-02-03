@@ -22,7 +22,7 @@
 
 ## 3. 安装环境
 
-```bash
+```py
 # 首先git官方的PaddleOCR项目，安装需要的依赖
 # 第一次运行打开该注释
 git clone https://gitee.com/PaddlePaddle/PaddleOCR.git
@@ -69,7 +69,7 @@ pip install -r ./ppstructure/kie/requirements.txt
 
 下载好发票数据集，并解压在train_data目录下，目录结构如下所示。
 
-```
+```py
 train_data
   |--zzsfp
        |---class_list.txt
@@ -92,7 +92,7 @@ b33.jpg [{"transcription": "No", "label": "question", "points": [[2882, 472], [3
 
 VI-LayoutXLM的配置为[ser_vi_layoutxlm_xfund_zh_udml.yml](../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml)，需要修改数据、类别数目以及配置文件。
 
-```yml
+```py
 Architecture:
   model_type: &model_type "kie"
   name: DistillationModel
@@ -157,14 +157,14 @@ LayoutXLM与VI-LayoutXLM针对该场景的训练结果如下所示。
 
 修改完成后，执行下面的命令完成评估过程。
 
-```bash
+```py
 # 注意：需要根据你的配置文件地址与保存的模型地址，对评估命令进行修改
 python3 tools/eval.py -c ./fapiao/ser_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy
 ```
 
 输出结果如下所示。
 
-```
+```py
 [2022/08/18 08:49:58] ppocr INFO: metric eval ***************
 [2022/08/18 08:49:58] ppocr INFO: precision:1.0
 [2022/08/18 08:49:58] ppocr INFO: recall:1.0
@@ -176,7 +176,7 @@ python3 tools/eval.py -c ./fapiao/ser_vi_layoutxlm.yml -o Architecture.Backbone.
 
 使用下面的命令进行预测。
 
-```bash
+```py
 python3 tools/infer_kie_token_ser.py -c fapiao/ser_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False
 ```
 
@@ -194,7 +194,7 @@ python3 tools/infer_kie_token_ser.py -c fapiao/ser_vi_layoutxlm.yml -o Architect
 如果希望使用OCR引擎结果得到的结果进行推理，则可以使用下面的命令进行推理。
 
 
-```bash
+```py
 python3 tools/infer_kie_token_ser.py -c fapiao/ser_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy Global.infer_img=./train_data/zzsfp/imgs/b25.jpg Global.infer_mode=True
 ```
 
@@ -210,7 +210,7 @@ python3 tools/infer_kie_token_ser.py -c fapiao/ser_vi_layoutxlm.yml -o Architect
 
 如果希望构建基于你在垂类场景训练得到的OCR检测与识别模型，可以使用下面的方法传入检测与识别的inference 模型路径，即可完成OCR文本检测与识别以及SER的串联过程。
 
-```bash
+```py
 python3 tools/infer_kie_token_ser.py -c fapiao/ser_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy Global.infer_img=./train_data/zzsfp/imgs/b25.jpg Global.infer_mode=True Global.kie_rec_model_dir="your_rec_model" Global.kie_det_model_dir="your_det_model"
 ```
 
@@ -241,7 +241,7 @@ b33.jpg [{"transcription": "No", "label": "question", "points": [[2882, 472], [3
 
 基于VI-LayoutXLM的RE任务配置为[re_vi_layoutxlm_xfund_zh_udml.yml](../configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml)，需要修改**数据路径、类别列表文件**。
 
-```yml
+```py
 Train:
   dataset:
     name: SimpleDataSet
@@ -291,7 +291,7 @@ LayoutXLM与VI-LayoutXLM针对该场景的训练结果如下所示。
 
 修改完成后，执行下面的命令完成评估过程。
 
-```bash
+```py
 # 注意：需要根据你的配置文件地址与保存的模型地址，对评估命令进行修改
 python3 tools/eval.py -c ./fapiao/re_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/re_vi_layoutxlm_fapiao_udml/best_accuracy
 ```
@@ -310,7 +310,7 @@ python3 tools/eval.py -c ./fapiao/re_vi_layoutxlm.yml -o Architecture.Backbone.c
 
 使用下面的命令进行预测。
 
-```bash
+```py
 # -c 后面的是RE任务的配置文件
 # -o 后面的字段是RE任务的配置
 # -c_ser 后面的是SER任务的配置文件
@@ -331,12 +331,12 @@ python3 tools/infer_kie_token_ser_re.py -c fapiao/re_vi_layoutxlm.yml -o Archite
 
 如果希望使用OCR引擎结果得到的结果进行推理，则可以使用下面的命令进行推理。
 
-```bash
+```py
 python3 tools/infer_kie_token_ser_re.py -c fapiao/re_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/re_vi_layoutxlm_fapiao_udml/best_accuracy Global.infer_img=./train_data/zzsfp/val.json Global.infer_mode=True -c_ser fapiao/ser_vi_layoutxlm.yml -o_ser Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy
 ```
 
 如果希望构建基于你在垂类场景训练得到的OCR检测与识别模型，可以使用下面的方法传入，即可完成SER + RE的串联过程。
 
-```bash
+```py
 python3 tools/infer_kie_token_ser_re.py -c fapiao/re_vi_layoutxlm.yml -o Architecture.Backbone.checkpoints=fapiao/models/re_vi_layoutxlm_fapiao_udml/best_accuracy Global.infer_img=./train_data/zzsfp/val.json Global.infer_mode=True -c_ser fapiao/ser_vi_layoutxlm.yml -o_ser Architecture.Backbone.checkpoints=fapiao/models/ser_vi_layoutxlm_fapiao_udml/best_accuracy Global.kie_rec_model_dir="your_rec_model" Global.kie_det_model_dir="your_det_model"
 ```

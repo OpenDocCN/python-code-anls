@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\constants.py`
 
-```
+```py
 # 定义一系列常量，用于设置和配置程序的各种参数和选项
 SETTING_FILENAME = 'filename'  # 文件名设置
 SETTING_RECENT_FILES = 'recentFiles'  # 最近打开的文件列表设置

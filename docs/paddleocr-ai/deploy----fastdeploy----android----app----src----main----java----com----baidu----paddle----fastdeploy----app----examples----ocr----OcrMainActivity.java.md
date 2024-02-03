@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\examples\ocr\OcrMainActivity.java`
 
-```
+```py
 package com.baidu.paddle.fastdeploy.app.examples.ocr;
 
 import static com.baidu.paddle.fastdeploy.app.ui.Utils.decodeBitmap;

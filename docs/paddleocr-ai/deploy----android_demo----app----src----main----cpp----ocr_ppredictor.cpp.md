@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_ppredictor.cpp`
 
-```
+```py
 // 包含头文件
 #include "ocr_ppredictor.h"
 #include "common.h"

@@ -32,13 +32,13 @@ aistudio项目链接: [高精度中文场景文本识别模型SVTR](https://aist
 
 下载 PaddleOCR代码
 
-```bash
+```py
 git clone -b dygraph https://github.com/PaddlePaddle/PaddleOCR
 ```
 
 安装依赖库
 
-```bash
+```py
 pip install -r PaddleOCR/requirements.txt -i https://mirror.baidu.com/pypi/simple
 ```
 
@@ -49,7 +49,7 @@ pip install -r PaddleOCR/requirements.txt -i https://mirror.baidu.com/pypi/simpl
 - PaddleX官方交流频道：https://aistudio.baidu.com/community/channel/610
 
 
-```bash
+```py
 # 解压模型文件
 tar xf svtr_ch_high_accuracy.tar
 ```
@@ -59,7 +59,7 @@ tar xf svtr_ch_high_accuracy.tar
 
 预测命令：
 
-```bash
+```py
 # CPU预测
 python tools/infer_rec.py -c configs/rec/rec_svtrnet_ch.yml -o Global.pretrained_model=./svtr_ch_high_accuracy/best_accuracy Global.infer_img=./doc/imgs_words/ch/word_1.jpg Global.use_gpu=False
 
@@ -78,12 +78,12 @@ inference 模型（paddle.jit.save保存的模型） 一般是模型训练，把
 
 运行识别模型转inference模型命令，如下：
 
-```bash
+```py
 python tools/export_model.py -c configs/rec/rec_svtrnet_ch.yml -o Global.pretrained_model=./svtr_ch_high_accuracy/best_accuracy Global.save_inference_dir=./inference/svtr_ch
 ```
 
 转换成功后，在目录下有三个文件：
-```shell
+```py
 inference/svtr_ch/
     ├── inference.pdiparams         # 识别inference模型的参数文件
     ├── inference.pdiparams.info    # 识别inference模型的参数信息，可忽略
@@ -92,7 +92,7 @@ inference/svtr_ch/
 
 inference模型预测，命令如下：
 
-```bash
+```py
 # CPU预测
 python3 tools/infer/predict_rec.py --image_dir="./doc/imgs_words/ch/word_1.jpg" --rec_algorithm='SVTR' --rec_model_dir=./inference/svtr_ch/ --rec_image_shape='3, 32, 320'  --rec_char_dict_path=ppocr/utils/ppocr_keys_v1.txt --use_gpu=False
 

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\table\table_metric\table_metric.py`
 
-```
+```py
 # 导入所需的库和模块
 from rapidfuzz.distance import Levenshtein
 from apted import APTED, Config

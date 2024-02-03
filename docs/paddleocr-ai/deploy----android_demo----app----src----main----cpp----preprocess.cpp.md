@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\preprocess.cpp`
 
-```
+```py
 // 将 Android Bitmap 转换为 OpenCV Mat 对象
 cv::Mat bitmap_to_cv_mat(JNIEnv *env, jobject bitmap) {
   // 定义 Android Bitmap 信息结构体

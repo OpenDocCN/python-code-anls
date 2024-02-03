@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\android\app\src\main\java\com\baidu\paddle\fastdeploy\app\ui\view\model\BaseResultModel.java`
 
-```
+```py
 // 定义一个名为 BaseResultModel 的类，用于存储结果数据
 package com.baidu.paddle.fastdeploy.app.ui.view.model;
 

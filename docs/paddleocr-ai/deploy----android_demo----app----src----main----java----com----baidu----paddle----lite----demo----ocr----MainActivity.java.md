@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\java\com\baidu\paddle\lite\demo\ocr\MainActivity.java`
 
-```
+```py
 # 导入必要的包
 package com.baidu.paddle.lite.demo.ocr;
 

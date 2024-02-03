@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\postprocess\locality_aware_nms.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 from shapely.geometry import Polygon

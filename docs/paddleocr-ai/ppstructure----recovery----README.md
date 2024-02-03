@@ -57,7 +57,7 @@ The following figures show the effect of restoring the layout of English and Chi
 
 ### 2.1 Install PaddlePaddle
 
-```bash
+```py
 python3 -m pip install --upgrade pip
 
 # If you have cuda9 or cuda10 installed on your machine, please run the following command to install
@@ -75,7 +75,7 @@ For more requirements, please refer to the instructions in [Installation Documen
 
 - **(1) Download source code**
 
-```bash
+```py
 [Recommended] git clone https://github.com/PaddlePaddle/PaddleOCR
 
 # If the pull cannot be successful due to network problems, you can also choose to use the hosting on the code cloud:
@@ -90,13 +90,13 @@ The layout restoration is exported as docx files, so python-docx API need to be 
 
 Install all the libraries by running the following command:
 
-```bash
+```py
 python3 -m pip install -r ppstructure/recovery/requirements.txt
 ````
 
  And if using pdf parse method, we need to install pdf2docx api.
 
-```bash
+```py
 wget https://paddleocr.bj.bcebos.com/whl/pdf2docx-0.0.0-py3-none-any.whl
 pip3 install pdf2docx-0.0.0-py3-none-any.whl
 ```
@@ -107,7 +107,7 @@ pip3 install pdf2docx-0.0.0-py3-none-any.whl
 
 `use_pdf2docx_api` use PDF parse for layout recovery, The whl package is also provided  for quick use, follow the above code, for more infomation please refer to [quickstart](../docs/quickstart_en.md) for details.
 
-```bash
+```py
 # install paddleocr
 pip3 install "paddleocr>=2.6"
 paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --recovery=true --use_pdf2docx_api=true
@@ -115,7 +115,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 
 Command line:
 
-```bash
+```py
 python3 predict_system.py \
     --image_dir=ppstructure/recovery/UnrealText.pdf \
     --recovery=True \
@@ -137,7 +137,7 @@ We can restore the test picture through the layout information, OCR detection an
 
 The whl package is also provided  for quick use, follow the above code, for more infomation please refer to [quickstart](../docs/quickstart_en.md) for details.
 
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --recovery=true --lang='en'
 ```
 
@@ -146,7 +146,7 @@ paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --recovery=t
 
 If input is English document, download English models:
 
-```bash
+```py
 cd PaddleOCR/ppstructure
 
 # download model
@@ -170,7 +170,7 @@ If input is Chinese document，download Chinese models:
 ### 4.2 Layout recovery
 
 
-```bash
+```py
 python3 predict_system.py \
     --image_dir=./docs/table/1.png \
     --det_model_dir=inference/en_PP-OCRv3_det_infer \

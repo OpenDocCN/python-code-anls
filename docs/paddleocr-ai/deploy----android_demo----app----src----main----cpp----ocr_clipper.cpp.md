@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_clipper.cpp`
 
-```
+```py
 /*******************************************************************************
 *                                                                              *
 * Author    :  Angus Johnson                                                   *

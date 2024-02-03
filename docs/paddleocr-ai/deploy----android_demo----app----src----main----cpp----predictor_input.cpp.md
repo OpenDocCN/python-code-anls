@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\predictor_input.cpp`
 
-```
+```py
 namespace ppredictor {
 
 void PredictorInput::set_dims(std::vector<int64_t> dims) {

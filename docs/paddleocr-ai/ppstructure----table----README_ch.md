@@ -62,7 +62,7 @@ PP-Structure目前提供了中英文两种语言的表格识别模型，模型�
 下面以中文表格识别模型为例，介绍如何识别一张表格。
 
 使用如下命令即可快速完成一张表格的识别。
-```python
+```py
 cd PaddleOCR/ppstructure
 
 # 下载模型
@@ -101,18 +101,18 @@ python table/predict_table.py \
 ### 4.3 计算TEDS
 
 表格使用 [TEDS(Tree-Edit-Distance-based Similarity)](https://github.com/ibm-aur-nlp/PubTabNet/tree/master/src) 作为模型的评估指标。在进行模型评估之前，需要将pipeline中的三个模型分别导出为inference模型(我们已经提供好)，还需要准备评估的gt， gt示例如下:
-```txt
+```py
 PMC5755158_010_01.png    <html><body><table><thead><tr><td></td><td><b>Weaning</b></td><td><b>Week 15</b></td><td><b>Off-test</b></td></tr></thead><tbody><tr><td>Weaning</td><td>–</td><td>–</td><td>–</td></tr><tr><td>Week 15</td><td>–</td><td>0.17 ± 0.08</td><td>0.16 ± 0.03</td></tr><tr><td>Off-test</td><td>–</td><td>0.80 ± 0.24</td><td>0.19 ± 0.09</td></tr></tbody></table></body></html>
 ```
 gt每一行都由文件名和表格的html字符串组成，文件名和表格的html字符串之间使用`\t`分隔。
 
 也可使用如下命令，由标注文件生成评估的gt文件：
-```python
+```py
 python3 ppstructure/table/convert_label2html.py --ori_gt_path /path/to/your_label_file --save_path /path/to/save_file
 ```
 
 准备完成后使用如下命令进行评估，评估完成后会输出teds指标。
-```python
+```py
 cd PaddleOCR/ppstructure
 python3 table/eval_table.py \
     --det_model_dir=path/to/det_model_dir \
@@ -128,7 +128,7 @@ python3 table/eval_table.py \
 
 如使用英文表格识别模型在PubLatNet数据集上进行评估
 
-```bash
+```py
 cd PaddleOCR/ppstructure
 # 下载模型
 mkdir inference && cd inference
@@ -154,7 +154,7 @@ python3 table/eval_table.py \
 ```
 
 将会输出
-```bash
+```py
 teds: 95.89
 ```
 

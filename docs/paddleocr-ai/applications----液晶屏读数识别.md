@@ -35,7 +35,7 @@ Aistudio项目链接：[OCR液晶屏读数识别](https://aistudio.baidu.com/ais
 
 ## 3. 安装环境
 
-```python
+```py
 # 首先git官方的PaddleOCR项目，安装需要的依赖
 # 第一次运行打开该注释
 # git clone https://gitee.com/PaddlePaddle/PaddleOCR.git
@@ -55,14 +55,14 @@ PP-OCRv3检测模型是对PP-OCRv2中的CML（Collaborative Mutual Learning) 协
 ### 4.2 数据准备
 [计量设备屏幕字符检测数据集](https://aistudio.baidu.com/aistudio/datasetdetail/127845)数据来源于实际项目中各种计量设备的数显屏，以及在网上搜集的一些其他数显屏，包含训练集755张，测试集355张。
 
-```python
+```py
 # 在PaddleOCR下创建新的文件夹train_data
 mkdir train_data
 # 下载数据集并解压到指定路径下
 unzip icdar2015.zip  -d train_data
 ```
 
-```python
+```py
 # 随机查看文字检测数据集图片
 from PIL import Image  
 import matplotlib.pyplot as plt
@@ -92,7 +92,7 @@ get_one_image(train)
 #### 4.3.1 预训练模型直接评估
 下载我们需要的PP-OCRv3检测预训练模型，更多选择请自行选择其他的[文字检测模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.5/doc/doc_ch/models_list.md#1-%E6%96%87%E6%9C%AC%E6%A3%80%E6%B5%8B%E6%A8%A1%E5%9E%8B)
 
-```python
+```py
 #使用该指令下载需要的预训练模型
 wget -P ./pretrained_models/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
 # 解压预训练模型文件
@@ -101,7 +101,7 @@ tar -xf ./pretrained_models/ch_PP-OCRv3_det_distill_train.tar -C pretrained_mode
 
 在训练之前，我们可以直接使用下面命令来评估预训练模型的效果:
 
-```python
+```py
 # 评估预训练模型
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.pretrained_model="./pretrained_models/ch_PP-OCRv3_det_distill_train/best_accuracy"
 ```
@@ -115,7 +115,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Globa
 #### 4.3.2 预训练模型直接finetune
 ##### 修改配置文件
 我们使用configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml，主要修改训练轮数和学习率参相关参数，设置预训练模型路径，设置数据集路径。 另外，batch_size可根据自己机器显存大小进行调整。 具体修改如下几个地方：
-```
+```py
 epoch:100
 save_epoch_step:10
 eval_batch_step:[0, 50]
@@ -128,14 +128,14 @@ num_workers: 0 # 如果单卡训练，建议将Train和Eval的loader部分的num
 ##### 开始训练
 使用我们上面修改的配置文件configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml，训练命令如下：
 
-```python
+```py
 # 开始训练模型
 python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.pretrained_model=./pretrained_models/ch_PP-OCRv3_det_distill_train/best_accuracy
 ```
 
 评估训练好的模型：
 
-```python
+```py
 # 评估训练好的模型
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_det/best_accuracy"
 ```
@@ -149,7 +149,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Globa
 #### 4.3.3 基于预训练模型Finetune_student模型
 
 我们使用configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml，主要修改训练轮数和学习率参相关参数，设置预训练模型路径，设置数据集路径。 另外，batch_size可根据自己机器显存大小进行调整。 具体修改如下几个地方：
-```
+```py
 epoch:100
 save_epoch_step:10
 eval_batch_step:[0, 50]
@@ -161,13 +161,13 @@ num_workers: 0 # 如果单卡训练，建议将Train和Eval的loader部分的num
 
 训练命令如下：
 
-```python
+```py
 python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o Global.pretrained_model=./pretrained_models/ch_PP-OCRv3_det_distill_train/student
 ```
 
 评估训练好的模型：
 
-```python
+```py
 # 评估训练好的模型
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_det_student/best_accuracy"
 ```
@@ -183,7 +183,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml -o G
 
 首先需要从提供的预训练模型best_accuracy.pdparams中提取teacher参数，组合成适合dml训练的初始化模型，提取代码如下：
 
-```python
+```py
 cd ./pretrained_models/
 # transform teacher params in best_accuracy.pdparams into teacher_dml.paramers
 import paddle
@@ -207,7 +207,7 @@ paddle.save(s_params, "ch_PP-OCRv3_det_distill_train/teacher_dml.pdparams")
 ```
 
 我们使用configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_dml.yml，主要修改训练轮数和学习率参相关参数，设置预训练模型路径，设置数据集路径。 另外，batch_size可根据自己机器显存大小进行调整。 具体修改如下几个地方：
-```
+```py
 epoch:100
 save_epoch_step:10
 eval_batch_step:[0, 50]
@@ -219,13 +219,13 @@ num_workers: 0 # 如果单卡训练，建议将Train和Eval的loader部分的num
 
 训练命令如下：
 
-```python
+```py
 python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_dml.yml -o Global.pretrained_model=./pretrained_models/ch_PP-OCRv3_det_distill_train/teacher_dml
 ```
 
 评估训练好的模型：
 
-```python
+```py
 # 评估训练好的模型
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_dml.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_det_teacher/best_accuracy"
 ```
@@ -242,7 +242,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_dml.yml -o Globa
 
 需要从4.3.3和4.3.4训练得到的best_accuracy.pdparams中提取各自代表student和teacher的参数，组合成适合cml训练的初始化模型，提取代码如下：
 
-```python
+```py
 # transform teacher params and student parameters into cml model
 import paddle
 
@@ -280,13 +280,13 @@ paddle.save(all_params, "./pretrained_models/ch_PP-OCRv3_det_distill_train/teach
 
 训练命令如下：
 
-```python
+```py
 python tools/train.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.pretrained_model=./pretrained_models/ch_PP-OCRv3_det_distill_train/teacher_cml_student Global.save_model_dir=./output/ch_PP-OCR_v3_det_finetune/
 ```
 
 评估训练好的模型：
 
-```python
+```py
 # 评估训练好的模型
 python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_det_finetune/best_accuracy"
 ```
@@ -311,7 +311,7 @@ python tools/eval.py -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml -o Globa
 #####  4.3.6.1 模型导出
 导出命令如下：
 
-```python
+```py
 # 转化为推理模型
 python tools/export_model.py \
 -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml \
@@ -323,7 +323,7 @@ python tools/export_model.py \
 #####  4.3.6.2 模型推理
 导出模型后，可以使用如下命令进行推理预测：
 
-```python
+```py
 # 推理预测
 python tools/infer/predict_det.py --image_dir="train_data/icdar2015/text_localization/test/1.jpg" --det_model_dir="./inference/det_ppocrv3/Student"
 ```
@@ -348,12 +348,12 @@ PP-OCRv3的识别模块是基于文本识别算法[SVTR](https://arxiv.org/abs/2
 ### 5.2 数据准备
 [计量设备屏幕字符识别数据集](https://aistudio.baidu.com/aistudio/datasetdetail/128714)数据来源于实际项目中各种计量设备的数显屏，以及在网上搜集的一些其他数显屏，包含训练集19912张，测试集4099张。
 
-```python
+```py
 # 解压下载的数据集到指定路径下
 unzip ic15_data.zip -d train_data
 ```
 
-```python
+```py
 # 随机查看文字检测数据集图片
 from PIL import Image  
 import matplotlib.pyplot as plt
@@ -382,7 +382,7 @@ get_one_image(train)
 ####  下载预训练模型
 下载我们需要的PP-OCRv3识别预训练模型，更多选择请自行选择其他的[文字识别模型](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.5/doc/doc_ch/models_list.md#2-%E6%96%87%E6%9C%AC%E8%AF%86%E5%88%AB%E6%A8%A1%E5%9E%8B)
 
-```python
+```py
 # 使用该指令下载需要的预训练模型
 wget -P ./pretrained_models/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
 # 解压预训练模型文件
@@ -391,7 +391,7 @@ tar -xf ./pretrained_models/ch_PP-OCRv3_rec_train.tar -C pretrained_models
 
 ####  修改配置文件
 我们使用configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml，主要修改训练轮数和学习率参相关参数，设置预训练模型路径，设置数据集路径。 另外，batch_size可根据自己机器显存大小进行调整。 具体修改如下几个地方：
-```
+```py
   epoch_num: 100 # 训练epoch数
   save_model_dir: ./output/ch_PP-OCR_v3_rec
   save_epoch_step: 10
@@ -437,7 +437,7 @@ Eval:
 
 在训练之前，我们可以直接使用下面命令来评估预训练模型的效果:
 
-```python
+```py
 # 评估预训练模型
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model="./pretrained_models/ch_PP-OCRv3_rec_train/best_accuracy"
 ```
@@ -450,14 +450,14 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o
 ####  开始训练
 我们使用上面修改好的配置文件configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml，预训练模型，数据集路径，学习率，训练轮数等都已经设置完毕后，可以使用下面命令开始训练。
 
-```python
+```py
 # 开始训练识别模型
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml
 ```
 
 训练完成后，可以对训练模型中最好的进行测试，评估命令如下：
 
-```python
+```py
 # 评估finetune效果
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.checkpoints="./output/ch_PP-OCR_v3_rec/best_accuracy"
 ```
@@ -479,7 +479,7 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o
 ####  模型导出
 导出命令如下：
 
-```python
+```py
 # 转化为推理模型
 python tools/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model="./output/ch_PP-OCR_v3_rec/best_accuracy" Global.save_inference_dir="./inference/rec_ppocrv3/"
 ```
@@ -487,7 +487,7 @@ python tools/export_model.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillatio
 #### 模型推理
 导出模型后，可以使用如下命令进行推理预测
 
-```python
+```py
 # 推理预测
 python tools/infer/predict_rec.py --image_dir="train_data/ic15_data/test/1_crop_0.jpg" --rec_model_dir="./inference/rec_ppocrv3/Student"
 ```
@@ -495,14 +495,14 @@ python tools/infer/predict_rec.py --image_dir="train_data/ic15_data/test/1_crop_
 ## 6. 系统串联
 我们将上面训练好的检测和识别模型进行系统串联测试，命令如下：
 
-```python
+```py
 #串联测试
 python3 tools/infer/predict_system.py --image_dir="./train_data/icdar2015/text_localization/test/142.jpg" --det_model_dir="./inference/det_ppocrv3/Student"  --rec_model_dir="./inference/rec_ppocrv3/Student"
 ```
 
 测试结果保存在`./inference_results/`目录下，可以用下面代码进行可视化
 
-```python
+```py
 %cd /home/aistudio/PaddleOCR
 # 显示结果
 import matplotlib.pyplot as plt
@@ -519,7 +519,7 @@ plt.show()
 ### 6.1 后处理
 如果需要获取key-value信息，可以基于启发式的规则，将识别结果与关键字库进行匹配；如果匹配上了，则取该字段为key, 后面一个字段为value。
 
-```python
+```py
 def postprocess(rec_res):
     keys = ["型号", "厂家", "版本号", "检定校准分类", "计量器具编号", "烟尘流量",
             "累积体积", "烟气温度", "动压", "静压", "时间", "试验台编号", "预测流速",
@@ -540,7 +540,7 @@ key_value = postprocess(filter_rec_res)
 ## 7. PaddleServing部署
 首先需要安装PaddleServing部署相关的环境
 
-```python
+```py
 python -m pip install paddle-serving-server-gpu
 python -m pip install paddle_serving_client
 python -m pip install paddle-serving-app
@@ -548,7 +548,7 @@ python -m pip install paddle-serving-app
 
 ###  7.1 转化检测模型
 
-```python
+```py
 cd deploy/pdserving/
 python -m paddle_serving_client.convert --dirname ../../inference/det_ppocrv3/Student/  \
                                          --model_filename inference.pdmodel          \
@@ -559,7 +559,7 @@ python -m paddle_serving_client.convert --dirname ../../inference/det_ppocrv3/St
 
 ### 7.2 转化识别模型
 
-```python
+```py
 python -m paddle_serving_client.convert --dirname ../../inference/rec_ppocrv3/Student \
                                          --model_filename inference.pdmodel          \
                                          --params_filename inference.pdiparams       \
@@ -570,7 +570,7 @@ python -m paddle_serving_client.convert --dirname ../../inference/rec_ppocrv3/St
 
 ### 7.3 启动服务
 首先可以将后处理代码加入到web_service.py中，具体修改如下：
-```
+```py
 # 代码153行后面增加下面代码
 def _postprocess(rec_res):
     keys = ["型号", "厂家", "版本号", "检定校准分类", "计量器具编号", "烟尘流量",
@@ -592,19 +592,19 @@ res = {"result": str(key_value)}
 ```
 
 启动服务端
-```python
+```py
 python web_service.py 2>&1 >log.txt
 ```
 
 ### 7.4 发送请求
 然后再开启一个新的终端，运行下面的客户端代码
 
-```python
+```py
 python pipeline_http_client.py --image_dir ../../train_data/icdar2015/text_localization/test/142.jpg
 ```
 
 可以获取到最终的key-value结果：
-```
+```py
 大气压, 100.07kPa
 干球温度, 0000℃
 计前温度, 0000℃

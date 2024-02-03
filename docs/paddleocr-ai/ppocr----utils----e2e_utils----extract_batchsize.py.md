@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\e2e_utils\extract_batchsize.py`
 
-```
+```py
 import paddle
 import numpy as np
 import copy

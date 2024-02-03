@@ -7,19 +7,19 @@ Web 端主要基于 Jest-Puppeteer 完成 e2e 测试，其中 Puppeteer 操作 C
 
 * 安装 Node（包含 npm ） （https://nodejs.org/zh-cn/download/）
 * 确认是否安装成功，在命令行执行
-```sh
+```py
 # 显示所安 node 版本号，即表示成功安装
 node -v
 ```
 * 确认 npm 是否安装成成
-```sh
+```py
 # npm 随着 node 一起安装，一般无需额外安装
 # 显示所安 npm 版本号，即表示成功安装
 npm -v
 ```
 
 #### 使用
-```sh
+```py
 # web 测试环境准备
 bash test_tipc/prepare_js.sh 'js_infer'
 # web 推理测试

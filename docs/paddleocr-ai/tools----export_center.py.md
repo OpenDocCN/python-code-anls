@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\export_center.py`
 
-```
+```py
 # 版权声明和许可信息
 # 导入必要的库
 from __future__ import absolute_import

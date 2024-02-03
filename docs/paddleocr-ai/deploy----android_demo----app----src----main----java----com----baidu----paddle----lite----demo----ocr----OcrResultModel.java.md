@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\java\com\baidu\paddle\lite\demo\ocr\OcrResultModel.java`
 
-```
+```py
 // 定义一个名为 OcrResultModel 的类，用于存储 OCR 结果
 package com.baidu.paddle.lite.demo.ocr;
 

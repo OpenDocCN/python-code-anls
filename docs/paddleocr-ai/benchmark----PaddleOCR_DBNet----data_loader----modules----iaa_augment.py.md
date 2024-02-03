@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\data_loader\modules\iaa_augment.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/12/4 18:06
 # @Author  : zhoujun

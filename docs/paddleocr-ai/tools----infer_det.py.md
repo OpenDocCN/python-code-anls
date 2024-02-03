@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer_det.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 import os

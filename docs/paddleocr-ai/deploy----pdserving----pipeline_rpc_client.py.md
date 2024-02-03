@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\pipeline_rpc_client.py`
 
-```
+```py
 # 导入所需的库和模块
 try:
     from paddle_serving_server_gpu.pipeline import PipelineClient

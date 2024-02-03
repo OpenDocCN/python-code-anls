@@ -1,6 +1,6 @@
 # `.\PaddleOCR\test_tipc\supplementary\slim\slim_quant.py`
 
-```
+```py
 # 导入 paddle 模块
 import paddle
 # 导入 numpy 模块，并重命名为 np

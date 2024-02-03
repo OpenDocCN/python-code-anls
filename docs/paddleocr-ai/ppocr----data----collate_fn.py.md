@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\data\collate_fn.py`
 
-```
+```py
 # 导入 paddle 模块
 import paddle
 # 导入 numbers 模块

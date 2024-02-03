@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\rec_ce_loss.py`
 
-```
+```py
 # 导入 paddle 模块
 import paddle
 # 从 paddle 模块中导入 nn 模块

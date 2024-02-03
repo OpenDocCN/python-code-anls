@@ -8,7 +8,7 @@
 ## 2. 生成基本目录文件
 
 该例程由以下几个部分组成
-```text
+```py
 .
 ├── CMakeLists.txt
 ├── fastdeploy-sophgo  # 编译好的SDK文件夹
@@ -20,7 +20,7 @@
 ## 3.部署示例
 
 ### 3.1 下载部署示例代码
-```bash
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/sophgo/cpp
@@ -36,7 +36,7 @@ cd PaddleOCR/deploy/fastdeploy/sophgo/cpp
 将Paddle模型转换为SOPHGO bmodel模型，转换步骤参考[文档](../README.md). 将转换后的SOPHGO bmodel模型文件拷贝至model中.
 
 ### 3.3 准备测试图片至image文件夹，以及字典文件
-```bash
+```py
 wget https://gitee.com/paddlepaddle/PaddleOCR/raw/release/2.6/doc/imgs/12.jpg
 cp 12.jpg image/
 
@@ -45,7 +45,7 @@ wget https://gitee.com/paddlepaddle/PaddleOCR/raw/release/2.6/ppocr/utils/ppocr_
 
 ### 3.4 编译example
 
-```bash
+```py
 cd build
 cmake .. -DFASTDEPLOY_INSTALL_DIR=${PWD}/fastdeploy-0.0.3
 make
@@ -53,7 +53,7 @@ make
 
 ### 3.5 运行例程
 
-```bash
+```py
 ./infer_demo model ./ppocr_keys_v1.txt image/12.jpeg
 ```
 

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\java\com\baidu\paddle\lite\demo\ocr\AppCompatPreferenceActivity.java`
 
-```
+```py
 /*
  * 版权所有 (C) 2014 The Android Open Source Project
  *

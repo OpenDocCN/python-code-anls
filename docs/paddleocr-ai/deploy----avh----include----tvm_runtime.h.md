@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\avh\include\tvm_runtime.h`
 
-```
+```py
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file

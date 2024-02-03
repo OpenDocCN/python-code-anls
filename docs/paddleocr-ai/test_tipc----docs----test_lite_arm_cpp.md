@@ -28,7 +28,7 @@ Lite\_arm\_cpp预测功能测试的主程序为`test_lite_arm_cpp.sh`，可以�
 
 #### 2.1.1 基于ARM\_CPU测试
 
-```shell
+```py
 
 # 数据、模型、Paddle-Lite预测库准备
 #预测库为下载方式
@@ -43,7 +43,7 @@ bash test_lite_arm_cpp.sh model_linux_gpu_normal_normal_lite_cpp_arm_cpu.txt
 
 #### 2.1.2 基于ARM\_GPU\_OPENCL测试
 
-```shell
+```py
 
 # 数据、模型、Paddle-Lite预测库准备
 #预测库下载方式
@@ -66,7 +66,7 @@ bash test_lite_arm_cpp.sh model_linux_gpu_normal_normal_lite_cpp_arm_gpu_opencl.
 各测试的运行情况会打印在 `./output/` 中：
 运行成功时会输出：
 
-```
+```py
 Run successfully with command - ./ocr_db_crnn det ch_PP-OCRv2_det_infer_opt.nb ARM_CPU FP32 1 1  ./test_data/icdar2015_lite/text_localization/ch4_test_images/ ./config.txt True > ./output/lite_ch_PP-OCRv2_det_infer_opt.nb_runtime_device_ARM_CPU_precision_FP32_batchsize_1_threads_1.log 2>&1!
 Run successfully with command xxx
 ...
@@ -74,7 +74,7 @@ Run successfully with command xxx
 
 运行失败时会输出：
 
-```
+```py
 Run failed with command - ./ocr_db_crnn det ch_PP-OCRv2_det_infer_opt.nb ARM_CPU FP32 1 1  ./test_data/icdar2015_lite/text_localization/ch4_test_images/ ./config.txt True > ./output/lite_ch_PP-OCRv2_det_infer_opt.nb_runtime_device_ARM_CPU_precision_FP32_batchsize_1_threads_1.log 2>&1!
 Run failed with command xxx
 ...

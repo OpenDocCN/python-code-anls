@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\win\ocr_web_client.py`
 
-```
+```py
 # 导入需要的库
 import requests
 import json

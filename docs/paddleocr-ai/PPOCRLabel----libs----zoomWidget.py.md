@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\zoomWidget.py`
 
-```
+```py
 # 版权声明，允许在特定条件下使用和分发软件
 # 导入 PyQt5 库中的模块
 try:

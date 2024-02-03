@@ -39,7 +39,7 @@ PPOCRLabelv2 is a semi-automatic graphic annotation tool suitable for OCR field,
 
 ### 1.1 Install PaddlePaddle
 
-```bash
+```py
 pip3 install --upgrade pip
 
 # If you have cuda9 or cuda10 installed on your machine, please run the following command to install
@@ -57,7 +57,7 @@ PPOCRLabel can be started in two ways: whl package and Python script. The whl pa
 
 #### Windows
 
-```bash
+```py
 pip install PPOCRLabel  # install
 
 # Select label mode and run
@@ -72,7 +72,7 @@ PPOCRLabel --kie True # [KIE mode] for [detection + recognition + keyword extrac
 
 #### Ubuntu Linux
 
-```bash
+```py
 pip3 install PPOCRLabel
 pip3 install trash-cli
 
@@ -82,7 +82,7 @@ PPOCRLabel --kie True # [KIE mode] for [detection + recognition + keyword extrac
 ```
 
 #### MacOS
-```bash
+```py
 pip3 install PPOCRLabel
 pip3 install opencv-contrib-python-headless==4.2.0.32
 
@@ -94,7 +94,7 @@ PPOCRLabel --kie True # [KIE mode] for [detection + recognition + keyword extrac
 #### 1.2.2 Run PPOCRLabel by Python Script
 If you modify the PPOCRLabel file (for example, specifying a new built-in model), it will be more convenient to see the results by running the Python script. If you still want to start with the whl package, you need to uninstall the whl package in the current environment and then recompile it according to the next section.
 
-```bash
+```py
 cd ./PPOCRLabel  # Switch to the PPOCRLabel directory
 
 # Select label mode and run
@@ -104,7 +104,7 @@ python PPOCRLabel.py --kie True # [KIE mode] for [detection + recognition + keyw
 
 #### 1.2.3 Build and Install the Whl Package Locally
 Compile and install a new whl package, where 0.0.0 is the version number, you can specify the new version in 'setup.py'.
-```bash
+```py
 cd ./PPOCRLabel
 python3 setup.py bdist_wheel
 pip3 install dist/PPOCRLabel-0.0.0-py2.py3-none-any.whl
@@ -231,7 +231,7 @@ PPOCRLabel supports three ways to export Label.txt
 
 - Enter the following command in the terminal to execute the dataset division script:
 
-    ```
+    ```py
   cd ./PPOCRLabel # Change the directory to the PPOCRLabel folder
   python gen_ocr_train_val_test.py --trainValTestRatio 6:2:2 --datasetRootPath ../train_data
   ```
@@ -241,7 +241,7 @@ PPOCRLabel supports three ways to export Label.txt
   - `trainValTestRatio` is the division ratio of the number of images in the training set, validation set, and test set, set according to your actual situation, the default is `6:2:2`
 
   - `datasetRootPath` is the storage path of the complete dataset labeled by PPOCRLabel. The default path is `PaddleOCR/train_data` .
-  ```
+  ```py
   |-train_data
     |-crop_img
       |- word_001_crop_0.png
@@ -262,15 +262,15 @@ PPOCRLabel supports three ways to export Label.txt
 
 - For Linux users, if you get an error starting with **objc[XXXXX]** when opening the software, it proves that your opencv version is too high. It is recommended to install version 4.2:
 
-    ```
+    ```py
     pip install opencv-python==4.2.0.32
     ```
 - If you get an error starting with **Missing string id **,you need to recompile resources:
-    ```
+    ```py
     pyrcc5 -o libs/resources.py resources.qrc
     ```
 - If you get an error ``` module 'cv2' has no attribute 'INTER_NEAREST'```, you need to delete all opencv related packages first, and then reinstall the 4.2.0.32  version of headless opencv
-    ```
+    ```py
     pip install opencv-contrib-python-headless==4.2.0.32
     ```
 

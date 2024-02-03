@@ -52,7 +52,7 @@ AIStudio项目链接： [一种基于PaddleOCR的包装生产日期识别方法]
 - text_renderer: master
 
 下载PaddlleOCR代码并安装依赖库:
-```bash
+```py
 git clone -b dygraph https://gitee.com/paddlepaddle/PaddleOCR
 
 # 安装依赖库
@@ -70,7 +70,7 @@ pip install -r PaddleOCR/requirements.txt
 
 
 标签文件格式如下：
-```txt
+```py
 数据路径 标签（中间以制表符分隔）
 ```
 
@@ -80,14 +80,14 @@ pip install -r PaddleOCR/requirements.txt
 
 数据集[下载链接](https://aistudio.baidu.com/aistudio/datasetdetail/149770)，下载后可以通过下方命令解压:
 
-```bash
+```py
 tar -xvf data.tar
 mv data ${PaddleOCR_root}
 ```
 
 数据解压后的文件结构如下：
 
-```shell
+```py
 PaddleOCR
 ├── data
 │   ├── mining_images            # 挖掘的真实数据示例
@@ -108,7 +108,7 @@ PaddleOCR
 
 首先需要下载PP-OCR v3中英文识别模型文件，下载链接可以在https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.5/doc/doc_ch/ppocr_introduction.md#6 获取，下载命令:
 
-```bash
+```py
 cd ${PaddleOCR_root}
 mkdir ckpt
 wget -nc -P ckpt https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
@@ -121,7 +121,7 @@ popd
 
 使用以下命令进行PP-OCRv3评估:
 
-```bash
+```py
 python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
                          -o Global.checkpoints=ckpt/ch_PP-OCRv3_rec_train/best_accuracy \
                          Eval.dataset.data_dir=./data \
@@ -131,7 +131,7 @@ python tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
 
 其中各参数含义如下：
 
-```bash
+```py
 -c: 指定使用的配置文件，ch_PP-OCRv3_rec_distillation.yml对应于OCRv3识别模型。
 -o: 覆盖配置文件中参数
 Global.checkpoints: 指定评估使用的模型文件路径
@@ -147,7 +147,7 @@ Eval.dataset.label_file_list: 指定评估数据集文件列表
 
 首先从github或gitee下载Text Renderer代码，并安装相关依赖。
 
-```bash
+```py
 git clone https://gitee.com/wowowoll/text_renderer.git
 
 # 安装依赖库
@@ -169,7 +169,7 @@ pip install -r requirements.txt
 
 背景图像存放于如下位置：
 
-```shell
+```py
 PaddleOCR
 ├── data
 ｜   ├── bg     # 合成数据所需背景图像
@@ -183,7 +183,7 @@ PaddleOCR
 
 基于以上两点，我们编写语料生成脚本：
 
-```python
+```py
 import random
 from random import choice
 import os
@@ -263,7 +263,7 @@ if __name__ == "__main__":
 
 本项目已准备了部分语料，在第3部分完成数据准备后,可以得到我们准备好的语料库，默认位置如下：
 
-```shell
+```py
 PaddleOCR
 ├── data
 │   └── corpus              #合成数据所需语料
@@ -276,7 +276,7 @@ https://www.fonts.net.cn/fonts-en/tag-dianzhen-1.html
 
 本项目已准备了部分字体，在第3部分完成数据准备后,可以得到我们准备好的字体，默认位置如下：
 
-```shell
+```py
 PaddleOCR
 ├── data
 │   └── fonts                #合成数据所需字体
@@ -284,7 +284,7 @@ PaddleOCR
 
 下载好字体后，还需要在list文件中指定字体文件存放路径，脚本如下:
 
-```bash
+```py
 cd text_renderer/my_data/
 touch fonts.list
 ls /home/aistudio/PaddleOCR/data/fonts/* > fonts.list
@@ -294,7 +294,7 @@ ls /home/aistudio/PaddleOCR/data/fonts/* > fonts.list
 
 完成数据准备后，my_data文件结构如下：
 
-```shell
+```py
 my_data/
 ├── cropus
 │   └── books.txt #语料库
@@ -305,7 +305,7 @@ my_data/
 在运行合成数据命令之前，还有两处细节需要手动修改：
 1. 将默认配置文件`text_renderer/configs/default.yaml`中第9行enable的值设为`true`，即允许合成彩色图像。否则合成的都是灰度图。
 
-```yaml
+```py
  # color boundary is in R,G,B format
  font_color:
 +  enable: true #false
@@ -313,14 +313,14 @@ my_data/
 
 2. 将`text_renderer/textrenderer/renderer.py`第184行作如下修改，取消padding。否则图片两端会有一些空白。
 
-```python
+```py
 padding = random.randint(s_bbox_width // 10, s_bbox_width // 8) #修改前
 padding = 0 #修改后
 ```
 
 运行数据合成命令:
 
-```bash
+```py
 cd /home/aistudio/text_renderer/
 python main.py --num_img=3000 \
                   --fonts_list='./my_data/fonts.list' \
@@ -337,13 +337,13 @@ python main.py --num_img=3000 \
 ![](https://ai-studio-static-online.cdn.bcebos.com/d686a48d465a43d09fbee51924fdca42ee21c50e676646da8559fb9967b94185)
 
 数据合成好后，还需要生成如下格式的训练所需的标注文件，
-```
+```py
 图像路径 标签
 ```
 
 使用如下脚本即可生成标注文件：
 
-```python
+```py
 import random
 
 abspath = '/home/aistudio/text_renderer/output/default/'
@@ -366,7 +366,7 @@ with open('./output/default/tmp_labels.txt','r') as f:
 
 本项目提供了生成好的数据供大家体验,完成步骤3的数据准备后，可得数据路径位于:
 
-```shell
+```py
 PaddleOCR
 ├── data
 │   ├── render_images     # 合成数据示例
@@ -376,7 +376,7 @@ PaddleOCR
 ###  5.2 模型训练
 
 准备好合成数据后，我们可以使用以下命令，利用合成数据进行finetune:
-```bash
+```py
 cd ${PaddleOCR_root}
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
                        -o Global.pretrained_model=./ckpt/ch_PP-OCRv3_rec_train/best_accuracy \
@@ -393,7 +393,7 @@ python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
 
 其中各参数含义如下：
 
-```txt
+```py
 -c: 指定使用的配置文件，ch_PP-OCRv3_rec_distillation.yml对应于OCRv3识别模型。
 -o: 覆盖配置文件中参数
 Global.pretrained_model: 指定finetune使用的预训练模型
@@ -422,7 +422,7 @@ Eval.loader.batch_size_per_card: 评估单卡batch size
 
 图片获取后，可按如下目录格式组织：
 
-```txt
+```py
 sprider
 ├── file.list
 ├── data
@@ -448,13 +448,13 @@ sprider
 
 完成下载后，可将模型存储于如下位置:
 
-```shell
+```py
 PaddleOCR
 ├── data
 │   ├── rec_vit_sub_64_363_all/  # svtr_tiny高精度识别模型
 ```
 
-```bash
+```py
 # 下载解压PP-OCRv3检测模型
 cd ${PaddleOCR_root}
 wget -nc -P ckpt https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
@@ -466,19 +466,19 @@ popd ckpt
 在使用PPOCRv3检测模型+svtr-tiny识别模型进行预测之前，有如下两处细节需要手动修改：
 1. 将`tools/infer/predict_rec.py`中第110行`imgW`修改为`320`
 
-```python
+```py
 #imgW = int((imgH * max_wh_ratio))
 imgW = 320
 ```
 
 2. 将`tools/infer/predict_system.py`第169行添加如下一行，将预测分数也写入结果文件中。
 
-```python
+```py
 "scores": rec_res[idx][1],
 ```
 
 模型预测命令:
-```bash
+```py
 python tools/infer/predict_system.py \
         --image_dir="/home/aistudio/sprider/data" \
         --det_model_dir="./ckpt/ch_PP-OCRv3_det_infer/"  \
@@ -491,7 +491,7 @@ python tools/infer/predict_system.py \
 2. 识别结果包含字符‘20’，即年份
 3. 没有中文，或者有中文并且‘日’和'月'同时在识别结果中
 
-```python
+```py
 # 获取有效预测
 
 import json
@@ -533,7 +533,7 @@ f_out.close()
 
 然后将有效预测对应的图像区域和标签提取出来，构建训练集。具体实现脚本如下：
 
-```python
+```py
 import cv2
 import json
 import numpy as np
@@ -613,7 +613,7 @@ f_label.close()
 
 利用真实数据进行finetune:
 
-```bash
+```py
 cd ${PaddleOCR_root}
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
                        -o Global.pretrained_model=./ckpt/ch_PP-OCRv3_rec_train/best_accuracy \
@@ -629,7 +629,7 @@ python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
 
 各参数含义参考第6部分合成数据finetune，只需要对训练数据路径做相应的修改：
 
-```txt
+```py
 Train.dataset.data_dir: 训练数据集路径
 Train.dataset.label_file_list: 训练集文件列表
 ```
@@ -647,19 +647,19 @@ Train.dataset.label_file_list: 训练集文件列表
 
 利用合成+真实数据进行finetune，各参数含义参考第6部分合成数据finetune，只需要对训练数据路径做相应的修改：
 
-```txt
+```py
 Train.dataset.data_dir: 训练数据集路径
 Train.dataset.label_file_list: 训练集文件列表
 ```
 
 生成训练list文件:
-```bash
+```py
 # 生成训练集文件list
 cat /home/aistudio/PaddleOCR/data/render_train.list /home/aistudio/PaddleOCR/data/mining_train.list > /home/aistudio/PaddleOCR/data/render_mining_train.list
 ```
 
 启动训练:
-```bash
+```py
 cd ${PaddleOCR_root}
 python tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
                        -o Global.pretrained_model=./ckpt/ch_PP-OCRv3_rec_train/best_accuracy \

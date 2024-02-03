@@ -30,7 +30,7 @@ PaddleOCR支持利用FastDeploy在NVIDIA GPU、X86 CPU、飞腾CPU、ARM CPU、I
 本文档编译的示例代码的编译工具依赖VS 2019，**Windows打开x64 Native Tools Command Prompt for VS 2019命令工具**，通过如下命令开始编译
 
 
-```shell
+```py
 ## 下载FastDeploy预编译库，用户可在上文提到的`FastDeploy预编译库`中自行选择合适的版本使用
 https://bj.bcebos.com/fastdeploy/release/cpp/fastdeploy-linux-x64-x.x.x.tgz
 
@@ -58,14 +58,14 @@ msbuild infer_demo.sln /m:4 /p:Configuration=Release /p:Platform=x64
 ### 4.4 运行可执行程序
 
 注意Windows上运行时，需要将FastDeploy依赖的库拷贝至可执行程序所在目录, 或者配置环境变量。FastDeploy提供了工具帮助我们快速将所有依赖库拷贝至可执行程序所在目录,通过如下命令将所有依赖的dll文件拷贝至可执行程序所在的目录(可能生成的可执行文件在Release下还有一层目录，这里假设生成的可执行文件在Release处)
-```shell
+```py
 cd D:\fastdeploy-win-x64-gpu-x.x.x
 
 fastdeploy_init.bat install %cd% D:\PaddleOCR\deploy\fastdeploy\cpu-gpu\csharp\build\Release
 ```
 
 将dll拷贝到当前路径后，准备好模型和图片，使用如下命令运行可执行程序即可
-```shell
+```py
 cd Release
 # CPU推理
 infer_demo ./ch_PP-OCRv3_det_infer ./ch_ppocr_mobile_v3.0_cls_infer ./ch_PP-OCRv3_rec_infer ./ppocr_keys_v1.txt ./12.jpg 0
@@ -87,7 +87,7 @@ fastdeploy.vision.ocr.DBDetector(
         string params_file,
         fastdeploy.RuntimeOption runtime_option = null,
         fastdeploy.ModelFormat model_format = ModelFormat.PADDLE)
-```
+```py
 
 > DBDetector模型加载和初始化。
 
@@ -104,7 +104,7 @@ fastdeploy.vision.ocr.Classifier(
         string params_file,
         fastdeploy.RuntimeOption runtime_option = null,
         fastdeploy.ModelFormat model_format = ModelFormat.PADDLE)
-```
+```py
 
 > Classifier模型加载和初始化。
 
@@ -122,7 +122,7 @@ fastdeploy.vision.ocr.Recognizer(
         string label_path,
         fastdeploy.RuntimeOption runtime_option = null,
         fastdeploy.ModelFormat model_format = ModelFormat.PADDLE)
-```
+```py
 
 > Recognizer模型加载和初始化。
 
@@ -139,7 +139,7 @@ fastdeploy.pipeline.PPOCRv3Model(
         DBDetector dbdetector,
         Classifier classifier,
         Recognizer recognizer)
-```
+```py
 
 > PP-OCRv3Model模型加载和初始化。
 

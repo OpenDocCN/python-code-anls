@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\serving\fastdeploy_serving\models\det_postprocess\1\model.py`
 
-```
+```py
 # 导入所需的库
 import json
 import numpy as np

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\win\ocr_web_server.py`
 
-```
+```py
 # 导入所需的库和模块
 from paddle_serving_client import Client
 import cv2

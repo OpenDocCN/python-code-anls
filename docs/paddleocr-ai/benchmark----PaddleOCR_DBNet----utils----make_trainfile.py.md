@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\make_trainfile.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/8/24 12:06
 # @Author  : zhoujun

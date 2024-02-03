@@ -83,7 +83,7 @@ However, there are also some challenges in some document scenarios, such as rare
 
 In the process of model finetuning, it is recommended to prepare at least `5000` vertical scene text recognition images to ensure the basic model fine-tuning effect. If you want to improve the accuracy and generalization ability of the model, you can synthesize more text recognition images similar to the scene, collect general real text recognition data from the public data set, and add them to the text recognition training process. In the training process, it is suggested that the ratio of real data, synthetic data and general data of each epoch should be around `1:1:1`, which can be controlled by setting the sampling ratio of different data sources. If there are 3 training text files, including 10k, 20k and 50k pieces of data respectively, the data can be set in the configuration file as follows:
 
-```yml
+```py
 Train:
   dataset:
     name: SimpleDataSet

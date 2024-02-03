@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\data\imaug\vqa\token\vqa_token_pad.py`
 
-```
+```py
 # 版权声明
 #
 # 版权所有 (c) 2021 PaddlePaddle 作者。保留所有权利。

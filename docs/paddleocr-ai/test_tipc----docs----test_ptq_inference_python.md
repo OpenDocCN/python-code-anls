@@ -21,7 +21,7 @@ Linux GPU/CPU KL离线量化训练推理测试的主程序为`test_ptq_inference
 
 先运行`prepare.sh`准备数据和模型，然后运行`test_ptq_inference_python.sh`进行测试，最终在```test_tipc/output/{model_name}/whole_infer```目录下生成`python_infer_*.log`后缀的日志文件。
 
-```shell
+```py
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_ptq_infer_python.txt "whole_infer"
 
 # 用法:
@@ -33,7 +33,7 @@ bash test_tipc/test_ptq_inference_python.sh ./test_tipc/configs/ch_PP-OCRv2_det/
 各测试的运行情况会打印在 `test_tipc/output/{model_name}/paddle2onnx/results_paddle2onnx.log` 中：
 运行成功时会输出：
 
-```
+```py
 Run successfully with command - ch_PP-OCRv2_det_KL - python3.7 deploy/slim/quantization/quant_kl.py -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_cml.yml -o Global.pretrained_model=./inference/ch_PP-OCRv2_det_infer/ Global.save_inference_dir=./inference/ch_PP-OCRv2_det_infer/_klquant > ./test_tipc/output/ch_PP-OCRv2_det_KL/whole_infer/whole_infer_export_0.log 2>&1 !
 Run successfully with command - ch_PP-OCRv2_det_KL - python3.7 tools/infer/predict_det.py --use_gpu=False --enable_mkldnn=False --cpu_threads=6 --det_model_dir=./inference/ch_PP-OCRv2_det_infer/_klquant --rec_batch_num=1   --image_dir=./inference/ch_det_data_50/all-sum-510/   --precision=int8   > ./test_tipc/output/ch_PP-OCRv2_det_KL/whole_infer/python_infer_cpu_usemkldnn_False_threads_6_precision_int8_batchsize_1.log 2>&1 !
 Run successfully with command - ch_PP-OCRv2_det_KL - python3.7 tools/infer/predict_det.py --use_gpu=True --use_tensorrt=False --precision=int8 --det_model_dir=./inference/ch_PP-OCRv2_det_infer/_klquant --rec_batch_num=1 --image_dir=./inference/ch_det_data_50/all-sum-510/       > ./test_tipc/output/ch_PP-OCRv2_det_KL/whole_infer/python_infer_gpu_usetrt_False_precision_int8_batchsize_1.log 2>&1 !
@@ -41,7 +41,7 @@ Run successfully with command - ch_PP-OCRv2_det_KL - python3.7 tools/infer/predi
 
 运行失败时会输出：
 
-```
+```py
 Run failed with command - ch_PP-OCRv2_det_KL - python3.7 deploy/slim/quantization/quant_kl.py -c configs/det/ch_PP-OCRv2/ch_PP-OCRv2_det_cml.yml -o Global.pretrained_model=./inference/ch_PP-OCRv2_det_infer/ Global.save_inference_dir=./inference/ch_PP-OCRv2_det_infer/_klquant > ./test_tipc/output/ch_PP-OCRv2_det_KL/whole_infer/whole_infer_export_0.log 2>&1 !
 ...
 ```

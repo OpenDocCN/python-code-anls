@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\compute_mean_std.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/12/7 14:46
 # @Author  : zhoujun

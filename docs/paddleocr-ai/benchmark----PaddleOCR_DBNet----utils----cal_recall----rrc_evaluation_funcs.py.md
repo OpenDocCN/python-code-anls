@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\cal_recall\rrc_evaluation_funcs.py`
 
-```
+```py
 #!/usr/bin/env python2
 #encoding: UTF-8
 # 导入所需的模块

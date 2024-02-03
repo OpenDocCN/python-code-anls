@@ -14,7 +14,7 @@
 同时, 在RKNPU2上部署PP-OCR系列模型时，我们需要把Paddle的推理模型转为RKNN模型.
 由于rknn_toolkit2工具暂不支持直接从Paddle直接转换为RKNN模型，因此我们需要先将Paddle推理模型转为ONNX模型, 最后转为RKNN模型, 示例如下.
 
-```bash
+```py
 # 下载PP-OCRv3文字检测模型
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
 tar -xvf ch_PP-OCRv3_det_infer.tar
@@ -65,7 +65,7 @@ python rockchip/rknpu2_tools/export.py --config_path tools/rknpu2/config/ppocrv3
 ## 3.运行部署示例
 在本目录执行如下命令即可完成编译测试，支持此模型需保证FastDeploy版本1.0.3以上(x.x.x>1.0.3), RKNN版本在1.4.1b22以上。
 
-```
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/rockchip/cpp
@@ -110,7 +110,7 @@ wget https://gitee.com/paddlepaddle/PaddleOCR/raw/release/2.6/ppocr/utils/ppocr_
 
 结果输出如下:
 
-```text
+```py
 det boxes: [[276,174],[285,173],[285,178],[276,179]]rec text:  rec score:0.000000 cls label: 1 cls score: 0.766602
 det boxes: [[43,408],[483,390],[483,431],[44,449]]rec text: 上海斯格威铂尔曼大酒店 rec score:0.888450 cls label: 0 cls score: 1.000000
 det boxes: [[186,456],[399,448],[399,480],[186,488]]rec text: 打浦路15号 rec score:0.988769 cls label: 0 cls score: 1.000000

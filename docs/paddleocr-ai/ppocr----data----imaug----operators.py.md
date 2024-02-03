@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\data\imaug\operators.py`
 
-```
+```py
 """
 # 版权声明
 # 2020年版权归 PaddlePaddle 作者所有

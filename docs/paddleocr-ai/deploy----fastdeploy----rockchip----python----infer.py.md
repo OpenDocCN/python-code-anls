@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\fastdeploy\rockchip\python\infer.py`
 
-```
+```py
 # 导入所需的库和模块
 import fastdeploy as fd
 import cv2

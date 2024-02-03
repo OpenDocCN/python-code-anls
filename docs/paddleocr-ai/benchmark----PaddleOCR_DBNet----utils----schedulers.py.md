@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\utils\schedulers.py`
 
-```
+```py
 # 从 paddle.optimizer 模块中导入 lr
 from paddle.optimizer import lr
 # 导入 logging 模块

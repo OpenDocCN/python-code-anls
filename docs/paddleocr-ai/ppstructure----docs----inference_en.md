@@ -12,13 +12,13 @@
 ## 1. Layout Structured Analysis
 Go to the `ppstructure` directory
 
-```bash
+```py
 cd ppstructure
 ````
 
 download model
 
-```bash
+```py
 mkdir inference && cd inference
 # Download the PP-StructureV2 layout analysis model and unzip it
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_layout_infer.tar && tar xf picodet_lcnet_x1_0_layout_infer.tar
@@ -32,7 +32,7 @@ cd ..
 ```
 <a name="1.1"></a>
 ### 1.1 layout analysis + table recognition
-```bash
+```py
 python3 predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
                           --rec_model_dir=inference/ch_PP-OCRv3_rec_infer \
                           --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer \
@@ -47,7 +47,7 @@ After the operation is completed, each image will have a directory with the same
 
 <a name="1.2"></a>
 ### 1.2 layout analysis
-```bash
+```py
 python3 predict_system.py --layout_model_dir=inference/picodet_lcnet_x1_0_layout_infer \
                           --image_dir=./docs/table/1.png \
                           --output=../output \
@@ -58,7 +58,7 @@ After the operation is completed, each image will have a directory with the same
 
 <a name="1.3"></a>
 ### 1.3 table recognition
-```bash
+```py
 python3 predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
                           --rec_model_dir=inference/ch_PP-OCRv3_rec_infer \
                           --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer \
@@ -75,7 +75,7 @@ After the operation is completed, each image will have a directory with the same
 ## 2. Key Information Extraction
 
 ### 2.1 SER
-```bash
+```py
 cd ppstructure
 
 mkdir inference && cd inference
@@ -97,7 +97,7 @@ After the operation is completed, each image will store the visualized image in 
 
 ### 2.2 RE+SER
 
-```bash
+```py
 cd ppstructure
 
 mkdir inference && cd inference

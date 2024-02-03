@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\ustr.py`
 
-```
+```py
 # 版权声明，允许任何人免费获取并使用该软件，需包含版权声明和许可声明
 # 导入sys模块和DEFAULT_ENCODING常量
 import sys

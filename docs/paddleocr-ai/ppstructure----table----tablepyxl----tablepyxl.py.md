@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\table\tablepyxl\tablepyxl.py`
 
-```
+```py
 # 导入必要的模块，确保代码能够同时在 Python 2 和 Python 3 中运行
 from __future__ import absolute_import
 

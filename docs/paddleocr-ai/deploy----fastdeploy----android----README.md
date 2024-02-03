@@ -35,7 +35,7 @@
   - labelFile: String, 可选参数，表示label标签文件所在路径，用于可视化，如 ppocr_keys_v1.txt，每一行包含一个label
   - option: RuntimeOption，可选参数，模型初始化option。如果不传入该参数则会使用默认的运行时选项。
     与其他模型不同的是，PP-OCRv3 包含 DBDetector、Classifier和Recognizer等基础模型，以及pipeline类型。
-```java
+```py
 // 构造函数: constructor w/o label file
 public DBDetector(String modelFile, String paramsFile);
 public DBDetector(String modelFile, String paramsFile, RuntimeOption option);
@@ -49,7 +49,7 @@ public PPOCRv3(DBDetector detModel, Recognizer recModel);
 public PPOCRv3(DBDetector detModel, Classifier clsModel, Recognizer recModel);
 ```  
 - 模型预测 API：模型预测API包含直接预测的API以及带可视化功能的API。直接预测是指，不保存图片以及不渲染结果到Bitmap上，仅预测推理结果。预测并且可视化是指，预测结果以及可视化，并将可视化后的图片保存到指定的途径，以及将可视化结果渲染在Bitmap(目前支持ARGB8888格式的Bitmap), 后续可将该Bitmap在camera中进行显示。
-```java
+```py
 // 直接预测：不保存图片以及不渲染结果到Bitmap上
 public OCRResult predict(Bitmap ARGB8888Bitmap)；
 // 预测并且可视化：预测结果以及可视化，并将可视化后的图片保存到指定的途径，以及将可视化结果渲染在Bitmap上
@@ -57,7 +57,7 @@ public OCRResult predict(Bitmap ARGB8888Bitmap, String savedImagePath);
 public OCRResult predict(Bitmap ARGB8888Bitmap, boolean rendering); // 只渲染 不保存图片
 ```
 - 模型资源释放 API：调用 release() API 可以释放模型资源，返回true表示释放成功，false表示失败；调用 initialized() 可以判断模型是否初始化成功，true表示初始化成功，false表示失败。
-```java
+```py
 public boolean release(); // 释放native资源  
 public boolean initialized(); // 检查是否初始化成功
 ```
@@ -72,7 +72,7 @@ public void disableLiteInt8(); // 关闭int8精度推理
 public void setCpuThreadNum(int threadNum); // 设置线程数
 public void setLitePowerMode(LitePowerMode mode);  // 设置能耗模式
 public void setLitePowerMode(String modeStr);  // 通过字符串形式设置能耗模式
-```
+```py
 
 - 模型结果OCRResult说明
 ```java
@@ -84,7 +84,7 @@ public class OCRResult {
   public int[] mClsLabels; // 表示文本框的方向分类类别
   public boolean mInitialized = false; // 检测结果是否有效
 }  
-```
+```py
 其他参考：C++/Python对应的OCRResult说明: [api/vision_results/ocr_result.md](https://github.com/PaddlePaddle/FastDeploy/blob/develop/docs/api/vision_results/ocr_result.md)
 
 
@@ -179,7 +179,7 @@ Classifier clsModel = new Classifier(clsModelFile, clsParamsFile, clsOption);
 Recognizer recModel = new Recognizer(recModelFile, recParamsFile, recLabelFilePath, recOption);
 model.init(detModel, clsModel, recModel);
 // Bitmap读取、模型预测、资源释放 同上 ...
-```
+```py
 更详细的用法请参考 [OcrMainActivity](./app/src/main/java/com/baidu/paddle/fastdeploy/app/examples/ocr/OcrMainActivity.java)中的用法
 
 ## 替换 FastDeploy SDK和模型
@@ -197,7 +197,7 @@ model.init(detModel, clsModel, recModel);
 ```  
 ## 使用量化模型  
 如果您使用的是量化格式的模型，只需要使用RuntimeOption的enableLiteInt8()接口设置Int8精度推理即可。
-```java
+```py
 String detModelFile = "ch_ppocrv3_plate_det_quant/inference.pdmodel";
 String detParamsFile = "ch_ppocrv3_plate_det_quant/inference.pdiparams";
 String recModelFile = "ch_ppocrv3_plate_rec_distillation_quant/inference.pdmodel";

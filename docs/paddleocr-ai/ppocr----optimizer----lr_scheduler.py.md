@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\optimizer\lr_scheduler.py`
 
-```
+```py
 # 版权声明
 #
 # 基于 Apache 许可证 2.0 版本授权

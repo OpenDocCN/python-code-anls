@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\e2e_metric\polygon_fast.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 from shapely.geometry import Polygon

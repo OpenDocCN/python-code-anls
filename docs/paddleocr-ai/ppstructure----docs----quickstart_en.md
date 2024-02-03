@@ -31,13 +31,13 @@
 
 - If you have CUDA 9 or CUDA 10 installed on your machine, please run the following command to install
 
-  ```bash
+  ```py
   python3 -m pip install paddlepaddle-gpu -i https://mirror.baidu.com/pypi/simple
   ```
 
 - If you have no available GPU on your machine, please run the following command to install the CPU version
 
-  ```bash
+  ```py
   python3 -m pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
   ```
 
@@ -45,7 +45,7 @@ For more software version requirements, please refer to the instructions in [Ins
 
 ### 1.2 Install PaddleOCR Whl Package
 
-```bash
+```py
 # Install paddleocr, version 2.6 is recommended
 pip3 install "paddleocr>=2.6.0.3"
 
@@ -62,25 +62,25 @@ pip3 install paddleclas>=2.4.3
 
 <a name="211"></a>
 #### 2.1.1 image orientation + layout analysis + table recognition
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --image_orientation=true
 ```
 
 <a name="212"></a>
 #### 2.1.2 layout analysis + table recognition
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure
 ```
 
 <a name="213"></a>
 #### 2.1.3 layout analysis
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --table=false --ocr=false
 ```
 
 <a name="214"></a>
 #### 2.1.4 table recognition
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/table.jpg --type=structure --layout=false
 ```
 
@@ -100,13 +100,13 @@ Two layout recovery methods are provided, For detailed usage tutorials, please r
 
 Recovery by using PDF parse (only support pdf as input):
 
-```bash
+```py
 paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --recovery=true --use_pdf2docx_api=true
 ```
 
 Recovery by using OCR：
 
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --recovery=true --lang='en'
 ```
 
@@ -116,7 +116,7 @@ paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --recovery=t
 <a name="221"></a>
 #### 2.2.1 image orientation + layout analysis + table recognition
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,draw_structure_result,save_structure_res
@@ -145,7 +145,7 @@ im_show.save('result.jpg')
 <a name="222"></a>
 #### 2.2.2 layout analysis + table recognition
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,draw_structure_result,save_structure_res
@@ -174,7 +174,7 @@ im_show.save('result.jpg')
 <a name="223"></a>
 #### 2.2.3 layout analysis
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -195,7 +195,7 @@ for line in result:
 <a name="224"></a>
 #### 2.2.4 table recognition
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -221,7 +221,7 @@ Key information extraction does not currently support use by the whl package. Fo
 <a name="226"></a>
 #### 2.2.6 layout recovery
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -254,7 +254,7 @@ The return of PP-Structure is a list of dicts, the example is as follows:
 
 <a name="231"></a>
 #### 2.3.1 layout analysis + table recognition
-```shell
+```py
 [
   {   'type': 'Text',
       'bbox': [34, 432, 345, 462],
@@ -272,7 +272,7 @@ Each field in dict is described as follows:
 |res| OCR or table recognition result of the image area. <br> table: a dict with field descriptions as follows: <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; `html`: html str of table.<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; In the code usage mode, set return_ocr_result_in_table=True whrn call can get the detection and recognition results of each text in the table area, corresponding to the following fields: <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; `boxes`: text detection boxes.<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; `rec_res`: text recognition results.<br> OCR: A tuple containing the detection boxes and recognition results of each single text. |
 
 After the recognition is completed, each image will have a directory with the same name under the directory specified by the `output` field. Each table in the image will be stored as an excel, and the picture area will be cropped and saved. The filename of  excel and picture is their coordinates in the image.
-  ```
+  ```py
   /output/table/1/
     └─ res.txt
     └─ [454, 360, 824, 658].xlsx        table recognition result

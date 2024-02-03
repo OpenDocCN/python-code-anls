@@ -14,7 +14,7 @@ PaddleOCR支持利用FastDeploy在NVIDIA GPU、X86 CPU、飞腾CPU、ARM CPU、I
 在部署前, 请准备好您所需要运行的推理模型, 您可以在[FastDeploy支持的PaddleOCR模型列表](../README.md)中下载所需模型.
 
 ## 4.运行部署示例
-```bash
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/cpu-gpu/c
@@ -71,7 +71,7 @@ wget https://gitee.com/paddlepaddle/PaddleOCR/raw/release/2.6/ppocr/utils/ppocr_
 
 ### 配置
 
-```c
+```py
 FD_C_RuntimeOptionWrapper* FD_C_CreateRuntimeOptionWrapper()
 ```
 
@@ -82,7 +82,7 @@ FD_C_RuntimeOptionWrapper* FD_C_CreateRuntimeOptionWrapper()
 > * **fd_c_runtime_option_wrapper**(FD_C_RuntimeOptionWrapper*): 指向RuntimeOption对象的指针
 
 
-```c
+```py
 void FD_C_RuntimeOptionWrapperUseCpu(
      FD_C_RuntimeOptionWrapper* fd_c_runtime_option_wrapper)
 ```
@@ -93,7 +93,7 @@ void FD_C_RuntimeOptionWrapperUseCpu(
 >
 > * **fd_c_runtime_option_wrapper**(FD_C_RuntimeOptionWrapper*): 指向RuntimeOption对象的指针
 
-```c
+```py
 void FD_C_RuntimeOptionWrapperUseGpu(
     FD_C_RuntimeOptionWrapper* fd_c_runtime_option_wrapper,
     int gpu_id)
@@ -108,7 +108,7 @@ void FD_C_RuntimeOptionWrapperUseGpu(
 
 ### 模型
 
-```c
+```py
 FD_C_DBDetectorWrapper* FD_C_CreateDBDetectorWrapper(
     const char* model_file, const char* params_file,
     FD_C_RuntimeOptionWrapper* fd_c_runtime_option_wrapper,
@@ -128,7 +128,7 @@ FD_C_DBDetectorWrapper* FD_C_CreateDBDetectorWrapper(
 > **返回**
 > * **fd_c_dbdetector_wrapper**(FD_C_DBDetectorWrapper*): 指向DBDetector模型对象的指针
 
-```c
+```py
 FD_C_ClassifierWrapper* FD_C_CreateClassifierWrapper(
     const char* model_file, const char* params_file,
     FD_C_RuntimeOptionWrapper* fd_c_runtime_option_wrapper,
@@ -148,7 +148,7 @@ FD_C_ClassifierWrapper* FD_C_CreateClassifierWrapper(
 >
 > * **fd_c_classifier_wrapper**(FD_C_ClassifierWrapper*): 指向Classifier模型对象的指针
 
-```c
+```py
 FD_C_RecognizerWrapper* FD_C_CreateRecognizerWrapper(
     const char* model_file, const char* params_file, const char* label_path,
     FD_C_RuntimeOptionWrapper* fd_c_runtime_option_wrapper,
@@ -168,7 +168,7 @@ FD_C_RecognizerWrapper* FD_C_CreateRecognizerWrapper(
 > **返回**
 > * **fd_c_recognizer_wrapper**(FD_C_RecognizerWrapper*): 指向Recognizer模型对象的指针
 
-```c
+```py
 FD_C_PPOCRv3Wrapper* FD_C_CreatePPOCRv3Wrapper(
     FD_C_DBDetectorWrapper* det_model,
     FD_C_ClassifierWrapper* cls_model,
@@ -191,7 +191,7 @@ FD_C_PPOCRv3Wrapper* FD_C_CreatePPOCRv3Wrapper(
 
 ### 读写图像
 
-```c
+```py
 FD_C_Mat FD_C_Imread(const char* imgpath)
 ```
 
@@ -206,7 +206,7 @@ FD_C_Mat FD_C_Imread(const char* imgpath)
 > * **imgmat**(FD_C_Mat): 指向图像数据cv::Mat的指针。
 
 
-```c
+```py
 FD_C_Bool FD_C_Imwrite(const char* savepath,  FD_C_Mat img);
 ```
 
@@ -224,7 +224,7 @@ FD_C_Bool FD_C_Imwrite(const char* savepath,  FD_C_Mat img);
 
 ### Predict函数
 
-```c
+```py
 FD_C_Bool FD_C_PPOCRv3WrapperPredict(
     FD_C_PPOCRv3Wrapper* fd_c_ppocrv3_wrapper,
     FD_C_Mat img,
@@ -241,7 +241,7 @@ FD_C_Bool FD_C_PPOCRv3WrapperPredict(
 
 ### Predict结果
 
-```c
+```py
 FD_C_Mat FD_C_VisOcr(FD_C_Mat im, FD_C_OCRResult* ocr_result)
 ```
 >

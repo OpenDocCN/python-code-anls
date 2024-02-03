@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\clipper.cpp`
 
-```
+```py
 /*******************************************************************************
 *                                                                              *
 * Author    :  Angus Johnson                                                   *

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\ocr_cpp_client.py`
 
-```
+```py
 # 导入所需的库和模块
 from paddle_serving_client import Client
 import sys

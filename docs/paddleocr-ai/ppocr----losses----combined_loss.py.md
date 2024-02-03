@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\losses\combined_loss.py`
 
-```
+```py
 # 导入 paddle 库
 import paddle
 # 导入 paddle 中的神经网络模块

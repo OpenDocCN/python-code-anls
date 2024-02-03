@@ -29,13 +29,13 @@
 
 - 您的机器安装的是CUDA9或CUDA10，请运行以下命令安装
 
-  ```bash
+  ```py
   python3 -m pip install paddlepaddle-gpu -i https://mirror.baidu.com/pypi/simple
   ```
 
 - 您的机器是CPU，请运行以下命令安装
 
-  ```bash
+  ```py
   python3 -m pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
   ```
 
@@ -43,7 +43,7 @@
 
 ### 1.2 安装PaddleOCR whl包
 
-```bash
+```py
 # 安装 paddleocr，推荐使用2.6版本
 pip3 install "paddleocr>=2.6.0.3"
 
@@ -60,25 +60,25 @@ pip3 install paddleclas>=2.4.3
 
 <a name="211"></a>
 #### 2.1.1 图像方向分类+版面分析+表格识别
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --image_orientation=true
 ```
 
 <a name="212"></a>
 #### 2.1.2 版面分析+表格识别
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure
 ```
 
 <a name="213"></a>
 #### 2.1.3 版面分析
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --table=false --ocr=false
 ```
 
 <a name="214"></a>
 #### 2.1.4 表格识别
-```bash
+```py
 paddleocr --image_dir=ppstructure/docs/table/table.jpg --type=structure --layout=false
 ```
 
@@ -98,7 +98,7 @@ paddleocr --image_dir=ppstructure/docs/table/table.jpg --type=structure --layout
 
 通过PDF解析(只支持pdf格式的输入)：
 
-```bash
+```py
 paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --recovery=true --use_pdf2docx_api=true
 ```
 
@@ -111,13 +111,13 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 
 通过PDF解析(只支持pdf格式的输入)：
 
-```bash
+```py
 paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --recovery=true --use_pdf2docx_api=true
 ```
 
 通过OCR技术：
 
-```bash
+```py
 # 中文测试图
 paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --recovery=true
 # 英文测试图
@@ -133,7 +133,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 <a name="221"></a>
 #### 2.2.1 图像方向分类+版面分析+表格识别
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,draw_structure_result,save_structure_res
@@ -162,7 +162,7 @@ im_show.save('result.jpg')
 <a name="222"></a>
 #### 2.2.2 版面分析+表格识别
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,draw_structure_result,save_structure_res
@@ -191,7 +191,7 @@ im_show.save('result.jpg')
 <a name="223"></a>
 #### 2.2.3 版面分析
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -213,7 +213,7 @@ for line in result:
 
 #### 2.2.4 表格识别
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -240,7 +240,7 @@ for line in result:
 
 #### 2.2.6 版面恢复
 
-```python
+```py
 import os
 import cv2
 from paddleocr import PPStructure,save_structure_res
@@ -272,7 +272,7 @@ PP-Structure的返回结果为一个dict组成的list，示例如下：
 
 <a name="231"></a>
 #### 2.3.1 版面分析+表格识别
-```shell
+```py
 [
   {   'type': 'Text',
       'bbox': [34, 432, 345, 462],
@@ -291,7 +291,7 @@ dict 里各个字段说明如下：
 
 运行完成后，每张图片会在`output`字段指定的目录下有一个同名目录，图片里的每个表格会存储为一个excel，图片区域会被裁剪之后保存下来，excel文件和图片名为表格在图片里的坐标。
 
-  ```
+  ```py
   /output/table/1/
     └─ res.txt
     └─ [454, 360, 824, 658].xlsx  表格识别结果

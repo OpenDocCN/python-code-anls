@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\kie\tools\eval_with_label_end2end.py`
 
-```
+```py
 # 导入所需的库
 import os
 import re

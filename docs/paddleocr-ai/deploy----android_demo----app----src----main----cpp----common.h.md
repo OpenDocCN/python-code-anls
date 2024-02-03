@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\common.h`
 
-```
+```py
 // 定义头文件的预处理指令，防止头文件被重复包含
 // Created by fu on 4/25/18.
 

@@ -16,13 +16,13 @@ benchmark/run_det.sh 中包含了三个过程：
 
 run_det.sh 执行方式如下:
 
-```
+```py
 # cd PaddleOCR/
 bash benchmark/run_det.sh
 ```
 
 以DB为例，将得到四个日志文件，如下：
-```
+```py
 det_res18_db_v2.0_sp_bs16_fp32_1
 det_res18_db_v2.0_sp_bs8_fp32_1
 det_res18_db_v2.0_mp_bs16_fp32_1

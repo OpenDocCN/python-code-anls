@@ -21,7 +21,7 @@ PaddleOCR提供2种服务部署方式：
 # 基于PaddleHub Serving的服务部署
 
 hubserving服务部署目录下包括文本检测、文本方向分类，文本识别、文本检测+文本方向分类+文本识别3阶段串联，版面分析、表格识别和PP-Structure七种服务包，请根据需求选择相应的服务包进行安装和启动。目录结构如下：
-```
+```py
 deploy/hubserving/
   └─  ocr_cls     文本方向分类模块服务包
   └─  ocr_det     文本检测模块服务包
@@ -35,7 +35,7 @@ deploy/hubserving/
 ```
 
 每个服务包下包含3个文件。以2阶段串联服务包为例，目录如下：
-```
+```py
 deploy/hubserving/ocr_system/
   └─  __init__.py    空文件，必选
   └─  config.json    配置文件，可选，使用配置启动服务时作为参数传入
@@ -52,7 +52,7 @@ deploy/hubserving/ocr_system/
 ## 2. 快速启动服务
 以下步骤以检测+识别2阶段串联服务为例，如果只需要检测服务或识别服务，替换相应文件路径即可。
 ### 2.1 准备环境
-```shell
+```py
 # 安装paddlehub  
 # paddlehub 需要 python>3.6.2
 pip3 install paddlehub==2.1.0 --upgrade -i https://mirror.baidu.com/pypi/simple
@@ -61,7 +61,7 @@ pip3 install paddlehub==2.1.0 --upgrade -i https://mirror.baidu.com/pypi/simple
 ### 2.2 下载推理模型
 安装服务模块前，需要准备推理模型并放到正确路径。默认使用的是PP-OCRv3模型，默认模型路径为：
 
-```
+```py
 检测模型：./inference/ch_PP-OCRv3_det_infer/
 识别模型：./inference/ch_PP-OCRv3_rec_infer/
 方向分类器：./inference/ch_ppocr_mobile_v2.0_cls_infer/
@@ -77,7 +77,7 @@ pip3 install paddlehub==2.1.0 --upgrade -i https://mirror.baidu.com/pypi/simple
 PaddleOCR提供5种服务模块，根据需要安装所需模块。
 
 * 在Linux环境下，安装示例如下：
-```shell
+```py
 # 安装检测服务模块：  
 hub install deploy/hubserving/ocr_det/
 
@@ -107,7 +107,7 @@ hub install deploy/hubserving/kie_ser_re/
 ```
 
 * 在Windows环境下(文件夹的分隔符为`\`)，安装示例如下：
-```shell
+```py
 # 安装检测服务模块：  
 hub install deploy\hubserving\ocr_det\
 
@@ -139,7 +139,7 @@ hub install deploy\hubserving\kie_ser_re\
 ### 2.4 启动服务
 #### 2.4.1. 命令行命令启动（仅支持CPU）
 **启动命令：**  
-```shell
+```py
 $ hub serving start --modules [Module1==Version1, Module2==Version2, ...] \
                     --port XXXX \
                     --use_multiprocess \
@@ -164,7 +164,7 @@ $ hub serving start --modules [Module1==Version1, Module2==Version2, ...] \
 ```hub serving start -c config.json```  
 
 其中，`config.json`格式如下：
-```python
+```py
 {
     "modules_info": {
         "ocr_system": {
@@ -191,7 +191,7 @@ $ hub serving start --modules [Module1==Version1, Module2==Version2, ...] \
 - **`use_gpu`不可与`use_multiprocess`同时为`true`**。
 
 如，使用GPU 3号卡启动串联服务：  
-```shell
+```py
 export CUDA_VISIBLE_DEVICES=3
 hub serving start -c deploy/hubserving/ocr_system/config.json
 ```
@@ -219,7 +219,7 @@ hub serving start -c deploy/hubserving/ocr_system/config.json
 - **output**：可视化结果保存路径，默认为`./hubserving_result`
 
 访问示例：  
-```python tools/test_hubserving.py --server_url=http://127.0.0.1:8868/predict/ocr_system --image_dir=./doc/imgs/ --visualize=false```
+```python tools/test_hubserving.py --server_url=http://127.0.0.1:8868/predict/ocr_system --image_dir=./doc/imgs/ --visualize=false```py
 
 ## 4. 返回结果格式说明
 返回结果为列表（list），列表中的每一项为词典（dict），词典一共可能包含3种字段，信息如下：

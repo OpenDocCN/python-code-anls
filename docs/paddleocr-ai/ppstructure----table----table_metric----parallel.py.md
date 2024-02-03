@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\table\table_metric\parallel.py`
 
-```
+```py
 # 导入必要的库
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed

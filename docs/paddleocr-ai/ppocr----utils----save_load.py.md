@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\save_load.py`
 
-```
+```py
 # 版权声明和许可信息
 # 该代码受 Apache 许可证版本 2.0 保护
 # 除非符合许可证的规定，否则不得使用此文件

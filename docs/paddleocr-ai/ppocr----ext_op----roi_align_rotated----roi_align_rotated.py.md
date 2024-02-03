@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\ext_op\roi_align_rotated\roi_align_rotated.py`
 
-```
+```py
 # 版权声明，版权归 PaddlePaddle 作者所有
 #
 # 根据 Apache 许可证 2.0 版本授权

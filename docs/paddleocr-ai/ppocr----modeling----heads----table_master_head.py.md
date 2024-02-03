@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\heads\table_master_head.py`
 
-```
+```py
 # 版权声明，告知代码版权归属于 PaddlePaddle 作者
 #
 # 根据 Apache 许可证 2.0 版本授权使用此文件

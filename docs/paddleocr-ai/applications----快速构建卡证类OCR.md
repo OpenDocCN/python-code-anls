@@ -120,7 +120,7 @@ A  使用爬虫获取无标注数据，将相同类别的放在同一文件夹�
 
 B  一行命令生成标签文件
 
-```
+```py
 tree -r -i -f | grep -E "jpg|JPG|jpeg|JPEG|png|PNG|webp" | awk -F "/" '{print $0" "$2}' > train_list.txt
 ```
 
@@ -147,7 +147,7 @@ C [下载预训练模型 ](https://github.com/PaddlePaddle/PaddleClas/blob/relea
 
 指定配置文件启动训练：
 
-```
+```py
 !python /home/aistudio/work/PaddleClas/tools/train.py -c   /home/aistudio/work/PaddleClas/ppcls/configs/PULC/text_image_orientation/PPLCNet_x1_0.yaml
 ```
 ![](https://ai-studio-static-online.cdn.bcebos.com/06af09bde845449ba0a676410f4daa1cdc3983ac95034bdbbafac3b7fd94042f)
@@ -217,17 +217,17 @@ AIStudio项目链接：[快速构建卡证类OCR](https://aistudio.baidu.com/ais
 ### 4.1 环境准备
 
 1）拉取[paddleocr](https://github.com/PaddlePaddle/PaddleOCR)项目，如果从github上拉取速度慢可以选择从gitee上获取。
-```
+```py
 !git clone https://github.com/PaddlePaddle/PaddleOCR.git  -b release/2.6  /home/aistudio/work/
 ```
 
 2）获取并解压预训练模型，如果要使用其他模型可以从模型库里自主选择合适模型。
-```
+```py
 !wget -P work/pre_trained/   https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar
 !tar -vxf /home/aistudio/work/pre_trained/ch_PP-OCRv3_det_distill_train.tar -C /home/aistudio/work/pre_trained
 ```
 3） 安装必要依赖
-```
+```py
 !pip install -r /home/aistudio/work/requirements.txt
 ```
 
@@ -273,7 +273,7 @@ AIStudio项目链接：[快速构建卡证类OCR](https://aistudio.baidu.com/ais
 * 修改 PaddleOCR/ppocr/data/imaug/label_ops.py中的DetLabelEncode
 
 
-```python
+```py
 class DetLabelEncode(object):
 
     # 修改检测标签的编码处，新增了参数分类数：num_classes，重写初始化方法，以及分类标签的读取
@@ -344,7 +344,7 @@ label_list中第一个为关键分类，则得到的分类Mask实际如下，与
 
 
 
-```python
+```py
 class MakeShrinkMap(object):
     r'''
     Making binary mask from detection data with ICDAR format.
@@ -421,7 +421,7 @@ class MakeShrinkMap(object):
 由于在训练数据中会对数据进行resize设置，yml中的操作为：EastRandomCropData，所以需要修改PaddleOCR/ppocr/data/imaug/random_crop_data.py中的EastRandomCropData
 
 
-```python
+```py
 class EastRandomCropData(object):
     def __init__(self,
                  size=(640, 640),
@@ -512,7 +512,7 @@ class EastRandomCropData(object):
 由于涉及到eval以及后续推理能否正常使用，我们需要修改后处理的相关代码，修改位置 PaddleOCR/ppocr/postprocess/db_postprocess.py中的DBPostProcess类
 
 
-```python
+```py
 class DBPostProcess(object):
     """
     The post process for Differentiable Binarization (DB).
@@ -745,17 +745,17 @@ class DBPostProcess(object):
 
 在完成上述步骤后我们就可以正常启动训练
 
-```
+```py
 !python /home/aistudio/work/PaddleOCR/tools/train.py  -c  /home/aistudio/work/PaddleOCR/configs/det/det_mv3_db.yml
 ```
 
 其他命令：
-```
+```py
 !python /home/aistudio/work/PaddleOCR/tools/eval.py  -c  /home/aistudio/work/PaddleOCR/configs/det/det_mv3_db.yml
 !python /home/aistudio/work/PaddleOCR/tools/infer_det.py  -c  /home/aistudio/work/PaddleOCR/configs/det/det_mv3_db.yml
 ```
 模型推理
-```
+```py
 !python /home/aistudio/work/PaddleOCR/tools/infer/predict_det.py --image_dir="/home/aistudio/work/test_img/" --det_model_dir="/home/aistudio/work/PaddleOCR/output/infer"
 ```
 

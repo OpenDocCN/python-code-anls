@@ -1,6 +1,6 @@
 # `.\PaddleOCR\applications\PCB字符识别\gen_data\gen.py`
 
-```
+```py
 # 版权声明
 #
 # 版权所有 (c) 2020 PaddlePaddle 作者。保留所有权利。

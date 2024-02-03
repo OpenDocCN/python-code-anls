@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\modeling\architectures\__init__.py`
 
-```
+```py
 # 版权声明，告知代码版权归属及使用许可
 # 根据 Apache License, Version 2.0 许可协议使用此文件
 # 获取许可协议的副本链接

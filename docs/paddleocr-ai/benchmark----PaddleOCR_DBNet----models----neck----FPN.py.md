@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\neck\FPN.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # @Time    : 2019/9/13 10:29
 # @Author  : zhoujun

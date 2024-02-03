@@ -37,14 +37,14 @@
 下载PaddleOCR源码，安装依赖环境。
 
 
-```python
+```py
 # 如仍需安装or安装更新，可以执行以下步骤
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
 #  git clone https://gitee.com/PaddlePaddle/PaddleOCR
 ```
 
 
-```python
+```py
 # 安装依赖包
 pip install -r /home/aistudio/PaddleOCR/requirements.txt
 ```
@@ -58,14 +58,14 @@ pip install -r /home/aistudio/PaddleOCR/requirements.txt
 
 暂时不开源生成的PCB数据集，但是通过更换背景，通过如下代码生成数据即可：
 
-```
+```py
 cd gen_data
 python3 gen.py --num_img=10
 ```
 
 生成图片参数解释：
 
-```
+```py
 num_img：生成图片数量
 font_min_size、font_max_size：字体最大、最小尺寸
 bg_path：文字区域背景存放路径
@@ -81,7 +81,7 @@ output_dir：生成图片存储路径
 <div align=center>图3 案例提供数据集示例</div>
 
 
-```python
+```py
 tar xf ./data/data148165/dataset.tar -C ./
 ```
 
@@ -92,7 +92,7 @@ tar xf ./data/data148165/dataset.tar -C ./
 
 标注文件格式如下，中间用'\t'分隔：
 
-```
+```py
 " 图像文件名                    json.dumps编码的图像标注信息"
 ch4_test_images/img_61.jpg    [{"transcription": "MASA", "points": [[310, 104], [416, 141], [418, 216], [312, 179]]}, {...}]
 ```
@@ -103,7 +103,7 @@ json.dumps编码前的图像标注信息是包含多个字典的list，字典中
 
 标注文件的格式如下， txt文件中默认请将图片路径和图片标签用'\t'分割，如用其他方式分割将造成训练报错。
 
-```
+```py
 " 图像文件名                 图像标注信息 "
 
 train_data/rec/train/word_001.jpg   简单可依赖
@@ -154,7 +154,7 @@ PaddleOCR已经提供了PP-OCR系列模型，部分模型展示如下表所示�
 
 
 
-```python
+```py
 # 如果更换其他模型，更新下载链接和解压指令就可以
 cd /home/aistudio/PaddleOCR
 mkdir pretrain_models
@@ -169,7 +169,7 @@ tar xf en_PP-OCRv3_det_distill_train.tar && rm -rf en_PP-OCRv3_det_distill_train
 
 
 首先修改配置文件`configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml`中的以下字段：
-```
+```py
 Eval.dataset.data_dir：指向验证集图片存放目录,'/home/aistudio/dataset'
 Eval.dataset.label_file_list：指向验证集标注文件,'/home/aistudio/dataset/det_gt_val.txt'
 Eval.dataset.transforms.DetResizeForTest:  尺寸
@@ -181,7 +181,7 @@ Eval.dataset.transforms.DetResizeForTest:  尺寸
 
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR
 python tools/eval.py \
     -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml  \
@@ -198,7 +198,7 @@ python tools/eval.py \
 将图片都padding到300*300大小，因为坐标信息发生了变化，我们同时要修改标注文件，在`/home/aistudio/dataset`目录里也提供了padding之后的图片，大家也可以尝试训练和评估：
 
 同上，我们需要修改配置文件`configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml`中的以下字段：
-```
+```py
 Eval.dataset.data_dir：指向验证集图片存放目录,'/home/aistudio/dataset'
 Eval.dataset.label_file_list：指向验证集标注文件,/home/aistudio/dataset/det_gt_padding_val.txt
 Eval.dataset.transforms.DetResizeForTest:  尺寸
@@ -213,7 +213,7 @@ Eval.dataset.transforms.DetResizeForTest:  尺寸
 将下载或训练完成的模型放置在对应目录下即可完成模型推理
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR
 python tools/eval.py \
     -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_cml.yml  \
@@ -224,7 +224,7 @@ python tools/eval.py \
 
 
 基于预训练模型，在生成的1500图片上进行fine-tune训练和评估，其中train数据1200张，val数据300张，修改配置文件`configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml`中的以下字段：
-```
+```py
 Global.epoch_num: 这里设置为1，方便快速跑通，实际中根据数据量调整该值
 Global.save_model_dir：模型保存路径
 Global.pretrained_model：指向预训练模型路径，'./pretrain_models/en_PP-OCRv3_det_distill_train/student.pdparams'
@@ -241,7 +241,7 @@ Eval.dataset.transforms.DetResizeForTest：评估尺寸，添加如下参数
 执行下面命令启动训练：
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR/
 python tools/train.py \
         -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml
@@ -253,7 +253,7 @@ python tools/train.py \
 使用训练好的模型进行评估，更新模型路径`Global.checkpoints`:
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR/
 python3 tools/eval.py \
     -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml  \
@@ -270,7 +270,7 @@ python3 tools/eval.py \
 |   3 | PP-OCRv3英文超轻量检测预训练模型  + fine-tune   | 100.00% |  +27.87%     | fine-tune会提升垂类场景效果 |
 
 
-```
+```py
 注：上述实验结果均是在1500张图片（1200张训练集，300张测试集）上训练、评估的得到，AIstudio只提供了100张数据，所以指标有所差异属于正常，只要策略有效、规律相同即可。
 ```
 
@@ -296,7 +296,7 @@ python3 tools/eval.py \
 我们使用PP-OCRv3中英文超轻量文本识别模型，下载并解压预训练模型：
 
 
-```python
+```py
 # 如果更换其他模型，更新下载链接和解压指令就可以
 cd /home/aistudio/PaddleOCR/pretrain_models/
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
@@ -309,7 +309,7 @@ cd ..
 
 首先修改配置文件`configs/det/ch_PP-OCRv3/ch_PP-OCRv2_rec_distillation.yml`中的以下字段：
 
-```
+```py
 Metric.ignore_space: True：忽略空格
 Eval.dataset.data_dir：指向验证集图片存放目录,'/home/aistudio/dataset'
 Eval.dataset.label_file_list：指向验证集标注文件,'/home/aistudio/dataset/rec_gt_val.txt'
@@ -318,7 +318,7 @@ Eval.dataset.label_file_list：指向验证集标注文件,'/home/aistudio/datas
 我们使用下载的预训练模型进行评估：
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR
 python3 tools/eval.py \
     -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml \
@@ -350,7 +350,7 @@ python3 tools/eval.py \
 
 接着我们看需要修改的参数，以上方案均需要修改配置文件`configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml`的参数，**修改一次即可**：
 
-```
+```py
 Global.pretrained_model：指向预训练模型路径,'pretrain_models/ch_PP-OCRv3_rec_train/best_accuracy'
 Optimizer.lr.values：学习率，本实验设置为0.0005
 Train.loader.batch_size_per_card: batch size,默认128，因为数据量小于128，因此我们设置为8，数据量大可以按默认的训练
@@ -359,7 +359,7 @@ Metric.ignore_space: 忽略空格，本实验设置为True
 ```
 
 **更换不同的方案**每次需要修改的参数：
-```
+```py
 Global.epoch_num: 这里设置为1，方便快速跑通，实际中根据数据量调整该值
 Global.save_model_dir：指向模型保存路径
 Train.dataset.data_dir：指向训练集图片存放目录
@@ -369,7 +369,7 @@ Eval.dataset.label_file_list：指向验证集标注文件
 ```
 
 同时**方案3**修改以下参数
-```
+```py
 Eval.dataset.label_file_list：添加公开通用识别数据标注文件
 Eval.dataset.ratio_list：数据和公开通用识别数据每次采样比例，按实际修改即可
 ```
@@ -381,7 +381,7 @@ Eval.dataset.ratio_list：数据和公开通用识别数据每次采样比例，
 我们提取Student模型的参数，在PCB数据集上进行fine-tune，可以参考如下代码：
 
 
-```python
+```py
 import paddle
 # 加载预训练模型
 all_params = paddle.load("./pretrain_models/ch_PP-OCRv3_rec_train/best_accuracy.pdparams")
@@ -399,7 +399,7 @@ paddle.save(s_params, "./pretrain_models/ch_PP-OCRv3_rec_train/student.pdparams"
 
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR/
 python3 tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml
 ```
@@ -408,7 +408,7 @@ python3 tools/train.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml
 使用训练好的模型进行评估，更新模型路径`Global.checkpoints`：
 
 
-```python
+```py
 cd /home/aistudio/PaddleOCR/
 python3 tools/eval.py \
     -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml \
@@ -424,7 +424,7 @@ python3 tools/eval.py \
 |   3 | PP-OCRv3中英文超轻量识别预训练模型 + fine-tune + 公开通用识别数据集   | 77.00% |  +30.33%     | 在数据量不足的情况下，可以考虑补充公开数据训练 |
 |   4 | PP-OCRv3中英文超轻量识别预训练模型 + fine-tune + 增加PCB图像数量   | 99.99% |  +22.99%     | 如果能获取更多数据量的情况，可以通过增加数据量提升效果 |
 
-```
+```py
 注：上述实验结果均是在1500张图片（1200张训练集，300张测试集）、2W张图片、添加公开通用识别数据集上训练、评估的得到，AIstudio只提供了100张数据，所以指标有所差异属于正常，只要策略有效、规律相同即可。
 ```
 
@@ -433,7 +433,7 @@ python3 tools/eval.py \
 inference 模型（paddle.jit.save保存的模型） 一般是模型训练，把模型结构和模型参数保存在文件中的固化模型，多用于预测部署场景。 训练过程中保存的模型是checkpoints模型，保存的只有模型的参数，多用于恢复训练等。 与checkpoints模型相比，inference 模型会额外保存模型的结构信息，在预测部署、加速推理上性能优越，灵活方便，适合于实际系统集成。
 
 
-```python
+```py
 # 导出检测模型
 python3 tools/export_model.py \
      -c configs/det/ch_PP-OCRv3/ch_PP-OCRv3_det_student.yml \
@@ -444,14 +444,14 @@ python3 tools/export_model.py \
 因为上述模型只训练了1个epoch，因此我们使用训练最优的模型进行预测，存储在`/home/aistudio/best_models/`目录下，解压即可
 
 
-```python
+```py
 cd /home/aistudio/best_models/
 wget https://paddleocr.bj.bcebos.com/fanliku/PCB/det_ppocr_v3_en_infer_PCB.tar
 tar xf /home/aistudio/best_models/det_ppocr_v3_en_infer_PCB.tar -C /home/aistudio/PaddleOCR/pretrain_models/
 ```
 
 
-```python
+```py
 # 检测模型inference模型预测
 cd /home/aistudio/PaddleOCR/
 python3 tools/infer/predict_det.py \
@@ -471,7 +471,7 @@ python3 tools/infer/predict_det.py \
 
 同理，导出识别模型并进行推理。
 
-```python
+```py
 # 导出识别模型
 python3 tools/export_model.py \
     -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml \
@@ -483,14 +483,14 @@ python3 tools/export_model.py \
 同检测模型，识别模型也只训练了1个epoch，因此我们使用训练最优的模型进行预测，存储在`/home/aistudio/best_models/`目录下，解压即可
 
 
-```python
+```py
 cd /home/aistudio/best_models/
 wget https://paddleocr.bj.bcebos.com/fanliku/PCB/rec_ppocr_v3_ch_infer_PCB.tar
 tar xf /home/aistudio/best_models/rec_ppocr_v3_ch_infer_PCB.tar -C /home/aistudio/PaddleOCR/pretrain_models/
 ```
 
 
-```python
+```py
 # 识别模型inference模型预测
 cd /home/aistudio/PaddleOCR/
 python3 tools/infer/predict_rec.py \
@@ -501,7 +501,7 @@ python3 tools/infer/predict_rec.py \
     --use_gpu=True
 ```
 
-```python
+```py
 # 检测+识别模型inference模型预测
 cd /home/aistudio/PaddleOCR/
 python3 tools/infer/predict_system.py  \
@@ -530,7 +530,7 @@ python3 tools/infer/predict_system.py  \
 1）首先运行`tools/infer/predict_system.py`，将`image_dir`改为需要评估的数据文件家，得到保存的结果:
 
 
-```python
+```py
 # 检测+识别模型inference模型预测
 python3 tools/infer/predict_system.py  \
     --image_dir="../dataset/imgs/" \
@@ -549,7 +549,7 @@ python3 tools/infer/predict_system.py  \
 得到保存结果，文本检测识别可视化图保存在`det_rec_infer/`目录下，预测结果保存在`det_rec_infer/system_results.txt`中，格式如下：`0018.jpg	[{"transcription": "E295", "points": [[88, 33], [137, 33], [137, 40], [88, 40]]}]`
 
 2）然后将步骤一保存的数据转换为端对端评测需要的数据格式： 修改 `tools/end2end/convert_ppocr_label.py`中的代码，convert_label函数中设置输入标签路径，Mode，保存标签路径等，对预测数据的GTlabel和预测结果的label格式进行转换。
-```
+```py
 ppocr_label_gt =  "/home/aistudio/dataset/det_gt_val.txt"
 convert_label(ppocr_label_gt, "gt", "./save_gt_label/")
 
@@ -560,12 +560,12 @@ convert_label(ppocr_label_gt, "pred", "./save_PPOCRV2_infer/")
 运行`convert_ppocr_label.py`:
 
 
-```python
+```py
  python3 tools/end2end/convert_ppocr_label.py
 ```
 
 得到如下结果：
-```
+```py
 ├── ./save_gt_label/
 ├── ./save_PPOCRV2_infer/
 ```
@@ -573,7 +573,7 @@ convert_label(ppocr_label_gt, "pred", "./save_PPOCRV2_infer/")
 3） 最后，执行端对端评测，运行`tools/end2end/eval_end2end.py`计算端对端指标，运行方式如下：
 
 
-```python
+```py
 pip install editdistance
 python3 tools/end2end/eval_end2end.py ./save_gt_label/ ./save_PPOCRV2_infer/
 ```
@@ -582,7 +582,7 @@ python3 tools/end2end/eval_end2end.py ./save_gt_label/ ./save_PPOCRV2_infer/
 <div align=center><img src='https://ai-studio-static-online.cdn.bcebos.com/37206ea48a244212ae7a821d50d1fd51faf3d7fe97ac47a29f04dfcbb377b019', width='700'></div>
 <div align=center>图8 端到端评估指标</div>
 
-```
+```py
 注: 使用上述命令不能跑出该结果，因为数据集不相同，可以更换为自己训练好的模型，按上述流程运行
 ```
 

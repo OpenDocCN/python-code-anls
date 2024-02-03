@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\metrics\det_metric.py`
 
-```
+```py
 # 导入必要的库
 from __future__ import absolute_import
 from __future__ import division

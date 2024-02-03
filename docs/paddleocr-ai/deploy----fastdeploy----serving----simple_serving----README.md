@@ -12,7 +12,7 @@ PaddleOCR Python轻量服务化部署是FastDeploy基于Flask框架搭建的可�
 
 
 ## 2. 启动服务
-```bash
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/FastDeploy.git
 cd  FastDeploy/examples/vision/ocr/PP-OCR/serving/simple_serving
@@ -41,7 +41,7 @@ fastdeploy simple_serving --app server:app
 ```
 
 ## 3. 客户端请求
-```bash
+```py
 # 下载部署示例代码
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
 cd PaddleOCR/deploy/fastdeploy/serving/simple_serving

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppstructure\recovery\recovery_to_doc.py`
 
-```
+```py
 # 导入所需的模块和库
 import os
 from copy import deepcopy

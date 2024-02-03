@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\main\cpp\ocr_cls_process.h`
 
-```
+```py
 // 版权声明，声明代码版权归 PaddlePaddle 作者所有
 //
 // 根据 Apache 许可证版本 2.0 进行许可;

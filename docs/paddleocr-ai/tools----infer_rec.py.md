@@ -1,6 +1,6 @@
 # `.\PaddleOCR\tools\infer_rec.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 从未来的 Python 版本导入特性
 # 导入 numpy 库

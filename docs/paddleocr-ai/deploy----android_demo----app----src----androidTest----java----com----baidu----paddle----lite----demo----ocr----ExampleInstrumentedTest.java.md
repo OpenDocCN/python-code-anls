@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\android_demo\app\src\androidTest\java\com\baidu\paddle\lite\demo\ocr\ExampleInstrumentedTest.java`
 
-```
+```py
 /**
  * 导入必要的类库
  */

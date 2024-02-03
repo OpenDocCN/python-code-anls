@@ -35,7 +35,7 @@
   - [Arm(R) Ethos(TM)-U NPU driver stack](https://review.mlplatform.org)
   - [CMSIS](https://github.com/ARM-software/CMSIS_5)
 - python 依赖
-  ```bash
+  ```py
   pip install -r ./requirements.txt
   ```
 - TVM
@@ -47,7 +47,7 @@
   - 从TLCPack 安装([TLCPack](https://tlcpack.ai/))
 
 安装完成后需要更新环境变量，以软件安装地址为`/opt/arm`为例：
-```bash
+```py
 export PATH=/opt/arm/FVP_Corstone_SSE-300/models/Linux64_GCC-6.4:/opt/arm/cmake/bin:$PATH
 ```
 
@@ -55,13 +55,13 @@ export PATH=/opt/arm/FVP_Corstone_SSE-300/models/Linux64_GCC-6.4:/opt/arm/cmake/
 ----------------------------
 使用如下命令可以一键运行demo
 
-```bash
+```py
 ./run_demo.sh
 ```
 
 如果 Ethos(TM)-U 平台或 CMSIS 没有安装在 `/opt/arm/ethosu` 中，可通过参数进行设置，例如：
 
-```bash
+```py
 ./run_demo.sh --cmsis_path /home/tvm-user/cmsis \
 --ethosu_platform_path /home/tvm-user/ethosu/core_platform
 ```

@@ -1,6 +1,6 @@
 # `.\PaddleOCR\benchmark\PaddleOCR_DBNet\models\backbone\resnet.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 导入 paddle 模块

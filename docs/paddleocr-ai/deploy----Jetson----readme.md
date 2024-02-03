@@ -15,7 +15,7 @@ The PaddlePaddle download [link](https://www.paddlepaddle.org.cn/inference/user_
 Please select the appropriate installation package for your Jetpack version, cuda version, and trt version. Here, we download paddlepaddle_gpu-2.3.0rc0-cp36-cp36m-linux_aarch64.whl.
 
 Install PaddlePaddle：
-```shell
+```py
 pip3 install -U paddlepaddle_gpu-2.3.0rc0-cp36-cp36m-linux_aarch64.whl
 ```
 
@@ -23,12 +23,12 @@ pip3 install -U paddlepaddle_gpu-2.3.0rc0-cp36-cp36m-linux_aarch64.whl
 2. Download PaddleOCR code and install dependencies
 
 Clone the PaddleOCR code:
-```
+```py
 git clone https://github.com/PaddlePaddle/PaddleOCR
 ```
 
 and install dependencies：
-```
+```py
 cd PaddleOCR
 pip3 install -r requirements.txt
 ```
@@ -40,7 +40,7 @@ pip3 install -r requirements.txt
 Obtain the PPOCR model from the [document](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/doc/doc_en/ppocr_introduction_en.md#6-model-zoo) model library. The following takes the PP-OCRv3 model as an example to introduce the use of the PPOCR model on Jetson:
 
 Download and unzip the PP-OCRv3 models.
-```
+```py
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar
 tar xf ch_PP-OCRv3_det_infer.tar
@@ -48,7 +48,7 @@ tar xf ch_PP-OCRv3_rec_infer.tar
 ```
 
 The text detection inference:
-```
+```py
 cd PaddleOCR
 python3 tools/infer/predict_det.py --det_model_dir=./inference/ch_PP-OCRv2_det_infer/  --image_dir=./doc/imgs/french_0.jpg  --use_gpu=True
 ```
@@ -58,18 +58,18 @@ After executing the command, the predicted information will be printed out in th
 
 
 The text recognition inference:
-```
+```py
 python3 tools/infer/predict_det.py --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/  --image_dir=./doc/imgs_words/en/word_2.png  --use_gpu=True --rec_image_shape="3,48,320"
 ```
 
 After executing the command, the predicted information will be printed on the terminal, and the output is as follows:
-```
+```py
 [2022/04/28 15:41:45] root INFO: Predicts of ./doc/imgs_words/en/word_2.png:('yourself', 0.98084533)
 ```
 
 The text  detection and text recognition inference:
 
-```
+```py
 python3 tools/infer/predict_system.py --det_model_dir=./inference/ch_PP-OCRv2_det_infer/ --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --image_dir=./doc/imgs/00057937.jpg --use_gpu=True --rec_image_shape="3,48,320"
 ```
 
@@ -77,7 +77,7 @@ After executing the command, the predicted information will be printed out in th
 ![](./images/00057937.jpg)
 
 To enable TRT prediction, you only need to set `--use_tensorrt=True` on the basis of the above command:
-```
+```py
 python3 tools/infer/predict_system.py --det_model_dir=./inference/ch_PP-OCRv2_det_infer/ --rec_model_dir=./inference/ch_PP-OCRv2_rec_infer/ --image_dir=./doc/imgs/  --rec_image_shape="3,48,320" --use_gpu=True --use_tensorrt=True
 ```
 

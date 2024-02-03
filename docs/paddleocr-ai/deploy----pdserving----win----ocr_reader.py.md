@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\pdserving\win\ocr_reader.py`
 
-```
+```py
 # 导入所需的库
 import cv2
 import copy

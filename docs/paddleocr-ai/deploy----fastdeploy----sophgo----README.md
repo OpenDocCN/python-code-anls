@@ -27,7 +27,7 @@ SOPHGO-TPU部署模型前需要将以上Paddle模型转换成bmodel模型，我�
 下面我们提供一个example, 供用户参考，完成模型的转换.
 
 ### 3.1 下载ch_PP-OCRv3_det模型,并转换为ONNX模型
-```shell
+```py
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar
 tar xvf ch_PP-OCRv3_det_infer.tar
 
@@ -58,7 +58,7 @@ docker run --privileged --name myname1234 -v $PWD:/workspace -it sophgo/tpuc_dev
 
 source ./envsetup.sh
 ./build.sh
-```
+```py
 
 #### 3.2.2    ONNX模型转换为bmodel模型
 ``` shell

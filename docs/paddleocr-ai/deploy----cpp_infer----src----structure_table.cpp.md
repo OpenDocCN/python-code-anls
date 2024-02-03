@@ -1,6 +1,6 @@
 # `.\PaddleOCR\deploy\cpp_infer\src\structure_table.cpp`
 
-```
+```py
 // 版权声明，告知代码版权归属及许可协议
 // 包含结构表头文件
 

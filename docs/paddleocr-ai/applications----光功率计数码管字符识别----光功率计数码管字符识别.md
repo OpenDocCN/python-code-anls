@@ -43,7 +43,7 @@ PaddleOCR 旨在打造一套丰富、领先、且实用的OCR工具库，助力�
 
 - 准备环境
 
-```
+```py
 python3 -m pip install -U pip
 python3 -m pip install paddleocr
 ```
@@ -56,13 +56,13 @@ python3 -m pip install paddleocr
 ![](https://ai-studio-static-online.cdn.bcebos.com/8dca91f016884e16ad9216d416da72ea08190f97d87b4be883f15079b7ebab9a)
 
 
-```
+```py
 paddleocr --lang=ch --det=Fase --image_dir=data
 ```
 
 得到如下测试结果：
 
-```
+```py
 ('.7000', 0.6885431408882141)
 ```
 
@@ -89,12 +89,12 @@ paddleocr --lang=ch --det=Fase --image_dir=data
 ![](https://github.com/oh-my-ocr/text_renderer/raw/master/example_data/effect_layout_image/color_image.jpg)
 
 
-```
+```py
 export https_proxy=http://172.19.57.45:3128
 git clone https://github.com/oh-my-ocr/text_renderer
 ```
 
-```
+```py
 import os
 python3 setup.py develop
 python3 -m pip install -r docker/requirements.txt
@@ -109,14 +109,14 @@ python3 main.py \
 
 将收集好的语料存放在 example_data 路径下：
 
-```
+```py
 ln -s ./fonts/DS* text_renderer/example_data/font/
 ln -s ./corpus/digital.txt text_renderer/example_data/text/
 ```
 
 修改 text_renderer/example_data/font_list/font_list.txt ,选择需要的字体开始合成：
 
-```
+```py
 python3 main.py \
     --config example_data/digital_example.py \
     --dataset img \
@@ -152,7 +152,7 @@ PPOCRLabel是一款适用于OCR领域的半自动化图形标注工具，内置P
 
 最终 `data` 文件夹应包含以下几部分：
 
-```
+```py
 |-data
   |- synth_train.txt
   |- real_train.txt
@@ -197,7 +197,7 @@ PPOCRLabel是一款适用于OCR领域的半自动化图形标注工具，内置P
 
 首先下载 PaddleOCR 代码库
 
-```
+```py
 git clone -b release/2.5 https://github.com/PaddlePaddle/PaddleOCR.git
 ```
 
@@ -207,7 +207,7 @@ PaddleOCR提供了训练脚本、评估脚本和预测脚本，本节将以 PP-O
 
 首先下载 pretrain model，您可以下载训练好的模型在自定义数据上进行finetune
 
-```
+```py
 cd PaddleOCR/
 # 下载PP-OCRv3 中文预训练模型
 wget -P ./pretrain_models/ https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
@@ -222,7 +222,7 @@ tar -xf ch_PP-OCRv3_rec_train.tar && rm -rf ch_PP-OCRv3_rec_train.tar
 
 因此字典需要包含所有希望被正确识别的字符，{word_dict_name}.txt需要写成如下格式，并以 `utf-8` 编码格式保存：
 
-```
+```py
 0
 1
 2
@@ -253,7 +253,7 @@ PaddleOCR内置了一部分字典，可以按需使用。
 
 遍历真实数据标签中的字符，制作字典`digital_dict.txt`如下所示：
 
-```
+```py
 -
 .
 0
@@ -290,7 +290,7 @@ z
 为了更好的使用预训练模型，训练推荐使用[ch_PP-OCRv3_rec_distillation.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml)配置文件，并参考下列说明修改配置文件：
 
 以 `ch_PP-OCRv3_rec_distillation.yml` 为例：
-```
+```py
 Global:
   ...
   # 添加自定义字典，如修改字典请将路径指向新字典
@@ -363,7 +363,7 @@ Eval:
 
 *如果您安装的是cpu版本，请将配置文件中的 `use_gpu` 字段修改为false*
 
-```
+```py
 # GPU训练 支持单卡，多卡训练
 # 训练数码管数据 训练日志会自动保存为 "{save_model_dir}" 下的train.log
 
@@ -385,7 +385,7 @@ SVTR_Tiny 训练步骤与上面一致，SVTR支持的配置和模型训练权重
 
 **Step1：下载预训练模型**
 
-```
+```py
 # 下载 SVTR_Tiny 中文识别预训练模型和配置文件
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/rec_svtr_tiny_none_ctc_ch_train.tar
 # 解压模型参数
@@ -401,7 +401,7 @@ tar -xf rec_svtr_tiny_none_ctc_ch_train.tar && rm -rf rec_svtr_tiny_none_ctc_ch_
 
 **Step4：启动训练**
 
-```
+```py
 ## 单卡训练
 python tools/train.py -c rec_svtr_tiny_none_ctc_ch_train/rec_svtr_tiny_6local_6global_stn_ch.yml \
            -o Global.pretrained_model=./rec_svtr_tiny_none_ctc_ch_train/best_accuracy
@@ -419,7 +419,7 @@ python tools/train.py -c rec_svtr_tiny_none_ctc_ch_train/rec_svtr_tiny_6local_6g
 
 训练中模型参数默认保存在`Global.save_model_dir`目录下。在评估指标时，需要设置`Global.checkpoints`指向保存的参数文件。评估数据集可以通过 `configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml`  修改Eval中的 `label_file_path` 设置。
 
-```
+```py
 # GPU 评估， Global.checkpoints 为待测权重
 python3 -m paddle.distributed.launch --gpus '0' tools/eval.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.checkpoints={path/to/weights}/best_accuracy
 ```
@@ -432,7 +432,7 @@ python3 -m paddle.distributed.launch --gpus '0' tools/eval.py -c configs/rec/PP-
 
 根据配置文件中设置的 `save_model_dir` 和 `save_epoch_step` 字段，会有以下几种参数被保存下来：
 
-```
+```py
 output/rec/
 ├── best_accuracy.pdopt  
 ├── best_accuracy.pdparams  
@@ -449,7 +449,7 @@ output/rec/
 
 其中 best_accuracy.* 是评估集上的最优模型；iter_epoch_x.* 是以 `save_epoch_step` 为间隔保存下来的模型；latest.* 是最后一个epoch的模型。
 
-```
+```py
 # 预测英文结果
 python3 tools/infer_rec.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml -o Global.pretrained_model={path/to/weights}/best_accuracy  Global.infer_img=test_digital.png
 ```
@@ -461,7 +461,7 @@ python3 tools/infer_rec.py -c configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.
 
 得到输入图像的预测结果：
 
-```
+```py
 infer_img: test_digital.png
         result: ('-70.00', 0.9998967)
 ```

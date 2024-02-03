@@ -1,6 +1,6 @@
 # `.\PaddleOCR\StyleText\engine\text_drawers.py`
 
-```
+```py
 # 导入所需的库
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np

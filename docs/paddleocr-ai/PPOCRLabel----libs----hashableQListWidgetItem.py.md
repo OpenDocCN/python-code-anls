@@ -1,6 +1,6 @@
 # `.\PaddleOCR\PPOCRLabel\libs\hashableQListWidgetItem.py`
 
-```
+```py
 # 版权声明，允许在特定条件下使用和修改软件
 # 导入所需的模块
 import sys

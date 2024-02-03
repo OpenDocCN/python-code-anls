@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\postprocess\pse_postprocess\pse\setup.py`
 
-```
+```py
 # 导入必要的模块
 from distutils.core import setup, Extension
 from Cython.Build import cythonize

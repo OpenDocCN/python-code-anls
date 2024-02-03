@@ -1,6 +1,6 @@
 # `.\PaddleOCR\ppocr\utils\loggers\vdl_logger.py`
 
-```
+```py
 # 从base_logger模块中导入BaseLogger类
 from .base_logger import BaseLogger
 # 从visualdl模块中导入LogWriter类
