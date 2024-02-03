@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\hypertile\hypertile.py`
 
-```
+```py
 """
 Hypertile module for splitting attention layers in SD-1.5 U-Net and SD-1.5 VAE
 Warn: The patch works well only if the input image has a width and height that are multiples of 128

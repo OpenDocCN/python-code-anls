@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\mobile\javascript\mobile.js`
 
-```
+```py
 // 定义一个变量，用于标识是否为移动设备
 var isSetupForMobile = false;
 

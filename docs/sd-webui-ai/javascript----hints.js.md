@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\hints.js`
 
-```
+```py
 // 鼠标悬停提示，用于各种 UI 元素
 
 // 定义各个 UI 元素的标题和对应的提示信息

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\inputAccordion.js`
 
-```
+```py
 function inputAccordionChecked(id, checked) {
     // 根据 id 获取对应的折叠面板元素
     var accordion = gradioApp().getElementById(id);

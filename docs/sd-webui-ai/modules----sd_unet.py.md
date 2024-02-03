@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_unet.py`
 
-```
+```py
 # 导入 torch.nn 模块
 import torch.nn
 

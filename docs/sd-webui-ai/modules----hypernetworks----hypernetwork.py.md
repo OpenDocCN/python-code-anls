@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\hypernetworks\hypernetwork.py`
 
-```
+```py
 # 导入必要的库
 import datetime
 import glob

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\lyco_helpers.py`
 
-```
+```py
 import torch
 
 # 根据输入的张量 t, wa, wb，通过张量乘法生成新的权重张量

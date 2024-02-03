@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\imageviewer.js`
 
-```
+```py
 // 关闭模态框，当左键点击图库预览时显示
 function closeModal() {
     // 设置模态框的显示样式为隐藏

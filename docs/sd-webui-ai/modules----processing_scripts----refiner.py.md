@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\processing_scripts\refiner.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 

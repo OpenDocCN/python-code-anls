@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\codeformer\codeformer_arch.py`
 
-```
+```py
 # 导入必要的库和模块
 import math
 import torch

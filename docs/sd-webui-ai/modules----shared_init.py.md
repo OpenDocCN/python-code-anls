@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_init.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

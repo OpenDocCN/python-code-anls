@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\prompt_parser.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 

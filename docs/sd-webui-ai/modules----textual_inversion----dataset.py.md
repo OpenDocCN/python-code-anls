@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\dataset.py`
 
-```
+```py
 # 导入必要的库
 import os
 import numpy as np

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\textualInversion.js`
 
-```
+```py
 # 开始文本反转训练的函数
 function start_training_textual_inversion() {
     # 清空错误信息

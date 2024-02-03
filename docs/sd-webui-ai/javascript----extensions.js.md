@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\extensions.js`
 
-```
+```py
 # 应用扩展的更改，根据传入的参数来决定是否禁用所有扩展
 function extensions_apply(_disabled_list, _update_list, disable_all) {
     # 初始化禁用和更新列表

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\deepbooru_model.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入神经网络模块

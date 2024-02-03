@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_models_xl.py`
 
-```
+```py
 # 导入未来版本的注释语法
 from __future__ import annotations
 

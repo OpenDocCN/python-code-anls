@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\esrgan_model_arch.py`
 
-```
+```py
 # 导入所需的库
 from collections import OrderedDict
 import math

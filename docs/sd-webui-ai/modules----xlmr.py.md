@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\xlmr.py`
 
-```
+```py
 # 从 transformers 库中导入 BertPreTrainedModel 和 BertConfig 类
 from transformers import BertPreTrainedModel, BertConfig
 # 从 torch.nn 模块中导入 nn 类

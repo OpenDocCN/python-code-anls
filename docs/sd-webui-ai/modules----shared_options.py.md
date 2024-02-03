@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_options.py`
 
-```
+```py
 # 导入必要的库
 import gradio as gr
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\postprocessing_caption.py`
 
-```
+```py
 # 从 modules 模块中导入所需的模块
 from modules import scripts_postprocessing, ui_components, deepbooru, shared
 # 导入 gradio 库并重命名为 gr

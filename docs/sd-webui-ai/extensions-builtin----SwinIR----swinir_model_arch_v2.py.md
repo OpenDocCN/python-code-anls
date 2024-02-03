@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\SwinIR\swinir_model_arch_v2.py`
 
-```
+```py
 # -----------------------------------------------------------------------------------
 # Swin2SR: Swin2SR: SwinV2 Transformer for Compressed Image Super-Resolution and Restoration, https://arxiv.org/abs/
 # Written by Conde and Choi et al.

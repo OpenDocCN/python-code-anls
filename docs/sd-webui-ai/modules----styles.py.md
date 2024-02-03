@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\styles.py`
 
-```
+```py
 # 导入必要的模块
 import csv
 import fnmatch

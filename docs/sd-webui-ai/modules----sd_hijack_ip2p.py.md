@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_ip2p.py`
 
-```
+```py
 # 导入 os.path 模块
 import os.path
 

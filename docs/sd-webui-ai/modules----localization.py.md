@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\localization.py`
 
-```
+```py
 # 导入 json 和 os 模块
 import json
 import os

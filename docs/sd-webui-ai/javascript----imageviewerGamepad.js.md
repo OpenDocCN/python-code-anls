@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\imageviewerGamepad.js`
 
-```
+```py
 // 初始化游戏手柄数组
 let gamepads = [];
 

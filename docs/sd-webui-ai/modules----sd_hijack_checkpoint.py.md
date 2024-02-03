@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_checkpoint.py`
 
-```
+```py
 # 从 torch.utils.checkpoint 模块中导入 checkpoint 函数
 from torch.utils.checkpoint import checkpoint
 

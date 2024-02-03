@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\paths_internal.py`
 
-```
+```py
 # 定义程序使用的内部路径，可以在 launch.py 中安装依赖之前安全导入
 import argparse  # 导入用于解析命令行参数的模块
 import os  # 导入用于操作系统相关功能的模块

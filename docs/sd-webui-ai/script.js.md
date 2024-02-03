@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\script.js`
 
-```
+```py
 /**
  * 定义一个函数用于获取 gradio-app 元素，如果不存在则返回 document
  */

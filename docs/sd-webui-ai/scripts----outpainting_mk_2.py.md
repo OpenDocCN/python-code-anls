@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\outpainting_mk_2.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

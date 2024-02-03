@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\LDSR\ldsr_model_arch.py`
 
-```
+```py
 # 导入所需的库
 import os
 import gc

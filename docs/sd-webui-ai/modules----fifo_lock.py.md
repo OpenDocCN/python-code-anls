@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\fifo_lock.py`
 
-```
+```py
 # 导入 threading 和 collections 模块
 import threading
 import collections

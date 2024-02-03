@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_samplers.py`
 
-```
+```py
 # 从 modules 模块中导入 sd_samplers_kdiffusion、sd_samplers_timesteps 和 shared 模块
 from modules import sd_samplers_kdiffusion, sd_samplers_timesteps, shared
 

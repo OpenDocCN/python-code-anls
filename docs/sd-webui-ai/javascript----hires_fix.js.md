@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\hires_fix.js`
 
-```
+```py
 function onCalcResolutionHires(enable, width, height, hr_scale, hr_resize_x, hr_resize_y) {
     // 定义内部函数，用于设置元素的激活状态
     function setInactive(elem, inactive) {

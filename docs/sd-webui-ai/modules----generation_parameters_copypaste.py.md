@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\generation_parameters_copypaste.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 import base64

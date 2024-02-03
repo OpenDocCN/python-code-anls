@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\ScuNET\scunet_model_arch.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库
 import numpy as np

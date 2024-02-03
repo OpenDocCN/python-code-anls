@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\util.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 re 模块

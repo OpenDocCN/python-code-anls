@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_samplers_kdiffusion.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 inspect 模块

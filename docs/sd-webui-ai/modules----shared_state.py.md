@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_state.py`
 
-```
+```py
 # 导入必要的模块
 import datetime
 import logging

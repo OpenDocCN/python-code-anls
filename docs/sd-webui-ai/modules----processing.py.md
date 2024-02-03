@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\processing.py`
 
-```
+```py
 # 导入必要的库
 from __future__ import annotations
 import json

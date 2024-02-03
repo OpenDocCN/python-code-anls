@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\patches.py`
 
-```
+```py
 # 导入 defaultdict 模块
 from collections import defaultdict
 

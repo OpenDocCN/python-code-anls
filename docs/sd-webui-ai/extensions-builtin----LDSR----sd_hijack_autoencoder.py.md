@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\LDSR\sd_hijack_autoencoder.py`
 
-```
+```py
 # 从 compvis/stable-diffusion 仓库的 ldm/models/autoencoder.py 文件中获取内容
 # 后来在切换到 stability-ai/stablediffusion 仓库时，VQModel 和 VQModelInterface 从 ldm/models/autoencoder.py 中被移除
 # 由于 LDSR 上采样器依赖于 VQModel 和 VQModelInterface，hijack 旨在将它们放回 ldm.models.autoencoder 中

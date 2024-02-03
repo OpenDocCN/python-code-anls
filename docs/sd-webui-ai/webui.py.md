@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\webui.py`
 
-```
+```py
 # 导入未来的注解特性
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks_checkpoints_user_metadata.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\ui_edit_user_metadata.py`
 
-```
+```py
 # 导入 datetime、html、random、gradio 和 re 模块
 import datetime
 import html

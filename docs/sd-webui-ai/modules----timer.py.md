@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\timer.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入参数解析模块

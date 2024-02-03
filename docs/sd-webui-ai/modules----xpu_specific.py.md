@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\xpu_specific.py`
 
-```
+```py
 # 从 modules 模块中导入 shared 对象
 from modules import shared
 # 从 modules.sd_hijack_utils 模块中导入 CondFunc 类

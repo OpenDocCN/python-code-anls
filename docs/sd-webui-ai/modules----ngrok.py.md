@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ngrok.py`
 
-```
+```py
 import ngrok
 
 # 连接到 ngrok 用于入口

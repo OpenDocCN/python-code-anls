@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\face_restoration.py`
 
-```
+```py
 # 从 modules 模块中导入 shared 对象
 from modules import shared
 

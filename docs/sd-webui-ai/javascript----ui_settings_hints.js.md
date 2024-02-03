@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\ui_settings_hints.js`
 
-```
+```py
 // 设置提示和额外信息的变量
 var settingsHintsSetup = false;
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\ui.js`
 
-```
+```py
 // 与 ui.py 交互的各种函数，代码量不大，不值得将它们放在单独的文件中
 
 // 设置主题

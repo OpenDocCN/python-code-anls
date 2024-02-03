@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\postprocessing_split_oversized.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

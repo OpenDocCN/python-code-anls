@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\scripts_postprocessing.py`
 
-```
+```py
 # 导入必要的模块
 import dataclasses
 import os

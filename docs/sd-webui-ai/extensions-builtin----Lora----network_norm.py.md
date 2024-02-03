@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\network_norm.py`
 
-```
+```py
 # 导入 network 模块
 import network
 

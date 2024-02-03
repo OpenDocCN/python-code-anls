@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\localization.js`
 
-```
+```py
 // 定义一个对象，用于存储需要忽略的元素的 id 和类型
 var ignore_ids_for_localization = {
     setting_sd_hypernetwork: 'OPTION',

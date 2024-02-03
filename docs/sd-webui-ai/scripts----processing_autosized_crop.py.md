@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\processing_autosized_crop.py`
 
-```
+```py
 # 导入所需的模块
 from PIL import Image
 from modules import scripts_postprocessing, ui_components

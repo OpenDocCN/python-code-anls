@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_clip_old.py`
 
-```
+```py
 # 从 modules 模块中导入 sd_hijack_clip 和 shared 模块
 from modules import sd_hijack_clip
 from modules import shared

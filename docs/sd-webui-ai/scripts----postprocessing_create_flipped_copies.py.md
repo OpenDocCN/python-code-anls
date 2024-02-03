@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\postprocessing_create_flipped_copies.py`
 
-```
+```py
 # 从 PIL 库中导入 ImageOps 和 Image 模块
 from PIL import ImageOps, Image
 

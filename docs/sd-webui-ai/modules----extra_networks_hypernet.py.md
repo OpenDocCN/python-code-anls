@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\extra_networks_hypernet.py`
 
-```
+```py
 # 从 modules 模块中导入 extra_networks 和 shared 模块
 # 从 modules.hypernetworks 模块中导入 hypernetwork 模块
 from modules import extra_networks, shared

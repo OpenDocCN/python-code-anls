@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_items.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

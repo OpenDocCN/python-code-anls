@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\edit-attention.js`
 
-```
+```py
 function keyupEditAttention(event) {
     // 获取事件的目标元素
     let target = event.originalTarget || event.composedPath()[0];

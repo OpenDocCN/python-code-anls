@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\hypertile\scripts\hypertile_xyz.py`
 
-```
+```py
 # 从 modules 模块中导入 scripts 和 opts 模块
 from modules import scripts
 from modules.shared import opts

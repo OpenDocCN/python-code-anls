@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\import_hook.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

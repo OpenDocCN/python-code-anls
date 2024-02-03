@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\SwinIR\preload.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 从 modules 模块中导入 paths 模块

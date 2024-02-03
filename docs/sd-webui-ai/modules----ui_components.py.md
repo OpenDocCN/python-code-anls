@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_components.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 
@@ -137,7 +137,7 @@ class InputAccordion(gr.Checkbox):
                 FormHTML(value="hello", min_width=0)
 
             ...
-        ```
+        ```py
         """
         # 返回一个用于在 Accordion 标签中放置内容的 Column 对象
         return gr.Column(elem_id=self.accordion_id + '-extra', elem_classes='input-accordion-extra', min_width=0)

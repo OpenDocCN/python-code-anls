@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\dragdrop.js`
 
-```
+```py
 // 检查文件列表是否包含有效的图片文件，只允许包含一个图片文件且类型为 'image/png', 'image/gif', 'image/jpeg'
 function isValidImageList(files) {
     return files && files?.length === 1 && ['image/png', 'image/gif', 'image/jpeg'].includes(files[0].type);

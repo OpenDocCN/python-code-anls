@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\extra-options-section\scripts\extra_options_section.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

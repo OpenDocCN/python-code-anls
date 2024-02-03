@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\network_lokr.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

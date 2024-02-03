@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\custom_code.py`
 
-```
+```py
 # 导入自定义模块 scripts
 import modules.scripts as scripts
 # 导入 gradio 库并重命名为 gr

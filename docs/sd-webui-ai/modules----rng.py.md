@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\rng.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

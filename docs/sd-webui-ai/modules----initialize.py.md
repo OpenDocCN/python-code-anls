@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\initialize.py`
 
-```
+```py
 # 导入必要的模块
 import importlib
 import logging

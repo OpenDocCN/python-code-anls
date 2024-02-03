@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\ui.py`
 
-```
+```py
 # 导入 html 模块
 import html
 # 导入 gradio 模块并重命名为 gr

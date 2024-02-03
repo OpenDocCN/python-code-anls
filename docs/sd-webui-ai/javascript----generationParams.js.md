@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\generationParams.js`
 
-```
+```py
 // 定义变量 txt2img_gallery, img2img_gallery, modal，初始值为 undefined
 let txt2img_gallery, img2img_gallery, modal = undefined;
 // 在 UI 更新后执行的回调函数

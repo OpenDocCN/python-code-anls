@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\hypertile\scripts\hypertile_script.py`
 
-```
+```py
 # 导入hypertile模块
 import hypertile
 # 从modules模块中导入scripts, script_callbacks, shared

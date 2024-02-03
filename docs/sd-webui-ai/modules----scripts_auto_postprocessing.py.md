@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\scripts_auto_postprocessing.py`
 
-```
+```py
 # 从 modules 模块中导入 scripts、scripts_postprocessing、shared 三个模块
 from modules import scripts, scripts_postprocessing, shared
 

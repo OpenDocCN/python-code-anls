@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\token-counters.js`
 
-```
+```py
 // 存储更新 token 计数器的函数
 let promptTokenCountUpdateFunctions = {};
 

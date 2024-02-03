@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\canvas-zoom-and-pan\javascript\zoom.js`
 
-```
+```py
 // 当页面加载完成时执行异步函数
 onUiLoaded(async() => {
     // 定义页面元素的 ID

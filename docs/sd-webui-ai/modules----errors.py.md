@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\errors.py`
 
-```
+```py
 # 导入 sys 模块，用于访问与 Python 解释器交互的变量和函数
 import sys
 # 导入 textwrap 模块，用于格式化文本块

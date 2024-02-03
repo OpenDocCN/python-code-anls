@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\network.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 import os

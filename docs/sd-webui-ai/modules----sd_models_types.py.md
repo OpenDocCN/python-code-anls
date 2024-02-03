@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_models_types.py`
 
-```
+```py
 from ldm.models.diffusion.ddpm import LatentDiffusion
 from typing import TYPE_CHECKING
 

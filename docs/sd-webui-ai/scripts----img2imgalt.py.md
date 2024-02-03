@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\img2imgalt.py`
 
-```
+```py
 # 导入必要的模块
 from collections import namedtuple
 import numpy as np

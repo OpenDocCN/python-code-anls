@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\prompts_from_file.py`
 
-```
+```py
 # 导入 copy 模块，用于复制对象
 import copy
 # 导入 random 模块，用于生成随机数

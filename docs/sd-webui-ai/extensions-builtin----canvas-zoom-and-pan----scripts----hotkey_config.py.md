@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\canvas-zoom-and-pan\scripts\hotkey_config.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 # 从 modules 模块中导入 shared 模块

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks.py`
 
-```
+```py
 # 导入必要的模块
 import functools
 import os.path

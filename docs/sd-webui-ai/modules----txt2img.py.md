@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\txt2img.py`
 
-```
+```py
 # 导入必要的模块和函数
 from contextlib import closing
 import modules.scripts

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\codeformer\vqgan_arch.py`
 
-```
+```py
 # 从 CodeFormer 仓库复制的文件，请查看 modules/codeformer_model.py 中的注释
 
 '''

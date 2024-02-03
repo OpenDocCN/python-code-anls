@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_postprocessing.py`
 
-```
+```py
 # 导入所需的库和模块
 import gradio as gr
 from modules import scripts, shared, ui_common, postprocessing, call_queue, ui_toprow

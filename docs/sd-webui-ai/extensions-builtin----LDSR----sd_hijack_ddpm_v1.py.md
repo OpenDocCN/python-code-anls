@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\LDSR\sd_hijack_ddpm_v1.py`
 
-```
+```py
 # 从 compvis/stable-diffusion 仓库中复制的脚本，用于恢复旧的 DDPM 逻辑，与 VQ 一起工作，而 V2 不支持
 # 像 LDSR 这样的模型需要 VQ 正确工作
 # 类被添加后缀为 "V1"，并添加回到 "ldm.models.diffusion.ddpm" 模块中

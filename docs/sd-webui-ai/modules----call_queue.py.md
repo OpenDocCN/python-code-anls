@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\call_queue.py`
 
-```
+```py
 # 从 functools 模块导入 wraps 装饰器
 from functools import wraps
 # 导入 html 模块

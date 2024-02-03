@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\SwinIR\scripts\swinir_model.py`
 
-```
+```py
 # 导入系统、平台、numpy、torch、PIL、tqdm等模块
 import sys
 import platform

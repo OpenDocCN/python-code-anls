@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\test\test_extras.py`
 
-```
+```py
 # 导入 requests 模块
 import requests
 

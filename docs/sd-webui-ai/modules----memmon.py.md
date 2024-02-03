@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\memmon.py`
 
-```
+```py
 # 导入所需的库
 import threading
 import time

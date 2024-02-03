@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\interrogate.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

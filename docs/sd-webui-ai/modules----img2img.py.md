@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\img2img.py`
 
-```
+```py
 # 导入必要的库
 import os
 from contextlib import closing

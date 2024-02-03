@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\imageMaskFix.js`
 
-```
+```py
 /**
  * 临时修复 https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/668 的问题
  * 参考 https://github.com/gradio-app/gradio/issues/1721

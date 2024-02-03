@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\ScuNET\scripts\scunet_model.py`
 
-```
+```py
 # 导入必要的库
 import sys
 

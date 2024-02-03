@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\extraNetworks.js`
 
-```
+```py
 function toggleCss(key, css, enable) {
     // 获取指定 ID 的样式元素
     var style = document.getElementById(key);

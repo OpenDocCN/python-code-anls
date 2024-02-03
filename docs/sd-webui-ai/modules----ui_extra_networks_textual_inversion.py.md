@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks_textual_inversion.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from modules import ui_extra_networks, sd_hijack, shared

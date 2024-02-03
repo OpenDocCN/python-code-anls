@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\sd_upscale.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

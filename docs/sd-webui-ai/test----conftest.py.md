@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\test\conftest.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

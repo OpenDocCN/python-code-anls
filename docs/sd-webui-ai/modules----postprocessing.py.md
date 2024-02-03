@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\postprocessing.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from PIL import Image

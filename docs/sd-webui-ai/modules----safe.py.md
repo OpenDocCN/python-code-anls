@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\safe.py`
 
-```
+```py
 # 导入 pickle、collections、torch、numpy、_codecs、zipfile、re 模块
 import pickle
 import collections

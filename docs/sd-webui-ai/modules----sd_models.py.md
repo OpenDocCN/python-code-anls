@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_models.py`
 
-```
+```py
 # 导入必要的库
 import collections
 import os.path

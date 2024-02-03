@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\LDSR\scripts\ldsr_model.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 

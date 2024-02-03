@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\ui_extra_networks_lora.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

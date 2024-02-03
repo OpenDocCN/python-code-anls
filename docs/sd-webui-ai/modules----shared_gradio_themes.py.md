@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_gradio_themes.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 

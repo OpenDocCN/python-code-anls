@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_utils.py`
 
-```
+```py
 # 导入 importlib 模块，用于动态导入模块
 import importlib
 

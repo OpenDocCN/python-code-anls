@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\contextMenus.js`
 
-```
+```py
 # 初始化右键菜单
 var contextMenuInit = function() {
     # 标记事件监听器是否已经应用

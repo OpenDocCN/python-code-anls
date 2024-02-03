@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\poor_mans_outpainting.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

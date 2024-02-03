@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\postprocessing_upscale.py`
 
-```
+```py
 # 从 PIL 库中导入 Image 模块
 from PIL import Image
 # 导入 numpy 库并使用别名 np

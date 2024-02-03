@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_samplers_timesteps.py`
 
-```
+```py
 # 导入 torch 模块
 import torch
 # 导入 inspect 模块

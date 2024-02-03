@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\test\test_utils.py`
 
-```
+```py
 # 导入 pytest 和 requests 模块
 import pytest
 import requests

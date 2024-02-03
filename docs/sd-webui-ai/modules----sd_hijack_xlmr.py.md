@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_xlmr.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

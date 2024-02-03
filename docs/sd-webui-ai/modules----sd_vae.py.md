@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_vae.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import collections

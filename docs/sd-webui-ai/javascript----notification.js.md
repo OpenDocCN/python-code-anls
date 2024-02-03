@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\notification.js`
 
-```
+```py
 // 监视画廊并在主要图像为新时发送浏览器通知
 
 // 上一个主要图像

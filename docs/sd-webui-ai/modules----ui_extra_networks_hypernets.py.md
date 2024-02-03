@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks_hypernets.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_disable_initialization.py`
 
-```
+```py
 # 导入所需的模块
 import ldm.modules.encoders.modules
 import open_clip
@@ -50,7 +50,7 @@ class DisableInitialization(ReplaceHelper):
     ```
     with DisableInitialization():
         do_things()
-    ```
+    ```py
     """
 
     def __init__(self, disable_clip=True):
@@ -81,7 +81,7 @@ class InitializeOnMeta(ReplaceHelper):
     用法:
     ```
 
-    ```
+    ```py
     """
     # 使用 sd_disable_initialization.InitializeOnMeta() 上下文管理器初始化模型
     with sd_disable_initialization.InitializeOnMeta():
@@ -122,7 +122,7 @@ class LoadStateDictOnMeta(ReplaceHelper):
     Meant to be used together with InitializeOnMeta above.
 
     Usage:
-    ```
+    ```py
     with sd_disable_initialization.LoadStateDictOnMeta(state_dict):
         model.load_state_dict(state_dict, strict=False)
     ```

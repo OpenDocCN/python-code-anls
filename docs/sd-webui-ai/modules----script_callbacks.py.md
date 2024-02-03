@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\script_callbacks.py`
 
-```
+```py
 # 导入 inspect 模块，用于获取对象信息
 import inspect
 # 导入 os 模块，提供了一种使用操作系统功能的接口

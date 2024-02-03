@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_vae_approx.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

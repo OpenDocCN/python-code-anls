@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\resizeHandle.js`
 
-```
+```py
 (function() {
     // 定义全局常量，最小宽度为 320
     const GRADIO_MIN_WIDTH = 320;

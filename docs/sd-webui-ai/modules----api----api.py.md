@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\api\api.py`
 
-```
+```py
 # 导入必要的库
 import base64
 import io

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\extensions.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import annotations
 import configparser

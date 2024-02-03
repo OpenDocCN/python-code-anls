@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_samplers_cfg_denoiser.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 modules 模块中导入 prompt_parser, devices, sd_samplers_common

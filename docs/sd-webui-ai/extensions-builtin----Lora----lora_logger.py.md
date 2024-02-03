@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\lora_logger.py`
 
-```
+```py
 # 导入必要的模块
 import sys
 import copy

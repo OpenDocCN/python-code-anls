@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\textual_inversion.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from collections import namedtuple

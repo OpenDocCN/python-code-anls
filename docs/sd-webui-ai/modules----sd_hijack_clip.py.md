@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_clip.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入命名元组

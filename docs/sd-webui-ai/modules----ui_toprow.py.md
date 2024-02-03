@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_toprow.py`
 
-```
+```py
 # 导入 gradio 库
 import gradio as gr
 

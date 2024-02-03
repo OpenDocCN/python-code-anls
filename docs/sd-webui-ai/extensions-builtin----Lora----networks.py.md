@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\networks.py`
 
-```
+```py
 # 导入日志模块
 import logging
 # 导入操作系统模块

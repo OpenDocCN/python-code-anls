@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\localStorage.js`
 
-```
+```py
 # 将键值对存储到本地存储中
 function localSet(k, v) {
     try:

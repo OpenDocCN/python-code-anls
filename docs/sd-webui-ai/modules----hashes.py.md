@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\hashes.py`
 
-```
+```py
 # 导入 hashlib 模块，用于计算哈希值
 # 导入 os.path 模块，用于获取文件的修改时间
 import hashlib

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_samplers_common.py`
 
-```
+```py
 # 导入 inspect 模块，用于检查对象
 import inspect
 # 导入 namedtuple 类型，用于创建命名元组

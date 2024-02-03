@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\rng_philox.py`
 
-```
+```py
 """RNG imitiating torch cuda randn on CPU. You are welcome.
 
 Usage:

@@ -1,3 +1,5 @@
+# SDWebUI 源码解析
+
 # Stable Diffusion web UI
 A browser interface based on Gradio library for Stable Diffusion.
 
@@ -117,7 +119,7 @@ Alternatively, use online services (like Google Colab):
 
 ### Automatic Installation on Linux
 1. Install the dependencies:
-```bash
+```py
 # Debian-based:
 sudo apt install wget git python3 python3-venv libgl1 libglib2.0-0
 # Red Hat-based:
@@ -128,7 +130,7 @@ sudo zypper install wget git python3 libtcmalloc4 libglvnd
 sudo pacman -S wget git python3
 ```
 2. Navigate to the directory you would like the webui to be installed and execute the following command:
-```bash
+```py
 wget -q https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/master/webui.sh
 ```
 3. Run `webui.sh`.

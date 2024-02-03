@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\aspectRatioOverlay.js`
 
-```
+```py
 // 初始化当前宽度和高度为null
 let currentWidth = null;
 let currentHeight = null;

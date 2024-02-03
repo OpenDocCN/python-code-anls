@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\edit-order.js`
 
-```
+```py
 // 定义处理键盘按键事件的函数
 function keyupEditOrder(event) {
     // 如果未启用键盘编辑移动功能，则直接返回

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\learn_schedule.py`
 
-```
+```py
 import tqdm
 
 # 定义一个学习率调度迭代器类

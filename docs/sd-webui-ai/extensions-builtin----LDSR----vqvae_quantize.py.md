@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\LDSR\vqvae_quantize.py`
 
-```
+```py
 # 从指定链接处导入代码，包含了版权声明和许可证信息
 # 代码版权归属于 Patrick Esser、Robin Rombach 和 Björn Ommer
 # 允许任何人免费获取该软件及相关文档文件的副本，并在不受限制的情况下处理该软件

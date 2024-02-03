@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\prompt-bracket-checker\javascript\prompt-bracket-checker.js`
 
-```
+```py
 // 检查文本框中的括号匹配情况，包括圆括号、方括号和花括号
 function checkBrackets(textArea, counterElt) {
     // 初始化一个空对象用于存储各种括号的数量

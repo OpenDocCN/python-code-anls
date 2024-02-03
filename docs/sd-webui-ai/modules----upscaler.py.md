@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\upscaler.py`
 
-```
+```py
 # 导入必要的模块
 import os
 from abc import abstractmethod

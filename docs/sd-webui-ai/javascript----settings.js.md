@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\settings.js`
 
-```
+```py
 // 定义一个对象，用于存储需要排除在显示所有选项卡之外的选项卡
 let settingsExcludeTabsFromShowAll = {
     settings_tab_defaults: 1,

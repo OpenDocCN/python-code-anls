@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.nn.functional 中导入 silu 函数

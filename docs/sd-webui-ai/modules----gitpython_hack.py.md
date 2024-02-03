@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\gitpython_hack.py`
 
-```
+```py
 from __future__ import annotations
 
 # 导入未来版本的注解特性

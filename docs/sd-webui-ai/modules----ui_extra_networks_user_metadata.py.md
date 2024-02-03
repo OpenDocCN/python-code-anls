@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks_user_metadata.py`
 
-```
+```py
 # 导入必要的模块
 import datetime
 import html

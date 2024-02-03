@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\api\models.py`
 
-```
+```py
 # 导入 inspect 模块，用于获取对象信息
 import inspect
 

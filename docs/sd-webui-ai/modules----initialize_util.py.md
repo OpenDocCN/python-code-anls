@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\initialize_util.py`
 
-```
+```py
 import json
 import os
 import signal

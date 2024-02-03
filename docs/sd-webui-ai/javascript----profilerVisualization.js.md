@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\profilerVisualization.js`
 
-```
+```py
 // 创建表格行，包含指定类型的单元格和数据
 function createRow(table, cellName, items) {
     // 创建表格行元素

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\network_hada.py`
 
-```
+```py
 # 导入 lyco_helpers 模块和 network 模块
 import lyco_helpers
 import network

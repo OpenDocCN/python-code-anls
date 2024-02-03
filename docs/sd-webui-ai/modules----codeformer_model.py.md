@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\codeformer_model.py`
 
-```
+```py
 # 导入所需的库
 import os
 import cv2

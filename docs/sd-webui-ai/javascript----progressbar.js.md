@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\javascript\progressbar.js`
 
-```
+```py
 // 记录图库选择的内容
 function rememberGallerySelection() {
 

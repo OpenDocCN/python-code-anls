@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\lowvram.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 modules 模块中导入 devices 和 shared

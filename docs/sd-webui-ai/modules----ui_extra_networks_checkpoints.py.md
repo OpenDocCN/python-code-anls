@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\ui_extra_networks_checkpoints.py`
 
-```
+```py
 # 导入所需的模块
 import html
 import os

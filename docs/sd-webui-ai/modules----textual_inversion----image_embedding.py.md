@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\image_embedding.py`
 
-```
+```py
 # 导入必要的库
 import base64
 import json

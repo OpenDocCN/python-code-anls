@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\devices.py`
 
-```
+```py
 # 导入必要的模块
 import sys
 import contextlib

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\processing_scripts\seed.py`
 
-```
+```py
 # 导入 json 模块
 import json
 

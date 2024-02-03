@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\models\diffusion\uni_pc\sampler.py`
 
-```
+```py
 """SAMPLING ONLY."""
 # 仅用于采样
 

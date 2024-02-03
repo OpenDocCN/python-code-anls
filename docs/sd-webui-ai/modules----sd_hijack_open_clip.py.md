@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_hijack_open_clip.py`
 
-```
+```py
 # 导入 open_clip.tokenizer 模块
 import open_clip.tokenizer
 # 导入 torch 模块

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_vae_taesd.py`
 
-```
+```py
 """
 Tiny AutoEncoder for Stable Diffusion
 (DNN for encoding / decoding SD's latent space)

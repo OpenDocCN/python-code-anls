@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\scripts.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import re

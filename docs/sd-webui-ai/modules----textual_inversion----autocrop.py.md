@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\autocrop.py`
 
-```
+```py
 # 导入所需的库
 import cv2
 import requests

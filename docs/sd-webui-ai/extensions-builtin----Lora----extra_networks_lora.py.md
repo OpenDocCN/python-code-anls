@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\extra_networks_lora.py`
 
-```
+```py
 # 导入额外的网络模块和共享模块
 from modules import extra_networks, shared
 # 导入网络模块

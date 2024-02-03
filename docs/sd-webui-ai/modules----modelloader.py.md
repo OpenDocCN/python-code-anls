@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\modelloader.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import annotations
 import os

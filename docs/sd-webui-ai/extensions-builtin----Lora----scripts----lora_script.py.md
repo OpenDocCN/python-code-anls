@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\extensions-builtin\Lora\scripts\lora_script.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

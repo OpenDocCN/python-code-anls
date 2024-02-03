@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\sd_models_config.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 torch 模块

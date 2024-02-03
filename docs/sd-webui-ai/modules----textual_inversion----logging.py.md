@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\textual_inversion\logging.py`
 
-```
+```py
 # 导入 datetime、json 和 os 模块
 import datetime
 import json

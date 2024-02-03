@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\launch.py`
 
-```
+```py
 # 从模块中导入 launch_utils 模块
 from modules import launch_utils
 

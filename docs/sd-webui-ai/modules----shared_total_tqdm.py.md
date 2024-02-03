@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\shared_total_tqdm.py`
 
-```
+```py
 # 导入 tqdm 库，用于显示进度条
 import tqdm
 

@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\masking.py`
 
-```
+```py
 from PIL import Image, ImageFilter, ImageOps
 
 # 找到包含图像中所有掩码区域的矩形区域。返回矩形的 (x1, y1, x2, y2) 坐标。

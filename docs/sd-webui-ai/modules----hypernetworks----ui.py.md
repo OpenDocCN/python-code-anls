@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\hypernetworks\ui.py`
 
-```
+```py
 # 导入必要的模块
 import html
 import gradio as gr

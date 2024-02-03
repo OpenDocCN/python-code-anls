@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\scripts\prompt_matrix.py`
 
-```
+```py
 # 导入 math 模块
 import math
 

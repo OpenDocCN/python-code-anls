@@ -1,6 +1,6 @@
 # `stable-diffusion-webui\modules\config_states.py`
 
-```
+```py
 """
 Supports saving and restoring webui and extensions from a known working set of commits
 """
