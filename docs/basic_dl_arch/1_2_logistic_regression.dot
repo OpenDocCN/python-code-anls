@@ -1,0 +1,23 @@
+digraph SoftmaxRegression {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+	
+	
+	inp     [label="输入\n[BatchSize, NFeature]", shape="Mrecord"]
+	ll      [label="Linear\n[NFeature, NLabel]"]
+	softmax [label="Softmax"]
+	oup     [label="输出\n[BatchSise, NLabel]", shape="Mrecord"]
+	
+	inp     -> ll
+	ll      -> softmax
+	softmax -> oup
+}

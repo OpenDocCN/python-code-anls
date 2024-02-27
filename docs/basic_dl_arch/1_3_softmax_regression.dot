@@ -1,0 +1,23 @@
+digraph LinearRegression {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+	
+	
+	inp [label="输入\n[BatchSize, NFeature]", shape="Mrecord"]
+	ll  [label="Linear\n[NFeature, 1]"]
+	σ   [label="Sigmoid"]
+	oup [label="输出\n[BatchSise, 1]", shape="Mrecord"]
+	
+	inp -> ll
+	ll  -> σ
+	σ   -> oup
+}
