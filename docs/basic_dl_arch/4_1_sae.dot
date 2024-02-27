@@ -1,4 +1,4 @@
-digraph MLP {
+digraph StackAutoEncoder {
 	rankdir=BT
     node [
 		style=filled, 
