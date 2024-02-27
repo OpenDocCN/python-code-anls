@@ -1,0 +1,27 @@
+digraph MLP {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+	
+	
+	inp     [label="输入\n[BatchSize, NFeature(768)]", shape="Mrecord"]
+	ll1     [label="Linear\n[NFeature(768), NHidden1(512)]"]
+    σ1      [label="Sigmoid"]
+    ll2     [label="Linear\n[NHidden1(512), NHidden2(256)]"]
+    σ2      [label="Sigmoid"]
+    ll3     [label="Linear\n[NHidden2(256), NHidden1(512)]"]
+    σ3      [label="Sigmoid"]
+    ll4     [label="Linear\n[NHidden1(512), NFeature(768)]"]
+	oup     [label="输出\n[BatchSise, NFeature(768)]", shape="Mrecord"]
+	
+	inp -> ll1 -> σ1 -> ll2 -> σ2
+        -> ll3 -> σ3 -> ll4 -> oup
+}
