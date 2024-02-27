@@ -16,6 +16,5 @@ digraph LinearRegression {
 	ll  [label="Linear\n[NFeature, 1]"]
 	oup [label="输出\n[BatchSise, 1]", shape="Mrecord"]
 	
-	inp -> ll
-	ll -> oup
+	inp -> ll -> oup
 }

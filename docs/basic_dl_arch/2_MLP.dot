@@ -12,20 +12,15 @@ digraph MLP {
 	]
 	
 	
-	inp     [label="输入\n[BatchSize, NFeature=768]", shape="Mrecord"]
-	ll1     [label="Linear\n[NFeature, NHidden1=512]"]
+	inp     [label="输入\n[BatchSize, NFeature(768)]", shape="Mrecord"]
+	ll1     [label="Linear\n[NFeature(768), NHidden1(512)]"]
     relu1   [label="Relu"]
-    ll2     [label="Linear\n[NHidden1, NHidden2=256]"]
+    ll2     [label="Linear\n[NHidden1(512), NHidden2(256)]"]
     relu2   [label="Relu"]
-    ll3     [label="Linear\n[NHidden2, NLabels=10]"]
+    ll3     [label="Linear\n[NHidden2(256), NLabels(10)]"]
     softmax [label="Softmax"]
-	oup     [label="输出\n[BatchSise, NLabels]", shape="Mrecord"]
+	oup     [label="输出\n[BatchSise, NLabels(10)]", shape="Mrecord"]
 	
-	inp     -> ll1
-    ll1     -> relu1
-    relu1   -> ll2
-    ll2     -> relu2
-    relu2   -> ll3
-    ll3     -> softmax
-	softmax -> oup
+	inp -> ll1 -> relu1 -> ll2 -> relu2
+        -> ll3 -> softmax -> oup
 }

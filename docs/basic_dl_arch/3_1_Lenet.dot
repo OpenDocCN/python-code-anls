@@ -1,0 +1,38 @@
+digraph Lenet {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+	
+	
+	inp [label="输入\n[BatchSize,\n W=32, H=32, C=1]", shape="Mrecord"]
+    conv1 [label="Conv2D\n[In=1, Out=6, K=5]"]
+    relu1 [label="Relu"]
+    featmap11 [label="[BatchSize,\n W=28, H=28, C=6]", shape="Mrecord"]
+    pool1 [label="MaxPool2D\n[K=2, S=2]"]
+    featmap12 [label="[BatchSize,\n W=14, H=14, C=6]", shape="Mrecord"]
+    conv2 [label="Conv2D\n[In=6, Out=16, K=5]"]
+    relu2 [label="Relu"]
+    featmap21 [label="[BatchSize,\n W=10, H=10, C=16]", shape="Mrecord"]
+    pool2 [label="MaxPool2D\n[K=2, S=2]"]
+    featmap22 [label="[BatchSize,\n W=5, H=5, C=16]", shape="Mrecord"]
+    reshape [label="reshape\n[BatchSize, 16x5x5]"]
+    ll1 [label="Linear1\n[16x5x5, 120]"]
+    relu3 [label="Relu"]
+    ll2 [label="Linear2\n[120, 84]"]
+    relu4 [label="Relu"]
+	ll3  [label="Linear3\n[84, NLabel(10)]"]
+	oup [label="输出\n[BatchSise, NLabel(10)]", shape="Mrecord"]
+	
+	inp -> conv1 -> relu1 -> featmap11 -> pool1 -> featmap12 ->
+           conv2 -> relu2 -> featmap21 -> pool2 -> featmap22 ->
+           reshape -> ll1 -> relu3 -> ll2 -> relu4 -> ll3 -> oup
+	
+}

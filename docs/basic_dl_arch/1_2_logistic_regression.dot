@@ -17,7 +17,5 @@ digraph SoftmaxRegression {
 	softmax [label="Softmax"]
 	oup     [label="输出\n[BatchSise, NLabel]", shape="Mrecord"]
 	
-	inp     -> ll
-	ll      -> softmax
-	softmax -> oup
+	inp -> ll -> softmax -> oup
 }

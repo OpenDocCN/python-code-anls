@@ -17,7 +17,5 @@ digraph LinearRegression {
 	σ   [label="Sigmoid"]
 	oup [label="输出\n[BatchSise, 1]", shape="Mrecord"]
 	
-	inp -> ll
-	ll  -> σ
-	σ   -> oup
+	inp -> ll -> σ -> oup
 }
