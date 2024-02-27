@@ -15,39 +15,27 @@ digraph LSTMCell {
     his_h [label="H[t-1]（历史）\n[BatchSize, NOut]", shape="Mrecord"]
     
     calc_z [label="σ(X[t] @ W[z]\n + H[t-1] @ U[x]\n + b[z])"]
-    calc_r [label="σ(X[t] @ W[xi]\n + H[t-1] @ W[hi]\n + b[i])"]
-    calc_c_cand [label="tanh(X[t] @ W[xc]\n + H[t-1] @ W[hc]\n + b[c])"]
+    calc_r [label="σ(X[t] @ W[r]\n + H[t-1] @ U[r]\n + b[r])"]
+    calc_h_cand [label="tanh(X[t] @ W[h]\n + (H[t-1] * R[t]) @ U[h]\n + b[h])"]
     
-    f   [label="F[t]（遗忘门）\n[BatchSize, NOut]", shape="Mrecord"]
-    i   [label="I[t]（记忆门）\n[BatchSize, NOut]", shape="Mrecord"]
-    c_cand   [label="CCand[t]（长期候补）\n[BatchSize, NOut]", shape="Mrecord"]
-    o   [label="O[t]（输出门）\n[BatchSize, NOut]", shape="Mrecord"]
+    z   [label="Z[t]（更新门）\n[BatchSize, NOut]", shape="Mrecord"]
+    r   [label="R[t]（复位门）\n[BatchSize, NOut]", shape="Mrecord"]
+    h_cand   [label="HCand[t]（候补）\n[BatchSize, NOut]", shape="Mrecord"]
 
-    calc_c [label="F[t] * C[t-1]\n + I[t] * CCand[t]"]
-    calc_h [label="C[t] * tanh(O[t])"]
+    calc_h [label="(1 - Z[t]) * H[t-1]\n + Z[t] * HCand[t]"]
 
-    h [label="H[t]（输出&短期记忆）\n[BatchSize, NOut]", shape="Mrecord"]
-    c [label="C[t]（长期记忆）\n[BatchSize, NOut]", shape="Mrecord"]
+    h [label="H[t]（输出）\n[BatchSize, NOut]", shape="Mrecord"]
 
-    x -> calc_f
-    x -> calc_i
-    x -> calc_c_cand
-    x -> calc_o
+    x -> calc_z
+    x -> calc_r
+    x -> calc_h_cand
 
-    his_h -> calc_f -> f
-    his_h -> calc_i -> i
-    his_h -> calc_c_cand -> c_cand
-    his_h -> calc_o -> o
+    his_h -> calc_z -> z
+    his_h -> calc_r -> r
+    his_h -> calc_h_cand
+    r -> calc_h_cand -> h_cand
 
-    f -> calc_c
-    i -> calc_c
-    c_cand -> calc_c
-
-    calc_c -> c
-
-    c -> calc_h
-    o -> calc_h
+    z -> calc_h
+    h_cand -> calc_h
     calc_h -> h
-
-
 }
