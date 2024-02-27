@@ -29,7 +29,7 @@ digraph Lenet {
     ll2 [label="Linear2\n[120, 84]"]
     relu4 [label="Relu"]
 	ll3  [label="Linear3\n[84, NLabel(10)]"]
-	oup [label="输出\n[BatchSise, NLabel(10)]", shape="Mrecord"]
+	oup [label="输出\n[BatchSise,\n NLabel(10)]", shape="Mrecord"]
 	
 	inp -> conv1 -> relu1 -> featmap11 -> pool1 -> featmap12 ->
            conv2 -> relu2 -> featmap21 -> pool2 -> featmap22 ->

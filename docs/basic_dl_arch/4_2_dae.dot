@@ -13,7 +13,7 @@ digraph DenoiseAutoEncoder {
 	
 	
 	inp       [label="输入\n[BatchSize,\n NFeature(768)]", shape="Mrecord"]
-	noise     [label="AddNoise\n+ 0.5 * randn(\nBatchSize, NFeature(768))", width=6]
+	noise     [label="AddNoise\n+ 0.5 * randn(\nBatchSize,\n NFeature(768))"]
 	ll1       [label="Linear\n[NFeature(768),\n NHidden1(512)]"]
     σ1        [label="Sigmoid"]
     ll2       [label="Linear\n[NHidden1(512),\n NHidden2(256)]"]
