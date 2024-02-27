@@ -1,0 +1,36 @@
+digraph RNNCell {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+    x [label="X[t]（输入）\n[BatchSize, NIn]", shape="Mrecord"]
+    his [label="H[t-1]\n[BatchSize, NOut]", shape="Mrecord"]
+    w_x [label="W[x]（参数）\n[NIn, NOut]", shape="Mrecord"]
+    w_h [label="W[h]（参数）\n[NOut, NOut]", shape="Mrecord"]
+    b   [label="b（参数）\n[1, NOut]", shape="Mrecord"]
+    σ   [label="Sigmoid"]
+    matmul1 [label="@"]
+    matmul2 [label="@"]
+    plus  [label="+"]
+    # calc [label="X[t] @ W[x] + H[t-1] @ W[h] + b"]
+    h   [label="H[t]（输出）\n[BatchSize, NOut]", shape="Mrecord"]
+
+    x -> matmul1
+    w_x -> matmul1
+    his -> matmul2
+    w_h -> matmul2
+    matmul1 -> plus
+    matmul2 -> plus
+    b -> plus
+    plus -> σ
+    σ -> h
+
+}

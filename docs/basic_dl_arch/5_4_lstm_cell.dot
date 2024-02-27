@@ -1,0 +1,55 @@
+digraph GRUCell {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+    x [label="X[t]（输入）\n[BatchSize, NIn]", shape="Mrecord"]
+    his_h [label="H[t-1]（短期历史）\n[BatchSize, NOut]", shape="Mrecord"]
+    his_c [label="C[t-1]（长期历史）\n[BatchSize, NOut]", shape="Mrecord"]
+    
+    calc_f [label="σ(X[t] @ W[xf]\n + H[t-1] @ W[hf]\n + b[f])"]
+    calc_i [label="σ(X[t] @ W[xi]\n + H[t-1] @ W[hi]\n + b[i])"]
+    calc_c_cand [label="tanh(X[t] @ W[xc]\n + H[t-1] @ W[hc]\n + b[c])"]
+    calc_o [label="σ(X[t] @ W[xo]\n + H[t-1] @ W[ho]\n + b[o])"]
+    
+    f   [label="F[t]（遗忘门）\n[BatchSize, NOut]", shape="Mrecord"]
+    i   [label="I[t]（记忆门）\n[BatchSize, NOut]", shape="Mrecord"]
+    c_cand   [label="CCand[t]（长期候补）\n[BatchSize, NOut]", shape="Mrecord"]
+    o   [label="O[t]（输出门）\n[BatchSize, NOut]", shape="Mrecord"]
+
+    calc_c [label="F[t] * C[t-1]\n + I[t] * CCand[t]"]
+    calc_h [label="C[t] * tanh(O[t])"]
+
+    h [label="H[t]（输出&短期记忆）\n[BatchSize, NOut]", shape="Mrecord"]
+    c [label="C[t]（长期记忆）\n[BatchSize, NOut]", shape="Mrecord"]
+
+    x -> calc_f
+    x -> calc_i
+    x -> calc_c_cand
+    x -> calc_o
+
+    his_h -> calc_f -> f
+    his_h -> calc_i -> i
+    his_h -> calc_c_cand -> c_cand
+    his_h -> calc_o -> o
+
+    f -> calc_c
+    i -> calc_c
+    c_cand -> calc_c
+
+    calc_c -> c
+
+    c -> calc_h
+    o -> calc_h
+    calc_h -> h
+
+
+}
