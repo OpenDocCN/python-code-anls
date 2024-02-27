@@ -12,12 +12,12 @@ digraph TimeRNN {
 	]
 	
 	
-	inp  [label="输入\n[BatchSize,\n SeqLen, NFeature]", shape="Mrecord"]
-    rnn1 [label="RNNCell1\n[NFeature, NHidden]"]
+	inp      [label="输入\n[BatchSize,\n SeqLen, NFeature]", shape="Mrecord"]
+    rnn1     [label="RNNCell1\n[NFeature, NHidden]"]
     rnn_rest [label="RNNCell x (NLayers-1)\n[NHidden, NHidden]"]
-    hidst [label="[BatchSize,\n SeqLen, NHidden]", shape="Mrecord"]
-	ll  [label="Linear\n[NHidden, NLabels]"]
-	oup [label="输出\n[BatchSize,\n SeqLen, NLabels]", shape="Mrecord"]
+    hidst    [label="[BatchSize,\n SeqLen, NHidden]", shape="Mrecord"]
+	ll       [label="Linear\n[NHidden, NLabels]"]
+	oup      [label="输出\n[BatchSize,\n SeqLen, NLabels]", shape="Mrecord"]
 	
 	inp -> rnn1 -> rnn_rest -> hidst -> ll -> oup
 }

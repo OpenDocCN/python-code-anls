@@ -12,13 +12,13 @@ digraph NLPRNN {
 	]
 	
 	
-	inp  [label="输入（单词ID）\n[BatchSize, SeqLen]", shape="Mrecord"]
-	emb  []
-    rnn1 [label="RNNCell1\n[NFeature, NHidden]"]
-    rnn_rest [label="RNNCell x (NLayers-1)\n[NHidden, NHidden]"]
-    hidst [label="[BatchSize,\n SeqLen, NHidden]", shape="Mrecord"]
-	ll  [label="Linear\n[NHidden, NLabels]"]
-	oup [label="输出\n[BatchSize,\n SeqLen, NLabels]", shape="Mrecord"]
+	inp      [label="输入（单词ID）\n[BatchSize, SeqLen]", shape="Mrecord"]
+	emb      [label="Embedding\n[VocabSize, NHidden]"]
+	inp_emb  [label="[BatchSize,\n SeqLen, NHidden]", shape="Mrecord"]
+    rnn      [label="RNNCell x NLayers\n[NHidden, NHidden]"]
+    hidst    [label="[BatchSize,\n SeqLen, NHidden]", shape="Mrecord"]
+	emb_w_t  [label="@ Embedding.w.T\n[NHidden, VocabSize]"]
+	oup      [label="输出（单词概率）\n[BatchSize,\n SeqLen, VocabSize]", shape="Mrecord"]
 	
-	inp -> rnn1 -> rnn_rest -> hidst -> ll -> oup
+	inp -> emb -> inp_emb -> rnn -> hidst -> emb_w_t -> oup
 }
