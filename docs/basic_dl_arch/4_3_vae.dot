@@ -1,0 +1,39 @@
+digraph VariationAutoEncoder {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+	
+	
+	inp           [label="输入\n[BatchSize,\n NFeature(768)]", shape="Mrecord"]
+	ll1           [label="Linear\n[NFeature(768),\n NHidden1(512)]"]
+    σ1            [label="Sigmoid"]
+    ll2           [label="Linear\n[NHidden1(512),\n NHidden2(256)]"]
+    σ2            [label="Sigmoid"]
+	ll3_mean      [label="Linear\n[NHidden2(256),\n NHidden3(128)]"]
+	ll3_log_var   [label="Linear\n[NHidden2(256),\n NHidden3(128)]"]
+	z_mean        [label="μ\n[BatchSize,\n NHidden3(128)]", shape="Mrecord"]
+	z_log_var     [label="logσ²\n[BatchSize,\n NHidden3(128)]", shape="Mrecord"]
+	eps           [label="ε\nrandn(BatchSize,\n NHidden3(128))", shape="Mrecord"]
+	sample        [label="μ + exp(logσ² / 2) * ε", width=7]
+	z             [label="z\n[BatchSize,\n NHidden3(128)]", shape="Mrecord"]
+    ll4           [label="Linear\n[NHidden3(128),\n NHidden2(256)]"]
+    σ4            [label="Sigmoid"]
+    ll5           [label="Linear\n[NHidden2(256),\n NHidden1(512)]"]
+    σ5            [label="Sigmoid"]
+    ll6           [label="Linear\n[NHidden1(512),\n NFeature(768)]"]
+	oup           [label="输出\n[BatchSize,\n NFeature(768)]", shape="Mrecord"]
+	
+	inp -> ll1 -> σ1 -> ll2 -> σ2
+    σ2 -> ll3_mean -> z_mean -> sample
+	σ2 -> ll3_log_var -> z_log_var -> sample
+	eps -> sample -> z -> ll4 -> σ4 -> ll5 -> σ5 -> ll6 -> oup
+
+}
