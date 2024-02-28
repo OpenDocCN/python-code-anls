@@ -1,4 +1,4 @@
-digraph DenseLayer {
+digraph TransitionLayer {
 	rankdir=BT
     node [
 		style=filled, 
@@ -10,16 +10,12 @@ digraph DenseLayer {
 		width=5, height=2,
 		shape="box",
 	]
-    inp [label="输入\n[BatchSize, W=BlockW,\n H=BlockH, C=LayerIn]"]
-    bn1 [label="BatchNorm1(LayerIn)"]
-    relu1  [label="Relu"]
-    conv1 [label="Conv2D#1\n[K=1, In=LayerIn,\n Out=BNSize*GrowthRate]"]
-    bn2 [label="BatchNorm2\n(BNSize*GrowthRate)"]
-    relu2  [label="Relu"]
-    conv2 [label="Conv2D#1\n[K=3, P=1,\n In=BNSize*GrowthRate,\n Out=GrowthRate]"]
-    cat [label="cat(axis=1)"]
-    oup [label="输出\n[BatchSize,\n W=BlockW, H=BlockH,\n C=LayerIn+GrowthRate]"]
+    inp [label="输入\n[BatchSize, W=LayerW,\n H=LayerH, C=LayerIn]"]
+    bn [label="BatchNorm1(LayerIn)"]
+    relu  [label="Relu"]
+    conv [label="Conv2D\n[K=1, In=LayerIn,\n Out=LayerIn*CompRate]"]
+    maxpool [label="MaxPool2D\n[K=2, S=2]"]
+    oup [label="输出\n[BatchSize,\n W=BlockW/2,\n H=BlockH/2,\n C=LayerIn*CompRate]"]
 
-    inp -> bn1 -> relu1 -> conv1 -> bn2 -> relu2 -> conv2 -> cat -> oup
-    inp -> cat
+    inp -> bn -> relu -> conv -> maxpool -> oup
 }
