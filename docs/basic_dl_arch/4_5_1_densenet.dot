@@ -1,0 +1,46 @@
+digraph DenseNet {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=7, height=2,
+		shape="box",
+	]
+    inp [label="输入\n[BatchSize, W=224,\n H=224, C=3]"]
+    conv0 [label="Conv2D#0\n[K=7, S=2, P=3,\nIn=3, Out=64]"]
+    bn0 [label="BatchNorm2D(64)"]
+    relu0 [label="Relu"]
+    maxpool0 [label="MaxPool2D#0\n[K=3, S=2, P=1]"]
+    featmap0 [label="[BatchSize,\nW=56, H=56, C=64"]
+    dense1 [label="DenseBlock1\n[NLayers=6, BNSize=4,\n GrowthRate=32]"]
+    featmap11 [label="[BatchSize, W=56, H=56,\n C=64+6*32=256]"]
+    trans1 [label="Trasition1\n[CompRate=0.5]"]
+    featmap12 [label="[BatchSize, W=28, H=28, C=128]"]
+    dense2 [label="DenseBlock2\n[NLayers=12, BNSize=4,\n GrowthRate=32]"]
+    featmap21 [label="[BatchSize, W=28, H=28,\n C=128+12*32=512]"]
+    trans2 [label="Trasition2\n[CompRate=0.5]"]
+    featmap22 [label="[BatchSize, W=14, H=14, C=256]"]
+    dense3 [label="DenseBlock3\n[NLayers=24, BNSize=4,\n GrowthRate=32]"]
+    featmap31 [label="[BatchSize, W=14, H=14,\n C=256+24*32=1024]"]
+    trans3 [label="Trasition3\n[CompRate=0.5]"]
+    featmap32 [label="[BatchSize, W=7, H=7, C=512]"]
+    dense4 [label="DenseBlock4\n[NLayers=16, BNSize=4,\n GrowthRate=32]"]
+    featmap4 [label="[BatchSize, W=7, H=7,\n C=512+16*32=1024]"]
+    avgpool [label="AvgPool2D\n[K=7, S=7]"]
+    featmap5 [label="[BatchSize, W=1, H=1, C=1024]"]
+    reshape [label="reshape([1024])"]
+    linear [label="Linear\n[1024, 1000"]
+    softmax [label="Softmax"]
+    oup [label="输出\n[BatchSize, 1000]"]
+
+    inp -> conv0 -> bn0 -> relu0 -> maxpool0 ->  featmap0 ->
+        dense1 -> featmap11 -> trans1 -> featmap12 ->
+        dense2 -> featmap21 -> trans2 -> featmap22 ->
+        dense3 -> featmap31 -> trans3 -> featmap32 ->
+        dense4 -> featmap4 -> avgpool -> featmap5 ->
+        reshape -> linear -> softmax -> oup
+}
