@@ -11,13 +11,14 @@ digraph ResNet18ConvBlock {
 		shape="box",
 	]
     
-    inp [label="输入\n[BatchSize,\nW=BlockW, \nH=BlockH, C=BlockC]", shape="Mrecord"]
-    conv1 [label="Conv2D#1\n[K=3, P=1,\n In=BlockC,\n Out=BlockC]"]
+    inp [label="输入\n[BatchSize,\nW=BlockW, \nH=BlockH, C=BlockIn]", shape="Mrecord"]
+    conv1 [label="Conv2D#1\n[K=3, S=2, P=1,\n In=BlockIn,\n Out=BlockOut]"]
     relu1 [label="Relu"]
-    conv2 [label="Conv2D#2\n[K=3, P=1,\n In=BlockC,\n Out=BlockC]"]
+    conv2 [label="Conv2D#2\n[K=3, P=1,\n In=BlockOut,\n Out=BlockOut]"]
+    downconv [label="Conv2D#0\n[K=1, S=2,\n In=BlockIn,\n Out=BlockOut]"]
     add   [label="+"]
     relu2 [label="Relu"]
 
     inp -> conv1 -> relu1 -> conv2 -> add -> relu2 -> oup
-    inp -> add
+    inp -> downconv -> add
 }
