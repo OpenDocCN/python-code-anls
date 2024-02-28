@@ -1,4 +1,4 @@
-digraph ResNet18ConvBlock {
+digraph ResNet18DownConvBlock {
 	rankdir=BT
     node [
 		style=filled, 
