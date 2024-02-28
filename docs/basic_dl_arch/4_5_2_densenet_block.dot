@@ -1,0 +1,19 @@
+digraph DenseBlock {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=7, height=2,
+		shape="box",
+	]
+    inp [label="输入\n[BatchSize, W=BlockW,\n H=BlockH, C=LayerIn]"]
+	DenseLayers [label="DenseLayer x NLayers\n[In=BlockIN+#Layer*GrowthRate]"]
+	oup [label="输出\n[BatchSize,\n W=BlockW, H=BlockH,\n C=LayerIn+NumLayer*GrowthRate ]"]
+
+	inp -> DenseLayers -> oup
+
+}

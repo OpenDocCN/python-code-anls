@@ -1,0 +1,25 @@
+digraph DenseLayer {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+    inp [label="输入\n[BatchSize, W=BlockW,\n H=BlockH, C=LayerIn]"]
+    bn1 [label="BatchNorm1(LayerIn)"]
+    relu1  [label="Relu"]
+    conv1 [label="Conv2D#1\n[K=1, In=LayerIn,\n Out=BNSize*GrowthRate]"]
+    bn2 [label="BatchNorm2\n(BNSize*GrowthRate)"]
+    relu2  [label="Relu"]
+    conv2 [label="Conv2D#1\n[K=3, P=1,\n In=BNSize*GrowthRate,\n Out=GrowthRate]"]
+    cat [label="cat(axis=1)"]
+    oup [label="输出\n[BatchSize,\n W=BlockW, H=BlockH,\n C=LayerIn+GrowthRate]"]
+
+    inp -> bn1 -> relu1 -> conv1 -> bn2 -> relu2 -> conv2 -> cat -> oup
+    inp -> cat
+}
