@@ -1,4 +1,4 @@
-digraph CAEConvBlock {
+digraph CAEDeconvBlock {
 	rankdir=BT
     node [
 		style=filled, 
@@ -13,11 +13,11 @@ digraph CAEConvBlock {
 	
 	
 	inp         [label="输入\n[BatchSize,\n W=BlockW,\n H=BlockH,\n C=BlockIn]", shape="Mrecord"]
+    upsamp      [label="UpSample x2"]
 	conv        [label="Conv2D\n[K=3, P=1,\n In=BlockIn,\n Out=BlockOut]"]
 	batchnorm   [label="BatchNorm(BlockOut)"]
     relu        [label="Relu"]
-    maxpool     [label="MaxPool2D\n[K=2, S=2]"]
-	oup         [label="输出\n[BatchSize,\n W=BlockW/2,\n H=BlockH/2,\n C=BlockOut]", shape="Mrecord"]
+	oup         [label="输出\n[BatchSize,\n W=BlockW*2,\n H=BlockH*2,\n C=BlockOut]", shape="Mrecord"]
 
-	inp -> conv -> batchnorm -> relu -> maxpool -> oup 
+	inp -> upsamp -> conv -> batchnorm -> relu -> oup 
 }
