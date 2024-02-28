@@ -1,0 +1,42 @@
+digraph ResNet18 {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+    inp [label="输入\n[BatchSize,\nW=224, H=224, C=3]", shape="Mrecord"]
+    conv0 [label="Conv2D#0\n[K=7, S=2, P=3, In=3, Out=64]"]
+    maxpool0 [label="MaxPool2D#0\n[K=3, S=2, P=1]"]
+    featmap0 [label="[BatchSize,\nW=56, H=56, C=64]", shape="Mrecord"]
+	convblock1 [label="ConvBlock1\n[C=64]"]
+	convblock2 [label="ConvBlock2\n[C=64]"]
+    featmap2 [label="[BatchSize,\nW=56, H=56, C=64]", shape="Mrecord"]
+    downconvblock3 [label="DownConvBlock1\n[In=64, Out=128]"]
+	convblock4 [label="ConvBlock2\n[C=128]"]
+    featmap4 [label="[BatchSize,\nW=28, H=28, C=128]", shape="Mrecord"]
+    downconvblock5 [label="DownConvBlock1\n[In=128, Out=256]"]
+	convblock6 [label="ConvBlock2\n[C=256]"]
+    featmap6 [label="[BatchSize,\nW=14, H=14, C=256]", shape="Mrecord"]
+    downconvblock7 [label="DownConvBlock1\n[In=256, Out=512]"]
+	convblock8 [label="ConvBlock2\n[C=512]"]
+    featmap8 [label="[BatchSize,\nW=7, H=7, C=512]", shape="Mrecord"]
+    avgpool [label="AvgPool2D\n[K=7, S=7]"]
+    featmap9 [label="[BatchSize,\nW=1, H=1, C=512]", shape="Mrecord"]
+    reshape [label="reshape([512])"]
+    linear [label="Linear\n[512, 1000]"]
+    softmax [label="Softmax"]
+	oup [label="输出\n[BatchSize, 1000]", shape="Mrecord"]
+
+    inp -> conv0 -> maxpool0 -> featmap0 -> convblock1 -> convblock2 -> 
+        featmap2 -> downconvblock3 -> convblock4 -> featmap4 ->
+        downconvblock5 -> convblock6 -> featmap6 ->
+        downconvblock7 -> convblock8 -> featmap8 -> avgpool ->
+        featmap9 -> reshape -> linear -> softmax -> oup
+
+}
