@@ -1,0 +1,41 @@
+digraph VGG16 {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+    inp [label="输入\n[BatchSize,\nW=224, H=224, C=3]", shape="Mrecord"]
+	convblock1 [label="ConvBlock1\n[In=3, Out=64]"]
+	featmap1 [label="[BatchSize\nW=112, H=112, C=64]", shape="Mrecord"]
+	convblock2 [label="ConvBlock2\n[In=64, Out=128]"]
+	featmap2 [label="[BatchSize\nW=56, H=56, C=128]", shape="Mrecord"]
+	convblock3 [label="ConvBlock3\n[In=128, Out=256]"]
+	featmap3 [label="[BatchSize\nW=28, H=28, C=256]", shape="Mrecord"]
+	convblock4 [label="ConvBlock4\n[In=256, Out=512]"]
+	featmap4 [label="[BatchSize\nW=14, H=14, C=512]", shape="Mrecord"]
+	convblock5 [label="ConvBlock5\n[In=512, Out=512]"]
+	featmap5 [label="[BatchSize\nW=7, H=7, C=512]", shape="Mrecord"]
+	reshape [label="reshape([7x7x512])"]
+	linear1 [label="Linear1\n[7x7x512, 4096]"]
+	relu1 [label="Relu"]
+	linear2 [label="Linear2\n[4096, 4096]"]
+	relu2 [label="Relu"]
+	linear3 [label="Linear3\n[4096, 1000]"]
+	relu3 [label="Relu"]
+	linear4 [label="Linear4\n[1000, 1000]"]
+	softmax [label="Softmax"]
+	oup [label="输出\n[BatchSize, 1000]", shape="Mrecord"]
+
+	inp -> convblock1 -> featmap1 -> convblock2 -> featmap2 ->
+		convblock3 -> featmap3 -> convblock4 -> featmap4 -> 
+		convblock5 -> featmap5 -> reshape -> linear1 -> relu1 ->
+		linear2 -> relu2 -> linear3 -> relu3 -> linear4 -> softmax ->
+		oup
+}

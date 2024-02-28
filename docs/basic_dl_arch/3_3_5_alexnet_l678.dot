@@ -22,7 +22,7 @@ digraph AlexNetL678 {
     dropout7 [label="Dropout"]
     linear8 [label="Linear7\n[4096, 1000]"]
     softmax [label="Softmax"]
-    oup [label="输出\n[BatchSize, 1000]"]
+    oup [label="输出\n[BatchSize, 1000]", shape="Mrecord"]
 
     featmap52 -> reshape -> linear6 -> relu6 -> dropout6 ->
         linear7 -> relu7 -> dropout7 -> linear8 -> softmax -> oup
