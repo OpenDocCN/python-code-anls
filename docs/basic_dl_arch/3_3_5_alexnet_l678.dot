@@ -1,0 +1,30 @@
+digraph AlexNetL678 {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+
+    featmap52 [label="[BatchSize,\nW=6, H=6, C=128x2]", shape="Mrecord"]
+    reshape [label="reshape([4096])"]
+    linear6 [label="Linear6\n[4096, 4096]"]
+    relu6 [label="Relu"]
+    dropout6 [label="Dropout"]
+    linear7 [label="Linear7\n[4096, 4096]"]
+    relu7 [label="Relu"]
+    dropout7 [label="Dropout"]
+    linear8 [label="Linear7\n[4096, 1000]"]
+    softmax [label="Softmax"]
+    oup [label="输出\n[BatchSize, 1000]"]
+
+    featmap52 -> reshape -> linear6 -> relu6 -> dropout6 ->
+        linear7 -> relu7 -> dropout7 -> linear8 -> softmax -> oup
+
+}

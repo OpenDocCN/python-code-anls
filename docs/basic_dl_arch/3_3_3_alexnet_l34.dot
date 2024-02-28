@@ -1,0 +1,23 @@
+digraph AlexNetL34 {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+    featmap22 [label="[BatchSize,\nW=13, H=13, C=128x2]", shape="Mrecord"]
+	conv3 [label="Conv2D#3\n[K=3, P=1,\n In=128x2, Out=192x2]"]
+    relu3 [label="Relu"]
+    featmap3 [label="[BatchSize,\nW=13, H=13, C=192x2]", shape="Mrecord"]
+	conv4 [label="Conv2D#4\n[K=3, P=1,\n In=192x2, Out=192x2]"]
+    relu4 [label="Relu"]
+    featmap4 [label="[BatchSize,\nW=13, H=13, C=192x2]", shape="Mrecord"]
+
+    featmap22 -> conv3 -> relu3 -> featmap3 -> conv4 -> relu4 -> featmap4
+}

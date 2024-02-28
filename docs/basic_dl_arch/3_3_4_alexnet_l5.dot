@@ -1,0 +1,22 @@
+digraph AlexNetL5 {
+	rankdir=BT
+    node [
+		style=filled, 
+		color=Black
+		fontcolor=White, 
+		fillcolor="#30638e", 
+		fontname="SimHei",
+		fontsize=32,
+		width=5, height=2,
+		shape="box",
+	]
+
+    featmap4 [label="[BatchSize,\nW=13, H=13, C=192x2]", shape="Mrecord"]
+    conv5 [label="Conv2D#5\n[K=3, P=1,\n In=192x2, Out=128x2]"]
+    relu5 [label="Relu"]
+    featmap51 [label="[BatchSize,\nW=13, H=13, C=128x2]", shape="Mrecord"]
+    maxpool5 [label="MaxPool2D#5\n[K=3, S=2]"]
+    featmap52 [label="[BatchSize,\nW=6, H=6, C=128x2]", shape="Mrecord"]
+
+    featmap4 -> conv5 -> relu5 -> featmap51 -> maxpool5 -> featmap52
+}
