@@ -19,16 +19,16 @@ digraph ConvAutoEncoder {
 	featmap_e2  [label="[BatchSize,\nW=64, H=64, C=32]", shape="Mrecord"]
 	conv3       [label="ConvBlock3\n[In=32, Out=32]"]
 	featmap_e3  [label="[BatchSize,\nW=32, H=32, C=32]", shape="Mrecord"]
-	deconv3     [label="DeconvBlock3\n[In=32, Out=32]"]
+	upconv3     [label="UpConvBlock3\n[In=32, Out=32]"]
 	featmap_d2  [label="[BatchSize,\nW=64, H=64, C=32]", shape="Mrecord"]
-	deconv2     [label="DeconvBlock2\n[In=32, Out=16]"]
+	upconv2     [label="UpConvBlock2\n[In=32, Out=16]"]
 	featmap_d1  [label="[BatchSize,\nW=128, H=128, C=16", shape="Mrecord"]
-	deconv1     [label="DeconvBlock1\n[In=16, Out=3]"]
+	upconv1     [label="UpConvBlock1\n[In=16, Out=3]"]
 	tanh        [label="Tanh"]
 	oup         [label="输出\n[BatchSize,\n W=256, H=256, C=3]", shape="Mrecord"]
 
 	inp -> conv1 -> featmap_e1 -> conv2 -> featmap_e2
-        -> conv3 -> featmap_e3 -> deconv3 -> featmap_d2
-        -> deconv2 -> featmap_d1 -> deconv1
+        -> conv3 -> featmap_e3 -> upconv3 -> featmap_d2
+        -> upconv2 -> featmap_d1 -> upconv1
         -> tanh -> oup 
 }
