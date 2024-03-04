@@ -1,4 +1,4 @@
-digraph SoftmaxRegression {
+digraph LinearRegression {
 	rankdir=BT
     node [
 		style=filled, 
@@ -12,10 +12,10 @@ digraph SoftmaxRegression {
 	]
 	
 	
-	inp     [label="输入\n[BatchSize, NFeature]", shape="Mrecord"]
-	ll      [label="Linear\n[NFeature, NLabel]"]
-	softmax [label="Softmax"]
-	oup     [label="输出\n[BatchSise, NLabel]", shape="Mrecord"]
+	inp [label="输入\n[BatchSize, NFeature]", shape="Mrecord"]
+	ll  [label="Linear\n[NFeature, 1]"]
+	σ   [label="Sigmoid"]
+	oup [label="输出\n[BatchSise, 1]", shape="Mrecord"]
 	
-	inp -> ll -> softmax -> oup
+	inp -> ll -> σ -> oup
 }
