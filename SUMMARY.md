@@ -9,6 +9,7 @@
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
 +   [KubiScan 源码解析](docs/kubiscan-ai/README.md)
++   [Marker 源码解析](docs/marker/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
 +   [PaddleOCR 源码解析](docs/paddleocr-ai/README.md)
