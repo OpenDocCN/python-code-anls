@@ -1,6 +1,6 @@
 # `.\PokeLLMon\vs_local_player.py`
 
-```
+```py
 # 导入必要的库
 import asyncio
 from poke_env import AccountConfiguration, ShowdownServerConfiguration

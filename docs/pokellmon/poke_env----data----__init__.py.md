@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\__init__.py`
 
-```
+```py
 # 从 poke_env.data.gen_data 模块中导入 GenData 类
 # 从 poke_env.data.normalize 模块中导入 to_id_str 函数
 # 从 poke_env.data.replay_template 模块中导入 REPLAY_TEMPLATE 常量

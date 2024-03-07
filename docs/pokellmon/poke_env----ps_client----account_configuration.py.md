@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\ps_client\account_configuration.py`
 
-```
+```py
 # 该模块包含与玩家配置相关的对象
 """
 # 导入必要的模块

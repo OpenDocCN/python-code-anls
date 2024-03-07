@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\replay_template.py`
 
-```
+```py
 # 导入 os 模块
 import os
 

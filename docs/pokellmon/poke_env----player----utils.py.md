@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\utils.py`
 
-```
+```py
 """This module contains utility functions and objects related to Player classes.
 """
 

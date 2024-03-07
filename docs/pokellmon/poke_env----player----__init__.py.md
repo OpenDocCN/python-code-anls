@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\__init__.py`
 
-```
+```py
 # 初始化 poke_env.player 模块
 """
 # 导入并引入并发模块 POKE_LOOP

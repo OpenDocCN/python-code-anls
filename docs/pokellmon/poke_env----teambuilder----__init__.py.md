@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\teambuilder\__init__.py`
 
-```
+```py
 # 初始化 poke_env.teambuilder 模块
 """
 # 导入 constant_teambuilder 和 teambuilder 模块

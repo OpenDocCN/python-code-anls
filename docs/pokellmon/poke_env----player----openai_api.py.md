@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\openai_api.py`
 
-```
+```py
 """This module defines a player class with the OpenAI API on the main thread.
 For a black-box implementation consider using the module env_player.
 """

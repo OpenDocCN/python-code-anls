@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\concurrency.py`
 
-```
+```py
 # 导入必要的模块
 import asyncio
 import atexit

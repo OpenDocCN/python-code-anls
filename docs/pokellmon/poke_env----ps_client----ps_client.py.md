@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\ps_client\ps_client.py`
 
-```
+```py
 """
 这个模块定义了一个与 Showdown 服务器通信的基类。
 """

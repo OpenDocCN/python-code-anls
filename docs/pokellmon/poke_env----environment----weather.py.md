@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\weather.py`
 
-```
+```py
 """This module defines the Weather class, which represents a in-battle weather.
 """
 # 导入日志记录模块

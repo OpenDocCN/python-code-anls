@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\battle.py`
 
-```
+```py
 # 导入所需模块
 from logging import Logger
 from typing import Any, Dict, List, Optional, Union

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\z_crystal.py`
 
-```
+```py
 """This module contains objects related ot z-crystal management. It should not be used
 directly.
 """

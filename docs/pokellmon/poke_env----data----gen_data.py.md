@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\gen_data.py`
 
-```
+```py
 # 导入必要的模块和函数
 from __future__ import annotations
 import os

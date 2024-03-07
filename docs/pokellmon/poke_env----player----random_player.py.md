@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\random_player.py`
 
-```
+```py
 # 定义一个随机玩家基线的模块
 """This module defines a random players baseline
 """

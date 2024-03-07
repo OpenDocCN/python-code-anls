@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\ps_client\server_configuration.py`
 
-```
+```py
 # 该模块包含与服务器配置相关的对象
 from typing import NamedTuple
 

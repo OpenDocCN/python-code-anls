@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\normalize.py`
 
-```
+```py
 # 导入 functools 模块中的 lru_cache 装饰器
 from functools import lru_cache
 

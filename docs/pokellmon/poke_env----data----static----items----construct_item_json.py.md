@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\static\items\construct_item_json.py`
 
-```
+```py
 # 导入 pandas 和 json 模块
 import pandas as pd
 import json

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\static\abilities\construct_ability_json.py`
 
-```
+```py
 # 导入 pandas 库，用于处理数据
 import pandas as pd
 # 导入 json 库，用于处理 JSON 数据

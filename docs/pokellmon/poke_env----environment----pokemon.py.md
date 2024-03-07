@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\pokemon.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来版本的注解特性
 

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\side_condition.py`
 
-```
+```py
 """This module defines the SideCondition class, which represents a in-battle side
 condition.
 """

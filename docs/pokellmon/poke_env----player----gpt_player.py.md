@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\gpt_player.py`
 
-```
+```py
 import json  # 导入 json 模块
 import os  # 导入 os 模块
 import random  # 导入 random 模块

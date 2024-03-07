@@ -12,7 +12,7 @@ The documentation will be fully updated within 3 days.
 
 ## Requirements:
 
-```sh
+```pysh
 python >= 3.8
 openai >= 1.7.2
 ``` 
@@ -24,7 +24,7 @@ openai >= 1.7.2
 1. Install Node.js v10+.
 2. Clone the Pokémon Showdown repository and set it up:
 
-```sh
+```pysh
 git clone https://github.com/smogon/pokemon-showdown.git
 cd pokemon-showdown
 npm install
@@ -41,7 +41,7 @@ Get GPT-4 API from https://platform.openai.com/account/api-keys
 
 Register in your account on https://play.pokemonshowdown.com/ and get your password.
 
-```sh
+```pysh
 from poke_env import AccountConfiguration
 # No authentication required for the local server
 my_account_config = AccountConfiguration("your_username", "your_password")
@@ -56,7 +56,7 @@ player = Player(account_configuration=my_account_config, server_configuration=Sh
 ## Let's Play Pokémon Battles!! 
 
 ### Battle Against the Heuristic Bot Locally
-```sh
+```pysh
 python vs_bot.py # fill in your username and password for PokeLLMon
 ``` 
 
@@ -64,7 +64,7 @@ python vs_bot.py # fill in your username and password for PokeLLMon
 
 First, log into your other account manually on the local server, choosing "[Gen 8] Random Battle".
 
-```sh
+```pysh
 python vs_local_player.py # fill in your username and password for PokeLLMon
 ```
 
@@ -72,7 +72,7 @@ python vs_local_player.py # fill in your username and password for PokeLLMon
 
 Open and log in: https://play.pokemonshowdown.com/
 
-```sh
+```pysh
 python vs_ladder_player.py # fill in your username and password for PokeLLMon, no need to set up local server.
 ```
 

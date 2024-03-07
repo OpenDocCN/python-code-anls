@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\__init__.py`
 
-```
+```py
 """poke_env module init.
 """
 # 导入日志模块

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\double_battle.py`
 
-```
+```py
 # 从 logging 模块中导入 Logger 类
 from logging import Logger
 # 从 typing 模块中导入 Any, Dict, List, Optional, Union 类型

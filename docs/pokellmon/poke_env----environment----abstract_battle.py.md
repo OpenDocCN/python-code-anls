@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\abstract_battle.py`
 
-```
+```py
 # 导入必要的模块
 import os
 from abc import ABC, abstractmethod

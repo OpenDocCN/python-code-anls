@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\effect.py`
 
-```
+```py
 """This module defines the Effect class, which represents in-game effects.
 """
 # 导入必要的模块

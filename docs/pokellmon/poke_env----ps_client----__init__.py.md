@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\ps_client\__init__.py`
 
-```
+```py
 # 导入所需的模块和类
 from poke_env.ps_client.account_configuration import AccountConfiguration
 from poke_env.ps_client.ps_client import PSClient

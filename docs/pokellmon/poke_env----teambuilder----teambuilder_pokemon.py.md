@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\teambuilder\teambuilder_pokemon.py`
 
-```
+```py
 """This module defines the TeambuilderPokemon class, which is used as an intermediate
 format to specify pokemon builds in teambuilders custom classes.
 """

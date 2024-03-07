@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\llama_player.py`
 
-```
+```py
 # 导入所需的模块
 from poke_env.player.gpt_player import LLMPlayer
 from poke_env.environment.abstract_battle import AbstractBattle

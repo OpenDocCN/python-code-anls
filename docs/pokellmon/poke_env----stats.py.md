@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\stats.py`
 
-```
+```py
 # 该模块包含与统计相关的实用函数和对象
 
 import math

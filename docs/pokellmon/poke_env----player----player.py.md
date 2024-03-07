@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\player\player.py`
 
-```
+```py
 """This module defines a base class for players.
 """
 

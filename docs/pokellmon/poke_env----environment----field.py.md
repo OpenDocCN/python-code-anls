@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\field.py`
 
-```
+```py
 """This module defines the Field class, which represents a battle field.
 """
 # 导入必要的模块

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\exceptions.py`
 
-```
+```py
 """
 This module contains exceptions.
 """

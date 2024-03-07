@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\status.py`
 
-```
+```py
 """
 This module defines the Status class, which represents statuses a pokemon can be afflicted with.
 """

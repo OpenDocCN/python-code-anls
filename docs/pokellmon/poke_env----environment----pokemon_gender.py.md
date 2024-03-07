@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\pokemon_gender.py`
 
-```
+```py
 """
 This module defines the PokemonGender class, which represents the gender of a Pokemon.
 """

@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\move_category.py`
 
-```
+```py
 # 导入需要的模块
 from enum import Enum, auto, unique
 

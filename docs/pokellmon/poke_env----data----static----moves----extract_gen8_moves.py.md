@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\data\static\moves\extract_gen8_moves.py`
 
-```
+```py
 # 导入 json 和 re 模块
 import json
 import re

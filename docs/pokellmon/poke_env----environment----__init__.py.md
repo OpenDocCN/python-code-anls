@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\__init__.py`
 
-```
+```py
 # 从 poke_env.environment 模块中导入各种类和常量
 from poke_env.environment import (
     abstract_battle,

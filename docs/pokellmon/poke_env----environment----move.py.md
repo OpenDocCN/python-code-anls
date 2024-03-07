@@ -1,6 +1,6 @@
 # `.\PokeLLMon\poke_env\environment\move.py`
 
-```
+```py
 # 导入 copy 模块，用于深拷贝对象
 import copy
 # 导入 lru_cache 装饰器，用于缓存函数的结果
