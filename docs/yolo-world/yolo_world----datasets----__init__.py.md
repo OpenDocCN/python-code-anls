@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\__init__.py`
 
-```
+```py
 # 导入所需的模块和类
 from .mm_dataset import (
     MultiModalDataset, MultiModalMixedDataset)

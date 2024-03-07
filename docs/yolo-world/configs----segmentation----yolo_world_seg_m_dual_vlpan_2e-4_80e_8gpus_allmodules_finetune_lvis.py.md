@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\segmentation\yolo_world_seg_m_dual_vlpan_2e-4_80e_8gpus_allmodules_finetune_lvis.py`
 
-```
+```py
 _base_ = (
     '../../third_party/mmyolo/configs/yolov8/yolov8_m_mask-refine_syncbn_fast_8xb16-500e_coco.py'
 )

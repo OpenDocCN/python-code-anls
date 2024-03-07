@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\deploy\detection_tensorrt-fp16_static-640x640.py`
 
-```
+```py
 _base_ = (
     '../../third_party/mmyolo/configs/deploy/'
     'detection_tensorrt-fp16_static-640x640.py')

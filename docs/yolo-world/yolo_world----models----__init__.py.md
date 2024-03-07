@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\__init__.py`
 
-```
+```py
 # 导入 Tencent 公司所有权的代码库
 # 从 backbones 模块中导入所有内容
 from .backbones import *  # noqa

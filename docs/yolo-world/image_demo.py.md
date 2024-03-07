@@ -1,6 +1,6 @@
 # `.\YOLO-World\image_demo.py`
 
-```
+```py
 # 版权声明
 # 导入必要的库
 import os

@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\data_preprocessors\__init__.py`
 
-```
+```py
 # 版权声明，版权归腾讯公司所有
 # 导入 YOLOWDetDataPreprocessor 类
 from .data_preprocessor import YOLOWDetDataPreprocessor

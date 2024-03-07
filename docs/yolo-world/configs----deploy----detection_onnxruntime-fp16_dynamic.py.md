@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\deploy\detection_onnxruntime-fp16_dynamic.py`
 
-```
+```py
 # 设置基础路径为指定的配置文件路径
 _base_ = (
     '../../third_party/mmdeploy/configs/mmdet/detection/'

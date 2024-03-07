@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\losses\dynamic_loss.py`
 
-```
+```py
 # 导入必要的库
 from typing import Optional
 import torch

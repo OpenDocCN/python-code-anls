@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\detectors\yolo_world.py`
 
-```
+```py
 # 导入所需的模块和类
 from typing import List, Tuple, Union
 from torch import Tensor

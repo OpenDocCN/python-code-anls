@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\mm_dataset.py`
 
-```
+```py
 # 导入所需的模块和类
 import copy
 import json

@@ -28,13 +28,13 @@ Please refer to the [config for fine-tuning YOLO-World-L on COCO](../configs/fin
 
 If the fine-tuning dataset **contains mask annotations**:
 
-```python
+```pypython
 _base_ = ('../../third_party/mmyolo/configs/yolov8/yolov8_l_mask-refine_syncbn_fast_8xb16-500e_coco.py')
 ```
 
 If the fine-tuning dataset **doesn't contain mask annotations**:
 
-```python
+```pypython
 _base_ = ('../../third_party/mmyolo/configs/yolov8/yolov8_l_syncbn_fast_8xb16-500e_coco.py')
 ```
 
@@ -42,7 +42,7 @@ _base_ = ('../../third_party/mmyolo/configs/yolov8/yolov8_l_syncbn_fast_8xb16-50
 
 Reducing the epochs and adjusting the learning rate
 
-```python
+```pypython
 max_epochs = 80
 base_lr = 2e-4
 weight_decay = 0.05
@@ -59,7 +59,7 @@ train_cfg = dict(
 
 3. Datasets:
 
-```python
+```pypython
 coco_train_dataset = dict(
     _delete_=True,
     type='MultiModalDataset',
@@ -83,7 +83,7 @@ You can refer to the [config for Efficient YOLO-World](./../configs/finetune_coc
 
 The efficient YOLO-World adopts `EfficientCSPLayerWithTwoConv` and the text encoder can be removed during inference or exporting models.
 
-```python
+```pypython
 
 model = dict(
     type='YOLOWorldDetector',
@@ -100,7 +100,7 @@ model = dict(
 
 It's easy:
 
-```bash
+```pybash
 ./dist_train.sh <path/to/config> <NUM_GPUS> --amp
 ```
 

@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\backbones\mm_backbone.py`
 
-```
+```py
 # 导入所需的库
 import itertools
 from typing import List, Sequence, Tuple

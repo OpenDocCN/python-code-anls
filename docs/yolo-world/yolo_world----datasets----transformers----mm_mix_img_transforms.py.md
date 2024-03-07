@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\transformers\mm_mix_img_transforms.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections
 import copy

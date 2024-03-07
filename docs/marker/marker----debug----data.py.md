@@ -1,6 +1,6 @@
 # `.\marker\marker\debug\data.py`
 
-```
+```py
 import base64
 import json
 import os

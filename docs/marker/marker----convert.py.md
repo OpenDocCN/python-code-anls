@@ -1,6 +1,6 @@
 # `.\marker\marker\convert.py`
 
-```
+```py
 # 导入所需的库
 import fitz as pymupdf
 

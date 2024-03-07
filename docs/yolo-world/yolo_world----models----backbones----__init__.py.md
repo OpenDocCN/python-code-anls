@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\backbones\__init__.py`
 
-```
+```py
 # 版权声明，版权归腾讯公司所有
 # YOLO 多模态骨干网络（视觉语言）
 # 视觉部分：YOLOv8 CSPDarknet

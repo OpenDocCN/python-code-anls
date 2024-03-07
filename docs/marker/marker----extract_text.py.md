@@ -1,6 +1,6 @@
 # `.\marker\marker\extract_text.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from typing import Tuple, List, Optional

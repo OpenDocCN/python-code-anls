@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\yolov5_v3det.py`
 
-```
+```py
 # 导入所需的模块和函数
 import copy
 import json

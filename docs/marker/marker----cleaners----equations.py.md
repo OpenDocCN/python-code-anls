@@ -1,6 +1,6 @@
 # `.\marker\marker\cleaners\equations.py`
 
-```
+```py
 # 导入所需的库
 import io
 from copy import deepcopy

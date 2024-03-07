@@ -1,6 +1,6 @@
 # `.\marker\marker\bbox.py`
 
-```
+```py
 import fitz as pymupdf
 
 # 判断两个矩形框是否应该合并

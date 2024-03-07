@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\engine\optimizers\yolow_v5_optim_constructor.py`
 
-```
+```py
 # 版权声明，版权归腾讯公司所有
 import logging
 from typing import List, Optional, Union

@@ -1,6 +1,6 @@
 # `.\marker\marker\schema.py`
 
-```
+```py
 # 导入 Counter 类，用于计数
 # 导入 List、Optional、Tuple 类型，用于类型提示
 from collections import Counter

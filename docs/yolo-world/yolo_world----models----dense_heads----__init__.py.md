@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\dense_heads\__init__.py`
 
-```
+```py
 # 导入 YOLOWorldHead 和 YOLOWorldHeadModule 类
 from .yolo_world_head import YOLOWorldHead, YOLOWorldHeadModule
 # 导入 YOLOWorldSegHead 和 YOLOWorldSegHeadModule 类

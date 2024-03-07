@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\data_preprocessors\data_preprocessor.py`
 
-```
+```py
 # 版权声明
 # 导入必要的库和模块
 from typing import Optional, Union

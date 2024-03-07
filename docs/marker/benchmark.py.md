@@ -1,6 +1,6 @@
 # `.\marker\benchmark.py`
 
-```
+```py
 import argparse
 import tempfile
 import time

@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\yolov5_obj365v2.py`
 
-```
+```py
 # 导入 Objects365V2Dataset 类
 from mmdet.datasets import Objects365V2Dataset
 

@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\yolov5_mixed_grounding.py`
 
-```
+```py
 # 导入必要的模块
 import os.path as osp
 from typing import List, Union

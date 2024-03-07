@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\finetune_coco\yolo_world_l_efficient_neck_2e-4_80e_8gpus_mask-refine_finetune_coco.py`
 
-```
+```py
 _base_ = ('../../third_party/mmyolo/configs/yolov8/'
           'yolov8_l_mask-refine_syncbn_fast_8xb16-500e_coco.py')
 custom_imports = dict(imports=['yolo_world'], allow_failed_imports=False)

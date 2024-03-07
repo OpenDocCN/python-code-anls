@@ -1,6 +1,6 @@
 # `.\marker\marker\ocr\utils.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Optional
 from nltk import wordpunct_tokenize

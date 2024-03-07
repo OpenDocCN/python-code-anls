@@ -1,6 +1,6 @@
 # `.\marker\marker\cleaners\table.py`
 
-```
+```py
 # 从 marker.bbox 模块中导入 merge_boxes 函数
 # 从 marker.schema 模块中导入 Line, Span, Block, Page 类
 # 从 copy 模块中导入 deepcopy 函数

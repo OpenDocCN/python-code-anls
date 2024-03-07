@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\layers\yolo_bricks.py`
 
-```
+```py
 # 版权声明，版权归腾讯公司所有
 from typing import List  # 导入 List 类型
 

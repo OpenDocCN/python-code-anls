@@ -1,6 +1,6 @@
 # `.\marker\marker\cleaners\headers.py`
 
-```
+```py
 # 导入所需的模块
 import re
 from collections import Counter, defaultdict

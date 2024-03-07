@@ -1,6 +1,6 @@
 # `.\marker\marker\cleaners\code.py`
 
-```
+```py
 # 导入所需的模块和类
 from marker.schema import Span, Line, Page
 import re

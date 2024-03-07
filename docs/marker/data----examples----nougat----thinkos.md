@@ -830,7 +830,7 @@ My modified version of this program is in the cache directory of the repository 
 
 The important part of the program is this loop:
 
-```
+```py
 iters=0; do{  sec0=get_seconds();  for(index=0;index<limit;index+=stride)  array[index]=array[index]+1;  iters=iters+1;  sec=sec+(get_seconds()-sec0); }while(sec<0.1);
 ```
 
@@ -840,13 +840,13 @@ sec keeps track of the total CPU time used by the inner loop. The outer loop run
 
 get_seconds uses the system call clock_gettime, converts to seconds, and returns the result as a double:
 
-```
+```py
 doubleget_seconds(){  structtimespects;  clock_gettime(CLOCK_PROCESS_CPUTIME_ID,&ts);  returnts.tv_sec+ts.tv_nsec/1e9; }
 ```
 
 To isolate the time to access the elements of the array, the program runs a second loop that is almost identical except that the inner loop doesn't touch the array; it always increments the same variable:
 
-``` iters2=0;  do{  sec0=get_seconds();
+```py iters2=0;  do{  sec0=get_seconds();
 
 ## Chapter 7 Caching
 
@@ -1128,7 +1128,7 @@ If the queue is not full, queue_push inserts the new element and then increments
 
 ```
 intqueue_incr(Queue*queue,inti){ return(i+1)%queue->length; }
-```
+```py
 
 When the index, i, gets to the end of the array, it wraps around to 0. And that's where we run into a tricky part. If we keep adding elements to the queue, eventually next_in wraps around and catches up with next_out. But if next_in==next_out, we would incorrectly conclude that the queue was empty.
 
@@ -1136,7 +1136,7 @@ To avoid that, we define another special case to indicate that the queue is full
 
 ```
 intqueue_full(Queue*queue){ return(queue_incr(queue,queue->next_in)==queue->next_out); }
-```
+```py
 
 If incrementing next_in lands on next_out, that means we can't add another element without making the queue seem empty. So we stop one element before the "end" (keeping in mind that the end of the queue can be anywhere, not necessarily the end of the array).
 
@@ -1144,7 +1144,7 @@ Now we can write queue_pop, which removes and returns the next element from the 
 
 ```
 intqueue_pop(Queue*queue){ if(queue_empty(queue)){ perform_exit("queueisempty"); } intitem=queue->array[queue->next_out]; queue->next_out=queue_incr(queue,queue->next_out); returnitem; }
-```
+```py
 
 If you try to pop from an empty queue, queue_pop prints an error message and exits.
 
@@ -1193,7 +1193,7 @@ Next we add synchronization code to queue_push:
 
 ```
 voidqueue_push(Queue*queue,intitem){ mutex_lock(queue->mutex);//--new  if(queue_full(queue)){  mutex_unlock(queue->mutex);//--new  perform_exit("queueisfull"); }  queue->array[queue->next_in]=item;  queue->next_in=queue_incr(queue,queue->next_in);  mutex_unlock(queue->mutex);//--new }
-```
+```py
 
 Before checking whether the queue is full, we have to lock the Mutex. If the queue is full, we have to unlock the Mutex before exiting; otherwise the thread would leave it locked and no other threads could proceed.
 
@@ -1201,7 +1201,7 @@ The synchronization code for queue_pop is similar:
 
 ```
 intqueue_pop(Queue*queue){  mutex_lock(queue->mutex);  if(queue_empty(queue)){  mutex_unlock(queue->mutex);  perform_exit("queueisempty"); }
-```
+```py
 
 ```
 intitem=queue->array[queue->next_out];  queue->next_out=queue_incr(queue,queue->next_out);  mutex_unlock(queue->mutex);  returnitem; }

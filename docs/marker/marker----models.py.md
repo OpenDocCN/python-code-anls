@@ -1,6 +1,6 @@
 # `.\marker\marker\models.py`
 
-```
+```py
 # 从 marker.cleaners.equations 模块中导入 load_texify_model 函数
 from marker.cleaners.equations import load_texify_model
 # 从 marker.ordering 模块中导入 load_ordering_model 函数

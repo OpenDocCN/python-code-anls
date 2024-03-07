@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\pretrain\yolo_world_v2_x_vlpan_bn_2e-3_100e_4x8gpus_obj365v1_goldg_train_lvis_minival.py`
 
-```
+```py
 # 设置基础配置文件路径
 _base_ = ('../../third_party/mmyolo/configs/yolov8/'
           'yolov8_x_syncbn_fast_8xb16-500e_coco.py')

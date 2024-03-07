@@ -1,6 +1,6 @@
 # `.\marker\marker\segmentation.py`
 
-```
+```py
 # 导入所需的库
 from concurrent.futures import ThreadPoolExecutor
 from typing import List

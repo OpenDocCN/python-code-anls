@@ -1,6 +1,6 @@
 # `.\marker\marker\postprocessors\t5.py`
 
-```
+```py
 # 从 transformers 库中导入 T5Config 和 T5PreTrainedModel 类
 from transformers import T5Config, T5PreTrainedModel
 # 导入 torch 库

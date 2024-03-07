@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\yolov5_lvis.py`
 
-```
+```py
 # 导入需要的模块
 from mmdet.datasets import LVISV1Dataset
 

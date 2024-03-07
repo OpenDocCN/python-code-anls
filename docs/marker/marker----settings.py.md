@@ -1,6 +1,6 @@
 # `.\marker\marker\settings.py`
 
-```
+```py
 import os
 from typing import Optional, List, Dict
 

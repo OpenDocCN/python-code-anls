@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\dense_heads\yolo_world_head.py`
 
-```
+```py
 # 导入所需的库和模块
 import math
 import copy

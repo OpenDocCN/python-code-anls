@@ -152,12 +152,12 @@ YOLO-World is developed based on `torch==1.11.0` `mmyolo==0.6.0` and `mmdetectio
 
 #### Clone Project 
 
-```bash
+```pybash
 git clone --recursive https://github.com/AILab-CVC/YOLO-World.git
 ```
 #### Install
 
-```bash
+```pybash
 pip install torch wheel -q
 pip install -e .
 ```
@@ -173,7 +173,7 @@ We adopt the default [training](./tools/train.py) or [evaluation](./tools/test.p
 We provide the configs for pre-training and fine-tuning in `configs/pretrain` and `configs/finetune_coco`.
 Training YOLO-World is easy:
 
-```bash
+```pybash
 chmod +x tools/dist_train.sh
 # sample command for pre-training, use AMP for mixed-precision training
 ./tools/dist_train.sh configs/pretrain/yolo_world_l_t2i_bn_2e-4_100e_4x8gpus_obj365v1_goldg_train_lvis_minival.py 8 --amp
@@ -182,7 +182,7 @@ chmod +x tools/dist_train.sh
 
 Evaluating YOLO-World is also easy:
 
-```bash
+```pybash
 chmod +x tools/dist_test.sh
 ./tools/dist_test.sh path/to/config path/to/weights 8
 ```
@@ -204,14 +204,14 @@ You can directly download the ONNX model through the online [demo](https://huggi
 
 We provide the [Gradio](https://www.gradio.app/) demo for local devices:
 
-```bash
+```pybash
 pip install gradio
 python demo.py path/to/config path/to/weights
 ```
 
 Additionaly, you can use a Dockerfile to build an image with gradio. As a prerequisite, make sure you have respective drivers installed alongside [nvidia-container-runtime](https://stackoverflow.com/questions/59691207/docker-build-with-nvidia-runtime). Replace MODEL_NAME and WEIGHT_NAME with the respective values or ommit this and use default values from the [Dockerfile](Dockerfile#3)
 
-```bash
+```pybash
 docker build --build-arg="MODEL=MODEL_NAME" --build-arg="WEIGHT=WEIGHT_NAME" -t yolo_demo .
 docker run --runtime nvidia -p 8080:8080
 ```
@@ -220,7 +220,7 @@ docker run --runtime nvidia -p 8080:8080
 
 We provide a simple image demo for inference on images with visualization outputs.
 
-```bash
+```pybash
 python image_demo.py path/to/config path/to/weights image/path/directory 'person,dog,cat' --topk 100 --threshold 0.005 --output-dir demo_outputs
 ```
 
@@ -241,7 +241,7 @@ We sincerely thank [mmyolo](https://github.com/open-mmlab/mmyolo), [mmdetection]
 ## Citations
 If you find YOLO-World is useful in your research or applications, please consider giving us a star 🌟 and citing it.
 
-```bibtex
+```pybibtex
 @article{cheng2024yolow,
   title={YOLO-World: Real-Time Open-Vocabulary Object Detection},
   author={Cheng, Tianheng and Song, Lin and Ge, Yixiao and Liu, Wenyu and Wang, Xinggang and Shan, Ying},

@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\version.py`
 
-```
+```py
 # 版权声明
 # 版权所有 © 腾讯公司
 

@@ -1,6 +1,6 @@
 # `.\marker\marker\ocr\page.py`
 
-```
+```py
 import io  # 导入io模块
 from typing import List, Optional  # 导入类型提示相关模块
 

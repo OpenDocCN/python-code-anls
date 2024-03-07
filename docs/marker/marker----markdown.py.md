@@ -1,6 +1,6 @@
 # `.\marker\marker\markdown.py`
 
-```
+```py
 # 从 marker.schema 模块中导入 MergedLine, MergedBlock, FullyMergedBlock, Page 类
 from marker.schema import MergedLine, MergedBlock, FullyMergedBlock, Page
 # 导入 re 模块，用于正则表达式操作

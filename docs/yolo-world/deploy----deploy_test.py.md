@@ -1,6 +1,6 @@
 # `.\YOLO-World\deploy\deploy_test.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 import os.path as osp

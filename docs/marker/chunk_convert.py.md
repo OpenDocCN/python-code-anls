@@ -1,6 +1,6 @@
 # `.\marker\chunk_convert.py`
 
-```
+```py
 # 导入 argparse 模块，用于解析命令行参数
 import argparse
 # 导入 subprocess 模块，用于执行外部命令

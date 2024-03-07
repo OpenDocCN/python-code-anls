@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\datasets\transformers\mm_transforms.py`
 
-```
+```py
 # 导入所需的库
 import json
 import random

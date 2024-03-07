@@ -1,6 +1,6 @@
 # `.\marker\scripts\verify_benchmark_scores.py`
 
-```
+```py
 # 导入 json 模块和 argparse 模块
 import json
 import argparse

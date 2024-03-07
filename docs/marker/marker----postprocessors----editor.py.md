@@ -1,6 +1,6 @@
 # `.\marker\marker\postprocessors\editor.py`
 
-```
+```py
 # 导入必要的库
 from collections import defaultdict, Counter
 from itertools import chain

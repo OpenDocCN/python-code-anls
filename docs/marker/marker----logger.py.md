@@ -1,6 +1,6 @@
 # `.\marker\marker\logger.py`
 
-```
+```py
 # 导入 logging 模块
 import logging
 # 导入 fitz 模块并重命名为 pymupdf

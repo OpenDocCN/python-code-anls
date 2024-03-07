@@ -104,7 +104,7 @@ First, some configuration.  Note that settings can be overridden with env vars, 
 
 Run `convert_single.py`, like this:
 
-```
+```py
 python convert_single.py /path/to/file.pdf /path/to/output.md --parallel_factor 2 --max_pages 10
 ```
 
@@ -117,7 +117,7 @@ Make sure the `DEFAULT_LANG` setting is set appropriately for your document.
 
 Run `convert.py`, like this:
 
-```
+```py
 python convert.py /path/to/input/folder /path/to/output/folder --workers 10 --max 10 --metadata_file /path/to/metadata.json --min_length 10000
 ```
 
@@ -126,7 +126,7 @@ python convert.py /path/to/input/folder /path/to/output/folder --workers 10 --ma
 - `--metadata_file` is an optional path to a json file with metadata about the pdfs.  If you provide it, it will be used to set the language for each pdf.  If not, `DEFAULT_LANG` will be used. The format is:
 - `--min_length` is the minimum number of characters that need to be extracted from a pdf before it will be considered for processing.  If you're processing a lot of pdfs, I recommend setting this to avoid OCRing pdfs that are mostly images. (slows everything down)
 
-```
+```py
 {
   "pdf1.pdf": {"language": "English"},
   "pdf2.pdf": {"language": "Spanish"},
@@ -138,7 +138,7 @@ python convert.py /path/to/input/folder /path/to/output/folder --workers 10 --ma
 
 Run `chunk_convert.sh`, like this:
 
-```
+```py
 MIN_LENGTH=10000 METADATA_FILE=../pdf_meta.json NUM_DEVICES=4 NUM_WORKERS=15 bash chunk_convert.sh ../pdf_in ../md_out
 ```
 
@@ -187,7 +187,7 @@ You can benchmark the performance of marker on your machine.  First, download th
 
 Then run `benchmark.py` like this:
 
-```
+```py
 python benchmark.py data/pdfs data/references report.json --nougat
 ```
 

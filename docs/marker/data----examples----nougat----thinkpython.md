@@ -648,7 +648,7 @@ The underscore character, _, can appear in a name. It is often used in names wit
 
 If you give a variable an illegal name, you get a syntax error:
 
-```
+```py
 >>>76trombones='bigparade' SyntaxError:invalidsyntax >>>more0=100000 SyntaxError:invalidsyntax >>>class='AdvancedTheoreticalZymurgy' SyntaxError:invalidsyntax 76trombonesis illegal because it does not begin with a letter. more0 is illegal because it contains an illegal character, 0. But what's wrong with class?
 ```
 
@@ -656,7 +656,7 @@ It turns out that class is one of Python's **keywords**. The interpreter uses ke
 
 Python 2 has 31 keywords:
 
-```
+```py
 anddelfromnotwhile aselifglobalorwith assertelseifpassyield breakexceptimportprint classexecinraise continuefinallyisreturn defforlambdatry
 ```
 
@@ -670,7 +670,7 @@ You might want to keep this list handy. If the interpreter complains about one o
 
 The operators +, _, *, / and ** perform addition, subtraction, multiplication, division and exponentiation, as in the following examples:
 
-```
+```py
 20+32hour-1hour*60+minuteminute/605**2(5+9)*(15-7)
 ```
 
@@ -678,7 +678,7 @@ In some other languages, ^ is used for exponentiation, but in Python it is a bit
 
 In Python 2, the division operator might not do what you expect:
 
-```
+```py
 >>>minute=59 >>>minute/60
 ```
 
@@ -688,7 +688,7 @@ In Python 3, the result of this division is a float. The new operator // perform
 
 If either of the operands is a floating-point number, Python performs floating-point division, and the result is a float:
 
-```
+```py
 >>>minute/60.0 0.9833333333333328
 ```
 
@@ -696,7 +696,7 @@ If either of the operands is a floating-point number, Python performs floating-p
 
 An **expression** is a combination of values, variables, and operators. A value all by itself is considered an expression, and so is a variable, so the following are all legal expressions (assuming that the variable x has been assigned a value):
 
-```
+```py
 x +17
 ```
 
@@ -710,7 +710,7 @@ One of the benefits of working with an interpreted language is that you can test
 
 For example, if you are using Python as a calculator, you might type
 
-```
+```py
 >>>miles=26.2 >>>miles*1.61 42.182
 ```
 
@@ -718,7 +718,7 @@ The first line assigns a value to miles, but it has no visible effect. The secon
 
 But if you type the same code into a script and run it, you get no output at all. In script mode an expression, all by itself, has no visible effect. Python actually evaluates the expression, but it doesn't display the value unless you tell it to:
 
-```
+```py
 miles=26.2 printmiles*1.61
 ```
 
@@ -729,13 +729,13 @@ A script usually contains a sequence of statements. If there is more than one st
 For example, the script 
 ### 2.7 Order of operations
 
-```
+```py
 print1 x=2 printx
 ```
 
 produces the output
 
-```
+```py
 2
 ```
 
@@ -743,7 +743,7 @@ The assignment statement produces no output.
 
 **Exercise 2.1**.: _Type the following statements in the Python interpreter to see what they do:_
 
-```
+```py
 x=5 x+1
 ```
 
@@ -887,7 +887,7 @@ The first line of the function definition is called the **header**; the rest is 
 
 The strings in the print statements are enclosed in double quotes. Single quotes and double quotes do the same thing; most people use single quotes except in cases like this where a single quote (which is also an apostrophe) appears in the string.
 
-If you type a function definition in interactive mode, the interpreter prints ellipses (...) to let you know that the definition isn't complete:* ```
+If you type a function definition in interactive mode, the interpreter prints ellipses (...) to let you know that the definition isn't complete:* ```py
 
 ## Chapter 3 Functions
 
@@ -929,19 +929,19 @@ This function works with any value that can be printed.
 
 When you create a variable inside a function, it is **local**, which means that it only exists inside the function. For example:
 
-```
+```py
 defcat_twice(part1,part2): cat=part1+part2 print_twice(cat)
 ```
 
 This function takes two arguments, concatenates them, and prints the result twice. Here is an example that uses it:
 
-```
+```py
 >>>line1='Bingtiddle' >>>line2='tiddlebang.' >>>cat_twice(line1,line2) Bingtiddletiddlebang. Bingtiddletiddlebang.
 ```
 
 When cat_twice terminates, the variable cat is destroyed. If we try to print it, we get an exception:
 
-```
+```py
 >>>printcat NameError:name'cat'isnotdefined
 ```
 
@@ -1460,13 +1460,13 @@ The same is true of runtime errors.
 
 Suppose you are trying to compute a signal-to-noise ratio in decibels. The formula is \(SNR_{db}=10\log_{10}(P_{signal}/P_{noise})\). In Python, you might write something like this:
 
-```
+```py
 importmathsignal_power=9 noise_power=10 ratio=signal_power/noise_power decibels=10*math.log10(ratio) printdecibels
 ```
 
 But when you run it in Python 2, you get an error message.
 
-```
+```py
 Traceback(mostrecentcalllast): File"snr.py",line5,in? decibels=10*math.log10(ratio) ValueError:mathdomainerror
 ```
 
@@ -1563,19 +1563,19 @@ Already you can write an outline of the function:
 
 def distance(x1, y1, x2, y2) :  return 0.0 Obviously, this version doesn't compute distances; it always returns zero. But it is syntactically correct, and it runs, which means that you can test it before you make it more complicated.
 
-To test the new function, call it with sample arguments:* ```
+To test the new function, call it with sample arguments:* ```py
 ### Incremental development
-``` >>>distance(1,2,4,6) ```
+``` >>>distance(1,2,4,6) ```py
 I chose these values so that the horizontal distance is 3 and the vertical distance is 4; that way, the result is 5 (the hypotenuse of a 3-4-5 triangle). When testing a function, it is useful to know the right answer.
 
 At this point we have confirmed that the function is syntactically correct, and we can start adding code to the body. A reasonable next step is to find the differences \(x_{2}-x_{1}\) and \(y_{2}-y_{1}\). The next version stores those values in temporary variables and prints them.
-``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 print'dxis',dx print'dyis',dy return0.0 ```
+``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 print'dxis',dx print'dyis',dy return0.0 ```py
 If the function is working, it should display 'dxis3' and 'dyis4'. If so, we know that the function is getting the right arguments and performing the first computation correctly. If not, there are only a few lines to check.
 
 Next we compute the sum of squares of dx and dy:
-``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 dsquared=dx**2+dy**2 print'dsquaredis',dsquared return0.0 ```
+``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 dsquared=dx**2+dy**2 print'dsquaredis',dsquared return0.0 ```py
 Again, you would run the program at this stage and check the output (which should be 25). Finally, you can use math.sqrt to compute and return the result:
-``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 dsquared=dx**2+dy**2 result=math.sqrt(dsquared) returnresult ```
+``` defdistance(x1,y1,x2,y2): dx=x2-x1 dy=y2-y1 dsquared=dx**2+dy**2 result=math.sqrt(dsquared) returnresult ```py
 
 If that works correctly, you are done. Otherwise, you might want to print the value of result before the return statement.
 
@@ -1723,7 +1723,7 @@ Adding print statements at the beginning and end of a function can help make the
 
 ## Chapter 6 Fruitful functions
 
-* ```
+* ```py
 
 **Algorithm 6** _The \(GCD\) of two numbers is based on the observation that if \(r\) is the remainder when \(a\) is divided by \(b\), then \(gcd(a,b)=gcd(b,r)\). As a base case, we can use \(gcd(a,0)=a\)._
 
@@ -1805,18 +1805,18 @@ For example, suppose you want to take input from the user until they type done. 
 ### 7.1 Introduction
 
 The main goal of this thesis is to develop a new method for computing a set of functions that are* ```
-``` >>>x=y >>>y=(x+a/x)/2 >>>printy 2.00001024003>>x=y >>>y=(x+a/x)/2 >>>printy 2.0000000003
+```py >>>x=y >>>y=(x+a/x)/2 >>>printy 2.00001024003>>x=y >>>y=(x+a/x)/2 >>>printy 2.0000000003
 ```
 
 In general we don't know ahead of time how many steps it takes to get to the right answer, but we know when we get there because the estimate stops changing:
 
-```
+```py
 >>>x=y >>>y=(x+a/x)/2 >>>printy 2.0 >>>x=y >>>y=(x+a/x)/2 >>>printy 2.0
 ```
 
 When y ==x, we can stop. Here is a loop that starts with an initial estimate, x, and improves it until it stops changing:
 
-```
+```py
 whileTrue:  printx  y=(x+a/x)/2  ify==x:  break x=y
 ```
 
@@ -1824,7 +1824,7 @@ For most values of a this works fine, but in general it is dangerous to test flo
 
 Rather than checking whether x and y are exactly equal, it is safer to use the built-in function abs to compute the absolute value, or magnitude, of the difference between them:
 
-```
+```py
 ifabs(y-x)<epsilon:  break
 ```
 
@@ -1930,7 +1930,7 @@ len is a built-in function that returns the number of characters in a string:
 
 The following program counts the number of times the letter a appears in a string:
 
-```
+```py
 word='banana' count=0 forletterinword: ifletter=='a': count=count+1 printcount
 ```
 
@@ -1946,7 +1946,7 @@ A **method** is similar to a function--it takes arguments and returns a value--b
 
 Instead of the function syntax upper(word), it uses the method syntax word.upper().
 
-```
+```py
 >>>word='banana' >>>new_word=word.upper() >>>printnew_word BANANA
 ```
 
@@ -1956,7 +1956,7 @@ A method call is called an **invocation**; in this case, we would say that we ar
 
 As it turns out, there is a string method named find that is remarkably similar to the function we wrote:
 
-```
+```py
 >>>word='banana' >>>index=word.find('a') >>>printindex
 ```
 
@@ -1964,25 +1964,25 @@ In this example, we invoke find on word and pass the letter we are looking for a
 
 Actually, the find method is more general than our function; it can find substrings, not just characters:
 
-``` >>>word.find('na')
+```py >>>word.find('na')
 
 ## Chapter 8 Strings
 
 ### 8.1 String comparison
 
 The relational operators work on strings. To see if two strings are equal:* ```
-``` ifword=='banana': print'Allright,bananas.'
+```py ifword=='banana': print'Allright,bananas.'
 ```
 
 Other relational operations are useful for putting words in alphabetical order:
 
-```
+```py
 ifword<'banana': print'Yourword,'+word+',comesbeforebanana.' elifword>'banana': print'Yourword,'+word+',comesafterbanana.' else: print'Allright,bananas.'
 ```
 
 Python does not handle uppercase and lowercase letters the same way that people do. All the uppercase letters come before all the lowercase letters, so:
 
-```
+```py
 Yourword,Pineapple,comesbeforebanana.
 ```
 
@@ -1992,9 +1992,9 @@ A common way to address this problem is to convert strings to a standard format,
 
 When you use indices to traverse the values in a sequence, it is tricky to get the beginning and end of the traversal right. Here is a function that is supposed to compare two words and return True if one of the words is the reverse of the other, but it contains two errors:
 
-```
+```py
 defis_reverse(word1,word2): iflen(word1)!=len(word2): returnFalse
-``` i-0 j-len(word2) whilej>0: ifword1[i]!=word2[j]: returnFalse i-i+1 j-j-1 returnTrue ```
+``` i-0 j-len(word2) whilej>0: ifword1[i]!=word2[j]: returnFalse i-i+1 j-j-1 returnTrue ```py
 The first if statement checks whether the words are the same length. If not, we can return False immediately and then, for the rest of the function, we can assume that the words are the same length. This is an example of the guardian pattern in Section 6.8.
 
 i and j are indices: i traverses word1 forward whilej traverses word2 backward. If we find two letters that don't match, we can return False immediately. If we get through the whole loop and all the letters match, we return True.
@@ -2050,20 +2050,20 @@ For the exercises in this chapter we need a list of English words. There are lot
 
 This file is in plain text, so you can open it with a text editor, but you can also read it from Python. The built-in function open takes the name of the file as a parameter and returns a **file object** you can use to read the file.
 
-```
+```py
 >>>fin=open('words.txt') >>>printfin <openfile'words.txt',mode'r'at0xb7f4b380> finis a common name for a file object used for input. Mode 'r' indicates that this file is open for reading (as opposed to 'w' for writing).
 
 The file object provides several methods for reading, including readine, which reads characters from the file until it gets to a newline and returns the result as a string:
-``` >>>fin.readline() 'aa\r\n' ```
+``` >>>fin.readline() 'aa\r\n' ```py
 The first word in this particular list is "aa," which is a kind of lava. The sequence \r\n represents two whitespace characters, a carriage return and a newline, that separate this word from the next.
 
 The file object keeps track of where it is in the file, so if you call readine again, you get the next word:
-``` >>>fin.readline() 'aa\r\n' ```
+``` >>>fin.readline() 'aa\r\n' ```py
 
 The next word is "aah," which is a perfectly legitimate word, so stop looking at me like that. Or, if it's the whitespace that's bothering you, we can get rid of it with the string method strip:
 ```
 >>>line=fin.readline() >>>word=line.strip() >>>printword aahed You can also use a file object as part of a for loop. This program reads words.txt and prints each word, one per line: fin=open('words.txt') forlineinfin: word=line.strip() printword
-```
+```py
 
 **Exercise 9.1**.: _Write a program that reads words.txt and prints only the words with more than 20 characters (not counting whitespace)._
 
@@ -2213,13 +2213,13 @@ The most common way to traverse the elements of a list is with a for loop. The s
 
 ```
 forcheeseinchees:  printcheese
-```
+```py
 
 This works well if you only need to read the elements of the list. But if you want to write or update the elements, you need the indices. A common way to do that is to combine the functions range and len:
 
 ```
 foriinrange(len(numbers)):  numbers[i]=numbers[i]*2
-```
+```py
 
 This loop traverses the list and updates each element. len returns the number of elements in the list. range returns a list of indices from 0 to \(n-1\), where \(n\) is the length of the list. Each time through the loop i gets the index of the next element. The assignment statement in the body uses i to read the old value of the element and to assign the new value.
 
@@ -2227,13 +2227,13 @@ A for loop over an empty list never executes the body:
 
 ```
 forxin[]:  print'Thisneverhappens.'
-```
+```py
 
 Although a list can contain another list, the nested list still counts as a single element. The length of this list is four:
 
 ```
 ['spam',1,['Brie','Roquefort','PolleVeq'],[1,2,3]]
-```
+```py
 
 ### 10.4 List operations
 
@@ -2241,13 +2241,13 @@ The + operator concatenates lists:
 
 ```
 >>>a=[1,2,3] >>>b-[4,5,6] >>>c=a+b >>>printc [1,2,3,4,5,6]
-```
+```py
 
 Similarly, the * operator repeats a list a given number of times:
 
 ```
 >>>[0]*4 [0,0,0,0] >>>[1,2,3]*3 [1,2,3,1,2,3]
-```
+```py
 
 The first example repeats [0] four times. The second example repeats the list [1,2,3] three times.
 
@@ -2352,7 +2352,7 @@ If a refers to an object and you assign b - a, then both variables refer to the 
 
 ```
 >>>a=[1,2,3] >>>b-a >>>bisaTrue
-```
+```py
 
 The state diagram looks like Figure 10.4.
 
@@ -2485,7 +2485,7 @@ Here is a function that inverts a dictionary:
 
 ```
 definvert_dict(d): inverse=dict() forkeyind: val=d[key] ifvalnotininverse: inverse[val]=[key] else: inverse[val].append(key) returninverse
-```
+```py
 
 Each time through the loop, key gets a key from d and val gets the corresponding value. If val is not in inverse, that means we haven't seen it before, so we create a new item and initialize it with a **singleton** (a list that contains a single element). Otherwise we have seen this value before, so we append the corresponding key to the list.
 
@@ -2497,7 +2497,7 @@ Figure 11.1 is a state diagram showing hist and inverse. A dictionary is represe
 
 Lists can be values in a dictionary, as this example shows, but they cannot be keys. Here's what happens if you try:
 
-``` >>>t-[1,2,3] >>>d-dict() >>>d[t]-'oops' Traceback(mostrecentcalllast): File"<stdin>",line1,in? TypeError:listobjectsareunhashable I mentioned earlier that a dictionary is implemented using a hashtable and that means that the keys have to behashable.
+```py >>>t-[1,2,3] >>>d-dict() >>>d[t]-'oops' Traceback(mostrecentcalllast): File"<stdin>",line1,in? TypeError:listobjectsareunhashable I mentioned earlier that a dictionary is implemented using a hashtable and that means that the keys have to behashable.
 
 Ahash is a function that takes a value (of any kind) and returns an integer. Dictionaries use these integers, called hash values, to store and look up key-value pairs.
 
@@ -2658,29 +2658,29 @@ Most list operators also work on tuples. The bracket operator indexes an element
 ### 12.1 **Tuple assignment**
 
 It is often useful to swap the values of two variables. With conventional assignments, you have to use a temporary variable. For example, to swap a and b:
-``` >>>temp=a >>>a=b >>>b-temp ```
+```py >>>temp=a >>>a=b >>>b-temp ```
 This solution is cumbersome; **tuple assignment** is more elegant:
-``` >>>a,b=b,a ```
+```py >>>a,b=b,a ```
 The left side is a tuple of variables; the right side is a tuple of expressions. Each value is assigned to its respective variable. All the expressions on the right side are evaluated before any of the assignments.
 
 The number of variables on the left and the number of values on the right have to be the same:
-``` >>>a,b=1,2,3 ```
-``` ValueError:toomanyvaluestounpack
+```py >>>a,b=1,2,3 ```
+```py ValueError:toomanyvaluestounpack
 ```
 
 More generally, the right side can be any kind of sequence (string, list or tuple). For example, to split an email address into a user name and a domain, you could write:
 
-```
+```py
 >>>add='monty@python.org' >>>uname,domain=addr.split('@')
 ```
 
 The return value from split is a list with two elements; the first element is assigned to uname, the second to domain.
 
-```
+```py
 >>>printuname
 ```
 
-```
+```py
 >>>printdomain
 ```
 
@@ -2688,7 +2688,7 @@ The return value from split is a list with two elements; the first element is as
 
 It is often useful to swap the values of two variables. With conventional assignments, you have to use a temporary variable. For example, to swap a and b:
 
-```
+```py
 >>>a=b >>>b-temp >>>a,b=b,a
 ```
 
@@ -2696,7 +2696,7 @@ The left side is a tuple of variables; the right side is a tuple of expressions.
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2704,7 +2704,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2712,7 +2712,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2720,7 +2720,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2728,7 +2728,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2736,7 +2736,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2744,7 +2744,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2752,7 +2752,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2760,7 +2760,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2768,7 +2768,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2776,7 +2776,7 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -2784,325 +2784,325 @@ The right side is a tuple of expressions. Each value is assigned to its respecti
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the left and the number of values on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
 The number of variables on the right have to be the same:
 
-```
+```py
 >>>a,b=1,2,3
 ```
 
@@ -3112,21 +3112,21 @@ Strictly speaking, a function can only return one value, but if the value is a t
 
 The built-in function divmod takes two arguments and returns a tuple of two values, the quotient and remainder. You can store the result as a tuple:
 
-```
+```py
 >>>t-divmod(7,3) >>>printt (2,1) Or use tuple assignment to store the elements separately:
-``` >>>quot,rem=divmod(7,3) >>>printquot 2 >>>printrem ```
+``` >>>quot,rem=divmod(7,3) >>>printquot 2 >>>printrem ```py
 Here is an example of a function that returns a tuple:
-```  returnmin(t),max(t) maxandminarebuilt-infunctionsthatfindthelargestandsmallestelementsofsequence.min_maxcomputesbothandreturnsttupleoftwovalues. ```
+```  returnmin(t),max(t) maxandminarebuilt-infunctionsthatfindthelargestandsmallestelementsofsequence.min_maxcomputesbothandreturnsttupleoftwovalues. ```py
 ### 12.4 Variable-length argument tuples
 
 Functions can take a variable number of arguments. A parameter name that begins with \(*\)**gathers** arguments into a tuple. For example, printalltakesanynumberofargumentsandprintsthem:
 ``` defprintall(*args):  printargs Thegatherparametercanhaveanynameyoulike,butargsisconventional.Here'showthefunctionworks:
 
-```
+```py
 >>>printall(1,2.0,'3') (1,2.0,'3') Thecomplementofgatherisscatter.Ifyouhavesequenceofvaluesandyouwanttopassittoafunctionasmultiplearguments,youcanusethe*operator.Forexample,divmodtakesexactlytwoarguments;itdoesn'tworkwithatuple:
-``` >>>t-(7,3) >>>divmod(t) TypeError:divmodexpected2arguments,got1 ```
+``` >>>t-(7,3) >>>divmod(t) TypeError:divmodexpected2arguments,got1 ```py
 Butifyouscatterthetuple,itworks:
-``` >>>divmod(*t) (2,1) ```
+``` >>>divmod(*t) (2,1) ```py
 
 **Exercise 12.1**.: _Manyofthebuilt-infunctionsusevariable-lengthargumenttuples.Forexample,maxandmincantakeanynumberofarguments:_
 
@@ -3146,20 +3146,20 @@ Again.
 ### 12.6 Dictionaries and tuples
 
 Dictionaries have a method called items that returns a list of tuples, where each tuple is a key-value pair.
-``` >>>d-{'a':0,'b':1,'c':2} >>>t-d.items() >>>printt
+```py >>>d-{'a':0,'b':1,'c':2} >>>t-d.items() >>>printt
 [('a',0),('c',2),('b',1)] ```
 As you should expect from a dictionary, the items are in no particular order. In Python 3, items returns an iterator, but for many purposes, iterators behave like lists.
 
 Going in the other direction, you can use a list of tuples to initialize a new dictionary:
-``` >>>t-[('a',0),('c',2),('b',1)] >>>d-dict(t) >>>printd {'a':0,'c':2,'b':1} ```
+```py >>>t-[('a',0),('c',2),('b',1)] >>>d-dict(t) >>>printd {'a':0,'c':2,'b':1} ```
 Combining dict with zip yields a concise way to create a dictionary:
-``` >>>d-dict(zip('abc',range(3))) >>>printd {'a':0,'c':2,'b':1} ```
+```py >>>d-dict(zip('abc',range(3))) >>>printd {'a':0,'c':2,'b':1} ```
 The dictionary method update also takes a list of tuples and adds them, as key-value pairs, to an existing dictionary.
 
 Combining items, tuple assignment and for, you get the idiom for traversing the keys and values of a dictionary:
-``` forkey,valind.items(): printval,key ```
+```py forkey,valind.items(): printval,key ```
 The output of this loop is:
-``` 0a
+```py 0a
 2c
 1b
 
@@ -3169,7 +3169,7 @@ It is common to use tuples as keys in dictionaries (primarily because you can't 
 
 ```
 directory[last,first]=number
-```
+```py
 
 The expression in brackets is a tuple. We could use tuple assignment to traverse this dictionary.
 
@@ -3189,7 +3189,7 @@ The relational operators work with tuples and other sequences; Python starts by 
 
 ```
 >>>(0,1,2)<(0,3,4) True >>>(0,1,2000000)<(0,3,4) True
-```
+```py
 
 The sort function works the same way. It sorts primarily by first element, but in the case of a tie, it sorts by second element, and so on.
 
@@ -3207,13 +3207,13 @@ For example, suppose you have a list of words and you want to sort them from lon
 
 ```
 defsort_by_length(words): t-[] forwordinwords: t.append((len(word),word)) t.sort(reverse=True) res=[] forlength,wordint: res.append(word) returnres
-```
+```py
 
 The first loop builds a list of tuples, where each tuple is a word preceded by its length.
 
 ```
 sortcomparesthefirstelement,length,first,andonlyconsidersthesecondelementtobreakties.Thekeywordargumentreverse=Truetellssorttogoindecreasingorder.
-```
+```py
 
 The second loop traverses the list of tuples and builds a list of words in descending order of length.
 
@@ -3246,13 +3246,13 @@ Here's the result for a simple list:
 
 ```
 >>>fromstrucshapeimportstrucshape >>>t-[1,2,3] >>>printstrucshape(t) listof3int A fancier program might write "list of 3 into," but it was easier not to deal with plurals. Here's a list of lists:
-``` >>>t2-[[1,2],[3,4],[5,6]] >>>printstrucshape(t2) listof3listof2int ```
+```py >>>t2-[[1,2],[3,4],[5,6]] >>>printstrucshape(t2) listof3listof2int ```
 If the elements of the list are not the same type, structshape groups them, in order, by type:
-``` >>>t3-[1,2,3,4.0,'5','6',[7],[8],9] >>>printstrucshape(t3) listof(3int,float,2str,2listofint,int) Here's a list of tuples:
+```py >>>t3-[1,2,3,4.0,'5','6',[7],[8],9] >>>printstrucshape(t3) listof(3int,float,2str,2listofint,int) Here's a list of tuples:
 
 ```
 >>>s='abc' >>>lt-zip(t,s) >>>printstrucshape(lt) listof3tupleof(int,str) And here's a dictionary with 3 items that map integers to strings.
-``` >>>d-dict(lt) >>>printstrucshape(d) dictof3int->str ```
+```py >>>d-dict(lt) >>>printstrucshape(d) dictof3int->str ```
 
 If you are having trouble keeping track of your data structures, structshape can help.
 
@@ -3364,7 +3364,7 @@ You should attempt the previous exercises before you go on. You can download my 
 
 Here is a program that reads a file and builds a histogram of the words in the file:
 
-```
+```py
 importstring defprocess_file(filename): hist=dict() fp=open(filename) forlineinfp: process_line(line,hist) returnhist defprocess_line(line,hist): line=line.replace('-','') forwordinline.split(): word=word.strip(string.punctuation+string.whitespace) word=word.lower() hist[word]=hist.get(word,0)+1 hist=process_file('emma.txt')
 ```
 
@@ -3378,19 +3378,19 @@ Finally, process_line updates the histogram by creating a new item or incrementi
 
 To count the total number of words in the file, we can add up the frequencies in the histogram:
 
-```
+```py
 deftotal_words(hist): returnsum(hist.values())
 ```
 
 The number of different words is just the number of items in the dictionary:
 
-```
+```py
 defdifferent_words(hist): returnlen(hist)
 ```
 
 Here is some code to print the results:
 
-```
+```py
 print'Totalnumberofwords:',total_words(hist) print'Numberofdifferentwords:',different_words(hist)
 ```
 
@@ -3398,26 +3398,26 @@ print'Totalnumberofwords:',total_words(hist) print'Numberofdifferentwords:',diff
 
 To find the most common words, we can apply the DSU pattern; most_common takes a histogram and returns a list of word-frequency tuples, sorted in reverse order by frequency:
 
-```
+```py
 defmost_common(hist): t-[] forkey,valueinhist.items(): t.append((value,key))
 ```
 
-```
+```py
 t.sort(reverse=True) return
 ```
 
 Here is a loop that prints the ten most common words:
 
-```
+```py
 t-most_common(hist) print'Themostcommonwordsare:' forfreq,wordint[0:10]: printword,'\t',freq And here are the results from _Emma_:
-``` Themostcommonwordsare: to5242 the5205 and4897 of4295 i3191 a3130 it2529 her2483 was2400 she2364 ```
+``` Themostcommonwordsare: to5242 the5205 and4897 of4295 i3191 a3130 it2529 her2483 was2400 she2364 ```py
 ### 13.5 Optional parameters
 
 We have seen built-in functions and methods that take a variable number of arguments. It is possible to write user-defined functions with optional arguments, too. For example, here is a function that prints the most common words in a histogram
 ``` defprint_most_common(hist,num=10): t-most_common(hist) print'Themostcommonwordsare:' forfreq,wordint[:num]: printword,'\t',freq The first parameter is required; the second is optional. The **default value** of num is 10.
 
 If you only provide one argument:
-```
+```py
 print_most_common(hist) numgets the default value. If you provide two arguments: print_most_common(hist, 20) numgets the value of the argument instead. In other words, the optional argument overrides the default value.
 ```
 
@@ -3427,7 +3427,7 @@ If a function has both required and optional parameters, all the required parame
 
 Finding the words from the book that are not in the word list from words.txt is a problem you might recognize as set subtraction; that is, we want to find all the words from one set (the words in the book) that are not in another set (the words in the list).
 
-```
+```py
 subtracttakes dictionariesd1andd2andreturnsanewdictionarythatcontainsallthekeysfromd1thatarenotind2.Sincewedon'treallycareaboutthevalues,wesetthemalltoNone. defsubtract(d1, d2): res=dict() forkeyind1: ifkeynotind2: res[key]=None returnres
 ```
 
@@ -3482,7 +3482,7 @@ How should you choose? The first step is to think about the operations you will 
 
 Your first choice might be a list, since it is easy to add and remove elements, but we also need to be able to use the prefixes as keys in a dictionary, so that rules out lists. With tuples, you can't append or remove, but you can use the addition operator to form a new tuple:
 
-``` defshift(prefix, word): returnprefix[1:]+(word,) shifttakes a tuple of words, prefix, and a string, word, and forms a new tuple that has all the words in prefix except the first, and word added to the end.
+```py defshift(prefix, word): returnprefix[1:]+(word,) shifttakes a tuple of words, prefix, and a string, word, and forms a new tuple that has all the words in prefix except the first, and word added to the end.
 
 For the collection of suffixes, the operations we need to perform include adding a new suffix (or increasing the frequency of an existing one), and choosing a random suffix.
 
@@ -3619,7 +3619,7 @@ The os module provides functions for working with files and directories ("os" st
 
 ```
 >>>importos >>>cwd=os.getcwd() >>>printcwd /home/dinsdale
-```
+```py
 
 cwd stands for "current working directory." The result in this example is /home/dinsdale, which is the home directory of a user named dinsdale.
 
@@ -3629,27 +3629,27 @@ The paths we have seen so far are simple filenames, so they are relative to the 
 
 ```
 >>>os.path.abspath('memo.txt' /home/dinsdale/memo.txt'
-```
+```py
 
 os.path.exists checks whether a file or directory exists:
 
 ```
 >>>os.path.exists('memo.txt') True
-```
+```py
 
 If it exists, os.path.isdir checks whether it's a directory:
 
 ```
 >>>os.path.isdir('memo.txt') False >>>os.path.isdir('music') True
-```
+```py
 
 Similarly, os.path.isfile checks whether it's a file.
 
 ```
 os.listdir returns a list of the files (and other directories) in the given directory:
-``` >>>os.listdir(cwd) ['music', 'photos','memo.txt'] ```
+```py >>>os.listdir(cwd) ['music', 'photos','memo.txt'] ```
 To demonstrate these functions, the following example "walks" through a directory, prints the names of all the files, and calls itself recursively on all the directories.
-``` defwalk(dirname):  fornameinos.listdir(dirname):  path=os.path.join(dirname, name)
+```py defwalk(dirname):  fornameinos.listdir(dirname):  path=os.path.join(dirname, name)
 
 ## Chapter 14 Files
 
@@ -3795,7 +3795,7 @@ Defining a class named Point creates a class object.
 
 You can assign values to an instance using dot notation:
 
-```
+```py
 >>>blank.x=3.0 >>>blank.y=4.0
 ```
 
@@ -3809,7 +3809,7 @@ The variable blank refers to a Point object, which contains two attributes. Each
 
 You can read the value of an attribute using the same syntax:
 
-```
+```py
 >>>printblank.y 4.0 >>>x=blank.x >>>printx 3.0
 ```
 
@@ -3847,7 +3847,7 @@ Aliasing can make a program difficult to read because changes in one place might
 
 Copying an object is often an alternative to aliasing. The copy module contains a function called copy that can duplicate any object:
 
-```
+```py
 >>> p1=Point() >>> p1.x=3.0 >>> p1.y=4.0 >>> importcopy >>>p2=copy.copy(p1) p1 and p2 contain the same data, but they are not the same Point. >>>print_point(p1) (3.0, 4.0) >>>print_point(p2) (3.0, 4.0) >>>p1isp2 False >>>p1==p2 False
 ```
 
@@ -3859,19 +3859,19 @@ If you use copy.copy to duplicate a Rectangle, you will find that it copies the 
 
 When you start working with objects, you are likely to encounter some new exceptions. If you try to access an attribute that doesn't exist, you get an AttributeError:
 
-```
+```py
 >>>p=Point() >>>printp.z AttributeError:Pointinstancehasnoattribute'z'
 ```
 
 If you are not sure what type an object is, you can ask:
 
-```
+```py
 >>>type(p) <type'_main_Point'>
 ```
 
 If you are not sure whether an object has a particular attribute, you can use the built-in function hasattr:
 
-```
+```py
 >>>hasattr(p,'x') True >>>hasattr(p,'z') False
 ```
 
@@ -3934,11 +3934,11 @@ Code examples from this chapter are available from [http://thinkpython.com/code/
 
 As another example of a user-defined type, we'll define a class called Time that records the time of day. The class definition looks like this:
 
-```
+```py
 classTime(object): """Representsthetimeofday.
-``` attributes:hour,minute,second """ ```
+``` attributes:hour,minute,second """ ```py
 We can create a new Time object and assign attributes for hours, minutes, and seconds:
-``` time=Time() time.hour=11 time.minute=59 time.second=30 ```
+``` time=Time() time.hour=11 time.minute=59 time.second=30 ```py
 
 The state diagram for the Time object looks like Figure 16.1.
 
@@ -3958,7 +3958,7 @@ The class of functions is defined in the following way:
 
 ```
 defadd_time(t1,t2): sum=Time() sum.hour=t1.hour+t2.hour sum.minute=t1.minute+t2.minute sum.second=t1.second+t2.second returnsum
-```
+```py
 
 The function creates a new Time object, initializes its attributes, and returns a reference to the new object. This is called a **pure function** because it does not modify any of the objects passed to it as arguments and it has no effect, like displaying a value or getting user input, other than returning a value.
 
@@ -3966,14 +3966,14 @@ To test this function, I'll create two Time objects: start contains the start ti
 
 ```
 add_timefiguresoutwhenthemoviewillbedone.
-``` >>>start=Time() >>>start.hour=9 >>>start.minute=45 >>>start.second=0 >>>duration=Time() >>>duration.hour=1 >>>duration.minute=35 >>>duration.second=0 >>>done=add_time(start,duration) >>>print_time(done)
+```py >>>start=Time() >>>start.hour=9 >>>start.minute=45 >>>start.second=0 >>>duration=Time() >>>duration.hour=1 >>>duration.minute=35 >>>duration.second=0 >>>done=add_time(start,duration) >>>print_time(done)
 10:80:00 The result, 10:80:00 might not be what you were hoping for. The problem is that this function does not deal with cases where the number of seconds or minutes adds up to more than sixty. When that happens, we have to "carry" the extra seconds into the minute column or the extra minutes into the hour column.
 
 Here's an improved version:
 
 ```
 defadd_time(t1,t2): sum=Time() sum.hour=t1.hour+t2.hour sum.minute=t1.minute+t2.minute sum.second=t1.second+t2.second
-```
+```py
 
 Figure 16.1: Object diagram.
 
@@ -4025,13 +4025,13 @@ Here is a function that converts Times to integers:
 
 ```
 deftime_to_int(time): minutes=time.hour*60+time.minute seconds=minutes*60+time.second returnsseconds
-```
+```py
 
 And here is the function that converts integers to Times (recall that divmod divides the first argument by the second and returns the quotient and remainder as a tuple).
 
 ```
 defint_to_time(seconds): time=Time() minutes,time.second=divmod(seconds,60) time.hour,time.minute=divmod(minutes,60) returntime
-```
+```py
 
 You might have to think a bit, and run some tests, to convince yourself that these functions are correct. One way to test them is to check that time_to_int(int_to_time(x)) == x for many values of x. This is an example of a consistency check.
 
@@ -4039,7 +4039,7 @@ Once you are convinced they are correct, you can use them to rewrite add_time:
 
 ```
 defadd_time(t1,t2): seconds=time_to_int(t1)+time_to_int(t2) returnint_to_time(seconds)
-```
+```py
 
 This version is shorter than the original, and easier to verify.
 
@@ -4195,14 +4195,14 @@ For example, here is a str method for Time objects:
 
 ```
 #insideclassTime: def__str__(self): return'%.2d:%.2d:%.2d'%(self.hour,self.minute,self.second)
-```
+```py
 
 When you print an object, Python invokes the str method:
 
 ```
+```py
 ```
-```
-09:45:00 ```
+09:45:00 ```py
 When I write a new class, I almost always start by writing __init__, which makes it easier to instantiate objects, and __str__, which is useful for debugging.
 
 **Exercise 17.3**.: _Write a str method for the Point class. Create a Point object and print it._
@@ -4213,14 +4213,14 @@ By defining other special methods, you can specify the behavior of operators on 
 
 Here is what the definition might look like:
 ```
-#insideclassTime: def__add__(self,other): seconds=self.time_to_int()+other.time_to_int() returnint_to_time(seconds) ```
+#insideclassTime: def__add__(self,other): seconds=self.time_to_int()+other.time_to_int() returnint_to_time(seconds) ```py
 And here is how you could use it:
 ```
 
-```
+```py
 ```
 11:20:00
-```
+```py
 
 When you apply the + operator to Time objects, Python invokes __add__. When you print the result, Python invokes __str__. So there is quite a lot happening behind the scenes!
 
@@ -4234,7 +4234,7 @@ In the previous section we added two Time objects, but you also might want to ad
 
 ```
 #insideclassTime: def__add__(self,other): ifisinstance(other,Time): returnself.add_time(other) else: returnself.increment(other) defadd_time(self,other): seconds=self.time_to_int()+other.time_to_int() returnint_to_time(seconds) defincrement(self,seconds): seconds+=self.time_to_int() returnint_to_time(seconds)
-```
+```py
 
 The built-in function isinstance takes a value and a class object, and returns True if the value is an instance of the class.
 
@@ -4246,9 +4246,9 @@ Here are examples that use the + operator with different types:
 >>>start=Time(9,45) >>>duration=Time(1,35) >>>printstart+duration
 11:20:00 >>>printstart+1337
 10:07:17 Unfortunately, this implementation of addition is not commutative. If the integer is the first operand, you get
-``` >>>print1337+start TypeError:unsupportedoperandtype(s)for+:'int'and'instance' ```
+```py >>>print1337+start TypeError:unsupportedoperandtype(s)for+:'int'and'instance' ```
 The problem is, instead of asking the Time object to add an integer, Python is asking an integer to add a Time object, and it doesn't know how to do that. But there is a clever solution for this problem: the special method __add__, which stands for "right-side add." This method is invoked when a Time object appears on the right side of the + operator. Here's the definition:
-```
+```py
 #insideclassTime: def__radd__(self,other): returnself.__add__(other) ```
 
 And here's how it's used:* [command={},frame={}
@@ -4342,7 +4342,7 @@ queen_of_diamonds = Card(1, 12)
 
 In order to print Card objects in a way that people can easily read, we need a mapping from the integer codes to the corresponding ranks and suits. A natural way to do that is with lists of strings. We assign these lists to **class attributes**:
 
-```
+```py
 #insideclassCard:  suit_names=['Clubs','Diamonds','Hearts','Spades']  rank_names=[None,'Ace','2','3','4','5','6','7',  '8','9','10','Jack','Queen','King'] def__str__(self):  return'%sof%%%(Card.rank_names[self.rank],  Card.suit_names[self.suit]) Variables like suit_names and rank_names, which are defined inside a class but outside of any method, are called class attributes because they are associated with the class object Card.
 
 This term distinguishes them from variables like suit and rank, which are called **instance attributes** because they are associated with a particular instance.
@@ -4408,7 +4408,7 @@ As another example, we can write a Deck method named shuffle using the function 
 
 ```
 #insideclassDeck: defshuffle(self): random.shuffle(self.cards) Don't forget to importrandom. Exercise18.2. Write a Deck method named sort that uses the list method sort to sort the cards in a Deck. sort uses the__cmp__method we defined to determine sort order.
-```
+```py
 
 ### 18.7 Inheritance
 
@@ -4426,7 +4426,7 @@ The definition of a child class is like other class definitions, but the name of
 
 ```
 classHand(Deck): """Representsahofplayingcards."""
-```
+```py
 
 This definition indicates that Hand inherits from Deck; that means we can use methods like pop_card and add_card for Hands as well as Decks.
 
@@ -4439,19 +4439,19 @@ If we provide an init method in the Hand class, it overrides the one in the Deck
 
 So when you create a Hand, Python invokes this init method:
 
-```
+```py
 >>>hand=Hand('newhand') >>>printhand.cards [] >>>printhand.label newhand
 ```
 
 But the other methods are inherited from Deck, so we can use pop_card and add_card to deal a card:
 
-```
+```py
 >>>decl=Deck() >>>card=deck.pop_card() >>>hand.add_card(card) >>>printhandKingofSpades
 ```
 
 A natural next step is to encapsulate this code in a method called move_cards:
 
-```
+```py
 defmove_cards(self,hand,num):  foriinrange(num):  hand.add_card(self.pop_card()) move_cardstakestwoarguments,aHandobjectandthenumberofcardstodeal.Itmodifiesbothselfandhand,andreturnsNone.
 ```
 
@@ -4615,13 +4615,13 @@ The fill option specifies that the circle should be filled in with red.
 
 The return value from circle is an Item object that provides methods for modifying the item on the canvas. For example, you can use config to change any of the circle's options:* **The \(\mathtt{get}\) method returns the contents of the Entry (which may have been changed by the user):**
 
-```
+```py
 >>entry.get() 'Defaulttext.'
 ```
 
 **tecreates a Text widget:**
 
-``` text=g.te(width=100,height=5) widthandheightarethedimensionsofthewidgetincharactersandlines.insertputstextEND is a special index that indicates the last character in the Text widget.
+```py text=g.te(width=100,height=5) widthandheightarethedimensionsofthewidgetincharactersandlines.insertputstextEND is a special index that indicates the last character in the Text widget.
 
 You can also specify a character using a dotted index, like 1.1, which has the line number before the dot and the column number after. The following example adds the letters 'nother' after the first character of the first line.
 
@@ -4704,15 +4704,15 @@ For Entry widgets, it is common to bind the <Return> event, which is triggered w
 bu=g.bu('Maketextitem:',make_text) en=g.en() en.bind('Return>',make_text) make_text is called when the Button is pressed or when the user hits Return while typing in the Entry. To make this work, we need a function that can be called as a command (with no arguments) or as an event handler (with an Event as an argument): defmake_text(event=None): text=en.get() item=ca.text([0,0],text) make_text gets the contents of the Entry and displays it as a Text item in the Canvas.
 
 It is also possible to create bindings for Canvas items. The following is a class definition for Draggable, which is a child class of Item that provides bindings that implement drag-and-drop capability.
-``` classDraggable(Item): def__init__(self,item): self.canvas=item.canvas self.tag=item.tag self.bind('<Button-3>',self.select) self.bind('<B3-Motion>',self.drag) self.bind('<Release-3>',self.drop) ```
+```py classDraggable(Item): def__init__(self,item): self.canvas=item.canvas self.tag=item.tag self.bind('<Button-3>',self.select) self.bind('<B3-Motion>',self.drag) self.bind('<Release-3>',self.drop) ```
 The init method takes an Item as a parameter. It copies the attributes of the Item and then creates bindings for three events: a button press, button motion, and button release.
 
 The event handler select stores the coordinates of the current event and the original color of the item, then changes the color to yellow:
-``` defselect(self,event): self.dragx=event.x self.dragy=event.y self.fill=self.cget('fill') self.config(fill='yellow') ```
+```py defselect(self,event): self.dragx=event.x self.dragy=event.y self.fill=self.cget('fill') self.config(fill='yellow') ```
 cget stands for "get configuration;" it takes the name of an option as a string and returns the current value of that option.
 
 drag computes how far the object has moved relative to the starting place, updates the stored coordinates, and then moves the item.
-``` defdrag(self,event): dx=event.x-self.dragx* ```
+```py defdrag(self,event): dx=event.x-self.dragx* ```
 
 ### 19.4 The _Catalog_
 
@@ -4864,9 +4864,9 @@ If you think you have an infinite loop and you think you know what loop is causi
 
 For example:
 
-```
+```py
 whilex>0andy<0:  #dosomethingtox  #dosomethingtoy
-``` print"x:",x  print"y:",y  print"condition:",(x>0andy<0) ```
+``` print"x:",x  print"y:",y  print"condition:",(x>0andy<0) ```py
 
 Now when you run the program, you will see three lines of output for each time through the loop. The last time through the loop, the condition should be false. If the loop keeps going, you will be able to see the values of x and y, and you might figure out why they are not being updated correctly.
 

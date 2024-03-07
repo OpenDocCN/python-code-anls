@@ -15,7 +15,7 @@ For pre-training YOLO-World, we adopt several datasets as listed in the below ta
 
 We put all data into the `data` directory, such as:
 
-```bash
+```pybash
 ├── coco
 │   ├── annotations
 │   ├── lvis
@@ -61,7 +61,7 @@ For training YOLO-World, we mainly adopt two kinds of dataset classs:
 
 The json file is formatted as follows:
 
-```json
+```pyjson
 [
     ['A_1','A_2'],
     ['B'],

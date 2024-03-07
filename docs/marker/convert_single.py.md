@@ -1,6 +1,6 @@
 # `.\marker\convert_single.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 用于解析命令行参数
 from marker.convert import convert_single_pdf  # 导入 convert_single_pdf 函数

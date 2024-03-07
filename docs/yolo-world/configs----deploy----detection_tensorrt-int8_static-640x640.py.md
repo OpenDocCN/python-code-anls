@@ -1,6 +1,6 @@
 # `.\YOLO-World\configs\deploy\detection_tensorrt-int8_static-640x640.py`
 
-```
+```py
 _base_ = [
     '../../third_party/mmdeploy/configs/mmdet/_base_/base_static.py',  # 定义基础配置文件路径
     '../../third_party/mmdeploy/configs/_base_/backends/tensorrt-int8.py']  # 定义后端配置文件路径

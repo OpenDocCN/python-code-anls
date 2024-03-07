@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\dense_heads\yolo_world_seg_head.py`
 
-```
+```py
 # 版权声明
 # 导入数学库
 import math

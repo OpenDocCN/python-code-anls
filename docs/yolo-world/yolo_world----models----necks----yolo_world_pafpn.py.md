@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\necks\yolo_world_pafpn.py`
 
-```
+```py
 # 导入必要的库
 import copy
 from typing import List, Union

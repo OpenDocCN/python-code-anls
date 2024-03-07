@@ -1,6 +1,6 @@
 # `.\YOLO-World\yolo_world\models\layers\__init__.py`
 
-```
+```py
 # 版权声明，版权归腾讯公司所有
 # 基于 CSPLayers 的 PAFPN 的基本模块
 
