@@ -12,6 +12,7 @@
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
 +   [PaddleOCR 源码解析](docs/paddleocr-ai/README.md)
++   [PokéLLMon](docs/pokellmon/README.md)
 +   [PythonMarkdown 源码解析](docs/python-markdown-ai/README.md)
 +   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
 +   [QLoRA 源码解析](docs/qlora-ai/README.md)
