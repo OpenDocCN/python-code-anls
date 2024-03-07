@@ -1,4 +1,4 @@
-# PokéLLMon
+# PokéLLMon 源码解析
 
 This is the implementation for the paper "PokéLLMon: A Human-Parity Agent for Pokémon battles with Large Language Models."
 
