@@ -82,14 +82,14 @@ our [Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/)
 
 First, make sure your machine has Python 3.10 installed.
 
-```
+```py
 $ python --version
 Python 3.10.12
 ```
 
 Then, create a virtual environment and install the project's dependencies within the virtual environment.
 
-```shell
+```py
 
 # 拉取仓库
 $ git clone https://github.com/chatchat-space/Langchain-Chatchat.git
@@ -120,7 +120,7 @@ To download the models, you need to first
 install [Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)
 and then run:
 
-```Shell
+```py
 $ git lfs install
 $ git clone https://huggingface.co/THUDM/chatglm2-6b
 $ git clone https://huggingface.co/moka-ai/m3e-base
@@ -130,7 +130,7 @@ $ git clone https://huggingface.co/moka-ai/m3e-base
 
 Follow the steps below to initialize your own knowledge base and config file:
 
-```shell
+```py
 $ python copy_config_example.py
 $ python init_database.py --recreate-vs
  ```
@@ -139,7 +139,7 @@ $ python init_database.py --recreate-vs
 
 To start the project, run the following command:
 
-```shell
+```py
 $ python startup.py -a
 ```
 

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\default_kb_service.py`
 
-```
+```py
 # 从 typing 模块导入 List 类型
 from typing import List
 

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\api\test_stream_chat_api_thread.py`
 
-```
+```py
 # 导入requests库，用于发送HTTP请求
 import requests
 # 导入json库，用于处理JSON数据

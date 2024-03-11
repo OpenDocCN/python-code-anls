@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\text_splitter\chinese_recursive_text_splitter.py`
 
-```
+```py
 import re
 from typing import List, Optional, Any
 from langchain.text_splitter import RecursiveCharacterTextSplitter

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\pg_kb_service.py`
 
-```
+```py
 # 导入所需的模块
 import json
 from typing import List, Dict, Optional

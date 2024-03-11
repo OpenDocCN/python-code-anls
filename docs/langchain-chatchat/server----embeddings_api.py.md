@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\embeddings_api.py`
 
-```
+```py
 # 导入所需的模块和类
 from langchain.docstore.document import Document
 from configs import EMBEDDING_MODEL, logger

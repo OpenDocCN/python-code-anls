@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\custom_agent\ChatGLM3Agent.py`
 
-```
+```py
 """
 This file is a modified version for ChatGLM3-6B the original glm3_agent.py file from the langchain repo.
 """

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\minimax.py`
 
-```
+```py
 # 从fastchat.conversation模块导入Conversation类
 from fastchat.conversation import Conversation
 # 从server.model_workers.base模块导入所有内容

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\__init__.py`
 
-```
+```py
 # 从 model_contain 模块中导入所有内容
 from .model_contain import *
 # 从 callbacks 模块中导入所有内容

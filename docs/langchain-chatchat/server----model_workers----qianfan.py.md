@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\qianfan.py`
 
-```
+```py
 import sys
 from fastchat.conversation import Conversation
 from server.model_workers.base import *

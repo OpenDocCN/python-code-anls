@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\cli_demo_hf.py`
 
-```
+```py
 # 导入所需的库
 import os
 import platform

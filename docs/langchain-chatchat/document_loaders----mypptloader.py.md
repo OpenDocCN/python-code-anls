@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\document_loaders\mypptloader.py`
 
-```
+```py
 # 从 langchain.document_loaders.unstructured 模块中导入 UnstructuredFileLoader 类
 from langchain.document_loaders.unstructured import UnstructuredFileLoader
 # 从 typing 模块中导入 List 类型

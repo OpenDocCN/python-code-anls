@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\chat\utils.py`
 
-```
+```py
 # 导入必要的模块和类
 from pydantic import BaseModel, Field
 from langchain.prompts.chat import ChatMessagePromptTemplate

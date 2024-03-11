@@ -61,11 +61,11 @@ OpenAI GPT API 的调用，并将在后续持续扩充对各类模型及模型 A
 
 版本所使用代码已更新至本项目 `v0.2.10` 版本。
 
-🐳 [Docker 镜像](registry.cn-beijing.aliyuncs.com/chatchat/chatchat:0.2.7) 已经更新到 ```0.2.7``` 版本。
+🐳 [Docker 镜像](registry.cn-beijing.aliyuncs.com/chatchat/chatchat:0.2.7) 已经更新到 ```py.2.7``` 版本。
 
 🌲 一行命令运行 Docker ：
 
-```shell
+```py
 docker run -d --gpus all -p 80:8501 registry.cn-beijing.aliyuncs.com/chatchat/chatchat:0.2.7
 ```
 
@@ -77,7 +77,7 @@ _仅仅是入门教程，能够基础运行__。
 ## 解决的痛点
 
 该项目是一个可以实现 __完全本地化__推理的知识库增强方案, 重点解决数据安全保护，私域化部署的企业痛点。
-本开源方案采用```Apache License```，可以免费商用，无需付费。
+本开源方案采用```py License```，可以免费商用，无需付费。
 
 我们支持市面上主流的本地大语言模型和Embedding模型，支持开源的本地向量数据库。
 支持列表详见[Wiki](https://github.com/chatchat-space/Langchain-Chatchat/wiki/)
@@ -88,14 +88,14 @@ _仅仅是入门教程，能够基础运行__。
 
 + 首先，确保你的机器安装了 Python 3.8 - 3.11 (我们强烈推荐使用 Python3.11)。
 
-```
+```py
 $ python --version
 Python 3.11.7
 ```
 
 接着，创建一个虚拟环境，并在虚拟环境内安装项目的依赖
 
-```shell
+```py
 
 # 拉取仓库
 $ git clone https://github.com/chatchat-space/Langchain-Chatchat.git
@@ -125,7 +125,7 @@ $ pip install -r requirements_webui.txt
 下载模型需要先[安装 Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)
 ，然后运行
 
-```Shell
+```py
 $ git lfs install
 $ git clone https://huggingface.co/THUDM/chatglm3-6b
 $ git clone https://huggingface.co/BAAI/bge-large-zh
@@ -135,7 +135,7 @@ $ git clone https://huggingface.co/BAAI/bge-large-zh
 
 按照下列方式初始化自己的知识库和简单的复制配置文件
 
-```shell
+```py
 $ python copy_config_example.py
 $ python init_database.py --recreate-vs
  ```
@@ -144,7 +144,7 @@ $ python init_database.py --recreate-vs
 
 按照以下命令启动项目
 
-```shell
+```py
 $ python startup.py -a
 ```
 

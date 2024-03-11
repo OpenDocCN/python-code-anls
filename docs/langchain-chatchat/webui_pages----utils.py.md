@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\webui_pages\utils.py`
 
-```
+```py
 # 该文件封装了对api.py的请求，可以被不同的webui使用
 # 通过ApiRequest和AsyncApiRequest支持同步/异步调用
 

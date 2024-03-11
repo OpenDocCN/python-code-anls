@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\calculate.py`
 
-```
+```py
 # 从指定模块中导入所需的类和函数
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMMathChain

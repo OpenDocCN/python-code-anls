@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\kb_vector_db\test_faiss_kb.py`
 
-```
+```py
 # 从指定路径导入FaissKBService类
 from server.knowledge_base.kb_service.faiss_kb_service import FaissKBService
 # 从指定路径导入create_tables函数

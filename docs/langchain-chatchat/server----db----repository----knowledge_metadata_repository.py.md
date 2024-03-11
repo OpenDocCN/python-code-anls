@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\repository\knowledge_metadata_repository.py`
 
-```
+```py
 # 导入所需模块和类
 from server.db.models.knowledge_metadata_model import SummaryChunkModel
 from server.db.session import with_session

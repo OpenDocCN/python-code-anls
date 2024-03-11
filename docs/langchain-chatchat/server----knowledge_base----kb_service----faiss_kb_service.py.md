@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\faiss_kb_service.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import shutil

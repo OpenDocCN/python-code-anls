@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\web_demo_hf.py`
 
-```
+```py
 # 导入所需的库
 from transformers import AutoModel, AutoTokenizer
 import gradio as gr

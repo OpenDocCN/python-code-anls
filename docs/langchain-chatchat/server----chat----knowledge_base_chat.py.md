@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\chat\knowledge_base_chat.py`
 
-```
+```py
 # 导入必要的模块和类
 from fastapi import Body, Request
 from sse_starlette.sse import EventSourceResponse

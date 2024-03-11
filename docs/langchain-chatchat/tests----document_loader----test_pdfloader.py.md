@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\document_loader\test_pdfloader.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 从 pathlib 模块中导入 Path 类

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\wolfram.py`
 
-```
+```py
 # 导入 Langchain 自带的 Wolfram Alpha API 封装模块
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 # 导入 Pydantic 模块中的 BaseModel 和 Field 类

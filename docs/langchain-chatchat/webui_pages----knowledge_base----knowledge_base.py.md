@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\webui_pages\knowledge_base\knowledge_base.py`
 
-```
+```py
 # 导入 streamlit 库
 import streamlit as st
 # 从 webui_pages.utils 模块中导入所有内容

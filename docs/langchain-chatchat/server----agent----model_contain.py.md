@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\model_contain.py`
 
-```
+```py
 # 定义一个名为 ModelContainer 的类
 class ModelContainer:
     # 初始化方法，设置 MODEL 和 DATABASE 属性为 None

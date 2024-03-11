@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\search_knowledgebase_simple.py`
 
-```
+```py
 # 从指定路径导入knowledge_base_chat函数
 from server.chat.knowledge_base_chat import knowledge_base_chat
 # 从configs模块导入VECTOR_SEARCH_TOP_K, SCORE_THRESHOLD, MAX_TOKENS

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\init_database.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 将当前目录添加到 sys.path 中

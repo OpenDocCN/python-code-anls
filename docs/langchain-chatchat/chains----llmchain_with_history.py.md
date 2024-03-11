@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\chains\llmchain_with_history.py`
 
-```
+```py
 # 从 server.utils 模块中导入 get_ChatOpenAI 函数
 # 从 configs.model_config 模块中导入 LLM_MODELS 和 TEMPERATURE 常量
 # 从 langchain.chains 模块中导入 LLMChain 类

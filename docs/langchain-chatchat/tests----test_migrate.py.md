@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\test_migrate.py`
 
-```
+```py
 # 导入必要的模块
 from pathlib import Path
 from pprint import pprint

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\repository\knowledge_file_repository.py`
 
-```
+```py
 # 导入所需的模块和类
 from server.db.models.knowledge_base_model import KnowledgeBaseModel
 from server.db.models.knowledge_file_model import KnowledgeFileModel, FileDocModel

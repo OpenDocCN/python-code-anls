@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\gemini.py`
 
-```
+```py
 # 导入所需的模块
 import sys
 from fastchat.conversation import Conversation

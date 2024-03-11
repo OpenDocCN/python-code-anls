@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\zhipu.py`
 
-```
+```py
 # 导入所需模块
 from contextlib import contextmanager
 import httpx

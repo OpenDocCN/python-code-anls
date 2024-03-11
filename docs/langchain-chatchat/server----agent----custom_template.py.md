@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\custom_template.py`
 
-```
+```py
 # 导入未来版本的注解功能
 from __future__ import annotations
 # 导入自定义模块

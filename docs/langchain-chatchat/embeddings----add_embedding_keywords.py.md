@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\embeddings\add_embedding_keywords.py`
 
-```
+```py
 '''
 该功能是为了将关键词加入到embedding模型中，以便于在embedding模型中进行关键词的embedding
 该功能的实现是通过修改embedding模型的tokenizer来实现的

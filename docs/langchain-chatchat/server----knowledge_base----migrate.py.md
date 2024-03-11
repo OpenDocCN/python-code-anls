@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\migrate.py`
 
-```
+```py
 # 从configs模块中导入所需的变量和函数
 from configs import (
     EMBEDDING_MODEL, DEFAULT_VS_TYPE, ZH_TITLE_ENHANCE,

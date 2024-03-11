@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\base.py`
 
-```
+```py
 # 从fastchat.conversation模块中导入Conversation类
 from fastchat.conversation import Conversation
 # 从configs模块中导入LOG_PATH和TEMPERATURE常量

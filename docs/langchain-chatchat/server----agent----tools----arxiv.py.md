@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\arxiv.py`
 
-```
+```py
 # 导入 LangChain 的 ArxivQueryRun 工具
 from pydantic import BaseModel, Field
 from langchain.tools.arxiv.tool import ArxivQueryRun

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\text_splitter\zh_title_enhance.py`
 
-```
+```py
 # 导入所需的模块
 from langchain.docstore.document import Document
 import re

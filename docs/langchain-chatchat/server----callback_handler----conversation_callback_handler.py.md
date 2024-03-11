@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\callback_handler\conversation_callback_handler.py`
 
-```
+```py
 # 导入必要的模块
 from typing import Any, Dict, List
 

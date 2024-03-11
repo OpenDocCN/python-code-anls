@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\search_internet.py`
 
-```
+```py
 # 导入所需的模块
 import json
 from server.chat.search_engine_chat import search_engine_chat

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\base.py`
 
-```
+```py
 # 导入 operator 模块，用于操作符函数
 import operator
 # 导入 ABC 抽象基类和 abstractmethod 装饰器

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\api\test_server_state_api.py`
 
-```
+```py
 # 导入必要的模块
 import sys
 from pathlib import Path

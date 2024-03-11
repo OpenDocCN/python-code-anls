@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\milvus_kb_service.py`
 
-```
+```py
 # 导入必要的模块
 from typing import List, Dict, Optional
 from langchain.schema import Document

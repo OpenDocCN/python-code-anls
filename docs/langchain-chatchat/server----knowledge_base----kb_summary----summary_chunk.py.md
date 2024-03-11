@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_summary\summary_chunk.py`
 
-```
+```py
 # 导入必要的模块
 from typing import List, Optional
 from langchain.schema.language_model import BaseLanguageModel

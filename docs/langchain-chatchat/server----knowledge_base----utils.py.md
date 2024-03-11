@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\utils.py`
 
-```
+```py
 # 导入必要的模块和变量
 import os
 from configs import (

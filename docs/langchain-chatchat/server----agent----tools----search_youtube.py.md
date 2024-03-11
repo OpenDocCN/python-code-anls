@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\search_youtube.py`
 
-```
+```py
 # 导入 Langchain 自带的 YouTube 搜索工具
 from langchain.tools import YouTubeSearchTool
 # 导入 BaseModel 和 Field 类

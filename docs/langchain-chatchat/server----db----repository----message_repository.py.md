@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\repository\message_repository.py`
 
-```
+```py
 # 从 server.db.session 模块导入 with_session 装饰器
 # 从 typing 模块导入 Dict 和 List 类型
 # 导入 uuid 模块

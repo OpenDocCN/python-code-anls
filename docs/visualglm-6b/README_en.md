@@ -41,19 +41,19 @@ VisualGLM-6B can answer questions related to image description.
 ### Model Inference
 
 Install dependencies with pip
-```
+```py
 pip install -i https://pypi.org/simple -r requirements.txt
 pip install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 ```
 This will default to installing the deepspeed library (which supports the sat library training). This library is not necessary for model inference and can cause problems when installed in some Windows environments.
 If you want to bypass deepspeed installation, you can change the command to:
-```
+```py
 pip install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements_wo_ds.txt
 pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-deps "SwissArmyTransformer>=0.3.6"
 ```
 
 If you are calling the model using the Huggingface transformers library (you also need to install the above dependency packages!), you can use the following code (where the image path is the local path):
-```python
+```py
 from transformers import AutoTokenizer, AutoModel
 tokenizer = AutoTokenizer.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True)
 model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).half().cuda()
@@ -65,7 +65,7 @@ print(response)
 ```
 
 If you use the SwissArmyTransformer library to call the model, the method is similar, and you can use the environment variable SAT_HOME to determine the model download location. In the directory of this repository:
-```python
+```py
 import argparse
 from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
@@ -90,7 +90,7 @@ Multimodal tasks are wide-ranging and diverse, and pre-training often cannot cov
 Here we provide an example of small sample fine-tuning, using 20 labeled images to enhance the model's ability to answer "background" questions.
 
 After unzipping fewshot-data.zip, run the following command:
-```
+```py
 bash finetune/finetune_visualglm.sh
 ```
 
@@ -102,7 +102,7 @@ Currently we support three types of (parameter-efficient) fine-tuning:
 
 After training, you can use the following command for inference:
 
-```
+```py
 python cli_demo.py --from_pretrained your_checkpoint_path --prompt_zh 这张图片的背景里有什么内容？
 ```
 
@@ -110,7 +110,7 @@ Fine-tuning requires the installation of the deepspeed library, and currently th
 
 If you want to merge LoRA weights into original weights, just call `merge_lora()`:
 
-```python
+```py
 from finetune_visualglm import FineTuneVisualGLMModel
 import argparse
 
@@ -133,14 +133,14 @@ save_checkpoint(1, model, None, None, args)
 
 ### Command Line Demo
 
-```shell
+```py
 python cli_demo.py 
 ```
 The program will automatically download the sat model and interact in the command line. You can generate replies by entering instructions and pressing enter. Enter 'clear' to clear the conversation history and 'stop' to stop the program.
 
 ![cli_demo](examples/thu.png)
 The program provides the following hyperparameters to control the generation process and quantization accuracy:
-```
+```py
 usage: cli_demo.py [-h] [--max_length MAX_LENGTH] [--top_p TOP_P] [--top_k TOP_K] [--temperature TEMPERATURE] [--english] [--quant {8,4}]
 
 optional arguments:
@@ -157,7 +157,7 @@ optional arguments:
 Note that during training, the prompt words for English Q&A pairs are 'Q: A:', while in Chinese they are '问：答：'. The web demo uses Chinese prompts, so the English replies will be worse and interspersed with Chinese; if you need English replies, please use the --english option in cli_demo.py.
 
 We also provide a typewriter effect command line tool inherited from ChatGLM-6B, which uses the Huggingface model:
-```shell
+```py
 python cli_demo_hf.py
 ```
 
@@ -167,7 +167,7 @@ python cli_demo_hf.py
 We provide a web demo based on [Gradio](https://gradio.app). First, install Gradio: `pip install gradio`.
 Then download and enter this repository and run `web_demo.py`:
 
-```
+```py
 git clone https://github.com/THUDM/VisualGLM-6B
 cd VisualGLM-6B
 python web_demo.py
@@ -175,7 +175,7 @@ python web_demo.py
 The program will automatically download the sat model and run a Web Server, outputting the address. Open the output address in your browser to use it.
 
 We also provide a web tool with a typewriter effect inherited from ChatGLM-6B, which uses the Huggingface model and will run on port :8080 after starting:
-```shell
+```py
 python web_demo_hf.py
 ```
 
@@ -183,17 +183,17 @@ Both web demos accept the command line parameter --share to generate a public li
 
 ### API Deployment
 First, you need to install additional dependencies pip install fastapi uvicorn, then run the api.py in the repository:
-```shell
+```py
 python api.py
 ```
 The program will automatically download the sat model, and by default it will be deployed on local port 8080 and called through the POST method. Below is an example of a request with curl, but in general you can also use a code method to POST.
-```shell
+```py
 echo "{\"image\":\"$(base64 path/to/example.jpg)\",\"text\":\"Describe this picture\",\"history\":[]}" > temp.json
 curl -X POST -H "Content-Type: application/json" -d @temp.json http://127.0.0.1:8080
 ```
 
 We also provide an api_hf.py that uses the Huggingface model, which works the same way as the sat model's api:
-```shell
+```py
 python api_hf.py
 ```
 
@@ -201,13 +201,13 @@ python api_hf.py
 ## Model Quantization
 In the Huggingface implementation, the model is loaded with FP16 precision by default, and running the above code requires about 15GB of GPU memory. If your GPU memory is limited, you can try loading the model in a quantized manner.
 Here's how:
-```python
+```py
 # Modify as needed, currently only 4/8 bit quantization is supported. The following will only quantize ChatGLM, as the error is larger when quantizing ViT
 model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).quantize(8).half().cuda()
 ```
 
 In the sat implementation, you need to change the loading location to 'cpu' first, and then perform quantization. Here's how, see cli_demo.py for details:
-```python
+```py
 from sat.quantization.kernels import quantize
 model = quantize(model, args.quant).cuda()
 # only need 7GB GPU memory to inference
@@ -226,7 +226,7 @@ The code in this repository is open source under the Apache-2.0 license, while t
 
 ## Citation & Acknowledgements
 If you find our work helpful, please consider citing the following papers
-```
+```py
 @inproceedings{du2022glm,
   title={GLM: General Language Model Pretraining with Autoregressive Blank Infilling},
   author={Du, Zhengxiao and Qian, Yujie and Liu, Xiao and Ding, Ming and Qiu, Jiezhong and Yang, Zhilin and Tang, Jie},

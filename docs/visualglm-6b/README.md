@@ -69,20 +69,20 @@ VisualGLM-6B 可以进行图像的描述的相关知识的问答。
 ### 模型推理
 
 使用pip安装依赖
-```
+```py
 pip install -i https://pypi.org/simple -r requirements.txt
 # 国内请使用aliyun镜像，TUNA等镜像同步最近出现问题，命令如下
 pip install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 ```
 此时默认会安装`deepspeed`库（支持`sat`库训练），此库对于模型推理并非必要，同时部分Windows环境安装此库时会遇到问题。
 如果想绕过`deepspeed`安装，我们可以将命令改为
-```
+```py
 pip install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements_wo_ds.txt
 pip install -i https://mirrors.aliyun.com/pypi/simple/ --no-deps "SwissArmyTransformer>=0.4.4"
 ```
 
 如果使用Huggingface transformers库调用模型（**也需要安装上述依赖包！**），可以通过如下代码（其中图像路径为本地路径）：
-```python
+```py
 from transformers import AutoTokenizer, AutoModel
 tokenizer = AutoTokenizer.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True)
 model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).half().cuda()
@@ -95,7 +95,7 @@ print(response)
 以上代码会由 `transformers` 自动下载模型实现和参数。完整的模型实现可以在 [Hugging Face Hub](https://huggingface.co/THUDM/visualglm-6b)。如果你从 Hugging Face Hub 上下载模型参数的速度较慢，可以从[这里](https://cloud.tsinghua.edu.cn/d/43ffb021ca5f4897b56a/)手动下载模型参数文件，并从本地加载模型。具体做法请参考[从本地加载模型](https://github.com/THUDM/ChatGLM-6B#%E4%BB%8E%E6%9C%AC%E5%9C%B0%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B)。关于基于 transformers 库模型的量化、CPU推理、Mac MPS 后端加速等内容，请参考 [ChatGLM-6B 的低成本部署](https://github.com/THUDM/ChatGLM-6B#%E4%BD%8E%E6%88%90%E6%9C%AC%E9%83%A8%E7%BD%B2)。
 
 如果使用SwissArmyTransformer库调用模型，方法类似，可以使用环境变量`SAT_HOME`决定模型下载位置。在本仓库目录下：
-```python
+```py
 import argparse
 from transformers import AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
@@ -117,7 +117,7 @@ print(response)
 这里我们提供了一个小样本微调的例子，使用20张标注图增强模型回答“背景”问题的能力。
 
 解压`fewshot-data.zip`以后运行如下命令：
-```
+```py
 bash finetune/finetune_visualglm.sh
 ```
 
@@ -129,7 +129,7 @@ bash finetune/finetune_visualglm.sh
 
 训练好以后可以使用如下命令推理：
 
-```
+```py
 python cli_demo.py --from_pretrained your_checkpoint_path --prompt_zh 这张图片的背景里有什么内容？
 ```
 
@@ -138,7 +138,7 @@ python cli_demo.py --from_pretrained your_checkpoint_path --prompt_zh 这张图�
 
 微调前：
 
-```
+```py
 欢迎使用 VisualGLM-6B 模型，输入图像URL或本地路径读图，继续输入内容对话，clear 重新开始，stop 终止程序
 请输入图像路径或URL（回车进入纯文本对话）： fewshot-data/2p.png
 用户：这张图片的背景里有什么内容？
@@ -157,7 +157,7 @@ VisualGLM-6B：这张图片的背景是一台电脑键盘和两张护照。
 
 微调后：
 
-```
+```py
 欢迎使用 VisualGLM-6B 模型，输入图像URL或本地路径读图，继续输入内容对话，clear 重新开始，stop 终止程序
 请输入图像路径或URL（回车进入纯文本对话）： fewshot-data/2p.png
 用户：这张图片的背景里有什么内容？
@@ -188,7 +188,7 @@ VisualGLM-6B：两张护照。
 
 如果希望把LoRA部分的参数合并到原始的权重，可以调用`merge_lora()`，例如：
 
-```python
+```py
 from finetune_visualglm import FineTuneVisualGLMModel
 import argparse
 
@@ -213,14 +213,14 @@ save_checkpoint(1, model, None, None, args)
 
 ### 命令行 Demo
 
-```shell
+```py
 python cli_demo.py 
 ```
 程序会自动下载sat模型，并在命令行中进行交互式的对话，输入指示并回车即可生成回复，输入 clear 可以清空对话历史，输入 stop 终止程序。
 
 ![cli_demo](examples/thu.png)
 程序提供如下超参数控制生成过程与量化精度：
-```
+```py
 usage: cli_demo.py [-h] [--max_length MAX_LENGTH] [--top_p TOP_P] [--top_k TOP_K] [--temperature TEMPERATURE] [--english] [--quant {8,4}]
 
 optional arguments:
@@ -237,12 +237,12 @@ optional arguments:
 需要注意的是，在训练时英文问答对的提示词为`Q: A:`，而中文为`问：答：`，在网页demo中采取了中文的提示，因此英文回复会差一些且夹杂中文；如果需要英文回复，请使用`cli_demo.py`中的`--english`选项。
 
 我们也提供了继承自`ChatGLM-6B`的打字机效果命令行工具，此工具使用Huggingface模型：
-```shell
+```py
 python cli_demo_hf.py
 ```
 
 我们也支持模型并行多卡部署：（需要更新最新版本的sat，如果之前下载了checkpoint，也需要手动删除后重新下载）
-```
+```py
 torchrun --nnode 1 --nproc-per-node 2 cli_demo_mp.py
 ```
 
@@ -252,7 +252,7 @@ torchrun --nnode 1 --nproc-per-node 2 cli_demo_mp.py
 我们提供了一个基于 [Gradio](https://gradio.app) 的网页版 Demo，首先安装 Gradio：`pip install gradio`。
 然后下载并进入本仓库运行`web_demo.py`：
 
-```
+```py
 git clone https://github.com/THUDM/VisualGLM-6B
 cd VisualGLM-6B
 python web_demo.py
@@ -261,7 +261,7 @@ python web_demo.py
 
 
 我们也提供了继承自`ChatGLM-6B`的打字机效果网页版工具，此工具使用 Huggingface 模型，启动后将运行在`:8080`端口上：
-```shell
+```py
 python web_demo_hf.py
 ```
 
@@ -269,16 +269,16 @@ python web_demo_hf.py
 
 ### API部署
 首先需要安装额外的依赖 `pip install fastapi uvicorn`，然后运行仓库中的 [api.py](api.py)：
-```shell
+```py
 python api.py
 ```
 程序会自动下载 sat 模型，默认部署在本地的 8080 端口，通过 POST 方法进行调用。下面是用`curl`请求的例子，一般而言可以也可以使用代码方法进行POST。
-```shell
+```py
 echo "{\"image\":\"$(base64 path/to/example.jpg)\",\"text\":\"描述这张图片\",\"history\":[]}" > temp.json
 curl -X POST -H "Content-Type: application/json" -d @temp.json http://127.0.0.1:8080
 ```
 得到的返回值为
-```
+```py
   {
     "response":"这张图片展现了一只可爱的卡通羊驼，它站在一个透明的背景上。这只羊驼长着一张毛茸茸的耳朵和一双大大的眼睛，它的身体是白色的，带有棕色斑点。",
     "history":[('描述这张图片', '这张图片展现了一只可爱的卡通羊驼，它站在一个透明的背景上。这只羊驼长着一张毛茸茸的耳朵和一双大大的眼睛，它的身体是白色的，带有棕色斑点。')],
@@ -288,7 +288,7 @@ curl -X POST -H "Content-Type: application/json" -d @temp.json http://127.0.0.1:
 ```
 
 我们也提供了使用Huggingface模型的 [api_hf.py](api_hf.py)，用法和sat模型的api一致：
-```shell
+```py
 python api_hf.py
 ```
 
@@ -296,13 +296,13 @@ python api_hf.py
 ## 模型量化
 在Huggingface实现中，模型默认以 FP16 精度加载，运行上述代码需要大概 15GB 显存。如果你的 GPU 显存有限，可以尝试以量化方式加载模型。
 使用方法如下：
-```python
+```py
 # 按需修改，目前只支持 4/8 bit 量化。下面将只量化ChatGLM，ViT 量化时误差较大
 model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).quantize(8).half().cuda()
 ```
 
 在sat实现中，需先传参将加载位置改为`cpu`，再进行量化。方法如下，详见`cli_demo.py`：
-```python
+```py
 from sat.quantization.kernels import quantize
 quantize(model, args.quant).cuda()
 # 只需要 7GB 显存即可推理
@@ -320,7 +320,7 @@ quantize(model, args.quant).cuda()
 
 ## 引用与致谢
 如果你觉得我们的工作有帮助的话，请考虑引用下列论文
-```
+```py
 @inproceedings{du2022glm,
   title={GLM: General Language Model Pretraining with Autoregressive Blank Infilling},
   author={Du, Zhengxiao and Qian, Yujie and Liu, Xiao and Ding, Ming and Qiu, Jiezhong and Yang, Zhilin and Tang, Jie},

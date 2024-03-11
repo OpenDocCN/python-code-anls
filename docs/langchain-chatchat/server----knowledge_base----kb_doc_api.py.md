@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_doc_api.py`
 
-```
+```py
 # 导入必要的库
 import os
 import urllib

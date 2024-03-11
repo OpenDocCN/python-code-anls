@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\utils.py`
 
-```
+```py
 # 导入必要的库
 import pydantic
 from pydantic import BaseModel

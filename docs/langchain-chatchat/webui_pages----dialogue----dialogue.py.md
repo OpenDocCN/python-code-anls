@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\webui_pages\dialogue\dialogue.py`
 
-```
+```py
 # 导入streamlit库
 import streamlit as st
 # 从webui_pages.utils模块中导入所有内容

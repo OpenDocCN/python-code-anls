@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\minx_chat_openai.py`
 
-```
+```py
 # 导入必要的模块和类型
 from typing import (
     TYPE_CHECKING,

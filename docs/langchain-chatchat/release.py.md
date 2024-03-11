@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\release.py`
 
-```
+```py
 # 导入必要的模块
 import os
 import subprocess

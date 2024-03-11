@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\text_splitter\chinese_text_splitter.py`
 
-```
+```py
 # 从 langchain.text_splitter 模块中导入 CharacterTextSplitter 类
 from langchain.text_splitter import CharacterTextSplitter
 # 导入 re 模块，用于正则表达式操作

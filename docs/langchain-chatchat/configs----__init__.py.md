@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\configs\__init__.py`
 
-```
+```py
 # 导入 basic_config 模块中的所有内容
 from .basic_config import *
 # 导入 model_config 模块中的所有内容

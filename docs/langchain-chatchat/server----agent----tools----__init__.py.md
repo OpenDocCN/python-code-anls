@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\__init__.py`
 
-```
+```py
 # 导入搜索知识库简单查询工具类
 from .search_knowledgebase_simple import search_knowledgebase_simple
 # 导入搜索知识库一次性查询工具类和知识搜索输入类

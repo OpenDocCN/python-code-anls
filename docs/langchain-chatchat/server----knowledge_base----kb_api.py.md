@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_api.py`
 
-```
+```py
 # 导入 urllib 模块
 import urllib
 # 从 server.utils 模块中导入 BaseResponse, ListResponse 类

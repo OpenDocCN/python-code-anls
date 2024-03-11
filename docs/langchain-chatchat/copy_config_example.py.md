@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\copy_config_example.py`
 
-```
+```py
 # 导入必要的库
 import os  # 导入操作系统相关的库
 import shutil  # 导入文件操作相关的库

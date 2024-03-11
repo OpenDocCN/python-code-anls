@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\__init__.py`
 
-```
+```py
 # 导入当前目录下的 base 模块中的所有内容
 from .base import *
 # 导入当前目录下的 zhipu 模块中的 ChatGLMWorker 类

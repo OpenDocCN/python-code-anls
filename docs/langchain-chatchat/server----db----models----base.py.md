@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\models\base.py`
 
-```
+```py
 # 导入 datetime 模块中的 datetime 类
 # 从 sqlalchemy 模块中导入 Column、DateTime、String、Integer 类
 class BaseModel:

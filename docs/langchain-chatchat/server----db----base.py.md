@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\base.py`
 
-```
+```py
 # 导入所需的模块
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta

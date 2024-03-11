@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools_select.py`
 
-```
+```py
 # 从指定模块中导入 Tool 类
 from langchain.tools import Tool
 # 从 server.agent.tools 模块中导入所有内容

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\weather_check.py`
 
-```
+```py
 """
 更简单的单参数输入工具实现，用于查询现在天气的情况
 """

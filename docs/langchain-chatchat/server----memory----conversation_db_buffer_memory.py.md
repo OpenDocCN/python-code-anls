@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\memory\conversation_db_buffer_memory.py`
 
-```
+```py
 import logging
 from typing import Any, List, Dict
 

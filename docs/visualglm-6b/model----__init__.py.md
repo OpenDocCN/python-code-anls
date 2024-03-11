@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\model\__init__.py`
 
-```
+```py
 # 从当前目录中导入 chat 模块
 from .chat import chat
 # 从当前目录中导入 infer_util 模块中的所有内容

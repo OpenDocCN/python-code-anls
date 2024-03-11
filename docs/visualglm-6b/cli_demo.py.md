@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\cli_demo.py`
 
-```
+```py
 # -*- encoding: utf-8 -*- 
 # 设置文件编码为 utf-8
 

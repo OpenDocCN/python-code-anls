@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\api_allinone_stale.py`
 
-```
+```py
 # 用法说明
 # 调用默认模型：python server/api_allinone.py
 # 加载多个非默认模型：python server/api_allinone.py --model-path-address model1@host1@port1 model2@host2@port2 

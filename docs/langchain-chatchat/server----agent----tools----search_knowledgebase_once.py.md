@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\search_knowledgebase_once.py`
 
-```
+```py
 # 导入必要的模块
 from __future__ import annotations
 import re
@@ -169,7 +169,7 @@ class LLMKnowledgeChain(LLMChain):
         llm_output = llm_output.strip()
         
         # 使用正则表达式匹配文本中的特定格式，提取数据库内容
-        text_match = re.search(r"^```text(.*?)```", llm_output, re.DOTALL)
+        text_match = re.search(r"^```py(.*?)```", llm_output, re.DOTALL)
         if text_match:
             database = text_match.group(1).strip()
             # 调用私有方法，评估数据库表达式
@@ -200,7 +200,7 @@ class LLMKnowledgeChain(LLMChain):
         # 去除文本输出两侧的空格
         llm_output = llm_output.strip()
         # 使用正则表达式匹配文本中的特定格式，获取匹配的文本
-        text_match = re.search(r"^```text(.*?)```", llm_output, re.DOTALL)
+        text_match = re.search(r"^```py(.*?)```", llm_output, re.DOTALL)
         if text_match:
             # 获取匹配的表达式
             expression = text_match.group(1)
@@ -239,7 +239,7 @@ class LLMKnowledgeChain(LLMChain):
         llm_output = self.llm_chain.predict(
             database_names=data_formatted_str,
             question=inputs[self.input_key],
-            stop=["```output"],
+            stop=["```py"],
             callbacks=_run_manager.get_child(),
         )
         # 处理LLM的结果并返回

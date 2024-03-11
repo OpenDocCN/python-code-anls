@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\llm_api_stale.py`
 
-```
+```py
 """
 这段代码是一个脚本文件的说明文档，描述了如何调用该脚本以及一些参数的使用说明
 """

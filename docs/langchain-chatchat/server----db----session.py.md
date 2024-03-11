@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\session.py`
 
-```
+```py
 # 导入必要的模块
 from functools import wraps
 from contextlib import contextmanager

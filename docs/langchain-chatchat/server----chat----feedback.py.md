@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\chat\feedback.py`
 
-```
+```py
 # 导入必要的模块和函数
 from fastapi import Body
 from configs import logger, log_verbose

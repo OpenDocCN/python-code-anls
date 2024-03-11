@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\chat\completion.py`
 
-```
+```py
 # 从 fastapi 模块中导入 Body 类，用于定义请求体参数
 from fastapi import Body
 # 从 sse_starlette.sse 模块中导入 EventSourceResponse 类，用于服务器端发送事件流响应

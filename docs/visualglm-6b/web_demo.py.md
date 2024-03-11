@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\web_demo.py`
 
-```
+```py
 #!/usr/bin/env python
 
 # 导入必要的库

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_summary\base.py`
 
-```
+```py
 # 导入所需的模块和类型提示
 from typing import List
 

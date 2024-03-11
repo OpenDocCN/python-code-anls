@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\model\kb_document_model.py`
 
-```
+```py
 # 导入 Document 类
 from langchain.docstore.document import Document
 

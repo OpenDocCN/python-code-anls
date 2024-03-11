@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\callbacks.py`
 
-```
+```py
 # 导入必要的模块和类
 from __future__ import annotations
 from uuid import UUID

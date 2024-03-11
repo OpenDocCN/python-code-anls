@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_cache\base.py`
 
-```
+```py
 # 导入所需的模块
 from langchain.embeddings.base import Embeddings
 from langchain.vectorstores.faiss import FAISS

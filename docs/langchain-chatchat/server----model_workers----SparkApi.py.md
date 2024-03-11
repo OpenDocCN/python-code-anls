@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\SparkApi.py`
 
-```
+```py
 import base64
 import datetime
 import hashlib

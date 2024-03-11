@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\zilliz_kb_service.py`
 
-```
+```py
 # 导入所需的模块和类
 from typing import List, Dict, Optional
 from langchain.embeddings.base import Embeddings

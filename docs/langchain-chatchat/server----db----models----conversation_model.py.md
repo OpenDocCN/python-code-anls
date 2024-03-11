@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\models\conversation_model.py`
 
-```
+```py
 # 导入需要的模块和类
 from sqlalchemy import Column, Integer, String, DateTime, JSON, func
 from server.db.base import Base

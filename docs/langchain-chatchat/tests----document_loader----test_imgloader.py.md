@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\document_loader\test_imgloader.py`
 
-```
+```py
 # 导入 sys 模块，用于访问 Python 解释器的变量和函数
 import sys
 # 从 pathlib 模块中导入 Path 类，用于处理文件路径

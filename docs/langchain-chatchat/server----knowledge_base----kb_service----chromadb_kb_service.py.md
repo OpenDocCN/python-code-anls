@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\chromadb_kb_service.py`
 
-```
+```py
 # 导入必要的模块和类型提示
 import uuid
 from typing import Any, Dict, List, Tuple

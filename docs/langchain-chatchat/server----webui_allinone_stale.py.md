@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\webui_allinone_stale.py`
 
-```
+```py
 """
 Usage
 加载本地模型：

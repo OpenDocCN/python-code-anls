@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\cli_demo_mp.py`
 
-```
+```py
 # -*- encoding: utf-8 -*-
 
 import os

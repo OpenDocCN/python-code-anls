@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\api\test_kb_api.py`
 
-```
+```py
 # 导入需要的模块
 import requests
 import json

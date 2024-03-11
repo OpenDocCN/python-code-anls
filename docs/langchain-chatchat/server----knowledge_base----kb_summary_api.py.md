@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_summary_api.py`
 
-```
+```py
 # 导入必要的模块和函数
 from fastapi import Body
 from configs import (DEFAULT_VS_TYPE, EMBEDDING_MODEL,

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\startup.py`
 
-```
+```py
 # 导入必要的库
 import asyncio
 import multiprocessing as mp

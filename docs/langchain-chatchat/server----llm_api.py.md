@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\llm_api.py`
 
-```
+```py
 # 导入所需模块和函数
 from fastapi import Body
 from configs import logger, log_verbose, LLM_MODELS, HTTPX_DEFAULT_TIMEOUT

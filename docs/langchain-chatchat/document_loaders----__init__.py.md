@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\document_loaders\__init__.py`
 
-```
+```py
 # 从当前目录中导入 RapidOCRPDFLoader 类
 from .mypdfloader import RapidOCRPDFLoader
 # 从当前目录中导入 RapidOCRLoader 类

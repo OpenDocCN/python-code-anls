@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\db\repository\conversation_repository.py`
 
-```
+```py
 # 从 server.db.session 模块中导入 with_session 装饰器
 from server.db.session import with_session
 # 导入 uuid 模块

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\chat\search_engine_chat.py`
 
-```
+```py
 # 导入必要的模块和类
 from langchain.utilities.bing_search import BingSearchAPIWrapper
 from langchain.utilities.duckduckgo_search import DuckDuckGoSearchAPIWrapper

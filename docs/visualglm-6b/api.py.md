@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\api.py`
 
-```
+```py
 # 导入所需的库
 import os
 import json

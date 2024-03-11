@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\webui_pages\model_config\model_config.py`
 
-```
+```py
 # 导入 streamlit 库，用于构建交互式 Web 应用
 import streamlit as st
 # 从 webui_pages.utils 模块中导入所有内容

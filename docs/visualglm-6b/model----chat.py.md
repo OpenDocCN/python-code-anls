@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\model\chat.py`
 
-```
+```py
 # -*- encoding: utf-8 -*-
 '''
 @File    :   chat.py

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\kb_vector_db\test_milvus_db.py`
 
-```
+```py
 # 从不同的模块中导入不同的知识库服务类
 from server.knowledge_base.kb_service.faiss_kb_service import FaissKBService
 from server.knowledge_base.kb_service.milvus_kb_service import MilvusKBService

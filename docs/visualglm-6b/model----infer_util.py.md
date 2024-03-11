@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\model\infer_util.py`
 
-```
+```py
 # 导入所需的库
 import os
 from PIL import Image

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\webui.py`
 
-```
+```py
 # 导入 streamlit 库
 import streamlit as st
 # 导入自定义工具函数

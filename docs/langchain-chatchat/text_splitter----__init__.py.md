@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\text_splitter\__init__.py`
 
-```
+```py
 # 从当前目录中导入 ChineseTextSplitter 模块
 from .chinese_text_splitter import ChineseTextSplitter
 # 从当前目录中导入 AliTextSplitter 模块

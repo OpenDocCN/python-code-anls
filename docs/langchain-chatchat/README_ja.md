@@ -80,14 +80,14 @@ Q&A）ソリューションを構築することです。
 
 まず、マシンにPython 3.10がインストールされていることを確認してください。
 
-```
+```py
 $ python --version
 Python 3.11.7
 ```
 
 次に、仮想環境を作成し、プロジェクトの依存関係を仮想環境内にインストールする。
 
-```shell
+```py
 
 # リポジトリをクローン
 $ git clone https://github.com/chatchat-space/Langchain-Chatchat.git
@@ -117,7 +117,7 @@ LangChain-Chachat `0.2.x` シリーズは Langchain `0.0.x` シリーズ用で�
 モデルをダウンロードするには、まず [Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)
 をインストールし、次のように実行する必要があります:
 
-```Shell
+```py
 $ git lfs install
 $ git clone https://huggingface.co/THUDM/chatglm2-6b
 $ git clone https://huggingface.co/moka-ai/m3e-base
@@ -127,7 +127,7 @@ $ git clone https://huggingface.co/moka-ai/m3e-base
 
 以下の手順に従って、ナレッジベースと設定ファイルを初期化してください:
 
-```shell
+```py
 $ python copy_config_example.py
 $ python init_database.py --recreate-vs
  ```
@@ -136,7 +136,7 @@ $ python init_database.py --recreate-vs
 
 プロジェクトを開始するには、次のコマンドを実行します:
 
-```shell
+```py
 $ python startup.py -a
 ```
 

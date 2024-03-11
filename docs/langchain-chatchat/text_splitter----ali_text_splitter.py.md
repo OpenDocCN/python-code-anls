@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\text_splitter\ali_text_splitter.py`
 
-```
+```py
 from langchain.text_splitter import CharacterTextSplitter
 import re
 from typing import List

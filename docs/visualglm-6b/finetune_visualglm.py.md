@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\finetune_visualglm.py`
 
-```
+```py
 # 导入必要的库
 import os
 import torch

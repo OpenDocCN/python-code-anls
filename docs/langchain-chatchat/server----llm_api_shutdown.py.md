@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\llm_api_shutdown.py`
 
-```
+```py
 """
 调用示例：
 python llm_api_shutdown.py --serve all

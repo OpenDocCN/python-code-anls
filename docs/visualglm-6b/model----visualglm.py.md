@@ -1,6 +1,6 @@
 # `.\VisualGLM-6B\model\visualglm.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 sat.model.official 模块中导入 ChatGLMModel 类

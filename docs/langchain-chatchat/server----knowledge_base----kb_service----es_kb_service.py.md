@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_service\es_kb_service.py`
 
-```
+```py
 # 导入所需的模块
 from typing import List
 import os

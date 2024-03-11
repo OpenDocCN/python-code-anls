@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\api.py`
 
-```
+```py
 # 导入必要的库
 import nltk
 import sys

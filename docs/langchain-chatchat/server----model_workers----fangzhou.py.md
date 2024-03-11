@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\fangzhou.py`
 
-```
+```py
 # 从 fastchat.conversation 模块中导入 Conversation 类
 from fastchat.conversation import Conversation
 # 从 server.model_workers.base 模块中导入所有内容

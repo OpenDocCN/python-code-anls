@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\tests\custom_splitter\test_different_splitter.py`
 
-```
+```py
 # 导入必要的模块
 import os
 from transformers import AutoTokenizer

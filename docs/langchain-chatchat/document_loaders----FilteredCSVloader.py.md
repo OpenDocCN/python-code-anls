@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\document_loaders\FilteredCSVloader.py`
 
-```
+```py
 ## 指定制定列的csv文件加载器
 
 # 导入所需的模块

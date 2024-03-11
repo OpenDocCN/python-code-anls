@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\knowledge_base\kb_cache\faiss_cache.py`
 
-```
+```py
 # 从configs模块中导入CACHED_VS_NUM和CACHED_MEMO_VS_NUM
 from configs import CACHED_VS_NUM, CACHED_MEMO_VS_NUM
 # 从server.knowledge_base.kb_cache.base模块中导入所有内容

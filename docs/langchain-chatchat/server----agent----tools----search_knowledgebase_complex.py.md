@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\agent\tools\search_knowledgebase_complex.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import annotations
 import json
@@ -187,7 +187,7 @@ class LLMKnowledgeChain(LLMChain):
         # 去除LLM输出文本两端的空白字符
         llm_output = llm_output.strip()
         # 使用正则表达式搜索匹配包含"text"的文本块
-        text_match = re.search(r"```text(.*)", llm_output, re.DOTALL)
+        text_match = re.search(r"```py(.*)", llm_output, re.DOTALL)
         if text_match:
             # 获取匹配到的文本块内容，并去除首尾空白字符
             expression = text_match.group(1).strip()
@@ -228,14 +228,14 @@ class LLMKnowledgeChain(LLMChain):
         await run_manager.on_text(llm_output, color="green", verbose=self.verbose)
         # 去除字符串两端的空格
         llm_output = llm_output.strip()
-        # 使用正则表达式匹配包含"```text"的字符串
+        # 使用正则表达式匹配包含"```py"的字符串
         text_match = re.search(r"```text(.*)", llm_output, re.DOTALL)
         if text_match:
             # 获取匹配到的文本内容
             expression = text_match.group(1).strip()
             # 清理输入字符串，去除特殊字符和空格
             cleaned_input_str = (
-                expression.replace("\"", "").replace("“", "").replace("”", "").replace("```", "").strip())
+                expression.replace("\"", "").replace("“", "").replace("”", "").replace("```py", "").strip())
             # 将清理后的字符串按行分割
             lines = cleaned_input_str.split("\n")
             try:
@@ -311,7 +311,7 @@ class LLMKnowledgeChain(LLMChain):
         llm_output = await self.llm_chain.apredict(
             database_names=data_formatted_str,
             question=inputs[self.input_key],
-            stop=["```output"],
+            stop=["```py"],
             callbacks=_run_manager.get_child(),
         )
         # 处理llm异步预测结果并返回

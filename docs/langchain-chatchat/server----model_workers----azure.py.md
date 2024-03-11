@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\model_workers\azure.py`
 
-```
+```py
 # 导入系统模块
 import sys
 # 导入操作系统模块

@@ -1,6 +1,6 @@
 # `.\Langchain-Chatchat\server\reranker\reranker.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 sys 模块
