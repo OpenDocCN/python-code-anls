@@ -20,5 +20,6 @@
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
 +   [Transformer-VQ 源码解析](docs/transformer-vq-ai/README.md)
 +   [Tranformers 架构和源码解析](docs/transformers/README.md)
++   [VisualGLM-6B 源码解析](docs/visualglm-6b/README.md)
 +   [YoloV5-DNF 源码解析](docs/yolov5-dnf-ai/README.md)
 +   [ZeroNet 源码解析](docs/ZeroNet-ai/README.md)
