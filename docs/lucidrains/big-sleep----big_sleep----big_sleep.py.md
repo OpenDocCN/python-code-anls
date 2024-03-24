@@ -1,0 +1,567 @@
+# `.\lucidrains\big-sleep\big_sleep\big_sleep.py`
+
+```
+# 导入必要的库
+import os
+import sys
+import subprocess
+import signal
+import string
+import re
+
+from datetime import datetime
+from pathlib import Path
+import random
+
+import torch
+import torch.nn.functional as F
+from torch import nn
+from torch.optim import Adam
+from torchvision.utils import save_image
+import torchvision.transforms as T
+from PIL import Image
+from tqdm import tqdm, trange
+
+from big_sleep.ema import EMA
+from big_sleep.resample import resample
+from big_sleep.biggan import BigGAN
+from big_sleep.clip import load, tokenize
+
+# 检查是否有可用的 CUDA
+assert torch.cuda.is_available(), 'CUDA must be available in order to use Big Sleep'
+
+# 优雅地处理键盘中断
+terminate = False
+
+def signal_handling(signum,frame):
+    print('detecting keyboard interrupt, gracefully exiting')
+    global terminate
+    terminate = True
+
+signal.signal(signal.SIGINT,signal_handling)
+
+# 辅助函数
+def exists(val):
+    return val is not None
+
+def open_folder(path):
+    if os.path.isfile(path):
+        path = os.path.dirname(path)
+
+    if not os.path.isdir(path):
+        return
+
+    cmd_list = None
+    if sys.platform == 'darwin':
+        cmd_list = ['open', '--', path]
+    elif sys.platform == 'linux2' or sys.platform == 'linux':
+        cmd_list = ['xdg-open', path]
+    elif sys.platform in ['win32', 'win64']:
+        cmd_list = ['explorer', path.replace('/','\\')]
+    if cmd_list == None:
+        return
+
+    try:
+        subprocess.check_call(cmd_list)
+    except subprocess.CalledProcessError:
+        pass
+    except OSError:
+        pass
+
+def create_text_path(text=None, img=None, encoding=None):
+    input_name = ""
+    if text is not None:
+        input_name += text
+    if img is not None:
+        if isinstance(img, str):
+            img_name = "".join(img.split(".")[:-1]) # replace spaces by underscores, remove img extension
+            img_name = img_name.split("/")[-1]  # only take img name, not path
+        else:
+            img_name = "PIL_img"
+        input_name += "_" + img_name
+    if encoding is not None:
+        input_name = "your_encoding"
+    return input_name.replace("-", "_").replace(",", "").replace(" ", "_").replace("|", "--").strip('-_')[:255]
+
+# 张量辅助函数
+def differentiable_topk(x, k, temperature=1.):
+    n, dim = x.shape
+    topk_tensors = []
+
+    for i in range(k):
+        is_last = i == (k - 1)
+        values, indices = (x / temperature).softmax(dim=-1).topk(1, dim=-1)
+        topks = torch.zeros_like(x).scatter_(-1, indices, values)
+        topk_tensors.append(topks)
+        if not is_last:
+            x = x.scatter(-1, indices, float('-inf'))
+
+    topks = torch.cat(topk_tensors, dim=-1)
+    return topks.reshape(n, k, dim).sum(dim = 1)
+
+def create_clip_img_transform(image_width):
+    clip_mean = [0.48145466, 0.4578275, 0.40821073]
+    clip_std = [0.26862954, 0.26130258, 0.27577711]
+    transform = T.Compose([
+                    #T.ToPILImage(),
+                    T.Resize(image_width),
+                    T.CenterCrop((image_width, image_width)),
+                    T.ToTensor(),
+                    T.Normalize(mean=clip_mean, std=clip_std)
+            ])
+    return transform
+
+def rand_cutout(image, size, center_bias=False, center_focus=2):
+    width = image.shape[-1]
+    min_offset = 0
+    max_offset = width - size
+    if center_bias:
+        # 以图像中心为中心进行采样
+        center = max_offset / 2
+        std = center / center_focus
+        offset_x = int(random.gauss(mu=center, sigma=std))
+        offset_y = int(random.gauss(mu=center, sigma=std))
+        # 如果超出边界，则均匀重新采样
+        offset_x = random.randint(min_offset, max_offset) if (offset_x > max_offset or offset_x < min_offset) else offset_x
+        offset_y = random.randint(min_offset, max_offset) if (offset_y > max_offset or offset_y < min_offset) else offset_y
+    else:
+        offset_x = random.randint(min_offset, max_offset)
+        offset_y = random.randint(min_offset, max_offset)
+    cutout = image[:, :, offset_x:offset_x + size, offset_y:offset_y + size]
+    # 返回变量 cutout 的值
+    return cutout
+# 加载 BigGAN 模型
+
+class Latents(torch.nn.Module):
+    def __init__(
+        self,
+        num_latents = 15,
+        num_classes = 1000,
+        z_dim = 128,
+        max_classes = None,
+        class_temperature = 2.
+    ):
+        super().__init__()
+        # 初始化正态分布的参数用于生成隐变量
+        self.normu = torch.nn.Parameter(torch.zeros(num_latents, z_dim).normal_(std = 1))
+        # 初始化正态分布的参数用于生成类别信息
+        self.cls = torch.nn.Parameter(torch.zeros(num_latents, num_classes).normal_(mean = -3.9, std = .3))
+        # 注册缓冲区，用于存储阈值
+        self.register_buffer('thresh_lat', torch.tensor(1))
+
+        # 检查最大类别数是否在合理范围内
+        assert not exists(max_classes) or max_classes > 0 and max_classes <= num_classes, f'max_classes must be between 0 and {num_classes}'
+        self.max_classes = max_classes
+        self.class_temperature = class_temperature
+
+    def forward(self):
+        # 根据最大类别数选择类别信息
+        if exists(self.max_classes):
+            classes = differentiable_topk(self.cls, self.max_classes, temperature = self.class_temperature)
+        else:
+            classes = torch.sigmoid(self.cls)
+
+        return self.normu, classes
+
+class Model(nn.Module):
+    def __init__(
+        self,
+        image_size,
+        max_classes = None,
+        class_temperature = 2.,
+        ema_decay = 0.99
+    ):
+        super().__init__()
+        # 确保图像尺寸合法
+        assert image_size in (128, 256, 512), 'image size must be one of 128, 256, or 512'
+        # 加载预训练的 BigGAN 模型
+        self.biggan = BigGAN.from_pretrained(f'biggan-deep-{image_size}')
+        self.max_classes = max_classes
+        self.class_temperature = class_temperature
+        self.ema_decay\
+            = ema_decay
+
+        self.init_latents()
+
+    def init_latents(self):
+        # 初始化隐变量
+        latents = Latents(
+            num_latents = len(self.biggan.config.layers) + 1,
+            num_classes = self.biggan.config.num_classes,
+            z_dim = self.biggan.config.z_dim,
+            max_classes = self.max_classes,
+            class_temperature = self.class_temperature
+        )
+        self.latents = EMA(latents, self.ema_decay)
+
+    def forward(self):
+        self.biggan.eval()
+        out = self.biggan(*self.latents(), 1)
+        return (out + 1) / 2
+
+
+class BigSleep(nn.Module):
+    def __init__(
+        self,
+        num_cutouts = 128,
+        loss_coef = 100,
+        image_size = 512,
+        bilinear = False,
+        max_classes = None,
+        class_temperature = 2.,
+        experimental_resample = False,
+        ema_decay = 0.99,
+        center_bias = False,
+        larger_clip = False
+    ):
+        super().__init__()
+        self.loss_coef = loss_coef
+        self.image_size = image_size
+        self.num_cutouts = num_cutouts
+        self.experimental_resample = experimental_resample
+        self.center_bias = center_bias
+
+        # 根据插值方式设置插值参数
+        self.interpolation_settings = {'mode': 'bilinear', 'align_corners': False} if bilinear else {'mode': 'nearest'}
+
+        model_name = 'ViT-B/32' if not larger_clip else 'ViT-L/14'
+        # 加载视觉-文本模型和图像归一化函数
+        self.perceptor, self.normalize_image = load(model_name, jit = False)
+
+        self.model = Model(
+            image_size = image_size,
+            max_classes = max_classes,
+            class_temperature = class_temperature,
+            ema_decay = ema_decay
+        )
+
+    def reset(self):
+        # 重置隐变量
+        self.model.init_latents()
+
+    def sim_txt_to_img(self, text_embed, img_embed, text_type="max"):
+        sign = -1
+        if text_type == "min":
+            sign = 1
+        # 计算文本嵌入和图像嵌入的余弦相似度
+        return sign * self.loss_coef * torch.cosine_similarity(text_embed, img_embed, dim = -1).mean()
+    # 定义前向传播函数，接受文本嵌入和文本最小嵌入作为输入，返回损失值
+    def forward(self, text_embeds, text_min_embeds=[], return_loss = True):
+        # 获取图像大小和裁剪块数量
+        width, num_cutouts = self.image_size, self.num_cutouts
+
+        # 使用模型进行前向传播
+        out = self.model()
+
+        # 如果不需要返回损失值，则直接返回模型输出
+        if not return_loss:
+            return out
+
+        # 初始化空列表用于存储裁剪块
+        pieces = []
+        for ch in range(num_cutouts):
+            # 随机采样裁剪块大小
+            size = int(width * torch.zeros(1,).normal_(mean=.8, std=.3).clip(.5, .95))
+            # 获取裁剪块
+            apper = rand_cutout(out, size, center_bias=self.center_bias)
+            # 如果启用实验性重采样，则进行重采样
+            if (self.experimental_resample):
+                apper = resample(apper, (224, 224))
+            else:
+                apper = F.interpolate(apper, (224, 224), **self.interpolation_settings)
+            pieces.append(apper)
+
+        # 将所有裁剪块拼接在一起
+        into = torch.cat(pieces)
+        # 对拼接后的图像进行归一化处理
+        into = self.normalize_image(into)
+
+        # 对拼接后的图像进行编码
+        image_embed = self.perceptor.encode_image(into)
+
+        # 获取潜在向量和软标签
+        latents, soft_one_hot_classes = self.model.latents()
+        num_latents = latents.shape[0]
+        latent_thres = self.model.latents.model.thresh_lat
+
+        # 计算潜在向量的损失
+        lat_loss =  torch.abs(1 - torch.std(latents, dim=1)).mean() + \
+                    torch.abs(torch.mean(latents, dim = 1)).mean() + \
+                    4 * torch.max(torch.square(latents).mean(), latent_thres)
+
+        # 遍历每个潜在向量数组，计算额外的损失
+        for array in latents:
+            mean = torch.mean(array)
+            diffs = array - mean
+            var = torch.mean(torch.pow(diffs, 2.0))
+            std = torch.pow(var, 0.5)
+            zscores = diffs / std
+            skews = torch.mean(torch.pow(zscores, 3.0))
+            kurtoses = torch.mean(torch.pow(zscores, 4.0)) - 3.0
+
+            lat_loss = lat_loss + torch.abs(kurtoses) / num_latents + torch.abs(skews) / num_latents
+
+        # 计算分类损失
+        cls_loss = ((50 * torch.topk(soft_one_hot_classes, largest = False, dim = 1, k = 999)[0]) ** 2).mean()
+
+        # 初始化结果列表
+        results = []
+        # 计算文本嵌入与图像嵌入之间的相似性损失
+        for txt_embed in text_embeds:
+            results.append(self.sim_txt_to_img(txt_embed, image_embed))
+        # 计算文本最小嵌入与图像嵌入之间的相似性损失
+        for txt_min_embed in text_min_embeds:
+            results.append(self.sim_txt_to_img(txt_min_embed, image_embed, "min"))
+        # 计算总的相似性损失
+        sim_loss = sum(results).mean()
+        # 返回模型输出和各项损失值
+        return out, (lat_loss, cls_loss, sim_loss)
+class Imagine(nn.Module):
+    # 定义 Imagine 类，继承自 nn.Module
+    def __init__(
+        self,
+        *,
+        text=None,
+        img=None,
+        encoding=None,
+        text_min = "",
+        lr = .07,
+        image_size = 512,
+        gradient_accumulate_every = 1,
+        save_every = 50,
+        epochs = 20,
+        iterations = 1050,
+        save_progress = False,
+        bilinear = False,
+        open_folder = True,
+        seed = None,
+        append_seed = False,
+        torch_deterministic = False,
+        max_classes = None,
+        class_temperature = 2.,
+        save_date_time = False,
+        save_best = False,
+        experimental_resample = False,
+        ema_decay = 0.99,
+        num_cutouts = 128,
+        center_bias = False,
+        larger_clip = False
+    ):
+        # 初始化函数，接收多个参数
+        super().__init__()
+
+        if torch_deterministic:
+            # 如果 torch_deterministic 为真
+            assert not bilinear, 'the deterministic (seeded) operation does not work with interpolation (PyTorch 1.7.1)'
+            # 断言不使用双线性插值，因为确定性（种子化）操作与插值不兼容（PyTorch 1.7.1）
+            torch.set_deterministic(True)
+
+        self.seed = seed
+        self.append_seed = append_seed
+
+        if exists(seed):
+            # 如果种子存在
+            print(f'setting seed of {seed}')
+            # 打印设置种子值
+            if seed == 0:
+                print('you can override this with --seed argument in the command line, or --random for a randomly chosen one')
+            # 如果种子为0，提示可以在命令行中使用 --seed 参数覆盖，或者使用 --random 选择随机种子
+            torch.manual_seed(seed)
+
+        self.epochs = epochs
+        self.iterations = iterations
+
+        model = BigSleep(
+            image_size = image_size,
+            bilinear = bilinear,
+            max_classes = max_classes,
+            class_temperature = class_temperature,
+            experimental_resample = experimental_resample,
+            ema_decay = ema_decay,
+            num_cutouts = num_cutouts,
+            center_bias = center_bias,
+            larger_clip = larger_clip
+        ).cuda()
+        # 创建 BigSleep 模型对象
+        self.model = model
+
+        self.lr = lr
+        self.optimizer = Adam(model.model.latents.model.parameters(), lr)
+        self.gradient_accumulate_every = gradient_accumulate_every
+        self.save_every = save_every
+
+        self.save_progress = save_progress
+        self.save_date_time = save_date_time
+
+        self.save_best = save_best
+        self.current_best_score = 0
+
+        self.open_folder = open_folder
+        self.total_image_updates = (self.epochs * self.iterations) / self.save_every
+        self.encoded_texts = {
+            "max": [],
+            "min": []
+        }
+        # 创建编码文本的字典
+        self.clip_transform = create_clip_img_transform(224)
+        # 创建图像转换
+        self.set_clip_encoding(text=text, img=img, encoding=encoding, text_min=text_min)
+        # 设置剪辑编码
+
+    @property
+    def seed_suffix(self):
+        # 定义 seed_suffix 属性
+        return f'.{self.seed}' if self.append_seed and exists(self.seed) else ''
+        # 如果 append_seed 为真且存在种子值，则返回种子值后缀
+
+    def set_text(self, text):
+        # 设置文本
+        self.set_clip_encoding(text = text)
+
+    def create_clip_encoding(self, text=None, img=None, encoding=None):
+        # 创建剪辑编码
+        self.text = text
+        self.img = img
+        if encoding is not None:
+            encoding = encoding.cuda()
+        #elif self.create_story:
+        #    encoding = self.update_story_encoding(epoch=0, iteration=1)
+        elif text is not None and img is not None:
+            encoding = (self.create_text_encoding(text) + self.create_img_encoding(img)) / 2
+        elif text is not None:
+            encoding = self.create_text_encoding(text)
+        elif img is not None:
+            encoding = self.create_img_encoding(img)
+        return encoding
+        # 返回编码结果
+
+    def create_text_encoding(self, text):
+        # 创建文本编码
+        tokenized_text = tokenize(text).cuda()
+        # 对文本进行标记化
+        with torch.no_grad():
+            text_encoding = self.model.perceptor.encode_text(tokenized_text).detach()
+        # 使用模型对文本进行编码
+        return text_encoding
+        # 返回文本编码结果
+    # 创建图像编码，将图像转换为张量并进行归一化处理，然后在GPU上执行
+    def create_img_encoding(self, img):
+        if isinstance(img, str):
+            img = Image.open(img)
+        normed_img = self.clip_transform(img).unsqueeze(0).cuda()
+        with torch.no_grad():
+            img_encoding = self.model.perceptor.encode_image(normed_img).detach()
+        return img_encoding
+    
+    # 对多个短语进行编码，根据文本类型将编码结果存储在字典中
+    def encode_multiple_phrases(self, text, img=None, encoding=None, text_type="max"):
+        if text is not None and "|" in text:
+            self.encoded_texts[text_type] = [self.create_clip_encoding(text=prompt_min, img=img, encoding=encoding) for prompt_min in text.split("|")]
+        else:
+            self.encoded_texts[text_type] = [self.create_clip_encoding(text=text, img=img, encoding=encoding)]
+
+    # 对最大和最小短语进行编码，调用encode_multiple_phrases方法
+    def encode_max_and_min(self, text, img=None, encoding=None, text_min=""):
+        self.encode_multiple_phrases(text, img=img, encoding=encoding)
+        if text_min is not None and text_min != "":
+            self.encode_multiple_phrases(text_min, img=img, encoding=encoding, text_type="min")
+
+    # 设置Clip编码，包括文本、图像、编码等信息，并调用encode_max_and_min方法
+    def set_clip_encoding(self, text=None, img=None, encoding=None, text_min=""):
+        self.current_best_score = 0
+        self.text = text
+        self.text_min = text_min
+        
+        if len(text_min) > 0:
+            text = text + "_wout_" + text_min[:255] if text is not None else "wout_" + text_min[:255]
+        text_path = create_text_path(text=text, img=img, encoding=encoding)
+        if self.save_date_time:
+            text_path = datetime.now().strftime("%y%m%d-%H%M%S-") + text_path
+
+        self.text_path = text_path
+        self.filename = Path(f'./{text_path}{self.seed_suffix}.png')
+        self.encode_max_and_min(text, img=img, encoding=encoding, text_min=text_min) # Tokenize and encode each prompt
+
+    # 重置模型，将模型移至GPU上，并初始化优化器
+    def reset(self):
+        self.model.reset()
+        self.model = self.model.cuda()
+        self.optimizer = Adam(self.model.model.latents.parameters(), self.lr)
+
+    # 训练模型的一步，计算损失并更新模型参数
+    def train_step(self, epoch, i, pbar=None):
+        total_loss = 0
+
+        for _ in range(self.gradient_accumulate_every):
+            out, losses = self.model(self.encoded_texts["max"], self.encoded_texts["min"])
+            loss = sum(losses) / self.gradient_accumulate_every
+            total_loss += loss
+            loss.backward()
+
+        self.optimizer.step()
+        self.model.model.latents.update()
+        self.optimizer.zero_grad()
+
+        if (i + 1) % self.save_every == 0:
+            with torch.no_grad():
+                self.model.model.latents.eval()
+                out, losses = self.model(self.encoded_texts["max"], self.encoded_texts["min"])
+                top_score, best = torch.topk(losses[2], k=1, largest=False)
+                image = self.model.model()[best].cpu()
+                self.model.model.latents.train()
+
+                save_image(image, str(self.filename))
+                if pbar is not None:
+                    pbar.update(1)
+                else:
+                    print(f'image updated at "./{str(self.filename)}"')
+
+                if self.save_progress:
+                    total_iterations = epoch * self.iterations + i
+                    num = total_iterations // self.save_every
+                    save_image(image, Path(f'./{self.text_path}.{num}{self.seed_suffix}.png'))
+
+                if self.save_best and top_score.item() < self.current_best_score:
+                    self.current_best_score = top_score.item()
+                    save_image(image, Path(f'./{self.text_path}{self.seed_suffix}.best.png'))
+
+        return out, total_loss
+    # 定义一个方法用于前向传播
+    def forward(self):
+        # 初始化一个空字符串用于记录惩罚信息
+        penalizing = ""
+        # 如果self.text_min的长度大于0，则将punishing赋值为包含self.text_min的字符串
+        if len(self.text_min) > 0:
+            penalizing = f'penalizing "{self.text_min}"'
+        # 打印信息，包括self.text_path和punishing信息
+        print(f'Imagining "{self.text_path}" {penalizing}...')
+        
+        # 禁用梯度计算
+        with torch.no_grad():
+            # 对模型进行一次前向传播，用于解决CLIP和CUDA的问题
+            self.model(self.encoded_texts["max"][0])
+
+        # 如果需要打开文件夹
+        if self.open_folder:
+            # 打开当前目录
+            open_folder('./')
+            # 将self.open_folder设置为False
+            self.open_folder = False
+
+        # 创建一个进度条用于显示图片更新的进度
+        image_pbar = tqdm(total=self.total_image_updates, desc='image update', position=2, leave=True)
+        # 创建一个进度条用于显示训练轮数的进度
+        epoch_pbar = trange(self.epochs, desc = '      epochs', position=0, leave=True)
+        # 遍历每个轮数
+        for epoch in (ep for ep in epoch_pbar if not terminate):
+            # 创建一个进度条用于显示每轮训练迭代的进度
+            pbar = trange(self.iterations, desc='   iteration', position=1, leave=True)
+            # 更新图片更新进度条
+            image_pbar.update(0)
+            # 遍历每个迭代
+            for i in (it for it in pbar if not terminate):
+                # 执行训练步骤，获取输出和损失值
+                out, loss = self.train_step(epoch, i, image_pbar)
+                # 设置进度条描述信息为当前损失值
+                pbar.set_description(f'loss: {loss.item():04.2f}')
+```

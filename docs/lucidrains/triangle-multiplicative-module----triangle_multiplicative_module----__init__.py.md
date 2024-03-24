@@ -1,0 +1,6 @@
+# `.\lucidrains\triangle-multiplicative-module\triangle_multiplicative_module\__init__.py`
+
+```
+# 从triangle_multiplicative_module.triangle_multiplicative_module模块中导入TriangleMultiplicativeModule类
+from triangle_multiplicative_module.triangle_multiplicative_module import TriangleMultiplicativeModule
+```

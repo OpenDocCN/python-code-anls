@@ -1,0 +1,10 @@
+# `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\__init__.py`
+
+```
+# 从 memory_efficient_attention_pytorch.memory_efficient_attention 模块中导入 Attention 类和 memory_efficient_attention 函数
+from memory_efficient_attention_pytorch.memory_efficient_attention import Attention, memory_efficient_attention
+# 从 memory_efficient_attention_pytorch.memory_efficient_cosine_sim_attention 模块中导入 CosineSimAttention 类和 numerically_unstable_memory_efficient_attention 函数
+from memory_efficient_attention_pytorch.memory_efficient_cosine_sim_attention import CosineSimAttention, numerically_unstable_memory_efficient_attention
+# 从 memory_efficient_attention_pytorch.flash_attention 模块中导入 FlashAttention 类
+from memory_efficient_attention_pytorch.flash_attention import FlashAttention
+```

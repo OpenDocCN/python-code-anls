@@ -1,0 +1,138 @@
+# `.\lucidrains\genetic-algorithm-pytorch\qbmb.py`
+
+```
+"""
+Queen-bee and Mutant-bee evolution for genetic algorithms - Jung 2007
+
+4 years after proposing the Queen bee evolution genetic algorithm, Jung proposes a simplification to get rid of a few hyperparameters
+
+In the new scheme, all the selected bees to mate with the queen undergo strong mutation prior to crossover
+This scheme therefore better preserves the queen's genetic code. He shows through various experiments that this performs just as well as the original algorithm while being simpler
+
+https://www.researchgate.net/publication/290131255_Queen-bee_and_Mutant-bee_Evolution_for_Genetic_Algorithms
+"""
+
+import torch
+from einops import repeat
+from einx import get_at
+
+# constants
+
+GOAL = 'Attention is all you need'
+
+POP_SIZE = 100
+MUTATION_PROB = 0.04
+STRONG_MUTATION_PROB = 0.25
+NUM_TOURNAMENT_PARTICIPANTS = 25
+
+# encode and decode functions
+
+def encode(s):
+    return torch.tensor([ord(c) for c in s])
+
+def decode(t):
+    return ''.join([chr(i) for i in t.tolist()])
+
+# derived constants
+
+gene_length = len(GOAL)
+gene_midpoint = gene_length // 2
+target_gene = encode(GOAL)
+
+num_code_mutate = MUTATION_PROB * gene_length
+strong_num_code_mutate = STRONG_MUTATION_PROB * gene_length
+
+# queen bee genetic algorithm
+
+generation = 1
+
+pool = torch.randint(0, 255, (POP_SIZE, gene_length))
+
+queen = queen_fitness = None
+
+while True:
+    print(f"\n\ngeneration {generation}\n")
+
+    # sort population by fitness
+
+    fitnesses = 1. / torch.square(pool - target_gene).sum(dim = -1)
+
+    indices = fitnesses.sort(descending = True).indices
+    pool, fitnesses = pool[indices], fitnesses[indices]
+
+    # display every generation
+
+    if queen is not None:
+        print("queen:")
+        print(f"{decode(queen)} ({queen_fitness.item():.3f})\n")
+
+    for gene, fitness in zip(pool, fitnesses):
+        print(f"{decode(gene)} ({fitness.item():.3f})")
+
+    # if one of the children has a better fitness than queen, that child becomes the new queen
+    # and the queen replaces the worst bee in the population, kept around for at least one generation more
+
+    if queen is not None and queen_fitness < fitnesses[0]:
+        pool = torch.cat((pool, queen[None, :]), dim = 0)
+        fitnesses = torch.cat((fitnesses, queen_fitness[None]), dim = 0)
+        queen = queen_fitness = None
+
+    # separate the queen bee from the rest of the population
+
+    if queen is None:
+        queen, pool = pool[0], pool[1:]
+        queen_fitness, fitnesses = fitnesses[0], fitnesses[1:]
+
+    # solved if any fitness is inf
+
+    if (queen_fitness == float('inf')).any():
+        break
+
+    # deterministic tournament selection - let top winner become parent with queen
+
+    contender_ids = torch.randn((POP_SIZE - 1, POP_SIZE - 1)).argsort(dim = -1)[..., :NUM_TOURNAMENT_PARTICIPANTS]
+    participants, tournaments = pool[contender_ids], fitnesses[contender_ids]
+    top_winner = tournaments.topk(1, dim = -1, largest = True, sorted = False).indices
+    parents = get_at('... [t] g, ... 1 -> ... g', participants, top_winner)
+
+    # potential parents with queen is strongly mutated ("Mutant Bee")
+
+    strong_mutate_mask = torch.randn(parents.shape).argsort(dim = -1) < strong_num_code_mutate
+    noise = torch.randint(0, 2, parents.shape) * 2 - 1
+    mutated_parents = torch.where(strong_mutate_mask, parents + noise, parents)
+    mutated_parents.clamp_(0, 255)
+
+    # cross over all chosen drones with the queen
+
+    queen_parents = repeat(queen, '... -> p ...', p = POP_SIZE - 1)
+    queen_and_parents = torch.stack((queen_parents, mutated_parents), dim = 1)
+
+    # in my experiments, the crossover point must be random between queen and drones for this to work
+    # todo: get caught up with all the different types of crossover operators
+
+    rand_crossover_order = torch.randn(queen_and_parents.shape[:2]).argsort(dim = -1)
+
+    batch_arange = torch.arange(POP_SIZE - 1)[..., None]
+    queen_and_parents = queen_and_parents[batch_arange, rand_crossover_order]
+    # 从 queen_and_parents 张量中解绑出 queen_parents 和 mutated_parents，沿着第一个维度进行解绑
+    queen_parents, mutated_parents = queen_and_parents.unbind(dim = 1)
+
+    # 将 queen_parents 和 mutated_parents 沿着最后一个维度拼接起来，形成新的 pool 张量
+    pool = torch.cat((queen_parents[:, :gene_midpoint], mutated_parents[:, gene_midpoint:]), dim = -1)
+
+    # 对种群中的基因进行变异
+
+    # 创建一个与 pool 张量相同形状的张量，其中的元素按照正态分布排序，小于 num_code_mutate 的元素为 True
+    mutate_mask = torch.randn(pool.shape).argsort(dim = -1) < num_code_mutate
+    # 创建一个与 pool 张量相同形状的张量，元素为 0 或 1
+    noise = torch.randint(0, 2, pool.shape) * 2 - 1
+
+    # 根据 mutate_mask，对 pool 张量中的元素进行变异，如果 mutate_mask 中对应位置为 True，则加上 noise 中对应位置的值
+    pool = torch.where(mutate_mask, pool + noise, pool)
+    # 将 pool 张量中的元素限制在 0 到 255 之间
+    pool.clamp_(0, 255)
+
+    # 增加一代
+
+    generation += 1
+```

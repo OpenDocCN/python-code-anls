@@ -1,0 +1,13 @@
+# `.\lucidrains\deformable-attention\deformable_attention\__init__.py`
+
+```
+# 从deformable_attention.deformable_attention_1d模块中导入DeformableAttention1D类
+from deformable_attention.deformable_attention_1d import DeformableAttention1D
+# 从deformable_attention.deformable_attention_2d模块中导入DeformableAttention2D类
+from deformable_attention.deformable_attention_2d import DeformableAttention2D
+# 从deformable_attention.deformable_attention_3d模块中导入DeformableAttention3D类
+from deformable_attention.deformable_attention_3d import DeformableAttention3D
+
+# 将DeformableAttention2D类赋值给DeformableAttention变量
+DeformableAttention = DeformableAttention2D
+```
