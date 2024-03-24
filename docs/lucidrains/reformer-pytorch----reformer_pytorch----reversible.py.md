@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\reversible.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 from torch.autograd.function import Function

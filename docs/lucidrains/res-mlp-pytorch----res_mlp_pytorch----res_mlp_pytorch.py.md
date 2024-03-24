@@ -1,6 +1,6 @@
 # `.\lucidrains\res-mlp-pytorch\res_mlp_pytorch\res_mlp_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops.layers.torch import Rearrange, Reduce

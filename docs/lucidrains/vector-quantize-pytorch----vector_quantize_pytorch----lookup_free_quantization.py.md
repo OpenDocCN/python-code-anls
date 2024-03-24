@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\lookup_free_quantization.py`
 
-```
+```py
 """
 Lookup Free Quantization
 Proposed in https://arxiv.org/abs/2310.05737

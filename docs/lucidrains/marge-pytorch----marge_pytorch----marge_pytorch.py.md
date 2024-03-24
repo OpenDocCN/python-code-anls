@@ -1,6 +1,6 @@
 # `.\lucidrains\marge-pytorch\marge_pytorch\marge_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import faiss
 import math

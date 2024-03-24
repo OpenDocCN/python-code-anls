@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库和模块
 from routing_transformer import RoutingTransformerLM
 from routing_transformer.autoregressive_wrapper import AutoregressiveWrapper

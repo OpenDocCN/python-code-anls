@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\open_clip.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

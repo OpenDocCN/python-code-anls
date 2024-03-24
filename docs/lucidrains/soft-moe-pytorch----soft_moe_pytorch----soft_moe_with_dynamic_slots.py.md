@@ -1,6 +1,6 @@
 # `.\lucidrains\soft-moe-pytorch\soft_moe_pytorch\soft_moe_with_dynamic_slots.py`
 
-```
+```py
 # 导入数学库
 import math
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\anymal-belief-state-encoder-decoder-pytorch\anymal_belief_state_encoder_decoder_pytorch\trainer.py`
 
-```
+```py
 import torch
 from torch import nn
 from torch.utils.data import Dataset, DataLoader

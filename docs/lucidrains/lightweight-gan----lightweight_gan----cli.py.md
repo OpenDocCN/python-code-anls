@@ -1,6 +1,6 @@
 # `.\lucidrains\lightweight-gan\lightweight_gan\cli.py`
 
-```
+```py
 # 导入所需的库
 import os
 import fire

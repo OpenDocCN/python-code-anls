@@ -1,6 +1,6 @@
 # `.\lucidrains\block-recurrent-transformer-pytorch\block_recurrent_transformer_pytorch\block_recurrent_transformer_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 random 模块中导入 random 函数

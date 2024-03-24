@@ -1,6 +1,6 @@
 # `.\lucidrains\memorizing-transformers-pytorch\memorizing_transformers_pytorch\memorizing_transformers_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 functools 模块导入 partial 函数

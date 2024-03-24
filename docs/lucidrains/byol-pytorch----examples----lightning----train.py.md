@@ -1,6 +1,6 @@
 # `.\lucidrains\byol-pytorch\examples\lightning\train.py`
 
-```
+```py
 # 导入所需的库
 import os
 import argparse

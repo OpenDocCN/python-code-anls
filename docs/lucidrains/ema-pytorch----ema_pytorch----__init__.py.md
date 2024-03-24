@@ -1,6 +1,6 @@
 # `.\lucidrains\ema-pytorch\ema_pytorch\__init__.py`
 
-```
+```py
 # 从 ema_pytorch 模块中导入 EMA 类
 from ema_pytorch.ema_pytorch import EMA
 

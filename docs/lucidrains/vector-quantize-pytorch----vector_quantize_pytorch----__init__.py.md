@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\__init__.py`
 
-```
+```py
 # 导入自定义模块中的 VectorQuantize 类
 from vector_quantize_pytorch.vector_quantize_pytorch import VectorQuantize
 # 导入自定义模块中的 ResidualVQ 和 GroupedResidualVQ 类

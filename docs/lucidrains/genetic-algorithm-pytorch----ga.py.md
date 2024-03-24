@@ -1,6 +1,6 @@
 # `.\lucidrains\genetic-algorithm-pytorch\ga.py`
 
-```
+```py
 """
 Genetic Algorithm - formalized by John H. Holland in 1992, but has been talked about since 1960-70s
 

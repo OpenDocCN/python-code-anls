@@ -1,6 +1,6 @@
 # `.\lucidrains\jax2torch\jax2torch\jax2torch.py`
 
-```
+```py
 # 导入需要的库
 import torch
 from torch.utils import dlpack as torch_dlpack

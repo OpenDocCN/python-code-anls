@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-tensorflow-sonnet-training-script\create_tfrecords.py`
 
-```
+```py
 # 导入所需的模块
 from itertools import islice
 from functools import partial

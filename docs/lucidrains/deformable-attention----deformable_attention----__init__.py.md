@@ -1,6 +1,6 @@
 # `.\lucidrains\deformable-attention\deformable_attention\__init__.py`
 
-```
+```py
 # 从deformable_attention.deformable_attention_1d模块中导入DeformableAttention1D类
 from deformable_attention.deformable_attention_1d import DeformableAttention1D
 # 从deformable_attention.deformable_attention_2d模块中导入DeformableAttention2D类

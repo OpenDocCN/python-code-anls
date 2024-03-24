@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-attention-jax\flash_attention_jax\rabe_attention.py`
 
-```
+```py
 # 导入数学库和部分函数
 import math
 from functools import partial

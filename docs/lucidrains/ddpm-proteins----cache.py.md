@@ -1,6 +1,6 @@
 # `.\lucidrains\ddpm-proteins\cache.py`
 
-```
+```py
 # 导入必要的库
 from tqdm import tqdm
 import sidechainnet as scn

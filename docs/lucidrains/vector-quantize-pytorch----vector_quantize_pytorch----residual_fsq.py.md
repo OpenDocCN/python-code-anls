@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\residual_fsq.py`
 
-```
+```py
 import random
 from math import log2
 from functools import partial

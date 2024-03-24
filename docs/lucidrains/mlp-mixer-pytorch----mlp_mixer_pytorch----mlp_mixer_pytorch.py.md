@@ -1,6 +1,6 @@
 # `.\lucidrains\mlp-mixer-pytorch\mlp_mixer_pytorch\mlp_mixer_pytorch.py`
 
-```
+```py
 # 导入需要的模块
 from torch import nn
 from functools import partial

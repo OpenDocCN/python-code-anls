@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\dalle_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 log2 和 sqrt 函数
 from math import log2, sqrt
 # 导入 torch 库

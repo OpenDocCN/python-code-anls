@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\train.py`
 
-```
+```py
 # 导入所需的库
 from triton_transformer import Transformer
 from triton_transformer.autoregressive_wrapper import AutoregressiveWrapper

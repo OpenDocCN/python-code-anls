@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\dataloaders\decoder_loader.py`
 
-```
+```py
 import os
 import webdataset as wds
 import torch

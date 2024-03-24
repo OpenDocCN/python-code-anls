@@ -1,6 +1,6 @@
 # `.\lucidrains\x-clip\setup.py`
 
-```
+```py
 # 导入设置和查找包的函数
 from setuptools import setup, find_packages
 

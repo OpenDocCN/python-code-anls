@@ -1,6 +1,6 @@
 # `.\lucidrains\med-seg-diff-pytorch\driver.py`
 
-```
+```py
 import os
 import argparse
 from tqdm import tqdm

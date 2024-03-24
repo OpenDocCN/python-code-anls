@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\scripts\tf_to_torch.py`
 
-```
+```py
 # 导入 einops 模块中的 rearrange 函数
 from einops import rearrange
 

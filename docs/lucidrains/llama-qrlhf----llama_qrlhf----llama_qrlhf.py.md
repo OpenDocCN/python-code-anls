@@ -1,6 +1,6 @@
 # `.\lucidrains\llama-qrlhf\llama_qrlhf\llama_qrlhf.py`
 
-```
+```py
 import torch
 from torch.nn import Module
 from torch.utils.data import Dataset

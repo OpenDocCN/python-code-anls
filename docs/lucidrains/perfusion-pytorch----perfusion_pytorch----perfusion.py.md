@@ -1,6 +1,6 @@
 # `.\lucidrains\perfusion-pytorch\perfusion_pytorch\perfusion.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 # 从 copy 模块中导入 deepcopy 函数
 # 从 pathlib 模块中导入 Path 类

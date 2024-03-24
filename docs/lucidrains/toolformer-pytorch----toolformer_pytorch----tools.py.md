@@ -1,6 +1,6 @@
 # `.\lucidrains\toolformer-pytorch\toolformer_pytorch\tools.py`
 
-```
+```py
 # 导入所需的库
 import os
 

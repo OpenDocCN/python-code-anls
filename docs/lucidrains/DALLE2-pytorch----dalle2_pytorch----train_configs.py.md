@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\train_configs.py`
 
-```
+```py
 # 导入所需的库
 import json
 from torchvision import transforms as T

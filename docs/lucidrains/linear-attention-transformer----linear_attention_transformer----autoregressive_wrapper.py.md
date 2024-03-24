@@ -1,6 +1,6 @@
 # `.\lucidrains\linear-attention-transformer\linear_attention_transformer\autoregressive_wrapper.py`
 
-```
+```py
 # 从 functools 模块导入 partial 函数
 from functools import partial
 # 导入 torch 库

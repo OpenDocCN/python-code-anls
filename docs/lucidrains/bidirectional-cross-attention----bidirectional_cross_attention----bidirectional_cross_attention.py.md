@@ -1,6 +1,6 @@
 # `.\lucidrains\bidirectional-cross-attention\bidirectional_cross_attention\bidirectional_cross_attention.py`
 
-```
+```py
 import torch
 from torch import nn
 from einops import rearrange

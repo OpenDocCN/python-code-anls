@@ -1,6 +1,6 @@
 # `.\lucidrains\siren-pytorch\siren_pytorch\siren_pytorch.py`
 
-```
+```py
 # 导入数学库和PyTorch库
 import math
 import torch

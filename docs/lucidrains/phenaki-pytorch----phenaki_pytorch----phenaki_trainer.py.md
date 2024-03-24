@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\phenaki_trainer.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入复制库

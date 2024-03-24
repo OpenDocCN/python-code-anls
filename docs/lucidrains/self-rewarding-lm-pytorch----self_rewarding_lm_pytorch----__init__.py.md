@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\__init__.py`
 
-```
+```py
 # 导入自我奖励语言模型训练器和奖励配置
 from self_rewarding_lm_pytorch.self_rewarding_lm_pytorch import (
     SelfRewardingTrainer,

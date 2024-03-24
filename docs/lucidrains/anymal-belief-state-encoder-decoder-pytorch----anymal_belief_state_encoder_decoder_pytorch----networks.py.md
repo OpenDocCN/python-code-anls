@@ -1,6 +1,6 @@
 # `.\lucidrains\anymal-belief-state-encoder-decoder-pytorch\anymal_belief_state_encoder_decoder_pytorch\networks.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

@@ -1,6 +1,6 @@
 # `.\lucidrains\FLASH-pytorch\flash_pytorch\flash_pytorch.py`
 
-```
+```py
 # 导入数学库和 PyTorch 库
 import math
 import torch

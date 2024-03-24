@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\data.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 from pathlib import Path

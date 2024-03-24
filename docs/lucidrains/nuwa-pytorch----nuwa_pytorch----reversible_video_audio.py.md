@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\reversible_video_audio.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 from torch.autograd.function import Function

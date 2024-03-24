@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\triton_transformer\utils.py`
 
-```
+```py
 # 检查值是否不为 None
 def exists(val):
     return val is not None

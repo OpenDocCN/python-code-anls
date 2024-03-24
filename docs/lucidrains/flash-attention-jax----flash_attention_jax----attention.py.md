@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-attention-jax\flash_attention_jax\attention.py`
 
-```
+```py
 # 导入需要的库
 import jax
 from jax import nn

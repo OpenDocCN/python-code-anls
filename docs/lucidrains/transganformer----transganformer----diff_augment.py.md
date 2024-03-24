@@ -1,6 +1,6 @@
 # `.\lucidrains\transganformer\transganformer\diff_augment.py`
 
-```
+```py
 # 导入random和torch模块
 import random
 import torch

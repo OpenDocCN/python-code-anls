@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\tests\test_irrep_repr.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 se3_transformer_pytorch.spherical_harmonics 模块中导入 clear_spherical_harmonics_cache 函数

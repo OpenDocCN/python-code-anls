@@ -1,6 +1,6 @@
 # `.\lucidrains\byol-pytorch\byol_pytorch\__init__.py`
 
-```
+```py
 # 从 byol_pytorch 模块中导入 BYOL 类
 # 该类用于实现 BYOL（Bootstrap Your Own Latent）算法
 from byol_pytorch.byol_pytorch import BYOL

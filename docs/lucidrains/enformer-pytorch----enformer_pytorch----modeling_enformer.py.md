@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\enformer_pytorch\modeling_enformer.py`
 
-```
+```py
 # 导入所需的库
 import math
 from pathlib import Path

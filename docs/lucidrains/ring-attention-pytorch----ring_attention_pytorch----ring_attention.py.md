@@ -1,6 +1,6 @@
 # `.\lucidrains\ring-attention-pytorch\ring_attention_pytorch\ring_attention.py`
 
-```
+```py
 # 导入必要的库
 from typing import Optional, Tuple, Union
 

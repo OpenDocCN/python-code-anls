@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\efficient.py`
 
-```
+```py
 import torch
 from torch import nn
 from einops import rearrange, repeat

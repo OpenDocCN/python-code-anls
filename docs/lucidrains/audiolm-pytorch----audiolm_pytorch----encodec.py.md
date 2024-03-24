@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\encodec.py`
 
-```
+```py
 # 导入所需的库和模块
 from functools import reduce
 from einops import rearrange, pack, unpack

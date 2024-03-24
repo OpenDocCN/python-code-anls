@@ -1,6 +1,6 @@
 # `.\lucidrains\complex-valued-transformer\train.py`
 
-```
+```py
 # 导入所需的库
 import gzip
 import random

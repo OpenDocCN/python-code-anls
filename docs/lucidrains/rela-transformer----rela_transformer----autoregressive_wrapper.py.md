@@ -1,6 +1,6 @@
 # `.\lucidrains\rela-transformer\rela_transformer\autoregressive_wrapper.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import torch

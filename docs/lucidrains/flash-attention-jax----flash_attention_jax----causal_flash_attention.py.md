@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-attention-jax\flash_attention_jax\causal_flash_attention.py`
 
-```
+```py
 # 导入所需的库
 import math
 import jax

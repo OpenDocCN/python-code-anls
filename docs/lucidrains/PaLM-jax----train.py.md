@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-jax\train.py`
 
-```
+```py
 # 导入必要的库
 import os
 from random import randrange

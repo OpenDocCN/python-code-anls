@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\fid_evaluation.py`
 
-```
+```py
 # 导入所需的库
 import math
 import os

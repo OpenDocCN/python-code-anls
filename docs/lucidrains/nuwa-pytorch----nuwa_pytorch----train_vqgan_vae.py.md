@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\train_vqgan_vae.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 # 从 copy 模块中导入 copy 函数

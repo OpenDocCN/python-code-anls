@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\t2t.py`
 
-```
+```py
 # 导入所需的库
 import math
 import torch

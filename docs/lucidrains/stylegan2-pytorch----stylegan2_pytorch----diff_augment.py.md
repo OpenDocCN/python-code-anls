@@ -1,6 +1,6 @@
 # `.\lucidrains\stylegan2-pytorch\stylegan2_pytorch\diff_augment.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import random

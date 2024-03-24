@@ -1,6 +1,6 @@
 # `.\lucidrains\axial-positional-embedding\axial_positional_embedding\axial_positional_embedding.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

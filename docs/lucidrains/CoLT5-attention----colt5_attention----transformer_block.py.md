@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\transformer_block.py`
 
-```
+```py
 import math
 from functools import partial
 from collections import namedtuple

@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\attend.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 from functools import wraps

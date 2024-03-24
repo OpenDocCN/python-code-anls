@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\constants.py`
 
-```
+```py
 import torch
 
 # 定义常量

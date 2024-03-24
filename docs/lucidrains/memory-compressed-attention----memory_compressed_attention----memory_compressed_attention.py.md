@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-compressed-attention\memory_compressed_attention\memory_compressed_attention.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-clip\x_clip\distributed.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.autograd 模块中导入 Function 类

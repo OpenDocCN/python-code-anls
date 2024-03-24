@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-attention-jax\flash_attention_jax\utils.py`
 
-```
+```py
 # 导入 JAX 库
 import jax
 # 导入 partial 函数

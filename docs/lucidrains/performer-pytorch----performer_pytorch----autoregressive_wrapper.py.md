@@ -1,6 +1,6 @@
 # `.\lucidrains\performer-pytorch\performer_pytorch\autoregressive_wrapper.py`
 
-```
+```py
 from functools import partial
 import torch
 from torch import nn

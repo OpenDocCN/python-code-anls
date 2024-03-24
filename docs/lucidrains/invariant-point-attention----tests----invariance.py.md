@@ -1,6 +1,6 @@
 # `.\lucidrains\invariant-point-attention\tests\invariance.py`
 
-```
+```py
 # 导入所需的库
 import torch
 from torch import nn

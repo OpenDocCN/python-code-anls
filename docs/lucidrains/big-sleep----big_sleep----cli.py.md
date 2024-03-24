@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\big_sleep\cli.py`
 
-```
+```py
 # 导入 fire 模块，用于命令行接口
 import fire
 # 导入 random 模块并重命名为 rnd

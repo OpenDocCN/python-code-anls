@@ -1,6 +1,6 @@
 # `.\lucidrains\muse-maskgit-pytorch\muse_maskgit_pytorch\t5.py`
 
-```
+```py
 # 导入日志、torch和transformers模块
 import logging
 import torch

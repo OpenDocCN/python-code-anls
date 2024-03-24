@@ -1,6 +1,6 @@
 # `.\lucidrains\rvq-vae-gpt\rvq_vae_gpt\rvq_vae_gpt.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn.functional 模块并重命名为 F

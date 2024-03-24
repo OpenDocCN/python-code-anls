@@ -1,6 +1,6 @@
 # `.\lucidrains\speculative-decoding\train.py`
 
-```
+```py
 # 导入所需的库
 import gzip
 import random

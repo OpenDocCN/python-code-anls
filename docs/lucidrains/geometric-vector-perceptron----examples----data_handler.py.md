@@ -1,6 +1,6 @@
 # `.\lucidrains\geometric-vector-perceptron\examples\data_handler.py`
 
-```
+```py
 # 作者：Eric Alcaide
 
 # 从 https://github.com/jonathanking/sidechainnet 借用了大部分代码

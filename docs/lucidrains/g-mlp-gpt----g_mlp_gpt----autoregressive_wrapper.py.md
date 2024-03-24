@@ -1,6 +1,6 @@
 # `.\lucidrains\g-mlp-gpt\g_mlp_gpt\autoregressive_wrapper.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

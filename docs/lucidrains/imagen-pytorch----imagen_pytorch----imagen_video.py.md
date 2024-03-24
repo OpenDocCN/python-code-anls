@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\imagen_video.py`
 
-```
+```py
 # 导入数学、操作符、函数工具等模块
 import math
 import operator

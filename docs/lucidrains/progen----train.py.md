@@ -1,6 +1,6 @@
 # `.\lucidrains\progen\train.py`
 
-```
+```py
 # 导入 load_dotenv 函数，用于加载环境变量
 from dotenv import load_dotenv
 # 调用 load_dotenv 函数加载环境变量

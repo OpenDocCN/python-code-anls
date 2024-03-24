@@ -1,6 +1,6 @@
 # `.\lucidrains\stylegan2-pytorch\stylegan2_pytorch\cli.py`
 
-```
+```py
 # 导入所需的库
 import os
 import fire

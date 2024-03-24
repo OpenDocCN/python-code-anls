@@ -1,6 +1,6 @@
 # `.\lucidrains\mlm-pytorch\mlm_pytorch\mlm_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 functools 库中导入 reduce 函数

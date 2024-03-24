@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-rlhf-pytorch\palm_rlhf_pytorch\utils.py`
 
-```
+```py
 # 导入 math、torch 模块，以及从 torch 模块中导入 einsum、nn 和 nn.functional 模块
 import math
 import torch

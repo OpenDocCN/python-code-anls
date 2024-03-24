@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\train_vae.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从数学库中导入平方根函数

@@ -1,6 +1,6 @@
 # `.\lucidrains\q-transformer\q_transformer\agent.py`
 
-```
+```py
 # 导入必要的库
 import sys
 from pathlib import Path

@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\es_vit.py`
 
-```
+```py
 # 导入所需的库
 import copy
 import random

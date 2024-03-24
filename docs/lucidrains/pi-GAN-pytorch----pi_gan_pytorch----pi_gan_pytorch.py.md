@@ -1,6 +1,6 @@
 # `.\lucidrains\pi-GAN-pytorch\pi_gan_pytorch\pi_gan_pytorch.py`
 
-```
+```py
 # 导入所需的库
 import math
 from pathlib import Path

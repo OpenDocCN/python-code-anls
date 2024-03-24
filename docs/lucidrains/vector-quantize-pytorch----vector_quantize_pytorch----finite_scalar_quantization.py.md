@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\finite_scalar_quantization.py`
 
-```
+```py
 """
 Finite Scalar Quantization: VQ-VAE Made Simple - https://arxiv.org/abs/2309.15505
 Code adapted from Jax version in Appendix A.1

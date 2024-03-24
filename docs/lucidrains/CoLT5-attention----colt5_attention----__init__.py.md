@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\__init__.py`
 
-```
+```py
 # 从 colt5_attention.transformer_block 模块中导入以下类：
 # ConditionalRoutedFeedForward：有条件路由的前馈网络
 # ConditionalRoutedAttention：有条件路由的注意力机制

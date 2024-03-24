@@ -1,6 +1,6 @@
 # `.\lucidrains\med-seg-diff-pytorch\med_seg_diff_pytorch\dataset.py`
 
-```
+```py
 import os
 import numpy as np
 # 设置环境变量，允许重复加载库

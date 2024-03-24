@@ -1,6 +1,6 @@
 # `.\lucidrains\local-attention\local_attention\local_attention.py`
 
-```
+```py
 # 导入数学库
 import math
 

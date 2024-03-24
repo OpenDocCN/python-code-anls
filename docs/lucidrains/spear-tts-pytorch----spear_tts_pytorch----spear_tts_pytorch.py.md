@@ -1,6 +1,6 @@
 # `.\lucidrains\spear-tts-pytorch\spear_tts_pytorch\spear_tts_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从路径库中导入路径类

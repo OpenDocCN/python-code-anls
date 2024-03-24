@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\latent_quantization.py`
 
-```
+```py
 """
 Disentanglement via Latent Quantization
  - https://arxiv.org/abs/2305.18378

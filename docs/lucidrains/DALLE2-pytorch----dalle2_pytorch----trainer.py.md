@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\trainer.py`
 
-```
+```py
 # 导入必要的库
 import time
 import copy

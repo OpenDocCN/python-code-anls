@@ -1,6 +1,6 @@
 # `.\lucidrains\genetic-algorithm-pytorch\qbmb.py`
 
-```
+```py
 """
 Queen-bee and Mutant-bee evolution for genetic algorithms - Jung 2007
 

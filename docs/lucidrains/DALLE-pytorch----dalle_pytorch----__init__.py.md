@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\__init__.py`
 
-```
+```py
 # 从dalle_pytorch包中导入DALLE, CLIP, DiscreteVAE类
 # 从dalle_pytorch包中导入OpenAIDiscreteVAE, VQGanVAE类
 from dalle_pytorch.dalle_pytorch import DALLE, CLIP, DiscreteVAE

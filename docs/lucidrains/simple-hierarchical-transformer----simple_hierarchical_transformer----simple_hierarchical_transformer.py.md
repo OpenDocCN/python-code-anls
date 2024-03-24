@@ -1,6 +1,6 @@
 # `.\lucidrains\simple-hierarchical-transformer\simple_hierarchical_transformer\simple_hierarchical_transformer.py`
 
-```
+```py
 # 从 math 模块中导入 log2 和 ceil 函数
 # 从 functools 模块中导入 partial 函数
 # 从 itertools 模块中导入 zip_longest 函数

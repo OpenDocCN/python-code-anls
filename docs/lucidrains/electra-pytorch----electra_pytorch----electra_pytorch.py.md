@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\electra_pytorch\electra_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 reduce 函数

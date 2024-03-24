@@ -1,6 +1,6 @@
 # `.\lucidrains\sinkhorn-transformer\examples\enwik8_deepspeed\train.py`
 
-```
+```py
 import deepspeed  # 导入deepspeed库
 
 from sinkhorn_transformer import SinkhornTransformerLM  # 从sinkhorn_transformer库中导入SinkhornTransformerLM类

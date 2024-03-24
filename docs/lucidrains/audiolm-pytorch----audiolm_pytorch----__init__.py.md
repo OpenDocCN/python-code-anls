@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\__init__.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入版本模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\geometric-vector-perceptron\examples\train_lightning.py`
 
-```
+```py
 import gc
 from argparse import ArgumentParser
 from functools import partial

@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\nest.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import torch

@@ -14,7 +14,7 @@ Update: I think it is working 🤞
 
 ## Install
 
-```
+```py
 $ pip install simple-hierarchical-transformer
 ```
 

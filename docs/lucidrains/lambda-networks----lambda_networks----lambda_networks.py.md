@@ -1,6 +1,6 @@
 # `.\lucidrains\lambda-networks\lambda_networks\lambda_networks.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange

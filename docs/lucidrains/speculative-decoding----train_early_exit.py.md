@@ -1,6 +1,6 @@
 # `.\lucidrains\speculative-decoding\train_early_exit.py`
 
-```
+```py
 # 导入必要的库
 import gzip
 import random

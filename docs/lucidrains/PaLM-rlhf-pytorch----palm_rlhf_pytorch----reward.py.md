@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-rlhf-pytorch\palm_rlhf_pytorch\reward.py`
 
-```
+```py
 # 导入必要的库
 import copy
 from pathlib import Path

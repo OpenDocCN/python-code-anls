@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\utils.py`
 
-```
+```py
 # 导入所需的模块
 from typing import Tuple
 import torch.nn.functional as F

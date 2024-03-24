@@ -1,6 +1,6 @@
 # `.\lucidrains\multistream-transformers\multistream_transformers\multistream_transformers.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

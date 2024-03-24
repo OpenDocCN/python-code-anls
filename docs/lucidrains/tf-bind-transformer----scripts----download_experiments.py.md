@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\scripts\download_experiments.py`
 
-```
+```py
 # 导入所需的模块
 import json
 import tqdm

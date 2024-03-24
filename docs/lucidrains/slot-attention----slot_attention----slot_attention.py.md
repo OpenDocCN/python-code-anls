@@ -1,6 +1,6 @@
 # `.\lucidrains\slot-attention\slot_attention\slot_attention.py`
 
-```
+```py
 import torch
 from torch import nn
 from torch.nn import init

@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\karras_unet_3d.py`
 
-```
+```py
 """
 the magnitude-preserving unet proposed in https://arxiv.org/abs/2312.02696 by Karras et al.
 """

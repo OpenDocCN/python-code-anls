@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\open_clip.py`
 
-```
+```py
 # 导入必要的库和模块
 from beartype import beartype
 from typing import List

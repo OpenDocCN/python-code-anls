@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\train_nuwa.py`
 
-```
+```py
 # 从 random 模块中导入 randrange 函数
 from random import randrange
 # 从 pathlib 模块中导入 Path 类

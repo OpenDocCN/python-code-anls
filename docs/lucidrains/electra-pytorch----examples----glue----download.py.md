@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\examples\glue\download.py`
 
-```
+```py
 # 下载和提取数据集的函数
 def download_and_extract(task, data_dir):
     # 打印提示信息，指示正在下载和解压缩特定任务的数据

@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-tensorflow-sonnet-training-script\sequence.py`
 
-```
+```py
 # 导入所需的库
 import tensorflow as tf
 import numpy as np

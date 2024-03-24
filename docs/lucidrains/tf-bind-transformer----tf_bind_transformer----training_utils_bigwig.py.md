@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\training_utils_bigwig.py`
 
-```
+```py
 import torch
 from torch import nn
 from tf_bind_transformer.optimizer import get_optimizer

@@ -1,6 +1,6 @@
 # `.\lucidrains\genetic-algorithm-pytorch\bcga.py`
 
-```
+```py
 """
 Bee Colonies Genetic Algorithm
 

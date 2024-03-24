@@ -1,6 +1,6 @@
 # `.\lucidrains\product-key-memory\product_key_memory\product_key_memory.py`
 
-```
+```py
 # 导入 math、torch 库
 import math
 import torch

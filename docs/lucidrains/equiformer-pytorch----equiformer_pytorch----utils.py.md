@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\equiformer_pytorch\utils.py`
 
-```
+```py
 # 导入必要的库
 from pathlib import Path
 

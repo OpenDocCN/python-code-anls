@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\train_pre.py`
 
-```
+```py
 # 导入所需的库
 import torch
 from torch.optim import Adam

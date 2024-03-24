@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\classifier_free_guidance.py`
 
-```
+```py
 # 导入所需的库
 import math
 import copy

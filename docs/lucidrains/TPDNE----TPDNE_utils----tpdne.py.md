@@ -1,6 +1,6 @@
 # `.\lucidrains\TPDNE\TPDNE_utils\tpdne.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

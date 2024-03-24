@@ -1,6 +1,6 @@
 # `.\lucidrains\g-mlp-pytorch\g_mlp_pytorch\g_mlp_pytorch.py`
 
-```
+```py
 # 从 random 模块中导入 randrange 函数
 # 从 torch 模块中导入相关函数和类
 # 从 einops 模块中导入 rearrange, repeat 函数以及 Rearrange, Reduce 类

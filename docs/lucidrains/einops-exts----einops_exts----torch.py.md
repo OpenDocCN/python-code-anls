@@ -1,6 +1,6 @@
 # `.\lucidrains\einops-exts\einops_exts\torch.py`
 
-```
+```py
 # 导入 torch 中的 nn 模块
 # 导入 einops 中的 rearrange 函数
 from torch import nn

@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-rlhf-pytorch\palm_rlhf_pytorch\palm.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入拷贝库

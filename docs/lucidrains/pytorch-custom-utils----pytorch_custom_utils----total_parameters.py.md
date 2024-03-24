@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\total_parameters.py`
 
-```
+```py
 # 从 torch.nn 模块中导入 Module 类
 from torch.nn import Module
 

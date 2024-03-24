@@ -1,6 +1,6 @@
 # `.\lucidrains\kronecker-attention-pytorch\kronecker_attention_pytorch\kronecker_attention_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange, repeat

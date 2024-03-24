@@ -1,6 +1,6 @@
 # `.\lucidrains\VN-transformer\VN_transformer\__init__.py`
 
-```
+```py
 # 从VN_transformer.VN_transformer模块中导入以下类和函数
 from VN_transformer.VN_transformer import (
     VNTransformer,         # 导入VNTransformer类

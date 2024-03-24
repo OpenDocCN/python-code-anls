@@ -1,6 +1,6 @@
 # `.\lucidrains\lumiere-pytorch\lumiere_pytorch\mp_lumiere.py`
 
-```
+```py
 # 导入所需的库
 from math import sqrt
 from functools import partial

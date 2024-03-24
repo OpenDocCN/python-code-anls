@@ -1,6 +1,6 @@
 # `.\lucidrains\genetic-algorithm-pytorch\bega.py`
 
-```
+```py
 """
 Queen-bee evolution for genetic algorithms - Jung 2003
 

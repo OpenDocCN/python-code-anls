@@ -1,6 +1,6 @@
 # `.\lucidrains\BS-RoFormer\bs_roformer\attend.py`
 
-```
+```py
 # 导入必要的库
 from functools import wraps
 from packaging import version

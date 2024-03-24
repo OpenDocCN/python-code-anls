@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\data.py`
 
-```
+```py
 # 导入所需的库
 from pathlib import Path
 import cv2

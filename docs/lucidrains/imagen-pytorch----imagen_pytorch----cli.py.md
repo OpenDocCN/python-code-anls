@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\cli.py`
 
-```
+```py
 import click
 import torch
 from pathlib import Path

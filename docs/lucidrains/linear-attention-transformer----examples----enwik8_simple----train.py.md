@@ -1,6 +1,6 @@
 # `.\lucidrains\linear-attention-transformer\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库和模块
 from linear_attention_transformer import LinearAttentionTransformerLM
 from linear_attention_transformer.autoregressive_wrapper import AutoregressiveWrapper

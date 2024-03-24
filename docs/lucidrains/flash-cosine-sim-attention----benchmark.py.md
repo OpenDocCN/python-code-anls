@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\benchmark.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 from itertools import product

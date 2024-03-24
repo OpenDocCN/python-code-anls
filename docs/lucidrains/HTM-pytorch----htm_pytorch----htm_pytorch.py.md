@@ -1,6 +1,6 @@
 # `.\lucidrains\HTM-pytorch\htm_pytorch\htm_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 # 导入 torch 模块

@@ -14,7 +14,7 @@ This library also contains an implementation of <a href="https://arxiv.org/abs/2
 
 ## Install
 
-``` bash
+```py bash
 $ pip install self-rewarding-lm-pytorch
 ```
 

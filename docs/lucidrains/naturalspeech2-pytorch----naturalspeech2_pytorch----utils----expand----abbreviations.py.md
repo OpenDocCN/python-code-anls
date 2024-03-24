@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\expand\abbreviations.py`
 
-```
+```py
 # 导入 csv 和 re 模块
 import csv
 import re

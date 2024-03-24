@@ -1,6 +1,6 @@
 # `.\lucidrains\rela-transformer\train.py`
 
-```
+```py
 # 导入所需的模块
 from rela_transformer import ReLATransformer
 from rela_transformer.autoregressive_wrapper import AutoregressiveWrapper

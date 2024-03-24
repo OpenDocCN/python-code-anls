@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\dpo.py`
 
-```
+```py
 # 导入必要的库
 import os
 from pathlib import Path

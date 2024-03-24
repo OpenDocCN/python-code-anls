@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-genomics-model\flash_genomics_model\attend.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 from functools import wraps

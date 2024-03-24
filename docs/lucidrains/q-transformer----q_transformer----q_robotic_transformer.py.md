@@ -1,6 +1,6 @@
 # `.\lucidrains\q-transformer\q_transformer\q_robotic_transformer.py`
 
-```
+```py
 # 从 random 模块导入 random 函数
 from random import random
 # 从 functools 模块导入 partial, cache 函数

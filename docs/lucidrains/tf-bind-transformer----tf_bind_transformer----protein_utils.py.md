@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\protein_utils.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import os

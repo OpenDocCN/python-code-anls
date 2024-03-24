@@ -1,6 +1,6 @@
 # `.\lucidrains\q-transformer\q_transformer\mocks.py`
 
-```
+```py
 from random import randrange
 # 从 random 模块中导入 randrange 函数
 

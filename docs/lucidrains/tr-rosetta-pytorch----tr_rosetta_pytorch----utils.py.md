@@ -1,6 +1,6 @@
 # `.\lucidrains\tr-rosetta-pytorch\tr_rosetta_pytorch\utils.py`
 
-```
+```py
 # 导入所需的库
 import string
 import numpy as np

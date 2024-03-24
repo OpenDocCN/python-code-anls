@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库
 from reformer_pytorch import ReformerLM
 from reformer_pytorch.generative_tools import TrainingWrapper

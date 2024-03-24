@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\equiformer_pytorch\basis.py`
 
-```
+```py
 # 导入必要的库
 import os
 from itertools import product

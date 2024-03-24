@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\soundstream.py`
 
-```
+```py
 # 导入必要的库
 import functools
 from pathlib import Path

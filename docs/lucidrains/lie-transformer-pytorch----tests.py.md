@@ -1,6 +1,6 @@
 # `.\lucidrains\lie-transformer-pytorch\tests.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 lie_transformer_pytorch 库中导入 LieTransformer 类

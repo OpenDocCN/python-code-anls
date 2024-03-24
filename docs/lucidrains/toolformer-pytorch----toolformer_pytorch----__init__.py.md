@@ -1,6 +1,6 @@
 # `.\lucidrains\toolformer-pytorch\toolformer_pytorch\__init__.py`
 
-```
+```py
 # 从 toolformer_pytorch.palm 模块中导入 PaLM 类
 from toolformer_pytorch.palm import PaLM
 

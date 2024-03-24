@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\big_sleep\resample.py`
 
-```
+```py
 """Good differentiable image resampling for PyTorch."""
 
 # 导入所需的库

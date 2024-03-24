@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\training_utils.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

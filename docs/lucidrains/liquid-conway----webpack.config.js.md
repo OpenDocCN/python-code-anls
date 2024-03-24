@@ -1,6 +1,6 @@
 # `.\lucidrains\liquid-conway\webpack.config.js`
 
-```
+```py
 # 引入 Node.js 的 path 模块和 ExtractTextPlugin 插件
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');

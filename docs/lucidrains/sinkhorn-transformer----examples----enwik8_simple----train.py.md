@@ -1,6 +1,6 @@
 # `.\lucidrains\sinkhorn-transformer\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库和模块
 from sinkhorn_transformer import SinkhornTransformerLM
 from sinkhorn_transformer.autoregressive_wrapper import AutoregressiveWrapper

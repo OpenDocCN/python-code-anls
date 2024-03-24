@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\train_decoder.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 from typing import List

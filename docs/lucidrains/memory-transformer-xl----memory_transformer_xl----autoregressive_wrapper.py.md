@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-transformer-xl\memory_transformer_xl\autoregressive_wrapper.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入partial函数

@@ -1,6 +1,6 @@
 # `.\lucidrains\ESBN-pytorch\esbn_pytorch\esbn_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 functools 库中导入 partial 函数

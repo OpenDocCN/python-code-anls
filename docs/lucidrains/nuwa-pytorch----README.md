@@ -310,7 +310,7 @@ ex.
  ┣ 📜dog.txt
  ┣ 📜turtle.gif
  ┗ 📜turtle.txt
-```
+```py
 
 Then you will load your previously trained VQGan-VAE and train NUWA with the `GifVideoDataset` and `NUWATrainer` classes.
 
@@ -373,7 +373,7 @@ trainer = NUWATrainer(
 )
 
 trainer.train()
-```
+```py
 
 ## VQ improvements
 
@@ -392,7 +392,7 @@ vae = VQGanVAE(
     # VectorQuantize will be initialized with use_cosine_sim = True
     # https://github.com/lucidrains/vector-quantize-pytorch#cosine-similarity
 ).cuda()
-```
+```py
 
 ## Todo
 
@@ -444,7 +444,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{esser2021taming,
@@ -455,7 +455,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{iashin2021taming,
@@ -466,7 +466,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{ding2021cogview,
@@ -477,7 +477,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{kitaev2020reformer,
@@ -488,7 +488,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{shazeer2020talkingheads,
@@ -499,7 +499,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{shazeer2020glu,
@@ -508,7 +508,7 @@ vae = VQGanVAE(
     year    = {2020},
     url     = {https://arxiv.org/abs/2002.05202}    
 }
-```
+```py
 
 ```py
 @misc{su2021roformer,
@@ -519,7 +519,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @inproceedings{ho2021classifierfree,
@@ -529,7 +529,7 @@ vae = VQGanVAE(
     year    = {2021},
     url     = {https://openreview.net/forum?id=qw8AKxfYbI}
 }
-```
+```py
 
 ```py
 @misc{liu2021swin,
@@ -540,7 +540,7 @@ vae = VQGanVAE(
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{crowson2022,

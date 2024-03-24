@@ -1,6 +1,6 @@
 # `.\lucidrains\metaformer-gpt\metaformer_gpt\autoregressive_wrapper.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

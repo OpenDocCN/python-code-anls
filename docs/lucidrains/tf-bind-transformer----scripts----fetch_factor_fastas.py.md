@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\scripts\fetch_factor_fastas.py`
 
-```
+```py
 # 导入所需的库
 import requests
 from pathlib import Path

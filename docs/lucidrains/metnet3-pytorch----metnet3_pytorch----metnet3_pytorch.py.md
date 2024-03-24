@@ -1,6 +1,6 @@
 # `.\lucidrains\metnet3-pytorch\metnet3_pytorch\metnet3_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from pathlib import Path
 from functools import partial

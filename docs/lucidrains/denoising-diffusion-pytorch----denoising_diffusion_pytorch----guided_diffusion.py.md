@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\guided_diffusion.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入拷贝库

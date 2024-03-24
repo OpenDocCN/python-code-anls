@@ -1,6 +1,6 @@
 # `.\lucidrains\all-normalization-transformer\train_enwik8.py`
 
-```
+```py
 # 导入所需的模块
 from all_normalization_transformer import TransformerLM
 from all_normalization_transformer.autoregressive_wrapper import AutoregressiveWrapper

@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\topk.py`
 
-```
+```py
 import torch
 from torch.cuda.amp import autocast
 

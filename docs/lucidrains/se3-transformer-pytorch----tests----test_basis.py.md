@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\tests\test_basis.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 se3_transformer_pytorch.basis 模块中导入 get_basis, get_R_tensor, basis_transformation_Q_J 函数

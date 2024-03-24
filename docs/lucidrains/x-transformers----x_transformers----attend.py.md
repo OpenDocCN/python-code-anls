@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\attend.py`
 
-```
+```py
 # 导入所需模块和库
 from functools import partial
 from typing import Optional, Tuple

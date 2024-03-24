@@ -1,6 +1,6 @@
 # `.\lucidrains\ddpm-proteins\train.py`
 
-```
+```py
 import os
 import torch
 import sidechainnet as scn

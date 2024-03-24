@@ -1,6 +1,6 @@
 # `.\lucidrains\halonet-pytorch\halonet_pytorch\halonet_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

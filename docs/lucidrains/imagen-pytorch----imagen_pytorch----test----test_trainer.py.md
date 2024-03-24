@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\test\test_trainer.py`
 
-```
+```py
 # 从 imagen_pytorch 包中导入 ImagenTrainer 类
 # 从 imagen_pytorch 包中导入 ImagenConfig 类
 # 从 imagen_pytorch 包中导入 t5_encode_text 函数

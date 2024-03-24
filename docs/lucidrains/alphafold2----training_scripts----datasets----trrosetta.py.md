@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\training_scripts\datasets\trrosetta.py`
 
-```
+```py
 import pickle
 import string
 from argparse import ArgumentParser

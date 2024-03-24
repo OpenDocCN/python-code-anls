@@ -1,6 +1,6 @@
 # `.\lucidrains\robotic-transformer-pytorch\setup.py`
 
-```
+```py
 # 导入设置工具和查找包函数
 from setuptools import setup, find_packages
 

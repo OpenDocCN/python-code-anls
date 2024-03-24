@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\max_vit.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 

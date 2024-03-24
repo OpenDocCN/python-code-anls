@@ -1,6 +1,6 @@
 # `.\lucidrains\all-normalization-transformer\all_normalization_transformer\all_normalization_transformer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

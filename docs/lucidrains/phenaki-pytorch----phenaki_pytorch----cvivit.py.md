@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\cvivit.py`
 
-```
+```py
 # 导入必要的库
 from pathlib import Path
 import copy

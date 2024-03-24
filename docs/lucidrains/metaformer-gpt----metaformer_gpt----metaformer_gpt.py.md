@@ -1,6 +1,6 @@
 # `.\lucidrains\metaformer-gpt\metaformer_gpt\metaformer_gpt.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange, repeat

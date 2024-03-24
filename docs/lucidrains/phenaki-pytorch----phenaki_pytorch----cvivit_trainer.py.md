@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\cvivit_trainer.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 # 从 random 模块中导入 choice 函数

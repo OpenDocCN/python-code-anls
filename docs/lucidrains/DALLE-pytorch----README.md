@@ -440,7 +440,7 @@ ex.
  ┣ 📜dog.txt
  ┣ 📜turtle.jpeg
  ┗ 📜turtle.txt
-```
+```py
 
 ex. `cat.txt`
 
@@ -448,19 +448,19 @@ ex. `cat.txt`
 A black and white cat curled up next to the fireplace
 A fireplace, with a cat sleeping next to it
 A black cat with a red collar napping
-```
+```py
 
 If you have a dataset with its own directory structure for tying together image and text descriptions, do let me know in the issues, and I'll see if I can accommodate it in the script.
 
 ```py
 $ python train_dalle.py --vae_path ./vae.pt --image_text_folder /path/to/data
-```
+```py
 
 You likely will not finish DALL-E training as quickly as you did your Discrete VAE. To resume from where you left off, just run the same script, but with the path to your DALL-E checkpoints.
 
 ```py
 $ python train_dalle.py --dalle_path ./dalle.pt --image_text_folder /path/to/data
-```
+```py
 
 ## Training using WebDataset
 
@@ -470,25 +470,25 @@ column key after the --wds argument. The ---image_text_folder points to your .ta
 
 ```py
 $ python train_dalle.py --wds img,cap --image_text_folder /path/to/data.tar(.gz)
-```
+```py
 
 Distributed training with deepspeed works the same way, e.g.:
 
 ```py
 $ deepspeed train_dalle.py --wds img,cap --image_text_folder /path/to/data.tar(.gz) --fp16 --deepspeed
-```
+```py
 
 If you have containing shards (dataset split into several .tar(.gz) files), this is also supported:
 
 ```py
 $ deepspeed train_dalle.py --wds img,cap --image_text_folder /path/to/shardfolder --fp16 --deepspeed
-```
+```py
 
 You can stream the data from a http server or gloogle cloud storage like this:
 
 ```py
 $ deepspeed train_dalle.py --image_text_folder "http://storage.googleapis.com/nvdata-openimages/openimages-train-{000000..000554}.tar" --wds jpg,json --taming --truncate_captions --random_resize_crop_lower_ratio=0.8 --attn_types=full --epochs=2 --fp16 --deepspeed
-```
+```py
 
 In order to convert your image-text-folder to WebDataset format, you can make use of one of several methods.
 (https://www.youtube.com/watch?v=v_PacO-3OGQ here are given 4 examples, or a little helper script which also supports splitting your dataset
@@ -500,7 +500,7 @@ You can now also train DALL-E without having to train the Discrete VAE at all, c
 
 ```py
 $ python train_dalle.py --image_text_folder /path/to/coco/dataset
-```
+```py
 
 ### DALL-E with Taming Transformer's VQVAE
 
@@ -508,7 +508,7 @@ Just use the `--taming` flag. Highly recommended you use this VAE over the OpenA
 
 ```py
 $ python train_dalle.py --image_text_folder /path/to/coco/dataset --taming
-```
+```py
 
 ### Generation
 
@@ -516,7 +516,7 @@ Once you have successfully trained DALL-E, you can then use the saved model for 
 
 ```py
 $ python generate.py --dalle_path ./dalle.pt --text 'fireflies in a field under a full moon'
-```
+```py
 
 You should see your images saved as `./outputs/{your prompt}/{image number}.jpg`
 
@@ -526,13 +526,13 @@ ex.
 
 ```py
 $ python generate.py --dalle_path ./dalle.pt --text 'a dog chewing a bone|a cat chasing mice|a frog eating a fly'
-```
+```py
 
 Note that DALL-E is a full image+text language model. As a consequence you can also generate text using a dalle model.
 
 ```py
 $ python generate.py --dalle_path ./dalle.pt --text 'a dog chewing a bone' --gentext
-```
+```py
 
 This will complete the provided text, save it in a caption.txt and generate the corresponding images.
 
@@ -544,13 +544,13 @@ To build:
 
 ```py
 docker build -t dalle docker
-```
+```py
 
 To run in an interactive shell:
 
 ```py
 docker run --gpus all -it --mount src="$(pwd)",target=/workspace/dalle,type=bind dalle:latest bash
-```
+```py
 
 ### Distributed Training
 
@@ -562,7 +562,7 @@ You can simply replace any `$ python <file>.py [args...]` command with
 
 ```py
 $ deepspeed <file>.py [args...] --deepspeed
-```
+```py
 
 to use the aforementioned DeepSpeed library for distributed training, speeding up your experiments.
 
@@ -587,7 +587,7 @@ Then you will need to install apex from source.
 This may take awhile and you may see some compilation warnings which can be ignored. 
 ```py
 sh install_apex.sh
-```
+```py
 
 Now, run `train_dalle.py` with `deepspeed` instead of `python` as done here:
 ```py
@@ -596,7 +596,7 @@ deepspeed train_dalle.py \
     --image_text_folder 'DatasetsDir' \
     --distr_backend 'deepspeed' \
     --amp
-```
+```py
 
 #### Horovod
 
@@ -609,7 +609,7 @@ replace any `$ python <file>.py [args...]` command with
 
 ```py
 $ horovodrun -np <num-gpus> <file>.py [args...] --distributed_backend horovod
-```
+```py
 
 to use the Horovod library for distributed training, speeding up your
 experiments. This will multiply your effective batch size per training
@@ -626,13 +626,13 @@ ex.
 
 ```py
 $ python train_dalle.py --image_text_folder ./path/to/data --bpe_path ./path/to/bpe.model
-```
+```py
 
 To create a BPE model file from scratch, firstly
 
 ```py
 $ pip install youtokentome
-```
+```py
 
 Then you need to prepare a big text file that is a representative sample of the type of text you want to encode. You can then invoke the `youtokentome` command-line tools. You'll also need to specify the vocab size you wish to use, in addition to the corpus of text.
 

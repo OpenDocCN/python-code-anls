@@ -1,6 +1,6 @@
 # `.\lucidrains\FLASH-pytorch\train.py`
 
-```
+```py
 # 导入所需的库
 from flash_pytorch import FLASHTransformer
 from flash_pytorch.autoregressive_wrapper import AutoregressiveWrapper

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\examples\enwik8_simple\train_nar.py`
 
-```
+```py
 # 从 x_transformers 模块中导入 TransformerWrapper、Encoder、NonAutoregressiveWrapper 类
 from x_transformers import (
     TransformerWrapper,

@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\__init__.py`
 
-```
+```py
 # 从 imagen_pytorch 模块中导入 Imagen 和 Unet 类
 from imagen_pytorch.imagen_pytorch import Imagen, Unet
 # 从 imagen_pytorch 模块中导入 NullUnet 类

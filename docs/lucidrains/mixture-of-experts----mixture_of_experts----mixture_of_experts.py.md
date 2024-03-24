@@ -1,6 +1,6 @@
 # `.\lucidrains\mixture-of-experts\mixture_of_experts\mixture_of_experts.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

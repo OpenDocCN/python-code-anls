@@ -1,6 +1,6 @@
 # `.\lucidrains\tab-transformer-pytorch\tab_transformer_pytorch\tab_transformer_pytorch.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 import torch.nn.functional as F

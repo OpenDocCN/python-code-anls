@@ -1,6 +1,6 @@
 # `.\lucidrains\sinkhorn-transformer\sinkhorn_transformer\sinkhorn_transformer.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 导入 torch 模块

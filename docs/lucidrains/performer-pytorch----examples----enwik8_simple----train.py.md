@@ -1,6 +1,6 @@
 # `.\lucidrains\performer-pytorch\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库
 from performer_pytorch import PerformerLM
 from performer_pytorch.autoregressive_wrapper import AutoregressiveWrapper

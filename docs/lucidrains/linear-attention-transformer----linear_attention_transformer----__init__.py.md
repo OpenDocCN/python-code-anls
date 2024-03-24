@@ -1,6 +1,6 @@
 # `.\lucidrains\linear-attention-transformer\linear_attention_transformer\__init__.py`
 
-```
+```py
 # 从 linear_attention_transformer 模块中导入 LinearAttentionTransformer、LinearAttentionTransformerLM、LinformerSettings、LinformerContextSettings 类
 from linear_attention_transformer.linear_attention_transformer import LinearAttentionTransformer, LinearAttentionTransformerLM, LinformerSettings, LinformerContextSettings
 # 从 linear_attention_transformer 模块中导入 AutoregressiveWrapper 类

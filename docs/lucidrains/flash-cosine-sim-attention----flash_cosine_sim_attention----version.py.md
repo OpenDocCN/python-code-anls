@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\flash_cosine_sim_attention\version.py`
 
-```
+```py
 # 定义当前模块的版本号
 __version__ = '0.1.40'
 

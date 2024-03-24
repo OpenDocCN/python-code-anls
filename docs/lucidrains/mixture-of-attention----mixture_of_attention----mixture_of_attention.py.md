@@ -1,6 +1,6 @@
 # `.\lucidrains\mixture-of-attention\mixture_of_attention\mixture_of_attention.py`
 
-```
+```py
 # 导入数学库
 import math
 

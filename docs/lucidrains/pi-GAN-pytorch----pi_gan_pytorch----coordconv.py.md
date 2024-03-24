@@ -1,6 +1,6 @@
 # `.\lucidrains\pi-GAN-pytorch\pi_gan_pytorch\coordconv.py`
 
-```
+```py
 # 从给定链接中导入所需的库
 # https://github.com/mkocabas/CoordConv-pytorch/blob/master/CoordConv.py
 import torch

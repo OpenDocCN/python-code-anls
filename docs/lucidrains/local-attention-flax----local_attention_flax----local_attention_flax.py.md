@@ -1,6 +1,6 @@
 # `.\lucidrains\local-attention-flax\local_attention_flax\local_attention_flax.py`
 
-```
+```py
 # 导入必要的库
 import flax.linen as nn
 from jax import numpy as np

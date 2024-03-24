@@ -1,6 +1,6 @@
 # `.\lucidrains\perceiver-ar-pytorch\perceiver_ar_pytorch\perceiver_ar_pytorch.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

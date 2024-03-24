@@ -1,6 +1,6 @@
 # `.\lucidrains\gateloop-transformer\gateloop_transformer\simplified_gate_loop.py`
 
-```
+```py
 # 导入所需模块
 from functools import partial
 import torch

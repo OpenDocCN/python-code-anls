@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\continuous_time_gaussian_diffusion.py`
 
-```
+```py
 import math
 import torch
 from torch import sqrt

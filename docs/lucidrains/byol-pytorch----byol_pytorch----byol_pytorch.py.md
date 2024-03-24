@@ -1,6 +1,6 @@
 # `.\lucidrains\byol-pytorch\byol_pytorch\byol_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import random

@@ -1,6 +1,6 @@
 # `.\lucidrains\linear-attention-transformer\linear_attention_transformer\images.py`
 
-```
+```py
 import torch
 from torch import nn
 

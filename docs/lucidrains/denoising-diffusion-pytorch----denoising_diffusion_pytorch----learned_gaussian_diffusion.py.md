@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\learned_gaussian_diffusion.py`
 
-```
+```py
 import torch
 from collections import namedtuple
 from math import pi, sqrt, log as ln

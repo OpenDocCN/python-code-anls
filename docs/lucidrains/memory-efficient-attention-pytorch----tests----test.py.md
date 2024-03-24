@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\tests\test.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 memory_efficient_attention_pytorch 中导入 Attention 类

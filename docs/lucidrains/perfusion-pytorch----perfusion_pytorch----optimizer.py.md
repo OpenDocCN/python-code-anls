@@ -1,6 +1,6 @@
 # `.\lucidrains\perfusion-pytorch\perfusion_pytorch\optimizer.py`
 
-```
+```py
 # 从 torch.nn 模块中导入 Module 类
 # 从 torch.optim 模块中导入 AdamW、Adam、Optimizer 类
 from torch.nn import Module

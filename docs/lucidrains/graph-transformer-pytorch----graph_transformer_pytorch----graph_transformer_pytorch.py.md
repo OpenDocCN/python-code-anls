@@ -1,6 +1,6 @@
 # `.\lucidrains\graph-transformer-pytorch\graph_transformer_pytorch\graph_transformer_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn, einsum

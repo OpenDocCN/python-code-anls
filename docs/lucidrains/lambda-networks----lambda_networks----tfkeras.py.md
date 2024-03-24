@@ -1,6 +1,6 @@
 # `.\lucidrains\lambda-networks\lambda_networks\tfkeras.py`
 
-```
+```py
 import tensorflow as tf
 from einops.layers.tensorflow import Rearrange
 from tensorflow.keras.layers import Conv2D, BatchNormalization, Conv3D, ZeroPadding3D, Softmax, Lambda, Add, Layer

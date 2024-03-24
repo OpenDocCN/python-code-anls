@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\bge.py`
 
-```
+```py
 # 导入所需的模块和函数
 from typing import List
 from beartype import beartype

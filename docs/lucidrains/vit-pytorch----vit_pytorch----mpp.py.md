@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\mpp.py`
 
-```
+```py
 # 导入数学库
 import math
 

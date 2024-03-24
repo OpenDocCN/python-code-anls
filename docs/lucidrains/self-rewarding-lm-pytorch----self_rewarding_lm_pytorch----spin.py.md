@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\spin.py`
 
-```
+```py
 from pathlib import Path
 # 导入 Path 模块，用于处理文件路径
 

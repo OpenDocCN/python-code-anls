@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\vit_with_patch_dropout.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

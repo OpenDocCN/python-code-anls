@@ -1,6 +1,6 @@
 # `.\lucidrains\product-key-memory\product_key_memory\transformer.py`
 
-```
+```py
 # 导入所需的库
 import json
 

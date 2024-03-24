@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\se3_transformer_pytorch\basis.py`
 
-```
+```py
 # 导入必要的库
 import os
 from math import pi

@@ -1,6 +1,6 @@
 # `.\lucidrains\spear-tts-pytorch\spear_tts_pytorch\attend.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

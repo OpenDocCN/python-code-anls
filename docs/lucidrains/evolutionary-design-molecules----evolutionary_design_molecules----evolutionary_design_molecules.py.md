@@ -1,6 +1,6 @@
 # `.\lucidrains\evolutionary-design-molecules\evolutionary_design_molecules\evolutionary_design_molecules.py`
 
-```
+```py
 import torch
 from torch import nn, einsum, Tensor
 from torch.nn import Module, ModuleList

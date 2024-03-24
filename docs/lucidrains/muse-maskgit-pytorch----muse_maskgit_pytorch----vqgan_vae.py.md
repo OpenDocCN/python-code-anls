@@ -1,6 +1,6 @@
 # `.\lucidrains\muse-maskgit-pytorch\muse_maskgit_pytorch\vqgan_vae.py`
 
-```
+```py
 # 导入必要的模块
 from pathlib import Path
 import copy

@@ -1,6 +1,6 @@
 # `.\lucidrains\RQ-Transformer\rq_transformer\hierarchical_causal_transformer.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 functools 库

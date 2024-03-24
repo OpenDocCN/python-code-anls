@@ -1,6 +1,6 @@
 # `.\lucidrains\ETSformer-pytorch\etsformer_pytorch\etsformer_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 pi 常数
 from math import pi
 # 从 collections 模块中导入 namedtuple 类

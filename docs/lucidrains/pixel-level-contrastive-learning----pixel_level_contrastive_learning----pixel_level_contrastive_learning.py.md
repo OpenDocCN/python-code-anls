@@ -1,6 +1,6 @@
 # `.\lucidrains\pixel-level-contrastive-learning\pixel_level_contrastive_learning\pixel_level_contrastive_learning.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入复制库

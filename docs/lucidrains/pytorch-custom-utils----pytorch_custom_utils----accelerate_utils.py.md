@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\accelerate_utils.py`
 
-```
+```py
 # 导入必要的模块
 from functools import partial, wraps
 from typing import Optional, Callable

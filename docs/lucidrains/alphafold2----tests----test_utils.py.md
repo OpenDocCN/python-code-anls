@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\tests\test_utils.py`
 
-```
+```py
 import torch
 import numpy as np
 from alphafold2_pytorch.utils import *

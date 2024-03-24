@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\se3_transformer_pytorch\se3_transformer_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 # 从 itertools 模块中导入 product 函数

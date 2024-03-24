@@ -1,6 +1,6 @@
 # `.\lucidrains\complex-valued-transformer\complex_valued_transformer\__init__.py`
 
-```
+```py
 # 从 complex_valued_transformer 模块中导入以下函数和类
 from complex_valued_transformer.complex_valued_transformer import (
     ComplexMultiheadAttention,  # 导入复数多头注意力机制类

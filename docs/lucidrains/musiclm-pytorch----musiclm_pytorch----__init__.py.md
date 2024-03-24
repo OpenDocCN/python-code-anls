@@ -1,6 +1,6 @@
 # `.\lucidrains\musiclm-pytorch\musiclm_pytorch\__init__.py`
 
-```
+```py
 # 从 musiclm_pytorch 包中导入以下模块
 from musiclm_pytorch.musiclm_pytorch import (
     MuLaN,  # 导入 MuLaN 类

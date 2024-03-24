@@ -1,6 +1,6 @@
 # `.\lucidrains\perceiver-ar-pytorch\perceiver_ar_pytorch\autoregressive_wrapper.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

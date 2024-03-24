@@ -1,6 +1,6 @@
 # `.\lucidrains\lumiere-pytorch\lumiere_pytorch\__init__.py`
 
-```
+```py
 # 从lumiere_pytorch.lumiere模块中导入ConvolutionInflationBlock、AttentionInflationBlock、TemporalDownsample、TemporalUpsample、set_time_dim_函数
 from lumiere_pytorch.lumiere import (
     ConvolutionInflationBlock,

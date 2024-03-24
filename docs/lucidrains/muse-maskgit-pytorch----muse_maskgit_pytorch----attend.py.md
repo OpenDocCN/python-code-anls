@@ -1,6 +1,6 @@
 # `.\lucidrains\muse-maskgit-pytorch\muse_maskgit_pytorch\attend.py`
 
-```
+```py
 # 导入所需的模块和函数
 from functools import wraps
 from packaging import version

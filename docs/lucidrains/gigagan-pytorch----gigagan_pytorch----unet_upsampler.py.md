@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\unet_upsampler.py`
 
-```
+```py
 # 从 math 模块中导入 log2 函数
 from math import log2
 # 从 functools 模块中导入 partial 函数

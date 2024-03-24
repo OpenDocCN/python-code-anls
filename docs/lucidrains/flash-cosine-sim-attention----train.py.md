@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\train.py`
 
-```
+```py
 # 导入所需的模块和类
 from flash_cosine_sim_attention.transformer import CosineSimCausalTransformer
 

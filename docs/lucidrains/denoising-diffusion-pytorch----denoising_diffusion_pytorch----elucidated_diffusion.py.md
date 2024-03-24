@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\elucidated_diffusion.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 # 从 random 模块中导入 random 函数

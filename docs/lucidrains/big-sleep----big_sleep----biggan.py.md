@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\big_sleep\biggan.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import torch.nn as nn

@@ -1,6 +1,6 @@
 # `.\lucidrains\parti-pytorch\parti_pytorch\vit_vqgan.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import math

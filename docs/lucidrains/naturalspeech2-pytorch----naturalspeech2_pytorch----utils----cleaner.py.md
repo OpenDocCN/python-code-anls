@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\cleaner.py`
 
-```
+```py
 import re
 from pathlib import Path
 from naturalspeech2_pytorch.utils.expand.abbreviations import AbbreviationExpander

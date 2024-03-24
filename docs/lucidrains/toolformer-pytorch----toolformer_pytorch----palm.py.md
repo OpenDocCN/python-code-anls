@@ -1,6 +1,6 @@
 # `.\lucidrains\toolformer-pytorch\toolformer_pytorch\palm.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\__init__.py`
 
-```
+```py
 # 从 x_transformers.x_transformers 模块中导入以下类
 from x_transformers.x_transformers import (
     XTransformer,  # XTransformer 类，用于定义 Transformer 模型

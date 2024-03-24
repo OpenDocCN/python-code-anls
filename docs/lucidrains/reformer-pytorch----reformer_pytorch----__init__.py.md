@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\__init__.py`
 
-```
+```py
 # 从 reformer_pytorch 模块中导入 LSHAttention, LSHSelfAttention, Reformer, ReformerLM 类
 from reformer_pytorch.reformer_pytorch import LSHAttention, LSHSelfAttention, Reformer, ReformerLM
 # 从 reformer_pytorch 模块中导入 ReformerEncDec 类

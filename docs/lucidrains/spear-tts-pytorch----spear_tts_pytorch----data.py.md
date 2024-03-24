@@ -1,6 +1,6 @@
 # `.\lucidrains\spear-tts-pytorch\spear_tts_pytorch\data.py`
 
-```
+```py
 # 导入必要的模块
 from pathlib import Path
 import torch

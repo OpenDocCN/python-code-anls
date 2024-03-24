@@ -1,6 +1,6 @@
 # `.\lucidrains\adjacent-attention-network\adjacent_attention_network\adjacent_attention_network.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

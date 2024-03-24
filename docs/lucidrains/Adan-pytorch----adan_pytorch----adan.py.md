@@ -1,6 +1,6 @@
 # `.\lucidrains\Adan-pytorch\adan_pytorch\adan.py`
 
-```
+```py
 import math
 import torch
 from torch.optim import Optimizer

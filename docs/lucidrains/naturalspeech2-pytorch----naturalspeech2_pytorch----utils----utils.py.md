@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\utils.py`
 
-```
+```py
 import torch
 from einops import repeat, rearrange
 

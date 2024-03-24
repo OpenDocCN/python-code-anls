@@ -1,6 +1,6 @@
 # `.\lucidrains\tranception-pytorch\tranception_pytorch\tranception_pytorch.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 导入 torch 模块

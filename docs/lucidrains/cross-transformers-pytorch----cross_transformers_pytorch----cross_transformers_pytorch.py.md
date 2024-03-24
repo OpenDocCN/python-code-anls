@@ -1,6 +1,6 @@
 # `.\lucidrains\cross-transformers-pytorch\cross_transformers_pytorch\cross_transformers_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

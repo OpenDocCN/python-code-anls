@@ -1,6 +1,6 @@
 # `.\lucidrains\cross-transformers-pytorch\setup.py`
 
-```
+```py
 # 导入设置工具和查找包工具
 from setuptools import setup, find_packages
 

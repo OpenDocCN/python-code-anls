@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\triton_coor_descent.py`
 
-```
+```py
 # 从 math 模块中导入 log 函数
 from math import log
 

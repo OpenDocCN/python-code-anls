@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\equiformer_pytorch\reversible.py`
 
-```
+```py
 import torch
 from torch.nn import Module
 import torch.nn as nn

@@ -1,6 +1,6 @@
 # `.\lucidrains\Mega-pytorch\train.py`
 
-```
+```py
 # 导入所需的库
 from mega_pytorch.mega_pytorch import Mega
 from mega_pytorch.autoregressive_wrapper import AutoregressiveWrapper

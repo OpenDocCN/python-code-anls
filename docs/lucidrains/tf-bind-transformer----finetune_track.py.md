@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\finetune_track.py`
 
-```
+```py
 # 导入 load_dotenv 函数，用于加载 .env 文件中的环境变量
 from dotenv import load_dotenv
 

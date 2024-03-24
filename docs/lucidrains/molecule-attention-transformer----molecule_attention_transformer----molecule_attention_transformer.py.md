@@ -1,6 +1,6 @@
 # `.\lucidrains\molecule-attention-transformer\molecule_attention_transformer\molecule_attention_transformer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-tensorflow-sonnet-training-script\train.py`
 
-```
+```py
 # 版权声明，指明代码的版权归属
 # 导入所需的库和模块
 import time

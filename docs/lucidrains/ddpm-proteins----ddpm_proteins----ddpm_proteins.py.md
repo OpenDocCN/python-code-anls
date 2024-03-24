@@ -1,6 +1,6 @@
 # `.\lucidrains\ddpm-proteins\ddpm_proteins\ddpm_proteins.py`
 
-```
+```py
 import math
 from math import log, pi
 import copy

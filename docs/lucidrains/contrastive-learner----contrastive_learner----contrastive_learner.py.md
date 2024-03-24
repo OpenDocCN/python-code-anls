@@ -1,6 +1,6 @@
 # `.\lucidrains\contrastive-learner\contrastive_learner\contrastive_learner.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import random

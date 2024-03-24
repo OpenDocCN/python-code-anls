@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\vit_3d.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 from torch import nn  # 从 PyTorch 库中导入 nn 模块
 

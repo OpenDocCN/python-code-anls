@@ -1,6 +1,6 @@
 # `.\lucidrains\performer-pytorch\performer_pytorch\performer_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 torch 库

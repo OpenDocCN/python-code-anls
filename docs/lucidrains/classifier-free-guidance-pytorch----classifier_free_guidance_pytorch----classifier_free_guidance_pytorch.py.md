@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\classifier_free_guidance_pytorch.py`
 
-```
+```py
 # 导入必要的模块
 from collections import namedtuple
 from functools import wraps, partial, cache

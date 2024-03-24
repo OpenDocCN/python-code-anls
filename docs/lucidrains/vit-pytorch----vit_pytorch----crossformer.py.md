@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\crossformer.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange

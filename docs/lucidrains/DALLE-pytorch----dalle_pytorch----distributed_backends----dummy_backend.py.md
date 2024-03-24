@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\distributed_backends\dummy_backend.py`
 
-```
+```py
 # 导入分布式后端类 DistributedBackend
 from .distributed_backend import DistributedBackend
 

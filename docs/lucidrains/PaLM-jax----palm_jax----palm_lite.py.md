@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-jax\palm_jax\palm_lite.py`
 
-```
+```py
 # 从 math 模块中导入 log2 和 floor 函数
 # 从 typing 模块中导入 List 和 Tuple 类型
 import numpy as onp

@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\examples\enwik8_deepspeed\train.py`
 
-```
+```py
 import deepspeed  # 导入deepspeed库
 
 from routing_transformer import RoutingTransformerLM  # 从routing_transformer库中导入RoutingTransformerLM类

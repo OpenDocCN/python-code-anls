@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\autopadder.py`
 
-```
+```py
 # 导入数学库和 PyTorch 库
 import math
 import torch

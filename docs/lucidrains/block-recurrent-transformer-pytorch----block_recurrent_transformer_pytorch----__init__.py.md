@@ -1,6 +1,6 @@
 # `.\lucidrains\block-recurrent-transformer-pytorch\block_recurrent_transformer_pytorch\__init__.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 packaging 库中导入 version 模块

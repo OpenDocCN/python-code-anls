@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\pretraining\self-supervised.py`
 
-```
+```py
 import re
 import torch
 import torch.nn as nn

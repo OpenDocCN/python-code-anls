@@ -1,6 +1,6 @@
 # `.\lucidrains\meshgpt-pytorch\meshgpt_pytorch\__init__.py`
 
-```
+```py
 # 从 meshgpt_pytorch 包中导入 MeshAutoencoder 和 MeshTransformer 类
 from meshgpt_pytorch.meshgpt_pytorch import (
     MeshAutoencoder,

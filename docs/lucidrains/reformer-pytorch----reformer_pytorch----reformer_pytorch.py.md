@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\reformer_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 PyTorch 库

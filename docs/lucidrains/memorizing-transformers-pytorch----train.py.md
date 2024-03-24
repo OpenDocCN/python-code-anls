@@ -1,6 +1,6 @@
 # `.\lucidrains\memorizing-transformers-pytorch\train.py`
 
-```
+```py
 # 导入所需的库
 from memorizing_transformers_pytorch import MemorizingTransformer
 

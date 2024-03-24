@@ -1,6 +1,6 @@
 # `.\lucidrains\diffusion-policy\diffusion_policy\diffusion_policy.py`
 
-```
+```py
 import math
 from pathlib import Path
 from random import random

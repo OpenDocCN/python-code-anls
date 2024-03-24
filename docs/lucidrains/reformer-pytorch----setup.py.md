@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\setup.py`
 
-```
+```py
 # 导入设置安装包和查找包的模块
 from setuptools import setup, find_packages
 

@@ -8,7 +8,7 @@ Implementation of <a href="https://arxiv.org/abs/2102.05095">TimeSformer</a>, fr
 
 ## Install
 
-``` bash
+```py bash
 $ pip install timesformer-pytorch
 ```
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-unet\x_unet\x_unet.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import math

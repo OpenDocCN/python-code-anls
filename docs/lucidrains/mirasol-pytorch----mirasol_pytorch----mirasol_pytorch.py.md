@@ -1,6 +1,6 @@
 # `.\lucidrains\mirasol-pytorch\mirasol_pytorch\mirasol_pytorch.py`
 
-```
+```py
 # 导入所需的模块和函数
 import operator
 from functools import partial

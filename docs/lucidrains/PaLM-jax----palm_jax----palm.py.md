@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-jax\palm_jax\palm.py`
 
-```
+```py
 # 导入所需的模块和库
 from typing import List, Tuple
 

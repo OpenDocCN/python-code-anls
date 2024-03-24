@@ -1,6 +1,6 @@
 # `.\lucidrains\h-transformer-1d\h_transformer_1d\autoregressive_wrapper.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

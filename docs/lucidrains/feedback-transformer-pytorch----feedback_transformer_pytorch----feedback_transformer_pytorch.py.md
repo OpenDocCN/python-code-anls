@@ -1,6 +1,6 @@
 # `.\lucidrains\feedback-transformer-pytorch\feedback_transformer_pytorch\feedback_transformer_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入命名元组

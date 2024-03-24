@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\cli.py`
 
-```
+```py
 # 导入需要的库
 import click
 import torch

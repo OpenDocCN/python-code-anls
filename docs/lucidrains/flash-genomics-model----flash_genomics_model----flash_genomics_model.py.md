@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-genomics-model\flash_genomics_model\flash_genomics_model.py`
 
-```
+```py
 # 导入 torch 库，包括神经网络模块和函数模块
 import torch
 # 导入 torch 中的函数模块

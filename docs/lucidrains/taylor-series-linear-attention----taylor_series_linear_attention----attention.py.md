@@ -1,6 +1,6 @@
 # `.\lucidrains\taylor-series-linear-attention\taylor_series_linear_attention\attention.py`
 
-```
+```py
 # 导入必要的库
 import importlib
 from functools import partial

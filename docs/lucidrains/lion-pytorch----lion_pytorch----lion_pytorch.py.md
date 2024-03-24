@@ -1,6 +1,6 @@
 # `.\lucidrains\lion-pytorch\lion_pytorch\lion_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from typing import Tuple, Optional, Callable
 import torch

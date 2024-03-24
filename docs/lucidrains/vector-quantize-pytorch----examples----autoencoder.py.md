@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\examples\autoencoder.py`
 
-```
+```py
 # 导入所需的库
 from tqdm.auto import trange
 import torch

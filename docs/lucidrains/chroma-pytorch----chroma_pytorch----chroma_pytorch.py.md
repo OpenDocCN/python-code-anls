@@ -1,6 +1,6 @@
 # `.\lucidrains\chroma-pytorch\chroma_pytorch\chroma_pytorch.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 from torch import nn, einsum  # 从 PyTorch 库中导入 nn 模块和 einsum 函数
 

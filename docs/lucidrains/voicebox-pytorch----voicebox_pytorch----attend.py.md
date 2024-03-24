@@ -1,6 +1,6 @@
 # `.\lucidrains\voicebox-pytorch\voicebox_pytorch\attend.py`
 
-```
+```py
 # 从 functools 模块导入 wraps 函数
 # 从 packaging 模块导入 version 类
 # 从 collections 模块导入 namedtuple 类

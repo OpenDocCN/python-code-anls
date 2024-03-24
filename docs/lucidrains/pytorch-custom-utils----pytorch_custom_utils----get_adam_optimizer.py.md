@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\get_adam_optimizer.py`
 
-```
+```py
 # 从 typing 模块导入 Tuple 类型
 from typing import Tuple
 # 从 torch.optim 模块导入 AdamW 和 Adam 优化器

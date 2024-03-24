@@ -1,6 +1,6 @@
 # `.\lucidrains\lightweight-gan\lightweight_gan\lightweight_gan.py`
 
-```
+```py
 # 导入必要的库
 import os
 import json

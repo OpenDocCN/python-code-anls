@@ -1,6 +1,6 @@
 # `.\lucidrains\multistream-transformers\train.py`
 
-```
+```py
 # 导入所需的库
 from multistream_transformers import MultistreamTransformer
 from multistream_transformers.autoregressive_wrapper import AutoregressiveWrapper

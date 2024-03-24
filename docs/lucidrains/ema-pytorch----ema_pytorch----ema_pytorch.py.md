@@ -1,6 +1,6 @@
 # `.\lucidrains\ema-pytorch\ema_pytorch\ema_pytorch.py`
 
-```
+```py
 # 导入深拷贝函数 deepcopy 和 partial 函数
 from copy import deepcopy
 from functools import partial

@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\big_sleep\ema.py`
 
-```
+```py
 # 导入必要的库
 from copy import deepcopy
 import torch

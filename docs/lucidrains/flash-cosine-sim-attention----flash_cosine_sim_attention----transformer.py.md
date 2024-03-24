@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\flash_cosine_sim_attention\transformer.py`
 
-```
+```py
 import torch
 from functools import partial
 from torch import nn, einsum

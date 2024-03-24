@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\distributed_utils.py`
 
-```
+```py
 """
 Utility functions for optional distributed execution.
 

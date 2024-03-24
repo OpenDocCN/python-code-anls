@@ -1,6 +1,6 @@
 # `.\lucidrains\linformer\linformer\linformer.py`
 
-```
+```py
 import math
 import torch
 from torch import nn

@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\vit_with_patch_merger.py`
 
-```
+```py
 import torch
 from torch import nn
 

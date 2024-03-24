@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\aligner.py`
 
-```
+```py
 from typing import Tuple
 import numpy as np
 

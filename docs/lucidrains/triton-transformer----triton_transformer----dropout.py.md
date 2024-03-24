@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\triton_transformer\dropout.py`
 
-```
+```py
 # 导入所需的库
 import torch
 from torch import autograd

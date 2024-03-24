@@ -1,6 +1,6 @@
 # `.\lucidrains\token-shift-gpt\token_shift_gpt\token_shift_gpt.py`
 
-```
+```py
 # 从 math 模块中导入 log2 和 ceil 函数
 # 从 torch 模块中导入 nn, einsum 和 nn.functional 模块
 from math import log2, ceil

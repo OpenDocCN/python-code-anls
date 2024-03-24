@@ -1,6 +1,6 @@
 # `.\lucidrains\deformable-attention\deformable_attention\deformable_attention_2d.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

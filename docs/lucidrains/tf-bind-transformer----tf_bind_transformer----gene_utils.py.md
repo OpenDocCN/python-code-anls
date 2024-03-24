@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\gene_utils.py`
 
-```
+```py
 # 用于获取转录因子序列的代码
 
 # 定义基因标识映射，将'RXR'映射为'RXRA'

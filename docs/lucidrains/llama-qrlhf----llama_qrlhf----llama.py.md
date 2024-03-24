@@ -1,6 +1,6 @@
 # `.\lucidrains\llama-qrlhf\llama_qrlhf\llama.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 from torch.nn import Module, ModuleList  # 导入 PyTorch 中的 Module 和 ModuleList
 from torch import nn, einsum, Tensor  # 导入 PyTorch 中的 nn、einsum 和 Tensor

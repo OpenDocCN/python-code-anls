@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-jax\palm_jax\utils.py`
 
-```
+```py
 # 导入所需的库
 from jax import random
 from jax.lax import top_k

@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\tests\test_equivariance.py`
 
-```
+```py
 # 导入 pytest 库
 import pytest
 

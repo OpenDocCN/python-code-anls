@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\mocks.py`
 
-```
+```py
 # 导入 functools 模块中的 wraps 函数
 # 导入 typing 模块中的 Type 和 Any 类型
 # 导入 torch.utils.data 模块中的 Dataset 类

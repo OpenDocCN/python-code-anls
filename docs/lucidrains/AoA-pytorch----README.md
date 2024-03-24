@@ -43,7 +43,7 @@ x = torch.randn(1, 1024, 512)
 context = torch.randn(1, 1024, 512)
 
 attn(x, context = context) + x # (1, 1024, 512)
-```
+```py
 
 ## Citations
 
@@ -56,7 +56,7 @@ attn(x, context = context) + x # (1, 1024, 512)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{huang2019attention,

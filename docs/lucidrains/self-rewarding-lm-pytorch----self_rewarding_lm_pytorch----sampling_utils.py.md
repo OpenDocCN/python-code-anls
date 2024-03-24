@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\sampling_utils.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 import torch.nn.functional as F  # 导入 PyTorch 中的函数模块
 from torch import Tensor  # 导入 PyTorch 中的张量

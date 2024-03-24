@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\utils.py`
 
-```
+```py
 # 从 torch 模块中导入 nn 模块
 
 from torch import nn

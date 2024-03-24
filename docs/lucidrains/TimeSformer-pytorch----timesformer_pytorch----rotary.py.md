@@ -1,6 +1,6 @@
 # `.\lucidrains\TimeSformer-pytorch\timesformer_pytorch\rotary.py`
 
-```
+```py
 # 从 math 模块中导入 log 和 pi 函数
 # 从 torch 模块中导入 nn, einsum 和 F
 # 从 einops 模块中导入 rearrange 和 repeat 函数

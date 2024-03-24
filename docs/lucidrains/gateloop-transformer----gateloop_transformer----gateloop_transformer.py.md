@@ -1,6 +1,6 @@
 # `.\lucidrains\gateloop-transformer\gateloop_transformer\gateloop_transformer.py`
 
-```
+```py
 from functools import partial  # 导入 functools 模块中的 partial 函数
 
 import torch  # 导入 torch 库

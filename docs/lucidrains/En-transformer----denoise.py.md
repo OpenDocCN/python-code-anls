@@ -1,6 +1,6 @@
 # `.\lucidrains\En-transformer\denoise.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 导入 PyTorch 中的函数库

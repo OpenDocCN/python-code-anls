@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\random_projection_quantizer.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

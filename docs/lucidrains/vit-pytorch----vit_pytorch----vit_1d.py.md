@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\vit_1d.py`
 
-```
+```py
 import torch
 from torch import nn
 

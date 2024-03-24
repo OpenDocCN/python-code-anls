@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\optimizer.py`
 
-```
+```py
 # 从 torch.optim 模块中导入 AdamW 优化器
 from torch.optim import AdamW
 

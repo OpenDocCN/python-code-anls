@@ -1,6 +1,6 @@
 # `.\lucidrains\marge-pytorch\marge_pytorch\autoregressive_wrapper.py`
 
-```
+```py
 from functools import partial
 import torch
 import random

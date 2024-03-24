@@ -1,6 +1,6 @@
 # `.\lucidrains\iTransformer\iTransformer\iTransformerFFT.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.fft 模块中导入 fft 函数

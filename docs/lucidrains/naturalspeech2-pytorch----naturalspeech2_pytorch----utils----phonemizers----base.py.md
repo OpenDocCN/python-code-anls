@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\phonemizers\base.py`
 
-```
+```py
 """ from https://github.com/coqui-ai/TTS/"""
 # 导入必要的模块
 import abc

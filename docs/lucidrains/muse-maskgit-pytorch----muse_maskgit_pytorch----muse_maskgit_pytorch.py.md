@@ -1,6 +1,6 @@
 # `.\lucidrains\muse-maskgit-pytorch\muse_maskgit_pytorch\muse_maskgit_pytorch.py`
 
-```
+```py
         # 定义一个注意力机制模块
 class Attention(nn.Module):
     def __init__(

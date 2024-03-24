@@ -1,6 +1,6 @@
 # `.\lucidrains\bottleneck-transformer-pytorch\bottleneck_transformer_pytorch\bottleneck_transformer_pytorch.py`
 
-```
+```py
 # 导入 math 和 torch 模块
 import math
 import torch

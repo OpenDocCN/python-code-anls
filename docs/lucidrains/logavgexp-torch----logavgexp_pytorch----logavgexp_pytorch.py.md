@@ -1,6 +1,6 @@
 # `.\lucidrains\logavgexp-torch\logavgexp_pytorch\logavgexp_pytorch.py`
 
-```
+```py
 import math
 from functools import partial
 

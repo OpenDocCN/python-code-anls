@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-pytorch\palm_pytorch\palm_lite.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn.functional 模块

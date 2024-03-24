@@ -1,6 +1,6 @@
 # `.\lucidrains\mlp-gpt-jax\train.py`
 
-```
+```py
 # 从 random 模块中导入 randrange 函数
 # 从 tqdm 模块中导入 tqdm 函数
 # 从 gzip 模块中导入 gzip 模块

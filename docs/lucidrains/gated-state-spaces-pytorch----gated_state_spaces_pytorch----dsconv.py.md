@@ -1,6 +1,6 @@
 # `.\lucidrains\gated-state-spaces-pytorch\gated_state_spaces_pytorch\dsconv.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

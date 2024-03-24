@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\expand\number_norm.py`
 
-```
+```py
 import re
 import inflect
 from num2words import num2words

@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\triton_transformer\transformer.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import torch

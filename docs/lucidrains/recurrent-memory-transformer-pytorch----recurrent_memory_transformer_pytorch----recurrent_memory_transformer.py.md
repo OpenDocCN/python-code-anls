@@ -1,6 +1,6 @@
 # `.\lucidrains\recurrent-memory-transformer-pytorch\recurrent_memory_transformer_pytorch\recurrent_memory_transformer.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入partial函数

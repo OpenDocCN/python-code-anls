@@ -1,6 +1,6 @@
 # `.\lucidrains\genetic-algorithm-pytorch\inbreed.py`
 
-```
+```py
 """
 Genetic Algorithm
 

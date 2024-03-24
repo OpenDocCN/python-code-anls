@@ -1,6 +1,6 @@
 # `.\lucidrains\voicebox-pytorch\voicebox_pytorch\__init__.py`
 
-```
+```py
 # 从 voicebox_pytorch.voicebox_pytorch 模块中导入 Transformer, EncodecVoco, VoiceBox, DurationPredictor, ConditionalFlowMatcherWrapper 类
 from voicebox_pytorch.voicebox_pytorch import (
     Transformer,

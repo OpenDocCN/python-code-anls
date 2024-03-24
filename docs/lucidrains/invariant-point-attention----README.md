@@ -130,7 +130,7 @@ $ pip install sidechainnet
 
 Finally
 
-```
+```py
 $ python denoise.py
 ```
 

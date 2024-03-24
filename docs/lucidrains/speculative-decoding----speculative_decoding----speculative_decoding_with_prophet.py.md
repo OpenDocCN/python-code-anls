@@ -1,6 +1,6 @@
 # `.\lucidrains\speculative-decoding\speculative_decoding\speculative_decoding_with_prophet.py`
 
-```
+```py
 import math
 import torch
 from torch.nn import Module, ModuleList

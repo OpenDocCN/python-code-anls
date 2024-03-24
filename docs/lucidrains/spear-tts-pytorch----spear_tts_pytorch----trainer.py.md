@@ -1,6 +1,6 @@
 # `.\lucidrains\spear-tts-pytorch\spear_tts_pytorch\trainer.py`
 
-```
+```py
 # 导入必要的库
 import re
 from pathlib import Path

@@ -1,6 +1,6 @@
 # `.\lucidrains\unet-stylegan2\unet_stylegan2\diff_augment.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn.functional 模块

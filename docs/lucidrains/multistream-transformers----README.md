@@ -8,7 +8,7 @@ This repository deviates slightly from the paper, where instead of using the ski
 
 ## Install
 
-```
+```py
 $ pip install multistream-transformers
 ```
 

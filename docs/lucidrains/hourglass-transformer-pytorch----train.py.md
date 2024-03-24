@@ -1,6 +1,6 @@
 # `.\lucidrains\hourglass-transformer-pytorch\train.py`
 
-```
+```py
 # 导入所需的模块和类
 from hourglass_transformer_pytorch import HourglassTransformerLM
 from hourglass_transformer_pytorch.autoregressive_wrapper import AutoregressiveWrapper

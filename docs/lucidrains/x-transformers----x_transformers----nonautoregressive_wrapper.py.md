@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\nonautoregressive_wrapper.py`
 
-```
+```py
 import math
 from random import random
 from contextlib import nullcontext

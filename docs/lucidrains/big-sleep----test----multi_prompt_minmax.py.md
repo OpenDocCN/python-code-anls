@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\test\multi_prompt_minmax.py`
 
-```
+```py
 # 导入所需的库
 import time
 import shutil

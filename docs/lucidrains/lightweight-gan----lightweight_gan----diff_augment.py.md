@@ -1,6 +1,6 @@
 # `.\lucidrains\lightweight-gan\lightweight_gan\diff_augment.py`
 
-```
+```py
 # 导入random模块
 import random
 

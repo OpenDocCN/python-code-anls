@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\autoregressive_wrapper.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 和 log 函数
 # 从 typing 模块中导入 Optional, Union, Tuple, Callable 类型
 # 导入 torch 模块及其子模块

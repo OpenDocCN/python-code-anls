@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\pit.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 

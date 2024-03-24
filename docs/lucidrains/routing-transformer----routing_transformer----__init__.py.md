@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\routing_transformer\__init__.py`
 
-```
+```py
 # 从 routing_transformer 包中导入 RoutingTransformer、RoutingTransformerLM、KmeansAttention、update_kmeans_on_backwards 类
 from routing_transformer.routing_transformer import RoutingTransformer, RoutingTransformerLM, KmeansAttention, update_kmeans_on_backwards
 # 从 routing_transformer 包中导入 RoutingTransformerEncDec 类

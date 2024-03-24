@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\routing_transformer\reversible.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 from operator import itemgetter

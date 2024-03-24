@@ -1,6 +1,6 @@
 # `.\lucidrains\magvit2-pytorch\magvit2_pytorch\__init__.py`
 
-```
+```py
 # 从 magvit2_pytorch 包中导入 MagViT2 和 VideoTokenizer 类
 from magvit2_pytorch.magvit2_pytorch import (
     MagViT2,

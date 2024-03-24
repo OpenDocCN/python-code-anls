@@ -1,6 +1,6 @@
 # `.\lucidrains\sinkhorn-transformer\sinkhorn_transformer\autopadder.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 PyTorch 库

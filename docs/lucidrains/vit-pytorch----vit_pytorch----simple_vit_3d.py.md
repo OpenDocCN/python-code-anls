@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\simple_vit_3d.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn

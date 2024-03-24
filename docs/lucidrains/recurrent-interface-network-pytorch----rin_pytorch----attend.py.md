@@ -1,6 +1,6 @@
 # `.\lucidrains\recurrent-interface-network-pytorch\rin_pytorch\attend.py`
 
-```
+```py
 # 导入所需的模块和类
 from functools import wraps
 from packaging import version

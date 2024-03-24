@@ -1,6 +1,6 @@
 # `.\lucidrains\perfusion-pytorch\perfusion_pytorch\save_load.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 import torch

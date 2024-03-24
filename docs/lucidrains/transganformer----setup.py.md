@@ -1,6 +1,6 @@
 # `.\lucidrains\transganformer\setup.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 从 setuptools 模块中导入 setup 和 find_packages 函数

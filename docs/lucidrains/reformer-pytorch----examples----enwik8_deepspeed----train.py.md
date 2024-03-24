@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\examples\enwik8_deepspeed\train.py`
 
-```
+```py
 # 导入 deepspeed 库
 import deepspeed
 

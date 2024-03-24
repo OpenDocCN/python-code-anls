@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\recorder.py`
 
-```
+```py
 # 从 functools 模块导入 wraps 装饰器
 from functools import wraps
 # 导入 torch 模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\dataloaders\simple_image_only_dataloader.py`
 
-```
+```py
 # 导入所需的库
 from pathlib import Path
 import torch

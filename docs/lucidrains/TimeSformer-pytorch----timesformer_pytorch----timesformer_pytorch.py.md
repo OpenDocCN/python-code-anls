@@ -1,6 +1,6 @@
 # `.\lucidrains\TimeSformer-pytorch\timesformer_pytorch\timesformer_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

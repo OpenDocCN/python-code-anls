@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\save_load.py`
 
-```
+```py
 # 导入所需的模块
 import pickle
 from functools import wraps

@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\recorder.py`
 
-```
+```py
 # 导入需要的模块
 from torch import nn
 from reformer_pytorch.reformer_pytorch import LSHAttention, LSHSelfAttention

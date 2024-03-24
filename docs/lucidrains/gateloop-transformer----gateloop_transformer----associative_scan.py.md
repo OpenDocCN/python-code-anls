@@ -1,6 +1,6 @@
 # `.\lucidrains\gateloop-transformer\gateloop_transformer\associative_scan.py`
 
-```
+```py
 # 从 S5-pytorch 代码库中获取的代码段
 # https://github.com/i404788/s5-pytorch/blob/74e2fdae00b915a62c914bf3615c0b8a4279eb84/s5/jax_compat.py#L51-L134
 

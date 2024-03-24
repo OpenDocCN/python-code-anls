@@ -1,6 +1,6 @@
 # `.\lucidrains\progen\progen_transformer\data.py`
 
-```
+```py
 # 导入所需的库
 import tensorflow as tf
 import numpy as np

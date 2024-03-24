@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\routing_transformer\encoder_decoder.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 # 导入 isfunction 函数，用于检查对象是否为函数
 # 导入 torch 模块

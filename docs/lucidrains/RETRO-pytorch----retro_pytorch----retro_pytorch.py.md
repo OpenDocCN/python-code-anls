@@ -1,6 +1,6 @@
 # `.\lucidrains\RETRO-pytorch\retro_pytorch\retro_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 

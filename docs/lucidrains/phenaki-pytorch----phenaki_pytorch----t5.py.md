@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\t5.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 transformers 库

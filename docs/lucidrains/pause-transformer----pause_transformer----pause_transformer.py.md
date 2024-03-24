@@ -1,6 +1,6 @@
 # `.\lucidrains\pause-transformer\pause_transformer\pause_transformer.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor, einsum

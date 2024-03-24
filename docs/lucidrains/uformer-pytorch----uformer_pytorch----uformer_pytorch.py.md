@@ -1,6 +1,6 @@
 # `.\lucidrains\uformer-pytorch\uformer_pytorch\uformer_pytorch.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 从 math 模块导入 log, pi, sqrt 函数

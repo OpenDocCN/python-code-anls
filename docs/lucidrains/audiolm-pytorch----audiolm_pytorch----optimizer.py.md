@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\optimizer.py`
 
-```
+```py
 # 从 torch.optim 模块中导入 AdamW 和 Adam 优化器
 from torch.optim import AdamW, Adam
 

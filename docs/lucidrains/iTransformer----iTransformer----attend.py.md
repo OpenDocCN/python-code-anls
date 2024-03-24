@@ -1,6 +1,6 @@
 # `.\lucidrains\iTransformer\iTransformer\attend.py`
 
-```
+```py
 # 导入所需的库
 from functools import partial
 

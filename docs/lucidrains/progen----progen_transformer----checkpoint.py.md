@@ -1,6 +1,6 @@
 # `.\lucidrains\progen\progen_transformer\checkpoint.py`
 
-```
+```py
 # 导入所需的模块
 import time
 import os, errno

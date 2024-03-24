@@ -1,6 +1,6 @@
 # `.\lucidrains\ddpm-ipa-protein-generation\ddpm_ipa_protein_generation\ddpm_ipa_protein_generation.py`
 
-```
+```py
 import torch
 from torch import nn
 

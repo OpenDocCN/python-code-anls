@@ -1,6 +1,6 @@
 # `.\lucidrains\point-transformer-pytorch\point_transformer_pytorch\multihead_point_transformer_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn, einsum 模块

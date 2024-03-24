@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\simple_diffusion.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 functools 模块中的 partial 和 wraps 函数

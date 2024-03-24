@@ -1,6 +1,6 @@
 # `.\lucidrains\sinkhorn-transformer\examples\increment_by_one\train.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 sinkhorn_transformer 库中导入 SinkhornTransformerLM 类

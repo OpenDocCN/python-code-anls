@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\optimizer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.optim 中导入 AdamW 和 Adam 优化器

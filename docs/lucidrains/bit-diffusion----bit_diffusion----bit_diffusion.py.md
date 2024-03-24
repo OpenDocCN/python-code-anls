@@ -1,6 +1,6 @@
 # `.\lucidrains\bit-diffusion\bit_diffusion\bit_diffusion.py`
 
-```
+```py
     # 导入所需的库
     import math
     from pathlib import Path

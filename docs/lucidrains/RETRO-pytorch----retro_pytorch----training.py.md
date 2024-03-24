@@ -1,6 +1,6 @@
 # `.\lucidrains\RETRO-pytorch\retro_pytorch\training.py`
 
-```
+```py
 import numpy as np
 from functools import partial
 import json

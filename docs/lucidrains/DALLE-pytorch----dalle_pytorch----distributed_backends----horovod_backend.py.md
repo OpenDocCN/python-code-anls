@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\distributed_backends\horovod_backend.py`
 
-```
+```py
 import torch
 # 导入 torch 库
 

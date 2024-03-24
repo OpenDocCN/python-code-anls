@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\__init__.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入版本比较模块 version

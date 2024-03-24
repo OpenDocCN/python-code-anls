@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\triton_transformer\cross_entropy.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

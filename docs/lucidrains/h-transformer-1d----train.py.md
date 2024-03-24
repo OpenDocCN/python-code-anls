@@ -1,6 +1,6 @@
 # `.\lucidrains\h-transformer-1d\train.py`
 
-```
+```py
 # 导入所需的模块和类
 from h_transformer_1d import HTransformer1D
 from h_transformer_1d.autoregressive_wrapper import AutoregressiveWrapper

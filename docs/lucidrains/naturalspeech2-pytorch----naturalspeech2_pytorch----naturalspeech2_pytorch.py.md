@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\naturalspeech2_pytorch.py`
 
-```
+```py
 # 导入所需的库
 import math
 import copy

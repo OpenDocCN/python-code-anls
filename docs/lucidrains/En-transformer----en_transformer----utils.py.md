@@ -1,6 +1,6 @@
 # `.\lucidrains\En-transformer\en_transformer\utils.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 sin, cos, atan2, acos 函数

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\examples\toy_tasks\enc_dec_copy.py`
 
-```
+```py
 # 导入必要的库
 import tqdm
 import torch

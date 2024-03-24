@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\phonemizers\espeak_wrapper.py`
 
-```
+```py
 """ from https://github.com/coqui-ai/TTS/"""
 # 导入所需的模块
 import logging

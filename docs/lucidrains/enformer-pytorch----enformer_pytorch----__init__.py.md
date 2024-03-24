@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\enformer_pytorch\__init__.py`
 
-```
+```py
 # 从enformer_pytorch包中导入EnformerConfig类
 from enformer_pytorch.config_enformer import EnformerConfig
 # 从enformer_pytorch包中导入Enformer、from_pretrained、SEQUENCE_LENGTH、AttentionPool类

@@ -1,6 +1,6 @@
 # `.\lucidrains\glom-pytorch\glom_pytorch\glom_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 函数
 from math import sqrt
 # 导入 torch 模块

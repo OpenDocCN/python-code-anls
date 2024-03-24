@@ -1,6 +1,6 @@
 # `.\lucidrains\g-mlp-pytorch\train.py`
 
-```
+```py
 # 导入所需的库
 from g_mlp_pytorch import gMLP
 from g_mlp_pytorch.autoregressive_wrapper import AutoregressiveWrapper

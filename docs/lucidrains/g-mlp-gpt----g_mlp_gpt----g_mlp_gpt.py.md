@@ -1,6 +1,6 @@
 # `.\lucidrains\g-mlp-gpt\g_mlp_gpt\g_mlp_gpt.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数，用于向上取整
 # 从 functools 模块中导入 partial 函数，用于创建偏函数
 # 从 random 模块中导入 randrange 函数，用于生成指定范围内的随机整数

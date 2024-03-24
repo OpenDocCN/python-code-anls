@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\t5.py`
 
-```
+```py
 # 导入所需的模块
 from typing import List
 from beartype import beartype

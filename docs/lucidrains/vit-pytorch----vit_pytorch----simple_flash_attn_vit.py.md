@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\simple_flash_attn_vit.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 from packaging import version

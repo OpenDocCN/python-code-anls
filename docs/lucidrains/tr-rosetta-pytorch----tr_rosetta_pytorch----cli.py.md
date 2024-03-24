@@ -1,6 +1,6 @@
 # `.\lucidrains\tr-rosetta-pytorch\tr_rosetta_pytorch\cli.py`
 
-```
+```py
 # 导入必要的库
 import fire
 import torch

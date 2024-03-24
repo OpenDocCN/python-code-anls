@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\attend.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 from functools import wraps

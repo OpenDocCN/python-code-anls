@@ -1,6 +1,6 @@
 # `.\lucidrains\reformer-pytorch\reformer_pytorch\generative_tools.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 import torch

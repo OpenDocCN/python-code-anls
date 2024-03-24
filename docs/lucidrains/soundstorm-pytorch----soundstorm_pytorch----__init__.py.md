@@ -1,6 +1,6 @@
 # `.\lucidrains\soundstorm-pytorch\soundstorm_pytorch\__init__.py`
 
-```
+```py
 # 从soundstorm_pytorch包中导入SoundStorm、SoundStream、ConformerWrapper和Conformer类
 from soundstorm_pytorch.soundstorm import (
     SoundStorm,

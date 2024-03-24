@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\distributed_backends\distributed_backend.py`
 
-```
+```py
 """
 An abstract backend for distributed deep learning.
 

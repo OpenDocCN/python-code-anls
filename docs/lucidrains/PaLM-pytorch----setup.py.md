@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-pytorch\setup.py`
 
-```
+```py
 # 导入必要的模块
 from setuptools import find_packages, setup
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\test_pretrained.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 enformer_pytorch 库中导入 from_pretrained 函数

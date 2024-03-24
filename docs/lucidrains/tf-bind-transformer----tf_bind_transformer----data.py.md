@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\data.py`
 
-```
+```py
 # 导入所需的模块
 from Bio import SeqIO
 from random import choice, randrange

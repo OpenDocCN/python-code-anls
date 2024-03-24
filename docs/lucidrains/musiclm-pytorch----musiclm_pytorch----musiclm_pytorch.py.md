@@ -1,6 +1,6 @@
 # `.\lucidrains\musiclm-pytorch\musiclm_pytorch\musiclm_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 functools 库中导入 wraps 和 partial 函数

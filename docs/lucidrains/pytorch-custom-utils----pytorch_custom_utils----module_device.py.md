@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\module_device.py`
 
-```
+```py
 # 导入必要的模块
 from functools import wraps
 from typing import List

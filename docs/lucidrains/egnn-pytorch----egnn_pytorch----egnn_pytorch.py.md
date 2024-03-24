@@ -1,6 +1,6 @@
 # `.\lucidrains\egnn-pytorch\egnn_pytorch\egnn_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum, broadcast_tensors
 import torch.nn.functional as F

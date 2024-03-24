@@ -1,6 +1,6 @@
 # `.\lucidrains\compressive-transformer-pytorch\compressive_transformer_pytorch\autoregressive_wrapper.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入partial函数

@@ -1,6 +1,6 @@
 # `.\lucidrains\compositional-attention-pytorch\compositional_attention_pytorch\compositional_attention_pytorch.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

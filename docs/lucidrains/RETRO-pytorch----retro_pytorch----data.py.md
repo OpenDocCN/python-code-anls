@@ -1,6 +1,6 @@
 # `.\lucidrains\RETRO-pytorch\retro_pytorch\data.py`
 
-```
+```py
 # 导入所需的库
 from functools import partial
 import numpy as np

@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\data.py`
 
-```
+```py
 # 导入必要的模块
 from pathlib import Path
 from functools import partial, wraps

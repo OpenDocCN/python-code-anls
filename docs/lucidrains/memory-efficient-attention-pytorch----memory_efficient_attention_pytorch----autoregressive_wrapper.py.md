@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\autoregressive_wrapper.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

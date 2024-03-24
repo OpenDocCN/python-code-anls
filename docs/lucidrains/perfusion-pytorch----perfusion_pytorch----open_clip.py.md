@@ -1,6 +1,6 @@
 # `.\lucidrains\perfusion-pytorch\perfusion_pytorch\open_clip.py`
 
-```
+```py
 # 导入必要的库
 from beartype import beartype
 from beartype.typing import List, Optional

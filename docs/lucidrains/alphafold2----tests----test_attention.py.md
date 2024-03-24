@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\tests\test_attention.py`
 
-```
+```py
 import torch
 from torch import nn
 from einops import repeat

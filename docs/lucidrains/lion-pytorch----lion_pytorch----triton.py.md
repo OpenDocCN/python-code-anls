@@ -1,6 +1,6 @@
 # `.\lucidrains\lion-pytorch\lion_pytorch\triton.py`
 
-```
+```py
 import torch
 # 导入 torch 库
 

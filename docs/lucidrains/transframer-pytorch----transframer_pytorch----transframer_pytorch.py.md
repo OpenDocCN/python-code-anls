@@ -1,6 +1,6 @@
 # `.\lucidrains\transframer-pytorch\transframer_pytorch\transframer_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt 和 pi 函数
 # 从 functools 模块中导入 partial 函数
 import torch

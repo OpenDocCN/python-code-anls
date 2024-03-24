@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\cait.py`
 
-```
+```py
 from random import randrange
 import torch
 from torch import nn, einsum

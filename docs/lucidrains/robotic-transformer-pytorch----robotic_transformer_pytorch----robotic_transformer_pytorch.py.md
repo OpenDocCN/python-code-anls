@@ -1,6 +1,6 @@
 # `.\lucidrains\robotic-transformer-pytorch\robotic_transformer_pytorch\robotic_transformer_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

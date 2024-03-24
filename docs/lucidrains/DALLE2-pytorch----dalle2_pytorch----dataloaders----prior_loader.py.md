@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\dataloaders\prior_loader.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 # 从 clip 模块中导入 tokenize 函数

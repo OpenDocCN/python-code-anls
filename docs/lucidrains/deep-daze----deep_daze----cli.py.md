@@ -1,6 +1,6 @@
 # `.\lucidrains\deep-daze\deep_daze\cli.py`
 
-```
+```py
 import sys
 # 导入系统模块
 

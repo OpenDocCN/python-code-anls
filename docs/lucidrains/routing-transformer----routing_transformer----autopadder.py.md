@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\routing_transformer\autopadder.py`
 
-```
+```py
 # 导入数学库和 PyTorch 库
 import math
 import torch

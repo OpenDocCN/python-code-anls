@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-rlhf-pytorch\palm_rlhf_pytorch\optimizer.py`
 
-```
+```py
 # 从 torch.optim 模块中导入 AdamW 和 Adam 优化器
 from torch.optim import AdamW, Adam
 # 从 lion_pytorch 模块中导入 Lion 类

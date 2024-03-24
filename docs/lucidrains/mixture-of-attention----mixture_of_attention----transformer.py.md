@@ -1,6 +1,6 @@
 # `.\lucidrains\mixture-of-attention\mixture_of_attention\transformer.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import torch.nn.functional as F

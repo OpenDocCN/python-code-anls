@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\enformer_pytorch\config_enformer.py`
 
-```
+```py
 # 导入预训练配置类 PretrainedConfig 从 transformers 模块
 from transformers import PretrainedConfig
 

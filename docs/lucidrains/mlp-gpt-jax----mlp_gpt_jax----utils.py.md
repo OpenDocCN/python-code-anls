@@ -1,6 +1,6 @@
 # `.\lucidrains\mlp-gpt-jax\mlp_gpt_jax\utils.py`
 
-```
+```py
 # 导入所需的库
 from jax import random, nn, value_and_grad, vmap, jit
 from jax.lax import top_k

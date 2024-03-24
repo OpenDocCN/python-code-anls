@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\alphafold2.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from torch.utils.checkpoint import checkpoint, checkpoint_sequential

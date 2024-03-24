@@ -1,6 +1,6 @@
 # `.\lucidrains\x-clip\x_clip\mlm.py`
 
-```
+```py
 import math
 from functools import reduce
 

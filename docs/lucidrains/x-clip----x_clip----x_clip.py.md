@@ -1,6 +1,6 @@
 # `.\lucidrains\x-clip\x_clip\x_clip.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入复制库

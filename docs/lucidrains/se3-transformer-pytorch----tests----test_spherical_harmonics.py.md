@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\tests\test_spherical_harmonics.py`
 
-```
+```py
 # 导入必要的库
 import time
 import torch

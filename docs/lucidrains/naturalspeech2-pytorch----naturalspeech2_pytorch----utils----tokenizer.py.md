@@ -1,6 +1,6 @@
 # `.\lucidrains\naturalspeech2-pytorch\naturalspeech2_pytorch\utils\tokenizer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 Tensor 类型
@@ -169,7 +169,7 @@ class Tokenizer:
     def intersperse_blank_char(self, char_sequence: List[str], use_blank_char: bool = False):
         """Intersperses the blank character between characters in a sequence.
 
-        Use the ```py``` character if defined else use the ```pad``` character.
+        Use the ```py```py character if defined else use the ```pad```py character.
         """
         # 根据 use_blank_char 决定使用 blank 或 pad 字符
         char_to_use = self.characters.blank if use_blank_char else self.characters.pad

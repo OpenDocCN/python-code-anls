@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\examples\glue\utils.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，包括作者和团队信息
 # 版权声明，版权所有，保留所有权利

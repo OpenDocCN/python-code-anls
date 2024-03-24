@@ -1,6 +1,6 @@
 # `.\lucidrains\perceiver-pytorch\perceiver_pytorch\mixed_latents.py`
 
-```
+```py
 # 导入所需的库
 import torch
 from torch import nn, einsum

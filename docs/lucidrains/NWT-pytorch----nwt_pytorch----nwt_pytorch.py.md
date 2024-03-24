@@ -1,6 +1,6 @@
 # `.\lucidrains\NWT-pytorch\nwt_pytorch\nwt_pytorch.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

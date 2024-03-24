@@ -1,6 +1,6 @@
 # `.\lucidrains\byol-pytorch\byol_pytorch\trainer.py`
 
-```
+```py
 # 导入必要的库
 from pathlib import Path
 import torch

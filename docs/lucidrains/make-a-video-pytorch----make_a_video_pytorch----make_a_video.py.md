@@ -1,6 +1,6 @@
 # `.\lucidrains\make-a-video-pytorch\make_a_video_pytorch\make_a_video.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 functools 库

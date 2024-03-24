@@ -1,6 +1,6 @@
 # `.\lucidrains\token-shift-gpt\train.py`
 
-```
+```py
 # 导入所需的模块
 from token_shift_gpt import TokenShiftGPT
 from token_shift_gpt.autoregressive_wrapper import AutoregressiveWrapper

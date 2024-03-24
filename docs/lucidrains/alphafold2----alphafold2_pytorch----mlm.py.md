@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\mlm.py`
 
-```
+```py
 import math
 import torch
 import torch.nn.functional as F

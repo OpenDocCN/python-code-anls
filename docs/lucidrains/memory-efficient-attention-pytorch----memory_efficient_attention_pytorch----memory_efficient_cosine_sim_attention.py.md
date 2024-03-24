@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\memory_efficient_cosine_sim_attention.py`
 
-```
+```py
 import math
 import torch
 import torch.nn.functional as F

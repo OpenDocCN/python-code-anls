@@ -1,6 +1,6 @@
 # `.\lucidrains\q-transformer\q_transformer\__init__.py`
 
-```
+```py
 # 从 q_transformer.q_robotic_transformer 模块中导入 QRoboticTransformer 和 MaxViT 类
 from q_transformer.q_robotic_transformer import (
     QRoboticTransformer,

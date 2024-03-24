@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\equiformer_pytorch\equiformer_pytorch.py`
 
-```
+```py
 from math import sqrt
 from functools import partial
 from itertools import product

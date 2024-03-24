@@ -1,6 +1,6 @@
 # `.\lucidrains\make-a-video-pytorch\make_a_video_pytorch\attend.py`
 
-```
+```py
 # 导入必要的库
 from functools import wraps
 from packaging import version

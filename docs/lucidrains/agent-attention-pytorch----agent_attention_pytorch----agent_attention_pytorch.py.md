@@ -1,6 +1,6 @@
 # `.\lucidrains\agent-attention-pytorch\agent_attention_pytorch\agent_attention_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.nn 模块中导入 Module 类

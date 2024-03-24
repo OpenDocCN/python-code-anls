@@ -1,6 +1,6 @@
 # `.\lucidrains\se3-transformer-pytorch\se3_transformer_pytorch\spherical_harmonics.py`
 
-```
+```py
 # 从 math 模块中导入 pi 和 sqrt 函数
 # 从 functools 模块中导入 reduce 函数
 # 从 operator 模块中导入 mul 函数

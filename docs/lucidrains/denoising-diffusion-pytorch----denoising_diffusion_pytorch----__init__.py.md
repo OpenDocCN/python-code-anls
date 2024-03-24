@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\__init__.py`
 
-```
+```py
 # 导入 denoising_diffusion_pytorch 库中的 GaussianDiffusion、Unet、Trainer 类
 from denoising_diffusion_pytorch.denoising_diffusion_pytorch import GaussianDiffusion, Unet, Trainer
 

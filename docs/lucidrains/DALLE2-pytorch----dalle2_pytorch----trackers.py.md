@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\trackers.py`
 
-```
+```py
 # 导入所需的库
 import urllib.request
 import os

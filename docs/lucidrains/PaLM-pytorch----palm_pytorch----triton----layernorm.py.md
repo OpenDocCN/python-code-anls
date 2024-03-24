@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-pytorch\palm_pytorch\triton\layernorm.py`
 
-```
+```py
 # 从 Phil Tillet 的 Triton 的 layernorm 教程中获取的代码
 
 # Triton - https://triton-lang.org

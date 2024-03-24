@@ -1,6 +1,6 @@
 # `.\lucidrains\soundstorm-pytorch\soundstorm_pytorch\soundstorm.py`
 
-```
+```py
 import math
 from random import random, randrange  # 导入随机数生成相关函数
 from functools import wraps  # 导入wraps装饰器

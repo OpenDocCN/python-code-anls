@@ -1,6 +1,6 @@
 # `.\lucidrains\rotary-embedding-torch\rotary_embedding_torch\rotary_embedding_torch.py`
 
-```
+```py
 # 从 math 模块中导入 pi 和 log 函数
 from math import pi, log
 

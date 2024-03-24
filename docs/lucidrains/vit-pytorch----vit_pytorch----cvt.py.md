@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\cvt.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 import torch.nn.functional as F

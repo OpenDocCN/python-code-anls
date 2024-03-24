@@ -1,6 +1,6 @@
 # `.\lucidrains\discrete-key-value-bottleneck-pytorch\discrete_key_value_bottleneck_pytorch\discrete_key_value_bottleneck.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn, einsum 模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\RETRO-pytorch\retro_pytorch\retrieval.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 from math import ceil

@@ -1,6 +1,6 @@
 # `.\lucidrains\video-diffusion-pytorch\video_diffusion_pytorch\video_diffusion_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入拷贝库

@@ -1,6 +1,6 @@
 # `.\lucidrains\point-transformer-pytorch\point_transformer_pytorch\point_transformer_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import repeat

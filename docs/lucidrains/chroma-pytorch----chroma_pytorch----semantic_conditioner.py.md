@@ -1,6 +1,6 @@
 # `.\lucidrains\chroma-pytorch\chroma_pytorch\semantic_conditioner.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import os

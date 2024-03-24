@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库
 from x_transformers import TransformerWrapper, Decoder
 from x_transformers.autoregressive_wrapper import AutoregressiveWrapper

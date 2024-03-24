@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\distributed_backends\deepspeed_backend.py`
 
-```
+```py
 import json
 import os
 

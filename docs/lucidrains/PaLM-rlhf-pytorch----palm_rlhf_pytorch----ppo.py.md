@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-rlhf-pytorch\palm_rlhf_pytorch\ppo.py`
 
-```
+```py
 import math
 from pathlib import Path
 import copy

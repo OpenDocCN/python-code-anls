@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\transformer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块和 einsum 函数

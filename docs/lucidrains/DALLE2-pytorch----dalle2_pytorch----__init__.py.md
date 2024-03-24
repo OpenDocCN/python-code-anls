@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\__init__.py`
 
-```
+```py
 # 从dalle2_pytorch版本模块中导入版本号
 from dalle2_pytorch.version import __version__
 # 从dalle2_pytorch模块中导入DALLE2类、DiffusionPriorNetwork类、DiffusionPrior类、Unet类和Decoder类

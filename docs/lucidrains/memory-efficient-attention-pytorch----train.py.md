@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\train.py`
 
-```
+```py
 # 从 memory_efficient_attention_pytorch 库中导入 Transformer 类
 # 从 memory_efficient_attention_pytorch 库中导入 AutoregressiveWrapper 类
 from memory_efficient_attention_pytorch.transformer import Transformer

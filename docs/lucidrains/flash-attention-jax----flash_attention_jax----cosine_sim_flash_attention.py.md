@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-attention-jax\flash_attention_jax\cosine_sim_flash_attention.py`
 
-```
+```py
 # 导入数学库和 JAX 库，以及部分函数
 import math
 import jax

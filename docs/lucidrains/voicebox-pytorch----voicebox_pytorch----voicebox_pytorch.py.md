@@ -1,6 +1,6 @@
 # `.\lucidrains\voicebox-pytorch\voicebox_pytorch\voicebox_pytorch.py`
 
-```
+```py
 import math
 import logging
 from random import random

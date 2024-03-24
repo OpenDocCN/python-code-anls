@@ -1,6 +1,6 @@
 # `.\lucidrains\mirasol-pytorch\mirasol_pytorch\distributed.py`
 
-```
+```py
 # 导入必要的库
 from functools import cache
 

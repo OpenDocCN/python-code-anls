@@ -1,6 +1,6 @@
 # `.\lucidrains\metnet3-pytorch\setup.py`
 
-```
+```py
 # 导入设置安装包和查找包的函数
 from setuptools import setup, find_packages
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\gradnorm-pytorch\gradnorm_pytorch\gradnorm_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from functools import cache, partial
 import torch

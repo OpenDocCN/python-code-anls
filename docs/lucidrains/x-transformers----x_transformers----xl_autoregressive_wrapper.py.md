@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\xl_autoregressive_wrapper.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 

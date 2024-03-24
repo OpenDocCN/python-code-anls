@@ -1,6 +1,6 @@
 # `.\lucidrains\multistream-transformers\multistream_transformers\autoregressive_wrapper.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

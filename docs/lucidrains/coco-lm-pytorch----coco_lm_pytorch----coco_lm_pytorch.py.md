@@ -1,6 +1,6 @@
 # `.\lucidrains\coco-lm-pytorch\coco_lm_pytorch\coco_lm_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 functools 库中导入 reduce 函数

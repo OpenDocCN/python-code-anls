@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\rotary.py`
 
-```
+```py
 # 从 math 模块中导入 log, sqrt, pi 函数
 # 导入 torch 模块
 # 从 torch 模块中导入 nn, einsum 函数

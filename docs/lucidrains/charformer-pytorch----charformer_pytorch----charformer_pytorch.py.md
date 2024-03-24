@@ -1,6 +1,6 @@
 # `.\lucidrains\charformer-pytorch\charformer_pytorch\charformer_pytorch.py`
 
-```
+```py
 # 导入 math 模块
 import math
 # 从 math 模块中导入 gcd 函数

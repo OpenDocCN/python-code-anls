@@ -1,6 +1,6 @@
 # `.\lucidrains\egnn-pytorch\tests\test_equivariance.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 
 from egnn_pytorch import EGNN, EGNN_Sparse  # 导入EGNN和EGNN_Sparse类

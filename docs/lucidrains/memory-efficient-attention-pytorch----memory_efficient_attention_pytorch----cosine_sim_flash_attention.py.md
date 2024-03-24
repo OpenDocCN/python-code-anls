@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\cosine_sim_flash_attention.py`
 
-```
+```py
 # 导入所需的库
 import math
 import torch

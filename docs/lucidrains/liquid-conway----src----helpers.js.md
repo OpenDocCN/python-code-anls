@@ -1,6 +1,6 @@
 # `.\lucidrains\liquid-conway\src\helpers.js`
 
-```
+```py
 # 从 lodash.clone 模块中导入 clone 函数
 import clone from 'lodash.clone';
 

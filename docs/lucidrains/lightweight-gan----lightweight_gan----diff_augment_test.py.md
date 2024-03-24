@@ -1,6 +1,6 @@
 # `.\lucidrains\lightweight-gan\lightweight_gan\diff_augment_test.py`
 
-```
+```py
 # 导入必要的库
 import os
 import tempfile

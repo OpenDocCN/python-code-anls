@@ -1,6 +1,6 @@
 # `.\lucidrains\gateloop-transformer\gateloop_transformer\gateloop_transformer_jax.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import List, Tuple, Callable
 from jax import random, jit, nn, lax, numpy as np

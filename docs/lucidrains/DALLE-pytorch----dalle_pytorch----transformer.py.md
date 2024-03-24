@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\transformer.py`
 
-```
+```py
 # 导入必要的库
 from collections import deque
 from collections.abc import Iterable

@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\gigagan_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 from pathlib import Path

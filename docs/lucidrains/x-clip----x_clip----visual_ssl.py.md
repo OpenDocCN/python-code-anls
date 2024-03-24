@@ -1,6 +1,6 @@
 # `.\lucidrains\x-clip\x_clip\visual_ssl.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import random

@@ -1,6 +1,6 @@
 # `.\lucidrains\recurrent-interface-network-pytorch\rin_pytorch\rin_pytorch.py`
 
-```
+```py
 import math
 from pathlib import Path
 from random import random

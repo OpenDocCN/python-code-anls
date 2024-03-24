@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-transformer-xl\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库
 from memory_transformer_xl import MemoryTransformerXL
 from memory_transformer_xl.autoregressive_wrapper import AutoregressiveWrapper

@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\__init__.py`
 
-```
+```py
 # 从 gigagan_pytorch 模块中导入 GigaGAN 相关类
 from gigagan_pytorch.gigagan_pytorch import (
     GigaGAN,

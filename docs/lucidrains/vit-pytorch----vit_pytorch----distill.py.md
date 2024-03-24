@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\distill.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 import torch.nn.functional as F  # 导入 PyTorch 中的函数模块
 from torch import nn  # 从 PyTorch 中导入 nn 模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\__init__.py`
 
-```
+```py
 # 从 nuwa_pytorch.nuwa_pytorch 模块中导入 NUWA、NUWASketch、NUWAVideoAudio、Sparse3DNA、CrossModalityCrossAttention 类
 # 以及从 nuwa_pytorch.vqgan_vae 模块中导入 VQGanVAE 类
 from nuwa_pytorch.nuwa_pytorch import NUWA, NUWASketch, NUWAVideoAudio, Sparse3DNA, CrossModalityCrossAttention

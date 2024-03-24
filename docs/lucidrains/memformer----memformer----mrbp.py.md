@@ -1,6 +1,6 @@
 # `.\lucidrains\memformer\memformer\mrbp.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 operator 库中导入 itemgetter 函数

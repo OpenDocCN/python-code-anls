@@ -1,6 +1,6 @@
 # `.\lucidrains\speculative-decoding\speculative_decoding\speculative_decoding.py`
 
-```
+```py
 import math
 # 导入数学库
 

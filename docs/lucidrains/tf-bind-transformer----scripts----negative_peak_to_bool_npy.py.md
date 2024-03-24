@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\scripts\negative_peak_to_bool_npy.py`
 
-```
+```py
 #/usr/bin/python
 
 # 导入必要的库

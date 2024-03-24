@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\configs.py`
 
-```
+```py
 # 导入必要的模块和类
 from pydantic import BaseModel, model_validator
 from typing import List, Optional, Union, Tuple

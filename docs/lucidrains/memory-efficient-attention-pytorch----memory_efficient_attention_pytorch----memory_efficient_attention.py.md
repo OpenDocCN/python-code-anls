@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\memory_efficient_attention.py`
 
-```
+```py
 import torch
 from functools import partial
 from torch import nn, einsum

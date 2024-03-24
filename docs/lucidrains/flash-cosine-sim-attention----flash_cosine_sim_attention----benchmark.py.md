@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\flash_cosine_sim_attention\benchmark.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.cuda 模块中导入 synchronize 和 Event 类

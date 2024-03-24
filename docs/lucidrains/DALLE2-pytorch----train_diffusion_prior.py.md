@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\train_diffusion_prior.py`
 
-```
+```py
 import click  # 导入 click 库，用于创建命令行界面
 import torch  # 导入 PyTorch 库
 

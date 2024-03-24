@@ -1,6 +1,6 @@
 # `.\lucidrains\RQ-Transformer\rq_transformer\rq_transformer.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn, einsum

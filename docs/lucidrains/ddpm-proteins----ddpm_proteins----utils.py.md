@@ -1,6 +1,6 @@
 # `.\lucidrains\ddpm-proteins\ddpm_proteins\utils.py`
 
-```
+```py
 # 导入所需的库
 import os
 from PIL import Image

@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\train_dalle.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 from pathlib import Path

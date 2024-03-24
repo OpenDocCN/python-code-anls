@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\vae.py`
 
-```
+```py
 # 导入所需的库
 import io
 import sys

@@ -1,6 +1,6 @@
 # `.\lucidrains\med-seg-diff-pytorch\med_seg_diff_pytorch\med_seg_diff_pytorch.py`
 
-```
+```py
 # 导入所需的库
 import math
 import copy

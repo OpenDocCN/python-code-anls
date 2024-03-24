@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\trainer.py`
 
-```
+```py
 # 导入必要的库
 import os
 from math import ceil

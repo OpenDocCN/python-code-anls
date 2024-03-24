@@ -1,6 +1,6 @@
 # `.\lucidrains\classifier-free-guidance-pytorch\classifier_free_guidance_pytorch\__init__.py`
 
-```
+```py
 # 从 classifier_free_guidance_pytorch 包中导入 NullConditioner、TextConditioner、AttentionTextConditioner、TextEmbeddingReturner 类
 from classifier_free_guidance_pytorch.classifier_free_guidance_pytorch import (
     NullConditioner,

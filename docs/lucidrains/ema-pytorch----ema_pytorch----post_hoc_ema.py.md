@@ -1,6 +1,6 @@
 # `.\lucidrains\ema-pytorch\ema_pytorch\post_hoc_ema.py`
 
-```
+```py
 # 导入必要的模块
 from pathlib import Path
 from copy import deepcopy

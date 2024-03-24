@@ -1,6 +1,6 @@
 # `.\lucidrains\memorizing-transformers-pytorch\memorizing_transformers_pytorch\knn_memory.py`
 
-```
+```py
 # 导入必要的库
 import os
 import math

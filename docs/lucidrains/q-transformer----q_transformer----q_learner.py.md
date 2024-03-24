@@ -1,6 +1,6 @@
 # `.\lucidrains\q-transformer\q_transformer\q_learner.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 from functools import partial

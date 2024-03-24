@@ -1,6 +1,6 @@
 # `.\lucidrains\ring-attention-pytorch\assert_flash.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 

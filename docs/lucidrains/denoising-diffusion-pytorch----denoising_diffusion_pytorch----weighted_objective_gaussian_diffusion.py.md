@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\weighted_objective_gaussian_diffusion.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 inspect 库中导入 isfunction 函数

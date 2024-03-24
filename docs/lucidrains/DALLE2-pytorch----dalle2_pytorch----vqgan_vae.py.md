@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\vqgan_vae.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import math

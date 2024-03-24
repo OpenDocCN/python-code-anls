@@ -460,7 +460,7 @@ model = TransformerWrapper(
         ff_glu = True    # set to true to use for all feedforwards
     )
 )
-``````
+``````py
 
 ### No Bias in Feedforward
 
@@ -482,7 +482,7 @@ model = TransformerWrapper(
         ff_no_bias = True  # set this to True
     )
 )
-```
+```py
 
 ### ReLU²
 
@@ -504,7 +504,7 @@ model = TransformerWrapper(
         ff_relu_squared = True
     )
 )
-```
+```py
 
 ### Explicit Sparse Transformer: Concentrated Attention Through Explicit Selection
 
@@ -528,7 +528,7 @@ model = TransformerWrapper(
         attn_sparse_topk = 8 # keep only the top 8 values before attention (softmax)
     )
 )
-```
+```py
 
 ### Talking-Heads Attention
 
@@ -552,7 +552,7 @@ model = TransformerWrapper(
         attn_talking_heads = True  # turn on information exchange between attention heads
     )
 )
-```
+```py
 
 ### One Write-Head Is All You Need
 
@@ -574,7 +574,7 @@ model = TransformerWrapper(
         attn_one_kv_head = True
     )
 )
-```
+```py
 
 This has been further generalized in <a href="https://arxiv.org/abs/2305.13245">a recent paper</a> to allow for groups of query heads to attend to a single key / value head. You can use this by specifying the `attn_kv_heads`
 
@@ -592,7 +592,7 @@ model = TransformerWrapper(
         attn_kv_heads = 2 # say you want 4 query heads to attend to 1 key / value head
     )
 )
-```
+```py
 
 ### Attention on Attention for Image Captioning
 
@@ -618,7 +618,7 @@ model = TransformerWrapper(
         attn_on_attn = True  # gate output of attention layer, by queries
     )
 )
-```
+```py
 
 ### Intra-attention Gating on Values
 
@@ -642,7 +642,7 @@ model = TransformerWrapper(
         attn_gate_values = True  # gate aggregated values with the input
     )
 )
-```
+```py
 
 ### Improving Transformer Models by Reordering their Sublayers
 
@@ -672,7 +672,7 @@ model = TransformerWrapper(
         sandwich_coef = 6  # interleave attention and feedforwards with sandwich coefficient of 6
     )
 )
-```
+```py
 
 ### Understanding and Improving Transformer From a Multi-Particle Dynamic System Point of View
 
@@ -698,7 +698,7 @@ model = TransformerWrapper(
         macaron = True  # use macaron configuration
     )
 )
-```
+```py
 
 ### T5's Simplified Relative Positional Encoding
 
@@ -720,7 +720,7 @@ model = TransformerWrapper(
         rel_pos_bias = True  # adds relative positional bias to all attention layers, a la T5
     )
 )
-```
+```py
 
 ### Residual Attention
 
@@ -745,7 +745,7 @@ model = TransformerWrapper(
         residual_attn = True    # add residual attention
     )
 )
-```
+```py
 
 I also tried residualizing cross attention and may have noticed an improvement in convergence. You can try it by setting the `cross_residual_attn` keyword to `True`
 
@@ -765,7 +765,7 @@ model = XTransformer(
     dec_max_seq_len = 1024,
     dec_cross_residual_attn = True     # residualize cross attention
 )
-```
+```py
 
 ### Transformer-XL recurrence
 
@@ -796,7 +796,7 @@ seg3 = torch.randint(0, 20000, (1, 512))
 logits1, mems1  = model_xl(seg1, return_mems = True)
 logits2, mems2  = model_xl(seg2, mems = mems1, return_mems = True)
 logits3, mems3  = model_xl(seg3, mems = mems2, return_mems = True)
-```
+```py
 
 Setting up the logic for training and sampling from transformer xl can be a bit overwhelming. This repository offers a simple wrapper that should make this easy, with the `XLAutoregressiveWrapper`.
 
@@ -815,7 +815,7 @@ loss.backward()
 prime = seg[:, :1024]   # if prime exceeds max length, memory will be caught up before generating
 
 generated = xl_wrapper.generate(prime, 4096)  # (1, 4096)
-```
+```py
 
 ### Enhanced recurrence
 
@@ -846,7 +846,7 @@ seg3 = torch.randint(0, 20000, (1, 512))
 
 logits1, mems1  = model_xl(seg1, return_mems = True)
 logits2, mems2  = model_xl(seg2, mems = mems1, return_mems = True) # mems1 of layer N are automatically routed to the layer N-1
-```
+```py
 
 ### Gated residual
 
@@ -871,7 +871,7 @@ model = TransformerWrapper(
         gate_residual = True
     )
 )
-```
+```py
 
 ### Rotary Positional Embeddings
 
@@ -895,7 +895,7 @@ model = TransformerWrapper(
         rotary_pos_emb = True  # turns on rotary positional embeddings
     )
 )
-```
+```py
 
 Update (12/2022): Rotary embedding has since been hugely successful, widely adopted in many large language models, including the largest in the world, PaLM. However, it has been uncovered in the ALiBi paper that rotary embeddings cannot length extrapolate well. This was recently addressed in <a href="https://arxiv.org/abs/2212.10554v1">a Microsoft research paper</a>. They propose a way to unobtrusively add the same decay as in ALiBi, and found that this resolves the extrapolation problem. You can use it in this repository by setting `rotary_xpos = True`. Like ALiBi, it would enforce the attention to be local. You can set the receptive field with `rotary_xpos_scale_base` value, which defaults to `512`
 
@@ -913,7 +913,7 @@ model = TransformerWrapper(
         rotary_xpos = True   # modified rotary to extrapolate well beyond length at which it was trained
     )
 )
-```
+```py
 
 ### Dynamic Positional Bias
 
@@ -958,7 +958,7 @@ model = TransformerWrapper(
         dynamic_pos_bias_log_distance = False   # whether to use log distance, as in SwinV2
     )
 )
-```
+```py
 
 ### ALiBi Positional Embedding
 
@@ -987,7 +987,7 @@ model = TransformerWrapper(
         alibi_num_heads = 4    # only use ALiBi for 4 out of the 8 heads, so other 4 heads can still attend far distances
     )
 )
-```
+```py
 
 ### Shifted Tokens
 
@@ -1015,7 +1015,7 @@ model = TransformerWrapper(
         shift_tokens = 1
     )
 )
-```
+```py
 
 If you want finer control over how much is shifted per block (whether attention or feedforward), simply pass in a tuple of size that is equal to the number of layers.
 
@@ -1033,7 +1033,7 @@ model = TransformerWrapper(
         shift_tokens = (1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0) # 12 blocks, attention and feedforward alternating, with progressively less shifting
     )
 )
-```
+```py
 
 ### Sandwich Norm
 
@@ -1058,7 +1058,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 ### ResiDual
 
@@ -1084,7 +1084,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 ### Normformer
 
@@ -1111,7 +1111,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 The second change is an extra layernorm right after the activation in the feedforward. I have also verified a slight improvement, at the cost of extra compute.
 
@@ -1132,7 +1132,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 For the residual scaling, you simply have to set `scale_residual = True`. I have noticed slight improvements, but occasional instability as well, so use with caution.
 
@@ -1153,7 +1153,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 The last change is a layernorm right after the outwards projection in attention. This is actually identical to the sandwich norm proposed by the Coqview paper, so you can use this by simply setting `sandwich_norm = True`, although it would also add it to the feedforward layer.
 
@@ -1193,7 +1193,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 Another update: Simply scaling the cosine similarity (group of 1) with a fixed constant (10) may work too
 
@@ -1215,7 +1215,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 ### QK RMSNorm
 
@@ -1251,7 +1251,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 256, (1, 1024))
 model(x)
-```
+```py
 
 ### Turning off absolute positional embedding
 
@@ -1278,7 +1278,7 @@ model = TransformerWrapper(
 
 x = torch.randint(0, 20000, (1, 1024))
 model(x)
-```
+```py
 
 ### Forgetful Causal Mask
 
@@ -1316,7 +1316,7 @@ x = torch.randint(0, 20000, (1, 1024)).cuda()
 
 loss = model(x)
 loss.backward()
-```
+```py
 
 
 ## Miscellaneous
@@ -1339,7 +1339,7 @@ neighbor_masks = torch.ones(1, 5).bool()
 encoded_neighbors = enc(neighbors, mask = neighbor_masks)
 model(nodes, context = encoded_neighbors, mask = node_masks, context_mask = neighbor_masks) # (1, 1, 512)
 
-```
+```py
 
 ### Continuous Embeddings
 
@@ -1361,7 +1361,7 @@ model = ContinuousTransformerWrapper(
 x = torch.randn((1, 1024, 32))
 
 model(x) # (1, 1024, 100)
-```
+```py
 
 You can also train a transformer that accepts continuous values autoregressively easily, in the same scheme as done successfully in <a href="https://arxiv.org/abs/2112.05329">this paper</a>
 
@@ -1399,7 +1399,7 @@ loss.backward
 
 start_emb = torch.randn(1, 777)
 generated = model.generate(start_emb, 17) # (17, 777)
-```
+```py
 
 ### xVal - Continuous and Discrete
 
@@ -1454,7 +1454,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 # (1, 17), (1, 17), (1, 17)
 
 # discrete, continuous, mask for discrete / continuous
-```
+```py
 
 ## Citations
 
@@ -1467,7 +1467,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @article{DBLP:journals/corr/abs-1907-01470,
@@ -1482,7 +1482,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year      = {2019},
     url       = {http://arxiv.org/abs/1907.01470}
 }
-```
+```py
 
 ```py
 @article{1910.05895,
@@ -1492,7 +1492,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     eprint  = {arXiv:1910.05895},
     doi     = {10.5281/zenodo.3525484},
 }
-```
+```py
 
 ```py
 @misc{shazeer2020glu,
@@ -1501,7 +1501,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2020},
     url     = {https://arxiv.org/abs/2002.05202}    
 }
-```
+```py
 
 ```py
 @inproceedings{Zoph2022STMoEDS,
@@ -1509,7 +1509,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam M. Shazeer and William Fedus},
     year    = {2022}
 }
-```
+```py
 
 ```py
 @misc{bhojanapalli2020lowrank,
@@ -1518,7 +1518,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2020},
     eprint  = {2002.07028}
 }
-```
+```py
 
 ```py
 @misc{burtsev2020memory,
@@ -1529,7 +1529,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{zhao2019explicit,
@@ -1540,7 +1540,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{correia2019adaptively,
@@ -1551,7 +1551,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{shazeer2020talkingheads,
@@ -1562,7 +1562,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{press2020improving,
@@ -1573,7 +1573,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{lu2019understanding,
@@ -1584,7 +1584,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{ke2020rethinking,
@@ -1595,7 +1595,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{dosovitskiy2020image,
@@ -1606,7 +1606,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{huang2019attention,
@@ -1617,7 +1617,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{raffel2020exploring,
@@ -1628,7 +1628,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @inproceedings{martins-etal-2020-sparse,
@@ -1643,7 +1643,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     publisher = "Association for Computational Linguistics",
     url     = "https://www.aclweb.org/anthology/2020.emnlp-main.348"
 }
-```
+```py
 
 ```py
 @misc{he2020realformer,
@@ -1654,7 +1654,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{carion2020endtoend,
@@ -1665,7 +1665,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @misc{press2021ALiBi,
@@ -1674,7 +1674,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2021},
     url     = {https://ofir.io/train_short_test_long.pdf}
 }
-```
+```py
 
 ```py
 @misc{parisotto2019stabilizing,
@@ -1685,7 +1685,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{narang2021transformer,
@@ -1696,7 +1696,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{zhang2019root,
@@ -1707,7 +1707,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @inproceedings{Qin2023ScalingTT,
@@ -1716,7 +1716,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     url     = {https://api.semanticscholar.org/CorpusID:260203124}
 }
-```
+```py
 
 ```py
 @misc{su2021roformer,
@@ -1727,7 +1727,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @inproceedings{Chen2023ExtendingCW,
@@ -1735,7 +1735,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {Shouyuan Chen and Sherman Wong and Liangjian Chen and Yuandong Tian},
     year    = {2023}
 }
-```
+```py
 
 ```py
 @inproceedings{Sun2022ALT,
@@ -1743,7 +1743,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
   author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
   year      = {2022}
 }
-```
+```py
 
 ```py
 @Article{AlphaFold2021,
@@ -1754,7 +1754,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     doi     = {10.1038/s41586-021-03819-2},
     note    = {(Accelerated article preview)},
 }
-```
+```py
 
 ```py
 @software{peng_bo_2021_5196578,
@@ -1767,7 +1767,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     doi          = {10.5281/zenodo.5196578},
     url          = {https://doi.org/10.5281/zenodo.5196578}
 }
-```
+```py
 
 ```py
 @misc{csordás2021devil,
@@ -1778,7 +1778,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{so2021primer,
@@ -1789,7 +1789,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.LG}
 }
-```
+```py
 
 ```py
 @misc{ding2021erniedoc,
@@ -1800,7 +1800,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{ding2021cogview,
@@ -1811,7 +1811,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @inproceedings{anonymous2022normformer,
@@ -1822,7 +1822,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     url     = {https://openreview.net/forum?id=GMYWzWztDx5},
     note    = {under review}
 }
-```
+```py
 
 ```py
 @misc{henry2020querykey,
@@ -1833,7 +1833,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CL}
 }
-```
+```py
 
 ```py
 @misc{liu2021swin,
@@ -1844,7 +1844,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     archivePrefix = {arXiv},
     primaryClass = {cs.CV}
 }
-```
+```py
 
 ```py
 @article{Haviv2022TransformerLM,
@@ -1854,7 +1854,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     volume  = {abs/2203.16634}
 }
-```
+```py
 
 ```py
 @article{chowdhery2022PaLM,
@@ -1862,7 +1862,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {Chowdhery, Aakanksha et al},
     year    = {2022}
 }
-```
+```py
 
 ```py
 @article{Shazeer2019FastTD,
@@ -1872,7 +1872,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2019},
     volume  = {abs/1911.02150}
 }
-```
+```py
 
 ```py
 @article{Ainslie2023GQATG,
@@ -1883,7 +1883,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     volume  = {abs/2305.13245},
     url     = {https://api.semanticscholar.org/CorpusID:258833177}
 }
-```
+```py
 
 ```py
 @misc{schlag2020enhancing,
@@ -1892,7 +1892,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2020},
     url     = {https://openreview.net/forum?id=B1xfElrKPr}
 }
-```
+```py
 
 ```py
 @article{Liu2022FCMFC,
@@ -1902,7 +1902,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     volume  = {abs/2210.13432}
 }
-```
+```py
 
 ```py
 @inproceedings{Huang2016DeepNW,
@@ -1911,7 +1911,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     booktitle = {European Conference on Computer Vision},
     year    = {2016}
 }
-```
+```py
 
 ```py
 @inproceedings{Hua2022TransformerQI,
@@ -1920,7 +1920,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     booktitle = {International Conference on Machine Learning},
     year    = {2022}
 }
-```
+```py
 
 ```py
 @article{Chang2022MaskGITMG,
@@ -1930,7 +1930,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     pages   = {11305-11315}
 }
-```
+```py
 
 ```py
 @article{Lezama2022ImprovedMI,
@@ -1940,7 +1940,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     volume  = {abs/2209.04439}
 }
-```
+```py
 
 ```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
@@ -1952,7 +1952,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     copyright = {Creative Commons Attribution 4.0 International}
 }
-```
+```py
 
 ```py
 @inproceedings{dao2022flashattention,
@@ -1961,7 +1961,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     booktitle = {Advances in Neural Information Processing Systems},
     year    = {2022}
 }
-```
+```py
 
 ```py
 @article{Xie2023ResiDualTW,
@@ -1971,7 +1971,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
   year      = {2023},
   volume    = {abs/2304.14802}
 }
-```
+```py
 
 ```py
 @inproceedings{Dehghani2023ScalingVT,
@@ -1979,7 +1979,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {Mostafa Dehghani and Josip Djolonga and Basil Mustafa and Piotr Padlewski and Jonathan Heek and Justin Gilmer and Andreas Steiner and Mathilde Caron and Robert Geirhos and Ibrahim M. Alabdulmohsin and Rodolphe Jenatton and Lucas Beyer and Michael Tschannen and Anurag Arnab and Xiao Wang and Carlos Riquelme and Matthias Minderer and Joan Puigcerver and Utku Evci and Manoj Kumar and Sjoerd van Steenkiste and Gamaleldin F. Elsayed and Aravindh Mahendran and Fisher Yu and Avital Oliver and Fantine Huot and Jasmijn Bastings and Mark Collier and Alexey A. Gritsenko and Vighnesh Birodkar and Cristina Nader Vasconcelos and Yi Tay and Thomas Mensink and Alexander Kolesnikov and Filip Paveti'c and Dustin Tran and Thomas Kipf and Mario Luvci'c and Xiaohua Zhai and Daniel Keysers and Jeremiah Harmsen and Neil Houlsby},
     year    = {2023}
 }
-```
+```py
 
 ```py
 @article{Beyer2022BetterPV,
@@ -1989,7 +1989,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     volume  = {abs/2205.01580}
 }
-```
+```py
 
 ```py
 @article{Kazemnejad2023TheIO,
@@ -1999,7 +1999,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     volume  = {abs/2305.19466}
 }
-```
+```py
 
 ```py
 @misc{bloc97-2023
@@ -2007,7 +2007,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {/u/bloc97},
     url     = {https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/}
 }
-```
+```py
 
 ```py
 @inproceedings{Zoph2022STMoEDS,
@@ -2015,7 +2015,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     author  = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam M. Shazeer and William Fedus},
     year    = {2022}
 }
-```
+```py
 
 ```py
 @article{Lan2019ALBERTAL,
@@ -2026,7 +2026,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     volume  = {abs/1909.11942},
     url     = {https://api.semanticscholar.org/CorpusID:202888986}
 }
-```
+```py
 
 ```py
 @inproceedings{Li2022ContrastiveDO,
@@ -2036,7 +2036,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2022},
     url     = {https://api.semanticscholar.org/CorpusID:253157949}
 }
-```
+```py
 
 ```py
 @inproceedings{OBrien2023ContrastiveDI,
@@ -2045,7 +2045,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     url     = {https://api.semanticscholar.org/CorpusID:261884427}
 }
-```
+```py
 
 ```py
 @inproceedings{Darcet2023VisionTN,
@@ -2054,7 +2054,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     url     = {https://api.semanticscholar.org/CorpusID:263134283}
 }
-```
+```py
 
 ```py
 @article{Bondarenko2023QuantizableTR,
@@ -2065,7 +2065,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     volume  = {abs/2306.12929},
     url     = {https://api.semanticscholar.org/CorpusID:259224568}
 }
-```
+```py
 
 ```py
 @inproceedings{Golkar2023xValAC,
@@ -2074,7 +2074,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
     year    = {2023},
     url     = {https://api.semanticscholar.org/CorpusID:263622222}
 }
-```
+```py
 
 ```py
 @article{Rafailov2023DirectPO,

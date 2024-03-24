@@ -1,6 +1,6 @@
 # `.\lucidrains\gigagan-pytorch\gigagan_pytorch\attend.py`
 
-```
+```py
 # 导入必要的库和模块
 from functools import wraps
 from packaging import version

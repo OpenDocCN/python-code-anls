@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\tf_bind_transformer.py`
 
-```
+```py
 # 导入必要的库
 import copy
 import math

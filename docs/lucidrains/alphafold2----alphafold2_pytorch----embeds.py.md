@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\embeds.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

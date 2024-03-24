@@ -1,6 +1,6 @@
 # `.\lucidrains\flamingo-pytorch\flamingo_pytorch\flamingo_palm.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import torch.nn.functional as F

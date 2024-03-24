@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\xcit.py`
 
-```
+```py
 # 从 random 模块中导入 randrange 函数
 from random import randrange
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\precache_proteins.py`
 
-```
+```py
 # 导入需要的库
 import click  # 用于创建命令行接口
 from tqdm import tqdm  # 用于显示进度条

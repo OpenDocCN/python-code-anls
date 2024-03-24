@@ -1,6 +1,6 @@
 # `.\lucidrains\fast-transformer-pytorch\fast_transformer_pytorch\fast_transformer_pytorch.py`
 
-```
+```py
 import torch  # 导入 PyTorch 库
 import torch.nn.functional as F  # 导入 PyTorch 中的函数模块
 from torch import nn, einsum  # 从 PyTorch 中导入 nn 和 einsum 模块

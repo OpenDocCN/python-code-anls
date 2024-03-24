@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\v_param_continuous_time_gaussian_diffusion.py`
 
-```
+```py
 # 导入数学库和PyTorch库
 import math
 import torch

@@ -1,6 +1,6 @@
 # `.\lucidrains\liquid-conway\src\liquid.js`
 
-```
+```py
 # 导入 Rx 模块
 import Rx from 'rxjs';
 # 导入 helpers 模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\CoLT5-attention\colt5_attention\coor_descent.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch.nn.functional 模块，并重命名为 F

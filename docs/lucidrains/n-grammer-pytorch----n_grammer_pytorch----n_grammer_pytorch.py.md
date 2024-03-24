@@ -1,6 +1,6 @@
 # `.\lucidrains\n-grammer-pytorch\n_grammer_pytorch\n_grammer_pytorch.py`
 
-```
+```py
 # 基于 jax 代码的实现
 # https://github.com/tensorflow/lingvo/blob/master/lingvo/jax/layers/ngrammer.py
 

@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\loader.py`
 
-```
+```py
 from pathlib import Path
 from random import randint, choice
 import PIL

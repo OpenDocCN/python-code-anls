@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\simple_vit_with_register_tokens.py`
 
-```
+```py
 """
     Vision Transformers Need Registers
     https://arxiv.org/abs/2309.16588

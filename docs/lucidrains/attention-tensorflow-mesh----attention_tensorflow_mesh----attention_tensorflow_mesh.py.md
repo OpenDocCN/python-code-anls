@@ -1,6 +1,6 @@
 # `.\lucidrains\attention-tensorflow-mesh\attention_tensorflow_mesh\attention_tensorflow_mesh.py`
 
-```
+```py
 # 导入必要的库
 import math
 import mesh_tensorflow as mtf

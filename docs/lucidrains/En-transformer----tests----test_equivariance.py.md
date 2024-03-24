@@ -1,6 +1,6 @@
 # `.\lucidrains\En-transformer\tests\test_equivariance.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 en_transformer.utils 模块中导入 rot 函数

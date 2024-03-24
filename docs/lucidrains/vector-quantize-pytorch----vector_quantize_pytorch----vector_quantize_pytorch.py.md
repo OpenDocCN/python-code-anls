@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\vector_quantize_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 

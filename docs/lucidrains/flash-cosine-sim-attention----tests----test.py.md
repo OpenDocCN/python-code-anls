@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\tests\test.py`
 
-```
+```py
 import torch
 import pytest
 from flash_cosine_sim_attention import plain_cosine_sim_attention, flash_cosine_sim_attention

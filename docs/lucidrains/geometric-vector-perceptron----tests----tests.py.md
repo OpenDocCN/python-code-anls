@@ -1,6 +1,6 @@
 # `.\lucidrains\geometric-vector-perceptron\tests\tests.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 geometric_vector_perceptron 库中导入 GVP, GVPDropout, GVPLayerNorm, GVP_MPNN

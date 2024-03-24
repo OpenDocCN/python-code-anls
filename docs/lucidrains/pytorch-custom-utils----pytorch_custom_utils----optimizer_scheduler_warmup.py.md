@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\optimizer_scheduler_warmup.py`
 
-```
+```py
 # 导入所需的模块和类
 from contextlib import nullcontext
 from typing import Optional, Type

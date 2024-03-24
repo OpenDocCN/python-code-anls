@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\pretraining\openwebtext\preprocess.py`
 
-```
+```py
 import logging
 import logging
 import math

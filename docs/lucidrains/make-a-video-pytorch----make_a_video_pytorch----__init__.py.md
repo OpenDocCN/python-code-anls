@@ -1,6 +1,6 @@
 # `.\lucidrains\make-a-video-pytorch\make_a_video_pytorch\__init__.py`
 
-```
+```py
 # 从 make_a_video_pytorch.make_a_video 模块中导入 PseudoConv3d, SpatioTemporalAttention 类
 from make_a_video_pytorch.make_a_video import PseudoConv3d, SpatioTemporalAttention
 

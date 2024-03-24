@@ -1,6 +1,6 @@
 # `.\lucidrains\meshgpt-pytorch\meshgpt_pytorch\meshgpt_pytorch.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 from functools import partial

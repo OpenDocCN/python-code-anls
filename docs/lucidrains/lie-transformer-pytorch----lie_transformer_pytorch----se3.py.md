@@ -1,6 +1,6 @@
 # `.\lucidrains\lie-transformer-pytorch\lie_transformer_pytorch\se3.py`
 
-```
+```py
 # 从 math 模块中导入 pi 常数
 from math import pi
 # 导入 torch 模块

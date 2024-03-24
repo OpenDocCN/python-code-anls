@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\enformer_pytorch\finetune.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入类型提示 Optional

@@ -1,6 +1,6 @@
 # `.\lucidrains\CoCa-pytorch\coca_pytorch\coca_pytorch.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 einsum, nn 模块

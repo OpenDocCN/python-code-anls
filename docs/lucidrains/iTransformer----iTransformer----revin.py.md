@@ -1,6 +1,6 @@
 # `.\lucidrains\iTransformer\iTransformer\revin.py`
 
-```
+```py
 # 导入必要的库
 from collections import namedtuple
 import torch

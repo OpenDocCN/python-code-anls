@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\flash_cosine_sim_attention\flash_cosine_sim_attention.py`
 
-```
+```py
 import os
 import math
 import importlib

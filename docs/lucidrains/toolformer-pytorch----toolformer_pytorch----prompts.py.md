@@ -1,6 +1,6 @@
 # `.\lucidrains\toolformer-pytorch\toolformer_pytorch\prompts.py`
 
-```
+```py
 # 默认提示输入标签
 DEFAULT_PROMPT_INPUT_TAG = '[input]'
 

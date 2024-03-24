@@ -1,6 +1,6 @@
 # `.\lucidrains\ring-attention-pytorch\ring_attention_pytorch\ring.py`
 
-```
+```py
 # 导入必要的模块
 from typing import Optional
 from functools import lru_cache, partial, wraps

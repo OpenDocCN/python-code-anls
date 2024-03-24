@@ -1,6 +1,6 @@
 # `.\lucidrains\phenaki-pytorch\phenaki_pytorch\attention.py`
 
-```
+```py
         # 初始化注意力机制模块
         def __init__(
             self,

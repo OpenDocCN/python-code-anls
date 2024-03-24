@@ -1,6 +1,6 @@
 # `.\lucidrains\lumiere-pytorch\lumiere_pytorch\lumiere.py`
 
-```
+```py
 """
 einstein notation
 b - batch

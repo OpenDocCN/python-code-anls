@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\pretraining\openwebtext\dataset.py`
 
-```
+```py
 import math
 import os
 import random

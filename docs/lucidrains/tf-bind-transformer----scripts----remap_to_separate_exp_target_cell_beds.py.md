@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\scripts\remap_to_separate_exp_target_cell_beds.py`
 
-```
+```py
 # 导入必要的库
 import polars as pl
 from pathlib import Path

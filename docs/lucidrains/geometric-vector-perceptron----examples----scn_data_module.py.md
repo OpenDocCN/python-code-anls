@@ -1,6 +1,6 @@
 # `.\lucidrains\geometric-vector-perceptron\examples\scn_data_module.py`
 
-```
+```py
 # 导入必要的模块
 from argparse import ArgumentParser
 from typing import List, Optional

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\xval.py`
 
-```
+```py
 """
 定义了一个基于离散标记的常规变换器，但对于数字是连续的
 更好地泛化了算术

@@ -1,6 +1,6 @@
 # `.\lucidrains\uniformer-pytorch\uniformer_pytorch\uniformer_pytorch.py`
 
-```
+```py
 import torch
 from torch import nn, einsum
 from einops import rearrange

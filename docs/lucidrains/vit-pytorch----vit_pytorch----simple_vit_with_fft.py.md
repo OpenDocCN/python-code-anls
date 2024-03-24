@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\simple_vit_with_fft.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch.fft 中导入 fft2 函数

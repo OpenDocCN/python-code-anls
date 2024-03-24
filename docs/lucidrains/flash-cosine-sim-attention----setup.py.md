@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\setup.py`
 
-```
+```py
 # 导入必要的库
 import sys
 from functools import lru_cache

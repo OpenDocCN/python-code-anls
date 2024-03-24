@@ -1,6 +1,6 @@
 # `.\lucidrains\panoptic-transformer\scripts\gen-pathx.py`
 
-```
+```py
 # 导入所需的库
 import time
 import sys

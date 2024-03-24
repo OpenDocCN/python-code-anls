@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\rvt.py`
 
-```
+```py
 # 从 math 模块中导入 sqrt, pi, log 函数
 # 从 torch 模块中导入 nn, einsum, F
 # 从 einops 模块中导入 rearrange, repeat

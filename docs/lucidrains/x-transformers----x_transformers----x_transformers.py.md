@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\x_transformers.py`
 
-```
+```py
 # 导入数学库
 import math
 # 从 random 模块中导入 random 函数

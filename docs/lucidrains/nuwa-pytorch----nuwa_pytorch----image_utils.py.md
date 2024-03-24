@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\image_utils.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torchvision.transforms 库并重命名为 T

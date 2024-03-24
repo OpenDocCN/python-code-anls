@@ -1,6 +1,6 @@
 # `.\lucidrains\imagen-pytorch\imagen_pytorch\data.py`
 
-```
+```py
 # 导入所需的库
 from pathlib import Path
 from functools import partial

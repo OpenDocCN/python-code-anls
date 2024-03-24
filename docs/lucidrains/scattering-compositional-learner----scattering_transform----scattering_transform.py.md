@@ -1,6 +1,6 @@
 # `.\lucidrains\scattering-compositional-learner\scattering_transform\scattering_transform.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 from torch import nn

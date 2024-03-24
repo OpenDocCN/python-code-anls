@@ -1,6 +1,6 @@
 # `.\lucidrains\denoising-diffusion-pytorch\denoising_diffusion_pytorch\attend.py`
 
-```
+```py
 # 导入必要的模块和类
 from functools import wraps
 from packaging import version

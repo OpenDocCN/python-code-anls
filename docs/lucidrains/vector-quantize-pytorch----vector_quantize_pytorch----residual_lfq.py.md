@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\residual_lfq.py`
 
-```
+```py
 # 导入所需的库
 import random
 from math import log2

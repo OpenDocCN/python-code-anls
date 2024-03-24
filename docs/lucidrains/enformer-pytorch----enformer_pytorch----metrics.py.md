@@ -1,6 +1,6 @@
 # `.\lucidrains\enformer-pytorch\enformer_pytorch\metrics.py`
 
-```
+```py
 from torchmetrics import Metric
 from typing import Optional
 import torch

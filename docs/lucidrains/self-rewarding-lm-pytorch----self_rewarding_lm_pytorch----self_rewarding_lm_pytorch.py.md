@@ -1,6 +1,6 @@
 # `.\lucidrains\self-rewarding-lm-pytorch\self_rewarding_lm_pytorch\self_rewarding_lm_pytorch.py`
 
-```
+```py
 # 导入所需的库
 import re
 import sys

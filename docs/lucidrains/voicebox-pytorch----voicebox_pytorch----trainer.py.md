@@ -1,6 +1,6 @@
 # `.\lucidrains\voicebox-pytorch\voicebox_pytorch\trainer.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 从路径模块中导入 Path 类

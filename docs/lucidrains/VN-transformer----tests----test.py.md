@@ -1,6 +1,6 @@
 # `.\lucidrains\VN-transformer\tests\test.py`
 
-```
+```py
 # 导入 pytest 库
 import pytest
 

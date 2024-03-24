@@ -1,6 +1,6 @@
 # `.\lucidrains\gateloop-transformer\train.py`
 
-```
+```py
 # 导入所需的库
 import math
 import gzip

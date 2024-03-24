@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\setup.py`
 
-```
+```py
 # 导入所需的模块和函数
 from setuptools import setup, find_packages
 # 执行版本文件中的代码，将版本信息导入当前环境

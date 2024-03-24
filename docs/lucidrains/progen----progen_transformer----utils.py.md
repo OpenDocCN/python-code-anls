@@ -1,6 +1,6 @@
 # `.\lucidrains\progen\progen_transformer\utils.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 # 导入 os 和 errno 模块

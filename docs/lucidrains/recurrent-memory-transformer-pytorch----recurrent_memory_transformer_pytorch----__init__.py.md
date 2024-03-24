@@ -1,6 +1,6 @@
 # `.\lucidrains\recurrent-memory-transformer-pytorch\recurrent_memory_transformer_pytorch\__init__.py`
 
-```
+```py
 # 从 recurrent_memory_transformer_pytorch.recurrent_memory_transformer 模块中导入 RecurrentMemoryTransformer 和 RecurrentMemoryTransformerWrapper 类
 from recurrent_memory_transformer_pytorch.recurrent_memory_transformer import RecurrentMemoryTransformer, RecurrentMemoryTransformerWrapper
 ```

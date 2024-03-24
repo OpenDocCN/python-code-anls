@@ -1,6 +1,6 @@
 # `.\lucidrains\memory-efficient-attention-pytorch\memory_efficient_attention_pytorch\flash_attention.py`
 
-```
+```py
 # 导入数学库和 PyTorch 库
 import math
 import torch

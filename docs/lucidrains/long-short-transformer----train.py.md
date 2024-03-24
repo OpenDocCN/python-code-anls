@@ -1,6 +1,6 @@
 # `.\lucidrains\long-short-transformer\train.py`
 
-```
+```py
 # 导入所需的模块和类
 from long_short_transformer import LongShortTransformer
 from long_short_transformer.autoregressive_wrapper import AutoregressiveWrapper

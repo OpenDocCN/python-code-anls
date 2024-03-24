@@ -1,6 +1,6 @@
 # `.\lucidrains\agent-attention-pytorch\agent_attention_pytorch\agent_transformer.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的函数库

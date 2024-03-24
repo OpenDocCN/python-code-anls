@@ -1,6 +1,6 @@
 # `.\lucidrains\electra-pytorch\examples\glue\run.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google AI Language Team Authors 和 HuggingFace Inc. 团队所有，以及 NVIDIA 公司所有
 # 根据 Apache 许可证 2.0 版本使用此文件，详细信息请访问 http://www.apache.org/licenses/LICENSE-2.0

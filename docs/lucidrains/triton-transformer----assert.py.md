@@ -1,6 +1,6 @@
 # `.\lucidrains\triton-transformer\assert.py`
 
-```
+```py
 # 导入 PyTorch 库
 import torch
 # 从 triton_transformer 模块中导入 Transformer 类

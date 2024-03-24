@@ -1,6 +1,6 @@
 # `.\lucidrains\parti-pytorch\parti_pytorch\__init__.py`
 
-```
+```py
 # 从 parti_pytorch.parti_pytorch 模块中导入 Parti 类
 from parti_pytorch.parti_pytorch import Parti
 

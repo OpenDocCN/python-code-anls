@@ -1,6 +1,6 @@
 # `.\lucidrains\compressive-transformer-pytorch\examples\enwik8_simple\train.py`
 
-```
+```py
 # 导入所需的库
 from compressive_transformer_pytorch import CompressiveTransformer
 from compressive_transformer_pytorch.autoregressive_wrapper import AutoregressiveWrapper

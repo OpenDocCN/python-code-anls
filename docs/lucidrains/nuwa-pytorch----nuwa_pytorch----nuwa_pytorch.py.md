@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\nuwa_pytorch.py`
 
-```
+```py
 # 导入 functools 模块
 import functools
 # 从 functools 模块中导入 partial 函数

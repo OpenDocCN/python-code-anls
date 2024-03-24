@@ -1,6 +1,6 @@
 # `.\lucidrains\RETRO-pytorch\retro_pytorch\utils.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 导入 numpy 模块并重命名为 np

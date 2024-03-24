@@ -1,6 +1,6 @@
 # `.\lucidrains\tf-bind-transformer\tf_bind_transformer\cache_utils.py`
 
-```
+```py
 # 导入必要的库
 import os
 from shutil import rmtree

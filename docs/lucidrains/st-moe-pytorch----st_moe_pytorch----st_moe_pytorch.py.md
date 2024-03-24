@@ -1,6 +1,6 @@
 # `.\lucidrains\st-moe-pytorch\st_moe_pytorch\st_moe_pytorch.py`
 
-```
+```py
 # 导入必要的库
 from functools import partial
 from collections import namedtuple

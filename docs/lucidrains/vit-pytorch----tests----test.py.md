@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\tests\test.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 vit_pytorch 库中导入 ViT 类

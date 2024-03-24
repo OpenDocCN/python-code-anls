@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\trainer.py`
 
-```
+```py
 # 导入所需的库
 import re
 import copy

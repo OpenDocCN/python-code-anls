@@ -1,6 +1,6 @@
 # `.\lucidrains\neural-plexer-pytorch\neural_plexer_pytorch\neural_plexer_pytorch.py`
 
-```
+```py
 # 定义一个名为calculate_area的函数，用于计算矩形的面积
 def calculate_area(length, width):
     # 计算矩形的面积

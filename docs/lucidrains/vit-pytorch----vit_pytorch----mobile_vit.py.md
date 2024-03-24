@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\mobile_vit.py`
 
-```
+```py
 import torch
 import torch.nn as nn
 

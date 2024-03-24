@@ -1,6 +1,6 @@
 # `.\lucidrains\pi-GAN-pytorch\pi_gan_pytorch\nerf.py`
 
-```
+```py
 # 从给定链接中获取的代码，需要从3D输入重构为5D输入（包含光线方向）
 
 import torch

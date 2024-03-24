@@ -1,6 +1,6 @@
 # `.\lucidrains\MEGABYTE-pytorch\train.py`
 
-```
+```py
 # 导入所需的库
 from MEGABYTE_pytorch import MEGABYTE
 import random

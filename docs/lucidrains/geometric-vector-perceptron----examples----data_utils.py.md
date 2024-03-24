@@ -1,6 +1,6 @@
 # `.\lucidrains\geometric-vector-perceptron\examples\data_utils.py`
 
-```
+```py
 # 作者：Eric Alcaide
 
 # 导入必要的库

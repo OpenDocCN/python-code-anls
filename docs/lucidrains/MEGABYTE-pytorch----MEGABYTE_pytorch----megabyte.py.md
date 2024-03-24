@@ -1,6 +1,6 @@
 # `.\lucidrains\MEGABYTE-pytorch\MEGABYTE_pytorch\megabyte.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 functools 库

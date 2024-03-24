@@ -1,6 +1,6 @@
 # `.\lucidrains\nuwa-pytorch\nuwa_pytorch\reversible.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 导入 torch 中的神经网络模块

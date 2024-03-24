@@ -1,6 +1,6 @@
 # `.\lucidrains\pytorch-custom-utils\pytorch_custom_utils\__init__.py`
 
-```
+```py
 # 从 pytorch_custom_utils.module_device 模块中导入 module_device 和 autocast_device 函数
 from pytorch_custom_utils.module_device import (
     module_device,

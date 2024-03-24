@@ -1,6 +1,6 @@
 # `.\lucidrains\protein-bert-pytorch\protein_bert_pytorch\protein_bert_pytorch.py`
 
-```
+```py
 # 导入 math、torch 库以及 torch.nn.functional 模块中的 F 函数
 import math
 import torch

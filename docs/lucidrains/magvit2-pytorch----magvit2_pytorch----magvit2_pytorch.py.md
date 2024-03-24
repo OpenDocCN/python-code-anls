@@ -1,6 +1,6 @@
 # `.\lucidrains\magvit2-pytorch\magvit2_pytorch\magvit2_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import copy
 from pathlib import Path

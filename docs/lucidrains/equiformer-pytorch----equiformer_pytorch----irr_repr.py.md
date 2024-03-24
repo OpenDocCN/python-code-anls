@@ -1,6 +1,6 @@
 # `.\lucidrains\equiformer-pytorch\equiformer_pytorch\irr_repr.py`
 
-```
+```py
 # 从 pathlib 模块中导入 Path 类
 from pathlib import Path
 # 从 functools 模块中导入 partial 函数

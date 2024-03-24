@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\na_vit.py`
 
-```
+```py
 from functools import partial
 from typing import List, Union
 

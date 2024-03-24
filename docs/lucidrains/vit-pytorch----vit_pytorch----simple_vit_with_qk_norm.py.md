@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\simple_vit_with_qk_norm.py`
 
-```
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F

@@ -1,6 +1,6 @@
 # `.\lucidrains\PaLM-pytorch\examples\enwik8_deepspeed\train.py`
 
-```
+```py
 import deepspeed
 # 导入 deepspeed 库
 

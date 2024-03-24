@@ -1,6 +1,6 @@
 # `.\lucidrains\h-transformer-1d\h_transformer_1d\h_transformer_1d.py`
 
-```
+```py
 # 从 math 模块中导入 log2 和 ceil 函数
 # 从 functools 模块中导入 wraps 函数
 import torch

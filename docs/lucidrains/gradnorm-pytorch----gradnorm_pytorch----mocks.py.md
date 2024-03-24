@@ -1,6 +1,6 @@
 # `.\lucidrains\gradnorm-pytorch\gradnorm_pytorch\mocks.py`
 
-```
+```py
 # 导入 torch 中的 nn 模块
 from torch import nn
 

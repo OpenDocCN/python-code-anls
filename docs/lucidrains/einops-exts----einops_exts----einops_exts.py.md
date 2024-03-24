@@ -1,6 +1,6 @@
 # `.\lucidrains\einops-exts\einops_exts\einops_exts.py`
 
-```
+```py
 # 导入所需的模块
 import re
 from torch import nn

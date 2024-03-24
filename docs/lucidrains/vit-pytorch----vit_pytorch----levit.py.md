@@ -1,6 +1,6 @@
 # `.\lucidrains\vit-pytorch\vit_pytorch\levit.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 

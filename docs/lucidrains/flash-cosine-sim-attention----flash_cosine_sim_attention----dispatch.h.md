@@ -1,6 +1,6 @@
 # `.\lucidrains\flash-cosine-sim-attention\flash_cosine_sim_attention\dispatch.h`
 
-```
+```py
 #pragma once
 
 // 自定义调度，灵感来源于其他项目的实现

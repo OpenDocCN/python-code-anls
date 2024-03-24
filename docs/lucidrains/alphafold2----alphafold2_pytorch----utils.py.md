@@ -1,6 +1,6 @@
 # `.\lucidrains\alphafold2\alphafold2_pytorch\utils.py`
 
-```
+```py
 # 导入必要的库
 import os
 import re

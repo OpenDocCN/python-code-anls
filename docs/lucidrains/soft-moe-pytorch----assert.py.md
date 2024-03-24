@@ -1,6 +1,6 @@
 # `.\lucidrains\soft-moe-pytorch\assert.py`
 
-```
+```py
 # 导入必要的库
 import os
 from copy import deepcopy

@@ -1,6 +1,6 @@
 # `.\lucidrains\x-transformers\x_transformers\dpo.py`
 
-```
+```py
 # 导入必要的库
 from copy import deepcopy
 import torch

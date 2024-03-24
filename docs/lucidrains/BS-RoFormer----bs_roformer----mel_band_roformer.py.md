@@ -1,6 +1,6 @@
 # `.\lucidrains\BS-RoFormer\bs_roformer\mel_band_roformer.py`
 
-```
+```py
 # 导入所需的库
 from functools import partial
 

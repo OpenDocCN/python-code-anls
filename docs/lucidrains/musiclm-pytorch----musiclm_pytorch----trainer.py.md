@@ -1,6 +1,6 @@
 # `.\lucidrains\musiclm-pytorch\musiclm_pytorch\trainer.py`
 
-```
+```py
 # 导入必要的库
 import copy
 from math import sqrt

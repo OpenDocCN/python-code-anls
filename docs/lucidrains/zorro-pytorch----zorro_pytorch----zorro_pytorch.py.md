@@ -1,6 +1,6 @@
 # `.\lucidrains\zorro-pytorch\zorro_pytorch\zorro_pytorch.py`
 
-```
+```py
 # 导入所需的模块和类
 from enum import Enum
 import functools

@@ -1,6 +1,6 @@
 # `.\lucidrains\vector-quantize-pytorch\vector_quantize_pytorch\residual_vq.py`
 
-```
+```py
 # 导入必要的库
 import random
 from math import ceil

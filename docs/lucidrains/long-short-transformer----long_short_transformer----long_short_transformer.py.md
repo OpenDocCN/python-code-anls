@@ -1,6 +1,6 @@
 # `.\lucidrains\long-short-transformer\long_short_transformer\long_short_transformer.py`
 
-```
+```py
 # 从 math 模块中导入 gcd（最大公约数）和 ceil（向上取整）函数
 from math import gcd, ceil
 # 导入 functools 模块

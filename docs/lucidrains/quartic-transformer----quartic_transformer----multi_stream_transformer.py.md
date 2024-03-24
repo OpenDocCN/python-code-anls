@@ -1,6 +1,6 @@
 # `.\lucidrains\quartic-transformer\quartic_transformer\multi_stream_transformer.py`
 
-```
+```py
         """
         实现注意力机制的模块
         参数：

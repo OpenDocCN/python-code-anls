@@ -1,6 +1,6 @@
 # `.\lucidrains\g-mlp-gpt\train.py`
 
-```
+```py
 # 导入必要的库
 from g_mlp_gpt import gMLPGPT
 from g_mlp_gpt.autoregressive_wrapper import AutoregressiveWrapper

@@ -1,6 +1,6 @@
 # `.\lucidrains\perceiver-pytorch\perceiver_pytorch\perceiver_pytorch.py`
 
-```
+```py
 # 从 math 模块中导入 pi 和 log 函数
 # 从 functools 模块中导入 wraps 装饰器
 # 导入 torch 库及其相关模块

@@ -1,6 +1,6 @@
 # `.\lucidrains\video-diffusion-pytorch\video_diffusion_pytorch\text.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 einops 库中导入 rearrange 函数

@@ -1,6 +1,6 @@
 # `.\lucidrains\parti-pytorch\parti_pytorch\parti_pytorch.py`
 
-```
+```py
 # 导入所需的库
 from typing import List
 from functools import partial

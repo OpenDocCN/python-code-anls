@@ -1,6 +1,6 @@
 # `.\lucidrains\stylegan2-pytorch\stylegan2_pytorch\stylegan2_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

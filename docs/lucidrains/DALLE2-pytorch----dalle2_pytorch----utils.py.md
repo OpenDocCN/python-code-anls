@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\utils.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入 importlib 模块

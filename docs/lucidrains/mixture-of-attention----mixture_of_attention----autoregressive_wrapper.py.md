@@ -1,6 +1,6 @@
 # `.\lucidrains\mixture-of-attention\mixture_of_attention\autoregressive_wrapper.py`
 
-```
+```py
 # 导入 torch 库
 import torch
 # 从 torch 库中导入 nn 模块

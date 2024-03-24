@@ -1,6 +1,6 @@
 # `.\lucidrains\big-sleep\big_sleep\big_sleep.py`
 
-```
+```py
 # 导入必要的库
 import os
 import sys

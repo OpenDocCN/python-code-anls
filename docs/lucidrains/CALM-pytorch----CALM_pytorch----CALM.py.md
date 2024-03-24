@@ -1,6 +1,6 @@
 # `.\lucidrains\CALM-pytorch\CALM_pytorch\CALM.py`
 
-```
+```py
 # 从 math 模块中导入 ceil 函数
 from math import ceil
 # 从 pathlib 模块中导入 Path 类

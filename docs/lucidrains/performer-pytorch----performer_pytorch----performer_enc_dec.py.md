@@ -1,6 +1,6 @@
 # `.\lucidrains\performer-pytorch\performer_pytorch\performer_enc_dec.py`
 
-```
+```py
 # 导入所需的库
 import re
 import torch

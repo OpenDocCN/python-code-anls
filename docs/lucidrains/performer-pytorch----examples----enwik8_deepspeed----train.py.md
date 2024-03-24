@@ -1,6 +1,6 @@
 # `.\lucidrains\performer-pytorch\examples\enwik8_deepspeed\train.py`
 
-```
+```py
 import deepspeed  # 导入deepspeed库
 
 from performer_pytorch import PerformerLM  # 从performer_pytorch库中导入PerformerLM类

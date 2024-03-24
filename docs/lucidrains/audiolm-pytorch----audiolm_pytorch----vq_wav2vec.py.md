@@ -1,6 +1,6 @@
 # `.\lucidrains\audiolm-pytorch\audiolm_pytorch\vq_wav2vec.py`
 
-```
+```py
 # 导入所需的模块
 from pathlib import Path
 # 导入 torch 模块

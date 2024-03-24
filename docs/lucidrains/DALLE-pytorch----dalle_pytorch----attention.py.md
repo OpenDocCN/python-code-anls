@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE-pytorch\dalle_pytorch\attention.py`
 
-```
+```py
 # 从 inspect 模块中导入 isfunction 函数
 # 从 math 模块中导入 ceil 函数
 # 导入 torch 库

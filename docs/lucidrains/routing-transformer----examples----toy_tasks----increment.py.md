@@ -1,6 +1,6 @@
 # `.\lucidrains\routing-transformer\examples\toy_tasks\increment.py`
 
-```
+```py
 # 导入所需的库
 import torch
 import numpy as np

@@ -1,6 +1,6 @@
 # `.\lucidrains\invariant-point-attention\invariant_point_attention\invariant_point_attention.py`
 
-```
+```py
 import torch
 import torch.nn.functional as F
 from torch.cuda.amp import autocast

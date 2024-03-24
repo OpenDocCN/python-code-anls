@@ -1,6 +1,6 @@
 # `.\lucidrains\DALLE2-pytorch\dalle2_pytorch\dalle2_pytorch.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入随机数库
