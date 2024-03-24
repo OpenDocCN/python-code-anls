@@ -26,13 +26,13 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install BS-RoFormer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from bs_roformer import BSRoformer
 
@@ -56,7 +56,7 @@ out = model(x)
 
 To use the Mel-Band Roformer proposed in <a href="https://arxiv.org/abs/2310.01809">a recent follow up paper</a>, simply import `MelBandRoformer` instead
 
-```python
+```py
 import torch
 from bs_roformer import MelBandRoformer
 
@@ -86,7 +86,7 @@ out = model(x)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Lu2023MusicSS,
     title   = {Music Source Separation with Band-Split RoPE Transformer},
     author  = {Wei-Tsung Lu and Ju-Chiang Wang and Qiuqiang Kong and Yun-Ning Hung},
@@ -95,7 +95,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Wang2023MelBandRF,
     title   = {Mel-Band RoFormer for Music Source Separation},
     author  = {Ju-Chiang Wang and Wei-Tsung Lu and Minz Won},
@@ -104,7 +104,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @misc{ho2019axial,
     title  = {Axial Attention in Multidimensional Transformers},
     author = {Jonathan Ho and Nal Kalchbrenner and Dirk Weissenborn and Tim Salimans},
@@ -113,7 +113,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -124,7 +124,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -133,7 +133,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -144,7 +144,7 @@ out = model(x)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ElNouby2021XCiTCI,
     title   = {XCiT: Cross-Covariance Image Transformers},
     author  = {Alaaeldin El-Nouby and Hugo Touvron and Mathilde Caron and Piotr Bojanowski and Matthijs Douze and Armand Joulin and Ivan Laptev and Natalia Neverova and Gabriel Synnaeve and Jakob Verbeek and Herv{\'e} J{\'e}gou},

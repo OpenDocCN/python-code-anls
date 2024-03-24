@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2202.01381">ETSformer</a>, stat
 
 ## Install
 
-```bash
+```py
 $ pip install etsformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from etsformer_pytorch import ETSFormer
 
@@ -33,7 +33,7 @@ pred = model(timeseries, num_steps_forecast = 32) # (1, 32, 4) - (batch, num ste
 
 For using ETSFormer for classification, using cross attention pooling on all latents and level output
 
-```python
+```py
 import torch
 from etsformer_pytorch import ETSFormer, ClassificationWrapper
 
@@ -63,7 +63,7 @@ logits = adapter(timeseries) # (1, 10)
 
 ## Citation
 
-```bibtex
+```py
 @misc{woo2022etsformer,
     title   = {ETSformer: Exponential Smoothing Transformers for Time-series Forecasting}, 
     author  = {Gerald Woo and Chenghao Liu and Doyen Sahoo and Akshat Kumar and Steven Hoi},

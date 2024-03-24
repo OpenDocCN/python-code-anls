@@ -18,13 +18,13 @@ Update: by doing recomputes in segments of iterations, now feasible, if it were 
 
 ## Install
 
-```bash
+```py
 $ pip install coordinate-descent-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from coordinate_descent_attention import Transformer
 
@@ -52,7 +52,7 @@ logits = model(x)
 
 ## Citations
 
-```bibtex
+```py
 @article{Wright2015CoordinateDA,
     title   = {Coordinate descent algorithms},
     author  = {Stephen J. Wright},
@@ -63,7 +63,7 @@ logits = model(x)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Gupta2021MemoryefficientTV,
     title   = {Memory-efficient Transformers via Top-k Attention},
     author  = {Ankit Gupta and Guy Dar and Shaya Goodman and David Ciprut and Jonathan Berant},
@@ -72,7 +72,7 @@ logits = model(x)
 }
 ```
 
-```bibtex
+```py
 @article{Zhao2019ExplicitST,
     title   = {Explicit Sparse Transformer: Concentrated Attention Through Explicit Selection},
     author  = {Guangxiang Zhao and Junyang Lin and Zhiyuan Zhang and Xuancheng Ren and Qi Su and Xu Sun},
@@ -82,7 +82,7 @@ logits = model(x)
 }
 ```
 
-```bibtex
+```py
 @article{Schmitzer2016StabilizedSS,
     title   = {Stabilized Sparse Scaling Algorithms for Entropy Regularized Transport Problems},
     author  = {Bernhard Schmitzer},

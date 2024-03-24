@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2111.11418">Metaformer</a>, but
 
 ## Install
 
-```bash
+```py
 $ pip install metaformer-gpt
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from metaformer_gpt import MetaformerGPT
 
@@ -28,7 +28,7 @@ logits = gpt(ids) # (1, 1024, 256)
 
 ## Citations
 
-```bibtex
+```py
 @article{Yu2021MetaFormerIA,
     title   = {MetaFormer is Actually What You Need for Vision},
     author  = {Weihao Yu and Mi Luo and Pan Zhou and Chenyang Si and Yichen Zhou and Xinchao Wang and Jiashi Feng and Shuicheng Yan},
@@ -38,7 +38,7 @@ logits = gpt(ids) # (1, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{woo2022etsformer,
     title   = {ETSformer: Exponential Smoothing Transformers for Time-series Forecasting},
     author  = {Gerald Woo and Chenghao Liu and Doyen Sahoo and Akshat Kumar and Steven Hoi},

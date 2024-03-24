@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2012.00926">π-GAN</a>, for 3d-
 
 ## Install
 
-```bash
+```py
 $ pip install pi-gan-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 from pi_gan_pytorch import piGAN, Trainer
 
 gan = piGAN(
@@ -32,7 +32,7 @@ trainer()
 
 ## Citations
 
-```bibtex
+```py
 @misc{chan2020pigan,
     title={pi-GAN: Periodic Implicit Generative Adversarial Networks for 3D-Aware Image Synthesis}, 
     author={Eric R. Chan and Marco Monteiro and Petr Kellnhofer and Jiajun Wu and Gordon Wetzstein},

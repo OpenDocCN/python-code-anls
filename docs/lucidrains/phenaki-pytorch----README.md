@@ -20,7 +20,7 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install phenaki-pytorch
 ```
 
@@ -28,7 +28,7 @@ $ pip install phenaki-pytorch
 
 C-ViViT
 
-```python
+```py
 import torch
 from phenaki_pytorch import CViViT, CViViTTrainer
 
@@ -60,7 +60,7 @@ trainer.train()               # reconstructions and checkpoints will be saved pe
 
 Phenaki
 
-```python
+```py
 import torch
 from phenaki_pytorch import CViViT, MaskGit, Phenaki
 
@@ -124,7 +124,7 @@ entire_video = torch.cat((video, video_next), dim = 2) # (1, 3, 17 + 14, 256, 12
 
 Or just import the `make_video` function
 
-```python
+```py
 # ... above code
 
 from phenaki_pytorch import make_video
@@ -146,7 +146,7 @@ That's it!
 
 A <a href="https://arxiv.org/abs/2209.04439">new paper</a> suggests that instead of relying on the predicted probabilities of each token as a measure of confidence, one can train an extra critic to decide what to iteratively mask during sampling. You can optionally train this critic for potentially better generations as shown below
 
-```python
+```py
 import torch
 from phenaki_pytorch import CViViT, MaskGit, TokenCritic, Phenaki
 
@@ -201,7 +201,7 @@ loss.backward()
 
 Or even simpler, just reuse `MaskGit` itself as a <a href="https://aclanthology.org/2021.naacl-main.409.pdf">Self Critic (Nijkamp et al)</a>, by setting `self_token_critic = True` on the initialization of `Phenaki`
 
-```python
+```py
 phenaki = Phenaki(
     ...,
     self_token_critic= True  # set this to True
@@ -215,7 +215,7 @@ Now your generations should be greatly improved!
 This repository will also endeavor to allow the researcher to train on text-to-image and then text-to-video. Similarly, for unconditional training, the researcher should be able to first train on images and then fine tune on video. Below is an example for text-to-video
 
 
-```python
+```py
 import torch
 from torch.utils.data import Dataset
 from phenaki_pytorch import CViViT, MaskGit, Phenaki, PhenakiTrainer
@@ -291,7 +291,7 @@ Unconditional is as follows
 
 ex. unconditional images and video training
 
-```python
+```py
 import torch
 from phenaki_pytorch import CViViT, MaskGit, Phenaki, PhenakiTrainer
 
@@ -373,7 +373,7 @@ trainer.train()
 
 ## Citations
 
-```bibtex
+```py
 @article{Villegas2022PhenakiVL,
     title   = {Phenaki: Variable Length Video Generation From Open Domain Textual Description},
     author  = {Ruben Villegas and Mohammad Babaeizadeh and Pieter-Jan Kindermans and Hernan Moraldo and Han Zhang and Mohammad Taghi Saffar and Santiago Castro and Julius Kunze and D. Erhan},
@@ -383,7 +383,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Chang2022MaskGITMG,
     title   = {MaskGIT: Masked Generative Image Transformer},
     author  = {Huiwen Chang and Han Zhang and Lu Jiang and Ce Liu and William T. Freeman},
@@ -393,7 +393,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Lezama2022ImprovedMI,
     title   = {Improved Masked Image Generation with Token-Critic},
     author  = {Jos{\'e} Lezama and Huiwen Chang and Lu Jiang and Irfan Essa},
@@ -403,7 +403,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -414,7 +414,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -423,7 +423,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{press2021ALiBi,
     title   = {Train Short, Test Long: Attention with Linear Biases Enable Input Length Extrapolation},
     author  = {Ofir Press and Noah A. Smith and Mike Lewis},
@@ -432,7 +432,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022SwinTV,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -442,7 +442,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Nijkamp2021SCRIPTSP,
     title   = {SCRIPT: Self-Critic PreTraining of Transformers},
     author  = {Erik Nijkamp and Bo Pang and Ying Nian Wu and Caiming Xiong},
@@ -451,7 +451,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -463,7 +463,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{gilmer2023intriguing
     title  = {Intriguing Properties of Transformer Training Instabilities},
     author = {Justin Gilmer, Andrea Schioppa, and Jeremy Cohen},
@@ -472,7 +472,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{mentzer2023finite,
     title   = {Finite Scalar Quantization: VQ-VAE Made Simple},
     author  = {Fabian Mentzer and David Minnen and Eirikur Agustsson and Michael Tschannen},
@@ -483,7 +483,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation},
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},

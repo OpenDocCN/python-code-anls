@@ -22,13 +22,13 @@ Any new developments for text-to-video synthesis will be centralized at <a href=
 
 ## Install
 
-```bash
+```py
 $ pip install video-diffusion-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from video_diffusion_pytorch import Unet3D, GaussianDiffusion
 
@@ -56,7 +56,7 @@ sampled_videos.shape # (4, 3, 5, 32, 32)
 
 For conditioning on text, they derived text embeddings by first passing the tokenized text through BERT-large. Then you just have to train it like so
 
-```python
+```py
 import torch
 from video_diffusion_pytorch import Unet3D, GaussianDiffusion
 
@@ -87,7 +87,7 @@ sampled_videos.shape # (2, 3, 5, 32, 32)
 
 You can also directly pass in the descriptions of the video as strings, if you plan on using BERT-base for text conditioning
 
-```python
+```py
 import torch
 from video_diffusion_pytorch import Unet3D, GaussianDiffusion
 
@@ -125,7 +125,7 @@ sampled_videos.shape # (3, 3, 5, 32, 32)
 
 This repository also contains a handy `Trainer` class for training on a folder of `gifs`. Each `gif` must be of the correct dimensions `image_size` and `num_frames`.
 
-```python
+```py
 import torch
 from video_diffusion_pytorch import Unet3D, GaussianDiffusion, Trainer
 
@@ -167,7 +167,7 @@ It was not clear how they achieved this, but I furthered a guess.
 
 To arrest attention to the present moment for a certain percentage of batch videos samples, simply pass `prob_focus_present = <prob>` on the diffusion forward method
 
-```python
+```py
 loss = diffusion(videos, cond = text, prob_focus_present = 0.5) # for 50% of videos, focus on the present during training
 loss.backward()
 ```
@@ -190,7 +190,7 @@ If you have a better idea how this is done, just open a github issue.
 
 ## Citations
 
-```bibtex
+```py
 @misc{ho2022video,
   title   = {Video Diffusion Models}, 
   author  = {Jonathan Ho and Tim Salimans and Alexey Gritsenko and William Chan and Mohammad Norouzi and David J. Fleet},
@@ -201,7 +201,7 @@ If you have a better idea how this is done, just open a github issue.
 }
 ```
 
-```bibtex
+```py
 @misc{Saharia2022,
     title   = {Imagen: unprecedented photorealism × deep level of language understanding},
     author  = {Chitwan Saharia*, William Chan*, Saurabh Saxena†, Lala Li†, Jay Whang†, Emily Denton, Seyed Kamyar Seyed Ghasemipour, Burcu Karagol Ayan, S. Sara Mahdavi, Rapha Gontijo Lopes, Tim Salimans, Jonathan Ho†, David Fleet†, Mohammad Norouzi*},

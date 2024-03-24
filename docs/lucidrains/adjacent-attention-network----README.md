@@ -6,7 +6,7 @@ This repository is for my own exploration into the graph neural network field. M
 
 ## Install
 
-```bash
+```py
 $ pip install adjacent-attention-network
 ```
 
@@ -16,7 +16,7 @@ Basically a transformers where each node pays attention to the neighbors as defi
 
 The following example will have a complexity of ~ 1024 * 100
 
-```python
+```py
 import torch
 from adjacent_attention_network import AdjacentAttentionNetwork
 
@@ -35,7 +35,7 @@ model(nodes, adj_mat, mask = mask) # (1, 1024, 512)
 
 If the number of neighbors contain outliers, then the above will lead to wasteful computation, since a lot of nodes will be doing attention on padding. You can use the following stop-gap measure to account for these outliers.
 
-```python
+```py
 import torch
 from adjacent_attention_network import AdjacentAttentionNetwork
 
@@ -58,7 +58,7 @@ model(nodes, adj_mat, mask = mask) # (1, 1024, 512)
 
 For non-local attention, I've decided to use a trick from the Set Transformers paper, the <a href="https://github.com/lucidrains/isab-pytorch">Induced Set Attention Block (ISAB)</a>. From the lens of graph neural net literature, this would be analogous as having global nodes for message passing non-locally.
 
-```python
+```py
 import torch
 from adjacent_attention_network import AdjacentAttentionNetwork
 

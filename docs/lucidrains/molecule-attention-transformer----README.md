@@ -8,13 +8,13 @@ Update: Reread the paper and results do look convincing. However, I do not like 
 
 ## Install
 
-```bash
+```py
 $ pip install molecule-attention-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from molecule_attention_transformer import MAT
 
@@ -44,7 +44,7 @@ out = model(
 
 ## Citations
 
-```bibtex
+```py
 @misc{maziarka2020molecule,
     title={Molecule Attention Transformer}, 
     author={Łukasz Maziarka and Tomasz Danel and Sławomir Mucha and Krzysztof Rataj and Jacek Tabor and Stanisław Jastrzębski},

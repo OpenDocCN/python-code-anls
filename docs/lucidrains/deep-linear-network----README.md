@@ -10,7 +10,7 @@ The module will take care of collapsing the linear weight matrices into one weig
 
 ## Install
 
-```bash
+```py
 $ pip install deep-linear-network
 ```
 
@@ -18,7 +18,7 @@ $ pip install deep-linear-network
 
 Matrix factorization
 
-```python
+```py
 import torch
 from deep_linear_network import DeepLinear
 
@@ -29,7 +29,7 @@ linear(x) # (1, 1024, 512)
 
 Deep Linear Network
 
-```python
+```py
 import torch
 from deep_linear_network import DeepLinear
 
@@ -40,7 +40,7 @@ linear(x) # (1, 1024, 128)
 
 ## Citations
 
-```bibtex
+```py
 @misc{arora2019implicit,
     title={Implicit Regularization in Deep Matrix Factorization}, 
     author={Sanjeev Arora and Nadav Cohen and Wei Hu and Yuping Luo},
@@ -51,7 +51,7 @@ linear(x) # (1, 1024, 128)
 }
 ```
 
-```bibtex
+```py
 @misc{jing2020implicit,
     title={Implicit Rank-Minimizing Autoencoder}, 
     author={Li Jing and Jure Zbontar and Yann LeCun},

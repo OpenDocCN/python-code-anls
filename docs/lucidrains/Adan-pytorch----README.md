@@ -10,13 +10,13 @@ Explanation from <a href="https://twitter.com/davisblalock/status/15619761825678
 
 ## Install
 
-```bash
+```py
 $ pip install adan-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 from adan_pytorch import Adan
 
 # mock model
@@ -50,7 +50,7 @@ for _ in range(10):
 
 ## Citations
 
-```bibtex
+```py
 @article{Xie2022AdanAN,
     title   = {Adan: Adaptive Nesterov Momentum Algorithm for Faster Optimizing Deep Models},
     author  = {Xingyu Xie and Pan Zhou and Huan Li and Zhouchen Lin and Shuicheng Yan},

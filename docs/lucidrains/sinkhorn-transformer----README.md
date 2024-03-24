@@ -18,7 +18,7 @@ This work also brings in reversible networks and feed forward chunking (concepts
 
 ## Install
 
-```bash
+```py
 $ pip install sinkhorn_transformer
 ```
 
@@ -26,7 +26,7 @@ $ pip install sinkhorn_transformer
 
 A Sinkhorn Transformer based language model
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformerLM
 
@@ -62,7 +62,7 @@ model(x) # (1, 2048, 20000)
 
 A plain Sinkhorn Transformer, layers of sinkhorn attention
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformer
 
@@ -79,7 +79,7 @@ model(x) # (1, 2048, 1024)
 
 Sinkhorn Encoder / Decoder Transformer
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformerLM
 
@@ -123,7 +123,7 @@ dec(y, context=context, input_mask=y_mask, context_mask=x_mask) # (1, 4096, 2000
 
 By default the model will complain if given an input that is not a multiple of the bucket size. To avoid having to make the same padding calculations each time, you can use the helper `Autopadder` class. It will take care of the `input_mask` for you as well, if given. Contextual key/values and mask are supported as well.
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformerLM
 from sinkhorn_transformer import Autopadder
@@ -148,7 +148,7 @@ model(x) # (1, 1117, 20000)
 
 This repository has diverged from the paper and is now using attention in place of the original sorting net + gumbel sinkhorn sampling. I have not found a noticeable difference in performance yet, and the new scheme allows me to generalize the network to flexible sequence lengths. If you would like to try Sinkhorn, please use the following settings, which only works for non-causal networks.
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformerLM
 
@@ -185,7 +185,7 @@ Sinkhorn, when trained on fixed length sequences, seems to have trouble decoding
 Fortunately, I think I have found a simple solution. During training, for causal networks, randomly truncate the sequences and force the sorting net to generalize. I have provided a flag (`randomly_truncate_sequence`) for the `AutoregressiveWrapper` instance to make this easy.
 
 
-```python
+```py
 import torch
 from sinkhorn_transformer import SinkhornTransformerLM, AutoregressiveWrapper
 
@@ -222,7 +222,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 
 ## Citations
 
-```bibtex
+```py
 @misc{tay2020sparse,
     title   = {Sparse Sinkhorn Attention},
     author  = {Yi Tay and Dara Bahri and Liu Yang and Donald Metzler and Da-Cheng Juan},
@@ -231,7 +231,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -241,7 +241,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @misc{lan2019albert,
     title       = {ALBERT: A Lite BERT for Self-supervised Learning of Language Representations},
     author      = {Zhenzhong Lan and Mingda Chen and Sebastian Goodman and Kevin Gimpel and Piyush Sharma and Radu Soricut},
@@ -250,7 +250,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -259,7 +259,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @misc{roy*2020efficient,
     title   = {Efficient Content-Based Sparse Attention with Routing Transformers},
     author  = {Aurko Roy* and Mohammad Taghi Saffar* and David Grangier and Ashish Vaswani},
@@ -268,7 +268,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @inproceedings{fan2020reducing,
     title     ={Reducing Transformer Depth on Demand with Structured Dropout},
     author    ={Angela Fan and Edouard Grave and Armand Joulin},
@@ -278,7 +278,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @misc{lample2019large,
     title   = {Large Memory Layers with Product Keys},
     author  = {Guillaume Lample and Alexandre Sablayrolles and Marc'Aurelio Ranzato and Ludovic Denoyer and Hervé Jégou},
@@ -288,7 +288,7 @@ If anyone has found a cleaner solution, please let me know in the issues.
 }
 ```
 
-```bibtex
+```py
 @misc{bhojanapalli2020lowrank,
     title   = {Low-Rank Bottleneck in Multi-head Attention Models},
     author  = {Srinadh Bhojanapalli and Chulhee Yun and Ankit Singh Rawat and Sashank J. Reddi and Sanjiv Kumar},

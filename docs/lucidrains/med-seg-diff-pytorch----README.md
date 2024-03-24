@@ -13,13 +13,13 @@ Implementation of <a href="https://arxiv.org/abs/2211.00611">MedSegDiff</a> in P
 
 ## Install
 
-```bash
+```py
 $ pip install med-seg-diff-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from med_seg_diff_pytorch import Unet, MedSegDiff
 
@@ -51,7 +51,7 @@ pred.shape                              # predicted segmented images - (8, 3, 12
 ## Training
 
 Command to run
-```bash
+```py
 accelerate launch driver.py --mask_channels=1 --input_img_channels=3 --image_size=64 --data_path='./data' --dim=64 --epochs=100 --batch_size=1 --scale_lr --gradient_accumulation_steps=4
 ```
 If you want to add in self condition where we condition with the mask we have so far, do --self_condition
@@ -64,7 +64,7 @@ If you want to add in self condition where we condition with the mask we have so
 
 ## Citations
 
-```bibtex
+```py
 @article{Wu2022MedSegDiffMI,
     title   = {MedSegDiff: Medical Image Segmentation with Diffusion Probabilistic Model},
     author  = {Junde Wu and Huihui Fang and Yu Zhang and Yehui Yang and Yanwu Xu},
@@ -74,7 +74,7 @@ If you want to add in self condition where we condition with the mask we have so
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hoogeboom2023simpleDE,
     title   = {simple diffusion: End-to-end diffusion for high resolution images},
     author  = {Emiel Hoogeboom and Jonathan Heek and Tim Salimans},

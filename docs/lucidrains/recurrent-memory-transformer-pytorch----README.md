@@ -14,13 +14,13 @@ There is no doubt in my mind that RMT would make a stronger RL agent than <a hre
 
 ## Install
 
-```bash
+```py
 $ pip install recurrent-memory-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from recurrent_memory_transformer_pytorch import RecurrentMemoryTransformer
 
@@ -48,7 +48,7 @@ logits3, mem3, _ = model(x, mem2)  # (1, 1024, 20000), (1, 128, 512), None
 
 With XL memories
 
-```python
+```py
 import torch
 from recurrent_memory_transformer_pytorch import RecurrentMemoryTransformer
 
@@ -77,7 +77,7 @@ logits3, mem3, xl_mem3 = model(x, mem2, xl_memories = xl_mem2)  # (1, 1024, 2000
 
 Train on an absurdly long sequence
 
-```python
+```py
 import torch
 from recurrent_memory_transformer_pytorch import (
     RecurrentMemoryTransformer,
@@ -121,7 +121,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{bulatov2022recurrent,
   title     = {Recurrent Memory Transformer},
   author    = {Aydar Bulatov and Yuri Kuratov and Mikhail Burtsev},
@@ -132,7 +132,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @misc{bulatov2023scaling,
   title     = {Scaling Transformer to 1M tokens and beyond with RMT},
   author    = {Aydar Bulatov and Yuri Kuratov and Mikhail S. Burtsev},
@@ -143,7 +143,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
   title     = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
   author    = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -152,7 +152,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -161,7 +161,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -172,7 +172,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Wu2020MemformerAM,
     title   = {Memformer: A Memory-Augmented Transformer for Sequence Modeling},
     author  = {Qingyang Wu and Zhenzhong Lan and Kun Qian and Jing Gu and Alborz Geramifard and Zhou Yu},
@@ -181,7 +181,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author    = {PENG Bo},
     title     = {BlinkDL/RWKV-LM: 0.01},
@@ -194,7 +194,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -205,7 +205,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @software{Dayma_DALLE_Mini_2021,
     author  = {Dayma, Boris and Patil, Suraj and Cuenca, Pedro and Saifullah, Khalid and Abraham, Tanishq and Lê Khắc, Phúc and Melas, Luke and Ghosh, Ritobrata},
     doi     = {10.5281/zenodo.5146400},
@@ -217,7 +217,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
     year    = {2021}}
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Anonymous},
@@ -228,7 +228,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021erniedoc,
     title   = {ERNIE-Doc: A Retrospective Long-Document Modeling Transformer},
     author  = {Siyu Ding and Junyuan Shang and Shuohuan Wang and Yu Sun and Hao Tian and Hua Wu and Haifeng Wang},
@@ -239,7 +239,7 @@ loss = model(seq, memory_replay_backprop = True) # memory efficient training fro
 }
 ```
 
-```bibtex
+```py
 @article{Xie2023ResiDualTW,
   title     = {ResiDual: Transformer with Dual Residual Connections},
   author    = {Shufang Xie and Huishuai Zhang and Junliang Guo and Xu Tan and Jiang Bian and Hany Hassan Awadalla and Arul Menezes and Tao Qin and Rui Yan},

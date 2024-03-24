@@ -6,7 +6,7 @@ A concise but fully-featured transformer, complete with a set of promising e**x*
 
 ## Install
 
-```bash
+```py
 $ pip install x-transformers
 ```
 
@@ -14,7 +14,7 @@ $ pip install x-transformers
 
 Full encoder / decoder
 
-```python
+```py
 import torch
 from x_transformers import XTransformer
 
@@ -41,7 +41,7 @@ loss.backward()
 
 Decoder-only (GPT-like)
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -62,7 +62,7 @@ model(x) # (1, 1024, 20000)
 
 GPT3 would be approximately the following (but you wouldn't be able to run it anyways)
 
-```python
+```py
 
 gpt3 = TransformerWrapper(
     num_tokens = 50000,
@@ -78,7 +78,7 @@ gpt3 = TransformerWrapper(
 
 Encoder-only (BERT-like)
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -100,7 +100,7 @@ model(x, mask = mask) # (1, 1024, 20000)
 
 State of the art image classification (<a href="https://arxiv.org/abs/2205.01580">SimpleViT</a>)
 
-```python
+```py
 import torch
 from x_transformers import ViTransformerWrapper, Encoder
 
@@ -121,7 +121,7 @@ model(img) # (1, 1000)
 
 Image -> caption
 
-```python
+```py
 import torch
 from x_transformers import ViTransformerWrapper, TransformerWrapper, Encoder, Decoder
 
@@ -155,7 +155,7 @@ decoder(caption, context = encoded) # (1, 1024, 20000)
 
 <a href="https://arxiv.org/abs/2209.06794">PaLI</a>, state of the art language-vision model
 
-```python
+```py
 import torch
 from x_transformers import ViTransformerWrapper, XTransformer, Encoder
 
@@ -214,7 +214,7 @@ loss.backward()
 
 ## Dropouts
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -256,7 +256,7 @@ You can use it in this repository by setting `attn_flash` to `True` and enjoy th
 
 ex.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -280,7 +280,7 @@ https://arxiv.org/abs/1907.01470
 
 Proposes adding learned memory key / values prior to attention. They were able to remove feedforwards altogether and attain similar performance to the original transformers. I have found that keeping the feedforwards and adding the memory key / values leads to even better performance.
 
-```python
+```py
 from x_transformers import Decoder, Encoder
 
 enc = Encoder(
@@ -299,7 +299,7 @@ https://arxiv.org/abs/2006.11527
 
 Proposes adding learned tokens, akin to CLS tokens, named memory tokens, that is passed through the attention layers alongside the input tokens. This setting is compatible with both encoder and decoder training.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -325,7 +325,7 @@ https://arxiv.org/abs/1910.05895
 
 They experiment with alternatives to Layer normalization and found one that is both effective and simpler. Researchers have shared with me this leads to faster convergence.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -343,7 +343,7 @@ model = TransformerWrapper(
 
 You can also use the l2 normalized embeddings proposed as part of `fixnorm`. I have found it leads to improved convergence, when paired with small initialization (proposed by <a href="https://github.com/BlinkDL">BlinkDL</a>). The small initialization will be taken care of as long as `l2norm_embed` is set to `True`
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -363,7 +363,7 @@ Along the same lines of l2 normalized embeddings, Huggingface's <a href="https:/
 
 It is recommended you either have either `l2norm_embed` or `post_emb_norm` set to `True` but not both, as they probably serve the same purpose.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -385,7 +385,7 @@ https://arxiv.org/abs/1910.07467
 
 The authors propose to replace layer normalization with a simpler alternative, without mean centering and the learned bias. An investigative paper found this to be the <a href="https://arxiv.org/abs/2102.11972">best performing normalization variant</a>. It was also used in Deepmind's latest large language models, <a href="https://deepmind.com/research/publications/2021/improving-language-models-by-retrieving-from-trillions-of-tokens">Retro</a> and <a href="https://arxiv.org/abs/2112.11446">Gopher</a>.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -403,7 +403,7 @@ model = TransformerWrapper(
 
 *July 2023* <a href="https://arxiv.org/abs/2307.14995">A linear attention paper</a> has experiments to show that removing the learned multiplicative gamma led to no performance degradation. This simplifies the RMS normalization to a satisfying `l2norm(x) * sqrt(dim)`.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -427,7 +427,7 @@ https://arxiv.org/abs/2002.05202
 
 Noam Shazeer paper that explores gating in the feedforward, finding that simple gating with GELU leads to significant improvements. This variant also showed up in the latest mT5 architecture. You should always turn this on (I may eventually turn it on by default).
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -445,7 +445,7 @@ model = TransformerWrapper(
 
 The <a href="https://ai.googleblog.com/2022/04/pathways-language-model-palm-scaling-to.html">PaLM</a> language model also chose to use the Swish GLU variant. You can turn this on by setting two flags
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -468,7 +468,7 @@ Starting with <a href="https://ai.googleblog.com/2022/04/pathways-language-model
 
 You can turn off the feedforward bias as follows
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -490,7 +490,7 @@ https://arxiv.org/abs/2109.08668
 
 This paper used neural architecture search and found an activation, Relu Squared, that is both simpler and performs better than GELU, in the autoregressive language model setting. I have confirmed this in my independent experiments. However, if one were using the GLU variant from above, GELU still performs better. Pending further corroboration.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, Encoder
 
@@ -514,7 +514,7 @@ https://arxiv.org/abs/1912.11637
 
 This paper proposes an efficient way to sparsify attention by zeroing all dot-product query/key values not within the top k values. The show that this cheap method was as effective as other more expensive operations like sparsemax or entmax15. This technique comes with the cost of an extra hyperparameter (the top k values to keep). The paper recommends a value of `k = 8`
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -538,7 +538,7 @@ https://arxiv.org/abs/2003.02436
 
 A Noam Shazeer paper that proposes mixing information between heads pre and post attention (softmax). This comes with the cost of extra memory and compute.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -560,7 +560,7 @@ https://arxiv.org/abs/1911.02150
 
 Yet another Noam Shazeer paper (he's a legend) that proposes to only have one head for the key / values, but multi-headed queries. This paper was largely ignored for a while, but recently validated at scale in <a href="https://arxiv.org/abs/2203.07814">AlphaCode</a> as well as <a href="https://arxiv.org/abs/2204.02311">PaLM</a>. It has the property of being memory efficient when decoding extremely large language models. You can use it with one keyword argument as shown below.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -578,7 +578,7 @@ model = TransformerWrapper(
 
 This has been further generalized in <a href="https://arxiv.org/abs/2305.13245">a recent paper</a> to allow for groups of query heads to attend to a single key / value head. You can use this by specifying the `attn_kv_heads`
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -604,7 +604,7 @@ This paper proposes to add a gated linear unit at the end of the attention layer
 
 Update: After some experimentation, I found this variant actually performs worse, but if it were to be modified to not concatenate the queries before gating, it performs much better. That is what we will be using in this repository.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -628,7 +628,7 @@ model = TransformerWrapper(
 
 A quick test shows a small but noticeable improvement, on about the same order as attention on attention.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -658,7 +658,7 @@ The amount of interleaving is controlled by a "sandwich coefficient", which they
 
 You can experiment with this feature as shown below
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -684,7 +684,7 @@ https://arxiv.org/abs/1906.02762
 
 The authors propose to view the success of transformers from a dynamical systems point of view, and then proposes an improvement based on mathematics of that POV. Specifically, they propose to place the attention layer in between two feedforward layers. This was adopted by a paper using transformers for speech recognition, the <a href="https://arxiv.org/abs/2005.08100">Conformer</a>.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -706,7 +706,7 @@ https://arxiv.org/abs/1910.10683
 
 T5 is one of the most successful encoder / decoder transformer architectures trained to date. They invented a new simplified relative positional encoding based on learned bias values that are added to the attention matrix pre-softmax. This bias is shared and injected into each attention layer. I have decided to include this because it offers a cheap way to have relative positional encoding (superior to absolute positional), and I have read papers that suggest having positional encoding added to each layer (vs only before the first) is beneficial.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -730,7 +730,7 @@ https://arxiv.org/abs/2012.11747
 
 This paper from Google proposes residualizing the pre-attention scores across all layers. At the cost of no extra parameters, they show improvement on top of regular attention networks. If you turn on this setting, be aware that the best results in the paper used post-normalization, in which case a learning warmup will be needed. The authors also reported that they could use a higher learning rate and get even better gains in the same amount of steps. (In the paper they use `2e-4` vs `1e-4` for vanilla transformer)
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Encoder
 
@@ -749,7 +749,7 @@ model = TransformerWrapper(
 
 I also tried residualizing cross attention and may have noticed an improvement in convergence. You can try it by setting the `cross_residual_attn` keyword to `True`
 
-```python
+```py
 import torch
 from x_transformers import XTransformer
 
@@ -773,7 +773,7 @@ You can also do Transformer-XL recurrence, by simply passing in a `max_mem_len` 
 
 Then, you can retrieve the memories at each step with the `return_mems` keyword and pass it to the next iteration.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -800,7 +800,7 @@ logits3, mems3  = model_xl(seg3, mems = mems2, return_mems = True)
 
 Setting up the logic for training and sampling from transformer xl can be a bit overwhelming. This repository offers a simple wrapper that should make this easy, with the `XLAutoregressiveWrapper`.
 
-```python
+```py
 # pass in the above model_xl
 
 xl_wrapper = XLAutoregressiveWrapper(model_xl)
@@ -823,7 +823,7 @@ generated = xl_wrapper.generate(prime, 4096)  # (1, 4096)
 
 <a href="https://arxiv.org/abs/2012.15688">This paper</a> proposes a simple technique to enhance the range of Transformer-XL. They simply route the memory segment of a layer to the layer below it, for the next recurrent step. You can enable this by setting `shift_mem_down = 1`. You can also shift down arbitrary number of layers by setting this value to `> 1`.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -856,7 +856,7 @@ https://arxiv.org/abs/1910.06764
 
 The authors propose gating the residual connections in the transformer network and demonstrate increased stability and performance for Transformer-XL in a variety of reinforcement learning tasks.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -881,7 +881,7 @@ Developed in Beijing, this new technique quickly gained interest in the NLP circ
 
 Highly recommend that you have this turned on whenever you are working on an ordered sequence.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -899,7 +899,7 @@ model = TransformerWrapper(
 
 Update (12/2022): Rotary embedding has since been hugely successful, widely adopted in many large language models, including the largest in the world, PaLM. However, it has been uncovered in the ALiBi paper that rotary embeddings cannot length extrapolate well. This was recently addressed in <a href="https://arxiv.org/abs/2212.10554v1">a Microsoft research paper</a>. They propose a way to unobtrusively add the same decay as in ALiBi, and found that this resolves the extrapolation problem. You can use it in this repository by setting `rotary_xpos = True`. Like ALiBi, it would enforce the attention to be local. You can set the receptive field with `rotary_xpos_scale_base` value, which defaults to `512`
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -943,7 +943,7 @@ You can use this type of relative position if you wish to train at smaller seque
 
 Update: <a href="https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460121">First place RNA folding using dynamic positional bias</a>
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -972,7 +972,7 @@ Update: There are reports that ALiBi outperform Rotary embeddings for pretrainin
 
 Update: <a href="https://arxiv.org/abs/2305.19466">New paper</a> shows that no positional embedding can length extrapolate even than explicit ones
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1001,7 +1001,7 @@ Update: after more experiments, it seems that in the context of BPE encoding, wi
 
 Update: When doing BPE encoded tokens, it seems that shift of 2 will bottleneck the dimensions (divided by 5). It is recommended you always do a shift of 1, unless if you are working with character level.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1019,7 +1019,7 @@ model = TransformerWrapper(
 
 If you want finer control over how much is shifted per block (whether attention or feedforward), simply pass in a tuple of size that is equal to the number of layers.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1041,7 +1041,7 @@ model = TransformerWrapper(
 
 This technique first made an appearance in <a href="https://arxiv.org/abs/2105.13290">the CoqView paper</a>, a Chinese version of the famous text-to-image transformer DALL-E. They propose, when using pre-layernorm, to add an extra layernorm to all the branch outputs. I have found this to be very effective for a number of projects, when facing instability during training.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1066,7 +1066,7 @@ model(x)
 
 <a href="https://arxiv.org/abs/2304.14802">This Microsoft paper</a> proposes yet another normalization configuration, combining both pre and post layernorm. They claim this hybridization reduces representation collapse (known to be an issue with pre-layernorm with increasing depth), while maintaining stability and reducing vanishing gradients (issues with post-layernorm). Initial experiments on my end show it to work no worse than pre-layernorm or sandwich norm. More study needed by the public to see if this is actually a winning technique.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1094,7 +1094,7 @@ This <a href="https://openreview.net/forum?id=GMYWzWztDx5">paper</a> uncovers an
 
 The first change is to offer per head scaling after aggregating the values in attention. My experiments show a slight improvement in convergence.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1115,7 +1115,7 @@ model(x)
 
 The second change is an extra layernorm right after the activation in the feedforward. I have also verified a slight improvement, at the cost of extra compute.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1136,7 +1136,7 @@ model(x)
 
 For the residual scaling, you simply have to set `scale_residual = True`. I have noticed slight improvements, but occasional instability as well, so use with caution.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1175,7 +1175,7 @@ Update 2: Tero Karras has successfully used cosine sim attention in <a href="htt
 
 You can use it as follows
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1197,7 +1197,7 @@ model(x)
 
 Another update: Simply scaling the cosine similarity (group of 1) with a fixed constant (10) may work too
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1233,7 +1233,7 @@ Update 3: Used by <a href="https://www.adept.ai/blog/persimmon-8b">8B parameter 
 
 Update 4: a MetaAI group found that they can <a href="https://arxiv.org/abs/2309.16588">alleviate outliers</a> by adding `register tokens`, also known as `memory tokens` from earlier literature (Burtsev et al). Perhaps what should be tried next is see if qk norm can be improved in the presence of memory tokens.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1261,7 +1261,7 @@ Given <a href="https://ai.googleblog.com/2022/04/pathways-language-model-palm-sc
 
 Update: <a href="https://arxiv.org/abs/2305.19466">This paper</a> shows that in the absence of any engineered absolute or relative positional embeddings, decoders can generate implicit positions, and even length generalize better than solutions of the past. They were unaware of dynamic positional bias, however.
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -1289,7 +1289,7 @@ model(x)
 You can use this by setting the `mask_prob` on the `AutoregressiveWrapper` class
 
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder, AutoregressiveWrapper
 
@@ -1323,7 +1323,7 @@ loss.backward()
 
 ### Cross Attention
 
-```python
+```py
 import torch
 from x_transformers import Encoder, CrossAttender
 
@@ -1343,7 +1343,7 @@ model(nodes, context = encoded_neighbors, mask = node_masks, context_mask = neig
 
 ### Continuous Embeddings
 
-```python
+```py
 import torch
 from x_transformers import ContinuousTransformerWrapper, Decoder
 
@@ -1365,7 +1365,7 @@ model(x) # (1, 1024, 100)
 
 You can also train a transformer that accepts continuous values autoregressively easily, in the same scheme as done successfully in <a href="https://arxiv.org/abs/2112.05329">this paper</a>
 
-```python
+```py
 import torch
 from x_transformers import ContinuousTransformerWrapper, Decoder
 from x_transformers import ContinuousAutoregressiveWrapper
@@ -1409,7 +1409,7 @@ This is promising work that resulted from the collaboration across many institut
 
 This is corroborated by some [prior work](https://github.com/lucidrains/tab-transformer-pytorch#ft-transformer)
 
-```python
+```py
 import torch
 
 from x_transformers import (
@@ -1458,7 +1458,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 
 ## Citations
 
-```bibtex
+```py
 @misc{vaswani2017attention,
     title   = {Attention Is All You Need},
     author  = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
@@ -1469,7 +1469,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{DBLP:journals/corr/abs-1907-01470,
     author    = {Sainbayar Sukhbaatar and
                Edouard Grave and
@@ -1484,7 +1484,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{1910.05895,
     author  = {Toan Q. Nguyen and Julian Salazar},
     title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
@@ -1494,7 +1494,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -1503,7 +1503,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Zoph2022STMoEDS,
     title   = {ST-MoE: Designing Stable and Transferable Sparse Expert Models},
     author  = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam M. Shazeer and William Fedus},
@@ -1511,7 +1511,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{bhojanapalli2020lowrank,
     title   = {Low-Rank Bottleneck in Multi-head Attention Models},
     author  = {Srinadh Bhojanapalli and Chulhee Yun and Ankit Singh Rawat and Sashank J. Reddi and Sanjiv Kumar},
@@ -1520,7 +1520,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{burtsev2020memory,
     title   = {Memory Transformer}, 
     author  = {Mikhail S. Burtsev and Grigory V. Sapunov},
@@ -1531,7 +1531,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{zhao2019explicit,
     title   = {Explicit Sparse Transformer: Concentrated Attention Through Explicit Selection}, 
     author  = {Guangxiang Zhao and Junyang Lin and Zhiyuan Zhang and Xuancheng Ren and Qi Su and Xu Sun},
@@ -1542,7 +1542,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{correia2019adaptively,
     title   = {Adaptively Sparse Transformers},
     author  = {Gonçalo M. Correia and Vlad Niculae and André F. T. Martins},
@@ -1553,7 +1553,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020talkingheads,
     title   = {Talking-Heads Attention}, 
     author  = {Noam Shazeer and Zhenzhong Lan and Youlong Cheng and Nan Ding and Le Hou},
@@ -1564,7 +1564,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{press2020improving,
     title   = {Improving Transformer Models by Reordering their Sublayers}, 
     author  = {Ofir Press and Noah A. Smith and Omer Levy},
@@ -1575,7 +1575,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{lu2019understanding,
     title   = {Understanding and Improving Transformer From a Multi-Particle Dynamic System Point of View}, 
     author  = {Yiping Lu and Zhuohan Li and Di He and Zhiqing Sun and Bin Dong and Tao Qin and Liwei Wang and Tie-Yan Liu},
@@ -1586,7 +1586,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{ke2020rethinking,
     title     = {Rethinking Positional Encoding in Language Pre-training},
     author    = {Guolin Ke and Di He and Tie-Yan Liu},
@@ -1597,7 +1597,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{dosovitskiy2020image,
     title   = {An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale},
     author  = {Alexey Dosovitskiy and Lucas Beyer and Alexander Kolesnikov and Dirk Weissenborn and Xiaohua Zhai and Thomas Unterthiner and Mostafa Dehghani and Matthias Minderer and Georg Heigold and Sylvain Gelly and Jakob Uszkoreit and Neil Houlsby},
@@ -1608,7 +1608,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{huang2019attention,
     title   = {Attention on Attention for Image Captioning},
     author  = {Lun Huang and Wenmin Wang and Jie Chen and Xiao-Yong Wei},
@@ -1619,7 +1619,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{raffel2020exploring,
     title   = {Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer}, 
     author  = {Colin Raffel and Noam Shazeer and Adam Roberts and Katherine Lee and Sharan Narang and Michael Matena and Yanqi Zhou and Wei Li and Peter J. Liu},
@@ -1630,7 +1630,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{martins-etal-2020-sparse,
     title   = "Sparse Text Generation",
     author  = "Martins, Pedro Henrique  and
@@ -1645,7 +1645,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{he2020realformer,
     title   = {RealFormer: Transformer Likes Residual Attention},
     author  = {Ruining He and Anirudh Ravula and Bhargav Kanagal and Joshua Ainslie},
@@ -1656,7 +1656,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{carion2020endtoend,
     title   = {End-to-End Object Detection with Transformers},
     author  = {Nicolas Carion and Francisco Massa and Gabriel Synnaeve and Nicolas Usunier and Alexander Kirillov and Sergey Zagoruyko},
@@ -1667,7 +1667,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{press2021ALiBi,
     title   = {Train Short, Test Long: Attention with Linear Biases Enable Input Length Extrapolation},
     author  = {Ofir Press and Noah A. Smith and Mike Lewis},
@@ -1676,7 +1676,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{parisotto2019stabilizing,
     title     = {Stabilizing Transformers for Reinforcement Learning},
     author    = {Emilio Parisotto and H. Francis Song and Jack W. Rae and Razvan Pascanu and Caglar Gulcehre and Siddhant M. Jayakumar and Max Jaderberg and Raphael Lopez Kaufman and Aidan Clark and Seb Noury and Matthew M. Botvinick and Nicolas Heess and Raia Hadsell},
@@ -1687,7 +1687,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{narang2021transformer,
     title       = {Do Transformer Modifications Transfer Across Implementations and Applications?},
     author      = {Sharan Narang and Hyung Won Chung and Yi Tay and William Fedus and Thibault Fevry and Michael Matena and Karishma Malkan and Noah Fiedel and Noam Shazeer and Zhenzhong Lan and Yanqi Zhou and Wei Li and Nan Ding and Jake Marcus and Adam Roberts and Colin Raffel},
@@ -1698,7 +1698,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{zhang2019root,
     title   = {Root Mean Square Layer Normalization},
     author  = {Biao Zhang and Rico Sennrich},
@@ -1709,7 +1709,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Qin2023ScalingTT,
     title   = {Scaling TransNormer to 175 Billion Parameters},
     author  = {Zhen Qin and Dong Li and Weigao Sun and Weixuan Sun and Xuyang Shen and Xiaodong Han and Yunshen Wei and Baohong Lv and Fei Yuan and Xiao Luo and Y. Qiao and Yiran Zhong},
@@ -1718,7 +1718,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -1729,7 +1729,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chen2023ExtendingCW,
     title   = {Extending Context Window of Large Language Models via Positional Interpolation},
     author  = {Shouyuan Chen and Sherman Wong and Liangjian Chen and Yuandong Tian},
@@ -1737,7 +1737,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
   title     = {A Length-Extrapolatable Transformer},
   author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -1745,7 +1745,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @Article{AlphaFold2021,
     author  = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and {\v{Z}}{\'\i}dek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A A and Ballard, Andrew J and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
     journal = {Nature},
@@ -1756,7 +1756,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},
@@ -1769,7 +1769,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{csordás2021devil,
     title   = {The Devil is in the Detail: Simple Tricks Improve Systematic Generalization of Transformers},
     author  = {Róbert Csordás and Kazuki Irie and Jürgen Schmidhuber},
@@ -1780,7 +1780,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{so2021primer,
     title   = {Primer: Searching for Efficient Transformers for Language Modeling}, 
     author  = {David R. So and Wojciech Mańke and Hanxiao Liu and Zihang Dai and Noam Shazeer and Quoc V. Le},
@@ -1791,7 +1791,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021erniedoc,
     title   = {ERNIE-Doc: A Retrospective Long-Document Modeling Transformer}, 
     author  = {Siyu Ding and Junyuan Shang and Shuohuan Wang and Yu Sun and Hao Tian and Hua Wu and Haifeng Wang},
@@ -1802,7 +1802,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -1813,7 +1813,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Anonymous},
@@ -1824,7 +1824,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{henry2020querykey,
     title   = {Query-Key Normalization for Transformers},
     author  = {Alex Henry and Prudhvi Raj Dachapally and Shubham Pawar and Yuxuan Chen},
@@ -1835,7 +1835,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -1846,7 +1846,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Haviv2022TransformerLM,
     title   = {Transformer Language Models without Positional Encodings Still Learn Positional Information},
     author  = {Adi Haviv and Ori Ram and Ofir Press and Peter Izsak and Omer Levy},
@@ -1856,7 +1856,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{chowdhery2022PaLM,
     title   = {PaLM: Scaling Language Modeling with Pathways},
     author  = {Chowdhery, Aakanksha et al},
@@ -1864,7 +1864,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam M. Shazeer},
@@ -1874,7 +1874,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Ainslie2023GQATG,
     title   = {GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints},
     author  = {Joshua Ainslie and James Lee-Thorp and Michiel de Jong and Yury Zemlyanskiy and Federico Lebr'on and Sumit K. Sanghai},
@@ -1885,7 +1885,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{schlag2020enhancing,
     title   = {Enhancing the Transformer with explicit relational encoding for math problem solving},
     author  = {Imanol Schlag and Paul Smolensky and Roland Fernandez and Nebojsa Jojic and J{\"u}rgen Schmidhuber and Jianfeng Gao},
@@ -1894,7 +1894,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022FCMFC,
     title   = {FCM: Forgetful Causal Masking Makes Causal Language Models Better Zero-Shot Learners},
     author  = {Hao Liu and Xinyang Geng and Lisa Lee and Igor Mordatch and Sergey Levine and Sharan Narang and P. Abbeel},
@@ -1904,7 +1904,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Huang2016DeepNW,
     title   = {Deep Networks with Stochastic Depth},
     author  = {Gao Huang and Yu Sun and Zhuang Liu and Daniel Sedra and Kilian Q. Weinberger},
@@ -1913,7 +1913,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hua2022TransformerQI,
     title   = {Transformer Quality in Linear Time},
     author  = {Weizhe Hua and Zihang Dai and Hanxiao Liu and Quoc V. Le},
@@ -1922,7 +1922,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Chang2022MaskGITMG,
     title   = {MaskGIT: Masked Generative Image Transformer},
     author  = {Huiwen Chang and Han Zhang and Lu Jiang and Ce Liu and William T. Freeman},
@@ -1932,7 +1932,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Lezama2022ImprovedMI,
     title   = {Improved Masked Image Generation with Token-Critic},
     author  = {Jos{\'e} Lezama and Huiwen Chang and Lu Jiang and Irfan Essa},
@@ -1942,7 +1942,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -1954,7 +1954,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -1963,7 +1963,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Xie2023ResiDualTW,
   title     = {ResiDual: Transformer with Dual Residual Connections},
   author    = {Shufang Xie and Huishuai Zhang and Junliang Guo and Xu Tan and Jiang Bian and Hany Hassan Awadalla and Arul Menezes and Tao Qin and Rui Yan},
@@ -1973,7 +1973,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Dehghani2023ScalingVT,
     title   = {Scaling Vision Transformers to 22 Billion Parameters},
     author  = {Mostafa Dehghani and Josip Djolonga and Basil Mustafa and Piotr Padlewski and Jonathan Heek and Justin Gilmer and Andreas Steiner and Mathilde Caron and Robert Geirhos and Ibrahim M. Alabdulmohsin and Rodolphe Jenatton and Lucas Beyer and Michael Tschannen and Anurag Arnab and Xiao Wang and Carlos Riquelme and Matthias Minderer and Joan Puigcerver and Utku Evci and Manoj Kumar and Sjoerd van Steenkiste and Gamaleldin F. Elsayed and Aravindh Mahendran and Fisher Yu and Avital Oliver and Fantine Huot and Jasmijn Bastings and Mark Collier and Alexey A. Gritsenko and Vighnesh Birodkar and Cristina Nader Vasconcelos and Yi Tay and Thomas Mensink and Alexander Kolesnikov and Filip Paveti'c and Dustin Tran and Thomas Kipf and Mario Luvci'c and Xiaohua Zhai and Daniel Keysers and Jeremiah Harmsen and Neil Houlsby},
@@ -1981,7 +1981,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Beyer2022BetterPV,
     title   = {Better plain ViT baselines for ImageNet-1k},
     author  = {Lucas Beyer and Xiaohua Zhai and Alexander Kolesnikov},
@@ -1991,7 +1991,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Kazemnejad2023TheIO,
     title   = {The Impact of Positional Encoding on Length Generalization in Transformers},
     author  = {Amirhossein Kazemnejad and Inkit Padhi and Karthikeyan Natesan Ramamurthy and Payel Das and Siva Reddy},
@@ -2001,7 +2001,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @misc{bloc97-2023
     title   = {NTK-Aware Scaled RoPE allows LLaMA models to have extended (8k+) context size without any fine-tuning and minimal perplexity degradation.},
     author  = {/u/bloc97},
@@ -2009,7 +2009,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Zoph2022STMoEDS,
     title   = {ST-MoE: Designing Stable and Transferable Sparse Expert Models},
     author  = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam M. Shazeer and William Fedus},
@@ -2017,7 +2017,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Lan2019ALBERTAL,
     title   = {ALBERT: A Lite BERT for Self-supervised Learning of Language Representations},
     author  = {Zhenzhong Lan and Mingda Chen and Sebastian Goodman and Kevin Gimpel and Piyush Sharma and Radu Soricut},
@@ -2028,7 +2028,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Li2022ContrastiveDO,
     title   = {Contrastive Decoding: Open-ended Text Generation as Optimization},
     author  = {Xiang Lisa Li and Ari Holtzman and Daniel Fried and Percy Liang and Jason Eisner and Tatsunori Hashimoto and Luke Zettlemoyer and Mike Lewis},
@@ -2038,7 +2038,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{OBrien2023ContrastiveDI,
     title   = {Contrastive Decoding Improves Reasoning in Large Language Models},
     author  = {Sean O'Brien and Mike Lewis},
@@ -2047,7 +2047,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Darcet2023VisionTN,
     title   = {Vision Transformers Need Registers},
     author  = {Timoth'ee Darcet and Maxime Oquab and Julien Mairal and Piotr Bojanowski},
@@ -2056,7 +2056,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -2067,7 +2067,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Golkar2023xValAC,
     title   = {xVal: A Continuous Number Encoding for Large Language Models},
     author  = {Siavash Golkar and Mariel Pettee and Michael Eickenberg and Alberto Bietti and M. Cranmer and G{\'e}raud Krawezik and Francois Lanusse and Michael McCabe and Ruben Ohana and Liam Parker and Bruno R{\'e}galdo-Saint Blancard and Tiberiu Teşileanu and Kyunghyun Cho and Shirley Ho},
@@ -2076,7 +2076,7 @@ ids_out, num_out, is_number_mask = model.generate(start_ids, start_nums, 17)
 }
 ```
 
-```bibtex
+```py
 @article{Rafailov2023DirectPO,
     title   = {Direct Preference Optimization: Your Language Model is Secretly a Reward Model},
     author  = {Rafael Rafailov and Archit Sharma and Eric Mitchell and Stefano Ermon and Christopher D. Manning and Chelsea Finn},

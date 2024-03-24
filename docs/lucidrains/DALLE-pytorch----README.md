@@ -66,7 +66,7 @@ Thanks to the amazing "mega b#6696" you can generate from this checkpoint in col
 
 ## Install
 
-```bash
+```py
 $ pip install dalle-pytorch
 ```
 
@@ -74,7 +74,7 @@ $ pip install dalle-pytorch
 
 Train VAE
 
-```python
+```py
 import torch
 from dalle_pytorch import DiscreteVAE
 
@@ -99,7 +99,7 @@ loss.backward()
 
 Train DALL-E with pretrained VAE from above
 
-```python
+```py
 import torch
 from dalle_pytorch import DiscreteVAE, DALLE
 
@@ -139,7 +139,7 @@ images.shape # (4, 3, 256, 256)
 
 To prime with a starting crop of an image, simply pass two more arguments
 
-```python
+```py
 img_prime = torch.randn(4, 3, 256, 256)
 
 images = dalle.generate_images(
@@ -153,7 +153,7 @@ images.shape # (4, 3, 256, 256)
 
 You may also want to generate text using DALL-E. For that call this function:
 
-```python
+```py
 text_tokens, texts = dalle.generate_texts(tokenizer, text)
 ```
 
@@ -161,7 +161,7 @@ text_tokens, texts = dalle.generate_texts(tokenizer, text)
 
 You can also skip the training of the VAE altogether, using the pretrained model released by OpenAI! The wrapper class should take care of downloading and caching the model for you auto-magically.
 
-```python
+```py
 import torch
 from dalle_pytorch import OpenAIDiscreteVAE, DALLE
 
@@ -194,7 +194,7 @@ In contrast to OpenAI's VAE, it also has an extra layer of downsampling, so the 
 
 Update - <a href="https://github.com/lucidrains/DALLE-pytorch/discussions/131">it works!</a>
 
-```python
+```py
 from dalle_pytorch import VQGanVAE
 
 vae = VQGanVAE()
@@ -211,7 +211,7 @@ Recently there has surfaced a <a href="https://openreview.net/forum?id=qw8AKxfYb
 
 <a href="https://github.com/crowsonkb">Katherine Crowson</a> outlined in a <a href="https://twitter.com/RiversHaveWings/status/1478093658716966912">tweet</a> how this could work for autoregressive attention models. I have decided to include her idea in this repository for further exploration. One only has to account for two extra keyword arguments on training (`null_cond_prob`) and generation (`cond_scale`).
 
-```python
+```py
 import torch
 from dalle_pytorch import DiscreteVAE, DALLE
 
@@ -265,7 +265,7 @@ That's it!
 
 Train CLIP
 
-```python
+```py
 import torch
 from dalle_pytorch import CLIP
 
@@ -294,7 +294,7 @@ loss.backward()
 
 To get the similarity scores from your trained Clipper, just do
 
-```python
+```py
 images, scores = dalle.generate_images(text, mask = mask, clip = clip)
 
 scores.shape # (2,)
@@ -311,7 +311,7 @@ In the blog post, they used 64 layers to achieve their results. I added reversib
 
 Simply set the `reversible` keyword to `True` for the `DALLE` class
 
-```python
+```py
 dalle = DALLE(
     dim = 1024,
     vae = vae,
@@ -339,7 +339,7 @@ By default `DALLE` will use full attention for all layers, but you can specify t
 
 The sparse attention only applies to the image. Text will always receive full attention, as said in the blogpost.
 
-```python
+```py
 dalle = DALLE(
     dim = 1024,
     vae = vae,
@@ -358,19 +358,19 @@ You can also train with Microsoft Deepspeed's <a href="https://www.deepspeed.ai/
 
 First, you need to install Deepspeed with Sparse Attention
 
-```bash
+```py
 $ sh install_deepspeed.sh
 ```
 
 Next, you need to install the pip package `triton`. It will need to be a version `< 1.0` because that's what Microsoft used.
 
-```bash
+```py
 $ pip install triton==0.4.2
 ```
 
 If both of the above succeeded, now you can train with Sparse Attention!
 
-```python
+```py
 dalle = DALLE(
     dim = 512,
     vae = vae,
@@ -390,13 +390,13 @@ This section will outline how to train the discrete variational autoencoder as w
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWvA54k4fH8zAmiix3VXbg95uEIMfqQM?usp=sharing) Train in Colab
 
-```bash
+```py
 $ pip install wandb
 ```
 
 Followed by
 
-```bash
+```py
 $ wandb login
 ```
 
@@ -404,7 +404,7 @@ $ wandb login
 
 To train the VAE, you just need to run
 
-```python
+```py
 $ python train_vae.py --image_folder /path/to/your/images
 ```
 
@@ -444,7 +444,7 @@ ex.
 
 ex. `cat.txt`
 
-```text
+```py
 A black and white cat curled up next to the fireplace
 A fireplace, with a cat sleeping next to it
 A black cat with a red collar napping
@@ -452,13 +452,13 @@ A black cat with a red collar napping
 
 If you have a dataset with its own directory structure for tying together image and text descriptions, do let me know in the issues, and I'll see if I can accommodate it in the script.
 
-```python
+```py
 $ python train_dalle.py --vae_path ./vae.pt --image_text_folder /path/to/data
 ```
 
 You likely will not finish DALL-E training as quickly as you did your Discrete VAE. To resume from where you left off, just run the same script, but with the path to your DALL-E checkpoints.
 
-```python
+```py
 $ python train_dalle.py --dalle_path ./dalle.pt --image_text_folder /path/to/data
 ```
 
@@ -468,25 +468,25 @@ WebDataset files are regular .tar(.gz) files which can be streamed and used for 
 You Just need to provide the image (first comma separated argument) and caption (second comma separated argument) 
 column key after the --wds argument. The ---image_text_folder points to your .tar(.gz) file instead of the datafolder.
 
-```python
+```py
 $ python train_dalle.py --wds img,cap --image_text_folder /path/to/data.tar(.gz)
 ```
 
 Distributed training with deepspeed works the same way, e.g.:
 
-```python
+```py
 $ deepspeed train_dalle.py --wds img,cap --image_text_folder /path/to/data.tar(.gz) --fp16 --deepspeed
 ```
 
 If you have containing shards (dataset split into several .tar(.gz) files), this is also supported:
 
-```python
+```py
 $ deepspeed train_dalle.py --wds img,cap --image_text_folder /path/to/shardfolder --fp16 --deepspeed
 ```
 
 You can stream the data from a http server or gloogle cloud storage like this:
 
-```python
+```py
 $ deepspeed train_dalle.py --image_text_folder "http://storage.googleapis.com/nvdata-openimages/openimages-train-{000000..000554}.tar" --wds jpg,json --taming --truncate_captions --random_resize_crop_lower_ratio=0.8 --attn_types=full --epochs=2 --fp16 --deepspeed
 ```
 
@@ -498,7 +498,7 @@ into shards of .tar.gz files https://github.com/robvanvolt/DALLE-datasets/blob/m
 
 You can now also train DALL-E without having to train the Discrete VAE at all, courtesy to their open-sourcing their model. You simply have to invoke the `train_dalle.py` script without specifying the `--vae_path`
 
-```python
+```py
 $ python train_dalle.py --image_text_folder /path/to/coco/dataset
 ```
 
@@ -506,7 +506,7 @@ $ python train_dalle.py --image_text_folder /path/to/coco/dataset
 
 Just use the `--taming` flag. Highly recommended you use this VAE over the OpenAI one!
 
-```python
+```py
 $ python train_dalle.py --image_text_folder /path/to/coco/dataset --taming
 ```
 
@@ -514,7 +514,7 @@ $ python train_dalle.py --image_text_folder /path/to/coco/dataset --taming
 
 Once you have successfully trained DALL-E, you can then use the saved model for generation!
 
-```python
+```py
 $ python generate.py --dalle_path ./dalle.pt --text 'fireflies in a field under a full moon'
 ```
 
@@ -524,13 +524,13 @@ To generate multiple images, just pass in your text with '|' character as a sepa
 
 ex.
 
-```python
+```py
 $ python generate.py --dalle_path ./dalle.pt --text 'a dog chewing a bone|a cat chasing mice|a frog eating a fly'
 ```
 
 Note that DALL-E is a full image+text language model. As a consequence you can also generate text using a dalle model.
 
-```python
+```py
 $ python generate.py --dalle_path ./dalle.pt --text 'a dog chewing a bone' --gentext
 ```
 
@@ -542,13 +542,13 @@ You can use a docker container to make sure the version of Pytorch and Cuda are 
 
 To build:
 
-```bash
+```py
 docker build -t dalle docker
 ```
 
 To run in an interactive shell:
 
-```bash
+```py
 docker run --gpus all -it --mount src="$(pwd)",target=/workspace/dalle,type=bind dalle:latest bash
 ```
 
@@ -560,7 +560,7 @@ Thanks to <a href="https://github.com/janEbert">janEbert</a>, the repository is 
 
 You can simply replace any `$ python <file>.py [args...]` command with
 
-```sh
+```py
 $ deepspeed <file>.py [args...] --deepspeed
 ```
 
@@ -585,12 +585,12 @@ In order to run with Apex AMP (through DeepSpeed), you will need to install Deep
 
 Then you will need to install apex from source. 
 This may take awhile and you may see some compilation warnings which can be ignored. 
-```sh
+```py
 sh install_apex.sh
 ```
 
 Now, run `train_dalle.py` with `deepspeed` instead of `python` as done here:
-```sh
+```py
 deepspeed train_dalle.py \
     --taming \
     --image_text_folder 'DatasetsDir' \
@@ -607,7 +607,7 @@ After [installing
 Horovod](https://github.com/lucidrains/DALLE-pytorch/wiki/Horovod-Installation),
 replace any `$ python <file>.py [args...]` command with
 
-```sh
+```py
 $ horovodrun -np <num-gpus> <file>.py [args...] --distributed_backend horovod
 ```
 
@@ -624,19 +624,19 @@ The only requirement is that you use `0` as the padding during tokenization
 
 ex.
 
-```sh
+```py
 $ python train_dalle.py --image_text_folder ./path/to/data --bpe_path ./path/to/bpe.model
 ```
 
 To create a BPE model file from scratch, firstly
 
-```bash
+```py
 $ pip install youtokentome
 ```
 
 Then you need to prepare a big text file that is a representative sample of the type of text you want to encode. You can then invoke the `youtokentome` command-line tools. You'll also need to specify the vocab size you wish to use, in addition to the corpus of text.
 
-```bash
+```py
 $ yttm bpe --vocab_size 8000 --data ./path/to/big/text/file.txt --model ./path/to/bpe.model
 ```
 
@@ -648,17 +648,17 @@ You can train with a <a href="https://huggingface.co/bert-base-chinese">pretrain
 
 ex.
 
-```sh
+```py
 $ python train_dalle.py --chinese --image_text_folder ./path/to/data
 ```
 
-```sh
+```py
 $ python generate.py --chinese --text '追老鼠的猫'
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{ramesh2021zeroshot,
     title   = {Zero-Shot Text-to-Image Generation}, 
     author  = {Aditya Ramesh and Mikhail Pavlov and Gabriel Goh and Scott Gray and Chelsea Voss and Alec Radford and Mark Chen and Ilya Sutskever},
@@ -669,7 +669,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{unpublished2021clip,
     title  = {CLIP: Connecting Text and Images},
     author = {Alec Radford, Ilya Sutskever, Jong Wook Kim, Gretchen Krueger, Sandhini Agarwal},
@@ -677,7 +677,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{kitaev2020reformer,
     title   = {Reformer: The Efficient Transformer},
     author  = {Nikita Kitaev and Łukasz Kaiser and Anselm Levskaya},
@@ -688,7 +688,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{esser2021taming,
     title   = {Taming Transformers for High-Resolution Image Synthesis},
     author  = {Patrick Esser and Robin Rombach and Björn Ommer},
@@ -699,7 +699,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -710,7 +710,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},
@@ -723,7 +723,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -734,7 +734,7 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ho2021classifierfree,
     title   = {Classifier-Free Diffusion Guidance},
     author  = {Jonathan Ho and Tim Salimans},
@@ -744,14 +744,14 @@ $ python generate.py --chinese --text '追老鼠的猫'
 }
 ```
 
-```bibtex
+```py
 @misc{crowson2022,
     author  = {Katherine Crowson},
     url     = {https://twitter.com/RiversHaveWings/status/1478093658716966912}
 }
 ```
 
-```bibtex
+```py
 @article{Liu2023BridgingDA,
     title   = {Bridging Discrete and Backpropagation: Straight-Through and Beyond},
     author  = {Liyuan Liu and Chengyu Dong and Xiaodong Liu and Bin Yu and Jianfeng Gao},

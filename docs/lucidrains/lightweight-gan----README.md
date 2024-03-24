@@ -18,7 +18,7 @@ Implementation of <a href="https://openreview.net/forum?id=1Fqg133qRaI">'lightwe
 
 ## Install
 
-```bash
+```py
 $ pip install lightweight-gan
 ```
 
@@ -26,7 +26,7 @@ $ pip install lightweight-gan
 
 One command
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --image-size 512
 ```
 
@@ -36,7 +36,7 @@ Model will be saved to `./models/{name}` every 1000 iterations, and samples from
 
 Pretty self explanatory for deep learning practitioners
 
-```bash
+```py
 $ lightweight_gan \
     --data ./path/to/images \
     --name {name of run} \
@@ -51,7 +51,7 @@ Augmentation is essential for Lightweight GAN to work effectively in a low data 
 
 By default, the augmentation types is set to translation and cutout, with color omitted. You can include color as well with the following.
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --aug-prob 0.25 --aug-types [translation,cutout,color]
 ```
 
@@ -65,7 +65,7 @@ You can test and see how your images will be augmented before it pass into a neu
 
 Base code to augment your image, define `--aug-test` and put path to your image into `--data`:
 
-```bash
+```py
 lightweight_gan \
     --aug-test \
     --data ./path/to/lena.jpg
@@ -85,7 +85,7 @@ You can use some options to change result:
 - `--num-image-tiles 5` to change count of tiles in the result image. Default: `5`.
 
 Try this command:
-```bash
+```py
 lightweight_gan \
     --aug-test \
     --data ./path/to/lena.jpg \
@@ -154,13 +154,13 @@ Also one flag to use `--multi-gpus`
 
 First you need to install `aim` with `pip`
 
-```bash
+```py
 $ pip install aim
 ```
 
 Next, you can specify Aim logs directory with `--aim_repo` flag, otherwise logs will be stored in the current directory
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --image-size 512 --use-aim --aim_repo ./path/to/logs/
 ```
 
@@ -183,7 +183,7 @@ Execute `aim up --repo ./path/to/logs/` to run Aim UI on your server.
 
 Once you have finished training, you can generate samples with one command. You can select which checkpoint number to load from. If `--load-from` is not specified, will default to the latest.
 
-```bash
+```py
 $ lightweight_gan \
   --name {name of run} \
   --load-from {checkpoint num} \
@@ -196,7 +196,7 @@ After run this command you will get folder near results image folder with postfi
 
 You can also generate interpolations
 
-```bash
+```py
 $ lightweight_gan --name {name of run} --generate-interpolation
 ```
 
@@ -204,7 +204,7 @@ $ lightweight_gan --name {name of run} --generate-interpolation
 
 After creating several checkpoints of model you can generate progress as sequence images by command:
 
-```bash
+```py
 $ lightweight_gan \
   --name {name of run} \
   --show-progress \
@@ -222,7 +222,7 @@ After running this command you will get a new folder in the results folder, with
 
 The author has kindly let me know that the discriminator output size (5x5 vs 1x1) leads to different results on different datasets. (5x5 works better for art than for faces, as an example). You can toggle this with a single flag
 
-```bash
+```py
 # disc output size is by default 1x1
 $ lightweight_gan --data ./path/to/art --image-size 512 --disc-output-size 5
 ```
@@ -231,7 +231,7 @@ $ lightweight_gan --data ./path/to/art --image-size 512 --disc-output-size 5
 
 You can add linear + axial attention to specific resolution layers with the following
 
-```bash
+```py
 # make sure there are no spaces between the values within the brackets []
 $ lightweight_gan --data ./path/to/images --image-size 512 --attn-res-layers [32,64] --aug-prob 0.25
 ```
@@ -242,7 +242,7 @@ A recent paper has proposed that a novel contrastive loss between the real and f
 
 You can use this with one extra flag as follows
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --dual-contrast-loss
 ```
 
@@ -250,13 +250,13 @@ $ lightweight_gan --data ./path/to/images --dual-contrast-loss
 
 You can also train with transparent images
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --transparent
 ```
 
 Or greyscale
 
-```bash
+```py
 $ lightweight_gan --data ./path/to/images --greyscale
 ```
 
@@ -266,7 +266,7 @@ If you want the current state of the art GAN, you can find it at https://github.
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021towards,
     title   = {Towards Faster and Stabilized {\{}GAN{\}} Training for High-fidelity Few-shot Image Synthesis},
@@ -278,7 +278,7 @@ If you want the current state of the art GAN, you can find it at https://github.
 }
 ```
 
-```bibtex
+```py
 @misc{cao2020global,
     title   = {Global Context Networks},
     author  = {Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
@@ -289,7 +289,7 @@ If you want the current state of the art GAN, you can find it at https://github.
 }
 ```
 
-```bibtex
+```py
 @misc{qin2020fcanet,
     title   = {FcaNet: Frequency Channel Attention Networks},
     author  = {Zequn Qin and Pengyi Zhang and Fei Wu and Xi Li},
@@ -300,7 +300,7 @@ If you want the current state of the art GAN, you can find it at https://github.
 }
 ```
 
-```bibtex
+```py
 @misc{yu2021dual,
     title   = {Dual Contrastive Loss and Attention for GANs}, 
     author  = {Ning Yu and Guilin Liu and Aysegul Dundar and Andrew Tao and Bryan Catanzaro and Larry Davis and Mario Fritz},
@@ -311,7 +311,7 @@ If you want the current state of the art GAN, you can find it at https://github.
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},

@@ -24,13 +24,13 @@ This repository will use denoising diffusion rather than score-based SDE, and ma
 
 ## Install
 
-```bash
+```py
 $ pip install naturalspeech2-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from naturalspeech2_pytorch import (
     EncodecWrapper,
@@ -73,7 +73,7 @@ With conditioning
 
 ex.
 
-```python
+```py
 import torch
 from naturalspeech2_pytorch import (
     EncodecWrapper,
@@ -132,7 +132,7 @@ generated_audio = diffusion.sample(
 
 Or if you want a `Trainer` class to take care of the training and sampling loop, just simply do
 
-```python
+```py
 from naturalspeech2_pytorch import Trainer
 
 trainer = Trainer(
@@ -160,7 +160,7 @@ trainer.train()
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Shen2023NaturalSpeech2L,
     title   = {NaturalSpeech 2: Latent Diffusion Models are Natural and Zero-Shot Speech and Singing Synthesizers},
     author  = {Kai Shen and Zeqian Ju and Xu Tan and Yanqing Liu and Yichong Leng and Lei He and Tao Qin and Sheng Zhao and Jiang Bian},
@@ -168,7 +168,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -177,7 +177,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -186,7 +186,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Salimans2022ProgressiveDF,
     title   = {Progressive Distillation for Fast Sampling of Diffusion Models},
     author  = {Tim Salimans and Jonathan Ho},
@@ -196,7 +196,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hang2023EfficientDT,
     title   = {Efficient Diffusion Training via Min-SNR Weighting Strategy},
     author  = {Tiankai Hang and Shuyang Gu and Chen Li and Jianmin Bao and Dong Chen and Han Hu and Xin Geng and Baining Guo},
@@ -204,7 +204,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Alayrac2022FlamingoAV,
     title   = {Flamingo: a Visual Language Model for Few-Shot Learning},
     author  = {Jean-Baptiste Alayrac and Jeff Donahue and Pauline Luc and Antoine Miech and Iain Barr and Yana Hasson and Karel Lenc and Arthur Mensch and Katie Millican and Malcolm Reynolds and Roman Ring and Eliza Rutherford and Serkan Cabi and Tengda Han and Zhitao Gong and Sina Samangooei and Marianne Monteiro and Jacob Menick and Sebastian Borgeaud and Andy Brock and Aida Nematzadeh and Sahand Sharifzadeh and Mikolaj Binkowski and Ricardo Barreira and Oriol Vinyals and Andrew Zisserman and Karen Simonyan},
@@ -214,7 +214,7 @@ trainer.train()
 }
 ```
 
-```bibtex
+```py
 @article{Badlani2021OneTA,
     title   = {One TTS Alignment to Rule Them All},
     author  = {Rohan Badlani and Adrian Lancucki and Kevin J. Shih and Rafael Valle and Wei Ping and Bryan Catanzaro},

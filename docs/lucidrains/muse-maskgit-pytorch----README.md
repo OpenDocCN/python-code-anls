@@ -8,7 +8,7 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install muse-maskgit-pytorch
 ```
 
@@ -16,7 +16,7 @@ $ pip install muse-maskgit-pytorch
 
 First train your VAE - `VQGanVAE`
 
-```python
+```py
 import torch
 from muse_maskgit_pytorch import VQGanVAE, VQGanVAETrainer
 
@@ -41,7 +41,7 @@ trainer.train()
 
 Then pass the trained `VQGanVAE` and a `Transformer` to `MaskGit`
 
-```python
+```py
 import torch
 from muse_maskgit_pytorch import VQGanVAE, MaskGit, MaskGitTransformer
 
@@ -115,7 +115,7 @@ To train the super-resolution maskgit requires you to change 1 field on `MaskGit
 
 Optionally, you can pass in a different `VAE` as `cond_vae` for the conditioning low-resolution image. By default it will use the `vae` for both tokenizing the super and low resoluted images.
 
-```python
+```py
 import torch
 import torch.nn.functional as F
 from muse_maskgit_pytorch import VQGanVAE, MaskGit, MaskGitTransformer
@@ -194,7 +194,7 @@ images.shape # (4, 3, 512, 512)
 
 All together now
 
-```python
+```py
 from muse_maskgit_pytorch import Muse
 
 base_maskgit.load('./path/to/base.pt')
@@ -236,7 +236,7 @@ images # List[PIL.Image.Image]
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Chang2023MuseTG,
     title   = {Muse: Text-To-Image Generation via Masked Generative Transformers},
     author  = {Huiwen Chang and Han Zhang and Jarred Barber and AJ Maschinot and Jos{\'e} Lezama and Lu Jiang and Ming-Hsuan Yang and Kevin P. Murphy and William T. Freeman and Michael Rubinstein and Yuanzhen Li and Dilip Krishnan},
@@ -244,7 +244,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @article{Chen2022AnalogBG,
     title   = {Analog Bits: Generating Discrete Data using Diffusion Models with Self-Conditioning},
     author  = {Ting Chen and Ruixiang Zhang and Geo rey E. Hinton},
@@ -254,7 +254,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @misc{jabri2022scalable,
     title   = {Scalable Adaptive Computation for Iterative Generation},
     author  = {Allan Jabri and David Fleet and Ting Chen},
@@ -265,7 +265,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @article{Lezama2022ImprovedMI,
     title   = {Improved Masked Image Generation with Token-Critic},
     author  = {Jos{\'e} Lezama and Huiwen Chang and Lu Jiang and Irfan Essa},
@@ -275,7 +275,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Nijkamp2021SCRIPTSP,
     title   = {SCRIPT: Self-Critic PreTraining of Transformers},
     author  = {Erik Nijkamp and Bo Pang and Ying Nian Wu and Caiming Xiong},
@@ -284,7 +284,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -293,7 +293,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @misc{mentzer2023finite,
     title   = {Finite Scalar Quantization: VQ-VAE Made Simple},
     author  = {Fabian Mentzer and David Minnen and Eirikur Agustsson and Michael Tschannen},
@@ -304,7 +304,7 @@ images # List[PIL.Image.Image]
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation},
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},

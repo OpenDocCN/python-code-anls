@@ -10,7 +10,7 @@ Generating a dataset of this type:
 3. Use [embedding-dataset-reordering](https://github.com/Veldrovive/embedding-dataset-reordering) to reorder the embeddings into the expected format.
 
 Usage:
-```python
+```py
 from dalle2_pytorch.dataloaders import ImageEmbeddingDataset, create_image_embedding_dataloader
 
 # Create a dataloader directly.
@@ -47,7 +47,7 @@ To utilize the `PriorEmbeddingDataset`, all you need to do is make a single call
 If you are training in a distributed manner, `make_splits()` accepts `rank` and `world_size` arguments to properly distribute to each process. The defaults for these values are `rank=0` and `world_size=1`, so single-process training can safely ignore these parameters.
 
 Usage:
-```python
+```py
 from dalle2_pytorch.dataloaders import get_reader, make_splits
 
 # grab embeddings from some specified location

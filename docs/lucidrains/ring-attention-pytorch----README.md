@@ -16,13 +16,13 @@ In addition, the repository also contains the logic for <a href="https://arxiv.o
 
 ## Install
 
-```bash
+```py
 $ pip install ring-attention-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from ring_attention_pytorch import RingAttention
 
@@ -44,7 +44,7 @@ assert attended.shape == tokens.shape
 
 ## Test
 
-```bash
+```py
 $ python assert.py
 ```
 
@@ -93,7 +93,7 @@ $ python assert.py
 
 ## Citations
 
-```bibtex
+```py
 @article{Liu2023RingAW,
     title    = {Ring Attention with Blockwise Transformers for Near-Infinite Context},
     author   = {Hao Liu and Matei Zaharia and Pieter Abbeel},
@@ -104,7 +104,7 @@ $ python assert.py
 }
 ```
 
-```bibtex
+```py
 @article{Brandon2023StripedAF,
     title   = {Striped Attention: Faster Ring Attention for Causal Transformers},
     author  = {William Brandon and Aniruddha Nrusimha and Kevin Qian and Zachary Ankner and Tian Jin and Zhiye Song and Jonathan Ragan-Kelley},
@@ -115,7 +115,7 @@ $ python assert.py
 }
 ```
 
-```bibtex
+```py
 @article{Dao2022FlashAttentionFA,
     title   = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
     author  = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and Christopher R'e},
@@ -125,7 +125,7 @@ $ python assert.py
 }
 ```
 
-```bibtex
+```py
 @article{dao2023flashattention2,
     title   = {Flash{A}ttention-2: Faster Attention with Better Parallelism and Work Partitioning,
     author  = {Dao, Tri},
@@ -133,7 +133,7 @@ $ python assert.py
 }
 ```
 
-```bibtex
+```py
 @article{Tillet2019TritonAI,
     title   = {Triton: an intermediate language and compiler for tiled neural network computations},
     author  = {Philippe Tillet and H. Kung and D. Cox},

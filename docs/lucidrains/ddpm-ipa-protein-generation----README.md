@@ -6,7 +6,7 @@ I will also equip this with ability to condition on encoded text, identical to <
 
 ## Citations
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2205.15019,
   doi     = {10.48550/ARXIV.2205.15019},
   url     = {https://arxiv.org/abs/2205.15019},

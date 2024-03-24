@@ -8,13 +8,13 @@ Update: Amazon AI claims to have beaten GBDT with Attention on <a href="https://
 
 ## Install
 
-```bash
+```py
 $ pip install tab-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 import torch.nn as nn
 from tab_transformer_pytorch import TabTransformer
@@ -49,7 +49,7 @@ pred = model(x_categ, x_cont) # (1, 1)
 
 Included in this repository just for convenient comparison to Tab Transformer
 
-```python
+```py
 import torch
 from tab_transformer_pytorch import FTTransformer
 
@@ -80,7 +80,7 @@ To undergo the type of unsupervised training described in the paper, you can fir
 
 ## Citations
 
-```bibtex
+```py
 @misc{huang2020tabtransformer,
     title   = {TabTransformer: Tabular Data Modeling Using Contextual Embeddings},
     author  = {Xin Huang and Ashish Khetan and Milan Cvitkovic and Zohar Karnin},
@@ -91,7 +91,7 @@ To undergo the type of unsupervised training described in the paper, you can fir
 }
 ```
 
-```bibtex
+```py
 @article{Gorishniy2021RevisitingDL,
     title   = {Revisiting Deep Learning Models for Tabular Data},
     author  = {Yu. V. Gorishniy and Ivan Rubachev and Valentin Khrulkov and Artem Babenko},

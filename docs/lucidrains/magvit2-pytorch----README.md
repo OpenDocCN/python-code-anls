@@ -18,13 +18,13 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install magvit2-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 from magvit2_pytorch import (
     VideoTokenizer,
     VideoTokenizerTrainer
@@ -90,7 +90,7 @@ assert torch.allclose(
 
 To track your experiments on <a href="https://wandb.ai">Weights & Biases</a> set `use_wandb_tracking = True` on `VideoTokenizerTrainer`, and then use the `.trackers` context manager
 
-```python
+```py
 
 trainer = VideoTokenizerTrainer(
     use_wandb_tracking = True,
@@ -125,7 +125,7 @@ with trainer.trackers(project_name = 'magvit2', run_name = 'baseline'):
 
 ## Citations
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation}, 
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},
@@ -136,7 +136,7 @@ with trainer.trackers(project_name = 'magvit2', run_name = 'baseline'):
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -145,7 +145,7 @@ with trainer.trackers(project_name = 'magvit2', run_name = 'baseline'):
 }
 ```
 
-```bibtex
+```py
 @article{Zhang2021TokenST,
     title   = {Token Shift Transformer for Video Classification},
     author  = {Hao Zhang and Y. Hao and Chong-Wah Ngo},
@@ -154,7 +154,7 @@ with trainer.trackers(project_name = 'magvit2', run_name = 'baseline'):
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Arora2023ZoologyMA,
     title   = {Zoology: Measuring and Improving Recall in Efficient Language Models},
     author  = {Simran Arora and Sabri Eyuboglu and Aman Timalsina and Isys Johnson and Michael Poli and James Zou and Atri Rudra and Christopher R'e},

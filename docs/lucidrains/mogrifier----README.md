@@ -8,13 +8,13 @@ A complete implementation of <a href="https://openreview.net/forum?id=SJe5P6EYvS
 
 ## Install
 
-```bash
+```py
 $ pip install mogrifier
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from mogrifier import Mogrifier
 
@@ -32,7 +32,7 @@ x_out, h_out = m(x, h) # (1, 16, 512), (1, 16, 512)
 
 ## Citation
 
-```bibtex
+```py
 @inproceedings{Melis2020Mogrifier,
     title={Mogrifier LSTM},
     author={Gábor Melis and Tomáš Kočiský and Phil Blunsom},

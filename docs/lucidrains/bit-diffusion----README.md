@@ -8,13 +8,13 @@ It seems like they missed the mark for text, but the research direction still se
 
 ## Install
 
-```bash
+```py
 $ pip install bit-diffusion
 ```
 
 ## Usage
 
-```python
+```py
 from bit_diffusion import Unet, Trainer, BitDiffusion
 
 model = Unet(
@@ -51,7 +51,7 @@ Results will be saved periodically to the `./results` folder
 
 If you would like to experiment with the `Unet` and `BitDiffusion` class outside the `Trainer`
 
-```python
+```py
 import torch
 from bit_diffusion import Unet, BitDiffusion
 
@@ -77,7 +77,7 @@ sampled_images.shape # (4, 3, 128, 128)
 
 ## Citations
 
-```bibtex
+```py
 @article{Chen2022AnalogBG,
     title   = {Analog Bits: Generating Discrete Data using Diffusion Models with Self-Conditioning},
     author  = {Ting Chen and Ruixiang Zhang and Geoffrey E. Hinton},

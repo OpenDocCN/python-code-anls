@@ -8,13 +8,13 @@ Implementation of Nyström Self-attention, from the paper <a href="https://arxiv
 
 ## Install
 
-```bash
+```py
 $ pip install nystrom-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from nystrom_attention import NystromAttention
 
@@ -35,7 +35,7 @@ attn(x, mask = mask) # (1, 16384, 512)
 
 Nyströmformer, layers of Nyström attention
 
-```python
+```py
 import torch
 from nystrom_attention import Nystromformer
 
@@ -56,12 +56,12 @@ model(x, mask = mask) # (1, 16384, 512)
 
 You can also import it as Nyströmer if you wish
 
-```python
+```py
 from nystrom_attention import Nystromer
 ```
 ## Citations
 
-```bibtex
+```py
 @misc{xiong2021nystromformer,
     title   = {Nyströmformer: A Nyström-Based Algorithm for Approximating Self-Attention},
     author  = {Yunyang Xiong and Zhanpeng Zeng and Rudrasis Chakraborty and Mingxing Tan and Glenn Fung and Yin Li and Vikas Singh},

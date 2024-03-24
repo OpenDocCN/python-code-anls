@@ -26,7 +26,7 @@ The paper also addresses the issue with time embedding incorrectly subjected to 
 
 ## Install
 
-```bash
+```py
 $ pip install voicebox-pytorch
 ```
 
@@ -34,7 +34,7 @@ $ pip install voicebox-pytorch
 
 Training and sampling with `TextToSemantic` module from <a href="https://github.com/lucidrains/spear-tts-pytorch">SpearTTS</a>
 
-```python
+```py
 import torch
 
 from voicebox_pytorch import (
@@ -98,7 +98,7 @@ sampled = cfm_wrapper.sample(cond = cond, texts = texts) # (2, 1, <audio length>
 
 For unconditional training, `condition_on_text` on `VoiceBox` must be set to `False`
 
-```python
+```py
 import torch
 from voicebox_pytorch import (
     VoiceBox,
@@ -156,7 +156,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @article{Le2023VoiceboxTM,
     title   = {Voicebox: Text-Guided Multilingual Universal Speech Generation at Scale},
     author  = {Matt Le and Apoorv Vyas and Bowen Shi and Brian Karrer and Leda Sari and Rashel Moritz and Mary Williamson and Vimal Manohar and Yossi Adi and Jay Mahadeokar and Wei-Ning Hsu},
@@ -167,7 +167,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -176,7 +176,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{torchdiffeq,
     author  = {Chen, Ricky T. Q.},
     title   = {torchdiffeq},
@@ -185,7 +185,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{lienen2022torchode,
     title     = {torchode: A Parallel {ODE} Solver for PyTorch},
     author    = {Marten Lienen and Stephan G{\"u}nnemann},
@@ -195,7 +195,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @article{siuzdak2023vocos,
     title   = {Vocos: Closing the gap between time-domain and Fourier-based neural vocoders for high-quality audio synthesis},
     author  = {Siuzdak, Hubert},
@@ -204,7 +204,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{darcet2023vision,
     title   = {Vision Transformers Need Registers},
     author  = {Timothée Darcet and Maxime Oquab and Julien Mairal and Piotr Bojanowski},
@@ -215,7 +215,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Dehghani2023ScalingVT,
     title   = {Scaling Vision Transformers to 22 Billion Parameters},
     author  = {Mostafa Dehghani and Josip Djolonga and Basil Mustafa and Piotr Padlewski and Jonathan Heek and Justin Gilmer and Andreas Steiner and Mathilde Caron and Robert Geirhos and Ibrahim M. Alabdulmohsin and Rodolphe Jenatton and Lucas Beyer and Michael Tschannen and Anurag Arnab and Xiao Wang and Carlos Riquelme and Matthias Minderer and Joan Puigcerver and Utku Evci and Manoj Kumar and Sjoerd van Steenkiste and Gamaleldin F. Elsayed and Aravindh Mahendran and Fisher Yu and Avital Oliver and Fantine Huot and Jasmijn Bastings and Mark Collier and Alexey A. Gritsenko and Vighnesh Birodkar and Cristina Nader Vasconcelos and Yi Tay and Thomas Mensink and Alexander Kolesnikov and Filip Paveti'c and Dustin Tran and Thomas Kipf and Mario Luvci'c and Xiaohua Zhai and Daniel Keysers and Jeremiah Harmsen and Neil Houlsby},
@@ -225,7 +225,7 @@ sampled = cfm_wrapper.sample(cond = cond) # (2, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Katsch2023GateLoopFD,
     title   = {GateLoop: Fully Data-Controlled Linear Recurrence for Sequence Modeling},
     author  = {Tobias Katsch},

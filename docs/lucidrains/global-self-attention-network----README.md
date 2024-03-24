@@ -10,13 +10,13 @@ The result is an extremely simple circuit composed of 8 einsums, 1 softmax, and 
 
 ## Install
 
-```bash
+```py
 $ pip install gsa-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from gsa_pytorch import GSA
 
@@ -34,7 +34,7 @@ gsa(x) # (1, 64, 256, 256)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021global,
     title={Global Self-Attention Networks},

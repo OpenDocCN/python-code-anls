@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2207.11240">Discrete Key / Valu
 
 ## Install
 
-```bash
+```py
 $ pip install discrete-key-value-bottleneck-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from discrete_key_value_bottleneck_pytorch import DiscreteKeyValueBottleneck
 
@@ -35,13 +35,13 @@ memories.shape # (1, 1024, 512)  # (batch, seq, memory / values dimension)
 
 You can also pass the pretrained encoder to the bottleneck and it will automatically invoke it. Example with `vit-pytorch` library
 
-```bash
+```py
 $ pip install vit-pytorch
 ```
 
 Then
 
-```python
+```py
 import torch
 
 # import vision transformer
@@ -86,7 +86,7 @@ memories = enc_with_bottleneck(images) # (1, 64, 2048)   # (64 patches)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Trauble2022DiscreteKB,
     title   = {Discrete Key-Value Bottleneck},
     author  = {Frederik Trauble and Anirudh Goyal and Nasim Rahaman and Michael Curtis Mozer and Kenji Kawaguchi and Yoshua Bengio and Bernhard Scholkopf},

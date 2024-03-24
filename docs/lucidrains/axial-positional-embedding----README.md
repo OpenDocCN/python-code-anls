@@ -6,13 +6,13 @@ A type of positional embedding that is very effective when working with attentio
 
 ## Install
 
-```bash
+```py
 $ pip install axial-positional-embedding
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from axial_positional_embedding import AxialPositionalEmbedding
 
@@ -28,7 +28,7 @@ tokens = pos_emb(tokens) + tokens   # add positional embedding to token embeddin
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -38,7 +38,7 @@ tokens = pos_emb(tokens) + tokens   # add positional embedding to token embeddin
 }
 ```
 
-```bibtex
+```py
 @misc{ho2019axial,
     title = {Axial Attention in Multidimensional Transformers},
     author = {Jonathan Ho and Nal Kalchbrenner and Dirk Weissenborn and Tim Salimans},

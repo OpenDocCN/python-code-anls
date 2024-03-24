@@ -12,7 +12,7 @@ Reach out to me if you are at least a 3rd year medical student, have kept up wit
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Tu2024TowardsCD,
     title   = {Towards Conversational Diagnostic AI},
     author  = {Tao Tu and Anil Palepu and Mike Schaekermann and Khaled Saab and Jan Freyberg and Ryutaro Tanno and Amy Wang and Brenna Li and Mohamed Amin and Nenad Toma{\vs}ev and Shekoofeh Azizi and Karan Singhal and Yong Cheng and Le Hou and Albert Webson and Kavita Kulkarni and S Sara Mahdavi and Christopher Semturs and Juraj Gottweis and Joelle Barral and Katherine Chou and Greg S. Corrado and Yossi Matias and Alan Karthikesalingam and Vivek Natarajan},

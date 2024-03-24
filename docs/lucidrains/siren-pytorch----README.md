@@ -6,7 +6,7 @@ Pytorch implementation of SIREN -  <a href="https://arxiv.org/abs/2006.09661">Im
 
 ## Install
 
-```bash
+```py
 $ pip install siren-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install siren-pytorch
 
 A SIREN based multi-layered neural network
 
-```python
+```py
 import torch
 from torch import nn
 from siren_pytorch import SirenNet
@@ -34,7 +34,7 @@ net(coor) # (1, 3) <- rgb value
 
 One SIREN layer
 
-```python
+```py
 import torch
 from siren_pytorch import Siren
 
@@ -49,7 +49,7 @@ neuron(coor) # (1, 256)
 
 Sine activation (just a wrapper around `torch.sin`)
 
-```python
+```py
 import torch
 from siren_pytorch import Sine
 
@@ -61,7 +61,7 @@ act(coor)
 Wrapper to train on a specific image of specified height and width from a given `SirenNet`, and then to subsequently generate.
 
 
-```python
+```py
 import torch
 from torch import nn
 from siren_pytorch import SirenNet, SirenWrapper
@@ -96,7 +96,7 @@ A <a href="https://arxiv.org/abs/2104.03960">new paper</a> proposes that the bes
 
 You can use this simply by setting an extra keyword `latent_dim`, on the `SirenWrapper`
 
-```python
+```py
 import torch
 from torch import nn
 from siren_pytorch import SirenNet, SirenWrapper
@@ -130,7 +130,7 @@ pred_img = wrapper(latent = latent) # (1, 3, 256, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{sitzmann2020implicit,
     title   = {Implicit Neural Representations with Periodic Activation Functions},
     author  = {Vincent Sitzmann and Julien N. P. Martel and Alexander W. Bergman and David B. Lindell and Gordon Wetzstein},
@@ -141,7 +141,7 @@ pred_img = wrapper(latent = latent) # (1, 3, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{mehta2021modulated,
     title   = {Modulated Periodic Activations for Generalizable Local Functional Representations}, 
     author  = {Ishit Mehta and Michaël Gharbi and Connelly Barnes and Eli Shechtman and Ravi Ramamoorthi and Manmohan Chandraker},

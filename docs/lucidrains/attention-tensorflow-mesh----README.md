@@ -4,13 +4,13 @@ A collection of attention related functions, for building and scaling large atte
 
 ## Install
 
-```bash
+```py
 $ pip install attention-tensorflow-mesh
 ```
 
 ## Usage
 
-```python
+```py
 from attention_tensorflow_mesh import transformer_lm
 
 import tensorflow as tf

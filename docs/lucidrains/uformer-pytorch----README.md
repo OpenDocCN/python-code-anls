@@ -8,13 +8,13 @@ This repository will be geared towards use in a project <a href="https://github.
 
 ## Install
 
-```bash
+```py
 $ pip install uformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from uformer_pytorch import Uformer
 
@@ -34,7 +34,7 @@ pred = model(x) # (1, 3, 256, 256)
 
 To condition on time for DDPM training
 
-```python
+```py
 import torch
 from uformer_pytorch import Uformer
 
@@ -56,7 +56,7 @@ pred = model(x, time = time) # (1, 3, 256, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{wang2021uformer,
     title   = {Uformer: A General U-Shaped Transformer for Image Restoration}, 
     author  = {Zhendong Wang and Xiaodong Cun and Jianmin Bao and Jianzhuang Liu},

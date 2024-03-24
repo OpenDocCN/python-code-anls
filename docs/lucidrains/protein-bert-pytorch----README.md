@@ -6,13 +6,13 @@ Implementation of <a href="https://www.biorxiv.org/content/10.1101/2021.05.24.44
 
 ## Install
 
-```bash
+```py
 $ pip install protein-bert-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from protein_bert_pytorch import ProteinBERT
 
@@ -38,7 +38,7 @@ seq_logits, annotation_logits = model(seq, annotation, mask = mask) # (2, 2048, 
 
 To use for pretraining
 
-```python
+```py
 import torch
 from protein_bert_pytorch import ProteinBERT, PretrainingWrapper
 
@@ -86,7 +86,7 @@ torch.save(model, './improved-protein-bert.pt')
 
 ## Citations
 
-```bibtex
+```py
 @article {Brandes2021.05.24.445464,
     author      = {Brandes, Nadav and Ofer, Dan and Peleg, Yam and Rappoport, Nadav and Linial, Michal},
     title       = {ProteinBERT: A universal deep-learning model of protein sequence and function},

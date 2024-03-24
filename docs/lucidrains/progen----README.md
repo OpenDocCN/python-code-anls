@@ -8,7 +8,7 @@ We are going to use <a href="https://github.com/python-poetry/poetry">Poetry</a>
 
 Next, git clone the project and install the dependencies
 
-```bash
+```py
 $ git clone git@github.com:lucidrains/progen
 $ cd progen
 $ poetry install
@@ -17,7 +17,7 @@ $ poetry install
 For training on GPUs, you may need to rerun pip install with the correct CUDA version. You can follow the instructions <a href="https://github.com/google/jax#pip-installation-gpu-cuda">here</a>
 
 
-```bash
+```py
 # ex. CUDA 11.1
 $ pip install --upgrade "jax[cuda111]" -f https://storage.googleapis.com/jax-releases/jax_releases.html
 ```
@@ -26,7 +26,7 @@ For running any scripts, you'll notice that it will always be prepended with `po
 
 ## Usage
 
-```python
+```py
 from jax import random
 from haiku import PRNGSequence
 from progen_transformer import ProGen
@@ -54,20 +54,20 @@ logits = model.apply(params, next(rng), seq) # (1024, 256)
 
 Download Uniref50 from <a href="https://www.uniprot.org/downloads">UniProt</a> and place `uniref50.fasta` in the root directory
 
-```bash
+```py
 $ poetry run python generate_data.py
 ```
 
 You should see a lot of green if everything succeeds. Then
 
 
-```bash
+```py
 $ poetry run python train.py
 ```
 
 By default, the script will checkpoint and resume automatically, but if you wish to clear your progress and restart, just add a `--new` flag
 
-```bash
+```py
 $ poetry run python train.py --new
 ```
 
@@ -75,13 +75,13 @@ Model checkpoints will be saved periodically to `./ckpts`
 
 Finally, to sample from your checkpoint, just do
 
-```bash
+```py
 $ poetry run python sample.py
 ```
 
 You can pass a prime with `--prime`. You can either pass the annotations, followed by `#`, to get the generated sequence, or pass the sequence (also followed by `#`) and get the generated annotations
 
-```bash
+```py
 $ poetry run python sample.py --prime "[Tax=Mammalia] #"
 ```
 
@@ -89,13 +89,13 @@ $ poetry run python sample.py --prime "[Tax=Mammalia] #"
 
 To use mixed precision training, you'll need to install the latest Haiku with the following command
 
-```bash
+```py
 $ pip install git+https://github.com/deepmind/dm-haiku
 ```
 
 Then make sure to set the `--mixed_precision` flag when invoking the training script
 
-```bash
+```py
 $ poetry run python train.py --mixed_precision
 ```
 
@@ -127,7 +127,7 @@ Many thanks goes out to <a href="https://github.com/kingoflolz">Ben Wang</a>, wh
 
 ## Citations
 
-```bibtex
+```py
 @misc{madani2020progen,
     title   = {ProGen: Language Modeling for Protein Generation}, 
     author  = {Ali Madani and Bryan McCann and Nikhil Naik and Nitish Shirish Keskar and Namrata Anand and Raphael R. Eguchi and Po-Ssu Huang and Richard Socher},
@@ -138,7 +138,7 @@ Many thanks goes out to <a href="https://github.com/kingoflolz">Ben Wang</a>, wh
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -149,7 +149,7 @@ Many thanks goes out to <a href="https://github.com/kingoflolz">Ben Wang</a>, wh
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},

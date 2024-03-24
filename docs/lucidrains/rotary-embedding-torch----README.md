@@ -8,13 +8,13 @@ My gut also tells me there is something <a href="https://www.nature.com/articles
 
 ## Install
 
-```bash
+```py
 $ pip install rotary-embedding-torch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from rotary_embedding_torch import RotaryEmbedding
 
@@ -41,7 +41,7 @@ If you do all the steps above correctly, you should see a dramatic improvement d
 
 For easy use of n-dimensional axial relative positional embedding, ie. video transformers
 
-```python
+```py
 import torch
 
 from rotary_embedding_torch import (
@@ -78,7 +78,7 @@ In <a href="https://arxiv.org/abs/2212.10554v1">this paper</a>, they were able t
 
 This can only be used for autoregressive transformers
 
-```python
+```py
 import torch
 from rotary_embedding_torch import RotaryEmbedding
 
@@ -109,7 +109,7 @@ You can use this by setting the `interpolate_factor` on initialization to a valu
 
 Update: someone in the community has reported that it does not work well. please email me if you see either a positive or negative result
 
-```python
+```py
 import torch
 from rotary_embedding_torch import RotaryEmbedding
 
@@ -121,7 +121,7 @@ rotary_emb = RotaryEmbedding(
 
 ## Citations
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding}, 
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -132,7 +132,7 @@ rotary_emb = RotaryEmbedding(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
     title     = {A Length-Extrapolatable Transformer},
     author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -140,7 +140,7 @@ rotary_emb = RotaryEmbedding(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chen2023ExtendingCW,
     title   = {Extending Context Window of Large Language Models via Positional Interpolation},
     author  = {Shouyuan Chen and Sherman Wong and Liangjian Chen and Yuandong Tian},
@@ -148,7 +148,7 @@ rotary_emb = RotaryEmbedding(
 }
 ```
 
-```bibtex
+```py
 @misc{bloc97-2023
     title   = {NTK-Aware Scaled RoPE allows LLaMA models to have extended (8k+) context size without any fine-tuning and minimal perplexity degradation.},
     author  = {/u/bloc97},

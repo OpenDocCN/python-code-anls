@@ -6,13 +6,13 @@ Implementation of a U-net complete with efficient attention as well as the lates
 
 ## Install
 
-```bash
+```py
 $ pip install x-unet
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from x_unet import XUnet
 
@@ -30,7 +30,7 @@ out = unet(img) # (1, 3, 256, 256)
 
 For 3d (video or CT / MRI scans)
 
-```python
+```py
 import torch
 from x_unet import XUnet
 
@@ -55,7 +55,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 
 ## Citations
 
-```bibtex
+```py
 @article{Ronneberger2015UNetCN,
     title   = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
     author  = {Olaf Ronneberger and Philipp Fischer and Thomas Brox},
@@ -65,7 +65,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @article{Qin2020U2NetGD,
     title   = {U2-Net: Going Deeper with Nested U-Structure for Salient Object Detection},
     author  = {Xuebin Qin and Zichen Vincent Zhang and Chenyang Huang and Masood Dehghan and Osmar R Zaiane and Martin J{\"a}gersand},
@@ -75,7 +75,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Henry2020QueryKeyNF,
     title   = {Query-Key Normalization for Transformers},
     author  = {Alex Henry and Prudhvi Raj Dachapally and Shubham Vivek Pawar and Yuxuan Chen},
@@ -84,7 +84,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @article{Qiao2019WeightS,
     title   = {Weight Standardization},
     author  = {Siyuan Qiao and Huiyu Wang and Chenxi Liu and Wei Shen and Alan Loddon Yuille},
@@ -94,7 +94,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @article{Shleifer2021NormFormerIT,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Sam Shleifer and Jason Weston and Myle Ott},
@@ -104,7 +104,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},
@@ -114,7 +114,7 @@ out = unet(video) # (1, 3, 10, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Woo2023ConvNeXtVC,
     title   = {ConvNeXt V2: Co-designing and Scaling ConvNets with Masked Autoencoders},
     author  = {Sanghyun Woo and Shoubhik Debnath and Ronghang Hu and Xinlei Chen and Zhuang Liu and In-So Kweon and Saining Xie},

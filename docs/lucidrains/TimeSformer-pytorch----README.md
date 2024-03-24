@@ -14,7 +14,7 @@ $ pip install timesformer-pytorch
 
 ## Usage
 
-```python
+```py
 import torch
 from timesformer_pytorch import TimeSformer
 
@@ -39,7 +39,7 @@ pred = model(video, mask = mask) # (2, 10)
 
 ## Citations
 
-```bibtex
+```py
 @misc{bertasius2021spacetime,
     title   = {Is Space-Time Attention All You Need for Video Understanding?}, 
     author  = {Gedas Bertasius and Heng Wang and Lorenzo Torresani},
@@ -50,7 +50,7 @@ pred = model(video, mask = mask) # (2, 10)
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -61,7 +61,7 @@ pred = model(video, mask = mask) # (2, 10)
 }
 ```
 
-```bibtex
+```py
 @article{tokshift2021,
     title   = {Token Shift Transformer for Video Classification},
     author  = {Hao Zhang, Yanbin Hao, Chong-Wah Ngo},

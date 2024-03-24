@@ -12,13 +12,13 @@ A <a href="https://arxiv.org/abs/2206.04176">Transformer made of Rotation-equiva
 
 ## Install
 
-```bash
+```py
 $ pip install VN-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from VN_transformer import VNTransformer
 
@@ -41,7 +41,7 @@ coors_out, feats_out = model(coors, feats = feats) # (1, 32, 3), (1, 32, 64)
 
 Confidence in equivariance
 
-```bash
+```py
 $ python setup.py test
 ```
 
@@ -49,13 +49,13 @@ $ python setup.py test
 
 First install `sidechainnet`
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
 Then run the protein backbone denoising task
 
-```bash
+```py
 $ python denoise.py
 ```
 
@@ -63,7 +63,7 @@ It does not perform as well as <a href="https://github.com/lucidrains/En-transfo
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Assaad2022VNTransformerRA,
     title   = {VN-Transformer: Rotation-Equivariant Attention for Vector Neurons},
     author  = {Serge Assaad and C. Downey and Rami Al-Rfou and Nigamaa Nayakanti and Benjamin Sapp},
@@ -71,7 +71,7 @@ It does not perform as well as <a href="https://github.com/lucidrains/En-transfo
 }
 ```
 
-```bibtex
+```py
 @article{Deng2021VectorNA,
     title   = {Vector Neurons: A General Framework for SO(3)-Equivariant Networks},
     author  = {Congyue Deng and Or Litany and Yueqi Duan and Adrien Poulenard and Andrea Tagliasacchi and Leonidas J. Guibas},
@@ -82,7 +82,7 @@ It does not perform as well as <a href="https://github.com/lucidrains/En-transfo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Kim2020TheLC,
     title   = {The Lipschitz Constant of Self-Attention},
     author  = {Hyunjik Kim and George Papamakarios and Andriy Mnih},
@@ -92,7 +92,7 @@ It does not perform as well as <a href="https://github.com/lucidrains/En-transfo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},

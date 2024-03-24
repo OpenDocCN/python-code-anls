@@ -6,13 +6,13 @@ Update: Used for <a href="https://www.biorxiv.org/content/10.1101/2023.07.15.549
 
 ## Install
 
-```bash
+```py
 $ pip install En-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from en_transformer import EnTransformer
 
@@ -40,7 +40,7 @@ feats, coors = model(feats, coors, edges, mask = mask)  # (1, 1024, 512), (1, 10
 
 Letting the network take care of both atomic and bond type embeddings
 
-```python
+```py
 import torch
 from en_transformer import EnTransformer
 
@@ -65,7 +65,7 @@ feats_out, coors_out = model(atoms, coors, edges = bonds) # (1, 16, 512), (1, 16
 
 If you would like to only attend to sparse neighbors, as defined by an adjacency matrix (say for atoms), you have to set one more flag and then pass in the `N x N` adjacency matrix.
 
-```python
+```py
 import torch
 from en_transformer import EnTransformer
 
@@ -96,7 +96,7 @@ feats_out, coors_out = model(atoms, coors, adj_mat = adj_mat) # (1, 16, 512), (1
 
 If you need to pass in continuous edges
 
-```python
+```py
 import torch
 from en_transformer import EnTransformer
 from en_transformer.utils import rot
@@ -125,13 +125,13 @@ feats1, coors1 = model(feats, coors, adj_mat = adj_mat, edges = edges)
 
 To run a protein backbone coordinate denoising toy task, first install `sidechainnet`
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
 Then
 
-```bash
+```py
 $ python denoise.py
 ```
 
@@ -141,7 +141,7 @@ $ python denoise.py
 
 ## Citations
 
-```bibtex
+```py
 @misc{satorras2021en,
     title 	= {E(n) Equivariant Graph Neural Networks}, 
     author 	= {Victor Garcia Satorras and Emiel Hoogeboom and Max Welling},
@@ -152,7 +152,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020talkingheads,
     title   = {Talking-Heads Attention}, 
     author  = {Noam Shazeer and Zhenzhong Lan and Youlong Cheng and Nan Ding and Le Hou},
@@ -163,7 +163,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -174,7 +174,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Kim2020TheLC,
     title   = {The Lipschitz Constant of Self-Attention},
     author  = {Hyunjik Kim and George Papamakarios and Andriy Mnih},
@@ -184,7 +184,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article {Mahajan2023.07.15.549154,
     author  = {Sai Pooja Mahajan and Jeffrey A. Ruffolo and Jeffrey J. Gray},
     title   = {Contextual protein and antibody encodings from equivariant graph transformers},
@@ -198,7 +198,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -209,7 +209,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Arora2023ZoologyMA,
     title   = {Zoology: Measuring and Improving Recall in Efficient Language Models},
     author  = {Simran Arora and Sabri Eyuboglu and Aman Timalsina and Isys Johnson and Michael Poli and James Zou and Atri Rudra and Christopher R'e},

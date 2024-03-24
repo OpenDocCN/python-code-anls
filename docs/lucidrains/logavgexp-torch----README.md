@@ -4,13 +4,13 @@ Implementation of <a href='https://arxiv.org/abs/2111.01742'>LogAvgExp</a> for P
 
 ## Install
 
-```bash
+```py
 $ pip install logavgexp-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from logavgexp_pytorch import logavgexp
 
@@ -41,7 +41,7 @@ y = logavgexp(x, mask = m, dim = 1, temp = 0.2, keepdim = True) # (1, 1, 5)
 
 With learned temperature
 
-```python
+```py
 # learned temperature
 import torch
 from torch import nn
@@ -55,7 +55,7 @@ y = logavgexp(x, temp = learned_temp, dim = 1) # (1, 5)
 
 Or you can use the `LogAvgExp` class to handle the learned temperature parameter
 
-```python
+```py
 import torch
 from logavgexp_pytorch import LogAvgExp
 
@@ -71,7 +71,7 @@ y = logavgexp(x) # (1, 5)
 
 ## LogAvgExp2D
 
-```python
+```py
 import torch
 from logavgexp_pytorch import LogAvgExp2D
 
@@ -87,7 +87,7 @@ out = logavgexp_pool(img) # (1, 16, 32, 32)
 
 ## Citations
 
-```bibtex
+```py
 @misc{lowe2021logavgexp,
     title   = {LogAvgExp Provides a Principled and Performant Global Pooling Operator}, 
     author  = {Scott C. Lowe and Thomas Trappenberg and Sageev Oore},

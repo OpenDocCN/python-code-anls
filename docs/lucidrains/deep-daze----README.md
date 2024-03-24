@@ -50,7 +50,7 @@ This will require that you have an Nvidia GPU or AMD GPU
 
 ## Install
 
-```bash
+```py
 $ pip install deep-daze
 ```  
 
@@ -60,13 +60,13 @@ $ pip install deep-daze
 
 Presuming Python is installed: 
 - Open command prompt and navigate to the directory of your current version of Python
-```bash
+```py
   pip install deep-daze
 ```
 
 ## Examples
 
-```bash
+```py
 $ imagine "a house in the forest"
 ```
 For Windows:
@@ -74,7 +74,7 @@ For Windows:
 <img src="./instruction_images/Windows/Step_2_DD_Win.png" width="480px"></img>
 
 - Open command prompt as administrator
-```bash
+```py
   imagine "a house in the forest"
 ```
 
@@ -83,7 +83,7 @@ That's it.
 
 If you have enough memory, you can get better quality by adding a `--deeper` flag
 
-```bash
+```py
 $ imagine "shattered plates on the ground" --deeper
 ```
 
@@ -91,14 +91,14 @@ $ imagine "shattered plates on the ground" --deeper
 
 In true deep learning fashion, more layers will yield better results. Default is at `16`, but can be increased to `32` depending on your resources.
 
-```bash
+```py
 $ imagine "stranger in strange lands" --num-layers 32
 ```
 
 ## Usage
 
 ### CLI
-```bash
+```py
 NAME
     imagine
 
@@ -203,7 +203,7 @@ Technique first devised and shared by <a href="https://twitter.com/quasimondo">M
 
 Simply specify the path to the image you wish to use, and optionally the number of initial training steps.
 
-```bash
+```py
 $ imagine 'a clear night sky filled with stars' --start_image_path ./cloudy-night-sky.jpg
 ```
 
@@ -219,7 +219,7 @@ Then trained with the prompt `A pizza with green pepper.`
 ### Optimize for the interpretation of an image
 
 We can also feed in an image as an optimization goal, instead of only priming the generator network. Deepdaze will then render its own interpretation of that image:
-```bash
+```py
 $ imagine --img samples/Autumn_1875_Frederic_Edwin_Church.jpg
 ```
 Original image:
@@ -240,7 +240,7 @@ The network's interpretation:
 
 #### Optimize for text and image combined
 
-```bash
+```py
 $ imagine "A psychedelic experience." --img samples/hot-dog.jpg
 ```
 The network's interpretation:  
@@ -261,7 +261,7 @@ https://user-images.githubusercontent.com/19983153/109539633-d671ef80-7ac1-11eb-
 
 ### Python
 #### Invoke `deep_daze.Imagine` in Python
-```python
+```py
 from deep_daze import Imagine
 
 imagine = Imagine(
@@ -273,7 +273,7 @@ imagine()
 
 #### Save progress every fourth iteration
 Save images in the format insert_text_here.00001.png, insert_text_here.00002.png, ...up to `(total_iterations % save_every)`
-```python
+```py
 imagine = Imagine(
     text=text,
     save_every=4,
@@ -285,7 +285,7 @@ imagine = Imagine(
 Creates files with both the timestamp and the sequence number.
 
 e.g. 210129-043928_328751_insert_text_here.00001.png, 210129-043928_512351_insert_text_here.00002.png, ...
-```python
+```py
 imagine = Imagine(
     text=text,
     save_every=4,
@@ -296,7 +296,7 @@ imagine = Imagine(
 
 #### High GPU memory usage
 If you have at least 16 GiB of vram available, you should be able to run these settings with some wiggle room.
-```python
+```py
 imagine = Imagine(
     text=text,
     num_layers=42,
@@ -306,7 +306,7 @@ imagine = Imagine(
 ```
 
 #### Average GPU memory usage
-```python
+```py
 imagine = Imagine(
     text=text,
     num_layers=24,
@@ -317,7 +317,7 @@ imagine = Imagine(
 
 #### Very low GPU memory usage (less than 4 GiB)
 If you are desperate to run this on a card with less than 8 GiB vram, you can lower the image_width.
-```python
+```py
 imagine = Imagine(
     text=text,
     image_width=256,
@@ -359,7 +359,7 @@ Please join replication efforts for DALL-E for <a href="https://github.com/lucid
 
 ## Citations
 
-```bibtex
+```py
 @misc{unpublished2021clip,
     title  = {CLIP: Connecting Text and Images},
     author = {Alec Radford, Ilya Sutskever, Jong Wook Kim, Gretchen Krueger, Sandhini Agarwal},
@@ -367,7 +367,7 @@ Please join replication efforts for DALL-E for <a href="https://github.com/lucid
 }
 ```
 
-```bibtex
+```py
 @misc{sitzmann2020implicit,
     title   = {Implicit Neural Representations with Periodic Activation Functions},
     author  = {Vincent Sitzmann and Julien N. P. Martel and Alexander W. Bergman and David B. Lindell and Gordon Wetzstein},

@@ -6,7 +6,7 @@ Implementation of the convolutional module from the <a href="https://arxiv.org/a
 
 ## Install
 
-```bash
+```py
 $ pip install conformer
 ```
 
@@ -14,7 +14,7 @@ $ pip install conformer
 
 The Conformer convolutional module, the main novelty of the paper
 
-```python
+```py
 import torch
 from conformer import ConformerConvModule
 
@@ -32,7 +32,7 @@ x = layer(x) + x
 
 1 Conformer Block
 
-```python
+```py
 import torch
 from conformer import ConformerBlock
 
@@ -55,7 +55,7 @@ block(x) # (1, 1024, 512)
 
 Conformer - just multiple `ConformerBlock` from above
 
-```python
+```py
 import torch
 from conformer import Conformer
 
@@ -84,7 +84,7 @@ conformer(x) # (1, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{gulati2020conformer,
     title   = {Conformer: Convolution-augmented Transformer for Speech Recognition},
     author  = {Anmol Gulati and James Qin and Chung-Cheng Chiu and Niki Parmar and Yu Zhang and Jiahui Yu and Wei Han and Shibo Wang and Zhengdong Zhang and Yonghui Wu and Ruoming Pang},

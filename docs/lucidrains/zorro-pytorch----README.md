@@ -10,13 +10,13 @@ Implementation of <a href="https://arxiv.org/abs/2301.09595">Zorro</a>, Masked M
 
 ## Install
 
-```bash
+```py
 $ pip install zorro-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from zorro_pytorch import Zorro, TokenTypes as T
 
@@ -55,7 +55,7 @@ audio_token, video_token = model(audio = audio, video = video, return_token_indi
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Recasens2023ZorroTM,
   title  = {Zorro: the masked multimodal transformer},
   author = {Adri{\`a} Recasens and Jason Lin and Jo{\~a}o Carreira and Drew Jaegle and Luyu Wang and Jean-Baptiste Alayrac and Pauline Luc and Antoine Miech and Lucas Smaira and Ross Hemsley and Andrew Zisserman},

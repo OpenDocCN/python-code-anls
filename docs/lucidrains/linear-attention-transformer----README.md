@@ -8,7 +8,7 @@ A fully featured Transformer that mixes (QKᵀ)V local attention with Q(KᵀV) g
 
 ## Install
 
-```bash
+```py
 $ pip install linear-attention-transformer
 ```
 
@@ -16,7 +16,7 @@ $ pip install linear-attention-transformer
 
 Language model
 
-```python
+```py
 import torch
 from linear_attention_transformer import LinearAttentionTransformerLM
 
@@ -48,7 +48,7 @@ model(x) # (1, 8192, 512)
 
 Transformer
 
-```python
+```py
 import torch
 from linear_attention_transformer import LinearAttentionTransformer
 
@@ -66,7 +66,7 @@ model(x) # (1, 8192, 512)
 
 Encoder / decoder
 
-```python
+```py
 import torch
 from linear_attention_transformer import LinearAttentionTransformerLM
 
@@ -107,7 +107,7 @@ logits = dec(tgt, context = context, input_mask = tgt_mask, context_mask = src_m
 
 Linformer is another variant of attention with linear complexity championed by Facebook AI. It only works with non-autoregressive models of a fixed sequence length. If your problem satisfies that criteria, you may choose to try it out.
 
-```python
+```py
 from linear_attention_transformer import LinearAttentionTransformerLM, LinformerSettings
 
 settings = LinformerSettings(k = 256)
@@ -124,7 +124,7 @@ enc = LinearAttentionTransformerLM(
 
 You can also used Linformer for the contextual attention layer, if the contextual keys are of a fixed sequence length.
 
-```python
+```py
 from linear_attention_transformer import LinearAttentionTransformerLM, LinformerContextSettings
 
 settings = LinformerContextSettings(
@@ -148,7 +148,7 @@ dec = LinearAttentionTransformerLM(
 
 This repository also contains a concise implementation of this efficient attention for images
 
-```python
+```py
 import torch
 from linear_attention_transformer.images import ImageLinearAttention
 
@@ -164,7 +164,7 @@ attn(img) # (1, 32, 256, 256)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{katharopoulos-et-al-2020,
   author    = {Katharopoulos, A. and Vyas, A. and Pappas, N. and Fleuret, F.},
   title     = {Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention},
@@ -174,7 +174,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @article{shen2019efficient,
   author    = {Zhuoran Shen and
                Mingyuan Zhang and
@@ -189,7 +189,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -199,7 +199,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -208,7 +208,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{wang2020linformer,
     title   = {Linformer: Self-Attention with Linear Complexity},
     author  = {Sinong Wang and Belinda Z. Li and Madian Khabsa and Han Fang and Hao Ma},
@@ -217,7 +217,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{bhojanapalli2020lowrank,
     title   = {Low-Rank Bottleneck in Multi-head Attention Models},
     author  = {Srinadh Bhojanapalli and Chulhee Yun and Ankit Singh Rawat and Sashank J. Reddi and Sanjiv Kumar},
@@ -226,7 +226,7 @@ attn(img) # (1, 32, 256, 256)
 }
 ```
 
-```bibtex
+```py
 @techreport{zhuiyiroformer,
     title   = {RoFormer: Transformer with Rotary Position Embeddings - ZhuiyiAI},
     author  = {Jianlin Su},

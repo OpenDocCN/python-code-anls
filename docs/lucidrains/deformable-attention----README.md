@@ -6,13 +6,13 @@ Implementation of Deformable Attention from <a href="https://arxiv.org/abs/2201.
 
 ## Install
 
-```bash
+```py
 $ pip install deformable-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from deformable_attention import DeformableAttention
 
@@ -33,7 +33,7 @@ attn(x) # (1, 512, 64, 64)
 
 3d deformable attention
 
-```python
+```py
 import torch
 from deformable_attention import DeformableAttention3D
 
@@ -53,7 +53,7 @@ attn(x) # (1, 512, 10, 32, 32)
 
 1d deformable attention for good measure
 
-```python
+```py
 import torch
 from deformable_attention import DeformableAttention1D
 
@@ -70,7 +70,7 @@ attn(x) # (1, 128, 512)
 
 ## Citation
 
-```bibtex
+```py
 @misc{xia2022vision,
     title   = {Vision Transformer with Deformable Attention}, 
     author  = {Zhuofan Xia and Xuran Pan and Shiji Song and Li Erran Li and Gao Huang},
@@ -81,7 +81,7 @@ attn(x) # (1, 128, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},

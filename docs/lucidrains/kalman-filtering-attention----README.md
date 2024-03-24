@@ -6,7 +6,7 @@ Will use <a href="https://github.com/zziz/kalman-filter">this repository</a> as 
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{NEURIPS2020_68ce199e,
     author = {Liu, Hu and LU, Jing and Zhao, Xiwei and Xu, Sulong and Peng, Hao and Liu, Yutong and Zhang, Zehua and Li, Jian and Jin, Junsheng and Bao, Yongjun and Yan, Weipeng},
     booktitle = {Advances in Neural Information Processing Systems},

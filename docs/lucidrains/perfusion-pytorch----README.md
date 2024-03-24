@@ -22,13 +22,13 @@ For researchers out there, if this paper checks out, the tools in this repositor
 
 ## Install
 
-```bash
+```py
 $ pip install perfusion-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from torch import nn
 
@@ -76,7 +76,7 @@ values = wrapped_to_values(text_enc)
 
 The repository also contains an `EmbeddingWrapper` that makes it easy to train on a new concept (and for eventual inference with multiple concepts)
 
-```python
+```py
 import torch
 from torch import nn
 
@@ -107,7 +107,7 @@ If you can identify the `CLIP` instance within the stable diffusion instance, yo
 
 ex.
 
-```python
+```py
 from perfusion_pytorch import OpenClipEmbedWrapper
 
 texts = [
@@ -145,7 +145,7 @@ text_enc, superclass_enc, mask, indices = wrapped_clip_with_new_concept(texts)
 
 ## Citations
 
-```bibtex
+```py
 @article{Tewel2023KeyLockedRO,
     title   = {Key-Locked Rank One Editing for Text-to-Image Personalization},
     author  = {Yoad Tewel and Rinon Gal and Gal Chechik and Yuval Atzmon},
@@ -155,7 +155,7 @@ text_enc, superclass_enc, mask, indices = wrapped_clip_with_new_concept(texts)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Meng2022LocatingAE,
     title   = {Locating and Editing Factual Associations in GPT},
     author  = {Kevin Meng and David Bau and Alex Andonian and Yonatan Belinkov},

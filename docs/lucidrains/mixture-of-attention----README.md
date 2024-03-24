@@ -14,13 +14,13 @@ In my opinion, the CoLT5 paper basically demonstrates mixture of attention alrea
 
 ## Install
 
-```bash
+```py
 $ pip install mixture-of-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from mixture_of_attention import MixtureOfAttention
 
@@ -45,7 +45,7 @@ mixture_of_attn(x, context = context, mask = mask) # (1, 1024, 512)
 
 Autoregressive flavor
 
-```python
+```py
 import torch
 from mixture_of_attention import MixtureOfAutoregressiveAttention
 
@@ -75,7 +75,7 @@ out = mixture_of_attn(x) # (1, 1023, 512)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Ainslie2023CoLT5FL,
     title   = {CoLT5: Faster Long-Range Transformers with Conditional Computation},
     author  = {Joshua Ainslie and Tao Lei and Michiel de Jong and Santiago Ontan'on and Siddhartha Brahma and Yury Zemlyanskiy and David Uthus and Mandy Guo and James Lee-Thorp and Yi Tay and Yun-Hsuan Sung and Sumit Sanghai},
@@ -83,7 +83,7 @@ out = mixture_of_attn(x) # (1, 1023, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -92,7 +92,7 @@ out = mixture_of_attn(x) # (1, 1023, 512)
 }
 ```
 
-```bibtex
+```py
 @article{Wright2015CoordinateDA,
     title   = {Coordinate descent algorithms},
     author  = {Stephen J. Wright},
@@ -103,7 +103,7 @@ out = mixture_of_attn(x) # (1, 1023, 512)
 }
 ```
 
-```bibtex
+```py
 @article{Schmitzer2016StabilizedSS,
     title   = {Stabilized Sparse Scaling Algorithms for Entropy Regularized Transport Problems},
     author  = {Bernhard Schmitzer},
@@ -113,7 +113,7 @@ out = mixture_of_attn(x) # (1, 1023, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},

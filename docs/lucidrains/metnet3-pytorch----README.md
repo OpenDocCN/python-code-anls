@@ -12,13 +12,13 @@ The model architecture is pretty unremarkable. It is basically a U-net with a sp
 
 ## Install
 
-```bash
+```py
 $ pip install metnet3-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from metnet3_pytorch import MetNet3
 
@@ -115,7 +115,7 @@ surface_preds, hrrr_pred, precipitation_preds = metnet3(
 
 ## Citations
 
-```bibtex
+```py
 @article{Andrychowicz2023DeepLF,
     title   = {Deep Learning for Day Forecasts from Sparse Observations},
     author  = {Marcin Andrychowicz and Lasse Espeholt and Di Li and Samier Merchant and Alexander Merose and Fred Zyda and Shreya Agrawal and Nal Kalchbrenner},
@@ -126,7 +126,7 @@ surface_preds, hrrr_pred, precipitation_preds = metnet3(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ElNouby2021XCiTCI,
     title   = {XCiT: Cross-Covariance Image Transformers},
     author  = {Alaaeldin El-Nouby and Hugo Touvron and Mathilde Caron and Piotr Bojanowski and Matthijs Douze and Armand Joulin and Ivan Laptev and Natalia Neverova and Gabriel Synnaeve and Jakob Verbeek and Herv{\'e} J{\'e}gou},

@@ -6,19 +6,19 @@ An implementation of Phasic Policy Gradient, a proposed improvement on top of Pr
 
 ## Install
 
-```bash
+```py
 $ pip install -r requirements.txt
 ```
 
 ## Use
 
-```bash
+```py
 $ python train.py --render
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{cobbe2020phasic,
     title={Phasic Policy Gradient},
     author={Karl Cobbe and Jacob Hilton and Oleg Klimov and John Schulman},

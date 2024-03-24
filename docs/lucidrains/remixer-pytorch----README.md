@@ -7,13 +7,13 @@ Implementation of the Remixer Block from the <a href="https://openreview.net/pdf
 
 ## Install
 
-```bash
+```py
 $ pip install remixer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from remixer_pytorch import RemixerBlock
 
@@ -28,7 +28,7 @@ block(x) # (1, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{anonymous,
     title   = {Remixers: A Mixer-Transformer Architecture with Compositional Operators for Natural Language Understanding },
     author  = {Anonymous},

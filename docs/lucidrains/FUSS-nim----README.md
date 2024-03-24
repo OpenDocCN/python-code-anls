@@ -8,7 +8,7 @@ Basically will be a rewrite of <a href="http://www.hutter1.net/ai/fussdd.cpp">FU
 
 ## Citations
 
-```bibtex
+```py
 @article{Hutter_2006,
 	doi = {10.1109/tevc.2005.863127},
 	url = {https://doi.org/10.1109%2Ftevc.2005.863127},

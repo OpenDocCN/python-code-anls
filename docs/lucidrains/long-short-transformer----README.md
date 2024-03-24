@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2107.02192">Long-Short Transfor
 
 ## Install
 
-```bash
+```py
 $ pip install long-short-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from long_short_transformer import LongShortTransformer
 
@@ -35,7 +35,7 @@ logits = model(x, mask = mask) # (1, 1024, 20000)
 
 For the autoregressive case, you will have to also supply the `segment_size` and set `causal` to `True`
 
-```python
+```py
 import torch
 from long_short_transformer import LongShortTransformer
 
@@ -60,13 +60,13 @@ logits = model(x, mask = mask) # (1, 1024, 20000)
 
 You can test the autoregressive on enwik8 with
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{zhu2021longshort,
     title   = {Long-Short Transformer: Efficient Transformers for Language and Vision}, 
     author  = {Chen Zhu and Wei Ping and Chaowei Xiao and Mohammad Shoeybi and Tom Goldstein and Anima Anandkumar and Bryan Catanzaro},

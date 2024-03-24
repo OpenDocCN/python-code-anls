@@ -8,13 +8,13 @@ Update: The official repository has been released <a href="https://github.com/go
 
 ## Install
 
-```bash
+```py
 $ pip install slot_attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from slot_attention import SlotAttention
 
@@ -30,13 +30,13 @@ slot_attn(inputs) # (2, 5, 512)
 
 After training, the network is reported to be able to generalize to slightly different number of slots (clusters). You can override the number of slots used by the `num_slots` keyword in forward.
 
-```python
+```py
 slot_attn(inputs, num_slots = 8) # (2, 8, 512)
 ```
 
 ## Citation
 
-```bibtex
+```py
 @misc{locatello2020objectcentric,
     title = {Object-Centric Learning with Slot Attention},
     author = {Francesco Locatello and Dirk Weissenborn and Thomas Unterthiner and Aravindh Mahendran and Georg Heigold and Jakob Uszkoreit and Alexey Dosovitskiy and Thomas Kipf},

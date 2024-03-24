@@ -65,13 +65,13 @@ User-made notebook with bugfixes and added features, like google drive integrati
 
 ## Install
 
-```bash
+```py
 $ pip install big-sleep
 ```
 
 ## Usage
 
-```bash
+```py
 $ dream "a pyramid made of ice"
 ```
 
@@ -81,7 +81,7 @@ Images will be saved to wherever the command is invoked
 
 You can invoke this in code with
 
-```python
+```py
 from big_sleep import Imagine
 
 dream = Imagine(
@@ -103,7 +103,7 @@ In this example we train on three phrases:
 - `an armchair imitating pikachu`
 - `abstract`
 
-```python
+```py
 from big_sleep import Imagine
 
 dream = Imagine(
@@ -123,7 +123,7 @@ In this example we train on the three phrases from before,
 **and** *penalize* the phrases:
 - `blur`
 - `zoom`
-```python
+```py
 from big_sleep import Imagine
 
 dream = Imagine(
@@ -136,25 +136,25 @@ dream()
 
 You can also set a new text by using the `.set_text(<str>)` command
 
-```python
+```py
 dream.set_text("a quiet pond underneath the midnight moon")
 ```
 
 And reset the latents with `.reset()`
 
-```python
+```py
 dream.reset()
 ```
 
 To save the progression of images during training, you simply have to supply the `--save-progress` flag
 
-```bash
+```py
 $ dream "a bowl of apples next to the fireplace" --save-progress --save-every 100
 ```
 
 Due to the class conditioned nature of the GAN, Big Sleep often steers off the manifold into noise. You can use a flag to save the best high scoring image (per CLIP critic) to `{filepath}.best.png` in your folder.
 
-```bash
+```py
 $ dream "a room with a view of the ocean" --save-best
 ```
 
@@ -162,7 +162,7 @@ $ dream "a room with a view of the ocean" --save-best
 
 If you have enough memory, you can also try using a bigger vision model released by OpenAI for improved generations.
 
-```bash
+```py
 $ dream "storm clouds rolling in over a white barnyard" --larger-model
 ```
 
@@ -170,7 +170,7 @@ $ dream "storm clouds rolling in over a white barnyard" --larger-model
 
 You can set the number of classes that you wish to restrict Big Sleep to use for the Big GAN with the `--max-classes` flag as follows (ex. 15 classes). This may lead to extra stability during training, at the cost of lost expressivity.
 
-```bash
+```py
 $ dream 'a single flower in a withered field' --max-classes 15
 ```
 
@@ -180,7 +180,7 @@ $ dream 'a single flower in a withered field' --max-classes 15
 
 ## Citations
 
-```bibtex
+```py
 @misc{unpublished2021clip,
     title  = {CLIP: Connecting Text and Images},
     author = {Alec Radford, Ilya Sutskever, Jong Wook Kim, Gretchen Krueger, Sandhini Agarwal},
@@ -188,7 +188,7 @@ $ dream 'a single flower in a withered field' --max-classes 15
 }
 ```
 
-```bibtex
+```py
 @misc{brock2019large,
     title   = {Large Scale GAN Training for High Fidelity Natural Image Synthesis}, 
     author  = {Andrew Brock and Jeff Donahue and Karen Simonyan},

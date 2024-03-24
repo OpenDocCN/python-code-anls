@@ -6,7 +6,7 @@ Implementation of the Hybrid Perception Block (`HPB`) and Dual-Pruned Self-Atten
 
 ## Install
 
-```bash
+```py
 $ pip install ITTR-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install ITTR-pytorch
 
 They had 9 blocks of Hybrid Perception Block (HPB) in the paper
 
-```python
+```py
 import torch
 from ITTR_pytorch import HPB
 
@@ -36,7 +36,7 @@ out = block(fmap) # (1, 512, 32, 32)
 
 You can also use the dual-pruned self-attention as so
 
-```python
+```py
 import torch
 from ITTR_pytorch import DPSA
 
@@ -56,7 +56,7 @@ out = attn(fmap) # (1, 512, 32, 32)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Zheng2022ITTRUI,
   title   = {ITTR: Unpaired Image-to-Image Translation with Transformers},
   author  = {Wanfeng Zheng and Qiang Li and Guoxin Zhang and Pengfei Wan and Zhongyuan Wang},

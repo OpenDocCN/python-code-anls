@@ -8,13 +8,13 @@ A concise but complete implementation of <a href="https://openai.com/blog/clip/"
 
 ## Install
 
-```bash
+```py
 $ pip install x-clip
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from x_clip import CLIP
 
@@ -59,11 +59,11 @@ loss.backward()
 
 You can also pass in an external visual transformer / residual net. You simply have to make sure your image encoder returns a set of embeddings in the shape of `batch x seq x dim`, and make sure `dim_image` is properly specified as the dimension of the returned embeddings. Below is an example using vision transformer from `vit_pytorch`
 
-```bash
+```py
 $ pip install vit_pytorch>=0.25.6
 ```
 
-```python
+```py
 import torch
 from x_clip import CLIP
 
@@ -107,7 +107,7 @@ loss.backward()
 
 Finally, one can also have the text transformer be externally defined. It will need to return the embeddings including the CLS token, for now.
 
-```python
+```py
 import torch
 from x_clip import CLIP, TextTransformer
 
@@ -160,7 +160,7 @@ This repository also supports multiview contrastive learning loss, as proposed i
 
 ex.
 
-```python
+```py
 import torch
 from x_clip import CLIP, TextTransformer
 
@@ -221,7 +221,7 @@ loss.backward()
 
 You can even send in more than one augmented text or image
 
-```python
+```py
 # ...
 
 aug_texts = (
@@ -250,7 +250,7 @@ loss.backward()
 
 You can pass in your own vision self-supervised learning module through the `visual_ssl` keyword as so
 
-```python
+```py
 import torch
 from x_clip import CLIP
 from x_clip.visual_ssl import SimSiam
@@ -303,7 +303,7 @@ loss.backward()
 
 ## Citations
 
-```bibtex
+```py
 @misc{radford2021learning,
     title   = {Learning Transferable Visual Models From Natural Language Supervision}, 
     author  = {Alec Radford and Jong Wook Kim and Chris Hallacy and Aditya Ramesh and Gabriel Goh and Sandhini Agarwal and Girish Sastry and Amanda Askell and Pamela Mishkin and Jack Clark and Gretchen Krueger and Ilya Sutskever},
@@ -314,7 +314,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{yao2021filip,
     title   = {FILIP: Fine-grained Interactive Language-Image Pre-Training}, 
     author  = {Lewei Yao and Runhui Huang and Lu Hou and Guansong Lu and Minzhe Niu and Hang Xu and Xiaodan Liang and Zhenguo Li and Xin Jiang and Chunjing Xu},
@@ -325,7 +325,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{fürst2021cloob,
     title   = {CLOOB: Modern Hopfield Networks with InfoLOOB Outperform CLIP},
     author  = {Andreas Fürst and Elisabeth Rumetshofer and Viet Tran and Hubert Ramsauer and Fei Tang and Johannes Lehner and David Kreil and Michael Kopp and Günter Klambauer and Angela Bitto-Nemling and Sepp Hochreiter},
@@ -336,7 +336,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{yeh2021decoupled,
     title   = {Decoupled Contrastive Learning},
     author  = {Chun-Hsiao Yeh and Cheng-Yao Hong and Yen-Chi Hsu and Tyng-Luh Liu and Yubei Chen and Yann LeCun},
@@ -347,7 +347,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{zhai2021lit,
     title   = {LiT: Zero-Shot Transfer with Locked-image Text Tuning},
     author  = {Xiaohua Zhai and Xiao Wang and Basil Mustafa and Andreas Steiner and Daniel Keysers and Alexander Kolesnikov and Lucas Beyer},
@@ -358,7 +358,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{li2021supervision,
     title   = {Supervision Exists Everywhere: A Data Efficient Contrastive Language-Image Pre-training Paradigm},
     author  = {Yangguang Li and Feng Liang and Lichen Zhao and Yufeng Cui and Wanli Ouyang and Jing Shao and Fengwei Yu and Junjie Yan},
@@ -369,7 +369,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @Article{mu2021slip,
     author  = {Norman Mu and Alexander Kirillov and David Wagner and Saining Xie},
     title   = {SLIP: Self-supervision meets Language-Image Pre-training},
@@ -378,7 +378,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -389,7 +389,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Anonymous},
@@ -400,7 +400,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Li2022ScalingLP,
     title   = {Scaling Language-Image Pre-training via Masking},
     author  = {Yanghao Li and Haoqi Fan and Ronghang Hu and Christoph Feichtenhofer and Kaiming He},
@@ -408,7 +408,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022PatchDropoutEV,
     title   = {PatchDropout: Economizing Vision Transformers Using Patch Dropout},
     author  = {Yue Liu and Christos Matsoukas and Fredrik Strand and Hossein Azizpour and Kevin Smith},
@@ -418,7 +418,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{shi2023enhance,
     title   = {Enhance audio generation controllability through representation similarity regularization}, 
     author  = {Yangyang Shi and Gael Le Lan and Varun Nagaraja and Zhaoheng Ni and Xinhao Mei and Ernie Chang and Forrest Iandola and Yang Liu and Vikas Chandra},

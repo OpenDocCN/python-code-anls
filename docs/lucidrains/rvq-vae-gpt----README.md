@@ -14,7 +14,7 @@ Update: <a href="https://api.wandb.ai/links/lucidrains/kpdfhad9">Some live exper
 
 ## Citations
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2107.03312,
   title  = {SoundStream: An End-to-End Neural Audio Codec},
   author = {Zeghidour, Neil and Luebs, Alejandro and Omran, Ahmed and Skoglund, Jan and Tagliasacchi, Marco},
@@ -24,7 +24,7 @@ Update: <a href="https://api.wandb.ai/links/lucidrains/kpdfhad9">Some live exper
 }
 ```
 
-```bibtex
+```py
 @unknown{unknown,
     author  = {Lee, Doyup and Kim, Chiheon and Kim, Saehoon and Cho, Minsu and Han, Wook-Shin},
     year    = {2022},
@@ -33,7 +33,7 @@ Update: <a href="https://api.wandb.ai/links/lucidrains/kpdfhad9">Some live exper
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},

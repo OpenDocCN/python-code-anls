@@ -6,7 +6,7 @@ Implementation of the <a href="https://arxiv.org/abs/2209.10655">Mega</a> layer,
 
 ## Install
 
-```bash
+```py
 $ pip install mega-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install mega-pytorch
 
 The Mega Layer with combination of attention and learned EMA
 
-```python
+```py
 import torch
 from mega_pytorch import MegaLayer
 
@@ -33,7 +33,7 @@ out = layer(x) # (1, 1024, 128)
 
 Full Mega (with layernorm for now)
 
-```python
+```py
 import torch
 from mega_pytorch import Mega
 
@@ -58,7 +58,7 @@ logits = mega(x) # (1, 1024, 256)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Ma2022MegaMA,
     title   = {Mega: Moving Average Equipped Gated Attention},
     author  = {Xuezhe Ma and Chunting Zhou and Xiang Kong and Junxian He and Liangke Gui and Graham Neubig and Jonathan May and Luke Zettlemoyer},

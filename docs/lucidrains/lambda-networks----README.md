@@ -8,7 +8,7 @@ Implementation of λ Networks, a new approach to image recognition that reaches 
 
 ## Install
 
-```bash
+```py
 $ pip install lambda-networks
 ```
 
@@ -16,7 +16,7 @@ $ pip install lambda-networks
 
 Global context
 
-```python
+```py
 import torch
 from lambda_networks import LambdaLayer
 
@@ -35,7 +35,7 @@ layer(x) # (1, 32, 64, 64)
 
 Localized context
 
-```python
+```py
 import torch
 from lambda_networks import LambdaLayer
 
@@ -54,7 +54,7 @@ layer(x) # (1, 32, 64, 64)
 
 For fun, you can also import this as follows
 
-```python
+```py
 from lambda_networks import λLayer
 ```
 
@@ -62,7 +62,7 @@ from lambda_networks import λLayer
 
 <a href="https://github.com/shinel94">Shinel94</a> has added a Keras implementation! It won't be officially supported in this repository, so either copy / paste the code under `./lambda_networks/tfkeras.py` or make sure to install `tensorflow` and `keras` before running the following.
 
-```python
+```py
 import tensorflow as tf
 from lambda_networks.tfkeras import LambdaLayer
 
@@ -80,7 +80,7 @@ layer(x) # (1, 64, 64, 32)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021lambdanetworks,
     title={LambdaNetworks: Modeling long-range Interactions without Attention},

@@ -20,13 +20,13 @@ Update: Turns out none of the technicalities really matters at all | <a href="ht
 
 ## Install
 
-```bash
+```py
 $ pip install denoising_diffusion_pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from denoising_diffusion_pytorch import Unet, GaussianDiffusion
 
@@ -54,7 +54,7 @@ sampled_images.shape # (4, 3, 128, 128)
 
 Or, if you simply want to pass in a folder name and the desired image dimensions, you can use the `Trainer` class to easily train a model.
 
-```python
+```py
 from denoising_diffusion_pytorch import Unet, GaussianDiffusion, Trainer
 
 model = Unet(
@@ -93,13 +93,13 @@ The `Trainer` class is now equipped with <a href="https://huggingface.co/docs/ac
 
 At the project root directory, where the training script is, run
 
-```python
+```py
 $ accelerate config
 ```
 
 Then, in the same directory
 
-```python
+```py
 $ accelerate launch train.py
 ```
 
@@ -109,7 +109,7 @@ $ accelerate launch train.py
 
 By popular request, a 1D Unet + Gaussian Diffusion implementation.
 
-```python
+```py
 import torch
 from denoising_diffusion_pytorch import Unet1D, GaussianDiffusion1D, Trainer1D, Dataset1D
 
@@ -160,7 +160,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{NEURIPS2020_4c5bcfec,
     author      = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
     booktitle   = {Advances in Neural Information Processing Systems},
@@ -174,7 +174,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @InProceedings{pmlr-v139-nichol21a,
     title       = {Improved Denoising Diffusion Probabilistic Models},
     author      = {Nichol, Alexander Quinn and Dhariwal, Prafulla},
@@ -191,7 +191,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kingma2021on,
     title       = {On Density Estimation with Diffusion Models},
     author      = {Diederik P Kingma and Tim Salimans and Ben Poole and Jonathan Ho},
@@ -202,7 +202,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Karras2022ElucidatingTD,
     title   = {Elucidating the Design Space of Diffusion-Based Generative Models},
     author  = {Tero Karras and Miika Aittala and Timo Aila and Samuli Laine},
@@ -212,7 +212,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Song2021DenoisingDI,
     title   = {Denoising Diffusion Implicit Models},
     author  = {Jiaming Song and Chenlin Meng and Stefano Ermon},
@@ -222,7 +222,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @misc{chen2022analog,
     title   = {Analog Bits: Generating Discrete Data using Diffusion Models with Self-Conditioning},
     author  = {Ting Chen and Ruixiang Zhang and Geoffrey Hinton},
@@ -233,7 +233,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Salimans2022ProgressiveDF,
     title   = {Progressive Distillation for Fast Sampling of Diffusion Models},
     author  = {Tim Salimans and Jonathan Ho},
@@ -243,7 +243,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Ho2022ClassifierFreeDG,
     title   = {Classifier-Free Diffusion Guidance},
     author  = {Jonathan Ho},
@@ -253,7 +253,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},
@@ -263,7 +263,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Jabri2022ScalableAC,
     title   = {Scalable Adaptive Computation for Iterative Generation},
     author  = {A. Jabri and David J. Fleet and Ting Chen},
@@ -271,7 +271,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Cheng2022DPMSolverPlusPlus,
     title   = {DPM-Solver++: Fast Solver for Guided Sampling of Diffusion Probabilistic Models},
     author  = {Cheng Lu and Yuhao Zhou and Fan Bao and Jianfei Chen and Chongxuan Li and Jun Zhu},
@@ -281,7 +281,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hoogeboom2023simpleDE,
     title   = {simple diffusion: End-to-end diffusion for high resolution images},
     author  = {Emiel Hoogeboom and Jonathan Heek and Tim Salimans},
@@ -289,7 +289,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -301,7 +301,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hang2023EfficientDT,
     title   = {Efficient Diffusion Training via Min-SNR Weighting Strategy},
     author  = {Tiankai Hang and Shuyang Gu and Chen Li and Jianmin Bao and Dong Chen and Han Hu and Xin Geng and Baining Guo},
@@ -309,14 +309,14 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @misc{Guttenberg2023,
     author  = {Nicholas Guttenberg},
     url     = {https://www.crosslabs.org/blog/diffusion-with-offset-noise}
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Lin2023CommonDN,
     title   = {Common Diffusion Noise Schedules and Sample Steps are Flawed},
     author  = {Shanchuan Lin and Bingchen Liu and Jiashi Li and Xiao Yang},
@@ -324,7 +324,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -333,7 +333,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -344,7 +344,7 @@ You could consider adding a suitable metric to the training loop yourself after 
 }
 ```
 
-```bibtex
+```py
 @article{Karras2023AnalyzingAI,
     title   = {Analyzing and Improving the Training Dynamics of Diffusion Models},
     author  = {Tero Karras and Miika Aittala and Jaakko Lehtinen and Janne Hellsten and Timo Aila and Samuli Laine},

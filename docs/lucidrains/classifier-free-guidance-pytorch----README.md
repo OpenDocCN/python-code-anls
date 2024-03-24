@@ -15,13 +15,13 @@ It is clear now that text guidance is the ultimate interface to models. This rep
 
 ## Install
 
-```bash
+```py
 $ pip install classifier-free-guidance-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from classifier_free_guidance_pytorch import TextConditioner
 
@@ -50,7 +50,7 @@ second_conditioned = second_condition_fn(second_hidden)
 
 If you wish to use cross attention based conditioning (each hidden feature in your network can attend to individual subword tokens), just import the `AttentionTextConditioner` instead. Rest is the same
 
-```python
+```py
 from classifier_free_guidance_pytorch import AttentionTextConditioner
 
 text_conditioner = AttentionTextConditioner(
@@ -66,7 +66,7 @@ This is a work in progress to make it as easy as possible to text condition your
 
 First, let's say you have a simple two layer network
 
-```python
+```py
 import torch
 from torch import nn
 
@@ -101,7 +101,7 @@ You would like to condition the hidden layers (`hiddens1` and `hiddens2`) with t
 
 This has been whittled down to ~3 step using this repository.
 
-```python
+```py
 import torch
 from torch import nn
 
@@ -167,7 +167,7 @@ guided_pred = model(data, texts = texts, cond_scale = 3.)  # cond_scale stands f
 
 ## Citations
 
-```bibtex
+```py
 @article{Ho2022ClassifierFreeDG,
     title   = {Classifier-Free Diffusion Guidance},
     author  = {Jonathan Ho},
@@ -177,7 +177,7 @@ guided_pred = model(data, texts = texts, cond_scale = 3.)  # cond_scale stands f
 }
 ```
 
-```bibtex
+```py
 @article{Balaji2022eDiffITD,
     title   = {eDiff-I: Text-to-Image Diffusion Models with an Ensemble of Expert Denoisers},
     author  = {Yogesh Balaji and Seungjun Nah and Xun Huang and Arash Vahdat and Jiaming Song and Karsten Kreis and Miika Aittala and Timo Aila and Samuli Laine and Bryan Catanzaro and Tero Karras and Ming-Yu Liu},
@@ -187,7 +187,7 @@ guided_pred = model(data, texts = texts, cond_scale = 3.)  # cond_scale stands f
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -196,7 +196,7 @@ guided_pred = model(data, texts = texts, cond_scale = 3.)  # cond_scale stands f
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Lin2023CommonDN,
     title   = {Common Diffusion Noise Schedules and Sample Steps are Flawed},
     author  = {Shanchuan Lin and Bingchen Liu and Jiashi Li and Xiao Yang},

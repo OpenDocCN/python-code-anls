@@ -8,7 +8,7 @@ Can support any number of augmentation LLMs
 
 ## Install
 
-```bash
+```py
 $ pip install CALM-pytorch
 ```
 
@@ -20,7 +20,7 @@ $ pip install CALM-pytorch
 
 ex. with `x-transformers`
 
-```python
+```py
 import torch
 from x_transformers import TransformerWrapper, Decoder
 
@@ -83,7 +83,7 @@ generated = calm.generate(
 
 To use a handy trainer class using 🤗 Accelerate, just import `FineTuner` and use as follows
 
-```python
+```py
 trainer = FineTuner(
     calm = calm,
     dataset = dataset,   # returns a dictionary of input kwargs to calm - dict(seq: Tensor, mask: Tensor, prompt: Tensor). it can also return a Tuple, in which data_kwargs needs to be set to the correct ordered value of kwarg names
@@ -104,7 +104,7 @@ To explore multiple augmentation LLMs, simply pass in a list for `augment_llm`
 
 ex.
 
-```python
+```py
 calm = CALM(
     anchor_llm = anchor_llm,
     augment_llm = [AugmentParams(augment_llm1), AugmentParams(augment_llm2)] # pass in a list of AugmentParams wrapping model and other hparams specific to that transformer
@@ -113,7 +113,7 @@ calm = CALM(
 
 Say you want to explore different types of connectivity between anchor and augmentation model(s), just pass in the connections as a tuple of tuple integer pairs, specifying the anchor to augment layer number.
 
-```python
+```py
 calm = CALM(
     anchor_llm = anchor_llm,
     augment_llms = (
@@ -140,7 +140,7 @@ calm = CALM(
 
 CALM setup with 2 specialized augmentation LLMs + a vision transformer
 
-```python
+```py
 import torch
 
 # pip install vit-pytorch x-transformers
@@ -265,7 +265,7 @@ loss.backward()
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Bansal2024LLMAL,
   title   = {LLM Augmented LLMs: Expanding Capabilities through Composition},
   author  = {Rachit Bansal and Bidisha Samanta and Siddharth Dalmia and Nitish Gupta and Shikhar Vashishth and Sriram Ganapathy and Abhishek Bapna and Prateek Jain and Partha Pratim Talukdar},

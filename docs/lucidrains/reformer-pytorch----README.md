@@ -13,7 +13,7 @@ It includes LSH attention, reversible network, and chunking. It has been validat
 
 ## Install
 
-```bash
+```py
 $ pip install reformer_pytorch
 ```
 
@@ -21,7 +21,7 @@ $ pip install reformer_pytorch
 
 A simple Reformer language model
 
-```python
+```py
 # should fit in ~ 5gb - 8k tokens
 
 import torch
@@ -64,7 +64,7 @@ y = model(x) # (1, 8192, 20000)
 
 The Reformer (just a stack of reversible LSH attention)
 
-```python
+```py
 # should fit in ~ 5gb - 8k embeddings
 
 import torch
@@ -84,7 +84,7 @@ y = model(x) # (1, 8192, 512)
 
 Self Attention with LSH
 
-```python
+```py
 import torch
 from reformer_pytorch import LSHSelfAttention
 
@@ -102,7 +102,7 @@ y = attn(x) # (10, 1024, 128)
 
 LSH (locality sensitive hashing) Attention
 
-```python
+```py
 import torch
 from reformer_pytorch import LSHAttention
 
@@ -126,7 +126,7 @@ This repository supports masks on the input sequence `input_mask (b x i_seq)`, t
 
 The causal triangular mask is all taken care of for you if you set `causal = True`.
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerLM
 
@@ -160,7 +160,7 @@ However, <a href="https://github.com/AranKomat">Aran</a> has informed me that th
 
 You can turn on axial positional embedding and adjust the shape and dimension of the axial embeddings by following the instructions below.
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerLM
 
@@ -190,7 +190,7 @@ Since version `0.17.0`, and some corrections to the reversible network, Reformer
 
 A full Reformer sequence → sequence, say translation
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerLM
 
@@ -228,7 +228,7 @@ yo = decoder(yi, keys = enc_keys)   # (1, 4096, 20000)
 
 A full Reformer image → caption
 
-```python
+```py
 import torch
 from torch.nn import Sequential
 from torchvision import models
@@ -272,7 +272,7 @@ yo = decoder(yi, keys = enc_keys) # (1, 4096, 20000)
 
 By popular demand, I have coded up a wrapper that removes a lot of the manual work in writing up a generic Reformer encoder / decoder architecture. To use, you would import the `ReformerEncDec` class. Encoder keyword arguments would be passed with a `enc_` prefix and decoder keyword arguments with `dec_`. The model dimension (`dim`) must be prefix free and will be shared between encoder and decoder. The framework will also take care of passing the encoder input mask to the decoder context mask, unless explicitly overridden.
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerEncDec
 
@@ -314,7 +314,7 @@ You can follow the instructions here to set it correctly https://github.com/luci
 
 By default, the activation function is `GELU`. If you would like an alternative activation function, you can pass in the class to the keyword `ff_activation`.
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerLM
 from torch import nn
@@ -339,7 +339,7 @@ y = model(x) # (1, 8192, 20000)
 
 To access the attention weights and bucket distribution, simply wrap the instantiated model with the `Recorder` wrapper class.
 
-```python
+```py
 import torch
 from reformer_pytorch import Reformer, Recorder
 
@@ -370,7 +370,7 @@ model = model.eject() # recover the original model and remove all listeners
 
 Reformer comes with a slight drawback that the sequence must be neatly divisible by the bucket size * 2. I have provided a small helper tool that can help you auto-round the sequence length to the next best multiple.
 
-```python
+```py
 import torch
 from reformer_pytorch import ReformerLM, Autopadder
 
@@ -399,7 +399,7 @@ y = model(x, keys = keys) # (1, 7777, 20000)
 
 A lot of users are only interested in an auto-regressive language model (like GPT-2). Here is a training wrapper to make it easy to both train and evaluate on arbitrarily lengthed sequences of encoded tokens. You will have to take care of the encoding and decoding yourself.
 
-```python
+```py
 import torch
 from torch import randint
 
@@ -454,7 +454,7 @@ print(sample.shape) # (1, <=100) token ids
 5. Compressive Transformer - https://github.com/lucidrains/compressive-transformer-pytorch
 
 ## Citations
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -464,7 +464,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @article{DBLP:journals/corr/abs-1907-01470,
     author    = {Sainbayar Sukhbaatar and
                Edouard Grave and
@@ -479,7 +479,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @article{1910.05895,
     author  = {Toan Q. Nguyen and Julian Salazar},
     title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
@@ -489,7 +489,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @inproceedings{fan2020reducing,
     title     = {Reducing Transformer Depth on Demand with Structured Dropout},
     author    = {Angela Fan and Edouard Grave and Armand Joulin},
@@ -499,7 +499,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam Shazeer},
@@ -509,7 +509,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -518,7 +518,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{roy*2020efficient,
     title   = {Efficient Content-Based Sparse Attention with Routing Transformers},
     author  = {Aurko Roy* and Mohammad Taghi Saffar* and David Grangier and Ashish Vaswani},
@@ -527,7 +527,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{bachlechner2020rezero,
     title   = {ReZero is All You Need: Fast Convergence at Large Depth},
     author  = {Thomas Bachlechner and Bodhisattwa Prasad Majumder and Huanru Henry Mao and Garrison W. Cottrell and Julian McAuley},
@@ -536,7 +536,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{lample2019large,
     title   = {Large Memory Layers with Product Keys},
     author  = {Guillaume Lample and Alexandre Sablayrolles and Marc'Aurelio Ranzato and Ludovic Denoyer and Hervé Jégou},
@@ -546,7 +546,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{bhojanapalli2020lowrank,
     title   = {Low-Rank Bottleneck in Multi-head Attention Models},
     author  = {Srinadh Bhojanapalli and Chulhee Yun and Ankit Singh Rawat and Sashank J. Reddi and Sanjiv Kumar},
@@ -555,7 +555,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{dong2021attention,
     title   = {Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth}, 
     author  = {Yihe Dong and Jean-Baptiste Cordonnier and Andreas Loukas},
@@ -564,7 +564,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -575,7 +575,7 @@ print(sample.shape) # (1, <=100) token ids
 }
 ```
 
-```bibtex
+```py
 @misc{vaswani2017attention,
     title   = {Attention Is All You Need},
     author  = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},

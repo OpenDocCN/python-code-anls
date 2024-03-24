@@ -12,7 +12,7 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install parti-pytorch
 ```
 
@@ -20,7 +20,7 @@ $ pip install parti-pytorch
 
 First you will need to train your Transformer VQ-GAN VAE
 
-```python
+```py
 from parti_pytorch import VitVQGanVAE, VQGanVAETrainer
 
 vit_vae = VitVQGanVAE(
@@ -45,7 +45,7 @@ trainer.train()
 
 Then
 
-```python
+```py
 import torch
 from parti_pytorch import Parti, VitVQGanVAE
 
@@ -110,7 +110,7 @@ images = parti.generate(texts = [
 
 Realistically, when scaling up, you'll want to pre-encode your text into tokens and their respective mask
 
-```python
+```py
 from parti_pytorch.t5 import t5_encode_text
 
 images = torch.randn(4, 3, 256, 256).cuda()
@@ -156,7 +156,7 @@ loss.backward()
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Yu2022Pathways
     title   = {Pathways Autoregressive Text-to-Image Model},
     author  = {Jiahui Yu*, Yuanzhong Xu†, Jing Yu Koh†, Thang Luong†, Gunjan Baid†, Zirui Wang†, Vijay Vasudevan†, Alexander Ku†, Yinfei Yang, Burcu Karagol Ayan, Ben Hutchinson, Wei Han, Zarana Parekh, Xin Li, Han Zhang, Jason Baldridge†, Yonghui Wu*},
@@ -164,7 +164,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{Shleifer2021NormFormerIT,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Sam Shleifer and Jason Weston and Myle Ott},
@@ -174,7 +174,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{Sankararaman2022BayesFormerTW,
     title   = {BayesFormer: Transformer with Uncertainty Estimation},
     author  = {Karthik Abinav Sankararaman and Sinong Wang and Han Fang},
@@ -184,7 +184,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{Lee2021VisionTF,
     title   = {Vision Transformer for Small-Size Datasets},
     author  = {Seung Hoon Lee and Seunghyun Lee and Byung Cheol Song},
@@ -194,7 +194,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{Chu2021DoWR,
     title   = {Do We Really Need Explicit Position Encodings for Vision Transformers?},
     author  = {Xiangxiang Chu and Bo Zhang and Zhi Tian and Xiaolin Wei and Huaxia Xia},
@@ -204,7 +204,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @article{So2021PrimerSF,
     title   = {Primer: Searching for Efficient Transformers for Language Modeling},
     author  = {David R. So and Wojciech Ma'nke and Hanxiao Liu and Zihang Dai and Noam M. Shazeer and Quoc V. Le},
@@ -214,7 +214,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Wang2021CrossFormerAV,
     title   = {CrossFormer: A Versatile Vision Transformer Hinging on Cross-scale Attention},
     author  = {Wenxiao Wang and Lulian Yao and Long Chen and Binbin Lin and Deng Cai and Xiaofei He and Wei Liu},
@@ -222,7 +222,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{mentzer2023finite,
     title   = {Finite Scalar Quantization: VQ-VAE Made Simple},
     author  = {Fabian Mentzer and David Minnen and Eirikur Agustsson and Michael Tschannen},
@@ -233,7 +233,7 @@ loss.backward()
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation},
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},

@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2102.09844v1">E(n)-Equivariant 
 
 ## Install
 
-```bash
+```py
 $ pip install egnn-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN
 
@@ -30,7 +30,7 @@ feats, coors = layer2(feats, coors) # (1, 16, 512), (1, 16, 3)
 
 With edges
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN
 
@@ -47,7 +47,7 @@ feats, coors = layer2(feats, coors, edges) # (1, 16, 512), (1, 16, 3)
 
 A full EGNN network
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN_Network
 
@@ -69,7 +69,7 @@ feats_out, coors_out = net(feats, coors, mask = mask) # (1, 1024, 32), (1, 1024,
 
 Only attend to sparse neighbors, given to the network as an adjacency matrix.
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN_Network
 
@@ -94,7 +94,7 @@ feats_out, coors_out = net(feats, coors, mask = mask, adj_mat = adj_mat) # (1, 1
 
 You can also have the network automatically determine the Nth-order neighbors, and pass in an adjacency embedding (depending on the order) to be used as an edge, with two extra keyword arguments
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN_Network
 
@@ -123,7 +123,7 @@ feats_out, coors_out = net(feats, coors, mask = mask, adj_mat = adj_mat) # (1, 1
 
 If you need to pass in continuous edges
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN_Network
 
@@ -153,7 +153,7 @@ feats_out, coors_out = net(feats, coors, edges = continuous_edges, mask = mask, 
 
 The initial architecture for EGNN suffered from instability when there was high number of neighbors. Thankfully, there seems to be two solutions that largely mitigate this.
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN_Network
 
@@ -175,7 +175,7 @@ feats_out, coors_out = net(feats, coors, mask = mask) # (1, 1024, 32), (1, 1024,
 
 ## All parameters
 
-```python
+```py
 import torch
 from egnn_pytorch import EGNN
 
@@ -203,13 +203,13 @@ model = EGNN(
 
 To run the protein backbone denoising example, first install `sidechainnet`
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
 Then
 
-```bash
+```py
 $ python denoise_sparse.py
 ```
 
@@ -217,13 +217,13 @@ $ python denoise_sparse.py
 
 Make sure you have pytorch geometric installed locally
 
-```bash
+```py
 $ python setup.py test
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{satorras2021en,
     title 	= {E(n) Equivariant Graph Neural Networks}, 
     author 	= {Victor Garcia Satorras and Emiel Hoogeboom and Max Welling},

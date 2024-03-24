@@ -4,13 +4,13 @@ A simple way to keep track of an Exponential Moving Average (EMA) version of you
 
 ## Install
 
-```bash
+```py
 $ pip install ema-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from ema_pytorch import EMA
 
@@ -51,7 +51,7 @@ ema_output = ema(data)
 
 In order to use the post-hoc synthesized EMA, proposed by Karras et al. in <a href="https://arxiv.org/abs/2312.02696">a recent paper</a>, follow the example below
 
-```python
+```py
 import torch
 from ema_pytorch import PostHocEMA
 
@@ -97,7 +97,7 @@ synthesized_ema_output = synthesized_ema(data)
 
 ## Citations
 
-```bibtex
+```py
 @article{Karras2023AnalyzingAI,
     title   = {Analyzing and Improving the Training Dynamics of Diffusion Models},
     author  = {Tero Karras and Miika Aittala and Jaakko Lehtinen and Janne Hellsten and Timo Aila and Samuli Laine},

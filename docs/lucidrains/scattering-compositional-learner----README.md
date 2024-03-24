@@ -10,7 +10,7 @@ If you would like the exact architecture used in the paper, the <a href="https:/
 
 ## Install
 
-```bash
+```py
 $ pip install scattering-transform
 ```
 
@@ -18,7 +18,7 @@ $ pip install scattering-transform
 
 Complete Scattering Compositional Learner network
 
-```python
+```py
 import torch
 import torch.nn.functional as F
 from scattering_transform import SCL, SCLTrainingWrapper
@@ -53,7 +53,7 @@ loss.backward()
 
 Scattering Transform, which is basically one MLP that acts over groups of the dimension
 
-```python
+```py
 import torch
 from scattering_transform import ScatteringTransform
 
@@ -71,7 +71,7 @@ mlp(x) # (1, 512, 1024)
 
 ## Citation
 
-```bibtex
+```py
 @misc{wu2020scattering,
     title={The Scattering Compositional Learner: Discovering Objects, Attributes, Relationships in Analogical Reasoning},
     author={Yuhuai Wu and Honghua Dong and Roger Grosse and Jimmy Ba},

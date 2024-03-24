@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2205.13760">Tranception</a>, an
 
 ## Install
 
-```bash
+```py
 $ pip install tranception-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from tranception_pytorch import Tranception
 
@@ -36,7 +36,7 @@ logits = model(amino_acids) # (1, 512, 21)
 
 ## Citations
 
-```bibtex
+```py
 @article{Notin2022TranceptionPF,
   title   = {Tranception: protein fitness prediction with autoregressive transformers and inference-time retrieval},
   author  = {Pascal Notin and Mafalda Dias and Jonathan Frazer and Javier Marchena-Hurtado and Aidan N. Gomez and Debora S. Marks and Yarin Gal},

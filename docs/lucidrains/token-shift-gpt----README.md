@@ -6,13 +6,13 @@ Update: Inexplicably, it actually works quite well. The feedforward module follo
 
 ## Install
 
-```bash
+```py
 $ pip install token-shift-gpt
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from token_shift_gpt import TokenShiftGPT
 
@@ -32,13 +32,13 @@ To use the discounted cumulative sum approach (which only uses one chunk and see
 
 First install an additional library
 
-```bash
+```py
 $ pip install torch-discounted-cumsum
 ```
 
 Then
 
-```python
+```py
 import torch
 from token_shift_gpt import TokenShiftGPT
 
@@ -58,7 +58,7 @@ logits = model(x) # (1, 1024, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{yu2021s2mlp,
     title   = {S$^2$-MLP: Spatial-Shift MLP Architecture for Vision}, 
     author  = {Tan Yu and Xu Li and Yunfeng Cai and Mingming Sun and Ping Li},
@@ -69,7 +69,7 @@ logits = model(x) # (1, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021pay,
     title   = {Pay Attention to MLPs}, 
     author  = {Hanxiao Liu and Zihang Dai and David R. So and Quoc V. Le},
@@ -80,7 +80,7 @@ logits = model(x) # (1, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},

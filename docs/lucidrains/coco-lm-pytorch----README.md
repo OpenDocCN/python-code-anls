@@ -6,7 +6,7 @@ Implementation of <a href="https://arxiv.org/abs/2102.08473">COCO-LM</a>, Correc
 
 ## Install
 
-```bash
+```py
 $ pip install coco-lm-pytorch
 ```
 
@@ -14,12 +14,12 @@ $ pip install coco-lm-pytorch
 
 An example using the `x-transformers` library
 
-```bash
+```py
 $ pip install x-transformers
 ```
 Then
 
-```python
+```py
 import torch
 from coco_lm_pytorch import COCO
 
@@ -89,7 +89,7 @@ torch.save(discriminator, f'./pretrained-model.pt')
 
 ## Citations
 
-```bibtex
+```py
 @misc{meng2021cocolm,
     title   = {COCO-LM: Correcting and Contrasting Text Sequences for Language Model Pretraining}, 
     author  = {Yu Meng and Chenyan Xiong and Payal Bajaj and Saurabh Tiwary and Paul Bennett and Jiawei Han and Xia Song},

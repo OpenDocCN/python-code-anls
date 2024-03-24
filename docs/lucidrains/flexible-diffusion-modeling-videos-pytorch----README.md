@@ -8,7 +8,7 @@ I will also attempt to push this approach even further by introducing a super-re
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Harvey2022FlexibleDM,
     title   = {Flexible Diffusion Modeling of Long Videos},
     author  = {William Harvey and Saeid Naderiparizi and Vaden Masrani and Christian Weilbach and Frank Wood},

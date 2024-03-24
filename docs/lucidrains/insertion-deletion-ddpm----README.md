@@ -4,7 +4,7 @@ Implementation of <a href="https://arxiv.org/abs/2107.07675">Insertion Deletion 
 
 ## Citations
 
-```bibtex
+```py
 @article{Johnson2021BeyondIC,
     title   = {Beyond In-Place Corruption: Insertion and Deletion In Denoising Probabilistic Models},
     author  = {Daniel D. Johnson and Jacob Austin and Rianne van den Berg and Daniel Tarlow},

@@ -4,7 +4,7 @@ Just some miscellaneous utility functions / decorators / modules related to Pyto
 
 ## Install
 
-```bash
+```py
 $ pip install pytorch-custom-utils
 ```
 
@@ -14,7 +14,7 @@ Class decorator for adding a quick `save` and `load` method to the module instan
 
 ex.
 
-```python
+```py
 import torch
 from torch import nn
 
@@ -49,7 +49,7 @@ mlp = MLP.init_and_load('./mlp.pt')
 
 ex.
 
-```python
+```py
 import torch
 from torch import nn
 

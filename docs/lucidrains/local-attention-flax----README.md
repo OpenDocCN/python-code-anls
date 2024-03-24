@@ -4,13 +4,13 @@ Autoregressive Local Attention - Flax module for Jax
 
 ## Install
 
-```bash
+```py
 $ pip install local-attention-flax
 ```
 
 ## Usage
 
-```python
+```py
 from jax import random
 from local_attention_flax import LocalAttention
 

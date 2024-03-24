@@ -18,13 +18,13 @@ Update: It works! Strongest formulation of linear attention I've come across in 
 
 ## Install
 
-```bash
+```py
 $ pip install taylor-series-linear-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from taylor_series_linear_attention import TaylorSeriesLinearAttn
 
@@ -44,7 +44,7 @@ assert x.shape == out.shape
 
 Cross attention
 
-```python
+```py
 import torch
 from taylor_series_linear_attention import TaylorSeriesLinearAttn
 
@@ -66,7 +66,7 @@ assert x.shape == out.shape
 
 For autoregressive, first `pip install pytorch-fast-transformers`. Then set `causal = True`
 
-```python
+```py
 import torch
 from taylor_series_linear_attention import TaylorSeriesLinearAttn
 
@@ -91,7 +91,7 @@ assert x.shape == out.shape
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Arora2023ZoologyMA,
   title   = {Zoology: Measuring and Improving Recall in Efficient Language Models},
   author  = {Simran Arora and Sabri Eyuboglu and Aman Timalsina and Isys Johnson and Michael Poli and James Zou and Atri Rudra and Christopher R'e},
@@ -100,7 +100,7 @@ assert x.shape == out.shape
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Keles2022OnTC,
   title   = {On The Computational Complexity of Self-Attention},
   author  = {Feyza Duman Keles and Pruthuvi Maheshakya Wijewardena and Chinmay Hegde},
@@ -110,7 +110,7 @@ assert x.shape == out.shape
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
   title   = {Fast Transformer Decoding: One Write-Head is All You Need},
   author  = {Noam M. Shazeer},
@@ -120,7 +120,7 @@ assert x.shape == out.shape
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Peng2023RWKVRR,
   title   = {RWKV: Reinventing RNNs for the Transformer Era},
   author  = {Bo Peng and Eric Alcaide and Quentin G. Anthony and Alon Albalak and Samuel Arcadinho and Stella Biderman and Huanqi Cao and Xin Cheng and Michael Chung and Matteo Grella and G Kranthikiran and Xuming He and Haowen Hou and Przemyslaw Kazienko and Jan Kocoń and Jiaming Kong and Bartlomiej Koptyra and Hayden Lau and Krishna Sri Ipsit Mantri and Ferdinand Mom and Atsushi Saito and Xiangru Tang and Bolun Wang and Johan Sokrates Wind and Stansilaw Wozniak and Ruichong Zhang and Zhenyuan Zhang and Qihang Zhao and Peng Zhou and Jian Zhu and Rui Zhu},
@@ -130,7 +130,7 @@ assert x.shape == out.shape
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Katharopoulos2020TransformersAR,
   title   = {Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention},
   author  = {Angelos Katharopoulos and Apoorv Vyas and Nikolaos Pappas and Franccois Fleuret},

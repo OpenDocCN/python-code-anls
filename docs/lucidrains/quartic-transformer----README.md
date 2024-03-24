@@ -12,13 +12,13 @@ Will also contain a modified implementation of <a href="https://arxiv.org/abs/21
 
 ## Install
 
-```bash
+```py
 $ pip install quartic-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from quartic_transformer import QuarticTransformer
 
@@ -44,7 +44,7 @@ logits = model(tokens) # (1, 128, 256)
 
 ## Citation
 
-```bibtex
+```py
 @inproceedings{Keles2022OnTC,
     title   = {On The Computational Complexity of Self-Attention},
     author  = {Feyza Duman Keles and Pruthuvi Maheshakya Wijewardena and Chinmay Hegde},
@@ -54,7 +54,7 @@ logits = model(tokens) # (1, 128, 256)
 }
 ```
 
-```bibtex
+```py
 @article{Burtsev2021MultiStreamT,
     title   = {Multi-Stream Transformers},
     author  = {Mikhail S. Burtsev and Anna Rumshisky},
@@ -65,7 +65,7 @@ logits = model(tokens) # (1, 128, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{Sutton,
     title  = {The Bitter Lesson},
     url    = {http://www.incompleteideas.net/IncIdeas/BitterLesson.html},
@@ -73,7 +73,7 @@ logits = model(tokens) # (1, 128, 256)
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2020TalkingHeadsA,
     title   = {Talking-Heads Attention},
     author  = {Noam M. Shazeer and Zhenzhong Lan and Youlong Cheng and Nan Ding and Le Hou},

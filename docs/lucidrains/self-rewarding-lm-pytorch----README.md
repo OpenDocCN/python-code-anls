@@ -20,7 +20,7 @@ $ pip install self-rewarding-lm-pytorch
 
 ## Usage
 
-```python
+```py
 import torch
 from torch import Tensor
 
@@ -72,7 +72,7 @@ trainer(overwrite_checkpoints = True)
 
 SPIN can be trained as follows - it can also be added to the fine-tuning pipeline as shown in the final example in the readme.
 
-```python
+```py
 import torch
 
 from self_rewarding_lm_pytorch import (
@@ -109,7 +109,7 @@ spin_trainer()
 
 Say you want to experiment with your own reward prompt (other than LLM-as-Judge). First you need to import the `RewardConfig`, next pass it into the trainer as `reward_prompt_config`
 
-```python
+```py
 
 # first import
 
@@ -144,7 +144,7 @@ ex. say you want to carry out research on interleaving SPIN, External Rewarding,
 
 This idea originated from <a href="https://github.com/teknium1">Teknium</a> from a private discord channel.
 
-```python
+```py
 
 # import the configs
 
@@ -190,7 +190,7 @@ trainer()
 
 ## Citation
 
-```bibtex
+```py
 @misc{yuan2024selfrewarding,
     title   = {Self-Rewarding Language Models}, 
     author  = {Weizhe Yuan and Richard Yuanzhe Pang and Kyunghyun Cho and Sainbayar Sukhbaatar and Jing Xu and Jason Weston},
@@ -201,7 +201,7 @@ trainer()
 }
 ```
 
-```bibtex
+```py
 @article{Chen2024SelfPlayFC,
     title   = {Self-Play Fine-Tuning Converts Weak Language Models to Strong Language Models},
     author  = {Zixiang Chen and Yihe Deng and Huizhuo Yuan and Kaixuan Ji and Quanquan Gu},
@@ -212,7 +212,7 @@ trainer()
 }
 ```
 
-```bibtex
+```py
 @article{Rafailov2023DirectPO,
     title   = {Direct Preference Optimization: Your Language Model is Secretly a Reward Model},
     author  = {Rafael Rafailov and Archit Sharma and Eric Mitchell and Stefano Ermon and Christopher D. Manning and Chelsea Finn},
@@ -223,7 +223,7 @@ trainer()
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Guo2024DirectLM,
     title   = {Direct Language Model Alignment from Online AI Feedback},
     author  = {Shangmin Guo and Biao Zhang and Tianlin Liu and Tianqi Liu and Misha Khalman and Felipe Llinares and Alexandre Rame and Thomas Mesnard and Yao Zhao and Bilal Piot and Johan Ferret and Mathieu Blondel},

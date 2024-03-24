@@ -6,7 +6,7 @@ Implementation of Soft Actor Critic and some of its improvements in Pytorch. Int
 
 ## Citations
 
-```bibtex
+```py
 @article{Haarnoja2018SoftAA,
     title   = {Soft Actor-Critic Algorithms and Applications},
     author  = {Tuomas Haarnoja and Aurick Zhou and Kristian Hartikainen and G. Tucker and Sehoon Ha and Jie Tan and Vikash Kumar and Henry Zhu and Abhishek Gupta and P. Abbeel and Sergey Levine},
@@ -17,7 +17,7 @@ Implementation of Soft Actor Critic and some of its improvements in Pytorch. Int
 }
 ```
 
-```bibtex
+```py
 @article{Hiraoka2021DropoutQF,
     title   = {Dropout Q-Functions for Doubly Efficient Reinforcement Learning},
     author  = {Takuya Hiraoka and Takahisa Imagawa and Taisei Hashimoto and Takashi Onishi and Yoshimasa Tsuruoka},
@@ -28,7 +28,7 @@ Implementation of Soft Actor Critic and some of its improvements in Pytorch. Int
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ObandoCeron2024MixturesOE,
     title   = {Mixtures of Experts Unlock Parameter Scaling for Deep RL},
     author  = {Johan S. Obando-Ceron and Ghada Sokar and Timon Willi and Clare Lyle and Jesse Farebrother and Jakob Foerster and Gintare Karolina Dziugaite and Doina Precup and Pablo Samuel Castro},

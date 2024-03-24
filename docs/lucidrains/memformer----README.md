@@ -6,7 +6,7 @@ Implementation of Memformer, a Memory-augmented Transformer, in Pytorch. It incl
 
 ## Install
 
-```bash
+```py
 $ pip install memformer
 ```
 
@@ -14,7 +14,7 @@ $ pip install memformer
 
 Full encoder / decoder, as in the paper
 
-```python
+```py
 import torch
 from memformer import Memformer
 
@@ -46,7 +46,7 @@ loss.backward()
 
 Encoder only
 
-```python
+```py
 import torch
 from memformer import Memformer
 
@@ -70,7 +70,7 @@ enc2, mems2 = model(src2, mems = mems1)
 
 Memory Replay Back-Propagation
 
-```python
+```py
 import torch
 from memformer import Memformer, memory_replay_backprop
 
@@ -103,7 +103,7 @@ memory_replay_backprop(
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021memformer,
     title={Memformer: The Memory-Augmented Transformer},

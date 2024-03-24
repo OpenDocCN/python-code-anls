@@ -4,7 +4,7 @@ An attempt to merge <a href="https://openreview.net/forum?id=LSFCEb3GYU7">ESBN</
 
 ## Usage
 
-```python
+```py
 import torch
 from esbn_transformer import EsbnTransformer
 
@@ -21,7 +21,7 @@ out = model(x) # (1, 512, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{webb2020emergent,
     title   = {Emergent Symbols through Binding in External Memory}, 
     author  = {Taylor W. Webb and Ishan Sinha and Jonathan D. Cohen},
@@ -32,7 +32,7 @@ out = model(x) # (1, 512, 256)
 }
 ```
 
-```bibtex
+```py
 @misc{dulberg2021modelling,
     title   = {Modelling the development of counting with memory-augmented neural networks}, 
     author  = {Zack Dulberg and Taylor Webb and Jonathan Cohen},

@@ -7,13 +7,13 @@ Implementation of a Transformer using <a href="https://arxiv.org/abs/2104.07012
 
 ## Install
 
-```bash
+```py
 $ pip install rela-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from rela_transformer import ReLATransformer
 
@@ -34,13 +34,13 @@ logits = model(x, mask = mask) # (1, 1024, 20000)
 
 ## Enwik8
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{zhang2021sparse,
     title   = {Sparse Attention with Linear Units},
     author  = {Biao Zhang and Ivan Titov and Rico Sennrich},

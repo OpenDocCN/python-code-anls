@@ -18,7 +18,7 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Usage
 
-```install
+```py
 $ pip install musiclm-pytorch
 ```
 
@@ -26,7 +26,7 @@ $ pip install musiclm-pytorch
 
 `MuLaN` first needs to be trained
 
-```python
+```py
 import torch
 from musiclm_pytorch import MuLaN, AudioSpectrogramTransformer, TextTransformer
 
@@ -70,7 +70,7 @@ embeds = mulan.get_text_latents(texts)  # during inference
 
 To obtain the conditioning embeddings for the three transformers that are a part of `AudioLM`, you must use the `MuLaNEmbedQuantizer` as so
 
-```python
+```py
 from musiclm_pytorch import MuLaNEmbedQuantizer
 
 # setup the quantizer with the namespaced conditioning embeddings, unique per quantizer as well as namespace (per transformer)
@@ -91,7 +91,7 @@ To train (or finetune) the three transformers that are a part of `AudioLM`, you 
 
 ex. `SemanticTransformerTrainer`
 
-```python
+```py
 import torch
 from audiolm_pytorch import HubertWithKmeans, SemanticTransformer, SemanticTransformerTrainer
 
@@ -122,7 +122,7 @@ trainer.train()
 
 After much training on all three transformers (semantic, coarse, fine), you will pass your finetuned or trained-from-scratch `AudioLM` and `MuLaN` wrapped in `MuLaNEmbedQuantizer` to the `MusicLM`
 
-```python
+```py
 # you need the trained AudioLM (audio_lm) from above
 # with the MulanEmbedQuantizer (mulan_embed_quantizer)
 
@@ -151,7 +151,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Agostinelli2023MusicLMGM,
     title     = {MusicLM: Generating Music From Text},
     author    = {Andrea Agostinelli and Timo I. Denk and Zal{\'a}n Borsos and Jesse Engel and Mauro Verzetti and Antoine Caillon and Qingqing Huang and Aren Jansen and Adam Roberts and Marco Tagliasacchi and Matthew Sharifi and Neil Zeghidour and C. Frank},
@@ -159,7 +159,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @article{Huang2022MuLanAJ,
     title   = {MuLan: A Joint Embedding of Music Audio and Natural Language},
     author  = {Qingqing Huang and Aren Jansen and Joonseok Lee and Ravi Ganti and Judith Yue Li and Daniel P. W. Ellis},
@@ -169,7 +169,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -181,7 +181,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022PatchDropoutEV,
     title   = {PatchDropout: Economizing Vision Transformers Using Patch Dropout},
     author  = {Yue Liu and Christos Matsoukas and Fredrik Strand and Hossein Azizpour and Kevin Smith},
@@ -191,7 +191,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -202,7 +202,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @misc{gilmer2023intriguing
     title  = {Intriguing Properties of Transformer Training Instabilities},
     author = {Justin Gilmer, Andrea Schioppa, and Jeremy Cohen},
@@ -211,7 +211,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Shukor2022EfficientVP,
     title   = {Efficient Vision-Language Pretraining with Visual Concepts and Hierarchical Alignment},
     author  = {Mustafa Shukor and Guillaume Couairon and Matthieu Cord},
@@ -220,7 +220,7 @@ music = musiclm('the crystalline sounds of the piano in a ballroom', num_samples
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Zhai2023SigmoidLF,
     title   = {Sigmoid Loss for Language Image Pre-Training},
     author  = {Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},

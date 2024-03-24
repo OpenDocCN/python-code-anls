@@ -10,7 +10,7 @@ For non-autoregressive, would recommend going with the simpler and better <a hre
 
 ## Install
 
-```bash
+```py
 $ pip install st-moe-pytorch
 ```
 
@@ -22,7 +22,7 @@ $ pip install st-moe-pytorch
 
 ## Usage
 
-```python
+```py
 import torch
 from st_moe_pytorch import MoE
 
@@ -88,7 +88,7 @@ out, total_aux_loss, balance_loss, router_z_loss = moe_block(inputs) # (4, 1024,
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Zoph2022STMoEDS,
     title   = {ST-MoE: Designing Stable and Transferable Sparse Expert Models},
     author  = {Barret Zoph and Irwan Bello and Sameer Kumar and Nan Du and Yanping Huang and Jeff Dean and Noam M. Shazeer and William Fedus},

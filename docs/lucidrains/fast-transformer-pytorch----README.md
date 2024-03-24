@@ -10,13 +10,13 @@ Implementation of <a href="https://arxiv.org/abs/2108.09084">Fast Transformer</a
 
 ## Install
 
-```bash
+```py
 $ pip install fast-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from fast_transformer_pytorch import FastTransformer
 
@@ -36,7 +36,7 @@ logits = model(x, mask = mask) # (1, 4096, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{wu2021fastformer,
     title   = {Fastformer: Additive Attention is All You Need}, 
     author  = {Chuhan Wu and Fangzhao Wu and Tao Qi and Yongfeng Huang},

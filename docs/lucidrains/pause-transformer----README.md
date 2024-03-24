@@ -15,7 +15,7 @@ Again, the idea relies on axial attention; one axis attends along the sequence l
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Goyal2023ThinkBY,
     title   = {Think before you speak: Training Language Models With Pause Tokens},
     author  = {Sachin Goyal and Ziwei Ji and Ankit Singh Rawat and Aditya Krishna Menon and Sanjiv Kumar and Vaishnavh Nagarajan},

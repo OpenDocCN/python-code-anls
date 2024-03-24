@@ -8,13 +8,13 @@ This code has been battletested in multiple repositories already, alongside diff
 
 ## Install
 
-```bash
+```py
 $ pip install local-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from local_attention import LocalAttention
 
@@ -38,7 +38,7 @@ out = attn(q, k, v, mask = mask) # (2, 8, 2048, 64)
 
 This library also allows for local attention in the setting of shared query/key space (Reformer architecture). The normalization of the keys, as well as the masking of tokens to itself, will be taken care of.
 
-```python
+```py
 import torch
 from local_attention import LocalAttention
 
@@ -58,7 +58,7 @@ out = attn(qk, qk, v, mask = mask) # (2, 8, 2048, 64)
 
 If you wish for the module to automagically pad your query / key / values as well as the mask, simply set the `autopad` keyword to `True`
 
-```python
+```py
 import torch
 from local_attention import LocalAttention
 
@@ -80,7 +80,7 @@ out = attn(q, k, v, mask = mask) # (8, 2057, 64)
 
 A full local attention transformer
 
-```python
+```py
 import torch
 from local_attention import LocalTransformer
 
@@ -102,13 +102,13 @@ logits = model(x) # (1, 8192, 256)
 
 window size of 256, lookback of 1, total receptive field of 512
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citation
 
-```bibtex
+```py
 @inproceedings{rae-razavi-2020-transformers,
     title   = "Do Transformers Need Deep Long-Range Memory?",
     author  = "Rae, Jack  and Razavi, Ali",
@@ -121,7 +121,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{roy*2020efficient,
     title   = {Efficient Content-Based Sparse Attention with Routing Transformers},
     author  = {Aurko Roy* and Mohammad Taghi Saffar* and David Grangier and Ashish Vaswani},
@@ -130,7 +130,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{beltagy2020longformer,
     title   = {Longformer: The Long-Document Transformer},
     author  = {Iz Beltagy and Matthew E. Peters and Arman Cohan},
@@ -141,7 +141,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
     title     = {A Length-Extrapolatable Transformer},
     author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -149,7 +149,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},

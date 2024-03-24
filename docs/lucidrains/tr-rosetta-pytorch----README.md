@@ -10,7 +10,7 @@ Update - <a href="https://github.com/aixander">Xander</a> has released <a href="
 
 ## Install
 
-```bash
+```py
 $ pip install tr-rosetta-pytorch
 ```
 
@@ -18,13 +18,13 @@ $ pip install tr-rosetta-pytorch
 
 As a command-line tool, to run a structure prediction
 
-```bash
+```py
 $ tr_rosetta <input-file.a3m>
 ```
 
 ## Code
 
-```python
+```py
 import torch
 from tr_rosetta_pytorch import trRosettaNetwork
 
@@ -41,7 +41,7 @@ theta, phi, distance, omega = model(x)
 
 ## Citations
 
-```bibtex
+```py
 @article {Yang1496,
     author = {Yang, Jianyi and Anishchenko, Ivan and Park, Hahnbeom and Peng, Zhenling and Ovchinnikov, Sergey and Baker, David},
     title = {Improved protein structure prediction using predicted interresidue orientations},
@@ -51,7 +51,7 @@ theta, phi, distance, omega = model(x)
 }
 ```
 
-```bibtex
+```py
 @article {Anishchenko2020.07.22.211482,
     author = {Anishchenko, Ivan and Chidyausiku, Tamuka M. and Ovchinnikov, Sergey and Pellock, Samuel J. and Baker, David},
     title = {De novo protein design by deep network hallucination},

@@ -6,7 +6,7 @@ Implementation of <a href="https://arxiv.org/abs/2106.04283">NWT</a>, audio-to-v
 
 ## Install
 
-```bash
+```py
 $ pip install nwt-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install nwt-pytorch
 
 The paper proposes a new discrete latent representation named `Memcodes`, which can be succinctly described as a type of multi-head hard-attention to learned memory (codebook) key / values. They claim the need for less codes and smaller codebook dimension in order to achieve better reconstructions.
 
-```python
+```py
 import torch
 from nwt_pytorch import Memcodes
 
@@ -36,7 +36,7 @@ assert torch.allclose(codebook.get_codes_from_indices(codebook_indices), out)
 
 ## Citations
 
-```bibtex
+```py
 @misc{mama2021nwt,
     title   = {NWT: Towards natural audio-to-video generation with representation learning}, 
     author  = {Rayhane Mama and Marc S. Tyndel and Hashiam Kadhim and Cole Clifford and Ragavan Thurairatnam},

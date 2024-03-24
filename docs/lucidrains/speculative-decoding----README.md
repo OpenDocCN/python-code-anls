@@ -27,7 +27,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Leviathan2022FastIF,
     title   = {Fast Inference from Transformers via Speculative Decoding},
     author  = {Yaniv Leviathan and Matan Kalman and Y. Matias},
@@ -37,7 +37,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 }
 ```
 
-```bibtex
+```py
 @inproceedings{sun2023spectr,
     title     = {SpecTr: Fast Speculative Decoding via Optimal Transport},
     author    = {Ziteng Sun and Ananda Theertha Suresh and Jae Hun Ro and Ahmad Beirami and Himanshu Jain and Felix Yu and Michael Riley and Sanjiv Kumar},
@@ -47,7 +47,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 }
 ```
 
-```bibtex
+```py
 @article{Chen2023AcceleratingLL,
     title     = {Accelerating Large Language Model Decoding with Speculative Sampling},
     author    = {Charlie Chen and Sebastian Borgeaud and Geoffrey Irving and Jean-Baptiste Lespiau and L. Sifre and John M. Jumper},
@@ -58,7 +58,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 }
 ```
 
-```bibtex
+```py
 @article{Yan2020ProphetNetPF,
     title   = {ProphetNet: Predicting Future N-gram for Sequence-to-Sequence Pre-training},
     author  = {Yu Yan and Weizhen Qi and Yeyun Gong and Dayiheng Liu and Nan Duan and Jiusheng Chen and Ruofei Zhang and Ming Zhou},
@@ -69,7 +69,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 }
 ```
 
-```bibtex
+```py
 @article{Zhang2023DraftV,
     title     = {Draft \& Verify: Lossless Large Language Model Acceleration via Self-Speculative Decoding},
     author    = {Jinchao Zhang and Jue Wang and Huan Li and Lidan Shou and Ke Chen and Gang Chen and Sharad Mehrotra},
@@ -80,7 +80,7 @@ Also have a few ideas of my own that I will try and share in this repository, if
 }
 ```
 
-```bibtex
+```py
 @misc{medusa,
     author     = {Tianle Cai and Yuhong Li and Zhengyang Geng and Hongwu Peng and Tri Dao},
     title      = {Medusa: Simple Framework for Accelerating LLM Generation with Multiple Decoding Heads},

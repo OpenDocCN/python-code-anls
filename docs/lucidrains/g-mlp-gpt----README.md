@@ -6,13 +6,13 @@ You can also add the "tiny" attention (as described in the paper) with the `attn
 
 ## Install
 
-```bash
+```py
 $ pip install g-mlp-gpt
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from g_mlp_gpt import gMLPGPT
 
@@ -30,7 +30,7 @@ logits = model(x) # (1, 1000, 20000)
 
 16k context length
 
-```python
+```py
 import torch
 from g_mlp_gpt import gMLPGPT
 
@@ -63,7 +63,7 @@ logits = model(x) # (1, 16384, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{liu2021pay,
     title   = {Pay Attention to MLPs}, 
     author  = {Hanxiao Liu and Zihang Dai and David R. So and Quoc V. Le},

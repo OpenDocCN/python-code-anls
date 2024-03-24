@@ -22,7 +22,7 @@ $ pip install simple-hierarchical-transformer
 
 Three hierarchies, all servicing predicting the next token
 
-```python
+```py
 import torch
 from simple_hierarchical_transformer import HierarchicalTransformer
 
@@ -49,7 +49,7 @@ logits = model(ids)
 
 By not specifying `hierarchies` and `window_sizes`, you basically default to a regular autoregressive transformer with attention across full sequence length.
 
-```python
+```py
 
 # non-hierarchical transformer
 
@@ -68,7 +68,7 @@ model = HierarchicalTransformer(
 
 Now something more complex. Experiments show that as you compress up the hierarchies, you need greater model dimensions for appropriate capacity.
 
-```python
+```py
 model = HierarchicalTransformer(
     num_tokens = 256,
     dim = (128, 256, 512, 1024),
@@ -118,7 +118,7 @@ Closest idea would be <a href="https://arxiv.org/abs/2110.13711">hourglass trans
 
 And my renewed interest in hierarchical approaches came from reading <a href="https://www.nature.com/articles/s41562-022-01516-2">this</a>.
 
-```bibtex
+```py
 @article{Nawrot2021HierarchicalTA,
     title   = {Hierarchical Transformers Are More Efficient Language Models},
     author  = {Piotr Nawrot and Szymon Tworkowski and Michal Tyrolski and Lukasz Kaiser and Yuhuai Wu and Christian Szegedy and Henryk Michalewski},
@@ -128,7 +128,7 @@ And my renewed interest in hierarchical approaches came from reading <a href="ht
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -137,7 +137,7 @@ And my renewed interest in hierarchical approaches came from reading <a href="ht
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -148,7 +148,7 @@ And my renewed interest in hierarchical approaches came from reading <a href="ht
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
     title     = {A Length-Extrapolatable Transformer},
     author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -156,7 +156,7 @@ And my renewed interest in hierarchical approaches came from reading <a href="ht
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author    = {PENG Bo},
     title     = {BlinkDL/RWKV-LM: 0.01},
@@ -169,7 +169,7 @@ And my renewed interest in hierarchical approaches came from reading <a href="ht
 }
 ```
 
-```bibtex
+```py
 @article{Piergiovanni2023Mirasol3BAM,
     title   = {Mirasol3B: A Multimodal Autoregressive model for time-aligned and contextual modalities},
     author  = {A. J. Piergiovanni and Isaac Noble and Dahun Kim and Michael S. Ryoo and Victor Gomes and Anelia Angelova},

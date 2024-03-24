@@ -6,13 +6,13 @@ Implementation of <a href="https://openreview.net/forum?id=GxjCYmQAody">N-Gramme
 
 ## Install
 
-```bash
+```py
 $ pip install n-grammer-pytorch
 ````
 
 ## Usage
 
-```python
+```py
 import torch
 from n_grammer_pytorch import VQNgrammer
 
@@ -34,7 +34,7 @@ vq_ngram(x) # (1, 1024, 32 * 16)
 Like product key memories, Ngrammer parameters need to have a higher learning rate (`1e-2` was recommended in the paper). The repository offers an easy way to generate the parameter groups.
 
 
-```python
+```py
 from torch.optim import Adam
 from n_grammer_pytorch import get_ngrammer_parameters
 
@@ -49,7 +49,7 @@ optim = Adam([
 
 Or, even more simply
 
-```python
+```py
 from torch.optim import Adam
 from n_grammer_pytorch import get_ngrammer_param_groups
 
@@ -59,7 +59,7 @@ optim = Adam(param_groups, lr = 3e-4)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{thai2020using,
     title   = {N-grammer: Augmenting Transformers with latent n-grams},
     author  = {Anonymous},

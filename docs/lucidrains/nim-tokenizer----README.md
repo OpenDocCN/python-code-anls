@@ -8,7 +8,7 @@ Implementation of a simple BPE tokenizer, but in <a href="https://nim-lang.org/"
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Wang2019NeuralMT,
     title   = {Neural Machine Translation with Byte-Level Subwords},
     author  = {Changhan Wang and Kyunghyun Cho and Jiatao Gu},
@@ -17,7 +17,7 @@ Implementation of a simple BPE tokenizer, but in <a href="https://nim-lang.org/"
 }
 ```
 
-```bibtex
+```py
 @inproceedings{provilkov-etal-2020-bpe,
     title   = "{BPE}-Dropout: Simple and Effective Subword Regularization",
     author  = "Provilkov, Ivan  and Emelianenko, Dmitrii  and Voita, Elena",

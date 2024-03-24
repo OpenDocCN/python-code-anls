@@ -16,13 +16,13 @@ The text-to-semantic module built here will be used for <a href="https://github.
 
 ## Install
 
-```bash
+```py
 $ pip install spear-tts-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 
 from audiolm_pytorch import HubertWithKmeans
@@ -85,7 +85,7 @@ assert len(generated_dataset) == 10
 
 ## Citations
 
-```bibtex
+```py
 @misc{kharitonov2023speak,
     title   = {Speak, Read and Prompt: High-Fidelity Text-to-Speech with Minimal Supervision}, 
     author  = {Eugene Kharitonov and Damien Vincent and Zalán Borsos and Raphaël Marinier and Sertan Girgin and Olivier Pietquin and Matt Sharifi and Marco Tagliasacchi and Neil Zeghidour},
@@ -96,7 +96,7 @@ assert len(generated_dataset) == 10
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -105,7 +105,7 @@ assert len(generated_dataset) == 10
 }
 ```
 
-```bibtex
+```py
 @misc{shi2023enhance,
     title   = {Enhance audio generation controllability through representation similarity regularization}, 
     author  = {Yangyang Shi and Gael Le Lan and Varun Nagaraja and Zhaoheng Ni and Xinhao Mei and Ernie Chang and Forrest Iandola and Yang Liu and Vikas Chandra},
@@ -116,7 +116,7 @@ assert len(generated_dataset) == 10
 }
 ```
 
-```bibtex
+```py
 @article{Ainslie2023GQATG,
     title   = {GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints},
     author  = {Joshua Ainslie and James Lee-Thorp and Michiel de Jong and Yury Zemlyanskiy and Federico Lebr'on and Sumit K. Sanghai},
@@ -127,7 +127,7 @@ assert len(generated_dataset) == 10
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Leviathan2022FastIF,
     title   = {Fast Inference from Transformers via Speculative Decoding},
     author  = {Yaniv Leviathan and Matan Kalman and Y. Matias},

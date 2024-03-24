@@ -10,7 +10,7 @@ This paper was actually rejected on the basis of being too simple. And yet, it h
 
 ### Install
 
-```bash
+```py
 $ pip install axial_attention
 ```
 
@@ -18,7 +18,7 @@ $ pip install axial_attention
 
 Image
 
-```python
+```py
 import torch
 from axial_attention import AxialAttention
 
@@ -38,7 +38,7 @@ attn(img) # (1, 3, 256, 256)
 
 Channel-last image latents
 
-```python
+```py
 import torch
 from axial_attention import AxialAttention
 
@@ -56,7 +56,7 @@ attn(img) # (1, 20, 20 ,512)
 
 Video
 
-```python
+```py
 import torch
 from axial_attention import AxialAttention
 
@@ -74,7 +74,7 @@ attn(video) # (1, 5, 128, 256, 256)
 
 Image Transformer, with reversible network
 
-```python
+```py
 import torch
 from torch import nn
 from axial_attention import AxialImageTransformer
@@ -94,7 +94,7 @@ transformer(conv1x1(img)) # (1, 3, 512, 512)
 
 With axial positional embedding
 
-```python
+```py
 import torch
 from axial_attention import AxialAttention, AxialPositionalEmbedding
 
@@ -117,7 +117,7 @@ img = attn(img)     # (1, 512, 20, 20)
 
 ## Citation
 
-```bibtex
+```py
 @misc{ho2019axial,
     title  = {Axial Attention in Multidimensional Transformers},
     author = {Jonathan Ho and Nal Kalchbrenner and Dirk Weissenborn and Tim Salimans},
@@ -126,7 +126,7 @@ img = attn(img)     # (1, 512, 20, 20)
 }
 ```
 
-```bibtex
+```py
 @misc{wang2020axialdeeplab,
     title   = {Axial-DeepLab: Stand-Alone Axial-Attention for Panoptic Segmentation},
     author  = {Huiyu Wang and Yukun Zhu and Bradley Green and Hartwig Adam and Alan Yuille and Liang-Chieh Chen},
@@ -137,7 +137,7 @@ img = attn(img)     # (1, 512, 20, 20)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{huang2019ccnet,
     title   = {Ccnet: Criss-cross attention for semantic segmentation},
     author  = {Huang, Zilong and Wang, Xinggang and Huang, Lichao and Huang, Chang and Wei, Yunchao and Liu, Wenyu},

@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2103.00112">Transformer in Tran
 
 ## Install
 
-```bash
+```py
 $ pip install transformer-in-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from transformer_in_transformer import TNT
 
@@ -36,7 +36,7 @@ logits = tnt(img) # (2, 1000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{han2021transformer,
     title   = {Transformer in Transformer}, 
     author  = {Kai Han and An Xiao and Enhua Wu and Jianyuan Guo and Chunjing Xu and Yunhe Wang},

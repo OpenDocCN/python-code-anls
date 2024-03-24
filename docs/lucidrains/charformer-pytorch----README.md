@@ -8,13 +8,13 @@ Implementation of the GBST (gradient-based subword tokenization) module from the
 
 ## Install
 
-```bash
+```py
 $ pip install charformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from charformer_pytorch import GBST
 
@@ -38,7 +38,7 @@ tokens, mask = tokenizer(tokens, mask = mask) # (1, 256, 512), (1, 256)
 
 Deviating from the paper, you can also specify block size(s) with different offsets. This is to cover a potential use-case for genomics pre-training, where the tokenizer should be able to learn the correct frame. Simply omit the `max_block_size`, and pass in `blocks` as a list of tuples of tuples, each tuple with the format `(block size, offset)`. Offsets must be less than the block size
 
-```python
+```py
 import torch
 from charformer_pytorch import GBST
 
@@ -60,7 +60,7 @@ basepairs, mask = tokenizer(basepairs, mask = mask)
 
 ## Citations
 
-```bibtex
+```py
 @misc{tay2021charformer,
     title   = {Charformer: Fast Character Transformers via Gradient-based Subword Tokenization}, 
     author  = {Yi Tay and Vinh Q. Tran and Sebastian Ruder and Jai Gupta and Hyung Won Chung and Dara Bahri and Zhen Qin and Simon Baumgartner and Cong Yu and Donald Metzler},

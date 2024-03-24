@@ -8,13 +8,13 @@ This type of axial autoregressive transformer should be compatible with <a href=
 
 ## Install
 
-```bash
+```py
 $ pip install RQ-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from rq_transformer import RQTransformer
 
@@ -46,7 +46,7 @@ sampled = model.generate(temperature = 0.9, filter_thres = 0.9) # (1, 1024, 4)
 
 I also think there is something deeper going on, and have generalized this to any number of dimensions. You can use it by importing the `HierarchicalCausalTransformer`
 
-```python
+```py
 import torch
 from rq_transformer import HierarchicalCausalTransformer
 
@@ -75,7 +75,7 @@ sampled = model.generate(temperature = 0.9, filter_thres = 0.9) # (1, 16, 4, 5)
 
 ## Citations
 
-```bibtex
+```py
 @unknown{unknown,
     author  = {Lee, Doyup and Kim, Chiheon and Kim, Saehoon and Cho, Minsu and Han, Wook-Shin},
     year    = {2022},
@@ -84,7 +84,7 @@ sampled = model.generate(temperature = 0.9, filter_thres = 0.9) # (1, 16, 4, 5)
 }
 ```
 
-```bibtex
+```py
 @misc{press2021ALiBi,
     title   = {Train Short, Test Long: Attention with Linear Biases Enable Input Length Extrapolation},
     author  = {Ofir Press and Noah A. Smith and Mike Lewis},

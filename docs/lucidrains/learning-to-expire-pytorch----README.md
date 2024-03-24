@@ -6,7 +6,7 @@ An implementation of Transformer with <a href="https://openreview.net/forum?id=Z
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021not,
     title={Not All Memories are Created Equal: Learning to Expire},

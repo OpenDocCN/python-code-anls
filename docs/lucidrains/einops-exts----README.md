@@ -4,7 +4,7 @@ Implementation of some personal helper functions for <a href="https://github.com
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
   title     = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
   author    = {Alex Rogozhnikov},

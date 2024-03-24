@@ -18,13 +18,13 @@ The official implementation has been released <a href="https://github.com/thuml/
 
 ## Install
 
-```bash
+```py
 $ pip install iTransformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from iTransformer import iTransformer
 
@@ -56,7 +56,7 @@ Update: It works! Thanks goes out to <a href="https://github.com/gdevos010">Greg
 
 Update 2: Got an email. Yes you are free to write a paper on this, if the architecture holds up for your problem. I have no skin in the game
 
-```python
+```py
 import torch
 from iTransformer import iTransformer2D
 
@@ -88,7 +88,7 @@ preds = model(time_series)
 
 A `iTransformer` but also with fourier tokens (FFT of time series is projected into tokens of their own and attended along side with the variate tokens, spliced out at the end)
 
-```python
+```py
 import torch
 from iTransformer import iTransformerFFT
 
@@ -123,7 +123,7 @@ preds = model(time_series)
 
 ## Citation
 
-```bibtex
+```py
 @misc{liu2023itransformer,
   title   = {iTransformer: Inverted Transformers Are Effective for Time Series Forecasting}, 
   author  = {Yong Liu and Tengge Hu and Haoran Zhang and Haixu Wu and Shiyu Wang and Lintao Ma and Mingsheng Long},
@@ -134,7 +134,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -143,7 +143,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @misc{burtsev2020memory,
     title   = {Memory Transformer},
     author  = {Mikhail S. Burtsev and Grigory V. Sapunov},
@@ -154,7 +154,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Darcet2023VisionTN,
     title   = {Vision Transformers Need Registers},
     author  = {Timoth'ee Darcet and Maxime Oquab and Julien Mairal and Piotr Bojanowski},
@@ -163,7 +163,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -172,7 +172,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @Article{AlphaFold2021,
     author  = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and {\v{Z}}{\'\i}dek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A A and Ballard, Andrew J and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
     journal = {Nature},
@@ -183,7 +183,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kim2022reversible,
     title   = {Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift},
     author  = {Taesung Kim and Jinhee Kim and Yunwon Tae and Cheonbok Park and Jang-Ho Choi and Jaegul Choo},
@@ -193,7 +193,7 @@ preds = model(time_series)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Katsch2023GateLoopFD,
     title   = {GateLoop: Fully Data-Controlled Linear Recurrence for Sequence Modeling},
     author  = {Tobias Katsch},

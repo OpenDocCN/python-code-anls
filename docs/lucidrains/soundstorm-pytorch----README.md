@@ -26,13 +26,13 @@ They basically applied <a href="https://arxiv.org/abs/2202.04200">MaskGiT</a> to
 
 ## Install
 
-```bash
+```py
 $ pip install soundstorm-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from soundstorm_pytorch import SoundStorm, ConformerWrapper
 
@@ -67,7 +67,7 @@ generated = model.generate(1024, batch_size = 2) # (2, 1024)
 
 To directly train on raw audio, you need to pass in your pretrained `SoundStream` into `SoundStorm`. You can train your own `SoundStream` at <a href="https://github.com/lucidrains/audiolm-pytorch#soundstream--encodec">audiolm-pytorch</a>.
 
-```python
+```py
 import torch
 from soundstorm_pytorch import SoundStorm, ConformerWrapper, Conformer, SoundStream
 
@@ -110,7 +110,7 @@ Complete text-to-speech will rely on a trained `TextToSemantic` encoder / decode
 
 This is a work-in-progress, as `spear-tts-pytorch` only has the model architecture complete, and not the pretraining + pseudo-labeling + backtranslation logic.
 
-```python
+```py
 from spear_tts_pytorch import TextToSemantic
 
 text_to_semantic = TextToSemantic(
@@ -161,7 +161,7 @@ generated_speech = model.generate(
 
 ## Citations
 
-```bibtex
+```py
 @misc{borsos2023soundstorm,
     title   = {SoundStorm: Efficient Parallel Audio Generation}, 
     author  = {Zalán Borsos and Matt Sharifi and Damien Vincent and Eugene Kharitonov and Neil Zeghidour and Marco Tagliasacchi},
@@ -172,7 +172,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -181,7 +181,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @article{Chang2022MaskGITMG,
     title   = {MaskGIT: Masked Generative Image Transformer},
     author  = {Huiwen Chang and Han Zhang and Lu Jiang and Ce Liu and William T. Freeman},
@@ -191,7 +191,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @article{Lezama2022ImprovedMI,
     title   = {Improved Masked Image Generation with Token-Critic},
     author  = {Jos{\'e} Lezama and Huiwen Chang and Lu Jiang and Irfan Essa},
@@ -201,7 +201,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Nijkamp2021SCRIPTSP,
     title   = {SCRIPT: Self-Critic PreTraining of Transformers},
     author  = {Erik Nijkamp and Bo Pang and Ying Nian Wu and Caiming Xiong},
@@ -210,7 +210,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},
@@ -220,7 +220,7 @@ generated_speech = model.generate(
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},

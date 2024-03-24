@@ -32,13 +32,13 @@ A summarization of previous updates: as shown in the <a href="https://api.wandb.
 
 ## Install
 
-```bash
+```py
 $ pip install lion-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 # toy model
 
 import torch
@@ -65,7 +65,7 @@ opt.zero_grad()
 
 To use a fused kernel for updating the parameters, first `pip install triton -U --pre`, then
 
-```python
+```py
 opt = Lion(
     model.parameters(),
     lr=1e-4,
@@ -80,7 +80,7 @@ opt = Lion(
 
 ## Citations
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.06675,
     url     = {https://arxiv.org/abs/2302.06675},
     author  = {Chen, Xiangning and Liang, Chen and Huang, Da and Real, Esteban and Wang, Kaiyuan and Liu, Yao and Pham, Hieu and Dong, Xuanyi and Luong, Thang and Hsieh, Cho-Jui and Lu, Yifeng and Le, Quoc V.},
@@ -90,7 +90,7 @@ opt = Lion(
 }
 ```
 
-```bibtex
+```py
 @article{Tillet2019TritonAI,
     title   = {Triton: an intermediate language and compiler for tiled neural network computations},
     author  = {Philippe Tillet and H. Kung and D. Cox},

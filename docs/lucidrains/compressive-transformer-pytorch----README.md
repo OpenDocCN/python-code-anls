@@ -8,13 +8,13 @@ Pytorch implementation of <a href="https://openreview.net/forum?id=SylKikSYDH">C
 
 ## Install
 
-```bash
+```py
 $ pip install compressive_transformer_pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from compressive_transformer_pytorch import CompressiveTransformer
 
@@ -51,7 +51,7 @@ logits,        _, aux_loss = model(segments[1], mask = masks[1], memories = memo
 
 When training, you can use the `AutoregressiveWrapper` to have memory management across segments taken care of for you. As easy as it gets.
 
-```python
+```py
 import torch
 from compressive_transformer_pytorch import CompressiveTransformer
 from compressive_transformer_pytorch import AutoregressiveWrapper
@@ -88,7 +88,7 @@ sample = model.generate(prime, 4096)
 
 ## Citations
 
-```bibtex
+```py
 @misc{rae2019compressive,
     title   = {Compressive Transformers for Long-Range Sequence Modelling},
     author  = {Jack W. Rae and Anna Potapenko and Siddhant M. Jayakumar and Timothy P. Lillicrap},
@@ -99,7 +99,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @misc{parisotto2019stabilizing,
     title   = {Stabilizing Transformers for Reinforcement Learning},
     author  = {Emilio Parisotto and H. Francis Song and Jack W. Rae and Razvan Pascanu and Caglar Gulcehre and Siddhant M. Jayakumar and Max Jaderberg and Raphael Lopez Kaufman and Aidan Clark and Seb Noury and Matthew M. Botvinick and Nicolas Heess and Raia Hadsell},
@@ -110,7 +110,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rae-razavi-2020-transformers,
     title   = "Do Transformers Need Deep Long-Range Memory?",
     author  = "Rae, Jack  and
@@ -124,7 +124,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam Shazeer},
@@ -134,7 +134,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -143,7 +143,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @misc{lan2019albert,
     title       = {ALBERT: A Lite BERT for Self-supervised Learning of Language Representations},
     author      = {Zhenzhong Lan and Mingda Chen and Sebastian Goodman and Kevin Gimpel and Piyush Sharma and Radu Soricut},
@@ -152,7 +152,7 @@ sample = model.generate(prime, 4096)
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021erniedoc,
     title   = {ERNIE-Doc: A Retrospective Long-Document Modeling Transformer},
     author  = {Siyu Ding and Junyuan Shang and Shuohuan Wang and Yu Sun and Hao Tian and Hua Wu and Haifeng Wang},

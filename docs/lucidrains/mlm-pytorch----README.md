@@ -4,7 +4,7 @@ This repository allows you to quickly setup unsupervised training for your trans
 
 ## Install
 
-```bash
+```py
 $ pip install mlm-pytorch
 ```
 
@@ -12,7 +12,7 @@ $ pip install mlm-pytorch
 
 First `pip install x-transformers`, then run the following example to see what one iteration of the unsupervised training is like
 
-```python
+```py
 import torch
 from torch import nn
 from torch.optim import Adam
@@ -65,7 +65,7 @@ Do the above for many steps, and your model should improve.
 
 ## Citation
 
-```bibtex
+```py
 @misc{devlin2018bert,
     title   = {BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding},
     author  = {Jacob Devlin and Ming-Wei Chang and Kenton Lee and Kristina Toutanova},

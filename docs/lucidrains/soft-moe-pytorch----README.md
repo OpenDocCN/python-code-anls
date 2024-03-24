@@ -18,13 +18,13 @@ If anyone has any ideas for how to make it work for autoregressive, let me know 
 
 ## Install
 
-```bash
+```py
 $ pip install soft-moe-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from soft_moe_pytorch import SoftMoE
 
@@ -41,7 +41,7 @@ out = moe(x) + x # (1, 1024, 512) - add in a transformer in place of a feedforwa
 
 For an improvised variant that does dynamic slots so that number of slots ~= sequence length, just import `DynamicSlotsSoftMoe` instead
 
-```python
+```py
 import torch
 from soft_moe_pytorch import DynamicSlotsSoftMoE
 
@@ -66,7 +66,7 @@ out = moe(x) + x # (1, 1023, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{puigcerver2023sparse,
     title 	= {From Sparse to Soft Mixtures of Experts}, 
     author 	= {Joan Puigcerver and Carlos Riquelme and Basil Mustafa and Neil Houlsby},
@@ -77,7 +77,7 @@ out = moe(x) + x # (1, 1023, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},

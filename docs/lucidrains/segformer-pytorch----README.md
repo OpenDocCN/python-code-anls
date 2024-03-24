@@ -6,7 +6,7 @@ Implementation of <a href="https://arxiv.org/abs/2105.15203">Segformer</a>, Atte
 
 ## Install
 
-```bash
+```py
 $ pip install segformer-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install segformer-pytorch
 
 For example, MiT-B0
 
-```python
+```py
 import torch
 from segformer_pytorch import Segformer
 
@@ -36,7 +36,7 @@ Make sure the keywords are at most a tuple of 4, as this repository is hard-code
 
 ## Citations
 
-```bibtex
+```py
 @misc{xie2021segformer,
     title   = {SegFormer: Simple and Efficient Design for Semantic Segmentation with Transformers}, 
     author  = {Enze Xie and Wenhai Wang and Zhiding Yu and Anima Anandkumar and Jose M. Alvarez and Ping Luo},

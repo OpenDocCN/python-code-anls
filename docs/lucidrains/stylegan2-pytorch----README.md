@@ -28,20 +28,20 @@ Nor these celebrities (trained by <a href="https://github.com/yoniker">@yoniker<
 
 You will need a machine with a GPU and CUDA installed. Then pip install the package like this
 
-```bash
+```py
 $ pip install stylegan2_pytorch
 ```
 
 If you are using a windows machine, the following commands reportedly works.
 
-```bash
+```py
 $ conda install pytorch torchvision -c python
 $ pip install stylegan2_pytorch
 ```
 
 ## Use
 
-```bash
+```py
 $ stylegan2_pytorch --data /path/to/images
 ```
 
@@ -51,55 +51,55 @@ That's it. Sample images will be saved to `results/default` and models will be s
 
 You can specify the name of your project with
 
-```bash
+```py
 $ stylegan2_pytorch --data /path/to/images --name my-project-name
 ```
 
 You can also specify the location where intermediate results and model checkpoints should be stored with
 
-```bash
+```py
 $ stylegan2_pytorch --data /path/to/images --name my-project-name --results_dir /path/to/results/dir --models_dir /path/to/models/dir
 ```
 
 You can increase the network capacity (which defaults to `16`) to improve generation results, at the cost of more memory.
 
-```bash
+```py
 $ stylegan2_pytorch --data /path/to/images --network-capacity 256
 ```
 
 By default, if the training gets cut off, it will automatically resume from the last checkpointed file. If you want to restart with new settings, just add a `new` flag
 
-```bash
+```py
 $ stylegan2_pytorch --new --data /path/to/images --name my-project-name --image-size 512 --batch-size 1 --gradient-accumulate-every 16 --network-capacity 10
 ```
 
 Once you have finished training, you can generate images from your latest checkpoint like so.
 
-```bash
+```py
 $ stylegan2_pytorch  --generate
 ```
 
 To generate a video of a interpolation through two random points in latent space.
 
-```bash
+```py
 $ stylegan2_pytorch --generate-interpolation --interpolation-num-steps 100
 ```
 
 To save each individual frame of the interpolation
 
-```bash
+```py
 $ stylegan2_pytorch --generate-interpolation --save-frames
 ```
 
 If a previous checkpoint contained a better generator, (which often happens as generators start degrading towards the end of training), you can load from a previous checkpoint with another flag
 
-```bash
+```py
 $ stylegan2_pytorch --generate --load-from {checkpoint number}
 ```
 
 A technique used in both StyleGAN and BigGAN is truncating the latent values so that their values fall close to the mean. The small the truncation value, the better the samples will appear at the cost of sample variety. You can control this with the `--trunc-psi`, where values typically fall between `0.5` and `1`. It is set at `0.75` as default
 
-```bash
+```py
 $ stylegan2_pytorch --generate --trunc-psi 0.5
 ```
 
@@ -109,7 +109,7 @@ If you have one machine with multiple GPUs, the repository offers a way to utili
 
 You simply have to add a `--multi-gpus` flag, everyting else is taken care of. If you would like to restrict to specific GPUs, you can use the `CUDA_VISIBLE_DEVICES` environment variable to control what devices can be used. (ex. `CUDA_VISIBLE_DEVICES=0,2,3` only devices 0, 2, 3 are available)
 
-```bash
+```py
 $ stylegan2_pytorch --data ./data --multi-gpus --batch-size 32 --gradient-accumulate-every 1
 ```
 
@@ -123,14 +123,14 @@ If one were to augment at a low enough probability, the augmentations will not '
 
 In the setting of low data, you can use the feature with a simple flag.
 
-```bash
+```py
 # find a suitable probability between 0. -> 0.7 at maximum
 $ stylegan2_pytorch --data ./data --aug-prob 0.25
 ```
 
 By default, the augmentations used are `translation` and `cutout`. If you would like to add `color`, you can do so with the `--aug-types` argument.
 
-```bash
+```py
 # make sure there are no spaces between items!
 $ stylegan2_pytorch --data ./data --aug-prob 0.25 --aug-types [translation,cutout,color]
 ```
@@ -141,7 +141,7 @@ You can customize it to any combination of the three you would like. The differe
 
 For as long as possible until the adversarial game between the two neural nets fall apart (we call this divergence). By default, the number of training steps is set to `150000` for 128x128 images, but you will certainly want this number to be higher if the GAN doesn't diverge by the end of training, or if you are training at a higher resolution.
 
-```bash
+```py
 $ stylegan2_pytorch --data ./data --image-size 512 --num-train-steps 1000000
 ```
 
@@ -149,12 +149,12 @@ $ stylegan2_pytorch --data ./data --image-size 512 --num-train-steps 1000000
 
 This framework also allows for you to add an efficient form of self-attention to the designated layers of the discriminator (and the symmetric layer of the generator), which will greatly improve results. The more attention you can afford, the better!
 
-```python
+```py
 # add self attention after the output of layer 1
 $ stylegan2_pytorch --data ./data --attn-layers 1
 ```
 
-```python
+```py
 # add self attention after the output of layers 1 and 2
 # do not put a space after the comma in the list!
 $ stylegan2_pytorch --data ./data --attn-layers [1,2]
@@ -164,7 +164,7 @@ $ stylegan2_pytorch --data ./data --attn-layers [1,2]
 
 Training on transparent images
 
-```bash
+```py
 $ stylegan2_pytorch --data ./transparent/images/path --transparent
 ```
 
@@ -172,7 +172,7 @@ $ stylegan2_pytorch --data ./transparent/images/path --transparent
 
 The more GPU memory you have, the bigger and better the image generation will be. Nvidia recommended having up to 16GB for training 1024x1024 images. If you have less than that, there are a couple settings you can play with so that the model fits.
 
-```bash
+```py
 $ stylegan2_pytorch --data /path/to/data \
     --batch-size 3 \
     --gradient-accumulate-every 5 \
@@ -200,7 +200,7 @@ types may be better but they are more expensive. You can read more about them
 3. Log into your EC2 instance via SSH
 4. Install the aws CLI client and configure it:
 
-```bash
+```py
 sudo snap install aws-cli --classic
 aws configure
 ```
@@ -210,7 +210,7 @@ Management Console > Profile > My Security Credentials > Access Keys
 
 Then, run these commands, or maybe put them in a shell script and execute that:
 
-```bash
+```py
 mkdir data
 curl -O https://bootstrap.pypa.io/get-pip.py
 sudo apt-get install python3-distutils
@@ -238,13 +238,13 @@ Thanks to <a href="https://github.com/GetsEclectic">GetsEclectic</a>, you can no
 
 Firstly, install the `pytorch_fid` package
 
-```bash
+```py
 $ pip install pytorch-fid
 ```
 
 Followed by
 
-```bash
+```py
 $ stylegan2_pytorch --data ./data --calculate-fid-every 5000
 ```
 
@@ -254,7 +254,7 @@ FID results will be logged to `./results/{name}/fid_scores.txt`
 
 If you would like to sample images programmatically, you can do so with the following simple `ModelLoader` class.
 
-```python
+```py
 import torch
 from torchvision.utils import save_image
 from stylegan2_pytorch import ModelLoader
@@ -275,13 +275,13 @@ save_image(images, './sample.jpg') # save your images, or do whatever you desire
 
 To log the losses to an open source experiment tracker (Aim), you simply need to pass an extra flag like so.
 
-```bash
+```py
 $ stylegan2_pytorch --data ./data --log
 ```
 
 Then, you need to make sure you have <a href="https://docs.docker.com/get-docker/">Docker installed</a>. Following the instructions at <a href="https://github.com/aimhubio/aim">Aim</a>, you execute the following in your terminal.
 
-```bash
+```py
 $ aim up
 ```
 
@@ -296,13 +296,13 @@ Then open up your browser to the address and you should see
 
 A new paper has produced evidence that by simply zero-ing out the gradient contributions from samples that are deemed fake by the discriminator, the generator learns significantly better, achieving new state of the art.
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --top-k-training
 ```
 
 Gamma is a decay schedule that slowly decreases the topk from the full batch size to the target fraction of 50% (also modifiable hyperparameter).
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --top-k-training --generate-top-k-frac 0.5 --generate-top-k-gamma 0.99
 ```
 
@@ -310,7 +310,7 @@ $ stylegan2_pytorch --data ./data --top-k-training --generate-top-k-frac 0.5 --g
 
 A recent paper reported improved results if intermediate representations of the discriminator are vector quantized. Although I have not noticed any dramatic changes, I have decided to add this as a feature, so other minds out there can investigate. To use, you have to specify which layer(s) you would like to vector quantize. Default dictionary size is `256` and is also tunable.
 
-```python
+```py
 # feature quantize layers 1 and 2, with a dictionary size of 512 each
 # do not put a space after the comma in the list!
 $ stylegan2_pytorch --data ./data --fq-layers [1,2] --fq-dict-size 512
@@ -320,7 +320,7 @@ $ stylegan2_pytorch --data ./data --fq-layers [1,2] --fq-dict-size 512
 
 I have tried contrastive learning on the discriminator (in step with the usual GAN training) and possibly observed improved stability and quality of final results. You can turn on this experimental feature with a simple flag as shown below.
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --cl-reg
 ```
 
@@ -328,7 +328,7 @@ $ stylegan2_pytorch --data ./data --cl-reg
 
 This was proposed in the Relativistic GAN paper to stabilize training. I have had mixed results, but will include the feature for those who want to experiment with it.
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --rel-disc-loss
 ```
 
@@ -336,7 +336,7 @@ $ stylegan2_pytorch --data ./data --rel-disc-loss
 
 By default, the StyleGAN architecture styles a constant learned 4x4 block as it is progressively upsampled. This is an experimental feature that makes it so the 4x4 block is learned from the style vector `w` instead.
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --no-const
 ```
 
@@ -344,7 +344,7 @@ $ stylegan2_pytorch --data ./data --no-const
 
 A recent paper has proposed that a novel contrastive loss between the real and fake logits can improve quality over other types of losses. (The default in this repository is hinge loss, and the paper shows a slight improvement)
 
-```python
+```py
 $ stylegan2_pytorch --data ./data --dual-contrast-loss
 ```
 
@@ -362,7 +362,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 
 ## References
 
-```bibtex
+```py
 @article{Karras2019stylegan2,
     title   = {Analyzing and Improving the Image Quality of {StyleGAN}},
     author  = {Tero Karras and Samuli Laine and Miika Aittala and Janne Hellsten and Jaakko Lehtinen and Timo Aila},
@@ -372,7 +372,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{zhao2020feature,
     title   = {Feature Quantization Improves GAN Training},
     author  = {Yang Zhao and Chunyuan Li and Ping Yu and Jianfeng Gao and Changyou Chen},
@@ -380,7 +380,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{chen2020simple,
     title   = {A Simple Framework for Contrastive Learning of Visual Representations},
     author  = {Ting Chen and Simon Kornblith and Mohammad Norouzi and Geoffrey Hinton},
@@ -388,7 +388,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @article{,
     title     = {Oxford 102 Flowers},
     author    = {Nilsback, M-E. and Zisserman, A., 2008},
@@ -396,7 +396,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @article{afifi201911k,
     title   = {11K Hands: gender recognition and biometric identification using a large dataset of hand images},
     author  = {Afifi, Mahmoud},
@@ -404,7 +404,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{zhang2018selfattention,
     title   = {Self-Attention Generative Adversarial Networks},
     author  = {Han Zhang and Ian Goodfellow and Dimitris Metaxas and Augustus Odena},
@@ -414,7 +414,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @article{shen2019efficient,
     author    = {Zhuoran Shen and
                Mingyuan Zhang and
@@ -428,7 +428,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @article{zhao2020diffaugment,
     title   = {Differentiable Augmentation for Data-Efficient GAN Training},
     author  = {Zhao, Shengyu and Liu, Zhijian and Lin, Ji and Zhu, Jun-Yan and Han, Song},
@@ -437,7 +437,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{zhao2020image,
     title  = {Image Augmentations for GAN Training},
     author = {Zhengli Zhao and Zizhao Zhang and Ting Chen and Sameer Singh and Han Zhang},
@@ -447,7 +447,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{karras2020training,
     title   = {Training Generative Adversarial Networks with Limited Data},
     author  = {Tero Karras and Miika Aittala and Janne Hellsten and Samuli Laine and Jaakko Lehtinen and Timo Aila},
@@ -458,7 +458,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{jolicoeurmartineau2018relativistic,
     title   = {The relativistic discriminator: a key element missing from standard GAN},
     author  = {Alexia Jolicoeur-Martineau},
@@ -469,7 +469,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{sinha2020topk,
     title   = {Top-k Training of GANs: Improving GAN Performance by Throwing Away Bad Samples},
     author  = {Samarth Sinha and Zhengli Zhao and Anirudh Goyal and Colin Raffel and Augustus Odena},
@@ -480,7 +480,7 @@ Thank you to Matthew Mann for his inspiring [simple port](https://github.com/man
 }
 ```
 
-```bibtex
+```py
 @misc{yu2021dual,
     title   = {Dual Contrastive Loss and Attention for GANs},
     author  = {Ning Yu and Guilin Liu and Aysegul Dundar and Andrew Tao and Bryan Catanzaro and Larry Davis and Mario Fritz},

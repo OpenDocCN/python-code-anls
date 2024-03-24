@@ -6,13 +6,13 @@ Implementation of the <a href="https://arxiv.org/abs/2012.09164">Point Transform
 
 ## Install
 
-```bash
+```py
 $ pip install point-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from point_transformer_pytorch import PointTransformerLayer
 
@@ -31,7 +31,7 @@ attn(feats, pos, mask = mask) # (1, 16, 128)
 
 This type of vector attention is much more expensive than the traditional one. In the paper, they used k-nearest neighbors on the points to exclude attention on faraway points. You can do the same with a single extra setting.
 
-```python
+```py
 import torch
 from point_transformer_pytorch import PointTransformerLayer
 
@@ -51,7 +51,7 @@ attn(feats, pos, mask = mask) # (1, 16, 128)
 
 ## Citations
 
-```bibtex
+```py
 @misc{zhao2020point,
     title={Point Transformer}, 
     author={Hengshuang Zhao and Li Jiang and Jiaya Jia and Philip Torr and Vladlen Koltun},

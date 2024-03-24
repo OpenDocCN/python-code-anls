@@ -6,7 +6,7 @@ Implementation of <a href="https://openreview.net/forum?id=1YLJDvSx6J4">Geometri
 
 ## Install
 
-```bash
+```py
 $ pip install geometric-vector-perceptron
 ```
 
@@ -20,7 +20,7 @@ $ pip install geometric-vector-perceptron
 
 ## Usage
 
-```python
+```py
 import torch
 from geometric_vector_perceptron import GVP
 
@@ -39,7 +39,7 @@ feats_out, vectors_out = model( (feats, vectors) ) # (1, 256), (1, 512, 3)
 
 With the specialized dropout and layernorm as described in the paper
 
-```python
+```py
 import torch
 from torch import nn
 from geometric_vector_perceptron import GVP, GVPDropout, GVPLayerNorm
@@ -68,7 +68,7 @@ The original implementation in TF by the paper authors can be found here: https:
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{anonymous2021learning,
     title   = {Learning from Protein Structure with Geometric Vector Perceptrons},
     author  = {Anonymous},
@@ -78,7 +78,7 @@ The original implementation in TF by the paper authors can be found here: https:
 }
 ```
 
-```bibtex
+```py
 @misc{jing2021equivariant,
     title   = {Equivariant Graph Neural Networks for 3D Macromolecular Structure}, 
     author  = {Bowen Jing and Stephan Eismann and Pratham N. Soni and Ron O. Dror},

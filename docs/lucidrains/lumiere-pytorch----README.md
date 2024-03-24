@@ -14,13 +14,13 @@ Since this paper is mostly just a few key ideas on top of text-to-image model, w
 
 ## Install
 
-```bash
+```py
 $ pip install lumiere-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from lumiere_pytorch import MPLumiere
 
@@ -82,7 +82,7 @@ assert noised_video.shape == denoised_video.shape
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{BarTal2024LumiereAS,
     title   = {Lumiere: A Space-Time Diffusion Model for Video Generation},
     author  = {Omer Bar-Tal and Hila Chefer and Omer Tov and Charles Herrmann and Roni Paiss and Shiran Zada and Ariel Ephrat and Junhwa Hur and Yuanzhen Li and Tomer Michaeli and Oliver Wang and Deqing Sun and Tali Dekel and Inbar Mosseri},
@@ -91,7 +91,7 @@ assert noised_video.shape == denoised_video.shape
 }
 ```
 
-```bibtex
+```py
 @article{Karras2023AnalyzingAI,
     title   = {Analyzing and Improving the Training Dynamics of Diffusion Models},
     author  = {Tero Karras and Miika Aittala and Jaakko Lehtinen and Janne Hellsten and Timo Aila and Samuli Laine},

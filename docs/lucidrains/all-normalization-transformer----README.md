@@ -6,19 +6,19 @@ Update - It works. You can have an entire language model built on only matrix mu
 
 ## Pre-requisites
 
-```bash
+```py
 $ pip install -r requirements.txt
 ```
 
 ## Train
 
-```python
+```py
 $ python train_enwik8.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{richter2020normalized,
     title={Normalized Attention Without Probability Cage},
     author={Oliver Richter and Roger Wattenhofer},

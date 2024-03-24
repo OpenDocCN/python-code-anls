@@ -12,13 +12,13 @@ Will definitely be putting more work / exploration into this. For now, I've inco
 
 ## Install
 
-```bash
+```py
 $ pip install equiformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from equiformer_pytorch import Equiformer
 
@@ -47,7 +47,7 @@ out.type1 # equivariant type 1  - (1, 128, 3)
 
 This repository also includes a way to decouple memory usage from depth using <a href="https://arxiv.org/abs/1707.04585">reversible networks</a>. In other words, if you increase depth, the memory cost will stay constant at the usage of one equiformer transformer block (attention and feedforward).
 
-```python
+```py
 import torch
 from equiformer_pytorch import Equiformer
 
@@ -74,7 +74,7 @@ out.type0.sum().backward()
 
 with edges, ex. atomic bonds
 
-```python
+```py
 import torch
 from equiformer_pytorch import Equiformer
 
@@ -102,7 +102,7 @@ out.type1 # (2, 32, 3)
 
 with adjacency matrix
 
-```python
+```py
 import torch
 from equiformer_pytorch import Equiformer
 
@@ -144,7 +144,7 @@ out.type1 # (1, 128, 3)
 
 Tests for equivariance etc
 
-```bash
+```py
 $ python setup.py test
 ```
 
@@ -152,13 +152,13 @@ $ python setup.py test
 
 First install `sidechainnet`
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
 Then run the protein backbone denoising task
 
-```bash
+```py
 $ python denoise.py
 ```
 
@@ -185,7 +185,7 @@ $ python denoise.py
 
 ## Citations
 
-```bibtex
+```py
 @article{Liao2022EquiformerEG,
     title   = {Equiformer: Equivariant Graph Attention Transformer for 3D Atomistic Graphs},
     author  = {Yi Liao and Tess E. Smidt},
@@ -195,7 +195,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article {Lee2022.10.07.511322,
     author  = {Lee, Jae Hyeon and Yadollahpour, Payman and Watkins, Andrew and Frey, Nathan C. and Leaver-Fay, Andrew and Ra, Stephen and Cho, Kyunghyun and Gligorijevic, Vladimir and Regev, Aviv and Bonneau, Richard},
     title   = {EquiFold: Protein Structure Prediction with a Novel Coarse-Grained Structure Representation},
@@ -209,7 +209,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam M. Shazeer},
@@ -219,7 +219,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -230,7 +230,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Kim2020TheLC,
     title   = {The Lipschitz Constant of Self-Attention},
     author  = {Hyunjik Kim and George Papamakarios and Andriy Mnih},
@@ -239,7 +239,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article{Zitnick2022SphericalCF,
     title   = {Spherical Channels for Modeling Atomic Interactions},
     author  = {C. Lawrence Zitnick and Abhishek Das and Adeesh Kolluru and Janice Lan and Muhammed Shuaibi and Anuroop Sriram and Zachary W. Ulissi and Brandon C. Wood},
@@ -249,7 +249,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article{Passaro2023ReducingSC,
   title     = {Reducing SO(3) Convolutions to SO(2) for Efficient Equivariant GNNs},
   author    = {Saro Passaro and C. Lawrence Zitnick},
@@ -259,7 +259,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Gomez2017TheRR,
     title   = {The Reversible Residual Network: Backpropagation Without Storing Activations},
     author  = {Aidan N. Gomez and Mengye Ren and Raquel Urtasun and Roger Baker Grosse},
@@ -268,7 +268,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -279,7 +279,7 @@ $ python denoise.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Arora2023ZoologyMA,
   title   = {Zoology: Measuring and Improving Recall in Efficient Language Models},
   author  = {Simran Arora and Sabri Eyuboglu and Aman Timalsina and Isys Johnson and Michael Poli and James Zou and Atri Rudra and Christopher R'e},

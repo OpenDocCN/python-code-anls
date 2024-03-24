@@ -8,13 +8,13 @@ Implementation of <a href="https://www.deepmind.com/blog/tackling-multiple-tasks
 
 ## Install
 
-```bash
+```py
 $ pip install flamingo-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from flamingo_pytorch import PerceiverResampler
 
@@ -35,7 +35,7 @@ Then you insert the `GatedCrossAttentionBlock` at different intervals in your gi
 
 The recommended way to derive the `media_locations` boolean tensor would be to allocate a special token id to the media, and then, at the start of your large language model, do `media_locations = text_id == media_token_id`
 
-```python
+```py
 import torch
 from flamingo_pytorch import GatedCrossAttentionBlock
 
@@ -67,13 +67,13 @@ Integration with <a href="https://ai.googleblog.com/2022/04/pathways-language-mo
 
 First install `vit-pytorch` for the vision encoder
 
-```bash
+```py
 $ pip install vit-pytorch
 ```
 
 Then
 
-```python
+```py
 from vit_pytorch.vit import ViT
 from vit_pytorch.extractor import Extractor
 
@@ -138,7 +138,7 @@ For factual correctness, just imagine where this system would stand if one were 
 
 ## Citations
 
-```bibtex
+```py
 @article{Alayrac2022Flamingo,
     title   = {Flamingo: a Visual Language Model for Few-Shot Learning},
     author  = {Jean-Baptiste Alayrac et al},
@@ -146,7 +146,7 @@ For factual correctness, just imagine where this system would stand if one were 
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chowdhery2022PaLMSL,
     title   = {PaLM: Scaling Language Modeling with Pathways},
     author  = {Aakanksha Chowdhery and Sharan Narang and Jacob Devlin and Maarten Bosma and Gaurav Mishra and Adam Roberts and Paul Barham and Hyung Won Chung and Charles Sutton and Sebastian Gehrmann and Parker Schuh and Kensen Shi and Sasha Tsvyashchenko and Joshua Maynez and Abhishek Rao and Parker Barnes and Yi Tay and Noam M. Shazeer and Vinodkumar Prabhakaran and Emily Reif and Nan Du and Benton C. Hutchinson and Reiner Pope and James Bradbury and Jacob Austin and Michael Isard and Guy Gur-Ari and Pengcheng Yin and Toju Duke and Anselm Levskaya and Sanjay Ghemawat and Sunipa Dev and Henryk Michalewski and Xavier Garc{\'i}a and Vedant Misra and Kevin Robinson and Liam Fedus and Denny Zhou and Daphne Ippolito and David Luan and Hyeontaek Lim and Barret Zoph and Alexander Spiridonov and Ryan Sepassi and David Dohan and Shivani Agrawal and Mark Omernick and Andrew M. Dai and Thanumalayan Sankaranarayana Pillai and Marie Pellat and Aitor Lewkowycz and Erica Oliveira Moreira and Rewon Child and Oleksandr Polozov and Katherine Lee and Zongwei Zhou and Xuezhi Wang and Brennan Saeta and Mark Diaz and Orhan Firat and Michele Catasta and Jason Wei and Kathleen S. Meier-Hellstern and Douglas Eck and Jeff Dean and Slav Petrov and Noah Fiedel},

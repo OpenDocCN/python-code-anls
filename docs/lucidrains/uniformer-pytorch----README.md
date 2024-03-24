@@ -6,7 +6,7 @@ Implementation of <a href="https://openreview.net/forum?id=nBU_u6DLvoK">Uniforme
 
 ## Install
 
-```bash
+```py
 $ pip install uniformer-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install uniformer-pytorch
 
 Uniformer-S
 
-```python
+```py
 import torch
 from uniformer_pytorch import Uniformer
 
@@ -32,7 +32,7 @@ logits = model(video) # (1, 1000)
 
 Uniformer-B
 
-```python
+```py
 import torch
 from uniformer_pytorch import Uniformer
 
@@ -44,7 +44,7 @@ model = Uniformer(
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{anonymous2022uniformer,
     title   = {UniFormer: Unified Transformer for Efficient Spatial-Temporal Representation Learning},
     author  = {Anonymous},

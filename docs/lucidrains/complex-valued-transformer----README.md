@@ -14,13 +14,13 @@ Update 3: I am not seeing anything remarkable. YMMV
 
 ## Install
 
-```bash
+```py
 $ pip install complex-valued-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from complex_valued_transformer import ComplexTransformer
 
@@ -49,7 +49,7 @@ logits = transformer(ids) # (2, 1024, 256)
 
 ## Citations
 
-```bibtex
+```py
 @article{Eilers2023BuildingBF,
     title   = {Building Blocks for a Complex-Valued Transformer Architecture},
     author  = {Florian Eilers and Xiaoyi Jiang},
@@ -60,7 +60,7 @@ logits = transformer(ids) # (2, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @article{Yang2019ComplexTA,
     title    = {Complex Transformer: A Framework for Modeling Complex-Valued Sequence},
     author   = {Muqiao Yang and Martin Q. Ma and Dongyu Li and Yao-Hung Hubert Tsai and Ruslan Salakhutdinov},
@@ -71,7 +71,7 @@ logits = transformer(ids) # (2, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @article{Dong2021SignalTC,
     title   = {Signal Transformer: Complex-valued Attention and Meta-Learning for Signal Recognition},
     author  = {Yihong Dong and Ying Peng and Muqiao Yang and Songtao Lu and Qingjiang Shi},
@@ -82,7 +82,7 @@ logits = transformer(ids) # (2, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -91,7 +91,7 @@ logits = transformer(ids) # (2, 1024, 256)
 }
 ```
 
-```bibtex
+```py
 @article{So2021PrimerSF,
     title   = {Primer: Searching for Efficient Transformers for Language Modeling},
     author  = {David R. So and Wojciech Ma'nke and Hanxiao Liu and Zihang Dai and Noam M. Shazeer and Quoc V. Le},

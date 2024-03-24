@@ -12,13 +12,13 @@ Update: You should now use <a href="https://github.com/lucidrains/st-moe-pytorch
 
 ## Install
 
-```bash
+```py
 $ pip install mixture_of_experts
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from torch import nn
 from mixture_of_experts import MoE
@@ -43,7 +43,7 @@ out, aux_loss = moe(inputs) # (4, 1024, 512), (1,)
 
 The above should suffice for a single machine, but if you want a heirarchical mixture of experts (2 levels), as used in the GShard paper, please follow the instructions below
 
-```python
+```py
 import torch
 from mixture_of_experts import HeirarchicalMoE
 
@@ -58,7 +58,7 @@ out, aux_loss = moe(inputs) # (4, 1024, 512), (1,)
 
 1 billion parameters
 
-```python
+```py
 import torch
 from mixture_of_experts import HeirarchicalMoE
 
@@ -76,7 +76,7 @@ print(f'number of parameters - {total_params}')
 
 If you want some more sophisticated network for the experts, you can define your own and pass it into the `MoE` class as `experts`
 
-```python
+```py
 import torch
 from torch import nn
 from mixture_of_experts import MoE
@@ -111,7 +111,7 @@ out, aux_loss = moe(inputs) # (4, 1024, 512), (1,)
 
 ## Citation
 
-```bibtex
+```py
 @misc{shazeer2017outrageously,
     title   = {Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer},
     author  = {Noam Shazeer and Azalia Mirhoseini and Krzysztof Maziarz and Andy Davis and Quoc Le and Geoffrey Hinton and Jeff Dean},
@@ -122,7 +122,7 @@ out, aux_loss = moe(inputs) # (4, 1024, 512), (1,)
 }
 ```
 
-```bibtex
+```py
 @misc{lepikhin2020gshard,
     title   = {GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding},
     author  = {Dmitry Lepikhin and HyoukJoong Lee and Yuanzhong Xu and Dehao Chen and Orhan Firat and Yanping Huang and Maxim Krikun and Noam Shazeer and Zhifeng Chen},

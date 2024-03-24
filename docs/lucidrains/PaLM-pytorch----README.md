@@ -11,13 +11,13 @@ It obviously will not scale, but it is just for educational purposes. To elucida
 <a href="https://github.com/lucidrains/palm-jax">Jax version</a>
 
 ## Install
-```bash
+```py
 $ pip install PaLM-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from palm_pytorch import PaLM
 
@@ -35,7 +35,7 @@ logits = palm(tokens) # (1, 2048, 20000)
 
 The PaLM 540B in the paper would be
 
-```python
+```py
 palm = PaLM(
     num_tokens = 256000,
     dim = 18432,
@@ -47,13 +47,13 @@ palm = PaLM(
 
 ## Test on Enwik8
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Chowdhery2022PaLMSL,
     title   = {PaLM: Scaling Language Modeling with Pathways},
     author  = {Aakanksha Chowdhery and Sharan Narang and Jacob Devlin and Maarten Bosma and Gaurav Mishra and Adam Roberts and Paul Barham and Hyung Won Chung and Charles Sutton and Sebastian Gehrmann and Parker Schuh and Kensen Shi and Sasha Tsvyashchenko and Joshua Maynez and Abhishek Rao and Parker Barnes and Yi Tay and Noam M. Shazeer and Vinodkumar Prabhakaran and Emily Reif and Nan Du and Benton C. Hutchinson and Reiner Pope and James Bradbury and Jacob Austin and Michael Isard and Guy Gur-Ari and Pengcheng Yin and Toju Duke and Anselm Levskaya and Sanjay Ghemawat and Sunipa Dev and Henryk Michalewski and Xavier Garc{\'i}a and Vedant Misra and Kevin Robinson and Liam Fedus and Denny Zhou and Daphne Ippolito and David Luan and Hyeontaek Lim and Barret Zoph and Alexander Spiridonov and Ryan Sepassi and David Dohan and Shivani Agrawal and Mark Omernick and Andrew M. Dai and Thanumalayan Sankaranarayana Pillai and Marie Pellat and Aitor Lewkowycz and Erica Oliveira Moreira and Rewon Child and Oleksandr Polozov and Katherine Lee and Zongwei Zhou and Xuezhi Wang and Brennan Saeta and Mark Diaz and Orhan Firat and Michele Catasta and Jason Wei and Kathleen S. Meier-Hellstern and Douglas Eck and Jeff Dean and Slav Petrov and Noah Fiedel},
@@ -61,7 +61,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{Tillet2019TritonAI,
     title   = {Triton: an intermediate language and compiler for tiled neural network computations},
     author  = {Philippe Tillet and H. T. Kung and David D. Cox},

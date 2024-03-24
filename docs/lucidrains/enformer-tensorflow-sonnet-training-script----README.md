@@ -17,7 +17,7 @@ Training takes about 3 days on v3-64
 
 ## Downloading sequence data for extending context length to 196,608
 
-```bash
+```py
 $ gsutil cp gs://basenji_barnyard/hg38.ml.fa.gz ./ && gunzip hg38.ml.fa.gz
 $ gsutil cp gs://basenji_barnyard/mm10.ml.fa.gz ./ && gunzip mm10.ml.fa.gz
 $ gsutil cp gs://basenji_barnyard/data/human/sequences.bed ./human-sequences.bed
@@ -30,7 +30,7 @@ $ gsutil cp gs://basenji_barnyard/data/mouse/sequences.bed ./mouse-sequences.bed
 
 ## Citations
 
-```bibtex
+```py
 @article {Avsec2021.04.07.438649,
     author  = {Avsec, {\v Z}iga and Agarwal, Vikram and Visentin, Daniel and Ledsam, Joseph R. and Grabska-Barwinska, Agnieszka and Taylor, Kyle R. and Assael, Yannis and Jumper, John and Kohli, Pushmeet and Kelley, David R.},
     title   = {Effective gene expression prediction from sequence by integrating long-range interactions},

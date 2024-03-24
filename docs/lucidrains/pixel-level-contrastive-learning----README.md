@@ -6,7 +6,7 @@ Implementation of Pixel-level Contrastive Learning, proposed in the paper <a hre
 
 ## Install
 
-```bash
+```py
 $ pip install pixel-level-contrastive-learning
 ```
 
@@ -15,7 +15,7 @@ $ pip install pixel-level-contrastive-learning
 Below is an example of how you would use the framework to self-supervise training of a resnet, taking the output of layer 4 (8 x 8 'pixels').
 
 
-```python
+```py
 import torch
 from pixel_level_contrastive_learning import PixelCL
 from torchvision import models
@@ -61,12 +61,12 @@ torch.save(resnet, 'improved-resnet.pt')
 
 You can also return the number of positive pixel pairs on `forward`, for logging or other purposes
 
-```python
+```py
 loss, positive_pairs = learner(images, return_positive_pairs = True)
 ```
 ## Citations
 
-```bibtex
+```py
 @misc{xie2020propagate,
     title={Propagate Yourself: Exploring Pixel-Level Consistency for Unsupervised Visual Representation Learning}, 
     author={Zhenda Xie and Yutong Lin and Zheng Zhang and Yue Cao and Stephen Lin and Han Hu},

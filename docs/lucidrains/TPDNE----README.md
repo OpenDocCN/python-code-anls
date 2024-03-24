@@ -14,13 +14,13 @@ The model itself was trained by <a href="https://research.nvidia.com/person/tero
 
 ## Install
 
-```bash
+```py
 $ pip install TPDNE-utils
 ```
 
 ## Usage
 
-```python
+```py
 from TPDNE_utils import sample_image_and_save_repeatedly
 
 # some function that returns a sampled image in the form of a 3 dimensional ndarray
@@ -46,7 +46,7 @@ sample_image_and_save_repeatedly(generate_image, 'out/sampled')
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Karras2020ada,
     title     = {Training Generative Adversarial Networks with Limited Data},
     author    = {Tero Karras and Miika Aittala and Janne Hellsten and Samuli Laine and Jaakko Lehtinen and Timo Aila},

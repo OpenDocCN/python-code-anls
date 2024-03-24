@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2103.13915">STAM (Space Time At
 
 ## Install
 
-```bash
+```py
 $ pip install stam-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from stam_pytorch import STAM
 
@@ -40,7 +40,7 @@ pred = model(frames) # (2, 100)
 
 ## Citations
 
-```bibtex
+```py
 @misc{sharir2021image,
     title   = {An Image is Worth 16x16 Words, What is a Video Worth?}, 
     author  = {Gilad Sharir and Asaf Noy and Lihi Zelnik-Manor},

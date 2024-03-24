@@ -10,6 +10,6 @@ Update: on track to solving path-x with transformers
 
 The script will generate 25000 training samples (in paper they used 100k; you can change it to this number if you are willing to wait).
 
-```bash
+```py
 $ ./setup.sh
 ```

@@ -16,13 +16,13 @@ Update: seems to be performing decently well on enwik8 with 4096 context length.
 
 ## Install
 
-```bash
+```py
 $ pip install perceiver-ar-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from perceiver_ar_pytorch import PerceiverAR
 
@@ -46,13 +46,13 @@ logits = model(x) # (1, 1024, 20000) - (4096 [seq len] - 3072 [perceived prefix]
 
 Enwik8 at 4096
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @article{Hawthorne2022GeneralpurposeLA,
     title   = {General-purpose, long-context autoregressive modeling with Perceiver AR},
     author  = {Curtis Hawthorne and Andrew Jaegle and Cătălina Cangea and Sebastian Borgeaud and Charlie Nash and Mateusz Malinowski and Sander Dieleman and Oriol Vinyals and Matthew M. Botvinick and Ian Simon and Hannah R. Sheahan and Neil Zeghidour and Jean-Baptiste Alayrac and Jo{\~a}o Carreira and Jesse Engel},

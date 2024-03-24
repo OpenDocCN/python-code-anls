@@ -8,13 +8,13 @@ An implementation of <a href="https://arxiv.org/abs/2009.14794">Performer</a>, a
 
 ## Install
 
-```bash
+```py
 $ pip install performer-pytorch
 ```
 
 Then you must run the following, if you plan on training an autoregressive model
 
-```bash
+```py
 $ pip install -r requirements.txt
 ```
 
@@ -22,7 +22,7 @@ $ pip install -r requirements.txt
 
 Performer Language Model
 
-```python
+```py
 import torch
 from performer_pytorch import PerformerLM
 
@@ -59,7 +59,7 @@ model(x, mask = mask) # (1, 2048, 20000)
 
 Plain Performer, if you are working with say images or other modalities
 
-```python
+```py
 import torch
 from performer_pytorch import Performer
 
@@ -76,7 +76,7 @@ model(x) # (1, 2048, 512)
 
 Encoder / Decoder - Made possible by <a href="https://github.com/gulnazaki">Thomas Melistas</a>
 
-```python
+```py
 import torch
 from performer_pytorch import PerformerEncDec
 
@@ -117,7 +117,7 @@ print(samples.shape) # (1, <= GENERATE_LEN) decode the tokens
 
 Standalone self-attention layer with linear complexity in respect to sequence length, for replacing trained full-attention transformer self-attention layers.
 
-```python
+```py
 import torch
 from performer_pytorch import SelfAttention
 
@@ -133,7 +133,7 @@ attn(x) # (1, 1024, 512)
 
 Cross attention is similarly
 
-```python
+```py
 import torch
 from performer_pytorch import CrossAttention
 
@@ -150,7 +150,7 @@ attn(x, context = context) # (1, 1024, 512)
 
 To minimize model surgery, you could also simply rewrite the code, so that the attention step is done by the `FastAttention` module, as follows.
 
-```python
+```py
 import torch
 from performer_pytorch import FastAttention
 
@@ -174,7 +174,7 @@ out = attn_fn(q, k, v) # (1, 8, 512, 64)
 
 At the end of training, if you wish to fix the projection matrices to get the model to output deterministically, you can invoke the following
 
-```python
+```py
 model.fix_projection_matrices_()
 ```
 
@@ -182,7 +182,7 @@ Now your model will have fixed projection matrices across all layers
 
 ## Citations
 
-```bibtex
+```py
 @misc{choromanski2020rethinking,
     title   = {Rethinking Attention with Performers},
     author  = {Krzysztof Choromanski and Valerii Likhosherstov and David Dohan and Xingyou Song and Andreea Gane and Tamas Sarlos and Peter Hawkins and Jared Davis and Afroz Mohiuddin and Lukasz Kaiser and David Belanger and Lucy Colwell and Adrian Weller},
@@ -193,7 +193,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -203,7 +203,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @inproceedings{katharopoulos_et_al_2020,
     author  = {Katharopoulos, A. and Vyas, A. and Pappas, N. and Fleuret, F.},
     title   = {Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention},
@@ -212,7 +212,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @misc{bachlechner2020rezero,
     title   = {ReZero is All You Need: Fast Convergence at Large Depth},
     author  = {Thomas Bachlechner and Bodhisattwa Prasad Majumder and Huanru Henry Mao and Garrison W. Cottrell and Julian McAuley},
@@ -221,7 +221,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @article{1910.05895,
     author  = {Toan Q. Nguyen and Julian Salazar},
     title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
@@ -231,7 +231,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -240,7 +240,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @misc{roy*2020efficient,
     title   = {Efficient Content-Based Sparse Attention with Routing Transformers},
     author  = {Aurko Roy* and Mohammad Taghi Saffar* and David Grangier and Ashish Vaswani},
@@ -249,7 +249,7 @@ Now your model will have fixed projection matrices across all layers
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},

@@ -61,13 +61,13 @@ A tensorflow2 translation also exists <a href="https://github.com/taki0112/vit-t
 
 ## Install
 
-```bash
+```py
 $ pip install vit-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from vit_pytorch import ViT
 
@@ -122,7 +122,7 @@ Among these simplifications include 2d sinusoidal positional embedding, global a
 
 You can use it by importing the `SimpleViT` as shown below
 
-```python
+```py
 import torch
 from vit_pytorch import SimpleViT
 
@@ -149,7 +149,7 @@ preds = v(img) # (1, 1000)
 
 You can use it as follows
 
-```python
+```py
 import torch
 from vit_pytorch.na_vit import NaViT
 
@@ -182,7 +182,7 @@ preds = v(images) # (5, 1000) - 5, because 5 images of different resolution abov
 
 Or if you would rather that the framework auto group the images into variable lengthed sequences that do not exceed a certain max length
 
-```python
+```py
 images = [
     torch.randn(3, 256, 256),
     torch.randn(3, 128, 128),
@@ -206,7 +206,7 @@ A recent <a href="https://arxiv.org/abs/2012.12877">paper</a> has shown that use
 
 ex. distilling from Resnet50 (or any teacher) to a vision transformer
 
-```python
+```py
 import torch
 from torchvision.models import resnet50
 
@@ -249,7 +249,7 @@ The `DistillableViT` class is identical to `ViT` except for how the forward pass
 
 You can also use the handy `.to_vit` method on the `DistillableViT` instance to get back a `ViT` instance.
 
-```python
+```py
 v = v.to_vit()
 type(v) # <class 'vit_pytorch.vit_pytorch.ViT'>
 ```
@@ -261,7 +261,7 @@ This <a href="https://arxiv.org/abs/2103.11886">paper</a> notes that ViT struggl
 
 You can use it as follows
 
-```python
+```py
 import torch
 from vit_pytorch.deepvit import DeepViT
 
@@ -290,7 +290,7 @@ They also add <a href="https://github.com/lucidrains/x-transformers#talking-head
 
 You can use this scheme as follows
 
-```python
+```py
 import torch
 from vit_pytorch.cait import CaiT
 
@@ -319,7 +319,7 @@ preds = v(img) # (1, 1000)
 
 <a href="https://arxiv.org/abs/2101.11986">This paper</a> proposes that the first couple layers should downsample the image sequence by unfolding, leading to overlapping image data in each token as shown in the figure above. You can use this variant of the `ViT` as follows.
 
-```python
+```py
 import torch
 from vit_pytorch.t2t import T2TViT
 
@@ -347,7 +347,7 @@ by using convolutions instead of patching and performing sequence pooling. This
 allows for CCT to have high accuracy and a low number of parameters.
 
 You can use this with two methods
-```python
+```py
 import torch
 from vit_pytorch.cct import CCT
 
@@ -376,7 +376,7 @@ Alternatively you can use one of several pre-defined models `[2,4,6,7,8,14,16]`
 which pre-define the number of layers, number of attention heads, the mlp ratio,
 and the embedding dimension.
 
-```python
+```py
 import torch
 from vit_pytorch.cct import cct_14
 
@@ -403,7 +403,7 @@ Repository</a> includes links to pretrained model checkpoints.
 
 <a href="https://arxiv.org/abs/2103.14899">This paper</a> proposes to have two vision transformers processing the image at different scales, cross attending to one every so often. They show improvements on top of the base vision transformer.
 
-```python
+```py
 import torch
 from vit_pytorch.cross_vit import CrossViT
 
@@ -438,7 +438,7 @@ pred = v(img) # (1, 1000)
 
 <a href="https://arxiv.org/abs/2103.16302">This paper</a> proposes to downsample the tokens through a pooling procedure using depth-wise convolutions.
 
-```python
+```py
 import torch
 from vit_pytorch.pit import PiT
 
@@ -469,7 +469,7 @@ preds = v(img) # (1, 1000)
 
 <a href="https://github.com/facebookresearch/LeViT">Official repository</a>
 
-```python
+```py
 import torch
 from vit_pytorch.levit import LeViT
 
@@ -495,7 +495,7 @@ levit(img) # (1, 1000)
 
 <a href="https://arxiv.org/abs/2103.15808">This paper</a> proposes mixing convolutions and attention. Specifically, convolutions are used to embed and downsample the image / feature map in three stages. Depthwise-convoltion is also used to project the queries, keys, and values for attention.
 
-```python
+```py
 import torch
 from vit_pytorch.cvt import CvT
 
@@ -539,7 +539,7 @@ pred = v(img) # (1, 1000)
 
 This <a href="https://arxiv.org/abs/2104.13840">paper</a> proposes mixing local and global attention, along with position encoding generator (proposed in <a href="https://arxiv.org/abs/2102.10882">CPVT</a>) and global average pooling, to achieve the same results as <a href="https://arxiv.org/abs/2103.14030">Swin</a>, without the extra complexity of shifted windows, CLS tokens, nor positional embeddings.
 
-```python
+```py
 import torch
 from vit_pytorch.twins_svt import TwinsSVT
 
@@ -584,7 +584,7 @@ pred = model(img) # (1, 1000)
 
 You can use it as follows
 
-```python
+```py
 import torch
 from vit_pytorch.regionvit import RegionViT
 
@@ -612,7 +612,7 @@ This <a href="https://arxiv.org/abs/2108.00154">paper</a> beats PVT and Swin usi
 
 They also have cross-scale embedding layer, which they shown to be a generic layer that can improve all vision transformers. Dynamic relative positional bias was also formulated to allow the net to generalize to images of greater resolution.
 
-```python
+```py
 import torch
 from vit_pytorch.crossformer import CrossFormer
 
@@ -641,7 +641,7 @@ They make the claim in this paper that this scheme outperforms Swin Transformer,
 
 You can use it as follows (ex. ScalableViT-S)
 
-```python
+```py
 import torch
 from vit_pytorch.scalable_vit import ScalableViT
 
@@ -671,7 +671,7 @@ I have decided to include only the version of `SepViT` with this specific self-a
 
 ex. SepViT-Lite
 
-```python
+```py
 import torch
 from vit_pytorch.sep_vit import SepViT
 
@@ -700,7 +700,7 @@ They also claim this specific vision transformer is good for generative models (
 
 ex. MaxViT-S
 
-```python
+```py
 import torch
 from vit_pytorch.max_vit import MaxViT
 
@@ -729,7 +729,7 @@ This <a href="https://arxiv.org/abs/2105.12723">paper</a> decided to process the
 
 You can use it with the following code (ex. NesT-T)
 
-```python
+```py
 import torch
 from vit_pytorch.nest import NesT
 
@@ -757,7 +757,7 @@ perspective for the global processing of information with transformers.
 
 You can use it with the following code (ex. mobilevit_xs)
 
-```python
+```py
 import torch
 from vit_pytorch.mobile_vit import MobileViT
 
@@ -781,7 +781,7 @@ This <a href="https://arxiv.org/abs/2106.09681">paper</a> introduces the cross c
 
 Technically, this amounts to simply transposing the query, key, values before executing cosine similarity attention with learned temperature.
 
-```python
+```py
 import torch
 from vit_pytorch.xcit import XCiT
 
@@ -813,7 +813,7 @@ This <a href="https://arxiv.org/abs/2111.09886">paper</a> proposes a simple mask
 
 You can use this as follows
 
-```python
+```py
 import torch
 from vit_pytorch import ViT
 from vit_pytorch.simmim import SimMIM
@@ -857,7 +857,7 @@ A new <a href="https://arxiv.org/abs/2111.06377">Kaiming He paper</a> proposes a
 
 You can use it with the following code
 
-```python
+```py
 import torch
 from vit_pytorch import ViT, MAE
 
@@ -894,7 +894,7 @@ torch.save(v.state_dict(), './trained-vit.pt')
 
 Thanks to <a href="https://github.com/zankner">Zach</a>, you can train using the original masked patch prediction task presented in the paper, with the following code.
 
-```python
+```py
 import torch
 from vit_pytorch import ViT
 from vit_pytorch.mpp import MPP
@@ -942,7 +942,7 @@ torch.save(model.state_dict(), './pretrained-net.pt')
 
 New <a href="https://arxiv.org/abs/2207.07611">paper</a> that introduces masked position prediction pre-training criteria. This strategy is more efficient than the Masked Autoencoder strategy and has comparable performance.  
 
-```python
+```py
 import torch
 from vit_pytorch.mp3 import ViT, MP3
 
@@ -980,7 +980,7 @@ torch.save(v.state_dict(), './trained-vit.pt')
 
 This <a href="https://arxiv.org/abs/2111.15667">paper</a> proposes to use the CLS attention scores, re-weighed by the norms of the value heads, as means to discard unimportant tokens at different layers.
 
-```python
+```py
 import torch
 from vit_pytorch.ats_vit import ViT
 
@@ -1014,7 +1014,7 @@ preds, token_ids = v(img, return_sampled_token_ids = True) # (4, 1000), (4, <=8)
 
 This <a href="https://arxiv.org/abs/2202.12015">paper</a> proposes a simple module (Patch Merger) for reducing the number of tokens at any layer of a vision transformer without sacrificing performance.
 
-```python
+```py
 import torch
 from vit_pytorch.vit_with_patch_merger import ViT
 
@@ -1039,7 +1039,7 @@ preds = v(img) # (4, 1000)
 
 One can also use the `PatchMerger` module by itself
 
-```python
+```py
 import torch
 from vit_pytorch.vit_with_patch_merger import PatchMerger
 
@@ -1061,7 +1061,7 @@ This <a href="https://arxiv.org/abs/2112.13492">paper</a> proposes a new image t
 
 You can use as follows:
 
-```python
+```py
 import torch
 from vit_pytorch.vit_for_small_dataset import ViT
 
@@ -1084,7 +1084,7 @@ preds = v(img) # (1, 1000)
 
 You can also use the `SPT` from this paper as a standalone module
 
-```python
+```py
 import torch
 from vit_pytorch.vit_for_small_dataset import SPT
 
@@ -1107,7 +1107,7 @@ You will need to pass in two additional hyperparameters: (1) the number of frame
 
 For starters, 3D ViT
 
-```python
+```py
 import torch
 from vit_pytorch.vit_3d import ViT
 
@@ -1132,7 +1132,7 @@ preds = v(video) # (4, 1000)
 
 3D Simple ViT
 
-```python
+```py
 import torch
 from vit_pytorch.simple_vit_3d import SimpleViT
 
@@ -1155,7 +1155,7 @@ preds = v(video) # (4, 1000)
 
 3D version of <a href="https://github.com/lucidrains/vit-pytorch#cct">CCT</a>
 
-```python
+```py
 import torch
 from vit_pytorch.cct_3d import CCT
 
@@ -1188,7 +1188,7 @@ pred = cct(video)
 
 This <a href="https://arxiv.org/abs/2103.15691">paper</a> offers 3 different types of architectures for efficient attention of videos, with the main theme being factorizing the attention across space and time. This repository will offer the first variant, which is a spatial transformer followed by a temporal one.
 
-```python
+```py
 import torch
 from vit_pytorch.vivit import ViT
 
@@ -1218,7 +1218,7 @@ This <a href="https://arxiv.org/abs/2203.09795">paper</a> propose parallelizing 
 
 You can try this variant as follows
 
-```python
+```py
 import torch
 from vit_pytorch.parallel_vit import ViT
 
@@ -1248,7 +1248,7 @@ This <a href="https://arxiv.org/abs/2203.15243">paper</a> shows that adding lear
 
 You can use this with a specially modified `ViT` as follows
 
-```python
+```py
 import torch
 from vit_pytorch.learnable_memory_vit import ViT, Adapter
 
@@ -1304,7 +1304,7 @@ You can train `ViT` with the recent SOTA self-supervised learning technique, <a 
 
 <a href="https://www.youtube.com/watch?v=h3ij3F3cPIk">Yannic Kilcher</a> video
 
-```python
+```py
 import torch
 from vit_pytorch import ViT, Dino
 
@@ -1358,7 +1358,7 @@ torch.save(model.state_dict(), './pretrained-net.pt')
 
 Even though it is named as though it were a new `ViT` variant, it actually is just a strategy for training any multistage `ViT` (in the paper, they focused on Swin). The example below will show how to use it with `CvT`. You'll need to set the `hidden_layer` to the name of the layer within your efficient ViT that outputs the non-average pooled visual representations, just before the global pooling and projection to logits.
 
-```python
+```py
 import torch
 from vit_pytorch.cvt import CvT
 from vit_pytorch.es_vit import EsViTTrainer
@@ -1428,7 +1428,7 @@ torch.save(cvt.state_dict(), './pretrained-net.pt')
 
 If you would like to visualize the attention weights (post-softmax) for your research, just follow the procedure below
 
-```python
+```py
 import torch
 from vit_pytorch.vit import ViT
 
@@ -1461,7 +1461,7 @@ attns # (1, 6, 16, 65, 65) - (batch x layers x heads x patch x patch)
 
 to cleanup the class and the hooks once you have collected enough data
 
-```python
+```py
 v = v.eject()  # wrapper is discarded and original ViT instance is returned
 ```
 
@@ -1469,7 +1469,7 @@ v = v.eject()  # wrapper is discarded and original ViT instance is returned
 
 You can similarly access the embeddings with the `Extractor` wrapper
 
-```python
+```py
 import torch
 from vit_pytorch.vit import ViT
 
@@ -1502,7 +1502,7 @@ embeddings # (1, 65, 1024) - (batch x patches x model dim)
 
 Or say for `CrossViT`, which has a multi-scale encoder that outputs two sets of embeddings for 'large' and 'small' scales
 
-```python
+```py
 import torch
 from vit_pytorch.cross_vit import CrossViT
 
@@ -1549,11 +1549,11 @@ There may be some coming from computer vision who think attention still suffers 
 
 An example with <a href="https://arxiv.org/abs/2102.03902">Nystromformer</a>
 
-```bash
+```py
 $ pip install nystrom-attention
 ```
 
-```python
+```py
 import torch
 from vit_pytorch.efficient import ViT
 from nystrom_attention import Nystromformer
@@ -1585,11 +1585,11 @@ This paper purposely used the most vanilla of attention networks to make a state
 
 ex.
 
-```bash
+```py
 $ pip install x-transformers
 ```
 
-```python
+```py
 import torch
 from vit_pytorch.efficient import ViT
 from x_transformers import Encoder
@@ -1620,7 +1620,7 @@ You can already pass in non-square images - you just have to make sure your heig
 
 ex.
 
-```python
+```py
 import torch
 from vit_pytorch import ViT
 
@@ -1643,7 +1643,7 @@ preds = v(img) # (1, 1000)
 
 - How do I pass in non-square patches?
 
-```python
+```py
 import torch
 from vit_pytorch import ViT
 
@@ -1676,7 +1676,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 
 
 ## Citations
-```bibtex
+```py
 @article{hassani2021escaping,
     title   = {Escaping the Big Data Paradigm with Compact Transformers},
     author  = {Ali Hassani and Steven Walton and Nikhil Shah and Abulikemu Abuduweili and Jiachen Li and Humphrey Shi},
@@ -1688,7 +1688,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{dosovitskiy2020image,
     title   = {An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale},
     author  = {Alexey Dosovitskiy and Lucas Beyer and Alexander Kolesnikov and Dirk Weissenborn and Xiaohua Zhai and Thomas Unterthiner and Mostafa Dehghani and Matthias Minderer and Georg Heigold and Sylvain Gelly and Jakob Uszkoreit and Neil Houlsby},
@@ -1699,7 +1699,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{touvron2020training,
     title   = {Training data-efficient image transformers & distillation through attention}, 
     author  = {Hugo Touvron and Matthieu Cord and Matthijs Douze and Francisco Massa and Alexandre Sablayrolles and Hervé Jégou},
@@ -1710,7 +1710,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{yuan2021tokenstotoken,
     title   = {Tokens-to-Token ViT: Training Vision Transformers from Scratch on ImageNet},
     author  = {Li Yuan and Yunpeng Chen and Tao Wang and Weihao Yu and Yujun Shi and Francis EH Tay and Jiashi Feng and Shuicheng Yan},
@@ -1721,7 +1721,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{zhou2021deepvit,
     title   = {DeepViT: Towards Deeper Vision Transformer},
     author  = {Daquan Zhou and Bingyi Kang and Xiaojie Jin and Linjie Yang and Xiaochen Lian and Qibin Hou and Jiashi Feng},
@@ -1732,7 +1732,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{touvron2021going,
     title   = {Going deeper with Image Transformers}, 
     author  = {Hugo Touvron and Matthieu Cord and Alexandre Sablayrolles and Gabriel Synnaeve and Hervé Jégou},
@@ -1743,7 +1743,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{chen2021crossvit,
     title   = {CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification},
     author  = {Chun-Fu Chen and Quanfu Fan and Rameswar Panda},
@@ -1754,7 +1754,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{wu2021cvt,
     title   = {CvT: Introducing Convolutions to Vision Transformers},
     author  = {Haiping Wu and Bin Xiao and Noel Codella and Mengchen Liu and Xiyang Dai and Lu Yuan and Lei Zhang},
@@ -1765,7 +1765,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{heo2021rethinking,
     title   = {Rethinking Spatial Dimensions of Vision Transformers}, 
     author  = {Byeongho Heo and Sangdoo Yun and Dongyoon Han and Sanghyuk Chun and Junsuk Choe and Seong Joon Oh},
@@ -1776,7 +1776,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{graham2021levit,
     title   = {LeViT: a Vision Transformer in ConvNet's Clothing for Faster Inference},
     author  = {Ben Graham and Alaaeldin El-Nouby and Hugo Touvron and Pierre Stock and Armand Joulin and Hervé Jégou and Matthijs Douze},
@@ -1787,7 +1787,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{li2021localvit,
     title   = {LocalViT: Bringing Locality to Vision Transformers},
     author  = {Yawei Li and Kai Zhang and Jiezhang Cao and Radu Timofte and Luc Van Gool},
@@ -1798,7 +1798,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{chu2021twins,
     title   = {Twins: Revisiting Spatial Attention Design in Vision Transformers},
     author  = {Xiangxiang Chu and Zhi Tian and Yuqing Wang and Bo Zhang and Haibing Ren and Xiaolin Wei and Huaxia Xia and Chunhua Shen},
@@ -1809,7 +1809,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding}, 
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -1820,7 +1820,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{zhang2021aggregating,
     title   = {Aggregating Nested Transformers},
     author  = {Zizhao Zhang and Han Zhang and Long Zhao and Ting Chen and Tomas Pfister},
@@ -1831,7 +1831,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{chen2021regionvit,
     title   = {RegionViT: Regional-to-Local Attention for Vision Transformers}, 
     author  = {Chun-Fu Chen and Rameswar Panda and Quanfu Fan},
@@ -1842,7 +1842,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{wang2021crossformer,
     title   = {CrossFormer: A Versatile Vision Transformer Hinging on Cross-scale Attention}, 
     author  = {Wenxiao Wang and Lu Yao and Long Chen and Binbin Lin and Deng Cai and Xiaofei He and Wei Liu},
@@ -1853,7 +1853,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{caron2021emerging,
     title   = {Emerging Properties in Self-Supervised Vision Transformers},
     author  = {Mathilde Caron and Hugo Touvron and Ishan Misra and Hervé Jégou and Julien Mairal and Piotr Bojanowski and Armand Joulin},
@@ -1864,7 +1864,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{he2021masked,
     title   = {Masked Autoencoders Are Scalable Vision Learners}, 
     author  = {Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and Piotr Dollár and Ross Girshick},
@@ -1875,7 +1875,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{xie2021simmim,
     title   = {SimMIM: A Simple Framework for Masked Image Modeling}, 
     author  = {Zhenda Xie and Zheng Zhang and Yue Cao and Yutong Lin and Jianmin Bao and Zhuliang Yao and Qi Dai and Han Hu},
@@ -1886,7 +1886,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{fayyaz2021ats,
     title   = {ATS: Adaptive Token Sampling For Efficient Vision Transformers},
     author  = {Mohsen Fayyaz and Soroush Abbasi Kouhpayegani and Farnoush Rezaei Jafari and Eric Sommerlade and Hamid Reza Vaezi Joze and Hamed Pirsiavash and Juergen Gall},
@@ -1897,7 +1897,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{mehta2021mobilevit,
     title   = {MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer},
     author  = {Sachin Mehta and Mohammad Rastegari},
@@ -1908,7 +1908,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{lee2021vision,
     title   = {Vision Transformer for Small-Size Datasets}, 
     author  = {Seung Hoon Lee and Seunghyun Lee and Byung Cheol Song},
@@ -1919,7 +1919,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{renggli2022learning,
     title   = {Learning to Merge Tokens in Vision Transformers},
     author  = {Cedric Renggli and André Susano Pinto and Neil Houlsby and Basil Mustafa and Joan Puigcerver and Carlos Riquelme},
@@ -1930,7 +1930,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{yang2022scalablevit,
     title   = {ScalableViT: Rethinking the Context-oriented Generalization of Vision Transformer}, 
     author  = {Rui Yang and Hailong Ma and Jie Wu and Yansong Tang and Xuefeng Xiao and Min Zheng and Xiu Li},
@@ -1941,7 +1941,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Touvron2022ThreeTE,
     title   = {Three things everyone should know about Vision Transformers},
     author  = {Hugo Touvron and Matthieu Cord and Alaaeldin El-Nouby and Jakob Verbeek and Herv'e J'egou},
@@ -1949,7 +1949,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sandler2022FinetuningIT,
     title   = {Fine-tuning Image Transformers using Learnable Memory},
     author  = {Mark Sandler and Andrey Zhmoginov and Max Vladymyrov and Andrew Jackson},
@@ -1957,7 +1957,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Li2022SepViTSV,
     title   = {SepViT: Separable Vision Transformer},
     author  = {Wei Li and Xing Wang and Xin Xia and Jie Wu and Xuefeng Xiao and Minghang Zheng and Shiping Wen},
@@ -1965,7 +1965,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Tu2022MaxViTMV,
     title   = {MaxViT: Multi-Axis Vision Transformer},
     author  = {Zhengzhong Tu and Hossein Talebi and Han Zhang and Feng Yang and Peyman Milanfar and Alan Conrad Bovik and Yinxiao Li},
@@ -1973,7 +1973,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @article{Li2021EfficientSV,
     title   = {Efficient Self-supervised Vision Transformers for Representation Learning},
     author  = {Chunyuan Li and Jianwei Yang and Pengchuan Zhang and Mei Gao and Bin Xiao and Xiyang Dai and Lu Yuan and Jianfeng Gao},
@@ -1983,7 +1983,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{Beyer2022BetterPlainViT
     title     = {Better plain ViT baselines for ImageNet-1k},
     author    = {Beyer, Lucas and Zhai, Xiaohua and Kolesnikov, Alexander},
@@ -1993,7 +1993,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 
 ```
 
-```bibtex
+```py
 @article{Arnab2021ViViTAV,
     title   = {ViViT: A Video Vision Transformer},
     author  = {Anurag Arnab and Mostafa Dehghani and Georg Heigold and Chen Sun and Mario Lucic and Cordelia Schmid},
@@ -2003,7 +2003,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022PatchDropoutEV,
     title   = {PatchDropout: Economizing Vision Transformers Using Patch Dropout},
     author  = {Yue Liu and Christos Matsoukas and Fredrik Strand and Hossein Azizpour and Kevin Smith},
@@ -2013,7 +2013,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -2025,7 +2025,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Dehghani2023PatchNP,
     title   = {Patch n' Pack: NaViT, a Vision Transformer for any Aspect Ratio and Resolution},
     author  = {Mostafa Dehghani and Basil Mustafa and Josip Djolonga and Jonathan Heek and Matthias Minderer and Mathilde Caron and Andreas Steiner and Joan Puigcerver and Robert Geirhos and Ibrahim M. Alabdulmohsin and Avital Oliver and Piotr Padlewski and Alexey A. Gritsenko and Mario Luvci'c and Neil Houlsby},
@@ -2033,7 +2033,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @misc{vaswani2017attention,
     title   = {Attention Is All You Need},
     author  = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
@@ -2044,7 +2044,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -2053,7 +2053,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Darcet2023VisionTN,
     title   = {Vision Transformers Need Registers},
     author  = {Timoth'ee Darcet and Maxime Oquab and Julien Mairal and Piotr Bojanowski},
@@ -2062,7 +2062,7 @@ Coming from computer vision and new to transformers? Here are some resources tha
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ElNouby2021XCiTCI,
     title   = {XCiT: Cross-Covariance Image Transformers},
     author  = {Alaaeldin El-Nouby and Hugo Touvron and Mathilde Caron and Piotr Bojanowski and Matthijs Douze and Armand Joulin and Ivan Laptev and Natalia Neverova and Gabriel Synnaeve and Jakob Verbeek and Herv{\'e} J{\'e}gou},

@@ -12,13 +12,13 @@ Update: It is recommended that you use <a href="https://github.com/lucidrains/eq
 
 ## Install
 
-```bash
+```py
 $ pip install se3-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -40,7 +40,7 @@ out = model(feats, coors, mask) # (1, 1024, 512)
 
 Potential example usage in Alphafold2, as outlined <a href="https://fabianfuchsml.github.io/alphafold2/">here</a>
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -63,7 +63,7 @@ refined_coors = coors + model(atom_feats, coors, mask, return_type = 1) # (2, 32
 
 You can also let the base transformer class take care of embedding the type 0 features being passed in. Assuming they are atoms
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -86,7 +86,7 @@ refined_coors = coors + model(atoms, coors, mask, return_type = 1) # (2, 32, 3)
 
 If you think the net could further benefit from positional encoding, you can featurize your positions in space and pass it in as follows.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -114,7 +114,7 @@ refined_coors = coors + model(features, coors, mask, return_type = 1) # (2, 32, 
 
 To offer edge information to SE3 Transformers (say bond types between atoms), you just have to pass in two more keyword arguments on initialization.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -140,7 +140,7 @@ pred = model(atoms, coors, mask, edges = bonds, return_type = 0) # (2, 32, 1)
 
 If you would like to pass in continuous values for your edges, you can choose to not set the `num_edge_tokens`, encode your discrete bond types, and then concat it to the fourier features of these continuous values
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 from se3_transformer_pytorch.utils import fourier_encode
@@ -173,7 +173,7 @@ out = model(feats, coors, mask, edges = edges, return_type = 1)
 
 If you know the connectivity of your points (say you are working with molecules), you can pass in an adjacency matrix, in the form of a boolean mask (where `True` indicates connectivity).
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -204,7 +204,7 @@ out = model(feats, coors, mask, adj_mat = adj_mat) # (1, 128, 512)
 
 You can also have the network automatically derive for you the Nth-degree neighbors with one extra keyword `num_adj_degrees`. If you would like the system to differentiate between the degree of the neighbors as edge information, further pass in a non-zero `adj_dim`.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch.se3_transformer_pytorch import SE3Transformer
 
@@ -235,7 +235,7 @@ out = model(feats, coors, mask, adj_mat = adj_mat, return_type = 1)
 
 To have fine control over the dimensionality of each type, you can use the `hidden_fiber_dict` and `out_fiber_dict` keywords to pass in a dictionary with the degree to dimension values as the key / values.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -268,7 +268,7 @@ pred['1'] # (2, 32, 1, 3)
 
 You can further control which nodes can be considered by passing in a neighbor mask. All `False` values will be masked out of consideration.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch.se3_transformer_pytorch import SE3Transformer
 
@@ -305,7 +305,7 @@ out = model(
 
 This feature allows you to pass in vectors that can be viewed as global nodes that are seen by all other nodes. The idea would be to pool your graph into a few feature vectors, which will be projected to key / values across all the attention layers in the network. All nodes will have full access to global node information, regardless of nearest neighbors or adjacency calculation.
 
-```python
+```py
 import torch
 from torch import nn
 from se3_transformer_pytorch import SE3Transformer
@@ -338,7 +338,7 @@ Todo:
 
 You can use SE3 Transformers autoregressively with just one extra flag
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -365,7 +365,7 @@ out = model(feats, coors, mask) # (1, 1024, 512)
 
 I've discovered that using linearly projected keys (rather than the pairwise convolution) seems to do ok in a toy denoising task. This leads to 25% memory savings. You can try this feature by setting `linear_proj_keys = True`
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -390,7 +390,7 @@ out = model(feats, coors, mask, return_type = 0)
 
 There is a relatively unknown technique for transformers where one can share one key / value head across all the heads of the queries. In my experience in NLP, this usually leads to worse performance, but if you are really in need to tradeoff memory for more depth or higher number of degrees, this may be a good option.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -415,7 +415,7 @@ out = model(feats, coors, mask, return_type = 0)
 
 You can also tie the key / values (have them be the same), for half memory savings
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -440,7 +440,7 @@ out = model(feats, coors, mask, return_type = 0)
 
 This is an experimental version of EGNN that works for higher types, and greater dimensionality than just 1 (for the coordinates). The class name is still `SE3Transformer` since it reuses some preexisting logic, so just ignore that for now until I clean it up later.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -468,7 +468,7 @@ coors = coors + refinement  # update coors with refinement
 
 If you would like to specify individual dimensions for each of the higher types, just pass in `hidden_fiber_dict` where the dictionary is in the format {\<degree\>:\<dim\>} instead of `num_degrees`
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -498,7 +498,7 @@ This section will list ongoing efforts to make SE3 Transformer scale a little be
 
 Firstly, I have added <a href="https://arxiv.org/abs/1707.04585">reversible networks</a>. This allows me to add a little more depth before hitting the usual memory roadblocks. Equivariance preservation is demonstrated in the tests.
 
-```python
+```py
 import torch
 from se3_transformer_pytorch import SE3Transformer
 
@@ -529,13 +529,13 @@ loss.backward()
 
 First install `sidechainnet`
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
 Then run the protein backbone denoising task
 
-```bash
+```py
 $ python denoise.py
 ```
 
@@ -543,25 +543,25 @@ $ python denoise.py
 
 By default, the basis vectors are cached. However, if there is ever the need to clear the cache, you simply have to set the environmental flag `CLEAR_CACHE` to some value on initiating the script
 
-```bash
+```py
 $ CLEAR_CACHE=1 python train.py
 ```
 
 Or you can try deleting the cache directory, which should exist at
 
-```bash
+```py
 $ rm -rf ~/.cache.equivariant_attention
 ```
 
 You can also designate your own directory where you want the caches to be stored, in the case that the default directory may have permission issues
 
-```bash
+```py
 CACHE_PATH=./path/to/my/cache python train.py
 ```
 
 ## Testing
 
-```bash
+```py
 $ python setup.py pytest
 ```
 
@@ -571,7 +571,7 @@ This library is largely a port of <a href="https://github.com/FabianFuchsML/se3-
 
 ## Citations
 
-```bibtex
+```py
 @misc{fuchs2020se3transformers,
     title   = {SE(3)-Transformers: 3D Roto-Translation Equivariant Attention Networks}, 
     author  = {Fabian B. Fuchs and Daniel E. Worrall and Volker Fischer and Max Welling},
@@ -582,7 +582,7 @@ This library is largely a port of <a href="https://github.com/FabianFuchsML/se3-
 }
 ```
 
-```bibtex
+```py
 @misc{satorras2021en,
     title   = {E(n) Equivariant Graph Neural Networks},
     author  = {Victor Garcia Satorras and Emiel Hoogeboom and Max Welling},
@@ -593,7 +593,7 @@ This library is largely a port of <a href="https://github.com/FabianFuchsML/se3-
 }
 ```
 
-```bibtex
+```py
 @misc{gomez2017reversible,
     title     = {The Reversible Residual Network: Backpropagation Without Storing Activations},
     author    = {Aidan N. Gomez and Mengye Ren and Raquel Urtasun and Roger B. Grosse},
@@ -604,7 +604,7 @@ This library is largely a port of <a href="https://github.com/FabianFuchsML/se3-
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2019fast,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam Shazeer},

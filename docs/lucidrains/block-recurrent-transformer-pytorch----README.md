@@ -14,13 +14,13 @@ It will also include <a href="https://arxiv.org/abs/2205.14135">flash attention<
 
 ## Install
 
-```bash
+```py
 $ pip install block-recurrent-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from block_recurrent_transformer_pytorch import BlockRecurrentTransformer
 
@@ -50,7 +50,7 @@ out, mems3, states3 = model(seq, xl_memories = mems2, states = states2)
 
 First `pip install -r requirements.txt`, then
 
-```bash
+```py
 $ python train.py
 ```
 
@@ -74,7 +74,7 @@ $ python train.py
 
 ## Citations
 
-```bibtex
+```py
 @article{Hutchins2022BlockRecurrentT,
     title   = {Block-Recurrent Transformers},
     author  = {DeLesley S. Hutchins and Imanol Schlag and Yuhuai Wu and Ethan Dyer and Behnam Neyshabur},
@@ -84,7 +84,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam M. Shazeer},
@@ -94,7 +94,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
     title     = {A Length-Extrapolatable Transformer},
     author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -102,7 +102,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -111,7 +111,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Ainslie2023CoLT5FL,
     title   = {CoLT5: Faster Long-Range Transformers with Conditional Computation},
     author  = {Joshua Ainslie and Tao Lei and Michiel de Jong and Santiago Ontan'on and Siddhartha Brahma and Yury Zemlyanskiy and David Uthus and Mandy Guo and James Lee-Thorp and Yi Tay and Yun-Hsuan Sung and Sumit Sanghai},

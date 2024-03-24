@@ -12,19 +12,19 @@ Update: Results have been very good. Will need to investigate combining this wit
 
 ## Install
 
-```bash
+```py
 $ pip install unet-stylegan2
 ```
 
 ## Usage
 
-```bash
+```py
 $ unet_stylegan2 --data ./path/to/data
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{karras2019analyzing,
     title={Analyzing and Improving the Image Quality of StyleGAN},
     author={Tero Karras and Samuli Laine and Miika Aittala and Janne Hellsten and Jaakko Lehtinen and Timo Aila},
@@ -35,7 +35,7 @@ $ unet_stylegan2 --data ./path/to/data
 }
 ```
 
-```bibtex
+```py
 @misc{schnfeld2020unet,
     title={A U-Net Based Discriminator for Generative Adversarial Networks},
     author={Edgar Schönfeld and Bernt Schiele and Anna Khoreva},

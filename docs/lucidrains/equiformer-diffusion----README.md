@@ -4,7 +4,7 @@ Implementation of denoising diffusion for protein design in the same vein as <a 
 
 ## Citations
 
-```bibtex
+```py
 @article{Liao2022EquiformerEG,
     title   = {Equiformer: Equivariant Graph Attention Transformer for 3D Atomistic Graphs},
     author  = {Yi Liao and Tess E. Smidt},
@@ -14,7 +14,7 @@ Implementation of denoising diffusion for protein design in the same vein as <a 
 }
 ```
 
-```bibtex
+```py
 @article{Watson2022,
     author  = {Watson, Joseph L. and Juergens, David and Bennett, Nathaniel R. and Trippe, Brian L. and Yim, Jason and Eisenach, Helen E. and Ahern, Woody and Borst, Andrew J. and Ragotte, Robert J. and Milles, Lukas F. and Wicky, Basile I. M. and Hanikel, Nikita and Pellock, Samuel J. and Courbet, Alexis and Sheffler, William and Wang, Jue and Venkatesh, Preetham and Sappington, Isaac and Torres, Susana Vazquez and Lauko, Anna and De Bortoli, Valentin and Mathieu, Emile and Barzilay, Regina and Jaakkola, Tommi S. and DiMaio, Frank and Baek, Minkyung and Baker, David},
     title   = {Broadly applicable and accurate protein design by integrating structure prediction networks and diffusion generative models},

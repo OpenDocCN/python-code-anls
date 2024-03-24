@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2107.11906">H-Transformer-1D</a
 
 ## Install
 
-```bash
+```py
 $ pip install h-transformer-1d
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from h_transformer_1d import HTransformer1D
 
@@ -41,7 +41,7 @@ logits = model(x, mask = mask) # (1, 8000, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{zhu2021htransformer1d,
     title   = {H-Transformer-1D: Fast One-Dimensional Hierarchical Attention for Sequences}, 
     author  = {Zhenhai Zhu and Radu Soricut},
@@ -52,7 +52,7 @@ logits = model(x, mask = mask) # (1, 8000, 256)
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},

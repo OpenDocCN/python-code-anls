@@ -15,7 +15,7 @@ The great thing is, if this really works, all the advances being made in text-to
 
 ## Citations
 
-```bibtex
+```py
 @article{Chi2023DiffusionPV,
     title   = {Diffusion Policy: Visuomotor Policy Learning via Action Diffusion},
     author  = {Cheng Chi and Siyuan Feng and Yilun Du and Zhenjia Xu and Eric A. Cousineau and Benjamin Burchfiel and Shuran Song},
@@ -26,7 +26,7 @@ The great thing is, if this really works, all the advances being made in text-to
 }
 ```
 
-```bibtex
+```py
 @article{Sauer2023AdversarialDD,
     title   = {Adversarial Diffusion Distillation},
     author  = {Axel Sauer and Dominik Lorenz and A. Blattmann and Robin Rombach},

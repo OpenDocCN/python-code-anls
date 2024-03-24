@@ -6,13 +6,13 @@ A GPT, made only of MLPs, in Jax. The specific MLP to be used are <a href="https
 
 ## Install
 
-```bash
+```py
 $ pip install mlp-gpt-jax
 ```
 
 ## Usage
 
-```python
+```py
 from jax import random
 from haiku import PRNGSequence
 from mlp_gpt_jax import TransformedMLPGpt
@@ -33,7 +33,7 @@ logits = model.apply(params, next(rng), seq) # (1024, 20000)
 
 To use the tiny attention (also made autoregressive with a causal mask), just set the `attn_dim` to the head dimension you'd like to use. `64` was recommended in the paper
 
-```python
+```py
 from jax import random
 from haiku import PRNGSequence
 from mlp_gpt_jax import TransformedMLPGpt
@@ -55,7 +55,7 @@ logits = model.apply(params, next(rng), seq) # (1024, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{liu2021pay,
     title   = {Pay Attention to MLPs}, 
     author  = {Hanxiao Liu and Zihang Dai and David R. So and Quoc V. Le},

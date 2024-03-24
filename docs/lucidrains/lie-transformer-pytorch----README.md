@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2012.10885">Lie Transformer</a>
 
 ## Install
 
-```bash
+```py
 $ pip install lie-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from lie_transformer_pytorch import LieTransformer
 
@@ -35,7 +35,7 @@ out = model(features, coors, mask = mask) # (1, 256, 512) <- 256 = (seq len * li
 
 Allowing Lie Transformer take care of embedding the features, just specify the number of unique tokens (node types).
 
-```python
+```py
 import torch
 from lie_transformer_pytorch import LieTransformer
 
@@ -59,7 +59,7 @@ Although it was not in the paper, I decided to allow for passing in edge informa
 
 Simply set two more keyword arguments on initialization of the transformer, and then pass in the specific bond types as shape `b x seq x seq`.
 
-```python
+```py
 import torch
 from lie_transformer_pytorch import LieTransformer
 
@@ -88,7 +88,7 @@ This repository is largely adapted from <a href="https://github.com/mfinzi/LieCo
 
 ## Citations
 
-```bibtex
+```py
 @misc{hutchinson2020lietransformer,
     title       = {LieTransformer: Equivariant self-attention for Lie Groups}, 
     author      = {Michael Hutchinson and Charline Le Lan and Sheheryar Zaidi and Emilien Dupont and Yee Whye Teh and Hyunjik Kim},
@@ -99,7 +99,7 @@ This repository is largely adapted from <a href="https://github.com/mfinzi/LieCo
 }
 ```
 
-```bibtex
+```py
 @misc{finzi2020generalizing,
     title   = {Generalizing Convolutional Neural Networks for Equivariance to Lie Groups on Arbitrary Continuous Data}, 
     author  = {Marc Finzi and Samuel Stanton and Pavel Izmailov and Andrew Gordon Wilson},

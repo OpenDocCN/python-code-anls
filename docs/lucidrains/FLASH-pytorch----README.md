@@ -6,7 +6,7 @@ Implementation of the Transformer variant proposed in the paper <a href="https:/
 
 ## Install
 
-```bash
+```py
 $ pip install FLASH-pytorch
 ```
 
@@ -16,7 +16,7 @@ The main novel circuit in this paper is the "Gated Attention Unit", which they c
 
 It uses a relu squared activation in place of the softmax, the activation of which was first seen in the <a href="https://arxiv.org/abs/2109.08668">Primer paper</a>, and the use of ReLU in <a href="https://arxiv.org/abs/2104.07012">ReLA Transformer</a>. The gating style seems mostly inspired by <a href="https://arxiv.org/abs/2105.08050">gMLPs</a>.
 
-```python
+```py
 import torch
 from flash_pytorch import GAU
 
@@ -38,7 +38,7 @@ This combination of the quadratic gated attention unit with grouped linear atten
 
 You can also use this quite easily
 
-```python
+```py
 import torch
 from flash_pytorch import FLASH
 
@@ -57,7 +57,7 @@ out = flash(x) # (1, 1111, 512)
 
 Finally, you can use the full FLASH transformer as mentioned in the paper. This contains all the positional embeddings mentioned in the paper. Absolute positional embedding uses scaled sinusoidal. GAU quadratic attention will get one-headed T5 relative positional bias. On top of all this, both GAU attention as well as the linear attention will be rotary embedded (RoPE).
 
-```python
+```py
 import torch
 from flash_pytorch import FLASHTransformer
 
@@ -79,13 +79,13 @@ logits = model(x) # (1, 1024, 20000)
 
 ## Test on Autoregressive Enwik8
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @article{Hua2022TransformerQI,
     title   = {Transformer Quality in Linear Time},
     author  = {Weizhe Hua and Zihang Dai and Hanxiao Liu and Quoc V. Le},
@@ -95,7 +95,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author    = {PENG Bo},
     title     = {BlinkDL/RWKV-LM: 0.01},
@@ -108,7 +108,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Ma2022MegaMA,
     title   = {Mega: Moving Average Equipped Gated Attention},
     author  = {Xuezhe Ma and Chunting Zhou and Xiang Kong and Junxian He and Liangke Gui and Graham Neubig and Jonathan May and Luke Zettlemoyer},

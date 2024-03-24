@@ -12,13 +12,13 @@ Update: <a href="https://arxiv.org/abs/2209.10655">This paper</a> has beat S4 on
 
 ## Install
 
-```bash
+```py
 $ pip install gated-state-spaces-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from gated_state_spaces_pytorch import GSS
 
@@ -36,7 +36,7 @@ out = gss(x) # (1, 65536, 512)
 
 Gated state spaces language model
 
-```python
+```py
 import torch
 from gated_state_spaces_pytorch import GatedStateSpacesLM
 
@@ -63,7 +63,7 @@ logits = gss_lm(ids) # (1, 1024, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Mehta2022LongRL,
     title   = {Long Range Language Modeling via Gated State Spaces},
     author  = {Harsh Mehta and Ankit Gupta and Ashok Cutkosky and Behnam Neyshabur},
@@ -71,7 +71,7 @@ logits = gss_lm(ids) # (1, 1024, 20000)
 }
 ```
 
-```bibtex
+```py
 @misc{woo2022etsformer,
     title   = {ETSformer: Exponential Smoothing Transformers for Time-series Forecasting},
     author  = {Gerald Woo and Chenghao Liu and Doyen Sahoo and Akshat Kumar and Steven Hoi},

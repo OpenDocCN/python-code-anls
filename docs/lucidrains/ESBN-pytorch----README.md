@@ -10,7 +10,7 @@ This decoupling / indirection of sensory to abstract processing allows the netwo
 
 ## Usage
 
-```python
+```py
 import torch
 from esbn_pytorch import ESBN
 
@@ -27,7 +27,7 @@ model(images) # (3, 2, 4) # (n, b, o)
 
 ## Citations
 
-```bibtex
+```py
 @misc{webb2020emergent,
     title={Emergent Symbols through Binding in External Memory}, 
     author={Taylor W. Webb and Ishan Sinha and Jonathan D. Cohen},

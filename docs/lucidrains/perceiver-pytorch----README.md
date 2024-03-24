@@ -8,13 +8,13 @@ Implementation of <a href="https://arxiv.org/abs/2103.03206">Perceiver</a>, Gene
 
 ## Install
 
-```bash
+```py
 $ pip install perceiver-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from perceiver_pytorch import Perceiver
 
@@ -46,7 +46,7 @@ model(img) # (1, 1000)
 
 For the backbone of <a href="https://arxiv.org/abs/2107.14795">Perceiver IO</a>, the follow up paper that allows for flexible number of output sequence length, just import `PerceiverIO` instead
 
-```python
+```py
 import torch
 from perceiver_pytorch import PerceiverIO
 
@@ -73,7 +73,7 @@ logits = model(seq, queries = queries) # (1, 128, 100) - (batch, decoder seq, lo
 
 As an example, using PerceiverIO as a language model
 
-```python
+```py
 import torch
 from perceiver_pytorch import PerceiverLM
 
@@ -103,13 +103,13 @@ I have also included a version of Perceiver that includes bottom-up (in addition
 
 You simply have to change the above import to
 
-```python
+```py
 from perceiver_pytorch.experimental import Perceiver
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{jaegle2021perceiver,
     title   = {Perceiver: General Perception with Iterative Attention},
     author  = {Andrew Jaegle and Felix Gimeno and Andrew Brock and Andrew Zisserman and Oriol Vinyals and Joao Carreira},
@@ -120,7 +120,7 @@ from perceiver_pytorch.experimental import Perceiver
 }
 ```
 
-```bibtex
+```py
 @misc{jaegle2021perceiver,
     title   = {Perceiver IO: A General Architecture for Structured Inputs & Outputs},
     author  = {Andrew Jaegle and Sebastian Borgeaud and Jean-Baptiste Alayrac and Carl Doersch and Catalin Ionescu and David Ding and Skanda Koppula and Andrew Brock and Evan Shelhamer and Olivier Hénaff and Matthew M. Botvinick and Andrew Zisserman and Oriol Vinyals and João Carreira},

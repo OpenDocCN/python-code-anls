@@ -4,6 +4,6 @@ a simple genetic algorithm written in Pytorch
 
 ## running
 
-```bash
+```py
 $ python ga.py
 ```

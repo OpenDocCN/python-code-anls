@@ -12,13 +12,13 @@ Will simply implement the Transformer Combiner and omit the other variants.
 
 ## Install
 
-```bash
+```py
 $ pip install mirasol-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from mirasol_pytorch import Mirasol
 
@@ -74,7 +74,7 @@ sampled_text = model.generate(
 
 ## Citations
 
-```bibtex
+```py
 @article{Piergiovanni2023Mirasol3BAM,
     title   = {Mirasol3B: A Multimodal Autoregressive model for time-aligned and contextual modalities},
     author  = {A. J. Piergiovanni and Isaac Noble and Dahun Kim and Michael S. Ryoo and Victor Gomes and Anelia Angelova},
@@ -85,7 +85,7 @@ sampled_text = model.generate(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Liu2022TowardsBF,
     title   = {Towards Better Few-Shot and Finetuning Performance with Forgetful Causal Language Models},
     author  = {Hao Liu and Xinyang Geng and Lisa Lee and Igor Mordatch and Sergey Levine and Sharan Narang and P. Abbeel},
@@ -94,7 +94,7 @@ sampled_text = model.generate(
 }
 ```
 
-```bibtex
+```py
 @article{Darcet2023VisionTN,
     title   = {Vision Transformers Need Registers},
     author  = {Timoth'ee Darcet and Maxime Oquab and Julien Mairal and Piotr Bojanowski},
@@ -105,7 +105,7 @@ sampled_text = model.generate(
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -116,7 +116,7 @@ sampled_text = model.generate(
 }
 ```
 
-```bibtex
+```py
 @misc{shi2023enhance,
     title   = {Enhance audio generation controllability through representation similarity regularization}, 
     author  = {Yangyang Shi and Gael Le Lan and Varun Nagaraja and Zhaoheng Ni and Xinhao Mei and Ernie Chang and Forrest Iandola and Yang Liu and Vikas Chandra},

@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2009.03509">Graph Transformer</
 
 ## Install
 
-```bash
+```py
 $ pip install graph-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from graph_transformer_pytorch import GraphTransformer
 
@@ -36,7 +36,7 @@ nodes.shape # (1, 128, 256) - project to R^3 for coordinates
 
 If you want it to handle an adjacency matrix
 
-```python
+```py
 import torch
 from graph_transformer_pytorch import GraphTransformer
 
@@ -61,7 +61,7 @@ nodes.shape # (1, 128, 256) - project to R^3 for coordinates
 
 ## Citations
 
-```bibtex
+```py
 @article {Costa2021.06.02.446809,
     author  = {Costa, Allan and Ponnapati, Manvitha and Jacobson, Joseph M. and Chatterjee, Pranam},
     title   = {Distillation of MSA Embeddings to Folded Protein Structures with Graph Transformers},
@@ -74,7 +74,7 @@ nodes.shape # (1, 128, 256) - project to R^3 for coordinates
 }
 ```
 
-```bibtex
+```py
 @article {Baek2021.06.14.448402,
     author  = {Baek, Minkyung and DiMaio, Frank and Anishchenko, Ivan and Dauparas, Justas and Ovchinnikov, Sergey and Lee, Gyu Rie and Wang, Jue and Cong, Qian and Kinch, Lisa N. and Schaeffer, R. Dustin and Mill{\'a}n, Claudia and Park, Hahnbeom and Adams, Carson and Glassman, Caleb R. and DeGiovanni, Andy and Pereira, Jose H. and Rodrigues, Andria V. and van Dijk, Alberdina A. and Ebrecht, Ana C. and Opperman, Diederik J. and Sagmeister, Theo and Buhlheller, Christoph and Pavkov-Keller, Tea and Rathinaswamy, Manoj K and Dalwadi, Udit and Yip, Calvin K and Burke, John E and Garcia, K. Christopher and Grishin, Nick V. and Adams, Paul D. and Read, Randy J. and Baker, David},
     title   = {Accurate prediction of protein structures and interactions using a 3-track network},
@@ -87,7 +87,7 @@ nodes.shape # (1, 128, 256) - project to R^3 for coordinates
 }
 ```
 
-```bibtex
+```py
 @misc{shi2021masked,
     title   = {Masked Label Prediction: Unified Message Passing Model for Semi-Supervised Classification}, 
     author  = {Yunsheng Shi and Zhengjie Huang and Shikun Feng and Hui Zhong and Wenjin Wang and Yu Sun},

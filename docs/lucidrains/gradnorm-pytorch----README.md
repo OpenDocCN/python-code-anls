@@ -14,13 +14,13 @@ Will be dog-fooded for <a href="http://github.com/lucidrains/audiolm-pytorch">So
 
 ## Install
 
-```bash
+```py
 $ pip install gradnorm-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 
 from gradnorm_pytorch import (
@@ -65,7 +65,7 @@ loss_weighter.backward(losses, backbone_output_activations)
 
 You can also switch it to basic static loss weighting, in case you want to run experiments against fixed weighting.
 
-```python
+```py
 loss_weighter = GradNormLossWeighter(
     loss_weights = [1., 10., 5., 2.],
     ...,
@@ -81,7 +81,7 @@ For use with <a href="https://huggingface.co/">🤗 Huggingface Accelerate</a>, 
 
 ex.
 
-```python
+```py
 accelerator = Accelerator()
 
 network = accelerator.prepare(network)
@@ -103,7 +103,7 @@ loss_weighter = GradNormLossWeighter(
 
 ## Citations
 
-```bibtex
+```py
 @article{Chen2017GradNormGN,
     title   = {GradNorm: Gradient Normalization for Adaptive Loss Balancing in Deep Multitask Networks},
     author  = {Zhao Chen and Vijay Badrinarayanan and Chen-Yu Lee and Andrew Rabinovich},

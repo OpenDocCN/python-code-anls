@@ -20,7 +20,7 @@ Update: On further meditation, there is nothing new in this paper except for gen
 
 ## Citations
 
-```bibtex
+```py
 @article{Nash2022TransframerAF,
     title   = {Transframer: Arbitrary Frame Prediction with Generative Models},
     author  = {Charlie Nash and Jo{\~a}o Carreira and Jacob Walker and Iain Barr and Andrew Jaegle and Mateusz Malinowski and Peter W. Battaglia},

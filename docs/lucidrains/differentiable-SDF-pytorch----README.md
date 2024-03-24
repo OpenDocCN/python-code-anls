@@ -4,7 +4,7 @@ Implementation of <a href="http://rgl.epfl.ch/publications/Vicini2022SDF">Differ
 
 ## Citations
 
-```bibtex
+```py
 @article{Vicini2022sdf,
     author = {Delio Vicini and Sébastien Speierer and Wenzel Jakob},
     title = {Differentiable Signed Distance Function Rendering},

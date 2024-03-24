@@ -44,7 +44,7 @@ In the future, <a href="https://www.youtube.com/watch?v=olNvmUCmY8o">this movie 
 
 ## Install
 
-```bash
+```py
 $ pip install audiolm-pytorch
 ```
 
@@ -53,7 +53,7 @@ $ pip install audiolm-pytorch
 ### SoundStream & Encodec
 
 There are two options for the neural codec. If you want to use the pretrained 24kHz Encodec, just create an Encodec object as follows:
-```python
+```py
 from audiolm_pytorch import EncodecWrapper
 encodec = EncodecWrapper()
 # Now you can use the encodec variable in the same way you'd use the soundstream variables below.
@@ -61,7 +61,7 @@ encodec = EncodecWrapper()
 
 Otherwise, to stay more true to the original paper, you can use `SoundStream`. First, `SoundStream` needs to be trained on a large corpus of audio data
 
-```python
+```py
 from audiolm_pytorch import SoundStream, SoundStreamTrainer
 
 soundstream = SoundStream(
@@ -95,7 +95,7 @@ recons = soundstream(audio, return_recons_only = True) # (1, 10080) - 1 channel
 
 Your trained `SoundStream` can then be used as a generic tokenizer for audio
 
-```python
+```py
 
 audio = torch.randn(1, 512 * 320)
 
@@ -115,7 +115,7 @@ assert torch.allclose(
 
 You can also use soundstreams that are specific to `AudioLM` and `MusicLM` by importing `AudioLMSoundStream` and `MusicLMSoundStream` respectively
 
-```python
+```py
 from audiolm_pytorch import AudioLMSoundStream, MusicLMSoundStream
 
 soundstream = AudioLMSoundStream(...) # say you want the hyperparameters as in Audio LM paper
@@ -125,7 +125,7 @@ soundstream = AudioLMSoundStream(...) # say you want the hyperparameters as in A
 
 As of version `0.17.0`, you can now invoke the class method on `SoundStream` to load from checkpoint files, without having to remember your configurations.
 
-```python
+```py
 from audiolm_pytorch import SoundStream
 
 soundstream = SoundStream.init_and_load_from('./path/to/checkpoint.pt')
@@ -133,7 +133,7 @@ soundstream = SoundStream.init_and_load_from('./path/to/checkpoint.pt')
 
 To use <a href="https://wandb.ai">Weights & Biases</a> tracking, first set `use_wandb_tracking = True` on the `SoundStreamTrainer`, then do the following
 
-```python
+```py
 
 trainer = SoundStreamTrainer(
     soundstream,
@@ -155,7 +155,7 @@ Then three separate transformers (`SemanticTransformer`, `CoarseTransformer`, `F
 
 ex. `SemanticTransformer`
 
-```python
+```py
 import torch
 from audiolm_pytorch import HubertWithKmeans, SemanticTransformer, SemanticTransformerTrainer
 
@@ -189,7 +189,7 @@ trainer.train()
 
 ex. `CoarseTransformer`
 
-```python
+```py
 import torch
 from audiolm_pytorch import HubertWithKmeans, SoundStream, CoarseTransformer, CoarseTransformerTrainer
 
@@ -224,7 +224,7 @@ trainer.train()
 
 ex. `FineTransformer`
 
-```python
+```py
 import torch
 from audiolm_pytorch import SoundStream, FineTransformer, FineTransformerTrainer
 
@@ -253,7 +253,7 @@ trainer.train()
 
 All together now
 
-```python
+```py
 from audiolm_pytorch import AudioLM
 
 audiolm = AudioLM(
@@ -282,7 +282,7 @@ Update: Looks like this will work, given <a href="https://valle-demo.github.io/"
 
 ex. Semantic Transformer
 
-```python
+```py
 import torch
 from audiolm_pytorch import HubertWithKmeans, SemanticTransformer, SemanticTransformerTrainer
 
@@ -347,13 +347,13 @@ Because all the trainer classes uses <a href="https://huggingface.co/docs/accele
 
 At the project root
 
-```python
+```py
 $ accelerate config
 ```
 
 Then, in the same directory
 
-```python
+```py
 $ accelerate launch train.py
 ```
 
@@ -397,7 +397,7 @@ $ accelerate launch train.py
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Borsos2022AudioLMAL,
   title  = {AudioLM: a Language Modeling Approach to Audio Generation},
   author = {Zal{\'a}n Borsos and Rapha{\"e}l Marinier and Damien Vincent and Eugene Kharitonov and Olivier Pietquin and Matthew Sharifi and Olivier Teboul and David Grangier and Marco Tagliasacchi and Neil Zeghidour},
@@ -405,7 +405,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2107.03312,
   title  = {SoundStream: An End-to-End Neural Audio Codec},
   author = {Zeghidour, Neil and Luebs, Alejandro and Omran, Ahmed and Skoglund, Jan and Tagliasacchi, Marco},
@@ -415,7 +415,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -424,7 +424,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
     title   = {Fast Transformer Decoding: One Write-Head is All You Need},
     author  = {Noam M. Shazeer},
@@ -434,7 +434,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Ho2022ClassifierFreeDG,
     title   = {Classifier-Free Diffusion Guidance},
     author  = {Jonathan Ho},
@@ -444,14 +444,14 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @misc{crowson2022,
     author  = {Katherine Crowson},
     url     = {https://twitter.com/rivershavewings}
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -462,7 +462,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Liu2022FCMFC,
     title   = {FCM: Forgetful Causal Masking Makes Causal Language Models Better Zero-Shot Learners},
     author  = {Hao Liu and Xinyang Geng and Lisa Lee and Igor Mordatch and Sergey Levine and Sharan Narang and P. Abbeel},
@@ -472,7 +472,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Anonymous},
@@ -483,7 +483,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -494,7 +494,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Li2021LocalViTBL,
     title   = {LocalViT: Bringing Locality to Vision Transformers},
     author  = {Yawei Li and K. Zhang and Jie Cao and Radu Timofte and Luc Van Gool},
@@ -504,7 +504,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Defossez2022HighFN,
     title   = {High Fidelity Neural Audio Compression},
     author  = {Alexandre D'efossez and Jade Copet and Gabriel Synnaeve and Yossi Adi},
@@ -514,7 +514,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Hu2017SqueezeandExcitationN,
     title   = {Squeeze-and-Excitation Networks},
     author  = {Jie Hu and Li Shen and Gang Sun},
@@ -524,7 +524,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Yang2023HiFiCodecGV,
     title   = {HiFi-Codec: Group-residual Vector quantization for High Fidelity Audio Codec},
     author  = {Dongchao Yang and Songxiang Liu and Rongjie Huang and Jinchuan Tian and Chao Weng and Yuexian Zou},
@@ -532,7 +532,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Kazemnejad2023TheIO,
     title   = {The Impact of Positional Encoding on Length Generalization in Transformers},
     author  = {Amirhossein Kazemnejad and Inkit Padhi and Karthikeyan Natesan Ramamurthy and Payel Das and Siva Reddy},
@@ -542,7 +542,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -551,7 +551,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation},
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},
@@ -562,7 +562,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Katsch2023GateLoopFD,
     title   = {GateLoop: Fully Data-Controlled Linear Recurrence for Sequence Modeling},
     author  = {Tobias Katsch},

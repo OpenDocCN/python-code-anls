@@ -7,13 +7,13 @@ Implementation of the Attention layer from the paper, <a href="https://arxiv.org
 
 ## Install
 
-```bash
+```py
 $ pip install halonet-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from halonet_pytorch import HaloAttention
 
@@ -31,7 +31,7 @@ attn(fmap) # (1, 512, 32, 32)
 
 ## Citations
 
-```bibtex
+```py
 @misc{vaswani2021scaling,
     title   = {Scaling Local Self-Attention For Parameter Efficient Visual Backbones}, 
     author  = {Ashish Vaswani and Prajit Ramachandran and Aravind Srinivas and Niki Parmar and Blake Hechtman and Jonathon Shlens},

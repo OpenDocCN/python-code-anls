@@ -7,13 +7,13 @@ Implementation of <a href="https://arxiv.org/abs/2110.13711">Hourglass Transform
 
 ## Install
 
-```bash
+```py
 $ pip install hourglass-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from hourglass_transformer_pytorch import HourglassTransformerLM
 
@@ -34,7 +34,7 @@ logits = model(x) # (1, 1024, 256)
 For something more sophisticated, two hourglasses, with one nested within the other
 
 
-```python
+```py
 import torch
 from hourglass_transformer_pytorch import HourglassTransformerLM
 
@@ -52,7 +52,7 @@ logits = model(x)
 
 Funnel Transformer would be approximately
 
-```python
+```py
 import torch
 from hourglass_transformer_pytorch import HourglassTransformerLM
 
@@ -72,7 +72,7 @@ logits = model(x)
 
 For images, instead of average pool and repeat for the down and upsampling functions, they found that linear projections worked a lot better. You can use this by setting `updown_sample_type = 'linear'`
 
-```python
+```py
 import torch
 from hourglass_transformer_pytorch import HourglassTransformer
 
@@ -89,7 +89,7 @@ model(img_tokens) # (1, 1024, 512)
 
 Although results were not presented in the paper, you can also use the Hourglass Transformer in this repository non-autoregressively.
 
-```python
+```py
 import torch
 from hourglass_transformer_pytorch import HourglassTransformerLM
 
@@ -110,7 +110,7 @@ logits = model(x, mask = mask) # (1, 1024, 20000)
 
 ## Enwik8 autoregressive example
 
-```bash
+```py
 $ python train.py
 ```
 
@@ -122,7 +122,7 @@ $ python train.py
 
 ## Citations
 
-```bibtex
+```py
 @misc{nawrot2021hierarchical,
     title   = {Hierarchical Transformers Are More Efficient Language Models}, 
     author  = {Piotr Nawrot and Szymon Tworkowski and Michał Tyrolski and Łukasz Kaiser and Yuhuai Wu and Christian Szegedy and Henryk Michalewski},

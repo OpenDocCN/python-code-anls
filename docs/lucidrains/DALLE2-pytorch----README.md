@@ -55,7 +55,7 @@ This library would not have gotten to this working state without the help of
 
 ## Install
 
-```bash
+```py
 $ pip install dalle2-pytorch
 ```
 
@@ -67,7 +67,7 @@ To train CLIP, you can either use <a href="https://github.com/lucidrains/x-clip"
 
 This repository will demonstrate integration with `x-clip` for starters
 
-```python
+```py
 import torch
 from dalle2_pytorch import CLIP
 
@@ -113,7 +113,7 @@ loss.backward()
 
 Then, you will need to train the decoder, which learns to generate images based on the image embedding coming from the trained CLIP above
 
-```python
+```py
 import torch
 from dalle2_pytorch import Unet, Decoder, CLIP
 
@@ -168,7 +168,7 @@ loss.backward()
 
 Finally, the main contribution of the paper. The repository offers the diffusion prior network. It takes the CLIP text embeddings and tries to generate the CLIP image embeddings. Again, you will need the trained CLIP from the first step
 
-```python
+```py
 import torch
 from dalle2_pytorch import DiffusionPriorNetwork, DiffusionPrior, CLIP
 
@@ -224,7 +224,7 @@ In the paper, they actually used a <a href="https://cascaded-diffusion.github.io
 
 This can easily be used within this framework as so
 
-```python
+```py
 import torch
 from dalle2_pytorch import Unet, Decoder, CLIP
 
@@ -291,7 +291,7 @@ loss.backward()
 
 Finally, to generate the DALL-E2 images from text. Insert the trained `DiffusionPrior` as well as the `Decoder` (which wraps `CLIP`, the causal transformer, and unet(s))
 
-```python
+```py
 from dalle2_pytorch import DALLE2
 
 dalle2 = DALLE2(
@@ -310,7 +310,7 @@ That's it!
 
 Let's see the whole script below
 
-```python
+```py
 import torch
 from dalle2_pytorch import DALLE2, DiffusionPriorNetwork, DiffusionPrior, Unet, Decoder, CLIP
 
@@ -427,7 +427,7 @@ It is likely, when scaling up, that you would first preprocess your images and t
 
 Working example below
 
-```python
+```py
 import torch
 from dalle2_pytorch import DiffusionPriorNetwork, DiffusionPrior, CLIP
 
@@ -492,7 +492,7 @@ loss.backward()
 
 You can also completely go `CLIP`-less, in which case you will need to pass in the `image_embed_dim` into the `DiffusionPrior` on initialization
 
-```python
+```py
 import torch
 from dalle2_pytorch import DiffusionPriorNetwork, DiffusionPrior
 
@@ -545,7 +545,7 @@ Although there is the possibility they are using an unreleased, more powerful CL
 
 To use a pretrained OpenAI CLIP, simply import `OpenAIClipAdapter` and pass it into the `DiffusionPrior` or `Decoder` like so
 
-```python
+```py
 import torch
 from dalle2_pytorch import DALLE2, DiffusionPriorNetwork, DiffusionPrior, Unet, Decoder, OpenAIClipAdapter
 
@@ -630,13 +630,13 @@ images = dalle2(
 
 Alternatively, you can also use <a href="https://github.com/mlfoundations/open_clip">Open Clip</a>
 
-```bash
+```py
 $ pip install open-clip-torch
 ```
 
 Ex. using the <a href="https://laion.ai/blog/large-openclip/">SOTA Open Clip</a> model trained by <a href="https://github.com/rom1504">Romain</a>
 
-```python
+```py
 from dalle2_pytorch import OpenClipAdapter
 
 clip = OpenClipAdapter('ViT-H/14')
@@ -650,7 +650,7 @@ Inpainting is also built into the `Decoder`. You simply have to pass in the `inp
 
 This repository uses the formulation put forth by <a href="https://arxiv.org/abs/2201.09865">Lugmayr et al. in Repaint</a>
 
-```python
+```py
 import torch
 from dalle2_pytorch import Unet, Decoder, CLIP
 
@@ -730,7 +730,7 @@ You can use it as follows. Latent diffusion can be limited to just the first U-N
 
 The repository also comes equipped with all the necessary settings to recreate `ViT-VQGan` from the <a href="https://arxiv.org/abs/2110.04627">Improved VQGans</a> paper. Furthermore, the <a href="https://github.com/lucidrains/vector-quantize-pytorch">vector quantization</a> library also comes equipped to do <a href="https://arxiv.org/abs/2203.01941">residual or multi-headed quantization</a>, which I believe will give an even further boost in performance to the autoencoder.
 
-```python
+```py
 import torch
 from dalle2_pytorch import Unet, Decoder, CLIP, VQGanVAE
 
@@ -845,7 +845,7 @@ images = decoder.sample(mock_image_embed) # (1, 3, 1024, 1024)
 
 Training the `Decoder` may be confusing, as one needs to keep track of an optimizer for each of the `Unet`(s) separately. Each `Unet` will also need its own corresponding exponential moving average. The `DecoderTrainer` hopes to make this simple, as shown below
 
-```python
+```py
 import torch
 from dalle2_pytorch import DALLE2, Unet, Decoder, CLIP, DecoderTrainer
 
@@ -925,7 +925,7 @@ images = decoder_trainer.sample(image_embed = mock_image_embed, text = text) # (
 
 Similarly, one can use the `DiffusionPriorTrainer` to automatically instantiate and keep track of an exponential moving averaged prior.
 
-```python
+```py
 import torch
 from dalle2_pytorch import DALLE2, DiffusionPriorNetwork, DiffusionPrior, DiffusionPriorTrainer, Unet, Decoder, CLIP
 
@@ -990,7 +990,7 @@ The repository also contains the means to train unconditional DDPM model, or eve
 
 ex.
 
-```python
+```py
 import torch
 from dalle2_pytorch import Unet, Decoder, DecoderTrainer
 
@@ -1052,7 +1052,7 @@ Generating a dataset of this type:
 
 Usage:
 
-```python
+```py
 from dalle2_pytorch.dataloaders import ImageEmbeddingDataset, create_image_embedding_dataloader
 
 # Create a dataloader directly.
@@ -1133,7 +1133,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 
 ## Citations
 
-```bibtex
+```py
 @misc{ramesh2022,
     title   = {Hierarchical Text-Conditional Image Generation with CLIP Latents}, 
     author  = {Aditya Ramesh et al},
@@ -1141,14 +1141,14 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @misc{crowson2022,
     author  = {Katherine Crowson},
     url     = {https://twitter.com/rivershavewings}
 }
 ```
 
-```bibtex
+```py
 @misc{rombach2021highresolution,
     title   = {High-Resolution Image Synthesis with Latent Diffusion Models}, 
     author  = {Robin Rombach and Andreas Blattmann and Dominik Lorenz and Patrick Esser and Björn Ommer},
@@ -1159,7 +1159,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{shen2019efficient,
     author  = {Zhuoran Shen and Mingyuan Zhang and Haiyu Zhao and Shuai Yi and Hongsheng Li},
     title   = {Efficient Attention: Attention with Linear Complexities},
@@ -1169,7 +1169,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Yu2021VectorquantizedIM,
     title   = {Vector-quantized Image Modeling with Improved VQGAN},
     author  = {Jiahui Yu and Xin Li and Jing Yu Koh and Han Zhang and Ruoming Pang and James Qin and Alexander Ku and Yuanzhong Xu and Jason Baldridge and Yonghui Wu},
@@ -1179,7 +1179,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Shleifer2021NormFormerIT,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Sam Shleifer and Jason Weston and Myle Ott},
@@ -1189,7 +1189,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Yu2022CoCaCC,
     title   = {CoCa: Contrastive Captioners are Image-Text Foundation Models},
     author  = {Jiahui Yu and Zirui Wang and Vijay Vasudevan and Legg Yeung and Mojtaba Seyedhosseini and Yonghui Wu},
@@ -1199,7 +1199,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @misc{wang2021crossformer,
     title   = {CrossFormer: A Versatile Vision Transformer Hinging on Cross-scale Attention},
     author  = {Wenxiao Wang and Lu Yao and Long Chen and Binbin Lin and Deng Cai and Xiaofei He and Wei Liu},
@@ -1210,7 +1210,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{ho2021cascaded,
     title   = {Cascaded Diffusion Models for High Fidelity Image Generation},
     author  = {Ho, Jonathan and Saharia, Chitwan and Chan, William and Fleet, David J and Norouzi, Mohammad and Salimans, Tim},
@@ -1219,7 +1219,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @misc{Saharia2022,
     title   = {Imagen: unprecedented photorealism × deep level of language understanding},
     author  = {Chitwan Saharia*, William Chan*, Saurabh Saxena†, Lala Li†, Jay Whang†, Emily Denton, Seyed Kamyar Seyed Ghasemipour, Burcu Karagol Ayan, S. Sara Mahdavi, Rapha Gontijo Lopes, Tim Salimans, Jonathan Ho†, David Fleet†, Mohammad Norouzi*},
@@ -1227,7 +1227,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Choi2022PerceptionPT,
     title   = {Perception Prioritized Training of Diffusion Models},
     author  = {Jooyoung Choi and Jungbeom Lee and Chaehun Shin and Sungwon Kim and Hyunwoo J. Kim and Sung-Hoon Yoon},
@@ -1237,7 +1237,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Saharia2021PaletteID,
     title   = {Palette: Image-to-Image Diffusion Models},
     author  = {Chitwan Saharia and William Chan and Huiwen Chang and Chris A. Lee and Jonathan Ho and Tim Salimans and David J. Fleet and Mohammad Norouzi},
@@ -1247,7 +1247,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Lugmayr2022RePaintIU,
     title   = {RePaint: Inpainting using Denoising Diffusion Probabilistic Models},
     author  = {Andreas Lugmayr and Martin Danelljan and Andr{\'e}s Romero and Fisher Yu and Radu Timofte and Luc Van Gool},
@@ -1257,7 +1257,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @misc{chen2022analog,
     title   = {Analog Bits: Generating Discrete Data using Diffusion Models with Self-Conditioning},
     author  = {Ting Chen and Ruixiang Zhang and Geoffrey Hinton},
@@ -1268,7 +1268,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Qiao2019WeightS,
     title   = {Weight Standardization},
     author  = {Siyuan Qiao and Huiyu Wang and Chenxi Liu and Wei Shen and Alan Loddon Yuille},
@@ -1278,7 +1278,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},
@@ -1288,7 +1288,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},
@@ -1298,7 +1298,7 @@ For detailed information on training the diffusion prior, please refer to the [d
 }
 ```
 
-```bibtex
+```py
 @article{Salimans2022ProgressiveDF,
     title   = {Progressive Distillation for Fast Sampling of Diffusion Models},
     author  = {Tim Salimans and Jonathan Ho},

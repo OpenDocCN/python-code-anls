@@ -6,7 +6,7 @@ Linformer has been <a href="https://ai.facebook.com/blog/how-facebook-uses-super
 
 ## Install
 
-```bash
+```py
 $ pip install linformer
 ```
 
@@ -14,7 +14,7 @@ $ pip install linformer
 
 Linformer language model
 
-```python
+```py
 import torch
 from linformer import LinformerLM
 
@@ -37,7 +37,7 @@ model(x) # (1, 4096, 20000)
 
 Linformer
 
-```python
+```py
 import torch
 from linformer import Linformer
 
@@ -57,7 +57,7 @@ model(x) # (1, 4096, 512)
 
 Single Self-Attention layer
 
-```python
+```py
 import torch
 from linformer import LinformerSelfAttention
 
@@ -76,7 +76,7 @@ attn(x) # (1, 4096, 512)
 
 Self-Attention layer above receiving contextual keys. The sequence length is validated on the length of the contextual keys instead of the source sequence.
 
-```python
+```py
 import torch
 from linformer import LinformerSelfAttention
 
@@ -96,7 +96,7 @@ attn(x, context) # (1, 2048, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{wang2020linformer,
     title={Linformer: Self-Attention with Linear Complexity},
     author={Sinong Wang and Belinda Z. Li and Madian Khabsa and Han Fang and Hao Ma},
@@ -107,7 +107,7 @@ attn(x, context) # (1, 2048, 512)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},

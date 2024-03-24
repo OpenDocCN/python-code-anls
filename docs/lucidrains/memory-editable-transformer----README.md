@@ -3,7 +3,7 @@ My explorations into <a href="https://arxiv.org/abs/2210.07229">editing the know
 
 ## Citations
 
-```bibtex
+```py
 @article{meng2022memit,
   title   = {Mass Editing Memory in a Transformer},
   author  = {Kevin Meng and Sen Sharma, Arnab and Alex Andonian and Yonatan Belinkov and David Bau},
@@ -12,7 +12,7 @@ My explorations into <a href="https://arxiv.org/abs/2210.07229">editing the know
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Burns2022DiscoveringLK,
   title  = {Discovering Latent Knowledge in Language Models Without Supervision},
   author = {Collin Burns and Hao-Tong Ye and Dan Klein and Jacob Steinhardt},

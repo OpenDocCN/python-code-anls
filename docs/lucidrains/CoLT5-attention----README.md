@@ -20,13 +20,13 @@ Update 2: seems to work well with the improvisation above
 
 ## Install
 
-```bash
+```py
 $ pip install colt5-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 
 from colt5_attention import (
@@ -89,7 +89,7 @@ block_out = block(tokens, mask = mask) # (2, 32768, 512)
 
 Also included a variation of the conditionally routed attention for cross attention, to be tried with long context memories in a transformer-xl
 
-```python
+```py
 import torch
 from colt5_attention import ConditionalRoutedCrossAttention
 
@@ -132,7 +132,7 @@ Currently I am seeing occasional differences between the gradients (as high as 1
 
 ex.
 
-```python
+```py
 import torch
 from colt5_attention import ConditionalRoutedAutoregressiveAttention
 
@@ -164,7 +164,7 @@ Finally, this repository contains a version for image feature maps. Typically a 
 
 ex.
 
-```python
+```py
 import torch
 from colt5_attention import ConditionalRoutedImageAttention
 
@@ -187,7 +187,7 @@ out = attn(fmap)
 
 <a href="https://arxiv.org/abs/2205.01580">Simple ViT</a> using coordinate descent routed attention and feedforward
 
-```python
+```py
 import torch
 from colt5_attention.vit import ConditionalRoutedViT
 
@@ -218,7 +218,7 @@ logits = vit(images) # (1, 1000)
 
 Use a small wrapper around coordinate descent for differentiable `topk`
 
-```python
+```py
 import torch
 from colt5_attention import topk
 
@@ -252,7 +252,7 @@ values, indices, coor_descent_values, gates = topk(x, k = 10, fused = True)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Ainslie2023CoLT5FL,
     title   = {CoLT5: Faster Long-Range Transformers with Conditional Computation},
     author  = {Joshua Ainslie and Tao Lei and Michiel de Jong and Santiago Ontan'on and Siddhartha Brahma and Yury Zemlyanskiy and David Uthus and Mandy Guo and James Lee-Thorp and Yi Tay and Yun-Hsuan Sung and Sumit Sanghai},
@@ -260,7 +260,7 @@ values, indices, coor_descent_values, gates = topk(x, k = 10, fused = True)
 }
 ```
 
-```bibtex
+```py
 @article{Tillet2019TritonAI,
     title   = {Triton: an intermediate language and compiler for tiled neural network computations},
     author  = {Philippe Tillet and H. Kung and D. Cox},
@@ -269,7 +269,7 @@ values, indices, coor_descent_values, gates = topk(x, k = 10, fused = True)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title     = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author    = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -278,7 +278,7 @@ values, indices, coor_descent_values, gates = topk(x, k = 10, fused = True)
 }
 ```
 
-```bibtex
+```py
 @article{Lei2023ConditionalAP,
     title   = {Conditional Adapters: Parameter-efficient Transfer Learning with Fast Inference},
     author  = {Tao Lei and Junwen Bai and Siddhartha Brahma and Joshua Ainslie and Kenton Lee and Yanqi Zhou and Nan Du and Vincent Zhao and Yuexin Wu and Bo Li and Yu Zhang and Ming-Wei Chang},
@@ -288,7 +288,7 @@ values, indices, coor_descent_values, gates = topk(x, k = 10, fused = True)
 }
 ```
 
-```bibtex
+```py
 @article{Beyer2022BetterPV,
     title   = {Better plain ViT baselines for ImageNet-1k},
     author  = {Lucas Beyer and Xiaohua Zhai and Alexander Kolesnikov},

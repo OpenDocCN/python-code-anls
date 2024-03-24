@@ -20,13 +20,13 @@ This repository also contains the ability to <a href="https://arxiv.org/abs/2301
 
 ## Install
 
-```bash
+```py
 $ pip install rin-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 from rin_pytorch import GaussianDiffusion, RIN, Trainer
 
 model = RIN(
@@ -65,7 +65,7 @@ Results will be saved periodically to the `./results` folder
 
 If you would like to experiment with the `RIN` and `GaussianDiffusion` class outside the `Trainer`
 
-```python
+```py
 import torch
 from rin_pytorch import RIN, GaussianDiffusion
 
@@ -101,7 +101,7 @@ sampled_images.shape # (4, 3, 128, 128)
 
 ## Citations
 
-```bibtex
+```py
 @misc{jabri2022scalable,
     title   = {Scalable Adaptive Computation for Iterative Generation}, 
     author  = {Allan Jabri and David Fleet and Ting Chen},
@@ -112,7 +112,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chen2023OnTI,
     title   = {On the Importance of Noise Scheduling for Diffusion Models},
     author  = {Ting Chen},
@@ -120,7 +120,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @article{Salimans2022ProgressiveDF,
     title   = {Progressive Distillation for Fast Sampling of Diffusion Models},
     author  = {Tim Salimans and Jonathan Ho},
@@ -130,7 +130,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -142,7 +142,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hang2023EfficientDT,
     title   = {Efficient Diffusion Training via Min-SNR Weighting Strategy},
     author  = {Tiankai Hang and Shuyang Gu and Chen Li and Jianmin Bao and Dong Chen and Han Hu and Xin Geng and Baining Guo},
@@ -150,7 +150,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -159,7 +159,7 @@ sampled_images.shape # (4, 3, 128, 128)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hoogeboom2023simpleDE,
     title   = {simple diffusion: End-to-end diffusion for high resolution images},
     author  = {Emiel Hoogeboom and Jonathan Heek and Tim Salimans},

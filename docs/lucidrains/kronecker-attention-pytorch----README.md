@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2007.08442">Kronecker Attention
 
 ## Install
 
-```bash
+```py
 $ pip install kronecker_attention_pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from kronecker_attention_pytorch import KroneckerSelfAttention
 
@@ -28,7 +28,7 @@ attn(x) # (1, 32, 256, 512)
 
 ## Citations
 
-```bibtex
+```py
 @article{Gao_2020,
    title={Kronecker Attention Networks},
    url={http://dx.doi.org/10.1145/3394486.3403065},

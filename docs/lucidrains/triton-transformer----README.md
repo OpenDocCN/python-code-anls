@@ -18,13 +18,13 @@ Softmax forwards and backwards
 
 ## Install
 
-```bash
+```py
 $ pip install triton-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from triton_transformer import Transformer
 
@@ -49,7 +49,7 @@ To train, just pass in the labels with the keyword `labels` on forward, and the 
 
 ex. BERT
 
-```python
+```py
 import torch
 from triton_transformer import Transformer
 
@@ -73,7 +73,7 @@ loss.backward()
 
 ## Test - GPT training
 
-```bash
+```py
 $ python train.py
 ```
 
@@ -95,7 +95,7 @@ $ python train.py
 
 ## Citations
 
-```bibtex
+```py
 @article{Tillet2019TritonAI,
     title   = {Triton: an intermediate language and compiler for tiled neural network computations},
     author  = {Philippe Tillet and H. Kung and D. Cox},
@@ -104,7 +104,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{vaswani2017attention,
     title   = {Attention Is All You Need}, 
     author  = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
@@ -115,7 +115,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{so2021primer,
     title   = {Primer: Searching for Efficient Transformers for Language Modeling},
     author  = {David R. So and Wojciech Mańke and Hanxiao Liu and Zihang Dai and Noam Shazeer and Quoc V. Le},
@@ -126,7 +126,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{chowdhery2022PaLM,
   title   = {PaLM: Scaling Language Modeling with Pathways},
   author  = {Chowdhery, Aakanksha et al},

@@ -18,13 +18,13 @@ Update: Deepnorm has been validated at scale in a <a href="https://keg.cs.tsingh
 
 ## Install
 
-```bash
+```py
 $ pip install retro-pytorch
 ````
 
 ## Usage
 
-```python
+```py
 import torch
 from retro_pytorch import RETRO
 
@@ -57,7 +57,7 @@ loss.backward()
 
 The aim of the `TrainingWrapper` is to process a folder of text documents into the necessary memmapped numpy arrays to begin training `RETRO`.
 
-```python
+```py
 import torch
 from retro_pytorch import RETRO, TrainingWrapper
 
@@ -132,7 +132,7 @@ sampled = wrapper.generate(prompt, filter_thres = 0.9, temperature = 1.0) # (1, 
 
 If you wish to force a reprocess of the training data, simply run your script with a `REPROCESS=1` environment flag as so
 
-```bash
+```py
 $ REPROCESS=1 python train.py
 ```
 
@@ -145,7 +145,7 @@ You can use this to easily assemble the data for `RETRO` training, if you do not
 Furthermore, all the functions needed to create the necessary memmapped data is in the sections to follow.
 
 
-```python
+```py
 import torch
 from torch.utils.data import DataLoader
 from retro_pytorch import RETRO, RETRODataset
@@ -237,7 +237,7 @@ This repository will use the default tokenizer (sentencepiece) for the cased ver
 
 ex. masked mean pooled representation
 
-```python
+```py
 from retro_pytorch.retrieval import bert_embed, tokenize
 
 ids = tokenize([
@@ -251,7 +251,7 @@ embeds = bert_embed(ids) # (2, 768) - 768 is hidden dimension of BERT
 ex. CLS token representation
 
 
-```python
+```py
 from retro_pytorch.retrieval import bert_embed, tokenize
 
 ids = tokenize([
@@ -264,7 +264,7 @@ embeds = bert_embed(ids, return_cls_repr = True) # (2, 768)
 
 Create your chunks and chunk start indices (for calculating sequence ranges for autoregressive training) using `text_folder_to_chunks_`
 
-```python
+```py
 from retro_pytorch.retrieval import text_folder_to_chunks_
 
 stats = text_folder_to_chunks_(
@@ -286,7 +286,7 @@ stats = text_folder_to_chunks_(
 
 You can turn your memmapped chunks numpy array into embeddings and a faiss index with one command
 
-```python
+```py
 from retro_pytorch.retrieval import chunks_to_index_and_embed
 
 index, embeddings = chunks_to_index_and_embed(
@@ -304,7 +304,7 @@ neighbor_embeddings = embeddings[indices]       # (1, 2, 768)
 
 You can also directly calculate the nearest neighbor file necessary for training, with `chunks_to_precalculated_knn_` command
 
-```python
+```py
 from retro_pytorch.retrieval import chunks_to_precalculated_knn_
 
 chunks_to_precalculated_knn_(
@@ -322,7 +322,7 @@ chunks_to_precalculated_knn_(
 
 ## Citations
 
-```bibtex
+```py
 @misc{borgeaud2022improving,
     title   = {Improving language models by retrieving from trillions of tokens}, 
     author  = {Sebastian Borgeaud and Arthur Mensch and Jordan Hoffmann and Trevor Cai and Eliza Rutherford and Katie Millican and George van den Driessche and Jean-Baptiste Lespiau and Bogdan Damoc and Aidan Clark and Diego de Las Casas and Aurelia Guy and Jacob Menick and Roman Ring and Tom Hennigan and Saffron Huang and Loren Maggiore and Chris Jones and Albin Cassirer and Andy Brock and Michela Paganini and Geoffrey Irving and Oriol Vinyals and Simon Osindero and Karen Simonyan and Jack W. Rae and Erich Elsen and Laurent Sifre},
@@ -333,7 +333,7 @@ chunks_to_precalculated_knn_(
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -344,7 +344,7 @@ chunks_to_precalculated_knn_(
 }
 ```
 
-```bibtex
+```py
 @article{Wang2022DeepNetST,
     title   = {DeepNet: Scaling Transformers to 1, 000 Layers},
     author  = {Hongyu Wang and Shuming Ma and Li Dong and Shaohan Huang and Dongdong Zhang and Furu Wei},
@@ -354,7 +354,7 @@ chunks_to_precalculated_knn_(
 }
 ```
 
-```bibtex
+```py
 @misc{zhang2021sparse,
     title   = {Sparse Attention with Linear Units},
     author  = {Biao Zhang and Ivan Titov and Rico Sennrich},

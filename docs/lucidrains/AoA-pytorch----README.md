@@ -6,7 +6,7 @@ A Pytorch implementation of the Attention on Attention module, from the paper <a
 
 ## Install
 
-```bash
+```py
 $ pip install aoa-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install aoa-pytorch
 
 Self Attention on Attention
 
-```python
+```py
 import torch
 from aoa_pytorch import AoA
 
@@ -29,7 +29,7 @@ attn(x) + x # (1, 1024, 512)
 
 Guided Attention on Attention
 
-```python
+```py
 ```python
 import torch
 from aoa_pytorch import AoA
@@ -47,7 +47,7 @@ attn(x, context = context) + x # (1, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{rahman2020improved,
     title   = {An Improved Attention for Visual Question Answering}, 
     author  = {Tanzila Rahman and Shih-Han Chou and Leonid Sigal and Giuseppe Carenini},
@@ -58,7 +58,7 @@ attn(x, context = context) + x # (1, 1024, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{huang2019attention,
     title   = {Attention on Attention for Image Captioning}, 
     author  = {Lun Huang and Wenmin Wang and Jie Chen and Xiao-Yong Wei},

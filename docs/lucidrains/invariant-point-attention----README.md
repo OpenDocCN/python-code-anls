@@ -8,13 +8,13 @@ Implementation of Invariant Point Attention as a standalone module, which was us
 
 ## Install
 
-```bash
+```py
 $ pip install invariant-point-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from einops import repeat
 from invariant_point_attention import InvariantPointAttention
@@ -48,7 +48,7 @@ attn_out.shape # (1, 256, 64)
 
 You can also use this module without the pairwise representations, which is very specific to the Alphafold2 architecture.
 
-```python
+```py
 import torch
 from einops import repeat
 from invariant_point_attention import InvariantPointAttention
@@ -77,7 +77,7 @@ attn_out.shape # (1, 256, 64)
 
 You can also use one IPA-based transformer block, which is an IPA followed by a feedforward. By default it will use post-layernorm as done in the official code, but you can also try pre-layernorm by setting `post_norm = False`
 
-```python
+```py
 import torch
 from torch import nn
 from einops import repeat
@@ -118,13 +118,13 @@ quaternion_update, translation_update = updates.chunk(2, dim = -1) # (1, 256, 3)
 
 To run IPA on a toy task for denoising protein backbone coordinates, first install `pytorch3d` by running
 
-```bash
+```py
 $ conda install pytorch3d -c pytorch3d
 ```
 
 Then you need to install `sidechainnet` with
 
-```bash
+```py
 $ pip install sidechainnet
 ```
 
@@ -136,7 +136,7 @@ $ python denoise.py
 
 ## Citations
 
-```bibtex
+```py
 @Article{AlphaFold2021,
     author  = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and {\v{Z}}{\'\i}dek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A A and Ballard, Andrew J and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
     journal = {Nature},

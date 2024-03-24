@@ -6,7 +6,7 @@ Implementation of <a href="https://arxiv.org/abs/2105.08050">gMLP</a>, an all-ML
 
 ## Install
 
-```bash
+```py
 $ pip install g-mlp-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install g-mlp-pytorch
 
 For masked language modelling
 
-```python
+```py
 import torch
 from torch import nn
 from g_mlp_pytorch import gMLP
@@ -34,7 +34,7 @@ logits = model(x) # (1, 256, 20000)
 
 For image classification
 
-```python
+```py
 import torch
 from g_mlp_pytorch import gMLPVision
 
@@ -52,7 +52,7 @@ logits = model(img) # (1, 1000)
 
 You can also add a tiny amount of attention (one-headed) to boost performance, as mentioned in the paper as `aMLP`, with the addition of one extra keyword `attn_dim`. This applies to both `gMLPVision` and `gMLP`
 
-```python
+```py
 import torch
 from g_mlp_pytorch import gMLPVision
 
@@ -71,7 +71,7 @@ pred = model(img) # (1, 1000)
 
 Non-square images and patch sizes
 
-```python
+```py
 import torch
 from g_mlp_pytorch import gMLPVision
 
@@ -92,7 +92,7 @@ pred = model(img) # (1, 1000)
 
 A independent researcher proposes using a multi-headed approach for gMLPs in <a href="https://zhuanlan.zhihu.com/p/395005917">a blogpost on Zhihu</a>. To do so, just set `heads` to be greater than `1`
 
-```python
+```py
 import torch
 from torch import nn
 from g_mlp_pytorch import gMLP
@@ -113,7 +113,7 @@ logits = model(x) # (1, 256, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{liu2021pay,
     title   = {Pay Attention to MLPs}, 
     author  = {Hanxiao Liu and Zihang Dai and David R. So and Quoc V. Le},
@@ -124,7 +124,7 @@ logits = model(x) # (1, 256, 20000)
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},

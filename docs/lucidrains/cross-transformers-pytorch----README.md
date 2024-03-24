@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2007.11498">Cross Transformer</
 
 ## Install
 
-```bash
+```py
 $ pip install cross-transformers-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -44,7 +44,7 @@ loss.backward()
 
 ## Citations
 
-```bibtex
+```py
 @misc{doersch2020crosstransformers,
     title={CrossTransformers: spatially-aware few-shot transfer}, 
     author={Carl Doersch and Ankush Gupta and Andrew Zisserman},

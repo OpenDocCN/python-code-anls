@@ -8,13 +8,13 @@ Update: Three researchers have independently reported that the repository works 
 
 ## Install
 
-```bash
+```py
 $ pip install marge-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 import numpy as np
 from torch.utils.data import DataLoader
@@ -86,7 +86,7 @@ for ind, data in enumerate(dl):
 
 Save your model after much training
 
-```python
+```py
 torch.save(model, f'./trained-model.pt')
 ```
 
@@ -94,7 +94,7 @@ torch.save(model, f'./trained-model.pt')
 
 If you would like the target and evidence documents to be from different sets, you just have to pass in up to four additional keyword arguments, as shown below.
 
-```python
+```py
 trainer = TrainingWrapper(
     model,
     num_documents = NUM_DOCS,
@@ -115,7 +115,7 @@ trainer = TrainingWrapper(
 
 You can sample from the decoder with the following instructions
 
-```python
+```py
 # some random evidence from the dataset
 # or provide your own in the dimensions (b x num_evidences x seq_len)
 *_, evidence, mask = trainer.dataset[0:1]
@@ -133,7 +133,7 @@ samples = model.generate(prime, 1024, evidence, mask = mask, similarities = doc_
 
 ## Citations
 
-```bibtex
+```py
 @misc{lewis2020pretraining,
     title={Pre-training via Paraphrasing},
     author={Mike Lewis and Marjan Ghazvininejad and Gargi Ghosh and Armen Aghajanyan and Sida Wang and Luke Zettlemoyer},
@@ -144,7 +144,7 @@ samples = model.generate(prime, 1024, evidence, mask = mask, similarities = doc_
 }
 ```
 
-```bibtex
+```py
 @misc{komatsuzaki2020current,
     title={Current Limitations of Language Models: What You Need is Retrieval},
     author={Aran Komatsuzaki},
@@ -155,7 +155,7 @@ samples = model.generate(prime, 1024, evidence, mask = mask, similarities = doc_
 }
 ```
 
-```bibtex
+```py
 @misc{izacard2020distilling,
     title={Distilling Knowledge from Reader to Retriever for Question Answering},
     author={Gautier Izacard and Edouard Grave},

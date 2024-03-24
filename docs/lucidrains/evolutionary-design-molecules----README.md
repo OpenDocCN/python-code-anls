@@ -10,7 +10,7 @@ May also include a policy network for choosing the parents, as proposed in the p
 
 ## Citations
 
-```bibtex
+```py
 @article{article,
 	author 	= {Kwon, Youngchun and Kang, Seokho and Choi, Youn-Suk and Kim, Inkoo},
 	year 	= {2021},
@@ -21,7 +21,7 @@ May also include a policy network for choosing the parents, as proposed in the p
 }
 ```
 
-```bibtex
+```py
 @article{Yu2023LanguageMB,
 	title 	= {Language Model Beats Diffusion - Tokenizer is Key to Visual Generation},
 	author 	= {Lijun Yu and Jos'e Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David C. Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},

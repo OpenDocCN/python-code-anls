@@ -8,13 +8,13 @@ I will be keeping around the logic for Q-learning on single action just for fina
 
 ## Install
 
-```bash
+```py
 $ pip install q-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 
 from q_transformer import (
@@ -134,7 +134,7 @@ actions = model.get_optimal_actions(video, instructions)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{qtransformer,
     title   = {Q-Transformer: Scalable Offline Reinforcement Learning via Autoregressive Q-Functions},
     authors = {Yevgen Chebotar and Quan Vuong and Alex Irpan and Karol Hausman and Fei Xia and Yao Lu and Aviral Kumar and Tianhe Yu and Alexander Herzog and Karl Pertsch and Keerthana Gopalakrishnan and Julian Ibarz and Ofir Nachum and Sumedh Sontakke and Grecia Salazar and Huong T Tran and Jodilyn Peralta and Clayton Tan and Deeksha Manjunath and Jaspiar Singht and Brianna Zitkovich and Tomas Jackson and Kanishka Rao and Chelsea Finn and Sergey Levine},
@@ -143,7 +143,7 @@ actions = model.get_optimal_actions(video, instructions)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},

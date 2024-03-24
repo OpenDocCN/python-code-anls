@@ -10,7 +10,7 @@ The results speak for itself in their <a href="https://www.youtube.com/watch?v=z
 
 ## Install
 
-```bash
+```py
 $ pip install anymal-belief-state-encoder-decoder-pytorch
 ```
 
@@ -18,7 +18,7 @@ $ pip install anymal-belief-state-encoder-decoder-pytorch
 
 Teacher
 
-```python
+```py
 import torch
 from anymal_belief_state_encoder_decoder_pytorch import Teacher
 
@@ -39,7 +39,7 @@ action_logits, values = teacher(proprio, extero, privileged, return_values = Tru
 
 Student
 
-```python
+```py
 import torch
 from anymal_belief_state_encoder_decoder_pytorch import Student
 
@@ -65,7 +65,7 @@ action_logits, hiddens = student(proprio, extero, hiddens) # (1, 10), (2, 1, 50)
 
 Full Anymal (which contains both Teacher and Student)
 
-```python
+```py
 import torch
 from anymal_belief_state_encoder_decoder_pytorch import Anymal
 
@@ -108,7 +108,7 @@ action = dist.sample()
 
 PPO training of the Teacher (using a mock environment, this needs to be substituted with a environment wrapper around simulator)
 
-```python
+```py
 import torch
 from anymal_belief_state_encoder_decoder_pytorch import Anymal, PPO
 from anymal_belief_state_encoder_decoder_pytorch.ppo import MockEnv
@@ -152,7 +152,7 @@ torch.save(anymal.state_dict(), './anymal-with-trained-teacher.pt')
 
 To train the student
 
-```python
+```py
 import torch
 from anymal_belief_state_encoder_decoder_pytorch import Anymal
 from anymal_belief_state_encoder_decoder_pytorch.trainer import StudentTrainer
@@ -215,7 +215,7 @@ But you probably haven't beaten a real quadripedal "anymal" just yet :)
 
 ## Citations
 
-```bibtex
+```py
 @article{2022,
   title     = {Learning robust perceptive locomotion for quadrupedal robots in the wild},
   url       = {http://dx.doi.org/10.1126/scirobotics.abk2822},

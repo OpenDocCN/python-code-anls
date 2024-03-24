@@ -8,7 +8,7 @@ I am thinking whether it makes more sense to modify Marge (https://github.com/lu
 
 ## Citations
 
-```bibtex
+```py
 @misc{izacard2020distilling,
     title={Distilling Knowledge from Reader to Retriever for Question Answering}, 
     author={Gautier Izacard and Edouard Grave},

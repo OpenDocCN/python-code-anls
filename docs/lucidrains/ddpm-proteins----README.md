@@ -10,7 +10,7 @@ This specific repository will be using a heavily modifying version of the U-net 
 
 ## Install
 
-```bash
+```py
 $ pip install ddpm-proteins
 ```
 
@@ -20,25 +20,25 @@ We are using <a href="https://wandb.ai">weights & biases</a> for experimental tr
 
 First you need to login
 
-```bash
+```py
 $ wandb login
 ```
 
 Then you will need to cache all the MSA attention embeddings by first running. For some reason, the below needs to be done multiple times to cache all the proteins correctly (it does work though). I'll get around to fixing this.
 
-```bash
+```py
 $ python cache.py
 ```
 
 Finally, you can begin training by invoking
 
-```bash
+```py
 $ python train.py
 ```
 
 If you would like to clear or recompute the cache (ie after changing the fetch MSA function), just run
 
-```bash
+```py
 $ rm -rf ~/.cache.ddpm-proteins
 ```
 
@@ -52,7 +52,7 @@ $ rm -rf ~/.cache.ddpm-proteins
 
 ## Usage
 
-```python
+```py
 import torch
 from ddpm_proteins import Unet, GaussianDiffusion
 
@@ -79,7 +79,7 @@ sampled_images.shape # (4, 3, 128, 128)
 
 Or, if you simply want to pass in a folder name and the desired image dimensions, you can use the `Trainer` class to easily train a model.
 
-```python
+```py
 from ddpm_proteins import Unet, GaussianDiffusion, Trainer
 
 model = Unet(
@@ -112,7 +112,7 @@ Samples and model checkpoints will be logged to `./results` periodically
 
 ## Citations
 
-```bibtex
+```py
 @misc{ho2020denoising,
     title   = {Denoising Diffusion Probabilistic Models},
     author  = {Jonathan Ho and Ajay Jain and Pieter Abbeel},
@@ -123,7 +123,7 @@ Samples and model checkpoints will be logged to `./results` periodically
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2021improved,
     title   = {Improved Denoising Diffusion Probabilistic Models},
     author  = {Anonymous},
@@ -134,7 +134,7 @@ Samples and model checkpoints will be logged to `./results` periodically
 }
 ```
 
-```bibtex
+```py
 @article{Rao2021.02.12.430858,
     author  = {Rao, Roshan and Liu, Jason and Verkuil, Robert and Meier, Joshua and Canny, John F. and Abbeel, Pieter and Sercu, Tom and Rives, Alexander},
     title   = {MSA Transformer},

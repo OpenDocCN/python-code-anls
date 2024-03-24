@@ -8,7 +8,7 @@ Standalone <a href="https://arxiv.org/abs/1907.05242">Product Key Memory</a> mod
 
 ## Install
 
-```bash
+```py
 $ pip install product-key-memory
 ```
 
@@ -16,7 +16,7 @@ $ pip install product-key-memory
 
 Replace the feedforwards in a Transformer with the following
 
-```python
+```py
 import torch
 from product_key_memory import PKM
 
@@ -37,7 +37,7 @@ values = pkm(x, input_mask = mask) # (1, 1024, 512)
 
 To give different learning rates to the value parameters of the product-key-memory network, use the following helper function.
 
-```python
+```py
 from torch.optim import Adam
 from product_key_memory import fetch_pkm_value_parameters
 
@@ -52,7 +52,7 @@ optim = Adam([
 
 Or, if product-key-memory parameters are the only other parameters you have a different learning rate for
 
-```python
+```py
 from torch.optim import Adam
 from product_key_memory import fetch_optimizer_parameters
 
@@ -74,7 +74,7 @@ Special thanks go to <a href="https://github.com/AranKomat">Aran</a> for encoura
 
 ## Citations
 
-```bibtex
+```py
 @misc{lample2019large,
     title   = {Large Memory Layers with Product Keys},
     author  = {Guillaume Lample and Alexandre Sablayrolles and Marc'Aurelio Ranzato and Ludovic Denoyer and Hervé Jégou},
@@ -84,7 +84,7 @@ Special thanks go to <a href="https://github.com/AranKomat">Aran</a> for encoura
 }
 ```
 
-```bibtex
+```py
 @misc{liu2020evolving,
     title   = {Evolving Normalization-Activation Layers},
     author  = {Hanxiao Liu and Andrew Brock and Karen Simonyan and Quoc V. Le},
@@ -94,7 +94,7 @@ Special thanks go to <a href="https://github.com/AranKomat">Aran</a> for encoura
 }
 ```
 
-```bibtex
+```py
 @article{Shen2023ASO,
     title   = {A Study on ReLU and Softmax in Transformer},
     author  = {Kai Shen and Junliang Guo and Xuejiao Tan and Siliang Tang and Rui Wang and Jiang Bian},

@@ -20,7 +20,7 @@ The gist of the paper comes down to, take a SOTA text-to-image model (here they 
 
 ## Install
 
-```bash
+```py
 $ pip install make-a-video-pytorch
 ```
 
@@ -28,7 +28,7 @@ $ pip install make-a-video-pytorch
 
 Passing in video features
 
-```python
+```py
 import torch
 from make_a_video_pytorch import PseudoConv3d, SpatioTemporalAttention
 
@@ -51,7 +51,7 @@ attn_out = attn(video) # (1, 256, 8, 16, 16)
 
 Passing in images (if one were to pretrain on images first), both temporal convolution and attention will be automatically skipped. In other words, you can use this straightforwardly in your 2d Unet and then port it over to a 3d Unet once that phase of the training is done. The temporal modules are initialized to output identity as the paper had done.
 
-```python
+```py
 import torch
 from make_a_video_pytorch import PseudoConv3d, SpatioTemporalAttention
 
@@ -74,7 +74,7 @@ attn_out = attn(images) # (1, 256, 16, 16)
 
 You can also control the two modules so that when fed 3-dimensional features, it only does training spatially
 
-```python
+```py
 import torch
 from make_a_video_pytorch import PseudoConv3d, SpatioTemporalAttention
 
@@ -100,7 +100,7 @@ attn_out = attn(video, enable_time = False) # (1, 256, 8, 16, 16)
 Full `SpaceTimeUnet` that is agnostic to images or video training, and where even if video is passed in, time can be ignored
 
 
-```python
+```py
 import torch
 from make_a_video_pytorch import SpaceTimeUnet
 
@@ -145,14 +145,14 @@ video_as_images_out = unet(video, enable_time = False)
 
 ## Citations
 
-```bibtex
+```py
 @misc{Singer2022,
     author  = {Uriel Singer},
     url     = {https://makeavideo.studio/Make-A-Video.pdf}
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},
@@ -162,7 +162,7 @@ video_as_images_out = unet(video, enable_time = False)
 }
 ```
 
-```bibtex
+```py
 @article{Dong2021AttentionIN,
     title   = {Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth},
     author  = {Yihe Dong and Jean-Baptiste Cordonnier and Andreas Loukas},
@@ -172,7 +172,7 @@ video_as_images_out = unet(video, enable_time = False)
 }
 ```
 
-```bibtex
+```py
 @article{Zhang2021TokenST,
     title   = {Token Shift Transformer for Video Classification},
     author  = {Hao Zhang and Y. Hao and Chong-Wah Ngo},
@@ -181,7 +181,7 @@ video_as_images_out = unet(video, enable_time = False)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{shleifer2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Sam Shleifer and Myle Ott},
@@ -191,7 +191,7 @@ video_as_images_out = unet(video, enable_time = False)
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},

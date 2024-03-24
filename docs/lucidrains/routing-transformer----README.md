@@ -10,7 +10,7 @@ A fully featured implementation of <a href="https://arxiv.org/pdf/2003.05997.pdf
 
 ### Install
 
-```bash
+```py
 $ pip install routing_transformer
 ```
 
@@ -18,7 +18,7 @@ $ pip install routing_transformer
 
 A simple language model
 
-```python
+```py
 import torch
 from routing_transformer import RoutingTransformerLM
 
@@ -62,7 +62,7 @@ aux_loss.backward() # add auxiliary loss to main loss before backprop
 
 A simple transformer
 
-```python
+```py
 import torch
 from routing_transformer import RoutingTransformer
 
@@ -86,7 +86,7 @@ aux_loss.backward() # add auxiliary loss to main loss before backprop
 
 To use a full encoder, decoder, simply import the `RoutingTransformerEncDec` class. Save for the `dim` keyword, all other keywords will be either prepended with `enc_` or `dec_` for the encoder and decoder `RoutingTransformerLM` class respectively.
 
-```python
+```py
 import torch
 from routing_transformer import RoutingTransformerEncDec
 
@@ -141,7 +141,7 @@ The weight of the auxiliary loss that encourages tokens to get closer (commit) t
 
 The following instructions will allow you to update the kmeans manually. By default the kmeans are updated automatically on every backward pass.
 
-```python
+```py
 import torch
 from routing_transformer import RoutingTransformerLM, AutoregressiveWrapper
 
@@ -173,7 +173,7 @@ This architecture has trouble generalizing to shorter sequence lengths when deco
 If you are priming the network with the full sequence length at start, then you will not face this problem, and you can skip this training procedure.
 
 
-```python
+```py
 import torch
 from routing_transformer import RoutingTransformerLM, AutoregressiveWrapper
 
@@ -199,7 +199,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 
 ## Citation
 
-```bibtex
+```py
 @misc{roy*2020efficient,
     title   = {Efficient Content-Based Sparse Attention with Routing Transformers},
     author  = {Aurko Roy* and Mohammad Taghi Saffar* and David Grangier and Ashish Vaswani},
@@ -208,7 +208,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -217,7 +217,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{kitaev2020reformer,
     title       = {Reformer: The Efficient Transformer},
     author      = {Nikita Kitaev and Lukasz Kaiser and Anselm Levskaya},
@@ -227,7 +227,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{fan2020reducing,
     title     ={Reducing Transformer Depth on Demand with Structured Dropout},
     author    ={Angela Fan and Edouard Grave and Armand Joulin},
@@ -237,7 +237,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{lan2019albert,
     title       = {ALBERT: A Lite BERT for Self-supervised Learning of Language Representations},
     author      = {Zhenzhong Lan and Mingda Chen and Sebastian Goodman and Kevin Gimpel and Piyush Sharma and Radu Soricut},
@@ -246,7 +246,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{lample2019large,
     title   = {Large Memory Layers with Product Keys},
     author  = {Guillaume Lample and Alexandre Sablayrolles and Marc'Aurelio Ranzato and Ludovic Denoyer and Hervé Jégou},
@@ -256,7 +256,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @article{DBLP:journals/corr/abs-1907-01470,
     author    = {Sainbayar Sukhbaatar and
                Edouard Grave and
@@ -271,7 +271,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{bhojanapalli2020lowrank,
     title   = {Low-Rank Bottleneck in Multi-head Attention Models},
     author  = {Srinadh Bhojanapalli and Chulhee Yun and Ankit Singh Rawat and Sashank J. Reddi and Sanjiv Kumar},
@@ -280,7 +280,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @article{1910.05895,
     author  = {Toan Q. Nguyen and Julian Salazar},
     title   = {Transformers without Tears: Improving the Normalization of Self-Attention},
@@ -290,7 +290,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{bachlechner2020rezero,
     title   = {ReZero is All You Need: Fast Convergence at Large Depth},
     author  = {Thomas Bachlechner and Bodhisattwa Prasad Majumder and Huanru Henry Mao and Garrison W. Cottrell and Julian McAuley},
@@ -299,7 +299,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @misc{vaswani2017attention,
     title   = {Attention Is All You Need},
     author  = {Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin},
@@ -310,7 +310,7 @@ Special thanks to <a href="https://github.com/AranKomat">Aran Komatsuzaki</a> fo
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author       = {PENG Bo},
     title        = {BlinkDL/RWKV-LM: 0.01},

@@ -8,13 +8,13 @@ This repository deviates from the paper slightly, using a hybrid attention acros
 
 ## Install
 
-```bash
+```py
 $ pip install memorizing-transformers-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from memorizing_transformers_pytorch import MemorizingTransformer
 
@@ -40,13 +40,13 @@ You can make the KNN memories read-only by setting `add_knn_memory` on forward t
 
 ex.
 
-```python
+```py
 logits = model(data, knn_memories = knn_memories, add_knn_memory = False) # knn memories will not be updated
 ```
 
 With Transformer-XL memories (only the memories that will be discarded will be added to the KNN memory)
 
-```python
+```py
 import torch
 from memorizing_transformers_pytorch import MemorizingTransformer
 
@@ -80,7 +80,7 @@ with model.knn_memories_context(batch_size = 2) as knn_memories:
 
 This repository contains a wrapper around Faiss that can automatically store and retrieve key / values
 
-```python
+```py
 import torch
 from memorizing_transformers_pytorch import KNNMemory
 
@@ -105,7 +105,7 @@ key_values, mask = memory.search(torch.randn(2, 512, 64), topk = 32)
 
 Enwik8 training
 
-```bash
+```py
 $ python train.py
 ```
 
@@ -121,7 +121,7 @@ $ python train.py
 
 ## Citations
 
-```bibtex
+```py
 @article{wu2022memorizing,
   title   = {Memorizing transformers},
   author  = {Wu, Yuhuai and Rabe, Markus N and Hutchins, DeLesley and Szegedy, Christian},
@@ -130,7 +130,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{Shazeer2019FastTD,
   title   = {Fast Transformer Decoding: One Write-Head is All You Need},
   author  = {Noam M. Shazeer},
@@ -140,7 +140,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @Article{AlphaFold2021,
   author  = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and {\v{Z}}{\'\i}dek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A A and Ballard, Andrew J and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
   journal = {Nature},
@@ -151,7 +151,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Rae2020DoTN,
   title   = {Do Transformers Need Deep Long-Range Memory?},
   author  = {Jack W. Rae and Ali Razavi},
@@ -160,7 +160,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021erniedoc,
   title   = {ERNIE-Doc: A Retrospective Long-Document Modeling Transformer},
   author  = {Siyu Ding and Junyuan Shang and Shuohuan Wang and Yu Sun and Hao Tian and Hua Wu and Haifeng Wang},
@@ -171,7 +171,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{henry2020querykey,
     title   = {Query-Key Normalization for Transformers},
     author  = {Alex Henry and Prudhvi Raj Dachapally and Shubham Pawar and Yuxuan Chen},

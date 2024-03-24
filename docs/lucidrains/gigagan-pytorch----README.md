@@ -28,7 +28,7 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install gigagan-pytorch
 ```
 
@@ -36,7 +36,7 @@ $ pip install gigagan-pytorch
 
 Simple unconditional GAN, for starters
 
-```python
+```py
 import torch
 
 from gigagan_pytorch import (
@@ -94,7 +94,7 @@ images = gan.generate(batch_size = 4) # (4, 3, 256, 256)
 
 For unconditional Unet Upsampler
 
-```python
+```py
 import torch
 from gigagan_pytorch import (
     GigaGAN,
@@ -171,13 +171,13 @@ The `GigaGAN` class is now equipped with <a href="https://huggingface.co/docs/ac
 
 At the project root directory, where the training script is, run
 
-```python
+```py
 $ accelerate config
 ```
 
 Then, in the same directory
 
-```python
+```py
 $ accelerate launch train.py
 ```
 
@@ -229,7 +229,7 @@ $ accelerate launch train.py
 
 ## Citations
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2303.05511,
     url     = {https://arxiv.org/abs/2303.05511},
     author  = {Kang, Minguk and Zhu, Jun-Yan and Zhang, Richard and Park, Jaesik and Shechtman, Eli and Paris, Sylvain and Park, Taesung},  
@@ -240,7 +240,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @article{Liu2021TowardsFA,
     title   = {Towards Faster and Stabilized GAN Training for High-fidelity Few-shot Image Synthesis},
     author  = {Bingchen Liu and Yizhe Zhu and Kunpeng Song and A. Elgammal},
@@ -250,7 +250,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -259,7 +259,7 @@ $ accelerate launch train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Karras2020ada,
     title     = {Training Generative Adversarial Networks with Limited Data},
     author    = {Tero Karras and Miika Aittala and Janne Hellsten and Samuli Laine and Jaakko Lehtinen and Timo Aila},

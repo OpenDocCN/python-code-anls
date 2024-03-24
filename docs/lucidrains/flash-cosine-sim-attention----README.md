@@ -34,7 +34,7 @@ Older graphic cards without enough shared memory, one will have to gauge the tra
 
 ## Install
 
-```bash
+```py
 $ pip install flash-cosine-sim-attention
 ```
 
@@ -42,7 +42,7 @@ $ pip install flash-cosine-sim-attention
 
 Self Attention
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -55,7 +55,7 @@ out = flash_cosine_sim_attention(q, k, v)  # (1, 8, 1024, 64)
 
 Cross attention
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -68,7 +68,7 @@ out = flash_cosine_sim_attention(q, k, v) # (1, 8, 1024, 64)
 
 With key / value masking
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -83,7 +83,7 @@ out = flash_cosine_sim_attention(q, k, v, mask = mask) # (1, 8, 1024, 64)
 
 Autoregressive
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -98,7 +98,7 @@ out = flash_cosine_sim_attention(q, k, v, causal = True)  # (4, 8, 1024, 64)
 
 Single-headed key / values (Shazeer et al & used in PaLM)
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -113,7 +113,7 @@ If you need to do operations on the queries and keys in between the l2norm and t
 
 ex.
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention, l2norm_tensors
 
@@ -131,7 +131,7 @@ out = flash_cosine_sim_attention(q, k, v, l2norm_qk = False)  # (4, 8, 1024, 64)
 
 Cross attention with causal works as expected - (caching of keys and values in autoregressive during inference, or transformer-xl like training)
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -144,7 +144,7 @@ out = flash_cosine_sim_attention(q, k, v, causal = True) # (1, 8, 1024, 64)
 
 If you have batch and head dimensions merged, that is ok
 
-```python
+```py
 import torch
 from flash_cosine_sim_attention import flash_cosine_sim_attention
 
@@ -209,7 +209,7 @@ Update 4: The improvement in performance seen in Boris' experiments are likely d
 
 For testing output and gradients are equal for non-autoregressive and autoregressive scenarios
 
-```bash
+```py
 $ python setup.py test
 ```
 
@@ -217,13 +217,13 @@ $ python setup.py test
 
 Make sure to first install the CUDA kernel
 
-```python
+```py
 $ python setup.py install
 ```
 
 Then
 
-```python
+```py
 $ python benchmark.py
 ```
 
@@ -235,7 +235,7 @@ For only benchmarking forwards or backwards, append either `--only-forwards` or 
 
 Forward
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -260,7 +260,7 @@ seq_len: 8192   slower: 0.00x   kernel: 42.61ms baseline: oom
 
 Backwards - still needs work
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -285,7 +285,7 @@ seq_len: 8192   slower: 0.00x   kernel: 101.02ms    baseline: oom
 
 Forward & Backwards - F32 is definitely slower
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64  
 ------------------------------------------------------------
@@ -310,7 +310,7 @@ seq_len: 8192   slower: 0.00x   kernel: 143.13ms    baseline: oom
 
 For autoregressive, a clear win `python benchmark.py --causal`
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64  
 ------------------------------------------------------------
@@ -336,7 +336,7 @@ seq_len: 8192   slower: 0.00x   kernel: 75.25ms baseline: oom
 
 For variable length sequences with masking, also a clear win. Assume on average 25% of tokens masked out `python benchmark.py --mask-prob 0.25`
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -369,7 +369,7 @@ A100 is still a work in progress. Shared memory is not fully exploited yet. Stra
 
 Forwards
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -394,7 +394,7 @@ seq_len: 8192   slower: 1.07x   kernel: 24.80ms baseline: 23.15ms
 
 Backwards
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -419,7 +419,7 @@ seq_len: 8192   slower: 1.34x   kernel: 53.90ms baseline: 40.28ms
 
 Forwards & Backwards
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64
 ------------------------------------------------------------
@@ -444,7 +444,7 @@ seq_len: 8192   slower: 1.24x   kernel: 78.75ms baseline: 63.45ms
 
 Autoregressive
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64  
 ------------------------------------------------------------
@@ -469,7 +469,7 @@ seq_len: 8192   slower: 0.41x   kernel: 40.58ms baseline: 99.14ms
 
 Variable lengthed sequences (up to 25% tokens masked out)
 
-```bash
+```py
 ------------------------------------------------------------
 float32     batch: 4    heads: 8    dim 64  
 ------------------------------------------------------------
@@ -494,19 +494,19 @@ seq_len: 8192   slower: 0.78x   kernel: 79.45ms baseline: 101.83ms
 
 ## Training a small GPT on Enwik8
 
-```bash
+```py
 $ make train
 ```
 
 Try 8192 sequence length. It'll be slow but will work (normal attention will break at > 2048, you'll see this if you remove the `--use-cuda-kernel` flag)
 
-```python
+```py
 $ python train.py --seq-len 8192 --use-cuda-kernel
 ```
 
 ## Citations
 
-```bibtex
+```py
 @article{Dao2022FlashAttentionFA,
     title   = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
     author  = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and Christopher R'e},
@@ -516,7 +516,7 @@ $ python train.py --seq-len 8192 --use-cuda-kernel
 }
 ```
 
-```bibtex
+```py
 @misc{rabe2021selfattention,
     title   = {Self-attention Does Not Need $O(n^2)$ Memory}, 
     author  = {Markus N. Rabe and Charles Staats},
@@ -527,7 +527,7 @@ $ python train.py --seq-len 8192 --use-cuda-kernel
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Henry2020QueryKeyNF,
     title   = {Query-Key Normalization for Transformers},
     author  = {Alex Henry and Prudhvi Raj Dachapally and Shubham Vivek Pawar and Yuxuan Chen},
@@ -536,7 +536,7 @@ $ python train.py --seq-len 8192 --use-cuda-kernel
 }
 ```
 
-```bibtex
+```py
 @article{Wang2022DeepNetST,
     title   = {DeepNet: Scaling Transformers to 1, 000 Layers},
     author  = {Hongyu Wang and Shuming Ma and Li Dong and Shaohan Huang and Dongdong Zhang and Furu Wei},

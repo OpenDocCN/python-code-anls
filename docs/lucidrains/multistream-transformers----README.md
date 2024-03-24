@@ -14,7 +14,7 @@ $ pip install multistream-transformers
 
 ## Usage
 
-```python
+```py
 import torch
 from multistream_transformers import MultistreamTransformer
 
@@ -35,7 +35,7 @@ logits = model(x, mask = mask) # (2, 1024, 256)
 
 ## Citations
 
-```bibtex
+```py
 @misc{burtsev2021multistream,
     title   = {Multi-Stream Transformers}, 
     author  = {Mikhail Burtsev and Anna Rumshisky},

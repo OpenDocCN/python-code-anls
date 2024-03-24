@@ -8,7 +8,7 @@ Update: from now on, you should just be using the <a href="https://pytorch.org/d
 
 ## Install
 
-```bash
+```py
 $ pip install memory-efficient-attention-pytorch
 ```
 
@@ -16,7 +16,7 @@ $ pip install memory-efficient-attention-pytorch
 
 For autoregressive language model
 
-```python
+```py
 import torch
 from memory_efficient_attention_pytorch import Attention
 
@@ -36,7 +36,7 @@ out = attn(x) # (1, 65536, 512)
 
 Cross attention
 
-```python
+```py
 import torch
 from memory_efficient_attention_pytorch import Attention
 
@@ -58,7 +58,7 @@ out = cross_attn(x, context = context, mask = mask) # (1, 65536, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{rabe2021selfattention,
     title   = {Self-attention Does Not Need $O(n^2)$ Memory}, 
     author  = {Markus N. Rabe and Charles Staats},
@@ -69,7 +69,7 @@ out = cross_attn(x, context = context, mask = mask) # (1, 65536, 512)
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -80,7 +80,7 @@ out = cross_attn(x, context = context, mask = mask) # (1, 65536, 512)
 }
 ```
 
-```bibtex
+```py
 @article{Dao2022FlashAttentionFA,
     title   = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
     author  = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and Christopher R'e},
@@ -90,7 +90,7 @@ out = cross_attn(x, context = context, mask = mask) # (1, 65536, 512)
 }
 ```
 
-```bibtex
+```py
 @article{dao2023flashattention2,
   title     = {Flash{A}ttention-2: Faster Attention with Better Parallelism and Work Partitioning,
   author    = {Dao, Tri},

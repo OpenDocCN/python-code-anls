@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2110.09419">Compositional Atten
 
 ## Install
 
-```bash
+```py
 $ pip install compositional-attention-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from compositional_attention_pytorch import CompositionalAttention
 
@@ -32,7 +32,7 @@ out = attn(tokens, mask = mask) # (1, 512, 1024)
 
 ## Citations
 
-```bibtex
+```py
 @article{Mittal2021CompositionalAD,
     title   = {Compositional Attention: Disentangling Search and Retrieval},
     author  = {Sarthak Mittal and Sharath Chandra Raparthy and Irina Rish and Yoshua Bengio and Guillaume Lajoie},

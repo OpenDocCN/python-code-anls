@@ -4,7 +4,7 @@ a simple neural network in coffeescript
 
 # running
 
-```bash
+```py
 $ npm install
 $ npm install coffee-script -g
 $ coffee nn.coffee

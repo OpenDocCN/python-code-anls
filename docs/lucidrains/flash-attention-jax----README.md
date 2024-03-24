@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2205.14135">Flash Attention</a>
 
 ## Install
 
-```bash
+```py
 $ pip install flash-attention-jax
 ```
 
 ## Usage
 
-```python
+```py
 from jax import random
 from flash_attention_jax import flash_attention
 
@@ -31,7 +31,7 @@ out.shape  # (1, 2, 131072, 512) - (batch, heads, seq, dim)
 Quick sanity check
 
 
-```python
+```py
 from flash_attention_jax import plain_attention, flash_attention, value_and_grad_difference
 
 diff, (dq_diff, dk_diff, dv_diff) = value_and_grad_difference(
@@ -49,7 +49,7 @@ print(f'dv: {dv_diff}')   # < 1e-6
 
 Autoregressive Flash Attention - GPT-like decoder attention
 
-```python
+```py
 from jax import random
 from flash_attention_jax import causal_flash_attention
 
@@ -74,7 +74,7 @@ out.shape  # (131072, 512)
 
 ## Citations
 
-```bibtex
+```py
 @article{Dao2022FlashAttentionFA,
     title   = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
     author  = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and Christopher R'e},
@@ -84,7 +84,7 @@ out.shape  # (131072, 512)
 }
 ```
 
-```bibtex
+```py
 @article{Rabe2021SelfattentionDN,
     title   = {Self-attention Does Not Need O(n2) Memory},
     author  = {Markus N. Rabe and Charles Staats},

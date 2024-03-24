@@ -14,13 +14,13 @@ This repository will add support for variable sequence lengths (masking) and pos
 
 ## Install
 
-```bash
+```py
 $ pip install agent-attention-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from agent_attention_pytorch import AgentSelfAttention
 
@@ -41,7 +41,7 @@ assert out.shape == x.shape
 
 For a full fledged linear transformer based on agent tokens, just import `AgentTransformer`
 
-```python
+```py
 import torch
 from agent_attention_pytorch import AgentTransformer
 
@@ -64,7 +64,7 @@ assert out.shape == x.shape
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Han2023AgentAO,
     title   = {Agent Attention: On the Integration of Softmax and Linear Attention},
     author  = {Dongchen Han and Tianzhu Ye and Yizeng Han and Zhuofan Xia and Shiji Song and Gao Huang},
@@ -73,7 +73,7 @@ assert out.shape == x.shape
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020talkingheads,
     title   = {Talking-Heads Attention}, 
     author  = {Noam Shazeer and Zhenzhong Lan and Youlong Cheng and Nan Ding and Le Hou},
@@ -84,7 +84,7 @@ assert out.shape == x.shape
 }
 ```
 
-```bibtex
+```py
 @article{Bondarenko2023QuantizableTR,
     title   = {Quantizable Transformers: Removing Outliers by Helping Attention Heads Do Nothing},
     author  = {Yelysei Bondarenko and Markus Nagel and Tijmen Blankevoort},
@@ -95,7 +95,7 @@ assert out.shape == x.shape
 }
 ```
 
-```bibtex
+```py
 @article{Wang2022FoundationT,
     title   = {Foundation Transformers},
     author  = {Hongyu Wang and Shuming Ma and Shaohan Huang and Li Dong and Wenhui Wang and Zhiliang Peng and Yu Wu and Payal Bajaj and Saksham Singhal and Alon Benhaim and Barun Patra and Zhun Liu and Vishrav Chaudhary and Xia Song and Furu Wei},

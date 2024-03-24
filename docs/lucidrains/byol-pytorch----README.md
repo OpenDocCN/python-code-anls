@@ -20,7 +20,7 @@ Now go save your organization from having to pay for labels :)
 
 ## Install
 
-```bash
+```py
 $ pip install byol-pytorch
 ```
 
@@ -28,7 +28,7 @@ $ pip install byol-pytorch
 
 Simply plugin your neural network, specifying (1) the image dimensions as well as (2) the name (or index) of the hidden layer, whose output is used as the latent representation used for self-supervised training.
 
-```python
+```py
 import torch
 from byol_pytorch import BYOL
 from torchvision import models
@@ -64,7 +64,7 @@ That's pretty much it. After much training, the residual network should now perf
 
 A <a href="https://arxiv.org/abs/2011.10566">new paper</a> from Kaiming He suggests that BYOL does not even need the target encoder to be an exponential moving average of the online encoder. I've decided to build in this option so that you can easily use that variant for training, simply by setting the `use_momentum` flag to `False`. You will no longer need to invoke `update_moving_average` if you go this route as shown in the example below.
 
-```python
+```py
 import torch
 from byol_pytorch import BYOL
 from torchvision import models
@@ -98,7 +98,7 @@ torch.save(resnet.state_dict(), './improved-net.pt')
 
 While the hyperparameters have already been set to what the paper has found optimal, you can change them with extra keyword arguments to the base wrapper class.
 
-```python
+```py
 learner = BYOL(
     resnet,
     image_size = 256,
@@ -111,7 +111,7 @@ learner = BYOL(
 
 By default, this library will use the augmentations from the SimCLR paper (which is also used in the BYOL paper). However, if you would like to specify your own augmentation pipeline, you can simply pass in your own custom augmentation function with the `augment_fn` keyword.
 
-```python
+```py
 augment_fn = nn.Sequential(
     kornia.augmentation.RandomHorizontalFlip()
 )
@@ -126,7 +126,7 @@ learner = BYOL(
 
 In the paper, they seem to assure that one of the augmentations have a higher gaussian blur probability than the other. You can also adjust this to your heart's delight.
 
-```python
+```py
 augment_fn = nn.Sequential(
     kornia.augmentation.RandomHorizontalFlip()
 )
@@ -147,7 +147,7 @@ learner = BYOL(
 
 To fetch the embeddings or the projections, you simply have to pass in a `return_embeddings = True` flag to the `BYOL` learner instance
 
-```python
+```py
 import torch
 from byol_pytorch import BYOL
 from torchvision import models
@@ -170,13 +170,13 @@ The repository now offers distributed training with <a href="https://huggingface
 
 First setup the configuration for distributed training by invoking the accelerate CLI
 
-```bash
+```py
 $ accelerate config
 ```
 
 Then craft your training script as shown below, say in `./train.py`
 
-```python
+```py
 from torchvision import models
 
 from byol_pytorch import (
@@ -205,7 +205,7 @@ trainer()
 
 Then use the accelerate CLI again to launch the script
 
-```bash
+```py
 $ accelerate launch ./train.py
 ```
 
@@ -217,7 +217,7 @@ https://github.com/lucidrains/pixel-level-contrastive-learning
 
 ## Citation
 
-```bibtex
+```py
 @misc{grill2020bootstrap,
     title = {Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning},
     author = {Jean-Bastien Grill and Florian Strub and Florent Altché and Corentin Tallec and Pierre H. Richemond and Elena Buchatskaya and Carl Doersch and Bernardo Avila Pires and Zhaohan Daniel Guo and Mohammad Gheshlaghi Azar and Bilal Piot and Koray Kavukcuoglu and Rémi Munos and Michal Valko},
@@ -228,7 +228,7 @@ https://github.com/lucidrains/pixel-level-contrastive-learning
 }
 ```
 
-```bibtex
+```py
 @misc{chen2020exploring,
     title={Exploring Simple Siamese Representation Learning}, 
     author={Xinlei Chen and Kaiming He},

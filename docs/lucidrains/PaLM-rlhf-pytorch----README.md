@@ -36,7 +36,7 @@ There is no trained model. This is just the ship and overall map. We still need 
 
 ## Install
 
-```bash
+```py
 $ pip install palm-rlhf-pytorch
 ```
 
@@ -44,7 +44,7 @@ $ pip install palm-rlhf-pytorch
 
 First train `PaLM`, like any other autoregressive transformer
 
-```python
+```py
 import torch
 from palm_rlhf_pytorch import PaLM
 
@@ -67,7 +67,7 @@ generated = palm.generate(2048) # (1, 2048)
 
 Then train your reward model, with the curated human feedback. In the original paper, they could not get reward model to be finetuned from a pretrained transformer without overfitting, but I gave the option to finetune with `LoRA` anyways, since it is still open research.
 
-```python
+```py
 import torch
 from palm_rlhf_pytorch import PaLM, RewardModel
 
@@ -101,7 +101,7 @@ reward = reward_model(seq, prompt_mask = prompt_mask)
 
 Then you will pass your transformer and the rewards model to the `RLHFTrainer`
 
-```python
+```py
 import torch
 from palm_rlhf_pytorch import PaLM, RewardModel, RLHFTrainer
 
@@ -163,7 +163,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 
 ## Citations
 
-```bibtex
+```py
 @article{Stiennon2020LearningTS,
     title   = {Learning to summarize from human feedback},
     author  = {Nisan Stiennon and Long Ouyang and Jeff Wu and Daniel M. Ziegler and Ryan J. Lowe and Chelsea Voss and Alec Radford and Dario Amodei and Paul Christiano},
@@ -173,7 +173,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chowdhery2022PaLMSL,
     title   = {PaLM: Scaling Language Modeling with Pathways},
     author  = {Aakanksha Chowdhery and Sharan Narang and Jacob Devlin and Maarten Bosma and Gaurav Mishra and Adam Roberts and Paul Barham and Hyung Won Chung and Charles Sutton and Sebastian Gehrmann and Parker Schuh and Kensen Shi and Sasha Tsvyashchenko and Joshua Maynez and Abhishek Rao and Parker Barnes and Yi Tay and Noam M. Shazeer and Vinodkumar Prabhakaran and Emily Reif and Nan Du and Benton C. Hutchinson and Reiner Pope and James Bradbury and Jacob Austin and Michael Isard and Guy Gur-Ari and Pengcheng Yin and Toju Duke and Anselm Levskaya and Sanjay Ghemawat and Sunipa Dev and Henryk Michalewski and Xavier Garc{\'i}a and Vedant Misra and Kevin Robinson and Liam Fedus and Denny Zhou and Daphne Ippolito and David Luan and Hyeontaek Lim and Barret Zoph and Alexander Spiridonov and Ryan Sepassi and David Dohan and Shivani Agrawal and Mark Omernick and Andrew M. Dai and Thanumalayan Sankaranarayana Pillai and Marie Pellat and Aitor Lewkowycz and Erica Oliveira Moreira and Rewon Child and Oleksandr Polozov and Katherine Lee and Zongwei Zhou and Xuezhi Wang and Brennan Saeta and Mark Diaz and Orhan Firat and Michele Catasta and Jason Wei and Kathleen S. Meier-Hellstern and Douglas Eck and Jeff Dean and Slav Petrov and Noah Fiedel},
@@ -181,7 +181,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 }
 ```
 
-```bibtex
+```py
 @article{Hu2021LoRALA,
     title   = {LoRA: Low-Rank Adaptation of Large Language Models},
     author  = {Edward J. Hu and Yelong Shen and Phillip Wallis and Zeyuan Allen-Zhu and Yuanzhi Li and Shean Wang and Weizhu Chen},
@@ -191,7 +191,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sun2022ALT,
     title     = {A Length-Extrapolatable Transformer},
     author    = {Yutao Sun and Li Dong and Barun Patra and Shuming Ma and Shaohan Huang and Alon Benhaim and Vishrav Chaudhary and Xia Song and Furu Wei},
@@ -199,7 +199,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 }
 ```
 
-```bibtex
+```py
 @misc{gilmer2023intriguing
     title  = {Intriguing Properties of Transformer Training Instabilities},
     author = {Justin Gilmer, Andrea Schioppa, and Jeremy Cohen},
@@ -208,7 +208,7 @@ answer = trainer.generate(2048, prompt = prompts[0], num_samples = 10) # (<= 204
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},

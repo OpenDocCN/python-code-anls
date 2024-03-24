@@ -8,7 +8,7 @@ Update: Interesting enough, <a href="https://arxiv.org/abs/2212.11972">a new pap
 
 ## Install
 
-```bash
+```py
 $ pip install isab-pytorch
 ```
 
@@ -16,7 +16,7 @@ $ pip install isab-pytorch
 
 You can either set the number of latents, in which the parameters will be instantiated and returned on completion of cross attention.
 
-```python
+```py
 import torch
 from isab_pytorch import ISAB
 
@@ -35,7 +35,7 @@ out, latents = attn(seq, mask = mask) # (1, 16384, 512), (1, 128, 512)
 
 Or you can choose not to set the number of latents, and pass in the latents yourself (some persistent latent that propagates down the transformer, as an example)
 
-```python
+```py
 import torch
 from isab_pytorch import ISAB
 
@@ -52,7 +52,7 @@ out, new_latents = attn(seq, latents) # (1, 16384, 512), (1, 128, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{lee2019set,
     title   = {Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks},
     author  = {Juho Lee and Yoonho Lee and Jungtaek Kim and Adam R. Kosiorek and Seungjin Choi and Yee Whye Teh},
@@ -63,7 +63,7 @@ out, new_latents = attn(seq, latents) # (1, 16384, 512), (1, 128, 512)
 }
 ```
 
-```bibtex
+```py
 @article{Alayrac2022Flamingo,
     title   = {Flamingo: a Visual Language Model for Few-Shot Learning},
     author  = {Jean-Baptiste Alayrac et al},

@@ -8,13 +8,13 @@ The code also resolves an edge-case where the very first query have no keys to a
 
 ## Install
 
-```bash
+```py
 $ pip install memory_compressed_attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from memory_compressed_attention import MemoryCompressedAttention
 
@@ -34,7 +34,7 @@ attn(x, input_mask = mask) # (1, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{liu2018generating,
     title={Generating Wikipedia by Summarizing Long Sequences},
     author={Peter J. Liu and Mohammad Saleh and Etienne Pot and Ben Goodrich and Ryan Sepassi and Lukasz Kaiser and Noam Shazeer},

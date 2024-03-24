@@ -10,13 +10,13 @@ Implementation of <a href="https://arxiv.org/abs/2101.11605">Bottleneck Transfor
 
 ## Install
 
-```bash
+```py
 $ pip install bottleneck-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from torch import nn
 from bottleneck_transformer_pytorch import BottleStack
@@ -42,7 +42,7 @@ layer(fmap) # (2, 2048, 32, 32)
 
 With some simple model surgery off a resnet, you can have the 'BotNet' (what a weird name) for training.
 
-```python
+```py
 import torch
 from torch import nn
 from torchvision.models import resnet50
@@ -83,7 +83,7 @@ preds = model(img) # (2, 1000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{srinivas2021bottleneck,
     title   = {Bottleneck Transformers for Visual Recognition}, 
     author  = {Aravind Srinivas and Tsung-Yi Lin and Niki Parmar and Jonathon Shlens and Pieter Abbeel and Ashish Vaswani},

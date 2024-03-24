@@ -12,13 +12,13 @@ Update: I tried this, but did not get better results than just using linear atte
 
 ## Install
 
-```bash
+```py
 $ pip install hamburger-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from hamburger_pytorch import Hamburger
 
@@ -35,7 +35,7 @@ hamburger(x) + x # (1, 512, 32, 32)
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{
     anonymous2021is,
     title={Is Attention Better Than Matrix Decomposition?},

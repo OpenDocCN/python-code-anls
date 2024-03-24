@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2103.01075">OmniNet</a>, Omnidi
 
 ## Install
 
-```bash
+```py
 $ pip install omninet-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from omninet_pytorch import Omninet
 
@@ -35,7 +35,7 @@ omninet(x, mask = mask) # (1, 1024, 512)
 
 Causal case, just use the class `OmninetCausal`. At the moment, it isn't faithful to the paper (I am using layer axial attention with layer positional embeddings to draw up information), but will fix this once I rework the linear attention CUDA kernel.
 
-```python
+```py
 import torch
 from omninet_pytorch import OmninetCausal
 
@@ -57,7 +57,7 @@ omninet(x, mask = mask) # (1, 1024, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{tay2021omninet,
     title   = {OmniNet: Omnidirectional Representations from Transformers}, 
     author  = {Yi Tay and Mostafa Dehghani and Vamsi Aribandi and Jai Gupta and Philip Pham and Zhen Qin and Dara Bahri and Da-Cheng Juan and Donald Metzler},

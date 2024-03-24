@@ -13,7 +13,7 @@ For demonstration purposes we will imagine that we wish to generate images from 
 
 > [CLIP](https://openai.com/blog/clip/) is a contrastive model that learns to maximize the cosine similarity between a given image and caption, however, there is no guarantee that these embeddings are in the same space. While the embeddings generated are ***close*** the image and text embeddings occupy two disjoint sets.
 
-```python
+```py
 # Load Models
 clip_model = clip.load("ViT-L/14")
 decoder = Decoder(checkpoint="best.pth") # A decoder trained on CLIP Image embeddings
@@ -33,7 +33,7 @@ predicted_image = decoder.sample(text_embedding)
 
 Unfortunately, we run into the issue previously mentioned--the image embeddings and the text embeddings are not interchangeable! Now let's look at a better solution
 
-```python
+```py
 # Load Models
 prior= Prior(checkpoint="prior.pth") # A decoder trained to go from: text-> clip text emb -> clip img emb
 decoder = Decoder(checkpoint="decoder.pth") # A decoder trained on CLIP Image embeddings
@@ -60,7 +60,7 @@ With the prior we are able to successfully generate embeddings *within* CLIP's i
 To utilize a pre-trained prior, it’s quite simple.
 
 ### Loading Checkpoints
-```python
+```py
 import torch
 from dalle2_pytorch import DiffusionPrior, DiffusionPriorNetwork, OpenAIClipAdapter
 from dalle2_pytorch.trainer import DiffusionPriorTrainer
@@ -114,7 +114,7 @@ def load_diffusion_model(dprior_path):
 
 ### Sampling
 Once we have a pre-trained model, generating embeddings is quite simple!
-```python
+```py
 # tokenize the text
 tokenized_text = clip.tokenize("<your amazing prompt>")
 # predict an embedding

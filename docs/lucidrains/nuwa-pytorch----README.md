@@ -19,7 +19,7 @@ Implementation of <a href="https://arxiv.org/abs/2111.12417">NÜWA</a>, state of
 
 ## Install
 
-```bash
+```py
 $ pip install nuwa-pytorch
 ```
 
@@ -27,7 +27,7 @@ $ pip install nuwa-pytorch
 
 First train the VAE
 
-```python
+```py
 import torch
 from nuwa_pytorch import VQGanVAE
 
@@ -63,7 +63,7 @@ recon_imgs = vae(imgs)
 
 Then, with your learned VAE
 
-```python
+```py
 import torch
 from nuwa_pytorch import NUWA, VQGanVAE
 
@@ -128,7 +128,7 @@ Then, you will use `NUWASketch` instead of `NUWA`, which can accept the sketch V
 
 ex.
 
-```python
+```py
 import torch
 from nuwa_pytorch import NUWASketch, VQGanVAE
 
@@ -203,7 +203,7 @@ video = nuwa.generate(sketch = sketch, num_frames = 5) # (1, 5, 3, 256, 256)
 
 This repository will also offer a variant of NUWA that can produce both video and audio. For now, the audio will need to be encoded manually.
 
-```python
+```py
 import torch
 from nuwa_pytorch import NUWAVideoAudio, VQGanVAE
 
@@ -269,7 +269,7 @@ video, audio = nuwa.generate(text = text, num_frames = 5) # (1, 5, 3, 256, 256),
 
 This library will offer some utilities to make training easier. For starters, you can use the `VQGanVAETrainer` class to take care of training the `VQGanVAE`. Simply wrap the model and also pass in the image folder path as well as the various training hyperparameters.
 
-```python
+```py
 import torch
 from nuwa_pytorch import VQGanVAE, VQGanVAETrainer
 
@@ -314,7 +314,7 @@ ex.
 
 Then you will load your previously trained VQGan-VAE and train NUWA with the `GifVideoDataset` and `NUWATrainer` classes.
 
-```python
+```py
 import torch
 from nuwa_pytorch import NUWA, VQGanVAE
 from nuwa_pytorch.train_nuwa import GifVideoDataset, NUWATrainer
@@ -381,7 +381,7 @@ This library depends on this <a href="https://github.com/lucidrains/vector-quant
 
 ex. cosine sim proposed in <a href="https://arxiv.org/abs/2110.04627">improved vqgan</a>
 
-```python
+```py
 from nuwa_pytorch import VQGanVAE
 
 vae = VQGanVAE(
@@ -435,7 +435,7 @@ vae = VQGanVAE(
 
 ## Citations
 
-```bibtex
+```py
 @misc{wu2021nuwa,
     title   = {N\"UWA: Visual Synthesis Pre-training for Neural visUal World creAtion}, 
     author  = {Chenfei Wu and Jian Liang and Lei Ji and Fan Yang and Yuejian Fang and Daxin Jiang and Nan Duan},
@@ -446,7 +446,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{esser2021taming,
     title   = {Taming Transformers for High-Resolution Image Synthesis},
     author  = {Patrick Esser and Robin Rombach and Björn Ommer},
@@ -457,7 +457,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{iashin2021taming,
     title   = {Taming Visually Guided Sound Generation},
     author  = {Vladimir Iashin and Esa Rahtu},
@@ -468,7 +468,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{ding2021cogview,
     title   = {CogView: Mastering Text-to-Image Generation via Transformers},
     author  = {Ming Ding and Zhuoyi Yang and Wenyi Hong and Wendi Zheng and Chang Zhou and Da Yin and Junyang Lin and Xu Zou and Zhou Shao and Hongxia Yang and Jie Tang},
@@ -479,7 +479,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{kitaev2020reformer,
     title   = {Reformer: The Efficient Transformer},
     author  = {Nikita Kitaev and Łukasz Kaiser and Anselm Levskaya},
@@ -490,7 +490,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020talkingheads,
     title   = {Talking-Heads Attention}, 
     author  = {Noam Shazeer and Zhenzhong Lan and Youlong Cheng and Nan Ding and Le Hou},
@@ -501,7 +501,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{shazeer2020glu,
     title   = {GLU Variants Improve Transformer},
     author  = {Noam Shazeer},
@@ -510,7 +510,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -521,7 +521,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{ho2021classifierfree,
     title   = {Classifier-Free Diffusion Guidance},
     author  = {Jonathan Ho and Tim Salimans},
@@ -531,7 +531,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{liu2021swin,
     title   = {Swin Transformer V2: Scaling Up Capacity and Resolution},
     author  = {Ze Liu and Han Hu and Yutong Lin and Zhuliang Yao and Zhenda Xie and Yixuan Wei and Jia Ning and Yue Cao and Zheng Zhang and Li Dong and Furu Wei and Baining Guo},
@@ -542,7 +542,7 @@ vae = VQGanVAE(
 }
 ```
 
-```bibtex
+```py
 @misc{crowson2022,
     author  = {Katherine Crowson},
     url     = {https://twitter.com/RiversHaveWings/status/1478093658716966912}

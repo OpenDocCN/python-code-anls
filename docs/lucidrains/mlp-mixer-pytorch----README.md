@@ -10,13 +10,13 @@ No convolutions nor attention needed!
 
 ## Install
 
-```bash
+```py
 $ pip install mlp-mixer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from mlp_mixer_pytorch import MLPMixer
 
@@ -35,7 +35,7 @@ pred = model(img) # (1, 1000)
 
 Rectangular image
 
-```python
+```py
 import torch
 from mlp_mixer_pytorch import MLPMixer
 
@@ -54,7 +54,7 @@ pred = model(img) # (1, 1000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{tolstikhin2021mlpmixer,
     title   = {MLP-Mixer: An all-MLP Architecture for Vision},
     author  = {Ilya Tolstikhin and Neil Houlsby and Alexander Kolesnikov and Lucas Beyer and Xiaohua Zhai and Thomas Unterthiner and Jessica Yung and Daniel Keysers and Jakob Uszkoreit and Mario Lucic and Alexey Dosovitskiy},
@@ -65,7 +65,7 @@ pred = model(img) # (1, 1000)
 }
 ```
 
-```bibtex
+```py
 @misc{hou2021vision,
     title   = {Vision Permutator: A Permutable MLP-Like Architecture for Visual Recognition},
     author  = {Qibin Hou and Zihang Jiang and Li Yuan and Ming-Ming Cheng and Shuicheng Yan and Jiashi Feng},

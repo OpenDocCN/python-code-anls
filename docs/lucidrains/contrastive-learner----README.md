@@ -16,7 +16,7 @@ It has surfaced that the results of CURL are <a href="https://www.reddit.com/r/M
 
 ## Install
 
-```bash
+```py
 $ pip install contrastive-learner
 ```
 
@@ -24,7 +24,7 @@ $ pip install contrastive-learner
 
 SimCLR (projection head with normalized temperature-scaled cross-entropy loss)
 
-```python
+```py
 import torch
 from contrastive_learner import ContrastiveLearner
 from torchvision import models
@@ -58,7 +58,7 @@ for _ in range(100):
 
 CURL (with momentum averaged key encoder)
 
-```python
+```py
 import torch
 from contrastive_learner import ContrastiveLearner
 from torchvision import models
@@ -95,7 +95,7 @@ for _ in range(100):
 
 If you want to accumulate queries and keys to do contrastive loss on a bigger batch, use the `accumulate` keyword on the forward pass.
 
-```python
+```py
 for _ in range(100):
     for _ in range(5):
         images = sample_batch_images()
@@ -108,7 +108,7 @@ for _ in range(100):
 
 By default, this will use the augmentations recommended in the SimCLR paper, mainly color jitter, gaussian blur, and random resize crop. However, if you would like to specify your own augmentations, you can simply pass in a `augment_fn` in the constructor. Augmentations must work in the tensor space. If you decide to use torchvision augmentations, make sure the function converts first to PIL `.toPILImage()` and then back to tensors `.ToTensor()`
 
-```python
+```py
 custom_augment_fn = nn.Sequential(
     kornia.augmentations.RandomHorizontalFlip()
 )
@@ -126,7 +126,7 @@ learner = ContrastiveLearner(
 
 ## Citations
 
-```bibtex
+```py
 @misc{chen2020simple,
     title   = {A Simple Framework for Contrastive Learning of Visual Representations},
     author  = {Ting Chen and Simon Kornblith and Mohammad Norouzi and Geoffrey Hinton},
@@ -134,7 +134,7 @@ learner = ContrastiveLearner(
 }
 ```
 
-```bibtex
+```py
 @misc{srinivas2020curl,
     title   = {CURL: Contrastive Unsupervised Representations for Reinforcement Learning},
     author  = {Aravind Srinivas and Michael Laskin and Pieter Abbeel},

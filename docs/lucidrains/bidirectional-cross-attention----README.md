@@ -4,13 +4,13 @@ A simple cross attention that updates both the source and target in one step. Th
 
 ## Install
 
-```bash
+```py
 $ pip install bidirectional-cross-attention
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from bidirectional_cross_attention import BidirectionalCrossAttention
 

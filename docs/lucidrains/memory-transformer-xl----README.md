@@ -4,13 +4,13 @@ A combination of Transformer-XL with ideas from Memory Transformers. While in Tr
 
 ## Install
 
-```bash
+```py
 $ pip install memory-transformer-xl
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from memory_transformer_xl import MemoryTransformerXL
 
@@ -39,7 +39,7 @@ logits2, mem2 = model(x2, memories = mem1)
 
 ## Citations
 
-```bibtex
+```py
 @article{Dai_2019,
    title  = {Transformer-XL: Attentive Language Models beyond a Fixed-Length Context},
    url    = {http://dx.doi.org/10.18653/v1/P19-1285},
@@ -51,7 +51,7 @@ logits2, mem2 = model(x2, memories = mem1)
 }
 ```
 
-```bibtex
+```py
 @misc{burtsev2020memory,
     title   = {Memory Transformer},
     author  = {Mikhail S. Burtsev and Grigory V. Sapunov},
@@ -62,7 +62,7 @@ logits2, mem2 = model(x2, memories = mem1)
 }
 ```
 
-```bibtex
+```py
 @misc{parisotto2019stabilizing,
     title     = {Stabilizing Transformers for Reinforcement Learning},
     author    = {Emilio Parisotto and H. Francis Song and Jack W. Rae and Razvan Pascanu and Caglar Gulcehre and Siddhant M. Jayakumar and Max Jaderberg and Raphael Lopez Kaufman and Aidan Clark and Seb Noury and Matthew M. Botvinick and Nicolas Heess and Raia Hadsell},
@@ -73,7 +73,7 @@ logits2, mem2 = model(x2, memories = mem1)
 }
 ```
 
-```bibtex
+```py
 @article{shen2019efficient,
   author    = {Zhuoran Shen and Mingyuan Zhang and Haiyu Zhao and Shuai Yi and Hongsheng Li},
   title     = {Efficient Attention: Attention with Linear Complexities},
@@ -84,7 +84,7 @@ logits2, mem2 = model(x2, memories = mem1)
 }
 ```
 
-```bibtex
+```py
 @article{DBLP:journals/corr/abs-1907-01470,
     author    = {Sainbayar Sukhbaatar and
                Edouard Grave and
@@ -99,7 +99,7 @@ logits2, mem2 = model(x2, memories = mem1)
 }
 ```
 
-```bibtex
+```py
 @misc{vecoven2020bioinspired,
     title   = {A bio-inspired bistable recurrent cell allows for long-lasting memory},
     author  = {Nicolas Vecoven and Damien Ernst and Guillaume Drion},

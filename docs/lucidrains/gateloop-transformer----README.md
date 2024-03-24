@@ -40,13 +40,13 @@ Update 15: There may be a way to combine associative scan based works with the f
 
 ### Install
 
-```bash
+```py
 $ pip install gateloop-transformer
 ```
 
 ### Usage
 
-```python
+```py
 import torch
 from gateloop_transformer import Transformer
 
@@ -63,7 +63,7 @@ logits = model(ids) # (1, 1024, 256)
 
 A simplified gate loop layer
 
-```python
+```py
 import torch
 from gateloop_transformer import SimpleGateLoopLayer
 
@@ -76,13 +76,13 @@ x = gateloop(x) + x
 
 Install requirements
 
-```bash
+```py
 $ pip install -r requirements.txt
 ```
 
 Then run the `train.py` script for autoregressive modeling on enwik8
 
-```bash
+```py
 $ python train.py
 ```
 
@@ -99,7 +99,7 @@ $ python train.py
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Katsch2023GateLoopFD,
     title   = {GateLoop: Fully Data-Controlled Linear Recurrence for Sequence Modeling},
     author  = {Tobias Katsch},
@@ -108,7 +108,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Heinsen2023EfficientPO,
     title   = {Efficient Parallelization of a Ubiquitous Sequential Computation},
     author  = {Franz A. Heinsen},

@@ -8,13 +8,13 @@ VQ has been successfully used by Deepmind and OpenAI for high quality generation
 
 ## Install
 
-```bash
+```py
 $ pip install vector-quantize-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -33,7 +33,7 @@ quantized, indices, commit_loss = vq(x) # (1, 1024, 256), (1, 1024), (1)
 
 This <a href="https://arxiv.org/abs/2107.03312">paper</a> proposes to use multiple vector quantizers to recursively quantize the residuals of the waveform. You can use this with the `ResidualVQ` class and one extra initialization parameter.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import ResidualVQ
 
@@ -62,7 +62,7 @@ Furthermore, <a href="https://arxiv.org/abs/2203.01941">this paper</a> uses Resi
 
 They make two modifications. The first is to share the codebook across all quantizers. The second is to stochastically sample the codes rather than always taking the closest match. You can use both of these features with two extra keyword arguments.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import ResidualVQ
 
@@ -84,7 +84,7 @@ quantized, indices, commit_loss = residual_vq(x)
 
 <a href="https://arxiv.org/abs/2305.02765">A recent paper</a> further proposes to do residual VQ on groups of the feature dimension, showing equivalent results to Encodec while using far fewer codebooks. You can use it by importing `GroupedResidualVQ`
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import GroupedResidualVQ
 
@@ -108,7 +108,7 @@ quantized, indices, commit_loss = residual_vq(x)
 
 The SoundStream paper proposes that the codebook should be initialized by the kmeans centroids of the first batch. You can easily turn on this feature with one flag `kmeans_init = True`, for either `VectorQuantize` or `ResidualVQ` class
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import ResidualVQ
 
@@ -132,7 +132,7 @@ This repository will contain a few techniques from various papers to combat "dea
 
 The <a href="https://openreview.net/forum?id=pfNyExj7z2">Improved VQGAN paper</a> proposes to have the codebook kept in a lower dimension. The encoder values are projected down before being projected back to high dimensional after quantization. You can set this with the `codebook_dim` hyperparameter.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -150,7 +150,7 @@ quantized, indices, commit_loss = vq(x)
 
 The <a href="https://openreview.net/forum?id=pfNyExj7z2">Improved VQGAN paper</a> also proposes to l2 normalize the codes and the encoded vectors, which boils down to using cosine similarity for the distance. They claim enforcing the vectors on a sphere leads to improvements in code usage and downstream reconstruction. You can turn this on by setting `use_cosine_sim = True`
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -168,7 +168,7 @@ quantized, indices, commit_loss = vq(x)
 
 Finally, the SoundStream paper has a scheme where they replace codes that have hits below a certain threshold with randomly selected vector from the current batch. You can set this threshold with `threshold_ema_dead_code` keyword.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -188,7 +188,7 @@ VQ-VAE / VQ-GAN is quickly gaining popularity. A <a href="https://arxiv.org/abs/
 
 You can use this feature by simply setting the `orthogonal_reg_weight` to be greater than `0`, in which case the orthogonal regularization will be added to the auxiliary loss outputted by the module.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -212,7 +212,7 @@ There has been a number of papers that proposes variants of discrete latent repr
 
 You can also use a more proven approach (memcodes) from <a href="https://github.com/lucidrains/nwt-pytorch">NWT paper</a>
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import VectorQuantize
 
@@ -236,7 +236,7 @@ quantized, indices, loss = vq(img_fmap) # (1, 256, 32, 32), (1, 32, 32, 8), (1,)
 
 USM further proposes to use multiple codebook, and the masked speech modeling with a multi-softmax objective. You can do this easily by setting `num_codebooks` to be greater than 1
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import RandomProjectionQuantizer
 
@@ -269,7 +269,7 @@ This repository should also automatically synchronizing the codebooks in a multi
 
 Thanks goes out to [@sekstini](https://github.com/sekstini) for porting over this implementation in record time!
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import FSQ
 
@@ -290,7 +290,7 @@ An improvised Residual FSQ, for an attempt to improve audio encoding.
 
 Credit goes to [@sekstini](https://github.com/sekstini) for originally incepting the idea [here](https://github.com/lucidrains/vector-quantize-pytorch/pull/74#issuecomment-1742048597)
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import ResidualFSQ
 
@@ -329,7 +329,7 @@ Developing a more advanced method of LFQ quantization without codebook-lookup co
 
 You can use it simply as follows. Will be dogfooded at <a href="https://github.com/lucidrains/magvit2-pytorch">MagViT2 pytorch port</a>
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import LFQ
 
@@ -355,7 +355,7 @@ assert (quantized == quantizer.indices_to_codes(indices)).all()
 
 You can also pass in video features as `(batch, feat, time, height, width)` or sequences as `(batch, seq, feat)`
 
-```python
+```py
 
 seq = torch.randn(1, 32, 16)
 quantized, *_ = quantizer(seq)
@@ -371,7 +371,7 @@ assert video_feats.shape == quantized.shape
 
 Or support multiple codebooks
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import LFQ
 
@@ -393,7 +393,7 @@ assert (quantized == quantizer.indices_to_codes(indices)).all()
 
 An improvised Residual LFQ, to see if it can lead to an improvement for audio compression.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import ResidualLFQ
 
@@ -426,7 +426,7 @@ Disentanglement is essential for representation learning as it promotes interpre
 
 Be aware they had to use a very high weight decay for the results in this paper.
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import LatentQuantize
 
@@ -452,7 +452,7 @@ assert (quantized == quantizer.indices_to_codes(indices)).all()
 
 You can also pass in video features as `(batch, feat, time, height, width)` or sequences as `(batch, seq, feat)`
 
-```python
+```py
 
 seq = torch.randn(1, 32, 16)
 quantized, *_ = quantizer(seq)
@@ -468,7 +468,7 @@ assert video_feats.shape == quantized.shape
 
 Or support multiple codebooks
 
-```python
+```py
 import torch
 from vector_quantize_pytorch import LatentQuantize
 
@@ -489,7 +489,7 @@ assert loss.item() >= 0
 
 ## Citations
 
-```bibtex
+```py
 @misc{oord2018neural,
     title   = {Neural Discrete Representation Learning},
     author  = {Aaron van den Oord and Oriol Vinyals and Koray Kavukcuoglu},
@@ -500,7 +500,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @misc{zeghidour2021soundstream,
     title   = {SoundStream: An End-to-End Neural Audio Codec},
     author  = {Neil Zeghidour and Alejandro Luebs and Ahmed Omran and Jan Skoglund and Marco Tagliasacchi},
@@ -511,7 +511,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022vectorquantized,
     title   = {Vector-quantized Image Modeling with Improved {VQGAN}},
     author  = {Anonymous},
@@ -522,7 +522,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @unknown{unknown,
     author  = {Lee, Doyup and Kim, Chiheon and Kim, Saehoon and Cho, Minsu and Han, Wook-Shin},
     year    = {2022},
@@ -531,7 +531,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @article{Defossez2022HighFN,
     title   = {High Fidelity Neural Audio Compression},
     author  = {Alexandre D'efossez and Jade Copet and Gabriel Synnaeve and Yossi Adi},
@@ -541,7 +541,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Chiu2022SelfsupervisedLW,
     title   = {Self-supervised Learning with Random-projection Quantizer for Speech Recognition},
     author  = {Chung-Cheng Chiu and James Qin and Yu Zhang and Jiahui Yu and Yonghui Wu},
@@ -550,7 +550,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Zhang2023GoogleUS,
     title   = {Google USM: Scaling Automatic Speech Recognition Beyond 100 Languages},
     author  = {Yu Zhang and Wei Han and James Qin and Yongqiang Wang and Ankur Bapna and Zhehuai Chen and Nanxin Chen and Bo Li and Vera Axelrod and Gary Wang and Zhong Meng and Ke Hu and Andrew Rosenberg and Rohit Prabhavalkar and Daniel S. Park and Parisa Haghani and Jason Riesa and Ginger Perng and Hagen Soltau and Trevor Strohman and Bhuvana Ramabhadran and Tara N. Sainath and Pedro J. Moreno and Chung-Cheng Chiu and Johan Schalkwyk and Franccoise Beaufays and Yonghui Wu},
@@ -558,7 +558,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Shen2023NaturalSpeech2L,
     title   = {NaturalSpeech 2: Latent Diffusion Models are Natural and Zero-Shot Speech and Singing Synthesizers},
     author  = {Kai Shen and Zeqian Ju and Xu Tan and Yanqing Liu and Yichong Leng and Lei He and Tao Qin and Sheng Zhao and Jiang Bian},
@@ -566,7 +566,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Yang2023HiFiCodecGV,
     title   = {HiFi-Codec: Group-residual Vector quantization for High Fidelity Audio Codec},
     author  = {Dongchao Yang and Songxiang Liu and Rongjie Huang and Jinchuan Tian and Chao Weng and Yuexian Zou},
@@ -574,7 +574,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @article{Liu2023BridgingDA,
     title   = {Bridging Discrete and Backpropagation: Straight-Through and Beyond},
     author  = {Liyuan Liu and Chengyu Dong and Xiaodong Liu and Bin Yu and Jianfeng Gao},
@@ -584,7 +584,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{huh2023improvedvqste,
     title   = {Straightening Out the Straight-Through Estimator: Overcoming Optimization Challenges in Vector Quantized Networks},
     author  = {Huh, Minyoung and Cheung, Brian and Agrawal, Pulkit and Isola, Phillip},
@@ -594,7 +594,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},
@@ -604,7 +604,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @misc{shin2021translationequivariant,
     title   = {Translation-equivariant Image Quantizer for Bi-directional Image-Text Generation},
     author  = {Woncheol Shin and Gyubok Lee and Jiyoung Lee and Joonseok Lee and Edward Choi},
@@ -615,7 +615,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @misc{mentzer2023finite,
     title   = {Finite Scalar Quantization: VQ-VAE Made Simple},
     author  = {Fabian Mentzer and David Minnen and Eirikur Agustsson and Michael Tschannen},
@@ -626,7 +626,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation},
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},
@@ -637,7 +637,7 @@ assert loss.item() >= 0
 }
 ```
 
-```bibtex
+```py
 @misc{hsu2023disentanglement,
     title   = {Disentanglement via Latent Quantization}, 
     author  = {Kyle Hsu and Will Dorrell and James C. R. Whittington and Jiajun Wu and Chelsea Finn},

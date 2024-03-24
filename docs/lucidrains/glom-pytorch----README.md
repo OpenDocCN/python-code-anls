@@ -10,13 +10,13 @@ An implementation of <a href="https://arxiv.org/abs/2102.12627">Glom</a>, Geoffr
 
 ## Install
 
-```bash
+```py
 $ pip install glom-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from glom_pytorch import Glom
 
@@ -35,7 +35,7 @@ Pass the `return_all = True` keyword argument on forward, and you will be return
 
 It also gives you access to all the level data across iterations for clustering, from which one can inspect for the theorized islands in the paper.
 
-```python
+```py
 import torch
 from glom_pytorch import Glom
 
@@ -55,7 +55,7 @@ top_level_output = all_levels[7, :, :, -1] # (1, 256, 512) - (batch, patches, di
 
 Denoising self-supervised learning for encouraging emergence, as described by Hinton
 
-```python
+```py
 import torch
 import torch.nn.functional as F
 from torch import nn
@@ -91,7 +91,7 @@ loss.backward()
 
 You can pass in the state of the column and levels back into the model to continue where you left off (perhaps if you are processing consecutive frames of a slow video, as mentioned in the paper)
 
-```python
+```py
 import torch
 from glom_pytorch import Glom
 
@@ -121,7 +121,7 @@ Thanks goes out to <a href="https://github.com/cfoster0">Cfoster0</a> for review
 
 ## Citations
 
-```bibtex
+```py
 @misc{hinton2021represent,
     title   = {How to represent part-whole hierarchies in a neural network}, 
     author  = {Geoffrey Hinton},

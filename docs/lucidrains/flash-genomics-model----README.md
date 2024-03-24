@@ -12,7 +12,7 @@ Update: Question <a href="https://huggingface.co/papers/2306.15794">has been ans
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -21,7 +21,7 @@ Update: Question <a href="https://huggingface.co/papers/2306.15794">has been ans
 }
 ```
 
-```bibtex
+```py
 @article {Dalla-Torre2023.01.11.523679,
     author  = {Hugo Dalla-Torre and Liam Gonzalez and Javier Mendoza Revilla and Nicolas Lopez Carranza and Adam Henryk Grzywaczewski and Francesco Oteri and Christian Dallago and Evan Trop and Hassan Sirelkhatim and Guillaume Richard and Marcin Skwark and Karim Beguir and Marie Lopez and Thomas Pierrot},
     title   = {The Nucleotide Transformer: Building and Evaluating Robust Foundation Models for Human Genomics},
@@ -35,7 +35,7 @@ Update: Question <a href="https://huggingface.co/papers/2306.15794">has been ans
 }
 ```
 
-```bibtex
+```py
 @article {Benegas2022.08.22.504706,
     author  = {Gonzalo Benegas and Sanjit Singh Batra and Yun S. Song},
     title   = {DNA language models are powerful zero-shot predictors of genome-wide variant effects},
@@ -49,7 +49,7 @@ Update: Question <a href="https://huggingface.co/papers/2306.15794">has been ans
 }
 ```
 
-```bibtex
+```py
 @article{Nguyen2023HyenaDNALG,
     title   = {HyenaDNA: Long-Range Genomic Sequence Modeling at Single Nucleotide Resolution},
     author  = {Eric D Nguyen and Michael Poli and Marjan Faizi and Armin W. Thomas and Callum Jacob Birch-sykes and Michael Wornow and Aman Patel and Clayton M. Rabideau and Stefano Massaroli and Yoshua Bengio and Stefano Ermon and Stephen A. Baccus and Christopher R{\'e}},

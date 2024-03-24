@@ -6,19 +6,19 @@ A repository with exploration into using transformers to predict DNA ↔ transcr
 
 Run the following at the project root to download dependencies
 
-```bash
+```py
 $ python setup.py install --user
 ```
 
 Then you must install `pybedtools`  as well as `pyBigWig`
 
-```bash
+```py
 $ conda install --channel conda-forge --channel bioconda pybedtools pyBigWig
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from tf_bind_transformer import AdapterModel
 
@@ -76,7 +76,7 @@ corr_coef = model(
 
 ## Using ESM or ProtAlbert for fetching of transcription factor protein embeddings
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer
 from tf_bind_transformer import AdapterModel
@@ -120,7 +120,7 @@ loss.backward()
 
 One can also pass the context (cell type, experimental parameters) directly as free text, which will be encoded by a text transformer trained on pubmed abstracts.
 
-```python
+```py
 import torch
 from tf_bind_transformer import AdapterModel
 
@@ -175,7 +175,7 @@ For predicting binary outcome (bind or not bind), just set the `binary_targets =
 
 ex.
 
-```python
+```py
 import torch
 from tf_bind_transformer import AdapterModel
 from enformer_pytorch import Enformer
@@ -229,7 +229,7 @@ loss.backward()
 
 ## Predicting Tracks from BigWig
 
-```python
+```py
 from pathlib import Path
 import torch
 from enformer_pytorch import Enformer
@@ -298,27 +298,27 @@ To download the protein sequences for both species, you need to download the rem
 
 Download human remap CRMS
 
-```bash
+```py
 $ wget https://remap.univ-amu.fr/storage/remap2022/hg38/MACS2/remap2022_crm_macs2_hg38_v1_0.bed.gz
 $ gzip -d remap2022_crm_macs2_hg38_v1_0.bed.gz
 ```
 
 Download mouse remap CRMs
 
-```bash
+```py
 $ wget https://remap.univ-amu.fr/storage/remap2022/mm10/MACS2/remap2022_crm_macs2_mm10_v1_0.bed.gz
 $ gzip -d remap2022_crm_macs2_mm10_v1_0.bed.gz
 ```
 
 Downloading all human transcription factors
 
-```bash
+```py
 $ python script/fetch_factor_fastas.py --species human
 ```
 
 For mouse transcription factors
 
-```bash
+```py
 $ python script/fetch_factor_fastas.py --species mouse
 ````
 
@@ -330,7 +330,7 @@ For starters, the `RemapAllPeakDataset` will allow you to load data easily from 
 
 Firstly you'll need to generate the non-peaks dataset by running the following function
 
-```python
+```py
 from tf_bind_transformer.data import generate_random_ranges_from_fasta
 
 generate_random_ranges_from_fasta(
@@ -353,7 +353,7 @@ Todo
 
 working fine-tuning training loop for bind / no-bind prediction
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer
 
@@ -402,7 +402,7 @@ while True:
 
 working fine-tuning script for training on new enformer tracks, with cross-attending transcription factor protein embeddings and cell type conditioning
 
-```python
+```py
 from dotenv import load_dotenv
 
 # set path to cache in .env and unset the next comment
@@ -478,7 +478,7 @@ while True:
 
 If you are low on GPU memory, you can save by making sure the protein and contextual embeddings are executed on CPU
 
-```bash
+```py
 CONTEXT_EMBED_USE_CPU=1 PROTEIN_EMBED_USE_CPU=1 python train.py
 ```
 
@@ -486,7 +486,7 @@ CONTEXT_EMBED_USE_CPU=1 PROTEIN_EMBED_USE_CPU=1 python train.py
 
 Transcription factor dataset
 
-```python
+```py
 from tf_bind_transformer.data import FactorProteinDataset
 
 ds = FactorProteinDataset(
@@ -507,13 +507,13 @@ ds['PAX3-FOXO1'] # (<seq1>, <seq2>)
 
 get a copy of hg38 blacklist bed file from calico
 
-```bash
+```py
 $ gsutil cp gs://basenji_barnyard/hg38.blacklist.rep.bed ./
 ```
 
 using bedtools to filter out repetitive regions of the genome
 
-```bash
+```py
 $ bedtools intersect -v -a ./remap2022_all_macs2_hg38_v1_0.bed -b ./hg38.blacklist.rep.bed > remap2022_all_filtered.bed
 ```
 
@@ -523,13 +523,13 @@ During training, protein sequences and contextual strings are cached to `~/.cach
 
 ex.
 
-```bash
+```py
 $ VERBOSE=1 python train.py
 ```
 
 You can also force a cache clearance
 
-```bash
+```py
 $ CLEAR_CACHE=1 python train.py
 ```
 
@@ -576,7 +576,7 @@ This work was generously sponsored by <a href="https://github.com/jeffhsu3">Jeff
 
 ## Citations
 
-```bibtex
+```py
 @article {Avsec2021.04.07.438649,
     author  = {Avsec, {\v Z}iga and Agarwal, Vikram and Visentin, Daniel and Ledsam, Joseph R. and Grabska-Barwinska, Agnieszka and Taylor, Kyle R. and Assael, Yannis and Jumper, John and Kohli, Pushmeet and Kelley, David R.},
     title   = {Effective gene expression prediction from sequence by integrating long-range interactions},
@@ -590,7 +590,7 @@ This work was generously sponsored by <a href="https://github.com/jeffhsu3">Jeff
 }
 ```
 
-```bibtex
+```py
 @misc{yao2021filip,
     title   = {FILIP: Fine-grained Interactive Language-Image Pre-Training},
     author  = {Lewei Yao and Runhui Huang and Lu Hou and Guansong Lu and Minzhe Niu and Hang Xu and Xiaodan Liang and Zhenguo Li and Xin Jiang and Chunjing Xu},
@@ -601,7 +601,7 @@ This work was generously sponsored by <a href="https://github.com/jeffhsu3">Jeff
 }
 ```
 
-```bibtex
+```py
 @misc{tay2020hypergrid,
     title   = {HyperGrid: Efficient Multi-Task Transformers with Grid-wise Decomposable Hyper Projections},
     author  = {Yi Tay and Zhe Zhao and Dara Bahri and Donald Metzler and Da-Cheng Juan},
@@ -612,7 +612,7 @@ This work was generously sponsored by <a href="https://github.com/jeffhsu3">Jeff
 }
 ```
 
-```bibtex
+```py
 @misc{lowe2021logavgexp,
     title   = {LogAvgExp Provides a Principled and Performant Global Pooling Operator},
     author  = {Scott C. Lowe and Thomas Trappenberg and Sageev Oore},
@@ -623,7 +623,7 @@ This work was generously sponsored by <a href="https://github.com/jeffhsu3">Jeff
 }
 ```
 
-```bibtex
+```py
 @article{10.1093/nar/gkab996,
     author  = {Hammal, Fayrouz and de Langen, Pierre and Bergon, Aurélie and Lopez, Fabrice and Ballester, Benoit},
     title   = "{ReMap 2022: a database of Human, Mouse, Drosophila and Arabidopsis regulatory regions from an integrative analysis of DNA-binding sequencing experiments}",

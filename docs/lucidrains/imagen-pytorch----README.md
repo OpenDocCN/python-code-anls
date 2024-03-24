@@ -48,13 +48,13 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install imagen-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from imagen_pytorch import Unet, Imagen
 
@@ -114,7 +114,7 @@ For simpler training, you can directly supply text strings instead of precomputi
 
 The number of textual captions must match the batch size of the images if you go this route.
 
-```python
+```py
 # mock images and text (get a lot of this)
 
 texts = [
@@ -135,7 +135,7 @@ for i in (1, 2):
 
 With the `ImagenTrainer` wrapper class, the exponential moving averages for all of the U-nets in the cascading DDPM will be automatically taken care of when calling `update`
 
-```python
+```py
 import torch
 from imagen_pytorch import Unet, Imagen, ImagenTrainer
 
@@ -201,7 +201,7 @@ images.shape # (2, 3, 256, 256)
 
 You can also train Imagen without text (unconditional image generation) as follows
 
-```python
+```py
 import torch
 from imagen_pytorch import Unet, Imagen, SRUnet256, ImagenTrainer
 
@@ -253,7 +253,7 @@ images = trainer.sample(batch_size = 16) # (16, 3, 128, 128)
 
 Or train only super-resoluting unets
 
-```python
+```py
 import torch
 from imagen_pytorch import Unet, NullUnet, Imagen
 
@@ -311,7 +311,7 @@ At any time you can save and load the trainer and all associated states with the
 
 ex.
 
-```python
+```py
 trainer.save('./path/to/checkpoint.pt')
 
 trainer.load('./path/to/checkpoint.pt')
@@ -325,7 +325,7 @@ You can also rely on the `ImagenTrainer` to automatically train off `DataLoader`
 
 ex. unconditional training
 
-```python
+```py
 from imagen_pytorch import Unet, Imagen, ImagenTrainer
 from imagen_pytorch.data import Dataset
 
@@ -381,13 +381,13 @@ Thanks to <a href="https://huggingface.co/docs/accelerate/index">🤗 Accelerate
 
 First you need to invoke `accelerate config` in the same directory as your training script (say it is named `train.py`)
 
-```bash
+```py
 $ accelerate config
 ```
 
 Next, instead of calling `python train.py` as you would for single GPU, you would use the accelerate CLI as so
 
-```bash
+```py
 $ accelerate launch train.py
 ```
 
@@ -401,11 +401,11 @@ Imagen can also be used via CLI directly.
 
 ex.
 
-```bash
+```py
 $ imagen config
 ```
 or
-```bash
+```py
 $ imagen config --path ./configs/config.json
 ```
 
@@ -424,11 +424,11 @@ For the dataset parameters all dataloader parameters can be used.
 This command allows you to train or resume training your model
 
 ex.
-```bash
+```py
 $ imagen train
 ```
 or
-```bash
+```py
 $ imagen train --unet 2 --epoches 10
 ```
 
@@ -444,7 +444,7 @@ Be aware when sampling your checkpoint should have trained all unets to get a us
 
 ex.
 
-```bash
+```py
 $ imagen sample --model ./path/to/model/checkpoint.pt "a squirrel raiding the birdfeeder"
 # image is saved to ./a_squirrel_raiding_the_birdfeeder.png
 ```
@@ -461,7 +461,7 @@ For proper training, you'll likely want to setup config-driven training anyways.
 
 ex.
 
-```python
+```py
 import torch
 from imagen_pytorch import ImagenConfig, ElucidatedImagenConfig, ImagenTrainer
 
@@ -492,7 +492,7 @@ It really should be as simple as that
 
 You can also pass this checkpoint file around, and anyone can continue finetune on their own data
 
-```python
+```py
 from imagen_pytorch import load_imagen_from_checkpoint, ImagenTrainer
 
 imagen = load_imagen_from_checkpoint('./checkpoint.pt')
@@ -506,7 +506,7 @@ trainer = ImagenTrainer(imagen)
 
 Inpainting follows the formulation laid out by the recent <a href="https://arxiv.org/abs/2201.09865">Repaint paper</a>. Simply pass in `inpaint_images` and `inpaint_masks` to the `sample` function on either `Imagen` or `ElucidatedImagen`
 
-```python
+```py
 
 inpaint_images = torch.randn(4, 3, 512, 512).cuda()      # (batch, channels, height, width)
 inpaint_masks = torch.ones((4, 512, 512)).bool().cuda()  # (batch, height, width)
@@ -523,7 +523,7 @@ inpainted_images # (4, 3, 512, 512)
 
 For video, similarly pass in your videos to `inpaint_videos` keyword on `.sample`. Inpainting mask can either be the same across all frames `(batch, height, width)` or different `(batch, frames, height, width)`
 
-```python
+```py
 
 inpaint_videos = torch.randn(4, 3, 8, 512, 512).cuda()   # (batch, channels, frames, height, width)
 inpaint_masks = torch.ones((4, 8, 512, 512)).bool().cuda()  # (batch, frames, height, width)
@@ -546,7 +546,7 @@ Simply import `ElucidatedImagen`, and then instantiate the instance as you did b
 
 Ex.
 
-```python
+```py
 from imagen_pytorch import ElucidatedImagen
 
 # instantiate your unets ...
@@ -580,7 +580,7 @@ Update: verified <a href="https://github.com/lucidrains/imagen-pytorch/issues/30
 
 Ex.
 
-```python
+```py
 import torch
 from imagen_pytorch import Unet3D, ElucidatedImagen, ImagenTrainer
 
@@ -648,7 +648,7 @@ Imagen uses an algorithm called <a href="https://openreview.net/forum?id=qw8AKxf
 
 Researcher <a href="https://github.com/Netruk44 ">Netruk44</a> have reported `5-10` to be optimal, but anything greater than `10` to break.
 
-```python
+```py
 trainer.sample(texts = [
     'a cloud in the shape of a roman gladiator'
 ], cond_scale = 5.) # <-- cond_scale is the conditioning scale, needs to be greater than 1.0 to be better than average
@@ -763,7 +763,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Saharia2022PhotorealisticTD,
     title   = {Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding},
     author  = {Chitwan Saharia and William Chan and Saurabh Saxena and Lala Li and Jay Whang and Emily L. Denton and Seyed Kamyar Seyed Ghasemipour and Burcu Karagol Ayan and Seyedeh Sara Mahdavi and Raphael Gontijo Lopes and Tim Salimans and Jonathan Ho and David Fleet and Mohammad Norouzi},
@@ -771,7 +771,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Alayrac2022Flamingo,
     title   = {Flamingo: a Visual Language Model for Few-Shot Learning},
     author  = {Jean-Baptiste Alayrac et al},
@@ -779,7 +779,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Sankararaman2022BayesFormerTW,
     title   = {BayesFormer: Transformer with Uncertainty Estimation},
     author  = {Karthik Abinav Sankararaman and Sinong Wang and Han Fang},
@@ -787,7 +787,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{So2021PrimerSF,
     title   = {Primer: Searching for Efficient Transformers for Language Modeling},
     author  = {David R. So and Wojciech Ma'nke and Hanxiao Liu and Zihang Dai and Noam M. Shazeer and Quoc V. Le},
@@ -797,7 +797,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @misc{cao2020global,
     title   = {Global Context Networks},
     author  = {Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
@@ -808,7 +808,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Karras2022ElucidatingTD,
     title   = {Elucidating the Design Space of Diffusion-Based Generative Models},
     author  = {Tero Karras and Miika Aittala and Timo Aila and Samuli Laine},
@@ -818,7 +818,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{NEURIPS2020_4c5bcfec,
     author      = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
     booktitle   = {Advances in Neural Information Processing Systems},
@@ -832,7 +832,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Lugmayr2022RePaintIU,
     title   = {RePaint: Inpainting using Denoising Diffusion Probabilistic Models},
     author  = {Andreas Lugmayr and Martin Danelljan and Andr{\'e}s Romero and Fisher Yu and Radu Timofte and Luc Van Gool},
@@ -842,7 +842,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @misc{ho2022video,
     title   = {Video Diffusion Models},
     author  = {Jonathan Ho and Tim Salimans and Alexey Gritsenko and William Chan and Mohammad Norouzi and David J. Fleet},
@@ -853,7 +853,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{rogozhnikov2022einops,
     title   = {Einops: Clear and Reliable Tensor Manipulations with Einstein-like Notation},
     author  = {Alex Rogozhnikov},
@@ -863,7 +863,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @misc{chen2022analog,
     title   = {Analog Bits: Generating Discrete Data using Diffusion Models with Self-Conditioning},
     author  = {Ting Chen and Ruixiang Zhang and Geoffrey Hinton},
@@ -874,14 +874,14 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @misc{Singer2022,
     author  = {Uriel Singer},
     url     = {https://makeavideo.studio/Make-A-Video.pdf}
 }
 ```
 
-```bibtex
+```py
 @article{Sunkara2022NoMS,
     title   = {No More Strided Convolutions or Pooling: A New CNN Building Block for Low-Resolution Images and Small Objects},
     author  = {Raja Sunkara and Tie Luo},
@@ -891,7 +891,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Salimans2022ProgressiveDF,
     title   = {Progressive Distillation for Fast Sampling of Diffusion Models},
     author  = {Tim Salimans and Jonathan Ho},
@@ -901,7 +901,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Ho2022ImagenVH,
     title   = {Imagen Video: High Definition Video Generation with Diffusion Models},
     author  = {Jonathan Ho and William Chan and Chitwan Saharia and Jay Whang and Ruiqi Gao and Alexey A. Gritsenko and Diederik P. Kingma and Ben Poole and Mohammad Norouzi and David J. Fleet and Tim Salimans},
@@ -911,7 +911,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @misc{gilmer2023intriguing
     title  = {Intriguing Properties of Transformer Training Instabilities},
     author = {Justin Gilmer, Andrea Schioppa, and Jeremy Cohen},
@@ -920,7 +920,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Hang2023EfficientDT,
     title   = {Efficient Diffusion Training via Min-SNR Weighting Strategy},
     author  = {Tiankai Hang and Shuyang Gu and Chen Li and Jianmin Bao and Dong Chen and Han Hu and Xin Geng and Baining Guo},
@@ -928,7 +928,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @article{Zhang2021TokenST,
     title   = {Token Shift Transformer for Video Classification},
     author  = {Hao Zhang and Y. Hao and Chong-Wah Ngo},
@@ -937,7 +937,7 @@ Anything! It is MIT licensed. In other words, you can freely copy / paste for yo
 }
 ```
 
-```bibtex
+```py
 @inproceedings{anonymous2022normformer,
     title   = {NormFormer: Improved Transformer Pretraining with Extra Normalization},
     author  = {Anonymous},

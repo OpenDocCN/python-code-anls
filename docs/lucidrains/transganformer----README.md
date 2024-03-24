@@ -4,19 +4,19 @@ Implementation of TransGanFormer, an all-attention GAN that combines the finding
 
 ## Install
 
-```bash
+```py
 $ pip install transganformer
 ```
 
 ## Usage
 
-```bash
+```py
 $ transganformer --data ./path/to/data
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{jiang2021transgan,
     title   = {TransGAN: Two Transformers Can Make One Strong GAN}, 
     author  = {Yifan Jiang and Shiyu Chang and Zhangyang Wang},
@@ -27,7 +27,7 @@ $ transganformer --data ./path/to/data
 }
 ```
 
-```bibtex
+```py
 @misc{hudson2021generative,
     title   = {Generative Adversarial Transformers}, 
     author  = {Drew A. Hudson and C. Lawrence Zitnick},

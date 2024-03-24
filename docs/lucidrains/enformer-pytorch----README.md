@@ -8,13 +8,13 @@ Update: finetuned for predicting pseudobulk chromatin accessibility <a href="htt
 
 ## Install
 
-```bash
+```py
 $ pip install enformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer
 
@@ -35,7 +35,7 @@ output['mouse'] # (1, 896, 1643)
 
 You can also directly pass in the sequence as one-hot encodings, which must be float values
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer, seq_indices_to_one_hot
 
@@ -58,7 +58,7 @@ output['mouse'] # (1, 896, 1643)
 
 Finally, one can fetch the embeddings, for fine-tuning and otherwise, by setting the `return_embeddings` flag to be `True` on forward
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer, seq_indices_to_one_hot
 
@@ -80,7 +80,7 @@ embeddings # (1, 896, 3072)
 
 For training, you can directly pass the head and target in to get the poisson loss
 
-```python
+```py
 import torch
 from enformer_pytorch import Enformer, seq_indices_to_one_hot
 
@@ -123,13 +123,13 @@ Update: <a href="https://github.com/jstjohn">John St. John</a> did some work and
 
 Update: As of version 0.8.0, if one were to use the `from_pretrained` function to load the pretrained model, it should automatically use precomputed gamma positions to address a difference between tensorflow and pytorch `xlogy`. This should resolve the numerical discrepancy above. If you were to further finetune and not be using the `from_pretrained` function, please make sure to set `use_tf_gamma = True` when using `.from_hparams` to instantiate the `Enformer`
 
-```bash
+```py
 $ pip install enformer-pytorch>=0.5
 ````
 
 Loading the model
 
-```python
+```py
 from enformer_pytorch import from_pretrained
 
 enformer = from_pretrained('EleutherAI/enformer-official-rough')
@@ -137,7 +137,7 @@ enformer = from_pretrained('EleutherAI/enformer-official-rough')
 
 Quick sanity check on a single human validation point
 
-```python
+```py
 $ python test_pretrained.py
 # 0.5963 correlation coefficient on a validation sample
 ```
@@ -146,7 +146,7 @@ This is all made possible thanks to HuggingFace's [custom model](https://hugging
 
 You can also load, with overriding of the `target_length` parameter, if you are working with shorter sequence lengths
 
-```python
+```py
 from enformer_pytorch import from_pretrained
 
 model = from_pretrained('EleutherAI/enformer-official-rough', target_length = 128, dropout_rate = 0.1)
@@ -156,7 +156,7 @@ model = from_pretrained('EleutherAI/enformer-official-rough', target_length = 12
 
 To save on memory during fine-tuning a large Enformer model
 
-```python
+```py
 from enformer_pytorch import from_pretrained
 
 enformer = from_pretrained('EleutherAI/enformer-official-rough', use_checkpointing = True)
@@ -170,7 +170,7 @@ This repository will also allow for easy fine-tuning of Enformer.
 
 Fine-tuning on new tracks
 
-```python
+```py
 import torch
 from enformer_pytorch import from_pretrained
 from enformer_pytorch.finetune import HeadAdapterWrapper
@@ -192,7 +192,7 @@ loss.backward()
 
 Finetuning on contextual data (cell type, transcription factor, etc)
 
-```python
+```py
 import torch
 from enformer_pytorch import from_pretrained
 from enformer_pytorch.finetune import ContextAdapterWrapper
@@ -220,7 +220,7 @@ loss.backward()
 
 Finally, there is also a way to use attention aggregation from a set of context embeddings (or a single context embedding). Simply use the `ContextAttentionAdapterWrapper`
 
-```python
+```py
 import torch
 from enformer_pytorch import from_pretrained
 from enformer_pytorch.finetune import ContextAttentionAdapterWrapper
@@ -255,7 +255,7 @@ loss.backward()
 
 You can use the `GenomicIntervalDataset` to easily fetch sequences of any length from a <a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1">`.bed`</a> file, with greater context length dynamically computed if specified
 
-```python
+```py
 import torch
 import polars as pl
 from enformer_pytorch import Enformer, GenomeIntervalDataset
@@ -294,7 +294,7 @@ pred = model(seq, head = 'human') # (896, 5313)
 
 To return the random shift value, as well as whether reverse complement was activated (in the case you need to reverse the corresponding chip-seq target data), just set `return_augs = True` when initializing the `GenomicIntervalDataset`
 
-```python
+```py
 import torch
 import polars as pl
 from enformer_pytorch import Enformer, GenomeIntervalDataset
@@ -338,7 +338,7 @@ Thanks also goes out to <a href="johahi">@johahi</a> for finding out that there 
 
 ## Citations
 
-```bibtex
+```py
 @article {Avsec2021.04.07.438649,
     author  = {Avsec, {\v Z}iga and Agarwal, Vikram and Visentin, Daniel and Ledsam, Joseph R. and Grabska-Barwinska, Agnieszka and Taylor, Kyle R. and Assael, Yannis and Jumper, John and Kohli, Pushmeet and Kelley, David R.},
     title   = {Effective gene expression prediction from sequence by integrating long-range interactions},
@@ -352,7 +352,7 @@ Thanks also goes out to <a href="johahi">@johahi</a> for finding out that there 
 }
 ```
 
-```bibtex
+```py
 @misc{liu2022convnet,
     title   = {A ConvNet for the 2020s},
     author  = {Zhuang Liu and Hanzi Mao and Chao-Yuan Wu and Christoph Feichtenhofer and Trevor Darrell and Saining Xie},

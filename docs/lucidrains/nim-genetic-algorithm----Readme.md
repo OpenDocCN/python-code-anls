@@ -4,6 +4,6 @@ a simple genetic algorithm written in <a href="https://nim-lang.org/">Nim</a>
 
 ## running
 
-```bash
+```py
 $ nim c -r ga.nim
 ```

@@ -10,13 +10,13 @@ I also took the liberty to add some various enhancements, including pre-normaliz
 
 ## Install
 
-```bash
+```py
 $ pip install feedback-transformer-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from feedback_transformer_pytorch import FeedbackTransformer
 
@@ -38,7 +38,7 @@ model(x)  # (2, 64, 20000)
 
 If you would like to have fine control over the memory (when to detach, etc), you can do it with some extra keyword arguments on `.forward`
 
-```python
+```py
 import torch
 from feedback_transformer_pytorch import FeedbackTransformer
 
@@ -61,7 +61,7 @@ out3, mem3 = model(x3, memory = mem2, return_memory = True)  # (2, 32, 20000)
 
 ## Citations
 
-```bibtex
+```py
 @misc{fan2021addressing,
     title   = {Addressing Some Limitations of Transformers with Feedback Memory}, 
     author  = {Angela Fan and Thibaut Lavril and Edouard Grave and Armand Joulin and Sainbayar Sukhbaatar},

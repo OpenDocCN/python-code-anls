@@ -2,13 +2,13 @@
 
 ### Requirements
 
-```bash
+```py
 $ pip install pytorch-lightning
 $ pip install pillow
 ```
 
 ### Run
 
-```bash
+```py
 $ python train.py --image_folder /path/to/your/images
 ```

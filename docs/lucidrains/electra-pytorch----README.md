@@ -6,7 +6,7 @@ A simple working wrapper for fast pretraining of language models as detailed in 
 
 ## Install
 
-```bash
+```py
 $ pip install electra-pytorch
 ```
 
@@ -14,7 +14,7 @@ $ pip install electra-pytorch
 
 The following example uses `reformer-pytorch`, which is available to be pip installed.
 
-```python
+```py
 import torch
 from torch import nn
 from reformer_pytorch import ReformerLM
@@ -78,7 +78,7 @@ torch.save(discriminator, f'./pretrained-model.pt')
 
 If you would rather not have the framework auto-magically intercept the hidden output of the discriminator, you can pass in the discriminator (with the extra linear [dim x 1]) by yourself with the following.
 
-```python
+```py
 import torch
 from torch import nn
 from reformer_pytorch import ReformerLM
@@ -147,7 +147,7 @@ The generator should be roughly a quarter to at most one half of the discriminat
 
 ## Testing
 
-```bash
+```py
 $ python setup.py test
 ```
 
@@ -155,7 +155,7 @@ $ python setup.py test
 
 1. Download the [OpenWebText](https://github.com/jcpeterson/openwebtext) dataset.
 
-```bash
+```py
 $ mkdir data
 $ cd data
 $ pip3 install gdown
@@ -167,31 +167,31 @@ $ cd ..
 
 2. Tokenize dataset.
 
-```bash
+```py
 $ python pretraining/openwebtext/preprocess.py
 ```
 
 3. Pre-train.
 
-```bash
+```py
 $ python pretraining/openwebtext/pretrain.py
 ```
 
 4. Download GLUE dataset.
 
-```bash
+```py
 $ python examples/glue/download.py 
 ```
 
 5. Fine-tune on the MRPC sub-task of the GLUE benchmark.
 
-```bash
+```py
 $ python examples/glue/run.py --model_name_or_path output/yyyy-mm-dd-hh-mm-ss/ckpt/200000
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{clark2020electra,
     title={ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators},
     author={Kevin Clark and Minh-Thang Luong and Quoc V. Le and Christopher D. Manning},

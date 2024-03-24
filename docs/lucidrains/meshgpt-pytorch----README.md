@@ -26,13 +26,13 @@ Please join <a href="https://discord.gg/xBPBXfcFHd"><img alt="Join us on Discord
 
 ## Install
 
-```bash
+```py
 $ pip install meshgpt-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 
 from meshgpt_pytorch import (
@@ -90,7 +90,7 @@ faces_coordinates, face_mask = transformer.generate()
 For <a href="https://www.youtube.com/watch?v=NXX0dKw4SjI">text-conditioned 3d shape synthesis</a>, simply set `condition_on_text = True` on your `MeshTransformer`, and then pass in your list of descriptions as the `texts` keyword argument
 
 ex.
-```python
+```py
 transformer = MeshTransformer(
     autoencoder,
     dim = 512,
@@ -115,7 +115,7 @@ faces_coordinates, face_mask = transformer.generate(texts = ['a long table'])
 
 If you want to tokenize meshes, for use in your multimodal transformer, simply invoke `.tokenize` on your autoencoder (or same method on autoencoder trainer instance for the exponentially smoothed model)
 
-```python
+```py
 
 mesh_token_ids = autoencoder.tokenize(
     vertices = vertices,
@@ -176,7 +176,7 @@ mesh_token_ids = autoencoder.tokenize(
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{Siddiqui2023MeshGPTGT,
     title   = {MeshGPT: Generating Triangle Meshes with Decoder-Only Transformers},
     author  = {Yawar Siddiqui and Antonio Alliegro and Alexey Artemov and Tatiana Tommasi and Daniele Sirigatti and Vladislav Rosov and Angela Dai and Matthias Nie{\ss}ner},
@@ -185,7 +185,7 @@ mesh_token_ids = autoencoder.tokenize(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -194,7 +194,7 @@ mesh_token_ids = autoencoder.tokenize(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Leviathan2022FastIF,
     title   = {Fast Inference from Transformers via Speculative Decoding},
     author  = {Yaniv Leviathan and Matan Kalman and Y. Matias},
@@ -204,7 +204,7 @@ mesh_token_ids = autoencoder.tokenize(
 }
 ```
 
-```bibtex
+```py
 @misc{yu2023language,
     title   = {Language Model Beats Diffusion -- Tokenizer is Key to Visual Generation}, 
     author  = {Lijun Yu and José Lezama and Nitesh B. Gundavarapu and Luca Versari and Kihyuk Sohn and David Minnen and Yong Cheng and Agrim Gupta and Xiuye Gu and Alexander G. Hauptmann and Boqing Gong and Ming-Hsuan Yang and Irfan Essa and David A. Ross and Lu Jiang},
@@ -215,7 +215,7 @@ mesh_token_ids = autoencoder.tokenize(
 }
 ```
 
-```bibtex
+```py
 @article{Lee2022AutoregressiveIG,
     title   = {Autoregressive Image Generation using Residual Quantization},
     author  = {Doyup Lee and Chiheon Kim and Saehoon Kim and Minsu Cho and Wook-Shin Han},
@@ -226,7 +226,7 @@ mesh_token_ids = autoencoder.tokenize(
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Katsch2023GateLoopFD,
     title   = {GateLoop: Fully Data-Controlled Linear Recurrence for Sequence Modeling},
     author  = {Tobias Katsch},

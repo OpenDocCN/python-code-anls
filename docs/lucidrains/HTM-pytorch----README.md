@@ -6,13 +6,13 @@ Implementation of <a href="https://arxiv.org/abs/2105.14039">Hierarchical Transf
 
 ## Install
 
-```bash
+```py
 $ pip install htm-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from htm_pytorch import HTMAttention
 
@@ -34,7 +34,7 @@ attended = attn(queries, memories, mask = mask) # (1, 128, 512)
 
 If you want the entire HTM Block (which contains the layernorm for the input followed by a skip connection), just import `HTMBlock` instead
 
-```python
+```py
 import torch
 from htm_pytorch import HTMBlock
 
@@ -53,7 +53,7 @@ out = block(queries, memories, mask = mask) # (1, 128, 512)
 
 ## Citations
 
-```bibtex
+```py
 @misc{lampinen2021mental,
     title   = {Towards mental time travel: a hierarchical memory for reinforcement learning agents}, 
     author  = {Andrew Kyle Lampinen and Stephanie C. Y. Chan and Andrea Banino and Felix Hill},

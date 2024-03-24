@@ -20,7 +20,7 @@ If you are interested in open sourcing works like these out in the wild, please 
 
 ## Citations
 
-```bibtex
+```py
 @misc{
     title   = {Illuminating protein space with a programmable generative model},
     author  = {John Ingraham, Max Baranov, Zak Costello, Vincent Frappier, Ahmed Ismail, Shan Tie, Wujie Wang, Vincent Xue, Fritz Obermeyer, Andrew Beam, Gevorg Grigoryan},    

@@ -6,6 +6,6 @@ Deepspeed is the framework Microsoft used to train the world's largest Attention
 
 2. Run the following command in this folder
 
-```bash
+```py
 $ deepspeed train.py --deepspeed --deepspeed_config ds_config.json
 ```

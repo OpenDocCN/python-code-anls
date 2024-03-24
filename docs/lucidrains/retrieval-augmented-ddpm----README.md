@@ -6,7 +6,7 @@ This will make use of the <a href="https://github.com/rom1504/clip-retrieval">Cl
 
 ## Citations
 
-```bibtex
+```py
 @article{Blattmann2022RetrievalAugmentedDM,
     title   = {Retrieval-Augmented Diffusion Models},
     author  = {A. Blattmann and Robin Rombach and K Oktay and Bj{\"o}rn Ommer},

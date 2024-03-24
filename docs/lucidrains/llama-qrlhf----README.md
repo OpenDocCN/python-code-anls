@@ -10,7 +10,7 @@ Will start off by adapting the autoregressive discrete Q-learning formulation in
 
 ## Citations
 
-```bibtex
+```py
 @inproceedings{qtransformer,
     title   = {Q-Transformer: Scalable Offline Reinforcement Learning via Autoregressive Q-Functions},
     authors = {Yevgen Chebotar and Quan Vuong and Alex Irpan and Karol Hausman and Fei Xia and Yao Lu and Aviral Kumar and Tianhe Yu and Alexander Herzog and Karl Pertsch and Keerthana Gopalakrishnan and Julian Ibarz and Ofir Nachum and Sumedh Sontakke and Grecia Salazar and Huong T Tran and Jodilyn Peralta and Clayton Tan and Deeksha Manjunath and Jaspiar Singht and Brianna Zitkovich and Tomas Jackson and Kanishka Rao and Chelsea Finn and Sergey Levine},
@@ -19,7 +19,7 @@ Will start off by adapting the autoregressive discrete Q-learning formulation in
 }
 ```
 
-```bibtex
+```py
 @inproceedings{Wang2015DuelingNA,
     title   = {Dueling Network Architectures for Deep Reinforcement Learning},
     author  = {Ziyun Wang and Tom Schaul and Matteo Hessel and H. V. Hasselt and Marc Lanctot and Nando de Freitas},

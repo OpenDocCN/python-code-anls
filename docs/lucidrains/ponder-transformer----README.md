@@ -6,13 +6,13 @@ This repository would not have been possible without repeated viewings of <a hre
 
 ## Install
 
-```bash
+```py
 $ pip install ponder-transformer
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from ponder_transformer import PonderTransformer
 
@@ -33,7 +33,7 @@ loss.backward()
 
 Now you can set the model to `.eval()` mode and it will terminate early when all samples of the batch have emitted a halting signal
 
-```python
+```py
 import torch
 from ponder_transformer import PonderTransformer
 
@@ -56,7 +56,7 @@ logits, layer_indices = model(x,  mask = mask) # (2, 512, 20000), (2)
 
 ## Citations
 
-```bibtex
+```py
 @misc{banino2021pondernet,
     title   = {PonderNet: Learning to Ponder}, 
     author  = {Andrea Banino and Jan Balaguer and Charles Blundell},

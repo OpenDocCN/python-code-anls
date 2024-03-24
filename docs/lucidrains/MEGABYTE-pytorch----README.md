@@ -12,13 +12,13 @@ Implementation of <a href="https://arxiv.org/abs/2305.07185">MEGABYTE</a>, Predi
 
 ## Install
 
-```bash
+```py
 $ pip install MEGABYTE-pytorch
 ```
 
 ## Usage
 
-```python
+```py
 import torch
 from MEGABYTE_pytorch import MEGABYTE
 
@@ -51,13 +51,13 @@ sampled = model.generate(temperature = 0.9, filter_thres = 0.9) # (1, 1024, 4)
 
 Train on character-level enwik8 with patches of size 4 - length 8192
 
-```bash
+```py
 $ python train.py
 ```
 
 ## Citations
 
-```bibtex
+```py
 @misc{yu2023megabyte,
     title   = {MEGABYTE: Predicting Million-byte Sequences with Multiscale Transformers}, 
     author  = {Lili Yu and Dániel Simig and Colin Flaherty and Armen Aghajanyan and Luke Zettlemoyer and Mike Lewis},
@@ -68,7 +68,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{https://doi.org/10.48550/arxiv.2302.01327,
     doi     = {10.48550/ARXIV.2302.01327},
     url     = {https://arxiv.org/abs/2302.01327},
@@ -80,7 +80,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @inproceedings{dao2022flashattention,
     title   = {Flash{A}ttention: Fast and Memory-Efficient Exact Attention with {IO}-Awareness},
     author  = {Dao, Tri and Fu, Daniel Y. and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
@@ -89,7 +89,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @software{peng_bo_2021_5196578,
     author    = {PENG Bo},
     title     = {BlinkDL/RWKV-LM: 0.01},
@@ -102,7 +102,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @article{Kazemnejad2023TheIO,
     title   = {The Impact of Positional Encoding on Length Generalization in Transformers},
     author  = {Amirhossein Kazemnejad and Inkit Padhi and Karthikeyan Natesan Ramamurthy and Payel Das and Siva Reddy},
@@ -112,7 +112,7 @@ $ python train.py
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},

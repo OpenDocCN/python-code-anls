@@ -12,7 +12,7 @@ Update: Deepmind has open sourced the official <a href="https://github.com/deepm
 
 ## Install
 
-```bash
+```py
 $ pip install alphafold2-pytorch
 ```
 
@@ -28,7 +28,7 @@ $ pip install alphafold2-pytorch
 
 Predicting distogram, like Alphafold-1, but with attention
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -55,7 +55,7 @@ distogram = model(
 
 You can also turn on prediction for the angles, by passing a `predict_angles = True` on init. The below example would be equivalent to <a href="https://github.com/lucidrains/tr-rosetta-pytorch">trRosetta</a> but with self / cross attention.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -93,7 +93,7 @@ You can also use <a href="https://github.com/lucidrains/En-transformer">E(n)-Tra
 
 Update: Baker's lab have shown that an end-to-end architecture from sequence and MSA embeddings to SE3 Transformers can best trRosetta and close the gap to Alphafold2. We will be using the <a href="https://github.com/lucidrains/graph-transformer-pytorch">Graph Transformer</a>, which acts on the trunk embeddings, to generate the initial set of coordinates to be sent to the equivariant network. (This is further corroborated by Costa et al in their work teasing out 3d coordinates from MSA Transformer embeddings in a paper predating Baker lab's)
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -130,7 +130,7 @@ coords = model(
 The underlying assumption is that the trunk works on the residue level, and then constitutes to atomic level for the structure module, whether it be SE3 Transformers, E(n)-Transformer, or EGNN doing the refinement. This library defaults to the 3 backbone atoms (C, Ca, N), but you can configure it to include any other atom you like, including Cb and the sidechains.
 
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -168,7 +168,7 @@ You can also pass in a tensor of shape (14,) defining which atoms you would like
 
 ex.
 
-```python
+```py
 atoms = torch.tensor([1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1])
 ```
 
@@ -180,7 +180,7 @@ There are some prerequisites. You will need to make sure that you have Nvidia's 
 
 Or you can try running the script below
 
-```bash
+```py
 git clone https://github.com/NVIDIA/apex
 cd apex
 pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
@@ -188,7 +188,7 @@ pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp
 
 Next, you will simply have to import and wrap your `Alphafold2` instance with a `ESMEmbedWrapper`, `MSAEmbedWrapper`, or `ProtTranEmbedWrapper` and it will take care of embedding both the sequence and the multiple-sequence alignments for you (and projecting it to the dimensions as specified on your model). Nothing needs to be changed save for adding the wrapper.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 from alphafold2_pytorch.embeds import MSAEmbedWrapper
@@ -220,7 +220,7 @@ distogram = model(
 
 By default, even if the wrapper supplies the trunk with the sequence and MSA embeddings, they would be summed with the usual token embeddings. If you want to train Alphafold2 without token embeddings (only rely on pretrained embeddings), you would need to set `disable_token_embed` to `True` on `Alphafold2` init.
 
-```python
+```py
 alphafold2 = Alphafold2(
     dim = 256,
     depth = 2,
@@ -236,7 +236,7 @@ A <a href="https://www.biorxiv.org/content/10.1101/2020.11.26.400523v1.full.pdf"
 
 If `predict_coords` is also turned on, then the MDS will accept the mean and standard deviation predictions directly without having to calculate that from the distogram bins.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -272,7 +272,7 @@ coords = model(
 
 You can add convolutional blocks, for both the primary sequence as well as the MSA, by simply setting one extra keyword argument `use_conv = True`
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -299,7 +299,7 @@ distogram = model(
 
 The convolutional kernels follow the lead of <a href="https://www.biorxiv.org/content/early/2021/05/11/2021.05.10.443415">this paper</a>, combining 1d and 2d kernels in one resnet-like block. You can fully customize the kernels as such.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -328,7 +328,7 @@ distogram = model(
 
 You can also do cycle dilation with one extra keyword argument. Default dilation is `1` for all layers.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -358,7 +358,7 @@ Finally, instead of following the pattern of convolutions, self-attention, cross
 
 ex. A network where you do predominately convolutions first, followed by self-attention + cross-attention blocks
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -391,13 +391,13 @@ You can train with Microsoft Deepspeed's <a href="https://www.deepspeed.ai/news/
 
 First, you need to install Deepspeed with Sparse Attention
 
-```bash
+```py
 $ sh install_deepspeed.sh
 ```
 
 Next, you need to install the pip package `triton`
 
-```bash
+```py
 $ pip install triton
 ```
 
@@ -405,7 +405,7 @@ If both of the above succeeded, now you can train with Sparse Attention!
 
 Sadly, the sparse attention is only supported for self attention, and not cross attention. I will bring in a different solution for making cross attention performant.
 
-```python
+```py
 model = Alphafold2(
     dim = 256,
     depth = 12,
@@ -420,7 +420,7 @@ model = Alphafold2(
 
 I have also added one of the best <a href="https://github.com/lucidrains/performer-pytorch">linear attention</a> variants, in the hope of lessening the burden of cross attending. I personally have not found Performer to work that well, but since in the paper they reported some ok numbers for protein benchmarks, I thought I'd include it and allow others to experiment.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -435,7 +435,7 @@ model = Alphafold2(
 
 You can also specify the exact layers you wish to use linear attention by passing in a tuple of the same length as the depth
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -452,7 +452,7 @@ model = Alphafold2(
 
 This <a href="https://arxiv.org/abs/2007.08442">paper</a> suggests that if you have queries or contexts that have defined axials (say an image), you can reduce the amount of attention needed by averaging across those axials (height and width) and concatenating the averaged axials into one sequence. You can turn this on as a memory saving technique for the cross attention, specifically for the primary sequence.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -476,7 +476,7 @@ Todo
 
 To save on memory for cross attention, you can set a compression ratio for the key / values, following the scheme laid out in <a href="https://arxiv.org/abs/1801.10198">this paper</a>. A compression ratio of 2-4 is usually acceptable.
 
-```python
+```py
 model = Alphafold2(
     dim = 256,
     depth = 12,
@@ -494,7 +494,7 @@ A <a href="https://www.biorxiv.org/content/10.1101/2021.02.12.430858v1">new pape
 
 You can also tie the row attentions of the MSA with the `msa_tie_row_attn = True` setting on initialization of `Alphafold2`. However, in order to use this, you must make sure that if you have uneven number of MSAs per primary sequence, that the MSA mask is properly set to `False` for the rows not in use.
 
-```python
+```py
 model = Alphafold2(
     dim = 256,
     depth = 2,
@@ -508,7 +508,7 @@ model = Alphafold2(
 
 Template processing is also largely done with axial attention, with cross attention done along the number of templates dimension. This largely follows the same scheme as in the recent all-attention approach to video classification as shown <a href="https://github.com/lucidrains/TimeSformer-pytorch">here</a>.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -546,7 +546,7 @@ distogram = model(
 
 If sidechain information is also present, in the form of the unit vector between the C and C-alpha coordinates of each residue, you can also pass it in as follows.
 
-```python
+```py
 import torch
 from alphafold2_pytorch import Alphafold2
 
@@ -603,7 +603,7 @@ Of interest to readers, each of the three frameworks have also been validated by
 
 ## Testing
 
-```bash
+```py
 $ python setup.py test
 ```
 
@@ -613,7 +613,7 @@ This library will use the awesome work by <a href="http://github.com/jonathankin
 
 We also have the MSA data, all ~3.5 TB worth, downloaded and hosted by Archivist, who owns <a href="https://the-eye.eu/">The-Eye</a> project. (They also host the data and models for <a href="https://www.eleuther.ai/">Eleuther AI</a>) Please consider a donation if you find them helpful.
 
-```bash
+```py
 $ curl -s https://the-eye.eu/eleuther_staging/globus_stuffs/tree.txt
 ```
 
@@ -646,7 +646,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 
 ## Citations
 
-```bibtex
+```py
 @misc{unpublished2021alphafold2,
     title   = {Alphafold2},
     author  = {John Jumper},
@@ -656,7 +656,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article{Rao2021.02.12.430858,
     author  = {Rao, Roshan and Liu, Jason and Verkuil, Robert and Meier, Joshua and Canny, John F. and Abbeel, Pieter and Sercu, Tom and Rives, Alexander},
     title   = {MSA Transformer},
@@ -667,7 +667,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article {Rives622803,
     author  = {Rives, Alexander and Goyal, Siddharth and Meier, Joshua and Guo, Demi and Ott, Myle and Zitnick, C. Lawrence and Ma, Jerry and Fergus, Rob},
     title   = {Biological Structure and Function Emerge from Scaling Unsupervised Learning to 250 Million Protein Sequences},
@@ -678,7 +678,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article {Elnaggar2020.07.12.199554,
     author  = {Elnaggar, Ahmed and Heinzinger, Michael and Dallago, Christian and Rehawi, Ghalia and Wang, Yu and Jones, Llion and Gibbs, Tom and Feher, Tamas and Angerer, Christoph and Steinegger, Martin and BHOWMIK, DEBSINDHU and Rost, Burkhard},
     title   = {ProtTrans: Towards Cracking the Language of Life{\textquoteright}s Code Through Self-Supervised Deep Learning and High Performance Computing},
@@ -692,7 +692,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{king2020sidechainnet,
     title   = {SidechainNet: An All-Atom Protein Structure Dataset for Machine Learning}, 
     author  = {Jonathan E. King and David Ryan Koes},
@@ -703,7 +703,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{alquraishi2019proteinnet,
     title   = {ProteinNet: a standardized data set for machine learning of protein structure}, 
     author  = {Mohammed AlQuraishi},
@@ -714,7 +714,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{gomez2017reversible,
     title     = {The Reversible Residual Network: Backpropagation Without Storing Activations}, 
     author    = {Aidan N. Gomez and Mengye Ren and Raquel Urtasun and Roger B. Grosse},
@@ -725,7 +725,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{fuchs2021iterative,
     title   = {Iterative SE(3)-Transformers},
     author  = {Fabian B. Fuchs and Edward Wagstaff and Justas Dauparas and Ingmar Posner},
@@ -736,7 +736,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{satorras2021en,
     title   = {E(n) Equivariant Graph Neural Networks}, 
     author  = {Victor Garcia Satorras and Emiel Hoogeboom and Max Welling},
@@ -747,7 +747,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @misc{su2021roformer,
     title   = {RoFormer: Enhanced Transformer with Rotary Position Embedding},
     author  = {Jianlin Su and Yu Lu and Shengfeng Pan and Bo Wen and Yunfeng Liu},
@@ -758,7 +758,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article{Gao_2020,
     title   = {Kronecker Attention Networks},
     ISBN    = {9781450379984},
@@ -772,7 +772,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article {Si2021.05.10.443415,
     author  = {Si, Yunda and Yan, Chengfei},
     title   = {Improved protein contact prediction using dimensional hybrid residual networks and singularity enhanced loss function},
@@ -786,7 +786,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article {Costa2021.06.02.446809,
     author  = {Costa, Allan and Ponnapati, Manvitha and Jacobson, Joseph M. and Chatterjee, Pranam},
     title   = {Distillation of MSA Embeddings to Folded Protein Structures with Graph Transformers},
@@ -799,7 +799,7 @@ https://pubmed.ncbi.nlm.nih.gov/33637700/
 }
 ```
 
-```bibtex
+```py
 @article {Baek2021.06.14.448402,
     author  = {Baek, Minkyung and DiMaio, Frank and Anishchenko, Ivan and Dauparas, Justas and Ovchinnikov, Sergey and Lee, Gyu Rie and Wang, Jue and Cong, Qian and Kinch, Lisa N. and Schaeffer, R. Dustin and Mill{\'a}n, Claudia and Park, Hahnbeom and Adams, Carson and Glassman, Caleb R. and DeGiovanni, Andy and Pereira, Jose H. and Rodrigues, Andria V. and van Dijk, Alberdina A. and Ebrecht, Ana C. and Opperman, Diederik J. and Sagmeister, Theo and Buhlheller, Christoph and Pavkov-Keller, Tea and Rathinaswamy, Manoj K and Dalwadi, Udit and Yip, Calvin K and Burke, John E and Garcia, K. Christopher and Grishin, Nick V. and Adams, Paul D. and Read, Randy J. and Baker, David},
     title   = {Accurate prediction of protein structures and interactions using a 3-track network},

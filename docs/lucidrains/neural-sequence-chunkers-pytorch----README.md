@@ -4,7 +4,7 @@ Implementation of the <a href="https://people.idsia.ch/~juergen/FKI-148-91ocr.pd
 
 ## Citations
 
-```bibtex
+```py
 @TECHREPORT{Schmidhuber91neuralsequence,
     author = {Jürgen Schmidhuber},
     title = {Neural Sequence Chunkers},

@@ -6,7 +6,7 @@ Implementation of <a href="https://arxiv.org/abs/2203.00274">TableFormer, Robust
 
 ## Citations
 
-```bibtex
+```py
 @article{Yang2022TableFormerRT,
   title   = {TableFormer: Robust Transformer Modeling for Table-Text Encoding},
   author  = {Jingfeng Yang and Aditya Gupta and Shyam Upadhyay and Luheng He and Rahul Goel and Shachi Paul},
