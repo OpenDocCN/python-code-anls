@@ -10,6 +10,7 @@
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
 +   [KubiScan 源码解析](docs/kubiscan-ai/README.md)
 +   [LangChain-Chatchat 源码解析](docs/langchain-chatchat/README.md)
++   [Lucidrains 系列项目源码解析](docs/lucidrains/README.md)
 +   [Marker 源码解析](docs/marker/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
