@@ -19,6 +19,7 @@
 +   [PythonMarkdown 源码解析](docs/python-markdown-ai/README.md)
 +   [PyZelda 源码解析](docs/pyzelda-ai/README.md)
 +   [QLoRA 源码解析](docs/qlora-ai/README.md)
++   [RWKV 源码解析](docs/rwkv/README.md)
 +   [SDWebUI 源码解析](docs/sd-webui-ai/README.md)
 +   [SegAny 源码解析](docs/segany-ai/README.md)
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
