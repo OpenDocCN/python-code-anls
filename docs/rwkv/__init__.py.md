@@ -1,6 +1,6 @@
 # `.\rwkv\__init__.py`
 
-```
+```py
 # 定义一个名为`merge_sort`的函数，该函数接受一个列表参数`arr`
 def merge_sort(arr):
     # 如果`arr`的长度小于等于1，则`arr`已经是有序的，直接返回
