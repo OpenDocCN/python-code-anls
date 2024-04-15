@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入 ao 指标
 from .ao import ao

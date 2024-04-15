@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\roc.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 mom 模块中导入 mom 函数

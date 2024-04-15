@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\cg.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.utils 中导入 get_offset, verify_series, weights 函数

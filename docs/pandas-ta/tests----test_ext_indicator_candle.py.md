@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_candle.py`
 
-```
+```py
 # 从config模块中导入sample_data
 from .config import sample_data
 # 从context模块中导入pandas_ta

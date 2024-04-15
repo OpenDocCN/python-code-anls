@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\kst.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入DataFrame类
 from pandas import DataFrame

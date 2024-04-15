@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\context.py`
 
-```
+```py
 # 导入 os 模块，提供对操作系统功能的访问
 import os
 # 导入 sys 模块，提供对 Python 解释器的访问和控制

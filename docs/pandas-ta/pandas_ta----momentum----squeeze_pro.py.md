@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\squeeze_pro.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需模块和对象
 from numpy import NaN as npNaN

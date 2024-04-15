@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\ichimoku.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库
 from pandas import date_range, DataFrame, RangeIndex, Timedelta

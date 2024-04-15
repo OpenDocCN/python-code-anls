@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\decay.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 导入 exp 函数并重命名为 npExp
 from numpy import exp as npExp

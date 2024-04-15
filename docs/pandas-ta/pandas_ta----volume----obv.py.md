@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\obv.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库
 from pandas_ta import Imports

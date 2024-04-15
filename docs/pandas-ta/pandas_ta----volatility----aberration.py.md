@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\aberration.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # from numpy import sqrt as npsqrt  # 导入 numpy 中的 sqrt 函数并重命名为 npsqrt（已注释掉）
 from pandas import DataFrame  # 从 pandas 库中导入 DataFrame 类

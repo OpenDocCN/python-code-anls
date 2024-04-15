@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\stochrsi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 DataFrame 类
 from pandas import DataFrame
@@ -112,7 +112,7 @@ Args:
     rsi_length (int): RSI 的周期。默认为 14
     k (int): 快速 %K 的周期。默认为 3
     d (int): 慢速 %K 的周期。默认为 3
-    mamode (str): 查看 ```help(ta.ma)```。默认为 'sma'（简单移动平均）
+    mamode (str): 查看 ```help(ta.ma)```py。默认为 'sma'（简单移动平均）
     offset (int): 结果偏移的周期数。默认为 0
 # 参数说明部分，描述函数的参数和返回值
 Kwargs:

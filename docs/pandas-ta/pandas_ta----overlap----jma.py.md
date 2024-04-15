@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\jma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库中导入 average 函数并重命名为 npAverage
 # 从 numpy 库中导入 nan 函数并重命名为 npNaN

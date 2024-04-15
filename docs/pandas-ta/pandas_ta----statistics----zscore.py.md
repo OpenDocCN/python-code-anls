@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\zscore.py`
 
-```
+```py
 # -*- coding: utf-8 -*- 
 # 从pandas_ta.overlap模块中导入sma函数
 from pandas_ta.overlap import sma

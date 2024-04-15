@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_indicator_statistics.py`
 
-```
+```py
 # 从.config模块中导入error_analysis，sample_data，CORRELATION，CORRELATION_THRESHOLD，VERBOSE变量
 # 从.context模块中导入pandas_ta模块
 from .config import error_analysis, sample_data, CORRELATION, CORRELATION_THRESHOLD, VERBOSE

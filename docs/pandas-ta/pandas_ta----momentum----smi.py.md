@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\smi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-                             # 指定编码格式为 UTF-8
 
 # 导入必要的模块和函数

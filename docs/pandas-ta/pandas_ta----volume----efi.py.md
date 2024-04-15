@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\efi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta.overlap 模块导入 ma 函数
 from pandas_ta.overlap import ma
@@ -83,7 +83,7 @@ Args:
     volume (pd.Series): Series of 'volume's
     length (int): The short period. Default: 13
     drift (int): The diff period. Default: 1
-    mamode (str): See ```help(ta.ma)```. Default: 'ema'
+    mamode (str): See ```help(ta.ma)```py. Default: 'ema'
     offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\accbands.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 DataFrame 类
 from pandas import DataFrame
@@ -118,7 +118,7 @@ Args:
     # 表示参数 `c` 是一个整数，代表乘数。默认值为 4
     c (int): Multiplier. Default: 4
     # 表示参数 `mamode` 是一个字符串，参见 `ta.ma` 的帮助文档。默认值为 'sma'
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     # 表示参数 `drift` 是一个整数，代表差异周期。默认值为 1
     drift (int): The difference period. Default: 1
     # 表示参数 `offset` 是一个整数，代表结果的偏移周期数。默认值为 0

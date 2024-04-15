@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\zlma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的函数库
 from . import (

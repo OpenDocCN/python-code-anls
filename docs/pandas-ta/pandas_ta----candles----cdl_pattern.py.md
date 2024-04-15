@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\candles\cdl_pattern.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入必要的类型和模块
 from typing import Sequence, Union

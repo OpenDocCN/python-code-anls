@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\fwma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta.utils 模块导入 fibonacci、get_offset、verify_series、weights 函数
 from pandas_ta.utils import fibonacci, get_offset, verify_series, weights

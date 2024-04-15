@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\coppock.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 roc 模块导入 roc 函数
 from .roc import roc

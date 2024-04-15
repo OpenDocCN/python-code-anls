@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_core.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 导入 re 模块并重命名为 re_
 # 从 pathlib 模块中导入 Path 类

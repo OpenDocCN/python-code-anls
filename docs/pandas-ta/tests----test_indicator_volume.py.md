@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_indicator_volume.py`
 
-```
+```py
 # 从.config中导入错误分析、示例数据、相关性、相关性阈值、详细模式
 from .config import error_analysis, sample_data, CORRELATION, CORRELATION_THRESHOLD, VERBOSE
 # 从.context中导入pandas_ta

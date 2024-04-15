@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_overlap_ext.py`
 
-```
+```py
 # 从当前包中导入 sample_data 和 pandas_ta 模块
 from .config import sample_data
 from .context import pandas_ta

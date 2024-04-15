@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\performance\log_return.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 中导入 log 函数并重命名为 nplog
 from numpy import log as nplog

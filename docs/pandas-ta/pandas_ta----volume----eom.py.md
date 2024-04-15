@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\eom.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入需要的库
 from pandas_ta.overlap import hl2, sma

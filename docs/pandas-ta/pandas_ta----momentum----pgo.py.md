@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\pgo.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # -*- coding: utf-8 -*-
 

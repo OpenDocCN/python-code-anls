@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_candles.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 Series 类
 from pandas import Series

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\vidya.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 库中的 nan 并重命名为 npNaN
 from numpy import nan as npNaN

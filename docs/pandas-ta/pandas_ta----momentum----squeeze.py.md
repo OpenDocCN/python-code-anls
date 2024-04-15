@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\squeeze.py`
 
-```
+```py
 # -*- coding: utf-8 -*-  # 指定文件编码格式为 UTF-8
 from numpy import nan as npNaN  # 导入 numpy 库中的 nan 并起别名为 npNaN
 from pandas import DataFrame  # 导入 pandas 库中的 DataFrame 类

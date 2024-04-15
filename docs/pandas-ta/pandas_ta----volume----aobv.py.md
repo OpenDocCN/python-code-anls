@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\aobv.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 DataFrame 类
 from pandas import DataFrame

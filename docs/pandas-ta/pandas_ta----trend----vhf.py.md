@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\vhf.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 fabs 函数并重命名为 npFabs
 from numpy import fabs as npFabs

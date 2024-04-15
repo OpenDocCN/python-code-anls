@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\ao.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从pandas_ta.overlap模块导入简单移动平均函数sma
 from pandas_ta.overlap import sma

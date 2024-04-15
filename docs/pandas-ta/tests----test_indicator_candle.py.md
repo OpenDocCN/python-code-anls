@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_indicator_candle.py`
 
-```
+```py
 # 从项目的config模块中导入错误分析、样本数据、相关性、相关性阈值和详细程度
 from .config import error_analysis, sample_data, CORRELATION, CORRELATION_THRESHOLD, VERBOSE
 # 从项目的context模块中导入pandas_ta

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\sinwma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入必要的库
 from numpy import pi as npPi  # 导入 numpy 库中的 pi 并重命名为 npPi

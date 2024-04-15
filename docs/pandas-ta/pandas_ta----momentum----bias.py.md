@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\bias.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 pandas_ta 库中的 ma 函数
 from pandas_ta.overlap import ma
@@ -72,7 +72,7 @@ Calculation:
 Args:
     close (pd.Series): Series of 'close's
     length (int): The period. Default: 26
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     drift (int): The short period. Default: 1
     offset (int): How many periods to offset the result. Default: 0
 

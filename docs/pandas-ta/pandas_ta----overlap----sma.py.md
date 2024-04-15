@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\sma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta 库中导入 Imports 对象

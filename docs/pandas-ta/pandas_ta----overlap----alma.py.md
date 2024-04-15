@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\alma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库中导入 exp 函数并重命名为 npExp
 from numpy import exp as npExp

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\pwma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.utils 模块中导入 get_offset, pascals_triangle, verify_series, weights 函数

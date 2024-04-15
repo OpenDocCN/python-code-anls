@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_cycles.py`
 
-```
+```py
 # 从 pandas 库的 core.series 模块中导入 Series 类
 from pandas.core.series import Series
 # 从当前目录中的 config 模块中导入 sample_data 变量

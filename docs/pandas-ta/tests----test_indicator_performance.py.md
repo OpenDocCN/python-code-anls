@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_indicator_performance.py`
 
-```
+```py
 # 导入所需的模块和函数
 from .config import sample_data
 from .context import pandas_ta

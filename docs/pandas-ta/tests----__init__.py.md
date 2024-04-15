@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\__init__.py`
 
-```
+```py
 # 导入必要的模块
 import numpy as np
 import matplotlib.pyplot as plt

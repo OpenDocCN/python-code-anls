@@ -1,6 +1,6 @@
 # `.\pandas-ta\docs\conf.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.

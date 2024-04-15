@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_metrics.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 引入需要的类型提示模块
 from typing import Tuple

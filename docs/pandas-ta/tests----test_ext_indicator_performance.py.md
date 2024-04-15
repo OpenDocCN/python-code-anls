@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_performance.py`
 
-```
+```py
 # 从当前目录下的 config 模块导入 sample_data 对象
 from .config import sample_data
 # 从当前目录下的 context 模块导入 pandas_ta 扩展

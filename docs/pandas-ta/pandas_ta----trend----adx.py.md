@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\adx.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库和模块
 from pandas import DataFrame
@@ -144,7 +144,7 @@ Args:
     length (int): 周期长度，默认为14
     lensig (int): 信号长度，类似于 TradingView 的默认 ADX 长度，默认为 length
     scalar (float): 放大倍数，默认为100
-    mamode (str): 参考 ```help(ta.ma)```，默认为 'rma'
+    mamode (str): 参考 ```help(ta.ma)```py，默认为 'rma'
     drift (int): 差异周期，默认为1
     offset (int): 结果偏移周期数，默认为0
 

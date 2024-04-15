@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\wma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入需要的模块和函数
 from pandas import Series

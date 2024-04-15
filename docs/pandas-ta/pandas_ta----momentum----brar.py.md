@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\brar.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入 DataFrame 类
 from pandas import DataFrame

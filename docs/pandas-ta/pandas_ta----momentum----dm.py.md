@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\dm.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas 库中导入 DataFrame 类
@@ -98,7 +98,7 @@ Calculation:
 Args:
     high (pd.Series): Series of 'high's
     low (pd.Series): Series of 'low's
-    mamode (str): See ```help(ta.ma)```.  Default: 'rma'
+    mamode (str): See ```help(ta.ma)```py.  Default: 'rma'
     talib (bool): If TA Lib is installed and talib is True, Returns the TA Lib
         version. Default: True
     drift (int): The difference period. Default: 1

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\mad.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 中导入 fabs 函数并重命名为 npfabs
 from numpy import fabs as npfabs

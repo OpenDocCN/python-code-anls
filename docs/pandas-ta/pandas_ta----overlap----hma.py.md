@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\hma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 numpy 库中导入 sqrt 函数并重命名为 npSqrt

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\psar.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 库中的 nan 作为 npNaN
 from numpy import nan as npNaN

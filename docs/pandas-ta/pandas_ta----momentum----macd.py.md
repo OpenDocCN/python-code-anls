@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\macd.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 concat 和 DataFrame 函数
 from pandas import concat, DataFrame

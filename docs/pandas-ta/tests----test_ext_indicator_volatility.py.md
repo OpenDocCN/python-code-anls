@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_volatility.py`
 
-```
+```py
 # 导入所需模块
 from .config import sample_data
 from .context import pandas_ta

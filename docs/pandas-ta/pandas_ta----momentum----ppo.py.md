@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\ppo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库和模块
 from pandas import DataFrame
@@ -108,7 +108,7 @@ Args:
     # 定义一个函数参数 scalar，表示放大倍数，默认值为 100
     scalar (float): How much to magnify. Default: 100
     # 定义一个函数参数 mamode，表示移动平均模式，查看可用模式的说明可调用 help(ta.ma)，默认值为 'sma'
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     # 定义一个函数参数 talib，表示是否使用 TA Lib，如果 TA Lib 已安装且 talib 为 True，则返回 TA Lib 版本，默认值为 True
     talib (bool): If TA Lib is installed and talib is True, Returns the TA Lib version. Default: True
     # 定义一个函数参数 offset，表示结果偏移多少周期，默认值为 0

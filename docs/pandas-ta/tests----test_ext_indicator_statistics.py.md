@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_ext_indicator_statistics.py`
 
-```
+```py
 # 从config模块中导入sample_data变量
 from .config import sample_data
 # 从context模块中导入pandas_ta模块

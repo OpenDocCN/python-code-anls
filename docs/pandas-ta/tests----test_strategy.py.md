@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_strategy.py`
 
-```
+```py
 # 导入必要的模块
 # 必须与其它测试分开运行，以确保成功运行
 from multiprocessing import cpu_count  # 导入获取 CPU 核心数量的函数

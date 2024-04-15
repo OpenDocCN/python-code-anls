@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\config.py`
 
-```
+```py
 # 导入 os 模块，用于操作系统相关功能
 import os
 # 导入 pandas 模块中的 DatetimeIndex 和 read_csv 函数

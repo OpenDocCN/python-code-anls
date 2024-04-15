@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\chop.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 numpy 库中导入 log10 函数并重命名为 npLog10

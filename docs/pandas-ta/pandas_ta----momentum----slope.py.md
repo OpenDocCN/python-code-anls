@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\slope.py`
 
-```
+```py
 # -*- coding: utf-8 -*-  # 指定文件编码格式为 UTF-8
 
 # 从 numpy 库中导入 arctan 函数并起别名为 npAtan

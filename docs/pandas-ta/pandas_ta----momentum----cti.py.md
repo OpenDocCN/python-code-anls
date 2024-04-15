@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\cti.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库导入 Series 类
 from pandas import Series

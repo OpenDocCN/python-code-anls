@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\fisher.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库和函数
 from numpy import log as nplog

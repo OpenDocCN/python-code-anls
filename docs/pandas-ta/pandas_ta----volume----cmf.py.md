@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\cmf.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.utils 导入一些必要的函数

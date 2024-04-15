@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\stoch.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入DataFrame类
 from pandas import DataFrame
@@ -119,7 +119,7 @@ Args:
     # 表示传入函数的参数，表示慢速 %D 的周期，默认为 3
     smooth_k (int): The Slow %D period. Default: 3
     # 表示传入函数的参数，参见 ta.ma 的帮助文档。默认为 'sma'
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     # 表示传入函数的参数，表示结果的偏移周期数，默认为 0
     offset (int): How many periods to offset the result. Default: 0
 # 参数说明：

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\median.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta.utils 模块中导入 get_offset 和 verify_series 函数
 from pandas_ta.utils import get_offset, verify_series

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\entropy.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 log 函数并将其命名为 npLog
 from numpy import log as npLog

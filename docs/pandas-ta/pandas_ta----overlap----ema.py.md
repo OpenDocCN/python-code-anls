@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\ema.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 导入 nan 并重命名为 npNaN
 from numpy import nan as npNaN

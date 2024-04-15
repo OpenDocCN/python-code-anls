@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\__init__.py`
 
-```
+```py
 # 导入 alma 指标计算模块
 from .alma import alma
 # 导入 dema 指标计算模块

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\adosc.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 ad 模块
 from .ad import ad

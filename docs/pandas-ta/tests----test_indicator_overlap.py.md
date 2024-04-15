@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_indicator_overlap.py`
 
-```
+```py
 # 从当前目录的 config 模块中导入 CORRELATION, CORRELATION_THRESHOLD, error_analysis, sample_data, VERBOSE 变量
 from .config import CORRELATION, CORRELATION_THRESHOLD, error_analysis, sample_data, VERBOSE
 # 从当前目录的 context 模块中导入 pandas_ta 模块

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\cmo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 导入必要的模块和函数

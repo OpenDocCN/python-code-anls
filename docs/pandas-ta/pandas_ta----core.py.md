@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\core.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 导入所需的模块

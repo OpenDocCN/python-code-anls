@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\__init__.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 导入模块中的各种函数和类
 from .aberration import aberration  # 导入 aberration 模块中的函数或类

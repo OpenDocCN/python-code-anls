@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\stdev.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 导入 sqrt 函数，并将其命名为 npsqrt
 from numpy import sqrt as npsqrt

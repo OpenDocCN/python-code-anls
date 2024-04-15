@@ -1,6 +1,6 @@
 # `.\pandas-ta\examples\watchlist.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 导入 datetime 模块并重命名为 dt
 import datetime as dt

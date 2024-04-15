@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\pvr.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从pandas_ta.utils模块中导入verify_series函数
 from pandas_ta.utils import verify_series

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\xsignals.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 中导入 nan 并重命名为 npNaN
 from numpy import nan as npNaN

@@ -1,6 +1,6 @@
 # `.\pandas-ta\tests\test_utils_metrics.py`
 
-```
+```py
 # 导入 unittest 模块中的 skip 和 TestCase 类
 from unittest import skip, TestCase
 # 导入 pandas 模块中的 DataFrame 类

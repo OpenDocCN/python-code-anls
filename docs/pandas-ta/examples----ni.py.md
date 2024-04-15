@@ -1,6 +1,6 @@
 # `.\pandas-ta\examples\ni.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从pandas_ta.overlap导入simple moving average函数
 from pandas_ta.overlap import sma

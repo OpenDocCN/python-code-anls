@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\tsi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库导入 DataFrame 类
 from pandas import DataFrame
@@ -115,7 +115,7 @@ Args:
     # 定义一个浮点数变量 scalar，表示放大倍数，默认值为 100
 
     mamode (str): Moving Average of TSI Signal Line.
-        See ```help(ta.ma)```. Default: 'ema'
+        See ```help(ta.ma)```py. Default: 'ema'
     # 定义一个字符串变量 mamode，表示 TSI 信号线的移动平均方式，默认值为 'ema'，可查看 ta.ma 的帮助文档
 
     drift (int): The difference period. Default: 1

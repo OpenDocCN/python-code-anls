@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\thermo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 DataFrame 类
 from pandas import DataFrame
@@ -151,7 +151,7 @@ Args:
     long(int): 买入因子
     short(float): 卖出因子
     length (int): 周期。默认值：20
-    mamode (str): 参见 ```help(ta.ma)```。默认值：'ema'
+    mamode (str): 参见 ```help(ta.ma)```py。默认值：'ema'
     drift (int): 漂移周期。默认值：1
     offset (int): 结果的偏移周期数。默认值：0
 

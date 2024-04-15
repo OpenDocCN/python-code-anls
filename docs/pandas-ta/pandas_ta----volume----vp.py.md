@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\vp.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库中导入 array_split 函数
 from numpy import array_split

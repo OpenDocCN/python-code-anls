@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\psl.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 导入 sign 函数并命名为 npSign
 from numpy import sign as npSign

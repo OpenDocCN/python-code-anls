@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\er.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas 库中导入 DataFrame 和 concat 函数

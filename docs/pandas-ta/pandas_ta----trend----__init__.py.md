@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\__init__.py`
 
-```
+```py
 # -*- coding: utf-8 -*-  
 # 指定文件编码为 UTF-8，确保正确处理中文字符
 

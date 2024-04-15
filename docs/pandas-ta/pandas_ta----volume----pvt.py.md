@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\pvt.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.momentum 模块中导入 roc 函数

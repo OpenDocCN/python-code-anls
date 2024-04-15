@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\data\yahoofinance.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 DataFrame 类
 from pandas import DataFrame

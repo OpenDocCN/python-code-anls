@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\pdist.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.utils 模块导入 get_drift, get_offset, non_zero_range, verify_series 函数

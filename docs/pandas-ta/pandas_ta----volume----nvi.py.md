@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\nvi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta 库中导入动量指标 roc
 from pandas_ta.momentum import roc

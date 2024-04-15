@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\dema.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 ema 函数
 from .ema import ema

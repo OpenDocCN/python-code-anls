@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\inertia.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 从 pandas_ta.overlap 模块导入 linreg 函数
 # 从 pandas_ta.volatility 模块导入 rvi 函数
@@ -99,7 +99,7 @@ Args:
     rvi_length (int): RVI period. Default: 14
     refined (bool): Use 'refined' calculation. Default: False
     thirds (bool): Use 'thirds' calculation. Default: False
-    mamode (str): See ```help(ta.ma)```. Default: 'ema'
+    mamode (str): See ```help(ta.ma)```py. Default: 'ema'
     drift (int): The difference period. Default: 1
 
 """

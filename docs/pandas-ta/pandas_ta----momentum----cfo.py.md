@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\cfo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta 库中导入 overlap 模块中的 linreg 函数
 from pandas_ta.overlap import linreg

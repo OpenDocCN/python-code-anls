@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\cycles\ebsw.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 模块导入 cos 函数并命名为 npCos
 from numpy import cos as npCos

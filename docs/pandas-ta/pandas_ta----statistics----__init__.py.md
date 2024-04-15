@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，以支持中文等非 ASCII 字符
 # 导入自定义模块中的函数，用于计算数据的不同统计量
 from .entropy import entropy  # 导入 entropy 函数，用于计算数据的熵

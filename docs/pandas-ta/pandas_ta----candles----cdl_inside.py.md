@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\candles\cdl_inside.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas_ta.utils 中导入 candle_color 和 get_offset 函数

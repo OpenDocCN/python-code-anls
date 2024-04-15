@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\trima.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从sma模块导入sma函数
 from .sma import sma

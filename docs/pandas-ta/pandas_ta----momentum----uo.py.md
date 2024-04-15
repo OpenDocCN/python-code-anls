@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\uo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 导入 DataFrame 类

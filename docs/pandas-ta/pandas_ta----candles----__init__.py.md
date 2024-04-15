@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\candles\__init__.py`
 
-```
+```py
 # 声明文件编码格式为 UTF-8
 # 导入 cdl_doji 模块中的 cdl_doji 函数
 from .cdl_doji import cdl_doji

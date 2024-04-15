@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\tos_stdevall.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 numpy 库中导入 array 别名为 npArray

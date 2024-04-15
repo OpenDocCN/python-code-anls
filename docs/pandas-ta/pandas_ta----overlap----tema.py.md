@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\tema.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 ema 模块中导入 ema 函数

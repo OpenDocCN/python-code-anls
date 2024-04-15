@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\increasing.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta.utils 中导入所需的函数和模块
 from pandas_ta.utils import get_drift, get_offset, is_percent, verify_series

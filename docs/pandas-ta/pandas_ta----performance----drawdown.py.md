@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\performance\drawdown.py`
 
-```
+```py
 # 导入所需模块
 # -*- coding: utf-8 -*-
 # 从 numpy 模块中导入 log 函数并重命名为 nplog

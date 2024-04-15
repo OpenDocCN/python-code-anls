@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\statistics\variance.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # -*- coding: utf-8 -*-
 

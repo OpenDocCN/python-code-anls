@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\ttm_trend.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas 库导入 DataFrame 类

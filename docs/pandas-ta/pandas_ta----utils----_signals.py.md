@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_signals.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 DataFrame 和 Series 类
 from pandas import DataFrame, Series

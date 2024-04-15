@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\qqe.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库中导入 maximum 函数并重命名为 npMaximum
 from numpy import maximum as npMaximum
@@ -161,7 +161,7 @@ Args:
     length (int): RSI period. Default: 14
     smooth (int): RSI smoothing period. Default: 5
     factor (float): QQE Factor. Default: 4.236
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     drift (int): The difference period. Default: 1
     offset (int): How many periods to offset the result. Default: 0
 

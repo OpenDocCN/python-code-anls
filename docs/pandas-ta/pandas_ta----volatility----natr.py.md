@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\natr.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入必要的库和模块
 from .atr import atr
@@ -69,7 +69,7 @@ Args:
     close (pd.Series): Series of 'close's
     length (int): The short period. Default: 20
     scalar (float): How much to magnify. Default: 100
-    mamode (str): See ```help(ta.ma)```. Default: 'ema'
+    mamode (str): See ```help(ta.ma)```py. Default: 'ema'
     talib (bool): If TA Lib is installed and talib is True, Returns the TA Lib
         version. Default: True
     offset (int): How many periods to offset the result. Default: 0

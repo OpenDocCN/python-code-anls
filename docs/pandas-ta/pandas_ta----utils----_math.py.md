@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_math.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入 functools 模块中的 reduce 函数
 # 从 math 模块中导入 floor 函数并将其命名为 mfloor

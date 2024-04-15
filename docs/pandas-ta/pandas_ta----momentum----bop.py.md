@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\bop.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta 库中导入必要的模块
 from pandas_ta import Imports

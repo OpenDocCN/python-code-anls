@@ -1,6 +1,6 @@
 # `.\pandas-ta\setup.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 setup 函数，用于设置 Python 包的元数据和安装信息
 from distutils.core import setup

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\vwap.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入依赖库中的hlc3函数
 from .hlc3 import hlc3

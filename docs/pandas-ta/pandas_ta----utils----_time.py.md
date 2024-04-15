@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\utils\_time.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 datetime 模块中导入 datetime 类

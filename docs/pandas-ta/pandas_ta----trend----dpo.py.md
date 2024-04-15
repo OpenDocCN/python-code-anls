@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\dpo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta.overlap 模块导入 sma 函数
 from pandas_ta.overlap import sma

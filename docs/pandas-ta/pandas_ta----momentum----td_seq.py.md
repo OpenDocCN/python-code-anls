@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\td_seq.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库中导入 where 函数并重命名为 npWhere
 from numpy import where as npWhere

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\kc.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 DataFrame 类
 from pandas import DataFrame
@@ -118,7 +118,7 @@ Args:
 """
     length (int): The short period.  Default: 20
     scalar (float): A positive float to scale the bands. Default: 2
-    mamode (str): See ```help(ta.ma)```. Default: 'ema'
+    mamode (str): See ```help(ta.ma)```py. Default: 'ema'
     offset (int): How many periods to offset the result. Default: 0
 # 函数参数：
 #   tr (bool): 如果为 True，则使用 True Range 进行计算；如果为 False，则使用高 - 低作为范围计算。默认值为 True

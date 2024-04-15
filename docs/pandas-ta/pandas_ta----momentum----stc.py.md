@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\stc.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 从 pandas 库中导入 DataFrame 和 Series 类
 从 pandas_ta.overlap 模块中导入 ema 函数

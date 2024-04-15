@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\apo.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 导入所需模块
 from pandas_ta import Imports
@@ -83,7 +83,7 @@ Args:
     close (pd.Series): Series of 'close's
     fast (int): The short period. Default: 12
     slow (int): The long period. Default: 26
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     talib (bool): If TA Lib is installed and talib is True, Returns the TA Lib
         version. Default: True
     offset (int): How many periods to offset the result. Default: 0

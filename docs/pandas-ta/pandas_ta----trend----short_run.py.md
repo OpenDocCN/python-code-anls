@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\trend\short_run.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入必要的模块和函数
 from .decreasing import decreasing  # 从当前目录下的 decreasing 模块中导入 decreasing 函数

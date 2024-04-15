@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\__init__.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从当前包中导入ad模块
 from .ad import ad

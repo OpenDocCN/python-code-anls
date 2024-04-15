@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\ssf.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 库，并将其中的 cos、exp、pi、sqrt 函数别名为 npCos、npExp、npPi、npSqrt
 from numpy import cos as npCos

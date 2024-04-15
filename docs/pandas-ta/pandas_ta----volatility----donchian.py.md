@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\donchian.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库导入 DataFrame 类
 from pandas import DataFrame

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\mom.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta 模块导入 Imports
 from pandas_ta import Imports

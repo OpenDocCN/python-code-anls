@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\bbands.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需的库和模块
 from pandas import DataFrame
@@ -116,7 +116,7 @@ Args:
     length (int): 短周期。默认值：5
     std (int): 长周期。默认值：2
     ddof (int): 使用的自由度。默认值：0
-    mamode (str): 参见 ```help(ta.ma)```。默认值：'sma'
+    mamode (str): 参见 ```help(ta.ma)```py。默认值：'sma'
     talib (bool): 如果安装了 TA Lib 并且 talib 为 True，则返回 TA Lib 版本。默认值：True
     offset (int): 结果偏移了多少周期。默认值：0
 

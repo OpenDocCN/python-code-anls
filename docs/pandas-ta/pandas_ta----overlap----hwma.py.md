@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\hwma.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas 库中导入 Series 类
 from pandas import Series

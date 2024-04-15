@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\__init__.py`
 
-```
+```py
 # 定义模块名称
 name = "pandas_ta"
 """

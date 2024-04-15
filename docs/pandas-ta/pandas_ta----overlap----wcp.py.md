@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\wcp.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 pandas_ta 库中导入 Imports 模块
 from pandas_ta import Imports

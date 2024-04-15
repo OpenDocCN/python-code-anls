@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\rsi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需模块和函数
 from pandas import DataFrame, concat

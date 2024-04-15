@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\hwc.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 库中的 sqrt 函数并重命名为 npSqrt
 from numpy import sqrt as npSqrt

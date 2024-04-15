@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\mcgd.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入所需模块和函数
 from pandas_ta.utils import get_offset, verify_series

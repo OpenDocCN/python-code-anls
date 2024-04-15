@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\linreg.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从 numpy 库导入 array 并重命名为 npArray，导入 arctan 并重命名为 npAtan，导入 nan 并重命名为 npNaN，导入 pi 并重命名为 npPi，从 numpy 版本导入 version 并重命名为 npVersion
 from numpy import array as npArray

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\momentum\cci.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入必要的库
 from pandas_ta import Imports

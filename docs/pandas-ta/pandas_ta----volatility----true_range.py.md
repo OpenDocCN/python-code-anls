@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\true_range.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 库中的 nan，并将其重命名为 npNaN
 from numpy import nan as npNaN

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volatility\rvi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 从pandas_ta.overlap模块导入ma函数
 from pandas_ta.overlap import ma
@@ -127,7 +127,7 @@ def bollinger_hband_indicator(high, low, close, length=14, scalar=100, refined=F
         scalar (float): 缩放带的正浮点数。默认值为100
         refined (bool): 使用“精炼”计算，即 RVI(high) 和 RVI(low) 的平均值，而不是 RVI(close)。默认值为False
         thirds (bool): 使用最高价、最低价和收盘价的平均值。默认值为False
-        mamode (str): 参见 ```help(ta.ma)```。默认值为'ema'
+        mamode (str): 参见 ```help(ta.ma)```py。默认值为'ema'
         offset (int): 结果的偏移周期数。默认值为0
 
     Kwargs:

@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\volume\mfi.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 
 # 从 pandas 库中导入 DataFrame 类

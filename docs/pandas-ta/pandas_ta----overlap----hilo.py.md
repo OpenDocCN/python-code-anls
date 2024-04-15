@@ -1,6 +1,6 @@
 # `.\pandas-ta\pandas_ta\overlap\hilo.py`
 
-```
+```py
 # -*- coding: utf-8 -*-
 # 导入 numpy 中的 nan 作为 npNaN
 from numpy import nan as npNaN
@@ -152,8 +152,8 @@ Args:
     high_length (int): It's period. Default: 13
     # 低期限的长度，即移动平均线的周期。默认值为21
     low_length (int): It's period. Default: 21
-    # 移动平均模式，参见```help(ta.ma)```。默认为'sma'
-    mamode (str): See ```help(ta.ma)```. Default: 'sma'
+    # 移动平均模式，参见```help(ta.ma)```py。默认为'sma'
+    mamode (str): See ```help(ta.ma)```py. Default: 'sma'
     # 结果的偏移量，即将结果向前或向后移动的周期数。默认为0
     offset (int): How many periods to offset the result. Default: 0
 
