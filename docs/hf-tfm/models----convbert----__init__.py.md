@@ -1,6 +1,6 @@
 # `.\models\convbert\__init__.py`
 
-```
+```py
 # 导入模块所需的类型检查功能
 from typing import TYPE_CHECKING
 

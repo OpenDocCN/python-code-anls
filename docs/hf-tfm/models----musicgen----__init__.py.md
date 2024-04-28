@@ -1,6 +1,6 @@
 # `.\transformers\models\musicgen\__init__.py`
 
-```
+```py
 # 导入类型检查工具
 from typing import TYPE_CHECKING
 # 导入可选依赖未安装异常和延迟加载模块

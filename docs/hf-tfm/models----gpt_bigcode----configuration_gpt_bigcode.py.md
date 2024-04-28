@@ -1,6 +1,6 @@
 # `.\models\gpt_bigcode\configuration_gpt_bigcode.py`
 
-```
+```py
 # 设置文件编码
 # 版权声明
 # 许可证信息
@@ -79,7 +79,7 @@ class GPTBigCodeConfig(PretrainedConfig):
 
     # 根据配置初始化一个模型（带有随机权重）
     >>> model = GPTBigCodeModel(configuration)
-    ```
+    ```py
     # 访问模型配置
     configuration = model.config
     

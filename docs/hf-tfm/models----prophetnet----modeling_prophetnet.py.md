@@ -1,6 +1,6 @@
 # `.\transformers\models\prophetnet\modeling_prophetnet.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明，指出代码的版权及使用许可
 # 此处代码使用 Apache License 2.0 授权
@@ -872,7 +872,7 @@ class ProphetNetDecoder(ProphetNetPreTrainedModel):  # 定义 ProphetNetDecoder 
         embeddings instead of randomly initialized word embeddings.
     """
 
-```  
+```py  
     # ProphetNetDecoder 的初始化函数，接受 ProphetNetConfig 和可选的词嵌入作为参数
     def __init__(self, config: ProphetNetConfig, word_embeddings: Optional[nn.Embedding] = None):
         # 调用父类的初始化函数

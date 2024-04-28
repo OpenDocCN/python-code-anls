@@ -1,6 +1,6 @@
 # `.\transformers\utils\sentencepiece_model_pb2.py`
 
-```
+```py
 # 由协议缓冲区编译器生成。请勿编辑！
 # 来源：sentencepiece_model.proto
 

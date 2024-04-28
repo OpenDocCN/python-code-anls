@@ -1,6 +1,6 @@
 # `.\transformers\models\reformer\__init__.py`
 
-```
+```py
 # 版权声明及许可声明
 # 从 ...utils 模块中导入相关函数和类
 from typing import TYPE_CHECKING

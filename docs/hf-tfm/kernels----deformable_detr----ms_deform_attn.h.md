@@ -1,6 +1,6 @@
 # `.\transformers\kernels\deformable_detr\ms_deform_attn.h`
 
-```
+```py
 /*!
 **************************************************************************************************
 * Deformable DETR

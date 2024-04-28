@@ -1,6 +1,6 @@
 # `.\transformers\models\mgp_str\modeling_mgp_str.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 版权所有 2023 年阿里巴巴研究和 HuggingFace 公司团队。保留所有权利。
@@ -563,7 +563,7 @@ class MgpstrForSceneTextRecognition(MgpstrPreTrainedModel):
 
         Example:
 
-        ```python
+        ```py
         >>> from transformers import (
         ...     MgpstrProcessor,
         ...     MgpstrForSceneTextRecognition,

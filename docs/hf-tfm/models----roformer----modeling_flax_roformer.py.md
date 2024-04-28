@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\modeling_flax_roformer.py`
 
-```
+```py
 # coding=utf-8
     # 定义模型配置类 RoFormerConfig 的参数
     Parameters:

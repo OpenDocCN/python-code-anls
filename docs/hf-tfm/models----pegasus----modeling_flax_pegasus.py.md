@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\modeling_flax_pegasus.py`
 
-```
+```py
 # 指定编码为 UTF-8
 # 版权声明
 # 版权所有 © 2021，Google 和 HuggingFace Inc. 团队。保留所有权利。
@@ -1268,7 +1268,7 @@ class FlaxPegasusForConditionalGeneration(FlaxPegasusPreTrainedModel):
     >>> summary_ids = model.generate(inputs['input_ids']).sequences
     # 打印解码后的摘要内容，跳过特殊标记，并保留分词空格
     >>> print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False))
-    ```
+    ```py
 
     # 填充掩码示例:
 
@@ -1294,7 +1294,7 @@ class FlaxPegasusForConditionalGeneration(FlaxPegasusPreTrainedModel):
 
     # 解码得到的预测结果，并以空格分隔
     >>> tokenizer.decode(predictions).split()
-    ```
+    ```py
 # 重写 `FlaxPegasusForConditionalGeneration` 的文档字符串，将 `PEGASUS_INPUTS_DOCSTRING` 和 `FLAX_PEGASUS_CONDITIONAL_GENERATION_DOCSTRING` 添加到其文档字符串中
 overwrite_call_docstring(
     FlaxPegasusForConditionalGeneration, PEGASUS_INPUTS_DOCSTRING + FLAX_PEGASUS_CONDITIONAL_GENERATION_DOCSTRING

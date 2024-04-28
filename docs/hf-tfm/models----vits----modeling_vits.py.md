@@ -1,6 +1,6 @@
 # `.\transformers\models\vits\modeling_vits.py`
 
-```
+```py
 # coding=utf-8
 
 # 导入必要的库

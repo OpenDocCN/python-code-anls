@@ -1,6 +1,6 @@
 # `.\transformers\trainer_callback.py`
 
-```
+```py
 # 导入所需的库和模块
 import dataclasses  # 用于定义数据类的装饰器
 import json  # 用于 JSON 数据的编解码
@@ -240,7 +240,7 @@ class TrainerCallback:
             _ = logs.pop("total_flos", None)
             if state.is_local_process_zero:
                 print(logs)
-    ```"""
+    ```py"""
 
     def on_init_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         """

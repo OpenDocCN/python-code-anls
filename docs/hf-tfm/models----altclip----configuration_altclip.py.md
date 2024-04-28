@@ -1,6 +1,6 @@
 # `.\transformers\models\altclip\configuration_altclip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括对应作者和 HuggingFace Inc. 团队的版权说明
 # 使用 Apache License, Version 2.0 授权，详见链接
@@ -44,7 +44,7 @@ class AltCLIPTextConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "altclip_text_model"
@@ -254,7 +254,7 @@ class AltCLIPConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AltCLIPConfig, AltCLIPModel
 
     >>> # Initializing a AltCLIPConfig with BAAI/AltCLIP style configuration

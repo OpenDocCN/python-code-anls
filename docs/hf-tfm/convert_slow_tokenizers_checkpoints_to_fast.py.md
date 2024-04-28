@@ -1,6 +1,6 @@
 # `.\transformers\convert_slow_tokenizers_checkpoints_to_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 这个文件的版权声明，使用了 Apache 许可证 2.0 版
 # 可以在 http://www.apache.org/licenses/LICENSE-2.0 获取许可证副本

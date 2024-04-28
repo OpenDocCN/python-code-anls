@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\tokenization_t5_fast.py`
 
-```
+```py
 # 设置文件编码和版权信息
 # 版权归 T5 作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 2.0 版本授权许可，除非符合许可条件，否则不得使用此文件

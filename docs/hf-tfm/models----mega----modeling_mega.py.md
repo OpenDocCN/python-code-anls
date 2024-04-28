@@ -1,6 +1,6 @@
 # `.\transformers\models\mega\modeling_mega.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The Mega Authors 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件

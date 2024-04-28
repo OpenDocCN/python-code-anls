@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\processing_sam.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 遵循 Apache 许可证 2.0 版本

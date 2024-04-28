@@ -1,6 +1,6 @@
 # `.\models\layoutlm\modeling_tf_layoutlm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归属于 Microsoft Research Asia LayoutLM 团队作者和 HuggingFace Inc. 团队
 #
@@ -1391,7 +1391,7 @@ class TFLayoutLMForTokenClassification(TFLayoutLMPreTrainedModel, TFTokenClassif
 
         >>> loss = outputs.loss
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
         outputs = self.layoutlm(
             input_ids=input_ids,
             bbox=bbox,

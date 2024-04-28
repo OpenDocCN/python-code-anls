@@ -1,6 +1,6 @@
 # `.\models\funnel\tokenization_funnel.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 版本 2.0 许可证，您可以使用此文件，但需要符合许可证规定
@@ -327,7 +327,7 @@ class FunnelTokenizer(PreTrainedTokenizer):
         ```
         2 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列         | 第二个序列      |
-        ```
+        ```py
 
         如果 `token_ids_1` 是 `None`，则此方法只返回掩码的第一部分（0）。
 

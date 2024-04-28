@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\modeling_mctct.py`
 
-```
+```py
 # 设定文件编码格式为utf-8
 # 版权声明
 # PyTorch M-CTC-T 模型

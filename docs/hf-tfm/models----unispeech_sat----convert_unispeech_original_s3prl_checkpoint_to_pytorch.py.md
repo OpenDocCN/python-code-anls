@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech_sat\convert_unispeech_original_s3prl_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 根据Apache许可2.0版，除非符合该许可，否则不得使用此文件

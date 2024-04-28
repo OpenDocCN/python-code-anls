@@ -1,6 +1,6 @@
 # `.\models\efficientformer\__init__.py`
 
-```
+```py
 # 版权声明，版权归 The HuggingFace Team 所有
 #
 # 根据 Apache 许可证 2.0 版本进行许可

@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\image_to_text.py`
 
-```
+```py
 # 从 typing 模块导入 List 和 Union 类型，用于类型提示
 from typing import List, Union
 
@@ -53,7 +53,7 @@ class ImageToTextPipeline(Pipeline):
     >>> captioner = pipeline(model="ydshieh/vit-gpt2-coco-en")
     >>> captioner("https://huggingface.co/datasets/Narsil/image_dummy/raw/main/parrots.png")
     [{'generated_text': 'two birds are standing next to each other '}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

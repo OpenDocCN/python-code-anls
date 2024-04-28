@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_text_dual_encoder\modeling_flax_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则不得使用此文件
@@ -454,7 +454,7 @@ VISION_TEXT_DUAL_ENCODER_MODEL_DOCSTRING = r"""
 
     Examples:
 
-    ```python
+    ```py
     >>> from PIL import Image
    >>> import requests
    >>> import jax

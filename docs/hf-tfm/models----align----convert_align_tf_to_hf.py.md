@@ -1,6 +1,6 @@
 # `.\transformers\models\align\convert_align_tf_to_hf.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 
 # 版权声明和许可证信息

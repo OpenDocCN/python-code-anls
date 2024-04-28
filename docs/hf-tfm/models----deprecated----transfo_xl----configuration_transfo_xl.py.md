@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\configuration_transfo_xl.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明以及版权信息，包括作者和团队信息
 # 获取 Apache 许可证 2.0 的副本链接
@@ -46,7 +46,7 @@ class TransfoXLConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型为 transfo-xl
     model_type = "transfo-xl"
     # 推理时需要忽略的键

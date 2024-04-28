@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\modeling_tf_blip_text.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Salesforce Team 作者和 HuggingFace Team 所有
 # 根据 BSD-3-Clause 许可证授权使用此文件

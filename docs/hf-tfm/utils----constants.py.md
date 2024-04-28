@@ -1,6 +1,6 @@
 # `.\transformers\utils\constants.py`
 
-```
+```py
 # 定义常量：ImageNet 数据集的默认均值
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
 # 定义常量：ImageNet 数据集的默认标准差

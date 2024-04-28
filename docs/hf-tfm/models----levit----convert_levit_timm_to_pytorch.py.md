@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\convert_levit_timm_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 导入所需的模块和库
 # 加载命令行参数解析器

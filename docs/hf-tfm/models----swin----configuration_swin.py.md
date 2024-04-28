@@ -1,6 +1,6 @@
 # `.\transformers\models\swin\configuration_swin.py`
 
-```
+```py
 # 设置字符编码为utf-8
 # 版权声明
 # 根据Apache许可证2.0版（“许可证”）的规定，在使用此文件时必须遵守许可证的规定
@@ -55,7 +55,7 @@ class SwinConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型为“swin”
     model_type = "swin"
 

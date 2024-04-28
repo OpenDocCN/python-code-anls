@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\tokenization_camembert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，包括作者和许可证信息
 # 该代码基于 Apache License, Version 2.0 许可证

@@ -1,6 +1,6 @@
 # `.\transformers\models\nezha\__init__.py`
 
-```
+```py
 # 导入需要的模块和类型
 # 首先导入必要的模块和类型，包括了自定义的utils模块、判断tokenizers是否可用的函数、判断torch是否可用的函数、TYPE_CHECKING类型
 from typing import TYPE_CHECKING

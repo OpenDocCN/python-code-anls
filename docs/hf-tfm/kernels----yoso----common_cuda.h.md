@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\common_cuda.h`
 
-```
+```py
 # 定义每个 CUDA 线程块中的最大线程数
 #define MAX_THREADS_PER_BLOCK 1024
 # 定义每个 CUDA 线程块中的最佳线程数

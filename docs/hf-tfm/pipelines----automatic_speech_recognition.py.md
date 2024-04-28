@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\automatic_speech_recognition.py`
 
-```
+```py
 # 导入必要的模块和类型
 from collections import defaultdict  # 导入 defaultdict 数据结构
 from typing import TYPE_CHECKING, Dict, Optional, Union  # 导入类型提示相关的模块
@@ -187,7 +187,7 @@ class AutomaticSpeechRecognitionPipeline(ChunkPipeline):
     >>> transcriber = pipeline(model="openai/whisper-base")
     >>> transcriber("https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac")
     {'text': ' He hoped there would be stew for dinner, turnips and carrots and bruised potatoes and fat mutton pieces to be ladled out in thick, peppered flour-fatten sauce.'}
-    ```
+    ```py
     """
     pass
     # 定义了一个名为`forward`的函数，用于实现推理过程

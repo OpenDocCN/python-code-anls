@@ -1,6 +1,6 @@
 # `.\transformers\convert_graph_to_onnx.py`
 
-```
+```py
 # 导入必要的库
 import warnings
 from argparse import ArgumentParser

@@ -1,6 +1,6 @@
 # `.\transformers\models\realm\tokenization_realm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 在 Apache 许可证 2.0 版本下授权使用该代码
@@ -301,7 +301,7 @@ class RealmTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

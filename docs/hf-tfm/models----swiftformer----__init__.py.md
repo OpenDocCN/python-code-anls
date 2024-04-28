@@ -1,6 +1,6 @@
 # `.\transformers\models\swiftformer\__init__.py`
 
-```
+```py
 # 引入类型检查模块
 from typing import TYPE_CHECKING
 # 从工具模块中引入必要的异常类和函数

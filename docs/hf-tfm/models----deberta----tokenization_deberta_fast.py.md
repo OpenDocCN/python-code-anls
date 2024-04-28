@@ -1,6 +1,6 @@
 # `.\models\deberta\tokenization_deberta_fast.py`
 
-```
+```py
 # 设定文件编码为utf-8
 # 版权声明，告知文件使用者遵守Apache License, Version 2.0
 # 获取Apache License, Version 2.0的副本链接
@@ -87,7 +87,7 @@ class DebertaTokenizerFast(PreTrainedTokenizerFast):
     # 对" Hello world"进行编码,得到的 input_ids 为[1, 20920, 232, 2]
     >>> tokenizer(" Hello world")["input_ids"]
     [1, 20920, 232, 2]
-    ```
+    ```py
 
     # 可以通过在实例化该分词器时传入 `add_prefix_space=True` 来避免这种行为,但由于模型并没有以这种方式预训练,可能会导致性能下降。
 
@@ -215,7 +215,7 @@ class DebertaTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

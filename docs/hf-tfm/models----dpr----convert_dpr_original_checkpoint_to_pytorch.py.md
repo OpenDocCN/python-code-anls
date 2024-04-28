@@ -1,6 +1,6 @@
 # `.\models\dpr\convert_dpr_original_checkpoint_to_pytorch.py`
 
-```
+```py
 # 版权声明
 # 版权所有，2020年HuggingFace团队。
 #

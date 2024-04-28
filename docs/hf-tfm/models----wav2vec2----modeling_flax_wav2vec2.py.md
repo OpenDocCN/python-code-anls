@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\modeling_flax_wav2vec2.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，被授权者除了按照该许可证遵守行为之外不得使用此文件
@@ -1213,7 +1213,7 @@ FLAX_WAV2VEC2_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoProcessor, FlaxWav2Vec2Model
     >>> from datasets import load_dataset
     >>> import soundfile as sf
@@ -1352,7 +1352,7 @@ FLAX_WAV2VEC2_FOR_CTC_DOCSTRING = """
     Example:
 
     # 示例代码，使用模型进行预测解码
-    ```python
+    ```py
     >>> import jax.numpy as jnp
     >>> from transformers import AutoProcessor, FlaxWav2Vec2ForCTC
     >>> from datasets import load_dataset
@@ -1532,7 +1532,7 @@ FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> import optax
     >>> import numpy as np
     >>> import jax.numpy as jnp

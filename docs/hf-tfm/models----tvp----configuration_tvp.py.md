@@ -1,6 +1,6 @@
 # `.\transformers\models\tvp\configuration_tvp.py`
 
-```
+```py
 # 该代码定义了一个 TvpConfig 类，用于存储和配置 TvpModel 模型的相关参数
 # 这个类继承自 PretrainedConfig 类，提供了配置模型架构的功能
 # 通过实例化该类并设置对应的参数，可以创建一个 TvpModel 模型并进行初始化

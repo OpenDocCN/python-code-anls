@@ -1,6 +1,6 @@
 # `.\models\convnext\feature_extraction_convnext.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 
 # 版权声明

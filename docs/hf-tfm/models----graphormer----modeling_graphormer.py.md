@@ -1,6 +1,6 @@
 # `.\models\graphormer\modeling_graphormer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 Microsoft、clefourrier 和 HuggingFace Inc. 团队。保留所有权利。
@@ -158,7 +158,7 @@ class LayerDropModuleList(nn.ModuleList):
         x = layer(x)
     for layer in layers:  # 这可能不会迭代任何层
         x = layer(x)
-    ```
+    ```py
 
     Args:
         p (float): 每个层丢弃的概率

@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\configuration_regnet.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 根据Apache 2.0许可证使用代码

@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t_v2\modeling_seamless_m4t_v2.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 使用此文件，详细信息请参考 License
@@ -894,7 +894,7 @@ class SeamlessM4Tv2ConformerAdapterLayer(nn.Module):
         hidden_states,
         attention_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-````
+```py`
         ):
         # 对隐藏状态进行残差层归一化
         residual = self.residual_layer_norm(hidden_states)
@@ -2310,7 +2310,7 @@ class SeamlessM4Tv2HifiGan(nn.Module):
 
         # 创建网络的后置卷积层，用于将特征映射转换为音频信号
         self.conv_post = nn.Conv1d(channels, 1, kernel_size=7, stride=1, padding=3)
-```  
+```py  
     # 将 log-mel 频谱图转换为语音波形
     def forward(self, input_embeds: torch.FloatTensor) -> torch.FloatTensor:
         r"""

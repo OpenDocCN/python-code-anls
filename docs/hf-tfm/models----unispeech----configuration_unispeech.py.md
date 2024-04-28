@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech\configuration_unispeech.py`
 
-```
+```py
 # 设定字符编码格式为utf-8
 # 版权声明和许可证信息
 # 引入必要的库和模块
@@ -47,7 +47,7 @@ class UniSpeechConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为'unispeech'
     model_type = "unispeech"

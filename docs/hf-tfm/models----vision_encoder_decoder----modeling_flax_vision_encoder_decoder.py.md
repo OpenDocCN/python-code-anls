@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_encoder_decoder\modeling_flax_vision_encoder_decoder.py`
 
-```
+```py
 # 该模块实现了基于 Vision-Encoder-Text-Decoder 架构的模型
 # 该架构可使用任何预训练的视觉自编码模型作为编码器，
 # 任何预训练的文本自回归模型作为解码器
@@ -428,7 +428,7 @@ class FlaxVisionEncoderDecoderModel(FlaxPreTrainedModel):
 
         >>> pixel_values = image_processor(images=image, return_tensors="np").pixel_values
         >>> encoder_outputs = model.encode(pixel_values)
-        ```"""
+        ```py"""
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\feature_extraction_layoutlmv2.py`
 
-```
+```py
 # 设定脚本编码为 UTF-8
 # 版权归 2021 年 HuggingFace Inc. 团队所有
 #

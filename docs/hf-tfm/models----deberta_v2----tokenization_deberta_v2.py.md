@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\tokenization_deberta_v2.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2020 年 Microsoft 和 HuggingFace Inc. 团队。
 #
@@ -241,7 +241,7 @@ class DebertaV2Tokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

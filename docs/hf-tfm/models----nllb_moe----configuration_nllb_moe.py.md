@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb_moe\configuration_nllb_moe.py`
 
-```
+```py
 # 设置文件的编码格式为 utf-8
 # 版权所有 2023 年，HuggingFace 公司
 #
@@ -49,7 +49,7 @@ class NllbMoeConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "nllb-moe"

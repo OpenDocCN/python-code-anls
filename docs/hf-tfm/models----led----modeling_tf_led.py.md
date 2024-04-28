@@ -1,6 +1,6 @@
 # `.\transformers\models\led\modeling_tf_led.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -398,7 +398,7 @@ class TFLEDEncoderSelfAttention(tf.keras.layers.Layer):
             0.2629,
         ]
         window_overlap = num_rows = 4
-        ```
+        ```py
 
                      (pad & diagonalize) => [ 0.4983, 2.6918, -0.0071, 1.0492, 0.0000, 0.0000, 0.0000
                        0.0000, -1.8348, 0.7672, 0.2986, 0.0285, 0.0000, 0.0000 0.0000, 0.0000, -0.7584, 0.4206,
@@ -1737,7 +1737,7 @@ class TFLEDForConditionalGeneration(TFLEDPreTrainedModel):
         >>> logits = model(inputs=batch.input_ids).logits
         >>> probs = tf.nn.softmax(logits[0])
         >>> # probs[5] is associated with the mask token
-        ```"""
+        ```py"""
 
         # 如果有标签，则不使用缓存
         if labels is not None:

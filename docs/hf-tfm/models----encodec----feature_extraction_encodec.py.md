@@ -1,6 +1,6 @@
 # `.\models\encodec\feature_extraction_encodec.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保支持中文注释等特殊字符
 # 版权声明，指明版权归 The HuggingFace Inc. team 所有
 # 使用 Apache 许可证 2.0 版本，允许自由使用，但需包含许可证和版权声明

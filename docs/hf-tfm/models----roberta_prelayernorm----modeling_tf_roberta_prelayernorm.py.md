@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta_prelayernorm\modeling_tf_roberta_prelayernorm.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，包括 Google AI Language Team Authors 和 HuggingFace Inc. team 的版权声明以及 NVIDIA CORPORATION 的版权声明
 # 根据 Apache 许可证 2.0 版本规定的权限使用本文件，在合规情况下使用，可获取许可证的副本

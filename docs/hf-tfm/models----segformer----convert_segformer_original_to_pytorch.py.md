@@ -1,6 +1,6 @@
 # `.\transformers\models\segformer\convert_segformer_original_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数
 import json  # 用于处理 JSON 格式的数据

@@ -1,6 +1,6 @@
 # `.\transformers\models\roc_bert\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 # 包含必要的导入
 from typing import TYPE_CHECKING

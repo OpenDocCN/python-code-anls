@@ -1,6 +1,6 @@
 # `.\models\deprecated\bort\convert_bort_original_gluonnlp_checkpoint_to_pytorch.py`
 
-```
+```py
     # 设置编码格式为 UTF-8
     # 版权声明及许可信息
     # 导入必要的库

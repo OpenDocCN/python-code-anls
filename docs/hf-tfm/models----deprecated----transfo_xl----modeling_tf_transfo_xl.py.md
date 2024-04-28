@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_tf_transfo_xl.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 # 引入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\models\focalnet\configuration_focalnet.py`
 
-```
+```py
 # 定义字符编码为 UTF-8
 # 版权声明
 # 根据 Apache 授权许可证 2.0 进行许可
@@ -46,7 +46,7 @@ class FocalNetConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
 # 模型类型为 "focalnet"
     model_type = "focalnet"

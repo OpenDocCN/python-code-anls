@@ -1,6 +1,6 @@
 # `.\transformers\models\squeezebert\tokenization_squeezebert.py`
 
-```
+```py
 # 设置 UTF-8 编码
 # 版权声明和许可证信息
 # 导入所需模块和函数
@@ -264,7 +264,7 @@ class SqueezeBertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

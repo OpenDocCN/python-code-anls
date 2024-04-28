@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\modeling_tf_longformer.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The Allen Institute for AI team 和 The HuggingFace Inc. team 所有
 # 基于 Apache License, Version 2.0（“许可证”）发行此文件；除非遵守许可证规定，否则不得使用此文件
@@ -967,7 +967,7 @@ class TFLongformerSelfAttention(tf.keras.layers.Layer):
 
         示例:
 
-        ```python
+        ```py
         chunked_hidden_states: [
             0.4983,
             2.6918,

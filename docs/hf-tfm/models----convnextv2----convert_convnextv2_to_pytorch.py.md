@@ -1,6 +1,6 @@
 # `.\models\convnextv2\convert_convnextv2_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 
 # 引入所需的库和模块

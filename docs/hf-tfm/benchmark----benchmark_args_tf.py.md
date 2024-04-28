@@ -1,6 +1,6 @@
 # `.\transformers\benchmark\benchmark_args_tf.py`
 
-```
+```py
 # 导入必要的模块
 from dataclasses import dataclass, field  # 导入 dataclass 类和 field 函数
 from typing import Tuple  # 导入 Tuple 类型

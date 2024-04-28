@@ -1,6 +1,6 @@
 # `.\transformers\models\align\modeling_align.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，对代码进行许可
@@ -1291,7 +1291,7 @@ class AlignVisionModel(AlignPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AlignVisionModel
@@ -1408,7 +1408,7 @@ class AlignModel(AlignPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, AlignModel
 
         >>> model = AlignModel.from_pretrained("kakaobrain/align-base")
@@ -1459,7 +1459,7 @@ class AlignModel(AlignPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AlignModel
@@ -1510,5 +1510,5 @@ class AlignModel(AlignPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-```  
+```py  
 ```

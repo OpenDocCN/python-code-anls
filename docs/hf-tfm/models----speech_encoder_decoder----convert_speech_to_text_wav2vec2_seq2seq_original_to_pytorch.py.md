@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_encoder_decoder\convert_speech_to_text_wav2vec2_seq2seq_original_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 声明版权信息
 # 导入依赖库

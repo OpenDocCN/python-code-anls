@@ -1,6 +1,6 @@
 # `.\transformers\models\patchtst\modeling_patchtst.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，声明文件版权，版权所有，IBM & Hugging Face 保留所有权利
 # 根据 Apache 许可证版本 2.0 授权使用该文件
@@ -901,7 +901,7 @@ def weighted_average(input_tensor: torch.Tensor, weights: Optional[torch.Tensor]
     Computes the weighted average of a given tensor across a given `dim`, masking values associated with weight zero,
     meaning instead of `nan * 0 = nan` you will get `0 * 0 = 0`.
     """
-```  
+```py  
     # 定义平均函数，接受输入张量、权重张量以及计算维度作为参数
     def weighted_average(input_tensor, weights=None, dim=None):
         # 如果提供了权重张量

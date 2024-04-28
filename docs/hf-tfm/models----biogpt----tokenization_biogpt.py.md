@@ -1,6 +1,6 @@
 # `.\transformers\models\biogpt\tokenization_biogpt.py`
 
-```
+```py
 # 导入所需的模块和类
 # coding=utf-8
 # 版权声明
@@ -336,7 +336,7 @@ class BioGptTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A FAIRSEQ
         Transformer sequence pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

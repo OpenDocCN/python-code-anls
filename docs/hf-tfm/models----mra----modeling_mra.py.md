@@ -1,6 +1,6 @@
 # `.\transformers\models\mra\modeling_mra.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 按照 Apache 许可证 2.0 版在合规的情况下使用该文件
@@ -1469,7 +1469,7 @@ class MraForMultipleChoice(MraPreTrainedModel):
         labels: Optional[torch.Tensor] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-```  
+```py  
         ) -> Union[Tuple, MultipleChoiceModelOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional`):

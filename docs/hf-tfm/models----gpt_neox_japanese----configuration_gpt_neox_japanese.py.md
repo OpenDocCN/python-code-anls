@@ -1,6 +1,6 @@
 # `.\models\gpt_neox_japanese\configuration_gpt_neox_japanese.py`
 
-```
+```py
 # 导入所需的模块和工具函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -58,7 +58,7 @@ class GPTNeoXJapaneseConfig(PretrainedConfig):
             The dropout ratio for the hidden layer.
         Example:
 
-    ```python
+    ```py
     >>> from transformers import GPTNeoXJapaneseConfig, GPTNeoXJapaneseModel
 
     >>> # Initializing a GPTNeoXJapanese gpt-neox-japanese-2.7b style configuration
@@ -72,7 +72,7 @@ class GPTNeoXJapaneseConfig(PretrainedConfig):
     ```"""
     # 设置模型类型为"gpt_neox_japanese"
     model_type = "gpt_neox_japanese"
-```  
+```py  
     # 初始化 Transformer 模型的参数
     def __init__(
         self,

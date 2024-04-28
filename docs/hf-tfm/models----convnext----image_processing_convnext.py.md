@@ -1,6 +1,6 @@
 # `.\models\convnext\image_processing_convnext.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，指定该文件的编码格式为UTF-8
 # 引入必要的模块和函数

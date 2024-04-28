@@ -1,6 +1,6 @@
 # `.\transformers\models\timesformer\configuration_timesformer.py`
 
-```
+```py
 # 设置编码为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0许可，可以使用此文件
@@ -77,7 +77,7 @@ TIMESFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP = {
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 设定模型类型为 "timesformer"
     model_type = "timesformer"

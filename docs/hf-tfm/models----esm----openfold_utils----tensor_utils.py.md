@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\tensor_utils.py`
 
-```
+```py
 # 引入 functools 中的 partial 函数，用于部分应用函数
 # 引入 Any, Callable, Dict, List, Type, TypeVar, Union, overload 类型提示
 # 引入 torch 和 torch 中的 nn、types 模块

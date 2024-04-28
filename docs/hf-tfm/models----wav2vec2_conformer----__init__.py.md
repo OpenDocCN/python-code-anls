@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_conformer\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # 2022 年由 HuggingFace 团队保留所有权利。

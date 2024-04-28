@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\tokenization_blenderbot.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可证信息
@@ -96,7 +96,7 @@ class BlenderbotTokenizer(PreTrainedTokenizer):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [6950, 1085, 2]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer or when you
     call it on some text, but since the model was not pretrained this way, it might yield a decrease in performance.

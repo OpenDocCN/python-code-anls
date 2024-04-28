@@ -1,6 +1,6 @@
 # `.\transformers\models\owlvit\image_processing_owlvit.py`
 
-```
+```py
 # 编码设置为 UTF-8
 # 定义 OwlViT 图像处理器类，继承自 BaseImageProcessor
 class OwlViTImageProcessor(BaseImageProcessor):

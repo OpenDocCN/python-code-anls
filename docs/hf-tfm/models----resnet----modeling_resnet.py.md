@@ -1,6 +1,6 @@
 # `.\transformers\models\resnet\modeling_resnet.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 导入必要的库和模块

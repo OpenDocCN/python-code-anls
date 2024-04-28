@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\modeling_flax_gpt_neo.py`
 
-```
+```py
 # 导入所需的库
 from functools import partial
 from typing import Optional, Tuple

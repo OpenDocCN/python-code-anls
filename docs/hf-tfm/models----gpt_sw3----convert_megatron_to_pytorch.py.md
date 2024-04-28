@@ -1,6 +1,6 @@
 # `.\models\gpt_sw3\convert_megatron_to_pytorch.py`
 
-```
+```py
 # 版权声明
 # 版权归 The HuggingFace Inc. team 和 AI-Sweden team 所有
 # 根据 Apache License, Version 2.0 许可，除非遵守许可，否则不得使用此文件

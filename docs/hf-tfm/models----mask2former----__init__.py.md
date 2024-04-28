@@ -1,6 +1,6 @@
 # `.\transformers\models\mask2former\__init__.py`
 
-```
+```py
 # 版权声明，版权所有，保留所有权利
 #
 # 根据 Apache 许可证 2.0 版本 (以下简称"许可证") 授权

@@ -1,6 +1,6 @@
 # `.\transformers\safetensors_conversion.py`
 
-```
+```py
 # 导入所需模块
 import json  # 导入 JSON 模块，用于处理 JSON 数据
 import uuid  # 导入 uuid 模块，用于生成唯一标识符

@@ -1,6 +1,6 @@
 # `.\transformers\models\persimmon\modeling_persimmon.py`
 
-```
+```py
 # 指定文件编码为utf-8
 
 # 版权声明，说明代码的版权信息

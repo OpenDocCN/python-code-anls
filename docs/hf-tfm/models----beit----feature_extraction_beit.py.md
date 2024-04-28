@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\feature_extraction_beit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，表明代码的版权和使用许可
 # 导入警告模块

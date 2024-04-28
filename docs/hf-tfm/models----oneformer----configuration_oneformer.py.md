@@ -1,6 +1,6 @@
 # `.\transformers\models\oneformer\configuration_oneformer.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Dict, Optional  # 导入用于类型提示的模块和类
 # 从配置工具中导入预训练配置类
@@ -43,7 +43,7 @@ class OneFormerConfig(PretrainedConfig):
     >>> model = OneFormerModel(configuration)
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型

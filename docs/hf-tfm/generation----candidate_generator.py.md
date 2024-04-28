@@ -1,6 +1,6 @@
 # `.\transformers\generation\candidate_generator.py`
 
-```
+```py
 # 导入所需的模块和类型提示
 import copy
 from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple

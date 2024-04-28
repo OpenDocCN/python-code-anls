@@ -1,6 +1,6 @@
 # `.\models\cvt\modeling_tf_cvt.py`
 
-```
+```py
 # 设置字符编码为 UTF-8
 # 版权声明和许可证
 # 版权声明为 2022 年版权归 Microsoft Research 和 The HuggingFace Inc. 团队所有，保留所有权利
@@ -1160,7 +1160,7 @@ TFCVT_INPUTS_DOCSTRING = r"""
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, TFCvtModel
         >>> from PIL import Image
         >>> import requests
@@ -1264,7 +1264,7 @@ class TFCvtForImageClassification(TFCvtPreTrainedModel, TFSequenceClassification
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, TFCvtForImageClassification
         >>> import tensorflow as tf
         >>> from PIL import Image

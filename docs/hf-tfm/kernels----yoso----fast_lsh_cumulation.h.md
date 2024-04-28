@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\fast_lsh_cumulation.h`
 
-```
+```py
 // 导入 Torch C++ 扩展库
 #include <torch/extension.h>
 // 导入 ATen 库

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\configuration_layoutlmv3.py`
 
-```
+```py
 # 指定编码格式为UTF-8
 # 版权声明和许可信息
 # 依据 Apache 许可 2.0 版本，本代码受许可保护
@@ -58,7 +58,7 @@ class LayoutLMv3Config(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "layoutlmv3"

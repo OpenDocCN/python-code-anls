@@ -1,6 +1,6 @@
 # `.\transformers\models\rag\modeling_tf_rag.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 

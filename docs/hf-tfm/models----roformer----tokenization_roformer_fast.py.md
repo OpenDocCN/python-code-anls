@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\tokenization_roformer_fast.py`
 
-```
+```py
 # 指定编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权，仅在符合许可证下才能使用该文件
@@ -165,7 +165,7 @@ PRETRAINED_INIT_CONFIGURATION = {
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列    | 第二个序列 |
-        ```
+        ```py
 
         如果 `token_ids_1` 是 `None`，则此方法仅返回掩码的第一部分（0s）。
 

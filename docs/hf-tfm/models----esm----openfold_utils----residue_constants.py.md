@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\residue_constants.py`
 
-```
+```py
 # 导入collections、copy、functools和resources模块
 import collections
 import copy

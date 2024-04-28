@@ -1,6 +1,6 @@
 # `.\transformers\generation\tf_utils.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，版权归 Google AI Language Team 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用此文件

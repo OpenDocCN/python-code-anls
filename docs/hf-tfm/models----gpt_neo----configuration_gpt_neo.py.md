@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\configuration_gpt_neo.py`
 
-```
+```py
 # 设置编码格式为UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授予的许可进行使用
@@ -51,7 +51,7 @@ class GPTNeoConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> 配置 = model.config
-    ```
+    ```py
     """
 
     model_type = "gpt_neo"

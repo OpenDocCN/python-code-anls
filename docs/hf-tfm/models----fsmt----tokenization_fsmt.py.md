@@ -1,6 +1,6 @@
 # `.\models\fsmt\tokenization_fsmt.py`
 
-```
+```py
 # 对代码文件进行编码声明为UTF-8
 # 版权声明
 # 根据Apache许可版本2.0授权，除非符合许可条件，否则不得使用此文件
@@ -518,7 +518,7 @@ class FSMTTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

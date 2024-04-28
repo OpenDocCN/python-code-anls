@@ -1,6 +1,6 @@
 # `.\transformers\models\opt\modeling_opt.py`
 
-```
+```py
 # 定义编码为 UTF-8
 # 版权声明，版权所有
 # 根据 Apache 许可证 2.0 版本使用和分发此代码

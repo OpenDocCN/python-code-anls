@@ -1,6 +1,6 @@
 # `.\transformers\models\pix2struct\image_processing_pix2struct.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 版权所有 2023 年 HuggingFace Inc. 团队。保留所有权利。

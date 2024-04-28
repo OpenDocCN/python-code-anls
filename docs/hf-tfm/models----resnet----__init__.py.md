@@ -1,6 +1,6 @@
 # `.\transformers\models\resnet\__init__.py`
 
-```
+```py
 # 从 typing 模块中导入 TYPE_CHECKING，用于类型检查
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\ibert\quant_modules.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，包括作者信息和版权信息
 # 根据Apache License 2.0许可证，对代码进行许可

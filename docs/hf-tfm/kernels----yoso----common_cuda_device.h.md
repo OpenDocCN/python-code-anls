@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\common_cuda_device.h`
 
-```
+```py
 // 在设备上执行插入操作，将值插入到集合中
 template<typename T>
 __device__ int set_insert(T *set, int set_size, T value) {

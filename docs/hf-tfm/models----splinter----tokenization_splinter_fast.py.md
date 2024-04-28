@@ -1,6 +1,6 @@
 # `.\transformers\models\splinter\tokenization_splinter_fast.py`
 
-```
+```py
 # 文件编码为 utf-8
 # 版权声明
 # 基于 Apache 2.0 协议

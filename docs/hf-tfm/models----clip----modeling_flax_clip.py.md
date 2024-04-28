@@ -1,6 +1,6 @@
 # `.\transformers\models\clip\modeling_flax_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码作者和许可证信息
 # 该代码遵循 Apache License, Version 2.0 许可证
@@ -1012,7 +1012,7 @@ class FlaxCLIPPreTrainedModel(FlaxPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, FlaxCLIPModel
 
         >>> model = FlaxCLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1074,7 +1074,7 @@ class FlaxCLIPPreTrainedModel(FlaxPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, FlaxCLIPModel
@@ -1161,7 +1161,7 @@ FLAX_CLIP_TEXT_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxCLIPTextModel
 
     >>> model = FlaxCLIPTextModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1246,7 +1246,7 @@ FLAX_CLIP_TEXT_MODEL_WITH_PROJECTION_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxCLIPTextModelWithProjection
 
     >>> model = FlaxCLIPTextModelWithProjection.from_pretrained("openai/clip-vit-base-patch32")
@@ -1310,7 +1310,7 @@ FLAX_CLIP_VISION_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from PIL import Image
     >>> import requests
     >>> from transformers import AutoProcessor, FlaxCLIPVisionModel
@@ -1462,7 +1462,7 @@ FLAX_CLIP_MODEL_DOCSTRING = """
 
     Example:  # 示例
 
-    ```python
+    ```py
     >>> import jax
     >>> from PIL import Image
     >>> import requests
@@ -1489,5 +1489,5 @@ overwrite_call_docstring(FlaxCLIPModel, CLIP_INPUTS_DOCSTRING + FLAX_CLIP_MODEL_
 
 # 追加和替换FlaxCLIPModel类的返回文档字符串
 append_replace_return_docstrings(FlaxCLIPModel, output_type=FlaxCLIPOutput, config_class=CLIPConfig)
-```  
+```py  
 ```

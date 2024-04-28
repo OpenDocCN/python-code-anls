@@ -1,6 +1,6 @@
 # `.\transformers\onnx\convert.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 从 inspect 模块中导入 signature 函数

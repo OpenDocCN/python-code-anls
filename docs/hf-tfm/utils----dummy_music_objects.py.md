@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_music_objects.py`
 
-```
+```py
 # 该文件是由命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入必要的模块
 from ..utils import DummyObject, requires_backends

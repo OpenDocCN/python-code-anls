@@ -1,6 +1,6 @@
 # `.\transformers\modeling_tf_pytorch_utils.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Google AI Language Team 作者和 HuggingFace Inc. 团队所有，以及 NVIDIA 公司所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件

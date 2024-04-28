@@ -1,6 +1,6 @@
 # `.\transformers\debug_utils.py`
 
-```
+```py
 # 导入collections模块，用于操作Python内置的集合数据类型
 import collections
 
@@ -31,7 +31,7 @@ class DebugUnderflowOverflow:
 
     ```python
     debug_overflow = DebugUnderflowOverflow(model)
-    ```
+    ```py
 
     then run the training as normal and if `nan` or `inf` gets detected in at least one of the weight, input or output
     elements this module will throw an exception and will print `max_frames_to_save` frames that lead to this event,
@@ -66,7 +66,7 @@ class DebugUnderflowOverflow:
                       encoder.block.2.layer.1.dropout Dropout
     3.18e-04 6.27e+04 input[0]
     0.00e+00      inf output
-    ```
+    ```py
 
     You can see here, that `T5DenseGatedGeluDense.forward` resulted in output activations, whose absolute max value was
     # 创建一个调试工具类，用于检测模型中的浮点数溢出和下溢问题

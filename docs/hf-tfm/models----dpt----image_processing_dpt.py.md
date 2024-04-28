@@ -1,6 +1,6 @@
 # `.\models\dpt\image_processing_dpt.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明和许可信息
 """Image processor class for DPT."""  # 为DPT设计的图像处理器类

@@ -1,6 +1,6 @@
 # `.\transformers\models\maskformer\modeling_maskformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权信息
 # 2022 年版权归 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队所有

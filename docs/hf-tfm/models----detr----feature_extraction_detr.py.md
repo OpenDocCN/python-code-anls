@@ -1,6 +1,6 @@
 # `.\models\detr\feature_extraction_detr.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 版权所有 2021 年 HuggingFace Inc. 团队。保留所有权利。

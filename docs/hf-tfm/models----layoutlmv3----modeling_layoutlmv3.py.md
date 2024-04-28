@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\modeling_layoutlmv3.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明：Microsoft Research 和 HuggingFace Inc. 团队
 # 根据 Apache 许可证 2.0 版本授权
@@ -978,7 +978,7 @@ class LayoutLMv3ForTokenClassification(LayoutLMv3PreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoProcessor, AutoModelForTokenClassification
         >>> from datasets import load_dataset
 

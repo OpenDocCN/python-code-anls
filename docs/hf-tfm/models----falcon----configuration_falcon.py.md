@@ -1,6 +1,6 @@
 # `.\models\falcon\configuration_falcon.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明及许可协议信息
 #
@@ -49,7 +49,7 @@ class FalconConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "falcon"

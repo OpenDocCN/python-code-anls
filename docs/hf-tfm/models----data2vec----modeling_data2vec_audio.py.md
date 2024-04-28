@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_data2vec_audio.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 根据Apache许可2.0版进行许可
@@ -1429,7 +1429,7 @@ class Data2VecAudioForSequenceClassification(Data2VecAudioPreTrainedModel):
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-```  
+```py  
 # 从transformers.models.wav2vec2.modeling_wav2vec2.AMSoftmaxLoss复制而来的类
 class AMSoftmaxLoss(nn.Module):
     def __init__(self, input_dim, num_labels, scale=30.0, margin=0.4):

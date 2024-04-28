@@ -1,6 +1,6 @@
 # `.\transformers\data\processors\squad.py`
 
-```
+```py
 # 导入所需模块和库
 import json  # 导入处理 JSON 格式数据的模块
 import os  # 导入操作系统相关功能的模块
@@ -528,7 +528,7 @@ class SquadProcessor(DataProcessor):
 
         >>> training_examples = get_examples_from_dataset(dataset, evaluate=False)
         >>> evaluation_examples = get_examples_from_dataset(dataset, evaluate=True)
-        ```"""
+        ```py"""
 
         # 根据评估模式选择数据集
         if evaluate:

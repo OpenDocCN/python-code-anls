@@ -1,6 +1,6 @@
 # `.\transformers\models\timm_backbone\configuration_timm_backbone.py`
 
-```
+```py
 # 设置文件编码
 # 版权声明
 # ...
@@ -48,7 +48,7 @@ class TimmBackboneConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     model_type = "timm_backbone"  # 设置模型类型为 "timm_backbone"

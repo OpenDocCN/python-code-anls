@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevit\configuration_mobilevit.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections
 from typing import Mapping
@@ -45,7 +45,7 @@ class MobileViTConfig(PretrainedConfig):
 
     # 访问模型配置
     configuration = model.config
-    ```
+    ```py
     """
 
     model_type = "mobilevit"

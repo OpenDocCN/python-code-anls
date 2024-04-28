@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\modeling_tf_wav2vec2.py`
 
-```
+```py
 # 导入必要的库
 from __future__ import annotations
 import warnings
@@ -1692,7 +1692,7 @@ class TFWav2Vec2Model(TFWav2Vec2PreTrainedModel):
 
         >>> input_values = processor(ds["speech"][0], return_tensors="tf").input_values  # Batch size 1
         >>> hidden_states = model(input_values).last_hidden_state
-        ```"""
+        ```py"""
 
         # 如果未指定output_hidden_states，则使用配置中的值
         output_hidden_states = output_hidden_states if output_hidden_states else self.config.output_hidden_states

@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\modeling_lxmert.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # Copyright 2018 Hao Tan, Mohit Bansal, and the HuggingFace team
@@ -1244,7 +1244,7 @@ class LxmertForPreTraining(LxmertPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         **kwargs,
-```  
+```py  
 # 使用 add_start_docstrings() 装饰器为 LxmertForQuestionAnswering 类添加文档字符串，说明该类是带有视觉问答头的 Lxmert 模型，用于下游 QA 任务
 # 调用父类的初始化方法，传入配置参数
 class LxmertForQuestionAnswering(LxmertPreTrainedModel):

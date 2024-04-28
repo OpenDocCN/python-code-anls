@@ -1,6 +1,6 @@
 # `.\models\jukebox\modeling_jukebox.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The OpenAI Team Authors 和 HuggingFace Inc. team 所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证的规定，否则不得使用此文件
@@ -905,7 +905,7 @@ class JukeboxVQVAE(PreTrainedModel):
         >>> zs = [torch.randint(100, (4, 1))]
         >>> model.decode(zs).shape
         torch.Size([4, 8, 1])
-        ```
+        ```py
         """
 
         # 开始编码/解码
@@ -1821,7 +1821,7 @@ class JukeboxConditionalAutoregressive(nn.Module):
             return loss, activations
         else:
             return loss, None  # 如果不需要返回额外信息，则只返回损失
-```  
+```py  
     # 定义一个获取词嵌入的函数
     def get_emb(self, sample_t, n_samples, tokens, audio_conditioning, metadata_conditioning):
         # 如果是第一个样本
@@ -2758,7 +2758,7 @@ class JukeboxModel(JukeboxPreTrainedModel):
         """
         Example:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, JukeboxModel, set_seed
 
         >>> model = JukeboxModel.from_pretrained("openai/jukebox-1b-lyrics", min_duration=0).eval()

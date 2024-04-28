@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\image_processing_deformable_detr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 许可证信息

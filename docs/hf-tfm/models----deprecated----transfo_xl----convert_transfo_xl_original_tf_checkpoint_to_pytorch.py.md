@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\convert_transfo_xl_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 这是一个用于将 Transformer XL 检查点和数据集转换为 PyTorch 格式的脚本
 # 导入必要的库和模块
 import argparse

@@ -1,6 +1,6 @@
 # `.\models\glpn\image_processing_glpn.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0授权许可证，您不得使用此文件，除非您遵守许可证的规定。您可以在以下网址获得许可证的副本

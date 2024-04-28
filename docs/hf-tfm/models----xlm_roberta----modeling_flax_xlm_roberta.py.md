@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\modeling_flax_xlm_roberta.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 引入所需的库

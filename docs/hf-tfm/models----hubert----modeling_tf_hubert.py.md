@@ -1,6 +1,6 @@
 # `.\models\hubert\modeling_tf_hubert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 授权使用此文件
@@ -1550,7 +1550,7 @@ class TFHubertModel(TFHubertPreTrainedModel):
 
         >>> input_values = processor(ds["speech"][0], return_tensors="tf").input_values  # Batch size 1
         >>> hidden_states = model(input_values).last_hidden_state
-        ```"""
+        ```py"""
 
         # 设置输出隐藏状态、输出注意力、返回字典的默认值
         output_hidden_states = output_hidden_states if output_hidden_states else self.config.output_hidden_states

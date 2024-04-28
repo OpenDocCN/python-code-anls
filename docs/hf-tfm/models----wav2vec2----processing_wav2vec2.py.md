@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\processing_wav2vec2.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明为 2021 年 HuggingFace 公司团队所有
 # 使用 Apache 许可证 2.0 版本进行许可

@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_text.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，保留所有权利
 #
@@ -49,7 +49,7 @@ class Data2VecTextConfig(PretrainedConfig):
     >>> model = Data2VecTextModel(configuration)
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "data2vec-text"
 

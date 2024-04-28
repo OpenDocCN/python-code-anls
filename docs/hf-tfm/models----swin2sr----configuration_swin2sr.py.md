@@ -1,6 +1,6 @@
 # `.\transformers\models\swin2sr\configuration_swin2sr.py`
 
-```
+```py
 # 模型的配置文件，用于定义 Swin2SR 模型的参数和架构
 class Swin2SRConfig(PretrainedConfig):
     r"""
@@ -22,7 +22,7 @@ class Swin2SRConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型名称

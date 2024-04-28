@@ -1,6 +1,6 @@
 # `.\transformers\models\siglip\image_processing_siglip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，禁止未经许可使用该文件

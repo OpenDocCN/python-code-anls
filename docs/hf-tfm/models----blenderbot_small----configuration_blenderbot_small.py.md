@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot_small\configuration_blenderbot_small.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 
 # 导入必要的模块和类
@@ -56,7 +56,7 @@ class BlenderbotSmallConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 blenderbot-small
     model_type = "blenderbot-small"

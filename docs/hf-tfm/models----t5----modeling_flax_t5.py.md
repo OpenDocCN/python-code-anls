@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\modeling_flax_t5.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明，版权归 T5 作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用本文件，未经许可不得使用
@@ -1107,7 +1107,7 @@ class FlaxT5PreTrainedModel(FlaxPreTrainedModel):
         >>> text = "My friends are cool but they eat too many carbs."
         >>> inputs = tokenizer(text, return_tensors="np")
         >>> encoder_outputs = model.encode(**inputs)
-        ```"""
+        ```py"""
         # 如果未提供 output_attentions 参数，则设置为配置中的默认值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 如果未提供 output_hidden_states 参数，则设置为配置中的默认值
@@ -1340,7 +1340,7 @@ FLAX_T5_MODEL_DOCSTRING = """
     >>> # forward pass
     >>> outputs = model(input_ids=input_ids, decoder_input_ids=decoder_input_ids)
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 # 将 FlaxT5Model 的调用示例和文档字符串追加到指定的 FlaxT5Model 上
@@ -1370,7 +1370,7 @@ FLAX_T5_MODEL_DOCSTRING = """
     >>> # forward pass
     >>> outputs = model(input_ids=input_ids, decoder_input_ids=decoder_input_ids)
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 # 用指定的文档字符串覆盖 FlaxT5Model 的调用文档字符串
@@ -1548,7 +1548,7 @@ class FlaxT5ForConditionalGenerationModule(nn.Module):
         output_hidden_states=None,
         return_dict=None,
         deterministic: bool = True,
-```  
+```py  
         ): 
             # 如果 return_dict 不为 None，则使用传入的 return_dict，否则使用配置文件中的 use_return_dict
             return_dict = return_dict if return_dict is not None else self.config.use_return_dict
@@ -1677,7 +1677,7 @@ FLAX_T5_CONDITIONAL_GENERATION_DOCSTRING = """
     >>> # 生成摘要
     >>> summary_ids = model.generate(inputs["input_ids"]).sequences
     >>> print(tokenizer.decode(summary_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=False))
-    ```
+    ```py
 """
 
 

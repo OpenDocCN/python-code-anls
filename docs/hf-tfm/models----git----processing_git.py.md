@@ -1,6 +1,6 @@
 # `.\models\git\processing_git.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 HuggingFace 公司团队所有。
 #

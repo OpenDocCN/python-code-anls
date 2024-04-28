@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\modeling_trajectory_transformer.py`
 
-```
+```py
 # 设定编码格式为UTF-8
 
 # 版权声明及许可证信息，该代码版权归 Trajectory Transformers 论文作者和 HuggingFace Inc. 团队所有，

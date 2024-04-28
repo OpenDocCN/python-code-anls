@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\configuration_blenderbot.py`
 
-```
+```py
 # 导入所需的模块和类
 from collections import OrderedDict  # 从 collections 模块导入 OrderedDict 类
 from typing import Any, Mapping, Optional  # 从 typing 模块导入 Any、Mapping、Optional 类型
@@ -43,7 +43,7 @@ class BlenderbotConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "blenderbot"  # 模型类型为 "blenderbot"
     keys_to_ignore_at_inference = ["past_key_values"]  # 推理时要忽略的键列表，包括 "past_key_values"

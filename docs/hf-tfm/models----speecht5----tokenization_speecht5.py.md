@@ -1,6 +1,6 @@
 # `.\transformers\models\speecht5\tokenization_speecht5.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明与许可协议，如何获取协议等信息
 """Tokenization class for SpeechT5."""

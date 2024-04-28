@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\tokenization_gpt_neox_fast.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明
 # Apache 许可证 2.0 版本
@@ -54,7 +54,7 @@ class GPTNeoXTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [18435, 995]
-    ```
+    ```py
 
     可以通过在实例化这个 tokenizer 时传递 `add_prefix_space=True` 来解决这个行为，但由于模型没有以这种方式
     预训练，这可能会降低性能。

@@ -1,6 +1,6 @@
 # `.\transformers\models\megatron_bert\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权归 NVIDIA 公司和 HuggingFace 团队所有，保留所有权利。
 # 根据 Apache 许可证 2.0 版本授权

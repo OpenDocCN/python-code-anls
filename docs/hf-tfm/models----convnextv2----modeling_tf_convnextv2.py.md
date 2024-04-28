@@ -1,6 +1,6 @@
 # `.\models\convnextv2\modeling_tf_convnextv2.py`
 
-```
+```py
 # 设定文件编码
 # 版权声明
 #

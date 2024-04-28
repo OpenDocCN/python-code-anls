@@ -1,6 +1,6 @@
 # `.\transformers\models\tvlt\feature_extraction_tvlt.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 授权使用该文件

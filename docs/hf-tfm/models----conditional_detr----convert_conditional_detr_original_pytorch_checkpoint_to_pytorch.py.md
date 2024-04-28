@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\convert_conditional_detr_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 引入需要使用的模块和类
 import argparse                          # 命令行参数解析模块

@@ -1,6 +1,6 @@
 # `.\transformers\models\mvp\modeling_mvp.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 基于Apache许可证2.0授权，可以在不违反许可证的情况下使用此文件
@@ -472,7 +472,7 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
 
     >>> loss = model(**inputs, labels=labels).loss
     >>> loss.backward()
-    ```
+    ```py
 
     Inference after the model fine-tuned
     ```python
@@ -480,7 +480,7 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
     ...     generated_ids = model.generate(**inputs)
 
     >>> generated_text = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    ```
+    ```py
 """
 
 
@@ -525,7 +525,7 @@ MVP_QUESTION_ANSWERING_SAMPLE = r"""
 
     # 微调问答模型，支持抽取式和生成式问答
     利用 `BartForConditionalGeneration` 模型进行微调
-    ```python
+    ```py
     >>> import torch
     >>> from transformers import AutoTokenizer, MvpForQuestionAnswering
 
@@ -548,7 +548,7 @@ MVP_QUESTION_ANSWERING_SAMPLE = r"""
     ```
 
     # 微调后的推理过程
-    ```python
+    ```py
     >>> with torch.no_grad():
     ...     outputs = model(**inputs)
 

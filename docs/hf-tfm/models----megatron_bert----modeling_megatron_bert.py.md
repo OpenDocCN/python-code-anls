@@ -1,6 +1,6 @@
 # `.\transformers\models\megatron_bert\modeling_megatron_bert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，对代码进行许可
@@ -1120,7 +1120,7 @@ class MegatronBertForNextSentencePrediction(MegatronBertPreTrainedModel):
         >>> outputs = model(**encoding, labels=torch.LongTensor([1]))
         >>> logits = outputs.logits
         >>> assert logits[0, 0] < logits[0, 1]  # next sentence was random
-        ```"""
+        ```py"""
 
         # 如果 kwargs 中包含 'next_sentence_label'，则发出警告，并将其作为 'labels' 参数
         if "next_sentence_label" in kwargs:

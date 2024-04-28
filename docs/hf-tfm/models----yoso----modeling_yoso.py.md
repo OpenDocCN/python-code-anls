@@ -1,6 +1,6 @@
 # `.\transformers\models\yoso\modeling_yoso.py`
 
-```
+```py
 # 导入所需的库和模块
 import math
 from pathlib import Path

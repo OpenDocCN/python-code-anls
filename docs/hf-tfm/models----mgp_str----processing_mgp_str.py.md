@@ -1,6 +1,6 @@
 # `.\transformers\models\mgp_str\processing_mgp_str.py`
 
-```
+```py
 # 导入必要的库和模块
 import warnings
 from transformers import AutoTokenizer

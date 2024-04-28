@@ -1,6 +1,6 @@
 # `.\transformers\models\swin2sr\modeling_swin2sr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 这个代码版权归 2022 年微软研究和 HuggingFace 公司团队所有
@@ -1261,5 +1261,5 @@ class Swin2SRForImageSuperResolution(Swin2SRPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         # 是否返回字典，默认为 None，数据类型为 bool
         return_dict: Optional[bool] = None,
-```  
+```py  
 ```

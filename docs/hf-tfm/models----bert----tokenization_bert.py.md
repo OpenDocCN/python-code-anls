@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\tokenization_bert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权持有人和许可方
 # 版权许可协议，使用 Apache License 2.0
@@ -374,7 +374,7 @@ class BertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

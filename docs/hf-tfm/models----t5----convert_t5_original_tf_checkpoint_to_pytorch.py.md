@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\convert_t5_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权归 2018 年 T5 作者和 HuggingFace 公司所有
 #

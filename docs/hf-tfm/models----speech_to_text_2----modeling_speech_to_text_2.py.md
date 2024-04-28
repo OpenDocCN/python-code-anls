@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text_2\modeling_speech_to_text_2.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0，除非符合许可证的要求或经书面同意，否则不得使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\mt5\configuration_mt5.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 遵循Apache License, Version 2.0的许可协议

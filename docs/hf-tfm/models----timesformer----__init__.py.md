@@ -1,6 +1,6 @@
 # `.\transformers\models\timesformer\__init__.py`
 
-```
+```py
 # 2022年 HuggingFace 团队版权所有
 #
 # 根据 Apache 许可证第 2.0 版（“许可证”）获得许可;

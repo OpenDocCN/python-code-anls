@@ -1,6 +1,6 @@
 # `.\transformers\tf_utils.py`
 
-```
+```py
 # 导入所需模块和类型提示
 from typing import List, Optional, Union
 # 导入 NumPy 库
@@ -224,7 +224,7 @@ def save_attributes_to_hdf5_group(group, name, data):
     else:
         # 如果只有一个块，则直接存储到 HDF5 group 的属性中
         group.attrs[name] = data
-```  
+```py  
 # 从 HDF5 组中加载指定名称的属性
 def load_attributes_from_hdf5_group(group, name):
     """Loads attributes of the specified name from the HDF5 group.

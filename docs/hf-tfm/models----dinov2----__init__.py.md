@@ -1,6 +1,6 @@
 # `.\models\dinov2\__init__.py`
 
-```
+```py
 # 2023年 HuggingFace 团队版权所有
 #
 # 根据 Apache 许可证 2.0 版授权使用此文件；

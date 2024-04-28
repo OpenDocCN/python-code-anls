@@ -1,6 +1,6 @@
 # `.\transformers\models\swinv2\convert_swinv2_timm_to_pytorch.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明
 # 根据Apache许可证2.0获得许可

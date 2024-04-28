@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\tokenization_roformer.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections
 import os
@@ -412,7 +412,7 @@ class RoFormerTokenizer(PreTrainedTokenizer):
     >>> tokenizer = RoFormerTokenizer.from_pretrained("junnyu/roformer_chinese_base")
     >>> tokenizer.tokenize("���天天气非常好。")
     ['今', '天', '天', '气', '非常', '好', '。']
-    ```
+    ```py
 
     # 以下变量的含义需要从其他文件中获取，具体细节不在这里说明
     vocab_files_names = VOCAB_FILES_NAMES
@@ -641,7 +641,7 @@ class RoFormerTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

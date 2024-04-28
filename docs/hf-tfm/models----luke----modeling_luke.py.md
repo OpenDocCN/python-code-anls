@@ -1,6 +1,6 @@
 # `.\transformers\models\luke\modeling_luke.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 
 # 引入必要的库
@@ -340,7 +340,7 @@ class LukeQuestionAnsweringModelOutput(ModelOutput):
     Outputs of question answering models.
     """
 
-```  
+```py  
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
             Total span extraction loss is the sum of a Cross-Entropy for the start and end positions.

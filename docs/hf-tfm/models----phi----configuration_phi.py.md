@@ -1,6 +1,6 @@
 # `.\transformers\models\phi\configuration_phi.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明及许可协议
 # 配置文件信息
@@ -39,7 +39,7 @@ class PhiConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "phi"
     keys_to_ignore_at_inference = ["past_key_values"]

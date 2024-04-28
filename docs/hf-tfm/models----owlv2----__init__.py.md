@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\__init__.py`
 
-```
+```py
 # 导入必要的模块
 from typing import TYPE_CHECKING
 # 导入 LazyModule 类和检查 Torch 和 Vision 模块是否可用的函数

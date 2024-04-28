@@ -1,6 +1,6 @@
 # `.\transformers\models\videomae\configuration_videomae.py`
 
-```
+```py
 # 基于现有的PretrainedConfig类，定义了VideoMAEConfig类
 # VideoMAEConfig类用于存储VideoMAE模型的配置信息，通过指定的参数实例化一个VideoMAE模型
 # VideoMAEConfig类继承自PretrainedConfig类，并可以用于控制模型的输出

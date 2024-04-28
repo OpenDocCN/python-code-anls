@@ -1,6 +1,6 @@
 # `.\transformers\models\big_bird\modeling_big_bird.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google Research 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -1036,7 +1036,7 @@ class BigBirdEncoder(nn.Module):
         to_mask=None,
         blocked_encoder_mask=None,
         return_dict=True,
-```  
+```py  
 
 
 # 定义一个 BigBirdPredictionHeadTransform 类，继承自 nn.Module 类
@@ -1091,7 +1091,7 @@ class BigBirdLMPredictionHead(nn.Module):
         hidden_states = self.decoder(hidden_states)
         # 返回预测结果
         return hidden_states
-```  
+```py  
 # 从 transformers.models.bert.modeling_bert.BertOnlyMLMHead 复制并修改为 BigBirdOnlyMLMHead 类
 class BigBirdOnlyMLMHead(nn.Module):
     def __init__(self, config):

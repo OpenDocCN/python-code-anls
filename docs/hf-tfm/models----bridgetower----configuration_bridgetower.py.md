@@ -1,6 +1,6 @@
 # `.\transformers\models\bridgetower\configuration_bridgetower.py`
 
-```
+```py
 # 导入所需模块和类
 import os
 from typing import Union
@@ -139,7 +139,7 @@ class BridgeTowerTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import BridgeTowerTextConfig
 
     >>> # Initializing a BridgeTower BridgeTower/bridgetower-base style configuration for the text model
@@ -258,7 +258,7 @@ class BridgeTowerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import BridgeTowerModel, BridgeTowerConfig
 
     >>> # Initializing a BridgeTower BridgeTower/bridgetower-base style configuration

@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_prophetnet\__init__.py`
 
-```
+```py
 # 这是一个 Python 文件，包含了 XLM-ProphetNet 模型相关的定义和导入。
 # 该模型是一种预训练的语言生成模型，由 Hugging Face 团队开发。
 

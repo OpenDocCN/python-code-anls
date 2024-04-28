@@ -1,6 +1,6 @@
 # `.\transformers\models\tvp\image_processing_tvp.py`
 
-```
+```py
 # 定义编码格式为 UTF-8
 # 版权声明
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\openai\convert_openai_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 引入编码方式 UTF-8 和 Hugging Face Inc. 团队版权信息
 # coding=utf-8
 # Copyright 2018 The HuggingFace Inc. team.

@@ -1,6 +1,6 @@
 # `.\models\fsmt\convert_fsmt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为 utf-8
 # 版权声明，此代码版权归 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0，除非符合许可要求，否则不得使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\biogpt\convert_biogpt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 声明著作权和许可证信息
 # 引入必要的模块
@@ -82,7 +82,7 @@ class Dictionary:
         <symbol0> <count0>
         <symbol1> <count1>
         ...
-        ```
+        ```py
         """
         # 从文本文件中加载字典
         d = cls()  # 创建字典对象

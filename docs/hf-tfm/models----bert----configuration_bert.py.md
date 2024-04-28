@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\configuration_bert.py`
 
-```
+```py
 # 导入必要的模块和函数
 from collections import OrderedDict
 from typing import Mapping

@@ -1,6 +1,6 @@
 # `.\transformers\models\qwen2\modeling_qwen2.py`
 
-```
+```py
 # 这是一个基于 GPT-NeoX 和 OPT 实现的 Qwen2 模型的 PyTorch 代码
 # 该代码已经过修改以适应与 Meta AI 团队训练的模型的小型架构差异
 # 在使用该代码前，请注意遵循 Apache License 2.0 协议

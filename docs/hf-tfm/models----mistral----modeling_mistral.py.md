@@ -1,6 +1,6 @@
 # `.\transformers\models\mistral\modeling_mistral.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 此代码基于 EleutherAI 的 GPT-NeoX 库以及该库中 GPT-NeoX 和 OPT 实现的基础，并对其进行了修改以适应与 Meta AI 团队训练模型时存在的一些架构差异。

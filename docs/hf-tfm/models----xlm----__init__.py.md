@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\__init__.py`
 
-```
+```py
 # 导入TYPE_CHECKING，用于类型检查
 from typing import TYPE_CHECKING
 

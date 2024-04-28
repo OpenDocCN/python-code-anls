@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\configuration_sam.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明
 # 根据Apache 2.0许可协议，除非符合许可协议要求或经书面同意，否则不得使用此文件
@@ -272,7 +272,7 @@ class SamConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import (
     ...     SamVisionConfig,
     ...     SamPromptEncoderConfig,

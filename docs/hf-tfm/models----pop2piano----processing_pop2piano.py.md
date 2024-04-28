@@ -1,6 +1,6 @@
 # `.\transformers\models\pop2piano\processing_pop2piano.py`
 
-```
+```py
 # 设置字符编码为utf-8
 # 版权信息
 # 包含了Apache 2.0许可证的文本

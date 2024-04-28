@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v1\configuration_mobilenet_v1.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 # 版权 2022 年 HuggingFace Inc. 团队。保留所有权利。

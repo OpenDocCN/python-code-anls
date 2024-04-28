@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\convert_pegasus_tf_to_pytorch.py`
 
-```
+```py
 # 声明文件编码为UTF-8
 # 版权声明
 # 根据Apache License, Version 2.0许可，你可以在遵守许可下使用该文件

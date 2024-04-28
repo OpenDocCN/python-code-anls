@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\convert_longformer_original_pytorch_lightning_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码使用 Apache License, Version 2.0
 # 初始化 arg 解析器

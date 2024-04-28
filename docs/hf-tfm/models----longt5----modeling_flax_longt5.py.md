@@ -1,6 +1,6 @@
 # `.\transformers\models\longt5\modeling_flax_longt5.py`
 
-```
+```py
 # 定义了编码器-解码器模型的配置类，继承自LongT5Config
 class LongT5Config:
 
@@ -1289,7 +1289,7 @@ class FlaxLongT5BlockCollection(nn.Module):
         deterministic: bool = True,
         init_cache: bool = False,
 
-```      
+```py      
         # 如果需要，准备头部掩码
         all_hidden_states = () if output_hidden_states else None
         all_attentions = () if output_attentions else None
@@ -1702,7 +1702,7 @@ class FlaxLongT5PreTrainedModel(FlaxPreTrainedModel):
     
             >>> encoder_outputs = model.encode(**inputs)
             # Encode the tokenized text with the model to obtain encoder outputs
-            ```"""
+            ```py"""
             # Check if output_attentions is set, otherwise use the default from the model's config
             output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
             # Check if output_hidden_states is set, otherwise use the default from the model's config
@@ -1929,7 +1929,7 @@ FLAX_LONGT5_MODEL_DOCSTRING = """
     >>> # forward pass
     >>> outputs = model(input_ids=input_ids, decoder_input_ids=decoder_input_ids)
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 # 更新FlaxLongT5Model的文档字符串
@@ -2132,7 +2132,7 @@ FLAX_LONGT5_CONDITIONAL_GENERATION_DOCSTRING = """
     >>> # Generate Summary
     >>> summary_ids = model.generate(inputs["input_ids"]).sequences
     >>> print(tokenizer.decode(summary_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=False))
-    ```
+    ```py
 """
 
 # 调用overwrite_call_docstring函数 with 添加的文档字符串作为参数

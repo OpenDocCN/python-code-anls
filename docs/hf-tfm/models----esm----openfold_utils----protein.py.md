@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\protein.py`
 
-```
+```py
 # 版权声明和许可协议
 # Protein 数据类型
 

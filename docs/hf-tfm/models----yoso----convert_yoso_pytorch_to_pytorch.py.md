@@ -1,6 +1,6 @@
 # `.\transformers\models\yoso\convert_yoso_pytorch_to_pytorch.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可证，只有在遵守许可证的情况下才能使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t_v2\configuration_seamless_m4t_v2.py`
 
-```
+```py
 # 导入必要的模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -36,7 +36,7 @@ class SeamlessM4Tv2Config(PretrainedConfig):
 
     >>> # 访问模型的配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型
     model_type = "seamless_m4t_v2"

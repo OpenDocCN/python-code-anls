@@ -1,6 +1,6 @@
 # `.\transformers\data\metrics\squad_metrics.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections  # 用于处理集合数据类型
 import json  # 用于处理 JSON 格式的数据

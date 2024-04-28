@@ -1,6 +1,6 @@
 # `.\models\glpn\configuration_glpn.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2022 KAIST 和 The HuggingFace Inc. 团队。保留所有权利。
 #
@@ -85,7 +85,7 @@ class GLPNConfig(PretrainedConfig):
 
     >>> # 根据 vinvino02/glpn-kitti 风格的配置初始化模型
     >>> model = GLPNModel(configuration)
-    ```
+    ```py
     # 访问模型配置
     configuration = model.config
     

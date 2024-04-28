@@ -1,6 +1,6 @@
 # `.\transformers\models\table_transformer\modeling_table_transformer.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，版权归 Microsoft Research 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证，版本 2.0 进行许可

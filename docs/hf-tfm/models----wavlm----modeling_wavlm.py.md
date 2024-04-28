@@ -1,6 +1,6 @@
 # `.\transformers\models\wavlm\modeling_wavlm.py`
 
-```
+```py
 # 该代码实现了一个 WavLM 模型，WavLM 是一个基于 Transformer 的语音模型，由微软研究院和 Hugging Face 团队开发。这个模型可以用于语音识别、语音分类等任务。
 
 # 这是该模型的 PyTorch 实现，代码中包含了一些公共函数和类定义。

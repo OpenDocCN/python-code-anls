@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilebert\tokenization_mobilebert_fast.py`
 
-```
+```py
 # 导入必要的模块和类型提示
 import json
 from typing import List, Optional, Tuple
@@ -169,7 +169,7 @@ class MobileBertTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

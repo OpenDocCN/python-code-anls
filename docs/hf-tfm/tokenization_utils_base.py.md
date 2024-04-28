@@ -1,6 +1,6 @@
 # `.\transformers\tokenization_utils_base.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2020 年 HuggingFace Inc. 团队
@@ -808,7 +808,7 @@ class SpecialTokensMixin:
         print("我们已经添加了", num_added_toks, "个标记")
         # 注意：resize_token_embeddings 期望接收新词汇表的完整大小，即分词器的长度。
         model.resize_token_embeddings(len(tokenizer))
-        ```"""
+        ```py"""
         if not new_tokens:
             return 0
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\modeling_tf_blip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Salesforce Team 作者和 HuggingFace Team 所有
 # 根据 Apache 许可证 2.0 版本授权使用本文件
@@ -902,7 +902,7 @@ class TFBlipVisionModel(TFBlipPreTrainedModel):
         if getattr(self, "post_layernorm", None) is not None:
             with tf.name_scope(self.post_layernorm.name):
                 self.post_layernorm.build([None, None, self.embed_dim])
-```  
+```py  
 class TFBlipMainLayer(tf.keras.layers.Layer):
     # 配置类，用于定义Blip的配置参数
     config_class = BlipConfig
@@ -1089,7 +1089,7 @@ class TFBlipMainLayer(tf.keras.layers.Layer):
 
         >>> inputs = processor(text=["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="tf")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 使用 BLIP 文本模型获取文本输出
@@ -1133,7 +1133,7 @@ class TFBlipMainLayer(tf.keras.layers.Layer):
         >>> inputs = processor(images=image, return_tensors="tf")
 
         >>> image_features = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 使用 BLIP 视觉模型获取图像输出
@@ -1210,7 +1210,7 @@ class TFBlipForConditionalGeneration(TFBlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipForConditionalGeneration
@@ -1289,7 +1289,7 @@ class TFBlipForConditionalGeneration(TFBlipPreTrainedModel):
 
 
         Examples:
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipForConditionalGeneration
@@ -1342,7 +1342,7 @@ class TFBlipForConditionalGeneration(TFBlipPreTrainedModel):
         )
 
         return outputs  # 返回生成的文本描述结果的张量
-```  
+```py  
     # 构建模型，如果已经构建过则直接返回
     def build(self, input_shape=None):
         # 如果已经构建过，则直接返回
@@ -1504,7 +1504,7 @@ class TFBlipForQuestionAnswering(TFBlipPreTrainedModel):
         >>> outputs = model.generate(**inputs)
         >>> print(processor.decode(outputs[0], skip_special_tokens=True))
         2
-        ```
+        ```py
         """
         vision_outputs = self.vision_model(pixel_values=pixel_values)
 

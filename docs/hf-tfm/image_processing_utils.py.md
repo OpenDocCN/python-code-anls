@@ -1,6 +1,6 @@
 # `.\transformers\image_processing_utils.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明

@@ -1,6 +1,6 @@
 # `.\transformers\cache_utils.py`
 
-```
+```py
 from typing import Any, Dict, List, Optional, Tuple
 
 import torch

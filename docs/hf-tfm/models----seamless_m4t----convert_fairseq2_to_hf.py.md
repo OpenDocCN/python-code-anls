@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\convert_fairseq2_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 #

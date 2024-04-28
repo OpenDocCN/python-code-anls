@@ -97,7 +97,7 @@ def glue_compute_metrics(task_name, preds, labels):
     elif task_name == "rte":
         # 对于RTE任务，返回准确度
         return {"acc": simple_accuracy(preds, labels)}
-```  
+```py  
     # 如果任务名称为 "wnli"，则返回一个包含准确率的字典
     elif task_name == "wnli":
         return {"acc": simple_accuracy(preds, labels)}

@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\modeling_auto.py`
 
-```
+```py
 # 指定编码为 UTF-8，确保代码中的 Unicode 字符正确解析
 # 版权声明，声明代码版权归 The HuggingFace Inc. 团队所有
 #

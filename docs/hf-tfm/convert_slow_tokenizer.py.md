@@ -1,6 +1,6 @@
 # `.\transformers\convert_slow_tokenizer.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 该代码的版权归 HuggingFace Inc. 团队所有。

@@ -1,6 +1,6 @@
 # `.\transformers\onnx\config.py`
 
-```
+```py
 # 版权声明及许可协议信息
 
 # 导入必要的库和模块

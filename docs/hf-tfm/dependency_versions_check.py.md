@@ -1,6 +1,6 @@
 # `.\transformers\dependency_versions_check.py`
 
-```
+```py
 # 版权声明和许可证信息
 #
 # 从依赖版本表中导入依赖信息

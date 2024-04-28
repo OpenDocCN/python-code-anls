@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\configuration_deberta_v2.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明和许可信息
 # 导入所需的模块和类型
@@ -54,7 +54,7 @@ class DebertaV2Config(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "deberta-v2"
     model_type = "deberta-v2"

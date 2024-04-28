@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\configuration_deformable_detr.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码为 UTF-8
 # 版权声明
@@ -51,7 +51,7 @@ class DeformableDetrConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "deformable_detr"

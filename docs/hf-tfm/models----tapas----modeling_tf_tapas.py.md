@@ -1,6 +1,6 @@
 # `.\transformers\models\tapas\modeling_tf_tapas.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 # 2021年版权属于Google Research和HuggingFace Inc.团队
@@ -1177,7 +1177,7 @@ class TFTapasModel(TFTapasPreTrainedModel):
         >>> outputs = model(**inputs)
 
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
         
         # 调用 Tapas 主层处理输入
         outputs = self.tapas(
@@ -1291,7 +1291,7 @@ class TFTapasForMaskedLM(TFTapasPreTrainedModel, TFMaskedLanguageModelingLoss):
     
         >>> outputs = model(**inputs, labels=labels)
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
         # 调用Tapas模型生成结果
         outputs = self.tapas(
             input_ids=input_ids,
@@ -1616,7 +1616,7 @@ class TFTapasForSequenceClassification(TFTapasPreTrainedModel, TFSequenceClassif
         >>> outputs = model(**inputs, labels=labels)
         >>> loss = outputs.loss
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
 
         # 使用tapas模型对输入进行序列分类
         outputs = self.tapas(

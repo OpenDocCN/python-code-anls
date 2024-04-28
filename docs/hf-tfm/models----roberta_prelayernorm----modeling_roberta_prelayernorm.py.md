@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta_prelayernorm\modeling_roberta_prelayernorm.py`
 
-```
+```py
 # 这是一个 PyTorch 实现的 RoBERTa-PreLayerNorm 模型的代码
 # 这个模型是基于 Google AI Language Team 和 HuggingFace Inc. 团队的工作开发的
 # 它遵循 Apache 2.0 许可协议

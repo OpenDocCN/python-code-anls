@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\modeling_tf_xlm.py`
 
-```
+```py
 # 设置脚本使用的字符编码为 UTF-8
 # 版权声明和许可证信息
 # 版权所有 2019 至今，Facebook, Inc 和 HuggingFace Inc. 团队。

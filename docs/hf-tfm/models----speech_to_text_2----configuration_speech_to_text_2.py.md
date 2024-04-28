@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text_2\configuration_speech_to_text_2.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可证信息
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.
@@ -88,7 +88,7 @@ class Speech2Text2Config(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     # 定义模型类型为 "speech_to_text_2"
     model_type = "speech_to_text_2"

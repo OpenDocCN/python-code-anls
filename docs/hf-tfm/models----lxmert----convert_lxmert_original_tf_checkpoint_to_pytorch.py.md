@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\convert_lxmert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 解析命令行参数
 import torch  # 导入 PyTorch 库

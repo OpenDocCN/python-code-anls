@@ -1,6 +1,6 @@
 # `.\models\convnext\configuration_convnext.py`
 
-```
+```py
 # 设置编码格式为UTF-8
 # 版权声明，版权归Meta Platforms，Inc.和The HuggingFace Inc. team所有
 # 根据Apache License, Version 2.0许可。非许可下禁止使用此文件
@@ -80,7 +80,7 @@ class ConvNextConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型为 "convnext"
     model_type = "convnext"

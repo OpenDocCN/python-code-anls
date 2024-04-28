@@ -1,6 +1,6 @@
 # `.\transformers\models\bridgetower\modeling_bridgetower.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可证信息，指明此代码的版权和许可证信息
 # Copyright 2023 The Intel Labs Team Authors, The Microsoft Research Team Authors and HuggingFace Inc. team. All rights reserved.
@@ -450,7 +450,7 @@ class BridgeTowerIntermediate(nn.Module):
 
 # 从 transformers.models.bert.modeling_bert.BertOutput 复制并修改为 BridgeTowerOutput
 class BridgeTowerOutput(nn.Module):
-``` 
+```py 
     # 初始化函数，用于初始化对象
     def __init__(self, config):
         # 调用父类的初始化函数
@@ -1417,7 +1417,7 @@ class BridgeTowerForMaskedLM(BridgeTowerPreTrainedModel):
 
         >>> print(results)
         .a cat looking out of the window.
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 使用传入的参数或者模型配置中的设置来确定是否返回字典格式的输出
         outputs = self.bridgetower(
@@ -1523,7 +1523,7 @@ class BridgeTowerForImageAndTextRetrieval(BridgeTowerPreTrainedModel):
         ...     encoding = processor(image, text, return_tensors="pt")
         ...     outputs = model(**encoding)
         ...     scores[text] = outputs.logits[0, 1].item()
-        ```"""
+        ```py"""
         # 设置返回字典的默认值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

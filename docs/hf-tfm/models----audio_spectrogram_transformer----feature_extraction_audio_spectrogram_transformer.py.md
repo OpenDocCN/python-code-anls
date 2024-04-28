@@ -1,6 +1,6 @@
 # `.\transformers\models\audio_spectrogram_transformer\feature_extraction_audio_spectrogram_transformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：版权归 2022 年 HuggingFace Inc. 团队所有。
 #

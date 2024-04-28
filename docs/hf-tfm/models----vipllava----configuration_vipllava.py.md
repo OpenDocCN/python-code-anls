@@ -1,6 +1,6 @@
 # `.\transformers\models\vipllava\configuration_vipllava.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明，版权归 Microsoft Research、University of Wisconsin-Madison 和 HuggingFace Inc. 团队所有
 # 以 Apache 许可证 Version 2.0 (许可证) 授权
@@ -73,7 +73,7 @@ class VipLlavaConfig(PretrainedConfig):
 
     # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
 
     # 模型类型
     model_type = "vipllava"

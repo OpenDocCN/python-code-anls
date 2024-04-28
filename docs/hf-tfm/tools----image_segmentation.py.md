@@ -1,6 +1,6 @@
 # `.\transformers\tools\image_segmentation.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 

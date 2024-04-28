@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\modeling_wav2vec2.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 # 根据 Apache 许可 2.0 版本授权

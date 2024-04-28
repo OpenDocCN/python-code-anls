@@ -1,6 +1,6 @@
 # `.\transformers\models\clvp\convert_clvp_to_hf.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 """

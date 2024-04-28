@@ -1,6 +1,6 @@
 # `.\transformers\models\realm\modeling_realm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明 REALM 作者和 HuggingFace Inc. 团队
 # 根据 Apache License, Version 2.0 授权进行使用，若不遵守则不得使用该文件
@@ -1136,7 +1136,7 @@ class RealmEmbedder(RealmPreTrainedModel):
         包含投影分数的输出结果
 
         示例:
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, RealmEmbedder
         >>> import torch
 

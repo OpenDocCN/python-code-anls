@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech_sat\convert_unispeech_sat_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 在 Apache 许可证 2.0 版的许可下，除非符合许可的要求，否则不得使用此文件。

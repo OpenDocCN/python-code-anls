@@ -1,6 +1,6 @@
 # `.\transformers\commands\add_new_model.py`
 
-```
+```py
 # 引入所需模块
 import json  # 导入用于处理 JSON 数据的模块
 import os  # 导入用于处理操作系统相关功能的模块

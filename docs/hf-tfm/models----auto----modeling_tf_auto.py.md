@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\modeling_tf_auto.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 导入有序字典模块

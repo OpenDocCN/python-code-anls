@@ -1,6 +1,6 @@
 # `.\models\electra\tokenization_electra_fast.py`
 
-```
+```py
 # 导入json模块，用于处理JSON数据
 import json
 # 从typing模块中导入List、Optional和Tuple，用于类型提示
@@ -192,7 +192,7 @@ class ElectraTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

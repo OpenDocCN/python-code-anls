@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # The HuggingFace Team 版权所有
 # 根据 Apache 许可证 Version 2.0 发布

@@ -1,6 +1,6 @@
 # `.\transformers\models\maskformer\configuration_maskformer_swin.py`
 
-```
+```py
 # 定义了一个编码声明，指定文件编码为 UTF-8
 
 # 引入必要的模块和类
@@ -40,7 +40,7 @@ class MaskFormerSwinConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     model_type = "maskformer-swin"
 

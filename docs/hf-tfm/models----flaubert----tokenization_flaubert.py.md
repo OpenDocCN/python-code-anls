@@ -1,6 +1,6 @@
 # `.\models\flaubert\tokenization_flaubert.py`
 
-```
+```py
 # 导入所需模块
 import json
 import os
@@ -574,7 +574,7 @@ class FlaubertTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. An XLM sequence
         pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\processing_markuplm.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Optional, Union
 # 从 HuggingFace 的文件工具中导入张量类型

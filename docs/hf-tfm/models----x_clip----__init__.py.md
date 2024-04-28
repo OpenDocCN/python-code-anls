@@ -1,6 +1,6 @@
 # `.\transformers\models\x_clip\__init__.py`
 
-```
+```py
 # 引入类型检查模块
 from typing import TYPE_CHECKING
 # 引入 OptionalDependencyNotAvailable 异常和 _LazyModule 工具类

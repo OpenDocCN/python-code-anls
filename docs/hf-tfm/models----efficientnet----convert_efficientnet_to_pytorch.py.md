@@ -1,6 +1,6 @@
 # `.\models\efficientnet\convert_efficientnet_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2023 年由 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 授权使用此文件；

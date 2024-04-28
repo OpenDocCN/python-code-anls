@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\tokenization_bert_fast.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 
 # 版权声明及许可证信息，表示此代码的版权和许可
@@ -320,7 +320,7 @@ class BertTokenizerFast(PreTrainedTokenizerFast):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A BERT sequence
         pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

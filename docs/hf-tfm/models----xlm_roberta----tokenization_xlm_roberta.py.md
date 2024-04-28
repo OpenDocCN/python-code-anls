@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\tokenization_xlm_roberta.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指出代码的版权归属
 # 根据 Apache 2.0 版本授权进行使用代码

@@ -1,6 +1,6 @@
 # `.\transformers\models\luke\tokenization_luke.py`
 
-```
+```py
 # 使用 lru_cache 装饰器缓存函数的结果，避免重复计算
 @lru_cache()
 # 从 transformers.models.roberta.tokenization_roberta.bytes_to_unicode 复制的函数

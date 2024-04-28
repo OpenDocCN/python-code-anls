@@ -1,6 +1,6 @@
 # `.\models\detr\configuration_detr.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0，除非符合许可证要求或书面同意，在不提供任何保证或条件的情况下分发软件
@@ -54,7 +54,7 @@ class DetrConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
     # 模型类型为"detr"
     model_type = "detr"

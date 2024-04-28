@@ -1,6 +1,6 @@
 # `.\transformers\models\vits\__init__.py`
 
-```
+```py
 # 这是一个版权声明和许可信息
 # 这些注释描述了 Apache License,Version 2.0 的许可条款
 from typing import TYPE_CHECKING

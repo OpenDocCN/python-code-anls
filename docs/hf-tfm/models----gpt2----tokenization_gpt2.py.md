@@ -1,6 +1,6 @@
 # `.\models\gpt2\tokenization_gpt2.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明
 # 著作权 2018 年由 Open AI 团队和 HuggingFace Inc. 团队拥有。
@@ -125,7 +125,7 @@ class GPT2Tokenizer(PreTrainedTokenizer):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [18435, 995]
-    ```
+    ```py
 
     你可以通过在实例化此分词器或在对文本进行编码时传入 `add_prefix_space=True` 来绕过此行为，但由于模型没有按照这种方式预训练，这可能会降低性能。
 

@@ -1,6 +1,6 @@
 # `.\transformers\benchmark\benchmark.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队和 NVIDIA 公司所有
 # 根据 Apache 许可证 2.0 版本使用本文件，除非遵循许可证，否则不得使用此文件

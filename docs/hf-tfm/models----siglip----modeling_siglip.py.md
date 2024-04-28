@@ -1,6 +1,6 @@
 # `.\transformers\models\siglip\modeling_siglip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -574,7 +574,7 @@ class SiglipPreTrainedModel(PreTrainedModel):
             # 将 LayerNorm 模块的偏置初始化为零，权重初始化为 1.0
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
-```  
+```py  
 # 定义模型的起始文档字符串，包含继承关系说明、参数说明等
 SIGLIP_START_DOCSTRING = r"""
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
@@ -845,7 +845,7 @@ class SiglipTextModel(SiglipPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled (EOS token) states
-        ```"""
+        ```py"""
         # 如果 return_dict 为 None，则使用配置中的 use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
@@ -1007,7 +1007,7 @@ class SiglipVisionModel(SiglipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, SiglipVisionModel
@@ -1088,7 +1088,7 @@ class SiglipModel(SiglipPreTrainedModel):
 
         示例：
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, AutoModel
         >>> import torch
 
@@ -1137,7 +1137,7 @@ class SiglipModel(SiglipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AutoModel

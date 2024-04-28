@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_tf_transfo_xl_utilities.py`
 
-```
+```py
 # 导入必要的 Python 模块
 # coding=utf-8
 # Copyright 2018 Google AI, Google Brain and Carnegie Mellon University Authors and the HuggingFace Inc. team.

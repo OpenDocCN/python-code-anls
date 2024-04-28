@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\modeling_tf_t5.py`
 
-```
+```py
 # 设置编码
 # 版权声明
 # 获取许可证

@@ -1,6 +1,6 @@
 # `.\transformers\models\big_bird\configuration_big_bird.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可证信息，用于标识代码版权及使用许可
 # Copyright 2021 Google Research and The HuggingFace Inc. team. All rights reserved.
@@ -63,7 +63,7 @@ class BigBirdConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型
     model_type = "big_bird"
     # 初始化函数，用于初始化Transformer模型的参数

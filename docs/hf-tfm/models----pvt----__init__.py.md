@@ -1,6 +1,6 @@
 # `.\transformers\models\pvt\__init__.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，包括作者和 HuggingFace 公司团队，保留所有权利

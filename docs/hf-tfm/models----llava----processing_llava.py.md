@@ -1,6 +1,6 @@
 # `.\transformers\models\llava\processing_llava.py`
 
-```
+```py
 # 声明文件编码格式为 UTF-8
 # 版权声明及许可证信息
 """

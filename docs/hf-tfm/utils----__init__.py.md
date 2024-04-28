@@ -1,6 +1,6 @@
 # `.\transformers\utils\__init__.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 

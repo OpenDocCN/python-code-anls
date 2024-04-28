@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v1\image_processing_mobilenet_v1.py`
 
-```
+```py
 # 这是 MobileNetV1 图像处理器的代码
 # 它包含了一些版权信息和许可证声明
 # 它导入了一些必要的库和模块，包括 typing、numpy、image_processing_utils、image_transforms 和 image_utils 等

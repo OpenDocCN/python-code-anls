@@ -1,6 +1,6 @@
 # `.\transformers\models\prophetnet\tokenization_prophetnet.py`
 
-```
+```py
 # 导入必要的模块和类型注解
 import collections
 import os
@@ -499,7 +499,7 @@ def load_vocab(vocab_file):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

@@ -1,6 +1,6 @@
 # `.\models\herbert\tokenization_herbert_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者和许可证信息
 # 从 typing 模块导入 List、Optional、Tuple 类型
@@ -83,7 +83,7 @@
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         Args:
             token_ids_0 (`List[int]`):

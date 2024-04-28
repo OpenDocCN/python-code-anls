@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\tokenization_longformer_fast.py`
 
-```
+```py
 # 定义了字符编码格式
 # 版权声明
 # 导入依赖
@@ -57,7 +57,7 @@ class LongformerTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     通过在实例化分词器或在对一些文本调用它时传递 `add_prefix_space=True`，可以避免这种行为，但由于模型没有使用这种方式进行预训练，这可能会降低性能。
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\tokenization_markuplm.py`
 
-```
+```py
 # 设置编码格式为 UTF-8，并声明版权信息
 # Copyright Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 #

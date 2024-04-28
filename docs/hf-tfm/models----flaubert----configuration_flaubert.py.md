@@ -1,6 +1,6 @@
 # `.\models\flaubert\configuration_flaubert.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，包括版权所有者和许可协议信息
 # 此代码用于Flaubert配置

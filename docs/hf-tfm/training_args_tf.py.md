@@ -1,6 +1,6 @@
 # `.\transformers\training_args_tf.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 导入 dataclass 模块的 dataclass 装饰器和 field 函数

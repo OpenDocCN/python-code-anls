@@ -1,6 +1,6 @@
 # `.\transformers\models\mpnet\modeling_tf_mpnet.py`
 
-```
+```py
 # 设置文件的编码格式为utf-8
 # 版权声明
 # 引入模块

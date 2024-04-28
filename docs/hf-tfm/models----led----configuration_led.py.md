@@ -1,6 +1,6 @@
 # `.\models\led\configuration_led.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可协议
 # 2021 年版权归 Iz Beltagy、Matthew E. Peters、Arman Cohan 和 HuggingFace Inc. 团队所有
@@ -47,7 +47,7 @@ class LEDConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "led"  # 模型类型为 LED
     attribute_map = {

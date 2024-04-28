@@ -1,6 +1,6 @@
 # `.\transformers\commands\user.py`
 
-```
+```py
 # 引入 subprocess 模块，用于执行外部命令
 import subprocess
 # 从 argparse 模块中引入 ArgumentParser 类，用于解析命令行参数

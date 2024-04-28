@@ -1,6 +1,6 @@
 # `.\transformers\models\rwkv\convert_rwkv_checkpoint_to_hf.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指明版权归 The HuggingFace Inc. 团队所有，且使用 Apache License 2.0 开源许可
 # 根据 Apache License 2.0 开源许可，可以自由使用该代码，但需要遵守相关许可规定

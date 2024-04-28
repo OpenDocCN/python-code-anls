@@ -1,6 +1,6 @@
 # `.\transformers\models\nougat\__init__.py`
 
-```
+```py
 # 从 typing 模块导入 TYPE_CHECKING 常量
 from typing import TYPE_CHECKING
 # 从 utils 模块导入 OptionalDependencyNotAvailable 类和 _LazyModule 函数，以及 is_tokenizers_available 和 is_vision_available 函数

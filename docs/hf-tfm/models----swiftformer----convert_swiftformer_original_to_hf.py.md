@@ -1,6 +1,6 @@
 # `.\transformers\models\swiftformer\convert_swiftformer_original_to_hf.py`
 
-```
+```py
 # 设置脚本文件编码格式为 UTF-8
 # 版权声明及使用许可说明
 # 通过结合执行原始代码以及遵守许可协议规定使用该文件。

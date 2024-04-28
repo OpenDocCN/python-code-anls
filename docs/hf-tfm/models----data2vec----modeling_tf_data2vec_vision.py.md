@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_tf_data2vec_vision.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明，该模型代码的版权归 Meta Platforms 和 The HuggingFace Inc. 团队所有
 #
@@ -281,7 +281,7 @@ class TFData2VecVisionPatchEmbeddings(tf.keras.layers.Layer):
             with tf.name_scope(self.projection.name):
                 # 构建投影层，输入维度为 [None, None, None, self.num_channels]
                 self.projection.build([None, None, None, self.num_channels])
-    ```  
+    ```py  
 class TFData2VecVisionSelfAttention(tf.keras.layers.Layer):
     # 定义 TFData2VecVisionSelfAttention 类，继承自 tf.keras.layers.Layer
 

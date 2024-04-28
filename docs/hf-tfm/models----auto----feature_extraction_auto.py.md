@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\feature_extraction_auto.py`
 
-```
+```py
 # 导入所需的模块和库
 # 这些模块包括了用于动态导入和加载类、配置管理、日志记录等功能
 import importlib
@@ -117,7 +117,7 @@ def get_feature_extractor_config(
 
     Examples:
 
-    ```python
+    ```py
     # 从huggingface.co下载配置并缓存。
     tokenizer_config = get_tokenizer_config("bert-base-uncased")
     # 此模型没有分词器配置，因此结果将是一个空字典。

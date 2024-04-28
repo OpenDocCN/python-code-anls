@@ -1,6 +1,6 @@
 # `.\transformers\models\lilt\__init__.py`
 
-```
+```py
 # 引入类型检查模块
 from typing import TYPE_CHECKING
 # 引入自定义的异常，用于处理可选依赖不可用情况

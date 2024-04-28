@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_tf_objects.py`
 
-```
+```py
 # 该文件是通过命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入所需的模块和函数
 from ..utils import DummyObject, requires_backends

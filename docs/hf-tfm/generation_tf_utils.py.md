@@ -1,6 +1,6 @@
 # `.\transformers\generation_tf_utils.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 

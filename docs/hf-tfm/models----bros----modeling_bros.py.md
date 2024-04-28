@@ -1,6 +1,6 @@
 # `.\transformers\models\bros\modeling_bros.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用
@@ -834,7 +834,7 @@ class BrosForTokenClassification(BrosPreTrainedModel):
         >>> encoding["bbox"] = bbox
 
         >>> outputs = model(**encoding)
-        ```"""
+        ```py"""
 
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
@@ -987,7 +987,7 @@ class BrosSpadeELForTokenClassification(BrosPreTrainedModel):
 
         示例:
 
-        ```python
+        ```py
         >>> import torch
         >>> from transformers import BrosProcessor, BrosSpadeELForTokenClassification
 

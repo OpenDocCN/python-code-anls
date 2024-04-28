@@ -1,6 +1,6 @@
 # `.\models\donut\image_processing_donut.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明，保留所有权利
 # 根据 Apache 许可证，除非遵守许可证规定，否则不能使用该文件

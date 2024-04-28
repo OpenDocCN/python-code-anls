@@ -1,6 +1,6 @@
 # `.\transformers\models\altclip\modeling_altclip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，对该文件的使用受限
@@ -1084,7 +1084,7 @@ class AltCLIPVisionModel(AltCLIPPreTrainedModel):
 
         Examples:  # 示例代码
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AltCLIPVisionModel
@@ -1111,7 +1111,7 @@ class AltCLIPVisionModel(AltCLIPPreTrainedModel):
             output_hidden_states=output_hidden_states,  # 输出隐藏状态
             return_dict=return_dict,  # 返回字典
         )
-```  
+```py  
 class AltRobertaModel(AltCLIPPreTrainedModel):
     """
     
@@ -1343,7 +1343,7 @@ class AltCLIPModel(AltCLIPPreTrainedModel):
         >>> processor = AutoProcessor.from_pretrained("BAAI/AltCLIP")
         >>> inputs = processor(text=["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="pt")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         # 使用 AltCLIP 模型的配置来覆盖一些字段（如果已指定），而不是使用视觉和文本组件的配置。
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 如果未指定输出隐藏状态，则使用配置中的默认值。
@@ -1397,7 +1397,7 @@ class AltCLIPModel(AltCLIPPreTrainedModel):
         >>> image = Image.open(requests.get(url, stream=True).raw)  # 使用 requests 库下载图像，并用 PIL 库打开
         >>> inputs = processor(images=image, return_tensors="pt")  # 使用 processor 处理图像，并返回 PyTorch 张量
         >>> image_features = model.get_image_features(**inputs)  # 获取图像特征
-        ```"""
+        ```py"""
         # Use AltCLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions  # 使用 AltCLIP 模型的配置而不是视觉和文本组件的配置
         output_hidden_states = (

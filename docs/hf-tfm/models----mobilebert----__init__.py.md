@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilebert\__init__.py`
 
-```
+```py
 # 导入需要的类型检查模块
 from typing import TYPE_CHECKING
 

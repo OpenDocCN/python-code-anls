@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot_small\tokenization_blenderbot_small.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证
 """Tokenization class for BlenderbotSmall."""

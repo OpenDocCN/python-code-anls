@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\modeling_retribert.py`
 
-```
+```py
 # 该代码定义了一个名为 RetriBertPreTrainedModel 的抽象基类，用于处理 RetriBERT 模型的权重初始化和加载预训练模型的接口
 class RetriBertPreTrainedModel(PreTrainedModel):
     # 设置配置类为 RetriBertConfig

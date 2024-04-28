@@ -1,6 +1,6 @@
 # `.\models\dpt\feature_extraction_dpt.py`
 
-```
+```py
 # 设定编码格式为 utf-8
 # 版权声明等信息
 # 特征提取类为 DPT 的特征提取器

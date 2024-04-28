@@ -1,6 +1,6 @@
 # `.\transformers\models\tapas\configuration_tapas.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Google Research 和 The HuggingFace Inc. team 所有
 # 根据 Apache License, Version 2.0 授权使用此文件
@@ -58,7 +58,7 @@ class TapasConfig(PretrainedConfig):
     >>> model = TapasModel(configuration)
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型
     model_type = "tapas"

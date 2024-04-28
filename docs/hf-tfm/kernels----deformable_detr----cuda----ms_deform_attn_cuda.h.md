@@ -1,6 +1,6 @@
 # `.\transformers\kernels\deformable_detr\cuda\ms_deform_attn_cuda.h`
 
-```
+```py
 // 包含torch扩展的头文件
 #pragma once
 #include <torch/extension.h>

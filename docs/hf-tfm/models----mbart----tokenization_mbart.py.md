@@ -1,6 +1,6 @@
 # `.\transformers\models\mbart\tokenization_mbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Facebook AI Research Team 作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
@@ -70,7 +70,7 @@ class MBartTokenizer(PreTrainedTokenizer):
     >>> example_english_phrase = " UN Chief Says There Is No Military Solution in Syria"
     >>> expected_translation_romanian = "Şeful ONU declară că nu există o soluţie militară în Siria"
     >>> inputs = tokenizer(example_english_phrase, text_target=expected_translation_romanian, return_tensors="pt")
-    ```"""
+    ```py"""
 
     # 定义词汇文件名
     vocab_files_names = VOCAB_FILES_NAMES

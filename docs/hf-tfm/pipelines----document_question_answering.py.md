@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\document_question_answering.py`
 
-```
+```py
 # 2022年版权声明
 
 # 导入正则表达式模块
@@ -123,7 +123,7 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
     ...     question="What is the invoice number?",
     ... )
     [{'score': 0.425, 'answer': 'us-001', 'start': 16, 'end': 16}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

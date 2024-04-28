@@ -1,6 +1,6 @@
 # `.\models\cpm\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入自定义的异常类OptionalDependencyNotAvailable和懒加载模块_LazyModule

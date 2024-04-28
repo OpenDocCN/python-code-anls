@@ -1,6 +1,6 @@
 # `.\transformers\modeling_tf_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者和团队信息
 # 版权声明，版权所有，保留所有权利
@@ -665,7 +665,7 @@ def dtype_byte_size(dtype):
     ```py
     >>> dtype_byte_size(tf.float32)
     4
-    ```
+    ```py
     """
     # 如果数据类型是布尔型，则返回占用字节数为 1/8
     if dtype == tf.bool:

@@ -1,6 +1,6 @@
 # `.\transformers\models\mra\convert_mra_pytorch_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为 UTF-8
 # Copyright 2023 The HuggingFace Inc. team.

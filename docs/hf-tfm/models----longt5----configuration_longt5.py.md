@@ -1,6 +1,6 @@
 # `.\transformers\models\longt5\configuration_longt5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022, The LongT5 Authors and HuggingFace Inc.
 # 版权声明，指定版权所有者及版权信息

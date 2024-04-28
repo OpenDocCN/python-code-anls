@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\__init__.py`
 
-```
+```py
 # 版权声明及许可信息，说明本代码的版权及使用许可
 from typing import TYPE_CHECKING  # 导入类型检查模块
 

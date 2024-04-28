@@ -1,6 +1,6 @@
 # `.\models\deta\__init__.py`
 
-```
+```py
 # 版权声明
 #
 # 该程序代码的版权属于 2022 年的 HuggingFace 团队，保留所有权利。

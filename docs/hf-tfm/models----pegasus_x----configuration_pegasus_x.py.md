@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus_x\configuration_pegasus_x.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年，Google 和 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -51,7 +51,7 @@ class PegasusXConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型为 PEGASUS-X
     model_type = "pegasus_x"
     # 推理时需要忽略的键列表

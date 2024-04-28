@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v2\configuration_mobilenet_v2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

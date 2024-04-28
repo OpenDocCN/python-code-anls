@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevit\modeling_mobilevit.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明，版权归 Apple Inc. 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用该文件，未经许可不得使用该文件
@@ -1232,7 +1232,7 @@ class MobileViTForSemanticSegmentation(MobileViTPreTrainedModel):
         
         Examples:
 
-        ```python
+        ```py
         >>> import requests
         >>> import torch
         >>> from PIL import Image

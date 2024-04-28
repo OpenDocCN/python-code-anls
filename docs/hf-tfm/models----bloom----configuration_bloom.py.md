@@ -1,6 +1,6 @@
 # `.\transformers\models\bloom\configuration_bloom.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明和许可协议
 """ Bloom配置"""

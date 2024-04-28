@@ -1,6 +1,6 @@
 # `.\models\ctrl\configuration_ctrl.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0进行许可，禁止在非遵守许可情况下使用该文件
@@ -54,7 +54,7 @@
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 设置模型类型为 "ctrl"
     model_type = "ctrl"

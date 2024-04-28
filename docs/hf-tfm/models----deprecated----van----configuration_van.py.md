@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\configuration_van.py`
 
-```
+```py
 # 设置编码为 utf-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 授权，除非遵守许可证，否则不得使用此文件
@@ -73,7 +73,7 @@ class VanConfig(PretrainedConfig):
     >>> model = VanModel(configuration)
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为"van"
     model_type = "van"

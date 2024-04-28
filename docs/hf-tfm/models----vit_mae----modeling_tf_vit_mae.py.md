@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_mae\modeling_tf_vit_mae.py`
 
-```
+```py
 # 声明文件编码为 UTF-8
 # 版权声明和许可信息
 # 本模型基于 Apache 许可证 2.0 进行许可
@@ -77,7 +77,7 @@ class TFViTMAEModelOutput(ModelOutput):  # TFViTMAEModel 的输出类，继承�
     ids_restore: tf.Tensor = None
     hidden_states: Tuple[tf.Tensor] | None = None
     attentions: Tuple[tf.Tensor] | None = None
-```  
+```py  
 @dataclass
 class TFViTMAEDecoderOutput(ModelOutput):
     """
@@ -1054,7 +1054,7 @@ class TFViTMAEModel(TFViTMAEPreTrainedModel):
         >>> inputs = image_processor(images=image, return_tensors="tf")
         >>> outputs = model(**inputs)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```
+        ```py
         """
         # 调用 ViT 主层
         outputs = self.vit(
@@ -1383,7 +1383,7 @@ class TFViTMAEForPreTraining(TFViTMAEPreTrainedModel):
         >>> loss = outputs.loss  # 损失值
         >>> mask = outputs.mask  # 掩码
         >>> ids_restore = outputs.ids_restore  # 恢复的 ID
-        ```"""  # 代码块结束
+        ```py"""  # 代码块结束
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 设置返回值的字典
         
         outputs = self.vit(  # 调用 Transformer 模型进行推理

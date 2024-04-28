@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\configuration_layoutlmv2.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 授权，除非符合许可证要求，否则不得使用该文件。
@@ -51,7 +51,7 @@ class LayoutLMv2Config(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 "layoutlmv2"
     model_type = "layoutlmv2"

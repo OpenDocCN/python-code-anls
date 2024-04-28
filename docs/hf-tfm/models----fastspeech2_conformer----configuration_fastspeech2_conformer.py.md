@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\configuration_fastspeech2_conformer.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明
 from typing import Dict
@@ -51,7 +51,7 @@ class FastSpeech2ConformerConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "fastspeech2_conformer"
     attribute_map = {"num_hidden_layers": "encoder_layers", "num_attention_heads": "encoder_num_attention_heads"}
@@ -221,7 +221,7 @@ class FastSpeech2ConformerHifiGanConfig(PretrainedConfig):
 
     # 访问模型配置
     configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为"hifigan"
     model_type = "hifigan"
@@ -297,7 +297,7 @@ class FastSpeech2ConformerWithHifiGanConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 定义模型类型为 fastspeech2_conformer_with_hifigan

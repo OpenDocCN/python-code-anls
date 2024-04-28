@@ -1,6 +1,6 @@
 # `.\transformers\models\openai\configuration_openai.py`
 
-```
+```py
 # 导入 OpenAI GPT 配置相关的模块
 import logging
 

@@ -1,6 +1,6 @@
 # `.\models\funnel\__init__.py`
 
-```
+```py
 # 导入必要的模块和类型提示
 from typing import TYPE_CHECKING
 

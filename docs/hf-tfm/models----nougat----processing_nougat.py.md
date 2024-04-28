@@ -1,6 +1,6 @@
 # `.\transformers\models\nougat\processing_nougat.py`
 
-```
+```py
 # 代码头部包含版权声明和许可信息
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.

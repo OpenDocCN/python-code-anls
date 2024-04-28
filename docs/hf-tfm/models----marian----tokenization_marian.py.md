@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\tokenization_marian.py`
 
-```
+```py
 # 版权声明以及许可信息
 # 版权所有 © 2020 The HuggingFace Team
 # 根据 Apache 许可证第 2 版（“许可证”）许可
@@ -123,7 +123,7 @@ class MarianTokenizer(PreTrainedTokenizer):
     >>> inputs = tokenizer(src_texts, text_target=tgt_texts, return_tensors="pt", padding=True)
 
     >>> outputs = model(**inputs)  # should work
-    ```"""
+    ```py"""
 
     # Define the names of the vocabulary files
     vocab_files_names = VOCAB_FILES_NAMES

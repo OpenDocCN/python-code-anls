@@ -1,6 +1,6 @@
 # `.\models\funnel\modeling_funnel.py`
 
-```
+```py
 # 设置 UTF-8 编码
 # 版权声明和许可证信息
 # 导入必要的库和模块
@@ -1283,7 +1283,7 @@ class FunnelForPreTraining(FunnelPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, FunnelForPreTraining
         >>> import torch
 

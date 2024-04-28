@@ -1,6 +1,6 @@
 # `.\models\idefics\image_processing_idefics.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，禁止未经许可使用此文件

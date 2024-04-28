@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\feature_extraction_deformable_detr.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # Apache许可证，版本2.0

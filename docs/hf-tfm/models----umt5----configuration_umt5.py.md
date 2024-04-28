@@ -1,6 +1,6 @@
 # `.\transformers\models\umt5\configuration_umt5.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权属于 The T5 Authors 和 HuggingFace Inc.
 # 根据 Apache License, Version 2.0 许可

@@ -1,6 +1,6 @@
 # `.\transformers\sagemaker\trainer_sm.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 

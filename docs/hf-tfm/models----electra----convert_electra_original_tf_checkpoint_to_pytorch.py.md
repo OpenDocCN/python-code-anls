@@ -1,6 +1,6 @@
 # `.\models\electra\convert_electra_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2018 年 HuggingFace 公司团队。
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\persimmon\configuration_persimmon.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # Adept AI 和 HuggingFace Inc. 团队，版权所有。
@@ -43,7 +43,7 @@ class PersimmonConfig(PretrainedConfig):
 
     >>> # 初始化一个 Persimmon 模型 persimmon-7b 风格配置
     >>> configuration = PersimmonConfig()
-    ```"""
+    ```py"""
 
     # 模型类型为 "persimmon"
     model_type = "persimmon"

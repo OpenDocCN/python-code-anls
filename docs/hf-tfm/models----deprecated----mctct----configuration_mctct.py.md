@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\configuration_mctct.py`
 
-```
+```py
 # 定义MCTCTConfig类，用于存储M-CTC-T模型的配置，并用于实例化M-CTC-T模型
 class MCTCTConfig(PretrainedConfig):
     r"""
@@ -26,7 +26,7 @@ class MCTCTConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为mctct
     model_type = "mctct"

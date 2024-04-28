@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevitv2\modeling_mobilevitv2.py`
 
-```
+```py
 # coding=utf-8  # 指定编码格式为utf-8
 
 # 此文件是 MobileViTV2 模型的实现，版权归 Apple Inc. 和 The HuggingFace Inc. 团队所有

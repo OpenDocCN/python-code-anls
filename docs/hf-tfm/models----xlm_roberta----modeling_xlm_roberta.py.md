@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\modeling_xlm_roberta.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括 Facebook AI Research 和 HuggingFace Inc. 团队的版权信息
 # 版权声明，包括 NVIDIA 公司的版权信息

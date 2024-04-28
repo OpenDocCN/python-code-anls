@@ -1,6 +1,6 @@
 # `.\transformers\models\m2m_100\modeling_m2m_100.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明
 # 根据 Apache License, Version 2.0 许可证规定
@@ -435,7 +435,7 @@ M2M_100_GENERATION_EXAMPLE = r"""
     >>> # translate to French
     >>> gen_tokens = model.generate(**model_inputs, forced_bos_token_id=tokenizer.get_lang_id("fr"))
     >>> print(tokenizer.batch_decode(gen_tokens, skip_special_tokens=True))
-    ```
+    ```py
 """
 
 M2M_100_INPUTS_DOCSTRING = r"""

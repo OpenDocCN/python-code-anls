@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入必要的依赖和模块

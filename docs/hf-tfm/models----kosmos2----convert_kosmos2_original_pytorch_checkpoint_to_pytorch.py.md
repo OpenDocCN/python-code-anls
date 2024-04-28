@@ -1,6 +1,6 @@
 # `.\models\kosmos2\convert_kosmos2_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 

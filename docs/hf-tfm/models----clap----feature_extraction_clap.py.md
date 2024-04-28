@@ -1,6 +1,6 @@
 # `.\transformers\models\clap\feature_extraction_clap.py`
 
-```
+```py
 # 设定文件编码为UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，您可以使用此文件，但需遵守许可证中的规定

@@ -1,6 +1,6 @@
 # `.\transformers\models\clipseg\configuration_clipseg.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的编码声明，指定为 UTF-8 编码
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
@@ -92,7 +92,7 @@ class CLIPSegTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型为 "clipseg_text_model"
     model_type = "clipseg_text_model"
@@ -204,7 +204,7 @@ class CLIPSegVisionConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义类属性 `model_type` 为 "clipseg_vision_model"
     model_type = "clipseg_vision_model"
@@ -304,7 +304,7 @@ class CLIPSegConfig(PretrainedConfig):
 
     ```python
     >>> from transformers import CLIPSegConfig, CLIPSegModel
-    ```
+    ```py
     # 使用CIDAS/clipseg-rd64风格的配置初始化一个CLIPSegConfig对象
     configuration = CLIPSegConfig()
     

@@ -1,6 +1,6 @@
 # `.\transformers\models\musicgen\configuration_musicgen.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权所有 2023 年 Meta AI 和 HuggingFace 公司团队。保留所有权利。
 #
@@ -155,7 +155,7 @@ class MusicgenConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import (
     ...     MusicgenConfig,
     ...     MusicgenDecoderConfig,

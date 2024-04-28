@@ -1,6 +1,6 @@
 # `.\models\falcon\convert_custom_code_checkpoint.py`
 
-```
+```py
 import json  # 导入 json 模块，用于处理 JSON 格式的数据
 from argparse import ArgumentParser  # 从 argparse 模块中导入 ArgumentParser 类，用于解析命令行参数
 from pathlib import Path  # 从 pathlib 模块中导入 Path 类，用于处理文件路径

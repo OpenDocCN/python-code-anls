@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\convert_bert_original_tf2_checkpoint_to_pytorch.py`
 
-```
+```py
 # 引入 argparse 模块，用于解析命令行参数
 import argparse
 # 引入 os 模块，提供与操作系统交互的功能

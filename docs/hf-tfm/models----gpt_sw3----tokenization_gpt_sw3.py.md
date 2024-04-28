@@ -1,6 +1,6 @@
 # `.\models\gpt_sw3\tokenization_gpt_sw3.py`
 
-```
+```py
 """The tokenizer used by the GPT-SW3 models."""
 
 # 导入所需的模块和库
@@ -63,7 +63,7 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
     >>> tokenizer = GPTSw3Tokenizer.from_pretrained("AI-Sweden-Models/gpt-sw3-126m")
     >>> tokenizer("Svenska är kul!")["input_ids"]
     [1814, 377, 3617, 63504]
-    ```
+    ```py
     Args:
         vocab_file (`str`):
             [SentencePiece](https://github.com/google/sentencepiece) file (generally has a *.spm* extension) that

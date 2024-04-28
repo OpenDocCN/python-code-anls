@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\feature_extraction_speech_to_text.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明：2021 年由 HuggingFace Inc. 团队保留所有权利
 #

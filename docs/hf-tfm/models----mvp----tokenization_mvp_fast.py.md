@@ -1,6 +1,6 @@
 # `.\transformers\models\mvp\tokenization_mvp_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，使用 Apache 许可证 2.0
 import json
@@ -61,7 +61,7 @@ class MvpTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     通过在实例化此分词器时或在调用一些文本时传递 `add_prefix_space=True`，可以避免这种行为，但由于模型未以此方式进行预训练，这可能会降低性能。
 

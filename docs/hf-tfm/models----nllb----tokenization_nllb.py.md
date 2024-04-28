@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb\tokenization_nllb.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为 UTF-8
 
@@ -293,7 +293,7 @@ class NllbTokenizer(PreTrainedTokenizer):
         """Converts a sequence of tokens (strings for sub-words) in a single string."""
         out_string = "".join(tokens).replace(SPIECE_UNDERLINE, " ").strip()  # Concatenate tokens, replace special character, and remove leading/trailing whitespace
         return out_string  # Return the concatenated string
-```  
+```py  
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
         # 检查保存目录是否存在
         if not os.path.isdir(save_directory):

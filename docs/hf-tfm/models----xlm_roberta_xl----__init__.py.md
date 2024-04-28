@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta_xl\__init__.py`
 
-```
+```py
 # 这是一个 Hugging Face 模型库的 Python 模块，包含了 XLM-RoBERTa-XL 模型的相关内容
 # 它首先定义了该模块的导入结构，指定了哪些类和常量可以从该模块中导入
 

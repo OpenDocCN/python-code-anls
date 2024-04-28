@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\convert_trajectory_transformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可信息
 # 版权所有 2022 年 轨迹变换器 论文作者 和 HuggingFace Inc. 团队。保留所有权利。
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     ```sh
     >>> python convert_trajectory_transformer_original_pytorch_checkpoint_to_pytorch.py --dataset <dataset_name>
     ...     --gpt_loadpath <path_to_original_pytorch_checkpoint>
-    ```
+    ```py
     """
 
     # 解析命令行参数

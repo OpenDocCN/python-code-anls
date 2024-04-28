@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\feature_extraction.py`
 
-```
+```py
 # 导入 Dict 类型
 from typing import Dict
 # 从base模块导入GenericTensor和Pipeline类
@@ -20,7 +20,7 @@ class FeatureExtractionPipeline(Pipeline):
     >>> result = extractor("This is a simple test.", return_tensors=True)
     >>> result.shape  # 这是一个形状为[1, sequence_lenth, hidden_dimension]的张量，表示输入字符串。
     torch.Size([1, 8, 768])
-    ```
+    ```py
 
     了解有关在[pipeline tutorial](../pipeline_tutorial)中使用管道的基础知识
 

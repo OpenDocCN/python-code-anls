@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\configuration_trajectory_transformer.py`
 
-```
+```py
 # coding=utf-8
 # 声明代码文件的编码格式和版权声明
 
@@ -42,7 +42,7 @@ class TrajectoryTransformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型
     model_type = "trajectory_transformer"

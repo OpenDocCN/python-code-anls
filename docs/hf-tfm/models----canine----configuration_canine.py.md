@@ -1,6 +1,6 @@
 # `.\transformers\models\canine\configuration_canine.py`
 
-```
+```py
 # 导入所需模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -39,7 +39,7 @@ class CanineConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为 "canine"
     model_type = "canine"

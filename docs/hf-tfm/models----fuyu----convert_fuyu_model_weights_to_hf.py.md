@@ -1,6 +1,6 @@
 # `.\models\fuyu\convert_fuyu_model_weights_to_hf.py`
 
-```
+```py
 # 引入命令行参数解析库
 import argparse
 # 引入操作系统交互库

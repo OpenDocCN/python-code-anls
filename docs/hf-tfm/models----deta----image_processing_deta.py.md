@@ -1,6 +1,6 @@
 # `.\models\deta\image_processing_deta.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可信息
 # 2022 年由 HuggingFace Inc. 团队版权所有
@@ -686,7 +686,7 @@ class DetaImageProcessor(BaseImageProcessor):
         data_format: Optional[ChannelDimension] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-```  
+```py  
     ) -> np.ndarray:
         """
         调整图像大小到给定尺寸。尺寸可以是`min_size`（标量）或`(height, width)`元组。如果尺寸是整数，则图像的较小边将匹配到这个数值。

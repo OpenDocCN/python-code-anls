@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\tokenization_deberta_v2_fast.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明部分
 # 根据 Apache 许可证，使用此文件需要遵守相应协议
@@ -165,7 +165,7 @@ class DebertaV2TokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列        | 第二个序列      |
-        ```
+        ```py
 
         如果 `token_ids_1` 为 `None`，则此方法仅返回掩码的第一部分（0）。
 

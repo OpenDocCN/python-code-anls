@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\modeling_markuplm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息
 # 导入必要的库和模块
@@ -303,7 +303,7 @@ class MarkupLMPooler(nn.Module):
 
 # 从transformers.models.bert.modeling_bert.BertPredictionHeadTransform复制代码，并将Bert->MarkupLM
 class MarkupLMPredictionHeadTransform(nn.Module):
-```  
+```py  
     # 初始化函数，接受配置参数并进行初始化操作
     def __init__(self, config):
         # 调用父类的初始化函数
@@ -983,7 +983,7 @@ class MarkupLMForTokenClassification(MarkupLMPreTrainedModel):
 
         >>> loss = outputs.loss
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         outputs = self.markuplm(

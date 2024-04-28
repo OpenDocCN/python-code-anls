@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\conversational.py`
 
-```
+```py
 import uuid  # 导入 uuid 模块，用于生成唯一标识符
 from typing import Any, Dict, List, Union  # 导入 typing 模块，用于类型提示
 
@@ -39,7 +39,7 @@ class Conversation:
     conversation = Conversation("Going to the movies tonight - any suggestions?")
     conversation.add_message({"role": "assistant", "content": "The Big lebowski."})
     conversation.add_message({"role": "user", "content": "Is it good?"})
-    ```"""
+    ```py"""
 
     def __init__(
         self, messages: Union[str, List[Dict[str, str]]] = None, conversation_id: uuid.UUID = None, **deprecated_kwargs
@@ -258,7 +258,7 @@ class ConversationalPipeline(Pipeline):
     >>> conversation = chatbot(conversation)
     >>> conversation.messages[-1]["content"]
     " I think it's just because they're so fast-paced and action-fantastic."
-    ```
+    ```py
 
     了解有关在[pipeline tutorial](../pipeline_tutorial)中使用Pipeline的基础知识
 

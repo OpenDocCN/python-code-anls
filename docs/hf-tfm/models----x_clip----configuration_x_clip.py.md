@@ -1,6 +1,6 @@
 # `.\transformers\models\x_clip\configuration_x_clip.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0许可证，你可以在符合许可证的情况下使用该文件
@@ -78,7 +78,7 @@ class XCLIPTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "xclip_text_model"
 

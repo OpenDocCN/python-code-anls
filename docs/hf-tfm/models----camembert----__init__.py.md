@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\__init__.py`
 
-```
+```py
 # 导入类型检查工具
 from typing import TYPE_CHECKING
 # 导入可选依赖未安装的异常

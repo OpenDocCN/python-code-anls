@@ -1,6 +1,6 @@
 # `.\models\deta\configuration_deta.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 SenseTime and The HuggingFace Inc. team. All rights reserved.
 #
@@ -54,7 +54,7 @@ class DetaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "deta"

@@ -1,6 +1,6 @@
 # `.\transformers\models\longt5\modeling_longt5.py`
 
-```
+```py
 # 设置脚本编码为utf-8
 # 版权信息声明
 # 启用Apache许可证2.0，不得使用此文件除非符合许可证的规定
@@ -1509,7 +1509,7 @@ class LongT5EncoderModel(LongT5PreTrainedModel):
         ... ).input_ids  # Batch size 1
         >>> outputs = model(input_ids=input_ids)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 确保返回字典的标志已设置，如果未提供，则使用配置中的默认值
 

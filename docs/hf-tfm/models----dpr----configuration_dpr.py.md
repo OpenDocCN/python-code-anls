@@ -1,6 +1,6 @@
 # `.\models\dpr\configuration_dpr.py`
 
-```
+```py
 # coding=utf-8
 # 载入预训练配置类 PretrainedConfig 和 logging 工具
 from ...configuration_utils import PretrainedConfig
@@ -56,7 +56,7 @@ class DPRConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 ```  
     # 模型类型设为 "dpr"
     model_type = "dpr"

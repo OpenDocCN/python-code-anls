@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\modeling_tf_rembert.py`
 
-```
+```py
 # 设置文件的编码格式为 UTF-8
 # 版权声明
 #

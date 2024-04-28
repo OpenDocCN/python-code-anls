@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\tokenization_xglm_fast.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版本版权声明
 # 根据Apache许可证版本2.0获得授权方可使用此文件

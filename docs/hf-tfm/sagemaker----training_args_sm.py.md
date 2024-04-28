@@ -1,6 +1,6 @@
 # `.\transformers\sagemaker\training_args_sm.py`
 
-```
+```py
 # 加载必要的库和模块
 import importlib.util
 import json

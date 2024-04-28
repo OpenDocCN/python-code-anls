@@ -1,6 +1,6 @@
 # `.\models\fuyu\configuration_fuyu.py`
 
-```
+```py
 # 导入所需模块和类
 # 配置文件的版权声明和许可协议信息
 # 声明模型配置类的起始位置，用于存储 `FuyuForCausalLM` 模型的配置
@@ -33,7 +33,7 @@ class FuyuConfig(PretrainedConfig):
 
     >>> # Initializing a Fuyu fuyu-7b style configuration
     >>> configuration = FuyuConfig()
-    ```"""
+    ```py"""
 
     # 模型类型为 "fuyu"
     model_type = "fuyu"

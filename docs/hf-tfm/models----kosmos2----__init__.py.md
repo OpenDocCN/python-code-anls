@@ -1,6 +1,6 @@
 # `.\models\kosmos2\__init__.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 The HuggingFace Inc. 团队所有

@@ -1,6 +1,6 @@
 # `.\transformers\models\swinv2\modeling_swinv2.py`
 
-```
+```py
 # 导入所需的模块和类
 import collections.abc
 import math
@@ -600,7 +600,7 @@ class Swinv2Intermediate(nn.Module):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
-``` 
+```py 
     # 前向传播函数，接受隐藏状态张量作为输入，返回处理后的隐藏状态张量
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
         # 将隐藏状态张量通过全连接层处理
@@ -1270,7 +1270,7 @@ class Swinv2Backbone(Swinv2PreTrainedModel, BackboneMixin):
         # 打印输出特征图的形状
         >>> list(feature_maps[-1].shape)
         [1, 2048, 7, 7]
-        ```"""
+        ```py"""
         
         # 如果没有提供 return_dict 参数，使用默认配置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict

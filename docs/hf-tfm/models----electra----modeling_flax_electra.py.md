@@ -1,6 +1,6 @@
 # `.\models\electra\modeling_flax_electra.py`
 
-```
+```py
 # 指定文件编码为 utf-8
 # 2021 The Google Flax Team Authors and The HuggingFace Inc. team 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用
@@ -1061,7 +1061,7 @@ FLAX_ELECTRA_FOR_PRETRAINING_DOCSTRING = """
     >>> outputs = model(**inputs)
 
     >>> prediction_logits = outputs.logits
-    ```
+    ```py
 """
 
 # 重写预训练模型的调用文档字符串

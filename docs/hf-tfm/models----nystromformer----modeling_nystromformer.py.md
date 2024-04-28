@@ -1,6 +1,6 @@
 # `.\transformers\models\nystromformer\modeling_nystromformer.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 # 版权声明，版权归 UW-Madison The HuggingFace Inc. 团队所有
 #

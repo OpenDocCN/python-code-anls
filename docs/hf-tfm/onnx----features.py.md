@@ -1,6 +1,6 @@
 # `.\transformers\onnx\features.py`
 
-```
+```py
 # 导入必要的模块和库
 import os
 from functools import partial, reduce

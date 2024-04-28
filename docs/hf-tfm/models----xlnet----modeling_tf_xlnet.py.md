@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\modeling_tf_xlnet.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明和许可协议信息
 # 导入必要的库和模块
@@ -500,7 +500,7 @@ class TFXLNetMainLayer(tf.keras.layers.Layer):
             qlen [0 0 0 0 0 0 0 1 1]     [1 1 0 0 0 0 0 1 1]
                  [0 0 0 0 0 0 0 0 1]     [1 1 1 0 0 0 0 0 1]
                v [0 0 0 0 0 0 0 0 0]     [1 1 1 1 0 0 0 0 0]
-        ```
+        ```py
         """
         # 创建一个全1的掩码矩阵
         attn_mask = tf.ones([qlen, qlen])
@@ -1339,7 +1339,7 @@ class TFXLNetForTokenClassification(TFXLNetPreTrainedModel, TFTokenClassificatio
         labels: np.ndarray | tf.Tensor | None = None,
         training: bool = False,
     ):
-``` 
+```py 
     ) -> Union[TFXLNetForTokenClassificationOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional`):

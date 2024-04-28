@@ -1,6 +1,6 @@
 # `.\transformers\models\bartpho\tokenization_bartpho.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 该文件版权归 VinAI Research 和 HuggingFace Inc. 团队所有
 # 基于 Apache 许可证 2.0 进行许可

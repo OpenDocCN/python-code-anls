@@ -1,6 +1,6 @@
 # `.\transformers\models\codegen\modeling_codegen.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可证信息
 # 本模型代码基于 Apache License, Version 2.0 发布，详情可见：http://www.apache.org/licenses/LICENSE-2.0

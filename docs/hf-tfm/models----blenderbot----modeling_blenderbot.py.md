@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\modeling_blenderbot.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明和许可协议
 # 版权所有（c）2021 Facebook, Inc. 和 The HuggingFace Inc. 团队。保留所有权利。
@@ -347,7 +347,7 @@ BLENDERBOT_GENERATION_EXAMPLE = r"""
     >>> next_reply_ids = model.generate(**inputs)
     >>> print("Bot: ", tokenizer.batch_decode(next_reply_ids, skip_special_tokens=True)[0])
     Bot:   I see. Well, it's good that they're trying to change their eating habits.
-    ```
+    ```py
 """
 
 BLENDERBOT_INPUTS_DOCSTRING = r"""

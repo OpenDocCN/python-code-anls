@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\convert_bart_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入所需模块和库
 import argparse  # 解析命令行参数
 import os  # 提供与操作系统交互的功能

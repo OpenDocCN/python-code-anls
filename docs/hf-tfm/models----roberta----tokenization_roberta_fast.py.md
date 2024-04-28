@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta\tokenization_roberta_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，引用了 Apache License 2.0
 # 导入必要的模块
@@ -83,7 +83,7 @@ class RobertaTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer or when you
     call it on some text, but since the model was not pretrained this way, it might yield a decrease in performance.

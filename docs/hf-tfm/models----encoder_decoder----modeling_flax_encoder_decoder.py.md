@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_flax_encoder_decoder.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，支持多种语言字符的正确显示和处理
 
@@ -455,7 +455,7 @@ class FlaxEncoderDecoderModel(FlaxPreTrainedModel):
         >>> text = "My friends are cool but they eat too many carbs."
         >>> input_ids = tokenizer.encode(text, return_tensors="np")
         >>> encoder_outputs = model.encode(input_ids)
-        ```"""
+        ```py"""
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 如果传入的 output_attentions 不为空，则使用之，否则使用配置中的 output_attentions
         output_hidden_states = (

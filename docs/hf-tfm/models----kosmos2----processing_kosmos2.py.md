@@ -1,6 +1,6 @@
 # `.\models\kosmos2\processing_kosmos2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证规定，否则不得使用此文件
@@ -512,7 +512,7 @@ def clean_text_and_extract_entities_with_bboxes(text, num_patches_per_side=32):
 
     >>> entities
     [('a snowman', (12, 21), [(0.390625, 0.046875, 0.984375, 0.828125)]), ('a fire', (41, 47), [(0.171875, 0.015625, 0.484375, 0.890625)])]
-    ```"""
+    ```py"""
     # 去除特殊字段（标签令牌、补丁索引令牌等）
     processed_text = re.sub("<.*?>", "", text)
 

@@ -1,6 +1,6 @@
 # `.\models\instructblip\configuration_instructblip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，禁止未经许可使用此文件
@@ -79,7 +79,7 @@ class InstructBlipVisionConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 instructblip_vision_model
     model_type = "instructblip_vision_model"
@@ -216,7 +216,7 @@ class InstructBlipQFormerConfig(PretrainedConfig):
     >>> model = InstructBlipQFormerModel(configuration)
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "instructblip_qformer"
     model_type = "instructblip_qformer"
@@ -327,7 +327,7 @@ class InstructBlipConfig(PretrainedConfig):
     >>> text_config = OPTConfig()
 
     >>> config = InstructBlipConfig.from_text_vision_configs(vision_config, qformer_config, text_config)
-    ```"""
+    ```py"""
 
     # 模型类型为 instructblip
     model_type = "instructblip"

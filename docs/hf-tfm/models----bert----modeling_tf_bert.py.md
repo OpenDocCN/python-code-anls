@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\modeling_tf_bert.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明
 # 导入必要的模块和库
@@ -1009,7 +1009,7 @@ class TFBertMainLayer(tf.keras.layers.Layer):
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
                 self.pooler.build(None)
-```  
+```py  
 class TFBertPreTrainedModel(TFPreTrainedModel):
     """
     一个抽象类，用于处理权重初始化以及下载和加载预训练模型的简单接口。
@@ -1514,7 +1514,7 @@ class TFBertForNextSentencePrediction(TFBertPreTrainedModel, TFNextSentencePredi
 
         >>> logits = model(encoding["input_ids"], token_type_ids=encoding["token_type_ids"])[0]
         >>> assert logits[0][0] < logits[0][1]  # the next sentence was random
-        ```"""
+        ```py"""
         获取BERT模型的输出。
 
         outputs = self.bert(
@@ -2140,5 +2140,5 @@ class TFBertForQuestionAnswering(TFBertPreTrainedModel, TFQuestionAnsweringLoss)
         if getattr(self, "qa_outputs", None) is not None:
             with tf.name_scope(self.qa_outputs.name):
                 self.qa_outputs.build([None, None, self.config.hidden_size])
-```  
+```py  
 ```

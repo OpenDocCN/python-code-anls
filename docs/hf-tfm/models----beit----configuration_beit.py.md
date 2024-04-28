@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\configuration_beit.py`
 
-```
+```py
 # 导入所需模块和类
 from collections import OrderedDict
 from typing import Mapping
@@ -46,7 +46,7 @@ class BeitConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 设定模型类型
     model_type = "beit"

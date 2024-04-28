@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\convert_van_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指定了代码的版权信息和许可协议
 # 此代码的版权归 BNRist（清华大学）、TKLNDST（南开大学）以及 HuggingFace Inc. 团队所有，保留所有权利

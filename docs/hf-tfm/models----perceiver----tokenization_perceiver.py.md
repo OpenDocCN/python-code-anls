@@ -1,6 +1,6 @@
 # `.\transformers\models\perceiver\tokenization_perceiver.py`
 
-```
+```py
 # 设置代码编码格式为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，未经授权不得使用此文件

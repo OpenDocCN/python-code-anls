@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\configuration_xlm.py`
 
-```
+```py
 # 设定代码文件的编码为 UTF-8
 # 版权声明，著作权归Facebook公司、HuggingFace Inc.团队所有
 # 在遵守Apache License 2.0的情况下方可使用本文件
@@ -57,7 +57,7 @@ class XLMConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为"xlm"

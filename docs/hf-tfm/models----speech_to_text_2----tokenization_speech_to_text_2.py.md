@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text_2\tokenization_speech_to_text_2.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明和许可信息，提供对代码的使用、复制和修改的规范
 import json

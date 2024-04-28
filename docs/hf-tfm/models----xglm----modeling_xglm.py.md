@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\modeling_xglm.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The Fairseq Authors 和 The HuggingFace Inc. 团队所有，保留所有权利
 # 根据 Apache 许可证 2.0 版本授权

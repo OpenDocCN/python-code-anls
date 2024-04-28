@@ -1,6 +1,6 @@
 # `.\models\cvt\modeling_cvt.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 根据Apache许可证2.0版本使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\x_clip\processing_x_clip.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache许可证2.0获取许可

@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\tokenization_xlm_roberta_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2018 年 Google AI、Google Brain 和卡内基梅隆大学作者以及 HuggingFace Inc. 团队。
 #

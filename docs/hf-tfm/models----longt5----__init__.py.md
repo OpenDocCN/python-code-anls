@@ -1,6 +1,6 @@
 # `.\transformers\models\longt5\__init__.py`
 
-```
+```py
 # 版权声明、许可信息、依赖库检查、模型相关配置和模型导入的主文件
 
 from typing import TYPE_CHECKING  # 导入类型提示模块

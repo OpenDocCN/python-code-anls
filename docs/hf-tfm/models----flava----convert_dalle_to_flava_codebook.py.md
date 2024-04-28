@@ -1,6 +1,6 @@
 # `.\models\flava\convert_dalle_to_flava_codebook.py`
 
-```
+```py
 # 这是 Python 文件的编码声明和版权信息
 # 版权 2022 Meta Platforms 和 HuggingFace 团队，保留所有权利。
 # 

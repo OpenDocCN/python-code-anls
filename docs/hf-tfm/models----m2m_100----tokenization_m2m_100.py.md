@@ -1,6 +1,6 @@
 # `.\transformers\models\m2m_100\tokenization_m2m_100.py`
 
-```
+```py
 # 该代码是 M2M100 模型的分词器实现,基于 SentencePiece 算法
 # 包含了以下主要功能:
 # 1. 定义了分词器需要的文件名和预训练模型的 URL
@@ -97,7 +97,7 @@ class M2M100Tokenizer(PreTrainedTokenizer):
     # >>> tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M", src_lang="en", tgt_lang="ro")
     # >>> src_text = " UN Chief Says There Is No Military Solution in Syria"
     # >>> tgt_text = "Şeful ONU declară că nu există o soluţie militară în Siria"
-    # ```
+    # ```py
     # 使用给定的文本进行标记化，生成模型输入
     model_inputs = tokenizer(src_text, text_target=tgt_text, return_tensors="pt")
     # 使用模型处理生成的输入，输出结果

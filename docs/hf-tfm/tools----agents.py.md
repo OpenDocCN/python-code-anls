@@ -1,6 +1,6 @@
 # `.\transformers\tools\agents.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -233,7 +233,7 @@ def clean_code_for_chat(result):
     idx += 1
     start_idx = idx
     # 找到代码块结束的索引
-    while not lines[idx].lstrip().startswith("```"):
+    while not lines[idx].lstrip().startswith("```py"):
         idx += 1
     code = "\n".join(lines[start_idx:idx]).strip()
 
@@ -251,7 +251,7 @@ def clean_code_for_run(result):
     code_lines = code.split("\n")
     if code_lines[0] in ["```", "```py", "```python"]:
         code_lines = code_lines[1:]
-    if code_lines[-1] == "```":
+    if code_lines[-1] == "```py":
         code_lines = code_lines[:-1]
     code = "\n".join(code_lines)
 

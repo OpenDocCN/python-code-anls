@@ -1,6 +1,6 @@
 # `.\models\fnet\configuration_fnet.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 版权所属：2021年 Google AI 和 HuggingFace Inc.团队。保留所有权利。
@@ -71,7 +71,7 @@ class FNetConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import FNetConfig, FNetModel
 
     >>> # Initializing a FNet fnet-base style configuration
@@ -122,5 +122,5 @@ class FNetConfig(PretrainedConfig):
         self.layer_norm_eps = layer_norm_eps
         self.use_tpu_fourier_optimizations = use_tpu_fourier_optimizations
         self.tpu_short_seq_length = tpu_short_seq_length
-    ```  
+    ```py  
 ```

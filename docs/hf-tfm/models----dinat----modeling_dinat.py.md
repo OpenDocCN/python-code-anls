@@ -1,6 +1,6 @@
 # `.\models\dinat\modeling_dinat.py`
 
-```
+```py
 # 设置编码为utf-8
 # 版权声明
 # 根据Apache许可证2.0版授权，您可以按照许可证的规定使用这个文件
@@ -1040,7 +1040,7 @@ class DinatBackbone(DinatPreTrainedModel, BackboneMixin):
         >>> feature_maps = outputs.feature_maps
         >>> list(feature_maps[-1].shape)
         [1, 512, 7, 7]
-        ```"""
+        ```py"""
         # 如果 return_dict 不为 None，则使用 return_dict，否则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 如果 output_hidden_states 不为 None，则使用 output_hidden_states，否则使用 self.config.output_hidden_states

@@ -1,6 +1,6 @@
 # `.\transformers\modeling_flax_outputs.py`
 
-```
+```py
 # 导入必要的模块和类型
 from typing import Dict, Optional, Tuple
 # 导入 Flax 框架

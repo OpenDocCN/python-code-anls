@@ -1,6 +1,6 @@
 # `.\models\deprecated\mmbt\configuration_mmbt.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明：来自 Facebook, Inc. 及其附属公司和 HuggingFace Inc. 团队
 # 根据 Apache 许可证 2.0 版本获得许可

@@ -1,6 +1,6 @@
 # `.\transformers\models\swin2sr\convert_swin2sr_original_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，该代码文件使用 Apache License, Version 2.0 授权
 # 获取授权副本的链接

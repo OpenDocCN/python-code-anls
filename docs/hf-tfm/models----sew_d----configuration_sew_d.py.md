@@ -1,6 +1,6 @@
 # `.\transformers\models\sew_d\configuration_sew_d.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 ASAPP Inc. 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -48,7 +48,7 @@ class SEWDConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 "sew-d"
     model_type = "sew-d"

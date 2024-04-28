@@ -1,6 +1,6 @@
 # `.\transformers\models\splinter\modeling_splinter.py`
 
-```
+```py
 # 设置 Python 文件编码格式为 UTF-8
 # 版权声明
 # 实体类，表示 Splinter 模型的配置信息

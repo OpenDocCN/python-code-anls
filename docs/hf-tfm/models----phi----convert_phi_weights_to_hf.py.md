@@ -1,6 +1,6 @@
 # `.\transformers\models\phi\convert_phi_weights_to_hf.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 进行许可

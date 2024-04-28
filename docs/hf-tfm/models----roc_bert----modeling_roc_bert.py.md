@@ -1,6 +1,6 @@
 # `.\transformers\models\roc_bert\modeling_roc_bert.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明，包括 Apache License 2.0 的许可条款
 # 请查看 http://www.apache.org/licenses/LICENSE-2.0 获得许可条款的副本
@@ -1039,7 +1039,7 @@ class RoCBertForMaskedLM(RoCBertPreTrainedModel):
             >>> predicted_token_id = logits[0, mask_token_index].argmax(axis=-1)
             >>> tokenizer.decode(predicted_token_id)
             '.'
-            ```
+            ```py
         """
     
         # 判断是否要返回字典结果

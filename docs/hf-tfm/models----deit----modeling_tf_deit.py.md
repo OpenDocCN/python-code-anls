@@ -1,6 +1,6 @@
 # `.\models\deit\modeling_tf_deit.py`
 
-```
+```py
 # 这是一个 TensorFlow 实现的 DeiT 模型
 # 它是由 Facebook AI Research (FAIR) 和 Hugging Face 团队开发的
 # 这个文件包含了 DeiT 模型的定义和相关的实用函数
@@ -944,7 +944,7 @@ class TFDeitDecoder(tf.keras.layers.Layer):
         # 创建一个TFDeitPixelShuffle层，用于将特征图上采样
         self.pixel_shuffle = TFDeitPixelShuffle(config.encoder_stride, name="1")
         self.config = config
-```  
+```py  
     # 定义一个函数，接受输入张量和一个训练标志，并返回一个张量
     def call(self, inputs: tf.Tensor, training: bool = False) -> tf.Tensor:
         # 初始化隐藏层状态为输入张量
@@ -1085,7 +1085,7 @@ class TFDeiTForImageClassification(TFDeiTPreTrainedModel, TFSequenceClassificati
         >>> predicted_class_idx = tf.math.argmax(logits, axis=-1)[0]
         >>> print("Predicted class:", model.config.id2label[int(predicted_class_idx)])
         Predicted class: little blue heron, Egretta caerulea
-        ```"""
+        ```py"""
         // 检查是否需要返回字典
           return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

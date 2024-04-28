@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_bert\processing_wav2vec2_bert.py`
 
-```
+```py
 # 设置代码文件的字符编码为 UTF-8
 # 版权声明，指明代码的版权归 The HuggingFace Inc. 团队所有
 #

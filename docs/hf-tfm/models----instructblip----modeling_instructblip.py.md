@@ -1,6 +1,6 @@
 # `.\models\instructblip\modeling_instructblip.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Salesforce 作者和 HuggingFace 团队所有
 # 根据 Apache 许可证 2.0 版本授权使用本文件

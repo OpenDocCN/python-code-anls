@@ -1,6 +1,6 @@
 # `.\transformers\integrations\integration_utils.py`
 
-```
+```py
 # 版权声明和许可信息
 """
 Integrations with other Python libraries.
@@ -355,7 +355,7 @@ def run_hp_search_ray(trainer, n_trials: int, direction: str, **kwargs) -> BestR
     trainer.model = None
 
     # 设置默认的 `resources_per_trial`
-```  
+```py  
     # 检查是否在参数中包含了"resources_per_trial"
     if "resources_per_trial" not in kwargs:
         # 默认每个 trial 使用 1 个 CPU 和 1 个 GPU（如果有的话）
@@ -1735,7 +1735,7 @@ class FlyteCallback(TrainerCallback):
         cp = current_context().checkpoint
         trainer = Trainer(..., callbacks=[FlyteCallback()])
         output = trainer.train(resume_from_checkpoint=cp.restore())
-    ```
+    ```py
     """
 
     def __init__(self, save_log_history: bool = True, sync_checkpoints: bool = True):

@@ -1,6 +1,6 @@
 # `.\transformers\models\mistral\convert_mistral_weights_to_hf.py`
 
-```
+```py
 # 版权声明和导入模块
 # 以上代码是版权声明和导入必要的模块
 

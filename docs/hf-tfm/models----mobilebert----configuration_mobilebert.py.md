@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilebert\configuration_mobilebert.py`
 
-```
+```py
 # 设置编码方式为utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，你不得使用此文件，除非符合许可证的规定
@@ -46,7 +46,7 @@ class MobileBertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
 
     属性：pretrained_config_archive_map（Dict[str, str]）：包含所有可用预训练检查点的字典。
     """

@@ -1,6 +1,6 @@
 # `.\transformers\models\clap\__init__.py`
 
-```
+```py
 # 导入类型检查相关模块
 from typing import TYPE_CHECKING
 # 导入可选依赖未安装异常类

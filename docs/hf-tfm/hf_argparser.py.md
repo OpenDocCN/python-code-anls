@@ -1,6 +1,6 @@
 # `.\transformers\hf_argparser.py`
 
-```
+```py
 # 引入必要的模块和库
 import dataclasses  # 用于定义数据类
 import json  # 用于 JSON 数据的编解码
@@ -72,7 +72,7 @@ def HfArg(
     class Args:
         regular_arg: str = dataclasses.field(default="Huggingface", metadata={"aliases": ["--example", "-e"], "help": "This syntax could be better!"})
         hf_arg: str = HfArg(default="Huggingface", aliases=["--example", "-e"], help="What a nice syntax!")
-    ```
+    ```py
     """
     def add_field_metadata(aliases=None, help=None, default=dataclasses.MISSING, default_factory=dataclasses.MISSING, metadata=None, **kwargs):
         """

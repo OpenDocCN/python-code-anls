@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\convert_t5x_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设定文件编码格式为UTF-8
 # 版权声明
 # 2022年由Google LLC和HuggingFace Inc.团队所有
@@ -21,7 +21,7 @@
     ```
     python3 convert_t5x_checkpoint_to_pytorch.py --t5x_checkpoint_path=$HOME/t5_1_1_small --config_file=config.json\
       --pytorch_dump_path=$HOME/t5_1_1_small_pt
-    ```
+    ```py
 """
 
 # 引入所需模块

@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\text2text_generation.py`
 
-```
+```py
 # 导入必要的库
 import enum  # 用于定义枚举类型
 import warnings  # 用于处理警告信息
@@ -48,7 +48,7 @@ class Text2TextGenerationPipeline(Pipeline):
     ...     "answer: Manuel context: Manuel has created RuPERTa-base with the support of HF-Transformers and Google"
     ... )
     [{'generated_text': 'question: Who created the RuPERTa-base?'}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial). You can pass text
     generation parameters to this pipeline to control stopping criteria, decoding strategy, and more. Learn more about
@@ -69,7 +69,7 @@ class Text2TextGenerationPipeline(Pipeline):
     ```python
     text2text_generator = pipeline("text2text-generation")
     text2text_generator("question: What is 42 ? context: 42 is the answer to life, the universe and everything")
-    ```"""
+    ```py"""
 
     # 用于表示返回结果中生成文本的键名
     return_name = "generated"
@@ -286,7 +286,7 @@ class SummarizationPipeline(Text2TextGenerationPipeline):
     # use t5 in tf
     summarizer = pipeline("summarization", model="t5-base", tokenizer="t5-base", framework="tf")
     summarizer("An apple a day, keeps the doctor away", min_length=5, max_length=20)
-    ```"""
+    ```py"""
 
     # Used in the return key of the pipeline.
     return_name = "summary"
@@ -348,7 +348,7 @@ class TranslationPipeline(Text2TextGenerationPipeline):
     ```python
     en_fr_translator = pipeline("translation_en_to_fr")
     en_fr_translator("How old are you?")
-    ```"""
+    ```py"""
 
     # 用于 pipeline 返回键的名称
     return_name = "translation"

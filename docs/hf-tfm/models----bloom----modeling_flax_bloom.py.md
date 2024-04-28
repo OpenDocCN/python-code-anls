@@ -1,6 +1,6 @@
 # `.\transformers\models\bloom\modeling_flax_bloom.py`
 
-```
+```py
 # 指定编码为UTF-8
 # 版权声明，版权归HuggingFace Inc.团队和Bigscience Workshop所有
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\mbart\modeling_flax_mbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Facebook AI Research Team 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -1014,7 +1014,7 @@ class FlaxMBartPreTrainedModel(FlaxPreTrainedModel):
         >>> text = "My friends are cool but they eat too many carbs."
         >>> inputs = tokenizer(text, max_length=1024, return_tensors="jax")
         >>> encoder_outputs = model.encode(**inputs)
-        ```"""
+        ```py"""
         # 设置输出注意力权重，默认为配置中的值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 设置输出隐藏状态，默认为配置中的值

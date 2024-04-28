@@ -1,6 +1,6 @@
 # `.\transformers\models\pop2piano\convert_pop2piano_weights_to_hf.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权归 The HuggingFace Inc. 团队所有，保留所有权利。
 # 根据 Apache 许可证 2.0 版本授权

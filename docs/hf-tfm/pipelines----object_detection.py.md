@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\object_detection.py`
 
-```
+```py
 # 从typing模块导入Any, Dict, List, Union类
 from typing import Any, Dict, List, Union
 
@@ -42,7 +42,7 @@ class ObjectDetectionPipeline(Pipeline):
     [{'score': 0.997, 'label': 'bird', 'box': {'xmin': 69, 'ymin': 171, 'xmax': 396, 'ymax': 507}}, {'score': 0.999, 'label': 'bird', 'box': {'xmin': 398, 'ymin': 105, 'xmax': 767, 'ymax': 507}}]
 
     >>> # x, y  are expressed relative to the top left hand corner.
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

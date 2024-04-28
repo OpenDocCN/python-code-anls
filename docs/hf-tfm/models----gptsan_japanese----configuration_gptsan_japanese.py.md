@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\configuration_gptsan_japanese.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权归 HuggingFace 公司所有，2023 年
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\megatron_gpt2\convert_megatron_gpt2_checkpoint.py`
 
-```
+```py
 ####################################################################################################
 
 # 版权声明，版权归 NVIDIA 公司所有

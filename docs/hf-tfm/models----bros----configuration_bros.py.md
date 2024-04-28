@@ -1,6 +1,6 @@
 # `.\transformers\models\bros\configuration_bros.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 本文件使用 Apache 许可证 2.0 授权
@@ -88,7 +88,7 @@ class BrosConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     # 设置模型类型为 "bros"
     model_type = "bros"
 

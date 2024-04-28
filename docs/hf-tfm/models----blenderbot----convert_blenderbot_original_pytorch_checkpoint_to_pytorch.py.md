@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\convert_blenderbot_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 许可证信息

@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_vision.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明和许可证信息
 #
@@ -56,7 +56,7 @@ class Data2VecVisionConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型为 data2vec-vision
     model_type = "data2vec-vision"
     # 初始化函数，设置模型的各种参数和属性

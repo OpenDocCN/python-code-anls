@@ -1,6 +1,6 @@
 # `.\models\convnextv2\modeling_convnextv2.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 2023 年 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队。保留所有权利。
@@ -597,7 +597,7 @@ class ConvNextV2Backbone(ConvNextV2PreTrainedModel, BackboneMixin):
 
         >>> inputs = processor(image, return_tensors="pt")
         >>> outputs = model(**inputs)
-        ```"""
+        ```py"""
 
         # 确定是否需要返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict

@@ -1,6 +1,6 @@
 # `.\transformers\models\timm_backbone\modeling_timm_backbone.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明和许可证信息
 

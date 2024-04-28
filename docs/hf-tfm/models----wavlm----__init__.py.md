@@ -1,6 +1,6 @@
 # `.\transformers\models\wavlm\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权声明，保留所有权利
 # 根据 Apache 许可证 2.0 版（“许可证”）授权

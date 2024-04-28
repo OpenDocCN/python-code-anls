@@ -1,6 +1,6 @@
 # `.\transformers\models\swiftformer\configuration_swiftformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # Copyright 2023 MBZUAI and The HuggingFace Inc. team. All rights reserved.
@@ -86,7 +86,7 @@ class SwiftFormerConfig(PretrainedConfig):
 
     >>> # 获取模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "swiftformer"

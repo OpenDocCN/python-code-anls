@@ -1,6 +1,6 @@
 # `.\transformers\models\resnet\modeling_tf_resnet.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权信息
 # 有关许可证的信息

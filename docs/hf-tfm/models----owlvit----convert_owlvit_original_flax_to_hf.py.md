@@ -1,6 +1,6 @@
 # `.\transformers\models\owlvit\convert_owlvit_original_flax_to_hf.py`
 
-```
+```py
 # 设置文件编码
 # 版权信息
 # 引入需要的模块

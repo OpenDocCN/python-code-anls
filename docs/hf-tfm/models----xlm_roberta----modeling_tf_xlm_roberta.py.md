@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\modeling_tf_xlm_roberta.py`
 
-```
+```py
 # 设置文本编码为 utf-8
 # 版权声明
 # 2021年，Facebook AI Research 和 HuggingFace Inc. team 版权所有

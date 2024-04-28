@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\loss.py`
 
-```
+```py
 # 版权声明
 # 从包中导入相关类型
 from typing import Dict, Optional, Tuple

@@ -1,6 +1,6 @@
 # `.\models\jukebox\tokenization_jukebox.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，声明代码作者和版权信息
 # 根据 Apache 许可证 2.0 版本，使用此文件需要遵守许可证规定
@@ -73,7 +73,7 @@ class JukeboxTokenizer(PreTrainedTokenizer):
     >>> tokenizer("Alan Jackson", "Country Rock", "old town road")["input_ids"]
     [tensor([[   0,    0,    0, 6785,  546,   41,   38,   30,   76,   46,   41,   49,
                40,   76,   44,   41,   27,   30]]), tensor([[  0,   0,   0, 145,   0]]), tensor([[  0,   0,   0, 145,   0]])]
-    ```
+    ```py
     # 通过在实例化此分词器时或在对某些文本调用时传递 `add_prefix_space=True` 来绕过这种行为，但由于模型不是以这种方式进行预训练的，可能会导致性能下降。
     
     <Tip>

@@ -1,6 +1,6 @@
 # `.\transformers\models\vilt\image_processing_vilt.py`
 
-```
+```py
 # 设定脚本的编码格式为 UTF-8
 
 # 版权声明，声明代码版权归 The HuggingFace Inc. 团队所有，保留所有权利。
@@ -306,7 +306,7 @@ class ViltImageProcessor(BaseImageProcessor):
         return_tensors: Optional[Union[str, TensorType]] = None,
         data_format: Optional[ChannelDimension] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
-```  
+```py  
     ) -> BatchFeature:
         """
         Pads a batch of images to the bottom and right of the image with zeros to the size of largest height and width

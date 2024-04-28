@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\modeling_tf_sam.py`
 
-```
+```py
 # 该文件主要用于定义 TensorFlow 版本的自注意力掩码 (SAM) 模型
 # 该文件大部分是通过从 PyTorch 版本自动翻译生成的，如果有任何不一致，以 PyTorch 版本为准
 
@@ -609,7 +609,7 @@ class TFSamFeedForward(tf.keras.layers.Layer):
             for layer in self.layers:
                 with tf.name_scope(layer.name):
                     layer.build([None, None, self.hidden_dim])  # 构建多层隐藏层
-```  
+```py  
     # 初始化函数，接收 SamMaskDecoderConfig 配置和其他关键字参数
     def __init__(self, config: SamMaskDecoderConfig, **kwargs):
         # 调用父类构造函数
@@ -1769,5 +1769,5 @@ class TFSamModel(TFSamPreTrainedModel):
             # 在掩码解码器的作用域内构建它
             with tf.name_scope(self.mask_decoder.name):
                 self.mask_decoder.build(None)
-```  
+```py  
 ```

@@ -1,6 +1,6 @@
 # `.\transformers\models\reformer\configuration_reformer.py`
 
-```
+```py
 # 指定编码为 utf-8
 # 版权声明，版权归 Trax Authors 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权
@@ -52,7 +52,7 @@ class ReformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "reformer"

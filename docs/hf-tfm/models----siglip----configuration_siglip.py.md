@@ -1,6 +1,6 @@
 # `.\transformers\models\siglip\configuration_siglip.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -79,7 +79,7 @@ class SiglipTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型为 "siglip_text_model"
     model_type = "siglip_text_model"
@@ -188,7 +188,7 @@ class SiglipVisionConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "siglip_vision_model"
@@ -282,7 +282,7 @@ class SiglipConfig(PretrainedConfig):
     >>> config_vision = SiglipVisionConfig()
 
     >>> config = SiglipConfig.from_text_vision_configs(config_text, config_vision)
-    ```"""
+    ```py"""
 
     # 模型类型为 "siglip"
     model_type = "siglip"

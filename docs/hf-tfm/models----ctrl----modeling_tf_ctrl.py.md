@@ -1,6 +1,6 @@
 # `.\models\ctrl\modeling_tf_ctrl.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 # 版权声明
 # 导入必要的包和模块

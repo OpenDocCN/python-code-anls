@@ -1,6 +1,6 @@
 # `.\transformers\models\llava\convert_llava_weights_to_hf.py`
 
-```
+```py
 # 版权声明和许可信息
 
 # 导入 argparse 库

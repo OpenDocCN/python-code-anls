@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\__init__.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import TYPE_CHECKING
 # 导入必要的异常类

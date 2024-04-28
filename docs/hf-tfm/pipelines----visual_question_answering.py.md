@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\visual_question_answering.py`
 
-```
+```py
 # 从 typing 模块中导入 Union 类型
 from typing import Union
 

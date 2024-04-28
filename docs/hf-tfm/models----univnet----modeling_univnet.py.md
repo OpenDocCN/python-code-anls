@@ -1,6 +1,6 @@
 # `.\transformers\models\univnet\modeling_univnet.py`
 
-```
+```py
 # 版权声明和许可声明
 """ PyTorch UnivNetModel model."""
 

@@ -1,6 +1,6 @@
 # `.\models\clvp\tokenization_clvp.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 """

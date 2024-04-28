@@ -1,6 +1,6 @@
 # `.\transformers\models\clap\configuration_clap.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可证信息
@@ -47,7 +47,7 @@ class ClapTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "clap_text_model"
@@ -142,7 +142,7 @@ class ClapAudioConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型为 CLAP 音频模型
     model_type = "clap_audio_model"
@@ -334,7 +334,7 @@ class ClapConfig(PretrainedConfig):
     >>> config_audio = ClapAudioConfig()
 
     >>> config = ClapConfig.from_text_audio_configs(config_text, config_audio)
-    ```"""
+    ```py"""
 
     model_type = "clap"
 

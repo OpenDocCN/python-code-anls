@@ -1,6 +1,6 @@
 # `.\transformers\models\rwkv\configuration_rwkv.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 版权许可协议
@@ -47,7 +47,7 @@
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型
     model_type = "rwkv"

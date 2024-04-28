@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta_prelayernorm\modeling_flax_roberta_prelayernorm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2022 年由 Google Flax 团队作者和 HuggingFace Inc. 团队撰写

@@ -1,6 +1,6 @@
 # `.\models\encodec\modeling_encodec.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 授权协议许可
@@ -883,7 +883,7 @@ class EncodecModel(EncodecPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from datasets import load_dataset
         >>> from transformers import AutoProcessor, EncodecModel
 

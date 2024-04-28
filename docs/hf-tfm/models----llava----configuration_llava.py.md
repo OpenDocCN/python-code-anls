@@ -1,6 +1,6 @@
 # `.\transformers\models\llava\configuration_llava.py`
 
-```
+```py
 # 以 UTF-8 编码方式解析代码
 # 版权所有 2023 年微软研究所和威斯康星大学麦迪逊分校以及 HuggingFace 公司团队. 保留所有权利.
 # 根据 Apache License, Version 2.0 许可，除非符合许可要求，否则不得使用此文件.
@@ -70,7 +70,7 @@ class LlavaConfig(PretrainedConfig):
 
     # 访问模型的配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型的类型为"llava"，组合标志为False
     model_type = "llava"

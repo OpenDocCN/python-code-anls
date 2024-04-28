@@ -1,6 +1,6 @@
 # `.\models\deberta\tokenization_deberta.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指出代码版权和使用许可
 # 声明 License，指出可以根据 Apache License, Version 2.0 许可使用代码
@@ -110,7 +110,7 @@ class DebertaTokenizer(PreTrainedTokenizer):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [1, 20920, 232, 2]
-    ```
+    ```py
 
     当您在实例化这个tokenizer或在对一些文本调用它时，可以通过传递`add_prefix_space=True`来避免这种行为，但是由于模型没有以这种方式进行预训练，所以可能会导致性能下降。
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\pvt\modeling_pvt.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2023 作者：Wenhai Wang，Enze Xie，Xiang Li，Deng-Ping Fan，
 # Kaitao Song，Ding Liang，Tong Lu，Ping Luo，Ling Shao 和 HuggingFace Inc. 团队。
@@ -355,7 +355,7 @@ class PvtFFN(nn.Module):
 
 
 class PvtLayer(nn.Module):
-````
+```py`
     # 初始化函数，接受一系列参数
     def __init__(
         self,

@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\audio_utils.py`
 
-```
+```py
 # 导入模块和库
 # 2023 年版权声明，HuggingFace 团队保留所有权利
 import datetime  # 导入处理日期时间的模块

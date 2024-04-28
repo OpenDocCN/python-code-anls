@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\image_processing_levit.py`
 
-```
+```py
 # 定义了 LeViT 的图像处理器类
 from typing import Dict, Iterable, Optional, Union  # 引入需要的类型提示模块
 

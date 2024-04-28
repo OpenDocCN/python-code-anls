@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech\__init__.py`
 
-```
+```py
 # 导入必要的模块和依赖项，包括类型检查和延迟加载模块
 from typing import TYPE_CHECKING
 from ...utils import (

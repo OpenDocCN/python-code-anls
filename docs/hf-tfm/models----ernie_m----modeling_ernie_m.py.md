@@ -1,6 +1,6 @@
 # `.\models\ernie_m\modeling_ernie_m.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 声明版权信息
 # 根据Apache许可证2.0版规定，权限受限，仅在遵循许可证的情况下可使用此文件

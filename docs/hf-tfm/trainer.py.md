@@ -2160,7 +2160,7 @@ class Trainer:
     #
     # Deprecated code
     #
-```  
+```py  
     def prediction_loop(
         self,
         dataloader: DataLoader,

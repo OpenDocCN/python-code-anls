@@ -1,6 +1,6 @@
 # `.\models\layoutlm\tokenization_layoutlm_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版本声明和作者授权声明
 # 指定代码文件的编码格式和版权信息
@@ -182,7 +182,7 @@ class LayoutLMTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

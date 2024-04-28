@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\configuration_camembert.py`
 
-```
+```py
 # 导入所需的库
 from collections import OrderedDict
 from typing import Mapping
@@ -53,7 +53,7 @@ class CamembertConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 定义模型类型
     model_type = "camembert"
@@ -119,5 +119,5 @@ class CamembertOnnxConfig(OnnxConfig):
                 ("attention_mask", dynamic_axis),   # 输入名称为attention_mask，对应的动态轴字典为dynamic_axis
             ]
         )
-```  
+```py  
 ```

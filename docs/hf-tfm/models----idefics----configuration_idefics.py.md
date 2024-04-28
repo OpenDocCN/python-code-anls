@@ -1,6 +1,6 @@
 # `.\models\idefics\configuration_idefics.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 EleutherAI 和 HuggingFace Inc. 团队所有
 # 该代码基于 EleutherAI 的 GPT-NeoX 库以及该库中的 GPT-NeoX 和 OPT 实现。已经根据与 Meta AI 团队训练模型时的微小架构差异进行了修改
@@ -180,7 +180,7 @@ class IdeficsConfig(PretrainedConfig):
 
     # 访问模型配置
     configuration = model.config
-    ```
+    ```py
 
     # 定义模型类型为 "idefics"，不是组合模型
     model_type = "idefics"

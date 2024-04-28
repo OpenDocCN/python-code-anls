@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\feature_extraction_markuplm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，使用 Apache 许可证版本 2.0
@@ -143,7 +143,7 @@ class MarkupLMFeatureExtractor(FeatureExtractionMixin):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import MarkupLMFeatureExtractor
 
         >>> page_name_1 = "page1.html"

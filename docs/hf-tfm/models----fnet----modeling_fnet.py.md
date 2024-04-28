@@ -1,6 +1,6 @@
 # `.\models\fnet\modeling_fnet.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明和许可声明
 # 导入必要的包和模块
@@ -793,7 +793,7 @@ class FNetForPreTraining(FNetPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> prediction_logits = outputs.prediction_logits
         >>> seq_relationship_logits = outputs.seq_relationship_logits
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         outputs = self.fnet(
@@ -961,7 +961,7 @@ class FNetForNextSentencePrediction(FNetPreTrainedModel):
         >>> outputs = model(**encoding, labels=torch.LongTensor([1]))
         >>> logits = outputs.logits
         >>> assert logits[0, 0] < logits[0, 1]  # next sentence was random
-        ```"""
+        ```py"""
 
         if "next_sentence_label" in kwargs:
             warnings.warn(

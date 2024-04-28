@@ -1,6 +1,6 @@
 # `.\transformers\dynamic_module_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证的规定，否则不得使用此文件
@@ -438,7 +438,7 @@ def get_class_from_dynamic_module(
     # Download module `modeling.py` from a given repo and cache then extract the class `MyBertModel` from this
     # module.
     cls = get_class_from_dynamic_module("sgugger/my-bert-model--modeling.MyBertModel", "sgugger/another-bert-model")
-    ```"""
+    ```py"""
     use_auth_token = kwargs.pop("use_auth_token", None)
     # Check if `use_auth_token` is provided and issue a warning
     if use_auth_token is not None:

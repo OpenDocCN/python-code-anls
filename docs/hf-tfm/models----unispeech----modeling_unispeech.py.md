@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech\modeling_unispeech.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明信息
 # 版权声明信息来源于 The Fairseq Authors 和 HuggingFace Inc. 团队，保留所有权利。

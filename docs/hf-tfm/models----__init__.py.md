@@ -1,6 +1,6 @@
 # `.\transformers\models\__init__.py`
 
-```
+```py
 # 导入各种模型
 from . import (
     albert,  # 导入 ALBERT 模型

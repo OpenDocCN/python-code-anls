@@ -1,6 +1,6 @@
 # `.\models\clip\tokenization_clip_fast.py`
 
-```
+```py
 # 导入所需模块和类
 from typing import List, Optional, Tuple
 from tokenizers import pre_tokenizers  # 导入tokenizers模块中的pre_tokenizers类

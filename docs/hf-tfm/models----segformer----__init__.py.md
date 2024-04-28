@@ -1,6 +1,6 @@
 # `.\transformers\models\segformer\__init__.py`
 
-```
+```py
 # 该文件包含 HuggingFace 团队开发的 SegFormer 模型的相关配置和功能定义
 # 版权归 HuggingFace 团队所有，遵循 Apache 2.0 License 开源协议
 

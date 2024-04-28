@@ -1,6 +1,6 @@
 # `.\transformers\models\opt\modeling_tf_opt.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 #

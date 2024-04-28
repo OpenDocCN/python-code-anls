@@ -1,6 +1,6 @@
 # `.\models\ernie_m\tokenization_ernie_m.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 使用该文件，详见 http://www.apache.org/licenses/LICENSE-2.0

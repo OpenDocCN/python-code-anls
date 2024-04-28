@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\__init__.py`
 
-```
+```py
 # 版权声明信息
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 #

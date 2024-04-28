@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\tokenization_wav2vec2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 版本 2.0 许可协议，授予权利

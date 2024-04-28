@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\modeling_flax_beit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -857,7 +857,7 @@ FLAX_BEIT_MLM_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, BeitForMaskedImageModeling
     >>> from PIL import Image
     >>> import requests
@@ -955,7 +955,7 @@ FLAX_BEIT_CLASSIF_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, FlaxBeitForImageClassification
     >>> from PIL import Image
     >>> import requests

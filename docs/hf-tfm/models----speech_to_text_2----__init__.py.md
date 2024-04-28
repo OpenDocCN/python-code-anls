@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text_2\__init__.py`
 
-```
+```py
 # 版权声明以及开源许可证信息
 
 # 判断是否为类型检查

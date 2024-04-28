@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot_small\modeling_blenderbot_small.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Facebook, Inc. 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用本文件
@@ -383,7 +383,7 @@ BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
     >>> next_reply_ids = model.generate(**inputs)
     >>> print("Bot: ", tokenizer.batch_decode(next_reply_ids, skip_special_tokens=True)[0])
     # 机器人: 他们吃了很多碳水化合物。碳水化合物含有大量脂肪、蛋白质和脂肪。
-    ```
+    ```py
 """
 
 BLENDERBOT_SMALL_INPUTS_DOCSTRING = r"""

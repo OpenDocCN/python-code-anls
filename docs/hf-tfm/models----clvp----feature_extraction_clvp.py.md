@@ -1,6 +1,6 @@
 # `.\transformers\models\clvp\feature_extraction_clvp.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码为 UTF-8
 # Copyright 2023 The HuggingFace Inc. team.

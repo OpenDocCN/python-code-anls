@@ -1,6 +1,6 @@
 # `.\transformers\models\vivit\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 用于忽略 flake8 对该模块的检查，并且还能保留其他警告
 

@@ -1,6 +1,6 @@
 # `.\models\electra\tokenization_electra.py`
 
-```
+```py
 # 设置编码方式为utf-8
 # 版权声明
 # 根据Apache许可证2.0授权

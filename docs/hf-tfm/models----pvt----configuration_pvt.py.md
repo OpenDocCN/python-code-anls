@@ -1,6 +1,6 @@
 # `.\transformers\models\pvt\configuration_pvt.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 作者：Wenhai Wang、Enze Xie、Xiang Li、Deng-Ping Fan、
 # Kaitao Song、Ding Liang、Tong Lu、Ping Luo、Ling Shao 和 HuggingFace Inc. 团队。

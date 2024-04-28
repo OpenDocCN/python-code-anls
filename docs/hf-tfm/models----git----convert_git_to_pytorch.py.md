@@ -1,6 +1,6 @@
 # `.\models\git\convert_git_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 根据 Apache License, Version 2.0 的规定，您可以在遵守许可证的前提下使用此文件

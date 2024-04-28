@@ -1,6 +1,6 @@
 # `.\models\detr\convert_detr_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息
 """Convert DETR checkpoints with timm backbone."""

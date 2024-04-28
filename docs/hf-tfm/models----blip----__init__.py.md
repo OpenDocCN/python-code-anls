@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从 utils 模块中导入必要的函数和异常类

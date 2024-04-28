@@ -1,6 +1,6 @@
 # `.\models\flava\configuration_flava.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为 UTF-8
 # Copyright 2022 Meta Platforms authors and The HuggingFace Team. All rights reserved.
@@ -121,7 +121,7 @@ class FlavaImageConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 设置模型类型为"flava_image_model"
     model_type = "flava_image_model"
@@ -213,7 +213,7 @@ class FlavaTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 定义了类属性model_type，并赋值为"flava_text_model"
@@ -333,7 +333,7 @@ class FlavaMultimodalConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为 "flava_multimodal_model"
     model_type = "flava_multimodal_model"
@@ -430,7 +430,7 @@ class FlavaImageCodebookConfig(PretrainedConfig):
     >>> model = FlavaImageCodebook(configuration)
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 初始化方法

@@ -1,6 +1,6 @@
 # `.\models\codegen\tokenization_codegen.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 #

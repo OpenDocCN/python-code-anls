@@ -1,6 +1,6 @@
 # `.\transformers\models\reformer\modeling_reformer.py`
 
-```
+```py
 # 定义一个稳定的 argsort 函数，以确保 torch.argsort 函数的稳定性
 def _stable_argsort(vector, dim):
     # 创建一个范围在 [0, vector.shape[dim]) 的张量，用于缩放

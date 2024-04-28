@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_conformer\convert_wav2vec2_conformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 
 # 版权声明和许可信息

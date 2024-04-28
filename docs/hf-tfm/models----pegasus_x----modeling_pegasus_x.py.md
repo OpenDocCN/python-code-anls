@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus_x\modeling_pegasus_x.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明和许可证信息
 # 这个模型是 PyTorch 下的 PEGASUS-X 模型
@@ -451,7 +451,7 @@ PEGASUS_X_START_DOCSTRING = r"""
 PEGASUS_X_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, PegasusXForConditionalGeneration
 
     >>> model = PegasusXForConditionalGeneration.from_pretrained("google/pegasus-x-base")

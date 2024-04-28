@@ -1,6 +1,6 @@
 # `.\models\dinat\configuration_dinat.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 # 版权所有 2022 年 HuggingFace Inc. 团队保留所有权利。
@@ -49,7 +49,7 @@ class DinatConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "dinat"
     model_type = "dinat"

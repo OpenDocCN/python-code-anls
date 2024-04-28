@@ -1,6 +1,6 @@
 # `.\transformers\models\musicgen\modeling_musicgen.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明及许可证信息
 # 版权归 Meta AI 和 The HuggingFace Inc. 团队所有，保留所有权利。
@@ -731,7 +731,7 @@ class MusicgenForConditionalGeneration(PreTrainedModel):
         >>> from transformers import MusicgenForConditionalGeneration
 
         >>> model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
-        ```"""
+        ```py"""
 
         # 目前不支持快速初始化对于复合模型
         if kwargs.get("_fast_init", False):
@@ -1009,7 +1009,7 @@ class MusicgenForConditionalGeneration(PreTrainedModel):
                 longer inference (since more audio tokens need to be generated per sample).
     
         Example:
-        ```python
+        ```py
         >>> from transformers import MusicgenForConditionalGeneration
     
         >>> model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")

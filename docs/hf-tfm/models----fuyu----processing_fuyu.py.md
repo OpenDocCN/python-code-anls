@@ -1,6 +1,6 @@
 # `.\models\fuyu\processing_fuyu.py`
 
-```
+```py
 # 设置文件编码、版权声明及许可
 # 为 GIT 的图像/文本处理类创建注释
 

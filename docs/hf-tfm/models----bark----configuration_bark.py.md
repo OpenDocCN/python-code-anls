@@ -1,6 +1,6 @@
 # `.\transformers\models\bark\configuration_bark.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可证信息
 # 导入必要的模块
@@ -165,7 +165,7 @@ class BarkSemanticConfig(BarkSubModelConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```""",
+    ```py""",
 )
 # 定义 BarkCoarseConfig 类，继承自 BarkSubModelConfig 类
 class BarkCoarseConfig(BarkSubModelConfig):
@@ -194,7 +194,7 @@ class BarkCoarseConfig(BarkSubModelConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```""",
+    ```py""",
 )
 # 定义 BarkFineConfig 类，继承自 BarkSubModelConfig 类
 class BarkFineConfig(BarkSubModelConfig):

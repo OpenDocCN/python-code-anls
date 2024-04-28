@@ -1,6 +1,6 @@
 # `.\transformers\models\vitdet\configuration_vitdet.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则不得使用此文件
@@ -47,7 +47,7 @@ class VitDetConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "vitdet"
     model_type = "vitdet"

@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\__init__.py`
 
-```
+```py
 # 版权声明和许可协议信息
 
 # 导入类型检查模块

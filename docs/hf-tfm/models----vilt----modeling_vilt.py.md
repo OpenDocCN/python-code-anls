@@ -1,6 +1,6 @@
 # `.\transformers\models\vilt\modeling_vilt.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据Apache License，Version 2.0授权，除非遵守许可证，否则不得使用本文件
@@ -854,7 +854,7 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
         >>> idx = logits.argmax(-1).item()
         >>> print("Predicted answer:", model.config.id2label[idx])
         Predicted answer: 2
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 使用 Vilt 模型进行前向传播
@@ -954,7 +954,7 @@ class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
         ...     encoding = processor(image, text, return_tensors="pt")
         ...     outputs = model(**encoding)
         ...     scores[text] = outputs.logits[0, :].item()
-        ```"""
+        ```py"""
         # 设置返回字典为传入值或者使用配置中的值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

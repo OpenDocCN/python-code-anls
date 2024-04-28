@@ -1,6 +1,6 @@
 # `.\transformers\models\mt5\__init__.py`
 
-```
+```py
 # 引入必要的类型检查工具
 from typing import TYPE_CHECKING
 

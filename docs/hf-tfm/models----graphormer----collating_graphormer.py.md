@@ -1,6 +1,6 @@
 # `.\models\graphormer\collating_graphormer.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import Any, Dict, List, Mapping
 import numpy as np

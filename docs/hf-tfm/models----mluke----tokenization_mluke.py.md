@@ -1,6 +1,6 @@
 # `.\transformers\models\mluke\tokenization_mluke.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 导入必要的库和模块

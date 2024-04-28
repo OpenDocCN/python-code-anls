@@ -1,6 +1,6 @@
 # `.\transformers\models\oneformer\processing_oneformer.py`
 
-```
+```py
 # 定义作者和许可证信息
 # 基于 Apache 许可证 2.0 授权使用此代码
 # 可以在 http://www.apache.org/licenses/LICENSE-2.0 获得许可证的副本

@@ -1,6 +1,6 @@
 # `.\transformers\models\swin\convert_swin_timm_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 
 

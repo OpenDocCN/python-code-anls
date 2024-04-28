@@ -1,6 +1,6 @@
 # `.\transformers\models\mluke\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 # 版权归 The HuggingFace Team 所有，保留所有权利
 # 在 Apache 许可证 2.0 版本下进行许可

@@ -1,6 +1,6 @@
 # `.\models\gpt2\convert_gpt2_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 定义编码格式
 # 版权声明
 #

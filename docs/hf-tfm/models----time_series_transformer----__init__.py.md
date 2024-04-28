@@ -1,6 +1,6 @@
 # `.\transformers\models\time_series_transformer\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权所有 © 2022 年 HuggingFace 团队。保留所有权利。
 #

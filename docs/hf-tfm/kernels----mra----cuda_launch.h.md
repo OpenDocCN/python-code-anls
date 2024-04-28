@@ -1,6 +1,6 @@
 # `.\transformers\kernels\mra\cuda_launch.h`
 
-```
+```py
 // 引入 Torch C++ 扩展的头文件
 #include <torch/extension.h>
 // 引入 ATen 库的头文件

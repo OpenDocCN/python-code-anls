@@ -1,6 +1,6 @@
 # `.\transformers\models\timesformer\convert_timesformer_to_pytorch.py`
 
-```
+```py
 # 设置脚本文件的编码格式为 UTF-8
 # 版权声明
 # 依据 Apache License, Version 2.0 许可证，除非符合许可证要求，否则您不得使用此文件

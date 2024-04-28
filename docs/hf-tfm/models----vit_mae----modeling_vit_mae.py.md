@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_mae\modeling_vit_mae.py`
 
-```
+```py
 # 引入需要的库和模块
 import collections.abc  # 引入collections模块中的abc子模块，用于抽象基类
 import math  # 引入math模块，用于数学运算
@@ -772,7 +772,7 @@ class ViTMAEModel(ViTMAEPreTrainedModel):
         >>> inputs = image_processor(images=image, return_tensors="pt")
         >>> outputs = model(**inputs)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
 
         # 如果 output_attentions 是 None，则使用 config 中的 output_attentions
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
@@ -1099,7 +1099,7 @@ class ViTMAEForPreTraining(ViTMAEPreTrainedModel):
         >>> loss = outputs.loss
         >>> mask = outputs.mask
         >>> ids_restore = outputs.ids_restore
-        ```"""
+        ```py"""
         # 如果 return_dict 不为空，则使用 return_dict；否则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

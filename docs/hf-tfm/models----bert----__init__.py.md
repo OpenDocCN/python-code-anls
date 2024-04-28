@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 从类型提示中导入 TYPE_CHECKING
 from typing import TYPE_CHECKING

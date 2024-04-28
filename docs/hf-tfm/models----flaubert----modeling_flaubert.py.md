@@ -1,6 +1,6 @@
 # `.\models\flaubert\modeling_flaubert.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 授权许可，通过许可使用该文件

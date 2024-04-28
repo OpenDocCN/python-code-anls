@@ -295,5 +295,5 @@ if __name__ == "__main__":
     
     # 调用函数，将Donut模型检查点转换为PyTorch模型，并可选择推送到hub
     convert_donut_checkpoint(args.model_name, args.pytorch_dump_folder_path, args.push_to_hub)
-```  
+```py  
 ```

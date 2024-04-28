@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\chunk_utils.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 2021年AlQuraishi实验室所有
 #

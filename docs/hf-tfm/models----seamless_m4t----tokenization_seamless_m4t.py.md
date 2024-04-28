@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\tokenization_seamless_m4t.py`
 
-```
+```py
 # 导入所需的模块和库
 import os  # 导入操作系统模块
 from shutil import copyfile  # 导入文件复制函数
@@ -63,7 +63,7 @@ class SeamlessM4TTokenizer(PreTrainedTokenizer):
     >>> example_english_phrase = " UN Chief Says There Is No Military Solution in Syria"
     >>> expected_translation_french = "Le chef de l'ONU affirme qu'il n'y a pas de solution militaire en Syrie."
     >>> inputs = tokenizer(example_english_phrase, text_target=expected_translation_french, return_tensors="pt")
-    ```
+    ```py
     """
     Args:
         vocab_file (`str`):

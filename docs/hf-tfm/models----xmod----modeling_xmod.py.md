@@ -1,6 +1,6 @@
 # `.\transformers\models\xmod\modeling_xmod.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # Meta AI 团队和 HuggingFace Inc. 团队，2023年

@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_encoder_decoder\modeling_tf_vision_encoder_decoder.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache许可证2.0版授权使用此文件

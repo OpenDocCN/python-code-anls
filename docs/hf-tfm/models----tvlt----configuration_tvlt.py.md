@@ -1,6 +1,6 @@
 # `.\transformers\models\tvlt\configuration_tvlt.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache License，Version 2.0进行授权
@@ -42,7 +42,7 @@ class TvltConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "tvlt"
 

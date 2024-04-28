@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\tokenization_t5.py`
 
-```
+```py
 # 定义编码为 UTF-8
 # 版权声明及许可信息，本代码遵循 Apache 许可证 2.0 版本
 """ T5 模型的分词类。"""

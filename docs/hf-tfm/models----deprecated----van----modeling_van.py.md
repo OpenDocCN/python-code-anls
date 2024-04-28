@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\modeling_van.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 本模型代码的版权归 BNRist（清华大学）、TKLNDST（南开大学）和 HuggingFace 公司所有
@@ -261,7 +261,7 @@ class VanLayer(nn.Module):
         hidden_size: int,
         mlp_ratio: int = 4,
         drop_path_rate: float = 0.5,
-        ```
+        ```py
     # 初始化方法，继承父类初始化方法
     def __init__(self, drop_path_rate):
         super().__init__()

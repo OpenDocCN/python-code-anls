@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_hybrid\image_processing_vit_hybrid.py`
 
-```
+```py
 # 设置文件编码格式为UTF-8
 # 版权声明信息
 #

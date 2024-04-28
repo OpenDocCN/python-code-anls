@@ -1,6 +1,6 @@
 # `.\transformers\models\patchtsmixer\configuration_patchtsmixer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，说明代码版权归 IBM 和 HuggingFace Inc. 团队所有，采用 Apache License 2.0 授权
 # 详细版权信息和许可证可在 http://www.apache.org/licenses/LICENSE-2.0 找到
@@ -41,7 +41,7 @@ class PatchTSMixerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 PatchTSMixer
     model_type = "patchtsmixer"

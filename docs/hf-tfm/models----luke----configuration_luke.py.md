@@ -1,6 +1,6 @@
 # `.\transformers\models\luke\configuration_luke.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 使用 Apache 许可证版本 2.0，除非遵循许可证，否则不得使用此文件

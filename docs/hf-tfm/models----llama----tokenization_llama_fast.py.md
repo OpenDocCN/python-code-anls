@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\tokenization_llama_fast.py`
 
-```
+```py
 # 导入所需的模块和库
 import os  # 导入操作系统模块
 from shutil import copyfile  # 从 shutil 模块中导入 copyfile 函数

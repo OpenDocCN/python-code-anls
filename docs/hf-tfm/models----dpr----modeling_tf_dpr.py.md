@@ -1,6 +1,6 @@
 # `.\models\dpr\modeling_tf_dpr.py`
 
-```
+```py
 # 引入必要的库
 from __future__ import annotations
 from dataclasses import dataclass
@@ -503,7 +503,7 @@ class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import TFDPRContextEncoder, DPRContextEncoderTokenizer
 
         >>> tokenizer = DPRContextEncoderTokenizer.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
@@ -617,7 +617,7 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
         Examples:
         示例用法
         
-        ```python
+        ```py
         >>> from transformers import TFDPRQuestionEncoder, DPRQuestionEncoderTokenizer
 
         >>> tokenizer = DPRQuestionEncoderTokenizer.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
@@ -705,7 +705,7 @@ class TFDPRReader(TFDPRPretrainedReader):  # 定义TFDPRReader类，继承自TFD
 
         Examples:  # 示例
 
-        ```python
+        ```py
         >>> from transformers import TFDPRReader, DPRReaderTokenizer  # 导入所需库
 
         >>> tokenizer = DPRReaderTokenizer.from_pretrained("facebook/dpr-reader-single-nq-base")  # 使用预训练的DPRReaderTokenizer

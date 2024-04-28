@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\modeling_layoutlmv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可协议
 # 版权所有 2021 年微软研究院和 HuggingFace 公司。保留所有权利。

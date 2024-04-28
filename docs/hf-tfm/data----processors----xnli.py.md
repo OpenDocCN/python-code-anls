@@ -1,6 +1,6 @@
 # `.\transformers\data\processors\xnli.py`
 
-```
+```py
 # 导入所需模块
 import os
 

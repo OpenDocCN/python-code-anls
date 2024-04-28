@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\__init__.py`
 
-```
+```py
 # 版权声明和许可协议信息
 # 从其他模块导入的模块和函数
 from typing import TYPE_CHECKING

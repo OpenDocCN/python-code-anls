@@ -1,6 +1,6 @@
 # `.\transformers\models\owlvit\feature_extraction_owlvit.py`
 
-```
+```py
 # coding=utf-8
 # 声明使用 utf-8 编码
 

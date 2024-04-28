@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_pt_objects.py`
 
-```
+```py
 # 该文件是通过命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入依赖的模块和函数
 from ..utils import DummyObject, requires_backends
@@ -10725,7 +10725,7 @@ class Wav2Vec2ForCTC(metaclass=DummyObject):
     def __init__(self, *args, **kwargs):
         # 检查是否需要使用 torch 库，如果需要则引入
         requires_backends(self, ["torch"])
-``` 
+```py 
 # 定义一个 Wav2Vec2ForMaskedLM 类，继承自 DummyObject 元类
 class Wav2Vec2ForMaskedLM(metaclass=DummyObject):
     # 定义该类支持 "torch" 后端

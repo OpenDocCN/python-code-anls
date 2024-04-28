@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\configuration_xlm_roberta.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict
 from typing import Mapping
@@ -56,7 +56,7 @@ class XLMRobertaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "xlm-roberta"

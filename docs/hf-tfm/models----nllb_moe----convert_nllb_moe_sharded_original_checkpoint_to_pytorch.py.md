@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb_moe\convert_nllb_moe_sharded_original_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse
 import json

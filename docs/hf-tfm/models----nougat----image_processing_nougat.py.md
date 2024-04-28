@@ -1,6 +1,6 @@
 # `.\transformers\models\nougat\image_processing_nougat.py`
 
-```
+```py
 # 这是 HuggingFace 的 Nougat 图像处理器类的代码
 # 导入所需的库和模块
 # coding=utf-8

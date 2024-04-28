@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v1\modeling_mobilenet_v1.py`
 
-```
+```py
 # 导入所需的模块和类型定义
 import torch
 from torch import nn

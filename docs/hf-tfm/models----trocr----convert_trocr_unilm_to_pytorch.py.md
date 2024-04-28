@@ -1,6 +1,6 @@
 # `.\transformers\models\trocr\convert_trocr_unilm_to_pytorch.py`
 
-```
+```py
 # 设置代码编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本发布

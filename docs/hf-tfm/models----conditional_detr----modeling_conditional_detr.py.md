@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\modeling_conditional_detr.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 代码版权信息
 #

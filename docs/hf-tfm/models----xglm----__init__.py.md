@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\__init__.py`
 
-```
+```py
 # 引入必要的依赖库和模块
 from typing import TYPE_CHECKING
 

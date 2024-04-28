@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\tokenization_bart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -126,7 +126,7 @@ class BartTokenizer(PreTrainedTokenizer):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer or when you
     call it on some text, but since the model was not pretrained this way, it might yield a decrease in performance.

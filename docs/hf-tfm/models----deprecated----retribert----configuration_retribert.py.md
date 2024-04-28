@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\configuration_retribert.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的编码格式为 UTF-8
 # 版权声明，版权属于 HuggingFace Inc. 团队、Google AI 语言团队和 Facebook, Inc.

@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\tokenization_retribert_fast.py`
 
-```
+```py
 # 表示使用 utf-8 编码
 # 版权信息
 # 导入需要的模块和类
@@ -127,7 +127,7 @@
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

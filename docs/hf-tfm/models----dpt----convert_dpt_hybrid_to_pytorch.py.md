@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dpt_hybrid_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权信息
 # 根据 Apache License, Version 2.0 可以在指定网址获得许可证

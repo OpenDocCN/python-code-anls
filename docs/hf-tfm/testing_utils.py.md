@@ -1,6 +1,6 @@
 # `.\transformers\testing_utils.py`
 
-```
+```py
 # 导入模块和库
 import collections  # 导入 collections 模块
 import contextlib  # 导入 contextlib 模块
@@ -1176,7 +1176,7 @@ class CaptureStd:
 
     Examples:
 
-    ```python
+    ```py
     # to capture stdout only with auto-replay
     with CaptureStdout() as cs:
         print("Secret message")
@@ -1312,7 +1312,7 @@ class CaptureLogger:
 
     示例:
 
-    ```python
+    ```py
     >>> from transformers import logging
     >>> from transformers.testing_utils import CaptureLogger
 
@@ -1350,7 +1350,7 @@ def LoggingLevel(level):
 
     示例:
 
-    ```python
+    ```py
     with LoggingLevel(logging.INFO):
         AutoModel.from_pretrained("gpt2")  # 调用logger.info()多次
     ```
@@ -1372,7 +1372,7 @@ def ExtendSysPath(path: Union[str, os.PathLike]) -> Iterator[None]:
 
     用法:
 
-    ```python
+    ```py
     with ExtendSysPath("/path/to/dir"):
         mymodule = importlib.import_module("mymodule")
     ```
@@ -1417,7 +1417,7 @@ class TestCasePlus(unittest.TestCase):
     
         1. 创建一个唯一的临时目录：
     
-        ```python
+        ```py
         def test_whatever(self):
             tmp_dir = self.get_auto_remove_tmp_dir()
         ```
@@ -1427,7 +1427,7 @@ class TestCasePlus(unittest.TestCase):
     
         2. 创建我选择的临时目录，在测试开始前确保它为空，并在测试结束后不清空它。
     
-        ```python
+        ```py
         def test_whatever(self):
             tmp_dir = self.get_auto_remove_tmp_dir("./xxx")
         ```
@@ -1484,7 +1484,7 @@ class TestCasePlus(unittest.TestCase):
     def test_whatever(self):
         # 获取设置好的环境变量
         env = self.get_env()
-    ```
+    ```py
 
     def setUp(self):
         # get_auto_remove_tmp_dir feature:
@@ -1681,7 +1681,7 @@ class TestCasePlus(unittest.TestCase):
         ```
         one_liner_str = 'from transformers import AutoModel; AutoModel.from_pretrained("t5-large")'
         max_rss = self.python_one_liner_max_rss(one_liner_str)
-        ```
+        ```py
         """
 
         # 检查是否存在 /usr/bin/time 命令
@@ -2126,7 +2126,7 @@ class RequestCounter:
     assert counter["GET"] == 0
     assert counter["HEAD"] == 1
     assert counter.total_calls == 1
-    ```
+    ```py
     """
 
     def __enter__(self):
@@ -2276,7 +2276,7 @@ def preprocess_string(string, skip_cuda_tests):
     `string`.
     """
     # 定义代码块的正则表达式模式
-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```)"
+    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```py)"
     # 使用正则表达式拆分字符串，提取代码块
     codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
     # 初始化 CUDA 检测标志
@@ -2329,7 +2329,7 @@ class HfDocTestParser(doctest.DocTestParser):
         (?P<want> (?:(?![ ]*$)    # Not a blank line
              (?![ ]*>>>)          # Not a line starting with PS1
              # !!!!!!!!!!! HF Specific !!!!!!!!!!!
-             (?:(?!```).)*        # Match any character except '`' until a '```' is found (this is specific to HF because black removes the last line)
+             (?:(?!```).)*        # Match any character except '`' until a '```py' is found (this is specific to HF because black removes the last line)
              # !!!!!!!!!!! HF Specific !!!!!!!!!!!
              (?:\n|$)  # Match a new line or end of string
           )*)

@@ -1,6 +1,6 @@
 # `.\transformers\models\lilt\configuration_lilt.py`
 
-```
+```py
 # 导入所需的模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -36,7 +36,7 @@ class LiltConfig(PretrainedConfig):
     >>> model = LiltModel(configuration)
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     model_type = "lilt"  # 模型类型为 "lilt"
 

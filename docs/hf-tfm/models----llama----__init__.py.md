@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 导入自定义的异常和工具函数

@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\convert_xlnet_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明以及版权声明
 

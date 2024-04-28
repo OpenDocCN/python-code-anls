@@ -1,6 +1,6 @@
 # `.\transformers\models\switch_transformers\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 此处是关于HuggingFace团队的版权声明和许可信息，告知使用者在遵守许可协议的情况下才能使用此文件
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\tokenization_whisper_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可证信息
@@ -465,7 +465,7 @@ class WhisperTokenizerFast(PreTrainedTokenizerFast):
         >>> tokenizer = WhisperTokenizerFast.from_pretrained("openai/whisper-tiny", language="spanish")
         >>> # now switch the prefix token from Spanish to French
         >>> tokenizer.set_prefix_tokens(language="french")
-        ```
+        ```py
 
         Args:
             language (`str`, *optional*, defaults to `None`):

@@ -1,6 +1,6 @@
 # `.\transformers\kernels\deformable_detr\vision.cpp`
 
-```
+```py
 # 包含版权声明和许可信息的注释头部
 
 #include 指令，引入名为 "ms_deform_attn.h" 的头文件，该头文件可能包含了一些函数和结构的声明或定义

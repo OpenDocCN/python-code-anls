@@ -1,6 +1,6 @@
 # `.\transformers\models\pop2piano\tokenization_pop2piano.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 
 # 版权声明，版权归 The Pop2Piano Authors 和 The HuggingFace Inc. team 所有

@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\modeling_deberta_v2.py`
 
-```
+```py
 # 包含方法和类的名称空间
 from collections.abc import Sequence
 from typing import Optional, Tuple, Union
@@ -387,7 +387,7 @@ class DebertaV2FeedForward(nn.Module):
     >>> dim = -1
 
     >>> y = XSoftmax.apply(x, mask, dim)
-    ```"""
+    ```py"""
 
 class XSoftmax:
     @staticmethod

@@ -1,6 +1,6 @@
 # `.\transformers\models\clvp\processing_clvp.py`
 
-```
+```py
 # 导入ProcessorMixin类
 from ...processing_utils import ProcessorMixin
 

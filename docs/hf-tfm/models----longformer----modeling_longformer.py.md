@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\modeling_longformer.py`
 
-```
+```py
 # 设定脚本编码格式为 UTF-8
 # 版权声明，分别标注 AI 研究所团队和 HuggingFace 公司团队的版权
 # 根据 Apache 2.0 版本授权许可，禁止未授权使用此文件
@@ -451,7 +451,7 @@ class LongformerSelfAttention(nn.Module):
 
         Example:
 
-        ```python
+        ```py
         chunked_hidden_states: [
             0.4983,
             2.6918,
@@ -1192,7 +1192,7 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
         Mask filling example:
         掩码填充示例：
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, LongformerForMaskedLM
 
         >>> tokenizer = AutoTokenizer.from_pretrained("allenai/longformer-base-4096")
@@ -1202,7 +1202,7 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
         Let's try a very long input.
         让我们尝试一个非常长的输入。
 
-        ```python
+        ```py
         >>> TXT = (
         ...     "My friends are <mask> but they eat too many carbs."
         ...     + " That's why I decide not to eat with them." * 300

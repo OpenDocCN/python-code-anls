@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\configuration_xlnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入警告模块
@@ -45,7 +45,7 @@ class XLNetConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为 "xlnet"
     model_type = "xlnet"

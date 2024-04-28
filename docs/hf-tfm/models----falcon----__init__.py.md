@@ -1,6 +1,6 @@
 # `.\models\falcon\__init__.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 本代码版权归 Falcon 作者和 HuggingFace 公司团队所有。保留所有权利。

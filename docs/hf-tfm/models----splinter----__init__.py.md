@@ -1,6 +1,6 @@
 # `.\transformers\models\splinter\__init__.py`
 
-```
+```py
 # 引入必要的模块和类型检查工具
 from typing import TYPE_CHECKING
 # 引入自定义工具模块和懒加载模块

@@ -1,6 +1,6 @@
 # `.\models\deprecated\tapex\__init__.py`
 
-```
+```py
 # 版权声明和许可协议
 # 版权声明和许可协议信息
 # 类型检查模块

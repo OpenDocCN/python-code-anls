@@ -1,6 +1,6 @@
 # `.\transformers\models\biogpt\modeling_biogpt.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 HuggingFace 团队和微软研究 AI4Science。保留所有权利。

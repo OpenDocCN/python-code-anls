@@ -1,6 +1,6 @@
 # `.\transformers\models\mvp\configuration_mvp.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版，你不得使用本文件，除非遵守许可证的规定。
@@ -46,7 +46,7 @@ class MvpConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "mvp"
     keys_to_ignore_at_inference = ["past_key_values"]

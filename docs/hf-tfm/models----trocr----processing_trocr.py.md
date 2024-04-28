@@ -1,6 +1,6 @@
 # `.\transformers\models\trocr\processing_trocr.py`
 
-```
+```py
 代码：
 
 

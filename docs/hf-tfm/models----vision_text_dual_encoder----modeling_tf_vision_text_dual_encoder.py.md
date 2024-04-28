@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_text_dual_encoder\modeling_tf_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 #
@@ -274,7 +274,7 @@ class TFVisionTextDualEncoderModel(TFPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import TFVisionTextDualEncoderModel, AutoTokenizer
 
         >>> model = TFVisionTextDualEncoderModel.from_pretrained("clip-italian/clip-italian", from_pt=True)
@@ -316,7 +316,7 @@ class TFVisionTextDualEncoderModel(TFPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import TFVisionTextDualEncoderModel, AutoImageProcessor

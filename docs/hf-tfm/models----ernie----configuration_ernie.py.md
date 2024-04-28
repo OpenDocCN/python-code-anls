@@ -1,6 +1,6 @@
 # `.\models\ernie\configuration_ernie.py`
 
-```
+```py
 # 导入所需模块
 from collections import OrderedDict
 from typing import Mapping

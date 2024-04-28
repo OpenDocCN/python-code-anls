@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\modeling_llama.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 此代码基于 EleutherAI 的 GPT-NeoX 库和 HuggingFace 公司团队的 GPT-NeoX

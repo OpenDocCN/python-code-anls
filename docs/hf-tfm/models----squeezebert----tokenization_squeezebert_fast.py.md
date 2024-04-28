@@ -1,6 +1,6 @@
 # `.\transformers\models\squeezebert\tokenization_squeezebert_fast.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明，引用了 SqueezeBert 作者和 HuggingFace Inc. 团队的版权声明
 # 根据 Apache License 2.0 进行许可
@@ -194,7 +194,7 @@ class SqueezeBertTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

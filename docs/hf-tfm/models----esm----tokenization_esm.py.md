@@ -1,6 +1,6 @@
 # `.\models\esm\tokenization_esm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入所需模块和函数

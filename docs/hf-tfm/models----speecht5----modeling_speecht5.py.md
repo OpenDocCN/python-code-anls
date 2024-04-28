@@ -1,6 +1,6 @@
 # `.\transformers\models\speecht5\modeling_speecht5.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 
 # 版权声明，声明代码的版权归于 Fairseq 作者、微软研究院以及 HuggingFace 公司团队所有

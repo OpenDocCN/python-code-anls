@@ -1,6 +1,6 @@
 # `.\transformers\commands\transformers_cli.py`
 
-```
+```py
 #!/usr/bin/env python
 # 指定脚本解释器为 Python
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\mpt\modeling_mpt.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明：2023年由 HuggingFace Inc. 团队和 MosaicML NLP 团队拥有
 # 根据 Apache 许可证 2.0 版本授权，除非在符合许可证的情况下不得使用此文件

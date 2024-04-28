@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta_prelayernorm\configuration_roberta_prelayernorm.py`
 
-```
+```py
 # 导入所需模块和库
 from collections import OrderedDict
 from typing import Mapping
@@ -44,7 +44,7 @@ class RobertaPreLayerNormConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "roberta-prelayernorm"

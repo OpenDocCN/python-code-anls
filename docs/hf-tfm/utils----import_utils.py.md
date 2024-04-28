@@ -1452,7 +1452,7 @@ BACKENDS_MAPPING = OrderedDict(
         # 检查是否 jinja 库可用, 如不可用则引发 JINJA_IMPORT_ERROR
         ("jinja", (is_jinja_available, JINJA_IMPORT_ERROR)),
     ]
-    ```  
+    ```py  
 # 定义一个函数，用于检查对象所需的后端
 def requires_backends(obj, backends):
     # 如果backends不是列表或元组类型，则将其转换为列表

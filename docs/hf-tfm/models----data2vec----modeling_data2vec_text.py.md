@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_data2vec_text.py`
 
-```
+```py
 # 设置代码文件编码为 UTF-8
 
 # 版权声明

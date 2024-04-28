@@ -1,6 +1,6 @@
 # `.\transformers\generation\utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者信息和许可证信息
 # 导入所需的库和模块

@@ -1,6 +1,6 @@
 # `.\transformers\models\umt5\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权归 The HuggingFace Team 所有
 # 根据 Apache 许可证版本 2.0 许可

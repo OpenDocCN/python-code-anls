@@ -1,6 +1,6 @@
 # `.\transformers\kernels\mra\torch_extension.cpp`
 
-```
+```py
 #include <torch/extension.h>
 #include <ATen/ATen.h>
 #include "cuda_launch.h"

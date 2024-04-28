@@ -1,6 +1,6 @@
 # `.\transformers\models\trocr\__init__.py`
 
-```
+```py
 # 2021年版权声明
 #
 # 根据 Apache 许可证 2.0 版本进行许可; 除非符合许可证的要求，否则不得使用此文件

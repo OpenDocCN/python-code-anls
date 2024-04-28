@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\tokenization_blenderbot_fast.py`
 
-```
+```py
 # 导入所需模块和类
 import json  # 导入用于 JSON 解析的模块
 from typing import List, Optional, Tuple  # 导入类型提示相关的模块
@@ -56,7 +56,7 @@ class BlenderbotTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [6950, 1085, 2]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer or when you
     call it on some text, but since the model was not pretrained this way, it might yield a decrease in performance.

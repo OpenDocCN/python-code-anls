@@ -1,6 +1,6 @@
 # `.\transformers\models\maskformer\configuration_maskformer.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 根据 Apache 2.0 许可，可以使用此文件，但需要遵守许可的相关规定
@@ -81,7 +81,7 @@ class MaskFormerConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     """
 

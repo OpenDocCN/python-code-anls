@@ -1,6 +1,6 @@
 # `.\models\esm\modeling_esm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息
 # 版权所有 2022 年 Meta 公司和 HuggingFace Inc. 团队保留所有权利。

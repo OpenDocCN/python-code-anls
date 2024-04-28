@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\convert_marian_to_pytorch.py`
 
-```
+```py
 # 导入所需的模块和库
 import argparse                                   # 用于处理命令行参数
 import json                                       # 用于处理 JSON 数据

@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\configuration_conditional_detr.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 
 # 版权声明
@@ -59,7 +59,7 @@ class ConditionalDetrConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 conditional_detr
     model_type = "conditional_detr"

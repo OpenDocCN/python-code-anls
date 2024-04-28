@@ -1,6 +1,6 @@
 # `.\models\dinov2\modeling_dinov2.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 
 # 引用标准库中的模块
@@ -866,7 +866,7 @@ class Dinov2Backbone(Dinov2PreTrainedModel, BackboneMixin):
         >>> feature_maps = outputs.feature_maps
         >>> list(feature_maps[-1].shape)
         [1, 768, 16, 16]
-        ```"""
+        ```py"""
         如果return_dict不为None，则使用return_dict，否则使用self.config.use_return_dict
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states

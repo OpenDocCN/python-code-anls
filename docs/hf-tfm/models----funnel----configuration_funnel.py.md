@@ -1,6 +1,6 @@
 # `.\models\funnel\configuration_funnel.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明和许可证信息
 # 声明配置 Funnel Transformer 模型的类

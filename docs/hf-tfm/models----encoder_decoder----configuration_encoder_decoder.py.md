@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\configuration_encoder_decoder.py`
 
-```
+```py
 # 设定编码为UTF-8
 # 版权声明
 # Apache License 2.0
@@ -57,7 +57,7 @@ class EncoderDecoderConfig(PretrainedConfig):
     >>> # loading model and config from pretrained folder
     >>> encoder_decoder_config = EncoderDecoderConfig.from_pretrained("my-model")
     >>> model = EncoderDecoderModel.from_pretrained("my-model", config=encoder_decoder_config)
-    ```"""
+    ```py"""
 
     # 类型描述信息
     model_type = "encoder-decoder"

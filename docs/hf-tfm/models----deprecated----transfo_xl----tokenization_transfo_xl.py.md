@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\tokenization_transfo_xl.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，列举了作者和团队，以及NVIDIA CORPORATION的版权
 # 根据 Apache License, Version 2.0 许可获取许可的链接
@@ -90,7 +90,7 @@ def tokenize_numbers(text_array: List[str]) -> List[str]:
     ```python
     >>> tokenize_numbers(["$", "5,000", "1.73", "m"])
     ['$', '5', '@,@', '000', '1', '@.@', '73', 'm']
-    ```"""
+    ```py"""
     tokenized = []
     for i in range(len(text_array)):
         reg, sub = MATCH_NUMBERS

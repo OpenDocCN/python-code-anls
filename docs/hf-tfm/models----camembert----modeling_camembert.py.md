@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\modeling_camembert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 声明版权信息
 # 导入所需模块

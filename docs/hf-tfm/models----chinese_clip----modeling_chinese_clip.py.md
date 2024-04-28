@@ -1,6 +1,6 @@
 # `.\transformers\models\chinese_clip\modeling_chinese_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2022 年 OFA-Sys 团队作者和 HuggingFace 团队。保留所有权利。
@@ -1282,7 +1282,7 @@ class ChineseCLIPVisionModel(ChineseCLIPPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled CLS states
-        ```"""
+        ```py"""
         # 如果 return_dict 为 None，则使用配置中的 use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
@@ -1372,7 +1372,7 @@ class ChineseCLIPModel(ChineseCLIPPreTrainedModel):
         >>> inputs = tokenizer(["杰尼龟", "妙蛙种子", "小火龙", "皮卡丘"], padding=True, return_tensors="pt")
         >>> text_features = model.get_text_features(**inputs)
         >>> text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)
-        ```"""
+        ```py"""
         # Use CHINESE_CLIP model's config for some fields (if specified) instead of those of vision & text components.
         # 设置输出注意力权重的标志，如果未指定则使用配置中的值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
@@ -1432,7 +1432,7 @@ class ChineseCLIPModel(ChineseCLIPPreTrainedModel):
 
         >>> image_features = model.get_image_features(**inputs)
         >>> image_features = image_features / image_features.norm(p=2, dim=-1, keepdim=True)
-        ```"""
+        ```py"""
         # Use CHINESE_CLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (

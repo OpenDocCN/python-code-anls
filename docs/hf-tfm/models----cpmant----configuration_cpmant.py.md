@@ -1,6 +1,6 @@
 # `.\models\cpmant\configuration_cpmant.py`
 
-```
+```py
 # 设置编码为utf-8
 # 版权声明
 # 根据Apache许可证2.0版许可
@@ -77,7 +77,7 @@ class CpmAntConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     # 设置模型类型
     model_type = "cpmant"

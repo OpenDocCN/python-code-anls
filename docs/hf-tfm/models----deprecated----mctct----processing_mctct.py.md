@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\processing_mctct.py`
 
-```
+```py
 # 设置字符编码为 UTF-8
 # 版权声明
 # 版权所有2022年HuggingFace Inc.团队。保留所有权利。

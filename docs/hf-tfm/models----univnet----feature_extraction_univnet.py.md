@@ -1,6 +1,6 @@
 # `.\transformers\models\univnet\feature_extraction_univnet.py`
 
-```
+```py
 # 版权声明
 # 本代码版权归HuggingFace团队所有
 # 根据Apache License, Version 2.0许可，您不得使用这个文件，除非符合许可条件

@@ -1,6 +1,6 @@
 # `.\transformers\models\timm_backbone\__init__.py`
 
-```
+```py
 # 禁用 flake8 对当前模块的检查，防止出现 "F401 '...' imported but unused" 警告
 # 由于需要保持其他警告，所以无法忽略这种警告，因此完全不检查这个模块
 

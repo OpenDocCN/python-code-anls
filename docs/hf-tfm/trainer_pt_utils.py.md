@@ -1,6 +1,6 @@
 # `.\transformers\trainer_pt_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证的规定，否则不得使用此文件
@@ -1073,7 +1073,7 @@ class IterableDatasetShard(IterableDataset):
 
         现在当运行此方法时，您将看到一个报告，其中包括：
 
-        ```
+        ```py
         init_mem_cpu_alloc_delta   =     1301MB
         init_mem_cpu_peaked_delta  =      154MB
         init_mem_gpu_alloc_delta   =      230MB
@@ -1087,7 +1087,7 @@ class IterableDatasetShard(IterableDataset):
     train_mem_gpu_peaked_delta =        7MB
     # 训练阶段 GPU 内存峰值增量为 7MB
 
-```  
+```py  
     **Understanding the reports:**
     # 理解报告内容：
     
@@ -1263,7 +1263,7 @@ def get_module_class_from_name(module, name):
         name (`str`): The name of the class.
 
     """
-```  
+```py  
     """
     # 将模块的子模块列表存储在modules_children中
     modules_children = list(module.children())

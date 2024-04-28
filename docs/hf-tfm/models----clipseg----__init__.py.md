@@ -1,6 +1,6 @@
 # `.\transformers\models\clipseg\__init__.py`
 
-```
+```py
 # 导入必要的类型检查模块
 from typing import TYPE_CHECKING
 # 导入自定义的异常

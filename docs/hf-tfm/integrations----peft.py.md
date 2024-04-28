@@ -1,6 +1,6 @@
 # `.\transformers\integrations\peft.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权归 The HuggingFace Team 所有
 # 根据 Apache 许可证 2.0 版本授权

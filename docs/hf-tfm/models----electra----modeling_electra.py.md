@@ -1,6 +1,6 @@
 # `.\models\electra\modeling_electra.py`
 
-```
+```py
 # 指定编码为 UTF-8
 # 版权声明及许可证信息
 # 版权所有 2019 年谷歌 AI 语言团队作者和 HuggingFace 公司团队
@@ -1513,7 +1513,7 @@ class ElectraForCausalLM(ElectraPreTrainedModel):
 
         # 返回包含信息的字典
         return {"input_ids": input_ids, "attention_mask": attention_mask, "past_key_values": past_key_values}
-```  
+```py  
     # 从 transformers.models.roberta.modeling_roberta.RobertaForCausalLM._reorder_cache 复制的方法，重新排序缓存数据
     def _reorder_cache(self, past_key_values, beam_idx):
         # 重新排序后的缓存

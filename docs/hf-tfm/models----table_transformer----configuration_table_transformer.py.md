@@ -1,6 +1,6 @@
 # `.\transformers\models\table_transformer\configuration_table_transformer.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证的条件，否则您不得使用此文件。
@@ -55,7 +55,7 @@ class TableTransformerConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 设置 model_type 属性为 "table-transformer"
     model_type = "table-transformer"
     # 设置 keys_to_ignore_at_inference 属性为 ["past_key_values"]

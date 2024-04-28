@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\feature_extraction_conditional_detr.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明及许可证的声明
 # 条件DETR功能提取器的类

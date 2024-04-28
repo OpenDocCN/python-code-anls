@@ -1,6 +1,6 @@
 # `.\models\ernie_m\configuration_ernie_m.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 版权声明说明了使用该文件的限制和条件

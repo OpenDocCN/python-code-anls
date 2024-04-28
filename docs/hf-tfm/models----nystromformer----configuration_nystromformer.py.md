@@ -1,6 +1,6 @@
 # `.\transformers\models\nystromformer\configuration_nystromformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 UW-Madison 和 The HuggingFace Inc. 团队保留所有权利。
 #

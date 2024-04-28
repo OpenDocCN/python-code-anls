@@ -1,6 +1,6 @@
 # `.\transformers\models\nat\configuration_nat.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可证
 # 本文件受 Apache 许可证 2.0 保护
@@ -48,7 +48,7 @@ class NatConfig(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为 nat
     model_type = "nat"

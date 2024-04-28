@@ -1,6 +1,6 @@
 # `.\transformers\modeling_outputs.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 导入 dataclass 模块
@@ -629,7 +629,7 @@ class SequenceClassifierOutputWithPast(ModelOutput):
 class MaskedLMOutput(ModelOutput):
     """
     Base class for masked language models outputs.
-``` 
+```py 
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
             Masked language modeling (MLM) loss.
@@ -1203,7 +1203,7 @@ class BaseModelOutputWithPoolingAndProjection(ModelOutput):
     基类，包含了模型输出和最后隐藏状态的汇聚
 
     """
-```  
+```py  
     # 参数说明：
     # last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
     # 模型最后一层的隐藏状态的序列输出。

@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_msn\modeling_vit_msn.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入所需模块和库
@@ -617,7 +617,7 @@ class ViTMSNModel(ViTMSNPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, ViTMSNModel
         >>> import torch
         >>> from PIL import Image

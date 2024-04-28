@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_encoder_decoder\modeling_speech_encoder_decoder.py`
 
-```
+```py
 # 引入 typing 库，用于类型提示
 from typing import Optional, Tuple, Union
 # 引入 torch 库

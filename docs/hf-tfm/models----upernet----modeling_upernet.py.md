@@ -1,6 +1,6 @@
 # `.\transformers\models\upernet\modeling_upernet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 2.0 许可证的规定，对本文件的使用受到限制

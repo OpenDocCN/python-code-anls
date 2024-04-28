@@ -1,6 +1,6 @@
 # `.\models\flava\modeling_flava.py`
 
-```
+```py
 # 设置代码编码格式为 utf-8
 # 版权声明和许可证信息
 # 作者：Meta Platforms 和 The HuggingFace Team
@@ -1293,7 +1293,7 @@ class FlavaMultimodalModel(FlavaPreTrainedModel):
             hidden_states=encoder_outputs.hidden_states,
             attentions=encoder_outputs.attentions,
         )
-``` 
+```py 
 # 为 FLAVA 模型添加文档字符串
 @add_start_docstrings(
     "The bare FLAVA Model transformer outputting raw hidden-states without any specific head on top.",
@@ -1386,7 +1386,7 @@ class FlavaModel(FlavaPreTrainedModel):
         ...     text=["a photo of a cat", "a photo of a dog"], max_length=77, padding="max_length", return_tensors="pt"
         ... )
         >>> text_features = model.get_text_features(**inputs)
-        ```""".format(_CHECKPOINT_FOR_DOC)
+        ```py""".format(_CHECKPOINT_FOR_DOC)
         text_outputs = self.text_model(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1435,7 +1435,7 @@ class FlavaModel(FlavaPreTrainedModel):
         >>> inputs = processor(images=image, return_tensors="pt")
 
         >>> image_features = model.get_image_features(**inputs)
-        ```""".format(_CHECKPOINT_FOR_DOC)
+        ```py""".format(_CHECKPOINT_FOR_DOC)
         # 使用图像模型获取图像输出
         image_outputs = self.image_model(
             pixel_values=pixel_values,  # 像素值
@@ -1612,7 +1612,7 @@ def get_codebook_indices(self, pixel_values: torch.Tensor) -> torch.Tensor:
     >>> inputs = dict(pixel_values=inputs.codebook_pixel_values)
 
     >>> outputs = model.get_codebook_indices(**inputs)
-    ```
+    ```py
     """.format(_CHECKPOINT_FOR_CODEBOOK_DOC)
     # 通过模块组计算像素值的 logits
     z_logits = self.blocks(pixel_values)
@@ -1652,7 +1652,7 @@ def get_codebook_indices(self, pixel_values: torch.Tensor) -> torch.Tensor:
         >>> outputs = model(**inputs)
         >>> print(outputs.shape)
         (1, 196)
-        ```
+        ```py
         """.format(_CHECKPOINT_FOR_CODEBOOK_DOC)
 
         # 检查输入像素值的形状是否为四维

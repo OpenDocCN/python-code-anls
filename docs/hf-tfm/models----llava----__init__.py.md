@@ -1,6 +1,6 @@
 # `.\transformers\models\llava\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 
 # 导入类型检查模块

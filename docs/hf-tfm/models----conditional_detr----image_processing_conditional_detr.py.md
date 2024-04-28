@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\image_processing_conditional_detr.py`
 
-```
+```py
 # 定义了一个名为"get_size_with_aspect_ratio"的函数，用于计算输出图像大小
 def get_size_with_aspect_ratio(image_size, size, max_size=None) -> Tuple[int, int]:
     """

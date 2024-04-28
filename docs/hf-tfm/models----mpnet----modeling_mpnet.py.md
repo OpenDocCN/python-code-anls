@@ -1,6 +1,6 @@
 # `.\transformers\models\mpnet\modeling_mpnet.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 # 版权声明：HuggingFace Inc.团队，Microsoft Corporation，NVIDIA CORPORATION。保留所有权利。
 # 根据 Apache 许可证 2.0 版本使用本文件

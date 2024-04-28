@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v2\modeling_mobilenet_v2.py`
 
-```
+```py
 # 设置编码格式
 # 版权声明
 # 授权许可，需要遵守Apache License 2.0

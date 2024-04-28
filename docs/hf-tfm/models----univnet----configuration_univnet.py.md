@@ -1,6 +1,6 @@
 # `.\transformers\models\univnet\configuration_univnet.py`
 
-```
+```py
 # 这是 HuggingFace 团队的 UnivNetModel 模型配置类
 # 它提供了 UnivNetModel 模型的配置参数以及一些默认值
 # 本配置类主要用于实例化 UnivNetModel 模型
@@ -45,7 +45,7 @@ class UnivNetConfig(PretrainedConfig):
 
     # 访问模型配置
     configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "univnet"

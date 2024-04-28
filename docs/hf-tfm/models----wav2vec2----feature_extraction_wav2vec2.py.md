@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\feature_extraction_wav2vec2.py`
 
-```
+```py
 # coding=utf-8  # 设置代码文件的编码格式为 UTF-8
 # Copyright 2021 The HuggingFace Inc. team.  # 版权声明，版权归 HuggingFace 公司所有
 # Licensed under the Apache License, Version 2.0 (the "License");  # 使用 Apache License 2.0 许可证

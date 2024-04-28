@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta_xl\configuration_xlm_roberta_xl.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 HuggingFace Inc. 团队所有。
 #
@@ -55,7 +55,7 @@ class XLMRobertaXLConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "xlm-roberta-xl"
     # 初始化函数，设置模型的各种参数

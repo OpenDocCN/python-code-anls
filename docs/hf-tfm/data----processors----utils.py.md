@@ -1,6 +1,6 @@
 # `.\transformers\data\processors\utils.py`
 
-```
+```py
 # 导入必要的模块和库
 import csv  # 导入用于 CSV 文件操作的模块
 import dataclasses  # 导入用于定义数据类的模块

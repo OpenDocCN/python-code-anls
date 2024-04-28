@@ -1,6 +1,6 @@
 # `.\transformers\models\segformer\modeling_segformer.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，版权归 NVIDIA The HuggingFace Inc. 团队所有
 # 根据 Apache 许可协议 2.0 版本使用代码，除非符合该许可协议，否则不得使用该文件

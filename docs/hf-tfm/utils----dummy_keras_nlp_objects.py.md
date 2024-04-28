@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_keras_nlp_objects.py`
 
-```
+```py
 # 该文件是由命令 `make fix-copies` 自动生成的，不要编辑。
 # 导入依赖的模块 DummyObject 和 requires_backends
 from ..utils import DummyObject, requires_backends

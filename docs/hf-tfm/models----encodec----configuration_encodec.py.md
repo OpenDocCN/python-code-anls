@@ -1,6 +1,6 @@
 # `.\models\encodec\configuration_encodec.py`
 
-```
+```py
 # 定义了一个配置类 EncodecConfig，用于存储 EncodecModel 的配置信息
 class EncodecConfig(PretrainedConfig):
     # 模型类型为 encodec

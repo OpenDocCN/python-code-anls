@@ -1,6 +1,6 @@
 # `.\transformers\models\align\configuration_align.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2023 年由 HuggingFace Inc. 团队所有。保留所有权利。
 #
@@ -57,7 +57,7 @@ class AlignTextConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "align_text_model"
@@ -189,7 +189,7 @@ class AlignVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     # 导入 AlignVisionConfig 和 AlignVisionModel 类
     >>> from transformers import AlignVisionConfig, AlignVisionModel
 
@@ -308,7 +308,7 @@ class AlignConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AlignConfig, AlignModel
 
     >>> # Initializing a AlignConfig with kakaobrain/align-base style configuration
@@ -382,5 +382,5 @@ class AlignConfig(PretrainedConfig):
         # 使用文本配置和视觉配置的字典形式来初始化一个新的配置对象
         return cls(text_config=text_config.to_dict(), vision_config=vision_config.to_dict(), **kwargs)
 
-```  
+```py  
 ```

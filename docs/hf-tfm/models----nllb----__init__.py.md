@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb\__init__.py`
 
-```
+```py
 # 引入必要的类型检查模块
 from typing import TYPE_CHECKING
 # 引入可选依赖未安装异常模块

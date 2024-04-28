@@ -1,6 +1,6 @@
 # `.\transformers\models\bertweet\tokenization_bertweet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可证信息
 import html  # 导入处理 HTML 的模块
@@ -711,7 +711,7 @@ def _replace_html_entities(text, keep=(), remove_illegal=True, encoding="utf-8")
 
     Examples:
 
-    ```python
+    ```py
 
     ```
     """
@@ -725,7 +725,7 @@ def _replace_html_entities(text, keep=(), remove_illegal=True, encoding="utf-8")
     # 打印使用_replace_html_entities函数替换HTML实体后的字符串
     >>> print(_replace_html_entities(b"Price: &pound;100"))
     Price: £100
-    ```
+    ```py
 
     # 定义_convert_entity函数，用于替换HTML实体
     def _convert_entity(match):
@@ -780,7 +780,7 @@ class TweetTokenizer:
     >>> s1 = "@remy: This is waaaaayyyy too much for you!!!!!!"
     >>> tknzr.tokenize(s1)
     [':', 'This', 'is', 'waaayyy', 'too', 'much', 'for', 'you', '!', '!', '!']
-    ```"""
+    ```py"""
 
     def __init__(self, preserve_case=True, reduce_len=False, strip_handles=False):
         # 是否保持单词大小写

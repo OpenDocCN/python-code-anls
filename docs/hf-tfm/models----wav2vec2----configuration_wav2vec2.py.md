@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\configuration_wav2vec2.py`
 
-```
+```py
 # 设置代码文件的编码格式为 utf-8
 # 版权声明
 # 基于 Apache 许可证 2.0 进行许可
@@ -48,7 +48,7 @@ class Wav2Vec2Config(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "wav2vec2"
     model_type = "wav2vec2"

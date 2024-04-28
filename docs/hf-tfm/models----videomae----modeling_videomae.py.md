@@ -1,6 +1,6 @@
 # `.\transformers\models\videomae\modeling_videomae.py`
 
-```
+```py
 # 这是一个 PyTorch 实现的 VideoMAE (masked autoencoder) 模型的代码
 # 引入所需的库和类
 # coding=utf-8

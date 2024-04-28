@@ -1,6 +1,6 @@
 # `.\transformers\models\resnet\convert_resnet_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，该代码版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 使用本文件

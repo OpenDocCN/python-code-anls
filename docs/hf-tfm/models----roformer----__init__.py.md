@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 从相应的模块中导入需要的依赖
 from typing import TYPE_CHECKING

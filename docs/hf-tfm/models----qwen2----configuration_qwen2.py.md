@@ -1,6 +1,6 @@
 # `.\transformers\models\qwen2\configuration_qwen2.py`
 
-```
+```py
 # 设定编码格式为utf-8
 # 版权声明及许可协议
 # 输出日志工具
@@ -38,7 +38,7 @@ class Qwen2Config(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "qwen2"
     keys_to_ignore_at_inference = ["past_key_values"]

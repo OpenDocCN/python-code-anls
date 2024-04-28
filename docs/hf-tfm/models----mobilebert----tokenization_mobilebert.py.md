@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilebert\tokenization_mobilebert.py`
 
-```
+```py
 # coding=utf-8
 #
 # 版权 2020 年 HuggingFace 团队。保留所有权利。
@@ -251,7 +251,7 @@ class MobileBertTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A MobileBERT sequence
         pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

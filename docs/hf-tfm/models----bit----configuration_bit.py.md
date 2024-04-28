@@ -1,6 +1,6 @@
 # `.\transformers\models\bit\configuration_bit.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 年 HuggingFace Inc. 团队。保留所有权利。
 #

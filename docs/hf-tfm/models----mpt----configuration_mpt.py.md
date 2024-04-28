@@ -1,6 +1,6 @@
 # `.\transformers\models\mpt\configuration_mpt.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 
 # 版权声明

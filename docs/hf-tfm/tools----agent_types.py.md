@@ -1,6 +1,6 @@
 # `.\transformers\tools\agent_types.py`
 
-```
+```py
 # 导入必要的库
 import os  # 导入操作系统模块
 import pathlib  # 导入路径操作模块

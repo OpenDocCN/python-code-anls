@@ -1,6 +1,6 @@
 # `.\models\gpt2\modeling_tf_gpt2.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明，版权归属于 The OpenAI Team Authors 和 HuggingFace Inc. team 以及 NVIDIA CORPORATION
 # 根据 Apache 2.0 许可证，可以在遵守许可的情况下使用此文件
@@ -960,7 +960,7 @@ class TFGPT2ForSequenceClassification(TFGPT2PreTrainedModel, TFSequenceClassific
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
         ):
-```  
+```py  
     # 定义一个方法，返回结果为 TFSequenceClassifierOutputWithPast 或 Tuple[tf.Tensor]
     def forward(
         self,

@@ -1,6 +1,6 @@
 # `.\transformers\models\timesformer\modeling_timesformer.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明和许可证信息
 # 2022 Meta 和 The HuggingFace Inc. 团队保留所有权利。

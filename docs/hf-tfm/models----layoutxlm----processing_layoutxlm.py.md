@@ -1,6 +1,6 @@
 # `.\models\layoutxlm\processing_layoutxlm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明使用的是 Apache 许可证 2.0 版本
 # 如果符合许可证条件，可以使用此文件，详细条件可查看链接 http://www.apache.org/licenses/LICENSE-2.0

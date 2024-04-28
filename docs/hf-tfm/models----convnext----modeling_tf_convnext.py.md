@@ -1,6 +1,6 @@
 # `.\models\convnext\modeling_tf_convnext.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 Meta Platforms 公司和 The HuggingFace 公司保留所有权利。
 #
@@ -614,7 +614,7 @@ class TFConvNextModel(TFConvNextPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, TFConvNextModel
         >>> from PIL import Image
         >>> import requests
@@ -728,7 +728,7 @@ class TFConvNextForImageClassification(TFConvNextPreTrainedModel, TFSequenceClas
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, TFConvNextForImageClassification
         >>> import tensorflow as tf
         >>> from PIL import Image
@@ -798,5 +798,5 @@ class TFConvNextForImageClassification(TFConvNextPreTrainedModel, TFSequenceClas
             if hasattr(self.classifier, "name"):
                 with tf.name_scope(self.classifier.name):
                     self.classifier.build([None, None, self.config.hidden_sizes[-1]])
-```  
+```py  
 ```

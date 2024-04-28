@@ -1,6 +1,6 @@
 # `.\transformers\data\__init__.py`
 
-```
+```py
 # 导入自定义的数据收集器模块
 from .data_collator import (
     DataCollatorForLanguageModeling,  # 用于语言建模的数据收集器

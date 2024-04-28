@@ -1,6 +1,6 @@
 # `.\models\layoutxlm\__init__.py`
 
-```
+```py
 # 从 typing 模块中导入 TYPE_CHECKING 常量，用于检查类型
 from typing import TYPE_CHECKING
 

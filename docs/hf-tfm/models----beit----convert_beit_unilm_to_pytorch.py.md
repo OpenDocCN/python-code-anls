@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\convert_beit_unilm_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

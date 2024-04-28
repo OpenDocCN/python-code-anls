@@ -1,6 +1,6 @@
 # `.\transformers\models\splinter\tokenization_splinter.py`
 
-```
+```py
 # 定义了代码文件的编码方式为 utf-8
 # 版权声明，版权归 Tel AViv University, AllenAI 和 The HuggingFace Inc. 团队所有
 # 版权声明，保留所有权利

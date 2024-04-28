@@ -1,6 +1,6 @@
 # `.\transformers\onnx\__main__.py`
 
-```
+```py
 # 版权声明，版权归 The HuggingFace Team 所有
 #
 # 根据 Apache 许可证，版本 2.0 进行许可

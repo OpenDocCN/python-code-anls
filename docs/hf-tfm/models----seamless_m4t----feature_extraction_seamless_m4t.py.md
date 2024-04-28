@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\feature_extraction_seamless_m4t.py`
 
-```
+```py
 # 导入所需的库和模块
 import numpy as np
 from typing import List, Optional, Union

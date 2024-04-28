@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\modeling_flax_blenderbot.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Fairseq 作者、Google Flax 团队作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -129,7 +129,7 @@ class FlaxBlenderbotAttention(nn.Module):
     bias: bool = True
     dtype: jnp.dtype = jnp.float32  # 计算的数据类型
 
-``` 
+```py 
     # 设置函数，初始化参数
     def setup(self) -> None:
         # 计算每个头的维度
@@ -966,7 +966,7 @@ class FlaxBlenderbotPreTrainedModel(FlaxPreTrainedModel):
         >>> text = "My friends are cool but they eat too many carbs."
         >>> inputs = tokenizer(text, max_length=1024, return_tensors="jax")
         >>> encoder_outputs = model.encode(**inputs)
-        ```"""
+        ```py"""
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
@@ -1261,7 +1261,7 @@ FLAX_BLENDERBOT_CONDITIONAL_GENERATION_DOCSTRING = r"""
     对话示例::
 
     ```py
-``` 
+```py 
     # 从transformers库导入AutoTokenizer和FlaxBlenderbotForConditionalGeneration类
     from transformers import AutoTokenizer, FlaxBlenderbotForConditionalGeneration
     

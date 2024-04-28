@@ -1,6 +1,6 @@
 # `.\models\layoutlm\configuration_layoutlm.py`
 
-```
+```py
 # 导入所需的模块和类
 from collections import OrderedDict  # 导入有序字典类
 from typing import Any, List, Mapping, Optional  # 导入类型提示
@@ -47,7 +47,7 @@ class LayoutLMConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "layoutlm"

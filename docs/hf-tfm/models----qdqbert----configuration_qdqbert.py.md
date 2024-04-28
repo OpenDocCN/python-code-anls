@@ -1,6 +1,6 @@
 # `.\transformers\models\qdqbert\configuration_qdqbert.py`
 
-```
+```py
 # 引入必要的模块和工具函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging

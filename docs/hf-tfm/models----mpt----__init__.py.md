@@ -1,6 +1,6 @@
 # `.\transformers\models\mpt\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入自定义的异常，用于处理可选依赖不可用的情况

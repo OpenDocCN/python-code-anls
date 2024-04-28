@@ -1,6 +1,6 @@
 # `.\models\decision_transformer\configuration_decision_transformer.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，保留所有权利
 # 根据 Apache 许可证，除非符合许可证条件，否则不得使用此文件
@@ -52,7 +52,7 @@ class DecisionTransformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
    
     # 模型类型为"decision_transformer"
     model_type = "decision_transformer"

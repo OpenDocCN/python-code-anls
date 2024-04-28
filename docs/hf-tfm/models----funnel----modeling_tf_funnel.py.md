@@ -1,6 +1,6 @@
 # `.\models\funnel\modeling_tf_funnel.py`
 
-```
+```py
 # 引入必要的库和模块
 from __future__ import annotations
 import warnings
@@ -424,7 +424,7 @@ class TFFunnelRelMultiheadAttention(tf.keras.layers.Layer):
         if getattr(self, "layer_norm", None) is not None:
             with tf.name_scope(self.layer_norm.name):
                 self.layer_norm.build([None, None, d_model])
-```  
+```py  
     def relative_positional_attention(self, position_embeds, q_head, context_len, cls_mask=None):
         """Relative attention score for the positional encodings"""
         # q_head has shape batch_size x sea_len x n_head x d_head
@@ -1534,7 +1534,7 @@ class TFFunnelForPreTraining(TFFunnelPreTrainedModel):
 
         >>> inputs = tokenizer("Hello, my dog is cute", return_tensors="tf")
         >>> logits = model(inputs).logits
-        ```"""
+        ```py"""
         # 使用Funnel模型对输入进行预训练
         discriminator_hidden_states = self.funnel(
             input_ids,

@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\tokenization_xglm.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可版本 2.0 授权使用此文件

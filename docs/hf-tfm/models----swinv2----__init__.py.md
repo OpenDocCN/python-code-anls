@@ -1,6 +1,6 @@
 # `.\transformers\models\swinv2\__init__.py`
 
-```
+```py
 # 版权声明
 # 2022年版权归 HuggingFace 团队所有。
 # 根据 Apache 许可证 2.0 版本授权；

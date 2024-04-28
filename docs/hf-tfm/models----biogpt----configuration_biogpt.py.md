@@ -1,6 +1,6 @@
 # `.\transformers\models\biogpt\configuration_biogpt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息
 # 定义了 BioGPT 模型的配置类
@@ -76,7 +76,7 @@ class BioGptConfig(PretrainedConfig):
     ```python
     # 导入 BioGptModel 和 BioGptConfig 类
     >>> from transformers import BioGptModel, BioGptConfig
-    ```
+    ```py
     # 初始化一个 BioGPT 配置，采用 microsoft/biogpt 风格
     >>> configuration = BioGptConfig()
 

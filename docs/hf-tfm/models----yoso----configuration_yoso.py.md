@@ -1,6 +1,6 @@
 # `.\transformers\models\yoso\configuration_yoso.py`
 
-```
+```py
 # coding=utf-8
 # 代码编码格式为 UTF-8
 # 版权信息
@@ -50,7 +50,7 @@ class YosoConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "yoso"  # 模型类型为 yoso
 

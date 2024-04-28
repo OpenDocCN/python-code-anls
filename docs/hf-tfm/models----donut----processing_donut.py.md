@@ -1,6 +1,6 @@
 # `.\models\donut\processing_donut.py`
 
-```
+```py
 # 定义编码格式为 UTF-8
 # 版权声明，声明代码版权归 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本进行许可

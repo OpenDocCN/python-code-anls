@@ -1,6 +1,6 @@
 # `.\transformers\models\openai\__init__.py`
 
-```
+```py
 # 导入所需的模块和函数
 from typing import TYPE_CHECKING  # 引用TYPE_CHECKING类型提示
 

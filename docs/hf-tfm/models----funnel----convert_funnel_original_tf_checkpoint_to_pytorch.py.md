@@ -1,6 +1,6 @@
 # `.\models\funnel\convert_funnel_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 指定文件编码格式
 # 版权声明
 # 根据 Apache 许可证，除非遵守许可，否则不能使用此文件

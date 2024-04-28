@@ -1,6 +1,6 @@
 # `.\models\efficientformer\modeling_tf_efficientformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Snapchat Research 和 The HuggingFace Inc. 团队所有
 #

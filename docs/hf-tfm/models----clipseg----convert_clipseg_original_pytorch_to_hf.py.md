@@ -1,6 +1,6 @@
 # `.\transformers\models\clipseg\convert_clipseg_original_pytorch_to_hf.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，声明使用 Apache 许可证 2.0 版本
 # 导入必要的库和模块

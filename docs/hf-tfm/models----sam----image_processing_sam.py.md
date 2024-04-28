@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\image_processing_sam.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 使用文件，禁止未经授权使用

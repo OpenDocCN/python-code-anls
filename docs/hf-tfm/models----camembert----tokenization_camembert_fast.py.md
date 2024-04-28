@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\tokenization_camembert_fast.py`
 
-```
+```py
 # 定义了编码格式为 UTF-8 的注释
 # 版权声明，列出了版权方和许可证信息
 # 依赖项：导入所需的模块和函数

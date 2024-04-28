@@ -1,6 +1,6 @@
 # `.\models\dpt\configuration_dpt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本(“许可证”)，除非符合许可证的规定，否则您不得使用此文件。您可以在以下获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
@@ -44,7 +44,7 @@ class DPTConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 "dpt"
     model_type = "dpt"

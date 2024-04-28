@@ -1,6 +1,6 @@
 # `.\transformers\models\byt5\tokenization_byt5.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权

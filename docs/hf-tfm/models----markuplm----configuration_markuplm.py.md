@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\configuration_markuplm.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明：说明代码版权归Microsoft Research Asia MarkupLM Team作者所有
 #
@@ -44,7 +44,7 @@ class MarkupLMConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> 配置 = 模型.config
-    ```"""
+    ```py"""
     # 标记模型类型为markuplm
     model_type = "markuplm"
 

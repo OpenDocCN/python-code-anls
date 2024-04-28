@@ -1,6 +1,6 @@
 # `.\models\code_llama\tokenization_code_llama.py`
 
-```
+```py
 # 定义系统起始和结束标记
 B_SYS, E_SYS = "<<SYS>>\n", "\n\n"
 
@@ -364,7 +364,7 @@ correct. If you don't know the answer to a question, please don't share false in
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
     
         if token_ids_1 is None, only returns the first portion of the mask (0s).
     

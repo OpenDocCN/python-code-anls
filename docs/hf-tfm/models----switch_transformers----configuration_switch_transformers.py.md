@@ -1,6 +1,6 @@
 # `.\transformers\models\switch_transformers\configuration_switch_transformers.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明
 # 根据Apache License, Version 2.0，如未遵守协议，不得使用此文件

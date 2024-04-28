@@ -1,6 +1,6 @@
 # `.\transformers\models\qwen2\tokenization_qwen2_fast.py`
 
-```
+```py
 # 引入必要的模块和类
 from typing import Optional, Tuple
 # 引入日志记录模块
@@ -48,7 +48,7 @@ class Qwen2TokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [21927, 1879]
-    ```
+    ```py
     This is expected.
 
     This tokenizer inherits from [`PreTrainedTokenizerFast`] which contains most of the main methods. Users should

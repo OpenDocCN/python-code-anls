@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\english_normalizer.py`
 
-```
+```py
 # 导入所需的模块
 import re
 import unicodedata

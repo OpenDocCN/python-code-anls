@@ -1,6 +1,6 @@
 # `.\transformers\models\rwkv\__init__.py`
 
-```
+```py
 # 导入所需的类型检查模块
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\pvt\convert_pvt_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，作者和团队信息
 # 版权告知，依照 Apache License, Version 2.0。未经授权，不得使用此文件。

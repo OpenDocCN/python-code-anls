@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\modeling_tf_deberta_v2.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # 版权信息，告知使用者遵守 Apache License 2.0

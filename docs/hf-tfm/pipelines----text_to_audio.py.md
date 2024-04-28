@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\text_to_audio.py`
 
-```
+```py
 # 从 typing 模块中导入 List 和 Union 类型
 from typing import List, Union
 
@@ -36,7 +36,7 @@ class TextToAudioPipeline(Pipeline):
 
     >>> audio = output["audio"]
     >>> sampling_rate = output["sampling_rate"]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 
@@ -60,7 +60,7 @@ class TextToAudioPipeline(Pipeline):
     ... }
 
     >>> outputs = music_generator("Techno music with high melodic riffs", generate_kwargs=generate_kwargs)
-    ```
+    ```py
 
     </Tip>
 

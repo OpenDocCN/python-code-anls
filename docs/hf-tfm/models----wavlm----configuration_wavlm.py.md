@@ -1,6 +1,6 @@
 # `.\transformers\models\wavlm\configuration_wavlm.py`
 
-```
+```py
 # 设置脚本文件的编码格式为UTF-8
 # 版权声明
 # 根据 Apache 2.0 许可证授权，可以在符合许可证的情况下使用该文件
@@ -42,7 +42,7 @@ class WavLMConfig(PretrainedConfig):
 
     ```python
 
-    ```
+    ```py
 
     示例:
 
@@ -57,7 +57,7 @@ class WavLMConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "wavlm"
     # 定义一个类，用于搭建一个模型，其中包含一系列的参数设置

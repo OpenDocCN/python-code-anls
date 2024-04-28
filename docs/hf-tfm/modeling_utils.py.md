@@ -1,6 +1,6 @@
 # `.\transformers\modeling_utils.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections  # 导入 collections 模块，用于提供额外的数据结构和工具
 import copy  # 导入 copy 模块，用于对象的浅拷贝和深拷贝操作
@@ -314,7 +314,7 @@ def dtype_byte_size(dtype):
     ```py
     >>> dtype_byte_size(torch.float32)
     4
-    ```
+    ```py
     """
     # 如果数据类型是torch.bool
     if dtype == torch.bool:
@@ -1277,7 +1277,7 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
 
         # Push the model to your namespace with the name "my-custom-bert".
         model.push_to_hub("my-custom-bert")
-        ```
+        ```py
         """
         # 如果输入的 tags 是字符串，则转换为列表
         if isinstance(tags, str):

@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\modeling_gpt_neo.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 
 # 导入必要的库

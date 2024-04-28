@@ -1,6 +1,6 @@
 # `.\models\git\configuration_git.py`
 
-```
+```py
 # 设定文件编码为utf-8
 # 版权声明
 # 2022年由HuggingFace Inc.团队保留所有权利。

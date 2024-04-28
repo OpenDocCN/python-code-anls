@@ -1,6 +1,6 @@
 # `.\transformers\models\patchtst\configuration_patchtst.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 授权，除非您遵守许可证的条款，否则您不得使用此文件
@@ -42,7 +42,7 @@ class PatchTSTConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     model_type = "patchtst"
     attribute_map = {
         "hidden_size": "d_model",

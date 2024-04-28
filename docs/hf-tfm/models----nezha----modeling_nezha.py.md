@@ -1,6 +1,6 @@
 # `.\transformers\models\nezha\modeling_nezha.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可证信息
 # 该模块实现了 PyTorch 下的 Nezha 模型
@@ -1173,7 +1173,7 @@ class NezhaForNextSentencePrediction(NezhaPreTrainedModel):
 
         Example:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, NezhaForNextSentencePrediction
         >>> import torch
 
@@ -1239,7 +1239,7 @@ class NezhaForNextSentencePrediction(NezhaPreTrainedModel):
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-```  
+```py  
 # 使用预定义的文档字符串和配置信息添加序列分类/回归头顶部的Nezha模型变换器（在汇总输出的顶部上方的线性层），例如用于GLUE任务
 @add_start_docstrings(
     """

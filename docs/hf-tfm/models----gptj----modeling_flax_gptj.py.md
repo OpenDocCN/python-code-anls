@@ -1,6 +1,6 @@
 # `.\models\gptj\modeling_flax_gptj.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 官网获取许可证的副本

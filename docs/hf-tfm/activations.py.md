@@ -1,6 +1,6 @@
 # `.\transformers\activations.py`
 
-```
+```py
 # 导入必要的模块和库
 import math  # 导入数学模块
 import warnings  # 导入警告模块

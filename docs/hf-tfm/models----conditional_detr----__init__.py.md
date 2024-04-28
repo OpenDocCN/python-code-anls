@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 
 # 导入模块

@@ -1,6 +1,6 @@
 # `.\models\distilbert\modeling_flax_distilbert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权归属于 HuggingFace Inc. 团队，Google AI 语言团队和 Facebook, Inc.

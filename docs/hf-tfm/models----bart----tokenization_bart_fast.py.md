@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\tokenization_bart_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Facebook AI Research Team 作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
@@ -85,7 +85,7 @@ class BartTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer or when you
     call it on some text, but since the model was not pretrained this way, it might yield a decrease in performance.

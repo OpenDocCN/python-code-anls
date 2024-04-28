@@ -1,6 +1,6 @@
 # `.\transformers\tools\text_classification.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -38,7 +38,7 @@ class TextClassificationTool(PipelineTool):
 
     classifier = TextClassificationTool()
     classifier("This is a super nice API!", labels=["positive", "negative"])
-    ```
+    ```py
     """
     # 定义类属性
     default_checkpoint = "facebook/bart-large-mnli"

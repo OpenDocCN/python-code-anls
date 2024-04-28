@@ -1,6 +1,6 @@
 # `.\models\idefics\perceiver.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import Optional, Tuple
 import torch

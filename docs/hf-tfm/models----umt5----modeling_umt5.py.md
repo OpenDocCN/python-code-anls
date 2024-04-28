@@ -1,6 +1,6 @@
 # `.\transformers\models\umt5\modeling_umt5.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 #
@@ -675,7 +675,7 @@ class UMT5Model(UMT5PreTrainedModel):
 
     >>> outputs = model(input_ids=inputs["input_ids"], decoder_input_ids=labels["input_ids"])
     >>> hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 
     初始化 UMT5Model 类
     """
@@ -793,7 +793,7 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
 
     >>> outputs = model(**inputs)
     >>> loss = outputs.loss
-    ```"""
+    ```py"""
 
     # 设置模型类型为 "umt5"
     model_type = "umt5"
@@ -960,7 +960,7 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
     >>> input_ids = tokenizer(article, return_tensors="pt").input_ids
     >>> outputs = model(input_ids)
     >>> hidden_state = outputs.last_hidden_state
-    ```"""
+    ```py"""
 
     # UMT5模型类型为"umt5"
     model_type = "umt5"
@@ -1039,7 +1039,7 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
         ... ).input_ids  # Batch size 1
         >>> outputs = model(input_ids=input_ids)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
         # 如果 return_dict 不为 None，则使用参数中的值；否则，使用模型配置中的默认值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

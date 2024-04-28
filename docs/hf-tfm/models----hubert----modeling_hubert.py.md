@@ -1,6 +1,6 @@
 # `.\models\hubert\modeling_hubert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2021 年版权归 Fairseq 作者和 HuggingFace 公司团队所有。保留所有权利。
@@ -1147,7 +1147,7 @@ class HubertModel(HubertPreTrainedModel):
 
         >>> input_values = processor(ds["speech"][0], return_tensors="pt").input_values  # Batch size 1
         >>> hidden_states = model(input_values).last_hidden_state
-        ```"""
+        ```py"""
         # 设置输出的注意力权重，默认为 None 则使用配置中的值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 设置输出的隐藏状态，默认为 None 则使用配置中的值

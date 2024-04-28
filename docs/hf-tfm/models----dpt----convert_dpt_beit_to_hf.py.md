@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dpt_beit_to_hf.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明，使用Apache License 2.0授权
 # 引入必要的库和模块

@@ -1,6 +1,6 @@
 # `.\models\donut\__init__.py`
 
-```
+```py
 # 版权声明
 # 2022年HuggingFace团队。保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\configuration_speech_to_text.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明声明版权归 HuggingFace Inc. 团队所有
 #
@@ -52,7 +52,7 @@ class Speech2TextConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "speech_to_text"
     keys_to_ignore_at_inference = ["past_key_values"]

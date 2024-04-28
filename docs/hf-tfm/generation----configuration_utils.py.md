@@ -1,6 +1,6 @@
 # `.\transformers\generation\configuration_utils.py`
 
-```
+```py
 # 引入所需的模块和库
 import copy  # 引入 copy 模块，用于复制对象
 import json  # 引入 json 模块，用于处理 JSON 格式数据

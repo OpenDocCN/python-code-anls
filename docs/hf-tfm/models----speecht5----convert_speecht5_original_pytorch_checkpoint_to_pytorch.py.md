@@ -461,5 +461,5 @@ if __name__ == "__main__":
         args.vocab_path,
         args.push_to_hub,
     )
-```  
+```py  
 ```

@@ -1,6 +1,6 @@
 # `.\transformers\models\yolos\modeling_yolos.py`
 
-```
+```py
 # 定义 YolosObjectDetectionOutput 类，继承自 ModelOutput，用于 YOLOS 检测模型的输出类型
 @dataclass
 class YolosObjectDetectionOutput(ModelOutput):

@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\configuration_whisper.py`
 
-```
+```py
 # 指定编码方式为 UTF-8
 
 # 引入必要的模块和库
@@ -87,7 +87,7 @@ class WhisperConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "whisper"

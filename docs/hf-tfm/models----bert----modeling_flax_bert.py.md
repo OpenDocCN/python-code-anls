@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\modeling_flax_bert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The Google Flax Team Authors 和 The HuggingFace Inc. team 所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证规定，否则不得使用此文件
@@ -1172,7 +1172,7 @@ FLAX_BERT_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxBertForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
@@ -1362,7 +1362,7 @@ FLAX_BERT_FOR_NEXT_SENT_PRED_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxBertForNextSentencePrediction
 
     >>> tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
@@ -1688,7 +1688,7 @@ class FlaxBertForQuestionAnsweringModule(nn.Module):
         )
         # 初始化 self.qa_outputs 属性为一个全连接层，用于执行问答任务
         self.qa_outputs = nn.Dense(self.config.num_labels, dtype=self.dtype)
-```  
+```py  
     def __call__(
         self,
         input_ids,

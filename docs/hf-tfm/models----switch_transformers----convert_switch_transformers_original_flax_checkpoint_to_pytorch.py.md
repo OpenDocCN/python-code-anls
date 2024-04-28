@@ -1,6 +1,6 @@
 # `.\transformers\models\switch_transformers\convert_switch_transformers_original_flax_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明信息
 # 引入必要的模块和库

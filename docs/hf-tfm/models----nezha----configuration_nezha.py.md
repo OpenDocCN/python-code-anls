@@ -1,6 +1,6 @@
 # `.\transformers\models\nezha\configuration_nezha.py`
 
-```
+```py
 # 从预训练配置中导入PretrainedConfig类
 from ... import PretrainedConfig
 

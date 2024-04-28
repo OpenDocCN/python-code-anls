@@ -1,6 +1,6 @@
 # `.\transformers\models\switch_transformers\modeling_switch_transformers.py`
 
-```
+```py
 # 设置字符编码格式为 UTF-8
 # 声明版权信息，包括作者和版权方
 # 根据 Apache 许可证 Version 2.0 授权，对该文件的使用有一定规定

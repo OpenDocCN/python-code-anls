@@ -1,6 +1,6 @@
 # `.\transformers\models\yolos\image_processing_yolos.py`
 
-```
+```py
 # 设定编码方式为 utf-8
 # 版权声明
 # Apache 2.0 许可

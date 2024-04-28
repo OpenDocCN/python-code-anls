@@ -1,6 +1,6 @@
 # `.\transformers\commands\download.py`
 
-```
+```py
 # 导入必要的模块
 from argparse import ArgumentParser
 # 导入基础的命令行接口类

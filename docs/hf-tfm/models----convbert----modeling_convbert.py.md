@@ -1,6 +1,6 @@
 # `.\models\convbert\modeling_convbert.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，授权信息详见链接：http://www.apache.org/licenses/LICENSE-2.0

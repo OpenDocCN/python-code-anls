@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\__init__.py`
 
-```
+```py
 # 版权声明
 #
 # 本代码版权归 HuggingFace 团队所有。

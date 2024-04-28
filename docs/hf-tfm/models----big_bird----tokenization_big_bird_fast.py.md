@@ -1,6 +1,6 @@
 # `.\transformers\models\big_bird\tokenization_big_bird_fast.py`
 
-```
+```py
 # 设置脚本的字符编码为 UTF-8
 # 版权声明，指明代码版权归谷歌人工智能、谷歌Brain以及HuggingFace公司团队所有
 # 使用 Apache 许可证版本 2.0 发布，除非你遵守许可证中规定的条款，否则不得使用此文件
@@ -228,7 +228,7 @@ class BigBirdTokenizerFast(PreTrainedTokenizerFast):
         """
         从传递的两个序列创建一个用于序列对分类任务的掩码。ALBERT 序列对掩码的格式如下：
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列     | 第二个序列 |
         ```

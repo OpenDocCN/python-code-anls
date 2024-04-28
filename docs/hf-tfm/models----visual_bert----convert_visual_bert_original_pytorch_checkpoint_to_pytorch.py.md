@@ -1,6 +1,6 @@
 # `.\transformers\models\visual_bert\convert_visual_bert_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\fast_lsh_cumulation_torch.cpp`
 
-```
+```py
 #include <torch/extension.h>  // 引入 PyTorch C++ 扩展头文件
 #include <ATen/ATen.h>  // 引入 ATen 头文件
 #include "fast_lsh_cumulation.h"  // 引入自定义的快速局部敏感哈希累积头文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\bark\convert_suno_to_hf.py`
 
-```
+```py
 """Convert Bark checkpoint."""
 # 导入所需模块
 import argparse  # 用于解析命令行参数

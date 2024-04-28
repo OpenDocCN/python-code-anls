@@ -1,6 +1,6 @@
 # `.\transformers\models\time_series_transformer\modeling_time_series_transformer.py`
 
-```
+```py
 # 设定 UTF-8 编码格式
 # 版权声明
 # 根据Apache License, Version 2.0许可协议，除非符合许可协议使用，否则不得使用此文件
@@ -735,7 +735,7 @@ class TimeSeriesTransformerModel(TimeSeriesTransformerPreTrainedModel):
         future_values: Optional[torch.Tensor] = None,
         # 未来时间特征的张量（可选）
         future_time_features: Optional[torch.Tensor] = None,
-```  
+```py  
     # 准备时间特征
     # 如果有未来值，则将过去时间特征和未来时间特征拼接在一起
     time_feat = (

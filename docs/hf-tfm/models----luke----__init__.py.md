@@ -1,6 +1,6 @@
 # `.\transformers\models\luke\__init__.py`
 
-```
+```py
 # 导入 TYPE_CHECKING 模块，用于在类型检查时导入依赖项
 from typing import TYPE_CHECKING
 

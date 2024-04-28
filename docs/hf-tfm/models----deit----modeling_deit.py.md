@@ -1,6 +1,6 @@
 # `.\models\deit\modeling_deit.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权属于 Facebook AI Research (FAIR)、Ross Wightman 和 The HuggingFace Inc. 团队
 #

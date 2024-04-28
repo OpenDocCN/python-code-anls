@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\zero_shot_classification.py`
 
-```
+```py
 # 导入模块
 import inspect
 from typing import List, Union
@@ -75,7 +75,7 @@ class ZeroShotClassificationPipeline(ChunkPipeline):
     ...     candidate_labels=["urgent", "not urgent", "phone", "tablet", "computer"],
     ... )
     {'sequence': 'I have a problem with my iphone that needs to be resolved asap!!', 'labels': ['urgent', 'phone', 'computer', 'not urgent', 'tablet'], 'scores': [0.504, 0.479, 0.013, 0.003, 0.002]}
-    ```
+    ```py
     # 调用 oracle 方法，传入文本序列和候选标签，在零样本分类任务中进行文本分类
     oracle(
         "I have a problem with my iphone that needs to be resolved asap!!",

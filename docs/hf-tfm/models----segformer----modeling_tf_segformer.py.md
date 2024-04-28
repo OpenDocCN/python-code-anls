@@ -1,6 +1,6 @@
 # `.\transformers\models\segformer\modeling_tf_segformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 声明代码使用 Apache 许可证 2.0
@@ -1157,7 +1157,7 @@ class TFSegformerForSemanticSegmentation(TFSegformerPreTrainedModel):
         >>> logits = outputs.logits
         >>> list(logits.shape)
         [1, 150, 128, 128]
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states

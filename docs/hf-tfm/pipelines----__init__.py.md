@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\__init__.py`
 
-```
+```py
 # 导入所需的库和模块
 import io  # 用于输入输出流的操作
 import json  # 用于 JSON 数据的处理
@@ -680,7 +680,7 @@ def pipeline(
     >>> model = AutoModelForTokenClassification.from_pretrained("dbmdz/bert-large-cased-finetuned-conll03-english")
     >>> tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
     >>> recognizer = pipeline("ner", model=model, tokenizer=tokenizer)
-    ```"""
+    ```py"""
     
     # 如果model_kwargs为None，则初始化为空字典
     if model_kwargs is None:

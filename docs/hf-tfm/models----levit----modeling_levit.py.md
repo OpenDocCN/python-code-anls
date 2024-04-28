@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\modeling_levit.py`
 
-```
+```py
 # 设置编码为 UTF-8
 
 # 版权声明及许可证信息

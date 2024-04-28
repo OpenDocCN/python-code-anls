@@ -1,6 +1,6 @@
 # `.\transformers\models\prophetnet\configuration_prophetnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2020 年版权归微软作者和 HuggingFace 公司团队所有

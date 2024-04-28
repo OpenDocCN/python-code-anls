@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\table_question_answering.py`
 
-```
+```py
 # 导入必要的库
 import collections
 import types
@@ -122,7 +122,7 @@ class TableQuestionAnsweringPipeline(Pipeline):
     ... }
     >>> oracle(query="How many stars does the transformers repository have?", table=table)
     {'answer': 'AVERAGE > 36542', 'coordinates': [(0, 1)], 'cells': ['36542'], 'aggregator': 'AVERAGE'}
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb\tokenization_nllb_fast.py`
 
-```
+```py
 # 导入所需的模块和函数
 import os
 # 从 shutil 模块导入 copyfile 函数，用于复制文件

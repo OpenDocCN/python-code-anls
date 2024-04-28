@@ -1,6 +1,6 @@
 # `.\models\glpn\feature_extraction_glpn.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明信息
 # 版权所有 © 2022 HuggingFace Inc. 团队。保留所有权利。

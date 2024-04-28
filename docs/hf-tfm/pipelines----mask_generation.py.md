@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\mask_generation.py`
 
-```
+```py
 # 从 collections 模块中导入 defaultdict 类
 from collections import defaultdict
 # 从 typing 模块中导入 Optional 类型提示

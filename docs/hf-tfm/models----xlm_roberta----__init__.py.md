@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_roberta\__init__.py`
 
-```
+```py
 # 引入必要的库
 from typing import TYPE_CHECKING
 # 引入自定义的异常和函数

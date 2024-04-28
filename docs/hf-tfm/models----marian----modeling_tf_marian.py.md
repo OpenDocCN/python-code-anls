@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\modeling_tf_marian.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2021 年 Marian 团队的作者和 HuggingFace Inc. 团队。保留所有权利。
@@ -506,7 +506,7 @@ MARIAN_GENERATION_EXAMPLE = r"""
         >>> gen = model.generate(**batch)
         >>> tokenizer.batch_decode(gen, skip_special_tokens=True)
         "Where is the bus stop ?"
-        ```
+        ```py
 """
 
 MARIAN_INPUTS_DOCSTRING = r"""

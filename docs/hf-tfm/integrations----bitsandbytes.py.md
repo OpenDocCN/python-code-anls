@@ -1,6 +1,6 @@
 # `.\transformers\integrations\bitsandbytes.py`
 
-```
+```py
 # 导入模块元数据
 import importlib.metadata
 # 导入警告模块

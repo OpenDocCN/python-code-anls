@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\modeling_flax_marian.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The Marian Team 作者、The Google Flax Team 作者以及 HuggingFace Inc. 团队所有
 # 使用 Apache License, Version 2.0 开源许可证，遵循许可证规定使用本文件
@@ -828,7 +828,7 @@ class FlaxMarianModule(nn.Module):
             encoder_hidden_states=encoder_outputs.hidden_states,
             encoder_attentions=encoder_outputs.attentions,
         )
-``` 
+```py 
 # 定义一个继承自FlaxPreTrainedModel的FlaxMarianPreTrainedModel类，用于Marian模型的预训练
 class FlaxMarianPreTrainedModel(FlaxPreTrainedModel):
     # 指定配置类为MarianConfig
@@ -1280,7 +1280,7 @@ FLAX_MARIAN_MT_DOCSTRING = """
 
     >>> outputs = tokenizer.batch_decode(sequences, skip_special_tokens=True)
     >>> # should give *Meine Freunde sind cool, aber sie essen zu viele Kohlenhydrate.*
-    ```
+    ```py
 """
 
 # 调用 overwrite_call_docstring 函数，给 FlaxMarianMTModel 添加文档字符串

@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_mae\configuration_vit_mae.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：版权归 Facebook AI 和 The HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 许可发行

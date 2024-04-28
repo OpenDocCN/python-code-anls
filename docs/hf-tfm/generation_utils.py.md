@@ -1,6 +1,6 @@
 # `.\transformers\generation_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者信息和许可证信息
 # 依据 Apache 许可证 2.0 版本，对该文件的使用受限

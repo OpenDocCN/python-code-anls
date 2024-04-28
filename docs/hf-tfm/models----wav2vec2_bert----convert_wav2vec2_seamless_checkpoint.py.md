@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_bert\convert_wav2vec2_seamless_checkpoint.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse
 import torch

@@ -1,6 +1,6 @@
 # `.\transformers\models\resnet\modeling_flax_resnet.py`
 
-```
+```py
 # 导入所需模块和类
 from functools import partial
 from typing import Optional, Tuple
@@ -643,7 +643,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, FlaxResNetModel
     >>> from PIL import Image
     >>> import requests

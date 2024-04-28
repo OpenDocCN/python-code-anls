@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\convert_xglm_original_ckpt_to_trfms.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 from argparse import Namespace

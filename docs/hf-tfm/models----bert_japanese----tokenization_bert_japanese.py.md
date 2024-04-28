@@ -1,6 +1,6 @@
 # `.\transformers\models\bert_japanese\tokenization_bert_japanese.py`
 
-```
+```py
 # 导入必要的库和模块
 import collections  # 导入collections模块，用于处理集合类型数据
 import copy  # 导入copy模块，用于复制对象
@@ -362,7 +362,7 @@ class BertJapaneseTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A BERT sequence
         pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

@@ -1,6 +1,6 @@
 # `.\transformers\utils\versions.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权归 The HuggingFace Team 所有
 # 根据 Apache 许可证版本 2.0 授权
@@ -64,7 +64,7 @@ def require_version(requirement: str, hint: Optional[str] = None) -> None:
     ```python
     require_version("pandas>1.1.2")
     require_version("numpy>1.18.5", "this is important to have for whatever reason")
-    ```"""
+    ```py"""
 
     # 如果有提示信息，则添加到提示字符串中
     hint = f"\n{hint}" if hint is not None else ""

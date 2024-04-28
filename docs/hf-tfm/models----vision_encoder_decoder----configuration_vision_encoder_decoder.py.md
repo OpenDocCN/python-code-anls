@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_encoder_decoder\configuration_vision_encoder_decoder.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明版权 2021 年 HuggingFace 公司。
 # 版权声明版权 2018 年，NVIDIA 公司。保留所有权利。
@@ -75,7 +75,7 @@ class VisionEncoderDecoderConfig(PretrainedConfig):
 
     >>> # 从预训练文件夹加载模型和配置
 
-    ```
+    ```py
     # 从预训练模型加载配置
     encoder_decoder_config = VisionEncoderDecoderConfig.from_pretrained("my-model")
     # 从预训练模型加载模型

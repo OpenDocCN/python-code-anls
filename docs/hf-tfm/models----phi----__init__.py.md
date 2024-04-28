@@ -1,6 +1,6 @@
 # `.\transformers\models\phi\__init__.py`
 
-```
+```py
 # 版权声明及许可协议信息
 # Copyright 2023 Microsoft and The HuggingFace Inc. team. All rights reserved.
 #

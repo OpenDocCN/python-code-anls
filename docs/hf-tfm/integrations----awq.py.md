@@ -1,6 +1,6 @@
 # `.\transformers\integrations\awq.py`
 
-```
+```py
 # 导入所需模块
 "AWQ (Activation aware Weight Quantization) integration file"
 from ..activations import ACT2FN  # 导入激活函数映射

@@ -1,6 +1,6 @@
 # `.\transformers\utils\hub.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权声明和许可信息，指定了代码的版权和许可信息
 #
@@ -349,7 +349,7 @@ def cached_file(
     ```python
     # Download a model weight from the Hub and cache it.
     model_weights_file = cached_file("bert-base-uncased", "pytorch_model.bin")
-    ```
+    ```py
     """
     # 获取旧版本参数中的"use_auth_token"值
     use_auth_token = deprecated_kwargs.pop("use_auth_token", None)
@@ -586,7 +586,7 @@ def get_file_from_repo(
     tokenizer_config = get_file_from_repo("bert-base-uncased", "tokenizer_config.json")
     # This model does not have a tokenizer config so the result will be None.
     tokenizer_config = get_file_from_repo("xlm-roberta-base", "tokenizer_config.json")
-    ```
+    ```py
     """
     # Check if the deprecated argument 'use_auth_token' is provided and assign it to 'use_auth_token' variable
     use_auth_token = deprecated_kwargs.pop("use_auth_token", None)

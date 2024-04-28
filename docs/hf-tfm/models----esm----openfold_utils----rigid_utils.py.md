@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\rigid_utils.py`
 
-```
+```py
 # 版权声明和许可证信息
 
 from __future__ import annotations # 导入未来的注释语法

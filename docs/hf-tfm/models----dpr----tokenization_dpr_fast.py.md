@@ -1,6 +1,6 @@
 # `.\models\dpr\tokenization_dpr_fast.py`
 
-```
+```py
 # 导入必要的模块和函数
 import collections
 from typing import List, Optional, Union

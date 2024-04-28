@@ -1,6 +1,6 @@
 # `.\transformers\models\mixtral\modeling_mixtral.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 基于 EleutherAI 的 GPT-NeoX 库和此库中的 OPT 实现对代码进行修改以适应 GPT-NeoX 和 Meta AI 团队训练模型的轻微架构差异

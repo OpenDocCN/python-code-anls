@@ -1,6 +1,6 @@
 # `.\transformers\models\clip\modeling_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用
@@ -616,7 +616,7 @@ class CLIPTextModel(CLIPPreTrainedModel):  # 定义 CLIPTextModel 类，继承�
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled (EOS token) states
-        ```"""  # 前向传播函数的返回文档字符串，包含示例
+        ```py"""  # 前向传播函数的返回文档字符串，包含示例
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 如果 return_dict 不为 None，则使用 return_dict，否则使用配置中的 use_return_dict
 
         return self.text_model(  # 调用文本模型的前向传播
@@ -809,7 +809,7 @@ class CLIPModel(CLIPPreTrainedModel):
 
         >>> inputs = tokenizer(["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="pt")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         # 使用 CLIP 模型的配置字段替代视觉和文本组件的字段（如果指定了）
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -864,7 +864,7 @@ class CLIPModel(CLIPPreTrainedModel):
         >>> inputs = processor(images=image, return_tensors="pt")
 
         >>> image_features = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
         # Use CLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -961,7 +961,7 @@ class CLIPTextModelWithProjection(CLIPPreTrainedModel):
 
         >>> outputs = model(**inputs)
         >>> text_embeds = outputs.text_embeds
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 获取文本模型的输出
@@ -1052,7 +1052,7 @@ class CLIPVisionModelWithProjection(CLIPPreTrainedModel):
 
         >>> outputs = model(**inputs)
         >>> image_embeds = outputs.image_embeds
-        ```"""
+        ```py"""
         # 如果未提供 return_dict，则使用配置中的默认值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

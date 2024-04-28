@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_audio.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则您不得使用此文件
@@ -49,7 +49,7 @@ class Data2VecAudioConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型
     model_type = "data2vec-audio"
     # 定义一个类，初始化各种参数

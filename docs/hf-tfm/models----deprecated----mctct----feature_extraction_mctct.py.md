@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\feature_extraction_mctct.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 
 # 版权声明

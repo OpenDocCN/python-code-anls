@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\convert_xlm_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码格式为 UTF-8
 # 版权声明

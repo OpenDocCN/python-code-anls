@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\processing_whisper.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 
 # 版权声明

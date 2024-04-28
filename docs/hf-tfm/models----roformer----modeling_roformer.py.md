@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\modeling_roformer.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明和许可证信息，这段代码标明了代码的版权归属和使用许可
 # 根据 Apache 许可证，只有遵守许可证规定才能使用该文件中的代码

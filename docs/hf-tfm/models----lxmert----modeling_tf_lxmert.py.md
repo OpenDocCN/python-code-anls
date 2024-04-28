@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\modeling_tf_lxmert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，包括谷歌 AI 语言团队、HuggingFace Inc. 团队以及 Lxmert 作者
 # 版权声明，包括 NVIDIA 公司，保留所有权利

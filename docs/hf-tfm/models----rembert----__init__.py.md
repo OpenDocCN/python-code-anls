@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权归 The HuggingFace 团队所有
 #

@@ -1,6 +1,6 @@
 # `.\models\efficientformer\convert_efficientformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 在 Apache 许可证 2.0 下授权 huggingface 公司使用

@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\tokenization_rembert.py`
 
-```
+```py
 # coding=utf-8 
 ## 在文件开始的地方，指定文件的编码格式为UTF-8，以防止中文或特殊字符出现乱码。
 # Copyright The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
@@ -268,7 +268,7 @@ class RemBertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

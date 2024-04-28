@@ -1,6 +1,6 @@
 # `.\models\cpm\tokenization_cpm.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，许可证地址为 http://www.apache.org/licenses/LICENSE-2.0
@@ -218,7 +218,7 @@ class CpmTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. An XLNet
         sequence pair mask has the following format:
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```

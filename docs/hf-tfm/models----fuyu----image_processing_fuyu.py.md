@@ -1,6 +1,6 @@
 # `.\models\fuyu\image_processing_fuyu.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 许可协议说明

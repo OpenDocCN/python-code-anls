@@ -1,6 +1,6 @@
 # `.\transformers\models\maskformer\feature_extraction_maskformer.py`
 
-```
+```py
 # 设置文件编码为utf-8
 
 # 版权声明，版权归The HuggingFace Inc.团队所有

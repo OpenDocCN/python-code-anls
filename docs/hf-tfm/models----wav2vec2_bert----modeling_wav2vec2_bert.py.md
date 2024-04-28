@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_bert\modeling_wav2vec2_bert.py`
 
-```
+```py
 # 声明编码格式为 utf-8
 # 版权声明
 # 根据 Apache 2.0 版权协议的规定，在遵守协议的前提下，不得使用此文件
@@ -1205,7 +1205,7 @@ class Wav2Vec2BertForCTC(Wav2Vec2BertPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         labels: Optional[torch.Tensor] = None,
-````
+```py`
     ) -> Union[Tuple, CausalLMOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, target_length)`, *optional*):

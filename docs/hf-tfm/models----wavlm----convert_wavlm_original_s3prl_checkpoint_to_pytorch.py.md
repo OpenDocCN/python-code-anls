@@ -1,6 +1,6 @@
 # `.\transformers\models\wavlm\convert_wavlm_original_s3prl_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入需要的库
 import argparse
 import torch

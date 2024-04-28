@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\modeling_seamless_m4t.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权信息，版权归The HuggingFace Inc.团队所有
 # 根据Apache许可证2.0，只有遵守许可证规定才能使用该文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\configuration_pegasus.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明，版权归 Google 和 The HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 许可使用该文件
@@ -50,7 +50,7 @@ class PegasusConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 PEGASUS
     model_type = "pegasus"

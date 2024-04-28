@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\convert_owlv2_to_hf.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明及许可证信息
 # 这段代码的功能是从原始仓库中转换 OWLv2 检查点

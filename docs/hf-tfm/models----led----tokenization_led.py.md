@@ -1,6 +1,6 @@
 # `.\transformers\models\led\tokenization_led.py`
 
-```
+```py
 # 设定文件编码格式和版权声明
 # 使用 Apache 许可证版本 2.0
 # 可在 http://www.apache.org/licenses/LICENSE-2.0 获取许可证的副本

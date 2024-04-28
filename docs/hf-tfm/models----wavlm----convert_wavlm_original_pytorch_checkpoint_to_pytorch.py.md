@@ -1,6 +1,6 @@
 # `.\transformers\models\wavlm\convert_wavlm_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可文件的要求，对代码进行了版权声明

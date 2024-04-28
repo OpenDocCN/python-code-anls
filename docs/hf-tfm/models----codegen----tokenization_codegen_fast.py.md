@@ -1,6 +1,6 @@
 # `.\models\codegen\tokenization_codegen_fast.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 
 # 导入所需的库
@@ -62,7 +62,7 @@ class CodeGenTokenizerFast(PreTrainedTokenizerFast):
     
     >>> tokenizer(" Hello world")["input_ids"]
     [18435, 995]
-    ```
+    ```py
     
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer, but since
     the model was not pretrained this way, it might yield a decrease in performance.

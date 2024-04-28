@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\configuration_owlv2.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明：此代码版权归 The HuggingFace Inc. 团队所有
 #

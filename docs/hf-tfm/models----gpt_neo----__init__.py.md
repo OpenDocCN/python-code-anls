@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_flax_available, is_torch_available

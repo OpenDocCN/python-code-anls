@@ -1,6 +1,6 @@
 # `.\transformers\models\mega\configuration_mega.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The Mega Authors 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -52,7 +52,7 @@ class MegaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "mega"
     model_type = "mega"

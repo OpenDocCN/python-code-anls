@@ -1,6 +1,6 @@
 # `.\models\focalnet\modeling_focalnet.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权所有 2023 年微软研究和 HuggingFace 公司团队保留所有权利
 # 根据 Apache 许可证 2.0 版本进行许可
@@ -1050,7 +1050,7 @@ class FocalNetBackbone(FocalNetPreTrainedModel, BackboneMixin):
 
         >>> inputs = processor(image, return_tensors="pt")
         >>> outputs = model(**inputs)
-        ```"""
+        ```py"""
         # 根据参数决定是否返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 根据参数决定是否输出隐藏状态

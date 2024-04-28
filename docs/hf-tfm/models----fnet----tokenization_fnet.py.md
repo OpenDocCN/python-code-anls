@@ -1,6 +1,6 @@
 # `.\models\fnet\tokenization_fnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2021年由 Google Research、Google AI、Google Brain 和 HuggingFace 团队共同拥有
 # 根据 Apache 许可证2.0版（“许可证”）授权；除非符合许可证，否则不得使用此文件
@@ -338,7 +338,7 @@ class FNetTokenizer(PreTrainedTokenizer):
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. An FNet sequence
         pair mask has the following format: :
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 | first sequence | second sequence |
         ```
 

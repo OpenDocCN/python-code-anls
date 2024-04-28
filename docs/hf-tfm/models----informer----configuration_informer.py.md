@@ -1,6 +1,6 @@
 # `.\models\informer\configuration_informer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -50,7 +50,7 @@ class InformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "informer"
     attribute_map = {

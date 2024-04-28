@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta\configuration_roberta.py`
 
-```
+```py
 # coding=utf-8
 # 版权信息
 
@@ -51,7 +51,7 @@ class RobertaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 	
     # 模型类型
     model_type = "roberta"

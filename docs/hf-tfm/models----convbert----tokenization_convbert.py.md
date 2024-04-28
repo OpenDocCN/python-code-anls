@@ -1,6 +1,6 @@
 # `.\models\convbert\tokenization_convbert.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可 2.0 版本，禁止未经许可使用此文件
@@ -245,7 +245,7 @@ class ConvBertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

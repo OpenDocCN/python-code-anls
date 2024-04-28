@@ -1,6 +1,6 @@
 # `.\models\layoutxlm\tokenization_layoutxlm.py`
 
-```
+```py
 # 设定文件编码格式为 utf-8
 # 版权声明，遵循 Apache License 2.0
 # 代码逻辑从 LayoutXLM 模型 tokenizer 继承而来

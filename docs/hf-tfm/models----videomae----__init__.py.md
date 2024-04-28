@@ -1,6 +1,6 @@
 # `.\transformers\models\videomae\__init__.py`
 
-```
+```py
 # 引入需要的模块和函数
 from typing import TYPE_CHECKING
 

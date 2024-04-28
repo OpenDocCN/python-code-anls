@@ -1,6 +1,6 @@
 # `.\models\efficientnet\image_processing_efficientnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 使用此文件，除非符合许可证下的条件，否则无法使用本文件

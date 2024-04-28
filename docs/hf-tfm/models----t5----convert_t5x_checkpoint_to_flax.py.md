@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\convert_t5x_checkpoint_to_flax.py`
 
-```
+```py
 # 这是一个用于将 T5X 检查点转换为 JAX/FLAX 模型的脚本
 # 导入必要的库和模块
 import argparse

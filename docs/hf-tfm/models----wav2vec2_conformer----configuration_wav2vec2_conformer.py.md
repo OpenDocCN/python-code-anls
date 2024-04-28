@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_conformer\configuration_wav2vec2_conformer.py`
 
-```
+```py
 # 设定文件编码为utf-8
 # 版权声明及许可协议
 # 本版权声明适用于Fairseq团队与HuggingFace Inc.团队，所有权利均为其所有
@@ -56,7 +56,7 @@ class Wav2Vec2ConformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为wav2vec2-conformer
     model_type = "wav2vec2-conformer"

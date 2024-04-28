@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\configuration_lxmert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和信息
 # 本代码使用 Apache 许可证版本 2.0 进行许可

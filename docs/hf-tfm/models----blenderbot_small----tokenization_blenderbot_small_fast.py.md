@@ -1,6 +1,6 @@
 # `.\models\blenderbot_small\tokenization_blenderbot_small_fast.py`
 
-```
+```py
 # 指定 Python 文件使用 UTF-8 编码
 # 声明版权和许可相关信息，使用 Apache License 2.0
 # 文件头部版权和许可说明

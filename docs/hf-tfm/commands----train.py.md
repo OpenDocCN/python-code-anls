@@ -1,6 +1,6 @@
 # `.\transformers\commands\train.py`
 
-```
+```py
 # 导入必要的模块
 import os  # 导入操作系统模块
 from argparse import ArgumentParser, Namespace  # 导入参数解析相关模块

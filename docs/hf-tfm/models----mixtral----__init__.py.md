@@ -1,6 +1,6 @@
 # `.\transformers\models\mixtral\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权所有©2023年Mixtral AI和The HuggingFace Inc.团队。
 #

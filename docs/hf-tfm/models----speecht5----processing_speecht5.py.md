@@ -1,6 +1,6 @@
 # `.\transformers\models\speecht5\processing_speecht5.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可协议，此处使用 Apache License 2.0
 """SpeechT5 的语音处理器类。"""

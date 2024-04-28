@@ -1,6 +1,6 @@
 # `.\models\convnextv2\configuration_convnextv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明以及许可协议信息
 # 作者：Meta Platforms, Inc. 和 The HuggingFace Inc. team
@@ -81,7 +81,7 @@ class ConvNextV2Config(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型的配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "convnextv2"

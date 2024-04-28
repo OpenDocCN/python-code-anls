@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\convert_regnet_seer_10b_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse
 import json

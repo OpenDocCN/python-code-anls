@@ -1,6 +1,6 @@
 # `.\models\fsmt\modeling_fsmt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证，版本 2.0 进行许可
@@ -169,7 +169,7 @@ FSMT_GENERATION_EXAMPLE = r"""
     >>> outputs = model.generate(input_ids, num_beams=5, num_return_sequences=3)
     >>> tokenizer.decode(outputs[0], skip_special_tokens=True)
     "Machine learning is great, isn't it?"
-    ```
+    ```py
 
 """
 

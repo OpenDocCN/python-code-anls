@@ -1,6 +1,6 @@
 # `.\transformers\models\m2m_100\configuration_m2m_100.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权属于 Fairseq 作者和 HuggingFace Inc. 团队，保留所有权利。
 #
@@ -60,7 +60,7 @@ class M2M100Config(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "m2m_100"
     model_type = "m2m_100"

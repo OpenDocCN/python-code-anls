@@ -1,6 +1,6 @@
 # `.\transformers\models\rag\modeling_rag.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 # 版权所有 2020 年，The RAG Authors 和 The HuggingFace Inc. 团队。

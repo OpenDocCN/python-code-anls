@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\__init__.py`
 
-```
+```py
 # 版权声明以及许可证信息
 # 这段代码实现了对HuggingFace团队的依赖和导入结构进行配置
 

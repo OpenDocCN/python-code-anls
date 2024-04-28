@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_prophetnet\configuration_xlm_prophetnet.py`
 
-```
+```py
 # 指定 Python 文件的字符编码为 UTF-8
 # 声明代码的版权归属于 Microsoft 和 HuggingFace 团队
 # 许可证信息：根据 Apache 许可证第 2 版进行授权，许可证条款规定了代码的使用条件

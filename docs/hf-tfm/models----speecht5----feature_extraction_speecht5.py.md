@@ -1,6 +1,6 @@
 # `.\transformers\models\speecht5\feature_extraction_speecht5.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证，只有在遵守许可证的情况下才能使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\modeling_flax_whisper.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 #
@@ -1033,7 +1033,7 @@ class FlaxWhisperPreTrainedModel(FlaxPreTrainedModel):
         >>> inputs = processor(ds[0]["audio"]["array"], return_tensors="np")
         >>> input_features = inputs.input_features
         >>> encoder_outputs = model.encode(input_features=input_features)
-        ```"""
+        ```py"""
 
         # 设置输出注意力的开关
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
@@ -1408,7 +1408,7 @@ FLAX_WHISPER_CONDITIONAL_GENERATION_DOCSTRING = r"""
     >>> transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
     >>> transcription
     ' Mr. Quilter is the apostle of the middle classes, and we are glad to welcome his gospel.'
-    ```
+    ```py
 """
 
 # 用新的文档字符串替换 FlaxWhisperForConditionalGeneration 类的输入和输出文档字符串

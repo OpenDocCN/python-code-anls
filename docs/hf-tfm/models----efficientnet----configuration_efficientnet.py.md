@@ -1,6 +1,6 @@
 # `.\models\efficientnet\configuration_efficientnet.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 版权所有2023年 Google Research, Inc. 和 The HuggingFace Inc. team. 保留所有权利。
@@ -54,7 +54,7 @@ class EfficientNetConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "efficientnet"

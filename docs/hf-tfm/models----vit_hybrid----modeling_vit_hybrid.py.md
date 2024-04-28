@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_hybrid\modeling_vit_hybrid.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 基于 Apache License, Version 2.0 开源许可协议

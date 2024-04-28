@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_text_dual_encoder\configuration_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -61,7 +61,7 @@ class VisionTextDualEncoderConfig(PretrainedConfig):
     >>> # 从预训练文件夹加载模型和配置
     >>> vision_text_config = VisionTextDualEncoderConfig.from_pretrained("vit-bert")
     >>> model = VisionTextDualEncoderModel.from_pretrained("vit-bert", config=vision_text_config)
-    ```"""
+    ```py"""
 
     model_type = "vision-text-dual-encoder"
     is_composition = True

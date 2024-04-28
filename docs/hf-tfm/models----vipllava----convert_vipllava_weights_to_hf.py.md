@@ -1,6 +1,6 @@
 # `.\transformers\models\vipllava\convert_vipllava_weights_to_hf.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 解析命令行参数
 

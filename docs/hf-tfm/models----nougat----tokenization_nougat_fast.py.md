@@ -97,7 +97,7 @@ def markdown_compatible(text: str) -> str:
         text,
     )
     # 使用正则表达式替换文本中的算法块格式，将其格式化为 Markdown 代码块形式
-    text = re.sub(r"```\s*(.+?)\s*```", r"```\n\1\n```", text, flags=re.S)
+    text = re.sub(r"```py\s*(.+?)\s*```", r"```py\n\1\n```", text, flags=re.S)
 
     return text
 # 定义函数，用于规范化类似列表项的文本行
@@ -512,7 +512,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
 
         Example:
 
-        ```python
+        ```py
         correct_tables("\\begin{table} \\begin{tabular}{l l} & \\ \\end{tabular} \\end{table}")
         "\\begin{table}\n\\begin{tabular}{l l} & \\ \\end{tabular}\n\\end{table}"
         ```

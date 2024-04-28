@@ -1,6 +1,6 @@
 # `.\models\deberta\modeling_deberta.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明，采用 Apache 2.0 协议
 # 导入必要的模块和类
@@ -99,7 +99,7 @@ class XSoftmax(torch.autograd.Function):
     >>> dim = -1
 
     >>> y = XSoftmax.apply(x, mask, dim)
-    ```"""
+    ```py"""
 
 # 定义一个静态方法，用于实现 softmax 操作
 class XSoftmax:

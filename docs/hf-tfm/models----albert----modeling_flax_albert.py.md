@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\modeling_flax_albert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google AI、Google Brain 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证规定，否则不得使用此文件
@@ -911,7 +911,7 @@ FLAX_ALBERT_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxAlbertForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")

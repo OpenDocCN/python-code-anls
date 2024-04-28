@@ -1,6 +1,6 @@
 # `.\transformers\audio_utils.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 2023 年的 HuggingFace Inc. 团队和 librosa & torchaudio 作者所有。
 #
@@ -644,7 +644,7 @@ def stft(frames: np.array, windowing_function: np.array, fft_window_size: int = 
     >>> hop_length = 2
     >>> framed_audio = fram_wave(audio, hop_length, fft_window_size)
     >>> spectrogram = stft(framed_audio, np.hanning(fft_window_size + 1))
-    ```
+    ```py
 
     Returns:
         spectrogram (`np.ndarray`):

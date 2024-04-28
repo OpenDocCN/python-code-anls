@@ -1,6 +1,6 @@
 # `.\transformers\onnx\utils.py`
 
-```
+```py
 # 导入所需模块和类
 from ctypes import c_float, sizeof
 from enum import Enum

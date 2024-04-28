@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\processing_owlv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用本文件，除非符合许可证的要求，否则不能使用

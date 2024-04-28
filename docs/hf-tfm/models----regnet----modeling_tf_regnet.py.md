@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\modeling_tf_regnet.py`
 
-```
+```py
 # 这是一个 TensorFlow 实现的 RegNet 模型的源代码
 # 它包含了一些导入、常量定义和一个自定义的 Conv 层
 

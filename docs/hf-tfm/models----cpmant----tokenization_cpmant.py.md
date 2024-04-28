@@ -1,6 +1,6 @@
 # `.\models\cpmant\tokenization_cpmant.py`
 
-```
+```py
 # Tokenization classes for CPMAnt: CPMAnt的分词类
 
 

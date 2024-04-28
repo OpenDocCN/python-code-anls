@@ -1,6 +1,6 @@
 # `.\transformers\models\mbart\modeling_mbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Facebook AI 研究团队和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则不得使用此文件
@@ -565,7 +565,7 @@ MBART_GENERATION_EXAMPLE = r"""
     >>> generated_ids = model.generate(**inputs, num_beams=4, max_length=5)
     >>> tokenizer.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
     '42 este răspuns'
-    ```
+    ```py
 
     Mask filling example:
 
@@ -587,7 +587,7 @@ MBART_GENERATION_EXAMPLE = r"""
 
     >>> tokenizer.decode(predictions).split()
     ['nett', 'sehr', 'ganz', 'nicht', 'so']
-    ```
+    ```py
 """
 
 # MBART_INPUTS_DOCSTRING 是一个空字符串，用于描述 MBart 模型的输入参数

@@ -1,6 +1,6 @@
 # `.\transformers\models\byt5\convert_byt5_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 T5 作者和 HuggingFace 公司所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件

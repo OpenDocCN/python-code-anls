@@ -1,6 +1,6 @@
 # `.\transformers\generation\streamers.py`
 
-```
+```py
 # 导入需要的模块
 from queue import Queue
 from typing import TYPE_CHECKING, Optional
@@ -57,7 +57,7 @@ class TextStreamer(BaseStreamer):
         >>> # Despite returning the usual output, the streamer will also print the generated text to stdout.
         >>> _ = model.generate(**inputs, streamer=streamer, max_new_tokens=20)
         An increasing sequence: one, two, three, four, five, six, seven, eight, nine, ten, eleven,
-        ```
+        ```py
     """
 
     # 初始化文本流处理器
@@ -189,7 +189,7 @@ class TextIteratorStreamer(TextStreamer):
         ...     generated_text += new_text
         >>> generated_text
         'An increasing sequence: one, two, three, four, five, six, seven, eight, nine, ten, eleven,'
-        ```
+        ```py
     """
 
     def __init__(

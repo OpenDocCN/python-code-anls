@@ -1,6 +1,6 @@
 # `.\transformers\commands\pt_to_tf.py`
 
-```
+```py
 # 导入模块
 import inspect  # 导入 inspect 模块，用于检查对象的属性和方法
 import os  # 导入 os 模块，提供了一种与操作系统交互的方法

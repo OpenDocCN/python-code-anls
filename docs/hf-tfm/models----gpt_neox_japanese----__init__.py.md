@@ -1,6 +1,6 @@
 # `.\models\gpt_neox_japanese\__init__.py`
 
-```
+```py
 # 导入 TYPE_CHECKING 模块，用于类型检查
 from typing import TYPE_CHECKING
 

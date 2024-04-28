@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\tokenization_pegasus_fast.py`
 
-```
+```py
 # 设定文件编码为 utf-8
 # 版权声明及许可信息
 # 声明 Tokenization class 用于 PEGASUS 模型

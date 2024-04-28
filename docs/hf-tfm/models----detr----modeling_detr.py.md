@@ -1,6 +1,6 @@
 # `.\models\detr\modeling_detr.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明
 # 根据Apache许可版本2.0（“许可证”）授权

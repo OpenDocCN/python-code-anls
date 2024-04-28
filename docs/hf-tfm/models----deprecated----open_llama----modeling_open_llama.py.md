@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\modeling_open_llama.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # - 2023 年 EleutherAI 和 HuggingFace Inc. 团队保留所有权利

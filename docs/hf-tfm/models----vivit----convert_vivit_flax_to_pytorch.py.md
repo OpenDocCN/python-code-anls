@@ -1,6 +1,6 @@
 # `.\transformers\models\vivit\convert_vivit_flax_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明，使用 Apache 许可证 2.0 版本
 # 创作团队为 HuggingFace Inc.，2023年

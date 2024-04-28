@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\modeling_tf_speech_to_text.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 #

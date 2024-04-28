@@ -1,6 +1,6 @@
 # `.\models\funnel\tokenization_funnel_fast.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 
 # 引入必要的库
@@ -232,7 +232,7 @@ class FunnelTokenizerFast(PreTrainedTokenizerFast):
             output += token_ids_1 + [self.sep_token_id]
 
         return output
-```  
+```py  
     # 从给定序列中创建用于序列对分类任务的token type ids
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
@@ -243,7 +243,7 @@ class FunnelTokenizerFast(PreTrainedTokenizerFast):
         ```
         2 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列       | 第二个序列     |
-        ```
+        ```py
 
         如果`token_ids_1`为`None`，则此方法仅返回掩码的第一部分(0)。
 

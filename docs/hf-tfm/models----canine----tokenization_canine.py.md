@@ -1,6 +1,6 @@
 # `.\transformers\models\canine\tokenization_canine.py`
 
-```
+```py
 # coding=utf-8
 # 该文件的版权声明和许可证信息
 
@@ -227,7 +227,7 @@ class CanineTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列        | 第二个序列     |
-        ```
+        ```py
 
         如果 `token_ids_1` 是 `None`，则该方法仅返回掩码的第一部分（全为0）。
 

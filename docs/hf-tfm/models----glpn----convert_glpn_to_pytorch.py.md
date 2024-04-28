@@ -1,6 +1,6 @@
 # `.\models\glpn\convert_glpn_to_pytorch.py`
 
-```
+```py
 # 设置代码文件的编码格式为UTF-8
 # 版权声明，指明了代码的版权归属和使用许可
 # 引入必要的库和模块

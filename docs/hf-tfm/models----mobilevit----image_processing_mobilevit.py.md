@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevit\image_processing_mobilevit.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 # 定义了一个用于MobileViT的图像处理类

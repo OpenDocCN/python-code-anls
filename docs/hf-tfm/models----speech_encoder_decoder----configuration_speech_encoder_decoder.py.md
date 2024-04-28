@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_encoder_decoder\configuration_speech_encoder_decoder.py`
 
-```
+```py
 # 引入必要的库和模块
 from ...configuration_utils import PretrainedConfig  # 从配置工具中导入预训练配置类
 from ...utils import logging  # 从工具集中导入日志模块
@@ -52,7 +52,7 @@ class SpeechEncoderDecoderConfig(PretrainedConfig):
     >>> # 从预训练文件夹加载模型和配置
     >>> encoder_decoder_config = SpeechEncoderDecoderConfig.from_pretrained("my-model")
     >>> model = SpeechEncoderDecoderModel.from_pretrained("my-model", config=encoder_decoder_config)
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "speech-encoder-decoder"

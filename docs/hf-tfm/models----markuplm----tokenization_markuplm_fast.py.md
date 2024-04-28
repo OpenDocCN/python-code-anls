@@ -1,6 +1,6 @@
 # `.\transformers\models\markuplm\tokenization_markuplm_fast.py`
 
-```
+```py
 # 设置文件编码
 # 版权声明
 # 根据Apache许可证2.0版发布，仅允许在遵守许可证的情况下使用该文件
@@ -488,7 +488,7 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
         return_attention_mask: Optional[bool] = None,
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-```  
+```py  
     ) -> List[int]:
         """
         Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and

@@ -1,6 +1,6 @@
 # `.\models\clip\tokenization_clip.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache 2.0许可证，除非符合许可证要求，否则不得使用此文件

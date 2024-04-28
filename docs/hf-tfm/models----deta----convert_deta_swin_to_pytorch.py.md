@@ -1,6 +1,6 @@
 # `.\models\deta\convert_deta_swin_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明，许可证信息，以及规则
 # 导入需要的库

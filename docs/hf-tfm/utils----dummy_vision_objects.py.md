@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_vision_objects.py`
 
-```
+```py
 # 该文件是通过命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入依赖的模块
 from ..utils import DummyObject, requires_backends

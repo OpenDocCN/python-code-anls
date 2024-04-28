@@ -1,6 +1,6 @@
 # `.\transformers\models\bit\image_processing_bit.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，声明代码版权归 The HuggingFace Inc. 团队所有，保留所有权利
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证要求，否则禁止使用此文件

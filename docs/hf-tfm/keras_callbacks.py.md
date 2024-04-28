@@ -1,6 +1,6 @@
 # `.\transformers\keras_callbacks.py`
 
-```
+```py
 import logging
 import os
 from pathlib import Path
@@ -41,13 +41,13 @@ class KerasMetricCallback(Callback):
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         result = rouge_metric.compute(predictions=decoded_predictions, references=decoded_labels)
         return {key: value.mid.fmeasure * 100 for key, value in result.items()}
-    ```
+    ```py
 
     The above function will return a dict containing values which will be logged like any other Keras metric:
 
     ```
     {'rouge1': 37.4199, 'rouge2': 13.9768, 'rougeL': 34.361, 'rougeLsum': 35.0781
-    ```
+    ```py
     Args:
         metric_fn (`Callable`):
             用户提供的度量函数。将以两个参数 - `predictions` 和 `labels` 调用它。这些参数包含模型的输出和数据集中的匹配标签。应返回一个字典，将度量名称映射到数值。

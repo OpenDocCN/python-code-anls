@@ -1,6 +1,6 @@
 # `.\models\flava\processing_flava.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明和许可信息
 """

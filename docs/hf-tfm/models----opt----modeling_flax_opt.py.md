@@ -1,6 +1,6 @@
 # `.\transformers\models\opt\modeling_flax_opt.py`
 
-```
+```py
 # 导入必要的库和模块
 from functools import partial  # 导入 partial 函数，用于创建偏函数
 from typing import Optional, Tuple  # 导入类型提示模块

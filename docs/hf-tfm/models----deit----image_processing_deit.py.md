@@ -1,6 +1,6 @@
 # `.\models\deit\image_processing_deit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证，除非符合许可证规定，否则不得使用此文件

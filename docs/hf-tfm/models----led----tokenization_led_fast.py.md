@@ -1,6 +1,6 @@
 # `.\transformers\models\led\tokenization_led_fast.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可 2.0 版本获取许可文件

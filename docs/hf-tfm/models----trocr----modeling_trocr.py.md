@@ -1,6 +1,6 @@
 # `.\transformers\models\trocr\modeling_trocr.py`
 
-```
+```py
 # 设置编码格式
 # 版权声明
 # 根据Apache许可证2.0版许可，除非符合许可证，否则您不能使用此文件

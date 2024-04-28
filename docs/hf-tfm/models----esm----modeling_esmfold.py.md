@@ -1,6 +1,6 @@
 # `.\models\esm\modeling_esmfold.py`
 
-```
+```py
 # 编码声明，指明代码文件采用的编码格式为utf-8
 # 版权声明
 import math  # 导入 math 模块

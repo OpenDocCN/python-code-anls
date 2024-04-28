@@ -1,6 +1,6 @@
 # `.\models\dpr\tokenization_dpr.py`
 
-```
+```py
 # 设置文件编码和版权信息
 # 版权声明
 # 许可证信息

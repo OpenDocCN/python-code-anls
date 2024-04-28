@@ -1,6 +1,6 @@
 # `.\models\glpn\modeling_glpn.py`
 
-```
+```py
 # 定义模型的编码，使用 UTF-8 编码格式
 # 版权声明，版权归 KAIST 和 HuggingFace Inc. 团队所有
 # 遵循 Apache 许可证 2.0 版本，除非符合许可证，否则禁止使用此文件
@@ -843,7 +843,7 @@ class GLPNForDepthEstimation(GLPNPreTrainedModel):
         >>> output = prediction.squeeze().cpu().numpy()
         >>> formatted = (output * 255 / np.max(output)).astype("uint8")
         >>> depth = Image.fromarray(formatted)
-        ```"""
+        ```py"""
         
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         output_hidden_states = (

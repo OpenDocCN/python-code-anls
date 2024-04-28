@@ -1,6 +1,6 @@
 # `.\models\electra\modeling_tf_electra.py`
 
-```
+```py
 # 设置编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权
@@ -1181,7 +1181,7 @@ class TFElectraForPreTraining(TFElectraPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFElectraForPreTraining
 

@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\token_classification.py`
 
-```
+```py
     # 添加结束文档字符串的装饰器，参数为 PIPELINE_INIT_ARGS 中定义的参数
     # 这是一个文档字符串,提供了一些参数的说明
     r"""
@@ -46,7 +46,7 @@ class TokenClassificationPipeline(ChunkPipeline):
     >>> syntaxer = pipeline(model="vblagoje/bert-english-uncased-finetuned-pos", aggregation_strategy="simple")
     >>> syntaxer("My name is Sarah and I live in London")
     [{'entity_group': 'PRON', 'score': 0.999, 'word': 'my', 'start': 0, 'end': 2}, {'entity_group': 'NOUN', 'score': 0.997, 'word': 'name', 'start': 3, 'end': 7}, {'entity_group': 'AUX', 'score': 0.994, 'word': 'is', 'start': 8, 'end': 10}, {'entity_group': 'PROPN', 'score': 0.999, 'word': 'sarah', 'start': 11, 'end': 16}, {'entity_group': 'CCONJ', 'score': 0.999, 'word': 'and', 'start': 17, 'end': 20}, {'entity_group': 'PRON', 'score': 0.999, 'word': 'i', 'start': 21, 'end': 22}, {'entity_group': 'VERB', 'score': 0.998, 'word': 'live', 'start': 23, 'end': 27}, {'entity_group': 'ADP', 'score': 0.999, 'word': 'in', 'start': 28, 'end': 30}, {'entity_group': 'PROPN', 'score': 0.999, 'word': 'london', 'start': 31, 'end': 37}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
     在[pipeline tutorial](../pipeline_tutorial)中了解更多关于使用管道的基础知识。

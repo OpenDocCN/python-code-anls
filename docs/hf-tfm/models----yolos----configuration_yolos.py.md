@@ -1,6 +1,6 @@
 # `.\transformers\models\yolos\configuration_yolos.py`
 
-```
+```py
 # 导入所需的库和模块
 from collections import OrderedDict
 from typing import Mapping
@@ -40,7 +40,7 @@ class YolosConfig(PretrainedConfig):
 
     # 访问模型配置
     configuration = model.config
-    ```
+    ```py
     """
 
     model_type = "yolos"

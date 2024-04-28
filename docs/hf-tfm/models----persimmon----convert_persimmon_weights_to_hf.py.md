@@ -1,6 +1,6 @@
 # `.\transformers\models\persimmon\convert_persimmon_weights_to_hf.py`
 
-```
+```py
 # 导入所需模块
 import argparse   # 导入命令行参数解析模块
 import os    # 导入操作系统模块

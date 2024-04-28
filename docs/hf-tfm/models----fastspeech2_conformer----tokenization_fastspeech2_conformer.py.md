@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\tokenization_fastspeech2_conformer.py`
 
-```
+```py
 # 设置代码文件的编码格式为utf-8
 # 版权声明部分，保留版权和许可信息
 # 加载必要库和模块

@@ -1,6 +1,6 @@
 # `.\transformers\models\switch_transformers\convert_big_switch.py`
 
-```
+```py
 import argparse
 import json
 import os

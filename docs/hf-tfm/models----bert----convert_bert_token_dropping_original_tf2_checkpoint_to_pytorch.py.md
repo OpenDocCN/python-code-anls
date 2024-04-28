@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\convert_bert_token_dropping_original_tf2_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 

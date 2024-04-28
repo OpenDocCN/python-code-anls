@@ -1,6 +1,6 @@
 # `.\transformers\modeling_tf_outputs.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 # 导入数据类模块

@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\convert_gptsan_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2023 年由 HuggingFace Inc. 团队版权所有
 #

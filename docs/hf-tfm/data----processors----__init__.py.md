@@ -1,6 +1,6 @@
 # `.\transformers\data\processors\__init__.py`
 
-```
+```py
 # 导入 HuggingFace 库中的相关模块和函数
 
 # 从 HuggingFace 库中的 glue 模块中导入函数和类

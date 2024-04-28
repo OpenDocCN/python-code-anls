@@ -1,6 +1,6 @@
 # `.\transformers\models\plbart\convert_plbart_original_checkpoint_to_torch.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权声明和许可信息，指定了代码的版权和许可信息
 # 从库中导入必要的模块和类

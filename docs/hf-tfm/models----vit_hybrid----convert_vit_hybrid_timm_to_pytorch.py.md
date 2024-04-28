@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_hybrid\convert_vit_hybrid_timm_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 #

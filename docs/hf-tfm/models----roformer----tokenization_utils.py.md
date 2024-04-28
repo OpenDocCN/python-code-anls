@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\tokenization_utils.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有，保留所有权利
 # 根据 Apache 许可证，除非符合许可证规定，否则不得使用此文件

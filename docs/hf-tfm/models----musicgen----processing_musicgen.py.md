@@ -1,6 +1,6 @@
 # `.\transformers\models\musicgen\processing_musicgen.py`
 
-```
+```py
 # 定义编码音乐的处理器类，继承了ProcessorMixin，其中包含了一些处理音乐数据的方法
 class MusicgenProcessor(ProcessorMixin):
     """

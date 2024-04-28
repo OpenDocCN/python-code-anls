@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\tokenization_gptsan_japanese.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 许可
@@ -104,7 +104,7 @@ class GPTSanJapaneseTokenizer(PreTrainedTokenizer):
     >>> # Both 慶応 and 慶應 are decoded to 慶応
     >>> tokenizer.decode(tokenizer("吾輩は猫である🐯。実は慶応(慶應)大学出身")["input_ids"])
     '吾輩は猫である🐯。実は慶応(慶応)大学出身'
-    ```
+    ```py
 
     Prefix-LM 示例:
 
@@ -118,7 +118,7 @@ class GPTSanJapaneseTokenizer(PreTrainedTokenizer):
     >>> # Mask for Prefix-LM inputs
     >>> tokenizer("実は慶応(慶應)大学出身", prefix_text="吾輩は猫である🐯。")["token_type_ids"]
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ```
+    ```py
 
     批量编码 示例:
 
@@ -136,7 +136,7 @@ class GPTSanJapaneseTokenizer(PreTrainedTokenizer):
     >>> # Mask for padding
     >>> tokenizer([["武田信玄", "は、"], ["織田信長", "の配下の、"]], padding=True)["attention_mask"]
     [[1, 1, 1, 1, 1, 1, 0, 0], [1, 1, 1, 1, 1, 1, 1, 1]]
-    ```
+    ```py
     Args:
         vocab_file (`str`):
             包含词汇表的文件。
@@ -334,7 +334,7 @@ class GPTSanJapaneseTokenizer(PreTrainedTokenizer):
         >>> x_token = tokenizer("ｳｴ", prefix_text="ｱｲ")
         >>> # input_ids:      | SOT | ｱ | ｲ | SEG | ｳ | ｴ |
         >>> # token_type_ids: | 1   | 1 | 1 | 0   | 0 | 0 |
-        ```"""
+        ```py"""
         # 计算前缀长度
         prefix_len = 0
         if self.sep_token in self.vocab:  # 如果分隔符在词汇表中

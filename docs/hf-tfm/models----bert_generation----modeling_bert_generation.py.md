@@ -1,6 +1,6 @@
 # `.\transformers\models\bert_generation\modeling_bert_generation.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 # 版权所有 2020 年 Google AI 语言团队作者和 HuggingFace Inc. 团队。

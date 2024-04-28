@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v2\image_processing_mobilenet_v2.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Dict, List, Optional, Tuple, Union
 import numpy as np

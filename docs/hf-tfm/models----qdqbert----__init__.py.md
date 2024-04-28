@@ -1,6 +1,6 @@
 # `.\transformers\models\qdqbert\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # NVIDIA 公司和 HuggingFace 团队版权所有
 #

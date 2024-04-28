@@ -1,6 +1,6 @@
 # `.\transformers\models\clap\modeling_clap.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 """ PyTorch CLAP 模型。"""
@@ -140,7 +140,7 @@ def contrastive_loss(logits: torch.Tensor) -> torch.Tensor:
 class ClapTextModelOutput(ModelOutput):
     """
     包含文本模型输出的基类，还包含最后隐藏状态的池化。
-``` 
+```py 
     Args:
         text_embeds (`torch.FloatTensor` of shape `(batch_size, output_dim)` *optional* returned when model is initialized with `with_projection=True`):
             模型使用 projection 层处理 pooler_output 后得到的文本嵌入。
@@ -1927,7 +1927,7 @@ class ClapTextModel(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, ClapModel
 
         >>> model = ClapModel.from_pretrained("laion/clap-htsat-unfused")
@@ -1980,7 +1980,7 @@ class ClapTextModel(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoFeatureExtractor, ClapModel
         >>> import torch
 
@@ -2076,7 +2076,7 @@ class ClapTextModelWithProjection(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, ClapTextModelWithProjection
 
         >>> model = ClapTextModelWithProjection.from_pretrained("laion/clap-htsat-unfused")
@@ -2163,7 +2163,7 @@ class ClapAudioModelWithProjection(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from datasets import load_dataset
         >>> from transformers import ClapAudioModelWithProjection, ClapProcessor
 

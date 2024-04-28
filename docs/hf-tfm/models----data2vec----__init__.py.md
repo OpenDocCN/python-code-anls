@@ -1,6 +1,6 @@
 # `.\models\data2vec\__init__.py`
 
-```
+```py
 # 版权声明及许可信息
 
 from typing import TYPE_CHECKING  # 导入类型检查模块

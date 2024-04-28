@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta\__init__.py`
 
-```
+```py
 # 版权声明和许可协议信息
 
 # 引入类型检查模块

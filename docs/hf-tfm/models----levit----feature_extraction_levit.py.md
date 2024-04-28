@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\feature_extraction_levit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明信息
 # 版权所有©2022 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队。保留所有权利。

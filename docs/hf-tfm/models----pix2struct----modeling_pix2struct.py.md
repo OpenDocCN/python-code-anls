@@ -1,6 +1,6 @@
 # `.\transformers\models\pix2struct\modeling_pix2struct.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -602,7 +602,7 @@ class Pix2StructVisionModel(Pix2StructPreTrainedModel):
         >>> last_hidden_states = outputs.last_hidden_state
         >>> list(last_hidden_states.shape)
         [1, 2048, 768]
-        ```
+        ```py
         """
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (

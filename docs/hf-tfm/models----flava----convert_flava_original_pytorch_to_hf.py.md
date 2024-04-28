@@ -1,6 +1,6 @@
 # `.\models\flava\convert_flava_original_pytorch_to_hf.py`
 
-```
+```py
 # 设置 Python 文件编码格式为 utf-8
 # 版权声明
 # 2022 年版权由 Meta Platforms 作者和 HuggingFace 团队所有。保留所有权利。

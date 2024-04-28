@@ -1,6 +1,6 @@
 # `.\transformers\models\rag\configuration_rag.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，版权属于 RAG 作者和 HuggingFace 公司团队
 # 基于 Apache 许可证 2.0 版本发布，除许可证规定外不得使用此文件

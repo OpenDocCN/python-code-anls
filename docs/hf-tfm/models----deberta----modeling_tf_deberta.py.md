@@ -1,6 +1,6 @@
 # `.\models\deberta\modeling_tf_deberta.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明，2021年由 Microsoft 和 HuggingFace Inc. 团队保留所有权利
 #
@@ -240,7 +240,7 @@ class TFDebertaSelfOutput(tf.keras.layers.Layer):
             # 在tf的name_scope下，使用self.dropout.name为名字，对dropout层进行构建，输入形状为None
             with tf.name_scope(self.dropout.name):
                 self.dropout.build(None)
-``` python
+```py python
 # 创建一个名为TFDebertaAttention的类，该类继承自tf.keras.layers.Layer
 class TFDebertaAttention(tf.keras.layers.Layer):
     # 定义初始化函数，其中config是DebertaConfig的实例

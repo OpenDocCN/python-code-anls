@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\processing_layoutlmv3.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 2022 年 HuggingFace Inc. 团队所有。
 #

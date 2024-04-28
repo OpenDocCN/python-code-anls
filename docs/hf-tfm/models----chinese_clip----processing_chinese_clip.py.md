@@ -1,6 +1,6 @@
 # `.\transformers\models\chinese_clip\processing_chinese_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 OFA-Sys 团队作者和 HuggingFace 团队所有
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\camembert\modeling_tf_camembert.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的编码声明，使用 UTF-8 编码
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.

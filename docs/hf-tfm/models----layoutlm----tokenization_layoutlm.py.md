@@ -1,6 +1,6 @@
 # `.\models\layoutlm\tokenization_layoutlm.py`
 
-```
+```py
 # 设置编码为 utf-8
 # 版权说明
 
@@ -270,7 +270,7 @@ class LayoutLMTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

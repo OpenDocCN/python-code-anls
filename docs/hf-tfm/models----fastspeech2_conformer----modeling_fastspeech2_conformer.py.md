@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\modeling_fastspeech2_conformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache License, Version 2.0 进行授权
@@ -894,7 +894,7 @@ class FastSpeech2ConformerEncoder(nn.Module):
         return BaseModelOutput(
             last_hidden_state=hidden_states, hidden_states=all_hidden_states, attentions=all_self_attentions
         )
-```  
+```py  
 # 定义一个计算 FastSpeech2Conformer 模型损失的类
 class FastSpeech2ConformerLoss(nn.Module):
     def __init__(self, config: FastSpeech2ConformerConfig):

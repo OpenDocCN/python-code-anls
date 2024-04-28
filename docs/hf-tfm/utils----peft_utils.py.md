@@ -1,6 +1,6 @@
 # `.\transformers\utils\peft_utils.py`
 
-```
+```py
 # 导入必要的模块
 import importlib
 import os

@@ -1,6 +1,6 @@
 # `.\transformers\models\nllb_moe\modeling_nllb_moe.py`
 
-```
+```py
 # 设置文件编码格式为UTF-8
 # 版权声明
 # 根据Apache许可证版本2.0授权使用该文件

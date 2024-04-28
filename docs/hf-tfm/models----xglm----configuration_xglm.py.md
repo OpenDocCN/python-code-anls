@@ -1,6 +1,6 @@
 # `.\transformers\models\xglm\configuration_xglm.py`
 
-```
+```py
 # 导入必要的模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -68,7 +68,7 @@ class XGLMConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 定义模型类型为"xglm"
     model_type = "xglm"

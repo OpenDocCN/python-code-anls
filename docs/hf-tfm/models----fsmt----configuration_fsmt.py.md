@@ -1,6 +1,6 @@
 # `.\models\fsmt\configuration_fsmt.py`
 
-```
+```py
 # 设置代码文件的编码格式为utf-8
 # 版权声明
 # 根据Apache 2.0许可证，许可使用本文件。详细信息请访问 http://www.apache.org/licenses/LICENSE-2.0
@@ -57,7 +57,7 @@ class FSMTConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "fsmt"
     attribute_map = {"num_attention_heads": "encoder_attention_heads", "hidden_size": "d_model"}

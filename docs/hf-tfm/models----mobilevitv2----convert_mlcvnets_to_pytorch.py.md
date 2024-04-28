@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevitv2\convert_mlcvnets_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 # 根据 Apache 许可证 2.0 版本进行授权，除非符合许可证，否则不得使用该文件，可以在以下链接获取许可证副本

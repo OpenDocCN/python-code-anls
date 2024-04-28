@@ -1,6 +1,6 @@
 # `.\transformers\models\rwkv\modeling_rwkv.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 版权声明
@@ -380,7 +380,7 @@ class RwkvSelfAttention(nn.Module):
 
         # 返回输出结果和状态
         return self.output(receptance * rwkv), state
-```  
+```py  
 # 定义一个名为RwkvFeedForward的类，继承自nn.Module类
 class RwkvFeedForward(nn.Module):
     def __init__(self, config, layer_id=0):

@@ -1,6 +1,6 @@
 # `.\transformers\modeling_attn_mask_utils.py`
 
-```
+```py
 # 导入所需模块和类
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
@@ -29,7 +29,7 @@ class AttentionMaskConverter:
             [-3.4028e+38, -3.4028e+38, -3.4028e+38, -3.4028e+38, -3.4028e+38],
             [-3.4028e+38, -3.4028e+38, -3.4028e+38,  0.0000e+00, -3.4028e+38],
             [-3.4028e+38, -3.4028e+38, -3.4028e+38,  0.0000e+00,  0.0000e+00]]]])
-    ```
+    ```py
 
     参数:
         is_causal (`bool`):

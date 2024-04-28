@@ -1,6 +1,6 @@
 # `.\transformers\models\nystromformer\__init__.py`
 
-```
+```py
 # 声明脚本版权信息
 # 版权 2022 年 HuggingFace 团队。保留所有权利。
 # 根据 Apache 许可证第 2.0 版（“许可证”）许可;

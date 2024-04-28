@@ -1,6 +1,6 @@
 # `.\transformers\models\barthez\tokenization_barthez_fast.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明和许可信息
 """ Tokenization classes for the BARThez model."""

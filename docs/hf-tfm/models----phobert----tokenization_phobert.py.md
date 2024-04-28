@@ -1,6 +1,6 @@
 # `.\transformers\models\phobert\tokenization_phobert.py`
 
-```
+```py
 # 设定文件编码为 utf-8
 # 版权声明，引用 VinAI Research 和 HuggingFace Inc. 团队的版权声明
 # 使用 Apache 许可证 2.0 版本授权

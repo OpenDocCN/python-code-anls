@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\zero_shot_object_detection.py`
 
-```
+```py
 # 从 typing 模块中导入 Any, Dict, List, Union 类型
 # 从 ..utils 模块中导入 add_end_docstrings, is_torch_available, is_vision_available, logging, requires_backends 函数
 # 从 .base 模块中导入 PIPELINE_INIT_ARGS, ChunkPipeline 类
@@ -47,7 +47,7 @@ class ZeroShotObjectDetectionPipeline(ChunkPipeline):
     ...     candidate_labels=["head", "bird"],
     ... )
     [{'score': 0.119, 'label': 'bird', 'box': {'xmin': 71, 'ymin': 170, 'xmax': 410, 'ymax': 508}}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\realm\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 此文件版权归 2022 年 HuggingFace 团队所有，保留所有权利
 # 根据 Apache 许可证版本 2.0 许可

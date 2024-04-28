@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\convert_albert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 引入 argparse 模块，用于解析命令行参数
 import argparse
 # 引入 torch 模块

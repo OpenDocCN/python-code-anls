@@ -1,6 +1,6 @@
 # `.\transformers\optimization.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The Google AI Language Team Authors 和 The HuggingFace Inc. team 所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证规定，否则不得使用此文件
@@ -633,19 +633,19 @@ class Adafactor(Optimizer):
 
     ```python
     Adafactor(model.parameters(), scale_parameter=False, relative_step=False, warmup_init=False, lr=1e-3)
-    ```
+    ```py
 
     其他人报告以下组合效果很好:
 
     ```python
     Adafactor(model.parameters(), scale_parameter=True, relative_step=True, warmup_init=True, lr=None)
-    ```
+    ```py
 
     当使用 `lr=None` 与 [`Trainer`] 时，您很可能需要使用 [`~optimization.AdafactorSchedule`]
     调度器如下:
 
     ```python
-    ```
+    ```py
     # 从transformers.optimization模块中导入Adafactor和AdafactorSchedule类
     from transformers.optimization import Adafactor, AdafactorSchedule
     

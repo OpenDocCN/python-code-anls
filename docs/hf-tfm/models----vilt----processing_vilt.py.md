@@ -1,6 +1,6 @@
 # `.\transformers\models\vilt\processing_vilt.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 HuggingFace Inc. 团队所有
 #

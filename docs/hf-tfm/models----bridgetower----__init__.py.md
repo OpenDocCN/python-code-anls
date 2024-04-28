@@ -1,6 +1,6 @@
 # `.\transformers\models\bridgetower\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入可选依赖未安装异常和延迟加载模块

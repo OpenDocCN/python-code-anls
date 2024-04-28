@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_mae\__init__.py`
 
-```
+```py
 # 保留版权声明
 
 # 引入必要的依赖

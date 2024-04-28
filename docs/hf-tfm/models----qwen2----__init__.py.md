@@ -1,6 +1,6 @@
 # `.\transformers\models\qwen2\__init__.py`
 
-```
+```py
 # 版权声明
 # Copyright 2024 The Qwen Team and The HuggingFace Inc. team. All rights reserved.
 #

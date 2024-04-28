@@ -1,6 +1,6 @@
 # `.\transformers\models\tvlt\image_processing_tvlt.py`
 
-```
+```py
 # 定义编码格式为 utf-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 #

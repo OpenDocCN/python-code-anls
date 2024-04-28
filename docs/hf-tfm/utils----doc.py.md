@@ -1,6 +1,6 @@
 # `.\transformers\utils\doc.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权归 The HuggingFace Team 所有
 # 根据 Apache 许可证 2.0 版本授权
@@ -206,7 +206,7 @@ PT_TOKEN_CLASSIFICATION_SAMPLE = r"""
 PT_QUESTION_ANSWERING_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
     >>> import torch
 
@@ -240,7 +240,7 @@ PT_QUESTION_ANSWERING_SAMPLE = r"""
 PT_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
     Example of single-label classification:
 
-    ```python
+    ```py
     >>> import torch
     >>> from transformers import AutoTokenizer, {model_class}
 
@@ -268,7 +268,7 @@ PT_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
 
     Example of multi-label classification:
 
-    ```python
+    ```py
     >>> import torch
     >>> from transformers import AutoTokenizer, {model_class}
 
@@ -327,7 +327,7 @@ PT_MASKED_LM_SAMPLE = r"""
     >>> outputs = model(**inputs, labels=labels)
     >>> round(outputs.loss.item(), 2)
     {expected_loss}
-    ```
+    ```py
 """
 
 # 定义一个字符串常量，包含示例代码片段，用于展示如何使用预训练模型进行基础模型操作
@@ -345,7 +345,7 @@ PT_BASE_MODEL_SAMPLE = r"""
     >>> outputs = model(**inputs)
 
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 # 定义一个字符串常量，包含示例代码片段，用于展示如何使用预训练模型进行多项选择任务
@@ -370,7 +370,7 @@ PT_MULTIPLE_CHOICE_SAMPLE = r"""
     >>> # the linear classifier still needs to be trained
     >>> loss = outputs.loss
     >>> logits = outputs.logits
-    ```
+    ```py
 """
 
 # 定义一个字符串常量，包含示例代码片段，用于展示如何使用预训练模型进行因果语言建模
@@ -388,7 +388,7 @@ PT_CAUSAL_LM_SAMPLE = r"""
     >>> outputs = model(**inputs, labels=inputs["input_ids"])
     >>> loss = outputs.loss
     >>> logits = outputs.logits
-    ```
+    ```py
 """
 
 # 定义一个字符串常量，包含示例代码片段，用于展示如何使用预训练模型进行语音基础模型操作
@@ -428,7 +428,7 @@ PT_SPEECH_BASE_MODEL_SAMPLE = r"""
 PT_SPEECH_CTC_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoProcessor, {model_class}
     >>> from datasets import load_dataset
     >>> import torch
@@ -463,7 +463,7 @@ PT_SPEECH_CTC_SAMPLE = r"""
 PT_SPEECH_SEQ_CLASS_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoFeatureExtractor, {model_class}
     >>> from datasets import load_dataset
     >>> import torch
@@ -499,7 +499,7 @@ PT_SPEECH_SEQ_CLASS_SAMPLE = r"""
 PT_SPEECH_FRAME_CLASS_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoFeatureExtractor, {model_class}
     >>> from datasets import load_dataset
     >>> import torch
@@ -564,7 +564,7 @@ PT_SPEECH_XVECTOR_SAMPLE = r"""
     ...     print("Speakers are not the same!")
     >>> round(similarity.item(), 2)
     {expected_output}
-    ```
+    ```py
 """
 
 
@@ -592,7 +592,7 @@ PT_VISION_BASE_MODEL_SAMPLE = r"""
     >>> last_hidden_states = outputs.last_hidden_state
     >>> list(last_hidden_states.shape)
     {expected_output}
-    ```
+    ```py
 """
 
 
@@ -621,7 +621,7 @@ PT_VISION_SEQ_CLASS_SAMPLE = r"""
     >>> predicted_label = logits.argmax(-1).item()
     >>> print(model.config.id2label[predicted_label])
     {expected_output}
-    ```
+    ```py
 """
     # 定义不同任务类型对应的示例模型
     "TokenClassification": PT_TOKEN_CLASSIFICATION_SAMPLE,
@@ -663,14 +663,14 @@ TF_TOKEN_CLASSIFICATION_SAMPLE = r"""
     >>> predicted_tokens_classes = [model.config.id2label[t] for t in predicted_token_class_ids[0].numpy().tolist()]
     >>> predicted_tokens_classes
     {expected_output}
-    ```
+    ```py
 
     ```python
     >>> labels = predicted_token_class_ids
     >>> loss = tf.math.reduce_mean(model(**inputs, labels=labels).loss)
     >>> round(float(loss), 2)
     {expected_loss}
-    ```
+    ```py
 """
 
 # 定义一个包含示例的字符串常量，用于展示如何使用模型进行问答任务
@@ -695,7 +695,7 @@ TF_QUESTION_ANSWERING_SAMPLE = r"""
     >>> predict_answer_tokens = inputs.input_ids[0, answer_start_index : answer_end_index + 1]
     >>> tokenizer.decode(predict_answer_tokens)
     {expected_output}
-    ```
+    ```py
 
     ```python
     >>> # target is "nice puppet"
@@ -706,7 +706,7 @@ TF_QUESTION_ANSWERING_SAMPLE = r"""
     >>> loss = tf.math.reduce_mean(outputs.loss)
     >>> round(float(loss), 2)
     {expected_loss}
-    ```
+    ```py
 """
 
 # 定义一个包��示例的字符串常量，用于展示如何使用模型进行序列分类任务
@@ -727,7 +727,7 @@ TF_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
     >>> predicted_class_id = int(tf.math.argmax(logits, axis=-1)[0])
     >>> model.config.id2label[predicted_class_id]
     {expected_output}
-    ```
+    ```py
     # 获取模型配置中标签的数量
     num_labels = len(model.config.id2label)
     # 从预训练模型中加载模型，并指定类别数量为num_labels
@@ -762,7 +762,7 @@ TF_MASKED_LM_SAMPLE = r"""
     >>> predicted_token_id = tf.math.argmax(selected_logits, axis=-1)
     >>> tokenizer.decode(predicted_token_id)
     {expected_output}
-    ```
+    ```py
 
     ```python
     >>> labels = tokenizer("The capital of France is Paris.", return_tensors="tf")["input_ids"]
@@ -772,7 +772,7 @@ TF_MASKED_LM_SAMPLE = r"""
     >>> outputs = model(**inputs, labels=labels)
     >>> round(float(outputs.loss), 2)
     {expected_loss}
-    ```
+    ```py
 """
 
 # Transformer 模型的基础模型示例
@@ -790,7 +790,7 @@ TF_BASE_MODEL_SAMPLE = r"""
     >>> outputs = model(inputs)
 
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 # Transformer 模型的多项选择示例
@@ -814,7 +814,7 @@ TF_MULTIPLE_CHOICE_SAMPLE = r"""
 
     >>> # the linear classifier still needs to be trained
     >>> logits = outputs.logits
-    ```
+    ```py
 """
 
 # Transformer 模型��因果语言建模示例
@@ -831,7 +831,7 @@ TF_CAUSAL_LM_SAMPLE = r"""
     >>> inputs = tokenizer("Hello, my dog is cute", return_tensors="tf")
     >>> outputs = model(inputs)
     >>> logits = outputs.logits
-    ```
+    ```py
 """
 
 # Transformer 模型的语音基础模型示例
@@ -870,7 +870,7 @@ TF_SPEECH_BASE_MODEL_SAMPLE = r"""
 TF_SPEECH_CTC_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoProcessor, {model_class}
     >>> from datasets import load_dataset
     >>> import tensorflow as tf
@@ -893,7 +893,7 @@ TF_SPEECH_CTC_SAMPLE = r"""
     {expected_output}
     ```
 
-    ```python
+    ```py
     >>> inputs["labels"] = processor(text=dataset[0]["text"], return_tensors="tf").input_ids
 
     >>> # compute loss
@@ -906,7 +906,7 @@ TF_SPEECH_CTC_SAMPLE = r"""
 TF_VISION_BASE_MODEL_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, {model_class}
     >>> from datasets import load_dataset
 
@@ -928,7 +928,7 @@ TF_VISION_BASE_MODEL_SAMPLE = r"""
 TF_VISION_SEQ_CLASS_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, {model_class}
     >>> import tensorflow as tf
     >>> from datasets import load_dataset
@@ -971,7 +971,7 @@ TF_SAMPLE_DOCSTRINGS = {
 FLAX_TOKEN_CLASSIFICATION_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -988,7 +988,7 @@ FLAX_TOKEN_CLASSIFICATION_SAMPLE = r"""
 FLAX_QUESTION_ANSWERING_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -1007,7 +1007,7 @@ FLAX_QUESTION_ANSWERING_SAMPLE = r"""
 FLAX_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -1024,7 +1024,7 @@ FLAX_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
 FLAX_MASKED_LM_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -1041,7 +1041,7 @@ FLAX_MASKED_LM_SAMPLE = r"""
 FLAX_BASE_MODEL_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -1058,7 +1058,7 @@ FLAX_BASE_MODEL_SAMPLE = r"""
 FLAX_MULTIPLE_CHOICE_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, {model_class}
 
     >>> tokenizer = AutoTokenizer.from_pretrained("{checkpoint}")
@@ -1079,7 +1079,7 @@ FLAX_MULTIPLE_CHOICE_SAMPLE = r"""
 FLAX_CAUSAL_LM_SAMPLE = r"""
     Example:
 
-    ```python
+    ```py
     # 从transformers库中导入AutoTokenizer类和{model_class}类
     from transformers import AutoTokenizer, {model_class}
     

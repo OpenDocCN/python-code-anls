@@ -1,6 +1,6 @@
 # `.\transformers\models\mvp\__init__.py`
 
-```
+```py
 # 这是一个 HuggingFace 团队的版权文件，包含了一些导入和类型检查的代码
 # Copyright 2022 The HuggingFace Team. All rights reserved.
 #

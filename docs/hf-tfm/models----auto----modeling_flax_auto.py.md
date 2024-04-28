@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\modeling_flax_auto.py`
 
-```
+```py
 # 导入所需模块和函数
 from collections import OrderedDict
 from ...utils import logging  # 导入相对路径下的模块

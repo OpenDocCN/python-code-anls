@@ -1,6 +1,6 @@
 # `.\transformers\models\barthez\tokenization_barthez.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Ecole Polytechnique 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件

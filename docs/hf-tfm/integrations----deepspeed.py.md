@@ -1,6 +1,6 @@
 # `.\transformers\integrations\deepspeed.py`
 
-```
+```py
 # 导入模块
 import importlib.metadata as importlib_metadata
 import importlib.util

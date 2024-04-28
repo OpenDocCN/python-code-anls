@@ -1,6 +1,6 @@
 # `.\models\gpt2\tokenization_gpt2_fast.py`
 
-```
+```py
 # 引入必要的模块
 import json  # 导入 json 模块，用于处理 JSON 数据
 from typing import Optional, Tuple  # 导入 typing 模块，用于类型提示
@@ -78,7 +78,7 @@ class GPT2TokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [18435, 995]
-    ```
+    ```py
 
     You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer, but since
     the model was not pretrained this way, it might yield a decrease in performance.

@@ -1,6 +1,6 @@
 # `.\transformers\training_args_seq2seq.py`
 
-```
+```py
 # 导入所需模块和库
 import logging  # 导入日志模块
 from dataclasses import dataclass, field  # 导入数据类相关的模块和函数

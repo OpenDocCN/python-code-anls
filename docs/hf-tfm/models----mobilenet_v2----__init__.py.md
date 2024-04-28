@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v2\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 这是HuggingFace团队版权所有的代码，受到Apache许可证版本2.0的保护
 # 在许可证要求的条件下，用户可以在某些限制范围内使用此代码

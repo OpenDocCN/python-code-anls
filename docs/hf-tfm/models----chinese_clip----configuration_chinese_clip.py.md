@@ -1,6 +1,6 @@
 # `.\transformers\models\chinese_clip\configuration_chinese_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有（c）2022年OFA-Sys团队作者和HuggingFace团队。保留所有权利。
@@ -64,7 +64,7 @@ class ChineseCLIPTextConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "chinese_clip_text_model"
     # 初始化方法，用于创建一个新的配置对象
@@ -202,7 +202,7 @@ class ChineseCLIPConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import ChineseCLIPConfig, ChineseCLIPModel
 
     >>> # 使用 OFA-Sys/chinese-clip-vit-base-patch16 风格配置初始化 ChineseCLIPConfig

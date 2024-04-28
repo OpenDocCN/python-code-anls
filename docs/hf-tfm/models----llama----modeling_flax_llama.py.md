@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\modeling_flax_llama.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 基于 EleutherAI 的 GPT-NeoX 库以及该库中的 GPT-NeoX 和 OPT 实现的代码。已根据 Meta AI 团队训练模型时的一些架构差异进行了修改。

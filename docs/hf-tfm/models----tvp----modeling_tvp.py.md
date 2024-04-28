@@ -1,6 +1,6 @@
 # `.\transformers\models\tvp\modeling_tvp.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明
 # 版权所有的 2023 年英特尔 AIA 团队作者和 HuggingFace Inc. 团队。保留所有权利。
@@ -269,7 +269,7 @@ class TvpVisualInputEmbedding(nn.Module):
         embeddings = self.layer_norm(embeddings)
         embeddings = self.dropout(embeddings)
         return embeddings
-``` 
+```py 
 class TvpTextInputEmbeddings(nn.Module):
     """Construct the embeddings from word, position and token_type embeddings."""
 

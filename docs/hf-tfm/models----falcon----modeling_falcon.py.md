@@ -1,6 +1,6 @@
 # `.\models\falcon\modeling_falcon.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 许可证声明
@@ -1376,5 +1376,5 @@ class FalconForQuestionAnswering(FalconPreTrainedModel):
                 attentions=outputs.attentions,
             )
             # 返回 QuestionAnsweringModelOutput 对象，包含损失、start_logits、end_logits、hidden_states 和 attentions
-    ``` 
+    ```py 
 ```

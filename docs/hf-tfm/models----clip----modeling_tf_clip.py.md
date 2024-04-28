@@ -1,6 +1,6 @@
 # `.\transformers\models\clip\modeling_tf_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，禁止未经许可使用此文件
@@ -1529,7 +1529,7 @@ class TFCLIPVisionModel(TFCLIPPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled CLS states
-        ```"""
+        ```py"""
 
         # 调用 CLIP 模型进行推理
         outputs = self.clip(
@@ -1597,7 +1597,7 @@ class TFCLIPModel(TFCLIPPreTrainedModel):
 
         >>> inputs = tokenizer(["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="tf")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
 
         # 调用 CLIP 主层的获取文本特征方法
         text_features = self.clip.get_text_features(
@@ -1644,7 +1644,7 @@ class TFCLIPModel(TFCLIPPreTrainedModel):
         >>> inputs = processor(images=image, return_tensors="tf")
 
         >>> image_features = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
 
         # 使用CLIP模型获取图像特征
         image_features = self.clip.get_image_features(
@@ -1697,7 +1697,7 @@ class TFCLIPModel(TFCLIPPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> logits_per_image = outputs.logits_per_image  # this is the image-text similarity score
         >>> probs = tf.nn.softmax(logits_per_image, axis=1)  # we can take the softmax to get the label probabilities
-        ```"""
+        ```py"""
 
         # 调用 CLIP 模型进行推理
         outputs = self.clip(

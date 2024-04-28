@@ -1,6 +1,6 @@
 # `.\models\dinov2\configuration_dinov2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 Version 2.0 使用本文件，详情请查看 http://www.apache.org/licenses/LICENSE-2.0
@@ -50,7 +50,7 @@ class Dinov2Config(BackboneConfigMixin, PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "dinov2"
     model_type = "dinov2"

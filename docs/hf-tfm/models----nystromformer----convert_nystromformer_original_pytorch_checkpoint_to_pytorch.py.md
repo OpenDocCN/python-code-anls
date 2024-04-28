@@ -1,6 +1,6 @@
 # `.\transformers\models\nystromformer\convert_nystromformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # Copyright 2022 Hugging Face Inc.团队。
 #

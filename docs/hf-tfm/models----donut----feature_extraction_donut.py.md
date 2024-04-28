@@ -1,6 +1,6 @@
 # `.\models\donut\feature_extraction_donut.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可证版本 2.0 保护权利

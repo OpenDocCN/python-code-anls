@@ -1,6 +1,6 @@
 # `.\transformers\models\mvp\tokenization_mvp.py`
 
-```
+```py
 # 导入必要的模块和类
 import json
 import os
@@ -94,7 +94,7 @@ class MvpTokenizer(PreTrainedTokenizer):
     # 对文本 " Hello world" 进行标记化，并获取其 input_ids
     >>> tokenizer(" Hello world")["input_ids"]
     [0, 20920, 232, 2]
-    ```
+    ```py
 
     # 当实例化此标记器时或在对文本进行标记化时传递 `add_prefix_space=True` 可以避免这种行为，但由于模型不是按这种方式预训练的，这可能会导致性能下降。
 

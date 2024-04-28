@@ -1,6 +1,6 @@
 # `.\transformers\models\opt\convert_opt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入所需模块和库
 import argparse  # 用于解析命令行参数
 from pathlib import Path  # 用于处理文件路径

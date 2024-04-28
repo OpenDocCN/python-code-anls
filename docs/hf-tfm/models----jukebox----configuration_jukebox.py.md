@@ -1,6 +1,6 @@
 # `.\models\jukebox\configuration_jukebox.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码作者和许可方
 # 根据 Apache 许可证 2.0 版本，使用此文件需要遵守许可证规定
@@ -440,7 +440,7 @@ class JukeboxConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "jukebox"

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\tokenization_layoutlmv2_fast.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\vitmatte\modeling_vitmatte.py`
 
-```
+```py
 # 编码声明，指定源代码文件编码格式为 UTF-8
 # 版权声明，版权归 HUST-VL 和 HuggingFace Inc. 团队所有
 #
@@ -321,7 +321,7 @@ class VitMatteForImageMatting(VitMattePreTrainedModel):
         Examples:
         例子：
 
-        ```python
+        ```py
         >>> from transformers import VitMatteImageProcessor, VitMatteForImageMatting
         >>> import torch
         >>> from PIL import Image

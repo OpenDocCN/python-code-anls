@@ -1,6 +1,6 @@
 # `.\transformers\tools\translation.py`
 
-```
+```py
 # 导入所需模块
 from ..models.auto import AutoModelForSeq2SeqLM, AutoTokenizer
 from .base import PipelineTool
@@ -221,7 +221,7 @@ class TranslationTool(PipelineTool):
 
     translator = TranslationTool()
     translator("This is a super nice API!", src_lang="English", tgt_lang="French")
-    ```
+    ```py
     """
 
     # 默认的检查点

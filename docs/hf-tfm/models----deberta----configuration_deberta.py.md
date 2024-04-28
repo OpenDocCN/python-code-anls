@@ -1,6 +1,6 @@
 # `.\models\deberta\configuration_deberta.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据许可证，除非遵守许可证，否则不得使用此文件
@@ -61,7 +61,7 @@ class DebertaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "deberta"
     model_type = "deberta"

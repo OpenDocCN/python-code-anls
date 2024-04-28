@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\configuration_llama.py`
 
-```
+```py
 # 设定文件编码为utf-8
 # 版权声明
 # 基于EleutherAI的GPT-NeoX库以及该库中的GPT-NeoX和OPT实现的代码
@@ -42,7 +42,7 @@ class LlamaConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "llama"

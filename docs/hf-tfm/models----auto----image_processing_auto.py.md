@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\image_processing_auto.py`
 
-```
+```py
 # 导入必要的库和模块
 import importlib  # 动态导入模块的库
 import json  # 处理 JSON 格式数据的库
@@ -135,7 +135,7 @@ def get_image_processor_config(
     
         image_processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
         image_processor.save_pretrained("image-processor-test")
-        ```
+        ```py
         """
         pass
     # 获取图像处理器配置信息

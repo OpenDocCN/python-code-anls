@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\common.h`
 
-```
+```py
 # 定义一个取两个值中较小值的宏
 #define min(a, b) ((a)<(b)?(a):(b))
 # 定义一个取两个值中较大值的宏

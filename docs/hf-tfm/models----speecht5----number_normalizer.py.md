@@ -1,6 +1,6 @@
 # `.\transformers\models\speecht5\number_normalizer.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 

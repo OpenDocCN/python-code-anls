@@ -1,6 +1,6 @@
 # `.\transformers\models\opt\configuration_opt.py`
 
-```
+```py
 # 导入所需的模块和工具类
 import logging
 from ...configuration_utils import PretrainedConfig

@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dpt_swinv2_to_hf.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 授权为 Apache License, Version 2.0

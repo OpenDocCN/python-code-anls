@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevit\modeling_tf_mobilevit.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明
 # 版权所有 2022 苹果公司和 HuggingFace 公司
@@ -172,7 +172,7 @@ class TFMobileViTConvLayer(tf.keras.layers.Layer):
             if hasattr(self.normalization, "name"):
                 with tf.name_scope(self.normalization.name):
                     self.normalization.build([None, None, None, self.out_channels])
-```  
+```py  
 # 定义一个名为 TFMobileViTInvertedResidual 的类，继承自 tf.keras.layers.Layer
 class TFMobileViTInvertedResidual(tf.keras.layers.Layer):
     """
@@ -1590,7 +1590,7 @@ class TFMobileViTForSemanticSegmentation(TFMobileViTPreTrainedModel):
     
         Examples:
             示例：
-            ```python
+            ```py
             >>> from transformers import AutoImageProcessor, TFMobileViTForSemanticSegmentation
             >>> from PIL import Image
             >>> import requests

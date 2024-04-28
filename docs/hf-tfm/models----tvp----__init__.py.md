@@ -1,6 +1,6 @@
 # `.\transformers\models\tvp\__init__.py`
 
-```
+```py
 # 定义代码的字符编码格式为 UTF-8
 # 版权声明
 # 导入所需的类型检查模块

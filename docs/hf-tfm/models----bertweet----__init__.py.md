@@ -1,6 +1,6 @@
 # `.\transformers\models\bertweet\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入惰性加载模块

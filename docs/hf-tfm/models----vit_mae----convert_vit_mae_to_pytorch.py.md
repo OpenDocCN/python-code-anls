@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_mae\convert_vit_mae_to_pytorch.py`
 
-```
+```py
 # 定义函数，用于重命名模型参数的键名以匹配当前模型配置
 def rename_key(name):
     # 如果键名中包含"cls_token"，替换为"vit.embeddings.cls_token"

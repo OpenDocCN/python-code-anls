@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\image_processing_layoutlmv2.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 根据 Apache License, Version 2.0 许可获取许可证副本

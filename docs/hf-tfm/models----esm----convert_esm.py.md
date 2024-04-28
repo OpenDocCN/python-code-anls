@@ -1,6 +1,6 @@
 # `.\models\esm\convert_esm.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 使用 Apache License, Version 2.0 进行许可

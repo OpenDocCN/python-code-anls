@@ -1,6 +1,6 @@
 # `.\transformers\models\openai\tokenization_openai.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明：2018年由 Open AI 团队作者和 HuggingFace 公司团队发布
 # 根据 Apache License, Version 2.0 可以在遵守许可证的前提下使用本文件

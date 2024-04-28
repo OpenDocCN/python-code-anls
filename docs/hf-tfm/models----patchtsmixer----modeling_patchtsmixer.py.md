@@ -1,6 +1,6 @@
 # `.\transformers\models\patchtsmixer\modeling_patchtsmixer.py`
 
-```
+```py
 # 设置文件编码和版权信息的注释
 # 导入需要的模块
 import math

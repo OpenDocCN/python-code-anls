@@ -1,6 +1,6 @@
 # `.\transformers\models\pix2struct\processing_pix2struct.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，您可以在遵守许可证的情况下使用此文件

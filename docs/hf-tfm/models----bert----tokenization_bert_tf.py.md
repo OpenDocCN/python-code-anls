@@ -1,6 +1,6 @@
 # `.\transformers\models\bert\tokenization_bert_tf.py`
 
-```
+```py
 import os  # 导入操作系统模块
 from typing import List, Union  # 导入类型提示模块
 
@@ -130,7 +130,7 @@ class TFBertTokenizer(tf.keras.layers.Layer):  # 定义 TFBertTokenizer 类，�
 
         Examples:
 
-        ```python
+        ```py
         from transformers import AutoTokenizer, TFBertTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
@@ -177,7 +177,7 @@ class TFBertTokenizer(tf.keras.layers.Layer):  # 定义 TFBertTokenizer 类，�
 
         Examples:
 
-        ```python
+        ```py
         from transformers import TFBertTokenizer
 
         tf_tokenizer = TFBertTokenizer.from_pretrained("bert-base-uncased")

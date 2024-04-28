@@ -1,6 +1,6 @@
 # `.\transformers\models\mluke\convert_mluke_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码规范为 UTF-8
 # 版权声明

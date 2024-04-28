@@ -1,6 +1,6 @@
 # `.\transformers\models\vivit\configuration_vivit.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 
 # 版权声明和许可信息

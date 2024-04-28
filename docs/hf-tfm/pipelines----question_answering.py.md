@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\question_answering.py`
 
-```
+```py
 # 导入模块和库
 import inspect
 import types
@@ -248,7 +248,7 @@ class QuestionAnsweringPipeline(ChunkPipeline):
     >>> oracle = pipeline(model="deepset/roberta-base-squad2")
     >>> oracle(question="Where do I live?", context="My name is Wolfgang and I live in Berlin")
     {'score': 0.9191, 'start': 34, 'end': 40, 'answer': 'Berlin'}
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

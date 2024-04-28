@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\modeling_pegasus.py`
 
-```
+```py
 # 导入所需的模块和函数
 import copy
 import math
@@ -377,7 +377,7 @@ PEGASUS_GENERATION_EXAMPLE = r"""
     >>> summary_ids = model.generate(inputs["input_ids"])
     >>> tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
     "California's largest electricity provider has turned off power to hundreds of thousands of customers."
-    ```
+    ```py
 """
 
 PEGASUS_INPUTS_DOCSTRING = r"""

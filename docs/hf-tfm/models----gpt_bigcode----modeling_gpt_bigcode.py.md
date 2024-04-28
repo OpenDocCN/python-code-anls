@@ -1,6 +1,6 @@
 # `.\models\gpt_bigcode\modeling_gpt_bigcode.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 
 # 导入所需的库

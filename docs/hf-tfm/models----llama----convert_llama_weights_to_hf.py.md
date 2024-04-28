@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\convert_llama_weights_to_hf.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 解析命令行参数的库
 import gc  # Python 垃圾回收模块

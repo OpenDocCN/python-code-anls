@@ -1,6 +1,6 @@
 # `.\models\gpt2\configuration_gpt2.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict
 from typing import Any, List, Mapping, Optional
@@ -51,7 +51,7 @@ class GPT2Config(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型标识
     model_type = "gpt2"

@@ -1,6 +1,6 @@
 # `.\transformers\data\data_collator.py`
 
-```
+```py
 # 导入必要的模块和库
 import random  # 导入随机模块
 import warnings  # 导入警告模块

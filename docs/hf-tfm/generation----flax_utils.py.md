@@ -1,6 +1,6 @@
 # `.\transformers\generation\flax_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google AI Flax 团队和 HuggingFace Inc. 团队所有
 # 版权声明，版权归 NVIDIA 公司所有

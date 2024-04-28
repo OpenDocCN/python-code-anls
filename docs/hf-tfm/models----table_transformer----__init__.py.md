@@ -1,6 +1,6 @@
 # `.\transformers\models\table_transformer\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权所有 © 2022 年 HuggingFace 团队。保留所有权利。
 #

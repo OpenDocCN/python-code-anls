@@ -1,6 +1,6 @@
 # `.\models\convnext\convert_convnext_to_pytorch.py`
 
-```
+```py
 # 设定编码格式为 utf-8
 # 版权信息声明
 # 根据 Apache 许可证版本 2.0 进行许可

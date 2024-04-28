@@ -1,6 +1,6 @@
 # `.\transformers\models\longt5\convert_longt5x_checkpoint_to_flax.py`
 
-```
+```py
 # 导入必要的库
 import argparse
 # 导入 T5X 模型相关的函数

@@ -1,6 +1,6 @@
 # `.\transformers\models\videomae\image_processing_videomae.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，保留所有权利
 #

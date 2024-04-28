@@ -1,6 +1,6 @@
 # `.\transformers\models\perceiver\configuration_perceiver.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict
 from typing import Any, Mapping, Optional, Union
@@ -47,7 +47,7 @@ class PerceiverConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 模型类型标识符
     model_type = "perceiver"
     # 初始化函数，设置各种参数的默认数值

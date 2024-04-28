@@ -1,6 +1,6 @@
 # `.\models\distilbert\modeling_distilbert.py`
 
-```
+```py
 # 设置脚本编码格式为 UTF-8
 # 版权声明信息包括当前年份和版权方信息
 # 根据 Apache License, Version 2.0 许可证使用此文件，并遵循许可证的规定

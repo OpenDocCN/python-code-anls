@@ -1,6 +1,6 @@
 # `.\transformers\models\visual_bert\configuration_visual_bert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，授权使用此文件
@@ -54,7 +54,7 @@ class VisualBertConfig(PretrainedConfig):
 
     >>> # 初始化一个 VisualBERT visualbert-vqa-coco-pre 风格的配置
     >>> configuration = VisualBertConfig.from_pretrained("uclanlp/visualbert-vqa-coco-pre")
-    ```
+    ```py
     # 初始化一个模型（带有随机权重），使用 visualbert-vqa-coco-pre 风格的配置
     model = VisualBertModel(configuration)
     

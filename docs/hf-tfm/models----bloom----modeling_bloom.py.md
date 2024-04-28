@@ -1,6 +1,6 @@
 # `.\transformers\models\bloom\modeling_bloom.py`
 
-```
+```py
 # 设置 UTF-8 编码声明
 # 版权声明和许可证信息
 """PyTorch BLOOM 模型。"""

@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\convert_wav2vec2_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件的编码格式为 UTF-8
 # 版权声明，使用 Apache 2.0 许可证
 # 用于转换 Wav2Vec2 检查点

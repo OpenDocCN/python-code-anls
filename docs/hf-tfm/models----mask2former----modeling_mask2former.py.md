@@ -1,6 +1,6 @@
 # `.\transformers\models\mask2former\modeling_mask2former.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明，所有权归 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队所有
 #

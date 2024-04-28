@@ -1,6 +1,6 @@
 # `.\transformers\models\sew\configuration_sew.py`
 
-```
+```py
 # coding=utf-8
 # 定义了文件编码格式为 UTF-8
 
@@ -47,7 +47,7 @@ class SEWConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "sew"
     model_type = "sew"

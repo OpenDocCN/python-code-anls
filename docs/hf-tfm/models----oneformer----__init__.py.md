@@ -1,6 +1,6 @@
 # `.\transformers\models\oneformer\__init__.py`
 
-```
+```py
 # 依赖检查与导入模块声明
 from typing import TYPE_CHECKING
 

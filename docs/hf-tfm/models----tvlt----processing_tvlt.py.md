@@ -1,6 +1,6 @@
 # `.\transformers\models\tvlt\processing_tvlt.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本许可

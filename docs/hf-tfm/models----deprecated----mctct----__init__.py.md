@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权所有2022年HuggingFace团队。保留所有权利。
 #

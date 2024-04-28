@@ -1,6 +1,6 @@
 # `.\models\efficientnet\modeling_efficientnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 使用 Apache 许可证版本 2.0 授权
@@ -401,7 +401,7 @@ class EfficientNetBlock(nn.Module):
             drop_rate=drop_rate,
             id_skip=id_skip,
         )
-```  
+```py  
     # 前向传播函数，接收隐藏状态张量作为输入，并返回处理后的张量
     def forward(self, hidden_states: torch.FloatTensor) -> torch.Tensor:
         embeddings = hidden_states

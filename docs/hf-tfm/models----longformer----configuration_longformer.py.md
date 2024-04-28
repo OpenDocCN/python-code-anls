@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\configuration_longformer.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 
 # 版权声明，包括版权声明和许可证信息
@@ -58,7 +58,7 @@
     
         >>> # Accessing the model configuration
         >>> configuration = model.config
-        ```
+        ```py
     
     # 将模型类型赋值为 "longformer"
         model_type = "longformer"

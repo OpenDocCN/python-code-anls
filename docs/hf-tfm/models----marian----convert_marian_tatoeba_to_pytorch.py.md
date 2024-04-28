@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\convert_marian_tatoeba_to_pytorch.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 代码版权归 The HuggingFace Team 所有，保留所有权利
 #
@@ -805,5 +805,5 @@ if __name__ == "__main__":
     resolver = TatoebaConverter(save_dir=args.save_dir)
     # 转换模型
     resolver.convert_models(args.models[0])
-```  
+```py  
 ```

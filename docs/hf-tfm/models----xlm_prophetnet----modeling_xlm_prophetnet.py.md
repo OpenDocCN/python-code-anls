@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_prophetnet\modeling_xlm_prophetnet.py`
 
-```
+```py
 # 指定编码为 UTF-8
 # 版权声明
 # 使用 Apache 许可证 2.0 版本

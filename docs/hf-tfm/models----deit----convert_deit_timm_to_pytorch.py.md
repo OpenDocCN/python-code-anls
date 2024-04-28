@@ -1,6 +1,6 @@
 # `.\models\deit\convert_deit_timm_to_pytorch.py`
 
-```
+```py
 # 导入模块
 import argparse  # 解析命令行参数的模块
 import json  # 处理 JSON 数据的模块

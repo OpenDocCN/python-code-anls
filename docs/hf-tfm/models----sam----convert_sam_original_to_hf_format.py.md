@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\convert_sam_original_to_hf_format.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 # 版权声明，保留所有权利

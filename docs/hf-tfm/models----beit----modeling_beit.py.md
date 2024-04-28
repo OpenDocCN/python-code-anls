@@ -1,6 +1,6 @@
 # `.\transformers\models\beit\modeling_beit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 The HuggingFace Inc. 团队所有
 #
@@ -903,7 +903,7 @@ class BeitForMaskedImageModeling(BeitPreTrainedModel):
         >>> loss, logits = outputs.loss, outputs.logits
         >>> list(logits.shape)
         [1, 196, 8192]
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 使用 BEiT 模型进行前向传播
@@ -1474,7 +1474,7 @@ class BeitBackbone(BeitPreTrainedModel, BackboneMixin):
 
         示例：
 
-        ```python
+        ```py
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

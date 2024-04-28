@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\text_classification.py`
 
-```
+```py
 import inspect  # 导入inspect模块，用于检查和获取对象信息
 import warnings  # 导入warnings模块，用于处理警告信息
 from typing import Dict  # 从typing模块导入Dict类型提示
@@ -68,7 +68,7 @@ class TextClassificationPipeline(Pipeline):
 
     >>> classifier("Director tried too much.")
     [{'label': 'NEGATIVE', 'score': 0.996}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

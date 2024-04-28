@@ -1,6 +1,6 @@
 # `.\models\cvt\convert_cvt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置代码文件的编码格式为 utf-8
 # 版权声明，声明该代码文件遵循 Apache License Version 2.0
 # 获得 Apache License 的详细内容可通过指定 URL 获取

@@ -1,6 +1,6 @@
 # `.\models\deberta\__init__.py`
 
-```
+```py
 # 导入模块中的类型检查
 from typing import TYPE_CHECKING
 # 从模块中导入实用工具函数

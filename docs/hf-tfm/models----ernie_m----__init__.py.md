@@ -1,6 +1,6 @@
 # `.\models\ernie_m\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 # Copyright 2023 The HuggingFace and Baidu Team. All rights reserved.
 #

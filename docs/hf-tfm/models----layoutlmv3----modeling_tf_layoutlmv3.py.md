@@ -1,6 +1,6 @@
 # `.\transformers\models\layoutlmv3\modeling_tf_layoutlmv3.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 2.0 许可协议，可以在符合许可内容的前提下使用该文件
@@ -1259,7 +1259,7 @@ class TFLayoutLMv3Model(TFLayoutLMv3PreTrainedModel):
 
         >>> outputs = model(**encoding)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
 
         # 调用layoutlmv3模型进行前向传播
         outputs = self.layoutlmv3(
@@ -1436,7 +1436,7 @@ class TFLayoutLMv3ForSequenceClassification(TFLayoutLMv3PreTrainedModel, TFSeque
         >>> outputs = model(**encoding, labels=sequence_label)
         >>> loss = outputs.loss
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
 
         # 检查是否使用了返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
@@ -1563,7 +1563,7 @@ class TFLayoutLMv3ForTokenClassification(TFLayoutLMv3PreTrainedModel, TFTokenCla
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoProcessor, TFAutoModelForTokenClassification
         >>> from datasets import load_dataset
 

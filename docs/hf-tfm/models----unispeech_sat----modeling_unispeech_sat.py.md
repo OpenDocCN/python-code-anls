@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech_sat\modeling_unispeech_sat.py`
 
-```
+```py
 # 导入所需的模块和类
 import math
 import warnings
@@ -1391,7 +1391,7 @@ class UniSpeechSatForPreTraining(UniSpeechSatPreTrainedModel):
         >>> feature_extractor = AutoFeatureExtractor.from_pretrained("microsoft/unispeech-sat-base")
         >>> model = UniSpeechSatForPreTraining.from_pretrained("microsoft/unispeech-sat-base")
         >>> # TODO: Add full pretraining example
-        ```"""
+        ```py"""
 
         # 设置返回字典，如果未指定则使用配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict

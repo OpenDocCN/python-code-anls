@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_text_dual_encoder\modeling_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 #
@@ -209,7 +209,7 @@ class VisionTextDualEncoderModel(PreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import VisionTextDualEncoderModel, AutoTokenizer
 
         >>> model = VisionTextDualEncoderModel.from_pretrained("clip-italian/clip-italian")
@@ -248,7 +248,7 @@ class VisionTextDualEncoderModel(PreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import VisionTextDualEncoderModel, AutoImageProcessor

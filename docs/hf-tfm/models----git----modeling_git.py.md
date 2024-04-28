@@ -1,6 +1,6 @@
 # `.\models\git\modeling_git.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明信息
 # 版权归 Microsoft Research 和 The HuggingFace Inc. 团队所有
@@ -969,7 +969,7 @@ class GitVisionModel(GitPreTrainedModel):
 
         示例：
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, GitVisionModel

@@ -1,6 +1,6 @@
 # `.\models\deit\__init__.py`
 
-```
+```py
 # 导入必要的包和模块
 from typing import TYPE_CHECKING  # 引入类型提示
 

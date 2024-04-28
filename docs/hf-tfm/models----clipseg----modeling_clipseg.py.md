@@ -1,6 +1,6 @@
 # `.\transformers\models\clipseg\modeling_clipseg.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 import copy  # 导入 copy 模块
@@ -650,7 +650,7 @@ class CLIPSegTextModel(CLIPSegPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, CLIPSegTextModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("CIDAS/clipseg-rd64-refined")
@@ -768,7 +768,7 @@ class CLIPSegVisionModel(CLIPSegPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, CLIPSegVisionModel
@@ -863,7 +863,7 @@ class CLIPSegModel(CLIPSegPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, CLIPSegModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("CIDAS/clipseg-rd64-refined")
@@ -911,7 +911,7 @@ class CLIPSegModel(CLIPSegPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, CLIPSegModel

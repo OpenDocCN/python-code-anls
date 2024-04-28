@@ -1,6 +1,6 @@
 # `.\transformers\models\align\__init__.py`
 
-```
+```py
 # 引入必要的模块和函数
 from typing import TYPE_CHECKING
 # 引入自定义异常和模块延迟加载工具

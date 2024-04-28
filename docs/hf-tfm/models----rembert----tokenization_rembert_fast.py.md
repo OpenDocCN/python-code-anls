@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\tokenization_rembert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 这个文件是用 UTF-8 编码的 Python 文件
 
@@ -243,7 +243,7 @@ class RemBertTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         if token_ids_1 is None, only returns the first portion of the mask (0s).
 

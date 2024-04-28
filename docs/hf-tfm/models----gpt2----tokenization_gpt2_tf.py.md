@@ -1,6 +1,6 @@
 # `.\models\gpt2\tokenization_gpt2_tf.py`
 
-```
+```py
 # 导入所需的模块
 import os
 from typing import Dict, List, Union
@@ -52,7 +52,7 @@ class TFGPT2Tokenizer(tf.keras.layers.Layer):
 
         tokenizer = AutoTokenizer.from_pretrained("gpt2")
         tf_tokenizer = TFGPT2Tokenizer.from_tokenizer(tokenizer)
-        ```
+        ```py
         """
         # 从 GPT2Tokenizer 中提取字典和分词列表生成 TFGPT2Tokenizer
         merges = [" ".join(m) for m in tokenizer.bpe_ranks.keys()]
@@ -73,7 +73,7 @@ class TFGPT2Tokenizer(tf.keras.layers.Layer):
         from transformers import TFGPT2Tokenizer
 
         tf_tokenizer = TFGPT2Tokenizer.from_pretrained("gpt2")
-        ```
+        ```py
         """
         # 从预训练的 GPT2Tokenizer 创建 TFGPT2Tokenizer
         tokenizer = GPT2Tokenizer.from_pretrained(pretrained_model_name_or_path, *init_inputs, **kwargs)

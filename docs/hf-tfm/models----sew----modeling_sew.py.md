@@ -1,6 +1,6 @@
 # `.\transformers\models\sew\modeling_sew.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 ASAPP Inc. and the HuggingFace Inc. team. All rights reserved.
 #

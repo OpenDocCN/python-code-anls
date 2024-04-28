@@ -1,6 +1,6 @@
 # `.\transformers\utils\notebook.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权
@@ -90,7 +90,7 @@ class NotebookProgressBar:
         pbar.update(val)
         time.sleep(0.07)
     pbar.update(100)
-    ```"""
+    ```py"""
 
     warmup = 5
     update_every = 0.2

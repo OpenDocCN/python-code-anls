@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\configuration_open_llama.py`
 
-```
+```py
 # 设置编码格式
 # 版权声明
 # 本代码基于EleutherAI的GPT-NeoX库以及该库中的GPT-NeoX和OPT实现进行修改，以适应与模型训练的Meta AI团队所使用的GPT-NeoX和OPT相比的架构上的轻微差异
@@ -75,7 +75,7 @@ class OpenLlamaConfig(PretrainedConfig):
     >>> model = OpenLlamaModel(configuration)
     # 访问模型配置
     >>> configuration = model.config
-    ``` 
+    ```py 
     # 模型类型
     model_type = "open-llama"
 

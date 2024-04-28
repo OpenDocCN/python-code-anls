@@ -1,6 +1,6 @@
 # `.\transformers\models\layoutlmv3\tokenization_layoutlmv3.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache License, Version 2.0 许可使用代码

@@ -1,6 +1,6 @@
 # `.\transformers\models\canine\modeling_canine.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2021 Google AI The HuggingFace Inc. 团队保留所有权利。
 #
@@ -852,7 +852,7 @@ CANINE_INPUTS_DOCSTRING = r"""
             # 是否返回所有层的隐藏状态。有关更多详细信息，请参见返回的张量下的 `hidden_states`。
         return_dict (`bool`, *optional*):
             # 是否返回一个 [`~utils.ModelOutput`] 而不是一个普通元组。
-```  
+```py  
 """
 @add_start_docstrings(
     "The bare CANINE Model transformer outputting raw hidden-states without any specific head on top.",
@@ -1273,13 +1273,13 @@ class CanineForTokenClassification(CaninePreTrainedModel):
             >>> # Multiple token classes might account for the same word
             >>> predicted_tokens_classes = [model.config.id2label[t.item()] for t in predicted_token_class_ids[0]]
             >>> predicted_tokens_classes  # doctest: +SKIP
-            ```
+            ```py
 
             ```python
             >>> labels = predicted_token_class_ids
             >>> loss = model(**inputs, labels=labels).loss
             >>> round(loss.item(), 2)  # doctest: +SKIP
-            ```"""
+            ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         outputs = self.canine(

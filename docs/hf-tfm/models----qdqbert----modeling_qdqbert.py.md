@@ -1,6 +1,6 @@
 # `.\transformers\models\qdqbert\modeling_qdqbert.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明信息，版权属于 NVIDIA Corporation 和 The HuggingFace Team
 # 版权声明信息，版权所有 (c) 2018-2021, NVIDIA CORPORATION
@@ -1259,7 +1259,7 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
 
         Example:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, QDQBertForNextSentencePrediction
         >>> import torch
 

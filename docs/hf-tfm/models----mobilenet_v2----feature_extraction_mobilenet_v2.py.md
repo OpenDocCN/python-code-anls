@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilenet_v2\feature_extraction_mobilenet_v2.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明：2022年HuggingFace Inc.团队。保留所有权利。
 #

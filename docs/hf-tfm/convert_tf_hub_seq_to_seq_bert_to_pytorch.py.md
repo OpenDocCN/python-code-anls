@@ -1,6 +1,6 @@
 # `.\transformers\convert_tf_hub_seq_to_seq_bert_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则不得使用此文件

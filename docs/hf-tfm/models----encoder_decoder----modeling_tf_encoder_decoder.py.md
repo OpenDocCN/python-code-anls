@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_tf_encoder_decoder.py`
 
-```
+```py
 # 导入必要的库和模块
 from __future__ import annotations
 import inspect

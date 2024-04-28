@@ -1,6 +1,6 @@
 # `.\transformers\models\vit\configuration_vit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2021 年 Google AI 和 HuggingFace Inc. 团队。保留所有权利。
@@ -87,7 +87,7 @@ class ViTConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为"vit"
     model_type = "vit"

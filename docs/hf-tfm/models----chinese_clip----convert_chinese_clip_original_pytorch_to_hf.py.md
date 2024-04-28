@@ -1,6 +1,6 @@
 # `.\transformers\models\chinese_clip\convert_chinese_clip_original_pytorch_to_hf.py`
 
-```
+```py
 # 导入所需模块
 import argparse  # 解析命令行参数的模块
 import torch  # PyTorch 深度学习框架

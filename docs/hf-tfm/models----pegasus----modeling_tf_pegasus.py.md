@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\modeling_tf_pegasus.py`
 
-```
+```py
 # 定义一个 TensorFlow 2.0 Pegasus 模型，该模型用于生成文本摘要
 from __future__ import annotations
 
@@ -523,7 +523,7 @@ PEGASUS_GENERATION_EXAMPLE = r"""
     >>> summary_ids = model.generate(input_ids)
     # 解码生成的摘要，跳过特殊标记并清除标记化空格
     >>> print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False))
-    ```
+    ```py
 # 这是 PEGASUS 模型的输入文档字符串
 PEGASUS_INPUTS_DOCSTRING = r"""
 """

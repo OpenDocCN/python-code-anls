@@ -1,6 +1,6 @@
 # `.\models\bloom\tokenization_bloom_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 HuggingFace Inc. 团队。
@@ -62,7 +62,7 @@ class BloomTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [86153, 8876]
-    ```
+    ```py
 
     当使用 `is_split_into_words=True` 时，可以通过在实例化分词器时传递 `add_prefix_space=True` 来绕过这种行为。
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\vit\modeling_flax_vit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码版权归 The Google Flax Team Authors 和 The HuggingFace Inc. team 所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证规定，否则不得使用此文件
@@ -621,7 +621,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, FlaxViTModel
     >>> from PIL import Image
     >>> import requests
@@ -716,7 +716,7 @@ FLAX_VISION_CLASSIF_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoImageProcessor, FlaxViTForImageClassification
     >>> from PIL import Image
     >>> import jax

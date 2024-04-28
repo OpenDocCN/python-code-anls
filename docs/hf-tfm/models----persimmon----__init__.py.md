@@ -1,6 +1,6 @@
 # `.\transformers\models\persimmon\__init__.py`
 
-```
+```py
 # 引入所需的模块和函数
 from typing import TYPE_CHECKING
 # 引入自定义的异常类和LazyModule

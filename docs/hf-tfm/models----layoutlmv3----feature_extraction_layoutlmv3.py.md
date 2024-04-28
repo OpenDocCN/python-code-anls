@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\feature_extraction_layoutlmv3.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保可以正确处理中文等字符
 # 版权声明，使用 Apache License 2.0 授权
 # 引入警告模块

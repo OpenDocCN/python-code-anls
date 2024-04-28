@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\zero_shot_image_classification.py`
 
-```
+```py
 # 从 collections 模块导入 UserDict 类
 from collections import UserDict
 # 从 typing 模块导入 List 和 Union 类型
@@ -69,7 +69,7 @@ class ZeroShotImageClassificationPipeline(Pipeline):
     ...     candidate_labels=["black and white", "photorealist", "painting"],
     ... )
     [{'score': 0.996, 'label': 'black and white'}, {'score': 0.003, 'label': 'photorealist'}, {'score': 0.0, 'label': 'painting'}]
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

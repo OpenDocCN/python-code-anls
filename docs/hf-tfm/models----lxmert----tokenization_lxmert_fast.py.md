@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\tokenization_lxmert_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本许可，除依法要求或书面同意外，不得使用此文件
@@ -189,7 +189,7 @@ class LxmertTokenizerFast(PreTrainedTokenizerFast):
         """
         从传递的两个序列创建一个用于序列对分类任务的掩码。一个 Lxmert 序列对掩码具有以下格式：
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列    | 第二个序列 |
         ```

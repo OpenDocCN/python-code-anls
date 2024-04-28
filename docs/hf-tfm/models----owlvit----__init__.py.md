@@ -1,6 +1,6 @@
 # `.\transformers\models\owlvit\__init__.py`
 
-```
+```py
 # 引入需要的模块和类
 from typing import TYPE_CHECKING
 

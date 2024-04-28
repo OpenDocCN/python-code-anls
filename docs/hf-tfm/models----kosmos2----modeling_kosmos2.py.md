@@ -1,6 +1,6 @@
 # `.\models\kosmos2\modeling_kosmos2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，本文件受版权保护
@@ -965,7 +965,7 @@ class Kosmos2TextTransformer(nn.Module):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-```  
+```py  
 class Kosmos2PreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained

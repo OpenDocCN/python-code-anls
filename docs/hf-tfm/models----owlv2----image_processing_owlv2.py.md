@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\image_processing_owlv2.py`
 
-```
+```py
 # 设置 UTF-8 编码
 # 版权声明和许可协议，表示代码版权和使用许可
 # 仅在遵循许可协议的情况下可使用该文件

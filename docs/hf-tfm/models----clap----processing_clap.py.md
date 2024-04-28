@@ -1,6 +1,6 @@
 # `.\transformers\models\clap\processing_clap.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 年 HuggingFace Inc. 团队所有。
 #

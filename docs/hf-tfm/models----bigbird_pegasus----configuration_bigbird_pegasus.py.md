@@ -1,6 +1,6 @@
 # `.\transformers\models\bigbird_pegasus\configuration_bigbird_pegasus.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 Google Research 和 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -66,7 +66,7 @@ class BigBirdPegasusConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "bigbird_pegasus"
@@ -231,7 +231,7 @@ class BigBirdPegasusOnnxConfig(OnnxSeq2SeqConfigWithPast):
         is_pair: bool = False,
         # 框架类型，默认为None
         framework: Optional[TensorType] = None,
-    ```  
+    ```py  
     ) -> Mapping[str, Any]:
         # 为序列分类和问答任务生成虚拟输入数据，用于编码器输入
         encoder_inputs = self._generate_dummy_inputs_for_sequence_classification_and_question_answering(

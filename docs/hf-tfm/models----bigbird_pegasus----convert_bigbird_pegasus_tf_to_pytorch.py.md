@@ -1,6 +1,6 @@
 # `.\transformers\models\bigbird_pegasus\convert_bigbird_pegasus_tf_to_pytorch.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 from typing import Dict  # 用于类型提示

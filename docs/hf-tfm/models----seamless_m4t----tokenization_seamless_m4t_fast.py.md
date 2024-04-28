@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\tokenization_seamless_m4t_fast.py`
 
-```
+```py
 # 设置编码方式
 # 版权声明
 #

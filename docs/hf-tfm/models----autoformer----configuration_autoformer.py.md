@@ -1,6 +1,6 @@
 # `.\transformers\models\autoformer\configuration_autoformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证规定，否则不得使用此文件
@@ -48,7 +48,7 @@ class AutoformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "autoformer"

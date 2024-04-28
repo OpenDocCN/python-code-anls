@@ -1,6 +1,6 @@
 # `.\transformers\models\mgp_str\tokenization_mgp_str.py`
 
-```
+```py
 # 导入所需的模块和依赖
 import json
 import os

@@ -1,6 +1,6 @@
 # `.\transformers\models\x_clip\modeling_x_clip.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 2022年版权所属于Microsoft Research和The HuggingFace Team，保留所有权利。
@@ -747,7 +747,7 @@ class XCLIPTextModel(XCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, XCLIPTextModel
 
         >>> model = XCLIPTextModel.from_pretrained("microsoft/xclip-base-patch32")
@@ -1070,7 +1070,7 @@ class XCLIPPromptGenerator(nn.Module):
 @add_start_docstrings(X_CLIP_START_DOCSTRING)
 class XCLIPModel(XCLIPPreTrainedModel):
     config_class = XCLIPConfig
-```  
+```py  
     # 初始化函数，接受一个 XCLIPConfig 类型的参数，调用父类（基类）的初始化函数
     def __init__(self, config: XCLIPConfig):
         super().__init__(config)
@@ -1160,7 +1160,7 @@ class XCLIPModel(XCLIPPreTrainedModel):
     
         >>> inputs = tokenizer(["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="pt")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         # Use X_CLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (

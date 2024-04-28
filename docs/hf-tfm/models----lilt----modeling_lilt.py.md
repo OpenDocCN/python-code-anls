@@ -1,6 +1,6 @@
 # `.\transformers\models\lilt\modeling_lilt.py`
 
-```
+```py
 # 设定编码格式为 utf-8
 # 版权声明
 

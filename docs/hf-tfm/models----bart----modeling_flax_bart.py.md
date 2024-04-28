@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\modeling_flax_bart.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 引入必要的库
@@ -1096,7 +1096,7 @@ class FlaxBartPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, FlaxBartForConditionalGeneration
 
         >>> model = FlaxBartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
@@ -1149,7 +1149,7 @@ class FlaxBartPreTrainedModel(FlaxPreTrainedModel):
 
     # 将BART的输入文档字符串添加到模型前向传播函数
     @add_start_docstrings_to_model_forward(BART_INPUTS_DOCSTRING)
-```  
+```py  
     # 定义一个调用函数，接受多个参数
     def __call__(
         self,
@@ -1776,7 +1776,7 @@ class FlaxBartDecoderPreTrainedModel(FlaxPreTrainedModel):
         past_key_values: dict = None,
         # 随机数生成器，用于 dropout 操作的随机数生成
         dropout_rng: PRNGKey = None,
-```  
+```py  
         # 如果 output_attentions 为 None，则使用配置中的 output_attentions 值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 如果 output_hidden_states 为 None，则使用配置中的 output_hidden_states 值

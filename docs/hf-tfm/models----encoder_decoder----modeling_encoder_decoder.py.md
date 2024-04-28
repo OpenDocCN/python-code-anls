@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_encoder_decoder.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明及许可证信息
 # 该类支持编码-解码架构

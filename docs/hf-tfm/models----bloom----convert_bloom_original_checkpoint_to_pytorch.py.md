@@ -1,6 +1,6 @@
 # `.\transformers\models\bloom\convert_bloom_original_checkpoint_to_pytorch.py`
 
-```
+```py
 # 指定 Python 文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 #

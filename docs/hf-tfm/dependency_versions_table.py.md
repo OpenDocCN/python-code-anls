@@ -1,6 +1,6 @@
 # `.\transformers\dependency_versions_table.py`
 
-```
+```py
 # 定义依赖字典，包含各个库的版本要求
 deps = {
     "Pillow": "Pillow>=10.0.1,<=15.0",  # 图像处理库 Pillow 版本要求

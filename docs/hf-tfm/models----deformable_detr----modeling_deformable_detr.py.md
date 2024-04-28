@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\modeling_deformable_detr.py`
 
-```
+```py
 # 设定文件编码为utf-8
 # 版权声明，保留所有权利
 #

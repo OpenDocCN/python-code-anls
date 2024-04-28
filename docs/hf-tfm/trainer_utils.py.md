@@ -1,6 +1,6 @@
 # `.\transformers\trainer_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证的规定，否则不得使用此文件
@@ -118,7 +118,7 @@ def neftune_post_forward_hook(module, input, output):
     model = ...
     model.embed_tokens.neftune_noise_alpha = 0.1
     model.embed_tokens.register_forward_hook(neftune_post_forward_hook)
-    ```
+    ```py
     Args:
         module (`torch.nn.Module`):
             The embedding module where the hook is attached. Note that you need to set `module.neftune_noise_alpha` to
@@ -470,7 +470,7 @@ class TrainerMemoryTracker:
 
     Example :
 
-    ```python
+    ```py
     self._memory_tracker = TrainerMemoryTracker(self.args.skip_memory_metrics)
     self._memory_tracker.start()
     # code ...

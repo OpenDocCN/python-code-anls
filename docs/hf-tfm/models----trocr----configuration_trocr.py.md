@@ -1,6 +1,6 @@
 # `.\transformers\models\trocr\configuration_trocr.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 2.0 许可证，除非符合许可证要求，否则不得使用此文件

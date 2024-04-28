@@ -1,6 +1,6 @@
 # `.\transformers\models\upernet\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 
 # 是否为类型检查环境

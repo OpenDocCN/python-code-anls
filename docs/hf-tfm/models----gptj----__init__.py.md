@@ -1,6 +1,6 @@
 # `.\models\gptj\__init__.py`
 
-```
+```py
 # 导入需要的模块和类型
 from typing import TYPE_CHECKING
 

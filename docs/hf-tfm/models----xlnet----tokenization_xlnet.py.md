@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\tokenization_xlnet.py`
 
-```
+```py
 # 导入所需库和模块
 import os  # 用于操作系统相关功能
 import unicodedata  # 用于 Unicode 字符处理
@@ -319,7 +319,7 @@ class XLNetTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

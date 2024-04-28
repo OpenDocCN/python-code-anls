@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\configuration_rembert.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明，保留所有权利
 # 根据 Apache 许可证 2.0 进行许可
@@ -55,7 +55,7 @@ class RemBertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "rembert"
     model_type = "rembert"

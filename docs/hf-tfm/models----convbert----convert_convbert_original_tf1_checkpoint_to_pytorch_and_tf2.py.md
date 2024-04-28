@@ -1,6 +1,6 @@
 # `.\models\convbert\convert_convbert_original_tf1_checkpoint_to_pytorch_and_tf2.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 基于Apache License, Version 2.0 (许可证)授权

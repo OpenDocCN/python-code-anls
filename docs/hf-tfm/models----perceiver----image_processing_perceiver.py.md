@@ -1,6 +1,6 @@
 # `.\transformers\models\perceiver\image_processing_perceiver.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息
 """Perceiver 的图像处理器类。"""

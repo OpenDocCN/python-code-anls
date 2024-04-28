@@ -1,6 +1,6 @@
 # `.\transformers\models\segformer\configuration_segformer.py`
 
-```
+```py
 # 导入必要的模块和库
 import warnings  # 导入警告模块
 from collections import OrderedDict  # 导入有序字典
@@ -77,7 +77,7 @@ class SegformerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     # 示例代码
     >>> from transformers import SegformerModel, SegformerConfig
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\yolos\feature_extraction_yolos.py`
 
-```
+```py
 # 指定编码格式为utf-8
 # 版权声明
 """Feature extractor class for YOLOS."""

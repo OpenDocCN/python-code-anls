@@ -1,6 +1,6 @@
 # `.\models\ctrl\__init__.py`
 
-```
+```py
 # 2020年由HuggingFace团队版权所有
 #
 # 根据Apache许可证2.0版本（“许可证”）获得许可；

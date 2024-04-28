@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\convert_regnet_to_pytorch.py`
 
-```
+```py
 # 设置文件编码和版权信息
 # 导入所需模块和类
 # 定义数据类，用于存储信息

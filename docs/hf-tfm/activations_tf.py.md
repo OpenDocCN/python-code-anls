@@ -1,6 +1,6 @@
 # `.\transformers\activations_tf.py`
 
-```
+```py
 import math  # 导入 math 模块
 
 import tensorflow as tf  # 导入 TensorFlow 模块

@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech\convert_unispeech_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件的编码格式为 UTF-8
 # 版权声明
 # 避免违反许可协议，需要按照 Apache License, Version 2.0 使用该文件

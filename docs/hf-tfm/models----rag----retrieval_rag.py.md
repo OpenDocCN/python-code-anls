@@ -1,6 +1,6 @@
 # `.\transformers\models\rag\retrieval_rag.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为 utf-8
 # 版权声明
@@ -612,7 +612,7 @@ class RagRetriever:
     def _chunk_tensor(self, t: Iterable, chunk_size: int) -> List[Iterable]:
         # 将输入的可迭代对象`t`按照指定大小`chunk_size`进行分块处理，并返回分块后的列表
         return [t[i : i + chunk_size] for i in range(0, len(t), chunk_size)]
-```  
+```py  
     def _main_retrieve(self, question_hidden_states: np.ndarray, n_docs: int) -> Tuple[np.ndarray, np.ndarray]:
         # 将问题隐藏状态分成批次以便处理
         question_hidden_states_batched = self._chunk_tensor(question_hidden_states, self.batch_size)

@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 从必要的模块中导入所需的函数和类
 from typing import TYPE_CHECKING

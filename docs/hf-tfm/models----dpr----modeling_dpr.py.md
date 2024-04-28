@@ -1,6 +1,6 @@
 # `.\models\dpr\modeling_dpr.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明及许可信息
 # 导入所需模块和库
@@ -375,7 +375,7 @@ class DPRContextEncoder(DPRPretrainedContextEncoder):
         >>> model = DPRContextEncoder.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
         >>> input_ids = tokenizer("Hello, is my dog cute ?", return_tensors="pt")["input_ids"]
         >>> embeddings = model(input_ids).pooler_output
-        ```"""
+        ```py"""
 
         # 根据参数设置是否输出注意力权重，默认使用模型配置中的设置
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
@@ -472,7 +472,7 @@ class DPRQuestionEncoder(DPRPretrainedQuestionEncoder):
         >>> model = DPRQuestionEncoder.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
         >>> input_ids = tokenizer("Hello, is my dog cute ?", return_tensors="pt")["input_ids"]
         >>> embeddings = model(input_ids).pooler_output
-        ```
+        ```py
         """
         # 如果输出注意力权重参数不为None，则使用参数值，否则使用配置中的默认值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
@@ -586,7 +586,7 @@ class DPRReader(DPRPretrainedReader):
         >>> start_logits = outputs.start_logits
         >>> end_logits = outputs.end_logits
         >>> relevance_logits = outputs.relevance_logits
-        ```
+        ```py
 
         """
         # 设置是否输出注意力的参数

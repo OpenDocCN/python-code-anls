@@ -1,6 +1,6 @@
 # `.\transformers\models\lxmert\tokenization_lxmert.py`
 
-```
+```py
 # 该文件实现了 LXMERT 模型的 Tokenizer 类
 # 引入必要的库和模块
 import collections
@@ -262,7 +262,7 @@ class LxmertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

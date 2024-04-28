@@ -1,6 +1,6 @@
 # `.\models\deprecated\tapex\tokenization_tapex.py`
 
-```
+```py
 # 定义编码为utf-8
 # 版权信息，版权由Microsoft Research 和 The HuggingFace Inc.团队所有
 # 根据Apache许可证2.0版版，除非符合许可证，否则不得使用此文件
@@ -1143,7 +1143,7 @@ class TapexTokenizer(PreTrainedTokenizer):
                 verbose=verbose,
                 **kwargs,
             )
-```  
+```py  
     def target_batch_encode_plus(
         self,
         answer: List[str],

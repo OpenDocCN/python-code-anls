@@ -1,6 +1,6 @@
 # `.\transformers\models\bridgetower\processing_bridgetower.py`
 
-```
+```py
 # 定义了一个名为 BridgeTowerProcessor 的类，用于处理 BridgeTower 相关的数据
 class BridgeTowerProcessor(ProcessorMixin):
     """

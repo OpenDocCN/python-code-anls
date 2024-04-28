@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\modeling_bart.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，使用 Apache License 2.0 进行许可，保留所有权利
 # 导入所需库和模块
@@ -259,7 +259,7 @@ class BartFlashAttention2(BartAttention):
         返回 attn_output
 
     # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2._upad_input 复制过来的
-```  
+```py  
     # 对输入进行处理，根据注意力掩码去除填充部分的数据
     def _upad_input(self, query_layer, key_layer, value_layer, attention_mask, query_length):
         # 获取未填充数据的索引、当前序列长度和批次中最大序列长度
@@ -585,7 +585,7 @@ BART_START_DOCSTRING = r"""
 BART_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, BartForConditionalGeneration
 
     >>> model = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
@@ -606,7 +606,7 @@ BART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, BartForConditionalGeneration
 
     >>> tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")

@@ -1,6 +1,6 @@
 # `.\transformers\models\tvp\processing_tvp.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，版权归 Intel AIA 团队和 HuggingFace 公司所有
 # 根据 Apache 许可证 2.0 版进行许可

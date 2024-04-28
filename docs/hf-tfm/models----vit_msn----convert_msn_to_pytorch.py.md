@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_msn\convert_msn_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 根据 Apache License, Version 2.0 许可证使用此文件

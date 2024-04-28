@@ -1,6 +1,6 @@
 # `.\transformers\tools\speech_to_text.py`
 
-```
+```py
 #!/usr/bin/env python
 # 声明 Python 脚本的解释器为在环境变量中搜索的第一个 Python 解释器
 # 设定编码格式为 utf-8

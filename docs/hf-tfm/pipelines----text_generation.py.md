@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\text_generation.py`
 
-```
+```py
 # 导入 enum、warnings 模块
 import enum
 import warnings
@@ -43,7 +43,7 @@ class TextGenerationPipeline(Pipeline):
 
     >>> # These parameters will return suggestions, and only the newly created text making it easier for prompting suggestions.
     >>> outputs = generator("My tart needs some", num_return_sequences=4, return_full_text=False)
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial). You can pass text
     generation parameters to this pipeline to control stopping criteria, decoding strategy, and more. Learn more about

@@ -1,6 +1,6 @@
 # `.\transformers\models\phobert\__init__.py`
 
-```
+```py
 # 导入 TYPE_CHECKING 用于类型检查
 from typing import TYPE_CHECKING
 # 导入 _LazyModule 用于延迟加载模块

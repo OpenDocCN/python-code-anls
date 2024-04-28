@@ -1,6 +1,6 @@
 # `.\transformers\training_args.py`
 
-```
+```py
 # 版权声明及许可信息
 # Copyright 2020 The HuggingFace Team. All rights reserved.
 #
@@ -1541,7 +1541,7 @@ class TrainingArguments:
         batch_size: int = 8,  # 用于测试的每个设备的批量大小，默认为8
         loss_only: bool = False,  # 是否仅考虑损失，默认为 False
         jit_mode: bool = False,  # 是否使用 PyTorch jit 跟踪进行推理，默认为 False
-```  
+```py  
         """
         一个方法，重新组织所有与在保留数据集上进行测试相关的基本参数。
 
@@ -1568,7 +1568,7 @@ class TrainingArguments:
         >>> args = args.set_testing(batch_size=32)
         >>> args.per_device_eval_batch_size
         32
-        ```
+        ```py
         """
         # 设置 self.do_predict 为 True
         self.do_predict = True
@@ -1620,7 +1620,7 @@ class TrainingArguments:
         >>> args = args.set_save(strategy="steps", steps=100)
         >>> args.save_steps
         100
-        ```
+        ```py
         """
         # 设置保存策略
         self.save_strategy = IntervalStrategy(strategy)
@@ -1691,7 +1691,7 @@ class TrainingArguments:
         >>> args = args.set_optimizer(name="adamw_torch", beta1=0.8)
         >>> args.optim
         'adamw_torch'
-        ```
+        ```py
         """
         # 设置优化器名称
         self.optim = OptimizerNames(name)
@@ -1742,7 +1742,7 @@ class TrainingArguments:
         >>> args = args.set_lr_scheduler(name="cosine", warmup_ratio=0.05)
         >>> args.warmup_ratio
         0.05
-        ```
+        ```py
         """
         # 设置学习率调度器类型
         self.lr_scheduler_type = SchedulerType(name)

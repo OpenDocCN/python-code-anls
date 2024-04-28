@@ -1,6 +1,6 @@
 # `.\transformers\models\xmod\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 忽略 flake8 检查，避免"导入但未使用"警告，同时保留其他警告
 

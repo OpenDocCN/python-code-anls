@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\depth_estimation.py`
 
-```
+```py
 # 从 typing 模块导入 List 和 Union 类型提示
 from typing import List, Union
 
@@ -41,7 +41,7 @@ class DepthEstimationPipeline(Pipeline):
     >>> # This is a tensor with the values being the depth expressed in meters for each pixel
     >>> output["predicted_depth"].shape
     torch.Size([1, 384, 384])
-    ```
+    ```py
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 

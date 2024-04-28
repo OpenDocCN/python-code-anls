@@ -1,6 +1,6 @@
 # `.\transformers\models\splinter\configuration_splinter.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明及许可协议
 # 导入所需的库和模块
@@ -80,7 +80,7 @@ class SplinterConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "splinter"
     def __init__(

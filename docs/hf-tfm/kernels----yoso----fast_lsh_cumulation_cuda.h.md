@@ -1,6 +1,6 @@
 # `.\transformers\kernels\yoso\fast_lsh_cumulation_cuda.h`
 
-```
+```py
 # CUDA 核函数，用于计算快速哈希的第一版本
 __global__ void fast_hash_ver1_cuda_kernel(
   int *mask,        // [batch_size, num_vector]，用于指示哪些向量要计算哈希码

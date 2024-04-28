@@ -1,6 +1,6 @@
 # `.\transformers\tools\image_question_answering.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 

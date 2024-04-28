@@ -1,6 +1,6 @@
 # `.\transformers\tools\text_summarization.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -29,7 +29,7 @@ class TextSummarizationTool(PipelineTool):
 
     summarizer = TextSummarizationTool()
     summarizer(long_text)
-    ```
+    ```py
     """
 
     # 默认的检查点

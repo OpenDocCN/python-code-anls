@@ -1,6 +1,6 @@
 # `.\models\encodec\__init__.py`
 
-```
+```py
 # 版权声明及使用许可信息
 # 从依赖库中导入必要的模块和函数
 from typing import TYPE_CHECKING

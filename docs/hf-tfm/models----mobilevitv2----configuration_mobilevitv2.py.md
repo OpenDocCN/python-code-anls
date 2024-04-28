@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevitv2\configuration_mobilevitv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 #

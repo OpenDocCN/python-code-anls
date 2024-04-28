@@ -1,6 +1,6 @@
 # `.\transformers\models\vision_text_dual_encoder\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权声明和许可证信息，指定了代码的版权和许可证信息
 # 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则不得使用此文件

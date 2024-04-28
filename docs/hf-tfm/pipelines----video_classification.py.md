@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\video_classification.py`
 
-```
+```py
 # 导入所需模块
 from io import BytesIO
 from typing import List, Union

@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_encoder_decoder\modeling_flax_speech_encoder_decoder.py`
 
-```
+```py
 # 设置编码，根据 UTF-8 编码规范
 # 版权版本声明及其许可协议
 # 如果没有许可协议，不得使用此文件，获取协议的副本，链接详细？
@@ -472,7 +472,7 @@ class FlaxSpeechEncoderDecoderModel(FlaxPreTrainedModel):
 
         >>> inputs = jnp.ones((2, 5000), dtype=jnp.float32)
         >>> encoder_outputs = model.encode(inputs)
-        ```"""
+        ```py"""
         # 检查是否指定输出注意力值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 检查是否指定输出隐藏层状态
@@ -590,7 +590,7 @@ class FlaxSpeechEncoderDecoderModel(FlaxPreTrainedModel):
 
         >>> outputs = model.generate(inputs)
         # Assert something? More interesting input? dtype correct?
-        ```
+        ```py
         """
 
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions

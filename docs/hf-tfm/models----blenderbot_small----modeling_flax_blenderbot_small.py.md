@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot_small\modeling_flax_blenderbot_small.py`
 
-```
+```py
 # 使用 UTF-8 编码
 # 版权声明，版权归 Facebook, Inc. 和 HuggingFace Inc. 团队所有
 #
@@ -753,7 +753,7 @@ class FlaxBlenderbotSmallModule(nn.Module):
     config: BlenderbotSmallConfig
     # 计算的数据类型，默认为32位浮点数
     dtype: jnp.dtype = jnp.float32  # the dtype of the computation
-``` 
+```py 
     # 初始化模型参数
     def setup(self):
         # 创建共享的嵌入层，用于编码器和解码器
@@ -967,7 +967,7 @@ class FlaxBlenderbotSmallPreTrainedModel(FlaxPreTrainedModel):
         >>> text = "My friends are cool but they eat too many carbs."
         >>> inputs = tokenizer(text, max_length=1024, return_tensors="np")
         >>> encoder_outputs = model.encode(**inputs)
-        ```"""
+        ```py"""
         # 如果未提供参数，则使用模型配置中的默认值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (

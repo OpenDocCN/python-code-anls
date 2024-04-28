@@ -1,6 +1,6 @@
 # `.\transformers\models\big_bird\__init__.py`
 
-```
+```py
 # 引入类型检查模块
 from typing import TYPE_CHECKING
 # 引入必要的工具函数和模块

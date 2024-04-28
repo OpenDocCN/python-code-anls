@@ -1,6 +1,6 @@
 # `.\transformers\modeling_flax_utils.py`
 
-```
+```py
 def flax_shard_checkpoint(params, max_shard_size="10GB"):
     """
     将参数字典分片为多个文件以减小文件大小。
@@ -16,7 +16,7 @@ def flax_shard_checkpoint(params, max_shard_size="10GB"):
     ```python
     # 分片参数字典并保存分片文件
     shards = flax_shard_checkpoint(params)
-    ```
+    ```py
     """
     # 计算最大分片大小
     max_size = convert_file_size_to_int(max_shard_size)
@@ -348,7 +348,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
         ... }
         >>> mask = traverse_util.unflatten_dict(mask)
         >>> model.params = model.to_bf16(model.params, mask)
-        ```"""
+        ```py"""
         # 调用 _cast_floating_to 方法，将参数转换为 jax.numpy.bfloat16 类型
         return self._cast_floating_to(params, jnp.bfloat16, mask)
     # 将浮点参数 `params` 转换为 `jax.numpy.float32`。此方法可用于显式将模型参数转换为fp32精度。这将返回一个新的 `params` 树，不会直接对 `params` 进行转换。
@@ -376,7 +376,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
         >>> model.params = model.to_f16(model.params)
         >>> # now cast back to fp32
         >>> model.params = model.to_fp32(model.params)
-        ```"""
+        ```py"""
         # 调用 `_cast_floating_to` 方法，将参数 `params` 中的浮点数转换为 `jax.numpy.float32`
         return self._cast_floating_to(params, jnp.float32, mask)
 ```  
@@ -398,7 +398,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import FlaxBertModel
 
         >>> # load model
@@ -422,7 +422,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
         return self._cast_floating_to(params, jnp.float16, mask)
 
     @classmethod
-```  
+```py  
     # 从文件中加载 FLAX 模型的权重数据
     def load_flax_weights(cls, resolved_archive_file):
         try:
@@ -586,7 +586,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
 
         # 将自动类赋值给当前类的私有属性 _auto_class
         cls._auto_class = auto_class
-```  
+```py  
 # 更新文档字符串，需要复制方法，否则会改变原始文档字符串
 FlaxPreTrainedModel.push_to_hub = copy_func(FlaxPreTrainedModel.push_to_hub)
 # 如果存在文档字符串

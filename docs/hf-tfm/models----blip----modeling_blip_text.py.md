@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\modeling_blip_text.py`
 
-```
+```py
 # 导入必要的模块
 import math
 from typing import List, Optional, Tuple, Union

@@ -1,6 +1,6 @@
 # `.\transformers\models\mbart\modeling_tf_mbart.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，本文件受版权保护
@@ -468,7 +468,7 @@ MBART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, TFMBartForConditionalGeneration
     >>> import tensorflow as tf
 

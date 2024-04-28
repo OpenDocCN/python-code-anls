@@ -1,6 +1,6 @@
 # `.\transformers\models\altclip\__init__.py`
 
-```
+```py
 # 引入类型检查模块中的 TYPE_CHECKING 常量
 from typing import TYPE_CHECKING
 # 从工具模块中导入自定义的异常类 OptionalDependencyNotAvailable 和懒加载模块 LazyModule

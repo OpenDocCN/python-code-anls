@@ -1,6 +1,6 @@
 # `.\transformers\commands\convert.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权声明和许可信息，指明代码的版权和许可信息
 #

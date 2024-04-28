@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\modeling_regnet.py`
 
-```
+```py
 # 这是一个 PyTorch 中的 RegNet 模型的实现
 # 版权由 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队所有
 # 该模型遵循 Apache License 2.0 协议

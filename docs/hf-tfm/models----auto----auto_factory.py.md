@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\auto_factory.py`
 
-```
+```py
 # 导入所需模块和库
 import copy  # 导入copy模块，用于深拷贝对象
 import importlib  # 导入importlib模块，用于动态导入模块
@@ -61,7 +61,7 @@ FROM_CONFIG_DOCSTRING = """
         >>> # Download configuration from huggingface.co and cache.
         >>> config = AutoConfig.from_pretrained("checkpoint_placeholder")
         >>> model = BaseAutoModelClass.from_config(config)
-        ```
+        ```py
 """
 
 # 定义_get_model_class函数

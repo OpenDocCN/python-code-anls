@@ -1,6 +1,6 @@
 # `.\transformers\models\codegen\configuration_codegen.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 # 版权所有 © 2022 Salesforce 作者、EleutherAI 和 HuggingFace 团队。保留所有权利。

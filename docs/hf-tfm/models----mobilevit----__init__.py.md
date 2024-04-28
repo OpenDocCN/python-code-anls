@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilevit\__init__.py`
 
-```
+```py
 # 2022年版权声明
 
 # 当前代码文件需遵守 Apache 许可证 2.0 版本

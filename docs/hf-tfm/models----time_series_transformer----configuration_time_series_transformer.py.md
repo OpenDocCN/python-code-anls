@@ -1,6 +1,6 @@
 # `.\transformers\models\time_series_transformer\configuration_time_series_transformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 
@@ -44,7 +44,7 @@ class TimeSeriesTransformerConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为"time_series_transformer"
     model_type = "time_series_transformer"

@@ -1,6 +1,6 @@
 # `.\transformers\models\bert_japanese\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 # 导入延迟加载模块

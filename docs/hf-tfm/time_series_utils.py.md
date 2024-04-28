@@ -1,6 +1,6 @@
 # `.\transformers\time_series_utils.py`
 
-```
+```py
 # 定义编码格式为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 # 版权声明，版权归 2018 Amazon.com, Inc. 或其关联公司所有

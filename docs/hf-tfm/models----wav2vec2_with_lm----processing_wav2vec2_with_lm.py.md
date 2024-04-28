@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_with_lm\processing_wav2vec2_with_lm.py`
 
-```
+```py
 # 设置代码文件编码格式为 UTF-8
 # 版权声明
 # 2021年 HuggingFace Inc. 团队

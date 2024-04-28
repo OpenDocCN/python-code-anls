@@ -1,6 +1,6 @@
 # `.\models\distilbert\configuration_distilbert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队、Google AI Language Team 和 Facebook, Inc. 所有
 # 根据 Apache 许可证 2.0 版本使用此文件

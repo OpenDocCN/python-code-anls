@@ -1,6 +1,6 @@
 # `.\transformers\models\squeezebert\modeling_squeezebert.py`
 
-```
+```py
 # 设定文件编码为 utf-8
 # 版权声明，指明版权所有者和许可协议
 # 本代码遵循 Apache License 2.0 许可协议
@@ -565,7 +565,7 @@ SQUEEZEBERT_START_DOCSTRING = r"""
             SqueezeBertSelfAttention
                 ConvActivation
                 ConvDropoutLayerNorm
-    ```
+    ```py
 
     Data layouts:
 

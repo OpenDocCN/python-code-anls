@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_encoder_decoder\convert_mbart_wav2vec2_seq2seq_original_to_pytorch.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 
 # 版权声明和许可证信息

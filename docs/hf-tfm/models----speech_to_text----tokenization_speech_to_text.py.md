@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\tokenization_speech_to_text.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 """Tokenization classes for Speech2Text."""

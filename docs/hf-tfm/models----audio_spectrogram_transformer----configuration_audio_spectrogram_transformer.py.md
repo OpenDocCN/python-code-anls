@@ -1,6 +1,6 @@
 # `.\transformers\models\audio_spectrogram_transformer\configuration_audio_spectrogram_transformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，声明了 Google AI 和 HuggingFace Inc. 团队对该代码的版权
 # 该代码遵循 Apache 2.0 许可证，可以在符合许可证的条件下使用
@@ -78,7 +78,7 @@ class ASTConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 设置模型类型为 "audio-spectrogram-transformer"
     model_type = "audio-spectrogram-transformer"

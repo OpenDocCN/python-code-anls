@@ -1,6 +1,6 @@
 # `.\models\deprecated\__init__.py`
 
-```
+```py
 代码：
 
 def get_user_input(prompt):

@@ -1,6 +1,6 @@
 # `.\transformers\models\swin\modeling_swin.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # Apache License, Version 2.0 权利声明
@@ -852,7 +852,7 @@ class SwinLayer(nn.Module):
         # 如果需要输出注意力，则返回 layer_output 和 attention 输出的元组，否则只返回 layer_output
         layer_outputs = (layer_output, attention_outputs[1]) if output_attentions else (layer_output,)
         return layer_outputs
-```  
+```py  
 class SwinStage(nn.Module):
     # 定义SwinStage类，用于实现Swin Transformer的一个阶段
     def __init__(self, config, dim, input_resolution, depth, num_heads, drop_path, downsample):
@@ -1365,7 +1365,7 @@ class SwinBackbone(SwinPreTrainedModel, BackboneMixin):
         >>> feature_maps = outputs.feature_maps
         >>> list(feature_maps[-1].shape)
         [1, 768, 7, 7]
-        ```"""
+        ```py"""
         确定返回字典是否为None，如果不是则使用配置中的返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         确定是否输出所有隐藏状态，如果不是则使用配置中的输出隐藏状态

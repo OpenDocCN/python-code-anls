@@ -1,6 +1,6 @@
 # `.\models\kosmos2\configuration_kosmos2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -279,7 +279,7 @@ class Kosmos2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import Kosmos2Config, Kosmos2Model
 
     >>> # Initializing a Kosmos-2 kosmos-2-patch14-224 style configuration

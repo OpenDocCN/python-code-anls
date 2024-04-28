@@ -1,6 +1,6 @@
 # `.\transformers\models\bit\modeling_bit.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，包括版权信息和许可证信息
 # 此模型由 Google AI 和 HuggingFace Inc. 团队版权所有
@@ -985,7 +985,7 @@ class BitBackbone(BitPreTrainedModel, BackboneMixin):
 
         >>> inputs = processor(image, return_tensors="pt")
         >>> outputs = model(**inputs)
-        ```"""
+        ```py"""
         # 设置是否返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 设置是否输出隐藏状态

@@ -1,6 +1,6 @@
 # `.\transformers\models\altclip\processing_altclip.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明：2022 年 WenXiang ZhongzhiCheng LedellWu LiuGuang BoWenZhang The HuggingFace Inc. 团队保留所有权利。
 #

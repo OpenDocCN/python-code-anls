@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\data_transforms.py`
 
-```
+```py
 # 导入必要的模块和类型
 from typing import Dict
 import numpy as np

@@ -1,6 +1,6 @@
 # `.\models\convnextv2\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁用 flake8 对当前模块的检查，忽略未使用导入的警告
 

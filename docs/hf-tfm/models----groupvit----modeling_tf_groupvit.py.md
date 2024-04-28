@@ -1,6 +1,6 @@
 # `.\models\groupvit\modeling_tf_groupvit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -2065,7 +2065,7 @@ class TFGroupViTTextModel(TFGroupViTPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled (EOS token) states
-        ```"""
+        ```py"""
 
         # 调用 groupvit 的方法，传入参数并获取输出
         outputs = self.groupvit(
@@ -2140,7 +2140,7 @@ class TFGroupViTVisionModel(TFGroupViTPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled CLS states
-        ```"""
+        ```py"""
 
         # 调用groupvit模型，传入参数
         outputs = self.groupvit(
@@ -2207,7 +2207,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
 
         >>> inputs = tokenizer(["a photo of a cat", "a photo of a dog"], padding=True, return_tensors="tf")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
 
         # 调用 TFGroupViTMainLayer 实例的 get_text_features 方法，传入参数并获取文本特征
         text_features = self.groupvit.get_text_features(
@@ -2256,7 +2256,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
         >>> inputs = processor(images=image, return_tensors="tf")
 
         >>> image_features = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
 
         # 获取图像特征，通过将像素值应用于投影层到 TFGroupViTVisionModel 的池化输出
         image_features = self.groupvit.get_image_features(
@@ -2309,7 +2309,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
         >>> outputs = model(**inputs)
         >>> logits_per_image = outputs.logits_per_image  # this is the image-text similarity score
         >>> probs = tf.math.softmax(logits_per_image, axis=1)  # we can take the softmax to get the label probabilities
-        ```"""
+        ```py"""
 
         # 调用 groupvit 方法进行模型推理
         outputs = self.groupvit(

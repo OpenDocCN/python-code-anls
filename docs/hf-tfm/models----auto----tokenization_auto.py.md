@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\tokenization_auto.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2018 年的 HuggingFace 公司团队
@@ -172,7 +172,7 @@ def get_tokenizer_config(
     tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
     tokenizer.save_pretrained("tokenizer-test")
     tokenizer_config = get_tokenizer_config("tokenizer-test")
-    ```"""
+    ```py"""
     # 从kwargs中取出use_auth_token参数，如果存在则弹出
     use_auth_token = kwargs.pop("use_auth_token", None)
     # 如果use_auth_token参数不为空，发出警告，该参数即将被移除

@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_phoneme\__init__.py`
 
-```
+```py
 # 版权声明和许可声明
 # 版权声明和许可声明
 

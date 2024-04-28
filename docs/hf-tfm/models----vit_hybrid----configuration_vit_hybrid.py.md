@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_hybrid\configuration_vit_hybrid.py`
 
-```
+```py
 # coding=utf-8
 # 以上为 Python 文件编码声明和版权信息
 
@@ -76,7 +76,7 @@ class ViTHybridConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 设置模型类型为 "vit-hybrid"
     model_type = "vit-hybrid"

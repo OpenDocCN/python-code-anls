@@ -1,6 +1,6 @@
 # `.\transformers\models\bigbird_pegasus\modeling_bigbird_pegasus.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google Research 团队和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件
@@ -876,7 +876,7 @@ BIGBIRD_PEGASUS_START_DOCSTRING = r"""
 BIGBIRD_PEGASUS_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, BigBirdPegasusForConditionalGeneration
 
     >>> model = BigBirdPegasusForConditionalGeneration.from_pretrained("google/bigbird-pegasus-large-arxiv")
@@ -923,7 +923,7 @@ BIGBIRD_PEGASUS_STANDALONE_INPUTS_DOCSTRING = r"""
             # 是否返回所有层的隐藏状态。有关更多详细信息，请参见返回的张量下的 `hidden_states`。
         return_dict (`bool`, *optional*):
             # 是否返回一个 [`~utils.ModelOutput`] 而不是一个普通的元组。
-```  
+```py  
 # 定义一个 BigBirdPegasusEncoder 类，继承自 BigBirdPegasusPreTrainedModel
 class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
     """

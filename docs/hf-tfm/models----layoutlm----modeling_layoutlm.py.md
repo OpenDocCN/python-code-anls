@@ -1,6 +1,6 @@
 # `.\models\layoutlm\modeling_layoutlm.py`
 
-```
+```py
 # 设置编码为 utf-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -895,7 +895,7 @@ class LayoutLMForTokenClassification(LayoutLMPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, LayoutLMForTokenClassification
         >>> import torch
 

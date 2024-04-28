@@ -1,6 +1,6 @@
 # `.\models\convbert\modeling_tf_convbert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可证信息
 from __future__ import annotations
@@ -1534,7 +1534,7 @@ class TFConvBertForTokenClassification(TFConvBertPreTrainedModel, TFTokenClassif
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
-```  
+```py  
 # 使用 add_start_docstrings 装饰器添加模型描述文档字符串，描述了 ConvBERT 模型与其适用的任务
 # 继承自 TFConvBertPreTrainedModel 和 TFQuestionAnsweringLoss 类
 class TFConvBertForQuestionAnswering(TFConvBertPreTrainedModel, TFQuestionAnsweringLoss):

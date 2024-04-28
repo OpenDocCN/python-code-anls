@@ -1,6 +1,6 @@
 # `.\transformers\models\owlv2\modeling_owlv2.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 基于 Apache License Version 2.0 授权
@@ -797,7 +797,7 @@ class Owlv2TextModel(Owlv2PreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled (EOS token) states
-        ```"""
+        ```py"""
 
         # 获取所有批次样本中所有文本查询的嵌入
         return self.text_model(
@@ -933,7 +933,7 @@ class Owlv2VisionModel(Owlv2PreTrainedModel):
         >>> outputs = model(**inputs)
         >>> last_hidden_state = outputs.last_hidden_state
         >>> pooled_output = outputs.pooler_output  # pooled CLS states
-        ```"""
+        ```py"""
         # 调用Owlv2VisionTransformer的前向传播方法
         return self.vision_model(
             pixel_values=pixel_values,
@@ -1012,7 +1012,7 @@ class Owlv2Model(Owlv2PreTrainedModel):
         ...     text=[["a photo of a cat", "a photo of a dog"], ["photo of a astronaut"]], return_tensors="pt"
         ... )
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         # 如果未指定 return_dict，则使用模型的配置来决定是否返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
@@ -1047,7 +1047,7 @@ class Owlv2Model(Owlv2PreTrainedModel):
         >>> image = Image.open(requests.get(url, stream=True).raw)
         >>> inputs = processor(images=image, return_tensors="pt")
         >>> image_features = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
         # Use OWLv2 model's config for some fields (if specified) instead of those of vision & text components.
         # 如果指定了output_attentions，则使用指定的值，否则使用OWLv2模型的配置值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions

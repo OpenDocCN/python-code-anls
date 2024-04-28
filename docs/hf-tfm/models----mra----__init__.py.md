@@ -1,6 +1,6 @@
 # `.\transformers\models\mra\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁用 flake8 对代码的语法检测
 # 在此模块中，无法忽略 "F401 '...' imported but unused" 警告，但可以保留其他警告。因此，完全不对这个模块进行检查。

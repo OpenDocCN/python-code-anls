@@ -1,6 +1,6 @@
 # `.\models\electra\configuration_electra.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，包括作者和团队信息以及许可证信息
 # 根据Apache License，版本2.0的许可证，除非符合许可证规定，否则不得使用此文件
@@ -67,7 +67,7 @@ class ElectraConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为"electra"

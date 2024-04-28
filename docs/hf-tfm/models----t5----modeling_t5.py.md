@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\modeling_t5.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括 Mesh TensorFlow 作者、T5 作者以及 HuggingFace Inc. 团队
 # 根据 Apache 许可证 2.0 版本http://www.apache.org/licenses/LICENSE-2.0，授权范围内使用此文件
@@ -137,7 +137,7 @@ PARALLELIZE_DOCSTRING = r"""
         3: [17, 18, 19, 20, 21, 22, 23],
     }
     model.parallelize(device_map)
-    ```
+    ```py
 """
 # 定义了另一个字符串变量，用于取消并行处理的文档字符串说明
 DEPARALLELIZE_DOCSTRING = r"""
@@ -156,7 +156,7 @@ DEPARALLELIZE_DOCSTRING = r"""
     }
     model.parallelize(device_map)  # Splits the model across several devices
     model.deparallelize()  # Put the model back on cpu and cleans memory by calling torch.cuda.empty_cache()
-    ```
+    ```py
 """
 
 # 定义了一个 T5LayerNorm 类，继承自 nn.Module
@@ -1107,7 +1107,7 @@ class T5ForConditionalGeneration(T5PreTrainedModel):
         use_cache=None,
         encoder_outputs=None,
         **kwargs,
-```  
+```py  
     # 如果在使用 past_key_values 的情况下，修剪 decoder_input_ids
     if past_key_values is not None:
         # 获取过去键值的长度
@@ -1303,7 +1303,7 @@ class T5EncoderModel(T5PreTrainedModel):
         ... ).input_ids  # Batch size 1
         >>> outputs = model(input_ids=input_ids)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
         # 如果 return_dict 不是 None，则使用其值；否则使用配置中的 use_return_dict 值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
     

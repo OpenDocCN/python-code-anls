@@ -1,6 +1,6 @@
 # `.\transformers\models\plbart\tokenization_plbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者和许可证信息
 # 根据 Apache 许可证 2.0 版本规定，使用此文件需要遵守许可证规定

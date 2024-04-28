@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_transfo_xl.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 2018年谷歌AI、谷歌Brain和卡耐基梅隆大学的作者以及HuggingFace Inc.团队的版权声明
 # 版权所有2018年，美国NVIDIA公司保留所有权利

@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\zero_shot_audio_classification.py`
 
-```
+```py
 # 导入所需模块和库
 from collections import UserDict  # 导入UserDict类，用于创建自定义字典类型
 from typing import Union  # 导入Union类型，用于指定多种可能的类型
@@ -35,7 +35,7 @@ class ZeroShotAudioClassificationPipeline(Pipeline):
     >>> classifier = pipeline(task="zero-shot-audio-classification", model="laion/clap-htsat-unfused")
     >>> classifier(audio, candidate_labels=["Sound of a dog", "Sound of vaccum cleaner"])
     [{'score': 0.9996, 'label': 'Sound of a dog'}, {'score': 0.0004, 'label': 'Sound of vaccum cleaner'}]
-    ```
+    ```py
 
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial) This audio

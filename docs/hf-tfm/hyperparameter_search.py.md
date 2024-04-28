@@ -1,6 +1,6 @@
 # `.\transformers\hyperparameter_search.py`
 
-```
+```py
 # 导入相关的集成模块和函数
 from .integrations import (
     is_optuna_available,

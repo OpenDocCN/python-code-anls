@@ -1,6 +1,6 @@
 # `.\transformers\models\regnet\modeling_flax_regnet.py`
 
-```
+```py
 # 导入所需的库
 from functools import partial
 from typing import Optional, Tuple
@@ -801,7 +801,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
     >>> inputs = image_processor(images=image, return_tensors="np")
     >>> outputs = model(**inputs)
     >>> last_hidden_states = outputs.last_hidden_state
-    ```
+    ```py
 """
 
 overwrite_call_docstring(FlaxRegNetModel, FLAX_VISION_MODEL_DOCSTRING)  # 覆盖调用文档字符串

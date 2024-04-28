@@ -1,6 +1,6 @@
 # `.\transformers\utils\fx.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本授权使用此文件
@@ -1023,7 +1023,7 @@ def symbolic_trace(
         from transformers.utils.fx import symbolic_trace
 
         traced_model = symbolic_trace(model, input_names=["input_ids", "attention_mask", "token_type_ids"])
-        ```
+        ```py
     """
     # 如果未指定输入参数名，则使用模型的虚拟输入��数名
     if input_names is None:

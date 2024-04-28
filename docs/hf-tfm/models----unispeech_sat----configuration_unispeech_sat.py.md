@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech_sat\configuration_unispeech_sat.py`
 
-```
+```py
 # 引入必要的库和模块
 # coding=utf-8
 # 导入预训练模型的配置基类
@@ -43,7 +43,7 @@ class UniSpeechSatConfig(PretrainedConfig):
 
     >>> # 访问模型的配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "unispeech-sat"
     model_type = "unispeech-sat"

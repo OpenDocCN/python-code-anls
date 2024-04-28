@@ -1,6 +1,6 @@
 # `.\models\cvt\configuration_cvt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，告知此代码的版权归属及使用许可
 # 此处使用了 Apache License, Version 2.0，表示在遵守许可的前提下可以使用此代码
@@ -42,7 +42,7 @@ class CvtConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 指定模型类型为 "cvt"
     model_type = "cvt"

@@ -1,6 +1,6 @@
 # `.\transformers\models\bert_generation\configuration_bert_generation.py`
 
-```
+```py
 # 导入必要的模块和类
 from ...configuration_utils import PretrainedConfig
 
@@ -29,7 +29,7 @@ class BertGenerationConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "bert-generation"

@@ -1,6 +1,6 @@
 # `.\transformers\models\openai\modeling_openai.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # Apache 2.0 许可证

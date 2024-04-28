@@ -1,6 +1,6 @@
 # `.\transformers\models\reformer\convert_reformer_trax_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 # 版权声明及许可证信息
 # 导入所需库和模块

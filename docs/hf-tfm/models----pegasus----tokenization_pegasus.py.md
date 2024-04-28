@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\tokenization_pegasus.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可证信息，指定本文件的编码格式和版权归属
 # Copyright 2020 Google and The HuggingFace Inc. team.

@@ -1,6 +1,6 @@
 # `.\transformers\models\vits\tokenization_vits.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，包括作者和团队信息
 # 根据 Apache 许可协议 Version 2.0 使用此文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\convert_roformer_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 该代码实现了将 TensorFlow 预训练的 RoFormer 模型权重转换为 PyTorch 模型
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.

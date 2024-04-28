@@ -1,6 +1,6 @@
 # `.\transformers\models\mask2former\image_processing_mask2former.py`
 
-```
+```py
 # 设定文件编码格式为 UTF-8
 # 版权声明及许可协议
 # 该模块用于 Mask2Former 的图像处理器类

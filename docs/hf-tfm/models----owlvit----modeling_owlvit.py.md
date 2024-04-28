@@ -1,6 +1,6 @@
 # `.\transformers\models\owlvit\modeling_owlvit.py`
 
-```
+```py
 # coding=utf-8
 # 此代码文件使用 utf-8 编码
 
@@ -836,7 +836,7 @@ class OwlViTTextModel(OwlViTPreTrainedModel):
         返回结果：
 
         示例：
-        ```python
+        ```py
         >>> from transformers import AutoProcessor, OwlViTTextModel
 
         >>> model = OwlViTTextModel.from_pretrained("google/owlvit-base-patch32")
@@ -968,7 +968,7 @@ class OwlViTVisionModel(OwlViTPreTrainedModel):
         返回 vision_model 的前向传播结果
 
         Examples:
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, OwlViTVisionModel
@@ -1055,7 +1055,7 @@ class OwlViTModel(OwlViTPreTrainedModel):
             applying the projection layer to the pooled output of [`OwlViTTextModel`].
             
         Examples:
-        ```python
+        ```py
         >>> from transformers import AutoProcessor, OwlViTModel
 
         >>> model = OwlViTModel.from_pretrained("google/owlvit-base-patch32")
@@ -1090,7 +1090,7 @@ class OwlViTModel(OwlViTPreTrainedModel):
             applying the projection layer to the pooled output of [`OwlViTVisionModel`].
 
         Examples:
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, OwlViTModel

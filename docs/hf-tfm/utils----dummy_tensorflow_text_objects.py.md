@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_tensorflow_text_objects.py`
 
-```
+```py
 # 该文件是由命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入依赖的模块 DummyObject 和 requires_backends
 from ..utils import DummyObject, requires_backends

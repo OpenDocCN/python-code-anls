@@ -1,6 +1,6 @@
 # `.\transformers\data\datasets\__init__.py`
 
-```
+```py
 # 导入相关模块
 
 # 导入 GlueDataset 和 GlueDataTrainingArguments 类

@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\modeling_gptsan_japanese.py`
 
-```
+```py
 # 将注释后的代码包含在一个代码块中
 # coding=utf-8
 

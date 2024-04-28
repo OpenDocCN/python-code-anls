@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t_v2\convert_fairseq2_to_hf.py`
 
-```
+```py
 # 导入必要的模块和类
 import argparse
 import os

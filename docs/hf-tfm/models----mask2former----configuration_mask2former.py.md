@@ -1,6 +1,6 @@
 # `.\transformers\models\mask2former\configuration_mask2former.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式和版权信息
 # 版权归 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队所有
@@ -51,7 +51,7 @@ class Mask2FormerConfig(PretrainedConfig):
 
     >>> # 访问模型的配置
     >>> configuration = model.config
-    ```
+    ```py
 
     """
 

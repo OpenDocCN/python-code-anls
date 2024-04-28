@@ -1,6 +1,6 @@
 # `.\transformers\models\luke\convert_luke_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设定脚本编码格式为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有
 #

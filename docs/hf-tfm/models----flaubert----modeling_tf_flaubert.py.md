@@ -1,6 +1,6 @@
 # `.\models\flaubert\modeling_tf_flaubert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，遵循 Apache License 2.0 协议
 # 引入相关 Python 库

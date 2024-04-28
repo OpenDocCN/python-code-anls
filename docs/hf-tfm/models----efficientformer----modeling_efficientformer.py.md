@@ -1,6 +1,6 @@
 # `.\models\efficientformer\modeling_efficientformer.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8
 

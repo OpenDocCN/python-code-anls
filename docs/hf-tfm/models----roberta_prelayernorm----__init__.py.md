@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta_prelayernorm\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权 2022 年由 HuggingFace 团队所有。保留所有权利
 # 根据 Apache 许可证 2.0 版本许可

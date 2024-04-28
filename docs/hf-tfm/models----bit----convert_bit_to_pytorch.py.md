@@ -1,6 +1,6 @@
 # `.\transformers\models\bit\convert_bit_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可证信息
 # 版权所有 2022 年由 HuggingFace Inc. 团队保留

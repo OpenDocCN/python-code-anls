@@ -1,6 +1,6 @@
 # `.\transformers\models\upernet\configuration_upernet.py`
 
-```
+```py
 # 代码文件的编码格式为UTF-8
 # 版权声明
 # 这是一个UperNet模型的配置类

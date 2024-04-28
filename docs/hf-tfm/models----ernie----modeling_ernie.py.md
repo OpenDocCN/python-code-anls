@@ -1,6 +1,6 @@
 # `.\models\ernie\modeling_ernie.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2022年版权归The HuggingFace Inc.团队所有
@@ -232,7 +232,7 @@ class ErnieSelfOutput(nn.Module):
         # LayerNorm
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
         return hidden_states
-```  
+```py  
 # 定义 ErnieAttention 类，用于实现 Ernie 模型中的注意力机制
 class ErnieAttention(nn.Module):
     def __init__(self, config, position_embedding_type=None):
@@ -1104,7 +1104,7 @@ class ErnieForNextSentencePrediction(ErniePreTrainedModel):
         >>> outputs = model(**encoding, labels=torch.LongTensor([1]))
         >>> logits = outputs.logits
         >>> assert logits[0, 0] < logits[0, 1]  # next sentence was random
-        ```
+        ```py
         """
 
         if "next_sentence_label" in kwargs:

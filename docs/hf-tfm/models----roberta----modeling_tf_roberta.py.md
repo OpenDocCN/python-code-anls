@@ -1,6 +1,6 @@
 # `.\transformers\models\roberta\modeling_tf_roberta.py`
 
-```
+```py
 # coding=utf-8
 # 设置脚本编码为 UTF-8
 
@@ -696,7 +696,7 @@ class TFRobertaEncoder(tf.keras.layers.Layer):
             attentions=all_attentions,
             cross_attentions=all_cross_attentions,
         )
-```  
+```py  
     # 构建模型
     def build(self, input_shape=None):
         # 如果已经构建过，则直接返回

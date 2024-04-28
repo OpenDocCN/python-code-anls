@@ -1,6 +1,6 @@
 # `.\transformers\models\perceiver\modeling_perceiver.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 Deepmind 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 进行许可
@@ -1209,7 +1209,7 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
         >>> logits = outputs.logits
         >>> list(logits.shape)
         [1, 368, 496, 2]
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 如果return_dict不为None，则使用return_dict，否则使用self.config.use_return_dict
 
         outputs = self.perceiver(

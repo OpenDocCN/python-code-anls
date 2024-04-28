@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_hybrid\__init__.py`
 
-```
+```py
 # 这些是 Hugging Face 团队版权声明和许可信息
 # Copyright 2022 The HuggingFace Team. All rights reserved.
 #

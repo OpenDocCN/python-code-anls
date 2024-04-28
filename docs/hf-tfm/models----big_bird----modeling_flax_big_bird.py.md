@@ -1,6 +1,6 @@
 # `.\transformers\models\big_bird\modeling_flax_big_bird.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：版权归 2021 年的 Google Flax 团队作者和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版（"许可证"）授权；除非遵守许可证，否则不得使用此文件
@@ -1443,7 +1443,7 @@ FLAX_BIG_BIRD_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, FlaxBigBirdForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google/bigbird-roberta-base")

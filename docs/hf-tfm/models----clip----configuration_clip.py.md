@@ -1,6 +1,6 @@
 # `.\transformers\models\clip\configuration_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可证信息
 # 导入所需模块和类
@@ -87,7 +87,7 @@ class CLIPTextConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```
+    ```py
 
     # 定义模型类型为 "clip_text_model"
     model_type = "clip_text_model"
@@ -208,7 +208,7 @@ class CLIPVisionConfig(PretrainedConfig):
     # 访问模型配置信息
     # 将模型配置信息赋值给 configuration
     configuration = model.config
-    ```
+    ```py
 
     # 定义 CLIP 视觉模型类型
     model_type = "clip_vision_model"
@@ -315,7 +315,7 @@ class CLIPConfig(PretrainedConfig):
     >>> config_vision = CLIPVisionConfig()
 
     >>> config = CLIPConfig.from_text_vision_configs(config_text, config_vision)
-    ```"""
+    ```py"""
 
     model_type = "clip"
 

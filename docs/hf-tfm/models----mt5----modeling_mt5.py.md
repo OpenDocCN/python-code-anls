@@ -1,6 +1,6 @@
 # `.\transformers\models\mt5\modeling_mt5.py`
 
-```
+```py
 # 指定字符编码格式为utf-8
 # 版权信息
 """ PyTorch mT5 model."""
@@ -56,7 +56,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```py
     # On a 4 GPU machine with mt5-xl:
     model = MT5ForConditionalGeneration.from_pretrained("Mt5-xl")
     device_map = {
@@ -755,7 +755,7 @@ class MT5Model(MT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import MT5Model, AutoTokenizer
 
     >>> model = MT5Model.from_pretrained("google/mt5-small")
@@ -906,7 +906,7 @@ class MT5ForConditionalGeneration(MT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import MT5ForConditionalGeneration, AutoTokenizer
 
     >>> model = MT5ForConditionalGeneration.from_pretrained("google/mt5-small")
@@ -968,7 +968,7 @@ class MT5ForConditionalGeneration(MT5PreTrainedModel):
     # 并行化方法的文档注释
     @add_start_docstrings(PARALLELIZE_DOCSTRING)
     # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration.parallelize 复制而来
-```  
+```py  
     # 并行化操作，根据给定的device_map在不同设备上并行化模型的encoder和decoder
     def parallelize(self, device_map=None):
         # 发出警告，提示方法将在 Transformers 的 v5 版本中移除
@@ -1175,7 +1175,7 @@ class MT5EncoderModel(MT5PreTrainedModel):
     >>> input_ids = tokenizer(article, return_tensors="pt").input_ids  # 获取输入文章的编码
     >>> outputs = model(input_ids)  # 将输入文章编码输入模型
     >>> hidden_state = outputs.last_hidden_state  # 获取模型输出的最后一个隐藏状态
-    ```"""
+    ```py"""
 
     model_type = "mt5"  # 模型类型
     config_class = MT5Config  # 配置类
@@ -1284,7 +1284,7 @@ class MT5EncoderModel(MT5PreTrainedModel):
         ... ).input_ids  # Batch size 1
         >>> outputs = model(input_ids=input_ids)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```"""
+        ```py"""
         # 如果未指定return_dict，则使用配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

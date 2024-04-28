@@ -1,6 +1,6 @@
 # `.\transformers\deepspeed.py`
 
-```
+```py
 # 导入警告模块，用于发出警告信息
 import warnings
 

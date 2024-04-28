@@ -1,6 +1,6 @@
 # `.\models\gpt2\modeling_gpt2.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，声明对代码版权拥有权
 # 版权声明，声明对代码版权拥有权
@@ -620,7 +620,7 @@ PARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```py
     # Here is an example of a device map on a machine with 4 GPUs using gpt2-xl, which has a total of 48 attention modules:
     model = GPT2LMHeadModel.from_pretrained("gpt2-xl")
     device_map = {
@@ -637,7 +637,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```py
     # On a 4 GPU machine with gpt2-large:
     model = GPT2LMHeadModel.from_pretrained("gpt2-large")
     device_map = {

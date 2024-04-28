@@ -1,6 +1,6 @@
 # `.\transformers\models\sam\modeling_sam.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明与许可证信息
 

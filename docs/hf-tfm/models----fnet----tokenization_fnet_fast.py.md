@@ -1,6 +1,6 @@
 # `.\models\fnet\tokenization_fnet_fast.py`
 
-```
+```py
 # 导入必要的库
 import os  # 导入操作系统库
 from shutil import copyfile  # 导入文件复制函数copyfile
@@ -149,7 +149,7 @@ class FNetTokenizerFast(PreTrainedTokenizerFast):
         """
         创建用于序列对分类任务的掩码。一个 FNet 序列对掩码的格式如下：
 
-        ```
+        ```py
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | 第一个序列       | 第二个序列     |
         ```

@@ -1,6 +1,6 @@
 # `.\transformers\models\oneformer\image_processing_oneformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可信息
@@ -415,7 +415,7 @@ class OneFormerImageProcessor(BaseImageProcessor):
         data_format=None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-``` 
+```py 
     ) -> np.ndarray:
         """
         Resize the image to the given size. Size can be min_size (scalar) or `(height, width)` tuple. If size is an

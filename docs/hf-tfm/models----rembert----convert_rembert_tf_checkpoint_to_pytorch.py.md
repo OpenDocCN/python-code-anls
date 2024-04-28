@@ -1,6 +1,6 @@
 # `.\transformers\models\rembert\convert_rembert_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入所需模块和库
 import argparse  # 用于解析命令行参数
 

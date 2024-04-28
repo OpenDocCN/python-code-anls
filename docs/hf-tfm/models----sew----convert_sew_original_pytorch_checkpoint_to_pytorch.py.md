@@ -1,6 +1,6 @@
 # `.\transformers\models\sew\convert_sew_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入所需的 Python 库和模块
 import argparse
 import json

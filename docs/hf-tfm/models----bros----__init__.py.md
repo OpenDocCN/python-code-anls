@@ -1,6 +1,6 @@
 # `.\transformers\models\bros\__init__.py`
 
-```
+```py
 # 导入 TYPE_CHECKING 模块，用于类型检查
 from typing import TYPE_CHECKING
 # 导入 OptionalDependencyNotAvailable 异常和 _LazyModule，以及 is_tokenizers_available 和 is_torch_available 函数

@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_essentia_and_librosa_and_pretty_midi_and_scipy_and_torch_objects.py`
 
-```
+```py
 # 这个文件是通过命令 `make fix-copies` 自动生成的，请勿编辑。
 # 导入所需的模块
 from ..utils import DummyObject, requires_backends

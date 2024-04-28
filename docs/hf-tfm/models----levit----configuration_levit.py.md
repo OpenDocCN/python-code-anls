@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\configuration_levit.py`
 
-```
+```py
 # 导入必要的库和模块
 # 从collections模块中导入OrderedDict类，用于创建有序的字典
 # 从typing模块中导入Mapping类，用于指定字典的类型注解

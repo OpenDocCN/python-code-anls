@@ -1,6 +1,6 @@
 # `.\transformers\models\audio_spectrogram_transformer\modeling_audio_spectrogram_transformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 MIT 和 The HuggingFace Inc. 团队所有
 #

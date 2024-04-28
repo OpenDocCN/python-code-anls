@@ -1,6 +1,6 @@
 # `.\transformers\models\unispeech_sat\__init__.py`
 
-```
+```py
 # 导入类型检查模块，用于检查是否支持类型检查
 from typing import TYPE_CHECKING
 

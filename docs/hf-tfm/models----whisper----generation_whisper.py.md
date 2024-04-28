@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\generation_whisper.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明
 # 根据 Apache 许可协议，进行代码许可

@@ -1,6 +1,6 @@
 # `.\transformers\models\qwen2\tokenization_qwen2.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式和版权信息
 
@@ -102,7 +102,7 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [21927, 1879]
-    ```
+    ```py
     This is expected.
 
     You should not use GPT2Tokenizer instead, because of the different pretokenization rules.

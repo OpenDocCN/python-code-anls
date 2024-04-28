@@ -1,6 +1,6 @@
 # `.\transformers\commands\add_new_model_like.py`
 
-```
+```py
 # 导入模块和库
 import difflib  # 用于比较序列之间差异的库
 import json  # 用于处理 JSON 格式数据的库
@@ -523,7 +523,7 @@ def remove_attributes(obj, target_attr):
     # See all {new_model_patterns.model_name} models at https://huggingface.co/models?filter={new_model_patterns.model_type}
 ]
 
-```  # 格式化特殊情况的新对象并添加到新对象列表
+```py  # 格式化特殊情况的新对象并添加到新对象列表
 # 将新对象添加到列表中并继续下一个对象的处理
             new_objects.append(obj)
             continue

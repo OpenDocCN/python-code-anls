@@ -1,6 +1,6 @@
 # `.\transformers\models\llama\tokenization_llama.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 基于EleutherAI的GPT-NeoX库和该库中的GPT-NeoX和OPT实现的代码。已对其进行修改，以适应与训练模型的Meta AI团队相比存在的轻微架构差异。
@@ -334,7 +334,7 @@ class LlamaTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         if token_ids_1 is None, only returns the first portion of the mask (0s).
 

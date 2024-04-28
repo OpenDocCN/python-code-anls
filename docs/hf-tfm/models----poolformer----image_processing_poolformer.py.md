@@ -1,6 +1,6 @@
 # `.\transformers\models\poolformer\image_processing_poolformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 HuggingFace Inc. 团队。保留所有权利。

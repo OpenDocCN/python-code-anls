@@ -1,6 +1,6 @@
 # `.\transformers\models\mpnet\configuration_mpnet.py`
 
-```
+```py
 # 导入必要的模块和类
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -52,7 +52,7 @@ class MPNetConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```py
     >>> from transformers import MPNetModel, MPNetConfig
 
     >>> # Initializing a MPNet mpnet-base style configuration

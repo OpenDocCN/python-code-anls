@@ -1,6 +1,6 @@
 # `.\transformers\models\bark\__init__.py`
 
-```
+```py
 # 引入必要的模块和函数
 from typing import TYPE_CHECKING
 

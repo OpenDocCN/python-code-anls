@@ -1,6 +1,6 @@
 # `.\transformers\generation\beam_constraints.py`
 
-```
+```py
 # 导入必要的模块
 from abc import ABC, abstractmethod
 from typing import List, Optional
@@ -16,7 +16,7 @@ class Constraint(ABC):
     completed = False
     while not completed:
         _, completed = constraint.update(constraint.advance())
-    ```
+    ```py
 
     will always terminate (halt).
     """

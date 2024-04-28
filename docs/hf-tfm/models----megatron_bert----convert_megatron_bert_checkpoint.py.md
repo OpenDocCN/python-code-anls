@@ -1,6 +1,6 @@
 # `.\transformers\models\megatron_bert\convert_megatron_bert_checkpoint.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权所有（c）2021年，NVIDIA公司。保留所有权利。
 # 根据Apache许可证2.0版（“许可证”）获得许可；

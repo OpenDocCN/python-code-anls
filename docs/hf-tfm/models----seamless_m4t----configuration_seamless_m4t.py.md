@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t\configuration_seamless_m4t.py`
 
-```
+```py
 # 这是一个 Python 脚本，包含了 SeamlessM4T 模型配置的定义。
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
@@ -52,7 +52,7 @@ class SeamlessM4TConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "seamless_m4t"

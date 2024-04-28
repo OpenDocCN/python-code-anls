@@ -1,6 +1,6 @@
 # `.\transformers\models\mt5\modeling_tf_mt5.py`
 
-```
+```py
 # 指定编码方式为 UTF-8
 # 版权声明及许可证信息
 # 导入日志记录工具
@@ -27,7 +27,7 @@ class TFMT5Model(TFT5Model):
 
     >>> outputs = model(input_ids=inputs["input_ids"], decoder_input_ids=labels["input_ids"])
     >>> hidden_states = outputs.last_hidden_state
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "mt5"
@@ -52,7 +52,7 @@ class TFMT5ForConditionalGeneration(TFT5ForConditionalGeneration):
 
     >>> outputs = model(**inputs)
     >>> loss = outputs.loss
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "mt5"

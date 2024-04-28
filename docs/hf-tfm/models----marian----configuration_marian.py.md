@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\configuration_marian.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 根据 Apache License, Version 2.0 获取许可，如果不符合许可则不得使用该文件
@@ -50,7 +50,7 @@ class MarianConfig(PretrainedConfig):
     >>> model = MarianModel(configuration)
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     # 定义 model_type 属性为 "marian"
     model_type = "marian"
     # 在推断阶段要忽略的密钥列表

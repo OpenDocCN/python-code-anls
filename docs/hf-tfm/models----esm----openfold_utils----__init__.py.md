@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\__init__.py`
 
-```
+```py
 # 从相对路径导入模块中的函数或类
 from .chunk_utils import chunk_layer
 # 从相对路径导入模块中的函数或类

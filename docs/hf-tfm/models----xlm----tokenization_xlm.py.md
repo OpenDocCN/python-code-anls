@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\tokenization_xlm.py`
 
-```
+```py
 # Tokenization classes for XLM.
 用于XLM的标记化类。
 
@@ -708,7 +708,7 @@ class XLMTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

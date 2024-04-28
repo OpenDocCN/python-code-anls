@@ -1,6 +1,6 @@
 # `.\transformers\models\longformer\tokenization_longformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明：本代码由 The Allen Institute for AI team 和 The HuggingFace Inc. team 版权所有
 #

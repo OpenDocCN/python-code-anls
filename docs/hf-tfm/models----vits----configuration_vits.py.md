@@ -1,6 +1,6 @@
 # `.\transformers\models\vits\configuration_vits.py`
 
-```
+```py
 # 导入必要的模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -37,7 +37,7 @@ class VitsConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型标识为 "vits"
     model_type = "vits"

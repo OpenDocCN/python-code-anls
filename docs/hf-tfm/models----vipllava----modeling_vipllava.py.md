@@ -1,6 +1,6 @@
 # `.\transformers\models\vipllava\modeling_vipllava.py`
 
-```
+```py
 # coding=utf-8
 # 版本信息和版权声明
 from dataclasses import dataclass

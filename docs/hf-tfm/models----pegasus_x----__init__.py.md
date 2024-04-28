@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus_x\__init__.py`
 
-```
+```py
 # 导入类型检查库
 from typing import TYPE_CHECKING
 

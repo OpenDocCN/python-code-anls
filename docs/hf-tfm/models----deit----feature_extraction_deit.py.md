@@ -1,6 +1,6 @@
 # `.\models\deit\feature_extraction_deit.py`
 
-```
+```py
 # 导入 utf-8 编码
 # coding=utf-8
 # 导入 HuggingFace Inc. 团队的版权声明

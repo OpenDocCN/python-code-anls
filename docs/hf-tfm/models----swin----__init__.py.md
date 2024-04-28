@@ -1,6 +1,6 @@
 # `.\transformers\models\swin\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 
 # 引入类型检查模块

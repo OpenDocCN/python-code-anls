@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\modeling_tf_whisper.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 OpenAI 作者和 HuggingFace Inc. 团队。保留所有权利。
@@ -806,7 +806,7 @@ class TFWhisperModel(TFWhisperPreTrainedModel):
 
         示例:
 
-         ```python
+         ```py
          >>> import tensorflow as tf
          >>> from transformers import TFWhisperModel, AutoFeatureExtractor
          >>> from datasets import load_dataset
@@ -841,7 +841,7 @@ class TFWhisperModel(TFWhisperPreTrainedModel):
         )
         # 返回模型输出
         return outputs
-    ``` 
+    ```py 
         # 为服务输出设置函数，接受输出为参数
         def serving_output(self, output):
             # 如果配置使用缓存，则从输出的过去键值对元组中获取第二个元素作为pkv；否则设置为None

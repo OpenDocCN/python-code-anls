@@ -1,6 +1,6 @@
 # `.\transformers\models\led\modeling_led.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 Iz Beltagy，Matthew E. Peters，Arman Cohan 和 The HuggingFace Inc. 团队。保留所有权利。
 # 根据 Apache 许可证 2.0（“许可证”）进行许可；
@@ -814,7 +814,7 @@ LED_START_DOCSTRING = r"""
 LED_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```py
     >>> import torch
     >>> from transformers import AutoTokenizer, LEDForConditionalGeneration
 
@@ -1355,7 +1355,7 @@ class LEDForSequenceClassification(LEDPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-``` 
+```py 
 
 
 # 为抽取式问答任务设计的 LED 模型，包含一个跨度分类头（在隐藏状态输出的顶部是一个线性层），例如用于 SQuAD 任务

@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_conformer\modeling_wav2vec2_conformer.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明
 # 使用 Apache License, Version 2.0 许可

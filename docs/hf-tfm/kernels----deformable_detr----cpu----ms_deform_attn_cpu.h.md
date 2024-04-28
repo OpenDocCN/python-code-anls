@@ -1,6 +1,6 @@
 # `.\transformers\kernels\deformable_detr\cpu\ms_deform_attn_cpu.h`
 
-```
+```py
 /*!
 **************************************************************************************************
 * Deformable DETR

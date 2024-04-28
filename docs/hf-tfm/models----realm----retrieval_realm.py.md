@@ -1,6 +1,6 @@
 # `.\transformers\models\realm\retrieval_realm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，作者REALM和HuggingFace Inc.团队
 # 根据Apache许可证版本2.0许可使用此文件

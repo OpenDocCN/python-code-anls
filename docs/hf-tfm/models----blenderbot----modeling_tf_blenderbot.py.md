@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot\modeling_tf_blenderbot.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可信息
 from __future__ import annotations
@@ -1177,7 +1177,7 @@ class TFBlenderbotForConditionalGeneration(TFBlenderbotPreTrainedModel, TFCausal
         )
 
     # 从 transformers.models.bart.modeling_tf_bart.TFBartForConditionalGeneration.serving_output 复制而来
-```  
+```py  
     # 定义一个方法，用于处理模型的输出并返回适合服务的格式
     def serving_output(self, output):
         # 如果配置中使用了缓存，则获取解码器的过去键值对中的值，否则设为 None

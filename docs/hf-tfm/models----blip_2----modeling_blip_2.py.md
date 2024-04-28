@@ -1,6 +1,6 @@
 # `.\transformers\models\blip_2\modeling_blip_2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可协议
 # 注意：该代码涉及版权声明和许可协议，要确保在使用时遵循相应的法律规定和许可协议。
@@ -1313,7 +1313,7 @@ class Blip2Model(Blip2PreTrainedModel):
         >>> tokenizer = AutoTokenizer.from_pretrained("Salesforce/blip2-opt-2.7b")
         >>> inputs = tokenizer(["a photo of a cat"], padding=True, return_tensors="pt")
         >>> text_features = model.get_text_features(**inputs)
-        ```"""
+        ```py"""
         # 如果未提供值，则使用配置中的参数值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -1375,7 +1375,7 @@ class Blip2Model(Blip2PreTrainedModel):
         >>> image = Image.open(requests.get(url, stream=True).raw)
         >>> inputs = processor(images=image, return_tensors="pt")
         >>> image_outputs = model.get_image_features(**inputs)
-        ```"""
+        ```py"""
         # 如果未提供output_attentions参数，则使用配置中的output_attentions参数
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 如果未提供output_hidden_states参数，则使用配置中的output_hidden_states参数
@@ -1424,7 +1424,7 @@ class Blip2Model(Blip2PreTrainedModel):
         >>> image = Image.open(requests.get(url, stream=True).raw)
         >>> inputs = processor(images=image, return_tensors="pt")
         >>> qformer_outputs = model.get_qformer_features(**inputs)
-        ```"""
+        ```py"""
         # 设置输出注意力权重，默认为模型配置中的设置
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         # 设置输出隐藏状态，默认为模型配置中的设置

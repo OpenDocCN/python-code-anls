@@ -1,6 +1,6 @@
 # `.\transformers\models\vit_msn\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息
 # 版权©2020 The HuggingFace Team。保留所有权利。
 # 根据Apache许可证第2.0版（“许可证”）获得许可；

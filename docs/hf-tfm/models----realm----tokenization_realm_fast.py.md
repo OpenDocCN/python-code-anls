@@ -1,6 +1,6 @@
 # `.\transformers\models\realm\tokenization_realm_fast.py`
 
-```
+```py
 # 导入所需模块
 import json
 from typing import List, Optional, Tuple
@@ -233,7 +233,7 @@ class RealmTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\convert_s2t_fairseq_to_tfms.py`
 
-```
+```py
 # 导入所需的库
 import argparse
 import torch

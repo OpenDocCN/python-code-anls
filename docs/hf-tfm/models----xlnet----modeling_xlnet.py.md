@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\modeling_xlnet.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明
 """
@@ -720,7 +720,7 @@ class XLNetForMultipleChoiceOutput(ModelOutput):
 class XLNetForQuestionAnsweringSimpleOutput(ModelOutput):
     """
     Output type of [`XLNetForQuestionAnsweringSimple`].
-    ```
+    ```py
     # `loss`是一个可选的`torch.FloatTensor`对象，形状为`(1,)`，当提供`labels`时返回
     # 总的跨度抽取损失是起始位置和结束位置的交叉熵损失的总和
     loss: Optional[torch.FloatTensor] = None

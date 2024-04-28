@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\modeling_tf_albert.py`
 
-```
+```py
 # 导入所需模块和库
 from __future__ import annotations
 
@@ -952,7 +952,7 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
 
         Example:
 
-        ```python
+        ```py
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFAlbertForPreTraining
 
@@ -1094,7 +1094,7 @@ class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss)
 
         Example:
 
-        ```python
+        ```py
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFAlbertForMaskedLM
 
@@ -1112,7 +1112,7 @@ class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss)
         'france'
         ```
 
-        ```python
+        ```py
         >>> labels = tokenizer("The capital of France is Paris.", return_tensors="tf")["input_ids"]
         >>> labels = tf.where(inputs.input_ids == tokenizer.mask_token_id, labels, -100)
         >>> outputs = model(**inputs, labels=labels)

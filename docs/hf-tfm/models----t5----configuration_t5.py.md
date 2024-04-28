@@ -1,6 +1,6 @@
 # `.\transformers\models\t5\configuration_t5.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明和许可证信息
 # T5 模型的配置类

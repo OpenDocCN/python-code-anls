@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2\convert_wav2vec2_original_s3prl_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置 UTF-8 编码
 # 版权声明
 # 根据 Apache 许可证 2.0 版许可使用

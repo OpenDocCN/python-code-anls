@@ -1,6 +1,6 @@
 # `.\transformers\models\marian\modeling_marian.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，版权归 The Marian Team 作者和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -392,7 +392,7 @@ MARIAN_GENERATION_EXAMPLE = r"""
     >>> generated_ids = model.generate(**batch)
     >>> tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
     "Where's the bus stop?"
-    ```
+    ```py
 """
 
 # 定义 MARIAN_INPUTS_DOCSTRING 变量，暂时没有内容，可以用于添加模型输入说明

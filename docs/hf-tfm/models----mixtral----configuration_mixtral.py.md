@@ -1,6 +1,6 @@
 # `.\transformers\models\mixtral\configuration_mixtral.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache许可证进行许可
@@ -44,7 +44,7 @@ class MixtralConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为mixtral
     model_type = "mixtral"

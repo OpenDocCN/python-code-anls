@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\image_to_image.py`
 
-```
+```py
 # 版权声明及许可证信息
 # 版权声明
 # 许可证：Apache许可证2.0
@@ -60,7 +60,7 @@ class ImageToImagePipeline(Pipeline):
 
     >>> upscaled_img.size
     (144, 144)
-    ```
+    ```py
 
     目前可以使用该图像到图像管道从[`pipeline`]加载，使用以下任务标识符：
     `"image-to-image"`。

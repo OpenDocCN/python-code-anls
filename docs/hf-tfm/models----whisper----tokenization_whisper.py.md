@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\tokenization_whisper.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，声明代码的版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 许可，你可以在遵守许可的前提下使用本文件中的代码
@@ -345,7 +345,7 @@ class WhisperTokenizer(PreTrainedTokenizer):
         >>> tokenizer = WhisperTokenizer.from_pretrained("openai/whisper-tiny", language="spanish")
         >>> # now switch the prefix token from Spanish to French
         >>> tokenizer.set_prefix_tokens(language="french")
-        ```
+        ```py
 
         Args:
             language (`str`, *optional*, defaults to `None`):

@@ -1,6 +1,6 @@
 # `.\transformers\models\bart\configuration_bart.py`
 
-```
+```py
 # 设置编码格式为UTF-8
 # 版权声明
 # 导入警告模块
@@ -46,7 +46,7 @@ class BartConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为"bart"

@@ -1,6 +1,6 @@
 # `.\generation\logits_process.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 基于Apache License, Version 2.0授权使用该文件
@@ -144,7 +144,7 @@ class MinLengthLogitsProcessor(LogitsProcessor):
     >>> gen_out = model.generate(**inputs, min_length=10)
     >>> print(tokenizer.batch_decode(gen_out, skip_special_tokens=True)[0])
     A number: one thousand, nine hundred and ninety-four
-    ```
+    ```py
     """
 
     def __init__(self, min_length: int, eos_token_id: Union[int, List[int]]):
@@ -204,7 +204,7 @@ class MinLengthLogitsProcessor(LogitsProcessor):
     >>> gen_out = model.generate(**inputs, min_new_tokens=2)
     >>> print(tokenizer.batch_decode(gen_out, skip_special_tokens=True)[0])
     A number: one thousand
-    ```
+    ```py
     """
 
     def __init__(self, prompt_length_to_skip: int, min_new_tokens: int, eos_token_id: Union[int, List[int]]):
@@ -314,7 +314,7 @@ class RepetitionPenaltyLogitsProcessor(LogitsProcessor):
     >>> penalized_ids = model.generate(**inputs, repetition_penalty=1.1)
     >>> print(tokenizer.batch_decode(penalized_ids, skip_special_tokens=True)[0])
     I'm not going to be able to do that. I'll just have to go out and play
-    ```
+    ```py
     """
 
     # 初始化方法，接受一个浮点数参数作为重复惩罚的值
@@ -376,7 +376,7 @@ class EncoderRepetitionPenaltyLogitsProcessor(LogitsProcessor):
     >>> gen_out = model.generate(**inputs, encoder_repetition_penalty=1.2)
     >>> print(tokenizer.batch_decode(gen_out, skip_special_tokens=True)[0])
     Alice and Bob. The third member's name was Bob. The third member's name was Bob.
-    ```
+    ```py
     """
 
     # 初始化函数，接收惩罚参数和编码器输入id
@@ -436,7 +436,7 @@ class TopPLogitsWarper(LogitsWarper):
     >>> outputs = model.generate(**inputs, do_sample=True, top_p=0.1)
     >>> print(tokenizer.batch_decode(outputs, skip_special_tokens=True)[0])
     A sequence: 1, 2, 3, 4, 5, 6, 7, 8, 9
-    ```
+    ```py
     """
 
     # 初始化方法，设置top_p参数、filter_value参数和min_tokens_to_keep参数
@@ -513,7 +513,7 @@ class TopKLogitsWarper(LogitsWarper):
     >>> outputs = model.generate(**inputs, do_sample=True, top_k=2)
     >>> print(tokenizer.batch_decode(outputs, skip_special_tokens=True)[0])
     A sequence: A, B, C, D, E, F, G, H, I
-    ```
+    ```py
 
     """
 
@@ -620,7 +620,7 @@ class EpsilonLogitsWarper(LogitsWarper):
     >>> outputs = model.generate(**inputs, do_sample=True, epsilon_cutoff=0.1)
     >>> print(tokenizer.batch_decode(outputs, skip_special_tokens=True)[0])
     A sequence: 1, 2, 3, 4, 5, 6, 7, 8, 9
-    ```
+    ```py
     """
 
     def __init__(self, epsilon: float, filter_value: float = -float("Inf"), min_tokens_to_keep: int = 1):
@@ -699,7 +699,7 @@ class EtaLogitsWarper(LogitsWarper):
     >>> outputs = model.generate(**inputs, do_sample=True, eta_cutoff=0.1)
     >>> print(tokenizer.batch_decode(outputs, skip_special_tokens=True)[0])
     A sequence: 1, 2, 3, 4, 5, 6, 7, 8, 9
-    ```
+    ```py
     """
     # 定义类的初始化方法，设置epsilon、filter_value和min_tokens_to_keep的默认值并进行类型检查
     def __init__(self, epsilon: float, filter_value: float = -float("Inf"), min_tokens_to_keep: int = 1):
@@ -870,7 +870,7 @@ class NoRepeatNGramLogitsProcessor(LogitsProcessor):
         >>> print(tokenizer.batch_decode(outputs, skip_special_tokens=True)[0])
         Alice: I love cats. What do you love?
         Bob: My cats are very cute.
-        ```
+        ```py
         """
     
         def __init__(self, encoder_ngram_size: int, encoder_input_ids: torch.LongTensor):
@@ -1104,7 +1104,7 @@ class NoBadWordsLogitsProcessor(SequenceBiasLogitsProcessor):
             
     Examples:
     
-    ```python
+    ```py
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("gpt2")
@@ -1314,7 +1314,7 @@ class HammingDiversityLogitsProcessor(LogitsProcessor):
     >>> print(summaries_diverse)
     ['the solar system formed 4.6 billion years ago from the collapse of a giant interstellar molecular cloud. of the objects that orbit the Sun directly, the largest are the eight planets.',
     'the solar system formed 4.6 billion years ago from the collapse of a giant interstellar molecular cloud. of the objects that orbit the Sun directly, the largest are the eight planets. the rest of the objects are smaller objects, such as the five dwarf planets and small solar system bodies.']
-    ```
+    ```py
 
     def __init__(self, diversity_penalty: float, num_beams: int, num_beam_groups: int):
         # 检查并设置多样性惩罚项
@@ -1409,7 +1409,7 @@ class ForcedBOSTokenLogitsProcessor(LogitsProcessor):
     >>> outputs = model.generate(**inputs, max_new_tokens=10, forced_bos_token_id=tokenizer.eos_token_id)
     >>> print(tokenizer.batch_decode(outputs)[0])
     <pad></s>
-    ```
+    ```py
     """
 
     def __init__(self, bos_token_id: int):
@@ -1453,7 +1453,7 @@ class ForcedEOSTokenLogitsProcessor(LogitsProcessor):
 
     >>> # `forced_eos_token_id` ensures the generation ends with a EOS token
     >>> outputs = model.generate(**inputs, max_new_tokens=10, forced_eos_token_id=tokenizer.eos_token_id)
-    ```
+    ```py
     # 打印第一个输出序列的解码结果
     >>> print(tokenizer.batch_decode(outputs)[0])
     A sequence: 1, 2, 3, 4, 5, 6, 7,<|endoftext|>
@@ -1545,7 +1545,7 @@ class ExponentialDecayLengthPenalty(LogitsProcessor):
     >>> # To promote the appearance of the EOS token at the right time, we add the `exponential_decay_length_penalty =
     >>> # (start_index, decay_factor)`. Instead of cutting at max_tokens, the output comes to an end before and usually
     >>> # with more meaning. What happens is that starting from `start_index` the EOS token score will be increased
-    ```
+    ```py
     # 设置初始种子来生成随机序列
     set_seed(1)
     # 使用模型生成文本输出
@@ -1635,14 +1635,14 @@ class LogitNormalization(LogitsProcessor, LogitsWarper):
     >>> outputs = model.generate(**inputs, renormalize_logits=True, return_dict_in_generate=True, output_scores=True)
     >>> print(torch.sum(torch.exp(outputs.scores[-1])))
     tensor(1.0000)
-    ```
+    ```py
     ```python中的例子：
     # 通过默认情况下，得分没有被标准化——它们的指数和不是标准化的概率分布，总和是1
     # 通过默认情况下，得分没有被标准化——它们的指数和不是标准化的概率分布，总和是1
     >>> outputs = model.generate(**inputs, renormalize_logits=True, return_dict_in_generate=True, output_scores=True)
     >>> print(torch.sum(torch.exp(outputs.scores[-1])))
     tensor(1.0000)
-    ```
+    ```py
 
     """
 
@@ -1675,11 +1675,11 @@ class SuppressTokensAtBeginLogitsProcessor(LogitsProcessor):
     >>> # Whisper has `begin_suppress_tokens` set by default (= `[220, 50256]`). 50256 is the EOS token, so this means
     >>> # it can't generate and EOS token in the first iteration, but it can in the others.
     >>> outputs = model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
-    ```
+    ```py
     ```python中的例子：
     # 默认情况下，Whisper has 'begin_suppress_tokens' 默认为（=[220, 50256]），50256是EOS令牌，因此这意味着它在第一次迭代中无法生成EOS令牌，但在其他迭代中可以。
     >>> outputs = model.generate(**inputs, return_dict_in_generate=True, output_scores=True)
-    ```
+    ```py
     # 输出模型的第一个生成token的分数
     print(outputs.scores[1][0, 50256])  # 1 (and not 0) is the first freely generated token
     # 输出模型生成的最后一个token的分数
@@ -1736,7 +1736,7 @@ class SuppressTokensLogitsProcessor(LogitsProcessor):
     >>> outputs = model.generate(**inputs, return_dict_in_generate=True, output_scores=True, suppress_tokens=None)
     >>> print(outputs.scores[1][0, 1])
     tensor(5.7738)
-    ```
+    ```py
     """
 
     def __init__(self, suppress_tokens):
@@ -1837,7 +1837,7 @@ class WhisperTimeStampLogitsProcessor(LogitsProcessor):
         _detect_timestamp_from_logprob (`bool`, *optional*): 是否可以从所有时间戳的logprobs中预测时间戳。
 
     Examples:
-    ``` python
+    ```py python
     >>> import torch
     >>> from transformers import AutoProcessor, WhisperForConditionalGeneration, GenerationConfig
     >>> from datasets import load_dataset
@@ -2056,7 +2056,7 @@ class ClassifierFreeGuidanceLogitsProcessor(LogitsProcessor):
     ...     return_tensors="pt",
     ... )
     >>> audio_values = model.generate(**inputs, do_sample=True, guidance_scale=3, max_new_tokens=256)
-    ```
+    ```py
     """
 
     # 初始化函数，接受一个 guidance_scale 参数

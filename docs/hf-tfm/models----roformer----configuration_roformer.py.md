@@ -1,6 +1,6 @@
 # `.\transformers\models\roformer\configuration_roformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # Apache 2.0 许可证

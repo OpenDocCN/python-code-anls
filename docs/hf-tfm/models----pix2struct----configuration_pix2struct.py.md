@@ -1,6 +1,6 @@
 # `.\transformers\models\pix2struct\configuration_pix2struct.py`
 
-```
+```py
 # 此文件包含 Pix2StructTextConfig 类的定义，该类用于存储 Pix2StructTextModel 的配置信息
 # 包含了导入必要的模块以及定义了 Pix2StructTextConfig 类
 
@@ -214,7 +214,7 @@ class Pix2StructVisionConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 定义模型类型为 "pix2struct_vision_model"
     model_type = "pix2struct_vision_model"
@@ -329,7 +329,7 @@ class Pix2StructConfig(PretrainedConfig):
     >>> config_vision = Pix2StructVisionConfig()
 
     >>> config = Pix2StructConfig.from_text_vision_configs(config_text, config_vision)
-    ```"""
+    ```py"""
 
     # 模型类型为 "pix2struct"
     model_type = "pix2struct"

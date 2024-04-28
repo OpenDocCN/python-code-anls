@@ -1,6 +1,6 @@
 # `.\transformers\generation\stopping_criteria.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 导入警告模块

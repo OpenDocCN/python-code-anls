@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\configuration_gpt_neox.py`
 
-```
+```py
 # 模块的编码声明，指定编码为 UTF-8
 # 版权声明，版权归 EleutherAI 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，使用该文件需要遵守许可证的规定
@@ -43,7 +43,7 @@ class GPTNeoXConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config  # doctest: +SKIP
-    ```"""
+    ```py"""
 
     model_type = "gpt_neox"
 

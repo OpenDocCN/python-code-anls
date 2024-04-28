@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\processing_layoutlmv2.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明 2021 年 HuggingFace 公司团队所有
 # 根据 Apache 许可证第 2.0 版授权

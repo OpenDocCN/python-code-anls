@@ -1,6 +1,6 @@
 # `.\models\flava\feature_extraction_flava.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 

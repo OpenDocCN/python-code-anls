@@ -1,6 +1,6 @@
 # `.\models\idefics\modeling_idefics.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，基于 EleutherAI 的 GPT-NeoX 库和 GPT-NeoX 中的 GPT-NeoX 和 OPT 实现
 # 根据 Apache 许可证 2.0 版本授权

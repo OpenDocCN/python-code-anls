@@ -1,6 +1,6 @@
 # `.\transformers\models\levit\__init__.py`
 
-```
+```py
 # 定义版权声明和许可证信息
 # 使用 import 语句导入模块
 from typing import TYPE_CHECKING

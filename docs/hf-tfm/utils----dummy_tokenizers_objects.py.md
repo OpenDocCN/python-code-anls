@@ -1,6 +1,6 @@
 # `.\transformers\utils\dummy_tokenizers_objects.py`
 
-```
+```py
 # 该文件是由命令 `make fix-copies` 自动生成的，不要编辑。
 # 导入必要的模块
 from ..utils import DummyObject, requires_backends

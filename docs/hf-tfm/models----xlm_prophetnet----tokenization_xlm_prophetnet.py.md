@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm_prophetnet\tokenization_xlm_prophetnet.py`
 
-```
+```py
 # 编码声明，使用 UTF-8 编码
 # 版权声明，告知代码的版权信息和许可协议
 import collections

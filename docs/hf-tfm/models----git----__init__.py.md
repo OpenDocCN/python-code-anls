@@ -1,6 +1,6 @@
 # `.\models\git\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权所有 © 2022 The HuggingFace Team。
 # 根据 Apache 许可证 2.0 版本许可。

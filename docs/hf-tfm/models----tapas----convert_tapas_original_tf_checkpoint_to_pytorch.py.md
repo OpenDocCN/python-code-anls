@@ -1,6 +1,6 @@
 # `.\transformers\models\tapas\convert_tapas_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入需要的库和模块
 import argparse
 

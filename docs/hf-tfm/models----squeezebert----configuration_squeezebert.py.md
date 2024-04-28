@@ -1,6 +1,6 @@
 # `.\transformers\models\squeezebert\configuration_squeezebert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 许可证详细信息
@@ -55,7 +55,7 @@ class SqueezeBertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
 
     属性: 
     pretrained_config_archive_map (Dict[str, str]): 包含所有可用预训练检查点的字典。

@@ -1,6 +1,6 @@
 # `.\models\cpm\tokenization_cpm_fast.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 根据Apache License, Version 2.0进行授权，禁止违规使用
@@ -74,7 +74,7 @@ class CpmTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         Args:
             token_ids_0 (`List[int]`):
@@ -106,7 +106,7 @@ class CpmTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         Args:
             token_ids_0 (`List[int]`):

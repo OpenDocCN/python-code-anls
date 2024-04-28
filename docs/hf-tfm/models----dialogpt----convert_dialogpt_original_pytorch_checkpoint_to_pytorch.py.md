@@ -1,6 +1,6 @@
 # `.\models\dialogpt\convert_dialogpt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 版权声明及许可信息
 # 版权声明及许可信息
 # 导入必要的库和模块

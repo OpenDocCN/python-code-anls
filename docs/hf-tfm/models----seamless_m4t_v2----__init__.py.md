@@ -1,6 +1,6 @@
 # `.\transformers\models\seamless_m4t_v2\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 from ...utils import (

@@ -1,6 +1,6 @@
 # `.\models\convnext\modeling_convnext.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权信息
 # 版权声明 
@@ -571,7 +571,7 @@ class ConvNextBackbone(ConvNextPreTrainedModel, BackboneMixin):
 
         >>> inputs = processor(image, return_tensors="pt")
         >>> outputs = model(**inputs)
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 定义return_dict变量，如果return_dict不为None，则赋值为return_dict，否则赋值为self.config.use_return_dict
         output_hidden_states = (

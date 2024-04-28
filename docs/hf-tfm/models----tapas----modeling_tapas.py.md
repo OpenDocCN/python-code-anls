@@ -1,6 +1,6 @@
 # `.\transformers\models\tapas\modeling_tapas.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入需要的库
@@ -992,7 +992,7 @@ class TapasForMaskedLM(TapasPreTrainedModel):
 
         >>> outputs = model(**inputs, labels=labels)
         >>> logits = outputs.logits
-        ```"""
+        ```py"""
         # 根据 return_dict 是否为 None 来决定是否使用配置中的 return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

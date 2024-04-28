@@ -1,6 +1,6 @@
 # `.\transformers\models\xmod\configuration_xmod.py`
 
-```
+```py
 # 这是一个配置类,用于存储 XmodModel 的配置信息
 class XmodConfig(PretrainedConfig):
     # 这是这个配置类的文档说明,描述了它的用途和使用方法

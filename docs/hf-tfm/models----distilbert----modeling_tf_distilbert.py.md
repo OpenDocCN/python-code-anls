@@ -1,6 +1,6 @@
 # `.\models\distilbert\modeling_tf_distilbert.py`
 
-```
+```py
 # 导入必要的库和模块
 # 引入警告模块，用于处理警告信息
 # 引入类型提示模块，用于类型提示

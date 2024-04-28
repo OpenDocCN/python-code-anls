@@ -1,6 +1,6 @@
 # `.\transformers\models\swin2sr\image_processing_swin2sr.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Optional, Union
 import numpy as np

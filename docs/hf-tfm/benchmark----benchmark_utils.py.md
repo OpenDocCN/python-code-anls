@@ -1,6 +1,6 @@
 # `.\transformers\benchmark\benchmark_utils.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入copy模块，用于复制对象
 import csv  # 导入csv模块，用于CSV文件的读写

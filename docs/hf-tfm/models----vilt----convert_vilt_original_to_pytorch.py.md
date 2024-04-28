@@ -1,6 +1,6 @@
 # `.\transformers\models\vilt\convert_vilt_original_to_pytorch.py`
 
-```
+```py
 # 设置源码文件的编码格式为 utf-8
 # 版权声明
 # 根据 Apache License 2.0 许可使用本文件

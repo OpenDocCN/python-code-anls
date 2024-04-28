@@ -1,6 +1,6 @@
 # `.\transformers\models\mistral\__init__.py`
 
-```
+```py
 # 版权声明
 # 版权归 Mistral AI 和 The HuggingFace Inc. 团队所有，保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\transformers\models\auto\configuration_auto.py`
 
-```
+```py
 # 设定脚本编码格式为 UTF-8
 # 版权声明，使用 Apache 许可证版本 2.0，详见链接
 # 引入必要的模块和库

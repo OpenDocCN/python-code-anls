@@ -1,6 +1,6 @@
 # `.\transformers\models\swiftformer\modeling_swiftformer.py`
 
-```
+```py
 # 添加编码信息
 # 2023年 MBZUAI 和 The HuggingFace Inc. 团队 版权所有。
 

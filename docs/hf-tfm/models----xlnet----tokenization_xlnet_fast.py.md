@@ -1,6 +1,6 @@
 # `.\transformers\models\xlnet\tokenization_xlnet_fast.py`
 
-```
+```py
 # 设置 Python 文件的字符编码为 UTF-8
 # 版权声明
 # 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则无法使用该文件

@@ -1,6 +1,6 @@
 # `.\transformers\models\roc_bert\configuration_roc_bert.py`
 
-```
+```py
 # 设定编码格式为 utf-8
 # 版权声明
 # 声明此代码版权属于 WeChatAI 和 The HuggingFace Inc. 团队，保留所有权利
@@ -44,7 +44,7 @@ class RoCBertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     # 模型类型为 "roc_bert"
     model_type = "roc_bert"

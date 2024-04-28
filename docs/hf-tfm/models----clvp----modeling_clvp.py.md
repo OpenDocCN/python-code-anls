@@ -1,6 +1,6 @@
 # `.\transformers\models\clvp\modeling_clvp.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 © 2023 年 HuggingFace 团队。保留所有权利。
@@ -809,7 +809,7 @@ class ClvpEncoder(ClvpPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-```  
+```py  
 class ClvpDecoder(ClvpPreTrainedModel):
     """
     Transformer decoder consisting of *config.num_hidden_layers* layers. Each layer is a [`ClvpDecoderLayer`]
@@ -1297,7 +1297,7 @@ class ClvpModelForConditionalGeneration(ClvpPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import ClvpProcessor, ClvpModelForConditionalGeneration
 
         >>> # Define the Text

@@ -1,6 +1,6 @@
 # `.\models\gpt_bigcode\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于在类型检查时使用
 from typing import TYPE_CHECKING
 # 引入自定义工具函数和异常类

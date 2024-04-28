@@ -1,6 +1,6 @@
 # `.\transformers\models\phi\modeling_phi.py`
 
-```
+```py
 # 使用UTF-8编码
 
 # 版权信息

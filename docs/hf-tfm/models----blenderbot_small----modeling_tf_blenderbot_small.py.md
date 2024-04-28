@@ -1,6 +1,6 @@
 # `.\transformers\models\blenderbot_small\modeling_tf_blenderbot_small.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2021 年版权归 Facebook 公司和 HuggingFace 公司团队所有。保留所有权利。
@@ -507,7 +507,7 @@ BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
     next_reply_ids = model.generate(**inputs)
     # 打印模型生成的下一个话语的回复
     print("Bot: ", tokenizer.batch_decode(next_reply_ids, skip_special_tokens=True)[0])
-    ```  
+    ```py  
 """
 BLENDERBOT_SMALL_INPUTS_DOCSTRING = r"""
 """

@@ -1,6 +1,6 @@
 # `.\transformers\models\megatron_bert\configuration_megatron_bert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明，版权归 NVIDIA Corporation 和 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -43,7 +43,7 @@ class MegatronBertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "megatron-bert"
 

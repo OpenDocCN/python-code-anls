@@ -1,6 +1,6 @@
 # `.\transformers\models\reformer\tokenization_reformer.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明，告知代码版权归Trax作者和HuggingFace团队所有，基于Apache 2.0许可证发布
 # 只有在遵循许可证条件的情况下才能使用此文件，可以通过提供的链接获取许可证副本

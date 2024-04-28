@@ -1,6 +1,6 @@
 # `.\transformers\commands\__init__.py`
 
-```
+```py
 # 导入必要的模块
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser

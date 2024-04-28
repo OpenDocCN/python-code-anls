@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\modeling_albert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google AI、Google Brain 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则不得使用此文件
@@ -794,7 +794,7 @@ class AlbertForPreTraining(AlbertPreTrainedModel):
 
         >>> prediction_logits = outputs.prediction_logits
         >>> sop_logits = outputs.sop_logits
-        ```"""
+        ```py"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         # 调用 Albert 模型进行预测
@@ -975,7 +975,7 @@ class AlbertForMaskedLM(AlbertPreTrainedModel):
         >>> predicted_token_id = logits[0, mask_token_index].argmax(axis=-1)
         >>> tokenizer.decode(predicted_token_id)
         'france'
-        ```
+        ```py
 
         ```python
         >>> labels = tokenizer("The capital of France is Paris.", return_tensors="pt")["input_ids"]
@@ -983,7 +983,7 @@ class AlbertForMaskedLM(AlbertPreTrainedModel):
         >>> outputs = model(**inputs, labels=labels)
         >>> round(outputs.loss.item(), 2)
         0.81
-        ```
+        ```py
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 

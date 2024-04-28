@@ -1,6 +1,6 @@
 # `.\transformers\models\autoformer\modeling_autoformer.py`
 
-```
+```py
 # 导入必要的库和模块
 import math
 from dataclasses import dataclass

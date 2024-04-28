@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\configuration_blip.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 # 版权声明，声明代码版权归 HuggingFace Inc. 团队所有
@@ -223,7 +223,7 @@ class BlipVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import BlipVisionConfig, BlipVisionModel
 
     >>> # Initializing a BlipVisionConfig with Salesforce/blip-vqa-base style configuration

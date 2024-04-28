@@ -1,6 +1,6 @@
 # `.\transformers\models\vitdet\modeling_vitdet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2023 年 Meta AI 和 The HuggingFace Inc. 团队。保留所有权利。
@@ -874,7 +874,7 @@ class VitDetModel(VitDetPreTrainedModel):
         >>> last_hidden_states = outputs.last_hidden_state  # 获取最后一层隐藏状态
         >>> list(last_hidden_states.shape)  # 打印最后一层隐藏状态的形状
         [1, 768, 14, 14]  # 最后一层隐藏状态的形状为[1, 768, 14, 14]
-        ```"""
+        ```py"""
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions  # 如果output_attentions不为空则使用，否则使用self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
@@ -970,7 +970,7 @@ class VitDetBackbone(VitDetPreTrainedModel, BackboneMixin):
         >>> feature_maps = outputs.feature_maps
         >>> list(feature_maps[-1].shape)
         [1, 768, 14, 14]
-        ```"""
+        ```py"""
         # 如果没有指定返回字典，则使用配置中的默认值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         # 如果没有指定是否输出隐藏状态，则使用配置中的默认值

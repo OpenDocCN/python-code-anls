@@ -1,6 +1,6 @@
 # `.\transformers\models\blip\modeling_blip.py`
 
-```
+```py
 # 定义一个数据类，用于存储 BLIP 有条件生成模型的输出
 @dataclass
 class BlipForConditionalGenerationModelOutput(ModelOutput):
@@ -788,7 +788,7 @@ class BlipModel(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoProcessor, BlipModel
 
         >>> model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")
@@ -830,7 +830,7 @@ class BlipModel(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image  # 导入Image类
         >>> import requests  # 导入requests模块
         >>> from transformers import AutoProcessor, BlipModel  # 导入AutoProcessor和BlipModel类
@@ -866,7 +866,7 @@ class BlipModel(BlipPreTrainedModel):
         output_attentions: Optional[bool] = None,  # 是否输出注意力权重
         output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
         return_dict: Optional[bool] = None,  # 是否返回字典
-```  
+```py  
 # 添加模型文档字符串，描述 BLIP 模型用于图像字幕生成，包含视觉编码器和文本解码器，可以传入 input_ids 作为文本提示，让文本解码器继续提示，否则从 [BOS] 标记开始生成文本
 @add_start_docstrings(
     """
@@ -942,7 +942,7 @@ class BlipForConditionalGeneration(BlipPreTrainedModel):
         >>> inputs = processor(images=image, text=text, return_tensors="pt")
 
         >>> outputs = model(**inputs)
-        ```"""
+        ```py"""
 
         # 设置返回字典，如果未指定则使用配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
@@ -1025,7 +1025,7 @@ class BlipForConditionalGeneration(BlipPreTrainedModel):
         >>> outputs = model.generate(**inputs)
         >>> print(processor.decode(outputs[0], skip_special_tokens=True))
         two cats sleeping on a couch
-        ```
+        ```py
         """
 
         # 获取输入图片的批量大小
@@ -1164,7 +1164,7 @@ class BlipForQuestionAnswering(BlipPreTrainedModel):
         >>> outputs = model.generate(**inputs)
         >>> print(processor.decode(outputs[0], skip_special_tokens=True))
         2
-        ```
+        ```py
         """
         vision_outputs = self.vision_model(pixel_values=pixel_values)
 
@@ -1274,7 +1274,7 @@ class BlipForImageTextRetrieval(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipForImageTextRetrieval

@@ -1,6 +1,6 @@
 # `.\transformers\models\blip_2\__init__.py`
 
-```
+```py
 # 导入模块类型检查
 from typing import TYPE_CHECKING
 

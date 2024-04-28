@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\convert_gpt_neo_mesh_tf_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 Eleuther AI 和 HuggingFace Inc. 团队。
 # 根据 Apache 许可证 2.0 版（“许可证”）获得许可

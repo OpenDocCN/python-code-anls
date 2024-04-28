@@ -1,6 +1,6 @@
 # `.\transformers\models\perceiver\__init__.py`
 
-```
+```py
 # 引入 TYPE_CHECKING 以检查类型
 from typing import TYPE_CHECKING
 # 引入 utils 模块中的函数和异常

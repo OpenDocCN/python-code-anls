@@ -1,6 +1,6 @@
 # `.\models\efficientformer\image_processing_efficientformer.py`
 
-```
+```py
 # 设定文件编码格式为 utf-8
 # 版权声明
 # 授权许可

@@ -1,6 +1,6 @@
 # `.\transformers\models\pegasus\__init__.py`
 
-```
+```py
 # 版权声明，版权属于 The HuggingFace Team，并受 Apache 2.0 许可证保护
 # 本文件仅可在遵守许可证的前提下使用
 from typing import TYPE_CHECKING

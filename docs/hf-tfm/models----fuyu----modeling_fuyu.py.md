@@ -1,6 +1,6 @@
 # `.\models\fuyu\modeling_fuyu.py`
 
-```
+```py
 # coding=utf-8
 # 以 UTF-8 编码的文件
 

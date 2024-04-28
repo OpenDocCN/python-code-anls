@@ -1,6 +1,6 @@
 # `.\models\decision_transformer\modeling_decision_transformer.py`
 
-```
+```py
 # 设置文件编码格式为utf-8
 # 版权声明
 # 根据Apache许可证2.0版本，除非符合许可证的规定，否则不得使用此文件

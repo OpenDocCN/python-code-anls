@@ -1,6 +1,6 @@
 # `.\models\efficientformer\configuration_efficientformer.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 # 在 Apache 许可证 2.0 下，根据许可证规定，除非符合许可证规定，否则不得使用此文件
@@ -51,7 +51,7 @@ class EfficientFormerConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 efficientformer
     model_type = "efficientformer"

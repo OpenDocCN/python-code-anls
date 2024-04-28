@@ -1,6 +1,6 @@
 # `.\transformers\models\tvlt\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 在这个模块中，无法忽略 "F401 '...' imported but unused" 警告，但要保留其他警告。所以，不检查这个模块。
 

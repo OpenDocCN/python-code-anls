@@ -1,6 +1,6 @@
 # `.\transformers\tools\evaluate_agent.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -537,7 +537,7 @@ def evaluate_agent(agent, batch_size=8, verbose=False, return_errors=False):
     bads = new_evaluate_agent(agent)
     for bad in bads:
         print(bad)
-    ```
+    ```py
     """
     # 对 agent 的工具进行检查，确保包含所有测试工具
     agent_tools = set(agent.toolbox.keys())
@@ -626,7 +626,7 @@ def evaluate_chat_agent(agent, verbose=False, return_errors=False):
     bads = new_evaluate_agent(agent)
     for bad in bads:
         print(bad)
-    ```
+    ```py
     """
     # 对代理工具进行检查
     agent_tools = set(agent.toolbox.keys())

@@ -1,6 +1,6 @@
 # `.\models\esm\configuration_esm.py`
 
-```
+```py
 # 设定编码为 utf-8
 # 版权声明，版权所有，Meta 和 HuggingFace 公司团队，保留所有权利。
 # 根据 Apache 许可证 2.0 版本，您不得使用此文件，除非符合许可证的规定。
@@ -45,7 +45,7 @@ class EsmConfig(PretrainedConfig):
     >>> # 从配置初始化模型 >>> model = ESMModel(configuration)
 
     >>> # 访问模型配置 >>> configuration = model.config
-    ```
+    ```py
     """
 
     # 模型类型为 "esm"

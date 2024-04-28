@@ -1,6 +1,6 @@
 # `.\transformers\models\vit\modeling_vit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 2021年由 Google AI、Ross Wightman 和 The HuggingFace Inc. 团队保留所有权利。

@@ -1,6 +1,6 @@
 # `.\transformers\models\blip_2\configuration_blip_2.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明
 # 版权所有 © 2023 年 HuggingFace Inc. 团队。保留所有权利。
@@ -79,7 +79,7 @@ class Blip2VisionConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```
+    ```py
 
     model_type = "blip_2_vision_model"
 
@@ -220,7 +220,7 @@ class Blip2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```py
     >>> from transformers import (
     ...     Blip2VisionConfig,
     ...     Blip2QFormerConfig,

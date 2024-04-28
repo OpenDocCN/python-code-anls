@@ -1,6 +1,6 @@
 # `.\transformers\models\xlm\modeling_xlm.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，告知使用者可以在遵守许可证的情况下使用该文件
 # 导入需要的库

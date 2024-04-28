@@ -1,6 +1,6 @@
 # `.\transformers\models\albert\tokenization_albert_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google AI、Google Brain 和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证要求，否则不得使用此文件
@@ -217,7 +217,7 @@ class AlbertTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         if token_ids_1 is None, only returns the first portion of the mask (0s).
 

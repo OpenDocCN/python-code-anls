@@ -1,6 +1,6 @@
 # `.\transformers\kernels\rwkv\wkv_op.cpp`
 
-```
+```py
 // 包含 Torch C++ 扩展头文件
 #include <torch/extension.h>
 // 包含 ATen 库的头文件

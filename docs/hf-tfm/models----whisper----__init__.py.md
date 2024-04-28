@@ -1,6 +1,6 @@
 # `.\transformers\models\whisper\__init__.py`
 
-```
+```py
 # 版权声明和许可协议
 # 版权声明：2022 年由 HuggingFace Team 版权所有
 # 许可协议：基于 Apache 许可证 2.0 版本，除非符合许可协议，否则不得使用此文件。可以在以下网址获取许可协议的副本：http://www.apache.org/licenses/LICENSE-2.0

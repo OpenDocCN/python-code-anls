@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\tokenization_layoutlmv2.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明
 # 引入所需依赖库
@@ -279,7 +279,7 @@ def whitespace_tokenize(text):
         if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
-```  
+```py  
     # 保存词汇表到指定目录下，并返回词汇表文件名
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
         # 初始化索引值

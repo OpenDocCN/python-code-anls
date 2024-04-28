@@ -1,6 +1,6 @@
 # `.\transformers\data\datasets\squad.py`
 
-```
+```py
 # 导入必要的库
 import os  # 用于操作文件路径
 import time  # 用于时间相关操作

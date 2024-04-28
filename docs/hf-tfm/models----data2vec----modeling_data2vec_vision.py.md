@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_data2vec_vision.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 本文件中的版权归 Meta Platforms 和 HuggingFace Inc. 团队所有，保留所有权利。

@@ -1,6 +1,6 @@
 # `.\transformers\models\chinese_clip\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权归 OFA-Sys 团队作者和 HuggingFace 团队所有
 # 根据 Apache 许可证 2.0 版本授权

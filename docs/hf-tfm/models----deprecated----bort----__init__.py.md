@@ -1,6 +1,6 @@
 # `.\models\deprecated\bort\__init__.py`
 
-```
+```py
 # 定义一个函数来计算给定数字的阶乘
 def factorial(n):
     # 如果输入的数字为0或1，则返回1

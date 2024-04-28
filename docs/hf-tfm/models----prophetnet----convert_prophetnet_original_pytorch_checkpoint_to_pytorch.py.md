@@ -1,6 +1,6 @@
 # `.\transformers\models\prophetnet\convert_prophetnet_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，引用了 HuggingFace 公司的团队
 # 根据 Apache 许可证版本 2.0 进行许可

@@ -1,6 +1,6 @@
 # `.\transformers\models\maskformer\modeling_maskformer_swin.py`
 
-```
+```py
 # 引入 Python 标准库中的 collections.abc 模块，用于处理集合类数据类型的抽象基类
 import collections.abc
 # 引入数学库中的 math 模块，用于执行数学计算

@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\__init__.py`
 
-```
+```py
 # 版权声明
 # Copyright 2023 EleutherAI and The HuggingFace Inc. team. All rights reserved.
 

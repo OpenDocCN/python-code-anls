@@ -1,6 +1,6 @@
 # `.\transformers\utils\generic.py`
 
-```
+```py
 # 版权声明和许可信息
 # 版权声明和许可信息，指定了代码的版权和许可信息
 # 详细信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取

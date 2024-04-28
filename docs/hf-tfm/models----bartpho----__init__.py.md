@@ -1,6 +1,6 @@
 # `.\transformers\models\bartpho\__init__.py`
 
-```
+```py
 # 导入 TYPE_CHECKING，用于在类型检查时使用
 from typing import TYPE_CHECKING
 # 导入自定义的异常 OptionalDependencyNotAvailable，用于处理可选依赖未安装的情况

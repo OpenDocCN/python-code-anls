@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\image_segmentation.py`
 
-```
+```py
 # 导入必要的库
 from typing import Any, Dict, List, Union
 import numpy as np

@@ -1,6 +1,6 @@
 # `.\transformers\models\mbart\convert_mbart_original_checkpoint_to_pytorch.py`
 
-```
+```py
 # 版权声明和许可信息
 # 该代码版权归 HuggingFace 团队所有，受 Apache 许可证 2.0 版本保护
 # 只有在遵守许可证的情况下才能使用该文件

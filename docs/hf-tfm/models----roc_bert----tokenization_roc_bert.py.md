@@ -1,6 +1,6 @@
 # `.\transformers\models\roc_bert\tokenization_roc_bert.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，标注了文件所有者和版权信息
 # 使用 Apache License 2.0 开源协议，允许使用者在遵守协议的前提下自由使用该文件
@@ -555,7 +555,7 @@ class RoCBertTokenizer(PreTrainedTokenizer):
 
     # 获取特殊标记的掩码
     # (此处的注释因为代码中断，所以无法提供完整的功能说明)
-```   
+```py   
     # 获取没有添加特殊符号的 token 列表的特殊符号 mask。当使用 tokenizer 的 `prepare_for_model` 方法添加特殊符号时会调用此方法。
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
@@ -598,7 +598,7 @@ class RoCBertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```
+        ```py
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 

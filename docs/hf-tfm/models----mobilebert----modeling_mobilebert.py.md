@@ -1,6 +1,6 @@
 # `.\transformers\models\mobilebert\modeling_mobilebert.py`
 
-```
+```py
 # 导入所需的库
 import math
 import os
@@ -440,7 +440,7 @@ class OutputBottleneck(nn.Module):
         self.LayerNorm = NORM2FN[config.normalization_type](config.hidden_size, eps=config.layer_norm_eps)
         # 创建 Dropout 层
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-```  
+```py  
     # 前向传播方法，接收隐藏状态和残差张量，返回处理后的张量
     def forward(self, hidden_states: torch.Tensor, residual_tensor: torch.Tensor) -> torch.Tensor:
         # 使用全连接层处理隐藏状态
@@ -1334,7 +1334,7 @@ class MobileBertForNextSentencePrediction(MobileBertPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```py
         >>> from transformers import AutoTokenizer, MobileBertForNextSentencePrediction
         >>> import torch
 

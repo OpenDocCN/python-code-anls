@@ -1,6 +1,6 @@
 # `.\transformers\pipelines\pt_utils.py`
 
-```
+```py
 # 导入所需的库
 import numpy as np
 import torch
@@ -41,7 +41,7 @@ class PipelineIterator(IterableDataset):
         ```
         for item in loader:
             yield infer(item, **params)
-        ```
+        ```py
 
         参数:
             loader (`torch.utils.data.DataLoader` or any iterator):
@@ -179,7 +179,7 @@ class PipelineChunkIterator(PipelineIterator):
         for iterator in loader:
             for item in iterator:
                 yield infer(item, **params)
-        ```
+        ```py
 
         参数:
             loader (`torch.utils.data.DataLoader` or any iterator):
@@ -235,7 +235,7 @@ class PipelinePackIterator(PipelineIterator):
         if item["is_last"]:
             yield packed
             packed = []
-    ```
+    ```py
 
     但它还处理了 `item` 为批处理的情况（这意味着它是一个具有大于 1 的第一维张量的字典）。在这种情况下，它执行以下操作
 
@@ -248,7 +248,7 @@ class PipelinePackIterator(PipelineIterator):
             if item["is_last"]:
                 yield packed
                 packed = []
-    ```
+    ```py
 
     参数:
         loader (`torch.utils.data.DataLoader` or any iterator):

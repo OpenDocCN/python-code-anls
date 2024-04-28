@@ -1,6 +1,6 @@
 # `.\models\deta\modeling_deta.py`
 
-```
+```py
 # 指定编码方式为 utf-8
 
 # 版权声明

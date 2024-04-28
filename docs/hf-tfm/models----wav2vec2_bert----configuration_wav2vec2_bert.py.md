@@ -1,6 +1,6 @@
 # `.\transformers\models\wav2vec2_bert\configuration_wav2vec2_bert.py`
 
-```
+```py
 # 设置文件编码为 utf-8
 # 版权声明
 # 2024年版权为 The Fairseq Authors 和 The HuggingFace Inc. 团队所有
@@ -50,7 +50,7 @@ class Wav2Vec2BertConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
     
     # 模型类型为 "wav2vec2-bert"
     model_type = "wav2vec2-bert"

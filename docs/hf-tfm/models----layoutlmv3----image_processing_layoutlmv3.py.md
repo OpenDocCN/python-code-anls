@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\image_processing_layoutlmv3.py`
 
-```
+```py
 # 设置字符编码为 UTF-8
 # 版权声明
 # 在 Apache 许可证 2.0 下授权使用此代码

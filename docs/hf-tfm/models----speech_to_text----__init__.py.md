@@ -1,6 +1,6 @@
 # `.\transformers\models\speech_to_text\__init__.py`
 
-```
+```py
 # 版权声明及许可信息，注明代码版权和许可信息
 # 引入类型检查模块
 from typing import TYPE_CHECKING

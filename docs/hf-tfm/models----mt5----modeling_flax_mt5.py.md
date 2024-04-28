@@ -1,6 +1,6 @@
 # `.\transformers\models\mt5\modeling_flax_mt5.py`
 
-```
+```py
 # 使用 UTF-8 编码格式
 # 版权声明和许可证信息，指明代码版权和使用许可
 # 引入所需的库和模块
@@ -55,7 +55,7 @@ class FlaxMT5Model(FlaxT5Model):
 
     >>> outputs = model(input_ids=inputs["input_ids"], decoder_input_ids=decoder_input_ids)
     >>> hidden_states = outputs.last_hidden_state
-    ```"""
+    ```py"""
 
     # 模型类型
     model_type = "mt5"
@@ -78,7 +78,7 @@ class FlaxMT5EncoderModel(FlaxT5EncoderModel):
 
     >>> article = "UN Offizier sagt, dass weiter verhandelt werden muss in Syrien."
     >>> summary = "Weiter Verhandlung in Syrien."
-    ```    
+    ```py    
     # 使用分词器将输入文章转换为张量格式
     >>> inputs = tokenizer(article, return_tensors="np")
     
@@ -114,7 +114,7 @@ class FlaxMT5ForConditionalGeneration(FlaxT5ForConditionalGeneration):
 
     >>> outputs = model(**inputs, decoder_input_ids=decoder_input_ids)
     >>> logits = outputs.logits
-    ```"""
+    ```py"""
 
     # 指定模型类型为 "mt5"
     model_type = "mt5"

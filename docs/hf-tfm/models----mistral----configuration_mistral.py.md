@@ -1,6 +1,6 @@
 # `.\transformers\models\mistral\configuration_mistral.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 # 根据Apache授权许可规定，使用者除非合规或通过许可，否则不得使用该文件
@@ -44,7 +44,7 @@ class MistralConfig(PretrainedConfig):
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```"""
+    ```py"""
 
     model_type = "mistral"
     keys_to_ignore_at_inference = ["past_key_values"]

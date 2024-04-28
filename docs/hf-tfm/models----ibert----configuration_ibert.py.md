@@ -1,6 +1,6 @@
 # `.\models\ibert\configuration_ibert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者信息和版权信息
 # 根据 Apache 许可证 2.0 版本，授权使用该文件
