@@ -24,6 +24,7 @@
 +   [RWKV 源码解析](docs/rwkv/README.md)
 +   [SDWebUI 源码解析](docs/sd-webui-ai/README.md)
 +   [SegAny 源码解析](docs/segany-ai/README.md)
++   [SimCSE 源码解析](docs/simcse/README.md)
 +   [SO-VITS-SVC 源码解析](docs/so-vits-svc-ai/README.md)
 +   [Transformer-VQ 源码解析](docs/transformer-vq-ai/README.md)
 +   [Tranformers 架构和源码解析](docs/transformers/README.md)
