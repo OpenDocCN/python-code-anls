@@ -1,6 +1,6 @@
 # `.\simcse\tool.py`
 
-```
+```py
 # 导入日志记录模块
 import logging
 # 导入进度条显示模块

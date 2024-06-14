@@ -1,6 +1,6 @@
 # `.\SentEval\examples\models.py`
 
-```
+```py
 # 导入必要的库和模块：numpy、time、torch 和 torch 的神经网络模块 nn
 import numpy as np
 import time

@@ -1,6 +1,6 @@
 # `.\simcse\models.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 import torch.nn as nn  # 导入PyTorch的神经网络模块
 import torch.nn.functional as F  # 导入PyTorch的函数操作模块

@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\probing.py`
 
-```
+```py
 # 引入必要的库和模块
 from __future__ import absolute_import, division, unicode_literals  # 导入未来版本兼容模块
 

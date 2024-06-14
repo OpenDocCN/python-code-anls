@@ -44,38 +44,38 @@ We propose a simple contrastive learning framework that works with both unlabele
 ## Getting Started
 
 We provide an easy-to-use sentence embedding tool based on our SimCSE model (see our [Wiki](https://github.com/princeton-nlp/SimCSE/wiki) for detailed usage). To use the tool, first install the `simcse` package from PyPI
-```bash
+```py
 pip install simcse
 ```
 
 Or directly install it from our code
-```bash
+```py
 python setup.py install
 ```
 
 Note that if you want to enable GPU encoding, you should install the correct version of PyTorch that supports CUDA. See [PyTorch official website](https://pytorch.org) for instructions.
 
 After installing the package, you can load our model by just two lines of code
-```python
+```py
 from simcse import SimCSE
 model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
 ```
 See [model list](#model-list) for a full list of available models. 
 
 Then you can use our model for **encoding sentences into embeddings**
-```python
+```py
 embeddings = model.encode("A woman is reading.")
 ```
 
 **Compute the cosine similarities** between two groups of sentences
-```python
+```py
 sentences_a = ['A woman is reading.', 'A man is playing a guitar.']
 sentences_b = ['He plays guitar.', 'A woman is making a photo.']
 similarities = model.similarity(sentences_a, sentences_b)
 ```
 
 Or build index for a group of sentences and **search** among them
-```python
+```py
 sentences = ['A woman is reading.', 'A man is playing a guitar.']
 model.build_index(sentences)
 results = model.search("He plays guitar.")
@@ -108,7 +108,7 @@ Note that the results are slightly better than what we have reported in the curr
 ## Use SimCSE with Huggingface
 
 Besides using our provided sentence embedding tool, you can also easily import our models with HuggingFace's `transformers`:
-```python
+```py
 import torch
 from scipy.spatial.distance import cosine
 from transformers import AutoModel, AutoTokenizer
@@ -148,20 +148,20 @@ In the following section, we describe how to train a SimCSE model by using our c
 
 First, install PyTorch by following the instructions from [the official website](https://pytorch.org). To faithfully reproduce our results, please use the correct `1.7.1` version corresponding to your platforms/CUDA versions. PyTorch version higher than `1.7.1` should also work. For example, if you use Linux and **CUDA11** ([how to check CUDA version](https://varhowto.com/check-cuda-version/)), install PyTorch by the following command,
 
-```bash
+```py
 pip install torch==1.7.1+cu110 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 If you instead use **CUDA** `<11` or **CPU**, install PyTorch by the following command,
 
-```bash
+```py
 pip install torch==1.7.1
 ```
 
 
 Then run the following script to install the remaining dependencies,
 
-```bash
+```py
 pip install -r requirements.txt
 ```
 
@@ -169,13 +169,13 @@ pip install -r requirements.txt
 Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates sentence embeddings on semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/pdf/2104.08821.pdf) (Appendix B) for evaluation details.
 
 Before evaluation, please download the evaluation datasets by running
-```bash
+```py
 cd SentEval/data/downstream/
 bash download_dataset.sh
 ```
 
 Then come back to the root directory, you can evaluate any `transformers`-based pre-trained models using our evaluation code. For example,
-```bash
+```py
 python evaluation.py \
     --model_name_or_path princeton-nlp/sup-simcse-bert-base-uncased \
     --pooler cls \
@@ -183,7 +183,7 @@ python evaluation.py \
     --mode test
 ```
 which is expected to output the results in a tabular format:
-```
+```py
 ------ test ------
 +-------+-------+-------+-------+-------+--------------+-----------------+-------+
 | STS12 | STS13 | STS14 | STS15 | STS16 | STSBenchmark | SICKRelatedness |  Avg. |
@@ -260,7 +260,7 @@ If you have any questions related to the code or the paper, feel free to email T
 
 Please cite our paper if you use SimCSE in your work:
 
-```bibtex
+```py
 @inproceedings{gao2021simcse,
    title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
    author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},

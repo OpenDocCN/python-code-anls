@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\trec.py`
 
-```
+```py
 # Copyright (c) 2017-present, Facebook, Inc.
 # All rights reserved.
 #

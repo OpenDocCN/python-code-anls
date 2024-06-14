@@ -1,6 +1,6 @@
 # `.\SentEval\examples\googleuse.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import absolute_import, division  # 导入未来的Python特性支持
 import os  # 导入操作系统相关功能

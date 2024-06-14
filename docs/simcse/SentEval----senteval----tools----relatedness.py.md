@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\tools\relatedness.py`
 
-```
+```py
 """
 Semantic Relatedness (supervised) with Pytorch
 """

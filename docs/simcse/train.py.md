@@ -1,6 +1,6 @@
 # `.\train.py`
 
-```
+```py
 # 导入必要的模块和库
 import logging  # 导入日志模块
 import math  # 导入数学模块

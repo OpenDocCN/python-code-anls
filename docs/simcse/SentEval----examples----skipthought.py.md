@@ -1,6 +1,6 @@
 # `.\SentEval\examples\skipthought.py`
 
-```
+```py
 # 导入日志记录模块
 import logging
 # 导入系统模块

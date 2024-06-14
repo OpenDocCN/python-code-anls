@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\tools\validation.py`
 
-```
+```py
 # 引入日志记录模块
 import logging
 # 引入处理数组和矩阵的numpy库，命名为np

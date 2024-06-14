@@ -1,6 +1,6 @@
 # `.\setup.py`
 
-```
+```py
 # 导入所需模块
 import io
 from setuptools import setup, find_packages

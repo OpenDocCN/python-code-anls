@@ -68,7 +68,7 @@ SentEval also includes a series of [*probing* tasks](https://github.com/facebook
 
 ## Download datasets
 To get all the transfer tasks datasets, run (in data/downstream/):
-```bash
+```py
 ./get_transfer_data.bash
 ```
 This will automatically download and preprocess the downstream datasets, and store them in data/downstream (warning: for MacOS users, you may have to use p7zip instead of unzip). The probing tasks are already in data/probing by default.
@@ -81,13 +81,13 @@ In examples/bow.py, we evaluate the quality of the average of word embeddings.
 
 To download state-of-the-art fastText embeddings:
 
-```bash
+```py
 curl -Lo glove.840B.300d.zip http://nlp.stanford.edu/data/glove.840B.300d.zip
 curl -Lo crawl-300d-2M.vec.zip https://dl.fbaipublicfiles.com/fasttext/vectors-english/crawl-300d-2M.vec.zip
 ```
 
 To reproduce the results for bag-of-vectors, run (in examples/):  
-```bash
+```py
 python bow.py
 ```
 
@@ -96,7 +96,7 @@ As required by SentEval, this script implements two functions: **prepare** (opti
 ### examples/infersent.py
 
 To get the **[InferSent](https://www.github.com/facebookresearch/InferSent)** model and reproduce our results, download our best models and run infersent.py (in examples/):
-```bash
+```py
 curl -Lo examples/infersent1.pkl https://dl.fbaipublicfiles.com/senteval/infersent/infersent1.pkl
 curl -Lo examples/infersent2.pkl https://dl.fbaipublicfiles.com/senteval/infersent/infersent2.pkl
 ```
@@ -124,7 +124,7 @@ To evaluate your sentence embeddings, SentEval requires that you implement two f
 
 *batcher* only sees one batch at a time while the *samples* argument of *prepare* contains all the sentences of a task.
 
-```
+```py
 prepare(params, samples)
 ```
 * *params*: senteval parameters.
@@ -135,7 +135,7 @@ prepare(params, samples)
 
 
 ### 2.) batcher(params, batch)
-```
+```py
 batcher(params, batch)
 ```
 * *params*: senteval parameters.
@@ -149,30 +149,30 @@ batcher(params, batch)
 After having implemented the batch and prepare function for your own sentence encoder,
 
 1) to perform the actual evaluation, first import senteval and set its parameters:
-```python
+```py
 import senteval
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 ```
 
 2) (optional) set the parameters of the classifier (when applicable):
-```python
+```py
 params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 You can choose **nhid=0** (Logistic Regression) or **nhid>0** (MLP) and define the parameters for training.
 
 3) Create an instance of the class SE:
-```python
+```py
 se = senteval.engine.SE(params, batcher, prepare)
 ```
 
 4) define the set of transfer tasks and run the evaluation:
-```python
+```py
 transfer_tasks = ['MR', 'SICKEntailment', 'STS14', 'STSBenchmark']
 results = se.eval(transfer_tasks)
 ```
 The current list of available tasks is:
-```python
+```py
 ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
 'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
@@ -182,7 +182,7 @@ The current list of available tasks is:
 
 ## SentEval parameters
 Global parameters of SentEval:
-```bash
+```py
 # senteval parameters
 task_path                   # path to SentEval datasets (required)
 seed                        # seed
@@ -191,7 +191,7 @@ kfold                       # k-fold validation for MR/CR/SUB/MPQA.
 ```
 
 Parameters of the classifier:
-```bash
+```py
 nhid:                       # number of hidden units (0: Logistic Regression, >0: MLP); Default nonlinearity: Tanh
 optim:                      # optimizer ("sgd,lr=0.1", "adam", "rmsprop" ..)
 tenacity:                   # how many times dev acc does not increase before training stops
@@ -202,7 +202,7 @@ dropout:                    # dropout for MLP
 
 Note that to get a proxy of the results while **dramatically reducing computation time**,
 we suggest the **prototyping config**:
-```python
+```py
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
 params['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
                                  'tenacity': 3, 'epoch_size': 2}
@@ -210,7 +210,7 @@ params['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
 which will results in a 5 times speedup for classification tasks.
 
 To produce results that are **comparable to the literature**, use the **default config**:
-```python
+```py
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
@@ -227,7 +227,7 @@ Please considering citing [[1]](https://arxiv.org/abs/1803.05449) if using this 
 
 [1] A. Conneau, D. Kiela, [*SentEval: An Evaluation Toolkit for Universal Sentence Representations*](https://arxiv.org/abs/1803.05449)
 
-```
+```py
 @article{conneau2018senteval,
   title={SentEval: An Evaluation Toolkit for Universal Sentence Representations},
   author={Conneau, Alexis and Kiela, Douwe},

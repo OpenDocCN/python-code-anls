@@ -1,6 +1,6 @@
 # `.\SentEval\examples\infersent.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权所有 © 2017 至今，Facebook, Inc.
 #

@@ -1,6 +1,6 @@
 # `.\simcse_to_huggingface.py`
 
-```
+```py
 """
 Convert SimCSE's checkpoints to Huggingface style.
 """

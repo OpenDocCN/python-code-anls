@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\tools\ranking.py`
 
-```
+```py
 """
 Image Annotation/Search for COCO with Pytorch
 """

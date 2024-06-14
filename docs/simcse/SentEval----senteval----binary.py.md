@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\binary.py`
 
-```
+```py
 '''
 Binary classifier and corresponding datasets : MR, CR, SUBJ, MPQA
 '''

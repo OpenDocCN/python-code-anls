@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\engine.py`
 
-```
+```py
 '''
 Generic sentence evaluation scripts wrapper
 '''

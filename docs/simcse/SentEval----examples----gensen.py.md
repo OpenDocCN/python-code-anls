@@ -1,6 +1,6 @@
 # `.\SentEval\examples\gensen.py`
 
-```
+```py
 """
 Clone GenSen repo here: https://github.com/Maluuba/gensen.git
 And follow instructions for loading the model used in batcher

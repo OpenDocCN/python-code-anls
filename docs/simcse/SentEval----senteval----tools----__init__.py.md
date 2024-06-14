@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\tools\__init__.py`
 
-```
+```py
 # 定义一个名为 read_csv 的函数，接受一个参数 filename
 def read_csv(filename):
     # 打开文件并赋值给变量 f，'r' 表示以只读模式打开文件

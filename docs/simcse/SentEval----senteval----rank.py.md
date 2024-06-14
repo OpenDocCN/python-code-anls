@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\rank.py`
 
-```
+```py
 '''
 Image-Caption Retrieval with COCO dataset
 '''

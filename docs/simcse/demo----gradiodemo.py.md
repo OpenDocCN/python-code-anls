@@ -1,6 +1,6 @@
 # `.\demo\gradiodemo.py`
 
-```
+```py
 import torch  # 导入PyTorch库
 from scipy.spatial.distance import cosine  # 从SciPy库中导入余弦距离计算函数
 from transformers import AutoModel, AutoTokenizer  # 从transformers库中导入AutoModel和AutoTokenizer

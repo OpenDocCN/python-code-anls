@@ -1,6 +1,6 @@
 # `.\SentEval\examples\bow.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import absolute_import, division, unicode_literals  # 兼容Python2和Python3的未来特性导入
 import sys  # 系统相关的操作

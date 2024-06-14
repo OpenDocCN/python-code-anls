@@ -1,6 +1,6 @@
 # `.\demo\flaskdemo.py`
 
-```
+```py
 import json  # 导入处理 JSON 数据的模块
 import argparse  # 导入命令行参数解析模块
 import torch  # 导入 PyTorch 深度学习框架

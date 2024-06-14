@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\tools\classifier.py`
 
-```
+```py
 # 版权声明和许可信息
 # 所有权利保留
 # 此源代码在根目录下的LICENSE文件中找到的许可下获得许可

@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\sts.py`
 
-```
+```py
 # 版权声明及引用
 # 版权声明，版权归 Facebook, Inc. 所有
 # 本源代码在源代码根目录下的 LICENSE 文件中可找到许可证

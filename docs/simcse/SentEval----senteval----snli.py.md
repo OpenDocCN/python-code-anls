@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\snli.py`
 
-```
+```py
 '''
 SNLI - Entailment
 '''

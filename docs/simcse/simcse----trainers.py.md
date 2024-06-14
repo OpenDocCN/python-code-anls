@@ -1,6 +1,6 @@
 # `.\simcse\trainers.py`
 
-```
+```py
 # 导入需要的库和模块
 import collections  # 提供了额外的数据容器和工具
 import inspect  # 提供了用于检查源代码的工具

@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\__init__.py`
 
-```
+```py
 # 导入未来的绝对引入功能，确保在 Python 2 和 Python 3 中的兼容性
 from __future__ import absolute_import
 

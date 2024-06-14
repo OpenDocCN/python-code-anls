@@ -1,6 +1,6 @@
 # `.\SentEval\setup.py`
 
-```
+```py
 # 导入 io 模块，用于处理文件输入输出
 import io
 # 从 setuptools 模块导入 setup 和 find_packages 函数

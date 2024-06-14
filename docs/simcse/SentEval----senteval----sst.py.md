@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\sst.py`
 
-```
+```py
 # 引入必要的模块和库
 from __future__ import absolute_import, division, unicode_literals
 import os  # 引入操作系统相关功能的模块

@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\sick.py`
 
-```
+```py
 '''
 SICK Relatedness and Entailment
 '''

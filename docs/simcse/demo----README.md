@@ -7,7 +7,7 @@ Several demos are available for people to play with our pre-trained SimCSE.
 </div>
 
 We provide a simple Web demo based on [flask](https://github.com/pallets/flask) to show how SimCSE can be directly used for information retrieval. The code is based on [DensePhrases](https://arxiv.org/abs/2012.12624)' [repo](https://github.com/princeton-nlp/DensePhrases) and [demo](http://densephrases.korea.ac.kr) (a lot of thanks to the authors of DensePhrases). To run this flask demo locally, make sure the SimCSE inference interfaces are setup:
-```bash
+```py
 git clone https://github.com/princeton-nlp/SimCSE
 cd SimCSE
 python setup.py develop

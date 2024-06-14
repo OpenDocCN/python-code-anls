@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\utils.py`
 
-```
+```py
 # 引入未来版本的特性允许 Python 2/3 兼容
 from __future__ import absolute_import, division, unicode_literals
 

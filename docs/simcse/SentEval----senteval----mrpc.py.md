@@ -1,6 +1,6 @@
 # `.\SentEval\senteval\mrpc.py`
 
-```
+```py
 # 版权声明和许可信息
 # Copyright (c) 2017-present, Facebook, Inc.
 # All rights reserved.
