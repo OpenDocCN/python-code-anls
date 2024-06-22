@@ -1,6 +1,6 @@
 # `.\rwkv\model.py`
 
-```
+```py
 # 导入所需的库和模块
 from typing import Optional
 import types, gc, os, time, re

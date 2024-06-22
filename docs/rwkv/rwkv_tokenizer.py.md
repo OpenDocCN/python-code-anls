@@ -1,6 +1,6 @@
 # `.\rwkv\rwkv_tokenizer.py`
 
-```
+```py
 # 定义一个 TRIE 类，用于实现字典树数据结构
 class TRIE:
     # 定义类的属性 slots

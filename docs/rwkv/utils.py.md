@@ -1,6 +1,6 @@
 # `.\rwkv\utils.py`
 
-```
+```py
 # 导入所需的库
 import os, sys
 import numpy as np
