@@ -1,6 +1,6 @@
 # `.\models\efficientnet\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 在本模块中无法忽略“F401 '...' imported but unused”警告，但需要保留其他警告。因此，完全禁用对本模块的检查。
 

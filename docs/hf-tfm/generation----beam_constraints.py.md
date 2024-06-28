@@ -1,6 +1,6 @@
 # `.\generation\beam_constraints.py`
 
-```
+```py
 # 导入必要的库
 from abc import ABC, abstractmethod
 from typing import List, Optional
@@ -12,7 +12,7 @@ class Constraint(ABC):
 
     All classes that inherit Constraint must follow the requirement that
 
-    ```py
+    ```
     completed = False
     while not completed:
         _, completed = constraint.update(constraint.advance())

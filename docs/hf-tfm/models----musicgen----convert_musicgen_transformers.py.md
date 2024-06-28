@@ -1,6 +1,6 @@
 # `.\models\musicgen\convert_musicgen_transformers.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保支持中文等非 ASCII 字符
 # 版权声明和许可信息，指明此代码的版权归属和使用许可
 # 导入必要的库和模块

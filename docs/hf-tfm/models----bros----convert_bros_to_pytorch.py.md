@@ -1,6 +1,6 @@
 # `.\models\bros\convert_bros_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，指明版权归属于 HuggingFace Inc. 团队
 #

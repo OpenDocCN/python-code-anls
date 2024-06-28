@@ -1,6 +1,6 @@
 # `.\models\x_clip\__init__.py`
 
-```
+```py
 # 导入类型检查模块，用于检查类型是否符合预期
 from typing import TYPE_CHECKING
 

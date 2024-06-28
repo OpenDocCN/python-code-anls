@@ -1,6 +1,6 @@
 # `.\models\vits\__init__.py`
 
-```
+```py
 # 版权声明及许可信息
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 #

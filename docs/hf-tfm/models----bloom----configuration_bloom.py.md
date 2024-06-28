@@ -1,6 +1,6 @@
 # `.\models\bloom\configuration_bloom.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 the Big Science Workshop and HuggingFace Inc. team.  All rights reserved.
 #

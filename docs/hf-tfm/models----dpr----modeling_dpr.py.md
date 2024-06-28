@@ -1,6 +1,6 @@
 # `.\models\dpr\modeling_dpr.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，指出代码的版权信息和使用许可
 # 依照 Apache License 2.0 许可证使用本代码
@@ -469,7 +469,7 @@ class DPRContextEncoder(DPRPretrainedContextEncoder):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import DPRContextEncoder, DPRContextEncoderTokenizer
 
         >>> tokenizer = DPRContextEncoderTokenizer.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
@@ -563,7 +563,7 @@ class DPRQuestionEncoder(DPRPretrainedQuestionEncoder):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import DPRQuestionEncoder, DPRQuestionEncoderTokenizer
 
         >>> tokenizer = DPRQuestionEncoderTokenizer.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
@@ -666,7 +666,7 @@ class DPRReader(DPRPretrainedReader):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import DPRReader, DPRReaderTokenizer
 
         >>> tokenizer = DPRReaderTokenizer.from_pretrained("facebook/dpr-reader-single-nq-base")

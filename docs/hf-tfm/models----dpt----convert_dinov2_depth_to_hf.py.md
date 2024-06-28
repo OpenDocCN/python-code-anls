@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dinov2_depth_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # 指定编码格式为 UTF-8
 

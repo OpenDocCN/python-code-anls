@@ -1,6 +1,6 @@
 # `.\models\cohere\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明代码版权所有者和使用许可
 # Copyright 2024 Cohere and The HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\integrations\quanto.py`
 
-```
+```py
 # 导入 is_torch_available 函数，检查是否可以导入 torch
 from ..utils import is_torch_available
 

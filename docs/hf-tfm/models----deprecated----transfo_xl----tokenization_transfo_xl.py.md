@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\tokenization_transfo_xl.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可信息，详细说明了使用该代码的条件和限制
 # 导入所需的模块和库

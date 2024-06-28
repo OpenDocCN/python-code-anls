@@ -1,6 +1,6 @@
 # `.\models\tvlt\feature_extraction_tvlt.py`
 
-```
+```py
 # 设置代码文件的编码格式为UTF-8
 # 版权声明：2023年由HuggingFace Inc.团队保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\beit\modeling_flax_beit.py`
 
-```
+```py
 # BEIT_START_DOCSTRING 是一个原始文档字符串的标记，用于后续的文档字符串生成
 BEIT_START_DOCSTRING = r"""
     # 这个模型继承自 `FlaxPreTrainedModel`。查看超类的文档，了解库为所有模型实现的通用方法（如下载、保存和从PyTorch模型转换权重）。
@@ -887,7 +887,7 @@ FLAX_BEIT_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```
     # 导入所需的库和模块
     >>> from transformers import AutoImageProcessor, FlaxBeitModel
     >>> from PIL import Image
@@ -999,7 +999,7 @@ FLAX_BEIT_MLM_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, BeitForMaskedImageModeling
     >>> from PIL import Image
     >>> import requests

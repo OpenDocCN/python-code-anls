@@ -1,6 +1,6 @@
 # `.\models\ernie_m\__init__.py`
 
-```
+```py
 # 版权声明和保留声明，声明了代码版权及许可协议
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

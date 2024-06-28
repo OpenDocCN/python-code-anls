@@ -1,6 +1,6 @@
 # `.\models\layoutlm\configuration_layoutlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2010, The Microsoft Research Asia LayoutLM Team authors
 #
@@ -54,7 +54,7 @@ class LayoutLMConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import LayoutLMConfig, LayoutLMModel
 
     >>> # Initializing a LayoutLM configuration

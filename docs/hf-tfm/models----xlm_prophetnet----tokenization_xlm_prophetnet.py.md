@@ -1,6 +1,6 @@
 # `.\models\xlm_prophetnet\tokenization_xlm_prophetnet.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Microsoft Authors and The HuggingFace Inc. team.
 # Licensed under the Apache License, Version 2.0 (the "License");

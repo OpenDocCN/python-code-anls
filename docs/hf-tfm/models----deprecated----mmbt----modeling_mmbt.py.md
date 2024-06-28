@@ -1,6 +1,6 @@
 # `.\models\deprecated\mmbt\modeling_mmbt.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明为UTF-8，确保可以处理各种字符
 # Copyright (c) Facebook, Inc. and its affiliates.
@@ -184,7 +184,7 @@ class MMBTForClassification(nn.Module):
 
     Examples:
 
-    ```python
+    ```
     # For example purposes. Not runnable.
     transformer = BertModel.from_pretrained("google-bert/bert-base-uncased")
     encoder = ImageEncoder(args)

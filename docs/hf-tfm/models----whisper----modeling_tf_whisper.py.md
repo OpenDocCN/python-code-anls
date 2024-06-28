@@ -1,6 +1,6 @@
 # `.\models\whisper\modeling_tf_whisper.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # Copyright 2022 The OpenAI Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -822,7 +822,7 @@ class TFWhisperModel(TFWhisperPreTrainedModel):
         
         Example:
         
-         ```python
+         ```
          >>> import tensorflow as tf
          >>> from transformers import TFWhisperModel, AutoFeatureExtractor
          >>> from datasets import load_dataset

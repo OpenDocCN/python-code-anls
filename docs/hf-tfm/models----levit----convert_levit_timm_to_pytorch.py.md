@@ -1,6 +1,6 @@
 # `.\models\levit\convert_levit_timm_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，这段代码由 HuggingFace Inc. 团队版权所有，遵循 Apache License, Version 2.0 授权
 #

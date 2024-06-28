@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\__init__.py`
 
-```
+```py
 # 版权声明和许可证声明，指明代码的版权和许可条件
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

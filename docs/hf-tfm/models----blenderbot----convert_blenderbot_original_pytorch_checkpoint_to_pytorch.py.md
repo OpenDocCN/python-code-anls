@@ -1,6 +1,6 @@
 # `.\models\blenderbot\convert_blenderbot_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明与许可证信息
 # 该脚本受 Apache License, Version 2.0 许可证保护，详见链接

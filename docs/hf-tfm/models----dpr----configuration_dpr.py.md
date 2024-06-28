@@ -1,6 +1,6 @@
 # `.\models\dpr\configuration_dpr.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权所有 2010 年，DPR 作者，The Hugging Face Team.
 #
@@ -56,7 +56,7 @@ class DPRConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import DPRConfig, DPRContextEncoder
 
     >>> # 初始化 DPR facebook/dpr-ctx_encoder-single-nq-base 风格的配置

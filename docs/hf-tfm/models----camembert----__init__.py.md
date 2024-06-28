@@ -1,6 +1,6 @@
 # `.\models\camembert\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于检查类型相关的导入
 from typing import TYPE_CHECKING
 

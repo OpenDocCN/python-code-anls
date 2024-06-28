@@ -1,6 +1,6 @@
 # `.\generation\flax_utils.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy                    # 导入 copy 模块，用于复制对象
 import inspect                 # 导入 inspect 模块，用于检查对象

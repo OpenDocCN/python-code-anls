@@ -1,6 +1,6 @@
 # `.\models\regnet\modeling_flax_regnet.py`
 
-```
+```py
 # 导入所需的模块和库
 from functools import partial  # 导入partial函数，用于创建带预设参数的可调用对象
 from typing import Optional, Tuple  # 引入类型提示，用于函数参数和返回类型的声明
@@ -718,7 +718,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxRegNetModel
     >>> from PIL import Image
     >>> import requests
@@ -830,7 +830,7 @@ FLAX_VISION_CLASSIF_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxRegNetForImageClassification
     >>> from PIL import Image
     >>> import jax

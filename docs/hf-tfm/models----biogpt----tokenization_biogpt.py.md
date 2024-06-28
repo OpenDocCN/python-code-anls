@@ -1,6 +1,6 @@
 # `.\models\biogpt\tokenization_biogpt.py`
 
-```
+```py
 # coding=utf-8
 # 设定文件编码为 UTF-8
 

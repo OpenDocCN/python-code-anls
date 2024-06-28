@@ -1,6 +1,6 @@
 # `.\models\roformer\tokenization_roformer_fast.py`
 
-```
+```py
 # 导入必要的模块和库
 import json  # 导入 json 模块，用于处理 JSON 格式数据
 from typing import List, Optional, Tuple  # 导入类型提示相关的模块
@@ -71,7 +71,7 @@ class RoFormerTokenizerFast(PreTrainedTokenizerFast):
     
     # 示例：
     #
-    # ```python
+    # ```
     # >>> from transformers import RoFormerTokenizerFast
     #
     # >>> tokenizer = RoFormerTokenizerFast.from_pretrained("junnyu/roformer_chinese_base")

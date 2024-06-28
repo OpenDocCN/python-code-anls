@@ -1,6 +1,6 @@
 # `.\models\ctrl\configuration_ctrl.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 Salesforce and HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.

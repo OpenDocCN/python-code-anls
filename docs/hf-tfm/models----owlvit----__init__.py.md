@@ -1,6 +1,6 @@
 # `.\models\owlvit\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明代码版权归 HuggingFace Team 所有，使用 Apache License 2.0 许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

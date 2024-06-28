@@ -1,6 +1,6 @@
 # `.\models\opt\modeling_flax_opt.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码设置为 UTF-8
 

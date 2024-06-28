@@ -1,6 +1,6 @@
 # `.\models\jukebox\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 该模块受 Apache License, Version 2.0 许可，详情请访问 http://www.apache.org/licenses/LICENSE-2.0
 

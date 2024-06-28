@@ -1,6 +1,6 @@
 # `.\models\m2m_100\tokenization_m2m_100.py`
 
-```
+```py
 # 版权声明和许可声明，说明代码的版权和使用条款
 # 请注意，这部分代码不会执行，仅作为声明性文本存在
 
@@ -110,7 +110,7 @@ class M2M100Tokenizer(PreTrainedTokenizer):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
     >>> model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_418M")

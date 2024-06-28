@@ -1,6 +1,6 @@
 # `.\models\mt5\modeling_tf_mt5.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明，指出代码的版权归属
 # 版权使用协议，告知可在Apache License Version 2.0下使用
@@ -31,7 +31,7 @@ class TFMT5Model(TFT5Model):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import TFMT5Model, AutoTokenizer
 
     >>> model = TFMT5Model.from_pretrained("google/mt5-small")
@@ -59,7 +59,7 @@ class TFMT5ForConditionalGeneration(TFT5ForConditionalGeneration):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import TFMT5ForConditionalGeneration, AutoTokenizer
 
     >>> model = TFMT5ForConditionalGeneration.from_pretrained("google/mt5-small")
@@ -86,7 +86,7 @@ class TFMT5EncoderModel(TFT5EncoderModel):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import TFMT5EncoderModel, AutoTokenizer
 
     >>> model = TFMT5EncoderModel.from_pretrained("google/mt5-small")

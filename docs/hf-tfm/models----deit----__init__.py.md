@@ -1,6 +1,6 @@
 # `.\models\deit\__init__.py`
 
-```
+```py
 # 版权声明和许可证声明
 # Copyright 2021 The HuggingFace Team. All rights reserved.
 #

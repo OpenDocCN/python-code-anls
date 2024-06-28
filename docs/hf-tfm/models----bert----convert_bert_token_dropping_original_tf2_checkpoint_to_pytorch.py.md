@@ -1,6 +1,6 @@
 # `.\models\bert\convert_bert_token_dropping_original_tf2_checkpoint_to_pytorch.py`
 
-```
+```py
 # 打印加载基于给定配置文件的模型信息
 print(f"Loading model based on config from {config_path}...")
 # 从指定路径加载BERT配置信息

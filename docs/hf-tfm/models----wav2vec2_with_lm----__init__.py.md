@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_with_lm\__init__.py`
 
-```
+```py
 # 版权声明和版权许可信息
 # Copyright 2021 The HuggingFace Team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\megatron_gpt2\__init__.py`
 
-```
+```py
 # 版权声明及许可信息，指定了此代码的使用条款和条件
 # 版权所有 © 2021 NVIDIA Corporation 和 The HuggingFace Team. 保留所有权利。
 #

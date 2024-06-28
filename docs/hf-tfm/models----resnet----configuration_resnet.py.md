@@ -1,6 +1,6 @@
 # `.\models\resnet\configuration_resnet.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指定使用 UTF-8 编码格式
 # Copyright 2022 Microsoft Research, Inc. and The HuggingFace Inc. team. All rights reserved.

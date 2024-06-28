@@ -1,6 +1,6 @@
 # `.\models\squeezebert\tokenization_squeezebert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2020 年的 SqueezeBert 作者和 HuggingFace Inc. 团队。
 #

@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v2\modeling_mobilenet_v2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Apple Inc. and The HuggingFace Inc. team. All rights reserved.
 #

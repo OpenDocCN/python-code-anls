@@ -1,6 +1,6 @@
 # `.\utils\dummy_torchaudio_objects.py`
 
-```
+```py
 # 这个文件是由命令 `make fix-copies` 自动生成的，不要编辑。
 # 导入必要的模块和函数：DummyObject 和 requires_backends
 from ..utils import DummyObject, requires_backends

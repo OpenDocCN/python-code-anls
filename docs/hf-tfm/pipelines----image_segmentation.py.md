@@ -1,6 +1,6 @@
 # `.\pipelines\image_segmentation.py`
 
-```
+```py
 # 从 typing 模块导入 Any、Dict、List、Union 类型
 from typing import Any, Dict, List, Union
 
@@ -48,7 +48,7 @@ class ImageSegmentationPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> segmenter = pipeline(model="facebook/detr-resnet-50-panoptic")

@@ -1,6 +1,6 @@
 # `.\models\sam\processing_sam.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8，确保支持多语言字符
 

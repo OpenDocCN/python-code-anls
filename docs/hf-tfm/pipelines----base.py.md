@@ -1,6 +1,6 @@
 # `.\pipelines\base.py`
 
-```
+```py
 # 导入必要的标准库和第三方库
 import collections  # 导入collections模块，用于处理集合类型数据
 import csv  # 导入csv模块，用于读写CSV文件
@@ -1037,7 +1037,7 @@ class Pipeline(_ScikitCompat):
 
         Examples:
 
-        ```python
+        ```
         # Explicitly ask for tensor allocation on CUDA device :0
         pipe = pipeline(..., device=0)
         with pipe.device_placement():

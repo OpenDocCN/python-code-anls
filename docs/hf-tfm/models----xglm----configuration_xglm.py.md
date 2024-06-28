@@ -1,6 +1,6 @@
 # `.\models\xglm\configuration_xglm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright The HuggingFace Inc. team. All rights reserved.
 #

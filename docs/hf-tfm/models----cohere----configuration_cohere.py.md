@@ -1,6 +1,6 @@
 # `.\models\cohere\configuration_cohere.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 Cohere team. All rights reserved.
 #
@@ -43,7 +43,7 @@ class CohereConfig(PretrainedConfig):
     with the defaults will yield a similar configuration to that of the [CohereForAI/c4ai-command-r-v01](https://huggingface.co/CohereForAI/c4ai-command-r-v01) model.
 
 
-    ```python
+    ```
     >>> from transformers import CohereModel, CohereConfig
 
     >>> # Initializing a Cohere model configuration

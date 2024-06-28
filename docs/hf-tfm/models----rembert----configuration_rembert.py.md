@@ -1,6 +1,6 @@
 # `.\models\rembert\configuration_rembert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class RemBertConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import RemBertModel, RemBertConfig
 
     >>> # Initializing a RemBERT rembert style configuration

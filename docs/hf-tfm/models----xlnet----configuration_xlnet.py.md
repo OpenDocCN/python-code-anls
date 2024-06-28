@@ -1,6 +1,6 @@
 # `.\models\xlnet\configuration_xlnet.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明为 UTF-8
 
@@ -35,7 +35,7 @@ class XLNetConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import XLNetConfig, XLNetModel
 
     >>> # 初始化一个 XLNet 配置对象

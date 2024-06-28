@@ -1,6 +1,6 @@
 # `.\models\hubert\configuration_hubert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明此代码版权归 Fairseq 作者和 HuggingFace Inc. 团队所有
 #
@@ -44,7 +44,7 @@ class HubertConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import HubertModel, HubertConfig
 
     >>> # 初始化一个 Hubert facebook/hubert-base-ls960 风格的配置

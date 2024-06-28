@@ -1,6 +1,6 @@
 # `.\models\patchtsmixer\modeling_patchtsmixer.py`
 
-```
+```py
 # 引入 math 模块，用于数学计算函数
 import math
 # 引入 dataclass 模块，用于定义数据类

@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_data2vec_audio.py`
 
-```
+```py
 # 设置代码文件的编码格式为UTF-8
 
 # 引入必要的依赖库和模块

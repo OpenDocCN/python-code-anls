@@ -1,6 +1,6 @@
 # `.\models\llava_next\__init__.py`
 
-```
+```py
 # Copyright 2024 The HuggingFace Team. All rights reserved.
 # 版权声明，版权归HuggingFace团队所有
 

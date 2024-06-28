@@ -1,6 +1,6 @@
 # `.\models\distilbert\modeling_flax_distilbert.py`
 
-```
+```py
 # 导入所需的库和模块
 import math
 from typing import Callable, Optional, Tuple

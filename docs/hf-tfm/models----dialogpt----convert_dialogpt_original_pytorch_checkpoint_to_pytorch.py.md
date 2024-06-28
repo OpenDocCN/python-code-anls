@@ -1,6 +1,6 @@
 # `.\models\dialogpt\convert_dialogpt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 导入用于处理命令行参数的模块
 import os  # 导入用于处理操作系统功能的模块

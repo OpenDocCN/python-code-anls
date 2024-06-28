@@ -1,6 +1,6 @@
 # `.\models\big_bird\tokenization_big_bird.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google Research and The HuggingFace Inc. team. All rights reserved.
 #

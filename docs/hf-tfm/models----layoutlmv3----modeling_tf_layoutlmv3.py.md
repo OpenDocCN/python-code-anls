@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\modeling_tf_layoutlmv3.py`
 
-```
+```py
 # 导入必要的模块和类
 from __future__ import annotations
 
@@ -1294,7 +1294,7 @@ class TFLayoutLMv3Model(TFLayoutLMv3PreTrainedModel):
         Examples:
             Example usage of TFLayoutLMv3Model for token classification.
 
-            ```python
+            ```
             >>> from transformers import AutoProcessor, TFAutoModel
             >>> from datasets import load_dataset
 
@@ -1475,7 +1475,7 @@ class TFLayoutLMv3ForSequenceClassification(TFLayoutLMv3PreTrainedModel, TFSeque
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, TFAutoModelForSequenceClassification
         >>> from datasets import load_dataset
         >>> import tensorflow as tf

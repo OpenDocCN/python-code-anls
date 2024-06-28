@@ -1,6 +1,6 @@
 # `.\pipelines\audio_utils.py`
 
-```
+```py
 # 版权声明及导入必要的库和模块
 # 版权 2023 The HuggingFace Team. 保留所有权利。
 import datetime

@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从当前包中导入自定义异常和模块惰性加载类

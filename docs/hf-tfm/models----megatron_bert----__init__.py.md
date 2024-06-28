@@ -1,6 +1,6 @@
 # `.\models\megatron_bert\__init__.py`
 
-```
+```py
 # 引入必要的模块和函数，包括类型检查和依赖检查
 from typing import TYPE_CHECKING
 # 从相对路径导入自定义的异常和模块加载器

@@ -1,6 +1,6 @@
 # `.\models\rembert\modeling_rembert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息
 # 此代码使用 Apache License, Version 2.0 许可证，详细信息可查阅 http://www.apache.org/licenses/LICENSE-2.0

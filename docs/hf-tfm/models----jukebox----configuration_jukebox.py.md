@@ -1,6 +1,6 @@
 # `.\models\jukebox\configuration_jukebox.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 OpenAI 团队和 HuggingFace Inc. 团队。
 #
@@ -423,7 +423,7 @@ class JukeboxConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import JukeboxModel, JukeboxConfig
 
     >>> # Initializing a Jukebox configuration

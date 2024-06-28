@@ -1,6 +1,6 @@
 # `.\models\speecht5\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从工具模块中导入异常和延迟加载模块

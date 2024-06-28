@@ -1,6 +1,6 @@
 # `.\models\umt5\configuration_umt5.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码为UTF-8
 

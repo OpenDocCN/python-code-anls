@@ -1,6 +1,6 @@
 # `.\models\bert\convert_bert_pytorch_checkpoint_to_original_tf.py`
 
-```
+```py
 # 设置 Python 文件的编码格式为 UTF-8
 # Copyright 2018 The HuggingFace Inc. team.
 # 声明脚本使用 Apache 2.0 版本许可协议，详见链接

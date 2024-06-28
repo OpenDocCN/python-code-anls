@@ -1,6 +1,6 @@
 # `.\models\llama\modeling_llama.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #

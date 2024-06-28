@@ -1,6 +1,6 @@
 # `.\models\convnext\feature_extraction_convnext.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件的编码格式为 UTF-8
 

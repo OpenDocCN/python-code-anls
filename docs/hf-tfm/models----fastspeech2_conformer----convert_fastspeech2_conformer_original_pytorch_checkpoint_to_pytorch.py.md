@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\convert_fastspeech2_conformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 
 # 导入 argparse 模块，用于处理命令行参数

@@ -1,6 +1,6 @@
 # `.\models\mega\configuration_mega.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行指定了文件的编码格式为 UTF-8
 
@@ -62,7 +62,7 @@ class MegaConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MegaConfig, MegaModel
 
     >>> # Initializing a Mega configuration

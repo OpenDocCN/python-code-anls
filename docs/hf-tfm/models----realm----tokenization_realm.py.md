@@ -1,6 +1,6 @@
 # `.\models\realm\tokenization_realm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The REALM authors and The HuggingFace Inc. team.
 #

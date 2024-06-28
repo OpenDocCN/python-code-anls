@@ -1,6 +1,6 @@
 # `.\dependency_versions_table.py`
 
-```
+```py
 # 自动化生成的依赖字典，用于设置项目的依赖关系和版本限制
 deps = {
     "Pillow": "Pillow>=10.0.1,<=15.0",  # 图像处理库 Pillow 的版本要求在 10.0.1 到 15.0 之间

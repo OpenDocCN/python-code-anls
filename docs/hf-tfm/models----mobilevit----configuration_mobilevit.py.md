@@ -1,6 +1,6 @@
 # `.\models\mobilevit\configuration_mobilevit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 # 上面是版权声明和编码声明
@@ -48,7 +48,7 @@ class MobileViTConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MobileViTConfig, MobileViTModel
 
     >>> # Initializing a mobilevit-small style configuration

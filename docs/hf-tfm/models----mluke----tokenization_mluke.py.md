@@ -1,6 +1,6 @@
 # `.\models\mluke\tokenization_mluke.py`
 
-```
+```py
 # 导入所需的模块和库
 import itertools  # 导入itertools模块，用于高效循环操作
 import json  # 导入json模块，用于处理JSON格式的数据

@@ -1,6 +1,6 @@
 # `.\models\gpt2\configuration_gpt2.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8
 
@@ -71,7 +71,7 @@ class GPT2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import GPT2Config, GPT2Model
 
     >>> # Initializing a GPT2 configuration

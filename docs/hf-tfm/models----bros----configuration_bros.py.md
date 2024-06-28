@@ -1,6 +1,6 @@
 # `.\models\bros\configuration_bros.py`
 
-```
+```py
 # 导入所需模块和类
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -64,7 +64,7 @@ class BrosConfig(PretrainedConfig):
     
     Examples:
     
-    ```python
+    ```
     >>> from transformers import BrosConfig, BrosModel
     
     >>> # Initializing a BROS jinho8345/bros-base-uncased style configuration

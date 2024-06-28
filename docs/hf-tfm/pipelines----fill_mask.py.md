@@ -1,6 +1,6 @@
 # `.\pipelines\fill_mask.py`
 
-```
+```py
 from typing import Dict  # 导入 Dict 类型提示，用于声明字典类型变量
 
 import numpy as np  # 导入 NumPy 库，用于数值计算
@@ -42,7 +42,7 @@ class FillMaskPipeline(Pipeline):  # 定义 FillMaskPipeline 类，继承自 Pip
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> fill_masker = pipeline(model="google-bert/bert-base-uncased")
@@ -71,7 +71,7 @@ class FillMaskPipeline(Pipeline):  # 定义 FillMaskPipeline 类，继承自 Pip
 
     This pipeline now supports tokenizer_kwargs. For example try:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> fill_masker = pipeline(model="google-bert/bert-base-uncased", tokenizer_kwargs={"do_lower_case": False})

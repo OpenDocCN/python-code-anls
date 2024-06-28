@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\convert_hifigan.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 年 HuggingFace Inc. 团队保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\roberta\configuration_roberta.py`
 
-```
+```py
 # 引入必要的模块和类
 from collections import OrderedDict  # 导入 OrderedDict 类，用于有序字典操作
 from typing import Mapping  # 导入 Mapping 类型提示，用于类型标注
@@ -37,7 +37,7 @@ class RobertaConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import RobertaConfig, RobertaModel
 
     >>> # Initializing a RoBERTa configuration

@@ -1,6 +1,6 @@
 # `.\models\electra\modeling_flax_electra.py`
 
-```
+```py
 # 引入必要的库和模块
 from typing import Callable, Optional, Tuple  # 导入类型提示相关的模块
 
@@ -1073,7 +1073,7 @@ FLAX_ELECTRA_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxElectraForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google/electra-small-discriminator")

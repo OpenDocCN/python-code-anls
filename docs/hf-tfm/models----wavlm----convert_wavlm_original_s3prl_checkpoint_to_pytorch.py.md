@@ -1,6 +1,6 @@
 # `.\models\wavlm\convert_wavlm_original_s3prl_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入需要的库和模块
 import argparse  # 导入参数解析模块
 

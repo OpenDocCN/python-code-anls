@@ -1,6 +1,6 @@
 # `.\models\bit\configuration_bit.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行指定了文件的编码格式为 UTF-8，确保文件中的中文等特殊字符能正确解析
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.

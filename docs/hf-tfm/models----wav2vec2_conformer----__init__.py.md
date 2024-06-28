@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_conformer\__init__.py`
 
-```
+```py
 # 导入所需的依赖和模块
 from typing import TYPE_CHECKING  # 导入类型检查模块
 

@@ -1,6 +1,6 @@
 # `.\models\depth_anything\modeling_depth_anything.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 
 # 版权声明和信息，指出版权归 TikTok 和 HuggingFace Inc. 团队所有，保留所有权利

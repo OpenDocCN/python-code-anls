@@ -1,6 +1,6 @@
 # `.\models\poolformer\image_processing_poolformer.py`
 
-```
+```py
 # 设置编码格式为UTF-8
 # 版权声明和许可证信息
 # 版权归The HuggingFace Inc.团队所有，保留所有权利。

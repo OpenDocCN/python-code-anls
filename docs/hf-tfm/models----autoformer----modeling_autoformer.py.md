@@ -1,6 +1,6 @@
 # `.\models\autoformer\modeling_autoformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8，确保代码中可以正确处理各种字符
 # 版权声明，这些代码的版权归清华大学 THUML、亚马逊公司及其关联公司以及HuggingFace团队所有
 # 根据 Apache 许可证 2.0 版本，你可以在遵守许可证的情况下使用这些代码

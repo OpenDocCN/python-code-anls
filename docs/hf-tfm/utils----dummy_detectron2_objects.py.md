@@ -1,6 +1,6 @@
 # `.\utils\dummy_detectron2_objects.py`
 
-```
+```py
 # 这个文件是由命令 `make fix-copies` 自动生成的，不要编辑。
 # 导入需要后端支持的工具函数
 from ..utils import requires_backends

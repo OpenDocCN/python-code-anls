@@ -1,6 +1,6 @@
 # `.\models\nllb_moe\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指明代码版权和许可的使用条款
 # The HuggingFace Team 版权声明和保留所有权利
 

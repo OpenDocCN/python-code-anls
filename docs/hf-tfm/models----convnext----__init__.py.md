@@ -1,6 +1,6 @@
 # `.\models\convnext\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于检查类型是否可用
 from typing import TYPE_CHECKING
 

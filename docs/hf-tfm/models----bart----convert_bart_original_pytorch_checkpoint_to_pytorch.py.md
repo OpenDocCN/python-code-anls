@@ -1,6 +1,6 @@
 # `.\models\bart\convert_bart_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明代码版权归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
 # 引入必要的库和模块

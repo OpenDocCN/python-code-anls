@@ -1,6 +1,6 @@
 # `.\models\clipseg\configuration_clipseg.py`
 
-```
+```py
 # coding=utf-8
 # 上面这行声明了文件的编码格式为 UTF-8，确保可以正确处理中文等特殊字符
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
@@ -89,7 +89,7 @@ class CLIPSegTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CLIPSegTextConfig, CLIPSegTextModel
 
     >>> # 使用 CIDAS/clipseg-rd64 风格配置初始化 CLIPSegTextConfig
@@ -205,7 +205,7 @@ class CLIPSegVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CLIPSegVisionConfig, CLIPSegVisionModel
 
     >>> # Initializing a CLIPSegVisionConfig with CIDAS/clipseg-rd64 style configuration
@@ -317,7 +317,7 @@ class CLIPSegConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CLIPSegConfig, CLIPSegModel
     # 初始化一个 CLIPSegConfig，使用 CIDAS/clipseg-rd64 风格的配置
     >>> configuration = CLIPSegConfig()

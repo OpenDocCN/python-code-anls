@@ -1,6 +1,6 @@
 # `.\models\roc_bert\modeling_roc_bert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 WeChatAI The HuggingFace Inc. team 所有
 # 根据 Apache License, Version 2.0 许可协议，除非符合许可协议的要求，否则不得使用此文件
@@ -962,7 +962,7 @@ class RoCBertForPreTraining(RoCBertPreTrainedModel):
             loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`.
 
         Example:
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, RoCBertForMaskedLM
         >>> import torch
 

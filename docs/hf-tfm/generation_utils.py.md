@@ -1,6 +1,6 @@
 # `.\generation_utils.py`
 
-```
+```py
 # 导入警告模块
 import warnings
 

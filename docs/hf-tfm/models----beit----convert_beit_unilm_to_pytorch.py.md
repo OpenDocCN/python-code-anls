@@ -1,6 +1,6 @@
 # `.\models\beit\convert_beit_unilm_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可证信息

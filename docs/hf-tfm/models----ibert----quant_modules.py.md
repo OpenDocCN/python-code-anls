@@ -1,6 +1,6 @@
 # `.\models\ibert\quant_modules.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括作者信息和版权信息
 # 版权所有 (c) 2021, NVIDIA CORPORATION. 保留所有权利。

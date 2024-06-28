@@ -1,6 +1,6 @@
 # `.\models\bart\modeling_flax_bart.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and The Google Flax Team Authors And The HuggingFace Inc. team. All rights reserved.
 #
@@ -995,7 +995,7 @@ class FlaxBartPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxBartForConditionalGeneration
 
         >>> model = FlaxBartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
@@ -1295,7 +1295,7 @@ FLAX_BART_CONDITIONAL_GENERATION_DOCSTRING = """
 
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxBartForConditionalGeneration
     >>> model = FlaxBartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
     # 使用预训练的 FlaxBart 模型加载条件生成模型，用于生成文本摘要

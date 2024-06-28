@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\__init__.py`
 
-```
+```py
 # 导入自定义模块中的函数和类
 
 from .chunk_utils import chunk_layer

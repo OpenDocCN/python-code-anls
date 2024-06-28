@@ -1,6 +1,6 @@
 # `.\models\phobert\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明此代码的版权归 HuggingFace Team 所有，依据 Apache License, Version 2.0 发布
 #
 # 在符合许可证的情况下，可以使用此文件。您可以在以下链接获取许可证副本：

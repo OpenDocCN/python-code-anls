@@ -1,6 +1,6 @@
 # `.\models\barthez\tokenization_barthez.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2020 年 Ecole Polytechnique 和 HuggingFace Inc. 团队。
 #

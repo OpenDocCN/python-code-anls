@@ -1,6 +1,6 @@
 # `.\models\udop\tokenization_udop_fast.py`
 
-```
+```py
 """
 定义一个 UdopTokenizerFast 类，继承自 PreTrainedTokenizerFast 类，用于实现快速的 UDOP 分词器，基于 HuggingFace 的 tokenizers 库。
 

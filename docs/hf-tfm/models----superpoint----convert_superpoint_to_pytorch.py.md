@@ -1,6 +1,6 @@
 # `.\models\superpoint\convert_superpoint_to_pytorch.py`
 
-```
+```py
 # 导入所需的模块和库
 import argparse  # 用于解析命令行参数
 import os  # 提供与操作系统交互的功能

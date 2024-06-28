@@ -1,6 +1,6 @@
 # `.\models\dinat\configuration_dinat.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -47,7 +47,7 @@ class DinatConfig(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import DinatConfig, DinatModel
 
     >>> # Initializing a Dinat shi-labs/dinat-mini-in1k-224 style configuration

@@ -1,6 +1,6 @@
 # `.\models\wavlm\configuration_wavlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors, Microsoft Research, and The HuggingFace Inc. team. All rights reserved.
 #
@@ -52,13 +52,13 @@ class WavLMConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
 
     ```
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import WavLMConfig, WavLMModel
 
     >>> # Initializing a WavLM facebook/wavlm-base-960h style configuration

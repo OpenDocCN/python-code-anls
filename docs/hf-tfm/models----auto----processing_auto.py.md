@@ -1,6 +1,6 @@
 # `.\models\auto\processing_auto.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

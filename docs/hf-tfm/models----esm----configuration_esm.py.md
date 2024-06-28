@@ -1,6 +1,6 @@
 # `.\models\esm\configuration_esm.py`
 
-```
+```py
 """
 # coding=utf-8
 # Copyright 2022 Meta and The HuggingFace Inc. team. All rights reserved.
@@ -50,7 +50,7 @@ class EsmConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import EsmModel, EsmConfig
 
     >>> # Initializing a ESM facebook/esm-1b style configuration >>> configuration = EsmConfig()

@@ -1,6 +1,6 @@
 # `.\kernels\mra\cuda_launch.h`
 
-```
+```py
 # 包含 Torch C++ 扩展的头文件
 #include <torch/extension.h>
 # 包含 ATen 库的头文件，用于张量操作

@@ -1,6 +1,6 @@
 # `.\models\clip\tokenization_clip_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Open AI Team Authors and The HuggingFace Inc. team.
 #

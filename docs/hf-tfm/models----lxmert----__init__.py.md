@@ -1,6 +1,6 @@
 # `.\models\lxmert\__init__.py`
 
-```
+```py
 # 引入必要的类型检查模块
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\vit\convert_dino_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码格式为 UTF-8，确保脚本中可以使用中文注释和字符串
 

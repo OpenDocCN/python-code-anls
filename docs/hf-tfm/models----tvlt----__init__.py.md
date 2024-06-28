@@ -1,6 +1,6 @@
 # `.\models\tvlt\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁用 flake8 检查此模块，因为无法忽略 "F401 '...' imported but unused" 警告，同时保留其他警告。
 

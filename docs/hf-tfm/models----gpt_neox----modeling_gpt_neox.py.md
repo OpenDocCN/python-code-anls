@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\modeling_gpt_neox.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 EleutherAI 和 HuggingFace Inc. 团队。保留所有权利。
 #

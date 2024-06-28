@@ -1,6 +1,6 @@
 # `.\models\vit\image_processing_vit.py`
 
-```
+```py
 # 导入必要的库和模块，包括类型提示、NumPy等
 from typing import Dict, List, Optional, Union
 

@@ -1,6 +1,6 @@
 # `.\models\clvp\number_normalizer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

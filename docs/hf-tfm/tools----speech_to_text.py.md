@@ -1,6 +1,6 @@
 # `.\tools\speech_to_text.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 

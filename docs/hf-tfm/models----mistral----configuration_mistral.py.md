@@ -1,6 +1,6 @@
 # `.\models\mistral\configuration_mistral.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Mistral AI and the HuggingFace Inc. team. All rights reserved.
 #
@@ -41,7 +41,7 @@ class MistralConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import MistralModel, MistralConfig
 
     >>> # Initializing a Mistral 7B style configuration

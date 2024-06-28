@@ -1,6 +1,6 @@
 # `.\models\big_bird\tokenization_big_bird_fast.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明及许可信息
 # 根据 Apache License 2.0 许可使用代码

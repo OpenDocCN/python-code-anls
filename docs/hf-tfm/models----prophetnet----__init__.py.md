@@ -1,6 +1,6 @@
 # `.\models\prophetnet\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从工具包中导入自定义异常和模块延迟加载工具函数

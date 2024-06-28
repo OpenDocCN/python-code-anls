@@ -1,6 +1,6 @@
 # `.\models\align\configuration_align.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件的编码格式为UTF-8
 
@@ -62,7 +62,7 @@ class AlignTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AlignTextConfig, AlignTextModel
 
     >>> # Initializing a AlignTextConfig with kakaobrain/align-base style configuration
@@ -250,7 +250,7 @@ class AlignVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AlignVisionConfig, AlignVisionModel
 
     >>> # 使用 kakaobrain/align-base 风格的配置初始化 AlignVisionConfig
@@ -365,7 +365,7 @@ class AlignConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AlignConfig, AlignModel
 
     >>> # Initializing a AlignConfig with kakaobrain/align-base style configuration

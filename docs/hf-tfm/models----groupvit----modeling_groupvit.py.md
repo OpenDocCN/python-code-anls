@@ -1,6 +1,6 @@
 # `.\models\groupvit\modeling_groupvit.py`
 
-```
+```py
 # 定义了编码格式为 UTF-8
 
 import collections.abc  # 导入 collections.abc 模块，用于处理集合和容器数据类型
@@ -1309,7 +1309,7 @@ class GroupViTTextModel(GroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import CLIPTokenizer, GroupViTTextModel
 
         >>> tokenizer = CLIPTokenizer.from_pretrained("nvidia/groupvit-gcc-yfcc")
@@ -1435,7 +1435,7 @@ class GroupViTVisionModel(GroupViTPreTrainedModel):
         Examples:
         以下是一些使用示例，展示了如何使用该方法进行图像特征提取和推断。
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, GroupViTVisionModel
@@ -1538,7 +1538,7 @@ class GroupViTModel(GroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import CLIPTokenizer, GroupViTModel
 
         >>> model = GroupViTModel.from_pretrained("nvidia/groupvit-gcc-yfcc")
@@ -1581,7 +1581,7 @@ class GroupViTModel(GroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, GroupViTModel

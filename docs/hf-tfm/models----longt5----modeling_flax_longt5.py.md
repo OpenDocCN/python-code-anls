@@ -1,6 +1,6 @@
 # `.\models\longt5\modeling_flax_longt5.py`
 
-```
+```py
 # 导入所需的模块和类
 import copy  # 导入copy模块，用于复制对象
 from typing import Any, Callable, List, Optional, Tuple  # 导入类型提示相关的模块
@@ -1649,7 +1649,7 @@ class FlaxLongT5PreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxLongT5ForConditionalGeneration
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-base")
@@ -1874,7 +1874,7 @@ FLAX_LONGT5_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxLongT5Model
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-base")
@@ -2128,7 +2128,7 @@ FLAX_LONGT5_CONDITIONAL_GENERATION_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxLongT5ForConditionalGeneration
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-base")

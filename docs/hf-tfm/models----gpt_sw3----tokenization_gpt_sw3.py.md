@@ -1,6 +1,6 @@
 # `.\models\gpt_sw3\tokenization_gpt_sw3.py`
 
-```
+```py
 """The tokenizer used by the GPT-SW3 models."""
 
 # 引入所需的模块和库
@@ -54,7 +54,7 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
     this superclass for more information regarding those methods.
 
     Example usage:
-    ```python
+    ```
     >>> from transformers import GPTSw3Tokenizer
 
     >>> tokenizer = GPTSw3Tokenizer.from_pretrained("AI-Sweden-Models/gpt-sw3-126m")

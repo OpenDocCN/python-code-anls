@@ -1,6 +1,6 @@
 # `.\models\owlvit\configuration_owlvit.py`
 
-```
+```py
 # 指定编码方式为 UTF-8
 
 # 版权声明和许可条款，声明代码版权和使用许可
@@ -79,7 +79,7 @@ class OwlViTTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import OwlViTTextConfig, OwlViTTextModel
 
     >>> # Initializing a OwlViTTextModel with google/owlvit-base-patch32 style configuration
@@ -193,7 +193,7 @@ class OwlViTVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import OwlViTVisionConfig, OwlViTVisionModel
 
     >>> # Initializing a OwlViTVisionModel with google/owlvit-base-patch32 style configuration

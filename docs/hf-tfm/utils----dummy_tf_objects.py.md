@@ -1,6 +1,6 @@
 # `.\utils\dummy_tf_objects.py`
 
-```
+```py
 # 由命令 `make fix-copies` 自动生成的文件，不要手动编辑。
 from ..utils import DummyObject, requires_backends
 

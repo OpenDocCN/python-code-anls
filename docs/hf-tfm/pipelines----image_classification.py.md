@@ -1,6 +1,6 @@
 # `.\pipelines\image_classification.py`
 
-```
+```py
 # 引入必要的类型和模块
 from typing import List, Union
 import numpy as np
@@ -72,7 +72,7 @@ class ImageClassificationPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> classifier = pipeline(model="microsoft/beit-base-patch16-224-pt22k-ft22k")

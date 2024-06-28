@@ -1,6 +1,6 @@
 # `.\models\timm_backbone\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁止 flake8 对本模块进行检查，因为无法忽略 "F401 '...' imported but unused" 警告，而保留其他警告。
 

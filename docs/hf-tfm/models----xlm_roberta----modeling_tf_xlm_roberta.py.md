@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta\modeling_tf_xlm_roberta.py`
 
-```
+```py
 # 编码声明，指定文件编码为UTF-8
 # 版权声明，版权归Facebook AI Research和HuggingFace Inc.团队所有
 # 版权声明，版权归NVIDIA CORPORATION所有，保留所有权利

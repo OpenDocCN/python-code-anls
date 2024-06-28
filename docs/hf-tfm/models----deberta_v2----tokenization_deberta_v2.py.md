@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\tokenization_deberta_v2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Microsoft and the HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\sam\configuration_sam.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出版权归 HuggingFace Inc. 团队所有
 #
@@ -270,7 +270,7 @@ class SamConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import (
     ...     SamVisionConfig,
     ...     SamPromptEncoderConfig,

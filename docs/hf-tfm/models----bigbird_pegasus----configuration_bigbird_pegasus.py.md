@@ -1,6 +1,6 @@
 # `.\models\bigbird_pegasus\configuration_bigbird_pegasus.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Google Research 和 HuggingFace Inc. 团队所有
 #
@@ -57,7 +57,7 @@ class BigBirdPegasusConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BigBirdPegasusConfig, BigBirdPegasusModel
 
     >>> # 初始化一个 BigBirdPegasus bigbird-pegasus-base 风格的配置

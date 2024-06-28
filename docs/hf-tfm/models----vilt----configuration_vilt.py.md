@@ -1,6 +1,6 @@
 # `.\models\vilt\configuration_vilt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -42,7 +42,7 @@ class ViltConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ViLTModel, ViLTConfig
 
     >>> # Initializing a ViLT dandelin/vilt-b32-mlm style configuration

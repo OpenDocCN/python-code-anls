@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\__init__.py`
 
-```
+```py
 # 导入所需模块和函数，包括特定的异常处理和延迟加载模块
 from typing import TYPE_CHECKING
 # 从相对路径导入必要的模块和类

@@ -1,6 +1,6 @@
 # `.\onnx\features.py`
 
-```
+```py
 import os  # 导入标准库 os，用于与操作系统交互
 from functools import partial, reduce  # 从 functools 模块导入 partial 和 reduce 函数
 from typing import TYPE_CHECKING, Callable, Dict, Optional, Tuple, Type, Union  # 导入类型提示相关的库

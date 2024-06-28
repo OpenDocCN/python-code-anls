@@ -1,6 +1,6 @@
 # `.\models\splinter\tokenization_splinter.py`
 
-```
+```py
 # 定义了文件编码为 UTF-8
 # 版权声明，包括版权归属和保留所有权利
 # Apache License 2.0 许可证声明，规定了软件的使用条件和责任限制

@@ -1,6 +1,6 @@
 # `.\models\plbart\tokenization_plbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # Copyright 2022, UCLA NLP, The Facebook AI Research Team Authors and The HuggingFace Inc. team.
 #
@@ -137,7 +137,7 @@ class PLBartTokenizer(PreTrainedTokenizer):
             See the [Python wrapper for SentencePiece](https://github.com/google/sentencepiece/tree/master/python) for details.
     Examples:
 
-    ```python
+    ```
     >>> from transformers import PLBartTokenizer
 
     >>> tokenizer = PLBartTokenizer.from_pretrained("uclanlp/plbart-python-en_XX", src_lang="python", tgt_lang="en_XX")

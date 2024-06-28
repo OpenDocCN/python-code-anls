@@ -1,6 +1,6 @@
 # `.\models\longt5\configuration_longt5.py`
 
-```
+```py
 # 引入必要的模块和类，包括预训练配置类、OnnxSeq2SeqConfigWithPast 类和日志记录工具
 """ LongT5 model configuration"""
 from typing import Mapping  # 导入 Mapping 类型

@@ -1,6 +1,6 @@
 # `.\models\led\tokenization_led.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 Iz Beltagy，Matthew E. Peters，Arman Cohan 和 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -101,7 +101,7 @@ class LEDTokenizer(PreTrainedTokenizer):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import LEDTokenizer
 
     >>> tokenizer = LEDTokenizer.from_pretrained("allenai/led-base-16384")

@@ -1,6 +1,6 @@
 # `.\models\dit\__init__.py`
 
-```
+```py
 # 导入标准库中的datetime模块，用于处理日期和时间相关的操作
 import datetime
 

@@ -1,6 +1,6 @@
 # `.\models\kosmos2\convert_kosmos2_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 import argparse  # 导入命令行参数解析模块
 
 from fairseq.checkpoint_utils import load_checkpoint_to_cpu  # 从fairseq库中导入加载checkpoint到CPU的函数

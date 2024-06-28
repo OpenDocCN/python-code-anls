@@ -1,6 +1,6 @@
 # `.\models\instructblip\configuration_instructblip.py`
 
-```
+```py
 # coding=utf-8
 # 定义脚本编码格式为 UTF-8
 
@@ -266,7 +266,7 @@ class InstructBlipConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import (
     ...     InstructBlipVisionConfig,
     ...     InstructBlipQFormerConfig,

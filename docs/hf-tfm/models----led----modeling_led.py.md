@@ -1,6 +1,6 @@
 # `.\models\led\modeling_led.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Iz Beltagy, Matthew E. Peters, Arman Cohan and The HuggingFace Inc. team. All rights reserved.
 #
@@ -834,7 +834,7 @@ LED_START_DOCSTRING = r"""
 LED_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> import torch
     >>> from transformers import AutoTokenizer, LEDForConditionalGeneration
 

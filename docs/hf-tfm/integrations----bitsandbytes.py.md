@@ -1,6 +1,6 @@
 # `.\integrations\bitsandbytes.py`
 
-```
+```py
 import importlib.metadata  # 导入元数据模块，用于获取包的版本信息
 import warnings  # 导入警告模块，用于处理警告信息
 from copy import deepcopy  # 导入深拷贝函数，用于复制对象

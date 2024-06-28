@@ -1,6 +1,6 @@
 # `.\models\imagegpt\configuration_imagegpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #
@@ -89,7 +89,7 @@ class ImageGPTConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ImageGPTConfig, ImageGPTModel
 
     >>> # 初始化一个 ImageGPT 配置对象

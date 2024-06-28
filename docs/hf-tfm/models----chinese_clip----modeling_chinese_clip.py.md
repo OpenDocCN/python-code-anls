@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\modeling_chinese_clip.py`
 
-```
+```py
 # 定义了编码为 UTF-8 的文件头声明
 # 版权声明及许可信息，使用 Apache License, Version 2.0 许可协议
 # 导入所需的库和模块
@@ -1342,7 +1342,7 @@ class ChineseCLIPVisionModel(ChineseCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import CLIPProcessor, ChineseCLIPVisionModel
@@ -1434,7 +1434,7 @@ class ChineseCLIPModel(ChineseCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, ChineseCLIPModel
 
         >>> model = ChineseCLIPModel.from_pretrained("OFA-Sys/chinese-clip-vit-base-patch16")
@@ -1477,7 +1477,7 @@ class ChineseCLIPModel(ChineseCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, ChineseCLIPModel

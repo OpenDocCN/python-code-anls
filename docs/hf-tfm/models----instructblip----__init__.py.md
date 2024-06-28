@@ -1,6 +1,6 @@
 # `.\models\instructblip\__init__.py`
 
-```
+```py
 # 版权声明和版权信息
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 # 

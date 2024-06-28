@@ -1,6 +1,6 @@
 # `.\models\lxmert\tokenization_lxmert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Google AI Team, Stanford University and The HuggingFace Inc. team.
 #

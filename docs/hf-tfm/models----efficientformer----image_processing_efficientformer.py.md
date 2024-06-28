@@ -1,6 +1,6 @@
 # `.\models\efficientformer\image_processing_efficientformer.py`
 
-```
+```py
 # 导入所需模块和类，包括类型提示和必要的功能函数
 from typing import Dict, List, Optional, Union
 

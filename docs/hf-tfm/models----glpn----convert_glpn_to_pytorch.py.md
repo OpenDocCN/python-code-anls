@@ -1,6 +1,6 @@
 # `.\models\glpn\convert_glpn_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 导入命令行参数解析模块
 from collections import OrderedDict  # 导入有序字典模块

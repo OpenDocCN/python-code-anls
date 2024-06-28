@@ -1,6 +1,6 @@
 # `.\models\regnet\configuration_regnet.py`
 
-```
+```py
 # 导入所需模块和类
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -44,7 +44,7 @@ class RegNetConfig(PretrainedConfig):
             If `True`, the first stage will downsample the inputs using a `stride` of 2.
 
     Example:
-    ```python
+    ```
     >>> from transformers import RegNetConfig, RegNetModel
 
     >>> # Initializing a RegNet regnet-y-40 style configuration

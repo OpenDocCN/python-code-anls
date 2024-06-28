@@ -1,6 +1,6 @@
 # `.\models\patchtsmixer\configuration_patchtsmixer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可协议，指定代码使用许可
 # 导入所需的模块和函数
@@ -32,7 +32,7 @@ class PatchTSMixerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PatchTSMixerConfig, PatchTSMixerModel
 
     >>> # Initializing a default PatchTSMixer configuration

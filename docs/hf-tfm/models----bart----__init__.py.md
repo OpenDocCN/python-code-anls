@@ -1,6 +1,6 @@
 # `.\models\bart\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于在类型检查时导入特定模块
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_aqlm.py`
 
-```
+```py
 # 版权声明及版权许可信息
 # Copyright 2024 The HuggingFace Inc. team. All rights reserved.
 #

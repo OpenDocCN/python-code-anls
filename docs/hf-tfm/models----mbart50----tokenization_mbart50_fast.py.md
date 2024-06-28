@@ -1,6 +1,6 @@
 # `.\models\mbart50\tokenization_mbart50_fast.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8，确保正确处理各种字符集
 # Copyright 2021 The Facebook AI Research Team Authors and The HuggingFace Inc. team.

@@ -1,6 +1,6 @@
 # `.\models\decision_transformer\configuration_decision_transformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
 #
@@ -47,7 +47,7 @@ class DecisionTransformerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import DecisionTransformerConfig, DecisionTransformerModel
 
     >>> # Initializing a DecisionTransformer configuration

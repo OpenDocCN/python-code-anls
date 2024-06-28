@@ -1,6 +1,6 @@
 # `.\models\barthez\__init__.py`
 
-```
+```py
 # 导入类型检查模块中的 TYPE_CHECKING
 from typing import TYPE_CHECKING
 

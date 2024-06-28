@@ -1,6 +1,6 @@
 # `.\models\bart\modeling_bart.py`
 
-```
+```py
 # 设置文件编码格式为UTF-8
 
 # 版权声明和许可信息
@@ -685,7 +685,7 @@ BART_START_DOCSTRING = r"""
 BART_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, BartForConditionalGeneration
 
     >>> model = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
@@ -706,7 +706,7 @@ BART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, BartForConditionalGeneration
 
     >>> tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")

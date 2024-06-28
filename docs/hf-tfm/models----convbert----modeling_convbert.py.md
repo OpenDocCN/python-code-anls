@@ -1,6 +1,6 @@
 # `.\models\convbert\modeling_convbert.py`
 
-```
+```py
 # 设定文件编码为UTF-8
 # 版权声明和许可信息
 # 版权所有 2021 年 HuggingFace Inc. 团队保留所有权利。

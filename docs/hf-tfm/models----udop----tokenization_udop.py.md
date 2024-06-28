@@ -1,6 +1,6 @@
 # `.\models\udop\tokenization_udop.py`
 
-```
+```py
 # 定义了编码为 UTF-8
 # 版权声明 2024 年由 HuggingFace Inc. 团队所有
 # 使用 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件

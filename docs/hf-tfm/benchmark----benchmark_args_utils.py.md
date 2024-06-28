@@ -1,6 +1,6 @@
 # `.\benchmark\benchmark_args_utils.py`
 
-```
+```py
 # 导入必要的模块和库
 import dataclasses  # 导入用于定义数据类的模块
 import json  # 导入处理 JSON 数据的模块

@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_flax_encoder_decoder.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #
@@ -572,7 +572,7 @@ class FlaxEncoderDecoderModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import FlaxEncoderDecoderModel, BertTokenizer
 
         >>> # initialize a bert2gpt2 from pretrained BERT and GPT2 models. Note that the cross-attention layers will be randomly initialized

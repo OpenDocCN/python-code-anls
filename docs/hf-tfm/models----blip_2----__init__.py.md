@@ -1,6 +1,6 @@
 # `.\models\blip_2\__init__.py`
 
-```
+```py
 # 引入必要的模块和类型检查
 from typing import TYPE_CHECKING
 # 引入自定义的异常，用于处理可选依赖不可用情况下的异常

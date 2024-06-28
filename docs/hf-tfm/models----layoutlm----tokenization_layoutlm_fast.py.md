@@ -1,6 +1,6 @@
 # `.\models\layoutlm\tokenization_layoutlm_fast.py`
 
-```
+```py
 # coding=utf-8
 # 设置脚本编码为 UTF-8
 
@@ -220,7 +220,7 @@ class LayoutLMTokenizerFast(PreTrainedTokenizerFast):
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
 
-# 创建用于 LayoutLM 序列的 token type IDs，根据输入的序列或序列对生成相应的类型 ID 列表```python
+# 创建用于 LayoutLM 序列的 token type IDs，根据输入的序列或序列对生成相应的类型 ID 列表```
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,

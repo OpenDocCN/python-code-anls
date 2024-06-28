@@ -1,6 +1,6 @@
 # `.\models\table_transformer\modeling_table_transformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，指明版权归属及许可协议
 # 除非符合许可协议，否则禁止使用此文件

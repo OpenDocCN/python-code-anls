@@ -1,6 +1,6 @@
 # `.\models\unispeech\convert_unispeech_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可协议信息，指明代码版权及使用条款
 # 导入 argparse 用于命令行解析，json 和 os 用于文件操作

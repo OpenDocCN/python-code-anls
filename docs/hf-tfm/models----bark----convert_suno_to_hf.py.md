@@ -1,6 +1,6 @@
 # `.\models\bark\convert_suno_to_hf.py`
 
-```
+```py
 """Convert Bark checkpoint."""
 # 导入所需的库和模块
 import argparse

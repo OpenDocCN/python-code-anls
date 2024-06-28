@@ -1,6 +1,6 @@
 # `.\models\imagegpt\feature_extraction_imagegpt.py`
 
-```
+```py
 # 指定编码格式为 UTF-8，确保文件中的所有字符能够正确地被解析和处理
 # 版权声明，指出 HuggingFace Inc. 团队保留所有权利
 #

@@ -1,6 +1,6 @@
 # `.\models\unispeech\configuration_unispeech.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class UniSpeechConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import UniSpeechConfig, UniSpeechModel
 
     >>> # Initializing a UniSpeech facebook/unispeech-base-960h style configuration

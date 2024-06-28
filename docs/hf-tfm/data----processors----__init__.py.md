@@ -1,6 +1,6 @@
 # `.\data\processors\__init__.py`
 
-```
+```py
 # 导入 HuggingFace 库中的各种模块和函数
 
 from .glue import glue_convert_examples_to_features, glue_output_modes, glue_processors, glue_tasks_num_labels

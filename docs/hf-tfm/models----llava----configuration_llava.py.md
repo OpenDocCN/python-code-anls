@@ -1,6 +1,6 @@
 # `.\models\llava\configuration_llava.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明，指明了版权归属及许可信息
 # 根据Apache License, Version 2.0规定，除非符合许可条件，否则不得使用此文件
@@ -62,7 +62,7 @@ class LlavaConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import LlavaForConditionalGeneration, LlavaConfig, CLIPVisionConfig, LlamaConfig
 
     >>> # Initializing a CLIP-vision config

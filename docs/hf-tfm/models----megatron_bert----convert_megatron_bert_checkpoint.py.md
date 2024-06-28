@@ -1,6 +1,6 @@
 # `.\models\megatron_bert\convert_megatron_bert_checkpoint.py`
 
-```
+```py
 # 引入 argparse 库用于解析命令行参数
 import argparse
 # 引入 os 库用于与操作系统交互

@@ -1,6 +1,6 @@
 # `.\models\mbart\configuration_mbart.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定文件编码为 UTF-8，确保支持多语言字符集
 # Copyright 2021, The Facebook AI Research Team and The HuggingFace Inc. team. All rights reserved.
@@ -57,7 +57,7 @@ class MBartConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MBartConfig, MBartModel
 
     >>> # Initializing a MBART facebook/mbart-large-cc25 style configuration

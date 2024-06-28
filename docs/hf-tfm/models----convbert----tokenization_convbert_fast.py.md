@@ -1,6 +1,6 @@
 # `.\models\convbert\tokenization_convbert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 HuggingFace Inc. 团队所有。
 #

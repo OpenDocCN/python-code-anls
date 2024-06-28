@@ -1,6 +1,6 @@
 # `.\models\deit\configuration_deit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Facebook AI Research (FAIR) and The HuggingFace Inc. team. All rights reserved.
 #

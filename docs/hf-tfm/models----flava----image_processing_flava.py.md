@@ -1,6 +1,6 @@
 # `.\models\flava\image_processing_flava.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

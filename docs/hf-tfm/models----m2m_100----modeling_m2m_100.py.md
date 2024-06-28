@@ -1,6 +1,6 @@
 # `.\models\m2m_100\modeling_m2m_100.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -417,7 +417,7 @@ M2M_100_START_DOCSTRING = r"""
 M2M_100_GENERATION_EXAMPLE = r"""
     Translation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, M2M100ForConditionalGeneration
 
     >>> model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_418M")

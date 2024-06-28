@@ -1,6 +1,6 @@
 # `.\models\clipseg\convert_clipseg_original_pytorch_to_hf.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，该代码由 HuggingFace Inc. 团队版权所有
 #

@@ -1,6 +1,6 @@
 # `.\models\encodec\configuration_encodec.py`
 
-```
+```py
 # 设置编码格式为 UTF-8，确保代码可以正确处理各种字符
 # 版权声明，指出版权归 Meta Platforms, Inc. 及其关联公司和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本授权，只有在符合许可证的情况下才能使用此文件
@@ -44,7 +44,7 @@ class EncodecConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import EncodecModel, EncodecConfig
 
     >>> # Initializing a "facebook/encodec_24khz" style configuration

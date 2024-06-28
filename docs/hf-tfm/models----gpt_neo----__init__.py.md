@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 导入自定义异常类，用于指示可选依赖项不可用

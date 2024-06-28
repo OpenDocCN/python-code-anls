@@ -1,6 +1,6 @@
 # `.\models\mobilevit\feature_extraction_mobilevit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息，声明代码版权归 HuggingFace Inc. 团队所有
 #

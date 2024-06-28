@@ -1,6 +1,6 @@
 # `.\models\ernie\configuration_ernie.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict  # 导入OrderedDict类，用于有序字典
 from typing import Mapping  # 导入Mapping类，用于类型提示
@@ -44,7 +44,7 @@ class ErnieConfig(PretrainedConfig):
     # 参数设置为默认值将产生与ERNIE [nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)架构类似的配置
 
     # 示例代码
-    # ```python
+    # ```
     # >>> from transformers import ErnieConfig, ErnieModel
     #
     # >>> # Initializing a ERNIE nghuyong/ernie-3.0-base-zh style configuration

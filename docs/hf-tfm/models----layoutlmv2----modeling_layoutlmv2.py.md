@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\modeling_layoutlmv2.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2021 Microsoft Research The HuggingFace Inc. team. 保留所有权利。
 #

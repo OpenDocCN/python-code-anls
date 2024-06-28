@@ -1,6 +1,6 @@
 # `.\models\lxmert\convert_lxmert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The HuggingFace Inc. team.
 #

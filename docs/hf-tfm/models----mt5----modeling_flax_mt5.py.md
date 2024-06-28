@@ -1,6 +1,6 @@
 # `.\models\mt5\modeling_flax_mt5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Mesh TensorFlow authors, T5 Authors and HuggingFace Inc. team.
 #
@@ -47,7 +47,7 @@ class FlaxMT5Model(FlaxT5Model):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import FlaxMT5Model, AutoTokenizer
 
     >>> model = FlaxMT5Model.from_pretrained("google/mt5-small")
@@ -74,7 +74,7 @@ class FlaxMT5EncoderModel(FlaxT5EncoderModel):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import FlaxT5EncoderModel, AutoTokenizer
 
     >>> model = FlaxT5EncoderModel.from_pretrained("google/mt5-small")

@@ -1,6 +1,6 @@
 # `.\models\nllb_moe\modeling_nllb_moe.py`
 
-```
+```py
 # 定义一个函数，根据输入的 `input_ids` 张量，将其中的 token 向右移动一位
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
@@ -609,7 +609,7 @@ class NllbMoePreTrainedModel(PreTrainedModel):
 NLLB_MOE_GENERATION_EXAMPLE = r"""
     Translation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, NllbMoeForConditionalGeneration
 
     >>> model = NllbMoeForConditionalGeneration.from_pretrained("facebook/nllb-moe-54b")

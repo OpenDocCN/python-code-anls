@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\processing_layoutlmv3.py`
 
-```
+```py
 """
 Processor class for LayoutLMv3.
 """

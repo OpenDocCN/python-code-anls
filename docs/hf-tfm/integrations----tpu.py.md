@@ -1,6 +1,6 @@
 # `.\integrations\tpu.py`
 
-```
+```py
 # 导入 DataLoader 类从 torch.utils.data 模块
 # 导入 is_torch_xla_available 函数从上级模块 ..utils 中
 from torch.utils.data import DataLoader

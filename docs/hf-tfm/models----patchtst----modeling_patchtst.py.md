@@ -1,6 +1,6 @@
 # `.\models\patchtst\modeling_patchtst.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 IBM & Hugging Face. All rights reserved.
 #

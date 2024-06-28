@@ -1,6 +1,6 @@
 # `.\models\imagegpt\modeling_imagegpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The OpenAI Team Authors and HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\vit\__init__.py`
 
-```
+```py
 # 引入类型检查相关模块
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\xlm\configuration_xlm.py`
 
-```
+```py
 # 导入所需的模块和类
 from collections import OrderedDict  # 导入有序字典模块
 from typing import Mapping  # 导入 Mapping 类型提示
@@ -35,7 +35,7 @@ class XLMConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import XLMConfig, XLMModel
 
     >>> # 初始化一个 XLM 配置

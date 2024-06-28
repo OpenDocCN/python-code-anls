@@ -1,6 +1,6 @@
 # `.\sagemaker\trainer_sm.py`
 
-```
+```py
 # 导入警告模块，用于在特定情况下发出警告
 import warnings
 

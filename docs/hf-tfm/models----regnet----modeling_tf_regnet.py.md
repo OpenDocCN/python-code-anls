@@ -1,6 +1,6 @@
 # `.\models\regnet\modeling_tf_regnet.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和版权信息，表明该文件的版权归 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队所有
 #

@@ -1,6 +1,6 @@
 # `.\models\bridgetower\processing_bridgetower.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Intel Labs Team Authors, The Microsoft Research Team Authors and HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\convnext\convert_convnext_to_pytorch.py`
 
-```
+```py
 # 指定文件编码为UTF-8，确保代码中的中文等字符能正确处理
 # 版权声明，声明代码版权归HuggingFace Inc.团队所有
 #

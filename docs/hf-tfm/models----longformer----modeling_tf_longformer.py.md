@@ -1,6 +1,6 @@
 # `.\models\longformer\modeling_tf_longformer.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 导入数据类装饰器，用于定义数据类

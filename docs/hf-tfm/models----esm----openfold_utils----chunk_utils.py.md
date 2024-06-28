@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\chunk_utils.py`
 
-```
+```py
 # 导入日志和数学库
 import logging
 import math

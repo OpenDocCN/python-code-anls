@@ -1,6 +1,6 @@
 # `.\models\graphormer\modeling_graphormer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft, clefourrier The HuggingFace Inc. team. All rights reserved.
 #
@@ -160,7 +160,7 @@ class LayerDropModuleList(nn.ModuleList):
 
     Usage:
 
-    ```python
+    ```
     layers = LayerDropList(p=0.5, modules=[layer1, layer2, layer3])
     for layer in layers:  # this might iterate over layers 1 and 3
         x = layer(x)

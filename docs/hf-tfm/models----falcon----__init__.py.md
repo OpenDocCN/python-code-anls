@@ -1,6 +1,6 @@
 # `.\models\falcon\__init__.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，标明 Falcon 作者和 HuggingFace Inc. 团队的版权
 # 根据 Apache License, Version 2.0 许可证，使用该文件需要遵循许可证规定

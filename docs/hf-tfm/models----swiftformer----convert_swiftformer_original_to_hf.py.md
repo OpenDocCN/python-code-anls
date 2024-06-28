@@ -1,6 +1,6 @@
 # `.\models\swiftformer\convert_swiftformer_original_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # 定义脚本的编码格式为 UTF-8
 

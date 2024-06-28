@@ -1,6 +1,6 @@
 # `.\models\nystromformer\configuration_nystromformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，版权归属于2022年的UW-Madison和The HuggingFace Inc.团队，保留所有权利
 #

@@ -1,6 +1,6 @@
 # `.\models\mega\modeling_mega.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Mega Authors and The HuggingFace Inc. team.
 #

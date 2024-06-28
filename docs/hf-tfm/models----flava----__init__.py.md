@@ -1,6 +1,6 @@
 # `.\models\flava\__init__.py`
 
-```
+```py
 # 版权声明及导入必要的类型检查
 # Meta Platforms 作者和 The HuggingFace Team 版权声明
 # Apache License, Version 2.0 版权许可，可以在指定条件下使用此文件

@@ -1,6 +1,6 @@
 # `.\models\layoutlm\tokenization_layoutlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Microsoft Research Asia LayoutLM Team Authors.
 #

@@ -1,6 +1,6 @@
 # `.\models\mamba\configuration_mamba.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2024 年 HuggingFace Inc. 团队。
 #
@@ -37,7 +37,7 @@ class MambaConfig(PretrainedConfig):
     
     Example:
     
-    ```python
+    ```
     >>> from transformers import MambaConfig, MambaModel
     
     >>> # Initializing a Mamba configuration

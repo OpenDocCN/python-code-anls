@@ -1,6 +1,6 @@
 # `.\models\realm\configuration_realm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The REALM authors and The HuggingFace Inc. team.
 #
@@ -65,7 +65,7 @@ class RealmConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import RealmConfig, RealmEmbedder
 
     >>> # Initializing a REALM realm-cc-news-pretrained-* style configuration

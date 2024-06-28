@@ -1,6 +1,6 @@
 # `.\optimization.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 #
@@ -660,20 +660,20 @@ class Adafactor(Optimizer):
 
     Example:
 
-    ```python
+    ```
     Adafactor(model.parameters(), scale_parameter=False, relative_step=False, warmup_init=False, lr=1e-3)
     ```
 
     Others reported the following combination to work well:
 
-    ```python
+    ```
     Adafactor(model.parameters(), scale_parameter=True, relative_step=True, warmup_init=True, lr=None)
     ```
 
     When using `lr=None` with [`Trainer`] you will most likely need to use [`~optimization.AdafactorSchedule`]
     scheduler as following:
 
-    ```python
+    ```
     ```
 
     def __init__(self, params, lr=None, eps=(1e-30, 0.001), clip_threshold=1.0, decay_rate=-0.8, beta1=None, weight_decay=0.0,

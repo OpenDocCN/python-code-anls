@@ -1,6 +1,6 @@
 # `.\models\vivit\configuration_vivit.py`
 
-```
+```py
 # coding=utf-8
 # 定义模块的版权信息和编码格式
 

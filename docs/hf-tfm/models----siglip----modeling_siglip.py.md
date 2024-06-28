@@ -1,6 +1,6 @@
 # `.\models\siglip\modeling_siglip.py`
 
-```
+```py
 # 导入 math 库，用于数学运算
 import math
 # 导入 warnings 库，用于警告处理
@@ -804,7 +804,7 @@ class SiglipTextModel(SiglipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, SiglipTextModel
 
         >>> model = SiglipTextModel.from_pretrained("google/siglip-base-patch16-224")
@@ -955,7 +955,7 @@ class SiglipVisionModel(SiglipPreTrainedModel):
 
         示例：
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, SiglipVisionModel
@@ -1037,7 +1037,7 @@ class SiglipModel(SiglipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, AutoModel
         >>> import torch
 
@@ -1087,7 +1087,7 @@ class SiglipModel(SiglipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AutoModel

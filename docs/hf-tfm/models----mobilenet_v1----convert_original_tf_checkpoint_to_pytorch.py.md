@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v1\convert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明：2022 年由 HuggingFace Inc. 团队拥有
 #

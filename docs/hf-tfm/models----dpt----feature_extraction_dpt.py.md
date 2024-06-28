@@ -1,6 +1,6 @@
 # `.\models\dpt\feature_extraction_dpt.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 
 # 版权声明及许可证信息，保留版权声明，提供 Apache License, Version 2.0 的获取链接

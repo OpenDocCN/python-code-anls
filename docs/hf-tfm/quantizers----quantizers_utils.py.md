@@ -1,6 +1,6 @@
 # `.\quantizers\quantizers_utils.py`
 
-```
+```py
 # 导入必要的类型
 from typing import Any, Tuple
 

@@ -1,6 +1,6 @@
 # `.\models\deprecated\bort\convert_bort_original_gluonnlp_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 解析命令行参数的库
 import os  # 提供与操作系统交互的功能

@@ -1,6 +1,6 @@
 # `.\models\swin\configuration_swin.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 HuggingFace Inc. 团队保留所有权利。
 #
@@ -45,7 +45,7 @@ class SwinConfig(BackboneConfigMixin, PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import SwinConfig, SwinModel
     >>> # 初始化一个 Swin microsoft/swin-tiny-patch4-window7-224 风格的配置
     >>> configuration = SwinConfig()

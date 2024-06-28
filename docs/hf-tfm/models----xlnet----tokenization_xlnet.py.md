@@ -1,6 +1,6 @@
 # `.\models\xlnet\tokenization_xlnet.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的版权声明和许可信息，遵循 Apache License, Version 2.0
 # 详细信息可查看 http://www.apache.org/licenses/LICENSE-2.0

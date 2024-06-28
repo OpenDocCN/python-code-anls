@@ -1,6 +1,6 @@
 # `.\modelcard.py`
 
-```
+```py
 # 导入所需的模块和库
 import copy  # 导入深拷贝函数
 import json  # 导入处理 JSON 的库

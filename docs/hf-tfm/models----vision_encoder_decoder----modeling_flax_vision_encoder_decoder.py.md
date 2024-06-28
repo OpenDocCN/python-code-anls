@@ -1,6 +1,6 @@
 # `.\models\vision_encoder_decoder\modeling_flax_vision_encoder_decoder.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明和许可证明，使用 Apache License, Version 2.0
 #
@@ -422,7 +422,7 @@ class FlaxVisionEncoderDecoderModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, FlaxVisionEncoderDecoderModel
         >>> from PIL import Image
         >>> import requests

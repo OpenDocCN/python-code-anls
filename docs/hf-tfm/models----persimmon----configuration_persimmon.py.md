@@ -1,6 +1,6 @@
 # `.\models\persimmon\configuration_persimmon.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的版权信息和许可证声明
 
@@ -30,7 +30,7 @@ class PersimmonConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import PersimmonModel, PersimmonConfig
 
     >>> # Initializing a Persimmon persimmon-7b style configuration

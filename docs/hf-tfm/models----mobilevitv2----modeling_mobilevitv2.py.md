@@ -1,6 +1,6 @@
 # `.\models\mobilevitv2\modeling_mobilevitv2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Apple Inc. and The HuggingFace Inc. team. All rights reserved.
 #

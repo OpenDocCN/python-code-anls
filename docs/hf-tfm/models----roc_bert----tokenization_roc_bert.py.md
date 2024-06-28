@@ -1,6 +1,6 @@
 # `.\models\roc_bert\tokenization_roc_bert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 WeChatAI and The HuggingFace Inc. team. All rights reserved.
 #

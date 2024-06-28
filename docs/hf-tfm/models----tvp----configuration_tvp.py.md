@@ -1,6 +1,6 @@
 # `.\models\tvp\configuration_tvp.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Intel AIA Team Authors, and HuggingFace Inc. team. All rights reserved.
 #

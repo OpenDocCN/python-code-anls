@@ -1,6 +1,6 @@
 # `.\models\t5\convert_t5x_checkpoint_to_flax.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，声明脚本归 HuggingFace Inc. 团队所有
 #

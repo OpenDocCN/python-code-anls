@@ -1,6 +1,6 @@
 # `.\image_utils.py`
 
-```
+```py
 # 导入必要的库和模块
 import base64  # 用于 base64 编解码
 import os  # 系统操作相关功能

@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta\tokenization_xlm_roberta_fast.py`
 
-```
+```py
 # 设置 Python 文件的编码格式为 UTF-8
 # 版权声明和许可证信息
 # 本模块提供了 XLM-RoBERTa 模型的分词类

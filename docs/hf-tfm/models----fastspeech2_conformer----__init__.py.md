@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\__init__.py`
 
-```
+```py
 # 版权声明和许可条款，声明代码归 HuggingFace 团队所有
 #
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则禁止使用此文件

@@ -1,6 +1,6 @@
 # `.\models\funnel\tokenization_funnel.py`
 
-```
+```py
 # 定义了代码文件的编码格式为 UTF-8
 # 版权声明，指明代码版权归 HuggingFace Inc. 团队所有，采用 Apache License, Version 2.0
 # 此函数用于加载指定路径下的词汇表文件，返回一个有序字典表示的词汇表

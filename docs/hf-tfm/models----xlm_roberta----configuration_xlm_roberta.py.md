@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta\configuration_xlm_roberta.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -63,7 +63,7 @@ class XLMRobertaConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import XLMRobertaConfig, XLMRobertaModel
 
     >>> # Initializing a XLM-RoBERTa FacebookAI/xlm-roberta-base style configuration

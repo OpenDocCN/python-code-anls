@@ -1,6 +1,6 @@
 # `.\models\cohere\tokenization_cohere_fast.py`
 
-```
+```py
 import pickle  # 导入pickle模块，用于序列化和反序列化Python对象
 from typing import Dict, List, Literal, Union  # 导入类型提示相关的模块
 
@@ -39,7 +39,7 @@ class CohereTokenizerFast(PreTrainedTokenizerFast):
 
     This uses notably ByteFallback and NFC normalization.
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer
 
     >>> tokenizer = AutoTokenizer.from_pretrained("CohereForAI/c4ai-command-r-v01")

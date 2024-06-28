@@ -1,6 +1,6 @@
 # `.\models\deit\feature_extraction_deit.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\modeling_layoutlmv3.py`
 
-```
+```py
 # 导入必要的模块和类
 import collections
 import math
@@ -944,7 +944,7 @@ class LayoutLMv3ForTokenClassification(LayoutLMv3PreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, AutoModelForTokenClassification
         >>> from datasets import load_dataset
 

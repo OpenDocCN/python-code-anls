@@ -1,6 +1,6 @@
 # `.\models\persimmon\modeling_persimmon.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #

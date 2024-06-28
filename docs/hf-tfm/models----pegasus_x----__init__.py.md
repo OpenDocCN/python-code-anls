@@ -1,6 +1,6 @@
 # `.\models\pegasus_x\__init__.py`
 
-```
+```py
 # 版权声明和版权许可信息，标识本代码版权归 HuggingFace 团队所有，受 Apache License, Version 2.0 许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

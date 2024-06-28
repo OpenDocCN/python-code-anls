@@ -1,6 +1,6 @@
 # `.\models\sam\convert_sam_to_hf.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，指出代码归属和使用许可
 # 根据 Apache License, Version 2.0 许可，除非符合许可要求，否则不得使用此文件

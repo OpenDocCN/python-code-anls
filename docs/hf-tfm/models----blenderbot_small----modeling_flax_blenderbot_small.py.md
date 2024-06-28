@@ -1,6 +1,6 @@
 # `.\models\blenderbot_small\modeling_flax_blenderbot_small.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2021 年 Facebook, Inc. 和 HuggingFace Inc. 团队保留所有权利
 #
@@ -979,7 +979,7 @@ class FlaxBlenderbotSmallPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxBlenderbotSmallForConditionalGeneration
 
         >>> model = FlaxBlenderbotSmallForConditionalGeneration.from_pretrained("facebook/blenderbot_small-90M")

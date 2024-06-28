@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\tokenization_retribert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2018 年 HuggingFace Inc. 团队。
 #

@@ -1,6 +1,6 @@
 # `.\models\mbart\modeling_tf_mbart.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 
 # 版权声明，声明此代码的版权归The Fairseq Authors和The HuggingFace Inc.团队所有
@@ -498,7 +498,7 @@ MBART_INPUTS_DOCSTRING = r"""
 MBART_GENERATION_EXAMPLE = r"""
     Translation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, TFMBartForConditionalGeneration
 
     >>> model = TFMBartForConditionalGeneration.from_pretrained("facebook/mbart-large-en-ro")
@@ -520,7 +520,7 @@ MBART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, TFMBartForConditionalGeneration
     >>> import tensorflow as tf
 

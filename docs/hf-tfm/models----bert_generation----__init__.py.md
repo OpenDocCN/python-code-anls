@@ -1,6 +1,6 @@
 # `.\models\bert_generation\__init__.py`
 
-```
+```py
 # 引入必要的模块和依赖项
 from typing import TYPE_CHECKING
 # 从相对路径导入工具函数和类

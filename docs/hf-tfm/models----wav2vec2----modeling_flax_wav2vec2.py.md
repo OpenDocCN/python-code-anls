@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\modeling_flax_wav2vec2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and the HuggingFace Inc. team. All rights reserved.
 #
@@ -1237,7 +1237,7 @@ FLAX_WAV2VEC2_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoProcessor, FlaxWav2Vec2Model
     >>> from datasets import load_dataset
     >>> import soundfile as sf
@@ -1424,7 +1424,7 @@ class FlaxWav2Vec2ForPreTrainingModule(nn.Module):
 
         Example:
 
-        ```python
+        ```
 
         ```"""
 
@@ -1553,7 +1553,7 @@ FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> import optax
     >>> import numpy as np
     >>> import jax.numpy as jnp

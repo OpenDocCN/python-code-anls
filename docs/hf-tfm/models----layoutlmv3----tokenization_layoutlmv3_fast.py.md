@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\tokenization_layoutlmv3_fast.py`
 
-```
+```py
 # 导入必要的模块和类
 import json  # 导入用于处理 JSON 数据的模块
 from typing import Dict, List, Optional, Tuple, Union  # 引入类型提示，用于函数参数和返回值类型检查

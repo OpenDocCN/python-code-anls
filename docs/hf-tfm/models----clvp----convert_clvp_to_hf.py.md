@@ -1,6 +1,6 @@
 # `.\models\clvp\convert_clvp_to_hf.py`
 
-```
+```py
 # 设置编码方式为 UTF-8，确保脚本可以处理各种字符集
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 #

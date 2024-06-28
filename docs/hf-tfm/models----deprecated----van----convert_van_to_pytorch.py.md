@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\convert_van_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为 UTF-8
 # Copyright 2022 BNRist (Tsinghua University), TKLNDST (Nankai University) and The HuggingFace Inc. team. All rights reserved.

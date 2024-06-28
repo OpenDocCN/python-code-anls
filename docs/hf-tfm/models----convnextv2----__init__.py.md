@@ -1,6 +1,6 @@
 # `.\models\convnextv2\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 无法在本模块中忽略 "F401 '...' imported but unused" 警告，以保留其他警告。因此，完全不检查本模块。
 

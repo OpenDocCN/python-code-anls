@@ -1,6 +1,6 @@
 # `.\models\siglip\configuration_siglip.py`
 
-```
+```py
 # coding=utf-8
 # 上方声明文件编码为 UTF-8
 
@@ -147,7 +147,7 @@ class SiglipVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import SiglipVisionConfig, SiglipVisionModel
 
     >>> # Initializing a SiglipVisionConfig with google/siglip-base-patch16-224 style configuration
@@ -232,7 +232,7 @@ class SiglipConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import SiglipConfig, SiglipModel
 
     >>> # 使用google/siglip-base-patch16-224风格的配置初始化SiglipConfig

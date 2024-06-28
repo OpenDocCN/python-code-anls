@@ -1,6 +1,6 @@
 # `.\models\reformer\configuration_reformer.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保可以正确处理中文等特殊字符
 # 版权声明和许可信息，指定代码的使用权限和限制条件
 # 引入预训练配置模块和日志记录工具
@@ -31,7 +31,7 @@ class ReformerConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import ReformerConfig, ReformerModel
 
     >>> # Initializing a Reformer configuration

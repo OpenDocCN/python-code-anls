@@ -1,6 +1,6 @@
 # `.\models\longformer\modeling_longformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 The Allen Institute for AI team 和 The HuggingFace Inc. team 所有。
 #
@@ -447,7 +447,7 @@ class LongformerEmbeddings(nn.Module):
 
         Example:
 
-        ```python
+        ```
         chunked_hidden_states: [
             0.4983,
             2.6918,
@@ -1253,7 +1253,7 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
 
         Mask filling example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, LongformerForMaskedLM
 
         >>> tokenizer = AutoTokenizer.from_pretrained("allenai/longformer-base-4096")
@@ -1262,7 +1262,7 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
 
         Let's try a very long input.
 
-        ```python
+        ```
         >>> TXT = (
         ...     "My friends are <mask> but they eat too many carbs."
         ...     + " That's why I decide not to eat with them." * 300

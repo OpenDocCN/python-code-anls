@@ -1,6 +1,6 @@
 # `.\models\electra\tokenization_electra_fast.py`
 
-```
+```py
 # 导入必要的模块
 import json  # 导入用于处理 JSON 数据的模块
 from typing import List, Optional, Tuple  # 导入类型提示模块

@@ -1,6 +1,6 @@
 # `.\utils\model_parallel_utils.py`
 
-```
+```py
 # coding=utf-8
 # 上面是代码文件的编码声明和版权信息，标识使用了Apache许可证版本2.0
 

@@ -1,6 +1,6 @@
 # `.\models\yoso\modeling_yoso.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 University of Wisconsin-Madison and The HuggingFace Inc. team. All rights reserved.
 #

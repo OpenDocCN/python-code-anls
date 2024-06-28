@@ -1,6 +1,6 @@
 # `.\models\roberta\tokenization_roberta_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Open AI Team Authors and The HuggingFace Inc. team.
 #
@@ -89,7 +89,7 @@ class RobertaTokenizerFast(PreTrainedTokenizerFast):
 
     这个分词器已经训练过，将空格视为标记的一部分（类似于sentencepiece），因此一个单词会因为它是否在句子开头（没有空格）而编码不同：
 
-    ```python
+    ```
     >>> from transformers import RobertaTokenizerFast
 
     >>> tokenizer = RobertaTokenizerFast.from_pretrained("FacebookAI/roberta-base")

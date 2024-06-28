@@ -1,6 +1,6 @@
 # `.\models\rwkv\convert_rwkv_checkpoint_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

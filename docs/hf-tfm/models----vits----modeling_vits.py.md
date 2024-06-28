@@ -1,6 +1,6 @@
 # `.\models\vits\modeling_vits.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Kakao Enterprise Authors and the HuggingFace Inc. team. All rights reserved.
 #

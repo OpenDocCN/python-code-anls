@@ -1,6 +1,6 @@
 # `.\models\gemma\tokenization_gemma_fast.py`
 
-```
+```py
 # 导入必要的模块和函数
 import os  # 导入操作系统模块
 from shutil import copyfile  # 从 shutil 模块导入 copyfile 函数
@@ -35,7 +35,7 @@ class GemmaTokenizerFast(PreTrainedTokenizerFast):
 
     这个分词器使用了 ByteFallback 和没有前缀空格。标准化应用于将 `" "` 替换为 `"▁"`
 
-    ```python
+    ```
     >>> from transformers import GemmaTokenizerFast
 
     >>> tokenizer = GemmaTokenizerFast.from_pretrained("hf-internal-testing/dummy-gemma")

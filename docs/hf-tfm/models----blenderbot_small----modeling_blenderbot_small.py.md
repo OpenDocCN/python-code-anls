@@ -1,6 +1,6 @@
 # `.\models\blenderbot_small\modeling_blenderbot_small.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Facebook, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -338,7 +338,7 @@ BLENDERBOT_SMALL_START_DOCSTRING = r"""
 BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
     Conversation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, BlenderbotSmallForConditionalGeneration
 
     >>> mname = "facebook/blenderbot_small-90M"

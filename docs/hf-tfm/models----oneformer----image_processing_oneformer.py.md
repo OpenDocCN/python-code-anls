@@ -1,6 +1,6 @@
 # `.\models\oneformer\image_processing_oneformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 SHI Labs and The HuggingFace Inc. team. All rights reserved.
 #

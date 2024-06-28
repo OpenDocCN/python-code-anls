@@ -1,6 +1,6 @@
 # `.\models\beit\image_processing_beit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出代码版权归 HuggingFace Inc. 团队所有
 #

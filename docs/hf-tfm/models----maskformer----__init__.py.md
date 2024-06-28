@@ -1,6 +1,6 @@
 # `.\models\maskformer\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # Copyright 2022 The HuggingFace Team. All rights reserved.

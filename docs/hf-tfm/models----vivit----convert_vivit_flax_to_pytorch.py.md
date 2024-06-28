@@ -1,6 +1,6 @@
 # `.\models\vivit\convert_vivit_flax_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为 UTF-8
 

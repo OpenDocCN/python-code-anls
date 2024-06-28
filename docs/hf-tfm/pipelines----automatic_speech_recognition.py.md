@@ -1,6 +1,6 @@
 # `.\pipelines\automatic_speech_recognition.py`
 
-```
+```py
 # 引入从 collections 模块中导入 defaultdict 类
 from collections import defaultdict
 # 从 typing 模块中导入 TYPE_CHECKING, Dict, Optional, Union 等类型
@@ -170,7 +170,7 @@ class AutomaticSpeechRecognitionPipeline(ChunkPipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> transcriber = pipeline(model="openai/whisper-base")

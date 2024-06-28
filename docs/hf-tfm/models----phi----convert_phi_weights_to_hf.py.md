@@ -1,6 +1,6 @@
 # `.\models\phi\convert_phi_weights_to_hf.py`
 
-```
+```py
 # 引入 argparse 模块，用于解析命令行参数
 import argparse
 # 引入垃圾收集模块 gc，用于手动进行内存管理

@@ -1,6 +1,6 @@
 # `.\models\mask2former\__init__.py`
 
-```
+```py
 # 引入模块的版权声明和许可证信息
 # Copyright 2022 The HuggingFace Team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\whisper\convert_openai_to_hf.py`
 
-```
+```py
 #!/usr/bin/env python
 """Converts a Whisper model in OpenAI format to Hugging Face format."""
 # 版本和许可声明

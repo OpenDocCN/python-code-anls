@@ -1,6 +1,6 @@
 # `.\models\sew\convert_sew_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\sam\image_processing_sam.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明和许可信息
 # 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件

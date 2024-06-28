@@ -1,6 +1,6 @@
 # `.\models\segformer\feature_extraction_segformer.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8，确保可以处理中文等特殊字符
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.

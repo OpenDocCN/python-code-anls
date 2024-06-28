@@ -1,6 +1,6 @@
 # `.\models\roformer\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数来检查当前环境中是否可用特定的依赖项
 from typing import TYPE_CHECKING
 from ...utils import (

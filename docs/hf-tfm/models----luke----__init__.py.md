@@ -1,6 +1,6 @@
 # `.\models\luke\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指出本代码的版权和使用许可
 # Copyright 2021 The HuggingFace Team. All rights reserved.
 #

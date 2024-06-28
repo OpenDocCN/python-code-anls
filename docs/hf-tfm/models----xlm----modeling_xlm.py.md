@@ -1,6 +1,6 @@
 # `.\models\xlm\modeling_xlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019-present, Facebook, Inc and the HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\clap\processing_clap.py`
 
-```
+```py
 """
 Audio/Text processor class for CLAP
 """

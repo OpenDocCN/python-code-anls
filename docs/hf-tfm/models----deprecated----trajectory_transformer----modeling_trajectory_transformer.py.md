@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\modeling_trajectory_transformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Trajectory Transformers paper authors and The HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\mistral\modeling_flax_mistral.py`
 
-```
+```py
 # Import necessary modules and functions from libraries
 from typing import Optional, Tuple  # 导入类型提示相关的模块和函数
 

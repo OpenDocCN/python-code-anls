@@ -1,6 +1,6 @@
 # `.\models\funnel\modeling_tf_funnel.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020-present Google Brain and Carnegie Mellon University Authors and the HuggingFace Inc. team.
 #
@@ -1507,7 +1507,7 @@ class TFFunnelForPreTraining(TFFunnelPreTrainedModel):
 
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFFunnelForPreTraining
         >>> import torch
 

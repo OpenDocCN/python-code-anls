@@ -1,6 +1,6 @@
 # `.\models\mra\modeling_mra.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 University of Wisconsin-Madison and The HuggingFace Inc. team. All rights reserved.
 #

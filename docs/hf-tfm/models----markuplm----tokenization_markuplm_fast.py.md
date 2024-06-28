@@ -1,6 +1,6 @@
 # `.\models\markuplm\tokenization_markuplm_fast.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明：2022 年 HuggingFace Inc. 团队所有
 #

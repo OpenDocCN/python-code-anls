@@ -1,6 +1,6 @@
 # `.\models\dialogpt\__init__.py`
 
-```
+```py
 # 导入所需的模块：datetime 用于日期和时间操作
 import datetime
 

@@ -1,6 +1,6 @@
 # `.\cache_utils.py`
 
-```
+```py
 # 导入必要的模块和类
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple

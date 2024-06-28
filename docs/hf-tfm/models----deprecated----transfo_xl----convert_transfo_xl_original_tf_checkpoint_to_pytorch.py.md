@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\convert_transfo_xl_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，使用 Apache 许可证 2.0 版本
 # 详细信息可参考 http://www.apache.org/licenses/LICENSE-2.0

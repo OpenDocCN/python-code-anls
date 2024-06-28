@@ -1,6 +1,6 @@
 # `.\models\tvlt\modeling_tvlt.py`
 
-```
+```py
 # 导入标准库和第三方库
 import collections.abc  # 导入 collections.abc 模块，用于检查对象是否是可迭代的序列
 import math  # 导入 math 模块，提供基本的数学函数实现
@@ -1106,7 +1106,7 @@ class TvltForAudioVisualClassification(TvltPreTrainedModel):
         Return:
 
         Examples:
-        ```python
+        ```
         >>> from transformers import TvltProcessor, TvltForAudioVisualClassification
         >>> import numpy as np
         >>> import torch

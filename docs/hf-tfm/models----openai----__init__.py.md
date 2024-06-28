@@ -1,6 +1,6 @@
 # `.\models\openai\__init__.py`
 
-```
+```py
 # 导入需要的模块和函数
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\t5\tokenization_t5_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2018 年 T5 作者和 HuggingFace Inc. 团队。
 #

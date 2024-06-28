@@ -1,6 +1,6 @@
 # `.\models\upernet\convert_convnext_upernet_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

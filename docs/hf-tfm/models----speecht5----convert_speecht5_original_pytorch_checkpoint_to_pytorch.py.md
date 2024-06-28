@@ -1,6 +1,6 @@
 # `.\models\speecht5\convert_speecht5_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证信息，指定这段代码的版权归属和使用许可
 # 导入命令行参数解析模块

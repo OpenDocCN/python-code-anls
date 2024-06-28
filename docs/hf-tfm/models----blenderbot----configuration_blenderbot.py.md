@@ -1,6 +1,6 @@
 # `.\models\blenderbot\configuration_blenderbot.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Facebook, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -51,7 +51,7 @@ class BlenderbotConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BlenderbotConfig, BlenderbotModel
 
     >>> # Initializing a Blenderbot facebook/blenderbot-3B style configuration

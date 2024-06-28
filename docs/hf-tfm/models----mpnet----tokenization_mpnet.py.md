@@ -1,6 +1,6 @@
 # `.\models\mpnet\tokenization_mpnet.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，包括 HuggingFace Inc. 团队和 Microsoft Corporation 的版权声明
 # 版权声明，包括 NVIDIA CORPORATION 的版权声明

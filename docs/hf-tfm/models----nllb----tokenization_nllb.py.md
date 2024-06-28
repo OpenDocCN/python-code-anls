@@ -1,6 +1,6 @@
 # `.\models\nllb\tokenization_nllb.py`
 
-```
+```py
 # 导入必要的模块
 import os  # 导入操作系统模块
 from shutil import copyfile  # 从 shutil 模块中导入 copyfile 函数
@@ -43,7 +43,7 @@ class NllbTokenizer(PreTrainedTokenizer):
 
     示例：
     
-    ```python
+    ```
     >>> from transformers import NllbTokenizer
 
     >>> tokenizer = NllbTokenizer.from_pretrained(

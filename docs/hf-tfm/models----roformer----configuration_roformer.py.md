@@ -1,6 +1,6 @@
 # `.\models\roformer\configuration_roformer.py`
 
-```
+```py
 # 定义了 RoFormer 模型的配置类，继承自 PretrainedConfig，用于存储 RoFormer 模型的配置信息
 class RoFormerConfig(PretrainedConfig):
     r"""

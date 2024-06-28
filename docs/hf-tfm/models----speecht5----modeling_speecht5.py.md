@@ -1,6 +1,6 @@
 # `.\models\speecht5\modeling_speecht5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Fairseq Authors, Microsoft Research, and the HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\utils\quantization_config.py`
 
-```
+```py
 # 指定 Python 解释器位置和文件编码
 #!/usr/bin/env python
 # coding=utf-8

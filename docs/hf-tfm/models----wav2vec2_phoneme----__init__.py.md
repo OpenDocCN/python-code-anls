@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_phoneme\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权声明，版权归 HuggingFace 团队所有，保留所有权利
 # 根据 Apache 许可证版本 2.0 进行许可

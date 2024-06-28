@@ -1,6 +1,6 @@
 # `.\models\cvt\modeling_tf_cvt.py`
 
-```
+```py
 # 设置编码格式为 utf-8
 # 版权声明
 
@@ -1145,7 +1145,7 @@ class TFCvtModel(TFCvtPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, TFCvtModel
         >>> from PIL import Image
         >>> import requests

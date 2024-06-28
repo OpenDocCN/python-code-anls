@@ -1,6 +1,6 @@
 # `.\models\vit_msn\convert_msn_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

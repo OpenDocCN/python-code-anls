@@ -1,6 +1,6 @@
 # `.\models\bert\tokenization_bert_tf.py`
 
-```
+```py
     # 导入所需的标准库和模块
     import os
     from typing import List, Union
@@ -93,7 +93,7 @@
 
         Examples:
 
-        ```python
+        ```
         from transformers import AutoTokenizer, TFBertTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
@@ -139,7 +139,7 @@
 
         Examples:
 
-        ```python
+        ```
         from transformers import TFBertTokenizer
 
         tf_tokenizer = TFBertTokenizer.from_pretrained("google-bert/bert-base-uncased")

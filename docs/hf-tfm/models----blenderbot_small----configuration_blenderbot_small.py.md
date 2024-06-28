@@ -1,6 +1,6 @@
 # `.\models\blenderbot_small\configuration_blenderbot_small.py`
 
-```
+```py
 """
 BlenderbotSmall model configuration
 
@@ -51,7 +51,7 @@ class BlenderbotSmallConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BlenderbotSmallConfig, BlenderbotSmallModel
 
     >>> # Initializing a BlenderbotSmall facebook/blenderbot_small-90M style configuration

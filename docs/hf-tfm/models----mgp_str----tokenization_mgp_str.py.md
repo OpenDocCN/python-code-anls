@@ -1,6 +1,6 @@
 # `.\models\mgp_str\tokenization_mgp_str.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

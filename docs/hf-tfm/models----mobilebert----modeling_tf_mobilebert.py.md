@@ -1,6 +1,6 @@
 # `.\models\mobilebert\modeling_tf_mobilebert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -1350,7 +1350,7 @@ class TFMobileBertForPreTraining(TFMobileBertPreTrainedModel, TFMobileBertPreTra
 
         示例：
 
-        ```python
+        ```
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFMobileBertForPreTraining
 
@@ -1617,7 +1617,7 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
 
         Examples:
 
-        ```python
+        ```
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFMobileBertForNextSentencePrediction
 

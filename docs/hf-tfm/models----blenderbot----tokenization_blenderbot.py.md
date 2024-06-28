@@ -1,6 +1,6 @@
 # `.\models\blenderbot\tokenization_blenderbot.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Facebook Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -96,7 +96,7 @@ class BlenderbotTokenizer(PreTrainedTokenizer):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import BlenderbotTokenizer
 
     >>> tokenizer = BlenderbotTokenizer.from_pretrained("facebook/blenderbot-3B")

@@ -1,6 +1,6 @@
 # `.\models\yoso\configuration_yoso.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -44,7 +44,7 @@ class YosoConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import YosoConfig, YosoModel
 
     >>> # Initializing a YOSO uw-madison/yoso-4096 style configuration

@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\tokenization_seamless_m4t.py`
 
-```
+```py
 # 导入标准库和第三方库
 import os  # 导入操作系统相关的模块
 from shutil import copyfile  # 从 shutil 模块导入 copyfile 函数
@@ -53,7 +53,7 @@ class SeamlessM4TTokenizer(PreTrainedTokenizer):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import SeamlessM4TTokenizer
 
     >>> tokenizer = SeamlessM4TTokenizer.from_pretrained(

@@ -1,6 +1,6 @@
 # `.\models\encodec\modeling_encodec.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 Meta Platforms, Inc. 及其关联公司以及 HuggingFace Inc. 团队保留所有权利。
 #

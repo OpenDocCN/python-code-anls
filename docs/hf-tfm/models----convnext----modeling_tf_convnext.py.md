@@ -1,6 +1,6 @@
 # `.\models\convnext\modeling_tf_convnext.py`
 
-```
+```py
 # 设置编码格式为utf-8
 # 版权声明
 from __future__ import annotations
@@ -682,7 +682,7 @@ class TFConvNextModel(TFConvNextPreTrainedModel):
         Examples:
             Example usage demonstrating image processing and classification using Transformers and TensorFlow.
 
-            ```python
+            ```
             >>> from transformers import AutoImageProcessor, TFConvNextForImageClassification
             >>> import tensorflow as tf
             >>> from PIL import Image

@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 
 # 引入类型检查标记

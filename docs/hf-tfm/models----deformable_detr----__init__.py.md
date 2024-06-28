@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明该代码的版权归属和许可证条款
 # Copyright 2022 The HuggingFace Team. All rights reserved.
 #

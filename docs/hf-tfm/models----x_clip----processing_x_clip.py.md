@@ -1,6 +1,6 @@
 # `.\models\x_clip\processing_x_clip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

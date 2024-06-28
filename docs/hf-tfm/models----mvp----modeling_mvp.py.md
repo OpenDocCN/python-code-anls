@@ -1,6 +1,6 @@
 # `.\models\mvp\modeling_mvp.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -444,7 +444,7 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
     Example of summarization:
 
     Fine-tuning a model
-    ```python
+    ```
     >>> import torch
     >>> from transformers import AutoTokenizer, MvpForConditionalGeneration
 
@@ -462,7 +462,7 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
     ```
 
     Inference after the model fine-tuned
-    ```python
+    ```
     >>> with torch.no_grad():
     ...     generated_ids = model.generate(**inputs)
 
@@ -474,7 +474,7 @@ MVP_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
     Example of single-label classification:
 
     Fine-tuning a model on `num_labels` classes
-    ```python
+    ```
     Placeholder for sequence classification sample.
     # 导入PyTorch库
     import torch
@@ -512,7 +512,7 @@ MVP_QUESTION_ANSWERING_SAMPLE = r"""
 
     Fine-tuning a model for extrative question answering, and our model also supports generative question answering
     using `BartForConditionalGeneration`
-    ```python
+    ```
     >>> import torch
     >>> from transformers import AutoTokenizer, MvpForQuestionAnswering
 
@@ -531,7 +531,7 @@ MVP_QUESTION_ANSWERING_SAMPLE = r"""
     ```
 
     Inference after the model fine-tuned
-    ```python
+    ```
     >>> with torch.no_grad():
     ...     outputs = model(**inputs)
 

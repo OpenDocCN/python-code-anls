@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v1\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # 根据 Apache License, Version 2.0 授权使用本代码

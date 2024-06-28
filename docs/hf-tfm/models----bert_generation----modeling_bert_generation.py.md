@@ -1,6 +1,6 @@
 # `.\models\bert_generation\modeling_bert_generation.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Google AI Language Team Authors and The HuggingFace Inc. team.
 #

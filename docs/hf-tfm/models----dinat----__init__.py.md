@@ -1,6 +1,6 @@
 # `.\models\dinat\__init__.py`
 
-```
+```py
 # 版权声明和许可证声明，指明版权所有者及许可协议
 # Copyright 2022 The HuggingFace Team. All rights reserved.
 #

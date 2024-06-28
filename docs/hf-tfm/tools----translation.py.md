@@ -1,6 +1,6 @@
 # `.\tools\translation.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -319,7 +319,7 @@ class TranslationTool(PipelineTool):
     """
     Example:
 
-    ```py
+    ```
     from transformers.tools import TranslationTool
 
     translator = TranslationTool()

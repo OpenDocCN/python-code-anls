@@ -1,6 +1,6 @@
 # `.\models\udop\processing_udop.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码格式为 UTF-8，确保代码中的中文和其他非ASCII字符能正确处理
 # Copyright 2024 The HuggingFace Inc. team.

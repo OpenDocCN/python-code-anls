@@ -1,6 +1,6 @@
 # `.\models\vit_mae\convert_vit_mae_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 用于解析命令行参数
 import requests  # 用于发送 HTTP 请求

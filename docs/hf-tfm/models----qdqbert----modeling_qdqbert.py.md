@@ -1,6 +1,6 @@
 # `.\models\qdqbert\modeling_qdqbert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 NVIDIA Corporation and The HuggingFace Team.
 # Copyright (c) 2018-2021, NVIDIA CORPORATION.  All rights reserved.
@@ -1182,7 +1182,7 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, QDQBertForNextSentencePrediction
         >>> import torch
 

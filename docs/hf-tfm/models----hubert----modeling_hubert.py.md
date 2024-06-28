@@ -1,6 +1,6 @@
 # `.\models\hubert\modeling_hubert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明及许可信息，指出代码的版权和许可条款
@@ -1121,7 +1121,7 @@ class HubertModel(HubertPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, HubertModel
         >>> from datasets import load_dataset
         >>> import soundfile as sf

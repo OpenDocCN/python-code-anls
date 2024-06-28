@@ -1,6 +1,6 @@
 # `.\models\deprecated\mmbt\configuration_mmbt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright (c) Facebook, Inc. and its affiliates.
 # Copyright (c) HuggingFace Inc. team.

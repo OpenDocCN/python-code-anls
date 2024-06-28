@@ -1,6 +1,6 @@
 # `.\models\layoutxlm\tokenization_layoutxlm_fast.py`
 
-```
+```py
 # 导入必要的库和模块
 import os  # 导入操作系统相关功能
 from shutil import copyfile  # 导入复制文件功能

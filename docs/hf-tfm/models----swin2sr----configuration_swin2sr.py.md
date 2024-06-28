@@ -1,6 +1,6 @@
 # `.\models\swin2sr\configuration_swin2sr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 #
@@ -43,7 +43,7 @@ class Swin2SRConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Swin2SRConfig, Swin2SRModel
 
     >>> # Initializing a Swin2SR caidas/swin2sr-classicalsr-x2-64 style configuration

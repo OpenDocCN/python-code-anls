@@ -1,6 +1,6 @@
 # `.\models\led\modeling_tf_led.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 #

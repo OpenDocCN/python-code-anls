@@ -1,6 +1,6 @@
 # `.\models\flava\feature_extraction_flava.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\gpt2\tokenization_gpt2_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Open AI Team Authors and The HuggingFace Inc. team.
 #
@@ -77,7 +77,7 @@ class GPT2TokenizerFast(PreTrainedTokenizerFast):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import GPT2TokenizerFast
 
     >>> tokenizer = GPT2TokenizerFast.from_pretrained("openai-community/gpt2")

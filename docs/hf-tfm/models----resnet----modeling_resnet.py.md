@@ -1,6 +1,6 @@
 # `.\models\resnet\modeling_resnet.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import Optional
 
@@ -528,7 +528,7 @@ class ResNetBackbone(ResNetPreTrainedModel, BackboneMixin):
         
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

@@ -1,6 +1,6 @@
 # `.\pipelines\zero_shot_object_detection.py`
 
-```
+```py
 from typing import Any, Dict, List, Union  # 导入需要的类型提示模块
 
 from ..utils import add_end_docstrings, is_torch_available, is_vision_available, logging, requires_backends  # 导入自定义工具函数和模块
@@ -27,7 +27,7 @@ class ZeroShotObjectDetectionPipeline(ChunkPipeline):  # 定义零样本对象�
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> detector = pipeline(model="google/owlvit-base-patch32", task="zero-shot-object-detection")

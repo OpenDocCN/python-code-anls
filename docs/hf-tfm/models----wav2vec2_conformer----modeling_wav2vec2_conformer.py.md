@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_conformer\modeling_wav2vec2_conformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，包括 Fairseq 作者和 HuggingFace Inc. 团队
 #

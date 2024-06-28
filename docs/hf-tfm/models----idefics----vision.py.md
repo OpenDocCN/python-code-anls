@@ -1,6 +1,6 @@
 # `.\models\idefics\vision.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，声明此代码版权归 OpenAI 团队和 HuggingFace 团队所有，保留所有权利

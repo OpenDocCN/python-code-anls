@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\modeling_gpt_neo.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保源文件可以正确解析非 ASCII 字符
 # 版权声明和许可信息，遵循 Apache License 2.0
 # 此模块定义了 PyTorch 中的 GPT Neo 模型

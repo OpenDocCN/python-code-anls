@@ -1,6 +1,6 @@
 # `.\models\fuyu\modeling_fuyu.py`
 
-```
+```py
     """
     The bare Fuyu Model outputting raw hidden-states without any specific head on top.
 

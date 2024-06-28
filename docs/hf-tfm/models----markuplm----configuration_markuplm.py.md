@@ -1,6 +1,6 @@
 # `.\models\markuplm\configuration_markuplm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021, The Microsoft Research Asia MarkupLM Team authors
 #
@@ -46,7 +46,7 @@ class MarkupLMConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MarkupLMModel, MarkupLMConfig
 
     >>> # Initializing a MarkupLM microsoft/markuplm-base style configuration

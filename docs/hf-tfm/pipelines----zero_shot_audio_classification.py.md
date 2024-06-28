@@ -1,6 +1,6 @@
 # `.\pipelines\zero_shot_audio_classification.py`
 
-```
+```py
 # 导入所需模块和库
 from collections import UserDict  # 导入 UserDict 类，用于自定义字典类型
 from typing import Union  # 导入 Union 用于支持多种类型的注解
@@ -29,7 +29,7 @@ class ZeroShotAudioClassificationPipeline(Pipeline):
     provide an audio and a set of `candidate_labels`.
 
     Example:
-    ```python
+    ```
     >>> from transformers import pipeline
     >>> from datasets import load_dataset
 

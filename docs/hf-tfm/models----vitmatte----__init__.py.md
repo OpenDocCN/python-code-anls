@@ -1,6 +1,6 @@
 # `.\models\vitmatte\__init__.py`
 
-```
+```py
 # 版权声明和保留所有权利的声明
 # 根据 Apache 许可证 2.0 版本授权，许可证详细信息可以通过给定的 URL 获取
 from typing import TYPE_CHECKING

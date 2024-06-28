@@ -1,6 +1,6 @@
 # `.\activations.py`
 
-```
+```py
 # 导入必要的库
 import math
 from collections import OrderedDict

@@ -1,6 +1,6 @@
 # `.\models\deta\configuration_deta.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可证声明，告知代码使用者版权和许可条件
 # 仅在遵守 Apache 许可证 Version 2.0 的情况下可使用本文件
@@ -36,7 +36,7 @@ class DetaConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import DetaConfig, DetaModel
 
     >>> # Initializing a DETA SenseTime/deformable-detr style configuration

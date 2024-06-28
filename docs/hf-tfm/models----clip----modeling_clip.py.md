@@ -1,6 +1,6 @@
 # `.\models\clip\modeling_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，2021年由OpenAI团队和HuggingFace团队版权所有
@@ -683,7 +683,7 @@ class CLIPTextModel(CLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, CLIPTextModel
 
         >>> model = CLIPTextModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -824,7 +824,7 @@ class CLIPVisionModel(CLIPPreTrainedModel):
         
         Examples:
         
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, CLIPVisionModel
@@ -917,7 +917,7 @@ class CLIPModel(CLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, CLIPModel
 
         >>> model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -969,7 +969,7 @@ class CLIPModel(CLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, CLIPModel
@@ -1059,7 +1059,7 @@ class CLIPTextModelWithProjection(CLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, CLIPTextModelWithProjection
 
         >>> model = CLIPTextModelWithProjection.from_pretrained("openai/clip-vit-base-patch32")
@@ -1145,7 +1145,7 @@ class CLIPVisionModelWithProjection(CLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, CLIPVisionModelWithProjection

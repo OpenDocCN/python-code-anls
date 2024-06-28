@@ -1,6 +1,6 @@
 # `.\models\perceiver\image_processing_perceiver.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import Dict, List, Optional, Union  # 导入类型提示相关的模块
 

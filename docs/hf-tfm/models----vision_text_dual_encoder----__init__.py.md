@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数，包括一些自定义的异常和LazyModule
 from typing import TYPE_CHECKING
 from ...utils import (

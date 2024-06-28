@@ -1,6 +1,6 @@
 # `.\models\ibert\__init__.py`
 
-```
+```py
 # 版权声明和许可声明，指明此代码的版权和使用许可
 # 详细许可信息可以在 Apache License, Version 2.0 网页上找到：http://www.apache.org/licenses/LICENSE-2.0
 #

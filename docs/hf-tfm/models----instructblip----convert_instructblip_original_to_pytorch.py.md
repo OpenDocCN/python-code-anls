@@ -1,6 +1,6 @@
 # `.\models\instructblip\convert_instructblip_original_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，确保支持中文和其他非ASCII字符
 

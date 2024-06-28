@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\modeling_wav2vec2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and the HuggingFace Inc. team. All rights reserved.
 #
@@ -597,7 +597,7 @@ class Wav2Vec2Attention(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-    ```python`
+    ````
         # 初始化方法，接受配置参数 config
         def __init__(self, config):
             # 调用父类的初始化方法

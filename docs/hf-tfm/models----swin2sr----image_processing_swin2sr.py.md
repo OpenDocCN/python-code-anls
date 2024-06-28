@@ -1,6 +1,6 @@
 # `.\models\swin2sr\image_processing_swin2sr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

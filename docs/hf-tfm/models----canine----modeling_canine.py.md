@@ -1,6 +1,6 @@
 # `.\models\canine\modeling_canine.py`
 
-```
+```py
 # 定义一个数据类，用于存储 CANINE 模型的输出，包含了额外的池化信息
 @dataclass
 class CanineModelOutputWithPooling(ModelOutput):
@@ -1301,7 +1301,7 @@ class CanineForTokenClassification(CaninePreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, CanineForTokenClassification
         >>> import torch
 
@@ -1324,7 +1324,7 @@ class CanineForTokenClassification(CaninePreTrainedModel):
         >>> predicted_tokens_classes  # doctest: +SKIP
         ```
 
-        ```python
+        ```
         >>> labels = predicted_token_class_ids
         >>> loss = model(**inputs, labels=labels).loss
         >>> round(loss.item(), 2)  # doctest: +SKIP

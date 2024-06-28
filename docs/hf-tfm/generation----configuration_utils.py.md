@@ -1,6 +1,6 @@
 # `.\generation\configuration_utils.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为UTF-8，确保文件中可以包含非ASCII字符
 # Copyright 2022 The HuggingFace Inc. team.

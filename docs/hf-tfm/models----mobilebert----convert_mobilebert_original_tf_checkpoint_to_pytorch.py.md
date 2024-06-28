@@ -1,6 +1,6 @@
 # `.\models\mobilebert\convert_mobilebert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 用于解析命令行参数
 

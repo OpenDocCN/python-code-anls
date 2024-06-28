@@ -1,6 +1,6 @@
 # `.\models\visual_bert\modeling_visual_bert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The UCLA NLP Authors and The HuggingFace Inc. team. All rights reserved.
 #

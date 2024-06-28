@@ -1,6 +1,6 @@
 # `.\models\llava\processing_llava.py`
 
-```
+```py
     # 设置文件编码为UTF-8
     # 版权声明归HuggingFace Inc.团队所有，使用Apache License, Version 2.0授权
     # 除非符合许可证要求或书面同意，否则不得使用此文件

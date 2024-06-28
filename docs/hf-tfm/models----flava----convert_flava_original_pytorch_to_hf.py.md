@@ -1,6 +1,6 @@
 # `.\models\flava\convert_flava_original_pytorch_to_hf.py`
 
-```
+```py
 # 导入命令行参数解析库
 import argparse
 # 导入操作系统功能模块

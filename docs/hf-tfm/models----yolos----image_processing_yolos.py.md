@@ -1,6 +1,6 @@
 # `.\models\yolos\image_processing_yolos.py`
 
-```
+```py
     # 计算按照指定尺寸和最大尺寸缩放后的图像大小，保持宽高比不变
     """
     Compute the size of the image while maintaining the aspect ratio based on the given size and optional maximum size.

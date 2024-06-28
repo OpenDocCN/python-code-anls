@@ -1,6 +1,6 @@
 # `.\models\pvt\image_processing_pvt.py`
 
-```
+```py
 # 导入所需的模块和类
 from typing import Dict, List, Optional, Union  # 导入类型提示模块
 

@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\configuration_wav2vec2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class Wav2Vec2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Wav2Vec2Config, Wav2Vec2Model
 
     >>> # Initializing a Wav2Vec2 facebook/wav2vec2-base-960h style configuration

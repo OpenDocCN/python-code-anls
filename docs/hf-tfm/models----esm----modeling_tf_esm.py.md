@@ -1,6 +1,6 @@
 # `.\models\esm\modeling_tf_esm.py`
 
-```
+```py
 # 设定编码格式为 UTF-8
 
 # 版权声明和许可证信息

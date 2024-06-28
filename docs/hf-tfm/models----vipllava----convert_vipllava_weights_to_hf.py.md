@@ -1,6 +1,6 @@
 # `.\models\vipllava\convert_vipllava_weights_to_hf.py`
 
-```
+```py
 # 导入 argparse 库，用于处理命令行参数
 import argparse
 

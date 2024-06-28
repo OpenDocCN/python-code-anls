@@ -1,6 +1,6 @@
 # `.\models\nougat\__init__.py`
 
-```
+```py
 # 版权声明及许可信息，指出此代码的版权归HuggingFace团队所有，并按Apache License, Version 2.0许可使用
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

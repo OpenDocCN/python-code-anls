@@ -1,6 +1,6 @@
 # `.\audio_utils.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team and the librosa & torchaudio authors.
 #
@@ -769,7 +769,7 @@ def stft(frames: np.array, windowing_function: np.array, fft_window_size: int = 
 
     Example:
 
-    ```python
+    ```
     >>> from transformers.audio_utils import stft, fram_wave
     >>> import numpy as np
 

@@ -1,6 +1,6 @@
 # `.\models\fsmt\tokenization_fsmt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019 The Open AI Team Authors and The HuggingFace Inc. team.
 #

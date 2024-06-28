@@ -1,6 +1,6 @@
 # `.\models\vitdet\modeling_vitdet.py`
 
-```
+```py
 # coding=utf-8
 # 定义了 UTF-8 编码格式
 
@@ -838,7 +838,7 @@ class VitDetModel(VitDetPreTrainedModel):
         Examples:
         演示如何使用该forward函数进行模型推理：
 
-        ```python
+        ```
         >>> from transformers import VitDetConfig, VitDetModel
         >>> import torch
 
@@ -929,7 +929,7 @@ class VitDetBackbone(VitDetPreTrainedModel, BackboneMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import VitDetConfig, VitDetBackbone
         >>> import torch
 

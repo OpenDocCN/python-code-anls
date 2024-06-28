@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\convert_deformable_detr_to_pytorch.py`
 
-```
+```py
 # 从状态字典中重命名键，根据特定规则进行替换
 def rename_key(orig_key):
     if "backbone.0.body" in orig_key:

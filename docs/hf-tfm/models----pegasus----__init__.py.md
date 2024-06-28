@@ -1,6 +1,6 @@
 # `.\models\pegasus\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数，包括类型检查相关内容
 from typing import TYPE_CHECKING
 

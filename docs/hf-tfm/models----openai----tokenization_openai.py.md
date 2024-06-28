@@ -1,6 +1,6 @@
 # `.\models\openai\tokenization_openai.py`
 
-```
+```py
 # 设定脚本的字符编码为 UTF-8
 # 版权声明，使用 Apache License 2.0 开源许可协议
 # 详细许可信息可访问 http://www.apache.org/licenses/LICENSE-2.0

@@ -1,6 +1,6 @@
 # `.\models\timm_backbone\configuration_timm_backbone.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可信息，指明代码版权归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
 #
@@ -37,7 +37,7 @@ class TimmBackboneConfig(PretrainedConfig):
             Converts all `BatchNorm2d` and `SyncBatchNorm` layers of provided module into `FrozenBatchNorm2d`.
 
     Example:
-    ```python
+    ```
     >>> from transformers import TimmBackboneConfig, TimmBackbone
 
     >>> # Initializing a timm backbone

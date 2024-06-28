@@ -1,6 +1,6 @@
 # `.\models\roberta\convert_roberta_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置 Python 文件编码格式为 UTF-8
 # 版权声明和许可协议，这里是 Apache License 2.0
 # 详细信息可参见 http://www.apache.org/licenses/LICENSE-2.0

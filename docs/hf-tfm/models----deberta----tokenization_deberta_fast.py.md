@@ -1,6 +1,6 @@
 # `.\models\deberta\tokenization_deberta_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Microsoft and the HuggingFace Inc. team.
 #
@@ -83,7 +83,7 @@ class DebertaTokenizerFast(PreTrainedTokenizerFast):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import DebertaTokenizerFast
 
     >>> tokenizer = DebertaTokenizerFast.from_pretrained("microsoft/deberta-base")

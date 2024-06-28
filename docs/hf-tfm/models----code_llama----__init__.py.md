@@ -1,6 +1,6 @@
 # `.\models\code_llama\__init__.py`
 
-```
+```py
 # 导入所需的模块和函数
 from typing import TYPE_CHECKING
 # 导入自定义异常类，用于处理缺少可选依赖的情况

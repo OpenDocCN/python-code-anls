@@ -1,6 +1,6 @@
 # `.\models\pegasus\convert_pegasus_tf_to_pytorch.py`
 
-```
+```py
 # 定义全局变量，用于将 TensorFlow 模型的状态字典键转换为 PyTorch 模型的对应键
 PATTERNS = [
     # 将左侧字符串替换为右侧字符串，以获取与 BART 模型状态字典相同的关键键值对（与 Pegasus 模型相同）

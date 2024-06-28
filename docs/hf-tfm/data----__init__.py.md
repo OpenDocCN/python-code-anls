@@ -1,6 +1,6 @@
 # `.\data\__init__.py`
 
-```
+```py
 # 导入数据收集器模块，包括多个特定用途的数据收集器类和函数
 from .data_collator import (
     DataCollatorForLanguageModeling,  # 语言建模数据收集器

@@ -1,6 +1,6 @@
 # `.\deepspeed.py`
 
-```
+```py
 # 引入警告模块，用于向用户显示有关未来变更或不推荐使用的信息
 import warnings
 

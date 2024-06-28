@@ -1,6 +1,6 @@
 # `.\models\blip_2\convert_blip_2_original_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #

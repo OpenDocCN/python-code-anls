@@ -1,6 +1,6 @@
 # `.\models\bert_japanese\tokenization_bert_japanese.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2018 年 Google AI 语言团队和 HuggingFace Inc. 团队。
 #

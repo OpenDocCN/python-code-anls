@@ -1,6 +1,6 @@
 # `.\benchmark\benchmark_args_tf.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队和 NVIDIA CORPORATION 所有
 # 根据 Apache License, Version 2.0 许可证使用本文件，除非符合许可证的条款，否则不得使用本文件

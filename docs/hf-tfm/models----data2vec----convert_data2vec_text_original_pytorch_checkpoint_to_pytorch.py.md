@@ -1,6 +1,6 @@
 # `.\models\data2vec\convert_data2vec_text_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 引入所需的模块和库
 import argparse  # 用于解析命令行参数
 import os  # 用于操作系统相关的功能

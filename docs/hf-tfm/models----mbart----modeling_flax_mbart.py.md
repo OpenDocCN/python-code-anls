@@ -1,6 +1,6 @@
 # `.\models\mbart\modeling_flax_mbart.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021, The Facebook AI Research Team and The HuggingFace Inc. team. All rights reserved.
 #
@@ -1086,7 +1086,7 @@ class FlaxMBartPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxMBartForConditionalGeneration
 
         >>> model = FlaxMBartForConditionalGeneration.from_pretrained("facebook/mbart-large-cc25")
@@ -1450,7 +1450,7 @@ FLAX_MBART_CONDITIONAL_GENERATION_DOCSTRING = r"""
 
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxMBartForConditionalGeneration, MBartConfig
     >>> model = FlaxMBartForConditionalGeneration.from_pretrained("facebook/mbart-large-cc25")
     >>> tokenizer = AutoTokenizer.from_pretrained("facebook/mbart-large-cc25")

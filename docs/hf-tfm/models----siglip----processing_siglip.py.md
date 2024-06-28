@@ -1,6 +1,6 @@
 # `.\models\siglip\processing_siglip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The HuggingFace Inc. team.
 #

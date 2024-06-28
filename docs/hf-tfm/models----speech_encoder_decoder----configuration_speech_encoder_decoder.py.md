@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\configuration_speech_encoder_decoder.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 HuggingFace Inc. 团队.
 # 版权所有 2018 年 NVIDIA 公司. 保留所有权利.
@@ -39,7 +39,7 @@ class SpeechEncoderDecoderConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import BertConfig, Wav2Vec2Config, SpeechEncoderDecoderConfig, SpeechEncoderDecoderModel
 
     >>> # 初始化一个 Wav2Vec2 和 BERT 风格的配置

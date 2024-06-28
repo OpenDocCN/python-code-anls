@@ -1,6 +1,6 @@
 # `.\models\xmod\modeling_xmod.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 Meta AI Team 和 HuggingFace Inc. 团队。
 #

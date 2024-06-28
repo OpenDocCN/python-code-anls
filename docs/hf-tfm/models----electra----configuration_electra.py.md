@@ -1,6 +1,6 @@
 # `.\models\electra\configuration_electra.py`
 
-```
+```py
 # 引入必要的模块和类
 from collections import OrderedDict  # 从 collections 模块中引入 OrderedDict 类
 from typing import Mapping  # 从 typing 模块中引入 Mapping 类型
@@ -43,7 +43,7 @@ class ElectraConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import ElectraConfig, ElectraModel
 
     >>> # Initializing a ELECTRA electra-base-uncased style configuration

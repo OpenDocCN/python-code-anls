@@ -1,6 +1,6 @@
 # `.\trainer_seq2seq.py`
 
-```
+```py
 # 引入警告模块，用于处理可能的警告信息
 import warnings
 # 从标准库中复制深度拷贝函数

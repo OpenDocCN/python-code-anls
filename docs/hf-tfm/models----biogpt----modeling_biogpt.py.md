@@ -1,6 +1,6 @@
 # `.\models\biogpt\modeling_biogpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Team and Microsoft Research AI4Science All rights reserved.
 #

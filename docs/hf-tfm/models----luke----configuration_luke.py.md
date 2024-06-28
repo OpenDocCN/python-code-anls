@@ -1,6 +1,6 @@
 # `.\models\luke\configuration_luke.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Studio Ousia and The HuggingFace Inc. team.
 #
@@ -44,7 +44,7 @@ class LukeConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import LukeConfig, LukeModel
 
     >>> # Initializing a LUKE configuration

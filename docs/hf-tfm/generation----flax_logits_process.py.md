@@ -1,6 +1,6 @@
 # `.\generation\flax_logits_process.py`
 
-```
+```py
 # coding=utf-8
 # 导入inspect模块，用于检查和获取源代码信息
 import inspect

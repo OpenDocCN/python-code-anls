@@ -1,6 +1,6 @@
 # `.\commands\download.py`
 
-```
+```py
 # 导入模块 argparse 中的 ArgumentParser 类
 from argparse import ArgumentParser
 

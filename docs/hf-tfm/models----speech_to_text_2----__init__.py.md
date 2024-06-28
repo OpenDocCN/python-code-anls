@@ -1,6 +1,6 @@
 # `.\models\speech_to_text_2\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # 本代码受版权保护，版权归 The HuggingFace Team 所有。

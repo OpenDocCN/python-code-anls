@@ -1,6 +1,6 @@
 # `.\models\depth_anything\__init__.py`
 
-```
+```py
 # 导入所需模块和函数
 from typing import TYPE_CHECKING
 # 从文件工具中导入懒加载模块和是否可用torch的函数

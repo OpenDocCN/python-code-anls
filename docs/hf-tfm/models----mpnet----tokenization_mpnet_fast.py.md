@@ -1,6 +1,6 @@
 # `.\models\mpnet\tokenization_mpnet_fast.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指定文件采用UTF-8编码格式
 

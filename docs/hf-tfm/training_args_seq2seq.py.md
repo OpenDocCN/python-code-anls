@@ -1,6 +1,6 @@
 # `.\training_args_seq2seq.py`
 
-```
+```py
 # 导入日志模块，用于记录程序运行时的信息
 import logging
 # 导入数据类装饰器和字段装饰器

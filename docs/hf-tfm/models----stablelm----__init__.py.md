@@ -1,6 +1,6 @@
 # `.\models\stablelm\__init__.py`
 
-```
+```py
 # 版权声明及许可信息
 # Copyright 2024 Stability AI and The HuggingFace Inc. team. All rights reserved.
 #

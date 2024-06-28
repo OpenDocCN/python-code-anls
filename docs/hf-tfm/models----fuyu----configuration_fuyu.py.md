@@ -1,6 +1,6 @@
 # `.\models\fuyu\configuration_fuyu.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Adept AI and the HuggingFace Inc. team. All rights reserved.
 #
@@ -42,7 +42,7 @@ class FuyuConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import FuyuConfig
 
     >>> # Initializing a Fuyu fuyu-7b style configuration

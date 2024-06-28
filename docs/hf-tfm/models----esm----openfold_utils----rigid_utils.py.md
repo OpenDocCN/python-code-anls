@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\rigid_utils.py`
 
-```
+```py
 # 引入必要的模块和库
 from functools import lru_cache  # 导入 functools 库中的 lru_cache 装饰器
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple  # 引入类型提示

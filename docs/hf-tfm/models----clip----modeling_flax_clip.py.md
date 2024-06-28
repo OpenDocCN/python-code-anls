@@ -1,6 +1,6 @@
 # `.\models\clip\modeling_flax_clip.py`
 
-```
+```py
 # 导入所需模块和类
 from typing import Any, Optional, Tuple, Union
 
@@ -1054,7 +1054,7 @@ class FlaxCLIPPreTrainedModel(FlaxPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxCLIPModel
 
         >>> model = FlaxCLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1119,7 +1119,7 @@ class FlaxCLIPPreTrainedModel(FlaxPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, FlaxCLIPModel
@@ -1199,7 +1199,7 @@ FLAX_CLIP_TEXT_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxCLIPTextModel
 
     >>> model = FlaxCLIPTextModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1285,7 +1285,7 @@ FLAX_CLIP_TEXT_MODEL_WITH_PROJECTION_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxCLIPTextModelWithProjection
 
     >>> model = FlaxCLIPTextModelWithProjection.from_pretrained("openai/clip-vit-base-patch32")
@@ -1346,7 +1346,7 @@ FLAX_CLIP_VISION_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from PIL import Image
     >>> import requests
     >>> from transformers import AutoProcessor, FlaxCLIPVisionModel
@@ -1479,7 +1479,7 @@ FLAX_CLIP_MODEL_DOCSTRING = """
     Example:
         给出一个使用示例，展示模型如何使用。
 
-    ```python
+    ```
     >>> import jax
     >>> from PIL import Image
     >>> import requests

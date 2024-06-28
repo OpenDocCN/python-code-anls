@@ -1,6 +1,6 @@
 # `.\models\umt5\modeling_umt5.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，指定代码使用的许可证为 Apache License, Version 2.0
 # 不可使用此文件，除非符合 Apache License, Version 2.0 的规定。可以通过上述链接获取许可证副本。
@@ -690,7 +690,7 @@ class UMT5Model(UMT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import UMT5Model, AutoTokenizer
 
     >>> model = UMT5Model.from_pretrained("google/umt5-small")
@@ -809,7 +809,7 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import UMT5ForConditionalGeneration, AutoTokenizer
 
     >>> model = UMT5ForConditionalGeneration.from_pretrained("google/umt5-small")
@@ -986,7 +986,7 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import UMT5EncoderModel, AutoTokenizer
 
     >>> model = UMT5EncoderModel.from_pretrained("google/umt5-small")
@@ -1061,7 +1061,7 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, UMT5EncoderModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google/umt5-small")

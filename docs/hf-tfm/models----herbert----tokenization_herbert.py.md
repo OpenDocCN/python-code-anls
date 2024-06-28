@@ -1,6 +1,6 @@
 # `.\models\herbert\tokenization_herbert.py`
 
-```
+```py
 # 导入必要的库和模块：json、os、re、unicodedata以及从typing模块导入List、Optional和Tuple
 import json
 import os

@@ -1,6 +1,6 @@
 # `.\models\led\configuration_led.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Iz Beltagy, Matthew E. Peters, Arman Cohan and The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class LEDConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import LEDModel, LEDConfig
 
     >>> # Initializing a LED allenai/led-base-16384 style configuration

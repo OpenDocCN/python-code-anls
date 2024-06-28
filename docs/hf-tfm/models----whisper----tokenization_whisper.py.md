@@ -1,6 +1,6 @@
 # `.\models\whisper\tokenization_whisper.py`
 
-```
+```py
 # 定义一个函数，用于将 UTF-8 字节映射为 Unicode 字符。避免映射到空白字符或控制字符，以确保 BPE 处理正常运行。
 def bytes_to_unicode():
     """
@@ -359,7 +359,7 @@ TO_LANGUAGE_CODE = {
         Override the prefix tokens appended to the start of the label sequence. This method can be used standalone to
         update the prefix tokens as required when fine-tuning. Example:
 
-        ```python
+        ```
         >>> # instantiate the tokenizer and set the prefix token to Spanish
         >>> tokenizer = WhisperTokenizer.from_pretrained("openai/whisper-tiny", language="spanish")
         >>> # now switch the prefix token from Spanish to French

@@ -1,6 +1,6 @@
 # `.\models\yoso\convert_yoso_pytorch_to_pytorch.py`
 
-```
+```py
 # 定义函数，将原始键名转换为适用于转换后模型的新键名
 def rename_key(orig_key):
     # 替换以 "model." 开头的键名为空字符串，去除前缀

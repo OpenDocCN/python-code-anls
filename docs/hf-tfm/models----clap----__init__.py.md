@@ -1,6 +1,6 @@
 # `.\models\clap\__init__.py`
 
-```
+```py
 # 引入必要的模块和类型检查功能
 from typing import TYPE_CHECKING
 # 引入自定义的异常和懒加载模块

@@ -1,6 +1,6 @@
 # `.\models\trocr\convert_trocr_unilm_to_pytorch.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，说明代码的版权归 The HuggingFace Inc. team. 所有
 # 根据 Apache 许可证 2.0 版本使用此文件，详细信息可查阅许可证

@@ -1,6 +1,6 @@
 # `.\models\starcoder2\configuration_starcoder2.py`
 
-```
+```py
 # 定义 Starcoder2Config 类，用于存储 Starcoder2 模型的配置信息
 class Starcoder2Config(PretrainedConfig):
     r"""
@@ -11,7 +11,7 @@ class Starcoder2Config(PretrainedConfig):
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
 
-    ```python
+    ```
     >>> from transformers import Starcoder2Model, Starcoder2Config
 
     >>> # Initializing a Starcoder2 7B style configuration

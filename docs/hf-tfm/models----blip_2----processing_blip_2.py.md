@@ -1,6 +1,6 @@
 # `.\models\blip_2\processing_blip_2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

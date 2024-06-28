@@ -1,6 +1,6 @@
 # `.\models\clip\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，告知此文件受 Apache 2.0 许可证保护
 # 详情可参阅 http://www.apache.org/licenses/LICENSE-2.0
 #

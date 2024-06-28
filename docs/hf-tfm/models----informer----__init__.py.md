@@ -1,6 +1,6 @@
 # `.\models\informer\__init__.py`
 
-```
+```py
 # 导入需要的模块和函数
 from typing import TYPE_CHECKING
 # 从当前包中导入自定义的异常和延迟加载模块

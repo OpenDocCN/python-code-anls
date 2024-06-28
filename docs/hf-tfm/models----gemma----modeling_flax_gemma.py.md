@@ -1,6 +1,6 @@
 # `.\models\gemma\modeling_flax_gemma.py`
 
-```
+```py
 # 导入必要的库和模块
 from typing import Optional, Tuple  # 导入类型提示模块
 

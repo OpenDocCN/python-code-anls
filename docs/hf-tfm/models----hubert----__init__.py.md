@@ -1,6 +1,6 @@
 # `.\models\hubert\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

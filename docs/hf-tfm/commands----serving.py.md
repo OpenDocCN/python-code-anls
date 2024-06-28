@@ -1,6 +1,6 @@
 # `.\commands\serving.py`
 
-```
+```py
 # 版权声明和许可证信息，指明此代码受 Apache License, Version 2.0 保护，禁止未经许可使用
 #
 # from ...pipelines 导入需要的模块和函数

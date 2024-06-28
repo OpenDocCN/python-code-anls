@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v2\feature_extraction_mobilenet_v2.py`
 
-```
+```py
 # coding=utf-8
 # 定义了编码格式为 UTF-8，确保支持多种字符集
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.

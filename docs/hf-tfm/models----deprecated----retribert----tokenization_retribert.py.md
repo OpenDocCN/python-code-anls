@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\tokenization_retribert.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明，引用的代码库遵循 Apache License, Version 2.0
 # 导入 collections 模块，用于构建数据结构

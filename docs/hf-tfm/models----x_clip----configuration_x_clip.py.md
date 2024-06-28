@@ -1,6 +1,6 @@
 # `.\models\x_clip\configuration_x_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保代码中文本正确解析
 # 版权声明和许可信息，指明此代码的使用权限和限制
 # 导入必要的模块和函数，包括 PretrainedConfig 和 logging
@@ -150,7 +150,7 @@ class XCLIPVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import XCLIPVisionModel, XCLIPVisionConfig
 
     >>> # 使用 microsoft/xclip-base-patch32 风格的配置初始化 XCLIPVisionModel

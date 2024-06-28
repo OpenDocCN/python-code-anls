@@ -1,6 +1,6 @@
 # `.\models\pegasus\modeling_pegasus.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明，指出版权归 Google 和 HuggingFace Inc. 团队所有
 #
@@ -348,7 +348,7 @@ PEGASUS_START_DOCSTRING = r"""
 PEGASUS_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, PegasusForConditionalGeneration
 
     >>> model = PegasusForConditionalGeneration.from_pretrained("google/pegasus-xsum")

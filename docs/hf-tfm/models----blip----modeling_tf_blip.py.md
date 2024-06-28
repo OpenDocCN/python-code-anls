@@ -1,6 +1,6 @@
 # `.\models\blip\modeling_tf_blip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Salesforce Team Authors and The HuggingFace Team. All rights reserved.
 #
@@ -1141,7 +1141,7 @@ class TFBlipModel(TFBlipPreTrainedModel):
 
         Examples:
         
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipModel
@@ -1311,7 +1311,7 @@ class TFBlipForConditionalGeneration(TFBlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipForConditionalGeneration
@@ -1399,7 +1399,7 @@ class TFBlipForConditionalGeneration(TFBlipPreTrainedModel):
 
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipForConditionalGeneration
@@ -1596,7 +1596,7 @@ class TFBlipForQuestionAnswering(TFBlipPreTrainedModel):
 
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFBlipForQuestionAnswering

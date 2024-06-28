@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\tokenization_layoutlmv2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 #

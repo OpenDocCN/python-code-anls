@@ -1,6 +1,6 @@
 # `.\models\perceiver\modeling_perceiver.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，声明代码版权归 Deepmind 和 HuggingFace Inc. 团队所有，保留所有权利
@@ -1307,7 +1307,7 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
         Examples:
             代码示例，展示了如何使用Perceiver模型处理光流问题。
 
-        ```python
+        ```
         >>> from transformers import PerceiverForOpticalFlow
         >>> import torch
 

@@ -1,6 +1,6 @@
 # `.\models\univnet\convert_univnet.py`
 
-```
+```py
 # 引入命令行参数解析模块
 import argparse
 

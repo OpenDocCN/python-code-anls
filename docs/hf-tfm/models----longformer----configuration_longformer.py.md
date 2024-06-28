@@ -1,6 +1,6 @@
 # `.\models\longformer\configuration_longformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Allen Institute for AI team and The HuggingFace Inc. team.
 #
@@ -131,7 +131,7 @@ class LongformerConfig(PretrainedConfig):
     
         Example:
     
-        ```python
+        ```
         >>> from transformers import LongformerConfig, LongformerModel
     
         >>> # Initializing a Longformer configuration

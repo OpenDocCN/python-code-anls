@@ -1,6 +1,6 @@
 # `.\models\cvt\convert_cvt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 定义一个函数，用于重命名嵌入层权重的函数
 def embeddings(idx):
     """

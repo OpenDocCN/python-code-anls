@@ -1,6 +1,6 @@
 # `.\models\llama\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指出代码受 Apache 许可证版本 2.0 保护，详见许可证链接
 # 导入必要的类型检查模块
 from typing import TYPE_CHECKING

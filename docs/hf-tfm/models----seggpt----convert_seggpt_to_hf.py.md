@@ -1,6 +1,6 @@
 # `.\models\seggpt\convert_seggpt_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The HuggingFace Inc. team.
 #

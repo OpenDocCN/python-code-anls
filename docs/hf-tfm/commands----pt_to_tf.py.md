@@ -1,6 +1,6 @@
 # `.\commands\pt_to_tf.py`
 
-```
+```py
 # 导入inspect模块，用于检查和获取Python对象的信息
 import inspect
 # 导入os模块，提供与操作系统交互的功能

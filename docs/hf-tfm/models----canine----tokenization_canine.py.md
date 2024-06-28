@@ -1,6 +1,6 @@
 # `.\models\canine\tokenization_canine.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Google AI and The HuggingFace Inc. team. All rights reserved.
 #

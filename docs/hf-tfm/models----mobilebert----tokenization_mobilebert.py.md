@@ -1,6 +1,6 @@
 # `.\models\mobilebert\tokenization_mobilebert.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定源代码文件的编码格式为UTF-8
 

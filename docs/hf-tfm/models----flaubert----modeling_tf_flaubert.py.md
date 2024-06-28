@@ -1,6 +1,6 @@
 # `.\models\flaubert\modeling_tf_flaubert.py`
 
-```
+```py
 # 引入必要的库和模块
 import itertools  # itertools模块用于高效地迭代操作
 import random  # random模块用于生成随机数和随机选择

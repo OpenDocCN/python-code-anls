@@ -1,6 +1,6 @@
 # `.\models\groupvit\modeling_tf_groupvit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 NVIDIA and The HuggingFace Team. All rights reserved.
 #
@@ -2080,7 +2080,7 @@ class TFGroupViTTextModel(TFGroupViTPreTrainedModel):
         Examples:
         示例用法，展示了如何使用模型进行推理。
 
-        ```python
+        ```
         >>> from transformers import CLIPTokenizer, TFGroupViTTextModel
 
         >>> tokenizer = CLIPTokenizer.from_pretrained("nvidia/groupvit-gcc-yfcc")
@@ -2150,7 +2150,7 @@ class TFGroupViTVisionModel(TFGroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFGroupViTVisionModel
@@ -2220,7 +2220,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
 
         示例:
 
-        ```python
+        ```
         >>> from transformers import CLIPTokenizer, TFGroupViTModel
 
         >>> model = TFGroupViTModel.from_pretrained("nvidia/groupvit-gcc-yfcc")
@@ -2265,7 +2265,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFGroupViTModel
@@ -2313,7 +2313,7 @@ class TFGroupViTModel(TFGroupViTPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFGroupViTModel

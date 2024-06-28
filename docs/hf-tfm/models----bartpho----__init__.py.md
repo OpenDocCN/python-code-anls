@@ -1,6 +1,6 @@
 # `.\models\bartpho\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，声明版权归 HuggingFace 团队所有，授权遵循 Apache License 2.0
 #
 # 导入必要的类型检查模块

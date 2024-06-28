@@ -1,6 +1,6 @@
 # `.\models\albert\configuration_albert.py`
 
-```
+```py
 # 引入 OrderedDict 用于有序字典，Mapping 用于类型提示
 from collections import OrderedDict
 from typing import Mapping
@@ -31,7 +31,7 @@ class AlbertConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import AlbertConfig, AlbertModel
 
     >>> # 初始化 ALBERT-xxlarge 风格的配置

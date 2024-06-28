@@ -1,6 +1,6 @@
 # `.\models\llama\modeling_flax_llama.py`
 
-```
+```py
 # 引入必要的模块和库
 from functools import partial  # 导入 functools 模块中的 partial 函数，用于创建带有部分参数的新函数
 from typing import Optional, Tuple  # 导入 typing 模块中的 Optional 和 Tuple 类型，用于类型标注

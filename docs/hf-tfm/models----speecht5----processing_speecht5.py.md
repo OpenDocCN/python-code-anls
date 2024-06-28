@@ -1,6 +1,6 @@
 # `.\models\speecht5\processing_speecht5.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\convert_gpt_neo_mesh_tf_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和函数
 import argparse  # 导入命令行参数解析模块
 import json  # 导入处理 JSON 格式数据的模块

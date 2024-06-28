@@ -1,6 +1,6 @@
 # `.\models\clip\configuration_clip.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息
 # 根据 Apache 许可证 2.0 版本，许可文件的链接
@@ -144,7 +144,7 @@ class CLIPVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CLIPVisionConfig, CLIPVisionModel
 
     >>> # Initializing a CLIPVisionConfig with openai/clip-vit-base-patch32 style configuration
@@ -238,7 +238,7 @@ class CLIPConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CLIPConfig, CLIPModel
 
     >>> # Initializing a CLIPConfig with openai/clip-vit-base-patch32 style configuration

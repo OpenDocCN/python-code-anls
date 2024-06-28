@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t_v2\convert_fairseq2_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可证信息
 

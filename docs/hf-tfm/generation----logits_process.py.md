@@ -1,6 +1,6 @@
 # `.\generation\logits_process.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，指明该代码的版权归 HuggingFace Inc. 团队所有
 #
@@ -120,7 +120,7 @@ class MinLengthLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoModelForCausalLM, AutoTokenizer
 
     >>> tokenizer = AutoTokenizer.from_pretrained("bigscience/bloomz-560m")
@@ -194,7 +194,7 @@ class MinNewTokensLengthLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoModelForCausalLM, AutoTokenizer
 
     >>> tokenizer = AutoTokenizer.from_pretrained("bigscience/bloomz-560m")
@@ -267,7 +267,7 @@ class TemperatureLogitsWarper(LogitsWarper):
 
     Examples:
 
-    ```python
+    ```
     >>> import torch
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 
@@ -335,7 +335,7 @@ class RepetitionPenaltyLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```py
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> # Initializing the model and tokenizer for it
@@ -419,7 +419,7 @@ class TopPLogitsWarper(LogitsWarper):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 
     >>> set_seed(0)
@@ -491,7 +491,7 @@ class TopKLogitsWarper(LogitsWarper):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 
     >>> set_seed(0)
@@ -595,7 +595,7 @@ class EpsilonLogitsWarper(LogitsWarper):
             Minimum number of tokens that cannot be filtered.
 
     Examples:
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 
     >>> set_seed(0)
@@ -682,7 +682,7 @@ class EtaLogitsWarper(LogitsWarper):
             even if all tokens have probabilities below the cutoff `eta`.
 
     Examples:
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
 
     >>> set_seed(0)
@@ -841,7 +841,7 @@ class NoRepeatNGramLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```py
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("distilbert/distilgpt2")
@@ -962,7 +962,7 @@ class SequenceBiasLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")
@@ -1231,7 +1231,7 @@ class PrefixConstrainedLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```py
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("bigscience/bloomz-560m")
@@ -1320,7 +1320,7 @@ class HammingDiversityLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
     >>> import torch
 
@@ -1436,7 +1436,7 @@ class ForcedBOSTokenLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
     >>> model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-small")
@@ -1489,7 +1489,7 @@ class ForcedEOSTokenLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("distilbert/distilgpt2")
@@ -1597,7 +1597,7 @@ class LogitNormalization(LogitsProcessor, LogitsWarper):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
     >>> import torch
 
@@ -1637,7 +1637,7 @@ class SuppressTokensAtBeginLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoProcessor, WhisperForConditionalGeneration
     >>> from datasets import load_dataset
 
@@ -1696,7 +1696,7 @@ class SuppressTokensLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoProcessor, WhisperForConditionalGeneration
     >>> from datasets import load_dataset
 
@@ -2080,7 +2080,7 @@ class UnbatchedClassifierFreeGuidanceLogitsProcessor(LogitsProcessor):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, AutoModelForCausalLM
 
     >>> model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2")

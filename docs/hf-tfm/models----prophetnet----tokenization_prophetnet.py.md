@@ -1,6 +1,6 @@
 # `.\models\prophetnet\tokenization_prophetnet.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Microsoft Authors and The HuggingFace Inc. team.
 #

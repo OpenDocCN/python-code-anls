@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\modeling_flax_vision_text_dual_encoder.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -487,7 +487,7 @@ VISION_TEXT_DUAL_ENCODER_MODEL_DOCSTRING = r"""
 
     Examples:
 
-    ```python
+    ```
     >>> from PIL import Image
     >>> import requests
     >>> import jax

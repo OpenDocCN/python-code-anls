@@ -1,6 +1,6 @@
 # `.\data\datasets\squad.py`
 
-```
+```py
 # 引入标准库和第三方库
 import os
 import time

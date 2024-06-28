@@ -1,6 +1,6 @@
 # `.\models\oneformer\configuration_oneformer.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保能够正确处理中文等特殊字符
 # 版权声明，指出版权归属于SHI Labs和HuggingFace Inc.团队，并保留所有权利
 # 使用Apache许可证2.0版本，允许按照此许可证使用和分发本软件
@@ -41,7 +41,7 @@ class OneFormerConfig(PretrainedConfig):
     配置对象继承自[`PretrainedConfig`]，可用于控制模型的输出。更多信息请参阅[`PretrainedConfig`]的文档。
 
     Examples:
-    ```python
+    ```
     >>> from transformers import OneFormerConfig, OneFormerModel
 
     >>> # 初始化一个OneFormer shi-labs/oneformer_ade20k_swin_tiny配置

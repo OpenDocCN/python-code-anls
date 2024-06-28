@@ -1,6 +1,6 @@
 # `.\models\unispeech_sat\configuration_unispeech_sat.py`
 
-```
+```py
 # 定义 UniSpeechSatConfig 类，用于存储 UniSpeechSat 模型的配置信息
 class UniSpeechSatConfig(PretrainedConfig):
     r"""
@@ -12,7 +12,7 @@ class UniSpeechSatConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import UniSpeechSatModel, UniSpeechSatConfig
 
     >>> # 初始化一个 UniSpeechSat microsoft/unispeech-sat-base-100h-libri-ft 风格的配置

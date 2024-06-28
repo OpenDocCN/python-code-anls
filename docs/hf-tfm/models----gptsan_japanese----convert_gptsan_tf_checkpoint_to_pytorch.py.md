@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\convert_gptsan_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入 argparse 模块，用于处理命令行参数解析
 import argparse
 # 导入 json 模块，用于读取和解析 JSON 格式的文件

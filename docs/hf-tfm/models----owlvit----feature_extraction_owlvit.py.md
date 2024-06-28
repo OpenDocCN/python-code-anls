@@ -1,6 +1,6 @@
 # `.\models\owlvit\feature_extraction_owlvit.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保脚本能够正确处理 Unicode 字符串
 # 版权声明，标明 HuggingFace Inc. 团队保留所有权利
 #

@@ -1,6 +1,6 @@
 # `.\pipelines\text_generation.py`
 
-```
+```py
 import enum  # 导入枚举类型的模块
 import warnings  # 导入警告模块
 from typing import Dict  # 导入字典类型的类型提示
@@ -45,7 +45,7 @@ class TextGenerationPipeline(Pipeline):  # 文本生成管道类，继承自基�
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> generator = pipeline(model="openai-community/gpt2")

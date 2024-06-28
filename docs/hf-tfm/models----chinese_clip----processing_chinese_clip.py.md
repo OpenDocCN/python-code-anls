@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\processing_chinese_clip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The OFA-Sys Team Authors and The HuggingFace Team. All rights reserved.
 #

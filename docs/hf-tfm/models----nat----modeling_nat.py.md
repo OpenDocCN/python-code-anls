@@ -1,6 +1,6 @@
 # `.\models\nat\modeling_nat.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 SHI Labs and The HuggingFace Inc. team. All rights reserved.
 #
@@ -1055,7 +1055,7 @@ class NatBackbone(NatPreTrainedModel, BackboneMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

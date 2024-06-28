@@ -1,6 +1,6 @@
 # `.\models\longformer\__init__.py`
 
-```
+```py
 # 引入类型检查标记，用于在类型检查时导入不同的模块和类
 from typing import TYPE_CHECKING
 

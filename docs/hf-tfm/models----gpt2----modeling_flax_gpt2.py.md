@@ -1,6 +1,6 @@
 # `.\models\gpt2\modeling_flax_gpt2.py`
 
-```
+```py
 # 导入必要的库和模块，包括类型提示
 from typing import Any, Optional, Tuple
 

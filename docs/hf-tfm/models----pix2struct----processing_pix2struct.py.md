@@ -1,6 +1,6 @@
 # `.\models\pix2struct\processing_pix2struct.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

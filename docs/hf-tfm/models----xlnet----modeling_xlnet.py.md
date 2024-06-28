@@ -1,6 +1,6 @@
 # `.\models\xlnet\modeling_xlnet.py`
 
-```
+```py
 # 创建一个映射字典，用于从 TensorFlow 到 PyTorch 的模块映射，以尽可能保持 PyTorch 模型与原始 TensorFlow 模型的一致性
 def build_tf_xlnet_to_pytorch_map(model, config, tf_weights=None):
     # 初始化一个空的 TensorFlow 到 PyTorch 的映射字典

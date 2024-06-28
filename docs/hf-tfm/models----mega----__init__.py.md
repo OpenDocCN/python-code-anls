@@ -1,6 +1,6 @@
 # `.\models\mega\__init__.py`
 
-```
+```py
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 # 版权声明及许可信息，指明该代码的版权归属及使用许可
 #

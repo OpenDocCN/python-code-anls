@@ -1,6 +1,6 @@
 # `.\utils\dummy_sentencepiece_and_tokenizers_objects.py`
 
-```
+```py
 # 这个文件是通过命令 `make fix-copies` 自动生成的，不要编辑。
 # 从上层模块导入 DummyObject 和 requires_backends 函数
 from ..utils import DummyObject, requires_backends

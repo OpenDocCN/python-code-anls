@@ -1,6 +1,6 @@
 # `.\pipelines\text2text_generation.py`
 
-```
+```py
 import enum  # 导入 Python 标准库中的 enum 模块，用于定义枚举类型
 import warnings  # 导入 Python 标准库中的 warnings 模块，用于警告处理
 
@@ -29,7 +29,7 @@ class Text2TextGenerationPipeline(Pipeline):  # 文本到文本生成管道类�
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> generator = pipeline(model="mrm8488/t5-base-finetuned-question-generation-ap")
@@ -55,7 +55,7 @@ class Text2TextGenerationPipeline(Pipeline):  # 文本到文本生成管道类�
 
     Usage:
 
-    ```python
+    ```
     text2text_generator = pipeline("text2text-generation")
     text2text_generator("question: What is 42 ? context: 42 is the answer to life, the universe and everything")
     ```
@@ -261,7 +261,7 @@ class SummarizationPipeline(Text2TextGenerationPipeline):
 
     Usage:
 
-    ```python
+    ```
     # use bart in pytorch
     summarizer = pipeline("summarization")
     summarizer("An apple a day, keeps the doctor away", min_length=5, max_length=20)
@@ -333,7 +333,7 @@ class TranslationPipeline(Text2TextGenerationPipeline):
 
     Usage:
 
-    ```python
+    ```
     en_fr_translator = pipeline("translation_en_to_fr")
     en_fr_translator("How old are you?")
     ```

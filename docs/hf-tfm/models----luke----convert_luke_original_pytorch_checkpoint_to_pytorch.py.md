@@ -1,6 +1,6 @@
 # `.\models\luke\convert_luke_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保可以正确处理中文等特殊字符
 # 版权声明，此代码版权归 The HuggingFace Inc. 团队所有，基于 Apache License, Version 2.0 发布
 # 只有在符合许可证的条件下才能使用该文件

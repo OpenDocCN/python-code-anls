@@ -1,6 +1,6 @@
 # `.\models\tvp\__init__.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\layoutlm\modeling_tf_layoutlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Microsoft Research Asia LayoutLM Team Authors and the HuggingFace Inc. team.
 #
@@ -1031,7 +1031,7 @@ class TFLayoutLMModel(TFLayoutLMPreTrainedModel):
         Examples:
         示例代码演示如何使用该方法：
         
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFLayoutLMModel
         >>> import tensorflow as tf
 
@@ -1156,7 +1156,7 @@ class TFLayoutLMForMaskedLM(TFLayoutLMPreTrainedModel, TFMaskedLanguageModelingL
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFLayoutLMForMaskedLM
         >>> import tensorflow as tf
 
@@ -1373,7 +1373,7 @@ class TFLayoutLMForSequenceClassification(TFLayoutLMPreTrainedModel, TFSequenceC
 
         Examples:
 
-        ```python
+        ```
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFLayoutLMForTokenClassification
 

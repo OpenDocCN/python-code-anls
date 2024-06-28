@@ -1,6 +1,6 @@
 # `.\models\marian\convert_marian_tatoeba_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 解析命令行参数的库
 import datetime  # 处理日期和时间的库

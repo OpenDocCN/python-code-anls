@@ -1,6 +1,6 @@
 # `.\models\swinv2\modeling_swinv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2022 年由 Microsoft Research 和 The HuggingFace Inc. 团队保留所有权利
 #
@@ -1313,7 +1313,7 @@ class Swinv2Backbone(Swinv2PreTrainedModel, BackboneMixin):
 
         示例:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

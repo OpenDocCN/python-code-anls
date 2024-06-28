@@ -1,6 +1,6 @@
 # `.\models\beit\configuration_beit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 #
@@ -46,7 +46,7 @@ class BeitConfig(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BeitConfig, BeitModel
 
     >>> # Initializing a BEiT beit-base-patch16-224-pt22k style configuration

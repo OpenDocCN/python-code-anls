@@ -1,6 +1,6 @@
 # `.\trainer_pt_utils.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2020-present HuggingFace Inc. 团队
 #

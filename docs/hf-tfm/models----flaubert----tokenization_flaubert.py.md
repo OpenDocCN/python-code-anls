@@ -1,6 +1,6 @@
 # `.\models\flaubert\tokenization_flaubert.py`
 
-```
+```py
 # 定义一个函数用于将文本转换为 Unicode 格式（如果尚未转换），假设输入是 UTF-8 编码的文本
 def convert_to_unicode(text):
     """

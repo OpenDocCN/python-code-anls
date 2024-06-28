@@ -1,6 +1,6 @@
 # `.\models\blip\convert_blip_original_pytorch_to_hf.py`
 
-```
+```py
 # 定义一个装饰器，用于告知解释器在调用 convert_blip_checkpoint 函数时不需要进行梯度计算
 @torch.no_grad()
 # 定义函数 convert_blip_checkpoint，用于将 BLIP 模型的检查点转换为 transformers 模型的权重

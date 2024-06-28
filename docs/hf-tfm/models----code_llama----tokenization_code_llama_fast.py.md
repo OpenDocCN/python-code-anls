@@ -1,6 +1,6 @@
 # `.\models\code_llama\tokenization_code_llama_fast.py`
 
-```
+```py
 # 导入所需的库和模块
 import os  # 导入操作系统模块
 from shutil import copyfile  # 导入复制文件函数
@@ -45,7 +45,7 @@ class CodeLlamaTokenizerFast(PreTrainedTokenizerFast):
 
     这里特别使用了 ByteFallback 和没有规范化。
 
-    ```python
+    ```
     >>> from transformers import CodeLlamaTokenizerFast
 
     >>> tokenizer = CodeLlamaTokenizerFast.from_pretrained("hf-internal-testing/llama-tokenizer")

@@ -1,6 +1,6 @@
 # `.\models\cpmant\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁止 flake8 对当前模块执行检查，以避免 "F401 '...' imported but unused" 警告。
 

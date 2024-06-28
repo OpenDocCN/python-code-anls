@@ -1,6 +1,6 @@
 # `.\models\videomae\modeling_videomae.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权归属及保留所有权利
 # 根据 Apache License, Version 2.0 许可证使用本文件

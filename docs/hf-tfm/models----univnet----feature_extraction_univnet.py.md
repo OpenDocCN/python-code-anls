@@ -1,6 +1,6 @@
 # `.\models\univnet\feature_extraction_univnet.py`
 
-```
+```py
 # 版权声明和许可信息，指明代码版权和使用许可条件
 # 详细描述使用 Apache 许可证 2.0 版本，允许在遵守许可的前提下使用此代码
 #

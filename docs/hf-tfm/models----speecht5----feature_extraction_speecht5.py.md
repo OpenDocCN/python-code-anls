@@ -1,6 +1,6 @@
 # `.\models\speecht5\feature_extraction_speecht5.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 年 HuggingFace Inc. 团队。保留所有权利。
 #

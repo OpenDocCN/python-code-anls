@@ -1,6 +1,6 @@
 # `.\generation\beam_search.py`
 
-```
+```py
 # 导入必要的模块和库
 from abc import ABC, abstractmethod  # 导入抽象基类和抽象方法装饰器
 from collections import UserDict  # 导入用户自定义字典类

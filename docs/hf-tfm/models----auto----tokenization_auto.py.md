@@ -1,6 +1,6 @@
 # `.\models\auto\tokenization_auto.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The HuggingFace Inc. team.
 #
@@ -162,7 +162,7 @@ def get_tokenizer_config(
 
     Examples:
 
-    ```python
+    ```
     # 从huggingface.co下载配置文件并进行缓存
     ```
     # 获取指定预训练模型的分词器配置信息

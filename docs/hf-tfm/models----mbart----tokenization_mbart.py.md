@@ -1,6 +1,6 @@
 # `.\models\mbart\tokenization_mbart.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Facebook AI Research Team Authors and The HuggingFace Inc. team.
 #
@@ -71,7 +71,7 @@ class MBartTokenizer(PreTrainedTokenizer):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MBartTokenizer
 
     >>> tokenizer = MBartTokenizer.from_pretrained("facebook/mbart-large-en-ro", src_lang="en_XX", tgt_lang="ro_RO")

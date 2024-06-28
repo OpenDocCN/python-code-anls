@@ -1,6 +1,6 @@
 # `.\kernels\yoso\fast_lsh_cumulation.h`
 
-```
+```py
 // 导入 PyTorch C++ 扩展头文件
 #include <torch/extension.h>
 // 导入 ATen 库的头文件

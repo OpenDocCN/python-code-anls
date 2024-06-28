@@ -1,6 +1,6 @@
 # `.\models\switch_transformers\configuration_switch_transformers.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022, Google and HuggingFace Inc.
 #

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\configuration_layoutlmv2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 # 标明代码文件使用UTF-8编码，版权信息声明
@@ -52,7 +52,7 @@ class LayoutLMv2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import LayoutLMv2Config, LayoutLMv2Model
 
     >>> # Initializing a LayoutLMv2 microsoft/layoutlmv2-base-uncased style configuration

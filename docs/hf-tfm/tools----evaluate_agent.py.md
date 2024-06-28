@@ -1,6 +1,6 @@
 # `.\tools\evaluate_agent.py`
 
-```
+```py
 ### Fake tools for test
 # 定义一系列用于测试目的的假工具函数
 
@@ -740,7 +740,7 @@ def evaluate_chat_agent(agent, verbose=False, return_errors=False):
 
     Example:
 
-    ```py
+    ```
     agent = NewOpenAiAgent(model="text-davinci-003", api_key=your_api_key)
     bads = new_evaluate_agent(agent)
     for bad in bads:

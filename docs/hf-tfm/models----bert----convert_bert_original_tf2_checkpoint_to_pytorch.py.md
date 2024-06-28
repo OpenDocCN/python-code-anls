@@ -1,6 +1,6 @@
 # `.\models\bert\convert_bert_original_tf2_checkpoint_to_pytorch.py`
 
-```
+```py
     # 版权声明和许可信息
     """
     Copyright 2020 The HuggingFace Team. All rights reserved.

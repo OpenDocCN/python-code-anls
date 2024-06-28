@@ -1,6 +1,6 @@
 # `.\models\tapas\modeling_tapas.py`
 
-```
+```py
 # coding=utf-8
 # 声明版权和许可信息，该文件使用 Apache License, Version 2.0 授权
 # 详细许可信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取
@@ -980,7 +980,7 @@ class TapasModel(TapasPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TapasForMaskedLM
         >>> import pandas as pd
 
@@ -1008,13 +1008,13 @@ class TapasModel(TapasPreTrainedModel):
         Determines the return type based on `return_dict`. If `labels` are provided, computes the masked language modeling loss using `CrossEntropyLoss`.
         Returns either a tuple or a `MaskedLMOutput` object depending on `return_dict`.
 
-        ```python
+        ```
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         ```
 
         Passes input arguments to the Tapas model and retrieves the outputs, including sequence output and prediction scores.
 
-        ```python
+        ```
         outputs = self.tapas(
             input_ids,
             attention_mask=attention_mask,
@@ -1032,14 +1032,14 @@ class TapasModel(TapasPreTrainedModel):
 
         Retrieves the sequence output from the Tapas model's outputs and computes prediction scores using a classifier layer.
 
-        ```python
+        ```
         sequence_output = outputs[0]
         prediction_scores = self.cls(sequence_output)
         ```
 
         If `labels` are provided, calculates the masked language modeling loss using `CrossEntropyLoss`.
 
-        ```python
+        ```
         masked_lm_loss = None
         if labels is not None:
             loss_fct = CrossEntropyLoss()  # -100 index = padding token
@@ -1048,7 +1048,7 @@ class TapasModel(TapasPreTrainedModel):
 
         Constructs the output based on whether `return_dict` is `False`, returning a tuple of outputs or including `masked_lm_loss` in a `MaskedLMOutput` object.
 
-        ```python
+        ```
         if not return_dict:
             output = (prediction_scores,) + outputs[2:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output

@@ -1,6 +1,6 @@
 # `.\models\git\configuration_git.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行声明了文件的编码格式为 UTF-8，确保文件中的中文和特殊字符能正确解析
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
@@ -127,7 +127,7 @@ class GitConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import GitConfig, GitModel
 
     >>> # Initializing a GIT microsoft/git-base style configuration

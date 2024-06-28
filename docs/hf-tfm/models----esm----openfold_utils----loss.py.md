@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\loss.py`
 
-```
+```py
 # 引入必要的模块和类型定义
 from typing import Dict, Optional, Tuple
 import torch

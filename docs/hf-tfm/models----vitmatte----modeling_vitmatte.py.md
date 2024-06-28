@@ -1,6 +1,6 @@
 # `.\models\vitmatte\modeling_vitmatte.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及使用条款，详细说明使用限制和免责声明
 # 此处定义了 PyTorch ViTMatte 模型
@@ -279,7 +279,7 @@ class VitMatteForImageMatting(VitMattePreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import VitMatteImageProcessor, VitMatteForImageMatting
         >>> import torch
         >>> from PIL import Image

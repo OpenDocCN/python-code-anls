@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_bert\processing_wav2vec2_bert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明：2024 年 HuggingFace Inc. 团队所有
 #

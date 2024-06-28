@@ -1,6 +1,6 @@
 # `.\models\altclip\modeling_altclip.py`
 
-```
+```py
 # 导入 math 模块，用于数学运算
 import math
 # 导入 dataclass 用于创建数据类，用于存储数据而无需手动编写常规方法
@@ -1114,7 +1114,7 @@ class AltCLIPVisionModel(AltCLIPPreTrainedModel):
 
         示例:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AltCLIPVisionModel
@@ -1355,7 +1355,7 @@ class AltRobertaModel(AltCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, AltCLIPModel
 
         >>> model = AltCLIPModel.from_pretrained("BAAI/AltCLIP")
@@ -1397,7 +1397,7 @@ class AltRobertaModel(AltCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AltCLIPModel

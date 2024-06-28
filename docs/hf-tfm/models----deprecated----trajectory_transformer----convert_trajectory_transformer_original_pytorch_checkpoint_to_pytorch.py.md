@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\convert_trajectory_transformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Trajectory Transformers paper authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     Run with the command:
 
-    ```sh
+    ```
     >>> python convert_trajectory_transformer_original_pytorch_checkpoint_to_pytorch.py --dataset <dataset_name>
     ...     --gpt_loadpath <path_to_original_pytorch_checkpoint>
     ```

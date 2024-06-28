@@ -1,6 +1,6 @@
 # `.\models\clvp\configuration_clvp.py`
 
-```
+```py
 # 设置文件编码格式为 utf-8
 # 版权声明及许可协议说明
 # 这是 CLVP 模型的配置文件
@@ -53,7 +53,7 @@ class ClvpDecoderConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ClvpDecoderConfig, ClvpDecoder
 
     >>> # Initializing a ClvpDecoderConfig with susnato/clvp_dev style configuration

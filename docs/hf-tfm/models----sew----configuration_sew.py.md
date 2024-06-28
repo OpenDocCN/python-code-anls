@@ -1,6 +1,6 @@
 # `.\models\sew\configuration_sew.py`
 
-```
+```py
 # 设置编码为UTF-8，确保代码可以处理Unicode字符
 # 版权声明，指明代码的版权归属和许可协议
 # 导入 functools 和 operator 模块，用于后续操作的支持函数
@@ -26,7 +26,7 @@ class SEWConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import SEWConfig, SEWModel
 
     >>> # 初始化一个 SEW 类型的配置，例如 asapp/sew-tiny-100k

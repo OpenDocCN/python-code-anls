@@ -1,6 +1,6 @@
 # `.\models\auto\auto_factory.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保可以正确处理中文和其他特殊字符
 # Copyright 2021 The HuggingFace Inc. team.
 # 根据 Apache License, Version 2.0 授权许可，进行版权声明和许可信息的设置
@@ -63,7 +63,7 @@ FROM_CONFIG_DOCSTRING = """
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoConfig, BaseAutoModelClass
 
         >>> # Download configuration from huggingface.co and cache.

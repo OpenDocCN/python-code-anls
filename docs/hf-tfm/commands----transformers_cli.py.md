@@ -1,6 +1,6 @@
 # `.\commands\transformers_cli.py`
 
-```
+```py
 # 指定 Python 解释器的位置，并添加版权声明
 #!/usr/bin/env python
 # Copyright 2020 The HuggingFace Team. All rights reserved.

@@ -1,6 +1,6 @@
 # `.\utils\dummy_music_objects.py`
 
-```
+```py
 # 该文件由命令 `make fix-copies` 自动生成，禁止编辑。
 # 导入依赖模块：从上级目录的 utils 模块中导入 DummyObject 和 requires_backends 函数
 from ..utils import DummyObject, requires_backends

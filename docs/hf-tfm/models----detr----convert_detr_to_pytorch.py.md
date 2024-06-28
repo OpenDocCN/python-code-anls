@@ -1,6 +1,6 @@
 # `.\models\detr\convert_detr_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件使用UTF-8编码
 

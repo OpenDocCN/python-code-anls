@@ -1,6 +1,6 @@
 # `.\models\rembert\tokenization_rembert.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码方式为UTF-8，确保支持各种字符集
 

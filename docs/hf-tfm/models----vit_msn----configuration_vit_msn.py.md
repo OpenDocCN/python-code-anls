@@ -1,6 +1,6 @@
 # `.\models\vit_msn\configuration_vit_msn.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码格式为UTF-8
 

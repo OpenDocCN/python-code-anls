@@ -1,6 +1,6 @@
 # `.\models\gpt2\modeling_tf_gpt2.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指明使用 UTF-8 编码
 # Copyright 2018 The OpenAI Team Authors and HuggingFace Inc. team.

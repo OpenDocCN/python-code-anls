@@ -1,6 +1,6 @@
 # `.\models\fuyu\processing_fuyu.py`
 
-```
+```py
 # 指定 Python 源文件的编码格式为 UTF-8
 # 版权声明，此代码版权归 HuggingFace Inc. 团队所有
 #

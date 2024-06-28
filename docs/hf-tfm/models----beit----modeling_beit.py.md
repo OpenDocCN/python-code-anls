@@ -1,6 +1,6 @@
 # `.\models\beit\modeling_beit.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明 2021 Microsoft Research 和 HuggingFace Inc. 团队，保留所有权利
 #

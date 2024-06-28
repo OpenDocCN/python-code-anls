@@ -1,6 +1,6 @@
 # `.\models\bert\__init__.py`
 
-```
+```py
 # 从 typing 模块导入 TYPE_CHECKING 类型检查工具
 from typing import TYPE_CHECKING
 

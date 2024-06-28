@@ -1,6 +1,6 @@
 # `.\processing_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码的版权归 The HuggingFace Inc. 团队所有
 #

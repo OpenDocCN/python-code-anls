@@ -1,6 +1,6 @@
 # `.\models\luke\tokenization_luke.py`
 
-```
+```py
 @lru_cache()
 # 使用 functools 模块的 lru_cache 装饰器，用于缓存函数的返回值，提高函数的执行效率
 def bytes_to_unicode():
@@ -58,7 +58,7 @@ class LukeTokenizer(PreTrainedTokenizer):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import LukeTokenizer
 
     >>> tokenizer = LukeTokenizer.from_pretrained("studio-ousia/luke-base")

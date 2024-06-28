@@ -1,6 +1,6 @@
 # `.\training_args_tf.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 导入 dataclass 模块中的 dataclass 和 field 函数

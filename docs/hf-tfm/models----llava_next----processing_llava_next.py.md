@@ -1,6 +1,6 @@
 # `.\models\llava_next\processing_llava_next.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The HuggingFace Inc. team.
 #

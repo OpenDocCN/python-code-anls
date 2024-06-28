@@ -1,6 +1,6 @@
 # `.\models\camembert\modeling_camembert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2019 年由 Inria、Facebook AI Research 和 HuggingFace Inc. 团队创建
 # 版权声明：2018 年，NVIDIA CORPORATION 版权所有

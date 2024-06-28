@@ -1,6 +1,6 @@
 # `.\models\mgp_str\processing_mgp_str.py`
 
-```
+```py
 # coding=utf-8
 # 定义字符编码类型枚举，包括字符级编码、BPE编码和WordPiece编码
 from transformers import AutoTokenizer

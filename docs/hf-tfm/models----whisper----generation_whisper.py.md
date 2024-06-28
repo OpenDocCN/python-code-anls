@@ -1,6 +1,6 @@
 # `.\models\whisper\generation_whisper.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The HuggingFace Inc. team.
 #

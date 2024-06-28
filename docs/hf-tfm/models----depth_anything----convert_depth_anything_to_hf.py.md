@@ -1,6 +1,6 @@
 # `.\models\depth_anything\convert_depth_anything_to_hf.py`
 
-```
+```py
     # coding=utf-8
     # 版权 2024 年 HuggingFace Inc. 团队所有。
     #

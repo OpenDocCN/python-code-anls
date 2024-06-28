@@ -1,6 +1,6 @@
 # `.\models\owlvit\convert_owlvit_original_flax_to_hf.py`
 
-```
+```py
 # 设定脚本编码格式为UTF-8，确保支持中文等非ASCII字符
 # 版权声明，声明该代码的版权归The HuggingFace Inc.团队所有，保留所有权利
 #

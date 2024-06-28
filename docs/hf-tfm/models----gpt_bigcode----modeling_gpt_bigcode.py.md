@@ -1,6 +1,6 @@
 # `.\models\gpt_bigcode\modeling_gpt_bigcode.py`
 
-```
+```py
 # 导入所需的模块和库
 import math
 from typing import List, Optional, Tuple, Union

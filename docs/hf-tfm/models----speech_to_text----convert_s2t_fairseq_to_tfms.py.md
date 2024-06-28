@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\convert_s2t_fairseq_to_tfms.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 导入 argparse 库，用于处理命令行参数
 

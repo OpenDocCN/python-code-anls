@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从内部模块中导入异常类和延迟加载模块

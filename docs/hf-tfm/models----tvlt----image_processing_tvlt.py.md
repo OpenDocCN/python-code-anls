@@ -1,6 +1,6 @@
 # `.\models\tvlt\image_processing_tvlt.py`
 
-```
+```py
 # 设定文件编码为 UTF-8
 # 版权声明及保留所有权利给 HuggingFace Inc. 团队，未经许可不得使用
 #

@@ -1,6 +1,6 @@
 # `.\models\ernie_m\tokenization_ernie_m.py`
 
-```
+```py
 # coding=utf-8
 # 上面的注释声明了文件的编码格式为 UTF-8，并非代码实际操作，仅为信息说明
 

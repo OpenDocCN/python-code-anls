@@ -1,6 +1,6 @@
 # `.\models\gemma\configuration_gemma.py`
 
-```
+```py
 # coding=utf-8
 # 声明版权和许可信息
 
@@ -26,7 +26,7 @@ class GemmaConfig(PretrainedConfig):
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
 
-    ```python
+    ```
     >>> from transformers import GemmaModel, GemmaConfig
 
     >>> # Initializing a Gemma gemma-7b style configuration

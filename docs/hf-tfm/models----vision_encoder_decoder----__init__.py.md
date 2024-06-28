@@ -1,6 +1,6 @@
 # `.\models\vision_encoder_decoder\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，保留所有权利
 #
 # 根据 Apache 许可证版本 2.0 授权使用此文件；

@@ -1,6 +1,6 @@
 # `.\models\perceiver\convert_perceiver_haiku_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，声明代码版权及使用许可
 # 根据 Apache 许可证版本 2.0 使用本文件，详见指定链接

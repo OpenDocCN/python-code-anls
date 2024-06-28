@@ -1,6 +1,6 @@
 # `.\models\longformer\convert_longformer_original_pytorch_lightning_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The HuggingFace Inc. team.
 #

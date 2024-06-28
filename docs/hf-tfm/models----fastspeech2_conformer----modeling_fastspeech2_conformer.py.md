@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\modeling_fastspeech2_conformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Espnet authors, IMS Toucan authors, and the HuggingFace Inc. team. All rights reserved.
 #

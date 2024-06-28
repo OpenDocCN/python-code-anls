@@ -1,6 +1,6 @@
 # `.\models\focalnet\configuration_focalnet.py`
 
-```
+```py
 # coding=utf-8
 # 以上为代码文件的编码声明和版权信息
 
@@ -29,7 +29,7 @@ class FocalNetConfig(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FocalNetConfig, FocalNetModel
 
     >>> # Initializing a FocalNet microsoft/focalnet-tiny style configuration

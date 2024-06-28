@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\configuration_van.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 年 HuggingFace Inc. 团队保留所有权利。
 #
@@ -65,7 +65,7 @@ class VanConfig(PretrainedConfig):
             丢弃的概率。
 
     Example:
-    ```python
+    ```
     >>> from transformers import VanModel, VanConfig
 
     >>> # Initializing a VAN van-base style configuration

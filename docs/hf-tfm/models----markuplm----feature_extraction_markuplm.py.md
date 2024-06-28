@@ -1,6 +1,6 @@
 # `.\models\markuplm\feature_extraction_markuplm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #
@@ -134,7 +134,7 @@ class MarkupLMFeatureExtractor(FeatureExtractionMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import MarkupLMFeatureExtractor
 
         >>> page_name_1 = "page1.html"

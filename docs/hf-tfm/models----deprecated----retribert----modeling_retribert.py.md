@@ -1,6 +1,6 @@
 # `.\models\deprecated\retribert\modeling_retribert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019-present, the HuggingFace Inc. team, The Google AI Language Team and Facebook, Inc.
 #

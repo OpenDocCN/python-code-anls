@@ -1,6 +1,6 @@
 # `.\models\speecht5\tokenization_speecht5.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定文件编码格式为 UTF-8
 

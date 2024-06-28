@@ -1,6 +1,6 @@
 # `.\models\starcoder2\modeling_starcoder2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和版权信息，说明本代码基于 EleutherAI 的 GPT-NeoX 库，已经进行了修改以适应 Meta AI 团队训练的模型的架构差异
 # 依照 Apache License, Version 2.0 授权许可，除非符合许可协议，否则不得使用本文件

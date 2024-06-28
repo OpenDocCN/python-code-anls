@@ -1,6 +1,6 @@
 # `.\pipelines\question_answering.py`
 
-```
+```py
 # 导入inspect模块，用于获取对象信息
 import inspect
 # 导入types模块，用于类型检查和动态类型创建
@@ -275,7 +275,7 @@ class QuestionAnsweringPipeline(ChunkPipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> oracle = pipeline(model="deepset/roberta-base-squad2")

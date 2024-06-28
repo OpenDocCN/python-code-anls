@@ -1,6 +1,6 @@
 # `.\models\time_series_transformer\configuration_time_series_transformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可信息，指定此代码的使用条款和条件
@@ -36,7 +36,7 @@ class TimeSeriesTransformerConfig(PretrainedConfig):
 
     配置对象继承自 [`PretrainedConfig`]，可以用于控制模型的输出。查阅 [`PretrainedConfig`] 的文档以获取更多信息。
 
-    ```python
+    ```
     >>> from transformers import TimeSeriesTransformerConfig, TimeSeriesTransformerModel
 
     >>> # 使用 12 个时间步进行预测初始化 Time Series Transformer 配置

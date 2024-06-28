@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_with_lm\processing_wav2vec2_with_lm.py`
 
-```
+```py
 # coding=utf-8
 # 定义了代码文件的编码格式为 UTF-8
 

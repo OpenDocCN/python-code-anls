@@ -1,6 +1,6 @@
 # `.\models\dpr\__init__.py`
 
-```
+```py
 # 引入必要的模块和类型检查
 from typing import TYPE_CHECKING
 

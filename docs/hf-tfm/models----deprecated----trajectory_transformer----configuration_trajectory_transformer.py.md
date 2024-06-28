@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\configuration_trajectory_transformer.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明，声明此代码版权归Trajectory Transformers论文作者和HuggingFace Inc.团队所有
 #
@@ -37,7 +37,7 @@ class TrajectoryTransformerConfig(PretrainedConfig):
 
     配置对象继承自[`PretrainedConfig`]，可用于控制模型的输出。有关更多信息，请阅读[`PretrainedConfig`]的文档。
 
-    ```python
+    ```
     >>> from transformers import TrajectoryTransformerConfig, TrajectoryTransformerModel
 
     >>> # 初始化一个TrajectoryTransformer模型，以CarlCochet/trajectory-transformer-halfcheetah-medium-v2风格的配置

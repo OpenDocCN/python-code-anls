@@ -1,6 +1,6 @@
 # `.\models\tvlt\configuration_tvlt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 MURGe-Lab and The HuggingFace Inc. team. All rights reserved.
 #
@@ -42,7 +42,7 @@ class TvltConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import TvltConfig, TvltModel
 
     >>> # # Initializing a TVLT ZinengTang/tvlt-base style configuration

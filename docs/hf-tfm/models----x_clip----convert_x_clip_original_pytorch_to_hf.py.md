@@ -1,6 +1,6 @@
 # `.\models\x_clip\convert_x_clip_original_pytorch_to_hf.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

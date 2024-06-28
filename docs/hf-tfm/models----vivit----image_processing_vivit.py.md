@@ -1,6 +1,6 @@
 # `.\models\vivit\image_processing_vivit.py`
 
-```
+```py
 # 指定编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
 # 详细版权信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取

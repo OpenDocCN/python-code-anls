@@ -1,6 +1,6 @@
 # `.\models\switch_transformers\convert_big_switch.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 命令行参数解析库
 import json  # JSON 数据处理库

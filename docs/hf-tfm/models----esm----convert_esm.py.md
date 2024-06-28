@@ -1,6 +1,6 @@
 # `.\models\esm\convert_esm.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 HuggingFace Inc. 团队所有。
 #

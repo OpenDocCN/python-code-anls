@@ -1,6 +1,6 @@
 # `.\models\whisper\tokenization_whisper_fast.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，确保可以正确处理中文等特殊字符
 
@@ -504,7 +504,7 @@ def _decode_with_timestamps(self, token_ids, skip_special_tokens=False, time_pre
         Override the prefix tokens appended to the start of the label sequence. This method can be used standalone to
         update the prefix tokens as required when fine-tuning. Example:
 
-        ```python
+        ```
         >>> # instantiate the tokenizer and set the prefix token to Spanish
         >>> tokenizer = WhisperTokenizerFast.from_pretrained("openai/whisper-tiny", language="spanish")
         >>> # now switch the prefix token from Spanish to French

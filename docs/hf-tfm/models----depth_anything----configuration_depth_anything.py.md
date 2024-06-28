@@ -1,6 +1,6 @@
 # `.\models\depth_anything\configuration_depth_anything.py`
 
-```
+```py
 # coding=utf-8
 # 引入深度学习框架的配置
 # 版权声明和许可证明，保留所有权利
@@ -68,7 +68,7 @@ class DepthAnythingConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import DepthAnythingConfig, DepthAnythingForDepthEstimation
 
     >>> # Initializing a DepthAnything small style configuration

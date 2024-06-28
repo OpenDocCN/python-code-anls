@@ -1,6 +1,6 @@
 # `.\models\t5\convert_t5x_checkpoint_to_pytorch.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，版权归谷歌有限责任公司和HuggingFace公司所有
 #

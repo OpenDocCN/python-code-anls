@@ -1,6 +1,6 @@
 # `.\models\big_bird\modeling_big_bird.py`
 
-```
+```py
 # 导入必要的库和模块
 import math  # 导入数学库，用于数学运算
 import os  # 导入操作系统库，用于操作文件路径等操作

@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\configuration_seamless_m4t.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，2023 年由 HuggingFace Inc. 团队保留所有权利
 #
@@ -38,7 +38,7 @@ class SeamlessM4TConfig(PretrainedConfig):
 
     配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档获取更多信息。
 
-    ```python
+    ```
     >>> from transformers import SeamlessM4TModel, SeamlessM4TConfig
 
     >>> # 初始化 SeamlessM4T "facebook/hf-seamless-m4t-medium" 风格的配置

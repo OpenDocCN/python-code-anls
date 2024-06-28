@@ -1,6 +1,6 @@
 # `.\utils\peft_utils.py`
 
-```
+```py
 # 导入模块和库
 import importlib  # 用于动态导入模块
 import os  # 系统操作相关功能

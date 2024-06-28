@@ -1,6 +1,6 @@
 # `.\models\lxmert\configuration_lxmert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018, Hao Tan, Mohit Bansal
 #

@@ -1,6 +1,6 @@
 # `.\models\nougat\tokenization_nougat_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明此代码的版权归 HuggingFace Inc. 团队所有，使用 Apache License 2.0 授权
 # 根据 Apache License 2.0 许可证，除非符合许可证的规定，否则不得使用此文件
@@ -523,7 +523,7 @@ class NougatTokenizerFast(PreTrainedTokenizerFast):
 
         Example:
 
-        ```python
+        ```
         correct_tables("\\begin{table} \\begin{tabular}{l l} & \\ \\end{tabular} \\end{table}")
         "\\begin{table}\n\\begin{tabular}{l l} & \\ \\end{tabular}\n\\end{table}"
         ```

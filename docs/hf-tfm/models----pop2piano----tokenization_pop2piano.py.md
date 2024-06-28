@@ -1,6 +1,6 @@
 # `.\models\pop2piano\tokenization_pop2piano.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Pop2Piano Authors and The HuggingFace Inc. team.
 #

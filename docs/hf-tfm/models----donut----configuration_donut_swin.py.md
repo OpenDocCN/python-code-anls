@@ -1,6 +1,6 @@
 # `.\models\donut\configuration_donut_swin.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码格式为 UTF-8
 

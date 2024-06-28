@@ -1,6 +1,6 @@
 # `.\models\vits\configuration_vits.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Kakao Enterprise Authors and the HuggingFace Inc. team. All rights reserved.
 #
@@ -44,7 +44,7 @@ class VitsConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import VitsModel, VitsConfig
 
     >>> # Initializing a "facebook/mms-tts-eng" style configuration

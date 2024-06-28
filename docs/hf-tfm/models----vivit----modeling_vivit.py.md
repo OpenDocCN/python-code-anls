@@ -1,6 +1,6 @@
 # `.\models\vivit\modeling_vivit.py`
 
-```
+```py
 # 定义 VivitTubeletEmbeddings 类，用于构建 Vivit 模型的 Tubelet embeddings
 class VivitTubeletEmbeddings(nn.Module):
     """

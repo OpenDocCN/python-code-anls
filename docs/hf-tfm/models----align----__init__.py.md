@@ -1,6 +1,6 @@
 # `.\models\align\__init__.py`
 
-```
+```py
 # 版权声明和版权信息
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

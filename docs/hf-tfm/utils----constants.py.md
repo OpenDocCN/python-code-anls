@@ -1,6 +1,6 @@
 # `.\utils\constants.py`
 
-```
+```py
 # ImageNet 数据集的默认均值（Mean）RGB值，用于图像预处理
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
 

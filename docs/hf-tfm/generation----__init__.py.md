@@ -1,6 +1,6 @@
 # `.\generation\__init__.py`
 
-```
+```py
 # 引入类型检查模块的条件语句，用于确定当前环境是否支持类型检查
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\longformer\tokenization_longformer_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Allen Institute for AI team and The HuggingFace Inc. team.
 #
@@ -112,7 +112,7 @@ class LongformerTokenizerFast(PreTrainedTokenizerFast):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import LongformerTokenizerFast
 
     >>> tokenizer = LongformerTokenizerFast.from_pretrained("allenai/longformer-base-4096")

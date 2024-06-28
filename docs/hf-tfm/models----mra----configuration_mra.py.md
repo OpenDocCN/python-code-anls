@@ -1,6 +1,6 @@
 # `.\models\mra\configuration_mra.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 # 上面是版权声明和编码声明

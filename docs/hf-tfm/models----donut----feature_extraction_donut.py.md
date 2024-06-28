@@ -1,6 +1,6 @@
 # `.\models\donut\feature_extraction_donut.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

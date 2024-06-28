@@ -1,6 +1,6 @@
 # `.\models\biogpt\convert_biogpt_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为 UTF-8
 

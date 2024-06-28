@@ -1,6 +1,6 @@
 # `.\models\swiftformer\configuration_swiftformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2023 MBZUAI 和 The HuggingFace Inc. 团队。保留所有权利。
 #

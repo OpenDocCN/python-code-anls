@@ -1,6 +1,6 @@
 # `.\tokenization_utils_base.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明为 HuggingFace Inc. 团队，版权年份为 2020 年
 # 使用 Apache 许可证 2.0 版本，详细信息请访问指定网址获取
@@ -826,7 +826,7 @@ class SpecialTokensMixin:
 
         Examples:
 
-        ```python
+        ```
         # Let's see how to increase the vocabulary of Bert model and tokenizer
         tokenizer = BertTokenizerFast.from_pretrained("google-bert/bert-base-uncased")
         model = BertModel.from_pretrained("google-bert/bert-base-uncased")
@@ -879,7 +879,7 @@ class SpecialTokensMixin:
 
         Examples:
 
-        ```python
+        ```
         # Let's see how to increase the vocabulary of Bert model and tokenizer
         tokenizer = BertTokenizerFast.from_pretrained("google-bert/bert-base-uncased")
         model = BertModel.from_pretrained("google-bert/bert-base-uncased")

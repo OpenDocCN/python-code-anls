@@ -1,6 +1,6 @@
 # `.\models\phi\configuration_phi.py`
 
-```
+```py
 # 定义一个 Python 源码文件的编码格式为 UTF-8
 # 版权声明和许可证信息，这里使用 Apache License, Version 2.0
 # 导入所需的模块和类
@@ -30,7 +30,7 @@ class PhiConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PhiModel, PhiConfig
 
     >>> # Initializing a Phi-1 style configuration

@@ -1,6 +1,6 @@
 # `.\models\clip\modeling_tf_clip.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明和许可证信息
 # 该代码遵循 Apache License, Version 2.0
@@ -1464,7 +1464,7 @@ class TFCLIPTextModel(TFCLIPPreTrainedModel):
 
         Examples:
             Example usage of the model:
-            ```python
+            ```
             >>> from transformers import AutoTokenizer, TFCLIPTextModel
 
             >>> model = TFCLIPTextModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1571,7 +1571,7 @@ class TFCLIPVisionModel(TFCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFCLIPVisionModel
@@ -1644,7 +1644,7 @@ class TFCLIPModel(TFCLIPPreTrainedModel):
 
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFCLIPModel
         
         >>> model = TFCLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -1685,7 +1685,7 @@ class TFCLIPModel(TFCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, TFCLIPModel

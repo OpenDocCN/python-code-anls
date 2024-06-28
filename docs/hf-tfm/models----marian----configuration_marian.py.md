@@ -1,6 +1,6 @@
 # `.\models\marian\configuration_marian.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Marian Team Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -57,7 +57,7 @@ class MarianConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MarianModel, MarianConfig
 
     >>> # Initializing a Marian Helsinki-NLP/opus-mt-en-de style configuration

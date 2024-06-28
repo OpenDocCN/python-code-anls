@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\convert_chinese_clip_original_pytorch_to_hf.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保代码中的中文字符可以正确处理
 # 版权声明和许可条款，指明代码的版权归属和使用许可
 # 导入命令行参数解析模块

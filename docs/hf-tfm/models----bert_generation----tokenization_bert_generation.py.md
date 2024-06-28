@@ -1,6 +1,6 @@
 # `.\models\bert_generation\tokenization_bert_generation.py`
 
-```
+```py
 # coding=utf-8
 # 上面的注释声明了编码格式和版权信息
 

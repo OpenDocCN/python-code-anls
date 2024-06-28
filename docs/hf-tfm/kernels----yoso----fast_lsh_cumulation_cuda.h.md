@@ -1,6 +1,6 @@
 # `.\kernels\yoso\fast_lsh_cumulation_cuda.h`
 
-```
+```py
 __global__ void fast_hash_ver1_cuda_kernel(
   int *mask,        // [batch_size, num_vector]，用于存储掩码数据的整数指针
   float *vector,    // [batch_size, num_vector, vector_dim]，存储向量数据的浮点数指针

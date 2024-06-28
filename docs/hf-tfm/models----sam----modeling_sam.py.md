@@ -1,6 +1,6 @@
 # `.\models\sam\modeling_sam.py`
 
-```
+```py
 # coding=utf-8
 # 设置编码方式为 UTF-8
 

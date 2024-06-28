@@ -1,6 +1,6 @@
 # `.\integrations\peft.py`
 
-```
+```py
 # 导入所需的模块和函数
 import inspect  # 导入 inspect 模块，用于检查和分析 Python 对象的属性和结构
 import warnings  # 导入 warnings 模块，用于管理警告信息

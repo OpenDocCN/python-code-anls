@@ -1,6 +1,6 @@
 # `.\models\siglip\__init__.py`
 
-```
+```py
 # 引入必要的依赖和模块结构定义
 from typing import TYPE_CHECKING
 

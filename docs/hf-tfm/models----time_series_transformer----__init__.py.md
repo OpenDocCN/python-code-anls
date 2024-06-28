@@ -1,6 +1,6 @@
 # `.\models\time_series_transformer\__init__.py`
 
-```
+```py
 # 引入类型检查器的功能，用于在类型检查时导入特定模块和对象
 from typing import TYPE_CHECKING
 

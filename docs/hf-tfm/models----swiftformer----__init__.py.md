@@ -1,6 +1,6 @@
 # `.\models\swiftformer\__init__.py`
 
-```
+```py
 # 引入必要的模块和依赖项来支持 SwiftFormer 模型的配置和建模
 from typing import TYPE_CHECKING
 

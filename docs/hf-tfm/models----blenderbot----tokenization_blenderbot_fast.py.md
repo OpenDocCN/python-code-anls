@@ -1,6 +1,6 @@
 # `.\models\blenderbot\tokenization_blenderbot_fast.py`
 
-```
+```py
 # 引入必要的模块和库
 import json  # 用于处理 JSON 格式的数据
 from typing import List, Optional, Tuple  # 引入类型提示相关的模块
@@ -41,7 +41,7 @@ class BlenderbotTokenizerFast(PreTrainedTokenizerFast):
 
     这个分词器经过训练，将空格视为词元的一部分（类似于 sentencepiece），因此一个词在句子开头（无空格）和其他位置编码会不同：
 
-    ```python
+    ```
     >>> from transformers import BlenderbotTokenizerFast
 
     >>> tokenizer = BlenderbotTokenizerFast.from_pretrained("facebook/blenderbot-3B")

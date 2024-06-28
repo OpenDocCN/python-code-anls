@@ -1,6 +1,6 @@
 # `.\models\xlm_prophetnet\configuration_xlm_prophetnet.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保代码中的中文和特殊字符能正确处理
 # 版权声明和许可条款，指明代码的使用和分发规则
 # 引入所需的模块和类，包括预训练配置和日志记录工具

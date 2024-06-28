@@ -1,6 +1,6 @@
 # `.\models\nougat\convert_nougat_to_hf.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保可以正确处理中文等特殊字符
 # 版权声明，指明本代码的版权归属于 HuggingFace Inc. 团队
 # 根据 Apache 许可证 2.0 版本使用本代码，详细条款可参考许可证链接

@@ -1,6 +1,6 @@
 # `.\models\mixtral\configuration_mixtral.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，包括公司和团队
 # 在 Apache License 2.0 下授权使用该文件
@@ -39,7 +39,7 @@ class MixtralConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import MixtralModel, MixtralConfig
 
     >>> # Initializing a Mixtral 7B style configuration

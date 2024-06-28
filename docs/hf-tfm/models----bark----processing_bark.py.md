@@ -1,6 +1,6 @@
 # `.\models\bark\processing_bark.py`
 
-```
+```py
 """
 Processor class for Bark
 """

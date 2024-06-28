@@ -1,6 +1,6 @@
 # `.\models\gpt2\modeling_gpt2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The OpenAI Team Authors and HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -656,7 +656,7 @@ PARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # Here is an example of a device map on a machine with 4 GPUs using gpt2-xl, which has a total of 48 attention modules:
     model = GPT2LMHeadModel.from_pretrained("openai-community/gpt2-xl")
     device_map = {
@@ -675,7 +675,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # On a 4 GPU machine with openai-community/gpt2-large:
     model = GPT2LMHeadModel.from_pretrained("openai-community/gpt2-large")
     device_map = {

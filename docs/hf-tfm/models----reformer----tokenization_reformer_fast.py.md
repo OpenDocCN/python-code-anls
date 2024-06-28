@@ -1,6 +1,6 @@
 # `.\models\reformer\tokenization_reformer_fast.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及许可协议信息
 # 引入操作系统模块和复制文件函数

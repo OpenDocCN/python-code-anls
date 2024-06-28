@@ -1,6 +1,6 @@
 # `.\models\umt5\convert_umt5_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数的模块
 import collections  # 提供额外的数据结构，如Counter，OrderedDict等

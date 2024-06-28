@@ -1,6 +1,6 @@
 # `.\models\codegen\tokenization_codegen_fast.py`
 
-```
+```py
 # 导入所需的模块和库
 import json  # 导入处理 JSON 格式数据的模块
 import re  # 导入正则表达式模块，用于文本处理
@@ -63,7 +63,7 @@ class CodeGenTokenizerFast(PreTrainedTokenizerFast):
 
     这个分词器经过训练，将空格视为标记的一部分（类似于sentencepiece），因此一个单词的编码方式会因其是否位于句子开头而不同（没有空格或有空格）：
 
-    ```python
+    ```
     >>> from transformers import CodeGenTokenizerFast
 
     >>> tokenizer = CodeGenTokenizerFast.from_pretrained("Salesforce/codegen-350M-mono")

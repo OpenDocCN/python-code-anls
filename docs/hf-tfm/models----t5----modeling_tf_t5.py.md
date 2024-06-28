@@ -1,6 +1,6 @@
 # `.\models\t5\modeling_tf_t5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 T5 Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -1171,7 +1171,7 @@ class TFT5EncoderModel(TFT5PreTrainedModel):
 
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFT5EncoderModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-small")

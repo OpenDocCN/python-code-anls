@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\modeling_tf_speech_to_text.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #

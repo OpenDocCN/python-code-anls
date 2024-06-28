@@ -1,6 +1,6 @@
 # `.\pipelines\image_feature_extraction.py`
 
-```
+```py
 # 导入类型提示字典
 from typing import Dict
 
@@ -33,7 +33,7 @@ class ImageFeatureExtractionPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> extractor = pipeline(model="google/vit-base-patch16-224", task="image-feature-extraction")

@@ -1,6 +1,6 @@
 # `.\models\ctrl\modeling_ctrl.py`
 
-```
+```py
 # coding=utf-8
 # 设置编码格式为 UTF-8
 

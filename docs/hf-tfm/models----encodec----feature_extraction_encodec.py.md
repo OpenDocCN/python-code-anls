@@ -1,6 +1,6 @@
 # `.\models\encodec\feature_extraction_encodec.py`
 
-```
+```py
 # 指定代码文件的编码格式为UTF-8
 
 # 版权声明，声明此代码版权归HuggingFace Inc.团队所有，保留所有权利

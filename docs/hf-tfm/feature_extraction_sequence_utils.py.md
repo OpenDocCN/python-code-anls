@@ -1,6 +1,6 @@
 # `.\feature_extraction_sequence_utils.py`
 
-```
+```py
 `
 """
 Sequence feature extraction class for common feature extractors to preprocess sequences.

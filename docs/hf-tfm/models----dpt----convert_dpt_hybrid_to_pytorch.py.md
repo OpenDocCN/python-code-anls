@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dpt_hybrid_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，引用的 HuggingFace Inc. 的团队
 #

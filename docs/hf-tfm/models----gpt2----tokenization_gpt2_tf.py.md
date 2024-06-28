@@ -1,6 +1,6 @@
 # `.\models\gpt2\tokenization_gpt2_tf.py`
 
-```
+```py
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], *init_inputs, **kwargs):
         """Creates TFGPT2Tokenizer from pretrained GPT2Tokenizer
@@ -10,7 +10,7 @@
 
         Examples:
 
-        ```python
+        ```
         from transformers import TFGPT2Tokenizer
 
         tf_tokenizer = TFGPT2Tokenizer.from_pretrained("openai-community/gpt2")

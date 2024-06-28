@@ -1,6 +1,6 @@
 # `.\models\mbart50\tokenization_mbart50.py`
 
-```
+```py
 # coding=utf-8
 # 设置日志记录器以获取当前模块的日志记录器对象
 import os
@@ -93,7 +93,7 @@ class MBart50Tokenizer(PreTrainedTokenizer):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MBart50Tokenizer
 
     >>> tokenizer = MBart50Tokenizer.from_pretrained("facebook/mbart-large-50", src_lang="en_XX", tgt_lang="ro_RO")

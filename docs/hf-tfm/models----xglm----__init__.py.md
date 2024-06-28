@@ -1,6 +1,6 @@
 # `.\models\xglm\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从工具包中导入相关依赖项

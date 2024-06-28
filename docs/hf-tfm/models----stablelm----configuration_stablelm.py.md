@@ -1,6 +1,6 @@
 # `.\models\stablelm\configuration_stablelm.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可信息
 # 本文件用于定义 StableLM 模型的配置类
@@ -33,7 +33,7 @@ class StableLmConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import StableLmModel, StableLmConfig
 
     >>> # Initializing a StableLM stablelm-3b style configuration

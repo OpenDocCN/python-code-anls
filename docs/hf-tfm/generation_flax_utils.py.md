@@ -1,6 +1,6 @@
 # `.\generation_flax_utils.py`
 
-```
+```py
 # 设置编码格式为UTF-8，确保脚本可以正确处理各种字符集
 # 版权声明，指出代码的版权归属及使用限制
 # 版权声明，版权属于Google AI Flax团队和HuggingFace Inc.团队，以及NVIDIA CORPORATION

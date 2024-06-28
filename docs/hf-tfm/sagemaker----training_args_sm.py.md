@@ -1,6 +1,6 @@
 # `.\sagemaker\training_args_sm.py`
 
-```
+```py
 # 导入必要的模块和库
 import importlib.util  # 导入用于动态加载模块的模块
 import json  # 导入处理 JSON 数据的模块

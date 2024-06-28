@@ -1,6 +1,6 @@
 # `.\models\autoformer\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 该模块是 HuggingFace 团队的代码，版权归其所有
 # 根据 Apache 许可证 2.0 版本进行许可

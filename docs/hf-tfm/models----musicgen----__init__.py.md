@@ -1,6 +1,6 @@
 # `.\models\musicgen\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于在不同环境下处理类型的依赖
 from typing import TYPE_CHECKING
 

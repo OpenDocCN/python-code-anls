@@ -1,6 +1,6 @@
 # `.\models\mobilebert\configuration_mobilebert.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为 UTF-8
 
@@ -61,7 +61,7 @@ class MobileBertConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MobileBertConfig, MobileBertModel
 
     >>> # Initializing a MobileBERT configuration

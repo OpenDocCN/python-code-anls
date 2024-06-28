@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta_xl\convert_xlm_roberta_xl_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 指定 Python 文件的编码格式为 UTF-8
 
 # 导入必要的库和模块

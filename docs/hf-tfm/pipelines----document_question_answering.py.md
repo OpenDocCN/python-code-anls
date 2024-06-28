@@ -1,6 +1,6 @@
 # `.\pipelines\document_question_answering.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入类型提示相关模块
@@ -110,7 +110,7 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> document_qa = pipeline(model="impira/layoutlm-document-qa")

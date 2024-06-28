@@ -1,6 +1,6 @@
 # `.\models\dpr\modeling_tf_dpr.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码格式和版权信息
 
@@ -532,7 +532,7 @@ class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import TFDPRContextEncoder, DPRContextEncoderTokenizer
 
         >>> tokenizer = DPRContextEncoderTokenizer.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
@@ -644,7 +644,7 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import TFDPRQuestionEncoder, DPRQuestionEncoderTokenizer
 
         >>> tokenizer = DPRQuestionEncoderTokenizer.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
@@ -740,7 +740,7 @@ class TFDPRReader(TFDPRPretrainedReader):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import TFDPRReader, DPRReaderTokenizer
 
         >>> tokenizer = DPRReaderTokenizer.from_pretrained("facebook/dpr-reader-single-nq-base")

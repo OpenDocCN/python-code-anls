@@ -1,6 +1,6 @@
 # `.\models\herbert\tokenization_herbert_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Google AI Language Team Authors, Allegro.pl, Facebook Inc. and the HuggingFace Inc. team.
 #

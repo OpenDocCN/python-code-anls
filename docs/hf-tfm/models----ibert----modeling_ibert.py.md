@@ -1,6 +1,6 @@
 # `.\models\ibert\modeling_ibert.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，版权归作者及 HuggingFace 公司所有，保留一切权利
 # Copyright 2021 The I-BERT Authors (Sehoon Kim, Amir Gholami, Zhewei Yao,

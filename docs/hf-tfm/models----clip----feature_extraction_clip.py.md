@@ -1,6 +1,6 @@
 # `.\models\clip\feature_extraction_clip.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为UTF-8
 

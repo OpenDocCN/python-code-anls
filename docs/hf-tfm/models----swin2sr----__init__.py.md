@@ -1,6 +1,6 @@
 # `.\models\swin2sr\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，声明代码版权归 HuggingFace 团队所有，使用 Apache License 2.0 许可证发布
 # 可以在符合许可证的情况下使用此文件。许可证详细信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取
 #

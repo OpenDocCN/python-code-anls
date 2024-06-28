@@ -1,6 +1,6 @@
 # `.\models\mpt\configuration_mpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 HuggingFace Inc. team and MosaicML NLP team.
 #
@@ -220,7 +220,7 @@ class MptConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     # 导入 transformers 库中的 MptConfig 和 MptModel 类
     >>> from transformers import MptConfig, MptModel
 

@@ -1,6 +1,6 @@
 # `.\models\rwkv\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指出此代码版权归HuggingFace团队所有，并遵循Apache License, Version 2.0。
 #
 # 如果不满足许可证的要求，禁止使用此文件。可以从以下链接获取许可证的副本：

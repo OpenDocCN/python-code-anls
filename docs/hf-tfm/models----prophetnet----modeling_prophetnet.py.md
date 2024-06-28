@@ -1,6 +1,6 @@
 # `.\models\prophetnet\modeling_prophetnet.py`
 
-```
+```py
 # 导入所需模块和库
 import copy
 import math

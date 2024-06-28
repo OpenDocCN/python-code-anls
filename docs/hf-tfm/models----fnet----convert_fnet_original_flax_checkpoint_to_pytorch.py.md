@@ -1,6 +1,6 @@
 # `.\models\fnet\convert_fnet_original_flax_checkpoint_to_pytorch.py`
 
-```
+```py
     # 导入所需的库和模块
 import argparse  # 用于解析命令行参数
 

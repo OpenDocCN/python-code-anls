@@ -1,6 +1,6 @@
 # `.\models\megatron_gpt2\checkpoint_reshaping_and_interoperability.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 导入处理命令行参数的模块
 import json  # 导入处理 JSON 数据的模块

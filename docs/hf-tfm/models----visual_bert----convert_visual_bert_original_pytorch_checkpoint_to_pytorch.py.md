@@ -1,6 +1,6 @@
 # `.\models\visual_bert\convert_visual_bert_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 定义代码文件的字符编码为UTF-8
 

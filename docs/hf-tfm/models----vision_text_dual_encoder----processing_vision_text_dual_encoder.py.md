@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\processing_vision_text_dual_encoder.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

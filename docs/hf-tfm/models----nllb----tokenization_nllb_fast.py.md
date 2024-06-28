@@ -1,6 +1,6 @@
 # `.\models\nllb\tokenization_nllb_fast.py`
 
-```
+```py
 # 导入标准库和第三方库
 import os  # 导入操作系统相关的功能模块
 from shutil import copyfile  # 从 shutil 模块中导入 copyfile 函数
@@ -57,7 +57,7 @@ class NllbTokenizerFast(PreTrainedTokenizerFast):
     # 
     # 示例:
     # 
-    # ```python
+    # ```
     # >>> from transformers import NllbTokenizerFast
     # 
     # >>> tokenizer = NllbTokenizerFast.from_pretrained(

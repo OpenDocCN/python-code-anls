@@ -1,6 +1,6 @@
 # `.\models\levit\image_processing_levit.py`
 
-```
+```py
 # 引入必要的库和模块
 from typing import Dict, Iterable, Optional, Union
 

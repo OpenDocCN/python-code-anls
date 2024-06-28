@@ -1,6 +1,6 @@
 # `.\models\roberta_prelayernorm\__init__.py`
 
-```
+```py
 # 引入类型检查依赖，用于在类型检查环境下做条件导入
 from typing import TYPE_CHECKING
 

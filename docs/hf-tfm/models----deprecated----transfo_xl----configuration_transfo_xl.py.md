@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\configuration_transfo_xl.py`
 
-```
+```py
 # coding=utf-8
 # 定义版权信息和许可证，此处使用Apache License 2.0
 # 这个文件包含了Transformer XL的配置信息
@@ -29,7 +29,7 @@ class TransfoXLConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import TransfoXLConfig, TransfoXLModel
 
     >>> # 初始化一个Transformer XL配置

@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_bnb_4bit.py`
 
-```
+```py
 # 导入必要的模块和库
 
 # 版权声明和许可证信息

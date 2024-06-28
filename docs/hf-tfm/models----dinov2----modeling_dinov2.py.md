@@ -1,6 +1,6 @@
 # `.\models\dinov2\modeling_dinov2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及保留所有权利声明
 #
@@ -963,7 +963,7 @@ class Dinov2Backbone(Dinov2PreTrainedModel, BackboneMixin):
 
         Examples: 示例用法，展示如何使用此方法的代码片段。
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

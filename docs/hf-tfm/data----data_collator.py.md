@@ -1,6 +1,6 @@
 # `.\data\data_collator.py`
 
-```
+```py
 # 导入必要的模块和类
 import random  # 导入随机数模块
 import warnings  # 导入警告模块

@@ -1,6 +1,6 @@
 # `.\models\mt5\modeling_mt5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Mesh TensorFlow authors, T5 Authors and HuggingFace Inc. team.
 #
@@ -92,7 +92,7 @@ PARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # Here is an example of a device map on a machine with 4 GPUs using mt5-xl, which has a total of 24 attention modules:
     model = MT5ForConditionalGeneration.from_pretrained("mt5-xl")
     创建一个 MT5 模型实例，使用预训练的 "mt5-xl" 模型
@@ -112,7 +112,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # On a 4 GPU machine with mt5-xl:
     model = MT5ForConditionalGeneration.from_pretrained("Mt5-xl")
     device_map = {
@@ -751,7 +751,7 @@ class MT5Model(MT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MT5Model, AutoTokenizer
 
     >>> model = MT5Model.from_pretrained("google/mt5-small")
@@ -910,7 +910,7 @@ class MT5ForConditionalGeneration(MT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MT5ForConditionalGeneration, AutoTokenizer
 
     >>> model = MT5ForConditionalGeneration.from_pretrained("google/mt5-small")
@@ -1169,7 +1169,7 @@ class MT5EncoderModel(MT5PreTrainedModel):
     r"""
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MT5EncoderModel, AutoTokenizer
 
     >>> model = MT5EncoderModel.from_pretrained("google/mt5-small")
@@ -1288,7 +1288,7 @@ class MT5EncoderModel(MT5PreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, MT5EncoderModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google-mt5/mt5-small")

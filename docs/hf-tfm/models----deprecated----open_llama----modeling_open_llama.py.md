@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\modeling_open_llama.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 年 EleutherAI 和 HuggingFace Inc. 团队保留所有权利。
 #

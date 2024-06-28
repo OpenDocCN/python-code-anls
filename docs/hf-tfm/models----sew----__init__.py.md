@@ -1,6 +1,6 @@
 # `.\models\sew\__init__.py`
 
-```
+```py
 # 版权声明及许可信息，指明此代码的版权归HuggingFace团队所有，受Apache License, Version 2.0许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

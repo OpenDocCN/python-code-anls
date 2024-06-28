@@ -1,6 +1,6 @@
 # `.\models\marian\modeling_flax_marian.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 The Marian Team 作者和 Google Flax Team 作者以及 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -966,7 +966,7 @@ class FlaxMarianPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxMarianMTModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-de")
@@ -1251,7 +1251,7 @@ FLAX_MARIAN_MT_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxMarianMTModel
 
     >>> model = FlaxMarianMTModel.from_pretrained("Helsinki-NLP/opus-mt-en-de")

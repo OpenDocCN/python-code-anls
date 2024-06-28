@@ -1,6 +1,6 @@
 # `.\models\clap\configuration_clap.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class ClapTextConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import ClapTextConfig, ClapTextModel
 
     >>> # Initializing a CLAP text configuration
@@ -279,7 +279,7 @@ class ClapConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ClapConfig, ClapModel
 
     >>> # Initializing a ClapConfig with laion-ai/base style configuration

@@ -1,6 +1,6 @@
 # `.\models\timesformer\configuration_timesformer.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码方式为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\table_transformer\convert_table_transformer_to_hf_no_timm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

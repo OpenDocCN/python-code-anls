@@ -1,6 +1,6 @@
 # `.\models\splinter\tokenization_splinter_fast.py`
 
-```
+```py
 # coding=utf-8
 # 上面的代码指定了文件编码格式为 UTF-8，确保能够正确解析包含非 ASCII 字符的内容
 # Copyright 2021 Tel AViv University, AllenAI and The HuggingFace Inc. team. All rights reserved.

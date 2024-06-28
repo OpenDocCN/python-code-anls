@@ -1,6 +1,6 @@
 # `.\models\yolos\configuration_yolos.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明 2022 年由 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 许可，除非符合许可证条款，否则不得使用此文件
@@ -39,7 +39,7 @@ class YolosConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import YolosConfig, YolosModel
 
     >>> # 初始化一个 YOLOS hustvl/yolos-base 风格的配置

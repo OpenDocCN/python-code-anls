@@ -1,6 +1,6 @@
 # `.\models\convnext\modeling_convnext.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Meta Platforms, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -460,7 +460,7 @@ class ConvNextBackbone(ConvNextPreTrainedModel, BackboneMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

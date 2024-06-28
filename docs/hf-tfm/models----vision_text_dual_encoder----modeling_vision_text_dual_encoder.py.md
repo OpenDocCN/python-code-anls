@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\modeling_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可协议，表明此代码的版权和许可情况
@@ -221,7 +221,7 @@ class VisionTextDualEncoderModel(PreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import VisionTextDualEncoderModel, AutoImageProcessor

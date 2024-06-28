@@ -1,6 +1,6 @@
 # `.\models\bart\modeling_tf_bart.py`
 
-```
+```py
     # 创建一个 mask tensor，用于标记输入的自回归性质
     """
 
@@ -473,7 +473,7 @@ BART_START_DOCSTRING = r"""
 BART_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, TFBartForConditionalGeneration
 
     >>> model = TFBartForConditionalGeneration.from_pretrained("facebook/bart-large")
@@ -489,7 +489,7 @@ BART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, TFBartForConditionalGeneration
 
     >>> tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large")

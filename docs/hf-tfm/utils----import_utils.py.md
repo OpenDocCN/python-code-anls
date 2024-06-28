@@ -1,6 +1,6 @@
 # `.\utils\import_utils.py`
 
-```
+```py
 # 导入模块：与导入和懒初始化相关的实用工具
 import importlib.metadata  # 导入标准库中的 importlib.metadata 模块
 import importlib.util  # 导入标准库中的 importlib.util 模块

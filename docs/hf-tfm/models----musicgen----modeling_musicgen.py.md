@@ -1,6 +1,6 @@
 # `.\models\musicgen\modeling_musicgen.py`
 
-```
+```py
 # 设置编码格式为UTF-8，确保脚本中的中文等字符能正确处理
 # 版权声明和许可条款，告知使用者如何合法使用代码
 # 导入所需模块和类
@@ -683,7 +683,7 @@ class MusicgenForConditionalGeneration(PreTrainedModel):
         r"""
         Example:
 
-        ```python
+        ```
         >>> from transformers import MusicgenForConditionalGeneration
 
         >>> model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
@@ -956,7 +956,7 @@ class MusicgenForConditionalGeneration(PreTrainedModel):
                 longer inference (since more audio tokens need to be generated per sample).
     
         Example:
-        ```python
+        ```
         >>> from transformers import MusicgenForConditionalGeneration
     
         >>> model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")

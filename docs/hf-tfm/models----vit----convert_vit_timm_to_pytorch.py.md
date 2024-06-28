@@ -1,6 +1,6 @@
 # `.\models\vit\convert_vit_timm_to_pytorch.py`
 
-```
+```py
 # 定义用于重命名权重键的函数，根据给定的配置和是否基于基础模型来生成重命名规则列表
 def create_rename_keys(config, base_model=False):
     rename_keys = []

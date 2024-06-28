@@ -1,6 +1,6 @@
 # `.\models\mobilevitv2\configuration_mobilevitv2.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指定使用UTF-8编码格式
 
@@ -121,7 +121,7 @@ class MobileViTV2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MobileViTV2Config, MobileViTV2Model
 
     >>> # Initializing a mobilevitv2-small style configuration

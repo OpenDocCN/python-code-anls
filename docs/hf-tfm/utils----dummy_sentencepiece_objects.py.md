@@ -1,6 +1,6 @@
 # `.\utils\dummy_sentencepiece_objects.py`
 
-```
+```py
 # 以下代码由命令 `make fix-copies` 自动生成，不要修改。
 from ..utils import DummyObject, requires_backends
 

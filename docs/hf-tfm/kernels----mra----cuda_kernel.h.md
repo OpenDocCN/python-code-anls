@@ -1,6 +1,6 @@
 # `.\kernels\mra\cuda_kernel.h`
 
-```
+```py
 // 定义线程块大小为32
 #define WARP_SIZE 32
 // 定义全掩码为32位全1

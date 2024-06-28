@@ -1,6 +1,6 @@
 # `.\models\clap\modeling_clap.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指出了 LAION-AI 团队和 HuggingFace 团队对代码的所有权
 # 根据 Apache 许可证版本 2.0 使用此文件，详细信息可以在指定网址获取
@@ -1960,7 +1960,7 @@ class ClapTextModel(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, ClapModel
 
         >>> model = ClapModel.from_pretrained("laion/clap-htsat-unfused")
@@ -2005,7 +2005,7 @@ class ClapTextModel(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoFeatureExtractor, ClapModel
         >>> import torch
 
@@ -2101,7 +2101,7 @@ class ClapTextModelWithProjection(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, ClapTextModelWithProjection
 
         >>> model = ClapTextModelWithProjection.from_pretrained("laion/clap-htsat-unfused")
@@ -2193,7 +2193,7 @@ class ClapAudioModelWithProjection(ClapPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from datasets import load_dataset
         >>> from transformers import ClapAudioModelWithProjection, ClapProcessor
 

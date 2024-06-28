@@ -1,6 +1,6 @@
 # `.\models\dpt\convert_dpt_to_pytorch.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明，指明此代码的版权归 The HuggingFace Inc. 团队所有
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件

@@ -1,6 +1,6 @@
 # `.\models\segformer\modeling_tf_segformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可信息，告知此代码的版权归属和使用许可

@@ -1,6 +1,6 @@
 # `.\models\cpmant\modeling_cpmant.py`
 
-```
+```py
 # 设置文件编码格式为UTF-8
 # 版权声明，指明本代码文件的版权归属
 # 根据Apache许可证2.0，除非符合许可证条件，否则不得使用此文件

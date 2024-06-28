@@ -1,6 +1,6 @@
 # `.\models\detr\modeling_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Facebook AI Research The HuggingFace Inc. team. All rights reserved.
 #

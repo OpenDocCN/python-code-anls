@@ -1,6 +1,6 @@
 # `.\models\flava\processing_flava.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 根据Apache License, Version 2.0 (许可证)的规定，除非符合许可证的条款，否则不得使用此文件

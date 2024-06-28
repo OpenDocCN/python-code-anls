@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t_v2\configuration_seamless_m4t_v2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保支持中文等多种字符集
 # 版权声明和许可证信息，声明此代码的版权及其使用条款
 # 导入所需的模块和类，包括预训练配置和日志记录工具
@@ -26,7 +26,7 @@ class SeamlessM4Tv2Config(PretrainedConfig):
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
 
-    ```python
+    ```
     >>> from transformers import SeamlessM4Tv2Model, SeamlessM4Tv2Config
 
     >>> # Initializing a SeamlessM4Tv2 "" style configuration

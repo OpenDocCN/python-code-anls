@@ -1,6 +1,6 @@
 # `.\models\altclip\configuration_altclip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 WenXiang ZhongzhiCheng LedellWu LiuGuang BoWenZhang and The HuggingFace Inc. team. All rights reserved.
 #
@@ -46,7 +46,7 @@ class AltCLIPTextConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AltCLIPTextModel, AltCLIPTextConfig
 
     >>> # Initializing a AltCLIPTextConfig with BAAI/AltCLIP style configuration
@@ -163,7 +163,7 @@ class AltCLIPVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AltCLIPVisionConfig, AltCLIPVisionModel
 
     >>> # Initializing a AltCLIPVisionConfig with BAAI/AltCLIP style configuration
@@ -260,7 +260,7 @@ class AltCLIPConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AltCLIPConfig, AltCLIPModel
 
     >>> # Initializing a AltCLIPConfig with BAAI/AltCLIP style configuration

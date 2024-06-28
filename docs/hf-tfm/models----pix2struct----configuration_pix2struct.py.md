@@ -1,6 +1,6 @@
 # `.\models\pix2struct\configuration_pix2struct.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. 团队所有，保留所有权利
 #
@@ -240,7 +240,7 @@ class Pix2StructConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Pix2StructConfig, Pix2StructForConditionalGeneration
 
     >>> # Initializing a Pix2StructConfig with google/pix2struct-base style configuration

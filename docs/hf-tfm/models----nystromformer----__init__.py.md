@@ -1,6 +1,6 @@
 # `.\models\nystromformer\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，版权归 HuggingFace 团队所有
 #
 # 根据 Apache 许可证 2.0 版本许可，除非符合许可要求，否则不得使用此文件

@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\modeling_conditional_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft Research Asia and The HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\mistral\modeling_mistral.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明和许可信息，基于Mistral AI和HuggingFace Inc.团队的代码
 # 本代码基于EleutherAI的GPT-NeoX库和GPT-NeoX和OPT实现进行了修改，以适应Meta AI团队训练模型时的架构差异

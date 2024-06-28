@@ -1,6 +1,6 @@
 # `.\models\auto\image_processing_auto.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指明代码版权归 HuggingFace Inc. 团队所有
 # 使用 Apache License, Version 2.0 许可协议，详见链接
@@ -130,7 +130,7 @@ def get_image_processor_config(
 
     Examples:
 
-    ```python
+    ```
     # Download configuration from huggingface.co and cache.
     image_processor_config = get_image_processor_config("google-bert/bert-base-uncased")
     # This model does not have a image processor config so the result will be an empty dict.

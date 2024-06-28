@@ -1,6 +1,6 @@
 # `.\pytorch_utils.py`
 
-```
+```py
 # 导入inspect模块，用于获取对象信息
 import inspect
 # 导入类型提示模块
@@ -160,7 +160,7 @@ def prune_linear_layer(layer: nn.Linear, index: torch.LongTensor, dim: int = 0) 
 
     Examples:
 
-    ```python
+    ```
     # rename the usual forward() fn to forward_chunk()
     def forward_chunk(self, hidden_states):
         hidden_states = self.decoder(hidden_states)

@@ -1,6 +1,6 @@
 # `.\models\gpt_neox_japanese\tokenization_gpt_neox_japanese.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 ABEJA, Inc. 和 The HuggingFace Inc. team. 保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\mgp_str\modeling_mgp_str.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及保留所有权利给 Alibaba Research 和 HuggingFace Inc. 团队
 #
@@ -512,7 +512,7 @@ class MgpstrForSceneTextRecognition(MgpstrPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import (
         ...     MgpstrProcessor,
         ...     MgpstrForSceneTextRecognition,

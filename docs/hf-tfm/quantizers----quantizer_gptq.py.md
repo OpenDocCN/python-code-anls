@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_gptq.py`
 
-```
+```py
 # 导入必要的模块和函数
 import importlib  # 导入 importlib 模块，用于动态导入
 from typing import TYPE_CHECKING, Optional  # 导入 TYPE_CHECKING 和 Optional 类型提示

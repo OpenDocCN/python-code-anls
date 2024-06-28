@@ -1,6 +1,6 @@
 # `.\models\mbart\tokenization_mbart_fast.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8
 
@@ -100,7 +100,7 @@ class MBartTokenizerFast(PreTrainedTokenizerFast):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MBartTokenizerFast
 
     >>> tokenizer = MBartTokenizerFast.from_pretrained(

@@ -1,6 +1,6 @@
 # `.\models\bigbird_pegasus\__init__.py`
 
-```
+```py
 # 版权声明及许可信息
 #
 # 版权所有 2021 年 HuggingFace 团队。保留所有权利。

@@ -1,6 +1,6 @@
 # `.\models\auto\__init__.py`
 
-```
+```py
 # 引入类型检查标记，用于条件检查时的类型提示
 from typing import TYPE_CHECKING
 

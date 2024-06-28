@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_transfo_xl_utilities.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码方式为 UTF-8
 

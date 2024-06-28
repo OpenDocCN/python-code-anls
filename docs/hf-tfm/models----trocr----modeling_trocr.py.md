@@ -1,6 +1,6 @@
 # `.\models\trocr\modeling_trocr.py`
 
-```
+```py
 # 定义了一个 Python 脚本的版权声明和编码声明
 # 该模块实现了一个基于 RoBERTa 的 PyTorch TrOCR 解码器模型
 

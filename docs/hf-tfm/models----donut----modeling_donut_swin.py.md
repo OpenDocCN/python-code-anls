@@ -1,6 +1,6 @@
 # `.\models\donut\modeling_donut_swin.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

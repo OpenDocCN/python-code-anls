@@ -1,6 +1,6 @@
 # `.\models\videomae\configuration_videomae.py`
 
-```
+```py
 # coding=utf-8
 # 上面这行指定了文件的编码格式为UTF-8，确保支持非英语字符
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.

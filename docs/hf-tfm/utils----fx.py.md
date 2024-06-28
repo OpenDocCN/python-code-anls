@@ -1,6 +1,6 @@
 # `.\utils\fx.py`
 
-```
+```py
 # 导入 Python 内置模块和第三方库
 import builtins
 import collections

@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\convert_fairseq2_to_hf.py`
 
-```
+```py
 # 指定 Python 文件的编码格式为 UTF-8
 # 版权声明，声明代码版权归 The HuggingFace Inc. 团队所有，保留所有权利
 #

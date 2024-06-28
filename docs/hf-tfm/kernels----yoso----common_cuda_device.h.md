@@ -1,6 +1,6 @@
 # `.\kernels\yoso\common_cuda_device.h`
 
-```
+```py
 # 包含公共头文件，这里假设 "common.h" 包含了项目中的通用定义和声明
 #include "common.h"
 

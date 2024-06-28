@@ -1,6 +1,6 @@
 # `.\models\starcoder2\__init__.py`
 
-```
+```py
 # 导入类型检查相关模块
 from typing import TYPE_CHECKING
 

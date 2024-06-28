@@ -1,6 +1,6 @@
 # `.\models\phobert\tokenization_phobert.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 # 版权声明，指出版权归属于 VinAI Research 和 HuggingFace Inc. 团队
 # 版权声明，指出版权归属于 Open AI Team 作者和 HuggingFace Inc. 团队

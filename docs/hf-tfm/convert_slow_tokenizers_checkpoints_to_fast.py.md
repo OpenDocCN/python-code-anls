@@ -1,6 +1,6 @@
 # `.\convert_slow_tokenizers_checkpoints_to_fast.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，此代码归 HuggingFace Inc. 团队所有，使用 Apache 许可证 2.0 版本
 #

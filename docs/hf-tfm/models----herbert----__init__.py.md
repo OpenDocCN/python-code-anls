@@ -1,6 +1,6 @@
 # `.\models\herbert\__init__.py`
 
-```
+```py
 # 版权声明及许可声明，说明代码受 Apache 许可证 2.0 版本保护
 #
 # 从 typing 模块导入 TYPE_CHECKING

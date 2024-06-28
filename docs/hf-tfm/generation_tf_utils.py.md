@@ -1,6 +1,6 @@
 # `.\generation_tf_utils.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归谷歌 AI 语言团队和 HuggingFace 公司所有，以及 NVIDIA 公司所有
 # 根据 Apache 许可证 2.0 版本，可以在遵守许可证的前提下使用本文件

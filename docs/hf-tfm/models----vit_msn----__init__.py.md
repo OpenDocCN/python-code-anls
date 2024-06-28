@@ -1,6 +1,6 @@
 # `.\models\vit_msn\__init__.py`
 
-```
+```py
 # 导入所需模块和函数
 from typing import TYPE_CHECKING
 # 从当前项目的utils模块中导入异常类和LazyModule类，还有is_torch_available函数

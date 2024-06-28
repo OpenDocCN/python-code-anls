@@ -1,6 +1,6 @@
 # `.\models\distilbert\__init__.py`
 
-```
+```py
 # 导入`
 # 版权声明和许可证信息，指明代码版权和使用许可
 # 详细描述了此代码的版权所有者和许可证（Apache License, Version 2.0）

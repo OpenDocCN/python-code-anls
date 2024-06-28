@@ -1,6 +1,6 @@
 # `.\models\visual_bert\configuration_visual_bert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可信息，声明代码版权归 HuggingFace Inc. 团队所有，并遵循 Apache License, Version 2.0
@@ -44,7 +44,7 @@ class VisualBertConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import VisualBertConfig, VisualBertModel
 
     >>> # 初始化一个 VisualBERT visualbert-vqa-coco-pre 风格的配置

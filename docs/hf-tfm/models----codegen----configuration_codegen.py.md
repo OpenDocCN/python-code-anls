@@ -1,6 +1,6 @@
 # `.\models\codegen\configuration_codegen.py`
 
-```
+```py
 # coding=utf-8
 # 上面是文件编码声明，指定文件编码格式为UTF-8
 

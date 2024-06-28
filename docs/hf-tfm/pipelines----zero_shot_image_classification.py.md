@@ -1,6 +1,6 @@
 # `.\pipelines\zero_shot_image_classification.py`
 
-```
+```py
 # 导入必要的模块和函数
 from collections import UserDict  # 导入UserDict用于创建自定义字典
 from typing import List, Union  # 导入List和Union用于类型提示
@@ -48,7 +48,7 @@ class ZeroShotImageClassificationPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> classifier = pipeline(model="google/siglip-so400m-patch14-384")

@@ -1,6 +1,6 @@
 # `.\models\lxmert\modeling_tf_lxmert.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码为 UTF-8
 

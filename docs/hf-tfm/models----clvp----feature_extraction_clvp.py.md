@@ -1,6 +1,6 @@
 # `.\models\clvp\feature_extraction_clvp.py`
 
-```
+```py
 # coding=utf-8
 # 定义了文件编码格式为 UTF-8
 

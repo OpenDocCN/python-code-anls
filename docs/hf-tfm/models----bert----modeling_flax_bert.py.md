@@ -1,6 +1,6 @@
 # `.\models\bert\modeling_flax_bert.py`
 
-```
+```py
 # 导入所需的模块和类
 from typing import Callable, Optional, Tuple  # 导入类型注解相关的类和方法
 
@@ -1025,7 +1025,7 @@ FLAX_BERT_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxBertForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
@@ -1046,7 +1046,7 @@ FLAX_BERT_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxBertForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
@@ -1221,7 +1221,7 @@ FLAX_BERT_FOR_NEXT_SENT_PRED_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxBertForNextSentencePrediction
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")

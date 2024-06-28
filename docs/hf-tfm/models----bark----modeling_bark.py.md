@@ -1,6 +1,6 @@
 # `.\models\bark\modeling_bark.py`
 
-```
+```py
 # 定义了一个 PyTorch 模型中的自注意力机制类 BarkSelfAttention
 class BarkSelfAttention(nn.Module):
     # 从 GPTNeoSelfAttention 和 Bark 代码适配而来的自注意力机制类 BarkSelfAttention

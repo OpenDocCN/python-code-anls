@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v2\configuration_mobilenet_v2.py`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict
 from typing import Mapping
@@ -77,7 +77,7 @@ class MobileNetV2Config(PretrainedConfig):
             语义分割模型损失函数中忽略的索引。
     Example:
 
-    ```python
+    ```
     >>> from transformers import MobileNetV2Config, MobileNetV2Model
 
     >>> # Initializing a "mobilenet_v2_1.0_224" style configuration

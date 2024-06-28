@@ -1,6 +1,6 @@
 # `.\models\llama\tokenization_llama_fast.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 导入所需的模块和函数
@@ -61,7 +61,7 @@ class LlamaTokenizerFast(PreTrainedTokenizerFast):
 
     这个分词器使用了 ByteFallback 和不进行任何标准化处理。
 
-    ```python
+    ```
     >>> from transformers import LlamaTokenizerFast
 
     >>> tokenizer = LlamaTokenizerFast.from_pretrained("hf-internal-testing/llama-tokenizer")

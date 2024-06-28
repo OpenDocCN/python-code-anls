@@ -1,6 +1,6 @@
 # `.\models\falcon\convert_custom_code_checkpoint.py`
 
-```
+```py
 # 导入所需的模块
 import json  # 导入用于处理 JSON 格式的模块
 from argparse import ArgumentParser  # 导入用于解析命令行参数的模块中的 ArgumentParser 类

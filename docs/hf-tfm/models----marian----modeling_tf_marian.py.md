@@ -1,6 +1,6 @@
 # `.\models\marian\modeling_tf_marian.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 The Marian Team 作者和 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -541,7 +541,7 @@ MARIAN_GENERATION_EXAMPLE = r"""
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TFMarianMTModel
         >>> from typing import List
 

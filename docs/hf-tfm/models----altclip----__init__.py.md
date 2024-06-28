@@ -1,6 +1,6 @@
 # `.\models\altclip\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明版权归 The HuggingFace Team 所有，使用 Apache License, Version 2.0 许可
 #
 # 引入必要的模块和函数

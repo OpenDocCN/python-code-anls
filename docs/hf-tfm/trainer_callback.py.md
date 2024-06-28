@@ -1,6 +1,6 @@
 # `.\trainer_callback.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码格式为UTF-8
 
@@ -223,7 +223,7 @@ class TrainerCallback:
 
     示例：
 
-    ```python
+    ```
     class PrinterCallback(TrainerCallback):
         def on_log(self, args, state, control, logs=None, **kwargs):
             _ = logs.pop("total_flos", None)

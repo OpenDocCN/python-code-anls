@@ -1,6 +1,6 @@
 # `.\generation\streamers.py`
 
-```
+```py
 # 从队列模块导入队列类
 from queue import Queue
 # 导入类型检查工具，用于类型提示
@@ -47,7 +47,7 @@ class TextStreamer(BaseStreamer):
 
     Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoModelForCausalLM, AutoTokenizer, TextStreamer
 
         >>> tok = AutoTokenizer.from_pretrained("openai-community/gpt2")
@@ -175,7 +175,7 @@ class TextIteratorStreamer(TextStreamer):
 
     Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
         >>> from threading import Thread
 

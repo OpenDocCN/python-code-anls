@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_tf_transfo_xl_utilities.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指定使用UTF-8编码
 # Copyright 2018 Google AI, Google Brain and Carnegie Mellon University Authors and the HuggingFace Inc. team.

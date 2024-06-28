@@ -1,6 +1,6 @@
 # `.\models\maskformer\modeling_maskformer_swin.py`
 
-```
+```py
 # coding=utf-8
 # 声明代码文件使用 UTF-8 编码
 

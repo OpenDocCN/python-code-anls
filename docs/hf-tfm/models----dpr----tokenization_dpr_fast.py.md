@@ -1,6 +1,6 @@
 # `.\models\dpr\tokenization_dpr_fast.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的编码声明，使用UTF-8格式
 

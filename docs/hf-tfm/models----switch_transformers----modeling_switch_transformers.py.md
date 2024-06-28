@@ -1,6 +1,6 @@
 # `.\models\switch_transformers\modeling_switch_transformers.py`
 
-```
+```py
 def load_balancing_loss_func(router_probs: torch.Tensor, expert_indices: torch.Tensor) -> float:
     r"""
     计算负载平衡损失函数。
@@ -1168,7 +1168,7 @@ class SwitchTransformersEncoderModel(SwitchTransformersPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, SwitchTransformersEncoderModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google/switch-base-8")

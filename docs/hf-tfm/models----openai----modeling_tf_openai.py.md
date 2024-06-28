@@ -1,6 +1,6 @@
 # `.\models\openai\modeling_tf_openai.py`
 
-```
+```py
 # 定义 TFAttention 类，继承自 keras.layers.Layer，用于实现注意力机制
 class TFAttention(keras.layers.Layer):
     # 初始化函数，设置注意力相关参数

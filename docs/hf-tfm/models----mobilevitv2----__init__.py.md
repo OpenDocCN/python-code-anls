@@ -1,6 +1,6 @@
 # `.\models\mobilevitv2\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，标明代码版权和使用许可条件
 from typing import TYPE_CHECKING
 

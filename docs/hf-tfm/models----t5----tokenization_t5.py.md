@@ -1,6 +1,6 @@
 # `.\models\t5\tokenization_t5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 T5 Authors and HuggingFace Inc. team.
 #

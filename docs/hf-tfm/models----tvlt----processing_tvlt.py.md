@@ -1,6 +1,6 @@
 # `.\models\tvlt\processing_tvlt.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2023 年 HuggingFace Inc. 团队。
 #

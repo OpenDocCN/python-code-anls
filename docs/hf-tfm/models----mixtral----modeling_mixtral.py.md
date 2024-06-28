@@ -1,6 +1,6 @@
 # `.\models\mixtral\modeling_mixtral.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可信息，基于 Apache License, Version 2.0
 # 本代码基于 EleutherAI 的 GPT-NeoX 库，包括 GPT-NeoX 和 OPT 实现的修改，以适应与 Meta AI 团队训练的模型的架构差异。

@@ -1,6 +1,6 @@
 # `.\quantizers\auto.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 导入类型提示相关模块

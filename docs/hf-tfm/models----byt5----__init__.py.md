@@ -1,6 +1,6 @@
 # `.\models\byt5\__init__.py`
 
-```
+```py
 # 导入必要的模块和类型检查工具
 from typing import TYPE_CHECKING
 # 导入懒加载模块

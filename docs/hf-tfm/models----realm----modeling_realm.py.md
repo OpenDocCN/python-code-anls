@@ -1,6 +1,6 @@
 # `.\models\realm\modeling_realm.py`
 
-```
+```py
 # 导入必要的库和模块
 import math  # 导入数学库
 import os    # 导入操作系统相关的库

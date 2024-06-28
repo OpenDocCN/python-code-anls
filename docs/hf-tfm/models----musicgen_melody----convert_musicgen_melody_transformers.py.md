@@ -1,6 +1,6 @@
 # `.\models\musicgen_melody\convert_musicgen_melody_transformers.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明和许可信息，指明此代码受 Apache License, Version 2.0 的保护
 # 该脚本用于将原始存储库中的 Musicgen Melody 检查点转换

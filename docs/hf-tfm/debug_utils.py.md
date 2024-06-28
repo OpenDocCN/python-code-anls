@@ -1,6 +1,6 @@
 # `.\debug_utils.py`
 
-```
+```py
 # 导入collections模块，用于管理特定数据结构的集合
 import collections
 
@@ -29,7 +29,7 @@ class DebugUnderflowOverflow:
 
     To activate the underflow/overflow detection, initialize the object with the model :
 
-    ```python
+    ```
     debug_overflow = DebugUnderflowOverflow(model)
     ```
 

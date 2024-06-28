@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v1\feature_extraction_mobilenet_v1.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

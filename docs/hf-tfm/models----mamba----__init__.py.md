@@ -1,6 +1,6 @@
 # `.\models\mamba\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # 版权 2024 年 HuggingFace 团队保留所有权利。
 #

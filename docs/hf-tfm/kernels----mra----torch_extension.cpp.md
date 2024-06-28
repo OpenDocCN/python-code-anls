@@ -1,6 +1,6 @@
 # `.\kernels\mra\torch_extension.cpp`
 
-```
+```py
 #include <torch/extension.h>
 #include <ATen/ATen.h>
 #include "cuda_launch.h"  // 引入 CUDA 相关的头文件

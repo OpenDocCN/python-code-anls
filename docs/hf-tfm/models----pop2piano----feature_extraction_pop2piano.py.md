@@ -1,6 +1,6 @@
 # `.\models\pop2piano\feature_extraction_pop2piano.py`
 
-```
+```py
     r"""
     Constructs a Pop2Piano feature extractor.
 

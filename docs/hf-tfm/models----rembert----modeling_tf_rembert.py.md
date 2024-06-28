@@ -1,6 +1,6 @@
 # `.\models\rembert\modeling_tf_rembert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可信息
 # 

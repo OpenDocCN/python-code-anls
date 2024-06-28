@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_encoder_decoder.py`
 
-```
+```py
 # 设置编码方式为 UTF-8，确保脚本可以正确处理各种字符
 # 版权声明和许可证信息，表明此代码遵循 Apache License, Version 2.0
 # 详细许可证信息可以通过指定的 URL 获取

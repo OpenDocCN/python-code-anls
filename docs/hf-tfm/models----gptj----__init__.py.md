@@ -1,6 +1,6 @@
 # `.\models\gptj\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # Copyright 2021 The EleutherAI and HuggingFace Teams. All rights reserved.
 #

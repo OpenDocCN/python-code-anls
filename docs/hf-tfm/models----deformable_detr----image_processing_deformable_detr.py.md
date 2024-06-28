@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\image_processing_deformable_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

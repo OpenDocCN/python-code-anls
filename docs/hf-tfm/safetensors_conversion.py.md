@@ -1,6 +1,6 @@
 # `.\safetensors_conversion.py`
 
-```
+```py
 import json  # 导入json模块，用于处理JSON格式数据
 import uuid  # 导入uuid模块，用于生成唯一标识符
 from typing import Optional  # 导入Optional类型，用于可选的类型声明

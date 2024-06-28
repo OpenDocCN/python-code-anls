@@ -1,6 +1,6 @@
 # `.\models\prophetnet\convert_prophetnet_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 定义脚本编码格式为 UTF-8
 

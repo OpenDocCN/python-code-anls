@@ -1,6 +1,6 @@
 # `.\models\llava_next\configuration_llava_next.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码格式为 UTF-8，确保文件能正确处理各种字符
 # Copyright 2024 The HuggingFace Inc. team. All rights reserved.

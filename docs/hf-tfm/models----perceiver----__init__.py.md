@@ -1,6 +1,6 @@
 # `.\models\perceiver\__init__.py`
 
-```
+```py
 # 引入类型检查模块的类型检查功能
 from typing import TYPE_CHECKING
 

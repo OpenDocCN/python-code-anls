@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\tokenization_gpt_neox_fast.py`
 
-```
+```py
 # 设置脚本文件的编码格式为UTF-8
 # 版权声明，指出此代码的版权归EleutherAI和The HuggingFace Inc.团队所有
 #
@@ -50,7 +50,7 @@ class GPTNeoXTokenizerFast(PreTrainedTokenizerFast):
 
     这个标记生成器被训练成将空格视为标记的一部分（类似于sentencepiece），因此单词的编码会根据其是否位于句子开头（没有空格）而不同：
 
-    ```python
+    ```
     >>> from transformers import GPTNeoXTokenizerFast
 
     >>> tokenizer = GPTNeoXTokenizerFast.from_pretrained("openai-community/gpt2")

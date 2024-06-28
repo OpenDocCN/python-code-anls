@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\configuration_gptsan_japanese.py`
 
-```
+```py
 # coding=utf-8
 # 指定代码文件的编码格式为UTF-8
 

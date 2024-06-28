@@ -1,6 +1,6 @@
 # `.\data\processors\squad.py`
 
-```
+```py
 # 版权声明和许可信息
 #
 # Copyright 2020 The HuggingFace Team. All rights reserved.
@@ -378,7 +378,7 @@ def squad_convert_example_to_features(
 #   [`~data.processors.squad.SquadFeatures`] 的列表
 
 # 示例：
-# ```python
+# ```
 # processor = SquadV2Processor()
 # examples = processor.get_dev_examples(data_dir)
 #
@@ -504,7 +504,7 @@ def squad_convert_example_to_features(
 
         Examples:
 
-        ```python
+        ```
         >>> import tensorflow_datasets as tfds
 
         >>> dataset = tfds.load("squad")

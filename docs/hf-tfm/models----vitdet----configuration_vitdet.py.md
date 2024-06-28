@@ -1,6 +1,6 @@
 # `.\models\vitdet\configuration_vitdet.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明：2023 年 HuggingFace 公司保留所有权利
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件
@@ -36,7 +36,7 @@ class VitDetConfig(BackboneConfigMixin, PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import VitDetConfig, VitDetModel
 
     >>> # 初始化 VitDet 配置

@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\configuration_vision_text_dual_encoder.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入必要的模块和类
@@ -39,7 +39,7 @@ class VisionTextDualEncoderConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import ViTConfig, BertConfig, VisionTextDualEncoderConfig, VisionTextDualEncoderModel
 
     >>> # 初始化 BERT 和 ViT 的配置

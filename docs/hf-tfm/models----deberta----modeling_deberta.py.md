@@ -1,6 +1,6 @@
 # `.\models\deberta\modeling_deberta.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2020 年 Microsoft 和 Hugging Face Inc. 团队。
 #

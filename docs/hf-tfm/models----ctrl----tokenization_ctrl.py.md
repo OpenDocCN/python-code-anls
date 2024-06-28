@@ -1,6 +1,6 @@
 # `.\models\ctrl\tokenization_ctrl.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件的字符编码为UTF-8，确保可以正确处理中文等特殊字符
 # Copyright 2018 Salesforce and The HuggingFace Inc. team.

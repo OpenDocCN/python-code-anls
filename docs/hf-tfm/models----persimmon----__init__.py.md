@@ -1,6 +1,6 @@
 # `.\models\persimmon\__init__.py`
 
-```
+```py
 # 导入需要的模块和类型检查
 from typing import TYPE_CHECKING
 

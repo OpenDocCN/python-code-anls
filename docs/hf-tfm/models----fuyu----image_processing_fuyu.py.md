@@ -1,6 +1,6 @@
 # `.\models\fuyu\image_processing_fuyu.py`
 
-```
+```py
 # coding=utf-8
 # 设置编码格式为 UTF-8，确保可以处理包含非英文字符的文本文件
 

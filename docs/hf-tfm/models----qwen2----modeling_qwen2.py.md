@@ -1,6 +1,6 @@
 # `.\models\qwen2\modeling_qwen2.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2024 年 Qwen 团队，阿里巴巴集团和 HuggingFace Inc. 团队。保留所有权利。
 #

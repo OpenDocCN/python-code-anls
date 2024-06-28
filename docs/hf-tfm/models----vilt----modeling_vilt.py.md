@@ -1,6 +1,6 @@
 # `.\models\vilt\modeling_vilt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明
 # 版权所有 2022 年 NAVER AI Labs 和 HuggingFace Inc. 团队。保留所有权利。
@@ -790,7 +790,7 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import ViltProcessor, ViltForQuestionAnswering
         >>> import requests
         >>> from PIL import Image
@@ -917,7 +917,7 @@ class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import ViltProcessor, ViltForImageAndTextRetrieval
         >>> import requests
         >>> from PIL import Image

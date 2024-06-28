@@ -1,6 +1,6 @@
 # `.\models\funnel\tokenization_funnel_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team.
 #

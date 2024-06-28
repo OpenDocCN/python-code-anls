@@ -1,6 +1,6 @@
 # `.\pipelines\text_classification.py`
 
-```
+```py
 import inspect  # 导入inspect模块，用于获取对象信息
 import warnings  # 导入warnings模块，用于处理警告信息
 from typing import Dict  # 从typing模块导入Dict类型提示
@@ -54,7 +54,7 @@ class TextClassificationPipeline(Pipeline):  # 定义TextClassificationPipeline�
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> classifier = pipeline(model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")

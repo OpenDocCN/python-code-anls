@@ -1,6 +1,6 @@
 # `.\models\flava\convert_dalle_to_flava_codebook.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 导入用于解析命令行参数的模块
 import os  # 导入操作系统相关功能的模块

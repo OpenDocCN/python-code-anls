@@ -1,6 +1,6 @@
 # `.\models\markuplm\processing_markuplm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 The HuggingFace Inc. team 所有，采用 Apache License 2.0
 # 如果不遵循许可证，不得使用此文件中的代码

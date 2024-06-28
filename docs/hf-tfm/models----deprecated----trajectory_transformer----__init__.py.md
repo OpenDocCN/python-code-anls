@@ -1,6 +1,6 @@
 # `.\models\deprecated\trajectory_transformer\__init__.py`
 
-```
+```py
 # 引入类型检查工具
 from typing import TYPE_CHECKING
 # 引入自定义的异常：依赖未安装异常和懒加载模块

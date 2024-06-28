@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\image_processing_conditional_detr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明及版权许可信息
 # 此代码基于 Apache License, Version 2.0 许可

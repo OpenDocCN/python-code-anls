@@ -1,6 +1,6 @@
 # `.\models\qwen2\tokenization_qwen2.py`
 
-```
+```py
 # 定义常量，指定文件名字典，包括词汇表文件和合并文件
 VOCAB_FILES_NAMES = {
     "vocab_file": "vocab.json",     # 词汇表文件名

@@ -1,6 +1,6 @@
 # `.\onnx\convert.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 从inspect模块中导入signature函数，用于获取函数签名信息

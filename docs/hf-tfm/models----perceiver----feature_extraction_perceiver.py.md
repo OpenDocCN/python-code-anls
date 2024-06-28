@@ -1,6 +1,6 @@
 # `.\models\perceiver\feature_extraction_perceiver.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，告知代码使用者遵循 Apache 许可证版本 2.0 使用，禁止未经许可的复制和修改
 # 获取 Apache 许可证版本 2.0 的详细信息的链接

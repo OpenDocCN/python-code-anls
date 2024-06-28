@@ -1,6 +1,6 @@
 # `.\models\imagegpt\image_processing_imagegpt.py`
 
-```
+```py
 # 导入所需的模块和函数
 from typing import Dict, List, Optional, Union  # 导入类型提示相关的模块和函数
 

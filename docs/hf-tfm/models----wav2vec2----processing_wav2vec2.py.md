@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\processing_wav2vec2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

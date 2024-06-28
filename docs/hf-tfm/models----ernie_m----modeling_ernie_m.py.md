@@ -1,6 +1,6 @@
 # `.\models\ernie_m\modeling_ernie_m.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2023 年 Xuan Ouyang, Shuohuan Wang, Chao Pang, Yu Sun, Hao Tian, Hua Wu, Haifeng Wang The HuggingFace Inc. team. 保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\rag\configuration_rag.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可协议，此代码版权归 RAG 作者和 HuggingFace Inc. 团队所有，使用 Apache License, Version 2.0 许可

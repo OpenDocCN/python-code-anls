@@ -1,6 +1,6 @@
 # `.\models\mega\convert_mega_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

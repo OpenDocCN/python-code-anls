@@ -1,6 +1,6 @@
 # `.\models\poolformer\modeling_poolformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和所有权信息
 #

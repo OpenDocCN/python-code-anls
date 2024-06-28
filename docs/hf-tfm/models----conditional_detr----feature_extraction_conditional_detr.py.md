@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\feature_extraction_conditional_detr.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可条款，指明此代码的版权归 HuggingFace Inc. 团队所有，遵循 Apache License, Version 2.0
 # 除非符合许可证要求，否则不得使用此文件

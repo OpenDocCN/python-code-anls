@@ -1,6 +1,6 @@
 # `.\models\bark\generation_configuration_bark.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Suno AI Authors and The HuggingFace Inc. team. All rights reserved.
 #

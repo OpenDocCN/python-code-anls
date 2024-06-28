@@ -1,6 +1,6 @@
 # `.\models\audio_spectrogram_transformer\convert_audio_spectrogram_transformer_original_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，声明代码归 HuggingFace Inc. 团队所有，采用 Apache License 2.0 版本进行许可

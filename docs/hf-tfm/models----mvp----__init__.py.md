@@ -1,6 +1,6 @@
 # `.\models\mvp\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，说明此代码的版权和使用许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

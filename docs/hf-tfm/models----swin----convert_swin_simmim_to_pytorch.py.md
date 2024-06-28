@@ -1,6 +1,6 @@
 # `.\models\swin\convert_swin_simmim_to_pytorch.py`
 
-```
+```py
 # 编码声明，指定使用 UTF-8 编码格式
 # Copyright 2022 The HuggingFace Inc. team.
 # 版权声明，版权归 The HuggingFace Inc. 团队所有

@@ -1,6 +1,6 @@
 # `.\models\longt5\modeling_longt5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Google LLC., LongT5 Authors and HuggingFace Inc. team.
 #
@@ -1562,7 +1562,7 @@ class LongT5EncoderModel(LongT5PreTrainedModel):
         Example:
         示例代码展示如何使用这个模型：
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, LongT5ForConditionalGeneration
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google/long-t5-local-base")

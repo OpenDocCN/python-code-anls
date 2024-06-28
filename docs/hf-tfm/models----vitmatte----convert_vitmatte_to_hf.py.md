@@ -1,6 +1,6 @@
 # `.\models\vitmatte\convert_vitmatte_to_hf.py`
 
-```
+```py
 # 加载 argparse 库，用于处理命令行参数
 import argparse
 

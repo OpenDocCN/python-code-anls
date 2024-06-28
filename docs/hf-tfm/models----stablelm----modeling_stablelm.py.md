@@ -1,6 +1,6 @@
 # `.\models\stablelm\modeling_stablelm.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2024 EleutherAI 和 HuggingFace Inc. 团队。保留所有权利。
 #

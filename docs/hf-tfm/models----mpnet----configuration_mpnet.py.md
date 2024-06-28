@@ -1,6 +1,6 @@
 # `.\models\mpnet\configuration_mpnet.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为UTF-8
 

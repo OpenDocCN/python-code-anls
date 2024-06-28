@@ -1,6 +1,6 @@
 # `.\tokenization_utils_fast.py`
 
-```
+```py
 # 设置脚本的字符编码为 UTF-8
 # 版权声明：2020年由 HuggingFace Inc. 团队提供
 #

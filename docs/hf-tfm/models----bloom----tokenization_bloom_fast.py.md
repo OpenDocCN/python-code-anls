@@ -1,6 +1,6 @@
 # `.\models\bloom\tokenization_bloom_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #
@@ -53,7 +53,7 @@ class BloomTokenizerFast(PreTrainedTokenizerFast):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import BloomTokenizerFast
 
     >>> tokenizer = BloomTokenizerFast.from_pretrained("bigscience/bloom")

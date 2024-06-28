@@ -1,6 +1,6 @@
 # `.\models\falcon\configuration_falcon.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 the Falcon authors and HuggingFace Inc. team.  All rights reserved.
 #
@@ -46,7 +46,7 @@ class FalconConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FalconModel, FalconConfig
 
     >>> # Initializing a small (2-layer) Falcon configuration

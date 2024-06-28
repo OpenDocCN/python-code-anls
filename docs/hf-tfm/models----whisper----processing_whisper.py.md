@@ -1,6 +1,6 @@
 # `.\models\whisper\processing_whisper.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，使用 UTF-8 编码
 # Copyright 2022 The HuggingFace Inc. team.

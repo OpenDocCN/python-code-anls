@@ -1,6 +1,6 @@
 # `.\models\tvp\modeling_tvp.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，指出版权归属及许可协议
@@ -939,7 +939,7 @@ class TvpModel(TvpPreTrainedModel):
         Returns:
 
         Examples:
-        ```python
+        ```
         >>> import torch
         >>> from transformers import AutoConfig, AutoTokenizer, TvpForVideoGrounding
 

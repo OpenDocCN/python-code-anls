@@ -1,6 +1,6 @@
 # `.\models\t5\modeling_t5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 Mesh TensorFlow authors, T5 Authors and HuggingFace Inc. team.
 #
@@ -149,7 +149,7 @@ PARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # Here is an example of a device map on a machine with 4 GPUs using google-t5/t5-3b, which has a total of 24 attention modules:
     model = T5ForConditionalGeneration.from_pretrained("google-t5/t5-3b")
     device_map = {
@@ -168,7 +168,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # On a 4 GPU machine with google-t5/t5-3b:
     model = T5ForConditionalGeneration.from_pretrained("google-t5/t5-3b")
     device_map = {
@@ -1348,7 +1348,7 @@ class T5EncoderModel(T5PreTrainedModel):
 
         示例：
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, T5EncoderModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-small")

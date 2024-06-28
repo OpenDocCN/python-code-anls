@@ -1,6 +1,6 @@
 # `.\tokenization_utils.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2020 年 HuggingFace Inc. 团队。
 #
@@ -67,7 +67,7 @@ class Trie:
 
         示例:
 
-        ```python
+        ```
         >>> trie = Trie()
         >>> trie.add("Hello 友達")
         >>> trie.data

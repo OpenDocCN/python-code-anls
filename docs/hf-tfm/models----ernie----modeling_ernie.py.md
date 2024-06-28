@@ -1,6 +1,6 @@
 # `.\models\ernie\modeling_ernie.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #
@@ -1170,7 +1170,7 @@ class ErnieForNextSentencePrediction(ErniePreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, ErnieForNextSentencePrediction
         >>> import torch
 

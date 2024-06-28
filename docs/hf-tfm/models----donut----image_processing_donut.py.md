@@ -1,6 +1,6 @@
 # `.\models\donut\image_processing_donut.py`
 
-```
+```py
 # 如果视觉处理库可用，则导入PIL库
 if is_vision_available():
     import PIL

@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\__init__.py`
 
-```
+```py
 # 导入类型检查模块
 from typing import TYPE_CHECKING
 

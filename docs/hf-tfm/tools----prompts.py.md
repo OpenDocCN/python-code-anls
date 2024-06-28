@@ -1,6 +1,6 @@
 # `.\tools\prompts.py`
 
-```
+```py
 # 消息提示模板，包含了人类消息和助手回复的基本结构
 CHAT_MESSAGE_PROMPT = """
 Human: <<task>>

@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\configuration_gpt_neox.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 EleutherAI 和 The HuggingFace Inc. 团队。保留所有权利。
 #
@@ -39,7 +39,7 @@ class GPTNeoXConfig(PretrainedConfig):
 
     配置对象继承自 [`PretrainedConfig`]，可以用于控制模型的输出。更多信息请参阅 [`PretrainedConfig`] 的文档。
 
-    ```python
+    ```
     >>> from transformers import GPTNeoXConfig, GPTNeoXModel
 
     >>> # 初始化一个 GPTNeoX gpt-neox-20b 风格的配置

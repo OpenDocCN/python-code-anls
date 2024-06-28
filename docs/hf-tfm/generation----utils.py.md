@@ -1,6 +1,6 @@
 # `.\generation\utils.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可信息，指定了本文件使用的Apache License, Version 2.0许可
 # 此处为代码导入所需的标准库、第三方库及自定义模块

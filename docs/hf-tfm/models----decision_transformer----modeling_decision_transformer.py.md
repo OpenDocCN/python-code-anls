@@ -1,6 +1,6 @@
 # `.\models\decision_transformer\modeling_decision_transformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Team The HuggingFace Inc. team. All rights reserved.
 #

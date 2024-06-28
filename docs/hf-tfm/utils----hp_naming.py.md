@@ -1,6 +1,6 @@
 # `.\utils\hp_naming.py`
 
-```
+```py
     # 复制标准库 copy 和 re
     import copy
     import re

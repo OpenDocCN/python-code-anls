@@ -1,6 +1,6 @@
 # `.\models\longt5\convert_longt5x_checkpoint_to_flax.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 导入命令行参数解析模块
 

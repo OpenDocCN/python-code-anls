@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\configuration_layoutlmv3.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 #
@@ -61,7 +61,7 @@ class LayoutLMv3Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import LayoutLMv3Config, LayoutLMv3Model
 
     >>> # Initializing a LayoutLMv3 microsoft/layoutlmv3-base style configuration

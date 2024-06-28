@@ -1,6 +1,6 @@
 # `.\models\ibert\configuration_ibert.py`
 
-```
+```py
 # coding=utf-8
 # 声明编码格式为UTF-8
 # Copyright 2021 The I-BERT Authors (Sehoon Kim, Amir Gholami, Zhewei Yao,

@@ -1,6 +1,6 @@
 # `.\models\univnet\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息
 # Copyright 2023 The HuggingFace Team. All rights reserved.
 #

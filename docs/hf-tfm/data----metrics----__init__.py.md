@@ -1,6 +1,6 @@
 # `.\data\metrics\__init__.py`
 
-```
+```py
 # 导入警告模块，用于发出关于未来版本不推荐使用的警告信息
 import warnings
 

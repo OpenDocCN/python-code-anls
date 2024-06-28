@@ -1,6 +1,6 @@
 # `.\models\mobilevit\modeling_mobilevit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Apple Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -1261,7 +1261,7 @@ class MobileViTForSemanticSegmentation(MobileViTPreTrainedModel):
             attentions=None,
         )
 
-以自定义的输出对象形式返回结果，包括损失、logits、隐藏状态（如果需要）和注意力机制（目前为None）。```python
+以自定义的输出对象形式返回结果，包括损失、logits、隐藏状态（如果需要）和注意力机制（目前为None）。```
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )

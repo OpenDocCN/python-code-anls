@@ -1,6 +1,6 @@
 # `.\models\gptj\modeling_tf_gptj.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保可以正确处理中文和其他特殊字符
 # 版权声明，声明代码版权归EleutherAI和HuggingFace团队所有
 #

@@ -1,6 +1,6 @@
 # `.\models\perceiver\configuration_perceiver.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为 UTF-8
 
@@ -38,7 +38,7 @@ class PerceiverConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PerceiverModel, PerceiverConfig
 
     >>> # Initializing a Perceiver deepmind/language-perceiver style configuration

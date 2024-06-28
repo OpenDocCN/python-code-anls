@@ -1,6 +1,6 @@
 # `.\models\deprecated\tapex\tokenization_tapex.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可条款
 # 该文件受 Apache License, Version 2.0 许可，除非符合许可条款，否则不得使用该文件

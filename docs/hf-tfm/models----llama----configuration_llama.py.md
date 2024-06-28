@@ -1,6 +1,6 @@
 # `.\models\llama\configuration_llama.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #
@@ -43,7 +43,7 @@ class LlamaConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import LlamaModel, LlamaConfig
 
     >>> # Initializing a LLaMA llama-7b style configuration

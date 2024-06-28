@@ -1,6 +1,6 @@
 # `.\models\nllb_moe\configuration_nllb_moe.py`
 
-```
+```py
 """
 NLLB-MoE model configuration
 """
@@ -29,7 +29,7 @@ class NllbMoeConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import NllbMoeModel, NllbMoeConfig
 
     >>> # Initializing a NllbMoe facebook/nllb-moe-54b style configuration

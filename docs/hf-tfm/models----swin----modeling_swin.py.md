@@ -1,6 +1,6 @@
 # `.\models\swin\modeling_swin.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 HuggingFace Inc. 团队所有
 

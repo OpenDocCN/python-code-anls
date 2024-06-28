@@ -1,6 +1,6 @@
 # `.\models\dpt\modeling_dpt.py`
 
-```
+```py
     """
     PyTorch DPT (Dense Prediction Transformers) model.
 

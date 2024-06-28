@@ -1,6 +1,6 @@
 # `.\models\vilt\processing_vilt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

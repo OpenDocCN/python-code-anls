@@ -1,6 +1,6 @@
 # `.\generation\tf_utils.py`
 
-```
+```py
 # 导入所需的模块和库
 import copy  # 导入 copy 模块，用于复制对象
 import inspect  # 导入 inspect 模块，用于获取对象信息

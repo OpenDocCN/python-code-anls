@@ -1,6 +1,6 @@
 # `.\pipelines\depth_estimation.py`
 
-```
+```py
 # 从 typing 模块导入 List 和 Union 类型
 from typing import List, Union
 
@@ -32,7 +32,7 @@ class DepthEstimationPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> depth_estimator = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-base-hf")

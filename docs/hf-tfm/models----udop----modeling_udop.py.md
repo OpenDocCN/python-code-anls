@@ -1,6 +1,6 @@
 # `.\models\udop\modeling_udop.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2024 年 Microsoft Research 和 HuggingFace Inc. 团队所有。
 #

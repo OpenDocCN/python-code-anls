@@ -1,6 +1,6 @@
 # `.\models\seggpt\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从项目内的 utils 模块导入自定义异常 OptionalDependencyNotAvailable 和 _LazyModule

@@ -1,6 +1,6 @@
 # `.\models\bert\tokenization_bert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定脚本的编码格式为 UTF-8
 

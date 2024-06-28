@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\convert_model_with_hifigan.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，确保支持中文和其他特殊字符的正确处理
 

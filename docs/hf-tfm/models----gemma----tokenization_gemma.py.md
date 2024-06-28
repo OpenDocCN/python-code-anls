@@ -1,6 +1,6 @@
 # `.\models\gemma\tokenization_gemma.py`
 
-```
+```py
 # coding=utf-8
 # 定义编码格式为 UTF-8
 

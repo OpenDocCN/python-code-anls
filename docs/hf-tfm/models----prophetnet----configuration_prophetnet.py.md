@@ -1,6 +1,6 @@
 # `.\models\prophetnet\configuration_prophetnet.py`
 
-```
+```py
 # coding=utf-8
 # 定义了文件的编码格式为 UTF-8
 

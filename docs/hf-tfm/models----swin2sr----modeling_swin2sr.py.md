@@ -1,6 +1,6 @@
 # `.\models\swin2sr\modeling_swin2sr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 Microsoft Research 和 HuggingFace Inc. 团队所有
 #
@@ -580,7 +580,7 @@ class Swin2SRLayer(nn.Module):
         window_size = [r if r <= w else w for r, w in zip(self.input_resolution, target_window_size)]
         shift_size = [0 if r <= w else s for r, w, s in zip(self.input_resolution, window_size, target_shift_size)]
         return window_size, shift_size
-    ```python`
+    ````
         # 根据窗口移动大小生成注意力掩码，用于移位窗口的多头自注意力
         def get_attn_mask(self, height, width, dtype):
             if self.shift_size > 0:

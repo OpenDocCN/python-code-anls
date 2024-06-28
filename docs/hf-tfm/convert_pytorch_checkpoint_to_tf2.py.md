@@ -1,6 +1,6 @@
 # `.\convert_pytorch_checkpoint_to_tf2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The HuggingFace Inc. team.
 #

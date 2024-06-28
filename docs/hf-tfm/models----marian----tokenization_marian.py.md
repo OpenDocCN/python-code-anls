@@ -1,6 +1,6 @@
 # `.\models\marian\tokenization_marian.py`
 
-```
+```py
 # 导入所需的模块和库
 import json  # 导入处理 JSON 数据的模块
 import os  # 导入操作系统功能的模块

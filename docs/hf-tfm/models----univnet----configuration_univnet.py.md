@@ -1,6 +1,6 @@
 # `.\models\univnet\configuration_univnet.py`
 
-```
+```py
 # 版权声明和信息，指出此代码版权归HuggingFace团队所有，并使用Apache许可证2.0授权
 #
 # 在遵守许可证的前提下，您可以使用此文件。您可以在以下网址获取许可证的副本：
@@ -34,7 +34,7 @@ class UnivNetConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import UnivNetModel, UnivNetConfig
 
     >>> # 初始化 Tortoise TTS 风格的配置

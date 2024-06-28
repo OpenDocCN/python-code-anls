@@ -1,6 +1,6 @@
 # `.\pipelines\image_to_text.py`
 
-```
+```py
 # 设置文件编码为utf-8
 # 版权声明
 #     2024年 HuggingFace Inc. 团队保留所有权利。
@@ -59,7 +59,7 @@ class ImageToTextPipeline(Pipeline):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> captioner = pipeline(model="ydshieh/vit-gpt2-coco-en")

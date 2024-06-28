@@ -1,6 +1,6 @@
 # `.\models\plbart\modeling_plbart.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022, UCLA NLP, The Facebook AI Research Team and The HuggingFace Inc. team. All rights reserved.
 #
@@ -399,7 +399,7 @@ PLBART_START_DOCSTRING = r"""
 PLBART_GENERATION_EXAMPLE = r"""
     Mask-filling example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, PLBartForConditionalGeneration
 
     >>> model = PLBartForConditionalGeneration.from_pretrained("uclanlp/plbart-base")

@@ -1,6 +1,6 @@
 # `.\models\persimmon\convert_persimmon_weights_to_hf.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于处理命令行参数的库
 import os  # 提供与操作系统交互的功能

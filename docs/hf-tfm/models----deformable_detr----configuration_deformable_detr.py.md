@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\configuration_deformable_detr.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明版权及许可条款
 # 根据 Apache 许可证 2.0 版本，除非符合许可证，否则不得使用此文件
@@ -34,7 +34,7 @@ class DeformableDetrConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import DeformableDetrConfig, DeformableDetrModel
 
     >>> # 初始化一个 Deformable DETR SenseTime/deformable-detr 风格的配置

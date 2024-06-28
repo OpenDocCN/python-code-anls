@@ -1,6 +1,6 @@
 # `.\models\deprecated\mmbt\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，声明版权归 HuggingFace Team 所有，遵循 Apache License, Version 2.0。
 # 可以在符合许可证的前提下使用此文件。
 # 获取完整许可证内容，请访问指定的 URL。

@@ -1,6 +1,6 @@
 # `.\kernels\yoso\fast_lsh_cumulation_torch.cpp`
 
-```
+```py
 #include <torch/extension.h>
 #include <ATen/ATen.h>
 #include "fast_lsh_cumulation.h"  // 引入自定义的头文件，包含快速LSH累积相关的函数声明

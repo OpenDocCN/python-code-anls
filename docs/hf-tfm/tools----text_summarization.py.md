@@ -1,6 +1,6 @@
 # `.\tools\text_summarization.py`
 
-```
+```py
 # 指定脚本使用的 Python 解释器，并声明编码格式为 UTF-8
 
 # 导入必要的库和模块
@@ -12,7 +12,7 @@ class TextSummarizationTool(PipelineTool):
     """
     Example:
 
-    ```py
+    ```
     from transformers.tools import TextSummarizationTool
 
     summarizer = TextSummarizationTool()

@@ -1,6 +1,6 @@
 # `.\models\speecht5\configuration_speecht5.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，指明了代码的版权和使用许可
 #
@@ -146,7 +146,7 @@ class SpeechT5HifiGanConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     # 定义模型类型为 "hifigan"
     model_type = "hifigan"
 

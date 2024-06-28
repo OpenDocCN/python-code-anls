@@ -1,6 +1,6 @@
 # `.\models\bros\modeling_bros.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023-present NAVER Corp, The Microsoft Research Asia LayoutLM Team Authors and the HuggingFace Inc. team.
 #
@@ -843,7 +843,7 @@ class BrosForTokenClassification(BrosPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> import torch
         >>> from transformers import BrosProcessor, BrosForTokenClassification
 
@@ -1017,7 +1017,7 @@ class BrosSpadeELForTokenClassification(BrosPreTrainedModel):
         Examples:
         示例代码展示了如何使用该方法进行预测和处理输出结果。
 
-        ```python
+        ```
         >>> import torch
         >>> from transformers import BrosProcessor, BrosSpadeELForTokenClassification
 

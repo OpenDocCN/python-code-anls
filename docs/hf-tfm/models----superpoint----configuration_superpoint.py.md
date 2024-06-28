@@ -1,6 +1,6 @@
 # `.\models\superpoint\configuration_superpoint.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import List
 
@@ -44,7 +44,7 @@ class SuperPointConfig(PretrainedConfig):
             The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
 
     Example:
-    ```python
+    ```
     >>> from transformers import SuperPointConfig, SuperPointForKeypointDetection
 
     >>> # Initializing a SuperPoint superpoint style configuration

@@ -1,6 +1,6 @@
 # `.\models\big_bird\modeling_flax_big_bird.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Callable, Optional, Tuple  # 导入类型提示相关模块
 
@@ -1520,7 +1520,7 @@ FLAX_BIG_BIRD_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxBigBirdForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google/bigbird-roberta-base")

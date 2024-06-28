@@ -1,6 +1,6 @@
 # `.\models\time_series_transformer\modeling_time_series_transformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指出本代码版权归 HuggingFace Inc. 和 Amazon.com, Inc. 所有
 # 根据 Apache 许可证 2.0 版本授权使用本代码

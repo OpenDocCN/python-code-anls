@@ -1,6 +1,6 @@
 # `.\models\roformer\modeling_roformer.py`
 
-```
+```py
 # coding=utf-8
 # 设定文件编码为 UTF-8
 

@@ -1,6 +1,6 @@
 # `.\models\albert\modeling_flax_albert.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定代码文件的字符编码格式
 
@@ -639,7 +639,7 @@ class FlaxAlbertPreTrainedModel(FlaxPreTrainedModel):
         module = self.module_class(config=config, dtype=dtype, **kwargs)
         # 调用父类的初始化方法
         super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
-    ```python`
+    ````
         # 初始化权重函数，使用随机数种子和输入形状，返回参数字典
         def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
             # 初始化输入张量，创建一个全零张量，数据类型为整数4位
@@ -911,7 +911,7 @@ FLAX_ALBERT_FOR_PRETRAINING_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxAlbertForPreTraining
 
     >>> tokenizer = AutoTokenizer.from_pretrained("albert/albert-base-v2")

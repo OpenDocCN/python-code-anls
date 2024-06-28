@@ -1,6 +1,6 @@
 # `.\models\owlv2\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，声明版权归 HuggingFace 团队所有
 #
 # 根据 Apache License, Version 2.0 进行许可

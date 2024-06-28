@@ -1,6 +1,6 @@
 # `.\models\funnel\configuration_funnel.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020, Hugging Face
 #

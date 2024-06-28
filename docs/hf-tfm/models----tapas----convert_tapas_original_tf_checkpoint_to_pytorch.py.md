@@ -1,6 +1,6 @@
 # `.\models\tapas\convert_tapas_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 引入命令行参数解析模块
 import argparse
 

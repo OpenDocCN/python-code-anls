@@ -1,6 +1,6 @@
 # `.\models\vit\configuration_vit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google AI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -79,7 +79,7 @@ class ViTConfig(PretrainedConfig):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import ViTConfig, ViTModel
 
         >>> # 初始化一个 ViT vit-base-patch16-224 风格的配置

@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\tokenization_speech_to_text.py`
 
-```
+```py
 # coding=utf-8
 # 设置脚本编码格式为 UTF-8
 

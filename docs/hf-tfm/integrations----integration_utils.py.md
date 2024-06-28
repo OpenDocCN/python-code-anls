@@ -1,6 +1,6 @@
 # `.\integrations\integration_utils.py`
 
-```
+```py
 """
 Integrations with other Python libraries.
 """
@@ -1756,7 +1756,7 @@ class FlyteCallback(TrainerCallback):
 
     Example:
 
-    ```python
+    ```
     # Note: This example skips over some setup steps for brevity.
     from flytekit import current_context, task
 

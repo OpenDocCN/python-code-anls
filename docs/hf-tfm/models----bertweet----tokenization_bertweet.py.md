@@ -1,6 +1,6 @@
 # `.\models\bertweet\tokenization_bertweet.py`
 
-```
+```py
 # 导入标准库和第三方库
 import html  # 用于 HTML 编码和解码
 import os    # 提供与操作系统交互的功能
@@ -598,7 +598,7 @@ class TweetTokenizer:
     r"""
     Examples:
 
-    ```python
+    ```
     >>> # Tokenizer for tweets.
     >>> from nltk.tokenize import TweetTokenizer
 

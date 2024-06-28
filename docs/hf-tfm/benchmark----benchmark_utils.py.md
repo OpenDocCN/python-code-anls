@@ -1,6 +1,6 @@
 # `.\benchmark\benchmark_utils.py`
 
-```
+```py
 # 导入所需的模块和库
 import copy  # 导入 copy 模块，用于对象的复制操作
 import csv  # 导入 csv 模块，用于 CSV 文件的读写操作

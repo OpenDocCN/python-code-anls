@@ -1,6 +1,6 @@
 # `.\models\camembert\tokenization_camembert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 上面的注释指定了文件的编码格式为 UTF-8
 

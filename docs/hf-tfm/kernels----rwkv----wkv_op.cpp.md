@@ -1,6 +1,6 @@
 # `.\kernels\rwkv\wkv_op.cpp`
 
-```
+```py
 # 包含 Torch 扩展和 ATen 库的头文件
 #include <torch/extension.h>
 #include "ATen/ATen.h"

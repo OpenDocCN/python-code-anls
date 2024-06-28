@@ -1,6 +1,6 @@
 # `.\models\bigbird_pegasus\modeling_bigbird_pegasus.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google Research The HuggingFace Inc. team. All rights reserved.
 #
@@ -971,7 +971,7 @@ BIGBIRD_PEGASUS_START_DOCSTRING = r"""
 BIGBIRD_PEGASUS_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, BigBirdPegasusForConditionalGeneration
 
     >>> model = BigBirdPegasusForConditionalGeneration.from_pretrained("google/bigbird-pegasus-large-arxiv")

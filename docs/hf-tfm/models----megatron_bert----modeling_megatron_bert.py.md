@@ -1,6 +1,6 @@
 # `.\models\megatron_bert\modeling_megatron_bert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018-2021, NVIDIA CORPORATION.  All rights reserved.
@@ -1149,7 +1149,7 @@ class MegatronBertForNextSentencePrediction(MegatronBertPreTrainedModel):
             - If `return_dict=True`: returns a `NextSentencePredictorOutput` containing loss, logits, hidden states, and attentions.
     
         Example:
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, MegatronBertForNextSentencePrediction
         >>> import torch
     

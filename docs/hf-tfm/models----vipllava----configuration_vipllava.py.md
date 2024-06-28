@@ -1,6 +1,6 @@
 # `.\models\vipllava\configuration_vipllava.py`
 
-```
+```py
 # 定义模块的版权信息和许可协议
 # coding=utf-8
 # Copyright 2023 Microsoft Research & University of Wisconsin-Madison and the HuggingFace Inc. team. All rights reserved.
@@ -66,7 +66,7 @@ class VipLlavaConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import VipLlavaForConditionalGeneration, VipLlavaConfig, CLIPVisionConfig, LlamaConfig
 
     >>> # Initializing a CLIP-vision config

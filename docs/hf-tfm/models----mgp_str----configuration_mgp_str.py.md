@@ -1,6 +1,6 @@
 # `.\models\mgp_str\configuration_mgp_str.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #
@@ -100,7 +100,7 @@ class MgpstrConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MgpstrConfig, MgpstrForSceneTextRecognition
 
     >>> # Initializing a Mgpstr mgp-str-base style configuration

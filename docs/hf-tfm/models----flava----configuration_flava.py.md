@@ -1,6 +1,6 @@
 # `.\models\flava\configuration_flava.py`
 
-```
+```py
 # coding=utf-8
 # 上面的声明指定了代码文件的编码格式为 UTF-8，确保支持中文等非ASCII字符
 # Copyright 2022 Meta Platforms authors and The HuggingFace Team. All rights reserved.
@@ -128,7 +128,7 @@ class FlavaTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FlavaTextConfig, FlavaTextModel
 
     >>> # Initializing a FlavaTextModel with  style configuration
@@ -243,7 +243,7 @@ class FlavaMultimodalConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FlavaMultimodalConfig, FlavaMultimodalModel
 
     >>> # Initializing a FlavaMultimodalModel with  style configuration
@@ -344,7 +344,7 @@ class FlavaImageCodebookConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FlavaImageCodebookConfig, FlavaImageCodebook
 
     >>> # Initializing a FlavaImageCodebook with style configuration
@@ -455,7 +455,7 @@ class FlavaConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FlavaConfig, FlavaModel, FlavaForPreTraining
 
     >>> # 使用风格配置初始化 FlavaConfig

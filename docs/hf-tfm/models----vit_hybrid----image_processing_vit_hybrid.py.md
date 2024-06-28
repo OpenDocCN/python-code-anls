@@ -1,6 +1,6 @@
 # `.\models\vit_hybrid\image_processing_vit_hybrid.py`
 
-```
+```py
     r"""
     Constructs a ViT Hybrid image processor.
     """

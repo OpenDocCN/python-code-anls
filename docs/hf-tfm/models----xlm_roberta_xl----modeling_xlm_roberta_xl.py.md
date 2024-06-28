@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta_xl\modeling_xlm_roberta_xl.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权归 HuggingFace Inc. 团队所有，使用 Apache License, Version 2.0 许可
 # 详细许可信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取

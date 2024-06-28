@@ -1,6 +1,6 @@
 # `.\models\seggpt\configuration_seggpt.py`
 
-```
+```py
 # 导入所需的模块和类
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
@@ -85,7 +85,7 @@ class SegGptConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import SegGptConfig, SegGptModel
 
     >>> # Initializing a SegGPT seggpt-vit-large style configuration

@@ -1,6 +1,6 @@
 # `.\models\nezha\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数，包括自定义的异常和延迟加载模块
 from typing import TYPE_CHECKING
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tokenizers_available, is_torch_available

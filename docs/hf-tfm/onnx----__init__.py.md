@@ -1,6 +1,6 @@
 # `.\onnx\__init__.py`
 
-```
+```py
 # 导入类型检查工具，用于检查类型注解的有效性
 from typing import TYPE_CHECKING
 

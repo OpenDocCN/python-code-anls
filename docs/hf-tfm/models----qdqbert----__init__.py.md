@@ -1,6 +1,6 @@
 # `.\models\qdqbert\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指出代码的版权和许可细则
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

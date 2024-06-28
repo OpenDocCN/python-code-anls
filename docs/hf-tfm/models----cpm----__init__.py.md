@@ -1,6 +1,6 @@
 # `.\models\cpm\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于判断当前是否处于类型检查模式
 from typing import TYPE_CHECKING
 

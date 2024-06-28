@@ -1,6 +1,6 @@
 # `.\models\switch_transformers\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从 utils 模块导入所需的异常和函数

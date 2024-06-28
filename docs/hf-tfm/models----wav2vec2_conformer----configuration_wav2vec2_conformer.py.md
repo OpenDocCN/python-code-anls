@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_conformer\configuration_wav2vec2_conformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，声明代码版权归 Fairseq 作者和 HuggingFace 团队所有，保留所有权利
@@ -44,7 +44,7 @@ class Wav2Vec2ConformerConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import Wav2Vec2ConformerConfig, Wav2Vec2ConformerModel
 
     >>> # 初始化一个 Wav2Vec2Conformer facebook/wav2vec2-conformer-rel-pos-large 风格的配置

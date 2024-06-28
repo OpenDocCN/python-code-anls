@@ -1,6 +1,6 @@
 # `.\models\segformer\configuration_segformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 NVIDIA and The HuggingFace Inc. team. All rights reserved.
 #

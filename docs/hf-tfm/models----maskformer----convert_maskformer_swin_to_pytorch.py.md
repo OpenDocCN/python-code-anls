@@ -1,6 +1,6 @@
 # `.\models\maskformer\convert_maskformer_swin_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明和许可证信息，指定代码使用 Apache License, Version 2.0
 # 导入所需模块和库

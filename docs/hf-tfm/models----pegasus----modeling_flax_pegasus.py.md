@@ -1,6 +1,6 @@
 # `.\models\pegasus\modeling_flax_pegasus.py`
 
-```
+```py
 # 导入必要的库和模块
 import math  # 导入数学函数库
 import random  # 导入随机数生成模块
@@ -1071,7 +1071,7 @@ class FlaxPegasusPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxPegasusForConditionalGeneration
 
         >>> model = FlaxPegasusForConditionalGeneration.from_pretrained("google/pegasus-large")

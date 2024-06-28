@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\modeling_flax_speech_encoder_decoder.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #
@@ -478,7 +478,7 @@ class FlaxSpeechEncoderDecoderModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import FlaxSpeechEncoderDecoderModel
 
         >>> # initialize a wav2vec2-2-bart from pretrained wav2vec2 and bart models. Note that the cross-attention layers will be randomly initialized
@@ -592,7 +592,7 @@ class FlaxSpeechEncoderDecoderModel(FlaxPreTrainedModel):
 
             Examples:
 
-            ```python
+            ```
             >>> from transformers import FlaxSpeechEncoderDecoderModel, AutoTokenizer
 
             >>> # load a fine-tuned wav2vec2-2-bart model

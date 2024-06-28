@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\tokenization_gptsan_japanese.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，版权归 HuggingFace Inc. 团队所有
 #
@@ -343,7 +343,7 @@ class GPTSanJapaneseTokenizer(PreTrainedTokenizer):
         token_type_ids is 1 for the Prefix part and 0 for the rest of the token.
 
         Example:
-        ```python
+        ```
         >>> from transformers import GPTSanJapaneseTokenizer
 
         >>> tokenizer = GPTSanJapaneseTokenizer.from_pretrained("Tanrei/GPTSAN-japanese")

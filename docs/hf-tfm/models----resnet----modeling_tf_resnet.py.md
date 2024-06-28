@@ -1,6 +1,6 @@
 # `.\models\resnet\modeling_tf_resnet.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft Research, Inc. and The HuggingFace Inc. team. All rights reserved.
 #

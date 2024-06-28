@@ -1,6 +1,6 @@
 # `.\models\qwen2\__init__.py`
 
-```
+```py
 # 版权声明和许可信息
 # 本代码受 Apache 许可证 2.0 版本保护，详细信息可查阅许可证
 # http://www.apache.org/licenses/LICENSE-2.0

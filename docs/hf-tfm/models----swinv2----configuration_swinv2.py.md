@@ -1,6 +1,6 @@
 # `.\models\swinv2\configuration_swinv2.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可证，声明代码版权归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0 版本
@@ -41,7 +41,7 @@ class Swinv2Config(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Swinv2Config, Swinv2Model
 
     >>> # Initializing a Swinv2 microsoft/swinv2-tiny-patch4-window8-256 style configuration

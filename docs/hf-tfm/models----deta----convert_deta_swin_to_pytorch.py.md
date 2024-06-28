@@ -1,6 +1,6 @@
 # `.\models\deta\convert_deta_swin_to_pytorch.py`
 
-```
+```py
 # 定义一个函数，用于生成 DETA 模型的配置信息
 def get_deta_config(model_name):
     # 定义 Swin Transformer 的配置信息作为背骨网络配置

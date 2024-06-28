@@ -1,6 +1,6 @@
 # `.\models\bert_generation\configuration_bert_generation.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Google AI Language Team Authors and The HuggingFace Inc. team.
 #
@@ -34,7 +34,7 @@ class BertGenerationConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import BertGenerationConfig, BertGenerationEncoder
 
     >>> # Initializing a BertGeneration config

@@ -1,6 +1,6 @@
 # `.\models\mask2former\configuration_mask2former.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权归属 Meta Platforms, Inc. 和 The HuggingFace Inc. team，保留所有权利
 #
@@ -45,7 +45,7 @@ class Mask2FormerConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import Mask2FormerConfig, Mask2FormerModel
 
     >>> # 初始化 Mask2Former facebook/mask2former-swin-small-coco-instance 配置

@@ -1,6 +1,6 @@
 # `.\models\detr\configuration_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Facebook AI Research and The HuggingFace Inc. team. All rights reserved.
 #
@@ -56,7 +56,7 @@ class DetrConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import DetrConfig, DetrModel
 
     >>> # Initializing a DETR facebook/detr-resnet-50 style configuration

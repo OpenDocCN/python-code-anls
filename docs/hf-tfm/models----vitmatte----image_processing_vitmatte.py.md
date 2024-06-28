@@ -1,6 +1,6 @@
 # `.\models\vitmatte\image_processing_vitmatte.py`
 
-```
+```py
 # 导入所需模块和类
 from typing import List, Optional, Union
 

@@ -1,6 +1,6 @@
 # `.\models\electra\modeling_electra.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019 The Google AI Language Team Authors and The HuggingFace Inc. team.
 #

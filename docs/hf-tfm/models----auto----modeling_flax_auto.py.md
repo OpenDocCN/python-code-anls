@@ -1,6 +1,6 @@
 # `.\models\auto\modeling_flax_auto.py`
 
-```
+```py
 # 导入必要的模块和函数
 from collections import OrderedDict
 # 导入日志记录器

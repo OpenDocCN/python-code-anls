@@ -1,6 +1,6 @@
 # `.\models\unispeech_sat\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数，包括依赖检查和异常处理
 from typing import TYPE_CHECKING
 

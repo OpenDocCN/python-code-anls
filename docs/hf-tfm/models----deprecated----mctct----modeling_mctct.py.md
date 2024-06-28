@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\modeling_mctct.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 年 HuggingFace Inc. 团队保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\tokenization_seamless_m4t_fast.py`
 
-```
+```py
 # 导入必要的模块和库
 import os  # 导入操作系统模块
 from shutil import copyfile  # 导入文件复制函数
@@ -54,7 +54,7 @@ class SeamlessM4TTokenizerFast(PreTrainedTokenizerFast):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import SeamlessM4TTokenizerFast
 
     >>> tokenizer = SeamlessM4TTokenizerFast.from_pretrained(

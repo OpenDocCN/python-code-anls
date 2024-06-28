@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\modeling_tf_encoder_decoder.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码版权归 HuggingFace Inc. 团队所有，采用 Apache License, Version 2.0
 # 只有在遵循许可证的情况下才能使用此文件

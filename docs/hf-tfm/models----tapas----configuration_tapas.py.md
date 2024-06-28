@@ -1,6 +1,6 @@
 # `.\models\tapas\configuration_tapas.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Google Research and The HuggingFace Inc. team.
 #
@@ -60,7 +60,7 @@ class TapasConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import TapasModel, TapasConfig
 
     >>> # Initializing a default (SQA) Tapas configuration

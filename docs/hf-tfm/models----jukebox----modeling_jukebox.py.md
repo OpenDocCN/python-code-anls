@@ -1,6 +1,6 @@
 # `.\models\jukebox\modeling_jukebox.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The OpenAI Team Authors and HuggingFace Inc. team.
 #
@@ -2220,7 +2220,7 @@ class JukeboxLabelConditioner(nn.Module):
         if isinstance(module, nn.Linear) and module.bias is not None:
             # 将偏置数据置零
             module.bias.data.zero_()
-    ```python`
+    ````
         def get_metadata(self, labels, start, total_length, offset, get_indices=False):
             # 克隆 labels 张量以避免修改原始数据，创建 metadata 张量
             metadata = labels.clone()
@@ -2805,7 +2805,7 @@ class JukeboxModel(JukeboxPreTrainedModel):
         """
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, JukeboxModel, set_seed
 
         >>> model = JukeboxModel.from_pretrained("openai/jukebox-1b-lyrics", min_duration=0).eval()

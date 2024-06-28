@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\processing_seamless_m4t.py`
 
-```
+```py
 """
 Audio/Text processor class for SeamlessM4T
 """

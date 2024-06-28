@@ -1,6 +1,6 @@
 # `.\models\lilt\modeling_lilt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -770,7 +770,7 @@ class LiltForTokenClassification(LiltPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, AutoModelForTokenClassification
         >>> from datasets import load_dataset
 

@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从相对路径导入必要的异常和类

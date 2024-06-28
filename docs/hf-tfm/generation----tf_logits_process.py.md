@@ -1,6 +1,6 @@
 # `.\generation\tf_logits_process.py`
 
-```
+```py
 # 导入模块inspect用于检查对象，并从typing导入List和Tuple
 import inspect
 from typing import List, Tuple

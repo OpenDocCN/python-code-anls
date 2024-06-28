@@ -1,6 +1,6 @@
 # `.\models\videomae\__init__.py`
 
-```
+```py
 # 版权声明及许可证信息，声明代码版权及使用许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

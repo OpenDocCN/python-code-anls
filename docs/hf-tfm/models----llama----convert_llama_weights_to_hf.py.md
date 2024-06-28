@@ -1,6 +1,6 @@
 # `.\models\llama\convert_llama_weights_to_hf.py`
 
-```
+```py
 # 导入必要的库
 import argparse  # 用于解析命令行参数
 import gc  # Python 的垃圾回收模块

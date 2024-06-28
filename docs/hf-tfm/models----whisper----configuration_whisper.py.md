@@ -1,6 +1,6 @@
 # `.\models\whisper\configuration_whisper.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 # 上述为版权声明和编码声明

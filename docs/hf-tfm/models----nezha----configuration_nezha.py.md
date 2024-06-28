@@ -1,6 +1,6 @@
 # `.\models\nezha\configuration_nezha.py`
 
-```
+```py
 # 导入PretrainedConfig类
 from ... import PretrainedConfig
 
@@ -52,7 +52,7 @@ class NezhaConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import NezhaConfig, NezhaModel
 
     >>> # Initializing an Nezha configuration

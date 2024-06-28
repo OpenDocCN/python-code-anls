@@ -1,6 +1,6 @@
 # `.\models\vit_hybrid\modeling_vit_hybrid.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 Google AI、Ross Wightman、The HuggingFace Inc. team。保留所有权利。
 #

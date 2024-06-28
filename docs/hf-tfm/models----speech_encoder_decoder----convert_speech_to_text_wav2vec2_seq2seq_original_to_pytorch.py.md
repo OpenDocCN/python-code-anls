@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\convert_speech_to_text_wav2vec2_seq2seq_original_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定代码文件的编码格式为 UTF-8
 

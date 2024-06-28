@@ -1,6 +1,6 @@
 # `.\models\deit\image_processing_deit.py`
 
-```
+```py
 # 引入必要的依赖库和模块，包括类型提示和图像处理工具
 from typing import Dict, List, Optional, Union  # 导入类型提示
 import numpy as np  # 导入 NumPy 库

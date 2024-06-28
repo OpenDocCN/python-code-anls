@@ -1,6 +1,6 @@
 # `.\models\fnet\configuration_fnet.py`
 
-```
+```py
 """
 FNet model configuration
 

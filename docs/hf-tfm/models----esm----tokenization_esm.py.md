@@ -1,6 +1,6 @@
 # `.\models\esm\tokenization_esm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Meta and The HuggingFace Inc. team. All rights reserved.
 #

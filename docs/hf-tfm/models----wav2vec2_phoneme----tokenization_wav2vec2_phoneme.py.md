@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_phoneme\tokenization_wav2vec2_phoneme.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 
 # 版权声明，版权归Facebook Inc.和HuggingFace Inc.团队所有

@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\configuration_open_llama.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #
@@ -79,7 +79,7 @@ class OpenLlamaConfig(PretrainedConfig):
     # 示例
     Example:
     
-    ```python
+    ```
     >>> from transformers import OpenLlamaModel, OpenLlamaConfig
 
     >>> # Initializing a Open-Llama open_llama-7b style configuration

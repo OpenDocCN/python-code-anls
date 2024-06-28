@@ -1,6 +1,6 @@
 # `.\models\efficientformer\configuration_efficientformer.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2022 年由 HuggingFace Inc. 团队保留所有权利
 #
@@ -42,7 +42,7 @@ class EfficientFormerConfig(PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import EfficientFormerConfig, EfficientFormerModel
 
     >>> # 初始化 EfficientFormer efficientformer-l1 风格的配置

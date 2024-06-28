@@ -1,6 +1,6 @@
 # `.\models\bit\image_processing_bit.py`
 
-```
+```py
 # 导入所需的模块和库
 from typing import Dict, List, Optional, Union  # 导入类型提示相关的模块
 

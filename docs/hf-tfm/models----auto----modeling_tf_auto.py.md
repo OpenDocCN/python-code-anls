@@ -1,6 +1,6 @@
 # `.\models\auto\modeling_tf_auto.py`
 
-```
+```py
 # 指定编码格式为UTF-8
 
 # 版权声明和许可证信息，告知代码的版权和许可使用条款

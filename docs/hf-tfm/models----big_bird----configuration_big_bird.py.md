@@ -1,6 +1,6 @@
 # `.\models\big_bird\configuration_big_bird.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google Research and The HuggingFace Inc. team. All rights reserved.
 #
@@ -52,7 +52,7 @@ class BigBirdConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BigBirdConfig, BigBirdModel
 
     >>> # Initializing a BigBird google/bigbird-roberta-base style configuration

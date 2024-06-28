@@ -1,6 +1,6 @@
 # `.\trainer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020-present the HuggingFace Inc. team.
 #

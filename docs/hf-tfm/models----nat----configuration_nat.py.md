@@ -1,6 +1,6 @@
 # `.\models\nat\configuration_nat.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明和许可证信息
 #
@@ -43,7 +43,7 @@ class NatConfig(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import NatConfig, NatModel
 
     >>> # Initializing a Nat shi-labs/nat-mini-in1k-224 style configuration

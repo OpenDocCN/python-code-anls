@@ -1,6 +1,6 @@
 # `.\models\gpt2\__init__.py`
 
-```
+```py
 # 引入类型检查工具，用于类型检查
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\bloom\modeling_flax_bloom.py`
 
-```
+```py
 # 导入所需的模块和库
 import math
 from functools import partial

@@ -1,6 +1,6 @@
 # `.\models\deit\modeling_tf_deit.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，版权归 Facebook AI Research (FAIR) 和 HuggingFace Inc. 团队所有
 #

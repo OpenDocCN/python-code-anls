@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\modeling_deformable_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 SenseTime and The HuggingFace Inc. team. All rights reserved.
 #

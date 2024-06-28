@@ -1,6 +1,6 @@
 # `.\models\bert\modeling_bert.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明，包括Google AI Language Team和HuggingFace Inc.的版权声明
 # 版权声明，包括NVIDIA CORPORATION的版权声明
@@ -1304,7 +1304,7 @@ class BertForNextSentencePrediction(BertPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, BertForNextSentencePrediction
         >>> import torch
 

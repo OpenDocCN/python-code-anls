@@ -1,6 +1,6 @@
 # `.\models\convnextv2\configuration_convnextv2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Meta Platforms, Inc. and The HuggingFace Inc. team. All rights reserved.
 #

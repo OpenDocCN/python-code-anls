@@ -1,6 +1,6 @@
 # `.\models\data2vec\convert_data2vec_vision_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 #!/usr/bin/env python3
 import argparse  # 导入命令行参数解析库
 import json  # 导入 JSON 操作库

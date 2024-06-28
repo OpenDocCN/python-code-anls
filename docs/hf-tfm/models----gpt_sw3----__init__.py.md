@@ -1,6 +1,6 @@
 # `.\models\gpt_sw3\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明代码版权归 The HuggingFace Team 所有，使用 Apache License 2.0 许可
 #
 # 导入必要的模块和函数声明

@@ -1,6 +1,6 @@
 # `.\models\gptj\modeling_flax_gptj.py`
 
-```
+```py
 from functools import partial
 from typing import Optional, Tuple
 
@@ -724,7 +724,7 @@ class FlaxGPTJForCausalLM(FlaxGPTJPreTrainedModel):
         
         # 返回更新后的模型参数
         return model_kwargs
-```python`
+````
 # 调用函数append_call_sample_docstring，添加样例文档字符串到指定类和对象的关联属性中
 append_call_sample_docstring(
     FlaxGPTJForCausalLM,  # 目标类：FlaxGPTJForCausalLM

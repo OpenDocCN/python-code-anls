@@ -1,6 +1,6 @@
 # `.\models\patchtst\configuration_patchtst.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #
@@ -42,7 +42,7 @@ class PatchTSTConfig(PretrainedConfig):
     Configuration objects inherit from [`PretrainedConfig`] can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
 
-    ```python
+    ```
     >>> from transformers import PatchTSTConfig, PatchTSTModel
 
     >>> # Initializing an PatchTST configuration with 12 time steps for prediction

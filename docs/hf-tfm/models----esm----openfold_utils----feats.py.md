@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\feats.py`
 
-```
+```py
 # 导入必要的模块和类型声明
 from typing import Dict, Tuple, overload
 import torch

@@ -1,6 +1,6 @@
 # `.\models\graphormer\configuration_graphormer.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码格式为 UTF-8
 

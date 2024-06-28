@@ -1,6 +1,6 @@
 # `.\models\bit\modeling_bit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Google AI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -959,7 +959,7 @@ class BitBackbone(BitPreTrainedModel, BackboneMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

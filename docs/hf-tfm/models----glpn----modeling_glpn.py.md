@@ -1,6 +1,6 @@
 # `.\models\glpn\modeling_glpn.py`
 
-```
+```py
 # 设置源代码文件的编码格式为UTF-8，确保能正确处理中文等特殊字符
 # 版权声明，版权归KAIST和The HuggingFace Inc.团队所有，保留所有权利
 #
@@ -820,7 +820,7 @@ class GLPNForDepthEstimation(GLPNPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, GLPNForDepthEstimation
         >>> import torch
         >>> import numpy as np

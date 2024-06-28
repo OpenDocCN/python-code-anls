@@ -1,6 +1,6 @@
 # `.\pipelines\video_classification.py`
 
-```
+```py
 # 导入所需模块和类
 from io import BytesIO  # 导入 BytesIO 类
 from typing import List, Union  # 导入 List 和 Union 类型

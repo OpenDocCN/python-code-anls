@@ -1,6 +1,6 @@
 # `.\models\bridgetower\image_processing_bridgetower.py`
 
-```
+```py
 # 定义脚本的编码格式为 UTF-8
 # 版权声明，指明版权归属和保留的权利
 

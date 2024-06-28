@@ -1,6 +1,6 @@
 # `.\models\deformable_detr\feature_extraction_deformable_detr.py`
 
-```
+```py
 # 设置 Python 文件的编码格式为 UTF-8
 # 版权声明，声明此代码版权归 HuggingFace Inc. 团队所有
 #

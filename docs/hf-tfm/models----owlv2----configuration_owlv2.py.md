@@ -1,6 +1,6 @@
 # `.\models\owlv2\configuration_owlv2.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，指定使用UTF-8编码
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
@@ -240,7 +240,7 @@ class Owlv2VisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Owlv2VisionConfig, Owlv2VisionModel
 
     >>> # Initializing a Owlv2VisionModel with google/owlv2-base-patch16 style configuration

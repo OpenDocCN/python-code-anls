@@ -1,6 +1,6 @@
 # `.\models\openai\tokenization_openai_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Open AI Team Authors and The HuggingFace Inc. team.
 #

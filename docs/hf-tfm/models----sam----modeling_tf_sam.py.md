@@ -1,6 +1,6 @@
 # `.\models\sam\modeling_tf_sam.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为 UTF-8
 

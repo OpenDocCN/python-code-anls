@@ -1,6 +1,6 @@
 # `.\models\swinv2\convert_swinv2_timm_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为UTF-8
 
 # 版权声明和许可信息，声明本代码版权归HuggingFace Inc.团队所有，并遵循Apache License 2.0许可

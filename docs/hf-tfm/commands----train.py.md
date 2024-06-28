@@ -1,6 +1,6 @@
 # `.\commands\train.py`
 
-```
+```py
 # 导入标准库中的os模块，用于处理操作系统相关的功能
 import os
 # 从argparse模块中导入ArgumentParser类和Namespace类，用于处理命令行参数

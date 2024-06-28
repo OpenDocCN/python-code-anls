@@ -1,6 +1,6 @@
 # `.\models\informer\configuration_informer.py`
 
-```
+```py
 # coding=utf-8
 # 定义模型配置的文件，声明版权信息和许可证信息
 
@@ -35,7 +35,7 @@ class InformerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import InformerConfig, InformerModel
 
     >>> # Initializing an Informer configuration with 12 time steps for prediction

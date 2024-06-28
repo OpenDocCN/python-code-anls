@@ -1,6 +1,6 @@
 # `.\models\esm\modeling_esm.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明和许可证信息

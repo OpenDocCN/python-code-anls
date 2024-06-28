@@ -1,6 +1,6 @@
 # `.\models\speech_to_text_2\processing_speech_to_text_2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

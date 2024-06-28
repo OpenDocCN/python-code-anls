@@ -1,6 +1,6 @@
 # `.\models\ernie_m\configuration_ernie_m.py`
 
-```
+```py
 # coding=utf-8
 # 上面是声明文件编码格式为 UTF-8，确保支持中文等特殊字符的正确显示
 # Copyright 2023 Xuan Ouyang, Shuohuan Wang, Chao Pang, Yu Sun, Hao Tian, Hua Wu, Haifeng Wang and The HuggingFace Inc. team. All rights reserved.

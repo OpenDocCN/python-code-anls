@@ -1,6 +1,6 @@
 # `.\models\idefics\perceiver.py`
 
-```
+```py
     def __init__(
         self, config: IdeficsConfig, embed_dim: int, depth: int, n_heads: int, head_dim: int, n_latents: int
     ):

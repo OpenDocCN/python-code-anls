@@ -1,6 +1,6 @@
 # `.\models\deberta\configuration_deberta.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020, Microsoft and the HuggingFace Inc. team.
 #
@@ -56,7 +56,7 @@ class DebertaConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import DebertaConfig, DebertaModel
 
     >>> # Initializing a DeBERTa microsoft/deberta-base style configuration

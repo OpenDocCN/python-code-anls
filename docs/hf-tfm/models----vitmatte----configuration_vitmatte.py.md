@@ -1,6 +1,6 @@
 # `.\models\vitmatte\configuration_vitmatte.py`
 
-```
+```py
 # 设置文件编码方式为 utf-8
 # 版权声明
 # 根据 Apache License, Version 2.0 许可协议，对代码的使用和分发进行限制和规定

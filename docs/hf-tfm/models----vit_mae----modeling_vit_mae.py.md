@@ -1,6 +1,6 @@
 # `.\models\vit_mae\modeling_vit_mae.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Facebook AI and The HuggingFace Inc. team. All rights reserved.
 #

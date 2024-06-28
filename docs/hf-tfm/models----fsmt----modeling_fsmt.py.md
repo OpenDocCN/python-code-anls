@@ -1,6 +1,6 @@
 # `.\models\fsmt\modeling_fsmt.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8
 
@@ -198,7 +198,7 @@ FSMT_START_DOCSTRING = r"""
 FSMT_GENERATION_EXAMPLE = r"""
     Translation example::
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FSMTForConditionalGeneration
 
     >>> mname = "facebook/wmt19-ru-en"

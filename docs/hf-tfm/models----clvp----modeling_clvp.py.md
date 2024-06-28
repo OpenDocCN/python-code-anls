@@ -1,6 +1,6 @@
 # `.\models\clvp\modeling_clvp.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入 copy 模块用于复制对象
 import math  # 导入 math 模块用于数学运算
@@ -1238,7 +1238,7 @@ class ClvpModelForConditionalGeneration(ClvpPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import ClvpProcessor, ClvpModelForConditionalGeneration
 
         >>> # Define the Text

@@ -1,6 +1,6 @@
 # `.\models\squeezebert\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，说明该代码受 Apache License, Version 2.0 版权保护
 #
 # 如果符合许可证要求，可以使用本文件；否则，不得使用

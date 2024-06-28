@@ -1,6 +1,6 @@
 # `.\models\fsmt\configuration_fsmt.py`
 
-```
+```py
 """
 FSMT configuration
 """
@@ -36,7 +36,7 @@ class FSMTConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import FSMTConfig, FSMTModel
 
     >>> # Initializing a FSMT facebook/wmt19-en-ru style configuration

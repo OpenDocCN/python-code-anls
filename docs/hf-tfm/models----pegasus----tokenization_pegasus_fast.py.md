@@ -1,6 +1,6 @@
 # `.\models\pegasus\tokenization_pegasus_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Google and The HuggingFace Inc. team.
 #

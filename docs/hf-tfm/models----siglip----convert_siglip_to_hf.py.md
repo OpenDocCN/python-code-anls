@@ -1,6 +1,6 @@
 # `.\models\siglip\convert_siglip_to_hf.py`
 
-```
+```py
 # 获取 SigLIP 模型配置信息的函数
 def get_siglip_config(model_name):
     # 创建 SigLIPConfig 对象

@@ -1,6 +1,6 @@
 # `.\models\mobilebert\tokenization_mobilebert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8
 

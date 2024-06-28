@@ -1,6 +1,6 @@
 # `.\models\bart\configuration_bart.py`
 
-```
+```py
 # 导入警告模块，用于在需要时发出警告
 import warnings
 # OrderedDict 是一个有序字典，可以记录元素插入的顺序
@@ -38,7 +38,7 @@ class BartConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BartConfig, BartModel
 
     >>> # 初始化一个 BART facebook/bart-large 风格的配置

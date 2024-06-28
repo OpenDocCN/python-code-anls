@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\__init__.py`
 
-```
+```py
 # 版权声明及许可信息
 # 2022年由HuggingFace团队版权所有。
 # 根据Apache许可证2.0版（“许可证”）授权；

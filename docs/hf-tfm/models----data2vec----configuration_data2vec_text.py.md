@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_text.py`
 
-```
+```py
 # coding=utf-8
 # 文件编码声明，使用 UTF-8 编码格式
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.

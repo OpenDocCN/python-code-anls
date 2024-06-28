@@ -1,6 +1,6 @@
 # `.\models\tapas\tokenization_tapas.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Google Research and The HuggingFace Inc. team.
 #

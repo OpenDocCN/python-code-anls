@@ -1,6 +1,6 @@
 # `.\models\pvt\modeling_pvt.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行指定了文件的编码格式为 UTF-8，确保可以正确处理所有字符
 # Copyright 2023 Authors: Wenhai Wang, Enze Xie, Xiang Li, Deng-Ping Fan,

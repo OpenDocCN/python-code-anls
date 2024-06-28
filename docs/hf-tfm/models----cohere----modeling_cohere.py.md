@@ -1,6 +1,6 @@
 # `.\models\cohere\modeling_cohere.py`
 
-```
+```py
 # 定义 CohereLayerNorm 类，用于实现 Cohere 模型中的 LayerNorm 层
 class CohereLayerNorm(nn.Module):
     # 初始化函数

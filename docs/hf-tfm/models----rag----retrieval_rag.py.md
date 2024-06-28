@@ -1,6 +1,6 @@
 # `.\models\rag\retrieval_rag.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020, The RAG Authors and The HuggingFace Inc. team.
 #

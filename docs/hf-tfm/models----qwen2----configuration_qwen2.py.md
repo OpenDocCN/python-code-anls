@@ -1,6 +1,6 @@
 # `.\models\qwen2\configuration_qwen2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The Qwen team, Alibaba Group and the HuggingFace Inc. team. All rights reserved.
 #
@@ -39,7 +39,7 @@ class Qwen2Config(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import Qwen2Model, Qwen2Config
 
     >>> # Initializing a Qwen2 style configuration

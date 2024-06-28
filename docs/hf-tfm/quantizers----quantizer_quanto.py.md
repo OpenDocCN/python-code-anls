@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_quanto.py`
 
-```
+```py
 # 导入模块 importlib，用于动态导入模块
 import importlib
 # 导入类型检查标记 TYPE_CHECKING、Any、Dict、List、Optional、Union

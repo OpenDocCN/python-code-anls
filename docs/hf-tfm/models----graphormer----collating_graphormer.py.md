@@ -1,6 +1,6 @@
 # `.\models\graphormer\collating_graphormer.py`
 
-```
+```py
 # 从 Microsoft Corporation 和 HuggingFace 中导入必要的模块
 # 使用 MIT 许可证进行许可
 

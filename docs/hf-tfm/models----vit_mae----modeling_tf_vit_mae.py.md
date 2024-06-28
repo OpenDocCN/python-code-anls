@@ -1,6 +1,6 @@
 # `.\models\vit_mae\modeling_tf_vit_mae.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Facebook AI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -995,7 +995,7 @@ Methods:
     build(input_shape=None): 构建模型的方法，用于初始化网络层。
 
 Examples:
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, TFViTMAEModel
     >>> from PIL import Image
     >>> import requests
@@ -1051,7 +1051,7 @@ class TFViTMAEModel(TFViTMAEPreTrainedModel):
             Union[TFViTMAEModelOutput, Tuple[tf.Tensor]]: 模型的输出结果。
 
         Examples:
-            ```python
+            ```
             >>> from transformers import AutoImageProcessor, TFViTMAEModel
             >>> from PIL import Image
             >>> import requests
@@ -1392,7 +1392,7 @@ class TFViTMAEForPreTraining(TFViTMAEPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, TFViTMAEForPreTraining
         >>> from PIL import Image
         >>> import requests

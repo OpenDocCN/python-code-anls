@@ -1,6 +1,6 @@
 # `.\models\git\convert_git_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，声明代码归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
 # 获取命令行参数解析器

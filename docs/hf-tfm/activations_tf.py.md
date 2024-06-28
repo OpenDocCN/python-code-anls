@@ -1,6 +1,6 @@
 # `.\activations_tf.py`
 
-```
+```py
 # 引入数学库
 import math
 

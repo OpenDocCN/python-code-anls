@@ -1,6 +1,6 @@
 # `.\convert_tf_hub_seq_to_seq_bert_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team.
 #

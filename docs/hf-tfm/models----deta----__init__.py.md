@@ -1,6 +1,6 @@
 # `.\models\deta\__init__.py`
 
-```
+```py
 # 引入类型检查标记，如果支持类型检查，表示当前环境可能用于类型检查
 from typing import TYPE_CHECKING
 

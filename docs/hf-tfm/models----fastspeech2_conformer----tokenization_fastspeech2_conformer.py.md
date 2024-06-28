@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\tokenization_fastspeech2_conformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
 #

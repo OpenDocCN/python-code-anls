@@ -1,6 +1,6 @@
 # `.\commands\add_new_model.py`
 
-```
+```py
 # 导入必要的模块
 import json
 import os

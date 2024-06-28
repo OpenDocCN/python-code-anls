@@ -1,6 +1,6 @@
 # `.\pipelines\zero_shot_classification.py`
 
-```
+```py
 import inspect  # 导入 inspect 模块，用于获取对象的信息
 from typing import List, Union  # 引入类型提示中的 List 和 Union 类型
 
@@ -64,7 +64,7 @@ class ZeroShotClassificationPipeline(ChunkPipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> oracle = pipeline(model="facebook/bart-large-mnli")

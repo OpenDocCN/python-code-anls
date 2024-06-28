@@ -1,6 +1,6 @@
 # `.\models\dinov2\configuration_dinov2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明此文件版权归 HuggingFace Inc. 团队所有
 # 根据 Apache License, Version 2.0 许可证使用本文件，除非符合许可证的条件，否则不得使用本文件
@@ -46,7 +46,7 @@ class Dinov2Config(BackboneConfigMixin, PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import Dinov2Config, Dinov2Model
 
     >>> # 初始化一个 Dinov2 dinov2-base-patch16-224 风格的配置

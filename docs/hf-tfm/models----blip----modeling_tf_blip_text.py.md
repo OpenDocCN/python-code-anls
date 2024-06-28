@@ -1,6 +1,6 @@
 # `.\models\blip\modeling_tf_blip_text.py`
 
-```
+```py
 # 导入所需的库和模块
 from __future__ import annotations
 

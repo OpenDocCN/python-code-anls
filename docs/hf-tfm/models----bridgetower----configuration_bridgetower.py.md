@@ -1,6 +1,6 @@
 # `.\models\bridgetower\configuration_bridgetower.py`
 
-```
+```py
 # coding=utf-8
 # 设置模块的版权声明和许可信息
 
@@ -157,7 +157,7 @@ class BridgeTowerTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BridgeTowerTextConfig
 
     >>> # Initializing a BridgeTower BridgeTower/bridgetower-base style configuration for the text model
@@ -273,7 +273,7 @@ class BridgeTowerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BridgeTowerModel, BridgeTowerConfig
 
     >>> # Initializing a BridgeTower BridgeTower/bridgetower-base style configuration

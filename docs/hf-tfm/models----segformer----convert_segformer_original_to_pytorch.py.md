@@ -1,6 +1,6 @@
 # `.\models\segformer\convert_segformer_original_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保可以处理各种字符集
 # 版权声明，指明代码版权归HuggingFace Inc.团队所有
 #

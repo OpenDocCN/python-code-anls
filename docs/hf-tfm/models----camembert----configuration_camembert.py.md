@@ -1,6 +1,6 @@
 # `.\models\camembert\configuration_camembert.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，包括谷歌 AI 语言团队和 HuggingFace 公司
 # 版权声明，包括 NVIDIA 公司
@@ -51,7 +51,7 @@ class CamembertConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CamembertConfig, CamembertModel
 
     >>> # Initializing a Camembert almanach/camembert-base style configuration

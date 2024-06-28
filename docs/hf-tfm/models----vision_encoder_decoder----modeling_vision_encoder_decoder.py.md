@@ -1,6 +1,6 @@
 # `.\models\vision_encoder_decoder\modeling_vision_encoder_decoder.py`
 
-```
+```py
 # 设置文件的编码格式为 UTF-8
 
 # 版权声明，指明版权归 HuggingFace Inc. 团队所有

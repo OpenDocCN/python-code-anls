@@ -1,6 +1,6 @@
 # `.\models\glpn\configuration_glpn.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 KAIST and The HuggingFace Inc. team. All rights reserved.
 #
@@ -83,7 +83,7 @@ class GLPNConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import GLPNModel, GLPNConfig
 
     >>> # 初始化一个GLPN vinvino02/glpn-kitti风格的配置

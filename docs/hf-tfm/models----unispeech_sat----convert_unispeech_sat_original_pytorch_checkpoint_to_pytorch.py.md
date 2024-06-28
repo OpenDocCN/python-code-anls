@@ -1,6 +1,6 @@
 # `.\models\unispeech_sat\convert_unispeech_sat_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 引用必要的库和模块

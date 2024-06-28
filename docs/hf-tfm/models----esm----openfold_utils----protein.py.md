@@ -1,6 +1,6 @@
 # `.\models\esm\openfold_utils\protein.py`
 
-```
+```py
 # 导入必要的模块和库
 import dataclasses  # 用于创建不可变数据类
 import re  # 用于正则表达式操作

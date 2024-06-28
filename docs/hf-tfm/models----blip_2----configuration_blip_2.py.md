@@ -1,6 +1,6 @@
 # `.\models\blip_2\configuration_blip_2.py`
 
-```
+```py
 # coding=utf-8
 # 定义文件编码格式为 UTF-8
 
@@ -102,7 +102,7 @@ class Blip2VisionConfig(PretrainedConfig):
             # 是否在自注意力层中的查询和值添加偏置。
 
     Example:
-    ```python
+    ```
     >>> from transformers import Blip2VisionConfig, Blip2VisionModel
 
     >>> # 初始化 Blip2VisionConfig，使用 Salesforce/blip2-opt-2.7b 样式配置
@@ -223,7 +223,7 @@ class Blip2QFormerConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import Blip2QFormerConfig, Blip2QFormerModel
     >>> # 设置模型类型为 "blip_2_qformer"
     model_type = "blip_2_qformer"
@@ -310,7 +310,7 @@ class Blip2Config(PretrainedConfig):
 
     # 示例:
     # 
-    # ```python
+    # ```
     # >>> from transformers import (
     # ...     Blip2VisionConfig,
     # ...     Blip2QFormerConfig,

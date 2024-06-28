@@ -1,6 +1,6 @@
 # `.\models\clip\image_processing_clip.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Dict, List, Optional, Union  # 导入类型提示所需的模块
 

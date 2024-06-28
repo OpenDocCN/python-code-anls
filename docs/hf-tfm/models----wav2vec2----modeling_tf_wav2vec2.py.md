@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\modeling_tf_wav2vec2.py`
 
-```
+```py
 # 设定代码文件的字符编码为 UTF-8
 # 版权声明和许可信息，表明此代码的使用受 Apache 许可证 2.0 版本的约束
 #
@@ -1745,7 +1745,7 @@ class TFWav2Vec2Model(TFWav2Vec2PreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, TFWav2Vec2Model
         >>> from datasets import load_dataset
         >>> import soundfile as sf

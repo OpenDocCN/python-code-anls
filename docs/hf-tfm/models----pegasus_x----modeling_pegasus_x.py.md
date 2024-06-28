@@ -1,6 +1,6 @@
 # `.\models\pegasus_x\modeling_pegasus_x.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 年，Google 和 The HuggingFace Inc. 团队。保留所有权利。
 #
@@ -436,7 +436,7 @@ PEGASUS_X_START_DOCSTRING = r"""
 PEGASUS_X_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, PegasusXForConditionalGeneration
 
     >>> model = PegasusXForConditionalGeneration.from_pretrained("google/pegasus-x-base")

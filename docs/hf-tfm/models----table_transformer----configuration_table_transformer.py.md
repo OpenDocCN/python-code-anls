@@ -1,6 +1,6 @@
 # `.\models\table_transformer\configuration_table_transformer.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码格式为 UTF-8
 
@@ -46,7 +46,7 @@ class TableTransformerConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import TableTransformerModel, TableTransformerConfig
 
     >>> # Initializing a Table Transformer microsoft/table-transformer-detection style configuration

@@ -1,6 +1,6 @@
 # `.\pipelines\image_to_image.py`
 
-```
+```py
 # 导入所需的模块和函数
 from typing import List, Union
 
@@ -39,7 +39,7 @@ class ImageToImagePipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from PIL import Image
     >>> import requests
 

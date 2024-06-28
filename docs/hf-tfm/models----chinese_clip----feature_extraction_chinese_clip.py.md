@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\feature_extraction_chinese_clip.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 OFA-Sys 团队作者和 HuggingFace 团队。保留所有权利。
 #

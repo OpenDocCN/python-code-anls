@@ -1,6 +1,6 @@
 # `.\models\biogpt\__init__.py`
 
-```
+```py
 # 引入必要的模块和函数来处理依赖性检查和延迟加载
 from typing import TYPE_CHECKING
 

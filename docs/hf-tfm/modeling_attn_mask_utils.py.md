@@ -1,6 +1,6 @@
 # `.\modeling_attn_mask_utils.py`
 
-```
+```py
 # 引入必要的库
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
@@ -20,7 +20,7 @@ class AttentionMaskConverter:
 
     Examples:
 
-    ```python
+    ```
     >>> import torch
     >>> from transformers.modeling_attn_mask_utils import AttentionMaskConverter
 

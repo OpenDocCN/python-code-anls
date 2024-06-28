@@ -1,6 +1,6 @@
 # `.\models\audio_spectrogram_transformer\feature_extraction_audio_spectrogram_transformer.py`
 
-```
+```py
 """
 Feature extractor class for Audio Spectrogram Transformer.
 """

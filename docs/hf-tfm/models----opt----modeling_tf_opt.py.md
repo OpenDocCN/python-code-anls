@@ -1,6 +1,6 @@
 # `.\models\opt\modeling_tf_opt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #

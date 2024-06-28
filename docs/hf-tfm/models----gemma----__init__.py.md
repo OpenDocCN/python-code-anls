@@ -1,6 +1,6 @@
 # `.\models\gemma\__init__.py`
 
-```
+```py
 # 导入所需模块和函数，这里从不同的模块和子模块中导入特定的内容
 from typing import TYPE_CHECKING  # 导入类型检查相关的功能
 

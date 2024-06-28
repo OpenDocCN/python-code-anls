@@ -1,6 +1,6 @@
 # `.\models\roberta\tokenization_roberta.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2018 年 Open AI 团队作者和 HuggingFace Inc. 团队
 #

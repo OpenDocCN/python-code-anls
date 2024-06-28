@@ -1,6 +1,6 @@
 # `.\models\wavlm\__init__.py`
 
-```
+```py
 # 引入所需的类型检查模块
 from typing import TYPE_CHECKING
 

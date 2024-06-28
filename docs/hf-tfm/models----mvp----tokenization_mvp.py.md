@@ -1,6 +1,6 @@
 # `.\models\mvp\tokenization_mvp.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Facebook AI Research Team Authors and The HuggingFace Inc. team.
 #

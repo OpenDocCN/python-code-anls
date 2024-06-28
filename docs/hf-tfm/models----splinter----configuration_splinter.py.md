@@ -1,6 +1,6 @@
 # `.\models\splinter\configuration_splinter.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Tel AViv University, AllenAI and The HuggingFace Inc. team. All rights reserved.
 #

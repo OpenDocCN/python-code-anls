@@ -1,6 +1,6 @@
 # `.\kernels\yoso\common.h`
 
-```
+```py
 # 定义宏函数，返回两个数中较小的一个
 #define min(a, b) ((a)<(b)?(a):(b))
 

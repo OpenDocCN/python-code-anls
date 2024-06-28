@@ -1,6 +1,6 @@
 # `.\models\fnet\modeling_fnet.py`
 
-```
+```py
 # 设置源代码文件的编码格式为UTF-8
 # 版权声明，2021年由Google Research和HuggingFace Inc.团队保留所有权利
 # 根据Apache许可证2.0版（“许可证”）许可，除非符合许可证的使用，否则不得使用此文件。
@@ -843,7 +843,7 @@ class FNetForPreTraining(FNetPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FNetForPreTraining
         >>> import torch
 
@@ -1027,7 +1027,7 @@ class FNetForNextSentencePrediction(FNetPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FNetForNextSentencePrediction
         >>> import torch
 

@@ -1,6 +1,6 @@
 # `.\models\marian\__init__.py`
 
-```
+```py
 # 版权声明和许可条款声明，指出版权归 HuggingFace Team 所有，采用 Apache License 2.0
 #
 # 此部分导入所需的模块和函数，从 utils 模块导入必要的依赖检查和工具函数

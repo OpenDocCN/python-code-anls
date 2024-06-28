@@ -1,6 +1,6 @@
 # `.\models\vilt\image_processing_vilt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指明版权归 HuggingFace Inc. 团队所有
 # 在 Apache 许可证 2.0 版本下许可使用本文件，详情请见 http://www.apache.org/licenses/LICENSE-2.0

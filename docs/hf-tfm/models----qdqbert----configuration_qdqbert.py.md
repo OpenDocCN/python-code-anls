@@ -1,6 +1,6 @@
 # `.\models\qdqbert\configuration_qdqbert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 NVIDIA Corporation and The HuggingFace Team. All rights reserved.
 #

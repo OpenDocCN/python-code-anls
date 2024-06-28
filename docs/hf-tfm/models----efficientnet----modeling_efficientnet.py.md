@@ -1,6 +1,6 @@
 # `.\models\efficientnet\modeling_efficientnet.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Google Research, Inc. and The HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\dpt\configuration_dpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -52,7 +52,7 @@ class DPTConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import DPTModel, DPTConfig
 
     >>> # Initializing a DPT dpt-large style configuration

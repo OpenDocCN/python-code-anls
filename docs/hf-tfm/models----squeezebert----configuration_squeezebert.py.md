@@ -1,6 +1,6 @@
 # `.\models\squeezebert\configuration_squeezebert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The SqueezeBert authors and The HuggingFace Inc. team.
 #
@@ -52,7 +52,7 @@ class SqueezeBertConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import SqueezeBertConfig, SqueezeBertModel
 
     >>> # Initializing a SqueezeBERT configuration

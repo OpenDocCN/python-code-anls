@@ -1,6 +1,6 @@
 # `.\commands\lfs.py`
 
-```
+```py
 """
 Implementation of a custom transfer agent for the transfer type "multipart" for git-lfs.
 

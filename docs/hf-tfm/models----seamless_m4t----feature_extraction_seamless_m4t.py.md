@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t\feature_extraction_seamless_m4t.py`
 
-```
+```py
 """
 Feature extractor class for SeamlessM4T
 """

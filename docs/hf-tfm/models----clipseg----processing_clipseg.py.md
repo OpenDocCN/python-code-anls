@@ -1,6 +1,6 @@
 # `.\models\clipseg\processing_clipseg.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，使用 Apache License 2.0 许可证
 # 警告：如果没有符合许可证要求的代码，不能使用本文件

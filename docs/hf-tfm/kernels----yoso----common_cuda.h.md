@@ -1,6 +1,6 @@
 # `.\kernels\yoso\common_cuda.h`
 
-```
+```py
 # 定义每个线程块中的最大线程数
 #define MAX_THREADS_PER_BLOCK 1024
 

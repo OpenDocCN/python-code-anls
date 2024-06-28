@@ -1,6 +1,6 @@
 # `.\tools\image_segmentation.py`
 
-```
+```py
 # 导入必要的库和模块
 import numpy as np
 import torch

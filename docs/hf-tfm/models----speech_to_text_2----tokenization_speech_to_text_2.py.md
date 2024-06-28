@@ -1,6 +1,6 @@
 # `.\models\speech_to_text_2\tokenization_speech_to_text_2.py`
 
-```
+```py
 # 定义词汇文件的名称映射
 VOCAB_FILES_NAMES = {
     "vocab_file": "vocab.json",  # 词汇表文件名

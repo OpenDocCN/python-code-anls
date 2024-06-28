@@ -1,6 +1,6 @@
 # `.\models\kosmos2\configuration_kosmos2.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，确保支持多语言字符集
 
@@ -251,7 +251,7 @@ class Kosmos2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Kosmos2Config, Kosmos2Model
 
     >>> # Initializing a Kosmos-2 kosmos-2-patch14-224 style configuration

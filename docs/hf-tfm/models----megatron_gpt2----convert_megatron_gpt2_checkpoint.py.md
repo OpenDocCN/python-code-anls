@@ -1,6 +1,6 @@
 # `.\models\megatron_gpt2\convert_megatron_gpt2_checkpoint.py`
 
-```
+```py
 # 定义递归打印函数，用于打印参数名及其对应的值
 def recursive_print(name, val, spaces=0):
     # 格式化消息，根据参数名生成相应格式的字符串，控制输出的对齐

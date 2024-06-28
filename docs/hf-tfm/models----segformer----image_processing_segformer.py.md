@@ -1,6 +1,6 @@
 # `.\models\segformer\image_processing_segformer.py`
 
-```
+```py
 # 导入警告模块，用于可能的警告信息输出
 import warnings
 # 导入类型提示相关模块

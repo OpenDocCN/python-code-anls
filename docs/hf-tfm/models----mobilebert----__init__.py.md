@@ -1,6 +1,6 @@
 # `.\models\mobilebert\__init__.py`
 
-```
+```py
 # 引入依赖类型检查模块
 from typing import TYPE_CHECKING
 

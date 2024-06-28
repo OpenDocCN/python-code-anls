@@ -1,6 +1,6 @@
 # `.\pipelines\feature_extraction.py`
 
-```
+```py
 # 引入类型提示字典 Dict
 from typing import Dict
 
@@ -27,7 +27,7 @@ class FeatureExtractionPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> extractor = pipeline(model="google-bert/bert-base-uncased", task="feature-extraction")

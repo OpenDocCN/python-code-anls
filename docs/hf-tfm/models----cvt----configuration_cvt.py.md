@@ -1,6 +1,6 @@
 # `.\models\cvt\configuration_cvt.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 导入所需模块和函数
@@ -26,7 +26,7 @@ class CvtConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import CvtConfig, CvtModel
 
     >>> # 初始化一个 CvT msft/cvt 风格的配置

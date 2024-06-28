@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_awq.py`
 
-```
+```py
 # 版权声明及许可信息，指明HuggingFace Inc.团队拥有版权
 #
 # 根据Apache许可证2.0版（"许可证"）授权，除非符合许可证要求，

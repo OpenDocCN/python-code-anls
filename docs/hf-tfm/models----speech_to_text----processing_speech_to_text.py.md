@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\processing_speech_to_text.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码格式为 UTF-8
 

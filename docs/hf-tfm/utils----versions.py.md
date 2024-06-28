@@ -1,6 +1,6 @@
 # `.\utils\versions.py`
 
-```
+```py
 # 版权声明和保留版权年份，标识代码版权归HuggingFace团队所有
 #
 # 根据Apache许可证2.0版（“许可证”）授权，除非符合许可证的规定，否则不得使用此文件
@@ -59,7 +59,7 @@ def require_version(requirement: str, hint: Optional[str] = None) -> None:
 
     Example:
 
-    ```python
+    ```
     require_version("pandas>1.1.2")
     require_version("numpy>1.18.5", "this is important to have for whatever reason")
     ```"""

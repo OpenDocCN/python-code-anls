@@ -1,6 +1,6 @@
 # `.\models\imagegpt\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，指明代码版权归HuggingFace团队所有，使用Apache License, Version 2.0许可证
 #
 # from typing import TYPE_CHECKING 导入类型检查相关模块

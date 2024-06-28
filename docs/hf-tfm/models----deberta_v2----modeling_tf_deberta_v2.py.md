@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\modeling_tf_deberta_v2.py`
 
-```
+```py
 """
 TF 2.0 DeBERTa-v2 model.
 

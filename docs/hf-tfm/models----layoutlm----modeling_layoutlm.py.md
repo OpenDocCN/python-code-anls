@@ -1,6 +1,6 @@
 # `.\models\layoutlm\modeling_layoutlm.py`
 
-```
+```py
 # coding=utf-8
 # 版权归 Microsoft Research Asia LayoutLM Team 作者和 HuggingFace Inc. 团队所有。
 #

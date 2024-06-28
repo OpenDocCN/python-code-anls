@@ -1,6 +1,6 @@
 # `.\models\gpt_bigcode\configuration_gpt_bigcode.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The BigCode team and HuggingFace Inc. team.
 #
@@ -82,7 +82,7 @@ class GPTBigCodeConfig(PretrainedConfig):
             是否使用多查询注意力（True）或多头注意力（False）
     Example:
 
-    ```python
+    ```
     >>> from transformers import GPTBigCodeConfig, GPTBigCodeModel
 
     >>> # 初始化一个 GPTBigCodeConfig 配置对象

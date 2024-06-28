@@ -1,6 +1,6 @@
 # `.\models\nezha\modeling_nezha.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -1173,7 +1173,7 @@ class NezhaForNextSentencePrediction(NezhaPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, NezhaForNextSentencePrediction
         >>> import torch
 

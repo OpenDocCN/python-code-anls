@@ -1,6 +1,6 @@
 # `.\generation\stopping_criteria.py`
 
-```
+```py
 # 导入时间模块，用于处理时间相关功能
 import time
 # 导入警告模块，用于发出警告信息

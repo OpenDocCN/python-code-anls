@@ -1,6 +1,6 @@
 # `.\models\whisper\feature_extraction_whisper.py`
 
-```
+```py
 # 设置文件编码为 UTF-8，确保支持非英文字符的正确解析
 # 版权声明，使用 Apache 许可证 2.0 版本
 #

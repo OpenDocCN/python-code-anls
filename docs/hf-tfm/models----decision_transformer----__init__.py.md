@@ -1,6 +1,6 @@
 # `.\models\decision_transformer\__init__.py`
 
-```
+```py
 # 版权声明和许可证信息，说明此文件的版权归HuggingFace团队所有，并遵循Apache License 2.0许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

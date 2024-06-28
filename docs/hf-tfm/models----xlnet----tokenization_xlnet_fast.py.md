@@ -1,6 +1,6 @@
 # `.\models\xlnet\tokenization_xlnet_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明和许可信息
 

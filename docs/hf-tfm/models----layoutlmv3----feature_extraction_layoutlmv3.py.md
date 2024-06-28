@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\feature_extraction_layoutlmv3.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

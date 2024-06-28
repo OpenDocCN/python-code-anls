@@ -1,6 +1,6 @@
 # `.\models\vipllava\modeling_vipllava.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 the HuggingFace Inc. team. All rights reserved.
 #

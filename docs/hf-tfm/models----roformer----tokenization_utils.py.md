@@ -1,6 +1,6 @@
 # `.\models\roformer\tokenization_utils.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.
 #

@@ -1,6 +1,6 @@
 # `.\models\efficientnet\configuration_efficientnet.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Google Research, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -51,7 +51,7 @@ class EfficientNetConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
     Example:
-    ```python
+    ```
     >>> from transformers import EfficientNetConfig, EfficientNetModel
 
     >>> # Initializing a EfficientNet efficientnet-b7 style configuration

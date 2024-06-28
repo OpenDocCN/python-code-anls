@@ -1,6 +1,6 @@
 # `.\models\blip\modeling_blip.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 
 # 导入警告模块，用于处理警告信息
@@ -860,7 +860,7 @@ class BlipVisionModel(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, BlipModel
 
         >>> model = BlipModel.from_pretrained("Salesforce/blip-image-captioning-base")
@@ -901,7 +901,7 @@ class BlipVisionModel(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipModel
@@ -1021,7 +1021,7 @@ class BlipForConditionalGeneration(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipForConditionalGeneration
@@ -1104,7 +1104,7 @@ class BlipForConditionalGeneration(BlipPreTrainedModel):
 
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipForConditionalGeneration
@@ -1283,7 +1283,7 @@ class BlipForQuestionAnswering(BlipPreTrainedModel):
                 传递给解码器 *generate* 函数的额外参数
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipForQuestionAnswering
@@ -1414,7 +1414,7 @@ class BlipForImageTextRetrieval(BlipPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, BlipForImageTextRetrieval

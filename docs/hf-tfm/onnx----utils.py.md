@@ -1,6 +1,6 @@
 # `.\onnx\utils.py`
 
-```
+```py
 # 导入所需的模块和类型声明
 from ctypes import c_float, sizeof
 from enum import Enum

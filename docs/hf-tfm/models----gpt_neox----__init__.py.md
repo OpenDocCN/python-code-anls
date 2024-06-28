@@ -1,6 +1,6 @@
 # `.\models\gpt_neox\__init__.py`
 
-```
+```py
 # 版权声明，指明代码的版权信息
 # 根据 Apache License, Version 2.0 许可证授权使用此文件
 # 如果不符合许可证要求，禁止使用此文件

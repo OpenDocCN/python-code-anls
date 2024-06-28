@@ -1,6 +1,6 @@
 # `.\models\unispeech_sat\modeling_unispeech_sat.py`
 
-```
+```py
 # 指定编码方式为 UTF-8，确保脚本可以正确处理 Unicode 字符
 # 版权声明，版权归 Fairseq 作者和 HuggingFace Inc. 团队所有，保留所有权利
 #
@@ -1407,7 +1407,7 @@ class UniSpeechSatForPreTraining(UniSpeechSatPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> import torch
         >>> from transformers import AutoFeatureExtractor, UniSpeechSatForPreTraining
         >>> from transformers.models.unispeech_sat.modeling_unispeech_sat import _compute_mask_indices

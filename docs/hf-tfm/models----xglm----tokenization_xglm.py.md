@@ -1,6 +1,6 @@
 # `.\models\xglm\tokenization_xglm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
 #

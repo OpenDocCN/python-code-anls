@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\tokenization_layoutlmv3.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为UTF-8，确保支持各种语言字符集
 # Copyright The HuggingFace Inc. team. All rights reserved.

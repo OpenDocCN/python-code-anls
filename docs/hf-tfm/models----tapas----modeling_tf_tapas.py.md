@@ -1,6 +1,6 @@
 # `.\models\tapas\modeling_tf_tapas.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出版权归属于 Google Research 和 HuggingFace Inc. 团队
 # 根据 Apache 许可证 2.0 版本授权，除非符合许可证条件，否则不得使用此文件
@@ -1123,7 +1123,7 @@ class TFTapasModel(TFTapasPreTrainedModel):
 
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, TapasModel
         >>> import pandas as pd
 

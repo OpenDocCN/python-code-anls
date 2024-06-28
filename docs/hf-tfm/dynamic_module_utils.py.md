@@ -1,6 +1,6 @@
 # `.\dynamic_module_utils.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #
@@ -449,7 +449,7 @@ def get_class_from_dynamic_module(
 
     Examples:
 
-    ```python
+    ```
     # Download module `modeling.py` from huggingface.co and cache then extract the class `MyBertModel` from this
     # module.
     cls = get_class_from_dynamic_module("modeling.MyBertModel", "sgugger/my-bert-model")

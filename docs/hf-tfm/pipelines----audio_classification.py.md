@@ -1,6 +1,6 @@
 # `.\pipelines\audio_classification.py`
 
-```
+```py
 # 导入子进程管理模块
 import subprocess
 # 导入 Union 用于类型提示
@@ -80,7 +80,7 @@ class AudioClassificationPipeline(Pipeline):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> classifier = pipeline(model="superb/wav2vec2-base-superb-ks")

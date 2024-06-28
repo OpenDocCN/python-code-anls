@@ -1,6 +1,6 @@
 # `.\models\oneformer\convert_to_hf_oneformer.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为 UTF-8
 

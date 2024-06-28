@@ -1,6 +1,6 @@
 # `.\models\m2m_100\configuration_m2m_100.py`
 
-```
+```py
 # coding=utf-8
 # 定义了文件的编码格式为 UTF-8
 
@@ -68,7 +68,7 @@ class M2M100Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import M2M100Config, M2M100Model
 
     >>> # Initializing a M2M100 facebook/m2m100_418M style configuration

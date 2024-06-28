@@ -1,6 +1,6 @@
 # `.\models\plbart\configuration_plbart.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022, UCLA NLP, The Facebook AI Research Team and The HuggingFace Inc. team. All rights reserved.
 #
@@ -48,7 +48,7 @@ class PLBartConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PLBartConfig, PLBartModel
 
     >>> # Initializing a PLBART uclanlp/plbart-base style configuration

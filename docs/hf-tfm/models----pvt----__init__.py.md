@@ -1,6 +1,6 @@
 # `.\models\pvt\__init__.py`
 
-```
+```py
 # coding=utf-8
 # 以上行指定了源代码文件的字符编码格式为 UTF-8
 

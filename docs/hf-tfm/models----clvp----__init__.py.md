@@ -1,6 +1,6 @@
 # `.\models\clvp\__init__.py`
 
-```
+```py
 # 版权声明及版权许可信息
 #
 # 版权所有2023年HuggingFace团队保留所有权利。

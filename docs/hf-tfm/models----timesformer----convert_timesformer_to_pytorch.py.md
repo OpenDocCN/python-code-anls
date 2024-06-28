@@ -1,6 +1,6 @@
 # `.\models\timesformer\convert_timesformer_to_pytorch.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可信息，指明代码使用的许可协议和版权归属
 # 导入转换 TimeSformer 检查点所需的库和模块

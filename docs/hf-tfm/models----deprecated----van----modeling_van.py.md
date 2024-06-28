@@ -1,6 +1,6 @@
 # `.\models\deprecated\van\modeling_van.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可信息
 

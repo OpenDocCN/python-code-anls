@@ -1,6 +1,6 @@
 # `.\utils\__init__.py`
 
-```
+```py
 # 指定 Python 解释器的路径，使得脚本可以在环境中独立运行
 #!/usr/bin/env python
 # 设置脚本的字符编码为 UTF-8

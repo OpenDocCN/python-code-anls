@@ -1,6 +1,6 @@
 # `.\models\groupvit\convert_groupvit_nvlab_to_hf.py`
 
-```
+```py
 # 定义函数用于重命名模型参数键名
 def rename_key(name):
     # 如果键名中包含 "img_encoder.pos_embed"，则替换为 "vision_model.embeddings.position_embeddings"

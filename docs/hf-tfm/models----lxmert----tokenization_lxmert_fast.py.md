@@ -1,6 +1,6 @@
 # `.\models\lxmert\tokenization_lxmert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 引入必要的库和模块
 import json  # 导入 json 库，用于处理 JSON 数据
@@ -141,7 +141,7 @@ class LxmertTokenizerFast(PreTrainedTokenizerFast):
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
 
-# 创建用于区分两个序列的 token type IDs 的方法。接受两个参数 `token_ids_0` 和 `token_ids_1`，分别是序列的ID列表，返回一个标识序列类型的ID列表。```python
+# 创建用于区分两个序列的 token type IDs 的方法。接受两个参数 `token_ids_0` 和 `token_ids_1`，分别是序列的ID列表，返回一个标识序列类型的ID列表。```
 ):
     super().__init__(
         vocab_file,

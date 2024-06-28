@@ -1,6 +1,6 @@
 # `.\models\auto\feature_extraction_auto.py`
 
-```
+```py
 # 设置脚本的编码格式为 UTF-8
 # 版权声明，使用 Apache License Version 2.0 授权许可
 # 只有遵循许可证的条款，才能使用该文件

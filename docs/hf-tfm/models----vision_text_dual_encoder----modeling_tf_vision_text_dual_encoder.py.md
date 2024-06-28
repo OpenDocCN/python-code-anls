@@ -1,6 +1,6 @@
 # `.\models\vision_text_dual_encoder\modeling_tf_vision_text_dual_encoder.py`
 
-```
+```py
 # 定义一个文本与视觉双编码模型的文档字符串，用于说明如何初始化并使用预训练的视觉和文本编码器。
 VISION_TEXT_DUAL_ENCODER_START_DOCSTRING = r"""
     This class can be used to initialize a vision-text dual encoder model with any pretrained vision autoencoding model
@@ -234,7 +234,7 @@ class TFVisionTextDualEncoderModel(TFPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import TFVisionTextDualEncoderModel, AutoTokenizer
 
         >>> model = TFVisionTextDualEncoderModel.from_pretrained("clip-italian/clip-italian", from_pt=True)
@@ -276,7 +276,7 @@ class TFVisionTextDualEncoderModel(TFPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import TFVisionTextDualEncoderModel, AutoImageProcessor

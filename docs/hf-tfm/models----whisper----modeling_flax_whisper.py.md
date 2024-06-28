@@ -1,6 +1,6 @@
 # `.\models\whisper\modeling_flax_whisper.py`
 
-```
+```py
 # 定义一个文档字符串，用于描述 WHISPER 模型的基本信息和继承关系
 WHISPER_START_DOCSTRING = r"""
     This model inherits from [`FlaxPreTrainedModel`]. Check the superclass documentation for the generic methods the
@@ -1021,7 +1021,7 @@ class FlaxWhisperPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import WhisperProcessor, FlaxWhisperForConditionalGeneration
         >>> from datasets import load_dataset
 
@@ -1097,7 +1097,7 @@ class FlaxWhisperPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> model = FlaxWhisperForConditionalGeneration.from_pretrained("openai/whisper-tiny.en", from_pt=True)
         >>> encoder_outputs = model.encode(input_features=input_features)
         >>> decoder_inputs = {"input_ids": decoder_input_ids}
@@ -1451,7 +1451,7 @@ FLAX_WHISPER_CONDITIONAL_GENERATION_DOCSTRING = r"""
 
     Transcription example:
 
-    ```python
+    ```
     >>> from transformers import WhisperProcessor, FlaxWhisperForConditionalGeneration
     >>> from datasets import load_dataset
 

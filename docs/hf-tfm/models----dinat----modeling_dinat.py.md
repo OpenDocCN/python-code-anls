@@ -1,6 +1,6 @@
 # `.\models\dinat\modeling_dinat.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 SHI Labs 和 HuggingFace Inc. 团队。保留所有权利。
 #

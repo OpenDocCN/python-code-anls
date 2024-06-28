@@ -1,6 +1,6 @@
 # `.\models\realm\tokenization_realm_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 REALM 作者和 HuggingFace Inc. 团队所有。
 #

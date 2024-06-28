@@ -1,6 +1,6 @@
 # `.\pipelines\text_to_audio.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import List, Union
 from ..utils import is_torch_available
@@ -21,7 +21,7 @@ class TextToAudioPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> pipe = pipeline(model="suno/bark-small")
@@ -39,7 +39,7 @@ class TextToAudioPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> music_generator = pipeline(task="text-to-audio", model="facebook/musicgen-small", framework="pt")

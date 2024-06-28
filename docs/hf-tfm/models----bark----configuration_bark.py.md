@@ -1,6 +1,6 @@
 # `.\models\bark\configuration_bark.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Suno AI Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -101,7 +101,7 @@ class BarkSemanticConfig(BarkSubModelConfig):
     """
     Example:
 
-    ```python
+    ```
     >>> from transformers import BarkCoarseConfig, BarkCoarseModel
 
     >>> # Initializing a Bark sub-module style configuration
@@ -130,7 +130,7 @@ class BarkCoarseConfig(BarkSubModelConfig):
             sub-models.
     Example:
 
-    ```python
+    ```
     >>> from transformers import BarkFineConfig, BarkFineModel
 
     >>> # Initializing a Bark sub-module style configuration

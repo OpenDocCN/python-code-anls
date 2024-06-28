@@ -1,6 +1,6 @@
 # `.\pipelines\pt_utils.py`
 
-```
+```py
 import numpy as np
 import torch
 from torch.utils.data import Dataset, IterableDataset

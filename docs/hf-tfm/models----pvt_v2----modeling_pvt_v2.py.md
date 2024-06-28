@@ -1,6 +1,6 @@
 # `.\models\pvt_v2\modeling_pvt_v2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包含作者信息和 HuggingFace 公司信息，保留所有权利
 # 根据 Apache 许可证 2.0 版本，除非符合许可证要求，否则不得使用此文件
@@ -766,7 +766,7 @@ class PvtV2Backbone(PvtV2Model, BackboneMixin):
 
         Examples:
         
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

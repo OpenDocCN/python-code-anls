@@ -1,6 +1,6 @@
 # `.\models\gptj\modeling_gptj.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The EleutherAI and HuggingFace Teams. All rights reserved.
 #
@@ -697,7 +697,7 @@ PARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # Here is an example of a device map on a machine with 4 GPUs using gpt-j-6B, which has a total of 28 attention modules:
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B")
     device_map = {
@@ -716,7 +716,7 @@ DEPARALLELIZE_DOCSTRING = r"""
 
     Example:
 
-    ```python
+    ```
     # On a 4 GPU machine with gpt-j-6B:
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B")
     device_map = {

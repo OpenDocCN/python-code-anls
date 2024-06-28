@@ -1,6 +1,6 @@
 # `.\models\sew_d\modeling_sew_d.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 ASAPP 公司和 HuggingFace 公司团队。保留所有权利。
 #
@@ -596,7 +596,7 @@ class XSoftmax(torch.autograd.Function):
 
     Example:
 
-    ```python
+    ```
     >>> import torch
     >>> from transformers.models.deberta_v2.modeling_deberta_v2 import XSoftmax
 

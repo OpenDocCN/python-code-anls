@@ -1,6 +1,6 @@
 # `.\models\audio_spectrogram_transformer\configuration_audio_spectrogram_transformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Google AI and The HuggingFace Inc. team. All rights reserved.
 #

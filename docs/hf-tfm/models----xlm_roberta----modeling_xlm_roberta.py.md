@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta\modeling_xlm_roberta.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019 Facebook AI Research and the HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -361,7 +361,7 @@ class XLMRobertaOutput(nn.Module):
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
         # 返回处理后的隐藏状态张量作为输出
         return hidden_states
-```python`
+````
 # 从 transformers.models.roberta.modeling_roberta.RobertaLayer 复制并修改，适配 Roberta 到 XLMRoberta
 class XLMRobertaLayer(nn.Module):
     def __init__(self, config):

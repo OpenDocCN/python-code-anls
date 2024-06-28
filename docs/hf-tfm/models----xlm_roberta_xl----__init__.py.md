@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta_xl\__init__.py`
 
-```
+```py
 # 引入类型检查模块
 from typing import TYPE_CHECKING
 

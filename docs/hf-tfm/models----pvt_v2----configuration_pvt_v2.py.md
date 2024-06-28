@@ -1,6 +1,6 @@
 # `.\models\pvt_v2\configuration_pvt_v2.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2024 作者: Wenhai Wang, Enze Xie, Xiang Li, Deng-Ping Fan,
 # Kaitao Song, Ding Liang, Tong Lu, Ping Luo, Ling Shao 和 HuggingFace 公司团队。
@@ -52,7 +52,7 @@ class PvtV2Config(BackboneConfigMixin, PretrainedConfig):
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import PvtV2Model, PvtV2Config
 
     >>> # 初始化一个 pvt_v2_b0 风格的配置

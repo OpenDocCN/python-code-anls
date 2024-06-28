@@ -1,6 +1,6 @@
 # `.\models\owlv2\processing_owlv2.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2023 年 HuggingFace Inc. 团队
 #

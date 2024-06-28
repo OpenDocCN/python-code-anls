@@ -1,6 +1,6 @@
 # `.\models\idefics\configuration_idefics.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为UTF-8
 
@@ -97,7 +97,7 @@ class IdeficsConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import IdeficsModel, IdeficsConfig
 
     >>> # Initializing a Idefics idefics-9b style configuration

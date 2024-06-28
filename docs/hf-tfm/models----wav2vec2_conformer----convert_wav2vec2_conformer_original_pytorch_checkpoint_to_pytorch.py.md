@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_conformer\convert_wav2vec2_conformer_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 
 # 版权声明，这里声明代码版权属于 The HuggingFace Inc. 团队

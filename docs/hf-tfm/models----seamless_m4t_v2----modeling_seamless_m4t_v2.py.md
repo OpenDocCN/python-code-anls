@@ -1,6 +1,6 @@
 # `.\models\seamless_m4t_v2\modeling_seamless_m4t_v2.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明，声明了版权信息和许可证信息
 # 如果没有特定许可证要求，你不能使用这个文件

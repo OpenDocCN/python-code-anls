@@ -1,6 +1,6 @@
 # `.\data\metrics\squad_metrics.py`
 
-```
+```py
 # 导入必要的模块和库
 import collections  # 导入collections模块，用于处理数据集合
 import json  # 导入json模块，用于处理JSON格式数据

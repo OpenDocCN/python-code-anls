@@ -1,6 +1,6 @@
 # `.\commands\convert.py`
 
-```
+```py
 # 导入必要的模块和类
 from argparse import ArgumentParser, Namespace  # 导入参数解析相关模块
 from ..utils import logging  # 导入日志工具

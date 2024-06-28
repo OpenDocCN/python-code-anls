@@ -1,6 +1,6 @@
 # `.\models\t5\modeling_flax_t5.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 T5 Authors and HuggingFace Inc. team.
 #
@@ -1010,7 +1010,7 @@ Args:
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxT5ForConditionalGeneration
 
         >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-small")
@@ -1230,7 +1230,7 @@ FLAX_T5_MODEL_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxT5Model
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-small")
@@ -1549,7 +1549,7 @@ FLAX_T5_CONDITIONAL_GENERATION_DOCSTRING = """
         
     示例：
     
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, FlaxT5ForConditionalGeneration
 
     >>> tokenizer = AutoTokenizer.from_pretrained("google-t5/t5-small")

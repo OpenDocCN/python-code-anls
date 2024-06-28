@@ -1,6 +1,6 @@
 # `.\data\processors\glue.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，包括 Google AI Language Team 和 HuggingFace Inc. 团队的版权声明
 # 版权声明，包括 NVIDIA CORPORATION 的版权声明

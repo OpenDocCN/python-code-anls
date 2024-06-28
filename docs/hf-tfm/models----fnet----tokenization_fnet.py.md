@@ -1,6 +1,6 @@
 # `.\models\fnet\tokenization_fnet.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行声明了文件编码格式为 UTF-8，确保可以正确处理中文和其他特殊字符
 # Copyright 2021 Google Research, Google AI, Google Brain and the HuggingFace Inc. team.

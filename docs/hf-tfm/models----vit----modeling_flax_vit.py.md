@@ -1,6 +1,6 @@
 # `.\models\vit\modeling_flax_vit.py`
 
-```
+```py
 #python
 # 导入必要的模块和类
 from typing import Optional, Tuple
@@ -675,7 +675,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxViTModel
     >>> from PIL import Image
     >>> import requests
@@ -768,7 +768,7 @@ FLAX_VISION_CLASSIF_DOCSTRING = """
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxViTForImageClassification
     >>> from PIL import Image
     >>> import jax

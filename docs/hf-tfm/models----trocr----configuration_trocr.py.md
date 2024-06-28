@@ -1,6 +1,6 @@
 # `.\models\trocr\configuration_trocr.py`
 
-```
+```py
 # coding=utf-8
 # 上面的行指定了源文件的编码格式为UTF-8，确保可以正确处理各种字符
 
@@ -99,7 +99,7 @@ class TrOCRConfig(PretrainedConfig):
     
     Example:
 
-    ```python
+    ```
     >>> from transformers import TrOCRConfig, TrOCRForCausalLM
 
     >>> # Initializing a TrOCR-base style configuration

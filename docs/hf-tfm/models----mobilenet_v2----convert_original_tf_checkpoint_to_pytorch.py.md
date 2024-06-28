@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v2\convert_original_tf_checkpoint_to_pytorch.py`
 
-```
+```py
 # 使用 UTF-8 编码声明文件编码方式
 # 版权声明及许可信息，使用 Apache License 2.0
 # 导入所需模块和库

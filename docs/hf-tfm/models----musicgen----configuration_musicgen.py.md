@@ -1,6 +1,6 @@
 # `.\models\musicgen\configuration_musicgen.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Meta AI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -162,7 +162,7 @@ class MusicgenConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import (
     ...     MusicgenConfig,
     ...     MusicgenDecoderConfig,

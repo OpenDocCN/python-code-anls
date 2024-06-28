@@ -1,6 +1,6 @@
 # `.\models\roc_bert\configuration_roc_bert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 WeChatAI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -42,7 +42,7 @@ class RoCBertConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
 
-    ```python
+    ```
     >>> from transformers import RoCBertModel, RoCBertConfig
 
     >>> # Initializing a RoCBert weiweishi/roc-bert-base-zh style configuration

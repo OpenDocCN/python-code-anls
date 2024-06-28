@@ -1,6 +1,6 @@
 # `.\models\blip_2\modeling_blip_2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出版权归 Salesforce 作者和 HuggingFace 团队所有
 #
@@ -1259,7 +1259,7 @@ class Blip2Model(Blip2PreTrainedModel):
                 contains the language model logits, the past key values and the hidden states if
                 `output_hidden_states=True`.
         Examples:
-        ```python
+        ```
         >>> import torch
         >>> from transformers import AutoTokenizer, Blip2Model
 
@@ -1314,7 +1314,7 @@ class Blip2Model(Blip2PreTrainedModel):
                 contains the image features, the pooled image features and the hidden states if
                 `output_hidden_states=True`.
         Examples:
-        ```python
+        ```
         >>> import torch
         >>> from PIL import Image
         >>> import requests
@@ -1363,7 +1363,7 @@ class Blip2Model(Blip2PreTrainedModel):
                 contains the image features, the pooled image features and the hidden states if
                 `output_hidden_states=True`.
         Examples:
-        ```python
+        ```
         >>> import torch
         >>> from PIL import Image
         >>> import requests

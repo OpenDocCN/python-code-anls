@@ -1,6 +1,6 @@
 # `.\models\llava\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 从 utils 模块中导入自定义异常 OptionalDependencyNotAvailable、_LazyModule 和 is_torch_available 函数

@@ -1,6 +1,6 @@
 # `.\models\layoutlmv3\image_processing_layoutlmv3.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可证明，此代码受 Apache License, Version 2.0 许可，详见链接
 """LayoutLMv3 的图像处理器类。"""

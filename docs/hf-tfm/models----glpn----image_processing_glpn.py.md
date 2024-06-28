@@ -1,6 +1,6 @@
 # `.\models\glpn\image_processing_glpn.py`
 
-```
+```py
 # 设置脚本编码为 UTF-8，确保支持中文和其他非 ASCII 字符
 # 版权声明，指出代码版权归 The HuggingFace Inc. 团队所有，保留一切权利
 #

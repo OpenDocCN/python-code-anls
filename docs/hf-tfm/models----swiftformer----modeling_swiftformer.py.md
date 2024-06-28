@@ -1,6 +1,6 @@
 # `.\models\swiftformer\modeling_swiftformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可协议信息

@@ -1,6 +1,6 @@
 # `.\models\superpoint\modeling_superpoint.py`
 
-```
+```py
 # 版权声明和许可信息，指明代码归属和使用许可
 # Copyright 2024 The HuggingFace Team. All rights reserved.
 #

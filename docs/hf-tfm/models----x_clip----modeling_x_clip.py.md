@@ -1,6 +1,6 @@
 # `.\models\x_clip\modeling_x_clip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft Research and The HuggingFace Team. All rights reserved.
 #
@@ -835,7 +835,7 @@ class XCLIPTextModel(XCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, XCLIPTextModel
 
         >>> model = XCLIPTextModel.from_pretrained("microsoft/xclip-base-patch32")
@@ -1247,7 +1247,7 @@ class XCLIPModel(XCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, AutoModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("microsoft/xclip-base-patch32")
@@ -1292,7 +1292,7 @@ class XCLIPModel(XCLIPPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, AutoModel
 
         >>> tokenizer = AutoTokenizer.from_pretrained("microsoft/xclip-base-patch32")

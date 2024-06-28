@@ -1,6 +1,6 @@
 # `.\models\musicgen_melody\processing_musicgen_melody.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 Meta AI and The HuggingFace Inc. team. All rights reserved.
 #
@@ -187,7 +187,7 @@ def _decode_audio(self, audio_values, attention_mask: Optional = None) -> List[n
                 Number of audio samples to unconditionally generate.
 
         Example:
-        ```python
+        ```
         >>> from transformers import MusicgenMelodyForConditionalGeneration, MusicgenMelodyProcessor
 
         >>> model = MusicgenMelodyForConditionalGeneration.from_pretrained("facebook/musicgen-melody")

@@ -1,6 +1,6 @@
 # `.\models\xglm\convert_xglm_original_ckpt_to_trfms.py`
 
-```
+```py
 import argparse                            # 导入argparse库，用于处理命令行参数
 from argparse import Namespace             # 导入Namespace类，用于创建命名空间
 

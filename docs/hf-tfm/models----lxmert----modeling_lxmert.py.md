@@ -1,6 +1,6 @@
 # `.\models\lxmert\modeling_lxmert.py`
 
-```
+```py
 # 导入所需的库和模块
 import math  # 导入数学函数库
 import os  # 导入操作系统功能库

@@ -1,6 +1,6 @@
 # `.\models\mamba\modeling_mamba.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 state-spaces/mamba org and HuggingFace Inc. team.
 #

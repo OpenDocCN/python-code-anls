@@ -1,6 +1,6 @@
 # `.\models\blip\__init__.py`
 
-```
+```py
 # 导入类型检查标记
 from typing import TYPE_CHECKING
 

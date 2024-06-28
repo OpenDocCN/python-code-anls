@@ -1,6 +1,6 @@
 # `.\utils\bitsandbytes.py`
 
-```
+```py
 # 引入警告模块，用于发出警告信息
 import warnings
 

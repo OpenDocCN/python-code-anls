@@ -1,6 +1,6 @@
 # `.\models\gpt_neox_japanese\modeling_gpt_neox_japanese.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 ABEJA, Inc. and The HuggingFace Inc. team. All rights reserved.
 #

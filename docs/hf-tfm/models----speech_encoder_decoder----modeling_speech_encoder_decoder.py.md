@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\modeling_speech_encoder_decoder.py`
 
-```
+```py
 # 导入必要的库和模块
 import torch
 from torch import nn

@@ -1,6 +1,6 @@
 # `.\models\speech_encoder_decoder\convert_mbart_wav2vec2_seq2seq_original_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 导入命令行参数解析模块
 

@@ -1,6 +1,6 @@
 # `.\models\speech_to_text_2\configuration_speech_to_text_2.py`
 
-```
+```py
 # coding=utf-8
 # 定义脚本编码为 UTF-8
 
@@ -76,7 +76,7 @@ class Speech2Text2Config(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Speech2Text2Config, Speech2Text2ForCausalLM
 
     >>> # 初始化一个 Speech2Text2Config 配置类实例

@@ -1,6 +1,6 @@
 # `.\models\sew_d\configuration_sew_d.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定源代码文件的编码格式为 UTF-8
 
@@ -54,7 +54,7 @@ class SEWDConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import SEWDConfig, SEWDModel
 
     >>> # Initializing a SEW-D asapp/sew-d-tiny-100k style configuration

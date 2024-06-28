@@ -1,6 +1,6 @@
 # `.\models\rag\modeling_rag.py`
 
-```
+```py
 # 导入必要的库和模块
 import copy  # 导入深拷贝模块
 from dataclasses import dataclass  # 导入dataclass装饰器

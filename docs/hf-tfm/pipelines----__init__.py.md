@@ -1,6 +1,6 @@
 # `.\pipelines\__init__.py`
 
-```
+```py
 # 导入所需的模块和函数
 
 import json  # 导入处理 JSON 数据的模块
@@ -793,7 +793,7 @@ def pipeline(
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
 
     >>> # Sentiment analysis pipeline

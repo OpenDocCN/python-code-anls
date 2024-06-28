@@ -1,6 +1,6 @@
 # `.\models\videomae\feature_extraction_videomae.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

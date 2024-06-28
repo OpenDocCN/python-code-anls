@@ -1,6 +1,6 @@
 # `.\models\roberta_prelayernorm\configuration_roberta_prelayernorm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # All rights reserved.
@@ -57,7 +57,7 @@ class RobertaPreLayerNormConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import RobertaPreLayerNormConfig, RobertaPreLayerNormModel
 
     >>> # Initializing a RoBERTa-PreLayerNorm configuration

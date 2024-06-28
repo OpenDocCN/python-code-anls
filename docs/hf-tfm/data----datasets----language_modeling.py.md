@@ -1,6 +1,6 @@
 # `.\data\datasets\language_modeling.py`
 
-```
+```py
 # 导入必要的模块和库
 import json
 import os

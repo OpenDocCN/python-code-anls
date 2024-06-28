@@ -1,6 +1,6 @@
 # `.\models\pegasus\configuration_pegasus.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出版权所有者和版权年份
 # 根据 Apache 许可证 2.0 版本使用该文件
@@ -39,7 +39,7 @@ class PegasusConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PegasusConfig, PegasusModel
 
     >>> # Initializing a PEGASUS google/pegasus-large style configuration

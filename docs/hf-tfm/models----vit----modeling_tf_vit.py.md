@@ -1,6 +1,6 @@
 # `.\models\vit\modeling_tf_vit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google AI, Ross Wightman, The HuggingFace Inc. team. All rights reserved.
 #

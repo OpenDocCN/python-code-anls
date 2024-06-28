@@ -1,6 +1,6 @@
 # `.\models\xmod\configuration_xmod.py`
 
-```
+```py
 # 引入需要的模块和类
 from collections import OrderedDict  # 导入有序字典类
 from typing import Mapping  # 导入映射类型
@@ -39,7 +39,7 @@ class XmodConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import XmodConfig, XmodModel
 
     >>> # Initializing an X-MOD facebook/xmod-base style configuration

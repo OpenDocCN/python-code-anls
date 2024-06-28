@@ -1,6 +1,6 @@
 # `.\models\flava\modeling_flava.py`
 
-```
+```py
 # 设置代码文件的编码格式为 UTF-8
 # 版权声明和许可证信息
 # 根据 Apache License 2.0 许可证，除非符合许可证要求，否则不得使用此文件
@@ -1432,7 +1432,7 @@ class FlavaModel(FlavaPreTrainedModel):
         
     Examples:
     
-    ```python
+    ```
     >>> from transformers import AutoProcessor, FlavaModel
     
     >>> model = FlavaModel.from_pretrained("{0}")
@@ -1481,7 +1481,7 @@ def get_image_features(
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, FlavaModel
@@ -1667,7 +1667,7 @@ class FlavaImageCodebook(FlavaPreTrainedModel):
                 `return_codebook_pixels=True`. See [`FlavaImageProcessor.__call__`] for details.
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoImageProcessor, FlavaImageCodebook

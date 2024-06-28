@@ -1,6 +1,6 @@
 # `.\models\opt\configuration_opt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Metaseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
@@ -82,7 +82,7 @@ class OPTConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import OPTConfig, OPTModel
 
     >>> # Initializing a OPT facebook/opt-large style configuration

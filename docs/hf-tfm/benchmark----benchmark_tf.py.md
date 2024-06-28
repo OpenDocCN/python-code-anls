@@ -1,6 +1,6 @@
 # `.\benchmark\benchmark_tf.py`
 
-```
+```py
 # coding=utf-8
 # 设置编码格式为 UTF-8
 

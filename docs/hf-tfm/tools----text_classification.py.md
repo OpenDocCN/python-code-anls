@@ -1,6 +1,6 @@
 # `.\tools\text_classification.py`
 
-```
+```py
 #!/usr/bin/env python
 # coding=utf-8
 
@@ -20,7 +20,7 @@ class TextClassificationTool(PipelineTool):
 
     Example:
 
-    ```py
+    ```
     from transformers.tools import TextClassificationTool
 
     classifier = TextClassificationTool()

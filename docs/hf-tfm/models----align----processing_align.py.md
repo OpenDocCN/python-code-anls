@@ -1,6 +1,6 @@
 # `.\models\align\processing_align.py`
 
-```
+```py
 """
 Image/Text processor class for ALIGN
 """

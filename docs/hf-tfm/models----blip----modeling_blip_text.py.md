@@ -1,6 +1,6 @@
 # `.\models\blip\modeling_blip_text.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 Salesforce 团队作者和 HuggingFace 团队。保留所有权利。
 #

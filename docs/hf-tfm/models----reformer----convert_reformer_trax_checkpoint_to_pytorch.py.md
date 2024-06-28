@@ -1,6 +1,6 @@
 # `.\models\reformer\convert_reformer_trax_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数
 import pickle    # 用于序列化和反序列化 Python 对象

@@ -1,6 +1,6 @@
 # `.\tools\agents.py`
 
-```
+```py
 # 导入 Python 标准库和第三方模块
 import importlib.util  # 导入模块的辅助函数
 import json  # 导入 JSON 解析库
@@ -208,7 +208,7 @@ def clean_code_for_run(result):
 
     # 分割代码行并去除首尾的代码块标记
     code_lines = code.split("\n")
-    if code_lines[0] in ["```", "```py", "```python"]:
+    if code_lines[0] in ["```", "```", "```"]:
         code_lines = code_lines[1:]
     if code_lines[-1] == "```":
         code_lines = code_lines[:-1]
@@ -388,7 +388,7 @@ def clean_code_for_run(result):
 
         Example:
 
-        ```py
+        ```
         from transformers import HfAgent
 
         agent = HfAgent("https://api-inference.huggingface.co/models/bigcode/starcoder")
@@ -454,7 +454,7 @@ def clean_code_for_run(result):
     
     Example:
     
-    ```py
+    ```
     from transformers import OpenAiAgent
     
     agent = OpenAiAgent(model="text-davinci-003", api_key=xxx)
@@ -560,7 +560,7 @@ def clean_code_for_run(result):
 
     Example:
 
-    ```py
+    ```
     from transformers import AzureOpenAiAgent
 
     agent = AzureAiAgent(deployment_id="Davinci-003", api_key=xxx, resource_name=yyy)
@@ -725,7 +725,7 @@ class HfAgent(Agent):
 
     Example:
 
-    ```py
+    ```
     from transformers import HfAgent
 
     agent = HfAgent("https://api-inference.huggingface.co/models/bigcode/starcoder")
@@ -802,7 +802,7 @@ class HfAgent(Agent):
 
         Example:
 
-        ```py
+        ```
         import torch
         from transformers import LocalAgent
 

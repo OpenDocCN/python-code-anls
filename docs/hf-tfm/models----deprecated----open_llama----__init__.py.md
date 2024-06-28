@@ -1,6 +1,6 @@
 # `.\models\deprecated\open_llama\__init__.py`
 
-```
+```py
 # 导入类型检查工具，用于检查类型是否可用
 from typing import TYPE_CHECKING
 

@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v1\image_processing_mobilenet_v1.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 # 代码文件的版权声明，声明此代码版权归 HuggingFace Inc. 团队所有

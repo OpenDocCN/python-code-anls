@@ -1,6 +1,6 @@
 # `.\models\pvt\configuration_pvt.py`
 
-```
+```py
 # coding=utf-8
 # 上面是设置文件编码为UTF-8，确保可以处理各种语言字符
 # Copyright 2023 Authors: Wenhai Wang, Enze Xie, Xiang Li, Deng-Ping Fan,
@@ -108,7 +108,7 @@ class PvtConfig(PretrainedConfig):
             类别数量，默认为 1000
     Example:
 
-    ```python
+    ```
     >>> from transformers import PvtModel, PvtConfig
 
     >>> # Initializing a PVT Xrenya/pvt-tiny-224 style configuration

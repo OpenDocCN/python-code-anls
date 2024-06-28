@@ -1,6 +1,6 @@
 # `.\models\mobilenet_v2\image_processing_mobilenet_v2.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8
 

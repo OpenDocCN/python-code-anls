@@ -1,6 +1,6 @@
 # `.\commands\__init__.py`
 
-```
+```py
 # 引入抽象基类（ABC）和抽象方法（abstractmethod）来定义一个基于命令行接口（CLI）的Transformers库命令的基类
 from abc import ABC, abstractmethod
 # 从argparse模块导入ArgumentParser类，用于解析命令行参数

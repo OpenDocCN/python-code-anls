@@ -1,6 +1,6 @@
 # `.\hyperparameter_search.py`
 
-```
+```py
 # 从 integrations 模块中导入必要的函数和变量
 from .integrations import (
     is_optuna_available,

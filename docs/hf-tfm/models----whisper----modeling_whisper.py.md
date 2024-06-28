@@ -1,6 +1,6 @@
 # `.\models\whisper\modeling_whisper.py`
 
-```
+```py
 # 设置 Python 文件的编码格式为 UTF-8
 # 版权声明和许可信息
 # 此处版权归 OpenAI 和 HuggingFace Inc. 团队所有，保留所有权利

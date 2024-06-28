@@ -1,6 +1,6 @@
 # `.\models\mvp\configuration_mvp.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件的版权声明和许可证信息
 
@@ -35,7 +35,7 @@ class MvpConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MvpConfig, MvpModel
 
     >>> # Initializing a MVP RUCAIBox/mvp style configuration

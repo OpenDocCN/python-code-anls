@@ -1,6 +1,6 @@
 # `.\models\vit_mae\__init__.py`
 
-```
+```py
 # 引入依赖类型检查
 from typing import TYPE_CHECKING
 

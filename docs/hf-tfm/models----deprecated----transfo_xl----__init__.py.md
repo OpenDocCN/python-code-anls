@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 
 # 引入类型检查器的模块

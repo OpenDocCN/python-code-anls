@@ -1,6 +1,6 @@
 # `.\models\swin\convert_swin_timm_to_pytorch.py`
 
-```
+```py
 # 导入必要的模块：命令行参数解析、JSON 数据处理、HTTP 请求、模型库导入、深度学习框架导入、图像处理库导入
 import argparse
 import json

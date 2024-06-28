@@ -1,6 +1,6 @@
 # `.\models\blenderbot\modeling_flax_blenderbot.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2021 年 Fairseq 作者和 Google Flax 团队作者以及 HuggingFace Inc. 团队。保留所有权利。
 #
@@ -997,7 +997,7 @@ class FlaxBlenderbotPreTrainedModel(FlaxPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, FlaxBlenderbotForConditionalGeneration
 
         >>> model = FlaxBlenderbotForConditionalGeneration.from_pretrained("facebook/blenderbot-400M-distill")
@@ -1369,7 +1369,7 @@ FLAX_BLENDERBOT_CONDITIONAL_GENERATION_DOCSTRING = r"""
 
     Conversation example::
 
-    ```py
+    ```
     >>> from transformers import AutoTokenizer, FlaxBlenderbotForConditionalGeneration
     导入所需的库：从transformers库中导入AutoTokenizer和FlaxBlenderbotForConditionalGeneration类
     

@@ -1,6 +1,6 @@
 # `.\models\m2m_100\convert_m2m100_original_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入命令行参数解析库
 import argparse
 

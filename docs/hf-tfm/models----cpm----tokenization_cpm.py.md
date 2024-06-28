@@ -1,6 +1,6 @@
 # `.\models\cpm\tokenization_cpm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 #

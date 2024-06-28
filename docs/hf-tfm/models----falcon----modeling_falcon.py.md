@@ -1,6 +1,6 @@
 # `.\models\falcon\modeling_falcon.py`
 
-```
+```py
 # 指定编码格式为 UTF-8
 
 # 版权声明和许可协议，此处声明代码版权归 Falcon 作者及 HuggingFace Inc. 团队所有，保留所有权利

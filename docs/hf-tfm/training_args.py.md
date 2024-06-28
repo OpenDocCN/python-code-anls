@@ -1,6 +1,6 @@
 # `.\training_args.py`
 
-```
+```py
 # 导入必要的库和模块，这些库和模块用于整个程序的功能实现
 import contextlib  # 上下文管理工具，用于创建上下文管理器和支持上下文管理协议的对象
 import io  # 提供了用于处理流的核心工具，如文本、二进制和内存缓冲区
@@ -1444,7 +1444,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")
@@ -1514,7 +1514,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")
@@ -1564,7 +1564,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")
@@ -1609,7 +1609,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")
@@ -1681,7 +1681,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")
@@ -1728,7 +1728,7 @@ class TrainingArguments:
 
         Example:
 
-        ```py
+        ```
         >>> from transformers import TrainingArguments
 
         >>> args = TrainingArguments("working_dir")

@@ -1,6 +1,6 @@
 # `.\models\perceiver\tokenization_perceiver.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2021 年 HuggingFace Inc. 团队。
 #

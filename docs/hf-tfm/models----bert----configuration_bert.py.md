@@ -1,6 +1,6 @@
 # `.\models\bert\configuration_bert.py`
 
-```
+```py
 # coding=utf-8
 # 声明版权和许可信息
 
@@ -79,7 +79,7 @@ class BertConfig(PretrainedConfig):
     
     Examples:  # 示例代码
 
-    ```python
+    ```
     >>> from transformers import BertConfig, BertModel
 
     >>> # Initializing a BERT google-bert/bert-base-uncased style configuration

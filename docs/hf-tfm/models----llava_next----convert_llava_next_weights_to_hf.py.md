@@ -1,6 +1,6 @@
 # `.\models\llava_next\convert_llava_next_weights_to_hf.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 解析命令行参数的库
 import glob  # 匹配文件路径名的模式扩展库

@@ -1,6 +1,6 @@
 # `.\models\cvt\modeling_cvt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Microsoft Research and The HuggingFace Inc. team. All rights reserved.
 #
@@ -706,7 +706,7 @@ CVT_INIT_WEIGHTS_DOCSTRING,
 CVT_INIT_WEIGHTS_FUNCTION_DOCSTRING,
 CVT_INIT_WEIGHTS_LINEAR_CONV2D_DOCSTRING,
 CVT_INIT_WEIGHTS_LAYERNORM_DOCSTRING,
-CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING```python
+CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING```
         """
         # CVTEncoder 类，用于实现一个可变形视觉 Transformer 编码器模型
 

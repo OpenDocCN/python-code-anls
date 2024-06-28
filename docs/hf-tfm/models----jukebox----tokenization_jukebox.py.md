@@ -1,6 +1,6 @@
 # `.\models\jukebox\tokenization_jukebox.py`
 
-```
+```py
 # 引入所需的库和模块
 import json  # 导入处理 JSON 格式的模块
 import os    # 导入操作系统相关功能的模块
@@ -66,7 +66,7 @@ class JukeboxTokenizer(PreTrainedTokenizer):
         - PreTrainedTokenizer：继承自父类 PreTrainedTokenizer 的构造函数。
 
     示例用法：
-    ```python
+    ```
     >>> from transformers import JukeboxTokenizer
 
     >>> tokenizer = JukeboxTokenizer.from_pretrained("openai/jukebox-1b-lyrics")

@@ -1,6 +1,6 @@
 # `.\models\udop\configuration_udop.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 HuggingFace Inc.
 #

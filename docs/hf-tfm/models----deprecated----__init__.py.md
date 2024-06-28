@@ -1,6 +1,6 @@
 # `.\models\deprecated\__init__.py`
 
-```
+```py
 # 导入必要的模块：os 模块提供了与操作系统交互的功能，sys 模块提供了与 Python 解释器交互的功能
 import os
 import sys

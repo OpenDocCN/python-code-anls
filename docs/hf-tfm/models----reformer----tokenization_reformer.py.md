@@ -1,6 +1,6 @@
 # `.\models\reformer\tokenization_reformer.py`
 
-```
+```py
 # coding=utf-8
 # 声明脚本编码格式为 UTF-8
 # Copyright 2020 The Trax Authors and The HuggingFace Inc. team.

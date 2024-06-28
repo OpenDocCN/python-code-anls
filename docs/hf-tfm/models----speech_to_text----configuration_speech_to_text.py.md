@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\configuration_speech_to_text.py`
 
-```
+```py
 # 定义了 Speech2Text 模型的配置类 Speech2TextConfig，继承自 PretrainedConfig
 class Speech2TextConfig(PretrainedConfig):
     # 类的文档字符串，描述了 Speech2TextConfig 的作用和用法
@@ -16,7 +16,7 @@ class Speech2TextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Speech2TextConfig, Speech2TextModel
 
     >>> # Initializing a Speech2Text s2t_transformer_s style configuration

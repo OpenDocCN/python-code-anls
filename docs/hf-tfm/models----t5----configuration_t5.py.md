@@ -1,6 +1,6 @@
 # `.\models\t5\configuration_t5.py`
 
-```
+```py
 # coding=utf-8
 # 引入必要的模块和类
 # 版权声明和许可协议

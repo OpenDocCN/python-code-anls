@@ -1,6 +1,6 @@
 # `.\models\fnet\tokenization_fnet_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 Google AI, Google Brain and the HuggingFace Inc. team.
 #

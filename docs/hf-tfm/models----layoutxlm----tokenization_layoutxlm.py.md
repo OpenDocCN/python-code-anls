@@ -1,6 +1,6 @@
 # `.\models\layoutxlm\tokenization_layoutxlm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\beit\__init__.py`
 
-```
+```py
 # 引入类型检查模块，用于条件类型检查
 from typing import TYPE_CHECKING
 

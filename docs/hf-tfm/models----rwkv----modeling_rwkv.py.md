@@ -1,6 +1,6 @@
 # `.\models\rwkv\modeling_rwkv.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2023 年 Bo Peng 和 HuggingFace 公司团队版权所有
 # 版权声明：2018 年 NVIDIA 公司版权所有

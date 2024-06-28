@@ -1,6 +1,6 @@
 # `.\models\mpt\modeling_mpt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 HuggingFace Inc. team and MosaicML NLP team.
 #

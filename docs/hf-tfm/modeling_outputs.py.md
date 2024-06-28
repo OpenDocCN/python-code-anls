@@ -1,6 +1,6 @@
 # `.\modeling_outputs.py`
 
-```
+```py
 # 导入警告模块，用于可能的警告消息
 import warnings
 # 导入 dataclass 模块，用于定义数据类

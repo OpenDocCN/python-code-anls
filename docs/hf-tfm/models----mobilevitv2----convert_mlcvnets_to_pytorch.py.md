@@ -1,6 +1,6 @@
 # `.\models\mobilevitv2\convert_mlcvnets_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team.
 #

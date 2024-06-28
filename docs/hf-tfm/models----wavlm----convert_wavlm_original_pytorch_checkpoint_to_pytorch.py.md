@@ -1,6 +1,6 @@
 # `.\models\wavlm\convert_wavlm_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为UTF-8
 

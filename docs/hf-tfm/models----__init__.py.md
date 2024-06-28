@@ -1,6 +1,6 @@
 # `.\models\__init__.py`
 
-```
+```py
 # 导入模块和库
 
 from . import (

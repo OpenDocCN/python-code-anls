@@ -1,6 +1,6 @@
 # `.\models\yolos\modeling_yolos.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明，指出2022年版权归华中科技大学电信学院和HuggingFace团队所有
 # 根据Apache许可证2.0版，除非符合许可证的规定，否则禁止使用此文件

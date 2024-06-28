@@ -1,6 +1,6 @@
 # `.\models\udop\convert_udop_to_hf.py`
 
-```
+```py
     filepath = hf_hub_download(
         repo_id="hf-internal-testing/fixtures_docvqa", filename="document_2.png", repo_type="dataset"
     )

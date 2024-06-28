@@ -1,6 +1,6 @@
 # `.\models\reformer\modeling_reformer.py`
 
-```
+```py
 # 定义一个函数 _stable_argsort，用于稳定地对输入的向量进行排序操作
 def _stable_argsort(vector, dim):
     # 此函数对向量进行缩放以确保 torch.argsort 的稳定性

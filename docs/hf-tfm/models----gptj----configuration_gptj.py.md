@@ -1,6 +1,6 @@
 # `.\models\gptj\configuration_gptj.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The EleutherAI and HuggingFace Teams. All rights reserved.
 #

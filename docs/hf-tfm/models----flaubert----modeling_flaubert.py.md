@@ -1,6 +1,6 @@
 # `.\models\flaubert\modeling_flaubert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2019-present CNRS, Facebook Inc. and the HuggingFace Inc. team.
 #

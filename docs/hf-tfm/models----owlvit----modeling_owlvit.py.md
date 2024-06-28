@@ -1,6 +1,6 @@
 # `.\models\owlvit\modeling_owlvit.py`
 
-```
+```py
 # 设置代码文件的字符编码为UTF-8
 # Copyright声明和许可证信息，使用Apache License 2.0
 # 详情参见：http://www.apache.org/licenses/LICENSE-2.0
@@ -837,7 +837,7 @@ class OwlViTTextModel(OwlViTPreTrainedModel):
         Returns:
 
         Examples:
-        ```python
+        ```
         >>> from transformers import AutoProcessor, OwlViTTextModel
 
         >>> model = OwlViTTextModel.from_pretrained("google/owlvit-base-patch32")
@@ -978,7 +978,7 @@ class OwlViTVisionModel(OwlViTPreTrainedModel):
             模型的输出，可能包括最后的隐藏状态和汇聚输出（汇聚的CLS状态）。
 
         示例:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, OwlViTVisionModel
@@ -1064,7 +1064,7 @@ class OwlViTModel(OwlViTPreTrainedModel):
             applying the projection layer to the pooled output of [`OwlViTTextModel`].
 
         Examples:
-        ```python
+        ```
         >>> from transformers import AutoProcessor, OwlViTModel
 
         >>> model = OwlViTModel.from_pretrained("google/owlvit-base-patch32")
@@ -1099,7 +1099,7 @@ class OwlViTModel(OwlViTPreTrainedModel):
             applying the projection layer to the pooled output of [`OwlViTVisionModel`].
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, OwlViTModel

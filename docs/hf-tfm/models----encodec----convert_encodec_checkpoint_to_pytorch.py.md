@@ -1,6 +1,6 @@
 # `.\models\encodec\convert_encodec_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置编码方式为 UTF-8
 # 版权声明，指出版权属于 2023 年的 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 使用本文件，详细信息可以访问指定网址获取

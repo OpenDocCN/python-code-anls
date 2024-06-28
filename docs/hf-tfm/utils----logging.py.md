@@ -1,6 +1,6 @@
 # `.\utils\logging.py`
 
-```
+```py
 # 设置脚本编码格式为 UTF-8
 # Copyright 2020 Optuna, Hugging Face
 #

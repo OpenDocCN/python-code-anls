@@ -1,6 +1,6 @@
 # `.\models\codegen\tokenization_codegen.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The Salesforce authors, The Open AI Team Authors and The HuggingFace Inc. team.
 #

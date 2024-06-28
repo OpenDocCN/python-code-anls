@@ -1,6 +1,6 @@
 # `.\models\bart\tokenization_bart_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The Facebook AI Research Team Authors and The HuggingFace Inc. team.
 #
@@ -81,7 +81,7 @@ class BartTokenizerFast(PreTrainedTokenizerFast):
 
     此分词器已经训练成将空格视为标记的一部分（类似于sentencepiece），因此一个词会根据其是否位于句子开头而编码不同：
 
-    ```python
+    ```
     >>> from transformers import BartTokenizerFast
 
     >>> tokenizer = BartTokenizerFast.from_pretrained("facebook/bart-base")

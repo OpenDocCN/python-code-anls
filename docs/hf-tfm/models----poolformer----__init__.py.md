@@ -1,6 +1,6 @@
 # `.\models\poolformer\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指明代码版权及使用许可
 # 版权所有 2022 年 HuggingFace 团队。保留所有权利。
 #

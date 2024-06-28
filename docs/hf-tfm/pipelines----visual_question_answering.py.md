@@ -1,6 +1,6 @@
 # `.\pipelines\visual_question_answering.py`
 
-```
+```py
 from typing import Union
 
 from ..utils import add_end_docstrings, is_torch_available, is_vision_available, logging
@@ -33,7 +33,7 @@ class VisualQuestionAnsweringPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> oracle = pipeline(model="dandelin/vilt-b32-finetuned-vqa")

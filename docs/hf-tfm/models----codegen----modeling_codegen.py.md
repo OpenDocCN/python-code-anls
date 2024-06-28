@@ -1,6 +1,6 @@
 # `.\models\codegen\modeling_codegen.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 Salesforce authors, The EleutherAI, and HuggingFace Teams. All rights reserved.
 #

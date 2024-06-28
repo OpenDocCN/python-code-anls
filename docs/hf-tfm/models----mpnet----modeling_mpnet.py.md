@@ -1,6 +1,6 @@
 # `.\models\mpnet\modeling_mpnet.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2018 年 HuggingFace Inc. 团队，Microsoft 公司。
 # 版权所有 (c) 2018 年 NVIDIA 公司。保留所有权利。

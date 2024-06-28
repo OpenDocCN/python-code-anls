@@ -1,6 +1,6 @@
 # `.\models\deprecated\bort\__init__.py`
 
-```
+```py
 # 导入必要的模块：os 模块提供了操作系统相关的功能，shutil 模块提供了高级的文件操作功能
 import os
 import shutil

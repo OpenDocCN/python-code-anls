@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_bert\convert_wav2vec2_seamless_checkpoint.py`
 
-```
+```py
 # 定义函数用于计算模型参数总数，不包括特定键名的参数
 def param_count(model):
     return sum(p[1].numel() for p in model.named_parameters() if "final_proj" not in p[0])

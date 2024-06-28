@@ -1,6 +1,6 @@
 # `.\models\videomae\image_processing_videomae.py`
 
-```
+```py
 # 指定编码为UTF-8，确保源文件可以正确解析中文和其他非ASCII字符
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

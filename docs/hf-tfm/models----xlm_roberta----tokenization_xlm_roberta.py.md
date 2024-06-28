@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta\tokenization_xlm_roberta.py`
 
-```
+```py
 # coding=utf-8
 # 指定文件编码为 UTF-8
 

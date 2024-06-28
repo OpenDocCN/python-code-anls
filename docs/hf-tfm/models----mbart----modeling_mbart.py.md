@@ -1,6 +1,6 @@
 # `.\models\mbart\modeling_mbart.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明和许可信息，指明代码版权归 Facebook AI Research Team 和 HuggingFace Inc. 团队所有，使用 Apache License, Version 2.0 授权
 #
@@ -576,7 +576,7 @@ MBART_START_DOCSTRING = r"""
 MBART_GENERATION_EXAMPLE = r"""
     Translation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, MBartForConditionalGeneration
 
     >>> model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-en-ro")
@@ -593,7 +593,7 @@ MBART_GENERATION_EXAMPLE = r"""
 
     Mask filling example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, MBartForConditionalGeneration
 
     >>> model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-cc25")

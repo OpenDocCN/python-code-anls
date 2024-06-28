@@ -1,6 +1,6 @@
 # `.\models\hubert\modeling_tf_hubert.py`
 
-```
+```py
 # 设置编码为 UTF-8
 # 版权声明，指明版权归 Fairseq 作者和 HuggingFace Inc. 团队所有
 #
@@ -1653,7 +1653,7 @@ class TFHubertModel(TFHubertPreTrainedModel):
 
         Example:
 
-        ```python
+        ```
         >>> from transformers import AutoProcessor, TFHubertModel
         >>> from datasets import load_dataset
         >>> import soundfile as sf

@@ -1,6 +1,6 @@
 # `.\models\luke\modeling_luke.py`
 
-```
+```py
 # coding=utf-8
 # Copyright Studio Ousia and The HuggingFace Inc. team.
 #

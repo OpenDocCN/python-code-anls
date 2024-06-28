@@ -1,6 +1,6 @@
 # `.\utils\hub.py`
 
-```
+```py
 # 标准版权声明，声明此代码版权归 HuggingFace 团队所有
 #
 # 根据 Apache License, Version 2.0 许可证进行许可，除非符合许可证要求，否则不得使用此文件
@@ -575,7 +575,7 @@ def get_file_from_repo(
 
     Examples:
 
-    ```python
+    ```
     # Download a tokenizer configuration from huggingface.co and cache.
     tokenizer_config = get_file_from_repo("google-bert/bert-base-uncased", "tokenizer_config.json")
     # This model does not have a tokenizer config so the result will be None.
@@ -895,7 +895,7 @@ def convert_file_size_to_int(size: Union[int, str]):
         size (`int` or `str`): The size to convert. Will be directly returned if an `int`.
 
     Example:
-    ```py
+    ```
     >>> convert_file_size_to_int("1MiB")
     1048576
     ```

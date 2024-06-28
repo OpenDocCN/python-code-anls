@@ -1,6 +1,6 @@
 # `.\models\vilt\convert_vilt_original_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 设置脚本的字符编码为UTF-8
 

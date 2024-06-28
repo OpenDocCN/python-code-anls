@@ -1,6 +1,6 @@
 # `.\models\conditional_detr\configuration_conditional_detr.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -54,7 +54,7 @@ class ConditionalDetrConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import ConditionalDetrConfig, ConditionalDetrModel
 
     >>> # Initializing a Conditional DETR microsoft/conditional-detr-resnet-50 style configuration

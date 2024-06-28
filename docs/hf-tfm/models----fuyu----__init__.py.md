@@ -1,6 +1,6 @@
 # `.\models\fuyu\__init__.py`
 
-```
+```py
 # 版权声明和版权许可声明，指明版权归属和使用许可
 # Copyright 2023 AdeptAI and The HuggingFace Inc. team. All rights reserved.
 #

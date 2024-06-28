@@ -1,6 +1,6 @@
 # `.\models\markuplm\modeling_markuplm.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年由 Microsoft Research Asia 和 HuggingFace Inc. 团队所有。
 #

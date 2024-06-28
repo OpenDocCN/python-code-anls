@@ -1,6 +1,6 @@
 # `.\models\xlm\modeling_tf_xlm.py`
 
-```
+```py
 # 计算位置编码并将其写入输出张量中
 def create_sinusoidal_embeddings(n_pos, dim, out):
     # 生成位置编码矩阵，其中每个位置的编码包括正弦和余弦部分

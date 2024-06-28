@@ -1,6 +1,6 @@
 # `.\models\musicgen_melody\feature_extraction_musicgen_melody.py`
 
-```
+```py
 """
 Feature extractor class for Musicgen Melody
 """

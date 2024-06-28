@@ -1,6 +1,6 @@
 # `.\testing_utils.py`
 
-```
+```py
 # 导入必要的标准库和第三方库
 import collections  # 提供额外的数据容器，如deque（双端队列）
 import contextlib  # 提供用于管理上下文的工具
@@ -1168,7 +1168,7 @@ class CaptureStd:
 
     Examples:
 
-    ```python
+    ```
     # to capture stdout only with auto-replay
     with CaptureStdout() as cs:
         print("Secret message")
@@ -1294,7 +1294,7 @@ class CaptureLogger:
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import logging
     >>> from transformers.testing_utils import CaptureLogger
 
@@ -1332,7 +1332,7 @@ def LoggingLevel(level):
 
     Example:
 
-    ```python
+    ```
     with LoggingLevel(logging.INFO):
         AutoModel.from_pretrained("openai-community/gpt2")  # 调用 logger.info() 多次
     ```
@@ -1353,7 +1353,7 @@ def ExtendSysPath(path: Union[str, os.PathLike]) -> Iterator[None]:
 
     Usage :
 
-    ```python
+    ```
     with ExtendSysPath("/path/to/dir"):
         mymodule = importlib.import_module("mymodule")
     ```
@@ -1401,7 +1401,7 @@ class TestCasePlus(unittest.TestCase):
     # 功能2：提供灵活的自动清理临时目录，确保测试结束后自动删除
     1. 创建一个唯一的临时目录：
 
-    ```python
+    ```
     def test_whatever(self):
         # 调用方法获取一个自动删除的临时目录路径
         tmp_dir = self.get_auto_remove_tmp_dir()
@@ -1411,7 +1411,7 @@ class TestCasePlus(unittest.TestCase):
 
     2. 创建自选的临时目录，在测试开始前确保它为空，并且测试结束后不清空它：
 
-    ```python
+    ```
     def test_whatever(self):
         # 调用方法获取一个指定路径的自动删除临时目录路径
         tmp_dir = self.get_auto_remove_tmp_dir("./xxx")
@@ -2119,7 +2119,7 @@ class RequestCounter:
     Might not be robust if urllib3 changes its logging format but should be good enough for us.
 
     Usage:
-    ```py
+    ```
     with RequestCounter() as counter:
         _ = AutoTokenizer.from_pretrained("hf-internal-testing/tiny-random-bert")
     assert counter["GET"] == 0

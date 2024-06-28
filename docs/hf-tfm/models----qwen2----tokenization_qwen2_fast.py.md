@@ -1,6 +1,6 @@
 # `.\models\qwen2\tokenization_qwen2_fast.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2024 年 Qwen 团队、阿里巴巴集团和 HuggingFace 公司。保留所有权利。
 #
@@ -51,7 +51,7 @@ class Qwen2TokenizerFast(PreTrainedTokenizerFast):
 
     与 GPT2Tokenizer 类似，此分词器经过训练，将空格视为标记的一部分，因此一个单词在句子开头（没有空格）和其他位置将被编码为不同的标记：
 
-    ```python
+    ```
     >>> from transformers import Qwen2TokenizerFast
 
     >>> tokenizer = Qwen2TokenizerFast.from_pretrained("Qwen/Qwen-tokenizer")

@@ -1,6 +1,6 @@
 # `.\models\distilbert\configuration_distilbert.py`
 
-```
+```py
 # 导入必要的模块和函数
 from collections import OrderedDict  # 导入OrderedDict，用于创建有序字典
 from typing import Mapping  # 导入Mapping，用于类型提示
@@ -75,7 +75,7 @@ class DistilBertConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import DistilBertConfig, DistilBertModel
 
     >>> # 初始化一个 DistilBERT 配置

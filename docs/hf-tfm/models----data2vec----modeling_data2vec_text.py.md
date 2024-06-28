@@ -1,6 +1,6 @@
 # `.\models\data2vec\modeling_data2vec_text.py`
 
-```
+```py
 # 设置文件编码为UTF-8，确保支持中文等多种字符集
 # 版权声明，告知代码的版权归属于The HuggingFace Inc.团队
 #

@@ -1,6 +1,6 @@
 # `.\models\unispeech\modeling_unispeech.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明
 # 2021年由Fairseq作者和HuggingFace团队保留所有权利。

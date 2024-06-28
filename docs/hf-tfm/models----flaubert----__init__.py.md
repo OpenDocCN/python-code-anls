@@ -1,6 +1,6 @@
 # `.\models\flaubert\__init__.py`
 
-```
+```py
 # 导入必要的模块和函数
 from typing import TYPE_CHECKING
 # 引入自定义的异常类和模块加载函数

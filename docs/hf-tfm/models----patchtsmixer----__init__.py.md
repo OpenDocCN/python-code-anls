@@ -1,6 +1,6 @@
 # `.\models\patchtsmixer\__init__.py`
 
-```
+```py
 代码：
 
 

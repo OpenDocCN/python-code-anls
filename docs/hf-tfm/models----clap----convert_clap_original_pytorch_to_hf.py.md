@@ -1,6 +1,6 @@
 # `.\models\clap\convert_clap_original_pytorch_to_hf.py`
 
-```
+```py
 # 导入 argparse 模块，用于解析命令行参数
 import argparse
 # 导入 re 模块，用于正则表达式操作

@@ -1,6 +1,6 @@
 # `.\models\vits\tokenization_vits.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Kakao Enterprise Authors, the MMS-TTS Authors and the HuggingFace Inc. team. All rights reserved.
 #

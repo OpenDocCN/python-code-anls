@@ -1,6 +1,6 @@
 # `.\integrations\deepspeed.py`
 
-```
+```py
 """
 Integration with Deepspeed
 """

@@ -1,6 +1,6 @@
 # `.\models\bros\__init__.py`
 
-```
+```py
 # 版权声明及许可证声明，指明代码作者及授权条款
 # 版权所有 2023-present NAVER Corp，Microsoft Research Asia LayoutLM Team 作者和 HuggingFace Inc. 团队。
 # 根据 Apache 许可证 2.0 版本发布，除非符合许可证，否则不得使用此文件。

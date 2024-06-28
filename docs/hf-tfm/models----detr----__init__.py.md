@@ -1,6 +1,6 @@
 # `.\models\detr\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指明代码版权及使用许可条件
 # The HuggingFace 团队，版权所有 © 2020
 #

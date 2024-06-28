@@ -1,6 +1,6 @@
 # `.\models\swin\modeling_tf_swin.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 Microsoft Research 和 HuggingFace Inc. 团队保留所有权利。
 #

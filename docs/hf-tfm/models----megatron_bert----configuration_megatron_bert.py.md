@@ -1,6 +1,6 @@
 # `.\models\megatron_bert\configuration_megatron_bert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，版权归 NVIDIA 公司和 HuggingFace Inc. 团队所有
 # 根据 Apache 许可证版本 2.0 使用本文件，除非符合许可证的要求，否则不得使用本文件
@@ -34,7 +34,7 @@ class MegatronBertConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import MegatronBertConfig, MegatronBertModel
 
     >>> # 初始化一个 MEGATRON_BERT google-bert/bert-base-uncased 风格的配置

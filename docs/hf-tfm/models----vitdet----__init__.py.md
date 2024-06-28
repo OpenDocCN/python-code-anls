@@ -1,6 +1,6 @@
 # `.\models\vitdet\__init__.py`
 
-```
+```py
 # 版权声明和许可条款，指明版权归 HuggingFace 团队所有，使用 Apache License, Version 2.0 许可
 #
 # 如果未遵守许可，除非适用法律要求或书面同意，否则不得使用该文件

@@ -1,6 +1,6 @@
 # `.\pipelines\token_classification.py`
 
-```
+```py
 import types
 import warnings
 from typing import List, Optional, Tuple, Union
@@ -112,7 +112,7 @@ class TokenClassificationPipeline(ChunkPipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> token_classifier = pipeline(model="Jean-Baptiste/camembert-ner", aggregation_strategy="simple")

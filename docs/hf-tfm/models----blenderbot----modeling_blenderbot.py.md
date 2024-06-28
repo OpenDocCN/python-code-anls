@@ -1,6 +1,6 @@
 # `.\models\blenderbot\modeling_blenderbot.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Facebook, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -298,7 +298,7 @@ class BlenderbotDecoderLayer(nn.Module):
 BLENDERBOT_GENERATION_EXAMPLE = r"""
     Conversation example:
 
-    ```python
+    ```
     >>> from transformers import AutoTokenizer, BlenderbotForConditionalGeneration
 
     >>> mname = "facebook/blenderbot-400M-distill"

@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_audio.py`
 
-```
+```py
 # coding=utf-8
 # 设置文件编码为 UTF-8，确保支持中文等多种字符集
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
@@ -57,7 +57,7 @@ class Data2VecAudioConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import Data2VecAudioConfig, Data2VecAudioModel
 
     >>> # Initializing a Data2VecAudio facebook/data2vec-audio-base-960h style configuration

@@ -1,6 +1,6 @@
 # `.\models\bridgetower\__init__.py`
 
-```
+```py
 # 从 typing 模块中导入 TYPE_CHECKING 类型检查器
 from typing import TYPE_CHECKING
 

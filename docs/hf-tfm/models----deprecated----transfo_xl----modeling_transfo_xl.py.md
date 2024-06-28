@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_transfo_xl.py`
 
-```
+```py
 # 声明 Python 源文件的编码格式为 UTF-8
 # 版权声明和许可信息，指明代码的版权和使用许可
 # 包含 Apache License 2.0 许可信息，告知使用者可以按此许可使用代码

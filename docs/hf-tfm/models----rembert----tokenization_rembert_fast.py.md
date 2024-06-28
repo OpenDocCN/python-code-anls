@@ -1,6 +1,6 @@
 # `.\models\rembert\tokenization_rembert_fast.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码格式为UTF-8
 

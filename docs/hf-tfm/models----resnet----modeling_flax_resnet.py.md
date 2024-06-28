@@ -1,6 +1,6 @@
 # `.\models\resnet\modeling_flax_resnet.py`
 
-```
+```py
 # 导入必要的模块和函数
 from functools import partial  # 导入 functools 模块中的 partial 函数
 from typing import Optional, Tuple  # 导入类型提示的 Optional 和 Tuple
@@ -661,7 +661,7 @@ FLAX_VISION_MODEL_DOCSTRING = """
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxResNetModel
     >>> from PIL import Image
     >>> import requests
@@ -694,7 +694,7 @@ FLAX_VISION_CLASSIF_DOCSTRING = """
     Example:
         展示如何从URL下载图像并使用模型预测图像的分类。
 
-    ```python
+    ```
     >>> from transformers import AutoImageProcessor, FlaxResNetForImageClassification
     >>> from PIL import Image
     >>> import jax

@@ -1,6 +1,6 @@
 # `.\models\levit\__init__.py`
 
-```
+```py
 # 版权声明和许可信息，指明版权归属和使用许可
 # 详情请查阅Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 #

@@ -1,6 +1,6 @@
 # `.\models\pegasus_x\configuration_pegasus_x.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022, Google and The HuggingFace Inc. team. All rights reserved.
 #
@@ -45,7 +45,7 @@ class PegasusXConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import PegasusXConfig, PegasusXModel
 
     >>> # Initializing a PEGASUS google/pegasus-x-large style configuration

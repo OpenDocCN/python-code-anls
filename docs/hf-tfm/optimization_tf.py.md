@@ -1,6 +1,6 @@
 # `.\optimization_tf.py`
 
-```
+```py
 # 版权声明和许可信息，指明使用许可证 Apache License, Version 2.0
 #
 # 引入正则表达式模块和类型提示模块

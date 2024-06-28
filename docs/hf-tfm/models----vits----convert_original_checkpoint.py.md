@@ -1,6 +1,6 @@
 # `.\models\vits\convert_original_checkpoint.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明和许可证信息，指定了 Apache License, Version 2.0 的使用条件和限制
@@ -143,7 +143,7 @@ MAPPING_STOCHASTIC_DURATION_PREDICTOR = {
     "dp.post_flows.*.convs.norms_2.2.beta": "duration_predictor.post_flows.*.conv_dds.norms_2.2.bias",
     # 映射条件参数路径
     "dp.cond": "duration_predictor.cond",  # num_speakers > 1
-```python`
+````
 }
 # 定义一个映射字典，用于将某些权重键映射到不同的键
 MAPPING_FLOW = {
@@ -220,7 +220,7 @@ def set_recursively(hf_pointer, key, value, full_name, weight_type):
             f" {value.shape} for {full_name}"
         )
 
-    # 如果 weight_type 是 'weight'，将 hf_pointer 的权重数据```python
+    # 如果 weight_type 是 'weight'，将 hf_pointer 的权重数据```
 }
 # 末尾多余的大括号，可能是代码片段复制过程中的错误
 
@@ -252,7 +252,7 @@ MAPPING_GENERATOR = {
     "dec.resblocks.*.convs2.2": "decoder.resblocks.*.convs2.2",
     "dec.conv_post": "decoder.conv_post",
     "dec.cond": "decoder.cond",  # 当 num_speakers > 1 时使用
-    # MAPPING_GENERATOR 中```python
+    # MAPPING_GENERATOR 中```
 }
 # 末尾多余的大括号，可能是代码片段复制过程中的错误
 

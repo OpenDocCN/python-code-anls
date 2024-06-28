@@ -1,6 +1,6 @@
 # `.\models\xglm\modeling_tf_xglm.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The Fairseq Authors The HuggingFace Inc. team. All rights reserved.
 #

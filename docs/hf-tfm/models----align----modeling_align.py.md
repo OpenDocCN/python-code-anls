@@ -1,6 +1,6 @@
 # `.\models\align\modeling_align.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The Google Research Team Authors and The HuggingFace Team. All rights reserved.
 #
@@ -1457,7 +1457,7 @@ class AlignModel(AlignPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, AlignModel
 
         >>> model = AlignModel.from_pretrained("kakaobrain/align-base")
@@ -1501,7 +1501,7 @@ class AlignModel(AlignPreTrainedModel):
 
         Examples:
 
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, AlignModel

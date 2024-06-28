@@ -1,6 +1,6 @@
 # `.\modeling_flax_utils.py`
 
-```
+```py
 # coding=utf-8
 # 代码文件声明使用 UTF-8 编码
 
@@ -77,7 +77,7 @@ ACT2FN = {
 def dtype_byte_size(dtype):
     """
     根据数据类型 `dtype` 返回一个参数占用的字节数。例如：
-    ```py
+    ```
     >>> dtype_byte_size(np.float32)
     4
     ```
@@ -374,7 +374,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import FlaxBertModel
 
         >>> # load model
@@ -410,7 +410,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
 
         Examples:
 
-        ```python
+        ```
         >>> from transformers import FlaxBertModel
 
         >>> # Download model and configuration from huggingface.co
@@ -436,7 +436,7 @@ class FlaxPreTrainedModel(PushToHubMixin, FlaxGenerationMixin):
     #
     # 示例:
     #
-    # ```python
+    # ```
     # >>> from transformers import FlaxBertModel
     # >>>
     # >>> # 加载模型

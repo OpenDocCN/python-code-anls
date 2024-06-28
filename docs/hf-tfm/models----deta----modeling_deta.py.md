@@ -1,6 +1,6 @@
 # `.\models\deta\modeling_deta.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明，指明 SenseTime 和 The HuggingFace Inc. 团队的所有权，保留所有权利
 #

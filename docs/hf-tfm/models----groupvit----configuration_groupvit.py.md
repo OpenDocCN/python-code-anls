@@ -1,6 +1,6 @@
 # `.\models\groupvit\configuration_groupvit.py`
 
-```
+```py
 # coding=utf-8
 # 定义 Python 源文件编码为 UTF-8
 
@@ -174,7 +174,7 @@ class GroupViTVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import GroupViTVisionConfig, GroupViTVisionModel
     ```
     # 初始化一个 GroupViTVisionConfig 对象，使用 nvidia/groupvit-gcc-yfcc 风格的配置

@@ -1,6 +1,6 @@
 # `.\models\mobilevit\modeling_tf_mobilevit.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 Apple Inc. 和 HuggingFace Inc. 团队保留所有权利。
 #

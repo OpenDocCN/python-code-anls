@@ -1,6 +1,6 @@
 # `.\models\llava\convert_llava_weights_to_hf.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 导入命令行参数解析模块
 

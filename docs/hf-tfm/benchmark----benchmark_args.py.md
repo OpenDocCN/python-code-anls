@@ -1,6 +1,6 @@
 # `.\benchmark\benchmark_args.py`
 
-```
+```py
 # 导入必要的库和模块
 from dataclasses import dataclass, field
 from typing import Tuple

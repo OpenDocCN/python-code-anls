@@ -1,6 +1,6 @@
 # `.\models\fastspeech2_conformer\configuration_fastspeech2_conformer.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #
@@ -54,7 +54,7 @@ class FastSpeech2ConformerConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FastSpeech2ConformerModel, FastSpeech2ConformerConfig
 
     >>> # Initializing a FastSpeech2Conformer style configuration
@@ -172,7 +172,7 @@ class FastSpeech2ConformerHifiGanConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import FastSpeech2ConformerHifiGan, FastSpeech2ConformerHifiGanConfig
     """
     # 初始化配置类，设置默认参数
@@ -245,7 +245,7 @@ class FastSpeech2ConformerWithHifiGanConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import (
     ...     FastSpeech2ConformerConfig,
     ...     FastSpeech2ConformerHifiGanConfig,

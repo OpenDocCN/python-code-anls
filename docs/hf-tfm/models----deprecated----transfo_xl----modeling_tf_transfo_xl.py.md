@@ -1,6 +1,6 @@
 # `.\models\deprecated\transfo_xl\modeling_tf_transfo_xl.py`
 
-```
+```py
 """
  TF 2.0 Transformer XL model.
 """

@@ -1,6 +1,6 @@
 # `.\models\albert\tokenization_albert_fast.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2018 Google AI, Google Brain and the HuggingFace Inc. team.
 #

@@ -1,6 +1,6 @@
 # `.\models\vit_msn\modeling_vit_msn.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2022 年 Facebook AI 和 HuggingFace Inc. 团队。保留所有权利。
 #

@@ -1,6 +1,6 @@
 # `.\models\beit\feature_extraction_beit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.
 # 2021年HuggingFace团队。版权所有。

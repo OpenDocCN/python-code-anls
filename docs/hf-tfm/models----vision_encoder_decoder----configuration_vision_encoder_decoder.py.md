@@ -1,6 +1,6 @@
 # `.\models\vision_encoder_decoder\configuration_vision_encoder_decoder.py`
 
-```
+```py
 # 引入需要的模块和类
 from typing import TYPE_CHECKING, Any, Mapping, Optional, OrderedDict
 # 引入版本控制的模块
@@ -34,7 +34,7 @@ class VisionEncoderDecoderConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import BertConfig, ViTConfig, VisionEncoderDecoderConfig, VisionEncoderDecoderModel
 
     >>> # 初始化 ViT 和 BERT 风格的配置

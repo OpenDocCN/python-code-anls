@@ -1,6 +1,6 @@
 # `.\models\pegasus\modeling_tf_pegasus.py`
 
-```
+```py
 # 定义函数 shift_tokens_right，将输入的 token 序列向右移动一位，用于生成模型的 decoder 输入
 def shift_tokens_right(input_ids: tf.Tensor, pad_token_id: int, decoder_start_token_id: int):
     # 将 pad_token_id 和 decoder_start_token_id 转换为与 input_ids 相同的数据类型

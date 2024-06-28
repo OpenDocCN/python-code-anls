@@ -1,6 +1,6 @@
 # `.\pipelines\object_detection.py`
 
-```
+```py
 # 从 typing 模块中导入 Any, Dict, List, Union 类型
 from typing import Any, Dict, List, Union
 
@@ -37,7 +37,7 @@ class ObjectDetectionPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> detector = pipeline(model="facebook/detr-resnet-50")

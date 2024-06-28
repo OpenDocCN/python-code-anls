@@ -1,6 +1,6 @@
 # `.\models\distilbert\modeling_distilbert.py`
 
-```
+```py
 # Copied from transformers.models.llama.modeling_llama._get_unpad_data
 # 从transformers.models.llama.modeling_llama._get_unpad_data复制而来，用于获取不需要填充的数据
 def _get_unpad_data(attention_mask):

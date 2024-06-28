@@ -1,6 +1,6 @@
 # `.\models\deprecated\mctct\configuration_mctct.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 导入必要的模块和类
@@ -29,7 +29,7 @@ class MCTCTConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MCTCTConfig, MCTCTModel
 
     >>> # Initializing a M-CTC-T mctct-large style configuration

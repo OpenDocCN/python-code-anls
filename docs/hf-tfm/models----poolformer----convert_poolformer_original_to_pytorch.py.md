@@ -1,6 +1,6 @@
 # `.\models\poolformer\convert_poolformer_original_to_pytorch.py`
 
-```
+```py
 # 设置日志输出级别为INFO，确保日志在运行时能够显示相关信息
 logging.set_verbosity_info()
 

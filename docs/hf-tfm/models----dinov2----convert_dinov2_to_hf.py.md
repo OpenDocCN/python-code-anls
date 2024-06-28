@@ -1,6 +1,6 @@
 # `.\models\dinov2\convert_dinov2_to_hf.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明及许可信息，指定此代码的使用条件
 # 此脚本用于从原始存储库转换 DINOv2 检查点

@@ -1,6 +1,6 @@
 # `.\models\vision_encoder_decoder\modeling_tf_vision_encoder_decoder.py`
 
-```
+```py
 # 设置编码为 UTF-8，确保脚本能够正确处理各种字符
 # 版权声明，指出代码的版权归属及使用许可
 # 导入必要的模块和类型声明

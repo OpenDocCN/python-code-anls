@@ -1,6 +1,6 @@
 # `.\models\donut\convert_donut_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为UTF-8，确保支持中文等Unicode字符
 # 版权声明，声明使用Apache License Version 2.0许可证
 # 可以在遵守许可证条件的前提下使用此文件

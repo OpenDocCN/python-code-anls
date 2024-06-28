@@ -1,6 +1,6 @@
 # `.\models\electra\tokenization_electra.py`
 
-```
+```py
 # 以 UTF-8 编码声明文件编码方式
 # 版权声明及许可信息
 # 该代码基于 Apache License, Version 2.0 开源许可证发布，详情请访问指定网址获取完整许可信息

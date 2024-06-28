@@ -1,6 +1,6 @@
 # `.\models\xmod\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 禁用 flake8 检查，因为无法忽略 "F401 '...' imported but unused" 警告，但要保留其他警告。因此完全不检查此模块。
 

@@ -1,6 +1,6 @@
 # `.\dependency_versions_check.py`
 
-```
+```py
 # 从依赖版本表导入依赖字典
 from .dependency_versions_table import deps
 # 从工具目录下的版本模块导入版本检查函数

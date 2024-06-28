@@ -1,6 +1,6 @@
 # `.\tools\python_interpreter.py`
 
-```
+```py
     """
     Evaluate an abstract syntax tree (AST) node representing a Python expression, using variables from `state` and 
     restricted to functions in `tools`.

@@ -1,6 +1,6 @@
 # `.\models\albert\modeling_tf_albert.py`
 
-```
+```py
 # 设置编码格式为 UTF-8，确保代码中可以正确处理各种字符
 # 版权声明，版权归 OpenAI Team Authors 和 HuggingFace Inc. team 所有
 # 版权声明，版权归 NVIDIA CORPORATION 所有，保留所有权利
@@ -989,7 +989,7 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
 
         Example:
 
-        ```python
+        ```
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFAlbertForPreTraining
 

@@ -1,6 +1,6 @@
 # `.\models\owlvit\image_processing_owlvit.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #

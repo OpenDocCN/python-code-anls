@@ -1,6 +1,6 @@
 # `.\commands\add_new_model_like.py`
 
-```
+```py
 # 导入 difflib 模块，用于生成文本差异的比较结果
 import difflib
 # 导入 json 模块，用于处理 JSON 数据的编解码

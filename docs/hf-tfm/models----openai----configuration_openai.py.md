@@ -1,6 +1,6 @@
 # `.\models\openai\configuration_openai.py`
 
-```
+```py
 # coding=utf-8
 # 设置代码文件的编码格式为 UTF-8
 
@@ -54,7 +54,7 @@ class OpenAIGPTConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import OpenAIGPTConfig, OpenAIGPTModel
 
     >>> # Initializing a GPT configuration

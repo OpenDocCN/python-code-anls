@@ -1,6 +1,6 @@
 # `.\models\blip\configuration_blip.py`
 
-```
+```py
 # 导入操作系统和Union类型
 import os
 from typing import Union
@@ -47,7 +47,7 @@ class BlipTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BlipTextConfig, BlipTextModel
 
     >>> # Initializing a BlipTextConfig with Salesforce/blip-vqa-base style configuration
@@ -176,7 +176,7 @@ class BlipVisionConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BlipVisionConfig, BlipVisionModel
 
     >>> # Initializing a BlipVisionConfig with Salesforce/blip-vqa-base style configuration
@@ -267,7 +267,7 @@ class BlipConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import BlipConfig, BlipModel
 
     >>> # 使用 Salesforce/blip-vqa-base 风格的配置初始化 BlipConfig

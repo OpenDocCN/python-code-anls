@@ -1,6 +1,6 @@
 # `.\models\convnextv2\modeling_convnextv2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2023 Meta Platforms, Inc. and The HuggingFace Inc. team. All rights reserved.
 #
@@ -582,7 +582,7 @@ class ConvNextV2Backbone(ConvNextV2PreTrainedModel, BackboneMixin):
 
         Examples: 示例代码展示了如何使用该函数来处理图像和调用模型。
 
-        ```python
+        ```
         >>> from transformers import AutoImageProcessor, AutoBackbone
         >>> import torch
         >>> from PIL import Image

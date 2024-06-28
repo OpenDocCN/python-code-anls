@@ -1,6 +1,6 @@
 # `.\models\upernet\convert_swin_upernet_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # 设置脚本编码格式为UTF-8
 

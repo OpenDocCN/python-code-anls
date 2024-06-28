@@ -1,6 +1,6 @@
 # `.\models\mobilebert\modeling_mobilebert.py`
 
-```
+```py
 # 导入必要的库和模块
 import math  # 导入数学库，用于数学运算
 import os  # 导入操作系统库，用于操作系统相关功能
@@ -78,7 +78,7 @@ def load_tf_weights_in_mobilebert(model, config, tf_checkpoint_path):
         RuntimeError: 如果无法从 tf_checkpoint_path 加载权重。
 
     Example usage:
-        ```python
+        ```
         model = MobileBertModel.from_pretrained('google/mobilebert-uncased')
         config = MobileBertConfig.from_pretrained('google/mobilebert-uncased')
         load_tf_weights_in_mobilebert(model, config, 'path/to/tf_checkpoint')
@@ -1330,7 +1330,7 @@ class MobileBertForNextSentencePrediction(MobileBertPreTrainedModel):
         Examples:
         Example usage of the `MobileBertForNextSentencePrediction` model.
 
-        ```python
+        ```
         >>> from transformers import AutoTokenizer, MobileBertForNextSentencePrediction
         >>> import torch
 

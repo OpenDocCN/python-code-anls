@@ -1,6 +1,6 @@
 # `.\models\speech_to_text\feature_extraction_speech_to_text.py`
 
-```
+```py
         feature_size=80,
         sampling_rate=16000,
         num_mel_bins=80,

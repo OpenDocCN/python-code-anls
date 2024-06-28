@@ -1,6 +1,6 @@
 # `.\models\convbert\tokenization_convbert.py`
 
-```
+```py
 # 指定文件编码为 UTF-8
 # 版权声明，基于 Apache License, Version 2.0
 # 详细信息可查阅 http://www.apache.org/licenses/LICENSE-2.0

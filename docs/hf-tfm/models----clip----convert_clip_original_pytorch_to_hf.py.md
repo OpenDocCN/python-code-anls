@@ -1,6 +1,6 @@
 # `.\models\clip\convert_clip_original_pytorch_to_hf.py`
 
-```
+```py
 # 引入 argparse 模块，用于处理命令行参数
 import argparse
 

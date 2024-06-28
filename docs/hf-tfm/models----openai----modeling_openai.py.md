@@ -1,6 +1,6 @@
 # `.\models\openai\modeling_openai.py`
 
-```
+```py
 # 导入必要的库和模块
 import json  # 导入处理 JSON 格式数据的模块
 import math  # 导入数学运算模块

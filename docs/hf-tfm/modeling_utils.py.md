@@ -1,6 +1,6 @@
 # `.\modeling_utils.py`
 
-```
+```py
 # 导入 Python 内置和第三方库
 import collections  # 导入 collections 模块，用于扩展内置容器数据类型
 import copy  # 导入 copy 模块，用于对象复制操作
@@ -1219,7 +1219,7 @@ class PreTrainedModel(nn.Module, ModuleUtilsMixin, GenerationMixin, PushToHubMix
 
         Examples:
 
-        ```python
+        ```
         from transformers import AutoModel
 
         model = AutoModel.from_pretrained("google-bert/bert-base-cased")

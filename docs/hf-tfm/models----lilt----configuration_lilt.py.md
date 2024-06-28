@@ -1,6 +1,6 @@
 # `.\models\lilt\configuration_lilt.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -39,7 +39,7 @@ class LiltConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import LiltConfig, LiltModel
 
     >>> # Initializing a LiLT SCUT-DLVCLab/lilt-roberta-en-base style configuration

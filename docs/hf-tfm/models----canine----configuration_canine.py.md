@@ -1,6 +1,6 @@
 # `.\models\canine\configuration_canine.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出代码的所有权和授权信息
 # 根据 Apache 2.0 许可证使用本代码
@@ -34,7 +34,7 @@ class CanineConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import CanineConfig, CanineModel
 
     >>> # 初始化一个 CANINE google/canine-s 风格的配置

@@ -1,6 +1,6 @@
 # `.\models\xlm_roberta_xl\configuration_xlm_roberta_xl.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件的编码格式为 UTF-8
 
@@ -63,7 +63,7 @@ class XLMRobertaXLConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import XLMRobertaXLConfig, XLMRobertaXLModel
 
     >>> # Initializing a XLM_ROBERTA_XL google-bert/bert-base-uncased style configuration

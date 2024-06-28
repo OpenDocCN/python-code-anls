@@ -1,6 +1,6 @@
 # `.\models\clip\processing_clip.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2021 年 HuggingFace Inc. 团队
 #

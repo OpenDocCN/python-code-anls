@@ -1,6 +1,6 @@
 # `.\models\bros\processing_bros.py`
 
-```
+```py
 # 设置编码格式为 UTF-8，确保支持中文等多种字符
 # 版权声明，指明此代码版权归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
 # 详细许可条款可以在 http://www.apache.org/licenses/LICENSE-2.0 查看

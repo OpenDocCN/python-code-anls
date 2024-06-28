@@ -1,6 +1,6 @@
 # `.\models\mixtral\convert_mixtral_weights_to_hf.py`
 
-```
+```py
 # 引入必要的库和模块
 import argparse  # 用于处理命令行参数解析
 import json  # 用于处理 JSON 格式的数据

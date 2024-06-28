@@ -1,6 +1,6 @@
 # `.\pipelines\mask_generation.py`
 
-```
+```py
 from collections import defaultdict  # 导入 defaultdict 类，用于创建默认值为列表的字典
 from typing import Optional  # 导入 Optional 类型，表示某些参数可选
 
@@ -51,7 +51,7 @@ class MaskGenerationPipeline(ChunkPipeline):  # 定义掩模生成管道类，�
 
     示例：
 
-    ```python
+    ```
     >>> from transformers import pipeline
     ```
     >>> generator = pipeline(model="facebook/sam-vit-base", task="mask-generation")

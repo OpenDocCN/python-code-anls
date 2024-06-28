@@ -1,6 +1,6 @@
 # `.\models\bigbird_pegasus\convert_bigbird_pegasus_tf_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 导入命令行参数解析模块
 from typing import Dict  # 导入类型提示模块 Dict

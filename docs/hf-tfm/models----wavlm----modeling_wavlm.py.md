@@ -1,6 +1,6 @@
 # `.\models\wavlm\modeling_wavlm.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明
 # 版权所有（c）2021年 Fairseq作者，Microsoft Research和HuggingFace Inc.团队。保留所有权利。

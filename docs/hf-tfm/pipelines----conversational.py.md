@@ -1,6 +1,6 @@
 # `.\pipelines\conversational.py`
 
-```
+```py
 # 导入必要的模块和库
 import uuid  # 导入用于生成唯一标识符的模块
 import warnings  # 导入警告处理模块
@@ -39,7 +39,7 @@ class Conversation:
 
     Usage:
 
-    ```python
+    ```
     conversation = Conversation("Going to the movies tonight - any suggestions?")
     conversation.add_message({"role": "assistant", "content": "The Big lebowski."})
     conversation.add_message({"role": "user", "content": "Is it good?"})
@@ -238,7 +238,7 @@ class ConversationalPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline, Conversation
     # Any model with a chat template can be used in a ConversationalPipeline.
 

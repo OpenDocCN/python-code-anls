@@ -1,6 +1,6 @@
 # `.\models\mobilevit\convert_mlcvnets_to_pytorch.py`
 
-```
+```py
 # 设置脚本的编码格式为UTF-8
 # 版权声明，使用 Apache License, Version 2.0 许可协议
 # 详细许可信息可以在 http://www.apache.org/licenses/LICENSE-2.0 找到

@@ -1,6 +1,6 @@
 # `.\models\blenderbot_small\tokenization_blenderbot_small.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2021 年 Facebook Inc. 和 HuggingFace Inc. 团队保留所有权利。
 #

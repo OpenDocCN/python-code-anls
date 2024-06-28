@@ -1,6 +1,6 @@
 # `.\models\deberta_v2\modeling_deberta_v2.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 Microsoft and the Hugging Face Inc. team.
 #
@@ -95,7 +95,7 @@ class XSoftmax(torch.autograd.Function):
 
     Example:
 
-    ```python
+    ```
     >>> import torch
     >>> from transformers.models.deberta_v2.modeling_deberta_v2 import XSoftmax
 

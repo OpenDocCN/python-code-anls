@@ -1,6 +1,6 @@
 # `.\models\altclip\processing_altclip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 WenXiang ZhongzhiCheng LedellWu LiuGuang BoWenZhang The HuggingFace Inc. team. All rights reserved.
 #

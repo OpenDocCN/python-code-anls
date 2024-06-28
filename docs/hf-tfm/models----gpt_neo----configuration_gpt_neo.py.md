@@ -1,6 +1,6 @@
 # `.\models\gpt_neo\configuration_gpt_neo.py`
 
-```
+```py
 # 定义模型配置类 GPTNeoConfig，它继承自 PretrainedConfig，用于存储 GPT Neo 模型的配置信息
 class GPTNeoConfig(PretrainedConfig):
     # 类属性：模型类型为 "gpt_neo"

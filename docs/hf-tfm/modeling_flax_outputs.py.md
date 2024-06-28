@@ -1,6 +1,6 @@
 # `.\modeling_flax_outputs.py`
 
-```
+```py
 # 导入必要的模块和类
 from typing import Dict, Optional, Tuple  # 导入类型提示相关模块
 

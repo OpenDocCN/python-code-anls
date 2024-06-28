@@ -1,6 +1,6 @@
 # `.\models\kosmos2\processing_kosmos2.py`
 
-```
+```py
 # coding=utf-8
 # 上面是指定文件编码为 UTF-8
 
@@ -443,7 +443,7 @@ def extract_entities_with_patch_indices(text):
 
     Examples:
 
-    ```python
+    ```
     >>> text = "<grounding> An image of<phrase> a snowman</phrase><object><patch_index_0044><patch_index_0863></object> warming himself by<phrase> a fire</phrase><object><patch_index_0005><patch_index_0911></object>."
     >>> entities = extract_entities_with_patch_indices(text)
     >>> entities
@@ -539,7 +539,7 @@ def clean_text_and_extract_entities_with_bboxes(text, num_patches_per_side=32):
 
     示例：
 
-    ```python
+    ```
     >>> text = "<grounding> An image of<phrase> a snowman</phrase><object><patch_index_0044><patch_index_0863></object> warming himself by<phrase> a fire</phrase><object><patch_index_0005><patch_index_0911></object>."
     >>> clean_text, entities = clean_text_and_extract_entities_with_bboxes(text)
     >>> clean_text

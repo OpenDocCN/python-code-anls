@@ -1,6 +1,6 @@
 # `.\models\bart\tokenization_bart.py`
 
-```
+```py
 # 定义一个名为 `bytes_to_unicode` 的函数，并且使用 `@lru_cache()` 装饰器进行缓存，使其结果可以被缓存以提高性能
 @lru_cache()
 def bytes_to_unicode():
@@ -61,7 +61,7 @@ class BartTokenizer(PreTrainedTokenizer):
     This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
     be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
-    ```python
+    ```
     >>> from transformers import BartTokenizer
 
     >>> tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")

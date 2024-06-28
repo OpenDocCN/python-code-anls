@@ -1,6 +1,6 @@
 # `.\models\layoutlmv2\image_processing_layoutlmv2.py`
 
-```
+```py
 # 定义一个名为 normalize_box 的函数，用于将边界框归一化为相对于图像宽高的千分比
 def normalize_box(box, width, height):
     return [

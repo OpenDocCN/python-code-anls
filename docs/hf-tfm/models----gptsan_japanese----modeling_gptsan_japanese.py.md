@@ -1,6 +1,6 @@
 # `.\models\gptsan_japanese\modeling_gptsan_japanese.py`
 
-```
+```py
 # 编码声明，指定文件编码为UTF-8
 # Copyright声明及许可信息，指明版权归属及许可协议
 # 引入模块：copy模块用于复制对象；List, Optional, Tuple, Union用于类型提示

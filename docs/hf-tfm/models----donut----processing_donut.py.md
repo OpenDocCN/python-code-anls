@@ -1,6 +1,6 @@
 # `.\models\donut\processing_donut.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 # 版权声明：2022 年由 HuggingFace Inc. 团队所有
 #

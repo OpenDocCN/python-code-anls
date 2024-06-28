@@ -1,6 +1,6 @@
 # `.\models\wav2vec2_bert\modeling_wav2vec2_bert.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2024 The Seamless Authors and the HuggingFace Inc. team. All rights reserved.
 #

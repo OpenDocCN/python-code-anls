@@ -1,6 +1,6 @@
 # `.\quantizers\base.py`
 
-```
+```py
 # 引入 ABC 类和类型检查相关的模块
 from abc import ABC, abstractmethod
 # 引入类型检查模块，用于检查是否支持特定类型的操作

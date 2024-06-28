@@ -1,6 +1,6 @@
 # `.\models\rag\modeling_tf_rag.py`
 
-```
+```py
 # coding=utf-8
 # 版权所有 2020 年，RAG 作者和 HuggingFace 公司团队。
 #

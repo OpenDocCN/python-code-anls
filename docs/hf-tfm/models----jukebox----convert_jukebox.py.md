@@ -1,6 +1,6 @@
 # `.\models\jukebox\convert_jukebox.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team.
 #

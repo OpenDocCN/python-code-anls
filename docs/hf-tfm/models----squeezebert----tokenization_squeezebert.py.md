@@ -1,6 +1,6 @@
 # `.\models\squeezebert\tokenization_squeezebert.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：2020 年由 SqueezeBert 作者和 HuggingFace Inc. 团队共同持有
 #

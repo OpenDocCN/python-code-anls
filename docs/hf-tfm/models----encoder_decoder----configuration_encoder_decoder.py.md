@@ -1,6 +1,6 @@
 # `.\models\encoder_decoder\configuration_encoder_decoder.py`
 
-```
+```py
 # 设置文件编码为UTF-8
 # 版权声明：2020年由HuggingFace Inc.团队版权所有。
 # 版权声明：2018年，NVIDIA CORPORATION版权所有。
@@ -36,7 +36,7 @@ class EncoderDecoderConfig(PretrainedConfig):
 
     Examples:
 
-    ```python
+    ```
     >>> from transformers import BertConfig, EncoderDecoderConfig, EncoderDecoderModel
 
     >>> # 初始化一个Bert google-bert/bert-base-uncased风格的配置

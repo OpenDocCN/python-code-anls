@@ -1,6 +1,6 @@
 # `.\utils\dummy_tensorflow_text_objects.py`
 
-```
+```py
 # 该文件由命令 `make fix-copies` 自动生成，不要编辑。
 # 从上级目录的 utils 模块导入 DummyObject 和 requires_backends 函数
 from ..utils import DummyObject, requires_backends

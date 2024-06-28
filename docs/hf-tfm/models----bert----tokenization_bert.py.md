@@ -1,6 +1,6 @@
 # `.\models\bert\tokenization_bert.py`
 
-```
+```py
 # 指定编码为 UTF-8
 
 # 版权声明，版权归Google AI Language Team和HuggingFace Inc.团队所有，使用Apache License 2.0授权

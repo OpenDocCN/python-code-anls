@@ -1,6 +1,6 @@
 # `.\models\bert\modeling_tf_bert.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明：2018 年由 Google AI 语言团队和 HuggingFace Inc. 团队所有。
 # 版权声明：2018 年，NVIDIA CORPORATION 版权所有。

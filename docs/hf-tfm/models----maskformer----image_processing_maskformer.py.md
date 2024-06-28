@@ -1,6 +1,6 @@
 # `.\models\maskformer\image_processing_maskformer.py`
 
-```
+```py
 # coding=utf-8
 # 版权 2022 年 HuggingFace Inc. 团队保留所有权利。
 #

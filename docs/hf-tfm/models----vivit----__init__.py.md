@@ -1,6 +1,6 @@
 # `.\models\vivit\__init__.py`
 
-```
+```py
 # flake8: noqa
 # 忽略 flake8 检查，因为这里没有办法仅忽略 "F401 '...' imported but unused" 警告而保留其它警告。
 # 这样做是为了确保保留其它警告，而不对本模块进行检查。

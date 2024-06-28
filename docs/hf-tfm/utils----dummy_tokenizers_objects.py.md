@@ -1,6 +1,6 @@
 # `.\utils\dummy_tokenizers_objects.py`
 
-```
+```py
 # 此文件由命令 `make fix-copies` 自动生成，不要编辑。
 
 # 从上级目录的 utils 模块中导入 DummyObject 类和 requires_backends 函数

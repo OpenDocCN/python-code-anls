@@ -1,6 +1,6 @@
 # `.\models\switch_transformers\convert_switch_transformers_original_flax_checkpoint_to_pytorch.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，声明代码版权归 The HuggingFace Inc. team 所有
 #

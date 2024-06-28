@@ -1,6 +1,6 @@
 # `.\models\mask2former\modeling_mask2former.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，指出 Meta Platforms, Inc. 和 The HuggingFace Inc. 团队的版权信息
 # 版权遵循 Apache 许可证 2.0 版本，详见 https://www.apache.org/licenses/LICENSE-2.0

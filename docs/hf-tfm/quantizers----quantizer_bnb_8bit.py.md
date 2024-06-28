@@ -1,6 +1,6 @@
 # `.\quantizers\quantizer_bnb_8bit.py`
 
-```
+```py
 # 导入 importlib 模块，用于动态加载其他模块
 import importlib
 # 导入类型提示相关模块：TYPE_CHECKING, Any, Dict, List, Optional, Union

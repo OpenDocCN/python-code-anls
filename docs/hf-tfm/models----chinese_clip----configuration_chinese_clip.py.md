@@ -1,6 +1,6 @@
 # `.\models\chinese_clip\configuration_chinese_clip.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The OFA-Sys Team Authors and The HuggingFace Team. All rights reserved.
 #
@@ -57,7 +57,7 @@ class ChineseCLIPTextConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ChineseCLIPTextConfig, ChineseCLIPTextModel
 
     >>> # Initializing a ChineseCLIPTextConfig with OFA-Sys/chinese-clip-vit-base-patch16 style configuration
@@ -178,7 +178,7 @@ class ChineseCLIPVisionConfig(PretrainedConfig):
             A factor for initializing all weight matrices (should be kept to 1, used internally for initialization
             testing).
     Example:
-    ```python
+    ```
     >>> from transformers import ChineseCLIPVisionConfig, ChineseCLIPVisionModel
 
     >>> # Initializing a ChineseCLIPVisionConfig with OFA-Sys/chinese-clip-vit-base-patch16 style configuration
@@ -267,7 +267,7 @@ class ChineseCLIPConfig(PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import ChineseCLIPConfig, ChineseCLIPModel
 
     >>> # 使用 OFA-Sys/chinese-clip-vit-base-patch16 风格的配置初始化 ChineseCLIPConfig

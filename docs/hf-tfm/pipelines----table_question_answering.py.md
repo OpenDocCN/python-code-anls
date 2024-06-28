@@ -1,6 +1,6 @@
 # `.\pipelines\table_question_answering.py`
 
-```
+```py
 # 导入必要的库和模块
 
 import collections  # 导入 collections 模块，用于高效操作集合数据类型
@@ -129,7 +129,7 @@ class TableQuestionAnsweringPipeline(Pipeline):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import pipeline
 
     >>> oracle = pipeline(model="google/tapas-base-finetuned-wtq")

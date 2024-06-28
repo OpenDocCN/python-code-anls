@@ -1,6 +1,6 @@
 # `.\models\cpmant\configuration_cpmant.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The OpenBMB Team and The HuggingFace Inc. team. All rights reserved.
 #

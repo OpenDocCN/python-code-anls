@@ -1,6 +1,6 @@
 # `.\models\mixtral\__init__.py`
 
-```
+```py
 # 导入需要的模块和函数
 from typing import TYPE_CHECKING
 # 从项目内部工具中导入必要的异常和工具函数

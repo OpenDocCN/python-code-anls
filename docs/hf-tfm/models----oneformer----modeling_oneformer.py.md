@@ -1,6 +1,6 @@
 # `.\models\oneformer\modeling_oneformer.py`
 
-```
+```py
 # 设置文件编码格式为 UTF-8
 # 版权声明，版权归 SHI Labs 和 The HuggingFace Inc. 团队所有
 #

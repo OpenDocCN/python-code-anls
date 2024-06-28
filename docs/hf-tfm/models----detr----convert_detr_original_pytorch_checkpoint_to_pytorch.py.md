@@ -1,6 +1,6 @@
 # `.\models\detr\convert_detr_original_pytorch_checkpoint_to_pytorch.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team.
 #

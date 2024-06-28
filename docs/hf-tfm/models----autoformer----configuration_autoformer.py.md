@@ -1,6 +1,6 @@
 # `.\models\autoformer\configuration_autoformer.py`
 
-```
+```py
 # 设置编码格式为 UTF-8
 
 # 版权声明，声明此代码的版权归 HuggingFace Inc. 团队所有，保留所有权利。
@@ -36,7 +36,7 @@ class AutoformerConfig(PretrainedConfig):
     Configuration objects inherit from [`PretrainedConfig`] can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
 
-    ```python
+    ```
     >>> from transformers import AutoformerConfig, AutoformerModel
 
     >>> # Initializing a default Autoformer configuration

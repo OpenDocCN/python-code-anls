@@ -1,6 +1,6 @@
 # `.\models\gemma\convert_gemma_weights_to_hf.py`
 
-```
+```py
 # 版权声明和信息
 # Copyright 2024 The HuggingFace Inc. team. All rights reserved.
 #

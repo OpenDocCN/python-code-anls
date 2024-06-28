@@ -1,6 +1,6 @@
 # `.\models\owlv2\modeling_owlv2.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明，标识该文件版权归 Google AI 和 The HuggingFace Team 所有
 #
@@ -998,7 +998,7 @@ class Owlv2VisionModel(Owlv2PreTrainedModel):
         - BaseModelOutputWithPooling 或 Tuple，模型输出的汇总结果
 
         示例:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, Owlv2VisionModel
@@ -1083,7 +1083,7 @@ class Owlv2Model(Owlv2PreTrainedModel):
             applying the projection layer to the pooled output of [`Owlv2TextModel`].
 
         Examples:
-        ```python
+        ```
         >>> from transformers import AutoProcessor, Owlv2Model
 
         >>> model = Owlv2Model.from_pretrained("google/owlv2-base-patch16-ensemble")
@@ -1118,7 +1118,7 @@ class Owlv2Model(Owlv2PreTrainedModel):
             applying the projection layer to the pooled output of [`Owlv2VisionModel`].
 
         Examples:
-        ```python
+        ```
         >>> from PIL import Image
         >>> import requests
         >>> from transformers import AutoProcessor, Owlv2Model

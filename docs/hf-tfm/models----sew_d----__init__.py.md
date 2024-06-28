@@ -1,6 +1,6 @@
 # `.\models\sew_d\__init__.py`
 
-```
+```py
 # 版权声明及许可声明，指明版权归 The HuggingFace Team 所有，依照 Apache License, Version 2.0 许可
 #
 # 在遵循许可的前提下，你可以使用本文件。你可以从以下链接获取许可的副本：

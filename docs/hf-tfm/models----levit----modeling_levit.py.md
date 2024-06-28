@@ -1,6 +1,6 @@
 # `.\models\levit\modeling_levit.py`
 
-```
+```py
 # coding=utf-8
 # 声明文件编码为 UTF-8
 

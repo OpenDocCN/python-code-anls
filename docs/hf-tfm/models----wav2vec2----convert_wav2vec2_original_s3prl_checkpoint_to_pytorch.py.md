@@ -1,6 +1,6 @@
 # `.\models\wav2vec2\convert_wav2vec2_original_s3prl_checkpoint_to_pytorch.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 用于解析命令行参数
 

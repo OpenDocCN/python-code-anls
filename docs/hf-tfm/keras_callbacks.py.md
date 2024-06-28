@@ -1,6 +1,6 @@
 # `.\keras_callbacks.py`
 
-```
+```py
 import logging  # 导入日志模块
 import os  # 导入操作系统模块
 from pathlib import Path  # 导入路径操作模块
@@ -29,7 +29,7 @@ class KerasMetricCallback(keras.callbacks.Callback):
     We provide an example of a suitable metric_fn that computes ROUGE scores for a summarization model below. Note that
     this example skips some post-processing for readability and simplicity, and should probably not be used as-is!
 
-    ```py
+    ```
     from datasets import load_metric
 
     rouge_metric = load_metric("rouge")
@@ -177,7 +177,7 @@ class PushToHubCallback(keras.callbacks.Callback):
     be changed with the `save_strategy` argument. Pushed models can be accessed like any other model on the hub, such
     as with the `from_pretrained` method.
 
-    ```py
+    ```
     from transformers.keras_callbacks import PushToHubCallback
 
     push_to_hub_callback = PushToHubCallback(

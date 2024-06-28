@@ -1,6 +1,6 @@
 # `.\configuration_utils.py`
 
-```
+```py
 # coding=utf-8
 # 版权声明及许可证信息
 

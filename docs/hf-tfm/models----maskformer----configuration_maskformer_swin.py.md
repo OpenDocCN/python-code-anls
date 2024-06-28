@@ -1,6 +1,6 @@
 # `.\models\maskformer\configuration_maskformer_swin.py`
 
-```
+```py
 # coding=utf-8
 # Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
@@ -41,7 +41,7 @@ class MaskFormerSwinConfig(BackboneConfigMixin, PretrainedConfig):
 
     Example:
 
-    ```python
+    ```
     >>> from transformers import MaskFormerSwinConfig, MaskFormerSwinModel
 
     >>> # Initializing a microsoft/swin-tiny-patch4-window7-224 style configuration

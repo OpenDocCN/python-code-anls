@@ -1,6 +1,6 @@
 # `.\models\focalnet\convert_focalnet_to_hf_format.py`
 
-```
+```py
 # 导入必要的库和模块
 import argparse  # 导入命令行参数解析模块
 import json  # 导入处理 JSON 格式数据的模块

@@ -1,6 +1,6 @@
 # `.\models\data2vec\configuration_data2vec_vision.py`
 
-```
+```py
 # 设置文件编码为 UTF-8
 # 版权声明：Meta Platforms 和 The HuggingFace Inc. 团队保留所有权利
 #
@@ -41,7 +41,7 @@ class Data2VecVisionConfig(PretrainedConfig):
 
     示例:
 
-    ```python
+    ```
     >>> from transformers import Data2VecVisionConfig, Data2VecVisionModel
 
     >>> # 初始化一个 Data2VecVision data2vec_vision-base-patch16-224-in22k 风格的配置
