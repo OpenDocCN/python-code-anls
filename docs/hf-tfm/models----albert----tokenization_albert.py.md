@@ -1,117 +1,129 @@
-# `.\transformers\models\albert\tokenization_albert.py`
+# `.\models\albert\tokenization_albert.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 Google AI、Google Brain 和 HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本，除非符合许可证要求，否则不得使用此文件
-# 可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制
-""" ALBERT 模型的分词类 """
+```
+# coding=utf-8
+# Copyright 2018 Google AI, Google Brain and the HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" Tokenization classes for ALBERT model."""
 
-# 导入所需的库
+# 引入必要的库和模块
 import os
 import unicodedata
 from shutil import copyfile
 from typing import Any, Dict, List, Optional, Tuple
 
-import sentencepiece as spm
+import sentencepiece as spm  # 导入句子分词模块
 
-# 导入所需的模块和函数
-from ...tokenization_utils import AddedToken, PreTrainedTokenizer
-from ...utils import logging
+from ...tokenization_utils import AddedToken, PreTrainedTokenizer  # 导入自定义的分词工具类
+from ...utils import logging  # 导入日志工具
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
-
-# 定义词汇文件名
+# 定义 ALBERT 模型的词汇文件名称
 VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}
 
-# 预训练词汇文件映射
+# 预训练模型的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
-        "albert-base-v1": "https://huggingface.co/albert-base-v1/resolve/main/spiece.model",
-        "albert-large-v1": "https://huggingface.co/albert-large-v1/resolve/main/spiece.model",
-        "albert-xlarge-v1": "https://huggingface.co/albert-xlarge-v1/resolve/main/spiece.model",
-        "albert-xxlarge-v1": "https://huggingface.co/albert-xxlarge-v1/resolve/main/spiece.model",
-        "albert-base-v2": "https://huggingface.co/albert-base-v2/resolve/main/spiece.model",
-        "albert-large-v2": "https://huggingface.co/albert-large-v2/resolve/main/spiece.model",
-        "albert-xlarge-v2": "https://huggingface.co/albert-xlarge-v2/resolve/main/spiece.model",
-        "albert-xxlarge-v2": "https://huggingface.co/albert-xxlarge-v2/resolve/main/spiece.model",
+        "albert/albert-base-v1": "https://huggingface.co/albert/albert-base-v1/resolve/main/spiece.model",
+        "albert/albert-large-v1": "https://huggingface.co/albert/albert-large-v1/resolve/main/spiece.model",
+        "albert/albert-xlarge-v1": "https://huggingface.co/albert/albert-xlarge-v1/resolve/main/spiece.model",
+        "albert/albert-xxlarge-v1": "https://huggingface.co/albert/albert-xxlarge-v1/resolve/main/spiece.model",
+        "albert/albert-base-v2": "https://huggingface.co/albert/albert-base-v2/resolve/main/spiece.model",
+        "albert/albert-large-v2": "https://huggingface.co/albert/albert-large-v2/resolve/main/spiece.model",
+        "albert/albert-xlarge-v2": "https://huggingface.co/albert/albert-xlarge-v2/resolve/main/spiece.model",
+        "albert/albert-xxlarge-v2": "https://huggingface.co/albert/albert-xxlarge-v2/resolve/main/spiece.model",
     }
 }
 
-# 预训练位置嵌入大小
+# 预训练模型的位置嵌入尺寸
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
-    "albert-base-v1": 512,
-    "albert-large-v1": 512,
-    "albert-xlarge-v1": 512,
-    "albert-xxlarge-v1": 512,
-    "albert-base-v2": 512,
-    "albert-large-v2": 512,
-    "albert-xlarge-v2": 512,
-    "albert-xxlarge-v2": 512,
+    "albert/albert-base-v1": 512,
+    "albert/albert-large-v1": 512,
+    "albert/albert-xlarge-v1": 512,
+    "albert/albert-xxlarge-v1": 512,
+    "albert/albert-base-v2": 512,
+    "albert/albert-large-v2": 512,
+    "albert/albert-xlarge-v2": 512,
+    "albert/albert-xxlarge-v2": 512,
 }
 
-# SentencePiece 分词符号
+# SentencePiece 分词器特有的下划线符号
 SPIECE_UNDERLINE = "▁"
 
-# ALBERT 分词器类，继承自 PreTrainedTokenizer
+# ALBERT 模型的分词器类，继承自 PreTrainedTokenizer 类
 class AlbertTokenizer(PreTrainedTokenizer):
     """
-    构建一个 ALBERT 分词器。基于 SentencePiece。
+    Construct an ALBERT tokenizer. Based on [SentencePiece](https://github.com/google/sentencepiece).
 
-    该分词器继承自 PreTrainedTokenizer，其中包含大多数主要方法。用户应参考该超类以获取有关这些方法的更多信息。
+    This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
+    this superclass for more information regarding those methods.
 
     Attributes:
         sp_model (`SentencePieceProcessor`):
-            用于每次转换（字符串、标记和 ID）的 SentencePiece 处理器。
+            The *SentencePiece* processor that is used for every conversion (string, tokens and IDs).
     """
 
-    # 定义词汇文件名
+    # 词汇文件名字典
     vocab_files_names = VOCAB_FILES_NAMES
-    # 预训练词汇文件映射
+    # 预训练模型的词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # 最大模型输入大小
+    # 预训练模型的最大输入尺寸
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 初始化函数，设置各种参数和属性
+
+    # sp_model 是 SentencePieceProcessor 对象，用于字符串、token 和 ID 的转换
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.sp_model = None  # 初始化 sp_model 为空
+    # 初始化函数，用于初始化一个新的对象实例
     def __init__(
         self,
-        vocab_file,
-        do_lower_case=True,
-        remove_space=True,
-        keep_accents=False,
-        bos_token="[CLS]",
-        eos_token="[SEP]",
-        unk_token="<unk>",
-        sep_token="[SEP]",
-        pad_token="<pad>",
-        cls_token="[CLS]",
-        mask_token="[MASK]",
-        sp_model_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs,
+        vocab_file,  # 词汇文件的路径
+        do_lower_case=True,  # 是否将输入文本转换为小写，默认为True
+        remove_space=True,  # 是否移除输入文本中的空格，默认为True
+        keep_accents=False,  # 是否保留输入文本中的重音符号，默认为False
+        bos_token="[CLS]",  # 开始标记（Beginning of Sentence），默认为"[CLS]"
+        eos_token="[SEP]",  # 结束标记（End of Sentence），默认为"[SEP]"
+        unk_token="<unk>",  # 未知标记（Unknown Token），默认为"<unk>"
+        sep_token="[SEP]",  # 分隔标记（Separator Token），默认为"[SEP]"
+        pad_token="<pad>",  # 填充标记（Padding Token），默认为"<pad>"
+        cls_token="[CLS]",  # 类别标记（Class Token），默认为"[CLS]"
+        mask_token="[MASK]",  # 掩码标记（Mask Token），默认为"[MASK]"
+        sp_model_kwargs: Optional[Dict[str, Any]] = None,  # SentencePiece 模型的参数，可选字典类型，默认为None
+        **kwargs,  # 其他额外的关键字参数
     ) -> None:
-        # 如果 mask_token 是字符串类型，则创建一个 AddedToken 对象
+        # 将掩码标记（mask_token）处理成一个 AddedToken 对象，具有特定的处理属性
         mask_token = (
             AddedToken(mask_token, lstrip=True, rstrip=False, normalized=False)
             if isinstance(mask_token, str)
             else mask_token
         )
 
-        # 如果 sp_model_kwargs 为 None，则设置为空字典
+        # 如果未提供 sp_model_kwargs，则初始化为空字典
         self.sp_model_kwargs = {} if sp_model_kwargs is None else sp_model_kwargs
 
-        # 设置各种属性
+        # 设置对象的各种属性值
         self.do_lower_case = do_lower_case
         self.remove_space = remove_space
         self.keep_accents = keep_accents
         self.vocab_file = vocab_file
 
-        # 使用 spm 库创建 SentencePieceProcessor 对象，并加载词汇文件
+        # 使用 SentencePieceProcessor 初始化一个 sp_model 对象，并加载词汇文件
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
         self.sp_model.Load(vocab_file)
 
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法，传递参数和额外的关键字参数
         super().__init__(
             do_lower_case=do_lower_case,
             remove_space=remove_space,
@@ -127,66 +139,63 @@ class AlbertTokenizer(PreTrainedTokenizer):
             **kwargs,
         )
 
-    # 返回词汇表大小
+    # vocab_size 属性，返回 sp_model 中词汇的数量
     @property
     def vocab_size(self) -> int:
         return len(self.sp_model)
 
-    # 获取词汇表
+    # 获取词汇表的方法，返回词汇到索引的字典
     def get_vocab(self) -> Dict[str, int]:
         vocab = {self.convert_ids_to_tokens(i): i for i in range(self.vocab_size)}
         vocab.update(self.added_tokens_encoder)
         return vocab
 
-    # 序列化对象时调用，返回对象的状态
+    # __getstate__ 方法，用于对象的序列化状态，排除 sp_model 以防止对象过大
     def __getstate__(self):
         state = self.__dict__.copy()
-        state["sp_model"] = None
+        state["sp_model"] = None  # 将 sp_model 设置为 None，不包含在序列化状态中
         return state
 
-    # 反序列化对象时调用，设置对象的状态
+    # __setstate__ 方法，用于对象的反序列化，重新初始化 sp_model
     def __setstate__(self, d):
         self.__dict__ = d
 
-        # 为了向后兼容性
+        # 为了向后兼容，如果对象没有 sp_model_kwargs 属性，则设置为空字典
         if not hasattr(self, "sp_model_kwargs"):
             self.sp_model_kwargs = {}
 
-        # 使用 spm 库创建 SentencePieceProcessor 对��，并加载词汇文件
+        # 使用 SentencePieceProcessor 重新初始化 sp_model 并加载 vocab_file
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
         self.sp_model.Load(self.vocab_file)
 
-    # 对输入文本进行预处理
+    # 文本预处理方法，根据对象的属性对输入文本进行处理并返回处理后的文本
     def preprocess_text(self, inputs):
-        # 如果需要去除空格，则去除空格并重新连接
         if self.remove_space:
-            outputs = " ".join(inputs.strip().split())
+            outputs = " ".join(inputs.strip().split())  # 移除多余的空格
         else:
             outputs = inputs
-        # 替换特殊字符
-        outputs = outputs.replace("``", '"').replace("''", '"')
 
-        # 如果不保留重音符号，则进行 Unicode 规范化和去除重音符号
+        outputs = outputs.replace("``", '"').replace("''", '"')  # 替换双引号
+
         if not self.keep_accents:
-            outputs = unicodedata.normalize("NFKD", outputs)
-            outputs = "".join([c for c in outputs if not unicodedata.combining(c)])
-        # 如果需要转换为小写，则转换为小写
+            outputs = unicodedata.normalize("NFKD", outputs)  # 标准化 unicode 字符串
+            outputs = "".join([c for c in outputs if not unicodedata.combining(c)])  # 移除重音符号
+
         if self.do_lower_case:
-            outputs = outputs.lower()
+            outputs = outputs.lower()  # 将文本转换为小写
 
         return outputs
-    # 将字符串进行分词处理
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize a string."""
-        # 预处理文本
+        # 对输入文本进行预处理
         text = self.preprocess_text(text)
-        # 使用句子分割模型对文本进行编码
+        # 使用句子片段模型对文本进行编码，输出为字符串列表
         pieces = self.sp_model.encode(text, out_type=str)
         new_pieces = []
         for piece in pieces:
-            # 处理特殊情况的逻辑，参考链接 https://github.com/google-research/bert/blob/master/README.md#tokenization
             if len(piece) > 1 and piece[-1] == str(",") and piece[-2].isdigit():
-                # 对特殊情况进行处理，例如 `9,9` -> ['▁9', ',', '9'] 而不是 [`_9,`, '9']
+                # 处理特殊情况的逻辑，参见 https://github.com/google-research/bert/blob/master/README.md#tokenization
+                # 当遇到形如 `9,9` 的情况时，确保正确分割为 ['▁9', ',', '9']，而非 [`_9,`, '9']
                 cur_pieces = self.sp_model.EncodeAsPieces(piece[:-1].replace(SPIECE_UNDERLINE, ""))
                 if piece[0] != SPIECE_UNDERLINE and cur_pieces[0][0] == SPIECE_UNDERLINE:
                     if len(cur_pieces[0]) == 1:
@@ -200,24 +209,23 @@ class AlbertTokenizer(PreTrainedTokenizer):
 
         return new_pieces
 
-    # 将 token 转换为 id
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
+        # 使用词汇表将token转换为对应的ID
         return self.sp_model.PieceToId(token)
 
-    # 将 id 转换为 token
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
+        # 使用词汇表将ID转换为对应的token
         return self.sp_model.IdToPiece(index)
 
-    # 将一系列 token 转换为单个字符串
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
         current_sub_tokens = []
         out_string = ""
         prev_is_special = False
         for token in tokens:
-            # 确保特殊 token 不使用 sentencepiece 模型解码
+            # 确保特殊的token不被句子片段模型解码
             if token in self.all_special_tokens:
                 if not prev_is_special:
                     out_string += " "
@@ -230,61 +238,35 @@ class AlbertTokenizer(PreTrainedTokenizer):
         out_string += self.sp_model.decode(current_sub_tokens)
         return out_string.strip()
 
-    # 构建带有特殊 token 的输入
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    ) -> List[int]:
-        """
-        从一个序列或一对序列构建模型输入，用于序列分类任务，通过连接和添加特殊标记。ALBERT 序列的格式如下：
-
-        - 单个序列：`[CLS] X [SEP]`
-        - 一对序列：`[CLS] A [SEP] B [SEP]`
-
-        Args:
-            token_ids_0 (`List[int]`):
-                要添加特殊标记的 ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                第二个序列的 ID 列表，用于序列对。
-
-        Returns:
-            `List[int]`: 包含适当特殊标记的 [输入 ID](../glossary#input-ids) 列表。
-        """
-        sep = [self.sep_token_id]
-        cls = [self.cls_token_id]
-        if token_ids_1 is None:
-            return cls + token_ids_0 + sep
-        return cls + token_ids_0 + sep + token_ids_1 + sep
-
-    def get_special_tokens_mask(
-        self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
-    ) -> List[int]:
-        """
-        从没有添加特殊标记的标记列表中检索序列 ID。当使用 tokenizer 的 `prepare_for_model` 方法添加特殊标记时调用此方法。
-
-        Args:
-            token_ids_0 (`List[int]`):
-                ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                第二个序列的 ID 列表，用于序列对。
-            already_has_special_tokens (`bool`, *可选*, 默认为 `False`):
-                标记列表是否已经格式化为模型的特殊标记。
-
-        Returns:
-            `List[int]`: 一个整数列表，范围为 [0, 1]：1 表示特殊标记，0 表示序列标记。
-        """
-
-        if already_has_special_tokens:
-            return super().get_special_tokens_mask(
-                token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
-            )
-
-        if token_ids_1 is not None:
-            return [1] + ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1)) + [1]
-        return [1] + ([0] * len(token_ids_0)) + [1]
-
+        ):
+        """Build model inputs from a sequence or a pair of sequence for BERT."""
+        # 实现构建适用于BERT模型的特殊token输入
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
+        """
+        Create token type IDs tensor from token list indices.
+
+        Args:
+            token_ids_0 (`List[int]`):
+                List of IDs for the first sequence.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
+
+        Returns:
+            `List[int]`: A list of token type IDs (0 or 1) corresponding to each token in the input sequences.
+        """
+        # Define token type ID for the first sequence (0)
+        token_type_ids = [0] * len(token_ids_0)
+        
+        if token_ids_1 is not None:
+            # Define token type ID for the second sequence (1)
+            token_type_ids += [1] * len(token_ids_1)
+        
+        return token_type_ids
+    def create_mask(self, token_ids_0: List[int], token_ids_1: Optional[List[int]]) -> List[int]:
         """
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. An ALBERT
         sequence pair mask has the following format:
@@ -292,52 +274,62 @@ class AlbertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs.
+                List of token IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
-                Optional second list of IDs for sequence pairs.
+                Optional second list of token IDs for sequence pairs.
 
         Returns:
-            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            `List[int]`: List of token type IDs according to the given sequence(s).
         """
-        # 定义分隔符的 ID 列表
+        # Define separation and classification tokens
         sep = [self.sep_token_id]
-        # 定义类别标识符的 ID 列表
         cls = [self.cls_token_id]
 
-        # 如果第二个序列的 ID 列表为空
+        # If only one sequence is provided (token_ids_1 is None), return a mask with 0s for the first sequence
         if token_ids_1 is None:
-            # 返回只包含第一个序列和分隔符的部分的标记类型 ID 列表，长度为 cls + token_ids_0 + sep 的长度，全部填充为 0
             return len(cls + token_ids_0 + sep) * [0]
-        # 否则，返回完整的标记类型 ID 列表，前半部分对应第一个序列，后半部分对应第二个序列
+
+        # Otherwise, concatenate both sequences and return a mask with 0s for the first sequence and 1s for the second
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 如果保存目录不存在，则报错并返回
+        """
+        Save the vocabulary files to the specified directory.
+
+        Args:
+            save_directory (`str`):
+                Directory path where the vocabulary files will be saved.
+            filename_prefix (`str`, *optional*):
+                Optional prefix to prepend to the vocabulary file names.
+
+        Returns:
+            `Tuple[str]`: Tuple containing the path of the saved vocabulary file.
+        """
+        # Check if the save directory exists; if not, log an error and return
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
-        # 定义输出的词汇文件路径
+
+        # Determine the output vocabulary file path
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
 
-        # 如果当前词汇文件路径与输出词汇文件路径不同，并且当前词汇文件存在
+        # If the current vocabulary file is not the same as the output file and exists, copy it to the output location
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file) and os.path.isfile(self.vocab_file):
-            # 复制当前词汇文件到输出词汇文件路径
             copyfile(self.vocab_file, out_vocab_file)
-        # 如果当前词汇文件不存在
+        # If the current vocabulary file doesn't exist, write the serialized model to the output file
         elif not os.path.isfile(self.vocab_file):
-            # 将序列化的 sp_model 内容写入输出词汇文件
             with open(out_vocab_file, "wb") as fi:
                 content_spiece_model = self.sp_model.serialized_model_proto()
                 fi.write(content_spiece_model)
 
-        # 返回输出词汇文件路径
+        # Return the path of the saved vocabulary file
         return (out_vocab_file,)
 ```

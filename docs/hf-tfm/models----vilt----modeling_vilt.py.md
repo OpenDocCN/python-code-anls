@@ -1,28 +1,33 @@
-# `.\transformers\models\vilt\modeling_vilt.py`
+# `.\models\vilt\modeling_vilt.py`
 
-```py
-# 设置文件编码为 utf-8
+```
+# 设置文件编码为 UTF-8
 # 版权声明
-# 根据Apache License，Version 2.0授权，除非遵守许可证，否则不得使用本文件
-# 可以从以下网址获取许可证副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 如适用法律或书面协议要求，按"原样"分发的软件，没有任何保证或条件，无论是明示的还是默示的
-# 请查看许可证以了解特定语言的权限和限制
+# 版权所有 2022 年 NAVER AI Labs 和 HuggingFace Inc. 团队。保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本（“许可证”）许可；
+# 除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则软件
+# 根据“原样”分发，不附带任何明示或暗示的担保或条件。
+# 有关详细信息，请参阅许可证。
 """ PyTorch ViLT 模型。"""
 
-# 导入所需库
-import collections.abc
-import math
-from dataclasses import dataclass
-from typing import List, Optional, Tuple, Union
+import collections.abc  # 导入抽象基类集合
+import math  # 导入数学库
+from dataclasses import dataclass  # 导入数据类装饰器
+from typing import List, Optional, Tuple, Union  # 导入类型提示
 
-import torch
-import torch.utils.checkpoint
-from torch import nn
-from torch.nn import CrossEntropyLoss
+import torch  # 导入 PyTorch
+import torch.utils.checkpoint  # 导入 PyTorch 检查点工具
+from torch import nn  # 导入 PyTorch 神经网络模块
+from torch.nn import CrossEntropyLoss  # 导入交叉熵损失函数
 
-from ...activations import ACT2FN
-from ...modeling_outputs import (
+from ...activations import ACT2FN  # 导入激活函数映射
+from ...modeling_outputs import (  # 导入模型输出类
     BaseModelOutput,
     BaseModelOutputWithPooling,
     MaskedLMOutput,
@@ -30,54 +35,58 @@ from ...modeling_outputs import (
     SequenceClassifierOutput,
     TokenClassifierOutput,
 )
-from ...modeling_utils import PreTrainedModel
-from ...pytorch_utils import (
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型工具
+from ...pytorch_utils import (  # 导入 PyTorch 工具函数
     find_pruneable_heads_and_indices,
     meshgrid,
     prune_linear_layer,
 )
-from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging, replace_return_docstrings
-from .configuration_vilt import ViltConfig
+from ...utils import (  # 导入工具函数
+    add_start_docstrings,
+    add_start_docstrings_to_model_forward,
+    logging,
+    replace_return_docstrings,
+)
+from .configuration_vilt import ViltConfig  # 导入 ViLT 配置
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取日志记录器
 
-# 文档中使用的配置和检查点
-_CONFIG_FOR_DOC = "ViltConfig"
-_CHECKPOINT_FOR_DOC = "dandelin/vilt-b32-mlm"
+_CONFIG_FOR_DOC = "ViltConfig"  # 用于文档的配置类名
+_CHECKPOINT_FOR_DOC = "dandelin/vilt-b32-mlm"  # 用于文档的检查点名称
 
-# 预训练模型列表
-VILT_PRETRAINED_MODEL_ARCHIVE_LIST = [
+VILT_PRETRAINED_MODEL_ARCHIVE_LIST = [  # ViLT 预训练模型存档列表
     "dandelin/vilt-b32-mlm",
-    # 查看所有 ViLT 模型: https://huggingface.co/models?filter=vilt
+    # 查看所有 ViLT 模型 https://huggingface.co/models?filter=vilt
 ]
 
 
 @dataclass
 class ViltForImagesAndTextClassificationOutput(ModelOutput):
     """
-    Class for outputs of [`ViltForImagesAndTextClassification`].
+    [`ViltForImagesAndTextClassification`] 的输出类。
+    """
+    # 定义函数参数和返回类型的文档字符串，描述了该函数可以接受的参数和可能的返回值类型
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            # 损失值，如果提供了`labels`，则返回分类（或回归，如果config.num_labels==1）的损失值。
+            分类（如果config.num_labels==1，则为回归）损失值。
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            # 分类（或回归，如果config.num_labels==1）得分（SoftMax之前）。
+            分类（如果config.num_labels==1，则为回归）得分（SoftMax之前）。
         hidden_states (`List[tuple(torch.FloatTensor)]`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            # 隐藏状态列表，包含每个图像-文本对应的元组的`torch.FloatTensor`（每个元组包含嵌入输出和每一层的输出），形状为`(batch_size, sequence_length, hidden_size)`。
-            # 模型在每一层输出的隐藏状态以及初始嵌入输出。
+            `torch.FloatTensor`的列表（每个图像-文本对一个，每个元组包含嵌入的输出+每层输出）的元组，形状为`(batch_size, sequence_length, hidden_size)`。
+            模型在每一层输出的隐藏状态加上初始嵌入的输出。
         attentions (`List[tuple(torch.FloatTensor)]`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            # 注意力列表，包含每个图像-文本对应的元组的`torch.FloatTensor`（每个元组包含形状为`(batch_size, num_heads, sequence_length, sequence_length)`的注意力权重）。
-            # 注意力softmax后的注意力权重，用于计算自注意力头中的加权平均值。
+            `torch.FloatTensor`的列表（每个图像-文本对一个，每个元组包含注意力权重的输出）的元组，形状为`(batch_size, num_heads, sequence_length, sequence_length)`。
+            注意力softmax之后的注意力权重，用于计算自注意力头中的加权平均值。
     """
 
+    # 定义可能为None的损失值变量，类型为`torch.FloatTensor`
     loss: Optional[torch.FloatTensor] = None
-    # 损失值，默认为None
+    # 定义必须存在的logits变量，类型为`torch.FloatTensor`
     logits: torch.FloatTensor = None
-    # 分类得分，默认为None
+    # 定义可能为None的隐藏状态列表变量，每个元素为`torch.FloatTensor`的元组列表
     hidden_states: Optional[List[Tuple[torch.FloatTensor]]] = None
-    # 隐藏状态，默认为None
+    # 定义可能为None的注意力权重列表变量，每个元素为`torch.FloatTensor`的元组列表
     attentions: Optional[List[Tuple[torch.FloatTensor]]] = None
-    # 注意力，默认为None
 class ViltEmbeddings(nn.Module):
     """
     Construct the text and patch embeddings.
@@ -120,218 +129,233 @@ class ViltEmbeddings(nn.Module):
 
         # PART 2: patch embeddings (with interpolated position encodings)
         if image_embeds is None:
+            # Generate visual embeddings and masks from pixel values
             image_embeds, image_masks, patch_index = self.visual_embed(
                 pixel_values, pixel_mask, max_image_length=self.config.max_image_length
             )
         else:
+            # Flatten pixel masks
             image_masks = pixel_mask.flatten(1)
 
         # PART 3: add modality type embeddings
         # 0 indicates text, 1 indicates image, 2 is optionally used when a second image is provided (NLVR2)
         if image_token_type_idx is None:
             image_token_type_idx = 1
+        # Add token type embeddings to text embeddings
         text_embeds = text_embeds + self.token_type_embeddings(
             torch.zeros_like(attention_mask, dtype=torch.long, device=text_embeds.device)
         )
+        # Add token type embeddings to image embeddings
         image_embeds = image_embeds + self.token_type_embeddings(
             torch.full_like(image_masks, image_token_type_idx, dtype=torch.long, device=text_embeds.device)
         )
 
-        # PART 4: concatenate
+        # PART 4: concatenate text and image embeddings
         embeddings = torch.cat([text_embeds, image_embeds], dim=1)
+        # Concatenate attention masks and image masks
         masks = torch.cat([attention_mask, image_masks], dim=1)
 
         return embeddings, masks
-
-
-class TextEmbeddings(nn.Module):
-    """Construct the embeddings from word, position and token_type embeddings."""
-    # 初始化函数，接受配置参数
+    # 初始化函数，接受一个配置参数 config
     def __init__(self, config):
-        # 调用父类初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 创建词嵌入层，vocab_size表示词汇表大小，hidden_size表示隐藏层大小，padding_idx表示填充标记的索引
+        # 创建一个词嵌入层，用于将词汇索引映射为隐藏状态向量
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=config.pad_token_id)
-        # 创建位置嵌入层，max_position_embeddings表示位置嵌入的最大位置数，hidden_size表示隐藏层大小
+        # 创建一个位置嵌入层，用于将位置索引映射为隐藏状态向量
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
-        # 创建标记类型嵌入层，type_vocab_size表示标记类型的数量，hidden_size表示隐藏层大小
+        # 创建一个标记类型嵌入层，用于将标记类型索引映射为隐藏状态向量
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
-        # 使用 TensorFlow 模型变量名称以及能够加载任何 TensorFlow 检查点文件的方式命名 self.LayerNorm
-        # self.LayerNorm不使用蛇形命名，以保持与 TensorFlow 模型变量名称一致，并能够加载任何 TensorFlow 检查点文件
+        # 创建一个 LayerNorm 层，用于标准化隐藏状态向量
+        # 注意：这里 LayerNorm 的命名方式与 TensorFlow 的模型变量保持一致，以便能够加载任何 TensorFlow 的检查点文件
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建 dropout 层，使用指定的 dropout 概率
+        # 创建一个 Dropout 层，用于在训练过程中随机丢弃隐藏状态向量的部分内容，以防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 设置位置嵌入类型，默认为"absolute"，即绝对位置嵌入
+        
+        # 设置位置嵌入类型，默认为绝对位置编码
         self.position_embedding_type = getattr(config, "position_embedding_type", "absolute")
-        # 注册缓冲区，用于存储位置标记的索引，序列化时会导出 position_ids (1, len position emb) 是内存中的连续值
+        # 注册一个缓冲区，用于存储位置索引的张量，这个张量在序列化时会被导出
         self.register_buffer(
             "position_ids", torch.arange(config.max_position_embeddings).expand((1, -1)), persistent=False
         )
-        # 注册缓冲区，用于存储标记类型的索引，初始值全为零
+        # 注册一个缓冲区，用于存储标记类型索引的张量，初始值为全零
         self.register_buffer(
             "token_type_ids", torch.zeros(self.position_ids.size(), dtype=torch.long), persistent=False
         )
 
-    # 前向传播函数
+    # 前向传播函数，接受多个输入参数，根据输入计算模型的输出
     def forward(self, input_ids=None, token_type_ids=None, position_ids=None, inputs_embeds=None):
-        # 如果传入了 input_ids，则获取其形状
+        # 如果输入的 input_ids 不为 None，则获取其形状
         if input_ids is not None:
             input_shape = input_ids.size()
         else:
+            # 否则，获取 inputs_embeds 的形状（排除最后一维）
             input_shape = inputs_embeds.size()[:-1]
 
-        # 获取序列长度
+        # 获取序列长度，即输入数据的第二个维度大小
         seq_length = input_shape[1]
 
-        # 如果未提供位置标记，则使用事先注册的位置标记
+        # 如果 position_ids 为 None，则使用预先注册的位置索引张量 self.position_ids
         if position_ids is None:
             position_ids = self.position_ids[:, :seq_length]
 
-        # 如果未提供标记类型，则设置为全零
+        # 如果 token_type_ids 为 None，则使用预先注册的标记类型索引张量 self.token_type_ids
         if token_type_ids is None:
-            # 如果已经定义了 token_type_ids，则使用事先注册的 token_type_ids
             if hasattr(self, "token_type_ids"):
+                # 获取并扩展预先注册的 token_type_ids 到与输入形状相匹配的张量
                 buffered_token_type_ids = self.token_type_ids[:, :seq_length]
                 buffered_token_type_ids_expanded = buffered_token_type_ids.expand(input_shape[0], seq_length)
                 token_type_ids = buffered_token_type_ids_expanded
-            # 否则创建全零的 token_type_ids
             else:
+                # 如果未注册 token_type_ids，则创建一个全零张量，与输入形状相匹配
                 token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
 
-        # 如果未提供输入嵌入，则使用词嵌入层生成输入嵌入
+        # 如果 inputs_embeds 为 None，则通过 word_embeddings 层将 input_ids 映射为词嵌入向量
         if inputs_embeds is None:
             inputs_embeds = self.word_embeddings(input_ids)
-        # 获取标记类型嵌入
+        
+        # 根据 token_type_ids 获取标记类型嵌入向量
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
 
-        # 将词嵌入和标记类型嵌入相加得到总的嵌入
+        # 将词嵌入向量和标记类型嵌入向量相加，得到最终的嵌入向量
         embeddings = inputs_embeds + token_type_embeddings
-        # 如果使用绝对位置嵌入，则添加位置嵌入
+        
+        # 如果位置编码方式为绝对位置编码，则添加位置嵌入向量到最终的嵌入向量中
         if self.position_embedding_type == "absolute":
             position_embeddings = self.position_embeddings(position_ids)
             embeddings += position_embeddings
-        # LayerNorm 正则化
+        
+        # 对最终的嵌入向量进行 LayerNorm 标准化处理
         embeddings = self.LayerNorm(embeddings)
-        # 使用 dropout
+        # 对标准化后的向量应用 Dropout，以防止过拟合
         embeddings = self.dropout(embeddings)
-        # 返回嵌入
+        # 返回最终的嵌入向量作为模型的输出
         return embeddings
-# 图像到补丁嵌入层
-class ViltPatchEmbeddings(nn.Module):
     """
-    图像到补丁嵌入。
+    Image to Patch Embedding.
     """
 
+    # 初始化函数，设置类的初始状态
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__()
-        # 获取配置中的图像尺寸和补丁尺寸
+        # 从配置中获取图像大小和patch大小
         image_size, patch_size = config.image_size, config.patch_size
-        # 获取配置中的通道数和隐藏层大小
+        # 从配置中获取通道数和隐藏层大小
         num_channels, hidden_size = config.num_channels, config.hidden_size
 
-        # 确保图像尺寸和补丁尺寸为可迭代的
+        # 确保image_size和patch_size是可迭代对象，若不是则转为元组
         image_size = image_size if isinstance(image_size, collections.abc.Iterable) else (image_size, image_size)
         patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
-        # 计算补丁数量
+        # 计算patch的数量
         num_patches = (image_size[1] // patch_size[1]) * (image_size[0] // patch_size[0])
-        # 保存属性
+
+        # 设置类的成员变量
         self.image_size = image_size
         self.patch_size = patch_size
         self.num_channels = num_channels
         self.num_patches = num_patches
 
-        # 定义卷积层进行图像到补丁的映射
+        # 使用卷积层进行投影，将图像转换为patch embeddings
         self.projection = nn.Conv2d(num_channels, hidden_size, kernel_size=patch_size, stride=patch_size)
 
+    # 前向传播函数，定义了数据从输入到输出的流程
     def forward(self, pixel_values):
-        # 获取输入的批量大小、通道数、高度和宽度
+        # 获取输入张量的尺寸信息
         batch_size, num_channels, height, width = pixel_values.shape
-        # 检查输入通道数是否与配置一致
+        # 如果输入通道数与配置中的通道数不匹配，则抛出数值错误异常
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 使用卷积层进行图像到补丁的映射
-        x = self.projection(pixel_values)
+        # 确定目标数据类型为投影层权重的数据类型
+        target_dtype = self.projection.weight.dtype
+        # 对输入张量进行投影操作，并转换为目标数据类型
+        x = self.projection(pixel_values.to(dtype=target_dtype))
+        # 返回投影后的张量作为输出
         return x
 
 
-# 多头自注意力模块
 class ViltSelfAttention(nn.Module):
+    # 初始化函数，设置自注意力模块的初始状态
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__()
-        # 检查隐藏层大小是否能被注意力头数整除
+        # 如果隐藏层大小不能被注意力头数整除，并且配置中没有嵌入大小属性，则抛出数值错误异常
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
             raise ValueError(
                 f"The hidden size {config.hidden_size,} is not a multiple of the number of attention "
                 f"heads {config.num_attention_heads}."
             )
 
-        # 保存注意力头数和每个头的大小
+        # 设置注意力头数和每个头的大小
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 定义查询、键和值的线性变换层
+        # 定义查询、键、值的线性映射层，并考虑是否使用偏置
         self.query = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
         self.key = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
         self.value = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
 
-        # 定义注意力权重dropout层
+        # 定义dropout层，用于注意力概率的dropout
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
+    # 将输入张量重塑为注意力分数计算所需的形状
     def transpose_for_scores(self, x):
-        # 将输入 x 重塑为多头注意力的形状
+        # 计算新的张量形状，以便符合多头注意力的要求
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
+        # 重新排列张量的维度，使得多头注意力能够并行计算
         x = x.view(*new_x_shape)
-        # 将通道维度移动到第二个维度
         return x.permute(0, 2, 1, 3)
-    # 定义一个前向传播函数，接收隐藏状态、注意力掩码、头掩码、是否输出注意力矩阵作为参数
+    # 此方法用于前向传播，计算注意力机制中的上下文表示
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 通过查询网络计算混合查询层
+        # 通过self.query对隐藏状态进行查询，生成混合的查询层
         mixed_query_layer = self.query(hidden_states)
 
-        # 将键层进行转置以便进行计算
+        # 通过self.key对隐藏状态进行键的变换，并进行得分计算
         key_layer = self.transpose_for_scores(self.key(hidden_states))
-        # 将值层进行转置以便进行计算
+
+        # 通过self.value对隐藏状态进行值的变换，并进行得分计算
         value_layer = self.transpose_for_scores(self.value(hidden_states))
-        # 将查询层进行转置以便进行计算
+
+        # 对混合的查询层再进行得分计算
         query_layer = self.transpose_for_scores(mixed_query_layer)
 
-        # 计算原始的注意力分数，通过"查询"和"键"的点积来得到
+        # 通过点积计算"查询"和"键"之间的原始注意力分数
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
-        # 对得到的注意力分数进行归一化处理
+
+        # 根据注意力头的大小对注意力分数进行缩放
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
+
+        # 如果提供了注意力掩码，则应用它
         if attention_mask is not None:
-            # 如果有注意力掩码，则应用它
+            # 注意力掩码是预先计算好的，适用于BertModel的forward()函数中的所有层
             attention_scores = attention_scores + attention_mask
 
-        # 将注意力分数归一化为概率值
+        # 将注意力分数归一化为概率分布
         attention_probs = nn.Softmax(dim=-1)(attention_scores)
 
-        # 通过dropout函数进行整个token的dropout
+        # 使用dropout函数对注意力概率进行随机失活处理
         attention_probs = self.dropout(attention_probs)
 
-        # 如果需要，对头进行掩码操作
+        # 如果需要，对注意力概率进行头部掩码处理
         if head_mask is not None:
             attention_probs = attention_probs * head_mask
 
-        # 计算上下文层，通过注意力概率和值层的矩阵相乘
+        # 计算加权和得到上下文表示层
         context_layer = torch.matmul(attention_probs, value_layer)
 
-        # 对上下文层进行维度置换和重塑
+        # 对上下文表示层进行维度变换和重塑
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
         context_layer = context_layer.view(*new_context_layer_shape)
 
-        # 根据是否输出注意力矩阵来返回相应结果
+        # 准备输出，根据需要包含注意力分布
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
+        # 返回计算结果
         return outputs
-# 从transformers.models.vit.modeling_vit.ViTSelfOutput复制而来，将ViT替换为Vilt
+# Copied from transformers.models.vit.modeling_vit.ViTSelfOutput with ViT->Vilt
 class ViltSelfOutput(nn.Module):
     """
     The residual connection is defined in ViltLayer instead of here (as is the case with other models), due to the
@@ -340,15 +364,15 @@ class ViltSelfOutput(nn.Module):
 
     def __init__(self, config: ViltConfig) -> None:
         super().__init__()
-        # 定义线性层，用于变换隐藏状态的维度
+        # 定义一个全连接层，输入和输出的维度都是 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 定义Dropout层，用于随机置零部分输入单元
+        # 定义一个 dropout 层，根据给定的隐藏状态概率随机将输入置零
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态通过线性层变换
+        # 将输入的隐藏状态通过全连接层映射到同一维度
         hidden_states = self.dense(hidden_states)
-        # 对变换后的隐藏状态进行随机置零
+        # 对映射后的隐藏状态进行 dropout 操作
         hidden_states = self.dropout(hidden_states)
 
         return hidden_states
@@ -357,100 +381,103 @@ class ViltSelfOutput(nn.Module):
 class ViltAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 定义自注意力层
+        # 初始化自注意力层和自输出层，都使用给定的配置参数
         self.attention = ViltSelfAttention(config)
-        # 定义自注意力输出层
         self.output = ViltSelfOutput(config)
-        # 用于存储被剪枝的注意力头索引的集合
+        # 初始化一个空集合，用于存储被修剪的注意力头
         self.pruned_heads = set()
 
     def prune_heads(self, heads):
         if len(heads) == 0:
             return
-        # 找到需要被剪枝的注意力头的索引
+        # 根据给定的头部列表找到可修剪的头部和对应的索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.attention.num_attention_heads, self.attention.attention_head_size, self.pruned_heads
         )
 
-        # 剪枝线性层
+        # 修剪线性层
         self.attention.query = prune_linear_layer(self.attention.query, index)
         self.attention.key = prune_linear_layer(self.attention.key, index)
         self.attention.value = prune_linear_layer(self.attention.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储被剪枝的头索引
+        # 更新超参数并存储修剪的头部
         self.attention.num_attention_heads = self.attention.num_attention_heads - len(heads)
         self.attention.all_head_size = self.attention.attention_head_size * self.attention.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 通过自注意力层进行前向传播
+        # 通过自注意力层处理隐藏状态和相关的掩码信息
         self_outputs = self.attention(hidden_states, attention_mask, head_mask, output_attentions)
 
-        # 将自注意力层的输出通过自注意力输出层处理
+        # 使用自输出层将注意力层的输出与原始隐藏状态相加
         attention_output = self.output(self_outputs[0], hidden_states)
 
-        # 如果需要输出注意力权重，则将其加入到输出中
-        outputs = (attention_output,) + self_outputs[1:]  # add attentions if we output them
+        # 如果输出注意力信息，则将其添加到输出元组中
+        outputs = (attention_output,) + self_outputs[1:]
         return outputs
 
 
-# 从transformers.models.vit.modeling_vit.ViTIntermediate复制而来，将ViT替换为Vilt
+# Copied from transformers.models.vit.modeling_vit.ViTIntermediate with ViT->Vilt
 class ViltIntermediate(nn.Module):
     def __init__(self, config: ViltConfig) -> None:
         super().__init__()
-        # 定义线性层，用于变换隐藏状态的维度
+        # 定义一个全连接层，输入维度为 config.hidden_size，输出维度为 config.intermediate_size
         self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
-        # 如果配置中隐藏激活函数为字符串，则使用相应的激活函数，否则使用配置中指定的激活函数
+        # 如果隐藏激活函数是字符串，则根据字符串映射到相应的激活函数，否则直接使用给定的激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态通过线性层变换
+        # 将输入的隐藏状态通过全连接层映射到 intermediate_size 的维度
         hidden_states = self.dense(hidden_states)
-        # 将变换后的隐藏状态通过激活函数处理
+        # 将映射后的隐藏状态通过中间激活函数处理
         hidden_states = self.intermediate_act_fn(hidden_states)
 
         return hidden_states
-# 从transformers.models.vit.modeling_vit.ViTOutput复制代码，并将ViT更改为Vilt
+# Copied from transformers.models.vit.modeling_vit.ViTOutput with ViT->Vilt
 class ViltOutput(nn.Module):
     def __init__(self, config: ViltConfig) -> None:
         super().__init__()
-        # 创建一个线性层，将输入维度转换为config.hidden_size
+        # 定义一个全连接层，将中间大小的特征转换为隐藏大小
         self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 创建一个dropout层，用于随机失活
+        # 定义一个 dropout 层，用于随机断开神经元连接，防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 通过线性层转换hidden_states的维度
+        # 将输入的隐藏状态通过全连接层映射到隐藏大小的空间
         hidden_states = self.dense(hidden_states)
-        # 对转换后的hidden_states进行dropout操作
+        # 对映射后的结果进行 dropout 处理
         hidden_states = self.dropout(hidden_states)
 
-        # 将转换后的hidden_states与输入的input_tensor相加
+        # 将处理后的隐藏状态与输入张量相加作为最终输出
         hidden_states = hidden_states + input_tensor
 
         return hidden_states
 
 
 class ViltLayer(nn.Module):
-    """这对应于timm实现中的Block类。"""
+    """This corresponds to the Block class in the timm implementation."""
 
     def __init__(self, config):
         super().__init__()
-        # 初始化ViltLayer类的属性
+        # 设置用于分块前馈的块大小
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
+        # 序列长度的维度索引
         self.seq_len_dim = 1
+        # 初始化自注意力层、中间层和输出层
         self.attention = ViltAttention(config)
         self.intermediate = ViltIntermediate(config)
         self.output = ViltOutput(config)
+        # ViLT 中的 layernorm 在自注意力之前应用
         self.layernorm_before = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        # ViLT 中的 layernorm 也在自注意力之后应用
         self.layernorm_after = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 对hidden_states应用layernorm，然后传入self-attention模块
+        # 对输入的隐藏状态应用 layernorm，并传入自注意力层进行处理
         self_attention_outputs = self.attention(
             self.layernorm_before(hidden_states),
             attention_mask,
@@ -458,18 +485,20 @@ class ViltLayer(nn.Module):
             output_attentions=output_attentions,
         )
         attention_output = self_attention_outputs[0]
-        outputs = self_attention_outputs[1:]  # 如果输出注意力权重，则添加self attentions
+        outputs = self_attention_outputs[1:]  # 如果输出注意力权重，添加自注意力的输出
 
-        # 第一个残差连接
+        # 第一个残差连接：将自注意力的输出与原始隐藏状态相加
         hidden_states = attention_output + hidden_states.to(attention_output.device)
 
-        # 在ViLT中，也在self-attention之后应用layernorm
+        # 在 ViLT 中，layernorm 也在自注意力之后应用
         layer_output = self.layernorm_after(hidden_states)
+        # 经过中间层的处理
         layer_output = self.intermediate(layer_output)
 
-        # 第二个残差连接在这里完成
+        # 第二个残差连接：将中间层的输出与原始隐藏状态传入输出层
         layer_output = self.output(layer_output, hidden_states)
 
+        # 将最终层的输出添加到输出集合中
         outputs = (layer_output,) + outputs
 
         return outputs
@@ -479,8 +508,9 @@ class ViltEncoder(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        # 创建一个包含config.num_hidden_layers个ViltLayer实例的ModuleList
+        # 创建多层 ViltLayer 构成的层列表
         self.layer = nn.ModuleList([ViltLayer(config) for _ in range(config.num_hidden_layers)])
+        # 默认关闭梯度检查点
         self.gradient_checkpointing = False
 
     def forward(
@@ -492,93 +522,91 @@ class ViltEncoder(nn.Module):
         output_hidden_states=False,
         return_dict=True,
         ):
-        # 如果不输出隐藏状态，则初始化一个空元组
-        all_hidden_states = () if output_hidden_states else None
-        # 如果不输出注意力权重，则初始化一个空元组
-        all_self_attentions = () if output_attentions else None
-
-        # 遍历每个 Transformer 层
-        for i, layer_module in enumerate(self.layer):
-            # 如果需要输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
+        ):
+            # 如果不需要输出隐藏状态，则初始化为空元组；否则设为 None
+            all_hidden_states = () if output_hidden_states else None
+            # 如果不需要输出注意力权重，则初始化为空元组；否则设为 None
+            all_self_attentions = () if output_attentions else None
+        
+            # 遍历 Transformer 模型的每一层
+            for i, layer_module in enumerate(self.layer):
+                # 如果需要输出隐藏状态，则累加当前隐藏状态到 all_hidden_states
+                if output_hidden_states:
+                    all_hidden_states = all_hidden_states + (hidden_states,)
+                
+                # 获取当前层的头部遮罩，如果未提供则为 None
+                layer_head_mask = head_mask[i] if head_mask is not None else None
+                
+                # 如果启用渐变检查点并且处于训练模式下
+                if self.gradient_checkpointing and self.training:
+                    # 通过渐变检查点功能调用当前层模块，获取层的输出
+                    layer_outputs = self._gradient_checkpointing_func(
+                        layer_module.__call__,
+                        hidden_states,
+                        attention_mask,
+                        layer_head_mask,
+                        output_attentions,
+                    )
+                else:
+                    # 否则直接调用当前层模块，获取层的输出
+                    layer_outputs = layer_module(hidden_states, attention_mask, layer_head_mask, output_attentions)
+    
+                # 更新隐藏状态为当前层的输出的第一个元素
+                hidden_states = layer_outputs[0]
+    
+                # 如果需要输出注意力权重，则累加当前层的注意力权重到 all_self_attentions
+                if output_attentions:
+                    all_self_attentions = all_self_attentions + (layer_outputs[1],)
+    
+            # 如果需要输出隐藏状态，则最后将当前隐藏状态加入 all_hidden_states
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-
-            # 获取当前层的头部掩码
-            layer_head_mask = head_mask[i] if head_mask is not None else None
-
-            # 如果启用了梯度检查点并且处于训练模式，则使用梯度检查点函数
-            if self.gradient_checkpointing and self.training:
-                layer_outputs = self._gradient_checkpointing_func(
-                    layer_module.__call__,
-                    hidden_states,
-                    attention_mask,
-                    layer_head_mask,
-                    output_attentions,
-                )
-            else:
-                # 否则直接调用当前层的前向传播函数
-                layer_outputs = layer_module(hidden_states, attention_mask, layer_head_mask, output_attentions)
-
-            # 更新隐藏状态为当前层的输出
-            hidden_states = layer_outputs[0]
-
-            # 如果需要输出注意力权重，则将当前层的注意力权重添加到 all_self_attentions 中
-            if output_attentions:
-                all_self_attentions = all_self_attentions + (layer_outputs[1],)
-
-        # 如果需要输出隐藏状态，则将最终隐藏状态添加到 all_hidden_states 中
-        if output_hidden_states:
-            all_hidden_states = all_hidden_states + (hidden_states,)
-
-        # 如果不返回字典形式的结果，则返回包含隐藏状态、所有隐藏状态和所有注意力权重的元组
-        if not return_dict:
-            return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
-        # 否则返回包含最终隐藏状态、所有隐藏状态和所有注意力权重的 BaseModelOutput 对象
-        return BaseModelOutput(
-            last_hidden_state=hidden_states,
-            hidden_states=all_hidden_states,
-            attentions=all_self_attentions,
-        )
+    
+            # 如果不返回字典形式的输出，则按顺序返回隐藏状态、所有隐藏状态和所有注意力权重的非空元组
+            if not return_dict:
+                return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
+            # 否则以 BaseModelOutput 类的形式返回结果，包含最终隐藏状态、所有隐藏状态和所有注意力权重
+            return BaseModelOutput(
+                last_hidden_state=hidden_states,
+                hidden_states=all_hidden_states,
+                attentions=all_self_attentions,
+            )
 class ViltPreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
 
-    # ViltPreTrainedModel 类继承自 PreTrainedModel 类，用于处理权重初始化和预训练模型的下载和加载
+    # 设置模型的配置类
     config_class = ViltConfig
-    # 配置类为 ViltConfig
+    # 模型基础名称前缀
     base_model_prefix = "vilt"
-    # 基础模型前缀为 "vilt"
-    supports_gradient_checkpointing = True
     # 支持梯度检查点
+    supports_gradient_checkpointing = True
+    # 不需要分割的模块列表
     _no_split_modules = ["ViltEmbeddings", "ViltSelfAttention"]
-    # 不分割的模块列表包括 "ViltEmbeddings" 和 "ViltSelfAttention"
 
     def _init_weights(self, module):
         """Initialize the weights"""
-        # 初始化权重的函数
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 如果模块是线性层或卷积层
-            # 与 TF 版本略有不同，使用正态分布初始化权重
-            # 参考 https://github.com/pytorch/pytorch/pull/5617
+            # 如果是线性层或卷积层，使用正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 初始化权重数据为正态分布
             if module.bias is not None:
+                # 如果有偏置，则将偏置初始化为零
                 module.bias.data.zero_()
-                # 如果存在偏置，则初始化为零
         elif isinstance(module, nn.Embedding):
+            # 如果是嵌入层，使用正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果模块是嵌入层，则初始化权重数据为正态分布
             if module.padding_idx is not None:
+                # 如果有填充索引，则将对应位置的权重初始化为零
                 module.weight.data[module.padding_idx].zero_()
-                # 如果存在填充索引，则将对应位置的权重初始化为零
         elif isinstance(module, nn.LayerNorm):
+            # 如果是LayerNorm层，将偏置初始化为零，权重初始化为1.0
             module.bias.data.zero_()
-            # 如果模块是 LayerNorm 层，则初始化偏置为零
             module.weight.data.fill_(1.0)
-            # 初始化权重为全 1
 
+
+# ViLT模型的起始文档字符串
 VILT_START_DOCSTRING = r"""
     This model is a PyTorch `torch.nn.Module <https://pytorch.org/docs/stable/nn.html#torch.nn.Module>`_ subclass. Use
     it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
@@ -589,64 +617,59 @@ VILT_START_DOCSTRING = r"""
             Initializing with a config file does not load the weights associated with the model, only the
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
-# VILT_START_DOCSTRING 为模型的文档字符串，介绍了模型是 PyTorch 的 torch.nn.Module 子类，如何使用以及参数说明
 
+# ViLT模型输入文档字符串（空白）
 VILT_INPUTS_DOCSTRING = r"""
 """
-# VILT_INPUTS_DOCSTRING 为输入文档字符串
 
+# ViLT图像和文本分类输入文档字符串（空白）
 VILT_IMAGES_AND_TEXT_CLASSIFICATION_INPUTS_DOCSTRING = r"""
 """
-# VILT_IMAGES_AND_TEXT_CLASSIFICATION_INPUTS_DOCSTRING 为图像和文本分类输入文档字符串
 
+# 添加起始文档字符串注释到ViltModel类
 @add_start_docstrings(
     "The bare ViLT Model transformer outputting raw hidden-states without any specific head on top.",
     VILT_START_DOCSTRING,
 )
-# 添加文档字符串，描述裸 ViLT 模型变换器输出原始隐藏状态，没有特定的输出头
-
 class ViltModel(ViltPreTrainedModel):
     def __init__(self, config, add_pooling_layer=True):
         super().__init__(config)
-        # 调用父类的初始化方法
         self.config = config
 
+        # 初始化嵌入层和编码器
         self.embeddings = ViltEmbeddings(config)
-        # 初始化嵌入层
         self.encoder = ViltEncoder(config)
-        # 初始化编码器
 
+        # LayerNorm层，用于归一化隐藏层输出
         self.layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 初始化 LayerNorm 层
+        
+        # 如果需要添加汇聚层，则初始化汇聚器
         self.pooler = ViltPooler(config) if add_pooling_layer else None
-        # 如果需要添加池化层，则初始化池化层，否则为 None
 
-        # Initialize weights and apply final processing
         # 初始化权重并应用最终处理
         self.post_init()
 
     def get_input_embeddings(self):
         return self.embeddings.text_embeddings.word_embeddings
-        # 获取输入嵌入层的词嵌入
 
     def set_input_embeddings(self, value):
         self.embeddings.text_embeddings.word_embeddings = value
-        # 设置输入嵌入层的词嵌入
-    # 修剪模型的注意力头部，根据给定的字典指定每个层需要修剪的注意力头部
+    # 修剪模型的注意力头
     def _prune_heads(self, heads_to_prune):
         """
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
         class PreTrainedModel
         """
-        # 遍历需要修剪的层和对应的注意力头部
+        # 遍历需要修剪的层和对应需要修剪的注意力头
         for layer, heads in heads_to_prune.items():
-            # 获取指定层的注意力对象，然后修剪指定的注意力头部
+            # 对编码器中的特定层的注意力头进行修剪
             self.encoder.layer[layer].attention.prune_heads(heads)
 
-    # 重写父类 PreTrainedModel 的 forward 方法，并添加模型输入的文档字符串
+    # 将输入参数添加到模型的文档字符串
     @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING)
-    # 替换输出的文档字符串，指定输出的类型和配置类
+    # 替换返回值的文档字符串
     @replace_return_docstrings(output_type=BaseModelOutputWithPooling, config_class=_CONFIG_FOR_DOC)
+    # 定义模型的前向传播方法
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -661,124 +684,59 @@ class ViltModel(ViltPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-class ViltPooler(nn.Module):
-    def __init__(self, config):
-        # 初始化 ViltPooler 类
-        super().__init__()
-        # 创建一个全连接层，输入和输出维度都是 config.hidden_size
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个激活函数 Tanh()
-        self.activation = nn.Tanh()
-
-    def forward(self, hidden_states):
-        # 在 forward 方法中，通过取第一个 token 对应的隐藏状态来"池化"模型
-        first_token_tensor = hidden_states[:, 0]
-        # 将第一个 token 的隐藏状态传入全连接层
-        pooled_output = self.dense(first_token_tensor)
-        # 将全连接层的输出传入激活函数
-        pooled_output = self.activation(pooled_output)
-        # 返回池化后的输出
-        return pooled_output
-
-
-@add_start_docstrings(
-    """
-    ViLT Model with a language modeling head on top as done during pretraining.
-    """,
-    VILT_START_DOCSTRING,
-)
-class ViltForMaskedLM(ViltPreTrainedModel):
-    _tied_weights_keys = ["mlm_score.decoder.weight", "mlm_score.decoder.bias"]
-
-    def __init__(self, config):
-        # 初始化 ViltForMaskedLM 类
-        super().__init__(config)
-
-        # 创建 ViltModel 和 ViltMLMHead 实例
-        self.vilt = ViltModel(config)
-        self.mlm_score = ViltMLMHead(config)
-
-        # 初始化权重并应用最终处理
-        self.post_init()
-
-    def get_output_embeddings(self):
-        # 返回 mlm_score.decoder 的权重
-        return self.mlm_score.decoder
-
-    def set_output_embeddings(self, new_embeddings):
-        # 设置 mlm_score.decoder 的权重为新的 embeddings
-        self.mlm_score.decoder = new_embeddings
-
-    @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    @replace_return_docstrings(output_type=MaskedLMOutput, config_class=_CONFIG_FOR_DOC)
-    def forward(
-        self,
-        input_ids: Optional[torch.LongTensor] = None,
-        attention_mask: Optional[torch.FloatTensor] = None,
-        token_type_ids: Optional[torch.LongTensor] = None,
-        pixel_values: Optional[torch.FloatTensor] = None,
-        pixel_mask: Optional[torch.LongTensor] = None,
-        head_mask: Optional[torch.FloatTensor] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        image_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
 class ViltPredictionHeadTransform(nn.Module):
     def __init__(self, config):
-        # 初始化 ViltPredictionHeadTransform 类
         super().__init__()
-        # 创建一个全连接层，输入和输出维度都是 config.hidden_size
+        # 使用全连接层进行线性变换，输入和输出维度都是 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 根据配置中的激活函数类型选择对应的激活函数
+        
+        # 根据配置选择激活函数，如果配置中指定的是字符串形式的激活函数，则使用对应的函数，否则直接使用配置中的函数
         if isinstance(config.hidden_act, str):
             self.transform_act_fn = ACT2FN[config.hidden_act]
         else:
             self.transform_act_fn = config.hidden_act
-        # 创建 LayerNorm 层，输入维度为 config.hidden_size
+        
+        # 应用 Layer Normalization 进行归一化处理，参数包括隐藏状态的维度和层归一化的 epsilon 值
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(self, hidden_states):
-        # 将隐藏状态传入全连接层
+        # 将隐藏状态通过全连接层进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 经过激活函数处理
+        
+        # 应用选择的激活函数进行非线性变换
         hidden_states = self.transform_act_fn(hidden_states)
-        # 经过 LayerNorm 处理
+        
+        # 对变换后的隐藏状态应用 Layer Normalization 进行归一化
         hidden_states = self.LayerNorm(hidden_states)
-        # 返回处理后的隐藏状态
+        
         return hidden_states
-
-
-class ViltMLMHead(nn.Module):
-    # 初始化函数，接受配置和权重参数
+    # 初始化函数，用于初始化模型对象
     def __init__(self, config, weight=None):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 保存配置参数
+        # 将配置参数保存到对象的属性中
         self.config = config
-        # 创建 ViltPredictionHeadTransform 实例
+        # 创建一个 ViltPredictionHeadTransform 的实例，并保存到对象的属性中
         self.transform = ViltPredictionHeadTransform(config)
-        # 创建线性层，将隐藏层的输出映射到词汇表大小的向量
+        # 创建一个线性层，用于模型的解码器，指定输入大小为 config.hidden_size，输出大小为 config.vocab_size，且没有偏置项
         self.decoder = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-        # 创建偏置参数
+        # 创建一个可学习的偏置项，大小为 config.vocab_size
         self.bias = nn.Parameter(torch.zeros(config.vocab_size))
-        # 如果传入了权重参数，则使用传入的权重
+        # 如果给定了预训练权重 weight，则将其赋值给解码器的权重
         if weight is not None:
             self.decoder.weight = weight
 
-        # 需要一个链接来确保偏置参数能够正确地随着 `resize_token_embeddings` 被调整大小
+        # 为了确保偏置项能够正确地在调整 token embeddings 时被重新调整大小，需要在这里建立两者之间的链接
         self.decoder.bias = self.bias
 
-    # 前向传播函数
+    # 前向传播函数，接收输入 x 并返回模型的输出 x
     def forward(self, x):
-        # 对输入进行变换
+        # 对输入 x 应用预测头变换
         x = self.transform(x)
-        # 使用线性层进行映射
+        # 使用解码器对变换后的 x 进行解码
         x = self.decoder(x)
-        # 返回结果
+        # 返回解码后的输出 x
         return x
-# 使用 Vilt 模型在视觉问答任务上添加一个分类器头部（在 [CLS] 标记的最终隐藏状态之上的线性层），例如用于 VQAv2
 @add_start_docstrings(
     """
     Vilt Model transformer with a classifier head on top (a linear layer on top of the final hidden state of the [CLS]
@@ -790,23 +748,20 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 获取标签数量
         self.num_labels = config.num_labels
-        # 初始化 Vilt 模型
         self.vilt = ViltModel(config)
 
-        # 分类器头部
+        # Classifier head
         self.classifier = nn.Sequential(
-            nn.Linear(config.hidden_size, config.hidden_size * 2),
-            nn.LayerNorm(config.hidden_size * 2),
-            nn.GELU(),
-            nn.Linear(config.hidden_size * 2, config.num_labels),
+            nn.Linear(config.hidden_size, config.hidden_size * 2),  # Linear layer to expand hidden size
+            nn.LayerNorm(config.hidden_size * 2),  # Layer normalization
+            nn.GELU(),  # GELU activation function
+            nn.Linear(config.hidden_size * 2, config.num_labels),  # Final linear layer for classification
         )
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 前向传播函数
     @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=SequenceClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -823,13 +778,15 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        ) -> Union[SequenceClassifierOutput, Tuple[torch.FloatTensor]]:
         r"""
-        labels (`torch.FloatTensor` of shape `(batch_size, num_labels)`, *optional`):
+        labels (`torch.FloatTensor` of shape `(batch_size, num_labels)`, *optional*):
             Labels for computing the visual question answering loss. This tensor must be either a one-hot encoding of
             all answers that are applicable for a given example in the batch, or a soft encoding indicating which
             answers are applicable, where 1.0 is the highest score.
 
         Returns:
+            Depending on `return_dict`, returns either a `SequenceClassifierOutput` or a tuple containing logits and optionally other outputs.
 
         Examples:
 
@@ -854,10 +811,12 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
         >>> idx = logits.argmax(-1).item()
         >>> print("Predicted answer:", model.config.id2label[idx])
         Predicted answer: 2
-        ```py"""
+        ```"""
+
+        # Determine whether to use the return_dict provided or the class attribute for return settings
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用 Vilt 模型进行前向传播
+        # Perform forward pass through the VILT model
         outputs = self.vilt(
             input_ids,
             attention_mask=attention_mask,
@@ -872,47 +831,66 @@ class ViltForQuestionAnswering(ViltPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 获取池化层输出
+        # Extract the pooler_output from the outputs based on return_dict setting
         pooler_output = outputs.pooler_output if return_dict else outputs[1]
 
-        # 使用分类器对池化层输出进行分类
+        # Pass the pooler_output through the classifier layer to obtain logits
         logits = self.classifier(pooler_output)
 
+        # Initialize loss variable
         loss = None
-        if labels is not None:
-            # 将标签移动到正确的设备以启用后处理
-            labels = labels.to(logits.device)
-            # 计算二元交叉熵损失
-            loss = nn.functional.binary_cross_entropy_with_logits(logits, labels) * labels.shape[1]
-            # 参考链接：https://github.com/jnhwkim/ban-vqa/blob/master/train.py#L19
 
+        # Calculate loss if labels are provided
+        if labels is not None:
+            # Move labels tensor to the same device as logits for compatibility
+            labels = labels.to(logits.device)
+            # Compute binary cross entropy loss scaled by number of labels
+            loss = nn.functional.binary_cross_entropy_with_logits(logits, labels) * labels.shape[1]
+            # Reference to paper or implementation where this loss scaling is discussed
+
+        # Prepare output based on return_dict flag
         if not return_dict:
+            # If return_dict is False, prepare tuple output
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回分类器输出
+        # If return_dict is True, prepare SequenceClassifierOutput object
         return SequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 使用 Vilt 模型进行图像到文本或文本到图像的检索，例如 MSCOCO 和 F30K，顶部有一个分类器头（线性层在[CLS]标记的最终隐藏状态之上）
+# 使用装饰器为类添加文档字符串，描述了该类的作用和功能，以及适用的应用场景（图片到文本或文本到图片的检索）
+@add_start_docstrings(
+    """
+    Vilt Model transformer with a classifier head on top (a linear layer on top of the final hidden state of the [CLS]
+    token) for image-to-text or text-to-image retrieval, e.g. MSCOCO and F30K.
+    """,
+    VILT_START_DOCSTRING,
+)
+# 定义 ViltForImageAndTextRetrieval 类，继承自 ViltPreTrainedModel
 class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
+    
+    # 初始化方法，接受一个 config 对象作为参数
     def __init__(self, config):
         # 调用父类的初始化方法
         super().__init__(config)
 
-        # 创建 Vilt 模型
+        # 创建 ViltModel 的实例，并保存到 self.vilt 属性中
         self.vilt = ViltModel(config)
 
-        # 分类器头部
+        # 分类器头部，使用线性层将最终隐藏状态（[CLS] token）映射到单一输出维度
         self.rank_output = nn.Linear(config.hidden_size, 1)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播方法
+    # 使用装饰器为 forward 方法添加文档字符串，描述了该方法的输入参数及其作用
+    @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING)
+    # 使用装饰器替换返回值的文档字符串，指定输出类型为 SequenceClassifierOutput，配置类为 _CONFIG_FOR_DOC
+    @replace_return_docstrings(output_type=SequenceClassifierOutput, config_class=_CONFIG_FOR_DOC)
+    # forward 方法，处理模型的前向传播逻辑
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -927,11 +905,15 @@ class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+    ) -> Union[SequenceClassifierOutput, Tuple[torch.FloatTensor]]:
         r"""
-        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional`):
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels are currently not supported.
 
         Returns:
+            Depending on `return_dict` flag:
+                - If `return_dict` is False, returns a tuple containing `logits` and additional outputs.
+                - If `return_dict` is True, returns a `SequenceClassifierOutput` object containing `loss`, `logits`, `hidden_states`, and `attentions`.
 
         Examples:
 
@@ -954,11 +936,12 @@ class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
         ...     encoding = processor(image, text, return_tensors="pt")
         ...     outputs = model(**encoding)
         ...     scores[text] = outputs.logits[0, :].item()
-        ```py"""
-        # 设置返回字典为传入值或者使用配置中的值
+        ```
+        """
+        # Determine whether to use the return_dict flag or the model's default configuration
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用 VILT 模型进行前向传播
+        # Perform the forward pass through the VILT model
         outputs = self.vilt(
             input_ids,
             attention_mask=attention_mask,
@@ -973,31 +956,33 @@ class ViltForImageAndTextRetrieval(ViltPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 如果 return_dict 为真，则使用 outputs.pooler_output，否则使用 outputs[1]
+        # Select the pooler output based on whether return_dict is True or False
         pooler_output = outputs.pooler_output if return_dict else outputs[1]
 
-        # 使用 rank_output 方法对 pooler_output 进行处理得到 logits
+        # Generate logits using the rank_output method
         logits = self.rank_output(pooler_output)
 
+        # Initialize loss as None
         loss = None
+
+        # Handle labels if provided (currently raises NotImplementedError)
         if labels is not None:
-            # 将标签移动到正确的设备以启用 PP
+            # Move labels to the device where logits are located
             labels = labels.to(logits.device)
             raise NotImplementedError("Training is not yet supported.")
 
-        # 如果 return_dict 为假，则返回 logits 和 outputs[2:]，否则返回 loss 和 output
+        # Return the output based on whether return_dict is True or False
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 SequenceClassifierOutput 对象
+        # Return a SequenceClassifierOutput object containing loss, logits, hidden_states, and attentions
         return SequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 使用 Vilt 模型进行自然语言视觉推理的分类器头部，例如 NLVR2
 @add_start_docstrings(
     """
     Vilt Model transformer with a classifier head on top for natural language visual reasoning, e.g. NLVR2.
@@ -1011,8 +996,9 @@ class ViltForImagesAndTextClassification(ViltPreTrainedModel):
         self.num_labels = config.num_labels
         self.vilt = ViltModel(config)
 
-        # 分类器头部
+        # Classifier head
         num_images = config.num_images
+        # 定义分类器，包括线性层、LayerNorm和GELU激活函数
         self.classifier = nn.Sequential(
             nn.Linear(config.hidden_size * num_images, config.hidden_size * num_images),
             nn.LayerNorm(config.hidden_size * num_images),
@@ -1020,7 +1006,8 @@ class ViltForImagesAndTextClassification(ViltPreTrainedModel):
             nn.Linear(config.hidden_size * num_images, config.num_labels),
         )
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
+        # 初始化权重并进行最终处理
         self.post_init()
 
     @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING)
@@ -1040,7 +1027,8 @@ class ViltForImagesAndTextClassification(ViltPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
 
-# 使用 ViLT 模型进行文本标记头部的标记分类，例如用于命名实体识别（NER）任务
+
+
 @add_start_docstrings(
     """
     ViLT Model with a token classification head on top (a linear layer on top of the final hidden-states of the text
@@ -1053,43 +1041,46 @@ class ViltForTokenClassification(ViltPreTrainedModel):
         super().__init__(config)
 
         self.num_labels = config.num_labels
+        # 初始化 ViLT 模型，不添加池化层
         self.vilt = ViltModel(config, add_pooling_layer=False)
 
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        # 分类器是一个线性层，输出维度为 config.num_labels
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
+        # 初始化权重并进行最终处理
         self.post_init()
 
     @add_start_docstrings_to_model_forward(VILT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TokenClassifierOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义一个前向传播函数，接受多个输入参数并返回预测结果
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token ID
-        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力掩码
-        token_type_ids: Optional[torch.LongTensor] = None,  # token 类型 ID
-        pixel_values: Optional[torch.FloatTensor] = None,  # 图像像素值
-        pixel_mask: Optional[torch.LongTensor] = None,  # 图像掩码
-        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入嵌入
-        image_embeds: Optional[torch.FloatTensor] = None,  # 图像嵌入
-        labels: Optional[torch.LongTensor] = None,  # 标签
-        output_attentions: Optional[bool] = None,  # 是否输出注意力
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
-        return_dict: Optional[bool] = None,  # 是否返回字典形式的结果
+        input_ids: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.FloatTensor] = None,
+        token_type_ids: Optional[torch.LongTensor] = None,
+        pixel_values: Optional[torch.FloatTensor] = None,
+        pixel_mask: Optional[torch.LongTensor] = None,
+        head_mask: Optional[torch.FloatTensor] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        image_embeds: Optional[torch.FloatTensor] = None,
+        labels: Optional[torch.LongTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
     ) -> Union[TokenClassifierOutput, Tuple[torch.FloatTensor]]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, text_sequence_length)`, *optional*):
             Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
 
         Returns:
+            Either a `TokenClassifierOutput` containing loss, logits, hidden states, and attentions,
+            or a tuple with logits and optional hidden states and attentions.
         """
 
-        # 如果 return_dict 为 None，则使用配置中的 use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用 VILT 模型进行前向传播
+        # Pass inputs to the VILT model for processing
         outputs = self.vilt(
             input_ids,
             attention_mask=attention_mask,
@@ -1104,31 +1095,31 @@ class ViltForTokenClassification(ViltPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 获取序列输出
         sequence_output = outputs[0]
 
-        # 获取文本输入大小
+        # Determine the size of the text input
         text_input_size = input_ids.shape[1] if input_ids is not None else inputs_embeds.shape[1]
 
-        # 对序列输出进行 dropout
+        # Apply dropout to the sequence output
         sequence_output = self.dropout(sequence_output)
-        # 获取分类器的 logits
+        
+        # Classify tokens using the classifier layer
         logits = self.classifier(sequence_output[:, :text_input_size])
 
         loss = None
-        # 如果存在标签，则计算损失
         if labels is not None:
+            # Calculate the cross-entropy loss
             loss_fct = CrossEntropyLoss()
-            # 将标签移动到正确的设备以启用后处理
+            # Move labels to the same device as logits
             labels = labels.to(logits.device)
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
 
-        # 如果不返回字典形式的结果，则返回元组
         if not return_dict:
+            # If return_dict is False, return a tuple of logits and optionally hidden states and attentions
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 TokenClassifierOutput 对象
+        # If return_dict is True, return a TokenClassifierOutput object
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,

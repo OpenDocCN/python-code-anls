@@ -1,12 +1,13 @@
-# `.\transformers\models\bridgetower\__init__.py`
+# `.\models\bridgetower\__init__.py`
 
-```py
-# 导入类型检查模块
+```
+# 从 typing 模块中导入 TYPE_CHECKING 类型检查器
 from typing import TYPE_CHECKING
-# 导入可选依赖未安装异常和延迟加载模块
+
+# 从当前目录的 utils 模块中导入必要的异常和工具函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available, is_vision_available
 
-# 定义导入结构字典，包含不同模块的导入信息
+# 定义一个字典结构 _import_structure，用于组织模块和对应的导入项
 _import_structure = {
     "configuration_bridgetower": [
         "BRIDGETOWER_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -17,24 +18,24 @@ _import_structure = {
     "processing_bridgetower": ["BridgeTowerProcessor"],
 }
 
-# 检查视觉处理模块是否可用，若不可用则抛出可选依赖未安装异常
+# 尝试导入图像处理模块，如果 is_vision_available 返回 False，则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，将视觉处理模块加入导入结构字典
+    # 如果成功导入，将图像处理模块添加到 _import_structure 中
     _import_structure["image_processing_bridgetower"] = ["BridgeTowerImageProcessor"]
 
-# 检查PyTorch是否可用，若不可用则抛出可选依赖未安装异常
+# 尝试导入 Torch 模块，如果 is_torch_available 返回 False，则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，将PyTorch模型处理模块加入导入结构字典
+    # 如果成功导入，将模型处理模块添加到 _import_structure 中
     _import_structure["modeling_bridgetower"] = [
         "BRIDGETOWER_PRETRAINED_MODEL_ARCHIVE_LIST",
         "BridgeTowerForContrastiveLearning",
@@ -44,19 +45,18 @@ else:
         "BridgeTowerPreTrainedModel",
     ]
 
-# 若为类型检查模式，进行更多的导入
+# 如果是类型检查环境
 if TYPE_CHECKING:
-    # 从配置模块中导入特定类和映射
+    # 从相关模块中导入配置和处理类
     from .configuration_bridgetower import (
         BRIDGETOWER_PRETRAINED_CONFIG_ARCHIVE_MAP,
         BridgeTowerConfig,
         BridgeTowerTextConfig,
         BridgeTowerVisionConfig,
     )
-    # 从处理模块中导入特定类
     from .processing_bridgetower import BridgeTowerProcessor
 
-    # 若视觉处理模块可用，从图片处理模块中导入特定类
+    # 尝试导入图像处理模块，如果 is_vision_available 返回 False，则跳过导入
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
@@ -65,7 +65,7 @@ if TYPE_CHECKING:
     else:
         from .image_processing_bridgetower import BridgeTowerImageProcessor
 
-    # 若PyTorch可用，从模型处理模块中导入特定类
+    # 尝试导入 Torch 模块，如果 is_torch_available 返回 False，则跳过导入
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -81,9 +81,10 @@ if TYPE_CHECKING:
             BridgeTowerPreTrainedModel,
         )
 
-# 若不是类型检查模式，将当前模块设置为延迟加载模式
+# 如果不是类型检查环境，则将当前模块设置为 LazyModule，用于延迟导入模块
 else:
     import sys
-    # 用延迟加载模块替换当前模块
+
+    # 将当前模块替换为 LazyModule 对象，支持延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
 ```

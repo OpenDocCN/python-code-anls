@@ -1,41 +1,45 @@
 # `.\models\deprecated\mmbt\configuration_mmbt.py`
 
-```py
-# 设置编码格式为 UTF-8
-# 版权声明：来自 Facebook, Inc. 及其附属公司和 HuggingFace Inc. 团队
-# 根据 Apache 许可证 2.0 版本获得许可
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
+```
+# coding=utf-8
+# Copyright (c) Facebook, Inc. and its affiliates.
+# Copyright (c) HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非法律要求或书面同意，或者软件在 "AS IS" 基础上分发
-# 没有任何形式的担保或条件，无论是明示或默示的
-# 请参阅许可证以了解详细的权限和限制
-"""MMBT 配置"""
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" MMBT configuration"""
 
-from ....utils import logging
+from ....utils import logging  # 导入 logging 模块，这里是从上级目录开始导入的
 
-# 获取 logger 实例
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器对象
 
 
-# MMBT 配置类
 class MMBTConfig(object):
     """
-    这是配置类，用于存储 [`MMBTModel`] 的配置。根据指定的参数实例化 MMBT 模型，定义模型架构。
+    This is the configuration class to store the configuration of a [`MMBTModel`]. It is used to instantiate a MMBT
+    model according to the specified arguments, defining the model architecture.
 
     Args:
-        config ([`PreTrainedConfig`]): 潜在 Transformer 模型的配置。将其值复制以使用单个配置。
-        num_labels (`int`, 可选): 用于分类的最终线性层的大小。
-        modal_hidden_size (`int`, 可选`, 默认为 2048): 非文本模态编码器的嵌入维度。
+        config ([`PreTrainedConfig`]):
+            Config of the underlying Transformer models. Its values are copied over to use a single config.
+        num_labels (`int`, *optional*):
+            Size of final Linear layer for classification.
+        modal_hidden_size (`int`, *optional*, defaults to 2048):
+            Embedding dimension of the non-text modality encoder.
     """
 
-    # 初始化方法
     def __init__(self, config, num_labels=None, modal_hidden_size=2048):
-        # 将当前对象的字典设置为配置对象的字典
-        self.__dict__ = config.__dict__
-        # 设置 modal_hidden_size 属性
-        self.modal_hidden_size = modal_hidden_size
-        # 如果存在 num_labels，则设置 num_labels 属性
+        self.__dict__ = config.__dict__  # 将传入的 config 对象的所有属性复制到当前对象的属性中
+        self.modal_hidden_size = modal_hidden_size  # 设置非文本模态编码器的嵌入维度大小
         if num_labels:
-            self.num_labels = num_labels
+            self.num_labels = num_labels  # 如果指定了 num_labels 参数，则设置分类器最终线性层的大小
 ```

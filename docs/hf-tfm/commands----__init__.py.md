@@ -1,22 +1,21 @@
-# `.\transformers\commands\__init__.py`
+# `.\commands\__init__.py`
 
-```py
-# 导入必要的模块
+```
+# 引入抽象基类（ABC）和抽象方法（abstractmethod）来定义一个基于命令行接口（CLI）的Transformers库命令的基类
 from abc import ABC, abstractmethod
+# 从argparse模块导入ArgumentParser类，用于解析命令行参数
 from argparse import ArgumentParser
 
-# 定义一个抽象基类 BaseTransformersCLICommand
+# 定义一个抽象基类BaseTransformersCLICommand，继承自ABC类
 class BaseTransformersCLICommand(ABC):
-    # 静态方法，用于注册子命令到 ArgumentParser 对象
+    # 声明一个静态方法，用于注册子命令到给定的ArgumentParser对象中
     @staticmethod
     @abstractmethod
     def register_subcommand(parser: ArgumentParser):
-        # 抛出未实现错误，子类需要实现该方法
         raise NotImplementedError()
 
-    # 抽象方法，用于运行命令
+    # 声明一个抽象方法run，表示子类需要实现的运行方法
     @abstractmethod
     def run(self):
-        # 抛出未实现错误，子类需要实现该方法
         raise NotImplementedError()
 ```

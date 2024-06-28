@@ -1,62 +1,91 @@
 # `.\models\encodec\convert_encodec_checkpoint_to_pytorch.py`
 
 ```
-# 设置文件编码
-# 版权声明
-# 许可证说明
-"""转换 EnCodec 检查点。"""
-# 导入模块
-import argparse
-# 导入 torch
-import torch
-# 从 transformers 模块中导入 EncodecConfig, EncodecFeatureExtractor, EncodecModel, logging
-from transformers import (
-    EncodecConfig,
-    EncodecFeatureExtractor,
-    EncodecModel,
-    logging,
+# 设置编码方式为 UTF-8
+# 版权声明，指出版权属于 2023 年的 HuggingFace Inc. 团队所有
+# 根据 Apache 许可证版本 2.0 使用本文件，详细信息可以访问指定网址获取
+# 除非法律要求或书面同意，否则不得使用本文件
+# 根据 Apache 许可证版本 2.0，本软件基于“原样”分发，不提供任何形式的担保或条件
+# 请查看许可证，了解具体语言版本的细节
+
+"""Convert EnCodec checkpoints."""
+
+# 导入必要的库
+import argparse  # 用于解析命令行参数
+
+import torch  # PyTorch 库
+
+from transformers import (  # 导入 transformers 库中的相关模块
+    EncodecConfig,  # EnCodec 的配置类
+    EncodecFeatureExtractor,  # EnCodec 的特征提取器类
+    EncodecModel,  # EnCodec 的模型类
+    logging,  # 日志记录模块
 )
 
-# 定义日志记录的详细程度
+# 设置日志记录的详细程度为 info 级别
 logging.set_verbosity_info()
-# 获取日志记录器
+# 获取名为 "transformers.models.encodec" 的日志记录器
 logger = logging.get_logger("transformers.models.encodec")
 
-# 映射器 - 量化器
+# 定义映射字典，用于重命名量化器（quantizer）中的模型参数
 MAPPING_QUANTIZER = {
     "quantizer.vq.layers.*._codebook.inited": "quantizer.layers.*.codebook.inited",
     "quantizer.vq.layers.*._codebook.cluster_size": "quantizer.layers.*.codebook.cluster_size",
     "quantizer.vq.layers.*._codebook.embed": "quantizer.layers.*.codebook.embed",
     "quantizer.vq.layers.*._codebook.embed_avg": "quantizer.layers.*.codebook.embed_avg",
 }
-# 映射器 - 编码器
+
+# 定义映射字典，用于重命名编码器（encoder）中的模型参数
 MAPPING_ENCODER = {
     "encoder.model.0.conv.conv": "encoder.layers.0.conv",
     "encoder.model.1.block.1.conv.conv": "encoder.layers.1.block.1.conv",
-    ...
+    "encoder.model.1.block.3.conv.conv": "encoder.layers.1.block.3.conv",
+    "encoder.model.1.shortcut.conv.conv": "encoder.layers.1.shortcut.conv",
+    "encoder.model.3.conv.conv": "encoder.layers.3.conv",
+    "encoder.model.4.block.1.conv.conv": "encoder.layers.4.block.1.conv",
+    "encoder.model.4.block.3.conv.conv": "encoder.layers.4.block.3.conv",
+    "encoder.model.4.shortcut.conv.conv": "encoder.layers.4.shortcut.conv",
+    "encoder.model.6.conv.conv": "encoder.layers.6.conv",
+    "encoder.model.7.block.1.conv.conv": "encoder.layers.7.block.1.conv",
+    "encoder.model.7.block.3.conv.conv": "encoder.layers.7.block.3.conv",
+    "encoder.model.7.shortcut.conv.conv": "encoder.layers.7.shortcut.conv",
+    "encoder.model.9.conv.conv": "encoder.layers.9.conv",
+    "encoder.model.10.block.1.conv.conv": "encoder.layers.10.block.1.conv",
+    "encoder.model.10.block.3.conv.conv": "encoder.layers.10.block.3.conv",
+    "encoder.model.10.shortcut.conv.conv": "encoder.layers.10.shortcut.conv",
+    "encoder.model.12.conv.conv": "encoder.layers.12.conv",
+    "encoder.model.13.lstm": "encoder.layers.13.lstm",
+    "encoder.model.15.conv.conv": "encoder.layers.15.conv",
 }
-# 映射器 - 48K 编码器
+
+# 定义映射字典，用于重命名 48kHz 编码器（encoder）中的模型参数
 MAPPING_ENCODER_48K = {
     "encoder.model.0.conv.norm": "encoder.layers.0.norm",
-    # 定义一个字典，将模型权重中的规范化层名称映射到相应的编码器层规范化层名称
-    "encoder.model.1.block.1.conv.norm": "encoder.layers.1.block.1.norm",
-    "encoder.model.1.block.3.conv.norm": "encoder.layers.1.block.3.norm",
-    "encoder.model.1.shortcut.conv.norm": "encoder.layers.1.shortcut.norm",
-    "encoder.model.3.conv.norm": "encoder.layers.3.norm",
-    "encoder.model.4.block.1.conv.norm": "encoder.layers.4.block.1.norm",
-    "encoder.model.4.block.3.conv.norm": "encoder.layers.4.block.3.norm",
-    "encoder.model.4.shortcut.conv.norm": "encoder.layers.4.shortcut.norm",
-    "encoder.model.6.conv.norm": "encoder.layers.6.norm",
-    "encoder.model.7.block.1.conv.norm": "encoder.layers.7.block.1.norm",
-    "encoder.model.7.block.3.conv.norm": "encoder.layers.7.block.3.norm",
-    "encoder.model.7.shortcut.conv.norm": "encoder.layers.7.shortcut.norm",
-    "encoder.model.9.conv.norm": "encoder.layers.9.norm",
-    "encoder.model.10.block.1.conv.norm": "encoder.layers.10.block.1.norm",
-    "encoder.model.10.block.3.conv.norm": "encoder.layers.10.block.3.norm",
-    "encoder.model.10.shortcut.conv.norm": "encoder.layers.10.shortcut.norm",
-    "encoder.model.12.conv.norm": "encoder.layers.12.norm",
-    "encoder.model.15.conv.norm": "encoder.layers.15.norm",
-# 定义字典，将解码器的层名称映射到相应的解码器层上
+    # 这里可以继续添加其他的映射关系
+}
+    # 定义一个字典，映射旧模型中的层标准化层到新模型中对应的标准化层
+    {
+        "encoder.model.1.block.1.conv.norm": "encoder.layers.1.block.1.norm",
+        "encoder.model.1.block.3.conv.norm": "encoder.layers.1.block.3.norm",
+        "encoder.model.1.shortcut.conv.norm": "encoder.layers.1.shortcut.norm",
+        "encoder.model.3.conv.norm": "encoder.layers.3.norm",
+        "encoder.model.4.block.1.conv.norm": "encoder.layers.4.block.1.norm",
+        "encoder.model.4.block.3.conv.norm": "encoder.layers.4.block.3.norm",
+        "encoder.model.4.shortcut.conv.norm": "encoder.layers.4.shortcut.norm",
+        "encoder.model.6.conv.norm": "encoder.layers.6.norm",
+        "encoder.model.7.block.1.conv.norm": "encoder.layers.7.block.1.norm",
+        "encoder.model.7.block.3.conv.norm": "encoder.layers.7.block.3.norm",
+        "encoder.model.7.shortcut.conv.norm": "encoder.layers.7.shortcut.norm",
+        "encoder.model.9.conv.norm": "encoder.layers.9.norm",
+        "encoder.model.10.block.1.conv.norm": "encoder.layers.10.block.1.norm",
+        "encoder.model.10.block.3.conv.norm": "encoder.layers.10.block.3.norm",
+        "encoder.model.10.shortcut.conv.norm": "encoder.layers.10.shortcut.norm",
+        "encoder.model.12.conv.norm": "encoder.layers.12.norm",
+        "encoder.model.15.conv.norm": "encoder.layers.15.norm",
+    }
+}
+# 闭合上一个字典的定义，表示字典定义的结束
+
 MAPPING_DECODER = {
     "decoder.model.0.conv.conv": "decoder.layers.0.conv",
     "decoder.model.1.lstm": "decoder.layers.1.lstm",
@@ -78,8 +107,8 @@ MAPPING_DECODER = {
     "decoder.model.13.shortcut.conv.conv": "decoder.layers.13.shortcut.conv",
     "decoder.model.15.conv.conv": "decoder.layers.15.conv",
 }
+# 映射字典，将模型中的编码器层命名映射到解码器层命名，用于对模型进行结构映射
 
-# 定义字典，将 48K 解码器的层名称映射到相应的解码器层上
 MAPPING_DECODER_48K = {
     "decoder.model.0.conv.norm": "decoder.layers.0.norm",
     "decoder.model.3.convtr.norm": "decoder.layers.3.norm",
@@ -100,15 +129,15 @@ MAPPING_DECODER_48K = {
     "decoder.model.13.shortcut.conv.norm": "decoder.layers.13.shortcut.norm",
     "decoder.model.15.conv.norm": "decoder.layers.15.norm",
 }
+# 映射字典，将模型中的编码器层的归一化命名映射到解码器层的归一化命名
 
-# 合并量化器、编码器和解码器的层映射字典，形成 24K 模型的映射字典
 MAPPING_24K = {
     **MAPPING_QUANTIZER,
     **MAPPING_ENCODER,
     **MAPPING_DECODER,
 }
+# 将量化器、编码器和解码器的映射合并到一个字典中，用于24K配置
 
-# 合并量化器、48K 编码器、48K 解码器的层映射字典，形成 48K 模型的映射字典
 MAPPING_48K = {
     **MAPPING_QUANTIZER,
     **MAPPING_ENCODER,
@@ -116,34 +145,34 @@ MAPPING_48K = {
     **MAPPING_DECODER,
     **MAPPING_DECODER_48K,
 }
+# 将量化器、编码器、解码器48K配置的映射合并到一个字典中，用于48K配置
 
-# 定义空列表 TOP_LEVEL_KEYS
 TOP_LEVEL_KEYS = []
+# 初始化一个空列表，用于存储顶层键
 
-# 定义空列表 IGNORE_KEYS
 IGNORE_KEYS = []
+# 初始化一个空列表，用于存储需要忽略的键
 
-# 定义函数 set_recursively，用于递归设置某个变量
 def set_recursively(hf_pointer, key, value, full_name, weight_type):
-    # 将输入的键按点分隔，逐级获取对象属性
+    # 将 key 按 "." 分割成属性列表，逐级获取 hf_pointer 的属性值
     for attribute in key.split("."):
         hf_pointer = getattr(hf_pointer, attribute)
 
-    # 如果权重类型不为空，则获取相应属性的形状
+    # 如果指定了 weight_type，则获取 hf_pointer 对应属性的形状
     if weight_type is not None:
         hf_shape = getattr(hf_pointer, weight_type).shape
     else:
-        # 否则获取整个对象的形状
+        # 否则获取 hf_pointer 自身的形状
         hf_shape = hf_pointer.shape
 
-    # 如果获取的形状与给定值的形状不相等，则引发 ValueError 异常
+    # 检查获取的形状是否与 value 的形状相匹配，如果不匹配则抛出 ValueError 异常
     if hf_shape != value.shape:
         raise ValueError(
             f"Shape of hf {key + '.' + weight_type if weight_type is not None else ''} is {hf_shape}, but should be"
             f" {value.shape} for {full_name}"
         )
 
-    # 根据权重类型设置对应属性的值
+    # 根据 weight_type 类型设置 hf_pointer 对应的数据值
     if weight_type == "weight":
         hf_pointer.weight.data = value
     elif weight_type == "weight_g":
@@ -175,94 +204,125 @@ def set_recursively(hf_pointer, key, value, full_name, weight_type):
     elif weight_type == "bias_hh_l1":
         hf_pointer.bias_hh_l1.data = value
     else:
-        # 如果权重类型为空或不在已知类型中，则直接设置对象的数据
+        # 如果 weight_type 未指定或未匹配到特定类型，直接设置 hf_pointer 的数据值
         hf_pointer.data = value
 
-    # 记录初始化信息
+    # 记录日志，指示成功初始化的属性和其来源
     logger.info(f"{key + ('.' + weight_type if weight_type is not None else '')} was initialized from {full_name}.")
-# 判断给定的文件名是否应该被忽略，根据忽略关键字列表
+# 判断给定的文件名是否应该被忽略，根据 ignore_keys 中的规则进行匹配
 def should_ignore(name, ignore_keys):
-    # 遍历忽略关键字列表
+    # 遍历 ignore_keys 列表中的每一个关键字
     for key in ignore_keys:
-        # 如果忽略关键字以".*"结尾
+        # 如果关键字以 ".*" 结尾，检查 name 是否以 key[:-1] 开头，如果是则返回 True
         if key.endswith(".*"):
-            # 如果文件名以去掉最后一个字符的忽略关键字开头，说明需要忽略该文件
             if name.startswith(key[:-1]):
                 return True
-        # 如果忽略关键字中包含".*."
+        # 如果关键字包含 ".*."，则将 key 拆分成前缀 prefix 和后缀 suffix，如果 name 同时包含这两部分则返回 True
         elif ".*." in key:
-            # 将忽略关键字按".*."分割成前缀和后缀
             prefix, suffix = key.split(".*.")
-            # 如果文件名中包含前缀和后缀，说明需要忽略该文件
             if prefix in name and suffix in name:
                 return True
-        # 如果忽略关键字在文件名中出现，说明需要忽略该文件
+        # 否则，如果关键字 key 直接在 name 中出现则返回 True
         elif key in name:
             return True
-    # 如果以上条件都不满足，则不需要忽略该文件
+    # 如果都没有匹配成功，则返回 False，表示不忽略该文件名
     return False
 
-# 根据模型名称和加载的权重进行递归加载权重
+
+# 根据给定的模型名和原始字典 orig_dict，加载对应模型的权重到 hf_model 中，并返回未使用的权重列表
 def recursively_load_weights(orig_dict, hf_model, model_name):
     # 初始化未使用的权重列表
     unused_weights = []
 
-    # 根据模型名称选择映射表
+    # 根据不同的模型名选择相应的映射关系
     if model_name == "encodec_24khz" or "encodec_32khz":
         MAPPING = MAPPING_24K
     elif model_name == "encodec_48khz":
         MAPPING = MAPPING_48K
     else:
-        # 如果模型名称不支持，抛出数值错误
+        # 如果模型名不在支持列表中，抛出 ValueError 异常
         raise ValueError(f"Unsupported model: {model_name}")
-    # 遍历原始字典中的键值对
+    # 遍历原始字典的键值对
     for name, value in orig_dict.items():
-        # 判断是否应该忽略该键，如果是则记录日志并继续下一个键值对
+        # 如果应该忽略该键名，则记录日志并跳过当前循环
         if should_ignore(name, IGNORE_KEYS):
             logger.info(f"{name} was ignored")
             continue
 
-        # 检查是否该键被使用
+        # 标志：用于检查是否在后续处理中使用了该键名对应的数值
         is_used = False
+
         # 遍历映射字典中的键值对
         for key, mapped_key in MAPPING.items():
-            # 如果键中包含通配符"*"，则进行匹配处理
+            # 如果当前映射键包含通配符"*"
             if "*" in key:
+                # 拆分通配符前缀和后缀
                 prefix, suffix = key.split(".*.")
+                # 如果键名同时包含前缀和后缀，则使用后缀作为新的键名
                 if prefix in name and suffix in name:
                     key = suffix
 
-            # 如果该键被使用
+            # 如果当前映射键在键名中找到匹配
             if key in name:
-                # Hack：避免 .embed 被初始化为 .embed_avg
+                # 特定情况下的处理：防止 ".embed_avg" 初始化为 ".embed"
                 if key.endswith("embed") and name.endswith("embed_avg"):
                     continue
 
+                # 设置标志表明该键名已被使用
                 is_used = True
-                # 如果映射的键包含通配符"*"，则进行替换处理
+
+                # 如果映射值中存在通配符"*"，则根据层索引替换通配符
                 if "*" in mapped_key:
                     layer_index = name.split(key)[0].split(".")[-2]
                     mapped_key = mapped_key.replace("*", layer_index)
-                # 根据键值名称判断权重类型
+
+                # 根据特定的权重类型为权重键赋值
                 if "weight_g" in name:
                     weight_type = "weight_g"
                 elif "weight_v" in name:
                     weight_type = "weight_v"
-                # ... 其他权重类型的判断
+                elif "weight_ih_l0" in name:
+                    weight_type = "weight_ih_l0"
+                elif "weight_hh_l0" in name:
+                    weight_type = "weight_hh_l0"
+                elif "bias_ih_l0" in name:
+                    weight_type = "bias_ih_l0"
+                elif "bias_hh_l0" in name:
+                    weight_type = "bias_hh_l0"
+                elif "weight_ih_l1" in name:
+                    weight_type = "weight_ih_l1"
+                elif "weight_hh_l1" in name:
+                    weight_type = "weight_hh_l1"
+                elif "bias_ih_l1" in name:
+                    weight_type = "bias_ih_l1"
+                elif "bias_hh_l1" in name:
+                    weight_type = "bias_hh_l1"
+                elif "bias" in name:
+                    weight_type = "bias"
+                elif "weight" in name:
+                    weight_type = "weight"
+                elif "running_mean" in name:
+                    weight_type = "running_mean"
+                elif "running_var" in name:
+                    weight_type = "running_var"
+                elif "num_batches_tracked" in name:
+                    weight_type = "num_batches_tracked"
                 else:
                     weight_type = None
-                # 递归设置模型中的参数值
+
+                # 递归地设置新模型的映射键对应的值
                 set_recursively(hf_model, mapped_key, value, name, weight_type)
+
+            # 继续下一个映射键的处理
             continue
-        # 如果未使用该键，添加到未使用权重列表中
+        
+        # 如果没有任何映射键被使用，则将该键名添加到未使用的权重列表中
         if not is_used:
             unused_weights.append(name)
 
-    # 输出未使用的权重列表
+    # 记录未使用的权重列表到警告日志中
     logger.warning(f"Unused weights: {unused_weights}")
-# 使用torch.no_grad()修饰器，禁止进行梯度计算
-@torch.no_grad()
-# 将模型的权重复制/粘贴/调整到transformers设计中
+# 用装饰器 @torch.no_grad() 标记该函数，禁止在函数内部进行梯度计算
 def convert_checkpoint(
     model_name,
     checkpoint_path,
@@ -271,21 +331,20 @@ def convert_checkpoint(
     repo_id=None,
 ):
     """
-    复制/粘贴/调整模型的权重到transformers设计中。
+    Copy/paste/tweak model's weights to transformers design.
     """
-    # 如果配置路径不为空，则从预训练配置路径中加载配置信息
+    # 如果提供了配置文件路径，则从预训练模型加载配置
     if config_path is not None:
         config = EncodecConfig.from_pretrained(config_path)
     else:
         # 否则创建一个新的配置对象
         config = EncodecConfig()
 
-    # 根据模型名称进行条件判断
+    # 根据模型名称设置配置对象的参数
     if model_name == "encodec_24khz":
-        # 如果模型名称是"encodec_24khz"，则不做任何改变
-        pass  # 配置已经是正确的
+        pass  # 对于 "encodec_24khz" 模型，配置已经是正确的
     elif model_name == "encodec_32khz":
-        # 如果模型名称是"encodec_32khz"，则设置特定的配置参数
+        # 根据模型名称调整配置对象的参数
         config.upsampling_ratios = [8, 5, 4, 4]
         config.target_bandwidths = [2.2]
         config.num_filters = 64
@@ -295,7 +354,7 @@ def convert_checkpoint(
         config.normalize = False
         config.use_conv_shortcut = False
     elif model_name == "encodec_48khz":
-        # 如果模型名称是"encodec_48khz"，则设置特定的配置参数
+        # 根据模型名称调整配置对象的参数
         config.upsampling_ratios = [8, 5, 4, 2]
         config.target_bandwidths = [3.0, 6.0, 12.0, 24.0]
         config.sampling_rate = 48_000
@@ -306,33 +365,37 @@ def convert_checkpoint(
         config.chunk_length_s = 1.0
         config.overlap = 0.01
     else:
-        # 模型名称未知则抛出数值错误
+        # 如果模型名称不在已知列表中，抛出异常
         raise ValueError(f"Unknown model name: {model_name}")
 
-    # 根据配置创建模型
+    # 根据配置对象创建模型
     model = EncodecModel(config)
 
-    # 创建特征提取器
+    # 根据配置对象创建特征提取器
     feature_extractor = EncodecFeatureExtractor(
         feature_size=config.audio_channels,
         sampling_rate=config.sampling_rate,
         chunk_length_s=config.chunk_length_s,
         overlap=config.overlap,
     )
+
     # 将特征提取器保存到指定路径
     feature_extractor.save_pretrained(pytorch_dump_folder_path)
 
-    # 加载原始检查点
+    # 加载原始 PyTorch 检查点
     original_checkpoint = torch.load(checkpoint_path)
+    
+    # 如果原始检查点中包含 "best_state" 键，只保留权重信息
     if "best_state" in original_checkpoint:
-        # 如果原始检查点中包含"best_state"，则可能有保存的训练状态，在这种情况下丢弃yaml结果，仅保留权重
         original_checkpoint = original_checkpoint["best_state"]
-    # 递归加载权重
+
+    # 递归加载权重到模型中
     recursively_load_weights(original_checkpoint, model, model_name)
+
     # 将模型保存到指定路径
     model.save_pretrained(pytorch_dump_folder_path)
 
-    # 如果存在repo_id，则将特征提取器和模型推送到hub
+    # 如果提供了 repo_id，将特征提取器和模型推送到指定的 hub
     if repo_id:
         print("Pushing to the hub...")
         feature_extractor.push_to_hub(repo_id)
@@ -340,30 +403,31 @@ def convert_checkpoint(
 
 
 if __name__ == "__main__":
-    # 创建命令行参数解析器
+    # 解析命令行参数
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
         default="encodec_24khz",
         type=str,
-        help="要转换的模型。应为'encodec_24khz'、'encodec_32khz'、'encodec_48khz'之一。"
+        help="The model to convert. Should be one of 'encodec_24khz', 'encodec_32khz', 'encodec_48khz'.",
     )
-    parser.add_argument("--checkpoint_path", required=True, default=None, type=str, help="原始检查点的路径")
-    parser.add_argument("--config_path", default=None, type=str, help="要转换的模型的hf config.json的路径")
+    parser.add_argument("--checkpoint_path", required=True, default=None, type=str, help="Path to original checkpoint")
+    parser.add_argument("--config_path", default=None, type=str, help="Path to hf config.json of model to convert")
     parser.add_argument(
-        "--pytorch_dump_folder_path", required=True, default=None, type=str, help="输出PyTorch模型的路径。"
+        "--pytorch_dump_folder_path", required=True, default=None, type=str, help="Path to the output PyTorch model."
     )
     parser.add_argument(
-        "--push_to_hub", default=None, type=str, help="将转换后的模型上传到🤗 hub的位置。"
+        "--push_to_hub", default=None, type=str, help="Where to upload the converted model on the 🤗 hub."
     )
-    # 解析命令行参数
+
+    # 解析参数
     args = parser.parse_args()
-    # 调用 convert_checkpoint 函数，传入参数：模型名称、检查点路径、PyTorch转储文件夹路径、配置文件路径、是否推送到Hub
+    # 调用函数 convert_checkpoint，用于转换模型的检查点文件格式
     convert_checkpoint(
-        args.model,  # 模型名称
-        args.checkpoint_path,  # 检查点路径
-        args.pytorch_dump_folder_path,  # PyTorch转储文件夹路径
-        args.config_path,  # 配置文件路径
-        args.push_to_hub,  # 是否推送到Hub
+        args.model,                     # 指定模型名称参数
+        args.checkpoint_path,           # 指定检查点文件路径参数
+        args.pytorch_dump_folder_path,  # 指定转换后的 PyTorch 模型输出文件夹路径参数
+        args.config_path,               # 指定模型配置文件路径参数
+        args.push_to_hub,               # 指定是否将转换后的模型推送到 Hub 的参数
     )
 ```

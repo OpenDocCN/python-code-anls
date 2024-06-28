@@ -1,51 +1,58 @@
-# `.\transformers\models\roformer\tokenization_utils.py`
+# `.\models\roformer\tokenization_utils.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有，保留所有权利
-# 根据 Apache 许可证，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"原样"分发的，没有任何明示或暗示的保证或条件
-# 有关特定语言的权限和限制，请参阅许可证
-
-"""RoFormer 的标记化工具"""
+```
+# coding=utf-8
+# Copyright 2021 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Tokenization utils for RoFormer."""
 
 from typing import List
-# 导入必要的库和模块
+
 from tokenizers import NormalizedString, PreTokenizedString, normalizers
+
 
 class JiebaPreTokenizer:
     def __init__(self, vocab) -> None:
-        # 初始化 JiebaPreTokenizer 类
         self.vocab = vocab
-        # 声明 normalizers.BertNormalizer 对象
+        # 初始化BERT风格的文本规范化器，用于清理文本，处理中文字符，不去除重音符号，不转换为小写
         self.normalizers = normalizers.BertNormalizer(
             clean_text=False,
             handle_chinese_chars=True,
             strip_accents=False,
             lowercase=False,
         )
-        # 尝试导入 rjieba 模块，不存在则抛出异常
         try:
             import rjieba
         except ImportError:
+            # 如果导入rjieba失败，引发ImportError并提供安装链接
             raise ImportError(
-                "To use RoFormerTokenizer, you need to install rjieba. "
-                "Please visit https://pypi.org/project/rjieba/ for installation instructions."
+                "You need to install rjieba to use RoFormerTokenizer. "
+                "See https://pypi.org/project/rjieba/ for installation."
             )
+        # 导入成功后，将rjieba赋值给self.jieba
         self.jieba = rjieba
 
     def jieba_split(self, i: int, normalized_string: NormalizedString) -> List[NormalizedString]:
         splits = []
 
-        # 利用 rjieba 模块对字符串进行分词
+        # 使用rjieba对normalized_string进行分词，hmm参数设为False以提高速度
         for token, start, end in self.jieba.tokenize(str(normalized_string), hmm=False):
-            # 如果分词结果在词汇表中存在，则添加到 splits 中
+            # 如果分词结果在词汇表中，则将对应的NormalizedString加入splits列表
             if token in self.vocab:
                 splits.append(normalized_string[start:end])
             else:
-                # 对分词结果进行规范化处理并切分
+                # 否则，对token进行文本规范化处理，并按照处理后的结果拆分为多个token加入splits列表
                 token_list = self.normalizers.normalize_str(token).split()
                 for token in token_list:
                     if token:
@@ -53,19 +60,10 @@ class JiebaPreTokenizer:
                         splits.append(normalized_string[start:end])
                         start = end
 
-        # 利用 rjieba 模块对字符串进行分词，效率更高但无法通过测试
-        # for token in self.jieba.cut(str(normalized_string), False):
-        #     if token in self.vocab:
-        #         splits.append(NormalizedString(token))
-        #     else:
-        #         token_list = self.normalizers.normalize_str(token).split()
-        #         for token in token_list:
-        #             if token:
-        #                 splits.append(NormalizedString(token))
-
+        # 返回分词后的NormalizedString列表
         return splits
 
-    # 对预标记化字符串进行分��处理
     def pre_tokenize(self, pretok: PreTokenizedString):
+        # 使用jieba_split方法对PreTokenizedString对象进行分词处理
         pretok.split(self.jieba_split)
 ```

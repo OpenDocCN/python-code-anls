@@ -1,68 +1,83 @@
 # `.\models\layoutlmv3\configuration_layoutlmv3.py`
 
-```py
-# 指定编码格式为UTF-8
-# 版权声明和许可信息
-# 依据 Apache 许可 2.0 版本，本代码受许可保护
-# 禁止在未遵守许可的情况下使用本文件
-# 可在以下网址获取许可副本
+```
+# coding=utf-8
+# Copyright 2022 Microsoft Research and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则本软件按"原样"分发，不附带任何明示或暗示的保证或条件
-# 有关详细信息，请参阅许可证
-""" LayoutLMv3 模型配置"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" LayoutLMv3 model configuration"""
 
-# 导入所需模块和库
-from collections import OrderedDict  # 有序字典，保留了元素的添加顺序
-from typing import TYPE_CHECKING, Any, Mapping, Optional  # 类型提示，不会影响实际代码执行
+# 引入 OrderedDict 类和一些类型定义
+from collections import OrderedDict
+from typing import TYPE_CHECKING, Any, Mapping, Optional
 
-from packaging import version  # 版本信息管理
+# 引入 version 模块
+from packaging import version
 
-from ...configuration_utils import PretrainedConfig  # 预训练配置的基类
-from ...onnx import OnnxConfig  # ONNX 模型配置
-from ...onnx.utils import compute_effective_axis_dimension  # 计算有效轴维度的函数
-from ...utils import logging  # 日志记录工具
+# 引入配置工具函数
+from ...configuration_utils import PretrainedConfig
 
-# 如果只是类型检查，则导入特定模块
+# 引入 OnnxConfig 类和相关工具函数
+from ...onnx import OnnxConfig
+from ...onnx.utils import compute_effective_axis_dimension
+
+# 引入日志记录工具
+from ...utils import logging
+
+# 如果是类型检查阶段，引入额外的类型和工具
 if TYPE_CHECKING:
-    from ...processing_utils import ProcessorMixin  # 数据处理工具
-    from ...utils import TensorType  # 张量类型
+    from ...processing_utils import ProcessorMixin
+    from ...utils import TensorType
 
-# 获取日志记录器
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 预训练模型配置的映射字典
+# LayoutLMv3 预训练模型配置文件映射
 LAYOUTLMV3_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "microsoft/layoutlmv3-base": "https://huggingface.co/microsoft/layoutlmv3-base/resolve/main/config.json",
 }
 
-# LayoutLMv3 模型配置类，继承自预训练配置类
+
+# LayoutLMv3 配置类，继承自 PretrainedConfig
 class LayoutLMv3Config(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`LayoutLMv3Model`] 的配置。它用于根据指定的参数实例化一个 LayoutLMv3 模型，定义模型架构。
-    使用默认值实例化一个配置将会产生类似于 LayoutLMv3 [microsoft/layoutlmv3-base](https://huggingface.co/microsoft/layoutlmv3-base) 架构的配置。
+    This is the configuration class to store the configuration of a [`LayoutLMv3Model`]. It is used to instantiate an
+    LayoutLMv3 model according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the LayoutLMv3
+    [microsoft/layoutlmv3-base](https://huggingface.co/microsoft/layoutlmv3-base) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档获取更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    示例：
+    Example:
 
     ```python
     >>> from transformers import LayoutLMv3Config, LayoutLMv3Model
 
-    >>> # 初始化一个 LayoutLMv3 microsoft/layoutlmv3-base 风格的配置
+    >>> # Initializing a LayoutLMv3 microsoft/layoutlmv3-base style configuration
     >>> configuration = LayoutLMv3Config()
 
-    >>> # 使用 microsoft/layoutlmv3-base 风格的配置初始化一个（带有随机权重）模型
+    >>> # Initializing a model (with random weights) from the microsoft/layoutlmv3-base style configuration
     >>> model = LayoutLMv3Model(configuration)
 
-    >>> # 访问模型配置
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```
+    """
 
-    # 模型类型
+    # 模型类型标识为 "layoutlmv3"
     model_type = "layoutlmv3"
-    # 初始化函数，用于创建一个新的实例
+    # 初始化函数，用于创建一个新的对象
     def __init__(
         self,
         vocab_size=50265,  # 词汇表大小，默认为50265
@@ -70,34 +85,34 @@ class LayoutLMv3Config(PretrainedConfig):
         num_hidden_layers=12,  # 隐藏层层数，默认为12
         num_attention_heads=12,  # 注意力头数，默认为12
         intermediate_size=3072,  # 中间层大小，默认为3072
-        hidden_act="gelu",  # 隐藏层激活函数，默认为gelu
-        hidden_dropout_prob=0.1,  # 隐藏层dropout概率，默认为0.1
-        attention_probs_dropout_prob=0.1,  # 注意力dropout概率，默认为0.1
+        hidden_act="gelu",  # 隐藏层激活函数，默认为GELU
+        hidden_dropout_prob=0.1,  # 隐藏层的dropout概率，默认为0.1
+        attention_probs_dropout_prob=0.1,  # 注意力概率的dropout概率，默认为0.1
         max_position_embeddings=512,  # 最大位置嵌入数，默认为512
         type_vocab_size=2,  # 类型词汇表大小，默认为2
         initializer_range=0.02,  # 初始化范围，默认为0.02
-        layer_norm_eps=1e-5,  # 层归一化epsilon值，默认为1e-5
-        pad_token_id=1,  # 填充标记id，默认为1
-        bos_token_id=0,  # 开始标记id，默认为0
-        eos_token_id=2,  # 结束标记id，默认为2
+        layer_norm_eps=1e-5,  # 层归一化的epsilon值，默认为1e-5
+        pad_token_id=1,  # 填充token的ID，默认为1
+        bos_token_id=0,  # 开始token的ID，默认为0
+        eos_token_id=2,  # 结束token的ID，默认为2
         max_2d_position_embeddings=1024,  # 最大二维位置嵌入数，默认为1024
         coordinate_size=128,  # 坐标大小，默认为128
         shape_size=128,  # 形状大小，默认为128
-        has_relative_attention_bias=True,  # 是否有相对注意力偏差，默认为True
-        rel_pos_bins=32,  # 相对位置箱数，默认为32
+        has_relative_attention_bias=True,  # 是否有相对注意力偏置，默认为True
+        rel_pos_bins=32,  # 相对位置bin数，默认为32
         max_rel_pos=128,  # 最大相对位置，默认为128
-        rel_2d_pos_bins=64,  # 二维相对位置箱数，默认为64
+        rel_2d_pos_bins=64,  # 二维相对位置bin数，默认为64
         max_rel_2d_pos=256,  # 最大二维相对位置，默认为256
-        has_spatial_attention_bias=True,  # 是否有空间注意力偏差，默认为True
-        text_embed=True,  # 文本嵌入标记，默认为True
-        visual_embed=True,  # 视觉嵌入标记，默认为True
+        has_spatial_attention_bias=True,  # 是否有空间注意力偏置，默认为True
+        text_embed=True,  # 是否包含文本嵌入，默认为True
+        visual_embed=True,  # 是否包含视觉嵌入，默认为True
         input_size=224,  # 输入大小，默认为224
         num_channels=3,  # 通道数，默认为3
         patch_size=16,  # 补丁大小，默认为16
-        classifier_dropout=None,  # 分类器dropout，默认为None
+        classifier_dropout=None,  # 分类器的dropout，默认为None
         **kwargs,  # 其他关键字参数
     ):
-        # 调用父类的初始化函数
+        # 调用父类（Transformer）的初始化函数，传递参数
         super().__init__(
             vocab_size=vocab_size,
             hidden_size=hidden_size,
@@ -114,49 +129,33 @@ class LayoutLMv3Config(PretrainedConfig):
             pad_token_id=pad_token_id,
             bos_token_id=bos_token_id,
             eos_token_id=eos_token_id,
-            **kwargs,  # 其他关键字参数
+            **kwargs,
         )
-        # 设置实例的最大二维位置嵌入数
+        # 设置对象的其他属性
         self.max_2d_position_embeddings = max_2d_position_embeddings
-        # 设置实例的坐标大小
         self.coordinate_size = coordinate_size
-        # 设置实例的形状大小
         self.shape_size = shape_size
-        # 设置实例是否有相对注意力偏差
         self.has_relative_attention_bias = has_relative_attention_bias
-        # 设置实例的相对位置箱数
         self.rel_pos_bins = rel_pos_bins
-        # 设置实例的最大相对位置
         self.max_rel_pos = max_rel_pos
-        # 设置实例是否有空间注意力偏差
         self.has_spatial_attention_bias = has_spatial_attention_bias
-        # 设置实例的二维相对位置箱数
         self.rel_2d_pos_bins = rel_2d_pos_bins
-        # 设置实例的最大二维相对位置
         self.max_rel_2d_pos = max_rel_2d_pos
-        # 设置实例的文本嵌入标记
         self.text_embed = text_embed
-        # 设置实例的视觉嵌入标记
         self.visual_embed = visual_embed
-        # 设置实例的输入大小
         self.input_size = input_size
-        # 设置实例的通道数
         self.num_channels = num_channels
-        # 设置实例的补丁大小
         self.patch_size = patch_size
-        # 设置实例的分类器dropout
         self.classifier_dropout = classifier_dropout
 class LayoutLMv3OnnxConfig(OnnxConfig):
-    # 继承自OnnxConfig的LayoutLMv3OnnxConfig类
-
-    # 设置torch_onnx_minimum_version属性为1.12
+    # 定义 torch ONNX 要求的最低版本为 1.12
     torch_onnx_minimum_version = version.parse("1.12")
 
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义inputs方法，返回输入的格式规范
-        # 根据任务类型返回不同的输入格式
+        # 输入的顺序在问答和序列分类任务中有所不同
         if self.task in ["question-answering", "sequence-classification"]:
+            # 返回有序字典，包含不同输入名称及其维度信息
             return OrderedDict(
                 [
                     ("input_ids", {0: "batch", 1: "sequence"}),
@@ -166,6 +165,7 @@ class LayoutLMv3OnnxConfig(OnnxConfig):
                 ]
             )
         else:
+            # 返回有序字典，包含不同输入名称及其维度信息
             return OrderedDict(
                 [
                     ("input_ids", {0: "batch", 1: "sequence"}),
@@ -177,12 +177,12 @@ class LayoutLMv3OnnxConfig(OnnxConfig):
 
     @property
     def atol_for_validation(self) -> float:
-        # 定义atol_for_validation属性，设置为1e-5
+        # 设置用于验证的绝对误差容限
         return 1e-5
 
     @property
     def default_onnx_opset(self) -> int:
-        # 定义default_onnx_opset属性，设置为12
+        # 默认的 ONNX 运算集版本
         return 12
 
     def generate_dummy_inputs(
@@ -196,52 +196,57 @@ class LayoutLMv3OnnxConfig(OnnxConfig):
         image_width: int = 40,
         image_height: int = 40,
         """
-        为特定框架生成给ONNX导出器的输入
+        Generate inputs to provide to the ONNX exporter for the specific framework
 
-        参数:
+        Args:
             processor ([`ProcessorMixin`]):
-                与此模型配置关联的处理器。
-            batch_size (`int`, *可选*, 默认为-1):
-                导出模型所用的批量大小(-1表示动态轴)。
-            seq_length (`int`, *可选*, 默认为-1):
-                导出模型所用的序列长度(-1表示动态轴)。
-            is_pair (`bool`, *可选*, 默认为 `False`):
-                指示输入是否为一对(句子1，句子2)。
-            framework (`TensorType`, *可选*, 默认为 `None`):
-                处理器将为其生成张量的框架(PyTorch或TensorFlow)。
-            num_channels (`int`, *可选*, 默认为 3):
-                生成图像的通道数。
-            image_width (`int`, *可选*, 默认为 40):
-                生成图像的宽度。
-            image_height (`int`, *可选*, 默认为 40):
-                生成图像的高度。
+                The processor associated with this model configuration.
+            batch_size (`int`, *optional*, defaults to -1):
+                The batch size to export the model for (-1 means dynamic axis).
+            seq_length (`int`, *optional*, defaults to -1):
+                The sequence length to export the model for (-1 means dynamic axis).
+            is_pair (`bool`, *optional*, defaults to `False`):
+                Indicate if the input is a pair (sentence 1, sentence 2).
+            framework (`TensorType`, *optional*, defaults to `None`):
+                The framework (PyTorch or TensorFlow) that the processor will generate tensors for.
+            num_channels (`int`, *optional*, defaults to 3):
+                The number of channels of the generated images.
+            image_width (`int`, *optional*, defaults to 40):
+                The width of the generated images.
+            image_height (`int`, *optional*, defaults to 40):
+                The height of the generated images.
 
-        返回:
-            Mapping[str, Any]: 包含提供给模型前向函数的参数
+        Returns:
+            Mapping[str, Any]: holding the kwargs to provide to the model's forward function
         """
 
-        # 使用虚拟图像，不应用 OCR
+        # A dummy image is used so OCR should not be applied
         setattr(processor.image_processor, "apply_ocr", False)
 
-        # 如果动态轴 (-1)，则向前传递固定维度的2个样本，以避免ONNX进行的优化
+        # If dynamic axis (-1) we forward with a fixed dimension of 2 samples to avoid optimizations made by ONNX
+        # 计算有效的批量维度，如果为动态轴（-1），则使用默认的固定批量维度，避免ONNX的优化
         batch_size = compute_effective_axis_dimension(
             batch_size, fixed_dimension=OnnxConfig.default_fixed_batch, num_token_to_add=0
         )
-        # 如果动态轴 (-1)，则向前传递固定维度的8个标记以避免ONNX进行的优化
+        # If dynamic axis (-1) we forward with a fixed dimension of 8 tokens to avoid optimizations made by ONNX
+        # 根据是否成对生成的token数量，计算有效的序列长度维度，避免ONNX的优化
         token_to_add = processor.tokenizer.num_special_tokens_to_add(is_pair)
         seq_length = compute_effective_axis_dimension(
             seq_length, fixed_dimension=OnnxConfig.default_fixed_sequence, num_token_to_add=token_to_add
         )
-        # 根据计算批量和序列生成虚拟输入
+        # Generate dummy inputs according to compute batch and sequence
+        # 根据计算得到的批次和序列长度生成虚拟文本输入
         dummy_text = [[" ".join([processor.tokenizer.unk_token]) * seq_length]] * batch_size
 
-        # 生成虚拟边界框
+        # Generate dummy bounding boxes
+        # 生成虚拟的边界框输入
         dummy_bboxes = [[[48, 84, 73, 128]]] * batch_size
 
-        # 如果动态轴 (-1)，则向前传递固定维度的2个样本以避免ONNX进行的优化
-        # batch_size = compute_effective_axis_dimension(batch_size, fixed_dimension=OnnxConfig.default_fixed_batch)
+        # If dynamic axis (-1) we forward with a fixed dimension of 2 samples to avoid optimizations made by ONNX
+        # 根据是否成对生成的token数量，计算有效的批量维度，避免ONNX的优化
         dummy_image = self._generate_dummy_images(batch_size, num_channels, image_height, image_width)
 
+        # 将生成的虚拟输入传递给处理器，生成模型前向函数所需的kwargs字典
         inputs = dict(
             processor(
                 dummy_image,

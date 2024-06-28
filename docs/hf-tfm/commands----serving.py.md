@@ -1,45 +1,49 @@
-# `.\transformers\commands\serving.py`
+# `.\commands\serving.py`
 
-```py
-# 导入必要的模块和类
+```
+# 版权声明和许可证信息，指明此代码受 Apache License, Version 2.0 保护，禁止未经许可使用
+#
+# from ...pipelines 导入需要的模块和函数
 from argparse import ArgumentParser, Namespace
 from typing import Any, List, Optional
 
 from ..pipelines import Pipeline, get_supported_tasks, pipeline
+# 导入日志模块
 from ..utils import logging
+# 导入基础命令行接口类
 from . import BaseTransformersCLICommand
 
-# 尝试导入 FastAPI 和相关模块
 try:
+    # 尝试导入 FastAPI 和相关依赖
     from fastapi import Body, FastAPI, HTTPException
     from fastapi.routing import APIRoute
     from pydantic import BaseModel
     from starlette.responses import JSONResponse
     from uvicorn import run
 
-    # 标记已成功导入 FastAPI 相关模块
+    # 标记服务依赖已安装
     _serve_dependencies_installed = True
-# 处理导入异常情况
 except (ImportError, AttributeError):
-    # 如果导入失败，则定义一个空的基本模型
+    # 如果导入错误或属性错误，将 BaseModel 设为 object，并定义 Body 函数为空函数
     BaseModel = object
-    # 定义一个空的函数，模拟 Body 函数
+
     def Body(*x, **y):
         pass
-    # 标记未成功导入 FastAPI 相关模块
+
+    # 标记服务依赖未安装
     _serve_dependencies_installed = False
 
-# 获取 logger 对象
+# 获取名为 "transformers-cli/serving" 的日志记录器对象
 logger = logging.get_logger("transformers-cli/serving")
 
-# 定义服务命令的工厂函数，根据命令行参数实例化服务服务器
+
 def serve_command_factory(args: Namespace):
     """
-    Factory function used to instantiate serving server from provided command line arguments.
+    从提供的命令行参数实例化服务服务器的工厂函数。
 
-    Returns: ServeCommand
+    Returns: ServeCommand 实例
     """
-    # 创建一个 pipeline 对象，用于处理自然语言处理任务
+    # 调用 pipeline 函数创建 NLP 管道对象 nlp
     nlp = pipeline(
         task=args.task,
         model=args.model if args.model else None,
@@ -47,46 +51,45 @@ def serve_command_factory(args: Namespace):
         tokenizer=args.tokenizer,
         device=args.device,
     )
-    # 返回 ServeCommand 实例
+    # 返回 ServeCommand 的实例，传递 nlp 对象、主机地址、端口和工作进程数作为参数
     return ServeCommand(nlp, args.host, args.port, args.workers)
 
-# 定义 ServeModelInfoResult 类，用于暴露模型信息
+
 class ServeModelInfoResult(BaseModel):
     """
-    Expose model information
+    暴露模型信息的数据模型
     """
 
     infos: dict
 
-# 定义 ServeTokenizeResult 类，用于表示分词结果
+
 class ServeTokenizeResult(BaseModel):
     """
-    Tokenize result model
+    分词结果数据模型
     """
 
-    tokens: List[str]  # 分词后的 token 列表
-    tokens_ids: Optional[List[int]]  # 分词后的 token ID 列表（可选）
+    tokens: List[str]
+    tokens_ids: Optional[List[int]]
 
-# 定义 ServeDeTokenizeResult 类，用于表示反分词结果
+
 class ServeDeTokenizeResult(BaseModel):
     """
-    DeTokenize result model
+    反分词结果数据模型
     """
 
-    text: str  # 反分词后的文本字符串
+    text: str
 
-# 定义 ServeForwardResult 类，用于表示转发结果
+
 class ServeForwardResult(BaseModel):
     """
-    Forward result model
+    前向传播结果数据模型
     """
 
-    output: Any  # 转发的输出结果
+    output: Any
 
-# 定义 ServeCommand 类，用于处理服务命令
+
 class ServeCommand(BaseTransformersCLICommand):
     @staticmethod
-    # 将该命令注册到 argparse，以便在 transformer-cli 中可用
     def register_subcommand(parser: ArgumentParser):
         """
         Register this command to argparse so it's available for the transformer-cli
@@ -94,63 +97,63 @@ class ServeCommand(BaseTransformersCLICommand):
         Args:
             parser: Root parser to register command-specific arguments
         """
-        # 添加名为 "serve" 的子命令解析器，用于运行 REST 和 GraphQL 端点的推理请求
+        # 创建一个子命令解析器 'serve'，用于运行 REST 和 GraphQL 端点的推理请求
         serve_parser = parser.add_parser(
             "serve", help="CLI tool to run inference requests through REST and GraphQL endpoints."
         )
-        # 添加命令行参数，用于指定要在管道上运行的任务
+        # 添加 '--task' 参数，指定要在管道上运行的任务，从支持的任务列表中选择
         serve_parser.add_argument(
             "--task",
             type=str,
             choices=get_supported_tasks(),
             help="The task to run the pipeline on",
         )
-        # 添加命令行参数，用于指定服务器将监听的接口
+        # 添加 '--host' 参数，指定服务器监听的接口，默认为 localhost
         serve_parser.add_argument("--host", type=str, default="localhost", help="Interface the server will listen on.")
-        # 添加命令行参数，用于指定服务将监听的端口
+        # 添加 '--port' 参数，指定服务器监听的端口，默认为 8888
         serve_parser.add_argument("--port", type=int, default=8888, help="Port the serving will listen to.")
-        # 添加命令行参数，用于指定 HTTP 工作线程的数量
+        # 添加 '--workers' 参数，指定 HTTP 服务器的工作线程数，默认为 1
         serve_parser.add_argument("--workers", type=int, default=1, help="Number of http workers")
-        # 添加命令行参数，用于指定模型的名称或存储模型的路径
+        # 添加 '--model' 参数，指定模型的名称或存储路径
         serve_parser.add_argument("--model", type=str, help="Model's name or path to stored model.")
-        # 添加命令行参数，用于指定模型配置的名称或存储模型配置的路径
+        # 添加 '--config' 参数，指定模型配置的名称或存储路径
         serve_parser.add_argument("--config", type=str, help="Model's config name or path to stored model.")
-        # 添加命令行参数，用于指定要使用的分词器名称
+        # 添加 '--tokenizer' 参数，指定要使用的分词器的名称
         serve_parser.add_argument("--tokenizer", type=str, help="Tokenizer name to use.")
-        # 添加命令行参数，用于指定要运行的设备，-1 表示 CPU，>= 0 表示 GPU（默认值：-1）
+        # 添加 '--device' 参数，指定运行的设备，-1 表示 CPU，>= 0 表示 GPU，默认为 -1
         serve_parser.add_argument(
             "--device",
             type=int,
             default=-1,
             help="Indicate the device to run onto, -1 indicates CPU, >= 0 indicates GPU (default: -1)",
         )
-        # 设置默认函数，将其指向 serve_command_factory
+        # 将函数 'serve_command_factory' 设置为默认处理函数
         serve_parser.set_defaults(func=serve_command_factory)
-    # 初始化方法，接受一个管道对象、主机地址、端口号和工作进程数作为参数
+    # 初始化方法，接受 Pipeline 对象、主机名、端口号和工作进程数作为参数
     def __init__(self, pipeline: Pipeline, host: str, port: int, workers: int):
-        # 将管道对象保存在实例属性中
+        # 将传入的 Pipeline 对象赋值给实例变量 _pipeline
         self._pipeline = pipeline
 
-        # 将主机地址、端口号和工作进程数保存在实例属性中
+        # 将传入的主机名赋值给实例变量 host
         self.host = host
+        # 将传入的端口号赋值给实例变量 port
         self.port = port
+        # 将传入的工作进程数赋值给实例变量 workers
         self.workers = workers
 
-        # 检查是否安装了 serve 的依赖
+        # 检查是否已安装 serve 所需的依赖，如果未安装则抛出运行时错误
         if not _serve_dependencies_installed:
-            # 如果没有安装依赖，则引发运行时错误并提示安装相关依赖
             raise RuntimeError(
                 "Using serve command requires FastAPI and uvicorn. "
                 'Please install transformers with [serving]: pip install "transformers[serving]". '
                 "Or install FastAPI and uvicorn separately."
             )
         else:
-            # 如果安装了依赖，则记录日志显示模型服务的主机和端口
+            # 若依赖已安装，则记录信息，指示模型正在指定的主机和端口上提供服务
             logger.info(f"Serving model over {host}:{port}")
-            # 创建 FastAPI 应用实例
+            # 创建 FastAPI 应用实例 _app，并设置路由和超时时间
             self._app = FastAPI(
                 routes=[
-                    # 定义根路径的路由，调用 model_info 方法，返回 ServeModelInfoResult 类型的结果
                     APIRoute(
                         "/",
                         self.model_info,
@@ -158,7 +161,6 @@ class ServeCommand(BaseTransformersCLICommand):
                         response_class=JSONResponse,
                         methods=["GET"],
                     ),
-                    # 定义 tokenize 路径的路由，调用 tokenize 方法，返回 ServeTokenizeResult 类型的结果
                     APIRoute(
                         "/tokenize",
                         self.tokenize,
@@ -166,7 +168,6 @@ class ServeCommand(BaseTransformersCLICommand):
                         response_class=JSONResponse,
                         methods=["POST"],
                     ),
-                    # 定义 detokenize 路径的路由，调用 detokenize 方法，返回 ServeDeTokenizeResult 类型的结果
                     APIRoute(
                         "/detokenize",
                         self.detokenize,
@@ -174,7 +175,6 @@ class ServeCommand(BaseTransformersCLICommand):
                         response_class=JSONResponse,
                         methods=["POST"],
                     ),
-                    # 定义 forward 路径的路由，调用 forward 方法，返回 ServeForwardResult 类型的结果
                     APIRoute(
                         "/forward",
                         self.forward,
@@ -183,21 +183,18 @@ class ServeCommand(BaseTransformersCLICommand):
                         methods=["POST"],
                     ),
                 ],
-                # 设置请求超时时间为 600 秒
                 timeout=600,
             )
 
-    # 运行方法，启动 FastAPI 应用
+    # 启动服务的方法，运行 FastAPI 应用
     def run(self):
-        # 调用 uvicorn 的 run 方法启动 FastAPI 应用
         run(self._app, host=self.host, port=self.port, workers=self.workers)
 
-    # 返回模型信息的方法
+    # 返回模型信息的方法，以 ServeModelInfoResult 对象的形式返回 Pipeline 模型的配置信息
     def model_info(self):
-        # 返回 ServeModelInfoResult 类型的结果，包含管道模型的配置信息
         return ServeModelInfoResult(infos=vars(self._pipeline.model.config))
 
-    # 对输入文本进行分词处理的方法
+    # 对输入文本进行标记化处理的方法，接受 text_input 和 return_ids 两个参数
     def tokenize(self, text_input: str = Body(None, embed=True), return_ids: bool = Body(False, embed=True)):
         """
         Tokenize the provided input and eventually returns corresponding tokens id: - **text_input**: String to
@@ -205,44 +202,42 @@ class ServeCommand(BaseTransformersCLICommand):
         mapping.
         """
         try:
-            # 使用管道中的分词器对输入文本进行分词处理
+            # 使用 Pipeline 对象的 tokenizer 对输入文本进行标记化处理
             tokens_txt = self._pipeline.tokenizer.tokenize(text_input)
 
-            # 判断是否需要返回分词对应的 ID
+            # 如果 return_ids 为 True，则将标记化后的文本转换为对应的整数标识
             if return_ids:
-                # 将分词转换为对应的 ID
                 tokens_ids = self._pipeline.tokenizer.convert_tokens_to_ids(tokens_txt)
-                # 返回 ServeTokenizeResult 类型的结果，包含分词结果和对应的 ID
                 return ServeTokenizeResult(tokens=tokens_txt, tokens_ids=tokens_ids)
             else:
-                # 返回 ServeTokenizeResult 类型的结果，仅包含分词结果
+                # 否则，返回标记化后的文本
                 return ServeTokenizeResult(tokens=tokens_txt)
 
+        # 捕获异常，并返回 HTTP 错误码 500 及错误详情
         except Exception as e:
-            # 捕获异常并返回 HTTP 状态码 500，以及相关错误信息
             raise HTTPException(status_code=500, detail={"model": "", "error": str(e)})
-    # 定义一个方法用于将 tokens ids 解码为可读文本
+    # Detokenize函数将token ids转换为可读文本
     def detokenize(
         self,
-        tokens_ids: List[int] = Body(None, embed=True),  # tokens ids 列表，默认为 None
-        skip_special_tokens: bool = Body(False, embed=True),  # 是否跳过特殊 tokens，默认为 False
-        cleanup_tokenization_spaces: bool = Body(True, embed=True),  # 是否清除 tokenization 中的空格，默认为 True
+        tokens_ids: List[int] = Body(None, embed=True),  # 输入参数：token ids列表
+        skip_special_tokens: bool = Body(False, embed=True),  # 是否跳过特殊token的标志
+        cleanup_tokenization_spaces: bool = Body(True, embed=True),  # 是否清除token化空格的标志
     ):
         """
-        Detokenize the provided tokens ids to readable text: - **tokens_ids**: List of tokens ids -
-        **skip_special_tokens**: Flag indicating to not try to decode special tokens - **cleanup_tokenization_spaces**:
-        Flag indicating to remove all leading/trailing spaces and intermediate ones.
+        Detokenize the provided tokens ids to readable text:
+        - **tokens_ids**: List of tokens ids
+        - **skip_special_tokens**: Flag indicating to not try to decode special tokens
+        - **cleanup_tokenization_spaces**: Flag indicating to remove all leading/trailing spaces and intermediate ones.
         """
         try:
-            # 使用 tokenizer 对 tokens ids 进行解码
+            # 使用tokenizer对象解码tokens_ids，根据skip_special_tokens和cleanup_tokenization_spaces的设置进行处理
             decoded_str = self._pipeline.tokenizer.decode(tokens_ids, skip_special_tokens, cleanup_tokenization_spaces)
-            # 返回解码后的文本结果
+            # 返回解码后的结果，作为ServeDeTokenizeResult的一部分
             return ServeDeTokenizeResult(model="", text=decoded_str)
         except Exception as e:
-            # 抛出异常
+            # 如果出现异常，抛出HTTP异常，返回500状态码和错误详情
             raise HTTPException(status_code=500, detail={"model": "", "error": str(e)})
 
-    # 异步方法，用于前向传播
     async def forward(self, inputs=Body(None, embed=True)):
         """
         **inputs**: **attention_mask**: **tokens_type_ids**:
@@ -250,15 +245,15 @@ class ServeCommand(BaseTransformersCLICommand):
 
         # 检查输入是否为空字符串
         if len(inputs) == 0:
-            # 返回空输出和注意力列表
+            # 如果为空，则返回空的ServeForwardResult对象，输出和attention都为空列表
             return ServeForwardResult(output=[], attention=[])
 
         try:
-            # 通过模型进行前向传播
+            # 通过模型处理输入数据
             output = self._pipeline(inputs)
-            # 返回前向传播结果
+            # 返回ServeForwardResult对象，包含模型输出的结果
             return ServeForwardResult(output=output)
         except Exception as e:
-            # 抛出异常
+            # 如果出现异常，抛出HTTP异常，返回500状态码和错误详情
             raise HTTPException(500, {"error": str(e)})
 ```

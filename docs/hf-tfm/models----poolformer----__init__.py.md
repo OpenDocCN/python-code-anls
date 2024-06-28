@@ -1,21 +1,26 @@
-# `.\transformers\models\poolformer\__init__.py`
+# `.\models\poolformer\__init__.py`
 
-```py
-# 版权声明和许可证信息
-# 版权归 The HuggingFace Team 所有，保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的详细信息
+```
+# 版权声明和许可信息，指明代码版权及使用许可
+# 版权所有 2022 年 HuggingFace 团队。保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本（“许可证”）许可；
+# 除非符合许可证的条款，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则按“原样”分发软件，
+# 没有任何明示或暗示的保证或条件。
+# 有关具体语言的权限，请参阅许可证。
 
-# 导入必要的模块和函数
+# 导入类型检查
 from typing import TYPE_CHECKING
+
+# 从 utils 模块导入相关依赖和工具函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available, is_vision_available
 
-# 定义模块导入结构
+# 定义模块导入结构的字典
 _import_structure = {
     "configuration_poolformer": [
         "POOLFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -24,25 +29,26 @@ _import_structure = {
     ]
 }
 
-# 检查视觉模块是否可用，如果不可用则引发异常
+# 检查视觉处理库是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果视觉模块可用，则添加特征提取和图像处理模块到导入结构中
+    # 如果可用，添加 feature_extraction_poolformer 模块的导入项
     _import_structure["feature_extraction_poolformer"] = ["PoolFormerFeatureExtractor"]
+    # 添加 image_processing_poolformer 模块的导入项
     _import_structure["image_processing_poolformer"] = ["PoolFormerImageProcessor"]
 
-# 检查 Torch 模块是否可用，如果不可用则引发异常
+# 检查 PyTorch 是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Torch 模块可用，则添加模型建模模块到导入结构中
+    # 如果可用，添加 modeling_poolformer 模块的导入项
     _import_structure["modeling_poolformer"] = [
         "POOLFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",
         "PoolFormerForImageClassification",
@@ -50,16 +56,16 @@ else:
         "PoolFormerPreTrainedModel",
     ]
 
-# 如果是类型检查模式
+# 如果当前环境支持类型检查（如 Mypy），执行以下导入
 if TYPE_CHECKING:
-    # 导入配置模块中的特定类和变量
+    # 从 configuration_poolformer 模块导入相关类和常量
     from .configuration_poolformer import (
         POOLFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP,
         PoolFormerConfig,
         PoolFormerOnnxConfig,
     )
 
-    # 检查视觉模块是否可用，如果可用则导入特征提取和图像处理模块
+    # 检查视觉处理库是否可用，若可用则导入 feature_extraction_poolformer 和 image_processing_poolformer 模块
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
@@ -69,7 +75,7 @@ if TYPE_CHECKING:
         from .feature_extraction_poolformer import PoolFormerFeatureExtractor
         from .image_processing_poolformer import PoolFormerImageProcessor
 
-    # 检查 Torch 模块是否可用，如��可用则导入模型建模模块
+    # 检查 PyTorch 是否可用，若可用则导入 modeling_poolformer 模块
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -83,10 +89,10 @@ if TYPE_CHECKING:
             PoolFormerPreTrainedModel,
         )
 
-# 如果不是类型检查模式
+# 如果当前环境不支持类型检查，则使用懒加载模块代理导入结构
 else:
     import sys
 
-    # 将当前模块设置为懒加载模块
+    # 将当前模块替换为懒加载模块的实例，该实例根据需要延迟加载具体模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
 ```

@@ -1,58 +1,55 @@
-# `.\transformers\models\tvlt\feature_extraction_tvlt.py`
+# `.\models\tvlt\feature_extraction_tvlt.py`
 
-```py
-# 设置代码文件的编码格式为 UTF-8
-# 版权声明
-# 根据 Apache 许可证版本 2.0 授权使用该文件
-# 未经许可不得使用该文件
-# 可以在下面链接找到该许可证
-# http://www.apache.org/licenses/LICENSE-2.0
-# 软件按照“现状”提供，没有任何明示或暗示的担保或条件
-# 可以根据许可证获取更多详细信息
-# 限制在许可证下开展的活动和设置的条件
-# 用于 TVLT 的特征提取器类。
+```
+# 设置代码文件的编码格式为UTF-8
+# 版权声明：2023年由HuggingFace Inc.团队保留所有权利。
+#
+# 根据Apache许可证2.0版（“许可证”）获得许可；除非符合许可证要求，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则按“原样”分发的软件
+# 没有任何明示或暗示的保证或条件。
+# 有关特定语言的权限，请参阅许可证。
+"""TVLT的特征提取器类。"""
 
-from math import ceil
-from typing import List, Optional, Union
+from math import ceil  # 导入ceil函数，用于向上取整
+from typing import List, Optional, Union  # 引入类型提示模块
 
-# 导入第三方库 numpy，使用缩写 np
-import numpy as np
+import numpy as np  # 导入NumPy库
 
-# 导入音频工具模块
-from ...audio_utils import mel_filter_bank, spectrogram, window_function
-# 导入序列特征提取器工具模块
-from ...feature_extraction_sequence_utils import BatchFeature, SequenceFeatureExtractor
-# 导入工具模块中的 TensorType 类型和 logging 函数
-from ...utils import TensorType, logging
+from ...audio_utils import mel_filter_bank, spectrogram, window_function  # 导入音频处理函数
+from ...feature_extraction_sequence_utils import BatchFeature, SequenceFeatureExtractor  # 导入序列特征提取器
+from ...utils import TensorType, logging  # 导入Tensor类型和日志记录工具
 
-# 获取 logger
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# TVLT 特征提取器类继承自序列特征提取器
 class TvltFeatureExtractor(SequenceFeatureExtractor):
     r"""
-    构建 TVLT 音频特征提取器。此特征提取器可用于为模型准备音频。
+    构造一个TVLT音频特征提取器。此特征提取器用于准备模型的音频输入数据。
 
-    此特征提取器继承自 [`FeatureExtractionMixin`]，其中包含大部分主要方法。用户应参考此超类以获取有关这些方法的更多信息。
+    此特征提取器继承自[`FeatureExtractionMixin`]，其中包含大多数主要方法。用户
+    应参考此超类以获取有关这些方法的更多信息。
 
-    参数:
-        spectrogram_length (`Dict[str, int]` *可选*, 默认为 2048):
+    Args:
+        spectrogram_length (`Dict[str, int]` *可选*, 默认为2048):
             每个音频频谱图的时间长度。
-        num_channels (`int` *可选*, 默认为 1):
+        num_channels (`int` *可选*, 默认为1):
             音频通道数。
-        patch_size (`List[int]` *可选*, 默认为 `[16, 16]`):
+        patch_size (`List[int]` *可选*, 默认为`[16, 16]`):
             音频补丁嵌入的补丁大小。
-        feature_size (`int`, *可选*, 默认为 128):
+        feature_size (`int`, *可选*, 默认为128):
             音频频谱图的频率长度。
-        sampling_rate (`int`, *可选*, 默认为 44100):
-            音频文件应数字化的采样率，以赫兹（Hz）表示。
-        hop_length_to_sampling_rate (`int`, *可选*, 默认为 86):
-            Hop length 是用于获得 Mel 频率系数的 STFT 的重叠窗口的长度。
-            例如，对于采样率 44100，跳跃长度为 512，即 44100 / 512 = 86
-        n_fft (`int`, *可选*, 默认为 2048):
+        sampling_rate (`int`, *可选*, 默认为44100):
+            应数字化音频文件的采样率，以赫兹（Hz）表示。
+        hop_length_to_sampling_rate (`int`, *可选*, 默认为86):
+            Hop length是用于获取Mel频率系数的STFT的重叠窗口的长度。
+            例如，对于采样率44100，跳跃长度为512，即44100 / 512 = 86。
+        n_fft (`int`, *可选*, 默认为2048):
             傅里叶变换的大小。
-        padding_value (`float`, *可选*, 默认为 0.0):
-            用于填充音频的填充值。 应对应沉默。
+        padding_value (`float`, *可选*, 默认为0.0):
+            用于填充音频的填充值。应该对应于静音部分。
     """
 
     model_input_names = ["audio_values", "audio_mask"]
@@ -68,39 +65,39 @@ class TvltFeatureExtractor(SequenceFeatureExtractor):
         n_fft=2048,
         padding_value=0.0,
         **kwargs,
-    # 定义构造函数，设置参数 feature_size, sampling_rate, padding_value 和其它关键字参数
-    def __init__(
-        self,
-        feature_size=feature_size,
-        sampling_rate=sampling_rate,
-        padding_value=padding_value,
-        **kwargs,
     ):
-        # 调用父类的构造函数，传入参数
         super().__init__(
             feature_size=feature_size,
             sampling_rate=sampling_rate,
             padding_value=padding_value,
             **kwargs,
         )
+        # 调用父类构造函数，初始化特征大小、采样率、填充值等参数
 
-        # 初始化音频的频谱长度
         self.spectrogram_length = spectrogram_length
-        # 初始化音频的通道数
+        # 设置频谱长度属性
+
         self.num_channels = num_channels
-        # 初始化音频的 patch 尺寸
+        # 设置通道数属性
+
         self.patch_size = patch_size
-        # 初始化频谱频率长度
+        # 设置补丁大小属性
+
         self.freq_len = feature_size // self.patch_size[1]
-        # 初始化快速傅立叶变换中的采样点数
+        # 计算频率长度，特征大小除以补丁大小的第二个维度
+
         self.n_fft = n_fft
-        # 初始化帧移长度
+        # 设置 FFT 窗口大小属性
+
         self.hop_length = sampling_rate // hop_length_to_sampling_rate
-        # 初始化采样率
+        # 计算帧移大小属性
+
         self.sampling_rate = sampling_rate
-        # 初始化填充值
+        # 设置采样率属性
+
         self.padding_value = padding_value
-        # 初始化梅尔滤波器
+        # 设置填充值属性
+
         self.mel_filters = mel_filter_bank(
             num_frequency_bins=1 + n_fft // 2,
             num_mel_filters=feature_size,
@@ -110,14 +107,15 @@ class TvltFeatureExtractor(SequenceFeatureExtractor):
             norm="slaney",
             mel_scale="slaney",
         ).T
+        # 使用 mel_filter_bank 函数生成梅尔滤波器系数矩阵并转置后赋给 mel_filters 属性
 
-    # 定义私有函数，用于提取音频的梅尔频谱特征
     def _np_extract_fbank_features(self, waveform: np.array) -> np.ndarray:
         """
         Compute the log-mel spectrogram of the provided audio, gives similar results to Whisper's original torch
         implementation with 1e-5 tolerance.
         """
-        # 计算音频的对数梅尔频谱
+        # 计算提供音频的对数梅尔频谱，使用 hann 窗口函数，帧长度为 n_fft，帧移为 hop_length
+        # 使用 mel_filters.T 作为梅尔滤波器，输出对数梅尔频谱，单位为 dB，幅度范围为 80.0 dB
         log_spec = spectrogram(
             waveform,
             window_function(self.n_fft, "hann"),
@@ -128,15 +126,11 @@ class TvltFeatureExtractor(SequenceFeatureExtractor):
             log_mel="dB",
             db_range=80.0,
         )
-        # 删除最后一列数据
-        log_spec = log_spec[:, :-1]
-        # 数据减去 20
-        log_spec = log_spec - 20.0
-        # 将数据限制在 -2 到 0 之间，并加上 1
-        log_spec = np.clip(log_spec / 40.0, -2.0, 0.0) + 1.0
+        log_spec = log_spec[:, :-1]  # 去除最后一列，用于兼容 Whisper 实现
+        log_spec = log_spec - 20.0  # 对数梅尔频谱减去 20.0
+        log_spec = np.clip(log_spec / 40.0, -2.0, 0.0) + 1.0  # 裁剪、缩放对数梅尔频谱
         return log_spec
 
-    # 定义 __call__ 方法，处理原始语音输入
     def __call__(
         self,
         raw_speech: Union[np.ndarray, List[float], List[np.ndarray], List[List[float]]],

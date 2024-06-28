@@ -1,68 +1,82 @@
-# `.\transformers\models\pvt\__init__.py`
+# `.\models\pvt\__init__.py`
 
-```py
-# 设置文件编码为 UTF-8
+```
+# coding=utf-8
+# 以上行指定了源代码文件的字符编码格式为 UTF-8
 
-# 版权声明，包括作者和 HuggingFace 公司团队，保留所有权利
-# 根据 Apache 许可证 2.0 版本授权，除非符合许可证中的规定，否则不得使用此文件
-# 可以在以下网址获得许可证副本：http://www.apache.org/licenses/LICENSE-2.0
-# 根据适用法律或书面同意的要求，本软件按"原样"提供，不提供任何形式的担保，明示或暗示。
-# 有关特定权限和限制的信息，请参阅许可证。
+# 版权声明和作者信息，标识代码版权归属和作者列表
+# Copyright 2023 Authors: Wenhai Wang, Enze Xie, Xiang Li, Deng-Ping Fan,
+# Kaitao Song, Ding Liang, Tong Lu, Ping Luo, Ling Shao and The HuggingFace Inc. team.
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入类型检查模块
+# 从 typing 模块中导入 TYPE_CHECKING 类型标记
 from typing import TYPE_CHECKING
 
-# 导入实用函数模块
+# 从 ...utils 中导入所需的模块和函数
 from ...utils import (
-    OptionalDependencyNotAvailable,  # 导入可选依赖未安装时的异常
-    _LazyModule,  # 导入惰性模块
-    is_torch_available,  # 导入检查是否安装了 Torch 的函数
-    is_vision_available,  # 导入检查是否安装了 Vision 的函数
+    OptionalDependencyNotAvailable,
+    _LazyModule,
+    is_torch_available,
+    is_vision_available,
 )
 
-# 定义导入结构
+# 定义模块导入结构的字典，包含 configuration_pvt 模块的导入结构
 _import_structure = {
-    "configuration_pvt": ["PVT_PRETRAINED_CONFIG_ARCHIVE_MAP", "PvtConfig", "PvtOnnxConfig"],  # 配置 PVT 模型的导入结构
+    "configuration_pvt": ["PVT_PRETRAINED_CONFIG_ARCHIVE_MAP", "PvtConfig", "PvtOnnxConfig"],
 }
 
-# 如果未安装 Vision 相关依赖，则抛出异常
+# 检查视觉处理是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Vision 可用，则添加图像处理模块到导入结构
+    # 如果可用，将 image_processing_pvt 模块导入结构添加到 _import_structure 字典中
     _import_structure["image_processing_pvt"] = ["PvtImageProcessor"]
 
-# 如果未安装 Torch 相关依赖，则抛出异常
+# 检查 Torch 是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Torch 可用，则添加模型定义和相关模块到导入结构
+    # 如果可用，将 modeling_pvt 模块导入结构添加到 _import_structure 字典中
     _import_structure["modeling_pvt"] = [
-        "PVT_PRETRAINED_MODEL_ARCHIVE_LIST",  # PVT 预训练模型存档列表
-        "PvtForImageClassification",  # 用于图像分类任务的 PVT 模型
-        "PvtModel",  # PVT 模型
-        "PvtPreTrainedModel",  # PVT 预训练模型
+        "PVT_PRETRAINED_MODEL_ARCHIVE_LIST",
+        "PvtForImageClassification",
+        "PvtModel",
+        "PvtPreTrainedModel",
     ]
 
-
-# 如果处于类型检查模式，则进行额外导入
+# 如果当前环境为 TYPE_CHECKING，进行类型导入
 if TYPE_CHECKING:
-    from .configuration_pvt import PVT_PRETRAINED_CONFIG_ARCHIVE_MAP, PvtConfig, PvtOnnxConfig  # 导入 PVT 配置
+    # 从 configuration_pvt 模块导入指定的类和变量
+    from .configuration_pvt import PVT_PRETRAINED_CONFIG_ARCHIVE_MAP, PvtConfig, PvtOnnxConfig
 
+    # 在视觉处理可用时，从 image_processing_pvt 模块导入 PvtImageProcessor 类
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        from .image_processing_pvt import PvtImageProcessor  # 导入 PVT 图像处理模块
+        from .image_processing_pvt import PvtImageProcessor
 
+    # 在 Torch 可用时，从 modeling_pvt 模块导入指定的类和变量
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -70,15 +84,16 @@ if TYPE_CHECKING:
         pass
     else:
         from .modeling_pvt import (
-            PVT_PRETRAINED_MODEL_ARCHIVE_LIST,  # PVT 预训练模型存档列表
-            PvtForImageClassification,  # 用于图像分类任务的 PVT 模型
-            PvtModel,  # PVT 模型
-            PvtPreTrainedModel,  # PVT 预训练模型
+            PVT_PRETRAINED_MODEL_ARCHIVE_LIST,
+            PvtForImageClassification,
+            PvtModel,
+            PvtPreTrainedModel,
         )
 
-# 如果不处于类型检查模式，则将当前模块指定为惰性模块
+# 如果不是 TYPE_CHECKING 环境，则将当前模块注册为 LazyModule
 else:
     import sys
 
+    # 使用 _LazyModule 将当前模块设置为惰性加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

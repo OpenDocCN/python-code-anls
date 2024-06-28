@@ -1,125 +1,100 @@
 # `.\models\deprecated\retribert\configuration_retribert.py`
 
-```py
+```
 # coding=utf-8
-# 代码文件的编码格式为 UTF-8
-# 版权声明，版权属于 HuggingFace Inc. 团队、Google AI 语言团队和 Facebook, Inc.
-# 根据 Apache License, Version 2.0 许可，除非符合许可要求，否则禁止使用此文件
-# 你可以在以下网址获取许可的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 根据适用法律的要求或书面同意，在 "AS IS" 基础上发布软件，不提供任何形式的担保或条件
-# 有关更多信息，请参见许可，特定语言的描述，请参见许可文件
+# Copyright 2019-present, the HuggingFace Inc. team, The Google AI Language Team and Facebook, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" RetriBERT model configuration"""
 
-""" RetriBERT 模型配置"""
-
-# 从配置工具导入 PretrainedConfig 类
+# 导入预训练配置类 PretrainedConfig 和日志记录工具 logging
 from ....configuration_utils import PretrainedConfig
-# 从工具包导入日志记录模块
 from ....utils import logging
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# TODO: upload to AWS
-# 预训练配置文件的映射字典
+# 预训练模型配置文件的映射字典，键为模型名称，值为配置文件的下载链接
 RETRIBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "yjernite/retribert-base-uncased": (
         "https://huggingface.co/yjernite/retribert-base-uncased/resolve/main/config.json"
     ),
 }
 
-
+# RetriBertConfig 类，继承自 PretrainedConfig，用于存储 RetriBertModel 的配置信息
 class RetriBertConfig(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`RetriBertModel`] 的配置。它用于根据指定的参数实例化 RetriBertModel 模型，定义模型的架构。
-    使用默认值实例化配置将产生类似于 RetriBERT [yjernite/retribert-base-uncased](https://huggingface.co/yjernite/retribert-base-uncased) 架构的配置。
+    This is the configuration class to store the configuration of a [`RetriBertModel`]. It is used to instantiate a
+    RetriBertModel model according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the RetriBERT
+    [yjernite/retribert-base-uncased](https://huggingface.co/yjernite/retribert-base-uncased) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。有关更多信息，请阅读 [`PretrainedConfig`] 的文档。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
     """
-    Args:
-        vocab_size (`int`, *optional*, defaults to 30522):
-            Vocabulary size of the RetriBERT model. Defines the number of different tokens that can be represented by
-            the `inputs_ids` passed when calling [`RetriBertModel`]
-        hidden_size (`int`, *optional*, defaults to 768):
-            Dimensionality of the encoder layers and the pooler layer.
-        num_hidden_layers (`int`, *optional*, defaults to 12):
-            Number of hidden layers in the Transformer encoder.
-        num_attention_heads (`int`, *optional*, defaults to 12):
-            Number of attention heads for each attention layer in the Transformer encoder.
-        intermediate_size (`int`, *optional*, defaults to 3072):
-            Dimensionality of the "intermediate" (often named feed-forward) layer in the Transformer encoder.
-        hidden_act (`str` or `function`, *optional*, defaults to `"gelu"`):
-            The non-linear activation function (function or string) in the encoder and pooler. If string, `"gelu"`,
-            `"relu"`, `"silu"` and `"gelu_new"` are supported.
-        hidden_dropout_prob (`float`, *optional*, defaults to 0.1):
-            The dropout probability for all fully connected layers in the embeddings, encoder, and pooler.
-        attention_probs_dropout_prob (`float`, *optional*, defaults to 0.1):
-            The dropout ratio for the attention probabilities.
-        max_position_embeddings (`int`, *optional*, defaults to 512):
-            The maximum sequence length that this model might ever be used with. Typically set this to something large
-            just in case (e.g., 512 or 1024 or 2048).
-        type_vocab_size (`int`, *optional*, defaults to 2):
-            The vocabulary size of the *token_type_ids* passed into [`BertModel`].
-        initializer_range (`float`, *optional*, defaults to 0.02):
-            The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
-        layer_norm_eps (`float`, *optional*, defaults to 1e-12):
-            The epsilon used by the layer normalization layers.
-        share_encoders (`bool`, *optional*, defaults to `True`):
-            Whether or not to use the same Bert-type encoder for the queries and document
-        projection_dim (`int`, *optional*, defaults to 128):
-            Final dimension of the query and document representation after projection
-    """
-
+    # 定义模型类型为 "retribert"
     model_type = "retribert"
-
+    
+    # 定义 RetriBertModel 类的构造函数，初始化模型的各种参数
     def __init__(
         self,
-        vocab_size=30522,
-        hidden_size=768,
-        num_hidden_layers=8,
-        num_attention_heads=12,
-        intermediate_size=3072,
-        hidden_act="gelu",
-        hidden_dropout_prob=0.1,
-        attention_probs_dropout_prob=0.1,
-        max_position_embeddings=512,
-        type_vocab_size=2,
-        initializer_range=0.02,
-        layer_norm_eps=1e-12,
-        share_encoders=True,
-        projection_dim=128,
-        pad_token_id=0,
-        **kwargs,
-    # 定义一个继承自特殊TensorFlow构建器类__init__的子类，并重写__init__方法
-    def __init__(
-        # 调用父类的初始化方法，并传入参数pad_token_id和kwargs
-        super().__init__(pad_token_id=pad_token_id, **kwargs)
-    
-        # 定义词汇表大小
-        self.vocab_size = vocab_size
-        # 定义隐藏层大小
-        self.hidden_size = hidden_size
-        # 定义隐藏层数量
-        self.num_hidden_layers = num_hidden_layers
-        # 定义注意力头数量
-        self.num_attention_heads = num_attention_heads
-        # 定义隐藏层激活函数
-        self.hidden_act = hidden_act
-        # 定义中间层大小
-        self.intermediate_size = intermediate_size
-        # 定义隐藏层舍弃比例
-        self.hidden_dropout_prob = hidden_dropout_prob
-        # 定义注意力机制舍弃比例
-        self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        # 定义最大位置嵌入大小
-        self.max_position_embeddings = max_position_embeddings
-        # 定义类型词汇表大小
-        self.type_vocab_size = type_vocab_size
-        # 定义初始化范围
-        self.initializer_range = initializer_range
-        # 定义层规范化的epsilon值
-        self.layer_norm_eps = layer_norm_eps
-        # 是否共享编码器
-        self.share_encoders = share_encoders
-        # 定义投影维度
-        self.projection_dim = projection_dim
+        vocab_size=30522,  # 词汇表大小，默认为 30522
+        hidden_size=768,  # 编码器层和池化层的维度
+        num_hidden_layers=8,  # Transformer 编码器中隐藏层的数量
+        num_attention_heads=12,  # 每个注意力层中的注意力头数
+        intermediate_size=3072,  # Transformer 编码器中“中间”（通常称为前馈）层的维度
+        hidden_act="gelu",  # 编码器和池化器中的非线性激活函数
+        hidden_dropout_prob=0.1,  # 嵌入层、编码器和池化层中所有全连接层的 dropout 概率
+        attention_probs_dropout_prob=0.1,  # 注意力概率的 dropout 比率
+        max_position_embeddings=512,  # 模型可能使用的最大序列长度
+        type_vocab_size=2,  # 传递给 BertModel 的 token_type_ids 的词汇表大小
+        initializer_range=0.02,  # 用于初始化所有权重矩阵的截断正态分布的标准差
+        layer_norm_eps=1e-12,  # 层归一化层使用的 epsilon
+        share_encoders=True,  # 是否使用相同的 Bert 类型编码器来处理查询和文档
+        projection_dim=128,  # 投影后的查询和文档表示的最终维度
+        pad_token_id=0,  # 用于填充的 token ID
+        **kwargs,  # 其他未命名参数
+    ):
+        ):
+            # 调用父类的初始化方法，设置填充标记的 ID 和其他可选参数
+            super().__init__(pad_token_id=pad_token_id, **kwargs)
+
+            # 设置词汇表大小
+            self.vocab_size = vocab_size
+            # 设置隐藏层大小
+            self.hidden_size = hidden_size
+            # 设置隐藏层的数量
+            self.num_hidden_layers = num_hidden_layers
+            # 设置注意力头的数量
+            self.num_attention_heads = num_attention_heads
+            # 设置隐藏层激活函数类型
+            self.hidden_act = hidden_act
+            # 设置中间层大小
+            self.intermediate_size = intermediate_size
+            # 设置隐藏层的 dropout 概率
+            self.hidden_dropout_prob = hidden_dropout_prob
+            # 设置注意力机制的 dropout 概率
+            self.attention_probs_dropout_prob = attention_probs_dropout_prob
+            # 设置最大位置编码的长度
+            self.max_position_embeddings = max_position_embeddings
+            # 设置类型词汇表的大小
+            self.type_vocab_size = type_vocab_size
+            # 设置初始化范围
+            self.initializer_range = initializer_range
+            # 设置层归一化的 epsilon 值
+            self.layer_norm_eps = layer_norm_eps
+            # 是否共享编码器的标志
+            self.share_encoders = share_encoders
+            # 设置投影维度
+            self.projection_dim = projection_dim
 ```

@@ -1,29 +1,39 @@
-# `.\transformers\models\bark\configuration_bark.py`
+# `.\models\bark\configuration_bark.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明及许可证信息
-# 导入必要的模块
-# 配置类文件的日志记录器
-""" BARK 模型配置"""
+```
+# coding=utf-8
+# Copyright 2023 The Suno AI Authors and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" BARK model configuration"""
 
-import os  # 导入操作系统模块
-from typing import Dict, Optional, Union  # 导入类型提示模块
+import os
+from typing import Dict, Optional, Union
 
-from ...configuration_utils import PretrainedConfig  # 导入预训练配置工具模块
-from ...utils import add_start_docstrings, logging  # 导入辅助工具函数和日志记录模块
-from ..auto import CONFIG_MAPPING  # 导入自动配置映射模块
+from ...configuration_utils import PretrainedConfig
+from ...utils import add_start_docstrings, logging
+from ..auto import CONFIG_MAPPING
 
-# 获取日志记录器
+# 获取名为 logging 的模块中的日志记录器对象
 logger = logging.get_logger(__name__)
 
-# BARK 预训练配置映射字典
+# BARK_PRETRAINED_CONFIG_ARCHIVE_MAP 是一个映射表，将模型名称映射到其预训练配置文件的 URL
 BARK_PRETRAINED_CONFIG_ARCHIVE_MAP = {
-    "suno/bark-small": "https://huggingface.co/suno/bark-small/resolve/main/config.json",  # BARK-Small 模型配置的预训练文件映射
-    "suno/bark": "https://huggingface.co/suno/bark/resolve/main/config.json",  # BARK 模型配置的预训练文件映射
+    "suno/bark-small": "https://huggingface.co/suno/bark-small/resolve/main/config.json",
+    "suno/bark": "https://huggingface.co/suno/bark/resolve/main/config.json",
 }
 
-# BARK 子模型配置的起始文档字符串
+# BARK_SUBMODELCONFIG_START_DOCSTRING 是一个多行字符串，用于说明配置类的作用和用法
 BARK_SUBMODELCONFIG_START_DOCSTRING = """
     This is the configuration class to store the configuration of a [`{model}`]. It is used to instantiate the model
     according to the specified arguments, defining the model architecture. Instantiating a configuration with the
@@ -32,124 +42,61 @@ BARK_SUBMODELCONFIG_START_DOCSTRING = """
 
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
-
-
+    # 设置块大小，定义模型可能使用的最大序列长度，默认为 1024。通常设置为较大值（例如 512、1024 或 2048），以防万一。
+    block_size (`int`, *optional*, defaults to 1024):
+    
+    # 输入词汇表大小，用于 Bark 子模型。定义在调用 `{model}` 时可以表示的不同 token 数量。默认为 10,048，但应根据所选子模型仔细考虑。
+    input_vocab_size (`int`, *optional*, defaults to 10_048):
+    
+    # 输出词汇表大小，用于 Bark 子模型。定义在向前传递 `{model}` 时可以表示的不同 token 数量。默认为 10,048，但应根据所选子模型仔细考虑。
+    output_vocab_size (`int`, *optional*, defaults to 10_048):
+    
+    # 给定子模型中的隐藏层数量。默认为 12。
+    num_layers (`int`, *optional*, defaults to 12):
+    
+    # Transformer 架构中每个注意力层的注意力头数量。默认为 12。
+    num_heads (`int`, *optional*, defaults to 12):
+    
+    # 架构中“中间”（通常称为前馈）层的维度大小。默认为 768。
+    hidden_size (`int`, *optional*, defaults to 768):
+    
+    # 嵌入层、编码器和池化器中所有全连接层的 dropout 概率。默认为 0.0，即不使用 dropout。
+    dropout (`float`, *optional*, defaults to 0.0):
+    
+    # 是否在线性层和层归一化层中使用偏置。默认为 `True`。
+    bias (`bool`, *optional*, defaults to `True`):
+    
+    # 初始化所有权重矩阵的截断正态初始化器的标准差。默认为 0.02。
+    initializer_range (`float`, *optional*, defaults to 0.02):
+    
+    # 模型是否应返回最后的键/值注意力。并非所有模型都使用此功能。默认为 `True`。
+    use_cache (`bool`, *optional*, defaults to `True`):
 """
-    # 定义函数参数列表
-    Args:
-        # 定义块大小参数，默认为 1024
-        block_size (`int`, *optional*, defaults to 1024):
-            # 该模型可能使用的最大序列长度。通常设置为一个较大的值，以防万一（例如，512、1024或2048）。
-        input_vocab_size (`int`, *optional*, defaults to 10_048):
-            # Bark 子模型的词汇表大小。定义了在调用 [`{model}`] 时可以由 `inputs_ids` 表示的不同标记数量。默认为 10_048，但应根据所选子模型慎重考虑。
-        output_vocab_size (`int`, *optional*, defaults to 10_048):
-            # Bark 子模型的输出词汇表大小。定义了在向前传递 [`{model}`] 时可以由 `output_ids` 表示的不同标记数量。默认为 10_048，但应根据所选子模型慎重考虑。
-        num_layers (`int`, *optional*, defaults to 12):
-            # 给定子模型中的隐藏层数量。
-        num_heads (`int`, *optional*, defaults to 12):
-            # Transformer 架构中每个注意力层的注意力头数量。
-        hidden_size (`int`, *optional*, defaults to 768):
-            # 架构中“中间”（通常称为前馈）层的维度。
-        dropout (`float`, *optional*, defaults to 0.0):
-            # 嵌入层、编码器和池化器中所有全连接层的丢弃概率。
-        bias (`bool`, *optional*, defaults to `True`):
-            # 是否在线性层和层归一化层中使用偏置。
-        initializer_range (`float`, *optional*, defaults to 0.02):
-            # 用于初始化所有权重矩阵的截断正态初始化器的标准差。
-        use_cache (`bool`, *optional*, defaults to `True`):
-            # 模型是否应返回最后的键/值注意力（并非所有模型都使用）。
-# 定义一个Bark子模型配置类，继承自PretrainedConfig
-class BarkSubModelConfig(PretrainedConfig):
-    # 模型类型为"bark_module"
-    model_type = "bark_module"
-    # 推断时需要忽略的键
-    keys_to_ignore_at_inference = ["past_key_values"]
+定义了一个名为 BarkSubModelConfig 的类，继承自 PretrainedConfig。
 
-    # 属性映射字典
-    attribute_map = {
-        "num_attention_heads": "num_heads",
-        "num_hidden_layers": "num_layers",
-        "vocab_size": "input_vocab_size",
-        "window_size": "block_size",
-    }
+model_type 属性指定为 "bark_module"，用于标识模型类型为 Bark 模块。
+keys_to_ignore_at_inference 属性指定在推断时要忽略的键，这里包括 "past_key_values"。
 
-    # 初始化方法
-    def __init__(
-        self,
-        block_size=1024,
-        input_vocab_size=10_048,
-        output_vocab_size=10_048,
-        num_layers=12,
-        num_heads=12,
-        hidden_size=768,
-        dropout=0.0,
-        bias=True,  # True: bias in Linears and LayerNorms, like GPT-2. False: a bit better and faster
-        initializer_range=0.02,
-        use_cache=True,
-        **kwargs,
-    ):
-        # 初始化各属性
-        self.block_size = block_size
-        self.input_vocab_size = input_vocab_size
-        self.output_vocab_size = output_vocab_size
-        self.num_layers = num_layers
-        self.num_heads = num_heads
-        self.hidden_size = hidden_size
-        self.dropout = dropout
-        self.bias = bias
-        self.use_cache = use_cache
-        self.initializer_range = initializer_range
+attribute_map 属性是一个映射字典，将类内部属性名映射到外部使用的名称，例如将 num_attention_heads 映射为 num_heads。
 
-        # 调用父类的初始化方法
-        super().__init__(**kwargs)
+__init__ 方法用于初始化类的实例，接受多个参数来设置模型配置的各个属性，如 block_size、input_vocab_size 等。
 
-    # 从预训练模型加载配置
-    @classmethod
-    def from_pretrained(
-        cls,
-        pretrained_model_name_or_path: Union[str, os.PathLike],
-        cache_dir: Optional[Union[str, os.PathLike]] = None,
-        force_download: bool = False,
-        local_files_only: bool = False,
-        token: Optional[Union[str, bool]] = None,
-        revision: str = "main",
-        **kwargs,
-    ) -> "PretrainedConfig":
-        # 设置参数
-        kwargs["cache_dir"] = cache_dir
-        kwargs["force_download"] = force_download
-        kwargs["local_files_only"] = local_files_only
-        kwargs["revision"] = revision
+from_pretrained 方法是一个类方法，用于从预训练模型加载配置。它接受预训练模型的名称或路径，并支持设置缓存目录、强制下载等参数。
 
-        # 设置token
-        cls._set_token_in_kwargs(kwargs, token)
+在方法内部，通过调用 cls.get_config_dict 方法获取预训练模型的配置字典。如果配置字典中的 model_type 为 "bark"，则从中提取对应的 Bark 配置。
 
-        # 获取配置字典
-        config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
-
-        # 如果从Bark加载，则获取Bark配置字典
-        if config_dict.get("model_type") == "bark":
-            config_dict = config_dict[f"{cls.model_type}_config"]
-
-        # 如果配置字典中包含模型类型且与当前模型类型不同，则发出警告
-        if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
-            logger.warning(
-                f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
-                f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
-            )
-
-        # 从配置字典创建配置对象
-        return cls.from_dict(config_dict, **kwargs)
-    # 访问模型配置信息
+警告日志用于提示用户，如果加载的预训练模型类型与当前类定义的模型类型不匹配，可能会导致错误。
+"""
+    # 获取模型的配置信息
     configuration = model.config
-)
-# 定义 BarkSemanticConfig 类，继承自 BarkSubModelConfig 类
+# 在 `BarkSubModelConfig` 的基础上定义了一个名为 `BarkSemanticConfig` 的类
 class BarkSemanticConfig(BarkSubModelConfig):
-    # 设置模型类型为 "semantic"
+    # 设定模型类型为 "semantic"
     model_type = "semantic"
 
-# 使用 add_start_docstrings 装饰器添加文档字符串，说明 BarkCoarseConfig 类的作用和示例用法
+# 在 `BarkSubModelConfig` 的基础上定义了一个名为 `BarkCoarseConfig` 的类
 @add_start_docstrings(
+    # 添加起始文档字符串，使用 `BARK_SUBMODELCONFIG_START_DOCSTRING` 格式化字符串
     BARK_SUBMODELCONFIG_START_DOCSTRING.format(config="BarkCoarseConfig", model="BarkCoarseModel"),
     """
     Example:
@@ -165,15 +112,15 @@ class BarkSemanticConfig(BarkSubModelConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py""",
+    ```""",
 )
-# 定义 BarkCoarseConfig 类，继承自 BarkSubModelConfig 类
 class BarkCoarseConfig(BarkSubModelConfig):
-    # 设置模型类型为 "coarse_acoustics"
+    # 设定模型类型为 "coarse_acoustics"
     model_type = "coarse_acoustics"
 
-# 使用 add_start_docstrings 装饰器添加文档字符串，说明 BarkFineConfig 类的作用、参数含义和示例用法
+# 在 `BarkSubModelConfig` 的基础上定义了一个名为 `BarkFineConfig` 的类
 @add_start_docstrings(
+    # 添加起始文档字符串，使用 `BARK_SUBMODELCONFIG_START_DOCSTRING` 格式化字符串
     BARK_SUBMODELCONFIG_START_DOCSTRING.format(config="BarkFineConfig", model="BarkFineModel"),
     """
         n_codes_total (`int`, *optional*, defaults to 8):
@@ -194,23 +141,21 @@ class BarkCoarseConfig(BarkSubModelConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py""",
+    ```""",
 )
-# 定义 BarkFineConfig 类，继承自 BarkSubModelConfig 类
 class BarkFineConfig(BarkSubModelConfig):
-    # 设置模型类型为 "fine_acoustics"
+    # 设定模型类型为 "fine_acoustics"
     model_type = "fine_acoustics"
 
-    # 定义初始化方法，包括参数 tie_word_embeddings、n_codes_total 和 n_codes_given
     def __init__(self, tie_word_embeddings=True, n_codes_total=8, n_codes_given=1, **kwargs):
-        # 初始化属性 n_codes_total 和 n_codes_given
-        self.n_codes_total = n_codes_total
-        self.n_codes_given = n_codes_given
+        # 初始化方法，设定了一些参数和默认值
+        self.n_codes_total = n_codes_total  # 总音频码书预测数量，默认为8
+        self.n_codes_given = n_codes_given  # 粗声学子模型中音频码书预测数量，默认为1
 
-        # 调用父类的初始化方法，并传入参数 tie_word_embeddings 和其他关键字参数
+        # 调用父类的初始化方法
         super().__init__(tie_word_embeddings=tie_word_embeddings, **kwargs)
 
-# 定义 BarkConfig 类，继承自 PretrainedConfig 类
+# 继承自 `PretrainedConfig` 的 `BarkConfig` 类
 class BarkConfig(PretrainedConfig):
     """
     This is the configuration class to store the configuration of a [`BarkModel`]. It is used to instantiate a Bark
@@ -229,87 +174,82 @@ class BarkConfig(PretrainedConfig):
         Configuration of the underlying coarse acoustics sub-model.
     fine_acoustics_config ([`BarkFineConfig`], *optional*):
         Configuration of the underlying fine acoustics sub-model.
-    # 定义了类变量 model_type，表示该模型的类型为 "bark"
-    model_type = "bark"
+    """
+        codec_config ([`AutoConfig`], *optional*):
+            Configuration of the underlying codec sub-model.
 
-    # 初始化方法，用于创建一个 BarkModel 实例
-    def __init__(
-        self,
-        # 语义模型的配置信息，默认为 None
-        semantic_config: Dict = None,
-        # 粗糙声学模型的配置信息，默认为 None
-        coarse_acoustics_config: Dict = None,
-        # 细致声学模型的配置信息，默认为 None
-        fine_acoustics_config: Dict = None,
-        # 编解码器模型的配置信息，默认为 None
-        codec_config: Dict = None,
-        # 初始化参数范围，默认为 0.02
-        initializer_range=0.02,
-        # 其他关键字参数
-        **kwargs,
-    ):
-        # 如果语义模型配置信息为空，则使用默认配置
-        if semantic_config is None:
-            semantic_config = {}
-            logger.info("semantic_config is None. initializing the semantic model with default values.")
 
-        # 如果粗糙声学模型配置信息为空，则使用默认配置
-        if coarse_acoustics_config is None:
-            coarse_acoustics_config = {}
-            logger.info("coarse_acoustics_config is None. initializing the coarse model with default values.")
 
-        # 如果细致声学模型配置信息为空，则使用默认配置
-        if fine_acoustics_config is None:
-            fine_acoustics_config = {}
-            logger.info("fine_acoustics_config is None. initializing the fine model with default values.")
+        model_type = "bark"
 
-        # 如果编解码器模型配置信息为空，则使用默认配置
-        if codec_config is None:
-            codec_config = {}
-            logger.info("codec_config is None. initializing the codec model with default values.")
 
-        # 根据配置信息创建相应的对象
-        self.semantic_config = BarkSemanticConfig(**semantic_config)
-        self.coarse_acoustics_config = BarkCoarseConfig(**coarse_acoustics_config)
-        self.fine_acoustics_config = BarkFineConfig(**fine_acoustics_config)
-        # 获取编解码器模型类型
-        codec_model_type = codec_config["model_type"] if "model_type" in codec_config else "encodec"
-        # 根据模型类型选择相应的配置
-        self.codec_config = CONFIG_MAPPING[codec_model_type](**codec_config)
 
-        # 初始化参数范围
-        self.initializer_range = initializer_range
+        def __init__(
+            self,
+            semantic_config: Dict = None,
+            coarse_acoustics_config: Dict = None,
+            fine_acoustics_config: Dict = None,
+            codec_config: Dict = None,
+            initializer_range=0.02,
+            **kwargs,
+        ):
+            # 如果semantic_config为None，则使用默认空字典并记录日志
+            if semantic_config is None:
+                semantic_config = {}
+                logger.info("semantic_config is None. initializing the semantic model with default values.")
 
-        # 调用父类的初始化方法
-        super().__init__(**kwargs)
+            # 如果coarse_acoustics_config为None，则使用默认空字典并记录日志
+            if coarse_acoustics_config is None:
+                coarse_acoustics_config = {}
+                logger.info("coarse_acoustics_config is None. initializing the coarse model with default values.")
 
-    # 类方法，用于从各个子模型的配置创建 BarkModel 的实例
-    @classmethod
-    def from_sub_model_configs(
-        cls,
-        # 语义模型的配置信息
-        semantic_config: BarkSemanticConfig,
-        # 粗糙声学模型的配置信息
-        coarse_acoustics_config: BarkCoarseConfig,
-        # 细致声学模型的配置信息
-        fine_acoustics_config: BarkFineConfig,
-        # 编解码器模型的配置信息
-        codec_config: PretrainedConfig,
-        # 其他关键字参数
-        **kwargs,
-``` 
-    ):  
+            # 如果fine_acoustics_config为None，则使用默认空字典并记录日志
+            if fine_acoustics_config is None:
+                fine_acoustics_config = {}
+                logger.info("fine_acoustics_config is None. initializing the fine model with default values.")
+
+            # 如果codec_config为None，则使用默认空字典并记录日志
+            if codec_config is None:
+                codec_config = {}
+                logger.info("codec_config is None. initializing the codec model with default values.")
+
+            # 初始化各个配置对象，如果给定配置为空，则创建默认配置对象
+            self.semantic_config = BarkSemanticConfig(**semantic_config)
+            self.coarse_acoustics_config = BarkCoarseConfig(**coarse_acoustics_config)
+            self.fine_acoustics_config = BarkFineConfig(**fine_acoustics_config)
+            
+            # 确定codec_model_type，如果未指定则默认为"encodec"
+            codec_model_type = codec_config["model_type"] if "model_type" in codec_config else "encodec"
+            self.codec_config = CONFIG_MAPPING[codec_model_type](**codec_config)
+
+            # 设置初始化范围
+            self.initializer_range = initializer_range
+
+            super().__init__(**kwargs)
+
+
+
+        @classmethod
+        def from_sub_model_configs(
+            cls,
+            semantic_config: BarkSemanticConfig,
+            coarse_acoustics_config: BarkCoarseConfig,
+            fine_acoustics_config: BarkFineConfig,
+            codec_config: PretrainedConfig,
+            **kwargs,
+        ):
+        ):
         r"""
-        从bark子模型配置实例化一个BarkConfig（或派生类）。
+        从bark子模型配置中实例化一个[`BarkConfig`]（或派生类）。
 
         Returns:
-            [`BarkConfig`]: 一个配置对象的实例
+            [`BarkConfig`]: 配置对象的一个实例
         """
         return cls(
-            semantic_config=semantic_config.to_dict(),  # 将semantic_config转换为字典并传入实例化参数
-            coarse_acoustics_config=coarse_acoustics_config.to_dict(),  # 将coarse_acoustics_config转换为字典并传入实例化参数
-            fine_acoustics_config=fine_acoustics_config.to_dict(),  # 将fine_acoustics_config转换为字典并传入实例化参数
-            codec_config=codec_config.to_dict(),  # 将codec_config转换为字典并传入实例化参数
-            **kwargs,  # 传入额外的关键字参数
+            semantic_config=semantic_config.to_dict(),  # 将语义配置转换为字典形式
+            coarse_acoustics_config=coarse_acoustics_config.to_dict(),  # 将粗略声学配置转换为字典形式
+            fine_acoustics_config=fine_acoustics_config.to_dict(),  # 将精细声学配置转换为字典形式
+            codec_config=codec_config.to_dict(),  # 将编解码器配置转换为字典形式
+            **kwargs,  # 传递额外的关键字参数
         )
 ```

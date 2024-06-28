@@ -1,24 +1,28 @@
 # `.\models\idefics\image_processing_idefics.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，禁止未经许可使用此文件
-# 可以在以下链接获取许可证副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础分发的，
-# 没有任何明示或暗示的保证或条件
-# 请查看许可证以获取有关权限和限制的详细信息
-"""Idefics 的图像处理器类。"""
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Image processor class for Idefics."""
 
 from typing import Callable, Dict, List, Optional, Union
 
-# 导入 PIL 库中的 Image 模块
-from PIL import Image
+from PIL import Image  # 导入 PIL 库中的 Image 模块
 
-# 导入相关的工具函数和类
-from ...image_processing_utils import BaseImageProcessor, BatchFeature
-from ...image_transforms import resize, to_channel_dimension_format
+from ...image_processing_utils import BaseImageProcessor, BatchFeature  # 导入自定义的图像处理工具
+from ...image_transforms import resize, to_channel_dimension_format  # 导入自定义的图像转换函数
 from ...image_utils import (
     ChannelDimension,
     ImageInput,
@@ -26,75 +30,72 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
-)
-from ...utils import TensorType, is_torch_available
+)  # 导入图像处理和转换的实用函数
+from ...utils import TensorType, is_torch_available  # 导入通用实用函数和 Torch 相关函数
 
-# IDEFICS 标准均值和标准差
-IDEFICS_STANDARD_MEAN = [0.48145466, 0.4578275, 0.40821073]
-IDEFICS_STANDARD_STD = [0.26862954, 0.26130258, 0.27577711]
+IDEFICS_STANDARD_MEAN = [0.48145466, 0.4578275, 0.40821073]  # 定义 IDEFICS 标准均值
+IDEFICS_STANDARD_STD = [0.26862954, 0.26130258, 0.27577711]  # 定义 IDEFICS 标准标准差
 
-# 将图像转换为 RGB 格式
+
 def convert_to_rgb(image):
-    # 如果图像已经是 RGB 格式，则直接返回
-    if image.mode == "RGB":
+    # `image.convert("RGB")` 只对 .jpg 图片有效，因为它会为透明图像创建错误的背景。
+    # `alpha_composite` 函数处理带有透明通道的图像。
+    if image.mode == "RGB":  # 检查图像是否已经是 RGB 模式
         return image
 
-    # 将图像转换为 RGBA 格式
-    image_rgba = image.convert("RGBA")
-    # 创建白色背景
-    background = Image.new("RGBA", image_rgba.size, (255, 255, 255))
-    # 处理透明图像的情况
-    alpha_composite = Image.alpha_composite(background, image_rgba)
-    # 将处理后的图像转换为 RGB 格式
-    alpha_composite = alpha_composite.convert("RGB")
+    image_rgba = image.convert("RGBA")  # 将图像转换为 RGBA 模式
+    background = Image.new("RGBA", image_rgba.size, (255, 255, 255))  # 创建白色背景图像
+    alpha_composite = Image.alpha_composite(background, image_rgba)  # 使用 alpha 合成处理透明通道
+    alpha_composite = alpha_composite.convert("RGB")  # 将结果转换回 RGB 模式
     return alpha_composite
 
-# Idefics 图像处理器类，继承自 BaseImageProcessor
+
 class IdeficsImageProcessor(BaseImageProcessor):
     r"""
-    构造一个 Idefics 图像处理器。
+    Constructs a Idefics image processor.
 
     Args:
         image_size (`int`, *optional*, defaults to 224):
-            调整图像大小
+            Resize to image size
         image_mean (`float` or `List[float]`, *optional*, defaults to `IDEFICS_STANDARD_MEAN`):
-            如果对图像进行归一化，则使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。
-            可以在 `preprocess` 方法中的 `image_mean` 参数中覆盖。可以在 `preprocess` 方法中的 `image_mean` 参数中覆盖。
+            Mean to use if normalizing the image. This is a float or list of floats the length of the number of
+            channels in the image. Can be overridden by the `image_mean` parameter in the `preprocess` method. Can be
+            overridden by the `image_mean` parameter in the `preprocess` method.
         image_std (`float` or `List[float]`, *optional*, defaults to `IDEFICS_STANDARD_STD`):
-            如果对图像进行归一化，则使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。
-            可以在 `preprocess` 方法中的 `image_std` 参数中覆盖。可以在 `preprocess` 方法中的 `image_std` 参数中覆盖。
+            Standard deviation to use if normalizing the image. This is a float or list of floats the length of the
+            number of channels in the image. Can be overridden by the `image_std` parameter in the `preprocess` method.
+            Can be overridden by the `image_std` parameter in the `preprocess` method.
         image_num_channels (`int`, *optional*, defaults to 3):
-            图像通道数。
+            Number of image channels.
     """
 
-    # 模型输入名称列表
-    model_input_names = ["pixel_values"]
-    # 初始化函数，设置图像大小、均值、标准差、通道数等参数
+    model_input_names = ["pixel_values"]  # 模型输入的名称列表，此处只有一个像素值的输入
+    # 初始化方法，用于设置图像处理的参数和调用父类的初始化方法
     def __init__(
         self,
-        image_size: int = 224,  # 图像大小，默认为224
-        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，可选参数，可以是单个值或列表
-        image_std: Optional[Union[float, List[float]] = None,  # 图像标准差，可选参数，可以是单个值或列表
-        image_num_channels: Optional[int] = 3,  # 图像通道数，默认为3
-        **kwargs,  # 其他关键字参数
+        image_size: int = 224,                            # 图像大小，默认为224像素
+        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，可以是单个数值或列表形式的均值
+        image_std: Optional[Union[float, List[float]]] = None,   # 图像标准差，可以是单个数值或列表形式的标准差
+        image_num_channels: Optional[int] = 3,             # 图像通道数，默认为3通道（彩色图像）
+        **kwargs,                                          # 其他关键字参数
     ) -> None:
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法，处理其他传入的关键字参数
         super().__init__(**kwargs)
 
-        # 设置图像大小、通道数、均值、标准差等参数
-        self.image_size = image_size
-        self.image_num_channels = image_num_channels
-        self.image_mean = image_mean
-        self.image_std = image_std
+        # 设置对象的属性值，用于后续图像预处理使用
+        self.image_size = image_size                       # 设置图像大小
+        self.image_num_channels = image_num_channels       # 设置图像通道数
+        self.image_mean = image_mean                       # 设置图像均值
+        self.image_std = image_std                         # 设置图像标准差
 
-    # 图像预处理函数，对输入图像进行预处理
+    # 图像预处理方法，用于对输入图像进行预处理操作
     def preprocess(
         self,
-        images: ImageInput,  # 输入图像
-        image_num_channels: Optional[int] = 3,  # 图像通道数，默认为3
-        image_size: Optional[Dict[str, int]] = None,  # 图像大小的字典，可选参数
-        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，可选参数，可以是单个值或列表
-        image_std: Optional[Union[float, List[float]] = None,  # 图像标准差，可选参数，可以是单个值或列表
-        transform: Callable = None,  # 可调用对象，用于对图像进行变换
-        **kwargs,  # 其他关键字参数
+        images: ImageInput,                                # 输入的图像数据，可以是单张图像或批量图像
+        image_num_channels: Optional[int] = 3,             # 图像通道数，默认为3通道
+        image_size: Optional[Dict[str, int]] = None,       # 图像大小的字典，包含宽和高
+        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，可以是单个数值或列表形式的均值
+        image_std: Optional[Union[float, List[float]]] = None,   # 图像标准差，可以是单个数值或列表形式的标准差
+        transform: Callable = None,                        # 图像变换函数，用于额外的图像处理
+        **kwargs,                                          # 其他关键字参数
 ```

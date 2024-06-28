@@ -1,43 +1,40 @@
-# `.\transformers\pipelines\text_classification.py`
+# `.\pipelines\text_classification.py`
 
-```py
-import inspect  # 导入inspect模块，用于检查和获取对象信息
+```
+import inspect  # 导入inspect模块，用于获取对象信息
 import warnings  # 导入warnings模块，用于处理警告信息
 from typing import Dict  # 从typing模块导入Dict类型提示
 
-import numpy as np  # 导入numpy库，并将其命名为np
+import numpy as np  # 导入NumPy库，用于数值计算
 
-from ..utils import ExplicitEnum, add_end_docstrings, is_tf_available, is_torch_available  # 从相对路径上级目录导入模块和函数
-from .base import PIPELINE_INIT_ARGS, GenericTensor, Pipeline  # 从当前目录的base模块导入常量和类
+from ..utils import ExplicitEnum, add_end_docstrings, is_tf_available, is_torch_available  # 导入自定义模块和函数
+from .base import GenericTensor, Pipeline, build_pipeline_init_args  # 从本地模块导入指定类和函数
 
-if is_tf_available():  # 如果TensorFlow可用
-    from ..models.auto.modeling_tf_auto import TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES  # 从相对路径上级目录导入TensorFlow的相关模型映射名称
+if is_tf_available():  # 如果TensorFlow可用，则导入相关模型映射名称
+    from ..models.auto.modeling_tf_auto import TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
 
-if is_torch_available():  # 如果PyTorch可用
-    from ..models.auto.modeling_auto import MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES  # 从相对路径上级目录导入PyTorch的相关模型映射名称
+if is_torch_available():  # 如果PyTorch可用，则导入相关模型映射名称
+    from ..models.auto.modeling_auto import MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
 
-# 定义sigmoid函数，接受_outputs作为输入参数，返回1.0 / (1.0 + exp(-_outputs))
-def sigmoid(_outputs):
-    return 1.0 / (1.0 + np.exp(-_outputs))
 
-# 定义softmax函数，接受_outputs作为输入参数，返回经过softmax函数计算后的结果
-def softmax(_outputs):
-    # 计算每个维度上的最大值
-    maxes = np.max(_outputs, axis=-1, keepdims=True)
-    # 计算每个维度上的指数值
-    shifted_exp = np.exp(_outputs - maxes)
-    # 对每个维度上的指数值进行归一化处理
-    return shifted_exp / shifted_exp.sum(axis=-1, keepdims=True)
+def sigmoid(_outputs):  # 定义sigmoid函数，接受一个参数_outputs
+    return 1.0 / (1.0 + np.exp(-_outputs))  # 返回sigmoid函数的计算结果
 
-# 定义一个显示枚举类，用于表示分类函数的类型
-class ClassificationFunction(ExplicitEnum):
-    SIGMOID = "sigmoid"  # sigmoid函数
-    SOFTMAX = "softmax"  # softmax函数
-    NONE = "none"  # 不应用任何函数
 
-# 添加文档字符串注释，并继承Pipeline类
-@add_end_docstrings(
-    PIPELINE_INIT_ARGS,  # 继承Pipeline类的初始化参数文档字符串
+def softmax(_outputs):  # 定义softmax函数，接受一个参数_outputs
+    maxes = np.max(_outputs, axis=-1, keepdims=True)  # 计算_outputs在最后一个轴上的最大值，并保持维度
+    shifted_exp = np.exp(_outputs - maxes)  # 计算_outputs减去最大值后的指数值
+    return shifted_exp / shifted_exp.sum(axis=-1, keepdims=True)  # 返回softmax归一化后的结果
+
+
+class ClassificationFunction(ExplicitEnum):  # 定义一个枚举类ClassificationFunction
+    SIGMOID = "sigmoid"  # 枚举项：sigmoid
+    SOFTMAX = "softmax"  # 枚举项：softmax
+    NONE = "none"  # 枚举项：none
+
+
+@add_end_docstrings(  # 使用add_end_docstrings装饰器，添加文档字符串
+    build_pipeline_init_args(has_tokenizer=True),  # 调用build_pipeline_init_args函数生成初始化参数文档
     r"""
         return_all_scores (`bool`, *optional*, defaults to `False`):
             Whether to return all prediction scores or just the one of the predicted class.
@@ -48,11 +45,9 @@ class ClassificationFunction(ExplicitEnum):
               has several labels, will apply the softmax function on the output.
             - `"sigmoid"`: Applies the sigmoid function on the output.
             - `"softmax"`: Applies the softmax function on the output.
-            - `"none"`: Does not apply any function on the output.
-    """,
+            - `"none"`: Does not apply any function on the output.""",
 )
-# 定义文本分类管道类，继承自Pipeline类
-class TextClassificationPipeline(Pipeline):
+class TextClassificationPipeline(Pipeline):  # 定义TextClassificationPipeline类，继承自Pipeline类
     """
     Text classification pipeline using any `ModelForSequenceClassification`. See the [sequence classification
     examples](../task_summary#sequence-classification) for more information.
@@ -62,13 +57,13 @@ class TextClassificationPipeline(Pipeline):
     ```python
     >>> from transformers import pipeline
 
-    >>> classifier = pipeline(model="distilbert-base-uncased-finetuned-sst-2-english")
+    >>> classifier = pipeline(model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
     >>> classifier("This movie is disgustingly good !")
     [{'label': 'POSITIVE', 'score': 1.0}]
 
     >>> classifier("Director tried too much.")
     [{'label': 'NEGATIVE', 'score': 0.996}]
-    ```py
+    ```
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 
@@ -79,163 +74,156 @@ class TextClassificationPipeline(Pipeline):
     over the results. If there is a single label, the pipeline will run a sigmoid over the result.
 
     The models that this pipeline can use are models that have been fine-tuned on a sequence classification task. See
+    """
+    """
     the up-to-date list of available models on
+    [huggingface.co/models](https://huggingface.co/models?filter=text-classification).
+    """
 
-"""
-    # 这个类用于加载和使用预训练的文本分类模型。
-    class TextClassificationPipeline(Pipeline):
-        """
-        Text classification pipeline using any model trained on a sequence classification task.
-        Available models can be found on 
-        [huggingface.co/models](https://huggingface.co/models?filter=text-classification).
-        """
-    
-        # 返回所有分类得分的标记是否开启
-        return_all_scores = False
-        # 要应用的分类函数（无/软最大值/硬最大值）
-        function_to_apply = ClassificationFunction.NONE
-    
-        def __init__(self, **kwargs):
-            # 调用父类的初始化方法
-            super().__init__(**kwargs)
-    
-            # 检查模型类型是否匹配文本分类任务
-            self.check_model_type(
-                TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
-                if self.framework == "tf"
-                else MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
+    return_all_scores = False  # 初始化一个布尔变量，表示是否返回所有分数，默认为 False
+    function_to_apply = ClassificationFunction.NONE  # 初始化一个枚举变量，表示应用的分类函数，默认为 NONE
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.check_model_type(
+            TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
+            if self.framework == "tf"
+            else MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
+        )
+        # 初始化函数，调用父类的初始化方法，并根据框架类型检查模型类型
+
+    def _sanitize_parameters(self, return_all_scores=None, function_to_apply=None, top_k="", **tokenizer_kwargs):
+        # 使用 "" 作为默认参数是因为我们将在用户代码中使用 `top_k=None` 来表示"没有 top_k"
+        preprocess_params = tokenizer_kwargs  # 将除了预处理参数外的其他参数赋值给 preprocess_params
+
+        postprocess_params = {}  # 初始化后处理参数的字典
+        if hasattr(self.model.config, "return_all_scores") and return_all_scores is None:
+            return_all_scores = self.model.config.return_all_scores
+            # 如果模型配置有 `return_all_scores` 属性且用户没有提供 return_all_scores 参数，则使用模型配置的值
+
+        if isinstance(top_k, int) or top_k is None:
+            postprocess_params["top_k"] = top_k  # 设置后处理参数中的 top_k
+            postprocess_params["_legacy"] = False  # 设置后处理参数中的 _legacy 属性为 False
+        elif return_all_scores is not None:
+            warnings.warn(
+                "`return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of"
+                " `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.",
+                UserWarning,
             )
-    
-        def _sanitize_parameters(self, return_all_scores=None, function_to_apply=None, top_k="", **tokenizer_kwargs):
-            # 使用 "" 作为 top_k 的默认参数，因为我们将在用户代码中使用 top_k=None 来表示"不使用 top_k"
-            preprocess_params = tokenizer_kwargs
-    
-            postprocess_params = {}
-            # 如果模型配置支持 return_all_scores，且用户没有设置，则使用模型配置中的默认值
-            if hasattr(self.model.config, "return_all_scores") and return_all_scores is None:
-                return_all_scores = self.model.config.return_all_scores
-    
-            # 处理 top_k 参数
-            if isinstance(top_k, int) or top_k is None:
-                postprocess_params["top_k"] = top_k
-                postprocess_params["_legacy"] = False
-            elif return_all_scores is not None:
-                # 如果用户同时设置了 return_all_scores 和 top_k，显示警告并根据 return_all_scores 设置 top_k
-                warnings.warn(
-                    "`return_all_scores` is now deprecated,  if want a similar functionality use `top_k=None` instead of"
-                    " `return_all_scores=True` or `top_k=1` instead of `return_all_scores=False`.",
-                    UserWarning,
-                )
-                if return_all_scores:
-                    postprocess_params["top_k"] = None
-                else:
-                    postprocess_params["top_k"] = 1
-    
-            # 处理 function_to_apply 参数
-            if isinstance(function_to_apply, str):
-                function_to_apply = ClassificationFunction[function_to_apply.upper()]
-    
-            if function_to_apply is not None:
-                postprocess_params["function_to_apply"] = function_to_apply
-            return preprocess_params, {}, postprocess_params
-    # 使用 __call__ 方法实现对文本进行分类
-    def __call__(self, *args, **kwargs):
+            if return_all_scores:
+                postprocess_params["top_k"] = None  # 如果 return_all_scores 为 True，则将 top_k 设置为 None
+            else:
+                postprocess_params["top_k"] = 1  # 如果 return_all_scores 为 False，则将 top_k 设置为 1
+
+        if isinstance(function_to_apply, str):
+            function_to_apply = ClassificationFunction[function_to_apply.upper()]
+            # 如果 function_to_apply 是字符串，则将其转换为大写并尝试从 ClassificationFunction 枚举中获取对应的值
+
+        if function_to_apply is not None:
+            postprocess_params["function_to_apply"] = function_to_apply
+            # 如果 function_to_apply 不为 None，则将其添加到后处理参数中的 function_to_apply 中
+
+        return preprocess_params, {}, postprocess_params
+        # 返回预处理参数、空字典和后处理参数
+    def __call__(self, inputs, **kwargs):
         """
         Classify the text(s) given as inputs.
 
         Args:
-            args (`str` or `List[str]` or `Dict[str]`, or `List[Dict[str]]`):
-                用作分类的一个或多个文本。为了在分类中使用文本对，可以发送包含`{"text", "text_pair"}`键的字典，或者包含这些字典的列表。
+            inputs (`str` or `List[str]` or `Dict[str]`, or `List[Dict[str]]`):
+                One or several texts to classify. In order to use text pairs for your classification, you can send a
+                dictionary containing `{"text", "text_pair"}` keys, or a list of those.
             top_k (`int`, *optional*, defaults to `1`):
-                要返回的结果数量。
+                How many results to return.
             function_to_apply (`str`, *optional*, defaults to `"default"`):
-                用于检索分数的模型输出的函数。接受四个不同的值：
+                The function to apply to the model outputs in order to retrieve the scores. Accepts four different
+                values:
 
-                如果未指定此参数，则将根据标签的数量应用以下函数：
+                If this argument is not specified, then it will apply the following functions according to the number
+                of labels:
 
-                - 如果模型只有一个标签，则在输出上应用 Sigmoid 函数。
-                - 如果模型有多个标签，则在输出上应用 Softmax 函数。
+                - If the model has a single label, will apply the sigmoid function on the output.
+                - If the model has several labels, will apply the softmax function on the output.
 
-                可能的值有:
+                Possible values are:
 
-                - `"sigmoid"`: 在输出上应用 Sigmoid 函数。
-                - `"softmax"`: 在输出上应用 Softmax 函数。
-                - `"none"`: 不在输出上应用任何函数。
+                - `"sigmoid"`: Applies the sigmoid function on the output.
+                - `"softmax"`: Applies the softmax function on the output.
+                - `"none"`: Does not apply any function on the output.
 
         Return:
-            A list or a list of list of `dict`: 每个结果都作为具有以下键的字典列表:
+            A list or a list of list of `dict`: Each result comes as list of dictionaries with the following keys:
 
-            - **label** (`str`) -- 预测的标签。
-            - **score** (`float`) -- 相应的概率。
+            - **label** (`str`) -- The label predicted.
+            - **score** (`float`) -- The corresponding probability.
 
-            如果使用 `top_k`，则会根据每个标签返回一个这样的字典。
+            If `top_k` is used, one such dictionary is returned per label.
         """
-        # 调用父类的 __call__ 方法
-        result = super().__call__(*args, **kwargs)
-        # 尝试以更好的方式从 _sanitize_parameters 中检索它
+        # Ensure inputs are treated as a tuple, even if initially a single string
+        inputs = (inputs,)
+        # Call the superclass's __call__ method to perform the classification
+        result = super().__call__(*inputs, **kwargs)
+        # TODO try and retrieve it in a nicer way from _sanitize_parameters.
+        # Check if 'top_k' is not in kwargs to determine legacy behavior
         _legacy = "top_k" not in kwargs
-        if isinstance(args[0], str) and _legacy:
-            # 当仅运行单个项目时，这个管道很奇怪，返回一个列表
+        # If inputs are a single string and _legacy is True, return result as a list
+        if isinstance(inputs[0], str) and _legacy:
+            # This pipeline is odd, and returns a list when a single item is processed
             return [result]
         else:
+            # Otherwise, return the result as it is
             return result
-    # 预处理输入数据，将其转换为模型所需格式的张量
+    # 预处理方法，将输入转换为模型所需的张量字典
     def preprocess(self, inputs, **tokenizer_kwargs) -> Dict[str, GenericTensor]:
-        # 确定返回张量类型
+        # 确定返回的张量类型由框架决定
         return_tensors = self.framework
-        # 如果输入是字典类型
+        # 如果输入是字典类型，则使用标记器处理并返回结果
         if isinstance(inputs, dict):
-            # 使用 tokenizer 处理输入字典，并返回张量化的结果
             return self.tokenizer(**inputs, return_tensors=return_tensors, **tokenizer_kwargs)
-        # 如果输入是列表类型，且列表中只有一个元素，且该元素是二维列表，保持兼容性
+        # 如果输入是列表且符合特定条件（用于处理文本对），则继续使用旧有的路径兼容处理
         elif isinstance(inputs, list) and len(inputs) == 1 and isinstance(inputs[0], list) and len(inputs[0]) == 2:
-            # 以兼容性方式使用 tokenizer 处理文本对，返回张量化的结果
             return self.tokenizer(
                 text=inputs[0][0], text_pair=inputs[0][1], return_tensors=return_tensors, **tokenizer_kwargs
             )
-        # 如果输入是列表类型
+        # 如果输入是列表但不符合上述条件，则抛出数值错误，提示不支持的输入方式
         elif isinstance(inputs, list):
-            # 抛出数值错误，因为尝试传递文本对是无效的用法
             raise ValueError(
                 "The pipeline received invalid inputs, if you are trying to send text pairs, you can try to send a"
                 ' dictionary `{"text": "My text", "text_pair": "My pair"}` in order to send a text pair.'
             )
-        # 使用 tokenizer 处理输入，并返回张量化的结果
+        # 对于其他类型的输入，使用标记器处理并返回结果
         return self.tokenizer(inputs, return_tensors=return_tensors, **tokenizer_kwargs)
 
-    # 执行前向传播
+    # 内部方法，根据模型输入调用模型的前向传播方法
     def _forward(self, model_inputs):
-        # `XXXForSequenceClassification` 模型不应使用 `use_cache=True`，即使支持也不应使用
+        # 对于 `XXXForSequenceClassification` 类型的模型，即使支持 `use_cache=True`，也不应该使用
         model_forward = self.model.forward if self.framework == "pt" else self.model.call
-        # 如果模型前向传播函数支持使用缓存参数
+        # 检查模型的前向传播方法签名，如果支持 `use_cache` 参数，则设为 False
         if "use_cache" in inspect.signature(model_forward).parameters.keys():
-            # 禁用缓存
             model_inputs["use_cache"] = False
-        # 调用模型的前向传播函数，并返回结果
+        # 调用模型的前向传播方法并返回结果
         return self.model(**model_inputs)
-    # 对模型输出进行后处理，根据指定参数应用函数，返回前 k 个结果
     def postprocess(self, model_outputs, function_to_apply=None, top_k=1, _legacy=True):
-        # `_legacy` 用于确定我们是否在运行裸管道并处于向后兼容模式，或者如果运行带有 `pipeline(..., top_k=1)` 的管道，我们正在运行包含列表的更自然结果。
-        # `set_parameters` 之前的默认值
+        # `_legacy` 用于确定我们是在运行裸管道和向后兼容模式，还是在运行带有 `pipeline(..., top_k=1)` 的更自然结果包含的列表。
+        # 在 `set_parameters` 之前的默认值
+        
+        # 如果未指定应用的函数，则根据模型配置确定默认的应用函数
         if function_to_apply is None:
-            # 如果模型问题类型为多标签分类或者标签数量为1，则应用 sigmoid 函数
             if self.model.config.problem_type == "multi_label_classification" or self.model.config.num_labels == 1:
                 function_to_apply = ClassificationFunction.SIGMOID
-            # 如果模型问题类型为单标签分类或者标签数量大于1，则应用 softmax 函数
             elif self.model.config.problem_type == "single_label_classification" or self.model.config.num_labels > 1:
                 function_to_apply = ClassificationFunction.SOFTMAX
-            # 如果模型配置中存在 `function_to_apply` 属性并且 function_to_apply 为 None，则使用模型配置中的 function_to_apply
             elif hasattr(self.model.config, "function_to_apply") and function_to_apply is None:
                 function_to_apply = self.model.config.function_to_apply
-            # 否则，不应用任何函数
             else:
                 function_to_apply = ClassificationFunction.NONE
 
-        # 从模型输出中获取 logits，并将其转换为 NumPy 数组
+        # 获取模型输出的 logits，并将其转换为 numpy 数组
         outputs = model_outputs["logits"][0]
         outputs = outputs.numpy()
 
-        # 根据指定的函数应用对输出进行处理
+        # 根据指定的函数应用对输出进行转换
         if function_to_apply == ClassificationFunction.SIGMOID:
             scores = sigmoid(outputs)
         elif function_to_apply == ClassificationFunction.SOFTMAX:
@@ -245,20 +233,21 @@ class TextClassificationPipeline(Pipeline):
         else:
             raise ValueError(f"Unrecognized `function_to_apply` argument: {function_to_apply}")
 
-        # 如果 top_k 为 1 且为 _legacy 模式，返回预测结果和置信度
+        # 如果 `top_k` 为 1 并且 `_legacy` 为 True，则返回最高分的标签和分数
         if top_k == 1 and _legacy:
             return {"label": self.model.config.id2label[scores.argmax().item()], "score": scores.max().item()}
 
-        # 将预测结果和置信度以字典形式存储
+        # 否则，构建包含所有标签及其分数的字典列表
         dict_scores = [
             {"label": self.model.config.id2label[i], "score": score.item()} for i, score in enumerate(scores)
         ]
-
-        # 如果非 _legacy 模式，则根据置信度降序排序结果，并只保留前 k 个结果
+        
+        # 如果不是 `_legacy` 模式，则根据分数降序排序字典列表，并根据 `top_k` 进行截断
         if not _legacy:
             dict_scores.sort(key=lambda x: x["score"], reverse=True)
             if top_k is not None:
                 dict_scores = dict_scores[:top_k]
         
+        # 返回最终的标签及其分数的字典列表
         return dict_scores
 ```

@@ -1,51 +1,71 @@
-# `.\transformers\models\biogpt\tokenization_biogpt.py`
+# `.\models\biogpt\tokenization_biogpt.py`
 
-```py
-# 导入所需的模块和类
+```
 # coding=utf-8
-# 版权声明
+# 设定文件编码为 UTF-8
+
 # Copyright 2022 The HuggingFace Team and Microsoft Research AI4Science. All rights reserved.
-#
+# 版权声明，版权归属于 HuggingFace Team 和 Microsoft Research AI4Science，保留所有权利。
+
 # Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache License, Version 2.0 许可证授权，除非符合许可证，否则不得使用此文件。
+
 # you may not use this file except in compliance with the License.
+# 除非符合许可证，否则不得使用此文件。
+
 # You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
+# 可以在以下网址获取许可证副本
+# http://www.apache.org/licenses/LICENSE-2.0
+
 # Unless required by applicable law or agreed to in writing, software
+# 除非适用法律要求或书面同意，否则软件
+
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 按“原样”分发，无论是明示还是暗示的，不附带任何形式的担保或条件。
+
 # See the License for the specific language governing permissions and
+# 查看许可证获取特定语言的权限
+
 # limitations under the License.
+# 许可证下的限制。
+
 """Tokenization classes for BioGPT."""
-import json  # 导入处理 JSON 格式的模块
-import os  # 导入处理文件路径的模块
-from typing import List, Optional, Tuple  # 导入类型提示相关的类和函数
+# 用于 BioGPT 的分词类
 
-from ...tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器的基类
-from ...utils import logging  # 导入日志记录模块
+import json
+# 导入 json 库
+import os
+# 导入 os 库
+from typing import List, Optional, Tuple
+# 导入类型提示，List、Optional 和 Tuple
 
-# 获取日志记录器对象
+from ...tokenization_utils import PreTrainedTokenizer
+# 从 tokenization_utils 模块中导入 PreTrainedTokenizer 类
+from ...utils import logging
+# 从 utils 模块中导入 logging 模块
+
 logger = logging.get_logger(__name__)
+# 获取当前模块的 logger 对象
 
-# 定义词汇文件的文件名
 VOCAB_FILES_NAMES = {
     "vocab_file": "vocab.json",
     "merges_file": "merges.txt",
 }
+# 定义词汇文件和合并文件的名称映射字典
 
-# 定义预训练词汇文件的映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "microsoft/biogpt": "https://huggingface.co/microsoft/biogpt/resolve/main/vocab.json",
     },
     "merges_file": {"microsoft/biogpt": "https://huggingface.co/microsoft/biogpt/resolve/main/merges.txt"},
 }
+# 预训练模型的词汇文件和合并文件的映射字典，指定了 Microsoft 的 BioGPT 模型的文件位置
 
-# 定义预训练位置嵌入的尺寸
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "microsoft/biogpt": 1024,
 }
+# 预训练模型的位置嵌入尺寸字典，指定了 Microsoft 的 BioGPT 模型的位置嵌入大小为 1024
 
 
 def get_pairs(word):
@@ -53,13 +73,14 @@ def get_pairs(word):
     Return set of symbol pairs in a word. word is represented as tuple of symbols (symbols being variable-length
     strings)
     """
-    # 返回单词中的符号对集合，单词表示为符号元组（符号是变长字符串）
+    # 返回单词中的符号对集合，单词表示为符号元组（符号是可变长度字符串）
     pairs = set()
     prev_char = word[0]
     for char in word[1:]:
         pairs.add((prev_char, char))
         prev_char = char
     return pairs
+    # 遍历单词中的字符，将相邻的字符作为一个对加入到集合中，并返回最终的符号对集合
 
 
 class BioGptTokenizer(PreTrainedTokenizer):
@@ -69,91 +90,146 @@ class BioGptTokenizer(PreTrainedTokenizer):
     This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
     this superclass for more information regarding those methods.
     """
-```  
-    # 初始化一个Tokenizer对象，用于将文本转换为模型可以理解的输入格式
-    class Tokenizer:
-        """
-        Args:
-            vocab_file (`str`):
-                词汇表文件的路径。
-            merges_file (`str`):
-                合并文件。
-            unk_token (`str`, *optional*, defaults to `"<unk>"`):
-                未知标记。词汇表中不存在的标记无法转换为 ID，并被设置为此标记。
-            bos_token (`str`, *optional*, defaults to `"<s>"`):
-                在预训练期间使用的序列开始标记。可用作序列分类器标记。
-    
-                <Tip>
-    
-                在使用特殊标记构建序列时，这不是用于序列开始的标记。用于序列开始的标记是 `cls_token`。
-    
-                </Tip>
-    
-            eos_token (`str`, *optional*, defaults to `"</s>"`):
-                序列结束标记。
-    
-                <Tip>
-    
-                在使用特殊标记构建序列时，这不是用于序列结束的标记。用于序列结束的标记是 `sep_token`。
-    
-                </Tip>
-    
-            sep_token (`str`, *optional*, defaults to `"</s>"`):
-                分隔标记，在从多个序列构建序列时使用，例如用于序列分类或用于文本和问题的问题回答。它还用作使用特殊标记构建的序列的最后一个标记。
-            pad_token (`str`, *optional*, defaults to `"<pad>"`):
-                用于填充的标记，例如当批处理不同长度的序列时。
-        """
-    
-        # 定义预定义的文件名和映射
-        vocab_files_names = VOCAB_FILES_NAMES
-        pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-        max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-        model_input_names = ["input_ids", "attention_mask"]
-    
-        def __init__(
-            self,
-            vocab_file,
-            merges_file,
-            unk_token="<unk>",
-            bos_token="<s>",
-            eos_token="</s>",
-            sep_token="</s>",
-            pad_token="<pad>",
-            **kwargs,
+    # 构建一个 FAIRSEQ Transformer 分词器，使用 Moses 分词后接字节对编码
+
+    def __init__(
+        self,
+        vocab_file,
+        merges_file,
+        unk_token="<unk>",
+        eos_token="</s>",
+        pad_token="<pad>",
+        **kwargs
     ):
-        # 尝试导入sacremoses模块，如果失败则抛出ImportError
+        # 初始化方法，接收词汇文件、合并文件以及其他参数
+        super().__init__(
+            unk_token=unk_token,
+            eos_token=eos_token,
+            pad_token=pad_token,
+            **kwargs
+        )
+        # 调用父类的初始化方法，设置未知符号、结束符号和填充符号
+
+        self.vocab_file = vocab_file
+        self.merges_file = merges_file
+        # 设置词汇文件和合并文件属性
+
+    def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
+        # 构建包含特殊符号的输入方法，用于处理包含两个序列的输入
+        """
+        Build model inputs from a sequence or a pair of sequences for sequence classification tasks by concatenating and
+        adding special tokens.
+        """
+        # 从序列或序列对构建模型输入，用于序列分类任务，通过连接和添加特殊符号
+
+        if token_ids_1 is None:
+            return token_ids_0
+        else:
+            return token_ids_0 + token_ids_1
+        # 如果只有一个序列，则直接返回该序列；如果有两个序列，则连接它们后返回
+
+    def get_vocab(self):
+        # 获取词汇表方法
+        with open(self.vocab_file, "r", encoding="utf-8") as reader:
+            vocab = json.load(reader)
+        return vocab
+        # 打开词汇文件，加载词汇表并返回
+
+    def tokenize(self, text):
+        # 分词方法
+        return text.split()
+        # 使用空格分割文本并返回分词结果
+
+    def convert_tokens_to_ids(self, tokens):
+        # 将分词转换为 ID 方法
+        vocab = self.get_vocab()
+        return [vocab[token] for token in tokens]
+        # 获取词汇表，将分词列表中的每个分词转换为对应的 ID 并返回
+
+    def convert_ids_to_tokens(self, ids):
+        # 将 ID 转换为分词方法
+        vocab = self.get_vocab()
+        return [list(vocab.keys())[list(vocab.values()).index(id)] for id in ids]
+        # 获取词汇表，将 ID 列表中的每个 ID 转换为对应的分词并返回
+    Args:
+        vocab_file (`str`):
+            Path to the vocabulary file.
+        merges_file (`str`):
+            Merges file.
+        unk_token (`str`, *optional*, defaults to `"<unk>"`):
+            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
+            token instead.
+        bos_token (`str`, *optional*, defaults to `"<s>"`):
+            The beginning of sequence token that was used during pretraining. Can be used a sequence classifier token.
+            <Tip>
+            When building a sequence using special tokens, this is not the token that is used for the beginning of
+            sequence. The token used is the `cls_token`.
+            </Tip>
+        eos_token (`str`, *optional*, defaults to `"</s>"`):
+            The end of sequence token.
+            <Tip>
+            When building a sequence using special tokens, this is not the token that is used for the end of sequence.
+            The token used is the `sep_token`.
+            </Tip>
+        sep_token (`str`, *optional*, defaults to `"</s>"`):
+            The separator token, which is used when building a sequence from multiple sequences, e.g. two sequences for
+            sequence classification or for a text and a question for question answering. It is also used as the last
+            token of a sequence built with special tokens.
+        pad_token (`str`, *optional*, defaults to `"<pad>"`):
+            The token used for padding, for example when batching sequences of different lengths.
+    """
+
+    # 确定词汇文件名的键名
+    vocab_files_names = VOCAB_FILES_NAMES
+    # 预训练模型的词汇文件映射表
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 预训练位置嵌入的最大模型输入大小
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 模型输入名称列表
+    model_input_names = ["input_ids", "attention_mask"]
+
+    def __init__(
+        self,
+        vocab_file,
+        merges_file,
+        unk_token="<unk>",
+        bos_token="<s>",
+        eos_token="</s>",
+        sep_token="</s>",
+        pad_token="<pad>",
+        **kwargs,
+    ):
         try:
-            import sacremoses
+            import sacremoses  # 尝试导入 sacremoses 库
         except ImportError:
+            # 如果导入失败，抛出 ImportError 异常，提醒需要安装 sacremoses 库
             raise ImportError(
                 "You need to install sacremoses to use BioGptTokenizer. "
                 "See https://pypi.org/project/sacremoses/ for installation."
             )
 
-        # 设置语言为英语
         self.lang = "en"
-        # 将sacremoses模块赋值给self.sm
-        self.sm = sacremoses
-        # sm.MosesTokenizer实例的缓存
+        self.sm = sacremoses  # 将 sacremoses 赋值给 self.sm
+        # 缓存 sm.MosesTokenizer 实例
         self.cache_moses_tokenizer = {}
-        # sm.MosesDetokenizer实例的缓存
         self.cache_moses_detokenizer = {}
 
         """ Initialisation"""
-        # 以UTF-8编码打开词汇文件，并加载词汇表到self.encoder中
+        # 用 utf-8 编码打开 vocab_file 文件，并将其内容加载为 JSON 格式，赋值给 self.encoder
         with open(vocab_file, encoding="utf-8") as vocab_handle:
             self.encoder = json.load(vocab_handle)
-        # 创建反向映射，从编码到词汇的映射
+        # 创建 self.decoder 字典，将 self.encoder 的键值对反转
         self.decoder = {v: k for k, v in self.encoder.items()}
-        # 以UTF-8编码打开合并文件，加载合并操作并创建BPE排名
+        # 用 utf-8 编码打开 merges_file 文件，读取内容并按行分割，去除最后一个空行，赋值给 merges 列表
         with open(merges_file, encoding="utf-8") as merges_handle:
             merges = merges_handle.read().split("\n")[:-1]
+        # 将 merges 列表中的每个元素按空格分割成元组，构成 merges 列表
         merges = [tuple(merge.split()[:2]) for merge in merges]
+        # 创建 self.bpe_ranks 字典，将 merges 列表中的元素与其在列表中的索引号配对
         self.bpe_ranks = dict(zip(merges, range(len(merges))))
-        # 缓存
         self.cache = {}
 
-        # 调用父类的初始化方法，并传入参数
+        # 调用父类的初始化方法，并传入指定参数
         super().__init__(
             bos_token=bos_token,
             eos_token=eos_token,
@@ -165,46 +241,49 @@ class BioGptTokenizer(PreTrainedTokenizer):
 
     @property
     def vocab_size(self):
-        """返回词汇表大小"""
+        """Returns vocab size"""
+        # 返回 self.encoder 的长度，即词汇表的大小
         return len(self.encoder)
 
-    # 返回词汇表
     def get_vocab(self):
+        # 返回包含 self.encoder 和 self.added_tokens_encoder 的字典
         return dict(self.encoder, **self.added_tokens_encoder)
 
-    # 使用sacremoses进行分词
     def moses_tokenize(self, text, lang):
+        # 如果 lang 不在 self.cache_moses_tokenizer 中，则创建一个新的 sm.MosesTokenizer 实例并缓存
         if lang not in self.cache_moses_tokenizer:
             moses_tokenizer = self.sm.MosesTokenizer(lang=lang)
             self.cache_moses_tokenizer[lang] = moses_tokenizer
+        # 使用缓存的 moses_tokenizer 对象对文本进行分词处理并返回结果
         return self.cache_moses_tokenizer[lang].tokenize(
             text, aggressive_dash_splits=True, return_str=False, escape=True
         )
 
-    # 使用sacremoses进行词汇还原
     def moses_detokenize(self, tokens, lang):
+        # 如果 lang 不在 self.cache_moses_detokenizer 中，则创建一个新的 sm.MosesDetokenizer 实例并缓存
         if lang not in self.cache_moses_detokenizer:
             moses_detokenizer = self.sm.MosesDetokenizer(lang=lang)
             self.cache_moses_detokenizer[lang] = moses_detokenizer
+        # 使用缓存的 moses_detokenizer 对象对 tokens 进行反向处理并返回结果
         return self.cache_moses_detokenizer[lang].detokenize(tokens)
     def bpe(self, token):
-        # 将 token 转换为元组形式，最后一个字符加上 "</w>"
+        # 将输入的token进行BPE处理，生成新的词形
         word = tuple(token[:-1]) + (token[-1] + "</w>",)
-        # 如果 token 已经在缓存中，则直接返回缓存中的结果
+        # 如果token已经被处理过，直接返回缓存中的结果
         if token in self.cache:
             return self.cache[token]
-        # 获取 token 的所有字符对
+        # 获取token中的所有字符对
         pairs = get_pairs(word)
 
-        # 如果没有字符对，则直接返回 token 加上 "</w>"
+        # 如果没有字符对，直接返回token后加上结束符的形式
         if not pairs:
             return token + "</w>"
 
-        # 循环处理字符对
+        # 循环处理字符对，直到无法继续合并
         while True:
-            # 找到当前字符对中频率最低的字符对
+            # 找到优先级最低的字符对
             bigram = min(pairs, key=lambda pair: self.bpe_ranks.get(pair, float("inf")))
-            # 如果当前字符对不在字符对频率字典中，则跳出循环
+            # 如果这个字符对不在BPE词频表中，停止合并
             if bigram not in self.bpe_ranks:
                 break
             first, second = bigram
@@ -220,6 +299,7 @@ class BioGptTokenizer(PreTrainedTokenizer):
                     new_word.extend(word[i:j])
                     i = j
 
+                # 合并找到的字符对
                 if word[i] == first and i < len(word) - 1 and word[i + 1] == second:
                     new_word.append(first + second)
                     i += 2
@@ -228,78 +308,83 @@ class BioGptTokenizer(PreTrainedTokenizer):
                     i += 1
             new_word = tuple(new_word)
             word = new_word
-            # 如果新的 word 长度为 1，则跳出循环
+            # 如果只剩一个词元，停止合并
             if len(word) == 1:
                 break
             else:
                 pairs = get_pairs(word)
-        # 将 word 转换为字符串形式
+        
+        # 将词元列表转换为字符串形式返回
         word = " ".join(word)
-        # 如果 word 是 "\n  </w>"，则替换为 "\n</w>"
+        # 处理特殊情况下的结束符
         if word == "\n  </w>":
             word = "\n</w>"
-        # 将结果存入缓存中
+        # 将处理后的结果缓存起来
         self.cache[token] = word
         return word
 
     def _tokenize(self, text, bypass_tokenizer=False):
         """Returns a tokenized string."""
-        # 如果绕过分词器，则直接按空格分割文本
+        # 根据bypass_tokenizer的值选择是否使用分词器进行处理文本
         if bypass_tokenizer:
             text = text.split()
         else:
-            # 否则使用 moses_tokenize 方法对文本进行分词
             text = self.moses_tokenize(text, self.lang)
 
         split_tokens = []
+        # 对文本中的每个token进行BPE处理并拆分结果
         for token in text:
             if token:
-                # 对每个 token 进行 BPE 处理，并按空格分割后加入结果列表
                 split_tokens.extend(list(self.bpe(token).split(" ")))
 
         return split_tokens
 
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
-        # 使用词汇表将 token 转换为对应的 id
+        # 根据词汇表将token转换为对应的ID，未知token返回未知token的ID
         return self.encoder.get(token, self.encoder.get(self.unk_token))
 
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
-        # 使用词汇表将 id 转换为对应的 token
+        # 根据词汇表将ID转换为对应的token，未知ID返回未知token
         return self.decoder.get(index, self.unk_token)
 
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
-        # 去除 BPE 标记，将 tokens 拼接为字符串
+        # 移除BPE处理过程中的空格和结束符，将tokens拼接成文本
         tokens = [t.replace(" ", "").replace("</w>", " ") for t in tokens]
         tokens = "".join(tokens).split()
-        # 反分词化
+        # 使用Moses库的反分词函数，将tokens还原为文本
         text = self.moses_detokenize(tokens, self.lang)
         return text
 
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    def build_inputs_with_special_tokens(
+        ):
+        # 构建输入序列，添加特殊token以及可能的第二个序列的token
+    def build_model_inputs(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        从一个序列或一对序列构建模型输入，用于序列分类任务，通过连接和添加特殊标记。一个 BioGPT 序列的格式如下：
+        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        adding special tokens. A BioGPT sequence has the following format:
 
-        - 单个序列：`</s> X `
-        - 一对序列：`</s> A </s> B `
+        - single sequence: `</s> X `
+        - pair of sequences: `</s> A </s> B `
 
         Args:
             token_ids_0 (`List[int]`):
-                要添加特殊标记的 ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                第二个序列的 ID 列表，用于序列对。
+                List of IDs to which the special tokens will be added.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: 包含适当特殊标记的 [输入 ID](../glossary#input-ids) 列表。
+            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
+        # If only one sequence provided, return with a single separator token added at the beginning
         if token_ids_1 is None:
             return [self.sep_token_id] + token_ids_0
+        # If two sequences provided, construct the input with a separator token between and at the ends of each sequence
         sep = [self.sep_token_id]
         return sep + token_ids_0 + sep + token_ids_1
 
@@ -307,36 +392,36 @@ class BioGptTokenizer(PreTrainedTokenizer):
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
     ) -> List[int]:
         """
-        从没有添加特殊标记的标记列表中检索序列 ID。当使用 tokenizer 的 `prepare_for_model` 方法添加特殊标记时调用此方法。
+        Retrieve sequence ids from a token list that has no special tokens added. This method is called when adding
+        special tokens using the tokenizer `prepare_for_model` method.
 
         Args:
             token_ids_0 (`List[int]`):
-                ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                第二个序列的 ID 列表，用于序列对。
-            already_has_special_tokens (`bool`, *可选*，默认为 `False`):
-                标记列表是否已经格式化为模型的特殊标记。
+                List of IDs.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
+            already_has_special_tokens (`bool`, *optional*, defaults to `False`):
+                Whether or not the token list is already formatted with special tokens for the model.
 
         Returns:
-            `List[int]`: 一个整数列表，范围为 [0, 1]：1 表示特殊标记，0 表示序列标记。
+            `List[int]`: A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
         """
+        # If tokens already have special tokens, delegate to superclass method
         if already_has_special_tokens:
             return super().get_special_tokens_mask(
                 token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
             )
+        # For sequences without special tokens, return a mask with 1s for special tokens and 0s for sequence tokens
         # no bos used in fairseq
         if token_ids_1 is not None:
             return [1] + ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1))
         return [1] + ([0] * len(token_ids_0))
-
-    def create_token_type_ids_from_sequences(
-        self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A FAIRSEQ
         Transformer sequence pair mask has the following format:
 
-        ```py
+        ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
         ```
@@ -350,21 +435,35 @@ class BioGptTokenizer(PreTrainedTokenizer):
                 Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
         """
         sep = [self.sep_token_id]
 
-        # no bos used in fairseq
-        # 如果 token_ids_1 为 None，则只返回 mask 的第一部分（全为 0）
+        # 如果没有传入第二个序列的 token_ids_1，则只返回第一个部分的 mask（全为 0）
         if token_ids_1 is None:
             return len(token_ids_0 + sep) * [0]
+        # 返回一个由 token_ids_0 和 token_ids_1 组成的 mask，其中 token_ids_0 部分全为 0，token_ids_1 部分全为 1
         return len(token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 检查保存目录是否存在
+        """
+        Save the vocabulary and merges files to the specified directory.
+
+        Args:
+            save_directory (str):
+                Directory path where the vocabulary files will be saved.
+            filename_prefix (str, optional):
+                Prefix to be added to the filenames of vocabulary and merges files.
+
+        Returns:
+            Tuple[str]: Tuple containing the paths to the saved vocabulary and merges files.
+        """
+        # 如果保存目录不存在，则记录错误并返回
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
+
+        # 构造保存的词汇表文件名和合并文件名的路径
         vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
@@ -372,12 +471,12 @@ class BioGptTokenizer(PreTrainedTokenizer):
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["merges_file"]
         )
 
-        # 写入词汇表文件
+        # 将词汇表写入到 JSON 格式的文件中
         with open(vocab_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(self.encoder, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
 
         index = 0
-        # 写入合并文件
+        # 将 BPE token 和其索引写入到合并文件中
         with open(merge_file, "w", encoding="utf-8") as writer:
             for bpe_tokens, token_index in sorted(self.bpe_ranks.items(), key=lambda kv: kv[1]):
                 if index != token_index:
@@ -389,18 +488,26 @@ class BioGptTokenizer(PreTrainedTokenizer):
                 writer.write(" ".join(bpe_tokens) + "\n")
                 index += 1
 
+        # 返回保存的词汇表文件和合并文件的路径
         return vocab_file, merge_file
 
     def __getstate__(self):
-        # 复制对象的状态，将 sm 置为 None
+        """
+        Get the state of the XLMTokenizer object for pickling.
+        """
+        # 复制对象的状态字典，并设置 'sm' 为 None，以便序列化时忽略 'sm'
         state = self.__dict__.copy()
         state["sm"] = None
         return state
 
     def __setstate__(self, d):
-        # 恢复对象的状态
+        """
+        Set the state of the XLMTokenizer object from a dictionary.
+        """
+        # 从字典中恢复对象的状态
         self.__dict__ = d
 
+        # 检查是否安装了 sacremoses 库，如果没有则抛出 ImportError
         try:
             import sacremoses
         except ImportError:
@@ -409,5 +516,6 @@ class BioGptTokenizer(PreTrainedTokenizer):
                 "See https://pypi.org/project/sacremoses/ for installation."
             )
 
+        # 将 sacremoses 模块引入 self.sm
         self.sm = sacremoses
 ```

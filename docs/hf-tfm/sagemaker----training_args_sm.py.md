@@ -1,137 +1,149 @@
-# `.\transformers\sagemaker\training_args_sm.py`
+# `.\sagemaker\training_args_sm.py`
 
-```py
-# 加载必要的库和模块
-import importlib.util
-import json
-import os
-import warnings
-from dataclasses import dataclass, field
-import torch
-# 导入自定义的模块和函数
-from ..training_args import TrainingArguments
-from ..utils import cached_property, is_sagemaker_dp_enabled, logging
+```
+# 导入必要的模块和库
+import importlib.util  # 导入用于动态加载模块的模块
+import json  # 导入处理 JSON 数据的模块
+import os  # 导入与操作系统交互的模块
+import warnings  # 导入用于处理警告的模块
+from dataclasses import dataclass, field  # 导入用于创建数据类的装饰器和字段定义
 
-# 获取logger对象用于记录日志信息
-logger = logging.get_logger(__name__)
+import torch  # 导入 PyTorch 库
 
-# TODO: 重构SageMakerTrainer后应移到`utils`目录中
+from ..training_args import TrainingArguments  # 从上级目录中导入训练参数类
+from ..utils import cached_property, is_sagemaker_dp_enabled, logging  # 从上级目录中导入缓存属性装饰器、SageMaker DP 启用状态检查函数和日志模块
 
-# 检查SageMaker是否支持模型并行训练
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器对象
+
+
+# TODO: 在 SageMakerTrainer 重构后应移动到 `utils` 模块中
+
+
 def is_sagemaker_model_parallel_available():
-    # 从环境变量中获取SMP参数
+    # 从环境变量中获取 SageMaker 的模型并行参数
     smp_options = os.getenv("SM_HP_MP_PARAMETERS", "{}")
     try:
-        # 解析SMP参数并检查是否包含"partitions"字段，该字段是模型并行训练必需的
+        # 解析 JSON 数据并检查是否包含 "partitions" 字段，模型并行需要此字段
         smp_options = json.loads(smp_options)
         if "partitions" not in smp_options:
             return False
     except json.JSONDecodeError:
         return False
 
-    # 从环境变量中获取Sagemaker特定框架参数
+    # 从环境变量中获取 SageMaker 的框架参数
     mpi_options = os.getenv("SM_FRAMEWORK_PARAMS", "{}")
     try:
-        # 解析MPI参数并检查"sagemaker_mpi_enabled"字段
+        # 解析 JSON 数据并检查是否包含 "sagemaker_mpi_enabled" 字段
         mpi_options = json.loads(mpi_options)
         if not mpi_options.get("sagemaker_mpi_enabled", False):
             return False
     except json.JSONDecodeError:
         return False
-    # 最后检查`smdistributed`模块是否存在
+
+    # 最后，检查是否存在 `smdistributed` 模块，以确认 SageMaker 是否支持模型并行
     return importlib.util.find_spec("smdistributed") is not None
 
-# 如果SageMaker支持模型并行训练，则导入相关模块并初始化
-if is_sagemaker_model_parallel_available():
-    import smdistributed.modelparallel.torch as smp
-    smp.init()
 
-# 定义SageMaker训练参数类，继承自TrainingArguments
+# 如果 SageMaker 支持模型并行，则导入相应的模型并行库并进行初始化
+if is_sagemaker_model_parallel_available():
+    import smdistributed.modelparallel.torch as smp  # 导入 SageMaker 模型并行的 Torch 扩展库
+
+    smp.init()  # 初始化 SageMaker 模型并行
+
+
 @dataclass
 class SageMakerTrainingArguments(TrainingArguments):
-    # 定义mp_parameters字段，默认为空，用于SageMaker启动器发送mp特定参数，SageMakerTrainer中不受影响
     mp_parameters: str = field(
         default="",
         metadata={"help": "Used by the SageMaker launcher to send mp-specific args. Ignored in SageMakerTrainer"},
     )
 
-    # 后初始化函数
     def __post_init__(self):
         super().__post_init__()
-        # 发出警告，提示`SageMakerTrainingArguments`已过时，并将在Transformers的v5版本中移除，建议使用`TrainingArguments`代替
+        # 发出警告，提示 `SageMakerTrainingArguments` 将在 Transformers v5 中被移除，建议使用 `TrainingArguments` 替代
         warnings.warn(
             "`SageMakerTrainingArguments` is deprecated and will be removed in v5 of Transformers. You can use "
             "`TrainingArguments` instead.",
             FutureWarning,
         )
 
-    # 装饰器，将方法转换为属性，避免重复计算
     @cached_property
-    # 设置设备，返回 torch.device
+    # 设置设备
     def _setup_devices(self) -> "torch.device":
-        # 输出日志信息
+        # 打印日志信息
         logger.info("PyTorch: setting up devices")
-        # 检查是否分布式训练环境并且分布式进程组已经初始化，但是 local_rank == -1，提示用户使用 Torch DDP 启动脚本
+        # 检查是否启用了torch分布式，并且本地进程的local_rank为-1
         if torch.distributed.is_available() and torch.distributed.is_initialized() and self.local_rank == -1:
+            # 打印警告信息
             logger.warning(
                 "torch.distributed process group is initialized, but local_rank == -1. "
                 "In order to use Torch DDP, launch your script with `python -m torch.distributed.launch"
             )
-        # 如果设置了 no_cuda，则使用 CPU 设备
+        # 如果禁用了CUDA
         if self.no_cuda:
+            # 将设备设置为CPU
             device = torch.device("cpu")
+            # GPU数量设为0
             self._n_gpu = 0
-        # 如果 SageMaker Model Parallel 可用，则使用当前进程的 local_rank 初始化设备
+        # 如果支持SageMaker模型并行
         elif is_sagemaker_model_parallel_available():
             local_rank = smp.local_rank()
             device = torch.device("cuda", local_rank)
+            # GPU数量设为1
             self._n_gpu = 1
-        # 如果启用了 SageMaker Data Parallel，则初始化进程组并使用环境变量 "SMDATAPARALLEL_LOCAL_RANK" 的值作为 local_rank，初始化设备
+        # 如果启用了SageMaker分布式训练
         elif is_sagemaker_dp_enabled():
+            # 导入SageMaker分布式训练模块
             import smdistributed.dataparallel.torch.torch_smddp  # noqa: F401
-
+            # 初始化进程组
             torch.distributed.init_process_group(backend="smddp", timeout=self.ddp_timeout_delta)
             self.local_rank = int(os.getenv("SMDATAPARALLEL_LOCAL_RANK"))
             device = torch.device("cuda", self.local_rank)
             self._n_gpu = 1
-        # 如果 local_rank == -1，则根据 CUDA 是否可用，选择设备
+        # 如果local_rank为-1
         elif self.local_rank == -1:
-            # 如果有多个 GPU，则使用 nn.DataParallel
-            # 如果只想使用特定的一些 GPU，则使用 `CUDA_VISIBLE_DEVICES=0`
-            # 显式地将 CUDA 设置为第一个（索引 0）CUDA 设备，否则 `set_device` 将会触发设备索引缺失的错误。索引 0 考虑了环境中可用的 GPU，因此 `CUDA_VISIBLE_DEVICES=1,2` 与 `cuda:0` 将使用环境中的第一个 GPU，即 GPU＃1
+            # 如果n_gpu大于1，将使用nn.DataParallel。
+            # 如果只想使用指定的GPU子集，可以使用`CUDA_VISIBLE_DEVICES=0`
+            # 显式设置CUDA到第一个（索引0）CUDA设备，否则`set_device`会触发缺少设备索引的错误。
+            # 索引0考虑了环境中可用的GPU，因此`CUDA_VISIBLE_DEVICES=1,2`与`cuda:0`将使用该环境中的第一个GPU，即GPU#1
             device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-            # 有时在我们到达这里之前还没有运行完 postinit 中的代码，所以只需检查是否不是默认值
+            # 有时在此之前尚未运行postinit中的行，因此只需检查我们不是默认值。
             self._n_gpu = torch.cuda.device_count()
-        # 在这里我们使用 torch.distributed
-        # 初始化分布式后端，该后端将负责同步节点/ GPU
         else:
+            # 在这里，我们将使用torch分布式。
+            # 初始化分布式后端，负责同步节点/GPU
             if not torch.distributed.is_initialized():
                 torch.distributed.init_process_group(backend="nccl", timeout=self.ddp_timeout_delta)
             device = torch.device("cuda", self.local_rank)
             self._n_gpu = 1
 
-        # 如果设备类���是 "cuda"，则设置当前 CUDA 设备
+        # 如果设备类型为cuda
         if device.type == "cuda":
+            # 设置当前使用的设备
             torch.cuda.set_device(device)
 
         # 返回设备
         return device
 
-    # 获取世界大小，如果可用 SageMaker Model Parallel，则返回 dp_size()，否则返回基类的 world_size
     @property
+    # 获取world_size属性
     def world_size(self):
+        # 如果支持SageMaker模型并行
         if is_sagemaker_model_parallel_available():
+            # 返回并行大小
             return smp.dp_size()
 
+        # 返回基类的world_size
         return super().world_size
 
-    # 是否将模型放置在设备上，如果可用 SageMaker Model Parallel，则返回 False，否则返回 True
     @property
+    # 获取place_model_on_device属性
     def place_model_on_device(self):
+        # 如果不支持SageMaker模型并行
         return not is_sagemaker_model_parallel_available()
 
-    # 梯度累积时是否不同步
     @property
+    # 获取_no_sync_in_gradient_accumulation属性
     def _no_sync_in_gradient_accumulation(self):
         return False
 ```

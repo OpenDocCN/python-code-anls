@@ -1,119 +1,109 @@
-# `.\transformers\models\pvt\image_processing_pvt.py`
+# `.\models\pvt\image_processing_pvt.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 版权所有 © 2023 HuggingFace Inc. 团队。保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本（“许可证”）获得许可;
-# 除非符合许可证，否则不得使用此文件。
-# 您可以在以下网址获取许可证副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则软件
-# 根据许可证分发是按“原样”基础分发的，
-# 没有任何明示或暗示的保证或条件。
-# 有关特定语言的权限，请参阅许可证。
-"""Pvt 的图像处理器类。"""
+```
+# 导入所需的模块和类
+from typing import Dict, List, Optional, Union  # 导入类型提示模块
 
-from typing import Dict, List, Optional, Union  # 导入类型提示
+import numpy as np  # 导入NumPy库
 
-import numpy as np  # 导入 NumPy 库
-
-from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict  # 导入图像处理相关工具
-from ...image_transforms import resize, to_channel_dimension_format  # 导入图像变换相关函数
-from ...image_utils import (  # 导入图像处理相关工具函数
-    IMAGENET_DEFAULT_MEAN,  # 导入 ImageNet 默认均值
-    IMAGENET_DEFAULT_STD,  # 导入 ImageNet 默认标准差
-    ChannelDimension,  # 导入通道维度枚举
-    ImageInput,  # 导入图像输入类型
-    PILImageResampling,  # 导入 PIL 图像重采样枚举
-    infer_channel_dimension_format,  # 推断通道维度格式函数
-    is_scaled_image,  # 判断是否为缩放图像函数
-    make_list_of_images,  # 创建图像列表函数
-    to_numpy_array,  # 将图像转换为 NumPy 数组函数
-    valid_images,  # 判断图像是否有效函数
+# 导入图像处理相关的工具和函数
+from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
+from ...image_transforms import resize, to_channel_dimension_format
+from ...image_utils import (
+    IMAGENET_DEFAULT_MEAN,  # 导入常量：ImageNet图像的默认均值
+    IMAGENET_DEFAULT_STD,   # 导入常量：ImageNet图像的默认标准差
+    ChannelDimension,       # 导入枚举类型：通道维度
+    ImageInput,             # 导入类型别名：图像输入
+    PILImageResampling,     # 导入枚举类型：PIL图像的重采样方法
+    infer_channel_dimension_format,  # 导入函数：推断通道维度格式
+    is_scaled_image,        # 导入函数：判断图像是否被缩放过
+    make_list_of_images,    # 导入函数：创建图像列表
+    to_numpy_array,         # 导入函数：将图像转换为NumPy数组
+    valid_images,           # 导入函数：验证图像的有效性
+    validate_kwargs,        # 导入函数：验证关键字参数
+    validate_preprocess_arguments,  # 导入函数：验证预处理参数
 )
-from ...utils import TensorType, logging  # 导入工具函数、模块
+from ...utils import TensorType, logging  # 导入类型别名和日志记录模块
 
-logger = logging.get_logger(__name__)  # 获取日志记录器
-
-
-class PvtImageProcessor(BaseImageProcessor):  # 定义 PvtImageProcessor 类，继承自 BaseImageProcessor 类
-    r"""
-    构造一个 PVT 图像处理器。
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
     """
     Args:
         do_resize (`bool`, *optional*, defaults to `True`):
-            是否将图像的（高度，宽度）尺寸调整为指定的 `(size["height"], size["width"])`。可以被 `preprocess` 方法中的 `do_resize` 参数覆盖。
+            Whether to resize the image's (height, width) dimensions to the specified `(size["height"],
+            size["width"])`. Can be overridden by the `do_resize` parameter in the `preprocess` method.
         size (`dict`, *optional*, defaults to `{"height": 224, "width": 224}`):
-            调整大小后输出图像的尺寸。可以被 `preprocess` 方法中的 `size` 参数覆盖。
+            Size of the output image after resizing. Can be overridden by the `size` parameter in the `preprocess`
+            method.
         resample (`PILImageResampling`, *optional*, defaults to `Resampling.BILINEAR`):
-            在调整图像大小时要使用的重采样滤波器。可以被 `preprocess` 方法中的 `resample` 参数覆盖。
+            Resampling filter to use if resizing the image. Can be overridden by the `resample` parameter in the
+            `preprocess` method.
         do_rescale (`bool`, *optional*, defaults to `True`):
-            是否按指定比例 `rescale_factor` 调整图像的尺度。可以被 `preprocess` 方法中的 `do_rescale` 参数覆盖。
+            Whether to rescale the image by the specified scale `rescale_factor`. Can be overridden by the `do_rescale`
+            parameter in the `preprocess` method.
         rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
-            如果重新调整图像尺寸，则要使用的比例因子。可以被 `preprocess` 方法中的 `rescale_factor` 参数覆盖。
+            Scale factor to use if rescaling the image. Can be overridden by the `rescale_factor` parameter in the
+            `preprocess` method.
         do_normalize (`bool`, *optional*, defaults to `True`):
-            是否对图像进行归一化。可以被 `preprocess` 方法中的 `do_normalize` 参数覆盖。
+            Whether to normalize the image. Can be overridden by the `do_normalize` parameter in the `preprocess`
+            method.
         image_mean (`float` or `List[float]`, *optional*, defaults to `IMAGENET_DEFAULT_MEAN`):
-            如果标准化图像，则要使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以被 `preprocess` 方法中的 `image_mean` 参数覆盖。
+            Mean to use if normalizing the image. This is a float or list of floats the length of the number of
+            channels in the image. Can be overridden by the `image_mean` parameter in the `preprocess` method.
         image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_DEFAULT_STD`):
-            如果标准化图像，则要使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以被 `preprocess` 方法中的 `image_std` 参数覆盖。
+            Standard deviation to use if normalizing the image. This is a float or list of floats the length of the
+            number of channels in the image. Can be overridden by the `image_std` parameter in the `preprocess` method.
     """
-
-    model_input_names = ["pixel_values"]
-
+    # 定义一个图像处理器类，继承自父类，用于处理图像的预处理操作
     def __init__(
         self,
-        do_resize: bool = True,
-        size: Optional[Dict[str, int]] = None,
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        do_rescale: bool = True,
-        rescale_factor: Union[int, float] = 1 / 255,
-        do_normalize: bool = True,
-        image_mean: Optional[Union[float, List[float]] = None,
-        image_std: Optional[Union[float, List[float]] = None,
         **kwargs,
-    # 确定输入参数和返回值类型为 None
     ) -> None:
-        # 调用父类的初始化方法，传递其他关键字参数
+        # 调用父类初始化方法，传入所有关键字参数
         super().__init__(**kwargs)
-        # 如果 size 不为 None，则使用传入的 size，否则使用默认大小 {"height": 224, "width": 224}
+        # 确定图像大小，若未指定则使用默认大小 {"height": 224, "width": 224}
         size = size if size is not None else {"height": 224, "width": 224}
-        # 获取 size 的大小字典
+        # 调用辅助函数，将 size 转换为规范化的尺寸字典
         size = get_size_dict(size)
-        # 是否进行调整大小的标志
+        # 是否进行图像大小调整的标志位
         self.do_resize = do_resize
-        # 是否进行重新缩放的标志
+        # 是否进行图像尺度缩放的标志位
         self.do_rescale = do_rescale
-        # 是否进行标准化的标志
+        # 是否进行图像归一化的标志位
         self.do_normalize = do_normalize
-        # 存储大小字典
+        # 存储图像大小的字典
         self.size = size
-        # 重新采样方法
+        # 图像调整使用的重采样方法
         self.resample = resample
-        # 重新缩放因子
+        # 图像尺度缩放的因子
         self.rescale_factor = rescale_factor
-        # 图像均值，如果为 None 则使用默认值 IMAGENET_DEFAULT_MEAN
+        # 图像均值，若未指定则使用默认的 IMAGENET_DEFAULT_MEAN
         self.image_mean = image_mean if image_mean is not None else IMAGENET_DEFAULT_MEAN
-        # 图像标准差，如果为 None 则使用默认值 IMAGENET_DEFAULT_STD
+        # 图像标准差，若未指定则使用默认的 IMAGENET_DEFAULT_STD
         self.image_std = image_std if image_std is not None else IMAGENET_DEFAULT_STD
-
-    # 从 transformers.models.vit.image_processing_vit.ViTImageProcessor.resize 复制而来
+        # 存储有效的处理器关键字列表
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
+    
+    # 从 transformers.models.vit.image_processing_vit.ViTImageProcessor.resize 复制而来的方法
     def resize(
-        # 输入图像的数组
+        self,
         image: np.ndarray,
-        # 目标大小的字典
         size: Dict[str, int],
-        # 重新采样方法，默认为双线性插值
         resample: PILImageResampling = PILImageResampling.BILINEAR,
-        # 数据格式，默认为 None
         data_format: Optional[Union[str, ChannelDimension]] = None,
-        # 输入数据格式，默认为 None
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        # 其他关键字参数
         **kwargs,
     ) -> np.ndarray:
         """
@@ -142,14 +132,10 @@ class PvtImageProcessor(BaseImageProcessor):  # 定义 PvtImageProcessor 类，�
         Returns:
             `np.ndarray`: The resized image.
         """
-        # 将 `size` 参数转换为标准格式的大小字典
-        size = get_size_dict(size)
-        # 检查 `size` 字典是否包含必要的键，如果不包含则抛出 ValueError 异常
+        size = get_size_dict(size)  # 获取调整后的尺寸字典
         if "height" not in size or "width" not in size:
             raise ValueError(f"The `size` dictionary must contain the keys `height` and `width`. Got {size.keys()}")
-        # 提取目标尺寸
-        output_size = (size["height"], size["width"])
-        # 调用 resize 函数对图像进行调整大小，并返回结果
+        output_size = (size["height"], size["width"])  # 设置输出图像的高度和宽度
         return resize(
             image,
             size=output_size,
@@ -174,4 +160,5 @@ class PvtImageProcessor(BaseImageProcessor):  # 定义 PvtImageProcessor 类，�
         data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
+    ):
 ```

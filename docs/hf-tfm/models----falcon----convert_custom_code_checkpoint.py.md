@@ -1,9 +1,10 @@
 # `.\models\falcon\convert_custom_code_checkpoint.py`
 
-```py
-import json  # 导入 json 模块，用于处理 JSON 格式的数据
-from argparse import ArgumentParser  # 从 argparse 模块中导入 ArgumentParser 类，用于解析命令行参数
-from pathlib import Path  # 从 pathlib 模块中导入 Path 类，用于处理文件路径
+```
+# 导入所需的模块
+import json  # 导入用于处理 JSON 格式的模块
+from argparse import ArgumentParser  # 导入用于解析命令行参数的模块中的 ArgumentParser 类
+from pathlib import Path  # 导入用于处理文件路径的模块中的 Path 类
 
 """
 This script converts Falcon custom code checkpoints to modern Falcon checkpoints that use code in the Transformers
@@ -11,69 +12,93 @@ library. After conversion, performance (especially for generation) should improv
 without needing trust_remote_code=True.
 """
 
+# 如果当前脚本作为主程序运行
 if __name__ == "__main__":
-    parser = ArgumentParser()  # 创建 ArgumentParser 实例，用于解析命令行参数
+    # 创建参数解析器
+    parser = ArgumentParser()
+    # 添加命令行参数：--checkpoint_dir，类型为路径，必需参数，用于指定包含自定义代码检查点的目录
     parser.add_argument(
         "--checkpoint_dir",
         type=Path,
         required=True,
         help="Directory containing a custom code checkpoint to convert to a modern Falcon checkpoint.",
-    )  # 添加命令行参数 "--checkpoint_dir"，表示包含自定义代码检查点的目录
-    args = parser.parse_args()  # 解析命令行参数并存储到 args 变量中
+    )
+    # 解析命令行参数
+    args = parser.parse_args()
 
-    if not args.checkpoint_dir.is_dir():  # 检查指定的目录是否存在
-        raise ValueError("--checkpoint_dir argument should be a directory!")  # 抛出错误提示
+    # 检查指定的目录是否存在
+    if not args.checkpoint_dir.is_dir():
+        # 如果不存在，抛出数值错误异常
+        raise ValueError("--checkpoint_dir argument should be a directory!")
 
+    # 检查模型目录是否包含 configuration_RW.py 和 modelling_RW.py 文件
     if (
-        not (args.checkpoint_dir / "configuration_RW.py").is_file()  # 检查是否存在 "configuration_RW.py" 文件
-        or not (args.checkpoint_dir / "modelling_RW.py").is_file()  # 检查是否存在 "modelling_RW.py" 文件
+        not (args.checkpoint_dir / "configuration_RW.py").is_file()
+        or not (args.checkpoint_dir / "modelling_RW.py").is_file()
     ):
+        # 如果不包含，抛出数值错误异常
         raise ValueError(
             "The model directory should contain configuration_RW.py and modelling_RW.py files! Are you sure this is a custom code checkpoint?"
-        )  # 如果缺少指定的文件，则抛出错误提示
+        )
+    
+    # 删除模型目录下的 configuration_RW.py 和 modelling_RW.py 文件
+    (args.checkpoint_dir / "configuration_RW.py").unlink()
+    (args.checkpoint_dir / "modelling_RW.py").unlink()
 
-    (args.checkpoint_dir / "configuration_RW.py").unlink()  # 删除指定文件
-    (args.checkpoint_dir / "modelling_RW.py").unlink()  # 删除指定文件
+    # 读取并修改配置文件 config.json
+    config = args.checkpoint_dir / "config.json"
+    text = config.read_text()
+    # 替换 JSON 文本中的特定字符串
+    text = text.replace("RWForCausalLM", "FalconForCausalLM")
+    text = text.replace("RefinedWebModel", "falcon")
+    text = text.replace("RefinedWeb", "falcon")
+    # 解析 JSON 文本为 Python 字典
+    json_config = json.loads(text)
+    # 删除字典中的 auto_map 键值对
+    del json_config["auto_map"]
 
-    config = args.checkpoint_dir / "config.json"  # 定义配置文件路径
-    text = config.read_text()  # 读取配置文件内容
-    text = text.replace("RWForCausalLM", "FalconForCausalLM")  # 替换文本中的内容
-    text = text.replace("RefinedWebModel", "falcon")  # 替换文本中的内容
-    text = text.replace("RefinedWeb", "falcon")  # 替换文本中的内容
-    json_config = json.loads(text)  # 将文本解析为 JSON 格式
-    del json_config["auto_map"]  # 删除指定的键值对
-
-    if "n_head" in json_config:  # 检查指定键是否存在于 JSON 配置中
-        json_config["num_attention_heads"] = json_config.pop("n_head")  # 重命名键名
-    if "n_layer" in json_config:  # 检查指定键是否存在于 JSON 配置中
-        json_config["num_hidden_layers"] = json_config.pop("n_layer")  # 重命名键名
-    if "n_head_kv" in json_config:  # 检查指定键是否存在于 JSON 配置中
-        json_config["num_kv_heads"] = json_config.pop("n_head_kv")  # 重命名键名
-        json_config["new_decoder_architecture"] = True  # 添加新的键值对
+    # 根据键名替换字典中的键值对
+    if "n_head" in json_config:
+        json_config["num_attention_heads"] = json_config.pop("n_head")
+    if "n_layer" in json_config:
+        json_config["num_hidden_layers"] = json_config.pop("n_layer")
+    if "n_head_kv" in json_config:
+        json_config["num_kv_heads"] = json_config.pop("n_head_kv")
+        json_config["new_decoder_architecture"] = True
     else:
-        json_config["new_decoder_architecture"] = False  # 添加新的键值对
-    bos_token_id = json_config.get("bos_token_id", 1)  # 获取指定键的值，如果键不存在则使用默认值
-    eos_token_id = json_config.get("eos_token_id", 2)  # 获取指定键的值，如果键不存在则使用默认值
-    config.unlink()  # 删除配置文件
-    config.write_text(json.dumps(json_config, indent=2, sort_keys=True))  # 将修改后的 JSON 格式写入配置文件
+        json_config["new_decoder_architecture"] = False
+    
+    # 获取字典中的 bos_token_id 和 eos_token_id，如果不存在默认为 1 和 2
+    bos_token_id = json_config.get("bos_token_id", 1)
+    eos_token_id = json_config.get("eos_token_id", 2)
+    
+    # 删除并重新写入修改后的配置文件 config.json
+    config.unlink()
+    config.write_text(json.dumps(json_config, indent=2, sort_keys=True))
 
-    tokenizer_config = args.checkpoint_dir / "tokenizer_config.json"  # 定义 tokenizer 配置文件路径
-    if tokenizer_config.is_file():  # 检查文件是否存在
-        text = tokenizer_config.read_text()  # 读取文件内容
-        json_config = json.loads(text)  # 将文本解析为 JSON 格式
-        if json_config["tokenizer_class"] == "PreTrainedTokenizerFast":  # 检查指定键的值是否符合预期
-            json_config["model_input_names"] = ["input_ids", "attention_mask"]  # 添加新的键值对
-            tokenizer_config.unlink()  # 删除文件
-            tokenizer_config.write_text(json.dumps(json_config, indent=2, sort_keys=True))  # 将修改后的 JSON 格式写入文件
+    # 处理 tokenizer_config.json 文件
+    tokenizer_config = args.checkpoint_dir / "tokenizer_config.json"
+    if tokenizer_config.is_file():
+        text = tokenizer_config.read_text()
+        json_config = json.loads(text)
+        # 如果 tokenizer_class 是 PreTrainedTokenizerFast，则修改 model_input_names
+        if json_config["tokenizer_class"] == "PreTrainedTokenizerFast":
+            json_config["model_input_names"] = ["input_ids", "attention_mask"]
+            # 删除并重新写入修改后的 tokenizer_config.json
+            tokenizer_config.unlink()
+            tokenizer_config.write_text(json.dumps(json_config, indent=2, sort_keys=True))
 
-    generation_config_path = args.checkpoint_dir / "generation_config.json"  # 定义生成配置文件路径
+    # 处理 generation_config.json 文件
+    generation_config_path = args.checkpoint_dir / "generation_config.json"
+    # 创建要写入的字典
     generation_dict = {
         "_from_model_config": True,
         "bos_token_id": bos_token_id,
         "eos_token_id": eos_token_id,
         "transformers_version": "4.33.0.dev0",
-    }  # 创建新的字典
-    generation_config_path.write_text(json.dumps(generation_dict, indent=2, sort_keys=True))  # 将生成配置写入文件
-    # 打印消息，提示操作完成，建议用户确认新的检查点是否符合预期
+    }
+    # 将生成配置写入 generation_config.json
+    generation_config_path.write_text(json.dumps(generation_dict, indent=2, sort_keys=True))
+    # 打印消息到标准输出，提示操作完成并建议用户验证新的检查点是否符合预期。
     print("Done! Please double-check that the new checkpoint works as expected.")
 ```

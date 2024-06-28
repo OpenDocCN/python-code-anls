@@ -1,7 +1,6 @@
-# `.\transformers\models\roformer\convert_roformer_original_tf_checkpoint_to_pytorch.py`
+# `.\models\roformer\convert_roformer_original_tf_checkpoint_to_pytorch.py`
 
-```py
-# 该代码实现了将 TensorFlow 预训练的 RoFormer 模型权重转换为 PyTorch 模型
+```
 # coding=utf-8
 # Copyright 2021 The HuggingFace Inc. team. All rights reserved.
 #
@@ -19,36 +18,37 @@
 """Convert RoFormer checkpoint."""
 
 
-import argparse # 导入命令行参数解析库
+import argparse  # 导入解析命令行参数的模块
 
-import torch # 导入 PyTorch
+import torch  # 导入 PyTorch 深度学习框架
 
-from transformers import RoFormerConfig, RoFormerForMaskedLM, load_tf_weights_in_roformer # 从 transformers 库导入相关类和函数
-from transformers.utils import logging # 从 transformers 库导入日志记录工具
+from transformers import RoFormerConfig, RoFormerForMaskedLM, load_tf_weights_in_roformer  # 导入 RoFormer 模型相关的类和函数
+from transformers.utils import logging  # 导入日志记录模块
 
 
-logging.set_verbosity_info() # 设置日志级别为信息级别
+logging.set_verbosity_info()  # 设置日志输出级别为 info
 
 
 def convert_tf_checkpoint_to_pytorch(tf_checkpoint_path, bert_config_file, pytorch_dump_path):
     # 初始化 PyTorch 模型
-    config = RoFormerConfig.from_json_file(bert_config_file) # 从 JSON 文件中读取 RoFormer 模型配置
-    print(f"Building PyTorch model from configuration: {config}") # 打印正在构建的模型配置
-    model = RoFormerForMaskedLM(config) # 创建 RoFormerForMaskedLM 模型
+    config = RoFormerConfig.from_json_file(bert_config_file)
+    print(f"Building PyTorch model from configuration: {config}")  # 打印配置信息
+    model = RoFormerForMaskedLM(config)  # 基于配置构建 RoFormer 的 Masked LM 模型
 
-    # 从 TensorFlow 检查点加载权重
-    load_tf_weights_in_roformer(model, config, tf_checkpoint_path) # 将 TensorFlow 检查点中的权重加载到 PyTorch 模型中
+    # 从 TensorFlow checkpoint 加载权重
+    load_tf_weights_in_roformer(model, config, tf_checkpoint_path)
 
     # 保存 PyTorch 模型
-    print(f"Save PyTorch model to {pytorch_dump_path}") # 打印正在保存模型的路径
-    torch.save(model.state_dict(), pytorch_dump_path, _use_new_zipfile_serialization=False) # 保存 PyTorch 模型权重
+    print(f"Save PyTorch model to {pytorch_dump_path}")
+    torch.save(model.state_dict(), pytorch_dump_path, _use_new_zipfile_serialization=False)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser() # 创建命令行参数解析器
+    parser = argparse.ArgumentParser()  # 创建参数解析器
+
     # 必需参数
     parser.add_argument(
-        "--tf_checkpoint_path", default=None, type=str, required=True, help="Path to the TensorFlow checkpoint path." # 指定 TensorFlow 检查点路径
+        "--tf_checkpoint_path", default=None, type=str, required=True, help="Path to the TensorFlow checkpoint path."
     )
     parser.add_argument(
         "--bert_config_file",
@@ -58,11 +58,12 @@ if __name__ == "__main__":
         help=(
             "The config json file corresponding to the pre-trained BERT model. \n"
             "This specifies the model architecture."
-        ), # 指定 BERT 模型配置文件路径
+        ),
     )
     parser.add_argument(
-        "--pytorch_dump_path", default=None, type=str, required=True, help="Path to the output PyTorch model." # 指定 PyTorch 模型保存路径
+        "--pytorch_dump_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
     )
-    args = parser.parse_args() # 解析命令行参数
-    convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.bert_config_file, args.pytorch_dump_path) # 调用转换函数
+
+    args = parser.parse_args()  # 解析命令行参数
+    convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.bert_config_file, args.pytorch_dump_path)  # 执行转换操作
 ```

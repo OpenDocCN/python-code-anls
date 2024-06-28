@@ -1,35 +1,20 @@
-# `.\transformers\models\lxmert\modeling_lxmert.py`
+# `.\models\lxmert\modeling_lxmert.py`
 
-```py
-# coding=utf-8
-# 版权声明
-# Copyright 2018 Hao Tan, Mohit Bansal, and the HuggingFace team
-# 
-# 根据 Apache 许可证版本 2.0 使用本文件，除非您遵守许可证规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本
-# 
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 
-# 除非适用法律要求或书面同意，否则本软件按"原样"分发，不提供任何形式的明示或暗示担保或条件。
-# 请参阅许可证了解特定语言的管理权限和限制。
-""" PyTorch LXMERT model."""
-
+```
 # 导入所需的库和模块
-import math
-import os
-import warnings
-from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, Union
+import math  # 导入数学函数库
+import os  # 导入操作系统功能库
+import warnings  # 导入警告处理库
+from dataclasses import dataclass  # 导入数据类装饰器
+from typing import Dict, Optional, Tuple, Union  # 导入类型提示相关库
 
-# 导入 PyTorch 库
-import torch
-from torch import nn
-from torch.nn import CrossEntropyLoss, SmoothL1Loss
+import torch  # 导入PyTorch库
+from torch import nn  # 导入神经网络模块
+from torch.nn import CrossEntropyLoss, SmoothL1Loss  # 导入交叉熵损失和平滑L1损失
 
-# 导入模型相关的工具和配置
-from ...activations import ACT2FN, gelu
-from ...modeling_utils import PreTrainedModel
-from ...utils import (
+from ...activations import ACT2FN, gelu  # 导入激活函数和GELU激活函数
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型基类
+from ...utils import (  # 导入工具函数和类
     ModelOutput,
     add_code_sample_docstrings,
     add_start_docstrings,
@@ -37,75 +22,145 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-from .configuration_lxmert import LxmertConfig
+from .configuration_lxmert import LxmertConfig  # 导入LXMERT配置类
 
-# 获取日志记录器
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
-# 文档中使用的模型检查点和配置文件
-_CHECKPOINT_FOR_DOC = "unc-nlp/lxmert-base-uncased"
-_CONFIG_FOR_DOC = "LxmertConfig"
+# 文档化相关常量
+_CHECKPOINT_FOR_DOC = "unc-nlp/lxmert-base-uncased"  # 预训练模型的检查点
+_CONFIG_FOR_DOC = "LxmertConfig"  # LXMERT模型配置信息
 
-# 预训练模型的存档列表
+# 预训练模型存档列表
 LXMERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
-    "unc-nlp/lxmert-base-uncased",
+    "unc-nlp/lxmert-base-uncased",  # LXMERT基础模型存档
 ]
 
-# GeLU 激活函数的定义
+
 class GeLU(nn.Module):
+    """
+    实现Gaussian Error Linear Unit (GELU)激活函数的PyTorch模块。
+    """
+
     def __init__(self):
         super().__init__()
 
     def forward(self, x):
+        """
+        对输入张量应用GELU激活函数。
+
+        Args:
+            x (torch.Tensor): 输入张量
+
+        Returns:
+            torch.Tensor: 经过GELU激活函数后的张量
+        """
         return gelu(x)
 
-# LxmertModelOutput 类的数据结构定义，包含语言、视觉和跨模态编码器的最后隐藏状态、池化输出以及注意力概率。
+
 @dataclass
 class LxmertModelOutput(ModelOutput):
     """
-    Lxmert's outputs that contain the last hidden states, pooled outputs, and attention probabilities for the language,
-    visual, and, cross-modality encoders. (note: the visual encoder in Lxmert is referred to as the "relation-ship"
-    encoder")
-    Args:
-        language_output (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            语言编码器最后一层的隐藏状态序列。
-        vision_output (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            视觉编码器最后一层的隐藏状态序列。
-        pooled_output (`torch.FloatTensor` of shape `(batch_size, hidden_size)`):
-            序列第一个标记（分类，CLS标记）的最后一层隐藏状态，经过一个线性层和一个Tanh激活函数进一步处理。
-        language_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            元组，包含一个输入特征的`torch.FloatTensor`（每个交叉模态层的输出也是一个）的形状为`(batch_size, sequence_length, hidden_size)`。
-        vision_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            元组，包含一个输入特征的`torch.FloatTensor`（每个交叉模态层的输出也是一个）的形状为`(batch_size, sequence_length, hidden_size)`。
-        language_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组，包含每个层的`torch.FloatTensor`（每个头的一个）的形状为`(batch_size, num_heads, sequence_length, sequence_length)`。注意力softmax之后的注意力权重，用于在自注意力头中计算加权平均值。
-        vision_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组，包含每个层的`torch.FloatTensor`（每个头的一个）的形状为`(batch_size, num_heads, sequence_length, sequence_length)`。注意力softmax之后的注意力权重，用于在自注意力头中计算加权平均值。
-        cross_encoder_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组，包含每个层的`torch.FloatTensor`（每个头的一个）的形状为`(batch_size, num_heads, sequence_length, sequence_length)`。注意力softmax之后的注意力权重，用于在自注意力头中计算加权平均值。
+    LXMERT模型的输出，包含语言编码器、视觉编码器和跨模态编码器的最后隐藏状态、汇总输出和注意力概率。
+    （注意：在LXMERT中，视觉编码器称为“关系-语义”编码器）
     """
 
+    # 继承自ModelOutput，不需要额外的字段
+    pass  # 无需额外的字段声明，直接继承父类的字段和方法
+    # 定义函数的参数和它们的类型注释，指定了每个参数的数据类型和形状
+    
+    Args:
+        language_output (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
+            最后一层语言编码器的隐藏状态序列。
+        vision_output (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
+            最后一层视觉编码器的隐藏状态序列。
+        pooled_output (`torch.FloatTensor` of shape `(batch_size, hidden_size)`):
+            序列中第一个令牌（分类、CLS令牌）的最后一层隐藏状态，通过一个线性层和Tanh激活函数进一步处理。
+        language_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            语言编码器的隐藏状态元组，形状为 `(batch_size, sequence_length, hidden_size)`。
+        vision_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            视觉编码器的隐藏状态元组，形状为 `(batch_size, sequence_length, hidden_size)`。
+        language_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            注意力权重元组，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，经过注意力softmax后得到，用于计算自注意力头中的加权平均值。
+        vision_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            注意力权重元组，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，经过注意力softmax后得到，用于计算自注意力头中的加权平均值。
+        cross_encoder_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            注意力权重元组，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，经过注意力softmax后得到，用于计算交叉编码器注意力头中的加权平均值。
+    """
+    
     language_output: Optional[torch.FloatTensor] = None
     vision_output: Optional[torch.FloatTensor] = None
     pooled_output: Optional[torch.FloatTensor] = None
     language_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
     vision_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的元组变量，用于存储语言注意力信息
+    # 声明一个可选的类型为 Tuple[torch.FloatTensor] 的变量 language_attentions，并初始化为 None
     language_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的元组变量，用于存储视觉注意力信息
+    
+    # 声明一个可选的类型为 Tuple[torch.FloatTensor] 的变量 vision_attentions，并初始化为 None
     vision_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的元组变量，用于存储交叉编码器的注意力信息
+    
+    # 声明一个可选的类型为 Tuple[torch.FloatTensor] 的变量 cross_encoder_attentions，并初始化为 None
     cross_encoder_attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 基于dataclass装饰器创建一个名为LxmertForQuestionAnsweringOutput的类
+# 定义 LxmertForQuestionAnsweringOutput 类，用于存储 LXMERT 模型问题回答的输出结果
+@dataclass
 class LxmertForQuestionAnsweringOutput(ModelOutput):
     """
-    Output type of [`LxmertForQuestionAnswering`].
+    LxmertForQuestionAnswering 的输出类型。
+
+    Args:
+        loss (*optional*, 当提供 `labels` 时返回，`torch.FloatTensor`，形状为 `(1,)`):
+            总损失，包括掩码语言建模损失和下一个序列预测（分类）损失的和。
+        question_answering_score (`torch.FloatTensor`，形状为 `(batch_size, n_qa_answers)`，*optional*):
+            问题回答目标的预测分数（分类）。
+        language_hidden_states (`tuple(torch.FloatTensor)`，*optional*，当传递 `output_hidden_states=True` 或者 `config.output_hidden_states=True` 时返回):
+            元组，包含 `torch.FloatTensor`（一个用于输入特征 + 一个用于每个交叉模态层的输出），
+            形状为 `(batch_size, sequence_length, hidden_size)`。
+        vision_hidden_states (`tuple(torch.FloatTensor)`，*optional*，当传递 `output_hidden_states=True` 或者 `config.output_hidden_states=True` 时返回):
+            元组，包含 `torch.FloatTensor`（一个用于输入特征 + 一个用于每个交叉模态层的输出），
+            形状为 `(batch_size, sequence_length, hidden_size)`。
+        language_attentions (`tuple(torch.FloatTensor)`，*optional*，当传递 `output_attentions=True` 或者 `config.output_attentions=True` 时返回):
+            元组，包含 `torch.FloatTensor`（每个层一个），
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+        vision_attentions (`tuple(torch.FloatTensor)`，*optional*，当传递 `output_attentions=True` 或者 `config.output_attentions=True` 时返回):
+            元组，包含 `torch.FloatTensor`（每个层一个），
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+        cross_encoder_attentions (`tuple(torch.FloatTensor)`，*optional*，当传递 `output_attentions=True` 或者 `config.output_attentions=True` 时返回):
+            元组，包含 `torch.FloatTensor`（每个层一个），
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+    """
+
+    # 损失值，类型为可选的浮点张量
+    loss: Optional[torch.FloatTensor] = None
+    # 问题回答分数，类型为可选的浮点张量
+    question_answering_score: Optional[torch.FloatTensor] = None
+    # 语言隐藏状态，类型为可选的张量元组
+    language_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    # 视觉隐藏状态，类型为可选的张量元组
+    vision_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    # 语言注意力权重，类型为可选的张量元组
+    language_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 视觉注意力权重，类型为可选的张量元组
+    vision_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 定义一个可选的类型注解，表示 cross_encoder_attentions 变量可以是一个包含一个 torch.FloatTensor 的元组，或者是 None
+    cross_encoder_attentions: Optional[Tuple[torch.FloatTensor]] = None
+@dataclass
+class LxmertForPreTrainingOutput(ModelOutput):
+    """
+    Output type of [`LxmertForPreTraining`].
 
     Args:
         loss (*optional*, returned when `labels` is provided, `torch.FloatTensor` of shape `(1,)`):
             Total loss as the sum of the masked language modeling loss and the next sequence prediction
-            (classification) loss.k.
-        question_answering_score (`torch.FloatTensor` of shape `(batch_size, n_qa_answers)`, *optional*):
+            (classification) loss.
+        prediction_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
+            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+        cross_relationship_score (`torch.FloatTensor` of shape `(batch_size, 2)`):
+            Prediction scores of the textual matching objective (classification) head (scores of True/False
+            continuation before SoftMax).
+        question_answering_score (`torch.FloatTensor` of shape `(batch_size, n_qa_answers)`):
             Prediction scores of question answering objective (classification).
         language_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for input features + one for the output of each cross-modality layer) of
@@ -125,103 +180,65 @@ class LxmertForQuestionAnsweringOutput(ModelOutput):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
             the self-attention heads.
-    """
 
-    # 初始化参数，可选参数，当提供'labels'时返回，返回一个形状为`(1,)`的torch.FloatTensor
+    """
+    # 定义损失变量，类型为可选的浮点张量
     loss: Optional[torch.FloatTensor] = None
-    # 问题回答目标分类的预测得分，形状为`(batch_size, n_qa_answers)`的torch.FloatTensor
-    question_answering_score: Optional[torch.FloatTensor] = None
-    # 语言隐藏状态的元组，元组中包含`torch.FloatTensor`，当`output_hidden_states=True`时返回，或者当`config.output_hidden_states=True`时返回，每个元素形状为`(batch_size, sequence_length, hidden_size)`
-    language_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 视觉隐藏状态的元组，元组中包含`torch.FloatTensor`，当`output_hidden_states=True`时返回，或者当`config.output_hidden_states=True`时返回，每个元素形状为`(batch_size, sequence_length, hidden_size)`
-    vision_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 语言注意力的元组，元组中包含`torch.FloatTensor`，当`output_attentions=True`时返回，或者当`config.output_attentions=True`时返回，每个元素形状为`(batch_size, num_heads, sequence_length, sequence_length)`，注意力softmax后的权重，用于计算自注意力头中的加权平均值
-    language_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 视觉注意力的元组，元组中包含`torch.FloatTensor`，当`output_attentions=True`时返回，或者当`config.output_attentions=True`时返回，每个元素形状为`(batch_size, num_heads, sequence_length, sequence_length)`，注意力softmax后的权重，用于计算自注意力头中的加权平均值
-    vision_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义 cross_encoder_attentions 变量，类型为可选的元组，元素为 torch 的 FloatTensor 类型
-    cross_encoder_attentions: Optional[Tuple[torch.FloatTensor]] = None
-@dataclass
-class LxmertForPreTrainingOutput(ModelOutput):
-    """
-    LxmertForPreTrainingOutput 类的输出类型。
-
-    Args:
-        loss (*optional*, returned when `labels` is provided, `torch.FloatTensor` of shape `(1,)`):
-            总损失，由掩码语言建模损失和下一个序列预测（分类）损失之和组成。
-        prediction_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-            语言建模头部的预测分数（SoftMax 前每个词汇标记的分数）。
-        cross_relationship_score (`torch.FloatTensor` of shape `(batch_size, 2)`):
-            文本匹配目标（分类）头部的预测分数（SoftMax 前的 True/False 继续分数）。
-        question_answering_score (`torch.FloatTensor` of shape `(batch_size, n_qa_answers)`):
-            问题回答目标的预测分数（分类）。
-        language_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor` 的元组（一个用于输入特征 + 一个用于每个交叉模态层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
-        vision_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor` 的元组（一个用于输入特征 + 一个用于每个交叉模态层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
-        language_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            `torch.FloatTensor` 的元组（每层一个）形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
-        vision_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            `torch.FloatTensor` 的元组（每层一个）形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
-        cross_encoder_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            `torch.FloatTensor` 的元组（每层一个）形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
-
-    """
-    # 初始化损失值为 None
-    loss: Optional[torch.FloatTensor] = None
-    # 初始化预测 logits 为 None
+    
+    # 定义预测 logits 变量，类型为可选的浮点张量
     prediction_logits: Optional[torch.FloatTensor] = None
-    # 初始化跨关系分数为 None
+    
+    # 定义跨关系分数变量，类型为可选的浮点张量
     cross_relationship_score: Optional[torch.FloatTensor] = None
-    # 初始化问答分数为 None
+    
+    # 定义问答分数变量，类型为可选的浮点张量
     question_answering_score: Optional[torch.FloatTensor] = None
-    # 初始化语言模型隐藏状态为 None
+    
+    # 定义语言隐藏状态变量，类型为可选的浮点张量元组
     language_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化视觉模型隐藏状态为 None
+    
+    # 定义视觉隐藏状态变量，类型为可选的浮点张量元组
     vision_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化语言模型注意力分布为 None
+    
+    # 定义语言注意力变量，类型为可选的浮点张量元组
     language_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化视觉模型注意力分布为 None
+    
+    # 定义视觉注意力变量，类型为可选的浮点张量元组
     vision_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化跨编码器注意力分布为 None
+    
+    # 定义跨编码器注意力变量，类型为可选的浮点张量元组
     cross_encoder_attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 将 TensorFlow 权重加载到 PyTorch 模型中的函数
 def load_tf_weights_in_lxmert(model, config, tf_checkpoint_path):
     """Load tf checkpoints in a pytorch model."""
-    # 导入必要的库
     try:
         import re  # 导入正则表达式模块
-        import numpy as np  # 导入 NumPy 库
-        import tensorflow as tf  # 导入 TensorFlow 库
+        import numpy as np  # 导入NumPy库
+        import tensorflow as tf  # 导入TensorFlow库
     except ImportError:
-        # 如果导入失败，记录错误信息并抛出 ImportError
         logger.error(
             "Loading a TensorFlow model in PyTorch, requires TensorFlow to be installed. Please see "
             "https://www.tensorflow.org/install/ for installation instructions."
         )
         raise
-    
-    # 获取 TensorFlow 检查点文件的绝对路径
-    tf_path = os.path.abspath(tf_checkpoint_path)
-    # 记录日志，指示正在转换 TensorFlow 检查点
-    logger.info(f"Converting TensorFlow checkpoint from {tf_path}")
-    
-    # 从 TF 模型加载权重
-    init_vars = tf.train.list_variables(tf_path)  # 列出 TensorFlow 模型中的变量名和形状
-    names = []  # 保存变量名的列表
-    arrays = []  # 保存变量值的列表
+
+    tf_path = os.path.abspath(tf_checkpoint_path)  # 获取TensorFlow checkpoint文件的绝对路径
+    logger.info(f"Converting TensorFlow checkpoint from {tf_path}")  # 记录日志：转换TensorFlow checkpoint的路径
+
+    # Load weights from TF model
+    init_vars = tf.train.list_variables(tf_path)  # 获取TensorFlow模型中的所有变量及其形状
+    names = []
+    arrays = []
     for name, shape in init_vars:
-        # 记录日志，指示正在加载 TF 权重和其形状
-        logger.info(f"Loading TF weight {name} with shape {shape}")
-        # 加载 TensorFlow 模型中的变量
-        array = tf.train.load_variable(tf_path, name)
+        logger.info(f"Loading TF weight {name} with shape {shape}")  # 记录日志：加载TensorFlow权重的名称和形状
+        array = tf.train.load_variable(tf_path, name)  # 加载TensorFlow模型中的变量值
         names.append(name)  # 将变量名添加到列表中
         arrays.append(array)  # 将变量值添加到列表中
-    
-    # 遍历变量名和变量值的列表
+
     for name, array in zip(names, arrays):
-        name = name.split("/")  # 将变量名按斜杠分割成部分
-        # 排除不需要加载的变量，如优化器中的变量和全局步数变量等
+        name = name.split("/")
+        
+        # adam_v and adam_m are variables used in AdamWeightDecayOptimizer to calculated m and v
+        # which are not required for using pretrained model
         if any(
             n
             in [
@@ -233,17 +250,17 @@ def load_tf_weights_in_lxmert(model, config, tf_checkpoint_path):
             ]
             for n in name
         ):
-            # 如果变量名匹配到不需要加载的模式，记录日志并跳过此变量的加载
-            logger.info(f"Skipping {'/'.join(name)}")
+            logger.info(f"Skipping {'/'.join(name)}")  # 记录日志：跳过特定的TensorFlow变量
             continue
         
-        pointer = model  # 设置指针指向模型
+        pointer = model
         for m_name in name:
             if re.fullmatch(r"[A-Za-z]+_\d+", m_name):
-                scope_names = re.split(r"_(\d+)", m_name)  # 使用正则表达式将变量名拆分成作用域名称和索引
+                scope_names = re.split(r"_(\d+)", m_name)
             else:
-                scope_names = [m_name]  # 如果变量名不匹配模式，作用域名称为变量名本身
-            # 根据作用域名称更新指针
+                scope_names = [m_name]
+            
+            # 根据变量名的前缀，设置对应的PyTorch模型指针
             if scope_names[0] == "kernel" or scope_names[0] == "gamma":
                 pointer = getattr(pointer, "weight")
             elif scope_names[0] == "output_bias" or scope_names[0] == "beta":
@@ -256,114 +273,107 @@ def load_tf_weights_in_lxmert(model, config, tf_checkpoint_path):
                 try:
                     pointer = getattr(pointer, scope_names[0])
                 except AttributeError:
-                    # 如果找不到对应的属性，记录日志并跳过加载此变量
-                    logger.info(f"Skipping {'/'.join(name)}")
+                    logger.info(f"Skipping {'/'.join(name)}")  # 记录日志：跳过特定的PyTorch变量
                     continue
-            # 如果作用域名称包含索引，更新指针到指定索引处
+            
             if len(scope_names) >= 2:
                 num = int(scope_names[1])
-                pointer = pointer[num]
-        # 处理特殊的变量名，如嵌入层权重和 kernel，进行相应的操作
+                pointer = pointer[num]  # 根据索引获取嵌套的指针
+        
+        # 处理特殊情况下的变量名，设置对应的PyTorch模型指针
         if m_name[-11:] == "_embeddings":
             pointer = getattr(pointer, "weight")
         elif m_name == "kernel":
-            array = np.transpose(array)  # 转置数组（通常是为了适配 TensorFlow 和 PyTorch 的权重格式）
+            array = np.transpose(array)  # 转置权重数组
+
         try:
-            assert pointer.shape == array.shape  # 断言指针形状和数组形状相同
+            assert pointer.shape == array.shape  # 断言PyTorch模型指针和权重数组的形状相同
         except AssertionError as e:
-            # 如果断言失败，抛出 AssertionError，附带指针和数组的形状信息
             e.args += (pointer.shape, array.shape)
             raise
-        # 记录日志，指示正在初始化 PyTorch 权重
-        logger.info(f"Initialize PyTorch weight {name}")
-        pointer.data = torch.from_numpy(array)  # 使用 NumPy 数组初始化 PyTorch 权重
-    return model
+        
+        logger.info(f"Initialize PyTorch weight {name}")  # 记录日志：初始化PyTorch权重的名称
+        pointer.data = torch.from_numpy(array)  # 使用NumPy数组初始化PyTorch模型的权重
 
-# 定义 LXMERT 模型的嵌入层类
-class LxmertEmbeddings(nn.Module):
-    # 构建从单词、位置和标记类型嵌入中构造嵌入向量。
+    return model  # 返回加载了TensorFlow权重的PyTorch模型
+    """Construct the embeddings from word, position and token_type embeddings."""
 
+    # 初始化函数，接受一个配置对象config作为参数
     def __init__(self, config):
-        # 继承父类构造函数
         super().__init__()
-        # 定义单词嵌入层，用于将单词索引映射为隐藏表示，padding_idx=0表示填充索引为0
+        # 创建一个词嵌入层，用于将输入的词汇索引映射为隐藏大小的词嵌入向量，padding_idx=0表示用0进行填充
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=0)
-        # 定义位置嵌入层，用于将位置索引映射为隐藏表示，padding_idx=0表示填充索引为0
+        # 创建一个位置嵌入层，用于将位置索引映射为隐藏大小的位置嵌入向量，padding_idx=0表示用0进行填充
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size, padding_idx=0)
-        # 定义标记类型嵌入层，用于将标记类型索引映射为隐藏表示，padding_idx=0表示填充索引为0
-
+        # 创建一个标记类型嵌入层，用于将标记类型索引映射为隐藏大小的嵌入向量，padding_idx=0表示用0进行填充
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size, padding_idx=0)
 
-        # self.LayerNorm不使用蛇式命名，以保持与 TensorFlow 模型变量名称一致，并能够加载任何 TensorFlow 检查点文件
+        # LayerNorm不使用蛇形命名以保持与TensorFlow模型变量名的一致性，使得能够加载任何TensorFlow检查点文件
+        # 创建LayerNorm层，用于归一化隐藏状态向量，eps=1e-12是一个非常小的数，用于数值稳定性
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=1e-12)
-        # 定义 LayerNorm 层，用于对隐藏表示进行归一化
+        # 创建Dropout层，用于在训练过程中随机失活部分神经元，防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 定义 Dropout 层，用于在训练中进行随机失活
 
+    # 前向传播函数，接受输入的词汇ID（input_ids）、标记类型ID（token_type_ids）和预先计算的嵌入（inputs_embeds）
     def forward(self, input_ids, token_type_ids=None, inputs_embeds=None):
+        # 如果input_ids不为None，则获取其形状和设备信息；否则获取inputs_embeds的形状和设备信息
         if input_ids is not None:
             input_shape = input_ids.size()
             device = input_ids.device
         else:
             input_shape = inputs_embeds.size()[:-1]
             device = inputs_embeds.device
-        # 获取输入数据的形状信息
-
         seq_length = input_shape[1]
-        # 获取序列长度
 
+        # 根据序列长度创建位置ID张量，dtype=torch.long表示数据类型为长整型，device=device表示放置在指定设备上
         position_ids = torch.arange(seq_length, dtype=torch.long, device=device)
-        # 生成位置索引
         position_ids = position_ids.unsqueeze(0).expand(input_shape)
 
+        # 如果token_type_ids为None，则创建全零张量作为标记类型ID，数据类型为长整型，设备使用self.position_ids的设备
         if token_type_ids is None:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
-        # 如果标记类型索引为None，则创建全零的标记类型索引张量
 
+        # 如果inputs_embeds为None，则通过word_embeddings将input_ids转换为嵌入向量
         if inputs_embeds is None:
             inputs_embeds = self.word_embeddings(input_ids)
-        # 如果输入嵌入为None，则使用单词嵌入层将输入单词索引转换为嵌入表示
+        # 根据位置ID获取位置嵌入向量
         position_embeddings = self.position_embeddings(position_ids)
-        # 使用位置嵌入层获取位置嵌入
+        # 根据标记类型ID获取标记类型嵌入向量
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
-        # 使用标记类型嵌入层获取标记类型嵌入
 
+        # 将词嵌入向量、位置嵌入向量和标记类型嵌入向量相加得到最终的嵌入向量
         embeddings = inputs_embeds + position_embeddings + token_type_embeddings
-        # 将单词嵌入、位置嵌入和标记类型嵌入进行相加得到最终嵌入向量
+        # 对最终的嵌入向量进行LayerNorm归一化
         embeddings = self.LayerNorm(embeddings)
-        # 对嵌入向量进行 LayerNorm 归一化处理
+        # 对归一化后的向量进行Dropout处理
         embeddings = self.dropout(embeddings)
-        # 对嵌入向量进行随机失活处理
         return embeddings
-# 创建一个名为 LxmertAttention 的类，继承自 nn.Module
+# 定义 LxmertAttention 类，继承自 nn.Module，用于执行 LXMERT 模型中的自注意力机制
 class LxmertAttention(nn.Module):
-    # 类的初始化方法，接收 config 和 ctx_dim 参数
     def __init__(self, config, ctx_dim=None):
-        # 调用父类的初始化方法
         super().__init__()
-        # 如果 hidden_size 不能被 num_attention_heads 整除，引发数值错误
+        # 检查隐藏层大小是否能被注意力头数整除
         if config.hidden_size % config.num_attention_heads != 0:
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
                 f"heads ({config.num_attention_heads})"
             )
-        # 设置属性值
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.head_size = self.num_attention_heads * self.attention_head_size
 
-        # 如果 ctx_dim 为 None，则设为 config.hidden_size
+        # 如果未指定上下文维度，则使用配置中的隐藏层大小
         if ctx_dim is None:
             ctx_dim = config.hidden_size
-        # 创建 query、key、value 三个线性层
+        # 创建查询、键、值的线性映射层
         self.query = nn.Linear(config.hidden_size, self.head_size)
         self.key = nn.Linear(ctx_dim, self.head_size)
         self.value = nn.Linear(ctx_dim, self.head_size)
 
-        # 创建 dropout 层
+        # 定义 dropout 层，用于注意力概率的 dropout
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
-    # 定义 transpose_for_scores 方法，用于对输入张量进行形状转换
+    # 对输入张量 x 进行形状转换，以适应多头注意力机制
     def transpose_for_scores(self, x):
         new_x_shape = x.size()[:-1] + (
             self.num_attention_heads,
@@ -372,97 +382,97 @@ class LxmertAttention(nn.Module):
         x = x.view(new_x_shape)
         return x.permute(0, 2, 1, 3)
 
-    # 定义 forward 方法，实现注意力机制
+    # 前向传播函数，执行自注意力计算
     def forward(self, hidden_states, context, attention_mask=None, output_attentions=False):
-        # 执行 query、key、value 的线性变换
+        # 通过查询、键、值映射层计算混合的查询、键、值张量
         mixed_query_layer = self.query(hidden_states)
         mixed_key_layer = self.key(context)
         mixed_value_layer = self.value(context)
 
-        # 对变换后的结果执行形状转换
+        # 对混合的查询、键、值张量进行形状转换，以进行多头注意力计算
         query_layer = self.transpose_for_scores(mixed_query_layer)
         key_layer = self.transpose_for_scores(mixed_key_layer)
         value_layer = self.transpose_for_scores(mixed_value_layer)
 
-        # 计算点积得到原始的注意力分数
+        # 计算原始注意力分数，通过查询与键的点积得到
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
-        # 如果存在 attention_mask，则应用到注意力分数上
+
+        # 如果存在注意力掩码，则将其应用于注意力分数
         if attention_mask is not None:
             attention_scores = attention_scores + attention_mask
 
-        # 对注意力分数进行归一化，得到注意力概率
+        # 对注意力分数进行 softmax 归一化，得到注意力概率
         attention_probs = nn.functional.softmax(attention_scores, dim=-1)
 
-        # 对注意力概率进行dropout
+        # 对注意力概率进行 dropout 操作
         attention_probs = self.dropout(attention_probs)
 
-        # 计算上下文表示
+        # 计算上下文张量，通过注意力概率与值层的乘积得到
         context_layer = torch.matmul(attention_probs, value_layer)
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
+
+        # 重新调整上下文张量的形状，以匹配预期的输出形状
         new_context_layer_shape = context_layer.size()[:-2] + (self.head_size,)
         context_layer = context_layer.view(new_context_layer_shape)
 
-        # 返回结果张量和注意力概率（可选）
+        # 如果需要输出注意力权重，则将其包含在输出中
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
         return outputs
 
 
-# 定义 LxmertAttentionOutput 类（未提供代码）
 class LxmertAttentionOutput(nn.Module):
-    # 初始化函数，用于初始化模型的参数
+    # 初始化函数，用于初始化神经网络模型的参数和层
     def __init__(self, config):
         # 调用父类的初始化函数
         super().__init__()
-        # 创建一个全连接层，输入和输出维度都是隐藏层的大小
+        # 创建一个线性层，输入和输出的大小都为 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个 LayerNormalization 层，对隐藏状态进行归一化处理
+        # 创建一个 LayerNorm 层，对隐藏状态进行归一化处理
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=1e-12)
-        # 创建一个 Dropout 层，用于在训练中随机丢弃部分隐藏状态
+        # 创建一个 Dropout 层，用于在训练过程中随机置零输入张量的部分元素
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    # 前向传播函数，定义了模型的前向计算逻辑
+    # 前向传播函数，定义了模型的计算过程
     def forward(self, hidden_states, input_tensor):
-        # 使用全连接层对隐藏状态进行线性变换
+        # 使用线性层对隐藏状态进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 对线性变换后的隐藏状态进行随机丢弃
+        # 对变换后的隐藏状态进行随机置零处理，以减少过拟合
         hidden_states = self.dropout(hidden_states)
-        # 将丢弃后的隐藏状态与输入张量相加，并进行 LayerNormalization 处理
+        # 对处理后的隐藏状态进行 LayerNorm 归一化，并与输入张量相加
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回处理后的隐藏状态
+        # 返回处理后的隐藏状态作为输出
         return hidden_states
 class LxmertCrossAttentionLayer(nn.Module):
-    def __init__(self, config):  
-        # 初始化 LxmertCrossAttentionLayer 类
+    def __init__(self, config):
         super().__init__()
-        # 初始化 LxmertAttention 层
+        # 初始化交叉注意力层，包括注意力和输出
         self.att = LxmertAttention(config)
-        # 初始化 LxmertAttentionOutput 层
         self.output = LxmertAttentionOutput(config)
 
     def forward(self, input_tensor, ctx_tensor, ctx_att_mask=None, output_attentions=False):
-        # 进行前向传播
+        # 执行前向传播，调用注意力层，并返回注意力输出
         output = self.att(input_tensor, ctx_tensor, ctx_att_mask, output_attentions=output_attentions)
         if output_attentions:
+            # 如果需要输出注意力权重，则获取注意力概率
             attention_probs = output[1]
-        # LxmertAttentionOutput 层的前向传播
+        # 使用输出层处理注意力输出和输入张量，得到最终输出
         attention_output = self.output(output[0], input_tensor)
+        # 根据需要是否输出注意力权重，构建最终输出结果
         outputs = (attention_output, attention_probs) if output_attentions else (attention_output,)
         return outputs
 
 
 class LxmertSelfAttentionLayer(nn.Module):
-    def __init__(self, config):  
-        # 初始化 LxmertSelfAttentionLayer 类
+    def __init__(self, config):
         super().__init__()
-        # 初始化 LxmertAttention 层
+        # 初始化自注意力层，包括注意力和输出
         self.self = LxmertAttention(config)
-        # 初始化 LxmertAttentionOutput 层
         self.output = LxmertAttentionOutput(config)
 
     def forward(self, input_tensor, attention_mask, output_attentions=False):
-        # Self attention attends to itself, thus keys and queries are the same (input_tensor).
-        # 进行前向传播
+        # 自注意力层的前向传播，处理输入张量、注意力掩码，并返回注意力输出
+        # 注意：自注意力的键和查询是相同的（即输入张量）
         output = self.self(
             input_tensor,
             input_tensor,
@@ -470,42 +480,39 @@ class LxmertSelfAttentionLayer(nn.Module):
             output_attentions=output_attentions,
         )
         if output_attentions:
+            # 如果需要输出注意力权重，则获取注意力概率
             attention_probs = output[1]
-        # LxmertAttentionOutput 层的前向传播
+        # 使用输出层处理注意力输出和输入张量，得到最终输出
         attention_output = self.output(output[0], input_tensor)
+        # 根据需要是否输出注意力权重，构建最终输出结果
         outputs = (attention_output, attention_probs) if output_attentions else (attention_output,)
         return outputs
 
 
 class LxmertIntermediate(nn.Module):
-    def __init__(self, config):  
-        # 初始化 LxmertIntermediate 类
+    def __init__(self, config):
         super().__init__()
-        # 初始化线性层
+        # 初始化中间层，包括线性变换和激活函数
         self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
-        # 初始化激活函数
         self.intermediate_act_fn = ACT2FN[config.hidden_act]
 
-    def forward(self, hidden_states):  
-        # 进行前向传播
+    def forward(self, hidden_states):
+        # 中间层的前向传播，先进行线性变换，再应用激活函数
         hidden_states = self.dense(hidden_states)
         hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
 
 
 class LxmertOutput(nn.Module):
-    def __init__(self, config):  
-        # 初始化 LxmertOutput 类
+    def __init__(self, config):
         super().__init__()
-        # 初始化线性层
+        # 初始化输出层，包括线性变换、LayerNorm和Dropout
         self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 初始化 LayerNormalization 层
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=1e-12)
-        # 初始化 Dropout 层
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    def forward(self, hidden_states, input_tensor):  
-        # 进行前向传播
+    def forward(self, hidden_states, input_tensor):
+        # 输出层的前向传播，先进行线性变换，再应用Dropout和LayerNorm，最后与输入张量相加
         hidden_states = self.dense(hidden_states)
         hidden_states = self.dropout(hidden_states)
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
@@ -513,57 +520,41 @@ class LxmertOutput(nn.Module):
 
 
 class LxmertLayer(nn.Module):
-    def __init__(self, config):  
-        # 初始化 LxmertLayer 类
+    def __init__(self, config):
         super().__init__()
-        # 初始化 LxmertSelfAttentionLayer 层
+        # 初始化整个 LXMERT 层，包括自注意力层、中间层和输出层
         self.attention = LxmertSelfAttentionLayer(config)
-        # 初始化 LxmertIntermediate 层
         self.intermediate = LxmertIntermediate(config)
-        # 初始化 LxmertOutput 层
         self.output = LxmertOutput(config)
-    # 定义前向传播方法，接收隐藏状态、注意力掩码和是否输出注意力权重
+    # 定义一个前向传播方法，接受隐藏状态作为输入，并可选地接受注意力掩码和是否输出注意力信息的标志
     def forward(self, hidden_states, attention_mask=None, output_attentions=False):
-        # 使用注意力层计算隐藏状态的注意力输出
+        # 调用注意力层的前向传播方法，得到输出
         outputs = self.attention(hidden_states, attention_mask, output_attentions=output_attentions)
-        # 获取注意力输出
+        # 从注意力层的输出中获取注意力输出
         attention_output = outputs[0]
-        # 使用中间层处理注意力输出
+        # 将注意力输出送入中间层处理
         intermediate_output = self.intermediate(attention_output)
-        # 使用输出层处理中间输出和注意力输出
+        # 将中间层的输出送入输出层处理，得到最终层输出
         layer_output = self.output(intermediate_output, attention_output)
-        # 如果需要输出注意力权重，则将其加入到输出中
-        outputs = (layer_output,) + outputs[1:]  
-        # 返回输出结果
+        # 如果输出注意力信息被激活，将注意力信息加入输出元组中
+        outputs = (layer_output,) + outputs[1:]  # add attentions if we output them
+        # 返回所有输出（包括最终层输出和可能的注意力信息）
         return outputs
 class LxmertXLayer(nn.Module):
-    # 定义 LxmertXLayer 类，作为 nn.Module 的子类
     def __init__(self, config):
-        # 初始化方法，接收一个配置参数 config
         super().__init__()
-        # 调用父类的初始化方法
-
-        # 网络结构定义
+        # The cross-attention Layer
         self.visual_attention = LxmertCrossAttentionLayer(config)
-        # 定义跨注意力层对象 visual_attention
 
+        # Self-attention Layers
         self.lang_self_att = LxmertSelfAttentionLayer(config)
-        # 定义语言自注意力层对象 lang_self_att
-
         self.visn_self_att = LxmertSelfAttentionLayer(config)
-        # 定义视觉自注意力层对象 visn_self_att
 
+        # Intermediate and Output Layers (FFNs)
         self.lang_inter = LxmertIntermediate(config)
-        # 定义语言中间层对象 lang_inter
-
         self.lang_output = LxmertOutput(config)
-        # 定义语言输出层对象 lang_output
-
         self.visn_inter = LxmertIntermediate(config)
-        # 定义视觉中间层对象 visn_inter
-
         self.visn_output = LxmertOutput(config)
-        # 定义视觉输出层对象 visn_output
 
     def cross_att(
         self,
@@ -573,43 +564,39 @@ class LxmertXLayer(nn.Module):
         visual_attention_mask,
         output_x_attentions=False,
     ):
-        # 定义跨注意力层的前向传播方法 cross_att
+        # Cross Attention between language and visual inputs
         lang_att_output = self.visual_attention(
             lang_input,
             visual_input,
             ctx_att_mask=visual_attention_mask,
             output_attentions=output_x_attentions,
         )
-        # 使用 visual_attention 进行跨注意力操作，得到语言的注意力输出
+        # Cross Attention between visual and language inputs
         visual_att_output = self.visual_attention(
             visual_input,
             lang_input,
             ctx_att_mask=lang_attention_mask,
             output_attentions=False,
         )
-        # 使用 visual_attention 进行跨注意力操作，得到视觉的注意力输出
         return lang_att_output, visual_att_output
 
     def self_att(self, lang_input, lang_attention_mask, visual_input, visual_attention_mask):
-        # 定义自注意力层的前向传播方法 self_att
+        # Self Attention for language input
         lang_att_output = self.lang_self_att(lang_input, lang_attention_mask, output_attentions=False)
-        # 使用 lang_self_att 进行语言自注意力操作
+        # Self Attention for visual input
         visual_att_output = self.visn_self_att(visual_input, visual_attention_mask, output_attentions=False)
-        # 使用 visn_self_att 进行视觉自注意力操作
         return lang_att_output[0], visual_att_output[0]
 
     def output_fc(self, lang_input, visual_input):
-        # 定义输出全连接层的前向传播方法 output_fc
+        # Feed-forward layers for language input
         lang_inter_output = self.lang_inter(lang_input)
-        # 使用 lang_inter 进行语言中间层操作
+        # Feed-forward layers for visual input
         visual_inter_output = self.visn_inter(visual_input)
-        # 使用 visn_inter 进行视觉中间层操作
 
-        # Layer output
+        # Output layers for language input
         lang_output = self.lang_output(lang_inter_output, lang_input)
-        # 使用 lang_output 进行语言输出操作
+        # Output layers for visual input
         visual_output = self.visn_output(visual_inter_output, visual_input)
-        # 使用 visn_output 进行视觉输出操作
 
         return lang_output, visual_output
 
@@ -620,88 +607,87 @@ class LxmertXLayer(nn.Module):
         visual_feats,
         visual_attention_mask,
         output_attentions=False,
-        ):
-            # 使用跨模态注意力机制，传入语言特征、语言注意力掩码、视觉特征、视觉注意力掩码，输出语言注意力输出和视觉注意力输出
-            lang_att_output, visual_att_output = self.cross_att(
-                lang_input=lang_feats,
-                lang_attention_mask=lang_attention_mask,
-                visual_input=visual_feats,
-                visual_attention_mask=visual_attention_mask,
-                output_x_attentions=output_attentions,
+    ):
+        # Perform cross-attention
+        lang_att_output, visual_att_output = self.cross_att(
+            lang_feats,
+            lang_attention_mask,
+            visual_feats,
+            visual_attention_mask,
+            output_x_attentions=output_attentions,
+        )
+
+        # Perform self-attention
+        lang_self_output, visual_self_output = self.self_att(
+            lang_feats,
+            lang_attention_mask,
+            visual_feats,
+            visual_attention_mask,
+        )
+
+        # Perform output FC layers
+        lang_output, visual_output = self.output_fc(lang_self_output, visual_self_output)
+
+        return lang_output, visual_output
+    # 定义一个方法，执行交叉注意力操作，将语言和视觉特征进行注意力计算
+    def forward(
+        self,
+        lang_feats,              # 输入的语言特征
+        lang_attention_mask,     # 语言注意力掩码
+        visual_feats,            # 输入的视觉特征
+        visual_attention_mask,   # 视觉注意力掩码
+        output_attentions=False  # 是否输出注意力矩阵，默认为 False
+    ):
+        # 执行交叉注意力计算，得到语言和视觉的注意力输出
+        lang_att_output, visual_att_output = self.cross_att(
+            lang_input=lang_feats,
+            lang_attention_mask=lang_attention_mask,
+            visual_input=visual_feats,
+            visual_attention_mask=visual_attention_mask,
+            output_x_attentions=output_attentions,
+        )
+        # 获取语言注意力输出中除第一个之外的所有部分
+        attention_probs = lang_att_output[1:]
+        
+        # 执行自注意力计算，传入语言和视觉的注意力输出以及对应的注意力掩码
+        lang_att_output, visual_att_output = self.self_att(
+            lang_att_output[0],
+            lang_attention_mask,
+            visual_att_output[0],
+            visual_attention_mask,
+        )
+        
+        # 将经过注意力计算后的语言和视觉输出，输入到输出全连接层进行最终的输出
+        lang_output, visual_output = self.output_fc(lang_att_output, visual_att_output)
+        
+        # 根据是否需要输出注意力矩阵，决定返回值的格式
+        return (
+            (
+                lang_output,          # 语言输出
+                visual_output,        # 视觉输出
+                attention_probs[0],   # 第一个注意力矩阵（如果有输出注意力）
             )
-            # 从语言注意力输出中获取注意力概率
-            attention_probs = lang_att_output[1:]
-            # 使用自注意力机制，传入语言注意力输出、语言注意力掩码、视觉注意力输出、视觉注意力掩码
-            lang_att_output, visual_att_output = self.self_att(
-                lang_att_output[0],
-                lang_attention_mask,
-                visual_att_output[0],
-                visual_attention_mask,
-            )
-
-            # 使用输出全连接层，传入语言注意力输出、视觉注意力输出，输出语言输出、视觉输出
-            lang_output, visual_output = self.output_fc(lang_att_output, visual_att_output)
-            # 返回语言输出、视觉输出、注意力概率（如果有）、如果有输出注意力则输出所有
-            return (
-                (
-                    lang_output,
-                    visual_output,
-                    attention_probs[0],
-                )
-                if output_attentions
-                else (lang_output, visual_output)
-            )
-# 定义一个类LxmertVisualFeatureEncoder，继承于nn.Module类
-class LxmertVisualFeatureEncoder(nn.Module):
-    # 初始化函数，接受config参数
-    def __init__(self, config):
-        # 根据配置获取特征维度和位置维度
-        feat_dim = config.visual_feat_dim
-        pos_dim = config.visual_pos_dim
-
-        # 对象特征编码
-        self.visn_fc = nn.Linear(feat_dim, config.hidden_size)  # 使用线性层进行特征编码
-        self.visn_layer_norm = nn.LayerNorm(config.hidden_size, eps=1e-12)  # 使用LayerNorm进行标准化
-
-        # 盒子位置编码
-        self.box_fc = nn.Linear(pos_dim, config.hidden_size)  # 使用线性层进行位置编码
-        self.box_layer_norm = nn.LayerNorm(config.hidden_size, eps=1e-12)  # 使用LayerNorm进行标准化
-
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # 使用Dropout进行随机失活
-
-    # 前向传播函数，接受visual_feats和visual_pos参数
-    def forward(self, visual_feats, visual_pos):
-        x = self.visn_fc(visual_feats)  # 对visual_feats进行特征编码
-        x = self.visn_layer_norm(x)  # 对编码后的特征进行标准化
-        y = self.box_fc(visual_pos)  # 对visual_pos进行位置编码
-        y = self.box_layer_norm(y)  # 对编码后的位置进行标准化
-        output = (x + y) / 2  # 计算特征和位置编码的平均值作为输出
-
-        output = self.dropout(output)  # 对输出进行随机失活
-        return output  # 返回输出结果
-
-
-class LxmertEncoder(nn.Module):
-    def __init__(self, config):
+            if output_attentions        # 如果需要输出注意力矩阵
+            else (lang_output, visual_output)  # 否则只返回语言和视觉输出
+        )
+        # LXMERT 编码器模型，用于处理多模态输入数据
         super().__init__()
 
-        # Obj-level image embedding layer
-        self.visn_fc = LxmertVisualFeatureEncoder(config)  # 对象级别图像嵌入层的实例化
-        self.config = config  # 保存配置信息
+        # 对象级别视觉特征编码层
+        self.visn_fc = LxmertVisualFeatureEncoder(config)
+        self.config = config
 
-        # Number of layers
-        self.num_l_layers = config.l_layers  # 获取L层的数量
-        self.num_x_layers = config.x_layers  # 获取X层的数量
-        self.num_r_layers = config.r_layers  # 获取R层的数量
+        # 层的数量
+        self.num_l_layers = config.l_layers
+        self.num_x_layers = config.x_layers
+        self.num_r_layers = config.r_layers
 
-        # Layers
-        # Using self.layer instead of self.l_layer to support loading BERT weights.
-        self.layer = nn.ModuleList([LxmertLayer(config) for _ in range(self.num_l_layers)])  # 创建L层的ModuleList
-        self.x_layers = nn.ModuleList([LxmertXLayer(config) for _ in range(self.num_x_layers)])  # 创建X层的ModuleList
-        self.r_layers = nn.ModuleList([LxmertLayer(config) for _ in range(self.num_r_layers)])  # 创建R层的ModuleList
+        # 层的初始化
+        # 使用 self.layer 而不是 self.l_layer 来支持加载 BERT 权重
+        self.layer = nn.ModuleList([LxmertLayer(config) for _ in range(self.num_l_layers)])
+        self.x_layers = nn.ModuleList([LxmertXLayer(config) for _ in range(self.num_x_layers)])
+        self.r_layers = nn.ModuleList([LxmertLayer(config) for _ in range(self.num_r_layers)])
 
-
-    # 前向传播函数，接受多个参数
     def forward(
         self,
         lang_feats,
@@ -710,286 +696,159 @@ class LxmertEncoder(nn.Module):
         visual_pos,
         visual_attention_mask=None,
         output_attentions=None,
-    # 初始化变量
-    # 存储图像层的隐藏状态
-    vision_hidden_states = ()
-    # 存储语言层的隐藏状态
-    language_hidden_states = ()
-    # 存储图像层的注意力分布（如果需要输出注意力分布）
-    vision_attentions = () if output_attentions or self.config.output_attentions else None
-    # 存储语言层的注意力分布（如果需要输出注意力分布）
-    language_attentions = () if output_attentions or self.config.output_attentions else None
-    # 存储跨模态层的注意力分布（如果需要输出注意力分布）
-    cross_encoder_attentions = () if output_attentions or self.config.output_attentions else None
-    
-    # 将视觉特征通过全连接层进行处理
-    visual_feats = self.visn_fc(visual_feats, visual_pos)
-    
-    # 运行语言层
-    for layer_module in self.layer:
-        # 调用每个语言层模块进行处理，获取语言特征和对应的注意力分布
-        l_outputs = layer_module(lang_feats, lang_attention_mask, output_attentions=output_attentions)
-        lang_feats = l_outputs[0]
-        # 存储当前语言层的隐藏状态
-        language_hidden_states = language_hidden_states + (lang_feats,)
-        if language_attentions is not None:
-            # 存储当前语言层的注意力分布
-            language_attentions = language_attentions + (l_outputs[1],)
-    
-    # 运行关系层
-    for layer_module in self.r_layers:
-        # 调用每个关系层模块进行处理，获取图像特征和对应的注意力分布
-        v_outputs = layer_module(visual_feats, visual_attention_mask, output_attentions=output_attentions)
-        visual_feats = v_outputs[0]
-        # 存储当前图像层的隐藏状态
-        vision_hidden_states = vision_hidden_states + (visual_feats,)
-        if vision_attentions is not None:
-            # 存储当前图像层的注意力分布
-            vision_attentions = vision_attentions + (v_outputs[1],)
-    
-    # 运行跨模态层
-    for layer_module in self.x_layers:
-        # 调用每个跨模态层模块进行处理，获取语言特征、图像特征和对应的注意力分布
-        x_outputs = layer_module(
-            lang_feats,
-            lang_attention_mask,
-            visual_feats,
-            visual_attention_mask,
-            output_attentions=output_attentions,
-        )
-        lang_feats, visual_feats = x_outputs[:2]
-        # 存储当前跨模态层的图像特征和语言特征的隐藏状态
-        vision_hidden_states = vision_hidden_states + (visual_feats,)
-        language_hidden_states = language_hidden_states + (lang_feats,)
-        if cross_encoder_attentions is not None:
-            # 存储当前跨模态层的注意力分布
-            cross_encoder_attentions = cross_encoder_attentions + (x_outputs[2],)
-    
-    # 存储最终的图像编码器输出，包括隐藏状态和注意力分布（如果需要输出注意力分布）
-    visual_encoder_outputs = (
-        vision_hidden_states,
-        vision_attentions if output_attentions else None,
-    )
-    # 存储最终的语言编码器输出，包括隐藏状态和注意力分布（如果需要输出注意力分布）
-    lang_encoder_outputs = (
-        language_hidden_states,
-        language_attentions if output_attentions else None,
-    )
-    
-    # 返回编码器的输出，注意力分布（如果需要输出），以元组形式返回
-    return (
-        visual_encoder_outputs,
-        lang_encoder_outputs,
-        cross_encoder_attentions if output_attentions else None,
-    )
-# 定义一个 LxmertPooler 类，继承自 nn.Module 类
-class LxmertPooler(nn.Module):
-    # 初始化方法，接受参数 config
+        ):
+            vision_hidden_states = ()
+            language_hidden_states = ()
+            # 如果需要输出注意力权重或者配置要求输出注意力权重，则初始化视觉和语言注意力为空元组，否则设为None
+            vision_attentions = () if output_attentions or self.config.output_attentions else None
+            language_attentions = () if output_attentions or self.config.output_attentions else None
+            cross_encoder_attentions = () if output_attentions or self.config.output_attentions else None
+
+            visual_feats = self.visn_fc(visual_feats, visual_pos)
+
+            # 运行语言层
+            for layer_module in self.layer:
+                # 调用每个语言层模块进行前向传播
+                l_outputs = layer_module(lang_feats, lang_attention_mask, output_attentions=output_attentions)
+                lang_feats = l_outputs[0]
+                # 将每一层的隐藏状态添加到语言隐藏状态元组中
+                language_hidden_states = language_hidden_states + (lang_feats,)
+                # 如果需要记录注意力权重，将每一层的注意力权重添加到语言注意力元组中
+                if language_attentions is not None:
+                    language_attentions = language_attentions + (l_outputs[1],)
+
+            # 运行关系层
+            for layer_module in self.r_layers:
+                # 调用每个关系层模块进行前向传播
+                v_outputs = layer_module(visual_feats, visual_attention_mask, output_attentions=output_attentions)
+                visual_feats = v_outputs[0]
+                # 将每一层的隐藏状态添加到视觉隐藏状态元组中
+                vision_hidden_states = vision_hidden_states + (visual_feats,)
+                # 如果需要记录注意力权重，将每一层的注意力权重添加到视觉注意力元组中
+                if vision_attentions is not None:
+                    vision_attentions = vision_attentions + (v_outputs[1],)
+
+            # 运行跨模态层
+            for layer_module in self.x_layers:
+                # 调用每个跨模态层模块进行前向传播
+                x_outputs = layer_module(
+                    lang_feats,
+                    lang_attention_mask,
+                    visual_feats,
+                    visual_attention_mask,
+                    output_attentions=output_attentions,
+                )
+                lang_feats, visual_feats = x_outputs[:2]
+                # 将每一层的隐藏状态添加到视觉和语言隐藏状态元组中
+                vision_hidden_states = vision_hidden_states + (visual_feats,)
+                language_hidden_states = language_hidden_states + (lang_feats,)
+                # 如果需要记录注意力权重，将每一层的注意力权重添加到跨模态注意力元组中
+                if cross_encoder_attentions is not None:
+                    cross_encoder_attentions = cross_encoder_attentions + (x_outputs[2],)
+            visual_encoder_outputs = (
+                vision_hidden_states,
+                vision_attentions if output_attentions else None,
+            )
+            lang_encoder_outputs = (
+                language_hidden_states,
+                language_attentions if output_attentions else None,
+            )
+            # 返回最终的视觉编码器输出、语言编码器输出以及跨编码器注意力权重（如果需要的话）
+            return (
+                visual_encoder_outputs,
+                lang_encoder_outputs,
+                cross_encoder_attentions if output_attentions else None,
+            )
+class LxmertVisualObjHead(nn.Module):
     def __init__(self, config):
-        # 调用父类的初始化方法
-        super(LxmertPooler, self).__init__()
-        # 创建一个全连接层，输入维度为 config.hidden_size，输出维度为 config.hidden_size
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个激活函数为 Tanh 的激活层
-        self.activation = nn.Tanh()
-
-    # 前向传播方法，接受参数 hidden_states
-    def forward(self, hidden_states):
-        # 从 hidden_states 中取出第一个 token 对应的隐藏状态
-        first_token_tensor = hidden_states[:, 0]
-        # 将取出的隐藏状态传入全连接层进行计算
-        pooled_output = self.dense(first_token_tensor)
-        # 通过激活层处理得到最终的池化输出
-        pooled_output = self.activation(pooled_output)
-        # 返回池化输出
-        return pooled_output
-
-
-# 定义一个 LxmertPredictionHeadTransform 类，继承自 nn.Module 类
-class LxmertPredictionHeadTransform(nn.Module):
-    # 初始化方法，接受参数 config
-    def __init__(self, config):
-        # 调用父类的初始化方法
-        super(LxmertPredictionHeadTransform, self).__init__()
-        # 创建一个全连接层，输入维度为 config.hidden_size，输出维度为 config.hidden_size
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 获取对应激活函数的函数对象
-        self.transform_act_fn = ACT2FN[config.hidden_act]
-        # 创建一个 LayerNorm 层，输入维度为 config.hidden_size
-        self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=1e-12)
-
-    # 前向传播方法，接受参数 hidden_states
-    def forward(self, hidden_states):
-        # 通过全连接层计算得到新的隐藏状态
-        hidden_states = self.dense(hidden_states)
-        # 通过激活函数处理隐藏状态
-        hidden_states = self.transform_act_fn(hidden_states)
-        # 通过 LayerNorm 处理隐藏状态
-        hidden_states = self.LayerNorm(hidden_states)
-        # 返回处理后的隐藏状态
-        return hidden_states
-
-
-# 定义一个 LxmertLMPredictionHead 类，继承自 nn.Module 类
-class LxmertLMPredictionHead(nn.Module):
-    # 初始化方法，接受参数 config 和 lxmert_model_embedding_weights
-    def __init__(self, config, lxmert_model_embedding_weights):
-        # 调用父类的初始化方法
-        super(LxmertLMPredictionHead, self).__init__()
-        # 创建一个 LxmertPredictionHeadTransform 对象
-        self.transform = LxmertPredictionHeadTransform(config)
-
-        # 输出权重与输入嵌入层相同，但每个 token 都有一个输出偏置
-        # 创建一个���性层，输入维度为 lxmert_model_embedding_weights 的列数，输出维度为 lxmert_model_embedding_weights 的行数，不使用偏置
-        self.decoder = nn.Linear(
-            lxmert_model_embedding_weights.size(1),
-            lxmert_model_embedding_weights.size(0),
-            bias=False,
-        )
-        # 将 decoder 层的权重设置为 lxmert_model_embedding_weights
-        self.decoder.weight = lxmert_model_embedding_weights
-        # 创建一个用于存储偏置的参数
-        self.bias = nn.Parameter(torch.zeros(lxmert_model_embedding_weights.size(0)))
-
-    # 前向传播方法，接受参数 hidden_states
-    def forward(self, hidden_states):
-        # 通过 transform 处理隐藏状态
-        hidden_states = self.transform(hidden_states)
-        # 通过 decoder 层计算得到预测结果并加上偏置
-        hidden_states = self.decoder(hidden_states) + self.bias
-        # 返回处理后的隐藏状态
-        return hidden_states
-
-
-# 定义一个 LxmertVisualAnswerHead 类，继承自 nn.Module 类
-class LxmertVisualAnswerHead(nn.Module):
-    # 初始化方法，接受参数 config 和 num_labels
-    def __init__(self, config, num_labels):
-        # 调用父类的初始化方法
         super().__init__()
-        # 获取隐藏层维度
         hid_dim = config.hidden_size
-        # 创建一个包含多个层的线性层对象，包括两个全连接层、GeLU 激活函数、LayerNorm 层和最终的全连接层
-        self.logit_fc = nn.Sequential(
+        self.vis_fc = nn.Sequential(
             nn.Linear(hid_dim, hid_dim * 2),
             GeLU(),
             nn.LayerNorm(hid_dim * 2, eps=1e-12),
-            nn.Linear(hid_dim * 2, num_labels),
         )
 
-    # 前向传播方法，接受参数 hidden_states
     def forward(self, hidden_states):
-        # 通过 logit_fc 进行前向传播得到预测结果
-        return self.logit_fc(hidden_states)
-
-
-# 定义一个 LxmertVisualObjHead 类，继承自 nn.Module 类
-    # 初始化函数，接收一个配置参数
+        # 进行视觉特征的预测，通过全连接层实现特征转换和归一化
+        visual_feats = self.vis_fc(hidden_states)
+        return visual_feats
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__()
-        # 创建一个 LxmertPredictionHeadTransform 对象并赋值给 self.transform
         self.transform = LxmertPredictionHeadTransform(config)
-        # 决定是否使用视觉损失
+        # Decide the use of visual losses
         visual_losses = {}
-        # 如果配置中包含视觉对象损失，则创建对应的损失字典并添加到 visual_losses 中
         if config.visual_obj_loss:
             visual_losses["obj"] = {"shape": (-1,), "num": config.num_object_labels}
-        # 如果配置中包含视觉属性损失，则创建对应的损失字典并添加到 visual_losses 中
         if config.visual_attr_loss:
             visual_losses["attr"] = {"shape": (-1,), "num": config.num_attr_labels}
-        # 如果配置中包含视觉特征损失，则创建对应的损失字典并添加到 visual_losses 中
         if config.visual_feat_loss:
             visual_losses["feat"] = {
                 "shape": (-1, config.visual_feat_dim),
                 "num": config.visual_feat_dim,
             }
-        # 将视觉损失字典赋值给 self.visual_losses
         self.visual_losses = visual_losses
+        # 定义一个字典，用于存储不同类型的视觉损失
 
-        # 输出权重与输入嵌入相同，但每个令牌都有一个输出偏差
-        # 创建一个包含多个 nn.Linear 对象的字典，并赋值给 self.decoder_dict
+        # The output weights are the same as the input embeddings, but there is
+        # an output-only bias for each token.
         self.decoder_dict = nn.ModuleDict(
             {key: nn.Linear(config.hidden_size, self.visual_losses[key]["num"]) for key in self.visual_losses}
         )
+        # 使用 nn.ModuleDict 创建一个 Module 字典，每个 key 对应不同的视觉损失类型，
+        # 值为一个 Linear 层，用于处理隐藏状态到对应损失类型的输出映射
 
-    # 前向传播函数
     def forward(self, hidden_states):
-        # 使用 self.transform 对隐藏状态进行转换
         hidden_states = self.transform(hidden_states)
+        # 对输入的隐藏状态进行转换
         output = {}
-        # 遍历视觉损失字典中的每一个损失类型
         for key in self.visual_losses:
-            # 使用 self.decoder_dict 中对应的线性层处理隐藏状态，并将结果添加到 output 字典中
             output[key] = self.decoder_dict[key](hidden_states)
-        # 返回输出字典
+        # 使用每个视觉损失对应的 Linear 层计算输出
         return output
 class LxmertPreTrainingHeads(nn.Module):
-    # 定义 Lxmert 模型的预训练头部
     def __init__(self, config, lxmert_model_embedding_weights):
-        # 初始化方法，接收配置和嵌入权重
         super(LxmertPreTrainingHeads, self).__init__()
-        # 调用父类的初始化方法
+        # 初始化预测头部：语言模型预测头部
         self.predictions = LxmertLMPredictionHead(config, lxmert_model_embedding_weights)
-        # 创建预测输出层对象
+        # 初始化预测头部：序列关系预测头部
         self.seq_relationship = nn.Linear(config.hidden_size, 2)
-        # 创建序列关系分类层对象
 
     def forward(self, sequence_output, pooled_output):
-        # 前向传播方法，接收序列输出和池化后的输出
+        # 预测语言模型的分数
         prediction_scores = self.predictions(sequence_output)
-        # 获取预测分数
+        # 预测序列关系的分数
         seq_relationship_score = self.seq_relationship(pooled_output)
-        # 获取序列关系得分
         return prediction_scores, seq_relationship_score
-        # 返回预测分数和序列关系得分
 
 
 class LxmertPreTrainedModel(PreTrainedModel):
-    # Lxmert 预训练模型类
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
-    # 一个抽象类，用于处理权重初始化、预训练模型的下载和加载的简单接口
 
     config_class = LxmertConfig
-    # 配置类为 LxmertConfig
     load_tf_weights = load_tf_weights_in_lxmert
-    # 加载 TensorFlow 权重
     base_model_prefix = "lxmert"
-    # 基础模型前缀为 "lxmert"
 
     def _init_weights(self, module):
-        # 初始化权重方法
         """Initialize the weights"""
-        # 初始化权重
         if isinstance(module, nn.Linear):
-            # 若模块是线性层
-            # Slightly different from the TF version which uses truncated_normal for initialization
-            # 略有不同于 TensorFlow 版本，TensorFlow 使用截尾正态分布进行初始化
-            # cf https://github.com/pytorch/pytorch/pull/5617
-            # 参考链接
+            # 使用正态分布初始化线性层的权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 初始化权重的数据
             if module.bias is not None:
-                # 若有偏置项
                 module.bias.data.zero_()
-                # 偏置项数据初始化为零
         elif isinstance(module, nn.Embedding):
-            # 若模块是嵌入层
+            # 使用正态分布初始化嵌入层的权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 初始化权重的数据
             if module.padding_idx is not None:
-                # 若有填充索引
                 module.weight.data[module.padding_idx].zero_()
-                # 填充索引对应的权重初始化为零
         elif isinstance(module, nn.LayerNorm):
-            # 若模块是 LayerNorm 层
+            # 将 LayerNorm 层的偏置项初始化为零，权重初始化为 1.0
             module.bias.data.zero_()
-            # 偏置项初始化为零
             module.weight.data.fill_(1.0)
-            # 权重项初始化为 1.0
+
 
 LXMERT_START_DOCSTRING = r"""
 
@@ -1006,48 +865,43 @@ LXMERT_START_DOCSTRING = r"""
     This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
     Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
     and behavior.
-    # 定义一个"配置"参数，其类型为 LxmertConfig 类型
-    # LxmertConfig 类包含了模型的所有参数配置
     Parameters:
         config ([`LxmertConfig`]): Model configuration class with all the parameters of the model.
-            # 使用配置文件初始化模型只会加载模型的配置信息，
-            # 而不会加载与模型相关联的权重。
-            # 要加载模型权重，需要使用 [`~PreTrainedModel.from_pretrained`] 方法。
             Initializing with a config file does not load the weights associated with the model, only the
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# 定义 LXMERT 模型，输出未经特定头部处理的原始隐藏状态
-# LXMERT_START_DOCSTRING 中包含 LXMERT 模型的详细信息
+LXMERT_INPUTS_DOCSTRING = r"""
+Args:
+    batch_size (int): The batch size of the input data.
+    sequence_length (int): The length of the input sequences.
+"""
+
 
 @add_start_docstrings(
     "The bare Lxmert Model transformer outputting raw hidden-states without any specific head on top.",
     LXMERT_START_DOCSTRING,
 )
 class LxmertModel(LxmertPreTrainedModel):
-    # 初始化函数
     def __init__(self, config):
-        # 调用父类初始化函数
         super().__init__(config)
-        # 实例化 LxmertEmbeddings 对象
+        # Initialize the embeddings module with the provided configuration
         self.embeddings = LxmertEmbeddings(config)
-        # 实例化 LxmertEncoder 对象
+        # Initialize the encoder module with the provided configuration
         self.encoder = LxmertEncoder(config)
-        # 实例化 LxmertPooler 对象
+        # Initialize the pooler module with the provided configuration
         self.pooler = LxmertPooler(config)
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 获取输入嵌入
     def get_input_embeddings(self):
+        # Return the word embeddings from the embeddings module
         return self.embeddings.word_embeddings
 
-    # 设置输入嵌入
     def set_input_embeddings(self, new_embeddings):
+        # Update the word embeddings in the embeddings module with new_embeddings
         self.embeddings.word_embeddings = new_embeddings
 
-    # 前向传播函数，包含参数和返回类型的描述信息
-    # 同时包含代码示例的描述信息
     @add_start_docstrings_to_model_forward(LXMERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -1066,222 +920,75 @@ class LxmertModel(LxmertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-)
 
-# 定义具有指定预训练头的 LXMERT 模型
-# LXMERT_START_DOCSTRING 包含了 LXMERT 模型的详细信息
-class LxmertForPreTraining(LxmertPreTrainedModel):
-    _tied_weights_keys = ["cls.predictions.decoder.weight"]
-    # 定义 LxmertPreTraining 类，继承自 nn.Module
+        # Perform forward pass through the LxmertModel
+        ...
     def __init__(self, config):
-        # 调用父类的构造方法
         super().__init__(config)
-        # 保存配置参数
+        # Configuration
         self.config = config
-        # 设置问答标签数量
-        self.num_qa_labels = config.num_qa_labels
-        # 设置视觉损失归一化因子
-        self.visual_loss_normalizer = config.visual_loss_normalizer
-    
-        # 是否使用 mask language model 预训练任务
-        self.task_mask_lm = config.task_mask_lm
-        # 是否使用目标预测预训练任务
-        self.task_obj_predict = config.task_obj_predict
-        # 是否使用匹配预训练任务
-        self.task_matched = config.task_matched
-        # 是否使用问答预训练任务
-        self.task_qa = config.task_qa
-    
-        # 创建 LxmertModel 实例
-        self.lxmert = LxmertModel(config)
-    
-        # 创建预训练头部
-        self.cls = LxmertPreTrainingHeads(config, self.lxmert.embeddings.word_embeddings.weight)
-        # 如果使用目标预测预训练任务，创建相应的头部
+        self.num_qa_labels = config.num_qa_labels  # 从配置中获取问答标签数量
+        self.visual_loss_normalizer = config.visual_loss_normalizer  # 从配置中获取视觉损失的归一化器
+
+        # Use of pretraining tasks
+        self.task_mask_lm = config.task_mask_lm  # 是否执行掩码语言建模任务
+        self.task_obj_predict = config.task_obj_predict  # 是否执行对象预测任务
+        self.task_matched = config.task_matched  # 是否执行匹配任务
+        self.task_qa = config.task_qa  # 是否执行问答任务
+
+        # Lxmert backbone
+        self.lxmert = LxmertModel(config)  # 初始化Lxmert模型
+
+        # Pre-training heads
+        self.cls = LxmertPreTrainingHeads(config, self.lxmert.embeddings.word_embeddings.weight)  # 初始化预训练头部
         if self.task_obj_predict:
-            self.obj_predict_head = LxmertVisualObjHead(config)
-        # 如果使用问答预训练任务，创建相应的头部
+            self.obj_predict_head = LxmertVisualObjHead(config)  # 如果执行对象预测任务，则初始化对象预测头部
         if self.task_qa:
-            self.answer_head = LxmertVisualAnswerHead(config, self.num_qa_labels)
-    
-        # 进行权重初始化
-        self.post_init()
-    
-        # 定义损失函数
+            self.answer_head = LxmertVisualAnswerHead(config, self.num_qa_labels)  # 如果执行问答任务，则初始化问答头部
+
+        # Weight initialization
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行后初始化操作，包括权重初始化和最终处理
+
+        # Loss functions
         self.loss_fcts = {
-            "l2": SmoothL1Loss(reduction="none"),
-            "visual_ce": CrossEntropyLoss(reduction="none"),
-            "ce": CrossEntropyLoss(),
+            "l2": SmoothL1Loss(reduction="none"),  # 平滑的L1损失函数，不进行降维
+            "visual_ce": CrossEntropyLoss(reduction="none"),  # 视觉交叉熵损失函数，不进行降维
+            "ce": CrossEntropyLoss(),  # 交叉熵损失函数，进行降维
         }
-    
-        # 定义视觉损失
+
         visual_losses = {}
-        # 如果使用目标预测视觉损失
         if config.visual_obj_loss:
             visual_losses["obj"] = {
-                "shape": (-1,),
-                "num": config.num_object_labels,
-                "loss": "visual_ce",
+                "shape": (-1,),  # 形状为一维向量
+                "num": config.num_object_labels,  # 目标标签数量
+                "loss": "visual_ce",  # 使用视觉交叉熵损失
             }
-        # 如果使用属性预测视觉损失
         if config.visual_attr_loss:
             visual_losses["attr"] = {
-                "shape": (-1,),
-                "num": config.num_attr_labels,
-                "loss": "visual_ce",
+                "shape": (-1,),  # 形状为一维向量
+                "num": config.num_attr_labels,  # 属性标签数量
+                "loss": "visual_ce",  # 使用视觉交叉熵损失
             }
-        # 如果使用特征回归视觉损失
         if config.visual_feat_loss:
             visual_losses["feat"] = {
-                "shape": (-1, config.visual_feat_dim),
-                "num": config.visual_feat_dim,
-                "loss": "l2",
+                "shape": (-1, config.visual_feat_dim),  # 形状为二维张量，其中维度为视觉特征维度
+                "num": config.visual_feat_dim,  # 视觉特征的维度
+                "loss": "l2",  # 使用平滑的L1损失
             }
-        # 保存视觉损失配置
-        self.visual_losses = visual_losses
-    # 调整问答任务标签数量的方法
+        self.visual_losses = visual_losses  # 存储视觉损失的配置信息
     def resize_num_qa_labels(self, num_labels):
         """
-        从提供的新线性层构建调整大小的问答任务线性层模块。增加大小将添加新初始化的权重。减少大小将从末尾删除权重
-    
-        参数:
-            num_labels (`int`, *optional*):
-                线性层权重矩阵中新的标签数量。增加大小将在末尾添加新初始化的权重。减少大小将从末尾删除权重。如果未提供或为 `None`，只返回模型的问答标签 ``torch.nn.Linear``` 模块的指针，而不执行任何操作。
-    
-        返回:
-            `torch.nn.Linear`: 调整后的线性层或旧线性层的指针
-        """
-        # 获取当前的问答任务逻辑层
-        cur_qa_logit_layer = self.get_qa_logit_layer()
-        # 如果没有提供新的标签数量或当前的问答任务逻辑层为 None，则返回
-        if num_labels is None or cur_qa_logit_layer is None:
-            return
-        # 调整问答任务标签数量
-        new_qa_logit_layer = self._resize_qa_labels(num_labels)
-        # 更新配置和标签数量
-        self.config.num_qa_labels = num_labels
-        self.num_qa_labels = num_labels
-    
-        return new_qa_logit_layer
-    
-    # 实际调整问答任务标签数量的内部方法
-    def _resize_qa_labels(self, num_labels):
-        # 获取当前的问答任务逻辑层
-        cur_qa_logit_layer = self.get_qa_logit_layer()
-        # 创建调整后的问答任务逻辑层
-        new_qa_logit_layer = self._get_resized_qa_labels(cur_qa_logit_layer, num_labels)
-        # 设置调整后的问答任务逻辑层
-        self._set_qa_logit_layer(new_qa_logit_layer)
-        # 返回调整后的问答任务逻辑层
-        return self.get_qa_logit_layer()
-    
-    # 获取问答任务逻辑层的方法
-    def get_qa_logit_layer(self) -> nn.Module:
-        """
-        返回生成问答任务逻辑输出的线性层。
-    
-        返回:
-            `nn.Module`: 一个将问答预测隐藏状态映射到输出的 PyTorch 模块，如果 LXMERT 没有视觉答案 head，则返回 `None`。
-        """
-        # 如果有 answer_head 属性，则返回其最后一个线性层
-        if hasattr(self, "answer_head"):
-            return self.answer_head.logit_fc[-1]
-    
-    # 设置问答任务逻辑层的方法
-    def _set_qa_logit_layer(self, qa_logit_layer):
-        # 设置 answer_head 的最后一个线性层
-        self.answer_head.logit_fc[-1] = qa_logit_layer
-    # 根据当前 QA 标签层和目标标签数量获取调整后的 QA 标签层
-    def _get_resized_qa_labels(self, cur_qa_logit_layer, num_labels):
-        # 如果目标标签数量为 None，则返回当前 QA 标签层
-        if num_labels is None:
-            return cur_qa_logit_layer
-
-        # 获取当前 QA 标签层的标签数量和隐藏维度
-        cur_qa_labels, hidden_dim = cur_qa_logit_layer.weight.size()
-        # 如果当前标签数量等于目标标签数量，则返回当前 QA 标签层
-        if cur_qa_labels == num_labels:
-            return cur_qa_logit_layer
-
-        # 构建新的线性输出层
-        if getattr(cur_qa_logit_layer, "bias", None) is not None:
-            new_qa_logit_layer = nn.Linear(hidden_dim, num_labels)
-        else:
-            new_qa_logit_layer = nn.Linear(hidden_dim, num_labels, bias=False)
-
-        # 将新的 QA 标签层移动到与当前权重相同的设备上
-        new_qa_logit_layer.to(cur_qa_logit_layer.weight.device)
-
-        # 初始化所有新标签的权重
-        self._init_weights(new_qa_logit_layer)
-
-        # 从先前的权重复制标签
-        num_labels_to_copy = min(cur_qa_labels, num_labels)
-        new_qa_logit_layer.weight.data[:num_labels_to_copy, :] = cur_qa_logit_layer.weight.data[:num_labels_to_copy, :]
-        if getattr(cur_qa_logit_layer, "bias", None) is not None:
-            new_qa_logit_layer.bias.data[:num_labels_to_copy] = cur_qa_logit_layer.bias.data[:num_labels_to_copy]
-
-        return new_qa_logit_layer
-
-    # 用于模型前向传播的函数，添加了 LXMERT 输入文档字符串的起始部分
-    @add_start_docstrings_to_model_forward(LXMERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 将返回文档字符串中的输出类型替换为 LxmertForPreTrainingOutput，配置类替换为 _CONFIG_FOR_DOC
-    @replace_return_docstrings(output_type=LxmertForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
-    def forward(
-        self,
-        input_ids: Optional[torch.LongTensor] = None,
-        visual_feats: Optional[torch.FloatTensor] = None,
-        visual_pos: Optional[torch.FloatTensor] = None,
-        attention_mask: Optional[torch.FloatTensor] = None,
-        visual_attention_mask: Optional[torch.FloatTensor] = None,
-        token_type_ids: Optional[torch.LongTensor] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        obj_labels: Optional[Dict[str, Tuple[torch.FloatTensor, torch.FloatTensor]]] = None,
-        matched_label: Optional[torch.LongTensor] = None,
-        ans: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        **kwargs,
-```py  
-# 使用 add_start_docstrings() 装饰器为 LxmertForQuestionAnswering 类添加文档字符串，说明该类是带有视觉问答头的 Lxmert 模型，用于下游 QA 任务
-# 调用父类的初始化方法，传入配置参数
-class LxmertForQuestionAnswering(LxmertPreTrainedModel):
-    def __init__(self, config):
-        super().__init__(config)
-        # 保存配置参数
-        self.config = config
-        # 保存 QA 标签数量
-        self.num_qa_labels = config.num_qa_labels
-        # 保存视觉损失标准化器
-        self.visual_loss_normalizer = config.visual_loss_normalizer
-
-        # 创建 Lxmert 模型
-        self.lxmert = LxmertModel(config)
-
-        # 创建视觉问答头
-        self.answer_head = LxmertVisualAnswerHead(config, self.num_qa_labels)
-
-        # 初始化权重
-        # 初始化权重并应用最终处理
-        self.post_init()
-
-        # 损失函数
-        self.loss = CrossEntropyLoss()
-
-    def resize_num_qa_labels(self, num_labels):
-        """
-        构建一个调整的问题回答线性层模块，增加大小将会添加新初始化的权重，减小大小将会移除权重
+        从提供的新线性层构建调整大小的问答线性层模块。增加大小会添加新初始化的权重，减小大小会从末尾移除权重。
 
         Args:
             num_labels (`int`, *optional*):
-                线性层权重矩阵中的新标签数量。增加大小将会在末尾添加新初始化的权重。减小大小将会从末尾移除权重。如果未提供或为 `None`，则仅返回模型的 qa 标签 ``torch.nn.Linear``` 模块的指针而不执行任何操作。
+                线性层权重矩阵中的新标签数量。增加大小会在末尾添加新初始化的权重，减小大小会从末尾移除权重。如果未提供或为 `None`，则仅返回模型的问答标签 `torch.nn.Linear` 模块的指针，而不执行任何操作。
 
-        Return:
-            `torch.nn.Linear`: 调整大小后的线性层的指针或旧线性层
+        Returns:
+            `torch.nn.Linear`: 调整大小后的线性层指针或旧线性层
         """
-        
+
         cur_qa_logit_layer = self.get_qa_logit_layer()
         if num_labels is None or cur_qa_logit_layer is None:
             return
@@ -1292,6 +999,16 @@ class LxmertForQuestionAnswering(LxmertPreTrainedModel):
         return new_qa_logit_layer
 
     def _resize_qa_labels(self, num_labels):
+        """
+        根据指定的标签数量调整当前问答预测线性层。
+
+        Args:
+            num_labels (`int`): 线性层权重矩阵中的新标签数量
+
+        Returns:
+            `nn.Module`: 调整大小后的问答预测线性层
+        """
+
         cur_qa_logit_layer = self.get_qa_logit_layer()
         new_qa_logit_layer = self._get_resized_qa_labels(cur_qa_logit_layer, num_labels)
         self._set_qa_logit_layer(new_qa_logit_layer)
@@ -1299,131 +1016,225 @@ class LxmertForQuestionAnswering(LxmertPreTrainedModel):
 
     def get_qa_logit_layer(self) -> nn.Module:
         """
-        返回用于产生问题回答对数的线性层
+        返回生成问答 logits 的线性层模块。
 
         Returns:
-            `nn.Module`: 一个将问题回答预测隐藏状态映射的 torch 模块。`None`: 如果 Lxmert 没有视觉问答头。
+            `nn.Module`: 一个 torch 模块，映射问答预测隐藏状态的线性层，如果 LXMERT 没有视觉回答头部则返回 `None`。
         """
-
         if hasattr(self, "answer_head"):
             return self.answer_head.logit_fc[-1]
 
     def _set_qa_logit_layer(self, qa_logit_layer):
+        """
+        设置问答预测线性层。
+
+        Args:
+            qa_logit_layer (`nn.Module`): 新的问答预测线性层
+        """
         self.answer_head.logit_fc[-1] = qa_logit_layer
-    # 获取调整大小后的问答标签
-    def _get_resized_qa_labels(self, cur_qa_logit_layer, num_labels):
-        # 如果标签数量为None，直接返回当前的问答逻辑层
-        if num_labels is None:
-            return cur_qa_logit_layer
+    # 如果 num_labels 为 None，则直接返回当前的 cur_qa_logit_layer
+    if num_labels is None:
+        return cur_qa_logit_layer
 
-        # 获取当前问答标签的数量和隐藏维度
-        cur_qa_labels, hidden_dim = cur_qa_logit_layer.weight.size()
-        # 如果当前标签数量等于要求的标签数量，直接返回当前的问答逻辑层
-        if cur_qa_labels == num_labels:
-            return cur_qa_logit_layer
+    # 获取当前 cur_qa_logit_layer 的标签数和隐藏维度
+    cur_qa_labels, hidden_dim = cur_qa_logit_layer.weight.size()
 
-        # 构建新的线性输出层
-        # 如果当前的逻辑层有偏置项，则创建新的线性层含有偏置项
-        if getattr(cur_qa_logit_layer, "bias", None) is not None:
-            new_qa_logit_layer = nn.Linear(hidden_dim, num_labels)
-        # 如果当前的逻辑层没有偏置项，则创建新的线性层不含偏置项
-        else:
-            new_qa_logit_layer = nn.Linear(hidden_dim, num_labels, bias=False)
+    # 如果当前标签数等于 num_labels，则直接返回当前的 cur_qa_logit_layer
+    if cur_qa_labels == num_labels:
+        return cur_qa_logit_layer
 
-        # 将新的问答逻辑层移到与当前问答逻辑层相同的设备上
-        new_qa_logit_layer.to(cur_qa_logit_layer.weight.device)
+    # 如果 cur_qa_logit_layer 存在偏置项，则创建新的线性输出层，否则不创建偏置项的新线性层
+    if getattr(cur_qa_logit_layer, "bias", None) is not None:
+        new_qa_logit_layer = nn.Linear(hidden_dim, num_labels)
+    else:
+        new_qa_logit_layer = nn.Linear(hidden_dim, num_labels, bias=False)
 
-        # 初始化所有的新标签
-        self._init_weights(new_qa_logit_layer)
+    # 将新的线性层放置在与 cur_qa_logit_layer 相同的设备上
+    new_qa_logit_layer.to(cur_qa_logit_layer.weight.device)
 
-        # 从之前的权重中复制标签
-        num_labels_to_copy = min(cur_qa_labels, num_labels)
-        new_qa_logit_layer.weight.data[:num_labels_to_copy, :] = cur_qa_logit_layer.weight.data[:num_labels_to_copy, :]
-        # 如果当前逻辑层有偏置项，则复制偏置项
-        if getattr(cur_qa_logit_layer, "bias", None) is not None:
-            new_qa_logit_layer.bias.data[:num_labels_to_copy] = cur_qa_logit_layer.bias.data[:num_labels_to_copy]
+    # 初始化新标签的权重
+    self._init_weights(new_qa_logit_layer)
 
-        return new_qa_logit_layer
+    # 复制之前权重中的标签
+    num_labels_to_copy = min(cur_qa_labels, num_labels)
+    new_qa_logit_layer.weight.data[:num_labels_to_copy, :] = cur_qa_logit_layer.weight.data[:num_labels_to_copy, :]
+    if getattr(cur_qa_logit_layer, "bias", None) is not None:
+        new_qa_logit_layer.bias.data[:num_labels_to_copy] = cur_qa_logit_layer.bias.data[:num_labels_to_copy]
 
-    # 定义前向传播函数
-    @add_start_docstrings_to_model_forward(LXMERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,
-        output_type=LxmertForQuestionAnsweringOutput,
-        config_class=_CONFIG_FOR_DOC,
-    )
-    def forward(
-        self,
-        input_ids: Optional[torch.LongTensor] = None,
-        visual_feats: Optional[torch.FloatTensor] = None,
-        visual_pos: Optional[torch.FloatTensor] = None,
-        attention_mask: Optional[torch.FloatTensor] = None,
-        visual_attention_mask: Optional[torch.FloatTensor] = None,
-        token_type_ids: Optional[torch.LongTensor] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-    # 定义一个方法，参数为input_ids, visual_feats, visual_pos, token_type_ids, attention_mask, visual_attention_mask, inputs_embeds, output_hidden_states, output_attentions, return_dict, labels
-    def forward(
-        self,
-        input_ids,
-        visual_feats,
-        visual_pos,
-        token_type_ids,
-        attention_mask,
-        visual_attention_mask,
-        inputs_embeds,
-        output_hidden_states,
-        output_attentions,
-        return_dict,
-        labels
-    ) -> Union[LxmertForQuestionAnsweringOutput, Tuple[torch.FloatTensor]]:
+    # 返回新的线性层 new_qa_logit_layer
+    return new_qa_logit_layer
+
+
+@add_start_docstrings_to_model_forward(LXMERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+@replace_return_docstrings(output_type=LxmertForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
+def forward(
+    self,
+    input_ids: Optional[torch.LongTensor] = None,
+    visual_feats: Optional[torch.FloatTensor] = None,
+    visual_pos: Optional[torch.FloatTensor] = None,
+    attention_mask: Optional[torch.FloatTensor] = None,
+    visual_attention_mask: Optional[torch.FloatTensor] = None,
+    token_type_ids: Optional[torch.LongTensor] = None,
+    inputs_embeds: Optional[torch.FloatTensor] = None,
+    labels: Optional[torch.LongTensor] = None,
+    obj_labels: Optional[Dict[str, Tuple[torch.FloatTensor, torch.FloatTensor]]] = None,
+    matched_label: Optional[torch.LongTensor] = None,
+    ans: Optional[torch.Tensor] = None,
+    output_attentions: Optional[bool] = None,
+    output_hidden_states: Optional[bool] = None,
+    return_dict: Optional[bool] = None,
+    **kwargs,
+):
+    # 此处函数定义用于模型的前向传播，接收多个输入参数和可选的返回类型标志
+@add_start_docstrings(
+    """Lxmert Model with a visual-answering head on top for downstream QA tasks""",
+    LXMERT_START_DOCSTRING,
+)
+class LxmertForQuestionAnswering(LxmertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+        # Configuration
+        self.config = config  # 存储模型配置信息
+        self.num_qa_labels = config.num_qa_labels  # 获取问题回答标签的数量
+        self.visual_loss_normalizer = config.visual_loss_normalizer  # 获取视觉损失归一化参数
+
+        # Lxmert backbone
+        self.lxmert = LxmertModel(config)  # 初始化LXMERT模型作为主干网络
+
+        self.answer_head = LxmertVisualAnswerHead(config, self.num_qa_labels)  # 初始化视觉回答头部
+
+        # Weight initialization
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行权重初始化和最终处理步骤
+
+        # Loss function
+        self.loss = CrossEntropyLoss()  # 定义交叉熵损失函数
+
+    def resize_num_qa_labels(self, num_labels):
+        """
+        Build a resized question answering linear layer Module from a provided new linear layer. Increasing the size
+        will add newly initialized weights. Reducing the size will remove weights from the end
+
+        Args:
+            num_labels (`int`, *optional*):
+                New number of labels in the linear layer weight matrix. Increasing the size will add newly initialized
+                weights at the end. Reducing the size will remove weights from the end. If not provided or `None`, just
+                returns a pointer to the qa labels ``torch.nn.Linear``` module of the model without doing anything.
+
+        Return:
+            `torch.nn.Linear`: Pointer to the resized Linear layer or the old Linear layer
+        """
+        cur_qa_logit_layer = self.get_qa_logit_layer()  # 获取当前问题回答对数层
+
+        if num_labels is None or cur_qa_logit_layer is None:
+            return  # 如果没有提供num_labels或当前qa_logit_layer为None，则直接返回
+
+        new_qa_logit_layer = self._resize_qa_labels(num_labels)  # 调整问题回答对数层的大小
+        self.config.num_qa_labels = num_labels  # 更新模型配置中的问题回答标签数量
+        self.num_qa_labels = num_labels  # 更新当前实例的问题回答标签数量
+
+        return new_qa_logit_layer  # 返回调整后的问题回答对数层
+
+    def _resize_qa_labels(self, num_labels):
+        cur_qa_logit_layer = self.get_qa_logit_layer()  # 获取当前问题回答对数层
+        new_qa_logit_layer = self._get_resized_qa_labels(cur_qa_logit_layer, num_labels)  # 调整问题回答对数层的大小
+        self._set_qa_logit_layer(new_qa_logit_layer)  # 设置新的问题回答对数层
+        return self.get_qa_logit_layer()  # 返回调整后的问题回答对数层
+
+    def get_qa_logit_layer(self) -> nn.Module:
+        """
+        Returns the linear layer that produces question answering logits
+
+        Returns:
+            `nn.Module`: A torch module mapping the question answering prediction hidden states. `None`: A NoneType
+            object if Lxmert does not have the visual answering head.
+        """
+        if hasattr(self, "answer_head"):
+            return self.answer_head.logit_fc[-1]  # 返回最后一个问题回答对数层
+
+    def _set_qa_logit_layer(self, qa_logit_layer):
+        self.answer_head.logit_fc[-1] = qa_logit_layer  # 设置最后一个问题回答对数层
+    # 如果 num_labels 为 None，则直接返回当前的 cur_qa_logit_layer
+    if num_labels is None:
+        return cur_qa_logit_layer
+
+    # 获取当前 cur_qa_logit_layer 的标签数量和隐藏层维度
+    cur_qa_labels, hidden_dim = cur_qa_logit_layer.weight.size()
+
+    # 如果当前 cur_qa_logit_layer 的标签数量与 num_labels 相同，则直接返回 cur_qa_logit_layer
+    if cur_qa_labels == num_labels:
+        return cur_qa_logit_layer
+
+    # 如果 cur_qa_logit_layer 具有偏置项，则构建一个新的线性输出层
+    if getattr(cur_qa_logit_layer, "bias", None) is not None:
+        new_qa_logit_layer = nn.Linear(hidden_dim, num_labels)
+    else:
+        # 如果 cur_qa_logit_layer 没有偏置项，则构建一个无偏置的新线性输出层
+        new_qa_logit_layer = nn.Linear(hidden_dim, num_labels, bias=False)
+
+    # 将新构建的线性输出层放置在与 cur_qa_logit_layer 相同的设备上
+    new_qa_logit_layer.to(cur_qa_logit_layer.weight.device)
+
+    # 初始化新线性输出层的权重
+    self._init_weights(new_qa_logit_layer)
+
+    # 复制标签从先前权重中的标签
+    num_labels_to_copy = min(cur_qa_labels, num_labels)
+    new_qa_logit_layer.weight.data[:num_labels_to_copy, :] = cur_qa_logit_layer.weight.data[:num_labels_to_copy, :]
+
+    # 如果 cur_qa_logit_layer 具有偏置项，则同时复制偏置项
+    if getattr(cur_qa_logit_layer, "bias", None) is not None:
+        new_qa_logit_layer.bias.data[:num_labels_to_copy] = cur_qa_logit_layer.bias.data[:num_labels_to_copy]
+
+    # 返回新构建的线性输出层 new_qa_logit_layer
+    return new_qa_logit_layer
+        ) -> Union[LxmertForQuestionAnsweringOutput, Tuple[torch.FloatTensor]]:
         r"""
-        labels (`Torch.Tensor` of shape `(batch_size)`, *optional`):
+        labels (`Torch.Tensor` of shape `(batch_size)`, *optional*):
             A one-hot representation of the correct answer
         """
-        # 如果return_dict为None，使用self.config.use_return_dict的值
+        # 根据需要确定是否返回字典格式的输出
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 调用lxmert方法，传入参数并获取输出
+
+        # 调用 LXMERT 模型进行前向传播
         lxmert_output = self.lxmert(
-            input_ids=input_ids,
-            visual_feats=visual_feats,
-            visual_pos=visual_pos,
-            token_type_ids=token_type_ids,
-            attention_mask=attention_mask,
-            visual_attention_mask=visual_attention_mask,
-            inputs_embeds=inputs_embeds,
-            output_hidden_states=output_hidden_states,
-            output_attentions=output_attentions,
-            return_dict=return_dict,
+            input_ids=input_ids,                      # 输入的token IDs
+            visual_feats=visual_feats,                # 视觉特征
+            visual_pos=visual_pos,                    # 视觉位置编码
+            token_type_ids=token_type_ids,            # token类型IDs
+            attention_mask=attention_mask,            # 注意力掩码
+            visual_attention_mask=visual_attention_mask,  # 视觉注意力掩码
+            inputs_embeds=inputs_embeds,              # 输入的嵌入表示
+            output_hidden_states=output_hidden_states,  # 输出隐藏状态
+            output_attentions=output_attentions,      # 输出注意力
+            return_dict=return_dict,                  # 是否返回字典格式的输出
         )
-    
-        # 从lxmert输出中获取pooled_output
+
+        # 获取经过 LXMERT 模型后的汇总输出
         pooled_output = lxmert_output[2]
-        # 使用answer_head方法对pooled_output进行处理，得到answer_score
+
+        # 使用答案头部对汇总输出进行评分
         answer_score = self.answer_head(pooled_output)
-        # 初始化loss为None
+
+        # 初始化损失值
         loss = None
-        # 如果labels不为None，使用self.loss计算loss
+        # 如果提供了标签，则计算损失值
         if labels is not None:
             loss = self.loss(answer_score.view(-1, self.num_qa_labels), labels.view(-1))
-    
-        # 如果return_dict为False，返回answer_score和lxmert_output的其余部分
+
+        # 如果不需要返回字典格式的输出，则按元组方式构建输出
         if not return_dict:
             output = (answer_score,) + lxmert_output[3:]
             return (loss,) + output if loss is not None else output
-    
-        # 返回LxmertForQuestionAnsweringOutput对象，包含loss，answer_score，language_hidden_states，vision_hidden_states，language_attentions，vision_attentions，cross_encoder_attentions
+
+        # 如果需要返回字典格式的输出，则创建相应的输出对象
         return LxmertForQuestionAnsweringOutput(
-            loss=loss,
-            question_answering_score=answer_score,
-            language_hidden_states=lxmert_output.language_hidden_states,
-            vision_hidden_states=lxmert_output.vision_hidden_states,
-            language_attentions=lxmert_output.language_attentions,
-            vision_attentions=lxmert_output.vision_attentions,
-            cross_encoder_attentions=lxmert_output.cross_encoder_attentions,
+            loss=loss,  # 损失值
+            question_answering_score=answer_score,  # 问题回答分数
+            language_hidden_states=lxmert_output.language_hidden_states,  # 语言模型的隐藏状态
+            vision_hidden_states=lxmert_output.vision_hidden_states,      # 视觉模型的隐藏状态
+            language_attentions=lxmert_output.language_attentions,        # 语言注意力
+            vision_attentions=lxmert_output.vision_attentions,            # 视觉注意力
+            cross_encoder_attentions=lxmert_output.cross_encoder_attentions,  # 跨编码器注意力
         )
 ```

@@ -1,42 +1,65 @@
 # `.\models\groupvit\configuration_groupvit.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，授权使用此文件
-# 只有在遵守许可证的情况下才能使用此文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制的详细信息
-""" GroupViT 模型配置"""
+```
+# coding=utf-8
+# 定义 Python 源文件编码为 UTF-8
 
-# 导入所需的库
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+# 版权声明，保留所有权利
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache 许可证 Version 2.0 授权
+
+# you may not use this file except in compliance with the License.
+# 除非符合许可证的要求，否则不得使用此文件
+
+# You may obtain a copy of the License at
+# 您可以在以下网址获取许可证的副本
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，不提供任何形式的担保或条件。
+# 详见许可证，以了解特定语言的权限
+
+""" GroupViT model configuration"""
+# GroupViT 模型配置
+
 import os
+# 导入操作系统相关模块
 from collections import OrderedDict
+# 导入 OrderedDict 类型，用于维护键值对的插入顺序
 from typing import TYPE_CHECKING, Any, Mapping, Optional, Union
+# 导入类型提示相关模块
 
-# 导入预训练配置
 from ...configuration_utils import PretrainedConfig
-# 导入 ONNX 配置
+# 从配置工具模块导入预训练配置类
 from ...onnx import OnnxConfig
-# 导入日志记录工具
+# 从 ONNX 模块导入 ONNX 配置类
 from ...utils import logging
+# 从工具模块导入日志模块
 
-# 如果是类型检查，则导入以下内容
 if TYPE_CHECKING:
     from ...processing_utils import ProcessorMixin
+    # 如果是类型检查，从处理工具模块导入 ProcessorMixin 类
     from ...utils import TensorType
+    # 如果是类型检查，从工具模块导入 TensorType 类型
 
-# 获取日志记录器
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器对象
 
-# 预训练配置映射
 GROUPVIT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "nvidia/groupvit-gcc-yfcc": "https://huggingface.co/nvidia/groupvit-gcc-yfcc/resolve/main/config.json",
 }
+# GroupViT 预训练模型配置映射字典，将模型名称映射到其配置文件的 URL
+# 当前只包含了一个模型 "nvidia/groupvit-gcc-yfcc" 对应的配置文件 URL
+# https://huggingface.co/nvidia/groupvit-gcc-yfcc/resolve/main/config.json
 
-# GroupViT 文本配置类，用于存储 GroupViTTextModel 的配置
 class GroupViTTextConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`GroupViTTextModel`]. It is used to instantiate an
@@ -46,53 +69,14 @@ class GroupViTTextConfig(PretrainedConfig):
 
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
-    Args:
-        vocab_size (`int`, *optional*, defaults to 49408):
-            Vocabulary size of the GroupViT text model. Defines the number of different tokens that can be represented
-            by the `inputs_ids` passed when calling [`GroupViTModel`].
-        hidden_size (`int`, *optional*, defaults to 256):
-            Dimensionality of the encoder layers and the pooler layer.
-        intermediate_size (`int`, *optional*, defaults to 1024):
-            Dimensionality of the "intermediate" (i.e., feed-forward) layer in the Transformer encoder.
-        num_hidden_layers (`int`, *optional*, defaults to 12):
-            Number of hidden layers in the Transformer encoder.
-        num_attention_heads (`int`, *optional*, defaults to 4):
-            Number of attention heads for each attention layer in the Transformer encoder.
-        max_position_embeddings (`int`, *optional*, defaults to 77):
-            The maximum sequence length that this model might ever be used with. Typically set this to something large
-            just in case (e.g., 512 or 1024 or 2048).
-        hidden_act (`str` or `function`, *optional*, defaults to `"quick_gelu"`):
-            The non-linear activation function (function or string) in the encoder and pooler. If string, `"gelu"`,
-            `"relu"`, `"selu"` and `"gelu_new"` ``"quick_gelu"` are supported.
-        layer_norm_eps (`float`, *optional*, defaults to 1e-5):
-            The epsilon used by the layer normalization layers.
-        attention_dropout (`float`, *optional*, defaults to 0.0):
-            The dropout ratio for the attention probabilities.
-        dropout (`float`, *optional*, defaults to 0.0):
-            The dropout probability for all fully connected layers in the embeddings, encoder, and pooler.
-        initializer_range (`float`, *optional*, defaults to 0.02):
-            The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
-        initializer_factor (`float`, *optional*, defaults to 1.0):
-            A factor for initializing all weight matrices (should be kept to 1, used internally for initialization
-            testing).
-
-    Example:
-
-    ```python
-    >>> from transformers import GroupViTTextConfig, GroupViTTextModel
-
-    >>> # Initializing a GroupViTTextModel with nvidia/groupvit-gcc-yfcc style configuration
-    >>> configuration = GroupViTTextConfig()
-
-    >>> model = GroupViTTextModel(configuration)
-
-    >>> # Accessing the model configuration
-    >>> configuration = model.config
-    ```py"""
-
-    # 定义模型类型为 "groupvit_text_model"
+    """
+    # GroupViTTextConfig 类的文档字符串，描述了如何存储 GroupViTTextModel 的配置
+    # 该配置用于实例化 GroupViT 模型，并根据指定的参数定义模型架构
+    # 使用默认参数实例化配置将产生类似于 GroupViT [nvidia/groupvit-gcc-yfcc] 架构的配置
+    # 配置对象继承自 PretrainedConfig，并可用于控制模型输出。详细信息请参阅 PretrainedConfig 的文档。
+    # 定义一个字符串常量，表示 GroupViT 文本模型的类型
     model_type = "groupvit_text_model"
-    # 初始化函数，设置模型的各种参数
+    # 初始化函数，用于创建一个新的配置对象
     def __init__(
         self,
         vocab_size=49408,
@@ -112,10 +96,10 @@ class GroupViTTextConfig(PretrainedConfig):
         eos_token_id=49407,
         **kwargs,
     ):
-        # 调用父类的初始化函数，设置特殊的标记 ID 和其他参数
+        # 调用父类的初始化函数，设置特殊的标记ID和其他传递的关键字参数
         super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        # 设置模型的各种参数
+        # 设置配置对象的各种属性
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.intermediate_size = intermediate_size
@@ -129,111 +113,105 @@ class GroupViTTextConfig(PretrainedConfig):
         self.initializer_factor = initializer_factor
         self.attention_dropout = attention_dropout
 
-    # 类方法，从预训练模型中加载配置
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
-        # 设置 token 参数到 kwargs 中
+        # 设置 token 的相关参数到 kwargs 中
         cls._set_token_in_kwargs(kwargs)
 
-        # 获取配置字典和 kwargs
+        # 获取配置字典和更新后的 kwargs
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
-        # 如果加载的是 GroupViTConfig，获取文本配置字典
+        # 如果配置字典中的 model_type 是 groupvit，则使用其中的 text_config
         if config_dict.get("model_type") == "groupvit":
             config_dict = config_dict["text_config"]
 
-        # 如果配置字典中包含模型类型，并且模型类型不匹配当前类的模型类型，发出警告
+        # 如果存在 model_type 并且不与当前类的 model_type 相符，则发出警告
         if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
             )
 
-        # 从配置字典和 kwargs 中创建实例
+        # 从配置字典创建配置对象并返回
         return cls.from_dict(config_dict, **kwargs)
+# 继承自预训练配置类 PretrainedConfig，用于存储 GroupViTVisionModel 的配置信息
 class GroupViTVisionConfig(PretrainedConfig):
-    r"""
-    This is the configuration class to store the configuration of a [`GroupViTVisionModel`]. It is used to instantiate
-    an GroupViT model according to the specified arguments, defining the model architecture. Instantiating a
-    configuration with the defaults will yield a similar configuration to that of the GroupViT
-    [nvidia/groupvit-gcc-yfcc](https://huggingface.co/nvidia/groupvit-gcc-yfcc) architecture.
+    """
+    这是一个配置类，用于存储 [`GroupViTVisionModel`] 的配置信息。它被用来根据指定的参数实例化一个 GroupViT 模型，
+    定义模型的架构。使用默认参数实例化一个配置对象会得到与 GroupViT [nvidia/groupvit-gcc-yfcc] 架构相似的配置。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
+    配置对象继承自 [`PretrainedConfig`]，可以用来控制模型的输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
 
     Args:
         hidden_size (`int`, *optional*, defaults to 384):
-            Dimensionality of the encoder layers and the pooler layer.
+            编码器层和池化层的维度。
         intermediate_size (`int`, *optional*, defaults to 1536):
-            Dimensionality of the "intermediate" (i.e., feed-forward) layer in the Transformer encoder.
+            Transformer 编码器中 "intermediate"（即前馈）层的维度。
         depths (`List[int]`, *optional*, defaults to [6, 3, 3]):
-            The number of layers in each encoder block.
+            每个编码器块中的层数。
         num_group_tokens (`List[int]`, *optional*, defaults to [64, 8, 0]):
-            The number of group tokens for each stage.
+            每个阶段的组令牌数量。
         num_output_groups (`List[int]`, *optional*, defaults to [64, 8, 8]):
-            The number of output groups for each stage, 0 means no group.
+            每个阶段的输出组数，0 表示没有组。
         num_attention_heads (`int`, *optional*, defaults to 6):
-            Number of attention heads for each attention layer in the Transformer encoder.
+            Transformer 编码器中每个注意力层的注意头数。
         image_size (`int`, *optional*, defaults to 224):
-            The size (resolution) of each image.
+            每个图像的大小（分辨率）。
         patch_size (`int`, *optional*, defaults to 16):
-            The size (resolution) of each patch.
+            每个补丁的大小（分辨率）。
         hidden_act (`str` or `function`, *optional*, defaults to `"gelu"`):
-            The non-linear activation function (function or string) in the encoder and pooler. If string, `"gelu"`,
-            `"relu"`, `"selu"` and `"gelu_new"` ``"quick_gelu"` are supported.
+            编码器和池化器中的非线性激活函数（函数或字符串）。支持的字符串有 "gelu"、"relu"、"selu" 和 "gelu_new" "quick_gelu"。
         layer_norm_eps (`float`, *optional*, defaults to 1e-5):
-            The epsilon used by the layer normalization layers.
+            层归一化层使用的 epsilon。
         dropout (`float`, *optional*, defaults to 0.0):
-            The dropout probabilitiy for all fully connected layers in the embeddings, encoder, and pooler.
+            嵌入层、编码器和池化器中所有全连接层的 dropout 概率。
         attention_dropout (`float`, *optional*, defaults to 0.0):
-            The dropout ratio for the attention probabilities.
+            注意力概率的 dropout 比率。
         initializer_range (`float`, *optional*, defaults to 0.02):
-            The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
+            用于初始化所有权重矩阵的截断正态初始化器的标准差。
         initializer_factor (`float`, *optional*, defaults to 1.0):
-            A factor for initializing all weight matrices (should be kept to 1, used internally for initialization
-            testing).
+            初始化所有权重矩阵的因子（应保持为 1，用于初始化测试中使用）。
 
     Example:
 
     ```python
     >>> from transformers import GroupViTVisionConfig, GroupViTVisionModel
-    # 初始化一个 GroupViTVisionModel，使用 nvidia/groupvit-gcc-yfcc 风格的配置
+    ```
+    # 初始化一个 GroupViTVisionConfig 对象，使用 nvidia/groupvit-gcc-yfcc 风格的配置
     configuration = GroupViTVisionConfig()
 
-    # 使用配置初始化模型
+    # 使用上述配置初始化一个 GroupViTVisionModel 模型
     model = GroupViTVisionModel(configuration)
 
     # 获取模型的配置信息
     configuration = model.config
-    """
+# 定义 GroupViTConfig 类，继承自 PretrainedConfig 类
 class GroupViTConfig(PretrainedConfig):
     r"""
-    [`GroupViTConfig`] is the configuration class to store the configuration of a [`GroupViTModel`]. It is used to
-    instantiate a GroupViT model according to the specified arguments, defining the text model and vision model
-    configs. Instantiating a configuration with the defaults will yield a similar configuration to that of the GroupViT
-    [nvidia/groupvit-gcc-yfcc](https://huggingface.co/nvidia/groupvit-gcc-yfcc) architecture.
+    [`GroupViTConfig`] 是用于存储 [`GroupViTModel`] 配置的配置类。它用于根据指定的参数实例化一个 GroupViT 模型，
+    定义文本模型和视觉模型的配置。使用默认值实例化配置将产生与 GroupViT [nvidia/groupvit-gcc-yfcc] 架构类似的配置。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
+    配置对象继承自 [`PretrainedConfig`]，可以用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
 
     Args:
         text_config (`dict`, *optional*):
-            Dictionary of configuration options used to initialize [`GroupViTTextConfig`].
+            用于初始化 [`GroupViTTextConfig`] 的配置选项字典。
         vision_config (`dict`, *optional*):
-            Dictionary of configuration options used to initialize [`GroupViTVisionConfig`].
+            用于初始化 [`GroupViTVisionConfig`] 的配置选项字典。
         projection_dim (`int`, *optional*, defaults to 256):
-            Dimentionality of text and vision projection layers.
+            文本和视觉投影层的维度。
         projection_intermediate_dim (`int`, *optional*, defaults to 4096):
-            Dimentionality of intermediate layer of text and vision projection layers.
+            文本和视觉投影层中间层的维度。
         logit_scale_init_value (`float`, *optional*, defaults to 2.6592):
-            The inital value of the *logit_scale* parameter. Default is used as per the original GroupViT
-            implementation.
+            *logit_scale* 参数的初始值。默认值与原始 GroupViT 实现相匹配。
         kwargs (*optional*):
-            Dictionary of keyword arguments.
+            关键字参数字典。
     """
 
+    # 模型类型为 "groupvit"
     model_type = "groupvit"
 
+    # 构造函数，初始化 GroupViTConfig 实例
     def __init__(
         self,
         text_config=None,
@@ -242,22 +220,26 @@ class GroupViTConfig(PretrainedConfig):
         projection_intermediate_dim=4096,
         logit_scale_init_value=2.6592,
         **kwargs,
+    ):
+        # 调用父类的构造函数，设置配置选项
+        super().__init__(**kwargs)
+
     @classmethod
     def from_text_vision_configs(cls, text_config: GroupViTTextConfig, vision_config: GroupViTVisionConfig, **kwargs):
         r"""
-        Instantiate a [`GroupViTConfig`] (or a derived class) from groupvit text model configuration and groupvit
-        vision model configuration.
+        从 GroupViT 文本模型配置和 GroupViT 视觉模型配置实例化一个 [`GroupViTConfig`]（或其派生类）。
 
         Returns:
-            [`GroupViTConfig`]: An instance of a configuration object
+            [`GroupViTConfig`]: 配置对象的一个实例
         """
-
+        # 使用传入的 text_config 和 vision_config 创建一个新的 GroupViTConfig 实例
         return cls(text_config=text_config.to_dict(), vision_config=vision_config.to_dict(), **kwargs)
 
 
 class GroupViTOnnxConfig(OnnxConfig):
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
+        # 定义输入层的名称和维度映射
         return OrderedDict(
             [
                 ("input_ids", {0: "batch", 1: "sequence"}),
@@ -267,23 +249,23 @@ class GroupViTOnnxConfig(OnnxConfig):
         )
 
     @property
-    # 返回一个有序字典，包含不同输出的名称和对应的数据结构
+    # 返回一个有序字典，包含输出标识和对应的数据结构
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
         return OrderedDict(
             [
-                ("logits_per_image", {0: "batch"}),
-                ("logits_per_text", {0: "batch"}),
-                ("text_embeds", {0: "batch"}),
-                ("image_embeds", {0: "batch"}),
+                ("logits_per_image", {0: "batch"}),  # 输出标识"logits_per_image"对应值为{0: "batch"}
+                ("logits_per_text", {0: "batch"}),   # 输出标识"logits_per_text"对应值为{0: "batch"}
+                ("text_embeds", {0: "batch"}),        # 输出标识"text_embeds"对应值为{0: "batch"}
+                ("image_embeds", {0: "batch"}),       # 输出标识"image_embeds"对应值为{0: "batch"}
             ]
         )
 
-    # 返回用于验证的绝对误差容限
+    # 返回用于验证的绝对误差容限值
     @property
     def atol_for_validation(self) -> float:
         return 1e-4
 
-    # 生成虚拟输入数据，包括文本和图像输入
+    # 生成虚拟的输入数据字典，结合文本和图像处理器的虚拟输入
     def generate_dummy_inputs(
         self,
         processor: "ProcessorMixin",
@@ -291,19 +273,22 @@ class GroupViTOnnxConfig(OnnxConfig):
         seq_length: int = -1,
         framework: Optional["TensorType"] = None,
     ) -> Mapping[str, Any]:
-        # 生成文本输入数据
+        # 调用父类方法生成文本输入字典
         text_input_dict = super().generate_dummy_inputs(
             processor.tokenizer, batch_size=batch_size, seq_length=seq_length, framework=framework
         )
-        # 生成图像输入数据
+        # 调用父类方法生成图像输入字典
         image_input_dict = super().generate_dummy_inputs(
             processor.image_processor, batch_size=batch_size, framework=framework
         )
-        # 合并文本和图像输入数据
+        # 合并文本和图像输入字典，返回合并后的结果
         return {**text_input_dict, **image_input_dict}
 
-    # 返回默认的 ONNX 操作集版本
+    # 返回默认的ONNX操作集版本号
     @property
     def default_onnx_opset(self) -> int:
         return 14
+
+
+这些注释解释了每个方法和属性的作用，确保了代码的清晰性和可读性。
 ```

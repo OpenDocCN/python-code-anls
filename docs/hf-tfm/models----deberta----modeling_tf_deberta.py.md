@@ -1,105 +1,53 @@
 # `.\models\deberta\modeling_tf_deberta.py`
 
-```py
-# 设置脚本编码为 UTF-8
-# 版权声明，2021年由 Microsoft 和 HuggingFace Inc. 团队保留所有权利
-#
-# 根据 Apache 许可证 2.0 版本（“许可证”）授权;
-# 除非符合许可证规定，否则不得使用此文件。
-# 您可以获取许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则软件将根据“按原样”
-# 分发，没有任何形式的明示或暗示保修或条件。
-# 有关具体语言的许可证以及限制，请查看许可证
-""" TF 2.0 DeBERTa model."""
-
-from __future__ import annotations
-
-import math
-from typing import Dict, Optional, Sequence, Tuple, Union
-
-import numpy as np
-import tensorflow as tf
-
-from ...activations_tf import get_tf_activation
-from ...modeling_tf_outputs import (
-    TFBaseModelOutput,
-    TFMaskedLMOutput,
-    TFQuestionAnsweringModelOutput,
-    TFSequenceClassifierOutput,
-    TFTokenClassifierOutput,
-)
-from ...modeling_tf_utils import (
-    TFMaskedLanguageModelingLoss,
-    TFModelInputType,
-    TFPreTrainedModel,
-    TFQuestionAnsweringLoss,
-    TFSequenceClassificationLoss,
-    TFTokenClassificationLoss,
-    get_initializer,
-    unpack_inputs,
-)
-from ...tf_utils import check_embeddings_within_bounds, shape_list, stable_softmax
-from ...utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward, logging
-from .configuration_deberta import DebertaConfig
-
-# 获取 logger 对象
-logger = logging.get_logger(__name__)
-
-# 用于文档的配置和检查点信息
-_CONFIG_FOR_DOC = "DebertaConfig"
-_CHECKPOINT_FOR_DOC = "kamalkraj/deberta-base"
-
-# DeBERTa 预训练模型的归档列表
-TF_DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST = [
-    "kamalkraj/deberta-base",
-    # 查看所有 DeBERTa 模型，请访问 https://huggingface.co/models?filter=DeBERTa
-]
-
-# 定义 TFDebertaContextPooler 类
-class TFDebertaContextPooler(tf.keras.layers.Layer):
-
+```
+# 定义 TFDebertaContextPooler 类，用于处理 DeBERTa 模型的上下文池化操作
+class TFDebertaContextPooler(keras.layers.Layer):
     def __init__(self, config: DebertaConfig, **kwargs):
         super().__init__(**kwargs)
-        # 全连接层，用于池化隐藏状态
-        self.dense = tf.keras.layers.Dense(config.pooler_hidden_size, name="dense")
-        # dropout 层
+        # 创建一个全连接层，用于池化上下文表示
+        self.dense = keras.layers.Dense(config.pooler_hidden_size, name="dense")
+        # 初始化一个稳定的 Dropout 层，用于在训练过程中进行正则化
         self.dropout = TFDebertaStableDropout(config.pooler_dropout, name="dropout")
+        # 存储配置信息
         self.config = config
 
     def call(self, hidden_states, training: bool = False):
-        # 我们通过简单地获取与第一个令牌对应的隐藏状态来"池化"模型。
+        # 通过仅使用第一个 token 对应的隐藏状态来进行模型的“池化”
         context_token = hidden_states[:, 0]
+        # 在训练过程中，应用 Dropout 正则化到 context_token
         context_token = self.dropout(context_token, training=training)
+        # 将经过 Dropout 后的 context_token 输入全连接层
         pooled_output = self.dense(context_token)
-        # 使用激活函数激活池化输出
+        # 应用激活函数到池化后的输出
         pooled_output = get_tf_activation(self.config.pooler_hidden_act)(pooled_output)
+        # 返回池化后的输出表示
         return pooled_output
 
     @property
     def output_dim(self) -> int:
+        # 返回输出的维度，即隐藏大小
         return self.config.hidden_size
-```  
-    # 构建模型
+    # 定义神经网络模型的 build 方法，用于构建模型的结构
     def build(self, input_shape=None):
-        # 检查模型是否已经构建，若已经构建则直接返回
+        # 如果模型已经构建完成，直接返回，避免重复构建
         if self.built:
             return
-        # 将模型设为已构建状态
+        # 将模型标记为已构建状态
         self.built = True
-        
-        # 检查是否存在 dense 属性，若存在则构建 dense 层
+        # 如果存在 dense 属性（密集连接层），则构建该层
         if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):  # 为 dense 层创建一个命名作用域
-                self.dense.build([None, None, self.config.pooler_hidden_size])  # 构建 dense 层，指定输入形状
-        
-        # 检查是否存在 dropout 属性，若存在则构建 dropout 层
+            # 使用 tf.name_scope 为 dense 层创建命名空间，命名空间名称为 dense.name
+            with tf.name_scope(self.dense.name):
+                # 调用 dense 层的 build 方法，指定输入的形状为 [None, None, self.config.pooler_hidden_size]
+                self.dense.build([None, None, self.config.pooler_hidden_size])
+        # 如果存在 dropout 属性，则构建 dropout 层
         if getattr(self, "dropout", None) is not None:
-            with tf.name_scope(self.dropout.name):  # 为 dropout 层创建一个命名作用域
-                self.dropout.build(None)  # 构建 dropout 层，不指定输入形状
-class TFDebertaXSoftmax(tf.keras.layers.Layer):
+            # 使用 tf.name_scope 为 dropout 层创建命名空间，命名空间名称为 dropout.name
+            with tf.name_scope(self.dropout.name):
+                # 调用 dropout 层的 build 方法，输入形状为 None（表示任意形状）
+                self.dropout.build(None)
+class TFDebertaXSoftmax(keras.layers.Layer):
     """
     Masked Softmax which is optimized for saving memory
 
@@ -114,18 +62,18 @@ class TFDebertaXSoftmax(tf.keras.layers.Layer):
         self.axis = axis
 
     def call(self, inputs: tf.Tensor, mask: tf.Tensor):
-        # Invert the mask to represent elements to ignore
+        # 创建反向的掩码张量，将 mask 张量转换成布尔类型取反
         rmask = tf.logical_not(tf.cast(mask, tf.bool))
-        # Apply -inf to elements to ignore
+        # 将输入张量中掩码为 True 的位置置为负无穷，保证 softmax 计算时被忽略
         output = tf.where(rmask, float("-inf"), inputs)
-        # Apply stable softmax
+        # 对处理后的张量应用稳定的 softmax 函数
         output = stable_softmax(output, self.axis)
-        # Reapply ignored elements as 0
+        # 将之前处理的掩码位置重新置为 0.0，保证输出符合预期
         output = tf.where(rmask, 0.0, output)
         return output
 
 
-class TFDebertaStableDropout(tf.keras.layers.Layer):
+class TFDebertaStableDropout(keras.layers.Layer):
     """
     Optimized dropout module for stabilizing the training
 
@@ -142,21 +90,21 @@ class TFDebertaStableDropout(tf.keras.layers.Layer):
         """
         Applies dropout to the inputs, as vanilla dropout, but also scales the remaining elements up by 1/drop_prob.
         """
-        # Generate dropout mask
+        # 使用 Bernoulli 分布生成 dropout 掩码
         mask = tf.cast(
             1
             - tf.compat.v1.distributions.Bernoulli(probs=1.0 - self.drop_prob).sample(sample_shape=shape_list(inputs)),
             tf.bool,
         )
-        # Calculate scaling factor
+        # 计算缩放因子
         scale = tf.convert_to_tensor(1.0 / (1 - self.drop_prob), dtype=tf.float32)
         if self.drop_prob > 0:
-            # Apply dropout and scaling
+            # 如果 dropout 概率大于 0，则对输入张量应用 dropout 并乘以缩放因子
             inputs = tf.where(mask, 0.0, inputs) * scale
 
         def grad(upstream):
             if self.drop_prob > 0:
-                # Gradient calculation for dropout
+                # 计算 dropout 操作的反向传播梯度
                 return tf.where(mask, 0.0, upstream) * scale
             else:
                 return upstream
@@ -164,13 +112,14 @@ class TFDebertaStableDropout(tf.keras.layers.Layer):
         return inputs, grad
 
     def call(self, inputs: tf.Tensor, training: tf.Tensor = False):
-        # Apply dropout during training
         if training:
+            # 在训练模式下应用自定义的 dropout 操作
             return self.xdropout(inputs)
+        # 在推断模式下直接返回输入张量
         return inputs
 
 
-class TFDebertaLayerNorm(tf.keras.layers.Layer):
+class TFDebertaLayerNorm(keras.layers.Layer):
     """LayerNorm module in the TF style (epsilon inside the square root)."""
 
     def __init__(self, size, eps=1e-12, **kwargs):
@@ -179,82 +128,77 @@ class TFDebertaLayerNorm(tf.keras.layers.Layer):
         self.eps = eps
 
     def build(self, input_shape):
-        # Initialize weights for gamma and beta
+        # 添加权重参数 gamma 和 beta
         self.gamma = self.add_weight(shape=[self.size], initializer=tf.ones_initializer(), name="weight")
         self.beta = self.add_weight(shape=[self.size], initializer=tf.zeros_initializer(), name="bias")
         return super().build(input_shape)
 
     def call(self, x: tf.Tensor) -> tf.Tensor:
-        # Compute mean, variance, and standard deviation
+        # 计算输入张量的均值、方差和标准差
         mean = tf.reduce_mean(x, axis=[-1], keepdims=True)
         variance = tf.reduce_mean(tf.square(x - mean), axis=[-1], keepdims=True)
         std = tf.math.sqrt(variance + self.eps)
-        # Normalize using gamma and beta
+        # 应用 LayerNorm 公式，输出归一化后的张量
         return self.gamma * (x - mean) / std + self.beta
 
 
-class TFDebertaSelfOutput(tf.keras.layers.Layer):
-    # 初始化方法，接受DebertaConfig类型的config参数和任意数量的关键字参数
+class TFDebertaSelfOutput(keras.layers.Layer):
+    # 这部分代码还未完整给出，故不做注释
+    pass
+    # 初始化函数，用于创建一个新的实例
     def __init__(self, config: DebertaConfig, **kwargs):
         # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 创建一个全连接层，输出维度为config.hidden_size，命名为"dense"
-        self.dense = tf.keras.layers.Dense(config.hidden_size, name="dense")
-        # 创建一个LayerNormalization层，使用config.layer_norm_eps作为epsilon，命名为"LayerNorm"
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 创建一个TFDebertaStableDropout层，使用config.hidden_dropout_prob作为dropout概率，命名为"dropout"
+        # 创建一个全连接层，用于处理隐藏状态，输出维度为config.hidden_size
+        self.dense = keras.layers.Dense(config.hidden_size, name="dense")
+        # 创建一个 LayerNormalization 层，设置 epsilon 为 config.layer_norm_eps
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # 创建一个 dropout 层，使用 TFDebertaStableDropout 类，dropout 概率为 config.hidden_dropout_prob
         self.dropout = TFDebertaStableDropout(config.hidden_dropout_prob, name="dropout")
-        # 记录config参数
+        # 将 config 对象存储在实例中，供后续调用使用
         self.config = config
 
-    # 前向传播方法，接受hidden_states、input_tensor和training参数
+    # 前向传播函数，接收隐藏状态和输入张量，根据训练标志进行处理
     def call(self, hidden_states, input_tensor, training: bool = False):
-        # 将hidden_states输入到全连接层中进行计算
+        # 全连接层处理隐藏状态
         hidden_states = self.dense(hidden_states)
-        # 对计算结果进行dropout处理
+        # 应用 dropout 处理后的隐藏状态
         hidden_states = self.dropout(hidden_states, training=training)
-        # 对生成的结果进行LayerNormalization处理并与input_tensor相加
+        # 使用 LayerNormalization 层处理 dropout 后的隐藏状态和输入张量的和
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回处理后的结果
+        # 返回处理后的隐藏状态
         return hidden_states
 
-    # 模型构建方法，接受输入形状参数input_shape
+    # 构建函数，用于构建层的结构
     def build(self, input_shape=None):
-        # 如果模型已经构建好了，直接返回
+        # 如果已经构建过，直接返回
         if self.built:
             return
-        # 将模型标记为已构建
+        # 设置标志为已构建
         self.built = True
-        # 如果存在"self.dense"属性
+        # 如果存在 dense 层，则构建 dense 层，并指定输入形状为 [None, None, self.config.hidden_size]
         if getattr(self, "dense", None) is not None:
-            # 在tf的name_scope下，使用self.dense.name为名字，对全连接层进行构建，输入形状为[None, None, self.config.hidden_size]
             with tf.name_scope(self.dense.name):
                 self.dense.build([None, None, self.config.hidden_size])
-        # 如果存在"self.LayerNorm"属性
+        # 如果存在 LayerNorm 层，则构建 LayerNorm 层，并指定输入形状为 [None, None, self.config.hidden_size]
         if getattr(self, "LayerNorm", None) is not None:
-            # 在tf的name_scope下，使用self.LayerNorm.name为名字，对LayerNormalization层进行构建，输入形状为[None, None, self.config.hidden_size]
             with tf.name_scope(self.LayerNorm.name):
                 self.LayerNorm.build([None, None, self.config.hidden_size])
-        # 如果存在"self.dropout"属性
+        # 如果存在 dropout 层，则构建 dropout 层，输入形状为 None
         if getattr(self, "dropout", None) is not None:
-            # 在tf的name_scope下，使用self.dropout.name为名字，对dropout层进行构建，输入形状为None
             with tf.name_scope(self.dropout.name):
                 self.dropout.build(None)
-```py python
-# 创建一个名为TFDebertaAttention的类，该类继承自tf.keras.layers.Layer
-class TFDebertaAttention(tf.keras.layers.Layer):
-    # 定义初始化函数，其中config是DebertaConfig的实例
+# 定义 TFDebertaAttention 类，继承自 keras 的 Layer 类，实现自定义的注意力层
+class TFDebertaAttention(keras.layers.Layer):
     def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(**kwargs)
-        # 创建一个名为self的TFDebertaDisentangledSelfAttention对象，并将其赋值给self.self属性
+        # 创建 TFDebertaDisentangledSelfAttention 实例，用于自注意力机制
         self.self = TFDebertaDisentangledSelfAttention(config, name="self")
-        # 创建一个名为dense_output的TFDebertaSelfOutput对象，并将其赋值给self.dense_output属性
+        # 创建 TFDebertaSelfOutput 实例，用于处理自注意力输出
         self.dense_output = TFDebertaSelfOutput(config, name="output")
-        # 将传入的config赋值给self.config属性
         self.config = config
 
-    # 定义call方法，用于调用该层(layer)的操作
+    # 定义 call 方法，实现层的前向传播逻辑
     def call(
         self,
         input_tensor: tf.Tensor,
@@ -265,7 +209,7 @@ class TFDebertaAttention(tf.keras.layers.Layer):
         output_attentions: bool = False,
         training: bool = False,
     ) -> Tuple[tf.Tensor]:
-        # 调用self.self的call方法，传入相应参数，并将返回值赋值给self_outputs
+        # 使用 self.self 实例进行自注意力计算
         self_outputs = self.self(
             hidden_states=input_tensor,
             attention_mask=attention_mask,
@@ -275,118 +219,139 @@ class TFDebertaAttention(tf.keras.layers.Layer):
             output_attentions=output_attentions,
             training=training,
         )
-        # 如果query_states为None，则将input_tensor赋值给query_states
+        # 如果 query_states 为 None，则将其设置为输入张量 input_tensor
         if query_states is None:
             query_states = input_tensor
-        # 调用self.dense_output的call方法，传入相应参数，并将返回值赋值给attention_output
+        # 使用 self.dense_output 实例处理自注意力输出
         attention_output = self.dense_output(
             hidden_states=self_outputs[0], input_tensor=query_states, training=training
         )
-
-        # 创建一个元组output，包含attention_output和self_outputs[1:]的元素
+        # 将处理后的输出和 self_outputs 的其余部分组成元组返回
         output = (attention_output,) + self_outputs[1:]
 
-        # 返回output
         return output
 
-    # 定义build方法，用于构建该层(layer)
+    # 定义 build 方法，用于构建层的参数
     def build(self, input_shape=None):
-        # 如果该层已经构建，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果self存在，则构建self
+        # 如果 self.self 实例存在，则在 tf 的命名空间下构建其参数
         if getattr(self, "self", None) is not None:
             with tf.name_scope(self.self.name):
                 self.self.build(None)
-        # 如果dense_output存在，则构建dense_output
+        # 如果 self.dense_output 实例存在，则在 tf 的命名空间下构建其参数
         if getattr(self, "dense_output", None) is not None:
             with tf.name_scope(self.dense_output.name):
                 self.dense_output.build(None)
-                
-                
-# 创建��个名为TFDebertaIntermediate的类，该类继承自tf.keras.layers.Layer
-class TFDebertaIntermediate(tf.keras.layers.Layer):
-    # 定义初始化函数，其中config是DebertaConfig的实例
-    def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的初始化函数
-        super().__init__(**kwargs)
 
-        # 创建一个全连接层，units为config.intermediate_size，kernel_initializer为指定的初始化器，名称为dense，并将其赋值给self.dense属性
-        self.dense = tf.keras.layers.Dense(
+
+# 定义 TFDebertaIntermediate 类，继承自 keras 的 Layer 类，实现中间层
+class TFDebertaIntermediate(keras.layers.Layer):
+    def __init__(self, config: DebertaConfig, **kwargs):
+        super().__init__(**kwargs)
+        # 创建 Dense 层实例，用于中间层的线性变换
+        self.dense = keras.layers.Dense(
             units=config.intermediate_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-
-        # 判断config.hidden_act的类型，如果是str类型，使用get_tf_activation函数获取激活函数，否则直接使用config.hidden_act作为self.intermediate_act_fn属性
+        # 根据配置获取激活函数，用于中间层的非线性变换
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = get_tf_activation(config.hidden_act)
         else:
             self.intermediate_act_fn = config.hidden_act
-        # 将传入的config赋值给self.config属性
         self.config = config
 
-    # 定义call方法，用于调用该层(layer)的操作
+    # 定义 call 方法，实现层的前向传播逻辑
     def call(self, hidden_states: tf.Tensor) -> tf.Tensor:
-        # 使用全连接层self.dense处理hidden_states，并将处理后的结果赋值给hidden_states
+        # 使用 Dense 层进行线性变换
         hidden_states = self.dense(inputs=hidden_states)
-        # 使用self
-    def __init__(self, config: DebertaConfig, **kwargs):
-        # 继承父类的初始化方法
-        super().__init__(**kwargs)
-
-        # 创建一个全连接层，输出大小为config.hidden_size，初始化方式为config.initializer_range
-        self.dense = tf.keras.layers.Dense(
-            units=config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
-        )
-        # 创建一个LayerNorm层，epsilon为config.layer_norm_eps
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 创建一个dropout层，丢弃概率为config.hidden_dropout_prob
-        self.dropout = TFDebertaStableDropout(config.hidden_dropout_prob, name="dropout")
-        # 保存config
-        self.config = config
-
-    def call(self, hidden_states: tf.Tensor, input_tensor: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 使用全连接层处理hidden_states
-        hidden_states = self.dense(inputs=hidden_states)
-        # 使用dropout层处理hidden_states
-        hidden_states = self.dropout(hidden_states, training=training)
-        # 使用LayerNorm层处理hidden_states与input_tensor的和
-        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        # 使用配置中的激活函数进行非线性变换
+        hidden_states = self.intermediate_act_fn(hidden_states)
 
         return hidden_states
 
+    # 定义 build 方法，用于构建层的参数
     def build(self, input_shape=None):
-        # 如果已经build过了，直接返回
         if self.built:
             return
-        # 设置self.built为True，表示已经build过了
         self.built = True
-        # 如果self.dense不为空
+        # 如果 self.dense 实例存在，则在 tf 的命名空间下构建其参数
         if getattr(self, "dense", None) is not None:
-            # 在名字域中对self.dense内的操作进行命名，并build
             with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.intermediate_size])
-        # 如果self.LayerNorm不为空
-        if getattr(self, "LayerNorm", None) is not None:
-            # 在名字域中对self.LayerNorm内的操作进行命名，并build
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build([None, None, self.config.hidden_size])
-        # 如果self.dropout不为空
-        if getattr(self, "dropout", None) is not None:
-            # 在名字域中对self.dropout内的操作进行命名，并build
-            with tf.name_scope(self.dropout.name):
-                self.dropout.build(None)
-# TFDebertaLayer 是一个 Keras 层类，实现了 DeBERTa 模型的一个隐藏层
-class TFDebertaLayer(tf.keras.layers.Layer):
+                self.dense.build([None, None, self.config.hidden_size])
+
+
+class TFDebertaOutput(keras.layers.Layer):
+    # 此处为 TFDebertaOutput 类的定义，未提供具体实现和方法，不需要添加额外注释
+    # 初始化函数，接受一个DebertaConfig对象和其他关键字参数
     def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的构造函数
+        # 调用父类的初始化函数
         super().__init__(**kwargs)
 
-        # 初始化 DeBERTa 注意力层
+        # 创建一个全连接层，输出单元数为config中指定的隐藏层大小，
+        # 初始化方式使用config中指定的initializer_range
+        self.dense = keras.layers.Dense(
+            units=config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
+        )
+
+        # 创建LayerNormalization层，epsilon值为config中指定的layer_norm_eps
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+
+        # 创建TFDebertaStableDropout层，dropout率为config中指定的hidden_dropout_prob
+        self.dropout = TFDebertaStableDropout(config.hidden_dropout_prob, name="dropout")
+
+        # 将传入的config对象保存在self.config中
+        self.config = config
+
+    # 调用函数，接收隐藏状态(hidden_states)、输入张量(input_tensor)和训练标志(training)，
+    # 返回经过全连接层、dropout和LayerNormalization处理后的隐藏状态
+    def call(self, hidden_states: tf.Tensor, input_tensor: tf.Tensor, training: bool = False) -> tf.Tensor:
+        # 使用self.dense对hidden_states进行全连接操作
+        hidden_states = self.dense(inputs=hidden_states)
+
+        # 使用self.dropout对全连接结果进行dropout操作，根据training参数决定是否使用训练模式
+        hidden_states = self.dropout(hidden_states, training=training)
+
+        # 将dropout后的结果与输入张量input_tensor相加，再使用self.LayerNorm进行LayerNormalization处理
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+
+        # 返回处理后的隐藏状态
+        return hidden_states
+
+    # 构建函数，用于构建模型层次结构
+    def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回
+        if self.built:
+            return
+        
+        # 标记为已经构建
+        self.built = True
+        
+        # 如果存在self.dense属性，则使用tf.name_scope为dense层命名空间，
+        # 并调用self.dense的build方法，传入输入形状[None, None, self.config.intermediate_size]
+        if getattr(self, "dense", None) is not None:
+            with tf.name_scope(self.dense.name):
+                self.dense.build([None, None, self.config.intermediate_size])
+        
+        # 如果存在self.LayerNorm属性，则使用tf.name_scope为LayerNorm层命名空间，
+        # 并调用self.LayerNorm的build方法，传入输入形状[None, None, self.config.hidden_size]
+        if getattr(self, "LayerNorm", None) is not None:
+            with tf.name_scope(self.LayerNorm.name):
+                self.LayerNorm.build([None, None, self.config.hidden_size])
+        
+        # 如果存在self.dropout属性，则使用tf.name_scope为dropout层命名空间，
+        # 并调用self.dropout的build方法，传入None作为输入形状
+        if getattr(self, "dropout", None) is not None:
+            with tf.name_scope(self.dropout.name):
+                self.dropout.build(None)
+class TFDebertaLayer(keras.layers.Layer):
+    # TFDebertaLayer 类定义，继承自 keras 的 Layer 类
+    def __init__(self, config: DebertaConfig, **kwargs):
+        super().__init__(**kwargs)
+        
+        # 初始化注意力、中间层和输出层组件
         self.attention = TFDebertaAttention(config, name="attention")
-        # 初始化 DeBERTa 中间层
         self.intermediate = TFDebertaIntermediate(config, name="intermediate")
-        # 初始化 DeBERTa 输出层
         self.bert_output = TFDebertaOutput(config, name="output")
 
     def call(
@@ -399,7 +364,7 @@ class TFDebertaLayer(tf.keras.layers.Layer):
         output_attentions: bool = False,
         training: bool = False,
     ) -> Tuple[tf.Tensor]:
-        # 计算注意力输出
+        # 调用注意力机制模块，返回注意力输出
         attention_outputs = self.attention(
             input_tensor=hidden_states,
             attention_mask=attention_mask,
@@ -410,87 +375,84 @@ class TFDebertaLayer(tf.keras.layers.Layer):
             training=training,
         )
         attention_output = attention_outputs[0]
-        # 计算中间层输出
+        
+        # 调用中间层，传入注意力输出，得到中间层输出
         intermediate_output = self.intermediate(hidden_states=attention_output)
-        # 计算输出层输出
+        
+        # 调用输出层，传入中间层输出和注意力输出，得到最终层输出
         layer_output = self.bert_output(
             hidden_states=intermediate_output, input_tensor=attention_output, training=training
         )
-        # 将注意力输出也包含在最终输出中
-        outputs = (layer_output,) + attention_outputs[1:]
-
+        
+        # 构建返回的输出元组，包括最终层输出和可能的注意力信息
+        outputs = (layer_output,) + attention_outputs[1:]  # add attentions if we output them
+        
         return outputs
 
     def build(self, input_shape=None):
-        # 如果模型已经构建，则直接返回
+        # 如果已经构建过，直接返回
         if self.built:
             return
         self.built = True
-        # 构建注意力层
+        
+        # 构建注意力、中间层和输出层
         if getattr(self, "attention", None) is not None:
             with tf.name_scope(self.attention.name):
                 self.attention.build(None)
-        # 构建中间层
         if getattr(self, "intermediate", None) is not None:
             with tf.name_scope(self.intermediate.name):
                 self.intermediate.build(None)
-        # 构建输出层
         if getattr(self, "bert_output", None) is not None:
             with tf.name_scope(self.bert_output.name):
                 self.bert_output.build(None)
 
 
-# TFDebertaEncoder 是一个 Keras 层类，实现了 DeBERTa 模型的编码器
-class TFDebertaEncoder(tf.keras.layers.Layer):
+class TFDebertaEncoder(keras.layers.Layer):
+    # TFDebertaEncoder 类定义，继承自 keras 的 Layer 类
     def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的构造函数
         super().__init__(**kwargs)
-
-        # 创建多个 TFDebertaLayer 层，组成 DeBERTa 的编码器
+        
+        # 根据配置参数构建多层 TFDebertaLayer 组成的列表
         self.layer = [TFDebertaLayer(config, name=f"layer_._{i}") for i in range(config.num_hidden_layers)]
+        
+        # 检查是否使用相对注意力机制
         self.relative_attention = getattr(config, "relative_attention", False)
         self.config = config
-        # 如果使用相对位置编码，则需要计算最大相对位置
+        
+        # 如果使用相对注意力，设置最大相对位置
         if self.relative_attention:
             self.max_relative_positions = getattr(config, "max_relative_positions", -1)
             if self.max_relative_positions < 1:
                 self.max_relative_positions = config.max_position_embeddings
-    # 构建模型
+    # 构建模型层，如果已经构建过则直接返回
     def build(self, input_shape=None):
-        # 如果模型已经构建完毕，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果 relative_attention 为 True，则添加相对位置编码的权重
+        # 如果使用相对注意力机制，添加相对位置嵌入权重
         if self.relative_attention:
             self.rel_embeddings = self.add_weight(
                 name="rel_embeddings.weight",
                 shape=[self.max_relative_positions * 2, self.config.hidden_size],
                 initializer=get_initializer(self.config.initializer_range),
             )
-        # 如果模型的层已经存在，则遍历每个层，对每个层建立模型
+        # 如果存在子层，则逐个构建这些子层
         if getattr(self, "layer", None) is not None:
             for layer in self.layer:
                 with tf.name_scope(layer.name):
                     layer.build(None)
 
-    # 获取相对位置编码的权重
+    # 获取相对位置嵌入权重
     def get_rel_embedding(self):
-        # 如果 relative_attention 为 True，则返回相对位置编码的权重
-        # 否则返回 None
         rel_embeddings = self.rel_embeddings if self.relative_attention else None
         return rel_embeddings
 
-    # 获取注意力的遮罩
+    # 根据输入的注意力掩码，生成扩展后的注意力掩码
     def get_attention_mask(self, attention_mask):
-        # 如果注意力遮罩的尺寸小于等于2，则添加两个尺寸为1的维度扩展
         if len(shape_list(attention_mask)) <= 2:
             extended_attention_mask = tf.expand_dims(tf.expand_dims(attention_mask, 1), 2)
-            # 将扩展后的注意力遮罩与其维度为1的压缩后的注意力遮罩相乘
             attention_mask = extended_attention_mask * tf.expand_dims(tf.squeeze(extended_attention_mask, -2), -1)
-            # 将注意力遮罩的数据类型转换为 tf.uint8
             attention_mask = tf.cast(attention_mask, tf.uint8)
-        # 如果注意力遮罩的尺寸等于3，则添加一个尺寸为1的维度扩展
         elif len(shape_list(attention_mask)) == 3:
             attention_mask = tf.expand_dims(attention_mask, 1)
 
@@ -498,13 +460,13 @@ class TFDebertaEncoder(tf.keras.layers.Layer):
 
     # 获取相对位置编码
     def get_rel_pos(self, hidden_states, query_states=None, relative_pos=None):
-        # 如果 relative_attention 为 True，且相对位置编码为 None，则通过 query_states 和 hidden_states 的维度构建相对位置编码
+        # 如果使用相对注意力且没有提供相对位置编码，则根据隐藏状态的形状生成
         if self.relative_attention and relative_pos is None:
             q = shape_list(query_states)[-2] if query_states is not None else shape_list(hidden_states)[-2]
             relative_pos = build_relative_position(q, shape_list(hidden_states)[-2])
         return relative_pos
 
-    # 前向传播
+    # 模型的调用函数，处理输入的隐藏状态和注意力掩码
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -515,36 +477,33 @@ class TFDebertaEncoder(tf.keras.layers.Layer):
         output_hidden_states: bool = False,
         return_dict: bool = True,
         training: bool = False,
-        ```
-
-    注释：
-        ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
-        # 如果不需要输出隐藏层状态，则初始化空元组
+    ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
+        # 如果输出隐藏状态为True，则初始化一个空元组，否则为None
         all_hidden_states = () if output_hidden_states else None
-        # 如果不需要输出注意力权重，则初始化空元组
+        # 如果输出注意力权重为True，则初始化一个空元组，否则为None
         all_attentions = () if output_attentions else None
 
-        # 获取注意力遮罩
+        # 调用self对象的get_attention_mask方法，生成注意力掩码
         attention_mask = self.get_attention_mask(attention_mask)
-        # 根据隐藏状态和查询状态获取相对位置
+        # 调用self对象的get_rel_pos方法，生成相对位置编码
         relative_pos = self.get_rel_pos(hidden_states, query_states, relative_pos)
 
-        # 如果隐藏状态是序列类型，则取第一个隐藏状态作为下一个键值对（key-value pair）
+        # 如果hidden_states是一个序列对象，则将第一个元素作为next_kv，否则直接使用hidden_states
         if isinstance(hidden_states, Sequence):
             next_kv = hidden_states[0]
         else:
             next_kv = hidden_states
 
-        # 获取相对位置嵌入
+        # 调用self对象的get_rel_embedding方法，生成相对位置嵌入
         rel_embeddings = self.get_rel_embedding()
 
-        # 遍历每个层模块
+        # 遍历self.layer中的每个层模块
         for i, layer_module in enumerate(self.layer):
-            # 如果需要输出隐藏层状态，则将当前隐藏状态添加到all_hidden_states中
+            # 如果输出隐藏状态为True，则记录当前隐藏状态到all_hidden_states中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 对当前层进行前向传播
+            # 调用当前层模块的__call__方法，计算当前层的输出
             layer_outputs = layer_module(
                 hidden_states=next_kv,
                 attention_mask=attention_mask,
@@ -554,19 +513,20 @@ class TFDebertaEncoder(tf.keras.layers.Layer):
                 output_attentions=output_attentions,
                 training=training,
             )
-            # 更新隐藏状态为当前层的输出
+            # 更新hidden_states为当前层的输出的第一个元素
             hidden_states = layer_outputs[0]
 
-            # 如果有查询状态，则更新查询状态为当前隐藏状态
+            # 如果query_states不为None，则更新query_states为当前隐藏状态
             if query_states is not None:
                 query_states = hidden_states
-                # 如果隐藏状态是序列类型，则更新下一个键值对（key-value pair）为下一个隐藏状态
+                # 如果hidden_states是一个序列对象，则更新next_kv为下一个层的隐藏状态
                 if isinstance(hidden_states, Sequence):
                     next_kv = hidden_states[i + 1] if i + 1 < len(self.layer) else None
             else:
+                # 否则直接更新next_kv为当前隐藏状态
                 next_kv = hidden_states
 
-            # 如果需要输出注意力权重，则将当前层的注意力权重添加到all_attentions中
+            # 如果输出注意力权重为True，则记录当前层的注意力权重到all_attentions中
             if output_attentions:
                 all_attentions = all_attentions + (layer_outputs[1],)
 
@@ -574,11 +534,11 @@ class TFDebertaEncoder(tf.keras.layers.Layer):
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果不需要返回字典形式的结果，则将非空部分组成元组返回
+        # 如果return_dict为False，则返回非None的结果组成的元组
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states, all_attentions] if v is not None)
 
-        # 返回TFBaseModelOutput类对象
+        # 如果return_dict为True，则返回TFBaseModelOutput对象，包含最后的隐藏状态、所有隐藏状态和所有注意力权重
         return TFBaseModelOutput(
             last_hidden_state=hidden_states, hidden_states=all_hidden_states, attentions=all_attentions
         )
@@ -586,7 +546,7 @@ def build_relative_position(query_size, key_size):
     """
     根据查询和键构建相对位置关系
 
-    我们假设查询的绝对位置 \\(P_q\\) 范围在 (0, query_size)，键的绝对位置 \\(P_k\\) 范围在 (0, key_size)，
+    假设查询的绝对位置 \\(P_q\\) 范围在 (0, query_size)，键的绝对位置 \\(P_k\\) 范围在 (0, key_size)，
     查询到键的相对位置为 \\(R_{q \\rightarrow k} = P_q - P_k\\)
 
     Args:
@@ -594,196 +554,207 @@ def build_relative_position(query_size, key_size):
         key_size (int): 键的长度
 
     Return:
-        `tf.Tensor`: 一个形状为 [1, query_size, key_size] 的张量
+        `tf.Tensor`: 形状为 [1, query_size, key_size] 的张量，表示相对位置索引
 
     """
-    q_ids = tf.range(query_size, dtype=tf.int32)
-    k_ids = tf.range(key_size, dtype=tf.int32)
-    rel_pos_ids = q_ids[:, None] - tf.tile(tf.reshape(k_ids, [1, -1]), [query_size, 1])
-    rel_pos_ids = rel_pos_ids[:query_size, :]
-    rel_pos_ids = tf.expand_dims(rel_pos_ids, axis=0)
-    return tf.cast(rel_pos_ids, tf.int64)
+    q_ids = tf.range(query_size, dtype=tf.int32)  # 生成查询位置的索引
+    k_ids = tf.range(key_size, dtype=tf.int32)    # 生成键位置的索引
+    rel_pos_ids = q_ids[:, None] - tf.tile(tf.reshape(k_ids, [1, -1]), [query_size, 1])  # 计算相对位置
+    rel_pos_ids = rel_pos_ids[:query_size, :]     # 裁剪得到查询长度范围内的相对位置
+    rel_pos_ids = tf.expand_dims(rel_pos_ids, axis=0)  # 扩展维度，形成 [1, query_size, key_size]
+    return tf.cast(rel_pos_ids, tf.int64)          # 转换为 int64 类型的张量返回
 
 
 def c2p_dynamic_expand(c2p_pos, query_layer, relative_pos):
     shapes = [
-        shape_list(query_layer)[0],
-        shape_list(query_layer)[1],
-        shape_list(query_layer)[2],
-        shape_list(relative_pos)[-1],
+        shape_list(query_layer)[0],        # 查询层的批量大小
+        shape_list(query_layer)[1],        # 查询层的序列长度
+        shape_list(query_layer)[2],        # 查询层的隐藏单元数
+        shape_list(relative_pos)[-1],      # 相对位置张量的最后一个维度大小
     ]
-    return tf.broadcast_to(c2p_pos, shapes)
+    return tf.broadcast_to(c2p_pos, shapes)  # 将 c2p_pos 广播扩展到指定形状的张量
 
 
 def p2c_dynamic_expand(c2p_pos, query_layer, key_layer):
     shapes = [
-        shape_list(query_layer)[0],
-        shape_list(query_layer)[1],
-        shape_list(key_layer)[-2],
-        shape_list(key_layer)[-2],
+        shape_list(query_layer)[0],        # 查询层的批量大小
+        shape_list(query_layer)[1],        # 查询层的序列长度
+        shape_list(key_layer)[-2],         # 键层的序列长度
+        shape_list(key_layer)[-2],         # 键层的序列长度
     ]
-    return tf.broadcast_to(c2p_pos, shapes)
+    return tf.broadcast_to(c2p_pos, shapes)  # 将 c2p_pos 广播扩展到指定形状的张量
 
 
 def pos_dynamic_expand(pos_index, p2c_att, key_layer):
     shapes = shape_list(p2c_att)[:2] + [shape_list(pos_index)[-2], shape_list(key_layer)[-2]]
-    return tf.broadcast_to(pos_index, shapes)
+    return tf.broadcast_to(pos_index, shapes)  # 将 pos_index 广播扩展到指定形状的张量
 
 
 def torch_gather(x, indices, gather_axis):
     if gather_axis < 0:
-        gather_axis = tf.rank(x) + gather_axis
+        gather_axis = tf.rank(x) + gather_axis  # 将负数索引转换为正数索引
 
     if gather_axis != tf.rank(x) - 1:
         pre_roll = tf.rank(x) - 1 - gather_axis
-        permutation = tf.roll(tf.range(tf.rank(x)), pre_roll, axis=0)
-        x = tf.transpose(x, perm=permutation)
-        indices = tf.transpose(indices, perm=permutation)
+        permutation = tf.roll(tf.range(tf.rank(x)), pre_roll, axis=0)  # 创建索引重排的置换
+        x = tf.transpose(x, perm=permutation)   # 根据置换重新排列张量 x
+        indices = tf.transpose(indices, perm=permutation)  # 根据置换重新排列索引张量 indices
     else:
         pre_roll = 0
 
-    flat_x = tf.reshape(x, (-1, tf.shape(x)[-1]))
-    flat_indices = tf.reshape(indices, (-1, tf.shape(indices)[-1]))
-    gathered = tf.gather(flat_x, flat_indices, batch_dims=1)
-    gathered = tf.reshape(gathered, tf.shape(indices))
+    flat_x = tf.reshape(x, (-1, tf.shape(x)[-1]))    # 将张量 x 展平
+    flat_indices = tf.reshape(indices, (-1, tf.shape(indices)[-1]))  # 将索引张量 indices 展平
+    gathered = tf.gather(flat_x, flat_indices, batch_dims=1)  # 根据展平后的索引从 flat_x 中收集数据
+    gathered = tf.reshape(gathered, tf.shape(indices))  # 将收集的数据重新 reshape 成原始索引张量的形状
 
     if pre_roll != 0:
-        permutation = tf.roll(tf.range(tf.rank(x)), -pre_roll, axis=0)
-        gathered = tf.transpose(gathered, perm=permutation)
+        permutation = tf.roll(tf.range(tf.rank(x)), -pre_roll, axis=0)  # 创建索引重排的逆置换
+        gathered = tf.transpose(gathered, perm=permutation)  # 根据逆置换重新排列 gathered 张量
 
     return gathered
 
 
-class TFDebertaDisentangledSelfAttention(tf.keras.layers.Layer):
+class TFDebertaDisentangledSelfAttention(keras.layers.Layer):
     """
-    分解自注意力模块
+    Disentangled self-attention module
 
     Parameters:
         config (`str`):
-            一个包含构建新模型的配置的模型配置类实例。模式类似于 *BertConfig*，详情请参阅[`DebertaConfig`]
+            A model config class instance with the configuration to build a new model. The schema is similar to
+            *BertConfig*, for more details, please refer [`DebertaConfig`]
 
     """
-    # 初始化方法，接受一个DebertaConfig类型的config参数和其他关键字参数
+    # 初始化函数，接受一个DebertaConfig对象和其他关键字参数
     def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的初始化方法
+        # 调用父类（AssumeRoleModel）的初始化方法
         super().__init__(**kwargs)
-        # 检查隐藏层大小是否能被注意力头的数量整除
+        # 检查隐藏大小是否是注意力头数的倍数，如果不是则引发异常
         if config.hidden_size % config.num_attention_heads != 0:
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
                 f"heads ({config.num_attention_heads})"
             )
-        # 初始化注意力头的数量和注意力头的大小
+        # 初始化注意力头数和每个注意力头的大小
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
+        # 计算总的头大小
         self.all_head_size = self.num_attention_heads * self.attention_head_size
-        # 使用tf.keras.layers.Dense创建一个线性层，用于输入项目
-        self.in_proj = tf.keras.layers.Dense(
+        # 创建输入投影层，用于将输入转换为模型可用的格式
+        self.in_proj = keras.layers.Dense(
             self.all_head_size * 3,
             kernel_initializer=get_initializer(config.initializer_range),
             name="in_proj",
             use_bias=False,
         )
-        # 初始化位置注意力类型
+        # 设置位置注意力类型，如果未指定，则为空列表
         self.pos_att_type = config.pos_att_type if config.pos_att_type is not None else []
 
-        # 初始化相对注意力机制和talking head机制
+        # 是否使用相对注意力机制和对话头模式的标志
         self.relative_attention = getattr(config, "relative_attention", False)
         self.talking_head = getattr(config, "talking_head", False)
 
+        # 如果启用对话头模式，创建头权重和头选择的投影层
         if self.talking_head:
-            # 如果使用talking head机制，创建头部logits投影和头部权重投影的线性层
-            self.head_logits_proj = tf.keras.layers.Dense(
+            self.head_logits_proj = keras.layers.Dense(
                 self.num_attention_heads,
                 kernel_initializer=get_initializer(config.initializer_range),
                 name="head_logits_proj",
                 use_bias=False,
             )
-            self.head_weights_proj = tf.keras.layers.Dense(
+            self.head_weights_proj = keras.layers.Dense(
                 self.num_attention_heads,
                 kernel_initializer=get_initializer(config.initializer_range),
                 name="head_weights_proj",
                 use_bias=False,
             )
 
-        # 使用TFDebertaXSoftmax创建一个softmax层
+        # 使用自定义的softmax层（TFDebertaXSoftmax），在最后一个轴上进行softmax操作
         self.softmax = TFDebertaXSoftmax(axis=-1)
 
+        # 如果启用相对注意力机制，配置最大相对位置，设置位置丢弃层，并根据pos_att_type设置位置投影层
         if self.relative_attention:
-            # 如果使用相对注意力机制，初始化最大相对位置以及位置dropout
             self.max_relative_positions = getattr(config, "max_relative_positions", -1)
             if self.max_relative_positions < 1:
                 self.max_relative_positions = config.max_position_embeddings
             self.pos_dropout = TFDebertaStableDropout(config.hidden_dropout_prob, name="pos_dropout")
             if "c2p" in self.pos_att_type:
-                # 如果位置注意力类型中包含"c2p"，创建一个位置投影的线性层
-                self.pos_proj = tf.keras.layers.Dense(
+                self.pos_proj = keras.layers.Dense(
                     self.all_head_size,
                     kernel_initializer=get_initializer(config.initializer_range),
                     name="pos_proj",
                     use_bias=False,
                 )
             if "p2c" in self.pos_att_type:
-                # 如果位置注意力类型中包含"p2c"，创建一个位置Q投影的线性层
-                self.pos_q_proj = tf.keras.layers.Dense(
+                self.pos_q_proj = keras.layers.Dense(
                     self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="pos_q_proj"
                 )
 
-        # 使用TFDebertaStableDropout创建一个dropout层
+        # 设置注意力概率丢弃层
         self.dropout = TFDebertaStableDropout(config.attention_probs_dropout_prob, name="dropout")
-        # 将config参数保存在对象中
+        # 保存配置信息
         self.config = config
+    # 定义神经网络层的构建方法，初始化权重等操作
     def build(self, input_shape=None):
-        # 如果已经构建过就直接返回
+        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置为已构建状态
+        # 标记为已构建
         self.built = True
-        # 添加权重参数，初始化为全零
+
+        # 添加查询偏置权重
         self.q_bias = self.add_weight(
-            name="q_bias", shape=(self.all_head_size), initializer=tf.keras.initializers.Zeros()
+            name="q_bias", shape=(self.all_head_size), initializer=keras.initializers.Zeros()
         )
-        # 添加权重参数，初始化为全零
+        # 添加数值偏置权重
         self.v_bias = self.add_weight(
-            name="v_bias", shape=(self.all_head_size), initializer=tf.keras.initializers.Zeros()
+            name="v_bias", shape=(self.all_head_size), initializer=keras.initializers.Zeros()
         )
-        # 如果存在 in_proj 属性，则构建 in_proj
+
+        # 如果存在输入投影层，则构建该层
         if getattr(self, "in_proj", None) is not None:
             with tf.name_scope(self.in_proj.name):
                 self.in_proj.build([None, None, self.config.hidden_size])
-        # 如果存在 dropout 属性，则构建 dropout
+
+        # 如果存在 dropout 层，则构建该层
         if getattr(self, "dropout", None) is not None:
             with tf.name_scope(self.dropout.name):
                 self.dropout.build(None)
-        # 如果存在 head_logits_proj 属性，则构建 head_logits_proj
+
+        # 如果存在头部 logits 投影层，则构建该层
         if getattr(self, "head_logits_proj", None) is not None:
             with tf.name_scope(self.head_logits_proj.name):
                 self.head_logits_proj.build(None)
-        # 如果存在 head_weights_proj 属性，则构建 head_weights_proj
+
+        # 如果存在头部权重投影层，则构建该层
         if getattr(self, "head_weights_proj", None) is not None:
             with tf.name_scope(self.head_weights_proj.name):
                 self.head_weights_proj.build(None)
-        # 如果存在 pos_dropout 属性，则构建 pos_dropout
+
+        # 如果存在位置 dropout 层，则构建该层
         if getattr(self, "pos_dropout", None) is not None:
             with tf.name_scope(self.pos_dropout.name):
                 self.pos_dropout.build(None)
-        # 如果存在 pos_proj 属性，则构建 pos_proj
+
+        # 如果存在位置投影层，则构建该层
         if getattr(self, "pos_proj", None) is not None:
             with tf.name_scope(self.pos_proj.name):
                 self.pos_proj.build([self.config.hidden_size])
-        # 如果存在 pos_q_proj 属性，则构建 pos_q_proj
+
+        # 如果存在位置查询投影层，则构建该层
         if getattr(self, "pos_q_proj", None) is not None:
             with tf.name_scope(self.pos_q_proj.name):
                 self.pos_q_proj.build([self.config.hidden_size])
 
+    # 将输入张量重塑为注意力得分所需的形状
     def transpose_for_scores(self, tensor: tf.Tensor) -> tf.Tensor:
+        # 获取张量的形状列表，去除最后一个维度，并将最后两个维度合并
         shape = shape_list(tensor)[:-1] + [self.num_attention_heads, -1]
-        # 重塑张量形状，转换维度
         tensor = tf.reshape(tensor=tensor, shape=shape)
 
-        # 将张量转置
+        # 将张量从 [batch_size, seq_length, all_head_size] 转置为 [batch_size, seq_length, num_attention_heads, attention_head_size]
         return tf.transpose(tensor, perm=[0, 2, 1, 3])
 
+    # 神经网络层的调用方法，执行注意力计算等操作
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -793,93 +764,105 @@ class TFDebertaDisentangledSelfAttention(tf.keras.layers.Layer):
         rel_embeddings: tf.Tensor = None,
         output_attentions: bool = False,
         training: bool = False,
-    # 计算位置注意力偏置
     def disentangled_att_bias(self, query_layer, key_layer, relative_pos, rel_embeddings, scale_factor):
-        # 如果没有相对位置信息，则根据查询层和键层的形状构建相对位置
+        # 如果未提供相对位置信息，根据查询层的形状获取相对位置
         if relative_pos is None:
             q = shape_list(query_layer)[-2]
             relative_pos = build_relative_position(q, shape_list(key_layer)[-2])
+        
         shape_list_pos = shape_list(relative_pos)
-        # 扩展相对位置张量的维度
+        
+        # 如果相对位置的形状是二维，则扩展维度使其成为四维
         if len(shape_list_pos) == 2:
             relative_pos = tf.expand_dims(tf.expand_dims(relative_pos, 0), 0)
+        # 如果相对位置的形状是三维，则在第二个维度上扩展维度
         elif len(shape_list_pos) == 3:
             relative_pos = tf.expand_dims(relative_pos, 1)
-        # 异常情况处理，相对位置维度必须为2或3或4
+        # 如果相对位置的形状不是二维或三维，则抛出异常
         elif len(shape_list_pos) != 4:
             raise ValueError(f"Relative position ids must be of dim 2 or 3 or 4. {len(shape_list_pos)}")
-        
-        # 计算注意力范围
+
+        # 计算注意力跨度，确保不超过最大相对位置数，并转换为整型
         att_span = tf.cast(
             tf.minimum(
                 tf.maximum(shape_list(query_layer)[-2], shape_list(key_layer)[-2]), self.max_relative_positions
             ),
             tf.int64,
         )
-        # 扩展相对位置嵌入
+        
+        # 根据注意力跨度选择相对位置嵌入，并扩展维度以匹配张量形状
         rel_embeddings = tf.expand_dims(
             rel_embeddings[self.max_relative_positions - att_span : self.max_relative_positions + att_span, :], 0
         )
 
         score = 0
 
-        # 内容到位置的注意力
+        # 若位置注意力类型包含 "c2p"，执行内容到位置的注意力计算
         if "c2p" in self.pos_att_type:
+            # 使用位置投影层对相对位置嵌入进行处理，并转置以便进行注意力计算
             pos_key_layer = self.pos_proj(rel_embeddings)
             pos_key_layer = self.transpose_for_scores(pos_key_layer)
+            # 计算内容到位置的注意力分数
             c2p_att = tf.matmul(query_layer, tf.transpose(pos_key_layer, [0, 1, 3, 2]))
+            # 对相对位置进行调整，并利用调整后的位置索引收集注意力分数
             c2p_pos = tf.clip_by_value(relative_pos + att_span, 0, att_span * 2 - 1)
             c2p_att = torch_gather(c2p_att, c2p_dynamic_expand(c2p_pos, query_layer, relative_pos), -1)
             score += c2p_att
 
-        # 位置到内容的注意力
+        # 若位置注意力类型包含 "p2c"，执行位置到内容的注意力计算
         if "p2c" in self.pos_att_type:
+            # 使用位置投影层对相对位置嵌入进行处理，并转置以便进行注意力计算
             pos_query_layer = self.pos_q_proj(rel_embeddings)
             pos_query_layer = self.transpose_for_scores(pos_query_layer)
+            # 根据缩放因子对位置查询层进行归一化处理
             pos_query_layer /= tf.math.sqrt(tf.cast(shape_list(pos_query_layer)[-1] * scale_factor, dtype=tf.float32))
+            # 如果查询层和键层的长度不同，重新构建相对位置
             if shape_list(query_layer)[-2] != shape_list(key_layer)[-2]:
                 r_pos = build_relative_position(shape_list(key_layer)[-2], shape_list(key_layer)[-2])
             else:
                 r_pos = relative_pos
+            # 对位置到内容的相对位置进行调整，并利用调整后的位置索引收集注意力分数
             p2c_pos = tf.clip_by_value(-r_pos + att_span, 0, att_span * 2 - 1)
             p2c_att = tf.matmul(key_layer, tf.transpose(pos_query_layer, [0, 1, 3, 2]))
             p2c_att = tf.transpose(
                 torch_gather(p2c_att, p2c_dynamic_expand(p2c_pos, query_layer, key_layer), -1), [0, 1, 3, 2]
             )
+            # 如果查询层和键层的长度不同，利用位置索引对注意力分数进行再次调整
             if shape_list(query_layer)[-2] != shape_list(key_layer)[-2]:
                 pos_index = tf.expand_dims(relative_pos[:, :, :, 0], -1)
                 p2c_att = torch_gather(p2c_att, pos_dynamic_expand(pos_index, p2c_att, key_layer), -2)
             score += p2c_att
 
+        # 返回最终的注意力分数
         return score
-class TFDebertaEmbeddings(tf.keras.layers.Layer):
+class TFDebertaEmbeddings(keras.layers.Layer):
     """Construct the embeddings from word, position and token_type embeddings."""
 
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
 
-        # 初始化对象的配置信息和其他参数
         self.config = config
         self.embedding_size = getattr(config, "embedding_size", config.hidden_size)
         self.hidden_size = config.hidden_size
         self.max_position_embeddings = config.max_position_embeddings
         self.position_biased_input = getattr(config, "position_biased_input", True)
         self.initializer_range = config.initializer_range
-        # 如果嵌入大小不等于隐藏大小，则创建嵌入投影层
         if self.embedding_size != config.hidden_size:
-            self.embed_proj = tf.keras.layers.Dense(
+            # 如果embedding_size不等于hidden_size，则使用全连接层进行投影
+            self.embed_proj = keras.layers.Dense(
                 config.hidden_size,
                 kernel_initializer=get_initializer(config.initializer_range),
                 name="embed_proj",
                 use_bias=False,
             )
-        # 创建 LayerNormalization 层和稳定的 Dropout 层
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # LayerNormalization层，用于标准化层的输出
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # dropout层，用于随机丢弃一部分神经元，防止过拟合
         self.dropout = TFDebertaStableDropout(config.hidden_dropout_prob, name="dropout")
 
     def build(self, input_shape=None):
         with tf.name_scope("word_embeddings"):
-            # 创建词嵌入权重矩阵
+            # 创建词嵌入权重矩阵，形状为[vocab_size, embedding_size]
             self.weight = self.add_weight(
                 name="weight",
                 shape=[self.config.vocab_size, self.embedding_size],
@@ -887,8 +870,8 @@ class TFDebertaEmbeddings(tf.keras.layers.Layer):
             )
 
         with tf.name_scope("token_type_embeddings"):
-            # 如果存在 token_type_embeddings，则创建对应的嵌入权重矩阵
             if self.config.type_vocab_size > 0:
+                # 如果有token_type信息，则创建token_type嵌入矩阵，形状为[type_vocab_size, embedding_size]
                 self.token_type_embeddings = self.add_weight(
                     name="embeddings",
                     shape=[self.config.type_vocab_size, self.embedding_size],
@@ -898,8 +881,8 @@ class TFDebertaEmbeddings(tf.keras.layers.Layer):
                 self.token_type_embeddings = None
 
         with tf.name_scope("position_embeddings"):
-            # 如果使用位置偏置输入，则创建位置嵌入权重矩阵
             if self.position_biased_input:
+                # 如果需要使用位置信息偏置，则创建位置嵌入矩阵，形状为[max_position_embeddings, hidden_size]
                 self.position_embeddings = self.add_weight(
                     name="embeddings",
                     shape=[self.max_position_embeddings, self.hidden_size],
@@ -908,168 +891,192 @@ class TFDebertaEmbeddings(tf.keras.layers.Layer):
             else:
                 self.position_embeddings = None
 
-        # 如果已经构建完成，则直接返回
         if self.built:
             return
-        # 标记已经构建完成
         self.built = True
-        # 如果存在 LayerNorm 层，则构建该层
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
+                # 构建LayerNormalization层
                 self.LayerNorm.build([None, None, self.config.hidden_size])
-        # 如果存在 dropout 层，则构建该层
         if getattr(self, "dropout", None) is not None:
             with tf.name_scope(self.dropout.name):
+                # 构建dropout层
                 self.dropout.build(None)
-        # 如果存在嵌入投影层，则构建该层
         if getattr(self, "embed_proj", None) is not None:
             with tf.name_scope(self.embed_proj.name):
+                # 构建全连接投影层
                 self.embed_proj.build([None, None, self.embedding_size])
-    # 定义一个call方法，用于将输入应用于嵌入操作
     def call(
         self,
-        input_ids: tf.Tensor = None,  # 输入的ID张量，默认为None
-        position_ids: tf.Tensor = None,  # 位置ID张量，默认为None
-        token_type_ids: tf.Tensor = None,  # 标记类型ID张量，默认为None
-        inputs_embeds: tf.Tensor = None,  # 输入的嵌入张量，默认为None
-        mask: tf.Tensor = None,  # 掩码张量，默认为None
-        training: bool = False,  # 训练模式，默认为False
-    ) -> tf.Tensor:  # 返回值为张量类型的结果
+        input_ids: tf.Tensor = None,
+        position_ids: tf.Tensor = None,
+        token_type_ids: tf.Tensor = None,
+        inputs_embeds: tf.Tensor = None,
+        mask: tf.Tensor = None,
+        training: bool = False,
+    ) -> tf.Tensor:
         """
         Applies embedding based on inputs tensor.
 
         Returns:
-            final_embeddings (`tf.Tensor`): output embedding tensor.  # 返回最终的嵌入张量
+            final_embeddings (`tf.Tensor`): output embedding tensor.
         """
-        if input_ids is None and inputs_embeds is None:  # 如果input_ids和inputs_embeds都为None，抛出数值错误
+        # 检查是否提供了有效的输入数据，至少需要提供 `input_ids` 或 `input_embeds`
+        if input_ids is None and inputs_embeds is None:
             raise ValueError("Need to provide either `input_ids` or `input_embeds`.")
 
+        # 如果提供了 `input_ids`，则使用权重张量 `self.weight` 来获取嵌入向量
         if input_ids is not None:
-            check_embeddings_within_bounds(input_ids, self.config.vocab_size)  # 检查输入ID张量是否在词汇大小范围内
-            inputs_embeds = tf.gather(params=self.weight, indices=input_ids)  # 用索引ID从权重中获取嵌入参数
+            check_embeddings_within_bounds(input_ids, self.config.vocab_size)
+            inputs_embeds = tf.gather(params=self.weight, indices=input_ids)
 
-        input_shape = shape_list(inputs_embeds)[:-1]  # 获取输入嵌入的形状
+        # 获取输入嵌入张量的形状
+        input_shape = shape_list(inputs_embeds)[:-1]
 
-        if token_type_ids is None:  # 如果标记类型ID为空
-            token_type_ids = tf.fill(dims=input_shape, value=0)  # 用0填充标记类型ID形状的张量
+        # 如果未提供 `token_type_ids`，则将其初始化为全零张量
+        if token_type_ids is None:
+            token_type_ids = tf.fill(dims=input_shape, value=0)
 
-        if position_ids is None:  # 如果位置ID为空
-            position_ids = tf.expand_dims(tf.range(start=0, limit=input_shape[-1]), axis=0)  # 用范围内的值扩展位置ID张量
+        # 如果未提供 `position_ids`，则根据输入张量的最后一个维度创建位置张量
+        if position_ids is None:
+            position_ids = tf.expand_dims(tf.range(start=0, limit=input_shape[-1]), axis=0)
 
-        final_embeddings = inputs_embeds  # 最终嵌入张量等于输入嵌入张量
-        if self.position_biased_input:  # 如果存在位置偏置输入
-            position_embeds = tf.gather(params=self.position_embeddings, indices=position_ids)  # 从位置嵌入中获取位置ID张量的嵌入参数
-            final_embeddings += position_embeds  # 最终嵌入张量加上位置嵌入
-        if self.config.type_vocab_size > 0:  # 如果类型词汇大小大于0
-            token_type_embeds = tf.gather(params=self.token_type_embeddings, indices=token_type_ids)  # 从标记类型嵌入中获取标记类型ID张量的嵌入参数
-            final_embeddings += token_type_embeds  # 最终嵌入张量加上标记类型嵌入
+        # 初始的最终嵌入张量即为输入嵌入张量
+        final_embeddings = inputs_embeds
 
-        if self.embedding_size != self.hidden_size:  # 如果嵌入大小不等于隐藏大小
-            final_embeddings = self.embed_proj(final_embeddings)  # 使用embed_proj对最终嵌入进行处理
+        # 如果模型配置要求在输入中加入位置偏置
+        if self.position_biased_input:
+            position_embeds = tf.gather(params=self.position_embeddings, indices=position_ids)
+            final_embeddings += position_embeds
 
-        final_embeddings = self.LayerNorm(final_embeddings)  # 对最终嵌入进行LayerNorm处理
+        # 如果模型配置要求加入类型标记嵌入
+        if self.config.type_vocab_size > 0:
+            token_type_embeds = tf.gather(params=self.token_type_embeddings, indices=token_type_ids)
+            final_embeddings += token_type_embeds
 
-        if mask is not None:  # 如果掩码不为空
-            if len(shape_list(mask)) != len(shape_list(final_embeddings)):  # 如果掩码的形状列表长度不等于最终嵌入的形状列表长度
-                if len(shape_list(mask)) == 4:  # 如果掩码的形状列表长度为4
-                    mask = tf.squeeze(tf.squeeze(mask, axis=1), axis=1)  # 对掩码进行两次挤压操作
-                mask = tf.cast(tf.expand_dims(mask, axis=2), tf.float32)  # 将掩码转换为浮点类型，并在第2个维度上扩展
+        # 如果嵌入大小与隐藏层大小不一致，则使用 `self.embed_proj` 进行投影
+        if self.embedding_size != self.hidden_size:
+            final_embeddings = self.embed_proj(final_embeddings)
 
-            final_embeddings = final_embeddings * mask  # 最终嵌入等于最终嵌入与掩码的乘积
+        # 对最终嵌入张量进行 Layer Normalization 处理
+        final_embeddings = self.LayerNorm(final_embeddings)
 
-        final_embeddings = self.dropout(final_embeddings, training=training)  # 使用dropout对最终嵌入进行处理，训练模式为training
+        # 如果提供了掩码张量 `mask`
+        if mask is not None:
+            # 如果掩码张量的维度与最终嵌入张量的维度不同，进行维度调整
+            if len(shape_list(mask)) != len(shape_list(final_embeddings)):
+                if len(shape_list(mask)) == 4:
+                    mask = tf.squeeze(tf.squeeze(mask, axis=1), axis=1)
+                mask = tf.cast(tf.expand_dims(mask, axis=2), tf.float32)
 
-        return final_embeddings  # 返回最终嵌入
-class TFDebertaPredictionHeadTransform(tf.keras.layers.Layer):
-    # 初始化函数，接受 DebertaConfig 配置对象和其他参数
+            # 应用掩码到最终嵌入张量上
+            final_embeddings = final_embeddings * mask
+
+        # 对最终嵌入张量应用 dropout，如果处于训练模式则启用
+        final_embeddings = self.dropout(final_embeddings, training=training)
+
+        # 返回处理后的最终嵌入张量
+        return final_embeddings
+# 定义 TFDebertaPredictionHeadTransform 类，作为 Keras 层
+class TFDebertaPredictionHeadTransform(keras.layers.Layer):
+    # 初始化方法，接受 DebertaConfig 对象和额外的关键字参数
     def __init__(self, config: DebertaConfig, **kwargs):
         super().__init__(**kwargs)
-
-        # 获取嵌入大小，如果配置中没有指定则为隐藏大小
+        
+        # 根据配置获取嵌入大小，如果未指定则使用 hidden_size
         self.embedding_size = getattr(config, "embedding_size", config.hidden_size)
-
-        # 创建全连接层，单元数为嵌入大小，使用配置中的初始化方法，命名为 dense
-        self.dense = tf.keras.layers.Dense(
+        
+        # 创建一个全连接层，输出单元数为嵌入大小，初始化器为配置中的初始化范围
+        self.dense = keras.layers.Dense(
             units=self.embedding_size,
             kernel_initializer=get_initializer(config.initializer_range),
             name="dense",
         )
-
-        # 根据配置中的隐藏激活函数，获取相应的激活函数或者使用配置中的激活函数
+        
+        # 如果 hidden_act 是字符串，则根据字符串获取激活函数；否则直接使用配置中的激活函数
         if isinstance(config.hidden_act, str):
             self.transform_act_fn = get_tf_activation(config.hidden_act)
         else:
             self.transform_act_fn = config.hidden_act
         
-        # 创建 LayerNormalization 层，使用配置中的 epsilon，命名为 LayerNorm
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # 创建 LayerNormalization 层，使用配置中的 epsilon 值，命名为 LayerNorm
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        
+        # 保存配置对象
         self.config = config
 
-    # 前向传播函数，接收隐藏状态并返回处理后的隐藏状态
+    # 定义调用方法，接受隐藏状态张量并返回转换后的张量
     def call(self, hidden_states: tf.Tensor) -> tf.Tensor:
-        # 通过全连接层处理隐藏状态
+        # 先通过全连接层进行线性变换
         hidden_states = self.dense(inputs=hidden_states)
-        # 通过激活函数处理处理后的隐藏状态
+        # 然后应用激活函数
         hidden_states = self.transform_act_fn(hidden_states)
-        # 通过 LayerNormalization 处理处理后的隐藏状态
+        # 最后对结果应用 LayerNormalization
         hidden_states = self.LayerNorm(hidden_states)
 
         return hidden_states
 
-    # 构建函数，用于构建层的变量
+    # 构建方法，用于构建层的权重
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
+        # 如果已经构建过，直接返回
         if self.built:
             return
-        # 设置标记为已构建
+        # 标记为已构建
         self.built = True
-        # 如果已经创建了全连接层，则构建全连接层
+        
+        # 如果存在 dense 层，则构建其权重
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
+                # 构建时指定输入形状为 [None, None, hidden_size]
                 self.dense.build([None, None, self.config.hidden_size])
-        # 如果已经创建了 LayerNormalization 层，则构建 LayerNormalization 层
+        
+        # 如果存在 LayerNorm 层，则构建其权重
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
+                # 构建时指定输入形状为 [None, None, embedding_size]
                 self.LayerNorm.build([None, None, self.embedding_size])
 
 
-class TFDebertaLMPredictionHead(tf.keras.layers.Layer):
-    # 初始化函数，接受 DebertaConfig 配置对象、输入嵌入层和其他参数
-    def __init__(self, config: DebertaConfig, input_embeddings: tf.keras.layers.Layer, **kwargs):
+# 定义 TFDebertaLMPredictionHead 类，作为 Keras 层
+class TFDebertaLMPredictionHead(keras.layers.Layer):
+    # 初始化方法，接受 DebertaConfig 对象、输入嵌入层和额外的关键字参数
+    def __init__(self, config: DebertaConfig, input_embeddings: keras.layers.Layer, **kwargs):
         super().__init__(**kwargs)
-
+        
+        # 保存配置对象和嵌入大小（默认为 hidden_size）
         self.config = config
-        # 获取嵌入大小，如果配置中没有指定则为隐藏大小
         self.embedding_size = getattr(config, "embedding_size", config.hidden_size)
-
-        # 创建 TFDebertaPredictionHeadTransform 对象，命名为 transform
+        
+        # 创建 TFDebertaPredictionHeadTransform 实例，命名为 transform
         self.transform = TFDebertaPredictionHeadTransform(config, name="transform")
-
-        # 输出权重与输入嵌入相同，但每个标记有一个仅输出的偏置
+        
+        # 输入的嵌入层
         self.input_embeddings = input_embeddings
 
-    # 构建函数，用于构建层的变量
+    # 构建方法，用于构建层的权重
     def build(self, input_shape=None):
-        # 添加一个形状为（词汇表大小）的可训练的偏置
+        # 添加一个全零的偏置，形状为 (vocab_size,)
         self.bias = self.add_weight(shape=(self.config.vocab_size,), initializer="zeros", trainable=True, name="bias")
-
-        # 如果已经构建过，则直接返回
+        
+        # 如果已经构建过，直接返回
         if self.built:
             return
-        # 设置标记为已构建
+        # 标记为已构建
         self.built = True
-        # 如果已经创建了 TFDebertaPredictionHeadTransform 对象，则构建它
+        
+        # 如果存在 transform 层，则构建其权重
         if getattr(self, "transform", None) is not None:
             with tf.name_scope(self.transform.name):
                 self.transform.build(None)
 
     # 获取输出嵌入层
-    def get_output_embeddings(self) -> tf.keras.layers.Layer:
+    def get_output_embeddings(self) -> keras.layers.Layer:
         return self.input_embeddings
 
     # 设置输出嵌入层
     def set_output_embeddings(self, value: tf.Variable):
         self.input_embeddings.weight = value
+        # 更新嵌入层的词汇大小
         self.input_embeddings.vocab_size = shape_list(value)[0]
 
     # 获取偏置
@@ -1079,75 +1086,91 @@ class TFDebertaLMPredictionHead(tf.keras.layers.Layer):
     # 设置偏置
     def set_bias(self, value: tf.Variable):
         self.bias = value["bias"]
+        # 更新配置中的词汇大小
         self.config.vocab_size = shape_list(value["bias"])[0]
-    # 定义一个函数，参数为隐藏状态张量，返回值为张量
-    def call(self, hidden_states: tf.Tensor) -> tf.Tensor:
-        # 通过transform函数处理隐藏状态
-        hidden_states = self.transform(hidden_states=hidden_states)
-        # 获取隐藏状态的序列长度
-        seq_length = shape_list(hidden_states)[1]
-        # 将隐藏状态重塑为二维张量
-        hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, self.embedding_size])
-        # 矩阵相乘，计算隐藏状态与输入嵌入权重的乘积
-        hidden_states = tf.matmul(a=hidden_states, b=self.input_embeddings.weight, transpose_b=True)
-        # 将结果重新重塑为三维张量
-        hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, seq_length, self.config.vocab_size])
-        # 添加偏置
-        hidden_states = tf.nn.bias_add(value=hidden_states, bias=self.bias)
-        # 返回处理后的隐藏状态
-        return hidden_states
-# 定义 TFDebertaOnlyMLMHead 类，继承自 tf.keras.layers.Layer
-class TFDebertaOnlyMLMHead(tf.keras.layers.Layer):
-    # 初始化方法，接受 DebertaConfig 对象和 input_embeddings 参数
-    def __init__(self, config: DebertaConfig, input_embeddings: tf.keras.layers.Layer, **kwargs):
-        # 调用父类的初始化方法
+    # 调用方法，输入隐藏状态张量，并通过 self.transform 方法进行转换
+    hidden_states = self.transform(hidden_states=hidden_states)
+
+    # 获取隐藏状态张量的序列长度
+    seq_length = shape_list(hidden_states)[1]
+
+    # 将隐藏状态张量重塑为二维张量，形状为 [-1, self.embedding_size]
+    hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, self.embedding_size])
+
+    # 执行矩阵乘法，计算隐藏状态张量与 self.input_embeddings.weight 的乘积，转置 self.input_embeddings.weight
+    hidden_states = tf.matmul(a=hidden_states, b=self.input_embeddings.weight, transpose_b=True)
+
+    # 将结果重新塑造为三维张量，形状为 [-1, seq_length, self.config.vocab_size]
+    hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, seq_length, self.config.vocab_size])
+
+    # 使用偏置 self.bias 添加到隐藏状态张量上
+    hidden_states = tf.nn.bias_add(value=hidden_states, bias=self.bias)
+
+    # 返回处理后的隐藏状态张量
+    return hidden_states
+class TFDebertaOnlyMLMHead(keras.layers.Layer):
+    # 定义 TFDebertaOnlyMLMHead 类，继承自 keras 的 Layer 类
+    def __init__(self, config: DebertaConfig, input_embeddings: keras.layers.Layer, **kwargs):
+        # 初始化方法，接受 DebertaConfig 类型的 config 和 keras.Layer 类型的 input_embeddings 参数
         super().__init__(**kwargs)
-        # 创建 TFDebertaLMPredictionHead 实例，命名为 predictions
+        # 调用父类的初始化方法
+
+        # 创建 TFDebertaLMPredictionHead 实例，并命名为 predictions
         self.predictions = TFDebertaLMPredictionHead(config, input_embeddings, name="predictions")
 
-    # 调用方法，接受 sequence_output 参数，返回 prediction_scores 结果
+    # 定义 call 方法，接受 tf.Tensor 类型的 sequence_output 参数，返回 tf.Tensor 类型的 prediction_scores
     def call(self, sequence_output: tf.Tensor) -> tf.Tensor:
-        # 调用 predictions 实例的方法，传入 sequence_output 参数，获取预测得分
+        # 调用 self.predictions 的 __call__ 方法，传入 hidden_states=sequence_output 参数
         prediction_scores = self.predictions(hidden_states=sequence_output)
-        # 返回预测得分
+
+        # 返回 prediction_scores
         return prediction_scores
 
-    # 构建方法，构建 predictions
+    # 定义 build 方法，接受 input_shape 参数，默认为 None
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
+        # 如果已经构建过，则直接返回
         if self.built:
             return
+        # 将 built 属性设置为 True，表示已经构建
         self.built = True
-        # 如果存在 predictions 实例，使用 tf.name_scope 构建 predictions
+        
+        # 如果 self.predictions 存在
         if getattr(self, "predictions", None) is not None:
+            # 使用 tf.name_scope 来限定作用域为 self.predictions.name
             with tf.name_scope(self.predictions.name):
+                # 调用 self.predictions 的 build 方法，传入 None 参数
                 self.predictions.build(None)
 
-# 定义 TFDebertaMainLayer 类，继承自 tf.keras.layers.Layer
-class TFDebertaMainLayer(tf.keras.layers.Layer):
-    # 设置 config_class 属性为 DebertaConfig
+
+# @keras_serializable
+class TFDebertaMainLayer(keras.layers.Layer):
+    # 类变量 config_class，指定为 DebertaConfig 类
     config_class = DebertaConfig
-    # 初始化方法，接受 config 参数
+
+    # 初始化方法，接受 DebertaConfig 类型的 config 参数和其他关键字参数
     def __init__(self, config: DebertaConfig, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 设置 self.config 为传入的 config
+        # 调用父类的初始化方法
+
+        # 将 config 参数赋值给 self.config
         self.config = config
-        # 创建 TFDebertaEmbeddings 实例，命名为 embeddings
+
+        # 创建 TFDebertaEmbeddings 实例，并命名为 embeddings
         self.embeddings = TFDebertaEmbeddings(config, name="embeddings")
-        # 创建 TFDebertaEncoder 实例，命名为 encoder
+        
+        # 创建 TFDebertaEncoder 实例，并命名为 encoder
         self.encoder = TFDebertaEncoder(config, name="encoder")
 
-    # 获取输入 embeddings
-    def get_input_embeddings(self) -> tf.keras.layers.Layer:
+    # 返回 embeddings 属性
+    def get_input_embeddings(self) -> keras.layers.Layer:
         return self.embeddings
 
-    # 设置输入 embeddings
+    # 设置 embeddings 属性的权重和词汇表大小
     def set_input_embeddings(self, value: tf.Variable):
         self.embeddings.weight = value
         self.embeddings.vocab_size = shape_list(value)[0]
 
-    # 精简模型头部
+    # _prune_heads 方法，用于剪枝模型的头部
     def _prune_heads(self, heads_to_prune):
         """
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
@@ -1155,7 +1178,7 @@ class TFDebertaMainLayer(tf.keras.layers.Layer):
         """
         raise NotImplementedError
 
-    # 调用方法
+    # 使用 unpack_inputs 装饰器，接受多个输入参数，并按需解包
     @unpack_inputs
     def call(
         self,
@@ -1168,31 +1191,30 @@ class TFDebertaMainLayer(tf.keras.layers.Layer):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         training: bool = False,
+        # 省略部分参数...
     ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
-        # 该函数定义了返回值的类型注解
-
+        # 如果同时指定了 input_ids 和 inputs_embeds，抛出数值错误异常
         if input_ids is not None and inputs_embeds is not None:
-            # 如果同时指定了input_ids和inputs_embeds，则抛出数值错误
             raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
+        # 如果指定了 input_ids，则获取其形状信息
         elif input_ids is not None:
-            # 如果指定了input_ids，则获取其形状
             input_shape = shape_list(input_ids)
+        # 如果指定了 inputs_embeds，则获取其形状信息去掉最后一维
         elif inputs_embeds is not None:
-            # 如果指定了inputs_embeds，则获取其形状直到倒数第二个元素
             input_shape = shape_list(inputs_embeds)[:-1]
         else:
-            # 如果既没有指定input_ids，也没有指定inputs_embeds，则抛出数值错误
+            # 如果既没有指定 input_ids 也没有指定 inputs_embeds，则抛出数值错误异常
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
+        # 如果 attention_mask 为 None，则使用输入形状创建全为1的张量
         if attention_mask is None:
-            # 如果未指定attention_mask，则创建一个形状和input_shape相同，值全为1的tensor
             attention_mask = tf.fill(dims=input_shape, value=1)
 
+        # 如果 token_type_ids 为 None，则使用输入形状创建全为0的张量
         if token_type_ids is None:
-            # 如果未指定token_type_ids，则创建一个形状和input_shape相同，值全为0的tensor
             token_type_ids = tf.fill(dims=input_shape, value=0)
 
-        # 使用embeddings方法生成embedding_output
+        # 使用 embeddings 层处理输入，获取嵌入输出
         embedding_output = self.embeddings(
             input_ids=input_ids,
             position_ids=position_ids,
@@ -1202,7 +1224,7 @@ class TFDebertaMainLayer(tf.keras.layers.Layer):
             training=training,
         )
 
-        # 使用encoder方法生成encoder_outputs
+        # 使用 encoder 层处理嵌入输出，获取编码器的输出
         encoder_outputs = self.encoder(
             hidden_states=embedding_output,
             attention_mask=attention_mask,
@@ -1212,14 +1234,14 @@ class TFDebertaMainLayer(tf.keras.layers.Layer):
             training=training,
         )
 
-        # 提取encoder_outputs的第一个元素作为sequence_output
+        # 获取编码器输出中的序列输出（通常是最后一层的隐藏状态）
         sequence_output = encoder_outputs[0]
 
+        # 如果不要求返回字典形式的输出，则返回编码器的输出
         if not return_dict:
-            # 如果不是return_dict，则返回一个元组，包含sequence_output和encoder_outputs的其他元素
             return (sequence_output,) + encoder_outputs[1:]
 
-        # 如果是return_dict，则返回一个TFBaseModelOutput对象
+        # 如果要求返回字典形式的输出，则构造 TFBaseModelOutput 对象并返回
         return TFBaseModelOutput(
             last_hidden_state=sequence_output,
             hidden_states=encoder_outputs.hidden_states,
@@ -1227,37 +1249,26 @@ class TFDebertaMainLayer(tf.keras.layers.Layer):
         )
 
     def build(self, input_shape=None):
+        # 如果已经构建过模型，直接返回
         if self.built:
-            # 如果已经构建过，则直接返回
             return
+        # 标记模型已构建
         self.built = True
+        # 如果模型具有 embeddings 属性，则构建 embeddings 层
         if getattr(self, "embeddings", None) is not None:
             with tf.name_scope(self.embeddings.name):
-                # 使用embeddings的name空间来构建embeddings
                 self.embeddings.build(None)
+        # 如果模型具有 encoder 属性，则构建 encoder 层
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
-                # 使用encoder的name空间来构建encoder
                 self.encoder.build(None)
-class TFDebertaPreTrainedModel(TFPreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
-
-    # 使用DebertaConfig作为配置类
-    config_class = DebertaConfig
-    # base_model_prefix指定为"deberta"
-    base_model_prefix = "deberta"
-
-
-DEBERTA_START_DOCSTRING = r"""
+"""
     The DeBERTa model was proposed in [DeBERTa: Decoding-enhanced BERT with Disentangled
     Attention](https://arxiv.org/abs/2006.03654) by Pengcheng He, Xiaodong Liu, Jianfeng Gao, Weizhu Chen. It's build
     on top of BERT/RoBERTa with two improvements, i.e. disentangled attention and enhanced mask decoder. With those two
     improvements, it out perform BERT/RoBERTa on a majority of tasks with 80GB pretraining data.
 
-    This model is also a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
+    This model is also a [keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
     as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
     behavior.
 
@@ -1292,75 +1303,63 @@ DEBERTA_START_DOCSTRING = r"""
             Initializing with a config file does not load the weights associated with the model, only the
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
-
-DEBERTA_INPUTS_DOCSTRING = r"""
-    """
-    # 输入 ID 是指输入序列中每个token在词汇表中的索引
     Args:
-        input_ids (`np.ndarray`, `tf.Tensor`, `List[tf.Tensor]` ``Dict[str, tf.Tensor]` or `Dict[str, np.ndarray]` and each example must have the shape `({0})`):
-            Indices of input sequence tokens in the vocabulary.
-    
-            Indices can be obtained using [`AutoTokenizer`]. See [`PreTrainedTokenizer.encode`] and
-            [`PreTrainedTokenizer.__call__`] for details.
-    
+        input_ids (`np.ndarray`, `tf.Tensor`, `List[tf.Tensor]` or `Dict[str, tf.Tensor]` or `Dict[str, np.ndarray]` and each example must have the shape `({0})`):
+            # 输入序列的 token 索引，在词汇表中的索引表示。
+            # 可以使用 [`AutoTokenizer`] 获取。有关详细信息，请参阅 [`PreTrainedTokenizer.encode`] 和 [`PreTrainedTokenizer.__call__`]。
+
             [What are input IDs?](../glossary#input-ids)
-    # 注意力掩码用于避免对填充token进行注意力计算
         attention_mask (`np.ndarray` or `tf.Tensor` of shape `({0})`, *optional*):
-            Mask to avoid performing attention on padding token indices. Mask values selected in `[0, 1]`:
-    
-            - 1 for tokens that are **not masked**,
-            - 0 for tokens that are **masked**.
-    
+            # 避免对填充的 token 索引进行注意力计算的掩码。掩码值为 `[0, 1]`：
+
+            - 1 表示 **未被掩码的** token，
+            - 0 表示 **被掩码的** token。
+
             [What are attention masks?](../glossary#attention-mask)
-    # Token type ID用于区分句子A和句子B
         token_type_ids (`np.ndarray` or `tf.Tensor` of shape `({0})`, *optional*):
-            Segment token indices to indicate first and second portions of the inputs. Indices are selected in `[0,
-            1]`:
-    
-            - 0 corresponds to a *sentence A* token,
-            - 1 corresponds to a *sentence B* token.
-    
+            # 段 token 索引，用于指示输入的第一部分和第二部分。索引选取在 `[0, 1]`：
+
+            - 0 对应 *句子 A* 的 token，
+            - 1 对应 *句子 B* 的 token。
+
             [What are token type IDs?](../glossary#token-type-ids)
-    # Position ID用于指示每个token在序列中的位置
         position_ids (`np.ndarray` or `tf.Tensor` of shape `({0})`, *optional*):
-            Indices of positions of each input sequence tokens in the position embeddings. Selected in the range `[0,
-            config.max_position_embeddings - 1]`.
-    
+            # 每个输入序列 token 在位置嵌入中的位置索引。选取范围在 `[0, config.max_position_embeddings - 1]`。
+
             [What are position IDs?](../glossary#position-ids)
-    # 输入嵌入允许直接传入嵌入向量，而不是输入ID
         inputs_embeds (`np.ndarray` or `tf.Tensor` of shape `({0}, hidden_size)`, *optional*):
-            Optionally, instead of passing `input_ids` you can choose to directly pass an embedded representation. This
-            is useful if you want more control over how to convert *input_ids* indices into associated vectors than the
-            model's internal embedding lookup matrix.
-    # 输出注意力权重
+            # 可选项，可以直接传递嵌入表示而不是 `input_ids`。如果您希望更多地控制如何将 `input_ids` 索引转换为关联向量，
+            # 则此选项非常有用，而不是使用模型的内部嵌入查找矩阵。
         output_attentions (`bool`, *optional*):
-            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
-            tensors for more detail.
-    # 输出所有隐藏层状态
+            # 是否返回所有注意力层的注意力张量。有关更多详细信息，请参见返回的张量下的 `attentions`。
+
         output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-    # 是否返回ModelOutput对象
+            # 是否返回所有层的隐藏状态。有关更多详细信息，请参见返回的张量下的 `hidden_states`。
+
         return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput``] instead of a plain tuple.
-# 添加起始文档字符串，描述了该模型的基本信息
+            # 是否返回 [`~utils.ModelOutput`] 而不是简单的元组。
+"""
 @add_start_docstrings(
     "The bare DeBERTa Model transformer outputting raw hidden-states without any specific head on top.",
     DEBERTA_START_DOCSTRING,
 )
-# 定义 TFDebertaModel 类，继承自 TFDebertaPreTrainedModel
+"""
+# 定义 TFDebertaModel 类，继承自 TFDebertaPreTrainedModel 类
 class TFDebertaModel(TFDebertaPreTrainedModel):
-    # 初始化方法，接受配置参数和其他参数
     def __init__(self, config: DebertaConfig, *inputs, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 创建一个 TFDebertaMainLayer 对象，命名为 "deberta"
+        # 初始化 DeBERTa 主层，使用给定的配置
         self.deberta = TFDebertaMainLayer(config, name="deberta")
 
-    # 使用装饰器 unpack_inputs 对 call 方法进行装饰，解包输入参数
-    # 添加模型前向传播的起始文档字符串
-    # 添加代码示例文档字符串
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(DEBERTA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=TFBaseModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    # 定义 call 方法，接收多种输入并调用 DeBERTa 主层
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1373,7 +1372,7 @@ class TFDebertaModel(TFDebertaPreTrainedModel):
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
     ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
-        # 调用 self.deberta 的前向传播方法，得到输出
+        # 调用 DeBERTa 主层进行前向传播，返回输出
         outputs = self.deberta(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1386,73 +1385,66 @@ class TFDebertaModel(TFDebertaPreTrainedModel):
             training=training,
         )
 
-        # 返回输出结果
         return outputs
 
-    # 定义 build 方法，用于构建模型
+    # 构建模型，确保 DeBERTa 主层已经被构建
     def build(self, input_shape=None):
-        # 如果已经构建过模型，则直接返回
         if self.built:
             return
-        # 设置模型为已构建状态
         self.built = True
-        # 如果 self.deberta 存在，构建 self.deberta
         if getattr(self, "deberta", None) is not None:
             with tf.name_scope(self.deberta.name):
                 self.deberta.build(None)
 
 
-# 添加起始文档字符串，描述了该模型的基本信息
-@add_start_docstrings("""DeBERTa Model with a `language modeling` head on top.""", DEBERTA_START_DOCSTRING)
-# 定义 TFDebertaForMaskedLM 类，继承自 TFDebertaPreTrainedModel 和 TFMaskedLanguageModelingLoss
+"""
+@add_start_docstrings("DeBERTa Model with a `language modeling` head on top.", DEBERTA_START_DOCSTRING)
+"""
+# 定义 TFDebertaForMaskedLM 类，继承自 TFDebertaPreTrainedModel 和 TFMaskedLanguageModelingLoss 类
 class TFDebertaForMaskedLM(TFDebertaPreTrainedModel, TFMaskedLanguageModelingLoss):
-    # 初始化方法，接受配置参数和其他参数
     def __init__(self, config: DebertaConfig, *inputs, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
+        # 如果配置中设定为解码器，发出警告信息
         if config.is_decoder:
             logger.warning(
                 "If you want to use `TFDebertaForMaskedLM` make sure `config.is_decoder=False` for "
                 "bi-directional self-attention."
             )
 
-        # 创建一个 TFDebertaMainLayer 对象，命名为 "deberta"
+        # 初始化 DeBERTa 主层和 MLM 头部
         self.deberta = TFDebertaMainLayer(config, name="deberta")
-        # 创建一个 TFDebertaOnlyMLMHead 对象，命名为 "cls"
         self.mlm = TFDebertaOnlyMLMHead(config, input_embeddings=self.deberta.embeddings, name="cls")
 
-    # 获取语言模型头部
-    def get_lm_head(self) -> tf.keras.layers.Layer:
+    # 返回 MLM 头部
+    def get_lm_head(self) -> keras.layers.Layer:
         return self.mlm.predictions
 
-    # 使用装饰器 unpack_inputs 对 call 方法进行装饰，解包输入参数
-    # 添加模型前向传播的起始文档字符串
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(DEBERTA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,  # 添加代码示例的文档字符串，用于指定文档字符串的检查点
-        output_type=TFMaskedLMOutput,  # 输出类型为 TFMaskedLMOutput 类型
-        config_class=_CONFIG_FOR_DOC,  # 使用_CONFIG_FOR_DOC配置类
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=TFMaskedLMOutput,
+        config_class=_CONFIG_FOR_DOC,
     )
     def call(
         self,
-        input_ids: TFModelInputType | None = None,  # 输入参数 input_ids 的类型为 TFModelInputType 或 None 类型，默认为 None
-        attention_mask: np.ndarray | tf.Tensor | None = None,  # 输入参数 attention_mask 的类型为 np.ndarray 或 tf.Tensor 或 None，默认为 None
-        token_type_ids: np.ndarray | tf.Tensor | None = None,  # 输入参数 token_type_ids 的类型为 np.ndarray 或 tf.Tensor 或 None，默认为 None
-        position_ids: np.ndarray | tf.Tensor | None = None,  # 输入参数 position_ids 的类型为 np.ndarray 或 tf.Tensor 或 None，默认为 None
-        inputs_embeds: np.ndarray | tf.Tensor | None = None,  # 输入参数 inputs_embeds 的类型为 np.ndarray 或 tf.Tensor 或 None，默认为 None
-        output_attentions: Optional[bool] = None,  # 输入参数 output_attentions 的类型为 Optional[bool] 类型或 None，默认为 None
-        output_hidden_states: Optional[bool] = None,  # 输入参数 output_hidden_states 的类型为 Optional[bool] 类型或 None，默认为 None
-        return_dict: Optional[bool] = None,  # 输入参数 return_dict 的类型为 Optional[bool] 类型或 None，默认为 None
-        labels: np.ndarray | tf.Tensor | None = None,  # 输入参数 labels 的类型为 np.ndarray 或 tf.Tensor 或 None，默认为 None
-        training: Optional[bool] = False,  # 输入参数 training 的类型为 Optional[bool] 类型或 False，默认为 False
-    ) -> Union[TFMaskedLMOutput, Tuple[tf.Tensor]]:  # 函数返回类型为 TFMaskedLMOutput 类型或 Tuple[tf.Tensor] 类型的元组
+        input_ids: TFModelInputType | None = None,  # 输入模型的输入序列的 ID，可以为 None
+        attention_mask: np.ndarray | tf.Tensor | None = None,  # 可选的注意力掩码，用于指示哪些位置需要注意力
+        token_type_ids: np.ndarray | tf.Tensor | None = None,  # 可选的标记类型 ID，用于区分不同类型的输入
+        position_ids: np.ndarray | tf.Tensor | None = None,  # 可选的位置 ID，用于指示输入中的位置
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,  # 可选的嵌入输入，用于直接传递嵌入向量
+        output_attentions: Optional[bool] = None,  # 是否返回注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否返回隐藏状态
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回输出
+        labels: np.ndarray | tf.Tensor | None = None,  # 可选的标签，用于计算掩码语言建模损失
+        training: Optional[bool] = False,  # 是否处于训练模式
+    ) -> Union[TFMaskedLMOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` or `np.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
-            config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
-            loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`
+            计算掩码语言建模损失的标签。索引应在 `[-100, 0, ..., config.vocab_size]` 范围内。索引为 `-100` 的标记被忽略（掩码），
+            损失仅计算标签在 `[0, ..., config.vocab_size]` 范围内的标记。
         """
-        # 调用 self.deberta 和 self.mlm 进行相应的操作，并返回结果
         outputs = self.deberta(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1464,33 +1456,32 @@ class TFDebertaForMaskedLM(TFDebertaPreTrainedModel, TFMaskedLanguageModelingLos
             return_dict=return_dict,
             training=training,
         )
-        sequence_output = outputs[0]  # 获取 outputs 的第一个元素
-        prediction_scores = self.mlm(sequence_output=sequence_output, training=training)  # 使用 sequence_output 和 training 参数调用 self.mlm 函数
-        loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=prediction_scores)  # 如果 labels 为 None，则 loss 为 None，否则调用 self.hf_compute_loss() 函数
+        sequence_output = outputs[0]  # 提取模型输出的序列输出
+        prediction_scores = self.mlm(sequence_output=sequence_output, training=training)  # 使用序列输出预测得分
+        loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=prediction_scores)  # 计算损失，如果没有标签则为 None
 
-        # 根据 return_dict 的值返回不同的结果
         if not return_dict:
-            output = (prediction_scores,) + outputs[2:]  # 如果 return_dict 为 False，则返回 (prediction_scores,) 和 outputs[2:] 组成的元组
-            return ((loss,) + output) if loss is not None else output  # 如果 loss 不为 None，则返回 (loss, output) 组成的元组，否则只返回 output
+            output = (prediction_scores,) + outputs[2:]  # 如果不以字典形式返回，构建输出元组
+            return ((loss,) + output) if loss is not None else output  # 返回损失和输出元组或者仅输出元组
 
-        return TFMaskedLMOutput(  # 返回 TFMaskedLMOutput 类型的对象
+        return TFMaskedLMOutput(
             loss=loss,
             logits=prediction_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
 
-    def build(self, input_shape=None):  # 定义 build 方法，输入参数为 input_shape，默认为 None
-        if self.built:  # 如果已经构建过则直接返回
+    def build(self, input_shape=None):
+        if self.built:
             return
-        self.built = True  # 设置标记为已构建
-        if getattr(self, "deberta", None) is not None:  # 如果 self 中包含 deberta 属性
-            with tf.name_scope(self.deberta.name):  # 使用 deberta 的名称创建命名空间
-                self.deberta.build(None)  # 调用 deberta 的 build 方法
-        if getattr(self, "mlm", None) is not None:  # 如果 self 中包含 mlm 属性
-            with tf.name_scope(self.mlm.name):  # 使用 mlm 的名称创建命名空间
-                self.mlm.build(None)  # 调用 mlm 的 build 方法
-# 使用给定的起始文档字符串初始化 TFDebertaForSequenceClassification 类
+        self.built = True  # 标记模型已构建
+        if getattr(self, "deberta", None) is not None:
+            with tf.name_scope(self.deberta.name):
+                self.deberta.build(None)  # 构建模型部件
+        if getattr(self, "mlm", None) is not None:
+            with tf.name_scope(self.mlm.name):
+                self.mlm.build(None)  # 构建掩码语言建模部件
+# 使用装饰器添加模型的文档字符串，说明这是一个在DeBERTa模型基础上增加了序列分类/回归头的Transformer模型
 @add_start_docstrings(
     """
     DeBERTa Model transformer with a sequence classification/regression head on top (a linear layer on top of the
@@ -1499,32 +1490,32 @@ class TFDebertaForMaskedLM(TFDebertaPreTrainedModel, TFMaskedLanguageModelingLos
     DEBERTA_START_DOCSTRING,
 )
 class TFDebertaForSequenceClassification(TFDebertaPreTrainedModel, TFSequenceClassificationLoss):
-    # 初始化 TFDebertaForSequenceClassification 类
     def __init__(self, config: DebertaConfig, *inputs, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 获取标签数
+        # 设置分类的标签数目
         self.num_labels = config.num_labels
 
-        # 创建 DeBERTa 主层和上下文池化层
+        # 初始化DeBERTa主层和池化层
         self.deberta = TFDebertaMainLayer(config, name="deberta")
         self.pooler = TFDebertaContextPooler(config, name="pooler")
 
-        # 获取分类器的随机失活率
+        # 从配置中获取分类器的dropout值或者使用默认的隐藏层dropout概率
         drop_out = getattr(config, "cls_dropout", None)
         drop_out = self.config.hidden_dropout_prob if drop_out is None else drop_out
-        # 创建稳定的随机失活层
+        # 初始化稳定的Dropout层用于分类器
         self.dropout = TFDebertaStableDropout(drop_out, name="cls_dropout")
-        # 创建分类器层
-        self.classifier = tf.keras.layers.Dense(
+        # 初始化分类器的全连接层
+        self.classifier = keras.layers.Dense(
             units=config.num_labels,
             kernel_initializer=get_initializer(config.initializer_range),
             name="classifier",
         )
-        # 获取池化层的输出维度
+        # 设置输出维度为池化层的输出维度
         self.output_dim = self.pooler.output_dim
 
-    # 对前向传播函数进行解包并添加文档字符串
+    # 使用装饰器添加模型前向传播方法的文档字符串，描述输入参数和输出类型
     @unpack_inputs
     @add_start_docstrings_to_model_forward(DEBERTA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1532,7 +1523,6 @@ class TFDebertaForSequenceClassification(TFDebertaPreTrainedModel, TFSequenceCla
         output_type=TFSequenceClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 调用函数，接受输入参数并执行前向传播
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1545,15 +1535,14 @@ class TFDebertaForSequenceClassification(TFDebertaPreTrainedModel, TFSequenceCla
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-        # ...
-        ) -> Union[TFSequenceClassifierOutput, Tuple[tf.Tensor]]:
+    ) -> Union[TFSequenceClassifierOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` or `np.ndarray` of shape `(batch_size,)`, *optional*):
             Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 使用输入的参数调用deberta模型，获取输出结果
+        # 使用 `->` 符号指定函数返回类型为 TFSequenceClassifierOutput 或者包含 tf.Tensor 的元组
         outputs = self.deberta(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1565,23 +1554,23 @@ class TFDebertaForSequenceClassification(TFDebertaPreTrainedModel, TFSequenceCla
             return_dict=return_dict,
             training=training,
         )
-        # 从输出结果中获取序列输出
+        # 从模型输出中取出序列输出（第一个元素）
         sequence_output = outputs[0]
-        # 使用pooler对序列输出进行池化处理
+        # 将序列输出通过池化层得到汇总输出
         pooled_output = self.pooler(sequence_output, training=training)
-        # 对池化后的结果进行dropout处理
+        # 对汇总输出应用 dropout 操作
         pooled_output = self.dropout(pooled_output, training=training)
-        # 使用分类器对处理后的结果进行分类
+        # 将经过 dropout 处理后的汇总输出输入分类器，得到 logits
         logits = self.classifier(pooled_output)
-        # 如果有labels，则计算损失，否则损失为None
+        # 如果提供了 labels，则计算损失；否则将损失设为 None
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=logits)
 
-        # 如果return_dict为False，则输出元组
+        # 如果 return_dict 为 False，则返回一个包含 logits 和额外输出的元组
         if not return_dict:
             output = (logits,) + outputs[1:]
             return ((loss,) + output) if loss is not None else output
-
-        # 如果return_dict为True，则输出TFSequenceClassifierOutput类型的对象
+        
+        # 如果 return_dict 为 True，则返回一个 TFSequenceClassifierOutput 对象
         return TFSequenceClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1590,27 +1579,31 @@ class TFDebertaForSequenceClassification(TFDebertaPreTrainedModel, TFSequenceCla
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建过则直接返回
+        # 如果已经构建过，则直接返回
         if self.built:
             return
+        # 标记为已构建
         self.built = True
-        # 构建deberta模型
+        
+        # 如果存在 self.deberta，则在 TensorFlow 的命名空间下构建 self.deberta
         if getattr(self, "deberta", None) is not None:
             with tf.name_scope(self.deberta.name):
                 self.deberta.build(None)
-        # 构建pooler
+        
+        # 如果存在 self.pooler，则在 TensorFlow 的命名空间下构建 self.pooler
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
                 self.pooler.build(None)
-        # 构建dropout
+        
+        # 如果存在 self.dropout，则在 TensorFlow 的命名空间下构建 self.dropout
         if getattr(self, "dropout", None) is not None:
             with tf.name_scope(self.dropout.name):
                 self.dropout.build(None)
-        # 构建分类器
+        
+        # 如果存在 self.classifier，则在 TensorFlow 的命名空间下构建 self.classifier
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.output_dim])
-# 定义一个基于 DeBERTa 模型的标记分类器，用于识别命名实体等任务
 @add_start_docstrings(
     """
     DeBERTa Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
@@ -1622,21 +1615,15 @@ class TFDebertaForTokenClassification(TFDebertaPreTrainedModel, TFTokenClassific
     def __init__(self, config: DebertaConfig, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
 
-        # 记录标签的数量
-        self.num_labels = config.num_labels
+        self.num_labels = config.num_labels  # 初始化模型的标签数量
 
-        # DeBERTa 主体模型
-        self.deberta = TFDebertaMainLayer(config, name="deberta")
-        # Dropout 层，用于减少过拟合
-        self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
-        # 全连接层，用于分类
-        self.classifier = tf.keras.layers.Dense(
+        self.deberta = TFDebertaMainLayer(config, name="deberta")  # 使用配置初始化 DeBERTa 主层
+        self.dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)  # 根据配置添加 dropout 层
+        self.classifier = keras.layers.Dense(
             units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
-        )
-        # 保存模型配置信息
-        self.config = config
+        )  # 添加分类器层，输出维度为标签数量，使用配置的初始化器范围初始化
+        self.config = config  # 保存配置对象
 
-    # 前向传播函数
     @unpack_inputs
     @add_start_docstrings_to_model_forward(DEBERTA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1656,25 +1643,45 @@ class TFDebertaForTokenClassification(TFDebertaPreTrainedModel, TFTokenClassific
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-        # 输入参数包括：input_ids、attention_mask、token_type_ids、position_ids、inputs_embeds、output_attentions、
-        # output_hidden_states、return_dict、labels 和 training
-    # 定义了一个函数，接受输入参数并返回 TFTokenClassifierOutput 或 Tuple[tf.Tensor] 类型的值
-    def call(self, 
-             input_ids: tf.Tensor, 
-             attention_mask: tf.Tensor, 
-             token_type_ids: tf.Tensor = None, 
-             position_ids: tf.Tensor = None, 
-             inputs_embeds: tf.Tensor = None, 
-             output_attentions: bool = False, 
-             output_hidden_states: bool = False, 
-             return_dict: bool = True, 
-             training: bool = False, 
-             labels: Union[tf.Tensor, np.ndarray] = None) -> Union[TFTokenClassifierOutput, Tuple[tf.Tensor]]:
+    ):
+        """
+        DeBERTa 模型的前向传播方法，处理输入并返回输出结果。
+
+        Args:
+            input_ids (TFModelInputType | None): 输入的 token IDs
+            attention_mask (np.ndarray | tf.Tensor | None): 注意力遮罩
+            token_type_ids (np.ndarray | tf.Tensor | None): token 类型 IDs
+            position_ids (np.ndarray | tf.Tensor | None): 位置 IDs
+            inputs_embeds (np.ndarray | tf.Tensor | None): 嵌入式输入
+            output_attentions (Optional[bool]): 是否输出注意力权重
+            output_hidden_states (Optional[bool]): 是否输出隐藏状态
+            return_dict (Optional[bool]): 是否以字典形式返回结果
+            labels (np.ndarray | tf.Tensor | None): 标签数据
+            training (Optional[bool]): 是否在训练模式下
+
+        Returns:
+            TFTokenClassifierOutput: DeBERTa 模型的输出结果对象
+        """
+        # 调用 TFDebertaForTokenClassification 模型的前向传播
+        # 详细参数和用法示例请参考文档和代码样例
+        return super().call(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            labels=labels,
+            training=training,
+        )
+    ) -> Union[TFTokenClassifierOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` or `np.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
         """
-        # 调用deberta模型进行计算
+        # 调用 DeBERTa 模型进行前向传播，获取输出结果
         outputs = self.deberta(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1686,21 +1693,21 @@ class TFDebertaForTokenClassification(TFDebertaPreTrainedModel, TFTokenClassific
             return_dict=return_dict,
             training=training,
         )
-        # 获取模型输出的序列
+        # 从 DeBERTa 模型的输出中获取序列输出（通常是隐藏状态）
         sequence_output = outputs[0]
-        # 采用dropout层对序列进行处理
+        # 根据训练状态进行 dropout 操作，以防止过拟合
         sequence_output = self.dropout(sequence_output, training=training)
-        # 将经过处理的序列输入到分类器中进行分类
+        # 将序列输出传递给分类器，生成分类预测 logits
         logits = self.classifier(inputs=sequence_output)
-        # 如果存在标签，计算损失
+        # 如果有标签，则计算损失
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=logits)
 
-        # 如果不需要返回字典，则返回输出结果和损失
+        # 如果不要求返回字典格式的输出，则按照元组形式返回结果
         if not return_dict:
             output = (logits,) + outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 TFTokenClassifierOutput 类型的对象，包括损失、logits、hidden_states 和 attentions
+        # 返回 TFTokenClassifierOutput 格式的输出，包括损失、logits、隐藏状态和注意力权重
         return TFTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1708,42 +1715,56 @@ class TFDebertaForTokenClassification(TFDebertaPreTrainedModel, TFTokenClassific
             attentions=outputs.attentions,
         )
 
-    # 定义了一个build函数，用于构建模型
     def build(self, input_shape=None):
         # 如果模型已经构建，则直接返回
         if self.built:
             return
+        # 设置模型为已构建状态
         self.built = True
-        # 如果deberta模型存在，则构建模型
+        # 如果存在 DeBERTa 模型，则构建其参数
         if getattr(self, "deberta", None) is not None:
             with tf.name_scope(self.deberta.name):
                 self.deberta.build(None)
-        # 如果classifier模型存在，则构建模型
+        # 如果存在分类器模型，则构建其参数
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
+"""
+DeBERTa Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
+layers on top of the hidden-states output to compute `span start logits` and `span end logits`).
+"""
+# 基于DeBERTa模型，在其隐藏状态输出顶部添加一个用于提取性问答任务（如SQuAD）的跨度分类头部（通过线性层计算`span start logits`和`span end logits`）。
+
 @add_start_docstrings(
     """
-    DeBERTa Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
-    layers on top of the hidden-states output to compute `span start logits` and `span end logits`).
+    添加文档字符串注释到模型的前向传播函数，描述输入的详细信息。
     """,
     DEBERTA_START_DOCSTRING,
 )
+# 装饰器：添加起始文档字符串到模型的前向传播函数，使用了预定义的DeBERTa起始文档字符串格式。
+
 class TFDebertaForQuestionAnswering(TFDebertaPreTrainedModel, TFQuestionAnsweringLoss):
+    # TFDebertaForQuestionAnswering类，继承自TFDebertaPreTrainedModel和TFQuestionAnsweringLoss。
+
     def __init__(self, config: DebertaConfig, *inputs, **kwargs):
+        # 初始化函数，接收DebertaConfig类型的配置参数config和其他输入。
+
         super().__init__(config, *inputs, **kwargs)
+        # 调用父类（TFDebertaPreTrainedModel和TFQuestionAnsweringLoss）的初始化函数。
 
-        # 获取标签数量
         self.num_labels = config.num_labels
+        # 设置类属性num_labels为配置参数config中的标签数目。
 
-        # 创建Deberta主层
         self.deberta = TFDebertaMainLayer(config, name="deberta")
+        # 创建TFDebertaMainLayer实例self.deberta，使用配置参数config并命名为"deberta"。
 
-        # 创建QA输出层，做线性变换
-        self.qa_outputs = tf.keras.layers.Dense(
+        self.qa_outputs = keras.layers.Dense(
             units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="qa_outputs"
         )
+        # 创建Dense层self.qa_outputs，用于输出QA任务结果，设置单元数为config.num_labels，初始化器使用config中的范围初始化器。
+
         self.config = config
+        # 设置类属性config为配置参数config。
 
     @unpack_inputs
     @add_start_docstrings_to_model_forward(DEBERTA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
@@ -1752,6 +1773,8 @@ class TFDebertaForQuestionAnswering(TFDebertaPreTrainedModel, TFQuestionAnswerin
         output_type=TFQuestionAnsweringModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 装饰器：添加起始文档字符串到模型的前向传播函数，描述输入的详细信息，并添加代码示例文档字符串。
+
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1765,23 +1788,19 @@ class TFDebertaForQuestionAnswering(TFDebertaPreTrainedModel, TFQuestionAnswerin
         start_positions: np.ndarray | tf.Tensor | None = None,
         end_positions: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-
-
-注释：
-    def call(self, input_ids, attention_mask=None, token_type_ids=None, position_ids=None, inputs_embeds=None,
-             output_attentions=None, output_hidden_states=None, return_dict=None, training=None, start_positions=None,
-             end_positions=None) -> Union[TFQuestionAnsweringModelOutput, Tuple[tf.Tensor]]:
+        # 定义模型的前向传播函数call，接收多个输入参数和可选的控制参数。
+    ) -> Union[TFQuestionAnsweringModelOutput, Tuple[tf.Tensor]]:
         r"""
-        start_positions (`tf.Tensor` or `np.ndarray` of shape `(batch_size,)`, *optional`):
+        start_positions (`tf.Tensor` or `np.ndarray` of shape `(batch_size,)`, *optional*):
             Labels for position (index) of the start of the labelled span for computing the token classification loss.
             Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
             are not taken into account for computing the loss.
-        end_positions (`tf.Tensor` or `np.ndarray` of shape `(batch_size,)`, *optional):
+        end_positions (`tf.Tensor` or `np.ndarray` of shape `(batch_size,)`, *optional*):
             Labels for position (index) of the end of the labelled span for computing the token classification loss.
             Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
             are not taken into account for computing the loss.
         """
-        # 调用模型的主要方法，传入各种参数，返回结果
+        # 调用模型的前向传播函数，并获取输出
         outputs = self.deberta(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1793,29 +1812,32 @@ class TFDebertaForQuestionAnswering(TFDebertaPreTrainedModel, TFQuestionAnswerin
             return_dict=return_dict,
             training=training,
         )
-        # 从模型输出获取序列输出
+        # 从模型输出中提取序列输出
         sequence_output = outputs[0]
-        # 通过序列输出获取问题回答的 logits
+        # 使用序列输出计算问题回答的 logits
         logits = self.qa_outputs(inputs=sequence_output)
-        # 将 logits 拆分为开始位置的 logits 和结束位置的 logits
+        # 将 logits 分割为起始位置和结束位置的预测
         start_logits, end_logits = tf.split(value=logits, num_or_size_splits=2, axis=-1)
-        # 移除多余的维度
+        # 移除起始位置和结束位置 logits 的最后一个维度，使得维度降为 (batch_size,)
         start_logits = tf.squeeze(input=start_logits, axis=-1)
         end_logits = tf.squeeze(input=end_logits, axis=-1)
+        # 初始化损失为 None
         loss = None
 
-        # 如果给定了起始位置和结束位置则计算损失
+        # 如果提供了起始位置和结束位置的标签，则计算损失
         if start_positions is not None and end_positions is not None:
+            # 构建标签字典
             labels = {"start_position": start_positions}
             labels["end_position"] = end_positions
+            # 使用损失计算函数计算损失
             loss = self.hf_compute_loss(labels=labels, logits=(start_logits, end_logits))
 
-        # 如果不需要返回字典则直接返回结果
+        # 如果不需要返回字典形式的输出，则按照元组形式返回结果
         if not return_dict:
             output = (start_logits, end_logits) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 如果需要返回字典则构建 TFQuestionAnsweringModelOutput 对象并返回
+        # 如果需要返回字典形式的输出，则创建 TFQuestionAnsweringModelOutput 对象并返回
         return TFQuestionAnsweringModelOutput(
             loss=loss,
             start_logits=start_logits,
@@ -1824,17 +1846,17 @@ class TFDebertaForQuestionAnswering(TFDebertaPreTrainedModel, TFQuestionAnswerin
             attentions=outputs.attentions,
         )
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果模型已经构建则直接返回
+        # 如果已经构建过网络结构，则直接返回
         if self.built:
             return
+        # 标记模型已经构建
         self.built = True
-        # 如果存在 deeberta 则构建 deeberta
+        # 如果存在 self.deberta 属性，则构建 self.deberta 模型
         if getattr(self, "deberta", None) is not None:
             with tf.name_scope(self.deberta.name):
                 self.deberta.build(None)
-        # 如果存在 qa_outputs 则构建 qa_outputs
+        # 如果存在 self.qa_outputs 属性，则构建 self.qa_outputs 层
         if getattr(self, "qa_outputs", None) is not None:
             with tf.name_scope(self.qa_outputs.name):
                 self.qa_outputs.build([None, None, self.config.hidden_size])

@@ -1,185 +1,193 @@
-# `.\transformers\models\perceiver\modeling_perceiver.py`
+# `.\models\perceiver\modeling_perceiver.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明，版权归 Deepmind 和 The HuggingFace Inc. 团队所有
+```
+# 设置文件编码为 UTF-8
+
+# 版权声明，声明代码版权归 Deepmind 和 HuggingFace Inc. 团队所有，保留所有权利
+
 # 根据 Apache 许可证版本 2.0 进行许可
-# 除非符合许可证，否则不得使用该文件
-# 可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 在适用法律或书面同意的情况下，根据许可证分发的软件是基于“原样”分发的，没有任何形式的担保或条件，无论是明示的还是暗示的
-# 请查看许可证了解具体语言控制权限和限制事项
-"""PyTorch Perceiver 模型。"""
+# 在遵守许可证的情况下，您可以使用此文件，详细信息请参见许可证
+# 您可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
 
-# 导入必要的库
-import abc
-import math
-from dataclasses import dataclass
-from functools import reduce
-from operator import __add__
-from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Union
+# 除非法律另有规定或书面同意，否则不得以任何方式使用此软件
+# 此软件按"原样"提供，不提供任何明示或暗示的保证或条件
+# 请参阅许可证以获取特定于语言的权限和限制
+""" PyTorch Perceiver 模型。"""
 
-import numpy as np
-import torch
-import torch.utils.checkpoint
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+# 导入必要的库和模块
+import abc  # 抽象基类模块
+import math  # 数学函数模块
+from dataclasses import dataclass  # 用于定义数据类的装饰器
+from functools import reduce  # 函数工具模块中的reduce函数
+from operator import __add__  # 运算符模块中的add函数
+from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple, Union  # 类型提示
 
-# 导入自定义的激活函数映射表
-from ...activations import ACT2FN
-# 导入模型输出类
-from ...modeling_outputs import BaseModelOutputWithCrossAttentions
-# 导入预训练模型基类
-from ...modeling_utils import PreTrainedModel
-# 导入 PyTorch 工具函数
-from ...pytorch_utils import apply_chunking_to_forward, find_pruneable_heads_and_indices, meshgrid, prune_linear_layer
-# 导入工具函数和类
-from ...utils import (
-    ModelOutput,
-    add_start_docstrings,
-    add_start_docstrings_to_model_forward,
-    logging,
-    replace_return_docstrings,
+import numpy as np  # 导入 NumPy 库，用于数值计算
+import torch  # 导入 PyTorch 深度学习库
+import torch.utils.checkpoint  # PyTorch 的 checkpoint 模块，用于内存优化
+from torch import nn  # PyTorch 的神经网络模块
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # PyTorch 的损失函数
+
+from ...activations import ACT2FN  # 导入激活函数映射
+from ...modeling_outputs import BaseModelOutputWithCrossAttentions  # 模型输出类，包含交叉注意力
+from ...modeling_utils import PreTrainedModel  # 预训练模型基类
+from ...pytorch_utils import apply_chunking_to_forward, find_pruneable_heads_and_indices, meshgrid, prune_linear_layer  # PyTorch 工具函数
+from ...utils import (  # 通用工具函数和类
+    ModelOutput,  # 模型输出基类
+    add_start_docstrings,  # 为函数添加文档字符串的装饰器
+    add_start_docstrings_to_model_forward,  # 为模型前向方法添加文档字符串的装饰器
+    logging,  # 日志记录模块
+    replace_return_docstrings,  # 替换返回文档字符串的工具函数
 )
-# 导入 Perceiver 配置类
-from .configuration_perceiver import PerceiverConfig
+from .configuration_perceiver import PerceiverConfig  # 导入 Perceiver 模型的配置类
 
-# 定义类型别名
-ModalitySizeType = Mapping[str, int]
-PreprocessorOutputType = Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]
-PreprocessorType = Callable[..., PreprocessorOutputType]
-PostprocessorType = Callable[..., Any]
+# 类型别名定义
+ModalitySizeType = Mapping[str, int]  # 模态大小类型别名，映射字符串到整数
+PreprocessorOutputType = Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]  # 预处理器输出类型别名
+PreprocessorType = Callable[..., PreprocessorOutputType]  # 预处理器类型别名
+PostprocessorType = Callable[..., Any]  # 后处理器类型别名
 
 # 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 用于生成文档的检查点和配置
-_CHECKPOINT_FOR_DOC = "deepmind/language-perceiver"
-_CONFIG_FOR_DOC = "PerceiverConfig"
+# 用于文档的模型检查点和配置常量
+_CHECKPOINT_FOR_DOC = "deepmind/language-perceiver"  # 模型检查点用于文档
+_CONFIG_FOR_DOC = "PerceiverConfig"  # Perceiver 模型配置用于文档
 
-# 预训练 Perceiver 模型存档列表
+# 预训练模型的存档列表
 PERCEIVER_PRETRAINED_MODEL_ARCHIVE_LIST = [
-    "deepmind/language-perceiver",
-    # 您可以在 https://huggingface.co/models?filter=perceiver 查看所有 Perceiver 模型
+    "deepmind/language-perceiver",  # Deepmind 的语言 Perceiver 模型
+    # 更多 Perceiver 模型存档可以在此处查看 https://huggingface.co/models?filter=perceiver
 ]
 
-# 定义 Perceiver 模型输出类
 @dataclass
 class PerceiverModelOutput(ModelOutput):
     """
-    Base class for Perceiver base model's outputs, with potential hidden states, attentions and cross-attentions.
+    Perceiver 模型输出的基类，包含可能的隐藏状态、注意力和交叉注意力。
+    
+    这个类使用 dataclass 装饰器来定义数据类，它是一个轻量级的数据结构，用于表示简单的值对象。
+    """
+
+    # 该类用于描述 Perceiver 模型的输出，包含了可能的隐藏状态、注意力和交叉注意力等信息
     """
     Args:
         logits (`torch.FloatTensor` of shape `(batch_size, num_labels)`):
-            分类（如果 config.num_labels==1 则为回归）得分（SoftMax 之前）。
+            Classification (or regression if config.num_labels==1) scores (before SoftMax).
+            分类（或回归，如果config.num_labels==1）分数，即SoftMax之前的分数。
         last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            模型最后一层的输出的隐藏状态序列。
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            元组形式的 `torch.FloatTensor`（包含嵌入输出和每层输出），形状为 `(batch_size, sequence_length, hidden_size)`。
-            每层模型的隐藏状态加上初始嵌入输出。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组形式的 `torch.FloatTensor`（每层一个）形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
-            在自注意力头中使用的注意力 softmax 后的注意力权重，用于计算加权平均值。
-        cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组形式的 `torch.FloatTensor`（每层一个）形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
-            在解码器的跨注意力层中使用的注意力 softmax 后的注意力权重，用于计算加权平均值。
-    """
-
-    # 初始化 logits 变量，类型为 torch.FloatTensor，形状为 `(batch_size, num_labels)`，默认为 None
-    logits: torch.FloatTensor = None
-    # 初始化 last_hidden_state 变量，类型为 torch.FloatTensor，形状为 `(batch_size, sequence_length, hidden_size)`，默认为 None
-    last_hidden_state: torch.FloatTensor = None
-    # 初始化 hidden_states 变量，类型为 `Optional[Tuple[torch.FloatTensor]]`，默认为 None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化 attentions 变量，类型为 `Optional[Tuple[torch.FloatTensor]]`，默认为 None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化 cross_attentions 变量，类型为 `Optional[Tuple[torch.FloatTensor]]`，默认为 None
-    cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 定义一个数据类，用于Perceiver解码器的输出，包括潜在的交叉注意力
-@dataclass
-class PerceiverDecoderOutput(ModelOutput):
-    """
-    Base class for Perceiver decoder outputs, with potential cross-attentions.
-
-    Args:
-        logits (`torch.FloatTensor` of shape `(batch_size, num_labels)`):
-            Output of the basic decoder.
-        cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`. Attentions weights of the decoder's cross-attention layer, after the attention softmax,
-            used to compute the weighted average in the cross-attention heads.
-    """
-
-    logits: torch.FloatTensor = None
-    cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
-
-# 定义一个数据类，用于Perceiver的掩码语言模型输出
-@dataclass
-class PerceiverMaskedLMOutput(ModelOutput):
-    """
-    Base class for Perceiver's masked language model outputs.
-
-    Args:
-        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            Masked language modeling (MLM) loss.
-        logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+            Sequence of hidden-states at the output of the last layer of the model.
+            模型最后一层输出的隐藏状态序列。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
             shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
             plus the initial embedding outputs.
+            `torch.FloatTensor`元组（一个用于嵌入输出 + 一个用于每层输出），形状为`(batch_size, sequence_length, hidden_size)`。
+            模型每层的隐藏状态，以及初始嵌入输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, num_latents,
-            num_latents)`. Attentions weights after the attention softmax, used to compute the weighted average in the
-            self-attention heads.
+            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
+            the self-attention heads.
+            `torch.FloatTensor`元组（每层一个），形状为`(batch_size, num_heads, sequence_length, sequence_length)`。
+            自注意力头中注意力权重的 softmax 后的结果，用于计算加权平均值。
         cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`. Attentions weights of the decoder's cross-attention layer, after the attention softmax,
             used to compute the weighted average in the cross-attention heads.
+            `torch.FloatTensor`元组（每层一个），形状为`(batch_size, num_heads, sequence_length, sequence_length)`。
+            解码器的交叉注意力层中注意力权重的 softmax 后的结果，用于计算加权平均值。
     """
 
+    logits: torch.FloatTensor = None  # 分类（或回归）分数的张量，形状为`(batch_size, num_labels)`
+    last_hidden_state: torch.FloatTensor = None  # 模型最后一层输出的隐藏状态张量，形状为`(batch_size, sequence_length, hidden_size)`
+    hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 模型每层的隐藏状态的元组张量，形状为`(batch_size, sequence_length, hidden_size)`
+    attentions: Optional[Tuple[torch.FloatTensor]] = None  # 自注意力头中的注意力权重的元组张量，形状为`(batch_size, num_heads, sequence_length, sequence_length)`
+    cross_attentions: Optional[Tuple[torch.FloatTensor]] = None  # 交叉注意力头中的注意力权重的元组张量，形状为`(batch_size, num_heads, sequence_length, sequence_length)`
+    # 定义 PerceiverDecoderOutput 类，继承自 ModelOutput 类
+    @dataclass
+    class PerceiverDecoderOutput(ModelOutput):
+        """
+        Base class for Perceiver decoder outputs, with potential cross-attentions.
+
+        Args:
+            logits (`torch.FloatTensor` of shape `(batch_size, num_labels)`):
+                Output of the basic decoder.
+            cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+                Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+                sequence_length)`. Attentions weights of the decoder's cross-attention layer, after the attention softmax,
+                used to compute the weighted average in the cross-attention heads.
+        """
+
+        # 定义 logits 属性，类型为 torch.FloatTensor，形状为 (batch_size, num_labels)，存储基本解码器的输出
+        logits: torch.FloatTensor = None
+        # 定义 cross_attentions 属性，类型为可选的元组，如果传入参数 output_attentions=True 或者 config.output_attentions=True 则会返回，存储解码器的跨注意力层的注意力权重
+        cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
+
+
+    # 定义 PerceiverMaskedLMOutput 类，继承自 ModelOutput 类
+    @dataclass
+    class PerceiverMaskedLMOutput(ModelOutput):
+        """
+        Base class for Perceiver's masked language model outputs.
+
+        Args:
+            loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+                Masked language modeling (MLM) loss.
+            logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
+                Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+            hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+                Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
+                shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
+                plus the initial embedding outputs.
+            attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+                Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, num_latents,
+                num_latents)`. Attentions weights after the attention softmax, used to compute the weighted average in the
+                self-attention heads.
+            cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+                Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+                sequence_length)`. Attentions weights of the decoder's cross-attention layer, after the attention softmax,
+                used to compute the weighted average in the cross-attention heads.
+        """
+
+        # 定义 loss 属性，类型为可选的 torch.FloatTensor，形状为 (1,)，当提供 labels 参数时返回，存储掩码语言模型（MLM）损失
+        loss: Optional[torch.FloatTensor] = None
+        # 定义 logits 属性，类型为 torch.FloatTensor，形状为 (batch_size, sequence_length, config.vocab_size)，存储语言建模头的预测分数（SoftMax之前的每个词汇标记的分数）
+        logits: torch.FloatTensor = None
+        # 定义 hidden_states 属性，类型为可选的元组，如果传入参数 output_hidden_states=True 或者 config.output_hidden_states=True 则会返回，存储模型在每一层输出之后的隐藏状态 plus 初始嵌入输出
+        hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+        # 定义 attentions 属性，类型为可选的元组，如果传入参数 output_attentions=True 或者 config.output_attentions=True 则会返回，存储注意力softmax后的注意权重，用于计算自注意力头中的加权平均值
+        attentions: Optional[Tuple[torch.FloatTensor]] = None
+        # 定义 cross_attentions 属性，类型为可选的元组，如果传入参数 output_attentions=True 或者 config.output_attentions=True 则会返回，存储解码器的跨注意力层的注意力权重
+        cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
+
+
+    # 定义 PerceiverClassifierOutput 类，继承自 ModelOutput 类
+    @dataclass
+    class PerceiverClassifierOutput(ModelOutput):
+    """
+    Perceiver 模型的输出基类，适用于序列/图像分类模型、光流和多模态自编码。
+    
+    Args:
+        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+            分类（或回归，如果 `config.num_labels==1`）的损失值。
+        logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
+            分类（或回归，如果 `config.num_labels==1`）的分数（SoftMax 之前）。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            包含 `torch.FloatTensor` 元组的隐藏状态（如果传递了 `output_hidden_states=True` 或 `config.output_hidden_states=True`）。
+            形状为 `(batch_size, sequence_length, hidden_size)`，模型在每一层输出后的隐藏状态以及初始嵌入输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            包含 `torch.FloatTensor` 元组的注意力权重（如果传递了 `output_attentions=True` 或 `config.output_attentions=True`）。
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+        cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            包含 `torch.FloatTensor` 元组的交叉注意力权重（如果传递了 `output_attentions=True` 或 `config.output_attentions=True`）。
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，解码器的交叉注意力层的注意力权重，经过注意力 softmax 后用于计算加权平均值。
+    """
+    
     loss: Optional[torch.FloatTensor] = None
     logits: torch.FloatTensor = None
     hidden_states: Optional[Tuple[torch.FloatTensor]] = None
     attentions: Optional[Tuple[torch.FloatTensor]] = None
     cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
-
-# 定义一个数据类，用于Perceiver分类器的输出
-@dataclass
-class PerceiverClassifierOutput(ModelOutput):
-    """
-    Perceiver模型的输出的基类，包括序列/图像分类模型、光流和多模态自编码。
-
-    Args:
-        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            分类（如果config.num_labels==1，则为回归）损失。
-        logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            分类（如果config.num_labels==1，则为回归）分数（SoftMax之前）。
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            元组`torch.FloatTensor`（一个用于嵌入输出 + 一个用于每个层的输出）的形状为`(batch_size, sequence_length, hidden_size)`。模型在每一层输出的隐藏状态加上初始嵌入输出。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed):
-            元组`torch.FloatTensor`（每一层一个）的形状为`(batch_size, num_heads, sequence_length, sequence_length)`。注意力softmax之后的注意力权重，用于计算自注意力头中的加权平均值。
-        cross_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed or when `config.output_attentions=True` is passed):
-            元组`torch.FloatTensor`（每一层一个）的形状为`(batch_size, num_heads, sequence_length, sequence_length)`。解码器的交叉注意力层的注意力权重，注意力softmax之后，用于计算交叉注意力头中的加权平均值。
-    """
-
-    loss: Optional[torch.FloatTensor] = None  # 分类（或回归）损失，可选
-    logits: torch.FloatTensor = None  # 分类（或回归）分数（SoftMax之前）
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 每一层的模型隐藏状态，包括嵌入输出
-    attentions: Optional[Tuple[torch.FloatTensor]] = None  # 注意力权重，用于计算��注意力头中的加权平均值
-    cross_attentions: Optional[Tuple[torch.FloatTensor]] = None  # 交叉注意力权重，用于计算交叉注意力头中的加权平均值
-class PerceiverEmbeddings(nn.Module):
-    """Construct the latent embeddings."""
-
-    def __init__(self, config):
-        super().__init__()
-        self.latents = nn.Parameter(torch.randn(config.num_latents, config.d_latents))
-
-    def forward(self, batch_size: int):
-        return self.latents.expand(batch_size, -1, -1)  # Thanks, Phil Wang
-
-
-class PerceiverSelfAttention(nn.Module):
-    """Multi-headed {cross, self}-attention. Can be used both in the encoder as well as in the decoder."""
+    """实现Perceiver模型的自注意力机制模块。可以用于编码器和解码器中。"""
 
     def __init__(
         self,
@@ -193,45 +201,39 @@ class PerceiverSelfAttention(nn.Module):
     ):
         super().__init__()
         self.num_heads = num_heads
-        # Q and K must have the same number of channels.
-        # Default to preserving Q's input's shape.
+        # Q和K必须具有相同数量的通道。
+        # 默认保持Q的输入形状。
         if qk_channels is None:
             qk_channels = q_dim
-        # V's num_channels determines the shape of the output of QKV-attention.
-        # Default to the same number of channels used in the key-query operation.
+        # V的通道数确定了QKV-attention输出的形状。
+        # 默认使用与键-查询操作中使用的通道数相同。
         if v_channels is None:
             v_channels = qk_channels
         if qk_channels % num_heads != 0:
-            raise ValueError(f"qk_channels ({qk_channels}) must be divisible by num_heads ({num_heads}).")
+            raise ValueError(f"qk_channels ({qk_channels})必须能被num_heads ({num_heads})整除。")
         if v_channels % num_heads != 0:
-            raise ValueError(f"v_channels ({v_channels}) must be divisible by num_heads ({num_heads}).")
+            raise ValueError(f"v_channels ({v_channels})必须能被num_heads ({num_heads})整除。")
 
         self.qk_channels = qk_channels
         self.v_channels = v_channels
         self.qk_channels_per_head = self.qk_channels // num_heads
         self.v_channels_per_head = self.v_channels // num_heads
 
-        # Layer normalization
-        # Layer normalization for query and key tensors
+        # 层归一化
         self.layernorm1 = nn.LayerNorm(q_dim)
-        # Layer normalization for value tensor if it's cross attention, otherwise an identity layer
         self.layernorm2 = nn.LayerNorm(kv_dim) if is_cross_attention else nn.Identity()
 
-        # Projection matrices
-        # Linear transformation for queries
+        # 投影矩阵
         self.query = nn.Linear(q_dim, qk_channels)
-        # Linear transformation for keys
         self.key = nn.Linear(kv_dim, qk_channels)
-        # Linear transformation for values
         self.value = nn.Linear(kv_dim, v_channels)
 
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
     def transpose_for_scores(self, x, channels_per_head):
-        # Reshape the tensor for multi-head attention computation
+        """将张量重塑为注意力分数计算所需的形状。"""
         new_x_shape = x.size()[:-1] + (self.num_heads, channels_per_head)
         x = x.view(*new_x_shape)
-        # Permute dimensions to facilitate multi-head attention computation
         return x.permute(0, 2, 1, 3)
 
     def forward(
@@ -242,81 +244,96 @@ class PerceiverSelfAttention(nn.Module):
         inputs: Optional[torch.FloatTensor] = None,
         inputs_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
-        # 使用 Layernorm1 层对 hidden_states 进行标准化处理
         hidden_states = self.layernorm1(hidden_states)
-        # 使用 Layernorm2 层对 inputs 进行标准化处理
-        inputs = self.layernorm2(inputs)
+        # 对隐藏状态进行 Layer Normalization
 
-        # 判断是否是跨注意力模块
+        inputs = self.layernorm2(inputs)
+        # 对输入进行 Layer Normalization
+
+        # Project queries, keys and values to a common feature dimension. If this is instantiated as a cross-attention module,
+        # the keys and values come from the inputs; the attention mask needs to be such that the inputs's non-relevant tokens are not attended to.
         is_cross_attention = inputs is not None
-        # 将 hidden_states 传入 query 层得到 queries
+        # 判断是否为跨注意力模块
+
         queries = self.query(hidden_states)
+        # 从隐藏状态计算查询
 
         if is_cross_attention:
-            # 如果是跨注意力模块，将 inputs 分别传入 key 层和 value 层，得到 keys 和 values
             keys = self.key(inputs)
+            # 如果是跨注意力模块，从输入计算键
             values = self.value(inputs)
-            # 将输入的注意力掩码赋值给 attention_mask
+            # 如果是跨注意力模块，从输入计算值
             attention_mask = inputs_mask
+            # 如果是跨注意力模块，使用输入的注意力掩码
         else:
-            # 如果不是跨注意力模块，将 hidden_states 分别传入 key 层和 value 层，得到 keys 和 values
             keys = self.key(hidden_states)
+            # 如果不是跨注意力模块，从隐藏状态计算键
             values = self.value(hidden_states)
+            # 如果不是跨注意力模块，从隐藏状态计算值
 
-        # 重塑通道以进行多头注意力
-        # 将输入数据从 (batch_size, time, channels) 重塑为 (batch_size, num_heads, time, channels per head)
+        # Reshape channels for multi-head attention.
+        # We reshape from (batch_size, time, channels) to (batch_size, num_heads, time, channels per head)
         queries = self.transpose_for_scores(queries, self.qk_channels_per_head)
+        # 调整查询张量以进行多头注意力计算
         keys = self.transpose_for_scores(keys, self.qk_channels_per_head)
+        # 调整键张量以进行多头注意力计算
         values = self.transpose_for_scores(values, self.v_channels_per_head)
+        # 调整值张量以进行多头注意力计算
 
-        # 计算查询与键之间的点积以获得原始注意力得分
+        # Take the dot product between the queries and keys to get the raw attention scores.
         attention_scores = torch.matmul(queries, keys.transpose(-1, -2))
+        # 计算查询和键的点积以获得原始注意力分数
 
-        # 获取 queries 的形状信息
         batch_size, num_heads, seq_len, q_head_dim = queries.shape
-        # 获取 values 的形状信息
         _, _, _, v_head_dim = values.shape
-        # 计算隐藏层数
         hiddens = self.num_heads * v_head_dim
+        # 计算中间变量
 
-        # 对 attention_scores 进行缩放处理
         attention_scores = attention_scores / math.sqrt(q_head_dim)
+        # 缩放注意力分数
 
         if attention_mask is not None:
-            # 应用预先计算的注意力掩码
+            # Apply the attention mask (precomputed for all layers in PerceiverModel forward() function)
             attention_scores = attention_scores + attention_mask
+            # 应用注意力掩码
 
-        # 对 attention_scores 进行 softmax 处理，得到注意力概率
+        # Normalize the attention scores to probabilities.
         attention_probs = nn.Softmax(dim=-1)(attention_scores)
+        # 将注意力分数归一化为概率
 
-        # 使用 dropout 层对 attention_probs 进行处理
+        # This is actually dropping out entire tokens to attend to, which might
+        # seem a bit unusual, but is taken from the original Transformer paper.
         attention_probs = self.dropout(attention_probs)
+        # 使用 dropout 随机丢弃整个 token 的注意力概率，这种做法源自于原始的 Transformer 论文
 
-        # 如果存在 head_mask，则对 attention_probs 进行头部掩码处理
+        # Mask heads if we want to
         if head_mask is not None:
             attention_probs = attention_probs * head_mask
+            # 如果有头部掩码，应用头部掩码
 
-        # 计算上下文层，即注意力概率与 values 的矩阵乘积
         context_layer = torch.matmul(attention_probs, values)
+        # 计算上下文张量
 
-        # 将 context_layer 进行维度变换
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
+        # 调整上下文张量的维度顺序
+
         new_context_layer_shape = context_layer.size()[:-2] + (hiddens,)
         context_layer = context_layer.view(*new_context_layer_shape)
+        # 调整上下文张量的形状
 
-        # 根据需要返回 outputs，包括 context_layer 和 attention_probs
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
+        # 准备输出
 
         return outputs
+        # 返回计算结果
 class PerceiverSelfOutput(nn.Module):
     def __init__(self, config, input_channels, output_channels):
-        # 初始化方法，设置 PerceiverSelfOutput 类的属性
         super().__init__()
-        # 创建一个线性层
+        # 初始化一个全连接层，输入通道数为input_channels，输出通道数为output_channels
         self.dense = nn.Linear(input_channels, output_channels)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 前向传播方法，通过线性层处理输入数据
+        # 将输入的隐藏状态通过全连接层进行线性变换
         hidden_states = self.dense(hidden_states)
         return hidden_states
 
@@ -335,9 +352,9 @@ class PerceiverAttention(nn.Module):
         kv_dim=None,
         use_query_residual=True,
     ):
-        # 初始化方法，设置 PerceiverAttention 类的属性
         super().__init__()
-        # 多头注意力机制的实现
+        
+        # 根据是否是交叉注意力机制和参数配置设置查询键值通道数和值通道数
         if is_cross_attention and qk_channels is None:
             if config.cross_attention_shape_for_attention == "q":
                 qk_channels = q_dim
@@ -353,7 +370,8 @@ class PerceiverAttention(nn.Module):
                 qk_channels = q_dim
             if v_channels is None:
                 v_channels = qk_channels
-        # 创建 PerceiverSelfAttention 实例
+        
+        # 初始化自注意力层
         self.self = PerceiverSelfAttention(
             config,
             is_cross_attention=is_cross_attention,
@@ -363,7 +381,8 @@ class PerceiverAttention(nn.Module):
             q_dim=q_dim,
             kv_dim=kv_dim,
         )
-        # 创建输出层
+        
+        # 设置输出层，根据是否是交叉注意力机制确定输出通道数
         output_channels = None
         if is_cross_attention:
             output_channels = q_dim
@@ -371,29 +390,30 @@ class PerceiverAttention(nn.Module):
             if output_channels is None:
                 output_channels = v_channels
         self.output = PerceiverSelfOutput(config, input_channels=self.self.v_channels, output_channels=output_channels)
+        
         self.use_query_residual = use_query_residual
         self.pruned_heads = set()
 
     def prune_heads(self, heads):
-        # 剪枝头部的方法
+        # 如果没有需要剪枝的头部，直接返回
         if len(heads) == 0:
             return
-        # 找到可剪枝的头的下标
+        
+        # 寻找可剪枝的头部及其索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.self.num_attention_heads, self.self.attention_head_size, self.pruned_heads
         )
 
-        # 剪枝线性层
+        # 对线性层进行剪枝
         self.self.query = prune_linear_layer(self.self.query, index)
         self.self.key = prune_linear_layer(self.self.key, index)
         self.self.value = prune_linear_layer(self.self.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储已剪枝的头部
+        # 更新超参数并记录已剪枝的头部
         self.self.num_attention_heads = self.self.num_attention_heads - len(heads)
         self.self.all_head_size = self.self.attention_head_size * self.self.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
-    # 前向传播函数，接受隐藏状态、注意力掩码、头部掩码、输入、输入掩码、输出注意力等参数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -403,7 +423,7 @@ class PerceiverAttention(nn.Module):
         inputs_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 使用 self-attention 层处理隐藏状态等参数，返回 self-attention 层的输出
+        # 使用 self.self 方法处理输入的隐藏状态，返回处理后的输出
         self_outputs = self.self(
             hidden_states,
             attention_mask,
@@ -413,40 +433,39 @@ class PerceiverAttention(nn.Module):
             output_attentions,
         )
 
-        # 输出投影层，将 self-attention 层的输出进行投影处理
+        # 将 self_outputs[0] 通过 self.output 进行输出投影
         attention_output = self.output(self_outputs[0])
 
-        # 可选择将原始查询加入到注意力输出中，仅当查询与输出的语义相同时可使用
-        # 例如查询是位置信息，输出是像素信息时，可以考虑不使用原始查询
+        # 如果指定使用查询残差连接
         if self.use_query_residual:
+            # 将 attention_output 添加到原始隐藏状态 hidden_states 上
             attention_output = attention_output + hidden_states
 
-        # 将注意力输出与可能的注意力结果一起组成输出
-        outputs = (attention_output,) + self_outputs[1:]  # 如果输出了注意力结果，则添加到输出中
+        # 组装最终输出，包括 attention_output 和可能的其他输出
+        outputs = (attention_output,) + self_outputs[1:]  # 如果需要输出注意力权重，也加入到 outputs 中
         return outputs
 class PerceiverMLP(nn.Module):
     """A Transformer-style dense module to follow attention."""
 
     def __init__(self, config, input_size, widening_factor):
         super().__init__()
-        # 创建一个线性层，输入维度为 input_size，输出维度为 widening_factor * input_size
+        # 第一层全连接层，将输入特征大小映射到扩展因子倍数的输入特征大小
         self.dense1 = nn.Linear(input_size, widening_factor * input_size)
-        # 判断 hidden_act 是否为字符串类型，如果是则使用指定的激活函数，否则使用 config 中的激活函数
+        # 根据配置选择激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
-        # 创建一个线性层，输入维度为 widening_factor * input_size，输出维度为 input_size
+        # 第二层全连接层，将扩展后的特征映射回原始输入特征大小
         self.dense2 = nn.Linear(widening_factor * input_size, input_size)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 对输入数据进行线性变换
+        # 前向传播：全连接层1
         hidden_states = self.dense1(hidden_states)
-        # 使用激活函数处理 hidden_states
+        # 前向传播：激活函数
         hidden_states = self.intermediate_act_fn(hidden_states)
-        # 对处理后的数据再次进行线性变换
+        # 前向传播：全连接层2
         hidden_states = self.dense2(hidden_states)
-        # 返回处理后的数据
         return hidden_states
 
 
@@ -464,11 +483,11 @@ class PerceiverLayer(nn.Module):
         use_query_residual=True,
     ):
         super().__init__()
-        # 设置前馈模块的块大小
+        # 分块大小
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
-        # 序列长度的维度
+        # 序列长度维度
         self.seq_len_dim = 1
-        # 创建一个 PerceiverAttention 实例
+        # 注意力机制
         self.attention = PerceiverAttention(
             config,
             is_cross_attention=is_cross_attention,
@@ -479,9 +498,9 @@ class PerceiverLayer(nn.Module):
             kv_dim=kv_dim,
             use_query_residual=use_query_residual,
         )
-        # 对输入进行层归一化
+        # Layer normalization
         self.layernorm = nn.LayerNorm(q_dim)
-        # 创建一个 PerceiverMLP 实例
+        # MLP层
         self.mlp = PerceiverMLP(config, input_size=q_dim, widening_factor=widening_factor)
 
     def forward(
@@ -493,7 +512,7 @@ class PerceiverLayer(nn.Module):
         inputs_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 通���注意力模块获取注意力输出
+        # 调用注意力机制的前向传播
         attention_outputs = self.attention(
             hidden_states,
             attention_mask,
@@ -504,24 +523,24 @@ class PerceiverLayer(nn.Module):
         )
         attention_output = attention_outputs[0]
 
-        outputs = attention_outputs[1:]  # 如果输出注意力权重，则添加到输出中
+        outputs = attention_outputs[1:]  # 如果输出注意力权重，则添加
 
-        # 将前馈操作分块处理
+        # 对注意力输出应用分块处理，返回分块后的输出
         layer_output = apply_chunking_to_forward(
             self.feed_forward_chunk, self.chunk_size_feed_forward, self.seq_len_dim, attention_output
         )
 
-        # 加上残差连接
-        layer_output = layer_output + attention_output 
+        # 残差连接
+        layer_output = layer_output + attention_output
 
-        # 构建输出
         outputs = (layer_output,) + outputs
 
         return outputs
 
-    # 前馈操作的分块处理
     def feed_forward_chunk(self, attention_output):
+        # Layer normalization
         layer_output = self.layernorm(attention_output)
+        # MLP层
         layer_output = self.mlp(layer_output)
         return layer_output
 
@@ -532,21 +551,21 @@ class PerceiverEncoder(nn.Module):
         super().__init__()
         self.config = config
 
-        # 检查我们是否可以使用这些形状的多头注意力。
-        # 检查潜在变量的维度是否能够被自注意力头数整除。
+        # Check that we can use multihead-attention with these shapes.
+        # 检查是否可以使用这些形状进行多头注意力
         if config.d_latents % config.num_self_attention_heads != 0:
             raise ValueError(
                 f"num_z_channels ({config.d_latents}) must be divisible by"
                 f" num_self_attend_heads ({config.num_self_attention_heads})."
             )
-        # 检查潜在变量的维度是否能够被交叉注意力头数整除。
         if config.d_latents % config.num_cross_attention_heads != 0:
             raise ValueError(
                 f"num_z_channels ({config.d_latents}) must be divisible by"
                 f" num_cross_attend_heads ({config.num_cross_attention_heads})."
             )
 
-        # 构建交叉注意力层。
+        # Construct the cross attention layer.
+        # 构建跨注意力层
         self.cross_attention = PerceiverLayer(
             config,
             is_cross_attention=True,
@@ -559,8 +578,9 @@ class PerceiverEncoder(nn.Module):
             use_query_residual=config.use_query_residual,
         )
 
-        # 构建自注意力层的单个块。
-        # 通过多次应用此块，我们得到更深的体系结构。
+        # Construct a single block of self-attention layers.
+        # 构建一个自注意力层块
+        # 通过多次应用这个块，可以得到更深的网络结构
         self_attention_layers = []
         for _ in range(config.num_self_attends_per_block):
             layer = PerceiverLayer(
@@ -575,7 +595,6 @@ class PerceiverEncoder(nn.Module):
             )
             self_attention_layers.append(layer)
 
-        # 将自注意力层放入模块列表中。
         self.self_attends = nn.ModuleList(self_attention_layers)
 
     def forward(
@@ -588,14 +607,15 @@ class PerceiverEncoder(nn.Module):
         output_attentions: Optional[bool] = False,
         output_hidden_states: Optional[bool] = False,
         return_dict: Optional[bool] = True,
-    ) -> Union[Tuple, BaseModelOutputWithCrossAttentions]:
-        # 如果不输出隐藏状态，则初始化为空元组
+        ) -> Union[Tuple, BaseModelOutputWithCrossAttentions]:
+        # 如果不需要输出隐藏状态，设置为空元组；否则初始化为 None
         all_hidden_states = () if output_hidden_states else None
-        # 如果不输出注意力权重，则初始化为空元组
+        # 如果不需要输出注意力权重，设置为空元组；否则初始化为 None
         all_self_attentions = () if output_attentions else None
+        # 如果不需要输出交叉注意力权重，设置为空元组；否则初始化为 None
         all_cross_attentions = () if output_attentions else None
 
-        # 对 latents（hidden_states）和输入之间应用交叉注意力：
+        # 对 latent（hidden_states）和 inputs 之间进行交叉注意力计算：
         layer_outputs = self.cross_attention(
             hidden_states,
             attention_mask=attention_mask,
@@ -604,21 +624,24 @@ class PerceiverEncoder(nn.Module):
             inputs_mask=inputs_mask,
             output_attentions=output_attentions,
         )
+        # 更新 hidden_states 为交叉注意力计算的输出的第一个元素
         hidden_states = layer_outputs[0]
 
+        # 如果需要输出注意力权重，将本次计算的注意力权重添加到 all_cross_attentions 中
         if output_attentions:
-            # 如果输出注意力权重，则将当前层的注意力权重添加到 all_cross_attentions 中
             all_cross_attentions = all_cross_attentions + (layer_outputs[1],)
 
         # 多次应用自注意力层块：
         for _ in range(self.config.num_blocks):
             for i, layer_module in enumerate(self.self_attends):
+                # 如果需要输出隐藏状态，将当前 hidden_states 添加到 all_hidden_states 中
                 if output_hidden_states:
-                    # 如果输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
                     all_hidden_states = all_hidden_states + (hidden_states,)
 
+                # 获取当前层的头部掩码
                 layer_head_mask = head_mask[i] if head_mask is not None else None
 
+                # 执行当前自注意力层的前向传播
                 layer_outputs = layer_module(
                     hidden_states,
                     attention_mask=attention_mask,
@@ -626,23 +649,24 @@ class PerceiverEncoder(nn.Module):
                     output_attentions=output_attentions,
                 )
 
+                # 更新 hidden_states 为当前自注意力层的输出的第一个元素
                 hidden_states = layer_outputs[0]
+                # 如果需要输出注意力权重，将本次计算的注意力权重添加到 all_self_attentions 中
                 if output_attentions:
-                    # 如果输出注意力权重，则将当前层的注意力权重添加到 all_self_attentions 中
                     all_self_attentions = all_self_attentions + (layer_outputs[1],)
 
+            # 如果需要输出隐藏状态，将当前 hidden_states 添加到 all_hidden_states 中
             if output_hidden_states:
-                # 如果输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
+        # 如果不返回字典形式的结果，将结果以元组形式返回，过滤掉值为 None 的项
         if not return_dict:
-            # 如果不返回字典，则返回非空元素的元组
             return tuple(
                 v
                 for v in [hidden_states, all_hidden_states, all_self_attentions, all_cross_attentions]
                 if v is not None
             )
-        # 返回带有交叉注意力的基础模型输出
+        # 返回一个 BaseModelOutputWithCrossAttentions 对象，包含最后隐藏状态、所有隐藏状态、自注意力和交叉注意力
         return BaseModelOutputWithCrossAttentions(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
@@ -655,46 +679,47 @@ class PerceiverPreTrainedModel(PreTrainedModel):
     models.
     """
 
-    # 设置配置类为PerceiverConfig
+    # 设置默认的配置类为PerceiverConfig
     config_class = PerceiverConfig
-    # 设置基础模型前缀为"perceiver"
+    # 指定基础模型前缀为"perceiver"
     base_model_prefix = "perceiver"
-    # 设置主输入名称为"inputs"
+    # 指定主要输入名称为"inputs"
     main_input_name = "inputs"
 
     def _init_weights(self, module):
         """Initialize the weights"""
-        # 如果模块是线性层或卷积层
+        # 如果module是Linear或者Conv2d类型
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 使用正态分布初始化权重
+            # 使用正态分布初始化权重数据，均值为0，标准差为config中指定的initializer_range
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果存在偏置项，初始化为0
+            # 如果有偏置项，则将偏置数据初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果模块有"latents"属性
+        # 如果module具有"latents"属性
         elif hasattr(module, "latents"):
-            # 使用正态分布初始化latents属性
+            # 使用正态分布初始化latents属性数据，均值为0，标准差为config中指定的initializer_range
             module.latents.data.normal_(mean=0.0, std=self.config.initializer_range)
-        # 如果模块有"position_embeddings"属性且是PerceiverTrainablePositionEncoding的实例
+        # 如果module具有"position_embeddings"属性并且是PerceiverTrainablePositionEncoding类型
         elif hasattr(module, "position_embeddings") and isinstance(module, PerceiverTrainablePositionEncoding):
-            # 使用正态分布初始化position_embeddings属性
+            # 使用正态分布初始化position_embeddings数据，均值为0，标准差为config中指定的initializer_range
             module.position_embeddings.data.normal_(mean=0.0, std=self.config.initializer_range)
-        # 如果模块是参数字典
+        # 如果module是ParameterDict类型
         elif isinstance(module, nn.ParameterDict):
-            # 遍历参数字典的键，使用正态分布初始化值
+            # 对于每个modality，使用正态分布初始化数据，均值为0，标准差为config中指定的initializer_range
             for modality in module.keys():
                 module[modality].data.normal_(mean=0.0, std=self.config.initializer_range)
-        # 如果模块是嵌入层
+        # 如果module是Embedding类型
         elif isinstance(module, nn.Embedding):
-            # 使用正态分布初始化权重
+            # 使用正态分布初始化权重数据，均值为0，标准差为config中指定的initializer_range
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果存在填充索引，将对应位置的权重初始化为0
+            # 如果指定了padding_idx，则将该索引位置的权重初始化为零
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
-        # 如果模块是LayerNorm层
+        # 如果module是LayerNorm类型
         elif isinstance(module, nn.LayerNorm):
-            # 初始化偏置为0，权重为1
+            # 将偏置数据初始化为零
             module.bias.data.zero_()
+            # 将权重数据初始化为1
             module.weight.data.fill_(1.0)
 
 
@@ -715,27 +740,29 @@ PERCEIVER_MODEL_START_DOCSTRING = r"""
     behavior.
     # 参数说明：
     # config ([`PerceiverConfig`]): 模型配置类，包含模型的所有参数。
-    # 初始化时使用配置文件不会加载与模型相关的权重，只加载配置。查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
-    # decoder (*DecoderType*, *optional*): 可选的解码器，用于解码编码器的潜在表示。示例包括
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverBasicDecoder*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverClassificationDecoder*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder*。
-    # input_preprocessor (*PreprocessorType*, *optional*): 可选的输入预处理器。示例包括
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverImagePreprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverAudioPreprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverTextPreprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalPreprocessor*。
-    # output_postprocessor (*PostprocessorType*, *optional*): 可选的输出后处理器。示例包括
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverImagePostprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverAudioPostprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverClassificationPostprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverProjectionPostprocessor*,
-    # *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalPostprocessor*。
-    # 
-    # 请注意，您可以定义自己的解码器、预处理器和/或后处理器以适应您的用例。
-"""
+    #                           通过配置文件初始化不会加载模型的权重，仅加载配置。
+    #                           查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
+    # decoder (*DecoderType*, *optional*):
+    #         可选的解码器，用于解码编码器的潜在表示。示例包括
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverBasicDecoder*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverClassificationDecoder*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder*。
+    # input_preprocessor (*PreprocessorType*, *optional*):
+    #         可选的输入预处理器。示例包括
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverImagePreprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverAudioPreprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverTextPreprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalPreprocessor*。
+    # output_postprocessor (*PostprocessorType*, *optional*):
+    #         可选的输出后处理器。示例包括
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverImagePostprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverAudioPostprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverClassificationPostprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverProjectionPostprocessor*,
+    #         *transformers.models.perceiver.modeling_perceiver.PerceiverMultimodalPostprocessor*。
 
-PERCEIVER_INPUTS_DOCSTRING = r"""
+    # 注意：您可以定义自己的解码器、预处理器和/或后处理器以适应您的使用案例。
+"""
     Args:
         inputs (`torch.FloatTensor`):
             Inputs to the perceiver. Can be anything: images, text, audio, video, etc.
@@ -762,12 +789,25 @@ PERCEIVER_INPUTS_DOCSTRING = r"""
             Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
-
 @add_start_docstrings(
     """The Perceiver: a scalable, fully attentional architecture.""",
     PERCEIVER_MODEL_START_DOCSTRING,
 )
 class PerceiverModel(PerceiverPreTrainedModel):
+    """
+    The PerceiverModel class implements a perceiver architecture for various input modalities.
+
+    Args:
+        config (PretrainedConfig):
+            The model configuration class instance.
+        decoder (Optional):
+            Optional decoder for the model.
+        input_preprocessor (PreprocessorType, Optional):
+            Optional input preprocessor for handling input data.
+        output_postprocessor (PostprocessorType, Optional):
+            Optional output postprocessor for handling model outputs.
+    """
+
     def __init__(
         self,
         config,
@@ -775,7 +815,19 @@ class PerceiverModel(PerceiverPreTrainedModel):
         input_preprocessor: PreprocessorType = None,
         output_postprocessor: PostprocessorType = None,
     ):
-        # 初始化PerceiverModel类
+        """
+        Initialize the PerceiverModel with given configuration and optional components.
+
+        Args:
+            config (PretrainedConfig):
+                The model configuration class instance.
+            decoder (Optional):
+                Optional decoder for the model.
+            input_preprocessor (PreprocessorType, Optional):
+                Optional input preprocessor for handling input data.
+            output_postprocessor (PostprocessorType, Optional):
+                Optional output postprocessor for handling model outputs.
+        """
         super().__init__(config)
         self.config = config
 
@@ -787,55 +839,85 @@ class PerceiverModel(PerceiverPreTrainedModel):
         )
         self.decoder = decoder
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
     def get_input_embeddings(self):
-        # 获取输入嵌入
+        """
+        Returns the latent embeddings used as inputs to the perceiver model.
+
+        Returns:
+            torch.Tensor: The latent embeddings tensor.
+        """
         return self.embeddings.latents
 
     def set_input_embeddings(self, value):
-        # 设置输入嵌入
+        """
+        Sets the input embeddings of the perceiver model.
+
+        Args:
+            value (torch.Tensor): The new input embeddings tensor.
+        """
         self.embeddings.latents = value
 
     def _prune_heads(self, heads_to_prune):
         """
-        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
-        class PreTrainedModel
+        Prunes heads of the model.
+
+        Args:
+            heads_to_prune (dict):
+                Dictionary of {layer_num: list of heads to prune in this layer}. See base class PreTrainedModel.
         """
         for layer, heads in heads_to_prune.items():
             self.encoder.layer[layer].attention.prune_heads(heads)
 
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("(batch_size, sequence_length)"))
     @replace_return_docstrings(output_type=PerceiverModelOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义一个前向传播函数，接受输入张量、注意力掩码、下采样输出点、头部掩码、输出注意力、输出隐藏状态、返回字典等参数
+    def forward(self, **inputs):
+        """
+        Perform a forward pass through the PerceiverModel.
+
+        Args:
+            **inputs (keyword arguments):
+                The input data. Can contain various inputs depending on the model configuration.
+
+        Returns:
+            PerceiverModelOutput or tuple:
+                The model outputs. Can contain attentions, hidden states, and additional model-specific outputs.
+        """
+        return super().forward(**inputs)
+    # 定义神经网络模型的前向传播函数
     def forward(
         self,
+        # 输入数据张量，通常是浮点型张量
         inputs: torch.FloatTensor,
+        # 注意力掩码张量，可选，用于控制注意力机制的作用范围
         attention_mask: Optional[torch.FloatTensor] = None,
+        # 子采样输出点的字典，可选，包含不同子样本输出的张量
         subsampled_output_points: Optional[Dict[str, torch.Tensor]] = None,
+        # 头部掩码张量，可选，用于掩盖特定头部的注意力权重
         head_mask: Optional[torch.FloatTensor] = None,
+        # 是否输出注意力权重信息，可选
         output_attentions: Optional[bool] = None,
+        # 是否输出隐藏状态信息，可选
         output_hidden_states: Optional[bool] = None,
+        # 是否返回字典形式的结果，可选
         return_dict: Optional[bool] = None,
-# 为遮蔽语言建模示例使用 Perceiver 添加文档字符串
-# 继承自 PerceiverPreTrainedModel 类
+@add_start_docstrings("""Example use of Perceiver for masked language modeling.""", PERCEIVER_START_DOCSTRING)
 class PerceiverForMaskedLM(PerceiverPreTrainedModel):
-    # 初始化函数，接受 PerceiverConfig 类型的参数
     def __init__(self, config: PerceiverConfig):
-        # 调用父类的初始化函数
         super().__init__(config)
 
-        # 创建 PerceiverTextPreprocessor 对象
+        # 实例化文本预处理器
         text_preprocessor = PerceiverTextPreprocessor(config)
 
-        # 定义可训练的位置编码参数
+        # 定义用于解码器的可训练位置编码参数
         trainable_position_encoding_kwargs_decoder = {
             "num_channels": text_preprocessor.num_channels,
             "index_dims": config.max_position_embeddings,
         }
 
-        # 创建 PerceiverModel 对象
+        # 创建 PerceiverModel 实例，配置输入预处理器和解码器
         self.perceiver = PerceiverModel(
             config,
             input_preprocessor=text_preprocessor,
@@ -852,13 +934,15 @@ class PerceiverForMaskedLM(PerceiverPreTrainedModel):
                 trainable_position_encoding_kwargs=trainable_position_encoding_kwargs_decoder,
             ),
         )
-        # 创建 PerceiverEmbeddingDecoder 对象
+
+        # 实例化 PerceiverEmbeddingDecoder
         self.embedding_decoder = PerceiverEmbeddingDecoder(config)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 为模型的前向传播添加文档字符串
+    @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @replace_return_docstrings(output_type=PerceiverMaskedLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
         inputs: Optional[torch.Tensor] = None,
@@ -869,23 +953,23 @@ class PerceiverForMaskedLM(PerceiverPreTrainedModel):
         labels: Optional[torch.Tensor] = None,
         return_dict: Optional[bool] = None,
         input_ids: Optional[torch.Tensor] = None,
+        # 具体的模型前向传播方法，参见 PERCEIVER_INPUTS_DOCSTRING 的格式说明
+        # 输出类型为 PerceiverMaskedLMOutput，配置类为 _CONFIG_FOR_DOC
 
 
 
-# 为文本分类示例使用 Perceiver 添加文档字符串
-# 继承自 PerceiverPreTrainedModel 类
+@add_start_docstrings("""Example use of Perceiver for text classification.""", PERCEIVER_START_DOCSTRING)
 class PerceiverForSequenceClassification(PerceiverPreTrainedModel):
-    # 初始化函数，接受 PerceiverConfig 类型的参数
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
 
-        # 定义可训练的位置编码参数
+        # 定义用于解码器的可训练位置编码参数
         trainable_position_encoding_kwargs_decoder = {"num_channels": config.d_latents, "index_dims": 1}
 
-        # 获取标签数量
+        # 设置分类数量
         self.num_labels = config.num_labels
-        # 创建 PerceiverModel 对象
+
+        # 创建 PerceiverModel 实例，配置输入预处理器和分类解码器
         self.perceiver = PerceiverModel(
             config,
             input_preprocessor=PerceiverTextPreprocessor(config),
@@ -897,50 +981,44 @@ class PerceiverForSequenceClassification(PerceiverPreTrainedModel):
             ),
         )
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
-    # 添加模型前向传播的文档字符串，包含Perceiver模型输入的说明
+    # 将模型的输入格式的文档字符串添加到前向传播方法上，描述其参数是批量大小和序列长度
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 替换返回值的文档字符串，指定输出类型为PerceiverClassifierOutput，配置类为_CONFIG_FOR_DOC
+    # 替换返回值的文档字符串，指定输出类型为PerceiverClassifierOutput，并使用_CONFIG_FOR_DOC作为配置类
     @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
+    # 定义模型的前向传播方法
     def forward(
         self,
-        inputs: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        labels: Optional[torch.Tensor] = None,
-        return_dict: Optional[bool] = None,
-        input_ids: Optional[torch.Tensor] = None,
-# 导入必要的库
+        inputs: Optional[torch.Tensor] = None,  # 模型的输入张量，默认为None
+        attention_mask: Optional[torch.Tensor] = None,  # 注意力遮罩张量，默认为None
+        head_mask: Optional[torch.Tensor] = None,  # 头部遮罩张量，默认为None
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，默认为None
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为None
+        labels: Optional[torch.Tensor] = None,  # 标签张量，默认为None
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回，默认为None
+        input_ids: Optional[torch.Tensor] = None,  # 输入ID张量，默认为None
 @add_start_docstrings(
     """
 Example use of Perceiver for image classification, for tasks such as ImageNet.
 
-This model uses learned position embeddings. In other words, this model is not given any privileged information about
-the structure of images. As shown in the paper, this model can achieve a top-1 accuracy of 72.7 on ImageNet.
-
-[`PerceiverForImageClassificationLearned`] uses [`~models.perceiver.modeling_perceiver.PerceiverImagePreprocessor`]
-(with `prep_type="conv1x1"`) to preprocess the input images, and
-[`~models.perceiver.modeling_perceiver.PerceiverClassificationDecoder`] to decode the latent representation of
-[`PerceiverModel`] into classification logits.
+This model uses fixed 2D Fourier position embeddings. As shown in the paper, this model can achieve a top-1 accuracy of
+79.0 on ImageNet, and 84.5 when pre-trained on a large-scale dataset (i.e. JFT).
 """,
     PERCEIVER_START_DOCSTRING,
 )
-# 定义 PerceiverForImageClassificationLearned 类，继承自 PerceiverPreTrainedModel
-class PerceiverForImageClassificationLearned(PerceiverPreTrainedModel):
-    # 初始化函数
+class PerceiverForImageClassificationFixed(PerceiverPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 定义可训练的位置编码参数
-        trainable_position_encoding_kwargs_preprocessor = {"num_channels": 256, "index_dims": config.image_size**2}
+        # Define kwargs for trainable position encoding in preprocessor and decoder
+        trainable_position_encoding_kwargs_preprocessor = {"num_channels": 256, "index_dims": config.image_size ** 2}
         trainable_position_encoding_kwargs_decoder = {"num_channels": config.d_latents, "index_dims": 1}
 
-        # 获取标签数量
+        # Initialize number of labels from config
         self.num_labels = config.num_labels
-        # 创建 PerceiverModel 模型
+
+        # Initialize Perceiver model with fixed 2D Fourier position embeddings
         self.perceiver = PerceiverModel(
             config,
             input_preprocessor=PerceiverImagePreprocessor(
@@ -948,8 +1026,8 @@ class PerceiverForImageClassificationLearned(PerceiverPreTrainedModel):
                 prep_type="conv1x1",
                 spatial_downsample=1,
                 out_channels=256,
-                position_encoding_type="trainable",
-                concat_or_add_pos="concat",
+                position_encoding_type="fourier",
+                concat_or_add_pos="add",
                 project_pos_dim=256,
                 trainable_position_encoding_kwargs=trainable_position_encoding_kwargs_preprocessor,
             ),
@@ -961,10 +1039,9 @@ class PerceiverForImageClassificationLearned(PerceiverPreTrainedModel):
             ),
         )
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 前向传播函数
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -977,56 +1054,81 @@ class PerceiverForImageClassificationLearned(PerceiverPreTrainedModel):
         labels: Optional[torch.Tensor] = None,
         return_dict: Optional[bool] = None,
         pixel_values: Optional[torch.Tensor] = None,
+        ):
+        """
+        Perform forward pass of the PerceiverForImageClassificationFixed model.
 
+        Args:
+            inputs (torch.Tensor, optional): Input tensor of shape (batch_size, sequence_length).
+            attention_mask (torch.Tensor, optional): Mask tensor indicating which elements should be attended to.
+            head_mask (torch.Tensor, optional): Mask tensor for attention heads.
+            output_attentions (bool, optional): Whether to output attentions.
+            output_hidden_states (bool, optional): Whether to output hidden states.
+            labels (torch.Tensor, optional): Labels tensor for classification.
+            return_dict (bool, optional): Whether to return outputs as a dictionary.
+            pixel_values (torch.Tensor, optional): Pixel values tensor for image input.
 
+        Returns:
+            PerceiverClassifierOutput or torch.Tensor: Output of the model, depending on return_dict.
 
-@add_start_docstrings(
-    """
-Example use of Perceiver for image classification, for tasks such as ImageNet.
-
-This model uses fixed 2D Fourier position embeddings. As shown in the paper, this model can achieve a top-1 accuracy of
-79.0 on ImageNet, and 84.5 when pre-trained on a large-scale dataset (i.e. JFT).
+        """
+        # Forward pass through the Perceiver model
+        return self.perceiver(
+            inputs=inputs,
+            attention_mask=attention_mask,
+            head_mask=head_mask,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            labels=labels,
+            return_dict=return_dict,
+            pixel_values=pixel_values,
+        )
+"""
+[`PerceiverForImageClassificationLearned`] uses [`~models.perceiver.modeling_perceiver.PerceiverImagePreprocessor`]
+(with `prep_type="pixels"`) to preprocess the input images, and
+[`~models.perceiver.modeling_perceiver.PerceiverClassificationDecoder`] to decode the latent representation of
+[`PerceiverModel`] into classification logits.
 """,
-    PERCEIVER_START_DOCSTRING,
+PERCEIVER_START_DOCSTRING,
 )
-# 使用PerceiverForImageClassificationLearned类，使用PerceiverImagePreprocessor对输入图像进行预处理，使用PerceiverClassificationDecoder将PerceiverModel的潜在表示解码为分类logits
-# 初始化PerceiverForImageClassificationFourier类，继承自PerceiverPreTrainedModel
 class PerceiverForImageClassificationFourier(PerceiverPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 设置Fourier位置编码的预处理器参数
+        # 设置傅里叶位置编码的预处理器参数
         fourier_position_encoding_kwargs_preprocessor = {
-            "concat_pos": True,
-            "max_resolution": (224, 224),
-            "num_bands": 64,
-            "sine_only": False,
+            "concat_pos": True,  # 是否将位置编码与输入数据连接
+            "max_resolution": (224, 224),  # 输入图像的最大分辨率
+            "num_bands": 64,  # 傅里叶变换中的频带数量
+            "sine_only": False,  # 是否只使用正弦函数作为位置编码的基础
         }
-        # 设置可训练位置编码的解码器参数
-        trainable_position_encoding_kwargs_decoder = {"num_channels": config.d_latents, "index_dims": 1}
+        # 可训练位置编码解码器的参数
+        trainable_position_encoding_kwargs_decoder = {
+            "num_channels": config.d_latents,  # 潜在表示的通道数
+            "index_dims": 1,  # 位置索引的维度
+        }
 
-        # 获取类别数量和PerceiverModel对象
         self.num_labels = config.num_labels
+        # 创建Perceiver模型，指定输入预处理器和分类解码器
         self.perceiver = PerceiverModel(
             config,
             input_preprocessor=PerceiverImagePreprocessor(
                 config,
-                prep_type="pixels",
-                spatial_downsample=1,
+                prep_type="pixels",  # 使用像素级别的预处理方式
+                spatial_downsample=1,  # 空间下采样因子
                 fourier_position_encoding_kwargs=fourier_position_encoding_kwargs_preprocessor,
             ),
             decoder=PerceiverClassificationDecoder(
                 config,
                 num_channels=config.d_latents,
                 trainable_position_encoding_kwargs=trainable_position_encoding_kwargs_decoder,
-                use_query_residual=True,
+                use_query_residual=True,  # 使用查询残差连接
             ),
         )
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 前向传播函数
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1041,97 +1143,107 @@ class PerceiverForImageClassificationFourier(PerceiverPreTrainedModel):
         pixel_values: Optional[torch.Tensor] = None,
 
 
-
-# 使用PerceiverForImageClassificationConvProcessing类，示例用于图像分类，如ImageNet
-# 该模型使用2D conv+maxpool预处理网络。如论文所示，该模型在ImageNet上可以达到82.1的top-1准确率
-# 使用PerceiverForImageClassificationLearned类，使用PerceiverImagePreprocessor对输入图像进行预处理，使用PerceiverClassificationDecoder将PerceiverModel的潜在表示解码为分类logits
-# 初始化PerceiverForImageClassificationConvProcessing类，继承自PerceiverPreTrainedModel
-class PerceiverForImageClassificationConvProcessing(PerceiverPreTrainedModel):
-    # 初始化函数，接受配置参数并调用父类的初始化函数
-    def __init__(self, config):
-        # 调用父类的初始化函数
-        super().__init__(config)
-
-        # 定义傅立叶位置编码的预处理参数
-        fourier_position_encoding_kwargs_preprocessor = {
-            "concat_pos": True,
-            "max_resolution": (56, 56),
-            "num_bands": 64,
-            "sine_only": False,
-        }
-        # 定义可训练位置编码的解码器参数
-        trainable_position_encoding_kwargs_decoder = {"num_channels": config.d_latents, "index_dims": 1}
-
-        # 设置类别数量
-        self.num_labels = config.num_labels
-        # 初始化感知器模型
-        self.perceiver = PerceiverModel(
-            config,
-            input_preprocessor=PerceiverImagePreprocessor(
-                config,
-                prep_type="conv",
-                spatial_downsample=1,
-                position_encoding_type="fourier",
-                fourier_position_encoding_kwargs=fourier_position_encoding_kwargs_preprocessor,
-            ),
-            decoder=PerceiverClassificationDecoder(
-                config,
-                num_channels=config.d_latents,
-                trainable_position_encoding_kwargs=trainable_position_encoding_kwargs_decoder,
-                use_query_residual=True,
-            ),
-        )
-
-        # 初始化权重并应用最终处理
-        self.post_init()
-
-    # 前向传播函数，接受多个输入参数并返回输出结果
-    @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
-    def forward(
-        self,
-        inputs: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        labels: Optional[torch.Tensor] = None,
-        return_dict: Optional[bool] = None,
-        pixel_values: Optional[torch.Tensor] = None,
-# 使用 Perceiver 处理光流的示例，适用于 Sintel 和 KITTI 等任务。PerceiverForOpticalFlow 使用 PerceiverImagePreprocessor（prep_type="patches"）对输入图像进行预处理，并使用 PerceiverOpticalFlowDecoder 解码 PerceiverModel 的潜在表示。
-
-# 作为输入，将两个连续帧沿通道维度连接起来，并在每个像素周围提取一个 3 x 3 的补丁（导致每个像素有 54 个值）。使用固定的傅立叶位置编码来编码每个像素在补丁中的位置。接下来，应用 Perceiver 编码器。为了解码，使用与输入相同的编码查询潜在表示。
 
 @add_start_docstrings(
     """
-Example use of Perceiver for optical flow, for tasks such as Sintel and KITTI. [`PerceiverForOpticalFlow`] uses
-[`~models.perceiver.modeling_perceiver.PerceiverImagePreprocessor`] (with *prep_type="patches"*) to preprocess the
-input images, and [`~models.perceiver.modeling_perceiver.PerceiverOpticalFlowDecoder`] to decode the latent
-representation of [`PerceiverModel`].
+    Example use of Perceiver for image classification, for tasks such as ImageNet.
 
-As input, one concatenates 2 subsequent frames along the channel dimension and extract a 3 x 3 patch around each pixel
-(leading to 3 x 3 x 3 x 2 = 54 values for each pixel). Fixed Fourier position encodings are used to encode the position
-of each pixel in the patch. Next, one applies the Perceiver encoder. To decode, one queries the latent representation
-using the same encoding used for the input.
-""",
+    This model uses a 2D conv+maxpool preprocessing network. As shown in the paper, this model can achieve a top-1 accuracy
+    of 82.1 on ImageNet.
+
+    [`PerceiverForImageClassificationLearned`] uses [`~models.perceiver.modeling_perceiver.PerceiverImagePreprocessor`]
+    (with `prep_type="conv"`) to preprocess the input images, and
+    [`~models.perceiver.modeling_perceiver.PerceiverClassificationDecoder`] to decode the latent representation of
+    [`PerceiverModel`] into classification logits.
+    """,
     PERCEIVER_START_DOCSTRING,
 )
+class PerceiverForImageClassificationConvProcessing(PerceiverPreTrainedModel):
 
-# PerceiverForOpticalFlow 类继承自 PerceiverPreTrainedModel
-class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
-    # 初始化方法
+
+
+"""
+注释：
+- `PerceiverForImageClassificationLearned` 类使用 `PerceiverImagePreprocessor` 来预处理输入图像（使用 `prep_type="pixels"`），并使用 `PerceiverClassificationDecoder` 来将 `PerceiverModel` 的潜在表示解码为分类 logits。
+- `PerceiverForImageClassificationConvProcessing` 类示例用于图像分类任务（例如 ImageNet），使用 2D 卷积+最大池化预处理网络，可以在 ImageNet 上达到82.1%的top-1准确率。
+"""
+    # 初始化函数，接受一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传入配置对象
         super().__init__(config)
 
-        # 预处理器的傅立叶位置编码参数
+        # 定义用于预处理的傅里叶位置编码的参数字典
+        fourier_position_encoding_kwargs_preprocessor = {
+            "concat_pos": True,  # 是否在输入中连接位置编码
+            "max_resolution": (56, 56),  # 最大分辨率
+            "num_bands": 64,  # 傅里叶变换中使用的波段数
+            "sine_only": False,  # 是否只使用正弦函数
+        }
+        
+        # 定义用于解码器的可训练位置编码的参数字典
+        trainable_position_encoding_kwargs_decoder = {"num_channels": config.d_latents, "index_dims": 1}
+
+        # 设置实例变量：标签的数量
+        self.num_labels = config.num_labels
+        
+        # 初始化感知器模型，配置输入预处理器和解码器
+        self.perceiver = PerceiverModel(
+            config,
+            input_preprocessor=PerceiverImagePreprocessor(
+                config,
+                prep_type="conv",  # 预处理类型为卷积
+                spatial_downsample=1,  # 空间下采样因子
+                position_encoding_type="fourier",  # 位置编码类型为傅里叶
+                fourier_position_encoding_kwargs=fourier_position_encoding_kwargs_preprocessor,  # 傅里叶位置编码参数
+            ),
+            decoder=PerceiverClassificationDecoder(
+                config,
+                num_channels=config.d_latents,  # 解码器的通道数
+                trainable_position_encoding_kwargs=trainable_position_encoding_kwargs_decoder,  # 可训练位置编码参数
+                use_query_residual=True,  # 是否使用查询残差
+            ),
+        )
+
+        # 调用初始化后的处理函数
+        self.post_init()
+
+    # 重写的前向传播函数，接受多种输入参数并返回模型输出
+    @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
+    def forward(
+        self,
+        inputs: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        head_mask: Optional[torch.Tensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        labels: Optional[torch.Tensor] = None,
+        return_dict: Optional[bool] = None,
+        pixel_values: Optional[torch.Tensor] = None,
+@add_start_docstrings(
+    """
+    Example use of Perceiver for optical flow, for tasks such as Sintel and KITTI. [`PerceiverForOpticalFlow`] uses
+    [`~models.perceiver.modeling_perceiver.PerceiverImagePreprocessor`] (with *prep_type="patches"*) to preprocess the
+    input images, and [`~models.perceiver.modeling_perceiver.PerceiverOpticalFlowDecoder`] to decode the latent
+    representation of [`PerceiverModel`].
+
+    As input, one concatenates 2 subsequent frames along the channel dimension and extract a 3 x 3 patch around each pixel
+    (leading to 3 x 3 x 3 x 2 = 54 values for each pixel). Fixed Fourier position encodings are used to encode the position
+    of each pixel in the patch. Next, one applies the Perceiver encoder. To decode, one queries the latent representation
+    using the same encoding used for the input.
+    """,
+    PERCEIVER_START_DOCSTRING,
+)
+class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+
         fourier_position_encoding_kwargs_preprocessor = {
             "num_bands": 64,
             "max_resolution": config.train_size,
             "sine_only": False,
             "concat_pos": True,
         }
-        # 解码器的傅立叶位置编码参数
         fourier_position_encoding_kwargs_decoder = {
             "concat_pos": True,
             "max_resolution": config.train_size,
@@ -1139,7 +1251,7 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
             "sine_only": False,
         }
 
-        # 创建图像预处理器
+        # Initialize the image preprocessor for the Perceiver model
         image_preprocessor = PerceiverImagePreprocessor(
             config,
             prep_type="patches",
@@ -1148,11 +1260,11 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
             conv_after_patching_in_channels=54,
             temporal_downsample=2,
             position_encoding_type="fourier",
-            # 位置编码参数
+            # Set Fourier position encoding parameters for preprocessor
             fourier_position_encoding_kwargs=fourier_position_encoding_kwargs_preprocessor,
         )
 
-        # 创建 PerceiverModel
+        # Initialize the Perceiver model with image preprocessor and optical flow decoder
         self.perceiver = PerceiverModel(
             config,
             input_preprocessor=image_preprocessor,
@@ -1161,38 +1273,39 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
                 num_channels=image_preprocessor.num_channels,
                 output_image_shape=config.train_size,
                 rescale_factor=100.0,
-                # 解码器参数
+                # Set decoder parameters including position encoding
                 use_query_residual=False,
                 output_num_channels=2,
-                # 使用第一帧特征而不是标准解码器位置编码来查询解码器
+                # Specify using Fourier position encoding for decoder
                 position_encoding_type="fourier",
                 fourier_position_encoding_kwargs=fourier_position_encoding_kwargs_decoder,
             ),
         )
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and perform post-initialization steps
         self.post_init()
 
-    # 重写模型前向传播方法的文档字符串
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
-        inputs: Optional[torch.Tensor] = None,  # 输入数据张量，默认为None
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码张量，默认为None
-        head_mask: Optional[torch.Tensor] = None,  # 头部掩码张量，默认为None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，默认为None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为None
-        labels: Optional[torch.Tensor] = None,  # 标签张量，默认为None
-        return_dict: Optional[bool] = None,  # 是否返回字典，默认为None
+        inputs: Optional[torch.Tensor] = None,  # 输入张量，用于模型的前向传播
+        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码张量，用于控制模型关注的位置
+        head_mask: Optional[torch.Tensor] = None,  # 头部掩码张量，用于屏蔽特定的注意力头部
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
+        labels: Optional[torch.Tensor] = None,  # 目标标签张量，用于光流损失的计算
+        return_dict: Optional[bool] = None,  # 是否返回字典形式的输出结果
     ) -> Union[Tuple, PerceiverClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the optical flow loss. Indices should be in `[0, ..., config.num_labels - 1]`.
 
         Returns:
+            根据参数设置返回不同形式的输出结果。
 
         Examples:
+            代码示例，展示了如何使用Perceiver模型处理光流问题。
 
         ```python
         >>> from transformers import PerceiverForOpticalFlow
@@ -1209,8 +1322,9 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
         >>> logits = outputs.logits
         >>> list(logits.shape)
         [1, 368, 496, 2]
-        ```py"""
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 如果return_dict不为None，则使用return_dict，否则使用self.config.use_return_dict
+        ```
+        """
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 根据配置确定是否使用字典形式的返回结果
 
         outputs = self.perceiver(
             inputs=inputs,
@@ -1219,16 +1333,17 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
-        )
-        logits = outputs.logits if return_dict else outputs[0]  # 如果return_dict为True，则使用outputs.logits，否则使用outputs的第一个元素
+        )  # 调用Perceiver模型进行前向传播，获取模型输出
 
-        loss = None
+        logits = outputs.logits if return_dict else outputs[0]  # 根据是否返回字典形式选择相应的logits输出方式
+
+        loss = None  # 初始化损失为None
         if labels is not None:
-            raise NotImplementedError("Optical flow training is not yet supported")  # 如果labels不为None，则抛出未实现错误
+            raise NotImplementedError("Optical flow training is not yet supported")  # 如果标签不为空，抛出未实现错误，暂不支持光流训练
 
         if not return_dict:
-            output = (logits,) + outputs[2:]  # 如果不返回字典，则将logits和outputs的第三个元素之后的元素组成元组
-            return ((loss,) + output) if loss is not None else output  # 如果loss不为None，则将loss和output组成元组返回，否则返回output
+            output = (logits,) + outputs[2:]  # 如果不返回字典形式，组合输出为(logits, hidden_states, attentions, cross_attentions)
+            return ((loss,) + output) if loss is not None else output  # 返回输出结果，包括损失信息
 
         return PerceiverClassifierOutput(
             loss=loss,
@@ -1236,44 +1351,34 @@ class PerceiverForOpticalFlow(PerceiverPreTrainedModel):
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
             cross_attentions=outputs.cross_attentions,
-        )
-# 导入必要的库和模块
+        )  # 返回以PerceiverClassifierOutput形式封装的输出结果
+# 导入所需模块和函数
 @add_start_docstrings(
     """
-Example use of Perceiver for multimodal (video) autoencoding, for tasks such as Kinetics-700.
+    Perceiver 用于多模态（视频）自编码的示例用法，例如 Kinetics-700 数据集。
 
-[`PerceiverForMultimodalAutoencoding`] uses [`~models.perceiver.modeling_perceiver.PerceiverMultimodalPreprocessor`] to
-preprocess the 3 modalities: images, audio and class labels. This preprocessor uses modality-specific preprocessors to
-preprocess every modality separately, after which they are concatenated. Trainable position embeddings are used to pad
-each modality to the same number of channels to make concatenation along the time dimension possible. Next, one applies
-the Perceiver encoder.
+    [`PerceiverForMultimodalAutoencoding`] 使用 [`~models.perceiver.modeling_perceiver.PerceiverMultimodalPreprocessor`] 来
+    预处理三种模态：图像、音频和类标签。这个预处理器使用模态特定的预处理器来单独处理每种模态，然后将它们连接起来。使用可训练的位置编码来
+    将每种模态填充到相同数量的通道，以便在时间维度上进行串联。接下来，应用 Perceiver 编码器。
 
-[`~models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder`] is used to decode the latent representation of
-[`PerceiverModel`]. This decoder uses each modality-specific decoder to construct queries. The decoder queries are
-created based on the inputs after preprocessing. However, autoencoding an entire video in a single forward pass is
-computationally infeasible, hence one only uses parts of the decoder queries to do cross-attention with the latent
-representation. This is determined by the subsampled indices for each modality, which can be provided as additional
-input to the forward pass of [`PerceiverForMultimodalAutoencoding`].
+    [`~models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder`] 用于解码 [`PerceiverModel`] 的潜在表示。
+    这个解码器使用每种模态特定的解码器来构建查询。解码器的查询基于预处理后的输入。然而，在单个前向传递中自动编码整个视频在计算上是不可行的，
+    因此只使用部分解码器查询与潜在表示进行交叉注意力。这由每种模态的子采样索引决定，可以作为额外输入提供给 [`PerceiverForMultimodalAutoencoding`] 的前向传递。
 
-[`~models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder`] also pads the decoder queries of the different
-modalities to the same number of channels, in order to concatenate them along the time dimension. Next, cross-attention
-is performed with the latent representation of [`PerceiverModel`].
+    [`~models.perceiver.modeling_perceiver.PerceiverMultimodalDecoder`] 还将不同模态的解码器查询填充到相同数量的通道，以便在时间维度上进行串联。接下来，使用 [`PerceiverModel`] 的潜在表示进行交叉注意力。
 
-Finally, [`~models.perceiver.modeling_perceiver.PerceiverMultiModalPostprocessor`] is used to turn this tensor into an
-actual video. It first splits up the output into the different modalities, and then applies the respective
-postprocessor for each modality.
+    最后，[`~models.perceiver.modeling_perceiver.PerceiverMultiModalPostprocessor`] 用于将这个张量转换成实际的视频。
+    它首先将输出分割成不同的模态，然后为每种模态应用相应的后处理器。
 
-Note that, by masking the classification label during evaluation (i.e. simply providing a tensor of zeros for the
-"label" modality), this auto-encoding model becomes a Kinetics 700 video classifier.
-""",
+    请注意，在评估过程中通过掩盖分类标签（即简单地为"label"模态提供零张量）时，这个自编码模型变成了 Kinetics 700 视频分类器。
+    """,
     PERCEIVER_START_DOCSTRING,
 )
-# 定义 PerceiverForMultimodalAutoencoding 类，继承自 PerceiverPreTrainedModel
+# 使用 PerceiverPreTrainedModel 作为基类定义 PerceiverForMultimodalAutoencoding 类
 class PerceiverForMultimodalAutoencoding(PerceiverPreTrainedModel):
-    # 重写 forward 方法
     @add_start_docstrings_to_model_forward(PERCEIVER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=PerceiverClassifierOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义 forward 方法的参数和返回值
+    # 重写前向传递函数 forward
     def forward(
         self,
         inputs: Optional[torch.Tensor] = None,
@@ -1284,50 +1389,56 @@ class PerceiverForMultimodalAutoencoding(PerceiverPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         labels: Optional[torch.Tensor] = None,
         return_dict: Optional[bool] = None,
-# Below: position encodings
+    ):
+        # 下面是位置编码
+    # 设置一个参数变量用来传递傅立叶位置编码的参数，默认为None
+# 构建位置编码器的函数，根据指定的参数生成不同类型的位置编码
 
-# 定义构建位置编码的函数
 def build_position_encoding(
-    position_encoding_type,
-    out_channels=None,
-    project_pos_dim=-1,
-    trainable_position_encoding_kwargs=None,
-    # 定义一个参数，用于传递傅立叶位置编码的参数，默认为None
+    out_channels,  # 输出通道数，表示位置编码的通道数目
+    project_pos_dim=None,  # 如果指定，将位置编码投影到这个维度
+    position_encoding_type="trainable",  # 位置编码的类型，默认为可训练的位置编码
+    trainable_position_encoding_kwargs=None,  # 可训练位置编码的额外参数
+    fourier_position_encoding_kwargs=None  # 傅立叶位置编码的额外参数
+):
     """
     Builds the position encoding.
 
     Args:
     - out_channels: refers to the number of channels of the position encodings.
     - project_pos_dim: if specified, will project the position encodings to this dimension.
+    - position_encoding_type: specifies the type of position encoding to use.
+    - trainable_position_encoding_kwargs: additional kwargs for trainable position encoding.
+    - fourier_position_encoding_kwargs: additional kwargs for Fourier position encoding.
 
+    Returns:
+    - output_pos_enc: the constructed position encoding object.
+    - positions_projection: optional projection layer for position encoding.
     """
 
-    # 根据位置编码类型选择不同的位置编码方式
     if position_encoding_type == "trainable":
-        # 如果选择可训练的位置编码，则使用PerceiverTrainablePositionEncoding类
         if not trainable_position_encoding_kwargs:
             raise ValueError("Make sure to pass trainable_position_encoding_kwargs")
         output_pos_enc = PerceiverTrainablePositionEncoding(**trainable_position_encoding_kwargs)
     elif position_encoding_type == "fourier":
-        # 如果选择傅立叶位置编码，则使用PerceiverFourierPositionEncoding类
-        # 我们不使用index_dims参数，因为这只在前向传递期间才知道
+        # We don't use the index_dims argument, as this is only known during the forward pass
         if not fourier_position_encoding_kwargs:
             raise ValueError("Make sure to pass fourier_position_encoding_kwargs")
         output_pos_enc = PerceiverFourierPositionEncoding(**fourier_position_encoding_kwargs)
     else:
         raise ValueError(f"Unknown position encoding type: {position_encoding_type}.")
 
-    # 可选地，将位置编码投影到目标维度
+    # Optionally, project the position encoding to a target dimension:
     positions_projection = nn.Linear(out_channels, project_pos_dim) if project_pos_dim > 0 else nn.Identity()
 
     return output_pos_enc, positions_projection
 
 
-# 以下是Perceiver解码器
+# Below: Perceiver decoders
 
 
 class PerceiverAbstractDecoder(nn.Module, metaclass=abc.ABCMeta):
-    """Perceiver抽象解码器。"""
+    """Perceiver abstract decoder."""
 
     @abc.abstractmethod
     def decoder_query(self, inputs, modality_sizes=None, inputs_without_pos=None, subsampled_points=None):
@@ -1345,11 +1456,11 @@ class PerceiverAbstractDecoder(nn.Module, metaclass=abc.ABCMeta):
 
 class PerceiverProjectionDecoder(PerceiverAbstractDecoder):
     """
-    基线投影解码器（无交叉注意力）。
+    Baseline projection decoder (no cross-attention).
 
     Args:
         config ([`PerceiverConfig`]):
-            模型配置。
+            Model configuration.
     """
 
     def __init__(self, config):
@@ -1371,83 +1482,66 @@ class PerceiverProjectionDecoder(PerceiverAbstractDecoder):
 
 class PerceiverBasicDecoder(PerceiverAbstractDecoder):
     """
-    基于交叉注意力的解码器。此类可用于使用交叉注意力操作解码潜在状态的最终隐藏状态，其中潜在状态生成键和值。
+    Cross-attention-based decoder. This class can be used to decode the final hidden states of the latents using a
+    cross-attention operation, in which the latents produce keys and values.
 
-    此类的输出形状取决于如何定义输出查询（也称为解码器查询）。
-    # 定义了一个 PerceiverConvQueryGenerator 类的构造函数
-    def __init__(
-        self,
-        # 接受 PerceiverConfig 类型的配置参数
-        config: PerceiverConfig,
-        # 指定输出通道数量
-        output_num_channels: int,
-        # 指定位置编码的类型，可以是"trainable"、"fourier"或"none"
-        position_encoding_type: Optional[str] = "trainable",
-        # 如果 position_encoding_type 不为"none"，则指定输出查询的维度数量
-        output_index_dims: Optional[int] = None,
-        # 如果 position_encoding_type 不为"none"，则指定查询通道数量
-        num_channels: Optional[int] = 128,
-        # 子采样后的索引维度数量
-        subsampled_index_dims: Optional[int] = None,
-        # 交叉注意力层中查询和键的通道数量
-        qk_channels: Optional[int] = None,
-        # 交叉注意力层中值的通道数量
-        v_channels: Optional[int] = None,
-        # 交叉注意力层中注意力头的数量
-        num_heads: Optional[int] = 1,
-        # 交叉注意力层的拓宽因子
-        widening_factor: Optional[int] = 1,
-        # 是否使用查询的残差连接
-        use_query_residual: Optional[bool] = False,
-        # 是否将预处理的输入拼接到查询上
-        concat_preprocessed_input: Optional[bool] = False,
-        # 是否将交叉注意力层的输出投射到目标维度
-        final_project: Optional[bool] = True,
-        # 是否仅用于定义输出查询
-        position_encoding_only: Optional[bool] = False,
-        # 位置编码其他参数
-        **position_encoding_kwargs,
-    ):
-    # 指定方法的返回值类型为 None
+    The shape of the output of this class depends on how one defines the output queries (also called decoder queries).
+    """
+    Args:
+        config ([*PerceiverConfig*]):
+            Model configuration.
+        output_num_channels (`int`, *optional*):
+            The number of channels in the output. Will only be used in case *final_project* is set to `True`.
+        position_encoding_type (`str`, *optional*, defaults to "trainable"):
+            The type of position encoding to use. Can be either "trainable", "fourier", or "none".
+        output_index_dims (`int`, *optional*):
+            The number of dimensions of the output queries. Ignored if 'position_encoding_type' == 'none'.
+        num_channels (`int`, *optional*, defaults to 128):
+            The number of channels of the decoder queries. Ignored if 'position_encoding_type' == 'none'.
+        subsampled_index_dims (`int`, *optional*):
+            The number of dimensions of the subsampled indices. Ignored if 'position_encoding_type' == 'none'.
+        qk_channels (`int`, *optional*):
+            The number of channels of the queries and keys in the cross-attention layer.
+        v_channels (`int`, *optional*):
+            The number of channels of the values in the cross-attention layer.
+        num_heads (`int`, *optional*, defaults to 1):
+            The number of attention heads in the cross-attention layer.
+        widening_factor (`int`, *optional*, defaults to 1):
+            The widening factor of the cross-attention layer.
+        use_query_residual (`bool`, *optional*, defaults to `False`):
+            Whether to use a residual connection between the query and the output of the cross-attention layer.
+        concat_preprocessed_input (`bool`, *optional*, defaults to `False`):
+            Whether to concatenate the preprocessed input to the query.
+        final_project (`bool`, *optional*, defaults to `True`):
+            Whether to project the output of the cross-attention layer to a target dimension.
+        position_encoding_only (`bool`, *optional*, defaults to `False`):
+            Whether to only use this class to define output queries.
     ) -> None:
-        # 调用父类的构造函数
         super().__init__()
-
-        # 设置输出的通道数
+        
         self.output_num_channels = output_num_channels
-        # 如果设置为 `none`，则解码器不会构建任何位置编码
-        # 在查询解码器时，您应该自行构建位置编码
+        # 如果为 `none`，则解码器不会构建任何位置编码。
+        # 当查询解码器时，您应该自行构建位置编码。
         self.output_position_encodings = None
-        # 位置编码类型
         self.position_encoding_type = position_encoding_type
-        # 位置编码的参数
         self.position_encoding_kwargs = position_encoding_kwargs
-        # 如果位置编码类型不为 "none"
         if position_encoding_type != "none":
-            # 构建位置编码
             self.output_position_encodings, self.positions_projection = build_position_encoding(
                 position_encoding_type=position_encoding_type, **position_encoding_kwargs
             )
-
-        # 输出索引维度
+        
         self.output_index_dims = output_index_dims
-        # 通道数
         self.num_channels = num_channels
-        # 如果下采样的索引维度为 None，则设为输出索引维度
         if subsampled_index_dims is None:
             subsampled_index_dims = output_index_dims
         self.subsampled_index_dims = subsampled_index_dims
-        # 是否在预处理输入时进行连接
         self.concat_preprocessed_input = concat_preprocessed_input
-        # 是否进行最终投影
         self.final_project = final_project
-        # 仅包含位置编码
         self.position_encoding_only = position_encoding_only
-
+        
         # 对于多模态自编码，我们不需要解码器的交叉注意力和最终层
-        # 因此将 position_encoding_only 设置为 True
+        # 因此，将 position_encoding_only 设置为 True
         if not self.position_encoding_only:
-            # 解码器交叉注意力
             self.decoding_cross_attention = PerceiverLayer(
                 config,
                 is_cross_attention=True,
@@ -1459,45 +1553,37 @@ class PerceiverBasicDecoder(PerceiverAbstractDecoder):
                 widening_factor=widening_factor,
                 use_query_residual=use_query_residual,
             )
-            # 最终层
             self.final_layer = nn.Linear(num_channels, output_num_channels) if final_project else nn.Identity()
 
-    # 查询通道数的属性访问器
     @property
     def num_query_channels(self) -> int:
-        # 如果位置编码类型为 "none"，则抛出异常
         if self.position_encoding_type == "none":  # 查询来自其他地方
             raise ValueError(
                 "You cannot calculate number of decoder query channels when position_encoding_type is set to none"
             )
-        # ��果仅包含位置编码
         if self.position_encoding_only:
-            # 如果在位置编码参数中包含 "project_pos_dim"，则返回该值
             if "project_pos_dim" in self.position_encoding_kwargs:
                 return self.position_encoding_kwargs["project_pos_dim"]
-            # 返回输出的位置编码大小
             return self.output_position_encodings.output_size()
-        # 如果最终进行投影
         if self.final_project:
             return self.output_num_channels
-        # 返回通道数
         return self.num_channels
-```      
-    # 该函数用于根据输入生成解码器查询
+    # 定义一个方法用于解码查询，接受多个输入参数
     def decoder_query(self, inputs, modality_sizes=None, inputs_without_pos=None, subsampled_points=None):
-        # 如果位置编码类型设置为"none"，则不能构建解码器查询
+        # 如果位置编码类型为"none"，则抛出数值错误，不允许构建解码查询
         if self.position_encoding_type == "none":
             raise ValueError("You cannot construct decoder queries when position_encoding_type is set to none")
         
-        # 如果提供了子采样点
+        # 如果给定了子采样点（subsampled_points）
         if subsampled_points is not None:
-            # 使用 unravel_index 函数获取未展平的数组的索引
+            # subsampled_points 是输入在扁平化后的索引，使用unravel_index获取非扁平化后的数组索引
             indices = [torch.from_numpy(x) for x in np.unravel_index(subsampled_points.cpu(), self.output_index_dims)]
-            # 将索引张量堆叠为 [n, d] 形状
+            # 将索引堆叠成 [n, d] 的坐标张量
             pos = torch.stack(indices, dim=1)
             batch_size = inputs.shape[0]
-            # 将坐标映射到 [-1, 1] 区间
+            # 将这些坐标映射到 [-1, 1] 的范围
             pos = -1 + 2 * pos / torch.tensor(self.output_index_dims)[None, :]
+            # 广播位置张量，使其与输入数据形状相匹配
             pos = torch.broadcast_to(pos[None], [batch_size, pos.shape[0], pos.shape[1]])
             
             # 构建位置编码
@@ -1507,14 +1593,15 @@ class PerceiverBasicDecoder(PerceiverAbstractDecoder):
                 pos_emb = self.output_position_encodings(
                     self.output_index_dims, batch_size=batch_size, device=inputs.device, dtype=inputs.dtype, pos=pos
                 )
-            
-            # 将位置编码投影到目标维度
+
+            # 可选地将位置编码投影到目标维度
             pos_emb = self.positions_projection(pos_emb)
             pos_emb = torch.reshape(pos_emb, [pos_emb.shape[0], -1, pos_emb.shape[-1]])
         else:
+            # 如果没有提供子采样点，获取输入的批次大小和索引维度
             batch_size = inputs.shape[0]
             index_dims = inputs.shape[2:]
-            
+
             # 构建位置编码
             if self.position_encoding_type == "trainable":
                 pos_emb = self.output_position_encodings(batch_size)
@@ -1522,51 +1609,48 @@ class PerceiverBasicDecoder(PerceiverAbstractDecoder):
                 pos_emb = self.output_position_encodings(
                     index_dims, batch_size, device=inputs.device, dtype=inputs.dtype
                 )
-            
-            # 将位置编码投影到目标维度
+
+            # 可选地将位置编码投影到目标维度
             pos_emb = self.positions_projection(pos_emb)
-        
-        # 如果concat_preprocessed_input为True，则将输入与位置编码连接
+
+        # 如果设置了 concat_preprocessed_input 标志，则将预处理的输入与位置编码连接起来
         if self.concat_preprocessed_input:
             if inputs_without_pos is None:
                 raise ValueError("Value is required for inputs_without_pos if concat_preprocessed_input is True")
             pos_emb = torch.cat([inputs_without_pos, pos_emb], dim=-1)
-        
+
+        # 返回位置编码张量作为方法的输出
         return pos_emb
-    
-    # 该函数用于执行前向传播
-    def forward(
-        self,
-        query: torch.Tensor,
-        z: torch.FloatTensor,
-        query_mask: Optional[torch.FloatTensor] = None,
-        output_attentions: Optional[bool] = False,
-    ):
-        ...
     ) -> PerceiverDecoderOutput:
-        # 使用交叉注意力机制进行解码
-        # key, value: 形状为 B x N x K; query: 形状为 B x M x K
-        # 注意力图 -> 形状为 B x N x M
-        # 输出 -> 形状为 B x M x K
-        cross_attentions = () if output_attentions else None  # 根据是否需要输出注意力，初始化交叉注意力变量
+        # 定义函数签名，指定返回类型为 PerceiverDecoderOutput
 
+        # 执行交叉注意力解码。
+        # key, value: B x N x K; query: B x M x K
+        # Attention maps -> B x N x M
+        # Output -> B x M x K
+        # 如果不需要输出注意力权重，则将 cross_attentions 设置为 None
+        cross_attentions = () if output_attentions else None
+
+        # 调用解码器的交叉注意力层
         layer_outputs = self.decoding_cross_attention(
-            query,  # 输入查询数据，形状为 B x M x K
-            attention_mask=query_mask,  # 查询掩码
-            head_mask=None,  # 没有头掩码
-            inputs=z,  # 输入数据，形状为 B x N x K
-            inputs_mask=None,  # 输入掩码
-            output_attentions=output_attentions,  # 指示是否输出注意力
+            query,
+            attention_mask=query_mask,
+            head_mask=None,
+            inputs=z,
+            inputs_mask=None,
+            output_attentions=output_attentions,
         )
-        output = layer_outputs[0]  # 从层输出中获取解码后的输出
+        # 获取解码器层输出的第一个元素，即解码器的输出
+        output = layer_outputs[0]
 
-        # 如果需要输出注意力，则将其添加到交叉注意力中
+        # 如果需要输出注意力权重，将当前层的注意力权重添加到 cross_attentions 中
         if output_attentions:
             cross_attentions = cross_attentions + (layer_outputs[1],)
 
-        logits = self.final_layer(output)  # 使用最终层处理输出数据，生成 logits
+        # 将解码器的输出传入最终的输出层，得到最终的 logits
+        logits = self.final_layer(output)
 
-        # 返回解码器输出，包含 logits 和交叉注意力信息
+        # 返回 PerceiverDecoderOutput 对象，包含 logits 和可能的 cross_attentions
         return PerceiverDecoderOutput(logits=logits, cross_attentions=cross_attentions)
 class PerceiverClassificationDecoder(PerceiverAbstractDecoder):
     """
@@ -1582,22 +1666,22 @@ class PerceiverClassificationDecoder(PerceiverAbstractDecoder):
     def __init__(self, config, **decoder_kwargs):
         super().__init__()
 
-        self.num_labels = config.num_labels  # 获取分类的数量
+        self.num_labels = config.num_labels  # 设置分类标签的数量
         self.decoder = PerceiverBasicDecoder(
             config,
-            output_num_channels=self.num_labels,
-            output_index_dims=1,  # Predict a single logit array.
+            output_num_channels=self.num_labels,  # 输出通道数设置为分类标签的数量
+            output_index_dims=1,  # 预测单一logit数组
             **decoder_kwargs,
-        )  # 初始化基本解码器
+        )
 
     @property
     def num_query_channels(self) -> int:
-        return self.decoder.num_query_channels  # 返回查询通道的数量
+        return self.decoder.num_query_channels  # 返回解码器的查询通道数量
 
     def decoder_query(self, inputs, modality_sizes=None, inputs_without_pos=None, subsampled_points=None):
         return self.decoder.decoder_query(
-            inputs, modality_sizes, inputs_without_pos, subsampled_points=subsampled_points
-        )  # 解码查询
+            inputs, modality_sizes, inputs_without_pos, subsampled_points=subsampled_points  # 返回解码器的查询结果
+        )
 
     def forward(
         self,
@@ -1606,12 +1690,12 @@ class PerceiverClassificationDecoder(PerceiverAbstractDecoder):
         query_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
     ) -> PerceiverDecoderOutput:
-        decoder_outputs = self.decoder(query, z, output_attentions=output_attentions)  # 获取解码器输出
+        decoder_outputs = self.decoder(query, z, output_attentions=output_attentions)
 
         # B x 1 x num_classes -> B x num_classes
-        logits = decoder_outputs.logits[:, 0, :]  # 转化为正确的形状
+        logits = decoder_outputs.logits[:, 0, :]  # 从解码器输出中提取logits
 
-        return PerceiverDecoderOutput(logits=logits, cross_attentions=decoder_outputs.cross_attentions)  # 返回解码器输出
+        return PerceiverDecoderOutput(logits=logits, cross_attentions=decoder_outputs.cross_attentions)  # 返回解码器的输出结果
 
 
 class PerceiverOpticalFlowDecoder(PerceiverAbstractDecoder):
@@ -1620,19 +1704,19 @@ class PerceiverOpticalFlowDecoder(PerceiverAbstractDecoder):
     def __init__(self, config, output_image_shape, output_num_channels=2, rescale_factor=100.0, **decoder_kwargs):
         super().__init__()
 
-        self.output_image_shape = output_image_shape  # 输出图像的形状
-        self.output_num_channels = output_num_channels  # 输出的通道数量
-        self.rescale_factor = rescale_factor  # 重新缩放因子
-        self.decoder = PerceiverBasicDecoder(config, output_num_channels=output_num_channels, **decoder_kwargs)  # 初始化基本解码器
+        self.output_image_shape = output_image_shape  # 设置输出图像的形状
+        self.output_num_channels = output_num_channels  # 设置输出图像的通道数
+        self.rescale_factor = rescale_factor  # 设置光流的重新缩放因子
+        self.decoder = PerceiverBasicDecoder(config, output_num_channels=output_num_channels, **decoder_kwargs)
 
     @property
     def num_query_channels(self) -> int:
-        return self.decoder.num_query_channels  # 返回查询通道的数量
+        return self.decoder.num_query_channels  # 返回解码器的查询通道数量
 
     def decoder_query(self, inputs, modality_sizes=None, inputs_without_pos=None, subsampled_points=None):
         if subsampled_points is not None:
-            raise ValueError("FlowDecoder doesn't support subsampling yet.")  # 抛出不支持子采样的异常
-        return inputs
+            raise ValueError("FlowDecoder doesn't support subsampling yet.")  # 如果有子采样点，则引发错误
+        return inputs  # 返回输入数据，用于光流解码器的查询
 
     def forward(
         self,
@@ -1640,8 +1724,20 @@ class PerceiverOpticalFlowDecoder(PerceiverAbstractDecoder):
         z: torch.FloatTensor,
         query_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
-    
-# 定义 PerceiverBasicVideoAutoencodingDecoder 类，继承自 PerceiverAbstractDecoder 类
+    ) -> PerceiverDecoderOutput:
+        # 此处应有更多代码，但已截断
+        pass  # 占位符，实际应该返回光流解码器的输出结果
+    ) -> PerceiverDecoderOutput:
+        # 调用解码器生成输出，传入查询向量 query 和编码器输出 z，选择是否返回注意力权重
+        decoder_outputs = self.decoder(query, z, output_attentions=output_attentions)
+        # 从解码器输出中提取预测的 logits
+        preds = decoder_outputs.logits
+        # 对预测结果进行缩放，使用预定义的缩放因子 self.rescale_factor
+        preds /= self.rescale_factor
+        # 调整预测结果的形状为 [batch_size, output_height, output_width, num_classes]
+        preds = preds.reshape([preds.shape[0]] + list(self.output_image_shape) + [preds.shape[-1]])
+        # 返回经过解码器处理后的输出，包括 logits 和可能的交叉注意力权重
+        return PerceiverDecoderOutput(logits=preds, cross_attentions=decoder_outputs.cross_attentions)
 class PerceiverBasicVideoAutoencodingDecoder(PerceiverAbstractDecoder):
     """
     Cross-attention based video-autoencoding decoder. Light-weight wrapper of [*PerceiverBasicDecoder*] with video
@@ -1656,20 +1752,18 @@ class PerceiverBasicVideoAutoencodingDecoder(PerceiverAbstractDecoder):
             The type of position encoding to use. Can be either "trainable", "fourier", or "none".
     """
 
-    # 初始化方法
     def __init__(
         self, config: PerceiverConfig, output_shape: List[int], position_encoding_type: str, **decoder_kwargs
     ) -> None:
-        # 调用父类的初始化方法
         super().__init__()
-        # 检查输出形状是否为 rank 4
+        # Validate the shape of output_shape to ensure it's rank 4 (batch_size, num_frames, height, width)
         if len(output_shape) != 4:  # B, T, H, W
             raise ValueError(f"Expected rank 4 output_shape, got {output_shape}.")
-        # 存储输出形状和输出通道数
+        # Initialize the decoder components:
         self.output_shape = output_shape
         self.output_num_channels = decoder_kwargs["output_num_channels"]
 
-        # 构建解码器组件
+        # Create an instance of PerceiverBasicDecoder tailored for video decoding:
         self.decoder = PerceiverBasicDecoder(
             config,
             output_index_dims=self.output_shape[1:4],  # T*H*W
@@ -1677,13 +1771,13 @@ class PerceiverBasicVideoAutoencodingDecoder(PerceiverAbstractDecoder):
             **decoder_kwargs,
         )
 
-    # 返回查询通道数的属性
     @property
     def num_query_channels(self) -> int:
+        # Return the number of query channels from the decoder:
         return self.decoder.num_query_channels
 
-    # 解码器查询方法
     def decoder_query(self, inputs, modality_sizes=None, inputs_without_pos=None, subsampled_points=None):
+        # Delegate the decoder_query method to the underlying PerceiverBasicDecoder instance:
         return self.decoder.decoder_query(
             inputs,
             modality_sizes=modality_sizes,
@@ -1691,20 +1785,18 @@ class PerceiverBasicVideoAutoencodingDecoder(PerceiverAbstractDecoder):
             subsampled_points=subsampled_points,
         )
 
-    # 前向传播方法
     def forward(
         self, query: torch.Tensor, z: torch.FloatTensor, query_mask: Optional[torch.FloatTensor] = None
     ) -> PerceiverDecoderOutput:
-        # 解码器输出
+        # Forward pass through the decoder:
         decoder_outputs = self.decoder(query, z)
         logits = decoder_outputs.logits
 
-        # 重新整形 logits
+        # Reshape logits to match the specified output shape:
         logits = torch.reshape(logits, self.output_shape + [logits.shape[-1]])
         return PerceiverDecoderOutput(logits=logits, cross_attentions=decoder_outputs.cross_attentions)
 
 
-# 重新结构化方法
 def restructure(modality_sizes: ModalitySizeType, inputs: torch.Tensor) -> Mapping[str, torch.Tensor]:
     """
     Partitions a [B, N, C] tensor into tensors for each modality.
@@ -1720,37 +1812,45 @@ def restructure(modality_sizes: ModalitySizeType, inputs: torch.Tensor) -> Mappi
     """
     outputs = {}
     index = 0
-    # 对模态应用可预测的排序
+    # Apply a predictable ordering to the modalities by iterating over sorted keys
     for modality in sorted(modality_sizes.keys()):
         size = modality_sizes[modality]
+        # Slice the input tensor to extract the portion corresponding to the current modality
         inp = inputs[:, index : index + size]
         index += size
         outputs[modality] = inp
     return outputs
 
 
-# 定义 PerceiverMultimodalDecoder 类，继承自 PerceiverAbstractDecoder 类
 class PerceiverMultimodalDecoder(PerceiverAbstractDecoder):
     """
-    # 多模态解码器，通过组合单模态解码器实现。构造函数的 *modalities* 参数是一个字典，将模态名称映射到该模态的解码器。该解码器将用于构建该模态的查询。特定于模态的查询在可训练的模态特定参数填充后进行填充，然后沿时间维度进行连接。
-    
-    # 接下来，对所有模态进行共享的交叉注意力操作。
-    
-    # 参数:
-    #     config ([*PerceiverConfig*]):
-    #         模型配置。
-    #     modalities (`Dict[str, PerceiverAbstractDecoder]`):
-    #         将模态名称映射到该模态的解码器的字典。
-    #     num_outputs (`int`):
-    #         解码器的输出数量。
-    #     output_num_channels (`int`):
-    #         输出中的通道数。
-    #     min_padding_size (`int`, *可选*, 默认为2):
-    #         所有模态的最小填充大小。最终输出的通道数等于所有模态中最大的通道数加上 min_padding_size。
-    #     subsampled_index_dims (`Dict[str, PerceiverAbstractDecoder]`, *可选*):
-    #         将模态名称映射到该模态的解码器查询要使用的子采样索引维度的字典。
-    # """
-    
+    Placeholder class for a multimodal decoder based on the Perceiver architecture.
+    """
+    """
+    Multimodal decoding by composing uni-modal decoders. The *modalities* argument of the constructor is a dictionary
+    mapping modality name to the decoder of that modality. That decoder will be used to construct queries for that
+    modality. Modality-specific queries are padded with trainable modality-specific parameters, after which they are
+    concatenated along the time dimension.
+
+    Next, there is a shared cross attention operation across all modalities.
+
+    Args:
+        config ([*PerceiverConfig*]):
+            Model configuration.
+        modalities (`Dict[str, PerceiverAbstractDecoder]`):
+            Dictionary mapping modality name to the decoder of that modality.
+        num_outputs (`int`):
+            The number of outputs of the decoder.
+        output_num_channels (`int`):
+            The number of channels in the output.
+        min_padding_size (`int`, *optional*, defaults to 2):
+            The minimum padding size for all modalities. The final output will have num_channels equal to the maximum
+            channels across all modalities plus min_padding_size.
+        subsampled_index_dims (`Dict[str, PerceiverAbstractDecoder]`, *optional*):
+            Dictionary mapping modality name to the subsampled index dimensions to use for the decoder query of that
+            modality.
+    """
+
     def __init__(
         self,
         config: PerceiverConfig,
@@ -1761,12 +1861,31 @@ class PerceiverMultimodalDecoder(PerceiverAbstractDecoder):
         subsampled_index_dims: Optional[Dict[str, PerceiverAbstractDecoder]] = None,
         **decoder_kwargs,
     ) -> None:
+        """
+        Constructor method for the MultimodalPerceiverDecoder class.
+
+        Args:
+            config (PerceiverConfig): Model configuration.
+            modalities (Dict[str, PerceiverAbstractDecoder]): Dictionary mapping modality name to the decoder.
+            num_outputs (int): The number of outputs of the decoder.
+            output_num_channels (int): The number of channels in the output.
+            min_padding_size (int, optional): The minimum padding size for all modalities.
+            subsampled_index_dims (Dict[str, PerceiverAbstractDecoder], optional): Dictionary mapping modality name to
+                subsampled index dimensions for the decoder query.
+            **decoder_kwargs: Additional keyword arguments for the decoder.
+        """
         super().__init__()
-        self.modalities = nn.ModuleDict(modalities)  # 创建模态解码器字典模块
-        self.subsampled_index_dims = subsampled_index_dims  # 存储子采样索引维度
-        self.min_padding_size = min_padding_size  # 存储最小填充大小
-        self.output_num_channels = output_num_channels  # 存储输出中的通道数
-        self.num_outputs = num_outputs  # 存储解码器的输出数量
+        # Initialize the modalities as a ModuleDict
+        self.modalities = nn.ModuleDict(modalities)
+        # Store the subsampled index dimensions
+        self.subsampled_index_dims = subsampled_index_dims
+        # Store the minimum padding size
+        self.min_padding_size = min_padding_size
+        # Store the number of output channels
+        self.output_num_channels = output_num_channels
+        # Store the number of outputs
+        self.num_outputs = num_outputs
+        # Initialize the decoder with given configuration and arguments
         self.decoder = PerceiverBasicDecoder(
             config,
             output_index_dims=(num_outputs,),
@@ -1774,54 +1893,68 @@ class PerceiverMultimodalDecoder(PerceiverAbstractDecoder):
             position_encoding_type="none",
             num_channels=self.num_query_channels,
             **decoder_kwargs,
-        )  # 创建基础解码器
-        self.padding = nn.ParameterDict(  # 创建包含模态填充参数的字典
+        )
+        # Initialize padding parameters for each modality
+        self.padding = nn.ParameterDict(
             {
                 modality: nn.Parameter(torch.randn(1, self.num_query_channels - decoder.num_query_channels))
                 for modality, decoder in modalities.items()
             }
         )
-    
+
     @property
     def num_query_channels(self) -> int:
-        max_channel_size = max(decoder.num_query_channels for _, decoder in self.modalities.items())  # 获取模态中查询通道数的最大值
-        common_channel_size = max_channel_size + self.min_padding_size  # 计算通用通道数
-        return common_channel_size  # 返回通用通道数
-    # 该函数用于根据不同的模态大小对输入进行划分，并获取每个模态的解码器查询
+        """
+        Calculate the number of query channels based on the modalities.
+
+        Returns:
+            int: Number of query channels.
+        """
+        # Determine the maximum number of query channels among modalities
+        max_channel_size = max(decoder.num_query_channels for _, decoder in self.modalities.items())
+        # Ensure common channel size includes minimum padding size
+        common_channel_size = max_channel_size + self.min_padding_size
+        return common_channel_size
     def decoder_query(self, inputs, modality_sizes, inputs_without_pos=None, subsampled_points=None):
-        # 根据模态大小对输入进行重组
+        # 将扁平化的输入数据按照不同的感知模态进行分割重组
         inputs = restructure(modality_sizes, inputs)
-    
-        # 获取每个模态对应的解码器查询
+
+        # 获取各个感知模态的解码器查询
         subsampled_points = subsampled_points or {}
+
+        # 存储每个模态的解码器查询结果
         decoder_queries = {}
         for modality, decoder in self.modalities.items():
-            # 获取当前模态的输入（不包含位置编码）
+            # 如果存在输入数据不包含位置信息，则获取当前模态的无位置信息的输入数据
             input_without_pos = None
             if inputs_without_pos is not None:
                 input_without_pos = inputs_without_pos.get(modality, None)
-            # 获取当前模态的解码器查询
+            # 调用解码器的查询函数，获取当前模态的查询结果
             query = decoder.decoder_query(
                 inputs=inputs[modality],
-                modality_sizes=None,
+                modality_sizes=None,  # 此处未使用 modality_sizes 参数，可能为函数签名未更新的遗留
                 inputs_without_pos=input_without_pos,
                 subsampled_points=subsampled_points.get(modality, None),
             )
             decoder_queries[modality] = query
-    
-        # 使用可训练的位置编码填充所有查询，使其具有相同的通道数
+
+        # 使用可训练的位置编码填充所有查询结果，以保证它们具有相同的通道数
+
         def embed(modality, x):
+            # 将输入张量 x 重塑为 [batch_size, 总特征数, 通道数] 的形状
             x = torch.reshape(x, [x.shape[0], np.prod(x.shape[1:-1]), x.shape[-1]])
+            # 获取当前模态的填充位置编码
             pos = self.padding[modality]
+            # 将位置编码广播到与 x 相同的形状
             pos = torch.broadcast_to(pos, [x.shape[0], x.shape[1], self.num_query_channels - x.shape[2]])
+            # 在通道维度上连接 x 和位置编码
             return torch.cat([x, pos], dim=2)
-    
-        # 以排序的方式连接所有模态的解码器查询
+
+        # 对模态按照可预测的顺序进行排序，并连接它们的查询结果
         return torch.cat(
             [embed(modality, decoder_queries[modality]) for modality in sorted(self.modalities.keys())], dim=1
         )
-    
-    # 该函数用于根据输入的查询和隐藏状态输出解码结果
+
     def forward(
         self,
         query: torch.Tensor,
@@ -1829,23 +1962,26 @@ class PerceiverMultimodalDecoder(PerceiverAbstractDecoder):
         query_mask: Optional[torch.FloatTensor] = None,
         output_attentions: Optional[bool] = False,
     ) -> torch.Tensor:
-        # 将 B x 1 x num_classes 的查询转换为 B x num_classes 的输出
+        # B x 1 x num_classes -> B x num_classes
+        # 调用解码器模块进行前向传播，生成解码器的输出结果
         decoder_outputs = self.decoder(query, z, output_attentions=output_attentions)
+
         return decoder_outputs
-# 下面是为 Perceiver 设计的 IO 预处理和后处理类。
+# Below: IO pre- and post-processor classes for Perceiver.
+
+# 定义一个函数，实现空间到深度的转换，用于重新排列空间数据块到深度
 def space_to_depth(frames: torch.Tensor, temporal_block_size: int = 1, spatial_block_size: int = 1) -> torch.Tensor:
     """
-    空间转深度变换。将空间数据块重新排列为深度数据块。
+    Space to depth transform. Rearranges blocks of spatial data, into depth.
 
-    此函数假设通道在前，但在变换后会将通道置于最后。
+    This function assumes the channels to be first, but will place the channels last after transformation.
 
-    基于 https://discuss.pytorch.org/t/is-there-any-layer-like-tensorflows-space-to-depth-function/3487/15。
+    Based on https://discuss.pytorch.org/t/is-there-any-layer-like-tensorflows-space-to-depth-function/3487/15.
     """
-    # 检查输入张量的维度
+    # 检查输入张量的维度是否为4
     if len(frames.shape) == 4:
-        # 获取批次大小、通道数、高度和宽度
         batch_size, num_channels, height, width = frames.shape
-        # 将图像按空间块大小切分
+        # 将空间数据块按照指定的空间块大小进行分割
         frames = frames.view(
             batch_size,
             num_channels,
@@ -1854,9 +1990,9 @@ def space_to_depth(frames: torch.Tensor, temporal_block_size: int = 1, spatial_b
             width // spatial_block_size,
             spatial_block_size,
         )
-        # 将块移到最后一个维度：(批次大小, H//bs, W//bs, bs, bs, 通道数)
+        # 将分割后的块移动到最后一个维度：(batch_size, H//bs, W//bs, bs, bs, C)
         frames = frames.permute(0, 2, 4, 3, 5, 1).contiguous()
-        # 沿通道维度连接块：(批次大小, H//bs, W//bs, bs*bs*通道数)
+        # 沿着通道维度连接块：(batch_size, H//bs, W//bs, bs*bs*C)
         frames = frames.view(
             batch_size,
             height // spatial_block_size,
@@ -1864,10 +2000,10 @@ def space_to_depth(frames: torch.Tensor, temporal_block_size: int = 1, spatial_b
             (spatial_block_size**2) * num_channels,
         )
         return frames
+    # 检查输入张量的维度是否为5
     elif len(frames.shape) == 5:
-        # 获取批次大小、时间步长、通道数、高度和宽度
         batch_size, time, num_channels, height, width = frames.shape
-        # 将图像按时间和空间块大小切分
+        # 将时间维度和空间维度按照指定的块大小进行分割
         frames = frames.view(
             batch_size,
             time // temporal_block_size,
@@ -1878,9 +2014,9 @@ def space_to_depth(frames: torch.Tensor, temporal_block_size: int = 1, spatial_b
             width // spatial_block_size,
             spatial_block_size,
         )
-        # 将块移到最后一个维度：(批次大小, T//ts, H//bs, W//bs, ts, bs, bs, 通道数)
+        # 将分割后的块移动到最后一个维度：(batch_size, T//ts, H//bs, W//bs, ts, bs, bs, C)
         frames = frames.permute(0, 1, 4, 6, 2, 5, 7, 3).contiguous()
-        # 沿通道维度连接块：(批次大小, T//ts, H//bs, W//bs, ts*bs*bs*通道数)
+        # 沿着通道维度连接块：(batch_size, T//ts, H//bs, W//bs, ts*bs*bs*C)
         frames = frames.view(
             batch_size,
             time // temporal_block_size,
@@ -1890,32 +2026,35 @@ def space_to_depth(frames: torch.Tensor, temporal_block_size: int = 1, spatial_b
         )
         return frames
     else:
-        # 抛出异常，输入张量的维度不正确
+        # 抛出异常，如果输入张量的维度既不是4也不是5
         raise ValueError(
             "Frames should be of rank 4 (batch, channels, height, width)"
             " or rank 5 (batch, time, channels, height, width)"
         )
 
 
+# 定义一个继承自 nn.Conv2d 的类，支持 padding="same"
 class Conv2dSamePadding(nn.Conv2d):
     """
-    带有 padding="same" 支持的 Conv2d 层。来源：
+    Conv2d layer with padding="same" support. Source:
     https://gist.github.com/sumanmichael/4de9dee93f972d47c80c4ade8e149ea6
     """
-    # 定义一个名为Conv2dSamePadding的类，继承自父类nn.Module
+    # 初始化方法，继承父类 Conv2dSamePadding
     def __init__(self, *args, **kwargs):
         # 调用父类的初始化方法
         super(Conv2dSamePadding, self).__init__(*args, **kwargs)
-        # 计算得到每一维度的padding大小，并创建ZeroPad2d对象
+        # 创建 ZeroPad2d 层，用于实现“same” padding
         self.zero_pad_2d = nn.ZeroPad2d(
-            # 遍历卷积核的尺寸，计算每一维度的padding大小，并将其累加起来
+            # 计算每个维度的 padding 数量，使得卷积操作后大小不变
             reduce(__add__, [(k // 2 + (k - 2 * (k // 2)) - 1, k // 2) for k in self.kernel_size[::-1]])
         )
-    
-    # 定义前向传播方法
+
+    # 前向传播方法
     def forward(self, input):
-        # 对输入的input进行零填充，并使用零填充后的input，权重和偏执参数进行卷积操作
-        return self._conv_forward(self.zero_pad_2d(input), self.weight, self.bias)
+        # 对输入进行 zero padding，保证卷积输出大小与输入相同
+        padded_input = self.zero_pad_2d(input)
+        # 执行卷积操作，使用权重 self.weight 和偏置 self.bias
+        return self._conv_forward(padded_input, self.weight, self.bias)
 class Conv2DDownsample(nn.Module):
     """Downsamples 4x by applying a 2D convolution and doing max pooling."""
 
@@ -1939,20 +2078,26 @@ class Conv2DDownsample(nn.Module):
         """
         super().__init__()
 
-        # Define a 2D convolution layer with kernel size 7 and stride 2
+        # Define a 2D convolution layer with same padding
         self.conv = Conv2dSamePadding(
             in_channels=in_channels, out_channels=out_channels, kernel_size=7, stride=2, bias=False
         )
-        # Add batch normalization if specified, otherwise use identity
+        
+        # Batch normalization layer if `use_batchnorm` is True, otherwise an identity layer
         self.batchnorm = nn.BatchNorm2d(num_features=out_channels) if use_batchnorm else nn.Identity()
-        self.relu = nn.ReLU()  # ReLU activation function
-        self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2)  # Max pooling layer
+        
+        # ReLU activation function
+        self.relu = nn.ReLU()
+        
+        # Max pooling layer with kernel size 3 and stride 2
+        self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2)
 
     def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-        out = self.conv(inputs)  # Pass inputs through the convolutional layer
-        out = self.batchnorm(out)  # Apply batch normalization
+        # Forward pass through the layers
+        out = self.conv(inputs)  # Apply convolution
+        out = self.batchnorm(out)  # Apply batch normalization or identity
         out = self.relu(out)  # Apply ReLU activation
-        out = self.max_pool(out)  # Perform max pooling
+        out = self.max_pool(out)  # Apply max pooling
         return out
 
 
@@ -1975,172 +2120,175 @@ def generate_fourier_features(pos, num_bands, max_resolution=(224, 224), concat_
     Returns:
       `torch.FloatTensor` of shape `(batch_size, sequence_length, n_channels)`: The Fourier position embeddings. If
       `concat_pos` is `True` and `sine_only` is `False`, output dimensions are ordered as: [dim_1, dim_2, ..., dim_d,
-      sin(pi*f_1*dim_1), ..., sin(pi*f_K*dim_1),..., sin(pi*f_1*dim_d), ..., sin(pi*f_K*dim_d), cos(pi*f_1*dim_1),
+      sin(pi*f_1*dim_1), ..., sin(pi*f_K*dim_1), ..., sin(pi*f_1*dim_d), ..., sin(pi*f_K*dim_d), cos(pi*f_1*dim_1),
       ..., cos(pi*f_K*dim_1), ..., cos(pi*f_1*dim_d), ..., cos(pi*f_K*dim_d)], where dim_i is pos[:, i] and f_k is the
       kth frequency band.
     """
 
-    batch_size = pos.shape[0]  # Get the batch size
+    batch_size = pos.shape[0]
 
-    min_freq = 1.0  # Define the minimum frequency
+    min_freq = 1.0
     # Nyquist frequency at the target resolution:
     freq_bands = torch.stack(
         [torch.linspace(start=min_freq, end=res / 2, steps=num_bands) for res in max_resolution], dim=0
     )
 
     # Get frequency bands for each spatial dimension.
-    # 生成大小为 [n, d * num_bands] 的特征向量
+    # (This part of the function calculates frequency bands based on the given maximum resolution and number of bands)
+    # Output is size [n, d * num_bands]
     per_pos_features = pos[0, :, :][:, :, None] * freq_bands[None, :, :]
-    # 重新调整特征向量的形状为 [-1, 所有列的乘积]
+    # Reshape per_pos_features into a flattened shape
     per_pos_features = torch.reshape(per_pos_features, [-1, np.prod(per_pos_features.shape[1:])])
 
     if sine_only:
-        # 使用正弦函数处理特征向量，输出大小为 [n, d * num_bands]
+        # Output is size [n, d * num_bands]
+        # Apply sine transformation to per_pos_features
         per_pos_features = torch.sin(np.pi * (per_pos_features))
     else:
-        # 使用正弦和余弦函数处理特征向量，输出大小为 [n, 2 * d * num_bands]
+        # Output is size [n, 2 * d * num_bands]
+        # Apply both sine and cosine transformations to per_pos_features
         per_pos_features = torch.cat(
             [torch.sin(np.pi * per_pos_features), torch.cos(np.pi * per_pos_features)], dim=-1
         )
-    # 拼接原始输入位置信息
+    
+    # Concatenate the raw input positions.
     if concat_pos:
-        # 在编码中添加 d 个频段
+        # Adds d bands to the encoding.
+        # Concatenate pos and per_pos_features along the last dimension
         per_pos_features = torch.cat([pos, per_pos_features.expand(batch_size, -1, -1)], dim=-1)
-    # 返回处理后的特征向量
+    
+    # Return the final per_pos_features tensor
     return per_pos_features
-# 生成一个 N 维输入数组的位置索引数组
+# 生成一个线性位置索引数组，用于 N 维输入数组。
+
 def build_linear_positions(index_dims, output_range=(-1.0, 1.0)):
-    # 定义一个函数来创建 1 维的线性间隔数组
+    """
+    Generate an array of position indices for an N-D input array.
+
+    Args:
+      index_dims (`List[int]`):
+        The shape of the index dimensions of the input array.
+      output_range (`Tuple[float]`, *optional*, defaults to `(-1.0, 1.0)`):
+        The min and max values taken by each input index dimension.
+
+    Returns:
+      `torch.FloatTensor` of shape `(index_dims[0], index_dims[1], .., index_dims[-1], N)`.
+    """
+
     def _linspace(n_xels_per_dim):
-        # 创建一个从 output_range 的最小值到最大值之间的等间隔线性数组
+        # 使用 torch.linspace 生成指定范围和步长的一维张量
         return torch.linspace(start=output_range[0], end=output_range[1], steps=n_xels_per_dim, dtype=torch.float32)
-    
-    # 遍历每个维度的单元格数，对每个维度创建线性间隔数组
+
+    # 生成每个维度的线性分布的张量数组
     dim_ranges = [_linspace(n_xels_per_dim) for n_xels_per_dim in index_dims]
-    
-    # 使用 meshgrid 函数创建一个 N 维的网格，每个维度对应一个线性间隔数组
+    # 使用 meshgrid 函数创建多维网格，表示每个位置的坐标
     array_index_grid = meshgrid(*dim_ranges, indexing="ij")
-    
-    # 将 N 维网格堆叠起来，形成最终的位置索引数组
+
     return torch.stack(array_index_grid, dim=-1)
 
 
-# 感知器抽象位置编码模块
 class PerceiverAbstractPositionEncoding(nn.Module, metaclass=abc.ABCMeta):
-    # 获取位置编码的维度数
+    """Perceiver abstract position encoding."""
+
     @property
     @abc.abstractmethod
     def num_dimensions(self) -> int:
         raise NotImplementedError
-    
-    # 获取位置编码的输出大小
+
     @abc.abstractmethod
     def output_size(self, *args, **kwargs) -> int:
         raise NotImplementedError
-    
-    # 执行位置编码的前向传播
+
     @abc.abstractmethod
     def forward(self, batch_size, pos):
         raise NotImplementedError
 
 
-# 可训练的位置编码模块
 class PerceiverTrainablePositionEncoding(PerceiverAbstractPositionEncoding):
+    """Trainable position encoding."""
+
     def __init__(self, index_dims, num_channels=128):
         super().__init__()
-        # 设置位置编码的通道数
         self._num_channels = num_channels
-        # 保存输入数组的维度信息
         self._index_dims = index_dims
-        # 计算总的单元格数
         index_dim = np.prod(index_dims)
-        # 创建可训练的位置嵌入向量
+        # 创建一个形状为 (index_dim, num_channels) 的可训练的位置嵌入参数
         self.position_embeddings = nn.Parameter(torch.randn(index_dim, num_channels))
-    
-    # 获取位置编码的维度数
+
     @property
     def num_dimensions(self) -> int:
         if isinstance(self._index_dims, int):
             return 1
         return len(self._index_dims)
-    
-    # 获取位置编码的输出大小
+
     def output_size(self, *args, **kwargs) -> int:
+        # 返回位置编码器的输出大小，即 num_channels
         return self._num_channels
-    
-    # 执行位置编码的前向传播
+
     def forward(self, batch_size: int) -> torch.Tensor:
-        # 获取位置嵌入向量
         position_embeddings = self.position_embeddings
-        
-        # 如果有 batch 维度，则复制嵌入向量到 batch 维度
+
         if batch_size is not None:
+            # 如果指定了批量大小，扩展位置嵌入参数的第一维度为 batch_size
             position_embeddings = position_embeddings.expand(batch_size, -1, -1)
-        
         return position_embeddings
 
 
-# 检查或构建空间位置特征
 def _check_or_build_spatial_positions(pos, index_dims, batch_size):
     """
-    检查或构建空间位置特征 (x, y, ...).
+    Checks or builds spatial position features (x, y, ...).
 
-    参数:
+    Args:
       pos (`torch.FloatTensor`):
-        None 或位置特征数组。如果为 None，则构建位置特征。否则，检查其大小。
+        None, or an array of position features. If None, position features are built. Otherwise, their size is checked.
       index_dims (`List[int]`):
-        要素化数据的空间/索引大小的可迭代对象。
+        An iterable giving the spatial/index size of the data to be featurized.
       batch_size (`int`):
-        要素化数据的批量大小。
+        The batch size of the data to be featurized.
 
-    返回:
-        `torch.FloatTensor` of shape `(batch_size, prod(index_dims))` 位置特征数组.
+    Returns:
+        `torch.FloatTensor` of shape `(batch_size, prod(index_dims))` an array of position features.
     """
-    # 如果未提供位置信息，则根据索引维度构建线性位置信息
+    # 如果 pos 参数为 None，则根据 index_dims 构建线性位置信息
     if pos is None:
         pos = build_linear_positions(index_dims)
-        # 相当于 `torch.broadcast_to(pos[None], (batch_size,) + pos.shape)`，
-        # 但 `torch.broadcast_to` 无法转换为 ONNX
-        # 将位置信息扩展到与批次维度相同的形状
+        # 相当于 `torch.broadcast_to(pos[None], (batch_size,) + pos.shape)`
+        # 但是 `torch.broadcast_to` 不能转换为 ONNX 格式
         pos = pos[None].expand((batch_size,) + pos.shape)
-        # 重新整形位置信息，以 [batch_size, 索引维度的乘积, -1] 形式表示
         pos = torch.reshape(pos, [batch_size, np.prod(index_dims), -1])
     else:
-        # 警告：您可能不希望空间特征与位置坐标系具有不同的空间布局。
-        # 如果您认为会有效果，请随意覆盖！
-        # 如果位置信息的最后一个维度与索引维度的长度不相等，则引发错误
+        # 警告：你可能不希望你的空间特征与 pos 坐标系的空间布局不同。
+        # 如果你认为可以，请随意覆盖这一段代码！
+        
+        # 检查 pos 的最后一个维度是否与 index_dims 的长度相同
         if pos.shape[-1] != len(index_dims):
             raise ValueError("Spatial features have the wrong number of dimensions.")
-    # 返回位置信息
+    # 返回 pos 变量，其中包含位置信息
     return pos
 class PerceiverFourierPositionEncoding(PerceiverAbstractPositionEncoding):
     """Fourier (Sinusoidal) position encoding."""
 
     def __init__(self, num_bands, max_resolution, concat_pos=True, sine_only=False):
-        # 调用父类的初始化方法
         super().__init__()
-        # 设置 Fourier 位置编码的参数
-        self.num_bands = num_bands
-        self.max_resolution = max_resolution
-        self.concat_pos = concat_pos
-        self.sine_only = sine_only
+        self.num_bands = num_bands  # 设置频带数量
+        self.max_resolution = max_resolution  # 设置最大分辨率
+        self.concat_pos = concat_pos  # 是否连接位置编码
+        self.sine_only = sine_only  # 是否只使用正弦编码
 
     @property
     def num_dimensions(self) -> int:
-        # 返回最大分辨率的维度数
-        return len(self.max_resolution)
+        return len(self.max_resolution)  # 返回最大分辨率的维度数
 
     def output_size(self):
         """Returns size of positional encodings last dimension."""
-        # 计算位置编码的输出维度
-        num_dims = len(self.max_resolution)
-        encoding_size = self.num_bands * num_dims
+        num_dims = len(self.max_resolution)  # 获取最大分辨率的维度数
+        encoding_size = self.num_bands * num_dims  # 计算编码的大小
         if not self.sine_only:
-            encoding_size *= 2
+            encoding_size *= 2  # 如果不仅使用正弦编码，则大小加倍
         if self.concat_pos:
-            encoding_size += self.num_dimensions
+            encoding_size += self.num_dimensions  # 如果连接位置编码，则增加维度数
 
-        return encoding_size
+        return encoding_size  # 返回编码的最后一个维度大小
 
     def forward(
         self,
@@ -2150,16 +2298,14 @@ class PerceiverFourierPositionEncoding(PerceiverAbstractPositionEncoding):
         dtype: torch.dtype,
         pos: torch.FloatTensor = None,
     ) -> torch.FloatTensor:
-        # 检查或构建空间位置
-        pos = _check_or_build_spatial_positions(pos, index_dims, batch_size)
-        # 生成 Fourier 特征
+        pos = _check_or_build_spatial_positions(pos, index_dims, batch_size)  # 检查或构建空间位置
         fourier_pos_enc = generate_fourier_features(
             pos,
             num_bands=self.num_bands,
             max_resolution=self.max_resolution,
             concat_pos=self.concat_pos,
             sine_only=self.sine_only,
-        ).to(device=device, dtype=dtype)
+        ).to(device=device, dtype=dtype)  # 生成傅里叶特征编码，并将其转移到指定设备和数据类型
         return fourier_pos_enc
 
 
@@ -2167,7 +2313,6 @@ class AbstractPreprocessor(nn.Module):
     @property
     def num_channels(self) -> int:
         """Returns size of preprocessor output."""
-        # 抽象方法，需要在子类中实现
         raise NotImplementedError()
 
 
@@ -2184,26 +2329,20 @@ class PerceiverTextPreprocessor(AbstractPreprocessor):
 
     def __init__(self, config: PerceiverConfig) -> None:
         super().__init__()
-        self.config = config
-        # 创建词嵌入层和位置编码层
-        self.embeddings = nn.Embedding(num_embeddings=config.vocab_size, embedding_dim=config.d_model)
-        self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.d_model)
+        self.config = config  # 设置模型配置
+        self.embeddings = nn.Embedding(num_embeddings=config.vocab_size, embedding_dim=config.d_model)  # 创建词嵌入层
+        self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.d_model)  # 创建位置编码层
 
     @property
     def num_channels(self) -> int:
-        # 返回词嵌入的维度大小
-        return self.config.d_model
+        return self.config.d_model  # 返回模型配置中的 d_model 大小
 
     def forward(self, inputs: torch.LongTensor, pos: Optional[torch.Tensor] = None, network_input_is_1d: bool = True):
-        # 获取输入的词嵌入
-        embeddings_without_pos = self.embeddings(inputs)
+        embeddings_without_pos = self.embeddings(inputs)  # 获取不包含位置编码的词嵌入
 
-        # 获取序列长度
-        seq_length = inputs.shape[1]
-        # 构建位置索引
-        position_ids = torch.arange(0, seq_length, device=inputs.device)
-        # 添加位置编码到词嵌入上
-        embeddings = embeddings_without_pos + self.position_embeddings(position_ids)
+        seq_length = inputs.shape[1]  # 获取序列长度
+        position_ids = torch.arange(0, seq_length, device=inputs.device)  # 在指定设备上创建位置索引
+        embeddings = embeddings_without_pos + self.position_embeddings(position_ids)  # 添加位置编码到词嵌入
 
         return embeddings, None, embeddings_without_pos
 
@@ -2216,26 +2355,24 @@ class PerceiverEmbeddingDecoder(nn.Module):
         config ([`PerceiverConfig`]):
             Model configuration.
     """
-    # 初始化函数，接收一个PerceiverConfig类型的参数并设置配置
+    # 定义 Perceiver 模型类，继承自 nn.Module
     def __init__(self, config: PerceiverConfig) -> None:
-        # 调用父类初始化函数
         super().__init__()
-        # 保存配置参数
+        # 保存模型配置
         self.config = config
         # 获取词汇表大小
         self.vocab_size = config.vocab_size
-        # 初始化偏置
+        # 初始化偏置项，维度为词汇表大小，作为可学习参数
         self.bias = nn.Parameter(torch.zeros(self.vocab_size))
 
-    # 前向传播函数，接收隐藏状态和嵌入层作为参数，并返回预测输出
     def forward(self, hidden_states: torch.Tensor, embedding_layer: torch.Tensor) -> torch.Tensor:
-        # 获取批量大小、序列长度和模型维度
+        # 获取输入的张量维度信息
         batch_size, seq_len, d_model = hidden_states.shape
-        # 将隐藏状态展平
+        # 将隐藏状态张量展平（flatten）为二维张量，进行矩阵乘法
         output = torch.matmul(hidden_states.reshape([-1, d_model]), embedding_layer.weight.transpose(0, 1))
-        # 加上偏置
+        # 添加偏置项到输出张量
         output = output + self.bias
-        # 将输出恢复成原始形状
+        # 将输出张量重新形状为原始的三维张量形状
         return output.reshape([batch_size, seq_len, self.vocab_size])
 class PerceiverMultimodalPostprocessor(nn.Module):
     """
@@ -2252,21 +2389,21 @@ class PerceiverMultimodalPostprocessor(nn.Module):
 
     def __init__(self, modalities: Mapping[str, PostprocessorType], input_is_dict: bool = False):
         super().__init__()
-        # 使用给定的模态列表创建一个模块字典
+        # 初始化时将各个模态的后处理器组成一个模块字典
         self.modalities = nn.ModuleDict(modalities)
-        # 指示输入是否为字典结构
+        # 标记输入是否为字典形式
         self.input_is_dict = input_is_dict
 
     def forward(
         self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, modality_sizes=None
     ) -> Mapping[str, torch.Tensor]:
         if not self.input_is_dict:
-            # 如果输入不是字典结构，则按照给定的模态大小对输入进行切片
+            # 如果输入不是字典形式，根据模态大小重新组织输入数据
             if modality_sizes is None:
                 raise ValueError("Modality sizes should be specified if input is not a dictionary.")
             inputs = restructure(modality_sizes=modality_sizes, inputs=inputs)
 
-        # 对每个模态应用对应的后处理器，生成输出字典
+        # 对每个模态使用对应的后处理器进行处理，并输出结果字典
         outputs = {
             modality: postprocessor(inputs[modality], pos=pos, modality_sizes=None)
             for modality, postprocessor in self.modalities.items()
@@ -2287,11 +2424,11 @@ class PerceiverClassificationPostprocessor(nn.Module):
 
     def __init__(self, config: PerceiverConfig, in_channels: int) -> None:
         super().__init__()
-        # 创建一个线性层作为分类器
+        # 使用线性层将输入通道数映射为分类标签数
         self.classifier = nn.Linear(in_channels, config.num_labels)
 
     def forward(self, inputs, pos: Optional[torch.Tensor] = None, modality_sizes=None) -> torch.Tensor:
-        # 将输入通过分类器转换为分类的logits
+        # 使用分类器线性层计算分类 logits
         logits = self.classifier(inputs)
         return logits[:, 0, :]
 
@@ -2308,24 +2445,29 @@ class PerceiverAudioPostprocessor(nn.Module):
         postproc_type (`str`, *optional*, defaults to `"patches"`):
             Postprocessor type to use. Currently, only "patches" is supported.
     """
-    # 定义 PerceiverClassifier 类，继承自 torch.nn.Module
-        def __init__(self, config: PerceiverConfig, in_channels: int, postproc_type: str = "patches") -> None:
-            # 调用父类 __init__ 方法
-            super().__init__()
-    
-            # 检查 postproc_type 是否是有效值
-            if postproc_type not in ("patches",):  # to be supported: 'conv', 'patches', 'pixels'
-                raise ValueError("Invalid postproc_type!")
-    
-            # 设置分类器参数
-            self.classifier = nn.Linear(in_channels, config.samples_per_patch)
-    
-        # 定义前向传播方法
-        def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, modality_sizes=None) -> torch.Tensor:
-            # 使用分类器计算输入的 logits
-            logits = self.classifier(inputs)
-            # 根据输入的 shape 重新组织输出的 logits
-            return torch.reshape(logits, [inputs.shape[0], -1])
+    # 使用给定的配置和输入通道数初始化模型
+    def __init__(self, config: PerceiverConfig, in_channels: int, postproc_type: str = "patches") -> None:
+        # 调用父类的初始化方法
+        super().__init__()
+
+        # 检查后处理类型是否在支持的范围内，目前支持 'patches' 类型
+        if postproc_type not in ("patches",):  # to be supported: 'conv', 'patches', 'pixels'
+            # 如果不在支持的类型中，则抛出数值错误异常
+            raise ValueError("Invalid postproc_type!")
+
+        # 架构参数:
+        # 创建一个线性分类器，输入通道数为 in_channels，输出通道数为 config.samples_per_patch
+        self.classifier = nn.Linear(in_channels, config.samples_per_patch)
+
+    # 前向传播函数，接收输入张量 inputs，可选的位置张量 pos 和模态大小 modality_sizes
+    def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, modality_sizes=None) -> torch.Tensor:
+        # 使用分类器进行前向计算，得到 logits
+        logits = self.classifier(inputs)
+        # 对 logits 进行形状变换，将其变为 [batch_size, -1] 的形状
+        return torch.reshape(logits, [inputs.shape[0], -1])
+# 定义了一个名为 PerceiverProjectionPostprocessor 的神经网络模块，用于处理 Perceiver 模型的投影后处理，
+# 可以将解码器输出的通道投影到较低维度。
+
 class PerceiverProjectionPostprocessor(nn.Module):
     """
     Projection postprocessing for Perceiver. Can be used to project the channels of the decoder output to a lower
@@ -2340,12 +2482,13 @@ class PerceiverProjectionPostprocessor(nn.Module):
 
     def __init__(self, in_channels: int, out_channels: int) -> None:
         super().__init__()
-        # 创建一个线性层，用于将输入的通道数投影到输出的通道数
+        # 使用线性层进行投影，将输入通道数投影到输出通道数
         self.classifier = nn.Linear(in_channels, out_channels)
 
     def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, modality_sizes=None) -> torch.Tensor:
-        # 使用线性层对输入进行投影得到logits
+        # 将输入数据通过线性层进行投影
         logits = self.classifier(inputs)
+        # 返回投影后的结果
         return logits
 
 
@@ -2388,46 +2531,34 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
     # 初始化函数，用于创建一个新的对象实例
     def __init__(
         self,
-        # config: 配置参数，用于初始化模型
         config,
-        # prep_type: 数据准备类型，默认为卷积（"conv"）
-        prep_type="conv",
-        # spatial_downsample: 空间下采样倍数，默认为4
-        spatial_downsample: int = 4,
-        # temporal_downsample: 时间下采样倍数，默认为1
-        temporal_downsample: int = 1,
-        # position_encoding_type: 位置编码类型，默认为"fourier"
-        position_encoding_type: str = "fourier",
-        # in_channels: 输入通道数，默认为3
-        in_channels: int = 3,
-        # out_channels: 输出通道数，默认为64
-        out_channels: int = 64,
-        # conv_after_patching: 是否在打补丁后进行卷积，默认为False
-        conv_after_patching: bool = False,
-        # conv_after_patching_in_channels: 在conv_after_patching为True时有效的输入通道数，默认为54
-        conv_after_patching_in_channels: int = 54,  # only relevant when conv_after_patching = True
-        # conv2d_use_batchnorm: 是否使用批量归一化，默认为True
-        conv2d_use_batchnorm: bool = True,
-        # concat_or_add_pos: 拼接或相加位置编码，默认为"concat"
-        concat_or_add_pos: str = "concat",
-        # project_pos_dim: 位置维度投影，默认为-1
-        project_pos_dim: int = -1,
-        # position_encoding_kwargs: 其他位置编码参数
-        **position_encoding_kwargs,
-        # 调用父类构造函数
+        prep_type="conv",  # 预处理类型，默认为卷积
+        spatial_downsample: int = 4,  # 空间下采样因子，默认为4
+        temporal_downsample: int = 1,  # 时间下采样因子，默认为1
+        position_encoding_type: str = "fourier",  # 位置编码类型，默认为傅里叶
+        in_channels: int = 3,  # 输入通道数，默认为3
+        out_channels: int = 64,  # 输出通道数，默认为64
+        conv_after_patching: bool = False,  # 是否在打补丁后进行卷积，默认为False
+        conv_after_patching_in_channels: int = 54,  # 仅在conv_after_patching为True时 relevant 的输入通道数
+        conv2d_use_batchnorm: bool = True,  # 是否在卷积层后使用批量归一化，默认为True
+        concat_or_add_pos: str = "concat",  # 位置编码添加方式，默认为拼接
+        project_pos_dim: int = -1,  # 位置维度投影，默认为-1
+        **position_encoding_kwargs,  # 其他位置编码的关键字参数
+        ):
+        # 调用父类的构造函数
         super().__init__()
-        # 将配置信息存储在对象中
+        # 将配置参数保存到实例变量中
         self.config = config
 
-        # 如果预处理类型不在指定的范围内，则引发数值错误
+        # 检查预处理类型是否合法
         if prep_type not in ("conv", "patches", "pixels", "conv1x1"):
             raise ValueError(f"Prep_type {prep_type} is invalid")
 
-        # 如果连接或添加位置不是指定的值，则引发数值错误
+        # 检查拼接或添加位置的选项是否合法
         if concat_or_add_pos not in ["concat", "add"]:
             raise ValueError(f"Invalid value {concat_or_add_pos} for concat_or_add_pos.")
 
-        # 存储输入通道数和其他指定属性
+        # 初始化实例变量
         self.in_channels = in_channels
         self.prep_type = prep_type
         self.spatial_downsample = spatial_downsample
@@ -2437,19 +2568,17 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
         self.conv_after_patching = conv_after_patching
         self.out_channels = out_channels
 
-        # 如果预处理类型为"conv"，则执行以下代码块
+        # 如果预处理类型为 "conv"
         if self.prep_type == "conv":
-            # 对于使用 conv 进行下采样目前有限制
-            # 计算卷积层数
+            # 使用对数函数计算需要的卷积层数，要求空间下采样为4的幂次方
             convnet_num_layers = math.log(spatial_downsample, 4)
-            # 检查卷积层数是否为整数
             convnet_num_layers_is_int = convnet_num_layers == np.round(convnet_num_layers)
-            # 如果卷积层数不是整数或者时间下采样不等于1，则引发数值错误
+            # 检查空间和时间下采样是否符合要求
             if not convnet_num_layers_is_int or temporal_downsample != 1:
                 raise ValueError(
                     "Only powers of 4 expected for spatial and 1 expected for temporal downsampling with conv."
                 )
-            # 创建 Conv2DDownsample 对象来进行下采样
+            # 创建卷积下采样网络
             self.convnet = Conv2DDownsample(
                 in_channels=in_channels,
                 num_layers=int(convnet_num_layers),
@@ -2457,23 +2586,21 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
                 use_batchnorm=conv2d_use_batchnorm,
             )
 
-        # 如果预处理类型为"conv1x1"，则执行以下代码块
+        # 如果预处理类型为 "conv1x1"
         elif self.prep_type == "conv1x1":
-            # 如果时间下采样不等于1，则引发数值错误
+            # 对于 conv1x1，只允许空间下采样，不允许时间下采样
             if temporal_downsample != 1:
                 raise ValueError("Conv1x1 does not downsample in time.")
-            # 创建一个 1x1 卷积进行处理
+            # 创建 1x1 卷积层
             self.convnet_1x1 = nn.Conv2d(
                 in_channels=in_channels,
                 out_channels=out_channels,
                 kernel_size=(1, 1),
-                # 对于 1x1 卷积，空间下采样没有限制
-                stride=(spatial_downsample, spatial_downsample),
+                stride=(spatial_downsample, spatial_downsample),  # 空间下采样步幅设置
             )
 
-        # 存储位置编码相关的属性
-        self.project_pos_dim = project_pos_dim
         # 构建位置编码
+        self.project_pos_dim = project_pos_dim
         self.position_embeddings, self.positions_projection = build_position_encoding(
             position_encoding_type=position_encoding_type,
             out_channels=out_channels,
@@ -2481,28 +2608,27 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
             **position_encoding_kwargs,
         )
 
-        # 可选的在补丁之后的卷积层
+        # 可选的卷积层，用于在提取补丁之后进行处理
         self.conv_after_patches = (
             nn.Linear(conv_after_patching_in_channels, self.out_channels) if conv_after_patching else nn.Identity()
         )
-
-    @property
     def num_channels(self) -> int:
-        # 返回通道数
-        
-        # 检查输入数据的分辨率数是否为2或3，如果处理图像则为2，处理视频则为3
+        # 假设输入数据的分辨率在图像预处理的上下文中是2或3，
+        # 取决于我们是处理图像还是视频。为了方便起见，
+        # 我们定义一个 is_temporal 变量，用于表示数据是否具有时间维度。
         is_temporal = self.position_embeddings.num_dimensions > 2
-        
+
         # 位置嵌入
         if self.project_pos_dim > 0:
             pos_dim = self.project_pos_dim
         else:
             pos_dim = self.position_embeddings.output_size()
+
+        # 如果使用“add”模式连接位置编码，则返回位置维度
         if self.concat_or_add_pos == "add":
             return pos_dim
-        
-        # 输入
-        # 根据不同的预处理类型确定输入维度
+
+        # 输入维度
         if self.conv_after_patching or self.prep_type in ("conv1x1", "conv"):
             inp_dim = self.out_channels
         elif self.prep_type == "pixels":
@@ -2516,21 +2642,22 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
                 inp_dim = self.in_channels * self.spatial_downsample**2
                 if is_temporal:
                     inp_dim *= self.temporal_downsample
-        
-        # 返回通道数
+
+        # 返回输入维度加上位置维度的结果
         return inp_dim + pos_dim
-    
+
     def _build_network_inputs(self, inputs: torch.Tensor, network_input_is_1d: bool = True):
         """
         构建最终输入，包括位置编码。
 
-        此方法期望输入始终具有通道作为最后一个维度。
+        该方法假设输入始终将通道作为最后一个维度。
+
         """
         batch_size = inputs.shape[0]
         index_dims = inputs.shape[1:-1]
         indices = np.prod(index_dims)
 
-        # 如果输入维度大于3且网络输入是1D，则将输入特征展平为1D索引维度
+        # 如果输入维度大于3且网络输入是1维，则将输入特征展平为1维索引维度。
         if len(inputs.shape) > 3 and network_input_is_1d:
             inputs = torch.reshape(inputs, [batch_size, indices, -1])
 
@@ -2539,35 +2666,35 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
             pos_enc = self.position_embeddings(batch_size)
         elif self.position_encoding_type == "fourier":
             pos_enc = self.position_embeddings(index_dims, batch_size, device=inputs.device, dtype=inputs.dtype)
-        
-        # 可选择地将位置编码投影到目标维度
+
+        # 可选择将位置编码投影到目标维度。
         pos_enc = self.positions_projection(pos_enc)
 
         if not network_input_is_1d:
-            # 如果网络接受非1D输入，则调整位置以匹配输入特征形状
+            # 如果网络接受非1维输入，则重新整形位置编码以匹配输入特征形状。
             sh = inputs.shape
             pos_enc = torch.reshape(pos_enc, list(sh)[:-1] + [-1])
+
+        # 根据连接或加法模式将位置编码与输入合并或相加，并返回结果。
         if self.concat_or_add_pos == "concat":
             inputs_with_pos = torch.cat([inputs, pos_enc], dim=-1)
         elif self.concat_or_add_pos == "add":
             inputs_with_pos = inputs + pos_enc
+
         return inputs_with_pos, inputs
-    # 定义一个前向传播函数，接受输入张量 inputs，位置张量 pos（可选），network_input_is_1d 参数（默认为 True）
     def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, network_input_is_1d: bool = True):
-        # 如果准备类型 prep_type 为 "conv"
+        # 根据 self.prep_type 的不同进行不同的数据预处理
         if self.prep_type == "conv":
-            # 卷积神经网络图像特征提取
+            # 如果预处理类型为 "conv"，则使用卷积神经网络进行图像特征提取
             # 空间下采样因子为4
             inputs = self.convnet(inputs)
 
-        # 如果准备类型 prep_type 为 "conv1x1"
         elif self.prep_type == "conv1x1":
-            # 将输入映射为 self.out_channels
+            # 如果预处理类型为 "conv1x1"，则将输入映射到 self.out_channels 维度
             inputs = self.convnet_1x1(inputs)
 
-        # 如果准备类型 prep_type 为 "pixels"
         elif self.prep_type == "pixels":
-            # 如果要求的话，以最简单的方式进行空间下采样
+            # 如果预处理类型为 "pixels"，根据输入的维度进行最简单的下采样处理
             if inputs.ndim == 4:
                 inputs = inputs[:: self.spatial_downsample, :: self.spatial_downsample]
             elif inputs.ndim == 5:
@@ -2577,24 +2704,22 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
             else:
                 raise ValueError("Unsupported data format for pixels.")
 
-        # 如果准备类型 prep_type 为 "patches"
         elif self.prep_type == "patches":
-            # Space2depth 特征化
-            # 视频：B x T x C x H x W
+            # 如果预处理类型为 "patches"，进行 Space2depth 特征化处理
+            # 视频数据格式为 B x T x C x H x W
             inputs = space_to_depth(
                 inputs, temporal_block_size=self.temporal_downsample, spatial_block_size=self.spatial_downsample
             )
 
+            # 如果数据维度为5且第二个维度为1，则为光流数据，进行压缩处理
             if inputs.ndim == 5 and inputs.shape[1] == 1:
-                # 用于光流
                 inputs = inputs.squeeze(dim=1)
 
-            # 可选地应用卷积层
+            # 可选择应用卷积层
             inputs = self.conv_after_patches(inputs)
 
-        # 如果准备类型不是 "patches"
         if self.prep_type != "patches":
-            # 将通道移动到最后一个维度，因为下面的 _build_network_inputs 方法期望这样的结构
+            # 将通道移动到最后一个维度，因为下面的 _build_network_inputs 方法需要这种格式
             if inputs.ndim == 4:
                 inputs = inputs.permute(0, 2, 3, 1)
             elif inputs.ndim == 5:
@@ -2602,12 +2727,12 @@ class PerceiverImagePreprocessor(AbstractPreprocessor):
             else:
                 raise ValueError("Unsupported data format for conv1x1.")
 
-        # 调用 _build_network_inputs 方法，构建网络输入，同时返回没有位置信息的输入
+        # 调用 _build_network_inputs 方法构建网络输入
         inputs, inputs_without_pos = self._build_network_inputs(inputs, network_input_is_1d)
-        modality_sizes = None  # 每个模态的尺寸，仅在多模态时需要
+        modality_sizes = None  # 每种模态的大小，仅在多模态情况下需要
 
-        # 返回输入、模态尺寸和没有位置信息的输入
         return inputs, modality_sizes, inputs_without_pos
+# 定义一个用于Perceiver Encoder的One-hot预处理器，用于将一个虚拟的索引维度添加到输入中。
 class PerceiverOneHotPreprocessor(AbstractPreprocessor):
     """
     One-hot preprocessor for Perceiver Encoder. Can be used to add a dummy index dimension to the input.
@@ -2623,14 +2748,14 @@ class PerceiverOneHotPreprocessor(AbstractPreprocessor):
 
     @property
     def num_channels(self) -> int:
+        # 返回配置中定义的标签数，作为通道数
         return self.config.num_labels
 
     def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, network_input_is_1d: bool = True):
-        # Add a dummy index dimension.
+        # 添加一个虚拟的索引维度到输入张量中
         inputs = inputs[:, None, :]
 
-        # No position encodings, so the 1st (input) and 3rd (inputs_without_pos)
-        # outputs are identical.
+        # 由于没有位置编码，因此第一个（输入）和第三个（没有位置编码的输入）输出是相同的
         return inputs, None, inputs
 
 
@@ -2668,29 +2793,28 @@ class PerceiverAudioPreprocessor(AbstractPreprocessor):
         project_pos_dim=-1,
         **position_encoding_kwargs,
     ):
-        # 调用父类的构造函数初始化
+    ):
         super().__init__()
-        # 设置配置参数
         self.config = config
 
-        # 检查预处理类型是否有效
+        # 检查预处理类型是否合法，只能是 "patches"
         if prep_type not in ("patches",):
             raise ValueError(f"Prep_type {prep_type} is invalid, can only be 'patches'.")
 
-        # 检查连接或加法位置是否有效
+        # 检查连接或添加位置编码的方式是否合法，只能是 "concat" 或 "add"
         if concat_or_add_pos not in ["concat", "add"]:
             raise ValueError(f"Concat_or_pos {concat_or_add_pos} is invalid, can only be 'concat' or 'add'.")
 
-        # 设置每个补丁的样本数
+        # 设置样本每个补丁的数量
         self.samples_per_patch = samples_per_patch
         # 设置位置编码类型
         self.position_encoding_type = position_encoding_type
-        # 设置连接或加法位置
+        # 设置连接或添加位置编码的方式
         self.concat_or_add_pos = concat_or_add_pos
-        # 设置投影位置的维度
+        # 设置位置编码的投影维度
         self.project_pos_dim = project_pos_dim
 
-        # 构建位置嵌入
+        # 构建位置编码和位置投影
         self.position_embeddings, self.positions_projection = build_position_encoding(
             position_encoding_type=position_encoding_type,
             out_channels=out_channels,
@@ -2700,19 +2824,18 @@ class PerceiverAudioPreprocessor(AbstractPreprocessor):
 
     @property
     def num_channels(self) -> int:
-        # 位置嵌入
+        # 位置编码维度
         if self.project_pos_dim > 0:
             pos_dim = self.project_pos_dim
         else:
             pos_dim = self.position_embeddings.output_size()
-        # 如果连接位置方式为加法，则返回位置维度
+        # 根据连接或添加位置编码的方式确定通道数
         if self.concat_or_add_pos == "add":
             return pos_dim
-        # 否则返回每个补丁的样本数加上位置维度
         return self.samples_per_patch + pos_dim
 
     def _build_network_inputs(self, inputs):
-        """构建最终输入，包括位置编码。"""
+        """Construct the final input, including position encoding."""
         batch_size = inputs.shape[0]
         index_dims = inputs.shape[1:-1]
 
@@ -2722,28 +2845,25 @@ class PerceiverAudioPreprocessor(AbstractPreprocessor):
         elif self.position_encoding_type == "fourier":
             pos_enc = self.position_embeddings(index_dims, batch_size, device=inputs.device, dtype=inputs.dtype)
 
-        # 可选地将它们投影到目标维度
+        # 可选择性地将位置编码投影到目标维度
         pos_enc = self.positions_projection(pos_enc)
 
-        # 如果连接位置方式为拼接，则将位置编码与输入拼接在一起
+        # 根据连接或添加位置编码的方式，合并输入数据和位置编码
         if self.concat_or_add_pos == "concat":
             inputs_with_pos = torch.cat([inputs, pos_enc], dim=-1)
-        # 如果连接位置方式为加法，则将位置编码与输入相加
         elif self.concat_or_add_pos == "add":
             inputs_with_pos = inputs + pos_enc
 
-        return inputs_with_pos, inputs
+        return inputs_with_pos, inputs  # 返回带位置编码和原始输入的数据
 
     def forward(self, inputs: torch.Tensor, pos: Optional[torch.Tensor] = None, network_input_is_1d: bool = True):
-        # 将输入重塑为[batch_size, 补丁数, 每个补丁的样本数]
         inputs = torch.reshape(inputs, [inputs.shape[0], -1, self.samples_per_patch])
 
-        # 构建具有位置编码的网络输入
+        # 构建网络的输入，包括位置编码
         inputs, inputs_without_pos = self._build_network_inputs(inputs)
-        modality_sizes = None  # 每种模态的大小，仅对多模态需要
+        modality_sizes = None  # 用于多模态的每个模态的大小
 
         return inputs, modality_sizes, inputs_without_pos
-class PerceiverMultimodalPreprocessor(AbstractPreprocessor):
     """
     Multimodal preprocessing for Perceiver Encoder.
 
@@ -2766,79 +2886,87 @@ class PerceiverMultimodalPreprocessor(AbstractPreprocessor):
         mask_probs: Optional[Mapping[str, float]] = None,
         min_padding_size: int = 2,
     ):
-        # 初始化方法，设置各种属性
         super().__init__()
-        # 保存传入的各个模态预处理器
+        # 使用 nn.ModuleDict 封装各个模态的预处理器
         self.modalities = nn.ModuleDict(modalities)
         # 设置最小填充大小
         self.min_padding_size = min_padding_size
-        # 如果提供了掩码概率，则保存，否则设为空字典
+        # 如果提供了遮罩概率字典，则使用该字典；否则为空字典
         self.mask_probs = mask_probs if mask_probs is not None else {}
-        # 初始化填充参数，为每个模态分别生成填充参数
+        # 初始化填充参数，为每个模态创建一个可训练的位置填充向量
         self.padding = nn.ParameterDict(
             {
                 modality: nn.Parameter(torch.randn(1, self.num_channels - preprocessor.num_channels))
                 for modality, preprocessor in modalities.items()
             }
         )
-        # 初始化掩码参数，为每个模态分别生成掩码参数
+        # 初始化遮罩参数，为每个模态创建一个可训练的遮罩向量
         self.mask = nn.ParameterDict(
             {modality: nn.Parameter(torch.randn(1, self.num_channels)) for modality, _ in self.mask_probs.items()}
         )
 
     @property
     def num_channels(self) -> int:
-        # 计算所有模态中通道数的最大值，并加上最小填充大小，作为总通道数
+        # 计算所有模态中最大通道数，并加上最小填充大小，得到公共通道数
         max_channel_size = max(processor.num_channels for _, processor in self.modalities.items())
         common_channel_size = max_channel_size + self.min_padding_size
         return common_channel_size
 
     def forward(
         self, inputs: Mapping[str, torch.Tensor], pos: Optional[torch.Tensor] = None, network_input_is_1d: bool = True
-        # 前向传播方法，对输入进行预处理和填充
-    # 定义函数的输入和输出类型
+    ):
+        # 实现前向传播的方法，处理输入数据和位置信息
     ) -> PreprocessorOutputType:
-        # 创建空字典用于存储填充后的数据
+        # 初始化空字典用于存储填充后的输出
         padded = {}
-        # 创建空字典用于存储每个模态的尺寸
+        # 初始化空字典用于存储每个模态的输出大小
         modality_sizes = {}
-        # 创建空字典用于存储没有位置信息的输入数据
+        # 初始化空字典用于存储没有位置编码的输入
         inputs_without_pos = {}
-        # 遍历所有模态和对应的预处理器
+
+        # 遍历每个模态和其对应的预处理器
         for modality, preprocessor in self.modalities.items():
-            # 使用相应的预处理器预处理每个模态
+            # 使用对应的预处理器处理每个模态的输入
+            # 获取预处理后的输出、位置编码和没有位置编码的输入
             output, _, inputs_without_pos[modality] = preprocessor(
                 inputs[modality], pos=pos, network_input_is_1d=network_input_is_1d
             )
 
-            # 对输出进行填充以保证通道数一致
+            # 对输出进行填充到相同的 common_channel_size
             batch_size, num_samples, num_channels = output.shape
+            # 扩展位置编码以匹配输出的形状
             pos_enc = self.padding[modality].expand(batch_size, -1, -1)
+
+            # 使用广播方式创建填充张量，使其与输出的通道数匹配
             padding = torch.broadcast_to(
                 pos_enc,
                 [batch_size, num_samples, self.num_channels - num_channels],
             )
+            # 在通道维度上连接输出和填充部分
             output_padded = torch.cat([output, padding], dim=2)
 
-            # 如果需要，进行遮罩处理
+            # 如果需要，进行掩码操作
             if modality in self.mask_probs:
+                # 获取模态对应的掩码标记并扩展以匹配输出形状
                 mask_token = self.mask[modality].expand(batch_size, -1, -1)
                 mask_prob = self.mask_probs[modality]
+                # 使用伯努利分布生成掩码
                 mask = torch.bernoulli(torch.full([batch_size, num_samples], mask_prob))
                 mask = torch.unsqueeze(mask, dim=2).to(mask_token.device)
+                # 应用掩码到填充后的输出
                 output_padded = (1 - mask) * output_padded + mask * mask_token
 
-            # 将填充后的数据存入字典
+            # 将填充后的输出存储到对应的模态键下
             padded[modality] = output_padded
-            # 记录填充后数据的尺寸
+            # 记录每个模态填充后的输出大小
             modality_sizes[modality] = output_padded.shape[1]
 
-        # 对模态提供一致的顺序
+        # 将填充后的输出按照模态键排序形成列表
         padded_ls = [padded[k] for k in sorted(padded.keys())]
 
-        # 最终沿着时间维度进行拼接
+        # 最终将所有模态的填充输出沿时间维度连接起来
         final_inputs = torch.cat(padded_ls, dim=1)
 
-        # 返回填充后的最终输入数据，模态尺寸和无位置信息的输入数据
+        # 返回最终的填充后的输入、每个模态的输出大小和没有位置编码的输入
         return final_inputs, modality_sizes, inputs_without_pos
 ```

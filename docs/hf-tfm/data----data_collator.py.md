@@ -1,70 +1,76 @@
-# `.\transformers\data\data_collator.py`
+# `.\data\data_collator.py`
 
-```py
-# 导入必要的模块和库
-import random  # 导入随机模块
+```
+# 导入必要的模块和类
+import random  # 导入随机数模块
 import warnings  # 导入警告模块
-from collections.abc import Mapping  # 导入 Mapping 抽象基类
-from dataclasses import dataclass  # 导入 dataclass 装饰器
-from random import randint  # 从随机模块导入 randint 函数
-from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union  # 导入类型提示
+from collections.abc import Mapping  # 从collections.abc模块导入Mapping类
+from dataclasses import dataclass  # 导入dataclass装饰器
+from random import randint  # 从random模块导入randint函数
+from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union  # 导入多种类型声明
 
-import numpy as np  # 导入 NumPy 库
+import numpy as np  # 导入NumPy模块
 
-from ..models.bert import BertTokenizer, BertTokenizerFast  # 导入 BERT 分词器
-from ..tokenization_utils_base import PreTrainedTokenizerBase  # 导入基础分词器类
-from ..utils import PaddingStrategy  # 导入填充策略类
+from ..models.bert import BertTokenizer, BertTokenizerFast  # 从上级目录的models.bert模块导入BertTokenizer和BertTokenizerFast类
+from ..tokenization_utils_base import PreTrainedTokenizerBase  # 从上级目录的tokenization_utils_base模块导入PreTrainedTokenizerBase类
+from ..utils import PaddingStrategy  # 从上级目录的utils模块导入PaddingStrategy类
 
-InputDataClass = NewType("InputDataClass", Any)  # 定义 InputDataClass 类型别名
+InputDataClass = NewType("InputDataClass", Any)  # 定义新类型InputDataClass
 
 """
 A DataCollator is a function that takes a list of samples from a Dataset and collate them into a batch, as a dictionary
 of PyTorch/TensorFlow tensors or NumPy arrays.
 """
-DataCollator = NewType("DataCollator", Callable[[List[InputDataClass]], Dict[str, Any]])  # 定义 DataCollator 类型别名
+DataCollator = NewType("DataCollator", Callable[[List[InputDataClass]], Dict[str, Any]])  # 定义新类型DataCollator
 
 
 class DataCollatorMixin:
     def __call__(self, features, return_tensors=None):
-        # 如果未指定返回张量类型，则使用设定的默认类型
+        # 确定返回的张量类型，默认与实例的return_tensors属性相同
         if return_tensors is None:
             return_tensors = self.return_tensors
-        # 根据返回张量类型的不同，调用不同的处理函数
+        # 如果返回类型为"tf"，调用tf_call方法处理features
         if return_tensors == "tf":
-            return self.tf_call(features)  # 调用 TensorFlow 处理函数
+            return self.tf_call(features)
+        # 如果返回类型为"pt"，调用torch_call方法处理features
         elif return_tensors == "pt":
-            return self.torch_call(features)  # 调用 PyTorch 处理函数
+            return self.torch_call(features)
+        # 如果返回类型为"np"，调用numpy_call方法处理features
         elif return_tensors == "np":
-            return self.numpy_call(features)  # 调用 NumPy 处理函数
+            return self.numpy_call(features)
         else:
-            raise ValueError(f"Framework '{return_tensors}' not recognized!")  # 抛出错误，指示不支持的返回张量类型
+            # 如果返回类型不是预期的类型，抛出值错误异常
+            raise ValueError(f"Framework '{return_tensors}' not recognized!")
 
 
 def pad_without_fast_tokenizer_warning(tokenizer, *pad_args, **pad_kwargs):
     """
     Pads without triggering the warning about how using the pad function is sub-optimal when using a fast tokenizer.
     """
-    # 避免使用快速分词器时触发关于 pad 函数子优化的警告
-    # 针对特征提取器的错误处理
+    
+    # 避免使用快速分词器时触发的填充警告
+    # 如果tokenizer没有deprecation_warnings属性，直接调用pad方法进行填充
     if not hasattr(tokenizer, "deprecation_warnings"):
         return tokenizer.pad(*pad_args, **pad_kwargs)
 
-    # 保存警告状态，然后禁用警告
+    # 保存警告状态，并且禁用相关警告
     warning_state = tokenizer.deprecation_warnings.get("Asking-to-pad-a-fast-tokenizer", False)
     tokenizer.deprecation_warnings["Asking-to-pad-a-fast-tokenizer"] = True
 
     try:
-        padded = tokenizer.pad(*pad_args, **pad_kwargs)  # 执行填充操作
+        # 调用tokenizer的pad方法进行填充
+        padded = tokenizer.pad(*pad_args, **pad_kwargs)
     finally:
         # 恢复警告状态
         tokenizer.deprecation_warnings["Asking-to-pad-a-fast-tokenizer"] = warning_state
 
-    return padded  # 返回填充后的结果
+    return padded
 
 
 def default_data_collator(features: List[InputDataClass], return_tensors="pt") -> Dict[str, Any]:
     """
     Very simple data collator that simply collates batches of dict-like objects and performs special handling for
+    """
     """
     potential keys named:
 
@@ -74,29 +80,23 @@ def default_data_collator(features: List[InputDataClass], return_tensors="pt") -
     Does not do any additional preprocessing: property names of the input object will be used as corresponding inputs
     to the model. See glue and ner for example of how it's useful.
     """
-    # 定义了一组可能的键名，用于处理对象的属性
-    # - `label`: 处理每个对象的单个值（int 或 float）
-    # - `label_ids`: 处理每个对象的值列表
-    # 不执行任何额外的预处理：输入对象的属性名称将用作模型的对应输入。查看 glue 和 ner 的示例以了解其有用性。
+    
+    # In this function we'll make the assumption that all `features` in the batch
+    # have the same attributes.
+    # So we will look at the first element as a proxy for what attributes exist
+    # on the whole batch.
+    
+    # 根据 `return_tensors` 参数的值选择合适的数据收集器函数并返回结果
 
-    # 在这个函数中，我们假设批处理中的所有 `features` 都具有相同的属性。
-    # 因此，我们将查看第一个元素作为整个批次存在的属性的代理。
-
-    # 如果 return_tensors 参数为 "pt"，则返回 PyTorch 默认的数据收集器处理结果
     if return_tensors == "pt":
+        # 如果 `return_tensors` 是 "pt"，则使用 PyTorch 默认的数据收集器
         return torch_default_data_collator(features)
-    # 如果 return_tensors 参数为 "tf"，则返回 TensorFlow 默认的数据收集器处理结果
     elif return_tensors == "tf":
+        # 如果 `return_tensors` 是 "tf"，则使用 TensorFlow 默认的数据收集器
         return tf_default_data_collator(features)
-    # 如果 return_tensors 参数为 "np"，则返回 NumPy 默认的数据收集器处理结果
     elif return_tensors == "np":
+        # 如果 `return_tensors` 是 "np"，则使用 NumPy 默认的数据收集器
         return numpy_default_data_collator(features)
-from dataclasses import dataclass
-from typing import List, Dict, Any, Mapping, Tuple
-import torch
-import numpy as np
-
-# 使用dataclass装饰器定义DefaultDataCollator类，实现了DataCollatorMixin接口
 @dataclass
 class DefaultDataCollator(DataCollatorMixin):
     """
@@ -117,60 +117,54 @@ class DefaultDataCollator(DataCollatorMixin):
             The type of Tensor to return. Allowable values are "np", "pt" and "tf".
     """
 
-    # 定义默认的返回张量类型为pytorch张量
     return_tensors: str = "pt"
 
-    # 实现类的可调用方法
     def __call__(self, features: List[Dict[str, Any]], return_tensors=None) -> Dict[str, Any]:
-        # 如果未指定返回张量类型，则使用默认的类型
+        # If return_tensors is not provided, default to the value set during initialization
         if return_tensors is None:
             return_tensors = self.return_tensors
-        # 调用default_data_collator函数进行数据拼接和处理
+        # Call the default_data_collator function with the specified return_tensors value
         return default_data_collator(features, return_tensors)
 
 
-# 定义针对torch张量的默认数据拼接函数
 def torch_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any]:
     import torch
 
-    # 若输入的特征列表中的第一个元素不是映射类型，则将其转换为字典
+    # If features list contains objects that are not mappings, convert them to dictionaries
     if not isinstance(features[0], Mapping):
         features = [vars(f) for f in features]
-    # 取出特征列表中的第一个元素
+    # Retrieve the first feature dictionary
     first = features[0]
-    # 创建一个空字典用于存储批次数据
+    # Initialize an empty batch dictionary
     batch = {}
 
-    # 特殊处理标签
+    # Special handling for labels.
+    # Ensure that tensor is created with the correct type
+    # (it should be automatically the case, but let's make sure of it.)
     if "label" in first and first["label"] is not None:
-        # 如果标签是torch张量，则提取其值
+        # Extract the label value and determine its dtype (long or float)
         label = first["label"].item() if isinstance(first["label"], torch.Tensor) else first["label"]
-        # 根据标签的类型设置数据类型
         dtype = torch.long if isinstance(label, int) else torch.float
-        # 将所有特征中的标签拼接成张量并存储到批次字典中
+        # Create a tensor batch["labels"] containing labels from all features
         batch["labels"] = torch.tensor([f["label"] for f in features], dtype=dtype)
     elif "label_ids" in first and first["label_ids"] is not None:
-        # 如果标签IDs是torch张量，则将其拼接成张量
+        # Handle case where label_ids are present
         if isinstance(first["label_ids"], torch.Tensor):
             batch["labels"] = torch.stack([f["label_ids"] for f in features])
         else:
-            # 根据标签IDs的类型设置数据类型
             dtype = torch.long if isinstance(first["label_ids"][0], int) else torch.float
-            # 将所有特征中的标签IDs拼接成张量并存储到批次字典中
             batch["labels"] = torch.tensor([f["label_ids"] for f in features], dtype=dtype)
 
-    # 处理其他可能的键
+    # Handling of all other possible keys.
+    # Again, we will use the first element to figure out which key/values are not None for this model.
     for k, v in first.items():
-        # 排除特殊处理的键和字符串类型的键，并且值不为空
+        # Process each key-value pair in the first feature dictionary
         if k not in ("label", "label_ids") and v is not None and not isinstance(v, str):
             if isinstance(v, torch.Tensor):
-                # 如果值是torch张量，则拼接成张量并存储到批次字典中
                 batch[k] = torch.stack([f[k] for f in features])
             elif isinstance(v, np.ndarray):
-                # 如果值是numpy数组，则转换为torch张量并存储到批次字典中
                 batch[k] = torch.tensor(np.stack([f[k] for f in features]))
             else:
-                # 将其他类型的值转换为torch张量并存储到批次字典中
                 batch[k] = torch.tensor([f[k] for f in features])
 
     return batch
@@ -178,16 +172,24 @@ def torch_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any
 
 def tf_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any]:
     import tensorflow as tf
-    # 检查第一个特征是否为映射类型，如果不是，则将特征列表中的每个元素转换为字典
+
+    # This function is intended to collate data for TensorFlow, but its implementation is incomplete.
+    # Further code would handle collation similar to the torch_default_data_collator.
+    pass
+    # 检查 features 列表中第一个元素是否是 Mapping 类型（字典类型）
     if not isinstance(features[0], Mapping):
+        # 如果不是 Mapping 类型，则将 features 中的每个元素转换为字典类型
         features = [vars(f) for f in features]
-    # 获取第一个特征
+    
+    # 获取 features 中的第一个元素
     first = features[0]
-    # 初始化批处理字典
+    
+    # 初始化空字典 batch
     batch = {}
 
-    # 处理标签的特殊情况
-    # 确保使用正确的类型创建张量
+    # 处理标签数据的特殊情况。
+    # 确保使用正确的数据类型创建张量
+    # （通常应该自动处理，但我们需要确保这一点。）
     if "label" in first and first["label"] is not None:
         label_col_name = "label"
     elif "label_ids" in first and first["label_ids"] is not None:
@@ -196,8 +198,10 @@ def tf_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any]:
         label_col_name = "labels"
     else:
         label_col_name = None
+    
+    # 如果存在标签列名
     if label_col_name is not None:
-        # 根据标签数据类型确定张量的数据类型
+        # 根据第一个元素的标签数据类型，确定 dtype
         if isinstance(first[label_col_name], tf.Tensor):
             dtype = tf.int64 if first[label_col_name].dtype.is_integer else tf.float32
         elif isinstance(first[label_col_name], np.ndarray) or isinstance(first[label_col_name], np.generic):
@@ -206,89 +210,81 @@ def tf_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any]:
             dtype = tf.int64 if isinstance(first[label_col_name][0], int) else tf.float32
         else:
             dtype = tf.int64 if isinstance(first[label_col_name], int) else tf.float32
-        # 将标签数据转换为张量并存储在批处理字典中
+        
+        # 将 features 中的标签数据转换为张量，存储在 batch 中的 "labels" 键下
         batch["labels"] = tf.convert_to_tensor([f[label_col_name] for f in features], dtype=dtype)
     
-    # 处理所有其他可能的键
-    # 再次使用第一个元素来确定哪些键/值对对于此模型不为 None
+    # 处理除标签以外的所有可能键。
+    # 再次使用第一个元素来确定哪些键/值对在此模型中不为 None。
     for k, v in first.items():
         if k not in ("label", "label_ids", "labels") and v is not None and not isinstance(v, str):
+            # 如果值是张量或者 numpy 数组，则将 features 中的相应值堆叠为张量
             if isinstance(v, (tf.Tensor, np.ndarray)):
-                # 如果值是张量或数组，则将其堆叠为张量并存储在批处理字典中
                 batch[k] = tf.stack([f[k] for f in features])
             else:
-                # 否则将值转换为张量并存储在批处理字典中
+                # 否则，将 features 中的相应值转换为张量
                 batch[k] = tf.convert_to_tensor([f[k] for f in features])
 
-    # 返回批处理字典
+    # 返回构建好的 batch 字典
     return batch
-# 定义一个函数，用于将输入的特征列表转换为批量数据字典
+# 根据输入特征列表创建批处理数据字典，适用于 NumPy 默认数据格式
 def numpy_default_data_collator(features: List[InputDataClass]) -> Dict[str, Any]:
-    # 如果特征列表中的第一个元素不是映射类型，则将特征列表中的每个元素转换为字典
+    # 如果第一个特征不是映射类型，则将每个特征对象转换为其变量字典表示
     if not isinstance(features[0], Mapping):
         features = [vars(f) for f in features]
-    # 取第一个特征作为参考
+    # 获取第一个特征对象
     first = features[0]
-    # 创建一个空的批量数据字典
+    # 初始化批处理字典
     batch = {}
 
     # 处理标签的特殊情况
-    # 确保正确创建张量
+    # 确保使用正确类型创建张量
+    # （虽然通常应该自动转换，但我们还是确保类型正确）
     if "label" in first and first["label"] is not None:
-        # 如果标签是 ndarray 类型，则转换为 Python 中的标量
+        # 如果标签是 NumPy 数组，则将其转换为标量
         label = first["label"].item() if isinstance(first["label"], np.ndarray) else first["label"]
-        # 确定数据类型
+        # 确定标签数据类型
         dtype = np.int64 if isinstance(label, int) else np.float32
-        # 将标签转换为数组，指定数据类型
         batch["labels"] = np.array([f["label"] for f in features], dtype=dtype)
     elif "label_ids" in first and first["label_ids"] is not None:
-        # 如果标签 ID 是 ndarray 类型，则堆叠成二维数组
+        # 如果标签 IDs 是 NumPy 数组，则堆叠它们
         if isinstance(first["label_ids"], np.ndarray):
             batch["labels"] = np.stack([f["label_ids"] for f in features])
         else:
-            # 否则，根据第一个标签 ID 元素的类型确定数据类型
+            # 否则，确定标签 IDs 的数据类型
             dtype = np.int64 if isinstance(first["label_ids"][0], int) else np.float32
-            # 将标签 ID 转换为数组，指定数据类型
             batch["labels"] = np.array([f["label_ids"] for f in features], dtype=dtype)
 
     # 处理所有其他可能的键
+    # 再次使用第一个元素确定该模型中哪些键/值不为 None
     for k, v in first.items():
-        # 如果键不是 "label" 或 "label_ids"，且值不为 None 且不是字符串类型
         if k not in ("label", "label_ids") and v is not None and not isinstance(v, str):
-            # 如果值是 ndarray 类型，则堆叠成二维数组
             if isinstance(v, np.ndarray):
+                # 如果值是 NumPy 数组，则堆叠它们
                 batch[k] = np.stack([f[k] for f in features])
             else:
                 # 否则，将值转换为数组
                 batch[k] = np.array([f[k] for f in features])
 
-    # 返回批量数据字典
+    # 返回批处理数据字典
     return batch
-
-
-# 定义一个数据收集器类，用于动态填充接收到的输入
-@dataclass
-class DataCollatorWithPadding:
-    """
-    Data collator that will dynamically pad the inputs received.
-    """
     Args:
         tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
-            用于对数据进行编码的分词器。
+            用于编码数据的分词器。
         padding (`bool`, `str` or [`~utils.PaddingStrategy`], *optional*, defaults to `True`):
-            选择一种策略来填充返回的序列（根据模型的填充位置和填充索引），其中：
-
-            - `True` 或 `'longest'`（默认）：填充到批次中最长的序列（或者如果仅提供单个序列则不填充）。
-            - `'max_length'`：填充到使用参数 `max_length` 指定的最大长度，或者如果未提供该参数，则填充到模型的最大可接受输入长度。
-            - `False` 或 `'do_not_pad'`：不填充（即，可以输出长度不同的序列批次）。
+            选择一种策略来对返回的序列进行填充（根据模型的填充位置和填充索引），可选值包括：
+            
+            - `True` 或 `'longest'`（默认）：对批次中最长的序列进行填充（如果只提供一个序列，则不进行填充）。
+            - `'max_length'`：按照参数 `max_length` 指定的最大长度进行填充，或者如果未提供该参数，则按照模型可接受的最大输入长度进行填充。
+            - `False` 或 `'do_not_pad'`：不进行填充（即可以输出长度不同的序列批次）。
         max_length (`int`, *optional*):
-            返回列表的最大长度，以及可选的填充长度（见上文）。
+            返回列表的最大长度，也可选用于填充长度（见上文）。
         pad_to_multiple_of (`int`, *optional*):
             如果设置，将序列填充到提供的值的倍数。
-
-            这对于在具有计算能力 >= 7.5（Volta）的 NVIDIA 硬件上启用张量核心尤其有用。
+            
+            这对于在具有计算能力 >= 7.5（Volta）的 NVIDIA 硬件上启用 Tensor Core 特别有用。
         return_tensors (`str`, *optional*, defaults to `"pt"`):
-            要返回的张量类型。可接受的值为 "np"、"pt" 和 "tf"。
+            要返回的张量类型。允许的值有 "np"、"pt" 和 "tf"。
     """
 
     tokenizer: PreTrainedTokenizerBase
@@ -298,7 +294,7 @@ class DataCollatorWithPadding:
     return_tensors: str = "pt"
 
     def __call__(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
-        # 使用自定义的 pad_without_fast_tokenizer_warning 函数填充序列
+        # 调用 pad_without_fast_tokenizer_warning 函数进行批量填充
         batch = pad_without_fast_tokenizer_warning(
             self.tokenizer,
             features,
@@ -307,17 +303,16 @@ class DataCollatorWithPadding:
             pad_to_multiple_of=self.pad_to_multiple_of,
             return_tensors=self.return_tensors,
         )
-        # 如果批次中有 "label" 键，则将其改为 "labels"
+        # 如果 batch 中有 "label" 键，将其重命名为 "labels"，并删除 "label"
         if "label" in batch:
             batch["labels"] = batch["label"]
             del batch["label"]
-        # 如果批次中有 "label_ids" 键，则将其改为 "labels"
+        # 如果 batch 中有 "label_ids" 键，将其重命名为 "labels"，并删除 "label_ids"
         if "label_ids" in batch:
             batch["labels"] = batch["label_ids"]
             del batch["label_ids"]
-        # 返回填充后的批次
+        # 返回处理后的 batch 字典
         return batch
-# 定义一个数据收集器类，用于在接收到数据时动态填充输入和标签
 @dataclass
 class DataCollatorForTokenClassification(DataCollatorMixin):
     """
@@ -348,143 +343,95 @@ class DataCollatorForTokenClassification(DataCollatorMixin):
             The type of Tensor to return. Allowable values are "np", "pt" and "tf".
     """
 
-    # 用于编码数据的分词器
-    tokenizer: PreTrainedTokenizerBase
-    # 填充策略，可以是布尔值、字符串或填充策略对象，默认为True
-    padding: Union[bool, str, PaddingStrategy] = True
-    # 返回列表的最大长度和可选的填充长度，默认为None
-    max_length: Optional[int] = None
-    # 将序列填充到提供的值的倍数，特别适用于启用 NVIDIA 硬件上的 Tensor Cores
-    pad_to_multiple_of: Optional[int] = None
-    # 填充标签时使用的 ID，默认为-100，PyTorch 损失函数会自动忽略-100
-    label_pad_token_id: int = -100
-    # 返回的张量类型，默认为"pt"，可选值为"np"、"pt"和"tf"
-    return_tensors: str = "pt"
-    # 定义一个函数用于处理 PyTorch 引擎的数据
+    tokenizer: PreTrainedTokenizerBase  # Tokenizer对象，用于数据编码
+    padding: Union[bool, str, PaddingStrategy] = True  # 序列填充策略：可以是布尔值、字符串或填充策略对象，默认为True
+    max_length: Optional[int] = None  # 返回列表的最大长度及填充长度（可选）
+    pad_to_multiple_of: Optional[int] = None  # 如果设置，将序列填充到提供的值的倍数（可选）
+    label_pad_token_id: int = -100  # 标签填充时使用的ID，默认为-100，PyTorch损失函数会自动忽略这些ID
+    return_tensors: str = "pt"  # 返回的Tensor类型，默认为"pt"，可选值有"np"、"pt"和"tf"
+    # 定义一个使用 Torch 处理特征的方法
     def torch_call(self, features):
         # 导入 PyTorch 库
         import torch
 
-        # 如果 features 中包含 'label' 键，则将 label_name 设置为 'label'，否则设置为 'labels'
+        # 确定标签名称是 "label" 还是 "labels"
         label_name = "label" if "label" in features[0].keys() else "labels"
-        # 如果 features 中的第一个元素包含 label_name，则提取所有 features 中的 labels，否则将 labels 设置为 None
+        # 如果特征中包含标签，提取所有标签值到列表；否则设置标签为 None
         labels = [feature[label_name] for feature in features] if label_name in features[0].keys() else None
 
-        # 从 features 中移除 label_name 键的所有内容，得到没有 labels 的 features
+        # 剔除特征中的标签，生成没有标签的特征字典列表
         no_labels_features = [{k: v for k, v in feature.items() if k != label_name} for feature in features]
 
-        # 使用填充函数对特征进行填充，返回 PyTorch 张量
+        # 使用自定义函数进行填充（此处函数的具体实现未显示），生成批处理数据
         batch = pad_without_fast_tokenizer_warning(
             self.tokenizer,
             no_labels_features,
             padding=self.padding,
             max_length=self.max_length,
             pad_to_multiple_of=self.pad_to_multiple_of,
-            return_tensors="pt",
+            return_tensors="pt",  # 返回 PyTorch 张量
         )
 
-        # 如果 labels 为 None，则返回批处理张量
+        # 如果没有标签，直接返回批处理数据
         if labels is None:
             return batch
 
-        # 获取序列长度
+        # 获取输入序列的长度
         sequence_length = batch["input_ids"].shape[1]
-        # 获取填充方向
+        # 获取填充的位置（左或右）
         padding_side = self.tokenizer.padding_side
 
-        # 将 PyTorch 张量或可迭代对象转换为列表
+        # 定义一个函数，将张量或可迭代对象转换为列表
         def to_list(tensor_or_iterable):
             if isinstance(tensor_or_iterable, torch.Tensor):
                 return tensor_or_iterable.tolist()
             return list(tensor_or_iterable)
 
-        # 如果填充方向为右侧
+        # 根据填充的位置对标签进行填充
         if padding_side == "right":
-            # 对 labels 进行填充，使其与序列长度相同
             batch[label_name] = [
                 to_list(label) + [self.label_pad_token_id] * (sequence_length - len(label)) for label in labels
             ]
         else:
-            # 对 labels 进行填充，使其与序列长度相同
             batch[label_name] = [
                 [self.label_pad_token_id] * (sequence_length - len(label)) + to_list(label) for label in labels
             ]
 
-        # 将 labels 转换为 PyTorch 张量
+        # 将填充后的标签转换为 PyTorch 的 int64 类型张量
         batch[label_name] = torch.tensor(batch[label_name], dtype=torch.int64)
-        # 返回填充后的批处理张量
         return batch
 
-    # 定义一个函数用于处理 TensorFlow 引擎的数据
+    # 定义一个使用 TensorFlow 处理特征的方法
     def tf_call(self, features):
         # 导入 TensorFlow 库
         import tensorflow as tf
 
-        # 如果 features 中包含 'label' 键，则将 label_name 设置为 'label'，否则设置为 'labels'
+        # 确定标签名称是 "label" 还是 "labels"
         label_name = "label" if "label" in features[0].keys() else "labels"
-        # 如果 features 中的第一个元素包含 label_name，则提取所有 features 中的 labels，否则将 labels 设置为 None
+        # 如果特征中包含标签，提取所有标签值到列表；否则设置标签为 None
         labels = [feature[label_name] for feature in features] if label_name in features[0].keys() else None
-        # 使用填充函数对特征进行填充，返回 TensorFlow 张量
+
+        # 使用自定义函数进行填充（此处函数的具体实现未显示），生成批处理数据
         batch = pad_without_fast_tokenizer_warning(
             self.tokenizer,
             features,
             padding=self.padding,
             max_length=self.max_length,
             pad_to_multiple_of=self.pad_to_multiple_of,
-            # 如果 labels 为 None，则直接返回 TensorFlow 张量，否则不转换为张量
+            # 如果标签为 None，则返回 TensorFlow 张量；否则不进行转换
             return_tensors="tf" if labels is None else None,
         )
 
-        # 如果 labels 为 None，则返回批处理张量
-        if labels is None:
-            return batch
-
-        # 获取序列长度
-        sequence_length = tf.convert_to_tensor(batch["input_ids"]).shape[1]
-        # 获取填充方向
-        padding_side = self.tokenizer.padding_side
-        # 如果填充方向为右侧
-        if padding_side == "right":
-            # 对 labels 进行填充，使其与序列长度相同
-            batch["labels"] = [
-                list(label) + [self.label_pad_token_id] * (sequence_length - len(label)) for label in labels
-            ]
-        else:
-            # 对 labels 进行填充，使其与序列长度相同
-            batch["labels"] = [
-                [self.label_pad_token_id] * (sequence_length - len(label)) + list(label) for label in labels
-            ]
-
-        # 将 batch 中的所有值转换为 TensorFlow 张量
-        batch = {k: tf.convert_to_tensor(v, dtype=tf.int64) for k, v in batch.items()}
-        # 返回填充后的批处理张量
-        return batch
-    # 定义一个方法，用于处理输入特征并返回处理后的批数据
-    def numpy_call(self, features):
-        # 确定标签名称是"label"还是"labels"
-        label_name = "label" if "label" in features[0].keys() else "labels"
-        # 如果特征中包含标签，则将所有标签提取出来
-        labels = [feature[label_name] for feature in features] if label_name in features[0].keys() else None
-        # 对特征进行填充处理，根据参数设置进行填充
-        batch = pad_without_fast_tokenizer_warning(
-            self.tokenizer,
-            features,
-            padding=self.padding,
-            max_length=self.max_length,
-            pad_to_multiple_of=self.pad_to_multiple_of,
-            # 如果没有标签，则返回numpy数组
-            return_tensors="np" if labels is None else None,
-        )
-
-        # 如果没有标签，则直接返回处理后的批数据
+        # 如果没有标签，直接返回批处理数据
         if labels is None:
             return batch
 
         # 获取输入序列的长度
-        sequence_length = np.array(batch["input_ids"]).shape[1]
-        # 获取填充的位置（左边或右边）
+        sequence_length = tf.convert_to_tensor(batch["input_ids"]).shape[1]
+        # 获取填充的位置（左或右）
         padding_side = self.tokenizer.padding_side
-        # 根据填充位置对标签进行填充处理
+
+        # 根据填充的位置对标签进行填充
         if padding_side == "right":
             batch["labels"] = [
                 list(label) + [self.label_pad_token_id] * (sequence_length - len(label)) for label in labels
@@ -494,38 +441,71 @@ class DataCollatorForTokenClassification(DataCollatorMixin):
                 [self.label_pad_token_id] * (sequence_length - len(label)) + list(label) for label in labels
             ]
 
-        # 将所有数据转换为numpy数组，并指定数据类型为int64
-        batch = {k: np.array(v, dtype=np.int64) for k, v in batch.items()}
-        # 返回处理后的批数据
+        # 将填充后的标签转换为 TensorFlow 的 int64 类型张量，并将批处理字典中的所有值转换为 TensorFlow 张量
+        batch = {k: tf.convert_to_tensor(v, dtype=tf.int64) for k, v in batch.items()}
         return batch
-# 将示例数据集合成一个批次，根据需要使用 tokenizer 进行填充
+    # 定义一个方法，用于处理特征数据并返回一个批次的 numpy 数组
+    def numpy_call(self, features):
+        # 确定标签名称是 "label" 还是 "labels"
+        label_name = "label" if "label" in features[0].keys() else "labels"
+        # 如果特征中包含标签信息，则从每个特征中提取标签，否则设为 None
+        labels = [feature[label_name] for feature in features] if label_name in features[0].keys() else None
+        # 使用自定义的 pad_without_fast_tokenizer_warning 函数对特征进行填充，转换成批次
+        batch = pad_without_fast_tokenizer_warning(
+            self.tokenizer,
+            features,
+            padding=self.padding,
+            max_length=self.max_length,
+            pad_to_multiple_of=self.pad_to_multiple_of,
+            # 如果没有标签信息，则返回的批次为 numpy 数组
+            return_tensors="np" if labels is None else None,
+        )
+
+        # 如果特征中没有标签信息，则直接返回批次
+        if labels is None:
+            return batch
+
+        # 计算输入序列长度
+        sequence_length = np.array(batch["input_ids"]).shape[1]
+        # 获取填充位置（左侧或右侧）
+        padding_side = self.tokenizer.padding_side
+        # 根据填充位置，为每个标签添加填充标记，使它们长度相同
+        if padding_side == "right":
+            batch["labels"] = [
+                list(label) + [self.label_pad_token_id] * (sequence_length - len(label)) for label in labels
+            ]
+        else:
+            batch["labels"] = [
+                [self.label_pad_token_id] * (sequence_length - len(label)) + list(label) for label in labels
+            ]
+
+        # 将批次中的每个键值对的值转换为 numpy 数组，类型为 int64
+        batch = {k: np.array(v, dtype=np.int64) for k, v in batch.items()}
+        # 返回处理后的批次
+        return batch
 def _torch_collate_batch(examples, tokenizer, pad_to_multiple_of: Optional[int] = None):
     """Collate `examples` into a batch, using the information in `tokenizer` for padding if necessary."""
     import torch
 
-    # 如果示例是列表、元组或者 numpy 数组，则转换为 torch 张量
+    # Tensorize if necessary.
     if isinstance(examples[0], (list, tuple, np.ndarray)):
         examples = [torch.tensor(e, dtype=torch.long) for e in examples]
 
-    # 获取第一个示例的长度
     length_of_first = examples[0].size(0)
 
-    # 检查是否需要填充
-
-    # 检查所有张量是否具有相同的长度
+    # Check if padding is necessary.
     are_tensors_same_length = all(x.size(0) == length_of_first for x in examples)
-    # 如果所有张量长度相同且不需要填充，则直接堆叠张量
     if are_tensors_same_length and (pad_to_multiple_of is None or length_of_first % pad_to_multiple_of == 0):
         return torch.stack(examples, dim=0)
 
-    # 如果需要填充，检查是否有填充标记
+    # If yes, check if we have a `pad_token`.
     if tokenizer._pad_token is None:
         raise ValueError(
             "You are attempting to pad samples but the tokenizer you are using"
             f" ({tokenizer.__class__.__name__}) does not have a pad token."
         )
 
-    # 创建完整的张量并用数据填充
+    # Creating the full tensor and filling it with our data.
     max_length = max(x.size(0) for x in examples)
     if pad_to_multiple_of is not None and (max_length % pad_to_multiple_of != 0):
         max_length = ((max_length // pad_to_multiple_of) + 1) * pad_to_multiple_of
@@ -542,159 +522,113 @@ def _tf_collate_batch(examples, tokenizer, pad_to_multiple_of: Optional[int] = N
     import tensorflow as tf
 
     """Collate `examples` into a batch, using the information in `tokenizer` for padding if necessary."""
-    # 如果示例是列表或元组，则转换为 TensorFlow 张量
+    # Tensorize if necessary.
     if isinstance(examples[0], (list, tuple)):
         examples = [tf.convert_to_tensor(e, dtype=tf.int64) for e in examples]
 
-    # 检查是否需要填充
+    # Check if padding is necessary.
     length_of_first = len(examples[0])
     are_tensors_same_length = all(len(x) == length_of_first for x in examples)
     if are_tensors_same_length and (pad_to_multiple_of is None or length_of_first % pad_to_multiple_of == 0):
         return tf.stack(examples, axis=0)
 
-    # 如果需要填充，检查���否有填充标记
+    # If yes, check if we have a `pad_token`.
     if tokenizer._pad_token is None:
         raise ValueError(
             "You are attempting to pad samples but the tokenizer you are using"
             f" ({tokenizer.__class__.__name__}) does not have a pad token."
         )
 
-    # 创建完整的张量并用数据填充
+    # Creating the full tensor and filling it with our data.
     max_length = max(len(x) for x in examples)
     if pad_to_multiple_of is not None and (max_length % pad_to_multiple_of != 0):
         max_length = ((max_length // pad_to_multiple_of) + 1) * pad_to_multiple_of
-    # result = examples[0].new_full([len(examples), max_length], tokenizer.pad_token_id)
+    
+    # Prepare paddings based on tensor rank.
     result = []
     rank = tf.rank(examples[0])
     paddings = np.zeros((rank, 2), dtype=np.int32)
     # 遍历给定的示例列表
     for example in examples:
-        # 如果分词器的填充位置在右侧
+        # 检查分词器的填充位置是否在右侧
         if tokenizer.padding_side == "right":
-            # 计算右侧填充的数量
+            # 如果填充在右侧，计算需要填充的长度并更新填充数组的第一行第二列
             paddings[0, 1] = max_length - len(example)
         else:
-            # 计算左侧填充的数量
+            # 如果填充在左侧，计算需要填充的长度并更新填充数组的第一行第一列
             paddings[0, 0] = max_length - len(example)
-        # 对示例进行填充，并将结果添加到结果列表中
+        # 使用 TensorFlow 的填充函数对示例进行填充，使用填充数组和分词器的填充标记值
         result.append(tf.pad(example, paddings, constant_values=tokenizer.pad_token_id))
-    # 使用 TensorFlow 在新维度上叠加填充后的示例，沿着轴0叠加
+    # 将填充后的示例堆叠成一个张量，沿着第一个维度（批次维度）
     return tf.stack(result, axis=0)
-# 将示例列表`examples`整理成一个批次，如果需要，使用`tokenizer`中的信息进行填充
-def _numpy_collate_batch(examples, tokenizer, pad_to_multiple_of: Optional[int] = None):
-    # 如果示例是列表或元组，则将其转换为NumPy数组
-    if isinstance(examples[0], (list, tuple)):
-        examples = [np.array(e, dtype=np.int64) for e in examples]
-
-    # 检查是否需要填充
-    length_of_first = len(examples[0])
-    are_tensors_same_length = all(len(x) == length_of_first for x in examples)
-    if are_tensors_same_length and (pad_to_multiple_of is None or length_of_first % pad_to_multiple_of == 0):
-        return np.stack(examples, axis=0)
-
-    # 如果需要填充，检查是否有`pad_token`
-    if tokenizer._pad_token is None:
-        raise ValueError(
-            "You are attempting to pad samples but the tokenizer you are using"
-            f" ({tokenizer.__class__.__name__}) does not have a pad token."
-        )
-
-    # 创建完整的张量并填充数据
-    max_length = max(len(x) for x in examples)
-    if pad_to_multiple_of is not None and (max_length % pad_to_multiple_of != 0):
-        max_length = ((max_length // pad_to_multiple_of) + 1) * pad_to_multiple_of
-    result = np.full(shape=(len(examples), max_length), fill_value=tokenizer.pad_token_id, dtype=examples[0].dtype)
-    for i, example in enumerate(examples):
-        if tokenizer.padding_side == "right":
-            result[i, : example.shape[0]] = example
-        else:
-            result[i, -example.shape[0] :] = example
-    return result
-
-
-# 将输入`x`转换为列表
-def tolist(x):
-    if isinstance(x, list):
-        return x
-    elif hasattr(x, "numpy"):  # 检查是否为TF张量，无需导入TF库
-        x = x.numpy()
-    return x.tolist()
-
-
-# 用于序列到序列模型的数据整理器
+# 定义一个数据收集器，用于序列到序列模型的数据处理
 @dataclass
 class DataCollatorForSeq2Seq:
     """
     Data collator that will dynamically pad the inputs received, as well as the labels.
+    """
+    # 定义函数参数和类型注解，说明函数的输入参数和可选参数
     Args:
         tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
             用于对数据进行编码的分词器。
         model ([`PreTrainedModel`], *optional*):
-            正在训练的模型。如果设置并且具有 *prepare_decoder_input_ids_from_labels*，则使用它来准备 *decoder_input_ids*。
-
-            在使用 *label_smoothing* 时很有用，可以避免两次计算损失。
+            正在训练的模型。如果设置并且具有 *prepare_decoder_input_ids_from_labels* 方法，
+            则使用它来准备 *decoder_input_ids*。
+            
+            当使用 *label_smoothing* 时，这很有用，可以避免重复计算损失。
         padding (`bool`, `str` or [`~utils.PaddingStrategy`], *optional*, defaults to `True`):
-            选择一种策略来对返回的序列进行填充（根据模型的填充方向和填充索引），可选值包括：
-
-            - `True` 或 `'longest'`（默认）：填充为批次中最长的序列（如果仅提供单个序列，则不进行填充）。
-            - `'max_length'`：填充到指定的最大长度（通过参数 `max_length` 提供）或者填充到模型的最大可接受输入长度（如果未提供该参数）。
-            - `False` 或 `'do_not_pad'`：不进行填充（即可以输出具有不同长度序列的批次）。
+            选择一种策略来填充返回的序列（根据模型的填充方向和填充索引），可选值包括：
+    
+            - `True` 或 `'longest'`（默认）：填充到批次中最长的序列（如果只提供单个序列，则不填充）。
+            - `'max_length'`：填充到指定的最大长度（通过参数 `max_length` 提供），或者如果未提供该参数，则填充到模型的最大可接受输入长度。
+            - `False` 或 `'do_not_pad'`：不填充（即可以输出具有不同长度的序列批次）。
         max_length (`int`, *optional*):
-            返回列表的最大长度，可选地作为填充长度（见上文）。
+            返回列表的最大长度，也可以作为填充长度（参见上文）。
         pad_to_multiple_of (`int`, *optional*):
             如果设置，将序列填充到提供的值的倍数。
-
-            这对于启用具有计算能力 >= 7.5（Volta）的 NVIDIA 硬件上的 Tensor Cores 特别有用。
+    
+            这对于在具有计算能力 >= 7.5（Volta）的 NVIDIA 硬件上启用张量核心特别有用。
         label_pad_token_id (`int`, *optional*, defaults to -100):
-            用于填充标签时使用的标识符（-100 将被 PyTorch 损失函数自动忽略）。
+            用于填充标签时的标识符（-100 将被 PyTorch 损失函数自动忽略）。
         return_tensors (`str`, *optional*, defaults to `"pt"`):
-            要返回的张量类型。允许的值为 "np"、"pt" 和 "tf"。
-    """
-
-    tokenizer: PreTrainedTokenizerBase
-    model: Optional[Any] = None
-    padding: Union[bool, str, PaddingStrategy] = True
-    max_length: Optional[int] = None
-    pad_to_multiple_of: Optional[int] = None
-    label_pad_token_id: int = -100
-    return_tensors: str = "pt"
-    # 定义 __call__ 方法，用于对输入的 features 进行处理，并返回处理后的 features
+            要返回的张量类型。允许的值有 "np"、"pt" 和 "tf"。
     def __call__(self, features, return_tensors=None):
-        # 如果 return_tensors 为 None，则使用默认值 self.return_tensors
+        # 如果没有指定返回张量类型，则使用预设的 return_tensors
         if return_tensors is None:
             return_tensors = self.return_tensors
-        # 如果 features 中包含 "labels" 键，则提取出所有 labels，并存储在列表中；否则 labels 为 None
+        # 从 features 中提取标签列表，如果 features 的第一个元素包含 "labels" 键
         labels = [feature["labels"] for feature in features] if "labels" in features[0].keys() else None
-        # 在调用 `tokenizer.pad` 方法之前，需要对 labels 进行填充，因为该方法不会进行填充，而且需要输入相同长度的 labels 才能返回张量
+        # 在调用 `tokenizer.pad` 之前，需要对标签进行填充，因为该方法不会进行填充，并且需要所有标签长度相同以返回张量
         if labels is not None:
-            # 计算 labels 中最长的标签长度
+            # 计算最长的标签长度
             max_label_length = max(len(l) for l in labels)
-            # 如果指定了 pad_to_multiple_of，则将 max_label_length 向上取整至其倍数
+            # 如果指定了 pad_to_multiple_of，调整最大标签长度使其成为该值的倍数
             if self.pad_to_multiple_of is not None:
                 max_label_length = (
                     (max_label_length + self.pad_to_multiple_of - 1)
                     // self.pad_to_multiple_of
                     * self.pad_to_multiple_of
                 )
+
             # 获取填充的位置（左侧或右侧）
             padding_side = self.tokenizer.padding_side
-            # 遍历 features 中的每个 feature
+            # 对每个 feature 进行标签填充
             for feature in features:
-                # 计算需要填充的标签部分，使其与最长标签长度相等
+                # 计算需要填充的空位，用 label_pad_token_id 填充
                 remainder = [self.label_pad_token_id] * (max_label_length - len(feature["labels"]))
-                # 如果 feature["labels"] 是列表，则根据填充位置在左右两侧进行填充
+                # 如果标签是列表
                 if isinstance(feature["labels"], list):
                     feature["labels"] = (
                         feature["labels"] + remainder if padding_side == "right" else remainder + feature["labels"]
                     )
-                # 如果填充在右侧，则将填充的部分与原标签连接起来，并转换为 int64 类型
+                # 如果填充在右侧
                 elif padding_side == "right":
                     feature["labels"] = np.concatenate([feature["labels"], remainder]).astype(np.int64)
-                # 如果填充在左侧，则将填充的部分与原标签连接起来，并转换为 int64 类型
+                # 如果填充在左侧
                 else:
                     feature["labels"] = np.concatenate([remainder, feature["labels"]]).astype(np.int64)
 
-        # 使用 pad_without_fast_tokenizer_warning 函数对 features 进行填充处理
+        # 使用 pad_without_fast_tokenizer_warning 函数对 features 进行填充，避免使用快速分词器警告
         features = pad_without_fast_tokenizer_warning(
             self.tokenizer,
             features,
@@ -705,51 +639,38 @@ class DataCollatorForSeq2Seq:
         )
 
         # 准备 decoder_input_ids
-        # 如果 labels 不为空，且 model 存在，并且 model 具有 prepare_decoder_input_ids_from_labels 方法
         if (
             labels is not None
             and self.model is not None
             and hasattr(self.model, "prepare_decoder_input_ids_from_labels")
         ):
-            # 使用 model 的 prepare_decoder_input_ids_from_labels 方法根据 labels 准备 decoder_input_ids
+            # 根据标签准备 decoder_input_ids
             decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(labels=features["labels"])
-            # 将准备好的 decoder_input_ids 存储在 features 中
             features["decoder_input_ids"] = decoder_input_ids
 
         # 返回处理后的 features
         return features
-# 定义一个数据收集器，用于语言建模。如果输入数据的长度不相同，将动态地将其填充到批次的最大长度。
-
-# 引入必要的库
-@dataclass
-class DataCollatorForLanguageModeling(DataCollatorMixin):
     """
-    Data collator used for language modeling. Inputs are dynamically padded to the maximum length of a batch if they
-    are not all of the same length.
+    Language modeling数据收集器。如果输入的长度不同，输入会被动态填充到一个batch的最大长度。
 
     Args:
         tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
-            The tokenizer used for encoding the data.
+            用于编码数据的分词器。
         mlm (`bool`, *optional*, defaults to `True`):
-            Whether or not to use masked language modeling. If set to `False`, the labels are the same as the inputs
-            with the padding tokens ignored (by setting them to -100). Otherwise, the labels are -100 for non-masked
-            tokens and the value to predict for the masked token.
+            是否使用masked language modeling。如果设置为`False`，则标签与输入相同，忽略填充的标记（通过将它们设置为-100）。否则，非masked的标记为-100，要预测的masked标记为其他值。
         mlm_probability (`float`, *optional*, defaults to 0.15):
-            The probability with which to (randomly) mask tokens in the input, when `mlm` is set to `True`.
+            当`mlm`设置为`True`时，随机mask输入中的token的概率。
         pad_to_multiple_of (`int`, *optional*):
-            If set will pad the sequence to a multiple of the provided value.
+            如果设置，则将序列填充到提供的值的倍数。
         return_tensors (`str`):
-            The type of Tensor to return. Allowable values are "np", "pt" and "tf".
+            要返回的Tensor类型。允许的值为"np"、"pt"和"tf"。
 
     <Tip>
 
-    For best performance, this data collator should be used with a dataset having items that are dictionaries or
-    BatchEncoding, with the `"special_tokens_mask"` key, as returned by a [`PreTrainedTokenizer`] or a
-    [`PreTrainedTokenizerFast`] with the argument `return_special_tokens_mask=True`.
+    为了最佳性能，此数据收集器应与具有项为字典或BatchEncoding的数据集一起使用，这些数据集具有"special_tokens_mask"键，该键由[`PreTrainedTokenizer`]或[`PreTrainedTokenizerFast`]返回，参数`return_special_tokens_mask=True`。
 
     </Tip>"""
 
-    # 初始化函数，用于检查是否可以执行 MLM，并进行一些设置
     tokenizer: PreTrainedTokenizerBase
     mlm: bool = True
     mlm_probability: float = 0.15
@@ -758,93 +679,98 @@ class DataCollatorForLanguageModeling(DataCollatorMixin):
     return_tensors: str = "pt"
 
     def __post_init__(self):
-        # 如果启用 MLM 但 Tokenizer 没有掩码标记，则引发错误
         if self.mlm and self.tokenizer.mask_token is None:
             raise ValueError(
                 "This tokenizer does not have a mask token which is necessary for masked language modeling. "
                 "You should pass `mlm=False` to train on causal language modeling instead."
             )
-        # 如果启用 TensorFlow 实验性编译，则导入 TensorFlow 库并编译 tf_mask_tokens 方法
         if self.tf_experimental_compile:
             import tensorflow as tf
 
             self.tf_mask_tokens = tf.function(self.tf_mask_tokens, jit_compile=True)
 
     @staticmethod
-    # 生成一个服从伯努利分布的张量，用于随机掩码
     def tf_bernoulli(shape, probability):
         import tensorflow as tf
 
         prob_matrix = tf.fill(shape, probability)
         return tf.cast(prob_matrix - tf.random.uniform(shape, 0, 1) >= 0, tf.bool)
 
-    # TensorFlow 下的掩码处理函数，用于对输入进行掩码处理
     def tf_mask_tokens(
         self, inputs: Any, vocab_size, mask_token_id, special_tokens_mask: Optional[Any] = None
+    ):
+        """
+        用于在TensorFlow中执行token masking的函数。
+
+        Args:
+            inputs (Any): 输入的数据（例如token IDs）。
+            vocab_size (int): 词汇表的大小。
+            mask_token_id (int): 要用作masked token的token ID。
+            special_tokens_mask (Optional[Any]): 特殊token的mask，与词汇表外的token相关。
+
+        """
     ) -> Tuple[Any, Any]:
         """
         Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original.
         """
-        # 导入 TensorFlow 库
         import tensorflow as tf
 
         # 将 mask_token_id 转换为与 inputs 相同的数据类型
         mask_token_id = tf.cast(mask_token_id, inputs.dtype)
 
-        # 获取输入的形状
+        # 获取输入张量的形状
         input_shape = tf.shape(inputs)
-        # 1 表示特殊标记，0 表示普通标记在特殊标记掩码中
-        # 我们在每个序列中随机选择一些标记进行 MLM 训练（概率为 self.mlm_probability）
+
+        # 为了进行 MLM 训练，以概率 self.mlm_probability 对每个序列中的部分 token 进行掩码操作
         masked_indices = self.tf_bernoulli(input_shape, self.mlm_probability) & ~special_tokens_mask
-        # 将未掩码的索引替换为 -100，因为我们只在掩码标记上计算损失
+
+        # 用 -100 替换 labels 中未被掩码的位置，因为损失只计算掩码 token 的损失
         labels = tf.where(masked_indices, inputs, -100)
 
-        # 80% 的时间，我们将掩码的输入标记替换为 tokenizer.mask_token ([MASK])
+        # 80% 的概率用 mask_token_id 替换掩码的输入 token
         indices_replaced = self.tf_bernoulli(input_shape, 0.8) & masked_indices
-
         inputs = tf.where(indices_replaced, mask_token_id, inputs)
 
-        # 10% 的时间，我们将掩码的输入标记替换为随机单词
+        # 10% 的概率用随机单词替换掩码的输入 token
         indices_random = self.tf_bernoulli(input_shape, 0.1) & masked_indices & ~indices_replaced
         random_words = tf.random.uniform(input_shape, maxval=vocab_size, dtype=inputs.dtype)
-
         inputs = tf.where(indices_random, random_words, inputs)
 
-        # 剩余的时间（10% 的时间），我们保持掩码的输入标记不变
+        # 剩余 10% 的概率保持掩码的输入 token 不变
         return inputs, labels
-    # 定义 TensorFlow 推断函数，接受 examples 参数作为输入，返回预测结果字典
+    # 定义一个 TensorFlow 模型的调用函数，处理输入的样本列表并返回预测结果字典
     def tf_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 导入 TensorFlow 库
         import tensorflow as tf
 
-        # 处理字典或列表，进行适当的填充和转换为张量
+        # 根据输入样本类型的不同进行处理：如果是字典，则使用自定义函数进行填充和转换为张量
         if isinstance(examples[0], Mapping):
-            # 使用 pad_without_fast_tokenizer_warning 函数进行填充，返回 TensorFlow 格式的批量数据
             batch = pad_without_fast_tokenizer_warning(
                 self.tokenizer, examples, return_tensors="tf", pad_to_multiple_of=self.pad_to_multiple_of
             )
         else:
-            # 对输入进行拼接并进行填充，返回 input_ids 键的批量数据
+            # 否则，将样本列表转换为包含 "input_ids" 键的字典，使用内置函数进行填充
             batch = {
                 "input_ids": _tf_collate_batch(examples, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
             }
 
-        # 如果特殊标记掩码已经预处理完毕，从字典中弹出该项
+        # 如果预处理了特殊 token 掩码，则从字典中移除该项
         special_tokens_mask = batch.pop("special_tokens_mask", None)
-        # 如果启用了 MLM（Masked Language Modeling），则执行以下逻辑
+        
+        # 如果采用 MLM（Masked Language Modeling），则进行相应处理
         if self.mlm:
             if special_tokens_mask is None:
-                # 获取已经存在特殊标记的数据的特殊标记掩码
+                # 如果没有预处理特殊 token 掩码，根据输入的 input_ids 创建掩码
                 special_tokens_mask = [
                     self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True)
                     for val in batch["input_ids"].numpy().tolist()
                 ]
-                # 将列表转换为 TensorFlow 张量，并将数据类型转换为布尔类型
+                # 将掩码转换为 TensorFlow 中的布尔类型张量
                 special_tokens_mask = tf.cast(tf.convert_to_tensor(special_tokens_mask, dtype=tf.int64), tf.bool)
             else:
-                # 将特殊标记掩码转换为 TensorFlow 张量，并将数据类型转换为布尔类型
+                # 否则，直接将已有的特殊 token 掩码转换为 TensorFlow 的布尔类型张量
                 special_tokens_mask = tf.cast(special_tokens_mask, tf.bool)
-            # 对输入数据进行 MLM 掩码处理，返回处理后的输入和标签
+            
+            # 使用 TensorFlow 函数 tf_mask_tokens 处理 input_ids 和 labels，并更新 batch 字典
             batch["input_ids"], batch["labels"] = self.tf_mask_tokens(
                 tf.cast(batch["input_ids"], tf.int64),
                 special_tokens_mask=special_tokens_mask,
@@ -852,61 +778,57 @@ class DataCollatorForLanguageModeling(DataCollatorMixin):
                 vocab_size=len(self.tokenizer),
             )
         else:
-            # 如果未启用 MLM，则将输入数据直接作为标签
+            # 如果不是 MLM 模式，则直接将 input_ids 作为 labels，同时处理 padding 的情况
             labels = batch["input_ids"]
             if self.tokenizer.pad_token_id is not None:
-                # 用 -100 替换标记为 pad_token_id 的位置
+                # 将 padding 的位置替换为 -100
                 labels = tf.where(labels == self.tokenizer.pad_token_id, -100, labels)
             else:
-                # 创建标签的副本，以防万一
+                # 如果没有定义 pad_token_id，创建 labels 的深拷贝以防万一
                 labels = tf.identity(labels)
             batch["labels"] = labels
-        # 返回处理后的批量数据
+        
+        # 返回处理后的 batch 字典，其中包含处理过的 input_ids 和相应的 labels
         return batch
-    # 定义 torch_call 方法，接收一个包含列表、任意类型或字典的列表作为参数，并返回字典类型的结果
     def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 如果 examples 中的第一个元素是字典，则进行特殊处理，包括适当的填充和转换为张量
+        # 处理输入数据 examples，可以是字典或列表，根据不同类型进行填充和转换为张量。
         if isinstance(examples[0], Mapping):
-            # 使用 pad_without_fast_tokenizer_warning 函数对 examples 进行填充，返回张量，pad_to_multiple_of 参数用于指定填充的倍数
+            # 对字典类型的 examples 进行填充，使用自定义的 pad_without_fast_tokenizer_warning 函数进行填充，并返回 PyTorch 张量。
             batch = pad_without_fast_tokenizer_warning(
                 self.tokenizer, examples, return_tensors="pt", pad_to_multiple_of=self.pad_to_multiple_of
             )
         else:
-            # 否则，创建一个包含 "input_ids" 键的字典，值为调用 _torch_collate_batch 函数的结果
+            # 对列表类型的 examples 进行处理，仅填充 "input_ids" 键，调用 _torch_collate_batch 函数进行填充。
             batch = {
                 "input_ids": _torch_collate_batch(examples, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
             }
 
-        # 如果已经预处理了特殊的 token mask，则从字典中删除它
+        # 如果特殊标记掩码已经预处理，则从字典中移除。
         special_tokens_mask = batch.pop("special_tokens_mask", None)
-        # 如果启用了 MLM，则调用 torch_mask_tokens 函数进行处理
         if self.mlm:
+            # 如果是 MLM（Masked Language Modeling）任务，调用 torch_mask_tokens 函数处理 input_ids 和 labels。
             batch["input_ids"], batch["labels"] = self.torch_mask_tokens(
                 batch["input_ids"], special_tokens_mask=special_tokens_mask
             )
         else:
-            # 否则，将 "input_ids" 的值复制给 labels
+            # 如果不是 MLM 任务，将 input_ids 复制到 labels，并根据 tokenizer 的 pad_token_id 设置 labels 中相应位置的值为 -100。
             labels = batch["input_ids"].clone()
-            # 如果 tokenizer 的 pad_token_id 不为 None，则将 labels 中等于 pad_token_id 的值设置为 -100
             if self.tokenizer.pad_token_id is not None:
                 labels[labels == self.tokenizer.pad_token_id] = -100
             batch["labels"] = labels
-        # 返回处理后的 batch
         return batch
 
-    # 定义 torch_mask_tokens 方法，接收 inputs 和 special_tokens_mask 两个参数，并返回一个元组
     def torch_mask_tokens(self, inputs: Any, special_tokens_mask: Optional[Any] = None) -> Tuple[Any, Any]:
         """
-        Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original.
+        准备用于掩码语言建模的输入/标签：80% MASK，10% 随机词，10% 原始词。
         """
         import torch
 
-        # 克隆 inputs，作为 labels
         labels = inputs.clone()
-        # 创建一个与 labels 形状相同的全为 self.mlm_probability 的张量
+        # 对每个序列进行 MLM 训练时，以概率 self.mlm_probability 对输入进行掩码。
         probability_matrix = torch.full(labels.shape, self.mlm_probability)
-        # 如果 special_tokens_mask 为 None，则根据 labels 的值获取特殊 token mask
         if special_tokens_mask is None:
+            # 如果特殊标记掩码为空，则使用 tokenizer 获取每个序列的特殊标记掩码。
             special_tokens_mask = [
                 self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
             ]
@@ -914,64 +836,63 @@ class DataCollatorForLanguageModeling(DataCollatorMixin):
         else:
             special_tokens_mask = special_tokens_mask.bool()
 
-        # 将 probability_matrix 中与 special_tokens_mask 对应位置的值设为 0
+        # 根据特殊标记掩码，将概率矩阵中的特定位置置为 0.0。
         probability_matrix.masked_fill_(special_tokens_mask, value=0.0)
-        # 根据概率矩阵生成掩码
+        # 使用伯努利分布生成掩码索引。
         masked_indices = torch.bernoulli(probability_matrix).bool()
-        # 将 labels 中非掩码位置的值设为 -100，用于计算损失
-        labels[~masked_indices] = -100  # We only compute loss on masked tokens
+        labels[~masked_indices] = -100  # 只计算掩码位置的损失
 
-        # 80% 的概率将掩码位置的输入 tokens 替换为 tokenizer.mask_token ([MASK])
+        # 80% 的时间，用 tokenizer.mask_token ([MASK]) 替换掩码位置的输入标记。
         indices_replaced = torch.bernoulli(torch.full(labels.shape, 0.8)).bool() & masked_indices
         inputs[indices_replaced] = self.tokenizer.convert_tokens_to_ids(self.tokenizer.mask_token)
 
-        # 10% 的概率将掩码位置的输入 tokens 替换为随机单词
+        # 10% 的时间，用随机词替换掩码位置的输入标记。
         indices_random = torch.bernoulli(torch.full(labels.shape, 0.5)).bool() & masked_indices & ~indices_replaced
         random_words = torch.randint(len(self.tokenizer), labels.shape, dtype=torch.long)
         inputs[indices_random] = random_words[indices_random]
 
-        # 剩余 10% 的概率保持掩码位置的输入 tokens 不变
+        # 剩余 10% 的时间，保持掩码位置的输入标记不变。
         return inputs, labels
+    # 定义一个方法，用于处理包含各种数据结构的示例列表，并返回处理后的结果字典
     def numpy_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 处理字典或列表，进行适当的填充和转换为张量
+        # 如果第一个示例是字典类型，则使用适当的填充方式和转换为张量
         if isinstance(examples[0], Mapping):
-            # 使用适当的填充和转换为张量处理字典
+            # 使用适当的填充方法（避免快速分词器警告），将示例列表转换为 NumPy 张量
             batch = pad_without_fast_tokenizer_warning(
                 self.tokenizer, examples, return_tensors="np", pad_to_multiple_of=self.pad_to_multiple_of
             )
         else:
-            # 处理列表
+            # 如果示例不是字典类型，则只包含输入 ID 的批次
             batch = {
                 "input_ids": _numpy_collate_batch(examples, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
             }
 
-        # 如果特殊标记掩码已经预处理，从字典中弹出
+        # 如果已预处理特殊标记掩码，则从字典中弹出
         special_tokens_mask = batch.pop("special_tokens_mask", None)
+        # 如果是 MLM 任务，调用方法对输入 ID 进行掩码处理，并将结果存入 batch 中
         if self.mlm:
-            # 如果是MLM任务，调用numpy_mask_tokens函数处理input_ids和special_tokens_mask
             batch["input_ids"], batch["labels"] = self.numpy_mask_tokens(
                 batch["input_ids"], special_tokens_mask=special_tokens_mask
             )
         else:
-            # 复制input_ids作为labels
+            # 如果不是 MLM 任务，则创建 labels 副本，并将填充标记转换为 -100
             labels = np.copy(batch["input_ids"])
             if self.tokenizer.pad_token_id is not None:
-                # 将labels中等于pad_token_id的值设为-100
                 labels[labels == self.tokenizer.pad_token_id] = -100
             batch["labels"] = labels
-        # 返回处理后的batch
+        # 返回处理后的批次数据字典
         return batch
     def numpy_mask_tokens(self, inputs: Any, special_tokens_mask: Optional[Any] = None) -> Tuple[Any, Any]:
         """
         Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original.
         """
-        # 复制输入作为标签
+        # 创建输入的副本作为标签
         labels = np.copy(inputs)
-        
-        # 创建一个与标签形状相同的概率矩阵，用于确定哪些标记要被掩盖
+
+        # 创建一个与输入形状相同的概率矩阵，每个位置的值为 self.mlm_probability
         probability_matrix = np.full(labels.shape, self.mlm_probability)
-        
-        # 如果没有提供特殊标记掩码，则根据标签获取特殊标记掩码
+
+        # 如果特殊标记掩码为空，则根据每个序列的值获取特殊标记掩码
         if special_tokens_mask is None:
             special_tokens_mask = [
                 self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
@@ -980,18 +901,20 @@ class DataCollatorForLanguageModeling(DataCollatorMixin):
         else:
             special_tokens_mask = special_tokens_mask.astype(bool)
 
-        # 将特殊标记位置的概率设为0
+        # 将特殊标记掩码位置的概率设为 0，这些位置不会被选为被屏蔽的位置
         probability_matrix[special_tokens_mask] = 0
-        
-        # 使用二项分布生成掩盖标记的索引
-        masked_indices = np.random.binomial(1, probability_matrix, size=probability_matrix.shape).astype(bool)
-        labels[~masked_indices] = -100  # 仅在掩盖标记上计算损失
 
-        # 80%的情况下，将掩盖的输入标记替换为tokenizer.mask_token_id ([MASK])
+        # 使用二项分布随机生成屏蔽的索引
+        masked_indices = np.random.binomial(1, probability_matrix, size=probability_matrix.shape).astype(bool)
+
+        # 将未屏蔽的标签设为 -100，用于损失计算
+        labels[~masked_indices] = -100  # We only compute loss on masked tokens
+
+        # 80% 的概率，将屏蔽的输入标记替换为 tokenizer.mask_token_id
         indices_replaced = np.random.binomial(1, 0.8, size=labels.shape).astype(bool) & masked_indices
         inputs[indices_replaced] = self.tokenizer.mask_token_id
 
-        # 10%的情况下，将掩盖的输入标记替换为随机单词
+        # 10% 的概率，将屏蔽的输入标记替换为随机词
         indices_random = (
             np.random.binomial(1, 0.5, size=labels.shape).astype(bool) & masked_indices & ~indices_replaced
         )
@@ -1000,9 +923,11 @@ class DataCollatorForLanguageModeling(DataCollatorMixin):
         )
         inputs[indices_random] = random_words
 
-        # 剩余的情况下（10%的情况下），保持掩盖的输入标记不变
+        # 剩余的 10% 的概率，保持屏蔽的输入标记不变
+
+        # 返回处理后的输入和标签
         return inputs, labels
-@dataclass
+@DataCollatorForWholeWordMask
 class DataCollatorForWholeWordMask(DataCollatorForLanguageModeling):
     """
     Data collator used for language modeling that masks entire words.
@@ -1016,326 +941,316 @@ class DataCollatorForWholeWordMask(DataCollatorForLanguageModeling):
     that subword tokens are prefixed with *##*. For tokenizers that do not adhere to this scheme, this collator will
     produce an output that is roughly equivalent to [`.DataCollatorForLanguageModeling`].
 
-    </Tip>"""
+    </Tip>
+    """
 
-    # 定义 torch_call 方法，接受 examples 参数，返回字典类型
-    def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]) -> Dict[str, Any]:
-        # 如果 examples 的第一个元素是 Mapping 类型
+    def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
+        # Determine if examples are provided as a list of mappings or as a list of input_ids
         if isinstance(examples[0], Mapping):
-            # 提取每个元素中的 "input_ids" 字段
-            input_ids = [e["input_ids"] for e in examples]
+            input_ids = [e["input_ids"] for e in examples]  # Extract input_ids from each example mapping
         else:
-            # 否则，直接使用 examples 作为 input_ids，并将每个元素包装成字典
-            input_ids = examples
-            examples = [{"input_ids": e} for e in examples]
+            input_ids = examples  # Examples are directly input_ids, wrap each in a mapping
 
-        # 调用 _torch_collate_batch 方法，将 input_ids 转换为 batch_input
+        # Collate input_ids into a batch tensor respecting tokenizer's padding rules
         batch_input = _torch_collate_batch(input_ids, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
 
-        # 初始化 mask_labels 列表
         mask_labels = []
-        # 遍历 examples
         for e in examples:
-            # 初始化 ref_tokens 列表
             ref_tokens = []
-            # 遍历 e["input_ids"] 中的每个 id
-            for id in tolist(e["input_ids"]):
-                # 将 id 转换为 token，并添加到 ref_tokens 中
+            for id in tolist(e["input_ids"]):  # Convert input_ids to tokens using tokenizer
                 token = self.tokenizer._convert_id_to_token(id)
                 ref_tokens.append(token)
 
-            # 对于中文 tokens，需要额外的信息来标记子词，例如 [喜,欢]-> [喜，##欢]
+            # For Chinese tokens, mark sub-words with "##", e.g., [喜,欢]->[喜，##欢]
             if "chinese_ref" in e:
-                # 提取中文参考信息
-                ref_pos = tolist(e["chinese_ref"])
-                len_seq = len(e["input_ids"])
-                # 遍历序列长度
+                ref_pos = tolist(e["chinese_ref"])  # Positions in input_ids that are sub-words
+                len_seq = len(e["input_ids"])  # Length of the input sequence
                 for i in range(len_seq):
-                    # 如果 i 在 ref_pos 中
                     if i in ref_pos:
-                        # 在对应的 token 前加上 "##"
-                        ref_tokens[i] = "##" + ref_tokens[i]
-            # 将整个词掩盖后的结果添加到 mask_labels 中
-            mask_labels.append(self._whole_word_mask(ref_tokens))
-        
-        # 调用 _torch_collate_batch 方法，将 mask_labels 转换为 batch_mask
+                        ref_tokens[i] = "##" + ref_tokens[i]  # Prefix sub-word tokens with "##"
+
+            mask_labels.append(self._whole_word_mask(ref_tokens))  # Apply whole word masking to tokens
+
+        # Collate mask_labels into a batch tensor respecting tokenizer's padding rules
         batch_mask = _torch_collate_batch(mask_labels, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
-        # 调用 torch_mask_tokens 方法，获取 inputs 和 labels
+
+        # Mask input_ids and create labels for masked language modeling
         inputs, labels = self.torch_mask_tokens(batch_input, batch_mask)
-        # 返回包含 inputs 和 labels 的字典
+
         return {"input_ids": inputs, "labels": labels}
-    # 定义一个 TensorFlow 接口函数，接受一个包含输入数据的列表，返回一个字典
+    # 定义 TensorFlow 版本的调用方法，接受一个例子列表，并返回处理后的输入和标签字典
     def tf_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
         # 导入 TensorFlow 库
         import tensorflow as tf
 
-        # 检查输入数据的类型，如果是 Mapping 类型，则提取其中的 "input_ids" 字段
+        # 检查第一个例子的类型，若为映射类型（字典），则提取其中的 "input_ids" 列表
         if isinstance(examples[0], Mapping):
             input_ids = [e["input_ids"] for e in examples]
         else:
+            # 否则，假设每个例子本身就是一个 input_ids 列表，将其赋值给 input_ids，并用例子包装成带 "input_ids" 键的字典列表
             input_ids = examples
             examples = [{"input_ids": e} for e in examples]
 
-        # 调用 _tf_collate_batch 函数，将输入数据整理成批量输入
+        # 调用内部函数 _tf_collate_batch，将 input_ids 列表和 tokenizer 进行批处理
         batch_input = _tf_collate_batch(input_ids, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
 
-        # 初始化一个空列表用于存储 mask 标签
+        # 初始化一个空列表，用于存储每个例子的掩码标签
         mask_labels = []
-        # 遍历每个示例
         for e in examples:
             ref_tokens = []
-            # 遍历示例中的每个输入 id，并将其转换为对应的 token
+            # 遍历每个例子中的 input_ids，将每个 id 转换为对应的 token
             for id in tolist(e["input_ids"]):
                 token = self.tokenizer._convert_id_to_token(id)
                 ref_tokens.append(token)
 
-            # 对于中文 token，需要额外的信息来标记子词，例如 [喜,欢]-> [喜，##欢]
+            # 对于中文 token，如果指定了 "chinese_ref" 键，需添加额外的标记 "##" 标识子词，例如 [喜,欢]-> [喜，##欢]
             if "chinese_ref" in e:
                 ref_pos = tolist(e["chinese_ref"])
                 len_seq = len(e["input_ids"])
                 for i in range(len_seq):
                     if i in ref_pos:
                         ref_tokens[i] = "##" + ref_tokens[i]
-            # 将处理后的 token 序列传入 _whole_word_mask 函数，生成 mask 标签
+            # 将处理后的 token 列表传入 _whole_word_mask 方法，得到该例子的掩码标签，添加到 mask_labels 列表中
             mask_labels.append(self._whole_word_mask(ref_tokens))
-        # 调用 _tf_collate_batch 函数，将 mask 标签整理成批量输入
+
+        # 再次调用 _tf_collate_batch，将 mask_labels 列表和 tokenizer 进行批处理，得到批量化的掩码标签
         batch_mask = _tf_collate_batch(mask_labels, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
-        # 调用 tf_mask_tokens 函数，对输入数据进行 mask 处理，返回处理后的输入和标签
+        # 调用对象自身的 tf_mask_tokens 方法，传入批量化的输入和掩码标签，得到 inputs 和 labels，返回作为字典的 "input_ids" 和 "labels"
         inputs, labels = self.tf_mask_tokens(tf.cast(batch_input, tf.int64), batch_mask)
-        # 返回处理后的结果字典
         return {"input_ids": inputs, "labels": labels}
 
-    # 定义一个 NumPy 接口函数，接受一个包含输入数据的列表，返回一个字典
+    # 定义 NumPy 版本的调用方法，接受一个例子列表，并返回处理后的输入和标签字典
     def numpy_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 检查输入数据的类型，如果是 Mapping 类型，则提取其中的 "input_ids" 字段
+        # 检查第一个例子的类型，若为映射类型（字典），则提取其中的 "input_ids" 列表
         if isinstance(examples[0], Mapping):
             input_ids = [e["input_ids"] for e in examples]
         else:
+            # 否则，假设每个例子本身就是一个 input_ids 列表，将其赋值给 input_ids，并用例子包装成带 "input_ids" 键的字典列表
             input_ids = examples
             examples = [{"input_ids": e} for e in examples]
 
-        # 调用 _numpy_collate_batch 函数，将输入数据整理成批量输入
+        # 调用内部函数 _numpy_collate_batch，将 input_ids 列表和 tokenizer 进行批处理
         batch_input = _numpy_collate_batch(input_ids, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
 
-        # 初始化一个空列表用于存储 mask 标签
+        # 初始化一个空列表，用于存储每个例子的掩码标签
         mask_labels = []
-        # 遍历每个示例
         for e in examples:
             ref_tokens = []
-            # 遍历示例中的每个输入 id，并将其转换为对应的 token
+            # 遍历每个例子中的 input_ids，将每个 id 转换为对应的 token
             for id in tolist(e["input_ids"]):
                 token = self.tokenizer._convert_id_to_token(id)
                 ref_tokens.append(token)
 
-            # 对于中文 token，需要额外的信息来标记子词，例如 [喜,欢]-> [喜，##欢]
+            # 对于中文 token，如果指定了 "chinese_ref" 键，需添加额外的标记 "##" 标识子词，例如 [喜,欢]-> [喜，##欢]
             if "chinese_ref" in e:
                 ref_pos = tolist(e["chinese_ref"])
                 len_seq = len(e["input_ids"])
                 for i in range(len_seq):
                     if i in ref_pos:
                         ref_tokens[i] = "##" + ref_tokens[i]
-            # 将处理���的 token 序列传入 _whole_word_mask 函数，生成 mask 标签
+            # 将处理后的 token 列表传入 _whole_word_mask 方法，得到该例子的掩码标签，添加到 mask_labels 列表中
             mask_labels.append(self._whole_word_mask(ref_tokens))
-        # 调用 _numpy_collate_batch 函数，将 mask 标签整理成批量输入
+
+        # 再次调用 _numpy_collate_batch，将 mask_labels 列表和 tokenizer 进行批处理，得到批量化的掩码标签
         batch_mask = _numpy_collate_batch(mask_labels, self.tokenizer, pad_to_multiple_of=self.pad_to_multiple_of)
-        # 调用 numpy_mask_tokens 函数，对输入数据进行 mask 处理，返回处理后的输入和标签
+        # 调用对象自身的 numpy_mask_tokens 方法，传入批量化的输入和掩码标签，得到 inputs 和 labels，返回作为字典的 "input_ids" 和 "labels"
         inputs, labels = self.numpy_mask_tokens(batch_input, batch_mask)
-        # 返回处理后的结果字典
         return {"input_ids": inputs, "labels": labels}
-    # 使用整个词掩盖代理获取被掩盖的标记的0/1标签
     def _whole_word_mask(self, input_tokens: List[str], max_predictions=512):
-        # 如果当前的分词器不是BertTokenizer或BertTokenizerFast类型的，则发出警告
+        """
+        Get 0/1 labels for masked tokens with whole word mask proxy
+        """
+        # 如果当前的分词器不是BertTokenizer或BertTokenizerFast，则发出警告
         if not isinstance(self.tokenizer, (BertTokenizer, BertTokenizerFast)):
             warnings.warn(
                 "DataCollatorForWholeWordMask is only suitable for BertTokenizer-like tokenizers. "
                 "Please refer to the documentation for more information."
             )
 
-        # 存储候选的词索引
+        # 初始化候选索引列表
         cand_indexes = []
-        # 遍历输入的标记列表
+        # 遍历输入的token列表
         for i, token in enumerate(input_tokens):
-            # 如果标记是"[CLS]"或"[SEP]"，则跳过
+            # 跳过特殊token，如"[CLS]"和"[SEP]"
             if token == "[CLS]" or token == "[SEP]":
                 continue
 
-            # 如果候选索引列表不为空且当前标记以"##"开头，则将当前索引添加到上一个候选索引列表中
+            # 如果当前候选索引列表不为空且当前token是一个以"##"开头的部分token，则将当前token加入最后一个候选索引的列表中
             if len(cand_indexes) >= 1 and token.startswith("##"):
                 cand_indexes[-1].append(i)
-            # 否则，将当前索引作为新的候选索引列表的第一个元素
             else:
+                # 否则，创建一个新的候选索引列表并加入当前token的索引
                 cand_indexes.append([i])
 
         # 随机打乱候选索引列表
         random.shuffle(cand_indexes)
-        # 计算要预测的标记数量，取最小值为最大预测数量和输入标记数量乘以掩码概率的四舍五入整数
+        # 计算应该预测的masked token数量，取最小值为max_predictions和输入token数量乘以mlm_probability的整数部分
         num_to_predict = min(max_predictions, max(1, int(round(len(input_tokens) * self.mlm_probability))))
-        # 存储被掩盖的标记的索引
+        # 初始化masked tokens列表
         masked_lms = []
-        # 存储已覆盖的索引
+        # 初始化已覆盖索引的集合
         covered_indexes = set()
         # 遍历候选索引列表
         for index_set in cand_indexes:
-            # 如果已经预测的标记数量大于等于要预测的标记数量，则跳出循环
+            # 如果已经预测的masked token数量达到了num_to_predict，则退出循环
             if len(masked_lms) >= num_to_predict:
                 break
-            # 如果添加一个整个词掩码会超过最大预测数量，则跳过此候选索引列表
+            # 如果当前候选索引集合加上已预测的masked token数量超过了num_to_predict，则跳过该候选集合
             if len(masked_lms) + len(index_set) > num_to_predict:
                 continue
-            # 判断当前候选索引集合中是否有任何一个索引已经被覆盖
+            # 检查当前候选索引集合中是否有已覆盖的索引
             is_any_index_covered = False
             for index in index_set:
                 if index in covered_indexes:
                     is_any_index_covered = True
                     break
-            # 如果已覆盖任何一个索引，则跳过此候选索引列表
+            # 如果有任何已覆盖的索引，则跳过该候选索引集合
             if is_any_index_covered:
                 continue
-            # 将候选索引集合中的索引添加到被掩盖的标记列表中，并标记为已覆盖
+            # 否则，将候选索引集合中的每个索引加入已覆盖索引集合，并将其加入masked tokens列表
             for index in index_set:
                 covered_indexes.add(index)
                 masked_lms.append(index)
 
-        # 如果已覆盖的索引数量不等于被掩盖的标记数量，则抛出值错误
+        # 如果已覆盖索引的数量不等于masked tokens列表的长度，则抛出异常
         if len(covered_indexes) != len(masked_lms):
             raise ValueError("Length of covered_indexes is not equal to length of masked_lms.")
-        # 构建标记掩码列表，如果索引在已覆盖的索引集合中，则为1，否则为0
+        # 根据已覆盖的索引集合生成mask标签列表，即标记哪些token是masked的
         mask_labels = [1 if i in covered_indexes else 0 for i in range(len(input_tokens))]
-        # 返回标记掩码列表
+        # 返回mask标签列表作为结果
         return mask_labels
     def torch_mask_tokens(self, inputs: Any, mask_labels: Any) -> Tuple[Any, Any]:
         """
-        准备用于掩码语言建模的掩码标记输入/标签：80% MASK，10% 随机，10% 原始。设置 'mask_labels' 意味着我们使用整词掩码 (wwm)，我们根据其引用直接掩码 idxs。
+        Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original. Set
+        'mask_labels' means we use whole word mask (wwm), we directly mask idxs according to it's ref.
         """
         import torch
 
-        如果标记器没有掩码标记：
-            抛出值错误异常
+        # 检查当前的分词器是否有掩码标记，这是进行掩码语言建模所必需的
+        if self.tokenizer.mask_token is None:
+            raise ValueError(
+                "This tokenizer does not have a mask token which is necessary for masked language modeling. Remove the"
+                " --mlm flag if you want to use this tokenizer."
+            )
+        # 复制输入以保留原始标签
         labels = inputs.clone()
-        # 我们在每个序列中对一些标记进行掩码-LM训练（概率为 args.mlm_probability，默认为 0.15 在 Bert/RoBERTa）
 
+        # 我们在每个序列中随机抽样几个标记，用于掩码语言建模训练（概率默认为0.15，适用于Bert/RoBERTa）
         probability_matrix = mask_labels
 
+        # 获取特殊标记的掩码，用于排除掉特殊标记的影响
         special_tokens_mask = [
             self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
         ]
         probability_matrix.masked_fill_(torch.tensor(special_tokens_mask, dtype=torch.bool), value=0.0)
-        如果标记器的填充标记不是 None：
-            创建填充掩码
+
+        # 如果存在填充标记，将其添加到掩码中
+        if self.tokenizer._pad_token is not None:
             padding_mask = labels.eq(self.tokenizer.pad_token_id)
             probability_matrix.masked_fill_(padding_mask, value=0.0)
 
+        # 确定要掩码的索引
         masked_indices = probability_matrix.bool()
-        labels[~masked_indices] = -100  # 我们只计算掩码标记上的损失
+        labels[~masked_indices] = -100  # 只计算掩码标记上的损失
 
-        # 80% 的时间，我们用 tokenizer.mask_token ([MASK]) 替换掩码输入标记
+        # 80%的时间，将掩码输入标记替换为tokenizer.mask_token ([MASK])
         indices_replaced = torch.bernoulli(torch.full(labels.shape, 0.8)).bool() & masked_indices
         inputs[indices_replaced] = self.tokenizer.convert_tokens_to_ids(self.tokenizer.mask_token)
 
-        # 10% 的时间，我们用随机单词替换掩码输入标记
+        # 10%的时间，将掩码输入标记替换为随机单词
         indices_random = torch.bernoulli(torch.full(labels.shape, 0.5)).bool() & masked_indices & ~indices_replaced
         random_words = torch.randint(len(self.tokenizer), labels.shape, dtype=torch.long)
         inputs[indices_random] = random_words[indices_random]
 
-        # 剩下的时间（10% 的时间），我们保持掩码输入标记不变
+        # 剩余的时间（10%），保持掩码输入标记不变
         return inputs, labels
-    # 定义方法，用于为掩码语言建模准备掩码的标记输入/标签：80% MASK，10% 随机，10% 原始。设置'mask_labels'意味着我们使用整词掩码(wwm)，我们直接根据其参考掩码索引。
     def tf_mask_tokens(self, inputs: Any, mask_labels: Any) -> Tuple[Any, Any]:
         """
         Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original. Set
         'mask_labels' means we use whole word mask (wwm), we directly mask idxs according to it's ref.
         """
-        # 导入 TensorFlow 库
-        import tensorflow as tf
+        import tensorflow as tf  # 导入 TensorFlow 库
 
-        # 获取输入的形状
-        input_shape = tf.shape(inputs)
-        # 如果分词器没有掩码标记，则引发错误
+        input_shape = tf.shape(inputs)  # 获取输入张量的形状
         if self.tokenizer.mask_token is None:
             raise ValueError(
                 "This tokenizer does not have a mask token which is necessary for masked language modeling. Remove the"
                 " --mlm flag if you want to use this tokenizer."
             )
-        # 将标签设置为输入的副本
-        labels = tf.identity(inputs)
-        # 从每个序列中随机抽样一些标记，用于掩码语言建模训练（默认情况下，Bert/RoBERTa 中的 args.mlm_probability 为 0.15）
+        labels = tf.identity(inputs)  # 创建输入张量的副本作为标签
 
-        # 将掩码标签转换为布尔型
-        masked_indices = tf.cast(mask_labels, tf.bool)
+        # We sample a few tokens in each sequence for masked-LM training (with probability args.mlm_probability defaults to 0.15 in Bert/RoBERTa)
 
-        # 获取特殊标记掩码
+        masked_indices = tf.cast(mask_labels, tf.bool)  # 将掩码标签转换为布尔类型张量
+
+        # Exclude special tokens from masking
         special_tokens_mask = [
             self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels
-        ]
-        # 掩码索引为掩码索引且不是特殊标记掩码
-        masked_indices = masked_indices & ~tf.cast(special_tokens_mask, dtype=tf.bool)
-        # 如果分词器的填充标记不是 None
+        ]  # 获取特殊标记的掩码，排除已有的特殊标记
+        masked_indices = masked_indices & ~tf.cast(special_tokens_mask, dtype=tf.bool)  # 更新掩码索引，排除特殊标记
+
         if self.tokenizer._pad_token is not None:
-            # 获取填充掩码
-            padding_mask = inputs == self.tokenizer.pad_token_id
-            # 掩码索引为掩码索引且不是填充掩码
-            masked_indices = masked_indices & ~padding_mask
+            padding_mask = inputs == self.tokenizer.pad_token_id  # 获取填充标记的掩码
+            masked_indices = masked_indices & ~padding_mask  # 更新掩码索引，排除填充标记
 
-        # 将未掩码的索引在标签中替换为 -100，因为我们只在掩码标记上计算损失
-        labels = tf.where(masked_indices, inputs, -100)
+        # Replace unmasked indices with -100 in the labels since we only compute loss on masked tokens
+        labels = tf.where(masked_indices, inputs, -100)  # 根据掩码索引，将未掩码的位置在标签中替换为-100，仅计算掩码位置的损失
 
-        # 80% 的时间，我们将掩码的输入标记替换为分词器的掩码标记 ([MASK])
-        indices_replaced = self.tf_bernoulli(input_shape, 0.8) & masked_indices
-
+        # 80% of the time, we replace masked input tokens with tokenizer.mask_token ([MASK])
+        indices_replaced = self.tf_bernoulli(input_shape, 0.8) & masked_indices  # 使用伯努利采样确定掩码位置，80%的时间用[MASK]标记替换掩码输入
         inputs = tf.where(indices_replaced, self.tokenizer.mask_token_id, inputs)
 
-        # 10% 的时间，我们将掩码的输入标记替换为随机词
-        indices_random = self.tf_bernoulli(input_shape, 0.5) & masked_indices & ~indices_replaced
-        random_words = tf.random.uniform(input_shape, maxval=len(self.tokenizer), dtype=tf.int64)
+        # 10% of the time, we replace masked input tokens with random word
+        indices_random = self.tf_bernoulli(input_shape, 0.5) & masked_indices & ~indices_replaced  # 使用伯努利采样确定掩码位置，10%的时间用随机词替换掩码输入
+        random_words = tf.random.uniform(input_shape, maxval=len(self.tokenizer), dtype=tf.int64)  # 生成随机词
         inputs = tf.where(indices_random, random_words, inputs)
 
-        # 剩余的时间（10% 的时间），我们保持掩码的输入标记不变
-        return inputs, labels
-``` 
+        # The rest of the time (10% of the time) we keep the masked input tokens unchanged
+        return inputs, labels  # 返回处理后的输入和标签
     def numpy_mask_tokens(self, inputs: Any, mask_labels: Any) -> Tuple[Any, Any]:
         """
         Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original. Set
         'mask_labels' means we use whole word mask (wwm), we directly mask idxs according to it's ref.
         """
-        # 检查当前分词器是否有掩码标记，用于掩码语言建模
         if self.tokenizer.mask_token is None:
             raise ValueError(
                 "This tokenizer does not have a mask token which is necessary for masked language modeling. Remove the"
                 " --mlm flag if you want to use this tokenizer."
             )
-        # 复制输入以获取标签
         labels = np.copy(inputs)
-        # 确定要掩码的索引
+        # We sample a few tokens in each sequence for masked-LM training (with probability args.mlm_probability defaults to 0.15 in Bert/RoBERTa)
+
+        # Convert mask_labels to boolean array indicating which tokens to mask
         masked_indices = mask_labels.astype(bool)
 
-        # 获取特殊标记的掩码
+        # Mask special tokens so they are not selected for masking
         special_tokens_mask = [
             self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
         ]
-        # 掩码特殊标记的索引
         masked_indices[np.array(special_tokens_mask, dtype=bool)] = 0
-        # 如果存在填充标记，将其掩码
+        
+        # If there is a padding token, mask it so it's not selected for masking
         if self.tokenizer._pad_token is not None:
             padding_mask = labels == self.tokenizer.pad_token_id
             masked_indices[padding_mask] = 0
 
-        # 将非掩码标记的标签设置为-100，用于计算损失
-        labels[~masked_indices] = -100  # We only compute loss on masked tokens
+        # Set labels of unmasked tokens to -100 to compute loss only on masked tokens
+        labels[~masked_indices] = -100
 
-        # 80%的情况下，将掩码的输入标记替换为tokenizer.mask_token ([MASK])
+        # 80% of the time, replace masked input tokens with tokenizer.mask_token ([MASK])
         indices_replaced = np.random.binomial(1, 0.8, size=labels.shape).astype(bool) & masked_indices
         inputs[indices_replaced] = self.tokenizer.convert_tokens_to_ids(self.tokenizer.mask_token)
 
-        # 10%的情况下，将掩码的输入标记替换为随机单词
+        # 10% of the time, replace masked input tokens with random words
         indices_random = (
             np.random.binomial(1, 0.5, size=labels.shape).astype(bool) & masked_indices & ~indices_replaced
         )
         random_words = np.random.randint(low=0, high=len(self.tokenizer), size=labels.shape, dtype=np.int64)
         inputs[indices_random] = random_words[indices_random]
 
-        # 剩余情况（10%的概率）下，保持掩码的输入标记不变
+        # The rest of the time (10% of the time), keep the masked input tokens unchanged
         return inputs, labels
-@dataclass
+@Dataclass
 class DataCollatorForSOP(DataCollatorForLanguageModeling):
     """
     Data collator used for sentence order prediction task.
@@ -1345,7 +1260,7 @@ class DataCollatorForSOP(DataCollatorForLanguageModeling):
     """
 
     def __init__(self, *args, **kwargs):
-        # 发出警告，表明 DataCollatorForSOP 类已被弃用，建议使用 DataCollatorForLanguageModeling 替代
+        # 发出警告信息，提示该类即将被弃用，并建议使用DataCollatorForLanguageModeling代替
         warnings.warn(
             "DataCollatorForSOP is deprecated and will be removed in a future version, you can now use "
             "DataCollatorForLanguageModeling instead.",
@@ -1356,24 +1271,23 @@ class DataCollatorForSOP(DataCollatorForLanguageModeling):
         import torch
         from torch.nn.utils.rnn import pad_sequence
 
-        # 提取 examples 中每个示例的 input_ids，并组成列表
+        # 从每个示例中提取input_ids列表
         input_ids = [example["input_ids"] for example in examples]
-        # 调用 _torch_collate_batch 函数对 input_ids 列表进行处理，保证张量的拼接
+        # 调用内部方法进行批量处理和填充
         input_ids = _torch_collate_batch(input_ids, self.tokenizer)
-        # 调用 mask_tokens 方法对 input_ids 进行处理，生成 mask 用于 masked language modeling
+        # 对input_ids进行遮蔽处理，生成labels和attention_mask
         input_ids, labels, attention_mask = self.mask_tokens(input_ids)
 
-        # 提取 examples 中每个示例的 token_type_ids，并组成列表
+        # 从每个示例中提取token_type_ids列表
         token_type_ids = [example["token_type_ids"] for example in examples]
-        # 对 token_type_ids 列表进行填充，使其长度相同，以适应模型的输入
+        # 使用pad_sequence函数对token_type_ids进行填充，保证每个批次的长度一致
         token_type_ids = pad_sequence(token_type_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
 
-        # 提取 examples 中每个示例的 sentence_order_label，并组成列表
+        # 从每个示例中提取sentence_order_label列表，并转换成tensor
         sop_label_list = [example["sentence_order_label"] for example in examples]
-        # 使用 torch.stack 将 sop_label_list 列表中的张量堆叠成一个张量
         sentence_order_label = torch.stack(sop_label_list)
 
-        # 返回字典，包含处理后的数据
+        # 返回包含处理后数据的字典
         return {
             "input_ids": input_ids,
             "labels": labels,
@@ -1386,60 +1300,59 @@ class DataCollatorForSOP(DataCollatorForLanguageModeling):
         Prepare masked tokens inputs/labels/attention_mask for masked language modeling: 80% MASK, 10% random, 10%
         original. N-gram not applied yet.
         """
-        import torch
+        import torch  # 导入PyTorch库，用于张量操作
 
-        # 检查当前的分词器是否有掩码标记，用于掩码语言建模
         if self.tokenizer.mask_token is None:
             raise ValueError(
                 "This tokenizer does not have a mask token which is necessary for masked language modeling. Remove the"
                 " --mlm flag if you want to use this tokenizer."
             )
 
-        # 复制输入作为标签
-        labels = inputs.clone()
-        
-        # 为每个序列中的一些标记准备掩码语言建模的输入/标签/注意力掩码：80% MASK，10% 随机，10% 原始
-        # 创建一个概率矩阵，用于确定哪些标记要被掩码
+        labels = inputs.clone()  # 复制输入作为标签
+
+        # 构建一个概率矩阵，决定哪些位置进行掩码处理，默认使用的概率为self.mlm_probability（通常为0.15）
         probability_matrix = torch.full(labels.shape, self.mlm_probability)
-        
-        # 获取特殊标记的掩码
+
+        # 获取输入序列中的特殊标记（如起始标记、结束标记等），并在概率矩阵中将这些位置的概率设为0
         special_tokens_mask = [
             self.tokenizer.get_special_tokens_mask(val, already_has_special_tokens=True) for val in labels.tolist()
         ]
         probability_matrix.masked_fill_(torch.tensor(special_tokens_mask, dtype=torch.bool), value=0.0)
-        
-        # 如果有填充标记，则将填充标记的概率设为0
+
+        # 如果存在填充标记，则在概率矩阵中将填充标记位置的概率设为0
         if self.tokenizer._pad_token is not None:
             padding_mask = labels.eq(self.tokenizer.pad_token_id)
             probability_matrix.masked_fill_(padding_mask, value=0.0)
-        
-        # 通过伯努利分布生成掩码的索引
+
+        # 使用伯努利分布生成一个掩码的布尔张量
         masked_indices = torch.bernoulli(probability_matrix).bool()
-        
-        # 生成注意力掩码，将掩码的标记设为0，反转值
+
+        # 根据模型的需求，调整注意力掩码的值（有些模型中，0表示被掩码）
         attention_mask = (~masked_indices).float()
-        
-        # 如果有填充标记，则将填充标记的注意力掩码设为1
+
+        # 如果存在填充标记，则在注意力掩码中将填充标记位置的值设为1.0
         if self.tokenizer._pad_token is not None:
             attention_padding_mask = labels.eq(self.tokenizer.pad_token_id)
             attention_mask.masked_fill_(attention_padding_mask, value=1.0)
-        
-        # 将未掩码的标记设为-100，用于计算损失
-        labels[~masked_indices] = -100  # We only compute loss on masked tokens, -100 is default for CE compute
 
-        # 80%的情况下，用tokenizer.mask_token ([MASK])替换掩码的输入标记
+        # 将非掩码的位置的标签值设为-100，用于计算交叉熵损失时忽略这些位置
+        labels[~masked_indices] = -100
+
+        # 80%的情况下，将掩码的输入标记替换为特定的掩码标记（如[MASK]）
         indices_replaced = torch.bernoulli(torch.full(labels.shape, 0.8)).bool() & masked_indices
         inputs[indices_replaced] = self.tokenizer.convert_tokens_to_ids(self.tokenizer.mask_token)
 
-        # 10%的情况下，用随机单词替换掩码的输入标记
+        # 10%的情况下，将掩码的输入标记替换为随机的单词
         indices_random = torch.bernoulli(torch.full(labels.shape, 0.5)).bool() & masked_indices & ~indices_replaced
         random_words = torch.randint(len(self.tokenizer), labels.shape, dtype=torch.long)
         inputs[indices_random] = random_words[indices_random]
 
-        # 剩余的10%的情况下，保持掩码的输入标记不变
-        return inputs, labels, attention_mask
-from dataclasses import dataclass  # 导入 dataclass 装饰器用于定义数据类
+        # 剩余10%的情况下，保持掩码的输入标记不变
 
+        # 返回处理后的输入、标签和注意力掩码
+        return inputs, labels, attention_mask
+# 使用 dataclass 装饰器定义一个数据类 DataCollatorForPermutationLanguageModeling，
+# 用于处理排列语言建模的数据。
 @dataclass
 class DataCollatorForPermutationLanguageModeling(DataCollatorMixin):
     """
@@ -1449,41 +1362,39 @@ class DataCollatorForPermutationLanguageModeling(DataCollatorMixin):
     - preprocesses batches for permutation language modeling with procedures specific to XLNet
     """
 
-    tokenizer: PreTrainedTokenizerBase  # 用于分词的预训练分词器
-    plm_probability: float = 1 / 6  # PLM 模型生成掩码的概率，默认为 1/6
-    max_span_length: int = 5  # 最大生成掩码的 token 数
-    return_tensors: str = "pt"  # 返回的张量类型，默认为 PyTorch 张量
+    # 初始化函数参数：tokenizer 表示预训练的分词器，plm_probability 表示置换语言建模的概率，默认为 1/6，
+    # max_span_length 表示最大掩码标记序列的长度，默认为 5，
+    # return_tensors 表示返回的张量类型，默认为 "pt"（PyTorch 张量）。
+    tokenizer: PreTrainedTokenizerBase
+    plm_probability: float = 1 / 6
+    max_span_length: int = 5  # maximum length of a span of masked tokens
+    return_tensors: str = "pt"
 
-    # 定义用于处理 Torch 张量的方法
+    # 定义 torch_call 方法，接收一个例子列表 examples，
+    # 如果 examples 中的第一个元素是字典类型，则提取它们的 "input_ids" 字段作为例子列表的新内容。
+    # 然后使用 _torch_collate_batch 函数对 examples 进行批量处理，结合 tokenizer 进行处理。
+    # 最后调用 torch_mask_tokens 方法生成输入、掩码、目标映射和标签，并以字典形式返回结果。
     def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 如果输入的示例为字典类型，则提取其中的 input_ids
         if isinstance(examples[0], Mapping):
             examples = [e["input_ids"] for e in examples]
-        # 对示例进行 Torch 张量化处理
         batch = _torch_collate_batch(examples, self.tokenizer)
-        # 生成掩码，并返回处理结果字典
         inputs, perm_mask, target_mapping, labels = self.torch_mask_tokens(batch)
         return {"input_ids": inputs, "perm_mask": perm_mask, "target_mapping": target_mapping, "labels": labels}
 
-    # 定义用于处理 TensorFlow 张量的方法
+    # 定义 tf_call 方法，功能与 torch_call 方法类似，不同之处在于使用 _tf_collate_batch 函数处理 examples。
     def tf_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 如果输入的示例为字典类型，则提取其中的 input_ids
         if isinstance(examples[0], Mapping):
             examples = [e["input_ids"] for e in examples]
-        # 对示例进行 TensorFlow 张量化处理
         batch = _tf_collate_batch(examples, self.tokenizer)
-        # 生成掩码，并返回处理结果字典
         inputs, perm_mask, target_mapping, labels = self.tf_mask_tokens(batch)
         return {"input_ids": inputs, "perm_mask": perm_mask, "target_mapping": target_mapping, "labels": labels}
 
-    # 定义用于处理 NumPy 数组的方法
+    # 定义 numpy_call 方法，功能与前两者相似，使用 _numpy_collate_batch 处理 examples，
+    # 并调用 numpy_mask_tokens 方法生成相应的输入、掩码、目标映射和标签，以字典形式返回结果。
     def numpy_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        # 如果输入的示例为字典类型，则提取其中的 input_ids
         if isinstance(examples[0], Mapping):
             examples = [e["input_ids"] for e in examples]
-        # 对示例进行 NumPy 数组化处理
         batch = _numpy_collate_batch(examples, self.tokenizer)
-        # 生成掩码，并返回处理结果字典
         inputs, perm_mask, target_mapping, labels = self.numpy_mask_tokens(batch)
         return {"input_ids": inputs, "perm_mask": perm_mask, "target_mapping": target_mapping, "labels": labels}
 ```

@@ -1,12 +1,22 @@
 # `.\models\deformable_detr\image_processing_deformable_detr.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 许可证信息
-"""Deformable DETR 的图像处理器类"""
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Image processor class for Deformable DETR."""
 
-# 导入所需模块
 import io
 import pathlib
 from collections import defaultdict
@@ -14,7 +24,6 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Un
 
 import numpy as np
 
-# 从相关模块导入所需函数或类
 from ...feature_extraction_utils import BatchFeature
 from ...image_processing_utils import BaseImageProcessor, get_size_dict
 from ...image_transforms import (
@@ -43,6 +52,8 @@ from ...image_utils import (
     to_numpy_array,
     valid_images,
     validate_annotations,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
 from ...utils import (
     TensorType,
@@ -57,72 +68,71 @@ from ...utils import (
     logging,
 )
 
-# 如果可用，导入 torch 模块和 nn 类
+
 if is_torch_available():
     import torch
     from torch import nn
 
-# 如果可用，导入 PIL 模块
+
 if is_vision_available():
     import PIL
 
-# 如果可用，导入 scipy 模块
 if is_scipy_available():
     import scipy.special
     import scipy.stats
 
-# 获取日志记录器
+
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
-# 支持的注释格式
 SUPPORTED_ANNOTATION_FORMATS = (AnnotationFormat.COCO_DETECTION, AnnotationFormat.COCO_PANOPTIC)
 
 
-# 从transformers.models.detr.image_processing_detr.get_size_with_aspect_ratio中获取图像大小和纵横比
+# Copied from transformers.models.detr.image_processing_detr.get_size_with_aspect_ratio
 def get_size_with_aspect_ratio(image_size, size, max_size=None) -> Tuple[int, int]:
     """
-    根据输入图像大小和所需的输出大小计算输出图像大小。
+    Computes the output image size given the input image size and the desired output size.
 
-    参数:
+    Args:
         image_size (`Tuple[int, int]`):
-            输入图像大小。
+            The input image size.
         size (`int`):
-            所需的输出大小。
+            The desired output size.
         max_size (`int`, *optional*):
-            允许的最大输出大小。
+            The maximum allowed output size.
     """
+    # 解构输入的图片尺寸元组，分别取出高度和宽度
     height, width = image_size
+    # 如果指定了最大尺寸限制
     if max_size is not None:
+        # 计算原始尺寸中的最小值
         min_original_size = float(min((height, width)))
+        # 计算原始尺寸中的最大值
         max_original_size = float(max((height, width)))
+        # 如果根据最大原始尺寸调整后的尺寸超过了最大限制，则重新调整尺寸
         if max_original_size / min_original_size * size > max_size:
             size = int(round(max_size * min_original_size / max_original_size))
-    # 如果高度小于等于宽度且高度等于指定尺寸，或者宽度小于等于高度且宽度等于指定尺寸，则返回高度和宽度
+    
+    # 如果高度小于等于宽度且高度等于目标尺寸，或者宽度小于等于高度且宽度等于目标尺寸，则直接返回原始高度和宽度
     if (height <= width and height == size) or (width <= height and width == size):
         return height, width
     
-    # 如果宽度小于高度，则计算调整后的宽度和高度
+    # 根据图像的宽高比例调整输出的宽高
     if width < height:
-        # 新的调整宽度为指定尺寸
         ow = size
-        # 计算调整后的高度，按比例缩放
         oh = int(size * height / width)
-    # 如果宽度大于等于高度，则计算调整后的高度和宽度
     else:
-        # 新的调整高度为指定尺寸
         oh = size
-        # 计算调整后的宽度，按比例缩放
         ow = int(size * width / height)
-    # 返回调整后的高度和宽度
+    
+    # 返回调整后的输出高度和宽度
     return (oh, ow)
-# 从transformers.models.detr.image_processing_detr.get_resize_output_image_size复制而来
-# 根据输入图像大小和期望的输出大小计算输出图像大小。如果期望的输出大小是元组或列表，则直接返回输出图像大小。如果期望的输出大小是整数，则通过保持输入图像大小的纵横比来计算输出图像大小。
+# Copied from transformers.models.detr.image_processing_detr.get_resize_output_image_size
 def get_resize_output_image_size(
-    input_image: np.ndarray,  # 输入图像
-    size: Union[int, Tuple[int, int], List[int]],  # 期望的输出大小
-    max_size: Optional[int] = None,  # 最大允许的输出大小
-    input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入图像的通道尺寸格式，如果未提供，将从输入图像中推断出来
-) -> Tuple[int, int]:  # 返回值为元组(int, int)类型的输出图像大小
+    input_image: np.ndarray,
+    size: Union[int, Tuple[int, int], List[int]],
+    max_size: Optional[int] = None,
+    input_data_format: Optional[Union[str, ChannelDimension]] = None,
+) -> Tuple[int, int]:
     """
     Computes the output image size given the input image size and the desired output size. If the desired output size
     is a tuple or list, the output image size is returned as is. If the desired output size is an integer, the output
@@ -138,9 +148,18 @@ def get_resize_output_image_size(
         input_data_format (`ChannelDimension` or `str`, *optional*):
             The channel dimension format of the input image. If not provided, it will be inferred from the input image.
     """
+    # 获取输入图像的尺寸
+    image_size = get_image_size(input_image, input_data_format)
+    
+    # 如果输出尺寸是元组或列表，则直接返回
+    if isinstance(size, (list, tuple)):
+        return size
+    
+    # 否则根据输入图像的尺寸和输出的单一尺寸计算具有保持宽高比的输出尺寸
+    return get_size_with_aspect_ratio(image_size, size, max_size)
 
-# 从transformers.models.detr.image_processing_detr.get_numpy_to_framework_fn复制而来
-# 返回一个函数，该函数将numpy数组转换为输入数组的框架
+
+# Copied from transformers.models.detr.image_processing_detr.get_numpy_to_framework_fn
 def get_numpy_to_framework_fn(arr) -> Callable:
     """
     Returns a function that converts a numpy array to the framework of the input array.
@@ -148,182 +167,170 @@ def get_numpy_to_framework_fn(arr) -> Callable:
     Args:
         arr (`np.ndarray`): The array to convert.
     """
+    # 如果输入数组是 numpy 数组，则返回 numpy 的 array 函数
     if isinstance(arr, np.ndarray):
         return np.array
+    
+    # 如果 TensorFlow 可用且输入数组是 TensorFlow 张量，则返回 TensorFlow 的 convert_to_tensor 函数
     if is_tf_available() and is_tf_tensor(arr):
         import tensorflow as tf
-
         return tf.convert_to_tensor
+    
+    # 如果 PyTorch 可用且输入数组是 PyTorch 张量，则返回 PyTorch 的 tensor 函数
     if is_torch_available() and is_torch_tensor(arr):
         import torch
-
         return torch.tensor
+    
+    # 如果 Flax 可用且输入数组是 JAX 张量，则返回 JAX 的 array 函数
     if is_flax_available() and is_jax_tensor(arr):
         import jax.numpy as jnp
-
         return jnp.array
+    
+    # 如果无法识别输入数组的类型，则抛出 ValueError
     raise ValueError(f"Cannot convert arrays of type {type(arr)}")
 
 
-# 从transformers.models.detr.image_processing_detr.safe_squeeze复制而来
-# 只有在指定的轴具有维度1时才压缩数组
+# Copied from transformers.models.detr.image_processing_detr.safe_squeeze
 def safe_squeeze(arr: np.ndarray, axis: Optional[int] = None) -> np.ndarray:
     """
     Squeezes an array, but only if the axis specified has dim 1.
     """
+    # 如果未指定轴，则按默认行为挤压数组
     if axis is None:
         return arr.squeeze()
-
+    
+    # 否则尝试按指定轴挤压数组，若失败则返回原数组
     try:
         return arr.squeeze(axis=axis)
     except ValueError:
         return arr
 
 
-# 从transformers.models.detr.image_processing_detr.normalize_annotation复制而来
-# 根据图像大小规范化注释
+# Copied from transformers.models.detr.image_processing_detr.normalize_annotation
 def normalize_annotation(annotation: Dict, image_size: Tuple[int, int]) -> Dict:
+    # 从图像尺寸元组中获取高度和宽度
     image_height, image_width = image_size
+    
+    # 初始化归一化后的注释字典
     norm_annotation = {}
-    # 遍历注释字典的键值对
+    # 遍历注释字典中的每个键值对
     for key, value in annotation.items():
-        # 如果键为"boxes"
+        # 如果键是 "boxes"
         if key == "boxes":
-            # 将值赋给变量boxes
+            # 将值赋给变量 boxes
             boxes = value
-            # 使用corners_to_center_format函数将边界框坐标格式转换为中心点坐标格式
+            # 转换边界框格式为中心点表示，并归一化到图像尺寸
             boxes = corners_to_center_format(boxes)
-            # 将边界框坐标归一化为图像宽高的比例
             boxes /= np.asarray([image_width, image_height, image_width, image_height], dtype=np.float32)
-            # 将归一化后的边界框值存入norm_annotation字典中
+            # 将归一化后的边界框数据存入 norm_annotation 字典
             norm_annotation[key] = boxes
-        # 如果键不为"boxes"
         else:
-            # 将值存入norm_annotation字典中
+            # 对于其他键直接存入 norm_annotation 字典
             norm_annotation[key] = value
     # 返回归一化后的注释字典
     return norm_annotation
-# Copied from transformers.models.detr.image_processing_detr.max_across_indices
-# 根据给定的可迭代值，返回所有索引上的最大值
+# 从 `transformers.models.detr.image_processing_detr.max_across_indices` 模块中复制的函数，用于返回可迭代值中每个索引的最大值列表。
 def max_across_indices(values: Iterable[Any]) -> List[Any]:
     """
-    Return the maximum value across all indices of an iterable of values.
+    返回一个可迭代值中所有索引的最大值列表。
     """
     return [max(values_i) for values_i in zip(*values)]
 
 
-# Copied from transformers.models.detr.image_processing_detr.get_max_height_width
-# 获取批处理中所有图像的最大高度和宽度
+# 从 `transformers.models.detr.image_processing_detr.get_max_height_width` 模块中复制的函数，用于获取批次中所有图像的最大高度和宽度。
 def get_max_height_width(
     images: List[np.ndarray], input_data_format: Optional[Union[str, ChannelDimension]] = None
 ) -> List[int]:
     """
-    Get the maximum height and width across all images in a batch.
+    获取批次中所有图像的最大高度和宽度。
     """
-    # 如果输入数据格式为空，则推断图像的通道维度格式
     if input_data_format is None:
         input_data_format = infer_channel_dimension_format(images[0])
 
-    # 如果输入数据格式是通道维度在前，则获取最大高度和宽度
     if input_data_format == ChannelDimension.FIRST:
         _, max_height, max_width = max_across_indices([img.shape for img in images])
-    # 如果输入数据格式是通道维度在后，则获取最大高度和宽度
     elif input_data_format == ChannelDimension.LAST:
         max_height, max_width, _ = max_across_indices([img.shape for img in images])
-    # 否则，引发值错误
     else:
         raise ValueError(f"Invalid channel dimension format: {input_data_format}")
     return (max_height, max_width)
 
 
-# Copied from transformers.models.detr.image_processing_detr.make_pixel_mask
-# 为图像创建像素掩码，其中1表示有效像素，0表示填充像素
+# 从 `transformers.models.detr.image_processing_detr.make_pixel_mask` 模块中复制的函数，用于生成图像的像素掩码。
 def make_pixel_mask(
     image: np.ndarray, output_size: Tuple[int, int], input_data_format: Optional[Union[str, ChannelDimension]] = None
 ) -> np.ndarray:
     """
-    Make a pixel mask for the image, where 1 indicates a valid pixel and 0 indicates padding.
+    生成图像的像素掩码，其中 1 表示有效像素，0 表示填充像素。
 
     Args:
         image (`np.ndarray`):
-            Image to make the pixel mask for.
+            要生成像素掩码的图像。
         output_size (`Tuple[int, int]`):
-            Output size of the mask.
+            掩码的输出尺寸。
     """
-    # 获取图像的输入高度和宽度
     input_height, input_width = get_image_size(image, channel_dim=input_data_format)
-    # 创建一个具有指定输出大小和int64类型的零数组
     mask = np.zeros(output_size, dtype=np.int64)
-    # 将1分配给输入高度和宽度内的像素
     mask[:input_height, :input_width] = 1
     return mask
 
 
-# Copied from transformers.models.detr.image_processing_detr.convert_coco_poly_to_mask
-# 将COCO多边形注释转换为掩码
+# 从 `transformers.models.detr.image_processing_detr.convert_coco_poly_to_mask` 模块中复制的函数，用于将 COCO 多边形注释转换为掩码。
 def convert_coco_poly_to_mask(segmentations, height: int, width: int) -> np.ndarray:
     """
-    Convert a COCO polygon annotation to a mask.
+    将 COCO 多边形注释转换为掩码。
 
     Args:
         segmentations (`List[List[float]]`):
-            List of polygons, each polygon represented by a list of x-y coordinates.
+            多边形列表，每个多边形由一组 x-y 坐标表示。
         height (`int`):
-            Height of the mask.
+            掩码的高度。
         width (`int`):
-            Width of the mask.
+            掩码的宽度。
     """
     try:
-        # 如果导入失败，则引发导入错误
         from pycocotools import mask as coco_mask
     except ImportError:
         raise ImportError("Pycocotools is not installed in your environment.")
 
     masks = []
-    # 遍历多边形列表
     for polygons in segmentations:
-        # 使用多边形列表、高度和宽度创建RLE编码
         rles = coco_mask.frPyObjects(polygons, height, width)
-        # 解码RLE编码，返回掩码
         mask = coco_mask.decode(rles)
-        # 如果掩码的维度小于3，则添加一个维度
         if len(mask.shape) < 3:
             mask = mask[..., None]
-        # 将掩码转换为uint8类型的数组
         mask = np.asarray(mask, dtype=np.uint8)
-        # 按轴2的方向上的任意元素进行逻辑或运算
         mask = np.any(mask, axis=2)
         masks.append(mask)
-    # 将所有掩码堆叠成一个数组
     if masks:
         masks = np.stack(masks, axis=0)
     else:
         masks = np.zeros((0, height, width), dtype=np.uint8)
 
     return masks
-# 从transformers.models.detr.image_processing_detr.prepare_coco_detection_annotation复制而来，将DETR格式的目标转换为DeformableDetr所期望的格式
+# 从transformers.models.detr.image_processing_detr.prepare_coco_detection_annotation复制并将DETR更改为DeformableDetr
 def prepare_coco_detection_annotation(
-    image,  # 图像数据
-    target,  # 目标数据
-    return_segmentation_masks: bool = False,  # 是否返回分割掩码
-    input_data_format: Optional[Union[ChannelDimension, str]] = None,  # 输入数据格式
+    image,
+    target,
+    return_segmentation_masks: bool = False,
+    input_data_format: Optional[Union[ChannelDimension, str]] = None,
 ):
     """
-    将COCO格式的目标转换为DeformableDetr所期望的格式。
+    将COCO格式的目标转换为DeformableDetr期望的格式。
     """
     # 获取图像的高度和宽度
     image_height, image_width = get_image_size(image, channel_dim=input_data_format)
 
-    # 获取图像的ID
+    # 提取图像ID
     image_id = target["image_id"]
     image_id = np.asarray([image_id], dtype=np.int64)
 
     # 获取给定图像的所有COCO注释
     annotations = target["annotations"]
-    # 过滤掉"isocrowd"属性为0或不存在的注释
+    # 过滤掉“iscrowd”属性为1的对象
     annotations = [obj for obj in annotations if "iscrowd" not in obj or obj["iscrowd"] == 0]
 
-    # 获取所有目标类别
+    # 提取类别ID
     classes = [obj["category_id"] for obj in annotations]
     classes = np.asarray(classes, dtype=np.int64)
 
@@ -331,17 +338,18 @@ def prepare_coco_detection_annotation(
     area = np.asarray([obj["area"] for obj in annotations], dtype=np.float32)
     iscrowd = np.asarray([obj["iscrowd"] if "iscrowd" in obj else 0 for obj in annotations], dtype=np.int64)
 
-    # 获取目标边界框
+    # 提取边界框信息
     boxes = [obj["bbox"] for obj in annotations]
-    # 防止没有边界框通过调整大小
+    # 处理无边界框的情况
     boxes = np.asarray(boxes, dtype=np.float32).reshape(-1, 4)
-    boxes[:, 2:] += boxes[:, :2]
-    boxes[:, 0::2] = boxes[:, 0::2].clip(min=0, max=image_width)
-    boxes[:, 1::2] = boxes[:, 1::2].clip(min=0, max=image_height)
+    boxes[:, 2:] += boxes[:, :2]  # 将(x_min, y_min, width, height)转换为(x_min, y_min, x_max, y_max)
+    boxes[:, 0::2] = boxes[:, 0::2].clip(min=0, max=image_width)   # 裁剪边界框的x坐标
+    boxes[:, 1::2] = boxes[:, 1::2].clip(min=0, max=image_height)  # 裁剪边界框的y坐标
 
-    # 保留有效边界框
+    # 保留有效的边界框
     keep = (boxes[:, 3] > boxes[:, 1]) & (boxes[:, 2] > boxes[:, 0])
 
+    # 创建新的目标字典
     new_target = {}
     new_target["image_id"] = image_id
     new_target["class_labels"] = classes[keep]
@@ -350,18 +358,16 @@ def prepare_coco_detection_annotation(
     new_target["iscrowd"] = iscrowd[keep]
     new_target["orig_size"] = np.asarray([int(image_height), int(image_width)], dtype=np.int64)
 
-    # 如果存在关键点，则添加关键点信息
+    # 如果注释中包含关键点信息，则提取并添加到新的目标字典中
     if annotations and "keypoints" in annotations[0]:
         keypoints = [obj["keypoints"] for obj in annotations]
-        # 将过滤后的关键点列表转换为numpy数组
         keypoints = np.asarray(keypoints, dtype=np.float32)
-        # 在此处应用保留掩码以过滤相关注释
         keypoints = keypoints[keep]
         num_keypoints = keypoints.shape[0]
         keypoints = keypoints.reshape((-1, 3)) if num_keypoints else keypoints
         new_target["keypoints"] = keypoints
 
-    # 如果需要返回分割掩码，则添加分割掩码信息
+    # 如果需要返回分割掩码，则提取分割掩码并添加到新的目标字典中
     if return_segmentation_masks:
         segmentation_masks = [obj["segmentation"] for obj in annotations]
         masks = convert_coco_poly_to_mask(segmentation_masks, image_height, image_width)
@@ -370,48 +376,60 @@ def prepare_coco_detection_annotation(
     return new_target
 
 
-# 从transformers.models.detr.image_processing_detr.masks_to_boxes复制而来
+# 从transformers.models.detr.image_processing_detr.masks_to_boxes复制
 def masks_to_boxes(masks: np.ndarray) -> np.ndarray:
     """
     计算提供的全景分割掩码周围的边界框。
 
     Args:
-        masks: 格式为`[number_masks, height, width]`的掩码，其中N是掩码数量
+        masks: 格式为`[number_masks, height, width]`的掩码，其中N是掩码的数量
 
     Returns:
         boxes: 格式为`[number_masks, 4]`的边界框，xyxy格式
     """
-```  
-    # 如果 masks 的大小为 0，则返回形状为 (0, 4) 的零数组
+    # 如果掩码数组为空，则返回一个形状为 (0, 4) 的零数组
     if masks.size == 0:
         return np.zeros((0, 4))
-    
-    # 获取 masks 的高度 h 和宽度 w
+
+    # 获取掩码数组的高度 h 和宽度 w
     h, w = masks.shape[-2:]
-    # 创建包含 0 到 h-1 之间所有整数的一维数组 y
+
+    # 创建一维数组 y 和 x，分别表示高度和宽度范围，数据类型为 np.float32
     y = np.arange(0, h, dtype=np.float32)
-    # 创建包含 0 到 w-1 之间所有整数的一维数组 x
     x = np.arange(0, w, dtype=np.float32)
-    # 生成网格点坐标矩阵，使用 "ij" 索引
+
+    # 创建二维网格，用 y 和 x 数组作为坐标，并按照 'ij' 索引顺序
     y, x = np.meshgrid(y, x, indexing="ij")
-    
-    # 计算 x 方向的最大值和最小值
+
+    # 将掩码数组与 x 数组进行逐元素相乘，得到 x_mask
     x_mask = masks * np.expand_dims(x, axis=0)
+
+    # 对 x_mask 进行重塑和最大值计算，得到 x_max
     x_max = x_mask.reshape(x_mask.shape[0], -1).max(-1)
+
+    # 使用掩码创建一个掩码数组的掩码对象，并填充未掩码部分为 1e8
     x = np.ma.array(x_mask, mask=~(np.array(masks, dtype=bool)))
+
+    # 对填充后的 x_min 进行重塑和最小值计算，得到 x_min
     x_min = x.filled(fill_value=1e8)
     x_min = x_min.reshape(x_min.shape[0], -1).min(-1)
-    
-    # 计算 y 方向的最大值和最小值
+
+    # 将掩码数组与 y 数组进行逐元素相乘，得到 y_mask
     y_mask = masks * np.expand_dims(y, axis=0)
+
+    # 对 y_mask 进行重塑和最大值计算，得到 y_max
     y_max = y_mask.reshape(x_mask.shape[0], -1).max(-1)
+
+    # 使用掩码创建一个掩码数组的掩码对象，并填充未掩码部分为 1e8
     y = np.ma.array(y_mask, mask=~(np.array(masks, dtype=bool)))
+
+    # 对填充后的 y_min 进行重塑和最小值计算，得到 y_min
     y_min = y.filled(fill_value=1e8)
     y_min = y_min.reshape(y_min.shape[0], -1).min(-1)
-    
-    # 返回合并后的最小值和最大值数组
+
+    # 返回堆叠的 x_min, y_min, x_max, y_max 数组，形状为 (N, 4)，其中 N 是掩码数量
     return np.stack([x_min, y_min, x_max, y_max], 1)
-# 从 transformers.models.detr.image_processing_detr.prepare_coco_panoptic_annotation 复制，将 DETR 替换为 DeformableDetr
+# Copied from transformers.models.detr.image_processing_detr.prepare_coco_panoptic_annotation with DETR->DeformableDetr
 def prepare_coco_panoptic_annotation(
     image: np.ndarray,
     target: Dict,
@@ -420,113 +438,123 @@ def prepare_coco_panoptic_annotation(
     input_data_format: Union[ChannelDimension, str] = None,
 ) -> Dict:
     """
-    为 DeformableDetr 准备 coco 全景注释。
+    Prepare a coco panoptic annotation for DeformableDetr.
     """
     # 获取图像的高度和宽度
     image_height, image_width = get_image_size(image, channel_dim=input_data_format)
-    # 构建注释路径
+    # 构建注释文件的路径
     annotation_path = pathlib.Path(masks_path) / target["file_name"]
 
+    # 初始化新的目标字典
     new_target = {}
-    # 将 image_id 转换为数组形式，若不存在则使用 id
+    # 将图像ID转换为numpy数组形式存储在新的目标字典中
     new_target["image_id"] = np.asarray([target["image_id"] if "image_id" in target else target["id"]], dtype=np.int64)
-    # 将图像尺寸转换为数组形式
+    # 将图像尺寸存储在新的目标字典中
     new_target["size"] = np.asarray([image_height, image_width], dtype=np.int64)
-    # 将原始图像尺寸转换为数组形式
+    # 将原始图像尺寸存储在新的目标字典中
     new_target["orig_size"] = np.asarray([image_height, image_width], dtype=np.int64)
 
+    # 如果目标字典包含分段信息
     if "segments_info" in target:
-        # 读取注释图像并转换为数组形式
+        # 从注释文件中读取掩码信息并转换为numpy数组
         masks = np.asarray(PIL.Image.open(annotation_path), dtype=np.uint32)
-        # 将 RGB 转换为 ID
+        # 将RGB格式的掩码转换为类别ID格式的掩码
         masks = rgb_to_id(masks)
 
-        # 获取每个分段信息的 ID
+        # 从segments_info中提取分段信息中的ID
         ids = np.array([segment_info["id"] for segment_info in target["segments_info"]])
-        # 将每个分段的掩码与对应的 ID 匹配
+        # 使用类别ID掩码创建掩码数组
         masks = masks == ids[:, None, None]
         masks = masks.astype(np.uint8)
-        # 如果需要返回掩码，则存储在新目标字典中
+        
+        # 如果需要返回掩码，则存储在新的目标字典中
         if return_masks:
             new_target["masks"] = masks
-        # 将掩码转换为边界框并存储在新目标字典中
+        
+        # 将掩码转换为边界框格式并存储在新的目标字典中
         new_target["boxes"] = masks_to_boxes(masks)
-        # 将类别标签存储在新目标字典中
+        
+        # 提取分段信息中的类别ID并存储在新的目标字典中
         new_target["class_labels"] = np.array(
             [segment_info["category_id"] for segment_info in target["segments_info"]], dtype=np.int64
         )
-        # 将是否是群集存储在新目标字典中
+        
+        # 提取分段信息中的iscrowd标志并存储在新的目标字典中
         new_target["iscrowd"] = np.asarray(
             [segment_info["iscrowd"] for segment_info in target["segments_info"]], dtype=np.int64
         )
-        # 将面积信息存储在新目标字典中
+        
+        # 提取分段信息中的区域面积并存储在新的目标字典中
         new_target["area"] = np.asarray(
             [segment_info["area"] for segment_info in target["segments_info"]], dtype=np.float32
         )
 
+    # 返回处理后的新的目标字典
     return new_target
 
 
-# 从 transformers.models.detr.image_processing_detr.get_segmentation_image 复制
+# Copied from transformers.models.detr.image_processing_detr.get_segmentation_image
 def get_segmentation_image(
     masks: np.ndarray, input_size: Tuple, target_size: Tuple, stuff_equiv_classes, deduplicate=False
 ):
-    # 获取输入图像的高度和宽度
+    # 提取输入图像的高度和宽度
     h, w = input_size
-    # 获取目标图像的最终高度和宽度
+    # 提取目标图像的最终高度和宽度
     final_h, final_w = target_size
 
-    # 对掩码进行 softmax 操作
+    # 对掩码执行softmax操作，以获得每个像素最可能的类别ID
     m_id = scipy.special.softmax(masks.transpose(0, 1), -1)
 
+    # 如果掩码的类别ID数量为0，则创建全零矩阵
     if m_id.shape[-1] == 0:
-        # 如果没有检测到任何掩码，则创建全零掩码
         m_id = np.zeros((h, w), dtype=np.int64)
     else:
-        # 将掩码转换为 ID，并且将其重新形状以匹配输入图像的尺寸
+        # 取最大概率类别ID，并将其重新形状为原始图像尺寸
         m_id = m_id.argmax(-1).reshape(h, w)
 
+    # 如果需要去重复
     if deduplicate:
-        # 合并属于相同物体类别的掩码
+        # 合并具有相同类别的掩码
         for equiv in stuff_equiv_classes.values():
             for eq_id in equiv:
                 m_id[m_id == eq_id] = equiv[0]
 
-    # 将 ID 转换为 RGB 图像
+    # 将类别ID图像转换为RGB图像
     seg_img = id_to_rgb(m_id)
-    # 将分割图像调整为目标尺寸
+    # 将图像大小调整为目标尺寸并使用最近邻插值
     seg_img = resize(seg_img, (final_w, final_h), resample=PILImageResampling.NEAREST)
+    # 返回分割图像
     return seg_img
 
 
-# 从 transformers.models.detr.image_processing_detr.get_mask_area 复制
+# Copied from transformers.models.detr.image_processing_detr.get_mask_area
 def get_mask_area(seg_img: np.ndarray, target_size: Tuple[int, int], n_classes: int) -> np.ndarray:
-    # 获取目标图像的最终高度和宽度
+    # 提取目标图像的最终高度和宽度
     final_h, final_w = target_size
-    # 将分割图像转换为 numpy 数组
+    # 将分割图像转换为numpy数组，并将其形状调整为最终图像尺寸
     np_seg_img = seg_img.astype(np.uint8)
-    # 重新形状以匹配目标图像的尺寸
     np_seg_img = np_seg_img.reshape(final_h, final_w, 3)
-    # 将 RGB 图像转换为 ID
+    # 将RGB格式的图像转换为类别ID格式的图像
     m_id = rgb_to_id(np_seg_img)
-    # 计算每个类别的样本数量，m_id == i 表示将类别标签与当前索引 i 比较，得到布尔值数组，sum() 统计 True 的数量即为该类别的样本数量
+    # 返回类别ID图像
+    # 计算每个类别的样本数，返回一个列表，列表索引对应类别编号
     area = [(m_id == i).sum() for i in range(n_classes)]
-    # 返回每个类别的样本数量列表
+    # 返回计算出的各类别样本数列表作为结果
     return area
-# 从类别概率中计算标签得分
+# 定义函数，从类别概率的对数输出中计算标签和分数
 def score_labels_from_class_probabilities(logits: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    # 使用 scipy.special.softmax 计算概率
+    # 对类别概率进行 softmax 处理，使其变成概率分布
     probs = scipy.special.softmax(logits, axis=-1)
-    # 取最大概率对应的类别标签
+    # 获取每个样本中概率最高的类别标签
     labels = probs.argmax(-1, keepdims=True)
-    # 从概率中获取对应标签的得分
+    # 根据标签取出对应的概率作为分数
     scores = np.take_along_axis(probs, labels, axis=-1)
-    # 压缩得分和标签的维度
+    # 去除多余的维度，使得 scores 和 labels 变为一维数组
     scores, labels = scores.squeeze(-1), labels.squeeze(-1)
-    # 返回得分和标签
     return scores, labels
 
-# 对单个样本的输出进行后处理，生成全景分割预测
+
+# 定义函数，处理单个样本的 Panoptic 分割输出
 def post_process_panoptic_sample(
     out_logits: np.ndarray,
     masks: np.ndarray,
@@ -537,96 +565,107 @@ def post_process_panoptic_sample(
     threshold=0.85,
 ) -> Dict:
     """
-    将 [`DetrForSegmentation`] 的输出转换为单个样本的全景分割预测。
+    Converts the output of [`DetrForSegmentation`] into panoptic segmentation predictions for a single sample.
 
     Args:
         out_logits (`torch.Tensor`):
-            该样本的logits。
+            The logits for this sample.
         masks (`torch.Tensor`):
-            该样本的预测分割掩模。
+            The predicted segmentation masks for this sample.
         boxes (`torch.Tensor`):
-            该样本的预测边界框。边界框以规范化格式 `(中心坐标_x, 中心坐标_y, 宽度, 高度)` 给出，取值范围 `[0, 1]`，相对于图像的大小（不考虑填充）。
+            The prediced bounding boxes for this sample. The boxes are in the normalized format `(center_x, center_y,
+            width, height)` and values between `[0, 1]`, relative to the size the image (disregarding padding).
         processed_size (`Tuple[int, int]`):
-            图像的处理尺寸 `(高度, 宽度)`，由预处理步骤返回，即数据增强后但未批处理之前的大小。
+            The processed size of the image `(height, width)`, as returned by the preprocessing step i.e. the size
+            after data augmentation but before batching.
         target_size (`Tuple[int, int]`):
-            图像的目标尺寸，`(高度, 宽度)` 对应于请求的最终预测大小。
+            The target size of the image, `(height, width)` corresponding to the requested final size of the
+            prediction.
         is_thing_map (`Dict`):
-            将类别索引映射到一个布尔值，指示类别是物体还是非物体。
-        threshold (`float`, *可选参数*, 默认为 0.85):
-            用于二值化分割掩模的阈值。
+            A dictionary mapping class indices to a boolean value indicating whether the class is a thing or not.
+        threshold (`float`, *optional*, defaults to 0.85):
+            The threshold used to binarize the segmentation masks.
     """
-    # 过滤空查询和得分低于阈值的检测
+    # 根据类别概率计算标签和分数
     scores, labels = score_labels_from_class_probabilities(out_logits)
+    # 筛选出有效预测结果，去除空查询和低于阈值的检测结果
     keep = (labels != out_logits.shape[-1] - 1) & (scores > threshold)
 
+    # 从筛选后的结果中取出分数、类别和边界框
     cur_scores = scores[keep]
     cur_classes = labels[keep]
     cur_boxes = center_to_corners_format(boxes[keep])
 
+    # 检查每个类别是否都有相应的边界框
     if len(cur_boxes) != len(cur_classes):
         raise ValueError("Not as many boxes as there are classes")
 
+    # 取出当前有效预测的掩膜，并调整大小以匹配预处理后的图像尺寸
     cur_masks = masks[keep]
-    # 对掩模进行调整大小
     cur_masks = resize(cur_masks[:, None], processed_size, resample=PILImageResampling.BILINEAR)
     cur_masks = safe_squeeze(cur_masks, 1)
     b, h, w = cur_masks.shape
 
-    # 可能会有多个相同类别的预测掩模，此处跟踪每个类别的掩模id列表（稍后将合并）
+    # 将掩膜展平，以便后续合并同一类别的多个掩膜
     cur_masks = cur_masks.reshape(b, -1)
+    # 创建一个 defaultdict，用于跟踪每个物体类别的掩膜 ids（后续将这些 ids 合并）
     stuff_equiv_classes = defaultdict(list)
-    # 对当前类别进行枚举，获取类别索引和标签
+    # 遍历当前类别列表，并使用枚举函数获取索引和标签
     for k, label in enumerate(cur_classes):
-        # 如果不是物体类别，则将其添加到对应的“stuff”类别中
+        # 如果当前标签对应的不是物体类别，则将索引添加到对应的“stuff”等价类别列表中
         if not is_thing_map[label]:
             stuff_equiv_classes[label].append(k)
 
-    # 获取分割图像
+    # 生成分割图像，传入当前掩膜、处理后的大小、目标大小、等价类别映射和去重标志
     seg_img = get_segmentation_image(cur_masks, processed_size, target_size, stuff_equiv_classes, deduplicate=True)
-    # 获取每个分割区域的面积
+    
+    # 获取掩膜的面积，传入当前掩膜、处理后的大小以及当前类别数
     area = get_mask_area(cur_masks, processed_size, n_classes=len(cur_scores))
 
-    # 过滤面积过小的分割区域
+    # 如果当前类别列表非空
     if cur_classes.size() > 0:
-        # 过滤掉面积小于等于4的分割区域
+        # 过滤面积小于等于4的掩膜
         filtered_small = np.array([a <= 4 for a in area], dtype=bool)
-        # 只要还存在面积小于等于4的分割区域就进行循环过滤
+        # 只要还有被过滤的掩膜存在就继续循环
         while filtered_small.any():
-            # 根据过滤条件，更新当前的分割区域、分割得分和分割类别
+            # 从当前掩膜、分数和类别中移除面积小于等于4的掩膜
             cur_masks = cur_masks[~filtered_small]
             cur_scores = cur_scores[~filtered_small]
             cur_classes = cur_classes[~filtered_small]
-            # 重新获取分割图像和分割区域的面积
+            # 重新生成分割图像，传入处理后的大小、目标大小、等价类别映射和去重标志
             seg_img = get_segmentation_image(cur_masks, (h, w), target_size, stuff_equiv_classes, deduplicate=True)
+            # 获取更新后的掩膜的面积
             area = get_mask_area(seg_img, target_size, n_classes=len(cur_scores))
-            # 再次过滤面积小于等于4的分割区域
+            # 重新过滤面积小于等于4的掩膜
             filtered_small = np.array([a <= 4 for a in area], dtype=bool)
     else:
-        # 如果当前类别为空，则创建一个具有默认分类的数组
+        # 如果当前类别列表为空，则创建一个包含一个元素的numpy数组，元素为1，数据类型为int64
         cur_classes = np.ones((1, 1), dtype=np.int64)
 
-    # 获取分割区域信息，包括ID、是否为物体、类别ID和面积
+    # 创建segments_info列表，每个元素是一个字典，包含id、是否物体、类别id和面积信息
     segments_info = [
         {"id": i, "isthing": is_thing_map[cat], "category_id": int(cat), "area": a}
         for i, (cat, a) in enumerate(zip(cur_classes, area))
     ]
-    # 删除当前类别数组
+    # 删除cur_classes变量
     del cur_classes
 
-    # 使用IO流保存分割图像
+    # 使用io.BytesIO创建一个字节流对象out
     with io.BytesIO() as out:
+        # 将seg_img转换为PIL图像格式，并保存到out字节流中，格式为PNG
         PIL.Image.fromarray(seg_img).save(out, format="PNG")
-        # 构建预测结果，包括PNG图像和分割区域信息
+        # 构建预测结果字典，包含PNG图像字符串和segments_info列表
         predictions = {"png_string": out.getvalue(), "segments_info": segments_info}
 
-    # 返回预测结果
+    # 返回预测结果字典
     return predictions
+# Copied from transformers.models.detr.image_processing_detr.resize_annotation
 def resize_annotation(
-    annotation: Dict[str, Any],  # 接受一个包含annotation的字典
-    orig_size: Tuple[int, int],   # 原始图像的大小
-    target_size: Tuple[int, int],  # 目标大小
-    threshold: float = 0.5,       # 阈值用于对分割蒙版进行二值化
-    resample: PILImageResampling = PILImageResampling.NEAREST,  # 重新采样时使用的滤波器
+    annotation: Dict[str, Any],
+    orig_size: Tuple[int, int],
+    target_size: Tuple[int, int],
+    threshold: float = 0.5,
+    resample: PILImageResampling = PILImageResampling.NEAREST,
 ):
     """
     Resizes an annotation to a target size.
@@ -643,35 +682,45 @@ def resize_annotation(
         resample (`PILImageResampling`, defaults to `PILImageResampling.NEAREST`):
             The resampling filter to use when resizing the masks.
     """
-    ratios = tuple(float(s) / float(s_orig) for s, s_orig in zip(target_size, orig_size))  # 计算需要缩放的比例
-    ratio_height, ratio_width = ratios  # 获取缩放比例
+    # 计算目标尺寸与原始尺寸的比率
+    ratios = tuple(float(s) / float(s_orig) for s, s_orig in zip(target_size, orig_size))
+    ratio_height, ratio_width = ratios
 
-    new_annotation = {}  # 创建新的annotation字典
-    new_annotation["size"] = target_size  # 将目标大小存入新字典
+    # 创建新的注释字典，设定大小为目标尺寸
+    new_annotation = {}
+    new_annotation["size"] = target_size
 
-    for key, value in annotation.items():  # 遍历原始annotation的键值对
-        if key == "boxes":  # 如果键是“boxes”
-            boxes = value  # 获取box的值
-            scaled_boxes = boxes * np.asarray([ratio_width, ratio_height, ratio_width, ratio_height], dtype=np.float32)  # 根据缩放比例对box进行缩放
-            new_annotation["boxes"] = scaled_boxes  # 将缩放后的box存入新字典
-        elif key == "area":  # 如果键是“area”
-            area = value  # 获取面积的值
-            scaled_area = area * (ratio_width * ratio_height)  # 根据缩放比例对面积进行缩放
-            new_annotation["area"] = scaled_area  # 将缩放后的面积存入新字典
-        elif key == "masks":  # 如果键是“masks”
-            masks = value[:, None]  # 获取掩码
-            masks = np.array([resize(mask, target_size, resample=resample) for mask in masks])  # 根据缩放比例对掩码进行缩放
-            masks = masks.astype(np.float32)  # 将掩码转换为浮点型
-            masks = masks[:, 0] > threshold  # 根据阈值进行二值化
-            new_annotation["masks"] = masks  # 将处理后的掩码存入新字典
-        elif key == "size":  # 如果键是“size”
-            new_annotation["size"] = target_size  # 更新新字典中的大小
-        else:  # 其他情况
-            new_annotation[key] = value  # 将原始值复制到新字典中
+    # 遍历原始注释的键值对
+    for key, value in annotation.items():
+        # 如果键是"boxes"，则将边界框按比例缩放
+        if key == "boxes":
+            boxes = value
+            scaled_boxes = boxes * np.asarray([ratio_width, ratio_height, ratio_width, ratio_height], dtype=np.float32)
+            new_annotation["boxes"] = scaled_boxes
+        # 如果键是"area"，则将面积按比例缩放
+        elif key == "area":
+            area = value
+            scaled_area = area * (ratio_width * ratio_height)
+            new_annotation["area"] = scaled_area
+        # 如果键是"masks"，则按目标尺寸和指定的重采样方法调整掩码
+        elif key == "masks":
+            masks = value[:, None]
+            masks = np.array([resize(mask, target_size, resample=resample) for mask in masks])
+            masks = masks.astype(np.float32)
+            masks = masks[:, 0] > threshold  # 使用阈值二值化掩码
+            new_annotation["masks"] = masks
+        # 如果键是"size"，则直接设定大小为目标尺寸
+        elif key == "size":
+            new_annotation["size"] = target_size
+        # 其他情况下直接复制原始注释的键值对
+        else:
+            new_annotation[key] = value
 
-    return new_annotation  # 返回新字典
+    # 返回调整后的新注释字典
+    return new_annotation
 
 
+# Copied from transformers.models.detr.image_processing_detr.binary_mask_to_rle
 def binary_mask_to_rle(mask):
     """
     Converts given binary mask of shape `(height, width)` to the run-length encoding (RLE) format.
@@ -684,75 +733,119 @@ def binary_mask_to_rle(mask):
         `List`: Run-length encoded list of the binary mask. Refer to COCO API for more information about the RLE
         format.
     """
-    if is_torch_tensor(mask):  # 如果是torch张量
-        mask = mask.numpy()  # 转换为numpy数组
+    # 如果输入的掩码是 PyTorch 张量，则转换为 NumPy 数组
+    if is_torch_tensor(mask):
+        mask = mask.numpy()
 
-    pixels = mask.flatten()  # 将掩码展平为一维数组
-    pixels = np.concatenate([[0], pixels, [0]])  # 在掩码数组两侧各拼接一个0
-    runs = np.where(pixels[1:] != pixels[:-1])[0] + 1  # 找到掩码中从0到1或者从1到0的转变点
-    runs[1::2] -= runs[::2]  # 计算每个区域的长度
-    return list(runs)  # 返回运行长度编码的列表
+    # 将掩码展平为一维数组
+    pixels = mask.flatten()
+    # 在数组两端各添加一个零，以处理掩码边界
+    pixels = np.concatenate([[0], pixels, [0]])
+    # 找到连续不同像素值的起始和结束索引，构建 RLE 编码
+    runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
+    runs[1::2] -= runs[::2]
+    return list(runs)
 
 
+# Copied from transformers.models.detr.image_processing_detr.convert_segmentation_to_rle
 def convert_segmentation_to_rle(segmentation):
     """
-    # 将给定的分割图像(segmentation map)的形状为 (height, width) 转换为游程编码(run-length encoding, RLE)格式。
-    def segmentation_to_rle(segmentation):
-        # 获取分割图像中唯一的分割ID
-        segment_ids = torch.unique(segmentation)
-    
-        # 初始化一个列表来存储每个分割ID的游程编码
-        run_length_encodings = []
-        for idx in segment_ids:
-            # 根据分割ID生成掩码张量
-            mask = torch.where(segmentation == idx, 1, 0)
-            # 将掩码张量转换为游程编码
-            rle = binary_mask_to_rle(mask)
-            # 将该分割ID的游程编码添加到列表中
-            run_length_encodings.append(rle)
-    
-        # 返回包含所有分割ID的游程编码的列表
-        return run_length_encodings
-# 从transformers.models.detr.image_processing_detr.remove_low_and_no_objects中复制的函数，用于移除低质量和不存在对象的掩码
+    Converts given segmentation map of shape `(height, width)` to the run-length encoding (RLE) format.
+
+    Args:
+        segmentation (`torch.Tensor` or `numpy.array`):
+            A segmentation map of shape `(height, width)` where each value denotes a segment or class id.
+    Returns:
+        `List[List]`: A list of lists, where each list is the run-length encoding of a segment / class id.
+    """
+    # 获取唯一的分割标识符列表，即所有不同的分割或类别标识符
+    segment_ids = torch.unique(segmentation)
+
+    # 初始化存储所有分割标识符的运行长度编码列表
+    run_length_encodings = []
+    # 遍历每个分割标识符
+    for idx in segment_ids:
+        # 创建一个二进制掩码，其中分割标识符对应的位置为1，其它位置为0
+        mask = torch.where(segmentation == idx, 1, 0)
+        # 将二进制掩码转换为运行长度编码（RLE）
+        rle = binary_mask_to_rle(mask)
+        # 将当前分割标识符的运行长度编码添加到列表中
+        run_length_encodings.append(rle)
+
+    # 返回所有分割标识符的运行长度编码列表
+    return run_length_encodings
+# Copied from transformers.models.detr.image_processing_detr.remove_low_and_no_objects
 def remove_low_and_no_objects(masks, scores, labels, object_mask_threshold, num_labels):
     """
-    用`object_mask_threshold`对给定的掩码进行二值化，返回`masks`、`scores`和`labels`的关联值。
+    Binarize the given masks using `object_mask_threshold`, it returns the associated values of `masks`, `scores` and
+    `labels`.
 
     Args:
         masks (`torch.Tensor`):
-            形状为`(num_queries, height, width)`的张量。
+            A tensor of shape `(num_queries, height, width)`.
         scores (`torch.Tensor`):
-            形状为`(num_queries)`的张量。
+            A tensor of shape `(num_queries)`.
         labels (`torch.Tensor`):
-            形状为`(num_queries)`的张量。
+            A tensor of shape `(num_queries)`.
         object_mask_threshold (`float`):
-            用于二值化掩码的0到1之间的数字。
+            A number between 0 and 1 used to binarize the masks.
     Raises:
-        `ValueError`: 当所有输入张量中的第一个维度不匹配时引发异常。
+        `ValueError`: Raised when the first dimension doesn't match in all input tensors.
     Returns:
-        `Tuple[`torch.Tensor`, `torch.Tensor`, `torch.Tensor`]`: 不包含小于`object_mask_threshold`的区域的`masks`、`scores`和`labels`。
+        `Tuple[`torch.Tensor`, `torch.Tensor`, `torch.Tensor`]`: The `masks`, `scores` and `labels` without the region
+        < `object_mask_threshold`.
     """
+    # 检查输入张量的第一个维度是否匹配
+    if not (masks.shape[0] == scores.shape[0] == labels.shape[0]):
+        raise ValueError("mask, scores and labels must have the same shape!")
 
-# 从transformers.models.detr.image_processing_detr.check_segment_validity中复制的函数，用于检查段的有效性
+    # 根据阈值和标签数筛选保留的对象
+    to_keep = labels.ne(num_labels) & (scores > object_mask_threshold)
+
+    return masks[to_keep], scores[to_keep], labels[to_keep]
+
+
+# Copied from transformers.models.detr.image_processing_detr.check_segment_validity
 def check_segment_validity(mask_labels, mask_probs, k, mask_threshold=0.5, overlap_mask_area_threshold=0.8):
-    # 获取与第k类相关联的掩码
+    """
+    Determine the validity of a segment based on mask labels and probabilities.
+
+    Args:
+        mask_labels (`torch.Tensor`):
+            Tensor indicating mask labels.
+        mask_probs (`torch.Tensor`):
+            Tensor of mask probabilities.
+        k (`int`):
+            Class index to evaluate.
+        mask_threshold (`float`, optional):
+            Threshold value for binarizing masks. Default is 0.5.
+        overlap_mask_area_threshold (`float`, optional):
+            Threshold for determining valid segment based on area overlap. Default is 0.8.
+    Returns:
+        `Tuple[bool, torch.Tensor]`: A tuple indicating segment validity and the mask for the class `k`.
+    """
+    # 获取与类别 k 相关的掩码
     mask_k = mask_labels == k
+    # 计算类别 k 的掩码区域面积
     mask_k_area = mask_k.sum()
 
-    # 计算查询k中所有内容的面积
+    # 计算查询 k 中所有内容的区域面积
     original_area = (mask_probs[k] >= mask_threshold).sum()
+    # 检查掩码是否存在
     mask_exists = mask_k_area > 0 and original_area > 0
 
-    # 消除断开的微小段
+    # 消除断开的小段
     if mask_exists:
+        # 计算区域比例
         area_ratio = mask_k_area / original_area
+        # 如果区域比例低于阈值，则认为掩码不存在
         if not area_ratio.item() > overlap_mask_area_threshold:
             mask_exists = False
 
     return mask_exists, mask_k
 
 
-# 从transformers.models.detr.image_processing_detr.compute_segments中复制的函数，用于计算段
+# Copied from transformers.models.detr.image_processing_detr.compute_segments
 def compute_segments(
     mask_probs,
     pred_scores,
@@ -762,52 +855,84 @@ def compute_segments(
     label_ids_to_fuse: Optional[Set[int]] = None,
     target_size: Tuple[int, int] = None,
 ):
+    """
+    Compute segments based on mask probabilities, prediction scores, and labels.
+
+    Args:
+        mask_probs (`torch.Tensor`):
+            Tensor of mask probabilities.
+        pred_scores (`torch.Tensor`):
+            Tensor of prediction scores.
+        pred_labels (`torch.Tensor`):
+            Tensor of prediction labels.
+        mask_threshold (`float`, optional):
+            Threshold value for binarizing masks. Default is 0.5.
+        overlap_mask_area_threshold (`float`, optional):
+            Threshold for determining valid segment based on area overlap. Default is 0.8.
+        label_ids_to_fuse (`Optional[Set[int]]`, optional):
+            Set of label IDs to fuse. Default is None.
+        target_size (`Tuple[int, int]`, optional):
+            Tuple specifying target size. Default is None.
+    Returns:
+        `torch.Tensor`: Segmentation results as a tensor of integers.
+    """
+    # 根据目标大小或默认大小获取高度和宽度
     height = mask_probs.shape[1] if target_size is None else target_size[0]
     width = mask_probs.shape[2] if target_size is None else target_size[1]
 
+    # 初始化分割结果
     segmentation = torch.zeros((height, width), dtype=torch.int32, device=mask_probs.device)
+    # 初始化段列表
     segments: List[Dict] = []
 
+    # 如果有指定目标大小，则插值调整 mask_probs
     if target_size is not None:
         mask_probs = nn.functional.interpolate(
             mask_probs.unsqueeze(0), size=target_size, mode="bilinear", align_corners=False
         )[0]
 
+    # 当前段的 ID
     current_segment_id = 0
 
-    # 根据其预测得分对每个掩码进行加权
+    # 根据预测分数加权每个掩码
     mask_probs *= pred_scores.view(-1, 1, 1)
+    # 确定每个像素的主要标签
     mask_labels = mask_probs.argmax(0)  # [height, width]
 
     # 跟踪每个类别的实例
-    # 定义一个空的字典，用于存储物品的内存列表，键为字符串，值为整数
+    # 初始化一个空字典，用于存储物体类别和其对应的当前段的标识符
     stuff_memory_list: Dict[str, int] = {}
-    # 遍历预测标签的行数
+    
+    # 遍历预测标签的每一行
     for k in range(pred_labels.shape[0]):
-        # 获取预测的类别
+        # 获取当前预测的类别标签
         pred_class = pred_labels[k].item()
-        # 判断是否应该进行融合
+        
+        # 检查当前类别是否需要融合
         should_fuse = pred_class in label_ids_to_fuse
     
-        # 检查掩码是否存在并且足够大以成为一个段
+        # 检查当前索引 k 对应的掩码是否有效且足够大作为一个段
         mask_exists, mask_k = check_segment_validity(
             mask_labels, mask_probs, k, mask_threshold, overlap_mask_area_threshold
         )
     
-        # 如果掩码存在
+        # 如果存在有效掩码
         if mask_exists:
-            # 如果预测类别在物品内存列表中
+            # 如果当前预测类别已经在 stuff_memory_list 中存在
             if pred_class in stuff_memory_list:
-                # 获取当前段的ID
+                # 获取当前类别对应的段标识符
                 current_segment_id = stuff_memory_list[pred_class]
             else:
-                # 否则，当前段的ID加1
+                # 如果不存在，则增加段标识符并更新到 stuff_memory_list 中
                 current_segment_id += 1
     
-            # 将当前对象段添加到最终分割地图中
+            # 将当前对象段添加到最终的分割地图中，使用掩码索引 mask_k
             segmentation[mask_k] = current_segment_id
-            # 对段得分进行舍入并保存
+            
+            # 获取当前预测得分，并四舍五入保留六位小数
             segment_score = round(pred_scores[k].item(), 6)
+            
+            # 将当前段的信息添加到 segments 列表中
             segments.append(
                 {
                     "id": current_segment_id,
@@ -816,16 +941,16 @@ def compute_segments(
                     "score": segment_score,
                 }
             )
-            # 如果应该融合，则更新物品内存列表
+            
+            # 如果当前类别需要融合，则更新 stuff_memory_list 中对应类别的段标识符
             if should_fuse:
                 stuff_memory_list[pred_class] = current_segment_id
     
     # 返回最终的分割地图和段列表
     return segmentation, segments
-# 创建一个名为DeformableDetrImageProcessor的类，它是BaseImageProcessor的子类
+# 定义一个 Deformable DETR 图像处理器类，继承自 BaseImageProcessor 基类
 class DeformableDetrImageProcessor(BaseImageProcessor):
-    # 类的文档字符串，描述了类的作用和参数
-    r"""
+    """
     Constructs a Deformable DETR image processor.
 
     Args:
@@ -854,34 +979,38 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
         image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_DEFAULT_STD`):
             Standard deviation values to use when normalizing the image. Can be a single value or a list of values, one
             for each channel. Can be overridden by the `image_std` parameter in the `preprocess` method.
+        do_convert_annotations (`bool`, *optional*, defaults to `True`):
+            Controls whether to convert the annotations to the format expected by the DETR model. Converts the
+            bounding boxes to the format `(center_x, center_y, width, height)` and in the range `[0, 1]`.
+            Can be overridden by the `do_convert_annotations` parameter in the `preprocess` method.
         do_pad (`bool`, *optional*, defaults to `True`):
-            Controls whether to pad the image to the largest image in a batch and create a pixel mask. Can be
-            overridden by the `do_pad` parameter in the `preprocess` method.
+            Controls whether to pad the image. Can be overridden by the `do_pad` parameter in the `preprocess`
+            method. If `True` will pad the images in the batch to the largest height and width in the batch.
+            Padding will be applied to the bottom and right of the image with zeros.
     """
-
-    # 类属性，指定模型接受的输入名称列表
     model_input_names = ["pixel_values", "pixel_mask"]
 
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.__init__复制代码
-    # 定义一个 DeformableDetrImageProcessor 类，用于处理和预处理图像和目标注释
+    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.__init__中复制而来，初始化函数
     def __init__(
         self,
-        format: Union[str, AnnotationFormat] = AnnotationFormat.COCO_DETECTION, # 设置默认的注释格式为 COCO 目标检测
-        do_resize: bool = True, # 是否进行图像缩放
-        size: Dict[str, int] = None, # 指定缩放后的图像尺寸
-        resample: PILImageResampling = PILImageResampling.BILINEAR, # 设置缩放时使用的采样方法
-        do_rescale: bool = True, # 是否进行图像像素值范围缩放
-        rescale_factor: Union[int, float] = 1 / 255, # 指定图像像素值缩放因子
-        do_normalize: bool = True, # 是否进行图像归一化
-        image_mean: Union[float, List[float]] = None, # 指定图像归一化时使用的均值
-        image_std: Union[float, List[float]] = None, # 指定图像归一化时使用的标准差
-        do_pad: bool = True, # 是否进行图像填充
+        format: Union[str, AnnotationFormat] = AnnotationFormat.COCO_DETECTION,
+        do_resize: bool = True,
+        size: Dict[str, int] = None,
+        resample: PILImageResampling = PILImageResampling.BILINEAR,
+        do_rescale: bool = True,
+        rescale_factor: Union[int, float] = 1 / 255,
+        do_normalize: bool = True,
+        image_mean: Union[float, List[float]] = None,
+        image_std: Union[float, List[float]] = None,
+        do_convert_annotations: Optional[bool] = None,
+        do_pad: bool = True,
         **kwargs,
     ) -> None:
-        # 处理 kwargs 中的一些特殊参数
+        # 如果kwargs中存在"pad_and_return_pixel_mask"参数，则将do_pad设置为该参数值并将其从kwargs中删除
         if "pad_and_return_pixel_mask" in kwargs:
             do_pad = kwargs.pop("pad_and_return_pixel_mask")
-    
+
+        # 如果kwargs中存在"max_size"参数，则发出警告提示，推荐使用size字典中的"longest_edge"参数
         if "max_size" in kwargs:
             logger.warning_once(
                 "The `max_size` parameter is deprecated and will be removed in v4.26. "
@@ -889,14 +1018,21 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
             )
             max_size = kwargs.pop("max_size")
         else:
+            # 否则将max_size设置为None或者size字典中的"longest_edge"参数，最大尺寸为1333
             max_size = None if size is None else 1333
-    
-        # 设置图像尺寸
+
+        # 如果size为None，则将size设置为{"shortest_edge": 800, "longest_edge": 1333}字典
         size = size if size is not None else {"shortest_edge": 800, "longest_edge": 1333}
+        # 调用get_size_dict函数，根据max_size和default_to_square参数调整size字典的内容
         size = get_size_dict(size, max_size=max_size, default_to_square=False)
-    
-        # 调用父类的初始化方法
+
+        # 兼容处理，如果do_convert_annotations为None，则设置其值等于do_normalize
+        if do_convert_annotations is None:
+            do_convert_annotations = do_normalize
+
+        # 调用父类的初始化方法，传入kwargs中的其它参数
         super().__init__(**kwargs)
+        # 设置对象的各个属性值
         self.format = format
         self.do_resize = do_resize
         self.size = size
@@ -904,21 +1040,53 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
         self.do_rescale = do_rescale
         self.rescale_factor = rescale_factor
         self.do_normalize = do_normalize
+        self.do_convert_annotations = do_convert_annotations
         self.image_mean = image_mean if image_mean is not None else IMAGENET_DEFAULT_MEAN
         self.image_std = image_std if image_std is not None else IMAGENET_DEFAULT_STD
         self.do_pad = do_pad
-    
+        # 设置有效的处理器键列表
+        self._valid_processor_keys = [
+            "images",
+            "annotations",
+            "return_segmentation_masks",
+            "masks_path",
+            "do_resize",
+            "size",
+            "resample",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "do_convert_annotations",
+            "image_mean",
+            "image_std",
+            "do_pad",
+            "format",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
+
     @classmethod
-    # 重写父类的 from_dict 方法，确保在使用 from_dict 创建图像处理器时能够正确处理参数
+    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.from_dict中复制而来，修改为DeformableDetr
+    # 从字典中重新构建 DeformableDetrImageProcessor 对象，更新参数
     def from_dict(cls, image_processor_dict: Dict[str, Any], **kwargs):
+        """
+        Overrides the `from_dict` method from the base class to make sure parameters are updated if image processor is
+        created using from_dict and kwargs e.g. `DeformableDetrImageProcessor.from_pretrained(checkpoint, size=600,
+        max_size=800)`
+        """
+        # 复制输入的字典，以确保不会修改原始数据
         image_processor_dict = image_processor_dict.copy()
+        # 如果 kwargs 中有 "max_size" 参数，则更新到 image_processor_dict 中，并从 kwargs 中移除该参数
         if "max_size" in kwargs:
             image_processor_dict["max_size"] = kwargs.pop("max_size")
+        # 如果 kwargs 中有 "pad_and_return_pixel_mask" 参数，则更新到 image_processor_dict 中，并从 kwargs 中移除该参数
         if "pad_and_return_pixel_mask" in kwargs:
             image_processor_dict["pad_and_return_pixel_mask"] = kwargs.pop("pad_and_return_pixel_mask")
+        # 调用父类的 from_dict 方法，将更新后的 image_processor_dict 和剩余的 kwargs 传递给它
         return super().from_dict(image_processor_dict, **kwargs)
-    
-    # 重写父类的 prepare_annotation 方法，用于预处理目标注释
+
+    # 从 DETR 的代码中复制，准备注释以供 DeformableDetr 使用
     def prepare_annotation(
         self,
         image: np.ndarray,
@@ -927,30 +1095,26 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
         return_segmentation_masks: bool = None,
         masks_path: Optional[Union[str, pathlib.Path]] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
-    ):
-        # 在这里实现预处理目标注释的逻辑
-        pass
-    # 定义一个函数，准备输入到 DeformableDetr 模型的注释
-    def prepare(self, image, target, return_segmentation_masks=None, masks_path=None) -> Dict:
+    ) -> Dict:
         """
         Prepare an annotation for feeding into DeformableDetr model.
         """
-        # 如果格式不为空，则采用指定格式；否则使用默认格式
+        # 如果未指定格式，则使用类中定义的格式
         format = format if format is not None else self.format
-    
-        # 如果格式为 COCO_DETECTION
+
+        # 如果格式是 COCO_DETECTION
         if format == AnnotationFormat.COCO_DETECTION:
-            # 如果返回分割掩码为空，则设为 False；否则使用指定值
+            # 如果未指定是否返回分割掩码，则默认为 False
             return_segmentation_masks = False if return_segmentation_masks is None else return_segmentation_masks
-            # 准备 COCO_DETECTION 的注释
+            # 调用 prepare_coco_detection_annotation 函数，准备 COCO_DETECTION 类型的注释
             target = prepare_coco_detection_annotation(
                 image, target, return_segmentation_masks, input_data_format=input_data_format
             )
-        # 如果格式为 COCO_PANOPTIC
+        # 如果格式是 COCO_PANOPTIC
         elif format == AnnotationFormat.COCO_PANOPTIC:
-            # 如果返回分割掩码为空，则设为 True；否则使用指定值
+            # 如果未指定是否返回分割掩码，则默认为 True
             return_segmentation_masks = True if return_segmentation_masks is None else return_segmentation_masks
-            # 准备 COCO_PANOPTIC 的注释
+            # 调用 prepare_coco_panoptic_annotation 函数，准备 COCO_PANOPTIC 类型的注释
             target = prepare_coco_panoptic_annotation(
                 image,
                 target,
@@ -959,46 +1123,46 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
                 input_data_format=input_data_format,
             )
         else:
-            # 抛出数值错误，指出不支持的格式
+            # 如果格式不是 COCO_DETECTION 或 COCO_PANOPTIC，则抛出异常
             raise ValueError(f"Format {format} is not supported.")
-        # 返回处理好的注释
+        
+        # 返回处理后的目标字典
         return target
-    
-    # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.prepare 复制而来
-    # 该方法已弃用，将在 v4.33 版本中删除
+
+    # 从 DETR 的代码中复制，警告该方法即将被弃用，建议使用 prepare_annotation 方法代替
     def prepare(self, image, target, return_segmentation_masks=None, masks_path=None):
         logger.warning_once(
             "The `prepare` method is deprecated and will be removed in a v4.33. "
             "Please use `prepare_annotation` instead. Note: the `prepare_annotation` method "
             "does not return the image anymore.",
         )
-        # 调用新的方法 prepare_annotation 处理注释
+        # 调用 prepare_annotation 方法来准备图像和目标
         target = self.prepare_annotation(image, target, return_segmentation_masks, masks_path, self.format)
+        # 返回图像和处理后的目标
         return image, target
-    
-    # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.convert_coco_poly_to_mask 复制而来
-    # 该方法已弃用，将在 v4.33 版本中删除
+
+    # 从 DETR 的代码中复制，用于将 COCO 多边形转换为掩码的方法
+    # 发出警告日志，提醒该方法即将在 v4.33 版本中移除
     def convert_coco_poly_to_mask(self, *args, **kwargs):
         logger.warning_once("The `convert_coco_poly_to_mask` method is deprecated and will be removed in v4.33. ")
-        # 调用新的方法 convert_coco_poly_to_mask 处理注释
+        # 调用被复制的函数 convert_coco_poly_to_mask，并传递所有参数和关键字参数
         return convert_coco_poly_to_mask(*args, **kwargs)
-    
+
     # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.prepare_coco_detection 复制而来
-    # 该方��已弃用，将在 v4.33 版本中删除
     def prepare_coco_detection(self, *args, **kwargs):
+        # 发出警告日志，提醒该方法即将在 v4.33 版本中移除
         logger.warning_once("The `prepare_coco_detection` method is deprecated and will be removed in v4.33. ")
-        # 调用新的方法 prepare_coco_detection_annotation 处理注释
+        # 调用被复制的函数 prepare_coco_detection_annotation，并传递所有参数和关键字参数
         return prepare_coco_detection_annotation(*args, **kwargs)
-    
+
     # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.prepare_coco_panoptic 复制而来
-    # 该方法已弃用，将在 v4.33 版本中删除
     def prepare_coco_panoptic(self, *args, **kwargs):
+        # 发出警告日志，提醒该方法即将在 v4.33 版本中移除
         logger.warning_once("The `prepare_coco_panoptic` method is deprecated and will be removed in v4.33. ")
-        # 调用新的方法 prepare_coco_panoptic_annotation 处理注释
+        # 调用被复制的函数 prepare_coco_panoptic_annotation，并传递所有参数和关键字参数
         return prepare_coco_panoptic_annotation(*args, **kwargs)
-    
+
     # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.resize 复制而来
-    # 定义resize方法，用于调整图像大小
     def resize(
         self,
         image: np.ndarray,
@@ -1007,23 +1171,32 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
         data_format: Optional[ChannelDimension] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
+    # 定义函数 resize，用于调整图像大小
+    def resize(
+        image: np.ndarray,
+        size: Union[int, Tuple[int, int]],
+        resample: PILImageResampling = PILImageResampling.BILINEAR,
+        data_format: str = "channels_last",
+        input_data_format: Optional[str] = None,
+        **kwargs
     ) -> np.ndarray:
         """
-        调整图像大小到给定的尺寸。尺寸可以是`min_size`（标量）或`(height, width)`元组。 如果尺寸是整数，则图像的较小边将与此数字匹配。
+        Resize the image to the given size. Size can be `min_size` (scalar) or `(height, width)` tuple. If size is an
+        int, smaller edge of the image will be matched to this number.
 
         Args:
             image (`np.ndarray`):
-                要调整大小的图像。
-            size (`Dict[str, int]`):
-                包含要调整大小的尺寸的字典。可以包含键`shortest_edge`和`longest_edge`或`height`和`width`。
-            resample (`PILImageResampling`, *optional*, 默认为`PILImageResampling.BILINEAR`):
-                在调整图像大小时要使用的重采样滤波器。
-            data_format (`str` or `ChannelDimension`, *optional*):
-                输出图像的通道维度格式。 如果未设置，则使用输入图像的通道维度格式。
-            input_data_format (`ChannelDimension` or `str`, *optional*):
-                输入图像的通道维度格式。 如果未提供，将进行推断。
+                Image to resize.
+            size (`Union[int, Tuple[int, int]]`):
+                Size to resize to. Can be an integer or a tuple of height and width.
+            resample (`PILImageResampling`, optional):
+                Resampling filter to use if resizing the image.
+            data_format (`str`, optional):
+                The channel dimension format for the output image.
+            input_data_format (`str`, optional):
+                The channel dimension format of the input image.
         """
-        # 检查是否存在已弃用的`max_size`参数，如果存在则发出警告
+        # 如果参数中包含 'max_size'，发出警告并从 kwargs 中移除该参数，将其值赋给 max_size；否则 max_size 设为 None
         if "max_size" in kwargs:
             logger.warning_once(
                 "The `max_size` parameter is deprecated and will be removed in v4.26. "
@@ -1032,49 +1205,51 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
             max_size = kwargs.pop("max_size")
         else:
             max_size = None
-        # 获取真实的尺寸字典，根据`size`和`max_size`，默认不生成正方形图像
+        
+        # 调用 get_size_dict 函数，根据参数 size 和 max_size 获得实际的调整大小结果，不默认为正方形
         size = get_size_dict(size, max_size=max_size, default_to_square=False)
-        # 根据尺寸字典获取调整大小后的图像尺寸
+        
+        # 如果 size 中同时包含 'shortest_edge' 和 'longest_edge'，调用 get_resize_output_image_size 函数获取调整后的大小
         if "shortest_edge" in size and "longest_edge" in size:
             size = get_resize_output_image_size(
                 image, size["shortest_edge"], size["longest_edge"], input_data_format=input_data_format
             )
+        # 如果 size 中同时包含 'height' 和 'width'，直接使用这两个值作为调整后的大小
         elif "height" in size and "width" in size:
             size = (size["height"], size["width"])
         else:
-            # 如果尺寸字典不含有所需的键，则引发错误
+            # 如果 size 不符合以上格式要求，抛出 ValueError 异常
             raise ValueError(
                 "Size must contain 'height' and 'width' keys or 'shortest_edge' and 'longest_edge' keys. Got"
                 f" {size.keys()}."
             )
-        # 执行图像调整大小操作
+        
+        # 调用 resize 函数，实际执行图像调整大小的操作
         image = resize(
             image, size=size, resample=resample, data_format=data_format, input_data_format=input_data_format, **kwargs
         )
+        
         # 返回调整大小后的图像
         return image
 
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.resize_annotation中复制的方法
+    # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor.resize_annotation
+    # 定义函数 resize_annotation，用于调整注释（标注）的大小以匹配调整后的图像
     def resize_annotation(
         self,
         annotation,
         orig_size,
         size,
         resample: PILImageResampling = PILImageResampling.NEAREST,
-    def resize_annotation(
-        self,
-        annotation: Dict,
-        orig_size: Tuple[int, int],
-        size: Union[int, Tuple[int, int]],
-        resample: int = Image.NEAREST,
     ) -> Dict:
         """
         Resize the annotation to match the resized image. If size is an int, smaller edge of the mask will be matched
         to this number.
         """
+        # 调用 resize_annotation 函数，实际执行标注调整大小的操作
         return resize_annotation(annotation, orig_size=orig_size, target_size=size, resample=resample)
 
     # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor.rescale
+    # 定义一个方法用于对图像进行重新缩放
     def rescale(
         self,
         image: np.ndarray,
@@ -1101,52 +1276,107 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
                 - `"channels_first"` or `ChannelDimension.FIRST`: image in (num_channels, height, width) format.
                 - `"channels_last"` or `ChannelDimension.LAST`: image in (height, width, num_channels) format.
         """
+        # 调用外部方法，返回重新缩放后的图像数组
         return rescale(image, rescale_factor, data_format=data_format, input_data_format=input_data_format)
 
     # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor.normalize_annotation
     def normalize_annotation(self, annotation: Dict, image_size: Tuple[int, int]) -> Dict:
         """
         Normalize the boxes in the annotation from `[top_left_x, top_left_y, bottom_right_x, bottom_right_y]` to
-        `[center_x, center_y, width, height]` format.
+        `[center_x, center_y, width, height]` format and from absolute to relative pixel values.
         """
+        # 调用外部方法，返回规范化后的注释字典
         return normalize_annotation(annotation, image_size=image_size)
+
+    # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor._update_annotation_for_padded_image
+    def _update_annotation_for_padded_image(
+        self,
+        annotation: Dict,
+        input_image_size: Tuple[int, int],
+        output_image_size: Tuple[int, int],
+        padding,
+        update_bboxes,
+    ):
+        """
+        Update the annotation to reflect changes made due to image padding.
+
+        Args:
+            annotation (`Dict`):
+                The annotation dictionary to update.
+            input_image_size (`Tuple[int, int]`):
+                The size of the original input image (height, width).
+            output_image_size (`Tuple[int, int]`):
+                The size of the padded output image (height, width).
+            padding:
+                The padding applied to the image.
+            update_bboxes:
+                Boolean flag indicating whether to update bounding boxes in the annotation.
+        """
+        # 处理由于图像填充而导致的注释更新，但未给出具体实现
+        pass
+    ) -> Dict:
+        """
+        Update the annotation for a padded image.
+        """
+        # 创建一个新的空注释字典
+        new_annotation = {}
+        # 将输出图像大小添加到新注释字典中的 "size" 键
+        new_annotation["size"] = output_image_size
+
+        # 遍历现有注释字典中的每个键值对
+        for key, value in annotation.items():
+            # 如果键是 "masks"
+            if key == "masks":
+                # 获取 masks 数据
+                masks = value
+                # 对 masks 应用零填充，使用指定的填充模式和常量值
+                masks = pad(
+                    masks,
+                    padding,
+                    mode=PaddingMode.CONSTANT,
+                    constant_values=0,
+                    input_data_format=ChannelDimension.FIRST,
+                )
+                # 压缩 masks 的第一个维度，确保形状适合预期
+                masks = safe_squeeze(masks, 1)
+                # 将处理后的 masks 存入新注释字典中的 "masks" 键
+                new_annotation["masks"] = masks
+            # 如果键是 "boxes" 并且 update_bboxes 为真
+            elif key == "boxes" and update_bboxes:
+                # 获取 boxes 数据
+                boxes = value
+                # 缩放边界框坐标，以适应输出图像大小
+                boxes *= np.asarray(
+                    [
+                        input_image_size[1] / output_image_size[1],
+                        input_image_size[0] / output_image_size[0],
+                        input_image_size[1] / output_image_size[1],
+                        input_image_size[0] / output_image_size[0],
+                    ]
+                )
+                # 将处理后的 boxes 存入新注释字典中的 "boxes" 键
+                new_annotation["boxes"] = boxes
+            # 如果键是 "size"
+            elif key == "size":
+                # 将输出图像大小添加到新注释字典中的 "size" 键
+                new_annotation["size"] = output_image_size
+            else:
+                # 对于其他键，直接将其值复制到新注释字典中
+                new_annotation[key] = value
+        # 返回更新后的注释字典
+        return new_annotation
 
     # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor._pad_image
     def _pad_image(
         self,
         image: np.ndarray,
         output_size: Tuple[int, int],
+        annotation: Optional[Dict[str, Any]] = None,
         constant_values: Union[float, Iterable[float]] = 0,
         data_format: Optional[ChannelDimension] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
-    ):
-        """
-        Pad the image to the given output size.
-
-        Args:
-            image (`np.ndarray`):
-                Image to pad.
-            output_size (`Tuple[int, int]`):
-                Target size of the output image (height, width).
-            constant_values (`float` or `Iterable[float]`, *optional*):
-                The value or values to pad with. If a single `float` is provided, it is used for all channels. If
-                multiple values are provided, their order should match the number of channels in the image.
-            data_format (`ChannelDimension`, *optional*):
-                The channel dimension format for the output image. If unset, the channel dimension format of the input
-                image is used.
-            input_data_format (`str` or `ChannelDimension`, *optional*):
-                The channel dimension format for the input image. If unset, is inferred from the input image.
-        """
-    # 定义一个函数，用于将图像用零填充到指定大小
-    def pad(
-        self,
-        images: List[np.ndarray],  # 输入图像列表
-        constant_values: Union[float, Iterable[float]] = 0,  # 填充值，默认为0
-        return_pixel_mask: bool = True,  # 是否返回像素掩码，默认为True
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 是否返回张量，默认为None
-        data_format: Optional[ChannelDimension] = None,  # 数据格式，可以为空
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，可以为空
-    ) -> np.ndarray:  # 返回类型为np.ndarray
+        update_bboxes: bool = True,
+    ) -> np.ndarray:
         """
         Pad an image with zeros to the given size.
         """
@@ -1155,238 +1385,187 @@ class DeformableDetrImageProcessor(BaseImageProcessor):
         # 获取输出图像的高度和宽度
         output_height, output_width = output_size
 
-        # 计算需要在底部和右侧填充的像素数
+        # 计算需要在图像底部和右侧填充的像素数
         pad_bottom = output_height - input_height
         pad_right = output_width - input_width
-        # 设置填充方式为((0, pad_bottom), (0, pad_right))
+        # 构造填充元组
         padding = ((0, pad_bottom), (0, pad_right))
-        # 使用指定的填充方式和值对图像进行填充
+        # 使用指定的填充模式和常量值对图像进行填充
         padded_image = pad(
             image,
             padding,
-            mode=PaddingMode.CONSTANT,  # 填充模式为常数填充
-            constant_values=constant_values,  # 指定常数填充的值
-            data_format=data_format,  # 指定数据格式
-            input_data_format=input_data_format,  # 指定输入数据格式
+            mode=PaddingMode.CONSTANT,
+            constant_values=constant_values,
+            data_format=data_format,
+            input_data_format=input_data_format,
         )
-        # 返回填充后的图像
-        return padded_image
+        # 如果存在注释数据，则更新注释以适应填充后的图像
+        if annotation is not None:
+            annotation = self._update_annotation_for_padded_image(
+                annotation, (input_height, input_width), (output_height, output_width), padding, update_bboxes
+            )
+        # 返回填充后的图像和更新后的注释数据（如果有）
+        return padded_image, annotation
 
     # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor.pad
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.pad复制而来
-    ) -> BatchFeature:
-        """
-        Pads a batch of images to the bottom and right of the image with zeros to the size of largest height and width
-        in the batch and optionally returns their corresponding pixel mask.
+    # 定义类的方法 pad，用于填充图像数组，并处理相关的注释
+    def pad(
+        self,
+        images: List[np.ndarray],  # 图像数组列表，每个元素是一个 numpy 数组
+        annotations: Optional[Union[AnnotationType, List[AnnotationType]]] = None,  # 可选的注释数据，可以是单个注释或注释列表
+        constant_values: Union[float, Iterable[float]] = 0,  # 填充使用的常数值，可以是单个浮点数或可迭代对象
+        return_pixel_mask: bool = True,  # 是否返回像素掩码，默认为 True
+        return_tensors: Optional[Union[str, TensorType]] = None,  # 返回的数据类型，可以是字符串或张量类型
+        data_format: Optional[ChannelDimension] = None,  # 图像数据的格式，可以是通道维度对象或 None
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入图像的数据格式，可以是字符串或通道维度对象
+        update_bboxes: bool = True,  # 是否更新边界框信息，默认为 True
 
-        Args:
-            image (`np.ndarray`):
-                Image to pad.
-            constant_values (`float` or `Iterable[float]`, *optional*):
-                The value to use for the padding if `mode` is `"constant"`.
-            return_pixel_mask (`bool`, *optional*, defaults to `True`):
-                Whether to return a pixel mask.
-            return_tensors (`str` or `TensorType`, *optional*):
-                The type of tensors to return. Can be one of:
-                    - Unset: Return a list of `np.ndarray`.
-                    - `TensorType.TENSORFLOW` or `'tf'`: Return a batch of type `tf.Tensor`.
-                    - `TensorType.PYTORCH` or `'pt'`: Return a batch of type `torch.Tensor`.
-                    - `TensorType.NUMPY` or `'np'`: Return a batch of type `np.ndarray`.
-                    - `TensorType.JAX` or `'jax'`: Return a batch of type `jax.numpy.ndarray`.
-            data_format (`str` or `ChannelDimension`, *optional*):
-                The channel dimension format of the image. If not provided, it will be the same as the input image.
-            input_data_format (`ChannelDimension` or `str`, *optional*):
-                The channel dimension format of the input image. If not provided, it will be inferred.
-        """
-        # 计算需要填充的大小，使所有图像都能达到批次中最大高度和宽度
-        pad_size = get_max_height_width(images, input_data_format=input_data_format)
 
-        # 对批次中的每张图像进行填充
-        padded_images = [
-            self._pad_image(
-                image,
-                pad_size,
-                constant_values=constant_values,
-                data_format=data_format,
-                input_data_format=input_data_format,
-            )
-            for image in images
-        ]
-        # 构建数据字典，包含填充后的图像像素值
-        data = {"pixel_values": padded_images}
 
-        # 如果需要返回像素掩码
-        if return_pixel_mask:
-            # 为每张图像生成像素掩码
-            masks = [
-                make_pixel_mask(image=image, output_size=pad_size, input_data_format=input_data_format)
-                for image in images
-            ]
-            # 将像素掩码添加到数据字典中
-            data["pixel_mask"] = masks
-
-        # 返回批次特征对象，包含填充后的数据和张量类型
-        return BatchFeature(data=data, tensor_type=return_tensors)
-
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.preprocess复制而来
-    # 预处理方法，用于对输入数据进行预处理操作
+    # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor.preprocess 复制而来的方法
     def preprocess(
         self,
-        # 图像输入，可以是 PIL Image 或路径
-        images: ImageInput,
-        # 注释，可以是单个注释或注释列表，默认为 None
-        annotations: Optional[Union[AnnotationType, List[AnnotationType]]] = None,
-        # 是否返回分割掩模
-        return_segmentation_masks: bool = None,
-        # 分割掩模路径，可以是字符串或路径，默认为 None
-        masks_path: Optional[Union[str, pathlib.Path]] = None,
-        # 是否进行调整大小
-        do_resize: Optional[bool] = None,
-        # 图像大小，包含宽高信息，默认为 None
-        size: Optional[Dict[str, int]] = None,
-        # 重采样方法，PIL ImageResampling，默认为 None
-        resample=None,
-        # 是否进行缩放
-        do_rescale: Optional[bool] = None,
-        # 缩放因子，可以是整数或浮点数，默认为 None
-        rescale_factor: Optional[Union[int, float]] = None,
-        # 是否进行归一化
-        do_normalize: Optional[bool] = None,
-        # 图像均值，可以是单个值或列表，默认为 None
-        image_mean: Optional[Union[float, List[float]]] = None,
-        # 图像标准差，可以是单个值或列表，默认为 None
-        image_std: Optional[Union[float, List[float]]] = None,
-        # 是否进行填充
-        do_pad: Optional[bool] = None,
-        # 注释格式，可以是字符串或注释格式，默认为 None
-        format: Optional[Union[str, AnnotationFormat]] = None,
-        # 返回张量类型，可以是张量类型或字符串，默认为 None
-        return_tensors: Optional[Union[TensorType, str]] = None,
-        # 数据格式，通道位置，第一维或者其他，默认为 ChannelDimension.FIRST
-        data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,
-        # 输入数据格式，可以是字符串或通道位置，默认为 None
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        # 其他参数
-        **kwargs,
-    # 后处理方法 - 待完成: 添加对其他框架的支持
-    def post_process(self, outputs, target_sizes):
+        images: ImageInput,  # 图像输入，可以是单个图像或图像列表
+        annotations: Optional[Union[AnnotationType, List[AnnotationType]]] = None,  # 可选的注释数据，可以是单个注释或注释列表
+        return_segmentation_masks: bool = None,  # 是否返回分割掩码
+        masks_path: Optional[Union[str, pathlib.Path]] = None,  # 掩码文件的路径，可以是字符串或路径对象的可选对象
+        do_resize: Optional[bool] = None,  # 是否调整图像大小，可选布尔值
+        size: Optional[Dict[str, int]] = None,  # 图像大小的字典，包含宽度和高度
+        resample=None,  # PIL 图像重新采样方法
+        do_rescale: Optional[bool] = None,  # 是否重新缩放图像，可选布尔值
+        rescale_factor: Optional[Union[int, float]] = None,  # 重新缩放的因子，可以是整数或浮点数
+        do_normalize: Optional[bool] = None,  # 是否归一化图像像素值，可选布尔值
+        do_convert_annotations: Optional[bool] = None,  # 是否转换注释数据格式，可选布尔值
+        image_mean: Optional[Union[float, List[float]]] = None,  # 图像像素均值，可以是单个浮点数或均值列表
+        image_std: Optional[Union[float, List[float]]] = None,  # 图像像素标准差，可以是单个浮点数或标准差列表
+        do_pad: Optional[bool] = None,  # 是否填充图像，可选布尔值
+        format: Optional[Union[str, AnnotationFormat]] = None,  # 注释数据的格式，可以是字符串或注释格式对象
+        return_tensors: Optional[Union[TensorType, str]] = None,  # 返回的数据类型，可以是张量类型或字符串
+        data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,  # 图像数据的格式，可以是字符串或通道维度对象，默认为第一种通道维度
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入图像的数据格式，可以是字符串或通道维度对象
+        **kwargs,  # 其他参数，用于接收额外的关键字参数
+
+
+
+    # 后处理方法 - TODO: 添加对其他框架的支持
         """
-        Converts the raw output of [`DeformableDetrForObjectDetection`] into final bounding boxes in (top_left_x,
-        top_left_y, bottom_right_x, bottom_right_y) format. Only supports PyTorch.
+        将 [`DeformableDetrForObjectDetection`] 的原始输出转换为最终的边界框，格式为 (top_left_x, top_left_y, bottom_right_x, bottom_right_y)。仅支持 PyTorch。
 
         Args:
             outputs ([`DeformableDetrObjectDetectionOutput`]):
-                Raw outputs of the model.
+                模型的原始输出。
             target_sizes (`torch.Tensor` of shape `(batch_size, 2)`):
-                Tensor containing the size (height, width) of each image of the batch. For evaluation, this must be the
-                original image size (before any data augmentation). For visualization, this should be the image size
-                after data augment, but before padding.
+                包含批处理中每个图像的大小（高度，宽度）的张量。在评估时，这必须是原始图像大小（在任何数据增强之前）。在可视化时，这应该是数据增强后，但在填充之前的图像大小。
         Returns:
-            `List[Dict]`: A list of dictionaries, each dictionary containing the scores, labels and boxes for an image
-            in the batch as predicted by the model.
+            `List[Dict]`: 一个字典列表，每个字典包含模型预测的批处理中每个图像的分数、标签和边界框。
         """
-        # 发出警告，提醒`post_process`将在Transformers v5中被移除，建议使用`post_process_object_detection`代替，并将阈值设置为0以获得相同的结果
         logger.warning_once(
             "`post_process` is deprecated and will be removed in v5 of Transformers, please use"
             " `post_process_object_detection` instead, with `threshold=0.` for equivalent results.",
         )
 
-        # 从模型输出中获取预测的logits和边界框
+        # 提取输出中的分类 logits 和边界框
         out_logits, out_bbox = outputs.logits, outputs.pred_boxes
 
-        # 检查logits和target_sizes的维度是否一致
+        # 检查输出 logits 和目标大小的维度是否匹配
         if len(out_logits) != len(target_sizes):
             raise ValueError("Make sure that you pass in as many target sizes as the batch dimension of the logits")
-        # 检查target_sizes的每个元素是否包含批次中每个图像的尺寸(h, w)
+        # 检查目标大小的每个元素是否包含批处理中每个图像的大小（h, w）
         if target_sizes.shape[1] != 2:
             raise ValueError("Each element of target_sizes must contain the size (h, w) of each image of the batch")
 
-        # 将logits转换为概率值
+        # 对 logits 应用 sigmoid 函数得到概率
         prob = out_logits.sigmoid()
-        # 获取top k的logits值和对应的索引
+
+        # 获取每个图像中前 100 个预测的最高分和其索引
         topk_values, topk_indexes = torch.topk(prob.view(out_logits.shape[0], -1), 100, dim=1)
         scores = topk_values
+        # 计算 topk_boxes 的索引
         topk_boxes = torch.div(topk_indexes, out_logits.shape[2], rounding_mode="floor")
         labels = topk_indexes % out_logits.shape[2]
-        # 将边界框转换为顶点坐标表示
+        
+        # 将边界框转换为 (top_left_x, top_left_y, bottom_right_x, bottom_right_y) 格式
         boxes = center_to_corners_format(out_bbox)
-        # 通过索引获取top k的边界框
+        # 使用 topk_boxes 获取每个图像的 top-k 边界框
         boxes = torch.gather(boxes, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, 4))
 
-        # 将相对坐标[0, 1]转换为绝对坐标[0, height]
+        # 将相对坐标 [0, 1] 转换为绝对坐标 [0, height] 和 [0, width]
         img_h, img_w = target_sizes.unbind(1)
         scale_fct = torch.stack([img_w, img_h, img_w, img_h], dim=1)
         boxes = boxes * scale_fct[:, None, :]
 
-        # 将结果整理成字典列表
+        # 创建结果列表，每个元素是一个字典，包含预测的分数、标签和边界框
         results = [{"scores": s, "labels": l, "boxes": b} for s, l, b in zip(scores, labels, boxes)]
 
         return results
-
-    def post_process_object_detection(
-        self, outputs, threshold: float = 0.5, target_sizes: Union[TensorType, List[Tuple]] = None, top_k: int = 100
+    ):
         """
-        将[`DeformableDetrForObjectDetection`]的原始输出转换为最终的边界框，格式为(top_left_x, top_left_y, bottom_right_x, bottom_right_y)。仅支持PyTorch。
+        Converts the raw output of [`DeformableDetrForObjectDetection`] into final bounding boxes in (top_left_x,
+        top_left_y, bottom_right_x, bottom_right_y) format. Only supports PyTorch.
 
         Args:
             outputs ([`DetrObjectDetectionOutput`]):
-                模型的原始输出。
+                Raw outputs of the model.
             threshold (`float`, *optional*):
-                用于保留目标检测预测的得分阈值。
-            target_sizes (`torch.Tensor` 或 `List[Tuple[int, int]]`, *optional*):
-                形状为`(batch_size, 2)`的张量或包含每个图像批次中目标大小（高度，宽度）的元组列表 (`Tuple[int, int]`)。
-                如果为None，则不调整预测大小。
-            top_k (`int`, *optional*, 默认为100):
-                在通过阈值过滤之前仅保留前k个边界框。
+                Score threshold to keep object detection predictions.
+            target_sizes (`torch.Tensor` or `List[Tuple[int, int]]`, *optional*):
+                Tensor of shape `(batch_size, 2)` or list of tuples (`Tuple[int, int]`) containing the target size
+                (height, width) of each image in the batch. If left to None, predictions will not be resized.
+            top_k (`int`, *optional*, defaults to 100):
+                Keep only top k bounding boxes before filtering by thresholding.
 
         Returns:
-            `List[Dict]`: 一个字典列表，每个字典包含模型预测的图像批次中的得分、标签和框。
+            `List[Dict]`: A list of dictionaries, each dictionary containing the scores, labels and boxes for an image
+            in the batch as predicted by the model.
         """
-        # 从输出中获取逻辑输出和预测框
+        # Extract logits and predicted bounding boxes from the model's outputs
         out_logits, out_bbox = outputs.logits, outputs.pred_boxes
 
-        # 如果指定了目标大小
+        # Check if target sizes are provided and validate their length against logits batch size
         if target_sizes is not None:
-            # 确保目标大小的数量与逻辑输出的批次维度相匹配
             if len(out_logits) != len(target_sizes):
                 raise ValueError(
                     "Make sure that you pass in as many target sizes as the batch dimension of the logits"
                 )
 
-        # 对逻辑输出进行sigmoid处理
+        # Apply sigmoid function to logits to get probabilities and reshape them
         prob = out_logits.sigmoid()
-        # 重新塑造概率张量
         prob = prob.view(out_logits.shape[0], -1)
-        # 确定要保留的top_k值和索引
+
+        # Determine the number of top-k boxes to consider
         k_value = min(top_k, prob.size(1))
+
+        # Find top-k values and their corresponding indices
         topk_values, topk_indexes = torch.topk(prob, k_value, dim=1)
-        # 提取得分和标签
         scores = topk_values
-        labels = topk_indexes % out_logits.shape[2]
-        # 将预测框转换为以中心为基准的坐标格式
-        boxes = center_to_corners_format(out_bbox)
-        # 使用topk索引提取对应的边界框
+
+        # Convert top-k indexes to top-k boxes
         topk_boxes = torch.div(topk_indexes, out_logits.shape[2], rounding_mode="floor")
+        labels = topk_indexes % out_logits.shape[2]
+
+        # Convert bounding boxes from center format to corner format
+        boxes = center_to_corners_format(out_bbox)
+
+        # Gather top-k boxes from all predicted boxes
         boxes = torch.gather(boxes, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, 4))
 
-        # 将相对[0, 1]的坐标转换为绝对[0, height]的坐标
-        if isinstance(target_sizes, List):
-            img_h = torch.Tensor([i[0] for i in target_sizes])
-            img_w = torch.Tensor([i[1] for i in target_sizes])
-        else:
-            img_h, img_w = target_sizes.unbind(1)
-        scale_fct = torch.stack([img_w, img_h, img_w, img_h], dim=1).to(boxes.device)
-        boxes = boxes * scale_fct[:, None, :]
+        # Convert boxes from relative [0, 1] to absolute [0, height] coordinates if target sizes are provided
+        if target_sizes is not None:
+            if isinstance(target_sizes, list):
+                img_h = torch.Tensor([i[0] for i in target_sizes])
+                img_w = torch.Tensor([i[1] for i in target_sizes])
+            else:
+                img_h, img_w = target_sizes.unbind(1)
+            scale_fct = torch.stack([img_w, img_h, img_w, img_h], dim=1).to(boxes.device)
+            boxes = boxes * scale_fct[:, None, :]
 
+        # Filter out boxes with scores below the threshold and construct results dictionary
         results = []
-        # 遍历每个图像的得分、标签和框
         for s, l, b in zip(scores, labels, boxes):
-            # 根据阈值过滤得分、标签和框
             score = s[s > threshold]
             label = l[s > threshold]
             box = b[s > threshold]
             results.append({"scores": score, "labels": label, "boxes": box})
 
-        # 返回结果
         return results
 ```

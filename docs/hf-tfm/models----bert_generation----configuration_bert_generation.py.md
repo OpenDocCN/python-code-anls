@@ -1,12 +1,28 @@
-# `.\transformers\models\bert_generation\configuration_bert_generation.py`
+# `.\models\bert_generation\configuration_bert_generation.py`
 
-```py
-# 导入必要的模块和类
+```
+# coding=utf-8
+# Copyright 2020 The Google AI Language Team Authors and The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""  BertGeneration model configuration"""
+
+# Import the base class PretrainedConfig from configuration_utils module
 from ...configuration_utils import PretrainedConfig
 
-# BertGenerationConfig 类，用于存储 BertGeneration 模型的配置信息，继承自 PretrainedConfig
+# Define a new class BertGenerationConfig that inherits from PretrainedConfig
 class BertGenerationConfig(PretrainedConfig):
-    """
+    r"""
     This is the configuration class to store the configuration of a [`BertGenerationPreTrainedModel`]. It is used to
     instantiate a BertGeneration model according to the specified arguments, defining the model architecture.
     Instantiating a configuration with the defaults will yield a similar configuration to that of the BertGeneration
@@ -29,60 +45,80 @@ class BertGenerationConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py
-    """
+    ```
 
-    # 模型类型为 "bert-generation"
+    # Set the model_type attribute to "bert-generation"
     model_type = "bert-generation"
 
-    # 初始化方法，用于设置模型的各种参数
+    # Define the constructor (__init__) method for initializing an instance of BertGenerationConfig
     def __init__(
         self,
-        vocab_size=50358,  # 词汇表大小，默认为 50358
-        hidden_size=1024,  # 隐藏层大小，默认为 1024
-        num_hidden_layers=24,  # 隐藏层的数量，默认为 24
-        num_attention_heads=16,  # 注意力头的数量，默认为 16
-        intermediate_size=4096,  # 中间层大小，默认为 4096
-        hidden_act="gelu",  # 隐藏层激活函数，默认为 gelu
-        hidden_dropout_prob=0.1,  # 隐藏层的 dropout 概率，默认为 0.1
-        attention_probs_dropout_prob=0.1,  # 注意力概率的 dropout 概率，默认为 0.1
-        max_position_embeddings=512,  # 最大位置嵌入，默认为 512
-        initializer_range=0.02,  # 初始化范围，默认为 0.02
-        layer_norm_eps=1e-12,  # 层归一化的 epsilon，默认为 1e-12
-        pad_token_id=0,  # 填充 token 的 id，默认为 0
-        bos_token_id=2,  # 起始 token 的 id，默认为 2
-        eos_token_id=1,  # 终止 token 的 id，默认为 1
-        position_embedding_type="absolute",  # 位置嵌入类型，默认为 "absolute"
-        use_cache=True,  # 是否使用缓存，默认为 True
-        **kwargs,
+        vocab_size=50358,  # Size of the vocabulary used by the model
+        hidden_size=1024,  # Dimensionality of the encoder layers and the pooler layer
+        num_hidden_layers=24,  # Number of hidden layers in the Transformer encoder
+        num_attention_heads=16,  # Number of attention heads for each attention layer in the Transformer encoder
+        intermediate_size=4096,  # Dimensionality of the "intermediate" (i.e., feed-forward) layer in the Transformer encoder
+        hidden_act="gelu",  # The activation function to be used in the hidden layers
+        hidden_dropout_prob=0.1,  # The dropout probability for all fully connected layers in the embeddings, encoder, and pooler
+        attention_probs_dropout_prob=0.1,  # The dropout ratio for the attention probabilities
+        max_position_embeddings=512,  # The maximum sequence length that this model might ever be used with
+        initializer_range=0.02,  # The standard deviation of the truncated_normal_initializer for initializing all weight matrices
+        layer_norm_eps=1e-12,  # The epsilon used by the layer normalization layers
+        pad_token_id=0,  # The token id for padding
+        bos_token_id=2,  # The token id for the beginning of sentence token
+        eos_token_id=1,  # The token id for the end of sentence token
+        position_embedding_type="absolute",  # Type of position embedding to use
+        use_cache=True,  # Whether to use an output cache
+        **kwargs,  # Additional keyword arguments for future expansion
     ):
-        # 调用父类的构造函数，初始化 Transformer 模型的参数，并传入相关的参数
-        super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
+        # Call the constructor of the base class (PretrainedConfig) with all the provided arguments
+        super().__init__(
+            vocab_size=vocab_size,
+            hidden_size=hidden_size,
+            num_hidden_layers=num_hidden_layers,
+            num_attention_heads=num_attention_heads,
+            intermediate_size=intermediate_size,
+            hidden_act=hidden_act,
+            hidden_dropout_prob=hidden_dropout_prob,
+            attention_probs_dropout_prob=attention_probs_dropout_prob,
+            max_position_embeddings=max_position_embeddings,
+            initializer_range=initializer_range,
+            layer_norm_eps=layer_norm_eps,
+            pad_token_id=pad_token_id,
+            bos_token_id=bos_token_id,
+            eos_token_id=eos_token_id,
+            position_embedding_type=position_embedding_type,
+            use_cache=use_cache,
+            **kwargs,
+        )
+        ):
+            # 调用父类的初始化方法，传递相关参数，并继承其行为
+            super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        # 设置词汇表大小
-        self.vocab_size = vocab_size
-        # 设置隐藏层大小
-        self.hidden_size = hidden_size
-        # 设置隐藏层的数量
-        self.num_hidden_layers = num_hidden_layers
-        # 设置注意力头的数量
-        self.num_attention_heads = num_attention_heads
-        # 设置隐藏层的激活函数
-        self.hidden_act = hidden_act
-        # 设置中间层大小
-        self.intermediate_size = intermediate_size
-        # 设置隐藏层的丢弃概率
-        self.hidden_dropout_prob = hidden_dropout_prob
-        # 设置注意力概率的丢弃概率
-        self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        # 设置最大位置嵌入的长度
-        self.max_position_embeddings = max_position_embeddings
-        # 设置初始化范围
-        self.initializer_range = initializer_range
-        # 设置层归一化的 epsilon 值
-        self.layer_norm_eps = layer_norm_eps
-        # 设置位置嵌入类型
-        self.position_embedding_type = position_embedding_type
-        # 设置是否使用缓存
-        self.use_cache = use_cache
+            # 设置当前类的词汇表大小
+            self.vocab_size = vocab_size
+            # 设置隐藏层大小
+            self.hidden_size = hidden_size
+            # 设置隐藏层的数量
+            self.num_hidden_layers = num_hidden_layers
+            # 设置注意力头的数量
+            self.num_attention_heads = num_attention_heads
+            # 设置隐藏层激活函数类型
+            self.hidden_act = hidden_act
+            # 设置中间层大小
+            self.intermediate_size = intermediate_size
+            # 设置隐藏层的 dropout 概率
+            self.hidden_dropout_prob = hidden_dropout_prob
+            # 设置注意力概率的 dropout 概率
+            self.attention_probs_dropout_prob = attention_probs_dropout_prob
+            # 设置最大位置嵌入长度
+            self.max_position_embeddings = max_position_embeddings
+            # 设置初始化范围
+            self.initializer_range = initializer_range
+            # 设置层归一化的 epsilon 值
+            self.layer_norm_eps = layer_norm_eps
+            # 设置位置嵌入类型
+            self.position_embedding_type = position_embedding_type
+            # 设置是否使用缓存
+            self.use_cache = use_cache
 ```

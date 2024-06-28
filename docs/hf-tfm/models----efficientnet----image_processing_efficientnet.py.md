@@ -1,26 +1,31 @@
 # `.\models\efficientnet\image_processing_efficientnet.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证版本 2.0 使用此文件，除非符合许可证下的条件，否则无法使用本文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则不提供保证或条件，软件按"原样"分发
-# 无论是明示的还是隐含的，都没有任何保证或条件
-# 详见许可证，以了解特定语言的权限和限制
-"""Image processor class for EfficientNet."""
-# 导入所需的模块和类型注解
-from typing import Dict, List, Optional, Union
+```
+# coding=utf-8
+# Copyright 2023 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Image processor class for EfficientNet.
+"""
 
-import numpy as np
+from typing import Dict, List, Optional, Union  # 导入需要的类型提示
 
-# 导入自定义的图像处理工具模块和函数
-from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
-# 导入图像变换函数
-from ...image_transforms import rescale, resize, to_channel_dimension_format
-# 导入图像处理用到的工具函数和常量
-from ...image_utils import (
+import numpy as np  # 导入 NumPy 库
+
+from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict  # 导入图像处理相关的模块和函数
+from ...image_transforms import rescale, resize, to_channel_dimension_format  # 导入图像变换相关函数
+from ...image_utils import (  # 导入图像处理工具函数
     IMAGENET_STANDARD_MEAN,
     IMAGENET_STANDARD_STD,
     ChannelDimension,
@@ -31,72 +36,89 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
-# 导入通用工具函数和类型判断函数
-from ...utils import TensorType, is_vision_available, logging
+from ...utils import TensorType, is_vision_available, logging  # 导入工具函数和模块
 
-# 如果视觉处理模块可用，导入相应模块
-if is_vision_available():
-    import PIL
+if is_vision_available():  # 如果视觉处理可用
+    import PIL  # 导入 PIL 库用于图像处理
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 定义 EfficientNet 的图像处理类，继承自 BaseImageProcessor
+
 class EfficientNetImageProcessor(BaseImageProcessor):
     r"""
     Constructs a EfficientNet image processor.
+    
+    This class inherits from BaseImageProcessor and is specialized for EfficientNet models.
+    It provides methods for preprocessing images before feeding them into an EfficientNet model.
+    """
     Args:
         do_resize (`bool`, *optional*, defaults to `True`):
-            # 是否将图像的（高度，宽度）尺寸调整为指定的`size`。可以被`preprocess`中的`do_resize`覆盖。
+            Whether to resize the image's (height, width) dimensions to the specified `size`. Can be overridden by
+            `do_resize` in `preprocess`.
         size (`Dict[str, int]` *optional*, defaults to `{"height": 346, "width": 346}`):
-            # 在`resize`后的图像尺寸。可以被`preprocess`中的`size`覆盖。
+            Size of the image after `resize`. Can be overridden by `size` in `preprocess`.
         resample (`PILImageResampling` filter, *optional*, defaults to 0):
-            # 在调整图像大小时要使用的重采样滤镜。可以被`preprocess`中的`resample`覆盖。
+            Resampling filter to use if resizing the image. Can be overridden by `resample` in `preprocess`.
         do_center_crop (`bool`, *optional*, defaults to `False`):
-            # 是否中心裁剪图像。如果输入尺寸在任何边上小于`crop_size`，则用0填充图像，然后进行中心裁剪。可以被`preprocess`中的`do_center_crop`覆盖。
+            Whether to center crop the image. If the input size is smaller than `crop_size` along any edge, the image
+            is padded with 0's and then center cropped. Can be overridden by `do_center_crop` in `preprocess`.
         crop_size (`Dict[str, int]`, *optional*, defaults to `{"height": 289, "width": 289}`):
-            # 应用中心裁剪时的期望输出尺寸。可以被`preprocess`中的`crop_size`覆盖。
+            Desired output size when applying center-cropping. Can be overridden by `crop_size` in `preprocess`.
         rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
-            # 如果重新调整图像，则使用的比例因子。可以被`preprocess`方法中的`rescale_factor`参数覆盖。
+            Scale factor to use if rescaling the image. Can be overridden by the `rescale_factor` parameter in the
+            `preprocess` method.
         rescale_offset (`bool`, *optional*, defaults to `False`):
-            # 是否将图像重新调整为[-scale_range，scale_range]，而不是[0，scale_range]。可以被`preprocess`方法中的`rescale_factor`参数覆盖。
+            Whether to rescale the image between [-scale_range, scale_range] instead of [0, scale_range]. Can be
+            overridden by the `rescale_factor` parameter in the `preprocess` method.
         do_rescale (`bool`, *optional*, defaults to `True`):
-            # 是否按照指定的比例`rescale_factor`重新调整图像。可以被`preprocess`方法中的`do_rescale`参数覆盖。
+            Whether to rescale the image by the specified scale `rescale_factor`. Can be overridden by the `do_rescale`
+            parameter in the `preprocess` method.
         do_normalize (`bool`, *optional*, defaults to `True`):
-            # 是否对图像进行规范化。可以被`preprocess`方法中的`do_normalize`参数覆盖。
+            Whether to normalize the image. Can be overridden by the `do_normalize` parameter in the `preprocess`
+            method.
         image_mean (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_MEAN`):
-            # 在规范化图像时使用的均值。这是一个浮点数或长度等于图像通道数的浮点数列表。可以被`preprocess`方法中的`image_mean`参数覆盖。
+            Mean to use if normalizing the image. This is a float or list of floats the length of the number of
+            channels in the image. Can be overridden by the `image_mean` parameter in the `preprocess` method.
         image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_STD`):
-            # 在规范化图像时使用的标准差。这是一个浮点数或长度等于图像通道数的浮点数列表。可以被`preprocess`方法中的`image_std`参数覆盖。
+            Standard deviation to use if normalizing the image. This is a float or list of floats the length of the
+            number of channels in the image. Can be overridden by the `image_std` parameter in the `preprocess` method.
         include_top (`bool`, *optional*, defaults to `True`):
-            # 是否再次调整图像。如果用于图像分类，则应设置为True。
+            Whether to rescale the image again. Should be set to True if the inputs are used for image classification.
     """
-
+    # 定义模型输入名称列表，只包含一个元素："pixel_values"
     model_input_names = ["pixel_values"]
+    # 初始化函数，设置图像处理器的各项参数
     def __init__(
         self,
-        do_resize: bool = True,  # 初始化函数，设置是否进行调整大小的标志，默认为True
-        size: Dict[str, int] = None,  # 设置大小的字典，默认为None
-        resample: PILImageResampling = PIL.Image.NEAREST,  # 设置重采样方法，默认为最近邻插值
-        do_center_crop: bool = False,  # 设置是否进行中心裁剪的标志，默认为False
-        crop_size: Dict[str, int] = None,  # 设置裁剪大小的字典，默认为None
-        rescale_factor: Union[int, float] = 1 / 255,  # 设置缩放因子，默认为1/255
-        rescale_offset: bool = False,  # 设置是否进行缩放偏移的标志，默认为False
-        do_rescale: bool = True,  # 设置是否进行重新缩放的标志，默认为True
-        do_normalize: bool = True,  # 设置是否进行归一化的标志，默认为True
-        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，默认为None
-        image_std: Optional[Union[float, List[float]]] = None,  # 图像标准差，默认为None
-        include_top: bool = True,  # 设置是否包含顶部的标志，默认为True
-        **kwargs,
-    ) -> None:  # 函数返回None
-        super().__init__(**kwargs)  # 调用父类的初始化函数
-        size = size if size is not None else {"height": 346, "width": 346}  # 如果size不为None，则使用size，否则使用默认大小
-        size = get_size_dict(size)  # 调用get_size_dict函数获取处理后的size字典
-        crop_size = crop_size if crop_size is not None else {"height": 289, "width": 289}  # 如果crop_size不为None，则使用crop_size，否则使用默认大小
-        crop_size = get_size_dict(crop_size, param_name="crop_size")  # 调用get_size_dict函数获取处理后的crop_size字典
+        do_resize: bool = True,  # 是否进行大小调整，默认为True
+        size: Dict[str, int] = None,  # 图像大小的字典，键为"height"和"width"
+        resample: PILImageResampling = PIL.Image.NEAREST,  # 图像调整大小时的重采样方法，默认为最近邻插值
+        do_center_crop: bool = False,  # 是否进行中心裁剪，默认为False
+        crop_size: Dict[str, int] = None,  # 裁剪大小的字典，键为"height"和"width"
+        rescale_factor: Union[int, float] = 1 / 255,  # 图像缩放因子，默认为1/255
+        rescale_offset: bool = False,  # 是否进行缩放偏移，默认为False
+        do_rescale: bool = True,  # 是否进行缩放，默认为True
+        do_normalize: bool = True,  # 是否进行归一化，默认为True
+        image_mean: Optional[Union[float, List[float]]] = None,  # 图像均值，可以是浮点数或浮点数列表
+        image_std: Optional[Union[float, List[float]]] = None,  # 图像标准差，可以是浮点数或浮点数列表
+        include_top: bool = True,  # 是否包含顶部处理，默认为True
+        **kwargs,  # 其他关键字参数
+    ) -> None:
+        # 调用父类的初始化方法
+        super().__init__(**kwargs)
+        # 如果未提供图像大小，则使用默认大小346x346
+        size = size if size is not None else {"height": 346, "width": 346}
+        # 根据给定的大小参数获取有效的尺寸字典
+        size = get_size_dict(size)
+        # 如果未提供裁剪大小，则使用默认大小289x289
+        crop_size = crop_size if crop_size is not None else {"height": 289, "width": 289}
+        # 根据给定的裁剪大小参数获取有效的裁剪尺寸字典
+        crop_size = get_size_dict(crop_size, param_name="crop_size")
 
-        # 设置各项参数
+        # 初始化对象的各个属性
         self.do_resize = do_resize
         self.size = size
         self.resample = resample
@@ -106,50 +128,81 @@ class EfficientNetImageProcessor(BaseImageProcessor):
         self.rescale_factor = rescale_factor
         self.rescale_offset = rescale_offset
         self.do_normalize = do_normalize
-        self.image_mean = image_mean if image_mean is not None else IMAGENET_STANDARD_MEAN
-        self.image_std = image_std if image_std is not None else IMAGENET_STANDARD_STD
+        self.image_mean = image_mean if image_mean is not None else IMAGENET_STANDARD_MEAN  # 如果未提供图像均值，则使用预设的ImageNet标准均值
+        self.image_std = image_std if image_std is not None else IMAGENET_STANDARD_STD  # 如果未提供图像标准差，则使用预设的ImageNet标准标准差
         self.include_top = include_top
+        # 初始化有效的处理器键列表
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_center_crop",
+            "crop_size",
+            "do_rescale",
+            "rescale_factor",
+            "rescale_offset",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "include_top",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
 
-    # Copied from transformers.models.vit.image_processing_vit.ViTImageProcessor.resize with PILImageResampling.BILINEAR->PILImageResampling.NEAREST
+    # 从transformers.models.vit.image_processing_vit.ViTImageProcessor.resize复制，将PILImageResampling.BILINEAR更改为PILImageResampling.NEAREST
     def resize(
         self,
-        image: np.ndarray,  # 要调整大小的图像数组
-        size: Dict[str, int],  # 调整的目标大小字典
-        resample: PILImageResampling = PILImageResampling.NEAREST,  # 设置重采样方法，默认为最近邻插值
-        data_format: Optional[Union[str, ChannelDimension]] = None,  # 数据格式，默认为None
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，默认为None
-        **kwargs,  # 其他参数
+        image: np.ndarray,  # 输入的图像数据，numpy数组格式
+        size: Dict[str, int],  # 调整后的图像大小字典，键为"height"和"width"
+        resample: PILImageResampling = PILImageResampling.NEAREST,  # 图像调整大小时的重采样方法，默认为最近邻插值
+        data_format: Optional[Union[str, ChannelDimension]] = None,  # 图像数据格式，可以是字符串或通道维度
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入图像的数据格式，可以是字符串或通道维度
+        **kwargs,  # 其他关键字参数
+    def resize(
+        self,
+        image: np.ndarray,
+        size: Dict[str, int],
+        resample: Optional[PILImageResampling] = PILImageResampling.NEAREST,
+        data_format: Optional[Union[str, ChannelDimension]] = None,
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,
+        **kwargs,
     ) -> np.ndarray:
         """
-        将图像调整大小为`(size["height"], size["width"])`。
+        Resize an image to `(size["height"], size["width"])`.
 
         Args:
             image (`np.ndarray`):
-                要调整大小的图像。
+                Image to resize.
             size (`Dict[str, int]`):
-                以`{"height": int, "width": int}`格式指定输出图像的大小的字典。
+                Dictionary in the format `{"height": int, "width": int}` specifying the size of the output image.
             resample (`PILImageResampling`, *optional*, defaults to `PILImageResampling.NEAREST`):
-                调整图像大小时要使用的`PILImageResampling`滤波器，例如`PILImageResampling.NEAREST`。
+                `PILImageResampling` filter to use when resizing the image e.g. `PILImageResampling.NEAREST`.
             data_format (`ChannelDimension` or `str`, *optional*):
-                输出图像的通道维度格式。如果未设置，则使用输入图像的通道维度格式。可以是以下之一：
-                - `"channels_first"`或`ChannelDimension.FIRST`：图像以(num_channels, height, width)格式。
-                - `"channels_last"`或`ChannelDimension.LAST`：图像以(height, width, num_channels)格式。
-                - `"none"`或`ChannelDimension.NONE`：图像以(height, width)格式。
+                The channel dimension format for the output image. If unset, the channel dimension format of the input
+                image is used. Can be one of:
+                - `"channels_first"` or `ChannelDimension.FIRST`: image in (num_channels, height, width) format.
+                - `"channels_last"` or `ChannelDimension.LAST`: image in (height, width, num_channels) format.
+                - `"none"` or `ChannelDimension.NONE`: image in (height, width) format.
             input_data_format (`ChannelDimension` or `str`, *optional*):
-                输入图像的通道维度格式。如果未设置，则从输入图像中推断出通道维度格式。可以是以下之一：
-                - `"channels_first"`或`ChannelDimension.FIRST`：图像以(num_channels, height, width)格式。
-                - `"channels_last"`或`ChannelDimension.LAST`：图像以(height, width, num_channels)格式。
-                - `"none"`或`ChannelDimension.NONE`：图像以(height, width)格式。
+                The channel dimension format for the input image. If unset, the channel dimension format is inferred
+                from the input image. Can be one of:
+                - `"channels_first"` or `ChannelDimension.FIRST`: image in (num_channels, height, width) format.
+                - `"channels_last"` or `ChannelDimension.LAST`: image in (height, width, num_channels) format.
+                - `"none"` or `ChannelDimension.NONE`: image in (height, width) format.
 
         Returns:
-            `np.ndarray`: 调整大小后的图像。
+            `np.ndarray`: The resized image.
         """
+        # 获取调整后的尺寸，确保 `size` 字典包含 `height` 和 `width` 键
         size = get_size_dict(size)
-        # 检查字典中是否包含键`height`和`width`
         if "height" not in size or "width" not in size:
+            # 如果 `size` 字典不包含 `height` 或 `width` 键，则抛出 ValueError 异常
             raise ValueError(f"The `size` dictionary must contain the keys `height` and `width`. Got {size.keys()}")
+        # 计算输出的图像尺寸
         output_size = (size["height"], size["width"])
-        # 调用`resize`函数，返回调整大小后的图像
+        # 调用 resize 函数对图像进行调整大小，并返回调整后的图像
         return resize(
             image,
             size=output_size,
@@ -158,49 +211,42 @@ class EfficientNetImageProcessor(BaseImageProcessor):
             input_data_format=input_data_format,
             **kwargs,
         )
-
-    def rescale(
-        self,
-        image: np.ndarray,
-        scale: Union[int, float],
-        offset: bool = True,
-        data_format: Optional[Union[str, ChannelDimension]] = None,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        **kwargs,
+    ):
         """
         Rescale an image by a scale factor.
 
-        如果 `offset` 是 `True`，那么图像的值将被 `scale` 重新调整，然后再加上1。 如果 `scale` 是 1/127.5，图像将在 [-1, 1] 之间重新调整。
+        If `offset` is `True`, the image has its values rescaled by `scale` and then offset by 1. If `scale` is
+        1/127.5, the image is rescaled between [-1, 1].
             image = image * scale - 1
 
-        如果 `offset` 是 `False`，并且 `scale` 是 1/255，那么图像将在 [0, 1] 之间重新调整。
+        If `offset` is `False`, and `scale` is 1/255, the image is rescaled between [0, 1].
             image = image * scale
 
-        参数:
+        Args:
             image (`np.ndarray`):
-                需要重新调整的图像.
+                Image to rescale.
             scale (`int` or `float`):
-                应用于图像的缩放比例.
+                Scale to apply to the image.
             offset (`bool`, *optional*):
-                是否在正负方向上重新调整图像.
+                Whether to scale the image in both negative and positive directions.
             data_format (`str` or `ChannelDimension`, *optional*):
-                图像的通道维度格式. 如果未提供，将与输入图像相同.
+                The channel dimension format of the image. If not provided, it will be the same as the input image.
             input_data_format (`ChannelDimension` or `str`, *optional*):
-                输入图像的通道维度格式. 如果未提供，将被推断.
+                The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # 通过给定的参数重新调整图像
+        # 调用外部函数 `rescale` 对图像进行缩放
         rescaled_image = rescale(
             image, scale=scale, data_format=data_format, input_data_format=input_data_format, **kwargs
         )
 
-        # 如果 offset 为 True，则对结果图像进行偏移
+        # 如果需要进行偏移处理
         if offset:
+            # 将图像数值做偏移处理
             rescaled_image = rescaled_image - 1
 
-        # 返回重新调整后的图像
+        # 返回经过缩放和可能的偏移处理后的图像
         return rescaled_image
 
-    # 对图像进行预处理
     def preprocess(
         self,
         images: ImageInput,
@@ -220,5 +266,4 @@ class EfficientNetImageProcessor(BaseImageProcessor):
         data_format: ChannelDimension = ChannelDimension.FIRST,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-        ):
 ```

@@ -1,56 +1,50 @@
-# `.\transformers\models\persimmon\configuration_persimmon.py`
+# `.\models\persimmon\configuration_persimmon.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# Adept AI 和 HuggingFace Inc. 团队，版权所有。
-#
-# 根据 Apache 许可证 2.0 版本 ("许可证") 获取的原始文件
-# 除许可证允许外，您不得使用此文件
-# 您可以在以下网址获取许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则不得
-# 分发的软件根据许可证"原样"分发
-# 没有任何形式的保证或条件，无论明示或默示。
-# 有关特定语言控制输出的条件
-# 和许可证中的限制
-""" Persimmon 模型配置"""
+```
+# coding=utf-8
+# 代码文件的版权信息和许可证声明
 
-# 导入必要的模块和类
+""" Persimmon model configuration"""
+# 模型配置文件的简短描述
+
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
+# 导入必要的模块和函数
 
-# 获取日志记录器
 logger = logging.get_logger(__name__)
+# 获取与当前模块相关的日志记录器
 
-# 预训练配置映射
 PERSIMMON_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "adept/persimmon-8b-base": "https://huggingface.co/adept/persimmon-8b-base/resolve/main/config.json",
 }
+# 定义预训练模型的配置映射表，将模型名称映射到其配置文件的下载链接
 
-# Persimmon 配置类，用于存储 PersimmonModel 的配置
 class PersimmonConfig(PretrainedConfig):
     r"""
-    此类用于存储 [`PersimmonModel`] 的配置。根据指定的参数实例化 Persimmon 模型的构架。
-    使用默认值实例化配置将产生类似 [adept/persimmon-8b-base](https://huggingface.co/adept/persimmon-8b-base) 的配置。
+    This is the configuration class to store the configuration of a [`PersimmonModel`]. It is used to instantiate an
+    Persimmon model according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the
+    [adept/persimmon-8b-base](https://huggingface.co/adept/persimmon-8b-base).
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。阅读 [`PretrainedConfig`] 的文档以了解更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+
 
     ```python
     >>> from transformers import PersimmonModel, PersimmonConfig
 
-    >>> # 初始化一个 Persimmon 模型 persimmon-7b 风格配置
+    >>> # Initializing a Persimmon persimmon-7b style configuration
     >>> configuration = PersimmonConfig()
-    ```py"""
+    ```
+    """
+    # PersimmonConfig 类的说明文档，描述如何使用该类配置 Persimmon 模型
 
-    # 模型类型为 "persimmon"
     model_type = "persimmon"
-    # 推理阶段要忽略的键
-    keys_to_ignore_at_inference = ["past_key_values"]
+    # 模型类型为 "persimmon"
 
-    # 初始化方法
+    keys_to_ignore_at_inference = ["past_key_values"]
+    # 推断过程中忽略的键列表，这里包含 "past_key_values"
+
     def __init__(
         self,
         vocab_size=262144,
@@ -74,44 +68,28 @@ class PersimmonConfig(PretrainedConfig):
         bos_token_id=1,
         eos_token_id=2,
         **kwargs,
-    # 初始化模型配置，设置词汇量大小
-    def __init__(
-        self,
-        vocab_size,
-        # 最大位置编码长度
-        max_position_embeddings,
-        # 隐藏层大小
-        hidden_size,
-        # 中间层大小
-        intermediate_size,
-        # 隐藏层层数
-        num_hidden_layers,
-        # 注意力头的数量
-        num_attention_heads,
-        # 隐藏层激活函数
-        hidden_act,
-        # 初始化范围
-        initializer_range,
-        # 层归一化 epsilon
-        layer_norm_eps,
-        # 是否使用缓存
-        use_cache,
-        # ROPE（旋转位置编码）角度
-        rope_theta,
-        # ROPE 缩放
-        rope_scaling,
-        # 是否对 QK（查询键）进行层归一化
-        qk_layernorm,
-        # 隐藏层 dropout
-        hidden_dropout,
-        # 注意力 dropout
-        attention_dropout,
-        # 部分旋转因子
-        partial_rotary_factor,
     ):
-        # ROPE 缩放验证
-        self.rope_scaling_validation()
-        # 调用父类初始化方法，设置特殊标记的 ID 和其他参数
+        # PersimmonConfig 的初始化函数，用于设置模型的各项配置参数
+        pass
+    ):
+        self.vocab_size = vocab_size
+        self.max_position_embeddings = max_position_embeddings
+        self.hidden_size = hidden_size
+        self.intermediate_size = intermediate_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_attention_heads = num_attention_heads
+        self.hidden_act = hidden_act
+        self.initializer_range = initializer_range
+        self.layer_norm_eps = layer_norm_eps
+        self.use_cache = use_cache
+        self.rope_theta = rope_theta
+        self.rope_scaling = rope_scaling
+        self.qk_layernorm = qk_layernorm
+        self.hidden_dropout = hidden_dropout
+        self.attention_dropout = attention_dropout
+        self.partial_rotary_factor = partial_rotary_factor
+        self._rope_scaling_validation()
+
         super().__init__(
             pad_token_id=pad_token_id,
             bos_token_id=bos_token_id,
@@ -120,32 +98,57 @@ class PersimmonConfig(PretrainedConfig):
             **kwargs,
         )
 
-    # 从 transformers.models.llama.configuration_llama.LlamaConfig._rope_scaling_validation 复制而来
-    # ROPE 缩放验证
-    def _rope_scaling_validation(self):
-        """
-        Validate the `rope_scaling` configuration.
-        """
-        # 如果没有设置 ROPE 缩放，则直接返回
-        if self.rope_scaling is None:
-            return
 
-        # 如果 ROPE 缩放不是字典或者字典长度不为 2，则抛出 ValueError
-        if not isinstance(self.rope_scaling, dict) or len(self.rope_scaling) != 2:
-            raise ValueError(
-                "`rope_scaling` must be a dictionary with with two fields, `type` and `factor`, "
-                f"got {self.rope_scaling}"
-            )
-        # 获取 ROPE 缩放的类型和因子
-        rope_scaling_type = self.rope_scaling.get("type", None)
-        rope_scaling_factor = self.rope_scaling.get("factor", None)
-        # 如果 ROPE 缩放类型为 None 或者不是 ['linear', 'dynamic'] 中的一种，则抛出 ValueError
-        if rope_scaling_type is None or rope_scaling_type not in ["linear", "dynamic"]:
-            raise ValueError(
-                f"`rope_scaling`'s type field must be one of ['linear', 'dynamic'], got {rope_scaling_type}"
-            )
-        # 如果 ROPE 缩放因子为 None 或者不是大于 1 的浮点数，则抛出 ValueError
-        if rope_scaling_factor is None or not isinstance(rope_scaling_factor, float) or rope_scaling_factor <= 1.0:
-            raise ValueError(f"`rope_scaling`'s factor field must be a float > 1, got {rope_scaling_factor}")
-```  
+# 构造函数，初始化模型配置参数和调用验证函数
+def __init__(
+    vocab_size,  # 词汇表大小
+    max_position_embeddings,  # 最大位置编码长度
+    hidden_size,  # 隐藏层大小
+    intermediate_size,  # 中间层大小
+    num_hidden_layers,  # 隐藏层层数
+    num_attention_heads,  # 注意力头的数量
+    hidden_act,  # 隐藏层激活函数
+    initializer_range,  # 参数初始化范围
+    layer_norm_eps,  # 层归一化 epsilon 参数
+    use_cache,  # 是否使用缓存
+    rope_theta,  # 绳子模型 theta 参数
+    rope_scaling,  # 绳子模型缩放参数
+    qk_layernorm,  # QK 归一化参数
+    hidden_dropout,  # 隐藏层 dropout 概率
+    attention_dropout,  # 注意力机制 dropout 概率
+    partial_rotary_factor,  # 部分旋转因子
+    pad_token_id=None,  # 填充 token ID
+    bos_token_id=None,  # 开始 token ID
+    eos_token_id=None,  # 结束 token ID
+    tie_word_embeddings=False,  # 是否共享词嵌入
+    **kwargs,  # 其他参数
+):
+    # 初始化模型配置参数
+    self.vocab_size = vocab_size
+    self.max_position_embeddings = max_position_embeddings
+    self.hidden_size = hidden_size
+    self.intermediate_size = intermediate_size
+    self.num_hidden_layers = num_hidden_layers
+    self.num_attention_heads = num_attention_heads
+    self.hidden_act = hidden_act
+    self.initializer_range = initializer_range
+    self.layer_norm_eps = layer_norm_eps
+    self.use_cache = use_cache
+    self.rope_theta = rope_theta
+    self.rope_scaling = rope_scaling
+    self.qk_layernorm = qk_layernorm
+    self.hidden_dropout = hidden_dropout
+    self.attention_dropout = attention_dropout
+    self.partial_rotary_factor = partial_rotary_factor
+    # 调用私有方法验证绳子模型缩放参数的有效性
+    self._rope_scaling_validation()
+
+    # 调用父类的初始化方法，传递必要的参数和其他关键字参数
+    super().__init__(
+        pad_token_id=pad_token_id,
+        bos_token_id=bos_token_id,
+        eos_token_id=eos_token_id,
+        tie_word_embeddings=tie_word_embeddings,
+        **kwargs,
+    )
 ```

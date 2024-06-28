@@ -1,41 +1,24 @@
-# `.\transformers\models\megatron_bert\convert_megatron_bert_checkpoint.py`
+# `.\models\megatron_bert\convert_megatron_bert_checkpoint.py`
 
-```py
-# 版权声明和许可信息
-# 版权所有（c）2021年，NVIDIA公司。保留所有权利。
-# 根据Apache许可证2.0版（“许可证”）获得许可；
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证的副本：
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，
-# 没有任何明示或暗示的保证或条件。
-# 请查看许可证以获取特定语言的权限和限制。
-
-# 如果在运行此转换脚本时出现异常：
-#     ModuleNotFoundError: No module named 'megatron.model.enums'
-# 您需要告诉Python在哪里找到Megatron-LM的克隆版本，例如：
-#
-# cd /tmp
-# git clone https://github.com/NVIDIA/Megatron-LM
-# PYTHONPATH=/tmp/Megatron-LM python src/transformers/models/megatron_bert/convert_megatron_bert_checkpoint.py ...
-#
-# 如果您已经在其他地方克隆了它，请简单地调整到现有路径
-#
-# 如果训练是使用Megatron-LM的分支进行的，例如，
-# https://github.com/microsoft/Megatron-DeepSpeed/，那么您可能需要将其添加到路径中，即，/path/to/Megatron-DeepSpeed/
-
-# 导入所需的库
+```
+# 引入 argparse 库用于解析命令行参数
 import argparse
+# 引入 os 库用于与操作系统交互
 import os
+# 引入 re 库用于正则表达式操作
 import re
+# 引入 zipfile 库用于 ZIP 文件操作
 import zipfile
 
+# 引入 torch 库
 import torch
 
+# 从 transformers 库中引入 MegatronBertConfig 类
 from transformers import MegatronBertConfig
 
-# 递归打印函数
+
 def recursive_print(name, val, spaces=0):
+    # 递归打印字典或者 Tensor 的内容
     # 格式化消息
     if name is None:
         msg = None
@@ -43,7 +26,7 @@ def recursive_print(name, val, spaces=0):
         fmt = "." * max(0, spaces - 2) + "# {:" + str(50 - spaces) + "s}"
         msg = fmt.format(name)
 
-    # 打印并递归（如果需要）
+    # 打印消息并递归打印（如果需要）
     if isinstance(val, dict):
         if msg is not None:
             print(msg)
@@ -54,48 +37,45 @@ def recursive_print(name, val, spaces=0):
     else:
         print(msg, ":", val)
 
-# 修复查询键值排序函数
-def fix_query_key_value_ordering(param, checkpoint_version, num_splits, num_heads, hidden_size):
-    # 重新排列参数张量的布局为[num_splits * num_heads * hidden_size, :]
-    # 以便与后续版本的NVIDIA Megatron-LM兼容。
-    # 在Megatron-LM内部执行反向操作以读取检查点：
-    # https://github.com/NVIDIA/Megatron-LM/blob/v2.4/megatron/checkpointing.py#L209
-    # 如果param是自注意力块的权重张量，则返回的张量
-    # 将需要再次转置才能被HuggingFace BERT读取。
-    input_shape = param.size()
-    # 如果检查点版本为1.0：
-    if checkpoint_version == 1.0:
-        # 存储格式为 [num_heads * hidden_size * num_splits, :]，计算保存的形状
-        saved_shape = (num_heads, hidden_size, num_splits) + input_shape[1:]
-        # 重新调整参数的形状
-        param = param.view(*saved_shape)
-        # 转置参数的维度0和2
-        param = param.transpose(0, 2)
-        # 再次转置参数的维度1和2，并确保内存连续性
-        param = param.transpose(1, 2).contiguous()
-    # 如果检查点版本大于等于2.0：
-    elif checkpoint_version >= 2.0:
-        # 存储格式为 [num_heads * num_splits * hidden_size, :]，计算保存的形状
-        saved_shape = (num_heads, num_splits, hidden_size) + input_shape[1:]
-        # 重新调整参数的形状
-        param = param.view(*saved_shape)
-        # 转置参数的维度0和1，并确保内存连续性
-        param = param.transpose(0, 1).contiguous()
-    # 将参数重新调整为输入形状
-    param = param.view(*input_shape)
-    # 返回参数
-    return param
-####################################################################################################
 
-# 将 Megatron-LM 检查点转换为 Transformers 模型检查点
+def fix_query_key_value_ordering(param, checkpoint_version, num_splits, num_heads, hidden_size):
+    # 重新排列 param 张量的布局为 [num_splits * num_heads * hidden_size, :]
+    # 以便与后续版本的 NVIDIA Megatron-LM 兼容
+    # 在 Megatron-LM 内部执行逆操作以读取检查点：
+    # https://github.com/NVIDIA/Megatron-LM/blob/v2.4/megatron/checkpointing.py#L209
+    # 如果 param 是 self-attention 块的权重张量，则返回的张量还需要再次转置才能被 HuggingFace BERT 读取
+    input_shape = param.size()
+    # 如果版本号为 1.0：
+    if checkpoint_version == 1.0:
+        # 版本 1.0 存储形状为 [num_heads * hidden_size * num_splits, :] 的参数
+        saved_shape = (num_heads, hidden_size, num_splits) + input_shape[1:]
+        # 调整参数的形状为 saved_shape
+        param = param.view(*saved_shape)
+        # 将维度 0 和 2 进行转置
+        param = param.transpose(0, 2)
+        # 将维度 1 和 2 进行转置并保证内存连续性
+        param = param.transpose(1, 2).contiguous()
+    # 如果版本号大于或等于 2.0：
+    elif checkpoint_version >= 2.0:
+        # 其他版本存储形状为 [num_heads * num_splits * hidden_size, :] 的参数
+        saved_shape = (num_heads, num_splits, hidden_size) + input_shape[1:]
+        # 调整参数的形状为 saved_shape
+        param = param.view(*saved_shape)
+        # 将维度 0 和 1 进行转置并保证内存连续性
+        param = param.transpose(0, 1).contiguous()
+    # 最终将参数的形状调整为 input_shape
+    param = param.view(*input_shape)
+    # 返回调整形状后的参数
+    return param
+# 定义一个函数，用于转换 Megatron-LM 的检查点到适用于 Transformers 框架的格式
 def convert_megatron_checkpoint(args, input_state_dict, config):
-    # 转换后的输出模型状态字典
+    # 输出的模型状态字典
     output_state_dict = {}
 
-    # 旧版本未存储训练参数
+    # 旧版本可能没有存储训练参数
     ds_args = input_state_dict.get("args", None)
     if ds_args is not None:
-        # 如果检查点中已包含确切的维度/大小信息，则无需让用户编写配置文件
+        # 如果存在训练参数，将其配置信息应用到转换后的配置中
         config.tokenizer_type = ds_args.tokenizer_type
         config.vocab_size = ds_args.padded_vocab_size
         config.max_position_embeddings = ds_args.max_position_embeddings
@@ -104,11 +84,11 @@ def convert_megatron_checkpoint(args, input_state_dict, config):
         config.num_attention_heads = ds_args.num_attention_heads
         config.intermediate_size = ds_args.ffn_hidden_size if "ffn_hidden_size" in ds_args else 4 * ds_args.hidden_size
 
-    # 头部数量
+    # 注意力头的数量
     heads = config.num_attention_heads
-    # 每个头部的隐藏大小
+    # 每个注意力头的隐藏大小
     hidden_size_per_head = config.hidden_size // heads
-    # Megatron-LM 检查点版本
+    # Megatron-LM 的检查点版本
     if "checkpoint_version" in input_state_dict.keys():
         checkpoint_version = input_state_dict["checkpoint_version"]
     else:
@@ -118,14 +98,14 @@ def convert_megatron_checkpoint(args, input_state_dict, config):
     model = input_state_dict["model"]
     # 语言模型
     lm = model["language_model"]
-    # 嵌入
+    # 嵌入层
     embeddings = lm["embedding"]
 
-    # 单词嵌入
+    # 词嵌入
     word_embeddings = embeddings["word_embeddings"]["weight"]
-    # 截断嵌入表至 vocab_size 行
+    # 截断嵌入表到指定的词汇表大小
     word_embeddings = word_embeddings[: config.vocab_size, :]
-    # 存储单词嵌入
+    # 存储词嵌入
     output_state_dict["bert.embeddings.word_embeddings.weight"] = word_embeddings
 
     # 位置嵌入
@@ -134,70 +114,74 @@ def convert_megatron_checkpoint(args, input_state_dict, config):
     # 存储位置嵌入
     output_state_dict["bert.embeddings.position_embeddings.weight"] = pos_embeddings
 
-    # 标记类型嵌入
+    # 类型嵌入
     tokentype_embeddings = embeddings["tokentype_embeddings"]["weight"]
-    # 存储标记类型嵌入
+    # 存储类型嵌入
     output_state_dict["bert.embeddings.token_type_embeddings.weight"] = tokentype_embeddings
 
-    # Transformer
+    # Transformer 模块
     transformer = lm["transformer"] if "transformer" in lm.keys() else lm["encoder"]
 
-    # 提取层名称的正则表达式
+    # 用于提取层名称的正则表达式
     layer_re = re.compile(r"layers\.(\d+)\.([a-z0-9_.]+)\.([a-z]+)")
 
-    # "自动化" 规则的简单名��映射
+    # Megatron-LM 到 Transformers 的简单名称映射
     megatron_to_transformers = {
         "attention.dense": ".attention.output.dense.",
         "self_attention.dense": ".attention.output.dense.",
         "mlp.dense_h_to_4h": ".intermediate.dense.",
         "mlp.dense_4h_to_h": ".output.dense.",
     }
-    # 用于跟踪注意力/查询/值张量
+    # 跟踪注意力/查询/值张量的变量，初始设为None
     attention_qkv_weight = None
 
-    # 提取层
-    # 最终的 LayerNorm
+    # 提取模型的各层参数并存储到输出状态字典中
+
+    # 存储最终的层归一化权重
     output_state_dict["bert.encoder.ln.weight"] = transformer["final_layernorm.weight"]
+    # 存储最终的层归一化偏置
     output_state_dict["bert.encoder.ln.bias"] = transformer["final_layernorm.bias"]
 
-    # 池化器
+    # 提取并存储池化器的权重和偏置
     pooler = lm["pooler"]
-
-    # 存储矩阵和偏置
     output_state_dict["bert.pooler.dense.weight"] = pooler["dense.weight"]
     output_state_dict["bert.pooler.dense.bias"] = pooler["dense.bias"]
 
-    # 来自 Megatron 的 LM 头（用于 RACE）
-    lm_head = model["lm_head"]
+    # 从 Megatron 的语言模型头部提取并存储 LM 头部的权重和偏置
 
-    # 变换矩阵
+    # 提取转换矩阵的权重
     output_state_dict["cls.predictions.transform.dense.weight"] = lm_head["dense.weight"]
+    # 提取转换矩阵的偏置
     output_state_dict["cls.predictions.transform.dense.bias"] = lm_head["dense.bias"]
 
-    # 变换的 LayerNorm
+    # 提取转换层归一化的权重
     output_state_dict["cls.predictions.transform.LayerNorm.weight"] = lm_head["layernorm.weight"]
+    # 提取转换层归一化的偏置
     output_state_dict["cls.predictions.transform.LayerNorm.bias"] = lm_head["layernorm.bias"]
 
-    # 对于解码器，我们复制权重
+    # 对于解码器，复制词嵌入的权重并存储到输出状态字典中
     output_state_dict["cls.predictions.decoder.weight"] = word_embeddings
+    # 存储 LM 头部的偏置
     output_state_dict["cls.predictions.bias"] = lm_head["bias"]
 
-    # 来自 Megatron 的分类器（用于 MLNI）
-    binary_head = model["binary_head"]
+    # 从 Megatron 的二元分类器提取并存储分类器的权重和偏置
 
-    # 存储分类器
+    # 存储序列关系分类器的权重
     output_state_dict["cls.seq_relationship.weight"] = binary_head["weight"]
+    # 存储序列关系分类器的偏置
     output_state_dict["cls.seq_relationship.bias"] = binary_head["bias"]
 
-    # 完成！
+    # 返回最终的输出状态字典
     return output_state_dict
-# 主函数，程序入口
+# 定义程序的主函数
 def main():
     # 创建参数解析器
     parser = argparse.ArgumentParser()
-    # 添加参数选项
+    # 添加用于打印检查点结构的参数
     parser.add_argument("--print-checkpoint-structure", action="store_true")
+    # 添加指向包含检查点的 ZIP 文件路径的参数
     parser.add_argument("path_to_checkpoint", type=str, help="Path to the ZIP file containing the checkpoint")
+    # 添加可选的配置文件参数，描述预训练模型的配置
     parser.add_argument(
         "--config_file",
         default="",
@@ -207,46 +191,50 @@ def main():
     # 解析命令行参数
     args = parser.parse_args()
 
-    # 提取基本名称
+    # 提取路径的基本名称部分
     basename = os.path.dirname(args.path_to_checkpoint)
 
     # 加载模型
-    # .zip 是可选的，为了向后兼容性，保留它
     print(f'Extracting PyTorch state dictionary from "{args.path_to_checkpoint}"')
+    # 如果路径以 .zip 结尾，则使用 zipfile 模块解压缩
     if args.path_to_checkpoint.endswith(".zip"):
         with zipfile.ZipFile(args.path_to_checkpoint, "r") as checkpoint:
+            # 使用 zipfile 中的文件打开函数获取 PyTorch 状态字典
             with checkpoint.open("release/mp_rank_00/model_optim_rng.pt") as pytorch_dict:
                 input_state_dict = torch.load(pytorch_dict, map_location="cpu")
     else:
+        # 否则直接加载 PyTorch 状态字典
         input_state_dict = torch.load(args.path_to_checkpoint, map_location="cpu")
 
+    # 根据配置文件是否为空，选择相应的 MegatronBertConfig
     if args.config_file == "":
-        # 默认的 megatron-bert 345m 配置
+        # 默认使用 Megatron-BERT 345m 的配置
         config = MegatronBertConfig()
-
-        # 不同的 megatron-bert-*-345m 模型具有不同的词汇表大小，因此用实际的词汇维度覆盖默认配置
+        # 根据输入状态字典调整词汇表大小
         config.vocab_size = input_state_dict["model"]["lm_head"]["bias"].numel()
     else:
+        # 从 JSON 文件加载 MegatronBertConfig
         config = MegatronBertConfig.from_json_file(args.config_file)
 
-    # 转换
+    # 执行转换
     print("Converting")
     output_state_dict = convert_megatron_checkpoint(args, input_state_dict, config)
 
-    # 打印转换后状态字典的结构
+    # 如果需要打印检查点结构，则递归打印输出状态字典
     if args.print_checkpoint_structure:
         recursive_print(None, output_state_dict)
 
-    # 将配置保存到文件
+    # 将配置保存到文件中
     print("Saving config")
     config.save_pretrained(basename)
 
-    # 将状态字典保存到文件
+    # 将输出的状态字典保存到文件中
     output_checkpoint_file = os.path.join(basename, "pytorch_model.bin")
     print(f'Saving checkpoint to "{output_checkpoint_file}"')
     torch.save(output_state_dict, output_checkpoint_file)
 
 
 if __name__ == "__main__":
+    # 如果是直接执行本脚本，则调用主函数
     main()
 ```

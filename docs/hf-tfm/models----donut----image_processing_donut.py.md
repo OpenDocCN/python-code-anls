@@ -1,56 +1,15 @@
 # `.\models\donut\image_processing_donut.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明，保留所有权利
-# 根据 Apache 许可证，除非遵守许可证规定，否则不能使用该文件
-# 查看许可证的副本，请访问 http://www.apache.org/licenses/LICENSE-2.0
-
-# 如果适用法律要求或书面同意，那么根据许可证分发的软件基于“原样”基础分发，不附带任何形式的担保或条件，无论是明示的还是暗示的
-# 请查看许可证以了解特定语言的权限和限制
-"""Image processor class for Donut.""" 模块，用于 Donut 的图像处理器类。
-
-from typing import Dict, List, Optional, Union  # 引入必要的类型提示
-
-import numpy as np  # 引入 numpy 库
-
-# 引入相关的图像处理工具
-from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
-from ...image_transforms import (
-    get_resize_output_image_size,
-    pad,
-    resize,
-    to_channel_dimension_format,
-)
-from ...image_utils import (  # 引入图像处理所需的工具
-    IMAGENET_STANDARD_MEAN,
-    IMAGENET_STANDARD_STD,
-    ChannelDimension,
-    ImageInput,
-    PILImageResampling,
-    get_image_size,
-    infer_channel_dimension_format,
-    is_scaled_image,
-    make_list_of_images,
-    to_numpy_array,
-    valid_images,
-)
-from ...utils import TensorType, logging  # 引入必要的工具和日志
-from ...utils.import_utils import is_vision_available  # 对于图像处理是否可用的判断
-
-# 获取日志记录器
-logger = logging.get_logger(__name__)
-
-# 如果图像处理工具可用
+```
+# 如果视觉处理库可用，则导入PIL库
 if is_vision_available():
-    # 导入 PIL 库
     import PIL
 
-
-# 创建 Donut 图像处理器类
+# 定义一个名为DonutImageProcessor的类，继承自BaseImageProcessor类
 class DonutImageProcessor(BaseImageProcessor):
     r"""
     Constructs a Donut image processor.
+    """
     Args:
         do_resize (`bool`, *optional*, defaults to `True`):
             Whether to resize the image's (height, width) dimensions to the specified `size`. Can be overridden by
@@ -83,37 +42,37 @@ class DonutImageProcessor(BaseImageProcessor):
         image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_STD`):
             Image standard deviation.
     """
-
-    # 定义模型输入的名称列表
+    # 定义模型输入的名称列表，仅包含像素值
     model_input_names = ["pixel_values"]
-    # 初始化函数，设置各种参数并初始化特征提取器类
+    # 初始化函数，用于设置图像处理的各项参数和默认值
     def __init__(
         self,
-        do_resize: bool = True,
-        size: Dict[str, int] = None,
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        do_thumbnail: bool = True,
-        do_align_long_axis: bool = False,
-        do_pad: bool = True,
-        do_rescale: bool = True,
-        rescale_factor: Union[int, float] = 1 / 255,
-        do_normalize: bool = True,
-        image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]] = None,
-        **kwargs,
+        do_resize: bool = True,  # 是否进行图像尺寸调整，默认为True
+        size: Dict[str, int] = None,  # 图像的目标尺寸，字典形式表示，包含高度和宽度，默认为None
+        resample: PILImageResampling = PILImageResampling.BILINEAR,  # 图像调整大小时的重采样方法，默认为双线性插值
+        do_thumbnail: bool = True,  # 是否生成缩略图，默认为True
+        do_align_long_axis: bool = False,  # 是否在长轴上对齐图像，默认为False
+        do_pad: bool = True,  # 是否进行图像填充，默认为True
+        do_rescale: bool = True,  # 是否对图像进行重新缩放，默认为True
+        rescale_factor: Union[int, float] = 1 / 255,  # 图像重新缩放的因子，默认为1/255
+        do_normalize: bool = True,  # 是否对图像进行归一化，默认为True
+        image_mean: Optional[Union[float, List[float]]] = None,  # 图像的均值用于归一化，默认为None
+        image_std: Optional[Union[float, List[float]]] = None,  # 图像的标准差用于归一化，默认为None
+        **kwargs,  # 其他可选的关键字参数
     ) -> None:
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法，传入其他的关键字参数
         super().__init__(**kwargs)
 
-        # 设置size参数默认值，如果size为空则设置为{"height": 2560, "width": 1920}
+        # 如果size为None，则设定默认的高度和宽度
         size = size if size is not None else {"height": 2560, "width": 1920}
-        # 如果size是元组或列表形式，则转换成(height, width)格式
+        # 如果size是元组或列表形式，则转换为字典形式，表示高度和宽度
         if isinstance(size, (tuple, list)):
+            # The previous feature extractor size parameter was in (width, height) format
             size = size[::-1]
-        # 获取有效的size字典
+        # 使用函数get_size_dict处理size，确保返回的是一个标准化的尺寸字典
         size = get_size_dict(size)
 
-        # 初始化各类参数
+        # 设置对象的属性值，将初始化函数的参数赋值给对象的属性
         self.do_resize = do_resize
         self.size = size
         self.resample = resample
@@ -123,10 +82,27 @@ class DonutImageProcessor(BaseImageProcessor):
         self.do_rescale = do_rescale
         self.rescale_factor = rescale_factor
         self.do_normalize = do_normalize
-        self.image_mean = image_mean if image_mean is not None else IMAGENET_STANDARD_MEAN
-        self.image_std = image_std if image_std is not None else IMAGENET_STANDARD_STD
-
-    # 将图像的长轴与指定尺寸的长轴对齐
+        self.image_mean = image_mean if image_mean is not None else IMAGENET_STANDARD_MEAN  # 如果image_mean为None，则使用IMAGENET_STANDARD_MEAN
+        self.image_std = image_std if image_std is not None else IMAGENET_STANDARD_STD  # 如果image_std为None，则使用IMAGENET_STANDARD_STD
+        # 验证处理器的关键字列表，用于后续处理
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_thumbnail",
+            "do_align_long_axis",
+            "do_pad",
+            "random_padding",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
     def align_long_axis(
         self,
         image: np.ndarray,
@@ -150,24 +126,25 @@ class DonutImageProcessor(BaseImageProcessor):
         Returns:
             `np.ndarray`: The aligned image.
         """
+
         # 获取输入图像的高度和宽度
         input_height, input_width = get_image_size(image, channel_dim=input_data_format)
         # 获取输出图像的高度和宽度
         output_height, output_width = size["height"], size["width"]
 
-        # 如果输出宽度小于高度并且输入宽度大于高度，或者输出宽度大于高度并且输入宽度小于高度，则旋转图像
+        # 如果输出宽度小于高度且输入宽度大于高度，或者输出宽度大于高度且输入宽度小于高度，则须旋转图像
         if (output_width < output_height and input_width > input_height) or (
             output_width > output_height and input_width < input_height
         ):
             image = np.rot90(image, 3)
 
-        # 如果设置了data_format参数，则将图像转换为指定数据格式
+        # 如果指定了输出数据格式，则转换图像数据格式
         if data_format is not None:
             image = to_channel_dimension_format(image, data_format, input_channel_dim=input_data_format)
 
         # 返回对齐后的图像
         return image
-    # 定义一个方法，用于给定的图像添加填充，使其达到指定的大小
+
     def pad_image(
         self,
         image: np.ndarray,
@@ -177,55 +154,54 @@ class DonutImageProcessor(BaseImageProcessor):
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ) -> np.ndarray:
         """
-        填充图像到指定的大小。
+        Pad the image to the specified size.
 
         Args:
             image (`np.ndarray`):
-                要进行填充的图像。
+                The image to be padded.
             size (`Dict[str, int]`):
-                指定图像填充后的大小，格式为 `{"height": h, "width": w}`。
+                The size `{"height": h, "width": w}` to pad the image to.
             random_padding (`bool`, *optional*, defaults to `False`):
-                是否使用随机填充，默认为否。
-            data_format (`str` 或 `ChannelDimension`, *optional*):
-                输出图像的数据格式。若未设置，则使用输入图像的相同格式。
-            input_data_format (`ChannelDimension` 或 `str`, *optional*):
-                输入图像的通道维度格式。若未提供，则会被推断。
+                Whether to use random padding or not.
+            data_format (`str` or `ChannelDimension`, *optional*):
+                The data format of the output image. If unset, the same format as the input image is used.
+            input_data_format (`ChannelDimension` or `str`, *optional*):
+                The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # 获取输出大小的高度和宽度
+        # Extract output height and width from the size dictionary
         output_height, output_width = size["height"], size["width"]
-        # 获取输入图像的高度和宽度
+        
+        # Obtain input height and width from the input image
         input_height, input_width = get_image_size(image, channel_dim=input_data_format)
 
-        # 计算需要填充的高度和宽度差距
+        # Calculate the difference between output and input dimensions
         delta_width = output_width - input_width
         delta_height = output_height - input_height
 
+        # Determine padding amounts based on random_padding flag
         if random_padding:
-            # 使用随机填充时，随机确定顶部和左侧的填充大小
             pad_top = np.random.randint(low=0, high=delta_height + 1)
             pad_left = np.random.randint(low=0, high=delta_width + 1)
         else:
-            # 使用对称填充时，计算顶部和左侧的填充大小
             pad_top = delta_height // 2
             pad_left = delta_width // 2
 
-        # 计算底部和右侧的填充大小
+        # Calculate remaining padding amounts to complete the pad
         pad_bottom = delta_height - pad_top
         pad_right = delta_width - pad_left
 
-        # 定义填充参数，分别为垂直方向和水平方向的填充量
+        # Construct the padding tuple for np.pad function
         padding = ((pad_top, pad_bottom), (pad_left, pad_right))
-        # 调用 pad 方法对图像进行填充，并返回填充后的图像
+        
+        # Apply padding to the image using np.pad
         return pad(image, padding, data_format=data_format, input_data_format=input_data_format)
 
-    # 定义一个已被弃用的方法，用于填充图像
     def pad(self, *args, **kwargs):
-        # 显示一条日志消息，指示该方法已被弃用，并将在未来版本中移除
+        # Log a deprecation warning for the `pad` method
         logger.info("pad is deprecated and will be removed in version 4.27. Please use pad_image instead.")
-        # 调用新的 pad_image 方法，替代旧的 pad 方法
+        # Redirect to `pad_image` method
         return self.pad_image(*args, **kwargs)
 
-    # 定义一个方法，用于生成缩略图
     def thumbnail(
         self,
         image: np.ndarray,
@@ -234,44 +210,44 @@ class DonutImageProcessor(BaseImageProcessor):
         data_format: Optional[Union[str, ChannelDimension]] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-        ...
     ) -> np.ndarray:
         """
-        调整图像大小以生成缩略图。调整图像大小使得没有任何维度大于指定大小的相应维度。
+        Resize the image to make a thumbnail. The image is resized so that no dimension is larger than any
+        corresponding dimension of the specified size.
 
         Args:
             image (`np.ndarray`):
-                要调整大小的图像。
+                The image to be resized.
             size (`Dict[str, int]`):
-                要调整图像大小为的 `{"height": h, "width": w}` 大小。
+                The size `{"height": h, "width": w}` to resize the image to.
             resample (`PILImageResampling`, *optional*, defaults to `PILImageResampling.BICUBIC`):
-                要使用的重采样滤波器。
+                The resampling filter to use.
             data_format (`Optional[Union[str, ChannelDimension]]`, *optional*):
-                输出图像的数据格式。如果未设置，则使用与输入图像相同的格式。
+                The data format of the output image. If unset, the same format as the input image is used.
             input_data_format (`ChannelDimension` or `str`, *optional*):
-                输入图像的通道维度格式。如果未提供，将进行推断。
+                The channel dimension format of the input image. If not provided, it will be inferred.
         """
         # 获取输入图像的高度和宽度
         input_height, input_width = get_image_size(image, channel_dim=input_data_format)
-        # 获取输出图像的高度和宽度
+        
+        # 获取输出图像的目标高度和宽度
         output_height, output_width = size["height"], size["width"]
 
-        # 我们始终调整大小为输入或输出大小中较小的一个。
+        # 始终调整图像大小为输入或输出大小中较小的那一个
         height = min(input_height, output_height)
         width = min(input_width, output_width)
 
-        # 如果输入图像的尺寸与输出尺寸相同，则直接返回输入图像
+        # 如果输入图像已经符合要求的大小，则直接返回原图像
         if height == input_height and width == input_width:
             return image
 
-        # 如果输入图像的高度大于宽度，则根据高度调整宽度
+        # 根据输入图像的长宽比例调整目标高度或宽度
         if input_height > input_width:
             width = int(input_width * height / input_height)
-        # 如果输入图像的宽度大于高度，则根据宽度调整高度
         elif input_width > input_height:
             height = int(input_height * width / input_width)
 
-        # 调整图像大小
+        # 调用 resize 函数，进行图像的实际调整
         return resize(
             image,
             size=(height, width),
@@ -290,6 +266,25 @@ class DonutImageProcessor(BaseImageProcessor):
         data_format: Optional[Union[str, ChannelDimension]] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
+        ):
+        """
+        Resize the input image to the specified size.
+
+        Args:
+            image (`np.ndarray`):
+                The image to be resized.
+            size (`Dict[str, int]`):
+                The target size `{"height": h, "width": w}` to resize the image to.
+            resample (`PILImageResampling`, *optional*):
+                The resampling filter to use.
+            data_format (`Optional[Union[str, ChannelDimension]]`, *optional*):
+                The data format of the output image.
+            input_data_format (`ChannelDimension` or `str`, *optional*):
+                The channel dimension format of the input image.
+
+        Returns:
+            np.ndarray: The resized image.
+        """
     ) -> np.ndarray:
         """
         Resizes `image` to `(height, width)` specified by `size` using the PIL library.
@@ -306,15 +301,15 @@ class DonutImageProcessor(BaseImageProcessor):
             input_data_format (`ChannelDimension` or `str`, *optional*):
                 The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # 根据给定的大小参数获取要调整的图片的大小
+        # 调整 `size` 参数，确保其为大小字典
         size = get_size_dict(size)
-        # 获取最短边
+        # 计算 `size` 中较短的边长
         shortest_edge = min(size["height"], size["width"])
-        # 根据最短边获取调整后的输出图像大小
+        # 获取调整大小后的输出图像尺寸
         output_size = get_resize_output_image_size(
             image, size=shortest_edge, default_to_square=False, input_data_format=input_data_format
         )
-        # 调整图像大小
+        # 调整图像大小并返回调整后的图像
         resized_image = resize(
             image,
             size=output_size,
@@ -339,7 +334,7 @@ class DonutImageProcessor(BaseImageProcessor):
         rescale_factor: float = None,
         do_normalize: bool = None,
         image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]] = None,
+        image_std: Optional[Union[float, List[float]]] = None,
         return_tensors: Optional[Union[str, TensorType]] = None,
         data_format: Optional[ChannelDimension] = ChannelDimension.FIRST,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,

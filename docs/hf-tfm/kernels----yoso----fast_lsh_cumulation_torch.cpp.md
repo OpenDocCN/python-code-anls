@@ -1,24 +1,23 @@
-# `.\transformers\kernels\yoso\fast_lsh_cumulation_torch.cpp`
+# `.\kernels\yoso\fast_lsh_cumulation_torch.cpp`
 
-```py
-#include <torch/extension.h>  // 引入 PyTorch C++ 扩展头文件
-#include <ATen/ATen.h>  // 引入 ATen 头文件
-#include "fast_lsh_cumulation.h"  // 引入自定义的快速局部敏感哈希累积头文件
-#include "common_cuda.h"  // 引入自定义的 CUDA 公共头文件
-#include <vector>  // 引入 C++ 标准库中的向量容器
+```
+#include <torch/extension.h>
+#include <ATen/ATen.h>
+#include "fast_lsh_cumulation.h"  // 引入自定义的头文件，包含快速LSH累积相关的函数声明
+#include "common_cuda.h"           // 引入自定义的头文件，包含通用的CUDA函数声明
+#include <vector>                  // 引入标准库中的向量容器
 
-// 快速哈希函数，返回哈希结果
+// 快速哈希函数，调用指定版本的核函数处理哈希计算
 std::vector<at::Tensor> fast_hash(
-  at::Tensor query_mask,  // 查询掩码
-  at::Tensor query_vector,  // 查询向量
-  at::Tensor key_mask,  // 关键字掩码
-  at::Tensor key_vector,  // 关键字向量
-  int num_hash_f,  // 哈希函数数量
-  int hash_code_len,  // 哈希码长度
-  bool use_cuda,  // 是否使用 CUDA
-  int version  // 版本号
+  at::Tensor query_mask,      // 查询掩码，形状为[batch_size, num_query]
+  at::Tensor query_vector,    // 查询向量，形状为[batch_size, num_query, vector_dim]
+  at::Tensor key_mask,        // 键掩码，形状为[batch_size, num_key]
+  at::Tensor key_vector,      // 键向量，形状为[batch_size, num_key, vector_dim]
+  int num_hash_f,             // 哈希函数数量
+  int hash_code_len,          // 哈希码长度
+  bool use_cuda,              // 是否使用CUDA加速
+  int version                 // 函数版本号
 ) {
-  // 调用快速哈希版本1的核函数
   return fast_hash_ver1_kernel(
     query_mask,
     query_vector,
@@ -30,18 +29,17 @@ std::vector<at::Tensor> fast_hash(
   );
 }
 
-// 局部敏感哈希累积函数，返回累积结果
+// LSH累积函数，调用指定版本的核函数执行LSH累积操作
 at::Tensor lsh_cumulation(
-  at::Tensor query_mask,  // 查询掩码
-  at::Tensor query_hash_code,  // 查询哈希码
-  at::Tensor key_mask,  // 关键字掩码
-  at::Tensor key_hash_code,  // 关键字哈希码
-  at::Tensor value,  // 值
-  int hashtable_capacity,  // 哈希表容量
-  bool use_cuda,  // 是否使用 CUDA
-  int version  // 版本号
+  at::Tensor query_mask,         // 查询掩码，形状为[batch_size, num_query]
+  at::Tensor query_hash_code,    // 查询哈希码，形状为[batch_size, num_query, num_hash_f]
+  at::Tensor key_mask,           // 键掩码，形状为[batch_size, num_key]
+  at::Tensor key_hash_code,      // 键哈希码，形状为[batch_size, num_key, num_hash_f]
+  at::Tensor value,              // 值，形状为[batch_size, num_key, value_dim]
+  int hashtable_capacity,        // 哈希表容量
+  bool use_cuda,                 // 是否使用CUDA加速
+  int version                    // 函数版本号
 ) {
-  // 调用局部敏感哈希累积版本1的核函数
   return lsh_cumulation_ver1_kernel(
     query_mask,
     query_hash_code,
@@ -53,20 +51,19 @@ at::Tensor lsh_cumulation(
   );
 }
 
-// 加权局部敏感哈希累积函数，返回累积结果
+// 加权LSH累积函数，根据版本号调用不同的核函数执行不同版本的加权LSH累积操作
 at::Tensor lsh_weighted_cumulation(
-  at::Tensor query_mask,  // 查询掩码
-  at::Tensor query_hash_code,  // 查询哈希码
-  at::Tensor query_weight,  // 查询权重
-  at::Tensor key_mask,  // 关键字掩码
-  at::Tensor key_hash_code,  // 关键字哈希码
-  at::Tensor key_weight,  // 关键字权重
-  at::Tensor value,  // 值
-  int hashtable_capacity,  // 哈希表容量
-  bool use_cuda,  // 是否使用 CUDA
-  int version  // 版本号
+  at::Tensor query_mask,         // 查询掩码，形状为[batch_size, num_query]
+  at::Tensor query_hash_code,    // 查询哈希码，形状为[batch_size, num_query, num_hash_f]
+  at::Tensor query_weight,       // 查询权重，形状为[batch_size, num_query, weight_dim]
+  at::Tensor key_mask,           // 键掩码，形状为[batch_size, num_key]
+  at::Tensor key_hash_code,      // 键哈希码，形状为[batch_size, num_key, num_hash_f]
+  at::Tensor key_weight,         // 键权重，形状为[batch_size, num_key, weight_dim]
+  at::Tensor value,              // 值，形状为[batch_size, num_key, value_dim]
+  int hashtable_capacity,        // 哈希表容量
+  bool use_cuda,                 // 是否使用CUDA加速
+  int version                    // 函数版本号
 ) {
-  // 根据版本号选择不同的加权局部敏感哈希累积核函数
   if (version == 1) {
     return lsh_weighted_cumulation_ver1_kernel(
       query_mask,
@@ -116,6 +113,7 @@ at::Tensor lsh_weighted_cumulation(
       use_cuda
     );
   } else {
+    // 默认情况下使用第三个版本的核函数
     return lsh_weighted_cumulation_ver3_kernel(
       query_mask,
       query_hash_code,
@@ -129,13 +127,13 @@ at::Tensor lsh_weighted_cumulation(
     );
   }
 }
-# 使用 PYBIND11_MODULE 宏定义一个 Python 模块，模块名为 TORCH_EXTENSION_NAME，模块对象为 m
+# 使用 PYBIND11_MODULE 宏定义一个 Python 模块
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-    # 将 fast_hash 函数绑定到模块 m 中，函数名为 "fast_hash"，函数指针为 &fast_hash，描述为 "Fast Hash (CUDA)"
-    m.def("fast_hash", &fast_hash, "Fast Hash (CUDA)");
-    # 将 lsh_cumulation 函数绑定到模块 m 中，函数名为 "lsh_cumulation"，函数指针为 &lsh_cumulation，描述为 "LSH Cumulation (CUDA)"
-    m.def("lsh_cumulation", &lsh_cumulation, "LSH Cumulation (CUDA)");
-    # 将 lsh_weighted_cumulation 函数绑定到模块 m 中，函数名为 "lsh_weighted_cumulation"，函数指针为 &lsh_weighted_cumulation，描述为 "LSH Weighted Cumulation (CUDA)"
-    m.def("lsh_weighted_cumulation", &lsh_weighted_cumulation, "LSH Weighted Cumulation (CUDA)");
+  # 将 fast_hash 函数绑定到 Python 模块中，并命名为 "Fast Hash (CUDA)"
+  m.def("fast_hash", &fast_hash, "Fast Hash (CUDA)");
+  # 将 lsh_cumulation 函数绑定到 Python 模块中，并命名为 "LSH Cumulation (CUDA)"
+  m.def("lsh_cumulation", &lsh_cumulation, "LSH Cumulation (CUDA)");
+  # 将 lsh_weighted_cumulation 函数绑定到 Python 模块中，并命名为 "LSH Weighted Cumulation (CUDA)"
+  m.def("lsh_weighted_cumulation", &lsh_weighted_cumulation, "LSH Weighted Cumulation (CUDA)");
 }
 ```

@@ -1,116 +1,112 @@
-# `.\transformers\models\blenderbot_small\__init__.py`
+# `.\models\blenderbot_small\__init__.py`
 
-```py
-# 导入类型检查模块
+```
+# 导入必要的模块和函数
 from typing import TYPE_CHECKING
 
-# 导入必要的依赖项
+# 从相对路径的utils模块导入所需的函数和异常类
 from ...utils import (
-    OptionalDependencyNotAvailable,  # 导入可选依赖未安装异常类
-    _LazyModule,  # 导入懒加载模块
-    is_flax_available,  # 检查是否可用 Flax
-    is_tf_available,  # 检查是否可用 TensorFlow
-    is_tokenizers_available,  # 检查是否可用 Tokenizers
-    is_torch_available,  # 检查是否可用 PyTorch
+    OptionalDependencyNotAvailable,
+    _LazyModule,
+    is_flax_available,
+    is_tf_available,
+    is_tokenizers_available,
+    is_torch_available,
 )
 
-# 定义导入结构字典，用于存储各模块的导入信息
+# 定义一个字典结构，用于存储模块导入的结构信息
 _import_structure = {
-    "configuration_blenderbot_small": [  # BlenderBot Small 配置模块
-        "BLENDERBOT_SMALL_PRETRAINED_CONFIG_ARCHIVE_MAP",  # 预训练配置映射
-        "BlenderbotSmallConfig",  # BlenderBot Small 配置类
-        "BlenderbotSmallOnnxConfig",  # BlenderBot Small ONNX 配置类
+    "configuration_blenderbot_small": [
+        "BLENDERBOT_SMALL_PRETRAINED_CONFIG_ARCHIVE_MAP",
+        "BlenderbotSmallConfig",
+        "BlenderbotSmallOnnxConfig",
     ],
-    "tokenization_blenderbot_small": [  # BlenderBot Small 分词模块
-        "BlenderbotSmallTokenizer",  # BlenderBot Small 分词器类
-    ],
+    "tokenization_blenderbot_small": ["BlenderbotSmallTokenizer"],
 }
 
-# 检查 Tokenizers 是否可用，若不可用则引发异常
+# 检查tokenizers库是否可用，若不可用则引发OptionalDependencyNotAvailable异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，将分词模块加入导入结构字典
+    # 若tokenizers库可用，则更新_import_structure字典，添加tokenization_blenderbot_small_fast模块的导入信息
     _import_structure["tokenization_blenderbot_small_fast"] = ["BlenderbotSmallTokenizerFast"]
 
-# 检查 PyTorch 是否可用，若不可用则引发异常
+# 检查torch库是否可用，若不可用则引发OptionalDependencyNotAvailable异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，将 PyTorch 模型相关模块加入导入结构字典
+    # 若torch库可用，则更新_import_structure字典，添加modeling_blenderbot_small模块的导入信息
     _import_structure["modeling_blenderbot_small"] = [
-        "BLENDERBOT_SMALL_PRETRAINED_MODEL_ARCHIVE_LIST",  # 预训练模型归档列表
-        "BlenderbotSmallForCausalLM",  # 用于因果语言建模的 BlenderBot Small 模型类
-        "BlenderbotSmallForConditionalGeneration",  # 用于条件生成的 BlenderBot Small 模型类
-        "BlenderbotSmallModel",  # BlenderBot Small 模型基类
-        "BlenderbotSmallPreTrainedModel",  # BlenderBot Small 预训练模型基类
+        "BLENDERBOT_SMALL_PRETRAINED_MODEL_ARCHIVE_LIST",
+        "BlenderbotSmallForCausalLM",
+        "BlenderbotSmallForConditionalGeneration",
+        "BlenderbotSmallModel",
+        "BlenderbotSmallPreTrainedModel",
     ]
 
-# 检查 TensorFlow 是否可用，若不可用则引发异常
+# 检查tensorflow库是否可用，若不可用则引发OptionalDependencyNotAvailable异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，将 TensorFlow 模型相关模块加入导入结构字典
+    # 若tensorflow库可用，则更新_import_structure字典，添加modeling_tf_blenderbot_small模块的导入信息
     _import_structure["modeling_tf_blenderbot_small"] = [
-        "TFBlenderbotSmallForConditionalGeneration",  # 用于条件生成的 TensorFlow 版 BlenderBot Small 模型类
-        "TFBlenderbotSmallModel",  # TensorFlow 版 BlenderBot Small 模型基类
-        "TFBlenderbotSmallPreTrainedModel",  # TensorFlow 版 BlenderBot Small 预训练模型基类
+        "TFBlenderbotSmallForConditionalGeneration",
+        "TFBlenderbotSmallModel",
+        "TFBlenderbotSmallPreTrainedModel",
     ]
 
-# 检查 Flax 是否可用，若不可用则引发异常
+# 检查flax库是否可用，若不可用则引发OptionalDependencyNotAvailable异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，将 Flax 模型相关模块加入导入结构字典
+    # 若flax库可用，则更新_import_structure字典，添加modeling_flax_blenderbot_small模块的导入信息
     _import_structure["modeling_flax_blenderbot_small"] = [
-        "FlaxBlenderbotSmallForConditionalGeneration",  # 用于条件生成的 Flax 版 BlenderBot Small 模型类
-        "FlaxBlenderbotSmallModel",  # Flax 版 BlenderBot Small 模型基类
-        "FlaxBlenderbotSmallPreTrainedModel",  # Flax 版 BlenderBot Small 预训练模型基类
+        "FlaxBlenderbotSmallForConditionalGeneration",
+        "FlaxBlenderbotSmallModel",
+        "FlaxBlenderbotSmallPreTrainedModel",
     ]
 
-# 如果是类型检查环境
+# 如果在类型检查模式下
 if TYPE_CHECKING:
-    # 导入 BlenderBot Small 配置相关类
+    # 从相对路径的configuration_blenderbot_small模块导入所需的类和常量
     from .configuration_blenderbot_small import (
-        BLENDERBOT_SMALL_PRETRAINED_CONFIG_ARCHIVE_MAP,  # 预训练配置归档映射
-        BlenderbotSmallConfig,  # BlenderBot Small 配置类
-        BlenderbotSmallOnnxConfig,  # BlenderBot Small ONNX 配置类
+        BLENDERBOT_SMALL_PRETRAINED_CONFIG_ARCHIVE_MAP,
+        BlenderbotSmallConfig,
+        BlenderbotSmallOnnxConfig,
     )
-    # 导入 BlenderBot Small 分词器相关类
+    # 从相对路径的tokenization_blenderbot_small模块导入所需的类
     from .tokenization_blenderbot_small import BlenderbotSmallTokenizer
 
-    # 检查 Tokenizers 是否可用，若不可用则引发异常
+    # 检查tokenizers库是否可用，若不可用则引发OptionalDependencyNotAvailable异常
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果可用，导入 BlenderBot Small 快速分词器相关类
+        # 若tokenizers库可用，则从tokenization_blenderbot_small_fast模块导入所需的类
         from .tokenization_blenderbot_small_fast import BlenderbotSmallTokenizerFast
-    # 尝试检查是否有 Torch 库可用
+    # 尝试检查是否安装了 Torch 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
-        # 如果 Torch 库不可用，引发自定义的异常
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获自定义异常
+    # 捕获 OptionalDependencyNotAvailable 异常，不做任何操作
     except OptionalDependencyNotAvailable:
-        # 如果 Torch 库不可用，则什么都不做，继续执行后续代码
         pass
+    # 如果 Torch 可用，则导入相关的 Blenderbot Small 模型类和常量
     else:
-        # 如果 Torch 库可用，则导入相关模块和对象
         from .modeling_blenderbot_small import (
             BLENDERBOT_SMALL_PRETRAINED_MODEL_ARCHIVE_LIST,
             BlenderbotSmallForCausalLM,
@@ -119,41 +115,44 @@ if TYPE_CHECKING:
             BlenderbotSmallPreTrainedModel,
         )
 
-    # 尝试检查是否有 TensorFlow 库可用
+    # 尝试检查是否安装了 TensorFlow 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
-        # 如果 TensorFlow 库不可用，引发自定义的异常
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获自定义异常
+    # 捕获 OptionalDependencyNotAvailable 异常，不做任何操作
     except OptionalDependencyNotAvailable:
-        # 如果 TensorFlow 库不可用，则什么都不做，继续执行后续代码
         pass
+    # 如果 TensorFlow 可用，则导入相关的 TensorFlow 版 Blenderbot Small 模型类和常量
     else:
-        # 如果 TensorFlow 库可用，则导入相关模块和对象
         from .modeling_tf_blenderbot_small import (
             TFBlenderbotSmallForConditionalGeneration,
             TFBlenderbotSmallModel,
             TFBlenderbotSmallPreTrainedModel,
         )
 
-    # 尝试检查是否有 Flax 库可用
+    # 尝试检查是否安装了 Flax 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
-        # 如果 Flax 库不可用，引发自定义的异常
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获自定义异常
+    # 捕获 OptionalDependencyNotAvailable 异常，不做任何操作
     except OptionalDependencyNotAvailable:
-        # 如果 Flax 库不可用，则什么都不做，继续执行后续代码
         pass
+    # 如果 Flax 可用，则导入相关的 Flax 版 Blenderbot Small 模型类和常量
     else:
-        # 如果 Flax 库可用，则导入相关模块和对象
         from .modeling_flax_blenderbot_small import (
             FlaxBlenderbotSmallForConditionalGeneration,
             FlaxBlenderbotSmallModel,
             FlaxBlenderbotSmallPreTrainedModel,
         )
-# 如果不在顶层模块中，则导入 sys 模块
-import sys
-# 使用 sys.modules 将当前模块注册为 _LazyModule 类型的模块，使得可以延迟加载
-sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+else:
+    # 如果前面的条件不满足，则执行以下代码块
+    import sys
+    # 导入 sys 模块，用于处理 Python 解释器的系统参数和功能
+
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 包装当前模块
+    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+    # __name__ 表示当前模块的名称
+    # globals()["__file__"] 获取当前模块的文件路径
+    # _import_structure 可能是一个函数或对象，用于指定模块的导入结构
+    # module_spec=__spec__ 指定当前模块的规范对象，用于描述模块的详细信息
 ```

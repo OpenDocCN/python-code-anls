@@ -1,16 +1,19 @@
 # `.\models\dpr\modeling_tf_dpr.py`
 
-```py
-# 引入必要的库
+```
+# coding=utf-8
+# 定义文件编码格式和版权信息
+
+# 导入必要的模块和库
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Tuple, Union
+
 import tensorflow as tf
-# 引入模型输出相关的类
+
+# 导入相关的模型输出类和工具函数
 from ...modeling_tf_outputs import TFBaseModelOutputWithPooling
-# 引入模型输入类型相关的类和函数
-from ...modeling_tf_utils import TFModelInputType, TFPreTrainedModel, get_initializer, shape_list, unpack_inputs
-# 引入工具函数和类
+from ...modeling_tf_utils import TFModelInputType, TFPreTrainedModel, get_initializer, keras, shape_list, unpack_inputs
 from ...utils import (
     ModelOutput,
     add_start_docstrings,
@@ -18,111 +21,138 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-# 引入BERT模型的主要层
 from ..bert.modeling_tf_bert import TFBertMainLayer
-# 引入DPR配置
 from .configuration_dpr import DPRConfig
 
-# 获取日志记录器
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 用于文档的配置信息
+# 预定义一些用于文档生成的配置常量
 _CONFIG_FOR_DOC = "DPRConfig"
 
-# 预训练的上下文编码器模型存档列表
+# 预训练模型的存档列表
 TF_DPR_CONTEXT_ENCODER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/dpr-ctx_encoder-single-nq-base",
     "facebook/dpr-ctx_encoder-multiset-base",
 ]
-# 预训练的问题编码器模型存档列表
 TF_DPR_QUESTION_ENCODER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/dpr-question_encoder-single-nq-base",
     "facebook/dpr-question_encoder-multiset-base",
 ]
-# 预训练的阅读器模型存档列表
 TF_DPR_READER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/dpr-reader-single-nq-base",
     "facebook/dpr-reader-multiset-base",
 ]
 
-
 ##########
 # Outputs
 ##########
 
-
+# 数据类，用于封装`TFDPRContextEncoder`的输出
 @dataclass
 class TFDPRContextEncoderOutput(ModelOutput):
     r"""
     Class for outputs of [`TFDPRContextEncoder`].
+    """
+    """
     Args:
         pooler_output (`tf.Tensor` of shape `(batch_size, embeddings_size)`):
-            DPR编码器输出的*pooler_output*，对应于上下文表示。通过线性层进一步处理的序列的第一个标记（分类标记）的最后一层隐藏状态。
-            该输出将用于将上下文嵌入到与问题嵌入进行最近邻查询的上下文中。
-        hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            形状为`(batch_size, sequence_length, hidden_size)`的`tf.Tensor`元组（当传递`output_hidden_states=True`或`config.output_hidden_states=True`时返回）。
+            DPR编码器的输出，对应于上下文表示。是序列中第一个标记（分类标记）的最后一层隐藏状态，
+            进一步由线性层处理。此输出用于嵌入上下文，以便使用问题嵌入进行最近邻查询。
 
-            每个层的模型在每个层的输出加上初始嵌入输出之后的隐藏状态。
+        hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            `tf.Tensor`元组（当传递`output_hidden_states=True`或`config.output_hidden_states=True`时返回），
+            包含形状为`(batch_size, sequence_length, hidden_size)`的张量。
+
+            模型在每个层的输出隐藏状态，以及初始嵌入输出。
+
         attentions (`tuple(tf.Tensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            形状为`(batch_size, num_heads, sequence_length, sequence_length)`的`tf.Tensor`元组（当传递`output_attentions=True`或`config.output_attentions=True`时返回）。
+            `tf.Tensor`元组（当传递`output_attentions=True`或`config.output_attentions=True`时返回），
+            包含形状为`(batch_size, num_heads, sequence_length, sequence_length)`的张量。
 
-            在注意力softmax之后的注意力权重，用于在自注意力头中计算加权平均值。
+            注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+
     """
 
-    pooler_output: tf.Tensor = None  # 用于存储DPR编码器输出的上下文表示
-    hidden_states: Tuple[tf.Tensor] | None = None  # 用于存储模型每一层的隐藏状态
-    attentions: Tuple[tf.Tensor] | None = None  # 用于存储注意力权重，用于计算自注意力头中的加权平均值
-```  
-from
+    pooler_output: tf.Tensor = None
+    hidden_states: Tuple[tf.Tensor, ...] | None = None
+    attentions: Tuple[tf.Tensor, ...] | None = None
+# 使用 `dataclass` 装饰器定义一个数据类，用于存储 `TFDPRQuestionEncoder` 的输出结果
+@dataclass
+class TFDPRQuestionEncoderOutput(ModelOutput):
+    """
+    Class for outputs of [`TFDPRQuestionEncoder`].
+
     Args:
-        start_logits (`tf.Tensor` of shape `(n_passages, sequence_length)`):
-            每个段落中起始索引的逻辑值。
-        end_logits (`tf.Tensor` of shape `(n_passages, sequence_length)`):
-            每个段落中结束索引的逻辑值。
-        relevance_logits (`tf.Tensor` of shape `(n_passages, )`):
-            对应于DPRReader的QA分类器的输出，表示每个段落回答问题时的分数，与所有其他段落进行比较。
+        pooler_output (`tf.Tensor` of shape `(batch_size, embeddings_size)`):
+            The DPR encoder outputs the *pooler_output* that corresponds to the question representation. Last layer
+            hidden-state of the first token of the sequence (classification token) further processed by a Linear layer.
+            This output is to be used to embed questions for nearest neighbors queries with context embeddings.
         hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            包含以下形状tf.Tensor元组（在传递output_hidden_states=True或config.output_hidden_states=True时返回）：
-            （嵌入输出的一个 + 每个层的输出）的形状为(batch_size, sequence_length, hidden_size)的张量。
+            Tuple of `tf.Tensor` (one for the output of the embeddings + one for the output of each layer) of shape
+            `(batch_size, sequence_length, hidden_size)`.
 
-            模型的每一层输出的隐藏状态加上初始嵌入输出。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            包含以下形状的torch.FloatTensor元组（在传递output_attentions=True或config.output_attentions=True时返回）：
-            （每个层的一个）的形状为(batch_size, num_heads, sequence_length, sequence_length)的张量。
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
+        attentions (`tuple(tf.Tensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            Tuple of `tf.Tensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
 
-            注意力softmax后的注意力权重，用于计算自注意力头中的加权平均值。
+            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+            heads.
     """
 
+    # 定义属性 `pooler_output`，类型为 `tf.Tensor`，用于存储 DPR 编码器对问题的池化输出
+    pooler_output: tf.Tensor = None
+    # 定义属性 `hidden_states`，类型为元组 `Tuple[tf.Tensor, ...]` 或 `None`，存储模型每一层的隐藏状态
+    hidden_states: Tuple[tf.Tensor, ...] | None = None
+    # 定义属性 `attentions`，类型为元组 `Tuple[tf.Tensor, ...]` 或 `None`，存储模型每一层的注意力权重
+    attentions: Tuple[tf.Tensor, ...] | None = None
+
+
+# 使用 `dataclass` 装饰器定义一个数据类，用于存储 `TFDPRReaderEncoder` 的输出结果
+@dataclass
+class TFDPRReaderOutput(ModelOutput):
+    """
+    Class for outputs of [`TFDPRReaderEncoder`].
+    """
+
+    # 这里省略了具体的属性定义，根据文档需求，应包含与 `TFDPRQuestionEncoderOutput` 类似的属性定义
+    # `start_logits` 是一个 Tensor，形状为 `(n_passages, sequence_length)`，包含每个段落中起始索引的预测值
     start_logits: tf.Tensor = None
+    # `end_logits` 是一个 Tensor，形状为 `(n_passages, sequence_length)`，包含每个段落中结束索引的预测值
     end_logits: tf.Tensor = None
+    # `relevance_logits` 是一个 Tensor，形状为 `(n_passages, )`，包含每个段落对于问题的相关性预测分数
     relevance_logits: tf.Tensor = None
-    hidden_states: Tuple[tf.Tensor] | None = None
-    attentions: Tuple[tf.Tensor] | None = None
-# 定义一个 TF-DPR 编码器层
-class TFDPREncoderLayer(tf.keras.layers.Layer):
-    # 基础模型的前缀
+    # `hidden_states` 是一个可选的元组，包含多个 Tensor，形状为 `(batch_size, sequence_length, hidden_size)`，表示模型在每一层输出的隐藏状态以及初始嵌入输出
+    hidden_states: Tuple[tf.Tensor, ...] | None = None
+    # `attentions` 是一个可选的元组，包含多个 Tensor，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`，表示每层的注意力权重
+    attentions: Tuple[tf.Tensor, ...] | None = None
+# 定义 TF-DPR 编码器层
+class TFDPREncoderLayer(keras.layers.Layer):
+    # 基础模型前缀设定为 "bert_model"
     base_model_prefix = "bert_model"
 
     def __init__(self, config: DPRConfig, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(**kwargs)
 
         # 解决与 TFBertMainLayer 的名称冲突，使用 TFBertMainLayer 而不是 TFBertModel
         self.bert_model = TFBertMainLayer(config, add_pooling_layer=False, name="bert_model")
-        # 存储配置信息
         self.config = config
 
-        # 检查隐藏层大小是否为非零值
+        # 检查隐藏层大小是否为非正数，如果是则抛出 ValueError
         if self.config.hidden_size <= 0:
             raise ValueError("Encoder hidden_size can't be zero")
-        # 如果投影维度大于零，则创建投影层
+        
+        # 设置投影维度为配置中的投影维度
         self.projection_dim = config.projection_dim
+        
+        # 如果投影维度大于 0，则创建投影层 Dense
         if self.projection_dim > 0:
-            self.encode_proj = tf.keras.layers.Dense(
+            self.encode_proj = keras.layers.Dense(
                 config.projection_dim, kernel_initializer=get_initializer(config.initializer_range), name="encode_proj"
             )
 
-    # 定义调用该层时执行的操作
+    # 解包输入参数装饰器，定义 call 方法
     @unpack_inputs
     def call(
         self,
@@ -135,7 +165,7 @@ class TFDPREncoderLayer(tf.keras.layers.Layer):
         return_dict: bool = None,
         training: bool = False,
     ) -> Union[TFBaseModelOutputWithPooling, Tuple[tf.Tensor, ...]]:
-        # 调用 BERT 模型
+        # 调用 bert_model 的 call 方法，传入参数并获取输出
         outputs = self.bert_model(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -147,18 +177,19 @@ class TFDPREncoderLayer(tf.keras.layers.Layer):
             training=training,
         )
 
-        # 获取序列输出和池化输出
+        # 提取序列输出和池化输出
         sequence_output = outputs[0]
-        pooled_output = sequence_output[:, 0, :]
-        # 如果有投影维度，则进行投影
+        pooled_output = sequence_output[:, 0, :]  # 取序列输出的第一个 token 的输出作为池化输出
+        
+        # 如果有投影维度，则应用投影层到池化输出上
         if self.projection_dim > 0:
             pooled_output = self.encode_proj(pooled_output)
 
-        # 如果不返回字典，则返回输出元组
+        # 如果不返回字典，则返回序列输出、池化输出和其他输出
         if not return_dict:
             return (sequence_output, pooled_output) + outputs[1:]
 
-        # 返回带有池化输出的 TFBaseModelOutputWithPooling 对象
+        # 返回 TFBaseModelOutputWithPooling 对象，包含最后的隐藏状态、池化输出、隐藏状态和注意力权重
         return TFBaseModelOutputWithPooling(
             last_hidden_state=sequence_output,
             pooler_output=pooled_output,
@@ -166,53 +197,53 @@ class TFDPREncoderLayer(tf.keras.layers.Layer):
             attentions=outputs.attentions,
         )
 
-    # 返回嵌入大小
+    # 嵌入大小的属性方法，返回投影维度或者 bert_model 配置中的隐藏大小
     @property
     def embeddings_size(self) -> int:
         if self.projection_dim > 0:
             return self.projection_dim
         return self.bert_model.config.hidden_size
 
-    # 构建层
+    # 构建方法，构建 bert_model 和 encode_proj 层
     def build(self, input_shape=None):
         if self.built:
             return
         self.built = True
-        # 如果存在 bert_model 属性，则构建它
+        
+        # 如果存在 bert_model，则在 bert_model 名称空间下构建
         if getattr(self, "bert_model", None) is not None:
             with tf.name_scope(self.bert_model.name):
                 self.bert_model.build(None)
-        # 如果存在 encode_proj 属性，则构建它
+        
+        # 如果存在 encode_proj，则在 encode_proj 名称空间下构建
         if getattr(self, "encode_proj", None) is not None:
             with tf.name_scope(self.encode_proj.name):
                 self.encode_proj.build(None)
 
 
-# 定义一个 TF-DPR Span 预测器层
-class TFDPRSpanPredictorLayer(tf.keras.layers.Layer):
-    # 基础模型的前缀
+# 定义 TF-DPR 跨度预测器层
+class TFDPRSpanPredictorLayer(keras.layers.Layer):
+    # 基础模型前缀设定为 "encoder"
     base_model_prefix = "encoder"
-    # 初始化方法，使用给定的配置参数初始化类实例
+    # 初始化函数，用于创建一个新的DPRReader对象
     def __init__(self, config: DPRConfig, **kwargs):
-        # 调用父类初始化方法
+        # 调用父类的初始化函数，传递任何额外的关键字参数
         super().__init__(**kwargs)
-        # 将配置参数保存到实例属性中
+        # 存储传入的配置对象
         self.config = config
-        # 创建 TFDPREncoderLayer 对象，命名为"encoder"
+        # 创建一个TFDPREncoderLayer对象作为编码器，并命名为"encoder"
         self.encoder = TFDPREncoderLayer(config, name="encoder")
 
-        # 创建用于问答输出的全连接层，输出维度为2，使用给定的初始化方法初始化参数
-        self.qa_outputs = tf.keras.layers.Dense(
+        # 创建一个全连接层用于生成答案的起始和结束logits
+        self.qa_outputs = keras.layers.Dense(
             2, kernel_initializer=get_initializer(config.initializer_range), name="qa_outputs"
         )
-        # 创建用于问答分类的全连接层，输出维度为1，使用给定的初始化方法初始化参数
-        self.qa_classifier = tf.keras.layers.Dense(
+        # 创建一个全连接层用于生成问题与文本段落相关性的logits
+        self.qa_classifier = keras.layers.Dense(
             1, kernel_initializer=get_initializer(config.initializer_range), name="qa_classifier"
         )
 
-    # 装饰器，用于解包输入，输入参数为调用方法时的输入
-    @unpack_inputs
-    # 定义 call 方法，接受一系列参数并返回 Union[TFDPRReaderOutput, Tuple[tf.Tensor, ...]] 类型对象
+    # 使用装饰器unpack_inputs，对输入进行解包
     def call(
         self,
         input_ids: tf.Tensor = None,
@@ -223,10 +254,10 @@ class TFDPRSpanPredictorLayer(tf.keras.layers.Layer):
         return_dict: bool = False,
         training: bool = False,
     ) -> Union[TFDPRReaderOutput, Tuple[tf.Tensor, ...]]:
-        # notations: N - number of questions in a batch, M - number of passages per questions, L - sequence length
-        # 确定输入数据的维度
+        # 获取输入张量input_ids的形状，n_passages表示问题批次中的段落数，sequence_length表示序列的长度
         n_passages, sequence_length = shape_list(input_ids) if input_ids is not None else shape_list(inputs_embeds)[:2]
-        # 将输入数据传递给编码器进行处理
+        
+        # 将输入传递给编码器进行处理
         outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -236,29 +267,28 @@ class TFDPRSpanPredictorLayer(tf.keras.layers.Layer):
             return_dict=return_dict,
             training=training,
         )
-        # 从输出中提取序列输出
+        # 从编码器的输出中获取序列输出
         sequence_output = outputs[0]
 
-        # 计算logits
+        # 计算起始和结束logits
         logits = self.qa_outputs(sequence_output)
-        # 将logits拆分为start_logits和end_logits
         start_logits, end_logits = tf.split(logits, 2, axis=-1)
-        # 去除多余的维度
         start_logits = tf.squeeze(start_logits, axis=-1)
         end_logits = tf.squeeze(end_logits, axis=-1)
-        # 通过qa_classifier计算relevance_logits
+        
+        # 计算问题与文本段落相关性的logits
         relevance_logits = self.qa_classifier(sequence_output[:, 0, :])
 
-        # 重新调整tensor的形状
+        # 调整logits的形状
         start_logits = tf.reshape(start_logits, [n_passages, sequence_length])
         end_logits = tf.reshape(end_logits, [n_passages, sequence_length])
         relevance_logits = tf.reshape(relevance_logits, [n_passages])
 
-        # 如果不要求返回字典形式的数据，则返回一系列tuple并附带额外的输出
+        # 如果return_dict为False，则返回元组形式的输出
         if not return_dict:
             return (start_logits, end_logits, relevance_logits) + outputs[2:]
 
-        # 返回TFDPRReaderOutput对象，包括start_logits、end_logits、relevance_logits、hidden_states和attentions
+        # 如果return_dict为True，则返回TFDPRReaderOutput对象的形式
         return TFDPRReaderOutput(
             start_logits=start_logits,
             end_logits=end_logits,
@@ -266,43 +296,35 @@ class TFDPRSpanPredictorLayer(tf.keras.layers.Layer):
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    # 构建模型，如果已经构建过则直接返回
+    # 构建方法用于构建模型的层和变量，如果已经构建过，则直接返回
     def build(self, input_shape=None):
         if self.built:
             return
-        # 设置标志表示模型已经构建
+        # 设置标志表示模型已构建
         self.built = True
-        # 如果存在编码器，构建编码器
+        # 如果存在编码器(encoder)，则构建编码器的层和变量
         if getattr(self, "encoder", None) is not None:
-            # 使用编码器的名称创建命名空间
+            # 在命名作用域下构建编码器
             with tf.name_scope(self.encoder.name):
-                # 构建编码器，输入形状为None表示未指定输入形状
                 self.encoder.build(None)
-        # 如果存在qa_outputs，构建qa_outputs
+        # 如果存在问答输出(qa_outputs)，则构建其层和变量
         if getattr(self, "qa_outputs", None) is not None:
-            # 使用qa_outputs的名称创建命名空间
+            # 在命名作用域下构建问答输出
             with tf.name_scope(self.qa_outputs.name):
-                # 构建qa_outputs，输入形状为[None, None, self.encoder.embeddings_size]
                 self.qa_outputs.build([None, None, self.encoder.embeddings_size])
-        # 如果存在qa_classifier，构建qa_classifier
+        # 如果存在问答分类器(qa_classifier)，则构建其层和变量
         if getattr(self, "qa_classifier", None) is not None:
-            # 使用qa_classifier的名称创建命名空间
+            # 在命名作用域下构建问答分类器
             with tf.name_scope(self.qa_classifier.name):
-                # 构建qa_classifier，输入形状为[None, None, self.encoder.embeddings_size]
                 self.qa_classifier.build([None, None, self.encoder.embeddings_size])
-# 定义 TFDPRSpanPredictor 类，该类继承自 TFPreTrainedModel 类
 class TFDPRSpanPredictor(TFPreTrainedModel):
-    # 基础模型的前缀是 "encoder"
     base_model_prefix = "encoder"
 
-    # 初始化函数，接受配置和额外参数
     def __init__(self, config: DPRConfig, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(config, **kwargs)
-        # 创建 TFDPRSpanPredictorLayer 的实例，并将其分配给 encoder 属性
+        # 初始化编码器层，使用给定的配置参数
         self.encoder = TFDPRSpanPredictorLayer(config)
 
-    # 定义 call 方法，接收输入数据并返回输出
     @unpack_inputs
     def call(
         self,
@@ -315,7 +337,7 @@ class TFDPRSpanPredictor(TFPreTrainedModel):
         return_dict: bool = False,
         training: bool = False,
     ) -> Union[TFDPRReaderOutput, Tuple[tf.Tensor, ...]]:
-        # 调用 encoder 的 call 方法并返回输出
+        # 调用编码器层的call方法，传递参数并获取输出
         outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -325,24 +347,17 @@ class TFDPRSpanPredictor(TFPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-
-        # 返回 encoder 的输出
         return outputs
 
-# 定义 TFDPREncoder 类，该类继承自 TFPreTrainedModel 类
+
 class TFDPREncoder(TFPreTrainedModel):
-    # 基础模型的前缀是 "encoder"
     base_model_prefix = "encoder"
 
-    # 初始化函数，接受配置和额外参数
     def __init__(self, config: DPRConfig, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(config, **kwargs)
-
-        # 创建 TFDPREncoderLayer 的实例，并将其分配给 encoder 属性
+        # 初始化编码器层，使用给定的配置参数
         self.encoder = TFDPREncoderLayer(config)
 
-    # 定义 call 方法，接收输入数据并返回输出
     @unpack_inputs
     def call(
         self,
@@ -355,7 +370,7 @@ class TFDPREncoder(TFPreTrainedModel):
         return_dict: bool = False,
         training: bool = False,
     ) -> Union[TFDPRReaderOutput, Tuple[tf.Tensor, ...]]:
-        # 调用 encoder 的 call 方法并返回输出
+        # 调用编码器层的call方法，传递参数并获取输出
         outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -365,64 +380,74 @@ class TFDPREncoder(TFPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-        # 返回 encoder 的输出
         return outputs
 
-# 定义 TFDPRPretrainedContextEncoder 类，该类继承自 TFPreTrainedModel 类
+
+##################
+# PreTrainedModel
+##################
+
+
 class TFDPRPretrainedContextEncoder(TFPreTrainedModel):
     """
-    一个抽象类，用于处理权重初始化以及下载和加载预训练模型的简单接口。
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
     """
-    # 配置类为 DPRConfig
+
     config_class = DPRConfig
-    # 基础模型的前缀是 "ctx_encoder"
     base_model_prefix = "ctx_encoder"
 
-# 定义 TFDPRPretrainedQuestionEncoder 类，该类继承自 TFPreTrainedModel 类
+
 class TFDPRPretrainedQuestionEncoder(TFPreTrainedModel):
     """
-    一个抽象类，用于处理权重初始化以及下载和加载预训练模型的简单接口。
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
     """
-    # 配置类为 DPRConfig
+
     config_class = DPRConfig
-    # 基础模型的前缀是 "question_encoder"
     base_model_prefix = "question_encoder"
 
-# 定义 TFDPRPretrainedReader 类，该类继承自 TFPreTrainedModel 类
+
 class TFDPRPretrainedReader(TFPreTrainedModel):
     """
-    一个抽象类，用于处理权重初始化以及下载和加载预训练模型的简单接口。
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
     """
-    # 配置类为 DPRConfig
+
     config_class = DPRConfig
-    # 基础模型的前缀是 "reader"
     base_model_prefix = "reader"
 
-# 定义 TF_DPR_START_DOCSTRING 为模型的文档字符串
+
+###############
+# Actual Models
+###############
+
+
 TF_DPR_START_DOCSTRING = r"""
-    # 这个模型继承自[`TFPreTrainedModel`]。查看超类文档以了解库为所有模型实现的通用方法（例如下载或保存、调整输入嵌入、修剪头等）。
-
-    # 这个模型也是一个Tensorflow [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model)子类。将其用作常规的TF 2.0 Keras模型，并参考TF 2.0文档，以了解所有与一般用法和行为相关的问题。
-
-    # <提示>
+    # 此模型继承自 `TFPreTrainedModel`。请查看超类文档，了解库实现的通用方法，如下载或保存模型、调整输入嵌入大小、修剪头等。
     
-    # `transformers`中的TensorFlow模型和层接受两种格式的输入：
-    # 1. 将所有输入作为关键字参数（类似于PyTorch模型）
-    # 2. 将所有输入作为列表、元组或字典的第一个位置参数。
+    # 此模型还是一个 Tensorflow 的 `keras.Model` 子类。您可以将其用作常规的 TF 2.0 Keras 模型，并参考 TF 2.0 文档了解所有与一般用法和行为相关的事项。
     
-    # 第二种格式受支持的原因是，当将输入传递给模型和层时，Keras方法更喜欢这种格式。由于有了这种支持，当使用`model.fit()`等方法时，应该会"正常工作" - 只需以`model.fit()`支持的任何格式传递输入和标签！
-    # 但是，如果您想在Keras方法之外使用第二种格式，比如在使用Keras `Functional` API创建自己的层或模型时，则可以使用三种可能性来在第一个位置参数中收集所有输入张量：
-    # - 仅包含`input_ids`和没有其他内容的单个张量：`model(input_ids)`
-    # - 包含一个或多个输入张量的长度可变的列表，顺序与docstring中给出的相同：`model([input_ids, attention_mask])`或`model([input_ids, attention_mask, token_type_ids])`
-    # - 包含与docstring中给出的输入名称相关联的一个或多个输入张量的字典：`model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
-
-    # 请注意，在使用[子类化](https://keras.io/guides/making_new_layers_and_models_via_subclassing/)创建模型和层时，您无需担心其中的任何内容，因为您可以像传递给任何其他Python函数一样传递输入！
-
-    # </提示>
-
-    # 参数：
-    #     config ([`DPRConfig`]): 具有模型所有参数的模型配置类。
-    #         使用配置文件进行初始化不会加载与模型关联的权重，只加载配置。查看[`~TFPreTrainedModel.from_pretrained`]方法以加载模型权重。
+    # <Tip>
+    
+    # 在 `transformers` 中，TensorFlow 模型和层接受两种输入格式：
+    
+    # - 将所有输入作为关键字参数（类似于 PyTorch 模型），
+    # - 将所有输入作为列表、元组或字典传递给第一个位置参数。
+    
+    # 支持第二种格式的原因是，Keras 方法在将输入传递给模型和层时更倾向于此格式。因此，在使用 `model.fit()` 等方法时，只需将输入和标签以 `model.fit()` 支持的任何格式传递即可！但是，如果您想在 Keras `Functional` API 中创建自己的层或模型时使用第二种格式，比如在创建自己的层或模型时，可以使用以下三种可能性将所有输入张量收集到第一个位置参数中：
+    
+    # - 只有 `input_ids` 的单个张量：`model(input_ids)`
+    # - 长度不同的列表，按照文档字符串中给定的顺序包含一个或多个输入张量：`model([input_ids, attention_mask])` 或 `model([input_ids, attention_mask, token_type_ids])`
+    # - 一个字典，其中包含一个或多个输入张量，与文档字符串中给定的输入名称关联：`model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
+    
+    # 注意，如果使用 [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) 创建模型和层，则无需担心这些问题，因为可以像对任何其他 Python 函数一样传递输入！
+    
+    # </Tip>
+    
+    # 参数:
+    #     config ([`DPRConfig`]): 包含模型所有参数的模型配置类。
+    #         使用配置文件初始化不会加载与模型关联的权重，仅加载配置。查看 [`~TFPreTrainedModel.from_pretrained`] 方法以加载模型权重。
 """
 
 TF_DPR_ENCODERS_INPUTS_DOCSTRING = r"""
@@ -471,22 +496,26 @@ TF_DPR_READER_INPUTS_DOCSTRING = r"""
 )
 class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
     def __init__(self, config: DPRConfig, *args, **kwargs):
+        # 调用父类构造函数，传递配置和其他可选参数
         super().__init__(config, *args, **kwargs)
+        # 创建一个上下文编码器层对象，使用给定的配置，命名为"ctx_encoder"
         self.ctx_encoder = TFDPREncoderLayer(config, name="ctx_encoder")
-    # 获取输入的嵌入层对象
-    def get_input_embeddings(self):
-        # 尝试返回上下文编码器的BERT模型的输入嵌入层对象
-        try:
-            return self.ctx_encoder.bert_model.get_input_embeddings()
-        # 如果发生属性错误，则构建模型并返回其BERT模型的输入嵌入层对象
-        except AttributeError:
-            self.build()
-            return self.ctx_encoder.bert_model.get_input_embeddings()
+    # 尝试获取上下文编码器（Context Encoder）中 BERT 模型的输入嵌入
+    try:
+        return self.ctx_encoder.bert_model.get_input_embeddings()
+    except AttributeError:
+        # 如果属性错误，则调用 build 方法重新构建模型
+        self.build()
+        # 返回重新构建后的 BERT 模型的输入嵌入
+        return self.ctx_encoder.bert_model.get_input_embeddings()
 
-    # 调用函数，接收一系列输入参数，并返回相应的输出
+    # 调用方法的装饰器：解压输入
     @unpack_inputs
+    # 调用方法的装饰器：将模型前向方法的文档字符串添加到模型中
     @add_start_docstrings_to_model_forward(TF_DPR_ENCODERS_INPUTS_DOCSTRING)
+    # 调用方法的装饰器：替换返回值的文档字符串为指定的类型和配置类
     @replace_return_docstrings(output_type=TFDPRContextEncoderOutput, config_class=_CONFIG_FOR_DOC)
+    # 定义模型的前向传播方法
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -499,11 +528,11 @@ class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
         training: bool = False,
     ) -> TFDPRContextEncoderOutput | Tuple[tf.Tensor, ...]:
         r"""
-        Return:
+        返回模型的输出：
 
         Examples:
 
-        ```py
+        ```python
         >>> from transformers import TFDPRContextEncoder, DPRContextEncoderTokenizer
 
         >>> tokenizer = DPRContextEncoderTokenizer.from_pretrained("facebook/dpr-ctx_encoder-single-nq-base")
@@ -512,31 +541,31 @@ class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
         >>> embeddings = model(input_ids).pooler_output
         ```
         """
-        # 如果同时指定了input_ids和inputs_embeds，则引发值错误
+        # 如果同时指定了 input_ids 和 inputs_embeds，则引发 ValueError
         if input_ids is not None and inputs_embeds is not None:
             raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
-        # 如果只指定了input_ids，则计算其形状
+        # 如果指定了 input_ids，则获取其形状
         elif input_ids is not None:
             input_shape = shape_list(input_ids)
-        # 如果只指定了inputs_embeds，则计算其形状
+        # 如果指定了 inputs_embeds，则获取其形状，去掉最后一个维度
         elif inputs_embeds is not None:
             input_shape = shape_list(inputs_embeds)[:-1]
-        # 如果既没有指定input_ids，也没有指定inputs_embeds，则引发值错误
         else:
+            # 如果既未指定 input_ids 也未指定 inputs_embeds，则引发 ValueError
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
-        # 如果attention_mask为None，则根据input_ids是否为None分配相应的值
+        # 如果 attention_mask 为 None，则根据 input_ids 是否为 None，选择性地创建 attention_mask
         if attention_mask is None:
             attention_mask = (
                 tf.ones(input_shape, dtype=tf.dtypes.int32)
                 if input_ids is None
                 else (input_ids != self.config.pad_token_id)
             )
-        # 如果token_type_ids为None，则分配全为零的值
+        # 如果 token_type_ids 为 None，则创建与 input_shape 相同形状的全零 tensor
         if token_type_ids is None:
             token_type_ids = tf.zeros(input_shape, dtype=tf.dtypes.int32)
 
-        # 使用输入参数调用上下文编码器函数
+        # 调用上下文编码器（Context Encoder）的前向传播方法
         outputs = self.ctx_encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -548,57 +577,56 @@ class TFDPRContextEncoder(TFDPRPretrainedContextEncoder):
             training=training,
         )
 
-        # 如果return_dict为False，则返回除第一个元素外的所有元素
+        # 如果 return_dict 为 False，则返回 outputs 的所有元素，除去第一个元素
         if not return_dict:
             return outputs[1:]
 
-        # 如果return_dict为True，则返回包含池化输出、隐藏状态和注意力分布的TFDPRContextEncoderOutput对象
+        # 如果 return_dict 为 True，则构建 TFDPRContextEncoderOutput 对象，并返回
         return TFDPRContextEncoderOutput(
             pooler_output=outputs.pooler_output, hidden_states=outputs.hidden_states, attentions=outputs.attentions
         )
-    # 构建神经网络模型
+    # 定义一个方法 `build`，用于构建模型的层次结构
     def build(self, input_shape=None):
-        # 如果模型已经构建完成，则直接返回
+        # 如果模型已经构建完成，直接返回，不再重复构建
         if self.built:
             return
-        # 设置标记为已构建
+        # 将模型标记为已构建状态
         self.built = True
-        # 检查是否存在上下文编码器，如果存在，则构建该编码器
+        # 如果存在上下文编码器 `ctx_encoder`
         if getattr(self, "ctx_encoder", None) is not None:
-            # 使用上下文编码器的名称作为命名空间
+            # 在 TensorFlow 的命名作用域下，构建上下文编码器
             with tf.name_scope(self.ctx_encoder.name):
-                # 构建上下文编码器，传入参数为None
+                # 调用上下文编码器的 `build` 方法，并传入 `None` 作为输入形状
                 self.ctx_encoder.build(None)
-# 使用装饰器添加文档字符串，说明这是一个裸的DPRQuestionEncoder转换器，输出pooler输出作为问题表示
+# 使用装饰器添加文档字符串，描述了该类的基本信息以及继承的文档字符串内容
 @add_start_docstrings(
     "The bare DPRQuestionEncoder transformer outputting pooler outputs as question representations.",
     TF_DPR_START_DOCSTRING,
 )
-# 定义TFDPRQuestionEncoder类，继承自TFDPRPretrainedQuestionEncoder类
+# 定义一个 TF 版本的 DPRQuestionEncoder 类，继承自 TFDPRPretrainedQuestionEncoder 类
 class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
-    # 定义初始化方法，接受配置参数和其他可选参数
+    
+    # 初始化方法，接受一个 DPRConfig 类型的配置对象以及其他参数和关键字参数
     def __init__(self, config: DPRConfig, *args, **kwargs):
         # 调用父类的初始化方法
         super().__init__(config, *args, **kwargs)
-        # 初始化question_encoder属性，使用TFDPREncoderLayer类的实例化对象，传入配置参数和名称
+        # 创建一个 TFDPREncoderLayer 类的实例作为 question_encoder 属性
         self.question_encoder = TFDPREncoderLayer(config, name="question_encoder")
 
-    # 定义获取输入嵌入的方法
+    # 获取输入嵌入的方法
     def get_input_embeddings(self):
-        # 尝试返回question_encoder的bert_model的输入嵌入
         try:
+            # 尝试获取 question_encoder 属性中 bert_model 的输入嵌入
             return self.question_encoder.bert_model.get_input_embeddings()
-        # 如果出现AttributeError异常
         except AttributeError:
-            # 构建question_encoder
+            # 如果属性错误（即不存在），则调用 build 方法重新构建
             self.build()
             return self.question_encoder.bert_model.get_input_embeddings()
 
-    # 使用装饰器添加文档字符串和替换返回值的文档字符串，说明细节模型的正向传播输入和输出
+    # 使用装饰器为 call 方法添加文档字符串，描述输入参数和返回输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(TF_DPR_ENCODERS_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TFDPRQuestionEncoderOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义call方法，接受多个输入参数
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -609,15 +637,14 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
         output_hidden_states: bool | None = None,
         return_dict: bool | None = None,
         training: bool = False,
+        # 函数签名中省略部分，以保持完整性
     ) -> TFDPRQuestionEncoderOutput | Tuple[tf.Tensor, ...]:
         r"""
-        Return:
-        指定函数的返回类型注解
+        指定该方法的返回类型为 TFDPRQuestionEncoderOutput 或包含 tf.Tensor 的元组
 
         Examples:
-        示例用法
-        
-        ```py
+
+        ```python
         >>> from transformers import TFDPRQuestionEncoder, DPRQuestionEncoderTokenizer
 
         >>> tokenizer = DPRQuestionEncoderTokenizer.from_pretrained("facebook/dpr-question_encoder-single-nq-base")
@@ -627,23 +654,23 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
         ```
         """
         if input_ids is not None and inputs_embeds is not None:
-            # 如果同时指定 input_ids 和 inputs_embeds，则抛出数值错误
             raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
         elif input_ids is not None:
             input_shape = shape_list(input_ids)
         elif inputs_embeds is not None:
             input_shape = shape_list(inputs_embeds)[:-1]
         else:
-            # 如果没有指定 input_ids 或 inputs_embeds，则抛出数值错误
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
         if attention_mask is None:
+            # 如果未提供 attention_mask，则根据输入的 shape 自动生成全为 1 的 attention_mask
             attention_mask = (
                 tf.ones(input_shape, dtype=tf.dtypes.int32)
                 if input_ids is None
                 else (input_ids != self.config.pad_token_id)
             )
         if token_type_ids is None:
+            # 如果未提供 token_type_ids，则生成一个全为 0 的 token_type_ids，与输入的 shape 相同
             token_type_ids = tf.zeros(input_shape, dtype=tf.dtypes.int32)
 
         outputs = self.question_encoder(
@@ -658,7 +685,9 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
         )
 
         if not return_dict:
+            # 如果 return_dict 为 False，则返回输出中除第一个元素外的所有元素
             return outputs[1:]
+        # 如果 return_dict 为 True，则以 TFDPRQuestionEncoderOutput 形式返回指定的输出
         return TFDPRQuestionEncoderOutput(
             pooler_output=outputs.pooler_output, hidden_states=outputs.hidden_states, attentions=outputs.attentions
         )
@@ -669,72 +698,84 @@ class TFDPRQuestionEncoder(TFDPRPretrainedQuestionEncoder):
         self.built = True
         if getattr(self, "question_encoder", None) is not None:
             with tf.name_scope(self.question_encoder.name):
+                # 构建 question_encoder 模型的网络结构
                 self.question_encoder.build(None)
-# 导入必要的库
 @add_start_docstrings(
-    "The bare DPRReader transformer outputting span predictions.",  # 添加起始文档字符串
-    TF_DPR_START_DOCSTRING,  # 添加DPR模型的文档字符串
+    "The bare DPRReader transformer outputting span predictions.",
+    TF_DPR_START_DOCSTRING,
 )
-class TFDPRReader(TFDPRPretrainedReader):  # 定义TFDPRReader类，继承自TFDPRPretrainedReader基类
-    def __init__(self, config: DPRConfig, *args, **kwargs):  # 初始化方法，接收DPRConfig类型的config参数和任意数量的位置参数和关键字参数
-        super().__init__(config, *args, **kwargs)  # 使用super()调用父类的初始化方法
-        self.span_predictor = TFDPRSpanPredictorLayer(config, name="span_predictor")  # 初始化span_predictor属性为TFDPRSpanPredictorLayer对象
+class TFDPRReader(TFDPRPretrainedReader):
+    def __init__(self, config: DPRConfig, *args, **kwargs):
+        super().__init__(config, *args, **kwargs)
+        # 初始化span预测器，使用给定的配置
+        self.span_predictor = TFDPRSpanPredictorLayer(config, name="span_predictor")
 
-    def get_input_embeddings(self):  # 定义获取输入嵌入向量的方法
-        try:  # 异常处理
-            return self.span_predictor.encoder.bert_model.get_input_embeddings()  # 返回span_predictor.encoder.bert_model的输入嵌入向量
-        except AttributeError:  # 处理AttributeError异常
-            self.build()  # 调用build方法
-            return self.span_predictor.encoder.bert_model.get_input_embeddings()  # 返回span_predictor.encoder.bert_model的输入嵌入向量
+    def get_input_embeddings(self):
+        try:
+            # 尝试获取输入嵌入层
+            return self.span_predictor.encoder.bert_model.get_input_embeddings()
+        except AttributeError:
+            # 如果属性错误，重新构建模型并返回输入嵌入层
+            self.build()
+            return self.span_predictor.encoder.bert_model.get_input_embeddings()
 
-    @unpack_inputs  # 使用unpack_inputs装饰器
-    @add_start_docstrings_to_model_forward(TF_DPR_READER_INPUTS_DOCSTRING)  # 添加model_forward方法的起始文档字符串
-    @replace_return_docstrings(output_type=TFDPRReaderOutput, config_class=_CONFIG_FOR_DOC)  # 替换返回值的文档字符串
-    def call(  # 定义call方法
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(TF_DPR_READER_INPUTS_DOCSTRING)
+    @replace_return_docstrings(output_type=TFDPRReaderOutput, config_class=_CONFIG_FOR_DOC)
+    def call(
         self,
-        input_ids: TFModelInputType | None = None,  # 输入的token IDs或None
-        attention_mask: tf.Tensor | None = None,  # 注意力掩码张量或None
-        inputs_embeds: tf.Tensor | None = None,  # 嵌入向量或None
-        output_attentions: bool | None = None,  # 输出注意力权重的标志或None
-        output_hidden_states: bool | None = None,  # 输出隐藏状态的标志或None
-        return_dict: bool | None = None,  # 返回结果字典的标志或None
-        training: bool = False,  # 是否处于训练模式
-    ) -> TFDPRReaderOutput | Tuple[tf.Tensor, ...]:  # 方法的返回值类型
+        input_ids: TFModelInputType | None = None,
+        attention_mask: tf.Tensor | None = None,
+        inputs_embeds: tf.Tensor | None = None,
+        output_attentions: bool | None = None,
+        output_hidden_states: bool | None = None,
+        return_dict: bool | None = None,
+        training: bool = False,
+    ) -> TFDPRReaderOutput | Tuple[tf.Tensor, ...]:
         r"""
-        Return:  # 返回值的描述
+        模型前向传播函数，接受多种输入参数，返回预测结果。
 
-        Examples:  # 示例
+        Return:
+            TFDPRReaderOutput或者一个元组包含tf.Tensor
 
-        ```py
-        >>> from transformers import TFDPRReader, DPRReaderTokenizer  # 导入所需库
+        Examples:
 
-        >>> tokenizer = DPRReaderTokenizer.from_pretrained("facebook/dpr-reader-single-nq-base")  # 使用预训练的DPRReaderTokenizer
-        >>> model = TFDPRReader.from_pretrained("facebook/dpr-reader-single-nq-base", from_pt=True)  # 从预训练模型创建TFDPRReader对象
-        >>> encoded_inputs = tokenizer(  # 使用tokenizer对输入进行编码
-        ...     questions=["What is love ?"],  # 问题
-        ...     titles=["Haddaway"],  # 标题
-        ...     texts=["'What Is Love' is a song recorded by the artist Haddaway"],  # 文本
-        ...     return_tensors="tf",  # 返回TensorFlow张量
+        ```python
+        >>> from transformers import TFDPRReader, DPRReaderTokenizer
+
+        >>> tokenizer = DPRReaderTokenizer.from_pretrained("facebook/dpr-reader-single-nq-base")
+        >>> model = TFDPRReader.from_pretrained("facebook/dpr-reader-single-nq-base", from_pt=True)
+        >>> encoded_inputs = tokenizer(
+        ...     questions=["What is love ?"],
+        ...     titles=["Haddaway"],
+        ...     texts=["'What Is Love' is a song recorded by the artist Haddaway"],
+        ...     return_tensors="tf",
         ... )
-        >>> outputs = model(encoded_inputs)  # 对编码后的输入进行模型预测
-        >>> start_logits = outputs.start_logits  # 获取开始位置的logits
-        >>> end_logits = outputs.end_logits  # 获取结束位置的logits
-        >>> relevance_logits = outputs.relevance_logits  # 获取相关性的logits
+        >>> outputs = model(encoded_inputs)
+        >>> start_logits = outputs.start_logits
+        >>> end_logits = outputs.end_logits
+        >>> relevance_logits = outputs.relevance_logits
         ```
         """
-        if input_ids is not None and inputs_embeds is not None:  # 如果同时指定了input_ids和inputs_embeds
-            raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")  # 抛出数值错误
-        elif input_ids is not None:  # 否则，如果指定了input_ids
-            input_shape = shape_list(input_ids)  # 获取input_ids的形状
-        elif inputs_embeds is not None:  # 否则，如果指定了inputs_embeds
-            input_shape = shape_list(inputs_embeds)[:-1]  # 获取inputs_embeds的形状（去掉最后一个维度）
-        else:  # 否则（既没有input_ids也没有inputs_embeds）
-            raise ValueError("You have to specify either input_ids or inputs_embeds")  # 抛出数值错误
+        if input_ids is not None and inputs_embeds is not None:
+            # 如果同时指定了input_ids和inputs_embeds，则引发值错误异常
+            raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
+        elif input_ids is not None:
+            # 获取input_ids的形状列表
+            input_shape = shape_list(input_ids)
+        elif inputs_embeds is not None:
+            # 获取inputs_embeds的形状列表，去掉最后一个维度
+            input_shape = shape_list(inputs_embeds)[:-1]
+        else:
+            # 如果既没有指定input_ids也没有指定inputs_embeds，则引发值错误异常
+            raise ValueError("You have to specify either input_ids or inputs_embeds")
 
-        if attention_mask is None:  # 如果attention_mask为None
-            attention_mask = tf.ones(input_shape, dtype=tf.dtypes.int32)  # 使用全1张量作为attention_mask
+        if attention_mask is None:
+            # 如果attention_mask为None，则创建全1的张量作为attention_mask
+            attention_mask = tf.ones(input_shape, dtype=tf.dtypes.int32)
 
-        return self.span_predictor(  # 调用span_predictor
+        # 调用span_predictor的前向传播方法，传递所有参数并返回结果
+        return self.span_predictor(
             input_ids=input_ids,
             attention_mask=attention_mask,
             inputs_embeds=inputs_embeds,
@@ -743,16 +784,18 @@ class TFDPRReader(TFDPRPretrainedReader):  # 定义TFDPRReader类，继承自TFD
             return_dict=return_dict,
             training=training,
         )
-    # 构建模型，如果已经构建过，则直接返回
+    # 定义模型的构建方法，参数 input_shape 可选，默认为 None
     def build(self, input_shape=None):
+        # 如果模型已经构建过，则直接返回，避免重复构建
         if self.built:
             return
-        # 设置标志表示模型已经构建
+        # 标记模型为已构建状态
         self.built = True
-        # 检查是否存在 span_predictor 属性，若存在则构建它
+        
+        # 检查模型是否具有 span_predictor 属性，并且该属性不为 None
         if getattr(self, "span_predictor", None) is not None:
-            # 使用 TensorFlow 的命名作用域为 span_predictor 构建模型
+            # 在 TensorFlow 中使用命名空间来组织模型的组件，这里将使用 span_predictor 的名字空间
             with tf.name_scope(self.span_predictor.name):
-                # 调用 span_predictor 对象的 build 方法进行构建
+                # 构建 span_predictor 组件，input_shape 参数这里传入 None
                 self.span_predictor.build(None)
 ```

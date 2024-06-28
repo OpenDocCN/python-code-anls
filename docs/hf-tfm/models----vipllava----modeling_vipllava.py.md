@@ -1,8 +1,23 @@
-# `.\transformers\models\vipllava\modeling_vipllava.py`
+# `.\models\vipllava\modeling_vipllava.py`
 
-```py
+```
 # coding=utf-8
-# 版本信息和版权声明
+# Copyright 2023 the HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch VipLlava model."""
+
+# 导入必要的库和模块
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
 
@@ -10,6 +25,7 @@ import torch
 import torch.utils.checkpoint
 from torch import nn
 
+# 导入 Hugging Face Transformers 中的预训练模型基类和其他必要组件
 from ... import PreTrainedModel
 from ...activations import ACT2FN
 from ...cache_utils import Cache
@@ -21,24 +37,28 @@ from ...utils import (
     replace_return_docstrings,
 )
 from ..auto import AutoModel, AutoModelForCausalLM
+
+# 导入 VipLlava 模型的配置类
 from .configuration_vipllava import VipLlavaConfig
 
+# 获取 logger 对象用于日志记录
 logger = logging.get_logger(__name__)
 
-# VipLlava配置的文档字符串
+# 文档中显示的配置对象名称
 _CONFIG_FOR_DOC = "VipLlavaConfig"
 
-# VipLlava预训练模型的存档列表
+# 预训练模型的存档列表，包括一个示例
 VIPLLAVA_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "llava-hf/vip-llava-7b-hf",
-    # 查看所有VipLlava模型：https://huggingface.co/models?filter=vipllava
+    # See all VipLlava models at https://huggingface.co/models?filter=vipllava
 ]
 
+# 定义一个数据类，用于表示 VipLlava 模型的自回归语言模型输出及过去状态
 @dataclass
-# 复制自transformers.models.idefics.modeling_idefics.IdeficsCausalLMOutputWithPast，将Idefics改为VipLlava
+# 从 Idefics 模型中复制的类，作为 VipLlava 模型的输出基类
 class VipLlavaCausalLMOutputWithPast(ModelOutput):
     """
-    VipLlava因果语言模型（或自回归）输出的基类.
+    Base class for VipLlava causal language model (or autoregressive) outputs.
     """
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
@@ -69,183 +89,138 @@ class VipLlavaCausalLMOutputWithPast(ModelOutput):
             image_hidden_states of the model produced by the vision encoder, and optionally by the perceiver
     """
 
-    # 损失值，对应语言建模任务中的损失值（用于下一个标记的预测）
+    # Optional loss value for language modeling
     loss: Optional[torch.FloatTensor] = None
-    # 语言建模头部的预测得分（SoftMax 之前每个词汇标记的预测分数）
+    # Predicted logits for each token in the batch
     logits: torch.FloatTensor = None
-    # 预先计算的隐藏状态（自注意力块中的键和值），可用于加速序列解码
+    # Cached key and value states for speeding up sequential decoding
     past_key_values: Optional[List[torch.FloatTensor]] = None
-    # 模型各层输出的隐藏状态（如果模型有嵌入层，则包括嵌入输出和每一层的输出）
+    # Hidden states of the model at each layer's output and optional initial embeddings
     hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 自注意力头部中注意力 softmax 后的注意力权重，用于计算自注意力头部的加权平均值
+    # Attention weights after softmax, used for self-attention computation
     attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 模型生成的图像嵌入的隐藏状态（由视觉编码器产生，并可由感知器可选地产生）
+    # Hidden states produced by the vision encoder for image embeddings
     image_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-# 定义一个 VipLlavaMultiModalProjector 类，继承自 nn.Module
-class VipLlavaMultiModalProjector(nn.Module):
-    # 初始化方法，接受一个 VipLlavaConfig 类的参数
-    def __init__(self, config: VipLlavaConfig):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 创建一个 LayerNorm 层，用于归一化输入特征
-        self.projector_layernorm = nn.LayerNorm(len(config.vision_feature_layers) * config.vision_config.hidden_size, eps=config.projector_layernorm_eps)
-
-        # 创建一个线性层，进行特征映射
-        self.linear_1 = nn.Linear(len(config.vision_feature_layers) * config.vision_config.hidden_size, config.text_config.hidden_size, bias=True)
-        # 获取激活函数
-        self.act = ACT2FN[config.projector_hidden_act]
-        # 创建第二个线性层
-        self.linear_2 = nn.Linear(config.text_config.hidden_size, config.text_config.hidden_size, bias=True)
-
-    # 前向传播方法
-    def forward(self, hidden_states):
-        # 对输入进行归一化
-        hidden_states = self.projector_layernorm(hidden_states)
-        # 第一个线性映射
-        hidden_states = self.linear_1(hidden_states)
-        # 激活函数
-        hidden_states = self.act(hidden_states)
-        # 第二个线性映射
-        hidden_states = self.linear_2(hidden_states)
-        # 返回最终输出
-        return hidden_states
-
-
-# 定义一个常量字符串，用于文档字符串
-VIPLLAVA_START_DOCSTRING = r"""
-    This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
-    etc.)
-
-    This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
-    Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
-    and behavior.
-
-    Parameters:
-        config ([`VipLlavaConfig`] or [`VipLlavaVisionConfig`]):
-            Model configuration class with all the parameters of the model. Initializing with a config file does not
-            load the weights associated with the model, only the configuration. Check out the
-            [`~PreTrainedModel.from_pretrained`] method to load the model weights.
-"""
-
-# 给类 VipLlavaPreTrainedModel 添加文档字符串
 @add_start_docstrings(
     "The bare VipLlava Model outputting raw hidden-states without any specific head on top.",
     VIPLLAVA_START_DOCSTRING,
 )
-# 定义一个 VipLlavaPreTrainedModel 类，继承自 PreTrainedModel
-# 用于加载 VipLlava 模型的权重，提供通用的方法
-class VipLlavaPreTrainedModel(PreTrainedModel):
-    config_class = VipLlavaConfig
-    base_model_prefix = "model"
-    supports_gradient_checkpointing = True
-    _no_split_modules = ["VipLlavaVisionAttention"]
-    _skip_keys_device_placement = "past_key_values"
-    _supports_flash_attn_2 = True
-    def _init_weights(self, module):
-        # 定义函数_init_weights，用于初始化模型参数
-        # 注意：这个移植版本的VipLlava不适用于从头训练，只适用于推理和微调
-        # 所以原始代码库https://github.com/haotian-liu/LLaVA/tree/main/vipllava可以用于从头训练
+# 为 VipLlavaPreTrainedModel 类添加文档字符串，描述其作为 VipLlava 模型的基础预训练模型的输出为原始隐藏状态，没有特定的输出头部。
 
+# 从 PreTrainedModel 类继承，定义 VipLlavaPreTrainedModel 类
+class VipLlavaPreTrainedModel(PreTrainedModel):
+    # 指定配置类为 VipLlavaConfig
+    config_class = VipLlavaConfig
+    # 模型的基础名称前缀
+    base_model_prefix = "model"
+    # 支持梯度检查点
+    supports_gradient_checkpointing = True
+    # 不分割的模块列表
+    _no_split_modules = ["VipLlavaVisionAttention"]
+    # 跳过键设备放置
+    _skip_keys_device_placement = "past_key_values"
+    # 支持 Flash Attention 2
+    _supports_flash_attn_2 = True
+    # 初始化模型权重的方法，用于对传入的模块进行权重初始化
+    def _init_weights(self, module):
+        # 注意: 这个迁移版本的 VipLlava 不适用于从头训练，只能用于推理和微调。
+        # 因此，适当的初始化权重代码已经被移除。原始代码库位于 https://github.com/haotian-liu/LLaVA/tree/main/vipllava，可以用于训练目的。
+
+        # 根据配置获取初始化标准差
         std = (
             self.config.initializer_range
             if hasattr(self.config, "initializer_range")
             else self.config.text_config.initializer_range
         )
-        # 设置标准差std，并根据条件判断获取正确的值
 
+        # 如果模块具有类嵌入（class_embedding）属性，则对其进行标准正态分布初始化
         if hasattr(module, "class_embedding"):
-            # 判断module是否具有class_embedding属性
             module.class_embedding.data.normal_(mean=0.0, std=std)
-            # 对module的class_embedding参数进行初始化，服从正态分布，均值为0，标准差为std
 
+        # 如果模块是线性层（nn.Linear）或二维卷积层（nn.Conv2d），则对权重进行标准正态分布初始化，
+        # 如果有偏置，则将偏置初始化为零
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 判断module是否是nn.Linear或nn.Conv2d类型的实例
             module.weight.data.normal_(mean=0.0, std=std)
-            # 对module的weight参数进行初始化，服从正态分布，均值为0，标准差为std
             if module.bias is not None:
                 module.bias.data.zero_()
-                # 如果module有bias参数，则将其初始化为0
+        
+        # 如果模块是嵌入层（nn.Embedding），则对权重进行标准正态分布初始化，
+        # 如果定义了填充索引（padding_idx），则将该索引处的权重初始化为零
         elif isinstance(module, nn.Embedding):
-            # 判断module是否是nn.Embedding类型的实例
             module.weight.data.normal_(mean=0.0, std=std)
-            # 对module的weight参数进行初始化，服从正态分布，均值为0，标准差为std
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
-                # 如果module有padding_idx参数，则将其初始化为0
 
     @property
     def _supports_sdpa(self):
         """
-        Retrieve language_model's attribute to check whether the model supports
-        SDPA or not.
+        检索语言模型的属性，检查模型是否支持 SDPA（Self-Attention with Dual Paths）。
         """
-        # _supports_sdpa方法的注释，用于检查模型是否支持SDPA（自注意力机制）
         return self.language_model._supports_sdpa
-# VIPLLAVA_INPUTS_DOCSTRING为空字符串，用于文档字符串的输入说明
-@add_start_docstrings装饰器用于添加模型的开始文档字符串
-VIPLLAVA模型由视觉主干和语言模型组成
-VIPLLAVA_START_DOCSTRING是VIPLLAVA模型的开始文档字符串
+# 定义模型文档字符串，用于描述 VIPLLAVA 模型的输入
+VIPLLAVA_INPUTS_DOCSTRING = r"""
+"""
 
-# 定义VipLlavaForConditionalGeneration类，继承自VipLlavaPreTrainedModel类
+
+@add_start_docstrings(
+    """The VIPLLAVA model which consists of a vision backbone and a language model.""",
+    VIPLLAVA_START_DOCSTRING,
+)
+# 从 transformers.models.llava.modeling_llava.LlavaForConditionalGeneration 复制而来，将 LLAVA 改为 VIPLLAVA，Llava 改为 VipLlava
 class VipLlavaForConditionalGeneration(VipLlavaPreTrainedModel):
-    # 初始化方法，接受VipLlavaConfig类型的config参数
     def __init__(self, config: VipLlavaConfig):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 使用config.vision_config创建视觉塔
+        # 初始化视觉塔模型，使用从配置中获取的视觉配置
         self.vision_tower = AutoModel.from_config(config.vision_config)
-        # 创建多模态投影器
+
+        # 初始化多模态投影器
         self.multi_modal_projector = VipLlavaMultiModalProjector(config)
-        # 获取词汇表大小
-        self.vocab_size = config.vocab_size
-        # 创建语言模型
+        # 获取文本配置中的词汇表大小作为模型的词汇表大小
+        self.vocab_size = config.text_config.vocab_size
+        # 初始化语言模型，使用从配置中获取的文本配置和注意力实现方式
         self.language_model = AutoModelForCausalLM.from_config(
             config.text_config, attn_implementation=config._attn_implementation
         )
-        # 如果config.pad_token_id不为None，则使用config.pad_token_id，否则使用-1
+        # 如果配置中定义了 pad_token_id，则使用配置中的值；否则使用 -1
         self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else -1
-        # 调用post_init方法
+        # 执行初始化后的处理
+        self.post_init()
 
-    # 获取输入嵌入
     def get_input_embeddings(self):
+        # 获取语言模型的输入嵌入层
         return self.language_model.get_input_embeddings()
 
-    # 设置输入嵌入
     def set_input_embeddings(self, value):
+        # 设置语言模型的输入嵌入层
         self.language_model.set_input_embeddings(value)
 
-    # 获取输出嵌入
     def get_output_embeddings(self):
+        # 获取语言模型的输出嵌入层
         return self.language_model.get_output_embeddings()
 
-    # 设置输出嵌入
     def set_output_embeddings(self, new_embeddings):
+        # 设置语言模型的输出嵌入层
         self.language_model.set_output_embeddings(new_embeddings)
 
-    # 设置解码器
     def set_decoder(self, decoder):
+        # 设置语言模型的解码器
         self.language_model.set_decoder(decoder)
 
-    # 获取解码器
     def get_decoder(self):
+        # 获取语言模型的解码器
         return self.language_model.get_decoder()
 
-    # 绑定权重
     def tie_weights(self):
+        # 绑定语言模型的权重
         return self.language_model.tie_weights()
 
-    # 调整标记嵌入
     def resize_token_embeddings(self, new_num_tokens: Optional[int] = None, pad_to_multiple_of=None) -> nn.Embedding:
-        # 调整模型嵌入
+        # 调整语言模型的 token 嵌入层大小，并更新模型配置中的词汇表大小
         model_embeds = self.language_model.resize_token_embeddings(new_num_tokens, pad_to_multiple_of)
-        # 更新词汇表大小
         self.config.text_config.vocab_size = model_embeds.num_embeddings
-        self.config.vocab_size = model_embeds.num_embeddings
         self.vocab_size = model_embeds.num_embeddings
         return model_embeds
 
-    # 前向传播方法
     @add_start_docstrings_to_model_forward(VIPLLAVA_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=VipLlavaCausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)
     # 忽略复制
@@ -263,51 +238,54 @@ class VipLlavaForConditionalGeneration(VipLlavaPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 为生成准备输入数据
+    ):
+        pass  # 在正式实现前，暂时占位，不执行任何操作
+
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, inputs_embeds=None, pixel_values=None, attention_mask=None, **kwargs
     ):
-        # 如果过去的键值不为空
+        pass  # 在正式实现前，暂时占位，不执行任何操作
+    ):
+        # 如果传入的过去键值不为 None，则处理缓存相关逻辑
         if past_key_values is not None:
-            # 如果过去的键值是 Cache 类型
+            # 如果过去键值是 Cache 类型，则获取序列长度和已见标记数
             if isinstance(past_key_values, Cache):
-                # 获取缓存长度
                 cache_length = past_key_values.get_seq_length()
-                # 获取已处理的 token 长度
                 past_length = past_key_values.seen_tokens
             else:
-                # 获取缓存长度和已处理的 token 长度
+                # 否则，假设过去键值的第一个元素的第一个维度是 token 的形状的长度
                 cache_length = past_length = past_key_values[0][0].shape[2]
 
             # 保留未处理的 token：
-            # 1 - 如果 attention_mask 的长度超过 input_ids 的长度，则说明有些输入是作为缓存的一部分传递的
+            # 1 - 如果 attention_mask 的长度超过 input_ids 的长度，则处理仅作为缓存传递的情况
             if attention_mask is not None and attention_mask.shape[1] > input_ids.shape[1]:
                 input_ids = input_ids[:, -(attention_mask.shape[1] - past_length) :]
-            # 2 - 如果 past_length 小于 input_ids 的长度，则 input_ids 包含所有输入 token。我们可以根据 past_length 丢弃 input_ids。
+            # 2 - 如果 past_length 小于 input_ids 的长度，则 input_ids 包含所有输入 token，可以基于 past_length 丢弃 input_ids
             elif past_length < input_ids.shape[1]:
                 input_ids = input_ids[:, past_length:]
-            # 3 - 否则（past_length >= input_ids.shape[1]），假设 input_ids 只包含未处理的 token。
+            # 3 - 否则（past_length >= input_ids.shape[1]），假设 input_ids 只有未处理的 token
             elif self.config.image_token_index in input_ids:
                 input_ids = input_ids[:, input_ids.shape[1] - 1 :]
-            # 如果缓存看到的 token 数量超过其容量，则缓存有大小限制。让我们丢弃旧的 attention 值，因为它们对应的值不是输入的一部分。
+            
+            # 如果缓存已见 token 数超过其容量限制，那么缓存有一个大小限制。丢弃较早的 attention 值，因为它们对应的值不是输入的一部分。
             if cache_length < past_length and attention_mask is not None:
                 attention_mask = attention_mask[:, -(cache_length + input_ids.shape[1]) :]
 
         position_ids = kwargs.get("position_ids", None)
-        # 如果 attention_mask 不为空且 position_ids 为空
+        # 如果 attention_mask 不为 None 且 position_ids 为 None，则在批量生成时动态创建 position_ids
         if attention_mask is not None and position_ids is None:
-            # 为批量生成动态创建 position_ids
             position_ids = attention_mask.long().cumsum(-1) - 1
             position_ids.masked_fill_(attention_mask == 0, 1)
             if past_key_values:
                 position_ids = position_ids[:, -input_ids.shape[1] :]
 
-        # 如果传递了 `inputs_embeds`，我们只想在第一代步骤中使用它们
+        # 如果传入 inputs_embeds，则仅在第一代步骤中使用它们
         if inputs_embeds is not None and past_key_values is None:
             model_inputs = {"inputs_embeds": inputs_embeds}
         else:
             model_inputs = {"input_ids": input_ids}
 
+        # 更新 model_inputs 字典
         model_inputs.update(
             {
                 "position_ids": position_ids,
@@ -318,7 +296,8 @@ class VipLlavaForConditionalGeneration(VipLlavaPreTrainedModel):
             }
         )
         return model_inputs
-    # 重新排序缓存数据的私有方法，调用语言模型对象的重新排序缓存方法
+
+    # 重排序缓存的内部方法委托给语言模型的 _reorder_cache 方法
     def _reorder_cache(self, *args, **kwargs):
         return self.language_model._reorder_cache(*args, **kwargs)
 ```

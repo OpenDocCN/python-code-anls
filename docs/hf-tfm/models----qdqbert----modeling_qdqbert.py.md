@@ -1,28 +1,38 @@
-# `.\transformers\models\qdqbert\modeling_qdqbert.py`
+# `.\models\qdqbert\modeling_qdqbert.py`
 
-```py
-# 设置代码文件的编码格式为 UTF-8
-# 版权声明信息，版权属于 NVIDIA Corporation 和 The HuggingFace Team
-# 版权声明信息，版权所有 (c) 2018-2021, NVIDIA CORPORATION
-# 基于 Apache License, Version 2.0 许可证
-# 除非符合许可证的要求，否则禁止使用该文件
-# 可以在以下链接获取许可证的拷贝： http://www.apache.org/licenses/LICENSE-2.0
-# 未经适用法律要求或书面同意，软件将根据“实际情况”分发，无论是明示的还是隐含的，均无任何担保或条件
-# 详细了解许可证规定，包括责任限制和权限限制请参考许可证文档
+```
+# coding=utf-8
+# Copyright 2021 NVIDIA Corporation and The HuggingFace Team.
+# Copyright (c) 2018-2021, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+PyTorch QDQBERT model.
+"""
 
-""" PyTorch QDQBERT model."""
 
-# 导入模块
-import math
-import os
-import warnings
-from typing import Dict, List, Optional, Tuple, Union
-import torch
-import torch.utils.checkpoint
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-from ...activations import ACT2FN
-from ...modeling_outputs import (
+import math  # 导入数学库
+import os  # 导入操作系统功能库
+import warnings  # 导入警告模块
+from typing import Dict, List, Optional, Tuple, Union  # 导入类型提示相关模块
+
+import torch  # 导入PyTorch库
+import torch.utils.checkpoint  # 导入PyTorch的checkpoint功能
+from torch import nn  # 导入PyTorch的神经网络模块
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 导入损失函数
+
+from ...activations import ACT2FN  # 导入激活函数
+from ...modeling_outputs import (  # 导入模型输出相关类
     BaseModelOutputWithPastAndCrossAttentions,
     BaseModelOutputWithPoolingAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -33,9 +43,12 @@ from ...modeling_outputs import (
     SequenceClassifierOutput,
     TokenClassifierOutput,
 )
-from ...modeling_utils import PreTrainedModel
-from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer
-from ...utils import (
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型基类
+from ...pytorch_utils import (  # 导入PyTorch工具函数
+    find_pruneable_heads_and_indices,
+    prune_linear_layer,
+)
+from ...utils import (  # 导入通用工具函数
     add_code_sample_docstrings,
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
@@ -44,19 +57,15 @@ from ...utils import (
     replace_return_docstrings,
     requires_backends,
 )
-from .configuration_qdqbert import QDQBertConfig
+from .configuration_qdqbert import QDQBertConfig  # 导入QDQBERT模型配置
 
-# 获取日志记录器对象
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 软依赖
-# 如果 PyTorch 量化可用
-if is_pytorch_quantization_available():
+# soft dependency
+if is_pytorch_quantization_available():  # 检查是否支持PyTorch量化
     try:
-        # 导入 PyTorch 量化模块
-        from pytorch_quantization import nn as quant_nn
-        # 导入张量量化器
-        from pytorch_quantization.nn.modules.tensor_quantizer import TensorQuantizer
+        from pytorch_quantization import nn as quant_nn  # 导入PyTorch量化模块
+        from pytorch_quantization.nn.modules.tensor_quantizer import TensorQuantizer  # 导入量化张量模块
     except OSError:
         logger.error(
             "QDQBERT model are not usable since `pytorch_quantization` can't be loaded. Please try to reinstall it"
@@ -64,66 +73,70 @@ if is_pytorch_quantization_available():
             " https://github.com/NVIDIA/TensorRT/tree/master/tools/pytorch-quantization."
         )
 
-# 用于文档的检查点
-_CHECKPOINT_FOR_DOC = "bert-base-uncased"
-# 用于文档的配置
-_CONFIG_FOR_DOC = "QDQBertConfig"
+_CHECKPOINT_FOR_DOC = "google-bert/bert-base-uncased"  # 定义用于文档的检查点名称
+_CONFIG_FOR_DOC = "QDQBertConfig"  # 定义用于文档的配置名称
 
-# QDQBERT 预训练模型的存档列表
-QDQBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
-    "bert-base-uncased",
-    # 查看所有 BERT 模型：https://huggingface.co/models?filter=bert
+QDQBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [  # 预训练模型存档列表
+    "google-bert/bert-base-uncased",
+    # See all BERT models at https://huggingface.co/models?filter=bert
 ]
+
 
 def load_tf_weights_in_qdqbert(model, tf_checkpoint_path):
     """Load tf checkpoints in a pytorch model."""
     try:
-        import re
-        import numpy as np
-        import tensorflow as tf
+        import re  # 导入正则表达式模块
+        import numpy as np  # 导入NumPy库
+        import tensorflow as tf  # 导入TensorFlow库
     except ImportError:
         logger.error(
             "Loading a TensorFlow model in PyTorch, requires TensorFlow to be installed. Please see "
             "https://www.tensorflow.org/install/ for installation instructions."
         )
         raise
-    # 获取 TensorFlow 模型路径的绝对路径
     tf_path = os.path.abspath(tf_checkpoint_path)
-    # 打印日志，提示正在转换 TensorFlow 检查点
+    # 使用给定的 TensorFlow 检查点路径获取其绝对路径
     logger.info(f"Converting TensorFlow checkpoint from {tf_path}")
-    # 从 TF 模型中加载权重
-    init_vars = tf.train.list_variables(tf_path)
-    names = []  # 保存变量名称
-    arrays = []  # 保存变量值
-    # 循环处理每个变量
-    for name, shape in init_vars:
-        # 打印日志，提示正在加载 TF 权重
-        logger.info(f"Loading TF weight {name} with shape {shape}")
-        # 从 TF 模型中获取变量值
-        array = tf.train.load_variable(tf_path, name)
-        names.append(name)  # 将变量名称添加到列表中
-        arrays.append(array)  # 将变量值添加到列表中
+    # 记录日志，指示正在转换 TensorFlow 检查点
 
-    # 遍历每个变量的名称和值
+    # 从 TensorFlow 模型中加载权重变量
+    init_vars = tf.train.list_variables(tf_path)
+    names = []
+    arrays = []
+
+    # 遍历初始化的变量名和形状
+    for name, shape in init_vars:
+        logger.info(f"Loading TF weight {name} with shape {shape}")
+        # 记录日志，指示正在加载 TensorFlow 权重，并记录其形状
+        array = tf.train.load_variable(tf_path, name)
+        names.append(name)
+        arrays.append(array)
+
+    # 遍历加载的变量名和数组
     for name, array in zip(names, arrays):
-        name = name.split("/")  # 按斜杠分割变量名
-        # 判断变量名是否为不需要加载的特殊变量
+        # 将变量名按斜杠划分为子路径
+        name = name.split("/")
+
+        # 跳过特定的变量名，这些变量不需要在预训练模型中使用
         if any(
             n in ["adam_v", "adam_m", "AdamWeightDecayOptimizer", "AdamWeightDecayOptimizer_1", "global_step"]
             for n in name
         ):
-            # 打印日志，跳过不需要加载的特殊变量
             logger.info(f"Skipping {'/'.join(name)}")
             continue
-        pointer = model  # 指针指向模型
-        # 遍历变量名的每个部分
+        
+        # 设置指针初始位置为模型对象
+        pointer = model
+        
+        # 遍历变量名的各个部分
         for m_name in name:
-            # 判断变量名是否带有数字后缀
+            # 如果变量名匹配字母加下划线加数字的模式，则按下划线划分
             if re.fullmatch(r"[A-Za-z]+_\d+", m_name):
                 scope_names = re.split(r"_(\d+)", m_name)
             else:
                 scope_names = [m_name]
-            # 根据变量名的不同部分更新指针位置
+            
+            # 根据变量名的首部设置指针指向相应的模型部分
             if scope_names[0] == "kernel" or scope_names[0] == "gamma":
                 pointer = getattr(pointer, "weight")
             elif scope_names[0] == "output_bias" or scope_names[0] == "beta":
@@ -136,60 +149,68 @@ def load_tf_weights_in_qdqbert(model, tf_checkpoint_path):
                 try:
                     pointer = getattr(pointer, scope_names[0])
                 except AttributeError:
-                    # 打印日志，跳过无法识别的变量名
                     logger.info(f"Skipping {'/'.join(name)}")
                     continue
-            # 如果变量名有多个部分，更新指针位置
+            
+            # 如果变量名有多个部分，则继续在模型中深入
             if len(scope_names) >= 2:
                 num = int(scope_names[1])
                 pointer = pointer[num]
-        # 如果变量名以 "_embeddings" 结尾，指向权重
+        
+        # 如果变量名以 "_embeddings" 结尾，则将指针指向权重部分
         if m_name[-11:] == "_embeddings":
             pointer = getattr(pointer, "weight")
-        # 如果变量名为 "kernel"，将数组转置
         elif m_name == "kernel":
-            array = np.transpose(array)
-        # 检查指针和数组形状是否匹配
+            array = np.transpose(array)  # 转置数组（针对 kernel 变量）
+
+        # 检查指针和加载的数组形状是否匹配，如果不匹配则抛出异常
         try:
             if pointer.shape != array.shape:
                 raise ValueError(f"Pointer shape {pointer.shape} and array shape {array.shape} mismatched")
         except AssertionError as e:
             e.args += (pointer.shape, array.shape)
             raise
-        # 打印日志，提示初始化 PyTorch 权重
+        
+        # 记录日志，指示初始化 PyTorch 权重
         logger.info(f"Initialize PyTorch weight {name}")
-        pointer.data = torch.from_numpy(array)  # 将数组转换为 PyTorch 张量
-    return model  # 返回加载了权重的模型
-# 从transformers.models.bert.modeling_bert.BertEmbeddings复制而来，并将类名修改为QDQBertEmbeddings
-class QDQBertEmbeddings(nn.Module):
-    """从单词、位置和token类型的嵌入构建嵌入。"""
+        # 将加载的 NumPy 数组转换为 PyTorch 的 Tensor，并赋值给指针
+        pointer.data = torch.from_numpy(array)
 
+    # 返回转换后的 PyTorch 模型
+    return model
+# Copied from transformers.models.bert.modeling_bert.BertEmbeddings with Bert -> QDQBert
+# 定义了一个名为 QDQBertEmbeddings 的类，用于构建从词嵌入、位置嵌入和标记类型嵌入生成的嵌入向量。
+
+class QDQBertEmbeddings(nn.Module):
+    """Construct the embeddings from word, position and token_type embeddings."""
+    # 类的初始化函数，接受一个 config 参数
     def __init__(self, config):
-        # 初始化函数
         super().__init__()
-        # 创建单词嵌入对象，词汇大小为config.vocab_size，隐藏层大小为config.hidden_size，填充id为config.pad_token_id
+        # 词嵌入层，使用 nn.Embedding 创建，参数为词汇表大小、隐藏层大小和填充标记索引
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=config.pad_token_id)
-        # 创建位置嵌入对象，最大位置为config.max_position_embeddings，隐藏层大小为config.hidden_size
+        # 位置嵌入层，使用 nn.Embedding 创建，参数为最大位置嵌入数和隐藏层大小
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
-        # 创建token类型嵌入对象，类型词汇大小为config.type_vocab_size，隐藏层大小为config.hidden_size
+        # 标记类型嵌入层，使用 nn.Embedding 创建，参数为标记类型数和隐藏层大小
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
-        # self.LayerNorm的命名不采用蛇形命名方式，以保留与TensorFlow模型变量名称的一致性，并能够加载任何TensorFlow检查点文件
+        # LayerNorm 层，用于归一化隐藏层输出，参数为隐藏层大小和层标准化的 epsilon 值
+        # 这里的 LayerNorm 命名不使用蛇形命名法，以保持与 TensorFlow 模型变量名称的一致性，可以加载任何 TensorFlow 检查点文件
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建Dropout对象，丢弃概率为config.hidden_dropout_prob
+        # Dropout 层，用于随机失活以防止过拟合，参数为隐藏层的丢弃概率
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # position_ids（1，长度位置嵌入）在内存中是连续的，并且在序列化时被导出
-        # 根据config.position_embedding_type的值来确定位置嵌入类型是绝对还是相对
+        
+        # position_embedding_type 属性，默认为 "absolute"，表示位置嵌入类型为绝对位置编码
         self.position_embedding_type = getattr(config, "position_embedding_type", "absolute")
-        # 注册名为position_ids的缓冲区，值为0到config.max_position_embeddings-1
+        # 注册一个持久化张量 "position_ids"，其值为从 0 到 max_position_embeddings-1 的序列张量，形状为 (1, max_position_embeddings)
         self.register_buffer(
             "position_ids", torch.arange(config.max_position_embeddings).expand((1, -1)), persistent=False
         )
-        # 注册名为token_type_ids的缓冲区，值为全零，数据类型为长整型
+        # 注册一个持久化张量 "token_type_ids"，其值为全零的张量，形状与 "position_ids" 相同，数据类型为长整型
         self.register_buffer(
             "token_type_ids", torch.zeros(self.position_ids.size(), dtype=torch.long), persistent=False
         )
 
+    # 前向传播函数，接受多个输入参数，并返回嵌入向量
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -197,193 +218,119 @@ class QDQBertEmbeddings(nn.Module):
         position_ids: Optional[torch.LongTensor] = None,
         inputs_embeds: Optional[torch.FloatTensor] = None,
         past_key_values_length: int = 0,
-    # 函数签名指定了输入参数及其类型，并指定了返回值类型为 torch.Tensor
-    ) -> torch.Tensor:
-        # 如果输入参数 input_ids 不为空，则获取其形状
+        # 省略了函数剩余部分的参数和逻辑，不在这里进行注释
+        # 定义函数forward的输入参数及其类型注解，返回torch.Tensor类型的张量
         if input_ids is not None:
+            # 如果input_ids不为None，则获取其形状（尺寸）
             input_shape = input_ids.size()
         else:
-            # 否则获取输入参数 inputs_embeds 的形状，除了最后一个维度（通常是 batch 维度）
+            # 如果input_ids为None，则获取inputs_embeds的形状，但去掉最后一维
             input_shape = inputs_embeds.size()[:-1]
 
-        # 获取序列长度
+        # 获取序列长度，即input_shape的第二个维度
         seq_length = input_shape[1]
 
-        # 如果位置编码参数 position_ids 为空，则使用已注册的位置编码（position_ids）中的一部分，以匹配当前序列长度
+        # 如果position_ids为None，则从self.position_ids中选择对应长度的位置编码
         if position_ids is None:
             position_ids = self.position_ids[:, past_key_values_length : seq_length + past_key_values_length]
 
-        # 设置 token_type_ids 为构造函数中注册的缓冲区，其中所有元素为零，通常在自动生成时发生，
-        # 注册的缓冲区有助于用户在跟踪模型时不传递 token_type_ids，解决问题 #5664
+        # 设置token_type_ids为构造函数中注册的缓冲区，通常是全零向量，在模型追踪时帮助解决不传递token_type_ids的问题
         if token_type_ids is None:
-            # 如果模型有注册 token_type_ids，则使用其值
             if hasattr(self, "token_type_ids"):
-                # 获取已注册的 token_type_ids，并且扩展以匹配当前序列长度
+                # 如果self中有token_type_ids属性，则使用其缓冲区中的值，并进行扩展以匹配input_shape
                 buffered_token_type_ids = self.token_type_ids[:, :seq_length]
                 buffered_token_type_ids_expanded = buffered_token_type_ids.expand(input_shape[0], seq_length)
                 token_type_ids = buffered_token_type_ids_expanded
             else:
-                # 否则创建一个零填充的 token_type_ids 张量，与输入形状相同
+                # 否则，创建全零的token_type_ids张量，与input_shape相同的形状
                 token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
 
-        # 如果输入参数 inputs_embeds 为空，则通过 word_embeddings 层获取输入的嵌入
+        # 如果inputs_embeds为None，则通过word_embeddings层获取input_ids的嵌入表示
         if inputs_embeds is None:
             inputs_embeds = self.word_embeddings(input_ids)
-        # 获取 token_type_embeddings
+        
+        # 使用token_type_ids获取token_type的嵌入表示
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
 
-        # 将输入嵌入和 token_type_embeddings 相加得到总嵌入
+        # 将input embeddings与token_type embeddings相加，得到最终的嵌入表示
         embeddings = inputs_embeds + token_type_embeddings
 
-        # 如果位置嵌入类型为 "absolute"，则加上位置嵌入
+        # 如果position_embedding_type为"absolute"，则加上位置编码的嵌入表示
         if self.position_embedding_type == "absolute":
             position_embeddings = self.position_embeddings(position_ids)
             embeddings += position_embeddings
         
-        # 对嵌入进行 LayerNormalization
+        # 对嵌入表示进行LayerNorm归一化
         embeddings = self.LayerNorm(embeddings)
-        # 对嵌入进行 dropout
+        
+        # 对归一化后的嵌入表示进行dropout处理
         embeddings = self.dropout(embeddings)
-        # 返回嵌入
+        
+        # 返回最终的嵌入表示张量
         return embeddings
-class QDQBertSelfAttention(nn.Module):
-    # 定义 QDQBertSelfAttention 类
-    def __init__(self, config):
-        # 初始化方法，接受一个config对象
-        super().__init__()
-        # 调用父类构造函数
-
-        if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
-            # 如果隐藏大小不能整除注意力头数且config没有嵌入大小
-            raise ValueError(
-                # 抛出值错误异常
-                f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
-                f"heads ({config.num_attention_heads})"
-            )
-
-        self.num_attention_heads = config.num_attention_heads
-        # 设置注意力头数
-        self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
-        # 计算每个注意力头的大小
-        self.all_head_size = self.num_attention_heads * self.attention_head_size
-        # 计算所有头的大小
-
-        self.query = quant_nn.QuantLinear(config.hidden_size, self.all_head_size)
-        # 创建查询线性层
-        self.key = quant_nn.QuantLinear(config.hidden_size, self.all_head_size)
-        # 创建键线性层
-        self.value = quant_nn.QuantLinear(config.hidden_size, self.all_head_size)
-        # 创建值线性层
-
-        self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
-        # 使用指定的dropout概率
-        self.position_embedding_type = getattr(config, "position_embedding_type", "absolute")
-        # 获取位置嵌入类型，如果不存在则使用绝对位置
-
-        if self.position_embedding_type == "relative_key" or self.position_embedding_type == "relative_key_query":
-            # 如果是相对键或相对键查询
-            self.max_position_embeddings = config.max_position_embeddings
-            # 获取最大位置嵌入
-            self.distance_embedding = nn.Embedding(2 * config.max_position_embeddings - 1, self.attention_head_size)
-            # 创建距离嵌入
-
-        self.is_decoder = config.is_decoder
-        # 判断是否为解码器
-
-        self.matmul_q_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        self.matmul_k_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        self.matmul_v_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        self.matmul_a_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        # 初始化输入的量化器
-
-    def transpose_for_scores(self, x):
-        # 定义转置函数，用于调整形状
-        new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
-        # 计算新的形状
-        x = x.view(*new_x_shape)
-        # 调整形状
-        return x.permute(0, 2, 1, 3)
-        # 对特定维度进行转置
-
-    def forward(
-        self,
-        hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        past_key_value=None,
-        output_attentions=False,
+# 定义一个名为 QDQBertSelfOutput 的类，继承自 nn.Module
 class QDQBertSelfOutput(nn.Module):
-    # 定义 QDQBertSelfOutput 类
+    # 初始化方法，接收一个 config 参数
     def __init__(self, config):
-        # 初始化方法，接受一个config对象
         super().__init__()
-        # 调用父类构造函数
-
-        # Quantize Linear layer
-        # 量化线性层
+        
+        # 创建一个 QuantLinear 对象，用于量化线性层的输入和输出
         self.dense = quant_nn.QuantLinear(config.hidden_size, config.hidden_size)
-
+        
+        # 创建一个 LayerNorm 层，用于归一化隐藏状态的特征
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 使用LayerNorm层
+        
+        # 创建一个 Dropout 层，用于随机失活隐藏状态的特征
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 使用dropout层
-
-        # Quantize the inputs to the residual add
-        # 量化残差加法的输入
+        
+        # 创建一个用于量化局部输入的 TensorQuantizer 对象
         self.add_local_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        # 输入本地量化器
+        
+        # 创建一个用于量化残差输入的 TensorQuantizer 对象
         self.add_residual_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        # 输入残差量化器
-```    
-    # 前向传播函数，接收隐藏状态和输入张量作为输入
+    # 定义模型的前向传播函数，接收隐藏状态和输入张量作为参数
     def forward(self, hidden_states, input_tensor):
-        # 将隐藏状态进行全连接操作
+        # 将隐藏状态通过全连接层 dense 进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 对全连接结果进行dropout操作
+        # 对线性变换后的隐藏状态进行 dropout 操作，以防止过拟合
         hidden_states = self.dropout(hidden_states)
-        # 对残差输入进行量化处理
+        # 对输入进行局部加法的量化处理
         add_local = self.add_local_input_quantizer(hidden_states)
-        # 对输入张量进行量化处理
+        # 对输入张量进行残差加法的量化处理
         add_residual = self.add_residual_input_quantizer(input_tensor)
-        # 将量化后的残差输入和量化后的输入张量相加，并通过LayerNorm进行归一化处理
+        # 将量化后的局部加法和残差加法结果进行 LayerNorm 归一化
         hidden_states = self.LayerNorm(add_local + add_residual)
-        # 返回处理后的隐藏状态
+        # 返回处理后的隐藏状态作为输出
         return hidden_states
-# 根据 transformers.models.bert.modeling_bert.BertAttention 改写而来，将类名由 BertAttention 改为 QDQBertAttention
+# 基于 transformers.models.bert.modeling_bert.BertAttention 更改为 QDQBert
 class QDQBertAttention(nn.Module):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__()
-        # 创建 QDQBertSelfAttention 对象
+        # 初始化自注意力层和自注意力输出层
         self.self = QDQBertSelfAttention(config)
-        # 创建 QDQBertSelfOutput 对象
         self.output = QDQBertSelfOutput(config)
-        # 创建 pruned_heads 集合，用于存储被剪枝的 attention heads
+        # 存储被修剪的注意力头的集合
         self.pruned_heads = set()
 
-    # 剪枝函数，用于剪枝 attention heads
     def prune_heads(self, heads):
-        # 如果要剪枝的 heads 列表为空，则直接返回
         if len(heads) == 0:
             return
-        # 调用 find_pruneable_heads_and_indices 方法，根据要剪枝的 heads 列表，self.self 中的参数，以及之前被剪枝的 heads，获取要被剪枝的 heads 列表以及对应的 indices
+        # 查找可修剪的注意力头并返回索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.self.num_attention_heads, self.self.attention_head_size, self.pruned_heads
         )
-        # 剪枝 linear layers
+
+        # 修剪线性层
         self.self.query = prune_linear_layer(self.self.query, index)
         self.self.key = prune_linear_layer(self.self.key, index)
         self.self.value = prune_linear_layer(self.self.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
-        # 更新超参数并存储剪枝的 heads
+
+        # 更新超参数并存储修剪的注意力头
         self.self.num_attention_heads = self.self.num_attention_heads - len(heads)
         self.self.all_head_size = self.self.attention_head_size * self.self.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
-    # 前向传播方法
     def forward(
         self,
         hidden_states,
@@ -394,7 +341,7 @@ class QDQBertAttention(nn.Module):
         past_key_value=None,
         output_attentions=False,
     ):
-        # 调用 self.self 的 forward 方法进行 self attention 计算，得到 self_outputs
+        # 执行自注意力计算
         self_outputs = self.self(
             hidden_states,
             attention_mask,
@@ -404,92 +351,92 @@ class QDQBertAttention(nn.Module):
             past_key_value,
             output_attentions,
         )
-        # 调用 self.output 的 forward 方法，将 self_outputs[0] 和 hidden_states 作为输入，得到 attention_output
+        # 使用自注意力输出层处理自注意力结果和隐藏状态
         attention_output = self.output(self_outputs[0], hidden_states)
-        # 构建 outputs，将 attention_output 放在第一个位置，然后是 self_outputs 的其它部分（如果 output_attentions 为 True，则还会包含 attention weights）
+        # 如果需要输出注意力，将其添加到输出中
         outputs = (attention_output,) + self_outputs[1:]
-        # 返回 outputs
         return outputs
 
 
 class QDQBertIntermediate(nn.Module):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__()
-        # 创建 quantized Linear layer
+        # 量化线性层
         self.dense = quant_nn.QuantLinear(config.hidden_size, config.intermediate_size)
-        # 根据 config.hidden_act 的类型选择激活函数，如果 hidden_act 是字符串类型，则在 ACT2FN 字典中找到对应的激活函数，否则直接使用 config.hidden_act
+        # 初始化中间激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
 
-    # 前向传播方法
     def forward(self, hidden_states):
-        # 将 hidden_states 输入 dense 层得到新的 hidden_states
+        # 通过量化线性层处理隐藏状态
         hidden_states = self.dense(hidden_states)
-        # 将新的 hidden_states 输入激活函数，得到 intermediate_hidden_states
-        intermediate_hidden_states = self.intermediate_act_fn(hidden_states)
-        # 返回 intermediate_hidden_states
-        return intermediate_hidden_states
+        # 应用中间激活函数
+        hidden_states = self.intermediate_act_fn(hidden_states)
+        return hidden_states
 
 
 class QDQBertOutput(nn.Module):
-    # 初始化函数，接受配置参数 config
     def __init__(self, config):
-        # 调用父类初始化函数
         super().__init__()
-        # 创建一个量化线性层，输入大小为 config.intermediate_size，输出大小为 config.hidden_size
+        # Quantize Linear layer
+        # 使用量化的神经网络层来定义一个线性层，输入大小为config.intermediate_size，输出大小为config.hidden_size
         self.dense = quant_nn.QuantLinear(config.intermediate_size, config.hidden_size)
-        # 创建一个LayerNorm层，输入大小为 config.hidden_size，使用 config.layer_norm_eps 作为eps值
+        
+        # Layer normalization 层，对隐藏状态进行归一化处理
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个Dropout层，使用 config.hidden_dropout_prob 作为dropout概率
+        
+        # Dropout 层，以config.hidden_dropout_prob的概率对输入进行随机置零，用于防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        # 创建一个输入量化器，用于量化到residual add的局部输入
+        # Quantize the inputs to the residual add
+        # 对残差加法的输入进行量化处理，使用默认的输入量化描述符
         self.add_local_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
-        # 创建一个输入量化器，用于量化到residual add的残差输入
         self.add_residual_input_quantizer = TensorQuantizer(quant_nn.QuantLinear.default_quant_desc_input)
 
-    # 前向传播函数，接受 hidden_states 和 input_tensor 作为输入
     def forward(self, hidden_states, input_tensor):
-        # 通过量化线性层处理 hidden_states
+        # 将隐藏状态传入量化的线性层进行处理
         hidden_states = self.dense(hidden_states)
-        # 使用dropout处理 hidden_states
+        
+        # 对处理后的隐藏状态进行dropout操作，以减少过拟合
         hidden_states = self.dropout(hidden_states)
-        # 量化到 residual add 的局部输入
+        
+        # Quantize the inputs to the residual add
+        # 对残差加法的输入进行量化处理
         add_local = self.add_local_input_quantizer(hidden_states)
-        # 量化到 residual add 的残差输入
         add_residual = self.add_residual_input_quantizer(input_tensor)
-        # LayerNorm 处理 residual add 的局部输入和残差输入的和，并将结果赋给 hidden_states
+        
+        # 对量化后的本地加法和残差加法进行 Layer normalization 处理
         hidden_states = self.LayerNorm(add_local + add_residual)
-        # 返回处理后的 hidden_states
+        
+        # 返回处理后的隐藏状态
         return hidden_states
-# 基于 transformers.models.bert.modeling_bert.BertLayer 实现的 QDQBertLayer 模块
+# 根据 transformers.models.bert.modeling_bert.BertLayer 修改为 QDQBertLayer，是 QDQ 模型的 Bert 层
 class QDQBertLayer(nn.Module):
     def __init__(self, config):
-        # 调用父类构造函数
         super().__init__()
-        # 序列长度维度设置为 1
+        # 设置序列长度维度为 1
         self.seq_len_dim = 1
-        # 创建 QDQBertAttention 模块
+        # 初始化 QDQBertAttention 层
         self.attention = QDQBertAttention(config)
-        # 判断是否为解码器模型
+        # 标记是否为解码器模型
         self.is_decoder = config.is_decoder
-        # 判断是否需要添加交叉注意力机制
+        # 标记是否添加跨层注意力
         self.add_cross_attention = config.add_cross_attention
-        # 如果需要添加交叉注意力，且不是解码器模型，则抛出错误
+        # 如果添加了跨层注意力
         if self.add_cross_attention:
+            # 如果不是解码器模型，抛出异常
             if not self.is_decoder:
                 raise ValueError(f"{self} should be used as a decoder model if cross attention is added")
-            # 创建 QDQBertAttention 模块用于交叉注意力
+            # 初始化跨层注意力 QDQBertAttention 层
             self.crossattention = QDQBertAttention(config)
-        # 创建 QDQBertIntermediate 模块
+        # 初始化 QDQBertIntermediate 层
         self.intermediate = QDQBertIntermediate(config)
-        # 创建 QDQBertOutput 模块
+        # 初始化 QDQBertOutput 层
         self.output = QDQBertOutput(config)
 
+    # 前向传播函数
     def forward(
         self,
         hidden_states,
@@ -500,9 +447,9 @@ class QDQBertLayer(nn.Module):
         past_key_value=None,
         output_attentions=False,
     ):
-        # 如果过去的键/值缓存不为空，则decoder的uni-directional自注意力的缓存键/值元组位于位置1,2
+        # 如果过去的键/值元组不为空，则从中提取解码器单向自注意力的缓存键/值，位置为1和2
         self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
-        # 使用自注意力机制处理隐藏状态
+        # 使用自注意力层处理隐藏状态，生成自注意力输出
         self_attention_outputs = self.attention(
             hidden_states,
             attention_mask,
@@ -510,33 +457,33 @@ class QDQBertLayer(nn.Module):
             output_attentions=output_attentions,
             past_key_value=self_attn_past_key_value,
         )
-        # 获取自注意力输出
+        # 提取自注意力输出的注意力部分
         attention_output = self_attention_outputs[0]
 
-        # 如果是decoder，最后一个输出是自注意力缓存的元组
+        # 如果是解码器，最后一个输出是自注意力缓存的元组
         if self.is_decoder:
-            # 输出不包括最后一个元素，即自注意力缓存
+            # 去除第一个和最后一个元素（自注意力输出中的自注意力元组和最后一个是自注意力缓存）
             outputs = self_attention_outputs[1:-1]
-            # 获取当前时刻的键/值
+            # 获取当前自注意力的键/值元组
             present_key_value = self_attention_outputs[-1]
         else:
-            # 如果输出注意权重，添加自注意力
-            outputs = self_attention_outputs[1:]  # 如果我们输出注意权重，添加自注意力
+            # 如果不是解码器，从自注意力输出中去除第一个元素（自注意力输出中的自注意力元组）
+            outputs = self_attention_outputs[1:]  # 如果输出注意力权重，则添加自注意力
         
 
         cross_attn_present_key_value = None
-        # 如果是decoder且有编码器的隐藏状态
+        # 如果是解码器且有编码器隐藏状态
         if self.is_decoder and encoder_hidden_states is not None:
-            # 如果未设置crossattention，则引发错误
+            # 如果模型没有交叉注意力层，则引发错误
             if not hasattr(self, "crossattention"):
                 raise ValueError(
                     f"If `encoder_hidden_states` are passed, {self} has to be instantiated with cross-attention layers"
                     " by setting `config.add_cross_attention=True`"
                 )
 
-            # 跨注意力的缓存键/值元组位于过去键/值元组的第3,4位置
+            # 如果过去的键/值元组不为空，则从中提取交叉注意力的缓存键/值，位置为3和4
             cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
-            # 使用crossattention处理自注意力输出
+            # 使用交叉注意力层处理自注意力输出和编码器隐藏状态，生成交叉注意力输出
             cross_attention_outputs = self.crossattention(
                 attention_output,
                 attention_mask,
@@ -546,47 +493,42 @@ class QDQBertLayer(nn.Module):
                 cross_attn_past_key_value,
                 output_attentions,
             )
-            # 获取crossattention输出
+            # 提取交叉注意力输出的注意力部分
             attention_output = cross_attention_outputs[0]
-            # 输出不包括crossattention缓存
-            outputs = outputs + cross_attention_outputs[1:-1]  # 如果我们输出注意权重，添加crossattention
+            # 将交叉注意力输出中的除了第一个和最后一个元素以外的部分添加到输出中（如果输出注意力权重）
+            outputs = outputs + cross_attention_outputs[1:-1]
 
-            # 将cross-attn缓存添加到当前键/值元组的第3,4位置
+            # 将交叉注意力的当前键/值添加到当前键/值中
             cross_attn_present_key_value = cross_attention_outputs[-1]
             present_key_value = present_key_value + cross_attn_present_key_value
 
-        # 使用前馈网络处理注意力输出
+        # 使用前馈网络块处理注意力输出
         layer_output = self.feed_forward_chunk(attention_output)
-        # 将前馈网络输出作为输出的第一个元素
+        # 将前馈网络块的输出作为第一个元素，连接到输出中
         outputs = (layer_output,) + outputs
 
-        # 如果是decoder，将注意力键/值作为最后一个输出
+        # 如果是解码器，将注意力键/值作为最后一个输出返回
         if self.is_decoder:
             outputs = outputs + (present_key_value,)
 
         return outputs
 
-    # 前馈网络的部分处理
+    # 定义前馈网络块函数，输入为注意力输出
     def feed_forward_chunk(self, attention_output):
         # 使用中间层处理注意力输出
         intermediate_output = self.intermediate(attention_output)
-        # 使用输出层处理中间层输出和注意力输出
+        # 使用输出层处理中间输出和注意力输出，生成层输出
         layer_output = self.output(intermediate_output, attention_output)
         return layer_output
-# 基于 transformers.models.bert.modeling_bert.BertEncoder 实现的 QDQBertEncoder 类
+# 根据 transformers.models.bert.modeling_bert.BertEncoder 修改为 QDQBertEncoder，表示这是一个基于 QDQBert 的编码器类
 class QDQBertEncoder(nn.Module):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__()
-        # 保存配置信息
-        self.config = config
-        # 创建 QDQBertLayer 模块列表，数量为配置中指定的隐藏层数
+        self.config = config  # 初始化时保存配置参数
+        # 创建多个 QDQBertLayer 层组成的列表，数量等于配置中指定的隐藏层数量
         self.layer = nn.ModuleList([QDQBertLayer(config) for _ in range(config.num_hidden_layers)])
-        # 初始化梯度检查点标志为 False
-        self.gradient_checkpointing = False
+        self.gradient_checkpointing = False  # 初始化梯度检查点标志为 False
 
-    # 前向传播方法
     def forward(
         self,
         hidden_states,
@@ -599,427 +541,399 @@ class QDQBertEncoder(nn.Module):
         output_attentions=False,
         output_hidden_states=False,
         return_dict=True,
-    ):
         ):
-            # 初始化存储所有隐藏状态的元组
-            all_hidden_states = () if output_hidden_states else None
-            # 初始化存储所有自注意力权重的元组
-            all_self_attentions = () if output_attentions else None
-            # 若输出注意力权重且存在交叉注意力，则初始化存储所有交叉注意力权重的元组
-            all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
+        # 如果不需要输出隐藏状态，则初始化一个空元组
+        all_hidden_states = () if output_hidden_states else None
+        # 如果不需要输出注意力权重，则初始化一个空元组
+        all_self_attentions = () if output_attentions else None
+        # 如果不需要输出交叉注意力权重，且配置允许，则初始化一个空元组
+        all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
 
-            # 若使用缓存，则初始化下一个解码器缓存的元组
-            next_decoder_cache = () if use_cache else None
-            # 遍历每个编码器层
-            for i, layer_module in enumerate(self.layer):
-                # 若输出隐藏状态，则将当前隐藏状态存入所有隐藏状态元组中
-                if output_hidden_states:
-                    all_hidden_states = all_hidden_states + (hidden_states,)
-
-                # 获取当前层的头部掩码
-                layer_head_mask = head_mask[i] if head_mask is not None else None
-                # 获取过去的键值对
-                past_key_value = past_key_values[i] if past_key_values is not None else None
-
-                # 如果启用渐变检查点并处于训练模式，则执行渐变检查点函数
-                if self.gradient_checkpointing and self.training:
-                    if use_cache:
-                        # 如果使用缓存与渐变检查点不兼容，则警告并关闭使用缓存
-                        logger.warning_once(
-                            "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
-                        )
-                        use_cache = False
-                    # 执行梯度检查点函数
-                    layer_outputs = self._gradient_checkpointing_func(
-                        layer_module.__call__,
-                        hidden_states,
-                        attention_mask,
-                        layer_head_mask,
-                        encoder_hidden_states,
-                        encoder_attention_mask,
-                        past_key_value,
-                        output_attentions,
-                    )
-                else:
-                    # 否则直接通过当前层模块计算输出
-                    layer_outputs = layer_module(
-                        hidden_states,
-                        attention_mask,
-                        layer_head_mask,
-                        encoder_hidden_states,
-                        encoder_attention_mask,
-                        past_key_value,
-                        output_attentions,
-                    )
-
-                # 更新隐藏状态为当前层的输出
-                hidden_states = layer_outputs[0]
-                # 若使用缓存，则将当前层的输出加入下一个解码器缓存中
-                if use_cache:
-                    next_decoder_cache += (layer_outputs[-1],)
-                # 若输出注意力权重，则将当前层的注意力权重加入所有自注意力的元组中
-                if output_attentions:
-                    all_self_attentions = all_self_attentions + (layer_outputs[1],)
-                    # 若模型具有交叉注意力，将当前层的交叉注意力加入所有交叉注意力的元组中
-                    if self.config.add_cross_attention:
-                        all_cross_attentions = all_cross_attentions + (layer_outputs[2],)
-
-            # 若输出隐藏状态，则将最终隐藏状态加入所有隐藏状态的元组中
+        # 如果不使用缓存，则初始化一个空元组
+        next_decoder_cache = () if use_cache else None
+        # 遍历每一个解码器层
+        for i, layer_module in enumerate(self.layer):
+            # 如果需要输出隐藏状态，则将当前隐藏状态添加到所有隐藏状态中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 若不返回字典形式的结果，则以非字典形式返回结果元组
-            if not return_dict:
-                return tuple(
-                    v
-                    for v in [
-                        hidden_states,
-                        next_decoder_cache,
-                        all_hidden_states,
-                        all_self_attentions,
-                        all_cross_attentions,
-                    ]
-                    if v is not None
+            # 如果指定了解码器头部掩码，则获取当前层的掩码；否则为None
+            layer_head_mask = head_mask[i] if head_mask is not None else None
+            # 如果指定了过去的键值对，则获取当前层的过去键值对；否则为None
+            past_key_value = past_key_values[i] if past_key_values is not None else None
+
+            # 如果启用了梯度检查点且处于训练模式
+            if self.gradient_checkpointing and self.training:
+                # 如果同时使用缓存，则发出警告并设置不使用缓存
+                if use_cache:
+                    logger.warning_once(
+                        "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
+                    )
+                    use_cache = False
+                # 调用梯度检查点函数，计算当前层的输出
+                layer_outputs = self._gradient_checkpointing_func(
+                    layer_module.__call__,
+                    hidden_states,
+                    attention_mask,
+                    layer_head_mask,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    past_key_value,
+                    output_attentions,
                 )
-            # 否则以字典形式返回模型输出，包括过去的键值对和交叉注意力
-            return BaseModelOutputWithPastAndCrossAttentions(
-                last_hidden_state=hidden_states,
-                past_key_values=next_decoder_cache,
-                hidden_states=all_hidden_states,
-                attentions=all_self_attentions,
-                cross_attentions=all_cross_attentions,
+            else:
+                # 否则，直接调用当前层模块计算当前层的输出
+                layer_outputs = layer_module(
+                    hidden_states,
+                    attention_mask,
+                    layer_head_mask,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    past_key_value,
+                    output_attentions,
+                )
+
+            # 更新当前隐藏状态为当前层的输出的第一个元素
+            hidden_states = layer_outputs[0]
+            # 如果使用缓存，则将当前层的输出的最后一个元素添加到下一个解码器缓存中
+            if use_cache:
+                next_decoder_cache += (layer_outputs[-1],)
+            # 如果需要输出注意力权重，则将当前层的注意力权重添加到所有自注意力权重中
+            if output_attentions:
+                all_self_attentions = all_self_attentions + (layer_outputs[1],)
+                # 如果配置允许且需要添加交叉注意力权重，则将当前层的交叉注意力权重添加到所有交叉注意力权重中
+                if self.config.add_cross_attention:
+                    all_cross_attentions = all_cross_attentions + (layer_outputs[2],)
+
+        # 如果需要输出隐藏状态，则将最终隐藏状态添加到所有隐藏状态中
+        if output_hidden_states:
+            all_hidden_states = all_hidden_states + (hidden_states,)
+
+        # 如果不返回字典形式的结果，则按顺序返回非空对象
+        if not return_dict:
+            return tuple(
+                v
+                for v in [
+                    hidden_states,
+                    next_decoder_cache,
+                    all_hidden_states,
+                    all_self_attentions,
+                    all_cross_attentions,
+                ]
+                if v is not None
             )
-# 从 transformers.models.bert.modeling_bert.BertPooler 复制并修改为 QDQBertPooler 类
+        # 否则，返回带过去键值对和交叉注意力权重的基础模型输出对象
+        return BaseModelOutputWithPastAndCrossAttentions(
+            last_hidden_state=hidden_states,
+            past_key_values=next_decoder_cache,
+            hidden_states=all_hidden_states,
+            attentions=all_self_attentions,
+            cross_attentions=all_cross_attentions,
+        )
+# 从transformers.models.bert.modeling_bert.BertPooler复制过来，将Bert改为QDQBert
 class QDQBertPooler(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建一个全连接层，输入和输出的维度都是 config.hidden_size
+        # 密集连接层，输入和输出大小都是config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个激活函数对象，使用双曲正切函数
+        # 激活函数Tanh
         self.activation = nn.Tanh()
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 通过取第一个 token 对应的隐藏状态来对模型进行“池化”
+        # 只使用第一个token对应的隐藏状态来“池化”模型
         first_token_tensor = hidden_states[:, 0]
-        # 将第一个 token 对应的隐藏状态传入全连接层
+        # 将第一个token的隐藏状态输入密集连接层
         pooled_output = self.dense(first_token_tensor)
-        # 将全连接层的输出通过激活函数进行激活
+        # 应用激活函数Tanh
         pooled_output = self.activation(pooled_output)
-        # 返回池化后的输出
         return pooled_output
 
 
-# 从 transformers.models.bert.modeling_bert.BertPredictionHeadTransform 复制并修改为 QDQBertPredictionHeadTransform 类
+# 从transformers.models.bert.modeling_bert.BertPredictionHeadTransform复制过来，将Bert改为QDQBert
 class QDQBertPredictionHeadTransform(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建一个全连接层，输入和输出的维度都是 config.hidden_size
+        # 密集连接层，输入和输出大小都是config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 如果 config.hidden_act 是字符串类型，则根据 ACT2FN 字典映射激活函数
+        # 根据配置选择激活函数，支持字符串或函数形式
         if isinstance(config.hidden_act, str):
             self.transform_act_fn = ACT2FN[config.hidden_act]
         else:
             self.transform_act_fn = config.hidden_act
-        # 创建一个 LayerNorm 层，对隐藏状态进行归一化
+        # LayerNorm层，输入大小为config.hidden_size，epsilon为config.layer_norm_eps
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 通过全连接层对隐藏状态进行线性变换
+        # 将隐藏状态输入密集连接层
         hidden_states = self.dense(hidden_states)
-        # 将线性变换后的结果通过激活函数进行激活
+        # 应用激活函数
         hidden_states = self.transform_act_fn(hidden_states)
-        # 对激活后的隐藏状态进行归一化
+        # 应用LayerNorm
         hidden_states = self.LayerNorm(hidden_states)
-        # 返回变换后的隐藏状态
         return hidden_states
 
 
-# 基于 transformers.models.bert.modeling_bert.BertLMPredictionHead 复制并修改为 QDQBertLMPredictionHead 类
+# 基于transformers.models.bert.modeling_bert.BertLMPredictionHead，将Bert改为QDQBert
 class QDQBertLMPredictionHead(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建一个 QDQBertPredictionHeadTransform 实例
+        # 使用QDQBertPredictionHeadTransform处理隐藏状态
         self.transform = QDQBertPredictionHeadTransform(config)
 
-        # 输出权重与输入嵌入相同，但每个 token 都有一个仅输出的偏置
+        # 输出权重与输入嵌入相同，但每个token有一个仅输出的偏置
         self.decoder = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
-        # 创建一个参数 tensor 用于偏置
+        # 偏置参数，与resize_token_embeddings正确调整大小的链接
         self.bias = nn.Parameter(torch.zeros(config.vocab_size))
 
-        # 需要一个链接来确保偏置能够与 `resize_token_embeddings` 正确地调整大小
+        # 需要连接这两个变量，以便偏置与`resize_token_embeddings`正确调整大小
         self.decoder.bias = self.bias
 
     def forward(self, hidden_states):
-        # 通过 QDQBertPredictionHeadTransform 对隐藏状态进行变换
         hidden_states = self.transform(hidden_states)
-        # 通过 decoder 进行线性变换
         hidden_states = self.decoder(hidden_states)
-        # 返回变换后的隐藏状态
         return hidden_states
 
 
-# 基于 transformers.models.bert.modeling_bert.BertOnlyMLMHead 复制并修改为 QDQBertOnlyMLMHead 类
+# 基于transformers.models.bert.modeling_bert.BertOnlyMLMHead，将Bert改为QDQBert
 class QDQBertOnlyMLMHead(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建一个 QDQBertLMPredictionHead 实例
+        # 使用QDQBertLMPredictionHead进行预测
         self.predictions = QDQBertLMPredictionHead(config)
 
     def forward(self, sequence_output):
-        # 通过 predictions 对序列输出进行预测
+        # 对序列输出进行预测
         prediction_scores = self.predictions(sequence_output)
-        # 返回预测分数
         return prediction_scores
 
 
-# 从 transformers.models.bert.modeling_bert.BertOnlyNSPHead 复制并修改为 QDQBertOnlyNSPHead 类
+# 从transformers.models.bert.modeling_bert.BertOnlyNSPHead复制过来，将Bert改为QDQBert
 class QDQBertOnlyNSPHead(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建一个全连接层，输入维度是 config.hidden_size，输出维度是 2
+        # 用于二分类的线性层，输入大小为config.hidden_size，输出大小为2
         self.seq_relationship = nn.Linear(config.hidden_size, 2)
-    # 定义一个方法，用于对输入的池化输出进行向前传播
+    # 定义一个方法 `forward`，接受参数 `pooled_output`
     def forward(self, pooled_output):
-        # 通过调用 seq_relationship 方法计算序列关系得分
+        # 调用模型中的 `seq_relationship` 方法，传入 `pooled_output` 参数，计算序列关系得分
         seq_relationship_score = self.seq_relationship(pooled_output)
         # 返回计算得到的序列关系得分
         return seq_relationship_score
-# 基于PreTrainedModel类的初始化权重和下载和加载预训练模型的简单接口的抽象基类
+# 根据 transformers.models.bert.modeling_bert.BertPreTrainingHeads 更改为 QDQBertPreTrainingHeads，并将 Bert 替换为 QDQBert
+class QDQBertPreTrainingHeads(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        # 使用 QDQBertLMPredictionHead 初始化预测头部
+        self.predictions = QDQBertLMPredictionHead(config)
+        # 使用线性层初始化序列关系头部，输出维度为2
+        self.seq_relationship = nn.Linear(config.hidden_size, 2)
+
+    def forward(self, sequence_output, pooled_output):
+        # 对序列输出进行预测
+        prediction_scores = self.predictions(sequence_output)
+        # 对汇总输出进行序列关系预测
+        seq_relationship_score = self.seq_relationship(pooled_output)
+        return prediction_scores, seq_relationship_score
+
+
+# 根据 transformers.models.bert.modeling_bert.BertPreTrainedModel 更改为 QDQBertPreTrainedModel，并将 Bert 替换为 QDQBert
 class QDQBertPreTrainedModel(PreTrainedModel):
     """
-    一个抽象类，用于处理权重初始化，并提供一个简单的接口来下载和加载预训练模型。
+    一个抽象类，处理权重初始化以及下载和加载预训练模型的简单接口。
+    """
 
-    config类：QDQBertConfig
-    load_tf_weights方法：load_tf_weights_in_qdqbert
-    base_model_prefix：bert
-    supports_gradient_checkpointing：True
-
-    _init_weights方法：初始化权重
-"""
-    # 配置类
+    # 使用 QDQBertConfig 作为配置类
     config_class = QDQBertConfig
-    # 加载TF格式的权重
+    # 使用 load_tf_weights_in_qdqbert 来加载 TF 权重
     load_tf_weights = load_tf_weights_in_qdqbert
-    # 模型前缀为bert
+    # 模型基础名称前缀设置为 "bert"
     base_model_prefix = "bert"
     # 支持梯度检查点
     supports_gradient_checkpointing = True
 
     def _init_weights(self, module):
-        """
-        初始化权重
-        """
-        # 如果是线性层
+        """初始化权重"""
         if isinstance(module, nn.Linear):
-            # 从标准正态分布初始化权重
+            # 稍微不同于 TF 版本，使用正态分布初始化权重
+            # 参考 https://github.com/pytorch/pytorch/pull/5617
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有偏置项，将偏置项初始化为0
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果是嵌入层
         elif isinstance(module, nn.Embedding):
-            # 从标准正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有填充索引，将填充索引的权重初始化为0
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
-        # 如果是LayerNorm层
         elif isinstance(module, nn.LayerNorm):
-            # 将偏置项初始化为0
             module.bias.data.zero_()
-            # 将权重初始化为1
             module.weight.data.fill_(1.0)
 
 
-# 基于BertPreTrainingHeads类的初始化和前向传播方法的子类，将Bert替换为QDQBert
-class QDQBertPreTrainingHeads(nn.Module):
-    """
-    基于BertPreTrainingHeads类的初始化和前向传播方法的子类，将Bert替换为QDQBert
-    """
-    def __init__(self, config):
-        super().__init__()
-        # 创建QDQBertLMPredictionHead对象
-        self.predictions = QDQBertLMPredictionHead(config)
-        # 用线性层将config.hidden_size维度的向量映射为2维向量
-        self.seq_relationship = nn.Linear(config.hidden_size, 2)
-
-    def forward(self, sequence_output, pooled_output):
-        # 调用QDQBertLMPredictionHead的forward方法进行预测，并获得预测分数
-        prediction_scores = self.predictions(sequence_output)
-        # 调用线性层，将pooled_output映射为2维向量，用于判断句子之间的关系
-        seq_relationship_score = self.seq_relationship(pooled_output)
-        # 返回预测分数和句子关系分数
-        return prediction_scores, seq_relationship_score
-
-
 QDQBERT_START_DOCSTRING = r"""
+    此模型继承自 [`PreTrainedModel`]。查看超类文档以了解库实现的通用方法（例如下载或保存模型、调整输入嵌入、修剪头等）。
 
-    本模型继承自[`PreTrainedModel`]。请查看超类文档以了解库实现的常见方法，例如下载或保存模型，调整输入嵌入大小，修剪头等。
-
-    该模型还是一个PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module)子类。
-    将其用作常规的PyTorch模块，并参考PyTorch文档以获取有关一般用法和行为的所有事项。
+    此模型还是 PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) 的子类。
+    将其用作常规的 PyTorch 模块，并参考 PyTorch 文档以获取所有与一般使用和行为相关的事项。
 
     参数:
-        config ([`QDQBertConfig`]): 包含模型所有参数的模型配置类。
-            使用配置文件进行初始化不会加载与模型关联的权重，只会加载配置信息。
-            可以查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
+        config ([`QDQBertConfig`]): 包含模型所有参数的配置类。
+            使用配置文件初始化不会加载与模型相关的权重，只加载配置。查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
 """
 
 QDQBERT_INPUTS_DOCSTRING = r"""
-    # 定义函数输入参数
     Args:
-        # input_ids 是输入序列标记在词汇表中的索引
         input_ids (`torch.LongTensor` of shape `({0})`):
-            Indices of input sequence tokens in the vocabulary.
-            # 通过 AutoTokenizer 可以获得索引。参见 PreTrainedTokenizer.encode 和 PreTrainedTokenizer.__call__ 获取更多细节。
-            Indices can be obtained using [`AutoTokenizer`]. See [`PreTrainedTokenizer.encode`] and
-            [`PreTrainedTokenizer.__call__`] for details.
-        
-        # attention_mask 是用来避免在填充标记索引上执行注意力的掩码
+            # 输入序列中的token索引，用于词汇表中的位置。
+
+            # 可以使用`AutoTokenizer`获得这些索引。详情请参见`PreTrainedTokenizer.encode`和`PreTrainedTokenizer.__call__`。
+
+            # [什么是input IDs?](../glossary#input-ids)
         attention_mask (`torch.FloatTensor` of shape `({0})`, *optional*):
-            Mask to avoid performing attention on padding token indices. Mask values selected in `[0, 1]`:
-            - 1 代表不被遮蔽的标记
-            - 0 代表被遮蔽的标记
-        # token_type_ids 是用来指示输入的第一部分和第二部分的片段标记索引
+            # 遮盖掩模，用于避免在填充token索引上进行注意力计算。遮盖值为0或1：
+
+            # - 1 表示对**未遮盖**的token进行注意力计算，
+            # - 0 表示对**遮盖**的token进行注意力计算。
+
+            # [什么是attention masks?](../glossary#attention-mask)
         token_type_ids (`torch.LongTensor` of shape `({0})`, *optional*):
-            Segment token indices to indicate first and second portions of the inputs. Indices are selected in `[0, 1]`:
-            - 0 对应一个句子 A 的标记
-            - 1 对应一个句子 B 的标记
-        # position_ids 是输入序列标记在位置嵌入中的位置索引
+            # 段落token索引，指示输入中第一部分和第二部分。索引为0或1：
+
+            # - 0 对应*句子A*的token，
+            # - 1 对应*句子B*的token。
+
+            # [什么是token type IDs?](../glossary#token-type-ids)
         position_ids (`torch.LongTensor` of shape `({0})`, *optional*):
-            Indices of positions of each input sequence tokens in the position embeddings. Selected in the range `[0,
-            config.max_position_embeddings - 1]`.
-        # head_mask 是用来清除自注意力模块的选择头部的掩码
+            # 输入序列token在位置嵌入中的位置索引。选择范围为`[0, config.max_position_embeddings - 1]`。
+
+            # [什么是position IDs?](../glossary#position-ids)
         head_mask (`torch.FloatTensor` of shape `(num_heads,)` or `(num_layers, num_heads)`, *optional*):
-            Mask to nullify selected heads of the self-attention modules. Mask values selected in `[0, 1]`:
-            - 1 表示头部没有被遮蔽
-            - 0 表示头部被遮蔽
-        # inputs_embeds 是直接传递嵌入表示
+            # 用于屏蔽自注意力模块中选定头部的遮盖。遮盖值为0或1：
+
+            # - 1 表示该头部**未遮盖**，
+            # - 0 表示该头部**遮盖**。
+
         inputs_embeds (`torch.FloatTensor` of shape `({0}, hidden_size)`, *optional*):
-            Optionally, instead of passing `input_ids` you can choose to directly pass an embedded representation. 
-            # 如果希望对如何将 input_ids 索引转换为关联向量有更多控制权，这将非常有用
-        # output_attentions 标志着是否返回所有注意力层的注意力张量
+            # 可选地，您可以直接传递嵌入表示而不是`input_ids`。如果您想对如何将`input_ids`索引转换为相关向量有更多控制权，这很有用。
+
         output_attentions (`bool`, *optional*):
-            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
-            tensors for more detail.
-        # output_hidden_states 标志着是否返回所有层的隐藏状态
+            # 是否返回所有注意力层的注意力张量。返回的张量中的`attentions`部分会有更多细节。
+
         output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-        # return_dict 标志着是否返回一个 ModelOutput 对象而不是一个普通元组
+            # 是否返回所有层的隐藏状态。返回的张量中的`hidden_states`部分会有更多细节。
+
         return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
-# QDQBERT 模型类，输出原始隐藏状态而不带任何特定的顶部头信息
-# QDQBERT_START_DOCSTRING 模型的文档字符串
-class QDQBertModel(QDQBertPreTrainedModel):
+            # 是否返回[`~utils.ModelOutput`]而不是普通元组。
     """
 
-    模型可以作为编码器（仅具有自注意力）以及解码器使用，在后一种情况下，在自注意力层之间添加了一个交叉注意力层，遵循 [注意力就是一切](https://arxiv.org/abs/1706.03762) 的架构，由 Ashish Vaswani、Noam Shazeer、Niki Parmar、Jakob Uszkoreit、Llion Jones、Aidan N. Gomez、Lukasz Kaiser 和 Illia Polosukhin 描述。
-
-    要作为解码器工作，模型需要使用配置集中的 `is_decoder` 参数初始化为 `True`。要在 Seq2Seq 模型中使用，模型需要使用 `is_decoder` 参数和 `add_cross_attention` 参数均初始化为 `True`；然后预期将 `encoder_hidden_states` 作为前向传递的输入。
-    """
-
-    def __init__(self, config, add_pooling_layer: bool = True):
-        requires_backends(self, "pytorch_quantization")
-        调用基类的初始化函数，传入配置参数
-        super().__init__(config)
-        self.config = config
-
-        初始化嵌入层模块
-        self.embeddings = QDQBertEmbeddings(config)
-        初始化编码器模块
-        self.encoder = QDQBertEncoder(config)
-
-        如果 add_pooling_layer 为真，则初始化池化层模块, 否则为 None
-        self.pooler = QDQBertPooler(config) if add_pooling_layer else None
-
-        # 初始化权重并应用最终处理
-        调用后续初始化函数
-        self.post_init()
-
-    返回输入嵌入
-    def get_input_embeddings(self):
-        return self.embeddings.word_embeddings
-
-    设置输入嵌入
-    def set_input_embeddings(self, value):
-        self.embeddings.word_embeddings = value
-
-    # 精简模型的头部
-    def _prune_heads(self, heads_to_prune: Dict[int, List[int]]):
+    @add_start_docstrings(
+        "The bare QDQBERT Model transformer outputting raw hidden-states without any specific head on top.",
+        QDQBERT_START_DOCSTRING,
+    )
+    class QDQBertModel(QDQBertPreTrainedModel):
         """
-        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
-        class PreTrainedModel
-        """
-        遍历需要精简的层和头部列表
-        for layer, heads in heads_to_prune.items():
-            调用基类 PreTrainedModel 的 attention.prune_heads 函数对头部进行裁剪
 
-    在模型的前向传递上添加注释
-    上面关于 QDQBERT 输入参数的文档字符串
-    # 添加代码示例的文档字符串
-    # 正向传播函数，用于模型的前向推断过程
+        The model can behave as an encoder (with only self-attention) as well as a decoder, in which case a layer of
+        cross-attention is added between the self-attention layers, following the architecture described in [Attention is
+        all you need](https://arxiv.org/abs/1706.03762) by Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
+        Llion Jones, Aidan N. Gomez, Lukasz Kaiser and Illia Polosukhin.
+
+        To behave as an decoder the model needs to be initialized with the `is_decoder` argument of the configuration set
+        to `True`. To be used in a Seq2Seq model, the model needs to initialized with both `is_decoder` argument and
+        `add_cross_attention` set to `True`; an `encoder_hidden_states` is then expected as an input to the forward pass.
+        """
+
+        def __init__(self, config, add_pooling_layer: bool = True):
+            requires_backends(self, "pytorch_quantization")
+            super().__init__(config)
+            self.config = config
+
+            # Initialize the embeddings layer using QDQBertEmbeddings class
+            self.embeddings = QDQBertEmbeddings(config)
+            # Initialize the encoder layer using QDQBertEncoder class
+            self.encoder = QDQBertEncoder(config)
+
+            # Initialize the pooler layer if add_pooling_layer is set to True
+            self.pooler = QDQBertPooler(config) if add_pooling_layer else None
+
+            # Initialize weights and apply final processing
+            self.post_init()
+
+        def get_input_embeddings(self):
+            # Return the word embeddings from the embeddings layer
+            return self.embeddings.word_embeddings
+
+        def set_input_embeddings(self, value):
+            # Set the word embeddings in the embeddings layer to the given value
+            self.embeddings.word_embeddings = value
+
+        def _prune_heads(self, heads_to_prune: Dict[int, List[int]]):
+            """
+            Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
+            class PreTrainedModel
+            """
+            for layer, heads in heads_to_prune.items():
+                # Prune heads specified in heads_to_prune for the attention layer in each encoder layer
+                self.encoder.layer[layer].attention.prune_heads(heads)
+
+        @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+        @add_code_sample_docstrings(
+            checkpoint=_CHECKPOINT_FOR_DOC,
+            output_type=BaseModelOutputWithPoolingAndCrossAttentions,
+            config_class=_CONFIG_FOR_DOC,
+        )
+    ```
+    # 正向传播函数，用于模型的前向推理过程
     def forward(
         self,
-        # 输入的 token ID 序列，可选参数，默认为 None
-        input_ids: Optional[torch.LongTensor] = None,
-        # 注意力遮罩，可选参数，默认为 None
-        attention_mask: Optional[torch.FloatTensor] = None,
-        # 分段 ID 序列，可选参数，默认为 None
-        token_type_ids: Optional[torch.LongTensor] = None,
-        # 位置 ID 序列，可选参数，默认为 None
-        position_ids: Optional[torch.LongTensor] = None,
-        # 头部遮罩，可选参数，默认为 None
-        head_mask: Optional[torch.FloatTensor] = None,
-        # 输入的嵌入张量，可选参数，默认为 None
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 编码器隐藏状态，可选参数，默认为 None
-        encoder_hidden_states: Optional[torch.FloatTensor] = None,
-        # 编码器注意力遮罩，可选参数，默认为 None
-        encoder_attention_mask: Optional[torch.FloatTensor] = None,
-        # 过去的键值对，可选参数，默认为 None
-        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        # 是否使用缓存，可选参数，默认为 None
-        use_cache: Optional[bool] = None,
-        # 是否输出注意力权重，可选参数，默认为 None
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，可选参数，默认为 None
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典格式的输出，可选参数，默认为 None
-        return_dict: Optional[bool] = None,
-# 导入所需要的模块
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的token id序列，数据类型为长整型Tensor，可选参数
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力掩码，数据类型为浮点型Tensor，可选参数
+        token_type_ids: Optional[torch.LongTensor] = None,  # token类型id，数据类型为长整型Tensor，可选参数
+        position_ids: Optional[torch.LongTensor] = None,  # 位置id，数据类型为长整型Tensor，可选参数
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码，数据类型为浮点型Tensor，可选参数
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入向量，数据类型为浮点型Tensor，可选参数
+        encoder_hidden_states: Optional[torch.FloatTensor] = None,  # 编码器的隐藏状态，数据类型为浮点型Tensor，可选参数
+        encoder_attention_mask: Optional[torch.FloatTensor] = None,  # 编码器的注意力掩码，数据类型为浮点型Tensor，可选参数
+        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,  # 过去的键值对，数据类型为嵌套元组的浮点型Tensor，可选参数
+        use_cache: Optional[bool] = None,  # 是否使用缓存，数据类型为布尔型，可选参数
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，数据类型为布尔型，可选参数
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，数据类型为布尔型，可选参数
+        return_dict: Optional[bool] = None,  # 是否返回字典格式结果，数据类型为布尔型，可选参数
+# 使用装饰器为模型添加文档字符串，指定了其用途为在 CLM 微调中使用语言建模头部的 QDQBERT 模型
 @add_start_docstrings(
     """QDQBERT Model with a `language modeling` head on top for CLM fine-tuning.""", QDQBERT_START_DOCSTRING
 )
+# 定义 QDQBertLMHeadModel 类，继承自 QDQBertPreTrainedModel
 class QDQBertLMHeadModel(QDQBertPreTrainedModel):
-    # 合并部分权重信息
+    # 定义了一组关键字列表，用于指定需要共享权重的参数键名
     _tied_weights_keys = ["predictions.decoder.weight", "predictions.decoder.bias"]
 
+    # 初始化方法，接受配置参数 config
     def __init__(self, config):
+        # 调用父类初始化方法
         super().__init__(config)
 
-        # 如果不是解码器的话，给出警告
+        # 如果配置中未指定为解码器，则发出警告
         if not config.is_decoder:
             logger.warning("If you want to use `QDQBertLMHeadModel` as a standalone, add `is_decoder=True.`")
 
-        # 创建BERT模型
+        # 创建 QDQBertModel 实例，并禁用添加池化层
         self.bert = QDQBertModel(config, add_pooling_layer=False)
-        # 创建MLM头部模型
+        
+        # 创建 QDQBertOnlyMLMHead 实例
         self.cls = QDQBertOnlyMLMHead(config)
 
-        # 初始化权重并应用最终处理
+        # 执行后续的初始化和权重处理
         self.post_init()
 
-    # 获取输出嵌入
+    # 返回输出嵌入层的方法
     def get_output_embeddings(self):
         return self.cls.predictions.decoder
 
-    # 设置输出嵌入
+    # 设置输出嵌入层的方法
     def set_output_embeddings(self, new_embeddings):
         self.cls.predictions.decoder = new_embeddings
 
-    # 前向传播的函数
+    # forward 方法用于模型前向传播
     @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1038,7 +952,10 @@ class QDQBertLMHeadModel(QDQBertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 生成预测输入
+    ):
+        # 略
+
+    # prepare_inputs_for_generation 方法准备生成的输入
     def prepare_inputs_for_generation(
         self,
         input_ids: Optional[torch.LongTensor],
@@ -1046,72 +963,74 @@ class QDQBertLMHeadModel(QDQBertPreTrainedModel):
         attention_mask: Optional[torch.Tensor] = None,
         **model_kwargs,
     ):
-        # 获取输入的形状
+        # 获取输入张量的形状
         input_shape = input_ids.shape
-        # 如果模型用作编码器-解码器模型中的解码器，那么将在需要时创建解码器注意力掩码
+        
+        # 如果没有给定注意力遮罩，则创建全为1的遮罩张量
         if attention_mask is None:
             attention_mask = input_ids.new_ones(input_shape)
 
-        # 如果使用过去的键值对，则切断解码器输入ID
+        # 如果给定了过去的键值对，则根据过去的键值对调整输入的 input_ids
         if past_key_values is not None:
+            # 获取过去键值对的长度
             past_length = past_key_values[0][0].shape[2]
 
-            # 一些生成方法已经只传递最后一个输入ID
+            # 如果输入的 input_ids 长度大于过去的长度，则截取掉前面的部分
             if input_ids.shape[1] > past_length:
                 remove_prefix_length = past_length
             else:
-                # 默认为旧的行为：仅保留最后的ID
+                # 否则，默认只保留最后一个输入 ID
                 remove_prefix_length = input_ids.shape[1] - 1
 
             input_ids = input_ids[:, remove_prefix_length:]
 
-        # 返回输入ID、注意力掩码和过去的键值对
+        # 返回一个包含更新后的 input_ids、attention_mask 和 past_key_values 的字典
         return {"input_ids": input_ids, "attention_mask": attention_mask, "past_key_values": past_key_values}
 
-    # 重新排序缓存内容
+    # 重新排序缓存中的过去键值对，以便与 beam 搜索索引对应
     def _reorder_cache(self, past_key_values, beam_idx):
+        # 初始化一个空的重新排序后的过去键值对元组
         reordered_past = ()
-        # 遍历过去的键值对，重新排序后添加到reordered_past中
+        
+        # 对每一层的过去状态进行重新排序
         for layer_past in past_key_values:
             reordered_past += (
+                # 将每个过去状态按照 beam_idx 列表重新排序，并转移到正确的设备上
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
+        
+        # 返回重新排序后的过去键值对元组
         return reordered_past
-# 给 QDQBERT 一个带有顶层 `语言建模` 头部的模型
 @add_start_docstrings("""QDQBERT Model with a `language modeling` head on top.""", QDQBERT_START_DOCSTRING)
 class QDQBertForMaskedLM(QDQBertPreTrainedModel):
-    # 指定需要绑定权重的键值对
     _tied_weights_keys = ["predictions.decoder.weight", "predictions.decoder.bias"]
 
-    # 初始化函数
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
 
-        # 如果配置中设置为decoder，则警告
         if config.is_decoder:
+            # 如果配置为解码器，警告用户使用双向自注意力时需将 `config.is_decoder` 设为 False
             logger.warning(
                 "If you want to use `QDQBertForMaskedLM` make sure `config.is_decoder=False` for "
                 "bi-directional self-attention."
             )
 
-        # 创建bert模型
+        # 使用配置初始化 QDQBERT 模型，禁用添加池化层
         self.bert = QDQBertModel(config, add_pooling_layer=False)
-        # 创建仅包含MLM头部的cls
+        # 初始化 MLM 头部
         self.cls = QDQBertOnlyMLMHead(config)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 获取输出embedding
     def get_output_embeddings(self):
+        # 返回 MLM 头部的解码器权重
         return self.cls.predictions.decoder
 
-    # 设置输出embedding
     def set_output_embeddings(self, new_embeddings):
+        # 设置 MLM 头部的解码器权重
         self.cls.predictions.decoder = new_embeddings
 
-    # 前向传播函数
     @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -1132,27 +1051,16 @@ class QDQBertForMaskedLM(QDQBertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 定义一个方法，用于生成给定输入的掩码语言建模损失输出
-    def forward(
-        self,
-        input_ids: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        token_type_ids: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        inputs_embeds: Optional[torch.Tensor] = None,
-        encoder_hidden_states: Optional[torch.Tensor] = None,
-        encoder_attention_mask: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        labels: Optional[torch.Tensor] = None,
-    ) -> Union[Tuple, MaskedLMOutput]:
-    
-        # 检查是否使用返回字典，如果为 None 则使用配置文件中的设置
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
+            config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
+            loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`
+        """
+        # 初始化 return_dict 变量，如果 return_dict 参数非空则使用其值，否则使用 self.config.use_return_dict 的值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 使用 BERT 模型处理输入
+
+        # 调用 BERT 模型进行前向传播
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1166,71 +1074,75 @@ class QDQBertForMaskedLM(QDQBertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-    
-        # 获取序列输出
+
+        # 获取 BERT 输出的序列输出
         sequence_output = outputs[0]
-        # 使用分类线性层得到预测分数
+        
+        # 使用分类层进行预测得分的计算
         prediction_scores = self.cls(sequence_output)
-    
-        # 初始化掩码语言建模损失为空
+
         masked_lm_loss = None
-        # 如果存在标签，则计算掩码语言建模损失
+        # 如果 labels 参数不为空，则计算 masked language modeling 的损失
         if labels is not None:
-            loss_fct = CrossEntropyLoss()  # -100 index = padding token
+            loss_fct = CrossEntropyLoss()  # 定义交叉熵损失函数，用于计算损失
             masked_lm_loss = loss_fct(prediction_scores.view(-1, self.config.vocab_size), labels.view(-1))
-    
-        # 如果不返回字典，则按特定顺序返回输出
+
+        # 如果 return_dict 为 False，则返回 tuple 类型的输出
         if not return_dict:
-            output = (prediction_scores,) + outputs[2:]
+            output = (prediction_scores,) + outputs[2:]  # 构建输出元组
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
-    
-        # 返回掩码语言建模的输出对象
+
+        # 如果 return_dict 为 True，则返回 MaskedLMOutput 对象
         return MaskedLMOutput(
             loss=masked_lm_loss,
             logits=prediction_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    
-    # 为生成准备输入，添加一个虚拟 token
+
     def prepare_inputs_for_generation(
         self, input_ids: torch.LongTensor, attention_mask: Optional[torch.FloatTensor] = None, **model_kwargs
     ):
-        # 获取输入的形状和有效批次大小
+        # 获取输入张量的形状和有效的 batch 大小
         input_shape = input_ids.shape
         effective_batch_size = input_shape[0]
-    
-        # 如果 PAD token 未定义，抛出 ValueError
+
+        # 如果配置文件中的 pad_token_id 为空，则抛出 ValueError 异常
         if self.config.pad_token_id is None:
             raise ValueError("The PAD token should be defined for generation")
-    
-        # 为每个输入添加一个虚拟 token，并扩展对应的注意力掩码
+
+        # 扩展 attention_mask，增加一个全零列
         attention_mask = torch.cat([attention_mask, attention_mask.new_zeros((attention_mask.shape[0], 1))], dim=-1)
+        
+        # 创建一个全为 pad_token_id 的 dummy_token 张量，并将其连接到 input_ids 后面
         dummy_token = torch.full(
             (effective_batch_size, 1), self.config.pad_token_id, dtype=torch.long, device=input_ids.device
         )
         input_ids = torch.cat([input_ids, dummy_token], dim=1)
-    
-        # 返回包含输入和注意力掩码的字典
+
+        # 返回包含输入张量和 attention_mask 的字典
         return {"input_ids": input_ids, "attention_mask": attention_mask}
-# 以一个带有“下一个句子预测（分类）”头部的Bert模型
+# 使用指定的文档字符串初始化一个带有“下一个句子预测（分类）”头部的Bert模型。
 @add_start_docstrings(
     """Bert Model with a `next sentence prediction (classification)` head on top.""",
     QDQBERT_START_DOCSTRING,
 )
+# 创建一个QDQBertForNextSentencePrediction类，继承自QDQBertPreTrainedModel类。
 class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
+    # 初始化方法，接受一个配置对象作为参数。
     def __init__(self, config):
+        # 调用父类的初始化方法。
         super().__init__(config)
 
-        # 初始化Bert模型
+        # 实例化一个QDQBertModel对象，作为BERT模型的主体。
         self.bert = QDQBertModel(config)
-        # 初始化仅包含NSP头部的模块
+        # 实例化一个QDQBertOnlyNSPHead对象，作为只包含NSP头部的模型组件。
         self.cls = QDQBertOnlyNSPHead(config)
 
-        # 初始化权重并应用最终处理
+        # 调用自定义的初始化方法，用于初始化权重并进行最终的处理。
         self.post_init()
 
-    # 前向传播函数，接受输入，并返回输出
+    # 前向传播方法，接受多个输入参数和关键字参数。
     @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=NextSentencePredictorOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1246,7 +1158,7 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         **kwargs,
-    ) -> Union[Tuple, NextSentencePredictorOutput]:
+        ) -> Union[Tuple, NextSentencePredictorOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the next sequence prediction (classification) loss. Input should be a sequence pair
@@ -1256,15 +1168,26 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
             - 1 indicates sequence B is a random sequence.
 
         Returns:
+            If `return_dict=True`, returns a `NextSentencePredictorOutput` object containing:
+                - loss (`torch.FloatTensor`, *optional*): Next sentence prediction loss.
+                - logits (`torch.FloatTensor` of shape `(batch_size, 2)`): Scores for next sentence prediction.
+                - hidden_states (`Optional[Tuple[torch.FloatTensor]]`): Tuple of hidden states at each layer of the model.
+                - attentions (`Optional[Tuple[torch.FloatTensor]]`): Tuple of attention tensors at each layer of the model.
+
+            If `return_dict=False`, returns a tuple:
+                - next_sentence_loss (`Optional[torch.FloatTensor]`): Next sentence prediction loss.
+                - seq_relationship_scores (`torch.FloatTensor`): Scores for next sentence prediction.
+                - hidden_states (`Optional[Tuple[torch.FloatTensor]]`): Tuple of hidden states at each layer of the model.
+                - attentions (`Optional[Tuple[torch.FloatTensor]]`): Tuple of attention tensors at each layer of the model.
 
         Example:
 
-        ```py
+        ```python
         >>> from transformers import AutoTokenizer, QDQBertForNextSentencePrediction
         >>> import torch
 
-        >>> tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-        >>> model = QDQBertForNextSentencePrediction.from_pretrained("bert-base-uncased")
+        >>> tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
+        >>> model = QDQBertForNextSentencePrediction.from_pretrained("google-bert/bert-base-uncased")
 
         >>> prompt = "In Italy, pizza served in formal settings, such as at a restaurant, is presented unsliced."
         >>> next_sentence = "The sky is blue due to the shorter wavelength of blue light."
@@ -1273,9 +1196,11 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
         >>> outputs = model(**encoding, labels=torch.LongTensor([1]))
         >>> logits = outputs.logits
         >>> assert logits[0, 0] < logits[0, 1]  # next sentence was random
-        ```"""
+        ```
 
-        # 检查是否传入了旧版参数"next_sentence_label"，如果是，发出警告，并使用"labels"替代
+        Check if `next_sentence_label` is provided in `kwargs`; issue a warning and use `labels` instead if found.
+        """
+        
         if "next_sentence_label" in kwargs:
             warnings.warn(
                 "The `next_sentence_label` argument is deprecated and will be removed in a future version, use"
@@ -1284,10 +1209,8 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
             )
             labels = kwargs.pop("next_sentence_label")
 
-        # 检查是否需要返回字典形式的输出，如果未指定，则根据模型配置决定
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 将输入传递给BERT模型，获取输出
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1300,70 +1223,73 @@ class QDQBertForNextSentencePrediction(QDQBertPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 从BERT模型的输出中提取池化后的表示
         pooled_output = outputs[1]
 
-        # 使用分类器层对池化后的表示进行分类，得到下一句关系的分数
         seq_relationship_scores = self.cls(pooled_output)
 
         next_sentence_loss = None
-        # 如果传入了标签，则计算下一句预测的损失
         if labels is not None:
             loss_fct = CrossEntropyLoss()
             next_sentence_loss = loss_fct(seq_relationship_scores.view(-1, 2), labels.view(-1))
 
-        # 如果不需要以字典形式返回输出，则将输出组装成元组形式返回
         if not return_dict:
             output = (seq_relationship_scores,) + outputs[2:]
             return ((next_sentence_loss,) + output) if next_sentence_loss is not None else output
 
-        # 如果需要以字典形式返回输出，则构造NextSentencePredictorOutput对象返回
         return NextSentencePredictorOutput(
             loss=next_sentence_loss,
             logits=seq_relationship_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 使用 BERT 模型进行序列分类/回归任务的变换器，顶部有一个线性层 (在汇总输出之上)，例如用于 GLUE 任务。
+@add_start_docstrings(
+    """
+    Bert Model transformer with a sequence classification/regression head on top (a linear layer on top of the pooled
+    output) e.g. for GLUE tasks.
+    """,
+    QDQBERT_START_DOCSTRING,
+)
 class QDQBertForSequenceClassification(QDQBertPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
-        # 设置标签数量
-        self.num_labels = config.num_labels
+        self.num_labels = config.num_labels  # 从配置中获取标签数量
         self.config = config
 
-        # 创建 QDQBertModel 实例
-        self.bert = QDQBertModel(config)
-        # 用于随机关闭单元
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 线性层，处理隐藏层数据
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
-        # 初始化权重并应用最终处理
+        self.bert = QDQBertModel(config)  # 使用给定配置初始化 QDQBertModel
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # 根据配置设置 dropout 层
+        self.classifier = nn.Linear(config.hidden_size, config.num_labels)  # 创建一个线性层用于分类，输入维度为隐藏大小，输出维度为标签数量
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 向前传递方法
+    @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=SequenceClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,
-        attention_mask: Optional[torch.FloatTensor] = None,
-        token_type_ids: Optional[torch.LongTensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        head_mask: Optional[torch.FloatTensor] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, SequenceClassifierOutput]:
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的token IDs
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力掩码
+        token_type_ids: Optional[torch.LongTensor] = None,  # token 类型 IDs
+        position_ids: Optional[torch.LongTensor] = None,  # 位置 IDs
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 嵌入输入
+        labels: Optional[torch.LongTensor] = None,  # 标签
+        output_attentions: Optional[bool] = None,  # 是否输出注意力
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
+        return_dict: Optional[bool] = None,  # 是否返回字典形式结果
+        ):
         r"""
-        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional`):
-            Labels for computing the sequence classification/regression loss. Indices should be in `[0,...,
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
+        # 如果 return_dict 不为 None，则使用其值；否则使用 self.config.use_return_dict 的值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用 BERT 模型进行处理
+        # 将输入传递给 BERT 模型进行处理，获取模型的输出
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1376,16 +1302,21 @@ class QDQBertForSequenceClassification(QDQBertPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 获取汇聚输出
+        # 从 BERT 模型的输出中获取池化后的特征表示
         pooled_output = outputs[1]
 
-        # 使用 Dropout 进行汇聚输出的处理
+        # 对池化后的特征表示应用 dropout 操作
         pooled_output = self.dropout(pooled_output)
-        # 使用分类器预测
+        
+        # 将 dropout 后的特征表示输入分类器，得到 logits（预测值）
         logits = self.classifier(pooled_output)
 
+        # 初始化损失为 None
         loss = None
+
+        # 如果传入了 labels，则计算损失
         if labels is not None:
+            # 如果问题类型未指定，则根据 num_labels 和 labels 的数据类型进行判断
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
@@ -1394,45 +1325,62 @@ class QDQBertForSequenceClassification(QDQBertPreTrainedModel):
                 else:
                     self.config.problem_type = "multi_label_classification"
 
+            # 根据问题类型计算相应的损失
             if self.config.problem_type == "regression":
-                loss_fct = MSELoss()
+                loss_fct = MSELoss()  # 使用均方误差损失函数
                 if self.num_labels == 1:
                     loss = loss_fct(logits.squeeze(), labels.squeeze())
                 else:
                     loss = loss_fct(logits, labels)
             elif self.config.problem_type == "single_label_classification":
-                loss_fct = CrossEntropyLoss()
+                loss_fct = CrossEntropyLoss()  # 使用交叉熵损失函数
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             elif self.config.problem_type == "multi_label_classification":
-                loss_fct = BCEWithLogitsLoss()
+                loss_fct = BCEWithLogitsLoss()  # 使用带 logits 的二元交叉熵损失函数
                 loss = loss_fct(logits, labels)
+
+        # 如果 return_dict 为 False，则输出格式为元组
         if not return_dict:
-            output = (logits,) + outputs[2:]
+            output = (logits,) + outputs[2:]  # 包括 logits 和其他输出状态
             return ((loss,) + output) if loss is not None else output
 
+        # 如果 return_dict 为 True，则输出格式为 SequenceClassifierOutput 对象
         return SequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 基于 Bert 模型构建一个多选题分类模型，用于例如 RocStories/SWAG 等任务
+# 使用装饰器为类添加文档字符串，描述了该类的功能和用途，特别是在多选分类任务中使用 BERT 模型的情况
+@add_start_docstrings(
+    """
+    Bert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
+    softmax) e.g. for RocStories/SWAG tasks.
+    """,
+    QDQBERT_START_DOCSTRING,
+)
 class QDQBertForMultipleChoice(QDQBertPreTrainedModel):
     def __init__(self, config):
-        # 调用父类构造函数初始化模型参数
+        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 初始化 Bert 模型
+        # 初始化 BERT 模型
         self.bert = QDQBertModel(config)
-        # 添加一个 dropout 层
+        # 添加 dropout 层，以防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 添加一个线性层用于分类，输出一个值（用于二分类）
+        # 添加一个线性层作为分类器，输入尺寸为隐藏状态的尺寸，输出尺寸为1（用于二分类）
         self.classifier = nn.Linear(config.hidden_size, 1)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播函数，接收多个输入参数并输出结果
+    # 使用装饰器为 forward 方法添加文档字符串，描述了该方法的输入和输出
+    @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=MultipleChoiceModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1445,26 +1393,20 @@ class QDQBertForMultipleChoice(QDQBertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 定义一个多选分类任务的前向传播函数
-    def forward(
-        self,
-        input_ids: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        token_type_ids: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        inputs_embeds: Optional[torch.Tensor] = None,
-        labels: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, MultipleChoiceModelOutput]:
-        # 如果 return_dict 为 None，则使用配置中的值
+        # forward 方法的输入参数，用于多选分类任务的 BERT 模型
+        ) -> Union[Tuple, MultipleChoiceModelOutput]:
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the multiple choice classification loss. Indices should be in `[0, ...,
+            num_choices-1]` where `num_choices` is the size of the second dimension of the input tensors. (See
+            `input_ids` above)
+        """
+        # 确定是否返回字典类型的输出，若未指定则使用模型配置中的默认设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 计算输入的选项数量
+        # 获取输入张量的第二维大小，即选项的数量
         num_choices = input_ids.shape[1] if input_ids is not None else inputs_embeds.shape[1]
-    
-        # 将输入重塑为 (batch_size * num_choices, seq_len)
+
+        # 重塑输入张量以便进行批处理处理
         input_ids = input_ids.view(-1, input_ids.size(-1)) if input_ids is not None else None
         attention_mask = attention_mask.view(-1, attention_mask.size(-1)) if attention_mask is not None else None
         token_type_ids = token_type_ids.view(-1, token_type_ids.size(-1)) if token_type_ids is not None else None
@@ -1474,8 +1416,8 @@ class QDQBertForMultipleChoice(QDQBertPreTrainedModel):
             if inputs_embeds is not None
             else None
         )
-    
-        # 通过 BERT 模型前向传播
+
+        # 使用BERT模型进行前向传播计算
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1487,54 +1429,60 @@ class QDQBertForMultipleChoice(QDQBertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-    
-        # 获取池化后的输出
+
+        # 提取汇聚后的输出
         pooled_output = outputs[1]
-    
-        # 对池化后的输出进行 dropout
+
+        # 对汇聚输出进行dropout处理
         pooled_output = self.dropout(pooled_output)
-        # 通过分类器得到逻辑分数
+        # 使用分类器对处理后的特征进行分类预测
         logits = self.classifier(pooled_output)
-        # 将逻辑分数重塑为 (batch_size, num_choices)
+        # 重塑logits张量以匹配多选项问题的形状
         reshaped_logits = logits.view(-1, num_choices)
-    
-        # 计算损失函数
+
+        # 初始化损失为None
         loss = None
+        # 如果提供了标签，则计算交叉熵损失
         if labels is not None:
             loss_fct = CrossEntropyLoss()
             loss = loss_fct(reshaped_logits, labels)
-    
-        # 根据 return_dict 返回不同的输出格式
+
+        # 如果不要求返回字典类型的输出，则返回一个元组
         if not return_dict:
             output = (reshaped_logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-    
+
+        # 如果要求返回字典类型的输出，则返回MultipleChoiceModelOutput对象
         return MultipleChoiceModelOutput(
             loss=loss,
             logits=reshaped_logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 在 QDQBERT 模型上增加一个标记分类头部（位于隐藏状态输出之上的线性层），例如用于命名实体识别（NER）任务
+QDQBERT Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
+Named-Entity-Recognition (NER) tasks.
+"""
+QDQBERT_START_DOCSTRING,
+)
 class QDQBertForTokenClassification(QDQBertPreTrainedModel):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__(config)
-        # 标签数量
         self.num_labels = config.num_labels
 
-        # QDQBERT 模型
+        # Initialize QDQBertModel with provided configuration
         self.bert = QDQBertModel(config, add_pooling_layer=False)
-        # Dropout
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 分类器
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 前向传播方法
+    @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=TokenClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1549,13 +1497,12 @@ class QDQBertForTokenClassification(QDQBertPreTrainedModel):
         return_dict: Optional[bool] = None,
     ) -> Union[Tuple, TokenClassifierOutput]:
         r"""
-        标签（`torch.LongTensor` 格式为 `(batch_size, sequence_length)`，*可选*）：
-            用于计算标记分类损失的标签。索引应在 `[0, ..., config.num_labels - 1]` 内。
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
         """
-        # 若 return_dict 为 None，则使用配置中的 use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 获取输出
+        # Perform forward pass through QDQBertModel
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1568,65 +1515,61 @@ class QDQBertForTokenClassification(QDQBertPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 序列输出
         sequence_output = outputs[0]
 
+        # Apply dropout to the sequence output
         sequence_output = self.dropout(sequence_output)
         logits = self.classifier(sequence_output)
 
         loss = None
-        # 计算损失
         if labels is not None:
+            # Calculate CrossEntropyLoss if labels are provided
             loss_fct = CrossEntropyLoss()
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
 
-        # 如果不要返回字典
         if not return_dict:
+            # Prepare output tuple if return_dict is False
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
+        # Return TokenClassifierOutput if return_dict is True
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-
-
-# 对 QDQBERT 模型添加起始文档字符串
-"""
-    # 这是一个 QDQBERT 模型的描述文档字符串。
-    # QDQBERT 模型是一个用于抽取式问答任务（如 SQuAD）的模型
-    # 它在隐藏状态的输出上添加了一个跨度分类头
-    # 用于计算 span start logits 和 span end logits
     QDQBERT Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
     layers on top of the hidden-states output to compute `span start logits` and `span end logits`).
     """,
     QDQBERT_START_DOCSTRING,
-# 定义 QDQBertForQuestionAnswering 类，继承自 QDQBertPreTrainedModel
+
+
+# QDQBERT 模型，顶部带有用于类似 SQuAD 的抽取式问答任务的跨度分类头部（在隐藏状态输出之上的线性层，用于计算“跨度起始对数”和“跨度终止对数”）。
+# QDQBERT_START_DOCSTRING 是用于文档字符串的起始标记。
+)
+# 结束 QDQBertForQuestionAnswering 类的定义
+
 class QDQBertForQuestionAnswering(QDQBertPreTrainedModel):
-    # 初始化函数
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
-        # 获取配置中的标签数量
         self.num_labels = config.num_labels
 
         # 初始化 BERT 模型，不添加池化层
         self.bert = QDQBertModel(config, add_pooling_layer=False)
-        # 初始化输出层，将隐藏层的输出映射到标签的数量上
+        # 线性层，用于答案抽取任务的输出
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 定义前向传播函数
     @add_start_docstrings_to_model_forward(QDQBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=QuestionAnsweringModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 前向传播函数，接受多个输入参数
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1640,7 +1583,7 @@ class QDQBertForQuestionAnswering(QDQBertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        ) -> Union[Tuple, QuestionAnsweringModelOutput]:
+    ) -> Union[Tuple, QuestionAnsweringModelOutput]:
         r"""
         start_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels for position (index) of the start of the labelled span for computing the token classification loss.
@@ -1651,9 +1594,10 @@ class QDQBertForQuestionAnswering(QDQBertPreTrainedModel):
             Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
             are not taken into account for computing the loss.
         """
+        # 默认情况下，如果 return_dict 为 None，则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用提供的输入参数调用BERT模型
+        # 使用 BERT 模型处理输入数据，输出包括 sequence_output 和其他附加信息
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1666,38 +1610,40 @@ class QDQBertForQuestionAnswering(QDQBertPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 从BERT输出中获取序列输出
+        # 取出 BERT 输出的 sequence_output，即模型最后一层的输出
         sequence_output = outputs[0]
 
-        # 将序列输出传入QA输出层获得logits
+        # 将 sequence_output 传入 QA 输出层，得到起始位置和结束位置的 logits
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = logits.split(1, dim=-1)
-        start_logits = start_logits.squeeze(-1).contiguous()
-        end_logits = end_logits.squeeze(-1).contiguous()
+        start_logits = start_logits.squeeze(-1).contiguous()  # 去除多余的维度，使得数据连续
+        end_logits = end_logits.squeeze(-1).contiguous()  # 去除多余的维度，使得数据连续
 
         total_loss = None
+        # 如果给定了起始和结束位置，则计算损失
         if start_positions is not None and end_positions is not None:
-            # 如果在多GPU上操作，增加一个维度
+            # 如果在多 GPU 环境中，添加一个维度
             if len(start_positions.size()) > 1:
                 start_positions = start_positions.squeeze(-1)
             if len(end_positions.size()) > 1:
                 end_positions = end_positions.squeeze(-1)
-            # 忽略超出模型输入范围的起始/结束位置
+            # 将超出模型输入的起始和结束位置修正到有效范围内
             ignored_index = start_logits.size(1)
             start_positions = start_positions.clamp(0, ignored_index)
             end_positions = end_positions.clamp(0, ignored_index)
 
-            # 定义交叉熵损失函数
+            # 使用交叉熵损失函数计算起始位置和结束位置的损失
             loss_fct = CrossEntropyLoss(ignore_index=ignored_index)
-            # 计算起始和结束位置的损失
             start_loss = loss_fct(start_logits, start_positions)
             end_loss = loss_fct(end_logits, end_positions)
             total_loss = (start_loss + end_loss) / 2
 
+        # 如果不需要返回字典格式的输出，则直接返回 logits 和其他附加信息
         if not return_dict:
-            output = (start_logits, end_logits) + outputs[2:]
+            output = (start_logits, end_logits) + outputs[2:]  # 包括除了 sequence_output 外的其他输出
             return ((total_loss,) + output) if total_loss is not None else output
 
+        # 返回格式化的 QuestionAnsweringModelOutput 对象，包括损失、起始和结束 logits，以及其他附加信息
         return QuestionAnsweringModelOutput(
             loss=total_loss,
             start_logits=start_logits,

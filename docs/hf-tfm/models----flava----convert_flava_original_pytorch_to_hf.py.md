@@ -1,39 +1,38 @@
 # `.\models\flava\convert_flava_original_pytorch_to_hf.py`
 
-```py
-# 设置 Python 文件编码格式为 utf-8
-# 版权声明
-# 2022 年版权由 Meta Platforms 作者和 HuggingFace 团队所有。保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证要求或经书面同意，否则不得使用此文件
-# 您可以在以下网址获取许可证副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面协议同意，否则根据"AS IS"的基础分发软件，
-# 没有任何种类的明示或暗示担保或条件
-# 详见许可证 关于特定语言的授权权限和限制
-import argparse  # 导入 argparse 模块，用于命令行参数解析
-import os  # 导入 os 模块，用于与操作系统交互
+```
+# 导入命令行参数解析库
+import argparse
+# 导入操作系统功能模块
+import os
 
-import torch  # 导入 torch 模块，用于深度学习
+# 导入PyTorch库
+import torch
 
-from transformers import FlavaConfig, FlavaForPreTraining  # 从 transformers 模块中导入 FlavaConfig 和 FlavaForPreTraining 类
-from transformers.models.flava.convert_dalle_to_flava_codebook import convert_dalle_checkpoint  # 导入 convert_dalle_checkpoint 函数
+# 导入transformers库中的FlavaConfig和FlavaForPreTraining类
+from transformers import FlavaConfig, FlavaForPreTraining
+# 导入convert_dalle_to_flava_codebook模块中的convert_dalle_checkpoint函数
+from transformers.models.flava.convert_dalle_to_flava_codebook import convert_dalle_checkpoint
 
 
+# 定义函数：计算模型参数数量
 def count_parameters(state_dict):
-    # 统计参数数量
-    # 在原始 FLAVA 中，encoder.embeddings 被复制了两次
+    # 对模型参数进行求和计算，但跳过名称中包含"encoder.embeddings"的部分
     return sum(param.float().sum() if "encoder.embeddings" not in key else 0 for key, param in state_dict.items())
 
 
+# 定义函数：升级模型状态字典
 def upgrade_state_dict(state_dict, codebook_state_dict):
-    upgrade = {}  # 创建空字典 upgrade
+    # 初始化升级后的状态字典
+    upgrade = {}
 
+    # 遍历原始状态字典中的键值对
     for key, value in state_dict.items():
+        # 如果键名中包含"text_encoder.embeddings"或"image_encoder.embeddings"，则跳过处理
         if "text_encoder.embeddings" in key or "image_encoder.embeddings" in key:
             continue
 
-        # 更新模型状态字典的键
+        # 替换键名中的特定子串，以适配新模型结构
         key = key.replace("heads.cmd.mim_head.cls.predictions", "mmm_image_head")
         key = key.replace("heads.cmd.mlm_head.cls.predictions", "mmm_text_head")
         key = key.replace("heads.cmd.itm_head.cls", "itm_head")
@@ -50,72 +49,77 @@ def upgrade_state_dict(state_dict, codebook_state_dict):
         key = key.replace("text_projection", "flava.text_projection")
         key = key.replace("image_projection", "flava.image_projection")
 
+        # 将处理后的键值对应存入升级后的状态字典
         upgrade[key] = value.float()
 
+    # 将代码簿状态字典中的键值对应存入升级后的状态字典，前缀为"image_codebook."
     for key, value in codebook_state_dict.items():
         upgrade[f"image_codebook.{key}"] = value
 
     return upgrade
 
 
+# 定义函数：转换FLAVA模型的检查点
 @torch.no_grad()
 def convert_flava_checkpoint(checkpoint_path, codebook_path, pytorch_dump_folder_path, config_path=None):
     """
     Copy/paste/tweak model's weights to transformers design.
-    复制/粘贴/微调模型权重到 transformers 设计中。
+    将模型权重复制/粘贴/调整为transformers设计。
     """
+    # 如果提供了配置文件路径，则从预训练配置文件中加载配置，否则使用默认配置
     if config_path is not None:
-        config = FlavaConfig.from_pretrained(config_path)  # 如果配置路径不为 None，则从预训练配置加载配置信息
+        config = FlavaConfig.from_pretrained(config_path)
     else:
-        config = FlavaConfig()  # 否则使用默认 FLAVA 配置
+        config = FlavaConfig()
 
-    hf_model = FlavaForPreTraining(config).eval()  # 创建一个 FLAVA 预训练模型对象，并设置为 eval 模式
-    # 将 codebook 文件路径转换为指定格式的 state_dict
+    # 创建一个FlavaForPreTraining模型，并设置为评估模式
+    hf_model = FlavaForPreTraining(config).eval()
+    # 调用函数 `convert_dalle_checkpoint`，将 `codebook_path` 转换为 DALL-E 模型的状态字典
     codebook_state_dict = convert_dalle_checkpoint(codebook_path, None, save_checkpoint=False)
-    
-    # 检查是否存在指定的 checkpoint 文件路径
+
+    # 检查 `checkpoint_path` 是否存在
     if os.path.exists(checkpoint_path):
-        # 如果存在，从指定路径加载 state_dict
+        # 如果存在，则从本地加载 PyTorch 模型状态字典
         state_dict = torch.load(checkpoint_path, map_location="cpu")
     else:
-        # 如果不存在，从指定路径下载 state_dict
+        # 如果不存在，则从指定的 URL 加载 PyTorch 模型状态字典
         state_dict = torch.hub.load_state_dict_from_url(checkpoint_path, map_location="cpu")
-    
-    # 更新 hf_state_dict，将 codebook_state_dict 与 state_dict 结合
+
+    # 升级模型的状态字典 `state_dict`，结合 `codebook_state_dict`
     hf_state_dict = upgrade_state_dict(state_dict, codebook_state_dict)
-    
-    # 使用 hf_state_dict 更新 hf_model 的状态
+
+    # 将升级后的状态字典加载到 `hf_model` 中
     hf_model.load_state_dict(hf_state_dict)
-    
-    # 重新获取 hf_model 的 state_dict
+
+    # 获取 `hf_model` 的当前状态字典
     hf_state_dict = hf_model.state_dict()
-    
-    # 计算 hf_model 的参数数量
+
+    # 计算 `hf_model` 中可训练参数的总数
     hf_count = count_parameters(hf_state_dict)
-    
-    # 计算 state_dict 和 codebook_state_dict 的参数总数
+
+    # 计算总共的模型参数数目，包括 `state_dict` 和 `codebook_state_dict`
     state_dict_count = count_parameters(state_dict) + count_parameters(codebook_state_dict)
-    
-    # 检查 hf_count 和 state_dict_count 是否接近（绝对误差不超过 1e-3）
+
+    # 使用断言确保 `hf_count` 与 `state_dict_count` 之间的参数数量非常接近，允许误差为 1e-3
     assert torch.allclose(hf_count, state_dict_count, atol=1e-3)
-    
-    # 保存 hf_model 的训练参数到指定路径
+
+    # 将 `hf_model` 的模型权重保存到指定的 PyTorch 转储文件夹路径中
     hf_model.save_pretrained(pytorch_dump_folder_path)
-# 如果运行的脚本是主程序，而不是被导入的模块
+# 如果当前脚本作为主程序运行，则执行以下代码块
 if __name__ == "__main__":
-    # 创建一个参数解析器
+    # 创建参数解析器对象
     parser = argparse.ArgumentParser()
-    # 添加一个用于接收 PyTorch 模型输出路径的参数
+    # 添加命令行参数，用于指定输出的 PyTorch 模型的路径
     parser.add_argument("--pytorch_dump_folder_path", default=None, type=str, help="Path to the output PyTorch model.")
-    # 添加一个用于接收 flava 检查点路径的参数
+    # 添加命令行参数，用于指定 flava checkpoint 的路径
     parser.add_argument("--checkpoint_path", default=None, type=str, help="Path to flava checkpoint")
-    # 添加一个用于接收 flava 代码本检查点路径的参数
+    # 添加命令行参数，用于指定 flava codebook checkpoint 的路径
     parser.add_argument("--codebook_path", default=None, type=str, help="Path to flava codebook checkpoint")
-    # 添加一个用于接收将要转换的模型的 hf 配置文件路径的参数
+    # 添加命令行参数，用于指定待转换模型的 hf config.json 文件的路径
     parser.add_argument("--config_path", default=None, type=str, help="Path to hf config.json of model to convert")
     # 解析命令行参数
     args = parser.parse_args()
 
-    # 调用函数 convert_flava_checkpoint，并传入命令行参数所得的路径
+    # 调用函数 convert_flava_checkpoint，传入命令行参数中指定的路径信息
     convert_flava_checkpoint(args.checkpoint_path, args.codebook_path, args.pytorch_dump_folder_path, args.config_path)
 ```

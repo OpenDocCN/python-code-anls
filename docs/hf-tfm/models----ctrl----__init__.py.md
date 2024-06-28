@@ -1,38 +1,36 @@
 # `.\models\ctrl\__init__.py`
 
-```py
-# 2020年由HuggingFace团队版权所有
+```
+# 版权声明和许可信息
 #
-# 根据Apache许可证2.0版本（“许可证”）获得许可；
-# 您不得使用此文件，除非符合许可证的要求。
-# 您可以在以下网址获取许可证的副本
+# 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下链接获取许可证的副本：
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非法律要求或书面同意，否则在“AS IS”基础上分发软件，
-# 没有任何形式的担保或条件，无论是明示或暗示的。
-# 有关特定语言的权限和限制，请参阅许可证。
+# 如果适用法律要求或书面同意，软件将根据“原样”基础分发，不附带任何明示或暗示的保证或条件。
+# 有关详细信息，请参阅许可证。
 #
-# 从类型检查导入TYPE_CHECKING
+
 from typing import TYPE_CHECKING
 
-从...工具中导入可选依赖未可用，_LazyModule，is_tf_available，is_torch_available
+# 引入自定义工具模块和依赖检查函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_available, is_torch_available
 
-# 这是一个导入结构字典，将要导入的模块和对应的方法放在一起
+# 定义模块的导入结构
 _import_structure = {
     "configuration_ctrl": ["CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP", "CTRLConfig"],
     "tokenization_ctrl": ["CTRLTokenizer"],
 }
 
-# 尝试导入torch，如果不可用则引发OptionalDependencyNotAvailable
+# 检查是否可用 Torch，如果不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    如果可用，则将"modeling_ctrl"添加到导入结构中
+    # 如果可用，添加 Torch 模块到导入结构
     _import_structure["modeling_ctrl"] = [
         "CTRL_PRETRAINED_MODEL_ARCHIVE_LIST",
         "CTRLForSequenceClassification",
@@ -41,14 +39,14 @@ else:
         "CTRLPreTrainedModel",
     ]
 
-# 尝试导入tensorflow，如果不可用则引发OptionalDependencyNotAvailable
+# 检查是否可用 TensorFlow，如果不可用则抛出异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    如果可用，则将"modeling_tf_ctrl"添加到导入结构中
+    # 如果可用，添加 TensorFlow 模块到导入结构
     _import_structure["modeling_tf_ctrl"] = [
         "TF_CTRL_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFCTRLForSequenceClassification",
@@ -57,21 +55,17 @@ else:
         "TFCTRLPreTrainedModel",
     ]
 
-# 如果是类型检查模式
+# 如果是类型检查阶段，引入具体模块的类型和常量
 if TYPE_CHECKING:
-    从.configuration_ctrl中导入CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP，CTRLConfig
     from .configuration_ctrl import CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP, CTRLConfig
-    从.tokenization_ctrl中导入CTRLTokenizer
     from .tokenization_ctrl import CTRLTokenizer
 
-    # 尝试导入torch，如果不可用则引发OptionalDependencyNotAvailable
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        从.modeling_ctrl中导入CTRL_PRETRAINED_MODEL_ARCHIVE_LIST，CTRLForSequenceClassification，CTRLLMHeadModel，CTRLModel，CTRLPreTrainedModel
         from .modeling_ctrl import (
             CTRL_PRETRAINED_MODEL_ARCHIVE_LIST,
             CTRLForSequenceClassification,
@@ -80,14 +74,12 @@ if TYPE_CHECKING:
             CTRLPreTrainedModel,
         )
 
-    # 尝试导入tensorflow，如果不可用则引发OptionalDependencyNotAvailable
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        从.modeling_tf_ctrl中导入TF_CTRL_PRETRAINED_MODEL_ARCHIVE_LIST，TFCTRLForSequenceClassification，TFCTRLLMHeadModel，TFCTRLModel，TFCTRLPreTrainedModel
         from .modeling_tf_ctrl import (
             TF_CTRL_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFCTRLForSequenceClassification,
@@ -96,11 +88,10 @@ if TYPE_CHECKING:
             TFCTRLPreTrainedModel,
         )
 
-# 如果不是类型检查模式
+# 如果不是类型检查阶段，使用延迟加载模块
 else:
-    导入sys模块
     import sys
 
-    将当前模块的名称和全局变量__file__传入_LazyModule，并指定导入结构_import_structure，模块规范为__spec__
+    # 将当前模块替换为延迟加载模块对象
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

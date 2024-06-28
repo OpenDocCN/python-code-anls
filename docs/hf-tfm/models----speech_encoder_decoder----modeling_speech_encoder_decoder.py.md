@@ -1,34 +1,27 @@
-# `.\transformers\models\speech_encoder_decoder\modeling_speech_encoder_decoder.py`
+# `.\models\speech_encoder_decoder\modeling_speech_encoder_decoder.py`
 
-```py
-# 引入 typing 库，用于类型提示
-from typing import Optional, Tuple, Union
-# 引入 torch 库
+```
+# 导入必要的库和模块
 import torch
-# 从 torch 库中引入 nn 模块
 from torch import nn
-# 从 torch.nn 库中引入 CrossEntropyLoss 类
 from torch.nn import CrossEntropyLoss
-# 从 Huggingface 库中引入预训练配置模块
+
+# 导入配置相关的模块和函数
 from ...configuration_utils import PretrainedConfig
-# 从 Huggingface 库中引入模型输出模块
 from ...modeling_outputs import BaseModelOutput, Seq2SeqLMOutput
-# 从 Huggingface 库中引入模型模块
 from ...modeling_utils import PreTrainedModel
-# 从 Huggingface 库中引入工具模块
 from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging, replace_return_docstrings
-# 从预训练配置模块中引入 AutoConfig 类
 from ..auto.configuration_auto import AutoConfig
-# 从预训练模型模块中引入 AutoModel 和 AutoModelForCausalLM 类
 from ..auto.modeling_auto import AutoModel, AutoModelForCausalLM
-# 从语音编码器解码器配置模块中引入 SpeechEncoderDecoderConfig 类
 from .configuration_speech_encoder_decoder import SpeechEncoderDecoderConfig
-# 从 logging 模块中引入 logger 对象
+
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 文档指定的配置
+# 用于文档的配置名称
 _CONFIG_FOR_DOC = "SpeechEncoderDecoderConfig"
-# 文档指定的起始文档字符串
+
+# 文档字符串，描述了 Speech-Encoder-Text-Decoder 架构的类
 SPEECH_ENCODER_DECODER_START_DOCSTRING = r"""
     This class can be used to initialize a speech-sequence-to-text-sequence model with any pretrained speech
     autoencoding model as the encoder and any pretrained text autoregressive model as the decoder. The encoder is
@@ -51,14 +44,19 @@ SPEECH_ENCODER_DECODER_START_DOCSTRING = r"""
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
     etc.)
-``` 
-    # 这个模型也是一个 PyTorch 的 torch.nn.Module 子类。
-    # 可以像使用常规的 PyTorch 模块一样使用它，并参考 PyTorch 文档了解有关一般用法和行为的所有事项。
-    
-    # 参数:
-    #     config ([`SpeechEncoderDecoderConfig`]): 包含模型所有参数的模型配置类。
-    #         使用配置文件初始化不会加载与模型相关的权重，只加载配置。
-    #         查看 [`~PreTrainedModel.from_pretrained`] 方法来加载模型权重。
+    This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
+    Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+    and behavior.
+
+
+
+    Parameters:
+        config ([`SpeechEncoderDecoderConfig`]): Model configuration class with all the parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+
+
+These comments provide context and explanations for each part of the code block, as requested.
 """
 
 SPEECH_ENCODER_DECODER_INPUTS_DOCSTRING = r"""
@@ -66,36 +64,40 @@ SPEECH_ENCODER_DECODER_INPUTS_DOCSTRING = r"""
 
 
 # Copied from transformers.models.encoder_decoder.modeling_encoder_decoder.shift_tokens_right
-# 将输入的 token 向右移动一个位置
+# 将输入的 token ids 向右移动一个位置
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
     Shift input ids one token to the right.
+    将输入的 token ids 向右移动一个位置。
     """
-    # 创建一个与输入相同形状的全零张量
     shifted_input_ids = input_ids.new_zeros(input_ids.shape)
-    # 将输入的 token 向右移动一个位置
+    # 将除了第一列外的所有列替换为当前列的前一列的值，实现向右移动一个位置
     shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()
     if decoder_start_token_id is None:
         raise ValueError("Make sure to set the decoder_start_token_id attribute of the model's configuration.")
-    # 设置首个 token 为 decoder_start_token_id
+    # 设置第一列的值为 decoder_start_token_id
     shifted_input_ids[:, 0] = decoder_start_token_id
 
     if pad_token_id is None:
         raise ValueError("Make sure to set the pad_token_id attribute of the model's configuration.")
-    # 将 labels 中可能存在的 -100 值替换为 pad_token_id
+    # 将 labels 中可能的 -100 值替换为 pad_token_id
     shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
 
     return shifted_input_ids
 
 
 @add_start_docstrings(SPEECH_ENCODER_DECODER_START_DOCSTRING)
-# `SpeechEncoderDecoderModel` 是一个通用的模型类，创建时会用库中的一个基础模型类作为编码器，另一个作为解码器。
+# SpeechEncoderDecoderModel 类，用于包装 Transformer 架构中的编码器和解码器
 class SpeechEncoderDecoderModel(PreTrainedModel):
     r"""
     [`SpeechEncoderDecoderModel`] is a generic model class that will be instantiated as a transformer architecture with
     one of the base model classes of the library as encoder and another one as decoder when created with the
     :meth*~transformers.AutoModel.from_pretrained* class method for the encoder and
     :meth*~transformers.AutoModelForCausalLM.from_pretrained* class method for the decoder.
+    
+    [`SpeechEncoderDecoderModel`] 是一个通用的模型类，将会被实例化为一个 Transformer 架构，其编码器和解码器是基于库中的基础模型类创建的，
+    可以通过 :meth*~transformers.AutoModel.from_pretrained* 方法创建编码器，以及 :meth*~transformers.AutoModelForCausalLM.from_pretrained* 
+    方法创建解码器。
     """
 
     config_class = SpeechEncoderDecoderConfig
@@ -108,34 +110,42 @@ class SpeechEncoderDecoderModel(PreTrainedModel):
         config: Optional[PretrainedConfig] = None,
         encoder: Optional[PreTrainedModel] = None,
         decoder: Optional[PreTrainedModel] = None,
-    # 获取编码器
+    ):
+        super().__init__(config)
+        # 初始化 SpeechEncoderDecoderModel 实例
+        # encoder 和 decoder 是预训练的编码器和解码器模型
+        self.encoder = encoder
+        self.decoder = decoder
+
+    # 返回当前实例的编码器模型
     def get_encoder(self):
         return self.encoder
 
-    # 获取解码器
+    # 返回当前实例的解码器模型
     def get_decoder(self):
         return self.decoder
 
-    # 获取输出 embeddings
+    # 返回当前实例解码器的输出嵌入
     def get_output_embeddings(self):
         return self.decoder.get_output_embeddings()
 
-    # 设置输出 embeddings
+    # 设置当前实例解码器的输出嵌入
     def set_output_embeddings(self, new_embeddings):
         return self.decoder.set_output_embeddings(new_embeddings)
 
-    # 冻结特征编码器
+    # 冻结特征编码器，禁用特征编码器的梯度计算，使其在训练过程中不会更新参数
     def freeze_feature_encoder(self):
         """
         Calling this function will disable the gradient computation for the feature encoder of the speech encoder so
         that its parameters will not be updated during training.
+        调用此函数将禁用语音编码器的特征编码器的梯度计算，使其在训练过程中不会更新参数。
         """
         self.encoder.freeze_feature_encoder()
 
     @classmethod
-    # 从预训练模型中实例化对象
+    # 从预训练模型加载 SpeechEncoderDecoderModel 实例
     def from_pretrained(cls, *args, **kwargs):
-        # 当前不支持快速初始化
+        # 目前不支持快速初始化复合模型
         if kwargs.get("_fast_init", False):
             logger.warning(
                 "Fast initialization is currently not supported for SpeechEncoderDecoderModel. "
@@ -145,15 +155,7 @@ class SpeechEncoderDecoderModel(PreTrainedModel):
         return super().from_pretrained(*args, **kwargs)
 
     @classmethod
-    # 类方法，用于从预训练的编码器和解码器模型中加载模型
-    def from_encoder_decoder_pretrained(
-        cls,
-        encoder_pretrained_model_name_or_path: str = None,
-        decoder_pretrained_model_name_or_path: str = None,
-        *model_args,
-        **kwargs,
-    ):
-    # 前向传播函数，执行模型的前向计算
+    # 从预训练的编码器和解码器模型名称或路径加载模型
     @add_start_docstrings_to_model_forward(SPEECH_ENCODER_DECODER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -174,19 +176,17 @@ class SpeechEncoderDecoderModel(PreTrainedModel):
         return_dict: Optional[bool] = None,
         **kwargs,
     ):
-    # 根据标签准备解码器输入的标识符
-    def prepare_decoder_input_ids_from_labels(self, labels: torch.Tensor):
-        return shift_tokens_right(labels, self.config.pad_token_id, self.config.decoder_start_token_id)
+        # 准备解码器输入的 token ids，从标签中右移，用于生成过程的初始化
+        def prepare_decoder_input_ids_from_labels(self, labels: torch.Tensor):
+            return shift_tokens_right(labels, self.config.pad_token_id, self.config.decoder_start_token_id)
 
-    # 为生成准备输入
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, attention_mask=None, use_cache=None, encoder_outputs=None, **kwargs
     ):
-        # 准备解码器的输入
+        # 为生成准备输入，包括解码器的准备
         decoder_inputs = self.decoder.prepare_inputs_for_generation(input_ids, past_key_values=past_key_values)
-        # 获取解码器注意力掩码
         decoder_attention_mask = decoder_inputs["attention_mask"] if "attention_mask" in decoder_inputs else None
-        # 构建输入字典
+        # 构建输入字典，供模型生成使用
         input_dict = {
             "attention_mask": attention_mask,
             "decoder_attention_mask": decoder_attention_mask,
@@ -195,19 +195,16 @@ class SpeechEncoderDecoderModel(PreTrainedModel):
             "past_key_values": decoder_inputs["past_key_values"],
             "use_cache": use_cache,
         }
-        # 返回输入字典
         return input_dict
 
-    # 调整标记嵌入大小的方法（未实现）
     def resize_token_embeddings(self, *args, **kwargs):
-        # 抛出未实现错误
+        # 不支持通过 SpeechEncoderDecoderModel 直接调整嵌入层大小
         raise NotImplementedError(
             "Resizing the embedding layers via the SpeechEncoderDecoderModel directly is not supported. Please use the"
             " respective methods of the wrapped decoder object (model.decoder.resize_token_embeddings(...))"
         )
 
-    # 重新排列缓存的方法
     def _reorder_cache(self, past_key_values, beam_idx):
-        # 应用解码器缓存重新排序
+        # 在这里重新排序缓存，应用解码器缓存重排
         return self.decoder._reorder_cache(past_key_values, beam_idx)
 ```

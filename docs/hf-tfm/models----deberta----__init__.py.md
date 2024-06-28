@@ -1,129 +1,135 @@
 # `.\models\deberta\__init__.py`
 
-```py
-# 导入模块中的类型检查
+```
+# 版权声明和许可信息
+#
+# 版权所有 (c) 2020 HuggingFace 团队。保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本（“许可证”）授权；
+# 除非符合许可证的规定，否则您不得使用此文件。
+# 您可以获取许可证的副本，请参阅
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，
+# 没有任何明示或暗示的保证或条件。
+# 有关许可证的详细信息，请参阅许可证。
+#
+
+# 导入类型检查工具
 from typing import TYPE_CHECKING
-# 从模块中导入实用工具函数
+
+# 从 utils 模块中导入所需的工具和异常
 from ...utils import (
-    OptionalDependencyNotAvailable,  # 导入可选依赖未安装异常类
-    _LazyModule,  # 导入惰性加载模块类
-    is_tf_available,  # 导入检查是否可用 TensorFlow 的函数
-    is_tokenizers_available,  # 导入检查是否可用 Tokenizers 的函数
-    is_torch_available,  # 导入检查是否可用 PyTorch 的函数
+    OptionalDependencyNotAvailable,
+    _LazyModule,
+    is_tf_available,
+    is_tokenizers_available,
+    is_torch_available,
 )
 
-
-# 定义模块导入结构，指定了各模块中需要导入的内容
+# 定义模块的导入结构
 _import_structure = {
-    "configuration_deberta": ["DEBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP", "DebertaConfig", "DebertaOnnxConfig"],  # 定义 DEBERTA 配置相关内容的导入结构
-    "tokenization_deberta": ["DebertaTokenizer"],  # 定义 DEBERTA 分词器的导入结构
+    "configuration_deberta": ["DEBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP", "DebertaConfig", "DebertaOnnxConfig"],
+    "tokenization_deberta": ["DebertaTokenizer"],
 }
 
-# 检查 Tokenizers 是否可用，如果不可用则抛出异常
+# 尝试导入 tokenizers_deberta_fast 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Tokenizers 可用，则添加对应的导入结构
     _import_structure["tokenization_deberta_fast"] = ["DebertaTokenizerFast"]
 
-# 检查 PyTorch 是否可用，如果不可用则抛出异常
+# 尝试导入 modeling_deberta 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 PyTorch 可用，则添加对应的导入结构
     _import_structure["modeling_deberta"] = [
-        "DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST",  # 定义 DEBERTA 预训练模型存档列表的导入结构
-        "DebertaForMaskedLM",  # 定义 DEBERTA 用于遮蔽语言建模的模型的导入结构
-        "DebertaForQuestionAnswering",  # 定义 DEBERTA 用于问答任务的模型的导入结构
-        "DebertaForSequenceClassification",  # 定义 DEBERTA 用于序列分类任务的模型的导入结构
-        "DebertaForTokenClassification",  # 定义 DEBERTA 用于标记分类任务的模型的导入结构
-        "DebertaModel",  # 定义 DEBERTA 模型的导入结构
-        "DebertaPreTrainedModel",  # 定义 DEBERTA 预训练模型的导入结构
+        "DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST",
+        "DebertaForMaskedLM",
+        "DebertaForQuestionAnswering",
+        "DebertaForSequenceClassification",
+        "DebertaForTokenClassification",
+        "DebertaModel",
+        "DebertaPreTrainedModel",
     ]
 
-# 检查 TensorFlow 是否可用，如果不可用则抛出异常
+# 尝试导入 modeling_tf_deberta 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 TensorFlow 可用，则添加对应的导入结构
     _import_structure["modeling_tf_deberta"] = [
-        "TF_DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST",  # 定义 TensorFlow 下 DEBERTA 预训练模型存档列表的导入结构
-        "TFDebertaForMaskedLM",  # 定义 TensorFlow 下 DEBERTA 用于遮蔽语言建模的模型的导入结构
-        "TFDebertaForQuestionAnswering",  # 定义 TensorFlow 下 DEBERTA 用于问答任务的模型的导入结构
-        "TFDebertaForSequenceClassification",  # 定义 TensorFlow 下 DEBERTA 用于序列分类任务的模型的导入结构
-        "TFDebertaForTokenClassification",  # 定义 TensorFlow 下 DEBERTA 用于标记分类任务的模型的导入结构
-        "TFDebertaModel",  # 定义 TensorFlow 下 DEBERTA 模型的导入结构
-        "TFDebertaPreTrainedModel",  # 定义 TensorFlow 下 DEBERTA 预训练模型的导入结构
+        "TF_DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST",
+        "TFDebertaForMaskedLM",
+        "TFDebertaForQuestionAnswering",
+        "TFDebertaForSequenceClassification",
+        "TFDebertaForTokenClassification",
+        "TFDebertaModel",
+        "TFDebertaPreTrainedModel",
     ]
 
-# 如果是类型检查环境
+# 如果在类型检查模式下，则导入特定的模块和符号
 if TYPE_CHECKING:
-    # 从 DEBERTA 配置模块中导入相关内容
     from .configuration_deberta import DEBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP, DebertaConfig, DebertaOnnxConfig
-    # 从 DEBERTA 分词模块中导入相关内容
     from .tokenization_deberta import DebertaTokenizer
 
-    # 检查 Tokenizers 是否可用，如果不可用则抛出异常
+    # 尝试导入 tokenization_deberta_fast 模块，如果不可用则忽略
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 Tokenizers 可用，则从 DEBERTA 快速分词模块中导入相关内容
         from .tokenization_deberta_fast import DebertaTokenizerFast
 
-    # 检查 PyTorch 是否可用，如果不可用则抛出异常
+    # 尝试导入 torch 模块，如果不可用则忽略
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    else:
-        # 从相对路径中导入Deberta相关模块
-        from .modeling_deberta import (
-            DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST,
-            DebertaForMaskedLM,
-            DebertaForQuestionAnswering,
-            DebertaForSequenceClassification,
-            DebertaForTokenClassification,
-            DebertaModel,
-            DebertaPreTrainedModel,
-        )
+    # 否则，导入以下模块来自模型定义的Deberta相关类和预训练模型列表
+    from .modeling_deberta import (
+        DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST,
+        DebertaForMaskedLM,
+        DebertaForQuestionAnswering,
+        DebertaForSequenceClassification,
+        DebertaForTokenClassification,
+        DebertaModel,
+        DebertaPreTrainedModel,
+    )
 
-    try:
-        # 检查是否存在TensorFlow可用
-        if not is_tf_available():
-            # 如果TensorFlow不可用，引发OptionalDependencyNotAvailable异常
-            raise OptionalDependencyNotAvailable()
-    except OptionalDependencyNotAvailable:
-        # 如果引发了OptionalDependencyNotAvailable异常，则跳过
-        pass
-    else:
-        # 从相对路径中导入TensorFlow版本的Deberta相关模块
-        from .modeling_tf_deberta import (
-            TF_DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST,
-            TFDebertaForMaskedLM,
-            TFDebertaForQuestionAnswering,
-            TFDebertaForSequenceClassification,
-            TFDebertaForTokenClassification,
-            TFDebertaModel,
-            TFDebertaPreTrainedModel,
-        )
-# 如果模块没有被导入过，则执行以下代码
+try:
+    # 检查是否没有可用的TensorFlow，如果是则抛出OptionalDependencyNotAvailable异常
+    if not is_tf_available():
+        raise OptionalDependencyNotAvailable()
+except OptionalDependencyNotAvailable:
+    # 如果OptionalDependencyNotAvailable异常被抛出，不做任何操作
+    pass
 else:
-    # 获取当前模块的 sys.modules 引用
+    # 否则，导入以下TensorFlow版本的Deberta相关类和预训练模型列表
+    from .modeling_tf_deberta import (
+        TF_DEBERTA_PRETRAINED_MODEL_ARCHIVE_LIST,
+        TFDebertaForMaskedLM,
+        TFDebertaForQuestionAnswering,
+        TFDebertaForSequenceClassification,
+        TFDebertaForTokenClassification,
+        TFDebertaModel,
+        TFDebertaPreTrainedModel,
+    )
+else:
+    # 导入 sys 模块，用于处理模块操作
     import sys
 
-    # 使用 _LazyModule 创建一个延迟加载的模块对象，并将其设置为当前模块的引用
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

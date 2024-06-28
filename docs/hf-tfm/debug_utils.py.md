@@ -1,20 +1,20 @@
-# `.\transformers\debug_utils.py`
+# `.\debug_utils.py`
 
-```py
-# 导入collections模块，用于操作Python内置的集合数据类型
+```
+# 导入collections模块，用于管理特定数据结构的集合
 import collections
 
-# 从当前包中导入utils模块中的ExplicitEnum、is_torch_available和logging对象
+# 从当前目录下的utils模块中导入ExplicitEnum、is_torch_available和logging对象
 from .utils import ExplicitEnum, is_torch_available, logging
 
-# 如果torch可用，导入torch模块
+# 如果torch可用，则导入torch模块
 if is_torch_available():
     import torch
 
-# 获取当前模块的日志记录器
+# 获取当前模块的日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 定义一个调试类，用于检测和理解模型在哪些地方开始变得非常大或非常小，以及更重要的是`nan`或`inf`的权重和激活元素
+# 定义一个调试类DebugUnderflowOverflow，用于检测和理解模型何时开始变得非常大或非常小，以及重要的nan或inf权重和激活元素
 class DebugUnderflowOverflow:
     """
     This debug class helps detect and understand where the model starts getting very large or very small, and more
@@ -31,7 +31,7 @@ class DebugUnderflowOverflow:
 
     ```python
     debug_overflow = DebugUnderflowOverflow(model)
-    ```py
+    ```
 
     then run the training as normal and if `nan` or `inf` gets detected in at least one of the weight, input or output
     elements this module will throw an exception and will print `max_frames_to_save` frames that lead to this event,
@@ -66,144 +66,107 @@ class DebugUnderflowOverflow:
                       encoder.block.2.layer.1.dropout Dropout
     3.18e-04 6.27e+04 input[0]
     0.00e+00      inf output
-    ```py
+    ```
 
     You can see here, that `T5DenseGatedGeluDense.forward` resulted in output activations, whose absolute max value was
-    # 创建一个调试工具类，用于检测模型中的浮点数溢出和下溢问题
-    class DebugUnderflowOverflow:
-        # 初始化调试工具类，接受模型对象以及一些可选参数
-        def __init__(self, model, max_frames_to_save=21, trace_batch_nums=[]):
-            # 保存模型对象
-            self.model = model
-            # 设置记录的最大帧数，默认为21
-            self.max_frames_to_save = max_frames_to_save
-            # 设置要跟踪的批次号列表，默认为空列表
-            self.trace_batch_nums = trace_batch_nums
-            # 未指定的情况下，设置中止训练的批次号为 None
-            self.abort_after_batch_num = None
+
+    ```
+    """
+    # 在此类中定义初始化方法和两种工作模式的详细说明
+    pass
+    """
+        As this module measures absolute `min`/``max` of each weight of the model on every forward it'll slow the training
+        down. Therefore remember to turn it off once the debugging needs have been met.
     
-        # 在模型执行前的钩子函数，用于跟踪模型的浮点数情况
-        def forward_pre_hook(self, module, inputs):
-            # 检查是否达到了中止训练的批次号
-            if self.abort_after_batch_num is not None and inputs[-1] >= self.abort_after_batch_num:
-                # 如果达到了中止训练的批次号，则抛出异常中止训练
-                raise RuntimeError("Aborting training after batch %d" % inputs[-1])
-            # 如果当前批次号在跟踪的批次号列表中，或者跟踪的批次号列表为空，则进行跟踪
-            if not self.trace_batch_nums or inputs[-1] in self.trace_batch_nums:
-                # 获取模型的参数
-                params = [p.data for p in self.model.parameters()]
-                # 获取绝对最小值和最大值
-                min_val = min([p.min() for p in params])
-                max_val = max([p.max() for p in params])
-                # 将当前批次号和最小最大值信息添加到跟踪记录中
-                self.trace.append((inputs[-1], min_val, max_val))
-                # 如果跟踪记录的长度超过了设定的最大帧数，则删除最早的记录
-                if len(self.trace) > self.max_frames_to_save:
-                    del self.trace[0]
-    
-        # 开始跟踪模型的浮点数情况
-        def enable(self, abort_after_batch_num=None):
-            # 清空之前的跟踪记录
-            self.trace = []
-            # 设置中止训练的批次号
-            self.abort_after_batch_num = abort_after_batch_num
-            # 注册 forward_pre_hook 钩子函数
-            self.hook_handle = self.model.register_forward_pre_hook(self.forward_pre_hook)
-    
-        # 停止跟踪模型的浮点数情况
-        def disable(self):
-            # 移除 forward_pre_hook 钩子函数
-            self.hook_handle.remove()
-            # 清空跟踪记录
-            self.trace = []
-    
-        # 获取跟踪记录
-        def get_trace(self):
-            return self.trace
-    # 初始化方法，设置模型、最大保存帧数、跟踪的批次号列表、在某个批次后中止的批次号
+        Args:
+            model (`nn.Module`):
+                The model to debug.
+            max_frames_to_save (`int`, *optional*, defaults to 21):
+                How many frames back to record
+            trace_batch_nums(`List[int]`, *optional*, defaults to `[]`):
+                Which batch numbers to trace (turns detection off)
+            abort_after_batch_num  (`int``, *optional*):
+                Whether to abort after a certain batch number has finished
+    """
+    # 初始化函数，用于设置对象的初始状态和属性
     def __init__(self, model, max_frames_to_save=21, trace_batch_nums=[], abort_after_batch_num=None):
-        # 设置模型、跟踪的批次号列表、中止的批次号
-        self.model = model
-        self.trace_batch_nums = trace_batch_nums
-        self.abort_after_batch_num = abort_after_batch_num
+        self.model = model  # 将传入的模型对象保存到实例属性中
+        self.trace_batch_nums = trace_batch_nums  # 保存需要跟踪的批次号列表
+        self.abort_after_batch_num = abort_after_batch_num  # 设置在哪个批次号之后终止运行
 
-        # 保存最近的帧以便在遇到inf/nan时立即转储，以提供问题出现的上下文
-        self.frames = collections.deque([], max_frames_to_save)
-        self.frame = []
-        self.batch_number = 0
-        self.total_calls = 0
-        self.detected_overflow = False
-        self.prefix = "                 "
+        # 创建一个LIFO（后进先出）的缓冲区，用于存储帧以便在遇到inf/nan时立即转储，以提供问题发生的上下文
+        self.frames = collections.deque([], max_frames_to_save)  # 初始化一个空的固定大小的双端队列
+        self.frame = []  # 初始化一个空的帧列表
+        self.batch_number = 0  # 初始化批次号为0
+        self.total_calls = 0  # 初始化总调用次数为0
+        self.detected_overflow = False  # 初始化检测到溢出标志为False
+        self.prefix = "                 "  # 初始化前缀字符串
 
-        # 分析模型
+        # 分析模型，可能是提取模型中模块的全限定名以便在运行时报告
         self.analyse_model()
 
-        # 注册前向钩子
+        # 注册前向钩子（hook），用于在模型的前向传播过程中记录信息
         self.register_forward_hook()
 
-    # 保存帧的方法
+    # 保存帧的方法，将当前帧内容转换为字符串并存入缓存队列中
     def save_frame(self, frame=None):
-        # 如果有帧，则扩展帧
         if frame is not None:
-            self.expand_frame(frame)
-        self.frames.append("\n".join(self.frame))
-        self.frame = []  # 开始一个新的帧
+            self.expand_frame(frame)  # 如果有指定帧，则扩展当前帧
+        self.frames.append("\n".join(self.frame))  # 将当前帧转换为字符串并添加到帧缓存队列中
+        self.frame = []  # 清空当前帧，以便开始新的帧记录
 
-    # 扩展帧的方法
+    # 扩展当前帧的方法，将一行文本添加到当前帧中
     def expand_frame(self, line):
-        self.frame.append(line)
+        self.frame.append(line)  # 将一行文本添加到当前帧的末尾
 
-    # 跟踪帧的方法
+    # 跟踪帧的方法，将所有缓存的帧内容打印出来
     def trace_frames(self):
-        print("\n".join(self.frames))
-        self.frames = []
+        print("\n".join(self.frames))  # 打印所有缓存的帧内容
+        self.frames = []  # 清空帧缓存队列
 
-    # 重置保存的帧
+    # 重置保存的帧的方法，清空所有缓存的帧内容
     def reset_saved_frames(self):
-        self.frames = []
+        self.frames = []  # 清空帧缓存队列
 
-    # 转储保存的帧
+    # 转储保存的帧的方法，打印检测到inf/nan时的批次号和最后保存的前向帧信息
     def dump_saved_frames(self):
-        print(f"\nDetected inf/nan during batch_number={self.batch_number}")
-        print(f"Last {len(self.frames)} forward frames:")
-        print(f"{'abs min':8} {'abs max':8} metadata")
-        print("\n".join(self.frames))
-        print("\n\n")
-        self.frames = []
+        print(f"\nDetected inf/nan during batch_number={self.batch_number}")  # 打印检测到inf/nan时的批次号
+        print(f"Last {len(self.frames)} forward frames:")  # 打印最后保存的前向帧数量
+        print(f"{'abs min':8} {'abs max':8} metadata")  # 打印帧数据表头
+        print("\n".join(self.frames))  # 打印所有缓存的前向帧内容
+        print("\n\n")  # 打印额外的空行以分隔输出内容
+        self.frames = []  # 清空帧缓存队列
 
-    # 分析模型的方法
+    # 分析模型的方法，提取模型中模块的全限定名并保存到实例属性中
     def analyse_model(self):
-        # 提取完全限定的模块名称，以便在运行时报告。例如：
-        # encoder.block.2.layer.0.SelfAttention.o
-        #
-        # 对于共享权重，只有第一个共享模块名称将被注册
+        # 提取模型中所有模块的全限定名，保存为字典形式，键为模块名，值为全限定名
         self.module_names = {m: name for name, m in self.model.named_modules()}
         # self.longest_module_name = max(len(v) for v in self.module_names.values())
 
-    # 分析变量的方法
+    # 分析变量的方法，根据变量类型进行不同的处理，如打印最大最小值或检测溢出
     def analyse_variable(self, var, ctx):
-        if torch.is_tensor(var):
-            self.expand_frame(get_abs_min_max(var, ctx))
-            if detect_overflow(var, ctx):
-                self.detected_overflow = True
-        elif var is None:
-            self.expand_frame(f"{'None':>17} {ctx}")
-        else:
-            self.expand_frame(f"{'not a tensor':>17} {ctx}")
+        if torch.is_tensor(var):  # 如果是张量
+            self.expand_frame(get_abs_min_max(var, ctx))  # 获取张量的绝对最小值和最大值，并扩展当前帧
+            if detect_overflow(var, ctx):  # 检测张量是否溢出
+                self.detected_overflow = True  # 标记检测到溢出
+        elif var is None:  # 如果变量为None
+            self.expand_frame(f"{'None':>17} {ctx}")  # 扩展当前帧记录为"None"
+        else:  # 变量不是张量也不是None
+            self.expand_frame(f"{'not a tensor':>17} {ctx}")  # 扩展当前帧记录为"not a tensor"
 
-    # 批次开始帧的方法
+    # 批次开始时记录帧的方法，记录批次号和开始信息到当前帧中
     def batch_start_frame(self):
-        self.expand_frame(f"\n\n{self.prefix} *** Starting batch number={self.batch_number} ***")
-        self.expand_frame(f"{'abs min':8} {'abs max':8} metadata")
+        self.expand_frame(f"\n\n{self.prefix} *** Starting batch number={self.batch_number} ***")  # 扩展当前帧记录批次开始信息
+        self.expand_frame(f"{'abs min':8} {'abs max':8} metadata")  # 扩展当前帧记录帧数据表头
 
-    # 批次结束帧的方法
+    # 批次结束时记录帧的方法，记录批次号和结束信息到当前帧中
     def batch_end_frame(self):
-        self.expand_frame(f"{self.prefix} *** Finished batch number={self.batch_number-1} ***\n\n")
-    # 创建一个新的调试帧，包含模块名称和类名
+        self.expand_frame(f"{self.prefix} *** Finished batch number={self.batch_number-1} ***\n\n")  # 扩展当前帧记录批次结束信息
     def create_frame(self, module, input, output):
+        # 扩展调用栈帧，包括模块名称和类名
         self.expand_frame(f"{self.prefix} {self.module_names[module]} {module.__class__.__name__}")
 
-        # 遍历模块的参数，分析每个参数
+        # 分析模块的参数
         for name, p in module.named_parameters(recurse=False):
             self.analyse_variable(p, name)
 
@@ -217,7 +180,7 @@ class DebugUnderflowOverflow:
         # 分析输出变量
         if isinstance(output, tuple):
             for i, x in enumerate(output):
-                # 可能是元组的元组
+                # 如果输出是元组，进一步分析内部元素
                 if isinstance(x, tuple):
                     for j, y in enumerate(x):
                         self.analyse_variable(y, f"output[{i}][{j}]")
@@ -226,72 +189,72 @@ class DebugUnderflowOverflow:
         else:
             self.analyse_variable(output, "output")
 
+        # 保存当前帧信息
         self.save_frame()
 
-    # 注册前向钩子
     def register_forward_hook(self):
+        # 对模型应用前向钩子
         self.model.apply(self._register_forward_hook)
 
-    # 实际注册前向钩子的方法
     def _register_forward_hook(self, module):
+        # 注册前向钩子到指定模块
         module.register_forward_hook(self.forward_hook)
 
-    # 前向钩子方法
     def forward_hook(self, module, input, output):
-        # - input 是一个打包输入的元组（可能不是张量）
-        # - output 可能是张量或张量和非张量的元组
+        # - input 是一个打包输入的元组（可能包含非张量）
+        # - output 可能是一个张量或者张量和非张量的元组
 
         last_frame_of_batch = False
 
-        # 检查是否在跟踪批次号列表中
+        # 判断是否在跟踪批次号中
         trace_mode = True if self.batch_number in self.trace_batch_nums else False
         if trace_mode:
             self.reset_saved_frames()
 
+        # 如果是第一次调用，则开始一个新批次的帧
         if self.total_calls == 0:
             self.batch_start_frame()
         self.total_calls += 1
 
-        # 计算批次号 - 批次完成时将调用批次的第一个前向钩子 - 即它将在最后被调用 - 我们知道这个批次已经完成
+        # 如果模块是整个模型，增加批次号并标记为批次的最后一帧
         if module == self.model:
             self.batch_number += 1
             last_frame_of_batch = True
 
+        # 创建调用帧
         self.create_frame(module, input, output)
 
-        # 如果是批次的最后一个帧
-        # if last_frame_of_batch:
-        #     self.batch_end_frame()
-
-        if trace_mode:
-            self.trace_frames()
-
+        # 如果是批次的最后一帧，则执行批次结束帧操作
         if last_frame_of_batch:
             self.batch_start_frame()
 
-        # 如果检测到溢出并且不是跟踪模式，则转储保存的帧
+        # 如果在跟踪模式中，追踪帧
+        if trace_mode:
+            self.trace_frames()
+
+        # 如果检测到溢出或下溢，并且不在跟踪模式中，则转储保存的帧信息并抛出异常
         if self.detected_overflow and not trace_mode:
             self.dump_saved_frames()
-
-            # 现在我们可以中止，因为继续运行没有意义
             raise ValueError(
-                "DebugUnderflowOverflow: 检测到 inf/nan，中止运行。请向上滚动查看此事件之前的激活值。"
+                "DebugUnderflowOverflow: inf/nan detected, aborting as there is no point running further. "
+                "Please scroll up above this traceback to see the activation values prior to this event."
             )
 
-        # 如果请求在特定批次后中止，则中止
+        # 如果请求在特定批次之后中止，则抛出异常
         if self.abort_after_batch_num is not None and self.batch_number > self.abort_after_batch_num:
             raise ValueError(
-                f"DebugUnderflowOverflow: 由于 `abort_after_batch_num={self.abort_after_batch_num}` 参数，中止在 {self.batch_number} 批次后。"
+                f"DebugUnderflowOverflow: aborting after {self.batch_number} batches due to"
+                f" `abort_after_batch_num={self.abort_after_batch_num}` arg"
             )
-# 定义一个函数，用于获取张量的绝对值的最小值和最大值，并返回格式化后的字符串
+# 计算变量的绝对值的最小值和最大值，并返回格式化的字符串
 def get_abs_min_max(var, ctx):
-    # 获取变量的绝对值
+    # 计算变量的绝对值
     abs_var = var.abs()
-    # 返回格式化后的字符串，包括绝对值的最小值和最大值，以及上下文信息
+    # 返回格式化的字符串，包括绝对值的最小值和最大值，以及上下文信息 ctx
     return f"{abs_var.min():8.2e} {abs_var.max():8.2e} {ctx}"
 
 
-# 定义一个函数，用于检测张量是否包含任何 `nan` 或 `inf` 的条目
+# 检测张量变量中是否包含 `nan` 或 `inf` 条目，并打印相关消息
 def detect_overflow(var, ctx):
     """
     Report whether the tensor contains any `nan` or `inf` entries.
@@ -310,44 +273,46 @@ def detect_overflow(var, ctx):
         `True` if `inf` or `nan` was detected, `False` otherwise
     """
     detected = False
-    # 如果张量中存在任何 `nan` 条目，则打印上下文信息并将 detected 置为 True
+    # 检测是否存在 `nan` 条目，若存在则设置 detected 为 True 并打印包含 `nans` 的上下文信息 ctx
     if torch.isnan(var).any().item():
         detected = True
         print(f"{ctx} has nans")
-    # 如果张量中存在任何 `inf` 条目，则打印上下文信息并将 detected 置为 True
+    # 检测是否存在 `inf` 条目，若存在则设置 detected 为 True 并打印包含 `infs` 的上下文信息 ctx
     if torch.isinf(var).any().item():
         detected = True
         print(f"{ctx} has infs")
 
-    # 如果需要监视大元素，可以启用以下代码
+    # 如果需要监视大的元素，可以启用以下功能
     if 0:  # and detected:
-        # 获取绝对值大于等于100的元素
+        # 打印绝对值大于等于 100 的元素数量
         n100 = var[torch.ge(var.abs(), 100)]
         if n100.numel() > 0:
             print(f"{ctx}:  n100={n100.numel()}")
-        # 获取绝对值大于等于1000的元素
+        # 打印绝对值大于等于 1000 的元素数量
         n1000 = var[torch.ge(var.abs(), 1000)]
         if n1000.numel() > 0:
             print(f"{ctx}: n1000={n1000.numel()}")
-        # 获取绝对值大于等于10000的元素
+        # 打印绝对值大于等于 10000 的元素数量
         n10000 = var[torch.ge(var.abs(), 10000)]
         if n10000.numel() > 0:
             print(f"{ctx}: n10000={n10000.numel()}")
 
-    # 如果需要打印变量的最小值和最大值，可以启用以下代码
+    # 如果需要打印最小值和最大值，可以启用以下功能
     if 0:
         print(f"min={var.min():9.2e} max={var.max():9.2e}")
 
-    # 如果需要打印变量的最小值、最大值、方差和均值，可以启用以下代码
+    # 如果需要打印最小值、最大值、方差和均值，可以启用以下功能
     if 0:
         print(f"min={var.min():9.2e} max={var.max():9.2e} var={var.var():9.2e} mean={var.mean():9.2e} ({ctx})")
 
-    # 返回 detected，表示是否检测到 `inf` 或 `nan`
+    # 返回是否检测到 `inf` 或 `nan` 的布尔值
     return detected
 
 
-# 定义一个枚举类，包含调试选项
+# 调试选项的枚举类，列出了一些调试选项
 class DebugOption(ExplicitEnum):
+    # 检测下溢和上溢
     UNDERFLOW_OVERFLOW = "underflow_overflow"
+    # TPU 指标调试
     TPU_METRICS_DEBUG = "tpu_metrics_debug"
 ```

@@ -1,16 +1,17 @@
-# `.\transformers\models\bark\__init__.py`
+# `.\models\bark\__init__.py`
 
-```py
-# 引入必要的模块和函数
+```
+# 导入类型检查模块
 from typing import TYPE_CHECKING
 
+# 导入必要的异常和模块
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
 
-# 定义要导入的结构
+# 定义模块导入结构
 _import_structure = {
     "configuration_bark": [
         "BARK_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -22,16 +23,14 @@ _import_structure = {
     "processing_bark": ["BarkProcessor"],
 }
 
-# 检查是否有 torch 可用
+# 检查是否导入了 torch 模块，如果未导入，则抛出异常
 try:
     if not is_torch_available():
-        # 如果 torch 不可用，引发 OptionalDependencyNotAvailable 异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
-    # 如果引发了 OptionalDependencyNotAvailable 异常，则不执行以下操作
     pass
 else:
-    # 如果没有引发异常，则将 modeling_bark 导入到 _import_structure 中
+    # 如果导入了 torch 模块，则添加额外的模块到导入结构中
     _import_structure["modeling_bark"] = [
         "BARK_PRETRAINED_MODEL_ARCHIVE_LIST",
         "BarkFineModel",
@@ -42,9 +41,9 @@ else:
         "BarkCausalModel",
     ]
 
-# 如果是类型检查模式
+# 如果在类型检查模式下
 if TYPE_CHECKING:
-    # 从 configuration_bark 模块中导入所需的内容
+    # 从相关模块导入特定的类或对象
     from .configuration_bark import (
         BARK_PRETRAINED_CONFIG_ARCHIVE_MAP,
         BarkCoarseConfig,
@@ -52,19 +51,16 @@ if TYPE_CHECKING:
         BarkFineConfig,
         BarkSemanticConfig,
     )
-    # 从 processing_bark 模块中导入所需的内容
     from .processing_bark import BarkProcessor
 
+    # 再次检查是否导入了 torch 模块，如果未导入，则继续忽略
     try:
-        # 再次检查是否有 torch 可用
         if not is_torch_available():
-            # 如果 torch 不可用，引发 OptionalDependencyNotAvailable 异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
-        # 如果引发了 OptionalDependencyNotAvailable 异常，则不执行以下操作
         pass
     else:
-        # 如果没有引发异常，则从 modeling_bark 模块中导入所需的内容
+        # 如果导入了 torch 模块，则从 modeling_bark 模块中导入特定的类或对象
         from .modeling_bark import (
             BARK_PRETRAINED_MODEL_ARCHIVE_LIST,
             BarkCausalModel,
@@ -75,11 +71,11 @@ if TYPE_CHECKING:
             BarkSemanticModel,
         )
 
-# 如果不是类型检查模式
+# 如果不是类型检查模式，则执行以下操作
 else:
     # 导入 sys 模块
     import sys
 
-    # 将当前模块重定向为 _LazyModule
+    # 将当前模块替换为一个懒加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

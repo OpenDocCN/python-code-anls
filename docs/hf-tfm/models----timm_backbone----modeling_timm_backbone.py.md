@@ -1,121 +1,110 @@
-# `.\transformers\models\timm_backbone\modeling_timm_backbone.py`
+# `.\models\timm_backbone\modeling_timm_backbone.py`
 
-```py
-# 设置文件编码格式为 utf-8
-# 版权声明和许可证信息
+```
+# 引入必要的模块和函数
+from typing import Optional, Tuple, Union  # 导入类型提示所需的模块
 
-# 引入类型提示模块中的类型
-from typing import Optional, Tuple, Union
+import torch  # 导入 PyTorch 库
 
-# 引入 pytorch 模块
-import torch
+from ...modeling_outputs import BackboneOutput  # 导入模型输出的背景输出
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型的实用工具
+from ...utils import is_timm_available, is_torch_available, requires_backends  # 导入用于检查库是否可用的工具函数
+from ...utils.backbone_utils import BackboneMixin  # 导入背景混合类
+from .configuration_timm_backbone import TimmBackboneConfig  # 导入 Timm 模型的配置类
 
-# 引入 HuggingFace 库中的模型输出和模型工具类
-from ...modeling_outputs import BackboneOutput
-from ...modeling_utils import PreTrainedModel
-from ...utils import is_timm_available, is_torch_available, requires_backends
-
-# 引入 timm 模型的配置类
-from .configuration_timm_backbone import TimmBackboneConfig
-
-# 如果 timm 模型可用
+# 检查是否安装了 timm 库
 if is_timm_available():
-    # 则引入 timm 模型
+    import timm  # 如果可用，导入 timm 库
 
-# 如果 torch 模块可用
+# 检查是否安装了 torch 库
 if is_torch_available():
-    # 则引入 Tensor 类型
+    from torch import Tensor  # 如果可用，从 torch 库导入 Tensor 类型
 
-# 定义 TimmBackbone 类，继承自 PreTrainedModel 和 BackboneMixin
 class TimmBackbone(PreTrainedModel, BackboneMixin):
     """
-    用于将 timm 模型包装成可以与库中其他模型互换使用的类。这保持了相同的 API。
+    Wrapper class for timm models to be used as backbones. This enables using the timm models interchangeably with the
+    other models in the library keeping the same API.
     """
-
-    # 设置主输入名称为 "pixel_values"
-    main_input_name = "pixel_values"
-    # 不支持梯度检查点
-    supports_gradient_checkpointing = False
-    # 设置配置类为 TimmBackboneConfig
-    config_class = TimmBackboneConfig
-    # 初始化方法，接受配置对象和额外的关键字参数
+    
+    main_input_name = "pixel_values"  # 定义主要输入名称为 "pixel_values"
+    supports_gradient_checkpointing = False  # 不支持梯度检查点
+    config_class = TimmBackboneConfig  # 指定配置类为 TimmBackboneConfig
+    # 初始化方法，接受配置和其他关键字参数
     def __init__(self, config, **kwargs):
-        # 检查所需后端是否存在，这里是指检查是否存在名为"timm"的后端
+        # 要求使用"timm"库作为后端
         requires_backends(self, "timm")
         # 调用父类的初始化方法
         super().__init__(config)
-        # 将传入的配置对象保存到实例属性中
+        # 将配置信息保存在实例中
         self.config = config
 
-        # 如果配置中未设置backbone，则抛出值错误异常
+        # 如果配置中未设置backbone，则抛出数值错误
         if config.backbone is None:
             raise ValueError("backbone is not set in the config. Please set it to a timm model name.")
 
-        # 如果配置中指定的backbone不在timm支持的模型列表中，则抛出值错误异常
+        # 如果配置中指定的backbone不在timm支持的模型列表中，则抛出数值错误
         if config.backbone not in timm.list_models():
             raise ValueError(f"backbone {config.backbone} is not supported by timm.")
 
-        # 如果配置中存在out_features属性且不为None，则抛出值错误异常
+        # 如果配置中存在out_features参数（不支持），则抛出数值错误，建议使用out_indices
         if hasattr(config, "out_features") and config.out_features is not None:
             raise ValueError("out_features is not supported by TimmBackbone. Please use out_indices instead.")
 
-        # 获取配置中的use_pretrained_backbone属性，若未设置则抛出值错误异常
+        # 获取配置中的use_pretrained_backbone参数，如果未设置，则抛出数值错误
         pretrained = getattr(config, "use_pretrained_backbone", None)
         if pretrained is None:
             raise ValueError("use_pretrained_backbone is not set in the config. Please set it to True or False.")
 
-        # 默认情况下，只取最后一层作为输出层。这与transformers模型的默认设置相匹配。
-        # 如果配置中设置了out_indices属性，则使用该属性值作为输出索引；否则，默认输出最后一层
+        # 默认情况下，仅使用最后一层。这与transformers模型的默认行为匹配
+        # 如果配置中存在out_indices参数，则使用该参数；否则默认使用最后一层（-1）
         out_indices = config.out_indices if getattr(config, "out_indices", None) is not None else (-1,)
 
-        # 使用timm库创建模型
+        # 使用timm库创建指定的模型
         self._backbone = timm.create_model(
             config.backbone,
             pretrained=pretrained,
-            # 对于transformer架构，当前不支持该参数
             features_only=config.features_only,
-            # 输入通道数
             in_chans=config.num_channels,
-            # 输出索引
             out_indices=out_indices,
             **kwargs,
         )
 
-        # 如果配置中存在freeze_batch_norm_2d属性且为True，则调用freeze_batch_norm_2d方法
+        # 如果配置中设置了freeze_batch_norm_2d参数为True，则冻结模型中所有的BatchNorm2d和SyncBatchNorm层
         if getattr(config, "freeze_batch_norm_2d", False):
             self.freeze_batch_norm_2d()
 
-        # 控制模型调用时的输出，如果output_hidden_states为True，则修改return_layers以包含所有层
+        # _backbone的return_layers属性用于控制模型调用时的输出
         self._return_layers = self._backbone.return_layers
-        # 存储所有层及其索引的字典
+        # _backbone的feature_info.info属性包含所有层的信息，将其转换为字典形式保存在_all_layers中
         self._all_layers = {layer["module"]: str(i) for i, layer in enumerate(self._backbone.feature_info.info)}
-        # 调用父类的_init_backbone方法
+        
+        # 调用父类的_init_backbone方法，初始化backbone模型
         super()._init_backbone(config)
-
-    # 类方法
-    @classmethod
-    # 从预训练模型名称或路径创建实例，接受额外的模型参数和关键字参数
+    # 通过预训练模型名或路径创建一个新的实例
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
-        # 确保后端支持视觉和timm库
+        # 要求类依赖的后端模块是 "vision" 和 "timm"
         requires_backends(cls, ["vision", "timm"])
-        # 导入TimmBackboneConfig配置类
+        # 从特定位置导入 TimmBackboneConfig 类
         from ...models.timm_backbone import TimmBackboneConfig
 
-        # 从关键字参数中弹出配置，使用默认值为TimmBackboneConfig的实例
+        # 从关键字参数中弹出配置对象，若不存在则使用 TimmBackboneConfig 的默认配置
         config = kwargs.pop("config", TimmBackboneConfig())
 
-        # 从关键字参数中弹出是否使用timm背骨的标志，如果不使用则引发值错误
+        # 确定是否使用 timm 的 backbone，默认为 True；若不是，则抛出 ValueError
         use_timm = kwargs.pop("use_timm_backbone", True)
         if not use_timm:
             raise ValueError("use_timm_backbone must be True for timm backbones")
 
-        # 从关键字参数中弹出通道数量，特征模式，预训练背骨使用标志和输出索引
+        # 从关键字参数中获取或使用 TimmBackboneConfig 中的默认值来设置通道数
         num_channels = kwargs.pop("num_channels", config.num_channels)
+        # 从关键字参数中获取或使用 TimmBackboneConfig 中的默认值来设置仅提取特征的标志
         features_only = kwargs.pop("features_only", config.features_only)
+        # 从关键字参数中获取或使用 TimmBackboneConfig 中的默认值来设置是否使用预训练的 backbone
         use_pretrained_backbone = kwargs.pop("use_pretrained_backbone", config.use_pretrained_backbone)
+        # 从关键字参数中获取或使用 TimmBackboneConfig 中的默认值来设置输出的索引列表
         out_indices = kwargs.pop("out_indices", config.out_indices)
 
-        # 根据弹出的参数创建TimmBackboneConfig配置类实例
+        # 使用给定的参数创建一个 TimmBackboneConfig 对象
         config = TimmBackboneConfig(
             backbone=pretrained_model_name_or_path,
             num_channels=num_channels,
@@ -123,28 +112,25 @@ class TimmBackbone(PreTrainedModel, BackboneMixin):
             use_pretrained_backbone=use_pretrained_backbone,
             out_indices=out_indices,
         )
-        # 返回调用超类_from_config方法得到的结果
+        # 调用父类的 _from_config 方法，传递配置对象和其它关键字参数
         return super()._from_config(config, **kwargs)
 
-    # 冻结二维批量归一化
+    # 冻结模型中所有 2D 批归一化层的参数
     def freeze_batch_norm_2d(self):
-        # 调用timm.layers中的freeze_batch_norm_2d方法传入背骨
         timm.layers.freeze_batch_norm_2d(self._backbone)
 
-    # 解冻二维批量归一化
+    # 解冻模型中所有 2D 批归一化层的参数
     def unfreeze_batch_norm_2d(self):
-        # 调用timm.layers中的unfreeze_batch_norm_2d方法传入背骨
         timm.layers.unfreeze_batch_norm_2d(self._backbone)
 
-    # 初始化权重函数，确保类在库中的兼容性
+    # 空的初始化权重函数，确保类在库中的兼容性
     def _init_weights(self, module):
         """
         Empty init weights function to ensure compatibility of the class in the library.
         """
-        # 空的初始化权重函数，以确保类在库中的兼容性
         pass
 
-    # 前向传播函数，接受像素值，输出是否关注，隐藏状态，返回字典等关键字参数
+    # 前向传播函数，接收像素值作为输入，并可以选择返回注意力、隐藏状态或以字典形式返回结果
     def forward(
         self,
         pixel_values: torch.FloatTensor,
@@ -152,45 +138,50 @@ class TimmBackbone(PreTrainedModel, BackboneMixin):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         **kwargs,
-    # 根据输入参数确定是否返回字典形式结果，如果不指定则根据配置决定是否使用返回字典形式
-            return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-            # 根据输入参数确定是否返回隐藏层状态，如果不指定则根据配置决定是否输出隐藏层状态
-            output_hidden_states = (
-                output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-            )
-            # 根据输入参数确定是否返回注意力权重，如果不指定则根据配置决定是否输出注意力权重
-            output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-    
-            if output_attentions:
-                # 如果需要输出注意力权重，则抛出异常，目前不支持 timm backbones 输出注意力权重
-                raise ValueError("Cannot output attentions for timm backbones at the moment")
-    
+    ):
+        # 如果 return_dict 为 None，则使用配置中的默认设置
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        # 如果 output_hidden_states 为 None，则使用配置中的默认设置
+        output_hidden_states = (
+            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+        )
+        # 如果 output_attentions 为 None，则使用配置中的默认设置
+        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+
+        # 如果要输出注意力机制信息，则抛出 ValueError，因为 timm 模型暂不支持注意力输出
+        if output_attentions:
+            raise ValueError("Cannot output attentions for timm backbones at the moment")
+
+        # 如果要输出隐藏状态信息
+        if output_hidden_states:
+            # 修改返回的层级以包括所有的 backbone 阶段
+            self._backbone.return_layers = self._all_layers
+            # 使用 backbone 模型提取特征，返回隐藏状态
+            hidden_states = self._backbone(pixel_values, **kwargs)
+            # 恢复返回的层级设置
+            self._backbone.return_layers = self._return_layers
+            # 从隐藏状态中提取指定索引的特征图
+            feature_maps = tuple(hidden_states[i] for i in self.out_indices)
+        else:
+            # 直接使用 backbone 模型提取特征，不返回隐藏状态
+            feature_maps = self._backbone(pixel_values, **kwargs)
+            hidden_states = None
+
+        # 将特征图转换为元组
+        feature_maps = tuple(feature_maps)
+        # 如果隐藏状态不为 None，则将其转换为元组；否则设置为 None
+        hidden_states = tuple(hidden_states) if hidden_states is not None else None
+
+        # 如果不需要返回字典形式的输出
+        if not return_dict:
+            # 构造输出元组，包含特征图
+            output = (feature_maps,)
+            # 如果需要输出隐藏状态，则将隐藏状态也添加到输出中
             if output_hidden_states:
-                # 如果需要输出隐藏层状态，修改返回的层以包括骨干网络的所有阶段
-                self._backbone.return_layers = self._all_layers
-                # 使用骨干网络处理输入像素值参数
-                hidden_states = self._backbone(pixel_values, **kwargs)
-                # 恢复返回的层
-                self._backbone.return_layers = self._return_layers
-                # 根据索引选择特征图
-                feature_maps = tuple(hidden_states[i] for i in self.out_indices)
-            else:
-                # 如果不输出隐藏层状态，直接使用骨干网络处理输入像素值参数
-                feature_maps = self._backbone(pixel_values, **kwargs)
-                hidden_states = None
-    
-            # 转换为元组形式
-            feature_maps = tuple(feature_maps)
-            hidden_states = tuple(hidden_states) if hidden_states is not None else None
-    
-            if not return_dict:
-                # 如果不需要返回字典形式结果
-                output = (feature_maps,)
-                if output_hidden_states:
-                    # 如果输出隐藏层状态，将隐藏层状态添加到输出中
-                    output = output + (hidden_states,)
-                return output
-    
-            # 返回字典形式结果
-            return BackboneOutput(feature_maps=feature_maps, hidden_states=hidden_states, attentions=None)
+                output = output + (hidden_states,)
+            # 返回构造的输出元组
+            return output
+
+        # 如果需要返回字典形式的输出，则构造 BackboneOutput 对象并返回
+        return BackboneOutput(feature_maps=feature_maps, hidden_states=hidden_states, attentions=None)
 ```

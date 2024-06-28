@@ -1,9 +1,9 @@
-# `.\transformers\models\wav2vec2\__init__.py`
+# `.\models\wav2vec2\__init__.py`
 
-```py
-# 导入必要的库和模块
+```
+# 导入必要的模块和函数
 from typing import TYPE_CHECKING
-# 导入必要的异常类
+# 从内部模块中导入异常类和延迟加载模块
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -12,7 +12,7 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块的结构
+# 定义导入结构的字典，用于指定每个模块导入的内容
 _import_structure = {
     "configuration_wav2vec2": ["WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP", "Wav2Vec2Config"],
     "feature_extraction_wav2vec2": ["Wav2Vec2FeatureExtractor"],
@@ -20,14 +20,14 @@ _import_structure = {
     "tokenization_wav2vec2": ["Wav2Vec2CTCTokenizer", "Wav2Vec2Tokenizer"],
 }
 
-# 检查是否torch可用，如果不可用则抛出异常
+# 尝试导入 torch 相关模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果torch可用，则添加相关模型到模块结构中
+    # 如果成功导入，则添加 torch 版本的模型结构到 _import_structure 中
     _import_structure["modeling_wav2vec2"] = [
         "WAV_2_VEC_2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "Wav2Vec2ForAudioFrameClassification",
@@ -40,14 +40,14 @@ else:
         "Wav2Vec2PreTrainedModel",
     ]
 
-# 检查是否tensorflow可用，如果不可用则抛出异常
+# 尝试导入 tensorflow 相关模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果tensorflow可用，则添加相关模型到模块结构中
+    # 如果成功导入，则添加 tensorflow 版本的模型结构到 _import_structure 中
     _import_structure["modeling_tf_wav2vec2"] = [
         "TF_WAV_2_VEC_2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFWav2Vec2ForCTC",
@@ -56,14 +56,14 @@ else:
         "TFWav2Vec2ForSequenceClassification",
     ]
 
-# 检查是否flax可用，如果不可用则抛出异常
+# 尝试导入 flax 相关模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果flax可用，则添加相关模型到模块结构中
+    # 如果成功导入，则添加 flax 版本的模型结构到 _import_structure 中
     _import_structure["modeling_flax_wav2vec2"] = [
         "FlaxWav2Vec2ForCTC",
         "FlaxWav2Vec2ForPreTraining",
@@ -71,20 +71,21 @@ else:
         "FlaxWav2Vec2PreTrainedModel",
     ]
 
-# 如果是类型检查阶段，则导入一些配置、特征提取、处理和分词模块的内容
+# 如果正在进行类型检查，导入类型检查所需的模块和类
 if TYPE_CHECKING:
     from .configuration_wav2vec2 import WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP, Wav2Vec2Config
     from .feature_extraction_wav2vec2 import Wav2Vec2FeatureExtractor
     from .processing_wav2vec2 import Wav2Vec2Processor
     from .tokenization_wav2vec2 import Wav2Vec2CTCTokenizer, Wav2Vec2Tokenizer
 
+    # 再次尝试导入 torch 相关模块，用于类型检查，如果不可用则跳过
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果不是之前定义的模块，则从modeling_wav2vec2中导入相应模块和变量
     else:
+        # 导入模型相关模块和预训练模型的存档列表（针对其他框架）
         from .modeling_wav2vec2 import (
             WAV_2_VEC_2_PRETRAINED_MODEL_ARCHIVE_LIST,
             Wav2Vec2ForAudioFrameClassification,
@@ -97,14 +98,16 @@ if TYPE_CHECKING:
             Wav2Vec2PreTrainedModel,
         )
 
-    # 尝试导入TensorFlow模块，如果不可用则抛出异常OptionalDependencyNotAvailable
     try:
+        # 检查是否可用 TensorFlow
         if not is_tf_available():
+            # 如果 TensorFlow 不可用，则抛出异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 如果 TensorFlow 不可用，不做处理，继续执行
         pass
-    # 如果成功导入TensorFlow模块，从modeling_tf_wav2vec2中导入相应模块和变量
     else:
+        # 导入 TensorFlow 版本的模型相关模块和预训练模型的存档列表
         from .modeling_tf_wav2vec2 import (
             TF_WAV_2_VEC_2_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFWav2Vec2ForCTC,
@@ -113,23 +116,25 @@ if TYPE_CHECKING:
             TFWav2Vec2PreTrainedModel,
         )
 
-    # 尝试导入Flax模块，如果不可用则抛出异常OptionalDependencyNotAvailable
     try:
+        # 检查是否可用 Flax
         if not is_flax_available():
+            # 如果 Flax 不可用，则抛出异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 如果 Flax 不可用，不做处理，继续执行
         pass
-    # 如果成功导入Flax模块，从modeling_tf_wav2vec2中导入相应模块和变量
     else:
+        # 导入 Flax 版本的模型相关模块和预训练模型的存档列表
         from .modeling_tf_wav2vec2 import (
             FlaxWav2Vec2ForCTC,
             FlaxWav2Vec2ForPreTraining,
             FlaxWav2Vec2Model,
             FlaxWav2Vec2PreTrainedModel,
         )
-# 如果以上条件都不满足，则执行以下代码块
-import sys  # 导入 sys 模块
-
-# 使用 _LazyModule 类创建一个模块对象，并将其赋值给当前模块的名称，同时传入指定的参数
-sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+else:
+    # 导入系统模块 sys
+    import sys
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
+    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

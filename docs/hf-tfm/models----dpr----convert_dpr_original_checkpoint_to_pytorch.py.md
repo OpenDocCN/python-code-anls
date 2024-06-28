@@ -1,55 +1,44 @@
 # `.\models\dpr\convert_dpr_original_checkpoint_to_pytorch.py`
 
-```py
-# 版权声明
-# 版权所有，2020年HuggingFace团队。
-#
-# 根据Apache许可证2.0版（“许可证”）许可;
-# 除非遵守许可证，否则您不得使用此文件。
-# 您可以在以下网址获取许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或经协议书面同意，否则将基于"现状"基础分发软件，
-# 没有任何形式的担保或条件，无论是明示的还是暗示的。
-# 请参阅许可证，了解特定语言管理权限和许可的限制。
-#
-# 导入需要的库
-import argparse
-import collections
-from pathlib import Path
-import torch
-from torch.serialization import default_restore_location
+```
+# 导入必要的库
+import argparse  # 用于解析命令行参数
+import collections  # 提供额外的数据结构
+from pathlib import Path  # 处理路径相关操作
+
+import torch  # PyTorch深度学习库
+from torch.serialization import default_restore_location  # 默认的模型加载位置
+
+# 导入transformers库中的相关组件
 from transformers import BertConfig, DPRConfig, DPRContextEncoder, DPRQuestionEncoder, DPRReader
 
-
-# 定义类：CheckpointState
+# 定义一个命名元组CheckpointState，用于保存模型加载状态
 CheckpointState = collections.namedtuple(
     "CheckpointState", ["model_dict", "optimizer_dict", "scheduler_dict", "offset", "epoch", "encoder_params"]
 )
 
-
-# 定义函数：load_states_from_checkpoint，用于从检查点文件中加载状态
+# 从文件中加载模型状态
 def load_states_from_checkpoint(model_file: str) -> CheckpointState:
+    # 打印正在读取的模型文件信息
     print(f"Reading saved model from {model_file}")
-    # 使用 Torch 加载模型文件，并将其映射到 CPU 上
+    # 使用torch.load加载模型文件，并映射到CPU上
     state_dict = torch.load(model_file, map_location=lambda s, l: default_restore_location(s, "cpu"))
+    # 返回包含模型状态的CheckpointState命名元组
     return CheckpointState(**state_dict)
 
 
-# 定义类：DPRState
+# 定义一个DPRState类，用于处理DPR相关的状态
 class DPRState:
-    # 初始化方法，接收源文件路径参数
     def __init__(self, src_file: Path):
-        self.src_file = src_file
+        self.src_file = src_file  # 初始化源文件路径
 
-    # 加载 DPR 模型的抽象方法
     def load_dpr_model(self):
-        raise NotImplementedError
+        raise NotImplementedError  # 抽象方法，子类需实现具体功能
 
-    # 从类型创建 DPRState 实例的静态方法
+    # 静态方法，根据组件类型创建对应的DPRState子类实例
     @staticmethod
     def from_type(comp_type: str, *args, **kwargs) -> "DPRState":
+        # 根据组件类型选择相应的子类实例化
         if comp_type.startswith("c"):
             return DPRContextEncoderState(*args, **kwargs)
         if comp_type.startswith("q"):
@@ -57,109 +46,113 @@ class DPRState:
         if comp_type.startswith("r"):
             return DPRReaderState(*args, **kwargs)
         else:
-            raise ValueError("Component type must be either 'ctx_encoder', 'question_encoder' or 'reader.")
+            raise ValueError("Component type must be either 'ctx_encoder', 'question_encoder' or 'reader'.")
 
 
-# 定义类：DPRContextEncoderState，继承自DPRState
+# DPRContextEncoderState类继承自DPRState，处理上下文编码器相关状态
 class DPRContextEncoderState(DPRState):
-    # 加载 DPR 模型的方法
     def load_dpr_model(self):
-        # 创建 DPRContextEncoder 实例，使用BertConfig初始化
-        model = DPRContextEncoder(DPRConfig(**BertConfig.get_config_dict("bert-base-uncased")[0]))
+        # 创建DPRContextEncoder模型实例，基于指定的配置
+        model = DPRContextEncoder(DPRConfig(**BertConfig.get_config_dict("google-bert/bert-base-uncased")[0]))
+        # 打印正在加载的DPR双编码器信息
         print(f"Loading DPR biencoder from {self.src_file}")
-        # 从检查点文件中加载状态
+        # 从检查点文件中加载保存的模型状态
         saved_state = load_states_from_checkpoint(self.src_file)
         encoder, prefix = model.ctx_encoder, "ctx_model."
-        # 修复来自https://github.com/huggingface/transformers/commit/614fef1691edb806de976756d4948ecbcd0c0ca3的更改
+
+        # 修复自GitHub提交中的更改，更新模型状态字典
         state_dict = {"bert_model.embeddings.position_ids": model.ctx_encoder.bert_model.embeddings.position_ids}
-        # 遍历加载的模型字典，进行必要的更改
         for key, value in saved_state.model_dict.items():
             if key.startswith(prefix):
                 key = key[len(prefix) :]
                 if not key.startswith("encode_proj."):
                     key = "bert_model." + key
                 state_dict[key] = value
-        # 加载模型的状态字典
+        
+        # 加载更新后的状态字典到编码器模型中
         encoder.load_state_dict(state_dict)
         return model
 
 
 class DPRQuestionEncoderState(DPRState):
-# 这里应该是其他类的定义，但是给出的示例代码不足以完整呈现这部分的逻辑，故省略
     # 加载 DPR 模型
     def load_dpr_model(self):
-        # 使用 DPR 配置创建 DPR 问题编码器模型
-        model = DPRQuestionEncoder(DPRConfig(**BertConfig.get_config_dict("bert-base-uncased")[0]))
-        # 打印加载 DPR 双向编码器的来源文件路径
+        # 创建 DPRQuestionEncoder 对象，使用指定的 DPRConfig 和 BertConfig
+        model = DPRQuestionEncoder(DPRConfig(**BertConfig.get_config_dict("google-bert/bert-base-uncased")[0]))
+        # 打印正在加载的 DPR biencoder 的来源文件路径
         print(f"Loading DPR biencoder from {self.src_file}")
-        # 从检查点中加载保存的状态
+        # 从指定的文件中加载模型状态
         saved_state = load_states_from_checkpoint(self.src_file)
-        # 获取问题编码器和前缀
+        # 获取模型的 encoder 部分和前缀字符串
         encoder, prefix = model.question_encoder, "question_model."
-        # 修复自 https://github.com/huggingface/transformers/commit/614fef1691edb806de976756d4948ecbcd0c0ca3 的更改
-        # 初始化状态字典，用于存储加载的模型状态
+        # 修复来自特定提交的更改，更新状态字典以适应新版本的模型
         state_dict = {"bert_model.embeddings.position_ids": model.question_encoder.bert_model.embeddings.position_ids}
-        # 遍历保存的状态模型字典
+        # 遍历加载的模型状态字典的每个键值对
         for key, value in saved_state.model_dict.items():
-            # 如果键以前缀开头
+            # 如果键以指定前缀开头
             if key.startswith(prefix):
-                # 去除前缀
+                # 去掉前缀
                 key = key[len(prefix) :]
-                # 如果不是以 "encode_proj." 开头，则添加 "bert_model." 前缀
+                # 如果不是以 "encode_proj." 开头的键，则加上 "bert_model." 前缀
                 if not key.startswith("encode_proj."):
                     key = "bert_model." + key
-                # 将键值对添加到状态字典中
+                # 更新状态字典
                 state_dict[key] = value
-        # 加载状态字典到编码器模型中
+        # 使用更新后的状态字典加载 encoder 的状态
         encoder.load_state_dict(state_dict)
-        # 返回加载的模型
+        # 返回加载后的模型对象
         return model
 class DPRReaderState(DPRState):
-    # DPRReaderState 类继承自 DPRState 类
+    # 继承自 DPRState 类的 DPRReaderState 类
+
     def load_dpr_model(self):
-        # 加载 DPRReader 模型
-        model = DPRReader(DPRConfig(**BertConfig.get_config_dict("bert-base-uncased")[0]))
-        # 打印加载 DPR reader 模型的来源文件路径
+        # 加载 DPR 模型
+        model = DPRReader(DPRConfig(**BertConfig.get_config_dict("google-bert/bert-base-uncased")[0]))
+        # 打印加载的 DPR 读取器模型的信息，显示源文件路径
         print(f"Loading DPR reader from {self.src_file}")
-        # 从检查点文件中加载保存的模型状态
+        # 从检查点文件加载保存的模型状态
         saved_state = load_states_from_checkpoint(self.src_file)
         
-        # 修正自 https://github.com/huggingface/transformers/commit/614fef1691edb806de976756d4948ecbcd0c0ca3 的更改
-        # 设置状态字典，将特定的模型参数路径映射到新模型中
+        # 修复自 https://github.com/huggingface/transformers/commit/614fef1691edb806de976756d4948ecbcd0c0ca3 的更改
+        # 准备状态字典，映射加载的模型状态到正确的位置
         state_dict = {
             "encoder.bert_model.embeddings.position_ids": model.span_predictor.encoder.bert_model.embeddings.position_ids
         }
+        
+        # 遍历保存的模型字典的键值对
         for key, value in saved_state.model_dict.items():
+            # 如果键以 "encoder." 开头但不以 "encoder.encode_proj" 开头，修正为 "encoder.bert_model."
             if key.startswith("encoder.") and not key.startswith("encoder.encode_proj"):
-                # 更新模型参数的键名以适应新模型
                 key = "encoder.bert_model." + key[len("encoder.") :]
+            # 将修正后的键值对加入到状态字典中
             state_dict[key] = value
         
-        # 加载模型的状态字典
+        # 加载状态字典到 DPR 读取器模型的 span_predictor 部分
         model.span_predictor.load_state_dict(state_dict)
-        # 返回加载后的模型
+        # 返回加载完成的 DPR 读取器模型
         return model
 
 
 def convert(comp_type: str, src_file: Path, dest_dir: Path):
-    # 将目标目录转换为 Path 对象
+    # 转换函数，将指定类型的 DPR 模型检查点文件转换为 PyTorch 模型
+
+    # 确保输出目录存在或创建它
     dest_dir = Path(dest_dir)
-    # 如果目标目录不存在，则创建目录
     dest_dir.mkdir(exist_ok=True)
-    
-    # 根据组件类型和源文件创建 DPRState 实例
+
+    # 根据组件类型和源文件路径创建 DPRState 对象
     dpr_state = DPRState.from_type(comp_type, src_file=src_file)
     # 加载 DPR 模型
     model = dpr_state.load_dpr_model()
-    # 将模型保存到指定的目标目录
+    # 将模型保存到指定的输出目录
     model.save_pretrained(dest_dir)
-    # 从保存的目录重新加载模型，以确保转换正确
+    # 从输出目录重新加载模型进行验证
     model.from_pretrained(dest_dir)  # sanity check
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # 必需的参数
+    # 必需参数
     parser.add_argument(
         "--type", type=str, help="Type of the component to convert: 'ctx_encoder', 'question_encoder' or 'reader'."
     )
@@ -175,18 +168,18 @@ if __name__ == "__main__":
     parser.add_argument("--dest", type=str, default=None, help="Path to the output PyTorch model directory.")
     args = parser.parse_args()
 
-    # 解析源文件路径
+    # 获取源文件路径和输出目录路径
     src_file = Path(args.src)
-    # 确定目标目录的名称
     dest_dir = f"converted-{src_file.name}" if args.dest is None else args.dest
-    # 将目标目录转换为 Path 对象
     dest_dir = Path(dest_dir)
-    # 断言源文件存在
+    
+    # 确保指定的源文件存在
     assert src_file.exists()
-    # 断言已指定 DPR 模型的组件类型
+    # 确保指定了 DPR 模型的组件类型
     assert (
         args.type is not None
     ), "Please specify the component type of the DPR model to convert: 'ctx_encoder', 'question_encoder' or 'reader'."
-    # 执行模型转换
+    
+    # 执行转换操作，将指定类型的 DPR 模型转换为 PyTorch 模型
     convert(args.type, src_file, dest_dir)
 ```

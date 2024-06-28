@@ -1,47 +1,52 @@
-# `.\transformers\models\phi\configuration_phi.py`
+# `.\models\phi\configuration_phi.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明及许可协议
-# 配置文件信息
+```
+# 定义一个 Python 源码文件的编码格式为 UTF-8
+# 版权声明和许可证信息，这里使用 Apache License, Version 2.0
+# 导入所需的模块和类
+from ...configuration_utils import PretrainedConfig  # 导入预训练配置类
+from ...utils import logging  # 导入日志记录工具
 
-# 导入预训练配置和日志工具
-from ...configuration_utils import PretrainedConfig
-from ...utils import logging
-
-# 获取日志工具的记录器
+# 获取全局的日志记录器
 logger = logging.get_logger(__name__)
 
-# 预训练配置文件存档映射
+# 定义一个字典，映射预训练模型名称到其配置文件的 URL
 PHI_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "microsoft/phi-1": "https://huggingface.co/microsoft/phi-1/resolve/main/config.json",
     "microsoft/phi-1_5": "https://huggingface.co/microsoft/phi-1_5/resolve/main/config.json",
     "microsoft/phi-2": "https://huggingface.co/microsoft/phi-2/resolve/main/config.json",
 }
 
-# Phi 模型配置类
+# PhiConfig 类，用于存储 PhiModel 的配置信息，继承自 PretrainedConfig 类
 class PhiConfig(PretrainedConfig):
     r"""
-    存储 [`PhiModel`] 的配置的配置类。它用于根据指定的参数来实例化 Phi 模型，定义模型架构。使用默认值来实例化配置会产生类似于 Phi 预训练模型 [microsoft/phi-1](https://huggingface.co/microsoft/phi-1) 的配置。
+    This is the configuration class to store the configuration of a [`PhiModel`]. It is used to instantiate an Phi
+    model according to the specified arguments, defining the model architecture. Instantiating a configuration with the
+    defaults will yield a similar configuration to that of the Phi
+    [microsoft/phi-1](https://huggingface.co/microsoft/phi-1).
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档以了解更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    示例:
+    Example:
 
     ```python
     >>> from transformers import PhiModel, PhiConfig
 
-    >>> # 初始化一个 Phi-1 风格的配置
+    >>> # Initializing a Phi-1 style configuration
     >>> configuration = PhiConfig.from_pretrained("microsoft/phi-1")
 
-    >>> # 根据配置初始化一个模型
+    >>> # Initializing a model from the configuration
     >>> model = PhiModel(configuration)
 
-    >>> # 访问模型配置
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```
 
+    """
+    # 模型类型为 "phi"
     model_type = "phi"
+    # 推断时忽略的键列表
     keys_to_ignore_at_inference = ["past_key_values"]
 
     def __init__(
@@ -68,49 +73,38 @@ class PhiConfig(PretrainedConfig):
         bos_token_id=1,
         eos_token_id=2,
         **kwargs,
-    ):  # 类的构造函数定义结束
-        # 设置词汇表大小
+    ):
+        # 初始化 PhiConfig 实例，设置各种模型配置参数
+        # 这些参数决定了 PhiModel 的架构和行为
+        pass
+        ):
         self.vocab_size = vocab_size
-        # 设置隐藏层大小
         self.hidden_size = hidden_size
-        # 设置中间层大小
         self.intermediate_size = intermediate_size
-        # 设置隐藏层数量
         self.num_hidden_layers = num_hidden_layers
-        # 设置注意力头数量
         self.num_attention_heads = num_attention_heads
 
-        # 如果未指定键值头数量，则默认与注意力头数量相同
         if num_key_value_heads is None:
             num_key_value_heads = num_attention_heads
 
-        # 设置键值头数量
         self.num_key_value_heads = num_key_value_heads
-        # 设置残差连接丢弃概率
         self.resid_pdrop = resid_pdrop
-        # 设置嵌入丢弃概率
         self.embd_pdrop = embd_pdrop
-        # 设置注意力丢弃概率
         self.attention_dropout = attention_dropout
-        # 设置隐藏层激活函数
         self.hidden_act = hidden_act
-        # 设置最大位置嵌入长度
         self.max_position_embeddings = max_position_embeddings
-        # 设置初始化范围
         self.initializer_range = initializer_range
-        # 设置层归一化 epsilon
         self.layer_norm_eps = layer_norm_eps
-        # 设置是否使用缓存
         self.use_cache = use_cache
-        # 设置 ROPE 相关参数
         self.rope_theta = rope_theta
         self.rope_scaling = rope_scaling
         self.partial_rotary_factor = partial_rotary_factor
         self.qk_layernorm = qk_layernorm
-        # 执行 ROPE 缩放验证
+
+        # 调用私有方法 _rope_scaling_validation() 进行 ROPE 缩放参数的验证
         self._rope_scaling_validation()
 
-        # 调用父类构造函数
+        # 调用父类初始化方法，传递相关参数
         super().__init__(
             bos_token_id=bos_token_id,
             eos_token_id=eos_token_id,
@@ -118,31 +112,33 @@ class PhiConfig(PretrainedConfig):
             **kwargs,
         )
 
-    # 从 transformers.models.llama.configuration_llama.LlamaConfig._rope_scaling_validation 复制过来
-    # ROPE 缩放验证函数
+    # 从 transformers.models.llama.configuration_llama.LlamaConfig._rope_scaling_validation 复制而来
     def _rope_scaling_validation(self):
         """
         Validate the `rope_scaling` configuration.
         """
-        # 如果未指定 ROPE 缩放参数，则直接返回
+        # 如果 rope_scaling 参数为 None，则直接返回，无需验证
         if self.rope_scaling is None:
             return
 
-        # 检查 ROPE 缩放参数是否为字典且包含两个字段
+        # 如果 rope_scaling 不是字典类型或者长度不为 2，则抛出数值错误异常
         if not isinstance(self.rope_scaling, dict) or len(self.rope_scaling) != 2:
             raise ValueError(
                 "`rope_scaling` must be a dictionary with with two fields, `type` and `factor`, "
                 f"got {self.rope_scaling}"
             )
-        # 获取 ROPE 缩放类型和因子
+        
+        # 获取 rope_scaling 字典中的 type 和 factor 字段
         rope_scaling_type = self.rope_scaling.get("type", None)
         rope_scaling_factor = self.rope_scaling.get("factor", None)
-        # 检查 ROPE 缩放类型是否有效
+        
+        # 如果 type 字段为 None 或者不在 ['linear', 'dynamic'] 中，则抛出数值错误异常
         if rope_scaling_type is None or rope_scaling_type not in ["linear", "dynamic"]:
             raise ValueError(
                 f"`rope_scaling`'s type field must be one of ['linear', 'dynamic'], got {rope_scaling_type}"
             )
-        # 检查 ROPE 缩放因子是否有效
+        
+        # 如果 factor 字段为 None 或者不是大于 1 的浮点数，则抛出数值错误异常
         if rope_scaling_factor is None or not isinstance(rope_scaling_factor, float) or rope_scaling_factor <= 1.0:
             raise ValueError(f"`rope_scaling`'s factor field must be a float > 1, got {rope_scaling_factor}")
 ```

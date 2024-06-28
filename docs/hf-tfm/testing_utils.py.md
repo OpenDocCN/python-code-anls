@@ -1,37 +1,38 @@
-# `.\transformers\testing_utils.py`
+# `.\testing_utils.py`
 
-```py
-# 导入模块和库
-import collections  # 导入 collections 模块
-import contextlib  # 导入 contextlib 模块
-import doctest  # 导入 doctest 模块
-import functools  # 导入 functools 模块
-import importlib  # 导入 importlib 模块
-import inspect  # 导入 inspect 模块
-import logging  # 导入 logging 模块
-import multiprocessing  # 导入 multiprocessing 模块
-import os  # 导入 os 模块
-import re  # 导入 re 模块
-import shlex  # 导入 shlex 模块
-import shutil  # 导入 shutil 模块
-import subprocess  # 导入 subprocess 模块
-import sys  # 导入 sys 模块
-import tempfile  # 导入 tempfile 模块
-import time  # 导入 time 模块
-import unittest  # 导入 unittest 模块
-from collections import defaultdict  # 从 collections 模块导入 defaultdict 类
-from collections.abc import Mapping  # 从 collections.abc 模块导入 Mapping 类
-from io import StringIO  # 从 io 模块导入 StringIO 类
-from pathlib import Path  # 从 pathlib 模块导入 Path 类
-from typing import Callable, Dict, Iterable, Iterator, List, Optional, Union  # 从 typing 模块导入若干类型
-from unittest import mock  # 从 unittest 模块导入 mock 模块
-from unittest.mock import patch  # 从 unittest.mock 模块导入 patch 类
+```
+# 导入必要的标准库和第三方库
+import collections  # 提供额外的数据容器，如deque（双端队列）
+import contextlib  # 提供用于管理上下文的工具
+import doctest  # 提供用于运行文档测试的模块
+import functools  # 提供函数式编程的工具，如partial函数应用
+import importlib  # 提供用于动态加载模块的工具
+import inspect  # 提供用于检查源代码的工具
+import logging  # 提供用于记录日志消息的功能
+import multiprocessing  # 提供用于多进程编程的工具
+import os  # 提供与操作系统交互的功能
+import re  # 提供支持正则表达式的工具
+import shlex  # 提供用于解析和操作命令行字符串的工具
+import shutil  # 提供高级文件操作功能的工具
+import subprocess  # 提供用于创建子进程的功能
+import sys  # 提供与Python解释器交互的功能
+import tempfile  # 提供创建临时文件和目录的功能
+import time  # 提供时间相关的功能
+import unittest  # 提供用于编写和运行单元测试的工具
+from collections import defaultdict  # 提供默认字典的功能
+from collections.abc import Mapping  # 提供抽象基类，用于检查映射类型
+from functools import wraps  # 提供用于创建装饰器的工具
+from io import StringIO  # 提供内存中文本I/O的工具
+from pathlib import Path  # 提供面向对象的路径操作功能
+from typing import Callable, Dict, Iterable, Iterator, List, Optional, Union  # 提供类型提示支持
+from unittest import mock  # 提供用于模拟测试的工具
+from unittest.mock import patch  # 提供用于模拟测试的工具
 
-import urllib3  # 导入 urllib3 模块
+import urllib3  # 提供HTTP客户端的功能
 
-from transformers import logging as transformers_logging  # 从 transformers 包中导入 logging 模块
-# 从本地 integrations 模块导入若干函数判断外部库是否可用
-from .integrations import (
+from transformers import logging as transformers_logging  # 导入transformers库中的logging模块
+
+from .integrations import (  # 导入自定义模块中的一系列集成检查函数
     is_clearml_available,
     is_optuna_available,
     is_ray_available,
@@ -39,12 +40,11 @@ from .integrations import (
     is_tensorboard_available,
     is_wandb_available,
 )
-# 从本地 integrations.deepspeed 模块导入是否可用 deepspeed
-from .integrations.deepspeed import is_deepspeed_available
-# 从本地 utils 模块导入若干函数判断外部库是否可用
-from .utils import (
+from .integrations.deepspeed import is_deepspeed_available  # 导入自定义模块中的深度加速集成检查函数
+from .utils import (  # 导入自定义模块中的一系列实用工具检查函数
     is_accelerate_available,
     is_apex_available,
+    is_aqlm_available,
     is_auto_awq_available,
     is_auto_gptq_available,
     is_bitsandbytes_available,
@@ -60,6 +60,7 @@ from .utils import (
     is_fsdp_available,
     is_ftfy_available,
     is_g2p_en_available,
+    is_galore_torch_available,
     is_ipex_available,
     is_jieba_available,
     is_jinja_available,
@@ -79,7 +80,9 @@ from .utils import (
     is_pytesseract_available,
     is_pytest_available,
     is_pytorch_quantization_available,
+    is_quanto_available,
     is_rjieba_available,
+    is_sacremoses_available,
     is_safetensors_available,
     is_scipy_available,
     is_sentencepiece_available,
@@ -87,6 +90,7 @@ from .utils import (
     is_soundfile_availble,
     is_spacy_available,
     is_sudachi_available,
+    is_sudachi_projection_available,
     is_tensorflow_probability_available,
     is_tensorflow_text_available,
     is_tf2onnx_available,
@@ -94,136 +98,136 @@ from .utils import (
     is_timm_available,
     is_tokenizers_available,
     is_torch_available,
-    is_torch_bf16_available_on_device,
-    is_torch_bf16_cpu_available,
-    is_torch_bf16_gpu_available,
-    is_torch_fp16_available_on_device,
-    is_torch_neuroncore_available,
 )
-    # 检查当前环境下是否可用 Torch 的 NPU 功能
+    # 检查当前设备是否支持 Torch 的 BF16 数据类型
+    is_torch_bf16_available_on_device,
+    # 检查当前 CPU 是否支持 Torch 的 BF16 数据类型
+    is_torch_bf16_cpu_available,
+    # 检查当前 GPU 是否支持 Torch 的 BF16 数据类型
+    is_torch_bf16_gpu_available,
+    # 检查当前设备是否支持 Torch 的 FP16 数据类型
+    is_torch_fp16_available_on_device,
+    # 检查当前设备是否支持 Torch 的 NeuronCore 加速器
+    is_torch_neuroncore_available,
+    # 检查当前设备是否支持 Torch 的 NPU 加速器
     is_torch_npu_available,
-    # 检查当前环境下是否可用 Torch 的 SDPA 功能
+    # 检查当前设备是否支持 Torch 的 SDPA 加速器
     is_torch_sdpa_available,
-    # 检查当前环境下是否可用 Torch 的 TensorRT FX 功能
+    # 检查当前设备是否支持 Torch 的 TensorRT FX 加速器
     is_torch_tensorrt_fx_available,
-    # 检查当前环境下是否可用 Torch 的 TF32 功能
+    # 检查当前设备是否支持 Torch 的 TF32 数据类型
     is_torch_tf32_available,
-    # 检查当前环境下是否可用 Torch 的 TPU 功能
-    is_torch_tpu_available,
-    # 检查当前环境下是否可用 Torch 的 XPU 功能
+    # 检查当前设备是否支持 Torch 的 XLA 加速器
+    is_torch_xla_available,
+    # 检查当前设备是否支持 Torch 的 XPU 加速器
     is_torch_xpu_available,
-    # 检查当前环境下是否可用 Torchaudio 库
+    # 检查当前环境是否支持 Torch Audio 库
     is_torchaudio_available,
-    # 检查当前环境下是否可用 TorchDynamo 库
+    # 检查当前环境是否支持 TorchDynamo 库
     is_torchdynamo_available,
-    # 检查当前环境下是否可用 TorchVision 库
+    # 检查当前环境是否支持 TorchVision 库
     is_torchvision_available,
-    # 检查当前环境下是否可用 Vision 功能（可能是 TorchVision 的一部分）
+    # 检查当前环境是否支持 Torch 的 Vision 扩展
     is_vision_available,
-    # 将字符串转换为布尔值的函数，用于解析配置等
+    # 将字符串转换为布尔值（支持"true", "false", "yes", "no", "1", "0"等）
     strtobool,
-# 检查是否可用加速器
+# 如果加速功能可用，则从 accelerate.state 中导入 AcceleratorState 和 PartialState 类
 if is_accelerate_available():
-    # 如果可用，从加速器状态模块导入加速器状态和部分状态
     from accelerate.state import AcceleratorState, PartialState
 
 
-# 检查是否可用 pytest
-if is_pytest_available():
-    # 如果可用，从 pytest 的 doctest 模块导入所需内容
-    from _pytest.doctest import (
-        Module,  # 导入 Module 类
-        _get_checker,  # 导入 _get_checker 函数
-        _get_continue_on_failure,  # 导入 _get_continue_on_failure 函数
-        _get_runner,  # 导入 _get_runner 函数
-        _is_mocked,  # 导入 _is_mocked 函数
-        _patch_unwrap_mock_aware,  # 导入 _patch_unwrap_mock_aware 函数
-        get_optionflags,  # 导入 get_optionflags 函数
-        import_path,  # 导入 import_path 函数
-    )
-    # 从 pytest 的 outcomes 模块导入 skip 函数
-    from _pytest.outcomes import skip
-    # 从 pytest 导入 DoctestItem 类
-    from pytest import DoctestItem
+# 如果 pytest 可用，则从 _pytest.doctest 中导入以下模块
+# Module: 用于表示 Python 模块的类
+# _get_checker: 获取 doctest 的检查器
+# _get_continue_on_failure: 获取 doctest 的继续失败选项
+# _get_runner: 获取 doctest 的运行器
+# _is_mocked: 检查是否模拟了对象
+# _patch_unwrap_mock_aware: 解除 Mock 对象感知的补丁
+# get_optionflags: 获取 doctest 的选项标志
+from _pytest.doctest import (
+    Module,
+    _get_checker,
+    _get_continue_on_failure,
+    _get_runner,
+    _is_mocked,
+    _patch_unwrap_mock_aware,
+    get_optionflags,
+)
+
+# 如果 pytest 不可用，则将 Module 和 DoctestItem 设置为 object 类型
 else:
-    # 如果 pytest 不可用，将 Module 和 DoctestItem 设为 object 类的实例
     Module = object
     DoctestItem = object
 
 
-# 定义一个小模型的标识符
+# 定义了一个小型模型的标识符字符串
 SMALL_MODEL_IDENTIFIER = "julien-c/bert-xsmall-dummy"
-# 定义一个未知模型的标识符，用于测试
+
+# 用于测试自动检测模型类型的标识符
 DUMMY_UNKNOWN_IDENTIFIER = "julien-c/dummy-unknown"
-# 定义一个具有不同分词器的虚拟模型的标识符，用于测试
 DUMMY_DIFF_TOKENIZER_IDENTIFIER = "julien-c/dummy-diff-tokenizer"
 
-# 用于测试 hub
-# 定义用户
+# 用于测试 Hub 的用户和端点
 USER = "__DUMMY_TRANSFORMERS_USER__"
-# 定义用于测试的端点
 ENDPOINT_STAGING = "https://hub-ci.huggingface.co"
 
-# 不是关键的，仅在受限的 CI 实例上可用
-# 定义令牌
+# 仅在受控的 CI 实例中可用，用于测试用的令牌
 TOKEN = "hf_94wBhPGp6KrrTH3KDchhKpRxZwd6dmHWLL"
 
 
-# 从环境中解析布尔型标志
+# 从环境变量中解析布尔类型的标志
 def parse_flag_from_env(key, default=False):
     try:
-        # 尝试从环境中获取值
         value = os.environ[key]
     except KeyError:
-        # 如果未设置键，则默认为 `default`
+        # 如果 KEY 未设置，则使用默认值 `default`
         _value = default
     else:
-        # 如果设置了键，将其转换为 True 或 False
+        # 如果 KEY 已设置，则尝试将其转换为 True 或 False
         try:
             _value = strtobool(value)
         except ValueError:
-            # 支持更多的值，但让消息保持简单
+            # 如果值不是 `yes` 或 `no`，则抛出异常
             raise ValueError(f"If set, {key} must be yes or no.")
     return _value
 
 
-# 从环境中解析整数
+# 从环境变量中解析整数类型的值
 def parse_int_from_env(key, default=None):
     try:
-        # 尝试从环境中获取值
         value = os.environ[key]
     except KeyError:
         _value = default
     else:
-        # 如果设置了键，将其转换为整数
         try:
             _value = int(value)
         except ValueError:
+            # 如果值不是整数，则抛出异常
             raise ValueError(f"If set, {key} must be a int.")
     return _value
 
 
-# 从环境中解析运行慢测试的标志
+# 根据环境变量 `RUN_SLOW` 解析是否运行慢速测试的标志
 _run_slow_tests = parse_flag_from_env("RUN_SLOW", default=False)
-# 从环境中解析运行 PyTorch + TensorFlow 交叉测试的标志
+# 根据环境变量 `RUN_PT_TF_CROSS_TESTS` 解析是否运行 PyTorch 和 TensorFlow 交叉测试的标志
 _run_pt_tf_cross_tests = parse_flag_from_env("RUN_PT_TF_CROSS_TESTS", default=True)
-# 从环境中解析运行 PyTorch + Flax 交叉测试的标志
+# 根据环境变量 `RUN_PT_FLAX_CROSS_TESTS` 解析是否运行 PyTorch 和 Flax 交叉测试的标志
 _run_pt_flax_cross_tests = parse_flag_from_env("RUN_PT_FLAX_CROSS_TESTS", default=True)
-# 从环境中解析运行自定义分词器测试的标志
+# 根据环境变量 `RUN_CUSTOM_TOKENIZERS` 解析是否运行自定义分词器测试的标志
 _run_custom_tokenizers = parse_flag_from_env("RUN_CUSTOM_TOKENIZERS", default=False)
-# 从环境中解析运行在 staging 上的测试的标志
+# 根据环境变量 `HUGGINGFACE_CO_STAGING` 解析是否运行在 Hugging Face CO 预发布环境中的标志
 _run_staging = parse_flag_from_env("HUGGINGFACE_CO_STAGING", default=False)
-# 从环境中解析 TensorFlow GPU 内存限制
+# 根据环境变量 `TF_GPU_MEMORY_LIMIT` 解析 TensorFlow GPU 内存限制的值
 _tf_gpu_memory_limit = parse_int_from_env("TF_GPU_MEMORY_LIMIT", default=None)
-# 从环境中解析运行管道测试的标志
+# 根据环境变量 `RUN_PIPELINE_TESTS` 解析是否运行管道测试的标志
 _run_pipeline_tests = parse_flag_from_env("RUN_PIPELINE_TESTS", default=True)
-# 从环境中解析运行工具测试的标志
+# 根据环境变量 `RUN_TOOL_TESTS` 解析是否运行工具测试的标志
 _run_tool_tests = parse_flag_from_env("RUN_TOOL_TESTS", default=False)
-# 从环境中解析运行第三方设备测试的标志
+# 根据环境变量 `RUN_THIRD_PARTY_DEVICE_TESTS` 解析是否运行第三方设备测试的标志
 _run_third_party_device_tests = parse_flag_from_env("RUN_THIRD_PARTY_DEVICE_TESTS", default=False)
 
 
-# 标记一个测试为控制 PyTorch 和 TensorFlow 之间交互的测试的装饰器
+# 函数装饰器，用于标记 PT+TF 交叉测试
 def is_pt_tf_cross_test(test_case):
     """
     Decorator marking a test as a test that control interactions between PyTorch and TensorFlow.
@@ -232,436 +236,417 @@ def is_pt_tf_cross_test(test_case):
     to a truthy value and selecting the is_pt_tf_cross_test pytest mark.
 
     """
-    # 如果不运行 PyTorch + TensorFlow 交叉测试或者 PyTorch 或 TensorFlow 不可用，则跳过测试
+    # 如果未设置环境变量 `RUN_PT_TF_CROSS_TESTS` 或者当前环境中没有安装 PyTorch 或 TensorFlow，
+    # 则跳过 PT+TF 测试
     if not _run_pt_tf_cross_tests or not is_torch_available() or not is_tf_available():
         return unittest.skip("test is PT+TF test")(test_case)
     else:
-        # 尝试导入 pytest 模块，如果导入失败，则返回原始测试用例
+        # 尝试导入 pytest 模块，避免在主库中硬编码依赖 pytest
         try:
-            import pytest  # We don't need a hard dependency on pytest in the main library
+            import pytest  
+        # 如果导入失败，返回原始的 test_case
         except ImportError:
             return test_case
-        # 如果导入成功，执行下面的代码块
+        # 如果导入成功，应用 pytest.mark.is_pt_tf_cross_test() 装饰器到 test_case 上
         else:
-            # 使用 pytest.mark.is_pt_tf_cross_test() 装饰器装饰测试用例，并返回装饰后的测试用例
             return pytest.mark.is_pt_tf_cross_test()(test_case)
-# 用于装饰测试，标记测试为 PyTorch 和 Flax 之间交互的测试
+# 标记一个测试用例为控制 PyTorch 和 Flax 交互的测试的装饰器
+
+PT+FLAX 测试默认情况下会被跳过，只有当设置了环境变量 RUN_PT_FLAX_CROSS_TESTS 为真值并且选择了 is_pt_flax_cross_test pytest 标记时才会运行。
+
 def is_pt_flax_cross_test(test_case):
-    # 如果不运行 PT+FLAX 测试或者 PyTorch 或 Flax 不可用，则跳过测试
     if not _run_pt_flax_cross_tests or not is_torch_available() or not is_flax_available():
+        # 如果不满足运行条件（未设置环境变量或者没有可用的 PyTorch 或 Flax），则跳过测试
         return unittest.skip("test is PT+FLAX test")(test_case)
     else:
         try:
-            import pytest  # 我们不需要在主库中硬依赖于 pytest
+            import pytest  # 我们不需要在主库中强制依赖 pytest
         except ImportError:
             return test_case
         else:
+            # 使用 pytest 的 is_pt_flax_cross_test 标记来标记测试用例
             return pytest.mark.is_pt_flax_cross_test()(test_case)
 
 
-# 用于装饰测试，标记测试为分段测试
+# 标记一个测试用例为在 staging 环境下运行的测试的装饰器
+
+这些测试将在 huggingface.co 的 staging 环境下运行，而不是真实的模型中心。
+
 def is_staging_test(test_case):
-    # 如果不运行分段测试，则跳过测试
     if not _run_staging:
+        # 如果不运行 staging 测试，则跳过测试
         return unittest.skip("test is staging test")(test_case)
     else:
         try:
-            import pytest  # 我们不需要在主库中硬依赖于 pytest
+            import pytest  # 我们不需要在主库中强制依赖 pytest
         except ImportError:
             return test_case
         else:
+            # 使用 pytest 的 is_staging_test 标记来标记测试用例
             return pytest.mark.is_staging_test()(test_case)
 
 
-# 用于装饰测试，标记测试为管道测试。如果 RUN_PIPELINE_TESTS 设置为假值，则跳过测试。
+# 标记一个测试用例为 pipeline 测试的装饰器
+
+如果未将 RUN_PIPELINE_TESTS 设置为真值，则这些测试将被跳过。
+
 def is_pipeline_test(test_case):
     if not _run_pipeline_tests:
+        # 如果不运行 pipeline 测试，则跳过测试
         return unittest.skip("test is pipeline test")(test_case)
     else:
         try:
-            import pytest  # 我们不需要在主库中硬依赖于 pytest
+            import pytest  # 我们不需要在主库中强制依赖 pytest
         except ImportError:
             return test_case
         else:
+            # 使用 pytest 的 is_pipeline_test 标记来标记测试用例
             return pytest.mark.is_pipeline_test()(test_case)
 
 
-# 用于装饰测试，标记测试为工具测试。如果 RUN_TOOL_TESTS 设置为假值，则跳过测试。
+# 标记一个测试用例为工具测试的装饰器
+
+如果未将 RUN_TOOL_TESTS 设置为真值，则这些测试将被跳过。
+
 def is_tool_test(test_case):
     if not _run_tool_tests:
+        # 如果不运行工具测试，则跳过测试
         return unittest.skip("test is a tool test")(test_case)
     else:
         try:
-            import pytest  # 我们不需要在主库中硬依赖于 pytest
+            import pytest  # 我们不需要在主库中强制依赖 pytest
         except ImportError:
             return test_case
         else:
+            # 使用 pytest 的 is_tool_test 标记来标记测试用例
             return pytest.mark.is_tool_test()(test_case)
 
 
-# 用于装饰测试，标记测试为慢速测试。慢速测试默认情况下会被跳过。设置 RUN_SLOW 环境变量为真值来运行它们。
+# 标记一个测试用例为慢速测试的装饰器
+
+慢速测试默认情况下会被跳过。设置 RUN_SLOW 环境变量为真值以运行这些测试。
+
 def slow(test_case):
     return unittest.skipUnless(_run_slow_tests, "test is slow")(test_case)
 
 
-# 用于装饰测试，标记测试为太慢测试。慢速测试在被修复过程中会被跳过。没有测试应该标记为 "tooslow"，因为这些测试将不会被 CI 测试。
+# 标记一个测试用例为太慢测试的装饰器
+
+太慢的测试在修复过程中会被跳过。不应将任何测试标记为 "tooslow"，因为这些测试不会被 CI 测试。
+
 def tooslow(test_case):
     return unittest.skip("test is too slow")(test_case)
 
 
-# 用于装饰测试，标记测试为自定义分词器测试。
-def custom_tokenizers(test_case):
+# 标记一个测试用例为自定义分词器测试的装饰器
     """
-    Decorator marking a test for a custom tokenizer.
+    自定义分词器需要额外的依赖项，默认情况下会被跳过。将环境变量 RUN_CUSTOM_TOKENIZERS
+    设置为真值，以便运行它们。
     """
-```  
-    # 定义一个装饰器函数，用于跳过测试用例（unittest）。
-    # Custom tokenizers 需要额外的依赖项，默认情况下会被跳过。将环境变量 RUN_CUSTOM_TOKENIZERS 设置为真值以运行它们。
-    # 返回一个装饰器函数，如果 _run_custom_tokenizers 为真，则返回装饰过的测试用例，否则返回一个跳过测试的函数。
+    # 返回一个装饰器，根据 _run_custom_tokenizers 的真假决定是否跳过测试用例
     return unittest.skipUnless(_run_custom_tokenizers, "test of custom tokenizers")(test_case)
-# 标记需要 BeautifulSoup4 的测试用例的装饰器，当未安装 BeautifulSoup4 时跳过这些测试
+# 装饰器，用于标记需要 BeautifulSoup4 的测试用例。在未安装 BeautifulSoup4 时跳过这些测试。
 def require_bs4(test_case):
-    """
-    Decorator marking a test that requires BeautifulSoup4. These tests are skipped when BeautifulSoup4 isn't installed.
-    """
     return unittest.skipUnless(is_bs4_available(), "test requires BeautifulSoup4")(test_case)
 
 
-# 标记需要 OpenCV 的测试用例的装饰器，当未安装 OpenCV 时跳过这些测试
+# 装饰器，用于标记需要 GaLore 的测试用例。在未安装 GaLore 时跳过这些测试。
+def require_galore_torch(test_case):
+    return unittest.skipUnless(is_galore_torch_available(), "test requires GaLore")(test_case)
+
+
+# 装饰器，用于标记需要 OpenCV 的测试用例。在未安装 OpenCV 时跳过这些测试。
 def require_cv2(test_case):
-    """
-    Decorator marking a test that requires OpenCV.
-
-    These tests are skipped when OpenCV isn't installed.
-
-    """
     return unittest.skipUnless(is_cv2_available(), "test requires OpenCV")(test_case)
 
 
-# 标记需要 Levenshtein 的测试用例的装饰器，当未安装 Levenshtein 时跳过这些测试
+# 装饰器，用于标记需要 Levenshtein 的测试用例。在未安装 Levenshtein 时跳过这些测试。
 def require_levenshtein(test_case):
-    """
-    Decorator marking a test that requires Levenshtein.
-
-    These tests are skipped when Levenshtein isn't installed.
-
-    """
     return unittest.skipUnless(is_levenshtein_available(), "test requires Levenshtein")(test_case)
 
 
-# 标记需要 NLTK 的测试用例的装饰器，当未安装 NLTK 时跳过这些测试
+# 装饰器，用于标记需要 NLTK 的测试用例。在未安装 NLTK 时跳过这些测试。
 def require_nltk(test_case):
-    """
-    Decorator marking a test that requires NLTK.
-
-    These tests are skipped when NLTK isn't installed.
-
-    """
     return unittest.skipUnless(is_nltk_available(), "test requires NLTK")(test_case)
 
 
-# 标记需要 accelerate 的测试用例的装饰器，当未安装 accelerate 时跳过这些测试
+# 装饰器，用于标记需要 accelerate 的测试用例。在未安装 accelerate 时跳过这些测试。
 def require_accelerate(test_case):
-    """
-    Decorator marking a test that requires accelerate. These tests are skipped when accelerate isn't installed.
-    """
     return unittest.skipUnless(is_accelerate_available(), "test requires accelerate")(test_case)
 
 
-# 标记需要 fsdp 的测试用例的装饰器，当未安装 fsdp 时跳过这些测试
+# 装饰器，用于标记需要 fsdp 的测试用例。在未安装 fsdp 或版本不符合要求时跳过这些测试。
 def require_fsdp(test_case, min_version: str = "1.12.0"):
-    """
-    Decorator marking a test that requires fsdp. These tests are skipped when fsdp isn't installed.
-    """
-    return unittest.skipUnless(is_fsdp_available(min_version), f"test requires torch version >= {min_version}")(
-        test_case
-    )
+    return unittest.skipUnless(is_fsdp_available(min_version), f"test requires torch version >= {min_version}")(test_case)
 
 
-# 标记需要 g2p_en 的测试用例的装饰器，当未安装 g2p_en 时跳过这些测试
+# 装饰器，用于标记需要 g2p_en 的测试用例。在未安装 SentencePiece 时跳过这些测试。
 def require_g2p_en(test_case):
-    """
-    Decorator marking a test that requires g2p_en. These tests are skipped when SentencePiece isn't installed.
-    """
     return unittest.skipUnless(is_g2p_en_available(), "test requires g2p_en")(test_case)
 
 
-# 标记需要 safetensors 的测试用例的装饰器，当未安装 safetensors 时跳过这些测试
+# 装饰器，用于标记需要 safetensors 的测试用例。在未安装 safetensors 时跳过这些测试。
 def require_safetensors(test_case):
-    """
-    Decorator marking a test that requires safetensors. These tests are skipped when safetensors isn't installed.
-    """
     return unittest.skipUnless(is_safetensors_available(), "test requires safetensors")(test_case)
 
 
-# 标记需要 rjieba 的测试用例的装饰器，当未安装 rjieba 时跳过这些测试
+# 装饰器，用于标记需要 rjieba 的测试用例。在未安装 rjieba 时跳过这些测试。
 def require_rjieba(test_case):
-    """
-    Decorator marking a test that requires rjieba. These tests are skipped when rjieba isn't installed.
-    """
     return unittest.skipUnless(is_rjieba_available(), "test requires rjieba")(test_case)
 
 
-# 标记需要 jieba 的测试用例的装饰器，当未安装 jieba 时跳过这些测试
+# 装饰器，用于标记需要 jieba 的测试用例。在未安装 jieba 时跳过这些测试。
 def require_jieba(test_case):
-    """
-    Decorator marking a test that requires jieba. These tests are skipped when jieba isn't installed.
-    """
     return unittest.skipUnless(is_jieba_available(), "test requires jieba")(test_case)
 
 
-# 标记需要 jinja 的测试用例的装饰器，当未安装 jinja 时跳过这些测试
+# 装饰器，用于标记需要 jinja 的测试用例。在此处仅声明函数，实际装饰逻辑未提供。
 def require_jinja(test_case):
+    # Placeholder for decorator marking tests requiring Jinja
+    pass
+    # 使用装饰器标记一个需要 jinja 的测试用例。如果 jinja 没有安装，则跳过这些测试。
     """
-    Decorator marking a test that requires jinja. These tests are skipped when jinja isn't installed.
+    使用 unittest.skipUnless 函数来动态地装饰测试用例，只有在 jinja 可用时才运行该测试用例。
+    如果 is_jinja_available() 函数返回 True，则装饰器返回一个可用于跳过测试的装饰器函数，否则返回 None。
     """
     return unittest.skipUnless(is_jinja_available(), "test requires jinja")(test_case)
-
-
-# 标记需要 tf2onnx 的测试用例的装饰器，当未安装 tf2onnx 时跳过这些测试
+# 根据条件判断是否加载 tf2onnx
 def require_tf2onnx(test_case):
     return unittest.skipUnless(is_tf2onnx_available(), "test requires tf2onnx")(test_case)
 
 
-# 标记需要 onnx 的测试用例的装饰器，当未安装 onnx 时跳过这些测试
+# 根据条件判断是否加载 ONNX
 def require_onnx(test_case):
-    # 如果 ONNX 可用，则跳过测试，否则返回一个测试用例
     return unittest.skipUnless(is_onnx_available(), "test requires ONNX")(test_case)
-# 标记一个需要 Timm 的测试的装饰器
+
+
+# 根据条件判断是否加载 Timm
 def require_timm(test_case):
     """
     Decorator marking a test that requires Timm.
 
     These tests are skipped when Timm isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 Timm 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_timm_available(), "test requires Timm")(test_case)
 
 
-# 标记一个需要 NATTEN 的测试的装饰器
+# 根据条件判断是否加载 NATTEN
 def require_natten(test_case):
     """
     Decorator marking a test that requires NATTEN.
 
     These tests are skipped when NATTEN isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 NATTEN 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_natten_available(), "test requires natten")(test_case)
 
 
-# 标记一个需要 PyTorch 的测试的装饰器
+# 根据条件判断是否加载 PyTorch
 def require_torch(test_case):
     """
     Decorator marking a test that requires PyTorch.
 
     These tests are skipped when PyTorch isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 PyTorch 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_torch_available(), "test requires PyTorch")(test_case)
 
 
-# 标记一个需要 Flash Attention 的测试的装饰器
+# 根据条件判断是否加载 Flash Attention
 def require_flash_attn(test_case):
     """
     Decorator marking a test that requires Flash Attention.
 
     These tests are skipped when Flash Attention isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 Flash Attention 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_flash_attn_2_available(), "test requires Flash Attention")(test_case)
 
 
-# 标记一个需要 PyTorch's SDPA 的测试的装饰器
+# 根据条件判断是否加载 PyTorch's SDPA
 def require_torch_sdpa(test_case):
     """
     Decorator marking a test that requires PyTorch's SDPA.
 
     These tests are skipped when requirements are not met (torch version).
     """
-    # 返回一个装饰器函数，检查 PyTorch's SDPA 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_torch_sdpa_available(), "test requires PyTorch SDPA")(test_case)
 
 
-# 标记一个需要 PEFT 的测试的装饰器
+# 根据条件判断是否加载 HF token
+def require_read_token(fn):
+    """
+    A decorator that loads the HF token for tests that require to load gated models.
+    """
+    token = os.getenv("HF_HUB_READ_TOKEN")
+
+    @wraps(fn)
+    def _inner(*args, **kwargs):
+        with patch("huggingface_hub.utils._headers.get_token", return_value=token):
+            return fn(*args, **kwargs)
+
+    return _inner
+
+
+# 根据条件判断是否加载 PEFT
 def require_peft(test_case):
     """
     Decorator marking a test that requires PEFT.
 
     These tests are skipped when PEFT isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 PEFT 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_peft_available(), "test requires PEFT")(test_case)
 
 
-# 标记一个需要 Torchvision 的测试的装饰器
+# 根据条件判断是否加载 Torchvision
 def require_torchvision(test_case):
     """
     Decorator marking a test that requires Torchvision.
 
     These tests are skipped when Torchvision isn't installed.
-
     """
-    # 返回一个装饰器函数，检查 Torchvision 是否可用，若不可用则跳过测试
     return unittest.skipUnless(is_torchvision_available(), "test requires Torchvision")(test_case)
 
 
-# 标记一个需要 PyTorch 或 TensorFlow 的测试的装饰器
+# 根据条件判断是否加载 PyTorch 或 TensorFlow
 def require_torch_or_tf(test_case):
     """
     Decorator marking a test that requires PyTorch or TensorFlow.
 
     These tests are skipped when neither PyTorch nor TensorFlow is installed.
-
     """
-    # 返回一个装饰器函数，检查 PyTorch 或 TensorFlow 是否可用，若都不可用则跳过测试
     return unittest.skipUnless(is_torch_available() or is_tf_available(), "test requires PyTorch or TensorFlow")(
         test_case
     )
 
 
-# 标记一个需要 Intel Extension for PyTorch 的测试的装饰器
+# 根据条件判断是否加载 Intel Extension for PyTorch
 def require_intel_extension_for_pytorch(test_case):
     """
     Decorator marking a test that requires Intel Extension for PyTorch.
-
-    These tests are skipped when Intel Extension for PyTorch isn't installed or it does not match current PyTorch
-    version.
-
     """
-    # 返回一个装饰器函数，检查 Intel Extension for PyTorch 是否可用，若不可用则跳过测试
+    # 注释部分未提供
+    pass
+    # 当未安装Intel Extension for PyTorch或者其版本与当前PyTorch版本不匹配时，跳过这些测试。
+    """
+    返回一个装饰器，用于根据条件跳过测试。
+    装饰器检查是否可用Intel Extension for PyTorch（IPEX）。
+    如果不可用或版本不匹配，则跳过测试，并提供相应的提示信息。
+    参考链接：https://github.com/intel/intel-extension-for-pytorch
+    """
     return unittest.skipUnless(
         is_ipex_available(),
         "test requires Intel Extension for PyTorch to be installed and match current PyTorch version, see"
         " https://github.com/intel/intel-extension-for-pytorch",
     )(test_case)
-
-
-# 标记一个需要 TensorFlow probability 的测试的装饰器
+# 装饰器，用于标记一个测试需要 TensorFlow probability
 def require_tensorflow_probability(test_case):
-    """
-    Decorator marking a test that requires TensorFlow probability.
-
-    These tests are skipped when TensorFlow probability isn't installed.
-
-    """
-    # 返回一个装饰器函数，检查 TensorFlow probability 是否可用，若不可用则跳过测试
+    # 返回一个装饰器，其功能是当 TensorFlow probability 未安装时跳过测试
     return unittest.skipUnless(is_tensorflow_probability_available(), "test requires TensorFlow probability")(
         test_case
     )
-    # 返回一个装饰器，用于跳过测试，除非 TensorFlow probability 可用
-    return unittest.skipUnless(is_tensorflow_probability_available(), "test requires TensorFlow probability")(
-        test_case
-    )
-# 标记一个需要 torchaudio 的测试用例的装饰器。当 torchaudio 未安装时，跳过这些测试。
+
+
+# 装饰器，用于标记一个测试需要 torchaudio
 def require_torchaudio(test_case):
-    """
-    Decorator marking a test that requires torchaudio. These tests are skipped when torchaudio isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 torchaudio 未安装时跳过测试
     return unittest.skipUnless(is_torchaudio_available(), "test requires torchaudio")(test_case)
 
-# 标记一个需要 TensorFlow 的测试用例的装饰器。当 TensorFlow 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 TensorFlow
 def require_tf(test_case):
-    """
-    Decorator marking a test that requires TensorFlow. These tests are skipped when TensorFlow isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 TensorFlow 未安装时跳过测试
     return unittest.skipUnless(is_tf_available(), "test requires TensorFlow")(test_case)
 
-# 标记一个需要 JAX & Flax 的测试用例的装饰器。当其中一个或两者未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 JAX & Flax
 def require_flax(test_case):
-    """
-    Decorator marking a test that requires JAX & Flax. These tests are skipped when one / both are not installed
-    """
+    # 返回一个装饰器，其功能是当 JAX 或 Flax 未安装时跳过测试
     return unittest.skipUnless(is_flax_available(), "test requires JAX & Flax")(test_case)
 
-# 标记一个需要 SentencePiece 的测试用例的装饰器。当 SentencePiece 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 SentencePiece
 def require_sentencepiece(test_case):
-    """
-    Decorator marking a test that requires SentencePiece. These tests are skipped when SentencePiece isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 SentencePiece 未安装时跳过测试
     return unittest.skipUnless(is_sentencepiece_available(), "test requires SentencePiece")(test_case)
 
-# 标记一个需要 Seqio 的测试用例的装饰器。当 Seqio 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 Sacremoses
+def require_sacremoses(test_case):
+    # 返回一个装饰器，其功能是当 Sacremoses 未安装时跳过测试
+    return unittest.skipUnless(is_sacremoses_available(), "test requires Sacremoses")(test_case)
+
+
+# 装饰器，用于标记一个测试需要 Seqio
 def require_seqio(test_case):
-    """
-    Decorator marking a test that requires SentencePiece. These tests are skipped when SentencePiece isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 Seqio 未安装时跳过测试
     return unittest.skipUnless(is_seqio_available(), "test requires Seqio")(test_case)
 
-# 标记一个需要 Scipy 的测试用例的装饰器。当 Scipy 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 Scipy
 def require_scipy(test_case):
-    """
-    Decorator marking a test that requires Scipy. These tests are skipped when SentencePiece isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 Scipy 未安装时跳过测试
     return unittest.skipUnless(is_scipy_available(), "test requires Scipy")(test_case)
 
-# 标记一个需要 🤗 Tokenizers 的测试用例的装饰器。当 🤗 Tokenizers 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 🤗 Tokenizers
 def require_tokenizers(test_case):
-    """
-    Decorator marking a test that requires 🤗 Tokenizers. These tests are skipped when 🤗 Tokenizers isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 🤗 Tokenizers 未安装时跳过测试
     return unittest.skipUnless(is_tokenizers_available(), "test requires tokenizers")(test_case)
 
-# 标记一个需要 tensorflow_text 的测试用例的装饰器。当 tensorflow_text 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 tensorflow_text
 def require_tensorflow_text(test_case):
-    """
-    Decorator marking a test that requires tensorflow_text. These tests are skipped when tensroflow_text isn't
-    installed.
-    """
+    # 返回一个装饰器，其功能是当 tensorflow_text 未安装时跳过测试
     return unittest.skipUnless(is_tensorflow_text_available(), "test requires tensorflow_text")(test_case)
 
-# 标记一个需要 keras_nlp 的测试用例的装饰器。当 keras_nlp 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 keras_nlp
 def require_keras_nlp(test_case):
-    """
-    Decorator marking a test that requires keras_nlp. These tests are skipped when keras_nlp isn't installed.
-    """
+    # 返回一个装饰器，其功能是当 keras_nlp 未安装时跳过测试
     return unittest.skipUnless(is_keras_nlp_available(), "test requires keras_nlp")(test_case)
 
-# 标记一个需要 pandas 的测试用例的装饰器。当 pandas 未安装时，跳过这些测试。
+
+# 装饰器，用于标记一个测试需要 Pandas
 def require_pandas(test_case):
     """
-    Decorator marking a test that requires pandas. These tests are skipped when pandas isn't installed.
+    Decorator marking a test that requires Pandas. These tests are skipped when Pandas isn't installed.
     """
+    return unittest.skipUnless(is_pandas_available(), "test requires Pandas")(test_case)
+    # 使用装饰器标记一个需要 pandas 的测试用例。当 pandas 没有安装时，这些测试将被跳过。
+    """
+    # 返回一个装饰器，根据 pandas 的可用性决定是否跳过测试用例
     return unittest.skipUnless(is_pandas_available(), "test requires pandas")(test_case)
-
-# 标记一个需要 PyTesseract 的测试用例的装饰器。当 PyTesseract 未安装时，跳过这些测试。
+# 标记一个测试需要 PyTesseract。如果 PyTesseract 没有安装，则跳过这些测试。
 def require_pytesseract(test_case):
-    """
-    Decorator marking a test that requires PyTesseract. These tests are skipped when PyTesseract isn't installed.
-    """
     return unittest.skipUnless(is_pytesseract_available(), "test requires PyTesseract")(test_case)
 
-# 标记一个需要 PyTorch 量化功能的测试用例的装饰器。暂时缺少了这个装饰器的具体注释。
+
+# 标记一个测试需要 PyTorch Quantization Toolkit。如果 PyTorch Quantization Toolkit 没有安装，则跳过这些测试。
 def require_pytorch_quantization(test_case):
-    """
-    # 装饰器标记一个需要 PyTorch 量化工具包的测试。当 PyTorch 量化工具包未安装时，这些测试将被跳过。
-    """
-    # 使用 unittest.skipUnless() 函数装饰测试用例，当 is_pytorch_quantization_available() 函数返回 False 时跳过测试，
-    # 并提供一条消息说明测试需要 PyTorch 量化工具包
-    return unittest.skipUnless(is_pytorch_quantization_available(), "test requires PyTorch Quantization Toolkit")(
-        test_case
-    )
-# 标记一个需要视觉依赖的测试用例的装饰器，当没有安装 torchaudio 时会跳过这些测试
+    return unittest.skipUnless(is_pytorch_quantization_available(), "test requires PyTorch Quantization Toolkit")(test_case)
+
+
+# 标记一个测试需要视觉相关的依赖。如果 torchaudio 没有安装，则跳过这些测试。
 def require_vision(test_case):
     return unittest.skipUnless(is_vision_available(), "test requires vision")(test_case)
 
-# 标记一个需要 ftfy 的测试用例的装饰器，当没有安装 ftfy 时会跳过这些测试
+
+# 标记一个测试需要 ftfy。如果 ftfy 没有安装，则跳过这些测试。
 def require_ftfy(test_case):
     return unittest.skipUnless(is_ftfy_available(), "test requires ftfy")(test_case)
 
-# 标记一个需要 SpaCy 的测试用例的装饰器，当没有安装 SpaCy 时会跳过这些测试
+
+# 标记一个测试需要 SpaCy。如果 SpaCy 没有安装，则跳过这些测试。
 def require_spacy(test_case):
     return unittest.skipUnless(is_spacy_available(), "test requires spacy")(test_case)
 
-# 标记一个需要 decord 的测试用例的装饰器，当没有安装 decord 时会跳过这些测试
+
+# 标记一个测试需要 decord。如果 decord 没有安装，则跳过这些测试。
 def require_decord(test_case):
     return unittest.skipUnless(is_decord_available(), "test requires decord")(test_case)
 
-# 标记一个需要多 GPU 设置（在 PyTorch 中）的测试用例的装饰器，当机器没有多个 GPU 时会跳过这些测试
+
+# 标记一个测试需要多 GPU 设置（在 PyTorch 中）。如果没有多个 GPU，则跳过这些测试。
+# 若要仅运行多 GPU 测试，请假设所有测试名称包含 multi_gpu：
+# $ pytest -sv ./tests -k "multi_gpu"
 def require_torch_multi_gpu(test_case):
     if not is_torch_available():
         return unittest.skip("test requires PyTorch")(test_case)
@@ -670,276 +655,288 @@ def require_torch_multi_gpu(test_case):
 
     return unittest.skipUnless(torch.cuda.device_count() > 1, "test requires multiple GPUs")(test_case)
 
-# 标记一个需要多加速器设置（在 PyTorch 中）的测试用例的装饰器，当机器没有多个加速器时会跳过这些测试
+
+# 标记一个测试需要多加速器设置（在 PyTorch 中）。如果没有多个加速器，则跳过这些测试。
+# 若要仅运行多加速器测试，请假设所有测试名称包含 multi_accelerator：
+# $ pytest -sv ./tests -k "multi_accelerator"
 def require_torch_multi_accelerator(test_case):
     if not is_torch_available():
         return unittest.skip("test requires PyTorch")(test_case)
 
     return unittest.skipUnless(backend_device_count(torch_device) > 1, "test requires multiple accelerators")(test_case)
 
-# 标记一个需要 0 或 1 个 GPU 设置（在 PyTorch 中）的测试用例的装饰器
+
+# 标记一个测试需要 0 或 1 个 GPU 设置（在 PyTorch 中）。
 def require_torch_non_multi_gpu(test_case):
     if not is_torch_available():
         return unittest.skip("test requires PyTorch")(test_case)
 
     import torch
-
+    # 返回一个装饰器，用于条件性跳过测试
     return unittest.skipUnless(torch.cuda.device_count() < 2, "test requires 0 or 1 GPU")(test_case)
-
-# 标记一个需要 0 或 1 个加速器设置（在 PyTorch 中）的测试用例的装饰器
+# 标记一个测试需要零或一个加速器设置（在PyTorch中）的装饰器
 def require_torch_non_multi_accelerator(test_case):
+    # 如果PyTorch不可用，则跳过测试
     if not is_torch_available():
         return unittest.skip("test requires PyTorch")(test_case)
 
+    # 返回一个条件，该条件检查当前设备上的后端设备数量是否小于2，否则跳过测试
     return unittest.skipUnless(backend_device_count(torch_device) < 2, "test requires 0 or 1 accelerator")(test_case)
 
-# 标记一个需要 0 或 1 或 2 个 GPU 设置（在 PyTorch 中）的测试用例的装饰器
+
+# 标记一个测试需要零、一个或两个GPU设置（在PyTorch中）的装饰器
 def require_torch_up_to_2_gpus(test_case):
-    # 检查当前环境是否可用 PyTorch 框架
-    if not is_torch_available():
-        # 如果不可用，则跳过测试并返回相应的消息
-        return unittest.skip("test requires PyTorch")(test_case)
-    
-    # 导入 PyTorch 框架
-    import torch
-    
-    # 仅在当前 CUDA 设备数量小于 3 时执行测试，否则跳过测试并返回消息
-    return unittest.skipUnless(torch.cuda.device_count() < 3, "test requires 0 or 1 or 2 GPUs")(test_case)
-# 装饰器，标记一个测试需要最多两个加速器（在 PyTorch 中）
-def require_torch_up_to_2_accelerators(test_case):
-    # 如果 PyTorch 不可用，则跳过测试
+    # 如果PyTorch不可用，则跳过测试
     if not is_torch_available():
         return unittest.skip("test requires PyTorch")(test_case)
 
-    # 除非当前设备加速器数量小于 3，否则跳过测试
+    import torch
+
+    # 返回一个条件，该条件检查当前机器上的GPU数量是否小于3，否则跳过测试
+    return unittest.skipUnless(torch.cuda.device_count() < 3, "test requires 0 or 1 or 2 GPUs")(test_case)
+
+
+# 标记一个测试需要零、一个或两个加速器设置（在PyTorch中）的装饰器
+def require_torch_up_to_2_accelerators(test_case):
+    # 如果PyTorch不可用，则跳过测试
+    if not is_torch_available():
+        return unittest.skip("test requires PyTorch")(test_case)
+
+    # 返回一个条件，该条件检查当前设备上的后端设备数量是否小于3，否则跳过测试
     return unittest.skipUnless(backend_device_count(torch_device) < 3, "test requires 0 or 1 or 2 accelerators")(test_case)
 
 
-# 装饰器，标记一个测试需要 TPU（在 PyTorch 中）
-def require_torch_tpu(test_case):
-    # 除非 PyTorch TPU 可用，否则跳过测试
-    return unittest.skipUnless(is_torch_tpu_available(check_device=False), "test requires PyTorch TPU")(test_case)
+# 标记一个测试需要TorchXLA（在PyTorch中）的装饰器
+def require_torch_xla(test_case):
+    # 返回一个条件，该条件检查当前系统是否支持TorchXLA，否则跳过测试
+    return unittest.skipUnless(is_torch_xla_available(), "test requires TorchXLA")(test_case)
 
 
-# 装饰器，标记一个测试需要 NeuronCore（在 PyTorch 中）
+# 标记一个测试需要NeuronCore（在PyTorch中）的装饰器
 def require_torch_neuroncore(test_case):
-    # 除非 PyTorch NeuronCore 可用，否则跳过测试
+    # 返回一个条件，该条件检查当前系统是否支持NeuronCore，否则跳过测试
     return unittest.skipUnless(is_torch_neuroncore_available(check_device=False), "test requires PyTorch NeuronCore")(test_case)
 
 
-# 装饰器，标记一个测试需要 NPU（在 PyTorch 中）
+# 标记一个测试需要NPU（在PyTorch中）的装饰器
 def require_torch_npu(test_case):
-    # 除非 PyTorch NPU 可用，否则跳过测试
+    # 返回一个条件，该条件检查当前系统是否支持NPU，否则跳过测试
     return unittest.skipUnless(is_torch_npu_available(), "test requires PyTorch NPU")(test_case)
 
 
-# 装饰器，标记一个测试需要多个 NPU（在 PyTorch 中）。这些测试在没有多个 NPU 的机器上跳过。
+# 标记一个测试需要多NPU设置（在PyTorch中）的装饰器，这些测试在没有多个NPU的机器上会被跳过
 def require_torch_multi_npu(test_case):
-    # 如果 PyTorch NPU 不可用，则跳过测试
+    # 如果没有NPU可用，则跳过测试
     if not is_torch_npu_available():
         return unittest.skip("test requires PyTorch NPU")(test_case)
 
-    # 除非当前设备的 NPU 数量大于 1，否则跳过测试
+    import torch
+
+    # 返回一个条件，该条件检查当前系统上NPU设备的数量是否大于1，否则跳过测试
     return unittest.skipUnless(torch.npu.device_count() > 1, "test requires multiple NPUs")(test_case)
 
 
-# 装饰器，标记一个测试需要 XPU 和 IPEX。这些测试在未安装 Intel Extension for PyTorch 或其版本不匹配当前 PyTorch 版本时跳过。
+# 标记一个测试需要XPU和IPEX（在PyTorch中）的装饰器
 def require_torch_xpu(test_case):
-    # 除非 IPEX 和 XPU 设备可用，否则跳过测试
+    # 返回一个条件，该条件检查当前系统是否支持IPEX和XPU设备，否则跳过测试
     return unittest.skipUnless(is_torch_xpu_available(), "test requires IPEX and an XPU device")(test_case)
 
 
-# 装饰器，标记一个测试需要带有 IPEX 和至少一个 XPU 设备的多个 XPU 设置。这些测试在没有 IPEX 或多个 XPU 的机器上跳过。
+# 标记一个测试需要多XPU设置和IPEX（在PyTorch中）的装饰器，这些测试在没有IPEX或多个XPU的机器上会被跳过
 def require_torch_multi_xpu(test_case):
-    # 如果 IPEX 和 XPU 不可用，则跳过测试
+    # 返回一个条件，该条件检查当前系统是否支持IPEX和至少一个XPU设备，否则跳过测试
+    return unittest.skipUnless(is_torch_xpu_available(), "test requires IPEX and an XPU device")(test_case)
+    """
+    如果没有可用的 Torch XPU（例如 IPEX），则跳过测试，并返回相应的提示信息
+    """
     if not is_torch_xpu_available():
+        # 跳过测试，并返回一个包含跳过原因的消息，用于单元测试框架
         return unittest.skip("test requires IPEX and atleast one XPU device")(test_case)
 
-    # 除非当前设备的 XPU 数量大于 1，否则跳过测试
+    # 除非系统有多个 Torch XPU 设备可用，否则跳过测试，并返回相应的提示信息
     return unittest.skipUnless(torch.xpu.device_count() > 1, "test requires multiple XPUs")(test_case)
-
-
-# 如果 PyTorch 可用，则设置环境变量 CUDA_VISIBLE_DEVICES="" 以强制使用 CPU 模式
 if is_torch_available():
+    # 如果 Torch 可用，则导入 torch 库
     import torch
-    # 检查环境变量中是否设置了名为 "TRANSFORMERS_TEST_BACKEND" 的变量
+
+    # 如果存在 TRANSFORMERS_TEST_BACKEND 环境变量
     if "TRANSFORMERS_TEST_BACKEND" in os.environ:
-        # 如果设置了，则获取该变量的值
+        # 获取 backend 名称
         backend = os.environ["TRANSFORMERS_TEST_BACKEND"]
         try:
-            # 尝试动态导入该变量指定的模块
+            # 尝试导入指定的 backend 模块
             _ = importlib.import_module(backend)
         except ModuleNotFoundError as e:
-            # 如果导入失败，则抛出模块未找到的异常，并提供详细信息
+            # 报错信息，指出无法导入指定的 backend 模块
             raise ModuleNotFoundError(
                 f"Failed to import `TRANSFORMERS_TEST_BACKEND` '{backend}'! This should be the name of an installed module. The original error (look up to see its"
                 f" traceback):\n{e}"
             ) from e
-    
-    # 检查环境变量中是否设置了名为 "TRANSFORMERS_TEST_DEVICE" 的变量
+
+    # 如果存在 TRANSFORMERS_TEST_DEVICE 环境变量
     if "TRANSFORMERS_TEST_DEVICE" in os.environ:
-        # 如果设置了，则获取该变量的值作为 Torch 设备
+        # 获取 torch_device 名称
         torch_device = os.environ["TRANSFORMERS_TEST_DEVICE"]
+        # 如果 torch_device 是 "cuda" 但 CUDA 不可用，则抛出 ValueError
+        if torch_device == "cuda" and not torch.cuda.is_available():
+            raise ValueError(
+                f"TRANSFORMERS_TEST_DEVICE={torch_device}, but CUDA is unavailable. Please double-check your testing environment."
+            )
+        # 如果 torch_device 是 "xpu" 但 XPU 不可用，则抛出 ValueError
+        if torch_device == "xpu" and not is_torch_xpu_available():
+            raise ValueError(
+                f"TRANSFORMERS_TEST_DEVICE={torch_device}, but XPU is unavailable. Please double-check your testing environment."
+            )
+        # 如果 torch_device 是 "npu" 但 NPU 不可用，则抛出 ValueError
+        if torch_device == "npu" and not is_torch_npu_available():
+            raise ValueError(
+                f"TRANSFORMERS_TEST_DEVICE={torch_device}, but NPU is unavailable. Please double-check your testing environment."
+            )
+
         try:
-            # 尝试创建 Torch 设备，以验证提供的设备是否有效
+            # 尝试创建设备来验证提供的设备名称是否有效
             _ = torch.device(torch_device)
         except RuntimeError as e:
-            # 如果创建设备时发生错误，则抛出运行时错误，并提供详细信息
+            # 报错信息，指出环境变量 TRANSFORMERS_TEST_DEVICE 指定的设备名称无效
             raise RuntimeError(
                 f"Unknown testing device specified by environment variable `TRANSFORMERS_TEST_DEVICE`: {torch_device}"
             ) from e
-    # 如果环境变量中未设置测试设备，并且 CUDA 可用，则选择 CUDA 设备
+    # 如果 CUDA 可用，则默认设备为 "cuda"
     elif torch.cuda.is_available():
         torch_device = "cuda"
-    # 如果第三方设备测试启用，并且 Torch NPU 可用，则选择 NPU 设备
+    # 如果需要运行第三方设备测试且 NPU 可用，则设备为 "npu"
     elif _run_third_party_device_tests and is_torch_npu_available():
         torch_device = "npu"
-    # 如果第三方设备测试启用，并且 Torch XPU 可用，则选择 XPU 设备
+    # 如果需要运行第三方设备测试且 XPU 可用，则设备为 "xpu"
     elif _run_third_party_device_tests and is_torch_xpu_available():
         torch_device = "xpu"
-    # 如果以上条件都不满足，则选择 CPU 设备
     else:
+        # 否则，默认设备为 "cpu"
         torch_device = "cpu"
 else:
-    # 如果没有其他设备可用，则将 torch_device 设为 None
+    # 如果 Torch 不可用，则设备为 None
     torch_device = None
 
-# 如果 TensorFlow 可用，则导入 TensorFlow 库
+# 如果 TensorFlow 可用，则导入 tensorflow 库
 if is_tf_available():
     import tensorflow as tf
 
-# 如果 Flax 可用，则导入 JAX 库，并设置默认设备为当前设备
+# 如果 Flax 可用，则导入 jax 库，并获取默认后端名称
 if is_flax_available():
     import jax
-    # 获取默认的 JAX 后端设备
+
     jax_device = jax.default_backend()
 else:
-    # 否则将 jax_device 设为 None
+    # 否则，设备为 None
     jax_device = None
-
-# 以下为一系列装饰器函数，用于标记需要特定环境支持的测试用例
-
-# 要求 TorchDynamo，需要 TorchDynamo 可用
-def require_torchdynamo(test_case):
-    """Decorator marking a test that requires TorchDynamo"""
-    return unittest.skipUnless(is_torchdynamo_available(), "test requires TorchDynamo")(test_case)
-
-# 要求 Torch-TensorRT FX，需要 Torch-TensorRT FX 可用
-def require_torch_tensorrt_fx(test_case):
-    """Decorator marking a test that requires Torch-TensorRT FX"""
-    return unittest.skipUnless(is_torch_tensorrt_fx_available(), "test requires Torch-TensorRT FX")(test_case)
-
-# 要求 Torch GPU，需要 CUDA 和 PyTorch 可用
-def require_torch_gpu(test_case):
-    """Decorator marking a test that requires CUDA and PyTorch."""
-    return unittest.skipUnless(torch_device == "cuda", "test requires CUDA")(test_case)
-
-# 要求 Torch 加速器，需要可用的加速器和 PyTorch
-def require_torch_accelerator(test_case):
-    """Decorator marking a test that requires an accessible accelerator and PyTorch."""
-    return unittest.skipUnless(torch_device is not None and torch_device != "cpu", "test requires accelerator")(test_case)
-
-# 要求 Torch fp16，需要设备支持 fp16
+    # 如果 torch_device 不为 None 并且不是 "cpu"，则使用 unittest.skipUnless 装饰器，
+    # 其中条件为 "test requires accelerator"，表示仅在满足条件时才跳过测试。
+    return unittest.skipUnless(torch_device is not None and torch_device != "cpu", "test requires accelerator")(
+        test_case
+    )
+# 装饰器，用于标记需要支持 fp16 设备的测试用例
 def require_torch_fp16(test_case):
-    """Decorator marking a test that requires a device that supports fp16"""
+    # 返回一个 unittest 装饰器，根据设备是否支持 fp16 来跳过测试用例
     return unittest.skipUnless(
         is_torch_fp16_available_on_device(torch_device), "test requires device with fp16 support"
     )(test_case)
 
-# 要求 Torch bf16，需要设备支持 bf16
+
+# 装饰器，用于标记需要支持 bf16 设备的测试用例
 def require_torch_bf16(test_case):
-    """Decorator marking a test that requires a device that supports bf16"""
+    # 返回一个 unittest 装饰器，根据设备是否支持 bf16 来跳过测试用例
     return unittest.skipUnless(
         is_torch_bf16_available_on_device(torch_device), "test requires device with bf16 support"
     )(test_case)
 
-# 要求 Torch bf16 GPU，需要 torch>=1.10，并且使用 Ampere GPU 或更新的架构，或 cuda>=11.0
+
+# 装饰器，用于标记需要支持 bf16 GPU 设备的测试用例
 def require_torch_bf16_gpu(test_case):
-    """Decorator marking a test that requires torch>=1.10, using Ampere GPU or newer arch with cuda>=11.0"""
+    # 返回一个 unittest 装饰器，根据设备是否支持 bf16 GPU 来跳过测试用例
     return unittest.skipUnless(
         is_torch_bf16_gpu_available(),
         "test requires torch>=1.10, using Ampere GPU or newer arch with cuda>=11.0",
     )(test_case)
 
-# 要求 Torch bf16 CPU，需要 torch>=1.10，并且使用 CPU
+
+# 装饰器，用于标记需要支持 bf16 CPU 设备的测试用例
 def require_torch_bf16_cpu(test_case):
-    """Decorator marking a test that requires torch>=1.10, using CPU."""
+    # 返回一个 unittest 装饰器，根据设备是否支持 bf16 CPU 来跳过测试用例
     return unittest.skipUnless(
         is_torch_bf16_cpu_available(),
         "test requires torch>=1.10, using CPU",
     )(test_case)
 
-# 要求 Torch tf32，需要 Ampere 或更新的 GPU 架构，cuda>=11 和 torch>=1.7
+
+# 装饰器，用于标记需要支持 tf32 设备的测试用例
 def require_torch_tf32(test_case):
-    """Decorator marking a test that requires Ampere or a newer GPU arch, cuda>=11 and torch>=1.7."""
+    # 返回一个 unittest 装饰器，根据设备是否支持 tf32 来跳过测试用例
     return unittest.skipUnless(
         is_torch_tf32_available(), "test requires Ampere or a newer GPU arch, cuda>=11 and torch>=1.7"
     )(test_case)
 
-# 要求 Detectron2，需要 detectron2 可用
+
+# 装饰器，用于标记需要 detectron2 的测试用例
 def require_detectron2(test_case):
-    """Decorator marking a test that requires detectron2."""
+    # 返回一个 unittest 装饰器，根据 detectron2 是否可用来跳过测试用例
     return unittest.skipUnless(is_detectron2_available(), "test requires `detectron2`")(test_case)
 
-# 要求 Faiss，需要 faiss 可用
+
+# 装饰器，用于标记需要 faiss 的测试用例
 def require_faiss(test_case):
-    """Decorator marking a test that requires faiss."""
+    # 返回一个 unittest 装饰器，根据 faiss 是否可用来跳过测试用例
     return unittest.skipUnless(is_faiss_available(), "test requires `faiss`")(test_case)
 
-# 要求 Optuna，需要 optuna 可用
+
+# 装饰器，用于标记需要 optuna 的测试用例
 def require_optuna(test_case):
     """
-    Decorator marking a test that requires optuna.
+    返回一个 unittest 装饰器，根据 optuna 是否可用来跳过测试用例
 
-    These tests are skipped when optuna isn't installed.
-
+    这些测试用例在没有安装 optuna 时会被跳过。
     """
-    # 如果 optuna 可用，则跳过测试，否则提示测试需要 optuna
     return unittest.skipUnless(is_optuna_available(), "test requires optuna")(test_case)
+
+
+# 装饰器，用于标记需要 Ray/tune 的测试用例
 def require_ray(test_case):
     """
-    Decorator marking a test that requires Ray/tune.
+    返回一个 unittest 装饰器，根据 Ray/tune 是否可用来跳过测试用例
 
-    These tests are skipped when Ray/tune isn't installed.
-
+    这些测试用例在没有安装 Ray/tune 时会被跳过。
     """
-    # 返回一个装饰器，用于标记需要 Ray/tune 的测试用例
     return unittest.skipUnless(is_ray_available(), "test requires Ray/tune")(test_case)
 
 
+# 装饰器，用于标记需要 SigOpt 的测试用例
 def require_sigopt(test_case):
     """
-    Decorator marking a test that requires SigOpt.
+    返回一个 unittest 装饰器，根据 SigOpt 是否可用来跳过测试用例
 
-    These tests are skipped when SigOpt isn't installed.
-
+    这些测试用例在没有安装 SigOpt 时会被跳过。
     """
-    # 返回一个装饰器，用于标记需要 SigOpt 的测试用例
     return unittest.skipUnless(is_sigopt_available(), "test requires SigOpt")(test_case)
 
 
+# 装饰器，用于标记需要 wandb 的测试用例
 def require_wandb(test_case):
     """
-    Decorator marking a test that requires wandb.
+    返回一个 unittest 装饰器，根据 wandb 是否可用来跳过测试用例
 
-    These tests are skipped when wandb isn't installed.
-
+    这些测试用例在没有安装 wandb 时会被跳过。
     """
-    # 返回一个装饰器，用于标记需要 wandb 的测试用例
     return unittest.skipUnless(is_wandb_available(), "test requires wandb")(test_case)
 
 
+# 装饰器，用于标记需要 clearml 的测试用例
 def require_clearml(test_case):
     """
-    Decorator marking a test requires clearml.
+    返回一个 unittest 装饰器，根据 clearml 是否可用来跳过测试用例
 
-    These tests are skipped when clearml isn't installed.
-
+    这些测试用例在没有安装 clearml 时会被跳过。
     """
-    # 返回一个装饰器，用于标记需要 clearml 的测试用例
     return unittest.skipUnless(is_clearml_available(), "test requires clearml")(test_case)
-
-
+# 标记一个需要 soundfile 库的测试用例的装饰器函数
 def require_soundfile(test_case):
     """
     Decorator marking a test that requires soundfile
@@ -947,218 +944,213 @@ def require_soundfile(test_case):
     These tests are skipped when soundfile isn't installed.
 
     """
-    # 返回一个装饰器，用于标记需要 soundfile 的测试用例
+    # 返回一个跳过测试的装饰器，除非 soundfile 可用
     return unittest.skipUnless(is_soundfile_availble(), "test requires soundfile")(test_case)
 
 
+# 标记一个需要 deepspeed 库的测试用例的装饰器函数
 def require_deepspeed(test_case):
     """
     Decorator marking a test that requires deepspeed
     """
-    # 返回一个装饰器，用于标记需要 deepspeed 的测试用例
+    # 返回一个跳过测试的装饰器，除非 deepspeed 可用
     return unittest.skipUnless(is_deepspeed_available(), "test requires deepspeed")(test_case)
 
 
+# 标记一个需要 apex 库的测试用例的装饰器函数
 def require_apex(test_case):
     """
     Decorator marking a test that requires apex
     """
-    # 返回一个装饰器，用于标记需要 apex 的测试用例
+    # 返回一个跳过测试的装饰器，除非 apex 可用
     return unittest.skipUnless(is_apex_available(), "test requires apex")(test_case)
 
 
+# 标记一个需要 aqlm 库的测试用例的装饰器函数
+def require_aqlm(test_case):
+    """
+    Decorator marking a test that requires aqlm
+    """
+    # 返回一个跳过测试的装饰器，除非 aqlm 可用
+    return unittest.skipUnless(is_aqlm_available(), "test requires aqlm")(test_case)
+
+
+# 标记一个需要 bitsandbytes 库的测试用例的装饰器函数
 def require_bitsandbytes(test_case):
     """
-    Decorator for bits and bytes (bnb) dependency
+    Decorator marking a test that requires the bitsandbytes library. Will be skipped when the library or its hard dependency torch is not installed.
     """
-    # 返回一个装饰器，用于标记需要 bnb 的测试用例
-    return unittest.skipUnless(is_bitsandbytes_available(), "test requires bnb")(test_case)
+    # 检查 bitsandbytes 和 torch 是否都可用
+    if is_bitsandbytes_available() and is_torch_available():
+        try:
+            import pytest
+
+            # 使用 pytest 的标记来标记测试用例
+            return pytest.mark.bitsandbytes(test_case)
+        except ImportError:
+            return test_case
+    else:
+        # 返回一个跳过测试的装饰器，需要 bitsandbytes 和 torch
+        return unittest.skip("test requires bitsandbytes and torch")(test_case)
 
 
+# 标记一个需要 optimum 依赖的测试用例的装饰器函数
 def require_optimum(test_case):
     """
     Decorator for optimum dependency
     """
-    # 返回一个装饰器，用于标记需要 optimum 的测试用例
+    # 返回一个跳过测试的装饰器，除非 optimum 可用
     return unittest.skipUnless(is_optimum_available(), "test requires optimum")(test_case)
 
 
+# 标记一个需要 tensorboard 依赖的测试用例的装饰器函数
 def require_tensorboard(test_case):
     """
     Decorator for `tensorboard` dependency
     """
-    # 返回一个装饰器，用于标记需要 tensorboard 的测试用例
+    # 返回一个跳过测试的装饰器，除非 tensorboard 可用
     return unittest.skipUnless(is_tensorboard_available(), "test requires tensorboard")
 
 
+# 标记一个需要 auto_gptq 依赖的测试用例的装饰器函数
 def require_auto_gptq(test_case):
     """
     Decorator for auto_gptq dependency
     """
-    # 返回一个装饰器，用于标记需要 auto_gptq 的测试用例
+    # 返回一个跳过测试的装饰器，除非 auto_gptq 可用
     return unittest.skipUnless(is_auto_gptq_available(), "test requires auto-gptq")(test_case)
 
 
+# 标记一个需要 auto_awq 依赖的测试用例的装饰器函数
 def require_auto_awq(test_case):
     """
     Decorator for auto_awq dependency
     """
-    # 返回一个装饰器，用于标记需要 autoawq 的测试用例
+    # 返回一个跳过测试的装饰器，除非 auto_awq 可用
     return unittest.skipUnless(is_auto_awq_available(), "test requires autoawq")(test_case)
 
 
+# 标记一个需要 quanto 依赖的测试用例的装饰器函数
+def require_quanto(test_case):
+    """
+    Decorator for quanto dependency
+    """
+    # 返回一个跳过测试的装饰器，除非 quanto 可用
+    return unittest.skipUnless(is_quanto_available(), "test requires quanto")(test_case)
+
+
+# 标记一个需要 phonemizer 依赖的测试用例的装饰器函数
 def require_phonemizer(test_case):
     """
     Decorator marking a test that requires phonemizer
     """
-    # 返回一个装饰器，用于标记需要 phonemizer 的测试用例
+    # 返回一个跳过测试的装饰器，除非 phonemizer 可用
     return unittest.skipUnless(is_phonemizer_available(), "test requires phonemizer")(test_case)
 
 
+# 标记一个需要 pyctcdecode 依赖的测试用例的装饰器函数
 def require_pyctcdecode(test_case):
     """
     Decorator marking a test that requires pyctcdecode
     """
-    # 返回一个装饰器，用于标记需要 pyctcdecode 的测试用例
+    # 返回一个跳过测试的装饰器，除非 pyctcdecode 可用
     return unittest.skipUnless(is_pyctcdecode_available(), "test requires pyctcdecode")(test_case)
 
 
+# 标记一个需要 librosa 依赖的测试用例的装饰器函数
 def require_librosa(test_case):
-    # Placeholder for require_librosa
-    pass
-    # 定义一个装饰器，用于标记需要使用 librosa 的测试
     """
     Decorator marking a test that requires librosa
     """
-    # 返回一个装饰器，根据是否可用 librosa 决定是否跳过测试
+    # 返回一个跳过测试的装饰器，除非 librosa 可用
     return unittest.skipUnless(is_librosa_available(), "test requires librosa")(test_case)
-# 标记一个测试需要 essentia 的装饰器
+
+
+# 标记一个需要 essentia 依赖的测试用例的装饰器函数
 def require_essentia(test_case):
     """
     Decorator marking a test that requires essentia
     """
+    # 返回一个跳过测试的装饰器，待补充，当前函数体为空
+    # 如果 essentia 可用，则使用 unittest 的 skipUnless 装饰器跳过测试，否则运行测试
     return unittest.skipUnless(is_essentia_available(), "test requires essentia")(test_case)
-
-
-# 标记一个测试需要 pretty_midi 的装饰器
+# 装饰器函数，用于标记需要依赖 pretty_midi 库的测试用例
 def require_pretty_midi(test_case):
-    """
-    Decorator marking a test that requires pretty_midi
-    """
     return unittest.skipUnless(is_pretty_midi_available(), "test requires pretty_midi")(test_case)
 
 
-# 检查给定命令是否存在
+# 检查给定的命令是否存在于系统 PATH 中
 def cmd_exists(cmd):
     return shutil.which(cmd) is not None
 
 
-# 标记一个测试需要 `/usr/bin/time` 的装饰器
+# 装饰器函数，标记需要 `/usr/bin/time` 命令的测试用例
 def require_usr_bin_time(test_case):
-    """
-    Decorator marking a test that requires `/usr/bin/time`
-    """
     return unittest.skipUnless(cmd_exists("/usr/bin/time"), "test requires /usr/bin/time")(test_case)
 
 
-# 标记一个测试需要 sudachi 的装饰器
+# 装饰器函数，标记需要 sudachi 库的测试用例
 def require_sudachi(test_case):
-    """
-    Decorator marking a test that requires sudachi
-    """
     return unittest.skipUnless(is_sudachi_available(), "test requires sudachi")(test_case)
 
 
-# 标记一个测试需要 jumanpp 的装饰器
+# 装饰器函数，标记需要 sudachi_projection 库的测试用例
+def require_sudachi_projection(test_case):
+    return unittest.skipUnless(is_sudachi_projection_available(), "test requires sudachi which supports projection")(test_case)
+
+
+# 装饰器函数，标记需要 jumanpp 库的测试用例
 def require_jumanpp(test_case):
-    """
-    Decorator marking a test that requires jumanpp
-    """
     return unittest.skipUnless(is_jumanpp_available(), "test requires jumanpp")(test_case)
 
 
-# 标记一个测试需要 cython 的装饰器
+# 装饰器函数，标记需要 cython 库的测试用例
 def require_cython(test_case):
-    """
-    Decorator marking a test that requires jumanpp
-    """
     return unittest.skipUnless(is_cython_available(), "test requires cython")(test_case)
 
 
-# 返回可用 GPU 数量（不管是使用 torch、tf 还是 jax）
+# 获取当前系统上可用的 GPU 数量，无论使用的是 torch、tf 还是 jax
 def get_gpu_count():
-    """
-    Return the number of available gpus (regardless of whether torch, tf or jax is used)
-    """
-    if is_torch_available():
+    if is_torch_available():  # 如果有 torch 库可用
         import torch
-
         return torch.cuda.device_count()
-    elif is_tf_available():
+    elif is_tf_available():  # 如果有 tensorflow 库可用
         import tensorflow as tf
-
         return len(tf.config.list_physical_devices("GPU"))
-    elif is_flax_available():
+    elif is_flax_available():  # 如果有 jax 库可用
         import jax
-
         return jax.device_count()
     else:
-        return 0
+        return 0  # 默认返回 GPU 数量为 0
 
 
-# 获取测试目录路径
+# 获取测试目录的路径，并允许附加路径作为参数
 def get_tests_dir(append_path=None):
-    """
-    Args:
-        append_path: optional path to append to the tests dir path
+    caller__file__ = inspect.stack()[1][1]  # 获取调用者的文件路径
+    tests_dir = os.path.abspath(os.path.dirname(caller__file__))  # 获取调用者所在目录的绝对路径
 
-    Return:
-        The full path to the `tests` dir, so that the tests can be invoked from anywhere. Optionally `append_path` is
-        joined after the `tests` dir the former is provided.
-
-    """
-    # 获取调用该函数的文件路径
-    caller__file__ = inspect.stack()[1][1]
-    tests_dir = os.path.abspath(os.path.dirname(caller__file__))
-
-    # 循环直到找到��含 "tests" 的目录
+    # 向上追溯直到找到以 "tests" 结尾的目录
     while not tests_dir.endswith("tests"):
         tests_dir = os.path.dirname(tests_dir)
 
-    # 如果提供了 append_path，则将其连接到 "tests" 目录后面
     if append_path:
         return os.path.join(tests_dir, append_path)
     else:
         return tests_dir
-
-
-#
-# 用于处理测试文本输出的辅助函数
-# 原始代码来源于：
-# https://github.com/fastai/fastai/blob/master/tests/utils/text.py
-
-
-# 当任何函数包含 print() 调用并且被覆盖时，比如进度条，
-# 需要特别注意，因为在 pytest -s 捕获的输出（capsys 或 contextlib.redirect_stdout）
-# 包含任何临时打印的字符串，后面跟着 \r。这个辅助函数确保缓冲区将包含相同的输出
-# 无论是否在 pytest 中使用 -s，将:
-# foo bar\r tar mar\r final message
-# 转换为:
-# final message
-# 定义一个函数，用于处理单个字符串或多行缓冲区
+# 定义一个函数，用于去除文本中的换行符以及其前面的内容
 def apply_print_resets(buf):
-    # 使用正则表达式替换掉以\r结尾的内容，返回处理后的结果
     return re.sub(r"^.*\r", "", buf, 0, re.M)
 
-# 断言输出中包含特定内容
+# 定义一个函数，用于断言某个字符串是否在给定输出中（不区分大小写）
 def assert_screenout(out, what):
-    # 将输出内容转换为小写，并去除特定格式的内容
+    # 将输出文本转换为小写，并应用去除换行符的处理
     out_pr = apply_print_resets(out).lower()
-    # 在处理后的输出中查找特定内容，如果找到则继续执行，否则抛出异常
+    # 在处理后的输出文本中查找给定字符串的位置
     match_str = out_pr.find(what.lower())
+    # 如果未找到，抛出断言异常，显示期望在输出中找到的字符串
     assert match_str != -1, f"expecting to find {what} in output: f{out_pr}"
 
-# 定义一个上下文管理器，用于捕获和重放 stdout 和 stderr
+# 定义一个上下文管理器，用于捕获和重放标准输出和标准错误输出
 class CaptureStd:
     """
     Context manager to capture:
@@ -1176,7 +1168,7 @@ class CaptureStd:
 
     Examples:
 
-    ```py
+    ```python
     # to capture stdout only with auto-replay
     with CaptureStdout() as cs:
         print("Secret message")
@@ -1207,12 +1199,12 @@ class CaptureStd:
         print("Secret message")
     assert "message" in cs.out
     ```"""
-
-    # 初始化方法，设置是否捕获 stdout 和 stderr，以及是否重放
+    
+    # 初始化函数，根据参数设置是否捕获和重放 stdout 和 stderr
     def __init__(self, out=True, err=True, replay=True):
         self.replay = replay
 
-        # 如���捕获 stdout，则创建一个 StringIO 对象
+        # 如果捕获 stdout
         if out:
             self.out_buf = StringIO()
             self.out = "error: CaptureStd context is unfinished yet, called too early"
@@ -1220,7 +1212,7 @@ class CaptureStd:
             self.out_buf = None
             self.out = "not capturing stdout"
 
-        # 如果捕获 stderr，则创建一个 StringIO 对象
+        # 如果捕获 stderr
         if err:
             self.err_buf = StringIO()
             self.err = "error: CaptureStd context is unfinished yet, called too early"
@@ -1228,73 +1220,63 @@ class CaptureStd:
             self.err_buf = None
             self.err = "not capturing stderr"
 
-    # 进入上下文时执行的方法
+    # 进入上下文管理器时的操作，替换 sys.stdout 和 sys.stderr 到自定义缓冲区
     def __enter__(self):
-        # 如果捕获 stdout，则将 sys.stdout 重定向到 StringIO 对象
+        # 如果捕获 stdout，则将 sys.stdout 替换为自定义缓冲区
         if self.out_buf:
             self.out_old = sys.stdout
             sys.stdout = self.out_buf
 
-        # 如果捕获 stderr，则将 sys.stderr 重定向到 StringIO 对象
+        # 如果捕获 stderr，则将 sys.stderr 替换为自定义缓冲区
         if self.err_buf:
             self.err_old = sys.stderr
             sys.stderr = self.err_buf
 
         return self
-    # 当退出上下文时的操作，接受任意异常信息
+    # 定义 __exit__ 方法，用于在对象退出时执行清理操作，接收任意异常参数
     def __exit__(self, *exc):
-        # 如果有输出缓冲区
+        # 如果输出缓冲区不为空，则恢复原始的标准输出，并获取捕获的输出内容
         if self.out_buf:
-            # 恢复标准输出到先前状态
-            sys.stdout = self.out_old
-            # 获取输出缓冲区中的内容
-            captured = self.out_buf.getvalue()
-            # 如果需要重放
+            sys.stdout = self.out_old  # 恢复原始的标准输出
+            captured = self.out_buf.getvalue()  # 获取捕获的标准输出内容
+            # 如果开启重放模式，则将捕获的输出内容重新写入标准输出
             if self.replay:
-                # 将捕获的内容写回标准输出
                 sys.stdout.write(captured)
-            # 应用输出重置并更新实例变量
+            # 将捕获的输出内容应用于处理后的输出结果
             self.out = apply_print_resets(captured)
 
-        # 如果有错误输出缓冲区
+        # 如果错误输出缓冲区不为空，则恢复原始的标准错误输出，并获取捕获的错误输出内容
         if self.err_buf:
-            # 恢复标准错误输出到先前状态
-            sys.stderr = self.err_old
-            # 获取错误输出缓冲区中的内容
-            captured = self.err_buf.getvalue()
-            # 如果需要重放
+            sys.stderr = self.err_old  # 恢复原始的标准错误输出
+            captured = self.err_buf.getvalue()  # 获取捕获的标准错误输出内容
+            # 如果开启重放模式，则将捕获的错误输出内容重新写入标准错误输出
             if self.replay:
-                # 将捕获的内容写回标准错误输出
                 sys.stderr.write(captured)
-            # 更新实例变量
+            # 将捕获的错误输出内容直接赋给 self.err
             self.err = captured
 
-    # 定义对象的字符串表示形式
+    # 定义 __repr__ 方法，用于生成对象的字符串表示形式
     def __repr__(self):
-        # 初始化消息为空字符串
-        msg = ""
-        # 如果存在输出缓冲区
+        msg = ""  # 初始化消息字符串
+        # 如果有标准输出缓冲区，则将标准输出的值加入消息字符串
         if self.out_buf:
-            # 添加标准输出的字符串表示形式到消息中
             msg += f"stdout: {self.out}\n"
-        # 如果存在错误输出缓冲区
+        # 如果有错误输出缓冲区，则将错误输出的值加入消息字符串
         if self.err_buf:
-            # 添加标准错误输出的字符串表示形式到消息中
             msg += f"stderr: {self.err}\n"
-        # 返回消息
-        return msg
-# 在测试中，最好只捕获所需的流，否则很容易错过一些东西，所以除非需要捕获两个流，否则使用下面的子类（输入更少）。
-# 或者可以配置`CaptureStd`来禁用不需要测试的流。
+        return msg  # 返回生成的字符串表示形式
+# 在测试中最好只捕获所需的流，否则可能会错过某些内容，所以除非需要同时捕获两个流，否则使用以下子类（更少的键入）。
+# 或者，可以配置 `CaptureStd` 来禁用不需要测试的流。
 
 class CaptureStdout(CaptureStd):
-    """与CaptureStd相同，但仅捕获stdout"""
+    """与 CaptureStd 相同，但只捕获 stdout"""
 
     def __init__(self, replay=True):
         super().__init__(err=False, replay=replay)
 
 
 class CaptureStderr(CaptureStd):
-    """与CaptureStd相同，但仅捕获stderr"""
+    """与 CaptureStd 相同，但只捕获 stderr"""
 
     def __init__(self, replay=True):
         super().__init__(out=False, replay=replay)
@@ -1302,17 +1284,17 @@ class CaptureStderr(CaptureStd):
 
 class CaptureLogger:
     """
-    上下文管理器，用于捕获`logging`流
+    上下文管理器，用于捕获 `logging` 流
 
     Args:
-        logger: 'logging` logger对象
+        logger: `logging` 的 logger 对象
 
     Returns:
-        通过`self.out`可获得捕获的输出
+        捕获的输出可以通过 `self.out` 获取
 
-    示例:
+    Example:
 
-    ```py
+    ```python
     >>> from transformers import logging
     >>> from transformers.testing_utils import CaptureLogger
 
@@ -1346,16 +1328,15 @@ class CaptureLogger:
 @contextlib.contextmanager
 def LoggingLevel(level):
     """
-    这是一个上下文管理器，用于临时更改transformers模块的日志级别为所需值，并在作用域结束时将其恢复为原始设置。
+    这是一个上下文管理器，用于临时将 transformers 模块的日志级别更改为所需的值，并在作用域结束时恢复到原始设置。
 
-    示例:
+    Example:
 
-    ```py
+    ```python
     with LoggingLevel(logging.INFO):
-        AutoModel.from_pretrained("gpt2")  # 调用logger.info()多次
+        AutoModel.from_pretrained("openai-community/gpt2")  # 调用 logger.info() 多次
     ```
     """
-
     orig_level = transformers_logging.get_verbosity()
     try:
         transformers_logging.set_verbosity(level)
@@ -1365,14 +1346,14 @@ def LoggingLevel(level):
 
 
 @contextlib.contextmanager
-# 改编自https://stackoverflow.com/a/64789046/9201239
+# 改编自 https://stackoverflow.com/a/64789046/9201239
 def ExtendSysPath(path: Union[str, os.PathLike]) -> Iterator[None]:
     """
-    临时将给定路径添加到`sys.path`中。
+    临时将给定路径添加到 `sys.path`。
 
-    用法:
+    Usage :
 
-    ```py
+    ```python
     with ExtendSysPath("/path/to/dir"):
         mymodule = importlib.import_module("mymodule")
     ```
@@ -1388,188 +1369,155 @@ def ExtendSysPath(path: Union[str, os.PathLike]) -> Iterator[None]:
 
 class TestCasePlus(unittest.TestCase):
     """
-    此类扩展了*unittest.TestCase*，具有附加功能。
+    这个类扩展了 *unittest.TestCase*，具有额外的功能。
 
-    特性1: 一组完全解析的重要文件和目录路径访问器。
+    Feature 1: A set of fully resolved important file and dir path accessors.
+    # 特性 1：一组完全解析的重要文件和目录路径访问器。
+    """
     class TestPaths:
-        """
-        在测试中通常需要知道事物相对于当前测试文件的位置，这并不是一个简单的问题，因为测试可以从多个目录调用，或者可能位于具有不同深度的子目录中。该类通过整理所有基本路径来解决这个问题，并提供了易于访问的访问器：
-    
-        - `pathlib` 对象（全部解析）：
-    
-           - `test_file_path` - 当前测试文件路径（=`__file__`）
-           - `test_file_dir` - 包含当前测试文件的目录
-           - `tests_dir` - `tests` 测试套件的目录
-           - `examples_dir` - `examples` 测试套件的目录
-           - `repo_root_dir` - 仓库的目录
-           - `src_dir` - `src` 的目录（即 `transformers` 子目录所在的位置）
-    
-        - 字符串化的路径---与上述相同，但这些返回路径作为字符串，而不是 `pathlib` 对象：
-    
-           - `test_file_path_str`
-           - `test_file_dir_str`
-           - `tests_dir_str`
-           - `examples_dir_str`
-           - `repo_root_dir_str`
-           - `src_dir_str`
-    
-        功能 2: 灵活的自动可移除临时目录，保证在测试结束时被删除。
-    
-        1. 创建一个唯一的临时目录：
-    
-        ```py
-        def test_whatever(self):
-            tmp_dir = self.get_auto_remove_tmp_dir()
-        ```
-    
-        `tmp_dir` 将包含创建的临时目录的路径。它将在测试结束时自动删除。
-    
-    
-        2. 创建我选择的临时目录，在测试开始前确保它为空，并在测试结束后不清空它。
-    
-        ```py
-        def test_whatever(self):
-            tmp_dir = self.get_auto_remove_tmp_dir("./xxx")
-        ```
-    
-        当您希望监视特定目录并确保以前的测试未在其中留下任何数据时，这是有用的。
-    
-        3. 您可以通过直接覆盖 `before` 和 `after` 参数来覆盖前两个选项，导致以下行为：
-    
-        `before=True`：临时目录将始终在测试开始时清除。
-    
-        `before=False`：如果临时目录已存在，则任何现有文件将保留在其中。
-    
-        `after=True`：临时目录将始终在测试结束时删除。
-    
-        `after=False`：临时目录将始终在测试结束时保持不变。
-    
-        注意 1：为了安全运行等同于 `rm -r` 的操作，只允许使用显式 `tmp_dir` 的项目仓库检出的子目录，以便不会意外地清理 `/tmp` 或类似的文件系统的重要部分。即请始终传递以 `./` 开头的路径。
-    
-        注意 2：每个测试都可以注册多个临时目录，并且除非另有要求，否则它们都将被自动删除。
-    
-        功能 3: 获取设置了特定于当前测试套件的 `PYTHONPATH` 的 `os.environ` 对象的副本。这
-        """
+        # 解析测试文件路径和其所在目录的工具类
         def __init__(self):
-            # 初始化测试路径对象
-            self._initialize_test_paths()
-    
-        def _initialize_test_paths(self):
-            # 初始化测试路径
-            self.test_file_path = Path(__file__).resolve()
-            # 当前测试文件所在的目录
+            # 初始化，获取当前测试文件的路径
+            self.test_file_path = pathlib.Path(__file__).resolve()
+            # 获取当前测试文件所在的目录路径
             self.test_file_dir = self.test_file_path.parent
-            # `tests` 测试套件的目录
+            # 获取测试套件 `tests` 的目录路径
             self.tests_dir = self.test_file_dir.parent
-            # `examples` 测试套件的目录
-            self.examples_dir = self.tests_dir / "examples"
-            # 仓库的目录
+            # 获取测试套件 `examples` 的目录路径
+            self.examples_dir = self.tests_dir / 'examples'
+            # 获取代码库的根目录路径
             self.repo_root_dir = self.tests_dir.parent
-            # `src` 的目录
-            self.src_dir = self.repo_root_dir / "src"
-    
-            # 将路径转换为字符串
+            # 获取 `src` 目录路径，即 `transformers` 子目录所在的位置
+            self.src_dir = self.repo_root_dir / 'src'
+
+            # 将以上路径对象转换为字符串形式
             self.test_file_path_str = str(self.test_file_path)
             self.test_file_dir_str = str(self.test_file_dir)
             self.tests_dir_str = str(self.tests_dir)
             self.examples_dir_str = str(self.examples_dir)
             self.repo_root_dir_str = str(self.repo_root_dir)
             self.src_dir_str = str(self.src_dir)
-    
-        def get_auto_remove_tmp_dir(self, path=None, before=True, after=True):
-            # 获取自动可移除临时目录
-            tmp_dir = TemporaryDirectory(prefix="tmp_", dir=path)
-            # 返回临时目录路径
-            return tmp_dir.name
-    def test_whatever(self):
-        # 获取设置好的环境变量
-        env = self.get_env()
-    ```py
 
+    # 功能2：提供灵活的自动清理临时目录，确保测试结束后自动删除
+    1. 创建一个唯一的临时目录：
+
+    ```python
+    def test_whatever(self):
+        # 调用方法获取一个自动删除的临时目录路径
+        tmp_dir = self.get_auto_remove_tmp_dir()
+    ```
+
+    `tmp_dir` 将包含创建的临时目录路径。该目录将在测试结束时自动删除。
+
+    2. 创建自选的临时目录，在测试开始前确保它为空，并且测试结束后不清空它：
+
+    ```python
+    def test_whatever(self):
+        # 调用方法获取一个指定路径的自动删除临时目录路径
+        tmp_dir = self.get_auto_remove_tmp_dir("./xxx")
+    ```
+
+    这在调试时很有用，当你想监视特定目录并确保之前的测试没有留下任何数据时。
+
+    3. 你可以通过直接覆盖 `before` 和 `after` 参数来重写前两个选项，从而实现以下行为：
+
+    `before=True`：测试开始时临时目录将始终被清空。
+
+    `before=False`：如果临时目录已经存在，则保留任何现有文件。
+
+    `after=True`：测试结束时临时目录将始终被删除。
+
+    `after=False`：测试结束时临时目录将保持不变。
+
+    注意1：为了安全地运行类似于 `rm -r` 的操作，请只允许在项目仓库检出的子目录中使用显式的 `tmp_dir`，以避免意外删除 `/tmp` 或类似的重要文件系统部分。即请始终传递以 `./` 开头的路径。
+
+    注意2：每个测试可以注册多个临时目录，它们都将自动删除，除非另有要求。
+
+    Feature 3: 获取设置了特定于当前测试套件的 `PYTHONPATH` 的 `os.environ` 对象的副本。这
     def setUp(self):
         # get_auto_remove_tmp_dir feature:
-        # 初始化用于自动清理临时目录的列表
+        # 初始化临时目录清理列表
         self.teardown_tmp_dirs = []
 
-        # 获取测试文件所在的绝对路径
+        # figure out the resolved paths for repo_root, tests, examples, etc.
+        # 获取当前测试类所在文件的路径
         self._test_file_path = inspect.getfile(self.__class__)
         path = Path(self._test_file_path).resolve()
-        # 获取测试文件的父目录
+        # 获取测试文件所在的父目录
         self._test_file_dir = path.parents[0]
-        # 通过迭代查找项目的根目录
+        # 逐级向上查找，确定项目根目录
         for up in [1, 2, 3]:
             tmp_dir = path.parents[up]
-            # 判断是否找到了根目录
             if (tmp_dir / "src").is_dir() and (tmp_dir / "tests").is_dir():
                 break
-        # 如果找到根目录，则设置根目录路径；否则，抛出异常
+        # 如果找到根目录则设定为项目根目录，否则抛出异常
         if tmp_dir:
             self._repo_root_dir = tmp_dir
         else:
             raise ValueError(f"can't figure out the root of the repo from {self._test_file_path}")
-        # 设置测试、示例和源代码目录路径
+        # 设定各个目录路径
         self._tests_dir = self._repo_root_dir / "tests"
         self._examples_dir = self._repo_root_dir / "examples"
         self._src_dir = self._repo_root_dir / "src"
 
     @property
     def test_file_path(self):
-        # 返回测试文件路径
+        # 返回测试文件的路径对象
         return self._test_file_path
 
     @property
     def test_file_path_str(self):
-        # 返回测试文件路径的字符串形式
+        # 返回测试文件的路径字符串
         return str(self._test_file_path)
 
     @property
     def test_file_dir(self):
-        # 返回测试文件所在目录
+        # 返回测试文件所在的目录对象
         return self._test_file_dir
 
     @property
     def test_file_dir_str(self):
-        # 返回测试文件所在目录的字符串形式
+        # 返回测试文件所在的目录字符串
         return str(self._test_file_dir)
 
     @property
     def tests_dir(self):
-        # 返回测试目录路径
+        # 返回项目中 tests 目录的路径对象
         return self._tests_dir
 
     @property
     def tests_dir_str(self):
-        # 返回测试目录路径的字符串形式
+        # 返回项目中 tests 目录的路径字符串
         return str(self._tests_dir)
 
     @property
     def examples_dir(self):
-        # 返回示例目录路径
+        # 返回项目中 examples 目录的路径对象
         return self._examples_dir
 
     @property
     def examples_dir_str(self):
-        # 返回示例目录路径的字符串形式
+        # 返回项目中 examples 目录的路径字符串
         return str(self._examples_dir)
 
     @property
     def repo_root_dir(self):
-        # 返回项目根目录路径
+        # 返回项目根目录的路径对象
         return self._repo_root_dir
 
     @property
     def repo_root_dir_str(self):
-        # 返回项目根目录路径的字符串形式
+        # 返回项目根目录的路径字符串
         return str(self._repo_root_dir)
 
     @property
     def src_dir(self):
-        # 返回源代码目录路径
+        # 返回项目中 src 目录的路径对象
         return self._src_dir
 
     @property
     def src_dir_str(self):
-        # 返回源代码目录路径的字符串形式
+        # 返回项目中 src 目录的路径字符串
         return str(self._src_dir)
 
     def get_env(self):
@@ -1581,19 +1529,19 @@ class TestCasePlus(unittest.TestCase):
         the preset `PYTHONPATH` if any (all full resolved paths).
 
         """
-        # 复制当前环境变量
+        # 创建一个环境变量的副本
         env = os.environ.copy()
-        # 构建正确设置了 `PYTHONPATH` 的环境变量
+        # 初始化路径列表，始终包含项目中 src 目录
         paths = [self.src_dir_str]
-        # 根据测试套件类型插入 `./tests` 或 `./examples`
+        # 根据测试文件所在路径判断当前测试类型，添加对应的 tests 或 examples 目录
         if "/examples" in self.test_file_dir_str:
             paths.append(self.examples_dir_str)
         else:
             paths.append(self.tests_dir_str)
-        # 插入预设的 `PYTHONPATH`（如果有的话，全都是完全解析的路径）
+        # 添加预设的 PYTHONPATH 如果有的话，将其解析后的完整路径也加入路径列表
         paths.append(env.get("PYTHONPATH", ""))
 
-        # 将路径列表拼接成字符串，并设置到环境变量中
+        # 将路径列表合并为以 ":" 分隔的字符串，并设置为 PYTHONPATH 环境变量
         env["PYTHONPATH"] = ":".join(paths)
         return env
     def get_auto_remove_tmp_dir(self, tmp_dir=None, before=None, after=None):
@@ -1601,13 +1549,15 @@ class TestCasePlus(unittest.TestCase):
         Args:
             tmp_dir (`string`, *optional*):
                 if `None`:
-                    - a unique temporary path will be created
-                    - sets `before=True` if `before` is `None`
-                    - sets `after=True` if `after` is `None`
+
+                   - a unique temporary path will be created
+                   - sets `before=True` if `before` is `None`
+                   - sets `after=True` if `after` is `None`
                 else:
-                    - `tmp_dir` will be created
-                    - sets `before=True` if `before` is `None`
-                    - sets `after=False` if `after` is `None`
+
+                   - `tmp_dir` will be created
+                   - sets `before=True` if `before` is `None`
+                   - sets `after=False` if `after` is `None`
             before (`bool`, *optional*):
                 If `True` and the `tmp_dir` already exists, make sure to empty it right away if `False` and the
                 `tmp_dir` already exists, any existing files will remain there.
@@ -1619,10 +1569,10 @@ class TestCasePlus(unittest.TestCase):
             tmp_dir(`string`): either the same value as passed via *tmp_dir* or the path to the auto-selected tmp dir
         """
         if tmp_dir is not None:
-            # 定义自定义路径提供时最可能的期望行为。
-            # 这很可能表示调试模式，我们想要一个易于定位的目录，具有以下特点：
-            # 1. 在测试之前清除（如果已经存在）
-            # 2. 在测试结束后保留
+            # 定义自定义路径提供时的预期行为
+            # 这通常表示调试模式，我们希望有一个易于定位的目录，具有以下特性：
+            # 1. 在测试之前清空（如果已经存在）
+            # 2. 在测试结束后保留不变
             if before is None:
                 before = True
             if after is None:
@@ -1631,36 +1581,36 @@ class TestCasePlus(unittest.TestCase):
             # 使用提供的路径
             path = Path(tmp_dir).resolve()
 
-            # 为了避免破坏文件系统的部分，只允许相对路径
+            # 为避免影响文件系统其他部分，只允许相对路径
             if not tmp_dir.startswith("./"):
                 raise ValueError(
                     f"`tmp_dir` can only be a relative path, i.e. `./some/path`, but received `{tmp_dir}`"
                 )
 
-            # 确保目录起始为空
+            # 确保目录在开始时为空
             if before is True and path.exists():
                 shutil.rmtree(tmp_dir, ignore_errors=True)
 
             path.mkdir(parents=True, exist_ok=True)
 
         else:
-            # 定义自动生成唯一临时路径时最可能的期望行为（不是调试模式）。
-            # 在这种情况下，我们需要一个唯一的临时目录：
-            # 1. 在测试之前为空（在这种情况下，它将始终为空）
-            # 2. 在测试结束后完全删除
+            # 定义自动生成唯一临时路径时的预期行为
+            # （非调试模式），这里我们需要一个在测试之前为空的唯一临时目录，并且在测试结束后完全删除
             if before is None:
                 before = True
             if after is None:
                 after = True
 
-            # 使用唯一的临时目录（始终为空，不管 `before` 如何）
+            # 使用唯一临时目录（始终为空，不考虑`before`）
             tmp_dir = tempfile.mkdtemp()
 
         if after is True:
-            # 注册以进行删除
+            # 注册待删除的临时目录
             self.teardown_tmp_dirs.append(tmp_dir)
 
         return tmp_dir
+    #python
+    # 定义一个方法，用于执行单行 Python 代码并返回程序运行时的最大内存占用情况
     def python_one_liner_max_rss(self, one_liner_str):
         """
         Runs the passed python one liner (just the code) and returns how much max cpu memory was used to run the
@@ -1679,97 +1629,81 @@ class TestCasePlus(unittest.TestCase):
         Example:
 
         ```
-        one_liner_str = 'from transformers import AutoModel; AutoModel.from_pretrained("t5-large")'
+        one_liner_str = 'from transformers import AutoModel; AutoModel.from_pretrained("google-t5/t5-large")'
         max_rss = self.python_one_liner_max_rss(one_liner_str)
-        ```py
+        ```
         """
 
-        # 检查是否存在 /usr/bin/time 命令
+        # 检查系统是否安装了 `/usr/bin/time`，如果没有则抛出错误
         if not cmd_exists("/usr/bin/time"):
             raise ValueError("/usr/bin/time is required, install with `apt install time`")
 
-        # 将命令字符串解析为列表
+        # 构建命令，使用 `/usr/bin/time` 来监测 Python 单行代码的内存使用情况
         cmd = shlex.split(f"/usr/bin/time -f %M python -c '{one_liner_str}'")
-        # 使用 CaptureStd 上下文管理器捕获标准输出和标准错误
+        
+        # 使用 CaptureStd 类捕获子进程执行结果
         with CaptureStd() as cs:
-            # 异步执行子进程
             execute_subprocess_async(cmd, env=self.get_env())
-        # 获取最大 RSS（Resident Set Size）并转换为字节
+
+        # 从捕获的错误输出中提取最大 RSS（Resident Set Size），单位为 KB，转换为字节
         max_rss = int(cs.err.split("\n")[-2].replace("stderr: ", "")) * 1024
+
+        # 返回最大内存占用量
         return max_rss
 
+    # 测试环境清理方法，用于删除临时目录和加速库状态变量
     def tearDown(self):
-        # get_auto_remove_tmp_dir feature: remove registered temp dirs
-        # 遍历需要清理的临时目录列表，删除目录
-        for path in self.teardown_tmp_dirs:
-            shutil.rmtree(path, ignore_errors=True)
-        self.teardown_tmp_dirs = []
-        # 如果加速器可用，则重置状态
-        if is_accelerate_available():
-            AcceleratorState._reset_state()
-            PartialState._reset_state()
-
-            # 删除所有环境变量中包含 `ACCELERATE` 的变量
-            for k in list(os.environ.keys()):
-                if "ACCELERATE" in k:
-                    del os.environ[k]
-# 定义一个便捷的包装器，允许在测试函数中方便地设置环境变量
+        # 循环遍历注册的临时目录列表，删除这些临时目录及其内容
+# 定义一个便捷的包装器，允许设置临时环境变量，以字典形式更新os.environ
 def mockenv(**kwargs):
-    """
-   this is a convenience wrapper, that allows this ::
-
-   @mockenv(RUN_SLOW=True, USE_TF=False) def test_something():
-        run_slow = os.getenv("RUN_SLOW", False) use_tf = os.getenv("USE_TF", False)
-
-   """
     return mock.patch.dict(os.environ, kwargs)
 
 
-# 临时更新 `os.environ` 字典的上下文管理器，类似于 mockenv
+# 定义一个上下文管理器，临时更新os.environ字典。类似于mockenv
 @contextlib.contextmanager
 def mockenv_context(*remove, **update):
     """
-    Temporarily updates the `os.environ` dictionary in-place. Similar to mockenv
+    临时更新`os.environ`字典。类似于mockenv。
 
-    The `os.environ` dictionary is updated in-place so that the modification is sure to work in all situations.
+    `os.environ`字典会被原地更新，以确保修改在所有情况下都有效。
 
     Args:
-      remove: Environment variables to remove.
-      update: Dictionary of environment variables and values to add/update.
+      remove: 要移除的环境变量。
+      update: 要添加/更新的环境变量及其值的字典。
     """
     env = os.environ
     update = update or {}
     remove = remove or []
 
-    # 被更新或删除的环境变量列表
+    # 所有被更新或移除的环境变量的集合
     stomped = (set(update.keys()) | set(remove)) & set(env.keys())
-    # 退出时需要恢复的环境变量和值
+    # 退出时需要恢复的环境变量及其值
     update_after = {k: env[k] for k in stomped}
-    # 退出时需要删除的环境变量
+    # 退出时需要移除的环境变量
     remove_after = frozenset(k for k in update if k not in env)
 
     try:
+        # 执行更新操作
         env.update(update)
         [env.pop(k, None) for k in remove]
         yield
     finally:
+        # 恢复环境变量到更新前的状态
         env.update(update_after)
         [env.pop(k) for k in remove_after]
 
 
-# --- pytest conf functions --- #
+# --- pytest 配置函数 --- #
 
-# 避免从 tests/conftest.py 和 examples/conftest.py 多次调用 - 确保只调用一次
+# 避免从多个conftest.py文件中调用多次，确保仅调用一次
 pytest_opt_registered = {}
 
 
 def pytest_addoption_shared(parser):
     """
-    This function is to be called from `conftest.py` via `pytest_addoption` wrapper that has to be defined there.
+    此函数应从`conftest.py`中的`pytest_addoption`包装器调用，必须在那里定义。
 
-    It allows loading both `conftest.py` files at once without causing a failure due to adding the same `pytest`
-    option.
-
+    允许同时加载两个`conftest.py`文件，而不会由于添加相同的`pytest`选项而导致失败。
     """
     option = "--make-reports"
     if option not in pytest_opt_registered:
@@ -1777,49 +1711,56 @@ def pytest_addoption_shared(parser):
             option,
             action="store",
             default=False,
-            help="generate report files. The value of this option is used as a prefix to report names",
+            help="生成报告文件。此选项的值用作报告名称的前缀。",
         )
         pytest_opt_registered[option] = 1
 
 
 def pytest_terminal_summary_main(tr, id):
     """
-    Generate multiple reports at the end of test suite run - each report goes into a dedicated file in the current
-    directory. The report files are prefixed with the test suite name.
+    在测试套件运行结束时生成多个报告文件，每个报告文件都存储在当前目录中。报告文件以测试套件名称作为前缀。
 
-    This function emulates --duration and -rA pytest arguments.
+    此函数模拟`--duration`和`-rA`pytest参数。
 
-    This function is to be called from `conftest.py` via `pytest_terminal_summary` wrapper that has to be defined
-    there.
+    此函数应从`conftest.py`中的`pytest_terminal_summary`包装器调用，必须在那里定义。
 
     Args:
-    - tr: `terminalreporter` passed from `conftest.py`
-    - id: unique id like `tests` or `examples` that will be incorporated into the final reports filenames - this is
-      needed as some jobs have multiple runs of pytest, so we can't have them overwrite each other.
-    # 导入所需模块，注意这里使用了 _pytest 的私有 API，若 pytest 进行内部更改可能会导致该功能失效；同时，调用了 terminalreporter 的默认内部方法，可能会被各种 `pytest-` 插件劫持而产生干扰。
+    - tr: 从`conftest.py`传递的`terminalreporter`
+    - id: 唯一的ID，如`tests`或`examples`，将被合并到最终报告文件名中，这是因为某些作业会多次运行pytest，因此不能相互覆盖。
+    """
+    """
+    NB: this functions taps into a private _pytest API and while unlikely, it could break should pytest do internal
+    changes - also it calls default internal methods of terminalreporter which can be hijacked by various `pytest-`
+    plugins and interfere.
+
+    """
+
+    # 导入创建终端写入器的函数
     from _pytest.config import create_terminal_writer
-    
-    # 如果 id 为空，则将其设置为 "tests"
+
+    # 如果 id 长度为 0，则将其设置为默认值 "tests"
     if not len(id):
         id = "tests"
-    
-    # 获取 terminalreporter 对应的配置信息
+
+    # 获取 terminalreporter 的配置
     config = tr.config
-    
+
     # 获取原始的终端写入器
     orig_writer = config.get_terminal_writer()
-    
-    # 获取原始的 traceback 显示方式
+
+    # 获取原始的 traceback 样式选项
     orig_tbstyle = config.option.tbstyle
-    
-    # 获取 terminalreporter 的原始报告字符
+
+    # 获取 terminalreporter 的 reportchars
     orig_reportchars = tr.reportchars
-    
-    # 创建报告保存的文件夹路径
+
+    # 设置报告目录为 "reports/{id}"
     dir = f"reports/{id}"
+
+    # 创建报告目录（如果不存在则创建）
     Path(dir).mkdir(parents=True, exist_ok=True)
-    
-    # 定义不同类型报告的文件名及路径
+
+    # 设置报告文件名列表
     report_files = {
         k: f"{dir}/{k}.txt"
         for k in [
@@ -1834,139 +1775,174 @@ def pytest_terminal_summary_main(tr, id):
             "warnings",
         ]
     }
-    
-    # 自定义耗时报告
-    # 注意：不需要调用 pytest --durations=XX 来获取单独的报告
-    # 适配自 https://github.com/pytest-dev/pytest/blob/897f151e/src/_pytest/runner.py#L66
+
+    # custom durations report
+    # note: there is no need to call pytest --durations=XX to get this separate report
+    # adapted from https://github.com/pytest-dev/pytest/blob/897f151e/src/_pytest/runner.py#L66
+    # 自定义持续时间报告
+
+    # 初始化持续时间列表
     dlist = []
+
+    # 遍历统计数据中的报告列表
     for replist in tr.stats.values():
         for rep in replist:
+            # 如果报告对象具有 "duration" 属性，则将其添加到持续时间列表中
             if hasattr(rep, "duration"):
                 dlist.append(rep)
+
+    # 如果持续时间列表不为空
     if dlist:
+        # 按照持续时间倒序排序
         dlist.sort(key=lambda x: x.duration, reverse=True)
+
+        # 打开持续时间报告文件
         with open(report_files["durations"], "w") as f:
             durations_min = 0.05  # sec
             f.write("slowest durations\n")
+            # 遍历持续时间列表，写入报告文件
             for i, rep in enumerate(dlist):
                 if rep.duration < durations_min:
                     f.write(f"{len(dlist)-i} durations < {durations_min} secs were omitted")
                     break
                 f.write(f"{rep.duration:02.2f}s {rep.when:<8} {rep.nodeid}\n")
-    
-    # 定义简短失败报告
+
+    # 定义 summary_failures_short 函数
     def summary_failures_short(tr):
-        # 期望报告为 --tb=long (默认) 格式，此处将其截断至最后一帧
+        # 获取所有失败报告
         reports = tr.getreports("failed")
         if not reports:
             return
+        # 写入分隔符和标题
         tr.write_sep("=", "FAILURES SHORT STACK")
+        # 遍历失败报告，输出精简的失败信息
         for rep in reports:
             msg = tr._getfailureheadline(rep)
             tr.write_sep("_", msg, red=True, bold=True)
-            # 截断可选的额外前导帧，只保留最后一帧
+            # 省略长报告的非必要部分，只保留最后一个帧
             longrepr = re.sub(r".*_ _ _ (_ ){10,}_ _ ", "", rep.longreprtext, 0, re.M | re.S)
             tr._tw.line(longrepr)
-            # 注意：不打印任何 rep.sections，以保持报告简洁
-    
-    # 使用预先准备好的报告函数，将日志输出到专用文件中
-    # 适配自 https://github.com/pytest-dev/pytest/blob/897f151e/src/_pytest/terminal.py#L814
-    # 注意：某些 pytest 插件可能会通过劫持默认的 `terminalreporter` 来产生干扰
-    # 报告失败时使用 line/short/long 样式
-    config.option.tbstyle = "auto"  # 全部 traceback 显示
-    # 将失败长报告写入文件
+            # 注意：不输出任何 rep.sections，以保持报告简洁
+
+    # 使用预定义的报告函数，将输出重定向到各自的文件
+    # adapted from https://github.com/pytest-dev/pytest/blob/897f151e/src/_pytest/terminal.py#L814
+    # 注意：某些 pytest 插件可能通过劫持默认的 `terminalreporter` 来干扰
+
+    # 设置 traceback 样式选项为 "auto"，即全 traceback 显示
+    config.option.tbstyle = "auto"
+    # 使用 report_files 字典中的 "failures_long" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["failures_long"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总失败
+        # 生成详细的失败摘要报告
         tr.summary_failures()
-    
-    # 将失败短报告写入文件
+
+    # 设置配置选项 config.option.tbstyle 为 "short"，用于短格式的回溯信息
+    # config.option.tbstyle = "short" # short tb
+    # 使用 report_files 字典中的 "failures_short" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["failures_short"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 简短汇总失败
+        # 生成简短的失败摘要报告
         summary_failures_short(tr)
-    
-    # 将失败行报告写入文件
-    config.option.tbstyle = "line"  # 每个错误一行
+
+    # 设置配置选项 config.option.tbstyle 为 "line"，每个错误单独一行显示
+    config.option.tbstyle = "line"  # one line per error
+    # 使用 report_files 字典中的 "failures_line" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["failures_line"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总失败
+        # 生成按行显示的失败摘要报告
         tr.summary_failures()
-    
-    # 将错误报告写入文件
+
+    # 使用 report_files 字典中的 "errors" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["errors"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总错误
+        # 生成错误摘要报告
         tr.summary_errors()
-    
-    # 将警告报告写入文件
+
+    # 使用 report_files 字典中的 "warnings" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["warnings"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总普通警告
-        tr.summary_warnings()
-        # 汇总最终警告
-        tr.summary_warnings()
-    
-    # 设置报告字符以模拟 `-rA`（用于 summary_passes() 和 short_test_summary() 中）
+        # 生成一般警告的摘要报告
+        tr.summary_warnings()  # normal warnings
+        # 生成最终警告的摘要报告
+        tr.summary_warnings()  # final warnings
+
+    # 设置测试运行器 tr 的报告字符集为 "wPpsxXEf"，模拟 "-rA" 参数（用于 summary_passes() 和 short_test_summary()）
     tr.reportchars = "wPpsxXEf"
-    
-    # 跳过 `passes` 报告，因为它开始花费超过 5 分钟，有时在 CircleCI 上超时，如果花费 > 10 分钟（因为此部分不在终端上生成任何输出）。
-    # （而且，似乎在此报告中没有有用的信息，我们很少需要阅读它）
+
+    # 跳过 "passes" 报告生成，因为它开始花费超过 5 分钟，有时在 CircleCI 上超时（如果超过 10 分钟）
+    # （此部分在终端上不生成任何输出）
+    # （另外，看起来此报告没有有用信息，我们很少需要查看它）
     # with open(report_files["passes"], "w") as f:
     #     tr._tw = create_terminal_writer(config, f)
     #     tr.summary_passes()
-    
-    # 将简短测试摘要写入文件
+
+    # 使用 report_files 字典中的 "summary_short" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["summary_short"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总简短测试摘要
+        # 生成简短的测试摘要报告
         tr.short_test_summary()
-    
-    # 将统计摘要写入文件
+
+    # 使用 report_files 字典中的 "stats" 键创建一个新文件对象 f，并以写模式打开
     with open(report_files["stats"], "w") as f:
-        # 创建终端写入器并将其配置为写入文件
+        # 为测试运行器 tr 创建一个新的终端写入器，并将其指定为 _tw 属性
         tr._tw = create_terminal_writer(config, f)
-        # 汇总统计信息
+        # 生成统计摘要报告
         tr.summary_stats()
-    
-    # 恢复:
-    # 恢复终端写入器为原始写入器
+
+    # 恢复原始的终端写入器和报告字符集设置
     tr._tw = orig_writer
-    # 恢复报告字符为原始报告字符
     tr.reportchars = orig_reportchars
-    # 恢复 traceback 格式为原始格式
+    # 恢复原始的 traceback 格式设置
     config.option.tbstyle = orig_tbstyle
-# --- distributed testing functions --- #
+# --- 分布式测试函数 --- #
 
-# 导入 asyncio 模块
-import asyncio  # noqa
+# 从 https://stackoverflow.com/a/59041913/9201239 改编而来
+import asyncio  # 引入 asyncio 库，用于异步编程
 
-# 定义一个用于存储子进程输出的类
 class _RunOutput:
     def __init__(self, returncode, stdout, stderr):
-        self.returncode = returncode
-        self.stdout = stdout
-        self.stderr = stderr
+        self.returncode = returncode  # 子进程返回码
+        self.stdout = stdout  # 子进程标准输出内容
+        self.stderr = stderr  # 子进程标准错误输出内容
 
-# 异步读取流的函数
 async def _read_stream(stream, callback):
+    """
+    异步读取流的内容，并通过回调函数处理每一行数据
+
+    Args:
+    - stream: 流对象（asyncio.subprocess.PIPE）
+    - callback: 回调函数，处理每一行数据
+    """
     while True:
-        line = await stream.readline()
+        line = await stream.readline()  # 异步读取一行数据
         if line:
-            callback(line)
+            callback(line)  # 调用回调函数处理该行数据
         else:
             break
 
-# 异步执行子进程并处理输出流的函数
 async def _stream_subprocess(cmd, env=None, stdin=None, timeout=None, quiet=False, echo=False) -> _RunOutput:
+    """
+    异步执行子进程，并返回其输出内容和状态
+
+    Args:
+    - cmd: 子进程命令及参数列表
+    - env: 子进程环境变量
+    - stdin: 子进程标准输入
+    - timeout: 超时时间（秒）
+    - quiet: 是否静默模式（不输出信息到控制台）
+    - echo: 是否输出命令执行信息到控制台
+
+    Returns:
+    - _RunOutput 对象，包含子进程的返回码、标准输出和标准错误输出
+    """
     if echo:
-        print("\nRunning: ", " ".join(cmd))
+        print("\nRunning: ", " ".join(cmd))  # 如果 echo 为 True，则输出执行的命令
 
     # 创建子进程
     p = await asyncio.create_subprocess_exec(
@@ -1978,69 +1954,93 @@ async def _stream_subprocess(cmd, env=None, stdin=None, timeout=None, quiet=Fals
         env=env,
     )
 
-    # 读取子进程的输出流
-    out = []
-    err = []
+    out = []  # 存储标准输出内容的列表
+    err = []  # 存储标准错误输出内容的列表
 
-    # 处理输出流的回调函数
     def tee(line, sink, pipe, label=""):
-        line = line.decode("utf-8").rstrip()
-        sink.append(line)
-        if not quiet:
-            print(label, line, file=pipe)
+        """
+        将行数据解码为字符串，并输出到指定的输出流和存储列表
 
-    # 异步等待输出流的处理
+        Args:
+        - line: 输入的行数据（bytes）
+        - sink: 存储行数据的列表
+        - pipe: 输出流对象（sys.stdout 或 sys.stderr）
+        - label: 输出的标签前缀
+        """
+        line = line.decode("utf-8").rstrip()  # 解码为 UTF-8 编码的字符串，并去除末尾的换行符
+        sink.append(line)  # 将解码后的字符串存储到指定的列表中
+        if not quiet:
+            print(label, line, file=pipe)  # 如果不是静默模式，则输出带有标签前缀的内容到指定输出流
+
+    # 异步等待两个流的数据读取，并进行处理
     await asyncio.wait(
         [
-            _read_stream(p.stdout, lambda l: tee(l, out, sys.stdout, label="stdout:")),
-            _read_stream(p.stderr, lambda l: tee(l, err, sys.stderr, label="stderr:")),
+            _read_stream(p.stdout, lambda l: tee(l, out, sys.stdout, label="stdout:")),  # 处理标准输出流
+            _read_stream(p.stderr, lambda l: tee(l, err, sys.stderr, label="stderr:")),  # 处理标准错误输出流
         ],
-        timeout=timeout,
+        timeout=timeout,  # 设置超时时间
     )
-    return _RunOutput(await p.wait(), out, err)
+    return _RunOutput(await p.wait(), out, err)  # 返回子进程的返回码及输出内容对象
 
-# 同步执行子进程的函数
 def execute_subprocess_async(cmd, env=None, stdin=None, timeout=180, quiet=False, echo=True) -> _RunOutput:
-    loop = asyncio.get_event_loop()
+    """
+    异步执行子进程的封装函数，使用 asyncio 事件循环运行 _stream_subprocess 函数，并处理执行结果
+
+    Args:
+    - cmd: 子进程命令及参数列表
+    - env: 子进程环境变量
+    - stdin: 子进程标准输入
+    - timeout: 超时时间（秒）
+    - quiet: 是否静默模式（不输出信息到控制台）
+    - echo: 是否输出命令执行信息到控制台
+
+    Returns:
+    - _RunOutput 对象，包含子进程的返回码、标准输出和标准错误输出
+
+    Raises:
+    - RuntimeError: 如果子进程返回码大于 0 或没有产生任何输出
+    """
+    loop = asyncio.get_event_loop()  # 获取 asyncio 的事件循环对象
     result = loop.run_until_complete(
         _stream_subprocess(cmd, env=env, stdin=stdin, timeout=timeout, quiet=quiet, echo=echo)
-    )
+    )  # 使用事件循环运行异步子进程函数
 
-    cmd_str = " ".join(cmd)
+    cmd_str = " ".join(cmd)  # 将命令及参数列表组合成字符串
     if result.returncode > 0:
-        stderr = "\n".join(result.stderr)
+        stderr = "\n".join(result.stderr)  # 将标准错误输出内容列表合并为字符串
         raise RuntimeError(
             f"'{cmd_str}' failed with returncode {result.returncode}\n\n"
             f"The combined stderr from workers follows:\n{stderr}"
         )
 
-    # 检查子进程是否有输出
+    # 检查子进程是否真正执行并产生输出
     if not result.stdout and not result.stderr:
         raise RuntimeError(f"'{cmd_str}' produced no output.")
 
-    return result
+    return result  # 返回执行结果对象
 
-# 返回 pytest-xdist 的工作进程编号
 def pytest_xdist_worker_id():
     """
-    Returns an int value of worker's numerical id under `pytest-xdist`'s concurrent workers `pytest -n N` regime, or 0
-    if `-n 1` or `pytest-xdist` isn't being used.
+    返回 `pytest-xdist` 插件下当前 worker 的数字 id（仅在 `pytest -n N` 模式下有效），否则返回 0
     """
-    # 获取环境变量 "PYTEST_XDIST_WORKER" 的值，若不存在则默认为 "gw0"
+    # 从环境变量中获取名为 PYTEST_XDIST_WORKER 的值，默认为 "gw0" 如果存在
     worker = os.environ.get("PYTEST_XDIST_WORKER", "gw0")
-    # 使用正则表达式替换字符串中以 "gw" 开头的部分为空字符串
+    
+    # 使用正则表达式替换字符串中以 "gw" 开头的部分为空字符串，进行全局替换
     worker = re.sub(r"^gw", "", worker, 0, re.M)
-    # 将结果转换为整数类型并返回
+    
+    # 将处理后的字符串转换为整数并返回
     return int(worker)
-# 返回一个可以传递给 `torch.distributed.launch` 的 `--master_port` 参数的端口号
+# 返回一个可以用作 `torch.distributed.launch` 的 `--master_port` 参数的端口号
 def get_torch_dist_unique_port():
+    # 初始端口号
     port = 29500
-    # 如果在 `pytest-xdist` 下运行，根据 worker id 添加一个增量，以避免并发测试尝试同时使用相同的端口
+    # 如果在 `pytest-xdist` 下运行，根据 worker id 添加一个偏移量，以避免并发测试尝试使用相同的端口
     uniq_delta = pytest_xdist_worker_id()
     return port + uniq_delta
 
 
-# 简化对象，将浮点数四舍五入，将张量/NumPy 数组降级以便在测试中进行简单的相等性检查
+# 简化对象，将浮点数四舍五入，将张量/NumPy 数组降级为可进行简单相等性测试的形式
 def nested_simplify(obj, decimals=3):
     import numpy as np
 
@@ -2073,32 +2073,29 @@ def check_json_file_has_correct_format(file_path):
     with open(file_path, "r") as f:
         lines = f.readlines()
         if len(lines) == 1:
-            # 如果长度为 1，则字典为空
+            # 如果文件只有一行，且内容为 "{}"，则认为 JSON 字典为空
             assert lines[0] == "{}"
         else:
-            # 否则确保 JSON 格式正确（至少有 3 行）
+            # 否则确保 JSON 文件格式正确（至少 3 行）
             assert len(lines) >= 3
-            # 每个键一行，缩进应为 2，最小长度为 3
+            # 第一行应该是 "{"
             assert lines[0].strip() == "{"
+            # 中间行每行缩进应为 2
             for line in lines[1:-1]:
-                left_indent = len(lines[1]) - len(lines[1].lstrip())
+                left_indent = len(line) - len(line.lstrip())
                 assert left_indent == 2
+            # 最后一行应该是 "}"
             assert lines[-1].strip() == "}"
 
 
-# 将输入转换为二元组
+# 将输入转换为长度为 2 的元组，如果输入已经是可迭代对象，则直接返回
 def to_2tuple(x):
     if isinstance(x, collections.abc.Iterable):
         return x
     return (x, x)
 
 
-# 这些工具与确保在运行脚本时接收到正确的错误消息有关
-class SubprocessCallException(Exception):
-    pass
-
-
-# 运行 `command`，使用 `subprocess.check_output`，可能返回 `stdout`。还将正确捕获运行 `command` 时是否发生错误
+# 运行指定的命令，并使用 subprocess.check_output 执行，可能返回 stdout
 def run_command(command: List[str], return_stdout=False):
     try:
         output = subprocess.check_output(command, stderr=subprocess.STDOUT)
@@ -2106,11 +2103,13 @@ def run_command(command: List[str], return_stdout=False):
             if hasattr(output, "decode"):
                 output = output.decode("utf-8")
             return output
-    # 捕获子进程调用时可能抛出的异常，存储在变量e中
     except subprocess.CalledProcessError as e:
-        # 抛出自定义的SubprocessCallException异常，并传递错误信息
+        # 如果命令执行出错，抛出 SubprocessCallException 异常
+        raise SubprocessCallException(str(e.output))
+    # 捕获 subprocess.CalledProcessError 异常，这是 subprocess 调用过程中可能抛出的错误之一
+    except subprocess.CalledProcessError as e:
+        # 抛出自定义的 SubprocessCallException 异常，提供详细的错误信息，包括失败的命令和错误输出内容的解码结果
         raise SubprocessCallException(
-            # 格式化字符串，包含失败的命令和错误输出
             f"Command `{' '.join(command)}` failed with the following error:\n\n{e.output.decode()}"
         ) from e
 class RequestCounter:
@@ -2126,40 +2125,40 @@ class RequestCounter:
     assert counter["GET"] == 0
     assert counter["HEAD"] == 1
     assert counter.total_calls == 1
-    ```py
+    ```
     """
 
     def __enter__(self):
-        # 初始化请求计数器字典
+        # 初始化一个计数器字典，默认值为整数类型
         self._counter = defaultdict(int)
-        # 开始拦截 urllib3 的 debug 日志
+        # 创建一个 mock 对象，用于模拟 urllib3.connectionpool.log.debug 方法
         self.patcher = patch.object(urllib3.connectionpool.log, "debug", wraps=urllib3.connectionpool.log.debug)
-        # 启动拦截器
+        # 启动 patcher，开始 mock
         self.mock = self.patcher.start()
+        # 返回当前对象实例，以供上下文管理器使用
         return self
 
     def __exit__(self, *args, **kwargs) -> None:
-        # 遍历拦截到的每个日志调用
+        # 遍历每次 mock 调用的参数列表
         for call in self.mock.call_args_list:
-            # 提取日志内容
+            # 格式化日志信息
             log = call.args[0] % call.args[1:]
-            # 遍历 HTTP 方法
+            # 遍历支持的 HTTP 方法，检查日志中是否包含该方法
             for method in ("HEAD", "GET", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"):
-                # 如果日志中包含当前方法
                 if method in log:
-                    # 将该方法计数加一
+                    # 如果日志中包含该方法，增加对应方法计数
                     self._counter[method] += 1
                     break
-        # 停止拦截器
+        # 停止 mock
         self.patcher.stop()
 
     def __getitem__(self, key: str) -> int:
-        # 返回指定方法的请求计数
+        # 获取指定 HTTP 方法的调用次数
         return self._counter[key]
 
     @property
     def total_calls(self) -> int:
-        # 返回所有请求的总计数
+        # 返回所有 HTTP 方法的总调用次数
         return sum(self._counter.values())
 
 
@@ -2180,25 +2179,23 @@ def is_flaky(max_attempts: int = 5, wait_before_retry: Optional[float] = None, d
     def decorator(test_func_ref):
         @functools.wraps(test_func_ref)
         def wrapper(*args, **kwargs):
-            # 初始化重试次数
+            # 初始化重试次数计数器
             retry_count = 1
 
-            # 在达到最大重试次数前循环
+            # 在最大重试次数之内循环执行测试函数
             while retry_count < max_attempts:
                 try:
-                    # 调用测试函数
                     return test_func_ref(*args, **kwargs)
 
                 except Exception as err:
-                    # 输出错误信息和重试次数
+                    # 打印测试失败信息及重试次数
                     print(f"Test failed with {err} at try {retry_count}/{max_attempts}.", file=sys.stderr)
-                    # 如果设置了重试等待时间，则等待指定时间后再重试
+                    # 如果设置了重试等待时间，等待指定秒数后再次重试
                     if wait_before_retry is not None:
                         time.sleep(wait_before_retry)
-                    # 增加重试次数
                     retry_count += 1
 
-            # 返回测试函数的最终结果
+            # 返回测试函数的执行结果
             return test_func_ref(*args, **kwargs)
 
         return wrapper
@@ -2209,165 +2206,112 @@ def is_flaky(max_attempts: int = 5, wait_before_retry: Optional[float] = None, d
 def run_test_in_subprocess(test_case, target_func, inputs=None, timeout=None):
     """
     To run a test in a subprocess. In particular, this can avoid (GPU) memory issue.
+    
+    This function is incomplete and needs further implementation.
     """
-    Args:
-        test_case (`unittest.TestCase`):
-            运行 `target_func` 的测试用例。
-        target_func (`Callable`):
-            实现实际测试逻辑的函数。
-        inputs (`dict`, *可选*, 默认为 `None`):
-            通过输入队列传递给 `target_func` 的输入。
-        timeout (`int`, *可选*, 默认为 `None`):
-            传递给输入和输出队列的超时时间（秒）。如果未指定，则检查环境变量 `PYTEST_TIMEOUT`。如果仍为 `None`，则将其值设置为 `600`。
-
-    """
-    # 如果未指定超时时间，则将其设置为环境变量 `PYTEST_TIMEOUT` 的值，若未定义，则设为 `600`。
+    # 运行测试在子进程中的函数，暂未实现完整功能
+    pass
+    # 如果未指定超时时间，则从环境变量 PYTEST_TIMEOUT 获取或默认设置为 600 秒
     if timeout is None:
         timeout = int(os.environ.get("PYTEST_TIMEOUT", 600))
 
-    # 使用 "spawn" 方法创建多进程上下文。
+    # 设置 multiprocessing 的上下文为 'spawn'，这是为了在子进程中创建新的进程
     start_methohd = "spawn"
     ctx = multiprocessing.get_context(start_methohd)
 
-    # 创建容量为1的输入队列和输出队列。
+    # 创建输入队列和输出队列，用于父子进程之间的通信
     input_queue = ctx.Queue(1)
     output_queue = ctx.JoinableQueue(1)
 
-    # 无法将 `unittest.TestCase` 发送到子进程，否则会出现有关 pickle 的问题。
-    # 将输入放入输入队列。
+    # 将输入数据放入输入队列，以供子进程使用，设置超时时间
     input_queue.put(inputs, timeout=timeout)
 
-    # 创建一个子进程，目标函数为 `target_func`，参数为输入队列、输出队列和超时时间。
+    # 创建子进程，执行测试函数 target_func，并传入输入和输出队列以及超时时间作为参数
     process = ctx.Process(target=target_func, args=(input_queue, output_queue, timeout))
     process.start()
 
-    # 如果无法及时从子进程获取输出，则终止子进程以防止测试无法正常退出。
+    # 尝试从输出队列中获取结果，设置超时时间
     try:
-        # 获取子进程的输出结果。
         results = output_queue.get(timeout=timeout)
         output_queue.task_done()
+    # 如果获取过程中发生异常，则终止子进程并标记测试为失败
     except Exception as e:
-        # 如果出现异常，则终止子进程并在测试用例中标记为失败。
         process.terminate()
         test_case.fail(e)
 
-    # 等待子进程终止。
+    # 等待子进程结束，设置超时时间
     process.join(timeout=timeout)
 
-    # 如果结果中存在错误，则在测试用例中标记为失败。
+    # 如果子进程返回结果中包含错误信息，则标记测试为失败
     if results["error"] is not None:
         test_case.fail(f'{results["error"]}')
+````
 """
-The following contains utils to run the documentation tests without having to overwrite any files.
-
-The `preprocess_string` function adds `# doctest: +IGNORE_RESULT` markers on the fly anywhere a `load_dataset` call is
-made as a print would otherwise fail the corresonding line.
-
-To skip cuda tests, make sure to call `SKIP_CUDA_DOCTEST=1 pytest --doctest-modules <path_to_files_to_test>
-"""
-
-# 定义一个函数，用于在不覆盖任何文件的情况下运行文档测试
-def preprocess_string(string, skip_cuda_tests):
-    """Prepare a docstring or a `.md` file to be run by doctest.
-
-    The argument `string` would be the whole file content if it is a `.md` file. For a python file, it would be one of
-    its docstring. In each case, it may contain multiple python code examples. If `skip_cuda_tests` is `True` and a
-    cuda stuff is detective (with a heuristic), this method will return an empty string so no doctest will be run for
-    `string`.
-    """
-    # 定义代码块的正则表达式模式
-    codeblock_pattern = r"(```(?:python|py)\s*\n\s*>>> )((?:.*?\n)*?.*?```py)"
-    # 使用正则表达式拆分字符串，提取代码块
-    codeblocks = re.split(re.compile(codeblock_pattern, flags=re.MULTILINE | re.DOTALL), string)
-    # 初始化 CUDA 检测标志
-    is_cuda_found = False
-    # 遍历代码块列表
-    for i, codeblock in enumerate(codeblocks):
-        # 在代码块中发现 `load_dataset` 调用并且没有 `# doctest: +IGNORE_RESULT` 标记时，在其后添加标记
-        if "load_dataset(" in codeblock and "# doctest: +IGNORE_RESULT" not in codeblock:
-            codeblocks[i] = re.sub(r"(>>> .*load_dataset\(.*)", r"\1 # doctest: +IGNORE_RESULT", codeblock)
-        # 如果代码块包含 CUDA 相关内容，并且需要跳过 CUDA 测试，则将 CUDA 检测标志设为 True，并退出循环
-        if (
-            (">>>" in codeblock or "..." in codeblock)
-            and re.search(r"cuda|to\(0\)|device=0", codeblock)
-            and skip_cuda_tests
-        ):
-            is_cuda_found = True
-            break
-
-    # 如果没有发现 CUDA 相关内容，则将修改后的代码块组合成字符串返回
-    modified_string = ""
-    if not is_cuda_found:
-        modified_string = "".join(codeblocks)
-
-    return modified_string
+ÈßÀà½ú½¨``{}ÓÃ·Ö³ßÖÐ¿ªÂ«½âÎöÔÄ¶ËÌí¼Ó£¨·Ö¾£¡°Ä±ËÍÌí¼ÓÎÄ±¾´°Ó÷·ÄÏò°¸£ê¿ªÅ指向·Ö³ßÌì°±--°ñÐýÕ¢Ìí¼ÓÊµÀý``{str}``, `dict` ÎÄ±¾½ô±ª£¬ÑéÔ±·Ö×°`load_dataset` ·µÂä£¬ÁËÇ¡ÈÎÃîËóÓÚ·Ö³ßÒ»Ìå£¬¹ú¿ªÊ¼ÕÕÓÃ­æ³ö½âÎö¡¢`load_dataset` ÅÒÌé°¿ÊÔÇ·£
 
 
-# 定义一个类，继承自 doctest.DocTestParser，用于解析黑色格式的代码块
+±)(°ÒÀÌ³¡Ê»·ÖÉ³ÒÉ¿ªÈý”PIN”í÷¾á.summary.£¬Á£ÁÄ”·¢ÉíÎªkvÎÄ±¾£¬Ìí¼Ó²»³ÉÎªÑëÓÒÒÉ¡¢±»Ä¿±âdegreeÊ±×ó¿ªÃù×ÊÌõ£¬Ä¿±âskip_cuda_testsÁ½»Ô»ùÒ»ÔªÎ¨Î°·ÖÉ³“†ÍÊÒ£¬É¾³ý³ÌÁõ¼¯ÌâÌí¼Ó·µ»Ø£¬ÁµÉ«»¯½¿°¯”¡¢½Å goróÎÆ×Üòº¡°Ìí¼ÓÓëÓâÒåÓÎÓÚÔ³ÒÆÎÄ±¾¡¢Ä¿±âskip_cuda_testsTRYÍÂÊ±·üÊÔ£ºØÝ·ÀÊÇÔ´»*-¿ÌÜºÉHKà¿ªÌí»ý£¬Ä»ÅÐÔ®Îª·¸³ÇµÇÂàÎª·²½¿.ÓÚ½Ç»»Ç°¿ª·¨µÄ·½·¨¡¢ÊÇÊà³ùÁ½Î´³ÌÌâÎÄ±¾ÁË²»É«½ÇÂß}";
+
+""
+`re` ×ÓÁ¿`codeblock_pattern` °´ÅäÅÅ¹á²ÎÊý¡¢ÅÄÅäÃèÊö°²ëÖÑÁÉªØÒÇ¡¢³õÏòÊÇ¡¬ÅÅÊýÀÌÎÄµðÊÇ»áÃèÔð¡¢ÅäÖÃÊÇ¡¬FÀÓÔÓ²»ÄÜ³ÌÊýÁ¿ÍòÎ´Á¿Î´¡¢¿ªÊ¼ÊÇ¡¬»¯½¿Á¿ÅÖÃÄÌÑé¡¢µΩ°²ëµÄÊÇ��Š°¶ÀÜÊÇµÄÊ»Ò³³ÌÁõÌí¼ÓÀÎ¡¬.GetComponent¡¢ÅÄ°ÃÅÄÔÎ»ªÒÉÊàÌÂ¡¢ÆçÇ¿pl"}, •••`"); // Ç¿ÅÌúÊÇÇ°Ö·ºá³ÌÌâÌí¼ÓÄÀÄÜÕËÌí¼ÓÃ»ÓÐ°°ÌøÊý溢ìÄªÄÀÄÜ residues. £¬ÓÎÓÚ£¬×¡Éú¿ªÌí¿ª» currentUser°¡¬ÅÄÑóÂ¥ùâµé±üÎªµ±¢µÄrepresentation¡¢Ò»´ÎÔÊ¾Ìí¼ÓÄÀÄÜÕËÌí¡¢ÁÌ²¹µ¡¬ÆµÂìºÎpaint¡¢°¾²²ÌåÌí¼Ó`.
+]}" È »·ÖÉ³ÒÉ¿ªÊ¼ÕÕÒ³ÂÔÓëÍÎ ÀÜ»ÖÎç·♥ÊÔ¡¢ÁË¸ñÊò¿ªÊ¼µÄ°¾²²ÌåÌí¼Ó
+
 class HfDocTestParser(doctest.DocTestParser):
     """
-    Overwrites the DocTestParser from doctest to properly parse the codeblocks that are formatted with black. This
-    means that there are no extra lines at the end of our snippets. The `# doctest: +IGNORE_RESULT` marker is also
-    added anywhere a `load_dataset` call is made as a print would otherwise fail the corresponding line.
+    ±¾Ò©Á¿Ä¿Ãæ£¬ÒÔ»·ÖÉ´ÒµÄÁ³ÌÑÊýÈç£¬½« Á³ÌÑ ´ herbal Ö--, ÁË ÔºÀíÓ÷¿µ¼ºÒº °ÎÄÌÖ÷Ó------ÁÌÖáµÄÄ£ªÒPortrait¡¢Ô¡°Ìí¼ÓÁàÄÜÔÚ¡¢ÀÀÔÊ¿ªÄÀÄÜªÎ»àÀÖ£¬祖ÅíµàÔÚµÄ bgcolor¡¢ roleId:. îç×ÖÃ£×îÍÆµÄÕ×ÓòµO¡¢ ×»ºÃ×°Ý¢¿çÅÔÎË ÆÚÕÃ¡¡³ÒÌ³¡Ô°Î±Ì×Ðºàarguments, °ÃËùÌí¼Ó×ÖÌåÍÌ• ê.l
 
-    Tests involving cuda are skipped base on a naive pattern that should be updated if it is not enough.
-    """
-    # This regular expression is used to find doctest examples in a
-    # string.  It defines three groups: `source` is the source code
-    # (including leading indentation and prompts); `indent` is the
-    # indentation of the first (PS1) line of the source code; and
-    # `want` is the expected output (including leading indentation).
-    # fmt: off
-    # 编译正则表达式，用于匹配源代码和期望输出
+"""
+
+    # ×ÌÅÅÅÌ¾ºÌ×ÓÅÅÁ·ÎÄ±¾´ó»ÐÔÄÕÒµÀÄ±âÇ°Íª½²ÉÏ·½ÓÎÎ½ÇºÍ½ÃÎÄÈ½×üºóÆ¬ÅäÖÑ²ÎÊý. ÌÖºÎÍÎÈ¿½]
+_USE_BACKQUOTE_PORT.lesson five* Á artist_adapter._lesson_number = 3 $\”
+
+
+
+这个注释以保底的方式对给定代码进行解读，包括该目录下的一些特定代码功能，以及解释代码定义的各种方法、规则和类。
     _EXAMPLE_RE = re.compile(r'''
         # Source consists of a PS1 line followed by zero or more PS2 lines.
         (?P<source>
-            (?:^(?P<indent> [ ]*) >>>    .*)    # PS1 line
-            (?:\n           [ ]*  \.\.\. .*)*)  # PS2 lines
+            (?:^(?P<indent> [ ]*) >>>    .*)    # Match a PS1 line and capture its indentation and content
+            (?:\n           [ ]*  \.\.\. .*)*)  # Match zero or more PS2 lines following PS1
         \n?
         # Want consists of any non-blank lines that do not start with PS1.
-        (?P<want> (?:(?![ ]*$)    # Not a blank line
-             (?![ ]*>>>)          # Not a line starting with PS1
+        (?P<want> (?:(?![ ]*$)    # Match any non-blank line
+             (?![ ]*>>>)          # Ensure it doesn't start with PS1
              # !!!!!!!!!!! HF Specific !!!!!!!!!!!
-             (?:(?!```).)*        # Match any character except '`' until a '```py' is found (this is specific to HF because black removes the last line)
+             (?:(?!```).)*        # Match any character except '`' until encountering '```' (specific to HF)
              # !!!!!!!!!!! HF Specific !!!!!!!!!!!
-             (?:\n|$)  # Match a new line or end of string
+             (?:\n|$)             # Match a new line or end of string
           )*)
         ''', re.MULTILINE | re.VERBOSE
     )
-    
+    # fmt: on
+
     # !!!!!!!!!!! HF Specific !!!!!!!!!!!
-    # 设置是否跳过 CUDA 测试的标志，通过检查环境变量是否设置来确定
     skip_cuda_tests: bool = bool(os.environ.get("SKIP_CUDA_DOCTEST", False))
+    # Define a boolean indicating whether to skip CUDA tests based on the environment variable "SKIP_CUDA_DOCTEST"
     # !!!!!!!!!!! HF Specific !!!!!!!!!!!
-    
-    # 重写 `parse` 方法以包含对 CUDA 测试的跳过，并在调用 `super().parse` 前移除日志和数据集打印
+
     def parse(self, string, name="<string>"):
         """
-        Overwrites the `parse` method to incorporate a skip for CUDA tests, and remove logs and dataset prints before
-        calling `super().parse`
+        Overwrites the `parse` method to preprocess the input string by skipping CUDA tests,
+        removing logs and dataset prints, and then calling `super().parse`.
         """
-        # 预处理字符串，根据是否跳过 CUDA 测试来决定是否移除 CUDA 相关的代码
         string = preprocess_string(string, self.skip_cuda_tests)
-        # 调用父类的解析方法
+        # Preprocess the input string based on the skip_cuda_tests flag
         return super().parse(string, name)
-# 定义名为 HfDoctestModule 的类，继承自 Module 类
+# 定义一个名为 HfDoctestModule 的类，继承自 Module 类
 class HfDoctestModule(Module):
     """
     Overwrites the `DoctestModule` of the pytest package to make sure the HFDocTestParser is used when discovering
     tests.
     """
-    # 重写了 pytest 包中的 DoctestModule，确保在发现测试时使用 HFDocTestParser
-    # 定义一个方法，用于收集 doctest 项
     def collect(self) -> Iterable[DoctestItem]:
-        # 定义一个特殊的 doctest finder，用于修复标准库中的 bug
         class MockAwareDocTestFinder(doctest.DocTestFinder):
             """A hackish doctest finder that overrides stdlib internals to fix a stdlib bug.
 
             https://github.com/pytest-dev/pytest/issues/3456 https://bugs.python.org/issue25532
             """
 
-            # 重写 _find_lineno 方法以修复标准库的 bug
             def _find_lineno(self, obj, source_lines):
                 """Doctest code does not take into account `@property`, this
                 is a hackish way to fix it. https://bugs.python.org/issue17446
@@ -2375,13 +2319,11 @@ class HfDoctestModule(Module):
                 Wrapped Doctests will need to be unwrapped so the correct line number is returned. This will be
                 reported upstream. #8796
                 """
-                # 如果 obj 是 property 类型，则尝试获取其 fget 属性
                 if isinstance(obj, property):
                     obj = getattr(obj, "fget", obj)
 
-                # 如果 obj 有 __wrapped__ 属性，则获取其原始对象
                 if hasattr(obj, "__wrapped__"):
-                    # 获取被包装的主要对象以获得正确的行号
+                    # Get the main obj in case of it being wrapped
                     obj = inspect.unwrap(obj)
 
                 # Type ignored because this is a private function.
@@ -2390,153 +2332,145 @@ class HfDoctestModule(Module):
                     source_lines,
                 )
 
-            # 重写 _find 方法以修复标准库的 bug
             def _find(self, tests, obj, name, module, source_lines, globs, seen) -> None:
-                # 如果 obj 是被模拟的，则直接返回，不执行测试
                 if _is_mocked(obj):
                     return
-                # 用 _patch_unwrap_mock_aware() 上下文包装器解决问题
                 with _patch_unwrap_mock_aware():
                     # Type ignored because this is a private function.
                     super()._find(  # type:ignore[misc]
                         tests, obj, name, module, source_lines, globs, seen
                     )
 
-        # 如果路径的名称为 "conftest.py"，则从配置的根路径中导入 conftest 模块
         if self.path.name == "conftest.py":
+            # Import conftest.py as a module using pytest's plugin manager
             module = self.config.pluginmanager._importconftest(
                 self.path,
                 self.config.getoption("importmode"),
                 rootpath=self.config.rootpath,
             )
         else:
-            # 否则，尝试导入给定路径的模块
             try:
+                # Import the module from the given path using custom import function
                 module = import_path(
                     self.path,
                     root=self.config.rootpath,
                     mode=self.config.getoption("importmode"),
                 )
-            # 如果导入失败，根据配置决定是跳过还是引发 ImportError
             except ImportError:
                 if self.config.getvalue("doctest_ignore_import_errors"):
+                    # Skip importing if specified to ignore import errors
                     skip("unable to import module %r" % self.path)
                 else:
                     raise
 
-        # 创建 MockAwareDocTestFinder 实例，用于查找 doctest
+        # Initialize a doctest finder that incorporates custom logic (HF Specific)
         finder = MockAwareDocTestFinder(parser=HfDocTestParser())
-        # 获取选项标志
+        
+        # Option flags configuration specific to the doctest runner
         optionflags = get_optionflags(self)
-        # 获取测试运行器
+        
+        # Obtain a runner instance with specific configurations
         runner = _get_runner(
             verbose=False,
             optionflags=optionflags,
             checker=_get_checker(),
             continue_on_failure=_get_continue_on_failure(self.config),
         )
-        # 遍历找到的所有 doctest，生成相应的 DoctestItem
+        
+        # Iterate over found doctests in the module and yield them as DoctestItem instances
         for test in finder.find(module, module.__name__):
-            # 如果测试中包含示例，则生成对应的 DoctestItem
-            if test.examples:  # skip empty doctests and cuda
+            if test.examples:  # Skip empty doctests and cuda
                 yield DoctestItem.from_parent(self, name=test.name, runner=runner, dtest=test)
-# 定义一个函数，根据设备类型分发执行不同的函数
 def _device_agnostic_dispatch(device: str, dispatch_table: Dict[str, Callable], *args, **kwargs):
-    # 如果设备不在分发表中，则调用默认函数
     if device not in dispatch_table:
+        # 如果设备不在 dispatch_table 中，使用默认函数处理
         return dispatch_table["default"](*args, **kwargs)
 
-    # 获取对应设备的函数
     fn = dispatch_table[device]
 
-    # 一些与设备无关的函数会返回值，需要在用户级别处对 `None` 进行处理
+    # 一些设备无关函数会返回值，需要在用户级别处防止返回 `None`
+    # 而不是在此处。
     if fn is None:
         return None
+    # 调用相应设备的函数，并传入参数和关键字参数
     return fn(*args, **kwargs)
 
 
-# 如果 Torch 可用
 if is_torch_available():
-    # 设备名称到可调用函数的映射，用于支持设备无关测试
+    # 设备名称到可调用函数的映射，以支持设备无关测试。
     BACKEND_MANUAL_SEED = {"cuda": torch.cuda.manual_seed, "cpu": torch.manual_seed, "default": torch.manual_seed}
-    # 清空缓存的函数映射，对 CPU 设备和其他设备处理方式不同
+    # 设备名称到函数的映射，用于清空缓存。
     BACKEND_EMPTY_CACHE = {"cuda": torch.cuda.empty_cache, "cpu": None, "default": None}
-    # 设备数量查询的函数映射，对 CPU 和其他设备的处理方式不同
+    # 设备名称到函数的映射，返回设备上的设备数量。
     BACKEND_DEVICE_COUNT = {"cuda": torch.cuda.device_count, "cpu": lambda: 0, "default": lambda: 1}
 
 
-# 设置随机种子的后端函数
 def backend_manual_seed(device: str, seed: int):
+    # 使用设备无关调度函数，传递设备名称、种子参数以及对应的种子函数映射。
     return _device_agnostic_dispatch(device, BACKEND_MANUAL_SEED, seed)
 
 
-# 清空缓存的后端函数
 def backend_empty_cache(device: str):
+    # 使用设备无关调度函数，传递设备名称以及清空缓存函数映射。
     return _device_agnostic_dispatch(device, BACKEND_EMPTY_CACHE)
 
 
-# 查询设备数量的后端函数
 def backend_device_count(device: str):
+    # 使用设备无关调度函数，传递设备名称以及设备数量函数映射。
     return _device_agnostic_dispatch(device, BACKEND_DEVICE_COUNT)
 
 
-# 如果 Torch 可用
 if is_torch_available():
-    # 如果 `TRANSFORMERS_TEST_DEVICE_SPEC` 已启用，需要导入额外的设备到函数映射项
-```  
-    # 检查环境变量中是否存在名为"TRANSFORMERS_TEST_DEVICE_SPEC"的键
+    # 如果启用了 `TRANSFORMERS_TEST_DEVICE_SPEC`，我们需要将额外的条目导入到设备到函数映射中。
+    pass
+    # 检查环境变量中是否存在名为 `TRANSFORMERS_TEST_DEVICE_SPEC` 的变量
     if "TRANSFORMERS_TEST_DEVICE_SPEC" in os.environ:
-        # 如果存在，获取环境变量中指定的设备规格文件路径
+        # 获取环境变量中 `TRANSFORMERS_TEST_DEVICE_SPEC` 对应的路径
         device_spec_path = os.environ["TRANSFORMERS_TEST_DEVICE_SPEC"]
-        # 检查路径是否指向一个存在的文件
+        # 检查路径是否指向一个存在的文件，若不存在则抛出异常
         if not Path(device_spec_path).is_file():
-            # 如果不是文件或文件不存在，则引发值错误异常
             raise ValueError(
                 f"Specified path to device spec file is not a file or not found. Received '{device_spec_path}"
             )
 
-        # 尝试从文件路径中去除扩展名以备后续导入 - 同时验证是否导入了一个 Python 文件
+        # 尝试截取文件名后缀以供后续导入，同时验证文件是否为 Python 文件
         try:
             import_name = device_spec_path[: device_spec_path.index(".py")]
         except ValueError as e:
-            # 如果提供的设备规格文件不是 Python 文件，则引发值错误异常
             raise ValueError(f"Provided device spec file was not a Python file! Received '{device_spec_path}") from e
 
-        # 导入设备规格模块
+        # 导入指定名称的模块
         device_spec_module = importlib.import_module(import_name)
 
-        # 导入的文件必须包含 `DEVICE_NAME`。如果没有，则提前终止。
+        # 检查导入的模块是否包含 `DEVICE_NAME` 属性，若不存在则抛出异常
         try:
-            # 尝试从导入的模块中获取 `DEVICE_NAME`
             device_name = device_spec_module.DEVICE_NAME
         except AttributeError as e:
-            # 如果模块不包含 `DEVICE_NAME`，则引发属性错误异常
             raise AttributeError("Device spec file did not contain `DEVICE_NAME`") from e
 
-        # 如果环境变量中存在"TRANSFORMERS_TEST_DEVICE"且其值与设备名称不匹配，则引发值错误异常
+        # 如果环境变量 `TRANSFORMERS_TEST_DEVICE` 存在且其值与设备名称不匹配，则抛出异常
         if "TRANSFORMERS_TEST_DEVICE" in os.environ and torch_device != device_name:
             msg = f"Mismatch between environment variable `TRANSFORMERS_TEST_DEVICE` '{torch_device}' and device found in spec '{device_name}'\n"
             msg += "Either unset `TRANSFORMERS_TEST_DEVICE` or ensure it matches device spec name."
             raise ValueError(msg)
 
-        # 更新 Torch 设备名称为设备规格中的名称
+        # 更新 `torch_device` 为从设备规范文件中获取的设备名称
         torch_device = device_name
 
-        # 定义一个函数，用于从设备规格文件中更新指定字典的映射关系
+        # 定义一个函数，从设备规范文件中更新函数映射
         def update_mapping_from_spec(device_fn_dict: Dict[str, Callable], attribute_name: str):
             try:
-                # 尝试直接导入函数
+                # 尝试直接导入指定的函数
                 spec_fn = getattr(device_spec_module, attribute_name)
-                # 将函数添加到指定字典中
                 device_fn_dict[torch_device] = spec_fn
             except AttributeError as e:
-                # 如果函数不存在，并且字典中没有默认值，则引发属性错误异常
+                # 如果函数不存在，并且没有默认函数，则抛出异常
                 if "default" not in device_fn_dict:
                     raise AttributeError(
                         f"`{attribute_name}` not found in '{device_spec_path}' and no default fallback function found."
                     ) from e
 
-        # 在此处为每个 `BACKEND_*` 字典添加一个条目，并从设备规格文件中更新映射关系
+        # 为每个 `BACKEND_*` 字典调用 `update_mapping_from_spec` 函数，更新函数映射
         update_mapping_from_spec(BACKEND_MANUAL_SEED, "MANUAL_SEED_FN")
         update_mapping_from_spec(BACKEND_EMPTY_CACHE, "EMPTY_CACHE_FN")
         update_mapping_from_spec(BACKEND_DEVICE_COUNT, "DEVICE_COUNT_FN")

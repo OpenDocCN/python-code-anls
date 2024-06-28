@@ -1,37 +1,23 @@
 # `.\models\deprecated\retribert\tokenization_retribert.py`
 
-```py
-# coding=utf-8
-# 版权 2018 年的 HuggingFace 公司团队
-#
-# 根据 Apache 许可证 2.0 版（“许可证”）获得许可;
-# 除非符合许可证的规定，否则不得使用此文件。
-# 您可以在下面的网址获得许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则按“原样”分发，
-# 没有任何担保或条件，无论是明示的还是暗示的。
-# 有关详细信息，请参阅许可证。
+```
+# 指定编码格式为 UTF-8
+# 版权声明，引用的代码库遵循 Apache License, Version 2.0
+# 导入 collections 模块，用于构建数据结构
+# 导入 os 模块，提供了一些与操作系统交互的功能
+# 导入 unicodedata 模块，用于对 Unicode 字符进行数据库查询
+# 导入 typing 模块中的 List、Optional、Tuple 类型
+# 从 tokenization_utils 模块中导入 PreTrainedTokenizer 类，用于构建 tokenizer
+# 从 tokenization_utils 模块中导入 _is_control、_is_punctuation、_is_whitespace 函数
+# 从 utils 模块中导入 logging 函数
 
-"""RetriBERT 的标记化类。"""
-
-import collections
-import os
-import unicodedata
-from typing import List, Optional, Tuple
-
-# 导入必要的模块
-from ....tokenization_utils import PreTrainedTokenizer, _is_control, _is_punctuation, _is_whitespace
-from ....utils import logging
-
-# 获取日志记录器
+# 获取 logger 对象，用于记录日志信息
 logger = logging.get_logger(__name__)
 
-# 词汇表文件名
+# 定义一个字典，指定 VOCAB 文件的名称为 "vocab.txt"
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt"}
 
-# 预训练词汇文件映射
+# 定义一个字典，映射预训练模型到对应的 VOCAB 文件路径
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "yjernite/retribert-base-uncased": (
@@ -40,19 +26,21 @@ PRETRAINED_VOCAB_FILES_MAP = {
     }
 }
 
-# 预训练位置嵌入大小
+# 定义一个字典，映射预训练模型到对应的位置编码大小
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "yjernite/retribert-base-uncased": 512,
 }
 
-# 预训练初始化配置
+# 定义一个字典，指定预训练模型的初始化配置
 PRETRAINED_INIT_CONFIGURATION = {
     "yjernite/retribert-base-uncased": {"do_lower_case": True},
 }
 
-# 从 transformers.models.bert.tokenization_bert.load_vocab 复制而来
+
+# 从 transformers.models.bert.tokenization_bert.load_vocab 复制过来的函数
+# 加载给定的词汇表文件到一个有序字典中
 def load_vocab(vocab_file):
-    """将词汇表文件加载到字典中。"""
+    """Loads a vocabulary file into a dictionary."""
     vocab = collections.OrderedDict()
     with open(vocab_file, "r", encoding="utf-8") as reader:
         tokens = reader.readlines()
@@ -61,78 +49,82 @@ def load_vocab(vocab_file):
         vocab[token] = index
     return vocab
 
-# 从 transformers.models.bert.tokenization_bert.whitespace_tokenize 复制而来
+
+# 从 transformers.models.bert.tokenization_bert.whitespace_tokenize 复制过来的函数
+# 对输入的文本进行基本的空白字符清理和分割
 def whitespace_tokenize(text):
-    """对文本进行基本的空白字符清理和拆分。"""
+    """Runs basic whitespace cleaning and splitting on a piece of text."""
     text = text.strip()
     if not text:
         return []
     tokens = text.split()
     return tokens
 
+
+# 定义 RetriBertTokenizer 类，继承自 PreTrainedTokenizer
 class RetriBertTokenizer(PreTrainedTokenizer):
     r"""
-    构建一个 RetriBERT 分词器。
+    Constructs a RetriBERT tokenizer.
 
-    [`RetriBertTokenizer`] 与 [`BertTokenizer`] 相同，并运行端到端的分词：标点符号拆分和 wordpiece。
+    [`RetriBertTokenizer`] is identical to [`BertTokenizer`] and runs end-to-end tokenization: punctuation splitting
+    and wordpiece.
 
-    此分词器继承自 [`PreTrainedTokenizer`]，其中包含大多数主要方法。用户应参考
-    这个超类以获取有关这些方法的更多信息。
-    # 参数说明：
-    # vocab_file (`str`): 包含词汇表的文件。
-    # do_lower_case (`bool`, *optional*, defaults to `True`): 在进行标记化时是否将输入转换为小写。
-    # do_basic_tokenize (`bool`, *optional*, defaults to `True`): 在 WordPiece 之前是否进行基本标记化。
-    # never_split (`Iterable`, *optional*): 在标记化时永远不会被拆分的令牌集合。仅在 `do_basic_tokenize=True` 时有效。
-    # unk_token (`str`, *optional*, defaults to `"[UNK]"`): 未知的标记。不在词汇表中的标记无法转换为 ID，并被设置为这个标记。
-    # sep_token (`str`, *optional*, defaults to `"[SEP]"`): 分隔符标记，在构建来自多个序列的序列时使用，例如用于序列分类的两个序列，或用于问题回答的文本和问题。在使用特殊标记构建的序列的最后一个标记也会使用它。
-    # pad_token (`str`, *optional*, defaults to `"[PAD]"`): 用于填充的标记，例如在批处理不同长度的序列时使用。
-    # cls_token (`str`, *optional*, defaults to `"[CLS]"`): 分类器标记，在进行序列分类时使用（而不是对每个标记进行分类）。在使用特殊标记构建的序列的第一个标记。
-    # mask_token (`str`, *optional*, defaults to `"[MASK]"`): 用于屏蔽值的标记。在使用掩码语言建模训练此模型时使用。这是模型将尝试预测的标记。
-    # tokenize_chinese_chars (`bool`, *optional*, defaults to `True`): 是否标记化中文字符。这可能应该在日语中停用（参见此问题）。
-    # strip_accents (`bool`, *optional*): 是否去除所有重音符号。如果未指定此选项，则将由 `lowercase` 的值确定（与原始 BERT 一样）。
-
-    # 定义变量
+    This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer
+    to: this superclass for more information regarding those methods.
+    """
+    # 词汇文件的名称列表，用于指定预训练模型使用的词汇文件名
     vocab_files_names = VOCAB_FILES_NAMES
+    # 预训练模型使用的预训练词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 预训练模型的最大输入大小，指定了每个模型的最大输入序列长度
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 预训练模型的初始化配置，包含了模型初始化时的各种参数设置
     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
+    # 模型输入的名称列表，定义了模型输入时所使用的名称
     model_input_names = ["input_ids", "attention_mask"]
 
-    # 从transformers.models.bert.tokenization_bert.BertTokenizer.__init__中复制而来
+    # 以下代码段为从transformers.models.bert.tokenization_bert.BertTokenizer.__init__中复制而来
     def __init__(
         self,
         vocab_file,
-        do_lower_case=True,  # 是否将输入文本都转换成小写，默认为 True
-        do_basic_tokenize=True,  # 是否进行基本的分词，默认为 True
-        never_split=None,  # 永远不需要分割的特殊词列表，默认为 None
-        unk_token="[UNK]",  # 未知词的token，默认为 "[UNK]"
-        sep_token="[SEP]",  # 分隔符token，默认为 "[SEP]"
-        pad_token="[PAD]",  # 填充token，默认为 "[PAD]"
-        cls_token="[CLS]",  # 分类token，默认为 "[CLS]"
-        mask_token="[MASK]",  # 掩码token，默认为 "[MASK]"
-        tokenize_chinese_chars=True,  # 是否对中文进行分词，默认为 True
-        strip_accents=None,  # 是否去掉重音符号，默认为 None
+        do_lower_case=True,
+        do_basic_tokenize=True,
+        never_split=None,
+        unk_token="[UNK]",
+        sep_token="[SEP]",
+        pad_token="[PAD]",
+        cls_token="[CLS]",
+        mask_token="[MASK]",
+        tokenize_chinese_chars=True,
+        strip_accents=None,
         **kwargs,
     ):
-        if not os.path.isfile(vocab_file):  # 如果给定的词汇表文件不存在
-            raise ValueError(  # 抛出数值错误
+        # 检查词汇文件是否存在，如果不存在则抛出数值错误异常
+        if not os.path.isfile(vocab_file):
+            raise ValueError(
                 f"Can't find a vocabulary file at path '{vocab_file}'. To load the vocabulary from a Google pretrained"
                 " model use `tokenizer = BertTokenizer.from_pretrained(PRETRAINED_MODEL_NAME)`"
             )
-        self.vocab = load_vocab(vocab_file)  # 载入词汇表
-        self.ids_to_tokens = collections.OrderedDict([(ids, tok) for tok, ids in self.vocab.items()])  # 将词汇表转换为 token 到 id 的字典
-        self.do_basic_tokenize = do_basic_tokenize  # 设置是否进行基本分词
-        if do_basic_tokenize:  # 如果需要进行基本分词
-            self.basic_tokenizer = BasicTokenizer(  # 初始化基本分词器
+        # 加载词汇表
+        self.vocab = load_vocab(vocab_file)
+        # 构建一个从 id 到 token 的有序字典
+        self.ids_to_tokens = collections.OrderedDict([(ids, tok) for tok, ids in self.vocab.items()])
+        # 设置是否进行基本的分词操作
+        self.do_basic_tokenize = do_basic_tokenize
+        # 如果需要进行基本分词，则初始化 BasicTokenizer 对象
+        if do_basic_tokenize:
+            self.basic_tokenizer = BasicTokenizer(
                 do_lower_case=do_lower_case,
                 never_split=never_split,
                 tokenize_chinese_chars=tokenize_chinese_chars,
                 strip_accents=strip_accents,
             )
 
-        self.wordpiece_tokenizer = WordpieceTokenizer(vocab=self.vocab, unk_token=str(unk_token))  # 初始化基于词汇表的分词器
+        # 初始化 WordpieceTokenizer 对象
+        self.wordpiece_tokenizer = WordpieceTokenizer(vocab=self.vocab, unk_token=str(unk_token))
 
-        super().__init__(  # 调用父类的初始化方法
+        # 调用父类的初始化方法
+        super().__init__(
             do_lower_case=do_lower_case,
             do_basic_tokenize=do_basic_tokenize,
             never_split=never_split,
@@ -147,67 +139,76 @@ class RetriBertTokenizer(PreTrainedTokenizer):
         )
 
     @property
-    # Copied from transformers.models.bert.tokenization_bert.BertTokenizer.do_lower_case
-    def do_lower_case(self):  # 获取是否将输入文本都转换成小写的属性
+    # 从 transformers.models.bert.tokenization_bert.BertTokenizer.do_lower_case 复制而来
+    def do_lower_case(self):
+        # 返回基本分词器的小写标志
         return self.basic_tokenizer.do_lower_case
 
     @property
-    # Copied from transformers.models.bert.tokenization_bert.BertTokenizer.vocab_size
-    def vocab_size(self):  # 获取词汇表的大小
+    # 从 transformers.models.bert.tokenization_bert.BertTokenizer.vocab_size 复制而来
+    def vocab_size(self):
+        # 返回词汇表的大小（词汇量）
         return len(self.vocab)
 
-    # Copied from transformers.models.bert.tokenization_bert.BertTokenizer.get_vocab
-    def get_vocab(self):  # 获取词汇表
+    # 从 transformers.models.bert.tokenization_bert.BertTokenizer.get_vocab 复制而来
+    def get_vocab(self):
+        # 返回词汇表和添加的特殊 token 编码器的组合字典
         return dict(self.vocab, **self.added_tokens_encoder)
 
-    # Copied from transformers.models.bert.tokenization_bert.BertTokenizer._tokenize
-    def _tokenize(self, text, split_special_tokens=False):  # 对文本进行分词
-        split_tokens = []  # 初始化分词结果列表
-        if self.do_basic_tokenize:  # 如果需要进行基本分词
-            for token in self.basic_tokenizer.tokenize(  # 遍历基本分词器对文本进行分词
+    # 从 transformers.models.bert.tokenization_bert.BertTokenizer._tokenize 复制而来
+    def _tokenize(self, text, split_special_tokens=False):
+        # 初始化分词后的 tokens 列表
+        split_tokens = []
+        # 如果需要进行基本分词
+        if self.do_basic_tokenize:
+            # 使用基本分词器对文本进行分词
+            for token in self.basic_tokenizer.tokenize(
                 text, never_split=self.all_special_tokens if not split_special_tokens else None
             ):
-                # If the token is part of the never_split set
-                if token in self.basic_tokenizer.never_split:  # 如果分割后的 token 在不需要分割的特殊词列表中
-                    split_tokens.append(token)  # 直接添加到结果列表
+                # 如果 token 在不分割集合中
+                if token in self.basic_tokenizer.never_split:
+                    split_tokens.append(token)
                 else:
-                    split_tokens += self.wordpiece_tokenizer.tokenize(token)  # 否则继续使用基于词汇表的分词器进行分词
-        else:  # 如果不需要进行基本分词
-            split_tokens = self.wordpiece_tokenizer.tokenize(text)  # 直接使用基于词汇表的分词器进行分词
-        return split_tokens  # 返回分词结果
-    # 根据词汇表将一个token转换为对应的id
+                    # 使用 WordpieceTokenizer 对 token 进行进一步分词
+                    split_tokens += self.wordpiece_tokenizer.tokenize(token)
+        else:
+            # 直接使用 WordpieceTokenizer 对文本进行分词
+            split_tokens = self.wordpiece_tokenizer.tokenize(text)
+        # 返回分词后的 tokens 列表
+        return split_tokens
+    # 从词汇表中将 token 转换为对应的 id
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
         return self.vocab.get(token, self.vocab.get(self.unk_token))
-    
-    # 根据词汇表将一个id转换为对应的token
+
+    # 从词汇表中将 id 转换为对应的 token
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
         return self.ids_to_tokens.get(index, self.unk_token)
-    
-    # 将一系列token转换为单个字符串
+
+    # 将一系列的 token 转换为单个字符串
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
         out_string = " ".join(tokens).replace(" ##", "").strip()
         return out_string
-    
-    # 构建包含特殊标记的模型输入
+
+    # 构建包含特殊 token 的模型输入
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
         Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
         adding special tokens. A BERT sequence has the following format:
-    
+
         - single sequence: `[CLS] X [SEP]`
         - pair of sequences: `[CLS] A [SEP] B [SEP]`
-    
+
         Args:
             token_ids_0 (`List[int]`):
                 List of IDs to which the special tokens will be added.
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
-    
+
         Returns:
             `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
@@ -216,24 +217,25 @@ class RetriBertTokenizer(PreTrainedTokenizer):
         cls = [self.cls_token_id]
         sep = [self.sep_token_id]
         return cls + token_ids_0 + sep + token_ids_1 + sep
-        
-    # 获取特殊标记的掩码
+
+    # 获取包含特殊 token 的 mask（掩码）
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
     ) -> List[int]:
         """
-        Get the token mask indicating whether each token is a special token (e.g. [CLS], [SEP]) or not.
-    
+        Retrieves sequence ids from a token list that has no special tokens added. It adds the special tokens according
+        to the BERT-like model requirements.
+
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs for the first sequence.
-            token_ids_1 (`List[int]`):
-                List of IDs for the second sequence.
-            already_has_special_tokens (`bool`, *optional*):
-                Whether the token list is already formatted with special tokens or not.
-    
+                List of IDs corresponding to the first sequence.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
+            already_has_special_tokens (`bool`, *optional*, defaults to `False`):
+                Whether or not the token list is already formatted with special tokens for BERT.
+
         Returns:
-            `List[int]`: List of 0s and 1s, with 1s indicating the special tokens.
+            `List[int]`: List of `1` and `0`, with `1` indicating a special token, `0` indicating a regular token.
         """
     ) -> List[int]:
         """
@@ -252,16 +254,17 @@ class RetriBertTokenizer(PreTrainedTokenizer):
             `List[int]`: A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
         """
 
-        # If token list already has special tokens, call super method to get special tokens mask
+        # Check if the token list already has special tokens added
         if already_has_special_tokens:
             return super().get_special_tokens_mask(
                 token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
             )
 
-        # If token list has two sequences, form the special tokens mask accordingly
+        # If token_ids_1 is provided, construct a mask for sequence pairs
         if token_ids_1 is not None:
+            # Return a list indicating positions of special tokens and sequence tokens
             return [1] + ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1)) + [1]
-        # If token list has only one sequence, form the special tokens mask accordingly
+        # Otherwise, construct a mask for a single sequence
         return [1] + ([0] * len(token_ids_0)) + [1]
 
     # Copied from transformers.models.bert.tokenization_bert.BertTokenizer.create_token_type_ids_from_sequences
@@ -275,7 +278,7 @@ class RetriBertTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
@@ -288,61 +291,65 @@ class RetriBertTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
         """
-        sep = [self.sep_token_id]  # Get the separator token ID
-        cls = [self.cls_token_id]  # Get the classification token ID
-        # If there is only one sequence, return token type IDs for the first sequence
+        # Define special tokens
+        sep = [self.sep_token_id]
+        cls = [self.cls_token_id]
+        
+        # If token_ids_1 is None, return a mask for a single sequence
         if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
-        # If there are two sequences, return token type IDs for both sequences
+        
+        # Otherwise, return a mask for sequence pairs
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
     # Copied from transformers.models.bert.tokenization_bert.BertTokenizer.save_vocabulary
-    # 保存词汇表到指定目录下，返回保存文件路径的元组
+    # 保存词汇表到指定目录中的文件，返回保存的文件路径元组
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 初始化索引值
+        # 初始化索引
         index = 0
-        # 如果保存目录已存在
+        # 检查保存目录是否存在，若存在则拼接文件路径，否则直接使用指定路径
         if os.path.isdir(save_directory):
-            # 构建词汇表文件路径
             vocab_file = os.path.join(
                 save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
             )
         else:
-            # 构建词汇表文件路径
             vocab_file = (filename_prefix + "-" if filename_prefix else "") + save_directory
-        # 打开词汇表文件，以写入模式，并指定编码格式为utf-8
+        # 使用 utf-8 编码打开文件准备写入
         with open(vocab_file, "w", encoding="utf-8") as writer:
-            # 遍历词汇表中的token及其索引，按索引升序排列
+            # 遍历词汇表 self.vocab，按照词汇索引排序
             for token, token_index in sorted(self.vocab.items(), key=lambda kv: kv[1]):
-                # 如果索引不连续，输出警告信息
+                # 检查索引是否连续，若不连续则发出警告
                 if index != token_index:
                     logger.warning(
                         f"Saving vocabulary to {vocab_file}: vocabulary indices are not consecutive."
                         " Please check that the vocabulary is not corrupted!"
                     )
                     index = token_index
-                # 将token写入词汇表文件并换行
+                # 将词汇写入文件，每个词汇占一行
                 writer.write(token + "\n")
                 index += 1
-        # 返回保存的词汇表文件路径的元组
+        # 返回保存的文件路径元组
         return (vocab_file,)
-# 定义一个 BasicTokenizer 类，用于运行基本的分词（如标点符号分割、转换为小写等）
-
+# 从transformers.models.bert.tokenization_bert.BasicTokenizer复制而来的类定义
 class BasicTokenizer(object):
     """
-    Constructs a BasicTokenizer that will run basic tokenization (punctuation splitting, lower casing, etc.).
-    
+    构造一个BasicTokenizer对象，用于运行基本的分词操作（如分割标点符号、转换为小写等）。
+
     Args:
         do_lower_case (`bool`, *optional*, defaults to `True`):
-            是否在分词时将输入转换为小写
+            是否在分词时将输入文本转换为小写。
         never_split (`Iterable`, *optional*):
-            在分词时不会被分割的 token 集合。仅在 `do_basic_tokenize=True` 时生效
+            在分词时永远不会被分割的标记集合。仅在`do_basic_tokenize=True`时生效。
         tokenize_chinese_chars (`bool`, *optional*, defaults to `True`):
-            是否对中文字符进行分词。对于日语，这个选项可能需要关闭
+            是否对中文字符进行分词。
+
+            对于日语，这应该被禁用（参见这个
+            [问题](https://github.com/huggingface/transformers/issues/328)）。
         strip_accents (`bool`, *optional*):
-            是否去除所有的重音符号。如果没有指定该选项，则根据 `lowercase` 的值来确定（与原始的 BERT 一样）
+            是否去除所有的重音符号。如果未指定此选项，则由`lowercase`的值决定（与原始BERT相同）。
         do_split_on_punc (`bool`, *optional*, defaults to `True`):
-            在某些情况下，我们希望跳过基本的标点符号分割，以便后续的分词能够捕捉单词的完整上下文，比如缩略词
+            在某些情况下，我们希望跳过基本的标点分割，以便后续的分词可以捕捉到完整的词语上下文，比如缩写词。
+
     """
 
     def __init__(
@@ -353,121 +360,120 @@ class BasicTokenizer(object):
         strip_accents=None,
         do_split_on_punc=True,
     ):
-        # 如果 never_split 没有指定，则设为一个空列表
+        # 如果`never_split`未提供，则设置为一个空列表
         if never_split is None:
             never_split = []
-        
-        # 设置类的属性
-        self.do_lower_case = do_lower_case
-        self.never_split = set(never_split)
-        self.tokenize_chinese_chars = tokenize_chinese_chars
-        self.strip_accents = strip_accents
-        self.do_split_on_punc = do_split_on_punc
-    # 定义一个名为 tokenize 的方法
+        # 初始化对象属性
+        self.do_lower_case = do_lower_case  # 是否转换为小写
+        self.never_split = set(never_split)  # 永不分割的标记集合，转换为集合类型
+        self.tokenize_chinese_chars = tokenize_chinese_chars  # 是否分词中文字符
+        self.strip_accents = strip_accents  # 是否去除重音符号
+        self.do_split_on_punc = do_split_on_punc  # 是否在标点符号处分割
+    # 对文本进行基本的分词操作。用于子词分词，请参见WordPieceTokenizer。
+    # 
+    # Args:
+    #     never_split (`List[str]`, *optional*): 用于向后兼容的参数。现在直接在基类级别实现
+    #         （参见`PreTrainedTokenizer.tokenize`）。不要分割的标记列表。
     def tokenize(self, text, never_split=None):
-        """
-        执行基本的文本分词。对于亚词分词，请参见 WordPieceTokenizer。
-    
-        参数:
-            never_split (`List[str]`, *可选*)
-                保持向后兼容性。现在已经在基类级别直接实现（请参见 `PreTrainedTokenizer.tokenize`）。不应该分割的令牌列表。
-        """
-        # 将 never_split 参数与实例属性 never_split 合并成一个新的集合
+        # 如果给定了never_split参数，则将其与对象属性self.never_split合并，形成新的集合
         never_split = self.never_split.union(set(never_split)) if never_split else self.never_split
-        # 清理文本
+        # 清理文本，去除不必要的字符
         text = self._clean_text(text)
-    
-        # 这个功能是在 2018 年 11 月 1 日为多语言和中文模型添加的。现在也应用于英语模型,但这并不重要,因为英语模型没有被训练在任何中文数据上,
-        # 并且通常也没有任何中文数据（维基百科中的英语页面中有一些中文词汇,所以词汇表中也有一些中文字符）。
+
+        # 2018年11月1日添加，用于多语言和中文模型。现在也适用于英语模型，但这并不重要，
+        # 因为英语模型未在任何中文数据上训练，并且通常不包含任何中文数据
+        # （英文维基百科中包含一些中文单词，因此词汇表中会包含中文字符）。
         if self.tokenize_chinese_chars:
+            # 对中文字符进行分词处理
             text = self._tokenize_chinese_chars(text)
-        # 防止将具有不同 Unicode 代码点的相同字符视为不同字符
+        # 将Unicode文本进行规范化处理，防止不同的Unicode编码造成字符被视为不同字符
         unicode_normalized_text = unicodedata.normalize("NFC", text)
-        # 使用空白符分割文本为原始令牌
+        # 使用空白字符分词
         orig_tokens = whitespace_tokenize(unicode_normalized_text)
         split_tokens = []
-        # 遍历原始令牌
+        # 遍历每个token
         for token in orig_tokens:
-            # 如果令牌不在 never_split 列表中
+            # 如果token不在never_split中，则考虑大小写问题和重音符号处理
             if token not in never_split:
-                # 如果需要转换为小写
                 if self.do_lower_case:
+                    # 如果设置为小写处理，则将token转换为小写
                     token = token.lower()
-                    # 如果需要去除重音符号
+                    # 如果需要去除重音符号，则执行去除操作
                     if self.strip_accents is not False:
                         token = self._run_strip_accents(token)
-                # 如果需要去除重音符号
                 elif self.strip_accents:
+                    # 如果需要去除重音符号，则执行去除操作
                     token = self._run_strip_accents(token)
-            # 将分割后的令牌添加到 split_tokens 列表
+            # 将分割后的token添加到列表中
             split_tokens.extend(self._run_split_on_punc(token, never_split))
-        # 使用空白符重新连接分割后的令牌,并进行分词
+
+        # 使用空白字符再次分词，将所有分割后的token重新组合成字符串列表
         output_tokens = whitespace_tokenize(" ".join(split_tokens))
+        # 返回最终的token列表
         return output_tokens
-    
-    # 定义一个名为 _run_strip_accents 的私有方法
+
+    # 从文本中去除重音符号
     def _run_strip_accents(self, text):
-        """删除文本中的重音符号。"""
-        # 将文本标准化为 NFC 形式
+        """Strips accents from a piece of text."""
+        # 将文本标准化为NFD格式，以便处理重音符号
         text = unicodedata.normalize("NFD", text)
         output = []
         # 遍历文本中的每个字符
         for char in text:
-            # 获取字符的 Unicode 类别
+            # 获取字符的Unicode分类
             cat = unicodedata.category(char)
-            # 如果类别为 Mn (结合记号),则跳过该字符
+            # 如果字符属于"Mark, Nonspacing"（重音符号），则跳过该字符
             if cat == "Mn":
                 continue
-            # 否则将该字符添加到输出列表
+            # 否则将字符添加到输出列表中
             output.append(char)
-        # 将输出列表拼接成字符串并返回
+        # 将输出列表中的字符重新组合成字符串，并返回
         return "".join(output)
-    # 在文本上分割标点符号
     def _run_split_on_punc(self, text, never_split=None):
         """Splits punctuation on a piece of text."""
-        # 如果不需要分割标点或者文本在不分割列表中，则直接返回文本
+        # 如果不需要在标点处分割或者指定了不分割的文本，则直接返回包含原始文本的列表
         if not self.do_split_on_punc or (never_split is not None and text in never_split):
             return [text]
+        # 将文本转换为字符列表
         chars = list(text)
         i = 0
         start_new_word = True
         output = []
-        # 遍历文本中的字符
         while i < len(chars):
             char = chars[i]
-            # 如果字符是标点符号，则单独放到一个列表里，表示分割
+            # 如果是标点符号，则将其作为单独的列表项加入输出列表，并标记为开始新单词
             if _is_punctuation(char):
                 output.append([char])
                 start_new_word = True
             else:
-                # 如果是非标点符号，判断是否需要新的单词
+                # 如果不是标点符号，根据是否开始新单词决定是追加到当前列表项还是新建列表项
                 if start_new_word:
                     output.append([])
                 start_new_word = False
                 output[-1].append(char)
             i += 1
 
+        # 将列表中的列表项连接为字符串，并返回分割后的文本列表
         return ["".join(x) for x in output]
 
-    # 给中文字符添加空白
     def _tokenize_chinese_chars(self, text):
         """Adds whitespace around any CJK character."""
         output = []
-        # 遍历文本中的字符
         for char in text:
             cp = ord(char)
+            # 如果字符是CJK字符，则在其前后添加空格，并加入输出列表；否则直接加入输出列表
             if self._is_chinese_char(cp):
                 output.append(" ")
                 output.append(char)
                 output.append(" ")
             else:
                 output.append(char)
+        # 将列表转换为字符串并返回
         return "".join(output)
 
-    # 检查是否为中文字符
     def _is_chinese_char(self, cp):
         """Checks whether CP is the codepoint of a CJK character."""
-        # 这里将中文字符定义为在CJK Unicode块中的字符范围内
+        # 判断字符编码是否在CJK统一表意文字范围内
         if (
             (cp >= 0x4E00 and cp <= 0x9FFF)
             or (cp >= 0x3400 and cp <= 0x4DBF)  #
@@ -477,53 +483,58 @@ class BasicTokenizer(object):
             or (cp >= 0x2B820 and cp <= 0x2CEAF)  #
             or (cp >= 0xF900 and cp <= 0xFAFF)
             or (cp >= 0x2F800 and cp <= 0x2FA1F)  #
-        ):
+        ):  #
             return True
 
         return False
 
-    # 清除文本中的无效字符和空白
     def _clean_text(self, text):
         """Performs invalid character removal and whitespace cleanup on text."""
         output = []
-        # 遍历文本中的字符
         for char in text:
             cp = ord(char)
-            # 如果字符是无效字符或控制字符，则跳过
+            # 如果字符编码为0或0xFFFD（无效字符），或者是控制字符，则跳过当前字符
             if cp == 0 or cp == 0xFFFD or _is_control(char):
                 continue
-            # 如果是空白字符，替换为空格���否则保留字符
+            # 如果是空白字符，则替换为单个空格；否则保留字符
             if _is_whitespace(char):
                 output.append(" ")
             else:
                 output.append(char)
+        # 将列表转换为字符串并返回
         return "".join(output)
-# 从transformers.models.bert.tokenization_bert.WordpieceTokenizer中复制的类
+# Copied from transformers.models.bert.tokenization_bert.WordpieceTokenizer
+# WordpieceTokenizer 类，用于运行 WordPiece 分词算法
+
 class WordpieceTokenizer(object):
-    """执行WordPiece标记化。"""
-
+    """Runs WordPiece tokenization."""
+    # 初始化方法，设置词汇表、未知标记和单词最大字符数
     def __init__(self, vocab, unk_token, max_input_chars_per_word=100):
-        # 初始化WordPiece标记化器，使用给定的词汇表、未知标记和每个单词的最大输入字符数
-        self.vocab = vocab
-        self.unk_token = unk_token
-        self.max_input_chars_per_word = max_input_chars_per_word
+        self.vocab = vocab  # 词汇表，包含所有的词和子词
+        self.unk_token = unk_token  # 未知标记，用于未能识别的词或子词
+        self.max_input_chars_per_word = max_input_chars_per_word  # 单词的最大字符数限制，默认为100
 
+    # 对文本进行 WordPiece 分词
     def tokenize(self, text):
         """
-        将一段文本标记化为其词片段。这使用贪婪最长匹配算法使用给定的词汇表进行标记化。
+        Tokenizes a piece of text into its word pieces. This uses a greedy longest-match-first algorithm to perform
+        tokenization using the given vocabulary.
 
-        例如，`input = "unaffable"`将返回输出`["un", "##aff", "##able"]`。
+        For example, `input = "unaffable"` will return as output `["un", "##aff", "##able"]`.
 
         Args:
-            text: 一个单个标记或以空格分隔的标记。这应该已经通过*BasicTokenizer*。
+            text: A single token or whitespace separated tokens. This should have
+                already been passed through *BasicTokenizer*.
 
         Returns:
-            一个词片段标记列表。
+            A list of wordpiece tokens.
         """
-
+        # 初始化输出 token 列表
         output_tokens = []
+        # 对文本进行空白字符分割，获取每一个 token
         for token in whitespace_tokenize(text):
             chars = list(token)
+            # 如果 token 的字符数超过最大字符数限制，则将未知标记加入输出 tokens
             if len(chars) > self.max_input_chars_per_word:
                 output_tokens.append(self.unk_token)
                 continue
@@ -531,9 +542,11 @@ class WordpieceTokenizer(object):
             is_bad = False
             start = 0
             sub_tokens = []
+            # 使用贪婪的最长匹配算法进行分词
             while start < len(chars):
                 end = len(chars)
                 cur_substr = None
+                # 从当前位置向前递减，生成子字符串并加上前缀 "##"，检查其是否在词汇表中
                 while start < end:
                     substr = "".join(chars[start:end])
                     if start > 0:
@@ -542,15 +555,19 @@ class WordpieceTokenizer(object):
                         cur_substr = substr
                         break
                     end -= 1
+                # 如果找不到合适的子字符串，则将 is_bad 标记设为 True
                 if cur_substr is None:
                     is_bad = True
                     break
                 sub_tokens.append(cur_substr)
                 start = end
 
+            # 如果 is_bad 为 True，则将未知标记加入输出 tokens；否则将子 tokens 加入输出 tokens
             if is_bad:
                 output_tokens.append(self.unk_token)
             else:
                 output_tokens.extend(sub_tokens)
+        
+        # 返回最终的 wordpiece tokens 列表
         return output_tokens
 ```

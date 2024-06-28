@@ -1,21 +1,12 @@
-# `.\transformers\models\whisper\modeling_whisper.py`
+# `.\models\whisper\modeling_whisper.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 版权所有（c）2022 OpenAI作者和HuggingFace Inc.团队。保留所有权利。
-#
-# 根据Apache许可2.0版（“许可证”）获得许可；
-# 除非符合许可证，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则软件
-# 按“原样”分发，不提供任何明示或暗示的担保或条件。
-# 有关特定语言的权限，请参阅许可证。
-""" PyTorch Whisper model."""
-# 导入所需模块
+```
+# 设置 Python 文件的编码格式为 UTF-8
+# 版权声明和许可信息
+# 此处版权归 OpenAI 和 HuggingFace Inc. 团队所有，保留所有权利
+
+""" PyTorch Whisper model. """
+# 导入必要的库和模块
 import math
 from typing import Optional, Tuple, Union
 
@@ -46,12 +37,14 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
+# 导入 Whisper 配置类
 from .configuration_whisper import WhisperConfig
+# 导入 Whisper 生成混合类
 from .generation_whisper import WhisperGenerationMixin
 
-# 检查是否可用flash_attn库的相关函数
+# 检查是否可用 Flash Attention 2.0
 if is_flash_attn_2_available():
-    # 导入相关函数和模块
+    # 如果可用，则导入 Flash Attention 相关函数和模块
     from flash_attn import flash_attn_func, flash_attn_varlen_func
     from flash_attn.bert_padding import index_first_axis, pad_input, unpad_input  # noqa
 
@@ -61,28 +54,29 @@ logger = logging.get_logger(__name__)
 # 隐藏状态的起始位置
 _HIDDEN_STATES_START_POSITION = 1
 
-# 用于文档的配置信息
+# 用于文档的配置示例
 _CONFIG_FOR_DOC = "WhisperConfig"
-# 用于文档的检查点信息
+# 用于文档的检查点示例
 _CHECKPOINT_FOR_DOC = "openai/whisper-tiny"
 
-# Whisper模型的预训练模型存档列表
+# Whisper 预训练模型的存档列表
 WHISPER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "openai/whisper-base",
-    # 查看所有Whisper模型 https://huggingface.co/models?filter=whisper
+    # 更多 Whisper 模型请见 https://huggingface.co/models?filter=whisper
 ]
 
 
-# 从transformers.models.llama.modeling_llama._get_unpad_data复制
+# 从 transformers.models.llama.modeling_llama._get_unpad_data 复制的函数
 def _get_unpad_data(attention_mask):
-    # 计算批次中每个序列的长度
+    """从注意力掩码中获取非填充数据"""
+    # 计算批次中的序列长度
     seqlens_in_batch = attention_mask.sum(dim=-1, dtype=torch.int32)
-    # 获取非零位置的索引
+    # 找到非填充数据的索引
     indices = torch.nonzero(attention_mask.flatten(), as_tuple=False).flatten()
     # 找到批次中最大的序列长度
     max_seqlen_in_batch = seqlens_in_batch.max().item()
-    # 对序列长度进行累积求和并填充
-    cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.torch.int32), (1, 0))
+    # 计算累积序列长度
+    cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.int32), (1, 0))
     return (
         indices,
         cu_seqlens,
@@ -90,44 +84,47 @@ def _get_unpad_data(attention_mask):
     )
 
 
-# 生成位置嵌入的正弦波
 def sinusoids(length: int, channels: int, max_timescale: float = 10000) -> torch.Tensor:
-    """Returns sinusoids for positional embedding"""
-    # 如果通道数不能被2整除，则引发错误
+    """为位置嵌入返回正弦波"""
+    # 检查通道数是否为偶数
     if channels % 2 != 0:
         raise ValueError(
             f"Number of channels has to be divisible by 2 for sinusoidal positional embeddings, got {channels} channels."
         )
-    # 计算对数时间刻度增量，以用于注意力机制中的位置编码
+    # 计算用于时间缩放的对数时间尺度增量
     log_timescale_increment = math.log(max_timescale) / (channels // 2 - 1)
-    # 计算时间刻度的倒数，用于位置编码
+    
+    # 计算逆时间尺度，通过 torch.exp 函数对每个通道的对数时间尺度增量进行指数运算
     inv_timescales = torch.exp(-log_timescale_increment * torch.arange(channels // 2))
-    # 生成长度为 length 的时间序列，并按时间刻度进行缩放
+    
+    # 创建一个二维张量，其中每一行代表一个时间步，每列代表一个通道的缩放时间
+    # 通过乘以逆时间尺度张量，将时间线性缩放到不同的频率
     scaled_time = torch.arange(length).view(-1, 1) * inv_timescales.view(1, -1)
-    # 返回经过正弦和余弦函数处理的时间序列作为位置编码
+    
+    # 返回一个张量，包含了缩放时间的正弦和余弦值，沿着通道维度连接
     return torch.cat([scaled_time.sin(), scaled_time.cos()], dim=1)
-# 从transformers.models.bart.modeling_bart.shift_tokens_right中复制代码
+# Copied from transformers.models.bart.modeling_bart.shift_tokens_right
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
-    将输入的id向右移动一个标记。
+    Shift input ids one token to the right.
     """
-    # 创建一个与input_ids相同形状的全零张量
+    # 创建一个和 input_ids 形状相同的全零张量 shifted_input_ids
     shifted_input_ids = input_ids.new_zeros(input_ids.shape)
-    # 将input_ids中每一行的数据向左移动一位，并将结果赋值给shifted_input_ids，同时保留最后一个位置的数据
+    # 将 input_ids 的每一行向右移动一位，将结果复制到 shifted_input_ids 中
     shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()
-    # 将decoder_start_token_id的值赋值给shifted_input_ids的每一行的第一个位置
+    # 将每一行的第一个位置填充为 decoder_start_token_id
     shifted_input_ids[:, 0] = decoder_start_token_id
 
     if pad_token_id is None:
-        # 如果pad_token_id未定义，则抛出错误
+        # 如果 pad_token_id 为 None，则抛出数值错误
         raise ValueError("self.model.config.pad_token_id has to be defined.")
-    # 使用pad_token_id替换标签中可能存在的-100值
+    # 将 shifted_input_ids 中值为 -100 的位置用 pad_token_id 替换
     shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
 
     return shifted_input_ids
 
 
-# 从transformers.models.wav2vec2.modeling_wav2vec2._compute_mask_indices中复制代码
+# Copied from transformers.models.wav2vec2.modeling_wav2vec2._compute_mask_indices
 def _compute_mask_indices(
     shape: Tuple[int, int],
     mask_prob: float,
@@ -136,86 +133,88 @@ def _compute_mask_indices(
     min_masks: int = 0,
 ) -> np.ndarray:
     """
-    计算给定形状的随机掩码范围。用于实现[SpecAugment: A Simple Data Augmentation Method for
-    ASR](https://arxiv.org/abs/1904.08779)。注意，此方法未经过优化，应在训练期间的预处理过程中在CPU上运行，而不是在TPU上运行。
+    Computes random mask spans for a given shape. Used to implement [SpecAugment: A Simple Data Augmentation Method for
+    ASR](https://arxiv.org/abs/1904.08779). Note that this method is not optimized to run on TPU and should be run on
+    CPU as part of the preprocessing during training.
 
     Args:
-        shape: 计算掩码的形状。这应该是大小为2的元组，其中
-               第一个元素是批量大小，第二个元素是要跨度的轴的长度。
-        mask_prob:  将被掩盖的整个轴的百分比（在0和1之间）。将通过`mask_prob*shape[1]/mask_length`计算长度为`mask_length`的独立生成掩码范围的数量。注意，由于重叠，`mask_prob`是一个上限，实际百分比将更小。
-        mask_length: 掩码的大小
-        min_masks: 掩码的最小数量
-        attention_mask: 一个（右填充的）注意力掩码，可以独立缩短每个批量维度的特征轴。
+        shape: The shape for which to compute masks. This should be of a tuple of size 2 where
+               the first element is the batch size and the second element is the length of the axis to span.
+        mask_prob:  The percentage of the whole axis (between 0 and 1) which will be masked. The number of
+                    independently generated mask spans of length `mask_length` is computed by
+                    `mask_prob*shape[1]/mask_length`. Note that due to overlaps, `mask_prob` is an upper bound and the
+                    actual percentage will be smaller.
+        mask_length: size of the mask
+        min_masks: minimum number of masked spans
+        attention_mask: A (right-padded) attention mask which independently shortens the feature axis of
+                        each batch dimension.
     """
     batch_size, sequence_length = shape
 
     if mask_length < 1:
-        # 如果mask_length小于1，则抛出错误
+        # 如果 mask_length 小于 1，则抛出数值错误
         raise ValueError("`mask_length` has to be bigger than 0.")
 
     if mask_length > sequence_length:
-        # 如果mask_length大于sequence_length，则抛出错误
+        # 如果 mask_length 大于 sequence_length，则抛出数值错误
         raise ValueError(
             f"`mask_length` has to be smaller than `sequence_length`, but got `mask_length`: {mask_length}"
             f" and `sequence_length`: {sequence_length}`"
         )
 
-    # epsilon用于概率舍入
+    # epsilon 用于概率舍入
     epsilon = np.random.rand(1).item()
-    # 定义一个函数，根据输入的长度计算应该被遮罩的span的数量
     def compute_num_masked_span(input_length):
         """Given input length, compute how many spans should be masked"""
-        # 计算应该被遮罩的span的数量
+        # 计算应该屏蔽的 span 数量
         num_masked_span = int(mask_prob * input_length / mask_length + epsilon)
         num_masked_span = max(num_masked_span, min_masks)
 
-        # 确保被遮罩的span数量不超过序列长度
+        # 确保 num_masked_span 不超过 sequence_length
         if num_masked_span * mask_length > sequence_length:
             num_masked_span = sequence_length // mask_length
 
-        # 确保被遮罩的span数量不超过 input_length - (mask_length - 1)
+        # 确保 num_masked_span 不超过 input_length - (mask_length - 1)
         if input_length - (mask_length - 1) < num_masked_span:
             num_masked_span = max(input_length - (mask_length - 1), 0)
 
         return num_masked_span
 
-    # 计算批处理中的被遮罩span的数量
+    # 计算批次中每个序列的长度
     input_lengths = (
         attention_mask.sum(-1).detach().tolist()
         if attention_mask is not None
         else [sequence_length for _ in range(batch_size)]
     )
 
-    # 创建用于 SpecAugment 的遮罩
+    # 创建用于 SpecAugment 的掩码
     spec_aug_mask = np.zeros((batch_size, sequence_length), dtype=bool)
     spec_aug_mask_idxs = []
 
-    # 计算可以被遮罩的最大span数量
+    # 计算最大允许的 masked span 数量
     max_num_masked_span = compute_num_masked_span(sequence_length)
 
-    # 如果最大被遮罩span的数量为0，则直接返回空的遮罩
     if max_num_masked_span == 0:
         return spec_aug_mask
 
     for input_length in input_lengths:
-        # 计算这个输入中被遮罩span的数量
+        # 计算当前输入长度下的 masked span 数量
         num_masked_span = compute_num_masked_span(input_length)
 
-        # 获取随机的索引以进行遮罩
+        # 获取随机的掩码索引
         spec_aug_mask_idx = np.random.choice(
             np.arange(input_length - (mask_length - 1)), num_masked_span, replace=False
         )
 
-        # 选择第一个被抽样的索引作为填充向量的虚拟索引，以确保由于概率舍入而使所有批次具有相同的维度
-        # 选择第一个样本只是为了对这些向量进行两次填充
+        # 选取第一个作为 dummy 索引，用于填充向量，确保所有批次维度相同
         if len(spec_aug_mask_idx) == 0:
-            # 只有在 `input_length` 严格小于 `sequence_length` 时才会发生这种情况，
-            # 此时最后一个标记必须是填充标记，我们可以将其用作虚拟的遮罩id
+            # 只有在 input_length 严格小于 sequence_length 时才可能发生这种情况，
+            # 此时最后一个标记必须是填充标记，可以用作虚拟掩码 id
             dummy_mask_idx = sequence_length - 1
         else:
             dummy_mask_idx = spec_aug_mask_idx[0]
 
-        # 将虚拟的遮罩id连接到已有的遮罩id数组中
+        # 填充掩码索引数组，确保每个批次的维度相同
         spec_aug_mask_idx = np.concatenate(
             [spec_aug_mask_idx, np.ones(max_num_masked_span - num_masked_span, dtype=np.int32) * dummy_mask_idx]
         )
@@ -223,47 +222,46 @@ def _compute_mask_indices(
 
     spec_aug_mask_idxs = np.array(spec_aug_mask_idxs)
 
-    # 扩展被遮罩的索引以获得遮罩的span
+    # 将掩码索引扩展为掩码 spans
     spec_aug_mask_idxs = np.broadcast_to(
         spec_aug_mask_idxs[:, :, None], (batch_size, max_num_masked_span, mask_length)
     )
     spec_aug_mask_idxs = spec_aug_mask_idxs.reshape(batch_size, max_num_masked_span * mask_length)
 
-    # 为起始索引添加偏移量，使索引现在创建一个span
+    # 将起始索引添加偏移量，使索引现在创建一个 span
     offsets = np.arange(mask_length)[None, None, :]
     offsets = np.broadcast_to(offsets, (batch_size, max_num_masked_span, mask_length)).reshape(
         batch_size, max_num_masked_span * mask_length
     )
     spec_aug_mask_idxs = spec_aug_mask_idxs + offsets
-    # 确保我们不能有超过序列长度的索引
+    # 确保我们不能使用大于 sequence_length - 1 的索引
     if spec_aug_mask_idxs.max() > sequence_length - 1:
-        # 将大于序列长度减一的索引值设为序列长度减一
+        # 将 spec_aug_mask_idxs 中大于 sequence_length - 1 的索引置为 sequence_length - 1
         spec_aug_mask_idxs[spec_aug_mask_idxs > sequence_length - 1] = sequence_length - 1
     
-    # 将索引散布到掩码上
+    # 在 spec_aug_mask 上根据 spec_aug_mask_idxs 的索引位置散布值
     np.put_along_axis(spec_aug_mask, spec_aug_mask_idxs, 1, -1)
     
-    # 返回特征增强后的掩码
+    # 返回 spec_aug_mask 结果
     return spec_aug_mask
 class WhisperPositionalEmbedding(nn.Embedding):
-    # WhisperPositionalEmbedding类继承自nn.Embedding类
+    # 继承自 nn.Embedding 的类 WhisperPositionalEmbedding，用于位置编码的嵌入
     def __init__(self, num_positions: int, embedding_dim: int, padding_idx: Optional[int] = None):
         super().__init__(num_positions, embedding_dim)
 
-    # 前向传播函数，用于计算位置嵌入
+    # 前向传播函数，根据输入的位置 ids 返回对应的嵌入向量
     def forward(self, input_ids, past_key_values_length=0, position_ids=None):
         if position_ids is None:
-            # 如果位置ID为空，则返回输入ID对应的位置嵌入
+            # 如果未提供 position_ids，则根据输入的 input_ids 和历史键值的长度返回相应的嵌入向量
             return self.weight[past_key_values_length : past_key_values_length + input_ids.shape[1]]
         else:
-            # 如果位置ID不为空，则返回指定位置ID对应的位置嵌入
+            # 如果提供了 position_ids，则直接返回对应位置的嵌入向量
             return self.weight[position_ids]
 
 
 class WhisperAttention(nn.Module):
-    """Multi-headed attention from 'Attention Is All You Need' paper"""
+    """来自 'Attention Is All You Need' 论文的多头注意力模块"""
 
-    # 初始化函数，用于初始化注意力模块的参数
     def __init__(
         self,
         embed_dim: int,
@@ -282,7 +280,6 @@ class WhisperAttention(nn.Module):
         self.config = config
 
         if (self.head_dim * num_heads) != self.embed_dim:
-            # 如果头维度乘以头数不等于嵌入维度，则抛出错误
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
@@ -291,18 +288,17 @@ class WhisperAttention(nn.Module):
         self.is_decoder = is_decoder
         self.is_causal = is_causal
 
-        # 初始化线性变换函数
+        # 初始化线性变换层，用于计算查询、键、值以及输出的投影
         self.k_proj = nn.Linear(embed_dim, embed_dim, bias=False)
         self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
-    # 从Bart模型复制过来的形状函数
+    # 从 transformers.models.bart.modeling_bart.BartAttention._shape 复制而来，用于调整张量的形状
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
-        # 重塑输入张量的形状以适应多头注意力的计算
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
 
-    # 从Bart模型复制过来的前向传播函数
+    # 从 transformers.models.bart.modeling_bart.BartAttention.forward 复制而来，前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -311,33 +307,49 @@ class WhisperAttention(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
+    ):
+        # 实现注意力机制的前向传播，包括查询、键、值的投影以及输出的投影
+        # 注意力掩码、层头掩码等参数用于控制注意力的行为
+        # 返回值包括输出张量以及可选的注意力权重
+        pass
 
 
-# 从Bart模型复制过来的WhisperFlashAttention2类，用于实现Whisper模型的闪现注意力机制
+# 从 Bart->Whisper 改名，并继承自 WhisperAttention，用于实现 Flash Attention 机制
 class WhisperFlashAttention2(WhisperAttention):
     """
-    Whisper flash attention module. This module inherits from `WhisperAttention` as the weights of the module stays
-    untouched. The only required change would be on the forward pass where it needs to correctly call the public API of
-    flash attention and deal with padding tokens in case the input contains any of them.
+    Whisper flash attention 模块。此模块继承自 `WhisperAttention`，保持模块权重不变。
+    在前向传播中正确调用 Flash Attention 的公共 API，并处理可能包含的填充令牌。
     """
 
-    # 从Llama模型复制过来的初始化函数
-    def __init__(self):
-```  
-    # 初始化方法，接受不定数量的位置参数和关键字参数，调用父类的初始化方法
+    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2.__init__ 复制而来
+    # 初始化函数，不同之处在于需调整成正确调用 Flash Attention 的接口及处理填充令牌的逻辑
+    def __init__(
+        self,
+        embed_dim: int,
+        num_heads: int,
+        dropout: float = 0.0,
+        is_decoder: bool = False,
+        bias: bool = True,
+        is_causal: bool = False,
+        config: Optional[WhisperConfig] = None,
+    ):
+        super().__init__(embed_dim, num_heads, dropout, is_decoder, bias, is_causal, config)
+        # 此处可能需要进行 Flash Attention 特定的初始化
+        pass
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
-        # 注意事项：应该在 Flash Attention for RoCm 升级到 2.1 之后删除这段代码
-        # flash_attn<2.1 生成左上角对齐的因果遮罩，而这里需要的是右下角对齐，在 flash_attn>=2.1 版本中已经默认为右下角对齐。这个属性用于处理这种差异。参考: https://github.com/Dao-AILab/flash-attention/releases/tag/v2.1.0.
-        # 请注意，对于 flash_attn<2.1，使用 q_seqlen != k_seqlen（除了 q_seqlen == 1 的情况外）会产生错误的遮罩（左上角）。
+
+        # TODO: Should be removed once Flash Attention for RoCm is bumped to 2.1.
+        # flash_attn<2.1 generates top-left aligned causal mask, while what is needed here is bottom-right alignment, which is default for flash_attn>=2.1. This attribute is used to handle this difference. Reference: https://github.com/Dao-AILab/flash-attention/releases/tag/v2.1.0.
+        # Beware that with flash_attn<2.1, using q_seqlen != k_seqlen (except for the case q_seqlen == 1) produces a wrong mask (top-left).
+        # 设置一个属性来处理 Flash Attention 版本间的差异，当 flash_attn<2.1 时，生成的是左上对齐的因果掩码，而我们需要的是右下对齐的掩码，这在 flash_attn>=2.1 中是默认的行为。
+
         self._flash_attn_uses_top_left_mask = not is_flash_attn_greater_or_equal_2_10()
-    
-    # 重新调整张量形状的方法，接受一个张量、序列长度和批次大小作为参数
+
     def _reshape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
+        # 重新塑形张量，将其形状变为 (bsz, seq_len, num_heads, head_dim)
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim)
-    
-    # 前向传播方法，接受隐藏状态、键值状态、过去的键值、注意力遮罩、层级头遮罩、输出注意力的布尔值作为参数
+
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -346,43 +358,54 @@ class WhisperFlashAttention2(WhisperAttention):
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2._flash_attention_forward 复制过来的
+    ):
+        # 从隐藏状态开始向前传播，支持可选的键值状态、过去的键值、注意力掩码和层头掩码等参数
+
+    # Copied from transformers.models.llama.modeling_llama.LlamaFlashAttention2._flash_attention_forward
     def _flash_attention_forward(
         self, query_states, key_states, value_states, attention_mask, query_length, dropout=0.0, softmax_scale=None
     ):
+        # Flash Attention 前向传播函数，接受查询状态、键状态、值状态、注意力掩码、查询长度以及可选的 dropout 和 softmax_scale 参数
+    ):
         """
-        调用 Flash Attention 的前向方法 - 如果输入的隐藏状态包含至少一个填充标记，则首先取消填充输入，然后计算注意力分数并填充最终的注意力分数。
+        Calls the forward method of Flash Attention - if the input hidden states contain at least one padding token
+        first unpad the input, then computes the attention scores and pad the final attention scores.
 
         Args:
             query_states (`torch.Tensor`):
-                传递给 Flash Attention API 的查询状态输入
+                Input query states to be passed to Flash Attention API
             key_states (`torch.Tensor`):
-                传递给 Flash Attention API 的键状态输入
+                Input key states to be passed to Flash Attention API
             value_states (`torch.Tensor`):
-                传递给 Flash Attention API 的值状态输入
+                Input value states to be passed to Flash Attention API
             attention_mask (`torch.Tensor`):
-                填充蒙版 - 对应于尺寸为 `(batch_size, seq_len)` 的张量，其中 0 表示填充标记的位置，1 表示非填充标记的位置。
-            dropout (`int`, *optional*):
-                注意力丢弃率
+                The padding mask - corresponds to a tensor of size `(batch_size, seq_len)` where 0 stands for the
+                position of padding tokens and 1 for the position of non-padding tokens.
+            dropout (`float`):
+                Attention dropout
             softmax_scale (`float`, *optional*):
-                在应用 softmax 前的 QK^T 缩放。默认为 1 / sqrt(head_dim)
+                The scaling of QK^T before applying softmax. Default to 1 / sqrt(head_dim)
         """
-        如果不是使用 top-left mask 的 Flash Attention：
+        # Determine if causal masking should be applied based on configuration and query length
+        if not self._flash_attn_uses_top_left_mask:
             causal = self.is_causal
-        否则：
-            # 一旦 Flash Attention 用于 RoCm 版本升级到 2.1，可以删除 `query_length != 1` 检查。有关详细信息，请参阅 LlamaFlashAttention2 __init__ 中的注释。
+        else:
+            # Conditionally adjust causal based on a specific condition for Flash Attention in RoCm
             causal = self.is_causal and query_length != 1
 
-        # 序列中至少包含一个填充标记
-        如果 attention_mask 不为 None：
+        # Check if there are any padding tokens in the sequence
+        if attention_mask is not None:
             batch_size = query_states.shape[0]
+            # Unpad the input states using a helper method _upad_input
             query_states, key_states, value_states, indices_q, cu_seq_lens, max_seq_lens = self._upad_input(
                 query_states, key_states, value_states, attention_mask, query_length
             )
 
+            # Retrieve sequence lengths from the computed values
             cu_seqlens_q, cu_seqlens_k = cu_seq_lens
             max_seqlen_in_batch_q, max_seqlen_in_batch_k = max_seq_lens
 
+            # Compute attention scores with variable length support using flash_attn_varlen_func
             attn_output_unpad = flash_attn_varlen_func(
                 query_states,
                 key_states,
@@ -396,60 +419,58 @@ class WhisperFlashAttention2(WhisperAttention):
                 causal=causal,
             )
 
+            # Pad the attention scores back to the original sequence length
             attn_output = pad_input(attn_output_unpad, indices_q, batch_size, query_length)
-        否则：
+        else:
+            # Compute attention scores without considering any padding tokens
             attn_output = flash_attn_func(
                 query_states, key_states, value_states, dropout, softmax_scale=softmax_scale, causal=causal
             )
 
-        返回 attn_output
+        # Return the final attention scores
+        return attn_output
 
-    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2._upad_input 中复制
-    # 这个函数接受 query_layer、key_layer、value_layer、attention_mask 和 query_length，并根据 attention_mask 对输入进行拆分和重组，目的是为了减少在注意力机制中的不必要计算
+    # Copied from transformers.models.llama.modeling_llama.LlamaFlashAttention2._upad_input
+    # 定义一个私有方法，用于处理输入数据，对查询、键和值进行调整，以及相关的注意力掩码
     def _upad_input(self, query_layer, key_layer, value_layer, attention_mask, query_length):
-        # 从 attention_mask 中获取未填充的数据索引、累积序列长度、以及批量中的最大序列长度
+        # 获取未填充数据的索引、当前序列长度和批次中的最大序列长度信息
         indices_k, cu_seqlens_k, max_seqlen_in_batch_k = _get_unpad_data(attention_mask)
-        # 获取 key_layer 的维度参数，包括批量大小、序列长度、头的数量和每个头的维度
+        
+        # 获取批次大小、键值序列长度、键值头数和头维度
         batch_size, kv_seq_len, num_key_value_heads, head_dim = key_layer.shape
-    
-        # 对 key_layer 进行 reshape，然后根据 indices_k 对第一个轴进行索引，获取未填充的数据
+        
+        # 重新形状化键层和值层，按照未填充数据的索引进行索引
         key_layer = index_first_axis(
             key_layer.reshape(batch_size * kv_seq_len, num_key_value_heads, head_dim), indices_k
         )
-        # 对 value_layer 进行同样的处理
         value_layer = index_first_axis(
             value_layer.reshape(batch_size * kv_seq_len, num_key_value_heads, head_dim), indices_k
         )
-        # 如果 query_length 和 kv_seq_len 相等，说明无需拆分
+        
+        # 根据查询长度选择不同的处理分支
         if query_length == kv_seq_len:
-            # 对 query_layer 进行 reshape，并根据 indices_k 对第一个轴进行索引
+            # 如果查询长度等于键值序列长度，则对查询层进行索引操作
             query_layer = index_first_axis(
                 query_layer.reshape(batch_size * kv_seq_len, self.num_heads, head_dim), indices_k
             )
-            # 如果序列长度一致，则 query 和 key 的累积序列长度、最大序列长度是一样的
             cu_seqlens_q = cu_seqlens_k
             max_seqlen_in_batch_q = max_seqlen_in_batch_k
             indices_q = indices_k
-        # 如果 query_length 为 1，则说明每个批次只有一个查询
         elif query_length == 1:
-            # 最大序列长度是 1
+            # 如果查询长度为1，则处理为标量情况
             max_seqlen_in_batch_q = 1
-            # cu_seqlens_q 用于表示每个批次的累积序列长度，这里通过 torch.arange 生成
             cu_seqlens_q = torch.arange(
                 batch_size + 1, dtype=torch.int32, device=query_layer.device
-            )  # 这个地方有一个可能不太好的 memcpy
-            # indices_q 表示未填充的序列索引，取除了最后一个元素的部分
+            )  # 这里有一个memcpy操作，性能较差。
             indices_q = cu_seqlens_q[:-1]
-            # 对 query_layer 进行压缩，去掉长度为 1 的轴
             query_layer = query_layer.squeeze(1)
-        # 如果 query_length 与 kv_seq_len 不相等且不为 1，则需要进行拆分
         else:
-            # 对 attention_mask 只保留 query_length 的部分，假设左侧填充
+            # 否则，根据查询长度和注意力掩码进行输入数据的解压缩操作
+            # 注意，这里的 -query_length: 切片假设左填充。
             attention_mask = attention_mask[:, -query_length:]
-            # 通过 unpad_input 对 query_layer 进行拆分，返回对应的各个部分
             query_layer, indices_q, cu_seqlens_q, max_seqlen_in_batch_q = unpad_input(query_layer, attention_mask)
-    
-        # 最后返回修改后的 query_layer、key_layer、value_layer 以及相关的索引和序列长度信息
+
+        # 返回调整后的查询层、键层、值层、查询索引、当前序列长度信息和批次最大序列长度信息
         return (
             query_layer,
             key_layer,
@@ -459,55 +480,56 @@ class WhisperFlashAttention2(WhisperAttention):
             (max_seqlen_in_batch_q, max_seqlen_in_batch_k),
         )
 class WhisperSdpaAttention(WhisperAttention):
-    # 从transformers.models.bart.modeling_bart.BartSdpaAttention.forward复制而来，将BART->whisper, Bart->Whisper
-    # 定义了前向传播函数
+    # 从 transformers.models.bart.modeling_bart.BartSdpaAttention.forward 复制而来，将 BART->whisper, Bart->Whisper
     def forward(
         self,
-        hidden_states: torch.Tensor,  # 隐藏状态张量
-        key_value_states: Optional[torch.Tensor] = None,  # 键值状态张量，默认为空
-        past_key_value: Optional[Tuple[torch.Tensor]] = None,  # 过去的键值对，默认为空
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码，默认为空
-        layer_head_mask: Optional[torch.Tensor] = None,  # 层头掩码，默认为空
-        output_attentions: bool = False,  # 是否输出注意力，默认为False
+        hidden_states: torch.Tensor,
+        key_value_states: Optional[torch.Tensor] = None,
+        past_key_value: Optional[Tuple[torch.Tensor]] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        layer_head_mask: Optional[torch.Tensor] = None,
+        output_attentions: bool = False,
+    ):
+        # 注意力机制的实现，用于计算注意力分数并加权隐藏状态
+        pass
 
+# WHISPER_ATTENTION_CLASSES 定义了不同实现的注意力类别映射
 WHISPER_ATTENTION_CLASSES = {
-    "eager": WhisperAttention,  # 指定“eager”关键字对应的WhisperAttention类
-    "flash_attention_2": WhisperFlashAttention2,  # 指定“flash_attention_2”关键字对应的WhisperFlashAttention2类
-    "sdpa": WhisperSdpaAttention,  # 指定“sdpa”关键字对应的WhisperSdpaAttention类
+    "eager": WhisperAttention,
+    "flash_attention_2": WhisperFlashAttention2,
+    "sdpa": WhisperSdpaAttention,  # 使用 WhisperSdpaAttention 作为一种注意力实现
 }
 
-
-# 从transformers.models.mbart.modeling_mbart.MBartEncoderLayer中复制而来，将MBart->Whisper, MBART->WHISPER
+# 从 transformers.models.mbart.modeling_mbart.MBartEncoderLayer 复制而来，将 MBart->Whisper, MBART->WHISPER
 class WhisperEncoderLayer(nn.Module):
     def __init__(self, config: WhisperConfig):
         super().__init__()
-        self.embed_dim = config.d_model  # 将嵌入维度设置为WhisperConfig中的d_model
+        self.embed_dim = config.d_model
 
-        self.self_attn = WHISPER_ATTENTION_CLASSES[config._attn_implementation](  # 使用config._attn_implementation配置创建自注意力机制
-            embed_dim=self.embed_dim,  # 嵌入维度
-            num_heads=config.encoder_attention_heads,  # 编码器注意力头的数量
-            dropout=config.attention_dropout,  # 注意力机制的丢弃率
-            config=config,  # WhisperConfig实例
+        # self_attn 是自注意力层，根据配置选择不同的注意力实现类别
+        self.self_attn = WHISPER_ATTENTION_CLASSES[config._attn_implementation](
+            embed_dim=self.embed_dim,
+            num_heads=config.encoder_attention_heads,
+            dropout=config.attention_dropout,
+            config=config,
         )
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 创建嵌入维度的层归一化层
-        self.dropout = config.dropout  # 丢弃率
-        self.activation_fn = ACT2FN[config.activation_function]  # 根据激活函数配置选择对应的激活函数
-        self.activation_dropout = config.activation_dropout  # 激活函数的丢弃率
-        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)  # 创建一个线性层, 输入维度为嵌入维度，输出维度为config.encoder_ffn_dim
-        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)  # 创建一个线性层, 输入维度为config.encoder_ffn_dim，输出维度为嵌入维度
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 创建嵌入维度的最终层归一化层
+        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
+        self.dropout = config.dropout
+        self.activation_fn = ACT2FN[config.activation_function]  # 激活函数的选择
+        self.activation_dropout = config.activation_dropout
+        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)  # 第一个全连接层
+        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)  # 第二个全连接层
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
 
     def forward(
         self,
-        hidden_states: torch.Tensor,  # 隐藏状态张量
-        attention_mask: torch.Tensor,  # 注意力掩码张量
-        layer_head_mask: torch.Tensor,  # 层头掩码张量
-        output_attentions: bool = False,  # 是否输出注意力，默认为False
-    def forward(
-        hidden_states: torch.Tensor,  # 输入层的隐藏状态张量，形状为`(batch, seq_len, embed_dim)`
-        attention_mask: torch.FloatTensor,  # 注意力掩码张量，大小为`(batch, 1, tgt_len, src_len)`，其中填充元素用非常大的负值表示
-        layer_head_mask: torch.FloatTensor,  # 给定层中注意力头的掩码张量，大小为`(encoder_attention_heads,)`
-        output_attentions: bool,  # 是否返回所有注意力层的注意力张量。详见返回的张量中的`attentions`。
+        hidden_states: torch.Tensor,
+        attention_mask: torch.Tensor,
+        layer_head_mask: torch.Tensor,
+        output_attentions: bool = False,
+    ):
+        # 编码器层的前向传播，包括自注意力、前馈神经网络和层归一化
+        pass
     ) -> torch.Tensor:
         """
         Args:
@@ -520,45 +542,62 @@ class WhisperEncoderLayer(nn.Module):
                 Whether or not to return the attentions tensors of all attention layers. See `attentions` under
                 returned tensors for more detail.
         """
-        residual = hidden_states  # 保存隐藏状态的副本，用于残差连接
-        hidden_states = self.self_attn_layer_norm(hidden_states)  # 应用自注意力层归一化
+        # 保存输入的原始状态，用于残差连接
+        residual = hidden_states
+        # 对输入的 hidden_states 进行 layer normalization
+        hidden_states = self.self_attn_layer_norm(hidden_states)
+        # 使用 self-attention 模块处理 normalized 后的 hidden_states
+        # 返回处理后的 hidden_states、attention 权重和额外的信息
         hidden_states, attn_weights, _ = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
             layer_head_mask=layer_head_mask,
             output_attentions=output_attentions,
-        )  # 使用自注意力机制处理隐藏状态，计算注意力权重
-        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)  # 应用丢弃操作
-        hidden_states = residual + hidden_states  # 执行残差连接
+        )
+        # 对处理后的 hidden_states 进行 dropout
+        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
+        # 将残差连接到处理后的 hidden_states 上
+        hidden_states = residual + hidden_states
 
-        residual = hidden_states  # 保存残差连接后的结果
-        hidden_states = self.final_layer_norm(hidden_states)  # 应用最终层归一化
-        hidden_states = self.activation_fn(self.fc1(hidden_states))  # 使用激活函数处理全连接层1
-        hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)  # 应用激活函数的丢弃操作
-        hidden_states = self.fc2(hidden_states)  # 应用全连接层2
-        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)  # 应用丢弃操作
-        hidden_states = residual + hidden_states  # 执行残差连接
+        # 再次保存当前的 hidden_states 用于残差连接
+        residual = hidden_states
+        # 对当前的 hidden_states 进行 layer normalization
+        hidden_states = self.final_layer_norm(hidden_states)
+        # 使用激活函数处理第一个全连接层的输出
+        hidden_states = self.activation_fn(self.fc1(hidden_states))
+        # 对处理后的 hidden_states 进行 dropout
+        hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
+        # 使用第二个全连接层处理 hidden_states
+        hidden_states = self.fc2(hidden_states)
+        # 对处理后的 hidden_states 进行 dropout
+        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
+        # 将残差连接到处理后的 hidden_states 上
+        hidden_states = residual + hidden_states
 
-        # 如果隐藏状态的数据类型为float16且包含无限或NaN值，则对其进行截断处理
+        # 如果 hidden_states 的数据类型是 torch.float16 并且包含无穷大或 NaN 的元素
         if hidden_states.dtype == torch.float16 and (
             torch.isinf(hidden_states).any() or torch.isnan(hidden_states).any()
         ):
+            # 对 hidden_states 进行截断处理，避免溢出
             clamp_value = torch.finfo(hidden_states.dtype).max - 1000
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
 
-        outputs = (hidden_states,)  # 将处理后的隐藏状态作为输出的一部分
+        # 构建输出元组，包含处理后的 hidden_states
+        outputs = (hidden_states,)
 
-        if output_attentions:  # 如果需要输出注意力张量
-            outputs += (attn_weights,)  # 将注意力权重也加入到输出中
+        # 如果需要输出 attentions，将 attentions 加入输出元组中
+        if output_attentions:
+            outputs += (attn_weights,)
 
-        return outputs  # 返回处理后的输出
-# 从transformers.models.mbart.modeling_mbart.MBartDecoderLayer复制而来，将MBart改为Whisper，MBART改为WHISPER
+        # 返回最终的输出元组
+        return outputs
+# 从transformers.models.mbart.modeling_mbart.MBartDecoderLayer复制而来，MBart->Whisper, MBART->WHISPER
 class WhisperDecoderLayer(nn.Module):
     def __init__(self, config: WhisperConfig):
         super().__init__()
-        self.embed_dim = config.d_model
+        self.embed_dim = config.d_model  # 设置嵌入维度为配置中的d_model
 
-        # 初始化自注意力机制
+        # 初始化自注意力层，根据配置选择的注意力机制类别进行设置
         self.self_attn = WHISPER_ATTENTION_CLASSES[config._attn_implementation](
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
@@ -567,16 +606,12 @@ class WhisperDecoderLayer(nn.Module):
             is_causal=True,
             config=config,
         )
-        # 初始化Dropout层
-        self.dropout = config.dropout
-        # 激活函数
-        self.activation_fn = ACT2FN[config.activation_function]
-        # 激活函数的Dropout层
-        self.activation_dropout = config.activation_dropout
+        self.dropout = config.dropout  # 设置dropout概率
+        self.activation_fn = ACT2FN[config.activation_function]  # 激活函数根据配置选择
+        self.activation_dropout = config.activation_dropout  # 激活函数的dropout概率
 
-        # LayerNorm层
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 初始化编码器注意力机制
+        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 初始化自注意力层的LayerNorm
+        # 初始化编码器注意力层，根据配置选择的注意力机制类别进行设置
         self.encoder_attn = WHISPER_ATTENTION_CLASSES[config._attn_implementation](
             self.embed_dim,
             config.decoder_attention_heads,
@@ -584,14 +619,10 @@ class WhisperDecoderLayer(nn.Module):
             is_decoder=True,
             config=config,
         )
-        # 编码器注意力机制的LayerNorm层
-        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 第一个线性层
-        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
-        # 第二个线性层
-        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
-        # 最终的LayerNorm层
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
+        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 初始化编码器注意力层的LayerNorm
+        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)  # 第一个全连接层
+        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)  # 第二个全连接层
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 最终输出的LayerNorm
 
     def forward(
         self,
@@ -604,47 +635,18 @@ class WhisperDecoderLayer(nn.Module):
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
         output_attentions: Optional[bool] = False,
         use_cache: Optional[bool] = True,
-# WhisperPreTrainedModel的基类
-class WhisperPreTrainedModel(PreTrainedModel):
-    # Whisper模型的配置类
-    config_class = WhisperConfig
-    # 基础模型的前缀
-    base_model_prefix = "model"
-    # 主输入名称
-    main_input_name = "input_features"
-    # 是否支持梯度检查点
-    supports_gradient_checkpointing = True
-    # 不需要拆分的模块列表
-    _no_split_modules = ["WhisperEncoderLayer", "WhisperDecoderLayer"]
-    # 是否支持闪光注意力
-    _supports_flash_attn_2 = True
-    # 是否支持SDPA
-    _supports_sdpa = True
-
-    # 初始化权重
-    def _init_weights(self, module):
-        std = self.config.init_std
-        if isinstance(module, (nn.Linear, nn.Conv1d)):
-            module.weight.data.normal_(mean=0.0, std=std)
-            if module.bias is not None:
-                module.bias.data.zero_()
-        elif isinstance(module, nn.Embedding):
-            module.weight.data.normal_(mean=0.0, std=std)
-            if module.padding_idx is not None:
-                module.weight.data[module.padding_idx].zero_()
-        elif isinstance(module, WhisperEncoder):
-            with torch.no_grad():
-                # 复制嵌入位置的权重
-                embed_positions = module.embed_positions.weight
-                embed_positions.copy_(sinusoids(*embed_positions.shape))
-    # 计算卷积层的输出长度
     def _get_feat_extract_output_lengths(self, input_lengths: torch.LongTensor):
-        # 对输入长度进行计算，满足卷积操作后的输出长度计算公式
+        """
+        计算卷积层的输出长度
+
+        将输入长度减去1，然后整除2，并加上1，计算卷积层的输出长度。
+        """
+        # 将输入长度减去1，然后整除2，并加上1，得到卷积层的输出长度
         input_lengths = (input_lengths - 1) // 2 + 1
-    
-        # 返回计算得到的输出长度
+
+        # 返回计算得到的卷积层输出长度
         return input_lengths
-# 定义WHISPER_START_DOCSTRING变量，包含模型的基本说明，继承自PreTrainedModel类，提供了一般性方法的详细介绍
+# 定义文档字符串，描述了 `WhisperEncoder` 类的继承和用法说明
 WHISPER_START_DOCSTRING = r"""
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
@@ -661,11 +663,11 @@ WHISPER_START_DOCSTRING = r"""
             [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# 定义WHISPER_INPUTS_DOCSTRING变量，暂时为空，用于后续填写输入说明
+# 空白的输入文档字符串，待后续补充输入参数的描述
 WHISPER_INPUTS_DOCSTRING = r"""
 """
 
-# 定义WHISPER_ENCODER_INPUTS_DOCSTRING变量，包含WhisperEncoder类的输入参数说明
+# 定义了用于WhisperEncoder类的输入参数的文档字符串，详细描述了每个参数的类型和作用
 WHISPER_ENCODER_INPUTS_DOCSTRING = r"""
     Args:
         input_features (`torch.FloatTensor` of shape `(batch_size, feature_size, sequence_length)`):
@@ -693,103 +695,122 @@ WHISPER_ENCODER_INPUTS_DOCSTRING = r"""
             Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
-# 定义WhisperEncoder类，继承自WhisperPreTrainedModel类
 class WhisperEncoder(WhisperPreTrainedModel):
     """
     Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
-        # 初始化 WhiperEncoderLayer 类
-        def __init__(self, config: WhisperConfig):
-            super().__init__(config)
-            self.dropout = config.dropout
-            self.layerdrop = config.encoder_layerdrop
-
-            embed_dim = config.d_model
-            self.num_mel_bins = config.num_mel_bins
-            self.padding_idx = config.pad_token_id
-            self.max_source_positions = config.max_source_positions
-            self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0
-
-            # 创建 1D 卷积层，输入维度为语音特征维度，输出维度为嵌入维度
-            self.conv1 = nn.Conv1d(self.num_mel_bins, embed_dim, kernel_size=3, padding=1)
-            # 创建 1D 卷积层，输入和输出维度均为嵌入维度
-            self.conv2 = nn.Conv1d(embed_dim, embed_dim, kernel_size=3, stride=2, padding=1)
-
-            # 创建位置嵌入层
-            self.embed_positions = nn.Embedding(self.max_source_positions, embed_dim)
-            # 设置位置嵌入层的参数不可训练
-            self.embed_positions.requires_grad_(False)
-
-            # 创建多层的 Transformer 编码器层
-            self.layers = nn.ModuleList([WhisperEncoderLayer(config) for _ in range(config.encoder_layers)])
-            # 创建 LayerNorm 层，对输入进行归一化
-            self.layer_norm = nn.LayerNorm(config.d_model)
-
-            self.gradient_checkpointing = False
-            # 初始化权重并进行最终处理
-            self.post_init()
-
-        # 冻结模型的参数，使其不可训练
-        def _freeze_parameters(self):
-            for param in self.parameters():
-                param.requires_grad = False
-            self._requires_grad = False
-
-        # 获取输入嵌入层
-        def get_input_embeddings(self) -> nn.Module:
-            return self.conv1
-
-        # 设置输入嵌入层
-        def set_input_embeddings(self, value: nn.Module):
-            self.conv1 = value
-
-        # 前向传播
-        def forward(
-            self,
-            input_features,
-            attention_mask=None,
-            head_mask=None,
-            output_attentions=None,
-            output_hidden_states=None,
-            return_dict=None,
-            # ... 省略部分参数
-class WhisperDecoder(WhisperPreTrainedModel):
-    """
-    Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`WhisperDecoderLayer`]
-
+    # `WhisperEncoderLayer` 的编码器层实现。
+    
     Args:
-        config: WhisperConfig
-    """
-
-    main_input_name = "input_ids"
+        config: WhisperConfig  # 输入参数为 WhisperConfig 类型的配置对象
 
     def __init__(self, config: WhisperConfig):
-        super().__init__(config)
-        self.dropout = config.dropout
-        self.layerdrop = config.decoder_layerdrop
-        self.padding_idx = config.pad_token_id
-        self.max_target_positions = config.max_target_positions
-        self.max_source_positions = config.max_source_positions
-        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0
+        super().__init__(config)  # 调用父类的初始化方法，传入配置对象
+        self.dropout = config.dropout  # 设置 dropout 概率
+        self.layerdrop = config.encoder_layerdrop  # 设置层丢弃率
 
-        self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)
-        self.embed_positions = WhisperPositionalEmbedding(self.max_target_positions, config.d_model)
+        embed_dim = config.d_model  # 获取嵌入维度
+        self.num_mel_bins = config.num_mel_bins  # 获取梅尔频谱的数量
+        self.padding_idx = config.pad_token_id  # 获取填充标记的索引
+        self.max_source_positions = config.max_source_positions  # 获取最大源序列位置
+        self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0  # 计算嵌入缩放因子，根据配置选择是否开启
 
-        self.layers = nn.ModuleList([WhisperDecoderLayer(config) for _ in range(config.decoder_layers)])
-        self._use_flash_attention_2 = config._attn_implementation == "flash_attention_2"
-        self._use_sdpa = config._attn_implementation == "sdpa"
+        # 初始化两个一维卷积层，用于特征提取
+        self.conv1 = nn.Conv1d(self.num_mel_bins, embed_dim, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv1d(embed_dim, embed_dim, kernel_size=3, stride=2, padding=1)
 
-        self.layer_norm = nn.LayerNorm(config.d_model)
+        # 初始化位置嵌入层，并设置为不需要梯度计算
+        self.embed_positions = nn.Embedding(self.max_source_positions, embed_dim)
+        self.embed_positions.requires_grad_(False)
 
-        self.gradient_checkpointing = False
-        # Initialize weights and apply final processing
+        # 使用 WhisperEncoderLayer 构建编码器层的列表，根据配置中的编码器层数量
+        self.layers = nn.ModuleList([WhisperEncoderLayer(config) for _ in range(config.encoder_layers)])
+        self.layer_norm = nn.LayerNorm(config.d_model)  # 初始化层归一化层
+
+        self.gradient_checkpointing = False  # 是否启用梯度检查点
+
+        # 初始化权重并应用最终处理
         self.post_init()
 
+    def _freeze_parameters(self):
+        # 冻结所有参数，使其不需要梯度计算
+        for param in self.parameters():
+            param.requires_grad = False
+        self._requires_grad = False  # 设置不需要梯度计算标志为 False
+
+    def get_input_embeddings(self) -> nn.Module:
+        return self.conv1  # 返回输入嵌入层 conv1
+
+    def set_input_embeddings(self, value: nn.Module):
+        self.conv1 = value  # 设置输入嵌入层 conv1 的值为给定的 value
+
+    def forward(
+        self,
+        input_features,
+        attention_mask=None,
+        head_mask=None,
+        output_attentions=None,
+        output_hidden_states=None,
+        return_dict=None,
+# 定义一个名为 WhisperDecoder 的类，继承自 WhisperPreTrainedModel 类
+class WhisperDecoder(WhisperPreTrainedModel):
+    """
+    Transformer 解码器，由 *config.decoder_layers* 层组成。每层是一个 [`WhisperDecoderLayer`]
+
+    Args:
+        config: WhisperConfig 对象，包含模型的配置信息
+    """
+
+    # 主要输入名称为 "input_ids"
+    main_input_name = "input_ids"
+
+    # 初始化方法，接收一个 WhisperConfig 类型的参数 config
+    def __init__(self, config: WhisperConfig):
+        super().__init__(config)
+        
+        # 设置 dropout 概率
+        self.dropout = config.dropout
+        # 设置层级丢弃概率
+        self.layerdrop = config.decoder_layerdrop
+        # 设置填充索引
+        self.padding_idx = config.pad_token_id
+        # 设置最大目标位置
+        self.max_target_positions = config.max_target_positions
+        # 设置最大源位置
+        self.max_source_positions = config.max_source_positions
+        # 如果开启了 scale_embedding，则使用 sqrt(config.d_model) 作为嵌入尺度，否则为 1.0
+        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0
+
+        # 嵌入 tokens，使用 nn.Embedding 创建一个嵌入层
+        self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)
+        # 嵌入位置编码，使用 WhisperPositionalEmbedding 创建一个位置编码嵌入层
+        self.embed_positions = WhisperPositionalEmbedding(self.max_target_positions, config.d_model)
+
+        # 创建解码器层列表，包含 config.decoder_layers 个 WhisperDecoderLayer 层
+        self.layers = nn.ModuleList([WhisperDecoderLayer(config) for _ in range(config.decoder_layers)])
+        
+        # 根据 config._attn_implementation 决定是否使用 Flash Attention 2.0 注意力机制
+        self._use_flash_attention_2 = config._attn_implementation == "flash_attention_2"
+        # 根据 config._attn_implementation 决定是否使用 SDPA 注意力机制
+        self._use_sdpa = config._attn_implementation == "sdpa"
+
+        # 层归一化，使用 nn.LayerNorm 进行归一化处理
+        self.layer_norm = nn.LayerNorm(config.d_model)
+
+        # 梯度检查点，默认为 False，是否使用梯度检查点
+        self.gradient_checkpointing = False
+        
+        # 初始化权重并应用最终处理
+        self.post_init()
+
+    # 获取输入嵌入层对象，返回 self.embed_tokens
     def get_input_embeddings(self):
         return self.embed_tokens
 
+    # 设置输入嵌入层对象为 value
     def set_input_embeddings(self, value):
         self.embed_tokens = value
 
+    # 前向传播函数定义，接收多个参数用于解码器的输入和控制
     def forward(
         self,
         input_ids=None,
@@ -804,61 +825,21 @@ class WhisperDecoder(WhisperPreTrainedModel):
         output_attentions=None,
         output_hidden_states=None,
         return_dict=None,
-# 添加输入文档字符串
-@add_start_docstrings(
-    "The bare Whisper Model outputting raw hidden-states without any specific head on top.",
-    WHISPER_START_DOCSTRING,
-)
-class WhisperModel(WhisperPreTrainedModel):
-    def __init__(self, config: WhisperConfig):
-        super().__init__(config)
-
-        self.encoder = WhisperEncoder(config)
-        self.decoder = WhisperDecoder(config)
-        # Initialize weights and apply final processing
-        self.post_init()
-
-    def get_input_embeddings(self):
-        return self.decoder.embed_tokens
-
-    def set_input_embeddings(self, value):
-        self.decoder.embed_tokens = value
-
-    def get_encoder(self):
-        return self.encoder
-
-    def get_decoder(self):
-        return self.decoder
-
-    def freeze_encoder(self):
-        """
-        Calling this function will disable the gradient computation for the Whisper encoder so that its parameters will
-        not be updated during training.
-        """
-        self.encoder._freeze_parameters()
-
-    def _mask_input_features(
-        self,
-        input_features: torch.FloatTensor,
-        attention_mask: Optional[torch.LongTensor] = None,
+    ):
         """
         Masks extracted features along time axis and/or along feature axis according to
         [SpecAugment](https://arxiv.org/abs/1904.08779).
         """
 
         # `config.apply_spec_augment` can set masking to False
-        # 如果配置中设置apply_spec_augment为False，则不进行特征遮蔽，直接返回输入特征
         if not getattr(self.config, "apply_spec_augment", True):
             return input_features
 
         # generate indices & apply SpecAugment along time axis
-        # 获取输入特征的维度信息
         batch_size, hidden_size, sequence_length = input_features.size()
 
-        # 如果mask_time_prob大于0且处于训练模式
         if self.config.mask_time_prob > 0 and self.training:
             # generate indices & apply SpecAugment along time axis
-            # 生成需要遮蔽的时间轴坐标并进行遮蔽
             mask_time_indices = _compute_mask_indices(
                 (batch_size, sequence_length),
                 mask_prob=self.config.mask_time_prob,
@@ -866,108 +847,96 @@ class WhisperModel(WhisperPreTrainedModel):
                 attention_mask=attention_mask,
                 min_masks=self.config.mask_time_min_masks,
             )
-            # 将生成的遮蔽坐标转换为torch.tensor，确保与输入特征在同一设备上
             mask_time_indices = torch.tensor(mask_time_indices, device=input_features.device, dtype=torch.bool)
-            # 对时间坐标进行遮蔽
             mask_time_indices = mask_time_indices[:, None].expand(-1, hidden_size, -1)
             input_features[mask_time_indices] = 0
 
-        # 如果mask_feature_prob大于0且处于训练模式
         if self.config.mask_feature_prob > 0 and self.training:
             # generate indices & apply SpecAugment along feature axis
-            # 生成需要遮蔽的特征轴坐标并进行遮蔽
             mask_feature_indices = _compute_mask_indices(
                 (batch_size, hidden_size),
                 mask_prob=self.config.mask_feature_prob,
                 mask_length=self.config.mask_feature_length,
                 min_masks=self.config.mask_feature_min_masks,
             )
-            # 将生成的遮蔽坐标转换为torch.tensor，确保与输入特征在同一设备上
             mask_feature_indices = torch.tensor(mask_feature_indices, device=input_features.device, dtype=torch.bool)
-            # 对特征轴进行遮蔽
             input_features[mask_feature_indices] = 0
 
-        # 返回应用了遮蔽的输入特征
         return input_features
 
-    @add_start_docstrings_to_model_forward(WHISPER_INPUTS_DOCSTRING)
-    @replace_return_docstrings(output_type=Seq2SeqModelOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义前向传播方法
-    def forward(
-        self,
-        input_features: Optional[torch.FloatTensor] = None,
-        attention_mask: Optional[torch.LongTensor] = None,
-        decoder_input_ids: Optional[torch.LongTensor] = None,
-        decoder_attention_mask: Optional[torch.LongTensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        decoder_head_mask: Optional[torch.Tensor] = None,
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        encoder_outputs: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        decoder_inputs_embeds: Optional[Tuple[torch.FloatTensor]] = None,
-        decoder_position_ids: Optional[Tuple[torch.LongTensor]] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-# 将注释添加到模型类上，并描述其功能
+
+注释：
+
+# 根据输入特征的尺寸在时间轴和/或特征轴上屏蔽提取的特征，根据 SpecAugment 方法
+def forward(
+    self,
+    input_features: Optional[torch.FloatTensor] = None,
+    attention_mask: Optional[torch.LongTensor] = None,
+    decoder_input_ids: Optional[torch.LongTensor] = None,
+    decoder_attention_mask: Optional[torch.LongTensor] = None,
+    head_mask: Optional[torch.Tensor] = None,
+    decoder_head_mask: Optional[torch.Tensor] = None,
+    cross_attn_head_mask: Optional[torch.Tensor] = None,
+    encoder_outputs: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
+    past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
+    decoder_inputs_embeds: Optional[Tuple[torch.FloatTensor]] = None,
+    decoder_position_ids: Optional[Tuple[torch.LongTensor]] = None,
+    use_cache: Optional[bool] = None,
+    output_attentions: Optional[bool] = None,
+    output_hidden_states: Optional[bool] = None,
+    return_dict: Optional[bool] = None,
+# 添加文档字符串到类定义，描述了 WhisperForConditionalGeneration 类的用途和功能
 @add_start_docstrings(
     "The Whisper Model with a language modeling head. Can be used for automatic speech recognition.",
     WHISPER_START_DOCSTRING,
 )
-# 定义 WhisperForConditionalGeneration 类，继承自 WhisperGenerationMixin 和 WhisperPreTrainedModel
 class WhisperForConditionalGeneration(WhisperGenerationMixin, WhisperPreTrainedModel):
-    # 定义模型的前缀
+    # 设置基础模型前缀，用于指定模型中与权重共享相关的键
     base_model_prefix = "model"
-    # 定义共享权重的键
+    # 指定应当共享权重的键名列表
     _tied_weights_keys = ["proj_out.weight"]
 
-    # 初始化函数，接收 WhisperConfig 类型的配置
     def __init__(self, config: WhisperConfig):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传入 WhisperConfig 对象
         super().__init__(config)
-        # 创建 WhisperModel 对象
+        # 创建 WhisperModel 对象，并将其保存在实例变量 self.model 中
         self.model = WhisperModel(config)
-        # 创建线性映射层，用于输出
+        # 创建线性层，用于输出模型的预测结果，不带偏置项
         self.proj_out = nn.Linear(config.d_model, config.vocab_size, bias=False)
 
-        # 初始化权重并应用最终处理
+        # 调用额外的初始化方法，用于权重初始化和最终处理
         self.post_init()
 
-    # 返回编码器
     def get_encoder(self):
+        # 返回模型中的编码器部分，通过调用 self.model 的 get_encoder 方法实现
         return self.model.get_encoder()
 
-    # 返回解码器
     def get_decoder(self):
+        # 返回模型中的解码器部分，通过调用 self.model 的 get_decoder 方法实现
         return self.model.get_decoder()
 
-    # 返回输出的嵌入
     def get_output_embeddings(self):
+        # 返回输出嵌入层，即预测输出的线性层 self.proj_out
         return self.proj_out
 
-    # 设置输出的嵌入
     def set_output_embeddings(self, new_embeddings):
+        # 设置新的输出嵌入层，更新 self.proj_out 的值为 new_embeddings
         self.proj_out = new_embeddings
 
-    # 返回输入的嵌入
     def get_input_embeddings(self) -> nn.Module:
+        # 返回模型中的输入嵌入层，通过调用 self.model 的 get_input_embeddings 方法实现
         return self.model.get_input_embeddings()
 
-    # 冻结编码器的参数，禁用梯度计算以使其参数在训练期间不会更新
     def freeze_encoder(self):
         """
-        Calling this function will disable the gradient computation for the Whisper encoder so that its parameters will
-        not be updated during training.
+        调用此方法将禁用 Whisper 编码器的梯度计算，使其在训练过程中不会更新参数。
         """
         self.model.encoder._freeze_parameters()
 
-    # 定义前向传播函数
     @add_start_docstrings_to_model_forward(WHISPER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
-        # 定义输入特征
         input_features: Optional[torch.FloatTensor] = None,
         attention_mask: Optional[torch.LongTensor] = None,
         decoder_input_ids: Optional[torch.LongTensor] = None,
@@ -984,7 +953,33 @@ class WhisperForConditionalGeneration(WhisperGenerationMixin, WhisperPreTrainedM
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 准备生成的输入
+    ):
+        """
+        覆盖父类中的 forward 方法，实现 Whisper 模型的前向传播。
+
+        Args:
+            input_features (Optional[torch.FloatTensor], optional): 输入特征张量。默认为 None。
+            attention_mask (Optional[torch.LongTensor], optional): 注意力掩码张量。默认为 None。
+            decoder_input_ids (Optional[torch.LongTensor], optional): 解码器输入 ID 张量。默认为 None。
+            decoder_attention_mask (Optional[torch.LongTensor], optional): 解码器注意力掩码张量。默认为 None。
+            head_mask (Optional[torch.Tensor], optional): 头部掩码张量。默认为 None。
+            decoder_head_mask (Optional[torch.Tensor], optional): 解码器头部掩码张量。默认为 None。
+            cross_attn_head_mask (Optional[torch.Tensor], optional): 交叉注意力头部掩码张量。默认为 None。
+            encoder_outputs (Optional[Tuple[Tuple[torch.FloatTensor]]], optional): 编码器输出元组。默认为 None。
+            past_key_values (Optional[Tuple[Tuple[torch.FloatTensor]]], optional): 过去的键值元组。默认为 None。
+            decoder_inputs_embeds (Optional[Tuple[torch.FloatTensor]], optional): 解码器输入嵌入张量元组。默认为 None。
+            decoder_position_ids (Optional[Tuple[torch.LongTensor]], optional): 解码器位置 ID 张量元组。默认为 None。
+            labels (Optional[torch.LongTensor], optional): 标签张量。默认为 None。
+            use_cache (Optional[bool], optional): 是否使用缓存。默认为 None。
+            output_attentions (Optional[bool], optional): 是否输出注意力。默认为 None。
+            output_hidden_states (Optional[bool], optional): 是否输出隐藏状态。默认为 None。
+            return_dict (Optional[bool], optional): 是否返回字典。默认为 None。
+
+        Returns:
+            Seq2SeqLMOutput: 序列到序列的语言模型输出。
+        """
+        # 实际的前向传播逻辑将在此处实现
+
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
@@ -994,32 +989,49 @@ class WhisperForConditionalGeneration(WhisperGenerationMixin, WhisperPreTrainedM
         attention_mask=None,
         decoder_attention_mask=None,
         **kwargs,
+    ):
+        """
+        准备生成过程中的输入，以便在生成文本时使用。
+
+        Args:
+            decoder_input_ids: 解码器输入 ID。
+            past_key_values: 过去的键值对。
+            use_cache: 是否使用缓存。
+            encoder_outputs: 编码器输出。
+            attention_mask: 注意力掩码。
+            decoder_attention_mask: 解码器注意力掩码。
+            **kwargs: 其他关键字参数。
+
+        Returns:
+            dict: 包含生成过程输入的字典。
+        """
+        # 实现生成输入准备的逻辑
         ):
-            # 初始化解码器位置信息为 None
+            # 初始化变量 decoder_position_ids 为 None
             decoder_position_ids = None
+            # 如果存在 decoder_attention_mask，计算每个位置累积和后减一，并确保不小于零
             if decoder_attention_mask is not None:
-                # 如果存在注意力掩码，计算解码器位置信息
                 decoder_position_ids = (decoder_attention_mask.cumsum(-1) - 1).clamp(min=0)
 
+            # 如果存在 past_key_values，则获取其长度
             if past_key_values is not None:
-                # 获取过去键值的长度
                 past_length = past_key_values[0][0].shape[2]
 
-                # 一些生成方法可能只传递最后一个输入ID
+                # 某些生成方法可能只传递最后一个输入 ID
                 if decoder_input_ids.shape[1] > past_length:
                     remove_prefix_length = past_length
                 else:
-                    # 默认保留旧的行为：仅保留最后一个ID
+                    # 默认行为：保留最后一个 ID
                     remove_prefix_length = decoder_input_ids.shape[1] - 1
 
-                # 更新解码器输入ID，去掉前缀部分
+                # 仅保留 decoder_input_ids 中的后缀部分
                 decoder_input_ids = decoder_input_ids[:, remove_prefix_length:]
 
+                # 如果存在 decoder_position_ids 并且其长度大于 decoder_input_ids 的长度，则也截断之
                 if decoder_position_ids is not None and decoder_position_ids.shape[1] > decoder_input_ids.shape[1]:
-                    # 如果存在解码器位置信息并且长度大于解码器输入ID长度，则进行相应处理
                     decoder_position_ids = decoder_position_ids[:, remove_prefix_length:]
 
-            # 返回包含关键信息的字典
+            # 返回重构后的信息字典
             return {
                 "encoder_outputs": encoder_outputs,
                 "past_key_values": past_key_values,
@@ -1029,16 +1041,18 @@ class WhisperForConditionalGeneration(WhisperGenerationMixin, WhisperPreTrainedM
                 "decoder_position_ids": decoder_position_ids,
             }
 
-        @staticmethod
-        def _reorder_cache(past_key_values, beam_idx):
-            # 重新调整缓存中的值
-            reordered_past = ()
-            for layer_past in past_key_values:
-                # 为每个层次的过去状态重新排序
-                reordered_past += (
-                    tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
-                )
-            return reordered_past
+    @staticmethod
+    def _reorder_cache(past_key_values, beam_idx):
+        # 初始化重新排序的 past_key_values
+        reordered_past = ()
+        # 遍历 past_key_values 中的每个层的过去状态
+        for layer_past in past_key_values:
+            # 使用 beam_idx 对每个 past_state 进行重新排序，并将结果添加到 reordered_past 中
+            reordered_past += (
+                tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+            )
+        # 返回重新排序后的 past_key_values
+        return reordered_past
 class WhisperDecoderWrapper(WhisperPreTrainedModel):
     """
     This wrapper class is a helper class to correctly load pretrained checkpoints when the causal language model is
@@ -1047,17 +1061,22 @@ class WhisperDecoderWrapper(WhisperPreTrainedModel):
 
     def __init__(self, config):
         super().__init__(config)
-        config.is_encoder_decoder = False  # 将配置中的 is_encoder_decoder 属性设为 False
-        self.decoder = WhisperDecoder(config)  # 使用配置创建一个 WhisperDecoder 对象
+        # 设置当前模型不是编码器-解码器结构
+        config.is_encoder_decoder = False
+        # 初始化一个WhisperDecoder对象作为解码器
+        self.decoder = WhisperDecoder(config)
 
     def get_input_embeddings(self):
-        return self.decoder.embed_tokens  # 返回解码器对象的嵌入层
+        # 返回当前模型的解码器的嵌入层
+        return self.decoder.embed_tokens
 
     def set_input_embeddings(self, value):
-        self.decoder.embed_tokens = value  # 设置解码器对象的嵌入层
+        # 设置当前模型的解码器的嵌入层
+        self.decoder.embed_tokens = value
 
     def forward(self, *args, **kwargs):
-        return self.decoder(*args, **kwargs)  # 调用解码器对象的前向方法
+        # 前向传播，调用当前模型的解码器进行处理
+        return self.decoder(*args, **kwargs)
 
 
 @add_start_docstrings(
@@ -1067,36 +1086,45 @@ class WhisperDecoderWrapper(WhisperPreTrainedModel):
     WHISPER_START_DOCSTRING,
 )
 class WhisperForCausalLM(WhisperPreTrainedModel):
-    _tied_weights_keys = ["proj_out.weight"]  # 权重绑定的键列表
-    main_input_name = "input_ids"  # 主输入名称为 input_ids
+    _tied_weights_keys = ["proj_out.weight"]
+    main_input_name = "input_ids"
 
     def __init__(self, config):
         super().__init__(config)
-        config.is_encoder_decoder = False  # 将配置中的 is_encoder_decoder 属性设为 False
-        self.model = WhisperDecoderWrapper(config)  # 使用配置创建一个 WhisperDecoderWrapper 对象
+        # 设置当前模型不是编码器-解码器结构
+        config.is_encoder_decoder = False
+        # 初始化一个WhisperDecoderWrapper对象作为当前模型的主模型
+        self.model = WhisperDecoderWrapper(config)
 
-        self.proj_out = nn.Linear(config.hidden_size, config.vocab_size, bias=False)  # 创建线性层对象并初始化权重（不使用偏置）
+        # 初始化一个线性层，作为模型的输出投影层，将隐藏状态映射到词汇表大小的向量空间
+        self.proj_out = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
-        # Initialize weights and apply final processing
-        self.post_init()  # 执行初始化权重和应用最终处理的操作
+        # 初始化权重并进行最终处理
+        self.post_init()
 
     def get_output_embeddings(self):
-        return self.proj_out  # 返回输出嵌入层
+        # 返回当前模型的输出投影层
+        return self.proj_out
 
     def set_output_embeddings(self, new_embeddings):
-        self.proj_out = new_embeddings  # 设置新的输出嵌入层
+        # 设置当前模型的输出投影层
+        self.proj_out = new_embeddings
 
     def get_input_embeddings(self) -> nn.Module:
-        return self.model.get_input_embeddings()  # 返回解码器对象的嵌入层
+        # 返回当前模型主模型的解码器的嵌入层
+        return self.model.get_input_embeddings()
 
     def set_input_embeddings(self, value):
-        self.model.set_input_embeddings(value)  # 设置解码器对象的嵌入层
+        # 设置当前模型主模型的解码器的嵌入层
+        self.model.set_input_embeddings(value)
 
     def set_decoder(self, decoder):
-        self.model.decoder = decoder  # 设置解码器
+        # 设置当前模型主模型的解码器
+        self.model.decoder = decoder
 
     def get_decoder(self):
-        return self.model.decoder  # 返回解码器
+        # 返回当前模型主模型的解码器
+        return self.model.decoder
 
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1106,14 +1134,16 @@ class WhisperForCausalLM(WhisperPreTrainedModel):
         encoder_outputs: Optional[Tuple[torch.FloatTensor]] = None,
         head_mask: Optional[torch.Tensor] = None,
         cross_attn_head_mask: Optional[torch.Tensor] = None,
-        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]] = None,
+        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
         inputs_embeds: Optional[torch.FloatTensor] = None,
         labels: Optional[torch.LongTensor] = None,
         use_cache: Optional[bool] = None,
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 以上是前向传播方法的参数
+    ):
+        # 前向传播函数，调用当前模型的主模型进行处理
+        pass  # 实际操作在self.model.forward中定义
 
     def prepare_inputs_for_generation(
         self,
@@ -1121,83 +1151,83 @@ class WhisperForCausalLM(WhisperPreTrainedModel):
         past_key_values=None,
         use_cache=None,
         encoder_outputs=None,
-        attention_mask=None
-        **kwargs,  # 准备用于生成的输入参数
-    # 如果已有的 past_key_values 不为空
-    if past_key_values is not None:
-        # 获取上次生成的序列长度
-        past_length = past_key_values[0][0].shape[2]
-        
-        # 如果当前输入的长度大于之前生成的长度
-        if input_ids.shape[1] > past_length:
-            # 则保留最后一个输入 ID
-            remove_prefix_length = past_length
-        else:
-            # 否则保留当前输入的所有 ID
-            remove_prefix_length = input_ids.shape[1] - 1
-        
-        # 截取输入序列，移除之前已生成的部分
-        input_ids = input_ids[:, remove_prefix_length:]
-    
-    # 返回一个字典，包含编码器输出、已有的 past_key_values、截取后的输入序列 ID、是否使用缓存标识、注意力掩码
-    return {
-        "encoder_outputs": encoder_outputs,
-        "past_key_values": past_key_values,
-        "input_ids": input_ids,
-        "use_cache": use_cache,
-        "attention_mask": attention_mask,
-    }
-    
-    # 一个静态方法，用于重排 past_key_values
-    @staticmethod
-    def _reorder_cache(past_key_values, beam_idx):
-        # 创建一个空的元组作为重排后的 past_key_values
-        reordered_past = ()
-        
-        # 遍历每一层的 past_key_values
-        for layer_past in past_key_values:
-            # 对每一层的状态按照 beam_idx 进行重排
-            reordered_past += (
-                tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
-            )
-        
-        # 返回重排后的 past_key_values
-        return reordered_past
-# 定义了带有序列分类头部的 Whisper 编码器模型，用于类似 SUPERB Keyword Spotting 等任务
+        attention_mask=None,
+        **kwargs,
+    ):
+        # 为生成过程准备输入数据，调用当前模型的主模型方法处理
+        pass  # 实际操作在self.model.prepare_inputs_for_generation中定义
+        ):
+            # 如果过去的键值不为 None，则获取过去键值的第一个元素的第三维度长度作为过去长度
+            if past_key_values is not None:
+                past_length = past_key_values[0][0].shape[2]
+
+                # 某些生成方法可能只传递最后一个输入 ID
+                if input_ids.shape[1] > past_length:
+                    # 如果输入的 ID 数量大于过去长度，则移除前缀长度为过去长度
+                    remove_prefix_length = past_length
+                else:
+                    # 否则，默认行为：只保留最后一个 ID
+                    remove_prefix_length = input_ids.shape[1] - 1
+
+                # 更新输入的 ID，移除前缀部分
+                input_ids = input_ids[:, remove_prefix_length:]
+
+            # 返回一个包含各种输出和参数的字典
+            return {
+                "encoder_outputs": encoder_outputs,
+                "past_key_values": past_key_values,
+                "input_ids": input_ids,
+                "use_cache": use_cache,
+                "attention_mask": attention_mask,
+            }
+
+        @staticmethod
+        def _reorder_cache(past_key_values, beam_idx):
+            reordered_past = ()
+            # 遍历过去键值中的每一层，并重新排序以匹配 beam_idx 的顺序
+            for layer_past in past_key_values:
+                reordered_past += (
+                    # 对于每个过去状态，根据 beam_idx 在设备上选择相应的索引
+                    tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+                )
+            # 返回重新排序后的过去键值
+            return reordered_past
+@add_start_docstrings(
+    """
+    Whisper Encoder Model with a sequence classification head on top (a linear layer over the pooled output) for tasks
+    like SUPERB Keyword Spotting.
+    """,
+    WHISPER_ENCODER_INPUTS_DOCSTRING,
+)
 class WhisperForAudioClassification(WhisperPreTrainedModel):
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 初始化 Whisper 编码器
-        self.encoder = WhisperEncoder(config)
-        # 计算层数，包括变压器层和输入嵌入层
-        num_layers = config.num_hidden_layers + 1
-        # 如果配置中使用加权的层求和
+        self.encoder = WhisperEncoder(config)  # 初始化Whisper编码器，使用给定的配置
+        num_layers = config.num_hidden_layers + 1  # 计算层数，包括transformer层和输入嵌入层
         if config.use_weighted_layer_sum:
-            # 初始化层权重
-            self.layer_weights = nn.Parameter(torch.ones(num_layers) / num_layers)
-        # 初始化投影层
-        self.projector = nn.Linear(config.hidden_size, config.classifier_proj_size)
-        # 初始化分类器层
-        self.classifier = nn.Linear(config.classifier_proj_size, config.num_labels)
+            self.layer_weights = nn.Parameter(torch.ones(num_layers) / num_layers)  # 如果使用加权层求和，初始化权重参数
+        self.projector = nn.Linear(config.hidden_size, config.classifier_proj_size)  # 初始化线性投影层
+        self.classifier = nn.Linear(config.classifier_proj_size, config.num_labels)  # 初始化分类器线性层
 
-        # 初始化权重并应用最终处理
-        self.post_init()
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行初始化权重和最终处理步骤
 
-    # 冻结编码器参数，使其在训练过程中不更新梯度
     def freeze_encoder(self):
-        self.encoder._freeze_parameters()
+        """
+        Calling this function will disable the gradient computation for the Whisper encoder so that its parameters will
+        not be updated during training. Only the projection layers and classification head will be updated.
+        """
+        self.encoder._freeze_parameters()  # 冻结Whisper编码器的参数，使其在训练过程中不更新梯度，只更新投影层和分类头部
 
-    # 获取输入嵌入层
     def get_input_embeddings(self) -> nn.Module:
-        return self.encoder.get_input_embeddings()
+        return self.encoder.get_input_embeddings()  # 返回Whisper编码器的输入嵌入层模块
 
-    # 设置输入嵌入层
     def set_input_embeddings(self, value: nn.Module):
-        self.encoder.set_input_embeddings(value)
+        self.encoder.set_input_embeddings(value)  # 设置Whisper编码器的输入嵌入层模块
 
-    # 定义前向传播函数
+    @add_start_docstrings_to_model_forward(WHISPER_ENCODER_INPUTS_DOCSTRING)
+    @replace_return_docstrings(output_type=SequenceClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
         input_features: Optional[torch.LongTensor] = None,

@@ -1,24 +1,23 @@
-# `.\transformers\models\tvlt\__init__.py`
+# `.\models\tvlt\__init__.py`
 
-```py
+```
 # flake8: noqa
-# 在这个模块中，无法忽略 "F401 '...' imported but unused" 警告，但要保留其他警告。所以，不检查这个模块。
+# 禁用 flake8 检查此模块，因为无法忽略 "F401 '...' imported but unused" 警告，同时保留其他警告。
 
-# 2023 年版权归 HuggingFace 团队所有。
-# 
-# 根据 Apache 许可 2.0 版本（“许可证”）获得许可；
-# 您不得使用此文件，除非遵守许可证。
-# 您可以在以下位置获取许可证副本：
-# 
+# Copyright 2023 The HuggingFace Team. All rights reserved.
+# 版权声明，保留所有权利。
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache 许可证版本 2.0 许可；您不得使用此文件，除非遵守许可证。
+# 您可以在以下网址获取许可证副本：
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
-# 除非适用法律要求或书面同意，否则按“原样”分发软件，
-# 无论是明示还是暗示的，都没有任何形式的担保或条件。
-# 有关特定语言的权限，请参阅许可证。
-
+#
+# Unless required by applicable law or agreed to in writing, software
+# 除非适用法律要求或书面同意，否则软件按"原样"提供，无任何明示或暗示的担保或条件。
+# 请参阅许可证获取特定语言的权限和限制。
 from typing import TYPE_CHECKING
 
-# 从工具包中导入相关功能和类
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -26,21 +25,21 @@ from ...utils import (
     is_vision_available,
 )
 
-# 定义导入结构
+# _import_structure 定义了模块的导入结构，包含不同模块及其导出的符号列表
 _import_structure = {
     "configuration_tvlt": ["TVLT_PRETRAINED_CONFIG_ARCHIVE_MAP", "TvltConfig"],
     "feature_extraction_tvlt": ["TvltFeatureExtractor"],
     "processing_tvlt": ["TvltProcessor"],
 }
 
-# 检查是否存在 torch 库
+# 检查是否 Torch 可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果存在 torch 库，则导入相关模型
+    # 如果 Torch 可用，则导入 modeling_tvlt 模块的符号列表
     _import_structure["modeling_tvlt"] = [
         "TVLT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TvltModel",
@@ -49,17 +48,17 @@ else:
         "TvltPreTrainedModel",
     ]
 
-# 检查是否存在 vision 库
+# 检查是否 Vision 可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果存在 vision 库，则导入图像处理模块
+    # 如果 Vision 可用，则导入 image_processing_tvlt 模块的符号列表
     _import_structure["image_processing_tvlt"] = ["TvltImageProcessor"]
 
-# 如果是类型检查，则导入相关类
+# 如果 TYPE_CHECKING 为真，导入各个模块的具体符号以供类型检查使用
 if TYPE_CHECKING:
     from .configuration_tvlt import TVLT_PRETRAINED_CONFIG_ARCHIVE_MAP, TvltConfig
     from .processing_tvlt import TvltProcessor
@@ -87,9 +86,10 @@ if TYPE_CHECKING:
     else:
         from .image_processing_tvlt import TvltImageProcessor
 
-# 如果不是类型检查，则将该模块设置为延迟加载模块
+# 如果不是 TYPE_CHECKING 环境，则将当前模块设置为一个懒加载模块 _LazyModule
 else:
     import sys
 
+    # 使用 _LazyModule 将当前模块动态注册为延迟加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

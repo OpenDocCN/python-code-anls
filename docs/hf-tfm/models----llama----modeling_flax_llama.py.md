@@ -1,38 +1,38 @@
-# `.\transformers\models\llama\modeling_flax_llama.py`
+# `.\models\llama\modeling_flax_llama.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# 基于 EleutherAI 的 GPT-NeoX 库以及该库中的 GPT-NeoX 和 OPT 实现的代码。已根据 Meta AI 团队训练模型时的一些架构差异进行了修改。
-# 根据Apache许可证2.0版本授权。
-# 除非符合许可证，否则不得使用此文件。
-# 您可以获取许可证的副本。
-# 在适用法律规定要求或书面同意的情况下，根据许可证分发的软件将基于“原样”基础分发，不附带任何类型的保证或条件。
-# 请参阅许可证以获取有关特定语言授权权限和限制的信息。
-# Flax LLaMA 模型。
-from functools import partial                # 导入 functools 库的 partial 函数
-from typing import Optional, Tuple           # 导入 typing 模块中的 Optional 和 Tuple 类型
-import flax.linen as nn                     # 导入 flax.linen 库并且重命名为 nn
-import jax                                  # 导入 jax 库
-import jax.numpy as jnp                      # 导入 jax.numpy 并重命名为 jnp
-import numpy as np                           # 导入 numpy 库并重命名为 np
-from flax.core.frozen_dict import FrozenDict, freeze, unfreeze   # 从 flax.core.frozen_dict 库中导入 FrozenDict, freeze, unfreeze 函数
-from flax.linen import combine_masks, make_causal_mask            # 导入 flax.linen 库中的 combine_masks 和 make_causal_mask 函数
-from flax.linen.attention import dot_product_attention_weights    # 导入 flax.linen.attention 中的 dot_product_attention_weights 函数
-from flax.traverse_util import flatten_dict, unflatten_dict        # 导入 flax.traverse_util 库的 flatten_dict, unflatten_dict 函数
-from jax import lax                                               # 导入 jax 库中的 lax 模块
-from ...modeling_flax_outputs import FlaxBaseModelOutput, FlaxCausalLMOutput    # 导入 FlaxBaseModelOutput, FlaxCausalLMOutput 类
-from ...modeling_flax_utils import ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring   # 导入 ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring 函数
-from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging    # 从 utils 模块中导入 add_start_docstrings, add_start_docstrings_to_model_forward, logging 函数
-from .configuration_llama import LlamaConfig     # 从 configuration_llama 模块中导入 LlamaConfig 类
+```
+# 引入必要的模块和库
+from functools import partial  # 导入 functools 模块中的 partial 函数，用于创建带有部分参数的新函数
+from typing import Optional, Tuple  # 导入 typing 模块中的 Optional 和 Tuple 类型，用于类型标注
 
-logger = logging.get_logger(__name__)    # 使用 logging 模块获取日志记录器，记录器名称为当前模块名称
+import flax.linen as nn  # 导入 Flax 的 linen 模块，并用 nn 别名引用
+import jax  # 导入 JAX 库，用于自动求导和并行计算
+import jax.numpy as jnp  # 导入 JAX 库中的 numpy 模块，并用 jnp 别名引用
+import numpy as np  # 导入 numpy 库，并用 np 别名引用
+from flax.core.frozen_dict import FrozenDict, freeze, unfreeze  # 导入 Flax 中的 FrozenDict 等相关函数
+from flax.linen import combine_masks, make_causal_mask  # 导入 Flax 中的相关函数和类
+from flax.linen.attention import dot_product_attention_weights  # 导入 Flax 中的 dot_product_attention_weights 函数
+from flax.traverse_util import flatten_dict, unflatten_dict  # 导入 Flax 中的 flatten_dict 和 unflatten_dict 函数
+from jax import lax  # 从 JAX 库中导入 lax 模块
 
-_CONFIG_FOR_DOC = "LlamaConfig"    # 设置用于文档的配置信息为 "LlamaConfig"
-_CHECKPOINT_FOR_DOC = "afmck/testing-llama-tiny"    # 设置用于文档的检查点为 "afmck/testing-llama-tiny"
-_REAL_CHECKPOINT_FOR_DOC = "openlm-research/open_llama_3b_v2"    # 设置用于文档的真实检查点为 "openlm-research/open_llama_3b_v2"
+# 导入模型相关的输出类和函数
+from ...modeling_flax_outputs import FlaxBaseModelOutput, FlaxCausalLMOutput
+from ...modeling_flax_utils import ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring
+from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging
 
-LLAMA_START_DOCSTRING = r"""    # LLAMA_START_DOCSTRING 字符串开始标记
+# 导入 LLaMA 模型的配置类
+from .configuration_llama import LlamaConfig
+
+# 获取 logger 对象，用于日志记录
+logger = logging.get_logger(__name__)
+
+# 用于文档的配置、检查点和真实检查点的字符串常量
+_CONFIG_FOR_DOC = "LlamaConfig"
+_CHECKPOINT_FOR_DOC = "afmck/testing-llama-tiny"
+_REAL_CHECKPOINT_FOR_DOC = "openlm-research/open_llama_3b_v2"
+
+# LLaMA 模型的起始文档字符串，包含了模型的继承信息和特性说明
+LLAMA_START_DOCSTRING = r"""
 
     This model inherits from [`FlaxPreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
@@ -48,152 +48,122 @@ LLAMA_START_DOCSTRING = r"""    # LLAMA_START_DOCSTRING 字符串开始标记
     - [Automatic Differentiation](https://jax.readthedocs.io/en/latest/jax.html#automatic-differentiation)
     - [Vectorization](https://jax.readthedocs.io/en/latest/jax.html#vectorization-vmap)
     - [Parallelization](https://jax.readthedocs.io/en/latest/jax.html#parallelization-pmap)
-
-
-```    # LLAMA_START_DOCSTRING 字符串结束标记
-    Parameters:
-        # 参数说明:
-        config ([`LlamaConfig`]): Model configuration class with all the parameters of the model.
-            # 使用 `LlamaConfig` 类存储模型所有参数的配置。
-            # 通过使用配置文件初始化该参数不会加载与模型相关的权重，只会加载配置。
-            # 使用 [`~FlaxPreTrainedModel.from_pretrained`] 方法加载模型权重。
-        dtype (`jax.numpy.dtype`, *optional*, defaults to `jax.numpy.float32`):
-            # 数据计算的数据类型。可选值为 `jax.numpy.float32`, `jax.numpy.float16`, 或 `jax.numpy.bfloat16`。
-            # 可用于启用 GPUs 或 TPUs 上的混合精度训练或半精度推断。如果指定了，所有计算将使用给定的 `dtype` 进行。
-            
-            **Note that this only specifies the dtype of the computation and does not influence the dtype of model
-            parameters.**
-            # 注意：这只是指定计算的数据类型，并不影响模型参数的数据类型。
-
-            If you wish to change the dtype of the model parameters, see [`~FlaxPreTrainedModel.to_fp16`] and
-            [`~FlaxPreTrainedModel.to_bf16`].
-            # 如果想要更改模型参数的数据类型，请参阅 [`~FlaxPreTrainedModel.to_fp16`] 和 [`~FlaxPreTrainedModel.to_bf16`]。
-"""
-
-LLAMA_INPUTS_DOCSTRING = r"""
-    Args:
-        input_ids (`numpy.ndarray` of shape `(batch_size, input_ids_length)`):
-            模型输入的 token 索引数组，形状为 `(batch_size, input_ids_length)`。默认会忽略填充部分。
-
-            可以使用 [`AutoTokenizer`] 获得索引。详见 [`PreTrainedTokenizer.encode`] 和
-            [`PreTrainedTokenizer.__call__`] 了解详情。
-
-            [什么是 input IDs?](../glossary#input-ids)
-        attention_mask (`numpy.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            避免对填充 token 进行注意力计算的掩码。掩码值取 `[0, 1]` 范围：
-
-            - 1 表示**未掩码**的 token，
-            - 0 表示**掩码**的 token。
-
-            可以使用 [`AutoTokenizer`] 获得索引。详见 [`PreTrainedTokenizer.encode`] 和
-            [`PreTrainedTokenizer.__call__`] 了解详情。
-
-            如果使用 `past_key_values`，可能只需输入最后的 `decoder_input_ids`（参见 `past_key_values`）。
-
-            如果需要更改填充行为，应阅读 [`modeling_opt._prepare_decoder_attention_mask`] 并根据需求修改。
-            查看[论文](https://arxiv.org/abs/1910.13461)中的图1以了解默认策略的更多信息。
-
-            - 1 表示头部**未掩码**，
-            - 0 表示头部**掩码**。
-        position_ids (`numpy.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            每个输入 token 在位置嵌入中的位置索引数组，形状为 `(batch_size, sequence_length)`。取值范围为 `[0,
-            config.n_positions - 1]`。
-
-            [什么是 position IDs?](../glossary#position-ids)
-        past_key_values (`Dict[str, np.ndarray]`, *optional*, 由 `init_cache` 返回或传递先前 `past_key_values`):
-            预计算的隐藏状态键和值（在注意力块中）的字典，可用于快速自回归解码。预计算的键和值的隐藏状态为
-            *[batch_size, max_length]* 的形状。
-        output_attentions (`bool`, *optional*):
-            是否返回所有注意力层的注意力张量。有关更多细节，请查看返回的张量中的 `attentions`。
-        output_hidden_states (`bool`, *optional*):
-            是否返回所有层的隐藏状态。有关更多细节，请查看返回的张量中的 `hidden_states`。
-        return_dict (`bool`, *optional*):
-            是否返回 [`~utils.ModelOutput`] 而不是普通的元组。
-"""
-
-
+    # 参数:
+    # config ([`LlamaConfig`]): 模型配置类，包含模型的所有参数。
+    #     用配置文件初始化不会加载与模型关联的权重，仅加载配置。
+    #     可以查看 [`~FlaxPreTrainedModel.from_pretrained`] 方法来加载模型权重。
+    # dtype (`jax.numpy.dtype`, *可选*, 默认为 `jax.numpy.float32`):
+    #     计算的数据类型。可以是 `jax.numpy.float32`, `jax.numpy.float16`, 或 `jax.numpy.bfloat16` 中的一种。
+    # 
+    #     这可用于在 GPU 或 TPU 上启用混合精度训练或半精度推断。如果指定，则所有计算将使用给定的 `dtype` 进行。
+    # 
+    #     **请注意，这仅指定计算的数据类型，不影响模型参数的数据类型。**
+    # 
+    #     如果您希望更改模型参数的数据类型，请参阅 [`~FlaxPreTrainedModel.to_fp16`] 和 [`~FlaxPreTrainedModel.to_bf16`]。
+# 创建正弦位置编码矩阵，用于将位置索引映射为正弦波形式的向量表示
 def create_sinusoidal_positions(num_pos, dim):
+    # 计算正弦编码的频率逆频率
     inv_freq = 1.0 / (10000 ** (np.arange(0, dim, 2) / dim))
+    # 计算位置索引乘以频率得到的矩阵，每个维度都是浮点数
     freqs = np.einsum("i , j -> i j", np.arange(num_pos), inv_freq).astype("float32")
-
+    # 按照最后一个维度将两个频率矩阵连接起来，形成最终的正弦位置编码矩阵
     emb = np.concatenate((freqs, freqs), axis=-1)
-    # 将正弦和余弦的结果连接起来，形成一个新的数组
+    # 将 emb 数组中的每个元素应用正弦函数，然后与对应元素应用余弦函数的结果拼接起来
     out = np.concatenate((np.sin(emb)[:, None, :], np.cos(emb)[:, None, :]), axis=-1)
-    # 返回新数组中的前num_pos项
+    # 从拼接后的数组中取出前 num_pos 列，并转换为 JAX 数组格式返回
     return jnp.array(out[:, :, :num_pos])
+# 定义一个函数，用于将输入张量的后一半隐藏维度旋转
 def rotate_half(tensor):
-    """Rotates half the hidden dims of the input."""
-    # 将输入张量的一半隐藏维度进行旋转
+    # 将张量按照其最后一个维度的一半进行拼接，实现旋转操作
     rotate_half_tensor = jnp.concatenate(
         (-tensor[..., tensor.shape[-1] // 2 :], tensor[..., : tensor.shape[-1] // 2]), axis=-1
     )
     return rotate_half_tensor
 
 
+# 定义一个函数，将旋转的位置嵌入应用到输入张量上
 def apply_rotary_pos_emb(tensor, sin_pos, cos_pos):
-    # 应用旋转位置编码到张量上
+    # 将输入张量乘以余弦位置编码，然后加上经过旋转半隐藏维度的正弦位置编码
     return (tensor * cos_pos) + (rotate_half(tensor) * sin_pos)
 
 
+# 定义一个名为FlaxLlamaRMSNorm的类，继承自nn.Module
 class FlaxLlamaRMSNorm(nn.Module):
+    # 类的配置信息
     config: LlamaConfig
     dtype: jnp.dtype = jnp.float32
 
+    # 设置方法，在类实例化时调用，用于初始化权重和其他参数
     def setup(self):
-        # 初始化 RMS 归一化层
+        # 设置 epsilon 参数为 RMS 归一化的小数值
         self.epsilon = self.config.rms_norm_eps
+        # 初始化权重矩阵，形状为隐藏大小（hidden_size）
         self.weight = self.param("weight", lambda _, shape: jnp.ones(shape), self.config.hidden_size)
 
+    # 类的调用方法，对隐藏状态进行处理
     def __call__(self, hidden_states):
-        # 计算方差
+        # 将隐藏状态转换为 jax 数组，并将数据类型设置为 jnp.float32
         variance = jnp.asarray(hidden_states, dtype=jnp.float32)
+        # 计算方差的平方
         variance = jnp.power(variance, 2)
+        # 求取方差的平均值，保持最后一个维度
         variance = variance.mean(-1, keepdims=True)
-        # 使用 `jax.numpy.sqrt`，因为 `jax.lax.rsqrt` 与 `torch.rsqrt` 不匹配
+        # 根据 RMS 归一化公式，将隐藏状态除以标准差加上一个小值 epsilon
         hidden_states = hidden_states / jnp.sqrt(variance + self.epsilon)
 
+        # 返回加权后的隐藏状态
         return self.weight * jnp.asarray(hidden_states, dtype=self.dtype)
 
 
+# 定义一个名为FlaxLlamaRotaryEmbedding的类，继承自nn.Module
 class FlaxLlamaRotaryEmbedding(nn.Module):
+    # 类的配置信息
     config: LlamaConfig
     dtype: jnp.dtype = jnp.float32
 
+    # 设置方法，在类实例化时调用，用于初始化位置编码
     def setup(self):
-        # 设置 Llama 旋转嵌入层
+        # 计算每个注意力头的维度
         head_dim = self.config.hidden_size // self.config.num_attention_heads
+        # 创建正弦余弦位置编码
         self.sincos = create_sinusoidal_positions(self.config.max_position_embeddings, head_dim)
 
+    # 类的调用方法，将位置编码应用到键、查询和位置ID上
     def __call__(self, key, query, position_ids):
-        # 获取位置编码
+        # 获取指定位置ID的正弦余弦位置编码
         sincos = self.sincos[position_ids]
         sin_pos, cos_pos = jnp.split(sincos, 2, axis=-1)
 
-        # 应用旋转位置编码到关键键值和查询上
+        # 将正弦余弦位置编码应用到键和查询上
         key = apply_rotary_pos_emb(key, sin_pos, cos_pos)
         query = apply_rotary_pos_emb(query, sin_pos, cos_pos)
 
+        # 将键和查询转换为 jax 数组，并将数据类型设置为 self.dtype
         key = jnp.asarray(key, dtype=self.dtype)
         query = jnp.asarray(query, dtype=self.dtype)
 
+        # 返回处理后的键和查询
         return key, query
 
 
+# 定义一个名为FlaxLlamaAttention的类，继承自nn.Module
 class FlaxLlamaAttention(nn.Module):
+    # 类的配置信息
     config: LlamaConfig
     dtype: jnp.dtype = jnp.float32
     causal: bool = True
     is_cross_attention: bool = False
 
+    # 设置方法，在类实例化时调用，用于初始化注意力机制的参数
     def setup(self):
-        # 设置 Llama 注意力层
+        # 从配置中获取参数
         config = self.config
         self.embed_dim = config.hidden_size
         self.num_heads = config.num_attention_heads
         self.head_dim = self.embed_dim // self.num_heads
         self.attention_softmax_in_fp32 = self.dtype is not jnp.float32
 
-        # 初始化 Dense 层
+        # 创建偏置注意力层
         dense = partial(
             nn.Dense,
             self.embed_dim,
@@ -202,210 +172,201 @@ class FlaxLlamaAttention(nn.Module):
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
 
+        # 初始化查询、键、值和输出投影层
         self.q_proj, self.k_proj, self.v_proj = dense(), dense(), dense()
         self.o_proj = dense()
 
-        # 创建因果掩码
+        # 创建因果遮罩
         self.causal_mask = make_causal_mask(jnp.ones((1, config.max_position_embeddings), dtype="bool"), dtype="bool")
+        # 创建旋转嵌入层
         self.rotary_emb = FlaxLlamaRotaryEmbedding(config, dtype=self.dtype)
 
+    # 内部方法，用于将隐藏状态分割为多个注意力头
     def _split_heads(self, hidden_states):
-        # 将隐藏状态拆分为头
         return hidden_states.reshape(hidden_states.shape[:2] + (self.num_heads, self.head_dim))
-    # 定义一个私有方法用于合并头部，将隐藏状态张量重塑为（batch_size, seq_length, num_heads, head_dim）的形状
     def _merge_heads(self, hidden_states):
+        # 将输入的 hidden_states 重塑成形状为 (batch_size, sequence_length, self.embed_dim) 的张量，并返回
         return hidden_states.reshape(hidden_states.shape[:2] + (self.embed_dim,))
 
     @nn.compact
-    # 从transformers库中的FlaxGPTNeoSelfAttention类中复制的方法，用于将单个输入标记的投影键、值状态连接到先前步骤的缓存状态
+    # 从 transformers.models.gpt_neo.modeling_flax_gpt_neo.FlaxGPTNeoSelfAttention._concatenate_to_cache 复制而来
     def _concatenate_to_cache(self, key, value, query, attention_mask):
         """
         This function takes projected key, value states from a single input token and concatenates the states to cached
         states from previous steps. This function is slighly adapted from the official Flax repository:
         https://github.com/google/flax/blob/491ce18759622506588784b4fca0e4bf05f8c8cd/flax/linen/attention.py#L252
         """
-        # 检测是否通过缺少现有缓存数据来初始化
+        # 检测是否通过缺少现有缓存数据进行初始化
         is_initialized = self.has_variable("cache", "cached_key")
-        # 初始化缓存键和缓存值的变量
+        # 如果未初始化，则创建形状和类型与 key 相同的零张量作为 cached_key
         cached_key = self.variable("cache", "cached_key", jnp.zeros, key.shape, key.dtype)
+        # 如果未初始化，则创建形状和类型与 value 相同的零张量作为 cached_value
         cached_value = self.variable("cache", "cached_value", jnp.zeros, value.shape, value.dtype)
-        # 初始化缓存索引的变量
+        # 如果未初始化，则创建初始值为 0 的 cache_index
         cache_index = self.variable("cache", "cache_index", lambda: jnp.array(0, dtype=jnp.int32))
 
         if is_initialized:
-            # 获取批次维度和缓存长度等维度信息
+            # 获取当前缓存张量的形状信息
             *batch_dims, max_length, num_heads, depth_per_head = cached_key.value.shape
-            # 更新键、值缓存，将新的一维空间切片更新到缓存中
+            # 使用新的 1 维空间切片更新 key、value 缓存
             cur_index = cache_index.value
             indices = (0,) * len(batch_dims) + (cur_index, 0, 0)
             key = lax.dynamic_update_slice(cached_key.value, key, indices)
             value = lax.dynamic_update_slice(cached_value.value, value, indices)
             cached_key.value = key
             cached_value.value = value
-            # 更新缓存索引，计算更新的缓存向量数量
+            # 更新 cache_index 值，增加已更新的缓存向量数量
             num_updated_cache_vectors = query.shape[1]
             cache_index.value = cache_index.value + num_updated_cache_vectors
-            # 为缓存的解码器自注意力创建因果掩码：我们的单个查询位置只能关注已生成和缓存的键位置，而不是剩余的零元素
+            # 生成用于缓存的因果掩码：我们的单个查询位置只应关注已生成和缓存的键位置，而不是剩余的零元素
             pad_mask = jnp.broadcast_to(
                 jnp.arange(max_length) < cur_index + num_updated_cache_vectors,
                 tuple(batch_dims) + (1, num_updated_cache_vectors, max_length),
             )
+            # 将 pad_mask 与 attention_mask 结合
             attention_mask = combine_masks(pad_mask, attention_mask)
-        # 返回更新后的键、值和注意力掩码
         return key, value, attention_mask
 
-    # 定义调用方法，用于执行自注意力机制
     def __call__(
         self,
-        hidden_states,  # 隐藏状态张量
-        attention_mask,  # 注意力掩码
-        position_ids,  # 位置ID
-        deterministic: bool = True,  # 是否确定性
-        init_cache: bool = False,  # 是否初始化缓存
-        output_attentions: bool = False,  # 是否输出注意力权重
+        hidden_states,
+        attention_mask,
+        position_ids,
+        deterministic: bool = True,
+        init_cache: bool = False,
+        output_attentions: bool = False,
         ):
-        # 使用 self.q_proj 方法对 hidden_states 进行投影得到查询矩阵
-        query = self.q_proj(hidden_states)
-        # 使用 self.k_proj 方法对 hidden_states 进行投影得到键矩阵
-        key = self.k_proj(hidden_states)
-        # 使用 self.v_proj 方法对 hidden_states 进行投影得到数值矩阵
-        value = self.v_proj(hidden_states)
+            # 使用投影函数计算查询向量
+            query = self.q_proj(hidden_states)
+            # 使用投影函数计算键向量
+            key = self.k_proj(hidden_states)
+            # 使用投影函数计算值向量
+            value = self.v_proj(hidden_states)
 
-        # 将查询矩阵进行头分割
-        query = self._split_heads(query)
-        # 将键矩阵进行头分割
-        key = self._split_heads(key)
-        # 将数值矩阵进行头分割
-        value = self._split_heads(value)
+            # 将查询向量分割成多个头
+            query = self._split_heads(query)
+            # 将键向量分割成多个头
+            key = self._split_heads(key)
+            # 将值向量分割成多个头
+            value = self._split_heads(value)
 
-        # 对键矩阵和查询矩阵进行轮换注意力机制操作并获取结果
-        key, query = self.rotary_emb(key, query, position_ids)
+            # 应用旋转位置编码器到键和查询向量
+            key, query = self.rotary_emb(key, query, position_ids)
 
-        # 获取查询矩阵和键矩阵的长度
-        query_length, key_length = query.shape[1], key.shape[1]
+            # 获取查询向量和键向量的长度
+            query_length, key_length = query.shape[1], key.shape[1]
 
-        # 如果存在缓存的键矩阵
-        if self.has_variable("cache", "cached_key"):
-            # 获取缓存的索引
-            mask_shift = self.variables["cache"]["cache_index"]
-            # 获取缓存的键矩阵的最大长度
-            max_decoder_length = self.variables["cache"]["cached_key"].shape[1]
-            # 根据索引信息对 causal_mask 进行切片得到新的 causal_mask
-            causal_mask = lax.dynamic_slice(
-                self.causal_mask, (0, 0, mask_shift, 0), (1, 1, query_length, max_decoder_length)
+            # 构建因果掩码
+            if self.has_variable("cache", "cached_key"):
+                # 如果有缓存的键，根据缓存索引和最大解码器长度动态切片因果掩码
+                mask_shift = self.variables["cache"]["cache_index"]
+                max_decoder_length = self.variables["cache"]["cached_key"].shape[1]
+                causal_mask = lax.dynamic_slice(
+                    self.causal_mask, (0, 0, mask_shift, 0), (1, 1, query_length, max_decoder_length)
+                )
+            else:
+                # 否则，使用静态切片获取因果掩码
+                causal_mask = self.causal_mask[:, :, :query_length, :key_length]
+
+            # 获取批次大小
+            batch_size = hidden_states.shape[0]
+            # 将因果掩码广播到与查询向量和键向量匹配的形状
+            causal_mask = jnp.broadcast_to(causal_mask, (batch_size,) + causal_mask.shape[1:])
+
+            # 广播注意力掩码以匹配因果掩码的形状
+            attention_mask = jnp.broadcast_to(jnp.expand_dims(attention_mask, axis=(-3, -2)), causal_mask.shape)
+            # 结合注意力掩码和因果掩码
+            attention_mask = combine_masks(attention_mask, causal_mask)
+
+            # 初始化 dropout RNG
+            dropout_rng = None
+            if not deterministic and self.config.attention_dropout > 0.0:
+                dropout_rng = self.make_rng("dropout")
+
+            # 在快速自回归解码期间，逐步一次性输入一个位置，逐步缓存键和值。
+            if self.has_variable("cache", "cached_key") or init_cache:
+                key, value, attention_mask = self._concatenate_to_cache(key, value, query, attention_mask)
+
+            # 将布尔掩码转换为浮点数掩码
+            attention_bias = lax.select(
+                attention_mask > 0,
+                jnp.full(attention_mask.shape, 0.0).astype(self.dtype),
+                jnp.full(attention_mask.shape, jnp.finfo(self.dtype).min).astype(self.dtype),
             )
-        else:
-            # 获取正常的 causal_mask
-            causal_mask = self.causal_mask[:, :, :query_length, :key_length]
 
-        # 获取隐藏层状态的批次大小
-        batch_size = hidden_states.shape[0]
-        # 使用 jnp.broadcast_to 将 causal_mask 广播成和 hidden_states 相同的形状
-        causal_mask = jnp.broadcast_to(causal_mask, (batch_size,) + causal_mask.shape[1:])
+            # 标准点积注意力
+            attention_dtype = jnp.float32 if self.attention_softmax_in_fp32 else self.dtype
+            attn_weights = dot_product_attention_weights(
+                query,
+                key,
+                bias=attention_bias,
+                dropout_rng=dropout_rng,
+                dropout_rate=self.config.attention_dropout,
+                deterministic=deterministic,
+                dtype=attention_dtype,
+            )
 
-        # 使用 jnp.expand_dims 将 attention_mask 增加维度后，使用 jnp.broadcast_to 广播成和 causal_mask 相同的形状
-        attention_mask = jnp.broadcast_to(jnp.expand_dims(attention_mask, axis=(-3, -2)), causal_mask.shape)
-        # 调用 combine_masks 方法将 attention_mask 和 causal_mask 合并
-        attention_mask = combine_masks(attention_mask, causal_mask)
+            # 如果需要，将注意力权重转换为指定的数据类型
+            if self.attention_softmax_in_fp32:
+                attn_weights = attn_weights.astype(self.dtype)
 
-        dropout_rng = None
-        # 如果非确定性模式下且注意力 dropout 大于 0，则需要创建 dropout_rng
-        if not deterministic and self.config.attention_dropout > 0.0:
-            dropout_rng = self.make_rng("dropout")
+            # 使用注意力权重计算注意力输出
+            attn_output = jnp.einsum("...hqk,...khd->...qhd", attn_weights, value)
+            # 合并多头得到的注意力输出
+            attn_output = self._merge_heads(attn_output)
+            # 应用输出投影层
+            attn_output = self.o_proj(attn_output)
 
-        # 在快速自回归解码期间，逐步对密钥和值进行缓存
-        if self.has_variable("cache", "cached_key") or init_cache:
-            key, value, attention_mask = self._concatenate_to_cache(key, value, query, attention_mask)
-
-        # 将布尔类型的 attention_mask 转换为浮点型的 attention_bias
-        attention_bias = lax.select(
-            attention_mask > 0,
-            jnp.full(attention_mask.shape, 0.0).astype(self.dtype),
-            jnp.full(attention_mask.shape, jnp.finfo(self.dtype).min).astype(self.dtype),
-        )
-
-        # 计算点乘注意力权重
-        attention_dtype = jnp.float32 if self.attention_softmax_in_fp32 else self.dtype
-        attn_weights = dot_product_attention_weights(
-            query,
-            key,
-            bias=attention_bias,
-            dropout_rng=dropout_rng,
-            dropout_rate=self.config.attention_dropout,
-            deterministic=deterministic,
-            dtype=attention_dtype,
-        )
-
-        # 如果 attention_softmax_in_fp32 为真，则将 attn_weights 转换为指定的数据类型
-        if self.attention_softmax_in_fp32:
-            attn_weights = attn_weights.astype(self.dtype)
-
-        # 计算注意力输出
-        attn_output = jnp.einsum("...hqk,...khd->...qhd", attn_weights, value)
-        # 对输出进行头合并
-        attn_output = self._merge_heads(attn_output)
-        # 使用 o_proj 对合并后的结果进行投影
-        attn_output = self.o_proj(attn_output)
-
-        # 如果需要输出注意力权重，则返回结果
-        outputs = (attn_output, attn_weights) if output_attentions else (attn_output,)
-        return outputs
-# 定义一个 FlaxLlamaMLP 类，继承自 nn.Module 类
+            # 准备输出，包括注意力输出和注意力权重（如果需要）
+            outputs = (attn_output, attn_weights) if output_attentions else (attn_output,)
+            return outputs
 class FlaxLlamaMLP(nn.Module):
-    # 设置类属性 config 为 LlamaConfig 类的实例，设置 dtype 为 jnp.float32 类型
-    config: LlamaConfig
-    dtype: jnp.dtype = jnp.float32
+    config: LlamaConfig  # 类型注解：指定该类的配置信息来自于LlamaConfig类
+    dtype: jnp.dtype = jnp.float32  # 类型注解：指定数据类型为jnp.float32，默认为浮点数类型
 
-    # 设置类方法 setup
     def setup(self):
-        # 获取隐藏层的嵌入维度
-        embed_dim = self.config.hidden_size
-        # 获取内部维度，如果未设置，则为 4 倍的隐藏层嵌入维度
+        embed_dim = self.config.hidden_size  # 从配置中获取隐藏层大小作为嵌入维度
         inner_dim = self.config.intermediate_size if self.config.intermediate_size is not None else 4 * embed_dim
+        # 计算内部层维度，如果配置中有中间大小定义则使用，否则使用默认值4倍的嵌入维度
 
-        # 使用正态分布初始化器创建 kernel_init
         kernel_init = jax.nn.initializers.normal(self.config.initializer_range)
-        # 根据 hidden_act 选择激活函数
+        # 使用正态分布初始化器初始化核参数，范围由配置的initializer_range定义
         self.act = ACT2FN[self.config.hidden_act]
+        # 从ACT2FN字典中获取激活函数，并存储在act属性中，其类型由配置的hidden_act指定
 
-        # 创建全连接层 gate_proj，内部维度为 inner_dim，无偏置，数据类型为 dtype，权重初始化为 kernel_init
         self.gate_proj = nn.Dense(inner_dim, use_bias=False, dtype=self.dtype, kernel_init=kernel_init)
-        # 创建全连接层 down_proj，内部维度为 embed_dim，无偏置，数据类型为 dtype，权重初始化为 kernel_init
+        # 创建具有inner_dim大小的全连接层，不使用偏置，使用上述初始化器初始化权重
         self.down_proj = nn.Dense(embed_dim, use_bias=False, dtype=self.dtype, kernel_init=kernel_init)
-        # 创建全连接层 up_proj，内部维度为 inner_dim，无偏置，数据类型为 dtype，权重初始化为 kernel_init
+        # 创建具有embed_dim大小的全连接层，不使用偏置，使用上述初始化器初始化权重
         self.up_proj = nn.Dense(inner_dim, use_bias=False, dtype=self.dtype, kernel_init=kernel_init)
+        # 创建具有inner_dim大小的全连接层，不使用偏置，使用上述初始化器初始化权重
 
-    # 定义类实例的调用方法
     def __call__(self, hidden_states):
-        # 获取 up_proj 的输出
         up_proj_states = self.up_proj(hidden_states)
-        # 获取 gate_proj 的输出，并经过激活函数处理
+        # 使用up_proj层处理输入的隐藏状态
         gate_states = self.act(self.gate_proj(hidden_states))
+        # 使用激活函数act处理gate_proj层处理后的隐藏状态
 
-        # 计算 hidden_states，使用 down_proj 对 up_proj_states 与 gate_states 的乘积进行处理
         hidden_states = self.down_proj(up_proj_states * gate_states)
-        # 返回处理后的 hidden_states
+        # 使用down_proj层处理up_proj_states与gate_states的乘积，并将结果存储在隐藏状态中
         return hidden_states
+        # 返回处理后的隐藏状态作为结果
 
 
-# 定义一个 FlaxLlamaDecoderLayer 类，继承自 nn.Module 类
 class FlaxLlamaDecoderLayer(nn.Module):
-    # 设置类属性 config 为 LlamaConfig 类的实例，设置 dtype 为 jnp.float32 类型
-    config: LlamaConfig
-    dtype: jnp.dtype = jnp.float32
+    config: LlamaConfig  # 类型注解：指定该类的配置信息来自于LlamaConfig类
+    dtype: jnp.dtype = jnp.float32  # 类型注解：指定数据类型为jnp.float32，默认为浮点数类型
 
-    # 设置类方法 setup
     def setup(self):
-        # 初始化 input_layernorm 为 FlaxLlamaRMSNorm 类的实例，参数为 config 和 dtype
         self.input_layernorm = FlaxLlamaRMSNorm(self.config, dtype=self.dtype)
-        # 初始化 self_attn 为 FlaxLlamaAttention 类的实例，参数为 config 和 dtype
+        # 创建一个使用LlamaConfig和指定数据类型的FlaxLlamaRMSNorm实例，存储在input_layernorm属性中
         self.self_attn = FlaxLlamaAttention(self.config, dtype=self.dtype)
-        # 初始化 post_attention_layernorm 为 FlaxLlamaRMSNorm 类的实例，参数为 config 和 dtype
+        # 创建一个使用LlamaConfig和指定数据类型的FlaxLlamaAttention实例，存储在self_attn属性中
         self.post_attention_layernorm = FlaxLlamaRMSNorm(self.config, dtype=self.dtype)
-        # 初始化 mlp 为 FlaxLlamaMLP 类的实例，参数为 config 和 dtype
+        # 创建一个使用LlamaConfig和指定数据类型的FlaxLlamaRMSNorm实例，存储在post_attention_layernorm属性中
         self.mlp = FlaxLlamaMLP(self.config, dtype=self.dtype)
+        # 创建一个使用LlamaConfig和指定数据类型的FlaxLlamaMLP实例，存储在mlp属性中
 
-    # 定义类实例的调用方法
     def __call__(
         self,
         hidden_states,
@@ -415,11 +376,11 @@ class FlaxLlamaDecoderLayer(nn.Module):
         init_cache: bool = False,
         output_attentions: bool = False,
     ):
-        # 保存 hidden_states 作为 residual
         residual = hidden_states
-        # 对 hidden_states 进行 input_layernorm 处理
+        # 将输入的隐藏状态存储在变量residual中，用于残差连接
         hidden_states = self.input_layernorm(hidden_states)
-        # 使用 self_attn 处理 hidden_states，并返回 outputs
+        # 使用input_layernorm对隐藏状态进行规范化处理
+
         outputs = self.self_attn(
             hidden_states,
             attention_mask=attention_mask,
@@ -428,35 +389,40 @@ class FlaxLlamaDecoderLayer(nn.Module):
             init_cache=init_cache,
             output_attentions=output_attentions,
         )
-        # 添加 residual 连接
+        # 使用self_attn处理规范化后的隐藏状态，传递额外参数attention_mask、position_ids等，并将结果存储在outputs中
+
         attn_output = outputs[0]
+        # 从outputs中获取注意力机制的输出
         hidden_states = residual + attn_output
+        # 将residual与注意力输出相加得到新的隐藏状态
 
-        # 保存 hidden_states 作为 residual
         residual = hidden_states
-        # 对 hidden_states 进行 post_attention_layernorm 处理
+        # 将新的隐藏状态存储在变量residual中，用于下一步的残差连接
         hidden_states = self.post_attention_layernorm(hidden_states)
-        # 使用 mlp 处理 hidden_states
+        # 使用post_attention_layernorm对新的隐藏状态进行规范化处理
         hidden_states = self.mlp(hidden_states)
-        # 添加 residual 连接
+        # 使用mlp处理规范化后的隐藏状态，得到最终的输出
+
         hidden_states = residual + hidden_states
+        # 将残差连接的结果与MLP处理后的隐藏状态相加，作为最终的输出
 
-        # 返回包含 hidden_states 和 outputs[1:] 的元组
         return (hidden_states,) + outputs[1:]
+        # 返回包含最终输出和outputs中其他项的元组
 
 
-# 从 transformers.models.gpt_neo.modeling_flax_gpt_neo.FlaxGPTNeoPreTrainedModel 复制，更新为处理 Llama 模型的 FlaxLlamaPreTrainedModel 类
+# Copied from transformers.models.gpt_neo.modeling_flax_gpt_neo.FlaxGPTNeoPreTrainedModel with GPTNeo->Llama, GPT_NEO->LLAMA, transformer->model
 class FlaxLlamaPreTrainedModel(FlaxPreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
 
-    # 设置 config_class 为 LlamaConfig，base_model_prefix 为 "model"，module_class 为 nn.Module 类的实例
     config_class = LlamaConfig
+    # 指定配置类为LlamaConfig
     base_model_prefix = "model"
+    # 指定基础模型前缀为"model"
     module_class: nn.Module = None
-    # 初始化函数，设置模型的配置、输入形状、种子、数据类型等参数，并调用模块类的初始化函数
+    # 指定模块类为nn.Module，初始值为None
     def __init__(
         self,
         config: LlamaConfig,
@@ -466,26 +432,28 @@ class FlaxLlamaPreTrainedModel(FlaxPreTrainedModel):
         _do_init: bool = True,
         **kwargs,
     ):
-        # 根据配置和数据类型初始化模块对象
+        # 使用给定的配置和参数初始化模块对象
         module = self.module_class(config=config, dtype=dtype, **kwargs)
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法，传入配置、模块对象以及其他参数
         super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
 
-    # 初始化权重函数，用于生成模型的随机参数
     def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
         # 初始化输入张量
         input_ids = jnp.zeros(input_shape, dtype="i4")
+        # 创建与 input_ids 相同形状的全 1 张量作为 attention_mask
         attention_mask = jnp.ones_like(input_ids)
+        # 根据 input_ids 的维度生成位置编码
         position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_shape)
-        # 分割随机数种子
+        # 利用输入的随机种子分割出两个随机数生成器
         params_rng, dropout_rng = jax.random.split(rng)
+        # 将随机数生成器存入字典
         rngs = {"params": params_rng, "dropout": dropout_rng}
 
-        # 初始化模块参数
+        # 利用模块的初始化方法初始化参数
         random_params = self.module.init(rngs, input_ids, attention_mask, position_ids, return_dict=False)["params"]
 
+        # 如果提供了额外的参数，则将随机初始化的参数与提供的参数进行合并
         if params is not None:
-            # 将随机参数和传入参数展开为字典，并对缺失的键进行处理
             random_params = flatten_dict(unfreeze(random_params))
             params = flatten_dict(unfreeze(params))
             for missing_key in self._missing_keys:
@@ -495,27 +463,27 @@ class FlaxLlamaPreTrainedModel(FlaxPreTrainedModel):
         else:
             return random_params
 
-    # 初始化缓存函数，用于生成自回归解码器的缓存
     def init_cache(self, batch_size, max_length):
         r"""
         Args:
             batch_size (`int`):
-                用于快速自回归解码的批次大小。定义了初始化缓存的批次大小。
+                fast auto-regressive decoding 使用的批大小。定义初始化缓存的批大小。
             max_length (`int`):
-                自回归解码的最大可能长度。定义了初始化缓存的序列长度。
+                auto-regressive decoding 的最大可能长度。定义初始化缓存的序列长度。
         """
-        # 初始化用于检索缓存的输入变量
+        # 初始化输入变量以检索缓存
         input_ids = jnp.ones((batch_size, max_length))
+        # 创建与 input_ids 相同形状的全 1 张量作为 attention_mask
         attention_mask = jnp.ones_like(input_ids)
+        # 根据 input_ids 的形状生成位置编码
         position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
 
-        # 初始化变量，并返回解冻的缓存
+        # 利用模块的初始化方法初始化变量，并指定初始化缓存
         init_variables = self.module.init(
             jax.random.PRNGKey(0), input_ids, attention_mask, position_ids, return_dict=False, init_cache=True
         )
         return unfreeze(init_variables["cache"])
 
-    # 调用函数，用于完成前向传播
     @add_start_docstrings_to_model_forward(LLAMA_INPUTS_DOCSTRING)
     def __call__(
         self,
@@ -529,87 +497,91 @@ class FlaxLlamaPreTrainedModel(FlaxPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 检查是否需要输出注意力权重
-    output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-    # 检查是否需要输出隐藏状态
-    output_hidden_states = output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-    # 检查是否需要返回字典形式的输出
-    return_dict = return_dict if return_dict is not None else self.config.return_dict
-    
-    # 获取输入的batch_size和sequence_length
-    batch_size, sequence_length = input_ids.shape
-    
-    # 如果未提供position_ids，则使用默认值，即序列的位置范围
-    if position_ids is None:
-        # 如果已传入past_key_values，则抛出异常
-        if past_key_values is not None:
-            raise ValueError("Make sure to provide `position_ids` when passing `past_key_values`.")
-        # 使用默认的位置id：0到sequence_length-1
-        position_ids = jnp.broadcast_to(jnp.arange(sequence_length)[None, :], (batch_size, sequence_length))
-    
-    # 如果未提供attention_mask，则创建一个全为1的矩阵
-    if attention_mask is None:
-        attention_mask = jnp.ones((batch_size, sequence_length))
-    
-    # 处理丢弃随机数生成器（PRNG）（如果需要）
-    rngs = {}
-    if dropout_rng is not None:
-        rngs["dropout"] = dropout_rng
-    
-    # 将参数封装为字典形式的输入
-    inputs = {"params": params or self.params}
-    
-    # 如果已传入past_key_values，则将其作为cache传递给模型
-    if past_key_values:
-        inputs["cache"] = past_key_values
-        # 将cache标记为可修改
-        mutable = ["cache"]
-    else:
-        mutable = False
-    
-    # 调用模型的apply方法进行前向计算
-    outputs = self.module.apply(
-        inputs,
-        jnp.array(input_ids, dtype="i4"),  # 输入的token ids编码
-        jnp.array(attention_mask, dtype="i4"),  # 注意力掩码
-        jnp.array(position_ids, dtype="i4"),  # 位置编码
-        not train,  # 是否为训练模式
-        False,
-        output_attentions,  # 是否输出注意力权重
-        output_hidden_states,  # 是否输出隐藏状态
-        return_dict,  # 是否返回字典形式的输出
-        rngs=rngs,  # 随机数生成器
-        mutable=mutable,  # 可修改的输入
-    )
-    
-    # 如果已传入past_key_values并且需要返回字典形式的输出，则将更新后的cache添加到模型输出中
-    if past_key_values is not None and return_dict:
-        outputs, past_key_values = outputs
-        outputs["past_key_values"] = unfreeze(past_key_values["cache"])
+    ):
+        # 省略了 __call__ 方法的注释，因为该方法通过装饰器 @add_start_docstrings_to_model_forward 添加了文档字符串
+        ):
+        # 如果没有显式提供输出注意力的设置，则使用配置中的默认值
+        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+        # 如果没有显式提供输出隐藏状态的设置，则使用配置中的默认值
+        output_hidden_states = (
+            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+        )
+        # 如果没有显式提供返回字典的设置，则使用配置中的默认值
+        return_dict = return_dict if return_dict is not None else self.config.return_dict
+
+        # 获取输入张量的批量大小和序列长度
+        batch_size, sequence_length = input_ids.shape
+
+        # 如果未提供位置编码，则根据序列长度创建默认位置编码
+        if position_ids is None:
+            # 如果传入了过去的键值（past_key_values），则需要明确提供位置编码，否则抛出异常
+            if past_key_values is not None:
+                raise ValueError("Make sure to provide `position_ids` when passing `past_key_values`.")
+            
+            # 使用广播操作将序列长度范围内的数组扩展为指定批次大小的位置编码张量
+            position_ids = jnp.broadcast_to(jnp.arange(sequence_length)[None, :], (batch_size, sequence_length))
+
+        # 如果未提供注意力遮罩，则创建全1的注意力遮罩张量
+        if attention_mask is None:
+            attention_mask = jnp.ones((batch_size, sequence_length))
+
+        # 处理任何需要的伪随机数生成器
+        rngs = {}
+        if dropout_rng is not None:
+            rngs["dropout"] = dropout_rng
+
+        # 准备输入参数字典，包括模型参数或者传入的参数
+        inputs = {"params": params or self.params}
+
+        # 如果传入了过去的键值（past_key_values），则将其作为缓存传递给模型，确保缓存是可变的以便后续更新
+        if past_key_values:
+            inputs["cache"] = past_key_values
+            mutable = ["cache"]
+        else:
+            mutable = False
+
+        # 应用模型的正向传播，传递所有必要的输入张量和设置
+        outputs = self.module.apply(
+            inputs,
+            jnp.array(input_ids, dtype="i4"),
+            jnp.array(attention_mask, dtype="i4"),
+            jnp.array(position_ids, dtype="i4"),
+            not train,
+            False,
+            output_attentions,
+            output_hidden_states,
+            return_dict,
+            rngs=rngs,
+            mutable=mutable,
+        )
+
+        # 如果传入了过去的键值（past_key_values）并且需要返回字典，则将更新后的缓存添加到模型输出中
+        if past_key_values is not None and return_dict:
+            outputs, past_key_values = outputs
+            outputs["past_key_values"] = unfreeze(past_key_values["cache"])
+            return outputs
+        # 如果传入了过去的键值（past_key_values）但不需要返回字典，则将更新后的缓存添加到模型输出元组中
+        elif past_key_values is not None and not return_dict:
+            outputs, past_key_values = outputs
+            outputs = outputs[:1] + (unfreeze(past_key_values["cache"]),) + outputs[1:]
+
+        # 返回模型的输出结果
         return outputs
-    # 如果已传入past_key_values但不需要返回字典形式的输出，则将更新后的cache添加到模型输出的合适位置
-    elif past_key_values is not None and not return_dict:
-        outputs, past_key_values = outputs
-        outputs = outputs[:1] + (unfreeze(past_key_values["cache"]),) + outputs[1:]
-    
-    # 返回模型输出
-    return outputs
-# 定义一个名为FlaxLlamaLayerCollection的类，继承自nn.Module
 class FlaxLlamaLayerCollection(nn.Module):
-    # 指定配置参数config为LlamaConfig类型
+    # LlamaConfig 类型的配置信息
     config: LlamaConfig
-    # 指定数据类型dtype为jnp.float32，默认为jnp.float32
+    # 默认数据类型为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化函数，用于设置层次结构
+    # 初始化方法
     def setup(self):
-        # 创建一个由多个FlaxLlamaDecoderLayer对象组成的列表，列表长度为config中指定的num_hidden_layers
+        # 创建一系列 FlaxLlamaDecoderLayer 对象并存储在 self.blocks 中
         self.blocks = [
             FlaxLlamaDecoderLayer(self.config, dtype=self.dtype, name=str(i))
             for i in range(self.config.num_hidden_layers)
         ]
 
-    # 定义调用该类实例时的行为
+    # 调用实例时执行的方法
     def __call__(
         self,
         hidden_states,
@@ -621,17 +593,17 @@ class FlaxLlamaLayerCollection(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = False,
     ):
-        # 如果需要输出注意力值，则初始化一个空元组，用于存储所有注意力值，默认为None
+        # 如果输出注意力矩阵，则初始化空的元组 all_attentions
         all_attentions = () if output_attentions else None
-        # 如果需要输出隐藏状态，则初始化一个空元组，用于存储所有隐藏状态，默认为None
+        # 如果输出隐藏状态，则初始化空的元组 all_hidden_states
         all_hidden_states = () if output_hidden_states else None
 
-        # 遍历self.blocks列表中的每个FlaxLlamaDecoderLayer对象
+        # 遍历 self.blocks 中的每个 FlaxLlamaDecoderLayer 对象
         for block in self.blocks:
-            # 如果需要输出隐藏状态，则将当前隐藏状态加入到all_hidden_states元组中
+            # 如果输出隐藏状态，则将当前隐藏状态 hidden_states 添加到 all_hidden_states 中
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
-            # 调用当前FlaxLlamaDecoderLayer对象的__call__方法，计算当前层的输出
+            # 调用 block 对象，计算层的输出结果 layer_outputs
             layer_outputs = block(
                 hidden_states,
                 attention_mask=attention_mask,
@@ -640,47 +612,44 @@ class FlaxLlamaLayerCollection(nn.Module):
                 init_cache=init_cache,
                 output_attentions=output_attentions,
             )
-            # 更新隐藏状态为当前层的输出的第一个元素
+            # 更新 hidden_states 为当前层的输出结果中的第一个元素
             hidden_states = layer_outputs[0]
 
-            # 如果需要输出注意力值，则将当前层的注意力值加入到all_attentions元组中
+            # 如果输出注意力矩阵，则将当前层的注意力矩阵添加到 all_attentions 中
             if output_attentions:
                 all_attentions += (layer_outputs[1],)
 
-        # outputs包含可能为None的值 - `FlaxLlamaModule`将过滤掉这些值
-        # 将最终的输出结果组成一个元组，包括最终的隐藏状态、所有隐藏状态和所有注意力值
+        # 输出结果包括 hidden_states, all_hidden_states, all_attentions
+        # 注意：all_hidden_states 和 all_attentions 可能包含 None 值，由 FlaxLlamaModule 进行过滤处理
         outputs = (hidden_states, all_hidden_states, all_attentions)
 
-        # 返回输出结果元组
         return outputs
 
 
-# 定义一个名为FlaxLlamaModule的类，继承自nn.Module
 class FlaxLlamaModule(nn.Module):
-    # 指定配置参数config为LlamaConfig类型
+    # LlamaConfig 类型的配置信息
     config: LlamaConfig
-    # 指定数据类型dtype为jnp.float32，默认为jnp.float32
+    # 默认数据类型为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化函数，用于设置层次结构
+    # 初始化方法
     def setup(self):
-        # 设置隐藏大小为config中指定的hidden_size
+        # 设置隐藏大小为 config 中的隐藏大小
         self.hidden_size = self.config.hidden_size
-        # 初始化嵌入层的参数，使用正态分布初始化，标准差为config中指定的initializer_range
+        # 使用正态分布初始化 embed_tokens 层，存储在 self.embed_tokens 中
         embedding_init = jax.nn.initializers.normal(stddev=self.config.initializer_range)
-        # 创建嵌入层，用于将输入token转换为隐藏状态向量
         self.embed_tokens = nn.Embed(
             self.config.vocab_size,
             self.hidden_size,
             embedding_init=embedding_init,
             dtype=self.dtype,
         )
-        # 创建FlaxLlamaLayerCollection对象，用于堆叠多个FlaxLlamaDecoderLayer对象
+        # 创建 FlaxLlamaLayerCollection 对象并存储在 self.layers 中
         self.layers = FlaxLlamaLayerCollection(self.config, dtype=self.dtype)
-        # 创建FlaxLlamaRMSNorm对象，用于归一化输入数据
+        # 创建 FlaxLlamaRMSNorm 对象并存储在 self.norm 中
         self.norm = FlaxLlamaRMSNorm(self.config, dtype=self.dtype)
 
-    # 定义调用该类实例时的行为
+    # 调用实例时执行的方法
     def __call__(
         self,
         input_ids,
@@ -691,64 +660,57 @@ class FlaxLlamaModule(nn.Module):
         output_attentions: bool = False,
         output_hidden_states: bool = False,
         return_dict: bool = True,
-    # 根据输入的参数进行模型推理
-    def __call__(
-        self,
-        input_ids: jnp.ndarray,
-        position_ids: Optional[jnp.ndarray] = None,
-        attention_mask: Optional[jnp.ndarray] = None,
-        deterministic: bool = True,
-        init_cache: Optional[Dict[str, Optional[jnp.ndarray]]] = None,
-        output_attentions: bool = False,
-        output_hidden_states: bool = False,
-        return_dict: bool = True,
     ):
-        # 将输入的词向量嵌入为嵌入向量
-        input_embeds = self.embed_tokens(input_ids.astype("i4"))
+        # 省略部分代码，未提供完整内容
+    # 使用给定的输入 ID 创建输入的嵌入表示，数据类型转换为32位整数
+    input_embeds = self.embed_tokens(input_ids.astype("i4"))
     
-        # 使用嵌入向量进行模型的前向传播
-        outputs = self.layers(
-            input_embeds,
-            position_ids=position_ids,
-            attention_mask=attention_mask,
-            deterministic=deterministic,
-            init_cache=init_cache,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
+    # 将输入的嵌入表示传递给模型的层进行处理，并返回处理后的输出结果
+    outputs = self.layers(
+        input_embeds,
+        position_ids=position_ids,
+        attention_mask=attention_mask,
+        deterministic=deterministic,
+        init_cache=init_cache,
+        output_attentions=output_attentions,
+        output_hidden_states=output_hidden_states,
+        return_dict=return_dict,
+    )
     
-        # 获取模型前向传播结果中的隐藏状态，并进行归一化处理
-        hidden_states = outputs[0]
-        hidden_states = self.norm(hidden_states)
+    # 从模型输出中获取隐藏状态，索引为0的元素为模型的最后隐藏状态
+    hidden_states = outputs[0]
     
-        # 根据设置的参数判断是否需要返回所有隐藏状态
-        if output_hidden_states:
-            all_hidden_states = outputs[1] + (hidden_states,)
-            outputs = (hidden_states, all_hidden_states) + outputs[2:]
-        else:
-            outputs = (hidden_states,) + outputs[1:]
+    # 对隐藏状态进行归一化处理
+    hidden_states = self.norm(hidden_states)
     
-        # 根据设置的参数判断是否需要返回字典类型的结果
-        if not return_dict:
-            return tuple(v for v in outputs if v is not None)
+    # 如果需要输出所有隐藏状态，则将当前隐藏状态添加到所有隐藏状态列表中
+    if output_hidden_states:
+        all_hidden_states = outputs[1] + (hidden_states,)
+        outputs = (hidden_states, all_hidden_states) + outputs[2:]
+    else:
+        outputs = (hidden_states,) + outputs[1:]
     
-        # 返回模型输出结果的字典形式
-        return FlaxBaseModelOutput(
-            last_hidden_state=hidden_states,
-            hidden_states=outputs[1],
-            attentions=outputs[-1],
-        )
-# 为 FlaxLlamaModel 添加起始注释字符串和 Llama 模型的基础字符串
+    # 如果不需要以字典形式返回结果，则返回所有非空的输出值的元组
+    if not return_dict:
+        return tuple(v for v in outputs if v is not None)
+    
+    # 如果需要以字典形式返回结果，则使用 FlaxBaseModelOutput 类封装最后的隐藏状态、所有隐藏状态和注意力值
+    return FlaxBaseModelOutput(
+        last_hidden_state=hidden_states,
+        hidden_states=outputs[1],
+        attentions=outputs[-1],
+    )
+# 添加起始文档字符串和元数据到 FlaxLlamaModel 类，说明它是一个裸 Llama 模型变换器，输出原始隐藏状态，没有特定的顶部头部。
+# 使用 LLAMA_START_DOCSTRING 定义的起始文档字符串作为补充信息。
 @add_start_docstrings(
     "The bare Llama Model transformer outputting raw hidden-states without any specific head on top.",
     LLAMA_START_DOCSTRING,
 )
-# 定义 FlaxLlamaModel 类，继承自 FlaxLlamaPreTrainedModel，module_class 为 FlaxLlamaModule
 class FlaxLlamaModel(FlaxLlamaPreTrainedModel):
     module_class = FlaxLlamaModule
 
-# 向 FlaxLlamaModel 添加调用示例的文档字符串
+
+# 向 FlaxLlamaModel 类添加调用示例的文档字符串
 append_call_sample_docstring(
     FlaxLlamaModel,
     _CHECKPOINT_FOR_DOC,
@@ -757,14 +719,18 @@ append_call_sample_docstring(
     real_checkpoint=_REAL_CHECKPOINT_FOR_DOC,
 )
 
-# 定义 FlaxLlamaForCausalLMModule 类
+
+# 定义 FlaxLlamaForCausalLMModule 类，用于支持因果语言建模任务
 class FlaxLlamaForCausalLMModule(nn.Module):
+    # 模块配置参数
     config: LlamaConfig
+    # 数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 模块设置函数
     def setup(self):
+        # 使用给定的配置参数和数据类型创建 Llama 模型
         self.model = FlaxLlamaModule(self.config, dtype=self.dtype)
+        # 创建语言建模头部，一个全连接层，用于生成词汇表大小的输出
         self.lm_head = nn.Dense(
             self.config.vocab_size,
             use_bias=False,
@@ -772,7 +738,7 @@ class FlaxLlamaForCausalLMModule(nn.Module):
             kernel_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
         )
 
-    # 对象调用函数
+    # 定义模块的调用方法
     def __call__(
         self,
         input_ids,
@@ -784,6 +750,7 @@ class FlaxLlamaForCausalLMModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
+        # 调用 Llama 模型来处理输入序列
         outputs = self.model(
             input_ids,
             position_ids=position_ids,
@@ -795,73 +762,77 @@ class FlaxLlamaForCausalLMModule(nn.Module):
             return_dict=return_dict,
         )
 
+        # 获取模型的隐藏状态
         hidden_states = outputs[0]
+        # 使用语言建模头部生成最终的语言建模输出
         lm_logits = self.lm_head(hidden_states)
 
+        # 如果不要求返回字典格式的输出，则返回元组形式的输出
         if not return_dict:
             return (lm_logits,) + outputs[1:]
 
-        # 返回 FlaxCausalLMOutput 对象
+        # 返回格式化后的因果语言建模输出
         return FlaxCausalLMOutput(logits=lm_logits, hidden_states=outputs.hidden_states, attentions=outputs.attentions)
 
-# 为 FlaxLlamaForCausalLM 添加起始注释字符串和 Llama 模型的基础字符串
+
+# 向 FlaxLlamaForCausalLM 类添加起始文档字符串，说明它是带有语言建模头部的 Llama 模型变换器
 @add_start_docstrings(
     """
     The Llama Model transformer with a language modeling head (linear layer) on top.
     """,
     LLAMA_START_DOCSTRING,
 )
-# 定义 FlaxLlamaForCausalLM 类，继承自 FlaxLlamaPreTrainedModel，module_class 为 FlaxLlamaForCausalLMModule
+# 从 transformers.models.gptj.modeling_flax_gptj.FlaxGPTJForCausalLM 复制到 FlaxLlamaForCausalLM，
+# 并将其中的 GPTJ 替换为 Llama
 class FlaxLlamaForCausalLM(FlaxLlamaPreTrainedModel):
     module_class = FlaxLlamaForCausalLMModule
-    # 定义生成过程中输入准备函数，接受输入的token IDs、最大生成长度以及可选的注意力掩码
+    # 为生成准备输入数据的方法
     def prepare_inputs_for_generation(self, input_ids, max_length, attention_mask: Optional[jax.Array] = None):
-        # 初始化缓存，获取输入的批量大小和序列长度
+        # 初始化缓存
         batch_size, seq_length = input_ids.shape
-    
-        # 使用初始化函数初始化过去的键值对
+
+        # 使用模型的初始化方法创建缓存
         past_key_values = self.init_cache(batch_size, max_length)
-    
-        # 注意：通常需要将注意力掩码中大于输入序列长度和小于缓存长度的位置设为0。
-        # 但由于Llama使用因果掩码，这些位置已经被掩盖了。
-        # 因此，我们可以在这里创建一个静态的注意力掩码，这对于编译效率更高。
+
+        # 注意：通常需要在 attention_mask 中对超出 input_ids.shape[-1] 和 cache_length 之外的位置置为 0。
+        # 但由于 Llama 使用因果注意力机制，这些位置已经被掩码处理。
+        # 因此，在这里我们可以创建一个单一的静态 attention_mask，这样更高效地进行编译。
         extended_attention_mask = jnp.ones((batch_size, max_length), dtype="i4")
         
-        # 如果提供了注意力掩码，则根据累计位置计算位置 IDs
+        # 如果有传入 attention_mask，则根据它计算 position_ids
         if attention_mask is not None:
             position_ids = attention_mask.cumsum(axis=-1) - 1
-            # 使用动态更新切片方法将注意力掩码应用到扩展的注意力掩码中
             extended_attention_mask = lax.dynamic_update_slice(extended_attention_mask, attention_mask, (0, 0))
         else:
-            # 否则，生成位置 IDs 为 [0, 1, 2, ..., seq_length-1] 的数组，并广播到批量大小
+            # 否则，根据序列长度广播创建 position_ids
             position_ids = jnp.broadcast_to(jnp.arange(seq_length, dtype="i4")[None, :], (batch_size, seq_length))
-    
-        # 返回准备好的输入字典，包括过去的键值对、注意力掩码和位置 IDs
+
+        # 返回生成所需的输入数据字典
         return {
             "past_key_values": past_key_values,
             "attention_mask": extended_attention_mask,
             "position_ids": position_ids,
         }
-    
-    # 定义生成过程中输入更新函数，接受模型输出和模型参数字典
+
+    # 更新生成过程中的输入数据的方法
     def update_inputs_for_generation(self, model_outputs, model_kwargs):
-        # 更新模型参数字典中的过去键值对和位置 IDs
+        # 更新模型关键值缓存和 position_ids
         model_kwargs["past_key_values"] = model_outputs.past_key_values
         model_kwargs["position_ids"] = model_kwargs["position_ids"][:, -1:] + 1
         
-        # 返回更新后的模型参数字典
+        # 返回更新后的输入数据字典
         return model_kwargs
-# 向函数中添加调用样例的文档字符串
+# 将样本文档字符串附加到指定类中的方法上
 append_call_sample_docstring(
-    # 目标函数名
+    # 目标类：FlaxLlamaForCausalLM，用于添加文档字符串
     FlaxLlamaForCausalLM,
-    # 用于文档的检查点
+    # 用于文档的检查点对象的名称或引用：_CHECKPOINT_FOR_DOC
     _CHECKPOINT_FOR_DOC,
-    # 目标函数的输出类型
+    # 生成的文档字符串应描述的输出对象类型：FlaxCausalLMOutput
     FlaxCausalLMOutput,
-    # 用于文档的配置
+    # 用于文档的配置对象的名称或引用：_CONFIG_FOR_DOC
     _CONFIG_FOR_DOC,
-    # 真实检查点的路径，用于文档
+    # 实际使用的检查点对象的名称或引用：_REAL_CHECKPOINT_FOR_DOC
     real_checkpoint=_REAL_CHECKPOINT_FOR_DOC,
 )
 ```

@@ -1,16 +1,31 @@
-# `.\transformers\models\align\__init__.py`
+# `.\models\align\__init__.py`
 
-```py
-# 引入必要的模块和函数
+```
+# 版权声明和版权信息
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 引入类型检查模块
 from typing import TYPE_CHECKING
-# 引入自定义异常和模块延迟加载工具
+
+# 从utils中导入必要的异常和模块
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
 
-# 定义需要延迟加载的模块和函数的结构
+# 定义模块的导入结构
 _import_structure = {
     "configuration_align": [
         "ALIGN_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -21,14 +36,14 @@ _import_structure = {
     "processing_align": ["AlignProcessor"],
 }
 
-# 尝试导入 torch 模块，如果不可用则引发自定义异常
+# 检查是否Torch可用，如果不可用则引发OptionalDependencyNotAvailable异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 torch 可用，则添加相关模型结构到导入结构中
+    # 如果Torch可用，则添加以下模型相关的导入结构
     _import_structure["modeling_align"] = [
         "ALIGN_PRETRAINED_MODEL_ARCHIVE_LIST",
         "AlignModel",
@@ -37,26 +52,22 @@ else:
         "AlignVisionModel",
     ]
 
-# 如果类型检查开启
+# 如果是类型检查阶段，导入特定的配置和模型类
 if TYPE_CHECKING:
-    # 从配置模块中导入相关内容
     from .configuration_align import (
         ALIGN_PRETRAINED_CONFIG_ARCHIVE_MAP,
         AlignConfig,
         AlignTextConfig,
         AlignVisionConfig,
     )
-    # 从处理模块中导入相关内容
     from .processing_align import AlignProcessor
 
-    # 尝试导入 torch 模块，如果不可用则引发自定义异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 torch 可用，则从建模模块中导入相关内容
         from .modeling_align import (
             ALIGN_PRETRAINED_MODEL_ARCHIVE_LIST,
             AlignModel,
@@ -65,10 +76,10 @@ if TYPE_CHECKING:
             AlignVisionModel,
         )
 
-# 如果不是类型检查阶段，则进行模块延迟加载
+# 如果不是类型检查阶段，则进行Lazy导入的设置
 else:
-    # 导入系统模块
     import sys
-    # 将当前模块替换为 LazyModule 实例，实现延迟加载
+
+    # 将当前模块替换为LazyModule，使用Lazy加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

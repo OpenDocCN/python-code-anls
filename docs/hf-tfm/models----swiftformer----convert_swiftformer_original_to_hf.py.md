@@ -1,51 +1,73 @@
-# `.\transformers\models\swiftformer\convert_swiftformer_original_to_hf.py`
+# `.\models\swiftformer\convert_swiftformer_original_to_hf.py`
 
-```py
-# 设置脚本文件编码格式为 UTF-8
-# 版权声明及使用许可说明
-# 通过结合执行原始代码以及遵守许可协议规定使用该文件。
-# 在需要的情况下，可以获取许可协议的副本
+```
+# coding=utf-8
+# 定义脚本的编码格式为 UTF-8
 
-# 引入必要的模块和库
-import argparse  # 用于解析命令行参数
-import json  # 用于 JSON 数据的编码和解码
-from pathlib import Path  # 提供了用于处理文件和目录的类
-import requests  # 用于发送 HTTP 请求
-import torch  # 用于 PyTorch 相关操作
-from huggingface_hub import hf_hub_download  # 从 Hugging Face 模型存储库下载模型
-from PIL import Image  # Python 图像库，用于打开，操作和显示图像
+# Copyright 2023 The HuggingFace Inc. team.
+# 版权声明，版权归 HuggingFace Inc. 团队所有
 
-# 引入 Hugging Face 提供的相关模块
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache 许可证版本 2.0 进行许可
+
+# you may not use this file except in compliance with the License.
+# 除非遵守许可证的规定，否则不得使用此文件。
+
+# You may obtain a copy of the License at
+# 您可以在以下网址获取许可证的副本
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”提供的。
+
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 没有明示或暗示的任何保证或条件。
+
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 请参阅许可证，了解特定语言的权限和限制。
+
+"""Convert SwiftFormer checkpoints from the original implementation."""
+
+import argparse
+import json
+from pathlib import Path
+
+import requests
+import torch
+from huggingface_hub import hf_hub_download
+from PIL import Image
+
 from transformers import (
-    SwiftFormerConfig,  # SwiftFormer 模型的配置
-    SwiftFormerForImageClassification,  # 用于图像分类任务的 SwiftFormer 模型
-    ViTImageProcessor,  # Vision Transformer 图像处理器
+    SwiftFormerConfig,
+    SwiftFormerForImageClassification,
+    ViTImageProcessor,
 )
-
-# 引入日志记录模块
 from transformers.utils import logging
 
-# 设置日志信息输出级别为 info
 logging.set_verbosity_info()
-# 获取日志记录对象
+# 设置日志记录的详细程度为信息级别
+
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器
 
-# 设备设置为 CPU
 device = torch.device("cpu")
+# 设置设备为 CPU
 
-
-# 准备需要用到的图像
+# We will verify our results on an image of cute cats
+# 我们将在一张可爱猫咪的图片上验证我们的结果
 def prepare_img():
-    # 通过 URL 打开图像
     url = "http://images.cocodataset.org/val2017/000000039769.jpg"
-    # 从 URL 获取图像数据
+    # 定义图像的 URL
     im = Image.open(requests.get(url, stream=True).raw)
+    # 从 URL 获取图像，并打开为 PIL 图像对象
     return im
 
-
-# 获取期望的输出结果
 def get_expected_output(swiftformer_name):
-    # 根据 SwiftFormer 模型的不同名称获取对应的期望输出
+    # 根据 SwiftFormer 模型名称返回预期的输出
     if swiftformer_name == "swiftformer_xs":
         return torch.tensor([-2.1703e00, 2.1107e00, -2.0811e00, 8.8685e-01, 2.4360e-01])
 
@@ -58,15 +80,13 @@ def get_expected_output(swiftformer_name):
     elif swiftformer_name == "swiftformer_l3":
         return torch.tensor([-2.5330e-01, 2.4211e-01, -6.0185e-01, -8.2789e-01, -6.0446e-02])
 
-
-# 重命名字典中的键值对
 def rename_key(dct, old, new):
+    # 将字典 dct 中的键 old 重命名为 new
     val = dct.pop(old)
     dct[new] = val
 
-
-# 创建要重命名的键值对列表
 def create_rename_keys(state_dict):
+    # 根据模型的 state_dict 创建重命名映射表
     rename_keys = []
     for k in state_dict.keys():
         k_new = k
@@ -87,27 +107,37 @@ def create_rename_keys(state_dict):
         rename_keys.append((k, k_new))
     return rename_keys
 
-
-# 转换 SwiftFormer 模型检查点
 @torch.no_grad()
+# 使用 torch.no_grad() 修饰，表明下方的函数不需要进行梯度计算
+
 def convert_swiftformer_checkpoint(swiftformer_name, pytorch_dump_folder_path, original_ckpt):
-    """ 转换 SwiftFormer 模型的检查点
+    """
+    根据指定的 SwiftFormer 模型名称，转换原始的检查点文件到 PyTorch 格式。
+
+    Args:
+        swiftformer_name (str): SwiftFormer 模型名称
+        pytorch_dump_folder_path (str): 转换后的 PyTorch 检查点保存路径
+        original_ckpt (str): 原始的 SwiftFormer 检查点文件路径
+    """
     Copy/paste/tweak model's weights to our SwiftFormer structure.
     """
 
-    # 定义默认的 SwiftFormer 配置
+    # 定义默认的 SwiftFormer 配置对象
     config = SwiftFormerConfig()
 
-    # 数据集（仅使用 ImageNet-21k 还是在 ImageNet 2012 上微调），patch_size 和 image_size
+    # 设置模型的类别数为 1000
     config.num_labels = 1000
+    # 定义 Hugging Face Hub 中的资源库 ID 和文件名
     repo_id = "huggingface/label-files"
     filename = "imagenet-1k-id2label.json"
+    # 从 Hugging Face Hub 下载并加载类别映射文件，转换为整数映射到标签名的字典
     id2label = json.load(open(hf_hub_download(repo_id, filename, repo_type="dataset"), "r"))
     id2label = {int(k): v for k, v in id2label.items()}
     config.id2label = id2label
+    # 根据 id2label 字典生成 label 到 id 的反向映射字典
     config.label2id = {v: k for k, v in id2label.items()}
 
-    # 架构的大小
+    # 根据不同的 SwiftFormer 模型名配置模型的深度和嵌入维度
     if swiftformer_name == "swiftformer_xs":
         config.depths = [3, 3, 6, 4]
         config.embed_dims = [48, 56, 112, 220]
@@ -124,42 +154,49 @@ def convert_swiftformer_checkpoint(swiftformer_name, pytorch_dump_folder_path, o
         config.depths = [4, 4, 12, 6]
         config.embed_dims = [64, 128, 320, 512]
 
-    # 加载原始模型的 state_dict，删除和重命名一些键
+    # 如果提供了原始模型的检查点路径，则加载其状态字典并进行重命名处理
     if original_ckpt:
         if original_ckpt.startswith("https"):
+            # 从 URL 加载模型状态字典
             checkpoint = torch.hub.load_state_dict_from_url(original_ckpt, map_location="cpu", check_hash=True)
         else:
+            # 从本地文件加载模型状态字典
             checkpoint = torch.load(original_ckpt, map_location="cpu")
     state_dict = checkpoint
 
+    # 根据预定义规则，创建重命名映射关系并对状态字典进行重命名
     rename_keys = create_rename_keys(state_dict)
     for rename_key_src, rename_key_dest in rename_keys:
         rename_key(state_dict, rename_key_src, rename_key_dest)
 
-    # 加载 HuggingFace 模型
+    # 加载 SwiftFormer 模型并载入处理后的状态字典
     hf_model = SwiftFormerForImageClassification(config).eval()
     hf_model.load_state_dict(state_dict)
 
-    # 准备测试输入
+    # 准备测试输入图像和预处理器
     image = prepare_img()
     processor = ViTImageProcessor.from_pretrained("preprocessor_config")
     inputs = processor(images=image, return_tensors="pt")
 
-    # 比较两个模型的输出
+    # 获取预期输出结果，用于与 HuggingFace 模型输出进行比较
     timm_logits = get_expected_output(swiftformer_name)
     hf_logits = hf_model(inputs["pixel_values"]).logits
 
+    # 断言检查 HuggingFace 模型输出的形状和预期的一致性
     assert hf_logits.shape == torch.Size([1, 1000])
     assert torch.allclose(hf_logits[0, 0:5], timm_logits, atol=1e-3)
 
+    # 确保 PyTorch 导出文件夹存在，保存 SwiftFormer 模型
     Path(pytorch_dump_folder_path).mkdir(exist_ok=True)
     print(f"Saving model {swiftformer_name} to {pytorch_dump_folder_path}")
     hf_model.save_pretrained(pytorch_dump_folder_path)
-# 如果当前脚本被直接执行，则执行以下操作
 if __name__ == "__main__":
-    # 创建 ArgumentParser 对象，用于处理命令行参数
+    # 如果当前脚本作为主程序运行
+
     parser = argparse.ArgumentParser()
-    # 添加必需参数
+    # 创建一个参数解析器对象
+
+    # Required parameters
     parser.add_argument(
         "--swiftformer_name",
         default="swiftformer_xs",
@@ -167,16 +204,29 @@ if __name__ == "__main__":
         type=str,
         help="Name of the SwiftFormer model you'd like to convert.",
     )
+    # 添加一个必需的参数：SwiftFormer 模型的名称，可以选择默认为 "swiftformer_xs"
+    # 允许的取值为预定义的几种模型名称
+    # 参数类型为字符串，帮助信息描述了希望转换的 SwiftFormer 模型的名称
+
     parser.add_argument(
         "--pytorch_dump_folder_path",
         default="./converted_outputs/",
         type=str,
         help="Path to the output PyTorch model directory.",
     )
+    # 添加一个参数：输出 PyTorch 模型的目录路径，默认为当前目录下的 "converted_outputs/"
+    # 参数类型为字符串，描述了输出 PyTorch 模型的保存路径
+
     parser.add_argument("--original_ckpt", default=None, type=str, help="Path to the original model checkpoint.")
-    
-    # 解析命令行参数
+    # 添加一个参数：原始模型检查点的路径，默认为 None
+    # 参数类型为字符串，描述了原始模型检查点文件的路径
+
     args = parser.parse_args()
-    # 调用 convert_swiftformer_checkpoint 函数，传入解析后的参数进行 SwiftFormer 模型转换
+    # 解析命令行参数并存储到 args 对象中
+
     convert_swiftformer_checkpoint(args.swiftformer_name, args.pytorch_dump_folder_path, args.original_ckpt)
+    # 调用函数 convert_swiftformer_checkpoint，传递解析后的参数：
+    #   - SwiftFormer 模型名称
+    #   - 输出的 PyTorch 模型目录路径
+    #   - 原始模型检查点路径
 ```

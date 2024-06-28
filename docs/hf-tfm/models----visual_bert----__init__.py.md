@@ -1,32 +1,38 @@
-# `.\transformers\models\visual_bert\__init__.py`
+# `.\models\visual_bert\__init__.py`
 
-```py
+```
 # 版权声明和许可证信息
-# 版权声明，保留所有权利
-# 根据 Apache 许可证版本 2.0 授权
-# 除非符合许可证的规定，否则不得使用此文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则按"原样"分发软件
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的具体语言
+# Copyright 2021 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入必要的模块和函数
+# 导入必要的类型检查模块
 from typing import TYPE_CHECKING
-# 导入自定义的异常类
+
+# 导入自定义的异常和模块延迟加载函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 定义模块的导入结构
+# 定义导入结构字典，包含导入的模块和变量列表
 _import_structure = {"configuration_visual_bert": ["VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "VisualBertConfig"]}
 
-# 检查是否存在 torch 库，如果不存在则抛出自定义异常
+# 尝试检查是否可用 Torch 库，若不可用则引发自定义异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果存在 torch 库，则添加以下模块到导入结构中
+    # 如果 Torch 可用，则添加模型相关的导入结构
     _import_structure["modeling_visual_bert"] = [
         "VISUAL_BERT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "VisualBertForMultipleChoice",
@@ -41,17 +47,17 @@ else:
 
 # 如果是类型检查模式
 if TYPE_CHECKING:
-    # 导入配置相关的模块和类
+    # 导入配置相关的类和变量
     from .configuration_visual_bert import VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP, VisualBertConfig
 
-    # 检查是否存在 torch 库，如果不存在则抛出自定义异常
+    # 尝试检查是否可用 Torch 库，若不可用则忽略
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入模型相关的模块和类
+        # 导入模型相关的类和变量
         from .modeling_visual_bert import (
             VISUAL_BERT_PRETRAINED_MODEL_ARCHIVE_LIST,
             VisualBertForMultipleChoice,
@@ -64,10 +70,10 @@ if TYPE_CHECKING:
             VisualBertPreTrainedModel,
         )
 
-# 如果不是类型检查模式
+# 如果不是类型检查模式，则配置 LazyModule 并添加到当前模块中
 else:
     import sys
 
-    # 将当前模块设置为懒加载模块
+    # 使用 LazyModule 来延迟加载模块的定义
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

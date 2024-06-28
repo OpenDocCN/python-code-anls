@@ -1,62 +1,90 @@
-# `.\transformers\models\mgp_str\tokenization_mgp_str.py`
+# `.\models\mgp_str\tokenization_mgp_str.py`
 
-```py
-# 导入所需的模块和依赖
-import json
-import os
-from typing import Optional, Tuple
+```
+# coding=utf-8
+# Copyright 2023 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Tokenization classes for MGT-STR CHAR.
+"""
 
-from ...tokenization_utils import PreTrainedTokenizer
-from ...utils import logging
+import json  # 导入json模块，用于处理JSON格式的数据
+import os    # 导入os模块，提供了与操作系统交互的功能
+from typing import Optional, Tuple   # 导入类型提示相关的模块
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+from ...tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器的基类
+from ...utils import logging   # 导入日志记录模块
 
-# 定义 vocab 文件的名称
-VOCAB_FILES_NAMES = {"vocab_file": "vocab.json"}
+logger = logging.get_logger(__name__)   # 获取当前模块的日志记录器对象
 
-# 定义预训练的 vocab 文件的映射
+VOCAB_FILES_NAMES = {"vocab_file": "vocab.json"}   # 定义词汇表文件名映射字典
+
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "mgp-str": "https://huggingface.co/alibaba-damo/mgp-str-base/blob/main/vocab.json",
     }
-}
+}   # 预训练词汇文件映射，指定了不同预训练模型的词汇文件路径
 
-# 定义预训练的 positional embeddings 大小
-PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {"mgp-str": 27}
+PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {"mgp-str": 27}   # 预训练位置嵌入的尺寸映射
 
-# 定义 MgpstrTokenizer 类
 class MgpstrTokenizer(PreTrainedTokenizer):
     """
-    构建 MGP-STR char tokenizer。
+    Construct a MGP-STR char tokenizer.
 
-    此 tokenizer 继承自 `PreTrainedTokenizer`，包含大多数主要方法。用户应该参考此超类以了解更多相关信息。
+    This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
+    this superclass for more information regarding those methods.
 
-    参数:
+    Args:
         vocab_file (`str`):
-            词汇表文件的路径。
-        unk_token (`str`, *optional*, 默认为 `"[GO]"`):
-            未知标记。不在词汇表中的标记将被设置为此标记。
-        bos_token (`str`, *optional*, 默认为 `"[GO]"`):
-            句子开始标记。
-        eos_token (`str`, *optional*, 默认为 `"[s]"`):
-            句子结束标记。
-        pad_token (`str` or `tokenizers.AddedToken`, *optional*, 默认为 `"[GO]"`):
-            用于填充使数组大小相同以进行批处理的特殊标记。将被注意力机制或损失计算忽略。
+            Path to the vocabulary file.
+        unk_token (`str`, *optional*, defaults to `"[GO]"`):
+            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
+            token instead.
+        bos_token (`str`, *optional*, defaults to `"[GO]"`):
+            The beginning of sequence token.
+        eos_token (`str`, *optional*, defaults to `"[s]"`):
+            The end of sequence token.
+        pad_token (`str` or `tokenizers.AddedToken`, *optional*, defaults to `"[GO]"`):
+            A special token used to make arrays of tokens the same size for batching purpose. Will then be ignored by
+            attention mechanisms or loss computation.
     """
 
-    # 定义 vocab 文件名称、预训练的 vocab 文件映射和最大模型输入大小
-    vocab_files_names = VOCAB_FILES_NAMES
-    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    vocab_files_names = VOCAB_FILES_NAMES   # 设置词汇文件名映射
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP   # 设置预训练词汇文件映射
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES   # 设置预训练位置嵌入的尺寸
 
     def __init__(self, vocab_file, unk_token="[GO]", bos_token="[GO]", eos_token="[s]", pad_token="[GO]", **kwargs):
-        # 从 vocab 文件中读取词汇表
+        """
+        Initialize a tokenizer instance.
+
+        Args:
+            vocab_file (`str`):
+                Path to the vocabulary file.
+            unk_token (`str`, *optional*, defaults to `"[GO]"`):
+                The unknown token.
+            bos_token (`str`, *optional*, defaults to `"[GO]"`):
+                The beginning of sequence token.
+            eos_token (`str`, *optional*, defaults to `"[s]"`):
+                The end of sequence token.
+            pad_token (`str` or `tokenizers.AddedToken`, *optional*, defaults to `"[GO]"`):
+                The padding token used in batching.
+            **kwargs:
+                Additional keyword arguments passed to the parent class constructor.
+        """
         with open(vocab_file, encoding="utf-8") as vocab_handle:
-            self.vocab = json.load(vocab_handle)
-        # 构建反向词汇表（ID 到字符的映射）
-        self.decoder = {v: k for k, v in self.vocab.items()}
-        # 初始化父类的构造函数
+            self.vocab = json.load(vocab_handle)   # 从指定路径加载词汇表文件，并转换为字典形式
+        self.decoder = {v: k for k, v in self.vocab.items()}   # 创建反向词汇表，用于将ID转换为对应的词汇
         super().__init__(
             unk_token=unk_token,
             bos_token=bos_token,
@@ -65,51 +93,55 @@ class MgpstrTokenizer(PreTrainedTokenizer):
             **kwargs,
         )
 
-    # 获取词汇表大小
     @property
     def vocab_size(self):
-        return len(self.vocab)
+        """
+        Return the size of the vocabulary.
 
-    # 获取完整的词汇表，包括添加的标记
+        Returns:
+            int: Number of tokens in the vocabulary.
+        """
+        return len(self.vocab)   # 返回词汇表中词汇的数量
+
     def get_vocab(self):
+        """
+        Get the vocabulary (including any additional tokens).
+
+        Returns:
+            dict: A dictionary containing the vocabulary tokens and their IDs.
+        """
         vocab = dict(self.vocab).copy()
         vocab.update(self.added_tokens_encoder)
-        return vocab
+        return vocab   # 返回包含额外token的完整词汇表字典
+    # 将文本字符串进行分词处理，返回字符级别的标记列表
     def _tokenize(self, text):
-        """Tokenize a string."""
-        # 初始化一个空列表来存储字符级别的 token
-        char_tokens = []
-        # 遍历文本中的每个字符
+        char_tokens = []  # 初始化一个空列表，用于存储字符级别的标记
         for s in text:
-            # 将每个字符添加到 char_tokens 列表中
-            char_tokens.extend(s)
-        # 返回字符级别的 token 列表
-        return char_tokens
+            char_tokens.extend(s)  # 将每个字符作为一个标记加入到列表中
+        return char_tokens  # 返回字符级别的标记列表
 
+    # 根据词汇表将标记转换为对应的 ID
     def _convert_token_to_id(self, token):
-        """Converts a token (str) in an id using the vocab."""
-        # 将 token 转换为对应的 id，如果 token 不存在于 vocab 中，则使用 unk_token 对应的 id
-        return self.vocab.get(token, self.vocab.get(self.unk_token))
+        return self.vocab.get(token, self.vocab.get(self.unk_token))  # 返回标记对应的 ID，如果标记不存在则使用未知标记的 ID
 
+    # 根据词汇表将 ID 转换为对应的标记
     def _convert_id_to_token(self, index):
-        """Converts an index (integer) in a token (str) using the vocab."""
-        # 将 index 转换为对应的 token
-        return self.decoder.get(index)
+        return self.decoder.get(index)  # 返回给定 ID 对应的标记
 
+    # 将词汇表保存到指定的目录中
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 检查保存目录是否存在
-        if not os.path.isdir(save_directory):
-            # 如果保存目录不存在，记录错误信息并返回
+        if not os.path.isdir(save_directory):  # 检查保存目录是否存在，如果不存在则记录错误并返回
             logger.error("Vocabulary path ({}) should be a directory".format(save_directory))
-            return
-        # 构建保存词汇表的文件路径
+            return  # 返回空值，表示保存操作未成功
+
+        # 构建词汇表文件的路径，文件名根据可选的前缀和预定义的文件名组成
         vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-        # 将词汇表写入文件
+
+        # 将词汇表以 JSON 格式写入到文件中
         with open(vocab_file, "w", encoding="utf-8") as f:
-            # 将 vocab 字典以 JSON 格式写入文件，每行一个词汇项，缩进为2个空格，保证 Unicode 字符的正确编码
             f.write(json.dumps(self.vocab, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
-        # 返回保存的词汇表文件路径
-        return (vocab_file,)
+
+        return (vocab_file,)  # 返回保存的词汇表文件路径的元组
 ```

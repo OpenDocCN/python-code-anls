@@ -1,42 +1,54 @@
 # `.\models\deit\__init__.py`
 
-```py
-# 导入必要的包和模块
-from typing import TYPE_CHECKING  # 引入类型提示
+```
+# 版权声明和许可证声明
+# Copyright 2021 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-from ...utils import (  # 导入自定义的工具模块
-    OptionalDependencyNotAvailable,  # 引入可选依赖不可用异常
-    _LazyModule,  # 引入延迟加载模块
-    is_tf_available,  # 引入判断 TensorFlow 是否可用的函数
-    is_torch_available,  # 引入判断 PyTorch 是否可用的函数
-    is_vision_available,  # 引入判断 torchvision 是否可用的函数
+from typing import TYPE_CHECKING
+
+# 从 HuggingFace 内部的 utils 模块中导入所需的依赖和函数
+from ...utils import (
+    OptionalDependencyNotAvailable,
+    _LazyModule,
+    is_tf_available,
+    is_torch_available,
+    is_vision_available,
 )
 
+# 定义导入结构字典，包含需要导入的模块和类
+_import_structure = {"configuration_deit": ["DEIT_PRETRAINED_CONFIG_ARCHIVE_MAP", "DeiTConfig", "DeiTOnnxConfig"]}
 
-# 定义了一个字典，用于记录待导入的模块和其中的对象/变量
-_import_structure = {
-    "configuration_deit": ["DEIT_PRETRAINED_CONFIG_ARCHIVE_MAP", "DeiTConfig", "DeiTOnnxConfig"]  # 导入 configuration_deit 模块中的多个对象/变量
-}
-
-# 检查 torchvision 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
-# 如果可用，则将相关模块和对象/变量添加到 _import_structure 中
+# 检查视觉处理是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 若视觉处理可用，则添加特征提取和图像处理模块到导入结构中
     _import_structure["feature_extraction_deit"] = ["DeiTFeatureExtractor"]
     _import_structure["image_processing_deit"] = ["DeiTImageProcessor"]
 
-# 检查 PyTorch 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
-# 如果可用，则将相关模块和对象/变量添加到 _import_structure 中
+# 检查是否 Torch 可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 若 Torch 可用，则添加模型建模相关的类到导入结构中
     _import_structure["modeling_deit"] = [
         "DEIT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "DeiTForImageClassification",
@@ -46,14 +58,14 @@ else:
         "DeiTPreTrainedModel",
     ]
 
-# 检查 TensorFlow 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
-# 如果可用，则将相关模块和对象/变量添加到 _import_structure 中
+# 检查是否 TensorFlow 可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 若 TensorFlow 可用，则添加 TensorFlow 下的模型建模相关的类到导入结构中
     _import_structure["modeling_tf_deit"] = [
         "TF_DEIT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFDeiTForImageClassification",
@@ -63,10 +75,9 @@ else:
         "TFDeiTPreTrainedModel",
     ]
 
-
-# 如果在类型检查模式下
+# 若当前环境支持类型检查，则进行进一步的导入
 if TYPE_CHECKING:
-    # 导入类型提示用到的模块和对象/变量
+    # 从相应模块中导入具体的类和配置
     from .configuration_deit import DEIT_PRETRAINED_CONFIG_ARCHIVE_MAP, DeiTConfig, DeiTOnnxConfig
 
     try:
@@ -75,6 +86,7 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 若视觉处理可用，则进一步导入特征提取和图像处理相关类
         from .feature_extraction_deit import DeiTFeatureExtractor
         from .image_processing_deit import DeiTImageProcessor
 
@@ -84,6 +96,7 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 若 Torch 可用，则进一步导入模型建模相关的类
         from .modeling_deit import (
             DEIT_PRETRAINED_MODEL_ARCHIVE_LIST,
             DeiTForImageClassification,
@@ -96,8 +109,10 @@ if TYPE_CHECKING:
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
+    # 如果发生 OptionalDependencyNotAvailable 异常，则什么都不做，直接 pass
     except OptionalDependencyNotAvailable:
         pass
+    # 如果没有发生异常，则导入以下模块
     else:
         from .modeling_tf_deit import (
             TF_DEIT_PRETRAINED_MODEL_ARCHIVE_LIST,
@@ -107,26 +122,10 @@ if TYPE_CHECKING:
             TFDeiTModel,
             TFDeiTPreTrainedModel,
         )
-
-
-以上是给定代码块的注释。
-    # 如果发生 OptionalDependencyNotAvailable 异常，则忽略，不做任何处理
-    except OptionalDependencyNotAvailable:
-        pass
-    # 如果没有发生 OptionalDependencyNotAvailable 异常，则执行以下操作
-    else:
-        # 从当前目录中导入相关模块和类
-        from .modeling_tf_deit import (
-            TF_DEIT_PRETRAINED_MODEL_ARCHIVE_LIST,  # 导入 TF DEIT 预训练模型的列表
-            TFDeiTForImageClassification,  # 导入用于图像分类的 TF DEIT 模型
-            TFDeiTForImageClassificationWithTeacher,  # 导入带有 teacher 的图像分类 TF DEIT 模型
-            TFDeiTForMaskedImageModeling,  # 导入用于图像蒙版建模的 TF DEIT 模型
-            TFDeiTModel,  # 导入 TF DEIT 模型
-            TFDeiTPreTrainedModel,  # 导入 TF DEIT 预训练模型的基类
-        )
-# 如果未满足前面 if 语句的条件，则执行下面的代码块
-    # 导入 sys 模块
+else:
+    # 导入 sys 模块，用于操作 Python 解释器的系统功能
     import sys
-    # 将当前模块的名称赋值给 sys.modules 中的 __name__ 键对应的值
+
+    # 将当前模块添加到 sys.modules 中，使用 _LazyModule 进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

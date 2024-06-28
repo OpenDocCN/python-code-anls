@@ -1,22 +1,62 @@
-# `.\transformers\models\vilt\convert_vilt_original_to_pytorch.py`
+# `.\models\vilt\convert_vilt_original_to_pytorch.py`
 
-```py
-# 设置源码文件的编码格式为 utf-8
-# 版权声明
-# 根据 Apache License 2.0 许可使用本文件
-# 获取许可证的链接
-# 在软件分发时，根据 "AS IS" 的基础分发，无需附加任何担保或条件，无论明示或默示
-# 查看特定语言的授权权限，限制或个别许可的具体语言文档
-# 从原始的 Github 存储库中转换 ViLT 检查点
+```
+# coding=utf-8
+# 设置脚本的字符编码为UTF-8
 
-# 导入必要的库
+# Copyright 2022 The HuggingFace Inc. team.
+# 版权声明，指明代码的版权信息
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 使用 Apache License, Version 2.0 许可证
+
+# you may not use this file except in compliance with the License.
+# 按照许可证要求，除非获得许可，否则不得使用此文件
+
+# You may obtain a copy of the License at
+# 可以在以下网址获取许可证的副本
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed on an "AS IS" BASIS,
+
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 无论是明示的还是隐含的，不附带任何形式的担保或条件
+
+# See the License for the specific language governing permissions and
+# 请查阅许可证，获取具体的使用权限和
+
+# limitations under the License.
+# 限制和条件
+
+"""Convert ViLT checkpoints from the original Github repository."""
+
+# 从原始的 Github 仓库中转换 ViLT 检查点
+
 import argparse
+# 导入 argparse 用于解析命令行参数
+
 import json
+# 导入 json 模块用于处理 JSON 数据
+
 from pathlib import Path
+# 从 pathlib 模块中导入 Path 类，用于处理文件路径
+
 import requests
+# 导入 requests 模块，用于发送 HTTP 请求
+
 import torch
+# 导入 torch 模块，用于 PyTorch 相关操作
+
 from huggingface_hub import hf_hub_download
+# 从 huggingface_hub 库中导入 hf_hub_download 函数，用于从 Hugging Face Hub 下载模型
+
 from PIL import Image
+# 从 PIL 库中导入 Image 模块，用于图像处理
+
 from transformers import (
     BertTokenizer,
     ViltConfig,
@@ -27,186 +67,180 @@ from transformers import (
     ViltImageProcessor,
     ViltProcessor,
 )
+# 从 transformers 库中导入多个类和函数，用于加载和处理 ViLT 模型的不同配置和任务
+
 from transformers.utils import logging
+# 从 transformers.utils 中导入 logging 模块，用于设置日志信息
 
-# 设置日志的显示级别为 info
 logging.set_verbosity_info()
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+# 设置日志记录级别为 info
 
-# 创建需要重命名的键值对列表
+logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器
+
+# here we list all keys to be renamed (original name on the left, our name on the right)
+# 在此处列出需要重命名的所有键（左侧为原始名称，右侧为我们的名称）
+
 def create_rename_keys(config, vqa_model=False, nlvr_model=False, irtr_model=False):
+    # 定义一个函数，用于生成重命名键的列表，根据不同的模型类型设置参数
+
     rename_keys = []
+    # 初始化空的重命名键列表
+
     for i in range(config.num_hidden_layers):
-        # 编码层：输出映射、两个前馈神经网络和两个 layernorm
+        # 遍历隐藏层的数量，进行重命名操作
+
+        # encoder layers: output projection, 2 feedforward neural networks and 2 layernorms
+        # 编码器层：输出投影，2 个前馈神经网络和 2 个层归一化
+
         rename_keys.append((f"transformer.blocks.{i}.norm1.weight", f"vilt.encoder.layer.{i}.layernorm_before.weight"))
+        # 添加归一化层权重的重命名映射
+
         rename_keys.append((f"transformer.blocks.{i}.norm1.bias", f"vilt.encoder.layer.{i}.layernorm_before.bias"))
+        # 添加归一化层偏置的重命名映射
+
         rename_keys.append(
             (f"transformer.blocks.{i}.attn.proj.weight", f"vilt.encoder.layer.{i}.attention.output.dense.weight")
         )
+        # 添加注意力投影层权重的重命名映射
+
         rename_keys.append(
             (f"transformer.blocks.{i}.attn.proj.bias", f"vilt.encoder.layer.{i}.attention.output.dense.bias")
         )
+        # 添加注意力投影层偏置的重命名映射
+
         rename_keys.append((f"transformer.blocks.{i}.norm2.weight", f"vilt.encoder.layer.{i}.layernorm_after.weight"))
+        # 添加第二层归一化权重的重命名映射
+
         rename_keys.append((f"transformer.blocks.{i}.norm2.bias", f"vilt.encoder.layer.{i}.layernorm_after.bias"))
+        # 添加第二层归一化偏置的重命名映射
+
         rename_keys.append(
             (f"transformer.blocks.{i}.mlp.fc1.weight", f"vilt.encoder.layer.{i}.intermediate.dense.weight")
         )
-        rename_keys.append((f"transformer.blocks.{i}.mlp.fc1.bias", f"vilt.encoder.layer.{i}.intermediate.dense.bias"))
+        # 添加 MLP 第一层权重的重命名映射
+
+        rename_keys.append(
+            (f"transformer.blocks.{i}.mlp.fc1.bias", f"vilt.encoder.layer.{i}.intermediate.dense.bias")
+        )
+        # 添加 MLP 第一层偏置的重命名映射
+
         rename_keys.append((f"transformer.blocks.{i}.mlp.fc2.weight", f"vilt.encoder.layer.{i}.output.dense.weight"))
+        # 添加 MLP 第二层权重的重命名映射
+
         rename_keys.append((f"transformer.blocks.{i}.mlp.fc2.bias", f"vilt.encoder.layer.{i}.output.dense.bias"))
+        # 添加 MLP 第二层偏置的重命名映射
 
     # embeddings
-    # 向 rename_keys 列表中添加文本嵌入相关的键值对
+    # 处理嵌入层的重命名，暂缺省略部分
+    # 将下列键值对列表扩展到已有的 rename_keys 列表中，用于重命名模型中的参数路径
     rename_keys.extend(
         [
-            # 文本嵌入的词嵌入权重
+            # 文本嵌入
             ("text_embeddings.word_embeddings.weight", "vilt.embeddings.text_embeddings.word_embeddings.weight"),
-            # 文本嵌入的位置嵌入权重
-            (
-                "text_embeddings.position_embeddings.weight",
-                "vilt.embeddings.text_embeddings.position_embeddings.weight",
-            ),
-            # 文本嵌入的位置ID
+            ("text_embeddings.position_embeddings.weight", "vilt.embeddings.text_embeddings.position_embeddings.weight"),
             ("text_embeddings.position_ids", "vilt.embeddings.text_embeddings.position_ids"),
-            # 文本嵌入的标记类型嵌入权重
-            (
-                "text_embeddings.token_type_embeddings.weight",
-                "vilt.embeddings.text_embeddings.token_type_embeddings.weight",
-            ),
-            # 文本嵌入的 LayerNorm 权重
+            ("text_embeddings.token_type_embeddings.weight", "vilt.embeddings.text_embeddings.token_type_embeddings.weight"),
             ("text_embeddings.LayerNorm.weight", "vilt.embeddings.text_embeddings.LayerNorm.weight"),
-            # 文本嵌入的 LayerNorm 偏置
             ("text_embeddings.LayerNorm.bias", "vilt.embeddings.text_embeddings.LayerNorm.bias"),
-            # 补丁嵌入相关
-            # Transformer 模型的 cls_token
+            # 补丁嵌入
             ("transformer.cls_token", "vilt.embeddings.cls_token"),
-            # Transformer 模型的 patch_embed 映射权重
             ("transformer.patch_embed.proj.weight", "vilt.embeddings.patch_embeddings.projection.weight"),
-            # Transformer 模型的 patch_embed 映射偏置
             ("transformer.patch_embed.proj.bias", "vilt.embeddings.patch_embeddings.projection.bias"),
-            # Transformer 模型的位置嵌入
             ("transformer.pos_embed", "vilt.embeddings.position_embeddings"),
-            # 标记类型嵌入权重
+            # 标记类型嵌入
             ("token_type_embeddings.weight", "vilt.embeddings.token_type_embeddings.weight"),
         ]
     )
-
-    # 最终的 LayerNorm 和 pooler
-    # 向 rename_keys 列表中添加最终的 LayerNorm 和 pooler 相关的键值对
+    
+    # 最终的 Layernorm 和池化器
     rename_keys.extend(
         [
-            # Transformer 模型的 LayerNorm 权重
             ("transformer.norm.weight", "vilt.layernorm.weight"),
-            # Transformer 模型的 LayerNorm 偏置
             ("transformer.norm.bias", "vilt.layernorm.bias"),
-            # pooler 模型的 dense 权重
             ("pooler.dense.weight", "vilt.pooler.dense.weight"),
-            # pooler 模型的 dense 偏置
             ("pooler.dense.bias", "vilt.pooler.dense.bias"),
         ]
     )
-
+    
     # 分类器头部
-    # 如果是 VQA 模型时，添加 VQA 分类器头部相关的键值对
     if vqa_model:
-        # 分类头部
+        # 如果是 VQA 模型，添加 VQA 分类器的参数路径映射
         rename_keys.extend(
             [
-                # VQA 分类器的第一层权重
                 ("vqa_classifier.0.weight", "classifier.0.weight"),
-                # VQA 分类器的第一层偏置
                 ("vqa_classifier.0.bias", "classifier.0.bias"),
-                # VQA 分类器的第二层权重
                 ("vqa_classifier.1.weight", "classifier.1.weight"),
-                # VQA 分类器的第二层偏置
                 ("vqa_classifier.1.bias", "classifier.1.bias"),
-                # VQA 分类器的第三层权重
                 ("vqa_classifier.3.weight", "classifier.3.weight"),
-                # VQA 分类器的第三层偏置
                 ("vqa_classifier.3.bias", "classifier.3.bias"),
             ]
         )
-    # 如果是 NLVR 模型时，添加 NLVR 分类器头部相关的键值对
     elif nlvr_model:
-        # 分类头部
+        # 如果是 NLVR 模型，添加 NLVR2 分类器的参数路径映射
         rename_keys.extend(
             [
-                # NLVR2 分类器的第一层权重
                 ("nlvr2_classifier.0.weight", "classifier.0.weight"),
-                # NLVR2 分类器的第一层偏置
                 ("nlvr2_classifier.0.bias", "classifier.0.bias"),
-                # NLVR2 分类器的第二层权重
                 ("nlvr2_classifier.1.weight", "classifier.1.weight"),
-                # NLVR2 分类器的第二层偏置
                 ("nlvr2_classifier.1.bias", "classifier.1.bias"),
-                # NLVR2 分类器的第三层权重
                 ("nlvr2_classifier.3.weight", "classifier.3.weight"),
-                # NLVR2 分类器的第三层偏置
                 ("nlvr2_classifier.3.bias", "classifier.3.bias"),
             ]
         )
     else:
         pass
-    # 返回更新后的 rename_keys 列表
+    
+    # 返回更新后的 rename_keys 列表，其中包含了所有需要重命名的模型参数路径映射
     return rename_keys
-# 将每个编码器层的矩阵分割成查询（queries）、键（keys）和值（values）
+# 按照每个编码器层的要求，从状态字典中读取查询（query）、键（key）和值（value）的权重和偏置
 def read_in_q_k_v(state_dict, config):
-    # 对每个编码器层进行循环处理
+    # 遍历编码器层的数量
     for i in range(config.num_hidden_layers):
-        # 设置前缀为 "vilt."
         prefix = "vilt."
-        # 读取输入投影层（在timm中，这是一个单矩阵加偏置）的权重和偏置
+        # 读取输入投影层的权重和偏置（在timm中，这是一个单独的矩阵加偏置）
         in_proj_weight = state_dict.pop(f"transformer.blocks.{i}.attn.qkv.weight")
         in_proj_bias = state_dict.pop(f"transformer.blocks.{i}.attn.qkv.bias")
-        # 将查询（query）、键（key）和值（value）（按顺序）添加到状态字典中
-        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.query.weight"] = in_proj_weight[
-            : config.hidden_size, :
-        ]
+        # 将查询（query）、键（key）、值（value）依次添加到状态字典中
+        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.query.weight"] = in_proj_weight[: config.hidden_size, :]
         state_dict[f"{prefix}encoder.layer.{i}.attention.attention.query.bias"] = in_proj_bias[: config.hidden_size]
-        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.key.weight"] = in_proj_weight[
-            config.hidden_size : config.hidden_size * 2, :
-        ]
-        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.key.bias"] = in_proj_bias[
-            config.hidden_size : config.hidden_size * 2
-        ]
-        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.value.weight"] = in_proj_weight[
-            -config.hidden_size :, :
-        ]
+        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.key.weight"] = in_proj_weight[config.hidden_size : config.hidden_size * 2, :]
+        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.key.bias"] = in_proj_bias[config.hidden_size : config.hidden_size * 2]
+        state_dict[f"{prefix}encoder.layer.{i}.attention.attention.value.weight"] = in_proj_weight[-config.hidden_size :, :]
         state_dict[f"{prefix}encoder.layer.{i}.attention.attention.value.bias"] = in_proj_bias[-config.hidden_size :]
 
-# 移除分类头部的权重和偏置
+
+# 从状态字典中移除分类头部分的权重和偏置
 def remove_classification_head_(state_dict):
-    # 忽略指定的键
     ignore_keys = ["head.weight", "head.bias"]
     for k in ignore_keys:
-        # 如果存在指定的键，则从状态字典中移除
         state_dict.pop(k, None)
 
-# 重命名字典中的键
+
+# 重命名字典中的键名
 def rename_key(dct, old, new):
-    # 弹出旧键对应的值
     val = dct.pop(old)
-    # 将值插入到新键下
     dct[new] = val
 
-# 将模型权重转换为我们的 ViLT 结构
+
+# 转换ViLT模型的检查点，将其权重复制/粘贴/调整到我们的ViLT结构中
 @torch.no_grad()
 def convert_vilt_checkpoint(checkpoint_url, pytorch_dump_folder_path):
     """
-    复制/粘贴/调整模型的权重以适应我们的 ViLT 结构。
+    复制/粘贴/调整模型的权重到我们的ViLT结构中。
     """
 
-    # 定义配置并初始化 HuggingFace 模型
+    # 定义配置并初始化HuggingFace模型
     config = ViltConfig(image_size=384, patch_size=32, tie_word_embeddings=False)
     mlm_model = False
     vqa_model = False
     nlvr_model = False
     irtr_model = False
+    
+    # 根据checkpoint_url的内容选择初始化不同的模型
     if "vqa" in checkpoint_url:
         vqa_model = True
         config.num_labels = 3129
-        # 配置 VQA 模型的标签
         repo_id = "huggingface/label-files"
         filename = "vqa2-id2label.json"
         id2label = json.load(open(hf_hub_download(repo_id, filename, repo_type="dataset"), "r"))
@@ -217,7 +251,6 @@ def convert_vilt_checkpoint(checkpoint_url, pytorch_dump_folder_path):
     elif "nlvr" in checkpoint_url:
         nlvr_model = True
         config.num_labels = 2
-        # 配置 NLVR 模型的标签
         config.id2label = {0: "False", 1: "True"}
         config.label2id = {v: k for k, v in config.id2label.items()}
         config.modality_type_vocab_size = 3
@@ -226,48 +259,46 @@ def convert_vilt_checkpoint(checkpoint_url, pytorch_dump_folder_path):
         irtr_model = True
         model = ViltForImageAndTextRetrieval(config)
     elif "mlm_itm" in checkpoint_url:
-        # 如果检查点 URL 中包含 "mlm_itm"，则设置 mlm_model 为 True
+        # 如果 URL 中包含 "mlm_itm"，则设置 mlm_model 为 True，并使用 ViltForMaskedLM 创建模型对象
         mlm_model = True
-        # 使用 ViltForMaskedLM 类来创建模型对象
         model = ViltForMaskedLM(config)
     else:
-        # 如果模型类型未知，则抛出 ValueError 异常
+        # 如果 URL 不包含 "mlm_itm"，则抛出 ValueError，表示未知的模型类型
         raise ValueError("Unknown model type")
 
-    # 从给定的检查点 URL 中加载原始模型的 state_dict，并移除或重命名一些键
+    # 加载原始模型的 state_dict，移除和重命名一些键
     state_dict = torch.hub.load_state_dict_from_url(checkpoint_url, map_location="cpu")["state_dict"]
-    # 创建将要被重命名的键的列表，根据不同的模型类型创建不同的键
     rename_keys = create_rename_keys(config, vqa_model, nlvr_model, irtr_model)
-    # 遍历 rename_keys 列表，将 state_dict 中的相应键进行重命名
     for src, dest in rename_keys:
+        # 调用 rename_key 函数，用新的键名重命名 state_dict 中的键
         rename_key(state_dict, src, dest)
-    # 从 state_dict 中读入问题、键、值
+    # 处理 state_dict，读入 query、key 和 value 相关信息
     read_in_q_k_v(state_dict, config)
-    # 如果是 mlm_model 或者 irtr_model，则移除忽略的键
     if mlm_model or irtr_model:
+        # 如果是 mlm_model 或 irtr_model，则忽略特定的键
         ignore_keys = ["itm_score.fc.weight", "itm_score.fc.bias"]
         for k in ignore_keys:
+            # 从 state_dict 中移除指定的键
             state_dict.pop(k, None)
 
     # 将 state_dict 加载到 HuggingFace 模型中
     model.eval()
     if mlm_model:
-        # 对于 mlm_model，加载 state_dict，并允许缺失一些键
+        # 如果是 mlm_model，使用非严格模式加载 state_dict，并验证缺失的键
         missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
-        # 断言加载到模型中的缺失键应为 ["mlm_score.decoder.bias"]
         assert missing_keys == ["mlm_score.decoder.bias"]
     else:
-        # 对于非 mlm_model，加载 state_dict
+        # 否则，使用严格模式加载 state_dict
         model.load_state_dict(state_dict)
 
-    # 定义 ViltProcessor 对象，用于将图像和文本进行处理
+    # 定义处理器对象
     image_processor = ViltImageProcessor(size=384)
-    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+    tokenizer = BertTokenizer.from_pretrained("google-bert/bert-base-uncased")
     processor = ViltProcessor(image_processor, tokenizer)
 
     # 对示例输入进行前向传播（图像 + 文本）
     if nlvr_model:
-        # 如果是 nlvr_model，从 URL 中打开两个图像，并提供相应的文本
+        # 如果是 nlvr_model，加载两个相同的图像和文本描述，使用 processor 对象编码
         image1 = Image.open(requests.get("https://lil.nlp.cornell.edu/nlvr/exs/ex0_0.jpg", stream=True).raw)
         image2 = Image.open(requests.get("https://lil.nlp.cornell.edu/nlvr/exs/ex0_0.jpg", stream=True).raw)
         text = (
@@ -276,94 +307,98 @@ def convert_vilt_checkpoint(checkpoint_url, pytorch_dump_folder_path):
         )
         encoding_1 = processor(image1, text, return_tensors="pt")
         encoding_2 = processor(image2, text, return_tensors="pt")
-        # 使用模型对输入进行预测
+        # 将编码后的输入传递给模型进行推断
         outputs = model(
             input_ids=encoding_1.input_ids,
             pixel_values=encoding_1.pixel_values,
             pixel_values_2=encoding_2.pixel_values,
         )
     else:
-        # 如果不是 nlvr_model，则从 URL 中打开一个图像，并提供相应的文本
+        # 否则，加载单个图像和相应的文本描述，使用 processor 对象编码
         image = Image.open(requests.get("http://images.cocodataset.org/val2017/000000039769.jpg", stream=True).raw)
         if mlm_model:
-            # 如果是 mlm_model，则提供一个含有 [MASK] 的文本
+            # 如果是 mlm_model，使用包含 [MASK] 的文本描述
             text = "a bunch of [MASK] laying on a [MASK]."
         else:
-            # 如果是其它类型的模型，则提供一个文本询问 "How many cats are there?"
+            # 否则，使用问句描述
             text = "How many cats are there?"
         encoding = processor(image, text, return_tensors="pt")
-        # 使用模型对输入进行预测
+        # 将编码后的输入传递给模型进行推断
         outputs = model(**encoding)
 
-    # 验证输出结果
+    # 验证模型输出
     if mlm_model:
+        # 如果是 mlm_model，验证输出的形状和特定位置的数值
         expected_shape = torch.Size([1, 11, 30522])
         expected_slice = torch.tensor([-12.5061, -12.5123, -12.5174])
-        # 断言输出的 logits 的形状为 [1, 11, 30522]
         assert outputs.logits.shape == expected_shape
-        # 断言输出 logits 的第一条数据的前三个值与 expected_slice 的值相近，误差不超过 1e-4
         assert torch.allclose(outputs.logits[0, 0, :3], expected_slice, atol=1e-4)
 
-        # 验证预测的被遮蔽的标记是否等于 "cats"
+        # 验证预测的 MASK 标记是否等于 "cats"
         predicted_id = outputs.logits[0, 4, :].argmax(-1).item()
         assert tokenizer.decode([predicted_id]) == "cats"
-    # 如果是 VQA 模型
+    # 如果是 VQA 模型，则执行以下操作
     elif vqa_model:
-        # 期望输出的形状是 [1, 3129]
+        # 预期的输出形状为 [1, 3129]
         expected_shape = torch.Size([1, 3129])
-        # 期望输出的前三个值
+        # 预期的输出切片为 [-15.9495, -18.1472, -10.3041]
         expected_slice = torch.tensor([-15.9495, -18.1472, -10.3041])
-        # 断言前三个预测值与期望值的接近度在 1e-4 的范围内
+        # 检查模型输出的前三个元素是否与预期切片接近
         assert torch.allclose(outputs.logits[0, :3], expected_slice, atol=1e-4)
-        # 断言输出的形状是否符合预期形状
+        # 检查模型输出的形状是否与预期形状一致
         assert outputs.logits.shape == expected_shape
-        # 断言前三个预测值与期望值的接近度在 1e-4 的范围内
+        # 再次检查模型输出的前三个元素是否与预期切片接近
         assert torch.allclose(outputs.logits[0, 0, :3], expected_slice, atol=1e-4)
 
-        # 验证 VQA 预测是否等于 "2"
+        # 验证 VQA 模型的预测结果是否等于 "2"
         predicted_idx = outputs.logits.argmax(-1).item()
         assert model.config.id2label[predicted_idx] == "2"
-    # 如果是 NLVR 模型
+    
+    # 如果是 NLVR 模型，则执行以下操作
     elif nlvr_model:
-        # 期望输出的形状是 [1, 2]
+        # 预期的输出形状为 [1, 2]
         expected_shape = torch.Size([1, 2])
-        # 期望输出的前两个值
+        # 预期的输出切片为 [-2.8721, 2.1291]
         expected_slice = torch.tensor([-2.8721, 2.1291])
-        # 断言前两个预测值与期望值的接近度在 1e-4 的范围内
+        # 检查模型输出的前三个元素是否与预期切片接近
         assert torch.allclose(outputs.logits[0, :3], expected_slice, atol=1e-4)
-        # 断言输出的形状是否符合预期形状
+        # 检查模型输出的形状是否与预期形状一致
         assert outputs.logits.shape == expected_shape
 
-    # 创建路径，如果路径不存在则创建路径
+    # 确保目录存在，如果不存在则创建
     Path(pytorch_dump_folder_path).mkdir(exist_ok=True)
-    # 打印保存模型和处理器的信息
+    # 打印信息，说明正在保存模型和处理器到指定路径
     print(f"Saving model and processor to {pytorch_dump_folder_path}")
-    # 保存模型到指定路径
+    # 将模型保存到指定路径
     model.save_pretrained(pytorch_dump_folder_path)
-    # 保存处理器到指定路径
+    # 将处理器保存到指定路径
     processor.save_pretrained(pytorch_dump_folder_path)
-# 如果该脚本是直接执行的，而不是被导入到别的脚本中，则执行以下代码
 if __name__ == "__main__":
-    # 创建一个命令行参数解析器
-    parser = argparse.ArgumentParser()
-    
-    # 添加必要的参数
-    parser.add_argument(
-        "--checkpoint_url",  # 参数名
-        default="https://github.com/dandelin/ViLT/releases/download/200k/vilt_200k_mlm_itm.ckpt",  # 默认值
-        type=str,  # 参数类型
-        help="URL of the checkpoint you'd like to convert."  # 参数的帮助信息
-    )
-    parser.add_argument(
-        "--pytorch_dump_folder_path",  # 参数名
-        default=None,  # 默认值
-        type=str,  # 参数类型
-        help="Path to the output PyTorch model directory."  # 参数的帮助信息
-    )
+    # 如果脚本作为主程序执行，则执行以下代码块
 
-    # 解析命令行参数
+    parser = argparse.ArgumentParser()
+    # 创建参数解析器对象
+
+    # Required parameters
+    parser.add_argument(
+        "--checkpoint_url",
+        default="https://github.com/dandelin/ViLT/releases/download/200k/vilt_200k_mlm_itm.ckpt",
+        type=str,
+        help="URL of the checkpoint you'd like to convert."
+    )
+    # 添加必需的命令行参数：checkpoint_url，指定了默认的模型检查点 URL
+
+    parser.add_argument(
+        "--pytorch_dump_folder_path", 
+        default=None, 
+        type=str, 
+        help="Path to the output PyTorch model directory."
+    )
+    # 添加命令行参数：pytorch_dump_folder_path，用于指定输出的 PyTorch 模型目录的路径
+
     args = parser.parse_args()
-    
-    # 调用函数convert_vilt_checkpoint，传入解析后的参数checkpoint_url和pytorch_dump_folder_path
+    # 解析命令行参数，并将其存储在 args 变量中
+
     convert_vilt_checkpoint(args.checkpoint_url, args.pytorch_dump_folder_path)
+    # 调用函数 convert_vilt_checkpoint，传入解析得到的参数 checkpoint_url 和 pytorch_dump_folder_path
 ```

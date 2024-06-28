@@ -1,20 +1,31 @@
 # `.\models\convnext\modeling_convnext.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权信息
-# 版权声明 
-# 您可能不会使用此文件，除非遵守许可证进行使用
-# 您可以获取许可证的副本，在http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或经书面同意，软件分发将根据“原样”基础上进行，没有任何形式的担保或条件，无论是明示的还是隐含的，
-#见许可证的具体语言，管理权限和限制
+```
+# coding=utf-8
+# Copyright 2022 Meta Platforms, Inc. and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch ConvNext model."""
 
-# 导入依赖库
+# Import necessary modules and functions from PyTorch and Transformers
 from typing import Optional, Tuple, Union
+
 import torch
 import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+
+# Import various components from HuggingFace Transformers library
 from ...activations import ACT2FN
 from ...modeling_outputs import (
     BackboneOutput,
@@ -33,42 +44,51 @@ from ...utils import (
 from ...utils.backbone_utils import BackboneMixin
 from .configuration_convnext import ConvNextConfig
 
-# 获取日志记录器
+# Get logger instance for logging messages
 logger = logging.get_logger(__name__)
 
-# 用于文档描述的常量
+# General docstring for configuration
 _CONFIG_FOR_DOC = "ConvNextConfig"
+
+# Base docstring for checkpoint
 _CHECKPOINT_FOR_DOC = "facebook/convnext-tiny-224"
 _EXPECTED_OUTPUT_SHAPE = [1, 768, 7, 7]
+
+# Image classification checkpoint and expected output
 _IMAGE_CLASS_CHECKPOINT = "facebook/convnext-tiny-224"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "tabby, tabby cat"
+
+# List of pretrained model archives for ConvNext
 CONVNEXT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/convnext-tiny-224",
-    # 查看所有ConvNext模型，请访问https://huggingface.co/models?filter=convnext
+    # See all ConvNext models at https://huggingface.co/models?filter=convnext
 ]
 
-# 复制自transformers.models.beit.modeling_beit.drop_path
+# Function definition for drop path, a form of stochastic depth regularization
+# Copied from transformers.models.beit.modeling_beit.drop_path
 def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = False) -> torch.Tensor:
     """
-    为每个样本丢弃路径（随机深度）（当应用于残差块的主路径时）。
-    
-    Ross Wightman的评论：这与我为EfficientNet等网络创建的DropConnect实现相同，
-    但是，原始名称是误导性的，因为“Drop Connect”是另一篇论文中不同形式的辍学... 
-    请参见讨论：https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... 
-    我选择将层和参数名称更改为“drop path”，而不是将DropConnect作为层名称并使用“幸存率”作为参数。
+    Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
+
+    Comment by Ross Wightman: This is the same as the DropConnect impl I created for EfficientNet, etc networks,
+    however, the original name is misleading as 'Drop Connect' is a different form of dropout in a separate paper...
+    See discussion: https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... I've opted for changing the
+    layer and argument names to 'drop path' rather than mix DropConnect as a layer name and use 'survival rate' as the
+    argument.
     """
-    如果 drop_prob == 0.0 或者不处于训练状态，则返回输入
+    if drop_prob == 0.0 or not training:
+        return input
     keep_prob = 1 - drop_prob
-    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # 适用于不同维度的张量，不仅仅是2D卷积网络
+    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
     random_tensor = keep_prob + torch.rand(shape, dtype=input.dtype, device=input.device)
-    random_tensor.floor_()  # 二值化
-    # 根据输入张量和dropout保留率计算输出张量
+    random_tensor.floor_()  # binarize
+    # 根据输入的张量 input 和保留概率 keep_prob 计算 dropout 后的输出张量
     output = input.div(keep_prob) * random_tensor
-    # 返回输出张量
+    # 返回 dropout 后的输出张量
     return output
-# 从transformers.models.beit.modeling_beit.BeitDropPath复制并将Beit->ConvNext
+# 从 transformers.models.beit.modeling_beit.BeitDropPath 复制的代码，将 Beit 替换为 ConvNext
 class ConvNextDropPath(nn.Module):
-    """针对每个样本丢失路径（随机深度）（当应用于残差块的主路径中）"""
+    """每个样本应用于残差块主路径中的丢弃路径（随机深度）。"""
 
     def __init__(self, drop_prob: Optional[float] = None) -> None:
         super().__init__()
@@ -82,8 +102,9 @@ class ConvNextDropPath(nn.Module):
 
 
 class ConvNextLayerNorm(nn.Module):
-    r"""支持两种数据格式的LayerNorm：channels_last（默认）或channels_first。
-    输入维度的顺序。channels_last对应于形状为（batch_size，height，width，channels）的输入，而channels_first对应于形状为（batch_size，channels，height，width）的输入。
+    r"""支持两种数据格式的 LayerNorm：channels_last（默认）或 channels_first。
+    输入数据维度的顺序。channels_last 对应形状为 (batch_size, height, width, channels) 的输入，
+    而 channels_first 对应形状为 (batch_size, channels, height, width) 的输入。
     """
 
     def __init__(self, normalized_shape, eps=1e-6, data_format="channels_last"):
@@ -111,7 +132,7 @@ class ConvNextLayerNorm(nn.Module):
 
 
 class ConvNextEmbeddings(nn.Module):
-    """这个类与src/transformers/models/swin/modeling_swin.py中找到的SwinEmbeddings类类似（受到启发）。"""
+    """这个类类似于（并且受到启发于）src/transformers/models/swin/modeling_swin.py 中的 SwinEmbeddings 类。"""
 
     def __init__(self, config):
         super().__init__()
@@ -120,141 +141,82 @@ class ConvNextEmbeddings(nn.Module):
         )
         self.layernorm = ConvNextLayerNorm(config.hidden_sizes[0], eps=1e-6, data_format="channels_first")
         self.num_channels = config.num_channels
-    # 前向传播函数，接受像素值张量并返回张量
+    # 定义前向传播函数，接收像素值作为输入，并返回处理后的张量
     def forward(self, pixel_values: torch.FloatTensor) -> torch.Tensor:
-        # 获取像素值的通道数
+        # 获取输入张量的通道数
         num_channels = pixel_values.shape[1]
-        # 如果通道数不等于模型设定的通道数，则抛出数值错误
+        # 检查输入张量的通道数是否与模型配置中的通道数一致，若不一致则抛出数值错误异常
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 使用 patch_embeddings 函数获取嵌入向量
+        # 使用预定义的函数处理输入像素值，生成嵌入表示
         embeddings = self.patch_embeddings(pixel_values)
-        # 对嵌入向量进行 layernorm 处理
+        # 对生成的嵌入表示进行层归一化处理
         embeddings = self.layernorm(embeddings)
-        # 返回处理后的嵌入向量
+        # 返回处理后的嵌入表示张量
         return embeddings
-# 定义一个新的 PyTorch 模块，表示 ConvNext 层
-class ConvNextLayer(nn.Module):
-    """对应原始实现中的 `Block` 类。
-    
-    有两种等效的实现方式：[DwConv, LayerNorm (channels_first), Conv, GELU, 1x1 Conv]；所有操作都在 (N, C, H, W) 维度进行
-    (2) [DwConv, Permute to (N, H, W, C), LayerNorm (channels_last), Linear, GELU, Linear]；再转换回来
-
-    作者使用了 (2)，因为他们发现它在 PyTorch 中稍微快一点。
-    
-    Args:
-        config ([`ConvNextConfig`]): 模型配置类。
-        dim (`int`): 输入通道的数量。
-        drop_path (`float`): 随机深度率，默认值为 0.0。
-    """
-
-    # 构造函数，接受配置参数、输入通道数和随机深度率
-    def __init__(self, config, dim, drop_path=0):
-        # 初始化父类
-        super().__init__()
-        # 深度卷积，维度保持不变
-        self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim)
-        # 定义卷积层的 LayerNorm（按通道进行归一化）
-        self.layernorm = ConvNextLayerNorm(dim, eps=1e-6)
-        # 点卷积/1x1 卷积，由线性层实现
-        self.pwconv1 = nn.Linear(dim, 4 * dim)
-        # 定义激活函数
-        self.act = ACT2FN[config.hidden_act]
-        # 第二个点卷积
-        self.pwconv2 = nn.Linear(4 * dim, dim)
-        # 可学习的层级缩放参数
-        self.layer_scale_parameter = (
-            nn.Parameter(config.layer_scale_init_value * torch.ones((dim)), requires_grad=True) 
-            if config.layer_scale_init_value > 0
-            else None
-        )
-        # 随机深度路径
-        self.drop_path = ConvNextDropPath(drop_path) if drop_path > 0.0 else nn.Identity()
-
-    # 前向传播方法
-    def forward(self, hidden_states: torch.FloatTensor) -> torch.Tensor:
-        # 保留输入，以便在后面进行跳跃连接
-        input = hidden_states
-        # 深度卷积操作
-        x = self.dwconv(hidden_states)
-        # 转换维度顺序 (N, C, H, W) -> (N, H, W, C)
-        x = x.permute(0, 2, 3, 1)
-        # 进行 LayerNorm 操作
-        x = self.layernorm(x)
-        # 第一个点卷积
-        x = self.pwconv1(x)
-        # 激活函数应用
-        x = self.act(x)
-        # 第二个点卷积
-        x = self.pwconv2(x)
-        # 如果存在缩放参数，进行缩放
-        if self.layer_scale_parameter is not None:
-            x = self.layer_scale_parameter * x
-        # 转换维度顺序 (N, H, W, C) -> (N, C, H, W)
-        x = x.permute(0, 3, 1, 2)
-        # 应用随机深度路径并添加跳跃连接
-        x = input + self.drop_path(x)
-        # 返回输出结果
-        return x
-
-
 # 定义 ConvNeXT 阶段，包含可选的下采样层和多个残差块
 class ConvNextStage(nn.Module):
-    """ConvNeXT 阶段，包含一个可选的下采样层和多个残差块。
-    
+    """ConvNeXT stage, consisting of an optional downsampling layer + multiple residual blocks.
+
     Args:
-        config ([`ConvNextConfig`]): 模型配置类。
-        in_channels (`int`): 输入通道的数量。
-        out_channels (`int`): 输出通道的数量。
-        depth (`int`): 残差块的数量。
-        drop_path_rates(`List[float]`): 每个层的随机深度率。
+        config ([`ConvNextConfig`]): Model configuration class.
+        in_channels (`int`): Number of input channels.
+        out_channels (`int`): Number of output channels.
+        depth (`int`): Number of residual blocks.
+        drop_path_rates(`List[float]`): Stochastic depth rates for each layer.
     """
-    # 定义一个类，用于实现具有下采样和多个卷积层的神经网络模型
+
+
+在这段代码中，我们定义了一个名为 `ConvNextStage` 的类，用于表示 ConvNeXT 模型的一个阶段。这个阶段包括一个可选的下采样层和多个残差块，这些块将按照指定的参数配置进行堆叠。
+    # 初始化函数，用于构建一个自定义的卷积神经网络模块
     def __init__(self, config, in_channels, out_channels, kernel_size=2, stride=2, depth=2, drop_path_rates=None):
-        super().__init__()  # 调用父类的初始化方法
-    
-        # 如果输入通道数不等于输出通道数，或者步长大于1
+        # 调用父类的初始化方法
+        super().__init__()
+
+        # 如果输入通道数不等于输出通道数或者步长大于1，则创建一个下采样层
         if in_channels != out_channels or stride > 1:
-            # 定义下采样层，使用序列容器封装了一系列操作
             self.downsampling_layer = nn.Sequential(
-                ConvNextLayerNorm(in_channels, eps=1e-6, data_format="channels_first"),  # 添加归一化层
-                nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride),  # 添加卷积层
+                # 使用自定义的 ConvNextLayerNorm 类，对输入进行归一化处理
+                ConvNextLayerNorm(in_channels, eps=1e-6, data_format="channels_first"),
+                # 添加一个卷积层，用于下采样
+                nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride),
             )
         else:
-            # 如果输入通道数等于输出通道数且步长为1，则使用恒等映射
-            self.downsampling_layer = nn.Identity()  # 创建恒等映射层
-        # 如果未提供丢弃路径率，则将其设置为与深度相匹配的零列表
+            # 如果输入通道数等于输出通道数且步长为1，则使用一个恒等映射层
+            self.downsampling_layer = nn.Identity()
+        
+        # 如果未提供 drop_path_rates 参数，则初始化为一个与深度 depth 相同长度的全零列表
         drop_path_rates = drop_path_rates or [0.0] * depth
-        # 使用序列容器创建多个卷积层
+        
+        # 创建深度为 depth 的卷积层序列
         self.layers = nn.Sequential(
             *[ConvNextLayer(config, dim=out_channels, drop_path=drop_path_rates[j]) for j in range(depth)]
         )
-    
-    # 定义前向传播方法，接受一个浮点数张量作为输入，并返回一个张量
+
+    # 前向传播函数，用于定义模型的数据流向
     def forward(self, hidden_states: torch.FloatTensor) -> torch.Tensor:
-        # 对输入的隐藏状态进行下采样
+        # 对输入的 hidden_states 进行下采样处理
         hidden_states = self.downsampling_layer(hidden_states)
-        # 通过多个卷积层处理隐藏状态
+        # 将下采样后的结果通过多层卷积处理
         hidden_states = self.layers(hidden_states)
-        # 返回处理后的隐藏状态张量
+        # 返回处理后的结果张量
         return hidden_states
 class ConvNextEncoder(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建包含多个子模块的列表
+        # 初始化一个空的模块列表用于存放各个阶段的 ConvNextStage
         self.stages = nn.ModuleList()
-        # 计算每一层的 drop_path_rate
+        # 计算每个阶段的 drop path rates
         drop_path_rates = [
             x.tolist() for x in torch.linspace(0, config.drop_path_rate, sum(config.depths)).split(config.depths)
         ]
-        # 初始化前一层的通道数
+        # 初始化前一阶段的输出通道数为输入的隐藏大小的第一个元素
         prev_chs = config.hidden_sizes[0]
+        # 遍历创建每个阶段的 ConvNextStage
         for i in range(config.num_stages):
-            # 设置当前层输出通道数
             out_chs = config.hidden_sizes[i]
-            # 创建 ConvNextStage 实例作为当前层的子模块
             stage = ConvNextStage(
                 config,
                 in_channels=prev_chs,
@@ -263,9 +225,8 @@ class ConvNextEncoder(nn.Module):
                 depth=config.depths[i],
                 drop_path_rates=drop_path_rates[i],
             )
-            # 将当前层的实例添加到列表中
+            # 将创建的阶段添加到模块列表中
             self.stages.append(stage)
-            # 更新前一层的通道数
             prev_chs = out_chs
 
     def forward(
@@ -274,26 +235,25 @@ class ConvNextEncoder(nn.Module):
         output_hidden_states: Optional[bool] = False,
         return_dict: Optional[bool] = True,
     ) -> Union[Tuple, BaseModelOutputWithNoAttention]:
-        # 如果需要输出隐藏状态，则初始化一个空元组
+        # 如果需要输出所有隐藏状态，则初始化一个空元组
         all_hidden_states = () if output_hidden_states else None
 
-        # 遍历每一层，实现前向传播
+        # 遍历每个阶段的模块，并对隐藏状态进行前向传播
         for i, layer_module in enumerate(self.stages):
-            # 如果需要输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-            # 更新隐藏状态
+
             hidden_states = layer_module(hidden_states)
 
-        # 如果需要输出隐藏状态，则将最终隐藏状态添加到 all_hidden_states 中
+        # 如果需要输出所有隐藏状态，则添加最后一个阶段的隐藏状态到 all_hidden_states 中
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果不需要返回字典，则返回隐藏状态和隐藏状态列表
+        # 如果不返回字典形式的输出，则根据需要返回隐藏状态和所有隐藏状态的元组
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states] if v is not None)
 
-        # 返回包含隐藏状态和隐藏状态列表的 BaseModelOutputWithNoAttention 实例
+        # 返回带有无注意力的基本模型输出
         return BaseModelOutputWithNoAttention(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
@@ -306,23 +266,20 @@ class ConvNextPreTrainedModel(PreTrainedModel):
     models.
     """
 
-    # 设置配置类
     config_class = ConvNextConfig
-    # 设置基础模型前缀
     base_model_prefix = "convnext"
-    # 设置主输入名称
     main_input_name = "pixel_values"
 
     def _init_weights(self, module):
         """Initialize the weights"""
+        # 初始化线性层和卷积层的权重，使用正态分布初始化，偏置初始化为零
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 初始化线性层和卷积层的权重
+            # 与 TF 版本略有不同，使用正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.bias is not None:
-                # 初始化偏置
                 module.bias.data.zero_()
+        # 初始化层归一化层的权重，偏置初始化为零，权重初始化为 1.0
         elif isinstance(module, nn.LayerNorm):
-            # 初始化 LayerNorm 层的参数
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
 
@@ -331,152 +288,99 @@ CONVNEXT_START_DOCSTRING = r"""
     This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass. Use it
     as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
     behavior.
-    # 参数：
-    # config ([`ConvNextConfig`]): 模型配置类，包含模型的所有参数。
-    # 用配置文件初始化不会加载与模型相关的权重，只是加载配置。查看 [`~PreTrainedModel.from_pretrained`] 方法加载模型权重。
-# 定义一个文档字符串，解释 ConvNextModel 类的输入参数
-CONVNEXT_INPUTS_DOCSTRING = r"""
-    Args:
-        pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            像素值。可以使用 [`AutoImageProcessor`] 获取像素值。详情请参考 [`ConvNextImageProcessor.__call__`]。
-
-        output_hidden_states (`bool`, *optional*):
-            是否返回所有层的隐藏状态。有关更多详情，请参考返回的张量中的`hidden_states`。
-        return_dict (`bool`, *optional*):
-            是否返回 [`~utils.ModelOutput`]，而不是简单的元组。
 """
-
-# 为 ConvNextModel 类添加文档字符串
+    Parameters:
+        config ([`ConvNextConfig`]): Model configuration class with all the parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 @add_start_docstrings(
-    "The bare ConvNext model outputting raw features without any specific head on top.",
+    """
+    ConvNext 模型输出裸特征，没有特定头部添加。
+    """,
     CONVNEXT_START_DOCSTRING,
 )
-class ConvNextModel(ConvNextPreTrainedModel):
-    # 初始化方法
-    def __init__(self, config):
-        super().__init__(config)
-        self.config = config
 
-        # 创建 ConvNextEmbeddings 和 ConvNextEncoder 实例
+
+这段代码定义了一个类 `ConvNextModel`，继承自 `ConvNextPreTrainedModel`，用于构建 ConvNext 模型。在类的初始化函数中，首先调用父类的初始化方法，然后设置了模型的配置信息和各个模块的初始化，包括 `ConvNextEmbeddings` 和 `ConvNextEncoder`。此外，还初始化了一个 `LayerNorm` 层用于最终的归一化处理。
+
+``````
         self.embeddings = ConvNextEmbeddings(config)
+
+
+这行代码初始化了 `ConvNextEmbeddings` 类的实例 `self.embeddings`，并传入了模型配置 `config`。
+
+
         self.encoder = ConvNextEncoder(config)
 
-        # 最终的 layernorm 层
+
+这行代码初始化了 `ConvNextEncoder` 类的实例 `self.encoder`，并同样传入了模型配置 `config`。
+
+
         self.layernorm = nn.LayerNorm(config.hidden_sizes[-1], eps=config.layer_norm_eps)
 
-        # 初始化权重并进行最终处理
-        self.post_init()
 
-    # 前向传播方法
-    @add_start_docstrings_to_model_forward(CONVNEXT_INPUTS_DOCSTRING)
-    @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,
-        output_type=BaseModelOutputWithPoolingAndNoAttention,
-        config_class=_CONFIG_FOR_DOC,
-        modality="vision",
-        expected_output=_EXPECTED_OUTPUT_SHAPE,
+这行代码初始化了 `LayerNorm` 层 `self.layernorm`，其中 `config.hidden_sizes[-1]` 表示配置中定义的隐藏层的最后一个尺寸，`eps=config.layer_norm_eps` 则是配置中定义的层归一化的 epsilon 参数。
+    # ConvNext模型，其顶部有一个图像分类头部（在池化特征之上的线性层），例如用于ImageNet。
+    """,
+    # 使用CONVNEXT_START_DOCSTRING的值作为注释的起始点
+    CONVNEXT_START_DOCSTRING,
     )
-    def forward(
-        self,
-        pixel_values: torch.FloatTensor = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, BaseModelOutputWithPoolingAndNoAttention]:
-        # 检查是否要返回隐藏状态和返回的类型
-        output_hidden_states = (
-            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-        )
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+    # Image classification model inheriting from a pretrained ConvNext model
+    class ConvNextForImageClassification(ConvNextPreTrainedModel):
+        def __init__(self, config):
+            super().__init__(config)
 
-        # 如果没有像素值，则引发 ValueError
-        if pixel_values is None:
-            raise ValueError("You have to specify pixel_values")
+            # Number of labels for classification
+            self.num_labels = config.num_labels
+            # Instantiate ConvNext model
+            self.convnext = ConvNextModel(config)
 
-        # 通过 embeddings 计算嵌入输出
-        embedding_output = self.embeddings(pixel_values)
-
-        # 使用 encoder 进行编码
-        encoder_outputs = self.encoder(
-            embedding_output,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
-
-        # 获取最后的隐藏状态
-        last_hidden_state = encoder_outputs[0]
-
-        # 全局平均池化，(N, C, H, W) -> (N, C)
-        pooled_output = self.layernorm(last_hidden_state.mean([-2, -1]))
-
-        # 如果不需要返回字典，则返回元组
-        if not return_dict:
-            return (last_hidden_state, pooled_output) + encoder_outputs[1:]
-
-        # 返回 BaseModelOutputWithPoolingAndNoAttention 实例
-        return BaseModelOutputWithPoolingAndNoAttention(
-            last_hidden_state=last_hidden_state,
-            pooler_output=pooled_output,
-            hidden_states=encoder_outputs.hidden_states,
-        )
-    # 创建 ConvNext 模型，并在顶部添加了一个图像分类头（线性层在池化特征的顶部），例如用于ImageNet数据集。
-        # 定义一个名为 ConvNextForImageClassification 的类，继承自 ConvNextPreTrainedModel
-        class ConvNextForImageClassification(ConvNextPreTrainedModel):
-            # 初始化方法，接受一个config参数
-            def __init__(self, config):
-                # 调用父类的初始化方法
-                super().__init__(config)
-
-                # 初始化num_labels属性
-                self.num_labels = config.num_labels
-                # 创建一个ConvNextModel对象
-                self.convnext = ConvNextModel(config)
-
-                # 分类器头部
-                self.classifier = (
-                    # 如果num_labels大于0，则创建一个线性层，否则创建一个恒等映射
-                    nn.Linear(config.hidden_sizes[-1], config.num_labels) if config.num_labels > 0 else nn.Identity()
-                )
-
-                # 初始化权重并应用最终处理
-                self.post_init()
-
-            # 前向传播方法，接受一些输入参数
-            @add_start_docstrings_to_model_forward(CONVNEXT_INPUTS_DOCSTRING)
-            @add_code_sample_docstrings(
-                checkpoint=_IMAGE_CLASS_CHECKPOINT,
-                output_type=ImageClassifierOutputWithNoAttention,
-                config_class=_CONFIG_FOR_DOC,
-                expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
+            # Classifier head: either a linear layer or an identity function based on number of labels
+            self.classifier = (
+                nn.Linear(config.hidden_sizes[-1], config.num_labels) if config.num_labels > 0 else nn.Identity()
             )
-            def forward(
-                self,
-                pixel_values: torch.FloatTensor = None,
-                labels: Optional[torch.LongTensor] = None,
-                output_hidden_states: Optional[bool] = None,
-                return_dict: Optional[bool] = None,
+
+            # Initialize weights and perform final setup
+            self.post_init()
+
+        @add_start_docstrings_to_model_forward(CONVNEXT_INPUTS_DOCSTRING)
+        @add_code_sample_docstrings(
+            checkpoint=_IMAGE_CLASS_CHECKPOINT,
+            output_type=ImageClassifierOutputWithNoAttention,
+            config_class=_CONFIG_FOR_DOC,
+            expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
+        )
+        # Forward method for the model
+        def forward(
+            self,
+            pixel_values: torch.FloatTensor = None,
+            labels: Optional[torch.LongTensor] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
     ) -> Union[Tuple, ImageClassifierOutputWithNoAttention]:
         r"""
-        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional`):
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the image classification/regression loss. Indices should be in `[0, ...,
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 确定是否返回字典
+        # 根据需要决定是否使用预定义的返回字典或者自定义的返回字典配置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 获取卷积输出
+        # 调用卷积神经网络模型进行前向传播
         outputs = self.convnext(pixel_values, output_hidden_states=output_hidden_states, return_dict=return_dict)
 
-        # 如果返回字典则获取池化输出，否则获取第一个元素（在outputs里）
+        # 根据返回字典的设置选择使用池化后的输出或者直接从输出列表中获取结果
         pooled_output = outputs.pooler_output if return_dict else outputs[1]
 
-        # 通过分类器获得预测输出
+        # 使用分类器模型计算输出logits
         logits = self.classifier(pooled_output)
 
+        # 初始化损失值为None
         loss = None
-        # 如果有标签
+        # 如果提供了标签，则计算损失
         if labels is not None:
-            # 如果未指定问题类型，则根据标签数据类型和类别数量确定问题类型
+            # 如果问题类型未定义，则根据标签类型和标签数量设置问题类型
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
@@ -485,64 +389,64 @@ class ConvNextModel(ConvNextPreTrainedModel):
                 else:
                     self.config.problem_type = "multi_label_classification"
 
-            # 根据问题类型计算损失
+            # 根据问题类型选择相应的损失函数
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.num_labels == 1:
+                    # 对于回归问题，使用均方误差损失函数
                     loss = loss_fct(logits.squeeze(), labels.squeeze())
                 else:
                     loss = loss_fct(logits, labels)
             elif self.config.problem_type == "single_label_classification":
+                # 对于单标签分类问题，使用交叉熵损失函数
                 loss_fct = CrossEntropyLoss()
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             elif self.config.problem_type == "multi_label_classification":
+                # 对于多标签分类问题，使用带logits的二元交叉熵损失函数
                 loss_fct = BCEWithLogitsLoss()
                 loss = loss_fct(logits, labels)
 
-        # 如果不返回字典，则包装输出并返回
+        # 如果不使用返回字典，则按照原始模型的输出方式返回
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回图像分类器输出，包括损失、预测输出、隐藏状态
+        # 如果使用返回字典，则构建特定输出格式的对象返回
         return ImageClassifierOutputWithNoAttention(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
         )
-# 添加起始文档字符串，描述了 ConvNeXt 骨干网络的作用和使用情况
-@add_start_docstrings(
-    """
-    ConvNeXt backbone, to be used with frameworks like DETR and MaskFormer.
-    """,
-    CONVNEXT_START_DOCSTRING,
-)
-# 定义 ConvNeXtBackbone 类，继承自 ConvNextPreTrainedModel 和 BackboneMixin
+"""
+ConvNeXt backbone, to be used with frameworks like DETR and MaskFormer.
+"""
+
+# 定义 ConvNeXtBackbone 类，用于与 DETR 和 MaskFormer 等框架一起使用的卷积神经网络骨干
 class ConvNextBackbone(ConvNextPreTrainedModel, BackboneMixin):
-    # 初始化函数，接受一个 config 参数
+    
+    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 调用父类的 _init_backbone 函数
+        # 调用父类 ConvNextPreTrainedModel 的 _init_backbone 方法
         super()._init_backbone(config)
 
-        # 创建 ConvNextEmbeddings 对象
+        # 初始化嵌入层和编码器
         self.embeddings = ConvNextEmbeddings(config)
-        # 创建 ConvNextEncoder 对象
         self.encoder = ConvNextEncoder(config)
-        # 初始化 num_features 列表
         self.num_features = [config.hidden_sizes[0]] + config.hidden_sizes
 
-        # 创建 hidden_states_norms 字典，为每个 stage 添加 LayerNorm
+        # 为输出特征的隐藏状态添加层归一化
         hidden_states_norms = {}
+        # 遍历输出特征和通道数，为每个输出特征添加 ConvNextLayerNorm 层归一化
         for stage, num_channels in zip(self._out_features, self.channels):
             hidden_states_norms[stage] = ConvNextLayerNorm(num_channels, data_format="channels_first")
         self.hidden_states_norms = nn.ModuleDict(hidden_states_norms)
 
-        # 初始化权重并进行最终处理
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 定义前向传播函数
+    # forward 方法，定义模型的前向传播过程
     @add_start_docstrings_to_model_forward(CONVNEXT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=BackboneOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -550,12 +454,11 @@ class ConvNextBackbone(ConvNextPreTrainedModel, BackboneMixin):
         pixel_values: torch.Tensor,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        ) -> BackboneOutput:  # 返回类型为 BackboneOutput
         ) -> BackboneOutput:
         """
-        返回：定义函数返回类型为BackboneOutput
+        返回 BackBoneOutput 对象。
 
-        示例：给出函数的使用示例
+        Examples:
 
         ```python
         >>> from transformers import AutoImageProcessor, AutoBackbone
@@ -571,49 +474,47 @@ class ConvNextBackbone(ConvNextPreTrainedModel, BackboneMixin):
 
         >>> inputs = processor(image, return_tensors="pt")
         >>> outputs = model(**inputs)
-        ```py"""
+        ```"""
+        
+        # 设置返回字典的默认值为 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 定义return_dict变量，如果return_dict不为None，则赋值为return_dict，否则赋值为self.config.use_return_dict
+        # 设置输出隐藏状态的默认值为 self.config.output_hidden_states
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 定义output_hidden_states变量，如果output_hidden_states不为None，则赋值为output_hidden_states，否则赋值为self.config.output_hidden_states
-
+        
+        # 使用 self.embeddings 对象生成嵌入输出
         embedding_output = self.embeddings(pixel_values)
-        # 对输入的像素值进行嵌入操作
 
+        # 将嵌入输出传入编码器，并设置输出隐藏状态和返回字典的选项
         outputs = self.encoder(
             embedding_output,
             output_hidden_states=True,
             return_dict=return_dict,
         )
-        # 使用编码器对嵌入输出进行编码，并指定是否输出隐藏状态，以及返回字典的选项
 
+        # 根据是否使用返回字典来选择输出的隐藏状态
         hidden_states = outputs.hidden_states if return_dict else outputs[1]
-        # 如果return_dict为True，则隐藏状态为outputs中的隐藏状态，否则为outputs的第二个元素
 
-        feature_maps = ()
         # 初始化特征图为空元组
+        feature_maps = ()
+        # 遍历阶段名称和对应的隐藏状态，如果阶段在输出特征中，则归一化隐藏状态并添加到特征图中
         for stage, hidden_state in zip(self.stage_names, hidden_states):
             if stage in self.out_features:
                 hidden_state = self.hidden_states_norms[stage](hidden_state)
-                # 如果当前阶段在输出特征中，对隐藏状态进行归一化处理
                 feature_maps += (hidden_state,)
-                # 将处理后的隐藏状态加入到特征图中
 
+        # 如果不使用返回字典，则将特征图和可能的隐藏状态作为元组输出
         if not return_dict:
             output = (feature_maps,)
-            # 如果不需要返回字典，则输出只包含特征图
             if output_hidden_states:
                 output += (hidden_states,)
-            # 如果需要输出隐藏状态，则将隐藏状态也加入输出中
             return output
-            # 返回结果
 
+        # 使用 BackboneOutput 类返回特征图、隐藏状态（如果有）、注意力（未提供）
         return BackboneOutput(
             feature_maps=feature_maps,
             hidden_states=hidden_states if output_hidden_states else None,
             attentions=None,
         )
-        # 返回BackboneOutput对象，包括特征图、隐藏状态和注意力
 ```

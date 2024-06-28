@@ -1,17 +1,22 @@
-# `.\transformers\models\blenderbot\convert_blenderbot_original_pytorch_checkpoint_to_pytorch.py`
+# `.\models\blenderbot\convert_blenderbot_original_pytorch_checkpoint_to_pytorch.py`
 
-```py
-# 设置编码格式为 UTF-8
-# 版权声明
-# 许可证信息
-"""转换 Blenderbot 检查点。"""
+```
+# 设置文件编码为 UTF-8
+# 版权声明与许可证信息
+# 该脚本受 Apache License, Version 2.0 许可证保护，详见链接
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非法律另有要求或书面同意，本软件是基于"原样"提供的，不提供任何担保或条件，无论是明示的还是暗示的。
+# 有关许可证的详细信息，请参阅许可证。
+"""Convert Blenderbot checkpoint."""
 
-# 导入必要的库
-import argparse
+# 导入必要的库和模块
+import argparse  # 用于解析命令行参数
+import torch  # 导入 PyTorch 库
 
-import torch
-
+# 从 transformers 库中导入 BlenderbotConfig 和 BlenderbotForConditionalGeneration
 from transformers import BlenderbotConfig, BlenderbotForConditionalGeneration
+# 从 transformers.utils 中导入 logging 模块
 from transformers.utils import logging
 
 # 设置日志级别为 info
@@ -19,7 +24,7 @@ logging.set_verbosity_info()
 # 获取 logger 对象
 logger = logging.get_logger(__name__)
 
-# 定义要替换的模式列表
+# 定义一组模式，用于重命名状态字典的键
 PATTERNS = [
     ["attention", "attn"],
     ["encoder_attention", "encoder_attn"],
@@ -33,17 +38,17 @@ PATTERNS = [
     ["ffn.lin", "fc"],
 ]
 
-# 定义函数，用于重命名 state_dict 键
+# 函数：根据指定规则重命名状态字典的键
 def rename_state_dict_key(k):
-    # 如果键为 "embeddings.weight"，则替换为 "shared.weight"
+    # 特殊情况：如果键为 "embeddings.weight"，则重命名为 "shared.weight"
     if k == "embeddings.weight":
         return "shared.weight"
 
-    # 使用 PATTERNS 列表中的替换规则对键进行替换
+    # 遍历预定义的模式列表，逐一替换匹配的键名
     for parlai_name, hf_name in PATTERNS:
         k = k.replace(parlai_name, hf_name)
 
-    # 根据键的前缀进行进一步的替换
+    # 根据模型结构进一步重命名 encoder 和 decoder 的特定键
     if k.startswith("encoder"):
         k = k.replace(".attn", ".self_attn")
         k = k.replace("norm1", "self_attn_layer_norm")
@@ -54,80 +59,82 @@ def rename_state_dict_key(k):
         k = k.replace("norm3", "final_layer_norm")
     return k
 
-# 定义函数，用于重命名 layernorm 键
+# 函数：根据指定规则重命名 Layernorm 层的键
 def rename_layernorm_keys(sd):
+    # 定义需要重命名的 Layernorm 层的键列表
     keys = [
         "model.encoder.layernorm_embedding.weight",
         "model.encoder.layernorm_embedding.bias",
         "model.decoder.layernorm_embedding.weight",
         "model.decoder.layernorm_embedding.bias",
     ]
+    # 遍历每个键，将 Layernorm 替换为 layer_norm，并进行键值对的映射更新
     for k in keys:
-        v = sd.pop(k)
-        new_k = k.replace("layernorm_embedding", "layer_norm")
-        assert new_k not in sd
-        sd[new_k] = v
+        v = sd.pop(k)  # 弹出旧键对应的值
+        new_k = k.replace("layernorm_embedding", "layer_norm")  # 构造新的键名
+        assert new_k not in sd  # 断言新键名不在原始字典中
+        sd[new_k] = v  # 更新字典中的键值对
 
-# 定义要忽略的键列表
+# 定义需要忽略的键的列表
 IGNORE_KEYS = ["START"]
 
-# 定义转换 Parlai 检查点的函数
+# 函数：将 Parlai 模型的检查点转换为适合 Blenderbot 结构的检查点
 @torch.no_grad()
 def convert_parlai_checkpoint(checkpoint_path, pytorch_dump_folder_path, config_json_path):
     """
     Copy/paste/tweak model's weights to our BERT structure.
     """
-    # 加载模型
+    # 使用 map_location="cpu" 加载模型的检查点数据
     model = torch.load(checkpoint_path, map_location="cpu")
-    # 获取模型参数
-    sd = model["model"]
-    # 加载 Blenderbot 的配置文件
-    cfg = BlenderbotConfig.from_json_file(config_json_path)
-    # 创建 Blenderbot 模型
-    m = BlenderbotForConditionalGeneration(cfg)
-    # 获取有效的模型键
-    valid_keys = m.model.state_dict().keys()
-    # 用于存储转换失败的键
-    failures = []
-    # 用于存储键的映射关系
-    mapping = {}
-    # 遍历模型参数
+    sd = model["model"]  # 获取模型的状态字典
+    cfg = BlenderbotConfig.from_json_file(config_json_path)  # 从 JSON 文件中加载配置信息
+    m = BlenderbotForConditionalGeneration(cfg)  # 根据配置创建 Blenderbot 模型实例
+    valid_keys = m.model.state_dict().keys()  # 获取 Blenderbot 模型的有效键集合
+    failures = []  # 初始化失败列表，用于记录转换过程中的失败情况
+    mapping = {}  # 初始化映射字典，用于记录成功映射的键值对
     for k, v in sd.items():
-        # 如果键在忽略列表中，则跳过
-        if k in IGNORE_KEYS:
+        if k in IGNORE_KEYS:  # 如果键在忽略列表中，则跳过处理
             continue
 
-        # 对键进行重命名
-        new_k = rename_state_dict_key(k)
-        # 如果重命名后的键不在有效的模型键中，则添加到失败列表中
-        if new_k not in valid_keys:
+        new_k = rename_state_dict_key(k)  # 根据预定义规则重命名键名
+        if new_k not in valid_keys:  # 如果重命名后的键名不在有效键集合中，记录到失败列表中
             failures.append([k, new_k])
         else:
-            # 否则将键和值添加到映射中
-            mapping[new_k] = v
-    # 如果配置中指定在加载之前进行归一化，则对应用于Blenderbot-3B检查点的操作，将layernorm_embedding重命名为layer_norm
-    if cfg.normalize_before:  
+            mapping[new_k] = v  # 否则，将映射后的键值对添加到映射字典中
+    # 如果 cfg.normalize_before 为真，则说明使用 Blenderbot-3B 的检查点。需要将 layernorm_embedding 重命名为 layer_norm
+    if cfg.normalize_before:
+        # 调用函数 rename_layernorm_keys(sd)，对模型状态字典进行重命名操作
         rename_layernorm_keys(sd)
-    # 加载模型的状态字典
+    
+    # 载入模型的状态字典，使用 mapping 进行映射，确保严格匹配
     m.model.load_state_dict(mapping, strict=True)
-    # 将模型转换为半精度浮点数
+    
+    # 将模型转换为半精度（half precision）
     m.half()
-    # 保存预训练模型到指定的PyTorch转储文件夹路径
+    
+    # 将模型保存到指定的 PyTorch dump 文件夹路径中
     m.save_pretrained(pytorch_dump_folder_path)
-# 检查当前脚本是否作为主程序运行
 if __name__ == "__main__":
-    # 创建参数解析器对象
+    # 如果当前脚本作为主程序运行，则执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 添加必需参数：源文件路径，类型为字符串，用于指定要转换的模型文件路径
+    # 创建参数解析器对象
+
+    # Required parameters
     parser.add_argument("--src_path", type=str, help="like blenderbot-model.bin")
-    # 添加可选参数：保存目录，默认为"hf_blenderbot"，类型为字符串，用于指定转换后模型的保存目录
+    # 添加必需的参数：--src_path，类型为字符串，用法说明为"like blenderbot-model.bin"
+
     parser.add_argument("--save_dir", default="hf_blenderbot", type=str, help="Where to save converted model.")
-    # 添加可选参数：Hugging Face 配置文件路径，默认为"blenderbot-3b-config.json"，类型为字符串，用于指定转换后模型的配置文件路径
+    # 添加参数：--save_dir，默认值为"hf_blenderbot"，类型为字符串，用法说明为"Where to save converted model."
+
     parser.add_argument(
         "--hf_config_json", default="blenderbot-3b-config.json", type=str, help="Path to config to use"
     )
-    # 解析命令行参数，并将它们存储在args对象中
+    # 添加参数：--hf_config_json，默认值为"blenderbot-3b-config.json"，类型为字符串，用法说明为"Path to config to use"
+
     args = parser.parse_args()
-    # 调用convert_parlai_checkpoint函数，传入源文件路径、保存目录和Hugging Face配置文件路径作为参数
+    # 解析命令行参数并返回一个命名空间对象 args
+
     convert_parlai_checkpoint(args.src_path, args.save_dir, args.hf_config_json)
+    # 调用函数 convert_parlai_checkpoint，传递解析后的参数 args 中的 src_path、save_dir 和 hf_config_json
 ```

@@ -1,9 +1,30 @@
 # `.\models\deberta_v2\__init__.py`
 
-```py
-# 导入类型检查模块
+```
+# 版权声明和许可证声明，指明代码的版权和许可条件
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache 许可证版本 2.0 授权使用此文件
+# you may not use this file except in compliance with the License.
+# 除非符合许可证的规定，否则不得使用本文件
+# You may obtain a copy of the License at
+# 获取许可证的副本地址
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# 除非法律要求或书面同意，否则本软件按"原样"提供
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 没有明示或暗示的担保或条件
+# See the License for the specific language governing permissions and
+# 详见许可证，了解特定语言的授权信息
+# limitations under the License.
+# 许可证下的限制
+
 from typing import TYPE_CHECKING
-# 导入可选依赖异常模块
+
+# 导入必要的依赖模块和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -12,28 +33,30 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义需要导入的模块结构
+# 定义模块导入结构
 _import_structure = {
     "configuration_deberta_v2": ["DEBERTA_V2_PRETRAINED_CONFIG_ARCHIVE_MAP", "DebertaV2Config", "DebertaV2OnnxConfig"],
     "tokenization_deberta_v2": ["DebertaV2Tokenizer"],
 }
 
-# 检查 tokenizers 是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查 tokenizers 是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-else:  # 若可用则添加 tokenization_deberta_v2_fast 到 _import_structure 中
+else:
+    # 如果可用，将 tokenization_deberta_v2_fast 模块添加到导入结构中
     _import_structure["tokenization_deberta_v2_fast"] = ["DebertaV2TokenizerFast"]
 
-# 检查 tensorflow 是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查 TensorFlow 是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-else:  # 若可用则添加 modeling_tf_deberta_v2 到 _import_structure 中
+else:
+    # 如果可用，将 modeling_tf_deberta_v2 模块添加到导入结构中
     _import_structure["modeling_tf_deberta_v2"] = [
         "TF_DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFDebertaV2ForMaskedLM",
@@ -45,13 +68,14 @@ else:  # 若可用则添加 modeling_tf_deberta_v2 到 _import_structure 中
         "TFDebertaV2PreTrainedModel",
     ]
 
-# 检查 pytorch 是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查 PyTorch 是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-else:  # 若可用则添加 modeling_deberta_v2 到 _import_structure 中
+else:
+    # 如果可用，将 modeling_deberta_v2 模块添加到导入结构中
     _import_structure["modeling_deberta_v2"] = [
         "DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "DebertaV2ForMaskedLM",
@@ -63,65 +87,68 @@ else:  # 若可用则添加 modeling_deberta_v2 到 _import_structure 中
         "DebertaV2PreTrainedModel",
     ]
 
-# 若为类型检查环境，则添加相应模块到导入结构中
+# 如果是类型检查阶段，进行进一步的导入
 if TYPE_CHECKING:
+    # 导入配置相关的类和变量
     from .configuration_deberta_v2 import (
         DEBERTA_V2_PRETRAINED_CONFIG_ARCHIVE_MAP,
         DebertaV2Config,
         DebertaV2OnnxConfig,
     )
+    # 导入 tokenizers 相关的类
     from .tokenization_deberta_v2 import DebertaV2Tokenizer
 
-    # 检查 tokenizers 是否可用，若可用则添加 tokenization_deberta_v2_fast 到导入结构中
+    # 检查 tokenizers 是否可用，若不可用则不导入
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果可用，导入 tokenization_deberta_v2_fast 模块
         from .tokenization_deberta_v2_fast import DebertaV2TokenizerFast
 
-    # 检查 tensorflow 是否可用，若不可用则抛出 OptionalDependencyNotAvailable 异常
+    # 检查 TensorFlow 是否可用，若不可用则不导入
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果不是使用Torch，则从模型的TF版本中导入相关内容
-    else:
-        from .modeling_tf_deberta_v2 import (
-            TF_DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST,  # TF版本的预训练模型文件列表
-            TFDebertaV2ForMaskedLM,  # TF版本的用于Masked Language Modeling的DeBERTaV2模型
-            TFDebertaV2ForMultipleChoice,  # TF版本的用于多项选择任务的DeBERTaV2模型
-            TFDebertaV2ForQuestionAnswering,  # TF版本的用于问答任务的DeBERTaV2模型
-            TFDebertaV2ForSequenceClassification,  # TF版本的用于序列分类任务的DeBERTaV2模型
-            TFDebertaV2ForTokenClassification,  # TF版本的用于标记分类任务的DeBERTaV2模型
-            TFDebertaV2Model,  # TF版本的DeBERTaV2模型
-            TFDebertaV2PreTrainedModel,  # TF版本的DeBERTaV2预训练模型
-        )
+    # 如果前面的条件不满足，则从当前目录下的.modeling_tf_deberta_v2模块中导入以下内容：
+    from .modeling_tf_deberta_v2 import (
+        TF_DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST,
+        TFDebertaV2ForMaskedLM,
+        TFDebertaV2ForMultipleChoice,
+        TFDebertaV2ForQuestionAnswering,
+        TFDebertaV2ForSequenceClassification,
+        TFDebertaV2ForTokenClassification,
+        TFDebertaV2Model,
+        TFDebertaV2PreTrainedModel,
+    )
 
-    # 尝试检查是否导入了Torch，若未导入则引发OptionalDependencyNotAvailable异常
-    try:
-        if not is_torch_available():
-            raise OptionalDependencyNotAvailable()
-    except OptionalDependencyNotAvailable:
-        # 如果OptionalDependencyNotAvailable异常被引发，则忽略
-        pass
-    # 如果没有异常被引发，则执行以下内容
-    else:
-        # 从模型的PyTorch版本中导入相关内容
-        from .modeling_deberta_v2 import (
-            DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST,  # PyTorch版本的预训练模型文件列表
-            DebertaV2ForMaskedLM,  # PyTorch版本的用于Masked Language Modeling的DeBERTaV2模型
-            DebertaV2ForMultipleChoice,  # PyTorch版本的用于多项选择任务的DeBERTaV2模型
-            DebertaV2ForQuestionAnswering,  # PyTorch版本的用于问答任务的DeBERTaV2模型
-            DebertaV2ForSequenceClassification,  # PyTorch版本的用于序列分类任务的DeBERTaV2模型
-            DebertaV2ForTokenClassification,  # PyTorch版本的用于标记分类任务的DeBERTaV2模型
-            DebertaV2Model,  # PyTorch版本的DeBERTaV2模型
-            DebertaV2PreTrainedModel,  # PyTorch版本的DeBERTaV2预训练模型
-        )
-# 如果条件不成立，则导入sys模块
-import sys
-# 将当前模块注册到sys.modules字典中
-sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+try:
+    # 尝试检查是否有torch库可用，如果不可用则引发OptionalDependencyNotAvailable异常
+    if not is_torch_available():
+        raise OptionalDependencyNotAvailable()
+except OptionalDependencyNotAvailable:
+    # 如果OptionalDependencyNotAvailable异常被引发，什么也不做，直接跳过
+    pass
+else:
+    # 如果上面的try块未引发异常，则从当前目录下的.modeling_deberta_v2模块中导入以下内容：
+    from .modeling_deberta_v2 import (
+        DEBERTA_V2_PRETRAINED_MODEL_ARCHIVE_LIST,
+        DebertaV2ForMaskedLM,
+        DebertaV2ForMultipleChoice,
+        DebertaV2ForQuestionAnswering,
+        DebertaV2ForSequenceClassification,
+        DebertaV2ForTokenClassification,
+        DebertaV2Model,
+        DebertaV2PreTrainedModel,
+    )
+else:
+    # 导入 sys 模块，用于操作 Python 解释器的系统功能
+    import sys
+    
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
+    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

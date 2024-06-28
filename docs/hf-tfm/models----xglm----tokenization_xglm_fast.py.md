@@ -1,35 +1,38 @@
-# `.\transformers\models\xglm\tokenization_xglm_fast.py`
+# `.\models\xglm\tokenization_xglm_fast.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版本版权声明
-# 根据Apache许可证版本2.0获得授权方可使用此文件
-# 可到 http://www.apache.org/licenses/LICENSE-2.0 获取许可证的副本
-# 如非依法要求，或经授权的书面同意，只有在符合本许可证的条件下方能使用本文件
-# 本许可证限制代码的发布，基于 "不做任何担保或条件"，无论是明示的或暗示的
-# 请从许可证中查看具体语言许可许可的权限以及限制。
-"""XGLM"""的标识处理类
+```
+# coding=utf-8
+# Copyright The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Tokenization classes for XGLM."""
 
-# 导入所需的模块和库
-import os
-from shutil import copyfile
-from typing import List, Optional, Tuple
-# 从 tokenization_utils_fast 模块中导入 PreTrainedTokenizerFast 类
-from ...tokenization_utils_fast import PreTrainedTokenizerFast
-# 从 utils 模块中导入 is_sentencepiece_available 和 logging 函数
-from ...utils import is_sentencepiece_available, logging
-# 如 sentencepiece 可用，从 tokenization_xglm 导入 XGLMTokenizer 类
+import os  # 导入操作系统功能
+from shutil import copyfile  # 导入复制文件功能
+from typing import List, Optional, Tuple  # 导入类型提示相关的模块
+
+from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 导入速度快的预训练分词器类
+from ...utils import is_sentencepiece_available, logging  # 导入判断是否安装了 sentencepiece 和日志记录相关的工具
+
 if is_sentencepiece_available():
-    from .tokenization_xglm import XGLMTokenizer
+    from .tokenization_xglm import XGLMTokenizer  # 如果安装了 sentencepiece，则导入 XGLMTokenizer 类
 else:
-    XGLMTokenizer = None
+    XGLMTokenizer = None  # 否则将 XGLMTokenizer 设置为 None
 
-# 获取日志处理对象
-logger = logging.get_logger(__name__)
-# 设置词汇文件名的映射
-VOCAB_FILES_NAMES = {"vocab_file": "sentencepiece.bpe.model", "tokenizer_file": "tokenizer.json"}
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 设置预训练词汇文件映射
+VOCAB_FILES_NAMES = {"vocab_file": "sentencepiece.bpe.model", "tokenizer_file": "tokenizer.json"}  # 定义词汇文件和分词器文件的名称
+
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "facebook/xglm-564M": "https://huggingface.co/facebook/xglm-564M/resolve/main/sentencepiece.bpe.model",
@@ -37,13 +40,12 @@ PRETRAINED_VOCAB_FILES_MAP = {
     "tokenizer_file": {
         "facebook/xglm-564M": "https://huggingface.co/facebook/xglm-564M/resolve/main/tokenizer.json",
     },
-}
-# 设置预训练位置嵌入大小
+}  # 预训练模型对应的词汇文件和分词器文件的映射
+
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "facebook/xglm-564M": 2048,
-}
+}  # 预训练模型对应的位置嵌入大小
 
-# 定义 XGLMTokenizerFast 类，继承 PreTrainedTokenizerFast 类
 class XGLMTokenizerFast(PreTrainedTokenizerFast):
     """
     Construct a "fast" XGLM tokenizer (backed by HuggingFace's *tokenizers* library). Adapted from [`RobertaTokenizer`]
@@ -52,42 +54,87 @@ class XGLMTokenizerFast(PreTrainedTokenizerFast):
 
     This tokenizer inherits from [`PreTrainedTokenizerFast`] which contains most of the main methods. Users should
     refer to this superclass for more information regarding those methods.
-    <s>NOTUSED", "</s>NOTUSED"]`):
-                # 标记器使用的其他特殊标记。
-                Additional special tokens used by the tokenizer.
-        """
-    
-        vocab_files_names = VOCAB_FILES_NAMES
-        pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-        max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-        model_input_names = ["input_ids", "attention_mask"]
-        slow_tokenizer_class = XGLMTokenizer
-    
-        def __init__(
-            self,
-            vocab_file=None,
-            tokenizer_file=None,
-            bos_token="<s>",
-            eos_token="</s>",
-            sep_token="</s>",
-            cls_token="<s>",
-            unk_token="<unk>",
-            pad_token="<pad>",
-            **kwargs,
+    """
+    """
+    Args:
+        vocab_file (`str`):
+            Path to the vocabulary file.
+        bos_token (`str`, *optional*, defaults to `"<s>"`):
+            The beginning of sequence token that was used during pretraining. Can be used a sequence classifier token.
+
+            <Tip>
+
+            When building a sequence using special tokens, this is not the token that is used for the beginning of
+            sequence. The token used is the `cls_token`.
+
+            </Tip>
+
+        eos_token (`str`, *optional*, defaults to `"</s>"`):
+            The end of sequence token.
+
+            <Tip>
+
+            When building a sequence using special tokens, this is not the token that is used for the end of sequence.
+            The token used is the `sep_token`.
+
+            </Tip>
+
+        sep_token (`str`, *optional*, defaults to `"</s>"`):
+            The separator token, which is used when building a sequence from multiple sequences, e.g. two sequences for
+            sequence classification or for a text and a question for question answering. It is also used as the last
+            token of a sequence built with special tokens.
+        cls_token (`str`, *optional*, defaults to `"<s>"`):
+            The classifier token which is used when doing sequence classification (classification of the whole sequence
+            instead of per-token classification). It is the first token of the sequence when built with special tokens.
+        unk_token (`str`, *optional*, defaults to `"<unk>"`):
+            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
+            token instead.
+        pad_token (`str`, *optional*, defaults to `"<pad>"`):
+            The token used for padding, for example when batching sequences of different lengths.
+        additional_special_tokens (`List[str]`, *optional*, defaults to `["<s>NOTUSED", "</s>NOTUSED"]`):
+            Additional special tokens used by the tokenizer.
+    """
+
+    # 映射不同文件名与对应的词汇表文件名
+    vocab_files_names = VOCAB_FILES_NAMES
+    # 预训练模型的词汇文件映射
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 预训练位置嵌入的最大输入尺寸
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 模型输入的名称列表
+    model_input_names = ["input_ids", "attention_mask"]
+    # 慢速分词器的类
+    slow_tokenizer_class = XGLMTokenizer
+
+    # 初始化函数，设置各种默认参数和额外参数
+    def __init__(
+        self,
+        vocab_file=None,
+        tokenizer_file=None,
+        bos_token="<s>",
+        eos_token="</s>",
+        sep_token="</s>",
+        cls_token="<s>",
+        unk_token="<unk>",
+        pad_token="<pad>",
+        **kwargs,
+    """
     ):
-        # 兼容原始分词器
+        """
+        Compatibility with the original tokenizer.
+        Set the number of made-up words to 7 and generate a list of made-up words.
+        Append any new made-up words to the 'additional_special_tokens' in kwargs.
+        Initialize the superclass with various parameters including vocab_file and additional_special_tokens.
+        """
+
         self.num_madeup_words = 7
-        # 创建虚构单词列表
         madeup_words = [f"<madeupword{i}>" for i in range(self.num_madeup_words)]
 
-        # 如果未指定附加特殊标记，则初始化为空列表
         kwargs["additional_special_tokens"] = kwargs.get("additional_special_tokens", []) or []
-        # 合并虚构单词到附加特殊标记中
         kwargs["additional_special_tokens"] += [
             word for word in madeup_words if word not in kwargs["additional_special_tokens"]
         ]
 
-        # 调用父类的构造函数，传递所需参数
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -100,32 +147,31 @@ class XGLMTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 保存词汇文件路径
         self.vocab_file = vocab_file
 
     @property
     def can_save_slow_tokenizer(self) -> bool:
-        # 判断词汇文件是否存在
+        """
+        Check if the vocab_file exists to determine if the slow tokenizer can be saved.
+        Returns True if vocab_file exists, False otherwise.
+        """
         return os.path.isfile(self.vocab_file) if self.vocab_file else False
 
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        通过连接并添加特殊标记，为序列分类任务构建模型输入。
-        XLM-RoBERTa 序列的格式如下：
-
-        - 单个序列: `<s> X </s>`
-        - 序列对: `<s> A </s></s> B </s>`
+        Build model inputs for sequence classification tasks by adding special tokens.
+        Formats sequences according to XLM-RoBERTa standards.
 
         Args:
             token_ids_0 (`List[int]`):
-                需要添加特殊标记的 ID 列表。
+                List of IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
-                可选的第二个 ID 列表，用于序列对。
+                List of IDs for the second sequence (optional).
 
         Returns:
-            `List[int]`: 具有适当特殊标记的输入 ID 列表。
+            `List[int]`: List of input IDs with special tokens added.
         """
 
         if token_ids_1 is None:
@@ -137,46 +183,47 @@ class XGLMTokenizerFast(PreTrainedTokenizerFast):
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        从传递的两个序列创建一个用于序列对分类任务的掩码。
-        XLM-RoBERTa 不使用令牌类型 ID，因此返回零列表。
+        Create token type IDs for sequence-pair classification tasks.
+        Always returns a list of zeros as XLM-RoBERTa does not use token type IDs.
 
         Args:
             token_ids_0 (`List[int]`):
-                ID 列表。
+                List of IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
-                可选的第二个 ID 列表，用于序列对。
+                List of IDs for the second sequence (optional).
 
         Returns:
-            `List[int]`: 零列表。
+            `List[int]`: List of zeros (indicating no distinction in token types).
         """
-
+        
         sep = [self.sep_token_id]
 
         if token_ids_1 is None:
             return len(sep + token_ids_0) * [0]
         return len(sep + token_ids_0 + sep + sep + token_ids_1) * [0]
-    # 保存词汇表到指定目录，返回保存的文件路径
+    # 定义一个方法用于保存词汇表到指定目录下的文件中，方法签名指定了参数和返回类型
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 如果无法保存慢速分词器的词汇表，则引发数值错误
+        # 如果当前的快速分词器没有保存慢速分词器所需的信息，则抛出数值错误异常
         if not self.can_save_slow_tokenizer:
             raise ValueError(
                 "Your fast tokenizer does not have the necessary information to save the vocabulary for a slow "
                 "tokenizer."
             )
-    
-        # 如果保存目录不存在，则记录错误信息并返回
+
+        # 如果保存词汇表的目录不存在，则记录错误日志并返回
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory.")
             return
-        # 组装输出词汇表文件的路径
+
+        # 构建输出词汇表文件的路径，包括可选的文件名前缀和文件名
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-    
-        # 如果当前词汇表文件的绝对路径不等于输出文件的绝对路径，则复制当前词汇表文件到输出文件
+
+        # 如果当前词汇表文件的绝对路径与输出文件的绝对路径不同，则复制当前词汇表文件到输出路径
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file):
             copyfile(self.vocab_file, out_vocab_file)
-    
-        # 返回保存的文件路径的元组
+
+        # 返回一个包含输出词汇表文件路径的元组
         return (out_vocab_file,)
 ```

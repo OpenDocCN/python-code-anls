@@ -1,36 +1,29 @@
 # `.\models\deta\configuration_deta.py`
 
-```py
-# coding=utf-8
-# Copyright 2022 SenseTime and The HuggingFace Inc. team. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+```
+# 设置文件编码为 UTF-8
+# 版权声明和许可证声明，告知代码使用者版权和许可条件
+# 仅在遵守 Apache 许可证 Version 2.0 的情况下可使用本文件
+# 可以从指定的网址获取完整的许可证文本
+# 根据适用法律或书面同意，本软件以"原样"提供，不带任何明示或暗示的担保或条件
+# 详细许可证信息请参见指定的网址
+
 """ DETA model configuration"""
 
-
+# 导入必要的模块和类
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
 from ..auto import CONFIG_MAPPING
 
-
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
-# DETA 预训练模型配置文件的下载地址映射
+# DETA 预训练配置文件映射，指定了模型名称和其对应的配置文件 URL
 DETA_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "ut/deta": "https://huggingface.co/ut/deta/resolve/main/config.json",
 }
 
-
+# DetaConfig 类继承自 PretrainedConfig 类，用于存储 DETA 模型的配置信息
 class DetaConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`DetaModel`]. It is used to instantiate a DETA
@@ -54,160 +47,71 @@ class DetaConfig(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```
+    """
 
-    # 模型类型
+    # 指定模型类型为 "deta"
     model_type = "deta"
-    # 属性映射字典，用于将预训练模型的配置属性映射到公共属性名称
+    # 定义属性映射，将通用名称映射到具体模型配置参数名称
     attribute_map = {
         "hidden_size": "d_model",
         "num_attention_heads": "encoder_attention_heads",
     }
-    # 初始化函数，用于初始化模型参数
+    # 初始化方法，用于初始化模型对象
     def __init__(
-        # backbone_config为预训练模型的配置文件，默认为None
-        backbone_config=None,
-        # 查询数量，默认为900
-        num_queries=900,
-        # 最大位置嵌入数，默认为2048
-        max_position_embeddings=2048,
-        # 编码器层数，默认为6
-        encoder_layers=6,
-        # 编码器中FFN层维度，默认为2048
-        encoder_ffn_dim=2048,
-        # 编码器中注意力头数，默认为8
-        encoder_attention_heads=8,
-        # 解码器层数，默认为6
-        decoder_layers=6,
-        # 解码器中FFN层维度，默认为1024
-        decoder_ffn_dim=1024,
-        # 解码器中注意力头数，默认为8
-        decoder_attention_heads=8,
-        # 编码器层级丢弃率，默认为0.0
-        encoder_layerdrop=0.0,
-        # 是否是编码器-解码器结构，默认为True
-        is_encoder_decoder=True,
-        # 激活函数，默认为"relu"
-        activation_function="relu",
-        # 模型维度，默认为256
-        d_model=256,
-        # 丢弃率，默认为0.1
-        dropout=0.1,
-        # 注意力丢弃率，默认为0.0
-        attention_dropout=0.0,
-        # 激活函数丢弃率，默认为0.0
-        activation_dropout=0.0,
-        # 初始化标准差，默认为0.02
-        init_std=0.02,
-        # 初始化Xavier标准差，默认为1.0
-        init_xavier_std=1.0,
-        # 是否返回中间结果，默认为True
-        return_intermediate=True,
-        # 是否进行辅助损失，默认为False
-        auxiliary_loss=False,
-        # 位置嵌入类型，默认为"sine"
-        position_embedding_type="sine",
-        # 特征级别数量，默认为5
-        num_feature_levels=5,
-        # 编码器点数，默认为4
-        encoder_n_points=4,
-        # 解码器点数，默认为4
-        decoder_n_points=4,
-        # 是否进行两阶段模式，默认为True
-        two_stage=True,
-        # 两阶段模式的提议数量，默认为300
-        two_stage_num_proposals=300,
-        # 是否进行框盒精化，默认为True
-        with_box_refine=True,
-        # 是否进行第一阶段分配，默认为True
-        assign_first_stage=True,
-        # 是否进行第二阶段分配，默认为True
-        assign_second_stage=True,
-        # 类损失，默认为1
-        class_cost=1,
-        # 边界框损失，默认为5
-        bbox_cost=5,
-        # GIOU损失，默认为2
-        giou_cost=2,
-        # 掩码损失系数，默认为1
-        mask_loss_coefficient=1,
-        # Dice损失系数，默认为1
-        dice_loss_coefficient=1,
-        # 边界框损失系数，默认为5
-        bbox_loss_coefficient=5,
-        # GIOU损失系数，默认为2
-        giou_loss_coefficient=2,
-        # 结束系数，默认为0.1
-        eos_coefficient=0.1,
-        # 焦点Alpha，默认为0.25
-        focal_alpha=0.25,
-        # **kwargs，其他参数
-        **kwargs,
-    # 检查是否未提供 backbone_config
+        self,
+        backbone_config=None,  # 设置用于骨干网络的配置
+        backbone=None,  # 设置用于骨干网络的具体实现
+        use_pretrained_backbone=False,  # 是否使用预训练的骨干网络参数
+        use_timm_backbone=False,  # 是否使用timm库提供的骨干网络
+        backbone_kwargs=None,  # 骨干网络的额外参数
+        num_queries=900,  # 查询的数量
+        max_position_embeddings=2048,  # 最大位置嵌入数
+        encoder_layers=6,  # 编码器层数
+        encoder_ffn_dim=2048,  # 编码器中FFN层的维度
+        encoder_attention_heads=8,  # 编码器中注意力头的数量
+        decoder_layers=6,  # 解码器层数
+        decoder_ffn_dim=1024,  # 解码器中FFN层的维度
+        decoder_attention_heads=8,  # 解码器中注意力头的数量
+        encoder_layerdrop=0.0,  # 编码器层的dropout率
+        is_encoder_decoder=True,  # 模型是否为编码-解码结构
+        activation_function="relu",  # 激活函数类型
+        d_model=256,  # 模型的维度
+        dropout=0.1,  # 全局的dropout率
+        attention_dropout=0.0,  # 注意力机制的dropout率
+        activation_dropout=0.0,  # 激活函数的dropout率
+        init_std=0.02,  # 初始化的标准差
+        init_xavier_std=1.0,  # Xavier初始化的标准差
+        return_intermediate=True,  # 是否返回中间结果
+        auxiliary_loss=False,  # 是否使用辅助损失
+        position_embedding_type="sine",  # 位置嵌入的类型
+        num_feature_levels=5,  # 特征金字塔的层数
+        encoder_n_points=4,  # 编码器中的采样点数
+        decoder_n_points=4,  # 解码器中的采样点数
+        two_stage=True,  # 是否使用两阶段检测器
+        two_stage_num_proposals=300,  # 第一阶段提议的数量
+        with_box_refine=True,  # 是否进行框细化
+        assign_first_stage=True,  # 是否进行第一阶段的指派
+        assign_second_stage=True,  # 是否进行第二阶段的指派
+        class_cost=1,  # 类别损失的权重
+        bbox_cost=5,  # 边界框损失的权重
+        giou_cost=2,  # GIoU损失的权重
+        mask_loss_coefficient=1,  # 掩膜损失的系数
+        dice_loss_coefficient=1,  # Dice损失的系数
+        bbox_loss_coefficient=5,  # 边界框损失的系数
+        giou_loss_coefficient=2,  # GIoU损失的系数
+        eos_coefficient=0.1,  # EOS损失的系数
+        focal_alpha=0.25,  # Focal损失的alpha参数
+        disable_custom_kernels=True,  # 是否禁用自定义内核
+        **kwargs,  # 其他未列出的关键字参数
     ):
-        # 如果没有提供 backbone_config，则使用默认的 ResNet backbone 进行初始化
-        logger.info("`backbone_config` is `None`. Initializing the config with the default `ResNet` backbone.")
-        backbone_config = CONFIG_MAPPING["resnet"](out_features=["stage2", "stage3", "stage4"])
-    else:
-        # 如果提供了 backbone_config，并且为字典类型，则根据 model_type 创建对应的配置类
-        if isinstance(backbone_config, dict):
-            backbone_model_type = backbone_config.pop("model_type")
-            config_class = CONFIG_MAPPING[backbone_model_type]
-            backbone_config = config_class.from_dict(backbone_config)
+        # 属性访问器，返回编码器注意力头的数量
+        @property
+        def num_attention_heads(self) -> int:
+            return self.encoder_attention_heads
 
-    # 设置模型配置参数
-    self.backbone_config = backbone_config
-    self.num_queries = num_queries
-    self.max_position_embeddings = max_position_embeddings
-    self.d_model = d_model
-    self.encoder_ffn_dim = encoder_ffn_dim
-    self.encoder_layers = encoder_layers
-    self.encoder_attention_heads = encoder_attention_heads
-    self.decoder_ffn_dim = decoder_ffn_dim
-    self.decoder_layers = decoder_layers
-    self.decoder_attention_heads = decoder_attention_heads
-    self.dropout = dropout
-    self.attention_dropout = attention_dropout
-    self.activation_dropout = activation_dropout
-    self.activation_function = activation_function
-    self.init_std = init_std
-    self.init_xavier_std = init_xavier_std
-    self.encoder_layerdrop = encoder_layerdrop
-    self.auxiliary_loss = auxiliary_loss
-    self.position_embedding_type = position_embedding_type
-    # 设置 deformable 属性
-    self.num_feature_levels = num_feature_levels
-    self.encoder_n_points = encoder_n_points
-    self.decoder_n_points = decoder_n_points
-    self.two_stage = two_stage
-    self.two_stage_num_proposals = two_stage_num_proposals
-    self.with_box_refine = with_box_refine
-    self.assign_first_stage = assign_first_stage
-    self.assign_second_stage = assign_second_stage
-    # 检查两阶段模型的配置是否正确
-    if two_stage is True and with_box_refine is False:
-        raise ValueError("If two_stage is True, with_box_refine must be True.")
-    # 设置 Hungarian matcher 相关参数
-    self.class_cost = class_cost
-    self.bbox_cost = bbox_cost
-    self.giou_cost = giou_cost
-    # 设置损失函数的系数
-    self.mask_loss_coefficient = mask_loss_coefficient
-    self.dice_loss_coefficient = dice_loss_coefficient
-    self.bbox_loss_coefficient = bbox_loss_coefficient
-    self.giou_loss_coefficient = giou_loss_coefficient
-    self.eos_coefficient = eos_coefficient
-    self.focal_alpha = focal_alpha
-    # 调用父类初始化方法
-    super().__init__(is_encoder_decoder=is_encoder_decoder, **kwargs)
-
-@property
-def num_attention_heads(self) -> int:
-    # 返回 encoder_attention_heads 属性值
-    return self.encoder_attention_heads
-
-@property
-def hidden_size(self) -> int:
-    # 返回 d_model 属性值
-    return self.d_model
+        # 属性访问器，返回模型隐藏层的维度
+        @property
+        def hidden_size(self) -> int:
+            return self.d_model
 ```

@@ -1,143 +1,158 @@
-# `.\transformers\models\univnet\feature_extraction_univnet.py`
+# `.\models\univnet\feature_extraction_univnet.py`
 
-```py
-# 版权声明
-# 本代码版权归HuggingFace团队所有
-# 根据Apache License, Version 2.0许可，您不得使用这个文件，除非符合许可条件
-# 您可以在以下位置获取许可证的拷贝
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可分发的软件是基于“AS IS”基础，没有任何形式的保证或条件
-# 请查看许可证以获取关于权限和限制的具体信息
-
-"""UnivNetModel的特征提取器类"""
-# 导入所需的库和模块
+```
+# 版权声明和许可信息，指明代码版权和使用许可条件
+# 详细描述使用 Apache 许可证 2.0 版本，允许在遵守许可的前提下使用此代码
+#
+# 导入必要的库和模块
 from typing import Any, Dict, List, Optional, Union
-import numpy as np
+
+import numpy as np  # 导入 NumPy 库，用于数值计算
+
+# 导入音频处理相关工具函数
 from ...audio_utils import mel_filter_bank, optimal_fft_length, spectrogram, window_function
+# 导入特征提取序列工具类
 from ...feature_extraction_sequence_utils import SequenceFeatureExtractor
+# 导入特征提取批处理类
 from ...feature_extraction_utils import BatchFeature
+# 导入通用工具类
 from ...utils import PaddingStrategy, TensorType, logging
 
-# 获取logger对象
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-
+# 定义 UnivNetFeatureExtractor 类，继承自 SequenceFeatureExtractor 类
 class UnivNetFeatureExtractor(SequenceFeatureExtractor):
     r"""
-    构建UnivNet特征提取器类
+    构建 UnivNet 特征提取器。
 
-    该类使用短时傅里叶变换(STFT)从原始语音中提取对数梅尔滤波器组特征，STFT实现遵循TacoTron 2和Hifi-GAN的方法。
+    此类使用短时傅里叶变换 (STFT) 从原始语音中提取对数梅尔滤波器组特征。
+    STFT 实现遵循 TacoTron 2 和 Hifi-GAN 的实现方式。
 
-    这个特征提取器继承自[`~feature_extraction_sequence_utils.SequenceFeatureExtractor`]，其中包含大部分主要方法。
-    用户可以参考这个超类获取更多关于这些方法的信息。
-
+    此特征提取器继承自 [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`]，
+    该超类包含大部分主要方法。用户应参考此超类以获取有关这些方法的更多信息。
     """
 
-    # 模型的输入名称列表
+    # 模型输入名称列表
     model_input_names = ["input_features", "noise_sequence", "padding_mask"]
 
+    # 初始化方法，设置特征提取器的各种参数
     def __init__(
         self,
-        feature_size: int = 1,
-        sampling_rate: int = 24000,
-        padding_value: float = 0.0,
-        do_normalize: bool = False,
-        num_mel_bins: int = 100,
-        hop_length: int = 256,
-        win_length: int = 1024,
-        win_function: str = "hann_window",
-        filter_length: Optional[int] = 1024,
-        max_length_s: int = 10,
-        fmin: float = 0.0,
-        fmax: Optional[float] = None,
-        mel_floor: float = 1e-9,
-        center: bool = False,
-        compression_factor: float = 1.0,
-        compression_clip_val: float = 1e-5,
-        normalize_min: float = -11.512925148010254,
-        normalize_max: float = 2.3143386840820312,
-        model_in_channels: int = 64,
-        pad_end_length: int = 10,
-        return_attention_mask=True,
-        **kwargs,
+        feature_size: int = 1,  # 特征大小，默认为 1
+        sampling_rate: int = 24000,  # 采样率，默认为 24000 Hz
+        padding_value: float = 0.0,  # 填充值，默认为 0.0
+        do_normalize: bool = False,  # 是否进行归一化，默认为 False
+        num_mel_bins: int = 100,  # 梅尔滤波器组数目，默认为 100
+        hop_length: int = 256,  # 跳跃长度，默认为 256
+        win_length: int = 1024,  # 窗口长度，默认为 1024
+        win_function: str = "hann_window",  # 窗函数类型，默认为 "hann_window"
+        filter_length: Optional[int] = 1024,  # 滤波器长度，默认为 1024
+        max_length_s: int = 10,  # 最大长度（秒），默认为 10
+        fmin: float = 0.0,  # 最低频率，默认为 0.0 Hz
+        fmax: Optional[float] = None,  # 最高频率，可选参数
+        mel_floor: float = 1e-9,  # 梅尔值下限，默认为 1e-9
+        center: bool = False,  # 是否居中，默认为 False
+        compression_factor: float = 1.0,  # 压缩因子，默认为 1.0
+        compression_clip_val: float = 1e-5,  # 压缩剪切值，默认为 1e-5
+        normalize_min: float = -11.512925148010254,  # 归一化最小值，默认为 -11.512925148010254
+        normalize_max: float = 2.3143386840820312,  # 归一化最大值，默认为 2.3143386840820312
+        model_in_channels: int = 64,  # 模型输入通道数，默认为 64
+        pad_end_length: int = 10,  # 结尾填充长度，默认为 10
+        return_attention_mask=True,  # 是否返回注意力掩码，默认为 True
+        **kwargs,  # 其他可选关键字参数
     ):
-        # 调用父类的构造函数，初始化参数
-        super().__init__(
-            feature_size=feature_size,
-            sampling_rate=sampling_rate,
-            padding_value=padding_value,
-            return_attention_mask=return_attention_mask,
-            **kwargs,
-        )
+        # 调用父类的初始化方法
+        super().__init__()
+        ):
+            # 调用父类的构造函数，初始化对象
+            super().__init__(
+                feature_size=feature_size,
+                sampling_rate=sampling_rate,
+                padding_value=padding_value,
+                return_attention_mask=return_attention_mask,
+                **kwargs,
+            )
 
-        # 初始化是否进行归一化的标志
-        self.do_normalize = do_normalize
+            # 设置是否进行归一化的标志
+            self.do_normalize = do_normalize
 
-        # 初始化梅尔频谱的参数
-        self.num_mel_bins = num_mel_bins
-        self.hop_length = hop_length
-        self.win_length = win_length
-        self.win_function = win_function
-        self.filter_length = filter_length
-        self.fmin = fmin
-        if fmax is None:
-            # 如果未指定最大频率，则根据采样率计算
-            # 遵循 librosa.filters.mel 的实现
-            fmax = float(sampling_rate) / 2
-        self.fmax = fmax
-        self.mel_floor = mel_floor
+            # 设置 Mel 频率滤波器的参数
+            self.num_mel_bins = num_mel_bins
+            self.hop_length = hop_length
+            self.win_length = win_length
+            self.win_function = win_function
+            self.filter_length = filter_length
+            self.fmin = fmin
+            if fmax is None:
+                # 如果未指定 fmax，则根据采样率计算最大频率
+                # 遵循 librosa.filters.mel 的实现
+                fmax = float(sampling_rate) / 2
+            self.fmax = fmax
+            self.mel_floor = mel_floor
 
-        # 初始化最大长度的参数
-        self.max_length_s = max_length_s
-        self.num_max_samples = max_length_s * sampling_rate
+            # 设置最大长度（秒）及其对应的最大样本数
+            self.max_length_s = max_length_s
+            self.num_max_samples = max_length_s * sampling_rate
 
-        # 计算 FFT 长度
-        if self.filter_length is None:
-            self.n_fft = optimal_fft_length(self.win_length)
-        else:
-            self.n_fft = self.filter_length
-        self.n_freqs = (self.n_fft // 2) + 1
+            # 根据是否指定了 filter_length 来决定使用的 FFT 长度
+            if self.filter_length is None:
+                self.n_fft = optimal_fft_length(self.win_length)
+            else:
+                self.n_fft = self.filter_length
+            self.n_freqs = (self.n_fft // 2) + 1
 
-        # 根据窗口函数及参数初始化窗口
-        self.window = window_function(window_length=self.win_length, name=self.win_function, periodic=True)
+            # 初始化窗口函数
+            self.window = window_function(window_length=self.win_length, name=self.win_function, periodic=True)
 
-        # 初始化梅尔滤波器组
-        self.mel_filters = mel_filter_bank(
-            num_frequency_bins=self.n_freqs,
-            num_mel_filters=self.num_mel_bins,
-            min_frequency=self.fmin,
-            max_frequency=self.fmax,
-            sampling_rate=self.sampling_rate,
-            norm="slaney",
-            mel_scale="slaney",
-        )
+            # 初始化 Mel 频率滤波器组
+            self.mel_filters = mel_filter_bank(
+                num_frequency_bins=self.n_freqs,
+                num_mel_filters=self.num_mel_bins,
+                min_frequency=self.fmin,
+                max_frequency=self.fmax,
+                sampling_rate=self.sampling_rate,
+                norm="slaney",
+                mel_scale="slaney",
+            )
 
-        # 初始化其他参数
-        self.center = center
-        self.compression_factor = compression_factor
-        self.compression_clip_val = compression_clip_val
-        self.normalize_min = normalize_min
-        self.normalize_max = normalize_max
-        self.model_in_channels = model_in_channels
-        self.pad_end_length = pad_end_length
+            # 设置中心化标志及其它相关参数
+            self.center = center
+            self.compression_factor = compression_factor
+            self.compression_clip_val = compression_clip_val
+            self.normalize_min = normalize_min
+            self.normalize_max = normalize_max
+            self.model_in_channels = model_in_channels
+            self.pad_end_length = pad_end_length
 
-    # 定义归一化函数
-    def normalize(self, spectrogram):
-        return 2 * ((spectrogram - self.normalize_min) / (self.normalize_max - self.normalize_min)) - 1
+        def normalize(self, spectrogram):
+            # 对频谱进行归一化处理
+            return 2 * ((spectrogram - self.normalize_min) / (self.normalize_max - self.normalize_min)) - 1
 
-    # 定义反归一化函数
-    def denormalize(self, spectrogram):
-        return self.normalize_min + (self.normalize_max - self.normalize_min) * ((spectrogram + 1) / 2)
-    # 计算给定波形的对数 MEL 频谱图
+        def denormalize(self, spectrogram):
+            # 对归一化后的频谱进行反归一化处理
+            return self.normalize_min + (self.normalize_max - self.normalize_min) * ((spectrogram + 1) / 2)
     def mel_spectrogram(self, waveform: np.ndarray) -> np.ndarray:
-        # 根据 MelGAN 和 Hifi-GAN 的实现,对输入波形进行自定义填充,使用"reflect"模式填充
+        """
+        Calculates log MEL spectrograms from a batch of waveforms. Note that the input waveform(s) will be padded by
+        `int(self.n_fft - self.hop_length) / 2` on both sides using the `reflect` padding mode.
+
+        Args:
+            waveform (`np.ndarray` of shape `(length,)`):
+                The input waveform. This must be a single real-valued, mono waveform.
+
+        Returns:
+            `numpy.ndarray`: Array containing a log-mel spectrogram of shape `(num_frames, num_mel_bins)`.
+        """
+        # 根据 MelGAN 和 Hifi-GAN 实现的方式，自定义填充波形
         waveform = np.pad(
             waveform,
             (int((self.n_fft - self.hop_length) / 2), int((self.n_fft - self.hop_length) / 2)),
             mode="reflect",
         )
-    
-        # 获取复数频谱图,注意 waveform 必须是单个波形(未批处理)
+
+        # 获取复杂谱图
+        # 注意：由于 spectrogram(...) 的实现方式，目前必须对波形进行解批处理
         complex_spectrogram = spectrogram(
             waveform,
             window=self.window,
@@ -149,76 +164,77 @@ class UnivNetFeatureExtractor(SequenceFeatureExtractor):
             mel_filters=None,
             mel_floor=None,
         )
-    
-        # 手动应用 MEL 滤波器组和 MEL 下限,因为 UnivNet 使用了略有不同的实现
+
+        # 手动应用 MEL 滤波器组和 MEL floor，因为 UnivNet 使用了稍微不同的实现方式
         amplitude_spectrogram = np.sqrt(
             np.real(complex_spectrogram) ** 2 + np.imag(complex_spectrogram) ** 2 + self.mel_floor
         )
         mel_spectrogram = np.matmul(self.mel_filters.T, amplitude_spectrogram)
-    
-        # 执行频谱归一化以获得对数 MEL 频谱图
+
+        # 执行谱归一化以获得对数 MEL 谱图
         log_mel_spectrogram = np.log(
             np.clip(mel_spectrogram, a_min=self.compression_clip_val, a_max=None) * self.compression_factor
         )
-    
-        # 返回频谱图,num_mel_bins 在最后一维
+
+        # 返回最后一个维度是 num_mel_bins 的谱图
         return log_mel_spectrogram.T
-    
-    # 生成噪音
+
     def generate_noise(
         self,
         noise_length: int,
         generator: Optional[np.random.Generator] = None,
-    ) -> np.ndarray:
+    def noise_sequence(self, noise_length: int, generator: Optional[np.random.Generator] = None) -> np.ndarray:
         """
-        生成标准高斯噪声的随机序列，用于 [`UnivNetModel.forward`] 方法中的 `noise_sequence` 参数。
+        Generates a random noise sequence of standard Gaussian noise for use in the `noise_sequence` argument of
+        [`UnivNetModel.forward`].
 
         Args:
-            spectrogram_length (`int`):
-                生成的噪声的长度（dim 0）。
-            model_in_channels (`int`, *optional*, defaults to `None`):
-                生成的噪声的特征数（dim 1）。这应该对应于 [`UnivNetGan`] 模型的 `model_in_channels`。
-                如果未设置，则默认为 `self.config.model_in_channels`。
+            noise_length (`int`):
+                The length of the generated noise sequence.
             generator (`numpy.random.Generator`, *optional*, defaults to `None`):
-                一个可选的 `numpy.random.Generator` 随机数生成器，用于控制噪声的生成。如果未设置，将创建一个带有新熵的新生成器。
+                An optional random number generator to control noise generation. If not provided, a new generator
+                instance will be created using `np.random.default_rng()`.
 
         Returns:
-            `numpy.ndarray`: 包含形状为 `(noise_length, model_in_channels)` 的随机标准高斯噪声的数组。
+            `numpy.ndarray`: Array containing random standard Gaussian noise of shape `(noise_length,
+            self.model_in_channels)`.
         """
-        # 如果未提供随机数生成器，则使用默认的随机数生成器
+        # If no generator is provided, create a new default generator
         if generator is None:
             generator = np.random.default_rng()
 
-        # 定义噪声的形状
+        # Define the shape of the noise array based on noise_length and self.model_in_channels
         noise_shape = (noise_length, self.model_in_channels)
-        # 生成随机标准高斯噪声
+        
+        # Generate standard normal noise using the generator
         noise = generator.standard_normal(noise_shape, dtype=np.float32)
 
         return noise
 
     def batch_decode(self, waveforms, waveform_lengths=None) -> List[np.ndarray]:
         r"""
-        在运行 [`UnivNetModel.forward`] 后移除生成音频的填充。这返回一个不规则列表，其中包含 1D 音频波形数组，
-        而不是单个张量/数组，因为一般来说，移除填充后波形的长度会不同。
+        Removes padding from generated audio after running [`UnivNetModel.forward`]. This returns a ragged list of 1D
+        audio waveform arrays and not a single tensor/array because in general the waveforms will have different
+        lengths after removing padding.
 
         Args:
             waveforms (`torch.FloatTensor` of shape `(batch_size, sequence_length)`):
-                [`UnivNetModel`] 的批量输出波形。
+                The batched output waveforms from the [`UnivNetModel`].
             waveform_lengths (`torch.FloatTensor` of shape `(batch_size,)`, *optional*):
-                每个波形在填充之前的批量长度。
+                The batched lengths of each waveform before padding.
 
         Returns:
-            `List[np.ndarray]`: 一个不规则列表，其中包含已移除填充的 1D 波形数组。
+            `List[np.ndarray]`: A ragged list of 1D waveform arrays with padding removed.
         """
-        # 将批量的波形张量折叠为 1D 音频波形列表
+        # Convert each batched waveform tensor to a 1D numpy array
         waveforms = [waveform.detach().clone().cpu().numpy() for waveform in waveforms]
 
-        # 如果提供了波形长度，则根据波形长度移除填充
+        # If waveform_lengths is provided, truncate each waveform according to its length
         if waveform_lengths is not None:
             waveforms = [waveform[: waveform_lengths[i]] for i, waveform in enumerate(waveforms)]
 
         return waveforms
-    # 定义一个方法，允许对象以函数的形式被调用，接受原始语音数据、采样率等参数
+    # 定义一个方法 __call__，用于处理语音数据的预处理和转换
     def __call__(
         self,
         raw_speech: Union[np.ndarray, List[float], List[np.ndarray], List[List[float]]],
@@ -234,16 +250,16 @@ class UnivNetFeatureExtractor(SequenceFeatureExtractor):
         do_normalize: Optional[str] = None,
         return_attention_mask: Optional[bool] = None,
         return_tensors: Optional[Union[str, TensorType]] = None,
-    # 转换当前对象为字典类型，返回字典
-    def to_dict(self) -> Dict[str, Any]:
-        # 调用父类方法返回字典对象
+    ):
+        # 调用父类的 to_dict 方法，获取基类的属性字典
         output = super().to_dict()
 
-        # 删除特定属性，因为这些属性可以从其他属性推导出来
+        # 从属性字典中删除不需要序列化的属性
         names = ["window", "mel_filters", "n_fft", "n_freqs", "num_max_samples"]
         for name in names:
             if name in output:
                 del output[name]
 
+        # 返回处理后的属性字典
         return output
 ```

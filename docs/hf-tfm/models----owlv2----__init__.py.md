@@ -1,9 +1,20 @@
-# `.\transformers\models\owlv2\__init__.py`
+# `.\models\owlv2\__init__.py`
 
-```py
-# 导入必要的模块
+```
+# 版权声明和许可证信息，声明版权归 HuggingFace 团队所有
+#
+# 根据 Apache License, Version 2.0 进行许可
+# 除非符合许可证的要求，否则不得使用此文件
+# 可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 如果适用法律不允许或书面同意，软件按"原样"分发
+# 无任何明示或暗示的保证或条件
+# 详细信息请查看许可证内容
 from typing import TYPE_CHECKING
-# 导入 LazyModule 类和检查 Torch 和 Vision 模块是否可用的函数
+
+# 从 utils 中导入必要的类和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -11,7 +22,7 @@ from ...utils import (
     is_vision_available,
 )
 
-#定义要导入的结构
+# 定义导入结构，用于按需导入模块和类
 _import_structure = {
     "configuration_owlv2": [
         "OWLV2_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -22,24 +33,24 @@ _import_structure = {
     "processing_owlv2": ["Owlv2Processor"],
 }
 
-# 检查 Vision 模块是否可用，不可用则抛出异常
+# 检查视觉处理是否可用，若不可用则抛出异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# Vision 模块可用则增加 image_processing_owlv2 模块到导入结构
 else:
+    # 若可用则添加视觉处理相关的导入结构
     _import_structure["image_processing_owlv2"] = ["Owlv2ImageProcessor"]
 
-# 检查 Torch 模块是否可用，不可用则抛出异常
+# 检查 Torch 是否可用，若不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# Torch 模块可用则增加 modeling_owlv2 模块到导入结构
 else:
+    # 若可用则添加模型处理相关的导入结构
     _import_structure["modeling_owlv2"] = [
         "OWLV2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "Owlv2Model",
@@ -49,8 +60,9 @@ else:
         "Owlv2ForObjectDetection",
     ]
 
-# 检查是否处于类型检查模式，导入相应模块
+# 如果是类型检查阶段
 if TYPE_CHECKING:
+    # 从相关模块中导入必要的类和函数
     from .configuration_owlv2 import (
         OWLV2_PRETRAINED_CONFIG_ARCHIVE_MAP,
         Owlv2Config,
@@ -59,7 +71,7 @@ if TYPE_CHECKING:
     )
     from .processing_owlv2 import Owlv2Processor
 
-    # 检查 Vision 模块是否可用，不可用则忽略导入
+    # 再次检查视觉处理是否可用，若不可用则忽略导入
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
@@ -68,7 +80,7 @@ if TYPE_CHECKING:
     else:
         from .image_processing_owlv2 import Owlv2ImageProcessor
 
-    # 检查 Torch 模块是否可用，不可用则忽略导入
+    # 再次检查 Torch 是否可用，若不可用则忽略导入
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -84,9 +96,10 @@ if TYPE_CHECKING:
             Owlv2VisionModel,
         )
 
-# 非类型检查模式下，设置当前模块为 LazyModule
+# 如果不是类型检查阶段，则将当前模块注册为 LazyModule
 else:
     import sys
-    # 使用 LazyModule 对象代替当前模块
+
+    # 使用 LazyModule 类来延迟导入模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

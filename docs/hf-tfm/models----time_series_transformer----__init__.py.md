@@ -1,22 +1,13 @@
-# `.\transformers\models\time_series_transformer\__init__.py`
+# `.\models\time_series_transformer\__init__.py`
 
-```py
-# 版权声明
-# 版权所有 © 2022 年 HuggingFace 团队。保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版（以下简称“许可证”）许可；
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以获取许可证的拷贝，网址为
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，按照“现状”方式发布的软件，
-# 没有任何明示或暗示的担保或条件。
-# 详见许可证以获得指定语言下的权限及限制。
+```
+# 引入类型检查器的功能，用于在类型检查时导入特定模块和对象
 from typing import TYPE_CHECKING
 
+# 引入自定义的异常类，用于处理依赖不可用的情况，以及 LazyModule 的实现和 torch 是否可用的检查
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 导入结构定义
+# 定义模块导入结构的字典，包含了配置和模型的名称
 _import_structure = {
     "configuration_time_series_transformer": [
         "TIME_SERIES_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -24,14 +15,14 @@ _import_structure = {
     ],
 }
 
-# 尝试导入 torch 模块，如果不可用，则抛出异常
+# 检查是否可用 torch 库，若不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可以导入 torch 模块，则继续增加导入结构定义
+    # 若 torch 可用，则添加相关模型的导入结构到 _import_structure 字典中
     _import_structure["modeling_time_series_transformer"] = [
         "TIME_SERIES_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TimeSeriesTransformerForPrediction",
@@ -39,22 +30,22 @@ else:
         "TimeSeriesTransformerPreTrainedModel",
     ]
 
-# 如果是类型检查阶段
+# 如果正在进行类型检查
 if TYPE_CHECKING:
-    # 导入时间序列变换器配置及相关内容
+    # 导入配置模块中所需的内容
     from .configuration_time_series_transformer import (
         TIME_SERIES_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP,
         TimeSeriesTransformerConfig,
     )
 
-    # 在此处再次尝试导入 torch 模块，如果不可用，则异常会被捕获
     try:
+        # 再次检查 torch 是否可用
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入时间序列变换器模型相关内容
+        # 导入模型模块中所需的内容
         from .modeling_time_series_transformer import (
             TIME_SERIES_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST,
             TimeSeriesTransformerForPrediction,
@@ -62,11 +53,10 @@ if TYPE_CHECKING:
             TimeSeriesTransformerPreTrainedModel,
         )
 
-# 如果不是类型检查阶段
+# 如果不是类型检查模式，则进行 LazyModule 的初始化
 else:
-    # 导入 sys 模块
     import sys
 
-    # 将当前模块映射到 LazyModule 类，并指定导入结构
+    # 将当前模块替换为 LazyModule，以支持按需导入和延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

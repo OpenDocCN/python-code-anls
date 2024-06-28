@@ -1,15 +1,15 @@
-# `.\transformers\pipelines\document_question_answering.py`
+# `.\pipelines\document_question_answering.py`
 
-```py
-# 2022年版权声明
-
+```
 # 导入正则表达式模块
 import re
-# 导入类型提示模块中的特定类和函数
+# 导入类型提示相关模块
 from typing import List, Optional, Tuple, Union
-# 导入numpy模块
+
+# 导入第三方库 numpy
 import numpy as np
-# 从模块中导入特定功能
+
+# 导入自定义工具函数和类
 from ..utils import (
     ExplicitEnum,
     add_end_docstrings,
@@ -18,39 +18,37 @@ from ..utils import (
     is_vision_available,
     logging,
 )
-# 从base模块中导入特定类
-from .base import PIPELINE_INIT_ARGS, ChunkPipeline
-# 从question_answering模块中导入特定功能
+
+# 导入基础类 ChunkPipeline 和函数 build_pipeline_init_args
+from .base import ChunkPipeline, build_pipeline_init_args
+# 导入问题回答相关函数 select_starts_ends
 from .question_answering import select_starts_ends
 
-# 如果引入了图像处理模块
+# 如果视觉处理库可用，则导入 PIL 图像处理模块和 load_image 函数
 if is_vision_available():
-    # 从PIL模块中导入Image类
     from PIL import Image
-    # 从image_utils模块中导入特定功能
     from ..image_utils import load_image
 
-# 如果引入了torch模块
+# 如果 PyTorch 可用，则导入 PyTorch 库
 if is_torch_available():
-    # 从torch模块中导入特定功能
     import torch
-    # 从模型自动模块中导入特定功能
     from ..models.auto.modeling_auto import MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES
 
-# 定义变量TESSERACT_LOADED
+# 初始化 TESSERACT_LOADED 标志
 TESSERACT_LOADED = False
-# 如果引入了pytesseract模块
+# 如果 pytesseract 可用，则将 TESSERACT_LOADED 设置为 True，并导入 pytesseract 库
 if is_pytesseract_available():
     TESSERACT_LOADED = True
-    # 从pytesseract模块中导入特定功能
     import pytesseract
 
-# 获取日志记录器
+# 获取当前模块的日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 对normalize_box()和apply_tesseract()进行了从models/layoutlmv3/feature_extraction_layoutlmv3.py中apply_tesseract得出的修改
-# 然而，因为pipeline可能会从layoutlmv3当前所做的事情发展，所以它是被拷贝而不是被引入，以避免产生不必要的依赖关系。
+# normalize_box() 和 apply_tesseract() 函数从 models/layoutlmv3/feature_extraction_layoutlmv3.py 中的 apply_tesseract 派生而来。
+# 由于管道可能会从 layoutlmv3 当前的实现中演变，因此此处将其复制（而非导入），以避免创建不必要的依赖关系。
+
 def normalize_box(box, width, height):
+    """根据图像宽度和高度，归一化边界框的坐标值，并返回归一化后的边界框列表。"""
     return [
         int(1000 * (box[0] / width)),
         int(1000 * (box[1] / height)),
@@ -58,14 +56,13 @@ def normalize_box(box, width, height):
         int(1000 * (box[3] / height)),
     ]
 
-# 定义函数apply_tesseract
 def apply_tesseract(image: "Image.Image", lang: Optional[str], tesseract_config: Optional[str]):
-    """Applies Tesseract OCR on a document image, and returns recognized words + normalized bounding boxes."""
-    # 运用 OCR
+    """对文档图像应用 Tesseract OCR，返回识别的单词及其归一化的边界框。"""
+    # 应用 OCR
     data = pytesseract.image_to_data(image, lang=lang, output_type="dict", config=tesseract_config)
     words, left, top, width, height = data["text"], data["left"], data["top"], data["width"], data["height"]
 
-    # 过滤空单词和对应的坐标
+    # 过滤空单词及其对应的坐标
     irrelevant_indices = [idx for idx, word in enumerate(words) if not word.strip()]
     words = [word for idx, word in enumerate(words) if idx not in irrelevant_indices]
     left = [coord for idx, coord in enumerate(left) if idx not in irrelevant_indices]
@@ -73,38 +70,37 @@ def apply_tesseract(image: "Image.Image", lang: Optional[str], tesseract_config:
     width = [coord for idx, coord in enumerate(width) if idx not in irrelevant_indices]
     height = [coord for idx, coord in enumerate(height) if idx not in irrelevant_indices]
 
-    # 将坐标转换为(left, top, left+width, top+height)格式
+    # 将坐标转换为 (left, top, left+width, top+height) 格式
     actual_boxes = []
-    # 遍历列表中的 left、top、width、height 四个列表，分别赋值给 x、y、w、h
+    # 使用 zip 函数并行迭代 left, top, width, height 四个列表，每次迭代取出一个元组 (x, y, w, h)
     for x, y, w, h in zip(left, top, width, height):
-        # 计算当前框的实际坐标，即左上角和右下角的坐标
+        # 根据左上角坐标和宽高计算出实际边界框的坐标 [left, top, right, bottom]
         actual_box = [x, y, x + w, y + h]
-        # 将当前框的实际坐标添加到实际框列表中
+        # 将计算得到的实际边界框添加到 actual_boxes 列表中
         actual_boxes.append(actual_box)
 
     # 获取图像的宽度和高度
     image_width, image_height = image.size
 
-    # 最终，将边界框归一化
+    # 创建一个空列表来存储标准化后的边界框
     normalized_boxes = []
-    # 遍历实际框列表中的每个框
+    # 遍历所有实际边界框，对每个边界框调用 normalize_box 函数进行标准化处理
     for box in actual_boxes:
-        # 将当前框进行归一化处理，并添加到归一化框列表中
         normalized_boxes.append(normalize_box(box, image_width, image_height))
 
-    # 如果单词列表的长度与归一化框列表的长度不相等，则抛出 ValueError 异常
+    # 检查单词列表和标准化边界框列表的长度是否相等，如果不相等则抛出 ValueError 异常
     if len(words) != len(normalized_boxes):
         raise ValueError("Not as many words as there are bounding boxes")
 
-    # 返回单词列表和归一化框列表
+    # 返回处理后的单词列表和标准化后的边界框列表作为结果
     return words, normalized_boxes
-# 定义了一个枚举类 ModelType，用于表示模型类型
 class ModelType(ExplicitEnum):
     LayoutLM = "layoutlm"
     LayoutLMv2andv3 = "layoutlmv2andv3"
     VisionEncoderDecoder = "vision_encoder_decoder"
 
-# 利用装饰器 @add_end_docstrings(PIPELINE_INIT_ARGS) 添加额外的文档字符串描述到 DocumentQuestionAnsweringPipeline 类
+
+@add_end_docstrings(build_pipeline_init_args(has_image_processor=True, has_tokenizer=True))
 class DocumentQuestionAnsweringPipeline(ChunkPipeline):
     # TODO: Update task_summary docs to include an example with document QA and then update the first sentence
     """
@@ -123,7 +119,7 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
     ...     question="What is the invoice number?",
     ... )
     [{'score': 0.425, 'answer': 'us-001', 'start': 16, 'end': 16}]
-    ```py
+    ```
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 
@@ -134,187 +130,166 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
     See the up-to-date list of available models on
     [huggingface.co/models](https://huggingface.co/models?filter=document-question-answering).
     """
-    
-    # 初始化方法
+
     def __init__(self, *args, **kwargs):
-        # 调用 ChunkPipeline 父类的初始化方法
         super().__init__(*args, **kwargs)
-        # 检查是否使用的是快速分词器，如果不是则抛出错误
+        # 检查是否提供了非快速的分词器，如果提供了，抛出值错误异常
         if self.tokenizer is not None and not self.tokenizer.__class__.__name__.endswith("Fast"):
             raise ValueError(
                 "`DocumentQuestionAnsweringPipeline` requires a fast tokenizer, but a slow tokenizer "
                 f"(`{self.tokenizer.__class__.__name__}`) is provided."
             )
-        # 检查模型配置是否为 VisionEncoderDecoderConfig，如果是则设置模型类型为 VisionEncoderDecoder
+
+        # 如果模型配置为 VisionEncoderDecoderConfig 类型，则设置模型类型为 VisionEncoderDecoder
         if self.model.config.__class__.__name__ == "VisionEncoderDecoderConfig":
             self.model_type = ModelType.VisionEncoderDecoder
+            # 如果模型编码器类型不是 "donut-swin"，则抛出值错误异常
             if self.model.config.encoder.model_type != "donut-swin":
                 raise ValueError("Currently, the only supported VisionEncoderDecoder model is Donut")
         else:
-            # 检查模型类型是否匹配 MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES 列表中的模型
+            # 否则，检查模型类型是否在 DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES 中
             self.check_model_type(MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES)
-            # 如果模型配置是 LayoutLMConfig 类型则设置模型类型为 LayoutLM，否则设置为 LayoutLMv2andv3
+            # 如果模型配置为 LayoutLMConfig 类型，则设置模型类型为 LayoutLM
             if self.model.config.__class__.__name__ == "LayoutLMConfig":
                 self.model_type = ModelType.LayoutLM
             else:
+                # 否则，设置模型类型为 LayoutLMv2andv3
                 self.model_type = ModelType.LayoutLMv2andv3
-
-    # 处理参数的方法
+    # 对输入参数进行清理和预处理，返回预处理参数和空的后处理参数字典
     def _sanitize_parameters(
         self,
-        padding=None,
-        doc_stride=None,
-        max_question_len=None,
-        lang: Optional[str] = None,
-        tesseract_config: Optional[str] = None,
-        max_answer_len=None,
-        max_seq_len=None,
-        top_k=None,
-        handle_impossible_answer=None,
-        timeout=None,
-        **kwargs,
-    # 初始化预处理和后处理参数字典
-    preprocess_params, postprocess_params = {}, {}
-    # 如果存在填充参数，添加到预处理参数字典中
-    if padding is not None:
-        preprocess_params["padding"] = padding
-    # 如果存在文档步距参数，添加到预处理参数字典中
-    if doc_stride is not None:
-        preprocess_params["doc_stride"] = doc_stride
-    # 如果存在最大问题长度参数，添加到预处理参数字典中
-    if max_question_len is not None:
-        preprocess_params["max_question_len"] = max_question_len
-    # 如果存在最大序列长度参数，添加到预处理参数字典中
-    if max_seq_len is not None:
-        preprocess_params["max_seq_len"] = max_seq_len
-    # 如果存在语言参数，添加到预处理参数字典中
-    if lang is not None:
-        preprocess_params["lang"] = lang
-    # 如果存在tesseract配置参数，添加到预处理参数字典中
-    if tesseract_config is not None:
-        preprocess_params["tesseract_config"] = tesseract_config
-    # 如果存在超时参数，添加到预处理参数字典中
-    if timeout is not None:
-        preprocess_params["timeout"] = timeout
+        padding=None,  # 如果指定了填充参数，设置预处理参数字典中的填充
+        doc_stride=None,  # 如果指定了文档步幅参数，设置预处理参数字典中的文档步幅
+        max_question_len=None,  # 如果指定了最大问题长度参数，设置预处理参数字典中的最大问题长度
+        lang: Optional[str] = None,  # 如果指定了语言参数，设置预处理参数字典中的语言
+        tesseract_config: Optional[str] = None,  # 如果指定了 Tesseract 配置参数，设置预处理参数字典中的 Tesseract 配置
+        max_answer_len=None,  # 如果指定了最大答案长度参数，设置后处理参数字典中的最大答案长度
+        max_seq_len=None,  # 如果指定了最大序列长度参数，设置预处理参数字典中的最大序列长度
+        top_k=None,  # 如果指定了 top_k 参数，设置后处理参数字典中的 top_k
+        handle_impossible_answer=None,  # 如果指定了处理不可能答案的参数，设置后处理参数字典中的处理方式
+        timeout=None,  # 如果指定了超时参数，设置预处理参数字典中的超时时间
+        **kwargs,  # 其他未命名的参数，不做特定处理
+    ):
+        preprocess_params, postprocess_params = {}, {}
 
-    # 如果存在top_k参数，检查是否大于等于1，若不是，抛出异常
-    if top_k is not None:
-        if top_k < 1:
-            raise ValueError(f"top_k parameter should be >= 1 (got {top_k})")
-        # 添加top_k参数到后处理参数字典中
-        postprocess_params["top_k"] = top_k
-    # 如果存在最大答案长度参数，检查是否大于等于1，若不是，抛出异常
-    if max_answer_len is not None:
-        if max_answer_len < 1:
-            raise ValueError(f"max_answer_len parameter should be >= 1 (got {max_answer_len}")
-        # 添加最大答案长度参数到后处理参数字典中
-        postprocess_params["max_answer_len"] = max_answer_len
-    # 如果存在处理不可能答案参数，添加到后处理参数字典中
-    if handle_impossible_answer is not None:
-        postprocess_params["handle_impossible_answer"] = handle_impossible_answer
+        if padding is not None:
+            preprocess_params["padding"] = padding
+        if doc_stride is not None:
+            preprocess_params["doc_stride"] = doc_stride
+        if max_question_len is not None:
+            preprocess_params["max_question_len"] = max_question_len
+        if max_seq_len is not None:
+            preprocess_params["max_seq_len"] = max_seq_len
+        if lang is not None:
+            preprocess_params["lang"] = lang
+        if tesseract_config is not None:
+            preprocess_params["tesseract_config"] = tesseract_config
+        if timeout is not None:
+            preprocess_params["timeout"] = timeout
 
-    # 返回预处理参数，空字典，后处理参数
-    return preprocess_params, {}, postprocess_params
+        if top_k is not None:
+            if top_k < 1:
+                raise ValueError(f"top_k parameter should be >= 1 (got {top_k})")
+            postprocess_params["top_k"] = top_k
+        if max_answer_len is not None:
+            if max_answer_len < 1:
+                raise ValueError(f"max_answer_len parameter should be >= 1 (got {max_answer_len}")
+            postprocess_params["max_answer_len"] = max_answer_len
+        if handle_impossible_answer is not None:
+            postprocess_params["handle_impossible_answer"] = handle_impossible_answer
 
+        return preprocess_params, {}, postprocess_params
 
-    # 定义__call__方法，接受图像、问题、单词框等输入
+    # 处理调用对象的输入，支持图片或文件路径、问题文本、词框列表等输入
     def __call__(
         self,
-        image: Union["Image.Image", str],
-        question: Optional[str] = None,
-        word_boxes: Tuple[str, List[float]] = None,
-        **kwargs,
-
-
-    # 定义预处理方法，接受输入，填充参数、文档步距、最大序列长度、单词框、语言、tesseract配置、超时等参数
+        image: Union["Image.Image", str],  # 图片或文件路径
+        question: Optional[str] = None,  # 可选的问题文本
+        word_boxes: Tuple[str, List[float]] = None,  # 包含词框的元组
+        **kwargs,  # 其他未命名的参数，不做特定处理
+    ):
+    
+    # 对输入进行预处理，支持输入、填充方式、文档步幅、最大序列长度、词框列表、语言、Tesseract 配置及超时设置
     def preprocess(
         self,
         input,
-        padding="do_not_pad",
-        doc_stride=None,
-        max_seq_len=None,
-        word_boxes: Tuple[str, List[float]] = None,
-        lang=None,
-        tesseract_config="",
-        timeout=None,
+        padding="do_not_pad",  # 默认不填充
+        doc_stride=None,  # 可选的文档步幅
+        max_seq_len=None,  # 可选的最大序列长度
+        word_boxes: Tuple[str, List[float]] = None,  # 可选的词框列表
+        lang=None,  # 可选的语言设置
+        tesseract_config="",  # 默认空的 Tesseract 配置
+        timeout=None,  # 可选的超时设置
+    ):
+    
+    # 执行模型的前向传播，处理模型输入和生成参数
+    def _forward(self, model_inputs, **generate_kwargs):
+        p_mask = model_inputs.pop("p_mask", None)  # 弹出并获取模型输入中的 p_mask
+        word_ids = model_inputs.pop("word_ids", None)  # 弹出并获取模型输入中的 word_ids
+        words = model_inputs.pop("words", None)  # 弹出并获取模型输入中的 words
+        is_last = model_inputs.pop("is_last", False)  # 弹出并获取模型输入中的 is_last，默认为 False
 
-
-    # 定义_forward方法，接受模型输入，p_mask、word_ids、words、is_last参数
-    def _forward(self, model_inputs):
-        # 弹出p_mask，word_ids，words，is_last参数
-        p_mask = model_inputs.pop("p_mask", None)
-        word_ids = model_inputs.pop("word_ids", None)
-        words = model_inputs.pop("words", None)
-        is_last = model_inputs.pop("is_last", False)
-
-        # 如果模型类型是VisionEncoderDecoder，执行generate方法
         if self.model_type == ModelType.VisionEncoderDecoder:
-            model_outputs = self.model.generate(**model_inputs)
+            model_outputs = self.model.generate(**model_inputs, **generate_kwargs)  # 生成视觉编码器解码器模型的输出
         else:
-            model_outputs = self.model(**model_inputs)
+            model_outputs = self.model(**model_inputs)  # 调用普通模型的前向传播
 
-        # 将模型输出组成字典
-        model_outputs = dict(model_outputs.items())
-        model_outputs["p_mask"] = p_mask
-        model_outputs["word_ids"] = word_ids
-        model_outputs["words"] = words
-        model_outputs["attention_mask"] = model_inputs.get("attention_mask", None)
-        model_outputs["is_last"] = is_last
-        # 返回模型输出
-        return model_outputs
-
-
-    # 定义后处理方法，接受模型输出和top_k参数等
+        model_outputs = dict(model_outputs.items())  # 将模型输出转换为字典形式
+        model_outputs["p_mask"] = p_mask  # 将 p_mask 放回模型输出
+        model_outputs["word_ids"] = word_ids  # 将 word_ids 放回模型输出
+        model_outputs["words"] = words  # 将 words 放回模型输出
+        model_outputs["attention_mask"] = model_inputs.get("attention_mask", None)  # 获取模型输入中的 attention_mask 并放入模型输出
+        model_outputs["is_last"] = is_last  # 将 is_last 放回模型输出
+        return model_outputs  # 返回模型输出
+    # 根据模型类型确定后处理方法，对模型输出进行处理并返回答案列表
     def postprocess(self, model_outputs, top_k=1, **kwargs):
-        # 如果模型类型是VisionEncoderDecoder，执行postprocess_encoder_decoder_single方法
         if self.model_type == ModelType.VisionEncoderDecoder:
+            # 如果模型类型是 VisionEncoderDecoder，则调用相应的单一处理方法
             answers = [self.postprocess_encoder_decoder_single(o) for o in model_outputs]
         else:
-            # 执行postprocess_extractive_qa方法
+            # 否则，调用抽取式问答的后处理方法
             answers = self.postprocess_extractive_qa(model_outputs, top_k=top_k, **kwargs)
 
-        # 根据得分倒序排列答案，并取前top_k个
+        # 按照答案的分数从高到低进行排序，并选取前 top_k 个答案
         answers = sorted(answers, key=lambda x: x.get("score", 0), reverse=True)[:top_k]
-        # 返回答案
         return answers
-    # 对编码解码模型的预测结果进行后处理，输出格式化的答案
+
+    # 处理单个 VisionEncoderDecoder 模型输出的后处理方法
     def postprocess_encoder_decoder_single(self, model_outputs, **kwargs):
-        # 将模型输出处理为字符串序列
+        # 解码模型输出的序列为文本
         sequence = self.tokenizer.batch_decode(model_outputs["sequences"])[0]
 
-        # TODO: 大部分逻辑是针对Donut模型的，可能应该在tokenizer中处理
-        # (参见 https://github.com/huggingface/transformers/pull/18414/files#r961747408 获取更多上下文)
-        # 从序列中移除结束标记和填充标记
+        # TODO: A lot of this logic is specific to Donut and should probably be handled in the tokenizer
+        # (see https://github.com/huggingface/transformers/pull/18414/files#r961747408 for more context).
+        
+        # 以下逻辑大部分特定于 Donut，可能应该在 tokenizer 中处理
+        # 参考链接：https://github.com/huggingface/transformers/pull/18414/files#r961747408
+        
+        # 替换序列中的 eos_token 和 pad_token
         sequence = sequence.replace(self.tokenizer.eos_token, "").replace(self.tokenizer.pad_token, "")
-        # 从序列中移除第一个任务起始标记
-        sequence = re.sub(r"<.*?>", "", sequence, count=1).strip()  # remove first task start token
-        # 初始化返回结果字典
+        # 使用正则表达式移除第一个任务开始标记之后的内容
+        sequence = re.sub(r"<.*?>", "", sequence, count=1).strip()
         ret = {
             "answer": None,
         }
 
-        # 从序列中提取答案
+        # 从序列中寻找 <s_answer>...</s_answer> 匹配的内容作为答案
         answer = re.search(r"<s_answer>(.*)</s_answer>", sequence)
         if answer is not None:
-            # 将答案加入返回结果字典
             ret["answer"] = answer.group(1).strip()
-        # 返回结果字典
         return ret
 
-    # 对抽取式问答模型的预测结果进行后处理，输出格式化的答案列表
+    # 处理抽取式问答模型输出的后处理方法
     def postprocess_extractive_qa(
         self, model_outputs, top_k=1, handle_impossible_answer=False, max_answer_len=15, **kwargs
     ):
-        # 初始化最小空答案得分
+        # 设置一个较大的初始空值分数
         min_null_score = 1000000  # large and positive
-        # 初始化答案列表
         answers = []
-        # 遍历模型输出列表
         for output in model_outputs:
-            # 获取词汇表
             words = output["words"]
 
-            # 根据开始和结束位置选择答案，并更新最小空答案得分
+            # 选择起始和结束位置，并更新最小空值分数
             starts, ends, scores, min_null_score = select_starts_ends(
                 start=output["start_logits"],
                 end=output["end_logits"],
@@ -327,14 +302,11 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
                 handle_impossible_answer=handle_impossible_answer,
                 max_answer_len=max_answer_len,
             )
-            # 获取单词id列表
             word_ids = output["word_ids"]
-            # 遍历开始和结束位置
             for start, end, score in zip(starts, ends, scores):
-                # 获取单词的开始和结束索引
                 word_start, word_end = word_ids[start], word_ids[end]
                 if word_start is not None and word_end is not None:
-                    # 将答案添加到答案列表
+                    # 将答案及其相关信息添加到答案列表中
                     answers.append(
                         {
                             "score": float(score),
@@ -344,10 +316,9 @@ class DocumentQuestionAnsweringPipeline(ChunkPipeline):
                         }
                     )
 
-        # 如果需要处理无法回答的问题，则加入一个空答案
+        # 如果处理不可能的答案，则将最小空值分数的答案添加到答案列表中
         if handle_impossible_answer:
             answers.append({"score": min_null_score, "answer": "", "start": 0, "end": 0})
 
-        # 返回答案列表
         return answers
 ```

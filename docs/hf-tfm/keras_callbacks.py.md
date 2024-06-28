@@ -1,25 +1,24 @@
-# `.\transformers\keras_callbacks.py`
+# `.\keras_callbacks.py`
 
-```py
-import logging
-import os
-from pathlib import Path
-from time import sleep
-from typing import Callable, List, Optional, Union
+```
+import logging  # 导入日志模块
+import os  # 导入操作系统模块
+from pathlib import Path  # 导入路径操作模块
+from time import sleep  # 导入睡眠函数
+from typing import Callable, List, Optional, Union  # 导入类型提示相关模块
 
-import numpy as np
-import tensorflow as tf
-from huggingface_hub import Repository, create_repo
-from packaging.version import parse
-from tensorflow.keras.callbacks import Callback
+import numpy as np  # 导入NumPy库
+import tensorflow as tf  # 导入TensorFlow库
+from huggingface_hub import Repository, create_repo  # 导入Hugging Face Hub相关函数
+from packaging.version import parse  # 导入版本解析模块
 
-from . import IntervalStrategy, PreTrainedTokenizerBase
-from .modelcard import TrainingSummary
+from . import IntervalStrategy, PreTrainedTokenizerBase  # 从当前包导入特定模块
+from .modelcard import TrainingSummary  # 从当前包导入模型卡片中的训练摘要
+from .modeling_tf_utils import keras  # 从当前包导入TensorFlow工具中的Keras模块
 
-# 获取 logger 对象
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)  # 获取当前模块的日志记录器
 
-class KerasMetricCallback(Callback):
+class KerasMetricCallback(keras.callbacks.Callback):
     """
     Callback to compute metrics at the end of every epoch. Unlike normal Keras metrics, these do not need to be
     compilable by TF. It is particularly useful for common NLP metrics like BLEU and ROUGE that require string
@@ -35,97 +34,80 @@ class KerasMetricCallback(Callback):
 
     rouge_metric = load_metric("rouge")
 
-    # 定义计算 ROUGE 分数的函数
+
     def rouge_fn(predictions, labels):
         decoded_predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         result = rouge_metric.compute(predictions=decoded_predictions, references=decoded_labels)
         return {key: value.mid.fmeasure * 100 for key, value in result.items()}
-    ```py
+    ```
 
     The above function will return a dict containing values which will be logged like any other Keras metric:
 
     ```
     {'rouge1': 37.4199, 'rouge2': 13.9768, 'rougeL': 34.361, 'rougeLsum': 35.0781
-    ```py
-    Args:
-        metric_fn (`Callable`):
-            用户提供的度量函数。将以两个参数 - `predictions` 和 `labels` 调用它。这些参数包含模型的输出和数据集中的匹配标签。应返回一个字典，将度量名称映射到数值。
-        eval_dataset (`tf.data.Dataset` or `dict` or `tuple` or `np.ndarray` or `tf.Tensor`):
-            用于为 `metric_fn` 生成预测的验证数据集。
-        output_cols (`List[str], *optional*):
-            从模型输出中保留的列的列表作为预测值。默认为全部列。
-        label_cols ('`List[str]`, *optional*'):
-            从输入数据集中保留的列的列表作为标签。如果未提供此参数，将自动检测。
-        batch_size (`int`, *optional*):
-            批量大小。仅在数据不是预先分批的 `tf.data.Dataset` 时使用。
-        predict_with_generate (`bool`, *optional*, defaults to `False`):
-            是否应使用 `model.generate()` 获取模型的输出。
-        use_xla_generation (`bool`, *optional*, defaults to `False`):
-            如果正在生成，则是否使用 XLA 编译模型的生成部分。这可以大大提高生成的速度（最多提高 100 倍），但会对每个输入形状进行新的 XLA 编译。在使用 XLA 生成时，最好将输入填充到相同的大小，或者在您的 `tokenizer` 或 `DataCollator` 中使用 `pad_to_multiple_of` 参数，这将减少唯一输入形状的数量并节省大量编译时间。如果 `predict_with_generate` 为 `False`，则此选项无效。
-        generate_kwargs (`dict`, *optional*):
-            在生成时传递给 `model.generate()` 的关键字参数。如果 `predict_with_generate` 为 `False`，则此参数无效。
+    ```
     """
-
+    pass  # KerasMetricCallback 类暂时不包含具体实现，只是一个占位符
+    # 初始化方法，用于创建一个新的评估器对象
     def __init__(
         self,
-        metric_fn: Callable,
-        eval_dataset: Union[tf.data.Dataset, np.ndarray, tf.Tensor, tuple, dict],
-        output_cols: Optional[List[str]] = None,
-        label_cols: Optional[List[str]] = None,
-        batch_size: Optional[int] = None,
-        predict_with_generate: bool = False,
-        use_xla_generation: bool = False,
-        generate_kwargs: Optional[dict] = None,
-    # 调用父类的构造函数初始化实例
-    ):
+        metric_fn: Callable,  # 参数：评估指标函数，接受预测值和标签作为输入，返回指标名称到数值的字典
+        eval_dataset: Union[tf.data.Dataset, np.ndarray, tf.Tensor, tuple, dict],  # 参数：用于评估的数据集或数据字典/元组/数组
+        output_cols: Optional[List[str]] = None,  # 可选参数：模型输出中要保留的列名列表，默认为全部列
+        label_cols: Optional[List[str]] = None,  # 可选参数：从输入数据集中要保留的标签列名列表，如果未提供则自动检测
+        batch_size: Optional[int] = None,  # 可选参数：批处理大小，仅在数据不是预先批处理的 tf.data.Dataset 时使用
+        predict_with_generate: bool = False,  # 可选参数：是否使用 model.generate() 获取模型输出
+        use_xla_generation: bool = False,  # 可选参数：如果生成结果，是否使用 XLA 编译模型生成，可以显著提高生成速度
+        generate_kwargs: Optional[dict] = None,  # 可选参数：传递给 model.generate() 的关键字参数，仅在 predict_with_generate 为 True 时有效
+        ):
+        # 调用父类的初始化方法
         super().__init__()
-        # 设置度量函数
+        # 设置度量函数和批次大小
         self.metric_fn = metric_fn
-        # 设置批处理大小
         self.batch_size = batch_size
-        # 检查评估数据集是否为 TensorFlow 数据集
+        # 如果评估数据集不是 tf.data.Dataset 类型，则根据情况处理
         if not isinstance(eval_dataset, tf.data.Dataset):
-            # 如果评估数据集不是预先批处理的 TensorFlow 数据集，则要求设置批处理大小
             if batch_size is None:
+                # 如果没有设置批次大小且传入的数据不是预先批处理的 tf.data.Dataset，则抛出异常
                 raise ValueError(
                     "When passing data to KerasMetricCallback that is not a pre-batched tf.data.Dataset "
                     "the batch_size argument must be set."
                 )
-            # 将数据包装成 TensorFlow 数据集
+            # 将传入的数据转换为 tf.data.Dataset，并按指定的批次大小进行分批
             eval_dataset = tf.data.Dataset.from_tensor_slices(eval_dataset).batch(batch_size, drop_remainder=False)
-        # 设置评估数据集
+        # 存储评估数据集
         self.eval_dataset = eval_dataset
-        # 是否使用生成模式进行预测
         self.predict_with_generate = predict_with_generate
-        # 输出列的名称
         self.output_cols = output_cols
 
-        # 下面的代码块尝试解析数据集中哪些元素应该被附加到传递给度量函数的标签列表中
+        # 下面的代码块尝试解析数据集的元素规范，确定应该将哪些元素附加到传递给 metric_fn 的标签列表中
         if isinstance(eval_dataset.element_spec, tuple) and len(eval_dataset.element_spec) == 2:
+            # 如果数据集的元素规范是一个元组且长度为 2，则假设第一个元素是输入，第二个元素是标签
             input_spec, label_spec = eval_dataset.element_spec
         else:
+            # 否则，将整个元素规范视为输入规范，标签规范设为 None
             input_spec = eval_dataset.element_spec
             label_spec = None
-        # 检查是否提供了标签列
+        # 如果指定了 label_cols
         if label_cols is not None:
+            # 检查每个指定的标签是否在输入规范中，如果不在则抛出异常
             for label in label_cols:
                 if label not in input_spec:
                     raise ValueError(f"Label {label} is in label_cols but could not be found in the dataset inputs!")
-            # 设置标签列和使用 Keras 标签的标志
             self.label_cols = label_cols
             self.use_keras_label = False
         elif label_spec is not None:
-            # 如果数据集输入被拆分为输入和标签的 2 元组，则假设第二个元素是标签
+            # 如果数据集的元素规范是一个元组，且没有指定 label_cols，则假设第二个元素是标签
             self.label_cols = None
             self.use_keras_label = True
         elif "labels" in input_spec:
-            # 如果数据集输入包含标签，则使用默认的 "labels" 键
+            # 如果输入规范中有 "labels"，则将其作为标签列
             self.label_cols = ["labels"]
             self.use_keras_label = False
             logging.warning("No label_cols specified for KerasMetricCallback, assuming you want the 'labels' key.")
         elif "start_positions" in input_spec and "end_positions" in input_spec:
-            # 如果数据集输入包含 "start_positions" 和 "end_positions" 键，则使用它们作为标签列
+            # 如果输入规范中有 "start_positions" 和 "end_positions"，则将它们作为标签列
             self.label_cols = ["start_positions", "end_positions"]
             self.use_keras_label = False
             logging.warning(
@@ -133,71 +115,63 @@ class KerasMetricCallback(Callback):
                 "start_positions and end_positions keys."
             )
         else:
-            # 如果无法自动检测标签列，则引发异常
+            # 如果无法自动检测到标签列，则抛出异常
             raise ValueError("Could not autodetect label_cols for KerasMetricCallback, please specify them!")
-        # 检查 TensorFlow 版本是否小于 2.7，如果是，则发出警告
+        # 如果 TensorFlow 版本小于 2.7，给出警告
         if parse(tf.__version__) < parse("2.7"):
             logging.warning("TF versions less than 2.7 may encounter issues with KerasMetricCallback!")
 
-        # 是否使用 XLA 生成
+        # 设置是否使用 XLA 生成
         self.use_xla_generation = use_xla_generation
-        # 生成参数
+        # 生成文本的额外参数
         self.generate_kwargs = {} if generate_kwargs is None else generate_kwargs
 
         # 生成函数初始化为 None
         self.generation_function = None
 
-    # 静态方法
     @staticmethod
-``` 
-    # 将多个批次数据进行拼接，如果所有批次都是一维或者长度相同，则简单拼接
     def _concatenate_batches(batches, padding_index=-100):
-        # 如果所有批次都是一维或者长度相同，则简单拼接
+        # 如果所有批次都是一维的或者长度相同，直接进行简单的拼接
         if batches[0].ndim == 1 or all(batch.shape[1] == batches[0].shape[1] for batch in batches):
             return np.concatenate(batches, axis=0)
 
         # 如果批次长度不同，进行填充操作
-        max_len = max([batch.shape[1] for batch in batches])
-        num_samples = sum([batch.shape[0] for batch in batches])
-        # 创建一个与第一个批次相同形状的填充数组
+        max_len = max([batch.shape[1] for batch in batches])  # 计算最大长度
+        num_samples = sum([batch.shape[0] for batch in batches])  # 计算总样本数
         output = np.full_like(
             batches[0], fill_value=padding_index, shape=[num_samples, max_len] + list(batches[0].shape[2:])
         )
-        # i 用于追踪下一个批次要写入的拼接数组的位置
+        # i 用于跟踪下一个要写入批次数据的位置
         i = 0
         for batch in batches:
-            output[i : i + len(batch), : batch.shape[1]] = batch
+            output[i : i + len(batch), : batch.shape[1]] = batch  # 将每个批次的数据写入到输出中
             i += len(batch)
         return output
 
-    # 后处理预测或标签数据
     def _postprocess_predictions_or_labels(self, inputs):
-        # 如果输入是字典
         if isinstance(inputs[0], dict):
             outputs = {}
             for key in inputs[0].keys():
-                # 对每个键值进行拼接操作
                 outputs[key] = self._concatenate_batches([batch[key] for batch in inputs])
-            # 如果字典只有一个键，直接返回数组
+            # 如果输出是一个只有一个键的字典，直接返回数组
             if len(outputs) == 1:
                 outputs = list(outputs.values())[0]
-        # 如果输入是列表或元组
         elif isinstance(inputs[0], list) or isinstance(inputs[0], tuple):
             outputs = []
             for input_list in zip(*inputs):
                 outputs.append(self._concatenate_batches(input_list))
             if len(outputs) == 1:
-                outputs = outputs[0]  # 如果列表只有一个元素，直接返回数组
-        # 如果输入是 numpy 数组
+                outputs = outputs[0]  # 如果输出是一个只有一个元素的列表，直接返回数组
         elif isinstance(inputs[0], np.ndarray):
             outputs = self._concatenate_batches(inputs)
-        # 如果输入是 TensorFlow 张量
         elif isinstance(inputs[0], tf.Tensor):
             outputs = self._concatenate_batches([tensor.numpy() for tensor in inputs])
         else:
-            raise TypeError(f"Couldn't handle batch of type {type(inputs[0])}!")
+            raise TypeError(f"Couldn't handle batch of type {type(inputs[0])}!")  # 处理无法处理的批次类型异常
         return outputs
-class PushToHubCallback(Callback):
+# 定义一个自定义的回调类，用于定期保存模型并推送到 Hub 上。默认情况下，每个 epoch 结束后进行推送，但可以通过 `save_strategy` 参数进行更改。
+class PushToHubCallback(keras.callbacks.Callback):
+
     """
     Callback that will save and push the model to the Hub regularly. By default, it pushes once per epoch, but this can
     be changed with the `save_strategy` argument. Pushed models can be accessed like any other model on the hub, such
@@ -255,126 +229,137 @@ class PushToHubCallback(Callback):
         checkpoint: bool = False,
         **model_card_args,
     ):
-        # 调用父类的构造函数
+        # 初始化回调函数，接受输出目录、保存策略、保存步数、分词器、Hub 模型 ID、Hub token、是否保存检查点等参数
         super().__init__()
-        # 如果有检查点并且保存策略不是“epoch”，则引发值错误异常
-        if checkpoint and save_strategy != "epoch":
-            raise ValueError("Cannot save checkpoints when save_strategy is not 'epoch'!")
-        # 如果保存策略是字符串，则转换为小写的IntervalStrategy对象
-        if isinstance(save_strategy, str):
-            save_strategy = IntervalStrategy(save_strategy.lower())
-        # 保存策略赋值
-        self.save_strategy = save_strategy
-        # 如果保存策略为IntervalStrategy.STEPS并且保存步数不是正整数，则引发值错误异常
-        if self.save_strategy == IntervalStrategy.STEPS and (not isinstance(save_steps, int) or save_steps <= 0):
-            raise ValueError("Please supply a positive integer argument for save_steps when save_strategy == 'steps'!")
-        # 保存步数赋值
-        self.save_steps = save_steps
-        # 将输出目录转换为Path对象
-        output_dir = Path(output_dir)
-
-        # 创建仓库并获取仓库ID
-        if hub_model_id is None:
-            hub_model_id = output_dir.absolute().name
-        # 创建仓库，并指定是否允许已存在的同名仓库，然后获取仓库ID
-        self.hub_model_id = create_repo(repo_id=hub_model_id, exist_ok=True, token=hub_token).repo_id
-
-        # 输出目录和仓库对象赋值
+        # 设置输出目录，用于保存模型预测和检查点，并与 Hub 上的仓库同步
         self.output_dir = output_dir
-        self.repo = Repository(str(self.output_dir), clone_from=self.hub_model_id, token=hub_token)
-
-        # 分词器、最后一个作业、检查点、训练历史、模型卡片参数初始化
+        # 设置保存策略，控制模型保存的频率，默认为每个 epoch 结束时保存
+        self.save_strategy = save_strategy
+        # 设置保存步数，当保存策略为 "steps" 时，指定每隔多少步保存一次
+        self.save_steps = save_steps
+        # 设置分词器，如果提供，将与模型权重一起上传到 Hub
         self.tokenizer = tokenizer
-        self.last_job = None
+        # 设置 Hub 模型 ID，指定要同步的本地输出目录对应的仓库名称
+        self.hub_model_id = hub_model_id
+        # 设置 Hub token，用于推送模型到 Hub，如果未提供，则使用缓存文件夹中的 token
+        self.hub_token = hub_token
+        # 设置是否保存完整的训练检查点，包括 epoch 和优化器状态，允许在训练中断后恢复
         self.checkpoint = checkpoint
-        self.training_history = None
+        # 其他模型卡片参数，以字典形式传递给模型卡片
         self.model_card_args = model_card_args
+        ):
+            super().__init__()
+            # 调用父类的构造方法
+            if checkpoint and save_strategy != "epoch":
+                raise ValueError("Cannot save checkpoints when save_strategy is not 'epoch'!")
+            # 检查是否能够保存检查点，若保存策略不是 'epoch'，则抛出值错误异常
+            if isinstance(save_strategy, str):
+                save_strategy = IntervalStrategy(save_strategy.lower())
+            # 如果保存策略是字符串，则转换为小写后创建 IntervalStrategy 对象
+            self.save_strategy = save_strategy
+            # 设置保存策略
+            if self.save_strategy == IntervalStrategy.STEPS and (not isinstance(save_steps, int) or save_steps <= 0):
+                raise ValueError("Please supply a positive integer argument for save_steps when save_strategy == 'steps'!")
+            # 如果保存策略为步数，并且保存步数不是正整数或者小于等于零，则抛出值错误异常
+            self.save_steps = save_steps
+            # 设置保存步数
+            output_dir = Path(output_dir)
+
+            # Create repo and retrieve repo_id
+            # 创建仓库并获取仓库 ID
+            if hub_model_id is None:
+                hub_model_id = output_dir.absolute().name
+            # 如果未指定 hub_model_id，则将其设为输出目录的绝对路径名
+            self.hub_model_id = create_repo(repo_id=hub_model_id, exist_ok=True, token=hub_token).repo_id
+            # 创建仓库，获取仓库 ID，并存储到实例变量中
+
+            self.output_dir = output_dir
+            # 设置输出目录
+            self.repo = Repository(str(self.output_dir), clone_from=self.hub_model_id, token=hub_token)
+            # 创建仓库对象，克隆自指定的 hub_model_id，并设置令牌
+
+            self.tokenizer = tokenizer
+            # 设置分词器
+            self.last_job = None
+            # 初始化最后一个作业为 None
+            self.checkpoint = checkpoint
+            # 设置检查点标志
+            self.training_history = None
+            # 初始化训练历史为 None
+            self.model_card_args = model_card_args
+            # 设置模型卡参数
 
     def on_train_begin(self, logs=None):
-        # 尽管我们可以访问model.history，但不能保证History回调函数会在这个回调函数之前触发，所以在这里也要跟踪训练历史
+        # Although we can access model.history, we have no guarantees that the History callback will fire before this
+        # one, so we keep track of it here too
+        # 虽然我们可以访问 model.history，但不能保证 History 回调会在当前回调之前触发，因此我们也在这里进行跟踪
         self.training_history = []
+        # 初始化训练历史为空列表
 
     def on_train_batch_end(self, batch, logs=None):
-        # 如果保存策略是IntervalStrategy.STEPS并且当前批次满足保存步数条件，则执行保存操作
         if self.save_strategy == IntervalStrategy.STEPS and (batch + 1) % self.save_steps == 0:
-            # 如果上一个上传作业仍在运行，则返回，不开始另一个上传
+            # 如果保存策略是基于步数，并且当前批次是保存步数的倍数
             if self.last_job is not None and not self.last_job.is_done:
-                return  
-            # 保存模型至输出目录
+                return  # The last upload is still running, don't start another
+                # 如果上一个上传仍在运行中，则不启动另一个上传
             self.model.save_pretrained(self.output_dir)
-            # 如果分词器不为空，则保存分词器至输出目录
+            # 保存模型到输出目录
             if self.tokenizer is not None:
                 self.tokenizer.save_pretrained(self.output_dir)
-            # 将结果推送到Hub，并获取推送作业对象
+                # 如果存在分词器，则保存分词器到输出目录
             _, self.last_job = self.repo.push_to_hub(
                 commit_message=f"Training in progress steps {batch}", blocking=False
             )
-    # 在每个 epoch 结束时调用的函数
+            # 推送模型和分词器到 Hub 仓库，使用批次号作为提交消息，非阻塞模式
+    # 在每个 epoch 结束时调用的方法，用于处理日志和保存模型训练历史
     def on_epoch_end(self, epoch, logs=None):
-        # 复制 logs，避免意外写入 Keras 后续会读取的内容
-        logs = logs.copy()
-        # 如果 logs 中没有 "epoch" 键，则添加当前 epoch
+        logs = logs.copy()  # 复制日志以避免意外影响后续 Keras 的读取操作
         if "epoch" not in logs:
-            logs["epoch"] = epoch
-        # 将 logs 添加到训练历史中
-        self.training_history.append(logs)
-        # 如果保存策略是基于 epoch，则执行以下操作
+            logs["epoch"] = epoch  # 如果日志中没有 epoch，则添加当前 epoch
+        self.training_history.append(logs)  # 将当前 epoch 的日志记录到训练历史中
         if self.save_strategy == IntervalStrategy.EPOCH:
-            # 如果上一个上传任务仍在运行，则返回，不启动新任务
             if self.last_job is not None and not self.last_job.is_done:
-                return
-            # 保存模型到指定输出目录
-            self.model.save_pretrained(self.output_dir)
-            # 如果存在 tokenizer，则保存到指定输出目录
+                return  # 如果上一个上传任务仍在运行，则不启动新的任务
+            self.model.save_pretrained(self.output_dir)  # 保存模型到指定输出目录
             if self.tokenizer is not None:
-                self.tokenizer.save_pretrained(self.output_dir)
-            # 如果存在 checkpoint，则保存到指定输出目录
+                self.tokenizer.save_pretrained(self.output_dir)  # 如果存在 tokenizer，则保存到同一输出目录
             if self.checkpoint:
                 checkpoint_dir = os.path.join(self.output_dir, "checkpoint")
-                self.model._save_checkpoint(checkpoint_dir, epoch)
-            # 从 Keras 创建 TrainingSummary 对象
+                self.model._save_checkpoint(checkpoint_dir, epoch)  # 保存检查点信息
+            # 从 Keras 历史和模型信息中生成训练摘要
             train_summary = TrainingSummary.from_keras(
                 model=self.model,
                 model_name=self.hub_model_id,
                 keras_history=self.training_history,
                 **self.model_card_args,
             )
-            # 将 TrainingSummary 转换为 model_card
-            model_card = train_summary.to_model_card()
-            # 将 model_card 写入 README.md 文件
+            model_card = train_summary.to_model_card()  # 转换训练摘要为模型卡片信息
             with (self.output_dir / "README.md").open("w") as f:
-                f.write(model_card)
-            # 推送到 Hub，并获取最后一个任务
+                f.write(model_card)  # 将模型卡片信息写入 README.md 文件中
+            # 推送到版本控制平台（Hub），并获取推送任务状态
             _, self.last_job = self.repo.push_to_hub(
                 commit_message=f"Training in progress epoch {epoch}", blocking=False
             )
 
-    # 在训练结束时调用的函数
+    # 在训练结束时调用的方法，确保最新版本的模型已上传到 Hub
     def on_train_end(self, logs=None):
-        # 确保最新版本的模型已上传
         if self.last_job is not None and not self.last_job.is_done:
             logging.info("Pushing the last epoch to the Hub, this may take a while...")
-            # 等待最后一个任务完成
             while not self.last_job.is_done:
-                sleep(1)
+                sleep(1)  # 等待上一个推送任务完成
         else:
-            # 保存模型到指定输出目录
-            self.model.save_pretrained(self.output_dir)
-            # 如果存在 tokenizer，则保存到指定输出目录
+            self.model.save_pretrained(self.output_dir)  # 保存最终版本的模型到输出目录
             if self.tokenizer is not None:
-                self.tokenizer.save_pretrained(self.output_dir)
-            # 从 Keras 创建 TrainingSummary 对象
+                self.tokenizer.save_pretrained(self.output_dir)  # 如果存在 tokenizer，则保存到同一输出目录
+            # 从 Keras 历史和模型信息中生成训练摘要
             train_summary = TrainingSummary.from_keras(
                 model=self.model,
                 model_name=self.hub_model_id,
                 keras_history=self.training_history,
                 **self.model_card_args,
             )
-            # 将 TrainingSummary 转换为 model_card
-            model_card = train_summary.to_model_card()
-            # 将 model_card 写入 README.md 文件
+            model_card = train_summary.to_model_card()  # 转换训练摘要为模型卡片信息
             with (self.output_dir / "README.md").open("w") as f:
-                f.write(model_card)
-            # 推送到 Hub，提交消息为 "End of training"，阻塞等待完成
-            self.repo.push_to_hub(commit_message="End of training", blocking=True)
+                f.write(model_card)  # 将模型卡片信息写入 README.md 文件中
+            self.repo.push_to_hub(commit_message="End of training", blocking=True)  # 推送最终训练结果到版本控制平台（Hub）
 ```

@@ -1,24 +1,21 @@
 # `.\models\electra\tokenization_electra_fast.py`
 
-```py
-# 导入json模块，用于处理JSON数据
-import json
-# 从typing模块中导入List、Optional和Tuple，用于类型提示
-from typing import List, Optional, Tuple
-# 从tokenizers模块中导入normalizers，用于规范化文本
-from tokenizers import normalizers
-# 从tokenization_utils_fast模块中导入PreTrainedTokenizerFast类
-from ...tokenization_utils_fast import PreTrainedTokenizerFast
-# 从当前目录下的tokenization_electra模块中导入ElectraTokenizer类
-from .tokenization_electra import ElectraTokenizer
+```
+# 导入必要的模块
+import json  # 导入用于处理 JSON 数据的模块
+from typing import List, Optional, Tuple  # 导入类型提示模块
 
-# 定义存储词汇表文件名的字典
+from tokenizers import normalizers  # 从 tokenizers 模块导入 normalizers 功能
+
+from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 导入预训练分词器
+from .tokenization_electra import ElectraTokenizer  # 从当前目录下的 tokenization_electra 模块导入 ElectraTokenizer 类
+
+# 定义文件名与文件路径映射关系的常量字典
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}
 
-# 定义预训练词汇表文件的映射字典
+# 定义预训练模型与其词汇文件和分词器文件映射关系的常量字典
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
-        # 生成器模型的词汇表文件URL
         "google/electra-small-generator": (
             "https://huggingface.co/google/electra-small-generator/resolve/main/vocab.txt"
         ),
@@ -37,7 +34,6 @@ PRETRAINED_VOCAB_FILES_MAP = {
         ),
     },
     "tokenizer_file": {
-        # 生成器模型的分词器文件URL
         "google/electra-small-generator": (
             "https://huggingface.co/google/electra-small-generator/resolve/main/tokenizer.json"
         ),
@@ -59,19 +55,18 @@ PRETRAINED_VOCAB_FILES_MAP = {
     },
 }
 
-# 定义预训练位置嵌入大小的字典
+# 定义预训练模型与其位置嵌入大小的映射关系的常量字典
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "google/electra-small-generator": 512,
     "google/electra-base-generator": 512,
-    # 定义了一组键值对，键是模型名称，值是模型的大小（512）
+    # 定义一个字典，包含四个条目，每个条目的键是一个字符串表示的模型名称，值是一个整数表示的模型大小（512表示模型大小为512字节）
     "google/electra-large-generator": 512,
     "google/electra-small-discriminator": 512,
     "google/electra-base-discriminator": 512,
     "google/electra-large-discriminator": 512,
-# 结束代码块
 }
 
-# 预训练模型的初始化配置，包含了各种不同大小的生成器和鉴别器模型
+# 预定义的预训练配置字典，包含了Electra模型的不同预训练变体及其配置信息
 PRETRAINED_INIT_CONFIGURATION = {
     "google/electra-small-generator": {"do_lower_case": True},
     "google/electra-base-generator": {"do_lower_case": True},
@@ -81,48 +76,42 @@ PRETRAINED_INIT_CONFIGURATION = {
     "google/electra-large-discriminator": {"do_lower_case": True},
 }
 
-# 从transformers.models.bert.tokenization_bert_fast.BertTokenizerFast 复制的代码，将Bert相关的部分替换为Electra
+# 从transformers.models.bert.tokenization_bert_fast.BertTokenizerFast复制而来，修改为支持Electra模型的快速分词器
 class ElectraTokenizerFast(PreTrainedTokenizerFast):
     r"""
-    构建一个“快速”ELECTRA分词器（由HuggingFace的*tokenizers*库支持）。基于WordPiece。
+    构建一个“快速”的ELECTRA分词器（基于HuggingFace的*tokenizers*库），基于WordPiece。
 
-    这个分词器继承自[`PreTrainedTokenizerFast`]，其中包含了大部分主要方法。用户应该参考这个超类获取更多关于这些方法的信息。
-    用于初始化 ElectraTokenizer 类的构造函数，用于创建 ElectraTokenizer 对象
-    Args:
-        vocab_file (`str`): 包含词汇的文件路径
-        do_lower_case (`bool`, *optional*, 默认为 `True`): 在进行标记化时是否将输入转换为小写。
-        unk_token (`str`, *optional*, 默认为 `"[UNK]"`): 未知标记。词汇表中不存在的标记无法转换为 ID，将被设置为此标记。
-        sep_token (`str`, *optional*, 默认为 `"[SEP]"`): 分隔符标记，用于从多个序列构建序列时使用，例如序列分类或问答中的文本和问题。在使用特殊标记构建的序列的最后一个标记。
-        pad_token (`str`, *optional*, 默认为 `"[PAD]"`): 用于填充的标记，在对不同长度的序列进行批处理时使用。
-        cls_token (`str`, *optional*, 默认为 `"[CLS]"`): 分类器标记，用于进行序列分类（整个序列的分类，而不是每个标记的分类）。在使用特殊标记构建的序列的第一个标记。
-        mask_token (`str`, *optional*, 默认为 `"[MASK]"`): 用于屏蔽值的标记。这是在训练具有遮罩语言建模的模型时使用的标记。模型将尝试预测此标记。
-        clean_text (`bool`, *optional*, 默认为 `True`): 在进行标记化之前是否清理文本，删除任何控制字符并将所有空格替换为经典空格。
-        tokenize_chinese_chars (`bool`, *optional*, 默认为 `True`): 是否标记化中文字符。这可能应该在日本语中禁用（请参见 [此问题](https://github.com/huggingface/transformers/issues/328)）。
-        strip_accents (`bool`, *optional*): 是否去除所有音调符号。如果未指定此选项，则将通过 `lowercase` 的值（如原始 ELECTRA 中）来确定。
-        wordpieces_prefix (`str`, *optional*, 默认为 `##`): 子词的前缀。
-    """
-
-    vocab_files_names = VOCAB_FILES_NAMES
-    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    slow_tokenizer_class = ElectraTokenizer
-
-    def __init__(
-        self,
-        vocab_file=None,
-        tokenizer_file=None,
-        do_lower_case=True,
-        unk_token="[UNK]",
-        sep_token="[SEP]",
-        pad_token="[PAD]",
-        cls_token="[CLS]",
-        mask_token="[MASK]",
-        tokenize_chinese_chars=True,
-        strip_accents=None,
-        **kwargs,
+    此分词器继承自[`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应参考该超类获取更多关于这些方法的信息。
+    ```
+    # 定义一个类，实现ElectraTokenizer的功能
+    class ElectraTokenizer:
+        # 默认的词汇文件名列表
+        vocab_files_names = VOCAB_FILES_NAMES
+        # 预训练模型的词汇文件映射
+        pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+        # 预训练模型的初始化配置
+        pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
+        # 预训练位置嵌入的最大模型输入大小
+        max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+        # ElectraTokenizer 的慢速实现类
+        slow_tokenizer_class = ElectraTokenizer
+    
+        # 初始化方法，用于创建一个 ElectraTokenizer 对象
+        def __init__(
+            self,
+            vocab_file=None,
+            tokenizer_file=None,
+            do_lower_case=True,
+            unk_token="[UNK]",
+            sep_token="[SEP]",
+            pad_token="[PAD]",
+            cls_token="[CLS]",
+            mask_token="[MASK]",
+            tokenize_chinese_chars=True,
+            strip_accents=None,
+            **kwargs,
+        ):
     ):
-        # 调用父类的构造函数，传入参数初始化对象
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -137,24 +126,37 @@ class ElectraTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 将后端分词器的规范化器的状态转换为 JSON 格式
+# 调用父类的初始化方法，传入必要的参数和关键字参数来初始化对象。
+
+
         normalizer_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
-        # 检查规范化器状态是否与传入的参数一致，如果不一致则修改
+
+# 从后端的分词器对象中获取标准化器的状态，将其反序列化为Python对象。
+
+
         if (
             normalizer_state.get("lowercase", do_lower_case) != do_lower_case
             or normalizer_state.get("strip_accents", strip_accents) != strip_accents
             or normalizer_state.get("handle_chinese_chars", tokenize_chinese_chars) != tokenize_chinese_chars
         ):
+
+# 检查标准化器的状态是否与当前对象的参数匹配，如果不匹配则需要更新标准化器。
+
+
             normalizer_class = getattr(normalizers, normalizer_state.pop("type"))
             normalizer_state["lowercase"] = do_lower_case
             normalizer_state["strip_accents"] = strip_accents
             normalizer_state["handle_chinese_chars"] = tokenize_chinese_chars
             self.backend_tokenizer.normalizer = normalizer_class(**normalizer_state)
 
-        # 设置对象属性值
+# 如果有不匹配的参数，根据标准化器的类型更新标准化器对象，确保与当前对象的参数一致。
+
+
         self.do_lower_case = do_lower_case
 
-    # 构造包含特殊标记的输入序列
+# 更新当前对象的小写参数为传入的do_lower_case值。
+
+
     def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
         """
         Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
@@ -172,52 +174,69 @@ class ElectraTokenizerFast(PreTrainedTokenizerFast):
         Returns:
             `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
-        # 构建包含特殊标记的输入序列
         output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
 
-        # 如果有第二个序列的 token_ids，则加入对应的特殊标记
+# 构建模型输入，根据输入的序列或序列对进行连接并添加特殊标记，用于序列分类任务。ELECTRA序列的格式包括单一序列和序列对，对应不同的特殊标记。
+
+
         if token_ids_1 is not None:
             output += token_ids_1 + [self.sep_token_id]
 
         return output
 
-    # 从输入序列创建 token 类型 ID
+# 如果提供了第二个序列token_ids_1，则将其连接到output中并添加特殊分隔标记，最后返回构建好的输入列表。
+
+
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    ) -> List[int]:
+
+# 根据给定的序列创建token type IDs，用于区分不同序列的类型。
+    def create_electra_mask(self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None) -> List[int]:
         """
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A ELECTRA sequence
         pair mask has the following format:
 
         ```
-        0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1
+        0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs.
+                List of IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            `List[int]`: List of token type IDs according to the given sequence(s).
         """
-        # 创建一个序列对掩码，用于序列对分类任务
-        sep = [self.sep_token_id] # 设置分隔符标记的列表
-        cls = [self.cls_token_id] # 设置类别标记的列表
-        if token_ids_1 is None: # 如果第二个序列的标记列表为空
-            # 返回第一个序列的掩码，即长度为第一个序列长度加上分隔符长度加上类别标记长度的0列表
+        # Define the separation and classification tokens
+        sep = [self.sep_token_id]
+        cls = [self.cls_token_id]
+
+        # If token_ids_1 is not provided, return a mask with zeros for the first sequence only
+        if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
-        # 如果第二个序列的标记列表不为空
-        # 返回第一个序列和第二个序列的掩码，即前面的掩码加上第二个序列的长度加上分隔符的长度的1列表
+
+        # Return a mask with zeros for the first sequence and ones for the second sequence
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 调用tokenizer的model.save方法来保存词汇表到指定目录，使用指定的文件名前缀
+        """
+        Save the tokenizer's vocabulary files to the specified directory.
+
+        Args:
+            save_directory (str):
+                Directory where the vocabulary files will be saved.
+            filename_prefix (str, *optional*):
+                Optional prefix for the saved files.
+
+        Returns:
+            `Tuple[str]`: Tuple containing the filenames of the saved vocabulary files.
+        """
+        # Save the model's vocabulary files using the tokenizer's internal method
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
-        # 返回保存的文件名组成的元组
         return tuple(files)
 ```

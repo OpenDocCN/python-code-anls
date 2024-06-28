@@ -1,19 +1,22 @@
 # `.\models\cvt\modeling_cvt.py`
 
-```py
-# 设置文件编码为UTF-8
-# 版权声明
-# 根据Apache许可证2.0版本使用此文件
-# 你不得使用本文件，除非符合许可证的条件
-# 你可以在以下网址获取许可证的副本
+```
+# coding=utf-8
+# Copyright 2022 Microsoft Research and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则按"原样"分发软件
-# 没有任何形式的担保或条件，明示或默示
-# 请查看许可证以了解特定语言规定的权限和限制。
-
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """ PyTorch CvT model."""
 
-# 导入所需模块
 import collections.abc
 from dataclasses import dataclass
 from typing import Optional, Tuple, Union
@@ -23,7 +26,6 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 导入所需函数
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 from ...modeling_outputs import ImageClassifierOutputWithNoAttention, ModelOutput
 from ...modeling_utils import PreTrainedModel, find_pruneable_heads_and_indices, prune_linear_layer
@@ -34,20 +36,17 @@ from .configuration_cvt import CvtConfig
 logger = logging.get_logger(__name__)
 
 # General docstring
-# 总体文档字符串
 _CONFIG_FOR_DOC = "CvtConfig"
 
 # Base docstring
-# 基本文档字符串
 _CHECKPOINT_FOR_DOC = "microsoft/cvt-13"
 _EXPECTED_OUTPUT_SHAPE = [1, 384, 14, 14]
 
 # Image classification docstring
-# 图像分类文档字符串
 _IMAGE_CLASS_CHECKPOINT = "microsoft/cvt-13"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "tabby, tabby cat"
 
-# 预训练模型存档列表
+# CvT预训练模型存档列表
 CVT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "microsoft/cvt-13",
     "microsoft/cvt-13-384",
@@ -55,7 +54,7 @@ CVT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "microsoft/cvt-21",
     "microsoft/cvt-21-384",
     "microsoft/cvt-21-384-22k",
-    # 查看所有Cvt模型请访问https://huggingface.co/models?filter=cvt
+    # See all Cvt models at https://huggingface.co/models?filter=cvt
 ]
 
 @dataclass
@@ -76,9 +75,8 @@ class BaseModelOutputWithCLSToken(ModelOutput):
 
     last_hidden_state: torch.FloatTensor = None
     cls_token_value: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
 # Copied from transformers.models.beit.modeling_beit.drop_path
-# 定义函数 drop_path，用于执行随机深度（Stochastic Depth）的路径丢弃
 def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = False) -> torch.Tensor:
     """
     Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
@@ -89,22 +87,17 @@ def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = Fals
     layer and argument names to 'drop path' rather than mix DropConnect as a layer name and use 'survival rate' as the
     argument.
     """
-    # 如果丢弃概率为 0 或者未进行训练，则直接返回输入
     if drop_prob == 0.0 or not training:
         return input
     keep_prob = 1 - drop_prob
-    # 计算随机张量的形状，与输入张量的形状相同
     shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
-    # 生成随机张量
     random_tensor = keep_prob + torch.rand(shape, dtype=input.dtype, device=input.device)
     random_tensor.floor_()  # binarize
-    # 执行路径丢弃操作，并返回结果
     output = input.div(keep_prob) * random_tensor
     return output
 
 
 # Copied from transformers.models.beit.modeling_beit.BeitDropPath
-# 定义类 CvtDropPath，用于执行随机深度的路径丢弃
 class CvtDropPath(nn.Module):
     """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
 
@@ -113,7 +106,6 @@ class CvtDropPath(nn.Module):
         self.drop_prob = drop_prob
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 调用 drop_path 函数执行随机深度的路径丢弃，并返回结果
         return drop_path(hidden_states, self.drop_prob, self.training)
 
     def extra_repr(self) -> str:
@@ -124,21 +116,16 @@ class CvtEmbeddings(nn.Module):
     """
     Construct the CvT embeddings.
     """
-    # 构建了 CvT 嵌入层的类
+
     def __init__(self, patch_size, num_channels, embed_dim, stride, padding, dropout_rate):
         super().__init__()
-        # 初始化卷积嵌入层
         self.convolution_embeddings = CvtConvEmbeddings(
             patch_size=patch_size, num_channels=num_channels, embed_dim=embed_dim, stride=stride, padding=padding
         )
-        # 初始化 dropout 层
         self.dropout = nn.Dropout(dropout_rate)
 
-    # 执行前向传播操作
     def forward(self, pixel_values):
-        # 获取卷积嵌入层的输出
         hidden_state = self.convolution_embeddings(pixel_values)
-        # 对卷积嵌入层的输出进行 dropout 操作
         hidden_state = self.dropout(hidden_state)
         return hidden_state
 
@@ -147,90 +134,87 @@ class CvtConvEmbeddings(nn.Module):
     """
     Image to Conv Embedding.
     """
-    # 定义了将图像转换为卷积嵌入的类
+
     def __init__(self, patch_size, num_channels, embed_dim, stride, padding):
         super().__init__()
-        # 将 patch_size 转换为元组形式
         patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
         self.patch_size = patch_size
-        # 定义卷积投影层
         self.projection = nn.Conv2d(num_channels, embed_dim, kernel_size=patch_size, stride=stride, padding=padding)
-        # 定义归一化层
         self.normalization = nn.LayerNorm(embed_dim)
-    # 定义一个前向传播函数，接受像素值作为输入
+    # 定义前向传播函数，接受像素值作为输入
     def forward(self, pixel_values):
-        # 使用投影函数处理像素值
+        # 使用投影函数对像素值进行处理
         pixel_values = self.projection(pixel_values)
-        # 获取输入像素值的形状信息：批量大小、通道数、高度、宽度
+        # 获取输入张量的维度信息：批大小，通道数，高度，宽度
         batch_size, num_channels, height, width = pixel_values.shape
         # 计算隐藏层大小
         hidden_size = height * width
-        # 重新排列像素值张量维度："b c h w -> b (h w) c"
+        # 将输入张量重新排列为 "批大小 (高度 * 宽度) 通道数"
         pixel_values = pixel_values.view(batch_size, num_channels, hidden_size).permute(0, 2, 1)
-        # 如果开启了标准化操作
+        # 如果启用了归一化函数，则对像素值进行归一化处理
         if self.normalization:
-            # 对像素值进行标准化处理
             pixel_values = self.normalization(pixel_values)
-        # 重新排列像素值张量维度："b (h w) c" -> "b c h w"
+        # 将张量重新排列为 "批大小 通道数 高度 宽度"
         pixel_values = pixel_values.permute(0, 2, 1).view(batch_size, num_channels, height, width)
         # 返回处理后的像素值张量
         return pixel_values
-# 自注意力模型的卷积投影层，用于将输入特征映射到更高维空间
+# 定义自注意力模块的卷积投影类
 class CvtSelfAttentionConvProjection(nn.Module):
     def __init__(self, embed_dim, kernel_size, padding, stride):
         super().__init__()
-        # 创建一个二维卷积层，用于对输入进行卷积操作
+        # 创建一个二维卷积层对象
         self.convolution = nn.Conv2d(
-            embed_dim,  # 输入通道数
-            embed_dim,  # 输出通道数
-            kernel_size=kernel_size,  # 卷积核大小
-            padding=padding,  # 填充大小
-            stride=stride,  # 步长大小
-            bias=False,  # 是否使用偏置
-            groups=embed_dim,  # 输入通道分组
+            embed_dim,
+            embed_dim,
+            kernel_size=kernel_size,
+            padding=padding,
+            stride=stride,
+            bias=False,
+            groups=embed_dim,  # 设定卷积的分组数量为 embed_dim，用于深度可分离卷积
         )
-        # 创建一个二维批归一化层，用于规范化卷积输出
+        # 创建二维批归一化层对象
         self.normalization = nn.BatchNorm2d(embed_dim)
 
     def forward(self, hidden_state):
-        # 对输入特征进行卷积操作
+        # 对输入的隐藏状态进行卷积操作
         hidden_state = self.convolution(hidden_state)
-        # 对卷积输出进行批归一化
+        # 对卷积后的结果进行批归一化处理
         hidden_state = self.normalization(hidden_state)
         return hidden_state
 
 
-# 自注意力模型的线性投影层，用于将二维特征映射到一维空间
+# 定义自注意力模块的线性投影类
 class CvtSelfAttentionLinearProjection(nn.Module):
     def forward(self, hidden_state):
-        # 获取输入特征的形状信息
+        # 获取输入隐藏状态的维度信息
         batch_size, num_channels, height, width = hidden_state.shape
-        # 计算输入特征的大小
+        # 计算隐藏状态的大小
         hidden_size = height * width
-        # 将二维特征重排为一维特征
+        # 重新排列张量的维度顺序，转换为 "b (h w) c" 的形式
         hidden_state = hidden_state.view(batch_size, num_channels, hidden_size).permute(0, 2, 1)
         return hidden_state
 
 
-# 自注意力模型的投影层，用于将输入特征映射到适合进行自注意力计算的维度
+# 定义自注意力模块的投影类
 class CvtSelfAttentionProjection(nn.Module):
     def __init__(self, embed_dim, kernel_size, padding, stride, projection_method="dw_bn"):
         super().__init__()
-        # 根据投影方法选择对应的投影层
+        # 根据投影方法选择不同的投影方式
         if projection_method == "dw_bn":
+            # 使用深度可分离卷积进行投影
             self.convolution_projection = CvtSelfAttentionConvProjection(embed_dim, kernel_size, padding, stride)
-        # 创建线性投影层
+        # 创建线性投影对象
         self.linear_projection = CvtSelfAttentionLinearProjection()
 
     def forward(self, hidden_state):
-        # 使用卷积投影层将输入特征映射到更高维空间
+        # 使用卷积投影对隐藏状态进行处理
         hidden_state = self.convolution_projection(hidden_state)
-        # 使用线性投影层将特征映射到一维空间
+        # 使用线性投影对卷积后的结果进行进一步处理
         hidden_state = self.linear_projection(hidden_state)
         return hidden_state
 
 
-# 自注意力模型的主体结构，用于计算自注意力权重并应用于输入特征
+# 定义自注意力模块的主类
 class CvtSelfAttention(nn.Module):
     def __init__(
         self,
@@ -246,19 +230,24 @@ class CvtSelfAttention(nn.Module):
         attention_drop_rate,
         with_cls_token=True,
         **kwargs,
-        ):
-        # 调用父类的构造函数
+    ):
+        # 在这里进行初始化，省略了部分参数
+        pass  # 实际初始化内容可以根据需要添加
         super().__init__()
-        # 定义缩放因子为 embed_dim 的负 0.5 次方
-        self.scale = embed_dim**-0.5
-        # 是否包含类别令牌
-        self.with_cls_token = with_cls_token
-        # 嵌入维度
-        self.embed_dim = embed_dim
-        # 注意力头的数量
-        self.num_heads = num_heads
+        # 调用父类的初始化方法
 
-        # 创建查询的卷积投影
+        self.scale = embed_dim**-0.5
+        # 初始化缩放因子，用于缩放注意力分数
+
+        self.with_cls_token = with_cls_token
+        # 是否包含类别标记的标志
+
+        self.embed_dim = embed_dim
+        # 嵌入维度大小
+
+        self.num_heads = num_heads
+        # 注意力头的数量
+
         self.convolution_projection_query = CvtSelfAttentionProjection(
             embed_dim,
             kernel_size,
@@ -266,104 +255,106 @@ class CvtSelfAttention(nn.Module):
             stride_q,
             projection_method="linear" if qkv_projection_method == "avg" else qkv_projection_method,
         )
-        # 创建键的卷积投影
+        # 创建用于查询的卷积投影对象，根据指定的投影方法
+
         self.convolution_projection_key = CvtSelfAttentionProjection(
             embed_dim, kernel_size, padding_kv, stride_kv, projection_method=qkv_projection_method
         )
-        # 创建值的卷积投影
+        # 创建用于键的卷积投影对象，根据指定的投影方法
+
         self.convolution_projection_value = CvtSelfAttentionProjection(
             embed_dim, kernel_size, padding_kv, stride_kv, projection_method=qkv_projection_method
         )
+        # 创建用于值的卷积投影对象，根据指定的投影方法
 
-        # 线性转换，用于查询
         self.projection_query = nn.Linear(embed_dim, embed_dim, bias=qkv_bias)
-        # 线性转换，用于键
+        # 创建查询的线性投影层
+
         self.projection_key = nn.Linear(embed_dim, embed_dim, bias=qkv_bias)
-        # 线性转换，用于值
+        # 创建键的线性投影层
+
         self.projection_value = nn.Linear(embed_dim, embed_dim, bias=qkv_bias)
+        # 创建值的线性投影层
 
-        # 用于注意力的丢弃层
         self.dropout = nn.Dropout(attention_drop_rate)
+        # 创建用于注意力掩码的dropout层
 
-    # 将隐藏状态重排以适应多头注意力
     def rearrange_for_multi_head_attention(self, hidden_state):
-        # 获取批大小、隐藏大小和注意力头的维度
         batch_size, hidden_size, _ = hidden_state.shape
-        # 计算每个注意力头的维度
         head_dim = self.embed_dim // self.num_heads
-        # 重排张量维度，使其符合多头注意力的输入格式
-        # 'b t (h d) -> b h t d'
+        # 计算每个注意力头的维度
+
+        # 重新排列张量以用于多头注意力计算，形式为 'b t (h d) -> b h t d'
         return hidden_state.view(batch_size, hidden_size, self.num_heads, head_dim).permute(0, 2, 1, 3)
-    # 定义前向传播函数，用于执行自注意力机制的操作
+        # 返回重新排列后的张量，以便进行多头注意力计算
+    # 定义一个前向传播方法，接受隐藏状态、高度和宽度作为参数
     def forward(self, hidden_state, height, width):
-        # 如果模型包含分类标记，则将隐藏状态分割为分类标记和其余部分
+        # 如果设置了包含CLS token，则将隐藏状态分割为CLS token和其余部分
         if self.with_cls_token:
             cls_token, hidden_state = torch.split(hidden_state, [1, height * width], 1)
-        # 获取批量大小、隐藏状态维度和通道数
+        
+        # 获取批大小、隐藏大小和通道数
         batch_size, hidden_size, num_channels = hidden_state.shape
-        # 将隐藏状态重新排列为"b (h w) c -> b c h w"的形状
+        
+        # 重新排列隐藏状态的维度以适应多头注意力机制的需求："b (h w) c -> b c h w"
         hidden_state = hidden_state.permute(0, 2, 1).view(batch_size, num_channels, height, width)
 
-        # 计算查询、键和值的投影
+        # 使用卷积投影函数对隐藏状态进行键、查询和值的投影
         key = self.convolution_projection_key(hidden_state)
         query = self.convolution_projection_query(hidden_state)
         value = self.convolution_projection_value(hidden_state)
 
-        # 如果模型包含分类标记，则将分类标记连接到查询、键和值中
+        # 如果设置了包含CLS token，则将CLS token拼接到查询、键和值中
         if self.with_cls_token:
             query = torch.cat((cls_token, query), dim=1)
             key = torch.cat((cls_token, key), dim=1)
             value = torch.cat((cls_token, value), dim=1)
 
-        # 计算每个头部的维度
+        # 计算每个头的维度
         head_dim = self.embed_dim // self.num_heads
 
-        # 将查询、键和值投影到多头注意力的形状
+        # 使用投影后的结果重新排列以适应多头注意力机制："b t (h d)"
         query = self.rearrange_for_multi_head_attention(self.projection_query(query))
         key = self.rearrange_for_multi_head_attention(self.projection_key(key))
         value = self.rearrange_for_multi_head_attention(self.projection_value(value))
 
         # 计算注意力分数
         attention_score = torch.einsum("bhlk,bhtk->bhlt", [query, key]) * self.scale
-        # 对注意力分数进行 softmax 操作
+        # 计算注意力概率并应用dropout
         attention_probs = torch.nn.functional.softmax(attention_score, dim=-1)
-        # 对注意力概率进行 dropout 操作
         attention_probs = self.dropout(attention_probs)
 
         # 计算上下文向量
         context = torch.einsum("bhlt,bhtv->bhlv", [attention_probs, value])
-        # 重新排列上下文向量的形状为"b h t d -> b t (h d)"
+        
+        # 重新排列上下文向量的维度："b h t d -> b t (h d)"
         _, _, hidden_size, _ = context.shape
         context = context.permute(0, 2, 1, 3).contiguous().view(batch_size, hidden_size, self.num_heads * head_dim)
-        # 返回上下文向量
+        
+        # 返回上下文向量作为前向传播的输出结果
         return context
 class CvtSelfOutput(nn.Module):
     """
     The residual connection is defined in CvtLayer instead of here (as is the case with other models), due to the
     layernorm applied before each block.
     """
-    # 定义CvtSelfOutput类，用于处理自注意力机制模块的输出
+
     def __init__(self, embed_dim, drop_rate):
-        # 初始化函数，接收嵌入维度和丢弃率作为参数
         super().__init__()
-        # 调用父类构造函数
+        # 定义全连接层，输入和输出维度为 embed_dim
         self.dense = nn.Linear(embed_dim, embed_dim)
-        # 创建线性层，处理嵌入维度到嵌入维度的转换
+        # 定义 dropout 层，应用于全连接层的输出
         self.dropout = nn.Dropout(drop_rate)
-        # 创建丢弃层，用于丢弃一部分神经元
 
     def forward(self, hidden_state, input_tensor):
-        # 前向传播函数，接收隐藏状态和输入张量作为参数
+        # 输入 hidden_state 经过全连接层
         hidden_state = self.dense(hidden_state)
-        # 使用线性层处理隐藏状态
+        # 对全连接层输出应用 dropout
         hidden_state = self.dropout(hidden_state)
-        # 使用丢弃层丢弃一部分神经元
         return hidden_state
-        # 返回处理后的隐藏状态
 
 
 class CvtAttention(nn.Module):
-    #定义CvtAttention类，用于处理自注意力机制模块
     def __init__(
         self,
         num_heads,
@@ -379,9 +370,8 @@ class CvtAttention(nn.Module):
         drop_rate,
         with_cls_token=True,
     ):
-        #初始化函数，接收多个参数，包括注意力头数、嵌入维度等
         super().__init__()
-        #调用父类构造函数
+        # 创建自注意力模块，参数由传入的参数决定
         self.attention = CvtSelfAttention(
             num_heads,
             embed_dim,
@@ -395,82 +385,74 @@ class CvtAttention(nn.Module):
             attention_drop_rate,
             with_cls_token,
         )
-        #创建自注意力机制模块
+        # 创建自定义的输出模块，包括全连接层和 dropout
         self.output = CvtSelfOutput(embed_dim, drop_rate)
-        #创建自身输出模块
+        # 存储被修剪的注意力头的集合
         self.pruned_heads = set()
-        #初始化剪枝头集合
 
     def prune_heads(self, heads):
-        #定义剪枝函数，接收头数作为参数
         if len(heads) == 0:
             return
-        #如果头数为0，则直接返回
+        # 寻找可修剪的注意力头，并获取相应的索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.attention.num_attention_heads, self.attention.attention_head_size, self.pruned_heads
         )
-        #找到可剪枝头的索引
-        # 剪枝线性层
+
+        # 修剪线性层
         self.attention.query = prune_linear_layer(self.attention.query, index)
         self.attention.key = prune_linear_layer(self.attention.key, index)
         self.attention.value = prune_linear_layer(self.attention.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
-        #更新参数并存储被剪枝的头索引
 
-        #更新超参数并存储被剪枝的头
+        # 更新超参数并存储修剪的头
         self.attention.num_attention_heads = self.attention.num_attention_heads - len(heads)
         self.attention.all_head_size = self.attention.attention_head_size * self.attention.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
     def forward(self, hidden_state, height, width):
-        #定义前向传播函数，接收隐藏状态、高度和宽度作为参数
+        # 使用自注意力模块处理 hidden_state，height 和 width 是额外的参数
         self_output = self.attention(hidden_state, height, width)
-        #使用自注意力模块处理隐藏状态
+        # 使用自定义的输出模块处理 self_output 和 hidden_state
         attention_output = self.output(self_output, hidden_state)
-        #使用自身输出模块处理自注意力输出
         return attention_output
-        #返回注意力输出结果
 
 
 class CvtIntermediate(nn.Module):
-    #定义CvtIntermediate类，用于处理中间状态的模块
     def __init__(self, embed_dim, mlp_ratio):
-        #初始化函数，接收嵌入维度和多层感知机比率作为参数
         super().__init__()
-        #调用父类构造函数
+        # 定义全连接层，输入维度为 embed_dim，输出维度为 embed_dim * mlp_ratio
         self.dense = nn.Linear(embed_dim, int(embed_dim * mlp_ratio))
-        #创建线性层，处理嵌入维度到多层感知机输出维度的转换
+        # 定义 GELU 激活函数
         self.activation = nn.GELU()
-        #创建GELU激活函数
 
     def forward(self, hidden_state):
-        #定义前向传播函数，接收隐藏状态作为参数
+        # 输入 hidden_state 经过全连接层
         hidden_state = self.dense(hidden_state)
-        #使用线性层处理隐藏状态
+        # 对全连接层输出应用 GELU 激活函数
         hidden_state = self.activation(hidden_state)
-        #使用激活函数处理中间状态
         return hidden_state
-        #返回处理后的中间状态
-    # 初始化函数，设置模型参数，包括嵌入维度、MLP 比例和丢弃率
+
+
+class CvtOutput(nn.Module):
+    # 定义初始化函数，接受嵌入维度、MLP比率和丢弃率作为参数
     def __init__(self, embed_dim, mlp_ratio, drop_rate):
-        # 继承父类的初始化函数
+        # 调用父类构造函数进行初始化
         super().__init__()
-        # 创建线性层，将输入维度乘以 MLP 比例后映射为嵌入维度
+        # 创建一个全连接层，将输入维度乘以MLP比率得到输出维度，输出维度为embed_dim
         self.dense = nn.Linear(int(embed_dim * mlp_ratio), embed_dim)
-        # 创建丢弃层，以指定丢弃率进行丢弃
+        # 创建一个丢弃层，丢弃率为drop_rate，用于在训练过程中随机丢弃部分神经元以减少过拟合
         self.dropout = nn.Dropout(drop_rate)
 
-    # 前向传播函数，接收隐藏状态和输入张量作为参数
+    # 定义前向传播函数，接受隐藏状态和输入张量作为输入，返回处理后的隐藏状态
     def forward(self, hidden_state, input_tensor):
-        # 通过线性层对隐藏状态进行映射
+        # 将隐藏状态通过全连接层dense进行线性变换
         hidden_state = self.dense(hidden_state)
-        # 通过丢弃层对映射后的隐藏状态进行丢弃
+        # 对线性变换后的隐藏状态进行dropout操作，随机丢弃一部分神经元
         hidden_state = self.dropout(hidden_state)
-        # 将丢弃后的隐藏状态与输入张量相加得到结果
+        # 将dropout后的隐藏状态与输入张量相加，实现残差连接
         hidden_state = hidden_state + input_tensor
-        # 返回计算结果
+        # 返回处理后的隐藏状态作为输出
         return hidden_state
-# 定义一个CvtLayer类，包含了注意力层、归一化和多层感知器（mlp）
 class CvtLayer(nn.Module):
     """
     CvtLayer composed by attention layers, normalization and multi-layer perceptrons (mlps).
@@ -493,9 +475,9 @@ class CvtLayer(nn.Module):
         drop_path_rate,
         with_cls_token=True,
     ):
-        # 调用父类的初始化方法
         super().__init__()
-        # 初始化注意力层
+        
+        # 初始化自注意力层
         self.attention = CvtAttention(
             num_heads,
             embed_dim,
@@ -513,240 +495,357 @@ class CvtLayer(nn.Module):
 
         # 初始化中间层
         self.intermediate = CvtIntermediate(embed_dim, mlp_ratio)
+        
         # 初始化输出层
         self.output = CvtOutput(embed_dim, mlp_ratio, drop_rate)
-        # 初始化DropPath
+        
+        # 如果有drop_path_rate大于0，则初始化drop path层；否则使用恒等映射
         self.drop_path = CvtDropPath(drop_prob=drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
-        # 初始化之前的LayerNorm
+        
+        # 初始化前层归一化层
         self.layernorm_before = nn.LayerNorm(embed_dim)
-        # 初始化之后的LayerNorm
+        
+        # 初始化后层归一化层
         self.layernorm_after = nn.LayerNorm(embed_dim)
 
     def forward(self, hidden_state, height, width):
-        # 使用注意力层处理隐藏状态
+        # 对隐藏状态进行前层归一化后，通过自注意力层计算自注意力输出
         self_attention_output = self.attention(
             self.layernorm_before(hidden_state),  # in Cvt, layernorm is applied before self-attention
             height,
             width,
         )
         attention_output = self_attention_output
+        
+        # 对自注意力输出应用DropPath层
         attention_output = self.drop_path(attention_output)
 
         # 第一个残差连接
         hidden_state = attention_output + hidden_state
 
-        # 在Cvt中，也在自注意力之后应用LayerNorm
+        # 对隐藏状态进行后层归一化后，通过中间层计算层输出
         layer_output = self.layernorm_after(hidden_state)
         layer_output = self.intermediate(layer_output)
 
-        # 在这里完成第二个残差连接
+        # 第二个残差连接
         layer_output = self.output(layer_output, hidden_state)
+        
+        # 对层输出应用DropPath层
         layer_output = self.drop_path(layer_output)
+        
         return layer_output
-
-
-class CvtStage(nn.Module):
-    # 初始化函数，接受配置和阶段参数
+    # 初始化函数，用于初始化一个CvtTransformer对象
     def __init__(self, config, stage):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 存储配置和阶段参数
+        # 将输入的配置参数和阶段保存到对象的属性中
         self.config = config
         self.stage = stage
-        # 如果配置中包含分类标记，并且该阶段需要分类标记
+        # 如果配置中指定了要使用的类别标记（cls_token），则创建一个可学习的类别标记参数
         if self.config.cls_token[self.stage]:
-            # 初始化分类标记为一个可学习的参数，大小为(1, 1, embed_dim[-1])
             self.cls_token = nn.Parameter(torch.randn(1, 1, self.config.embed_dim[-1]))
 
-        # 初始化嵌入层
+        # 创建嵌入层对象，用于将输入的隐藏状态映射到嵌入空间
         self.embedding = CvtEmbeddings(
-            patch_size=config.patch_sizes[self.stage],  # 补丁大小
-            stride=config.patch_stride[self.stage],    # 步幅
+            patch_size=config.patch_sizes[self.stage],           # 补丁大小
+            stride=config.patch_stride[self.stage],              # 步长
             num_channels=config.num_channels if self.stage == 0 else config.embed_dim[self.stage - 1],  # 输入通道数
-            embed_dim=config.embed_dim[self.stage],    # 嵌入维度
-            padding=config.patch_padding[self.stage],  # 填充
-            dropout_rate=config.drop_rate[self.stage],  # 丢弃率
+            embed_dim=config.embed_dim[self.stage],              # 嵌入维度
+            padding=config.patch_padding[self.stage],            # 填充
+            dropout_rate=config.drop_rate[self.stage],           # 丢弃率
         )
 
         # 计算每个层的丢弃路径率
         drop_path_rates = [x.item() for x in torch.linspace(0, config.drop_path_rate[self.stage], config.depth[stage])]
 
-        # 初始化层组成的序列
+        # 创建包含多个CvtLayer层的顺序容器
         self.layers = nn.Sequential(
             *[
                 CvtLayer(
-                    num_heads=config.num_heads[self.stage],  # 头数
-                    embed_dim=config.embed_dim[self.stage],  # 嵌入维度
-                    kernel_size=config.kernel_qkv[self.stage],  # QKV核大小
-                    padding_q=config.padding_q[self.stage],    # Q填充
-                    padding_kv=config.padding_kv[self.stage],  # KV填充
-                    stride_kv=config.stride_kv[self.stage],    # KV步幅
-                    stride_q=config.stride_q[self.stage],      # Q步幅
+                    num_heads=config.num_heads[self.stage],       # 头数
+                    embed_dim=config.embed_dim[self.stage],       # 嵌入维度
+                    kernel_size=config.kernel_qkv[self.stage],    # QKV核大小
+                    padding_q=config.padding_q[self.stage],      # Q填充
+                    padding_kv=config.padding_kv[self.stage],    # KV填充
+                    stride_kv=config.stride_kv[self.stage],      # KV步长
+                    stride_q=config.stride_q[self.stage],        # Q步长
                     qkv_projection_method=config.qkv_projection_method[self.stage],  # QKV投影方法
-                    qkv_bias=config.qkv_bias[self.stage],      # QKV偏置
+                    qkv_bias=config.qkv_bias[self.stage],        # QKV偏置
                     attention_drop_rate=config.attention_drop_rate[self.stage],  # 注意力丢弃率
-                    drop_rate=config.drop_rate[self.stage],    # 丢弃率
-                    drop_path_rate=drop_path_rates[self.stage],  # 丢弃路径率
-                    mlp_ratio=config.mlp_ratio[self.stage],    # MLP比率
-                    with_cls_token=config.cls_token[self.stage],  # 是否使用分类标记
+                    drop_rate=config.drop_rate[self.stage],       # 丢弃率
+                    drop_path_rate=drop_path_rates[self.stage],   # 丢弃路径率
+                    mlp_ratio=config.mlp_ratio[self.stage],       # MLP比率
+                    with_cls_token=config.cls_token[self.stage],  # 是否包含类别标记
                 )
-                for _ in range(config.depth[self.stage])  # 根据深度创建CvtLayer
+                # 根据配置的深度创建多个CvtLayer对象
+                for _ in range(config.depth[self.stage])
             ]
         )
 
-    # 前向传播函数
+    # 前向传播函数，定义了如何计算输入隐藏状态的转换过程
     def forward(self, hidden_state):
         cls_token = None
-        # 嵌入输入的隐藏状态
+        # 将输入的隐藏状态通过嵌入层进行转换
         hidden_state = self.embedding(hidden_state)
         batch_size, num_channels, height, width = hidden_state.shape
-        # 重排形状以适应层的输入要求
+        # 将转换后的张量重新排列为 batch_size x (height * width) x num_channels
         hidden_state = hidden_state.view(batch_size, num_channels, height * width).permute(0, 2, 1)
-        # 如果需要分类标记
+        # 如果配置中指定了要使用的类别标记，则将类别标记和转换后的隐藏状态连接起来
         if self.config.cls_token[self.stage]:
-            # 将分类标记扩展到与隐藏状态相同的批大小
             cls_token = self.cls_token.expand(batch_size, -1, -1)
-            # 将分类标记与隐藏状态拼接起来
             hidden_state = torch.cat((cls_token, hidden_state), dim=1)
 
-        # 逐层进行前向传播
+        # 逐层对输入的隐藏状态进行变换，通过CvtLayer层处理
         for layer in self.layers:
-            # 调用每个层的前向传播函数
             layer_outputs = layer(hidden_state, height, width)
             hidden_state = layer_outputs
 
-        # 如果需要分类标记
+        # 如果配置中指定了要使用的类别标记，则从最终的隐藏状态中分离出类别标记
         if self.config.cls_token[self.stage]:
-            # 将隐藏状态分割为分类标记和其余部分
             cls_token, hidden_state = torch.split(hidden_state, [1, height * width], 1)
-        # 重排形状以适应输出的形状
+        # 将最终的隐藏状态重新排列为 batch_size x num_channels x height x width 的形式
         hidden_state = hidden_state.permute(0, 2, 1).view(batch_size, num_channels, height, width)
-        # 返回隐藏状态和分类标记（如果有）
+        # 返回转换后的隐藏状态和类别标记（如果有的话）
         return hidden_state, cls_token
-## 注释：
+        """
+        # CVTEncoder 类，用于实现一个可变形视觉 Transformer 编码器模型
+
+        def __init__(self, config):
+            # 初始化函数，继承自 nn.Module
+            super().__init__()
+            # 保存模型配置信息
+            self.config = config
+            # 初始化模型的多个编码阶段
+            self.stages = nn.ModuleList([])
+            # 根据配置中的深度信息，逐个创建并添加 CvtStage 实例到 stages 中
+            for stage_idx in range(len(config.depth)):
+                self.stages.append(CvtStage(config, stage_idx))
+
+        def forward(self, pixel_values, output_hidden_states=False, return_dict=True):
+            # 初始化隐藏状态和额外输出
+            all_hidden_states = () if output_hidden_states else None
+            hidden_state = pixel_values
+
+            # 初始化分类标记
+            cls_token = None
+            # 遍历每个阶段的模块
+            for _, (stage_module) in enumerate(self.stages):
+                # 通过阶段模块处理隐藏状态，同时获取分类标记
+                hidden_state, cls_token = stage_module(hidden_state)
+                # 如果需要输出所有隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
+                if output_hidden_states:
+                    all_hidden_states = all_hidden_states + (hidden_state,)
+
+            # 如果不返回字典形式的输出，则返回非空的隐藏状态、分类标记和所有隐藏状态
+            if not return_dict:
+                return tuple(v for v in [hidden_state, cls_token, all_hidden_states] if v is not None)
+
+            # 返回包含分类标记、最终隐藏状态和所有隐藏状态的 BaseModelOutputWithCLSToken 对象
+            return BaseModelOutputWithCLSToken(
+                last_hidden_state=hidden_state,
+                cls_token_value=cls_token,
+                hidden_states=all_hidden_states,
+            )
+        """
 
 
-# CvtEncoder 类继承自 nn.Module 类，用于将图像转换为隐含表示
-class CvtEncoder(nn.Module):
-    # 初始化方法
-    def __init__(self, config):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 保存配置对象
-        self.config = config
-        # 存储 CvtStage 对象的列表
-        self.stages = nn.ModuleList([])
-        # 遍历配置的深度，并为每个深度创建一个 CvtStage 对象，然后添加到 stages 列表中
-        for stage_idx in range(len(config.depth)):
-            self.stages.append(CvtStage(config, stage_idx))
 
-    # 前向传播方法
-    def forward(self, pixel_values, output_hidden_states=False, return_dict=True):
-        # 如果设置为输出隐藏状态，则创建一个空的元组用于保存所有隐藏状态
-        all_hidden_states = () if output_hidden_states else None
-        # 初始化隐藏状态为像素值
-        hidden_state = pixel_values
+CVT_PRETRAINED_MODEL_DOCSTRING = r"""
+    This model is an abstract class for handling weights initialization and providing a simple interface for downloading
+    and loading pretrained models.
 
-        # 初始化 cls_token 为 None
-        cls_token = None
-        # 遍历 stages 列表
-        for _, (stage_module) in enumerate(self.stages):
-            # 调用 CvtStage 对象的前向传播方法，更新隐藏状态和 cls_token
-            hidden_state, cls_token = stage_module(hidden_state)
-            # 如果设置为输出隐藏状态，则保存隐藏状态到 all_hidden_states 中
-            if output_hidden_states:
-                all_hidden_states = all_hidden_states + (hidden_state,)
-
-        # 如果 return_dict 为 False，则返回一个元组，其中包含非空的隐藏状态，cls_token 和 all_hidden_states
-        if not return_dict:
-            return tuple(v for v in [hidden_state, cls_token, all_hidden_states] if v is not None)
-
-        # 如果 return_dict 为 True，则返回一个 BaseModelOutputWithCLSToken 对象，其中包含最后的隐藏状态，cls_token 和 all_hidden_states
-        return BaseModelOutputWithCLSToken(
-            last_hidden_state=hidden_state,
-            cls_token_value=cls_token,
-            hidden_states=all_hidden_states,
-        )
-
-
-# CvtPreTrainedModel 类继承自 PreTrainedModel 类，用于处理权重初始化和预训练模型的下载和加载
-class CvtPreTrainedModel(PreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
-
-    # 配置类是 CvtConfig 类
-    config_class = CvtConfig
-    # 基础模型前缀是 "cvt"
-    base_model_prefix = "cvt"
-    # 主输入名称是 "pixel_values"
-    main_input_name = "pixel_values"
-
-    # 初始化权重的方法
-    def _init_weights(self, module):
-        """Initialize the weights"""
-        # 如果是线性层或卷积层，初始化权重和偏置
-        if isinstance(module, (nn.Linear, nn.Conv2d)):
-            module.weight.data = nn.init.trunc_normal_(module.weight.data, mean=0.0, std=self.config.initializer_range)
-            if module.bias is not None:
-                module.bias.data.zero_()
-        # 如果是层归一化层，初始化权重为 1.0，偏置为 0.0
-        elif isinstance(module, nn.LayerNorm):
-            module.bias.data.zero_()
-            module.weight.data.fill_(1.0)
-        # 如果是 CvtStage 对象，初始化 cls_token
-        elif isinstance(module, CvtStage):
-            if self.config.cls_token[module.stage]:
-                module.cls_token.data = nn.init.trunc_normal_(
-                    torch.zeros(1, 1, self.config.embed_dim[-1]), mean=0.0, std=self.config.initializer_range
-                )
-
-
-# CVT_START_DOCSTRING 是一个多行字符串，用于描述 CVTPreTrainedModel 类
-CVT_START_DOCSTRING = r"""
-    This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass. Use it
-    as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
-    behavior.
-
-    Parameters:
-        config ([`CvtConfig`]): Model configuration class with all the parameters of the model.
+    Configuration:
+        config_class (`CvtConfig`): The configuration class holding all parameters of the model.
             Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+            configuration. To load weights, use the `~PreTrainedModel.from_pretrained` method.
+
+    Attributes:
+        base_model_prefix (`str`): Prefix applied to base model attributes.
+        main_input_name (`str`): Name of the main input attribute for the model, typically 'pixel_values'.
 """
 
-# CVT_INPUTS_DOCSTRING 是一个多行字符串，用于描述 CVTPreTrainedModel 类的参数
-CVT_INPUTS_DOCSTRING = r"""
-    # 参数说明：
-    # pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-    #     像素值。可以使用 [`AutoImageProcessor`] 获取像素值。详见 [`CvtImageProcessor.__call__`]。
-    # output_hidden_states (`bool`, *optional*):
-    #     是否返回所有层的隐藏状态。更多细节见返回的张量中的 `hidden_states`。
-    # return_dict (`bool`, *optional*):
-    #     是否返回 [`~file_utils.ModelOutput`] 而不是一个普通的元组。
-"""
-Wrap the Cvt Model transformer with additional functionalities and documentation.
+CVT_INIT_WEIGHTS_DOCSTRING = r"""
+    Initialize the weights of the model module.
 
+    Args:
+        module (`nn.Module`): The PyTorch module for which weights need to be initialized.
+"""
+
+CVT_INIT_WEIGHTS_FUNCTION_DOCSTRING = r"""
+        Initialize the weights of the provided module.
+
+        Args:
+            module (`nn.Module`): The PyTorch module for which weights need to be initialized.
+"""
+
+CVT_INIT_WEIGHTS_LINEAR_CONV2D_DOCSTRING = r"""
+            Initialize the weights of a Linear or Conv2d module.
+
+            Args:
+                module (`nn.Module`): The PyTorch Linear or Conv2d module.
+"""
+
+CVT_INIT_WEIGHTS_LAYERNORM_DOCSTRING = r"""
+            Initialize the weights of a LayerNorm module.
+
+            Args:
+                module (`nn.Module`): The PyTorch LayerNorm module.
+"""
+
+CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING = r"""
+            Initialize the weights of a CvtStage module.
+
+            Args:
+                module (`CvtStage`): The CvtStage module.
+"""
+
+CVT_START_DOCSTRING,
+CVT_INPUTS_DOCSTRING,
+CVT_PRETRAINED_MODEL_DOCSTRING,
+CVT_INIT_WEIGHTS_DOCSTRING,
+CVT_INIT_WEIGHTS_FUNCTION_DOCSTRING,
+CVT_INIT_WEIGHTS_LINEAR_CONV2D_DOCSTRING,
+CVT_INIT_WEIGHTS_LAYERNORM_DOCSTRING,
+CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING```python
+        """
+        # CVTEncoder 类，用于实现一个可变形视觉 Transformer 编码器模型
+
+        def __init__(self, config):
+            # 初始化函数，继承自 nn.Module
+            super().__init__()
+            # 保存模型配置信息
+            self.config = config
+            # 初始化模型的多个编码阶段
+            self.stages = nn.ModuleList([])
+            # 根据配置中的深度信息，逐个创建并添加 CvtStage 实例到 stages 中
+            for stage_idx in range(len(config.depth)):
+                self.stages.append(CvtStage(config, stage_idx))
+
+        def forward(self, pixel_values, output_hidden_states=False, return_dict=True):
+            # 初始化隐藏状态和额外输出
+            all_hidden_states = () if output_hidden_states else None
+            hidden_state = pixel_values
+
+            # 初始化分类标记
+            cls_token = None
+            # 遍历每个阶段的模块
+            for _, (stage_module) in enumerate(self.stages):
+                # 通过阶段模块处理隐藏状态，同时获取分类标记
+                hidden_state, cls_token = stage_module(hidden_state)
+                # 如果需要输出所有隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
+                if output_hidden_states:
+                    all_hidden_states = all_hidden_states + (hidden_state,)
+
+            # 如果不返回字典形式的输出，则返回非空的隐藏状态、分类标记和所有隐藏状态
+            if not return_dict:
+                return tuple(v for v in [hidden_state, cls_token, all_hidden_states] if v is not None)
+
+            # 返回包含分类标记、最终隐藏状态和所有隐藏状态的 BaseModelOutputWithCLSToken 对象
+            return BaseModelOutputWithCLSToken(
+                last_hidden_state=hidden_state,
+                cls_token_value=cls_token,
+                hidden_states=all_hidden_states,
+            )
+        """
+
+
+
+CVT_PRETRAINED_MODEL_DOCSTRING = r"""
+    This model is an abstract class for handling weights initialization and providing a simple interface for downloading
+    and loading pretrained models.
+
+    Configuration:
+        config_class (`CvtConfig`): The configuration class holding all parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. To load weights, use the `~PreTrainedModel.from_pretrained` method.
+
+    Attributes:
+        base_model_prefix (`str`): Prefix applied to base model attributes.
+        main_input_name (`str`): Name of the main input attribute for the model, typically 'pixel_values'.
+"""
+
+CVT_INIT_WEIGHTS_DOCSTRING = r"""
+    Initialize the weights of the model module.
+
+    Args:
+        module (`nn.Module`): The PyTorch module for which weights need to be initialized.
+"""
+
+CVT_INIT_WEIGHTS_FUNCTION_DOCSTRING = r"""
+        Initialize the weights of the provided module.
+
+        Args:
+            module (`nn.Module`): The PyTorch module for which weights need to be initialized.
+"""
+
+CVT_INIT_WEIGHTS_LINEAR_CONV2D_DOCSTRING = r"""
+            Initialize the weights of a Linear or Conv2d module.
+
+            Args:
+                module (`nn.Module`): The PyTorch Linear or Conv2d module.
+"""
+
+CVT_INIT_WEIGHTS_LAYERNORM_DOCSTRING = r"""
+            Initialize the weights of a LayerNorm module.
+
+            Args:
+                module (`nn.Module`): The PyTorch LayerNorm module.
+"""
+
+CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING = r"""
+            Initialize the weights of a CvtStage module.
+
+            Args:
+                module (`CvtStage`): The CvtStage module.
+"""
+
+CVT_START_DOCSTRING,
+CVT_INPUTS_DOCSTRING,
+CVT_PRETRAINED_MODEL_DOCSTRING,
+CVT_INIT_WEIGHTS_DOCSTRING,
+CVT_INIT_WEIGHTS_FUNCTION_DOCSTRING,
+CVT_INIT_WEIGHTS_LINEAR_CONV2D_DOCSTRING,
+CVT_INIT_WEIGHTS_LAYERNORM_DOCSTRING,
+CVT_INIT_WEIGHTS_CVTSTAGE_DOCSTRING
+    Args:
+        pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
+            # 输入的像素数值。可以使用 `AutoImageProcessor` 获取像素值。详见 `CvtImageProcessor.__call__`。
+            Pixel values. Pixel values can be obtained using [`AutoImageProcessor`]. See [`CvtImageProcessor.__call__`]
+            for details.
+        output_hidden_states (`bool`, *optional*):
+            # 是否返回所有层的隐藏状态。返回的张量中包含 `hidden_states`，详见返回的张量部分。
+            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
+            more detail.
+        return_dict (`bool`, *optional*):
+            # 是否返回一个 `~file_utils.ModelOutput` 而不是一个普通的元组。
+            Whether or not to return a [`~file_utils.ModelOutput`] instead of a plain tuple.
+"""
+Cvt Model transformer outputting raw hidden-states without any specific head on top.
+"""
 class CvtModel(CvtPreTrainedModel):
-    """
-    Initialize the Cvt Model transformer with the given configuration and optional pooling layer.
-    """
     def __init__(self, config, add_pooling_layer=True):
         super().__init__(config)
         self.config = config
-        self.encoder = CvtEncoder(config)  # Initialize the encoder using the provided configuration
-        self.post_init()  # Perform additional post initialization steps
+        self.encoder = CvtEncoder(config)  # 初始化 CvtEncoder 模块
+        self.post_init()
 
-    """
-    Prune heads of the model based on the provided dictionary of layer numbers and heads to prune in each layer.
-    """
     def _prune_heads(self, heads_to_prune):
+        """
+        Prunes heads of the model.
+        heads_to_prune: dict of {layer_num: list of heads to prune in this layer}
+        See base class PreTrainedModel
+        """
         for layer, heads in heads_to_prune.items():
-            self.encoder.layer[layer].attention.prune_heads(heads)
+            self.encoder.layer[layer].attention.prune_heads(heads)  # 对指定层的注意力头进行修剪
 
-    """
-    Forward method to process the input pixel values and return the model outputs.
-    """
+    @add_start_docstrings_to_model_forward(CVT_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=BaseModelOutputWithCLSToken,
+        config_class=_CONFIG_FOR_DOC,
+        modality="vision",
+        expected_output=_EXPECTED_OUTPUT_SHAPE,
+    )
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
@@ -759,56 +858,58 @@ class CvtModel(CvtPreTrainedModel):
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         if pixel_values is None:
-            raise ValueError("You have to specify pixel_values")
+            raise ValueError("You have to specify pixel_values")  # 如果 pixel_values 为 None，则抛出数值错误异常
 
         encoder_outputs = self.encoder(
             pixel_values,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        sequence_output = encoder_outputs[0]
+        sequence_output = encoder_outputs[0]  # 获取编码器输出的序列输出
 
         if not return_dict:
-            return (sequence_output,) + encoder_outputs[1:]
+            return (sequence_output,) + encoder_outputs[1:]  # 返回序列输出以及额外的编码器输出
 
         return BaseModelOutputWithCLSToken(
             last_hidden_state=sequence_output,
             cls_token_value=encoder_outputs.cls_token_value,
             hidden_states=encoder_outputs.hidden_states,
-        )
+        )  # 返回包含 CLS 标记值的基础模型输出类型
 
-
+"""
+Cvt Model transformer with an image classification head on top (a linear layer on top of the final hidden state of
+the [CLS] token) e.g. for ImageNet.
+"""
 class CvtForImageClassification(CvtPreTrainedModel):
-    """
-    Initialize the Cvt Model transformer with an image classification head on top for tasks such as ImageNet.
-    """
     def __init__(self, config):
         super().__init__(config)
 
-        self.num_labels = config.num_labels
-        self.cvt = CvtModel(config, add_pooling_layer=False)  # Initialize the Cvt Model without a pooling layer
-        self.layernorm = nn.LayerNorm(config.embed_dim[-1])  # Apply layer normalization
-        # Classifier head
+        self.num_labels = config.num_labels  # 存储标签数目
+        self.cvt = CvtModel(config, add_pooling_layer=False)  # 初始化 CvtModel 模块，不添加池化层
+        self.layernorm = nn.LayerNorm(config.embed_dim[-1])  # 应用 LayerNorm 到最后一个嵌入维度
+        # 分类器头部
         self.classifier = (
             nn.Linear(config.embed_dim[-1], config.num_labels) if config.num_labels > 0 else nn.Identity()
-        )  # Initialize the classifier based on the number of labels
+        )  # 如果存在标签数目，则创建线性层作为分类器头部，否则创建恒等映射
 
         # Initialize weights and apply final processing
-        self.post_init()  # Perform additional post initialization steps
-    # 使用装饰器为代码添加文档字符串，指定了代码的一些元数据
+        self.post_init()
+    
+    @add_start_docstrings_to_model_forward(CVT_INPUTS_DOCSTRING)
+    # 使用装饰器添加代码示例的文档字符串，指定模型使用的检查点、输出类型、配置类和预期输出
     @add_code_sample_docstrings(
         checkpoint=_IMAGE_CLASS_CHECKPOINT,
         output_type=ImageClassifierOutputWithNoAttention,
         config_class=_CONFIG_FOR_DOC,
         expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
     )
-    # 定义一个方法，用于模型的前向推断
+    # 定义模型的前向传播方法，接受像素值张量、标签张量、是否返回隐藏状态和是否返回字典作为参数
     def forward(
         self,
-        pixel_values: Optional[torch.Tensor] = None,  # 输入的像素值，默认为 None
-        labels: Optional[torch.Tensor] = None,         # 目标标签，默认为 None
-        output_hidden_states: Optional[bool] = None,   # 是否输出隐藏状态，默认为 None
-        return_dict: Optional[bool] = None,            # 是否返回字典，默认为 None
+        pixel_values: Optional[torch.Tensor] = None,
+        labels: Optional[torch.Tensor] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
     ) -> Union[Tuple, ImageClassifierOutputWithNoAttention]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -816,37 +917,42 @@ class CvtForImageClassification(CvtPreTrainedModel):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 判断是否要返回数据字典
+        # 根据需要确定是否返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 使用图片像素值作为输入，进行模型预测
+        # 调用转换器进行处理像素值，根据需要返回隐藏状态，结果存储在outputs中
         outputs = self.cvt(
             pixel_values,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
 
-        # 获取最后一个隐藏层的输出和cls token的输出
+        # 获取序列输出和CLS token
         sequence_output = outputs[0]
         cls_token = outputs[1]
-        # 判断是否需要把cls token融入到输出序列中
+        # 如果配置中的CLS token标记为最后一个
         if self.config.cls_token[-1]:
+            # 应用层归一化到CLS token
             sequence_output = self.layernorm(cls_token)
         else:
+            # 获取序列输出的维度信息
             batch_size, num_channels, height, width = sequence_output.shape
-            # 重排列 "b c h w -> b (h w) c"
+            # 重新排列 "b c h w -> b (h w) c"
             sequence_output = sequence_output.view(batch_size, num_channels, height * width).permute(0, 2, 1)
+            # 应用层归一化到重新排列的序列输出
             sequence_output = self.layernorm(sequence_output)
 
-        # 对序列输出进行平均
+        # 计算序列输出的平均值
         sequence_output_mean = sequence_output.mean(dim=1)
-        # 将平均后的输出传入分类器
+        # 将平均值输入分类器得到logits
         logits = self.classifier(sequence_output_mean)
 
+        # 初始化损失为None
         loss = None
-        # 计算损失函数
+        # 如果存在标签
         if labels is not None:
-            # 判断问题类型
+            # 如果问题类型尚未确定
             if self.config.problem_type is None:
+                # 根据标签数确定问题类型
                 if self.config.num_labels == 1:
                     self.config.problem_type = "regression"
                 elif self.config.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
@@ -854,28 +960,25 @@ class CvtForImageClassification(CvtPreTrainedModel):
                 else:
                     self.config.problem_type = "multi_label_classification"
 
+            # 根据问题类型计算损失
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.config.num_labels == 1:
-                    # 计算回归损失
                     loss = loss_fct(logits.squeeze(), labels.squeeze())
                 else:
                     loss = loss_fct(logits, labels)
             elif self.config.problem_type == "single_label_classification":
                 loss_fct = CrossEntropyLoss()
-                # 计算单标签分类损失
                 loss = loss_fct(logits.view(-1, self.config.num_labels), labels.view(-1))
             elif self.config.problem_type == "multi_label_classification":
                 loss_fct = BCEWithLogitsLoss()
-                # 计算多标签分类损失
                 loss = loss_fct(logits, labels)
 
-        # 根据是否要返回数据字典进行返回
+        # 如果不需要返回字典，则返回logits和额外的隐藏状态
         if not return_dict:
-            # 返回 (logits, hidden_states...)
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回预测结果和损失值的数据字典
+        # 返回ImageClassifierOutputWithNoAttention对象，包括损失、logits和隐藏状态
         return ImageClassifierOutputWithNoAttention(loss=loss, logits=logits, hidden_states=outputs.hidden_states)
 ```

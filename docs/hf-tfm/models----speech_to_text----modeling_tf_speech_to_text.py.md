@@ -1,100 +1,151 @@
-# `.\transformers\models\speech_to_text\modeling_tf_speech_to_text.py`
+# `.\models\speech_to_text\modeling_tf_speech_to_text.py`
 
-```py
-# 设置文件编码格式为 utf-8
-# 版权声明
+```
+# coding=utf-8
+# Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
 #
-# 此处为 Apache License, Version 2.0 的授权许可链接
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# 预定义变量，用于表示大的负数
-LARGE_NEGATIVE = -1e8
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" TensorFlow Speech2Text model."""
+
 
 from __future__ import annotations
+
 import random
 from typing import Optional, Tuple, Union
+
 import numpy as np
 import tensorflow as tf
-from ...activations_tf 模块引入 get_tf_activation 和 glu 函数
-from ...modeling_tf_outputs 模块引入各种 TFBaseModelOutput* 类
-from ...modeling_tf_utils 模块引入各种工具函数
-from ...tf_utils 模块引入 check_embeddings_within_bounds、shape_list、stable_softmax 函数
-from ...utils 模块引入各种工具函数
-from .configuration_speech_to_text 模块引入 Speech2TextConfig 类
-# 查看是否超出边界
-check_embeddings_within_bounds(input_embeddings: tf.Tensor, 
-                                bounds: Tuple[float, float], 
-                                message: str) -> None:
 
-# 定义了一个函数 shift_tokens_right，作用是将输入的 input_ids 右移一位
+from ...activations_tf import get_tf_activation, glu
+from ...modeling_tf_outputs import (
+    TFBaseModelOutput,
+    TFBaseModelOutputWithPastAndCrossAttentions,
+    TFSeq2SeqLMOutput,
+    TFSeq2SeqModelOutput,
+)
+from ...modeling_tf_utils import (
+    TFCausalLanguageModelingLoss,
+    TFModelInputType,
+    TFPreTrainedModel,
+    TFSharedEmbeddings,
+    keras,
+    keras_serializable,
+    unpack_inputs,
+)
+from ...tf_utils import check_embeddings_within_bounds, shape_list, stable_softmax
+from ...utils import (
+    add_code_sample_docstrings,
+    add_start_docstrings,
+    add_start_docstrings_to_model_forward,
+    logging,
+    replace_return_docstrings,
+)
+from .configuration_speech_to_text import Speech2TextConfig
+
+
+logger = logging.get_logger(__name__)
+
+_CONFIG_FOR_DOC = "Speech2TextConfig"
+_CHECKPOINT_FOR_DOC = "facebook/s2t-small-librispeech-asr"
+
+
+TF_SPEECH_TO_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST = [
+    "facebook/s2t-small-librispeech-asr",
+    # See all Speech2Text models at https://huggingface.co/models?filter=speech_to_text
+]
+
+
+LARGE_NEGATIVE = -1e8
+
+
+# Copied from transformers.models.bart.modeling_tf_bart.shift_tokens_right
 def shift_tokens_right(input_ids: tf.Tensor, pad_token_id: int, decoder_start_token_id: int):
+    # 将输入的 token ids 向右移动一位，用于解码过程
     pad_token_id = tf.cast(pad_token_id, input_ids.dtype)
     decoder_start_token_id = tf.cast(decoder_start_token_id, input_ids.dtype)
+    # 创建起始 token，填充为 decoder_start_token_id
     start_tokens = tf.fill(
         (shape_list(input_ids)[0], 1), tf.convert_to_tensor(decoder_start_token_id, input_ids.dtype)
     )
+    # 将 input_ids 向右移动一位，构成 shifted_input_ids
     shifted_input_ids = tf.concat([start_tokens, input_ids[:, :-1]], -1)
-    # 将 labels 中可能存在的-100值替换为 pad_token_id
+    # 替换 labels 中可能的 -100 值为 pad_token_id
     shifted_input_ids = tf.where(
         shifted_input_ids == -100,
         tf.fill(shape_list(shifted_input_ids), tf.convert_to_tensor(pad_token_id, input_ids.dtype)),
         shifted_input_ids,
     )
 
-    # 验证 labels 只包含正值和-100
+    # "Verify that `labels` has only positive values and -100"
+    # 断言 shifted_input_ids 中的值大于等于 0
     assert_gte0 = tf.debugging.assert_greater_equal(shifted_input_ids, tf.constant(0, dtype=input_ids.dtype))
 
-    # 通过添加 identity 操作确保执行了断言操作
-    # 使用assert_gte0作为控制依赖，确保shifted_input_ids大于等于0
+    # Make sure the assertion op is called by wrapping the result in an identity no-op
+    # 确保断言操作被调用，通过将结果包装在一个恒等 no-op 中
+    return tf.identity(shifted_input_ids, name="shifted_input_ids")
+    # 使用 TensorFlow 中的控制依赖机制，确保 assert_gte0（大于等于0的断言）被执行
     with tf.control_dependencies([assert_gte0]):
-        # 创建shifted_input_ids的副本
+        # 使用 tf.identity 创建 shifted_input_ids 的副本，并确保在执行 assert_gte0 后再进行
         shifted_input_ids = tf.identity(shifted_input_ids)
     
-    # 返回shifted_input_ids
+    # 返回经过控制依赖处理后的 shifted_input_ids
     return shifted_input_ids
-# 从transformers.models.bart.modeling_tf_bart中复制过来的函数，用于生成自注意力的时序掩码
+# Copied from transformers.models.bart.modeling_tf_bart._make_causal_mask
 def _make_causal_mask(input_ids_shape: tf.TensorShape, past_key_values_length: int = 0):
     """
     Make causal mask used for bi-directional self-attention.
-    生成用于双向自注意力的时序掩码。
     """
-    # 获取输入id的形状
+    # 获取 batch size 和目标序列长度
     bsz = input_ids_shape[0]
     tgt_len = input_ids_shape[1]
-    # 生成掩码，全部设置为LARGE_NEGATIVE
+    # 创建一个全为 LARGE_NEGATIVE 的矩阵作为初始 mask
     mask = tf.ones((tgt_len, tgt_len)) * LARGE_NEGATIVE
-    # 判断mask_cond是否小于mask_cond + 1，是则赋值为0.0
+    # 创建一个条件向量，长度与 mask 的最后一个维度相同
     mask_cond = tf.range(shape_list(mask)[-1])
+    # 根据条件向量设置 mask 中的值，实现上三角为 0，其余为 LARGE_NEGATIVE
     mask = tf.where(mask_cond < tf.reshape(mask_cond + 1, (shape_list(mask)[-1], 1)), 0.0, mask)
-    # 如果past_key_values_length大于0，则在mask左侧补充0
+    
+    # 如果 past_key_values_length 大于 0，则在 mask 左侧添加相应长度的 0
     if past_key_values_length > 0:
         mask = tf.concat([tf.zeros((tgt_len, past_key_values_length)), mask], axis=-1)
-    # 在batch维度上复制mask
+
     return tf.tile(mask[None, None, :, :], (bsz, 1, 1, 1))
 
 
-# 从transformers.models.bart.modeling_tf_bart中复制过来的函数，将注意力掩码从`[bsz, seq_len]`扩展到`[bsz, 1, tgt_seq_len, src_seq_len]`
+# Copied from transformers.models.bart.modeling_tf_bart._expand_mask
 def _expand_mask(mask: tf.Tensor, tgt_len: Optional[int] = None):
     """
     Expands attention_mask from `[bsz, seq_len]` to `[bsz, 1, tgt_seq_len, src_seq_len]`.
-    将注意力掩码从`[bsz, seq_len]`扩展到`[bsz, 1, tgt_seq_len, src_seq_len]`。
     """
-    # 获取输入掩码的长度
+    # 获取原始 mask 的长度
     src_len = shape_list(mask)[1]
+    # 如果未指定 tgt_len，则默认为 src_len
     tgt_len = tgt_len if tgt_len is not None else src_len
-    # 创建常量张量one_cst，并转换mask的数据类型为one_cst的数据类型
+    # 创建一个常数张量值为 1.0
     one_cst = tf.constant(1.0)
+    # 将 mask 转换为与目标长度相关的数据类型
     mask = tf.cast(mask, dtype=one_cst.dtype)
-    # 在第2维度上复制mask
+    # 在 mask 的第二个维度上扩展为 `[bsz, 1, tgt_len, src_len]`
     expanded_mask = tf.tile(mask[:, None, None, :], (1, 1, tgt_len, 1))
-    # 返回扩展后的掩码
+
+    # 返回扩展后的 mask，将其中的 1.0 改为 LARGE_NEGATIVE
     return (one_cst - expanded_mask) * LARGE_NEGATIVE
 
 
-class TFConv1dSubsampler(tf.keras.layers.Layer):
+class TFConv1dSubsampler(keras.layers.Layer):
     """
     Convolutional subsampler: a stack of 1D convolution (along temporal dimension) followed by non-linear activation
     via gated linear units (https://arxiv.org/abs/1911.08460)
-    一维卷积下采样器：由一维卷积（沿时序维度）和非线性激活函数通过门控线性单元组成。
     """
 
     def __init__(self, config: Speech2TextConfig, **kwargs):
@@ -106,9 +157,9 @@ class TFConv1dSubsampler(tf.keras.layers.Layer):
         self.out_channels = config.d_model
         self.kernel_sizes = config.conv_kernel_sizes
 
-        # 创建一维卷积层的列表，根据config中的参数设置
+        # 创建一系列的 1D 卷积层，每一层使用不同的参数配置
         self.conv_layers = [
-            tf.keras.layers.Conv1D(
+            keras.layers.Conv1D(
                 filters=self.mid_channels if i < self.num_layers - 1 else self.out_channels * 2,
                 kernel_size=k,
                 strides=2,
@@ -117,12 +168,15 @@ class TFConv1dSubsampler(tf.keras.layers.Layer):
             for i, k in enumerate(self.kernel_sizes)
         ]
     def call(self, input_features: tf.Tensor) -> tf.Tensor:
-        # TF Conv1D假设输入为Batch x Time x Channels，与输入相同
+        # TF Conv1D assumes Batch x Time x Channels, same as the input
+        # 将输入特征转换为 float32 类型的张量
         hidden_states = tf.cast(input_features, tf.float32)
         for i, conv in enumerate(self.conv_layers):
-            # 相当于PT中nn.Conv1d的`padding=k // 2`
+            # equivalent to `padding=k // 2` on PT's `nn.Conv1d`
+            # 计算填充长度，使得卷积操作的输出与输入在时间维度上保持一致
             pad_len = self.kernel_sizes[i] // 2
             hidden_shapes = shape_list(hidden_states)
+            # 在时间维度两侧进行零填充，以保持卷积操作后的维度一致性
             hidden_states = tf.concat(
                 (
                     tf.zeros((hidden_shapes[0], pad_len, hidden_shapes[2])),
@@ -132,8 +186,11 @@ class TFConv1dSubsampler(tf.keras.layers.Layer):
                 axis=1,
             )
 
+            # 应用卷积操作
             hidden_states = conv(hidden_states)
-            hidden_states = glu(hidden_states, axis=2)  # 在通道维度上进行GLU操作
+            # 在通道维度上应用门控线性单元（GLU）操作
+            hidden_states = glu(hidden_states, axis=2)  # GLU over the Channel dimension
+        # 返回处理后的隐藏状态张量
         return hidden_states
 
     def build(self, input_shape=None):
@@ -143,16 +200,21 @@ class TFConv1dSubsampler(tf.keras.layers.Layer):
         if getattr(self, "conv_layers", None) is not None:
             for i, layer in enumerate(self.conv_layers):
                 with tf.name_scope(layer.name):
+                    # 根据卷积层的要求构建该层的参数
                     layer.build([None, None, self.in_channels] if i == 0 else [None, None, self.mid_channels // 2])
-class TFSpeech2TextSinusoidalPositionalEmbedding(tf.keras.layers.Layer):
+class TFSpeech2TextSinusoidalPositionalEmbedding(keras.layers.Layer):
     """This module produces sinusoidal positional embeddings of any length."""
 
     def __init__(self, num_positions: int, embedding_dim: int, padding_idx: Optional[int] = None, **kwargs):
         super().__init__(**kwargs)
-        self.offset = 2  # 设置偏移量，用于生成位置嵌入
-        self.embedding_dim = embedding_dim  # 嵌入维度
-        self.padding_idx = padding_idx  # 填充索引
-        self.embedding_weights = self._get_embedding(num_positions + self.offset, embedding_dim, padding_idx)  # 获取嵌入权重
+        # 偏移量，用于生成位置编码
+        self.offset = 2
+        # 嵌入维度
+        self.embedding_dim = embedding_dim
+        # 填充索引，指定填充位置的特殊索引
+        self.padding_idx = padding_idx
+        # 初始化嵌入权重矩阵
+        self.embedding_weights = self._get_embedding(num_positions + self.offset, embedding_dim, padding_idx)
 
     @staticmethod
     def _get_embedding(num_embeddings: int, embedding_dim: int, padding_idx: Optional[int] = None) -> tf.Tensor:
@@ -160,157 +222,165 @@ class TFSpeech2TextSinusoidalPositionalEmbedding(tf.keras.layers.Layer):
         Build sinusoidal embeddings. This matches the implementation in tensor2tensor, but differs slightly from the
         description in Section 3.5 of "Attention Is All You Need".
         """
-        half_dim = embedding_dim // 2  # 嵌入维度的一半
-        emb = tf.math.log(10000.0) / (half_dim - 1)  # 计算频率参数
-        emb = tf.math.exp(tf.range(half_dim, dtype=tf.float32) * -emb)  # 计算正弦和余弦的参数
-        emb = tf.expand_dims(tf.range(num_embeddings, dtype=tf.float32), axis=1) * tf.expand_dims(emb, axis=0)  # 计算位置嵌入
-        emb = tf.reshape(tf.concat([tf.math.sin(emb), tf.math.cos(emb)], axis=1), shape=[num_embeddings, -1])  # 组合正弦和余弦
+        # 计算一半的维度
+        half_dim = embedding_dim // 2
+        # 计算频率
+        emb = tf.math.log(10000.0) / (half_dim - 1)
+        emb = tf.math.exp(tf.range(half_dim, dtype=tf.float32) * -emb)
+        emb = tf.expand_dims(tf.range(num_embeddings, dtype=tf.float32), axis=1) * tf.expand_dims(emb, axis=0)
+        emb = tf.reshape(tf.concat([tf.math.sin(emb), tf.math.cos(emb)], axis=1), shape=[num_embeddings, -1])
         if embedding_dim % 2 == 1:
-            # zero pad
-            emb = tf.concat([emb, tf.zeros((num_embeddings, 1))], axis=1)  # 若嵌入维度为奇数，进行零填充
+            # 如果维度是奇数，补零
+            emb = tf.concat([emb, tf.zeros((num_embeddings, 1))], axis=1)
         if padding_idx is not None:
-            emb = tf.concat([emb[:padding_idx, :], tf.zeros((1, tf.shape(emb)[1])), emb[padding_idx + 1 :, :]], axis=0)  # 处理填充索引
+            # 如果有填充索引，处理填充位置
+            emb = tf.concat([emb[:padding_idx, :], tf.zeros((1, tf.shape(emb)[1])), emb[padding_idx + 1 :, :]], axis=0)
         return emb
 
     def call(self, input_ids: tf.Tensor, past_key_values_length: int = 0) -> tf.Tensor:
-        bsz, seq_len = shape_list(input_ids)  # 获取输入张量的形状
-        # Create the position ids from the input token ids. Any padded tokens remain padded.
-        position_ids = self.create_position_ids_from_input_ids(input_ids, self.padding_idx, past_key_values_length)  # 根据输入标记 ID 创建位置 ID
+        bsz, seq_len = shape_list(input_ids)
+        # 根据输入的 token ids 创建位置 ids，保留任何填充的 token 的填充状态
+        position_ids = self.create_position_ids_from_input_ids(input_ids, self.padding_idx, past_key_values_length)
 
-        # Matt: The PyTorch code does a lot of work to cache the embeddings, setting the cached values as a
-        # model attribute in the forward pass. This is extremely forbidden in TF, which wants forward calls to be
-        # idempotent. TF doesn't need that caching anyway, since it can just store constants during compilation,
-        # so we just remove all of that code.
+        # 生成位置嵌入
         embeddings = self._get_embedding(
             self.padding_idx + 1 + seq_len + self.offset + past_key_values_length, self.embedding_dim, self.padding_idx
-        )  # 获取嵌入张量
-        return tf.reshape(tf.gather(embeddings, tf.reshape(position_ids, (-1,)), axis=0), (bsz, seq_len, -1))  # 获取嵌入张量中对应位置的嵌入向量
+        )
+        return tf.reshape(tf.gather(embeddings, tf.reshape(position_ids, (-1,)), axis=0), (bsz, seq_len, -1))
 
     @staticmethod
     def create_position_ids_from_input_ids(
         input_ids: tf.Tensor, padding_idx: int, past_key_values_length: Optional[int] = 0
-        ) -> tf.Tensor:
-        # 定义一个函数，接受一个输入参数并返回一个张量
+    ) -> tf.Tensor:
+        # 从输入的 token ids 创建位置 ids
+        # 这里会根据填充索引和历史键值长度处理位置 ids
+        pass  # 实际的实现将在代码中完成，这里只是声明函数结构
+    def make_positions(x: tf.Tensor) -> tf.Tensor:
         """
         Replace non-padding symbols with their position numbers. Position numbers begin at padding_idx+1. Padding
         symbols are ignored. This is modified from fairseq's `utils.make_positions`.
-
+    
         Args:
-            x: tf.Tensor x:
-        Returns: tf.Tensor
+            x: tf.Tensor, input tensor where positions will be computed.
+    
+        Returns:
+            tf.Tensor, tensor with replaced positions.
         """
-        # 创建一个遮罩，标记出非填充符号的位置
+        # 创建一个掩码，标记输入张量中不是填充符号的位置
         mask = tf.cast(tf.math.not_equal(input_ids, padding_idx), dtype=tf.int32)
-        # 计算增量索引，从padding_idx+1开始
+        # 计算增量索引，加上过去键值的长度，并乘以掩码以忽略填充符号
         incremental_indices = (tf.math.cumsum(mask, axis=1) + past_key_values_length) * mask
-        # 返回增量索引并添加padding_idx，转换数据类型为int64
+        # 返回增量索引，并将数据类型转换为 int64，同时加上填充索引
         return tf.cast(incremental_indices, dtype=tf.int64) + padding_idx
-# 从transformers.models.bart.modeling_tf_bart.TFBartAttention复制并修改成Speech2Text
-class TFSpeech2TextAttention(tf.keras.layers.Layer):
-    """从“Attention Is All You Need”中的多头注意力机制创建"""
+# 从 transformers.models.bart.modeling_tf_bart.TFBartAttention 复制并修改为 Speech2Text
+class TFSpeech2TextAttention(keras.layers.Layer):
+    """多头注意力机制，基于 'Attention Is All You Need'"""
 
     def __init__(
         self,
-        embed_dim: int,  # 嵌入维度
-        num_heads: int,  # 注意力头数
-        dropout: float = 0.0,  # dropout率
-        is_decoder: bool = False,  # 是否为解码器
-        bias: bool = True,  # 是否使用偏置
-        **kwargs,  # 其他参数
+        embed_dim: int,
+        num_heads: int,
+        dropout: float = 0.0,
+        is_decoder: bool = False,
+        bias: bool = True,
+        **kwargs,
     ):
         super().__init__(**kwargs)
-        self.embed_dim = embed_dim  # 初始化嵌入维度
-
-        self.num_heads = num_heads  # 初始化注意力头数
-        self.dropout = tf.keras.layers.Dropout(dropout)  # 定义Dropout层
-        self.head_dim = embed_dim // num_heads  # 每个头的维度
-        if (self.head_dim * num_heads) != self.embed_dim:  # 检查嵌入维度是否能整除头数
+        # 初始化注意力层的参数
+        self.embed_dim = embed_dim  # 注意力层的嵌入维度
+        self.num_heads = num_heads  # 注意力头的数量
+        self.dropout = keras.layers.Dropout(dropout)  # dropout 层
+        self.head_dim = embed_dim // num_heads  # 每个注意力头的维度
+        if (self.head_dim * num_heads) != self.embed_dim:
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
             )
         self.scaling = self.head_dim**-0.5  # 缩放因子
-        self.is_decoder = is_decoder  # 是否为解码器
+        self.is_decoder = is_decoder  # 是否为解码器模式
 
-        self.k_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="k_proj")  # 线性变换层，用于映射k
-        self.q_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="q_proj")  # 线性变换层，用于映射q
-        self.v_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="v_proj")  # 线性变换层，用于映射v
-        self.out_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="out_proj")  # 线性变换层，用于最终输出
+        # 初始化线性映射层
+        self.k_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="k_proj")  # K 线性映射
+        self.q_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="q_proj")  # Q 线性映射
+        self.v_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="v_proj")  # V 线性映射
+        self.out_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="out_proj")  # 输出线性映射
 
     def _shape(self, tensor: tf.Tensor, seq_len: int, bsz: int):
+        # 将输入张量重新形状为 [batch_size, num_heads, seq_len, head_dim]，并转置为 [batch_size, num_heads, seq_len, head_dim]
         return tf.transpose(tf.reshape(tensor, (bsz, seq_len, self.num_heads, self.head_dim)), (0, 2, 1, 3))
 
     def call(
         self,
-        hidden_states: tf.Tensor,  # 输入的隐藏状态
-        key_value_states: tf.Tensor | None = None,  # 键值对的状态，可选
-        past_key_value: Tuple[Tuple[tf.Tensor]] | None = None,  # 过去的键值对，可选
-        attention_mask: tf.Tensor | None = None,  # 注意力掩码，可选
-        layer_head_mask: tf.Tensor | None = None,  # 层头掩码，可选
-        training: Optional[bool] = False,  # 是否训练模式
-    def build(self, input_shape=None):
-        if self.built:
-            return
-        self.built = True
-        if getattr(self, "k_proj", None) is not None:
-            with tf.name_scope(self.k_proj.name):
-                self.k_proj.build([None, None, self.embed_dim])
-        if getattr(self, "q_proj", None) is not None:
-            with tf.name_scope(self.q_proj.name):
-                self.q_proj.build([None, None, self.embed_dim])
-        if getattr(self, "v_proj", None) is not None:
-            with tf.name_scope(self.v_proj.name):
-                self.v_proj.build([None, None, self.embed_dim])
-        if getattr(self, "out_proj", None) is not None:
-            with tf.name_scope(self.out_proj.name):
-                self.out_proj.build([None, None, self.embed_dim])
+        hidden_states: tf.Tensor,
+        key_value_states: tf.Tensor | None = None,
+        past_key_value: Tuple[Tuple[tf.Tensor]] | None = None,
+        attention_mask: tf.Tensor | None = None,
+        layer_head_mask: tf.Tensor | None = None,
+        training: Optional[bool] = False,
+    ):
+        # 注意力层的前向传播函数
+        def build(self, input_shape=None):
+            if self.built:
+                return
+            self.built = True
+            # 构建线性映射层
+            if getattr(self, "k_proj", None) is not None:
+                with tf.name_scope(self.k_proj.name):
+                    self.k_proj.build([None, None, self.embed_dim])
+            if getattr(self, "q_proj", None) is not None:
+                with tf.name_scope(self.q_proj.name):
+                    self.q_proj.build([None, None, self.embed_dim])
+            if getattr(self, "v_proj", None) is not None:
+                with tf.name_scope(self.v_proj.name):
+                    self.v_proj.build([None, None, self.embed_dim])
+            if getattr(self, "out_proj", None) is not None:
+                with tf.name_scope(self.out_proj.name):
+                    self.out_proj.build([None, None, self.embed_dim])
 
-
-class TFSpeech2TextEncoderLayer(tf.keras.layers.Layer):
-    # 初始化函数，接收配置参数和其他关键字参数
+class TFSpeech2TextEncoderLayer(keras.layers.Layer):
+    # 初始化函数，用于创建一个新的实例
     def __init__(self, config: Speech2TextConfig, **kwargs):
-        # 调用父类初始化函数
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 设置嵌入维度
+        # 设置嵌入维度为模型配置中的 d_model
         self.embed_dim = config.d_model
-        # 创建自注意力层对象
+        # 创建自注意力层对象，使用自定义的注意力头数和丢弃率配置
         self.self_attn = TFSpeech2TextAttention(
             self.embed_dim, config.encoder_attention_heads, dropout=config.attention_dropout, name="self_attn"
         )
-        # 创建自注意力层标准化层对象
-        self.self_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
-        # 创建 Dropout 层对象
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
-        # 获取激活函数对象
+        # 创建自注意力层的层归一化层
+        self.self_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
+        # 创建丢弃层，使用配置中的丢弃率
+        self.dropout = keras.layers.Dropout(config.dropout)
+        # 获取激活函数对象，根据配置的激活函数名
         self.activation_fn = get_tf_activation(config.activation_function)
-        # 创建激活函数 Dropout 层对象
-        self.activation_dropout = tf.keras.layers.Dropout(config.activation_dropout)
-        # 创建全连接层对象 fc1
-        self.fc1 = tf.keras.layers.Dense(config.encoder_ffn_dim, name="fc1")
-        # 创建全连接层对象 fc2
-        self.fc2 = tf.keras.layers.Dense(self.embed_dim, name="fc2")
-        # 创建最终输出层标准化层对象
-        self.final_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
-        # 保存配置参数
+        # 创建激活函数丢弃层，使用配置中的激活函数丢弃率
+        self.activation_dropout = keras.layers.Dropout(config.activation_dropout)
+        # 创建全连接层 fc1，输出维度为配置中的 encoder_ffn_dim
+        self.fc1 = keras.layers.Dense(config.encoder_ffn_dim, name="fc1")
+        # 创建全连接层 fc2，输出维度与嵌入维度相同
+        self.fc2 = keras.layers.Dense(self.embed_dim, name="fc2")
+        # 创建最终层的层归一化层
+        self.final_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
+        # 将配置对象保存到实例中
         self.config = config
 
-    # 调用函数，执行前向传播
+    # 调用函数，执行实际的前向计算过程
     def call(
         self, hidden_states: tf.Tensor, attention_mask: tf.Tensor, layer_head_mask: tf.Tensor, training: bool = False
     ):
         """
         Args:
-            hidden_states (`tf.Tensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
-            attention_mask (`tf.Tensor`): attention mask of size
-                `(batch, 1, tgt_len, src_len)` where padding elements are indicated by very large negative values.
-            layer_head_mask (`tf.Tensor`): mask for attention heads in a given layer of size
-                `(encoder_attention_heads,)`
+            hidden_states (`tf.Tensor`): 输入到层的张量，形状为 `(batch, seq_len, embed_dim)`
+            attention_mask (`tf.Tensor`): 注意力掩码张量，形状为 `(batch, 1, tgt_len, src_len)`，其中填充元素由非常大的负值表示。
+            layer_head_mask (`tf.Tensor`): 给定层中注意力头的掩码张量，形状为 `(encoder_attention_heads,)`
+            training (`bool`): 是否处于训练模式
         """
-        # 保存残差连接
+        # 保存残差连接，用于后续加法操作
         residual = hidden_states
-        # 对输入进行自注意力层标准化
+        # 执行自注意力层的层归一化
         hidden_states = self.self_attn_layer_norm(hidden_states)
-        # 调用自注意力层进行处理
+        # 执行自注意力计算，并返回计算结果、注意力权重及额外信息
         hidden_states, self_attn_weights, _ = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
@@ -318,66 +388,88 @@ class TFSpeech2TextEncoderLayer(tf.keras.layers.Layer):
             training=training,
         )
 
-        # 断言自注意力层的输出与输入的形状相同
+        # 断言确保自注意力操作未修改查询的形状
         tf.debugging.assert_equal(
             shape_list(hidden_states),
             shape_list(residual),
             message=f"Self attn modified the shape of query {shape_list(residual)} to {shape_list(hidden_states)}",
         )
 
-        # 对当前输出进行 Dropout 处理
+        # 应用丢弃操作到自注意力结果
         hidden_states = self.dropout(hidden_states, training=training)
-        # 残差连接
+        # 添加残差连接到自注意力结果上
         hidden_states = residual + hidden_states
 
-        # 保存残差连接
+        # 保存残差连接，用于后续加法操作
         residual = hidden_states
-        # 最终输出进行标准化
+        # 执行最终层的层归一化
         hidden_states = self.final_layer_norm(hidden_states)
-        # 使用激活函数处理全连接层 fc1 输出
+        # 应用激活函数到第一个全连接层的输出
         hidden_states = self.activation_fn(self.fc1(hidden_states))
-        # 全连接层输出进行 Dropout 处理
+        # 应用激活函数的丢弃操作到第一个全连接层的输出
         hidden_states = self.activation_dropout(hidden_states, training=training)
-        # 使用全连接层 fc2 处理数据
+        # 应用第二个全连接层，并输出结果
         hidden_states = self.fc2(hidden_states)
-        # 对输出进行 Dropout 处理
+        # 应用丢弃操作到第二个全连接层的输出
         hidden_states = self.dropout(hidden_states, training=training)
-        # 残差连接
+        # 添加残差连接到第二个全连接层的输出上
         hidden_states = residual + hidden_states
 
-        # 返回处理后的 hidden_states 和 self_attn_weights
+        # 返回最终的隐藏状态和自注意力权重
         return hidden_states, self_attn_weights
-    # 构建模型，如果已经构建过了则直接返回
+    # 构建神经网络层的方法，用于在输入形状已知或未知时构建层
     def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回，避免重复构建
         if self.built:
             return
+        # 标记该层已经构建
         self.built = True
-        # 如果存在 self_attn 属性，就构建 self_attn
+        
+        # 如果存在 self_attn 属性，则构建 self_attn 层
         if getattr(self, "self_attn", None) is not None:
+            # 在 TensorFlow 中使用 name_scope 为层设置命名空间
             with tf.name_scope(self.self_attn.name):
+                # 调用 self_attn 层的 build 方法
                 self.self_attn.build(None)
-        # 如果存在 self_attn_layer_norm 属性，就构建 self_attn_layer_norm
+        
+        # 如果存在 self_attn_layer_norm 属性，则构建 self_attn_layer_norm 层
         if getattr(self, "self_attn_layer_norm", None) is not None:
+            # 在 TensorFlow 中使用 name_scope 为层设置命名空间
             with tf.name_scope(self.self_attn_layer_norm.name):
+                # 调用 self_attn_layer_norm 层的 build 方法，传入输入形状
                 self.self_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在 fc1 属性，就构建 fc1
+        
+        # 如果存在 fc1 属性，则构建 fc1 层
         if getattr(self, "fc1", None) is not None:
+            # 在 TensorFlow 中使用 name_scope 为层设置命名空间
             with tf.name_scope(self.fc1.name):
+                # 调用 fc1 层的 build 方法，传入输入形状
                 self.fc1.build([None, None, self.embed_dim])
-        # 如果存在 fc2 属性，就构建 fc2
+        
+        # 如果存在 fc2 属性，则构建 fc2 层
         if getattr(self, "fc2", None) is not None:
+            # 在 TensorFlow 中使用 name_scope 为层设置命名空间
             with tf.name_scope(self.fc2.name):
+                # 调用 fc2 层的 build 方法，传入输入形状的编码器维度
                 self.fc2.build([None, None, self.config.encoder_ffn_dim])
-        # 如果存在 final_layer_norm 属性，就构建 final_layer_norm
+        
+        # 如果存在 final_layer_norm 属性，则构建 final_layer_norm 层
         if getattr(self, "final_layer_norm", None) is not None:
+            # 在 TensorFlow 中使用 name_scope 为层设置命名空间
             with tf.name_scope(self.final_layer_norm.name):
+                # 调用 final_layer_norm 层的 build 方法，传入输入形状
                 self.final_layer_norm.build([None, None, self.embed_dim])
-class TFSpeech2TextDecoderLayer(tf.keras.layers.Layer):
+class TFSpeech2TextDecoderLayer(keras.layers.Layer):
+    # 定义 TF Speech-to-Text 解码器层的类
     def __init__(self, config: Speech2TextConfig, **kwargs):
-        super().__init__(**kwargs)  # 调用父类的构造函数
-        self.embed_dim = config.d_model  # 设置嵌入维度为配置中的模型维度
+        # 初始化函数，接收配置参数和其他关键字参数
+        super().__init__(**kwargs)
+        # 调用父类的初始化方法
 
-        # 初始化自注意力层
+        # 设置嵌入维度为模型配置中的维度
+        self.embed_dim = config.d_model
+
+        # 创建自注意力层，用于解码器的自注意力机制
         self.self_attn = TFSpeech2TextAttention(
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
@@ -386,19 +478,17 @@ class TFSpeech2TextDecoderLayer(tf.keras.layers.Layer):
             is_decoder=True,
         )
 
-        # 初始化dropout层
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
+        # dropout 层，用于在激活函数前进行随机失活
+        self.dropout = keras.layers.Dropout(config.dropout)
 
-        # 获取激活函数
+        # 获取激活函数并设置激活函数的随机失活
         self.activation_fn = get_tf_activation(config.activation_function)
+        self.activation_dropout = keras.layers.Dropout(config.activation_dropout)
 
-        # 初始化激活函数的dropout层
-        self.activation_dropout = tf.keras.layers.Dropout(config.activation_dropout)
+        # 层归一化，用于自注意力层输出的归一化
+        self.self_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
 
-        # 初始化自注意力层的LayerNormalization层
-        self.self_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
-
-        # 初始化编码器注意力层
+        # 创建编码器注意力层，用于解码器与编码器之间的注意力机制
         self.encoder_attn = TFSpeech2TextAttention(
             self.embed_dim,
             config.decoder_attention_heads,
@@ -407,22 +497,21 @@ class TFSpeech2TextDecoderLayer(tf.keras.layers.Layer):
             is_decoder=True,
         )
 
-        # 初始化编码器注意力层的LayerNormalization层
-        self.encoder_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="encoder_attn_layer_norm")
+        # 编码器注意力层的归一化
+        self.encoder_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="encoder_attn_layer_norm")
 
-        # 初始化全连接层1
-        self.fc1 = tf.keras.layers.Dense(config.decoder_ffn_dim, name="fc1")
+        # 第一个全连接层，用于解码器中的前馈神经网络
+        self.fc1 = keras.layers.Dense(config.decoder_ffn_dim, name="fc1")
 
-        # 初始化全连接层2
-        self.fc2 = tf.keras.layers.Dense(self.embed_dim, name="fc2")
+        # 第二个全连接层，输出维度与嵌入维度相同
+        self.fc2 = keras.layers.Dense(self.embed_dim, name="fc2")
 
-        # 初始化最终的LayerNormalization层
-        self.final_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
+        # 最终的层归一化，用于前馈神经网络输出的归一化
+        self.final_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
 
-        # 保存配置
+        # 存储配置参数
         self.config = config
 
-    # 定义调用方法
     def call(
         self,
         hidden_states,
@@ -433,68 +522,74 @@ class TFSpeech2TextDecoderLayer(tf.keras.layers.Layer):
         cross_attn_layer_head_mask: tf.Tensor | None = None,
         past_key_value: Tuple[tf.Tensor] | None = None,
         training=False,
-    # 构建模型，如果已经构建过则直接返回
     def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回，不进行重复构建
         if self.built:
             return
-        # 设置标志为已构建
+        # 标记为已构建
         self.built = True
-        # 如果存在自注意力机制，则构建自注意力层
+        
+        # 如果存在 self_attn 属性，则构建 self_attn 层
         if getattr(self, "self_attn", None) is not None:
             with tf.name_scope(self.self_attn.name):
                 self.self_attn.build(None)
-        # 如果存在自注意力层归一化，则构建自注意力层归一化层
+        
+        # 如果存在 self_attn_layer_norm 属性，则构建 self_attn_layer_norm 层
         if getattr(self, "self_attn_layer_norm", None) is not None:
             with tf.name_scope(self.self_attn_layer_norm.name):
                 self.self_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在编码器注意力机制，则构建编码器注意力层
+        
+        # 如果存在 encoder_attn 属性，则构建 encoder_attn 层
         if getattr(self, "encoder_attn", None) is not None:
             with tf.name_scope(self.encoder_attn.name):
                 self.encoder_attn.build(None)
-        # 如果存在编码器注意力层归一化，则构建编码器注意力层归一化层
+        
+        # 如果存在 encoder_attn_layer_norm 属性，则构建 encoder_attn_layer_norm 层
         if getattr(self, "encoder_attn_layer_norm", None) is not None:
             with tf.name_scope(self.encoder_attn_layer_norm.name):
                 self.encoder_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在第一个全连接层，则构建第一个全连接层
+        
+        # 如果存在 fc1 属性，则构建 fc1 层
         if getattr(self, "fc1", None) is not None:
             with tf.name_scope(self.fc1.name):
                 self.fc1.build([None, None, self.embed_dim])
-        # 如果存在第二个全连接层，则构建第二个全连接层
+        
+        # 如果存在 fc2 属性，则构建 fc2 层
         if getattr(self, "fc2", None) is not None:
             with tf.name_scope(self.fc2.name):
                 self.fc2.build([None, None, self.config.decoder_ffn_dim])
-        # 如果存在最终归一化层，则构建最终归一化层
+        
+        # 如果存在 final_layer_norm 属性，则构建 final_layer_norm 层
         if getattr(self, "final_layer_norm", None) is not None:
             with tf.name_scope(self.final_layer_norm.name):
                 self.final_layer_norm.build([None, None, self.embed_dim])
 class TFSpeech2TextPreTrainedModel(TFPreTrainedModel):
-    # 定义一个继承自TFPreTrainedModel的类，用于演示语音到文本的预训练模型
+    # 指定配置类
     config_class = Speech2TextConfig
-    # 指定配置类为Speech2TextConfig
+    # 模型前缀用于加载
     base_model_prefix = "model"
-    # 设置基础模型前缀为"model"
+    # 主要输入特征名称
     main_input_name = "input_features"
-    # 设置主输入名称为"input_features"
+    # 在加载时忽略的键列表
     _keys_to_ignore_on_load_unexpected = [r"encoder.embed_positions.weights"]
-    # 指定在加载时忽略的键名
 
     def _get_feat_extract_output_lengths(self, input_lengths: tf.Tensor):
         """
         Computes the output length of the convolutional layers
+        计算卷积层的输出长度
         """
-        # 计算卷积层的输出长度
+        # 根据配置中的卷积层数进行迭代计算
         for _ in range(self.config.num_conv_layers):
             input_lengths = (input_lengths - 1) // 2 + 1
-            # 通过循环迭代计算输出长度
 
         return input_lengths
-        # 返回计算结果
 
     @property
     def input_signature(self):
-        # 定义输入签名方法
+        # 定义模型输入的签名
         return {
             "input_features": tf.TensorSpec(
+                # 输入特征的形状：(None, None, 输入通道数 * 每个通道的特征数)
                 (None, None, self.config.input_feat_per_channel * self.config.input_channels),
                 tf.float32,
                 name="input_features",
@@ -503,14 +598,14 @@ class TFSpeech2TextPreTrainedModel(TFPreTrainedModel):
             "decoder_input_ids": tf.TensorSpec((None, None), tf.int32, name="decoder_input_ids"),
             "decoder_attention_mask": tf.TensorSpec((None, None), tf.int32, name="decoder_attention_mask"),
         }
-        # 返回包含输入特征和注意力掩码等信息的字典
+
 
 SPEECH_TO_TEXT_START_DOCSTRING = r"""
     This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
     etc.)
 
-    This model is also a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
+    This model is also a [keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
     as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
     behavior.
 
@@ -534,33 +629,27 @@ SPEECH_TO_TEXT_START_DOCSTRING = r"""
     - a dictionary with one or several input Tensors associated to the input names given in the docstring:
     `model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
 """
-    Note that when creating models and layers with
-    [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) then you don't need to worry
-    about any of this, as you can just pass inputs like you would to any other Python function!
+    # 注意：在使用子类化（subclassing）创建模型和层时，您不需要担心以下任何内容，因为您可以像将输入传递给任何其他Python函数一样进行传递！
 
     </Tip>
-    # 注意：当使用子类化创建模型和层时，您无需担心这些，因为您可以像对待任何其他Python函数一样传递输入！
 
-    Parameters:
-        config ([`Speech2TextConfig`]):
-            Model configuration class with all the parameters of the model. Initializing with a config file does not
-            load the weights associated with the model, only the configuration. Check out the
-            [`~TFPreTrainedModel.from_pretrained`] method to load the model weights.
     # 参数:
-    #     config ([`Speech2TextConfig`]):
-    #         包含模型所有参数的模型配置类。使用配置文件初始化不会加载与模型关联的权重，只会加载配置。查看
-    #         [`~TFPreTrainedModel.from_pretrained`] 方法以加载模型权重。
-# 定义一个文档字符串，用于指定模块Speech to Text输入的说明
+    # config ([`Speech2TextConfig`]):
+    #     包含模型所有参数的模型配置类。使用配置文件初始化时，不会加载与模型关联的权重，只加载配置信息。
+    #     可以查看[`~TFPreTrainedModel.from_pretrained`]方法以加载模型权重。
+"""
+
+
 SPEECH_TO_TEXT_INPUTS_DOCSTRING = r"""
 """
 
-# 定义一个基于Transformer的编码器层，由多个自注意力层组成
-# 每一层都是一个TFSpeech2TextEncoderLayer
-class TFSpeech2TextEncoder(tf.keras.layers.Layer):
-    # 配置类为Speech2TextConfig
+
+@keras_serializable
+class TFSpeech2TextEncoder(keras.layers.Layer):
     config_class = Speech2TextConfig
     """
-    Transformer编码器，由config.encoder_layers个自注意力层组成，每层是一个TFSpeech2TextEncoderLayer
+    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
+    [`TFSpeech2TextEncoderLayer`].
 
     Args:
         config: Speech2TextConfig
@@ -570,7 +659,9 @@ class TFSpeech2TextEncoder(tf.keras.layers.Layer):
         super().__init__(**kwargs)
         self.config = config
 
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
+        # 初始化 dropout 层，使用指定的 dropout 概率
+        self.dropout = keras.layers.Dropout(config.dropout)
+        # layerdrop 是指定的 encoder_layerdrop 参数
         self.layerdrop = config.encoder_layerdrop
 
         embed_dim = config.d_model
@@ -578,40 +669,42 @@ class TFSpeech2TextEncoder(tf.keras.layers.Layer):
         self.max_source_positions = config.max_source_positions
         self.embed_scale = tf.math.sqrt(float(embed_dim)) if config.scale_embedding else 1.0
 
-        # 基于config配置创建TFConv1dSubsampler层，用于卷积操作
+        # 创建 TFConv1dSubsampler 对象，用于卷积操作
         self.conv = TFConv1dSubsampler(config, name="conv")
 
-        # 创建位置编码层，用于将序列位置信息嵌入到特征中
+        # 创建 TFSpeech2TextSinusoidalPositionalEmbedding 对象，用于位置编码
         self.embed_positions = TFSpeech2TextSinusoidalPositionalEmbedding(
             num_positions=config.max_source_positions,
             embedding_dim=embed_dim,
             padding_idx=self.padding_idx,
             name="embed_positions",
         )
-        # 创建多个TFSpeech2TextEncoderLayer层，作为Transformer编码器的主要层
+        
+        # 创建多个 TFSpeech2TextEncoderLayer 对象，作为 Transformer 编码器的层
         self.layers = [TFSpeech2TextEncoderLayer(config, name=f"layers.{i}") for i in range(config.encoder_layers)]
-        # 创建LayerNormalization层，用于归一化每个Transformer编码器层的输出
-        self.layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
+        
+        # 创建 LayerNormalization 层，用于归一化每个编码器层的输出
+        self.layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
 
     def _get_feat_extract_output_lengths(self, input_lengths: tf.Tensor):
         """
-        计算卷积层的输出长度
+        Computes the output length of the convolutional layers
         """
+        # 计算卷积层的输出长度
         for _ in range(self.config.num_conv_layers):
             input_lengths = (input_lengths - 1) // 2 + 1
 
         return input_lengths
 
     def _get_feature_vector_attention_mask(self, feature_vector_length, attention_mask):
-        # 生成一个3D的注意力掩码，用于输入特征向量
-        # 如果情况特殊，将其转换为2D
+        # 如果 attention_mask 的维度大于2，则取最后一个维度
         if len(attention_mask.shape) > 2:
             attention_mask = attention_mask[:, :, -1]
 
-        # 计算特征提取输出长度
+        # 计算特征提取的输出长度
         subsampled_lengths = self._get_feat_extract_output_lengths(tf.math.reduce_sum(attention_mask, -1))
         bsz = shape_list(attention_mask)[0]
-        # 构建索引，用于生成2D的注意力掩码
+        # 创建注意力掩码，将特定位置标记为1
         indices = tf.concat(
             (
                 tf.expand_dims(tf.range(bsz, dtype=attention_mask.dtype), -1),
@@ -619,14 +712,11 @@ class TFSpeech2TextEncoder(tf.keras.layers.Layer):
             ),
             axis=-1,
         )
-        attention_mask = tf.scatter_nd(indices=indices, # scatter_nd用指定的索引位置更新给定的数值，生成新的张量
-                                       updates=tf.ones(bsz), 
-                                       shape=[bsz, feature_vector_length])
-        # 反转并累加注意力掩码
+        attention_mask = tf.scatter_nd(indices=indices, updates=tf.ones(bsz), shape=[bsz, feature_vector_length])
+        # 反转和累积注意力掩码
         attention_mask = tf.cast(tf.reverse(tf.math.cumsum(tf.reverse(attention_mask, [-1]), -1), [-1]), tf.int64)
         return attention_mask
 
-    # 定义call方法，用于前向传播
     @unpack_inputs
     def call(
         self,
@@ -637,65 +727,72 @@ class TFSpeech2TextEncoder(tf.keras.layers.Layer):
         output_hidden_states=None,
         return_dict=None,
         training=False,
-    # 构建神经网络模型
+    # 定义神经网络模型的 build 方法，用于构建模型的各个层次和参数
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
+        # 如果已经构建过模型，直接返回，避免重复构建
         if self.built:
             return
-        # 设置标志为已构建
+        # 设置标志位，表示模型已经构建
         self.built = True
-        # 如果存在卷积层
+        
+        # 如果存在卷积层，则构建卷积层
         if getattr(self, "conv", None) is not None:
-            # 在 tensorflow 中设置作用域名称为卷积层的名称
+            # 使用卷积层的名称作为 TensorFlow 的命名空间
             with tf.name_scope(self.conv.name):
-                # 构建卷积层
                 self.conv.build(None)
-        # 如果存在位置嵌入
+        
+        # 如果存在位置嵌入层，则构建位置嵌入层
         if getattr(self, "embed_positions", None) is not None:
-            # 在 tensorflow 中设置作用域名称为位置嵌入的名称
+            # 使用位置嵌入层的名称作为 TensorFlow 的命名空间
             with tf.name_scope(self.embed_positions.name):
-                # 构建位置嵌入
                 self.embed_positions.build(None)
-        # 如果存在层归一化
+        
+        # 如果存在层归一化层，则构建层归一化层
         if getattr(self, "layer_norm", None) is not None:
-            # 在 tensorflow 中设置作用域名称为层归一化的名称
+            # 使用层归一化层的名称作为 TensorFlow 的命名空间
             with tf.name_scope(self.layer_norm.name):
-                # 构建层归一化，要求输入形状为 [None, None, self.config.d_model]
+                # 构建层归一化层，输入形状为 [None, None, self.config.d_model]
                 self.layer_norm.build([None, None, self.config.d_model])
-        # 如果存在多个层
+        
+        # 如果存在多个层，则分别构建每个层
         if getattr(self, "layers", None) is not None:
-            # 对每一层进行构建
             for layer in self.layers:
+                # 使用每个层的名称作为 TensorFlow 的命名空间
                 with tf.name_scope(layer.name):
-                    # 在 tensorflow 中设置作用域名称为层的名称
+                    # 构建当前层，输入形状为 None（即不限制输入形状）
                     layer.build(None)
-# 使用keras_serializable装饰器将TFSpeech2TextDecoder类标记为序列化对象
+# 使用 keras_serializable 装饰器使类可序列化
 @keras_serializable
-class TFSpeech2TextDecoder(tf.keras.layers.Layer):
-    # 将config_class属性设置为Speech2TextConfig类
+class TFSpeech2TextDecoder(keras.layers.Layer):
+    # 将 config_class 属性设置为 Speech2TextConfig 类
     config_class = Speech2TextConfig
+
     """
     Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`TFSpeech2TextDecoderLayer`]
-    描述Transformer解码器由config.decoder_layers层组成，每一层都是一个TFSpeech2TextDecoderLayer
 
     Args:
         config: Speech2TextConfig
-        参数：config是Speech2TextConfig的实例
     """
 
-    # 初始化方法
+    # 初始化方法，接受一个 config 参数和其他关键字参数
     def __init__(self, config: Speech2TextConfig, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
+        # 将传入的 config 参数赋值给 self.config
         self.config = config
+        # 设置 layerdrop 属性为 config.decoder_layerdrop
         self.layerdrop = config.decoder_layerdrop
+        # 设置 padding_idx 属性为 config.pad_token_id
         self.padding_idx = config.pad_token_id
+        # 设置 max_target_positions 属性为 config.max_target_positions
         self.max_target_positions = config.max_target_positions
+        # 如果 config.scale_embedding 为 True，则设置 embed_scale 为 d_model 的平方根，否则为 1.0
         self.embed_scale = tf.math.sqrt(float(config.d_model)) if config.scale_embedding else 1.0
 
-        # 创建TFSharedEmbeddings实例，并赋值给embed_tokens属性
+        # 创建 TFSharedEmbeddings 对象并赋值给 embed_tokens 属性
         self.embed_tokens = TFSharedEmbeddings(config.vocab_size, config.d_model, name="embed_tokens")
 
-        # 创建TFSpeech2TextSinusoidalPositionalEmbedding实例，并赋值给embed_positions属性
+        # 创建 TFSpeech2TextSinusoidalPositionalEmbedding 对象并赋值给 embed_positions 属性
         self.embed_positions = TFSpeech2TextSinusoidalPositionalEmbedding(
             num_positions=config.max_target_positions,
             embedding_dim=config.d_model,
@@ -703,23 +800,24 @@ class TFSpeech2TextDecoder(tf.keras.layers.Layer):
             name="embed_positions",
         )
 
-        # 创建多个TFSpeech2TextDecoderLayer实例，并赋值给layers属性
+        # 创建包含 config.decoder_layers 个 TFSpeech2TextDecoderLayer 的列表并赋值给 layers 属性
         self.layers = [TFSpeech2TextDecoderLayer(config, name=f"layers.{i}") for i in range(config.decoder_layers)]
-        # 创建LayerNormalization层，并赋值给layer_norm属性
-        self.layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
+        
+        # 创建 LayerNormalization 层并赋值给 layer_norm 属性
+        self.layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
 
-        # 创建Dropout层，并赋值给dropout属性
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
+        # 创建 Dropout 层并赋值给 dropout 属性
+        self.dropout = keras.layers.Dropout(config.dropout)
 
-    # 获取embed_tokens属性的方法
+    # 获取 embed_tokens 属性的方法
     def get_embed_tokens(self):
         return self.embed_tokens
 
-    # 设置embed_tokens属性的方法
+    # 设置 embed_tokens 属性的方法
     def set_embed_tokens(self, embed_tokens):
         self.embed_tokens = embed_tokens
 
-    # unpack_inputs装饰器修饰call方法
+    # 使用 unpack_inputs 装饰器定义 call 方法，接受多个参数用于 Transformer 解码器的前向传播
     @unpack_inputs
     def call(
         self,
@@ -736,51 +834,65 @@ class TFSpeech2TextDecoder(tf.keras.layers.Layer):
         output_hidden_states=None,
         return_dict=None,
         training=False,
-    # build方法
+    ):
+        # 此处实现前向传播逻辑，具体内容需要进一步详细注释，但不在此处进行总结
+
+    # build 方法用于构建层，当被调用时检查是否已经构建，如果已构建则直接返回，否则构建各层
     def build(self, input_shape=None):
+        # 如果已经构建过，直接返回
         if self.built:
             return
+        # 将 built 属性标记为 True，表示已构建
         self.built = True
-        # 如果embed_tokens存在，则调用其build方法
+
+        # 如果 embed_tokens 属性存在，则构建其内部结构
         if getattr(self, "embed_tokens", None) is not None:
             with tf.name_scope(self.embed_tokens.name):
                 self.embed_tokens.build(None)
-        # 如果embed_positions存在，则调用其build方法
+
+        # 如果 embed_positions 属性存在，则构建其内部结构
         if getattr(self, "embed_positions", None) is not None:
             with tf.name_scope(self.embed_positions.name):
                 self.embed_positions.build(None)
-        # 如果layer_norm存在，则调用其build方法
+
+        # 如果 layer_norm 属性存在，则构建其内部结构
         if getattr(self, "layer_norm", None) is not None:
             with tf.name_scope(self.layer_norm.name):
                 self.layer_norm.build([None, None, self.config.d_model])
-        # 如果layers存在，则遍历其中的每一层，并调用其build方法
+
+        # 遍历 layers 列表中的每一层，并构建其内部结构
         if getattr(self, "layers", None) is not None:
             for layer in self.layers:
                 with tf.name_scope(layer.name):
                     layer.build(None)
 
 
+# 使用 keras_serializable 装饰器使类可序列化
 @keras_serializable
-class TFSpeech2TextMainLayer(tf.keras.layers.Layer):
+class TFSpeech2TextMainLayer(keras.layers.Layer):
+    # 将 config_class 属性设置为 Speech2TextConfig 类
     config_class = Speech2TextConfig
-    # 初始化函数，接受配置参数并调用父类的初始化方法，保存配置信息
+    # 初始化方法，接受一个配置对象 config 和其他关键字参数
     def __init__(self, config: Speech2TextConfig, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
+        # 将传入的配置对象保存在实例变量中
         self.config = config
-    
-        # 初始化编码器和解码器对象
+
+        # 创建一个 TFSpeech2TextEncoder 对象并保存在实例变量 encoder 中
         self.encoder = TFSpeech2TextEncoder(config, name="encoder")
+        # 创建一个 TFSpeech2TextDecoder 对象并保存在实例变量 decoder 中
         self.decoder = TFSpeech2TextDecoder(config, name="decoder")
-    
-    # 获取输入嵌入
+
+    # 获取输入嵌入的方法，返回 decoder 的 embed_tokens 属性
     def get_input_embeddings(self):
         return self.decoder.embed_tokens
-    
-    # 设置输入嵌入
+
+    # 设置输入嵌入的方法，接受新的嵌入向量并将其赋值给 decoder 的 embed_tokens 属性
     def set_input_embeddings(self, new_embeddings):
         self.decoder.embed_tokens = new_embeddings
-    
-    # call方法，接受多个输入参数，使用@unpack_inputs注解解包输入
+
+    # 装饰器函数，用于解包输入参数
     @unpack_inputs
     def call(
         self,
@@ -800,46 +912,48 @@ class TFSpeech2TextMainLayer(tf.keras.layers.Layer):
         return_dict=None,
         training=False,
         **kwargs,
-          
-    # 构建方法，接受输入形状作为参数，如果已构建则直接返回，否则构建编码器和解码器对象
+    ):
+        # 此处是模型的调用方法，接受多个输入参数，并进行相应的处理
+
+    # build 方法用于构建模型，在第一次调用时执行
     def build(self, input_shape=None):
+        # 如果模型已经构建过，直接返回
         if self.built:
             return
+        # 标记模型已经构建
         self.built = True
-        # 构建编码器对象
+        # 如果实例变量中存在 encoder 对象，则在命名空间下构建 encoder
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
                 self.encoder.build(None)
-        # 构建解码器对象
+        # 如果实例变量中存在 decoder 对象，则在命名空间下构建 decoder
         if getattr(self, "decoder", None) is not None:
             with tf.name_scope(self.decoder.name):
                 self.decoder.build(None)
-# 使用装饰器添加文档字符串，描述模型功能以及输入输出
+# 定义一个基于 TFSpeech2TextPreTrainedModel 的具体模型类 TFSpeech2TextModel，用于输出未经特定头部处理的原始隐藏状态
 @add_start_docstrings(
     "The bare Speech2Text Model outputting raw hidden-states without any specific head on top.",
     SPEECH_TO_TEXT_START_DOCSTRING,
 )
-# 定义 TFSpeech2TextModel 类，继承自 TFSpeech2TextPreTrainedModel 类
 class TFSpeech2TextModel(TFSpeech2TextPreTrainedModel):
-    # 初始化方法，接受配置对象 config 和其他参数
+    
+    # 初始化方法，接受一个 Speech2TextConfig 类型的配置对象和其他可选参数
     def __init__(self, config: Speech2TextConfig, *inputs, **kwargs):
         # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 创建 TFSpeech2TextMainLayer 对象，传入配置对象和名称参数
+        # 创建一个 TFSpeech2TextMainLayer 对象作为模型的主层，使用给定的配置对象和名称
         self.model = TFSpeech2TextMainLayer(config, name="model")
 
-    # 获取编码器的方法
+    # 获取模型的编码器部分
     def get_encoder(self):
-        # 返回模型的编码器
         return self.model.encoder
 
-    # 获取解码器的方法
+    # 获取模型的解码器部分
     def get_decoder(self):
-        # 返回模型的解码器
         return self.model.decoder
 
-    # 定义 call 方法，接受多个输入参数，并返回模型输出
+    # 定义模型的调用方法，接受多个输入参数和一些可选的输出控制标志，返回模型输出的元组或 TFSeq2SeqModelOutput 类型
     @unpack_inputs
     @add_start_docstrings_to_model_forward(SPEECH_TO_TEXT_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
@@ -866,7 +980,8 @@ class TFSpeech2TextModel(TFSpeech2TextPreTrainedModel):
         training: bool = False,
         **kwargs,
     ) -> Union[Tuple, TFSeq2SeqModelOutput]:
-        # 调用模型的前向传播方法，传入各种输入参数
+        
+        # 调用模型的主层对象，传递所有参数和标志，并接收输出结果
         outputs = self.model(
             input_features=input_features,
             attention_mask=attention_mask,
@@ -885,25 +1000,24 @@ class TFSpeech2TextModel(TFSpeech2TextPreTrainedModel):
             training=training,
         )
 
-        # 返回模型输出
+        # 返回模型的输出结果
         return outputs
-```  
-    # 定义一个方法用于返回模型输出
+    # 定义一个方法用于生成模型的输出
     def serving_output(self, output):
-        # 如果配置中使用缓存，则从output的过去key value中获取pkv，否则为None
+        # 如果配置中使用缓存，则获取输出中的过去关键值的第二项，否则为 None
         pkv = tf.tuple(output.past_key_values)[1] if self.config.use_cache else None
-        # 如果配置中输出隐藏状态，则将output的decoder hidden states转换为张量，否则为None
+        # 如果配置中输出隐藏状态，则将输出中的解码器隐藏状态转换为 TensorFlow 张量，否则为 None
         dec_hs = tf.convert_to_tensor(output.decoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置中输出注意力分布，则将output的decoder attentions转换为张量，否则为None
+        # 如果配置中输出注意力权重，则将输出中的解码器注意力权重转换为 TensorFlow 张量，否则为 None
         dec_attns = tf.convert_to_tensor(output.decoder_attentions) if self.config.output_attentions else None
-        # 如果配置中输出注意力分布，则将output的cross attentions转换为张量，否则为None
+        # 如果配置中输出注意力权重，则将输出中的交叉注意力权重转换为 TensorFlow 张量，否则为 None
         cross_attns = tf.convert_to_tensor(output.cross_attentions) if self.config.output_attentions else None
-        # 如果配置中输出隐藏状态，则将output的encoder hidden states转换为张量，否则为None
+        # 如果配置中输出隐藏状态，则将输出中的编码器隐藏状态转换为 TensorFlow 张量，否则为 None
         enc_hs = tf.convert_to_tensor(output.encoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置中输出注意力分布，则将output的encoder attentions转换为张量，否则为None
+        # 如果配置中输出注意力权重，则将输出中的编码器注意力权重转换为 TensorFlow 张量，否则为 None
         enc_attns = tf.convert_to_tensor(output.encoder_attentions) if self.config.output_attentions else None
-        
-        # 返回转换后的TFSeq2SeqModelOutput对象
+
+        # 返回一个 TFSeq2SeqModelOutput 对象，封装了模型的输出
         return TFSeq2SeqModelOutput(
             last_hidden_state=output.last_hidden_state,
             past_key_values=pkv,
@@ -914,62 +1028,62 @@ class TFSpeech2TextModel(TFSpeech2TextPreTrainedModel):
             encoder_hidden_states=enc_hs,
             encoder_attentions=enc_attns,
         )
-    
-    # 定义一个方法用于构建模型，如果已经构建过，则直接返回
+
+    # 构建方法，用于构建模型
     def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 标记为已构建
+        # 标记模型已经构建
         self.built = True
-        # 检查self中是否存在model属性
+        # 如果模型已存在
         if getattr(self, "model", None) is not None:
-            # 在命名空间中构建模型
+            # 使用模型的名称空间构建模型，输入形状为 None
             with tf.name_scope(self.model.name):
                 self.model.build(None)
-# 使用装饰器添加模型介绍到文档字符串起始部分，说明该模型可以用于摘要生成
+# 定义一个基于 TFSpeech2TextPreTrainedModel 和 TFCausalLanguageModelingLoss 的模型类，用于语音到文本转换，并具有语言建模头部
 @add_start_docstrings(
     "The Speech2Text Model with a language modeling head. Can be used for summarization.",
     SPEECH_TO_TEXT_START_DOCSTRING,
 )
-# 声明一个类 TFSpeech2TextForConditionalGeneration，继承自 TFSpeech2TextPreTrainedModel 和 TFCausalLanguageModelingLoss
 class TFSpeech2TextForConditionalGeneration(TFSpeech2TextPreTrainedModel, TFCausalLanguageModelingLoss):
-    # 初始化方法，接收一个 Speech2TextConfig 类型的 config 参数
+    
+    # 初始化方法，接受一个 Speech2TextConfig 对象作为参数
     def __init__(self, config: Speech2TextConfig):
-        # 调用父类初始化方法
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 创建 TFSpeech2TextMainLayer 对象，命名为 model
+        # 创建 TFSpeech2TextMainLayer 对象作为模型主体，并命名为 "model"
         self.model = TFSpeech2TextMainLayer(config, name="model")
-        # 创建一个 Dense 层用于语言模型头，输出大小为 config.vocab_size，不使用偏置，命名为 lm_head
-        self.lm_head = tf.keras.layers.Dense(self.config.vocab_size, use_bias=False, name="lm_head")
-        # TODO (Joao): 常量输出调查为什么 Speech2Text 在 XLA 生成中存在数值问题
-        # 设置是否支持 XLA 生成为 False
+        # 创建一个 Dense 层作为语言建模头部，输出维度为 config.vocab_size，不使用偏置
+        self.lm_head = keras.layers.Dense(self.config.vocab_size, use_bias=False, name="lm_head")
+        # 设置是否支持在 XLA 生成中使用的标志为 False
+        # TODO (Joao): investigate why Speech2Text has numerical issues in XLA generate
         self.supports_xla_generation = False
-        # 保存传入的 config 参数
+        # 将传入的 config 对象保存到实例变量中
         self.config = config
 
-    # 获取编码器
+    # 返回模型的编码器部分
     def get_encoder(self):
         return self.model.encoder
 
-    # 获取解码器
+    # 返回模型的解码器部分
     def get_decoder(self):
         return self.model.decoder
 
-    # 调整 token embeddings 的大小
+    # 重新调整 token embeddings 的大小，返回更新后的 embeddings
     def resize_token_embeddings(self, new_num_tokens: int) -> tf.Variable:
-        # 调用父类的 resize_token_embeddings 方法，返回新的 embeddings
         new_embeddings = super().resize_token_embeddings(new_num_tokens)
         return new_embeddings
 
-    # 获取输出 embeddings
+    # 返回语言建模头部
     def get_output_embeddings(self):
         return self.lm_head
 
-    # 设置输出 embeddings
+    # 设置新的输出 embeddings
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
 
-    # 实现 call 方法，接收多个输入参数和标志位
+    # 模型的前向传播方法，接受多种输入参数并返回 TFSeq2SeqLMOutput 类型的输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(SPEECH_TO_TEXT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TFSeq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
@@ -992,22 +1106,22 @@ class TFSpeech2TextForConditionalGeneration(TFSpeech2TextPreTrainedModel, TFCaus
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
         **kwargs,
-    # 定义用于输出的方法，接受输出对象作为参数
+    # 定义一个方法用于处理模型输出，并根据配置选择性地返回不同的张量
     def serving_output(self, output):
-        # 如果配置中使用了缓存，则从输出对象的过去键值中获取键值，否则为 None
+        # 如果配置要求使用缓存，则获取输出中的过去键值（past_key_values）的第二个元素
         pkv = tf.tuple(output.past_key_values)[1] if self.config.use_cache else None
-        # 如果配置中输出隐藏状态，则将输出对象的解码器隐藏状态转换为张量，否则为 None
+        # 如果配置要求输出隐藏状态，则将输出的解码器隐藏状态转换为张量
         dec_hs = tf.convert_to_tensor(output.decoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置中输出注意力权重，则将输出对象的解码器注意力权重转换为张量，否则为 None
+        # 如果配置要求输出注意力权重，则将输出的解码器注意力权重转换为张量
         dec_attns = tf.convert_to_tensor(output.decoder_attentions) if self.config.output_attentions else None
-        # 如果配置中输出注意力权重，则将输出对象的交叉注意力权重转换为张量，否则为 None
+        # 如果配置要求输出交叉注意力权重，则将输出的交叉注意力权重转换为张量
         cross_attns = tf.convert_to_tensor(output.cross_attentions) if self.config.output_attentions else None
-        # 如果配置中输出隐藏状态，则将输出对象的编码器隐藏状态转换为张量，否则为 None
+        # 如果配置要求输出隐藏状态，则将输出的编码器隐藏状态转换为张量
         enc_hs = tf.convert_to_tensor(output.encoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置中输出注意力权重，则将输出对象的编码器注意力权重转换为张量，否则为 None
+        # 如果配置要求输出注意力权重，则将输出的编码器注意力权重转换为张量
         enc_attns = tf.convert_to_tensor(output.encoder_attentions) if self.config.output_attentions else None
 
-        # 返回 TFSeq2SeqLMOutput 对象，包含输出对象的不同属性
+        # 返回一个 TFSeq2SeqLMOutput 对象，包含不同类型的模型输出
         return TFSeq2SeqLMOutput(
             logits=output.logits,
             past_key_values=pkv,
@@ -1019,7 +1133,7 @@ class TFSpeech2TextForConditionalGeneration(TFSpeech2TextPreTrainedModel, TFCaus
             encoder_attentions=enc_attns,
         )
 
-    # 准备用于生成的输入，接受解码器输入 ID、过去键值等参数
+    # 准备用于生成的输入参数，根据条件截取 decoder_input_ids
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
@@ -1032,13 +1146,13 @@ class TFSpeech2TextForConditionalGeneration(TFSpeech2TextPreTrainedModel, TFCaus
         encoder_outputs=None,
         **kwargs,
     ):
-        # 如果存在过去键值，则截取解码器输入 ID 的最后一个 token
+        # 如果存在 past_key_values，则截取 decoder_input_ids 的最后一个元素作为输入
         if past_key_values is not None:
             decoder_input_ids = decoder_input_ids[:, -1:]
 
-        # 返回包含不同输入参数的字典
+        # 返回一个字典，包含用于生成的输入参数
         return {
-            "input_features": None,  # 需要传递以使 Keras.layer.__call__ 快乐
+            "input_features": None,  # 需要传递以使 Keras.layer.__call__ 正常运行
             "encoder_outputs": encoder_outputs,
             "past_key_values": past_key_values,
             "decoder_input_ids": decoder_input_ids,
@@ -1046,31 +1160,30 @@ class TFSpeech2TextForConditionalGeneration(TFSpeech2TextPreTrainedModel, TFCaus
             "head_mask": head_mask,
             "decoder_head_mask": decoder_head_mask,
             "cross_attn_head_mask": cross_attn_head_mask,
-            "use_cache": use_cache,  # 修改此处以避免缓存（可能用于调试）
+            "use_cache": use_cache,  # 更改此项以避免缓存（可能用于调试）
         }
 
-    # 构建模型，接受输入形状作为参数
+    # 构建方法，用于建立模型的组件
     def build(self, input_shape=None):
-        # 如果已经构建过了，则直接返回
+        # 如果已经建立过，则直接返回
         if self.built:
             return
-        # 设置为已构建
+        # 标记模型已经建立
         self.built = True
-        # 如果存在模型，则构建模型
+        # 如果存在模型对象，则在命名空间下建立模型
         if getattr(self, "model", None) is not None:
             with tf.name_scope(self.model.name):
                 self.model.build(None)
-        # 如果存在语言模型头部，则构建语言模型头部
+        # 如果存在 lm_head 对象，则在命名空间下建立 lm_head
         if getattr(self, "lm_head", None) is not None:
             with tf.name_scope(self.lm_head.name):
                 self.lm_head.build([None, None, self.config.d_model])
 
-    # 将 TensorFlow 权重重命名为 PyTorch 权重
+    # 转换 TensorFlow 权重名称到 PyTorch 权重名称的方法
     def tf_to_pt_weight_rename(self, tf_weight):
-        # 如果是语言模型头部权重，则将其重命名为模型的嵌入令牌权重
+        # 如果输入的 TensorFlow 权重名称是 "lm_head.weight"，则返回对应的 PyTorch 权重名称
         if tf_weight == "lm_head.weight":
             return tf_weight, "model.decoder.embed_tokens.weight"
-        # 否则返回原始权重
         else:
             return (tf_weight,)
 ```

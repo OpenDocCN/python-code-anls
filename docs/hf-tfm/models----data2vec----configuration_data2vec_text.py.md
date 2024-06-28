@@ -1,57 +1,66 @@
 # `.\models\data2vec\configuration_data2vec_text.py`
 
-```py
-# 设置代码文件的编码格式为 UTF-8
-# 版权声明，保留所有权利
+```
+# coding=utf-8
+# 文件编码声明，使用 UTF-8 编码格式
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+# 版权声明，版权归 HuggingFace Inc. 团队所有
 #
-# 根据 Apache 许可证，你只能在遵守许可证规定的情况下使用该文件
-# 你可以从以下网址获得许可证的副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 授权协议声明，使用 Apache License, Version 2.0 版本
+# you may not use this file except in compliance with the License.
+# 除非遵循 Apache License 2.0 版本，否则不得使用此文件
+# You may obtain a copy of the License at
+# 可以获取协议的副本链接
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除了适用法律要求或书面同意的情况下，根据许可证分发的软件将按照“原样”分发，
-# 不附带任何明示或暗示的担保或条件。请参阅许可证了解特定的语言管理权限以及限制。
-""" Data2VecText 配置"""
-# 导入所需的模块
+# Unless required by applicable law or agreed to in writing, software
+# 除非适用法律要求或书面同意，否则软件
+# distributed under the License is distributed on an "AS IS" BASIS,
+# 根据协议分发软件，按"现状"提供，无任何担保
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 无论是明示还是暗示的，均不对软件的任何担保或条件
+# See the License for the specific language governing permissions and
+# 详细信息请查阅协议
+# limitations under the License.
+# 限制的详细内容请查阅协议
+""" Data2VecText configuration"""
+# 模块说明，Data2VecText 配置
 from collections import OrderedDict
+# 导入 OrderedDict，有序字典类
 from typing import Mapping
-# 从上级目录中导入 configuration_utils.py 中的 PretrainedConfig 类
+# 导入 Mapping，映射类型
+
 from ...configuration_utils import PretrainedConfig
-# 从上级目录中导入 onnx.py 中的 OnnxConfig 类
+# 导入预训练配置类 PretrainedConfig
 from ...onnx import OnnxConfig
-# 从上级目录中导入 logging.py 中的 logging 模块
+# 导入 OnnxConfig，ONNX 配置类
 from ...utils import logging
+# 导入 logging 模块，日志模块
 
-# 获取 logger 对象
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器
 
-# 预训练配置文件映射
 DATA2VEC_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/data2vec-text-base": "https://huggingface.co/data2vec/resolve/main/config.json",
 }
+# 预训练配置映射表，将预训练模型名称映射到其配置文件的 URL
 
-# Data2VecTextConfig 继承自 PretrainedConfig 类
 class Data2VecTextConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`Data2VecTextModel`] 和 [`Data2VecTextModel`] 配置的配置类。它用于根据指定的参数实例化
-    一个 Data2VecText 模型，定义了模型的架构。使用默认值实例化一个配置将产生类似于 Data2VecText
-    [facebook/data2vec-text-base](https://huggingface.co/facebook/data2vec-text-base) 架构的配置。
+    This is the configuration class to store the configuration of a [`Data2VecTextModel`] and [`Data2VecTextModel`]. It
+    is used to instantiate a Data2VecText model according to the specified arguments, defining the model architecture.
+    Instantiating a configuration with the defaults will yield a similar configuration to that of the Data2VecText
+    [facebook/data2vec-text-base](https://huggingface.co/facebook/data2vec-text-base) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。请阅读 [`PretrainedConfig`] 的文档以获取更多信息。
-
-    示例：
-
-    ```python
-    >>> from transformers import Data2VecTextConfig, Data2VecTextModel
-    >>> # 初始化 Data2VecText facebook/data2vec-text-base 风格的配置
-    >>> configuration = Data2VecTextConfig()
-    >>> # 从 facebook/data2vec-text-base 风格的配置初始化一个模型（带有随机权重）
-    >>> model = Data2VecTextModel(configuration)
-    >>> # 访问模型配置
-    >>> configuration = model.config
-    ```py"""
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+    """
+    # Data2VecText 配置类，用于存储 Data2VecTextModel 的配置
 
     model_type = "data2vec-text"
+    # 模型类型标识为 "data2vec-text"
 
     def __init__(
         self,
@@ -74,42 +83,64 @@ class Data2VecTextConfig(PretrainedConfig):
         use_cache=True,
         classifier_dropout=None,
         **kwargs,
-        # 调用父类的构造函数，传入参数 pad_token_id、bos_token_id、eos_token_id 和 **kwargs
-        super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
+    ):
+        # 初始化方法，配置 Data2VecText 模型的各项参数
+        pass
+        # 占位符，未实际执行操作，保留该方法以后可能的参数扩展
+        ):
+            # 调用父类初始化方法，传递相关参数并设置默认的特殊标记的 ID
+            super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        # 初始化 Transformer 的各个参数
-        self.vocab_size = vocab_size
-        self.hidden_size = hidden_size
-        self.num_hidden_layers = num_hidden_layers
-        self.num_attention_heads = num_attention_heads
-        self.hidden_act = hidden_act
-        self.intermediate_size = intermediate_size
-        self.hidden_dropout_prob = hidden_dropout_prob
-        self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        self.max_position_embeddings = max_position_embeddings
-        self.type_vocab_size = type_vocab_size
-        self.initializer_range = initializer_range
-        self.layer_norm_eps = layer_norm_eps
-        self.position_embedding_type = position_embedding_type
-        self.use_cache = use_cache
-        self.classifier_dropout = classifier_dropout
-```  
-# 定义一个数据文本转换为ONNX配置的类，继承自OnnxConfig类
+            # 初始化模型的词汇表大小
+            self.vocab_size = vocab_size
+            # 初始化隐藏层的大小
+            self.hidden_size = hidden_size
+            # 初始化隐藏层的数量
+            self.num_hidden_layers = num_hidden_layers
+            # 初始化注意力头的数量
+            self.num_attention_heads = num_attention_heads
+            # 初始化隐藏层激活函数
+            self.hidden_act = hidden_act
+            # 初始化中间层的大小
+            self.intermediate_size = intermediate_size
+            # 初始化隐藏层的 dropout 概率
+            self.hidden_dropout_prob = hidden_dropout_prob
+            # 初始化注意力矩阵的 dropout 概率
+            self.attention_probs_dropout_prob = attention_probs_dropout_prob
+            # 初始化最大位置嵌入的长度
+            self.max_position_embeddings = max_position_embeddings
+            # 初始化类型词汇表的大小
+            self.type_vocab_size = type_vocab_size
+            # 初始化初始化范围
+            self.initializer_range = initializer_range
+            # 初始化层归一化的 epsilon 值
+            self.layer_norm_eps = layer_norm_eps
+            # 初始化位置嵌入的类型
+            self.position_embedding_type = position_embedding_type
+            # 初始化是否使用缓存
+            self.use_cache = use_cache
+            # 初始化分类器的 dropout 概率
+            self.classifier_dropout = classifier_dropout
+# 定义一个继承自OnnxConfig的Data2VecTextOnnxConfig类，用于配置ONNX模型的输入规格
 class Data2VecTextOnnxConfig(OnnxConfig):
-    # 输入属性的装饰器，返回值为输入映射的字典，键为字符串，值为映射整数和字符串的字典
+    
+    # 定义一个inputs属性，返回一个映射，描述模型的输入
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 如果任务是多选题，则动态轴为{0:"batch", 1:"choice", 2:"sequence"}
+        
+        # 如果任务是"multiple-choice"
         if self.task == "multiple-choice":
+            # 定义动态轴的映射，包含批处理、选择和序列三个轴
             dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
-        # 否则动态轴为{0:"batch", 1:"sequence"}
         else:
+            # 否则，定义动态轴的映射，包含批处理和序列两个轴
             dynamic_axis = {0: "batch", 1: "sequence"}
-        # 返回有序字典
+        
+        # 返回一个有序字典，描述模型的输入，包括input_ids和attention_mask两个输入
         return OrderedDict(
             [
-                ("input_ids", dynamic_axis),  # 输入IDs，使用动态轴进行映射
-                ("attention_mask", dynamic_axis),  # 注意力掩码，使用动态轴进行映射
+                ("input_ids", dynamic_axis),         # input_ids使用动态轴定义
+                ("attention_mask", dynamic_axis),    # attention_mask使用动态轴定义
             ]
         )
 ```

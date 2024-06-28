@@ -1,71 +1,66 @@
-# `.\transformers\models\xlnet\tokenization_xlnet_fast.py`
+# `.\models\xlnet\tokenization_xlnet_fast.py`
 
-```py
-# 设置 Python 文件的字符编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则无法使用该文件
-# 可以在以下网址获取许可证的拷贝
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则不得使用该软件
-# 根据许可证分发的软件基于"现状"分发，没有任何明示或暗示的保证或条件
-# 请参阅特定语言的许可证中对权限和限制的说明
-# 适用于 XLNet 模型的标记化类
-# 导入所需的模块和类
-import os
-from shutil import copyfile
-from typing import List, Optional, Tuple
-# 导入 tokenization_utils 模块中的 AddedToken 类
-from ...tokenization_utils import AddedToken
-# 导入 tokenization_utils_fast 模块中的 PreTrainedTokenizerFast 类
-from ...tokenization_utils_fast import PreTrainedTokenizerFast
-# 导入 utils 模块中的 is_sentencepiece_available 和 logging 方法
-from ...utils import is_sentencepiece_available, logging
+```
+# coding=utf-8
+# 版权声明和许可信息
 
-# 如果 SentencePiece 可用，则导入 tokenization_xlnet 模块中的 XLNetTokenizer 类，否则设置为 None
+# 导入必要的库和模块
+import os  # 导入操作系统相关模块
+from shutil import copyfile  # 导入文件复制函数
+from typing import List, Optional, Tuple  # 导入类型提示相关模块
+
+# 导入所需的Tokenization相关工具函数和类
+from ...tokenization_utils import AddedToken  
+from ...tokenization_utils_fast import PreTrainedTokenizerFast  
+from ...utils import is_sentencepiece_available, logging  # 导入SentencePiece可用性检查和日志模块
+
+# 如果SentencePiece可用，则导入XLNetTokenizer类
 if is_sentencepiece_available():
     from .tokenization_xlnet import XLNetTokenizer
 else:
-    XLNetTokenizer = None
+    XLNetTokenizer = None  # 否则将XLNetTokenizer设置为None
 
-# 获取 logger
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 定义 XLNetTokenizerFast 类
+# 定义词汇文件名字典
 VOCAB_FILES_NAMES = {"vocab_file": "spiece.model", "tokenizer_file": "tokenizer.json"}
-# 预训练词汇文件映射
+
+# 定义预训练词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
-        "xlnet-base-cased": "https://huggingface.co/xlnet-base-cased/resolve/main/spiece.model",
-        "xlnet-large-cased": "https://huggingface.co/xlnet-large-cased/resolve/main/spiece.model",
+        "xlnet/xlnet-base-cased": "https://huggingface.co/xlnet/xlnet-base-cased/resolve/main/spiece.model",
+        "xlnet/xlnet-large-cased": "https://huggingface.co/xlnet/xlnet-large-cased/resolve/main/spiece.model",
     },
     "tokenizer_file": {
-        "xlnet-base-cased": "https://huggingface.co/xlnet-base-cased/resolve/main/tokenizer.json",
-        "xlnet-large-cased": "https://huggingface.co/xlnet-large-cased/resolve/main/tokenizer.json",
+        "xlnet/xlnet-base-cased": "https://huggingface.co/xlnet/xlnet-base-cased/resolve/main/tokenizer.json",
+        "xlnet/xlnet-large-cased": "https://huggingface.co/xlnet/xlnet-large-cased/resolve/main/tokenizer.json",
     },
 }
-# 预训练位置嵌入大小
+
+# 定义预训练位置嵌入尺寸
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
-    "xlnet-base-cased": None,
-    "xlnet-large-cased": None,
+    "xlnet/xlnet-base-cased": None,
+    "xlnet/xlnet-large-cased": None,
 }
-# 分隔符
+
+# 定义句子片段标识符常量
 SPIECE_UNDERLINE = "▁"
-# 段落标识符
+
+# 定义不同句子段的标识符常量
 SEG_ID_A = 0
 SEG_ID_B = 1
 SEG_ID_CLS = 2
 SEG_ID_SEP = 3
 SEG_ID_PAD = 4
 
-# 定义 XLNetTokenizerFast 类
 class XLNetTokenizerFast(PreTrainedTokenizerFast):
     """
-    构建"快速"的 XLNet 标记化器（由 HuggingFace 的 *tokenizers* 库支持）。基于 [Unigram](https://huggingface.co/docs/tokenizers/python/latest/components.html?highlight=unigram#models)。
-    该标记化器继承自 `PreTrainedTokenizerFast`，其中包含大多数主要方法。用户应参考该超类以获取更多关于这些方法的信息。
-    # 定义一个类，用于实例化一个 tokenizer，具体参数如下：
-    
+    快速构建XLNet分词器，基于HuggingFace的tokenizers库。基于Unigram模型。
+
+    该分词器继承自PreTrainedTokenizerFast类，包含大部分主要方法。详细方法信息请参考其超类。
+    """
+    pass  # 占位符，该类暂时没有自定义方法或属性，只是继承了PreTrainedTokenizerFast的功能
     Args:
         vocab_file (`str`):
             [SentencePiece](https://github.com/google/sentencepiece) file (generally has a .spm extension) that
@@ -78,16 +73,24 @@ class XLNetTokenizerFast(PreTrainedTokenizerFast):
             Whether to keep accents when tokenizing.
         bos_token (`str`, *optional*, defaults to `"<s>"`):
             The beginning of sequence token that was used during pretraining. Can be used a sequence classifier token.
+
             <Tip>
-                When building a sequence using special tokens, this is not the token that is used for the beginning of
-                sequence. The token used is the `cls_token`.
+
+            When building a sequence using special tokens, this is not the token that is used for the beginning of
+            sequence. The token used is the `cls_token`.
+
             </Tip>
+
         eos_token (`str`, *optional*, defaults to `"</s>"`):
             The end of sequence token.
+
             <Tip>
-                When building a sequence using special tokens, this is not the token that is used for the end of sequence.
-                The token used is the `sep_token`.
+
+            When building a sequence using special tokens, this is not the token that is used for the end of sequence.
+            The token used is the `sep_token`.
+
             </Tip>
+
         unk_token (`str`, *optional*, defaults to `"<unk>"`):
             The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
             token instead.
@@ -105,22 +108,23 @@ class XLNetTokenizerFast(PreTrainedTokenizerFast):
             modeling. This is the token which the model will try to predict.
         additional_special_tokens (`List[str]`, *optional*, defaults to `["<eop>", "<eod>"]`):
             Additional special tokens used by the tokenizer.
-    
+
     Attributes:
         sp_model (`SentencePieceProcessor`):
             The *SentencePiece* processor that is used for every conversion (string, tokens and IDs).
-    
-    # VOCAB_FILES_NAMES 是一个常量，用于存储文件名
-    vocab_files_names = VOCAB_FILES_NAMES
-    # 将预训练词汇文件映射赋值给变量
-    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # 将预训练定位嵌入大小映射赋值给变量
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 设定填充位置在左边
-    padding_side = "left"
-    # 慢速标记器类为 XLNetTokenizer
+    """
 
-    # 初始化方法，包含多个参数
+    # VOCAB_FILES_NAMES is typically a constant or a configuration that defines
+    # the names or paths of various vocabulary-related files used by the tokenizer.
+    vocab_files_names = VOCAB_FILES_NAMES
+    # 使用预先定义的词汇文件映射 PRETRAINED_VOCAB_FILES_MAP
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 使用预先定义的最大模型输入大小映射 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 指定填充位置为左侧
+    padding_side = "left"
+    # 指定使用的慢速分词器类为 XLNetTokenizer
+
     def __init__(
         self,
         vocab_file=None,
@@ -138,10 +142,10 @@ class XLNetTokenizerFast(PreTrainedTokenizerFast):
         additional_special_tokens=["<eop>", "<eod>"],
         **kwargs,
     ):
-        # 如果 mask_token 是字符串，添加的标记将表现得像普通单词，即包括其之前的空格
+        # 如果 mask_token 是字符串，则创建一个 AddedToken 对象，用于处理去除左侧空格
         mask_token = AddedToken(mask_token, lstrip=True, rstrip=False) if isinstance(mask_token, str) else mask_token
 
-        # 调用父类初始化方法
+        # 调用父类的构造方法，初始化分词器对象
         super().__init__(
             vocab_file=vocab_file,
             tokenizer_file=tokenizer_file,
@@ -159,88 +163,101 @@ class XLNetTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 设置 _pad_token_type_id 属性为 3
+        # 设置特殊的 pad_token_type_id 为 3
         self._pad_token_type_id = 3
-        # 赋值其他属性
+        # 初始化其他属性
         self.do_lower_case = do_lower_case
         self.remove_space = remove_space
         self.keep_accents = keep_accents
         self.vocab_file = vocab_file
 
-    # 定义 can_save_slow_tokenizer 属性方法，用于判断是否可以保存慢速标记器
     @property
     def can_save_slow_tokenizer(self) -> bool:
+        # 检查是否可以保存慢速分词器，基于是否存在 vocab_file 文件
         return os.path.isfile(self.vocab_file) if self.vocab_file else False
 
-    # 构建带有特殊标记的输入
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        通过串联和添加特殊标记，从一个序列或一个序列对构建用于序列分类任务的模型输入
+        从一个序列或一对序列构建模型输入，用于序列分类任务，通过连接和添加特殊标记。对于 XLNet 模型，输入的格式如下：
+
+        - 单个序列: `X <sep> <cls>`
+        - 一对序列: `A <sep> B <sep> <cls>`
+
         Args:
-            token_ids_0 (`List[int]`): 将添加特殊标记的 ID 列表
+            token_ids_0 (`List[int]`):
+                要添加特殊标记的 ID 列表。
             token_ids_1 (`List[int]`, *optional*):
-                可选的第二个 ID 列表，用于序列对
+                可选的第二个序列 ID 列表，用于序列对。
 
         Returns:
-            `List[int]`: 包含适当的特殊标记的 [输入 ID](../glossary#input-ids) 列表
+            `List[int]`: 包含适当特殊标记的输入 ID 列表。
         """
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
-        # 如果没有 token_ids_1，返回 token_ids_0 + sep + cls
         if token_ids_1 is None:
             return token_ids_0 + sep + cls
-        # 否则返回 token_ids_0 + sep + token_ids_1 + sep + cls
         return token_ids_0 + sep + token_ids_1 + sep + cls
 
-    # 从序列中创建 token_type_ids 方法
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    # 该函数用于创建一个掩码(mask)，用于序列对分类任务
-    def create_token_type_ids_from_sequences(
-        self,
-        token_ids_0: List[int],
-        token_ids_1: Optional[List[int]] = None
+    ):
+        # 这个方法的作用没有具体注释，应该补充一个注释来解释它的功能
     ) -> List[int]:
-        # XLNet 序列对掩码的格式如下:
-        # 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
-        # | first sequence    | second sequence |
-        # 如果 token_ids_1 为 None, 则只返回第一部分的掩码(0s)
-        
-        # 定义特殊字符的 token ID
+        """
+        Create a mask from the two sequences passed to be used in a sequence-pair classification task. An XLNet
+        sequence pair mask has the following format:
+
+        ```
+        0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
+        | first sequence    | second sequence |
+        ```
+
+        If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
+
+        Args:
+            token_ids_0 (`List[int]`):
+                List of IDs.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
+
+        Returns:
+            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+        """
+        # Separator token [SEP] used to separate sequences
         sep = [self.sep_token_id]
+        # Classification segment ID indicating the segment for classification
         cls_segment_id = [2]
-        
-        # 如果只有一个序列, 则返回第一部分的掩码加上 cls_segment_id
+
+        # If only one sequence (`token_ids_1` is None), return a mask for the first sequence only
         if token_ids_1 is None:
             return len(token_ids_0 + sep) * [0] + cls_segment_id
-        # 如果有两个序列, 则返回两部分的掩码加上 cls_segment_id
+        # Otherwise, return a mask for both sequences
         return len(token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1] + cls_segment_id
-    
-    # 该函数用于保存词汇表
+
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 如果当前的快速 tokenizer 没有保存慢 tokenizer 所需的信息, 则抛出异常
+        # Check if the fast tokenizer can save vocabulary; raise an error if not
         if not self.can_save_slow_tokenizer:
             raise ValueError(
                 "Your fast tokenizer does not have the necessary information to save the vocabulary for a slow "
                 "tokenizer."
             )
-        
-        # 如果保存目录不是一个目录, 则记录错误并返回
+
+        # Check if save_directory is a valid directory; log an error and return if not
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
         
-        # 构造输出词汇表文件的路径
+        # Define the output vocabulary file path
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-        
-        # 如果输出路径与当前的词汇表文件路径不同, 则复制文件到输出路径
+
+        # If the current vocabulary file path is different from the output path, copy the vocabulary file
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file):
             copyfile(self.vocab_file, out_vocab_file)
-        
-        # 返回输出词汇表文件的路径
+
+        # Return the path to the saved vocabulary file
         return (out_vocab_file,)
 ```

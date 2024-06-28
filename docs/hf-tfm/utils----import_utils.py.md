@@ -1,228 +1,300 @@
-# `.\transformers\utils\import_utils.py`
+# `.\utils\import_utils.py`
 
 ```
-# 版权声明和许可证信息
-# 版权声明和许可证信息，指定了代码的版权和许可证信息
-# 详细信息可在 http://www.apache.org/licenses/LICENSE-2.0 获取
+# 导入模块：与导入和懒初始化相关的实用工具
+import importlib.metadata  # 导入标准库中的 importlib.metadata 模块
+import importlib.util  # 导入标准库中的 importlib.util 模块
+import json  # 导入标准库中的 json 模块
+import os  # 导入标准库中的 os 模块
+import shutil  # 导入标准库中的 shutil 模块
+import subprocess  # 导入标准库中的 subprocess 模块
+import sys  # 导入标准库中的 sys 模块
+import warnings  # 导入标准库中的 warnings 模块
+from collections import OrderedDict  # 从标准库的 collections 模块中导入 OrderedDict 类
+from functools import lru_cache  # 从标准库的 functools 模块中导入 lru_cache 装饰器
+from itertools import chain  # 从标准库的 itertools 模块中导入 chain 函数
+from types import ModuleType  # 从标准库的 types 模块中导入 ModuleType 类
+from typing import Any, Tuple, Union  # 导入 typing 模块中的 Any、Tuple、Union 类型
 
-"""
-导入工具：与导入和懒加载相关的工具。
-"""
+from packaging import version  # 从 packaging 库中导入 version 模块
 
-# 导入模块
-import importlib.metadata
-import importlib.util
-import json
-import os
-import shutil
-import subprocess
-import sys
-import warnings
-from collections import OrderedDict
-from functools import lru_cache
-from itertools import chain
-from types import ModuleType
-from typing import Any, Tuple, Union
+from . import logging  # 从当前包中导入 logging 模块
 
-# 导入 packaging 模块中的 version 类
-from packaging import version
 
-# 导入 logging 模块
-from . import logging
-
-# 获取 logger 对象
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+# 获取当前模块的 logger 实例，用于记录日志，名称为当前模块的名称
+# pylint: disable=invalid-name 是禁止 pylint 检查器发出的无效名称警告
 
-# 检查指定包是否可用
+
+# TODO: This doesn't work for all packages (`bs4`, `faiss`, etc.) Talk to Sylvain to see how to do with it better.
 def _is_package_available(pkg_name: str, return_version: bool = False) -> Union[Tuple[bool, str], bool]:
-    # 检查是否可以找到指定包的规范
+    """
+    检查指定的包是否可用，并返回其版本信息（如果指定）。
+
+    Args:
+        pkg_name (str): 要检查的包的名称。
+        return_version (bool, optional): 是否返回包的版本信息。默认为 False。
+
+    Returns:
+        Union[Tuple[bool, str], bool]: 如果 return_version 为 True，则返回包的存在状态和版本信息的元组；
+        否则，仅返回包的存在状态（布尔值）。
+
+    Notes:
+        如果包存在，则尝试获取其版本信息，如果无法获取则使用特定的后备方法。
+        使用 logging 模块记录调试信息，包括检测到的包的版本信息。
+    """
+    # 检查包是否存在，并获取其版本信息以避免导入本地目录
     package_exists = importlib.util.find_spec(pkg_name) is not None
     package_version = "N/A"
     if package_exists:
         try:
-            # 尝试获取指定包的版本信息
+            # 主要方法获取包的版本信息
             package_version = importlib.metadata.version(pkg_name)
-            package_exists = True
         except importlib.metadata.PackageNotFoundError:
-            package_exists = False
-        logger.debug(f"Detected {pkg_name} version {package_version}")
+            # 备用方法：仅针对 "torch" 和包含 "dev" 的版本
+            if pkg_name == "torch":
+                try:
+                    package = importlib.import_module(pkg_name)
+                    temp_version = getattr(package, "__version__", "N/A")
+                    # 检查版本信息中是否包含 "dev"
+                    if "dev" in temp_version:
+                        package_version = temp_version
+                        package_exists = True
+                    else:
+                        package_exists = False
+                except ImportError:
+                    # 如果无法导入包，则表示不可用
+                    package_exists = False
+            else:
+                # 对于除了 "torch" 外的包，不尝试后备方法，直接设置为不可用
+                package_exists = False
+        logger.debug(f"Detected {pkg_name} version: {package_version}")
     if return_version:
         return package_exists, package_version
     else:
         return package_exists
 
-# 环境变量中表示 True 的值集合
+
 ENV_VARS_TRUE_VALUES = {"1", "ON", "YES", "TRUE"}
-# 环境变量中表示 True 和 AUTO 的值集合
 ENV_VARS_TRUE_AND_AUTO_VALUES = ENV_VARS_TRUE_VALUES.union({"AUTO"})
 
-# 获取环境变量 USE_TF、USE_TORCH、USE_JAX 的值
 USE_TF = os.environ.get("USE_TF", "AUTO").upper()
+# 获取环境变量 USE_TF 的值，并转换为大写形式，如果未设置则默认为 "AUTO"
 USE_TORCH = os.environ.get("USE_TORCH", "AUTO").upper()
 USE_JAX = os.environ.get("USE_FLAX", "AUTO").upper()
 
-# 获取环境变量 FORCE_TF_AVAILABLE 的值
+# 尝试通过设置该值为0，在安装了TorchXLA的环境中运行原生的PyTorch作业。
+USE_TORCH_XLA = os.environ.get("USE_TORCH_XLA", "1").upper()
+
 FORCE_TF_AVAILABLE = os.environ.get("FORCE_TF_AVAILABLE", "AUTO").upper()
 
-# `transformers` 需要 `torch>=1.11`，但这个变量是公开的，不能简单地删除它。
-# 运行 torch.fx 特性和 torch.onnx 需要的 torch 版本。
+# `transformers`需要`torch>=1.11`，但此变量对外公开，因此不能简单地删除它。
+# 这是运行torch.fx特性和torch.onnx与字典输入所需的torch版本。
 TORCH_FX_REQUIRED_VERSION = version.parse("1.10")
 
-# 加速库的最小版本要求
 ACCELERATE_MIN_VERSION = "0.21.0"
-# FSDP 的最小版本要求
 FSDP_MIN_VERSION = "1.12.0"
 
-# 检查 accelerate 包是否可用，并获取其版本信息
+# 检查是否安装了accelerate包，并返回其是否可用及其版本号。
 _accelerate_available, _accelerate_version = _is_package_available("accelerate", return_version=True)
-# 检查 apex 包是否可用
+# 检查是否安装了apex包。
 _apex_available = _is_package_available("apex")
-# 检查 bitsandbytes 包是否可用
+# 检查是否安装了aqlm包。
+_aqlm_available = _is_package_available("aqlm")
+# 检查是否安装了bitsandbytes包。
 _bitsandbytes_available = _is_package_available("bitsandbytes")
-# 对于 bs4 包，`importlib.metadata.version` 无法使用，需要使用 `beautifulsoup4`。
-# 检查是否安装了 `bs4` 模块
+# 检查是否安装了galore_torch包。
+_galore_torch_available = _is_package_available("galore_torch")
+# 检查是否安装了beautifulsoup4包（注意，使用的是find_spec函数，因为导入的名称与包名称不同）。
 _bs4_available = importlib.util.find_spec("bs4") is not None
-# 检查是否安装了 `coloredlogs` 模块
+# 检查是否安装了coloredlogs包。
 _coloredlogs_available = _is_package_available("coloredlogs")
-# 检查是否安装了 `cv2` 模块
+# 检查是否安装了cv2（opencv-python-headless）包。
 _cv2_available = importlib.util.find_spec("cv2") is not None
-# 检查是否安装了 `datasets` 模块
+# 检查是否安装了datasets包。
 _datasets_available = _is_package_available("datasets")
-# 检查是否安装了 `decord` 模块
+# 检查是否安装了decord包。
 _decord_available = importlib.util.find_spec("decord") is not None
-# 检查是否安装了 `detectron2` 模块
+# 检查是否安装了detectron2包。
 _detectron2_available = _is_package_available("detectron2")
-# 检查是否安装了 `faiss` 或 `faiss-cpu` 模块
+# 检查是否安装了faiss或faiss-cpu包。
 _faiss_available = importlib.util.find_spec("faiss") is not None
-# 尝试获取 `faiss` 或 `faiss-cpu` 模块的版本信息
 try:
+    # 尝试获取faiss包的版本信息。
     _faiss_version = importlib.metadata.version("faiss")
     logger.debug(f"Successfully imported faiss version {_faiss_version}")
 except importlib.metadata.PackageNotFoundError:
     try:
+        # 如果faiss包未找到，则尝试获取faiss-cpu包的版本信息。
         _faiss_version = importlib.metadata.version("faiss-cpu")
         logger.debug(f"Successfully imported faiss version {_faiss_version}")
     except importlib.metadata.PackageNotFoundError:
+        # 如果faiss和faiss-cpu包都未找到，则标记_faiss_available为False。
         _faiss_available = False
-# 检查是否安装了 `ftfy` 模块
+# 检查是否安装了ftfy包。
 _ftfy_available = _is_package_available("ftfy")
-# 检查是否安装了 `g2p_en` 模块
+# 检查是否安装了g2p_en包。
 _g2p_en_available = _is_package_available("g2p_en")
-# 检查是否安装了 `intel_extension_for_pytorch` 模块，并获取版本信息
+# 检查是否安装了intel_extension_for_pytorch包，并返回其是否可用及其版本号。
 _ipex_available, _ipex_version = _is_package_available("intel_extension_for_pytorch", return_version=True)
-# 检查是否安装了 `jieba` 模块
+# 检查是否安装了jieba包。
 _jieba_available = _is_package_available("jieba")
-# 检查是否安装了 `jinja2` 模块
+# 检查是否安装了jinja2包。
 _jinja_available = _is_package_available("jinja2")
-# 检查是否安装了 `kenlm` 模块
+# 检查是否安装了kenlm包。
 _kenlm_available = _is_package_available("kenlm")
-# 检查是否安装了 `keras_nlp` 模块
+# 检查是否安装了keras_nlp包。
 _keras_nlp_available = _is_package_available("keras_nlp")
-# 检查是否安装了 `Levenshtein` 模块
+# 检查是否安装了Levenshtein包。
 _levenshtein_available = _is_package_available("Levenshtein")
-# 检查是否安装了 `librosa` 模块
+# 检查是否安装了librosa包。
 _librosa_available = _is_package_available("librosa")
-# 检查是否安装了 `natten` 模块
+# 检查是否安装了natten包。
 _natten_available = _is_package_available("natten")
-# 检查是否安装了 `nltk` 模块
+# 检查是否安装了nltk包。
 _nltk_available = _is_package_available("nltk")
-# 检查是否安装了 `onnx` 模块
+# 检查是否安装了onnx包。
 _onnx_available = _is_package_available("onnx")
-# 检查是否安装了 `openai` 模块
+# 检查是否安装了openai包。
 _openai_available = _is_package_available("openai")
-# 检查是否安装了 `optimum` 模块
+# 检查是否安装了optimum包。
 _optimum_available = _is_package_available("optimum")
-# 检查是否安装了 `auto_gptq` 模块
+# 检查是否安装了auto_gptq包。
 _auto_gptq_available = _is_package_available("auto_gptq")
-# 检查是否安装了 `awq` 模块
+# 检查是否安装了awq包。
+# （注意，此处应有代码，但由于未找到正确的导入方式，省略了相关部分）
+# 检查是否可以导入名为 "awq" 的模块
 _auto_awq_available = importlib.util.find_spec("awq") is not None
-# 检查是否安装了 `pandas` 模块
+
+# 检查名为 "quanto" 的包是否可用
+_quanto_available = _is_package_available("quanto")
+
+# 检查名为 "pandas" 的包是否可用
 _pandas_available = _is_package_available("pandas")
-# 检查是否安装了 `peft` 模块
+
+# 检查名为 "peft" 的包是否可用
 _peft_available = _is_package_available("peft")
-# 检查是否安装了 `phonemizer` 模块
+
+# 检查名为 "phonemizer" 的包是否可用
 _phonemizer_available = _is_package_available("phonemizer")
-# 检查是否安装了 `psutil` 模块
+
+# 检查名为 "psutil" 的包是否可用
 _psutil_available = _is_package_available("psutil")
-# 检查是否安装了 `py3nvml` 模块
+
+# 检查名为 "py3nvml" 的包是否可用
 _py3nvml_available = _is_package_available("py3nvml")
-# 检查是否安装了 `pyctcdecode` 模块
+
+# 检查名为 "pyctcdecode" 的包是否可用
 _pyctcdecode_available = _is_package_available("pyctcdecode")
-# 检查是否安装了 `pytesseract` 模块
+
+# 检查名为 "pytesseract" 的包是否可用
 _pytesseract_available = _is_package_available("pytesseract")
-# 检查是否安装了 `pytest` 模块
+
+# 检查名为 "pytest" 的包是否可用
 _pytest_available = _is_package_available("pytest")
-# 检查是否安装了 `pytorch_quantization` 模块
+
+# 检查名为 "pytorch_quantization" 的包是否可用
 _pytorch_quantization_available = _is_package_available("pytorch_quantization")
-# 检查是否安装了 `rjieba` 模块
+
+# 检查名为 "rjieba" 的包是否可用
 _rjieba_available = _is_package_available("rjieba")
-# 检查是否安装了 `sacremoses` 模块
+
+# 检查名为 "sacremoses" 的包是否可用
 _sacremoses_available = _is_package_available("sacremoses")
-# 检查是否安装了 `safetensors` 模块
+
+# 检查名为 "safetensors" 的包是否可用
 _safetensors_available = _is_package_available("safetensors")
-# 检查是否安装了 `scipy` 模块
+
+# 检查名为 "scipy" 的包是否可用
 _scipy_available = _is_package_available("scipy")
-# 检查是否安装了 `sentencepiece` 模块
+
+# 检查名为 "sentencepiece" 的包是否可用
 _sentencepiece_available = _is_package_available("sentencepiece")
-# 检查是否安装了 `seqio` 模块
+
+# 检查名为 "seqio" 的包是否可用
 _is_seqio_available = _is_package_available("seqio")
-# 检查是否安装了 `sklearn` 模块
+
+# 检查是否可以导入名为 "sklearn" 的模块
 _sklearn_available = importlib.util.find_spec("sklearn") is not None
-# 如果安装了 `sklearn` 模块，则尝试获取 `scikit-learn` 模块的版本信息
 if _sklearn_available:
     try:
+        # 尝试获取 "scikit-learn" 的版本信息
         importlib.metadata.version("scikit-learn")
-    # 捕获 importlib.metadata.PackageNotFoundError 异常
     except importlib.metadata.PackageNotFoundError:
-        # 设置 _sklearn_available 为 False
+        # 如果找不到 "scikit-learn" 包，将 _sklearn_available 设为 False
         _sklearn_available = False
-# 检查是否安装了smdistributed包，返回布尔值
+
+# 检查是否可以导入名为 "smdistributed" 的模块
 _smdistributed_available = importlib.util.find_spec("smdistributed") is not None
-# 检查是否安装了soundfile包，返回布尔值
+
+# 检查名为 "soundfile" 的包是否可用
 _soundfile_available = _is_package_available("soundfile")
-# 检查是否安装了spacy包，返回布尔值
+
+# 检查名为 "spacy" 的包是否可用
 _spacy_available = _is_package_available("spacy")
-# 检查是否安装了sudachipy包，返回布尔值
-_sudachipy_available = _is_package_available("sudachipy")
-# 检查是否安装了tensorflow_probability包，返回布尔值
+
+# 检查名为 "sudachipy" 的包是否可用，并获取其版本信息
+_sudachipy_available, _sudachipy_version = _is_package_available("sudachipy", return_version=True)
+
+# 检查名为 "tensorflow_probability" 的包是否可用
 _tensorflow_probability_available = _is_package_available("tensorflow_probability")
-# 检查是否安装了tensorflow_text包，返回布尔值
+
+# 检查名为 "tensorflow_text" 的包是否可用
 _tensorflow_text_available = _is_package_available("tensorflow_text")
-# 检查是否安装了tf2onnx包，返回布尔值
+
+# 检查名为 "tf2onnx" 的包是否可用
 _tf2onnx_available = _is_package_available("tf2onnx")
-# 检查是否安装了timm包，返回布尔值
+
+# 检查名为 "timm" 的包是否可用
 _timm_available = _is_package_available("timm")
-# 检查是否安装了tokenizers包，返回布尔值
+
+# 检查名为 "tokenizers" 的包是否可用
 _tokenizers_available = _is_package_available("tokenizers")
-# 检查是否安装了torchaudio包，返回布尔值
+
+# 检查名为 "torchaudio" 的包是否可用
 _torchaudio_available = _is_package_available("torchaudio")
-# 检查是否安装了torchdistx包，返回布尔值
+
+# 检查名为 "torchdistx" 的包是否可用
 _torchdistx_available = _is_package_available("torchdistx")
-# 检查是否安装了torchvision包，返回布尔值
+
+# 检查名为 "torchvision" 的包是否可用
 _torchvision_available = _is_package_available("torchvision")
 
-# 初始化torch版本为"N/A"，torch是否可用为False
+# 检查名为 "mlx" 的包是否可用
+_mlx_available = _is_package_available("mlx")
+
+# 初始化 _torch_version 变量为 "N/A"，_torch_available 变量为 False
 _torch_version = "N/A"
 _torch_available = False
-# 如果USE_TORCH在ENV_VARS_TRUE_AND_AUTO_VALUES中且USE_TF不在ENV_VARS_TRUE_VALUES中
+
+# 如果 USE_TORCH 在 ENV_VARS_TRUE_AND_AUTO_VALUES 中且 USE_TF 不在 ENV_VARS_TRUE_VALUES 中
 if USE_TORCH in ENV_VARS_TRUE_AND_AUTO_VALUES and USE_TF not in ENV_VARS_TRUE_VALUES:
-    # 检查torch包是否可用，如果可用则获取版本号
+    # 尝试获取 "torch" 包的版本信息，并设置 _torch_available 为 True
     _torch_available, _torch_version = _is_package_available("torch", return_version=True)
 else:
+    # 记录信息表明禁用 PyTorch 因为 USE_TF 已设置
     logger.info("Disabling PyTorch because USE_TF is set")
+    # 设置 _torch_available 为 False
     _torch_available = False
 
-# 初始化tensorflow版本为"N/A"，tensorflow是否可用为False
+# 初始化 _tf_version 变量为 "N/A"，_tf_available 变量为 False
 _tf_version = "N/A"
 _tf_available = False
-# 如果FORCE_TF_AVAILABLE在ENV_VARS_TRUE_VALUES中
+
+# 如果 FORCE_TF_AVAILABLE 在 ENV_VARS_TRUE_VALUES 中
 if FORCE_TF_AVAILABLE in ENV_VARS_TRUE_VALUES:
+    # 设置 _tf_available 为 True
     _tf_available = True
 else:
+    # 检查环境变量中是否启用了 TensorFlow，并且未启用 Torch
     if USE_TF in ENV_VARS_TRUE_AND_AUTO_VALUES and USE_TORCH not in ENV_VARS_TRUE_VALUES:
-        # 检查tensorflow包是否可用
+        # 注意：_is_package_available("tensorflow") 对 tensorflow-cpu 会失败，请测试下面的代码行
+        # 在使用 tensorflow-cpu 时确保它仍然有效！
+
+        # 检查是否可以导入 tensorflow 库
         _tf_available = importlib.util.find_spec("tensorflow") is not None
         if _tf_available:
+            # 可选的 TensorFlow 包列表
             candidates = (
                 "tensorflow",
                 "tensorflow-cpu",
@@ -238,156 +310,226 @@ else:
                 "tensorflow-aarch64",
             )
             _tf_version = None
-            # 获取tensorflow的版本号
+            # 在候选包列表中查找 TensorFlow 的版本信息
             for pkg in candidates:
                 try:
                     _tf_version = importlib.metadata.version(pkg)
                     break
                 except importlib.metadata.PackageNotFoundError:
                     pass
+            # 更新 _tf_available 状态为找到的 TensorFlow 版本是否非空
             _tf_available = _tf_version is not None
+
         if _tf_available:
+            # 如果找到 TensorFlow 并且版本小于 2，则记录警告信息并将 _tf_available 置为 False
             if version.parse(_tf_version) < version.parse("2"):
                 logger.info(
                     f"TensorFlow found but with version {_tf_version}. Transformers requires version 2 minimum."
                 )
                 _tf_available = False
     else:
+        # 如果 USE_TORCH 已设置，则记录禁用 TensorFlow 的信息
         logger.info("Disabling Tensorflow because USE_TORCH is set")
-
-# 检查是否安装了essentia包，返回布尔值
+# 检查是否安装了 Essentia 库
 _essentia_available = importlib.util.find_spec("essentia") is not None
 try:
-    # 获取essentia的版本号
+    # 获取 Essentia 库的版本信息
     _essentia_version = importlib.metadata.version("essentia")
-    # 使用 debug 级别的日志记录成功导入的 essentia 版本信息
     logger.debug(f"Successfully imported essentia version {_essentia_version}")
-# 捕获 importlib.metadata.PackageNotFoundError 异常，设置 _essentia_version 为 False
 except importlib.metadata.PackageNotFoundError:
+    # 如果 Essentia 库未找到，则标记为不可用
     _essentia_version = False
 
-# 检查是否安装了 pretty_midi 模块，设置 _pretty_midi_available 为 True 或 False
+
+# 检查是否安装了 Pretty MIDI 库
 _pretty_midi_available = importlib.util.find_spec("pretty_midi") is not None
 try:
-    # 获取 pretty_midi 模块的版本号，记录日志
+    # 获取 Pretty MIDI 库的版本信息
     _pretty_midi_version = importlib.metadata.version("pretty_midi")
     logger.debug(f"Successfully imported pretty_midi version {_pretty_midi_version}")
 except importlib.metadata.PackageNotFoundError:
-    # 捕获 importlib.metadata.PackageNotFoundError 异常，设置 _pretty_midi_available 为 False
+    # 如果 Pretty MIDI 库未找到，则标记为不可用
     _pretty_midi_available = False
 
-# 初始化 ccl_version 为 "N/A"，检查是否安装了 torch_ccl 或 oneccl_bindings_for_pytorch 模块，设置 _is_ccl_available 为 True 或 False
+
+# 初始化 CCL 版本信息，默认为 "N/A"，检查是否安装了 CCL 相关库
 ccl_version = "N/A"
 _is_ccl_available = (
     importlib.util.find_spec("torch_ccl") is not None
     or importlib.util.find_spec("oneccl_bindings_for_pytorch") is not None
 )
 try:
-    # 获取 oneccl_bind_pt 模块的版本号，记录日志
+    # 获取 oneccl_bind_pt 库的版本信息
     ccl_version = importlib.metadata.version("oneccl_bind_pt")
     logger.debug(f"Detected oneccl_bind_pt version {ccl_version}")
 except importlib.metadata.PackageNotFoundError:
-    # 捕获 importlib.metadata.PackageNotFoundError 异常，设置 _is_ccl_available 为 False
+    # 如果 oneccl_bind_pt 库未找到，则标记 CCL 不可用
     _is_ccl_available = False
 
-# 初始化 _flax_available 为 False，检查是否安装了 flax 模块，设置 _flax_available 为 True 或 False
+
+# 初始化 Flax 是否可用，默认为 False
+_flax_available = False
+# 如果使用 JAX 环境变量指定为 True
 if USE_JAX in ENV_VARS_TRUE_AND_AUTO_VALUES:
+    # 检查 Flax 包是否可用，并获取其版本信息
     _flax_available, _flax_version = _is_package_available("flax", return_version=True)
     if _flax_available:
-        # 如果 flax 模块可用，检查是否安装了 jax 模块，记录日志
+        # 如果 Flax 可用，则检查 JAX 包是否也可用，并获取其版本信息
         _jax_available, _jax_version = _is_package_available("jax", return_version=True)
         if _jax_available:
+            # 如果 JAX 可用，则记录日志显示 JAX 和 Flax 的版本信息
             logger.info(f"JAX version {_jax_version}, Flax version {_flax_version} available.")
         else:
-            # 如果 jax 模块不可用，设置 _flax_available 和 _jax_available 为 False
+            # 如果 JAX 不可用，则将 Flax 和 JAX 的可用性都设为 False，并将版本信息置为 "N/A"
             _flax_available = _jax_available = False
             _jax_version = _flax_version = "N/A"
 
-# 初始化 _torch_fx_available 为 False，如果 torch 模块可用，检查 torch 版本是否符合要求，设置 _torch_fx_available 为 True 或 False
+
+# 初始化 Torch FX 是否可用，默认为 False
+_torch_fx_available = False
+# 如果 Torch 可用
 if _torch_available:
+    # 解析 Torch 版本信息
     torch_version = version.parse(_torch_version)
+    # 检查 Torch FX 是否可用，需满足指定的最低版本要求
     _torch_fx_available = (torch_version.major, torch_version.minor) >= (
         TORCH_FX_REQUIRED_VERSION.major,
         TORCH_FX_REQUIRED_VERSION.minor,
     )
 
-# 返回 kenlm 模块是否可用的布尔值
+
+# 初始化 Torch XLA 是否可用，默认为 False
+_torch_xla_available = False
+# 如果使用 Torch XLA 环境变量指定为 True
+if USE_TORCH_XLA in ENV_VARS_TRUE_VALUES:
+    # 检查 Torch XLA 包是否可用，并获取其版本信息
+    _torch_xla_available, _torch_xla_version = _is_package_available("torch_xla", return_version=True)
+    if _torch_xla_available:
+        # 如果 Torch XLA 可用，则记录日志显示 Torch XLA 的版本信息
+        logger.info(f"Torch XLA version {_torch_xla_version} available.")
+
+
+# 返回 KenLM 库是否可用的函数
 def is_kenlm_available():
     return _kenlm_available
 
-# 返回 cv2 模块是否可用的布尔值
+
+# 返回 OpenCV 库是否可用的函数
 def is_cv2_available():
     return _cv2_available
 
-# 返回 torch 模块是否可用的布尔值
+
+# 返回 Torch 库是否可用的函数
 def is_torch_available():
     return _torch_available
 
-# 返回 torch 模块的版本号
+
+# 返回当前使用的 Torch 版本信息的函数
 def get_torch_version():
     return _torch_version
 
-# 返回 torch_sdpa 模块是否可用的布尔值
+
+# 检查是否安装了 Torch SDPA 库
 def is_torch_sdpa_available():
+    # 如果 Torch 不可用，则 SDPA 也不可用
     if not is_torch_available():
         return False
+    # 如果 Torch 版本信息为 "N/A"，则 SDPA 也不可用
     elif _torch_version == "N/A":
         return False
-    # 检查 torch 版本是否符合要求，返回布尔值
+
+    # 笔记: 我们要求 torch>=2.1（而不是torch>=2.0）以在 Transformers 中使用 SDPA 有两个原因：
+    # - 允许全局使用在 https://github.com/pytorch/pytorch/pull/95259 中引入的 `scale` 参数
+    # - 内存高效的注意力支持任意的 attention_mask: https://github.com/pytorch/pytorch/pull/104310
+    # 笔记: 我们要求 torch>=2.1.1 以避免 SDPA 在非连续输入中出现的数值问题：https://github.com/pytorch/pytorch/issues/112577
     return version.parse(_torch_version) >= version.parse("2.1.1")
 
-# 返回 torchvision 模块是否可用的布尔值
+
+# 返回 Torch Vision 库是否可用的函数
 def is_torchvision_available():
     return _torchvision_available
 
-# 返回 pyctcdecode 模块是否可用的布尔值
+
+# 返回变量 _torchvision_available 的值作为函数的返回结果
+# 检查是否 galore_torch 可用，返回对应的状态
+def is_galore_torch_available():
+    return _galore_torch_available
+
+
+# 检查是否 pyctcdecode 可用，返回对应的状态
 def is_pyctcdecode_available():
     return _pyctcdecode_available
 
-# 返回 librosa 模块是否可用的布尔值
+
+# 检查是否 librosa 可用，返回对应的状态
 def is_librosa_available():
     return _librosa_available
 
-# 返回 essentia 模块是否可用的布尔值
+
+# 检查是否 essentia 可用，返回对应的状态
 def is_essentia_available():
     return _essentia_available
 
-# 返回 pretty_midi 模块是否可用的布尔值
+
+# 检查是否 pretty_midi 可用，返回对应的状态
 def is_pretty_midi_available():
     return _pretty_midi_available
 
-# 返回 torch.cuda 模块是否可用的布尔值
+
+# 检查是否 torch 可用，并且 CUDA 是否可用
 def is_torch_cuda_available():
     if is_torch_available():
         import torch
+
         return torch.cuda.is_available()
     else:
         return False
 
-# 返回 torch_mps 模块是否可用的布尔值
-def is_torch_mps_available():
-    # 检查是否安装了 torch 库
+
+# 检查是否 torch 可用，并且检查是否 mamba_ssm 包可用
+def is_mamba_ssm_available():
     if is_torch_available():
-        # 导入 torch 库
         import torch
-        # 检查 torch.backends 中是否有 "mps" 属性
-        if hasattr(torch.backends, "mps"):
-            # 返回 torch.backends.mps.is_available() 的结果
-            return torch.backends.mps.is_available()
-    # 如果未安装 torch 或者没有 "mps" 属性，则返回 False
+
+        if not torch.cuda.is_available():
+            return False
+        else:
+            return _is_package_available("mamba_ssm")
     return False
-# 检查是否存在可用的 torch 库
+
+
+# 检查是否 torch 可用，并且检查是否 causal_conv1d 包可用
+def is_causal_conv1d_available():
+    if is_torch_available():
+        import torch
+
+        if not torch.cuda.is_available():
+            return False
+        return _is_package_available("causal_conv1d")
+    return False
+
+
+# 检查是否 torch 可用，并且检查是否 torch.backends.mps 可用
+def is_torch_mps_available():
+    if is_torch_available():
+        import torch
+
+        if hasattr(torch.backends, "mps"):
+            return torch.backends.mps.is_available()
+    return False
+
+
+# 检查是否 torch 可用，并且检查是否 CUDA BF16 支持
 def is_torch_bf16_gpu_available():
     if not is_torch_available():
         return False
 
     import torch
 
-    # 检查是否存在可用的 CUDA GPU 并且是否支持 bf16
     return torch.cuda.is_available() and torch.cuda.is_bf16_supported()
 
 
-# 检查是否存在可用的 torch 库
+# 检查是否 torch 可用，并且检查是否 CPU BF16 支持
 def is_torch_bf16_cpu_available():
     if not is_torch_available():
         return False
@@ -395,7 +537,6 @@ def is_torch_bf16_cpu_available():
     import torch
 
     try:
-        # 尝试访问 torch.cpu.amp.autocast 属性，检查是否存在
         _ = torch.cpu.amp.autocast
     except AttributeError:
         return False
@@ -403,9 +544,8 @@ def is_torch_bf16_cpu_available():
     return True
 
 
-# 检查是否存在可用的 torch 库
+# 检查是否 torch 可用，并且检查是否 GPU 或 CPU 上 BF16 支持
 def is_torch_bf16_available():
-    # 原始的 bf16 检查仅适用于 GPU，但后来出现了 CPU/bf16 组合，因此此实用程序已变得模糊，因此已弃用
     warnings.warn(
         "The util is_torch_bf16_available is deprecated, please use is_torch_bf16_gpu_available "
         "or is_torch_bf16_cpu_available instead according to whether it's used with cpu or gpu",
@@ -414,8 +554,7 @@ def is_torch_bf16_available():
     return is_torch_bf16_gpu_available()
 
 
-# 检查在特定设备上是否存在可用的 torch fp16
-@lru_cache()
+# 使用 lru_cache 修饰器，检查在指定设备上是否 torch 的 FP16 可用
 def is_torch_fp16_available_on_device(device):
     if not is_torch_available():
         return False
@@ -423,118 +562,147 @@ def is_torch_fp16_available_on_device(device):
     import torch
 
     try:
+        # 创建一个小张量，并执行矩阵乘法操作以检查 FP16 支持
         x = torch.zeros(2, 2, dtype=torch.float16).to(device)
         _ = x @ x
-    except:  # noqa: E722
-        # TODO: 更精确的异常匹配，如果可能的话
-        # 大多数后端应该返回 `RuntimeError`，但这并不是保证
+
+        # 检查在设备上是否支持 LayerNorm 操作，因为许多模型使用此操作
+        batch, sentence_length, embedding_dim = 3, 4, 5
+        embedding = torch.randn(batch, sentence_length, embedding_dim, dtype=torch.float16, device=device)
+        layer_norm = torch.nn.LayerNorm(embedding_dim, dtype=torch.float16, device=device)
+        _ = layer_norm(embedding)
+
+    except:  # 捕获所有异常，返回 False
         return False
 
     return True
-
-
-# 检查在特定设备上是否存在可用的 torch bf16
+# 使用 LRU 缓存装饰器缓存函数结果，避免重复计算
 @lru_cache()
+# 检查指定设备上是否可用 Torch 的 BF16 支持
 def is_torch_bf16_available_on_device(device):
+    # 如果 Torch 不可用，则返回 False
     if not is_torch_available():
         return False
 
+    # 导入 Torch 库
     import torch
 
+    # 如果设备是 "cuda"，则检查 GPU 上是否可用 BF16 支持
     if device == "cuda":
         return is_torch_bf16_gpu_available()
 
+    # 尝试在指定设备上创建一个 bfloat16 类型的张量并执行矩阵乘法操作
     try:
         x = torch.zeros(2, 2, dtype=torch.bfloat16).to(device)
         _ = x @ x
     except:  # noqa: E722
-        # TODO: 更精确的异常匹配，如果可能的话
-        # 大多数后端应该返回 `RuntimeError`，但这并不是保证
+        # 捕获所有异常，通常返回 RuntimeError，但不保证
+        # TODO: 如果可能的话，进行更精确的异常匹配
         return False
 
+    # 如果以上尝试成功，则返回 True，表示 BF16 在该设备上可用
     return True
 
 
-# 检查是否存在可用的 torch tf32
+# 检查当前环境是否支持 Torch 的 TF32 支持
 def is_torch_tf32_available():
+    # 如果 Torch 不可用，则返回 False
     if not is_torch_available():
         return False
 
+    # 导入 Torch 库
     import torch
 
+    # 如果 CUDA 不可用或者 CUDA 版本为 None，则返回 False
     if not torch.cuda.is_available() or torch.version.cuda is None:
         return False
+    # 如果 CUDA 设备的主版本号小于 8，则返回 False
     if torch.cuda.get_device_properties(torch.cuda.current_device()).major < 8:
         return False
+    # 如果 CUDA 版本的主版本号小于 11，则返回 False
     if int(torch.version.cuda.split(".")[0]) < 11:
         return False
+    # 如果 Torch 版本小于 1.7，则返回 False
     if version.parse(version.parse(torch.__version__).base_version) < version.parse("1.7"):
         return False
 
+    # 如果以上条件都满足，则返回 True，表示 TF32 在当前环境中可用
     return True
 
 
-# 检查是否存在可用的 torch fx
+# 返回 Torch FX 是否可用的标志
 def is_torch_fx_available():
     return _torch_fx_available
 
 
-# 检查是否存在可用的 peft
+# 返回 PEFT 是否可用的标志
 def is_peft_available():
     return _peft_available
 
 
-# 检查是否存在可用的 bs4
+# 返回 Beautiful Soup (bs4) 是否可用的标志
 def is_bs4_available():
     return _bs4_available
 
 
-# 检查是否存在可用的 tensorflow
+# 返回 TensorFlow 是否可用的标志
 def is_tf_available():
     return _tf_available
 
 
-# 检查是否存在可用的 coloredlogs
+# 返回 coloredlogs 是否可用的标志
 def is_coloredlogs_available():
     return _coloredlogs_available
 
 
-# 检查是否存在可用的 tf2onnx
+# 返回 TF2ONNX 是否可用的标志
 def is_tf2onnx_available():
     return _tf2onnx_available
 
 
-# 检查是否存在可用的 onnx
+# 返回 ONNX 是否可用的标志
 def is_onnx_available():
     return _onnx_available
 
 
-# 检查是否存在可用的 openai
+# 返回 OpenAI 的库是否可用的标志
 def is_openai_available():
     return _openai_available
 
 
-# 检查是否存在可用的 flax
+# 返回 Flax 是否可用的标志
 def is_flax_available():
     return _flax_available
 
 
-# 检查是否存在可用的 ftfy
+# 返回 ftfy 是否可用的标志
 def is_ftfy_available():
     return _ftfy_available
-# 检查是否可用 G2P 英文模型
+
+
+# 返回 g2p_en 是否可用的标志
 def is_g2p_en_available():
     return _g2p_en_available
 
 
-# 使用 lru_cache 装饰器缓存结果，检查是否可用 Torch TPU
+# 使用 LRU 缓存装饰器缓存函数结果，避免重复计算
+@lru_cache()
+# 检查是否 Torch TPU 可用（即是否安装了 torch_xla 并且环境中存在 TPU）
 def is_torch_tpu_available(check_device=True):
-    "Checks if `torch_xla` is installed and potentially if a TPU is in the environment"
+    # 发出警告，提示函数即将被弃用
+    warnings.warn(
+        "`is_torch_tpu_available` is deprecated and will be removed in 4.41.0. "
+        "Please use the `is_torch_xla_available` instead.",
+        FutureWarning,
+    )
+
+    # 如果 Torch 不可用，则返回 False
     if not _torch_available:
         return False
+    # 如果安装了 torch_xla，则进一步检查是否存在 TPU 设备
     if importlib.util.find_spec("torch_xla") is not None:
         if check_device:
-            # 检查是否能找到 `xla_device`，如果找不到会引发 RuntimeError
+            # 需要检查是否可以找到 `xla_device`，如果找不到将引发 RuntimeError
             try:
                 import torch_xla.core.xla_model as xm
 
@@ -546,16 +714,46 @@ def is_torch_tpu_available(check_device=True):
     return False
 
 
-# 使用 lru_cache 装饰器缓存结果，检查是否可用 Torch NeuronCore
+# 使用 LRU 缓存装饰器缓存函数结果，避免重复计算
+@lru_cache
+# 检查 Torch XLA 是否可用
+def is_torch_xla_available(check_is_tpu=False, check_is_gpu=False):
+    """
+    Check if `torch_xla` is available. To train a native pytorch job in an environment with torch xla installed, set
+    the USE_TORCH_XLA to false.
+    """
+    # 断言 `check_is_tpu` 和 `check_is_gpu` 不能同时为 True
+    assert not (check_is_tpu and check_is_gpu), "The check_is_tpu and check_is_gpu cannot both be true."
+
+    # 如果 Torch XLA 不可用，则返回 False
+    if not _torch_xla_available:
+        return False
+
+    # 导入 torch_xla 库
+    import torch_xla
+
+    # 如果需要检查 GPU，则返回当前设备类型是否为 GPU 或 CUDA
+    if check_is_gpu:
+        return torch_xla.runtime.device_type() in ["GPU", "CUDA"]
+    # 如果检测到是TPU设备，则返回是否为TPU
+    elif check_is_tpu:
+        return torch_xla.runtime.device_type() == "TPU"
+    # 否则返回True
+    return True
+# 使用 lru_cache 装饰器，缓存函数调用结果，提升性能
+@lru_cache()
+# 检查是否存在 torch_neuronx 模块，若存在则调用 is_torch_xla_available 函数
 def is_torch_neuroncore_available(check_device=True):
     if importlib.util.find_spec("torch_neuronx") is not None:
-        return is_torch_tpu_available(check_device)
+        return is_torch_xla_available()
     return False
 
 
-# 使用 lru_cache 装饰器缓存结果，检查是否可用 Torch NPU
+# 使用 lru_cache 装饰器，缓存函数调用结果，提升性能
+@lru_cache()
+# 检查是否安装了 torch_npu 模块，并可选地检查环境中是否存在 NPU 设备
 def is_torch_npu_available(check_device=False):
-    "Checks if `torch_npu` is installed and potentially if a NPU is in the environment"
+    # 如果 _torch_available 为 False 或者找不到 torch_npu 模块，则返回 False
     if not _torch_available or importlib.util.find_spec("torch_npu") is None:
         return False
 
@@ -564,17 +762,18 @@ def is_torch_npu_available(check_device=False):
 
     if check_device:
         try:
-            # 如果找不到 NPU 会引发 RuntimeError
+            # 如果没有找到 NPU 设备会抛出 RuntimeError
             _ = torch.npu.device_count()
             return torch.npu.is_available()
         except RuntimeError:
             return False
+    # 检查 torch 是否有 npu 属性并且 NPU 可用
     return hasattr(torch, "npu") and torch.npu.is_available()
 
 
-# 检查是否可用 Torch Dynamo
+# 检查是否存在 torch _dynamo 模块以判断是否可用
 def is_torchdynamo_available():
-    if not is_torch_available():
+    if not is_torch_available():  # 如果 torch 不可用，则返回 False
         return False
     try:
         import torch._dynamo as dynamo  # noqa: F401
@@ -584,20 +783,20 @@ def is_torchdynamo_available():
         return False
 
 
-# 检查是否可用 Torch 编译
+# 检查是否存在 torch.compile 属性来判断是否可用
 def is_torch_compile_available():
-    if not is_torch_available():
+    if not is_torch_available():  # 如果 torch 不可用，则返回 False
         return False
 
     import torch
 
-    # 这里不进行任何版本检查，以支持标记为 1.14 的夜间版本。最终需要与 2.0 版本进行版本检查，但暂时不做。
+    # 不进行版本检查以支持夜间版本标记为 1.14。最终需要与 2.0 版本进行检查，但暂时不处理
     return hasattr(torch, "compile")
 
 
-# 检查是否正在编译 Torch Dynamo
+# 检查是否在编译 torch _dynamo 模块
 def is_torchdynamo_compiling():
-    if not is_torch_available():
+    if not is_torch_available():  # 如果 torch 不可用，则返回 False
         return False
     try:
         import torch._dynamo as dynamo  # noqa: F401
@@ -607,251 +806,234 @@ def is_torchdynamo_compiling():
         return False
 
 
-# 检查是否可用 Torch TensorRT FX
+# 检查是否安装了 torch_tensorrt 模块，并且是否存在 torch_tensorrt.fx 子模块
 def is_torch_tensorrt_fx_available():
-    if importlib.util.find_spec("torch_tensorrt") is None:
+    if importlib.util.find_spec("torch_tensorrt") is None:  # 如果找不到 torch_tensorrt 模块，则返回 False
         return False
-    return importlib.util.find_spec("torch_tensorrt.fx") is not None
+    return importlib.util.find_spec("torch_tensorrt.fx") is not None  # 检查是否存在 torch_tensorrt.fx 子模块
 
 
-# 检查是否可用数据集
+# 返回 _datasets_available 变量的值
 def is_datasets_available():
     return _datasets_available
 
 
-# 检查是否可用 Detectron2
+# 返回 _detectron2_available 变量的值
 def is_detectron2_available():
     return _detectron2_available
 
 
-# 检查是否可用 rJieba
+# 返回 _rjieba_available 变量的值
 def is_rjieba_available():
     return _rjieba_available
 
 
-# 检查是否可用 psutil
+# 返回 _psutil_available 变量的值
 def is_psutil_available():
     return _psutil_available
 
 
-# 检查是否可用 py3nvml
+# 返回 _py3nvml_available 变量的值
 def is_py3nvml_available():
     return _py3nvml_available
 
 
-# 检查是否可用 SacreMoses
+# 返回 _sacremoses_available 变量的值
 def is_sacremoses_available():
     return _sacremoses_available
 
 
-# 检查是否可用 Apex
+# 返回 _apex_available 变量的值
 def is_apex_available():
     return _apex_available
 
 
-# 检查是否可用 Ninja
+# 返回 _aqlm_available 变量的值
+def is_aqlm_available():
+    return _aqlm_available
+
+
+# 检查系统是否安装了 ninja 构建系统
 def is_ninja_available():
     r"""
     Code comes from *torch.utils.cpp_extension.is_ninja_available()*. Returns `True` if the
-    # 检查系统上是否安装了 ninja 构建系统，如果有则返回 True，否则返回 False
+    [ninja](https://ninja-build.org/) build system is available on the system, `False` otherwise.
     """
-    # 尝试运行命令 "ninja --version"，如果成功则说明系统上安装了 ninja
     try:
-        subprocess.check_output("ninja --version".split())
-    # 如果运行命令失败，则捕获异常
+        subprocess.check_output("ninja --version".split())  # 执行命令检查 ninja 版本
     except Exception:
-        # 返回 False
-        return False
-    # 如果没有异常，则说明系统上安装了 ninja，返回 True
+        return False  # 捕获异常则返回 False
     else:
-        return True
-# 检查当前环境是否安装了 Intel Extension for PyTorch，并且是否可用
+        return True  # 执行成功则返回 True
+
+
+# 检查是否安装了 ipex 模块以及 torch 可用性和 _ipex_available 变量
 def is_ipex_available():
-    # 从完整版本号中获取主版本号和次版本号
     def get_major_and_minor_from_version(full_version):
         return str(version.parse(full_version).major) + "." + str(version.parse(full_version).minor)
 
-    # 如果 Torch 不可用或者 _ipex_available 为 False，则返回 False
     if not is_torch_available() or not _ipex_available:
-        return False
+        return False  # 如果 torch 不可用或者 _ipex_available 为 False，则返回 False
 
-    # 获取 Torch 和 Intel Extension for PyTorch 的主版本号和次版本号
     torch_major_and_minor = get_major_and_minor_from_version(_torch_version)
     ipex_major_and_minor = get_major_and_minor_from_version(_ipex_version)
-    # 如果 Torch 和 Intel Extension for PyTorch 的主版本号和次版本号不一致，则输出警告信息并返回 False
+    # 检查当前安装的 PyTorch 主版本和次版本是否与 Intel Extension for PyTorch 所需版本匹配
     if torch_major_and_minor != ipex_major_and_minor:
+        # 如果不匹配，记录警告信息，提示用户切换到匹配的 PyTorch 版本后重新运行
         logger.warning(
             f"Intel Extension for PyTorch {ipex_major_and_minor} needs to work with PyTorch {ipex_major_and_minor}.*,"
             f" but PyTorch {_torch_version} is found. Please switch to the matching version and run again."
         )
+        # 返回 False 表示版本不匹配
         return False
-    # 返回 True
+    # 如果版本匹配，返回 True
     return True
-
-
-# 使用缓存装饰器检查是否安装了 Torch XPU，并且可能检查环境中是否有 XPU 设备
+# 使用 lru_cache 装饰器来缓存函数的结果，提升函数性能
 @lru_cache
+# 检查是否安装了 intel_extension_for_pytorch 并且可能存在 XPU 设备
 def is_torch_xpu_available(check_device=False):
-    "Checks if `intel_extension_for_pytorch` is installed and potentially if a XPU is in the environment"
-    # 如果 Intel Extension for PyTorch 不可用，则返回 False
-    if not is_ipex_available():
+    if not is_ipex_available():  # 如果没有安装 intel_extension_for_pytorch，则返回 False
         return False
 
-    import intel_extension_for_pytorch  # noqa: F401
-    import torch
+    import intel_extension_for_pytorch  # 引入 intel_extension_for_pytorch 模块，用于检查是否安装
+    import torch  # 引入 torch 模块
 
-    # 如果需要检查设备，则尝试获取 XPU 设备数量，如果没有找到则返回 False
     if check_device:
         try:
-            # 如果没有找到 XPU 设备，则会引发 RuntimeError
+            # 尝试获取 XPU 设备的数量，如果没有 XPU 设备会抛出 RuntimeError
             _ = torch.xpu.device_count()
+            # 返回当前是否有可用的 XPU 设备
             return torch.xpu.is_available()
         except RuntimeError:
             return False
-    # 检查是否有 torch.xpu 属性并且 XPU 可用
+    # 检查是否存在 torch.xpu 模块，并且该模块当前是否可用
     return hasattr(torch, "xpu") and torch.xpu.is_available()
 
 
-# 检查是否安装了 bitsandbytes
 def is_bitsandbytes_available():
-    # 如果 Torch 不可用，则返回 False
-    if not is_torch_available():
+    if not is_torch_available():  # 如果 torch 不可用，则返回 False
         return False
 
-    # bitsandbytes 在没有可用的 cuda 时会引发错误，通过添加简单检查来避免这种情况
-    import torch
+    # bitsandbytes 在没有 cuda 可用时会抛出错误，这里添加简单检查避免异常
+    import torch  # 引入 torch 模块
 
-    return _bitsandbytes_available and torch.cuda.is_available()
+    return _bitsandbytes_available and torch.cuda.is_available()  # 返回 bitsandbytes 是否可用以及当前是否有 cuda 可用
 
 
-# 检查是否安装了 flash_attn_2
 def is_flash_attn_2_available():
-    # 如果 Torch 不可用，则返回 False
-    if not is_torch_available():
+    if not is_torch_available():  # 如果 torch 不可用，则返回 False
         return False
 
-    # 如果 flash_attn 包不可用，则返回 False
-    if not _is_package_available("flash_attn"):
+    if not _is_package_available("flash_attn"):  # 如果 flash_attn 包不可用，则返回 False
         return False
 
-    # 检查是否有 cuda 可用
-    import torch
+    import torch  # 引入 torch 模块
 
-    if not torch.cuda.is_available():
+    if not torch.cuda.is_available():  # 如果没有 cuda 可用，则返回 False
         return False
 
-    # 根据不同的环境版本要求，返回是否 flash_attn 版本大于等于指定版本
-    if torch.version.cuda:
+    if torch.version.cuda:  # 如果是 CUDA 版本
+        # 检查 flash_attn 包的版本是否大于等于 2.1.0
         return version.parse(importlib.metadata.version("flash_attn")) >= version.parse("2.1.0")
-    elif torch.version.hip:
-        # TODO: 一旦在 https://github.com/ROCmSoftwarePlatform/flash-attention 中发布版本，请将要求提高到 2.1.0
+    elif torch.version.hip:  # 如果是 HIP 版本
+        # TODO: 一旦在 https://github.com/ROCmSoftwarePlatform/flash-attention 发布，将要求将要求版本提升至 2.1.0
         return version.parse(importlib.metadata.version("flash_attn")) >= version.parse("2.0.4")
     else:
         return False
 
 
-# 检查是否 flash_attn 版本大于等于 2.1.0
 def is_flash_attn_greater_or_equal_2_10():
-    # 如果 flash_attn 包不可用，则返回 False
-    if not _is_package_available("flash_attn"):
+    if not _is_package_available("flash_attn"):  # 如果 flash_attn 包不可用，则返回 False
         return False
 
+    # 检查 flash_attn 包的版本是否大于等于 2.1.0
     return version.parse(importlib.metadata.version("flash_attn")) >= version.parse("2.1.0")
 
 
-# 检查是否安装了 flash_attn
-def is_flash_attn_available():
-    logger.warning(
-        "Using `is_flash_attn_available` is deprecated and will be removed in v4.38. "
-        "Please use `is_flash_attn_2_available` instead."
-    )
-    return is_flash_attn_2_available()
-
-
-# 检查是否安装了 torchdistx
 def is_torchdistx_available():
-    return _torchdistx_available
+    return _torchdistx_available  # 返回 _torchdistx_available 变量的值
 
 
-# 检查是否安装了 faiss
 def is_faiss_available():
-    return _faiss_available
+    return _faiss_available  # 返回 _faiss_available 变量的值
 
 
-# 检查是否安装了 scipy
 def is_scipy_available():
-    return _scipy_available
+    return _scipy_available  # 返回 _scipy_available 变量的值
 
 
-# 检查是否安装了 sklearn
 def is_sklearn_available():
-    # 返回一个变量 _sklearn_available 的值
-    return _sklearn_available
-# 检查是否安装了 sentencepiece 库
+    return _sklearn_available  # 返回 _sklearn_available 变量的值
+
+
 def is_sentencepiece_available():
-    return _sentencepiece_available
+    return _sentencepiece_available  # 返回 _sentencepiece_available 变量的值
 
 
-# 检查是否安装了 seqio 库
 def is_seqio_available():
-    return _is_seqio_available
+    return _is_seqio_available  # 返回 _is_seqio_available 变量的值
 
 
-# 检查是否安装了 protobuf 库
 def is_protobuf_available():
-    if importlib.util.find_spec("google") is None:
+    if importlib.util.find_spec("google") is None:  # 如果找不到 google 模块，则返回 False
         return False
+    # 检查是否找到 google.protobuf 模块，并返回结果
     return importlib.util.find_spec("google.protobuf") is not None
 
 
-# 检查是否安装了 accelerate 库，并且版本符合要求
 def is_accelerate_available(min_version: str = ACCELERATE_MIN_VERSION):
     if min_version is not None:
+        # 检查 _accelerate_available 变量的值，并且检查其版本是否大于等于 min_version
         return _accelerate_available and version.parse(_accelerate_version) >= version.parse(min_version)
-    return _accelerate_available
+    return _accelerate_available  # 返回 _accelerate_available 变量的值
 
 
-# 检查是否安装了 fsdp 库，并且版本符合要求
 def is_fsdp_available(min_version: str = FSDP_MIN_VERSION):
-    return is_torch_available() and version.parse(_torch_version) >= version.parse(min_version)
+    if is_torch_available():  # 如果 torch 可用
+        # 检查 _torch_version 的版本是否大于等于 min_version
+        return version.parse(_torch_version) >= version.parse(min_version)
+    return False  # 如果 torch 不可用，则返回 False
 
 
-# 检查是否安装了 optimum 库
 def is_optimum_available():
-    return _optimum_available
+    return _optimum_available  # 返回 _optimum_available 变量的值
 
 
-# 检查是否安装了 auto_awq 库
 def is_auto_awq_available():
-    return _auto_awq_available
+    return _auto_awq_available  # 返回 _auto_awq_available 变量的值
 
 
-# 检查是否安装了 auto_gptq 库
+def is_quanto_available():
+    return _quanto_available  # 返回 _quanto_available 变量的值
+
+
 def is_auto_gptq_available():
-    return _auto_gptq_available
+    return _auto_gptq_available  # 返回 _auto_gptq_available 变量的值
 
 
-# 检查是否安装了 levenshtein 库
 def is_levenshtein_available():
+    # 此函数未实现，没有返回值
     return _levenshtein_available
 
 
-# 检查是否安装了 optimum.neuron 库
+    # 返回变量 _levenshtein_available 的值作为函数的返回结果
+# 检查是否已经安装了 optimum.neuron 包并且 _optimum_available 变量为真
 def is_optimum_neuron_available():
     return _optimum_available and _is_package_available("optimum.neuron")
 
 
-# 检查是否安装了 safetensors 库
+# 返回 _safetensors_available 变量的值
 def is_safetensors_available():
     return _safetensors_available
 
 
-# 检查是否安装了 tokenizers 库
+# 返回 _tokenizers_available 变量的值
 def is_tokenizers_available():
     return _tokenizers_available
 
 
-# 检查是否安装了 vision 库
+# 使用 lru_cache 装饰器缓存函数结果，检查 PIL 库是否可用
+@lru_cache
 def is_vision_available():
     _pil_available = importlib.util.find_spec("PIL") is not None
     if _pil_available:
@@ -866,145 +1048,140 @@ def is_vision_available():
     return _pil_available
 
 
-# 检查是否安装了 pytesseract 库
+# 返回 _pytesseract_available 变量的值
 def is_pytesseract_available():
     return _pytesseract_available
 
 
-# 检查是否安装了 pytest 库
+# 返回 _pytest_available 变量的值
 def is_pytest_available():
     return _pytest_available
 
 
-# 检查是否安装了 spacy 库
+# 返回 _spacy_available 变量的值
 def is_spacy_available():
     return _spacy_available
 
 
-# 检查是否安装了 tensorflow_text 库
+# 返回 is_tf_available() 和 _tensorflow_text_available 变量的逻辑与结果
 def is_tensorflow_text_available():
     return is_tf_available() and _tensorflow_text_available
 
 
-# 检查是否安装了 keras_nlp 库
+# 返回 is_tensorflow_text_available() 和 _keras_nlp_available 变量的逻辑与结果
 def is_keras_nlp_available():
     return is_tensorflow_text_available() and _keras_nlp_available
 
 
-# 检查是否在 notebook 环境中
+# 在 Notebook 环境中检查 IPython 模块的存在
 def is_in_notebook():
     try:
-        # 从 tqdm.autonotebook 中适配的测试
         get_ipython = sys.modules["IPython"].get_ipython
         if "IPKernelApp" not in get_ipython().config:
             raise ImportError("console")
         if "VSCODE_PID" in os.environ:
             raise ImportError("vscode")
         if "DATABRICKS_RUNTIME_VERSION" in os.environ and os.environ["DATABRICKS_RUNTIME_VERSION"] < "11.0":
-            # Databricks Runtime 11.0 及以上默认使用 IPython 内核，因此应与 Jupyter notebook 兼容
-            # https://docs.microsoft.com/en-us/azure/databricks/notebooks/ipython-kernel
             raise ImportError("databricks")
-
         return importlib.util.find_spec("IPython") is not None
     except (AttributeError, ImportError, KeyError):
         return False
-# 检查是否 PyTorch 量化可用
+
+
+# 返回 _pytorch_quantization_available 变量的值
 def is_pytorch_quantization_available():
     return _pytorch_quantization_available
 
 
-# 检查是否 TensorFlow 概率可用
+# 返回 _tensorflow_probability_available 变量的值
 def is_tensorflow_probability_available():
     return _tensorflow_probability_available
 
 
-# 检查是否 Pandas 可用
+# 返回 _pandas_available 变量的值
 def is_pandas_available():
     return _pandas_available
 
 
-# 检查是否 SageMaker 数据并行可用
+# 检查 SageMaker 是否启用了分布式数据并行 (Distributed Data Parallel, DDP)
+# 通过解析环境变量 SM_FRAMEWORK_PARAMS 检查 sagemaker_distributed_dataparallel_enabled 字段
 def is_sagemaker_dp_enabled():
-    # 获取 SageMaker 特定环境变量
     sagemaker_params = os.getenv("SM_FRAMEWORK_PARAMS", "{}")
     try:
-        # 解析并检查字段 "sagemaker_distributed_dataparallel_enabled"
         sagemaker_params = json.loads(sagemaker_params)
         if not sagemaker_params.get("sagemaker_distributed_dataparallel_enabled", False):
             return False
     except json.JSONDecodeError:
         return False
-    # 最后，检查 `smdistributed` 模块是否存在
     return _smdistributed_available
 
 
-# 检查是否 SageMaker 模型并行可用
+# 获取 SageMaker 的 MP 参数变量 SM_HP_MP_PARAMETERS
 def is_sagemaker_mp_enabled():
-    # 从 smp_options 变量获取 SageMaker 特定 mp 参数
     smp_options = os.getenv("SM_HP_MP_PARAMETERS", "{}")
     try:
-        # 解析并检查字段 "partitions" 是否包含在内，这是模型并行所需的
+        # 尝试解析 smp_options 变量，并检查是否包含 "partitions" 字段，这是模型并行所需的。
         smp_options = json.loads(smp_options)
         if "partitions" not in smp_options:
             return False
     except json.JSONDecodeError:
+        # 解析失败或格式错误，返回 False
         return False
 
-    # 从 mpi_options 变量获取 SageMaker 特定框架参数
+    # 从 mpi_options 变量中获取 SageMaker 特定的框架参数。
     mpi_options = os.getenv("SM_FRAMEWORK_PARAMS", "{}")
     try:
-        # 解析并检查字段 "sagemaker_mpi_enabled"
+        # 尝试解析 mpi_options 变量，并检查是否包含 "sagemaker_mpi_enabled" 字段。
         mpi_options = json.loads(mpi_options)
         if not mpi_options.get("sagemaker_mpi_enabled", False):
             return False
     except json.JSONDecodeError:
+        # 解析失败或格式错误，返回 False
         return False
-    # 最后，检查 `smdistributed` 模块是否存在
+    
+    # 最后，检查是否存在 `smdistributed` 模块。
     return _smdistributed_available
-
-
-# 检查是否在 SageMaker 上运行训练
+# 检查当前运行环境是否为 SageMaker 环境，通过检查环境变量中是否存在 "SAGEMAKER_JOB_NAME"
 def is_training_run_on_sagemaker():
     return "SAGEMAKER_JOB_NAME" in os.environ
 
 
-# 检查是否 SoundFile 可用
+# 返回一个布尔值，指示是否安装了 soundfile 库
 def is_soundfile_availble():
     return _soundfile_available
 
 
-# 检查是否 Timm 可用
+# 返回一个布尔值，指示是否安装了 timm 库
 def is_timm_available():
     return _timm_available
 
 
-# 检查是否 Natten 可用
+# 返回一个布尔值，指示是否安装了 natten 库
 def is_natten_available():
     return _natten_available
 
 
-# 检查是否 NLTK 可用
+# 返回一个布尔值，指示是否安装了 nltk 库
 def is_nltk_available():
     return _nltk_available
 
 
-# 检查是否 TorchAudio 可用
+# 返回一个布尔值，指示是否安装了 torchaudio 库
 def is_torchaudio_available():
     return _torchaudio_available
 
 
-# 检查是否 Speech 可用
+# 返回一个布尔值，指示是否安装了与语音处理相关的库，目前依赖于 torchaudio
 def is_speech_available():
-    # 目前依赖于 TorchAudio，但确切的依赖关系可能会在未来发生变化
     return _torchaudio_available
 
 
-# 检查是否 Phonemizer 可用
+# 返回一个布尔值，指示是否安装了 phonemizer 库
 def is_phonemizer_available():
     return _phonemizer_available
 
 
-# 仅适用于 Torch 的方法
+# 返回一个装饰器函数，用于检查是否安装了 torch 库，如果未安装则抛出 ImportError
 def torch_only_method(fn):
     def wrapper(*args, **kwargs):
         if not _torch_available:
@@ -1018,41 +1195,62 @@ def torch_only_method(fn):
     return wrapper
 
 
-# 检查是否 CCL 可用
+# 返回一个布尔值，指示是否安装了 ccl 库
 def is_ccl_available():
     return _is_ccl_available
 
 
-# 检查是否 Decord 可用
+# 返回一个布尔值，指示是否安装了 decord 库
 def is_decord_available():
     return _decord_available
 
 
-# 检查是否 Sudachi 可用
+# 返回一个布尔值，指示是否安装了 sudachipy 库
 def is_sudachi_available():
     return _sudachipy_available
 
 
-# 检查是否 Juman++ 可用
+# 返回当前 sudachipy 库的版本信息
+def get_sudachi_version():
+    return _sudachipy_version
+
+
+# 返回一个布尔值，指示是否安装了 sudachipy 并且支持 projection 选项
+def is_sudachi_projection_available():
+    if not is_sudachi_available():
+        return False
+
+    # 检查 sudachipy 版本是否大于等于 0.6.8，以确定是否支持 projection 选项
+    return version.parse(_sudachipy_version) >= version.parse("0.6.8")
+
+
+# 返回一个布尔值，指示是否安装了 jumanpp 库
 def is_jumanpp_available():
-    # 检查是否存在名为"rhoknp"的模块，并且检查是否存在名为"jumanpp"的可执行文件，返回两者的逻辑与结果
+    # 使用 importlib.util.find_spec 检查 rhoknp 模块和 shutil.which 检查 jumanpp 是否存在
     return (importlib.util.find_spec("rhoknp") is not None) and (shutil.which("jumanpp") is not None)
-# 检查是否安装了 Cython
+
+
+# 返回一个布尔值，指示是否安装了 cython 库
 def is_cython_available():
     return importlib.util.find_spec("pyximport") is not None
 
 
-# 检查是否安装了结巴分词库
+# 返回一个布尔值，指示是否安装了 jieba 库
 def is_jieba_available():
     return _jieba_available
 
 
-# 检查是否安装了 Jinja 模板库
+# 返回一个布尔值，指示是否安装了 jinja 库
 def is_jinja_available():
     return _jinja_available
 
 
-# 忽略文档风格检查，OpenCV 库未找到时的错误提示信息
+# 返回一个布尔值，指示是否安装了 mlx 库
+def is_mlx_available():
+    return _mlx_available
+
+
+# CV2_IMPORT_ERROR 的文本内容，提醒用户需要安装 OpenCV 库才能继续执行相关操作
 CV2_IMPORT_ERROR = """
 {0} requires the OpenCV library but it was not found in your environment. You can install it with:
 
@@ -1062,7 +1260,7 @@ Please note that you may need to restart your runtime after installation.
 """
 
 
-# 忽略文档风格检查，Datasets 库未找到时的错误提示信息
+# DATASETS_IMPORT_ERROR 的文本内容，提醒用户需要安装 🤗 Datasets 库才能继续执行相关操作
 DATASETS_IMPORT_ERROR = """
 {0} requires the 🤗 Datasets library but it was not found in your environment. You can install it with:
 
@@ -1080,21 +1278,9 @@ that python file if that's the case. Please note that you may need to restart yo
 """
 
 
-# 忽略文档风格检查，Tokenizers 库未找到时的错误提示信息
+# TOKENIZERS_IMPORT_ERROR 是空字符串，没有具体的内容或注释
 TOKENIZERS_IMPORT_ERROR = """
-{0} requires the 🤗 Tokenizers library but it was not found in your environment. You can install it with:
-
-pip install tokenizers
-
-In a notebook or a colab, you can install it by executing a cell with
-
-!pip install tokenizers
-
-Please note that you may need to restart your runtime after installation.
-"""
-
-
-# 忽略文档风格检查，SentencePiece 库未找到时的错误提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息
 SENTENCEPIECE_IMPORT_ERROR = """
 {0} requires the SentencePiece library but it was not found in your environment. Checkout the instructions on the
 installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones
@@ -1102,7 +1288,7 @@ that match your environment. Please note that you may need to restart your runti
 """
 
 
-# 忽略文档风格检查，Protobuf 库未找到时的错误提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息
 PROTOBUF_IMPORT_ERROR = """
 {0} requires the protobuf library but it was not found in your environment. Checkout the instructions on the
 installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
@@ -1110,7 +1296,7 @@ that match your environment. Please note that you may need to restart your runti
 """
 
 
-# 忽略文档风格检查，Faiss 库未找到时的错误提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息
 FAISS_IMPORT_ERROR = """
 {0} requires the faiss library but it was not found in your environment. Checkout the instructions on the
 installation page of its repo: https://github.com/facebookresearch/faiss/blob/master/INSTALL.md and follow the ones
@@ -1118,7 +1304,7 @@ that match your environment. Please note that you may need to restart your runti
 """
 
 
-# 忽略文档风格检查，PyTorch 库未找到时的错误提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息
 PYTORCH_IMPORT_ERROR = """
 {0} requires the PyTorch library but it was not found in your environment. Checkout the instructions on the
 installation page: https://pytorch.org/get-started/locally/ and follow the ones that match your environment.
@@ -1126,16 +1312,14 @@ Please note that you may need to restart your runtime after installation.
 """
 
 
-# 忽略文档风格检查
-# 当导入某个模块时出现 Torchvision 库未找到的错误提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息
 TORCHVISION_IMPORT_ERROR = """
 {0} requires the Torchvision library but it was not found in your environment. Checkout the instructions on the
 installation page: https://pytorch.org/get-started/locally/ and follow the ones that match your environment.
 Please note that you may need to restart your runtime after installation.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 PyTorch 库未找到的错误提示信息，但找到 TensorFlow 安装的情况下的提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息，同时提供了关于 TensorFlow 和 PyTorch 的信息
 PYTORCH_IMPORT_ERROR_WITH_TF = """
 {0} requires the PyTorch library but it was not found in your environment.
 However, we were able to find a TensorFlow installation. TensorFlow classes begin
@@ -1148,27 +1332,17 @@ https://pytorch.org/get-started/locally/ and follow the instructions that
 match your environment.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 TensorFlow 库未找到的错误提示信息，但找到 PyTorch 安装的情况下的提示信息
+# 格式化字符串，用于给定模块名的导入错误提示信息，同时提供了关于 TensorFlow 和 PyTorch 的信息
 TF_IMPORT_ERROR_WITH_PYTORCH = """
 {0} requires the TensorFlow library but it was not found in your environment.
 However, we were able to find a PyTorch installation. PyTorch classes do not begin
-with "TF", but are otherwise identically named to our TF classes.
-If you want to use PyTorch, please use those classes instead!
-
-If you really do want to use TensorFlow, please follow the instructions on the
-installation page https://www.tensorflow.org/install that match your environment.
-"""
-
-# docstyle-ignore
-# 当导入某个模块时出现 Beautiful Soup 库未找到的错误提示信息
+# 定义错误消息模板，用于缺少 Beautiful Soup 库时显示
 BS4_IMPORT_ERROR = """
 {0} requires the Beautiful Soup library but it was not found in your environment. You can install it with pip:
 `pip install beautifulsoup4`. Please note that you may need to restart your runtime after installation.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 scikit-learn 库未找到的错误提示信息
+# 定义错误消息模板，用于缺少 scikit-learn 库时显示
 SKLEARN_IMPORT_ERROR = """
 {0} requires the scikit-learn library but it was not found in your environment. You can install it with:
 
@@ -1181,418 +1355,387 @@ In a notebook or a colab, you can install it by executing a cell with
 Please note that you may need to restart your runtime after installation.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 TensorFlow 库未找到的错误提示信息
+# 定义错误消息模板，用于缺少 TensorFlow 库时显示
 TENSORFLOW_IMPORT_ERROR = """
 {0} requires the TensorFlow library but it was not found in your environment. Checkout the instructions on the
 installation page: https://www.tensorflow.org/install and follow the ones that match your environment.
 Please note that you may need to restart your runtime after installation.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 detectron2 库未找到的错误提示信息
+# 定义错误消息模板，用于缺少 detectron2 库时显示
 DETECTRON2_IMPORT_ERROR = """
 {0} requires the detectron2 library but it was not found in your environment. Checkout the instructions on the
 installation page: https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md and follow the ones
 that match your environment. Please note that you may need to restart your runtime after installation.
 """
 
-# docstyle-ignore
-# 当导入某个模块时出现 FLAX 库未找到的错误提示信息
+# 定义错误消息模板，用于缺少 FLAX 库时显示
 FLAX_IMPORT_ERROR = """
 {0} requires the FLAX library but it was not found in your environment. Checkout the instructions on the
-# 安装页面: https://github.com/google/flax 并且遵循与您的环境相匹配的指南。
-# 请注意，安装后可能需要重新启动运行时。
+installation page: https://github.com/google/flax and follow the ones that match your environment.
+Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 ftfy 库在您的环境中找不到，则抛出此异常
+# 定义错误消息模板，用于缺少 ftfy 库时显示
 FTFY_IMPORT_ERROR = """
-{0} 需要 ftfy 库，但在您的环境中找不到。检查安装部分的说明：
-https://github.com/rspeer/python-ftfy/tree/master#installing 并遵循与您的环境匹配的指南。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the ftfy library but it was not found in your environment. Checkout the instructions on the
+installation section: https://github.com/rspeer/python-ftfy/tree/master#installing and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 python-Levenshtein 库在您的环境中找不到，则抛出此异常
+# 定义错误消息模板，用于缺少 python-Levenshtein 库时显示
 LEVENSHTEIN_IMPORT_ERROR = """
-{0} 需要 python-Levenshtein 库，但在您的环境中找不到。您可以使用 pip 安装它：`pip install python-Levenshtein`。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the python-Levenshtein library but it was not found in your environment. You can install it with pip: `pip
+install python-Levenshtein`. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 g2p-en 库在您的环境中找不到，则抛出此异常
+# 定义错误消息模板，用于缺少 g2p-en 库时显示
 G2P_EN_IMPORT_ERROR = """
-{0} 需要 g2p-en 库，但在您的环境中找不到。您可以使用 pip 安装它：`pip install g2p-en`。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the g2p-en library but it was not found in your environment. You can install it with pip:
+`pip install g2p-en`. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 pytorch-quantization 库在您的环境中找不到，则抛出此异常
+# 空白的错误消息模板，用于缺少 PyTorch Quantization 库时显示
 PYTORCH_QUANTIZATION_IMPORT_ERROR = """
-{0} 需要 pytorch-quantization 库，但在您的环境中找不到。您可以使用 pip 安装它：`pip install pytorch-quantization --extra-index-url
-https://pypi.ngc.nvidia.com`
-请注意，安装后可能需要重新启动运行时。
-
-# 如果 tensorflow_probability 库在您的环境中找不到，则抛出此异常
+"""
+# 定义当缺少 pytorch-quantization 库时所需的错误消息模板
 TENSORFLOW_PROBABILITY_IMPORT_ERROR = """
-{0} 需要 tensorflow_probability 库，但在您的环境中找不到。您可以按照这里的说明使用 pip 安装：
-https://github.com/tensorflow/probability。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the tensorflow_probability library but it was not found in your environment. You can install it with pip as
+explained here: https://github.com/tensorflow/probability. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 tensorflow_text 库在您的环境中找不到，则抛出此异常
+# 定义当缺少 tensorflow_text 库时所需的错误消息模板
 TENSORFLOW_TEXT_IMPORT_ERROR = """
-{0} 需要 tensorflow_text 库，但在您的环境中找不到。您可以按照这里的说明使用 pip 安装：
-https://www.tensorflow.org/text/guide/tf_text_intro。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the tensorflow_text library but it was not found in your environment. You can install it with pip as
+explained here: https://www.tensorflow.org/text/guide/tf_text_intro.
+Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 pandas 库在您的环境中找不到，则抛出此异常
+# 定义当缺少 pandas 库时所需的错误消息模板
 PANDAS_IMPORT_ERROR = """
-{0} 需要 pandas 库，但在您的环境中找不到。您可以按照这里的说明使用 pip 安装：
-https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the pandas library but it was not found in your environment. You can install it with pip as
+explained here: https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html.
+Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 phonemizer 库在您的环境中找不到，则抛出此异常
+# 定义当缺少 phonemizer 库时所需的错误消息模板
 PHONEMIZER_IMPORT_ERROR = """
-{0} 需要 phonemizer 库，但在您的环境中找不到。你可以使用 pip 安装它：`pip install phonemizer`。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the phonemizer library but it was not found in your environment. You can install it with pip:
+`pip install phonemizer`. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 sacremoses 库在您的环境中找不到，则抛出此异常
+# 定义当缺少 sacremoses 库时所需的错误消息模板
 SACREMOSES_IMPORT_ERROR = """
-{0} 需要 sacremoses 库，但在您的环境中找不到。您可以使用 pip 安装它：`pip install sacremoses`。
-请注意，安装后可能需要重新启动运行时。
+{0} requires the sacremoses library but it was not found in your environment. You can install it with pip:
+`pip install sacremoses`. Please note that you may need to restart your runtime after installation.
+"""
 
-# 如果 scipy 库在您的环境中找不到，则抛出此异常
+# 定义当缺少 scipy 库时所需的错误消息模板
 SCIPY_IMPORT_ERROR = """
-{0} 需要 scipy 库，但在您的环境中找不到。您可以使用 pip 安装它：
-# 定义 Speech 相关错误提示信息
+{0} requires the scipy library but it was not found in your environment. You can install it with pip:
+`pip install scipy`. Please note that you may need to restart your runtime after installation.
+"""
+
+# 定义当缺少 torchaudio 库时所需的错误消息模板
 SPEECH_IMPORT_ERROR = """
 {0} requires the torchaudio library but it was not found in your environment. You can install it with pip:
 `pip install torchaudio`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 Timm 相关错误提示信息
+# 定义当缺少 timm 库时所需的错误消息模板
 TIMM_IMPORT_ERROR = """
 {0} requires the timm library but it was not found in your environment. You can install it with pip:
 `pip install timm`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 Natten 相关错误提示信息
+# 定义当缺少 natten 库时所需的错误消息模板
 NATTEN_IMPORT_ERROR = """
 {0} requires the natten library but it was not found in your environment. You can install it by referring to:
 shi-labs.com/natten . You can also install it with pip (may take longer to build):
 `pip install natten`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 NLTK 相关错误提示信息
+# 定义当缺少 NLTK 库时所需的错误消息模板
 NLTK_IMPORT_ERROR = """
 {0} requires the NLTK library but it was not found in your environment. You can install it by referring to:
-https://www.nltk.org/install.html. Please note that you may need to restart your runtime after installation.
-"""
-
-# 定义 Vision 相关错误提示信息
+# 引入 docstyle-ignore，以下注释内容是一些导入错误消息的字符串模板
+# 引入 Vision 模块时的导入错误消息模板
 VISION_IMPORT_ERROR = """
 {0} requires the PIL library but it was not found in your environment. You can install it with pip:
 `pip install pillow`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 PyTesseract 相关错误提示信息
+# 引入 PyTesseract 模块时的导入错误消息模板
 PYTESSERACT_IMPORT_ERROR = """
 {0} requires the PyTesseract library but it was not found in your environment. You can install it with pip:
 `pip install pytesseract`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 PyCTCDecode 相关错误提示信息
+# 引入 pyctcdecode 模块时的导入错误消息模板
 PYCTCDECODE_IMPORT_ERROR = """
 {0} requires the pyctcdecode library but it was not found in your environment. You can install it with pip:
 `pip install pyctcdecode`. Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 Accelerate 相关错误提示信息
+# 引入 accelerate 模块时的导入错误消息模板
 ACCELERATE_IMPORT_ERROR = """
 {0} requires the accelerate library >= {ACCELERATE_MIN_VERSION} it was not found in your environment.
 You can install or update it with pip: `pip install --upgrade accelerate`. Please note that you may need to restart your
 runtime after installation.
 """
 
-# 定义 CCL 相关错误提示信息
+# 引入 torch ccl 模块时的导入错误消息模板
 CCL_IMPORT_ERROR = """
 {0} requires the torch ccl library but it was not found in your environment. You can install it with pip:
 `pip install oneccl_bind_pt -f https://developer.intel.com/ipex-whl-stable`
 Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 Essentia 相关错误提示信息
+# 引入 essentia 模块时的导入错误消息模板
 ESSENTIA_IMPORT_ERROR = """
 {0} requires essentia library. But that was not found in your environment. You can install them with pip:
 `pip install essentia==2.1b6.dev1034`
 Please note that you may need to restart your runtime after installation.
 """
 
-# 定义 Librosa 相关错误提示信息
+# 引入 librosa 模块时的导入错误消息模板
 LIBROSA_IMPORT_ERROR = """
-# This block intentionally left blank
-"""
-# 显示缺少 librosa 库的错误信息及安装提示
 {0} requires thes librosa library. But that was not found in your environment. You can install them with pip:
 `pip install librosa`
 Please note that you may need to restart your runtime after installation.
 """
 
-# 显示缺少 pretty_midi 库的错误信息及安装提示
+# 引入 pretty_midi 模块时的导入错误消息模板
 PRETTY_MIDI_IMPORT_ERROR = """
 {0} requires thes pretty_midi library. But that was not found in your environment. You can install them with pip:
 `pip install pretty_midi`
 Please note that you may need to restart your runtime after installation.
 """
 
-# 显示缺少 decord 库的错误信息及安装提示
+# 引入 decord 模块时的导入错误消息模板
 DECORD_IMPORT_ERROR = """
 {0} requires the decord library but it was not found in your environment. You can install it with pip: `pip install
 decord`. Please note that you may need to restart your runtime after installation.
 """
 
-# 显示缺少 Cython 库的错误信息及安装提示
+# 引入 Cython 模块时的导入错误消息模板
 CYTHON_IMPORT_ERROR = """
 {0} requires the Cython library but it was not found in your environment. You can install it with pip: `pip install
 Cython`. Please note that you may need to restart your runtime after installation.
 """
 
-# 显示缺少 jieba 库的错误信息及安装提示
+# 引入 jieba 模块时的导入错误消息模板
 JIEBA_IMPORT_ERROR = """
 {0} requires the jieba library but it was not found in your environment. You can install it with pip: `pip install
 jieba`. Please note that you may need to restart your runtime after installation.
 """
 
-# 显示缺少 peft 库的错误信息及安装提示
+# 引入 PEFT 模块时的注释内容为空，因此无需添加任何注释
 PEFT_IMPORT_ERROR = """
-{0} requires the peft library but it was not found in your environment. You can install it with pip: `pip install
-peft`. Please note that you may need to restart your runtime after installation.
-"""
-
-# 显示缺少 jinja 库的错误信息及安装提示
-JINJA_IMPORT_ERROR = """
-{0} requires the jinja library but it was not found in your environment. You can install it with pip: `pip install
-jinja2`. Please note that you may need to restart your runtime after installation.
-"""
-
-# 指定不同的后端和其对应的顺序
+# 引入 OrderedDict 类型，用于定义一个有序的映射关系
 BACKENDS_MAPPING = OrderedDict(
+    # 列表包含了各个库及其可用性检查函数和导入错误常量的元组
     [
-        # 检查是否 bs4 库可用, 如不可用则引发 BS4_IMPORT_ERROR
+        # BeautifulSoup4 库的可用性检查和导入错误常量
         ("bs4", (is_bs4_available, BS4_IMPORT_ERROR)),
-        # 检查是否 cv2 库可用, 如不可用则引发 CV2_IMPORT_ERROR
+        # OpenCV 库的可用性检查和导入错误常量
         ("cv2", (is_cv2_available, CV2_IMPORT_ERROR)),
-        # 检查是否 datasets 库可用, 如不可用则引发 DATASETS_IMPORT_ERROR
+        # Datasets 库的可用性检查和导入错误常量
         ("datasets", (is_datasets_available, DATASETS_IMPORT_ERROR)),
-        # 检查是否 detectron2 库可用, 如不可用则引发 DETECTRON2_IMPORT_ERROR
+        # Detectron2 库的可用性检查和导入错误常量
         ("detectron2", (is_detectron2_available, DETECTRON2_IMPORT_ERROR)),
-        # 检查是否 essentia 库可用, 如不可用则引发 ESSENTIA_IMPORT_ERROR
+        # Essentia 库的可用性检查和导入错误常量
         ("essentia", (is_essentia_available, ESSENTIA_IMPORT_ERROR)),
-        # 检查是否 faiss 库可用, 如不可用则引发 FAISS_IMPORT_ERROR
+        # Faiss 库的可用性检查和导入错误常量
         ("faiss", (is_faiss_available, FAISS_IMPORT_ERROR)),
-        # 检查是否 flax 库可用, 如不可用则引发 FLAX_IMPORT_ERROR
+        # Flax 库的可用性检查和导入错误常量
         ("flax", (is_flax_available, FLAX_IMPORT_ERROR)),
-        # 检查是否 ftfy 库可用, 如不可用则引发 FTFY_IMPORT_ERROR
+        # FTFY 库的可用性检查和导入错误常量
         ("ftfy", (is_ftfy_available, FTFY_IMPORT_ERROR)),
-        # 检查是否 g2p_en 库可用, 如不可用则引发 G2P_EN_IMPORT_ERROR
+        # g2p_en 库的可用性检查和导入错误常量
         ("g2p_en", (is_g2p_en_available, G2P_EN_IMPORT_ERROR)),
-        # 检查是否 pandas 库可用, 如不可用则引发 PANDAS_IMPORT_ERROR
+        # Pandas 库的可用性检查和导入错误常量
         ("pandas", (is_pandas_available, PANDAS_IMPORT_ERROR)),
-        # 检查是否 phonemizer 库可用, 如不可用则引发 PHONEMIZER_IMPORT_ERROR
+        # Phonemizer 库的可用性检查和导入错误常量
         ("phonemizer", (is_phonemizer_available, PHONEMIZER_IMPORT_ERROR)),
-        # 检查是否 pretty_midi 库可用, 如不可用则引发 PRETTY_MIDI_IMPORT_ERROR
+        # Pretty MIDI 库的可用性检查和导入错误常量
         ("pretty_midi", (is_pretty_midi_available, PRETTY_MIDI_IMPORT_ERROR)),
-        # 检查是否 levenshtein 库可用, 如不可用则引发 LEVENSHTEIN_IMPORT_ERROR
+        # Levenshtein 库的可用性检查和导入错误常量
         ("levenshtein", (is_levenshtein_available, LEVENSHTEIN_IMPORT_ERROR)),
-        # 检查是否 librosa 库可用, 如不可用则引发 LIBROSA_IMPORT_ERROR
+        # Librosa 库的可用性检查和导入错误常量
         ("librosa", (is_librosa_available, LIBROSA_IMPORT_ERROR)),
-        # 检查是否 protobuf 库可用, 如不可用则引发 PROTOBUF_IMPORT_ERROR
+        # Protobuf 库的可用性检查和导入错误常量
         ("protobuf", (is_protobuf_available, PROTOBUF_IMPORT_ERROR)),
-        # 检查是否 pyctcdecode 库可用, 如不可用则引发 PYCTCDECODE_IMPORT_ERROR
+        # PyCTCDecode 库的可用性检查和导入错误常量
         ("pyctcdecode", (is_pyctcdecode_available, PYCTCDECODE_IMPORT_ERROR)),
-        # 检查是否 pytesseract 库可用, 如不可用则引发 PYTESSERACT_IMPORT_ERROR
+        # Pytesseract 库的可用性检查和导入错误常量
         ("pytesseract", (is_pytesseract_available, PYTESSERACT_IMPORT_ERROR)),
-        # 检查是否 sacremoses 库可用, 如不可用则引发 SACREMOSES_IMPORT_ERROR
+        # Sacremoses 库的可用性检查和导入错误常量
         ("sacremoses", (is_sacremoses_available, SACREMOSES_IMPORT_ERROR)),
-        # 检查是否 pytorch_quantization 库可用, 如不可用则引发 PYTORCH_QUANTIZATION_IMPORT_ERROR
+        # PyTorch Quantization 库的可用性检查和导入错误常量
         ("pytorch_quantization", (is_pytorch_quantization_available, PYTORCH_QUANTIZATION_IMPORT_ERROR)),
-        # 检查是否 sentencepiece 库可用, 如不可用则引发 SENTENCEPIECE_IMPORT_ERROR
+        # SentencePiece 库的可用性检查和导入错误常量
         ("sentencepiece", (is_sentencepiece_available, SENTENCEPIECE_IMPORT_ERROR)),
-        # 检查是否 sklearn 库可用, 如不可用则引发 SKLEARN_IMPORT_ERROR
+        # Scikit-learn 库的可用性检查和导入错误常量
         ("sklearn", (is_sklearn_available, SKLEARN_IMPORT_ERROR)),
-        # 检查是否 speech 库可用, 如不可用则引发 SPEECH_IMPORT_ERROR
+        # Speech 库的可用性检查和导入错误常量
         ("speech", (is_speech_available, SPEECH_IMPORT_ERROR)),
-        # 检查是否 tensorflow_probability 库可用, 如不可用则引发 TENSORFLOW_PROBABILITY_IMPORT_ERROR
+        # TensorFlow Probability 库的可用性检查和导入错误常量
         ("tensorflow_probability", (is_tensorflow_probability_available, TENSORFLOW_PROBABILITY_IMPORT_ERROR)),
-        # 检查是否 tf 库可用, 如不可用则引发 TENSORFLOW_IMPORT_ERROR
+        # TensorFlow 库的可用性检查和导入错误常量
         ("tf", (is_tf_available, TENSORFLOW_IMPORT_ERROR)),
-        # 检查是否 tensorflow_text 库可用, 如不可用则引发 TENSORFLOW_TEXT_IMPORT_ERROR
+        # TensorFlow Text 库的可用性检查和导入错误常量
         ("tensorflow_text", (is_tensorflow_text_available, TENSORFLOW_TEXT_IMPORT_ERROR)),
-        # 检查是否 timm 库可用, 如不可用则引发 TIMM_IMPORT_ERROR
+        # Timm 库的可用性检查和导入错误常量
         ("timm", (is_timm_available, TIMM_IMPORT_ERROR)),
-        # 检查是否 natten 库可用, 如不可用则引发 NATTEN_IMPORT_ERROR
+        # Natten 库的可用性检查和导入错误常量
         ("natten", (is_natten_available, NATTEN_IMPORT_ERROR)),
-        # 检查是否 nltk 库可用, 如不可用则引发 NLTK_IMPORT_ERROR
+        # NLTK 库的可用性检查和导入错误常量
         ("nltk", (is_nltk_available, NLTK_IMPORT_ERROR)),
-        # 检查是否 tokenizers 库可用, 如不可用则引发 TOKENIZERS_IMPORT_ERROR
+        # Tokenizers 库的可用性检查和导入错误常量
         ("tokenizers", (is_tokenizers_available, TOKENIZERS_IMPORT_ERROR)),
-        # 检查是否 torch 库可用, 如不可用则引发 PYTORCH_IMPORT_ERROR
+        # PyTorch 库的可用性检查和导入错误常量
         ("torch", (is_torch_available, PYTORCH_IMPORT_ERROR)),
-        # 检查是否 torchvision 库可用, 如不可用则引发 TORCHVISION_IMPORT_ERROR
+        # Torchvision 库的可用性检查和导入错误常量
         ("torchvision", (is_torchvision_available, TORCHVISION_IMPORT_ERROR)),
-        # 检查是否 vision 库可用, 如不可用则引发 VISION_IMPORT_ERROR
+        # Vision 库的可用性检查和导入错误常量
         ("vision", (is_vision_available, VISION_IMPORT_ERROR)),
-        # 检查是否 scipy 库可用, 如不可用则引发 SCIPY_IMPORT_ERROR
+        # SciPy 库的可用性检查和导入错误常量
         ("scipy", (is_scipy_available, SCIPY_IMPORT_ERROR)),
-        # 检查是否 accelerate 库可用, 如不可用则引发 ACCELERATE_IMPORT_ERROR
+        # Accelerate 库的可用性检查和导入错误常量
         ("accelerate", (is_accelerate_available, ACCELERATE_IMPORT_ERROR)),
-        # 检查是否 oneccl_bind_pt 库可用, 如不可用则引发 CCL_IMPORT_ERROR
+        # OneCCL 绑定库的可用性检查和导入错误常量
         ("oneccl_bind_pt", (is_ccl_available, CCL_IMPORT_ERROR)),
-        # 检查是否 decord 库可用, 如不可用则引发 DECORD_IMPORT_ERROR
+        # Decord 库的可用性检查和导入错误常量
         ("decord", (is_decord_available, DECORD_IMPORT_ERROR)),
-        # 检查是否 cython 库可用, 如不可用则引发 CYTHON_IMPORT_ERROR
+        # Cython 库的可用性检查和导入错误常量
         ("cython", (is_cython_available, CYTHON_IMPORT_ERROR)),
-        # 检查是否 jieba 库可用, 如不可用则引发 JIEBA_IMPORT_ERROR
+        # 结巴分词 库的可用性检查和导入错误常量
         ("jieba", (is_jieba_available, JIEBA_IMPORT_ERROR)),
-        # 检查是否 peft 库可用, 如不可用则引发 PEFT_IMPORT_ERROR
+        # PEFT 库的可用性检查和导入错误常量
         ("peft", (is_peft_available, PEFT_IMPORT_ERROR)),
-        # 检查是否 jinja 库可用, 如不可用则引发 JINJA_IMPORT_ERROR
+        # Jinja 库的可用性检查和导入错误常量
         ("jinja", (is_jinja_available, JINJA_IMPORT_ERROR)),
     ]
-    ```py  
-# 定义一个函数，用于检查对象所需的后端
-def requires_backends(obj, backends):
-    # 如果backends不是列表或元组类型，则将其转换为列表
-    if not isinstance(backends, (list, tuple)):
-        backends = [backends]
+    # 定义一个名为 `DummyObject` 的元类，用于创建虚拟对象类
+    class DummyObject(type):
+        """
+        Metaclass for the dummy objects. Any class inheriting from it will return the ImportError generated by
+        `requires_backend` each time a user tries to access any method of that class.
+        """
 
-    # 获取对象的名称，如果有 "__name__" 属性则使用该属性，否则使用类名
-    name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__
-
-    # 对于没有 "TF" 的类进行 torch-only 的错误提示
-    if "torch" in backends and "tf" not in backends and not is_torch_available() and is_tf_available():
-        raise ImportError(PYTORCH_IMPORT_ERROR_WITH_TF.format(name))
-
-    # 对于尝试加载 TF 类的 PyTorch 用户进行反向错误提示
-    if "tf" in backends and "torch" not in backends and is_torch_available() and not is_tf_available():
-        raise ImportError(TF_IMPORT_ERROR_WITH_PYTORCH.format(name))
-
-    # 对于每个后端进行检查，如果有未满足条件的则抛出 ImportError
-    checks = (BACKENDS_MAPPING[backend] for backend in backends)
-    failed = [msg.format(name) for available, msg in checks if not available()]
-    if failed:
-        raise ImportError("".join(failed))
+        # 拦截对类属性和方法的访问，检查所需的后端是否可用
+        def __getattribute__(cls, key):
+            if key.startswith("_") and key != "_from_config":
+                return super().__getattribute__(key)
+            # 调用 `requires_backends` 函数，检查类 `cls` 所需的后端是否可用
+            requires_backends(cls, cls._backends)
 
 
-# 定义一个元类，用于创建占位对象，尝试访问对象的方法时将抛出 ImportError
-class DummyObject(type):
-    # 重载__getattribute__方法，实现访问对象方法时抛出 ImportError 的功能
-    def __getattribute__(cls, key):
-        if key.startswith("_") and key != "_from_config":
-            return super().__getattribute__(key)
-        requires_backends(cls, cls._backends)
+    # 判断对象 `x` 是否为 Torch FX 的代理对象
+    def is_torch_fx_proxy(x):
+        if is_torch_fx_available():
+            import torch.fx
+
+            return isinstance(x, torch.fx.Proxy)
+        return False
 
 
-# 判断对象是否为 torch.fx.Proxy 对象
-def is_torch_fx_proxy(x):
-    # 如果存在 torch.fx 模块，则判断是否为 torch.fx.Proxy 对象
-    if is_torch_fx_available():
-        import torch.fx
-        return isinstance(x, torch.fx.Proxy)
-    return False
+    # 定义一个 `_LazyModule` 类，用于惰性加载模块
+    class _LazyModule(ModuleType):
+        """
+        Module class that surfaces all objects but only performs associated imports when the objects are requested.
+        """
 
+        # 构造函数，初始化惰性加载模块
+        def __init__(self, name, module_file, import_structure, module_spec=None, extra_objects=None):
+            super().__init__(name)
+            # 设置模块的导入结构和相关属性
+            self._modules = set(import_structure.keys())
+            self._class_to_module = {}
+            # 为类和其模块之间的映射建立字典
+            for key, values in import_structure.items():
+                for value in values:
+                    self._class_to_module[value] = key
+            # 设置模块的 `__all__` 属性，用于 IDE 的自动补全
+            self.__all__ = list(import_structure.keys()) + list(chain(*import_structure.values()))
+            self.__file__ = module_file
+            self.__spec__ = module_spec
+            self.__path__ = [os.path.dirname(module_file)]
+            # 设置模块的额外对象属性
+            self._objects = {} if extra_objects is None else extra_objects
+            self._name = name
+            self._import_structure = import_structure
 
-# 定义一个懒加载模块类，延迟导入模块中的对象直到对象被访问时
-class _LazyModule(ModuleType):
-    # 初始化方法，设置模块的属性和导入结构
-    def __init__(self, name, module_file, import_structure, module_spec=None, extra_objects=None):
-        super().__init__(name)
-        self._modules = set(import_structure.keys())  # 设置模块集合
-        self._class_to_module = {}  # 设置类名到模块名的映射字典
-        for key, values in import_structure.items():
-            for value in values:
-                self._class_to_module[value] = key
-        # 用于 IDE 的自动补全
-        self.__all__ = list(import_structure.keys()) + list(chain(*import_structure.values()))
-        self.__file__ = module_file  # 模块文件路径
-        self.__spec__ = module_spec  # 模块规范
-        self.__path__ = [os.path.dirname(module_file)]  # 模块路径
-        self._objects = {} if extra_objects is None else extra_objects  # 额外的对象集合
-        self._name = name  # 模块名称
-        self._import_structure = import_structure  # 导入结构
-    # 定义 __dir__ 方法，返回对象的属性列表
+        # 为了在 IDE 中进行自动补全而需要的特殊方法
+    # 继承父类的 __dir__() 方法，获取默认的属性列表
     def __dir__(self):
-        # 先调用父类的 __dir__ 方法获取属性列表
         result = super().__dir__()
-        # 遍历 self.__all__ 中的元素
+        # 检查 self.__all__ 中的元素是否是子模块，有些可能已经在属性列表中，取决于是否已被访问
+        # 只添加那些尚未在属性列表中的 self.__all__ 元素
         for attr in self.__all__:
-            # 如果该元素不在 result 中
             if attr not in result:
-                # 则添加到 result 中
                 result.append(attr)
-        # 返回最终的属性列表
+        # 返回更新后的属性列表
         return result
-    
-    # 定义 __getattr__ 方法，用于获取对象的属性
+
+    # 获取属性值的方法，支持动态获取 self._objects 中的对象或者通过模块名称获取模块中的属性
     def __getattr__(self, name: str) -> Any:
-        # 如果 name 在 self._objects 中
         if name in self._objects:
-            # 返回对应的值
-            return self._objects[name]
-        # 如果 name 在 self._modules 中
-        elif name in self._modules:
-            # 获取对应的模块
-            value = self._get_module(name)
-        # 如果 name 在 self._class_to_module 的键中
+            return self._objects[name]  # 如果属性在 self._objects 中，直接返回其值
+        if name in self._modules:
+            value = self._get_module(name)  # 如果属性在 self._modules 中，调用 _get_module 获取模块对象
         elif name in self._class_to_module.keys():
-            # 获取对应的模块
+            # 如果属性在 self._class_to_module 中，获取相应的模块对象，并从中获取属性值
             module = self._get_module(self._class_to_module[name])
-            # 从模块中获取对应的属性值
             value = getattr(module, name)
         else:
-            # 如果都没找到，则抛出属性错误异常
+            # 如果属性不存在于以上三种情况，则引发 AttributeError
             raise AttributeError(f"module {self.__name__} has no attribute {name}")
-        
-        # 将获取到的属性值设置到 self 中
-        setattr(self, name, value)
-        # 返回属性值
+
+        setattr(self, name, value)  # 将获取到的属性值设置为实例的属性，以便下次直接访问
         return value
-    
-    # 定义 _get_module 方法，用于获取模块
+
+    # 根据模块名称导入模块的方法
     def _get_module(self, module_name: str):
         try:
-            # 使用 importlib.import_module 导入模块
             return importlib.import_module("." + module_name, self.__name__)
         except Exception as e:
-            # 如果导入模块出错，抛出运行时错误异常
+            # 如果导入失败，抛出 RuntimeError 异常
             raise RuntimeError(
                 f"Failed to import {self.__name__}.{module_name} because of the following error (look up to see its"
                 f" traceback):\n{e}"
             ) from e
-    
-    # 定义 __reduce__ 方法，用于对象序列化
+
+    # 序列化对象时调用的方法，返回对象的类、名称、导入结构元组
     def __reduce__(self):
-        # 返回元组，包含类对象和构造参数
         return (self.__class__, (self._name, self.__file__, self._import_structure))
 class OptionalDependencyNotAvailable(BaseException):
-    """自定义异常类，用于表示未找到可选依赖。"""
+    """用于表示未找到可选依赖项的内部错误类。"""
 
 
 def direct_transformers_import(path: str, file="__init__.py") -> ModuleType:
-    """直接导入transformers模块
+    """直接导入 transformers 模块
 
     Args:
         path (`str`): 源文件的路径
-        file (`str`, optional): 与路径组合的文件名。默认为"__init__.py"。
+        file (`str`, optional): 要与路径拼接的文件名。默认为 "__init__.py".
 
     Returns:
-        `ModuleType`: 导入的模块
+        `ModuleType`: 导入的结果模块对象
     """
-    # 模块名称
+    # 设置模块名为 "transformers"
     name = "transformers"
-    # 源文件的完整路径
+    # 构建文件的完整路径
     location = os.path.join(path, file)
-    # 根据路径和文件创建模块的规范
+    # 创建模块的规范对象
     spec = importlib.util.spec_from_file_location(name, location, submodule_search_locations=[path])
-    # 根据规范创建模块对象
+    # 根据规范对象创建模块
     module = importlib.util.module_from_spec(spec)
-    # 执行模块对象，将其载入到内存中
+    # 执行模块的代码，加载模块
     spec.loader.exec_module(module)
-    # 获取模块对象
+    # 获取已加载的模块对象
     module = sys.modules[name]
-    # 返回导入的模块
+    # 返回导入的模块对象
     return module
 ```

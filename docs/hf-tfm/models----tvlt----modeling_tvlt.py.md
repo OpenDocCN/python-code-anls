@@ -1,83 +1,82 @@
-# `.\transformers\models\tvlt\modeling_tvlt.py`
+# `.\models\tvlt\modeling_tvlt.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 使用 Apache License, Version 2.0 开源许可
-""" PyTorch TVLT 模型。"""
+```
+# 导入标准库和第三方库
+import collections.abc  # 导入 collections.abc 模块，用于检查对象是否是可迭代的序列
+import math  # 导入 math 模块，提供基本的数学函数实现
+from copy import deepcopy  # 从 copy 模块中导入 deepcopy 函数，用于深度复制对象
+from dataclasses import dataclass  # 从 dataclasses 模块中导入 dataclass 装饰器，用于简化类的定义
+from typing import Optional, Tuple, Union  # 导入类型提示，声明可选类型、元组、联合类型
 
-# 导入需要的模块
-import collections.abc
-import math
-from copy import deepcopy
-from dataclasses import dataclass
-from typing import Optional, Tuple, Union
+import torch  # 导入 PyTorch 库
+import torch.utils.checkpoint  # 导入 PyTorch 的 checkpoint 模块，提供基于检查点的内存优化方法
+from torch import nn  # 从 PyTorch 导入 nn 模块，用于神经网络的构建
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 从 nn 模块中导入损失函数类
 
-import torch
-import torch.utils.checkpoint
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-# 导入所需的自定义模块和函数
-
-# 提供给 TVLT model 的输出类，可能包含隐藏状态和注意力
-from ...activations import ACT2FN
-# 提供基础模型的输出类
-from ...modeling_outputs import BaseModelOutput, SequenceClassifierOutput
-# 提供预训练模型的抽象基类
-from ...modeling_utils import PreTrainedModel
-# 导入用于剪枝的工具函数
-from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer
-# 提供一些实用函数
+# 导入自定义模块和函数
+from ...activations import ACT2FN  # 从相对路径导入 ACT2FN，用于激活函数
+from ...modeling_outputs import BaseModelOutput, SequenceClassifierOutput  # 导入模型输出类
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型基类
+from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer  # 导入 PyTorch 辅助函数
 from ...utils import (
-    ModelOutput,
-    add_start_docstrings,
-    add_start_docstrings_to_model_forward,
-    logging,
-    replace_return_docstrings,
+    ModelOutput,  # 导入模型输出基类
+    add_start_docstrings,  # 导入函数用于添加文档字符串的装饰器
+    add_start_docstrings_to_model_forward,  # 导入函数用于添加模型前向传播文档字符串的装饰器
+    logging,  # 导入 logging 模块，用于日志记录
+    replace_return_docstrings,  # 导入函数用于替换返回值文档字符串的装饰器
 )
-# 导入 TVLT 的配置文件
+
+# 导入 TVLT 模型配置类
 from .configuration_tvlt import TvltConfig
 
-# 获取 logger 对象
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
-# 该模型的配置文件文档
+# 定义用于文档的配置名称
 _CONFIG_FOR_DOC = "TvltConfig"
-# 预训练模型的检查点
+# 定义用于文档的检查点名称
 _CHECKPOINT_FOR_DOC = "ZinengTang/tvlt-base"
 
-# TVLT 预训练模型的列表
+# 预定义 TVLT 预训练模型的存档列表
 TVLT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "ZinengTang/tvlt-base",
-    # 可以在 https://huggingface.co/ZinengTang/tvlt-base 查看所有 TVLT 模型
+    # 查看所有 TVLT 模型的列表地址
+    # https://huggingface.co/ZinengTang/tvlt-base
 ]
 
-# 定义 TvltModelOutput 类，用于 TVLT 模型的输出
+
 @dataclass
+# TvltModelOutput 类，用于 TvltModel 的输出，包含潜在的隐藏状态和注意力
 class TvltModelOutput(ModelOutput):
     """
     Class for TvltModel's outputs, with potential hidden states and attentions.
+    """
+    # 定义函数参数，表示模型输出的隐藏状态及其它相关信息
     Args:
         last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            模型最后一层的隐藏状态的序列。
+            模型最后一层输出的隐藏状态序列。
         last_pixel_hidden_state (`torch.FloatTensor` of shape `(batch_size, pixel_sequence_length, hidden_size)`):
-            模型最后一层的像素序列的隐藏状态。
+            模型最后一层输出的像素序列的隐藏状态。
         last_audio_hidden_state (`torch.FloatTensor` of shape `(batch_size, audio_sequence_length, hidden_size)`):
-            模型最后一层的音频序列的隐藏状态。
+            模型最后一层输出的音频序列的隐藏状态。
         pixel_label_masks (`torch.FloatTensor` of shape `(batch_size, pixel_patch_length)`):
-            表示哪些像素补丁被屏蔽（1）和哪些没有被屏蔽（0）的张量。
+            表示哪些像素补丁被掩盖（置为1），哪些未被掩盖（置为0）的张量。
         audio_label_masks (`torch.FloatTensor` of shape `(batch_size, audio_patch_length)`):
-            表示哪些音频补丁被屏蔽（1）和哪些没有被屏蔽（0）的张量。
+            表示哪些音频补丁被掩盖（置为1），哪些未被掩盖（置为0）的张量。
         pixel_ids_restore (`torch.LongTensor` of shape `(batch_size, pixel_patch_length)`):
-            包含像素屏蔽的 ID 排列的张量。
+            像素掩盖的id排列顺序的张量。
         audio_ids_restore (`torch.LongTensor` of shape `(batch_size, audio_patch_length)`):
-            包含音频屏蔽的 ID 排列的张量。
+            音频掩盖的id排列顺序的张量。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            模型每一层的隐藏状态的元组。元组包含一个张量（用于嵌入的输出）和每一层的输出，形状为 `(batch_size, sequence_length, hidden_size)`。
+            元组，包含模型每层的隐藏状态张量（嵌入输出和每层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
+            当参数 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            每一层的注意力权重的元组。每个元组元素是一个张量，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            元组，包含模型每层的注意力权重张量，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            注意力softmax后的注意力权重，用于计算自注意力头中的加权平均。
+            当参数 `output_attentions=True` 或 `config.output_attentions=True` 时返回。
     """
 
+    # 初始化函数参数，均为None，表示这些参数在调用时可以传入具体的张量数据
     last_hidden_state: torch.FloatTensor = None
     last_pixel_hidden_state: torch.FloatTensor = None
     last_audio_hidden_state: torch.FloatTensor = None
@@ -85,9 +84,10 @@ class TvltModelOutput(ModelOutput):
     audio_label_masks: torch.LongTensor = None
     pixel_ids_restore: torch.LongTensor = None
     audio_ids_restore: torch.LongTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-```  
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# TvltDecoderOutput 类用于存储 TvltDecoder 模型的输出结果，可能包含隐藏状态和注意力信息
+
 @dataclass
 class TvltDecoderOutput(ModelOutput):
     """
@@ -95,21 +95,23 @@ class TvltDecoderOutput(ModelOutput):
 
     Args:
         logits (`torch.FloatTensor` of shape `(batch_size, patch_size ** 2 * num_channels)`):
-            Pixel reconstruction logits.
+            Pixel reconstruction logits. 像素重构的逻辑回归输出。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings and one for the output of each layer) of
             shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
-            plus the initial embedding outputs.
+            plus the initial embedding outputs. 模型每一层输出的隐藏状态，包括初始嵌入输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
-            the self-attention heads.
+            the self-attention heads. 经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
     """
 
     logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
+
+# TvltForPreTrainingOutput 类用于存储 TvltForPreTraining 模型的输出结果，可能包含隐藏状态和注意力信息
 
 @dataclass
 class TvltForPreTrainingOutput(ModelOutput):
@@ -118,475 +120,536 @@ class TvltForPreTrainingOutput(ModelOutput):
 
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`):
-            Pixel reconstruction loss.
+            Pixel reconstruction loss. 像素重构损失。
         matching_logits (`torch.FloatTensor` of shape `(batch_size, 1)`):
-            Matching objective logits.
+            Matching objective logits. 匹配目标的逻辑回归输出。
         pixel_logits (`torch.FloatTensor` of shape
             `(batch_size, pixel_patch_length, image_patch_size ** 3 * pixel_num_channels)`): Pixel reconstruction
-            logits.
+            logits. 像素重构的逻辑回归输出。
         audio_logits (`torch.FloatTensor` of shape
             `(batch_size, audio_patch_length, image_patch_size[0] * image_patch_size[1])`): Audio reconstruction
-            logits.
+            logits. 音频重构的逻辑回归输出。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings and one for the output of each layer) of
             shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
-            plus the initial embedding outputs.
+            plus the initial embedding outputs. 模型每一层输出的隐藏状态，包括初始嵌入输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
-            the self-attention heads.
+            the self-attention heads. 经过注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
     """
 
     loss: Optional[torch.FloatTensor] = None
-    # 用于存储匹配（matching）的逻辑回归结果的张量，初始化为 None
+    # 定义一个变量 matching_logits，类型为 torch 的 FloatTensor，初始值为 None，用于存储匹配 logits
     matching_logits: torch.FloatTensor = None
-    # 用于存储像素（pixel）的逻辑回归结果的张量，初始化为 None
+    
+    # 定义一个变量 pixel_logits，类型为 torch 的 FloatTensor，初始值为 None，用于存储像素 logits
     pixel_logits: torch.FloatTensor = None
-    # 用于存储音频（audio）的逻辑回归结果的张量，初始化为 None
+    
+    # 定义一个变量 audio_logits，类型为 torch 的 FloatTensor，初始值为 None，用于存储音频 logits
     audio_logits: torch.FloatTensor = None
-    # 用于存储隐藏状态（hidden states）的元组，元组中包含一个或多个张量，初始化为 None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 用于存储注意力权重（attentions）的元组，元组中包含一个或多个张量，初始化为 None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 生成用于遮蔽像素的噪声
+    
+    # 定义一个变量 hidden_states，类型为可选的元组，元素为 torch 的 FloatTensor，初始值为 None，用于存储隐藏状态
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义一个变量 attentions，类型为可选的元组，元素为 torch 的 FloatTensor，初始值为 None，用于存储注意力机制
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 生成用于像素值屏蔽的噪声，用于音频屏蔽。
 def generate_pixel_mask_noise(pixel_values, pixel_mask=None, mask_ratio=0.75):
-    # 获取输入张量的批大小和序列长度
+    """Generate noise for audio masking."""
+    # 获取批次大小和序列长度
     batch_size, seq_len = pixel_values.shape[:2]
-    # 生成[0, 1]之间的随机噪声
-    noise = torch.rand((batch_size, seq_len), device=pixel_values.device)
-    # 计算需要保留的部分长度
+    # 生成在 [0, 1] 范围内的随机噪声
+    noise = torch.rand((batch_size, seq_len), device=pixel_values.device)  # noise in [0, 1]
+    # 计算需要保留的序列长度
     len_keep = int(seq_len * (1 - mask_ratio))
-    # 返回噪声和保留长度
     return noise, len_keep
 
-# 生成用于遮蔽音频的噪声
+
+# 生成用于音频屏蔽的噪声。
 def generate_audio_mask_noise(audio_values, audio_mask=None, mask_ratio=0.75, mask_type="patch-level", freq_len=8):
-    # 获取输入张量的批大小和序列长度
+    """Generate noise for audio masking."""
+    # 获取批次大小和序列长度
     batch_size, seq_len = audio_values.shape[:2]
-    # 根据遮蔽类型生成噪声
     if mask_type == "frame-level":
-        # 将序列长度划分为块，每块包含 freq_len 个元素
+        # 计算帧级别的时间片段数
         num_time_patches = seq_len // freq_len
-        # 生成随机噪声，并重复扩展成与序列长度一致的张量
+        # 生成 [0, 1] 范围内的随机噪声并重复以匹配序列长度
         noise = (
             torch.rand(batch_size, num_time_patches, device=audio_values.device)
             .unsqueeze(-1)
             .repeat(1, 1, freq_len)
             .view(batch_size, seq_len)
-        )
+        )  # noise in [0, 1]
     elif mask_type == "patch-level":
-        # 生成[0, 1]之间的随机噪声
-        noise = torch.rand(batch_size, seq_len, device=audio_values.device)
-    # 计算需要保留的部分长度
+        # 生成 [0, 1] 范围内的随机噪声
+        noise = torch.rand(batch_size, seq_len, device=audio_values.device)  # noise in [0, 1]
+    # 计算需要保留的序列长度
     len_keep = int(seq_len * (1 - mask_ratio))
-    # 返回噪声和保留长度
     return noise, len_keep
 
-# 对序列执行随机遮蔽
+
+# 随机屏蔽，通过样本内帧级别的乱序进行随机屏蔽。通过 argsort 随机噪声进行样本内的乱序。
 def random_masking(sequence, noise, len_keep, attention_masks=None):
-    # 获取输入张量的批大小、序列长度和隐藏维度
+    """
+    Perform random masking by per-sample shuffling on frame-level. Per-sample shuffling is done by argsort random
+    noise. sequence: [batch_size, seq_len, hidden_dim], sequence
+    """
     batch_size, seq_len, hidden_dim = sequence.shape
-    # 对噪声进行升序排序，得到索引 ids_shuffle
-    ids_shuffle = torch.argsort(noise, dim=1)
-    # 根据 ids_shuffle 对序列进行重新排序
+
+    # 对每个样本的噪声进行排序
+    ids_shuffle = torch.argsort(noise, dim=1)  # ascend: small is keep, large is remove
+    # 恢复原始顺序
     ids_restore = torch.argsort(ids_shuffle, dim=1)
-    # 保留前 len_keep 个元素
+
+    # 保留第一个子集
     ids_keep = ids_shuffle[:, :len_keep]
+    # 使用乱序索引收集序列数据
     sequence_masked = torch.gather(sequence, dim=1, index=ids_keep.unsqueeze(-1).repeat(1, 1, hidden_dim))
-    # 生成二进制遮蔽掩码
+
+    # 生成二进制屏蔽：0 表示保留，1 表示移除
     label_masks = torch.ones([batch_size, seq_len], device=sequence.device)
     label_masks[:, :len_keep] = 0
-    # 根据 ids_restore 对遮蔽掩码进行重新排序
+    # 使用 ids_restore 恢复原始顺序得到二进制屏蔽
     label_masks = torch.gather(label_masks, dim=1, index=ids_restore)
-    # 如果有注意力掩码，则应用之
+
     if attention_masks is not None:
+        # 若存在注意力屏蔽，则将其乘以二进制屏蔽
         label_masks *= attention_masks
+        # 使用 ids_keep 乱序索引 attention_masks
         attention_masks = torch.gather(attention_masks, dim=1, index=ids_keep)
-    # 返回遮蔽后的序列、注意力掩码和遮蔽掩码
+
     return sequence_masked, attention_masks, label_masks, ids_restore
 
-# 构建像素嵌入
+
 class TvltPixelEmbeddings(nn.Module):
-    # 初始化方法
+    """Construct the patch and position embeddings."""
+
     def __init__(self, config):
         super().__init__()
-        # 构建像素分块嵌入
+
+        # 初始化像素块和位置嵌入
         self.patch_embeddings = TvltPixelPatchEmbeddings(config)
-        # 获取每个图像的分块数量
         self.num_patches_per_image = self.patch_embeddings.num_patches_per_image
-        # 定义类型嵌入、时间嵌入和位置嵌入
+
+        # 初始化类型嵌入向量、时间嵌入和位置嵌入向量
         self.type_embed_v = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
         self.temporal_embed = nn.Parameter(torch.zeros(1, config.num_frames, config.hidden_size))
         self.pos_embed_v = nn.Parameter(torch.zeros(1, self.num_patches_per_image, config.hidden_size))
-        # 存储配置信息
+
         self.config = config
-    # 前向传播函数，用于处理输入的像素数值和注意力掩码
     def forward(self, pixel_values, attention_masks=None):
-        # 获取输入像素值的形状信息
+        # 定义函数 forward，用于模型的前向传播计算
+        # 获取输入张量的维度信息
         batch_size, num_frames, num_channels, height, width = pixel_values.shape
         
-        # 使用 patch_embeddings 函数对像素值进行嵌入操作
+        # 通过 patch_embeddings 方法将像素值转换为补丁嵌入向量
         embeddings = self.patch_embeddings(pixel_values)
         
-        # 在嵌入结果上添加位置编码
+        # 加上位置嵌入向量，重复 num_frames 次以适应每一帧
         embeddings += self.pos_embed_v.repeat(1, num_frames, 1)
         
-        # 在嵌入结果上添加时间编码
+        # 使用 torch.repeat_interleave 方法，根据 num_patches_per_image 重复填充时间嵌入向量的部分，以适应每个补丁
         embeddings += torch.repeat_interleave(self.temporal_embed[:, :num_frames], self.num_patches_per_image, dim=1)
         
-        # 在嵌入结果上添加类型编码
+        # 加上类型嵌入向量，以适应输入数据的类型特征
         embeddings += self.type_embed_v
         
-        # 返回嵌入结果和注意力掩码
+        # 返回嵌入向量和注意力掩码（可选）
         return embeddings, attention_masks
-class TvltAudioEmbeddings(nn.Module): 
-    """构建音频嵌入的类，包括补丁和位置嵌入。"""
+class TvltAudioEmbeddings(nn.Module):
+    """Construct the patch and position embeddings."""
 
     def __init__(self, config):
         super().__init__()
 
-        self.patch_embeddings = TvltAudioPatchEmbeddings(config) 
-        self.num_patches = self.patch_embeddings.num_patches 
+        # 初始化音频补丁嵌入对象
+        self.patch_embeddings = TvltAudioPatchEmbeddings(config)
+        # 获取补丁数量
+        self.num_patches = self.patch_embeddings.num_patches
 
-        self.type_embed_a = nn.Parameter(torch.zeros(1, 1, config.hidden_size)) 
-        self.num_freq_patches = config.frequency_length // config.audio_patch_size[1] 
-        self.pos_embed_a = nn.Parameter(torch.zeros(1, self.num_patches // self.num_freq_patches, config.hidden_size)) 
-        self.freq_embed = nn.Parameter(torch.zeros(1, self.num_freq_patches, config.hidden_size)) 
+        # 初始化音频类型嵌入
+        self.type_embed_a = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
+        # 计算频率补丁数量
+        self.num_freq_patches = config.frequency_length // config.audio_patch_size[1]
+        # 初始化位置嵌入
+        self.pos_embed_a = nn.Parameter(torch.zeros(1, self.num_patches // self.num_freq_patches, config.hidden_size))
+        # 初始化频率嵌入
+        self.freq_embed = nn.Parameter(torch.zeros(1, self.num_freq_patches, config.hidden_size))
 
-        self.num_freq_patches = config.frequency_length // config.audio_patch_size[1] 
-        self.config = config 
+        # 重新计算频率补丁数量
+        self.num_freq_patches = config.frequency_length // config.audio_patch_size[1]
+        # 保存配置信息
+        self.config = config
 
-    def forward(self, audio_values, attention_masks=None): 
+    def forward(self, audio_values, attention_masks=None):
         # 创建补丁嵌入
         embeddings = self.patch_embeddings(audio_values)
 
-        num_time_patches = embeddings.size(1) // self.num_freq_patches 
-        embeddings += self.freq_embed.repeat(1, num_time_patches, 1) 
-        embeddings += torch.repeat_interleave(self.pos_embed_a[:, :num_time_patches], self.num_freq_patches, dim=1) 
-        embeddings += self.type_embed_a 
+        # 计算时间补丁数量
+        num_time_patches = embeddings.size(1) // self.num_freq_patches
+        # 添加频率嵌入到每个时间补丁
+        embeddings += self.freq_embed.repeat(1, num_time_patches, 1)
+        # 添加位置嵌入到每个时间补丁
+        embeddings += torch.repeat_interleave(self.pos_embed_a[:, :num_time_patches], self.num_freq_patches, dim=1)
+        # 添加类型嵌入
+        embeddings += self.type_embed_a
 
+        # 返回嵌入和注意力掩码（可选）
         return embeddings, attention_masks
 
 
-class TvltPixelPatchEmbeddings(nn.Module): 
+class TvltPixelPatchEmbeddings(nn.Module):
     """
-    此类将形状为`(batch_size, num_channels, height, width)`的`pixel_values`转换为形状为`(batch_size, seq_length, hidden_size)`的初始
-    `hidden_states`（补丁嵌入），以供Transformer使用。
+    This class turns `pixel_values` of shape `(batch_size, num_channels, height, width)` into the initial
+    `hidden_states` (patch embeddings) of shape `(batch_size, seq_length, hidden_size)` to be consumed by a
+    Transformer.
     """
 
-    def __init__(self, config): 
-        super().__init()
+    def __init__(self, config):
+        super().__init__()
+        
+        # 初始化图像大小、补丁大小、通道数和隐藏层大小
         image_size, patch_size = config.image_size, config.image_patch_size
-        num_channels, hidden_size = config.num_image_channels, config.hidden_size 
+        num_channels, hidden_size = config.num_image_channels, config.hidden_size
 
-        image_size = image_size if isinstance(image_size, collections.abc.Iterable) else (image_size, image_size) 
-        patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size) 
-        num_patches_per_image = (image_size[1] // patch_size[1]) * (image_size[0] // patch_size[0]) 
-        self.image_size = image_size 
-        self.patch_size = patch_size 
-        self.num_channels = num_channels 
-        self.num_patches_per_image = num_patches_per_image 
+        # 确保图像大小和补丁大小是迭代对象
+        image_size = image_size if isinstance(image_size, collections.abc.Iterable) else (image_size, image_size)
+        patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
+        # 计算每张图像的补丁数量
+        num_patches_per_image = (image_size[1] // patch_size[1]) * (image_size[0] // patch_size[0])
+
+        # 保存初始化参数
+        self.image_size = image_size
+        self.patch_size = patch_size
+        self.num_channels = num_channels
+        self.num_patches_per_image = num_patches_per_image
         self.hidden_size = hidden_size
 
-        self.projection = nn.Conv2d(num_channels, hidden_size, kernel_size=patch_size, stride=patch_size) 
+        # 使用卷积层进行投影
+        self.projection = nn.Conv2d(num_channels, hidden_size, kernel_size=patch_size, stride=patch_size)
+    # 定义一个方法，用于对输入的像素值进行前向传播计算
     def forward(self, pixel_values: torch.Tensor) -> torch.Tensor:
-        # 获取输入张量的形状信息
+        # 从输入的像素值张量中提取批量大小、帧数、通道数、高度和宽度
         batch_size, num_frames, num_channels, height, width = pixel_values.shape
-        # 检查通道数是否与配置中设置的通道数相匹配
+        
+        # 检查输入的像素值通道数是否与配置中指定的通道数一致，若不一致则抛出数值错误
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 检查输入图像尺寸是否与模型的期望尺寸匹配
+        
+        # 检查输入图像的高度和宽度是否与模型配置中的设置一致，若不一致则抛出数值错误
         if height != self.image_size[0] or width != self.image_size[1]:
             raise ValueError(
-                f"Input image size ({height}*{width}) doesn't match model ({self.image_size[0]}*{self.image_size[1]}."
+                f"Input image size ({height}*{width}) doesn't match model ({self.image_size[0]}*{self.image_size[1]})."
             )
 
-        # 对输入的图像像素值进行重塑，将其形状变为(batch_size * num_frames, num_channels, height, width)
+        # 将输入的像素值张量重塑为(batch_size * num_frames, num_channels, height, width)的形状
         pixel_values = pixel_values.reshape(batch_size * num_frames, num_channels, height, width)
-        # 使用projection模型对像素值进行投影，并将结果展平并转置
+        
+        # 使用模型中的投影层对重塑后的像素值进行投影，并将结果展平并转置
         embeddings = self.projection(pixel_values).flatten(2).transpose(1, 2)
-        # 将投影后的结果再次重塑，变为(batch_size, num_frames * self.num_patches_per_image, self.hidden_size)
+        
+        # 将投影后的嵌入张量重新形状为(batch_size, num_frames * self.num_patches_per_image, self.hidden_size)
         embeddings = embeddings.reshape(batch_size, num_frames * self.num_patches_per_image, self.hidden_size)
 
-        # 返回最终的嵌入向量张量
+        # 返回计算得到的嵌入张量作为前向传播的结果
         return embeddings
-class TvltAudioPatchEmbeddings(nn.Module):
+# 定义一个名为 `TvltAudioPatchEmbeddings` 的类，继承自 `nn.Module`，用于将形状为 `(batch_size, num_channels, height, width)` 的音频值转换为形状为 `(batch_size, seq_length, hidden_size)` 的初始隐藏状态（即补丁嵌入），以供 Transformer 模型使用。
+
     """
     This class turns `audio_values` of shape `(batch_size, num_channels, height, width)` into the initial
     `hidden_states` (patch embeddings) of shape `(batch_size, seq_length, hidden_size)` to be consumed by a
     Transformer.
     """
 
-    # 初始化函数，接受配置对象作为参数
     def __init__(self, config):
         super().__init__()
+        # 从配置中获取频谱长度、频率长度和补丁大小
         spectrogram_length, frequency_length, patch_size = (
             config.spectrogram_length,
             config.frequency_length,
             config.audio_patch_size,
         )
+        # 从配置中获取音频通道数和隐藏状态的大小
         num_channels, hidden_size = config.num_audio_channels, config.hidden_size
 
+        # 定义频谱大小为元组 `(spectrogram_length, frequency_length)`
         spectrogram_size = (spectrogram_length, frequency_length)
+        # 如果 `patch_size` 是可迭代对象，则保持不变；否则转换为元组 `(patch_size, patch_size)`
         patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
+        # 计算补丁数量，即 `(spectrogram_size[1] // patch_size[1]) * (spectrogram_size[0] // patch_size[0])`
         num_patches = (spectrogram_size[1] // patch_size[1]) * (spectrogram_size[0] // patch_size[0])
+        # 定义补丁形状为 `(spectrogram_size[0] // patch_size[0], spectrogram_size[1] // patch_size[1])`
         patch_shape = (spectrogram_size[0] // patch_size[0], spectrogram_size[1] // patch_size[1])
+
+        # 设置类的属性，包括频谱大小、补丁大小、音频通道数、补丁数量和补丁形状
         self.spectrogram_size = spectrogram_size
         self.patch_size = patch_size
         self.num_channels = num_channels
         self.num_patches = num_patches
         self.patch_shape = patch_shape
 
-        # 使用卷积层将输入进行投影
+        # 使用 `nn.Conv2d` 定义投影层，将输入的音频通道转换为隐藏状态的卷积操作
         self.projection = nn.Conv2d(num_channels, hidden_size, kernel_size=patch_size, stride=patch_size)
 
-    # 前向传播函数，接受音频值张量并返回嵌入张量
     def forward(self, audio_values: torch.Tensor) -> torch.Tensor:
+        # 获取输入音频的形状信息 `(batch_size, num_channels, height, width)`
         batch_size, num_channels, height, width = audio_values.shape
-        # 检查通道的数量是否与配置中设置的一致
+        # 如果输入音频的通道数与设定的音频通道数不匹配，抛出数值错误
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 检查输入音频大小是否与模型期望的大小匹配
+        # 如果输入音频的高度大于设定的频谱高度或者宽度不等于设定的频率长度，抛出数值错误
         if height > self.spectrogram_size[0] or width != self.spectrogram_size[1]:
             raise ValueError(
                 f"Input audio size ({height}*{width}) doesn't match model"
                 f" ({self.spectrogram_size[0]}*{self.spectrogram_size[1]})."
             )
-        # 将输入值经过投影并展平，然后进行转置操作
+        # 将输入音频值投影到隐藏状态空间，并展平成形状 `(batch_size, hidden_size, seq_length)`
         embeddings = self.projection(audio_values).flatten(2).transpose(1, 2)
 
+        # 返回嵌入后的结果
         return embeddings
 
 
-# 以下是从transformers.models.vilt.modeling_vilt.ViltSelfAttention复制并修改为TvltSelfAttention
+# 从 `transformers.models.vilt.modeling_vilt.ViltSelfAttention` 复制到 `TvltSelfAttention`，仅修改类名
 class TvltSelfAttention(nn.Module):
-    # 初始化方法，接受配置对象作为参数
+    # 初始化函数，接收一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化方法
+        # 调用父类的初始化函数
         super().__init__()
-        # 检查隐藏层大小是否符合注意力头数的要求
+        
+        # 检查隐藏层大小是否能被注意力头数整除，同时检查是否有嵌入大小的属性
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
-            # 如果不符合要求，则抛出数值错误异常
+            # 如果不满足条件，抛出数值错误异常
             raise ValueError(
                 f"The hidden size {config.hidden_size,} is not a multiple of the number of attention "
                 f"heads {config.num_attention_heads}."
             )
-
-        # 设置注意力头数
+        
+        # 设置注意力头数和每个头的大小
         self.num_attention_heads = config.num_attention_heads
-        # 计算注意力头大小
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
-        # 计算全部头的大小
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 初始化查询、键、值的线性层
+        # 创建用于查询、键和值的线性层，并指定是否使用偏置
         self.query = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
         self.key = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
         self.value = nn.Linear(config.hidden_size, self.all_head_size, bias=config.qkv_bias)
 
-        # 初始化注意力概率的dropout层
+        # 创建用于 dropout 的层，以减少注意力概率
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
-    # 转换形状以适应注意力计算
+    # 将输入张量 x 转换为适合计算注意力分数的形状
     def transpose_for_scores(self, x):
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
         x = x.view(*new_x_shape)
         return x.permute(0, 2, 1, 3)
 
-    # 前向传播方法
+    # 前向传播函数，接收隐藏状态、注意力掩码、头掩码和是否输出注意力作为参数
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 计算混合的查询层
+        # 通过查询线性层生成混合查询层
         mixed_query_layer = self.query(hidden_states)
 
-        # 计算键和值的转置形状
+        # 使用键和值线性层生成适合计算注意力分数的键和值张量
         key_layer = self.transpose_for_scores(self.key(hidden_states))
         value_layer = self.transpose_for_scores(self.value(hidden_states))
         query_layer = self.transpose_for_scores(mixed_query_layer)
 
-        # 计算原始的注意力分数
+        # 计算查询与键的点积，得到原始的注意力分数
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
-
-        # 如果存在注意力遮罩，则应用注意力遮罩
+        
+        # 如果存在注意力掩码，将其应用到注意力分数上
         if attention_mask is not None:
             attention_scores = attention_scores + attention_mask
 
-        # 将注意力分数归一化为概率
+        # 将注意力分数归一化为概率值
         attention_probs = nn.Softmax(dim=-1)(attention_scores)
 
-        # 对注意力概率进行dropout
+        # 使用 dropout 层减少注意力概率
         attention_probs = self.dropout(attention_probs)
 
-        # 如果存在头遮罩，则应用头遮罩
+        # 如果存在头掩码，将其应用到注意力概率上
         if head_mask is not None:
             attention_probs = attention_probs * head_mask
 
-        # 计算上下文层
+        # 计算上下文张量，即注意力概率加权的值层
         context_layer = torch.matmul(attention_probs, value_layer)
 
+        # 将上下文张量的维度重新排列为 [batch_size, seq_length, all_head_size]
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
         context_layer = context_layer.view(*new_context_layer_shape)
 
-        # 如果需要输出注意力信息，则返回上下文层和注意力概率
+        # 根据输出注意力的设置返回结果
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
         return outputs
+# Copied from transformers.models.vilt.modeling_vilt.ViltSelfOutput with Vilt->Tvlt
 class TvltSelfOutput(nn.Module):
     """
     The residual connection is defined in TvltLayer instead of here (as is the case with other models), due to the
     layernorm applied before each block.
     """
-    # TvltSelfOutput类继承自nn.Module，用于定义Tvlt模型的自注意力机制输出层
+
     def __init__(self, config: TvltConfig) -> None:
         super().__init__()
-        # 定义全连接层，输入和输出维度均为config.hidden_size
+        # 定义一个全连接层，输入和输出大小都为 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 定义dropout层，概率为config.hidden_dropout_prob
+        # 定义一个 dropout 层，根据 config.hidden_dropout_prob 概率随机将输入设置为0
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    # 前向传播函数
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 全连接层处理隐藏状态
+        # 使用全连接层处理输入 hidden_states
         hidden_states = self.dense(hidden_states)
-        # dropout层处理全连接层输出
+        # 对全连接层的输出进行 dropout 处理
         hidden_states = self.dropout(hidden_states)
 
         return hidden_states
 
 
+# Copied from transformers.models.vilt.modeling_vilt.ViltAttention with Vilt->Tvlt
 class TvltAttention(nn.Module):
-    # 定义TvltAttention类，用于Tvlt模型的自注意力机制
-    def __init__(self, config: TvltConfig):
+    def __init__(self, config):
         super().__init__()
-        # 初始化TvltSelfAttention和TvltSelfOutput模块
+        # 初始化 TvltSelfAttention 和 TvltSelfOutput
         self.attention = TvltSelfAttention(config)
         self.output = TvltSelfOutput(config)
         self.pruned_heads = set()
 
-    # 头部修剪函数
     def prune_heads(self, heads):
+        # 如果 heads 列表为空，直接返回
         if len(heads) == 0:
             return
-        # 寻找可修剪头部和对应索引
+        # 调用 find_pruneable_heads_and_indices 函数获取需要修剪的头信息
         heads, index = find_pruneable_heads_and_indices(
             heads, self.attention.num_attention_heads, self.attention.attention_head_size, self.pruned_heads
         )
 
-        # 修剪线性层
+        # 对 attention 和 output 中的相关层进行修剪
         self.attention.query = prune_linear_layer(self.attention.query, index)
         self.attention.key = prune_linear_layer(self.attention.key, index)
         self.attention.value = prune_linear_layer(self.attention.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储修剪头部
+        # 更新超参数并存储修剪后的头信息
         self.attention.num_attention_heads = self.attention.num_attention_heads - len(heads)
         self.attention.all_head_size = self.attention.attention_head_size * self.attention.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
-    # 前向传播函数
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 通过self.attention计算self_outputs
+        # 调用 TvltSelfAttention 的 forward 方法处理 hidden_states
         self_outputs = self.attention(hidden_states, attention_mask, head_mask, output_attentions)
 
-        # 通过self.output计算attention_output
+        # 使用 TvltSelfOutput 处理 self_outputs 的第一个元素和 hidden_states
         attention_output = self.output(self_outputs[0], hidden_states)
 
+        # 如果需要输出 attention，则将其加入 outputs
         outputs = (attention_output,) + self_outputs[1:]  # add attentions if we output them
         return outputs
 
 
+# Copied from transformers.models.vilt.modeling_vilt.ViltIntermediate with Vilt->Tvlt
 class TvltIntermediate(nn.Module):
-    # 定义TvltIntermediate类，用于Tvlt模型的中间层
     def __init__(self, config: TvltConfig) -> None:
         super().__init__()
-        # 定义全连接层，输入维度为config.hidden_size，输出维度为config.intermediate_size
+        # 定义一个全连接层，输入大小为 config.hidden_size，输出大小为 config.intermediate_size
         self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
+        # 根据配置选择隐藏层激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
-    # 定义一个方法，用于前向传播，输入参数为隐藏状态张量，输出为张量
+    # 定义一个前向传播方法，接收隐藏状态张量作为输入，并返回处理后的张量作为输出
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 使用全连接层对隐藏状态进行处理
+        # 将隐藏状态张量传入全连接层，进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 使用激活函数对处理后的隐藏状态进行处理
+        # 对线性变换后的结果应用中间激活函数
         hidden_states = self.intermediate_act_fn(hidden_states)
-        # 返回处理后的隐藏状态
+
+        # 返回经过线性变换和激活函数处理后的隐藏状态张量
         return hidden_states
-# 从transformers.models.vilt.modeling_vilt.ViltOutput复制了TvltOutput类，并将Vilt->Tvlt
+# Copied from transformers.models.vilt.modeling_vilt.ViltOutput with Vilt->Tvlt
 class TvltOutput(nn.Module):
     def __init__(self, config: TvltConfig) -> None:
         super().__init__()
-        # 创建一个线性全连接层，用于将intermediate_size映射到hidden_size
+        # 定义一个全连接层，将输入维度为config.intermediate_size的向量映射到config.hidden_size的向量
         self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 创建一个dropout层，用于防止过拟合
+        # 定义一个dropout层，用于在训练过程中随机置零输入张量中的部分元素，以防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 通过全连接层处理隐藏状态
+        # 将输入hidden_states通过全连接层进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 在处理后的隐藏状态上应用dropout
+        # 对变换后的hidden_states进行dropout操作
         hidden_states = self.dropout(hidden_states)
 
-        # 将处理后的隐藏状态与输入张量相加
+        # 将dropout后的hidden_states与输入的input_tensor相加，实现残差连接
         hidden_states = hidden_states + input_tensor
 
         return hidden_states
 
 
-# 从transformers.models.vilt.modeling_vilt.ViltLayer复制了TvltLayer类，并将Vilt->Tvlt
+# Copied from transformers.models.vilt.modeling_vilt.ViltLayer with Vilt->Tvlt
 class TvltLayer(nn.Module):
     """This corresponds to the Block class in the timm implementation."""
 
     def __init__(self, config):
         super().__init__()
-        # 设置feed forward的块大小
+        # 初始化TvltLayer类，设置一些需要的参数
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
         self.seq_len_dim = 1
-        # 初始化TvltAttention、TvltIntermediate、TvltOutput和LayerNorm层
+        # 初始化self.attention为TvltAttention类的实例
         self.attention = TvltAttention(config)
+        # 初始化self.intermediate为TvltIntermediate类的实例
         self.intermediate = TvltIntermediate(config)
+        # 初始化self.output为TvltOutput类的实例
         self.output = TvltOutput(config)
+        # 初始化layernorm_before，使用nn.LayerNorm对输入向量进行归一化处理
         self.layernorm_before = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        # 初始化layernorm_after，同样使用nn.LayerNorm对输入向量进行归一化处理
         self.layernorm_after = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(self, hidden_states, attention_mask=None, head_mask=None, output_attentions=False):
-        # 在self-attention之前应用layernorm
+        # 在ViLT中，先对输入hidden_states进行layernorm处理，再进行自注意力计算
         self_attention_outputs = self.attention(
             self.layernorm_before(hidden_states),
             attention_mask,
             head_mask,
             output_attentions=output_attentions,
         )
+        # 取出self_attention计算后的输出
         attention_output = self_attention_outputs[0]
+        # 如果需要输出注意力权重，则将注意力权重也包含在输出中
         outputs = self_attention_outputs[1:]
 
-        # 第一个残差连接
+        # 第一个残差连接，将自注意力计算的输出与原始hidden_states相加
         hidden_states = attention_output + hidden_states.to(attention_output.device)
 
-        # 在self-attention之后也应用layernorm
+        # 在ViLT中，再次对输出进行layernorm处理
         layer_output = self.layernorm_after(hidden_states)
+        # 将layernorm处理后的输出传递给intermediate层进行进一步的非线性变换
         layer_output = self.intermediate(layer_output)
 
-        # 第二个残差连接在这里执行
+        # 第二个残差连接，将intermediate层的输出与原始hidden_states相加
         layer_output = self.output(layer_output, hidden_states)
 
+        # 将最终的layer_output作为输出结果，并将可能的注意力权重等其他信息也包含在outputs中返回
         outputs = (layer_output,) + outputs
 
         return outputs
 
 
-# 从transformers.models.vilt.modeling_vilt.ViltEncoder复制了TvltEncoder类，并将Vilt->Tvlt
+# Copied from transformers.models.vilt.modeling_vilt.ViltEncoder with Vilt->Tvlt
 class TvltEncoder(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 初始化TvltLayer模块列表，数量为num_hidden_layers
         self.config = config
+        # 初始化TvltEncoder类，创建包含config.num_hidden_layers个TvltLayer层的ModuleList
         self.layer = nn.ModuleList([TvltLayer(config) for _ in range(config.num_hidden_layers)])
         self.gradient_checkpointing = False
 
@@ -598,301 +661,258 @@ class TvltEncoder(nn.Module):
         output_attentions=False,
         output_hidden_states=False,
         return_dict=True,
-        ):
-            # 如果不输出隐藏状态，则初始化为一个空元组，否则初始化为None
-            all_hidden_states = () if output_hidden_states else None
-            # 如果不输出注意力，则初始化为一个空元组，否则初始化为None
-            all_self_attentions = () if output_attentions else None
+    ):
+        # 如果输出隐藏状态为真，则初始化一个空元组，否则为None
+        all_hidden_states = () if output_hidden_states else None
+        # 如果输出注意力分布为真，则初始化一个空元组，否则为None
+        all_self_attentions = () if output_attentions else None
 
-            # 遍历每个层的模块
-            for i, layer_module in enumerate(self.layer):
-                # 如果输出隐藏状态，则将当前隐藏状态添加到all_hidden_states中
-                if output_hidden_states:
-                    all_hidden_states = all_hidden_states + (hidden_states,)
-
-                # 如果头部蒙版不为空，则获取当前层的蒙版，否则初始化为None
-                layer_head_mask = head_mask[i] if head_mask is not None else None
-
-                # 如果启用梯度检查点并且处于训练模式，则调用_gradient_checkpointing_func函数
-                if self.gradient_checkpointing and self.training:
-                    layer_outputs = self._gradient_checkpointing_func(
-                        layer_module.__call__,
-                        hidden_states,
-                        attention_mask,
-                        layer_head_mask,
-                        output_attentions,
-                    )
-                else:
-                    # 否则，调用当前层模块的__call__函数
-                    layer_outputs = layer_module(hidden_states, attention_mask, layer_head_mask, output_attentions)
-
-                # 更新隐藏状态为当前层输出的隐藏状态
-                hidden_states = layer_outputs[0]
-
-                # 如果输出注意力，则将当前层输出的注意力添加到all_self_attentions中
-                if output_attentions:
-                    all_self_attentions = all_self_attentions + (layer_outputs[1],)
-
-            # 如果输出隐藏状态，则将最终的隐藏状态添加到all_hidden_states中
+        # 遍历所有的Transformer层
+        for i, layer_module in enumerate(self.layer):
+            # 如果输出隐藏状态为真，将当前隐藏状态添加到all_hidden_states中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 如果不返回字典，则返回包含非空元素的元组
-            if not return_dict:
-                return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
-            # 否则，返回BaseModelOutput对象
-            return BaseModelOutput(
-                last_hidden_state=hidden_states,
-                hidden_states=all_hidden_states,
-                attentions=all_self_attentions,
-            )
-# TvltPreTrainedModel 类，用于处理权重初始化、下载和加载预训练模型的简单接口
-class TvltPreTrainedModel(PreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
+            # 获取当前层的头部掩码
+            layer_head_mask = head_mask[i] if head_mask is not None else None
 
-    # TvltConfig 作为配置类
-    config_class = TvltConfig
-    # 基础模型前缀为 "tvlt"
-    base_model_prefix = "tvlt"
-    # 主要输入名称为 "pixel_values"
-    main_input_name = "pixel_values"
-    # 支持梯度检查点
-    supports_gradient_checkpointing = True
+            # 如果开启了梯度检查点且处于训练状态
+            if self.gradient_checkpointing and self.training:
+                # 使用梯度检查点函数进行前向传播
+                layer_outputs = self._gradient_checkpointing_func(
+                    layer_module.__call__,
+                    hidden_states,
+                    attention_mask,
+                    layer_head_mask,
+                    output_attentions,
+                )
+            else:
+                # 普通的Transformer层前向传播
+                layer_outputs = layer_module(hidden_states, attention_mask, layer_head_mask, output_attentions)
 
-    # 初始化权重的方法
-    def _init_weights(self, module):
-        """Initialize the weights"""
-        # 如果是线性层或卷积层
-        if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 略有不同于 TF 版本，使用 normal 分布初始化权重
-            # 参考：https://github.com/pytorch/pytorch/pull/5617
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果存在偏置，则初始化为 0
-            if module.bias is not None:
-                module.bias.data.zero_()
-        # 如果是 LayerNorm 层
-        elif isinstance(module, nn.LayerNorm):
-            # 偏置初始化为 0
-            module.bias.data.zero_()
-            # 权重初始化为 1
-            module.weight.data.fill_(1.0)
+            # 更新隐藏状态为当前层的输出
+            hidden_states = layer_outputs[0]
 
+            # 如果输出注意力分布为真，将当前层的注意力分布添加到all_self_attentions中
+            if output_attentions:
+                all_self_attentions = all_self_attentions + (layer_outputs[1],)
 
-# TVLT_START_DOCSTRING 用于存储模型的文档字符串
-TVLT_START_DOCSTRING = r"""
-    This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass. Use it
-    as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
-    behavior.
+        # 如果输出隐藏状态为真，将最终隐藏状态添加到all_hidden_states中
+        if output_hidden_states:
+            all_hidden_states = all_hidden_states + (hidden_states,)
 
-    Parameters:
-        config ([`TvltConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
-"""
+        # 如果不使用返回字典形式，则返回非None的元组
+        if not return_dict:
+            return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
+        # 否则，使用BaseModelOutput对象包装并返回
+        return BaseModelOutput(
+            last_hidden_state=hidden_states,
+            hidden_states=all_hidden_states,
+            attentions=all_self_attentions,
+        )
+        Args:
+            pixel_values (:obj:`torch.Tensor` of shape :obj:`(batch_size, channels, height, width)`):
+                Pixel values. Pixel values are expected to be in the range [0, 1]. If the model expects a different
+                range, you can rescale it accordingly before passing it to the model.
+            Return: A dictionary containing the following entries:
 
-# TVLT_INPUTS_DOCSTRING 用于存储输入的文档字符串
-TVLT_INPUTS_DOCSTRING = r"""
+                - **last_hidden_state** (:obj:`torch.FloatTensor` of shape :obj:`(batch_size, sequence_length, hidden_size)`):
+                    Sequence of hidden-states at the output of the last layer of the model.
+                - **pooler_output** (:obj:`torch.FloatTensor` of shape :obj:`(batch_size, hidden_size)`):
+                    Last layer hidden-state of the first token of the sequence (classification token) further processed
+                    by a Linear layer and a Tanh activation function. The Linear layer weights are trained from the
+                    last layer hidden-state and the bias is initialized as a zero vector.
+    # 定义函数签名，描述输入参数的类型和形状
     Args:
         pixel_values (`torch.FloatTensor` of shape `(batch_size, num_frames, num_channels, height, width)`):
-            # 像素数值。像素数值可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            像素数值。可以使用 [`TvltProcessor`] 获取像素数值。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         audio_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            # 音频数值。音频数值可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            音频数值。可以使用 [`TvltProcessor`] 获取音频数值。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         pixel_mask (`torch.FloatTensor` of shape `(batch_size, num_pixel_patches)`):
-            # 像素掩码。像素掩码可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            像素掩码。可以使用 [`TvltProcessor`] 获取像素掩码。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         audio_mask (`torch.FloatTensor` of shape `(batch_size, num_audio_patches)`):
-            # 音频掩码。音频掩码可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            音频掩码。可以使用 [`TvltProcessor`] 获取音频掩码。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         pixel_values_mixed (`torch.FloatTensor` of shape `(batch_size, num_frames, num_channels, height, width)`):
-            # Tvlt 视听匹配中混合正负样本的像素数值。可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            Tvlt 视听匹配中混合了正负样本的像素数值。可以使用 [`TvltProcessor`] 获取混合像素数值。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         pixel_mask_mixed (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            # pixel_values_mixed 的像素掩码。可以使用 [`TvltProcessor`] 获得。有关详细信息，请参阅 [`TvltProcessor.__call__`]。
+            `pixel_values_mixed` 的像素掩码。可以使用 [`TvltProcessor`] 获取混合像素掩码。有关详细信息，请参见 [`TvltProcessor.__call__`]。
 
         mask_pixel (`bool`, *optional*):
-            # 是否对 MAE 任务遮罩像素。仅在 TvltForPreTraining 中设置为 True。
+            是否为 MAE 任务屏蔽像素。仅在 `TvltForPreTraining` 中设置为 True。
 
         mask_audio (`bool`, *optional*):
-            # 是否对 MAE 任务遮罩音频。仅在 TvltForPreTraining 中设置为 True。
+            是否为 MAE 任务屏蔽音频。仅在 `TvltForPreTraining` 中设置为 True。
 
         output_attentions (`bool`, *optional*):
-            # 是否返回所有注意力层的注意力张量。有关更多详细信息，请参阅返回张量下的 `attentions`。
+            是否返回所有注意力层的注意力张量。有关返回的张量中 `attentions` 的更多详细信息，请参阅。
 
         output_hidden_states (`bool`, *optional*):
-            # 是否返回所有层的隐藏状态。有关更多详细信息，请参阅返回张量下的 `hidden_states`。
+            是否返回所有层的隐藏状态。有关返回的张量中 `hidden_states` 的更多详细信息，请参阅。
 
         return_dict (`bool`, *optional*):
-            # 是否返回一个 [`~utils.ModelOutput`] 而不是一个普通元组。
+            是否返回 [`~utils.ModelOutput`] 而不是普通元组。
 """
-@add_start_docstrings(
-    "The bare TVLT Model transformer outputting raw hidden-states without any specific head on top.",
-    TVLT_START_DOCSTRING,
-)
-class TvltModel(TvltPreTrainedModel):
-    # TVLT 模型的基本定义，继承自 TvltPreTrainedModel
-    def __init__(self, config):
-        # 初始化方法，接收配置参数并进行初始化
-        super().__init__(config)
-        # 保存配置，初始化各嵌入层和编码器
-        self.config = config
-        self.pixel_embeddings = TvltPixelEmbeddings(config)
-        self.audio_embeddings = TvltAudioEmbeddings(config)
-        self.encoder = TvltEncoder(config)
-        self.cls_embedding = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
+定义 TvltModel 类，继承自 TvltPreTrainedModel 类，实现了 TVLT 模型的基础功能。
 
-        if config.use_mean_pooling:
-            self.layernorm = None
-        else:
-            self.layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+这是一个 Transformer 模型，用于处理 TVLT 相关任务，返回原始隐藏状态而不添加任何特定的输出头部。
 
-        # 初始化权重并应用最终处理
-        self.post_init()
+@param config: 模型的配置对象，包含了模型的各种参数设置
 
-    def get_input_embeddings(self):
-        # 获取像素和音频的嵌入层
-        return self.pixel_embeddings.patch_embeddings, self.audio_embeddings.patch_embeddings
+初始化 TvltModel 类，设置模型的各个组件和参数。
 
-    def _prune_heads(self, heads_to_prune):
-        # 剪枝模型的注意力头
-        for layer, heads in heads_to_prune.items():
-            self.encoder.layer[layer].attention.prune_heads(heads)
+self.pixel_embeddings = TvltPixelEmbeddings(config)
+    # 初始化像素嵌入层，根据配置创建 TvltPixelEmbeddings 对象
 
-    @add_start_docstrings_to_model_forward(TVLT_INPUTS_DOCSTRING)
-    @replace_return_docstrings(output_type=TvltModelOutput, config_class=_CONFIG_FOR_DOC)
-    def forward(
-        self,
-        # TVLT 模型的前向传播方法，接收像素和音频数据以及相关参数
-        pixel_values: torch.FloatTensor,
-        audio_values: torch.FloatTensor,
-        pixel_mask: Optional[torch.FloatTensor] = None,
-        audio_mask: Optional[torch.FloatTensor] = None,
-        mask_pixel: bool = False,
-        mask_audio: bool = False,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-class TvltDecoder(nn.Module):
-    # TVLT 解码器的定义
-    def __init__(self, config):
-        # 初始化方法，接收配置参数并进行初始化
-        super().__init__()
-        # 复制配置并设置解码器的隐藏层大小等参数
-        decoder_config = deepcopy(config)
-        decoder_config.hidden_size = config.decoder_hidden_size
-        decoder_config.num_hidden_layers = config.decoder_num_hidden_layers
-        decoder_config.num_attention_heads = config.decoder_num_attention_heads
-        decoder_config.intermediate_size = config.decoder_intermediate_size
-        self.decoder_layers = nn.ModuleList(
-            [TvltLayer(decoder_config) for _ in range(config.decoder_num_hidden_layers)]
-        )
-        # 设置解码器的 LayerNorm 层
-        self.layernorm = nn.LayerNorm(config.decoder_hidden_size, eps=config.layer_norm_eps)
-        # 设置梯度检查点为 False，保存配置
-        self.gradient_checkpointing = False
-        self.config = config
+self.audio_embeddings = TvltAudioEmbeddings(config)
+    # 初始化音频嵌入层，根据配置创建 TvltAudioEmbeddings 对象
 
-    def forward(
-        self,
-        # TVLT 解码器的前向传播方法，接收隐藏状态以及输出参数
-        hidden_states,
-        output_attentions=False,
-        output_hidden_states=False,
-        return_dict=True,
-        ):
-            # 如果输出隐藏状态，初始化为空元组；否则为 None
-            all_hidden_states = () if output_hidden_states else None
-            # 如果输出注意力，初始化为空元组；否则为 None
-            all_self_attentions = () if output_attentions else None
-            # 遍历解码器层
-            for i, layer_module in enumerate(self.decoder_layers):
-                # 如果输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
-                if output_hidden_states:
-                    all_hidden_states = all_hidden_states + (hidden_states,)
+self.encoder = TvltEncoder(config)
+    # 初始化编码器，根据配置创建 TvltEncoder 对象
 
-                # 如果启用了渐变检查点并且在训练中
-                if self.gradient_checkpointing and self.training:
-                    # 使用梯度检查点函数进行处理
-                    layer_outputs = self._gradient_checkpointing_func(
-                        layer_module.__call__,
-                        hidden_states,
-                        None,
-                        output_attentions,
-                    )
-                else:
-                    # 否则使用层的调用方法计算输出
-                    layer_outputs = layer_module(hidden_states, output_attentions=output_attentions)
+self.cls_embedding = nn.Parameter(torch.zeros(1, 1, config.hidden_size))
+    # 创建一个可学习的参数，用于分类嵌入
 
-                # 更新隐藏状态为当前层输出的第一个元素
-                hidden_states = layer_outputs[0]
+if config.use_mean_pooling:
+    self.layernorm = None
+else:
+    self.layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+    # 如果配置要求使用均值池化，则不使用 LayerNorm；否则使用 LayerNorm 对隐藏状态进行标准化
 
-                # 如果输出注意力，将当前层的注意力添加到 all_self_attentions 中
-                if output_attentions:
-                    all_self_attentions = all_self_attentions + (layer_outputs[1],)
+调用 post_init 方法，用于初始化权重并进行最终处理
 
-            # 如果输出隐藏状态，将当前隐藏状态添加到 all_hidden_states 中
+提供方法 get_input_embeddings，用于获取像素和音频嵌入的 patch 嵌入对象
+
+_prune_heads 方法用于剪枝模型的注意力头部
+
+@param heads_to_prune: 要剪枝的模型头部的字典，格式为 {layer_num: 在该层要剪枝的头部列表}，参见基类 PreTrainedModel
+
+前向传播方法 forward，接受像素值和音频值作为输入，并可选地接受掩码和其他参数，返回 TvltModelOutput 对象
+
+@param pixel_values: 像素值的张量输入
+@param audio_values: 音频值的张量输入
+@param pixel_mask: 可选的像素掩码张量
+@param audio_mask: 可选的音频掩码张量
+@param mask_pixel: 是否对像素值进行掩码处理
+@param mask_audio: 是否对音频值进行掩码处理
+@param output_attentions: 是否输出注意力权重
+@param output_hidden_states: 是否输出隐藏状态
+@param return_dict: 是否返回字典形式的输出结果
+
+@return: TvltModelOutput 对象，包含前向传播的输出结果
+
+定义 TvltDecoder 类，继承自 nn.Module 类，用于 TVLT 模型的解码器部分
+
+@param config: 模型配置对象，包含解码器的各种参数设置
+
+初始化 TvltDecoder 类，设置解码器的层列表和标准化层
+
+self.decoder_layers = nn.ModuleList([TvltLayer(decoder_config) for _ in range(config.decoder_num_hidden_layers)])
+    # 创建 TvltLayer 的模块列表，用于组成解码器的层
+
+self.layernorm = nn.LayerNorm(config.decoder_hidden_size, eps=config.layer_norm_eps)
+    # 创建解码器层的 LayerNorm 层，对隐藏状态进行标准化
+
+设置梯度检查点为 False，并保存配置信息
+"""
+    ):
+        # 如果输出隐藏状态设置为 True，则初始化空元组以保存所有隐藏状态，默认为 None
+        all_hidden_states = () if output_hidden_states else None
+        # 如果输出注意力权重设置为 True，则初始化空元组以保存所有自注意力权重，默认为 None
+        all_self_attentions = () if output_attentions else None
+        
+        # 遍历 Transformer 解码器的每个层
+        for i, layer_module in enumerate(self.decoder_layers):
+            # 如果需要输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
+            
+            # 如果启用了梯度检查点且处于训练模式，则使用梯度检查点函数调用层模块
+            if self.gradient_checkpointing and self.training:
+                layer_outputs = self._gradient_checkpointing_func(
+                    layer_module.__call__,
+                    hidden_states,
+                    None,
+                    output_attentions,
+                )
+            else:
+                # 否则直接调用层模块，得到层的输出
+                layer_outputs = layer_module(hidden_states, output_attentions=output_attentions)
 
-            # 预测者投影，计算 logits
-            logits = self.layernorm(hidden_states)
+            # 更新隐藏状态为当前层的输出的第一个元素（通常是下一层的输入）
+            hidden_states = layer_outputs[0]
 
-            # 如果不返回字典，返回值为元组中的非 None 元素
-            if not return_dict:
-                return tuple(v for v in [logits, all_hidden_states, all_self_attentions] if v is not None)
-            # 否则返回 TvltDecoderOutput 对象，包括 logits、hidden_states 和 attentions
-            return TvltDecoderOutput(logits=logits, hidden_states=all_hidden_states, attentions=all_self_attentions)
-# 使用装饰器添加模型文档字符串，介绍了 TVLT 模型的特点以及自监督预训练的目的
+            # 如果需要输出注意力权重，则将当前层的自注意力权重添加到 all_self_attentions 中
+            if output_attentions:
+                all_self_attentions = all_self_attentions + (layer_outputs[1],)
+
+        # 如果需要输出隐藏状态，则将最终的隐藏状态添加到 all_hidden_states 中
+        if output_hidden_states:
+            all_hidden_states = all_hidden_states + (hidden_states,)
+
+        # 对最终的隐藏状态进行层归一化，得到最终的预测结果 logits
+        logits = self.layernorm(hidden_states)
+
+        # 如果不需要返回字典格式的结果，则按照顺序返回 logits、all_hidden_states、all_self_attentions 中不为 None 的部分
+        if not return_dict:
+            return tuple(v for v in [logits, all_hidden_states, all_self_attentions] if v is not None)
+        
+        # 否则，将结果封装成 TvltDecoderOutput 对象并返回
+        return TvltDecoderOutput(logits=logits, hidden_states=all_hidden_states, attentions=all_self_attentions)
+# 添加自动文档字符串以描述该类的作用和功能
 @add_start_docstrings(
     "The TVLT Model transformer with the decoder on top for self-supervised pre-training.",
     TVLT_START_DOCSTRING,
 )
-# TvltForPreTraining 类，继承自 TvltPreTrainedModel 类
+# TvltForPreTraining 类继承自 TvltPreTrainedModel 类
 class TvltForPreTraining(TvltPreTrainedModel):
-    # 初始化方法，接受一个配置参数
     def __init__(self, config):
         # 调用父类的初始化方法
         super().__init__(config)
-        # 将配置参数保存到实例变量中
+        # 将配置信息存储在实例中
         self.config = config
 
-        # 保存任务匹配标志和 MAE 任务标志到实例变量中
+        # 从配置中获取任务匹配和任务 MAE 的标志位
         self.task_matching = config.task_matching
         self.task_mae = config.task_mae
-        # 如果既没有任务匹配标志也没有 MAE 任务标志，则抛出 ValueError 异常
+        # 如果既没有设置任务匹配也没有设置任务 MAE，则抛出值错误异常
         if not (self.task_matching or self.task_mae):
             raise ValueError("Must set at least one of matching task and MAE task to true")
 
         # 创建 TVLT 模型实例
         self.tvlt = TvltModel(config)
 
-        # 如果有任务匹配标志，则创建匹配头实例
+        # 如果配置了任务匹配，则创建匹配头部实例
         if self.task_matching:
             self.matching_head = TvltMatchingHead(config)
 
-        # 如果有 MAE 任务标志，则创建相关组件
+        # 如果配置了任务 MAE，则进行以下初始化操作
         if self.task_mae:
-            # 创建线性层，用于编码器到解码器的映射
+            # 创建编码器到解码器的线性层
             self.encoder_to_decoder = nn.Linear(config.hidden_size, config.decoder_hidden_size, bias=True)
 
-            # 创建像素和音频的掩码令牌参数
+            # 创建像素级和音频级掩码标记参数
             self.pixel_mask_token = nn.Parameter(torch.zeros(1, 1, config.decoder_hidden_size))
             self.audio_mask_token = nn.Parameter(torch.zeros(1, 1, config.decoder_hidden_size))
 
-            # 创建解码器实例
+            # 创建 TVLT 解码器实例
             self.decoder = TvltDecoder(config)
 
-            # 设置解码器相关参数
+            # 从配置中获取解码器的隐藏层大小
             decoder_hidden_size = config.decoder_hidden_size
+
+            # 从 TVLT 模型的像素嵌入中获取相关参数并创建相应的解码器位置嵌入
             num_frames = config.num_frames
             num_patches_per_image = self.tvlt.pixel_embeddings.num_patches_per_image
             self.decoder_pixel_pos_embed = nn.Parameter(torch.zeros(1, num_patches_per_image, decoder_hidden_size))
             self.decoder_temporal_embed = nn.Parameter(torch.zeros(1, config.num_frames, decoder_hidden_size))
             self.decoder_pixel_type_embed = nn.Parameter(torch.zeros(1, 1, decoder_hidden_size))
+
+            # 从 TVLT 模型的音频嵌入中获取相关参数并创建相应的解码器位置嵌入
             num_audio_patches = self.tvlt.audio_embeddings.num_patches
             num_freq_patches = config.frequency_length // config.audio_patch_size[1]
             self.decoder_audio_pos_embed = nn.Parameter(
@@ -901,7 +921,7 @@ class TvltForPreTraining(TvltPreTrainedModel):
             self.decoder_freq_embed = nn.Parameter(torch.zeros(1, num_freq_patches, decoder_hidden_size))
             self.decoder_audio_type_embed = nn.Parameter(torch.zeros(1, 1, decoder_hidden_size))
 
-            # 设置像素和音频 MAE 头
+            # 创建像素级和音频级 MAE 头部实例
             pixel_mae_output_dim = self.config.image_patch_size[0] ** 2 * self.config.num_image_channels
             self.pixel_mae_head = TvltMAEHead(config, pixel_mae_output_dim)
             audio_mae_output_dim = (
@@ -909,26 +929,26 @@ class TvltForPreTraining(TvltPreTrainedModel):
             )
             self.audio_mae_head = TvltMAEHead(config, audio_mae_output_dim)
 
-            # 保存一些参数到实例变量中
+            # 存储一些与解码器相关的参数信息
             self.num_frames = num_frames
             self.num_patches_per_image = num_patches_per_image
             self.num_freq_patches = num_freq_patches
             self.image_patch_size = config.image_patch_size
             self.audio_patch_size = config.audio_patch_size
 
-        # 初始化权重并进行最终处理
+        # 执行后续的初始化步骤，包括权重初始化和最终处理
         self.post_init()
-    # 将输入的像素值按指定大小切割成块状
+    # 将输入的像素值按照指定的图像块大小进行分块处理
     def patchify_pixel(self, pixel_values):
         """
         pixel_values: [batch_size, num_frames, 3, height, width]
         """
-        # 获取输入的像素值张量的形状信息
+        # 获取输入像素值张量的维度信息
         batch_size, num_frames, num_channels, height, width = pixel_values.shape
-        # 计算图像的高度和宽度方向上可以切割成的块的数量
+        # 计算在高度和宽度上可以分成多少个图像块
         num_patches_height = pixel_values.shape[3] // self.image_patch_size[0]
         num_patches_width = pixel_values.shape[4] // self.image_patch_size[1]
-        # 将像素值张量重塑为块状
+        # 将像素值重新组织成指定形状的张量，以便后续处理
         patchified_pixel_values = pixel_values.reshape(
             shape=(
                 batch_size,
@@ -940,9 +960,9 @@ class TvltForPreTraining(TvltPreTrainedModel):
                 self.image_patch_size[1],
             )
         )
-        # 使用 Einstein 求和符号重排张量的维度顺序
+        # 使用 Einstein Summation Convention 进行张量乘积计算，重新排列张量维度
         patchified_pixel_values = torch.einsum("ntchpwq->nthwpqc", patchified_pixel_values)
-        # 将块状像素值张量重新调整形状
+        # 将重新排列的张量再次整形为指定形状，以便后续计算
         patchified_pixel_values = patchified_pixel_values.reshape(
             shape=(
                 batch_size,
@@ -950,20 +970,19 @@ class TvltForPreTraining(TvltPreTrainedModel):
                 self.image_patch_size[0] * self.image_patch_size[1] * num_channels,
             )
         )
-        # 返回切割后的像素值张量
         return patchified_pixel_values
 
-    # 将输入的音频值按指定大小切割成块状
+    # 将输入的音频值按照指定的音频块大小进行分块处理
     def patchify_audio(self, audio_values):
         """
         audio_values: [batch_size, 1, height, width]
         """
-        # 获取输入的音频值张量的形状信息
+        # 获取输入音频值张量的维度信息
         batch_size, num_channels, height, width = audio_values.shape
-        # 计算音频的高度和宽度方向上可以切割成的块的数量
+        # 计算在高度和宽度上可以分成多少个音频块
         num_patches_height = height // self.audio_patch_size[0]
         num_patches_width = width // self.audio_patch_size[1]
-        # 将音频值张量重塑为块状
+        # 将音频值重新组织成指定形状的张量，以便后续处理
         patchified_audio_values = audio_values.reshape(
             shape=(
                 batch_size,
@@ -974,9 +993,9 @@ class TvltForPreTraining(TvltPreTrainedModel):
                 self.audio_patch_size[1],
             )
         )
-        # 使用 Einstein 求和符号重排张量的维度顺序
+        # 使用 Einstein Summation Convention 进行张量乘积计算，重新排列张量维度
         patchified_audio_values = torch.einsum("nchpwq->nhwpqc", patchified_audio_values)
-        # 将块状音频值张量重新调整形状
+        # 将重新排列的张量再次整形为指定形状，以便后续计算
         patchified_audio_values = patchified_audio_values.reshape(
             shape=(
                 batch_size,
@@ -984,126 +1003,62 @@ class TvltForPreTraining(TvltPreTrainedModel):
                 self.audio_patch_size[0] * self.audio_patch_size[1] * num_channels,
             )
         )
-        # 返回切割后的音频值张量
         return patchified_audio_values
 
-    # 计算像素值的均方误差损失
+    # 计算像素预测和实际像素之间的均方误差损失
     def pixel_mae_loss(self, pixel_values, pixel_predictions, mask):
-        # 将输入的像素值切割成块状
+        # 将输入的像素值进行分块处理
         patchified_pixel_values = self.patchify_pixel(pixel_values)
-        # 计算损失，即预测值与真实值之差的平方
+        # 计算预测像素值和分块像素值之间的平方差
         loss = (pixel_predictions - patchified_pixel_values) ** 2
-        # 沿着最后一个维度计算均值，即每个块的平均损失
+        # 计算每个图像块上的平均损失
         loss = loss.mean(dim=-1)  # [batch_size, pixel_pixel_length], mean loss per patch
-        # 将损失乘以掩码并求和，再除以掩码的总数，得到被移除块的平均损失
+        # 根据掩码计算移除的图像块上的平均损失
         loss = (loss * mask).sum() / mask.sum()  # mean loss on removed patches
-        # 返回损失值
         return loss
 
-    # 计算音频值的均方误差损失
+    # 计算音频预测和实际音频值之间的均方误差损失
     def audio_mae_loss(self, audio_values, audio_predictions, mask):
-        # 将输入的音频值切割成块状
+        # 将输入的音频值进行分块处理
         patchified_audio_values = self.patchify_audio(audio_values)
-        # 计算损失，即预测值与真实值之差的平方
+        # 计算预测音频值和分块音频值之间的平方差
         loss = (audio_predictions - patchified_audio_values) ** 2
-        # 沿着最后一个维度计算均值，即每个块的平均损失
+        # 计算每个音频块上的平均损失
         loss = loss.mean(dim=-1)  # [batch_size, audio_pixel_length], mean loss per patch
-        # 将损失乘以掩码并求和，再除以掩码的总数，得到被移除块的平均损失
+        # 根据掩码计算移除的音频块上的平均损失
         loss = (loss * mask).sum() / mask.sum()  # mean loss on removed patches
-        # 返回损失值
         return loss
-    # 将预测的掩码序列拼接到原始序列上的函数
+    # 定义一个方法用于拼接掩码到序列的末尾
     def concatenate_mask(self, mask_token, sequence, ids_restore):
-        # 获取输入序列的批次大小、长度和维度
+        # 获取序列的批大小、序列长度和维度
         batch_size, seq_length, dim = sequence.shape
-        # 根据恢复索引的大小重复掩码标记，以填充到原始序列长度
+        # 将掩码标记重复添加到每个样本序列末尾，以匹配恢复后的序列长度
         mask_tokens = mask_token.repeat(batch_size, ids_restore.shape[1] - seq_length, 1)
-        # 将原始序列和掩码标记拼接起来
+        # 在序列的末尾连接掩码标记
         padded_sequence = torch.cat([sequence, mask_tokens], dim=1)
-        # 根据恢复索引将序列顺序恢复到原始顺序
+        # 根据恢复的索引ids_restore重新排序序列，以恢复原始顺序
         padded_sequence = torch.gather(
             padded_sequence, dim=1, index=ids_restore.unsqueeze(-1).repeat(1, 1, dim)
-        )
+        )  # unshuffle
+        # 返回重新排序后的序列
         return padded_sequence
-    
-    # 定义模型的前向传播过程
+
+    # 定义模型的前向传播方法，此处注释通过装饰器已添加到模型前向方法的输入和输出文档字符串
     @add_start_docstrings_to_model_forward(TVLT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TvltForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
-        pixel_values: torch.FloatTensor, # 输入的图像数据
-        audio_values: torch.FloatTensor, # 输入的音频数据
-        pixel_mask: Optional[torch.FloatTensor] = None, # 图像数据的掩码
-        audio_mask: Optional[torch.FloatTensor] = None, # 音频数据的掩码
-        labels: Optional[torch.LongTensor] = None, # 标签数据
-        pixel_values_mixed: Optional[torch.FloatTensor] = None, # 混合图像数据
-        pixel_mask_mixed: Optional[torch.FloatTensor] = None, # 混合图像数据的掩码
-        output_attentions: Optional[bool] = None, # 是否输出注意力权重
-        output_hidden_states: Optional[bool] = None, # 是否输出隐藏状态
-        return_dict: Optional[bool] = None # 是否以字典形式返回结果
-    ):
-# 创建一个名为 TvltPooler 的类，继承自 nn.Module
-class TvltPooler(nn.Module):
-    # 初始化方法，接受一个 config 参数
-    def __init__(self, config):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 创建一个线性层，输入维度为 config.hidden_size，输出维度为 config.hidden_size
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个激活函数层，使用双曲正切函数
-        self.activation = nn.Tanh()
-
-    # 前向传播方法，接受 hidden_states 参数
-    def forward(self, hidden_states):
-        # 提取 hidden_states 中的第一个 token 的数据
-        first_token_tensor = hidden_states[:, 0]
-        # 将第一个 token 的数据传入线性层
-        pooled_output = self.dense(first_token_tensor)
-        # 通过激活函数层处理得到的结果
-        pooled_output = self.activation(pooled_output)
-        # 返回处理后的结果
-        return pooled_output
-
-
-# 创建一个名为 TvltMatchingHead 的类，继承自 nn.Module
-class TvltMatchingHead(nn.Module):
-    # 初始化方法，接受一个 config 参数
-    def __init__(self, config):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 创建一个 TvltPooler 类的实例
-        self.pooler = TvltPooler(config)
-        # 创建一个线性层，输入维度为 config.hidden_size，输出维度为 1
-        self.fc = nn.Linear(config.hidden_size, 1)
-
-    # 前向传播方法，接受 hidden_states 参数
-    def forward(self, hidden_states):
-        # 通过 pooler 处理 hidden_states，再将结果传入线性层
-        hidden_states = self.fc(self.pooler(hidden_states))
-        # 返回处理后的结果
-        return hidden_states
-
-
-# 创建一个名为 TvltMAEHead 的类，继承自 nn.Module
-class TvltMAEHead(nn.Module):
-    # 初始化方法，接受一个 config 参数和一个可选的 output_dim 参数
-    def __init__(self, config, output_dim=None):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 将 config 参数存储到实例变量中
-        self.config = config
-        # 创建一个线性层，输入维度为 config.decoder_hidden_size，输出维度为 output_dim
-        self.decoder = nn.Linear(config.decoder_hidden_size, output_dim)
-
-    # 前向传播方法，接受 hidden_states 参数
-    def forward(self, hidden_states):
-        # 通过线性层处理 hidden_states
-        hidden_states = self.decoder(hidden_states)
-        # 返回处理后的结果
-        return hidden_states
-
-
-# 创建一个名为 TvltForAudioVisualClassification 的类，继承自 TvltPreTrainedModel 类
+        pixel_values: torch.FloatTensor,
+        audio_values: torch.FloatTensor,
+        pixel_mask: Optional[torch.FloatTensor] = None,
+        audio_mask: Optional[torch.FloatTensor] = None,
+        labels: Optional[torch.LongTensor] = None,
+        pixel_values_mixed: Optional[torch.FloatTensor] = None,
+        pixel_mask_mixed: Optional[torch.FloatTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+# 定义一个自定义的 Transformer 模型，用于处理音频和视觉分类任务，例如 CMU-MOSEI 情感分析和音频到视频检索
 @add_start_docstrings(
     """
     Tvlt Model transformer with a classifier head on top (an MLP on top of the final hidden state of the [CLS] token)
@@ -1112,32 +1067,24 @@ class TvltMAEHead(nn.Module):
     TVLT_START_DOCSTRING,
 )
 class TvltForAudioVisualClassification(TvltPreTrainedModel):
-    # 初始化方法，接受一个 config 参数
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 创建一个 TvltModel 类的实例
+        # 初始化 TvltModel，这是主要的 Transformer 模型
         self.tvlt = TvltModel(config)
 
-        # 分类器头部
+        # 分类器头部网络
         self.classifier = nn.Sequential(
-            # 创建一个线性层，输入维度为 config.hidden_size，输出维度为 config.hidden_size * 2
-            nn.Linear(config.hidden_size, config.hidden_size * 2),
-            # 创建一个 LayerNorm 层，输入维度为 config.hidden_size * 2，指定 epsilon 参数为 config.layer_norm_eps
-            nn.LayerNorm(config.hidden_size * 2, eps=config.layer_norm_eps),
-            # GELU 激活函数层
-            nn.GELU(),
-            # 创建一个线性层，输入维度为 config.hidden_size * 2，输出维度为 config.num_labels
-            nn.Linear(config.hidden_size * 2, config.num_labels),
+            nn.Linear(config.hidden_size, config.hidden_size * 2),  # 线性层，扩展隐藏层大小
+            nn.LayerNorm(config.hidden_size * 2, eps=config.layer_norm_eps),  # LayerNorm 层
+            nn.GELU(),  # GELU 激活函数
+            nn.Linear(config.hidden_size * 2, config.num_labels),  # 线性层，输出分类标签数
         )
-        # 将 config 参数存储到实例变量中
         self.config = config
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播方法，接受指定的输入和可选的参数
     @add_start_docstrings_to_model_forward(TVLT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=SequenceClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1150,21 +1097,32 @@ class TvltForAudioVisualClassification(TvltPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         labels: Optional[torch.LongTensor] = None,
-    # 定义一个方法，接受输入的像素值、音频值和标签，返回分类器的输出
-    def forward(
-        pixel_values: torch.FloatTensor,
-        audio_values: torch.FloatTensor,
-        pixel_mask: Optional[torch.FloatTensor] = None,
-        audio_mask: Optional[torch.FloatTensor] = None,
-        return_dict: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        labels: Optional[torch.LongTensor] = None,
     ) -> Union[Tuple[torch.FloatTensor], SequenceClassifierOutput]:
-        # 如果 return_dict 为 None，则使用配置中的 use_return_dict 值
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 调用 tvlt 模型，传入像素值、音频值，以及其它参数
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, num_labels)`, *optional*):
+            Labels for computing the audiovisual loss. Indices should be in `[0, ..., num_classes-1]` where num_classes
+            refers to the number of classes in audiovisual tasks.
+
+        Return:
+
+        Examples:
+        ```python
+        >>> from transformers import TvltProcessor, TvltForAudioVisualClassification
+        >>> import numpy as np
+        >>> import torch
+
+        >>> num_frames = 8
+        >>> images = list(np.random.randn(num_frames, 3, 224, 224))
+        >>> audio = list(np.random.randn(10000))
+        >>> processor = TvltProcessor.from_pretrained("ZinengTang/tvlt-base")
+        >>> model = TvltForAudioVisualClassification.from_pretrained("ZinengTang/tvlt-base")
+        >>> input_dict = processor(images, audio, sampling_rate=44100, return_tensors="pt")
+
+        >>> outputs = model(**input_dict)
+        >>> loss = outputs.loss
+        ```"""
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 若未指定 return_dict 则使用模型配置中的默认值
+
         outputs = self.tvlt(
             pixel_values,
             audio_values,
@@ -1173,37 +1131,28 @@ class TvltForAudioVisualClassification(TvltPreTrainedModel):
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
-        )
-        # 从输出中取出序列输出的第一个元素
-        sequence_output = outputs[0][:, 0]
-        # 将序列输出传入分类器，得到 logit 值
-        logits = self.classifier(sequence_output)  # rank value
-    
-        # 初始化损失值
+        )  # 调用 Tvlt 模型进行前向传播，获取输出
+
+        sequence_output = outputs[0][:, 0]  # 获取序列输出的第一个位置的结果
+        logits = self.classifier(sequence_output)  # 将序列输出传入分类器，得到分类 logits
+
         loss = None
-        # 如果标签不为空
         if labels is not None:
-            # 根据配置中的损失类型选择损失函数
-            if self.config.loss_type == "regression":
+            if self.config.loss_type == "regression":  # 如果损失类型为回归
                 loss_fct = MSELoss()
-                # 计算均方误差损失
-                loss = loss_fct(logits, labels)
-            elif self.config.loss_type == "classification":
+                loss = loss_fct(logits, labels)  # 计算均方误差损失
+            elif self.config.loss_type == "classification":  # 如果损失类型为分类
                 loss_fct = CrossEntropyLoss()
-                # 计算交叉熵损失
-                loss = loss_fct(logits, labels)
-    
-        # 如果不返回字典
+                loss = loss_fct(logits, labels)  # 计算交叉熵损失
+
         if not return_dict:
-            # 组装输出结果
-            output = (logits,) + outputs[4:]
-            return ((loss,) + output) if loss is not None else output
-    
-        # 返回分类器输出包装类对象
+            output = (logits,) + outputs[4:]  # 如果不返回字典，则组合输出结果
+            return ((loss,) + output) if loss is not None else output  # 返回包含损失的输出
+
         return SequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
-        )
+        )  # 返回包含损失、logits、隐藏状态和注意力的 SequenceClassifierOutput 对象
 ```

@@ -1,58 +1,59 @@
-# `.\transformers\models\vitdet\configuration_vitdet.py`
+# `.\models\vitdet\configuration_vitdet.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，没有任何明示或暗示的保证或条件
-# 请查看许可证以获取有关特定语言的权限和限制
+```
+# 设置编码格式为 UTF-8
+# 版权声明：2023 年 HuggingFace 公司保留所有权利
+# 根据 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件
+# 可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
+# 除非适用法律要求或书面同意，否则按“原样”分发软件，不附带任何明示或暗示的担保或条件
+# 请查阅许可证了解更多信息
+
 """ VitDet 模型配置"""
 
-# 导入必要的模块和类
+# 从相对路径导入 PretrainedConfig 类
 from ...configuration_utils import PretrainedConfig
+# 导入 logging 模块用于日志记录
 from ...utils import logging
+# 从 backbone_utils 中导入 BackboneConfigMixin 类和 get_aligned_output_features_output_indices 函数
+
 from ...utils.backbone_utils import BackboneConfigMixin, get_aligned_output_features_output_indices
 
-# 获取日志记录器
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
-# 预训练配置映射
+# VitDet 预训练模型配置映射，指定了模型名和其配置文件的下载链接
 VITDET_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/vit-det-base": "https://huggingface.co/facebook/vit-det-base/resolve/main/config.json",
 }
 
-# VitDet 配置类，继承自 BackboneConfigMixin 和 PretrainedConfig
+# VitDetConfig 类，继承了 BackboneConfigMixin 和 PretrainedConfig
 class VitDetConfig(BackboneConfigMixin, PretrainedConfig):
     r"""
-    This is the configuration class to store the configuration of a [`VitDetModel`]. It is used to instantiate an
-    VitDet model according to the specified arguments, defining the model architecture. Instantiating a configuration
-    with the defaults will yield a similar configuration to that of the VitDet
-    [google/vitdet-base-patch16-224](https://huggingface.co/google/vitdet-base-patch16-224) architecture.
+    这是存储 [`VitDetModel`] 配置的类。它用于根据指定的参数实例化 VitDet 模型，定义模型架构。
+    使用默认配置实例化一个配置对象将会生成类似于 VitDet [google/vitdet-base-patch16-224] 架构的配置。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
+    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。详细信息请参阅 [`PretrainedConfig`] 的文档。
 
-    Example:
+    示例：
 
     ```python
     >>> from transformers import VitDetConfig, VitDetModel
 
-    >>> # Initializing a VitDet configuration
+    >>> # 初始化 VitDet 配置
     >>> configuration = VitDetConfig()
 
-    >>> # Initializing a model (with random weights) from the configuration
+    >>> # 使用配置对象实例化一个模型（带有随机权重）
     >>> model = VitDetModel(configuration)
 
-    >>> # Accessing the model configuration
+    >>> # 访问模型配置
     >>> configuration = model.config
-    ```py"""
+    ```
+    """
 
     # 模型类型为 "vitdet"
     model_type = "vitdet"
 
-    # 初始化方法，设置各种配置参数
+    # VitDetConfig 的构造函数，定义了模型的各种配置参数
     def __init__(
         self,
         hidden_size=768,
@@ -77,51 +78,35 @@ class VitDetConfig(BackboneConfigMixin, PretrainedConfig):
         out_features=None,
         out_indices=None,
         **kwargs,
-        # 调用父类的构造函数，传入关键字参数
+        ):
+        # 调用父类的构造函数并传递所有关键字参数
         super().__init__(**kwargs)
 
-        # 初始化模型的隐藏层大小
+        # 初始化模型的各种超参数
         self.hidden_size = hidden_size
-        # 初始化模型的隐藏层数量
         self.num_hidden_layers = num_hidden_layers
-        # 初始化模型的注意力头数量
         self.num_attention_heads = num_attention_heads
-        # 初始化MLP的比例
         self.mlp_ratio = mlp_ratio
-        # 初始化隐藏层的激活函数
         self.hidden_act = hidden_act
-        # 初始化模型的dropout概率
         self.dropout_prob = dropout_prob
-        # 初始化模型的初始化范围
         self.initializer_range = initializer_range
-        # 初始化模型的层归一化epsilon值
         self.layer_norm_eps = layer_norm_eps
-        # 初始化输入图像的大小
         self.image_size = image_size
-        # 初始化预训练图像的大小
         self.pretrain_image_size = pretrain_image_size
-        # 初始化图像的patch大小
         self.patch_size = patch_size
-        # 初始化图像的通道数量
         self.num_channels = num_channels
-        # 初始化是否使用qkv偏置
         self.qkv_bias = qkv_bias
-        # 初始化drop path的概率
         self.drop_path_rate = drop_path_rate
-        # 初始化窗口块的索引
         self.window_block_indices = window_block_indices
-        # 初始化残差块的索引
         self.residual_block_indices = residual_block_indices
-        # 初始化是否使用绝对位置嵌入
         self.use_absolute_position_embeddings = use_absolute_position_embeddings
-        # 初始化是否使用相对位置嵌入
         self.use_relative_position_embeddings = use_relative_position_embeddings
-        # 初始化窗口大小
         self.window_size = window_size
 
-        # 初始化阶段名称列表，包括"stem"和"stage1"到"stageN"
+        # 设定模型各阶段的名称，包括初始的"stem"和从"stage1"到"stageN"的隐藏层
         self.stage_names = ["stem"] + [f"stage{idx}" for idx in range(1, self.num_hidden_layers + 1)]
-        # 获取对齐的输出特征和输出索引
+        
+        # 调用函数获取对齐的输出特征和输出索引
         self._out_features, self._out_indices = get_aligned_output_features_output_indices(
             out_features=out_features, out_indices=out_indices, stage_names=self.stage_names
         )

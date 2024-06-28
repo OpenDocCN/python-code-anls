@@ -1,38 +1,25 @@
-# `.\transformers\models\vit_hybrid\__init__.py`
+# `.\models\vit_hybrid\__init__.py`
 
-```py
-# 这些是 Hugging Face 团队版权声明和许可信息
-# Copyright 2022 The HuggingFace Team. All rights reserved.
+```
+# 版权声明和许可证信息，指明代码版权归HuggingFace团队所有，使用Apache License, Version 2.0许可证
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# 导入必要的类型提示
+# 导入必要的类型检查工具
 from typing import TYPE_CHECKING
 
-# 从同目录下导入一些工具函数和判断是否有可选依赖的函数
+# 导入自定义的异常和模块延迟加载工具，用于处理可能缺失的依赖
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available, is_vision_available
 
-# 定义 _import_structure 字典，用于延迟导入需要的模块
+# 定义模块的导入结构字典，包含配置和模型信息
 _import_structure = {"configuration_vit_hybrid": ["VIT_HYBRID_PRETRAINED_CONFIG_ARCHIVE_MAP", "ViTHybridConfig"]}
 
-# 检查 torch 是否可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
+# 尝试导入torch，若不可用则抛出OptionalDependencyNotAvailable异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 torch 可用，则添加相关的 modeling_vit_hybrid 模块到 _import_structure 字典
+    # 若torch可用，则添加模型相关的导入信息到_import_structure字典
     _import_structure["modeling_vit_hybrid"] = [
         "VIT_HYBRID_PRETRAINED_MODEL_ARCHIVE_LIST",
         "ViTHybridForImageClassification",
@@ -40,21 +27,20 @@ else:
         "ViTHybridPreTrainedModel",
     ]
 
-# 检查 vision 是否可用，如果不可用则引发 OptionalDependencyNotAvailable 异常    
+# 尝试导入vision，若不可用则抛出OptionalDependencyNotAvailable异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 vision 可用，则添加 image_processing_vit_hybrid 模块到 _import_structure 字典
+    # 若vision可用，则添加图像处理相关的导入信息到_import_structure字典
     _import_structure["image_processing_vit_hybrid"] = ["ViTHybridImageProcessor"]
 
-# 如果是类型检查，则导入相关的类型
+# 如果正在进行类型检查，导入具体的配置和模型类
 if TYPE_CHECKING:
     from .configuration_vit_hybrid import VIT_HYBRID_PRETRAINED_CONFIG_ARCHIVE_MAP, ViTHybridConfig
 
-    # 如果 torch 可用，则导入 modeling_vit_hybrid 中的类型
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -68,7 +54,6 @@ if TYPE_CHECKING:
             ViTHybridPreTrainedModel,
         )
 
-    # 如果 vision 可用，则导入 image_processing_vit_hybrid 中的类型
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
@@ -77,8 +62,10 @@ if TYPE_CHECKING:
     else:
         from .image_processing_vit_hybrid import ViTHybridImageProcessor
 
-# 如果不是类型检查，则使用 _LazyModule 延迟导入需要的模块
+# 如果不是类型检查环境，则进行模块的延迟加载设置
 else:
     import sys
+
+    # 将当前模块替换为延迟加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

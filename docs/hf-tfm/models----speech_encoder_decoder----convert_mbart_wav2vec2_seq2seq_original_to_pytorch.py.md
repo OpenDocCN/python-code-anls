@@ -1,27 +1,14 @@
-# `.\transformers\models\speech_encoder_decoder\convert_mbart_wav2vec2_seq2seq_original_to_pytorch.py`
+# `.\models\speech_encoder_decoder\convert_mbart_wav2vec2_seq2seq_original_to_pytorch.py`
 
-```py
-# 设置文件编码格式为 UTF-8
+```
+# 导入必要的库和模块
+import argparse  # 导入命令行参数解析模块
 
-# 版权声明和许可证信息
-# 版权所有 2021 年 HuggingFace 公司团队
-# 根据 Apache 许可证第 2.0 版 ("许可证") 许可
-# 除非符合许可证的规定，否则您不得使用此文件
-# 您可以从以下网址获取许可证的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或经书面同意
-# 根据许可证分发的软件是根据"按原样"的基础分发的
-# 无论是明示还是暗示的，都没有任何保修或条件类型的保证
-# 有关特定语言的权限和限制，请参阅许可证
-"""将 Wav2Vec2 检查点转换为 MBart 检查点"""
+import fairseq  # 导入fairseq库
+import torch  # 导入PyTorch库
+from torch import nn  # 导入PyTorch的神经网络模块
 
-
-# 导入所需的模块
-import argparse
-import fairseq
-import torch
-from torch import nn
-from transformers import (
+from transformers import (  # 从transformers库中导入以下模块和类
     MBart50Tokenizer,
     MBartConfig,
     MBartForCausalLM,
@@ -33,12 +20,10 @@ from transformers import (
     logging,
 )
 
-# 设置日志记录级别为信息
-logging.set_verbosity_info()
-# 获取当前模块的日志记录器
-logger = logging.get_logger(__name__)
+logging.set_verbosity_info()  # 设置日志级别为INFO
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 定义映射字典，用于将 Wav2Vec2 模型的参数在 MBart 模型中对应的位置
+# 定义一个字典，用于将Wav2Vec2模型的参数映射到Hugging Face的命名空间
 MAPPING = {
     "post_extract_proj": "feature_projection.projection",
     "encoder.pos_conv.0": "encoder.pos_conv_embed.conv",
@@ -59,7 +44,8 @@ MAPPING = {
     "w2v_encoder.proj": "lm_head",
     "mask_emb": "masked_spec_embed",
 }
-# 顶层参数键列表
+
+# 定义顶层的关键字列表
 TOP_LEVEL_KEYS = [
     "lm_head",
     "quantizer.weight_proj",
@@ -68,25 +54,25 @@ TOP_LEVEL_KEYS = [
     "project_hid",
 ]
 
-# 递归设置参数值的函数
+# 递归设置函数，用于将权重设置到指定的Hugging Face指针中
 def set_recursively(hf_pointer, key, value, full_name, weight_type):
-    # 根据键的层次结构设置值
+    # 根据键名逐级获取Hugging Face指针
     for attribute in key.split("."):
         hf_pointer = getattr(hf_pointer, attribute)
 
-    # 如果权重类型不为空，则获取相应权重的形状
+    # 检查Hugging Face指针的形状是否与待设置的值相匹配
     if weight_type is not None:
         hf_shape = getattr(hf_pointer, weight_type).shape
     else:
         hf_shape = hf_pointer.shape
 
-    # 断言，确保参数形状一致
+    # 断言确认形状匹配，否则抛出错误
     assert hf_shape == value.shape, (
         f"Shape of hf {key + '.' + weight_type if weight_type is not None else ''} is {hf_shape}, but should be"
         f" {value.shape} for {full_name}"
     )
 
-    # 根据权重类型设置参数值
+    # 根据权重类型设置相应的值到Hugging Face指针中
     if weight_type == "weight":
         hf_pointer.weight.data = value
     elif weight_type == "weight_g":
@@ -97,26 +83,25 @@ def set_recursively(hf_pointer, key, value, full_name, weight_type):
         hf_pointer.bias.data = value
     else:
         hf_pointer.data = value
-    # 记录日志信息，包括初始化的参数和来源信息
+    # 记录信息到日志中，描述初始化操作的详细情况，包括属性名（如果提供了权重类型）和来源的完整名称。
     logger.info(f"{key + '.' + weight_type if weight_type is not None else ''} was initialized from {full_name}.")
-# 递归加载权重到 wav2vec2 模型中
+# 递归加载 Fairseq 模型的权重到 Hugging Face 模型中
 def recursively_load_weights_wav2vec2(fairseq_model, hf_model):
-    # 用于存储未使用的权重名称
+    # 未使用的权重列表
     unused_weights = []
-    # 获取 fairseq 模型的状态字典
+    # 获取 Fairseq 模型的状态字典
     fairseq_dict = fairseq_model.state_dict()
 
     # 获取 Hugging Face 模型的特征提取器和适配器
     feature_extractor = hf_model.feature_extractor
     adapter = hf_model.adapter
 
-    # 遍历 fairseq 模型的状态字典中的键值对
+    # 遍历 Fairseq 模型状态字典中的每个键值对
     for name, value in fairseq_dict.items():
-        # 判断权重是否被使用的标志
         is_used = False
-        # 如果名称中包含 "conv_layers" 则表示是卷积层权重
+        # 如果名称中包含 "conv_layers"
         if "conv_layers" in name:
-            # 载入卷积层权重
+            # 调用加载卷积层的函数
             load_conv_layer(
                 name,
                 value,
@@ -125,23 +110,22 @@ def recursively_load_weights_wav2vec2(fairseq_model, hf_model):
                 hf_model.config.feat_extract_norm == "group",
             )
             is_used = True
-        # 如果名称中包含 "adaptor" 或者其他 wav2vec2 特定的键，则表示是适配器权重
+        # 如果名称中包含任何 "adaptor", "w2v_encoder.proj.", "w2v_proj_ln."
         elif any(x in name for x in ["adaptor", "w2v_encoder.proj.", "w2v_proj_ln."]):
-            # 载入适配器权重
+            # 调用加载适配器的函数
             load_adapter(name, value, adapter, unused_weights)
             is_used = True
-        # 否则，可能是其他 wav2vec2 模型的权重
         else:
-            # 遍历映射表中的键值对
+            # 遍历 MAPPING 字典中的每个键值对
             for key, mapped_key in MAPPING.items():
-                # 如果键出现在名称中，或者经过处理后的名称符合 wav2vec2 模型中的键
+                # 如果键存在于名称中或者其去掉 "w2v_model." 后的部分等于名称的第一个部分
                 if key in name or key.split("w2v_model.")[-1] == name.split(".")[0]:
                     is_used = True
-                    # 如果映射键中包含通配符 "*"，则替换为对应的层索引
+                    # 如果映射键包含 "*"，则替换为层索引
                     if "*" in mapped_key:
                         layer_index = name.split(key)[0].split(".")[-2]
                         mapped_key = mapped_key.replace("*", layer_index)
-                    # 确定权重类型
+                    # 根据名称中的关键字确定权重类型
                     if "weight_g" in name:
                         weight_type = "weight_g"
                     elif "weight_v" in name:
@@ -152,132 +136,131 @@ def recursively_load_weights_wav2vec2(fairseq_model, hf_model):
                         weight_type = "weight"
                     else:
                         weight_type = None
-                    # 递归设置权重
+                    # 递归设置 Hugging Face 模型的对应权重
                     set_recursively(hf_model, mapped_key, value, name, weight_type)
-                # 继续下一个映射键
                 continue
-        # 如果权重未被使用，则添加到未使用权重列表中
+        # 如果没有使用此权重，则添加到未使用列表中
         if not is_used:
             unused_weights.append(name)
 
-    # 输出未使用的权重名称
+    # 记录未使用的权重列表到日志
     logger.warning(f"Unused weights: {unused_weights}")
 
 
-# 载入卷积层权重
+# 加载卷积层的函数
 def load_conv_layer(full_name, value, feature_extractor, unused_weights, use_group_norm):
     # 获取卷积层的名称
     name = full_name.split("conv_layers.")[-1]
-    # 分割名称
+    # 拆分名称
     items = name.split(".")
-    # 获取层索引和类型索引
+    # 获取层和类型索引
     layer_id = int(items[0])
     type_id = int(items[1])
 
-    # 如果类型索引为 0，则表示是卷积层的权重
+    # 如果类型索引为 0
     if type_id == 0:
-        # 如果名称中包含 "bias"，则表示是偏置项权重
+        # 如果名称中包含 "bias"
         if "bias" in name:
-            # 检查权重的形状是否匹配，并赋值给特征提取器的卷积层的偏置项
+            # 断言检查值的形状与特征提取器中相应卷积层的偏置数据形状是否一致
             assert value.shape == feature_extractor.conv_layers[layer_id].conv.bias.data.shape, (
                 f"{full_name} has size {value.shape}, but"
                 f" {feature_extractor.conv_layers[layer_id].conv.bias.data.shape} was found."
             )
+            # 将值赋给特征提取器中对应卷积层的偏置数据
             feature_extractor.conv_layers[layer_id].conv.bias.data = value
             logger.info(f"Feat extract conv layer {layer_id} was initialized from {full_name}.")
-        # 如果名称中包含 "weight"，则表示是卷积核权重
+        # 如果名称中包含 "weight"
         elif "weight" in name:
-            # 检查权重的形状是否匹配，并赋值给特征提取器的卷积层的卷积核权重
+            # 断言检查值的形状与特征提取器中相应卷积层的权重数据形状是否一致
             assert value.shape == feature_extractor.conv_layers[layer_id].conv.weight.data.shape, (
                 f"{full_name} has size {value.shape}, but"
                 f" {feature_extractor.conv_layers[layer_id].conv.weight.data.shape} was found."
             )
+            # 将值赋给特征提取器中对应卷积层的权重数据
             feature_extractor.conv_layers[layer_id].conv.weight.data = value
             logger.info(f"Feat extract conv layer {layer_id} was initialized from {full_name}.")
-    # 如果类型为 2 且不使用组归一化，或者类型为 2 且为第一层且使用组归一化
+    # 如果 type_id 等于 2，并且不使用组归一化，或者 type_id 等于 2，且 layer_id 等于 0 并且使用组归一化
     elif (type_id == 2 and not use_group_norm) or (type_id == 2 and layer_id == 0 and use_group_norm):
-        # 如果名称中包含 "bias"
+        # 如果变量名中包含 "bias"
         if "bias" in name:
-            # 断言当前值的形状与特征提取器的卷积层的层归一化偏置数据的形状相同
+            # 断言当前值的形状与特征提取器中卷积层的层归一化偏置数据的形状相同
             assert value.shape == feature_extractor.conv_layers[layer_id].layer_norm.bias.data.shape, (
                 f"{full_name} has size {value.shape}, but {feature_extractor[layer_id].layer_norm.bias.data.shape} was"
                 " found."
             )
-            # 将当前值赋给特征提取器的卷积层的层归一化偏置数据
+            # 将值赋给特征提取器中卷积层的层归一化偏置数据
             feature_extractor.conv_layers[layer_id].layer_norm.bias.data = value
-            # 记录日志，显示哪一层的特征提取器的层归一化权重被从哪里初始化
+            # 记录日志，指示层归一化权重已从指定变量名初始化
             logger.info(f"Feat extract layer norm weight of layer {layer_id} was initialized from {full_name}.")
-        # 如果名称中包含 "weight"
+        # 如果变量名中包含 "weight"
         elif "weight" in name:
-            # 断言当前值的形状与特征提取器的卷积层的层归一化权重数据的形状相同
+            # 断言当前值的形状与特征提取器中卷积层的层归一化权重数据的形状相同
             assert value.shape == feature_extractor.conv_layers[layer_id].layer_norm.weight.data.shape, (
                 f"{full_name} has size {value.shape}, but"
                 f" {feature_extractor[layer_id].layer_norm.weight.data.shape} was found."
             )
-            # 将当前值赋给特征提取器的卷积层的层归一化权重数据
+            # 将值赋给特征提取器中卷积层的层归一化权重数据
             feature_extractor.conv_layers[layer_id].layer_norm.weight.data = value
-            # 记录日志，显示哪一层的特征提取器的层归一化权重被从哪里初始化
+            # 记录日志，指示层归一化权重已从指定变量名初始化
             logger.info(f"Feat extract layer norm weight of layer {layer_id} was initialized from {full_name}.")
-    # 如果不满足以上条件
     else:
-        # 将未使用的权重名称添加到未使用权重列表中
+        # 将未使用的权重变量名添加到未使用权重列表中
         unused_weights.append(full_name)
-# 定义一个函数，用于加载适配器参数
+# 定义一个函数，用于加载适配器（adapter）的权重信息
 def load_adapter(full_name, value, adapter, unused_weights):
-    # 根据名称获取适配器层的名称
+    # 从完整的名称中提取适配器的名称
     name = full_name.split("adaptor.")[-1]
-    # 将名称分割成列表
+    # 将名称按"."分割为列表
     items = name.split(".")
 
-    # 如果第二个元素是数字，则表示是层的 ID
+    # 判断第二个元素是否为数字，如果是则转换为整数，否则设为None
     if items[1].isdigit():
         layer_id = int(items[1])
     else:
         layer_id = None
 
-    # 如果名称中不包含适配器，则执行以下操作
+    # 如果完整名称中不包含 "adaptor"
     if "adaptor" not in full_name:
-        # 如果名称中包含 proj_ln，则表示是投影层的 LayerNorm
+        # 如果包含 "proj_ln"，则是投影层规范化（layer norm）
         if "proj_ln" in full_name:
-            # 如果名称中包含 bias，则初始化投影层的偏置
+            # 如果名称中包含 "bias"，则进行断言和赋值操作
             if "bias" in name:
                 assert (
                     value.shape == adapter.proj_layer_norm.bias.data.shape
                 ), f"{full_name} has size {value.shape}, but {adapter.proj_layer_norm.bias.data.shape} was found."
                 adapter.proj_layer_norm.bias.data = value
                 logger.info(f"Adapter proj layer norm bias was initialized from {full_name}.")
-            # 如果名称中包含 weight，则初始化投影层的权重
+            # 如果名称中包含 "weight"，则进行断言和赋值操作
             if "weight" in name:
                 assert (
                     value.shape == adapter.proj_layer_norm.weight.data.shape
                 ), f"{full_name} has size {value.shape}, but {adapter.proj_layer_norm.weight.data.shape} was found."
                 adapter.proj_layer_norm.weight.data = value
-        # 如果不是 proj_ln，则表示是投影层
         else:
-            # 如果名称中包含 bias，则初始化投影层的偏置
+            # 否则是投影层
+            # 如果名称中包含 "bias"，则进行断言和赋值操作
             if "bias" in name:
                 assert (
                     value.shape == adapter.proj.bias.data.shape
                 ), f"{full_name} has size {value.shape}, but {adapter.proj.bias.data.shape} was found."
                 adapter.proj.bias.data = value
                 logger.info(f"Adapter proj layer bias was initialized from {full_name}.")
-            # 如果名称中包含 weight，则初始化投影层的权重
+            # 如果名称中包含 "weight"，则进行断言和赋值操作
             if "weight" in name:
                 assert (
                     value.shape == adapter.proj.weight.data.shape
                 ), f"{full_name} has size {value.shape}, but {adapter.proj.weight.data.shape} was found."
                 adapter.proj.weight.data = value
-                logger.info(f"Adapter proj layer weight was initialized from {full_name}.")
-    # 如果层 ID 是整数类型，则表示是适配器层
+    # 如果 layer_id 是整数
     elif isinstance(layer_id, int):
-        # 如果名称中包含 bias，则初始化适配器层的偏置
+        # 如果名称中包含 "bias"，则进行断言和赋值操作
         if "bias" in name:
             assert (
                 value.shape == adapter.layers[layer_id].conv.bias.data.shape
             ), f"{full_name} has size {value.shape}, but {adapter.layers[layer_id].conv.bias.data.shape} was found."
             adapter.layers[layer_id].conv.bias.data = value
             logger.info(f"Adapter layer {layer_id} bias was initialized from {full_name}.")
-        # 如果名称中包含 weight，则初始化适配器层的权重
+        # 如果名称中包含 "weight"，则进行断言和赋值操作
         elif "weight" in name:
             assert (
                 value.shape == adapter.layers[layer_id].conv.weight.data.shape
@@ -285,40 +268,47 @@ def load_adapter(full_name, value, adapter, unused_weights):
             adapter.layers[layer_id].conv.weight.data = value
             logger.info(f"Adapter layer {layer_id} bias was initialized from {full_name}.")
     else:
-        # 将未使用的权重添加到列表中
+        # 如果既不是 "adaptor" 开头，也没有整数的 layer_id，将 full_name 添加到未使用的权重列表中
         unused_weights.append(full_name)
 
 
-# 定义一个函数，根据嵌入层创建线性层
+# 根据嵌入层（emb）创建一个线性层，并将其权重初始化为嵌入层的权重
 def make_linear_from_emb(emb):
-    # 获取嵌入层的词汇大小和嵌入维度大小
+    # 获取嵌入层的词汇大小和嵌入维度
     vocab_size, emb_size = emb.weight.shape
-    # 创建一个线性层，将词汇大小作为输入维度，嵌入维度作为输出维度，无偏置
+    # 创建一个线性层，不带偏置
     lin_layer = nn.Linear(vocab_size, emb_size, bias=False)
-    # 将嵌入层的权重复制给线性层
+    # 将线性层的权重数据初始化为嵌入层的权重数据
     lin_layer.weight.data = emb.weight.data
-    # 返回线性层
     return lin_layer
 
 
-# 使用无梯度计算的上下文装饰器定义函数，用于转换 wav2vec2 检查点
+# 使用无梯度的上下文装饰器定义一个函数，用于将 wav2vec2 的检查点转换
 @torch.no_grad()
 def convert_wav2vec2_checkpoint(
     checkpoint_path,
-    pytorch_dump_folder_path,  # 存储 PyTorch 模型的文件夹路径
-    dict_path,  # 字典文件路径
-    config_yaml_path,  # 配置文件路径（YAML 格式）
-    encoder_config_path,  # 编码器配置文件路径
-    decoder_config_path,  # 解码器配置文件路径
-    add_adapter,  # 是否增加适配器的标志
-    adapter_kernel_size,  # 适配器的卷积核大小
-    adapter_stride,  # 适配器的步长大小
-    decoder_start_token_id,  # 解码器起始标记的 ID
-    encoder_output_dim,  # 编码器输出维度
-    # Copy/paste/tweak model's weights to transformers design.
+    pytorch_dump_folder_path,        # PyTorch模型保存的文件夹路径
+    dict_path,                       # 词典文件路径
+    config_yaml_path,                # 配置文件（YAML格式）路径
+    encoder_config_path,             # 编码器配置文件路径
+    decoder_config_path,             # 解码器配置文件路径
+    add_adapter,                     # 是否添加适配器（布尔值）
+    adapter_kernel_size,             # 适配器的卷积核大小
+    adapter_stride,                  # 适配器的步幅大小
+    decoder_start_token_id,          # 解码器起始标记ID
+    encoder_output_dim,              # 编码器的输出维度
+def copy_weights_to_transformers_model(
+    pytorch_dump_folder_path,
+    checkpoint_path,
+    dict_path,
+    config_yaml_path,
+):
+    """
+    Copy/paste/tweak model's weights to transformers design.
+    """
 
     # load configs
-    # 从预训练模型加载编码器配置，设置适配器和输出维度等参数
+    # 从预训练配置文件加载 Wav2Vec2Config
     encoder_config = Wav2Vec2Config.from_pretrained(
         encoder_config_path,
         add_adapter=True,
@@ -327,11 +317,12 @@ def convert_wav2vec2_checkpoint(
         token_token=True,
         output_hidden_size=encoder_output_dim,
     )
-    # 从预训练模型加载解码器配置
+    
+    # 从预训练配置文件加载 MBartConfig
     decoder_config = MBartConfig.from_pretrained(decoder_config_path)
 
     # load model
-    # 加载模型权重
+    # 使用 fairseq 提供的函数加载模型集合和任务
     model, _, _ = fairseq.checkpoint_utils.load_model_ensemble_and_task(
         [checkpoint_path],
         arg_overrides={
@@ -341,37 +332,36 @@ def convert_wav2vec2_checkpoint(
             "load_pretrained_decoder_from": None,
         },
     )
-    # 设置模型为评估模式
-    model = model[0].eval()
+    model = model[0].eval()  # 设置模型为评估模式
 
     # load feature extractor
-    # 从预训练模型加载特征提取器配置
+    # 从预训练配置文件加载 Wav2Vec2FeatureExtractor
     feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(encoder_config_path, token_token=True)
 
     # set weights for wav2vec2 encoder
-    # 设置 wav2vec2 编码器的权重
+    # 使用 Wav2Vec2Model 构建 hf_encoder
     hf_encoder = Wav2Vec2Model(encoder_config)
+
+    # 递归加载 wav2vec2 encoder 的权重
     recursively_load_weights_wav2vec2(model.encoder, hf_encoder)
 
     # load decoder weights
-    # 加载解码器权重
+    # 使用 MBartForCausalLM 构建 hf_decoder
     hf_decoder = MBartForCausalLM(decoder_config)
+    # 加载模型的 decoder 权重，并记录缺失和意外的键
     missing_keys, unexpected_keys = hf_decoder.model.decoder.load_state_dict(model.decoder.state_dict(), strict=False)
     logger.warning(f"The following keys are missing when loading the decoder weights: {missing_keys}")
     logger.warning(f"The following keys are unexpected when loading the decoder weights: {unexpected_keys}")
 
-    # initialize speech encoder-decoder model
-    # 初始化语音编码-解码模型
+    # 构建 SpeechEncoderDecoderModel
     hf_wav2vec = SpeechEncoderDecoderModel(encoder=hf_encoder, decoder=hf_decoder)
-    hf_wav2vec.config.tie_word_embeddings = False
+    hf_wav2vec.config.tie_word_embeddings = False  # 设置不共享词嵌入权重
 
-    # initialize tokenizer
-    # 初始化分词器
+    # 初始化 MBart50Tokenizer
     tokenizer = MBart50Tokenizer(dict_path)
-    tokenizer.save_pretrained(pytorch_dump_folder_path)
+    tokenizer.save_pretrained(pytorch_dump_folder_path)  # 保存 tokenizer 到指定路径
 
-    # configure and save model and feature extractor
-    # 配置并保存模型和特征提取器
+    # 构建配置字典并设置相关 token id
     config = hf_wav2vec.config.to_dict()
     config["pad_token_id"] = tokenizer.pad_token_id
     config["bos_token_id"] = tokenizer.bos_token_id
@@ -381,46 +371,57 @@ def convert_wav2vec2_checkpoint(
     config["decoder_start_token_id"] = tokenizer.eos_token_id
     config["forced_bos_token_id"] = 250004
     config["forced_eos_token_id"] = tokenizer.eos_token_id
+
+    # 从配置字典构建 SpeechEncoderDecoderConfig
     hf_wav2vec.config = SpeechEncoderDecoderConfig.from_dict(config)
+
+    # 将模型保存到指定路径
     hf_wav2vec.save_pretrained(pytorch_dump_folder_path)
+    # 保存 feature extractor 到指定路径
     feature_extractor.save_pretrained(pytorch_dump_folder_path)
 
-# 主函数入口
+
 if __name__ == "__main__":
-    # 解析命令行参数
     parser = argparse.ArgumentParser()
     parser.add_argument("--pytorch_dump_folder_path", default=None, type=str, help="Path to the output PyTorch model.")
     parser.add_argument("--checkpoint_path", default=None, type=str, help="Path to fairseq checkpoint")
     parser.add_argument("--dict_path", default=None, type=str, help="Path to dict of fine-tuned model")
     parser.add_argument("--config_yaml_path", default=None, type=str, help="Path to yaml file of fine-tuned model")
-    # 添加一个命令行参数，用于指定编码器的配置文件路径，默认为"facebook/wav2vec2-xls-r-1b"，字符串类型，帮助信息为"Path to hf encoder wav2vec2 checkpoint config"
+    # 添加一个接收命令行参数的选项，用于指定编码器配置文件的路径
     parser.add_argument(
         "--encoder_config_path",
         default="facebook/wav2vec2-xls-r-1b",
         type=str,
         help="Path to hf encoder wav2vec2 checkpoint config",
     )
-    # 添加一个命令行参数，用于指定解码器的配置文件路径，默认为"facebook/mbart-large-50-one-to-many-mmt"，字符串类型，帮助信息为"Path to hf decoder checkpoint config"
+    
+    # 添加一个接收命令行参数的选项，用于指定解码器配置文件的路径
     parser.add_argument(
         "--decoder_config_path",
         default="facebook/mbart-large-50-one-to-many-mmt",
         type=str,
         help="Path to hf decoder checkpoint config",
     )
-    # 添加一个命令行参数，用于指定是否添加模型适配器层，默认为True，布尔类型，帮助信息为"whethere to add model adapter layers"
-    parser.add_argument("--add_adapter", default=True, type=bool, help="whethere to add model adapter layers")
-    # 添加一个命令行参数，用于指定适配器层的步长，默认为2，整数类型，帮助信息为"stride of adapter layers"
+    
+    # 添加一个接收命令行参数的选项，指定是否添加模型适配器层，默认为 True
+    parser.add_argument("--add_adapter", default=True, type=bool, help="whether to add model adapter layers")
+    
+    # 添加一个接收命令行参数的选项，用于指定模型适配器层的步幅，默认为 2
     parser.add_argument("--adapter_stride", default=2, type=int, help="stride of adapter layers")
-    # 添加一个命令行参数，用于指定适配器层的卷积核尺寸，默认为3，整数类型，帮助信息为"kernel size of adapter layers"
+    
+    # 添加一个接收命令行参数的选项，用于指定模型适配器层的卷积核大小，默认为 3
     parser.add_argument("--adapter_kernel_size", default=3, type=int, help="kernel size of adapter layers")
-    # 添加一个命令行参数，用于指定编码器输出维度，默认为1024，整数类型，帮助信息为"encoder output dim"
+    
+    # 添加一个接收命令行参数的选项，用于指定编码器输出的维度，默认为 1024
     parser.add_argument("--encoder_output_dim", default=1024, type=int, help="encoder output dim")
-    # 添加一个命令行参数，用于指定解码器开始标记的ID，默认为250004，整数类型，帮助信息为"`decoder_start_token_id` of model config"
+    
+    # 添加一个接收命令行参数的选项，用于指定解码器启动令牌的ID，默认为 250004
     parser.add_argument("--start_token_id", default=250004, type=int, help="`decoder_start_token_id` of model config")
-
-    # 从命令行参数中解析得到参数对象
+    
+    # 解析命令行参数并将其存储在 args 变量中
     args = parser.parse_args()
-    # 将参数传递给函数convert_wav2vec2_checkpoint以执行转换wav2vec2检查点的操作
+    
+    # 调用函数 convert_wav2vec2_checkpoint，传递命令行参数中的各个配置项作为参数
     convert_wav2vec2_checkpoint(
         args.checkpoint_path,
         args.pytorch_dump_folder_path,

@@ -1,38 +1,33 @@
-# `.\transformers\models\umt5\modeling_umt5.py`
+# `.\models\umt5\modeling_umt5.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-#
-# 根据 Apache 许可证，除非遵守许可证，否则不得使用此文件。您可以在以下网址获取许可证的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则在“AS IS”基础上分发软件，没有任何担保或条件，无论是明示的还是隐含的。
-# 有限制的语言权利限制特定的语言权利，并
-# 根据许可证，对于特定语言的特定权利。
-""" PyTorch UMT5 model."""
+```
+# 设置文件编码为 UTF-8
+# 版权声明和许可信息，指定代码使用的许可证为 Apache License, Version 2.0
+# 不可使用此文件，除非符合 Apache License, Version 2.0 的规定。可以通过上述链接获取许可证副本。
+# 根据适用法律或书面同意，本软件按“原样”分发，无任何担保或条件。
+# 有关详细信息，请参阅许可证的特定语言，限制和条件
+""" PyTorch UMT5 模型."""
 
-# 导入必要的库
-import copy
-import math
-from typing import List, Optional, Tuple, Union
+import copy  # 导入 copy 模块
+import math  # 导入 math 模块
+from typing import List, Optional, Tuple, Union  # 导入类型提示相关的模块
 
-import torch
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+import torch  # 导入 PyTorch 库
+from torch import nn  # 从 PyTorch 导入神经网络模块
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 从 PyTorch 神经网络模块导入损失函数
 
-# 导入必要的组件和输出类
-from ...activations import ACT2FN
-from ...modeling_outputs import (
+from ...activations import ACT2FN  # 导入激活函数映射
+from ...modeling_outputs import (  # 导入模型输出相关类
     BaseModelOutput,
     BaseModelOutputWithPastAndCrossAttentions,
     Seq2SeqLMOutput,
     Seq2SeqModelOutput,
     Seq2SeqQuestionAnsweringModelOutput,
     Seq2SeqSequenceClassifierOutput,
+    TokenClassifierOutput,
 )
-from ...modeling_utils import PreTrainedModel
-from ...utils import (
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型基类
+from ...utils import (  # 导入辅助工具函数和常量
     DUMMY_INPUTS,
     DUMMY_MASK,
     add_start_docstrings,
@@ -41,190 +36,190 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-from .configuration_umt5 import UMT5Config
+from .configuration_umt5 import UMT5Config  # 导入 UMT5 模型的配置类
 
-# 获取logger对象
-logger = logging.get_logger(__name__)
 
-# 用于文档的配置字符串
-_CONFIG_FOR_DOC = "UMT5Config"
-# 用于文档的检查点字符串
-_CHECKPOINT_FOR_DOC = "google/umt5-small"
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 从 transformers.models.t5.modeling_t5.T5LayerNorm 复制并将 T5 替换为 UMT5
+_CONFIG_FOR_DOC = "UMT5Config"  # 文档中显示的配置文件名称
+_CHECKPOINT_FOR_DOC = "google/umt5-small"  # 文档中显示的检查点名称
+
+
+# 从 transformers.models.t5.modeling_t5.T5LayerNorm 复制并改为 UMT5
 class UMT5LayerNorm(nn.Module):
     def __init__(self, hidden_size, eps=1e-6):
         """
-        UMT5 风格的 LayerNorm 模块。没有偏置，也没有减去均值。
+        构造一个 UMT5 风格的 LayerNorm 模块。无偏差和无平均值减法。
         """
         super().__init__()
-        # 初始化权重参数
-        self.weight = nn.Parameter(torch.ones(hidden_size))
-        self.variance_epsilon = eps
+        self.weight = nn.Parameter(torch.ones(hidden_size))  # 初始化权重参数为全1张量
+        self.variance_epsilon = eps  # 方差的小值偏置
 
     def forward(self, hidden_states):
-        # UMT5 使用的是只进行缩放而不进行移位的 layer_norm，也称为 RMS Layer Normalization
-        # 因此方差是在没有均值的情况下计算的，也没有偏差。此外，我们希望确保对于半精度输入，在 fp32 中进行累积
+        # UMT5 使用一个只进行缩放而不进行偏移的 LayerNorm，这也称为均方根层归一化
+        # 因此，方差是在没有均值的情况下计算的，而且没有偏差。另外，我们要确保对于半精度输入的累积是在 fp32 中进行的
 
-        # 计算方差
-        variance = hidden_states.to(torch.float32).pow(2).mean(-1, keepdim=True)
-        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
+        variance = hidden_states.to(torch.float32).pow(2).mean(-1, keepdim=True)  # 计算方差
+        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)  # 归一化操作
 
-        # 如果权重类型在 [torch.float16, torch.bfloat16] 中，则转换为该类型
+        # 如果权重数据类型是半精度浮点数或 BF16，则将隐藏状态转换为相应的数据类型
         if self.weight.dtype in [torch.float16, torch.bfloat16]:
             hidden_states = hidden_states.to(self.weight.dtype)
 
-        return self.weight * hidden_states
+        return self.weight * hidden_states  # 返回经归一化处理的隐藏状态乘以权重
 
 
-# 从 transformers.models.t5.modeling_t5.T5DenseActDense 复制并将 T5 替换为 UMT5
+# 从 transformers.models.t5.modeling_t5.T5DenseActDense 复制并改为 UMT5
 class UMT5DenseActDense(nn.Module):
-    # 初始化函数，接受一个UMT5Config类型的参数config
+    # 初始化方法，接收一个UMT5Config类型的配置参数
     def __init__(self, config: UMT5Config):
         # 调用父类的初始化方法
         super().__init__()
-        # 创建一个线性变换层，输入尺寸为config.d_model，输出尺寸为config.d_ff，没有偏置
+        # 创建一个线性层，输入维度为config.d_model，输出维度为config.d_ff，无偏置项
         self.wi = nn.Linear(config.d_model, config.d_ff, bias=False)
-        # 创建一个线性变换层，输入尺寸为config.d_ff，输出尺寸为config.d_model，没有偏置
+        # 创建一个线性层，输入维度为config.d_ff，输出维度为config.d_model，无偏置项
         self.wo = nn.Linear(config.d_ff, config.d_model, bias=False)
-        # 创建一个以config.dropout_rate为丢弃概率的Dropout层
+        # 创建一个以config.dropout_rate为丢弃率的Dropout层
         self.dropout = nn.Dropout(config.dropout_rate)
-        # 根据配置选择激活函数的类型，并赋值给self.act
+        # 根据配置选择合适的激活函数，并赋值给self.act
         self.act = ACT2FN[config.dense_act_fn]
-    
-    # 前向传播函数，接受输入hidden_states
+
+    # 前向传播方法，接收隐藏状态hidden_states作为输入
     def forward(self, hidden_states):
-        # 使用wi进行线性变换
+        # 输入hidden_states经过self.wi线性层
         hidden_states = self.wi(hidden_states)
-        # 使用激活函数act
+        # 经过激活函数self.act
         hidden_states = self.act(hidden_states)
-        # 使用dropout进行丢弃
+        # 经过丢弃层self.dropout
         hidden_states = self.dropout(hidden_states)
-        # 判断wo.weight的类型是否为torch.Tensor，并且hidden_states的dtype与wo.weight的dtype不同，且wo.weight的dtype不为torch.int8
+        # 如果self.wo.weight是torch.Tensor类型，且hidden_states的数据类型不等于self.wo.weight的数据类型，且self.wo.weight的数据类型不是torch.int8
         if (
             isinstance(self.wo.weight, torch.Tensor)
             and hidden_states.dtype != self.wo.weight.dtype
             and self.wo.weight.dtype != torch.int8
         ):
-            # 将hidden_states转换为wo.weight的dtype
+            # 将hidden_states转换为self.wo.weight的数据类型
             hidden_states = hidden_states.to(self.wo.weight.dtype)
-        # 使用wo进行线性变换，并返回结果
+        # 输入hidden_states经过self.wo线性层
         hidden_states = self.wo(hidden_states)
+        # 返回经过self.wo线性层后的hidden_states
         return hidden_states
-# 从transformers.models.t5.modeling_t5.T5DenseGatedActDense复制过来，将T5->UMT5
+# 从 transformers.models.t5.modeling_t5.T5DenseGatedActDense 复制代码，将 T5 替换为 UMT5
 class UMT5DenseGatedActDense(nn.Module):
     def __init__(self, config: UMT5Config):
         super().__init__()
-        # 定义一个线性变换层，将输入维度为config.d_model的向量映射成维度为config.d_ff的向量，不使用偏置
+        # 定义一个线性层，将输入维度 config.d_model 映射到 config.d_ff，无偏置
         self.wi_0 = nn.Linear(config.d_model, config.d_ff, bias=False)
-        # 定义第二个线性变换层，同样将输入维度为config.d_model的向量映射成维度为config.d_ff的向量，不使用偏置
+        # 定义另一个线性层，同样将输入维度 config.d_model 映射到 config.d_ff，无偏置
         self.wi_1 = nn.Linear(config.d_model, config.d_ff, bias=False)
-        # 定义一个线性变换层，将维度为config.d_ff的向量映射回维度为config.d_model的向量，不使用偏置
+        # 定义一个线性层，将输入维度 config.d_ff 映射回 config.d_model，无偏置
         self.wo = nn.Linear(config.d_ff, config.d_model, bias=False)
-        # 定义一个dropout层，按照config.dropout_rate的概率丢弃输入中的元素
+        # 定义一个 dropout 层，丢弃概率为 config.dropout_rate
         self.dropout = nn.Dropout(config.dropout_rate)
-        # 从ACT2FN字典中选取对应的激活函数
+        # 根据配置选择激活函数 ACT2FN 中的一个作为 self.act
         self.act = ACT2FN[config.dense_act_fn]
 
-    # 前向传播函数
     def forward(self, hidden_states):
-        # 经过激活函数后的隐藏状态
+        # 将 hidden_states 经过 self.wi_0 和激活函数 self.act 处理得到 hidden_gelu
         hidden_gelu = self.act(self.wi_0(hidden_states))
-        # 经过第二个线性变换层后的隐藏状态
+        # 将 hidden_states 经过 self.wi_1 处理得到 hidden_linear
         hidden_linear = self.wi_1(hidden_states)
-        # 将两个隐藏状态相乘
+        # 将 hidden_gelu 和 hidden_linear 逐元素相乘，得到新的 hidden_states
         hidden_states = hidden_gelu * hidden_linear
-        # 对相乘结果进行dropout操作
+        # 对 hidden_states 进行 dropout 处理
         hidden_states = self.dropout(hidden_states)
 
-        # 为了使8位量化适用于google/flan-t5-xxl，self.wo保持为float32
-        # 参见https://github.com/huggingface/transformers/issues/20287
-        # 也确保权重不是`int8`，以防用户强制`_keep_in_fp32_modules`为`None`
+        # 为了使得 8 位量化在 google/flan-t5-xxl 上工作，self.wo 保持为 float32 类型
+        # 参考 https://github.com/huggingface/transformers/issues/20287
+        # 同时确保权重不是 `int8` 类型，以防用户将 `_keep_in_fp32_modules` 强制设置为 `None`
         if (
             isinstance(self.wo.weight, torch.Tensor)
             and hidden_states.dtype != self.wo.weight.dtype
             and self.wo.weight.dtype != torch.int8
         ):
-            # 将隐藏状态转换为与self.wo权重相同的数据类型
+            # 将 hidden_states 转换为 self.wo.weight 的数据类型
             hidden_states = hidden_states.to(self.wo.weight.dtype)
 
-        # 经过wo线性变换层后的隐藏状态
+        # 将 hidden_states 经过 self.wo 处理得到最终的输出
         hidden_states = self.wo(hidden_states)
         return hidden_states
 
 
-# 从transformers.models.t5.modeling_t5.T5LayerFF复制过来，将T5->UMT5
+# 从 transformers.models.t5.modeling_t5.T5LayerFF 复制代码，将 T5 替换为 UMT5
 class UMT5LayerFF(nn.Module):
     def __init__(self, config: UMT5Config):
         super().__init__()
-        # 如果is_gated_act为真，则使用UMT5DenseGatedActDense，否则使用UMT5DenseActDense
+        # 如果配置为使用 gated activation，则使用 UMT5DenseGatedActDense，否则使用 UMT5DenseActDense
         if config.is_gated_act:
             self.DenseReluDense = UMT5DenseGatedActDense(config)
         else:
             self.DenseReluDense = UMT5DenseActDense(config)
 
-        # 初始化UMT5LayerNorm层，传入config中的隐藏层维度和layer_norm_epsilon
+        # 定义层归一化层，输入维度为 config.d_model，epsilon 为 config.layer_norm_epsilon
         self.layer_norm = UMT5LayerNorm(config.d_model, eps=config.layer_norm_epsilon)
-        # 初始化一个dropout层，按照config.dropout_rate的概率丢弃输入中的元素
+        # 定义 dropout 层，丢弃概率为 config.dropout_rate
         self.dropout = nn.Dropout(config.dropout_rate)
 
-    # 前向传播函数
     def forward(self, hidden_states):
-        # 对输入的隐藏状态进行Layer Norm处理
+        # 对输入的 hidden_states 进行层归一化处理
         forwarded_states = self.layer_norm(hidden_states)
-        # 经过UMT5DenseGatedActDense或UMT5DenseActDense层后的结果
+        # 将归一化后的 hidden_states 输入到 self.DenseReluDense 中进行处理
         forwarded_states = self.DenseReluDense(forwarded_states)
-        # 将原始输入的隐藏状态和经过dropout后的结果相加
+        # 将原始的 hidden_states 和经过 dropout 处理后的 forwarded_states 相加作为最终输出
         hidden_states = hidden_states + self.dropout(forwarded_states)
         return hidden_states
 
 
-# 定义UMT5Attention类
 class UMT5Attention(nn.Module):
     """
-    T5's attention using relative_attention_bias.
+    使用 relative_attention_bias 的 T5 注意力模块。
     """
-    # 初始化类，接受配置和是否包含相对注意力偏置标志
+    # 初始化函数，用于初始化一个注意力头部模型
     def __init__(self, config, has_relative_attention_bias=False):
-        # 调用父类初始化方法
+        # 调用父类构造函数初始化
         super().__init__()
-        # 设置是否为解码器的标志
+        # 根据配置设置是否为解码器
         self.is_decoder = config.is_decoder
-        # 设置是否包含相对注意力偏置的标志
+        # 设置是否存在相对注意力偏置
         self.has_relative_attention_bias = has_relative_attention_bias
-        # 设置相对注意力桶的数量
+        # 相对注意力的桶数目
         self.relative_attention_num_buckets = config.relative_attention_num_buckets
-        # 设置相对注意力的最大距离
+        # 相对注意力的最大距离
         self.relative_attention_max_distance = config.relative_attention_max_distance
-        # 设置模型维度
+        # 模型的维度
         self.d_model = config.d_model
-        # 设置键值投影维度
+        # 键值映射的维度
         self.key_value_proj_dim = config.d_kv
-        # 设置注意力头的数量
+        # 注意力头部的数量
         self.n_heads = config.num_heads
-        # 设置丢弃率
+        # 丢弃率
         self.dropout = config.dropout_rate
-        # 计算内部维度
+        # 内部维度，等于头部数量乘以键值映射的维度
         self.inner_dim = self.n_heads * self.key_value_proj_dim
 
-        # 使用线性变换定义查询、键、值和输出投影层
+        # 创建线性层，用于查询
         self.q = nn.Linear(self.d_model, self.inner_dim, bias=False)
+        # 创建线性层，用于键
         self.k = nn.Linear(self.d_model, self.inner_dim, bias=False)
+        # 创建线性层，用于值
         self.v = nn.Linear(self.d_model, self.inner_dim, bias=False)
+        # 创建线性层，用于输出
         self.o = nn.Linear(self.inner_dim, self.d_model, bias=False)
 
-        # 如果包含相对注意力偏置，初始化相对注意力偏置
+        # 如果存在相对注意力偏置，则创建相对注意力偏置的嵌入层
         if self.has_relative_attention_bias:
             self.relative_attention_bias = nn.Embedding(self.relative_attention_num_buckets, self.n_heads)
-        # 初始化剪枝的注意力头集合
+        
+        # 初始化剪枝的注意力头部集合为空集
         self.pruned_heads = set()
 
-    # 重塑投影张量的形状
+    # 重新形状函数，用于调整注意力头部的投影
     def _shape(self, projection: torch.Tensor) -> torch.Tensor:
-        # 计算新的投影张量形状
+        # 计算新的投影形状
         new_projection_shape = projection.size()[:-1] + (self.n_heads, self.key_value_proj_dim)
-        # 移动注意力头到第二个位置 (B, T, H * D) -> (B, T, H, D) -> (B, H, T, D)
+        # 调整投影的形状，将头部移动到第二个位置 (B, T, H * D) -> (B, T, H, D) -> (B, H, T, D)
         new_projection = projection.view(new_projection_shape).permute(0, 2, 1, 3)
+        # 返回调整后的新投影
         return new_projection
     def _relative_position_bucket(self, relative_position):
         """
@@ -247,52 +242,57 @@ class UMT5Attention(nn.Module):
         Returns:
             a Tensor with the same shape as relative_position, containing int32 values in the range [0, num_buckets)
         """
-        relative_buckets = 0  # 初始化相对位置桶变量为0
-        num_buckets = self.relative_attention_num_buckets  # 从对象属性获取总桶数
-        max_distance = self.relative_attention_max_distance  # 从对象属性获取最大距离限制
-        if not self.is_decoder:  # 如果当前模块不是解码器
-            num_buckets //= 2  # 桶数量减半，因为仅使用一半桶用于正方向或负方向
-            relative_buckets += (relative_position > 0).to(torch.long) * num_buckets  # 根据位置正负分配到不同的桶区间
-            relative_position = torch.abs(relative_position)  # 将位置转换为绝对值，以用于后续计算
-        else:  # 如果是解码器
-            relative_position = -torch.min(relative_position, torch.zeros_like(relative_position))  # 调整相对位置值，保证它非负
-        # now relative_position is in the range [0, inf)
+        relative_buckets = 0  # 初始化相对位置的桶号为0
 
-        # half of the buckets are for exact increments in positions
-        max_exact = num_buckets // 2  # 确切位置桶的最大数量（一半的桶）
-        is_small = relative_position < max_exact  # 检查哪些位置在确切位置桶的范围内
+        # 获取相对位置的桶数和最大距离
+        num_buckets = self.relative_attention_num_buckets
+        max_distance = self.relative_attention_max_distance
 
-        # The other half of the buckets are for logarithmically bigger bins in positions up to max_distance
-        log_ratio = torch.log(relative_position.float() / max_exact) / math.log(max_distance / max_exact)  # 计算对数桶比例
-        log_ratio = log_ratio * (num_buckets - max_exact)  # 转换比例到适合的桶索引范围
-        relative_position_if_large = max_exact + log_ratio.to(torch.long)  # 计算较大距离的相对位置所在的桶索引
+        # 如果不是解码器模式，调整桶数和相对位置
+        if not self.is_decoder:
+            num_buckets //= 2  # 桶数减半
+            relative_buckets += (relative_position > 0).to(torch.long) * num_buckets  # 根据相对位置正负，选择桶号
+            relative_position = torch.abs(relative_position)  # 取相对位置的绝对值
+        else:
+            relative_position = -torch.min(relative_position, torch.zeros_like(relative_position))  # 如果是解码器模式，调整相对位置
+
+        # 现在相对位置在区间[0, inf)
+
+        # 将一半的桶用于精确增量位置
+        max_exact = num_buckets // 2
+        is_small = relative_position < max_exact  # 判断相对位置是否小于最大精确值
+
+        # 另一半桶用于对数增量位置，直到最大距离
+        log_ratio = torch.log(relative_position.float() / max_exact) / math.log(max_distance / max_exact)
+        log_ratio = log_ratio * (num_buckets - max_exact)
+        relative_position_if_large = max_exact + log_ratio.to(torch.long)
         relative_position_if_large = torch.min(
             relative_position_if_large, torch.full_like(relative_position_if_large, num_buckets - 1)
-        )  # 限制桶索引不超过最大值
+        )
 
-        relative_buckets += torch.where(is_small, relative_position, relative_position_if_large)  # 根据大小选择适当的桶索引
-        return relative_buckets  # 返回计算的桶索引
-    # 计算分箱的相对位置偏置
+        relative_buckets += torch.where(is_small, relative_position, relative_position_if_large)  # 根据相对位置大小选择最终的桶号
+        return relative_buckets  # 返回计算出的相对位置的桶号
+    # 计算相对位置偏置
     def compute_bias(self, query_length, key_length, device=None):
         """Compute binned relative position bias"""
-        # 如果设备为None，则使用权重的设备
+        # 如果设备未指定，则使用相对注意力偏置张量的设备
         if device is None:
             device = self.relative_attention_bias.weight.device
-        # 创建一个包含查询长度元素的长整型张量，设备为给定设备
+        # 创建上下文位置张量，包含长度为 query_length 的序列，dtype 为 long，设备为指定设备
         context_position = torch.arange(query_length, dtype=torch.long, device=device)[:, None]
-        # 创建一个包含键长度元素的长整型张量，设备为给定设备
+        # 创建记忆位置张量，包含长度为 key_length 的序列，dtype 为 long，设备为指定设备
         memory_position = torch.arange(key_length, dtype=torch.long, device=device)[None, :]
-        # 计算相对位置，形状为(query_length, key_length)
+        # 计算相对位置，形状为 (query_length, key_length)
         relative_position = memory_position - context_position
-        # 计算相对位置所属的桶，根据相对位置算出桶的索引
+        # 将相对位置转换为桶索引
         relative_position_bucket = self._relative_position_bucket(relative_position)
-        # 通过相对位置桶计算相对注意力偏置，形状为(query_length, key_length, num_heads)
+        # 使用相对注意力偏置张量计算偏置值，形状为 (query_length, key_length, num_heads)
         values = self.relative_attention_bias(relative_position_bucket)
-        # 转置values维度，形状变为(1, num_heads, query_length, key_length)，在最前面添加一个维度
+        # 调整维度顺序，形状变为 (1, num_heads, query_length, key_length)
         values = values.permute([2, 0, 1]).unsqueeze(0)
+        # 返回计算得到的偏置值张量
         return values
 
-    # 前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -300,17 +300,18 @@ class UMT5Attention(nn.Module):
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
-# 定义 UMT5 自注意力层的模块
+# UMT5 模型中的自注意力层定义，用于处理自注意力机制
 class UMT5LayerSelfAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建 UMT5 自注意力层对象，包含相对注意力偏置
+        # 初始化自注意力层，配置是否包含相对注意力偏置
         self.SelfAttention = UMT5Attention(config, has_relative_attention_bias=True)
-        # 创建层归一化对象
+        # 初始化层归一化（Layer Normalization），输入维度为 config.d_model，epsilon 设置为 config.layer_norm_epsilon
         self.layer_norm = UMT5LayerNorm(config.d_model, eps=config.layer_norm_epsilon)
-        # 创建 Dropout 层对象
+        # 初始化 dropout，丢弃率为 config.dropout_rate
         self.dropout = nn.Dropout(config.dropout_rate)
 
+    # 定义前向传播函数
     def forward(
         self,
         hidden_states,
@@ -318,33 +319,34 @@ class UMT5LayerSelfAttention(nn.Module):
         layer_head_mask=None,
         past_key_value=None,
     ):
-        # 对隐藏状态进行层归一化
+        # 对输入的 hidden_states 进行层归一化
         normed_hidden_states = self.layer_norm(hidden_states)
-        # 通过自注意力层进行前向传播
+        # 将归一化后的 hidden_states 输入到 SelfAttention 层中进行自注意力计算
         attention_output = self.SelfAttention(
             normed_hidden_states,
             attention_mask=attention_mask,
             layer_head_mask=layer_head_mask,
             past_key_value=past_key_value,
         )
-        # 将自注意力层的输出与原始隐藏状态进行残差连接，并应用 Dropout
+        # 将原始的 hidden_states 和经过 dropout 处理的 attention_output 相加，作为最终输出的 hidden_states
         hidden_states = hidden_states + self.dropout(attention_output[0])
-        # 构建输出元组，包含残差连接后的隐藏状态和可能的注意力信息
-        outputs = (hidden_states,) + attention_output[1:]  # add attentions if we output them
+        # 构建输出元组，包含更新后的 hidden_states 和可能的 attention 情况（如果有的话）
+        outputs = (hidden_states,) + attention_output[1:]  # 如果有的话，添加 attention
         return outputs
 
 
-# 定义 UMT5 跨注意力层的模块
+# UMT5 模型中的编码-解码注意力层定义
 class UMT5LayerCrossAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建 UMT5 跨注意力层对象，不包含相对注意力偏置
+        # 初始化编码-解码注意力层，配置不包含相对注意力偏置
         self.EncDecAttention = UMT5Attention(config, has_relative_attention_bias=False)
-        # 创建层归一化对象
+        # 初始化层归一化（Layer Normalization），输入维度为 config.d_model，epsilon 设置为 config.layer_norm_epsilon
         self.layer_norm = UMT5LayerNorm(config.d_model, eps=config.layer_norm_epsilon)
-        # 创建 Dropout 层对象
+        # 初始化 dropout，丢弃率为 config.dropout_rate
         self.dropout = nn.Dropout(config.dropout_rate)
 
+    # 定义前向传播函数
     def forward(
         self,
         hidden_states,
@@ -353,9 +355,9 @@ class UMT5LayerCrossAttention(nn.Module):
         layer_head_mask=None,
         past_key_value=None,
     ):
-        # 对隐藏状态进行层归一化
+        # 对输入的 hidden_states 进行层归一化
         normed_hidden_states = self.layer_norm(hidden_states)
-        # 通过跨注意力层进行前向传播
+        # 将归一化后的 hidden_states 输入到 EncDecAttention 层中进行编码-解码注意力计算
         attention_output = self.EncDecAttention(
             normed_hidden_states,
             encoder_hidden_states=encoder_hidden_states,
@@ -363,29 +365,30 @@ class UMT5LayerCrossAttention(nn.Module):
             layer_head_mask=layer_head_mask,
             past_key_value=past_key_value,
         )
-        # 将跨注意力层的输出与原始隐藏状态进行残差连接，并应用 Dropout
+        # 将原始的 hidden_states 和经过 dropout 处理的 attention_output 相加，作为最终输出的 hidden_states
         layer_output = hidden_states + self.dropout(attention_output[0])
-        # 构建输出元组，包含残差连接后的隐藏状态和可能的注意力信息
-        outputs = (layer_output,) + attention_output[1:]  # add attentions if we output them
+        # 构建输出元组，包含更新后的 hidden_states 和可能的 attention 情况（如果有的话）
+        outputs = (layer_output,) + attention_output[1:]  # 如果有的话，添加 attention
         return outputs
 
 
-# 定义 UMT5 块的模块
+# UMT5 模型中的单个块定义，包含自注意力层、可能的编码-解码注意力层和前馈神经网络层
 class UMT5Block(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 判断是否为解码器块
+        # 标志是否为解码器
         self.is_decoder = config.is_decoder
-        # 创建模块列表
+        # 层列表，用于存放块内的各层
         self.layer = nn.ModuleList()
-        # 添加自注意力层到模块列表
+        # 添加自注意力层到层列表中
         self.layer.append(UMT5LayerSelfAttention(config))
-        # 如果是解码器块，添加跨注意力层到模块列表
+        # 如果是解码器，添加编码-解码注意力层到层列表中
         if self.is_decoder:
             self.layer.append(UMT5LayerCrossAttention(config))
-        # 添加前馈网络层到模块列表
+        # 添加前馈神经网络层到层列表中
         self.layer.append(UMT5LayerFF(config))
 
+    # 定义前向传播函数
     def forward(
         self,
         hidden_states,
@@ -397,42 +400,55 @@ class UMT5Block(nn.Module):
         past_key_value=None,
         use_cache=False,
         output_attentions=False,
-    # 该函数是 Transformer 解码器层的前向传播函数
-    def forward(
-        self,
-        hidden_states,
-        attention_mask=None,
-        layer_head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        cross_attn_layer_head_mask=None,
-        past_key_value=None,
-        output_attentions=False,
-        ):
-        # 自注意力层的缓存的key和value元组
+    ):
+        # 依次对层列表中的每一层进行前向传播
+        for layer_module in self.layer:
+            # 如果层为自注意力或编码-解码注意力层，传递相应参数进行计算
+            if isinstance(layer_module, (UMT5LayerSelfAttention, UMT5LayerCrossAttention)):
+                hidden_states = layer_module(
+                    hidden_states,
+                    attention_mask=attention_mask,
+                    encoder_hidden_states=encoder_hidden_states,
+                    layer_head_mask=cross_attn_layer_head_mask if isinstance(layer_module, UMT5LayerCrossAttention) else layer_head_mask,
+                    past_key_value=past_key_value,
+                )[0]
+            else:
+                # 否则，直接对隐藏状态进行前向传播
+                layer_outputs = layer_module(hidden_states)
+                hidden_states = layer_outputs[0]  # 更新隐藏状态为层的输出
+
+        # 构建输出元组，包含最终更新后的 hidden_states 和可能的 attention 情况（如果有的话）
+        outputs = (hidden_states,)
+        if output_attentions:
+            outputs = outputs + (layer_outputs[1],)  # 添加 attention 情况
+        return outputs
+        # Self Attention
+        # 如果过去的键/值对不为 None，则取其前两个元素作为当前自注意力层的缓存键/值对
         self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
-    
-        # 执行自注意力层的前向传播, 输出为隐藏状态、自注意力权重、当前key和value
+
+        # 调用第一个层的自注意力机制，处理隐藏状态
         hidden_states, self_attn_weights, present_key_value = self.layer[0](
             hidden_states,
             attention_mask=attention_mask,
             layer_head_mask=layer_head_mask,
             past_key_value=self_attn_past_key_value,
         )
-    
-        # 对隐藏状态进行截断, 避免溢出, 仅在float16精度下使用
+
+        # 如果隐藏状态的数据类型为 torch.float16，则将无穷大的值 clamp 到一个较小的值，以支持 fp16 训练
         if hidden_states.dtype == torch.float16:
             max_dtype = torch.finfo(hidden_states.dtype).max
             clamp_value = torch.where(torch.isinf(hidden_states).any(), max_dtype - 1000, max_dtype)
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
-    
-        # 跨注意力层的缓存的key和value元组
-        cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
-    
-        # 仅在解码器且有encoder hidden states时执行跨注意力层
+
+        # Cross-Attention Block
+        cross_attn_present_key_value = None
+        cross_attn_weights = None
+        # 如果模型是解码器且 encoder_hidden_states 不为 None，则进行交叉注意力计算
         do_cross_attention = self.is_decoder and encoder_hidden_states is not None
         if do_cross_attention:
-            # 执行跨注意力层的前向传播, 输出为隐藏状态、跨注意力权重、当前key和value
+            # 如果过去的键/值对不为 None，则取其后两个元素作为当前交叉注意力层的缓存键/值对
+            cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
+            # 调用第二个层的交叉注意力机制，处理隐藏状态和编码器的隐藏状态
             hidden_states, cross_attn_weights, cross_attn_present_key_value = self.layer[1](
                 hidden_states,
                 encoder_hidden_states=encoder_hidden_states,
@@ -440,76 +456,89 @@ class UMT5Block(nn.Module):
                 layer_head_mask=cross_attn_layer_head_mask,
                 past_key_value=cross_attn_past_key_value,
             )
-            # 对隐藏状态进行截断, 避免溢出, 仅在float16精度下使用
+            # 如果隐藏状态的数据类型为 torch.float16，则将无穷大的值 clamp 到一个较小的值，以支持 fp16 训练
             if hidden_states.dtype == torch.float16:
                 max_dtype = torch.finfo(hidden_states.dtype).max
                 clamp_value = torch.where(torch.isinf(hidden_states).any(), max_dtype - 1000, max_dtype)
                 hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
-            # 更新当前的key和value
+
+            # 更新当前的键/值对，加上交叉注意力的结果
             present_key_value += cross_attn_present_key_value
-    
-        # 执行前馈网络层
+
+        # 应用 Feed Forward 层
         hidden_states = self.layer[-1](hidden_states)
-    
-        # 对隐藏状态进行截断, 避免溢出, 仅在float16精度下使用
+
+        # 如果隐藏状态的数据类型为 torch.float16，则将无穷大的值 clamp 到一个较小的值，以支持 fp16 训练
         if hidden_states.dtype == torch.float16:
             max_dtype = torch.finfo(hidden_states.dtype).max
             clamp_value = torch.where(torch.isinf(hidden_states).any(), max_dtype - 1000, max_dtype)
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
-    
-        # 返回结果
+
+        # 设置输出内容
         outputs = (
-            hidden_states,
-            present_key_value,
+            hidden_states,  # 最终的隐藏状态
+            present_key_value,  # 当前键/值对
         )
-    
+
+        # 如果需要输出注意力权重，则将自注意力和交叉注意力的权重也加入输出
         if output_attentions:
             outputs += (self_attn_weights, cross_attn_weights)
-    
+
+        # 返回最终输出结果
         return outputs
-# 这是一个 UMT5 分类头的实现，用于句子级别的分类任务
+# Copied from transformers.models.t5.modeling_t5.T5ClassificationHead with T5->UMT5
+# 在 T5ClassificationHead 的基础上复制并修改为 UMT5ClassificationHead
+
 class UMT5ClassificationHead(nn.Module):
     """Head for sentence-level classification tasks."""
+    # 用于句子级分类任务的头部模块
 
     def __init__(self, config: UMT5Config):
         super().__init__()
-        # 初始化一个全连接层，输入维度为 config.d_model，输出维度也为 config.d_model
+        # 调用父类构造函数初始化模块
         self.dense = nn.Linear(config.d_model, config.d_model)
-        # 初始化一个 dropout 层，丢弃率为 config.classifier_dropout
+        # 全连接层，输入和输出维度为 config.d_model
         self.dropout = nn.Dropout(p=config.classifier_dropout)
-        # 初始化一个全连接层，输入维度为 config.d_model，输出维度为 config.num_labels
+        # Dropout 层，使用概率为 config.classifier_dropout 的概率丢弃神经元
         self.out_proj = nn.Linear(config.d_model, config.num_labels)
+        # 全连接层，将维度为 config.d_model 的输入映射到 config.num_labels 的输出
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 对输入的隐藏状态应用 dropout
         hidden_states = self.dropout(hidden_states)
-        # 将隐藏状态通过第一个全连接层
+        # 对输入 hidden_states 进行 Dropout 处理
         hidden_states = self.dense(hidden_states)
-        # 对全连接层的输出应用 tanh 激活函数
+        # 将经过 Dropout 处理的 hidden_states 输入全连接层 self.dense
         hidden_states = torch.tanh(hidden_states)
-        # 对激活后的隐藏状态再次应用 dropout
+        # 对全连接层的输出应用 Tanh 激活函数
         hidden_states = self.dropout(hidden_states)
-        # 将最终的隐藏状态通过输出全连接层得到分类结果
+        # 再次对输出进行 Dropout 处理
         hidden_states = self.out_proj(hidden_states)
+        # 将处理后的 hidden_states 输入全连接层 self.out_proj
         return hidden_states
+        # 返回全连接层的输出作为模型的输出结果
 
 
-# 这是 UMT5 预训练模型的抽象基类
 class UMT5PreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
+    # 处理权重初始化以及预训练模型下载和加载的抽象类
 
     config_class = UMT5Config
+    # 使用 UMT5Config 类配置模型参数
     base_model_prefix = "transformer"
+    # 基础模型前缀名为 "transformer"
     supports_gradient_checkpointing = True
+    # 支持梯度检查点
+
     _no_split_modules = ["UMT5Block"]
+    # 不拆分的模块列表，包含 "UMT5Block"
     _keep_in_fp32_modules = ["wo"]
+    # 在 FP32 精度下保持的模块列表，包含 "wo"
 
     @property
     def dummy_inputs(self):
-        # 定义一些dummy输入用于模型测试
         input_ids = torch.tensor(DUMMY_INPUTS)
         input_mask = torch.tensor(DUMMY_MASK)
         dummy_inputs = {
@@ -518,9 +547,9 @@ class UMT5PreTrainedModel(PreTrainedModel):
             "decoder_attention_mask": input_mask,
         }
         return dummy_inputs
+        # 返回用于测试的虚拟输入数据字典 dummy_inputs
 
     def _shift_right(self, input_ids):
-        # 将输入的 token ID 向右移动一位，并用 decoder_start_token_id 填充第一个位置
         decoder_start_token_id = self.config.decoder_start_token_id
         pad_token_id = self.config.pad_token_id
 
@@ -529,56 +558,62 @@ class UMT5PreTrainedModel(PreTrainedModel):
                 "self.model.config.decoder_start_token_id has to be defined. In UMT5 it is usually set to the pad_token_id. "
                 "See UMT5 docs for more information."
             )
+        # 如果 decoder_start_token_id 未定义，则抛出 ValueError
 
+        # shift inputs to the right
         if is_torch_fx_proxy(input_ids):
-            # 对于 torch.fx 代理对象，使用 torch.full 和 torch.cat 进行操作
+            # Item assignment is not supported natively for proxies.
+            # 对于代理对象，不支持原生的项目分配
             shifted_input_ids = torch.full(input_ids.shape[:-1] + (1,), decoder_start_token_id)
             shifted_input_ids = torch.cat([shifted_input_ids, input_ids[..., :-1]], dim=-1)
         else:
-            # 对于普通的 tensor，使用 new_zeros 和 masked_fill 进行操作
             shifted_input_ids = input_ids.new_zeros(input_ids.shape)
             shifted_input_ids[..., 1:] = input_ids[..., :-1].clone()
             shifted_input_ids[..., 0] = decoder_start_token_id
+            # 将输入向右移动一位，并在开头插入 decoder_start_token_id
 
         if pad_token_id is None:
             raise ValueError("self.model.config.pad_token_id has to be defined.")
-        # 将 -100 值替换为 pad_token_id
+            # 如果 pad_token_id 未定义，则抛出 ValueError
+        # replace possible -100 values in labels by `pad_token_id`
         shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
+        # 将标签中可能的 -100 值替换为 pad_token_id
 
         return shifted_input_ids
+        # 返回右移后的输入张量
 
 
-# UMT5 模型的主体实现
 class UMT5Stack(UMT5PreTrainedModel):
     # 初始化方法，接受配置和嵌入标记作为参数
     def __init__(self, config, embed_tokens=None):
-        # 调用父类的初始化方法
+        # 调用父类初始化方法，传入配置
         super().__init__(config)
-        # 初始化嵌入标记
+        # 设置嵌入标记属性
         self.embed_tokens = embed_tokens
-        # 判断是否为解码器
+        # 根据配置设置解码器标志
         self.is_decoder = config.is_decoder
-        # 创建包含多个UMT5Block对象的列表
+        # 创建一个由多个UMT5Block组成的模块列表，列表长度为配置中指定的层数
         self.block = nn.ModuleList([UMT5Block(config) for i in range(config.num_layers)])
-        # 创建最终层的 LayerNorm
+        # 创建一个最终层归一化对象，将模型维度和epsilon作为参数
         self.final_layer_norm = UMT5LayerNorm(config.d_model, eps=config.layer_norm_epsilon)
-        # 创建丢弃层
+        # 创建一个dropout层，使用配置中的dropout率
         self.dropout = nn.Dropout(config.dropout_rate)
 
         # 初始化权重并应用最终处理
+        # 设置梯度检查点为False
         self.gradient_checkpointing = False
-        # 调用后期初始化方法
+        # 执行后初始化操作
         self.post_init()
 
-    # 获取输入嵌入
+    # 返回输入嵌入对象的方法
     def get_input_embeddings(self):
         return self.embed_tokens
 
-    # 设置输入嵌入
+    # 设置新的输入嵌入对象的方法
     def set_input_embeddings(self, new_embeddings):
         self.embed_tokens = new_embeddings
 
-    # 前向传播方法
+    # 前向传播方法，接收多个输入参数
     def forward(
         self,
         input_ids=None,
@@ -593,72 +628,64 @@ class UMT5Stack(UMT5PreTrainedModel):
         output_attentions=None,
         output_hidden_states=None,
         return_dict=None,
-# UMT5_START_DOCSTRING 的值是 UMT5 模型的文档字符串，包含了模型的提出背景、论文引用、继承关系、参数说明等信息
 UMT5_START_DOCSTRING = r"""
+    UMT5 模型是由 Colin Raffel, Noam Shazeer, Adam Roberts 等人在文献 [Exploring the Limits of Transfer Learning with a Unified Text-to-Text
+    Transformer](https://arxiv.org/abs/1910.10683) 中提出的。它是一个编码解码转换器，在文本去噪生成任务中进行预训练。
 
-    The UMT5 model was proposed in [Exploring the Limits of Transfer Learning with a Unified Text-to-Text
-    Transformer](https://arxiv.org/abs/1910.10683) by Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan
-    Narang, Michael Matena, Yanqi Zhou, Wei Li, Peter J. Liu. It's an encoder decoder transformer pre-trained in a
-    text-to-text denoising generative setting.
+    该模型继承自 [`PreTrainedModel`]。请查阅其超类文档以了解库实现的通用方法（如下载或保存模型、调整输入嵌入大小、修剪头等）。
 
-    This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
-    etc.)
+    此模型也是 PyTorch 的 [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) 子类。
+    您可以像使用常规 PyTorch 模块一样使用它，并参考 PyTorch 文档以获取有关一般使用和行为的所有相关信息。
 
-    This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
-    Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
-    and behavior.
-
-    Parameters:
-        config ([`UMT5Config`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+    参数:
+        config ([`UMT5Config`]): 包含模型所有参数的配置类。
+            使用配置文件进行初始化不会加载与模型相关的权重，只会加载配置信息。
+            查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
 """
 
-# UMT5_INPUTS_DOCSTRING 和 UMT5_ENCODER_INPUTS_DOCSTRING 的值为空，可能用于存储模型输入的文档字符串，暂未填充内容
 UMT5_INPUTS_DOCSTRING = r"""
+    输入文档字符串未提供具体内容，暂无注释。
 """
 
 UMT5_ENCODER_INPUTS_DOCSTRING = r"""
+    编码器输入文档字符串未提供具体内容，暂无注释。
+"""
     Args:
         input_ids (`torch.LongTensor` of shape `(batch_size, sequence_length)`):
-            # 输入序列标记在词汇表中的索引。UMT5 是一个具有相对位置嵌入的模型，因此您应该能够在左右两侧对输入进行填充。
+            # 输入序列标记的索引，形状为(batch_size, sequence_length)。
+            # UMT5 是一个具有相对位置嵌入的模型，因此可以在输入的右侧和左侧进行填充。
 
-            # 可以使用 [`AutoTokenizer`] 获取索引。参见 [`PreTrainedTokenizer.encode`] 和 [`PreTrainedTokenizer.__call__`] 获取详细信息。
+            # 可以使用 `AutoTokenizer` 获取这些索引。详见 `PreTrainedTokenizer.encode` 和 `PreTrainedTokenizer.__call__`。
 
-            # 若要了解如何为预训练准备`input_ids`，请参阅 [UMT5 Training](./umt5#training)。
+            # 要了解如何为预训练准备 `input_ids`，请查看 [UMT5 Training](./umt5#training)。
         attention_mask (`torch.FloatTensor` of shape `(batch_size, sequence_length)`, *optional*):
-            # 避免在填充标记索引上执行注意力的掩码。掩码值在 `[0, 1]` 中选择：
+            # 遮盖掩码，避免在填充的标记索引上执行注意力操作。掩码值在 `[0, 1]` 之间选择：
 
-            # - 1 表示**未掩码**的标记，
-            # - 0 表示**掩码**的标记。
+            # - 1 表示 **未被遮盖** 的标记，
+            # - 0 表示 **被遮盖** 的标记。
 
-            # [什么是注意力掩码?](../glossary#attention-mask)
+            # [什么是注意力遮盖？](../glossary#attention-mask)
         head_mask (`torch.FloatTensor` of shape `(num_heads,)` or `(num_layers, num_heads)`, *optional*):
-            # 用于抵消自注意力模块选择性头部的掩码。掩码值在 `[0, 1]` 中选择：
+            # 用于取消选择自注意力模块中特定头部的掩码。掩码值在 `[0, 1]` 之间选择：
 
-            # - 1 表示**未掩码**的头部，
-            # - 0 表示**掩码**的头部。
+            # - 1 表示头部 **未被遮盖**，
+            # - 0 表示头部 **被遮盖**。
 
         inputs_embeds (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`, *optional*):
-            # 可选择直接传递嵌入表示而不是传递`input_ids`。如果您想更好地控制如何将`input_ids`索引转换为关联向量，这将非常有用，而不是模型的内部嵌入查找矩阵。
-        output_attentions (`bool`, *optional*):
-            # 是否返回所有关注层的注意力张量。有关更多详细信息，请参见返回张量下的 `attentions`。
-        output_hidden_states (`bool`, *optional*):
-            # 是否返回所有层的隐藏状态。有关更多详细信息，请参见返回张量下的 `hidden_states`。
-        return_dict (`bool`, *optional*):
-            # 是否返回一个[`~utils.ModelOutput`]而不是一个普通的元组。
-# 导入必要的包
-from transformers.modeling_t5 import T5PreTrainedModel, T5Stack, T5Config
-from transformers.file_utils import add_start_docstrings
-import copy
-import torch.nn as nn
+            # 可选参数，可以直接传递嵌入表示，而不是传递 `input_ids`。如果希望更多控制如何将 `input_ids` 索引转换为相关联向量，
+            # 这非常有用，而不是使用模型内部的嵌入查找矩阵。
 
-# 定义 UMT5 模型
-@add_start_docstrings(
-    "The bare UMT5 Model transformer outputting raw hidden-states without any specific head on top.",
-    UMT5_START_DOCSTRING,
-)
+        output_attentions (`bool`, *optional*):
+            # 是否返回所有注意力层的注意力张量。查看返回的张量中的 `attentions` 以获取更多细节。
+
+        output_hidden_states (`bool`, *optional*):
+            # 是否返回所有层的隐藏状态。查看返回的张量中的 `hidden_states` 以获取更多细节。
+
+        return_dict (`bool`, *optional*):
+            # 是否返回 `~utils.ModelOutput` 而不是普通的元组。
+"""
+The bare UMT5 Model transformer outputting raw hidden-states without any specific head on top.
+"""
 class UMT5Model(UMT5PreTrainedModel):
     r"""
     Examples:
@@ -675,108 +702,108 @@ class UMT5Model(UMT5PreTrainedModel):
 
     >>> outputs = model(input_ids=inputs["input_ids"], decoder_input_ids=labels["input_ids"])
     >>> hidden_states = outputs.last_hidden_state
-    ```py
+    ```
 
-    初始化 UMT5Model 类
+    Initializes UMT5 model with configuration parameters and shared embeddings.
+
+    Args:
+        config (UMT5Config): Configuration object defining model parameters.
+
+    Attributes:
+        model_type (str): Type of the model ("umt5").
+        config_class (UMT5Config): Class defining model configuration settings.
+        _tied_weights_keys (List[str]): List of keys for tied weights between encoder and decoder embeddings.
+        shared (nn.Embedding): Shared embeddings across encoder and decoder.
+        encoder (UMT5Stack): Encoder stack of the UMT5 model.
+        decoder (UMT5Stack): Decoder stack of the UMT5 model.
     """
-    # 初始化 UMT5Model 类的必要属性
-    model_type = "uumt5"
+    
+    model_type = "umt5"
     config_class = UMT5Config
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
-    # 初始化 UMT5Model 类
     def __init__(self, config):
         super().__init__(config)
         self.shared = nn.Embedding(config.vocab_size, config.d_model)
 
-        # 复制配置并设置编码器
+        # Initialize encoder with modified configuration
         encoder_config = copy.deepcopy(config)
         encoder_config.is_decoder = False
         encoder_config.use_cache = False
         encoder_config.is_encoder_decoder = False
         self.encoder = UMT5Stack(encoder_config, self.shared)
 
-        # 复制配置并设置解码器
+        # Initialize decoder with modified configuration
         decoder_config = copy.deepcopy(config)
         decoder_config.is_decoder = True
         decoder_config.is_encoder_decoder = False
         decoder_config.num_layers = config.num_decoder_layers
         self.decoder = UMT5Stack(decoder_config, self.shared)
 
-        # 初始化权重并进行最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 获取输入嵌入
+    # Copied from transformers.models.t5.modeling_t5.T5Model.get_input_embeddings
     def get_input_embeddings(self):
+        """
+        Returns the shared input embeddings used by the model.
+        """
         return self.shared
 
-    # 设置输入嵌入
+    # Copied from transformers.models.t5.modeling_t5.T5Model.set_input_embeddings
     def set_input_embeddings(self, new_embeddings):
+        """
+        Sets new shared input embeddings for the model and propagates them to encoder and decoder.
+        """
         self.shared = new_embeddings
         self.encoder.set_input_embeddings(new_embeddings)
         self.decoder.set_input_embeddings(new_embeddings)
 
-    # 绑定权重
+    # Copied from transformers.models.t5.modeling_t5.T5Model._tie_weights
     def _tie_weights(self):
+        """
+        Ties the weights between encoder and decoder embeddings if configured to do so.
+        """
         if self.config.tie_word_embeddings:
             self._tie_or_clone_weights(self.encoder.embed_tokens, self.shared)
             self._tie_or_clone_weights(self.decoder.embed_tokens, self.shared)
 
-    # 获取编码器
+    # Copied from transformers.models.t5.modeling_t5.T5Model.get_encoder
     def get_encoder(self):
+        """
+        Returns the encoder stack of the model.
+        """
         return self.encoder
 
-    # 获取解码器
+    # Copied from transformers.models.t5.modeling_t5.T5Model.get_decoder
     def get_decoder(self):
+        """
+        Returns the decoder stack of the model.
+        """
         return self.decoder
 
-    # 剪枝头信息
-    # 对模型的注意力头进行修剪
-    def _prune_heads(self, heads_to_prune):
-        """
-        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
-        class PreTrainedModel
-        """
-        # 遍历需要修剪的层和对应需要修剪的注意力头
-        for layer, heads in heads_to_prune.items():
-            # 在编码器中修剪对应层的注意力头
-            self.encoder.layer[layer].attention.prune_heads(heads)
-
-    # 重写父类函数的注释并添加到模型的向前传播函数
+    # Copied from transformers.models.t5.modeling_t5.T5Model._prune_heads
+    # 定义模型的前向传播函数，用于执行模型的前向计算过程
     @add_start_docstrings_to_model_forward(UMT5_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=Seq2SeqModelOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
-        # 输入编码器的标记序列
-        input_ids: Optional[torch.LongTensor] = None,
-        # 编码器的注意力蒙版
-        attention_mask: Optional[torch.FloatTensor] = None,
-        # 解码器的输入标记序列
-        decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力蒙版
-        decoder_attention_mask: Optional[torch.BoolTensor] = None,
-        # 编码器的注意力头蒙版
-        head_mask: Optional[torch.FloatTensor] = None,
-        # 解码器的注意力头蒙版
-        decoder_head_mask: Optional[torch.FloatTensor] = None,
-        # 交叉注意力头的蒙版
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器输出
-        encoder_outputs: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        # 过去的键值对
-        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        # 编码器的嵌入输入
-        inputs_embeds: Optional[torch.Tensor] = None,
-        # 解码器的嵌入输入
-        decoder_inputs_embeds: Optional[torch.Tensor] = None,
-        # 是否使用缓存
-        use_cache: Optional[bool] = None,
-        # 是否输出注意力权重
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典格式的结果
-        return_dict: Optional[bool] = None,
-# 为 UMT5 模型添加文档字符串，说明其具有 language modeling head 功能
+        self,
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs，类型为可选的长整型张量
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩，类型为可选的浮点张量
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器的输入 token IDs，类型为可选的长整型张量
+        decoder_attention_mask: Optional[torch.BoolTensor] = None,  # 解码器的注意力遮罩，类型为可选的布尔张量
+        head_mask: Optional[torch.FloatTensor] = None,  # 注意力头部的遮罩，类型为可选的浮点张量
+        decoder_head_mask: Optional[torch.FloatTensor] = None,  # 解码器注意力头部的遮罩，类型为可选的浮点张量
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 跨注意力头部的遮罩，类型为可选的张量
+        encoder_outputs: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,  # 编码器的输出，类型为可选的元组
+        past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,  # 过去的键值对，类型为可选的元组
+        inputs_embeds: Optional[torch.Tensor] = None,  # 输入的嵌入向量，类型为可选的张量
+        decoder_inputs_embeds: Optional[torch.Tensor] = None,  # 解码器输入的嵌入向量，类型为可选的张量
+        use_cache: Optional[bool] = None,  # 是否使用缓存，类型为可选的布尔值
+        output_attentions: Optional[bool] = None,  # 是否输出注意力，类型为可选的布尔值
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，类型为可选的布尔值
+        return_dict: Optional[bool] = None,  # 是否返回字典形式的输出，类型为可选的布尔值
+# 用于给 UMT5ForConditionalGeneration 类添加文档字符串，说明其在语言建模上的应用
 @add_start_docstrings("""UMT5 Model with a `language modeling` head on top.""", UMT5_START_DOCSTRING)
 class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
     r"""
@@ -793,79 +820,84 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
 
     >>> outputs = model(**inputs)
     >>> loss = outputs.loss
-    ```py"""
+    ```"""
 
-    # 设置模型类型为 "umt5"
+    # 模型类型标识符
     model_type = "umt5"
-    # 设置共享权重的键
+    # 被绑定权重的键列表
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight", "lm_head.weight"]
 
-    # 初始化函数
+    # 初始化函数，接收一个配置对象并进行初始化
     def __init__(self, config):
-        # 调用父类初始化函数
         super().__init__(config)
-        # 设置模型维度为 config 中的 d_model
+        # 设置模型维度
         self.model_dim = config.d_model
 
-        # 创建共享权重的嵌入层
+        # 共享的嵌入层，使用 nn.Embedding 初始化
         self.shared = nn.Embedding(config.vocab_size, config.d_model)
 
-        # 复制 config 创建编码器配置，并设置为非解码器
+        # 复制配置对象用于编码器
         encoder_config = copy.deepcopy(config)
         encoder_config.is_decoder = False
         encoder_config.use_cache = False
         encoder_config.is_encoder_decoder = False
-        # 创建编码器
+        # 初始化编码器实例
         self.encoder = UMT5Stack(encoder_config, self.shared)
 
-        # 复制 config 创建解码器配置，并设置为解码器
+        # 复制配置对象用于解码器
         decoder_config = copy.deepcopy(config)
         decoder_config.is_decoder = True
         decoder_config.is_encoder_decoder = False
         decoder_config.num_layers = config.num_decoder_layers
-        # 创建解码器
+        # 初始化解码器实例
         self.decoder = UMT5Stack(decoder_config, self.shared)
 
-        # 创建语言模型头
+        # 语言建模头部，线性层，将模型维度映射到词汇表大小
         self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
 
-        # 初始化权重并进行最终处理
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入嵌入层
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 返回共享的嵌入层对象
     def get_input_embeddings(self):
         return self.shared
 
-    # 设置输入嵌入层
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 设置共享的嵌入层对象
     def set_input_embeddings(self, new_embeddings):
         self.shared = new_embeddings
         self.encoder.set_input_embeddings(new_embeddings)
         self.decoder.set_input_embeddings(new_embeddings)
 
-    # 绑定权重
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 如果配置要求，将权重绑定到共享的嵌入层上
     def _tie_weights(self):
         if self.config.tie_word_embeddings:
             self._tie_or_clone_weights(self.encoder.embed_tokens, self.shared)
             self._tie_or_clone_weights(self.decoder.embed_tokens, self.shared)
 
-    # 设置输出嵌入层
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 设置输出嵌入层对象
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
 
-    # 获取输出嵌入层
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 返回输出嵌入层对象
     def get_output_embeddings(self):
         return self.lm_head
 
-    # 获取编码器
+    # 从 transformers.models.t5.modeling_t5.T5ForConditionalGeneration 中复制的方法
+    # 返回编码器对象
     def get_encoder(self):
         return self.encoder
-    # 从transformers.models.t5.modeling_t5.T5ForConditionalGeneration.get_decoder中复制方法
+    # Copied from transformers.models.t5.modeling_t5.T5ForConditionalGeneration.get_decoder
     def get_decoder(self):
-        # 返回decoder对象
         return self.decoder
+    # 返回模型的解码器对象
     
-    # 添加model forward的文档字符串到前向传播
-    # 替换返回文档字符串为Seq2SeqLMOutput类型，配置类为_CONFIG_FOR_DOC
+    @add_start_docstrings_to_model_forward(UMT5_INPUTS_DOCSTRING)
+    @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -884,9 +916,10 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        ):
+    ):
+    # 从输入到输出的前向传播函数，接受多个参数用于控制模型行为和计算，返回输出结果
     
-    # 从transformers.models.t5.modeling_t5.T5ForConditionalGeneration.prepare_inputs_for_generation中复制方法
+    # Copied from transformers.models.t5.modeling_t5.T5ForConditionalGeneration.prepare_inputs_for_generation
     def prepare_inputs_for_generation(
         self,
         input_ids,
@@ -900,19 +933,17 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
         encoder_outputs=None,
         **kwargs,
     ):
-        # 如果past_key_values不为空，则剪切decoder_input_ids
+        # 如果使用过去的键值对，根据其长度截断输入的序列
         if past_key_values is not None:
-            # 获取过去键值的长度
             past_length = past_key_values[0][0].shape[2]
     
-            # 一些生成方法已经只传递了最后一个输入ID
+            # 一些生成方法可能只传递最后一个输入 ID
             if input_ids.shape[1] > past_length:
                 remove_prefix_length = past_length
             else:
-                # 默认使用旧的行为：只保留最后一个ID
+                # 默认行为：保留最后一个 ID
                 remove_prefix_length = input_ids.shape[1] - 1
     
-            # 将decoder_input_ids截取为剩余部分
             input_ids = input_ids[:, remove_prefix_length:]
     
         return {
@@ -926,27 +957,31 @@ class UMT5ForConditionalGeneration(UMT5PreTrainedModel):
             "cross_attn_head_mask": cross_attn_head_mask,
             "use_cache": use_cache,
         }
+    # 准备生成过程中需要的输入，根据传入的参数返回一个包含各种输入信息的字典
     
-    # 从transformers.models.t5.modeling_t5.T5ForConditionalGeneration.prepare_decoder_input_ids_from_labels中复制方法
+    # Copied from transformers.models.t5.modeling_t5.T5ForConditionalGeneration.prepare_decoder_input_ids_from_labels
     def prepare_decoder_input_ids_from_labels(self, labels: torch.Tensor):
-        # 调用_shift_right方法，将标签向右移动
         return self._shift_right(labels)
-    
-    @staticmethod
-    # 重新排序缓存数据，以适应beam搜索
+    # 根据标签生成解码器的输入序列，通过右移操作来实现
+    # 定义一个函数 `_reorder_cache`，重新排列缓存中的历史键值
     def _reorder_cache(past_key_values, beam_idx):
-        # 初始化一个空的重新排序后的缓存
+        # 初始化一个空元组，用于存储重新排列后的历史键值
         reordered_past = ()
-        # 遍历过去键和值的列表
+        # 遍历每个层的历史键值
         for layer_past in past_key_values:
-            # 对每一层的过去状态进行重新排序，并添加到重新排序后的缓存中
+            # 对每个层的历史状态按照给定的索引 `beam_idx` 进行重新排序，并转移到对应的设备上
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
-        # 返回重新排序后的缓存
+        # 返回重新排列后的历史键值
         return reordered_past
-# 添加起始文档字符串，描述UMT5模型的编码器的输出，没有特定的头部
-# 引入UMT5_START_DOCSTRING
+# 在 UMT5 模型的基础上定义了一个编码器模型 UMT5EncoderModel，用于输出编码器的原始隐藏状态，没有额外的特定头部结构。
+# 继承自 UMT5PreTrainedModel，这是一个预训练模型基类。
+
+@add_start_docstrings(
+    "The bare UMT5 Model transformer outputting encoder's raw hidden-states without any specific head on top.",
+    UMT5_START_DOCSTRING,
+)
 class UMT5EncoderModel(UMT5PreTrainedModel):
     r"""
     Examples:
@@ -960,48 +995,45 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
     >>> input_ids = tokenizer(article, return_tensors="pt").input_ids
     >>> outputs = model(input_ids)
     >>> hidden_state = outputs.last_hidden_state
-    ```py"""
+    ```"""
 
-    # UMT5模型类型为"umt5"
     model_type = "umt5"
-    # 定义用于共享权重的键
+    # config_class = UMT5Config
     _tied_weights_keys = ["encoder.embed_tokens.weight"]
 
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
-        # 定义共享的嵌入层
         self.shared = nn.Embedding(config.vocab_size, config.d_model)
 
-        # 复制配置并进行一些调整
+        # 创建编码器配置的深层副本，确保不使用缓存，且不是编码器-解码器结构
         encoder_config = copy.deepcopy(config)
         encoder_config.use_cache = False
         encoder_config.is_encoder_decoder = False
-        # 初始化UMT5编码器堆栈
+        # 初始化共享的嵌入层和编码器堆栈
         self.encoder = UMT5Stack(encoder_config, self.shared)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel中复制的函数
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel.get_input_embeddings 复制过来
     def get_input_embeddings(self):
         return self.shared
 
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel中复制的函数
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel.set_input_embeddings 复制过来
     def set_input_embeddings(self, new_embeddings):
         self.shared = new_embeddings
         self.encoder.set_input_embeddings(new_embeddings)
 
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel中复制的函数
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel._tie_weights 复制过来
     def _tie_weights(self):
         if self.config.tie_word_embeddings:
             self._tie_or_clone_weights(self.encoder.embed_tokens, self.shared)
 
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel中复制的函数
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel.get_encoder 复制过来
     def get_encoder(self):
         return self.encoder
 
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel中复制的函数
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel._prune_heads 复制过来
     def _prune_heads(self, heads_to_prune):
         """
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
@@ -1012,20 +1044,20 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
 
     @add_start_docstrings_to_model_forward(UMT5_ENCODER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=BaseModelOutput, config_class=_CONFIG_FOR_DOC)
-    # 从transformers.models.t5.modeling_t5.T5EncoderModel.forward中复制的函数，将T5替换成UMT5，t5-small替换成google/umt5-small
-    # 此方法用于模型的前向传播，接受输入参数并返回模型输出
+    # 从 transformers.models.t5.modeling_t5.T5EncoderModel.forward 复制过来，将 T5 替换为 UMT5，google-t5/t5-small 替换为 google/umt5-small
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs，类型为可选的长整型张量，默认为 None
-        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩张量，类型为可选的浮点数张量，默认为 None
-        head_mask: Optional[torch.FloatTensor] = None,  # 头部遮罩张量，类型为可选的浮点数张量，默认为 None
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入张量，类型为可选的浮点数张量，默认为 None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力张量，类型为可选的布尔值，默认为 None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态张量，类型为可选的布尔值，默认为 None
-        return_dict: Optional[bool] = None,  # 是否返回字典格式的输出，类型为可选的布尔值，默认为 None
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的token ID序列，可以为空
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩，用于指示模型应该关注哪些token
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部遮罩，控制每个注意力头的掩盖
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 可选的嵌入输入，代替输入ID
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回输出
     ) -> Union[Tuple[torch.FloatTensor], BaseModelOutput]:
         r"""
         Returns:
+            返回值的类型可以是包含Tensor的元组，或者BaseModelOutput对象
 
         Example:
 
@@ -1039,11 +1071,10 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
         ... ).input_ids  # Batch size 1
         >>> outputs = model(input_ids=input_ids)
         >>> last_hidden_states = outputs.last_hidden_state
-        ```py"""
-        # 如果 return_dict 不为 None，则使用参数中的值；否则，使用模型配置中的默认值
+        ```"""
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        # 确定是否使用配置中的返回字典选项
 
-        # 将输入参数传递给编码器模块，获取编码器的输出
         encoder_outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1053,10 +1084,49 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
+        # 使用encoder处理输入，返回编码器的输出
 
-        # 返回编码器的输出
         return encoder_outputs
-# 定义一个 UMT5 模型，用于序列分类任务，包含一个线性层用于汇总输出，在 GLUE 等任务中应用
+"""
+UMT5 model with a sequence classification/head on top (a linear layer on top of the pooled output) e.g. for GLUE
+tasks.
+"""
+# UMT5 序列分类模型，顶部有一个序列分类头部（在汇总输出之上的线性层），例如用于 GLUE 任务。
+@add_start_docstrings(
+    """
+    UMT5 Encoder Model with a token classification head on top (a linear layer on top of the hidden-states output)
+    e.g. for Named-Entity-Recognition (NER) tasks.
+    """,
+    UMT5_START_DOCSTRING,
+)
+# UMT5 编码器模型，顶部有一个标记分类头部（在隐藏状态输出之上的线性层），例如用于命名实体识别（NER）任务。
+class UMT5ForTokenClassification(UMT5PreTrainedModel):
+    # Keys to ignore when loading unexpected elements during model loading
+    _keys_to_ignore_on_load_unexpected = ["decoder.block.0.layer.1.EncDecAttention.relative_attention_bias.weight"]
+    # Keys indicating tied weights between encoder and decoder
+    _tied_weights_keys = ["transformer.encoder.embed_tokens.weight"]
+
+    # Copied from transformers.models.t5.modeling_t5.T5ForTokenClassification.__init__ with T5->UMT5
+    def __init__(self, config: UMT5Config):
+        super().__init__(config)
+        self.num_labels = config.num_labels
+
+        # UMT5 编码器模型
+        self.transformer = UMT5EncoderModel(config)
+        # Dropout layer
+        self.dropout = nn.Dropout(config.classifier_dropout)
+        # Linear layer for classification
+        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+
+        # Initialize weights and apply final processing
+        self.post_init()
+
+    @add_start_docstrings_to_model_forward(UMT5_INPUTS_DOCSTRING)
+"""
+UMT5 model with a sequence classification/head on top (a linear layer on top of the pooled output) e.g. for GLUE
+tasks.
+"""
+# UMT5 序列分类模型，顶部有一个序列分类头部（在汇总输出之上的线性层），例如用于 GLUE 任务。
 @add_start_docstrings(
     """
     UMT5 model with a sequence classification/head on top (a linear layer on top of the pooled output) e.g. for GLUE
@@ -1065,64 +1135,105 @@ class UMT5EncoderModel(UMT5PreTrainedModel):
     UMT5_START_DOCSTRING,
 )
 class UMT5ForSequenceClassification(UMT5PreTrainedModel):
-    # 在加载过程中忽略的键值对应的键列表
+    # Keys to ignore when loading unexpected elements during model loading
     _keys_to_ignore_on_load_unexpected = ["decoder.block.0.layer.1.EncDecAttention.relative_attention_bias.weight"]
-    # 共享权重的键列表
+    # Keys indicating tied weights between encoder and decoder
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
-    # 根据配置初始化 UMT5ForSequenceClassification 类
-    # 从 transformers.models.t5.modeling_t5.T5ForSequenceClassification.__init__ 复制并替换 T5 为 UMT5
+    # Copied from transformers.models.t5.modeling_t5.T5ForSequenceClassification.__init__ with T5->UMT5
     def __init__(self, config: UMT5Config):
         super().__init__(config)
-        # 初始化 UMT5 模型和分类头
+        # UMT5 模型的变换器
         self.transformer = UMT5Model(config)
+        # UMT5 模型的分类头部
         self.classification_head = UMT5ClassificationHead(config)
 
-        # 初始化权重并进行最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-        # 设置模型并行处理为 False
+        # Model parallelism setting
         self.model_parallel = False
 
-    # 在前向传播时添加注释描述
     @add_start_docstrings_to_model_forward(UMT5_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=Seq2SeqSequenceClassifierOutput, config_class=_CONFIG_FOR_DOC)
+    # 替换返回值文档字符串，输出类型为 Seq2SeqSequenceClassifierOutput，配置类为 _CONFIG_FOR_DOC
     def forward(
         self,
-        # 输入的 token ID
         input_ids: torch.LongTensor = None,
-        # 注意力遮盖
         attention_mask: Optional[torch.Tensor] = None,
-        # 解码器输入的 token ID
         decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力遮盖
         decoder_attention_mask: Optional[torch.LongTensor] = None,
-        # 头部遮盖
         head_mask: Optional[torch.Tensor] = None,
-        # 解码器头部遮盖
         decoder_head_mask: Optional[torch.Tensor] = None,
-        # 交叉注意力头部遮盖
         cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器输出
         encoder_outputs: Optional[List[torch.FloatTensor]] = None,
-        # 嵌入的输入
         inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 解码器嵌入的输入
         decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 标签
         labels: Optional[torch.LongTensor] = None,
-        # 是否使用缓存
         use_cache: Optional[bool] = None,
-        # 输出注意力
         output_attentions: Optional[bool] = None,
-        # 输出隐藏状态
         output_hidden_states: Optional[bool] = None,
-        # 返回的字典类型
         return_dict: Optional[bool] = None,
+):
+    @replace_return_docstrings(output_type=TokenClassifierOutput, config_class=_CONFIG_FOR_DOC)
+    # 使用装饰器替换返回值文档字符串，指定输出类型为TokenClassifierOutput，配置类为_CONFIG_FOR_DOC
+    # 从transformers.models.t5.modeling_t5.T5ForTokenClassification.forward复制而来，将T5替换为UMT5
+    def forward(
+        self,
+        input_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        head_mask: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        labels: Optional[torch.Tensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
+        r"""
+        标签 (`torch.LongTensor`，形状为 `(batch_size, sequence_length)`，*可选*):
+            用于计算标记分类损失的标签。索引应在 `[0, ..., config.num_labels - 1]` 范围内。
+        返回:
+        """
+        # 如果 return_dict 不为 None，则使用给定值；否则使用 self.config.use_return_dict 的值
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
+        # 将输入传递给 Transformer 模型
+        outputs = self.transformer(
+            input_ids,
+            attention_mask=attention_mask,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
 
+        # 获取隐藏状态并进行 dropout 处理
+        hidden_states = outputs[0]
+        hidden_states = self.dropout(hidden_states)
 
-# 定义一个 UMT5 模型，用于问答任务，包含���个线性层用于计算 `span start logits` 和 `span end logits` 的输出，在类似 SQuAD 的任务中应用
+        # 将隐藏状态传递给分类器得到 logits
+        logits = self.classifier(hidden_states)
+
+        # 如果提供了标签，则计算损失
+        loss = None
+        if labels is not None:
+            loss_fct = CrossEntropyLoss()
+            loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+
+        # 如果不返回字典格式的结果，则返回元组格式的输出
+        if not return_dict:
+            output = (logits, outputs[2:-1])  # 排除最后一个元素
+            return ((loss,) + output) if loss is not None else output
+
+        # 返回 TokenClassifierOutput 类型的结果，包括损失、logits、隐藏状态和注意力
+        return TokenClassifierOutput(
+            loss=loss,
+            logits=logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+# 为 UMT5ForQuestionAnswering 类添加文档字符串，描述其作为 UMT5 模型的问题回答器的用途和结构
 @add_start_docstrings(
     """
     UMT5 Model with a span classification head on top for extractive question-answering tasks like SQuAD (linear layers
@@ -1131,106 +1242,87 @@ class UMT5ForSequenceClassification(UMT5PreTrainedModel):
     UMT5_START_DOCSTRING,
 )
 class UMT5ForQuestionAnswering(UMT5PreTrainedModel):
-    # 共享权重的键列表
+    # 定义一个列表，包含与权重绑定相关的键
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
-    # 初始化函数，接受配置参数，并设置模型维度
+
+    # 初始化方法，接受一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置模型维度为配置参数中的 d_model
+        # 设置模型维度为配置对象中的模型维度
         self.model_dim = config.d_model
 
-        # 创建一个共享的嵌入层，词汇量为配置参数中的 vocab_size，维度为 d_model
+        # 创建一个共享的嵌入层，用于共享词汇表和模型维度的嵌入
         self.shared = nn.Embedding(config.vocab_size, config.d_model)
 
-        # 复制配置参数，用于生成编码器实例的配置
+        # 复制编码器配置，设置为非解码器模式，并禁用缓存，创建编码器对象
         encoder_config = copy.deepcopy(config)
         encoder_config.is_decoder = False
         encoder_config.use_cache = False
         encoder_config.is_encoder_decoder = False
-        # 创建编码器实例
         self.encoder = UMT5Stack(encoder_config, self.shared)
 
-        # 复制配置参数，用于生成解码器实例的配置
+        # 复制解码器配置，设置为解码器模式，并创建解码器对象
         decoder_config = copy.deepcopy(config)
         decoder_config.is_decoder = True
         decoder_config.is_encoder_decoder = False
         decoder_config.num_layers = config.num_decoder_layers
-        # 创建解码器实例
         self.decoder = UMT5Stack(decoder_config, self.shared)
 
-        # 设置标签数量为配置参数中的 num_labels
+        # 设置模型输出标签数量和一个线性层用于问题回答任务的输出
         self.num_labels = config.num_labels
-        # 创建一个线性层，输入维度为 d_model，输出维度为 num_labels
         self.qa_outputs = nn.Linear(config.d_model, config.num_labels)
 
-        # 初始化权重并进行最终处理
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入嵌入层的函数
+    # 从 transformers 库中 T5ForQuestionAnswering 类的方法复制，返回共享的嵌入层
     def get_input_embeddings(self):
         return self.shared
 
-    # 设置输入嵌入层的函数
+    # 从 transformers 库中 T5ForQuestionAnswering 类的方法复制，设置新的输入嵌入层
     def set_input_embeddings(self, new_embeddings):
+        # 更新共享的嵌入层
         self.shared = new_embeddings
-        # 设置编码器和解码器的输入嵌入层
+        # 更新编码器和解码器的输入嵌入层
         self.encoder.set_input_embeddings(new_embeddings)
         self.decoder.set_input_embeddings(new_embeddings)
 
-    # 权重共享函数
+    # 从 transformers 库中 T5ForQuestionAnswering 类的方法复制，用于绑定权重
     def _tie_weights(self):
-        # 如果配置参数中设置了词嵌入共享
+        # 如果配置指定要绑定词嵌入权重，则将编码器和解码器的词嵌入权重绑定到共享的嵌入层上
         if self.config.tie_word_embeddings:
-            # 将编码器和解码器的嵌入层权重进行共享或克隆
             self._tie_or_clone_weights(self.encoder.embed_tokens, self.shared)
             self._tie_or_clone_weights(self.decoder.embed_tokens, self.shared)
 
-    # 获取编码器实例的函数
+    # 从 transformers 库中 T5ForQuestionAnswering 类的方法复制，返回编码器对象
     def get_encoder(self):
         return self.encoder
 
-    # 获取解码器实例的函数
+    # 从 transformers 库中 T5ForQuestionAnswering 类的方法复制，返回解码器对象
     def get_decoder(self):
         return self.decoder
 
-    # 根据模型前向推理的文档规范添加文档字符串注释，使用 Seq2SeqQuestionAnsweringModelOutput 进行替换
+    # 使用装饰器添加模型前向方法的文档字符串，描述输入和输出的结构和用途
     @add_start_docstrings_to_model_forward(UMT5_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=Seq2SeqQuestionAnsweringModelOutput, config_class=_CONFIG_FOR_DOC)
-    # 这个函数是模型的前向传播函数
+    # 定义一个方法用于模型的前向传播，接受多个可选参数
     def forward(
         self,
-        # 输入序列的 ID，形状为 (batch_size, sequence_length)
-        input_ids: Optional[torch.LongTensor] = None,
-        # 输入序列的注意力掩码，形状为 (batch_size, sequence_length)
-        attention_mask: Optional[torch.FloatTensor] = None,
-        # 解码器的输入序列 ID，形状为 (batch_size, sequence_length)
-        decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力掩码，形状为 (batch_size, sequence_length)
-        decoder_attention_mask: Optional[torch.BoolTensor] = None,
-        # 编码器注意力头的掩码，形状为 (num_heads, sequence_length, sequence_length)
-        head_mask: Optional[torch.FloatTensor] = None,
-        # 解码器注意力头的掩码，形状为 (num_heads, sequence_length, sequence_length)
-        decoder_head_mask: Optional[torch.FloatTensor] = None,
-        # 跨注意力头的掩码，形状为 (num_heads, sequence_length, sequence_length)
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器的输出，一个元组的元组，包含隐藏状态和注意力权重
-        encoder_outputs: Optional[Tuple[Tuple[torch.Tensor]]] = None,
-        # 问答任务的起始位置，形状为 (batch_size,)
-        start_positions: Optional[torch.LongTensor] = None,
-        # 问答任务的结束位置，形状为 (batch_size,)
-        end_positions: Optional[torch.LongTensor] = None,
-        # 输入的 embedding 表示，形状为 (batch_size, sequence_length, embedding_dim)
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 解码器的 embedding 表示，形状为 (batch_size, sequence_length, embedding_dim)
-        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 是否使用缓存
-        use_cache: Optional[bool] = None,
-        # 是否输出注意力权重
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回 dict 格式的输出
-        return_dict: Optional[bool] = None,
-    ):
+        input_ids: Optional[torch.LongTensor] = None,  # 输入序列的token IDs，可以为None
+        attention_mask: Optional[torch.FloatTensor] = None,  # 输入序列的注意力掩码，可以为None
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器输入序列的token IDs，可以为None
+        decoder_attention_mask: Optional[torch.BoolTensor] = None,  # 解码器输入序列的注意力掩码，可以为None
+        head_mask: Optional[torch.FloatTensor] = None,  # 多头注意力机制的掩码，可以为None
+        decoder_head_mask: Optional[torch.FloatTensor] = None,  # 解码器的多头注意力机制的掩码，可以为None
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 交叉注意力的多头掩码，可以为None
+        encoder_outputs: Optional[Tuple[Tuple[torch.Tensor]]] = None,  # 编码器的输出，可以为None
+        start_positions: Optional[torch.LongTensor] = None,  # 开始位置的token ID，可以为None
+        end_positions: Optional[torch.LongTensor] = None,  # 结束位置的token ID，可以为None
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 嵌入的输入张量，可以为None
+        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器的嵌入输入张量，可以为None
+        use_cache: Optional[bool] = None,  # 是否使用缓存，可以为None
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可以为None
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可以为None
+        return_dict: Optional[bool] = None,  # 是否以字典的形式返回结果，可以为None
 ```

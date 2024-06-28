@@ -1,21 +1,21 @@
-# `.\transformers\models\roberta_prelayernorm\modeling_flax_roberta_prelayernorm.py`
+# `.\models\roberta_prelayernorm\modeling_flax_roberta_prelayernorm.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 2022 年由 Google Flax 团队作者和 HuggingFace Inc. 团队撰写
+```
+# coding=utf-8
+# Copyright 2022 The Google Flax Team Authors and The HuggingFace Inc. team.
 #
-# 根据 Apache 许可证 2.0 版（“许可证”）获得许可；
-# 除非符合许可证，否则您不能使用此文件。
-# 您可以在以下网址获取许可证副本：
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则按“原样”分发软件，
-# 没有任何形式的明示或暗示保证或条件。
-# 有关特定语言的权限，请参阅许可证。
-""" Flax RoBERTa-PreLayerNorm 模型。"""
-# 导入必要的库
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" Flax RoBERTa-PreLayerNorm model."""
 from typing import Callable, Optional, Tuple
 
 import flax.linen as nn
@@ -29,7 +29,6 @@ from flax.linen.attention import dot_product_attention_weights
 from flax.traverse_util import flatten_dict, unflatten_dict
 from jax import lax
 
-# 导入其他模块
 from ...modeling_flax_outputs import (
     FlaxBaseModelOutputWithPastAndCrossAttentions,
     FlaxBaseModelOutputWithPooling,
@@ -43,20 +42,21 @@ from ...modeling_flax_outputs import (
 )
 from ...modeling_flax_utils import ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring, overwrite_call_docstring
 from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging
-# 初始化日志记录器
+from .configuration_roberta_prelayernorm import RobertaPreLayerNormConfig
+
 logger = logging.get_logger(__name__)
 
-# 用于文档的检查点和配置
 _CHECKPOINT_FOR_DOC = "andreasmadsen/efficient_mlm_m0.40"
 _CONFIG_FOR_DOC = "RobertaPreLayerNormConfig"
 
-# 定义 remat 函数，用于重新材料化（Rematerialization）
 remat = nn_partitioning.remat
 
-# 从 transformers.models.roberta.modeling_flax_roberta.create_position_ids_from_input_ids 复制的函数
+
+# Copied from transformers.models.roberta.modeling_flax_roberta.create_position_ids_from_input_ids
 def create_position_ids_from_input_ids(input_ids, padding_idx):
     """
-    将非填充符号替换为其位置编号。位置编号从 padding_idx+1 开始。忽略填充符号。这是从 fairseq 的 `utils.make_positions` 修改的。
+    Replace non-padding symbols with their position numbers. Position numbers begin at padding_idx+1. Padding symbols
+    are ignored. This is modified from fairseq's `utils.make_positions`.
 
     Args:
         input_ids: jnp.ndarray
@@ -64,274 +64,272 @@ def create_position_ids_from_input_ids(input_ids, padding_idx):
 
     Returns: jnp.ndarray
     """
-    # 创建一个掩码，将填充符号替换为 0
+    # Create a mask where non-padding symbols are marked as 1 and padding symbols as 0
     mask = (input_ids != padding_idx).astype("i4")
 
-    # 如果掩码的维度大于 2，则重塑掩码的形状
+    # Reshape mask if it has more than 2 dimensions
     if mask.ndim > 2:
         mask = mask.reshape((-1, mask.shape[-1]))
-        # 计算非填充符号的累积位置编号
-        incremental_indices = jnp.cumsum(mask, axis=1).astype("i4") * mask
-        incremental_indices = incremental_indices.reshape(input_ids.shape)
-    else:
-        incremental_indices = jnp.cumsum(mask, axis=1).astype("i4") * mask
 
-    # 返回最终的位置编号
+    # Calculate cumulative sum along the last dimension of the mask
+    incremental_indices = jnp.cumsum(mask, axis=1).astype("i4") * mask
+
+    # Reshape incremental indices to match the shape of input_ids
+    incremental_indices = incremental_indices.reshape(input_ids.shape)
+
+    # Add padding_idx to the incremental indices to get final position ids
     return incremental_indices.astype("i4") + padding_idx
-# ROBERTA_PRELAYERNORM_START_DOCSTRING 是一个原始文档字符串，用于描述一个继承自 FlaxPreTrainedModel 的模型类。
-# 此类继承了通用方法，比如下载、保存和从 PyTorch 模型转换权重等。
-# 此模型还是一个 flax.linen.Module 子类。可将其用作常规的 Flax linen Module，并参考 Flax 文档了解一般用法和行为。
-# 最后，此模型支持 JAX 的内在特性，例如：
-# - Just-In-Time (JIT) 编译
-# - 自动微分
-# - 向量化
-# - 并行化
-# 
-# 参数:
-#     config ([`RobertaPreLayerNormConfig`]): 包含模型所有参数的配置类。使用配置文件初始化不会加载与模型关联的权重，只加载配置。
-#         可以查看 [`~FlaxPreTrainedModel.from_pretrained`] 方法来加载模型权重。
+# ROBERTA_PRELAYERNORM_START_DOCSTRING 字符串常量，包含关于 RobertaPreLayerNormModel 模型的详细文档字符串。
+ROBERTA_PRELAYERNORM_START_DOCSTRING = r"""
 
+    This model inherits from [`FlaxPreTrainedModel`]. Check the superclass documentation for the generic methods the
+    library implements for all its model (such as downloading, saving and converting weights from PyTorch models)
+
+    This model is also a
+    [flax.linen.Module](https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html) subclass. Use it as
+    a regular Flax linen Module and refer to the Flax documentation for all matter related to general usage and
+    behavior.
+
+    Finally, this model supports inherent JAX features such as:
+
+    - [Just-In-Time (JIT) compilation](https://jax.readthedocs.io/en/latest/jax.html#just-in-time-compilation-jit)
+    - [Automatic Differentiation](https://jax.readthedocs.io/en/latest/jax.html#automatic-differentiation)
+    - [Vectorization](https://jax.readthedocs.io/en/latest/jax.html#vectorization-vmap)
+    - [Parallelization](https://jax.readthedocs.io/en/latest/jax.html#parallelization-pmap)
+
+    Parameters:
+        config ([`RobertaPreLayerNormConfig`]): Model configuration class with all the parameters of the
+            model. Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~FlaxPreTrainedModel.from_pretrained`] method to load the model weights.
+"""
+
+# ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING 字符串常量，包含关于 RobertaPreLayerNormModel 模型输入的文档字符串，目前为空。
 ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING = r"""
     Args:
         input_ids (`numpy.ndarray` of shape `({0})`):
-            输入序列标记在词汇表中的索引。
-
-            可以使用 [`AutoTokenizer`] 获得索引。查看 [`PreTrainedTokenizer.encode`] 和
-            [`PreTrainedTokenizer.__call__`] 了解详情。
-
-            [什么是输入 ID？](../glossary#input-ids)
+            Indices of input sequence tokens in the vocabulary.
+            
+            Indices can be obtained using [`AutoTokenizer`]. See [`PreTrainedTokenizer.encode`] and
+            [`PreTrainedTokenizer.__call__`] for details.
+            
+            [What are input IDs?](../glossary#input-ids)
+        
         attention_mask (`numpy.ndarray` of shape `({0})`, *optional*):
-            用于避免在填充标记索引上进行注意力计算的掩码。掩码的取值范围为 `[0, 1]`：
-
-            - 对于**未被掩盖**的标记，取值为 1，
-            - 对于**被掩盖**的标记，取值为 0。
-
-            [什么是注意力掩码？](../glossary#attention-mask)
+            Mask to avoid performing attention on padding token indices. Mask values selected in `[0, 1]`:
+            
+            - 1 for tokens that are **not masked**,
+            - 0 for tokens that are **masked**.
+            
+            [What are attention masks?](../glossary#attention-mask)
+        
         token_type_ids (`numpy.ndarray` of shape `({0})`, *optional*):
-            指示输入的第一部分和第二部分的段标记索引。索引的取值范围为 `[0, 1]`：
-
-            - 0 对应*句子 A* 的标记，
-            - 1 对应*句子 B* 的标记。
-
-            [什么是标记类型 ID？](../glossary#token-type-ids)
+            Segment token indices to indicate first and second portions of the inputs. Indices are selected in `[0,
+            1]`:
+            
+            - 0 corresponds to a *sentence A* token,
+            - 1 corresponds to a *sentence B* token.
+            
+            [What are token type IDs?](../glossary#token-type-ids)
+        
         position_ids (`numpy.ndarray` of shape `({0})`, *optional*):
-            指示每个输入序列标记在位置嵌入中的位置索引。索引的取值范围为 `[0, config.max_position_embeddings - 1]`。
+            Indices of positions of each input sequence tokens in the position embeddings. Selected in the range `[0,
+            config.max_position_embeddings - 1]`.
+        
         head_mask (`numpy.ndarray` of shape `({0})`, `optional):
-            用于屏蔽注意力模块中的选定头部的掩码。掩码的取值范围为 `[0, 1]`：
-
-            - 1 表示该头部**未被屏蔽**，
-            - 0 表示该头部**被屏蔽**。
-
+            Mask to nullify selected heads of the attention modules. Mask values selected in `[0, 1]`:
+            
+            - 1 indicates the head is **not masked**,
+            - 0 indicates the head is **masked**.
+        
         return_dict (`bool`, *optional*):
-            是否返回一个 [`~utils.ModelOutput`] 而不是一个普通的元组。
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertEmbeddings复制而来，修改为RobertaPreLayerNorm
+            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
+"""
+# 从transformers.models.bert.modeling_flax_bert.FlaxBertEmbeddings复制并修改为RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormEmbeddings(nn.Module):
-    """Construct the embeddings from word, position and token_type embeddings."""
+    """从单词、位置和标记类型嵌入构建嵌入。"""
 
-    # 构造函数，初始化模型配置和数据类型
     config: RobertaPreLayerNormConfig
     dtype: jnp.dtype = jnp.float32  # 计算的数据类型
 
     def setup(self):
-        # 初始化词嵌入层，词汇大小为config.vocab_size，隐藏层大小为config.hidden_size
-        # 使用正态分布初始化，标准差为config.initializer_range
+        # 初始化单词嵌入，使用正态分布初始化方法
         self.word_embeddings = nn.Embed(
             self.config.vocab_size,
             self.config.hidden_size,
             embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化位置嵌入层，位置嵌入最大值为config.max_position_embeddings，隐藏层大小为config.hidden_size
-        # 使用正态分布初始化，标准差为config.initializer_range
+        # 初始化位置嵌入，使用正态分布初始化方法
         self.position_embeddings = nn.Embed(
             self.config.max_position_embeddings,
             self.config.hidden_size,
             embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化标记类型嵌入层，类型词汇大小为config.type_vocab_size，隐藏层大小为config.hidden_size
-        # 使用正态分布初始化，标准差为config.initializer_range
+        # 初始化标记类型嵌入，使用正态分布初始化方法
         self.token_type_embeddings = nn.Embed(
             self.config.type_vocab_size,
             self.config.hidden_size,
             embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化Layer Norm层，epsilon为config.layer_norm_eps，数据类型为dtype
+        # 初始化 LayerNorm 层
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化Dropout层，丢弃率为config.hidden_dropout_prob
+        # 初始化 Dropout 层
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
 
-    # 前向传播函数，接受输入id，标记类型id，位置id，注意力掩码，确定性标志
     def __call__(self, input_ids, token_type_ids, position_ids, attention_mask, deterministic: bool = True):
-        # 嵌入
-        inputs_embeds = self.word_embeddings(input_ids.astype("i4"))  # 输入词嵌入
-        position_embeds = self.position_embeddings(position_ids.astype("i4"))  # 位置嵌入
-        token_type_embeddings = self.token_type_embeddings(token_type_ids.astype("i4"))  # 标记类型嵌入
+        # 嵌入输入的 ids
+        inputs_embeds = self.word_embeddings(input_ids.astype("i4"))
+        # 嵌入位置 ids
+        position_embeds = self.position_embeddings(position_ids.astype("i4"))
+        # 嵌入标记类型 ids
+        token_type_embeddings = self.token_type_embeddings(token_type_ids.astype("i4"))
 
-        # 合并所有嵌入
+        # 汇总所有嵌入
         hidden_states = inputs_embeds + token_type_embeddings + position_embeds
 
-        # Layer Norm层
+        # Layer Norm 层
         hidden_states = self.LayerNorm(hidden_states)
-        # Dropout层
+        # Dropout 层
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
         return hidden_states
 
 
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertSelfAttention复制而来，修改为RobertaPreLayerNorm
+# 从transformers.models.bert.modeling_flax_bert.FlaxBertSelfAttention复制并修改为RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormSelfAttention(nn.Module):
     config: RobertaPreLayerNormConfig
     causal: bool = False
     dtype: jnp.dtype = jnp.float32  # 计算的数据类型
-    # 初始化函数，设置每个头的维度并检查隐藏层大小是否可以整除头数
+    # 在对象初始化时设置方法
     def setup(self):
-        # 计算每个头的维度
+        # 计算每个注意力头的维度
         self.head_dim = self.config.hidden_size // self.config.num_attention_heads
-        # 检查隐藏层大小是否可以整除头数
+        # 检查隐藏层大小是否能被注意力头数整除
         if self.config.hidden_size % self.config.num_attention_heads != 0:
             raise ValueError(
                 "`config.hidden_size`: {self.config.hidden_size} has to be a multiple of `config.num_attention_heads` "
                 "                   : {self.config.num_attention_heads}"
             )
 
-        # 初始化查询层
+        # 初始化查询、键、值的全连接层
         self.query = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 初始化键层
         self.key = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 初始化值层
         self.value = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
 
-        # 如果启用了因果关系，则创建因果掩码
+        # 如果是因果注意力，则创建因果掩码
         if self.causal:
             self.causal_mask = make_causal_mask(
                 jnp.ones((1, self.config.max_position_embeddings), dtype="bool"), dtype="bool"
             )
 
-    # 将隐藏状态分割为各个头
+    # 将隐藏状态分割成多个注意力头
     def _split_heads(self, hidden_states):
         return hidden_states.reshape(hidden_states.shape[:2] + (self.config.num_attention_heads, self.head_dim))
 
-    # 将各个头合并回原始隐藏状态
+    # 将分割后的注意力头合并成原始隐藏状态的形状
     def _merge_heads(self, hidden_states):
         return hidden_states.reshape(hidden_states.shape[:2] + (self.config.hidden_size,))
 
-    # 使用 nn.compact 装饰器，标记为 Flax 模型的组件
     @nn.compact
-    # 从 transformers.models.bart.modeling_flax_bart.FlaxBartAttention._concatenate_to_cache 复制的代码
-```  
+    # 从transformers.models.bart.modeling_flax_bart.FlaxBartAttention._concatenate_to_cache复制而来的注释
     def _concatenate_to_cache(self, key, value, query, attention_mask):
         """
         This function takes projected key, value states from a single input token and concatenates the states to cached
-        states from previous steps. This function is slightly adapted from the official Flax repository:
+        states from previous steps. This function is slighly adapted from the official Flax repository:
         https://github.com/google/flax/blob/491ce18759622506588784b4fca0e4bf05f8c8cd/flax/linen/attention.py#L252
         """
-        # 检测是否通过缺少现有缓存数据进行初始化。
+        # 检测是否初始化缓存数据
         is_initialized = self.has_variable("cache", "cached_key")
-        # 获取或创建缓存的键状态变量
+        # 获取或创建缓存的键值和值的变量，如果不存在则创建新的变量
         cached_key = self.variable("cache", "cached_key", jnp.zeros, key.shape, key.dtype)
-        # 获取或创建缓存的值状态变量
         cached_value = self.variable("cache", "cached_value", jnp.zeros, value.shape, value.dtype)
-        # 获取或创建缓存索引变量
+        # 获取或创建缓存索引的变量，如果不存在则初始化为0
         cache_index = self.variable("cache", "cache_index", lambda: jnp.array(0, dtype=jnp.int32))
 
         if is_initialized:
-            # 获取批次维度、最大长度、头数以及每个头的深度
+            # 获取批次维度等信息，并获取当前缓存键的最大长度、头数和每个头的深度
             *batch_dims, max_length, num_heads, depth_per_head = cached_key.value.shape
-            # 使用新的一维空间切片更新键、值缓存
+            # 使用新的一维空间片段更新键值缓存
             cur_index = cache_index.value
-            # 索引位置
             indices = (0,) * len(batch_dims) + (cur_index, 0, 0)
-            # 动态更新键
             key = lax.dynamic_update_slice(cached_key.value, key, indices)
-            # 动态更新值
             value = lax.dynamic_update_slice(cached_value.value, value, indices)
-            # 更新缓存键值
             cached_key.value = key
             cached_value.value = value
-            # 更新缓存向量数量
+            # 更新缓存索引以反映新增的缓存向量数目
             num_updated_cache_vectors = query.shape[1]
             cache_index.value = cache_index.value + num_updated_cache_vectors
-            # 为缓存的解码器自注意力创建因果掩码：我们的单个查询位置应仅注意已生成并缓存的键位置，而不是剩余的零元素。
+            # 用于缓存解码器自注意力的因果掩码：我们的单个查询位置只应关注已生成并缓存的键位置，而不是剩余的零元素
             pad_mask = jnp.broadcast_to(
                 jnp.arange(max_length) < cur_index + num_updated_cache_vectors,
                 tuple(batch_dims) + (1, num_updated_cache_vectors, max_length),
             )
-            # 合并掩码
+            # 合并填充掩码和注意力掩码
             attention_mask = combine_masks(pad_mask, attention_mask)
+        # 返回更新后的键、值和注意力掩码
         return key, value, attention_mask
-
-    def __call__(
-        self,
-        hidden_states,
-        attention_mask,
-        layer_head_mask,
-        key_value_states: Optional[jnp.ndarray] = None,
-        init_cache: bool = False,
-        deterministic=True,
-        output_attentions: bool = False,
-# FlaxRobertaPreLayerNormSelfOutput 类
+# 定义 FlaxRobertaPreLayerNormSelfOutput 类，继承自 nn.Module
 class FlaxRobertaPreLayerNormSelfOutput(nn.Module):
-    # 类属性，为 RobertaPreLayerNormConfig 类型的 config 参数
+    # 类型注解，指定 config 属性为 RobertaPreLayerNormConfig 类型
     config: RobertaPreLayerNormConfig
-    # 类属性，值为 jnp.float32 的 jnp.dtype
+    # 定义 dtype 属性，默认为 jnp.float32，表示计算中使用的数据类型
     dtype: jnp.dtype = jnp.float32  # the dtype of the computation
 
-    # 类方法
+    # 初始化函数，在模块设置时调用
     def setup(self):
-        # 创建一个 nn.Dense 对象，并使用 config 和 dtype 参数进行初始化
+        # 初始化 dense 层，输出维度为 self.config.hidden_size
+        # 使用正态分布初始化权重，范围为 self.config.initializer_range
         self.dense = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 创建一个 nn.Dropout 对象，并使用 config 的 hidden_dropout_prob 参数进行初始化
+        # 初始化 dropout 层，丢弃率为 self.config.hidden_dropout_prob
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
 
-    # 类方法
+    # 调用函数，定义模块的前向传播逻辑
     def __call__(self, hidden_states, input_tensor, deterministic: bool = True):
-        # 将 hidden_states 传递给 self.dense 处理，并将结果赋值给 hidden_states
+        # 输入 hidden_states 经过 dense 层处理
         hidden_states = self.dense(hidden_states)
-        # 将 hidden_states 传递给 self.dropout 处理，并将结果赋值给 hidden_states
+        # 对处理后的 hidden_states 进行 dropout 操作
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 将 input_tensor 加上 hidden_states，并将结果返回
+        # 将 dropout 后的 hidden_states 与 input_tensor 相加作为输出
         hidden_states = hidden_states + input_tensor
         return hidden_states
 
 
-# FlaxRobertaPreLayerNormAttention 类
+# 定义 FlaxRobertaPreLayerNormAttention 类，继承自 nn.Module
 class FlaxRobertaPreLayerNormAttention(nn.Module):
-    # 类属性，为 RobertaPreLayerNormConfig 类型的 config 参数
+    # 类型注解，指定 config 属性为 RobertaPreLayerNormConfig 类型
     config: RobertaPreLayerNormConfig
-    # 类属性，值为 False 的 bool 类型的变量
+    # 定义 causal 属性，默认为 False，表示是否是因果关系的自注意力
     causal: bool = False
-    # 类属性，值为 jnp.float32 的 jnp.dtype
+    # 定义 dtype 属性，默认为 jnp.float32，表示计算中使用的数据类型
     dtype: jnp.dtype = jnp.float32
 
-    # 类方法
+    # 初始化函数，在模块设置时调用
     def setup(self):
-        # 创建一个 FlaxRobertaPreLayerNormSelfAttention 对象，
-        # 并使用 config、causal 和 dtype 参数进行初始化
+        # 初始化 self 层为 FlaxRobertaPreLayerNormSelfAttention 类实例
         self.self = FlaxRobertaPreLayerNormSelfAttention(self.config, causal=self.causal, dtype=self.dtype)
-        # 创建一个 FlaxRobertaPreLayerNormSelfOutput 对象，
-        # 并使用 config 和 dtype 参数进行初始化
+        # 初始化 output 层为 FlaxRobertaPreLayerNormSelfOutput 类实例
         self.output = FlaxRobertaPreLayerNormSelfOutput(self.config, dtype=self.dtype)
-        # 创建一个 nn.LayerNorm 对象，并使用 config 的 layer_norm_eps 和 dtype 参数进行初始化
+        # 初始化 LayerNorm 层，用于层归一化，epsilon 为 self.config.layer_norm_eps
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
 
-    # 类方法
+    # 调用函数，定义模块的前向传播逻辑
     def __call__(
         self,
         hidden_states,
@@ -342,10 +340,10 @@ class FlaxRobertaPreLayerNormAttention(nn.Module):
         deterministic=True,
         output_attentions: bool = False,
     ):
-        # 将 hidden_states 传递给 self.LayerNorm 处理，并将结果赋值给 hidden_states_pre_layer_norm
+        # 对 hidden_states 进行层归一化
         hidden_states_pre_layer_norm = self.LayerNorm(hidden_states)
-        # 调用 self.self() 方法，将 hidden_states_pre_layer_norm 和其他参数传入，
-        # 并将返回的结果赋值给 attn_outputs
+        # 调用 self 层的前向传播函数，处理层归一化后的 hidden_states
+        # 返回的 attn_outputs 包含注意力输出和可能的附加信息，如注意力权重
         attn_outputs = self.self(
             hidden_states_pre_layer_norm,
             attention_mask,
@@ -355,100 +353,101 @@ class FlaxRobertaPreLayerNormAttention(nn.Module):
             deterministic=deterministic,
             output_attentions=output_attentions,
         )
-        # 取 attn_outputs 的第一个元素，并将结果赋值给 attn_output
+        # 从 attn_outputs 中获取注意力输出
         attn_output = attn_outputs[0]
-        # 调用 self.output() 方法，将 attn_output、hidden_states 和其他参数传入，
-        # 并将返回的结果赋值给 hidden_states
+        # 调用 output 层的前向传播函数，处理注意力输出和原始 hidden_states
         hidden_states = self.output(attn_output, hidden_states, deterministic=deterministic)
 
-        # 创建一个元组 outputs，包含 hidden_states
+        # 构建输出元组，包含更新后的 hidden_states
         outputs = (hidden_states,)
 
-        # 如果 output_attentions 为 True，将 attn_outputs 的第二个元素添加到 outputs 中
+        # 如果需要输出注意力权重，则添加到输出元组中
         if output_attentions:
             outputs += (attn_outputs[1],)
 
-        # 返回 outputs
         return outputs
 
 
-# FlaxRobertaPreLayerNormIntermediate 类
+# 定义 FlaxRobertaPreLayerNormIntermediate 类，继承自 nn.Module
 class FlaxRobertaPreLayerNormIntermediate(nn.Module):
-    # 类属性，为 RobertaPreLayerNormConfig 类型的 config 参数
+    # 类型注解，指定 config 属性为 RobertaPreLayerNormConfig 类型
     config: RobertaPreLayerNormConfig
-    # 类属性，值为 jnp.float32 的 jnp.dtype
+    # 定义 dtype 属性，默认为 jnp.float32，表示计算中使用的数据类型
     dtype: jnp.dtype = jnp.float32  # the dtype of the computation
 
-    # 类方法
+    # 初始化函数，在模块设置时调用
     def setup(self):
-        # 创建一个 nn.LayerNorm 对象，并使用 config 的 layer_norm_eps 和 dtype 参数进行初始化
+        # 初始化 LayerNorm 层，用于层归一化，epsilon 为 self.config.layer_norm_eps
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 创建一个 nn.Dense 对象，并使用 config 的 intermediate_size、initializer_range 和 dtype 参数进行初始化
+        # 初始化 dense 层，输出维度为 self.config.intermediate_size
+        # 使用正态分布初始化权重，范围为 self.config.initializer_range
         self.dense = nn.Dense(
             self.config.intermediate_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 创建一个 ACT2FN 字典，并将 config 的 hidden_act 参数作为键，获得对应的激活函数，并将结果赋值给 activation
+        # 激活函数 activation 为根据配置中的 hidden_act 从 ACT2FN 字典中选择的函数
         self.activation = ACT2FN[self.config.hidden_act]
-    # 定义一个类方法，接收隐藏状态作为参数
+    # 定义一个类方法，用于处理给定的隐藏状态数据
     def __call__(self, hidden_states):
-        # 对隐藏状态进行 LayerNorm 处理
+        # 对隐藏状态进行层归一化操作
         hidden_states = self.LayerNorm(hidden_states)
-        # 对处理后的隐藏状态进行全连接操作
+        # 对归一化后的隐藏状态应用全连接层变换
         hidden_states = self.dense(hidden_states)
-        # 对全连接操作后的结果进行激活函数处理
+        # 对变换后的隐藏状态应用激活函数（如ReLU等）
         hidden_states = self.activation(hidden_states)
-        # 返回处理后的隐藏状态
+        # 返回处理后的隐藏状态作为结果
         return hidden_states
-# 定义一个 FlaxRobertaPreLayerNormOutput 类，继承自 nn.Module，用于输出预训练层归一化后的 RoBERTa 模型的结果
+# 定义一个名为 FlaxRobertaPreLayerNormOutput 的新的神经网络模块（nn.Module）
 class FlaxRobertaPreLayerNormOutput(nn.Module):
-    # 定义配置参数
+    # 配置对象，用于存储 RobertaPreLayerNormConfig 类的配置信息
     config: RobertaPreLayerNormConfig
-    # 定义计算的数据类型，默认为 float32
-    dtype: jnp.dtype = jnp.float32
+    # 计算过程中所用的数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
 
-    # 设置模型层
+    # 模块初始化方法
     def setup(self):
-        # 添加一个全连接层，输入为 config.hidden_size，输出为 config.hidden_size，使用正态分布初始化权重
+        # 定义一个全连接层，输出维度为 config.hidden_size，权重初始化为正态分布，范围为 config.initializer_range
         self.dense = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 添加一个 Dropout 层，dropout 概率为 config.hidden_dropout_prob
+        # 定义一个 Dropout 层，丢弃率为 config.hidden_dropout_prob
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
 
-    # 定义前向传播过程
+    # 模块调用方法，用于前向传播
     def __call__(self, hidden_states, attention_output, deterministic: bool = True):
-        # 通过全连接层得到隐藏状态
+        # 将输入的 hidden_states 通过全连接层 dense 进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 对隐藏状态应用 Dropout
+        # 对线性变换后的 hidden_states 应用 Dropout，用于随机丢弃部分神经元，防止过拟合
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 将 attention_output 与 hidden_states 相加得到最终输出
+        # 将 Dropout 后的 hidden_states 与 attention_output 相加，得到最终输出
         hidden_states = hidden_states + attention_output
+        # 返回最终输出的 hidden_states
         return hidden_states
 
-# 定义一个 FlaxRobertaPreLayerNormLayer 类，继承自 nn.Module，用于实现 RoBERTa 预训练层归一化后的计算
-class FlaxRobertaPreLayerNormLayer(nn.Module):
-    # 定义配置参数
-    config: RobertaPreLayerNormConfig
-    # 定义计算的数据类型，默认为 float32
-    dtype: jnp.dtype = jnp.float32
 
-    # 设置模型层
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertLayer 复制的类，修改为使用 RobertaPreLayerNorm
+class FlaxRobertaPreLayerNormLayer(nn.Module):
+    # 配置对象，用于存储 RobertaPreLayerNormConfig 类的配置信息
+    config: RobertaPreLayerNormConfig
+    # 计算过程中所用的数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
+
+    # 模块初始化方法
     def setup(self):
-        # 添加一个 FlaxRobertaPreLayerNormAttention 层
+        # 定义自注意力层，使用 FlaxRobertaPreLayerNormAttention 模块，传入配置信息和数据类型
         self.attention = FlaxRobertaPreLayerNormAttention(self.config, causal=self.config.is_decoder, dtype=self.dtype)
-        # 添加一个 FlaxRobertaPreLayerNormIntermediate 层
+        # 定义中间层，使用 FlaxRobertaPreLayerNormIntermediate 模块，传入配置信息和数据类型
         self.intermediate = FlaxRobertaPreLayerNormIntermediate(self.config, dtype=self.dtype)
-        # 添加一个 FlaxRobertaPreLayerNormOutput 层
+        # 定义输出层，使用 FlaxRobertaPreLayerNormOutput 模块，传入配置信息和数据类型
         self.output = FlaxRobertaPreLayerNormOutput(self.config, dtype=self.dtype)
-        # 如果需要交叉注意力，则添加一个 FlaxRobertaPreLayerNormAttention 层
+        # 如果配置中设置了添加交叉注意力，定义交叉注意力层，使用 FlaxRobertaPreLayerNormAttention 模块，传入配置信息和数据类型
         if self.config.add_cross_attention:
             self.crossattention = FlaxRobertaPreLayerNormAttention(self.config, causal=False, dtype=self.dtype)
 
-    # 定义前向传播过程
+    # 模块调用方法，用于前向传播
     def __call__(
         self,
         hidden_states,
@@ -459,58 +458,63 @@ class FlaxRobertaPreLayerNormLayer(nn.Module):
         init_cache: bool = False,
         deterministic: bool = True,
         output_attentions: bool = False,
-    ):
-        # 此处省略了后续的代码实现
-    ):
-        # Self Attention  self-attention层，用于对输入的hidden_states进行自注意力计算
+        # Self Attention
+        # 调用 self.attention 方法进行自注意力计算
         attention_outputs = self.attention(
-            hidden_states,  # 输入的隐状态
-            attention_mask,  # 注意力掩码
-            layer_head_mask=layer_head_mask,  # 层和头的掩码
-            init_cache=init_cache,  # 初始缓存
-            deterministic=deterministic,  # 是否确定性计算
-            output_attentions=output_attentions,  # 是否输出注意力值
+            hidden_states,
+            attention_mask,
+            layer_head_mask=layer_head_mask,
+            init_cache=init_cache,
+            deterministic=deterministic,
+            output_attentions=output_attentions,
         )
-        attention_output = attention_outputs[0]  # 注意力层的输出
+        attention_output = attention_outputs[0]
 
-        # Cross-Attention Block 跨attention块
+        # Cross-Attention Block
+        # 如果提供了 encoder_hidden_states，则进行交叉注意力计算
         if encoder_hidden_states is not None:
             cross_attention_outputs = self.crossattention(
-                attention_output,  # 输入的注意力输出
-                attention_mask=encoder_attention_mask,  # 编码器注意力掩码
-                layer_head_mask=layer_head_mask,  # 层和头的掩码
-                key_value_states=encoder_hidden_states,  # 编码器的隐藏层状态
-                deterministic=deterministic,  # 是否确定性计算
-                output_attentions=output_attentions,  # 是否输出注意力值
+                attention_output,
+                attention_mask=encoder_attention_mask,
+                layer_head_mask=layer_head_mask,
+                key_value_states=encoder_hidden_states,
+                deterministic=deterministic,
+                output_attentions=output_attentions,
             )
-            attention_output = cross_attention_outputs[0]  # 跨attention块的输出
+            attention_output = cross_attention_outputs[0]
 
-        hidden_states = self.intermediate(attention_output)  # 经过一层全连接层
-        hidden_states = self.output(hidden_states, attention_output, deterministic=deterministic)  # 经过一层全连接层
+        # 经过 intermediate 层的处理
+        hidden_states = self.intermediate(attention_output)
+        # 经过 output 层的处理
+        hidden_states = self.output(hidden_states, attention_output, deterministic=deterministic)
 
-        outputs = (hidden_states,)  # 将隐状态存储到元组中
+        # 将 hidden_states 包装为 outputs 元组
+        outputs = (hidden_states,)
 
-        if output_attentions:  # 如果需要输出注意力值
-            outputs += (attention_outputs[1],)  # 将自注意力值存储到元组中
+        # 如果需要输出 attentions，则将 attention 输出包含在 outputs 中
+        if output_attentions:
+            outputs += (attention_outputs[1],)
+            # 如果提供了 encoder_hidden_states，则将 cross-attention 输出也包含在 outputs 中
             if encoder_hidden_states is not None:
-                outputs += (cross_attention_outputs[1],)  # 将跨attention块的注意力值存储到元组中
-        return outputs  # 返回输出结果元组
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertLayerCollection复制代码，并将Bert->RobertaPreLayerNorm
+                outputs += (cross_attention_outputs[1],)
+        return outputs
+# 从transformers.models.bert.modeling_flax_bert.FlaxBertLayerCollection复制并修改为FlaxRobertaPreLayerNormLayerCollection类
 class FlaxRobertaPreLayerNormLayerCollection(nn.Module):
-    config: RobertaPreLayerNormConfig
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
-    gradient_checkpointing: bool = False  # 梯度检查点
+    config: RobertaPreLayerNormConfig  # 类型提示，指定配置对象类型为RobertaPreLayerNormConfig
+    dtype: jnp.dtype = jnp.float32  # 计算时所用的数据类型，默认为jnp.float32
+    gradient_checkpointing: bool = False  # 是否使用梯度检查点
 
     def setup(self):
-        # 如果使用梯度检查点，则使用remat函数对FlaxRobertaPreLayerNormLayer进行处理，静态参数为(5, 6, 7)
         if self.gradient_checkpointing:
+            # 如果启用梯度检查点，则定义FlaxRobertaPreLayerNormCheckpointLayer，并传递静态参数索引
             FlaxRobertaPreLayerNormCheckpointLayer = remat(FlaxRobertaPreLayerNormLayer, static_argnums=(5, 6, 7))
+            # 创建多个梯度检查点层对象，每个层对象对应一层神经网络层
             self.layers = [
                 FlaxRobertaPreLayerNormCheckpointLayer(self.config, name=str(i), dtype=self.dtype)
                 for i in range(self.config.num_hidden_layers)
             ]
-        # 否则，直接创建FlaxRobertaPreLayerNormLayer对象
         else:
+            # 如果未启用梯度检查点，则创建多个Roberta预层归一化层对象，每个对象对应一层神经网络层
             self.layers = [
                 FlaxRobertaPreLayerNormLayer(self.config, name=str(i), dtype=self.dtype)
                 for i in range(self.config.num_hidden_layers)
@@ -528,75 +532,77 @@ class FlaxRobertaPreLayerNormLayerCollection(nn.Module):
         output_attentions: bool = False,
         output_hidden_states: bool = False,
         return_dict: bool = True,
-    # 检查是否需要输出注意力和隐藏状态, 并根据需要初始化相关的元组
-    all_attentions = () if output_attentions else None
-    all_hidden_states = () if output_hidden_states else None
-    all_cross_attentions = () if (output_attentions and encoder_hidden_states is not None) else None
-    
-    # 检查 head_mask 的层数是否正确
-    if head_mask is not None:
-        if head_mask.shape[0] != (len(self.layers)):
-            raise ValueError(
-                f"The head_mask should be specified for {len(self.layers)} layers, but it is for {head_mask.shape[0]}."
+        ):
+            # 初始化空元组，根据需要输出注意力的设置确定是否包含
+            all_attentions = () if output_attentions else None
+            # 初始化空元组，根据需要输出隐藏状态的设置确定是否包含
+            all_hidden_states = () if output_hidden_states else None
+            # 初始化空元组，根据需要输出交叉注意力的设置和编码器隐藏状态是否存在确定是否包含
+            all_cross_attentions = () if (output_attentions and encoder_hidden_states is not None) else None
+
+            # 检查头部掩码是否为每层指定了正确数量的层
+            if head_mask is not None:
+                if head_mask.shape[0] != (len(self.layers)):
+                    raise ValueError(
+                        f"The head_mask should be specified for {len(self.layers)} layers, but it is for                  "
+                        f"       {head_mask.shape[0]}."
+                    )
+
+            # 遍历模型的每一层
+            for i, layer in enumerate(self.layers):
+                # 如果需要输出隐藏状态，则将当前隐藏状态添加到所有隐藏状态的元组中
+                if output_hidden_states:
+                    all_hidden_states += (hidden_states,)
+
+                # 调用当前层的前向传播方法
+                layer_outputs = layer(
+                    hidden_states,
+                    attention_mask,
+                    head_mask[i] if head_mask is not None else None,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    init_cache,
+                    deterministic,
+                    output_attentions,
+                )
+
+                # 更新隐藏状态为当前层的输出的第一个元素
+                hidden_states = layer_outputs[0]
+
+                # 如果需要输出注意力权重，则将当前层的注意力权重添加到所有注意力的元组中
+                if output_attentions:
+                    all_attentions += (layer_outputs[1],)
+
+                    # 如果存在编码器的隐藏状态，则将当前层的交叉注意力添加到所有交叉注意力的元组中
+                    if encoder_hidden_states is not None:
+                        all_cross_attentions += (layer_outputs[2],)
+
+            # 如果需要输出隐藏状态，则将最终隐藏状态添加到所有隐藏状态的元组中
+            if output_hidden_states:
+                all_hidden_states += (hidden_states,)
+
+            # 组装最终的模型输出，包括隐藏状态、所有隐藏状态、所有注意力和所有交叉注意力
+            outputs = (hidden_states, all_hidden_states, all_attentions, all_cross_attentions)
+
+            # 如果不需要返回字典形式的输出，则返回非空元素的元组
+            if not return_dict:
+                return tuple(v for v in outputs if v is not None)
+
+            # 返回具有过去和交叉注意力的 Flax 模型输出对象
+            return FlaxBaseModelOutputWithPastAndCrossAttentions(
+                last_hidden_state=hidden_states,
+                hidden_states=all_hidden_states,
+                attentions=all_attentions,
+                cross_attentions=all_cross_attentions,
             )
-    
-    # 循环处理每一层
-    for i, layer in enumerate(self.layers):
-        # 如果需要输出隐藏状态, 则将当前隐藏状态添加到 all_hidden_states
-        if output_hidden_states:
-            all_hidden_states += (hidden_states,)
-    
-        # 调用当前层的前向计算, 获得输出
-        layer_outputs = layer(
-            hidden_states,
-            attention_mask,
-            head_mask[i] if head_mask is not None else None,
-            encoder_hidden_states,
-            encoder_attention_mask,
-            init_cache,
-            deterministic,
-            output_attentions,
-        )
-    
-        # 更新隐藏状态
-        hidden_states = layer_outputs[0]
-    
-        # 如果需要输出注意力, 则将注意力添加到 all_attentions
-        if output_attentions:
-            all_attentions += (layer_outputs[1],)
-    
-            # 如果存在 encoder_hidden_states, 则将跨注意力添加到 all_cross_attentions
-            if encoder_hidden_states is not None:
-                all_cross_attentions += (layer_outputs[2],)
-    
-    # 如果需要输出隐藏状态, 则将最终隐藏状态添加到 all_hidden_states
-    if output_hidden_states:
-        all_hidden_states += (hidden_states,)
-    
-    # 构建输出结果
-    outputs = (hidden_states, all_hidden_states, all_attentions, all_cross_attentions)
-    
-    # 根据 return_dict 选择返回类型
-    if not return_dict:
-        return tuple(v for v in outputs if v is not None)
-    
-    return FlaxBaseModelOutputWithPastAndCrossAttentions(
-        last_hidden_state=hidden_states,
-        hidden_states=all_hidden_states,
-        attentions=all_attentions,
-        cross_attentions=all_cross_attentions,
-    )
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertEncoder复制代码，并将Bert->RobertaPreLayerNorm
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertEncoder 复制并将 Bert 替换为 RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormEncoder(nn.Module):
-    # 定义config为RobertaPreLayerNormConfig类型的参数
-    config: RobertaPreLayerNormConfig
-    # 定义dtype为jnp.float32，默认为计算的数据类型
-    dtype: jnp.dtype = jnp.float32  
-    # 定义gradient_checkpointing为bool类型，默认为False
-    gradient_checkpointing: bool = False
+    config: RobertaPreLayerNormConfig  # 使用 RobertaPreLayerNormConfig 配置
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
+    gradient_checkpointing: bool = False  # 梯度检查点标志，默认为 False
 
     def setup(self):
-        # 创建FlaxRobertaPreLayerNormLayerCollection对象，并传入config、dtype和gradient_checkpointing参数
+        # 初始化 FlaxRobertaPreLayerNormLayerCollection 层集合
         self.layer = FlaxRobertaPreLayerNormLayerCollection(
             self.config,
             dtype=self.dtype,
@@ -616,7 +622,7 @@ class FlaxRobertaPreLayerNormEncoder(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 调用self.layer对象并传入参数，返回结果
+        # 调用 self.layer 进行编码器的前向传播
         return self.layer(
             hidden_states,
             attention_mask,
@@ -631,15 +637,13 @@ class FlaxRobertaPreLayerNormEncoder(nn.Module):
         )
 
 
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertPooler复制代码，并将Bert->RobertaPreLayerNorm
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertPooler 复制并将 Bert 替换为 RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormPooler(nn.Module):
-    # 定义config为RobertaPreLayerNormConfig类型的参数
-    config: RobertaPreLayerNormConfig
-    # 定义dtype为jnp.float32，默认为计算的数据类型
-    dtype: jnp.dtype = jnp.float32  
+    config: RobertaPreLayerNormConfig  # 使用 RobertaPreLayerNormConfig 配置
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
 
     def setup(self):
-        # 创建nn.Dense对象，并传入hidden_size、kernel_init和dtype参数
+        # 初始化全连接层 dense
         self.dense = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
@@ -647,109 +651,111 @@ class FlaxRobertaPreLayerNormPooler(nn.Module):
         )
 
     def __call__(self, hidden_states):
-        # 获取hidden_states的第一个元素
+        # 取出每个序列的第一个隐藏状态作为 CLS 隐藏状态，然后经过全连接层 dense 和 tanh 函数处理后返回
         cls_hidden_state = hidden_states[:, 0]
-        # 将cls_hidden_state传入self.dense对象，并返回结果
         cls_hidden_state = self.dense(cls_hidden_state)
-        # 返回tanh函数作用后的cls_hidden_state
         return nn.tanh(cls_hidden_state)
 
 
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaLMHead复制代码，并将Roberta->RobertaPreLayerNorm
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaLMHead 复制并将 Roberta 替换为 RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormLMHead(nn.Module):
-    # 定义config为RobertaPreLayerNormConfig类型的参数
-    config: RobertaPreLayerNormConfig
-    # 定义dtype为jnp.float32
-    dtype: jnp.dtype = jnp.float32
-    # 定义bias_init为Callable类型，使用jax.nn.initializers.zeros函数初始化
-    bias_init: Callable[..., np.ndarray] = jax.nn.initializers.zeros
+    config: RobertaPreLayerNormConfig  # 使用 RobertaPreLayerNormConfig 配置
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
+    bias_init: Callable[..., np.ndarray] = jax.nn.initializers.zeros  # 偏置初始化器为零初始化器
 
     def setup(self):
-        # 创建nn.Dense对象，并传入hidden_size、dtype和kernel_init参数
+        # 初始化全连接层 dense、LayerNorm 层和解码器 dense
         self.dense = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 创建nn.LayerNorm对象，并指定epsilon和dtype参数
         self.layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 创建nn.Dense对象，并传入vocab_size、dtype、use_bias和kernel_init参数
         self.decoder = nn.Dense(
             self.config.vocab_size,
             dtype=self.dtype,
             use_bias=False,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 创建bias参数，并初始化为0，大小为vocab_size
         self.bias = self.param("bias", self.bias_init, (self.config.vocab_size,))
-    #
-# 定义一个继承自 nn.Module 的 FlaxRobertaPreLayerNormClassificationHead 类
-# 该类用于对 RobertaPreLayerNorm 模型的输出进行分类任务
+    # 定义一个特殊方法 __call__，用于将对象实例作为函数调用
+    def __call__(self, hidden_states, shared_embedding=None):
+        # 将隐藏状态通过全连接层 dense 进行线性变换
+        hidden_states = self.dense(hidden_states)
+        # 对变换后的隐藏状态应用 GELU 激活函数
+        hidden_states = ACT2FN["gelu"](hidden_states)
+        # 对激活后的隐藏状态进行层归一化处理
+        hidden_states = self.layer_norm(hidden_states)
+
+        # 如果传入了共享的嵌入矩阵，则使用嵌入矩阵进行解码
+        if shared_embedding is not None:
+            # 使用 decoder 对象的 apply 方法应用共享的嵌入矩阵进行解码
+            hidden_states = self.decoder.apply({"params": {"kernel": shared_embedding.T}}, hidden_states)
+        else:
+            # 否则，直接使用 decoder 对象进行解码
+            hidden_states = self.decoder(hidden_states)
+
+        # 将偏置转换为与当前数据类型匹配的 JAX 数组，并加到隐藏状态上
+        bias = jnp.asarray(self.bias, self.dtype)
+        hidden_states += bias
+        # 返回处理后的隐藏状态作为结果
+        return hidden_states
+# Copied from transformers.models.roberta.modeling_flax_roberta.FlaxRobertaClassificationHead with Roberta->RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormClassificationHead(nn.Module):
-    # 获取 RobertaPreLayerNormConfig 配置
     config: RobertaPreLayerNormConfig
-    # 设置数据类型为 float32
     dtype: jnp.dtype = jnp.float32
 
-    # 执行模块的初始化
     def setup(self):
-        # 定义一个全连接层，输入大小为 config.hidden_size，输出大小为 config.hidden_size
-        # 权重初始化采用正态分布初始化方式，标准差为 config.initializer_range
+        # 初始化一个全连接层，用于分类头部，输入维度是隐藏层大小
         self.dense = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 根据配置确定分类器的dropout率，如果没有配置则使用隐藏层dropout率
+        # 根据配置中的 dropout 概率设置 Dropout 层
         classifier_dropout = (
             self.config.classifier_dropout
             if self.config.classifier_dropout is not None
             else self.config.hidden_dropout_prob
         )
-        # 定义一个dropout层
         self.dropout = nn.Dropout(rate=classifier_dropout)
-        # 定义一个全连接层，输入大小为 config.hidden_size，输出大小为 config.num_labels
-        # 权重初始化采用正态分布初始化方式，标准差为 config.initializer_range
+        # 初始化输出投影层，输出维度是标签数量
         self.out_proj = nn.Dense(
             self.config.num_labels,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
 
-    # 定义前向传播过程
     def __call__(self, hidden_states, deterministic=True):
-        # 取出序列的第一个token（即[CLS]token）
+        # 取隐藏状态中的第一个 token 的表示，相当于 [CLS] 标志
         hidden_states = hidden_states[:, 0, :]
-        # 对token进行dropout
+        # 应用 Dropout 层到隐藏状态，以减少过拟合
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 通过全连接层
+        # 输入全连接层，对隐藏状态进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 使用tanh激活函数
+        # 应用 tanh 激活函数
         hidden_states = nn.tanh(hidden_states)
-        # 再次进行dropout
+        # 再次应用 Dropout 层
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 通过最终的全连接层得到分类结果
+        # 输出投影层，生成最终的分类预测结果
         hidden_states = self.out_proj(hidden_states)
         return hidden_states
 
 
-# 定义一个继承自 FlaxPreTrainedModel 的 FlaxRobertaPreLayerNormPreTrainedModel 类
-# 该类用于处理模型的初始化和加载
+# Copied from transformers.models.roberta.modeling_flax_roberta.FlaxRobertaPreTrainedModel with ROBERTA->ROBERTA_PRELAYERNORM,Roberta->RobertaPreLayerNorm,roberta->roberta_prelayernorm
 class FlaxRobertaPreLayerNormPreTrainedModel(FlaxPreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
 
-    # 设置配置类为 RobertaPreLayerNormConfig
+    # 配置类为 RobertaPreLayerNormConfig
     config_class = RobertaPreLayerNormConfig
-    # 设置基础模型前缀为 "roberta_prelayernorm"
+    # 基础模型前缀为 roberta_prelayernorm
     base_model_prefix = "roberta_prelayernorm"
 
-    # 设置模块类为 None
     module_class: nn.Module = None
 
-    # 初始化模型
     def __init__(
         self,
         config: RobertaPreLayerNormConfig,
@@ -760,35 +766,36 @@ class FlaxRobertaPreLayerNormPreTrainedModel(FlaxPreTrainedModel):
         gradient_checkpointing: bool = False,
         **kwargs,
     ):
-        # 根据配置创建模块
+        # 初始化模型实例，根据传入的配置和参数
         module = self.module_class(config=config, dtype=dtype, gradient_checkpointing=gradient_checkpointing, **kwargs)
-        # 调用父类的初始化方法
         super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
 
-    # 启用梯度检查点机制
+    # Copied from transformers.models.bert.modeling_flax_bert.FlaxBertPreTrainedModel.enable_gradient_checkpointing
     def enable_gradient_checkpointing(self):
+        # 启用梯度检查点，更新模型内部使用的模块实例
         self._module = self.module_class(
             config=self.config,
             dtype=self.dtype,
             gradient_checkpointing=True,
         )
-    # 初始化模型权重，根据给定的随机数种子、输入形状和参数（可选），返回初始化后的参数字典
+    # 初始化权重函数，用于模型的参数初始化
     def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
         # 初始化输入张量
-        input_ids = jnp.zeros(input_shape, dtype="i4")
-        token_type_ids = jnp.ones_like(input_ids)
-        position_ids = create_position_ids_from_input_ids(input_ids, self.config.pad_token_id)
-        attention_mask = jnp.ones_like(input_ids)
-        head_mask = jnp.ones((self.config.num_hidden_layers, self.config.num_attention_heads))
+        input_ids = jnp.zeros(input_shape, dtype="i4")  # 创建全零张量，形状为input_shape，数据类型为32位整数
+        token_type_ids = jnp.ones_like(input_ids)  # 创建与input_ids相同形状的全一张量
+        position_ids = create_position_ids_from_input_ids(input_ids, self.config.pad_token_id)  # 根据input_ids创建位置编码张量
+        attention_mask = jnp.ones_like(input_ids)  # 创建与input_ids相同形状的全一张量作为注意力掩码
+        head_mask = jnp.ones((self.config.num_hidden_layers, self.config.num_attention_heads))  # 创建全一头掩码张量
 
-        # 分割随机数种子生成不同用途的随机数
+        # 使用随机数生成器rng拆分参数rng和dropout_rng
         params_rng, dropout_rng = jax.random.split(rng)
         rngs = {"params": params_rng, "dropout": dropout_rng}
 
         if self.config.add_cross_attention:
+            # 如果配置中包含跨注意力机制，则初始化编码器隐藏状态和注意力掩码
             encoder_hidden_states = jnp.zeros(input_shape + (self.config.hidden_size,))
             encoder_attention_mask = attention_mask
-            # 根据给定参数初始化模型
+            # 调用模块的初始化函数，返回非字典形式的初始化输出
             module_init_outputs = self.module.init(
                 rngs,
                 input_ids,
@@ -801,103 +808,101 @@ class FlaxRobertaPreLayerNormPreTrainedModel(FlaxPreTrainedModel):
                 return_dict=False,
             )
         else:
-            # 根据给定参数初始化模型
+            # 否则，只使用基本输入初始化模块
             module_init_outputs = self.module.init(
                 rngs, input_ids, attention_mask, token_type_ids, position_ids, head_mask, return_dict=False
             )
 
-        random_params = module_init_outputs["params"]
+        random_params = module_init_outputs["params"]  # 获取模块初始化输出中的随机参数
 
         if params is not None:
+            # 如果提供了预训练参数，则进行参数的扁平化和解冻操作
             random_params = flatten_dict(unfreeze(random_params))
             params = flatten_dict(unfreeze(params))
-            # 对缺失的参数键进行处理
             for missing_key in self._missing_keys:
                 params[missing_key] = random_params[missing_key]
             self._missing_keys = set()
-            return freeze(unflatten_dict(params))
+            return freeze(unflatten_dict(params))  # 返回冻结的参数字典
         else:
-            return random_params
+            return random_params  # 否则，返回随机初始化的参数
 
-    # 初始化缓存，用于快速自回归解码
-    # Copied from transformers.models.bart.modeling_flax_bart.FlaxBartDecoderPreTrainedModel.init_cache
+    # 从transformers库中复制的初始化缓存函数，用于自回归解码
     def init_cache(self, batch_size, max_length):
         r"""
         Args:
             batch_size (`int`):
-                用于快速自回归解码的批量大小。定义初始化缓存时的批量大小。
+                用于快速自回归解码的批大小。定义了初始化缓存的批大小。
             max_length (`int`):
-                自回归解码的最大可能长度。定义初始化缓存时的序列长度。
+                自回归解码的最大可能长度。定义了初始化缓存的序列长度。
         """
-        # 初始化用于获取缓存的输入变量
-        input_ids = jnp.ones((batch_size, max_length), dtype="i4")
-        attention_mask = jnp.ones_like(input_ids, dtype="i4")
+        # 初始化用于检索缓存的输入变量
+        input_ids = jnp.ones((batch_size, max_length), dtype="i4")  # 创建全一张量作为输入ids，形状为(batch_size, max_length)
+        attention_mask = jnp.ones_like(input_ids, dtype="i4")  # 创建与input_ids相同形状的全一张量作为注意力掩码
         position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
+        # 根据input_ids的维度广播位置ids张量
 
-        # 初始化模型以获取缓存，根据给定的输入变量
         init_variables = self.module.init(
             jax.random.PRNGKey(0), input_ids, attention_mask, position_ids, return_dict=False, init_cache=True
         )
-        # 返回解封缓存
-        return unfreeze(init_variables["cache"])
+        return unfreeze(init_variables["cache"])  # 返回解冻的初始化缓存变量
 
-    # 将文档字符串添加到模型的前向传播中，描述 ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING 模版格式
-    @add_start_docstrings_to_model_forward(ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 定义一个类的调用方法
-    def __call__(
-        self,
-        # 输入的 token IDs
-        input_ids,
-        # 注意力掩码，用于指定哪些位置的 token 应该被注意到
-        attention_mask=None,
-        # token 类型 IDs，用于区分不同句子的 token
-        token_type_ids=None,
-        # 位置 IDs，用于标识 token 在句子中的位置
-        position_ids=None,
-        # 头部掩码，用于指定哪些注意力头部应该被屏蔽
-        head_mask=None,
-        # 编码器隐藏状态，用于传入预训练模型的编码器隐藏状态
-        encoder_hidden_states=None,
-        # 编码器注意力掩码，用于指定哪些编码器注意力应该被屏蔽
-        encoder_attention_mask=None,
-        # 参数字典，用于传入其他参数
-        params: dict = None,
-        # 随机数生成器，用于生成随机数
-        dropout_rng: jax.random.PRNGKey = None,
-        # 是否处于训练状态
-        train: bool = False,
-        # 是否输出注意力权重
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典
-        return_dict: Optional[bool] = None,
-        # 过去的键值对，用于传入预训练模型的过去键值对
-        past_key_values: dict = None,
-# 定义 FlaxRobertaPreLayerNormModule 类，继承自 nn.Module
+    # 为模型前向传播添加文档字符串，来自ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING格式化为模型前向传播
+    # 定义一个特殊方法 __call__，用于将实例作为可调用对象使用
+    self,
+    # 输入参数 input_ids：用于表示输入序列的 token IDs
+    input_ids,
+    # attention_mask：用于指定哪些 token 应该被忽略（1 表示不被忽略，0 表示被忽略）
+    attention_mask=None,
+    # token_type_ids：用于区分不同句子的 token 类型
+    token_type_ids=None,
+    # position_ids：指定 token 的位置信息
+    position_ids=None,
+    # head_mask：用于控制多头注意力机制中每个注意力头的掩码
+    head_mask=None,
+    # encoder_hidden_states：编码器的隐藏状态
+    encoder_hidden_states=None,
+    # encoder_attention_mask：编码器的注意力掩码
+    encoder_attention_mask=None,
+    # params：额外的参数，应为字典类型
+    params: dict = None,
+    # dropout_rng：用于随机数生成的 PRNG 键
+    dropout_rng: jax.random.PRNGKey = None,
+    # train：是否处于训练模式
+    train: bool = False,
+    # output_attentions：是否输出注意力权重
+    output_attentions: Optional[bool] = None,
+    # output_hidden_states：是否输出隐藏状态
+    output_hidden_states: Optional[bool] = None,
+    # return_dict：是否返回字典形式的输出
+    return_dict: Optional[bool] = None,
+    # past_key_values：过去的键值对，应为字典类型
+    past_key_values: dict = None,
 class FlaxRobertaPreLayerNormModule(nn.Module):
-    # 设置类属性 config，类型为 RobertaPreLayerNormConfig
+    # 类型注解：配置对象为 RobertaPreLayerNormConfig 类型
     config: RobertaPreLayerNormConfig
-    # 设置类属性 dtype，默认为 jnp.float32，用于计算的数据类型
-    dtype: jnp.dtype = jnp.float32
-    # 设置类属性 add_pooling_layer，默认为 True，表示是否添加池化层
+    # 计算的数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
+    # 是否添加池化层，默认为 True
     add_pooling_layer: bool = True
-    # 设置类属性 gradient_checkpointing，默认为 False，表示是否使用梯度检查点
+    # 是否使用梯度检查点，默认为 False
+    gradient_checkpointing: bool = False
 
+    # 模块初始化方法
     def setup(self):
-        # 初始化 self.embeddings，使用 FlaxRobertaPreLayerNormEmbeddings 类
+        # 初始化嵌入层
         self.embeddings = FlaxRobertaPreLayerNormEmbeddings(self.config, dtype=self.dtype)
-        # 初始化 self.encoder，使用 FlaxRobertaPreLayerNormEncoder 类
+        # 初始化编码器
         self.encoder = FlaxRobertaPreLayerNormEncoder(
             self.config,
             dtype=self.dtype,
             gradient_checkpointing=self.gradient_checkpointing,
         )
-        # 初始化 self.LayerNorm，使用 nn.LayerNorm 类，设置 epsilon 值为 config.layer_norm_eps
+        # 初始化 LayerNorm 层
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化 self.pooler，使用 FlaxRobertaPreLayerNormPooler 类
+        # 初始化池化层
         self.pooler = FlaxRobertaPreLayerNormPooler(self.config, dtype=self.dtype)
 
+    # 对象调用方法
     def __call__(
         self,
         input_ids,
@@ -913,19 +918,19 @@ class FlaxRobertaPreLayerNormModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 如果 token_type_ids 未传入，则初始化为与 input_ids 形状相同的全零数组
+        # 确保当未传入 token_type_ids 时，其被正确初始化为全零数组
         if token_type_ids is None:
             token_type_ids = jnp.zeros_like(input_ids)
 
-        # 如果 position_ids 未传入，则初始化为与 input_ids 形状相同的广播后的数组
+        # 确保当未传入 position_ids 时，其被正确初始化为广播后的数组
         if position_ids is None:
             position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
 
-        # 获取输入的嵌入表示
+        # 调用嵌入层生成隐藏状态
         hidden_states = self.embeddings(
             input_ids, token_type_ids, position_ids, attention_mask, deterministic=deterministic
         )
-        # 编码器计算
+        # 调用编码器处理隐藏状态
         outputs = self.encoder(
             hidden_states,
             attention_mask,
@@ -938,22 +943,20 @@ class FlaxRobertaPreLayerNormModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 取编码器输出的第一个元素作为隐藏状态
+        # 对编码后的隐藏状态应用 LayerNorm
         hidden_states = outputs[0]
-        # 对隐藏状态进行 LayerNorm 处理
         hidden_states = self.LayerNorm(hidden_states)
-        # 如果设置了添加池化层，则进行池化
+        # 如果设置了添加池化层，则对处理后的隐藏状态进行池化
         pooled = self.pooler(hidden_states) if self.add_pooling_layer else None
 
-        # 如果不返回字典格式，则按照元组格式返回结果
+        # 如果不返回字典，则按非字典格式返回结果
         if not return_dict:
-            # 如果池化结果为 None，则不返回池化结果
+            # 如果 pooled 为 None，则不返回它
             if pooled is None:
                 return (hidden_states,) + outputs[1:]
-            # 返回隐藏状态和池化结果以及其他输出
             return (hidden_states, pooled) + outputs[1:]
 
-        # 返回包含隐藏状态、池化结果、隐藏状态序列、注意力分布、交叉注意力分布的字典格式结果
+        # 返回带有池化和交叉注意力的 FlaxBaseModelOutputWithPoolingAndCrossAttentions 对象
         return FlaxBaseModelOutputWithPoolingAndCrossAttentions(
             last_hidden_state=hidden_states,
             pooler_output=pooled,
@@ -964,15 +967,18 @@ class FlaxRobertaPreLayerNormModule(nn.Module):
 
 
 @add_start_docstrings(
-    # "The bare RoBERTa-PreLayerNorm Model transformer outputting raw hidden-states without any specific head on top." 的说明文档起始
-    ROBERTA_PRELAYERNORM_START_DOCSTRING,
-)  # 无法确定这个括号的作用，可能是多余的错误字符
-
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaModel复制并更改为Roberta->RobertaPreLayerNorm
+    # "The bare RoBERTa-PreLayerNorm Model transformer outputting raw hidden-states without any specific head on top."
+    # 上面的字符串描述了 RoBERTa-PreLayerNorm 模型的基本特征，它输出原始隐藏状态而没有特定的顶部头部。
+    
+    ROBERTA_PRELAYERNORM_START_DOCSTRING
+    # 使用 ROBERTA_PRELAYERNORM_START_DOCSTRING 常量，可能是用于指定 RoBERTa-PreLayerNorm 模型的文档字符串的起始部分。
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaModel 中复制代码，并将 Roberta->RobertaPreLayerNorm 进行了替换
 class FlaxRobertaPreLayerNormModel(FlaxRobertaPreLayerNormPreTrainedModel):
+    # 设定模块类为 FlaxRobertaPreLayerNormModule
     module_class = FlaxRobertaPreLayerNormModule
 
-# 向FlaxRobertaPreLayerNormModel类添加示例文档字符串
+
+# 调用函数 append_call_sample_docstring，向 FlaxRobertaPreLayerNormModel 添加文档字符串示例
 append_call_sample_docstring(
     FlaxRobertaPreLayerNormModel,
     _CHECKPOINT_FOR_DOC,
@@ -980,19 +986,23 @@ append_call_sample_docstring(
     _CONFIG_FOR_DOC,
 )
 
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForMaskedLMModule复制并更改为Roberta->RobertaPreLayerNorm,roberta->roberta_prelayernorm
+
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForMaskedLMModule 中复制代码，并将 Roberta->RobertaPreLayerNorm,roberta->roberta_prelayernorm 进行了替换
 class FlaxRobertaPreLayerNormForMaskedLMModule(nn.Module):
+    # 配置项为 RobertaPreLayerNormConfig，数据类型为 jnp.float32，默认情况下不使用梯度检查点
     config: RobertaPreLayerNormConfig
     dtype: jnp.dtype = jnp.float32
     gradient_checkpointing: bool = False
 
     def setup(self):
+        # 初始化 self.roberta_prelayernorm 为 FlaxRobertaPreLayerNormModule 实例
         self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
             config=self.config,
             add_pooling_layer=False,
             dtype=self.dtype,
             gradient_checkpointing=self.gradient_checkpointing,
         )
+        # 初始化 self.lm_head 为 FlaxRobertaPreLayerNormLMHead 实例
         self.lm_head = FlaxRobertaPreLayerNormLMHead(config=self.config, dtype=self.dtype)
 
     def __call__(
@@ -1007,7 +1017,7 @@ class FlaxRobertaPreLayerNormForMaskedLMModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 模型
+        # 模型前向传播
         outputs = self.roberta_prelayernorm(
             input_ids,
             attention_mask,
@@ -1022,32 +1032,38 @@ class FlaxRobertaPreLayerNormForMaskedLMModule(nn.Module):
 
         hidden_states = outputs[0]
         if self.config.tie_word_embeddings:
+            # 如果配置中指定共享词嵌入，则使用共享的词嵌入
             shared_embedding = self.roberta_prelayernorm.variables["params"]["embeddings"]["word_embeddings"][
                 "embedding"
             ]
         else:
             shared_embedding = None
 
-        # 计算预测分数
+        # 计算预测得分
         logits = self.lm_head(hidden_states, shared_embedding=shared_embedding)
 
         if not return_dict:
             return (logits,) + outputs[1:]
 
+        # 返回 FlaxMaskedLMOutput 对象，包含预测得分、隐藏状态、注意力权重
         return FlaxMaskedLMOutput(
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
 
+
+# 使用 add_start_docstrings 函数向 FlaxRobertaPreLayerNormForMaskedLM 添加文档字符串
 @add_start_docstrings(
-    """RoBERTa-PreLayerNorm模型在顶部具有`语言建模`头。""", ROBERTA_PRELAYERNORM_START_DOCSTRING
+    """RoBERTa-PreLayerNorm 模型，顶部带有 `语言建模` 头.""", ROBERTA_PRELAYERNORM_START_DOCSTRING
 )
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForMaskedLM复制并更改为Roberta->RobertaPreLayerNorm
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForMaskedLM 复制代码，并将 Roberta->RobertaPreLayerNorm 进行了替换
 class FlaxRobertaPreLayerNormForMaskedLM(FlaxRobertaPreLayerNormPreTrainedModel):
+    # 设定模块类为 FlaxRobertaPreLayerNormForMaskedLMModule
     module_class = FlaxRobertaPreLayerNormForMaskedLMModule
 
-# 向FlaxRobertaPreLayerNormForMaskedLM类添加示例文档字符串
+
+# 调用函数 append_call_sample_docstring，向 FlaxRobertaPreLayerNormForMaskedLM 添加文档字符串示例
 append_call_sample_docstring(
     FlaxRobertaPreLayerNormForMaskedLM,
     _CHECKPOINT_FOR_DOC,
@@ -1055,28 +1071,28 @@ append_call_sample_docstring(
     _CONFIG_FOR_DOC,
     mask="<mask>",
 )
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForSequenceClassificationModule复制而来，将Roberta->RobertaPreLayerNorm，roberta->roberta_prelayernorm
+# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForSequenceClassificationModule复制而来，修改了Roberta为RobertaPreLayerNorm，roberta为roberta_prelayernorm
 class FlaxRobertaPreLayerNormForSequenceClassificationModule(nn.Module):
-    # 类的配置信息
+    # 配置信息为RobertaPreLayerNormConfig
     config: RobertaPreLayerNormConfig
-    # 数据类型，默认为jnp.float32
+    # 数据类型默认为jnp.float32
     dtype: jnp.dtype = jnp.float32
-    # 是否启用梯度检查点，默认为False
+    # 是否使用梯度检查点，默认为False
     gradient_checkpointing: bool = False
 
-    # 设置函数
+    # 模块初始化方法
     def setup(self):
-        # 使用配置信息和数据类型创建RobertaPreLayerNorm模块，不添加池化层，可选择是否启用梯度检查点
+        # 初始化self.roberta_prelayernorm，使用FlaxRobertaPreLayerNormModule
         self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
             config=self.config,
             dtype=self.dtype,
             add_pooling_layer=False,
             gradient_checkpointing=self.gradient_checkpointing,
         )
-        # 创建RobertaPreLayerNorm分类头
+        # 初始化self.classifier，使用FlaxRobertaPreLayerNormClassificationHead
         self.classifier = FlaxRobertaPreLayerNormClassificationHead(config=self.config, dtype=self.dtype)
 
-    # 调用函数
+    # 模块调用方法
     def __call__(
         self,
         input_ids,
@@ -1089,7 +1105,7 @@ class FlaxRobertaPreLayerNormForSequenceClassificationModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 模型
+        # 模型处理过程
         outputs = self.roberta_prelayernorm(
             input_ids,
             attention_mask,
@@ -1104,14 +1120,14 @@ class FlaxRobertaPreLayerNormForSequenceClassificationModule(nn.Module):
 
         # 获取序列输出
         sequence_output = outputs[0]
-        # 使用分类器获取logits
+        # 获取logits，使用self.classifier处理序列输出
         logits = self.classifier(sequence_output, deterministic=deterministic)
 
-        # 如果不返回字典，则返回logits和其他输出
+        # 如果return_dict为False，返回logits和其他输出状态
         if not return_dict:
             return (logits,) + outputs[1:]
 
-        # 返回FlaxSequenceClassifierOutput对象
+        # 返回FlaxSequenceClassifierOutput对象，包括logits、隐藏状态和注意力权重
         return FlaxSequenceClassifierOutput(
             logits=logits,
             hidden_states=outputs.hidden_states,
@@ -1119,8 +1135,16 @@ class FlaxRobertaPreLayerNormForSequenceClassificationModule(nn.Module):
         )
 
 
-# 使用起始文档字符串添加说明，将RobertaPreLayerNorm Model转换为具有顶部序列分类/回归头的模型（池化输出顶部的线性层），例如GLUE任务
+# 添加起始文档字符串
+@add_start_docstrings(
+    """
+    带有顶部序列分类/回归头部的RobertaPreLayerNorm模型变换器（在汇聚输出的顶部添加线性层），例如用于GLUE任务。
+    """,
+    ROBERTA_PRELAYERNORM_START_DOCSTRING,
+)
+# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForSequenceClassification复制而来，修改了Roberta为RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormForSequenceClassification(FlaxRobertaPreLayerNormPreTrainedModel):
+    # 模块类为FlaxRobertaPreLayerNormForSequenceClassificationModule
     module_class = FlaxRobertaPreLayerNormForSequenceClassificationModule
 
 
@@ -1133,28 +1157,27 @@ append_call_sample_docstring(
 )
 
 
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertForMultipleChoiceModule复制而来，将Bert->RobertaPreLayerNorm，self.bert->self.roberta_prelayernorm
+# 从transformers.models.bert.modeling_flax_bert.FlaxBertForMultipleChoiceModule复制而来，修改了Bert为RobertaPreLayerNorm，self.bert为self.roberta_prelayernorm
 class FlaxRobertaPreLayerNormForMultipleChoiceModule(nn.Module):
-    # 类的配置信息
+    # 配置信息为RobertaPreLayerNormConfig
     config: RobertaPreLayerNormConfig
-    # 数据类型，默认为jnp.float32
+    # 数据类型默认为jnp.float32
     dtype: jnp.dtype = jnp.float32
-    # 是否启用梯度检查点，默认为False
+    # 是否使用梯度检查点，默认为False
     gradient_checkpointing: bool = False
-    # 定义初始化方法
+    # 设置模型的初始状态，包括Roberta的预层归一化模块
     def setup(self):
-        # 初始化 RoBERTa 模型的预层归一化模块
         self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
             config=self.config,
             dtype=self.dtype,
             gradient_checkpointing=self.gradient_checkpointing,
         )
-        # 初始化 Dropout 层
+        # 设置dropout层，使用配置中指定的隐藏层dropout概率
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
-        # 初始化分类器
+        # 设置分类器层，输出维度为1，使用指定的数据类型
         self.classifier = nn.Dense(1, dtype=self.dtype)
 
-    # 定义调用方法
+    # 定义类的调用方法，实现模型的前向传播
     def __call__(
         self,
         input_ids,
@@ -1167,15 +1190,15 @@ class FlaxRobertaPreLayerNormForMultipleChoiceModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 获取输入的选项个数
+        # 计算选择题的数量
         num_choices = input_ids.shape[1]
-        # 若输入不为空，则将其进行reshape处理
+        # 重塑输入张量，将其展平以便传递给模型
         input_ids = input_ids.reshape(-1, input_ids.shape[-1]) if input_ids is not None else None
         attention_mask = attention_mask.reshape(-1, attention_mask.shape[-1]) if attention_mask is not None else None
         token_type_ids = token_type_ids.reshape(-1, token_type_ids.shape[-1]) if token_type_ids is not None else None
         position_ids = position_ids.reshape(-1, position_ids.shape[-1]) if position_ids is not None else None
 
-        # 模型计算
+        # 调用Roberta的预层归一化模块进行模型计算
         outputs = self.roberta_prelayernorm(
             input_ids,
             attention_mask,
@@ -1188,73 +1211,136 @@ class FlaxRobertaPreLayerNormForMultipleChoiceModule(nn.Module):
             return_dict=return_dict,
         )
 
-        # 获取池化输出
+        # 从模型输出中提取汇聚输出
         pooled_output = outputs[1]
-        # 对池化输出进行 dropout 处理
+        # 对汇聚输出应用dropout，以便在训练过程中随机丢弃一部分节点
         pooled_output = self.dropout(pooled_output, deterministic=deterministic)
-        # 通过分类器获取 logits
+        # 使用分类器层计算最终的logits
         logits = self.classifier(pooled_output)
 
-        # 对 logits 进行reshape，以适应多个选项
+        # 将logits张量重新形状为[num_choices, -1]，以便适应多选题的输出格式
         reshaped_logits = logits.reshape(-1, num_choices)
 
-        # 若不返回字典，则返回结果的元组
+        # 如果不要求返回字典形式的输出，则返回包含logits和可能的额外输出的元组
         if not return_dict:
             return (reshaped_logits,) + outputs[2:]
 
-        # 返回多选模型的输出
+        # 返回FlaxMultipleChoiceModelOutput类的实例，包含重塑后的logits、隐藏状态和注意力张量
         return FlaxMultipleChoiceModelOutput(
             logits=reshaped_logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-自定义多选分类模型，基于RobertaPreLayerNorm模型（在池化输出之上加一个线性层和softmax），用于RocStories/SWAG任务。
-
-参数：
-- multiple_choice模型
-- RobertaPreLayerNorm模型的输入文档字符串
-
-
-覆盖调用的文档字符串为输入提供者中的文档字符串，格式为(batch_size, num_choices, sequence_length)。
+    """
+    RobertaPreLayerNorm Model with a multiple choice classification head on top (a linear layer on top of the pooled
+    output and a softmax) e.g. for RocStories/SWAG tasks.
+    """
 
 
-追加调用示例的文档字符串，包括检查点和模型输出。
+    ROBERTA_PRELAYERNORM_START_DOCSTRING,
 
 
-用于标记分类任务的RobertaPreLayerNorm模块的类，用于分词分类任务。
+)
 
 
-模块参数:
-- RobertaPreLayerNorm配置
-- 数据类型等于jnp.float32的损失函数
-- 梯度检查点默认为False
-
-设置：
-- 创建RobertaPreLayerNorm模块
-- 设置dropout层
-- 设置分类器层
+# Copied from transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForMultipleChoice with Roberta->RobertaPreLayerNorm
+class FlaxRobertaPreLayerNormForMultipleChoice(FlaxRobertaPreLayerNormPreTrainedModel):
+    module_class = FlaxRobertaPreLayerNormForMultipleChoiceModule
 
 
-调用函数：
-- 将输入传入RobertaPreLayerNorm模块，获得输出
-- 使用dropout层对输出进行处理
-- 使用分类器层对处理后的结果进行分类
-- 返回分类结果，包括输出、隐藏层、注意力层
-    # 这段代码是针对 RobertaPreLayerNorm 模型的描述。
-    # RobertaPreLayerNorm 模型是在 RobertaModel 的基础上加上了一个 token 分类头(一个线性层位于隐藏状态输出之上)
-    # 这种模型通常用于命名实体识别(NER)等任务。
-    # 这段描述是 ROBERTA_PRELAYERNORM_START_DOCSTRING 的一部分。
-        RobertaPreLayerNorm Model with a token classification head on top (a linear layer on top of the hidden-states
-        output) e.g. for Named-Entity-Recognition (NER) tasks.
-        """,
-        ROBERTA_PRELAYERNORM_START_DOCSTRING,
-# 这是 FlaxRobertaPreLayerNormForTokenClassification 类的定义
-# 它继承自 FlaxRobertaPreLayerNormPreTrainedModel 类
-# 它使用 FlaxRobertaPreLayerNormForTokenClassificationModule 作为其模块类
+overwrite_call_docstring(
+    FlaxRobertaPreLayerNormForMultipleChoice,
+    ROBERTA_PRELAYERNORM_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length"),
+)
+
+
+append_call_sample_docstring(
+    FlaxRobertaPreLayerNormForMultipleChoice,
+    _CHECKPOINT_FOR_DOC,
+    FlaxMultipleChoiceModelOutput,
+    _CONFIG_FOR_DOC,
+)
+
+
+# Copied from transformers.models.bert.modeling_flax_bert.FlaxBertForTokenClassificationModule with Bert->RobertaPreLayerNorm, with self.bert->self.roberta_prelayernorm
+class FlaxRobertaPreLayerNormForTokenClassificationModule(nn.Module):
+    config: RobertaPreLayerNormConfig
+    dtype: jnp.dtype = jnp.float32
+    gradient_checkpointing: bool = False
+
+    def setup(self):
+        self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
+            config=self.config,
+            dtype=self.dtype,
+            add_pooling_layer=False,
+            gradient_checkpointing=self.gradient_checkpointing,
+        )
+        classifier_dropout = (
+            self.config.classifier_dropout
+            if self.config.classifier_dropout is not None
+            else self.config.hidden_dropout_prob
+        )
+        self.dropout = nn.Dropout(rate=classifier_dropout)
+        self.classifier = nn.Dense(self.config.num_labels, dtype=self.dtype)
+
+    def __call__(
+        self,
+        input_ids,
+        attention_mask,
+        token_type_ids,
+        position_ids,
+        head_mask,
+        deterministic: bool = True,
+        output_attentions: bool = False,
+        output_hidden_states: bool = False,
+        return_dict: bool = True,
+    ):
+        # Model
+        outputs = self.roberta_prelayernorm(
+            input_ids,
+            attention_mask,
+            token_type_ids,
+            position_ids,
+            head_mask,
+            deterministic=deterministic,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
+
+        hidden_states = outputs[0]
+        hidden_states = self.dropout(hidden_states, deterministic=deterministic)
+        logits = self.classifier(hidden_states)
+
+        if not return_dict:
+            return (logits,) + outputs[1:]
+
+        return FlaxTokenClassifierOutput(
+            logits=logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
+
+@add_start_docstrings(
+    """
+    RobertaPreLayerNorm Model with a token classification head on top (a linear layer on top of the hidden-states
+    output) e.g. for Named-Entity-Recognition (NER) tasks.
+    """
+    ROBERTA_PRELAYERNORM_START_DOCSTRING,
+
+
+
+    注释：
+    RobertaPreLayerNorm 模型，其顶部有一个面向标记分类的头部（在隐藏状态输出之上的线性层），例如用于命名实体识别（NER）任务。
+    """
+    ROBERTA_PRELAYERNORM_START_DOCSTRING,
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForTokenClassification 复制代码，并将 Roberta 改为 RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormForTokenClassification(FlaxRobertaPreLayerNormPreTrainedModel):
+    # 模块类设置为 FlaxRobertaPreLayerNormForTokenClassificationModule
     module_class = FlaxRobertaPreLayerNormForTokenClassificationModule
 
-# 在类定义后添加了一个函数调用，用于为 FlaxRobertaPreLayerNormForTokenClassification 类添加文档样例
+# 调用函数 append_call_sample_docstring，用于给定的类添加示例文档字符串，包括检查点、输出和配置信息
 append_call_sample_docstring(
     FlaxRobertaPreLayerNormForTokenClassification,
     _CHECKPOINT_FOR_DOC,
@@ -1262,26 +1348,28 @@ append_call_sample_docstring(
     _CONFIG_FOR_DOC,
 )
 
-# 这是 FlaxRobertaPreLayerNormForQuestionAnsweringModule 类的定义
-# 它继承自 nn.Module 类
-# 它包含了一个 FlaxRobertaPreLayerNormModule 实例和一个 Dense 层
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertForQuestionAnsweringModule 复制代码，并将 Bert 改为 RobertaPreLayerNorm，self.bert 改为 self.roberta_prelayernorm
 class FlaxRobertaPreLayerNormForQuestionAnsweringModule(nn.Module):
-    # 定义了一些配置参数和数据类型
+    # 配置为 RobertaPreLayerNormConfig 类型
     config: RobertaPreLayerNormConfig
+    # 数据类型设置为 jnp.float32
     dtype: jnp.dtype = jnp.float32
+    # 梯度检查点设置为 False
     gradient_checkpointing: bool = False
 
+    # 初始化函数
     def setup(self):
-        # 初始化 FlaxRobertaPreLayerNormModule 实例
+        # 创建 RobertaPreLayerNormModule 实例，包括配置、数据类型、不添加池化层、梯度检查点设置
         self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
             config=self.config,
             dtype=self.dtype,
             add_pooling_layer=False,
             gradient_checkpointing=self.gradient_checkpointing,
         )
-        # 初始化 Dense 层
+        # 创建全连接层 nn.Dense，输出维度为 self.config.num_labels，数据类型为 self.dtype
         self.qa_outputs = nn.Dense(self.config.num_labels, dtype=self.dtype)
 
+    # 调用函数，实现模型的前向传播
     def __call__(
         self,
         input_ids,
@@ -1294,7 +1382,7 @@ class FlaxRobertaPreLayerNormForQuestionAnsweringModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 调用 FlaxRobertaPreLayerNormModule 实例
+        # 调用 self.roberta_prelayernorm 进行模型前向传播，传入各种输入参数
         outputs = self.roberta_prelayernorm(
             input_ids,
             attention_mask,
@@ -1306,16 +1394,21 @@ class FlaxRobertaPreLayerNormForQuestionAnsweringModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 处理输出结果
+
+        # 获取隐藏状态
         hidden_states = outputs[0]
+
+        # 计算问题回答的起始和结束 logits
         logits = self.qa_outputs(hidden_states)
         start_logits, end_logits = jnp.split(logits, self.config.num_labels, axis=-1)
         start_logits = start_logits.squeeze(-1)
         end_logits = end_logits.squeeze(-1)
 
+        # 如果不返回字典，则返回元组和其他输出
         if not return_dict:
             return (start_logits, end_logits) + outputs[1:]
 
+        # 返回 FlaxQuestionAnsweringModelOutput 类的实例，包括起始 logits、结束 logits、隐藏状态和注意力
         return FlaxQuestionAnsweringModelOutput(
             start_logits=start_logits,
             end_logits=end_logits,
@@ -1323,9 +1416,7 @@ class FlaxRobertaPreLayerNormForQuestionAnsweringModule(nn.Module):
             attentions=outputs.attentions,
         )
 
-# 这是 FlaxRobertaPreLayerNormForQuestionAnswering 类的定义
-# 它继承自 FlaxRobertaPreLayerNormPreTrainedModel 类
-# 它使用 FlaxRobertaPreLayerNormForQuestionAnsweringModule 作为其模块类
+# 使用 add_start_docstrings 函数添加 RobertaPreLayerNorm 模型的文档字符串，适用于抽取式问答任务如 SQuAD
 @add_start_docstrings(
     """
     RobertaPreLayerNorm Model with a span classification head on top for extractive question-answering tasks like SQuAD
@@ -1333,130 +1424,137 @@ class FlaxRobertaPreLayerNormForQuestionAnsweringModule(nn.Module):
     """,
     ROBERTA_PRELAYERNORM_START_DOCSTRING,
 )
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForQuestionAnswering 复制代码，并将 Roberta 改为 RobertaPreLayerNorm
 class FlaxRobertaPreLayerNormForQuestionAnswering(FlaxRobertaPreLayerNormPreTrainedModel):
+    # 定义变量 module_class 并赋值为 FlaxRobertaPreLayerNormForQuestionAnsweringModule 类
     module_class = FlaxRobertaPreLayerNormForQuestionAnsweringModule
-    # 定义变量 module_class 为 FlaxRobertaPreLayerNormForQuestionAnsweringModule 类的引用
-    module_class = FlaxRobertaPreLayerNormForQuestionAnsweringModule
-# 在模型类中添加调用示例的文档字符串
+# 向函数添加示例文档字符串，用于自动生成API文档
 append_call_sample_docstring(
-    FlaxRobertaPreLayerNormForQuestionAnswering,  # 调用示例所在的模型类
-    _CHECKPOINT_FOR_DOC,  # 文档中的检查点说明
-    FlaxQuestionAnsweringModelOutput,  # 问题回答模型输出
-    _CONFIG_FOR_DOC,  # 文档中的配置说明
+    FlaxRobertaPreLayerNormForQuestionAnswering,  # 要添加示例文档字符串的类
+    _CHECKPOINT_FOR_DOC,  # 用于文档的检查点
+    FlaxQuestionAnsweringModelOutput,  # 生成文档的模型输出
+    _CONFIG_FOR_DOC,  # 用于文档的配置
 )
 
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForCausalLMModule复制，将Roberta->RobertaPreLayerNorm,roberta->roberta_prelayernorm
+
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForCausalLMModule 复制的代码，将类名和部分参数修改为适应 Causal LM 的设置
 class FlaxRobertaPreLayerNormForCausalLMModule(nn.Module):
-    config: RobertaPreLayerNormConfig  # 使用RobertaPreLayerNormConfig配置
-    dtype: jnp.dtype = jnp.float32  # 数据类型为jnp.float32，默认为此
-    gradient_checkpointing: bool = False  # 是否使用渐变检查点，默认为False
+    config: RobertaPreLayerNormConfig  # 模型配置信息
+    dtype: jnp.dtype = jnp.float32  # 数据类型设置为 32 位浮点数
+    gradient_checkpointing: bool = False  # 是否使用梯度检查点
 
     def setup(self):
-        # 初始化RobertaPreLayerNormModule和LMHead
+        # 初始化 RoBERTa + LayerNorm 模块，不包括池化层
         self.roberta_prelayernorm = FlaxRobertaPreLayerNormModule(
-            config=self.config,  # 使用给定的配置初始化
-            add_pooling_layer=False,  # 不添加池化层
-            dtype=self.dtype,  # 使用指定的数据类型
-            gradient_checkpointing=self.gradient_checkpointing,  # 使用梯度检查点
+            config=self.config,
+            add_pooling_layer=False,
+            dtype=self.dtype,
+            gradient_checkpointing=self.gradient_checkpointing,
         )
-        self.lm_head = FlaxRobertaPreLayerNormLMHead(config=self.config, dtype=self.dtype)  # 初始化LM头部
+        # 初始化语言模型头部，与 RoBERTa + LayerNorm 共享配置和数据类型
+        self.lm_head = FlaxRobertaPreLayerNormLMHead(config=self.config, dtype=self.dtype)
 
     def __call__(
         self,
-        input_ids,  # 输入的标识符
-        attention_mask,  # 注意力遮罩
-        position_ids,  # 位置标识符
-        token_type_ids: Optional[jnp.ndarray] = None,  # 令牌类型标识符，默认为None
-        head_mask: Optional[jnp.ndarray] = None,  # 头部遮罩，默认为None
-        encoder_hidden_states: Optional[jnp.ndarray] = None,  # 编码器隐藏状态，默认为None
-        encoder_attention_mask: Optional[jnp.ndarray] = None,  # 编码器注意力遮罩，默认为None
-        init_cache: bool = False,  # 是否初始化缓存，默认为False
-        deterministic: bool = True,  # 是否确定性，默认为True
-        output_attentions: bool = False,  # 是否输出注意力，默认为False
-        output_hidden_states: bool = False,  # 是否输出隐藏状态，默认为False
-        return_dict: bool = True,  # 是否返回字典，默认为True
+        input_ids,
+        attention_mask,
+        position_ids,
+        token_type_ids: Optional[jnp.ndarray] = None,
+        head_mask: Optional[jnp.ndarray] = None,
+        encoder_hidden_states: Optional[jnp.ndarray] = None,
+        encoder_attention_mask: Optional[jnp.ndarray] = None,
+        init_cache: bool = False,
+        deterministic: bool = True,
+        output_attentions: bool = False,
+        output_hidden_states: bool = False,
+        return_dict: bool = True,
     ):
-        # 模型
+        # 执行模型前向传播
         outputs = self.roberta_prelayernorm(
-            input_ids,  # 输入标识符
-            attention_mask,  # 注意力遮罩
-            token_type_ids,  # 令牌类型标识符
-            position_ids,  # 位置标识符
-            head_mask,  # 头部遮罩
-            encoder_hidden_states=encoder_hidden_states,  # 编码器隐藏状态
-            encoder_attention_mask=encoder_attention_mask,  # 编码器注意力遮罩
-            init_cache=init_cache,  # 是否初始化缓存
-            deterministic=deterministic,  # 是否确定性
-            output_attentions=output_attentions,  # 是否输出注意力
-            output_hidden_states=output_hidden_states,  # 是否输出隐藏状态
-            return_dict=return_dict,  # 是否返回字典
+            input_ids,
+            attention_mask,
+            token_type_ids,
+            position_ids,
+            head_mask,
+            encoder_hidden_states=encoder_hidden_states,
+            encoder_attention_mask=encoder_attention_mask,
+            init_cache=init_cache,
+            deterministic=deterministic,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
         )
 
-        hidden_states = outputs[0]  # 获取隐藏状态
-        if self.config.tie_word_embeddings:  # 如果需要绑定词嵌入
-            shared_embedding = self.roberta_prelayernorm.variables["params"]["embeddings"]["word_embeddings"]["embedding"]  # 共享的嵌入
-        else:
-            shared_embedding = None  # 否则为None
+        hidden_states = outputs[0]  # 提取隐藏状态作为输出的第一部分
 
-        # 计算预测得分
+        if self.config.tie_word_embeddings:
+            # 如果配置要求共享词嵌入，获取共享的嵌入层参数
+            shared_embedding = self.roberta_prelayernorm.variables["params"]["embeddings"]["word_embeddings"][
+                "embedding"
+            ]
+        else:
+            shared_embedding = None  # 否则不共享词嵌入
+
+        # 计算预测分数
         logits = self.lm_head(hidden_states, shared_embedding=shared_embedding)
 
-        if not return_dict:  # 如果不返回字典
-            return (logits,) + outputs[1:]  # 返回元组
+        if not return_dict:
+            # 如果不需要返回字典形式的输出，则返回元组形式的结果
+            return (logits,) + outputs[1:]
 
-        return FlaxCausalLMOutputWithCrossAttentions(  # 返回FlaxCausalLMOutputWithCrossAttentions
-            logits=logits,  # 预测得分
-            hidden_states=outputs.hidden_states,  # 隐藏状态
-            attentions=outputs.attentions,  # 注意力
-            cross_attentions=outputs.cross_attentions,  # 交叉注意力
+        # 返回带有交叉注意力的 Causal LM 输出
+        return FlaxCausalLMOutputWithCrossAttentions(
+            logits=logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+            cross_attentions=outputs.cross_attentions,
         )
 
 
 @add_start_docstrings(
     """
-    带有语言建模头部的RobertaPreLayerNorm模型（在隐藏状态输出的顶部是线性层），用于自回归任务。
+    在 RoBERTa + LayerNorm 模型上添加语言建模头部的预训练模型，
+    例如用于自回归任务的隐藏状态输出之上的线性层。
     """,
-    ROBERTA_PRELAYERNORM_START_DOCSTRING,
+    ROBERTA_PRELAYERNORM_START_DOCSTRING,  # 引用 RoBERTa + LayerNorm 的起始文档字符串
 )
-# 从transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForCausalLM中复制，将Roberta->RobertaPreLayerNorm
-# 定义一个名为 FlaxRobertaPreLayerNormForCausalLM 的类，它继承自 FlaxRobertaPreLayerNormPreTrainedModel
+# 从 transformers.models.roberta.modeling_flax_roberta.FlaxRobertaForCausalLM 复制的代码，将类名和部分参数修改为适应 Causal LM 的设置
 class FlaxRobertaPreLayerNormForCausalLM(FlaxRobertaPreLayerNormPreTrainedModel):
-    # 设置 module_class 属性为 FlaxRobertaPreLayerNormForCausalLMModule
+    # 指定内部模块的类为 FlaxRobertaPreLayerNormForCausalLMModule
     module_class = FlaxRobertaPreLayerNormForCausalLMModule
 
-    # 定义一个 prepare_inputs_for_generation 方法，用于准备输入以进行生成
     def prepare_inputs_for_generation(self, input_ids, max_length, attention_mask: Optional[jax.Array] = None):
         # 初始化缓存
         batch_size, seq_length = input_ids.shape
+
+        # 使用 self.init_cache 方法初始化 past_key_values
         past_key_values = self.init_cache(batch_size, max_length)
-
-        # 创建一个大小为 (batch_size, max_length) 的全 1 attention_mask
+        
+        # 由于解码器使用因果掩码，可以创建一个静态的扩展注意力掩码
         extended_attention_mask = jnp.ones((batch_size, max_length), dtype="i4")
-
-        # 如果提供了 attention_mask，则将其复制到 extended_attention_mask 中
+        
+        # 如果存在 attention_mask，则根据其累积位置更新 extended_attention_mask
         if attention_mask is not None:
             position_ids = attention_mask.cumsum(axis=-1) - 1
             extended_attention_mask = lax.dynamic_update_slice(extended_attention_mask, attention_mask, (0, 0))
-        # 如果没有提供 attention_mask，则创建一个从 0 到 seq_length-1 的 position_ids
         else:
+            # 否则，根据序列长度广播位置 ids
             position_ids = jnp.broadcast_to(jnp.arange(seq_length, dtype="i4")[None, :], (batch_size, seq_length))
 
-        # 返回一个字典，包含 past_key_values、attention_mask 和 position_ids
+        # 返回准备好的生成输入
         return {
             "past_key_values": past_key_values,
             "attention_mask": extended_attention_mask,
             "position_ids": position_ids,
         }
 
-    # 定义一个 update_inputs_for_generation 方法，用于更新输入以进行下一步生成
     def update_inputs_for_generation(self, model_outputs, model_kwargs):
-        # 更新 past_key_values 和 position_ids
+        # 更新生成输入的方法，将过去的键值和位置 ids 更新到 model_kwargs 中
         model_kwargs["past_key_values"] = model_outputs.past_key_values
         model_kwargs["position_ids"] = model_kwargs["position_ids"][:, -1:] + 1
         return model_kwargs
 
 
-# 将一些额外的文档字符串附加到 FlaxRobertaPreLayerNormForCausalLM 类上
 append_call_sample_docstring(
     FlaxRobertaPreLayerNormForCausalLM,
     _CHECKPOINT_FOR_DOC,

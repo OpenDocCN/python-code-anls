@@ -1,9 +1,33 @@
-# `.\transformers\models\bridgetower\processing_bridgetower.py`
+# `.\models\bridgetower\processing_bridgetower.py`
 
-```py
-# 定义了一个名为 BridgeTowerProcessor 的类，用于处理 BridgeTower 相关的数据
+```
+# coding=utf-8
+# Copyright 2023 The Intel Labs Team Authors, The Microsoft Research Team Authors and HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Processor class for BridgeTower.
+"""
+
+from typing import List, Optional, Union
+
+from ...processing_utils import ProcessorMixin
+from ...tokenization_utils_base import BatchEncoding, PaddingStrategy, PreTokenizedInput, TextInput, TruncationStrategy
+from ...utils import TensorType
+
+
 class BridgeTowerProcessor(ProcessorMixin):
-    """
+    r"""
     Constructs a BridgeTower processor which wraps a Roberta tokenizer and BridgeTower image processor into a single
     processor.
 
@@ -17,46 +41,73 @@ class BridgeTowerProcessor(ProcessorMixin):
         tokenizer (`RobertaTokenizerFast`):
             An instance of ['RobertaTokenizerFast`]. The tokenizer is a required input.
     """
-    
-    # 类属性，用于描述类的属性
+
     attributes = ["image_processor", "tokenizer"]
-    # 类属性，指定图像处理器的类名
     image_processor_class = "BridgeTowerImageProcessor"
-    # 类属性，指定 tokenizer 的类名
     tokenizer_class = ("RobertaTokenizer", "RobertaTokenizerFast")
 
-    # 类的初始化方法，接受图像处理器和 tokenizer 作为参数
     def __init__(self, image_processor, tokenizer):
         super().__init__(image_processor, tokenizer)
 
-    # 类的调用方法，用于处理图像和文本数据
     def __call__(
         self,
-        images,  # 图像数据
-        text: Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]] = None,  # 文本数据
-        add_special_tokens: bool = True,  # 是否添加特殊标记
-        padding: Union[bool, str, PaddingStrategy] = False,  # 填充策略
-        truncation: Union[bool, str, TruncationStrategy] = None,  # 截断策略
-        max_length: Optional[int] = None,  # 最大长度
-        stride: int = 0,  # 步长
-        pad_to_multiple_of: Optional[int] = None,  # 填充到的长度
-        return_token_type_ids: Optional[bool] = None,  # 是否返回标记类型的 ID
-        return_attention_mask: Optional[bool] = None,  # 是否返回注意力掩码
-        return_overflowing_tokens: bool = False,  # 是否返回溢出的标记
-        return_special_tokens_mask: bool = False,  # 是否返回特殊标记的掩码
-        return_offsets_mapping: bool = False,  # 是否返回偏移映射
-        return_length: bool = False,  # 是否返回长度
-        verbose: bool = True,  # 是否显示详细信息
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 返回的张量类型
-        **kwargs,  # 其它参数
+        images,
+        text: Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]] = None,
+        add_special_tokens: bool = True,
+        padding: Union[bool, str, PaddingStrategy] = False,
+        truncation: Union[bool, str, TruncationStrategy] = None,
+        max_length: Optional[int] = None,
+        stride: int = 0,
+        pad_to_multiple_of: Optional[int] = None,
+        return_token_type_ids: Optional[bool] = None,
+        return_attention_mask: Optional[bool] = None,
+        return_overflowing_tokens: bool = False,
+        return_special_tokens_mask: bool = False,
+        return_offsets_mapping: bool = False,
+        return_length: bool = False,
+        verbose: bool = True,
+        return_tensors: Optional[Union[str, TensorType]] = None,
+        **kwargs,
+    ):
+        # Callable method to preprocess inputs combining images and text for model input
+        """
+        Process images and optionally text into model input.
+
+        Args:
+            images: Input images to be processed.
+            text: Optional text input, can be either TextInput or PreTokenizedInput format.
+            add_special_tokens: Whether to add special tokens (like [CLS], [SEP]) to the inputs.
+            padding: Padding strategy. Can be a bool, str, or PaddingStrategy enum.
+            truncation: Truncation strategy. Can be a bool, str, or TruncationStrategy enum.
+            max_length: Maximum length of the returned sequences.
+            stride: Stride to use when overflowing tokens.
+            pad_to_multiple_of: Pad to a multiple of specified value.
+            return_token_type_ids: Whether to return token type ids.
+            return_attention_mask: Whether to return attention mask.
+            return_overflowing_tokens: Whether to return overflowing tokens.
+            return_special_tokens_mask: Whether to return special tokens mask.
+            return_offsets_mapping: Whether to return offsets mapping.
+            return_length: Whether to return the lengths of processed inputs.
+            verbose: Whether to output detailed logs during processing.
+            return_tensors: Return tensors format (e.g., "pt" for PyTorch tensors).
+            **kwargs: Additional keyword arguments for processing.
+
+        Returns:
+            BatchEncoding: Processed inputs formatted as BatchEncoding.
+
+        Notes:
+            This method processes images and optionally text into a format suitable for model input,
+            handling tokenization, padding, truncation, and special token additions as specified.
+        """
+        pass  # Placeholder for actual implementation or further logic
     ) -> BatchEncoding:
         """
-        This method uses [`BridgeTowerImageProcessor.__call__`] method to prepare image(s) for the model, and
-        [`RobertaTokenizerFast.__call__`] to prepare text for the model.
+        使用 [`BridgeTowerImageProcessor.__call__`] 方法准备图像以供模型使用，
+        使用 [`RobertaTokenizerFast.__call__`] 方法准备文本以供模型使用。
 
-        Please refer to the docstring of the above two methods for more information.
+        更多信息请参考上述两个方法的文档字符串。
         """
-        # 使用 BridgeTowerImageProcessor 对象的 __call__ 方法准备图像数据，使用 RobertaTokenizerFast 对象的 __call__ 方法准备文本数据
+        # 使用指定参数调用 tokenizer 方法，生成编码结果
         encoding = self.tokenizer(
             text=text,
             add_special_tokens=add_special_tokens,
@@ -75,34 +126,37 @@ class BridgeTowerProcessor(ProcessorMixin):
             return_tensors=return_tensors,
             **kwargs,
         )
-        # 添加 pixel_values 和 pixel_mask 到 encoding 字典中
+        # 使用 image_processor 方法处理图像，获取处理后的编码结果
         encoding_image_processor = self.image_processor(
             images, return_tensors=return_tensors, do_normalize=True, do_center_crop=True, **kwargs
         )
+        # 将图像处理的编码结果更新到文本处理的编码结果中
         encoding.update(encoding_image_processor)
 
+        # 返回合并了文本和图像编码结果的最终编码结果
         return encoding
 
     def batch_decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to RobertaTokenizerFast's [`~PreTrainedTokenizer.batch_decode`]. Please
-        refer to the docstring of this method for more information.
+        将所有参数转发给 RobertaTokenizerFast 的 [`~PreTrainedTokenizer.batch_decode`] 方法。
+        更多信息请参考该方法的文档字符串。
         """
-        # 将所有参数转发给 RobertaTokenizerFast 对象的 batch_decode 方法
+        # 调用 tokenizer 的 batch_decode 方法，并返回结果
         return self.tokenizer.batch_decode(*args, **kwargs)
 
     def decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to RobertaTokenizerFast's [`~PreTrainedTokenizer.decode`]. Please refer
-        to the docstring of this method for more information.
+        将所有参数转发给 RobertaTokenizerFast 的 [`~PreTrainedTokenizer.decode`] 方法。
+        更多信息请参考该方法的文档字符串。
         """
-        # 将所有参数转发给 RobertaTokenizerFast 对象的 decode 方法
+        # 调用 tokenizer 的 decode 方法，并返回结果
         return self.tokenizer.decode(*args, **kwargs)
 
     @property
     def model_input_names(self):
-        # 获取 tokenizer 和 image_processor 的模型输入名称，并将它们合并去重后返回
+        # 获取 tokenizer 和 image_processor 的模型输入名称列表
         tokenizer_input_names = self.tokenizer.model_input_names
         image_processor_input_names = self.image_processor.model_input_names
+        # 合并去重后的模型输入名称列表，并返回
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 ```

@@ -1,35 +1,29 @@
-# `.\transformers\models\vitdet\__init__.py`
+# `.\models\vitdet\__init__.py`
 
-```py
-# 版权声明和许可证信息
-# 版权归 The HuggingFace Team 所有，保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证要求，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则按"原样"分发软件
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的具体语言
-
-# 导入必要的模块和函数
+```
+# 版权声明和许可条款，指明版权归 HuggingFace 团队所有，使用 Apache License, Version 2.0 许可
+#
+# 如果未遵守许可，除非适用法律要求或书面同意，否则不得使用该文件
 from typing import TYPE_CHECKING
+
+# 从当前目录中的 utils 模块导入所需的符号
 from ...utils import (
-    OptionalDependencyNotAvailable,
-    _LazyModule,
-    is_torch_available,
+    OptionalDependencyNotAvailable,  # 导入 OptionalDependencyNotAvailable 异常类
+    _LazyModule,  # 导入 _LazyModule 类
+    is_torch_available,  # 导入 is_torch_available 函数
 )
 
-# 定义模块导入结构
+# 定义导入结构，包含了配置和模型相关的符号
 _import_structure = {"configuration_vitdet": ["VITDET_PRETRAINED_CONFIG_ARCHIVE_MAP", "VitDetConfig"]}
 
-# 检查是否存在 torch 库，如果不存在则引发异常
+# 尝试检查是否 torch 可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果存在 torch 库，则添加以下模块到导入结构中
+    # 如果 torch 可用，则将模型相关的符号加入导入结构
     _import_structure["modeling_vitdet"] = [
         "VITDET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "VitDetModel",
@@ -37,19 +31,17 @@ else:
         "VitDetBackbone",
     ]
 
-# 如果是类型检查模式
+# 如果在类型检查模式下
 if TYPE_CHECKING:
-    # 导入配置和模型相关的内容
+    # 导入配置相关的符号和模型相关的符号（如果 torch 可用）
     from .configuration_vitdet import VITDET_PRETRAINED_CONFIG_ARCHIVE_MAP, VitDetConfig
 
-    # 检查是否存在 torch 库，如果不存在则引发异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入模型相关的内容
         from .modeling_vitdet import (
             VITDET_PRETRAINED_MODEL_ARCHIVE_LIST,
             VitDetBackbone,
@@ -57,10 +49,10 @@ if TYPE_CHECKING:
             VitDetPreTrainedModel,
         )
 
-# 如果不是类型检查模式
+# 如果不在类型检查模式下
 else:
     import sys
 
-    # 将当前模块设置为 LazyModule 类型，延迟加载模块内容
+    # 动态设置当前模块的 sys.modules 条目，使用 _LazyModule 进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

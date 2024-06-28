@@ -1,158 +1,107 @@
-# `.\transformers\models\clip\configuration_clip.py`
+# `.\models\clip\configuration_clip.py`
 
-```py
+```
 # 设置文件编码为 UTF-8
-# 版权声明及许可证信息
-# 导入所需模块和类
+# 版权声明和许可信息
+# 根据 Apache 许可证 2.0 版本，许可文件的链接
+# 如果符合许可证的条件，可以使用该文件，否则禁止使用
+""" CLIP 模型配置"""
+
+# 导入标准库和模块
 import os
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any, Mapping, Optional, Union
 
-# 如果当前是类型检查模式，则导入类型检查所需的模块
+# 如果在类型检查模式下
 if TYPE_CHECKING:
+    # 导入处理工具混合类和张量类型
     from ...processing_utils import ProcessorMixin
     from ...utils import TensorType
 
-# 导入预训练配置类
+# 导入配置工具类和 ONNX 配置
 from ...configuration_utils import PretrainedConfig
-# 导入 ONNX 配置类
 from ...onnx import OnnxConfig
-# 导入日志记录工具
 from ...utils import logging
 
 # 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# CLIP 预训练模型配置文件的映射字典
+# CLIP 预训练配置映射字典
 CLIP_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "openai/clip-vit-base-patch32": "https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/config.json",
     # 查看所有 CLIP 模型：https://huggingface.co/models?filter=clip
 }
 
-# CLIP 文本编码模型配置类，继承自预训练配置类
+# CLIPTextConfig 类，继承自 PretrainedConfig
 class CLIPTextConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`CLIPTextModel`] 配置的配置类。根据指定的参数实例化一个 CLIP 文本编码器，定义模型架构。
-    使用默认参数实例化一个配置将产生类似于 CLIP [openai/clip-vit-base-patch32]
-    (https://huggingface.co/openai/clip-vit-base-patch32) 架构的配置。
+    这是一个配置类，用于存储 [`CLIPTextModel`] 的配置。根据指定的参数实例化 CLIP 文本编码器，定义模型架构。
+    使用默认配置实例化将得到类似于 CLIP [openai/clip-vit-base-patch32] 架构的配置。
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。有关更多信息，请阅读 [`PretrainedConfig`] 的文档。
+    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
     """
-    Args:
-        vocab_size (`int`, *optional*, defaults to 49408):
-            Vocabulary size of the CLIP text model. Defines the number of different tokens that can be represented by
-            the `inputs_ids` passed when calling [`CLIPModel`].
-        hidden_size (`int`, *optional*, defaults to 512):
-            Dimensionality of the encoder layers and the pooler layer.
-        intermediate_size (`int`, *optional*, defaults to 2048):
-            Dimensionality of the "intermediate" (i.e., feed-forward) layer in the Transformer encoder.
-        projection_dim (`int`, *optional*, defaults to 512):
-            Dimentionality of text and vision projection layers.
-        num_hidden_layers (`int`, *optional*, defaults to 12):
-            Number of hidden layers in the Transformer encoder.
-        num_attention_heads (`int`, *optional*, defaults to 8):
-            Number of attention heads for each attention layer in the Transformer encoder.
-        max_position_embeddings (`int`, *optional*, defaults to 77):
-            The maximum sequence length that this model might ever be used with. Typically set this to something large
-            just in case (e.g., 512 or 1024 or 2048).
-        hidden_act (`str` or `function`, *optional*, defaults to `"quick_gelu"`):
-            The non-linear activation function (function or string) in the encoder and pooler. If string, `"gelu"`,
-            `"relu"`, `"selu"` and `"gelu_new"` `"quick_gelu"` are supported.
-        layer_norm_eps (`float`, *optional*, defaults to 1e-05):
-            The epsilon used by the layer normalization layers.
-        attention_dropout (`float`, *optional*, defaults to 0.0):
-            The dropout ratio for the attention probabilities.
-        initializer_range (`float`, *optional*, defaults to 0.02):
-            The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
-        initializer_factor (`float`, *optional*, defaults to 1.0):
-            A factor for initializing all weight matrices (should be kept to 1, used internally for initialization
-            testing).
-        pad_token_id (`int`, *optional*, defaults to 1):
-            Padding token id.
-        bos_token_id (`int`, *optional*, defaults to 49406):
-            Beginning of stream token id.
-        eos_token_id (`int`, *optional*, defaults to 49407):
-            End of stream token id.
-
-    Example:
-
-    ```python
-    >>> from transformers import CLIPTextConfig, CLIPTextModel
-
-    >>> # Initializing a CLIPTextConfig with openai/clip-vit-base-patch32 style configuration
-    >>> configuration = CLIPTextConfig()
-
-    >>> # Initializing a CLIPTextModel (with random weights) from the openai/clip-vit-base-patch32 style configuration
-    >>> model = CLIPTextModel(configuration)
-
-    >>> # Accessing the model configuration
-    >>> configuration = model.config
-    ```py
-
-    # 定义模型类型为 "clip_text_model"
+    # 定义模型类型为 CLIP 文本模型
     model_type = "clip_text_model"
-    # 初始化函数，用于创建一个新的配置对象
     def __init__(
         self,
-        vocab_size=49408,  # 词汇表大小，默认为49408
-        hidden_size=512,  # 隐藏层大小，默认为512
-        intermediate_size=2048,  # 中间层大小，默认为2048
-        projection_dim=512,  # 投影维度，默认为512
-        num_hidden_layers=12,  # 隐藏层数，默认为12
-        num_attention_heads=8,  # 注意力头数，默认为8
-        max_position_embeddings=77,  # 最大位置嵌入，默认为77
-        hidden_act="quick_gelu",  # 隐藏层激活函数，默认为"quick_gelu"
-        layer_norm_eps=1e-5,  # 层归一化的 epsilon，默认为1e-5
-        attention_dropout=0.0,  # 注意力机制的 dropout，默认为0.0
-        initializer_range=0.02,  # 初始化范围，默认为0.02
-        initializer_factor=1.0,  # 初始化因子，默认为1.0
-        # 这与`CLIPTokenizer`的默认值不同，也不同于openai/clip
-        # 参见https://github.com/huggingface/transformers/pull/24773#issuecomment-1632287538
-        pad_token_id=1,  # 填充标记的ID，默认为1
-        bos_token_id=49406,  # 起始标记的ID，默认为49406
-        eos_token_id=49407,  # 终止标记的ID，默认为49407
-        **kwargs,  # 其他关键字参数
+        vocab_size=49408,
+        hidden_size=512,
+        intermediate_size=2048,
+        projection_dim=512,
+        num_hidden_layers=12,
+        num_attention_heads=8,
+        max_position_embeddings=77,
+        hidden_act="quick_gelu",
+        layer_norm_eps=1e-5,
+        attention_dropout=0.0,
+        initializer_range=0.02,
+        initializer_factor=1.0,
+        # This differs from `CLIPTokenizer`'s default and from openai/clip
+        # See https://github.com/huggingface/transformers/pull/24773#issuecomment-1632287538
+        pad_token_id=1,
+        bos_token_id=49406,
+        eos_token_id=49407,
+        **kwargs,
     ):
-        # 调用父类的初始化函数，设置填充、起始和终止标记的ID
+        # 调用父类的初始化方法，设置特殊的标记符号的ID，并传递其他参数
         super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        # 设置配置对象的属性值
-        self.vocab_size = vocab_size  # 词汇表大小
-        self.hidden_size = hidden_size  # 隐藏层大小
-        self.intermediate_size = intermediate_size  # 中间层大小
-        self.projection_dim = projection_dim  # 投影维度
-        self.num_hidden_layers = num_hidden_layers  # 隐藏层数
-        self.num_attention_heads = num_attention_heads  # 注意力头数
-        self.max_position_embeddings = max_position_embeddings  # 最大位置嵌入
-        self.layer_norm_eps = layer_norm_eps  # 层归一化的 epsilon
-        self.hidden_act = hidden_act  # 隐藏层激活函数
-        self.initializer_range = initializer_range  # 初始化范围
-        self.initializer_factor = initializer_factor  # 初始化因子
-        self.attention_dropout = attention_dropout  # 注意力机制的 dropout
+        # 设置模型的各种超参数
+        self.vocab_size = vocab_size
+        self.hidden_size = hidden_size
+        self.intermediate_size = intermediate_size
+        self.projection_dim = projection_dim
+        self.num_hidden_layers = num_hidden_layers
+        self.num_attention_heads = num_attention_heads
+        self.max_position_embeddings = max_position_embeddings
+        self.layer_norm_eps = layer_norm_eps
+        self.hidden_act = hidden_act
+        self.initializer_range = initializer_range
+        self.initializer_factor = initializer_factor
+        self.attention_dropout = attention_dropout
 
-    # 类方法，用于从预训练模型加载配置
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
-        # 将token信息设置到kwargs中
+        # 调用内部方法，设置token相关的kwargs参数
         cls._set_token_in_kwargs(kwargs)
 
-        # 获取配置字典和其他kwargs
+        # 获取预训练模型的配置字典和更新后的kwargs
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
-        # 如果加载的模型类型为clip，则获取文本配置字典
+        # 如果配置字典中的模型类型是"clip"，则获取其文本配置字典
         if config_dict.get("model_type") == "clip":
             config_dict = config_dict["text_config"]
 
-        # 如果配置字典中包含模型类型，并且当前类的模型类型与其不匹配，则发出警告
+        # 如果配置字典中包含模型类型且与当前类的模型类型不同，发出警告
         if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
             )
 
-        # 从配置字典和其他kwargs中创建配置对象
+        # 根据配置字典和kwargs创建模型配置对象并返回
         return cls.from_dict(config_dict, **kwargs)
-# 定义 CLIPVisionConfig 类，用于存储 CLIPVisionModel 的配置信息
+# 定义 CLIPVisionConfig 类，继承自 PretrainedConfig，用于存储 CLIPVisionModel 的配置信息
 class CLIPVisionConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`CLIPVisionModel`]. It is used to instantiate a
@@ -202,18 +151,14 @@ class CLIPVisionConfig(PretrainedConfig):
     >>> configuration = CLIPVisionConfig()
 
     >>> # Initializing a CLIPVisionModel (with random weights) from the openai/clip-vit-base-patch32 style configuration
-    # 创建一个 CLIP 视觉模型实例，使用给定的配置
-    model = CLIPVisionModel(configuration)
+    >>> model = CLIPVisionModel(configuration)
 
-    # 访问模型配置信息
-    # 将模型配置信息赋值给 configuration
-    configuration = model.config
-    ```py
+    >>> # 访问模型配置
+    >>> configuration = model.config
 
-    # 定义 CLIP 视觉模型类型
+
     model_type = "clip_vision_model"
 
-    # 初始化 CLIP 视觉模型类
     def __init__(
         self,
         hidden_size=768,
@@ -231,10 +176,10 @@ class CLIPVisionConfig(PretrainedConfig):
         initializer_factor=1.0,
         **kwargs,
     ):
-        # 调用父类的初始化方法
+        # 调用父类的构造方法，初始化基类的属性
         super().__init__(**kwargs)
 
-        # 设置模型的各种参数
+        # 初始化模型的各种参数
         self.hidden_size = hidden_size
         self.intermediate_size = intermediate_size
         self.projection_dim = projection_dim
@@ -249,27 +194,25 @@ class CLIPVisionConfig(PretrainedConfig):
         self.layer_norm_eps = layer_norm_eps
         self.hidden_act = hidden_act
 
-    # 从预训练模型加载 CLIP 视觉模型的配置
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], **kwargs) -> "PretrainedConfig":
-        # 设置参数中的 token
         cls._set_token_in_kwargs(kwargs)
 
-        # 获取预训练模型的配置字典和参数字典
+        # 获取预训练模型的配置字典和额外的关键字参数
         config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
 
-        # 如果配置字典中的模型类型是 "clip"，则取其视觉配置字典
+        # 如果从 CLIPConfig 加载，获取视觉配置字典
         if config_dict.get("model_type") == "clip":
             config_dict = config_dict["vision_config"]
 
-        # 如果配置字典中包含模型类型，并且当前类的模型类型与之不同，发出警告
+        # 如果配置字典中存在模型类型，且与当前类的模型类型不匹配，发出警告
         if "model_type" in config_dict and hasattr(cls, "model_type") and config_dict["model_type"] != cls.model_type:
             logger.warning(
                 f"You are using a model of type {config_dict['model_type']} to instantiate a model of type "
                 f"{cls.model_type}. This is not supported for all configurations of models and can yield errors."
             )
 
-        # 根据配置字典创建实例
+        # 使用配置字典和额外参数创建类的实例
         return cls.from_dict(config_dict, **kwargs)
 class CLIPConfig(PretrainedConfig):
     r"""
@@ -315,24 +258,22 @@ class CLIPConfig(PretrainedConfig):
     >>> config_vision = CLIPVisionConfig()
 
     >>> config = CLIPConfig.from_text_vision_configs(config_text, config_vision)
-    ```py"""
+    ```"""
 
     model_type = "clip"
 
     def __init__(
         self, text_config=None, vision_config=None, projection_dim=512, logit_scale_init_value=2.6592, **kwargs
     ):
-        # 继承父类构造方法，初始化CLIPConfig对象
+        # 调用父类的初始化方法，初始化基类的配置
         super().__init__(**kwargs)
-        # 设定模型类型为"clip"
-        self.model_type = "clip"
-        # 设定文本配置，默认为空字典
-        self.text_config = text_config if text_config is not None else {}
-        # 设定视觉配置，默认为空字典
-        self.vision_config = vision_config if vision_config is not None else {}
-        # 设定投影维度，默认为512
+        # 设定文本配置
+        self.text_config = text_config
+        # 设定视觉配置
+        self.vision_config = vision_config
+        # 设定投影维度
         self.projection_dim = projection_dim
-        # 设定logit_scale参数的初始值，默认为2.6592
+        # 设定logit_scale参数的初始值
         self.logit_scale_init_value = logit_scale_init_value
 
     @classmethod
@@ -344,44 +285,42 @@ class CLIPConfig(PretrainedConfig):
         Returns:
             [`CLIPConfig`]: An instance of a configuration object
         """
-
-        # 从文本配置和视觉配置实例化一个CLIPConfig对象
+        # 从文本配置和视觉配置创建一个新的 `CLIPConfig` 实例
         return cls(text_config=text_config.to_dict(), vision_config=vision_config.to_dict(), **kwargs)
 
 
 class CLIPOnnxConfig(OnnxConfig):
     @property
-    # 定义一个方法，返回输入的规格
+    # 定义一个方法 `inputs`，返回一个有序字典，描述了输入数据的结构
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 返回一个有序字典，描述输入的数据结构，包含 input_ids、pixel_values、attention_mask 三个键
+        # 返回一个有序字典，包含三个键值对，每个键值对描述了不同输入的维度信息
         return OrderedDict(
             [
-                ("input_ids", {0: "batch", 1: "sequence"}),  # input_ids: batch, sequence
-                ("pixel_values", {0: "batch", 1: "num_channels", 2: "height", 3: "width"}),  # pixel_values: batch, num_channels, height, width
-                ("attention_mask", {0: "batch", 1: "sequence"}),  # attention_mask: batch, sequence
+                ("input_ids", {0: "batch", 1: "sequence"}),  # 表示 input_ids 维度为 [batch, sequence]
+                ("pixel_values", {0: "batch", 1: "num_channels", 2: "height", 3: "width"}),  # pixel_values 维度为 [batch, num_channels, height, width]
+                ("attention_mask", {0: "batch", 1: "sequence"}),  # attention_mask 维度为 [batch, sequence]
             ]
         )
 
-    # 定义一个只读属性，返回输出的规格
+    # 定义一个只读属性 `outputs`，返回一个有序字典，描述了输出数据的结构
     @property
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 返回一个有序字典，描述输出的数据结构，包含 logits_per_image、logits_per_text、text_embeds、image_embeds 四个键
+        # 返回一个有序字典，包含四个键值对，每个键值对描述了不同输出的维度信息
         return OrderedDict(
             [
-                ("logits_per_image", {0: "batch"}),  # logits_per_image: batch
-                ("logits_per_text", {0: "batch"}),  # logits_per_text: batch
-                ("text_embeds", {0: "batch"}),  # text_embeds: batch
-                ("image_embeds", {0: "batch"}),  # image_embeds: batch
+                ("logits_per_image", {0: "batch"}),  # logits_per_image 维度为 [batch]
+                ("logits_per_text", {0: "batch"}),   # logits_per_text 维度为 [batch]
+                ("text_embeds", {0: "batch"}),       # text_embeds 维度为 [batch]
+                ("image_embeds", {0: "batch"}),      # image_embeds 维度为 [batch]
             ]
         )
 
-    # 定义一个属性，返回用于验证时的绝对误差容差
+    # 定义一个方法 `atol_for_validation`，返回浮点数值，表示验证中的绝对容差
     @property
     def atol_for_validation(self) -> float:
-        # 返回一个浮点数，表示绝对误差容差
         return 1e-4
 
-    # 定义一个方法，生成虚拟输入数据
+    # 定义一个方法 `generate_dummy_inputs`，生成虚拟输入数据的字典
     def generate_dummy_inputs(
         self,
         processor: "ProcessorMixin",
@@ -389,21 +328,19 @@ class CLIPOnnxConfig(OnnxConfig):
         seq_length: int = -1,
         framework: Optional["TensorType"] = None,
     ) -> Mapping[str, Any]:
-        # 生成文本输入的虚拟数据
+        # 使用父类的方法生成文本输入的虚拟数据字典
         text_input_dict = super().generate_dummy_inputs(
             processor.tokenizer, batch_size=batch_size, seq_length=seq_length, framework=framework
         )
-        # 生成图像输入的虚拟数据
+        # 使用父类的方法生成图像输入的虚拟数据字典
         image_input_dict = super().generate_dummy_inputs(
             processor.image_processor, batch_size=batch_size, framework=framework
         )
-        # 合并文本和图像输入的虚拟数据，返回一个字典
+        # 返回合并了文本和图像输入数据字典的结果
         return {**text_input_dict, **image_input_dict}
 
-    # 定义一个只读属性，返回默认的 ONNX 操作集版本号
+    # 定义一个只读属性 `default_onnx_opset`，返回整数值，表示默认的 ONNX 运算集版本
     @property
     def default_onnx_opset(self) -> int:
-        # 返回一个整数，表示默认的 ONNX 操作集版本号
         return 14
-```  
 ```

@@ -1,101 +1,103 @@
 # `.\models\encoder_decoder\configuration_encoder_decoder.py`
 
-```py
-# 设定编码为UTF-8
-# 版权声明
-# Apache License 2.0
-# 导入相关模块
+```
+# 设置文件编码为UTF-8
+# 版权声明：2020年由HuggingFace Inc.团队版权所有。
+# 版权声明：2018年，NVIDIA CORPORATION版权所有。
+#
+# 根据Apache许可证2.0版（“许可证”）授权，除非符合许可证规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，不提供任何明示或暗示的担保或条件。
+# 有关详细信息，请参阅许可证。
+
+# 导入必要的模块
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
 
-# 获取日志记录器
+# 获取名为__name__的当前日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义一个`EncoderDecoderConfig`类，继承自`PretrainedConfig`类
+# 定义EncoderDecoderConfig类，继承自PretrainedConfig
 class EncoderDecoderConfig(PretrainedConfig):
     r"""
-    [`EncoderDecoderConfig`] is the configuration class to store the configuration of a [`EncoderDecoderModel`]. It is
-    used to instantiate an Encoder Decoder model according to the specified arguments, defining the encoder and decoder
-    configs.
+    [`EncoderDecoderConfig`]是用于存储[`EncoderDecoderModel`]配置的配置类。它用于根据指定的参数实例化编码器和解码器模型。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
+    配置对象继承自[`PretrainedConfig`]，可用于控制模型输出。有关更多信息，请阅读[`PretrainedConfig`]的文档。
 
     Args:
-        kwargs (*optional*):
-            Dictionary of keyword arguments. Notably:
+        kwargs (*可选参数*):
+            关键字参数的字典。特别是:
 
-                - **encoder** ([`PretrainedConfig`], *optional*) -- An instance of a configuration object that defines
-                  the encoder config.
-                - **decoder** ([`PretrainedConfig`], *optional*) -- An instance of a configuration object that defines
-                  the decoder config.
+                - **encoder** ([`PretrainedConfig`]，*可选*) -- 定义编码器配置的配置对象实例。
+                - **decoder** ([`PretrainedConfig`]，*可选*) -- 定义解码器配置的配置对象实例。
 
     Examples:
 
     ```python
     >>> from transformers import BertConfig, EncoderDecoderConfig, EncoderDecoderModel
 
-    >>> # Initializing a BERT bert-base-uncased style configuration
+    >>> # 初始化一个Bert google-bert/bert-base-uncased风格的配置
     >>> config_encoder = BertConfig()
     >>> config_decoder = BertConfig()
 
     >>> config = EncoderDecoderConfig.from_encoder_decoder_configs(config_encoder, config_decoder)
 
-    >>> # Initializing a Bert2Bert model (with random weights) from the bert-base-uncased style configurations
+    >>> # 初始化一个Bert2Bert模型（带有随机权重），从google-bert/bert-base-uncased风格的配置开始
     >>> model = EncoderDecoderModel(config=config)
 
-    >>> # Accessing the model configuration
+    >>> # 访问模型配置
     >>> config_encoder = model.config.encoder
     >>> config_decoder = model.config.decoder
-    >>> # set decoder config to causal lm
+    >>> # 将解码器配置设置为因果语言模型
     >>> config_decoder.is_decoder = True
     >>> config_decoder.add_cross_attention = True
 
-    >>> # Saving the model, including its configuration
+    >>> # 保存模型，包括其配置
     >>> model.save_pretrained("my-model")
 
-    >>> # loading model and config from pretrained folder
+    >>> # 从预训练文件夹加载模型和配置
     >>> encoder_decoder_config = EncoderDecoderConfig.from_pretrained("my-model")
     >>> model = EncoderDecoderModel.from_pretrained("my-model", config=encoder_decoder_config)
-    ```py"""
-
-    # 类型描述信息
+    ```"""
+    
+    # 模型类型为“encoder-decoder”
     model_type = "encoder-decoder"
-    # 是否是合成的
+    # 是复合对象
     is_composition = True
-    # 初始化方法，接收字典类型的可变关键字参数
+    # 初始化方法，继承自父类并接收关键字参数
     def __init__(self, **kwargs):
         # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 确保关键字参数中包含 "encoder" 和 "decoder" 键
+        # 断言确保参数中包含 "encoder" 和 "decoder"，否则抛出异常
         assert (
             "encoder" in kwargs and "decoder" in kwargs
         ), "Config has to be initialized with encoder and decoder config"
-        # 从关键字参数中提取编码器配置并移除该参数
+        # 从参数中弹出 "encoder" 和 "decoder" 的配置信息
         encoder_config = kwargs.pop("encoder")
-        # 从编码器配置中提取模型类型并移除该参数
+        # 获取编码器模型类型并弹出其配置信息
         encoder_model_type = encoder_config.pop("model_type")
-        # 从关键字参数中提取解码器配置并移除该参数
+        # 获取解码器配置信息并弹出其模型类型
         decoder_config = kwargs.pop("decoder")
-        # 从解码器配置中提取模型类型并移除该参数
         decoder_model_type = decoder_config.pop("model_type")
 
         # 导入自动配置模块
         from ..auto.configuration_auto import AutoConfig
 
-        # 根据编码器模型类型和配置创建编码器配置对象
+        # 使用自动配置模块为编码器创建配置对象
         self.encoder = AutoConfig.for_model(encoder_model_type, **encoder_config)
-        # 根据解码器模型类型和配置创建解码器配置对象
+        # 使用自动配置模块为解码器创建配置对象
         self.decoder = AutoConfig.for_model(decoder_model_type, **decoder_config)
-        # 标记为是编码器-解码器模式
+        # 设置标志，表明这是一个编码器-解码器结构
         self.is_encoder_decoder = True
 
-    # 类方法，接收编码器配置和解码器配置，返回一个新的配置实例
+    # 类方法：根据预训练的编码器和解码器配置实例化一个编码器-解码器配置对象
     @classmethod
     def from_encoder_decoder_configs(
         cls, encoder_config: PretrainedConfig, decoder_config: PretrainedConfig, **kwargs
     ) -> PretrainedConfig:
-        # 说明该方法会实例化一个配置对象
         r"""
         Instantiate a [`EncoderDecoderConfig`] (or a derived class) from a pre-trained encoder model configuration and
         decoder model configuration.
@@ -103,13 +105,12 @@ class EncoderDecoderConfig(PretrainedConfig):
         Returns:
             [`EncoderDecoderConfig`]: An instance of a configuration object
         """
-        # 记录日志，指出对解码器配置的修改
+        # 记录信息：为解码器配置设置 `is_decoder=True` 和 `add_cross_attention=True`
         logger.info("Set `config.is_decoder=True` and `config.add_cross_attention=True` for decoder_config")
-        # 将解码器配置的 `is_decoder` 标记设为 True
+        # 设置解码器配置为解码器类型，并启用交叉注意力机制
         decoder_config.is_decoder = True
-        # 将解码器配置的 `add_cross_attention` 标记设为 True
         decoder_config.add_cross_attention = True
 
-        # 返回一个新的配置实例，传入编码器和解码器配置的字典形式，以及其他参数
+        # 使用当前类构造函数创建一个编码器-解码器配置对象，并返回
         return cls(encoder=encoder_config.to_dict(), decoder=decoder_config.to_dict(), **kwargs)
 ```

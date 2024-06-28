@@ -1,18 +1,14 @@
-# `.\transformers\models\xlm_roberta_xl\__init__.py`
+# `.\models\xlm_roberta_xl\__init__.py`
 
-```py
-# 这是一个 Hugging Face 模型库的 Python 模块，包含了 XLM-RoBERTa-XL 模型的相关内容
-# 它首先定义了该模块的导入结构，指定了哪些类和常量可以从该模块中导入
-
-# 导入所需的类型提示
+```
+# 引入类型检查模块
 from typing import TYPE_CHECKING
 
-# 导入工具函数
+# 引入自定义的异常和模块懒加载工具函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 定义该模块的导入结构
+# 定义模块的导入结构，包含了配置和模型的映射和类名
 _import_structure = {
-    # 配置相关的类和常量
     "configuration_xlm_roberta_xl": [
         "XLM_ROBERTA_XL_PRETRAINED_CONFIG_ARCHIVE_MAP",
         "XLMRobertaXLConfig",
@@ -20,14 +16,14 @@ _import_structure = {
     ],
 }
 
-# 如果 PyTorch 不可用，则引发 OptionalDependencyNotAvailable 异常
+# 尝试检测是否存在 torch 库，如果不存在则抛出自定义的异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 PyTorch 可用，则添加模型相关的类和常量到导入结构中
+    # 如果 torch 存在，则添加相关模型的导入结构
     _import_structure["modeling_xlm_roberta_xl"] = [
         "XLM_ROBERTA_XL_PRETRAINED_MODEL_ARCHIVE_LIST",
         "XLMRobertaXLForCausalLM",
@@ -40,23 +36,23 @@ else:
         "XLMRobertaXLPreTrainedModel",
     ]
 
-# 如果进入了类型检查阶段
+# 如果处于类型检查模式
 if TYPE_CHECKING:
-    # 导入配置相关的类和常量
+    # 从配置模块中导入特定的符号（符号已在上面定义）
     from .configuration_xlm_roberta_xl import (
         XLM_ROBERTA_XL_PRETRAINED_CONFIG_ARCHIVE_MAP,
         XLMRobertaXLConfig,
         XLMRobertaXLOnnxConfig,
     )
 
-    # 如果 PyTorch 不可用，则引发 OptionalDependencyNotAvailable 异常
+    # 再次尝试检查 torch 库的存在，如果不存在则抛出自定义的异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 PyTorch 可用，则导入模型相关的类和常量
+        # 从模型定义模块中导入特定的符号（符号已在上面定义）
         from .modeling_xlm_roberta_xl import (
             XLM_ROBERTA_XL_PRETRAINED_MODEL_ARCHIVE_LIST,
             XLMRobertaXLForCausalLM,
@@ -69,8 +65,11 @@ if TYPE_CHECKING:
             XLMRobertaXLPreTrainedModel,
         )
 
+# 如果不处于类型检查模式
 else:
-    # 如果不是类型检查阶段，则使用延迟导入机制
+    # 引入系统模块
     import sys
+
+    # 动态地将当前模块设置为一个懒加载模块，延迟加载导入的模块和符号
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
 ```

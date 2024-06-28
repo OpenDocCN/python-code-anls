@@ -1,87 +1,101 @@
-# `.\transformers\models\wav2vec2\modeling_flax_wav2vec2.py`
+# `.\models\wav2vec2\modeling_flax_wav2vec2.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，被授权者除了按照该许可证遵守行为之外不得使用此文件
-# 可以在以下网址获取许可证的一份拷贝
+```
+# coding=utf-8
+# Copyright 2021 The Fairseq Authors and the HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，按照该许可证分发的软件都是按"原样"的基础分发的
-# 没有任何种类的担保或条件，无论是明示的还是暗示的，参见许可证中关于具体语言的权限以及限制
-# 看许可证获取具体的语言资源和限制
-""" Flax Wav2Vec2 模型。"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Flax Wav2Vec2 model.
+"""
 
-# 导入必要的库
-from functools import partial
-from typing import Optional, Tuple, Union
+# 导入必要的模块和库
+from functools import partial  # 导入 partial 函数，用于创建偏函数
+from typing import Optional, Tuple, Union  # 导入类型提示所需的类型
 
-import flax
-import flax.linen as nn
-import jax
-import jax.numpy as jnp
-import numpy as np
-from flax.core.frozen_dict import FrozenDict, freeze, unfreeze
-from flax.linen.attention import dot_product_attention_weights
-from flax.traverse_util import flatten_dict, unflatten_dict
-from jax import lax
+import flax  # 导入 Flax 模块
+import flax.linen as nn  # 导入 Flax 的线性层模块
+import jax  # 导入 JAX 模块
+import jax.numpy as jnp  # 导入 JAX 的 NumPy 接口
+import numpy as np  # 导入 NumPy 库
+from flax.core.frozen_dict import FrozenDict, freeze, unfreeze  # 导入 Flax 的 FrozenDict 相关函数
+from flax.linen.attention import dot_product_attention_weights  # 导入注意力权重计算函数
+from flax.traverse_util import flatten_dict, unflatten_dict  # 导入字典扁平化和反扁平化函数
+from jax import lax  # 导入 JAX 的 lax 模块
 
-# 导入相关的类和方法
-from ...modeling_flax_outputs import FlaxBaseModelOutput, FlaxCausalLMOutput
-from ...modeling_flax_utils import (
+# 导入相关输出、工具类和配置
+from ...modeling_flax_outputs import FlaxBaseModelOutput, FlaxCausalLMOutput  # 导入输出类
+from ...modeling_flax_utils import (  # 导入工具函数和基类
     ACT2FN,
     FlaxPreTrainedModel,
     append_replace_return_docstrings,
     overwrite_call_docstring,
 )
-from ...utils import ModelOutput, add_start_docstrings, add_start_docstrings_to_model_forward, logging
-from .configuration_wav2vec2 import Wav2Vec2Config
+from ...utils import ModelOutput, add_start_docstrings, add_start_docstrings_to_model_forward, logging  # 导入实用工具和日志模块
+from .configuration_wav2vec2 import Wav2Vec2Config  # 导入 Wav2Vec2 的配置类
 
-# 获取 logger 对象
+# 获取日志记录器
 logger = logging.get_logger(__name__)
-
-# 定义 FlaxWav2Vec2BaseModelOutput 类，用于输出模型输出结果，包括隐藏状态和注意力机制
+    # 定义变量 `last_hidden_state`，用于存储 JAX NumPy 数组（jnp.ndarray），初始值为 None
+    last_hidden_state: jnp.ndarray = None
+    # 定义变量 `extract_features`，用于存储 JAX NumPy 数组（jnp.ndarray），初始值为 None
+    extract_features: jnp.ndarray = None
+    # 定义变量 `hidden_states`，用于存储一个元组，其中元素是 JAX NumPy 数组（jnp.ndarray），可选类型（Optional）表示可以为 None
+    hidden_states: Optional[Tuple[jnp.ndarray]] = None
+    # 定义变量 `attentions`，用于存储一个元组，其中元素是 JAX NumPy 数组（jnp.ndarray），可选类型（Optional）表示可以为 None
+    attentions: Optional[Tuple[jnp.ndarray]] = None
+# 定义一个数据类，用于存储 FlaxWav2Vec2 模型预训练的输出结果，继承自 ModelOutput
 @flax.struct.dataclass
-class FlaxWav2Vec2BaseModelOutput(ModelOutput):
+class FlaxWav2Vec2ForPreTrainingOutput(ModelOutput):
     """
-    FlaxWav2Vec2BaseModelOutput 的输出类型，包括潜在的隐藏状态和注意力信息。
+    Output type of [`FlaxWav2Vec2ForPreTrainingOutput`], with potential hidden states and attentions.
 
     Args:
-        last_hidden_state (`jnp.ndarray` of shape `(batch_size, sequence_length, hidden_size)`):
-            模型最后一层的隐藏状态序列。
-        extract_features (`jnp.ndarray` of shape `(batch_size, sequence_length, last_conv_dim)`):
-            模型最后一层的卷积层提取的特征向量序列，`last_conv_dim` 是最后一个卷积层的维度。
+        loss (*optional*, returned when model is in train mode, `jnp.ndarray` of shape `(1,)`):
+            Total loss as the sum of the contrastive loss (L_m) and the diversity loss (L_d) as stated in the [official
+            paper](https://arxiv.org/pdf/2006.11477.pdf) . (classification) loss.
+        projected_states (`jnp.ndarray` of shape `(batch_size, sequence_length, config.proj_codevector_dim)`):
+            Hidden-states of the model projected to *config.proj_codevector_dim* that can be used to predict the masked
+            projected quantized states.
+        projected_quantized_states (`jnp.ndarray` of shape `(batch_size, sequence_length, config.proj_codevector_dim)`):
+            Quantized extracted feature vectors projected to *config.proj_codevector_dim* representing the positive
+            target vectors for contrastive loss.
         hidden_states (`tuple(jnp.ndarray)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            模型每一层的隐藏状态的元组 `jnp.ndarray`（一个用于嵌入输出 + 一个用于每一层的输出），形状为
-            `(batch_size, sequence_length, hidden_size)`。
+            Tuple of `jnp.ndarray` (one for the output of the embeddings + one for the output of each layer) of shape
+            `(batch_size, sequence_length, hidden_size)`.
 
-            模型的每一层的隐藏状态以及初始嵌入输出。
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
         attentions (`tuple(jnp.ndarray)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            注意力权重的元组 `jnp.ndarray`（每一层一个）的形状为 `(batch_size, num_heads, sequence_length,
-            sequence_length)`。
+            Tuple of `jnp.ndarray` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
 
-            注意力权重在经过注意力 softmax 后的结果，用于在自注意力头中计算加权平均值。
+            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+            heads.
     """
-    # 定义变量last_hidden_state，类型为jnp.ndarray，默认值为None
-    last_hidden_state: jnp.ndarray = None
-    # 定义变量extract_features，类型为jnp.ndarray，默认值为None
-    extract_features: jnp.ndarray = None
-    # 定义变量hidden_states，类型为Tuple[jnp.ndarray]，可选类型为None
-    hidden_states: Optional[Tuple[jnp.ndarray]] = None
-    # 定义变量attentions，类型为Tuple[jnp.ndarray]，可选类型为None
-    attentions: Optional[Tuple[jnp.ndarray]] = None
-# 使用装饰器定义类的一个数据结构,表示[`FlaxWav2Vec2ForPreTrainingOutput`]的输出类型，并包括潜在的隐藏状态和注意力
-class FlaxWav2Vec2ForPreTrainingOutput(ModelOutput):
-    # 定义全局变量的类型和默认值
+
+    # 定义属性：模型预测的状态向量，形状为 jnp.ndarray 或者 None
     projected_states: jnp.ndarray = None
+    # 定义属性：量化后的状态向量，形状为 jnp.ndarray 或者 None
     projected_quantized_states: jnp.ndarray = None
+    # 定义属性：码本的困惑度，形状为 jnp.ndarray 或者 None
     codevector_perplexity: jnp.ndarray = None
+    # 定义属性：隐藏状态的元组，包含 jnp.ndarray 或者 None
     hidden_states: Optional[Tuple[jnp.ndarray]] = None
+    # 定义属性：注意力的元组，包含 jnp.ndarray 或者 None
     attentions: Optional[Tuple[jnp.ndarray]] = None
 
-# 定义一个函数，用于计算给定形状的随机掩码范围。用于实现[SpecAugment: A Simple Data Augmentation Method for ASR](https://arxiv.org/abs/1904.08779)。
-# 注意，此方法没有经过优化以在TPU上运行，应该作为训练期间预处理的一部分在CPU上运行。
+
+# 定义一个函数，用于计算给定形状的随机掩码段落，用于实现 SpecAugment 数据增强方法，参考了 ASR 领域的论文
 def _compute_mask_indices(
     shape: Tuple[int, int],
     mask_prob: float,
@@ -89,39 +103,49 @@ def _compute_mask_indices(
     attention_mask: Optional[np.ndarray] = None,
     min_masks: int = 0,
 ) -> np.ndarray:
+    """
+    Computes random mask spans for a given shape. Used to implement [SpecAugment: A Simple Data Augmentation Method for
+    ASR](https://arxiv.org/abs/1904.08779). Note that this method is not optimized to run on TPU and should be run on
+    CPU as part of the preprocessing during training.
+    """
     Args:
-        shape: 用于计算蒙版的形状。
-            应该是大小为2的数组，第一个元素是批处理大小，第二个是时间步长
+        shape: the shape for which to compute masks.
+            should be of size 2 where first element is batch size and 2nd is timesteps
         mask_prob:
-            每个令牌被选为蒙版起始的概率。这将与时间步长数乘以蒙版跨度长度相除，以蒙版大约这个百分比的所有元素。
-            但是由于重叠，实际数量会更小（除非 no_overlap 为 True）
-        mask_length: 蒙版的大小
-        min_masks: 最小蒙版数
+            probability for each token to be chosen as start of the span to be masked. this will be multiplied by
+            number of timesteps divided by length of mask span to mask approximately this percentage of all elements.
+            however due to overlaps, the actual number will be smaller (unless no_overlap is True)
+        mask_length: size of the mask
+        min_masks: minimum number of masked spans
 
     """
+    # 解包形状参数，batch_size 为批次大小，sequence_length 为时间步长
     batch_size, sequence_length = shape
 
+    # 如果 mask_length 小于 1，则引发值错误
     if mask_length < 1:
-        raise ValueError("`mask_length` 必须大于 0。")
+        raise ValueError("`mask_length` has to be bigger than 0.")
 
+    # 如果 mask_length 大于 sequence_length，则引发值错误
     if mask_length > sequence_length:
         raise ValueError(
-            f"`mask_length` 必须小于 `sequence_length`，但是得到了 `mask_length`：{mask_length} 和"
-            f" `sequence_length`：{sequence_length}`"
+            f"`mask_length` has to be smaller than `sequence_length`, but got `mask_length`: {mask_length} and"
+            f" `sequence_length`: {sequence_length}`"
         )
 
-    # 计算批处理中蒙版的数量
+    # 计算每批次中需要掩蔽的区间数目
     num_masked_spans = int(mask_prob * sequence_length / mask_length + np.random.rand(1).item())
+    # 确保 num_masked_spans 不小于 min_masks
     num_masked_spans = max(num_masked_spans, min_masks)
 
-    # 确保蒙版索引数量小于等于序列长度
+    # 确保掩蔽的索引数不超过 sequence_length
     if num_masked_spans * mask_length > sequence_length:
         num_masked_spans = sequence_length // mask_length
 
-    # SpecAugment 蒙版填充
+    # 初始化一个形状为 (batch_size, sequence_length) 的布尔类型的掩蔽数组
     spec_aug_mask = np.zeros((batch_size, sequence_length), dtype=bool)
 
-    # 获取要蒙版的随机索引
+    # 随机生成要掩蔽的起始索引
     spec_aug_mask_idxs = np.array(
         [
             np.random.choice(np.arange(sequence_length - (mask_length - 1)), num_masked_spans, replace=False)
@@ -129,58 +153,58 @@ def _compute_mask_indices(
         ]
     )
 
-    # 将蒙版的索引扩展为蒙版跨度
+    # 将掩蔽的索引扩展为掩蔽的区间
     spec_aug_mask_idxs = np.broadcast_to(spec_aug_mask_idxs[:, :, None], (batch_size, num_masked_spans, mask_length))
     spec_aug_mask_idxs = spec_aug_mask_idxs.reshape(batch_size, num_masked_spans * mask_length)
 
+    # 创建一个偏移数组以便扩展掩蔽的区间
     offsets = np.arange(mask_length)[None, None, :]
     offsets = np.broadcast_to(offsets, (batch_size, num_masked_spans, mask_length)).reshape(
         batch_size, num_masked_spans * mask_length
     )
     spec_aug_mask_idxs = spec_aug_mask_idxs + offsets
 
-    # 散点索引以蒙版
+    # 在掩蔽数组中填充掩蔽的索引
     np.put_along_axis(spec_aug_mask, spec_aug_mask_idxs, 1, -1)
 
+    # 如果存在 attention_mask，则确保填充的输入 ID 不能被掩蔽
     if attention_mask is not None:
-        # 确保填充的输入 id 不能被蒙版
         spec_aug_mask = np.where(attention_mask, spec_aug_mask, False)
 
+    # 返回生成的掩蔽数组
     return spec_aug_mask
-# 从特征向量中随机采样 `num_negatives` 个负向量的索引
 def _sample_negative_indices(features_shape: Tuple, num_negatives: int, attention_mask: Optional[np.ndarray] = None):
     """
     Sample `num_negatives` vectors from feature vectors.
     """
-    # 获取特征向量的形状信息
+    # 解析输入参数的形状信息
     batch_size, sequence_length, hidden_size = features_shape
-    # 检查序列长度是否小于等于1，若是，则引发 ValueError 异常
+
+    # 检查序列长度是否小于等于1，如果是则引发异常
     if sequence_length <= 1:
         raise ValueError(
             "`features should have `sequence_length` > 1, but are of shape "
             f"(batch_size, sequence_length, hidden_size) = ({batch_size, sequence_length, hidden_size})."
         )
 
-    # 从同一句话中获取 `num_negatives` 个随机向量的索引
+    # 从同一个语句中随机选择 `num_negatives` 个向量索引
     sampled_negative_indices = []
     for batch_idx in range(batch_size):
-        # 计算上限，若存在注意力掩码则取其和，否则取序列长度减1
+        # 根据注意力掩码确定可用索引的上限，或者使用序列长度的上限
         high = attention_mask[batch_idx].sum() - 1 if attention_mask is not None else sequence_length - 1
-        # 从0到high之间随机采样 `num_negatives * sequence_length` 个索引
+        # 随机抽样索引，数量为 `num_negatives * sequence_length`
         sampled_indices_slice = np.random.randint(0, high, size=(num_negatives * sequence_length,))
-        # 将采样到的索引添加到列表中
         sampled_negative_indices.append(sampled_indices_slice)
 
-    # 转换成 numpy 数组
     sampled_negative_indices = np.asarray(sampled_negative_indices, dtype=np.int32)
 
-    # 生成正向量本身的索引，并将其重复 `num_negatives` 次
+    # 生成正向量的索引，将其重复 `num_negatives` 次
     feature_indices = np.broadcast_to(np.arange(sequence_length)[:, None], (sequence_length, num_negatives)).flatten()
 
-    # 避免采样相同的正向量，但保持分布均匀
+    # 避免抽样到相同的正向量索引，同时保持均匀分布
     sampled_negative_indices[sampled_negative_indices >= feature_indices] += 1
 
-    # 根据批次大小进行修正
+    # 调整索引以匹配批次大小
     for batch_idx in range(1, batch_size):
         sampled_negative_indices[batch_idx] += batch_idx * sequence_length
 
@@ -216,248 +240,242 @@ WAV_2_VEC_2_START_DOCSTRING = r"""
         dtype (`jax.numpy.dtype`, *optional*, defaults to `jax.numpy.float32`):
             The data type of the computation. Can be one of `jax.numpy.float32`, `jax.numpy.float16` (on GPUs) and
             `jax.numpy.bfloat16` (on TPUs).
+            
+            This specifies the data type used for computations, allowing for mixed-precision training or
+            half-precision inference on GPUs or TPUs. If specified, all computations within the model will be
+            performed with the specified `dtype`.
 
-            This can be used to enable mixed-precision training or half-precision inference on GPUs or TPUs. If
-            specified all the computation will be performed with the given `dtype`.
+            **Note that this setting affects only the computation dtype and not the dtype of model parameters.**
 
-            **Note that this only specifies the dtype of the computation and does not influence the dtype of model
-            parameters.**
-
-            If you wish to change the dtype of the model parameters, see [`~FlaxPreTrainedModel.to_fp16`] and
+            To change the dtype of model parameters, refer to [`~FlaxPreTrainedModel.to_fp16`] and
             [`~FlaxPreTrainedModel.to_bf16`].
-# WAV_2_VEC_2_INPUTS_DOCSTRING 定义了函数 read_zip 的文档字符串，描述了函数的参数和用法
-WAV_2_VEC_2_INPUTS_DOCSTRING = r"""
-    Args:
-        input_values (`jnp.ndarray` of shape `(batch_size, sequence_length)`):
-            Float values of input raw speech waveform. Values can be obtained by loading a `.flac` or `.wav` audio file
-            into an array of type `List[float]` or a `numpy.ndarray`, *e.g.* via the soundfile library (`pip install
-            soundfile`). To prepare the array into `input_values`, the [`AutoProcessor`] should be used for padding and
-            conversion into a tensor of type `jnp.ndarray`. See [`Wav2Vec2Processor.__call__`] for details.
-        attention_mask (`jnp.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            Mask to avoid performing convolution and attention on padding token indices. Mask values selected in `[0,
-            1]`:
-
-            - 1 for tokens that are **not masked**,
-            - 0 for tokens that are **masked**.
-
-            [What are attention masks?](../glossary#attention-mask) .. warning:: `attention_mask` should only be passed
-            if the corresponding processor has `config.return_attention_mask == True`. For all models whose processor
-            has `config.return_attention_mask == False`, such as
-            [wav2vec2-base](https://huggingface.co/facebook/wav2vec2-base-960h), `attention_mask` should **not** be
-            passed to avoid degraded performance when doing batched inference. For such models `input_values` should
-            simply be padded with 0 and passed without `attention_mask`. Be aware that these models also yield slightly
-            different results depending on whether `input_values` is padded or not.
-        mask_time_indices (`jnp.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            Indices to mask extracted features for contrastive loss. When in training mode, model learns to predict
-            masked extracted features in *config.proj_codevector_dim* space.
-        output_attentions (`bool`, *optional*):
-            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
-            tensors for more detail.
-        output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-        return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
-
-# 定义 FlaxWav2Vec2LayerNormConvLayer 类，继承自 nn.Module
+定义一个类 `FlaxWav2Vec2LayerNormConvLayer`，继承自 `nn.Module`，用于实现基于 Flax 的 Wav2Vec2 模型的一层。
+"""
 class FlaxWav2Vec2LayerNormConvLayer(nn.Module):
-    # 接受 Wav2Vec2Config 对象作为配置参数
+    # 设置类属性 `config` 为 `Wav2Vec2Config` 类型，用于配置模型参数
     config: Wav2Vec2Config
-    # 定义层的 ID，初始值为 0
+    # 设置类属性 `layer_id` 为整数，表示当前层的标识，默认为 0
     layer_id: int = 0
-    # 定义变量的数据类型为 jnp.float32
+    # 设置类属性 `dtype` 为 `jnp.float32`，表示数据类型为 32 位浮点数
     dtype: jnp.dtype = jnp.float32
-    # 设置方法，用于初始化各种属性
+    # 设置函数，用于初始化网络层参数
     def setup(self):
-        # 如果当前层不是第一层，则输入卷积维度为配置文件中对应层的卷积维度，否则为1
+        # 如果当前层不是第一层，设置输入卷积维度为指定的卷积维度列表中对应层的值，否则设为1
         self.in_conv_dim = self.config.conv_dim[self.layer_id] if self.layer_id > 0 else 1
-        # 输出卷积维度为配置文件中对应层的卷积维度
+        # 设置输出卷积维度为指定的卷积维度列表中对应层的值
         self.out_conv_dim = self.config.conv_dim[self.layer_id]
 
         # 初始化卷积层
         self.conv = nn.Conv(
-            features=self.config.conv_dim[self.layer_id],  # 输入特征维度为配置文件中对应层的卷积维度
-            kernel_size=(self.config.conv_kernel[self.layer_id],),  # 卷积核大小为配置文件中对应层的卷积核大小
-            strides=(self.config.conv_stride[self.layer_id],),  # 卷积步幅为配置文件中对应层的卷积步幅
-            use_bias=self.config.conv_bias,  # 是否使用偏置，根据配置文件决定
-            kernel_init=jax.nn.initializers.he_normal(),  # 卷积核初始化方式为 He 正态分布初始化
-            padding="VALID",  # 不使用填充
+            features=self.config.conv_dim[self.layer_id],  # 卷积层输出特征维度
+            kernel_size=(self.config.conv_kernel[self.layer_id],),  # 卷积核大小
+            strides=(self.config.conv_stride[self.layer_id],),  # 卷积步长
+            use_bias=self.config.conv_bias,  # 是否使用偏置
+            kernel_init=jax.nn.initializers.he_normal(),  # 卷积核初始化方法
+            padding="VALID",  # 卷积填充方式
             dtype=self.dtype,  # 数据类型
         )
-        # 初始化 LayerNormalization 层
+        # 初始化层归一化层
         self.layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化激活函数，根据配置文件中指定的激活函数名称从预定义字典中获取对应的激活函数
+        # 初始化激活函数，根据配置选择相应的激活函数
         self.activation = ACT2FN[self.config.feat_extract_activation]
 
-    # 对象被调用时执行的方法，用于执行前向传播
+    # 定义调用函数，用于前向传播计算
     def __call__(self, hidden_states):
-        # 输入经过卷积层
+        # 卷积操作，计算特征提取后的隐藏状态
         hidden_states = self.conv(hidden_states)
-        # 卷积结果经过 LayerNormalization 层
+        # 层归一化操作，对卷积输出进行归一化处理
         hidden_states = self.layer_norm(hidden_states)
-        # 经过激活函数
+        # 激活函数操作，对归一化后的输出应用激活函数
         hidden_states = self.activation(hidden_states)
-        # 返回处理后的结果
+        # 返回处理后的隐藏状态
         return hidden_states
+# 定义一个自定义的 Flax 模块，用于卷积操作并包含权重归一化
 class FlaxConvWithWeightNorm(nn.Module):
-    config: Wav2Vec2Config  # 存储模型配置信息
-    dtype: jnp.dtype = jnp.float32  # 默认数据类型为 jnp.float32
+    # 配置信息，指定为 Wav2Vec2Config 类型
+    config: Wav2Vec2Config
+    # 数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32
 
-    def setup(self):  # 定义模型初始化方法
-        self.conv = nn.Conv(  # 创建卷积层对象
-            features=self.config.hidden_size,  # 输出通道数等于隐藏尺寸
-            kernel_size=(self.config.num_conv_pos_embeddings,),  # 卷积核大小为位置嵌入数量
-            kernel_init=jax.nn.initializers.he_normal(),  # 卷积核参数初始化
-            padding="VALID",  # 边缘填充方式为有效填充
-            feature_group_count=self.config.num_conv_pos_embedding_groups,  # 分组卷积的组数
-            dtype=self.dtype,  # 指定数据类型
-        )
-        weight_shape = (  # 计算权重形状
-            self.conv.features,  # 权重数量等于输出通道数
-            self.conv.features // self.conv.feature_group_count,  # 每个分组的权重数量
-            self.conv.kernel_size[0],  # 卷积核的大小
-        )
-        self.weight_v = self.param("weight_v", jax.nn.initializers.he_normal(), weight_shape)  # 初始化权重 v
-        self.weight_g = self.param("weight_g", lambda _: jnp.linalg.norm(self.weight_v, axis=(0, 1))[None, None, :])  # 初始化权重 g
-        self.bias = self.param("bias", jax.nn.initializers.zeros, (self.conv.features,))  # 初始化偏置
-        self.prev_padding = self.conv.kernel_size[0] // 2  # 计算卷积前的填充大小
-
-    def _get_normed_weights(self):  # 定义获取归一化权重的方法
-        weight_v_norm = jnp.linalg.norm(self.weight_v, axis=(0, 1))[None, None, :]  # 计算权重 v 的范数
-        normed_weight_v = jnp.divide(self.weight_v, weight_v_norm)  # 归一化权重 v
-        normed_kernel = jnp.multiply(normed_weight_v, self.weight_g)  # 使用权重 g 缩放权重 v
-        return normed_kernel  # 返回归一化后的卷积核
-
-    def __call__(self, hidden_states):  # 定义模型调用方法
-        kernel = self._get_normed_weights()  # 获取归一化的卷积核
-        hidden_states = jnp.pad(hidden_states, ((0, 0), (self.prev_padding, self.prev_padding), (0, 0)))  # 对隐藏状态进行填充
-        hidden_states = self.conv.apply({"params": {"kernel": kernel.T, "bias": self.bias}}, hidden_states)  # 应用卷积操作
-        return hidden_states  # 返回卷积后的隐藏状态
-
-
-class FlaxWav2Vec2PositionalConvEmbedding(nn.Module):
-    config: Wav2Vec2Config  # 存储模型配置信息
-    dtype: jnp.dtype = jnp.float32  # 默认数据类型为 jnp.float32
-
-    def setup(self):  # 定义模型初始化方法
-        self.conv = FlaxConvWithWeightNorm(self.config, dtype=self.dtype)  # 创建带权重归一化的卷积层对象
-        self.activation = ACT2FN[self.config.feat_extract_activation]  # 获取激活函数
-        self.num_pad_remove = 1 if self.config.num_conv_pos_embeddings % 2 == 0 else 0  # 计算需要移除的填充数目
-
-    def __call__(self, hidden_states):  # 定义模型调用方法
-        hidden_states = hidden_states.transpose((0, 1, 2))  # 调整输入张量的维度顺序
-
-        hidden_states = self.conv(hidden_states)  # 应用卷积操作
-
-        if self.num_pad_remove > 0:  # 如果需要移除填充
-            hidden_states = hidden_states[:, : -self.num_pad_remove, :]  # 移除填充
-        hidden_states = self.activation(hidden_states)  # 应用激活函数
-
-        hidden_states = hidden_states.transpose((0, 1, 2))  # 恢复张量维度顺序
-        return hidden_states  # 返回隐藏状态
-
-
-class FlaxConvLayersCollection(nn.Module):
-    config: Wav2Vec2Config  # 存储模型配置信息
-    dtype: jnp.dtype = jnp.float32  # 默认数据类型为 jnp.float32
-```  
-    # 初始化特征提取的设置
+    # 模块设置方法，用于初始化模块的各个部分
     def setup(self):
-        # 如果特征提取使用层归一化
+        # 创建卷积层，设置特征数为 hidden_size，卷积核大小为 num_conv_pos_embeddings
+        self.conv = nn.Conv(
+            features=self.config.hidden_size,
+            kernel_size=(self.config.num_conv_pos_embeddings,),
+            kernel_init=jax.nn.initializers.he_normal(),
+            padding="VALID",
+            feature_group_count=self.config.num_conv_pos_embedding_groups,
+            dtype=self.dtype,
+        )
+        # 定义权重形状，与卷积层特征数及分组数有关
+        weight_shape = (
+            self.conv.features,
+            self.conv.features // self.conv.feature_group_count,
+            self.conv.kernel_size[0],
+        )
+        # 初始化并定义权重 v 作为模型参数，使用 he_normal 初始化器
+        self.weight_v = self.param("weight_v", jax.nn.initializers.he_normal(), weight_shape)
+        # 计算权重 v 的 L2 范数，并初始化权重 g 作为模型参数
+        self.weight_g = self.param("weight_g", lambda _: jnp.linalg.norm(self.weight_v, axis=(0, 1))[None, None, :])
+        # 初始化偏置参数，特征数与卷积层相同
+        self.bias = self.param("bias", jax.nn.initializers.zeros, (self.conv.features,))
+        # 计算用于填充输入的前置填充数
+        self.prev_padding = self.conv.kernel_size[0] // 2
+
+    # 内部方法，用于获取归一化后的权重
+    def _get_normed_weights(self):
+        # 计算权重 v 的归一化形式
+        weight_v_norm = jnp.linalg.norm(self.weight_v, axis=(0, 1))[None, None, :]
+        normed_weight_v = jnp.divide(self.weight_v, weight_v_norm)
+        # 计算归一化后的卷积核
+        normed_kernel = jnp.multiply(normed_weight_v, self.weight_g)
+        return normed_kernel
+
+    # 模块的调用方法，执行卷积操作并返回结果
+    def __call__(self, hidden_states):
+        # 获取归一化后的卷积核
+        kernel = self._get_normed_weights()
+        # 对输入进行前置填充，保证卷积输出尺寸与输入相同
+        hidden_states = jnp.pad(hidden_states, ((0, 0), (self.prev_padding, self.prev_padding), (0, 0)))
+        # 应用卷积操作到输入上，使用归一化后的卷积核和偏置
+        hidden_states = self.conv.apply({"params": {"kernel": kernel.T, "bias": self.bias}}, hidden_states)
+        return hidden_states
+
+
+# 定义一个 Flax 模块，用于处理位置卷积嵌入
+class FlaxWav2Vec2PositionalConvEmbedding(nn.Module):
+    # 配置信息，指定为 Wav2Vec2Config 类型
+    config: Wav2Vec2Config
+    # 数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32
+
+    # 模块设置方法，用于初始化模块的各个部分
+    def setup(self):
+        # 创建包含权重归一化的卷积层模块
+        self.conv = FlaxConvWithWeightNorm(self.config, dtype=self.dtype)
+        # 设置激活函数为配置文件中指定的函数
+        self.activation = ACT2FN[self.config.feat_extract_activation]
+        # 根据卷积核大小决定需要移除的填充数量
+        self.num_pad_remove = 1 if self.config.num_conv_pos_embeddings % 2 == 0 else 0
+
+    # 模块的调用方法，执行位置卷积嵌入操作并返回结果
+    def __call__(self, hidden_states):
+        # 调整输入张量的维度顺序
+        hidden_states = hidden_states.transpose((0, 1, 2))
+        # 应用包含权重归一化的卷积操作到输入上
+        hidden_states = self.conv(hidden_states)
+        # 根据需要移除的填充数量截取卷积输出
+        if self.num_pad_remove > 0:
+            hidden_states = hidden_states[:, : -self.num_pad_remove, :]
+        # 应用激活函数到卷积输出上
+        hidden_states = self.activation(hidden_states)
+        # 恢复张量的原始维度顺序并返回结果
+        hidden_states = hidden_states.transpose((0, 1, 2))
+        return hidden_states
+
+
+# 定义一个 Flax 模块，用于包含一系列卷积层的集合
+class FlaxConvLayersCollection(nn.Module):
+    # 配置信息，指定为 Wav2Vec2Config 类型
+    config: Wav2Vec2Config
+    # 数据类型，默认为 jnp.float32
+    dtype: jnp.dtype = jnp.float32
+    # 初始化方法，用于设置对象的初始状态
+    def setup(self):
+        # 如果配置要求特征提取的归一化方式为 "layer"
         if self.config.feat_extract_norm == "layer":
-            # 创建一系列层归一化卷积层
+            # 创建一系列 FlaxWav2Vec2LayerNormConvLayer 对象作为 self.layers 列表的元素，
+            # 每个对象对应一个特征提取层
             self.layers = [
                 FlaxWav2Vec2LayerNormConvLayer(self.config, layer_id=i, name=str(i), dtype=self.dtype)
                 for i in range(self.config.num_feat_extract_layers)
             ]
-        # 如果特征提取使用组归一化，但目前不支持
+        # 如果配置要求特征提取的归一化方式为 "group"，暂时不支持这种方式
         elif self.config.feat_extract_norm == "group":
+            # 抛出 NotImplementedError 异常，提醒暂时只支持 "layer" 形式的特征提取归一化
             raise NotImplementedError("At the moment only ``config.feat_extact_norm == 'layer'`` is supported")
-        # 如果特征提取归一化方式不符合要求
+        # 如果配置的特征提取归一化方式既不是 "layer" 也不是 "group"，则抛出 ValueError 异常
         else:
+            # 抛出 ValueError 异常，指明配置中的 feat_extract_norm 值不合法
             raise ValueError(
                 f"`config.feat_extract_norm` is {self.config.feat_extract_norm}, but has to be one of ['group',"
                 " 'layer']"
             )
-    
-    # 特征提取前向传播
+
+    # 对象被调用时执行的方法，用于处理输入的隐藏状态数据
     def __call__(self, hidden_states):
-        # 依次通过各个卷积层
+        # 遍历 self.layers 中的每个 conv_layer，依次对 hidden_states 进行处理
         for i, conv_layer in enumerate(self.layers):
-            hidden_states = conv_layer(hidden_states)
-        # 返回最终的特征
+            hidden_states = conv_layer(hidden_states)  # 调用 conv_layer 对象处理 hidden_states
+        # 返回处理后的 hidden_states
         return hidden_states
 class FlaxWav2Vec2FeatureEncoder(nn.Module):
-    """从原始音频波形构造特征"""
+    """从原始音频波形中构建特征"""
 
-    config: Wav2Vec2Config  # Wav2Vec2 模型的配置
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型，默认为 jnp.float32
+    config: Wav2Vec2Config  # 引用Wav2Vec2Config配置对象
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型，默认为单精度浮点数
 
     def setup(self):
-        # 初始化卷积层集合
         self.conv_layers = FlaxConvLayersCollection(self.config, dtype=self.dtype)
+        # 初始化卷积层集合，使用配置对象和指定数据类型
 
     def __call__(self, input_values, freeze_feature_encoder=False):
-        # 将输入值扩展一个维度，用于卷积操作
         hidden_states = input_values[:, :, None]
-        # 通过卷积层集合处理输入值
+        # 在最后添加一个维度，将形状从[batch_size, seq_len]变为[batch_size, seq_len, 1]
         hidden_states = self.conv_layers(hidden_states)
+        # 经过卷积层处理，处理后形状为[batch_size, seq_len, hidden_size]
         if freeze_feature_encoder:
-            # 如果需要冻结特征编码器，停止梯度传播
             hidden_states = jax.lax.stop_gradient(hidden_states)
+            # 如果需要冻结特征编码器，则停止梯度传播
         return hidden_states
 
 
 class FlaxWav2Vec2FeatureProjection(nn.Module):
-    """Wav2Vec2 的特征投影模块"""
-
-    config: Wav2Vec2Config  # Wav2Vec2 模型的配置
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型，默认为 jnp.float32
+    config: Wav2Vec2Config  # 引用Wav2Vec2Config配置对象
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型，默认为单精度浮点数
 
     def setup(self):
-        # 初始化层归一化
         self.layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化全连接层，用于特征投影
+        # 初始化层归一化，使用指定的epsilon值和数据类型
         self.projection = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化 dropout 层
+        # 初始化全连接层，设置隐藏大小、权重初始化方法和数据类型
         self.dropout = nn.Dropout(rate=self.config.feat_proj_dropout)
+        # 初始化dropout层，设置丢弃率为配置中的特征投影dropout率
 
     def __call__(self, hidden_states, deterministic=True):
-        # 执行层归一化
         norm_hidden_states = self.layer_norm(hidden_states)
-        # 执行特征投影
+        # 对隐藏状态进行层归一化处理
         hidden_states = self.projection(norm_hidden_states)
-        # 执行 dropout
+        # 应用投影层
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
+        # 应用dropout，如果确定性为True，则使用确定性dropout
         return hidden_states, norm_hidden_states
 
 
 class FlaxWav2Vec2Attention(nn.Module):
-    """Wav2Vec2 的注意力模块"""
-
-    config: Wav2Vec2Config  # Wav2Vec2 模型的配置
+    config: Wav2Vec2Config  # 引用Wav2Vec2Config配置对象
     embed_dim: int  # 嵌入维度
     num_heads: int  # 头的数量
-    dropout: float = 0.0  # dropout 概率，默认为 0.0
-    bias: bool = True  # 是否使用偏置，默认为 True
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型，默认为 jnp.float32
+    dropout: float = 0.0  # dropout率，默认为0.0
+    bias: bool = True  # 是否使用偏置，默认为True
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型，默认为单精度浮点数
 
     def setup(self) -> None:
-        # 计算每个头的维度
         self.head_dim = self.embed_dim // self.num_heads
+        # 计算每个头的维度
         if self.head_dim * self.num_heads != self.embed_dim:
-            # 如果嵌入维度不能被头的数量整除，抛出错误
             raise ValueError(
-                f"embed_dim 必须能够被 num_heads 整除 (得到 `embed_dim`: {self.embed_dim} 和 `num_heads`:"
+                f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim} and `num_heads`:"
                 f" {self.num_heads})."
             )
+            # 检查embed_dim必须能够被num_heads整除的条件，否则引发错误
 
-        # 部分函数应用，用于创建全连接层
         dense = partial(
             nn.Dense,
             self.embed_dim,
@@ -465,22 +483,23 @@ class FlaxWav2Vec2Attention(nn.Module):
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
+        # 创建一个部分应用了参数的全连接层函数
 
-        # 初始化查询、键、值投影
         self.q_proj, self.k_proj, self.v_proj = dense(), dense(), dense()
-        # 初始化输出投影
+        # 使用dense函数初始化查询、键、值投影层
         self.out_proj = dense()
+        # 使用dense函数初始化输出投影层
 
-        # 初始化 dropout 层
         self.dropout_layer = nn.Dropout(rate=self.dropout)
+        # 初始化dropout层，设置丢弃率为配置中的dropout率
 
     def _split_heads(self, hidden_states):
-        # 将隐藏状态分割成多个头
         return hidden_states.reshape(hidden_states.shape[:2] + (self.num_heads, self.head_dim))
+        # 将隐藏状态切分成多个头
 
     def _merge_heads(self, hidden_states):
-        # 合并多个头的隐藏状态
         return hidden_states.reshape(hidden_states.shape[:2] + (self.embed_dim,))
+        # 合并多个头的隐藏状态
 
     def __call__(
         self,
@@ -488,19 +507,18 @@ class FlaxWav2Vec2Attention(nn.Module):
         key_value_states: Optional[jnp.ndarray] = None,
         attention_mask: Optional[jnp.ndarray] = None,
         deterministic: bool = True,
+        # 定义Attention层的调用方式，包括隐藏状态、键值状态、注意力掩码和确定性
     ) -> Tuple[jnp.ndarray]:
         """Input shape: Batch x Time x Channel"""
         
         # 获取查询投影
         query_states = self.q_proj(hidden_states)
 
-        # 获取键投影
+        # 获取键投影和值投影
         key_states = self.k_proj(hidden_states)
-        
-        # 获取值投影
         value_states = self.v_proj(hidden_states)
 
-        # 对查询投影、键投影和值投影进行头部分割
+        # 将查询投影、键投影和值投影按照头的数量进行分割
         query_states = self._split_heads(query_states)
         key_states = self._split_heads(key_states)
         value_states = self._split_heads(value_states)
@@ -511,7 +529,7 @@ class FlaxWav2Vec2Attention(nn.Module):
 
         # 将布尔类型的注意力掩码转换为注意力偏置
         if attention_mask is not None:
-            # 注意力掩码转换为注意力偏置形式
+            # 注意力掩码转换为注意力偏置
             attention_bias = lax.select(
                 attention_mask > 0,
                 jnp.full(attention_mask.shape, 0.0).astype(self.dtype),
@@ -520,7 +538,7 @@ class FlaxWav2Vec2Attention(nn.Module):
         else:
             attention_bias = None
 
-        # 初始化 dropout_rng
+        # 如果不是确定性计算且具有非零的 dropout 率，则创建 dropout 随机数生成器
         dropout_rng = None
         if not deterministic and self.dropout > 0.0:
             dropout_rng = self.make_rng("dropout")
@@ -538,70 +556,76 @@ class FlaxWav2Vec2Attention(nn.Module):
             precision=None,
         )
 
-        # 计算注意力输出
+        # 计算注意力输出，使用 einsum 实现批量矩阵乘法
         attn_output = jnp.einsum("...hqk,...khd->...qhd", attn_weights, value_states)
-        attn_output = self._merge_heads(attn_output)
-        attn_output = self.out_proj(attn_output)
+        attn_output = self._merge_heads(attn_output)  # 合并注意力头
+        attn_output = self.out_proj(attn_output)  # 输出投影
 
-        # 返回注意力输出和注意力权重
         return attn_output, attn_weights
-# 定义一个FlaxWav2Vec2FeedForward类，继承自nn.Module类
+# 定义一个名为 FlaxWav2Vec2FeedForward 的自定义神经网络模块，继承自 nn.Module
 class FlaxWav2Vec2FeedForward(nn.Module):
-    # 定义config属性，存储Wav2Vec2Config实例
+    # 类属性：配置信息，类型为 Wav2Vec2Config
     config: Wav2Vec2Config
-    # 定义dtype属性，默认值为jnp.float32
+    # 类属性：数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化方法，用来设置网络层结构
+    # 初始化方法，设置网络结构
     def setup(self):
-        # 初始化中间层的dropout
+        # 定义中间层的 dropout 操作，使用配置中的激活函数的 dropout 率
         self.intermediate_dropout = nn.Dropout(rate=self.config.activation_dropout)
 
-        # 初始化中间层的稠密层，应用配置的初始化方法和数据类型
+        # 定义中间层的全连接层，输入大小为配置中的 intermediate_size
+        # 初始化方式为正态分布，范围为配置中的 initializer_range
         self.intermediate_dense = nn.Dense(
             self.config.intermediate_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 判断配置中隐藏层激活函数是否为字符串，选择对应的激活函数
+
+        # 根据配置选择激活函数，如果是字符串则从预定义的映射中获取，否则直接使用配置中的激活函数
         if isinstance(self.config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[self.config.hidden_act]
         else:
             self.intermediate_act_fn = self.config.hidden_act
 
-        # 初始化输出层的稠密层，应用配置的初始化方法和数据类型
+        # 定义输出层的全连接层，输出大小为配置中的 hidden_size
+        # 初始化方式为正态分布，范围为配置中的 initializer_range
         self.output_dense = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化输出层的dropout
+
+        # 定义输出层的 dropout 操作，使用配置中的隐藏层 dropout 率
         self.output_dropout = nn.Dropout(rate=self.config.hidden_dropout)
 
-    # 实现__call__方法，用来定义前向传播过程
+    # 前向传播方法，接收隐藏状态和是否确定性的标志，返回最终的隐藏状态
     def __call__(self, hidden_states, deterministic=True):
-        # 中间层前向计算
+        # 中间层的全连接操作
         hidden_states = self.intermediate_dense(hidden_states)
+        # 中间层的激活函数
         hidden_states = self.intermediate_act_fn(hidden_states)
+        # 中间层的 dropout 操作
         hidden_states = self.intermediate_dropout(hidden_states, deterministic=deterministic)
 
-        # 输出层前向计算
+        # 输出层的全连接操作
         hidden_states = self.output_dense(hidden_states)
+        # 输出层的 dropout 操作
         hidden_states = self.output_dropout(hidden_states, deterministic=deterministic)
-        # 返回输出结果
+        # 返回最终的隐藏状态
         return hidden_states
 
 
-# 定义FlaxWav2Vec2EncoderLayerStableLayerNorm类，继承自nn.Module类
+# 定义一个名为 FlaxWav2Vec2EncoderLayerStableLayerNorm 的自定义神经网络模块，继承自 nn.Module
 class FlaxWav2Vec2EncoderLayerStableLayerNorm(nn.Module):
-    # 定义config属性，存储Wav2Vec2Config实例
+    # 类属性：配置信息，类型为 Wav2Vec2Config
     config: Wav2Vec2Config
-    # 定义dtype属性，默认值为jnp.float32
+    # 类属性：数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化方法，用来设置网络层结构
+    # 初始化方法，设置网络结构
     def setup(self):
-        # 初始化注意力层
+        # 定义注意力层
         self.attention = FlaxWav2Vec2Attention(
             config=self.config,
             embed_dim=self.config.hidden_size,
@@ -609,124 +633,124 @@ class FlaxWav2Vec2EncoderLayerStableLayerNorm(nn.Module):
             dropout=self.config.attention_dropout,
             dtype=self.dtype,
         )
-        # 初始化dropout层
+        # 定义隐藏层的 dropout 操作
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout)
-        # 初始化Layer Norm层
+        # 定义层归一化操作，使用配置中的 epsilon
         self.layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化前馈网络结构
+        # 定义前馈网络层
         self.feed_forward = FlaxWav2Vec2FeedForward(self.config, dtype=self.dtype)
-        # 初始化最终Layer Norm层
+        # 定义最终的层归一化操作
         self.final_layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
 
-    # 实现__call__方法，用来定义前向传播过程
+    # 前向传播方法，接收隐藏状态、注意力掩码、是否确定性的标志和是否输出注意力权重的标志，返回输出
     def __call__(self, hidden_states, attention_mask=None, deterministic=True, output_attentions=False):
-        # 保存注意力计算前的隐藏状态
+        # 记录注意力残差连接
         attn_residual = hidden_states
-        # 应用Layer Norm到隐藏状态
+        # 应用层归一化操作
         hidden_states = self.layer_norm(hidden_states)
-        # 计算注意力权重并进行注意力计算
+        # 注意力层的前向传播
         hidden_states, attn_weights = self.attention(
             hidden_states, attention_mask=attention_mask, deterministic=deterministic
         )
-        # 应用dropout层
+        # 应用隐藏层的 dropout 操作
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 加上注意力计算前的隐藏状态，构成残差连接
+        # 加上注意力残差连接
         hidden_states = attn_residual + hidden_states
-        # 应用前馈网络
+        # 应用前馈网络层
         hidden_states = hidden_states + self.feed_forward(
             self.final_layer_norm(hidden_states), deterministic=deterministic
         )
 
-        # 构建输出元组
+        # 输出结果
         outputs = (hidden_states,)
 
-        # 根据输出注意力权重标志，决定是否返回注意力权重
+        # 如果需要输出注意力权重，则添加到输出中
         if output_attentions:
             outputs += (attn_weights,)
 
-        # 返回输出结果
         return outputs
 
 
-# 定义FlaxWav2Vec2EncoderLayerStableLayerNormCollection类，继承自nn.Module类
+# 定义一个名为 FlaxWav2Vec2EncoderLayerStableLayerNormCollection 的自定义神经网络模块，继承自 nn.Module
 class FlaxWav2Vec2EncoderLayerStableLayerNormCollection(nn.Module):
-    # 定义config属性，存储Wav2Vec2Config实例
+    # 类属性：配置信息，类型为 Wav2Vec2Config
     config: Wav2Vec2Config
-    # 定义数据类型为 jnp.float32
+    # 定义数据类型为 jnp.float32，默认为浮点数类型
     dtype: jnp.dtype = jnp.float32
     
+    # 定义初始化方法，创建多个编码层对象并存储在列表 self.layers 中
     def setup(self):
-        # 创建一个列表,其中包含指定数量的 FlaxWav2Vec2EncoderLayerStableLayerNorm 层
         self.layers = [
+            # 使用 FlaxWav2Vec2EncoderLayerStableLayerNorm 类创建编码层对象，编号从 '0' 到 str(num_hidden_layers-1)，并指定数据类型为 self.dtype
             FlaxWav2Vec2EncoderLayerStableLayerNorm(self.config, name=str(i), dtype=self.dtype)
             for i in range(self.config.num_hidden_layers)
         ]
     
+    # 定义调用方法，接受输入 hidden_states 和多个可选参数，并根据参数返回结果
     def __call__(
         self,
-        hidden_states,
-        attention_mask=None,
-        deterministic: bool = True,
-        output_attentions: bool = False,
-        output_hidden_states: bool = False,
-        return_dict: bool = True,
+        hidden_states,  # 输入的隐藏状态张量
+        attention_mask=None,  # 可选的注意力掩码张量，默认为 None
+        deterministic: bool = True,  # 是否确定性推断，默认为 True
+        output_attentions: bool = False,  # 是否输出注意力张量，默认为 False
+        output_hidden_states: bool = False,  # 是否输出所有隐藏状态，默认为 False
+        return_dict: bool = True,  # 是否以字典形式返回结果，默认为 True
     ):
-        # 初始化用于存储注意力和隐藏状态的元组
+        # 初始化空的元组变量 all_attentions 和 all_hidden_states，根据参数决定是否存储相应的输出
         all_attentions = () if output_attentions else None
         all_hidden_states = () if output_hidden_states else None
     
-        # 遍历所有的层
+        # 遍历 self.layers 中的编码层，并依次处理隐藏状态
         for i, layer in enumerate(self.layers):
-            # 如果需要输出隐藏状态,将当前隐藏状态添加到元组中
             if output_hidden_states:
+                # 如果需要输出隐藏状态，则将当前隐藏状态存入 all_hidden_states 中
                 all_hidden_states += (hidden_states,)
     
-            # 在当前层上执行前向传播,获得输出
+            # 调用当前层的 __call__ 方法，处理隐藏状态和注意力掩码，根据参数确定是否输出注意力张量
             layer_outputs = layer(
                 hidden_states, attention_mask, deterministic=deterministic, output_attentions=output_attentions
             )
     
-            # 更新隐藏状态
+            # 更新隐藏状态为当前层的输出的第一个元素
             hidden_states = layer_outputs[0]
     
-            # 如果需要输出注意力,将当前注意力添加到元组中
             if output_attentions:
+                # 如果需要输出注意力张量，则将当前层的注意力张量存入 all_attentions 中
                 all_attentions += (layer_outputs[1],)
     
-        # 如果需要输出隐藏状态,将最后一个隐藏状态添加到元组中
         if output_hidden_states:
+            # 如果需要输出隐藏状态，则将最终的隐藏状态存入 all_hidden_states 中
             all_hidden_states += (hidden_states,)
     
-        # 将输出组成一个元组
+        # 按照设定的返回方式构建输出元组 outputs
         outputs = (hidden_states, all_hidden_states, all_attentions)
     
-        # 如果不需要返回字典,将元组中的非 None 元素返回
         if not return_dict:
+            # 如果不需要以字典形式返回，则返回一个去除 None 值后的元组
             return tuple(v for v in outputs if v is not None)
     
-        # 如果需要返回字典,创建并返回 FlaxBaseModelOutput
+        # 如果需要以字典形式返回，则返回一个包含最终隐藏状态、所有隐藏状态和所有注意力张量的 FlaxBaseModelOutput 对象
         return FlaxBaseModelOutput(
             last_hidden_state=hidden_states, hidden_states=all_hidden_states, attentions=all_attentions
         )
-# 定义一个基于 Flax 的 Wav2Vec2 的稳定层归一化编码器类
 class FlaxWav2Vec2StableLayerNormEncoder(nn.Module):
-    # Wav2Vec2的配置
+    # Wav2Vec2Config类型的配置对象
     config: Wav2Vec2Config
-    # 数据类型设置为jnp.float32
+    # 数据类型，默认为32位浮点数
     dtype: jnp.dtype = jnp.float32
 
-    # 设置方法，初始化各个组件
+    # 模块设置方法，初始化各个子模块
     def setup(self):
-        # 初始化位置卷积嵌入
+        # 位置卷积嵌入层对象，使用Wav2Vec2Config配置和指定数据类型
         self.pos_conv_embed = FlaxWav2Vec2PositionalConvEmbedding(self.config, dtype=self.dtype)
-        # 初始化层归一化
+        # 层归一化对象，使用指定的epsilon值和数据类型
         self.layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 初始化丢弃层
+        # 丢弃层对象，使用指定的丢弃率
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout)
-        # 初始化编码器层
+        # 编码器层集合对象，使用Wav2Vec2Config配置和指定数据类型
         self.layers = FlaxWav2Vec2EncoderLayerStableLayerNormCollection(self.config, dtype=self.dtype)
 
-    # 调用方法，处理输入hidden_states，应用注意力掩码等，并返回结果
+    # 对象调用方法，实现编码器的前向计算
     def __call__(
         self,
         hidden_states,
@@ -736,22 +760,22 @@ class FlaxWav2Vec2StableLayerNormEncoder(nn.Module):
         output_hidden_states=False,
         return_dict=True,
     ):
-        # 如果存在注意力掩码
+        # 如果存在注意力掩码，则确保填充的令牌不被注意到
         if attention_mask is not None:
-            # 确保填充的标记不被关注
             hidden_states = jnp.where(
+                # 根据注意力掩码扩展到hidden_states的形状，将未被掩盖的位置置为0
                 jnp.broadcast_to(attention_mask[:, :, None], hidden_states.shape), hidden_states, 0
             )
 
         # 计算位置嵌入
         position_embeddings = self.pos_conv_embed(hidden_states)
 
-        # 加上位置嵌入
+        # 将位置嵌入加到hidden_states中
         hidden_states = hidden_states + position_embeddings
-        # 应用丢弃层
+        # 对加了位置嵌入的hidden_states进行丢弃操作
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
 
-        # 处理输入hidden_states，应用注意力掩码等，返回结果
+        # 调用编码器层集合对象进行编码器层的前向计算
         outputs = self.layers(
             hidden_states,
             attention_mask,
@@ -760,57 +784,58 @@ class FlaxWav2Vec2StableLayerNormEncoder(nn.Module):
             return_dict=return_dict,
         )
 
-        # 对最后的隐藏状态进行层归一化
+        # 对编码器输出的最后一个隐藏状态进行层归一化处理
         last_hidden_state = self.layer_norm(outputs[0])
 
-        # 更新`hidden_states`中的最后一个元素，在上述应用`layernorm`后
+        # 如果需要返回隐藏状态历史，更新最后一个`hidden_states`元素
         hidden_states = None
         if output_hidden_states:
             hidden_states = outputs[1]
             hidden_states = hidden_states[:-1] + (last_hidden_state,)
 
-        # 如果不返回字典
+        # 如果不返回字典格式的结果，则展开outputs并返回非空值
         if not return_dict:
             outputs = (last_hidden_state, hidden_states) + (outputs[2:] if output_hidden_states else outputs[1:])
             return tuple(v for v in outputs if v is not None)
 
-        # 返回FlaxBaseModelOutput
+        # 返回FlaxBaseModelOutput对象，包括最后的隐藏状态、隐藏状态历史和注意力信息
         return FlaxBaseModelOutput(
             last_hidden_state=last_hidden_state, hidden_states=hidden_states, attentions=outputs.attentions
         )
 
 
-# 定义一个基于Flax的Wav2Vec2的Gumbel向量量化器类
 class FlaxWav2Vec2GumbelVectorQuantizer(nn.Module):
     """
-    使用Gumbel softmax进行向量量化。更多信息详见[CATEGORICAL REPARAMETERIZATION WITH GUMBEL-SOFTMAX](https://arxiv.org/pdf/1611.01144.pdf)。
+    Vector quantization using gumbel softmax. See [CATEGORICAL REPARAMETERIZATION WITH
+    GUMBEL-SOFTMAX](https://arxiv.org/pdf/1611.01144.pdf) for more information.
     """
 
-    # Wav2Vec2的配置
+    # Wav2Vec2Config类型的配置对象
     config: Wav2Vec2Config
-    # 数据类型设置为jnp.float32
+    # 数据类型，默认为32位浮点数
     dtype: jnp.dtype = jnp.float32
-    # 原因和步骤：初始化对象时，设置属性
+    # 在设置方法中初始化类的一些属性
     def setup(self):
-        # 设置编码向量的分组数和每组的编码向量数
+        # 将配置中的参数赋值给实例属性
         self.num_groups = self.config.num_codevector_groups
         self.num_vars = self.config.num_codevectors_per_group
 
-        # 如果编码向量维度不能被分组数整除，则抛出异常
+        # 检查是否能够均匀分割 codevector_dim
         if self.config.codevector_dim % self.num_groups != 0:
+            # 如果不能整除，抛出数值错误异常
             raise ValueError(
                 f"`config.codevector_dim {self.config.codevector_dim} must be divisible by"
                 f" `config.num_codevector_groups` {self.num_groups} for concatenation"
             )
 
-        # 为编码向量变量（码字）提供存储空间
+        # 为存储码书变量（码字）预留空间
         self.codevectors = self.param(
             "codevectors",
             jax.nn.initializers.uniform(),
             (1, self.num_groups * self.num_vars, self.config.codevector_dim // self.num_groups),
         )
-
-        # 权重投影层，用于投影到编码向量总数的维度
+        
+        # 设置权重投影层
         self.weight_proj = nn.Dense(
             self.num_groups * self.num_vars,
             kernel_init=jax.nn.initializers.normal(1.0),
@@ -820,34 +845,27 @@ class FlaxWav2Vec2GumbelVectorQuantizer(nn.Module):
     # 静态方法：计算困惑度
     @staticmethod
     def _compute_perplexity(probs, mask=None):
-        # 如果给定了掩码，则将掩码扩展到与概率形状相同
+        # 如果有掩码，扩展掩码并应用到概率矩阵上
         if mask is not None:
             mask_extended = jnp.broadcast_to(mask.flatten()[:, None, None], probs.shape)
-            # 将掩码应用于概率，将非掩码位置上的概率置为零
             probs = jnp.where(mask_extended, probs, jnp.zeros_like(probs))
-            # 计算边际概率，即各个位置上的概率的和除以掩码位置的总数
             marginal_probs = probs.sum(axis=0) / mask.sum()
         else:
-            # 如果没有给定掩码，则计算平均概率
+            # 否则，计算概率矩阵的平均值
             marginal_probs = probs.mean(axis=0)
 
-        # 计算困惑度 = exp(-sum(边际概率 * log(边际概率 + 1e-7))) 的和
+        # 计算困惑度
         perplexity = jnp.exp(-jnp.sum(marginal_probs * jnp.log(marginal_probs + 1e-7), axis=-1)).sum()
-        # 返回困惑度
         return perplexity
-    # 定义一个方法，接受隐藏状态、时间索引掩码、是否确定性、温度参数作为输入
     def __call__(self, hidden_states, mask_time_indices=None, deterministic=True, temperature=1):
-        # 获取隐藏状态的形状信息
         batch_size, sequence_length, hidden_size = hidden_states.shape
 
-        # 将隐藏状态投影到码向量维度
+        # 将隐藏状态投影到代码向量维度
         hidden_states = self.weight_proj(hidden_states)
-        # 将隐藏状态重塑为(batch_size * sequence_length * self.num_groups, -1)的形状
         hidden_states = hidden_states.reshape(batch_size * sequence_length * self.num_groups, -1)
 
-        # 如果不是确定性的，则执行以下操作
         if not deterministic:
-            # 在可微分的方式中通过Gumbel分布采样码向量概率
+            # 使用古贝尔分布在可区分的方式中采样代码向量概率
             gumbel_rng = self.make_rng("gumbel")
             gumbels = jax.random.gumbel(gumbel_rng, hidden_states.shape)
             codevector_probs = nn.softmax((hidden_states + gumbels) / temperature)
@@ -857,64 +875,67 @@ class FlaxWav2Vec2GumbelVectorQuantizer(nn.Module):
                 hidden_states.reshape(batch_size * sequence_length, self.num_groups, -1), axis=-1
             )
             perplexity = self._compute_perplexity(codevector_soft_dist, mask_time_indices)
-        # 如果是确定性的，则执行以下操作
         else:
-            # 以不可微分的方式取argmax，计算硬码向量分布（one hot）
+            # 以非可区分的方式取 argmax
+            # 计算硬代码向量分布（one-hot）
             codevector_idx = hidden_states.argmax(axis=-1)
             codevector_probs = jax.nn.one_hot(codevector_idx, hidden_states.shape[-1]) * 1.0
             codevector_probs = codevector_probs.reshape(batch_size * sequence_length, self.num_groups, -1)
             perplexity = self._compute_perplexity(codevector_probs, mask_time_indices)
 
-        # 重塑码向量概率的形状为(batch_size * sequence_length, -1)
         codevector_probs = codevector_probs.reshape(batch_size * sequence_length, -1)
-        # 使用概率来检索码向量
+        # 使用概率值检索代码向量
         codevectors_per_group = jnp.expand_dims(codevector_probs, axis=-1) * self.codevectors
         codevectors = codevectors_per_group.reshape(batch_size * sequence_length, self.num_groups, self.num_vars, -1)
         codevectors = codevectors.sum(-2).reshape(batch_size, sequence_length, -1)
 
-        # 返回码向量和困惑度
         return codevectors, perplexity
 class FlaxWav2Vec2Adapter(nn.Module):
-    # 定义一个适配器模块，继承自 nn.Module
     config: Wav2Vec2Config
     dtype: jnp.dtype = jnp.float32
 
     def setup(self):
-        # 如果隐藏状态需要下投影，如果特征维度不匹配
+        # hidden_states require down-projection if feature dims don't match
+        # 如果特征维度不匹配，则需要对隐藏状态进行降维投影
         if self.config.output_hidden_size != self.config.hidden_size:
-            # 创建一个具有指定输出大小的全连接层，并初始化权重
+            # Initialize a Dense layer for projection with normal distribution initialization
+            # 初始化一个用于投影的稠密层，使用正态分布进行初始化
             self.proj = nn.Dense(
                 self.config.output_hidden_size,
                 kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
                 dtype=self.dtype,
             )
-            # 创建一个 LayerNorm 层
+            # Layer normalization for the projection layer
+            # 投影层的层归一化
             self.proj_layer_norm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
         else:
             self.proj = self.proj_layer_norm = None
 
-        # 创建一个适配器层的集合
+        # Initialize the collection of adapter layers
+        # 初始化适配器层集合
         self.layers = FlaxWav2Vec2AdapterLayersCollection(self.config, dtype=self.dtype)
 
     def __call__(self, hidden_states, deterministic=True):
-        # 如果需要，进行隐藏状态的下投影
+        # down-project hidden_states if required
+        # 如果需要，则对隐藏状态进行降维投影
         if self.proj is not None and self.proj_layer_norm is not None:
             hidden_states = self.proj(hidden_states)
             hidden_states = self.proj_layer_norm(hidden_states)
 
-        # 对隐藏状态进行处理
+        # Pass hidden_states through adapter layers
+        # 通过适配器层处理隐藏状态
         hidden_states = self.layers(hidden_states)
 
         return hidden_states
 
 
 class FlaxWav2Vec2AdapterLayer(nn.Module):
-    # 定义一个适配器层，继承自 nn.Module
     config: Wav2Vec2Config
     dtype: jnp.dtype = jnp.float32
 
     def setup(self):
-        # 创建一个卷积层
+        # Initialize a convolutional layer for the adapter layer
+        # 初始化适配器层的卷积层
         self.conv = nn.Conv(
             features=2 * self.config.output_hidden_size,
             kernel_size=(self.config.adapter_kernel_size,),
@@ -925,28 +946,31 @@ class FlaxWav2Vec2AdapterLayer(nn.Module):
         )
 
     def __call__(self, hidden_states):
-        # 对隐藏状态进行卷积操作
+        # Apply convolution to hidden_states
+        # 将卷积应用于隐藏状态
         hidden_states = self.conv(hidden_states)
-        # 使用门控线性单元激活函数处理隐藏状态
+        # Apply gated linear unit (GLU) activation along axis 2
+        # 沿着轴 2 应用门控线性单元（GLU）激活函数
         hidden_states = nn.glu(hidden_states, axis=2)
 
         return hidden_states
 
 
 class FlaxWav2Vec2AdapterLayersCollection(nn.Module):
-    # 定义一个适配器层的集合，继承自 nn.Module
     config: Wav2Vec2Config
     dtype: jnp.dtype = jnp.float32
 
     def setup(self):
-        # 创建适配器层的列表
+        # Initialize a list of adapter layers
+        # 初始化适配器层的列表
         self.layers = [
             FlaxWav2Vec2AdapterLayer(self.config, name=str(i), dtype=self.dtype)
             for i in range(self.config.num_adapter_layers)
         ]
 
     def __call__(self, hidden_states):
-        # 遍历适配器层列表，对隐藏状态进行处理
+        # Iterate through each adapter layer and apply it to hidden_states
+        # 遍历每个适配器层，并将其应用于隐藏状态
         for conv_layer in self.layers:
             hidden_states = conv_layer(hidden_states)
 
@@ -959,7 +983,6 @@ class FlaxWav2Vec2PreTrainedModel(FlaxPreTrainedModel):
     models.
     """
 
-    # Wav2Vec2 模型的抽象类，用于处理权重初始化和预训练模型的下载和加载
     config_class = Wav2Vec2Config
     base_model_prefix: str = "wav2vec2"
     main_input_name = "input_values"
@@ -973,37 +996,34 @@ class FlaxWav2Vec2PreTrainedModel(FlaxPreTrainedModel):
         dtype: jnp.dtype = jnp.float32,
         _do_init: bool = True,
         **kwargs,
-       
     ):
-        # 实例化一个自定义的模块对象
+        # 使用配置和数据类型初始化模块对象
         module = self.module_class(config=config, dtype=dtype, **kwargs)
-        # 调用父类的构造函数进行初始化
+        # 调用父类初始化方法，传递配置、模块对象、输入形状、随机种子、数据类型和是否执行初始化的标志
         super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
 
     def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
         # 初始化输入张量
         input_values = jnp.zeros(input_shape, dtype="i4")
-        # 创建一个与input_values形状相同的全1张量
+        # 创建一个与输入值形状相同的全1张量作为注意力掩码
         attention_mask = jnp.ones_like(input_values)
-        # 将rng切分为两部分，params_rng 和 dropout_rng
+        # 拆分随机数生成器为两部分，一个用于参数，一个用于dropout
         params_rng, dropout_rng = jax.random.split(rng, 2)
-        # 将切分后的rng存放在rngs字典中
         rngs = {"params": params_rng, "dropout": dropout_rng}
 
-        # 通过随机初始化方式初始化自定义模块的参数
+        # 使用模块的初始化方法初始化参数，返回参数字典
         random_params = self.module.init(rngs, input_values, attention_mask, return_dict=False)["params"]
 
         if params is not None:
-            # 将随机初始化的参数和已有的参数展平为一维张量
+            # 如果传入了额外的参数，将随机生成的参数与传入的参数合并
             random_params = flatten_dict(unfreeze(random_params))
             params = flatten_dict(unfreeze(params))
-            # 将缺失的键添加到已有的参数字典中
             for missing_key in self._missing_keys:
                 params[missing_key] = random_params[missing_key]
             self._missing_keys = set()
-            # 冻结参数字典并返回
             return freeze(unflatten_dict(params))
         else:
+            # 否则直接返回随机生成的参数
             return random_params
 
     @add_start_docstrings_to_model_forward(WAV_2_VEC_2_INPUTS_DOCSTRING)
@@ -1020,32 +1040,31 @@ class FlaxWav2Vec2PreTrainedModel(FlaxPreTrainedModel):
         freeze_feature_encoder: bool = False,
         return_dict: Optional[bool] = None,
     ):
-        # 判断是否需要输出注意力权重
+        # 如果输出注意力没有明确指定，则使用配置中的设置
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-        # 判断是否需要输出隐藏状态
+        # 如果输出隐藏状态没有明确指定，则使用配置中的设置
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 判断是否返回字典格式结果
+        # 如果返回字典没有明确指定，则使用配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.return_dict
 
-        # 获取输入值的batch size和序列长度
+        # 获取输入数据的批量大小和序列长度
         batch_size, sequence_length = input_values.shape
 
-        # 如果attention_mask为None，创建与input_values形状相同的全1张量作为attention_mask
+        # 如果没有提供注意力掩码，则创建一个全1的注意力掩码
         if attention_mask is None:
             attention_mask = jnp.ones((batch_size, sequence_length))
 
-        # 创建用于存放PRNGKey的字典
+        # 处理可能存在的随机数生成器
         rngs = {}
-        # 如果dropout_rng不为None，将其加入rngs字典
         if dropout_rng is not None:
             rngs["dropout"] = dropout_rng
 
-        # 创建inputs字典并存储参数
+        # 构建输入参数字典，如果未提供params则使用self.params
         inputs = {"params": params or self.params}
 
-        # 对自定义模块的apply方法进行调用
+        # 调用模块的应用方法，执行模型前向传播
         return self.module.apply(
             inputs,
             jnp.array(input_values, dtype="f4"),
@@ -1062,35 +1081,38 @@ class FlaxWav2Vec2PreTrainedModel(FlaxPreTrainedModel):
     def _get_feat_extract_output_lengths(
         self, input_lengths: Union[jnp.ndarray, int], add_adapter: Optional[bool] = None
     ):
+        # 调用模块的特征提取方法，获取输出长度
         return self.module._get_feat_extract_output_lengths(input_lengths, add_adapter=add_adapter)
-# 定义 FlaxWav2Vec2Module 类，继承自 nn.Module
+# 定义一个名为 FlaxWav2Vec2Module 的 PyTorch 模块
 class FlaxWav2Vec2Module(nn.Module):
-    # 配置信息
+    # 类型注解：配置信息为 Wav2Vec2Config 类型
     config: Wav2Vec2Config
     # 数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化方法
+    # 模块初始化方法
     def setup(self):
-        # 创建 FlaxWav2Vec2FeatureEncoder 对象
+        # 初始化特征提取器，使用配置信息和指定数据类型
         self.feature_extractor = FlaxWav2Vec2FeatureEncoder(self.config, dtype=self.dtype)
-        # 创建 FlaxWav2Vec2FeatureProjection 对象
+        # 初始化特征投影器，使用配置信息和指定数据类型
         self.feature_projection = FlaxWav2Vec2FeatureProjection(self.config, dtype=self.dtype)
-        # 创建 masked_spec_embed 参数
+        # 初始化掩码后的谱图嵌入参数，形状为 (hidden_size,)
         self.masked_spec_embed = self.param(
             "masked_spec_embed", jax.nn.initializers.uniform(), (self.config.hidden_size,)
         )
 
-        # 根据 config.do_stable_layer_norm 的值创建不同的编码器
+        # 如果配置指定使用稳定层归一化
         if self.config.do_stable_layer_norm:
+            # 初始化编码器，使用配置信息和指定数据类型
             self.encoder = FlaxWav2Vec2StableLayerNormEncoder(self.config, dtype=self.dtype)
         else:
+            # 抛出错误，暂不支持稳定层归一化未启用的情况
             raise NotImplementedError("``config.do_stable_layer_norm is False`` is currently not supported.")
 
-        # 如果配置中需要 adapter，则创建 FlaxWav2Vec2Adapter 对象
+        # 如果配置指定添加适配器，初始化适配器
         self.adapter = FlaxWav2Vec2Adapter(self.config, dtype=self.dtype) if self.config.add_adapter else None
 
-    # 前向传播方法
+    # 模块的调用方法，用于执行模型前向传播
     def __call__(
         self,
         input_values,
@@ -1102,27 +1124,29 @@ class FlaxWav2Vec2Module(nn.Module):
         freeze_feature_encoder=False,
         return_dict=None,
     ):
-        # 提取特征
+        # 提取特征向量
         extract_features = self.feature_extractor(input_values, freeze_feature_encoder=freeze_feature_encoder)
 
-        # 根据 attention_mask 计算相应的注意力掩码
+        # 如果有注意力掩码
         if attention_mask is not None:
+            # 计算对应于特征向量的减少注意力掩码
             attention_mask = self._get_feature_vector_attention_mask(
                 extract_features.shape[1], attention_mask, add_adapter=False
             )
 
-        # 进行特征投射
+        # 特征投影
         hidden_states, extract_features = self.feature_projection(extract_features, deterministic=deterministic)
-
-        # 如果给定了 mask_time_indices，则应用 SpecAugment 增强
+        
+        # 如果有时间轴索引的掩码
         if mask_time_indices is not None:
+            # 在时间轴上应用 SpecAugment，并使用给定的索引
             hidden_states = jnp.where(
                 jnp.broadcast_to(mask_time_indices[:, :, None], hidden_states.shape),
                 jnp.broadcast_to(self.masked_spec_embed[None, None, :], hidden_states.shape),
                 hidden_states,
             )
 
-        # 通过编码器进行编码
+        # 编码器的输出
         encoder_outputs = self.encoder(
             hidden_states,
             attention_mask=attention_mask,
@@ -1132,17 +1156,19 @@ class FlaxWav2Vec2Module(nn.Module):
             return_dict=return_dict,
         )
 
-        # 获取编码器的输出
+        # 编码器的隐藏状态
         hidden_states = encoder_outputs[0]
 
-        # 如果配置中需要 adapter，则应用 adapter
+        # 如果有适配器，应用适配器
         if self.adapter is not None:
             hidden_states = self.adapter(hidden_states)
 
-        # 根据 return_dict 的值返回不同的输出
+        # 如果不返回字典形式的结果
         if not return_dict:
+            # 返回元组形式的结果：(隐藏状态, 提取的特征) + 编码器输出中的其余部分
             return (hidden_states, extract_features) + encoder_outputs[1:]
 
+        # 返回 FlaxWav2Vec2BaseModelOutput 类的实例，包括最后的隐藏状态、提取的特征、隐藏状态和注意力权重
         return FlaxWav2Vec2BaseModelOutput(
             last_hidden_state=hidden_states,
             extract_features=extract_features,
@@ -1150,30 +1176,27 @@ class FlaxWav2Vec2Module(nn.Module):
             attentions=encoder_outputs.attentions,
         )
 
-    # 获取特征提取输出长度的方法
+    # 辅助方法：获取特征提取器的输出长度
     def _get_feat_extract_output_lengths(
         self, input_lengths: Union[jnp.ndarray, int], add_adapter: Optional[bool] = None
     ):
-        ...
-    ):
         """
+        Computes the output length of the convolutional layers
         计算卷积层的输出长度
         """
 
-        # 设置是否添加适配器，默认为config中设定的值
         add_adapter = self.config.add_adapter if add_adapter is None else add_adapter
 
         def _conv_out_length(input_length, kernel_size, stride):
-            # 从 https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html 获取的1D卷积层输出长度公式
+            # 1D convolutional layer output length formula taken
+            # from https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
+            # 1D卷积层输出长度的计算公式，参考自 https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
             return (input_length - kernel_size) // stride + 1
 
-        # 遍历卷积核大小和步长，计算输出长度
         for kernel_size, stride in zip(self.config.conv_kernel, self.config.conv_stride):
             input_lengths = _conv_out_length(input_lengths, kernel_size, stride)
 
-        # 如果需要添加适配器层
         if add_adapter:
-            # 遍历适配器层数量，计算输出长度
             for _ in range(self.config.num_adapter_layers):
                 input_lengths = _conv_out_length(input_lengths, 1, self.config.adapter_stride)
 
@@ -1182,38 +1205,39 @@ class FlaxWav2Vec2Module(nn.Module):
     def _get_feature_vector_attention_mask(
         self, feature_vector_length: int, attention_mask: jnp.ndarray, add_adapter=None
     ):
-        # 根据attention_mask的累积值计算非填充长度
+        # Effectively attention_mask.sum(-1), but not inplace to be able to run
+        # on inference mode.
+        # 实际上是 attention_mask.sum(-1)，但不是原地操作，以便在推断模式下运行。
         non_padded_lengths = attention_mask.cumsum(axis=-1)[:, -1]
 
-        # 获取特征提取输出长度
         output_lengths = self._get_feat_extract_output_lengths(non_padded_lengths, add_adapter=add_adapter)
 
         batch_size = attention_mask.shape[0]
 
-        # 初始化全零的注意力掩码
         attention_mask = jnp.zeros((batch_size, feature_vector_length), dtype=attention_mask.dtype)
-        # 确保所有输出长度之前的值都被关注
+        # these two operations makes sure that all values
+        # before the output lengths indices are attended to
+        # 这两个操作确保所有输出长度索引之前的值都被关注到
         attention_mask = attention_mask.at[jnp.arange(attention_mask.shape[0]), output_lengths - 1].set(1)
-        # 翻转计算出的注意力掩码
         attention_mask = jnp.flip(jnp.flip(attention_mask, -1).cumsum(-1), -1).astype("bool")
         return attention_mask
-# 添加起始文档字符串，描述Wav2Vec2模型输出原始隐藏状态的基本模型，以及其它相关信息
+# 添加函数文档字符串和装饰器，描述此类作为没有特定输出头部的裸Wav2Vec2模型转换器
 @add_start_docstrings(
     "The bare Wav2Vec2 Model transformer outputting raw hidden-states without any specific head on top.",
     WAV_2_VEC_2_START_DOCSTRING,
 )
+# 定义 FlaxWav2Vec2Model 类，继承自 FlaxWav2Vec2PreTrainedModel 类
 class FlaxWav2Vec2Model(FlaxWav2Vec2PreTrainedModel):
-    # 使用FlaxWav2Vec2Module作为模块类
-    module_class = FlaxWav2Vec2Module
+    module_class = FlaxWav2Vec2Module  # 设置模块类为 FlaxWav2Vec2Module
 
 
-# 添加文档字符串描述返回、示例等信息，并将其替换为FlaxWav2Vec2Model的调用文档字符串
+# 定义 FLAX_WAV2VEC2_MODEL_DOCSTRING 作为模型的文档字符串，描述返回值和示例用法
 FLAX_WAV2VEC2_MODEL_DOCSTRING = """
     Returns:
 
     Example:
 
-    ```py
+    ```python
     >>> from transformers import AutoProcessor, FlaxWav2Vec2Model
     >>> from datasets import load_dataset
     >>> import soundfile as sf
@@ -1238,38 +1262,34 @@ FLAX_WAV2VEC2_MODEL_DOCSTRING = """
     ```
 """
 
-# 重写FlaxWav2Vec2Model的调用文档字符串
+# 调用 overwrite_call_docstring 函数，将输入的文档字符串添加到 FlaxWav2Vec2Model 类的文档字符串中
 overwrite_call_docstring(
     FlaxWav2Vec2Model,
     WAV_2_VEC_2_INPUTS_DOCSTRING + FLAX_WAV2VEC2_MODEL_DOCSTRING,
 )
 
-# 添加替换返回文档字符串
+# 调用 append_replace_return_docstrings 函数，为 FlaxWav2Vec2Model 类添加返回值文档字符串
 append_replace_return_docstrings(
     FlaxWav2Vec2Model, output_type=FlaxWav2Vec2BaseModelOutput, config_class=Wav2Vec2Config
 )
 
 
-# 创建FlaxWav2Vec2ForCTCModule类
+# 定义 FlaxWav2Vec2ForCTCModule 类，继承自 nn.Module
 class FlaxWav2Vec2ForCTCModule(nn.Module):
-    # 定义config属性为Wav2Vec2Config，dtype属性为jnp.float32
     config: Wav2Vec2Config
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化方法
+    # 初始化函数，设置模块及其成员
     def setup(self):
-        # 创建wav2vec2属性，使用FlaxWav2Vec2Module和指定的config和dtype
-        self.wav2vec2 = FlaxWav2Vec2Module(self.config, dtype=self.dtype)
-        # 创建dropout属性，使用指定的config.final_dropout
-        self.dropout = nn.Dropout(rate=self.config.final_dropout)
-        # 创建lm_head属性，使用指定的config.vocab_size和kernel_init等参数
-        self.lm_head = nn.Dense(
+        self.wav2vec2 = FlaxWav2Vec2Module(self.config, dtype=self.dtype)  # 初始化 wav2vec2 模块
+        self.dropout = nn.Dropout(rate=self.config.final_dropout)  # 初始化 dropout 层
+        self.lm_head = nn.Dense(  # 初始化语言模型头部 Dense 层
             self.config.vocab_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
 
-    # 调用方法
+    # 调用函数，定义模型的前向传播逻辑
     def __call__(
         self,
         input_values,
@@ -1281,7 +1301,7 @@ class FlaxWav2Vec2ForCTCModule(nn.Module):
         freeze_feature_encoder=False,
         return_dict=None,
     ):
-        # 对input_values执行wav2vec2操作，获取输出结果
+        # 调用 wav2vec2 模块进行前向传播，获取输出
         outputs = self.wav2vec2(
             input_values,
             attention_mask=attention_mask,
@@ -1293,20 +1313,16 @@ class FlaxWav2Vec2ForCTCModule(nn.Module):
             return_dict=return_dict,
         )
 
-        # 获取隐藏状态，并对其进行dropout
-        hidden_states = outputs[0]
-        hidden_states = self.dropout(hidden_states, deterministic=deterministic)
+        hidden_states = outputs[0]  # 获取隐藏状态
+        hidden_states = self.dropout(hidden_states, deterministic=deterministic)  # 应用 dropout
 
-        # 计算logits
-        logits = self.lm_head(hidden_states)
+        logits = self.lm_head(hidden_states)  # 计算 logits
 
-        # 如果return_dict为False，则返回logits和outputs[2:]
         if not return_dict:
-            return (logits,) + outputs[2:]
+            return (logits,) + outputs[2:]  # 返回 logits 和其他输出
 
-        # 如果return_dict为True，则返回FlaxCausalLMOutput类型的结果
+        # 返回包含 logits、隐藏状态和注意力的 FlaxCausalLMOutput 对象
         return FlaxCausalLMOutput(logits=logits, hidden_states=outputs.hidden_states, attentions=outputs.attentions)
-    # 定义一个方法来计算卷积层的输出长度
     def _get_feat_extract_output_lengths(
         self,
         input_lengths: Union[jnp.ndarray, int],
@@ -1316,114 +1332,77 @@ class FlaxWav2Vec2ForCTCModule(nn.Module):
         Computes the output length of the convolutional layers
         """
 
-        # 如果 add_adapter 为 None，则使用配置中的 add_adapter
+        # 如果 add_adapter 未提供，则使用配置中的默认值
         add_adapter = self.config.add_adapter if add_adapter is None else add_adapter
 
-        # 定义一个方法来计算卷积层输出长度
         def _conv_out_length(input_length, kernel_size, stride):
-            # 1D 卷积层的输出长度公式来自于 https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
+            # 从 https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html 获取的
+            # 1维卷积层输出长度计算公式
             return (input_length - kernel_size) // stride + 1
 
-        # 根据配置中的卷积核大小和步长计算输入长度的输出长度
+        # 遍历每个卷积核大小和步长，并计算每层卷积的输出长度
         for kernel_size, stride in zip(self.config.conv_kernel, self.config.conv_stride):
             input_lengths = _conv_out_length(input_lengths, kernel_size, stride)
 
-        # 如果要添加适配器层，则根据配置中的适配器层数量计算输入长度的输出长度
+        # 如果需要添加适配器层，根据配置中的适配器层数量和步长进行计算
         if add_adapter:
             for _ in range(self.config.num_adapter_layers):
                 input_lengths = _conv_out_length(input_lengths, 1, self.config.adapter_stride)
 
-        # 返回最终的输入长度
+        # 返回最终计算得到的输出长度
         return input_lengths
-# 添加文档字符串描述 Wav2Vec2 模型与用于 CTC 的语言建模头部
+# 使用装饰器为 FlaxWav2Vec2ForCTC 类添加文档字符串，描述其为在 Connectionist Temporal Classification (CTC) 上加有语言建模头部的 Wav2Vec2 模型
 @add_start_docstrings(
     "Wav2Vec2 Model with a `language modeling` head on top for Connectionist Temporal Classification (CTC).",
     WAV_2_VEC_2_START_DOCSTRING,
 )
-# 定义FlaxWav2Vec2ForCTC类，继承自FlaxWav2Vec2PreTrainedModel类
+# 定义 FlaxWav2Vec2ForCTC 类，继承自 FlaxWav2Vec2PreTrainedModel 类
 class FlaxWav2Vec2ForCTC(FlaxWav2Vec2PreTrainedModel):
-    # 模型类别为FlaxWav2Vec2ForCTCModule
+    # 将 module_class 属性指定为 FlaxWav2Vec2ForCTCModule
     module_class = FlaxWav2Vec2ForCTCModule
 
-# FlaxWav2Vec2ForCTC类的文档字符串
-FLAX_WAV2VEC2_FOR_CTC_DOCSTRING = """
-    Returns:
 
-    Example:
+# FLAX_WAV2VEC2_FOR_CTC_DOCSTRING 是一个长字符串，描述了 FlaxWav2Vec2ForCTC 类的返回值和示例用法
 
-    # 示例代码，使用模型进行预测解码
-    ```py
-    >>> import jax.numpy as jnp
-    >>> from transformers import AutoProcessor, FlaxWav2Vec2ForCTC
-    >>> from datasets import load_dataset
-    >>> import soundfile as sf
-
-    >>> processor = AutoProcessor.from_pretrained("facebook/wav2vec2-large-960h-lv60")
-    >>> model = FlaxWav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-960h-lv60")
-
-    # 自定义函数map_to_array，用于处理batch数据
-    >>> def map_to_array(batch):
-    ...     speech, _ = sf.read(batch["file"])
-    ...     batch["speech"] = speech
-    ...     return batch
-
-    # 加载数据集并映射处理
-    >>> ds = load_dataset("hf-internal-testing/librispeech_asr_dummy", "clean", split="validation")
-    >>> ds = ds.map(map_to_array)
-
-    # 处理输入数据并生成预测结果
-    >>> input_values = processor(
-    ...     ds["speech"][0], sampling_rate=16_000, return_tensors="np"
-    ... ).input_values  # Batch size 1
-    >>> logits = model(input_values).logits
-    >>> predicted_ids = jnp.argmax(logits, axis=-1)
-
-    # 解码预测结果
-    >>> transcription = processor.decode(predicted_ids[0])
-    >>> # should give:  "A MAN SAID TO THE UNIVERSE SIR I EXIST"
-    ```
-
-"""
-
-# 覆盖FlaxWav2Vec2ForCTC类的调用文档字符串
+# 调用 overwrite_call_docstring 函数，为 FlaxWav2Vec2ForCTC 类的文档字符串添加输入参数文档和 FLAX_WAV2VEC2_FOR_CTC_DOCSTRING 内容
 overwrite_call_docstring(
     FlaxWav2Vec2ForCTC,
     WAV_2_VEC_2_INPUTS_DOCSTRING + FLAX_WAV2VEC2_FOR_CTC_DOCSTRING,
 )
-# 追加替换返回文档字符串
+
+# 调用 append_replace_return_docstrings 函数，为 FlaxWav2Vec2ForCTC 类添加输出类型文档，并指定 output_type 和 config_class 参数
 append_replace_return_docstrings(FlaxWav2Vec2ForCTC, output_type=FlaxCausalLMOutput, config_class=Wav2Vec2Config)
 
 
-# 定义FlaxWav2Vec2ForPreTrainingModule类，继承自nn.Module类
+# 定义 FlaxWav2Vec2ForPreTrainingModule 类，继承自 nn.Module 类
 class FlaxWav2Vec2ForPreTrainingModule(nn.Module):
-    # 定义config属性，类型为Wav2Vec2Config类
+    # 设置 config 属性为 Wav2Vec2Config 类型，dtype 属性默认为 jnp.float32
     config: Wav2Vec2Config
-    # 定义dtype属性，默认为jnp.float32
     dtype: jnp.dtype = jnp.float32
 
-    # 模块初始化方法
+    # 定义 setup 方法，初始化模块
     def setup(self):
-        # 初始化wav2vec2属性，使用FlaxWav2Vec2Module类
+        # 实例化 FlaxWav2Vec2Module 类，并存储在 self.wav2vec2 属性中
         self.wav2vec2 = FlaxWav2Vec2Module(self.config, dtype=self.dtype)
-        # 初始化dropout_features属性，使用nn.Dropout类
+        # 使用 self.config.feat_quantizer_dropout 参数初始化 nn.Dropout 类，存储在 self.dropout_features 属性中
         self.dropout_features = nn.Dropout(self.config.feat_quantizer_dropout)
 
-        # 初始化quantizer属性，使用FlaxWav2Vec2GumbelVectorQuantizer类
+        # 实例化 FlaxWav2Vec2GumbelVectorQuantizer 类，并存储在 self.quantizer 属性中
         self.quantizer = FlaxWav2Vec2GumbelVectorQuantizer(self.config, dtype=self.dtype)
-        # 初始化project_q属性，使用nn.Dense类，进行压缩编码向量的投影转换
+        # 使用 self.config.proj_codevector_dim 参数初始化 nn.Dense 类，存储在 self.project_q 属性中
         self.project_q = nn.Dense(
             self.config.proj_codevector_dim,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 初始化project_hid属性，使用nn.Dense类，进行隐藏状态的投影转换
+        # 使用 self.config.proj_codevector_dim 参数初始化 nn.Dense 类，存储在 self.project_hid 属性中
         self.project_hid = nn.Dense(
             self.config.proj_codevector_dim,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
 
-    # 定义调用方法，接受多个参数
+    # 定义 __call__ 方法，实现对象的可调用性
     def __call__(
         self,
         input_values,
@@ -1435,41 +1414,86 @@ class FlaxWav2Vec2ForPreTrainingModule(nn.Module):
         output_hidden_states=None,
         freeze_feature_encoder=False,
         return_dict=None,
-   # 该方法是一个私有方法，用于获取特征提取层的输出长度
+        # 函数参数的注释可以在文档字符串中找到
+        **kwargs,
+    ):
+        # 省略方法内部的具体实现，不在注释范围内
+        ):
+        r"""
+        Returns:
+
+        Example:
+
+        ```python
+
+        ```"""
+
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        # 使用给定的参数调用wav2vec2模型，获取输出
+        outputs = self.wav2vec2(
+            input_values,
+            attention_mask=attention_mask,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            mask_time_indices=mask_time_indices,
+            deterministic=deterministic,
+            freeze_feature_encoder=freeze_feature_encoder,
+            return_dict=return_dict,
+        )
+
+        # 将所有转换后的特征（包括被掩码的）投影到最终的向量量化维度
+        transformer_features = self.project_hid(outputs[0])
+
+        # 量化所有（未被掩码的）提取特征并投影到最终的向量量化维度
+        extract_features = self.dropout_features(outputs[1], deterministic=deterministic)
+        quantized_features, codevector_perplexity = self.quantizer(
+            extract_features, mask_time_indices, deterministic=deterministic, temperature=gumbel_temperature
+        )
+        quantized_features = self.project_q(quantized_features)
+
+        # 如果不使用返回字典，则返回元组形式的输出
+        if not return_dict:
+            return (transformer_features, quantized_features, codevector_perplexity) + outputs[2:]
+
+        # 使用FlaxWav2Vec2ForPreTrainingOutput类封装输出，包括所有相关信息
+        return FlaxWav2Vec2ForPreTrainingOutput(
+            projected_states=transformer_features,
+            projected_quantized_states=quantized_features,
+            codevector_perplexity=codevector_perplexity,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
     def _get_feat_extract_output_lengths(
         self, input_lengths: Union[jnp.ndarray, int], add_adapter: Optional[bool] = None
     ):
         """
-        Computes the output length of the convolutional layers
+        计算卷积层的输出长度
         """
-        # 如果add_adapter为None，则使用配置中的add_adapter值
+
         add_adapter = self.config.add_adapter if add_adapter is None else add_adapter
 
-        # 定义计算卷积层输出长度的函数
         def _conv_out_length(input_length, kernel_size, stride):
-            # 1D卷积层输出长度公式来自于https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
+            # 从 https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html 中得到的一维卷积层输出长度公式
             return (input_length - kernel_size) // stride + 1
 
-        # 遍历配置中的卷积核大小和步幅，更新输入长度
+        # 遍历配置的卷积核大小和步幅，计算每一层卷积层的输出长度
         for kernel_size, stride in zip(self.config.conv_kernel, self.config.conv_stride):
             input_lengths = _conv_out_length(input_lengths, kernel_size, stride)
 
-        # 如果需要添加适配器，再次根据适配器的参数更新输入长度
+        # 如果需要添加适配器层，则计算适配器层的输出长度
         if add_adapter:
             for _ in range(self.config.num_adapter_layers):
                 input_lengths = _conv_out_length(input_lengths, 1, self.config.adapter_stride)
 
-        # 返回更新后的输入长度
         return input_lengths
-# 使用'add_start_docstrings'装饰器为FlaxWav2Vec2ForPreTraining类添加注释和文档字符串
 @add_start_docstrings("""Wav2Vec2 Model with a quantizer and `VQ` head on top.""", WAV_2_VEC_2_START_DOCSTRING)
 class FlaxWav2Vec2ForPreTraining(FlaxWav2Vec2PreTrainedModel):
-    # 设置模型类别为FlaxWav2Vec2ForPreTrainingModule
     module_class = FlaxWav2Vec2ForPreTrainingModule
 
-    # 使用'add_start_docstrings_to_model_forward'装饰器为__call__方法添加注释和文档字符串
     @add_start_docstrings_to_model_forward(WAV_2_VEC_2_INPUTS_DOCSTRING)
-    # 重写__call__方法，添加'gumbel_temperature'输入参数
+    # 覆盖原始定义，添加了 `gumbel_temperature` 输入参数
     def __call__(
         self,
         input_values,
@@ -1485,21 +1509,19 @@ class FlaxWav2Vec2ForPreTraining(FlaxWav2Vec2PreTrainedModel):
         freeze_feature_encoder: bool = False,
         return_dict: Optional[bool] = None,
     ):
-        # 设置output_attentions, output_hidden_states和return_dict默认值
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
         return_dict = return_dict if return_dict is not None else self.config.return_dict
 
-        # 获取input_values的batch_size和sequence_length
         batch_size, sequence_length = input_values.shape
 
-        # 如果attention_mask是None，则创建一个全为1的矩阵
+        # 如果未提供注意力掩码，则创建一个全为1的注意力掩码
         if attention_mask is None:
             attention_mask = jnp.ones((batch_size, sequence_length))
 
-        # 处理需要的PRNG
+        # 处理可能需要的任何伪随机数生成器
         rngs = {}
         if dropout_rng is not None:
             rngs["dropout"] = dropout_rng
@@ -1507,10 +1529,10 @@ class FlaxWav2Vec2ForPreTraining(FlaxWav2Vec2PreTrainedModel):
         if gumbel_rng is not None:
             rngs["gumbel"] = gumbel_rng
 
-        # 设置inputs为params或self.params
+        # 准备模型输入
         inputs = {"params": params or self.params}
 
-        # 调用module的apply方法，传入各种参数和参数值
+        # 调用模块的前向方法
         return self.module.apply(
             inputs,
             jnp.array(input_values, dtype="f4"),
@@ -1526,13 +1548,12 @@ class FlaxWav2Vec2ForPreTraining(FlaxWav2Vec2PreTrainedModel):
         )
 
 
-# 给FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING添加注释和文档字符串
 FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING = """
     Returns:
 
     Example:
 
-    ```py
+    ```python
     >>> import optax
     >>> import numpy as np
     >>> import jax.numpy as jnp
@@ -1553,34 +1574,33 @@ FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING = """
 
     >>> ds = load_dataset("hf-internal-testing/librispeech_asr_dummy", "clean", split="validation")
     >>> ds = ds.map(map_to_array)
+    >>> input_values = feature_extractor(ds["speech"][0], return_tensors="np").input_values  # 获取输入特征向量值，批大小为1
 
+    >>> # 计算掩码索引
+    >>> batch_size, raw_sequence_length = input_values.shape  # 获取批大小和原始序列长度
+    >>> sequence_length = model._get_feat_extract_output_lengths(raw_sequence_length)  # 根据模型获取特征提取后的序列长度
+    >>> mask_time_indices = _compute_mask_indices((batch_size, sequence_length), mask_prob=0.2, mask_length=2)  # 计算掩码时间点的索引
 
+    >>> outputs = model(input_values, mask_time_indices=mask_time_indices)  # 使用模型进行推理，传入掩码时间点索引
 
-
-注释：
-    >>> input_values = feature_extractor(ds["speech"][0], return_tensors="np").input_values  # Batch size 1
-
-    >>> # 计算被掩盖的索引
-    >>> batch_size, raw_sequence_length = input_values.shape
-    >>> # 通过模型获取特征提取后的输出长度
-    >>> sequence_length = model._get_feat_extract_output_lengths(raw_sequence_length)
-    >>> # 计算需要被掩盖的时间索引
-    >>> mask_time_indices = _compute_mask_indices((batch_size, sequence_length), mask_prob=0.2, mask_length=2)
-
-    >>> outputs = model(input_values, mask_time_indices=mask_time_indices)
-
-    >>> # 计算预测（=projected_states）和目标（=projected_quantized_states）之间的余弦相似度
+    >>> # 计算预测状态(outputs.projected_states)与目标状态(outputs.projected_quantized_states)之间的余弦相似度
     >>> cosine_sim = optax.cosine_similarity(outputs.projected_states, outputs.projected_quantized_states)
 
-    >>> # 证明余弦相似度远高于随机
+    >>> # 确保余弦相似度在掩码时间点上的平均值高于0.5
     >>> assert np.asarray(cosine_sim)[mask_time_indices].mean() > 0.5
-```  
-# 覆盖 FlaxWav2Vec2ForPreTraining 的文档字符串
+"""
+为 `FlaxWav2Vec2ForPreTraining` 类的 `__call__` 方法覆盖文档字符串，
+使用 `WAV_2_VEC_2_INPUTS_DOCSTRING` 和 `FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING` 进行替换。
+"""
 overwrite_call_docstring(
     FlaxWav2Vec2ForPreTraining,
     WAV_2_VEC_2_INPUTS_DOCSTRING + FLAX_WAV2VEC2_FOR_PRETRAINING_DOCSTRING,
 )
-# 追加并替换 FlaxWav2Vec2ForPreTraining 的返回文档字符串
+
+"""
+为 `FlaxWav2Vec2ForPreTraining` 类附加和替换返回值文档字符串，
+使用 `FlaxWav2Vec2ForPreTrainingOutput` 作为输出类型，`Wav2Vec2Config` 作为配置类。
+"""
 append_replace_return_docstrings(
     FlaxWav2Vec2ForPreTraining, output_type=FlaxWav2Vec2ForPreTrainingOutput, config_class=Wav2Vec2Config
 )

@@ -1,26 +1,19 @@
-# `.\transformers\models\siglip\__init__.py`
+# `.\models\siglip\__init__.py`
 
-```py
-# 版权声明和许可证信息
-# 版权归 The HuggingFace Team 所有，保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证，否则不得使用此文件
-# 可以在以下网址获取许可证副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取特定语言的权限和限制
-
-# 导入必要的模块和函数
+```
+# 引入必要的依赖和模块结构定义
 from typing import TYPE_CHECKING
+
+# 从 HuggingFace 的 utils 模块中导入所需的工具和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
+    is_sentencepiece_available,
     is_torch_available,
     is_vision_available,
 )
 
-# 定义模块导入结构
+# 定义模块的导入结构，用于动态导入所需的类和函数
 _import_structure = {
     "configuration_siglip": [
         "SIGLIP_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -29,77 +22,95 @@ _import_structure = {
         "SiglipVisionConfig",
     ],
     "processing_siglip": ["SiglipProcessor"],
-    "tokenization_siglip": ["SiglipTokenizer"],
 }
 
-# 检查视觉模块是否可用，如果不可用则引发异常
+# 检查是否存在 sentencepiece，若不存在则引发 OptionalDependencyNotAvailable 异常
+try:
+    if not is_sentencepiece_available():
+        raise OptionalDependencyNotAvailable()
+except OptionalDependencyNotAvailable:
+    pass
+else:
+    # 如果存在，将 SiglipTokenizer 加入导入结构
+    _import_structure["tokenization_siglip"] = ["SiglipTokenizer"]
+
+# 检查是否存在 vision 库，若不存在则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在，将 SiglipImageProcessor 加入导入结构
     _import_structure["image_processing_siglip"] = ["SiglipImageProcessor"]
 
-# 检查 Torch 模块是否可用，如果不可用则引发异常
+# 检查是否存在 torch 库，若不存在则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在，将 Siglip 相关的模型和类加入导入结构
     _import_structure["modeling_siglip"] = [
         "SIGLIP_PRETRAINED_MODEL_ARCHIVE_LIST",
         "SiglipModel",
         "SiglipPreTrainedModel",
         "SiglipTextModel",
         "SiglipVisionModel",
+        "SiglipForImageClassification",
     ]
 
-# 如果是类型检查阶段
+# 如果是类型检查阶段，导入所需的具体类和函数
 if TYPE_CHECKING:
-    # 导入配置相关模块
     from .configuration_siglip import (
         SIGLIP_PRETRAINED_CONFIG_ARCHIVE_MAP,
         SiglipConfig,
         SiglipTextConfig,
         SiglipVisionConfig,
     )
-    # 导入处理相关模块
     from .processing_siglip import SiglipProcessor
-    # 导入标记化相关模块
-    from .tokenization_siglip import SiglipTokenizer
 
-    # 检查视觉模块是否可用，如果不可用则引发异常
+    # 检查是否存在 sentencepiece，若存在则导入 SiglipTokenizer
+    try:
+        if not is_sentencepiece_available():
+            raise OptionalDependencyNotAvailable()
+    except OptionalDependencyNotAvailable:
+        pass
+    else:
+        from .tokenization_siglip import SiglipTokenizer
+
+    # 检查是否存在 vision 库，若存在则导入 SiglipImageProcessor
     try:
         if not is_vision_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入图像处理相关模块
         from .image_processing_siglip import SiglipImageProcessor
 
-    # 检查 Torch 模块是否可用，如果不可用则引发异常
+    # 检查是否存在 torch 库，若存在则导入 Siglip 相关的模型和类
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入建模相关模块
         from .modeling_siglip import (
             SIGLIP_PRETRAINED_MODEL_ARCHIVE_LIST,
+            SiglipForImageClassification,
             SiglipModel,
             SiglipPreTrainedModel,
             SiglipTextModel,
             SiglipVisionModel,
         )
 
-# 如果不是类型检查阶段
 else:
+    # 如果不是类型检查阶段，则什么都不做，这部分代码不会执行
+    pass
     import sys
-
-    # 将当前模块设置为 LazyModule
+    导入 sys 模块，用于访问和操作 Python 解释器的运行时环境和变量。
+    
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+    将当前模块注册为一个懒加载模块。这行代码的作用是将当前模块的模块对象（通过__name__获取）关联到一个自定义的 _LazyModule 实例，这个实例接受当前模块的名称、文件路径（通过 globals()["__file__"] 获取）、一个导入结构（_import_structure）、和一个模块规范（module_spec=__spec__）作为参数。
 ```

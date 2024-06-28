@@ -1,53 +1,74 @@
-# `.\transformers\models\whisper\feature_extraction_whisper.py`
+# `.\models\whisper\feature_extraction_whisper.py`
 
-```py
-# 设置代码文件的编码格式为 utf-8
-# 版权声明，许可证信息等
+```
+# 设置文件编码为 UTF-8，确保支持非英文字符的正确解析
+# 版权声明，使用 Apache 许可证 2.0 版本
+#
+# 根据 Apache 许可证 2.0 版本规定，除非符合许可证要求，否则禁止使用本文件中的代码
+#
+# 引入必要的库和模块
 """
 Feature extractor class for Whisper
 """
-
-# 导入需要的模块和库
+# 引入类型提示相关模块
 from typing import List, Optional, Union
+
+# 引入 NumPy 库，并使用 np 别名
 import numpy as np
-from ... import is_torch_available  # 导入 is_torch_available 函数
-from ...audio_utils import mel_filter_bank, spectrogram, window_function  # 导入音频处理相关的函数
-from ...feature_extraction_sequence_utils import SequenceFeatureExtractor  # 导入序列特征提取器
-from ...feature_extraction_utils import BatchFeature  # 导入 BatchFeature 类
-from ...utils import TensorType, logging  # 导入 TensorType、logging 类/函数
 
-if is_torch_available():  # 如果 torch 可用
-    import torch  # 导入 torch 模块
+# 引入 Hugging Face 提供的 is_torch_available 函数，用于检查是否安装了 Torch
+from ... import is_torch_available
 
-logger = logging.get_logger(__name__)  # 获取 logger 实例
+# 从 Hugging Face 的 audio_utils 模块中引入 mel_filter_bank、spectrogram 和 window_function 函数
+from ...audio_utils import mel_filter_bank, spectrogram, window_function
+
+# 从 feature_extraction_sequence_utils 模块中引入 SequenceFeatureExtractor 类
+from ...feature_extraction_sequence_utils import SequenceFeatureExtractor
+
+# 从 feature_extraction_utils 模块中引入 BatchFeature 类
+from ...feature_extraction_utils import BatchFeature
+
+# 从 utils 模块中引入 TensorType 和 logging 函数
+from ...utils import TensorType, logging
+
+# 如果 Torch 可用，导入 Torch 库
+if is_torch_available():
+    import torch
+
+# 从 logging 模块中获取 logger 对象，并命名为 __name__，用于日志记录
+logger = logging.get_logger(__name__)
 
 # 定义 WhisperFeatureExtractor 类，继承自 SequenceFeatureExtractor 类
 class WhisperFeatureExtractor(SequenceFeatureExtractor):
     r"""
-    构建 Whisper 特征提取器。
+    Constructs a Whisper feature extractor.
 
-    该特征提取器继承自 [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`]，其中包含大部分主要方法。
-    用户应该参考这个超类以获得关于这些方法的更多信息。
+    This feature extractor inherits from [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`] which contains
+    most of the main methods. Users should refer to this superclass for more information regarding those methods.
 
-    该类使用自定义的 numpy 实现的 `短时傅里叶变换` 从原始语音中提取 mel 滤波器组特征，应该与 pytorch 的 `torch.stft` 等效。
+    This class extracts mel-filter bank features from raw speech using a custom numpy implementation of the `Short Time
+    Fourier Transform` which should match pytorch's `torch.stft` equivalent.
 
-    参数:
-        feature_size (`int`, 默认为 80):
-            提取到的特征的维度。
-        sampling_rate (`int`, 默认为 16000):
-            音频文件应该以赫兹为单位数字化的采样率。
-        hop_length (`int`, 默认为 160):
-            用于获取 Mel 频率系数的重叠窗口的长度。
-        chunk_length (`int`, 默认为 30):
-            用于修剪和填充更长或更短的音频序列的最大数量的 `sampling_rate` 样本的块数。
-        n_fft (`int`, 默认为 400):
-            傅里叶变换的大小。
-        padding_value (`float`, *可选*, 默认为 0.0):
-            用于填充音频的填充值。应该对应于静音部分。
+    Args:
+        feature_size (`int`, defaults to 80):
+            The feature dimension of the extracted features.
+        sampling_rate (`int`, defaults to 16000):
+            The sampling rate at which the audio files should be digitalized expressed in hertz (Hz).
+        hop_length (`int`, defaults to 160):
+            Length of the overlaping windows for the STFT used to obtain the Mel Frequency coefficients.
+        chunk_length (`int`, defaults to 30):
+            The maximum number of chuncks of `sampling_rate` samples used to trim and pad longer or shorter audio
+            sequences.
+        n_fft (`int`, defaults to 400):
+            Size of the Fourier transform.
+        padding_value (`float`, *optional*, defaults to 0.0):
+            Padding value used to pad the audio. Should correspond to silences.
     """
 
-    model_input_names = ["input_features"]  # 模型输入的名称为 "input_features"
+    # 类变量 model_input_names，指定输入模型的名称为 "input_features"
+    model_input_names = ["input_features"]
 
+    # 初始化方法，用于创建 WhisperFeatureExtractor 实例
     def __init__(
         self,
         feature_size=80,
@@ -56,118 +77,104 @@ class WhisperFeatureExtractor(SequenceFeatureExtractor):
         chunk_length=30,
         n_fft=400,
         padding_value=0.0,
-        return_attention_mask=False,  # 使用静默令牌（零）填充输入并没有注意力遮罩
+        return_attention_mask=False,  # pad inputs to max length with silence token (zero) and no attention mask
         **kwargs,
-    # 此类是 Wav2Vec2FeatureExtractor 的子类，继承其功能并扩展了一些新的功能
-    class CustomFeatureExtractor(Wav2Vec2FeatureExtractor):
-        # 初始化方法，接受一些参数并赋值给类属性
-        def __init__(
-            self,
-            feature_size=64,
-            sampling_rate=16000,
-            padding_value=0.0,
-            return_attention_mask=True,
-            n_fft=400,
-            hop_length=160,
-            chunk_length=1600,
-            **kwargs
-        ):
-            # 调用父类的初始化方法，设置一些基本属性
-            super().__init__(
-                feature_size=feature_size,
-                sampling_rate=sampling_rate,
-                padding_value=padding_value,
-                return_attention_mask=return_attention_mask,
-                **kwargs,
-            )
-            # 设置一些新的属性，如 n_fft、hop_length、chunk_length 等
-            self.n_fft = n_fft
-            self.hop_length = hop_length
-            self.chunk_length = chunk_length
-            self.n_samples = chunk_length * sampling_rate
-            self.nb_max_frames = self.n_samples // hop_length
-            self.sampling_rate = sampling_rate
-            # 计算 mel 滤波器组
-            self.mel_filters = mel_filter_bank(
-                num_frequency_bins=1 + n_fft // 2,
-                num_mel_filters=feature_size,
-                min_frequency=0.0,
-                max_frequency=8000.0,
-                sampling_rate=sampling_rate,
-                norm="slaney",
-                mel_scale="slaney",
-            )
-    
-        # 使用 NumPy 实现的 log-mel 谱特征提取方法
-        def _np_extract_fbank_features(self, waveform: np.array) -> np.ndarray:
-            """
-            计算提供音频的对数 mel 频谱，与 Whisper 的原始 PyTorch 实现给出的结果非常接近（容差为 1e-5）。
-            """
-            # 计算声谱图
-            log_spec = spectrogram(
-                waveform,
-                window_function(self.n_fft, "hann"),
-                frame_length=self.n_fft,
-                hop_length=self.hop_length,
-                power=2.0,
-                mel_filters=self.mel_filters,
-                log_mel="log10",
-            )
-            # 对结果进行一些后处理
-            log_spec = log_spec[:, :-1]
-            log_spec = np.maximum(log_spec, log_spec.max() - 8.0)
-            log_spec = (log_spec + 4.0) / 4.0
-            return log_spec
-    
-        # 使用 PyTorch 实现的 log-mel 谱特征提取方法
-        def _torch_extract_fbank_features(self, waveform: np.array) -> np.ndarray:
-            """
-            使用 PyTorch 的 STFT 实现计算提供音频的对数 mel 频谱。
-            """
-            # 将输入转换为 PyTorch 张量
-            waveform = torch.from_numpy(waveform).type(torch.float32)
-            # 计算短时傅里叶变换
-            window = torch.hann_window(self.n_fft)
-            stft = torch.stft(waveform, self.n_fft, self.hop_length, window=window, return_complex=True)
-            magnitudes = stft[..., :-1].abs() ** 2
-            # 计算 mel 频谱
-            mel_filters = torch.from_numpy(self.mel_filters).type(torch.float32)
-            mel_spec = mel_filters.T @ magnitudes
-            # 对结果进行一些后处理
-            log_spec = torch.clamp(mel_spec, min=1e-10).log10()
-            log_spec = torch.maximum(log_spec, log_spec.max() - 8.0)
-            log_spec = (log_spec + 4.0) / 4.0
-            return log_spec.numpy()
-    
-        # 静态方法，用于对输入值进行零均值单位方差归一化
-        @staticmethod
-        def zero_mean_unit_var_norm(
-            input_values: List[np.ndarray], attention_mask: List[np.ndarray], padding_value: float = 0.0
+    ):
+        super().__init__(
+            feature_size=feature_size,
+            sampling_rate=sampling_rate,
+            padding_value=padding_value,
+            return_attention_mask=return_attention_mask,
+            **kwargs,
+        )
+        self.n_fft = n_fft
+        self.hop_length = hop_length
+        self.chunk_length = chunk_length
+        self.n_samples = chunk_length * sampling_rate
+        self.nb_max_frames = self.n_samples // hop_length
+        self.sampling_rate = sampling_rate
+        self.mel_filters = mel_filter_bank(
+            num_frequency_bins=1 + n_fft // 2,
+            num_mel_filters=feature_size,
+            min_frequency=0.0,
+            max_frequency=8000.0,
+            sampling_rate=sampling_rate,
+            norm="slaney",
+            mel_scale="slaney",
+        )
+
+
+    def _np_extract_fbank_features(self, waveform: np.array) -> np.ndarray:
+        """
+        Compute the log-mel spectrogram of the provided audio, gives similar results to Whisper's original torch
+        implementation with 1e-5 tolerance.
+        """
+        log_spec = spectrogram(
+            waveform,
+            window_function(self.n_fft, "hann"),
+            frame_length=self.n_fft,
+            hop_length=self.hop_length,
+            power=2.0,
+            mel_filters=self.mel_filters,
+            log_mel="log10",
+        )
+        log_spec = log_spec[:, :-1]  # Remove the last frame to match expected shape
+        log_spec = np.maximum(log_spec, log_spec.max() - 8.0)  # Clamp values to ensure numerical stability
+        log_spec = (log_spec + 4.0) / 4.0  # Scale values to a range suitable for neural network input
+        return log_spec
+
+
+    def _torch_extract_fbank_features(self, waveform: np.array) -> np.ndarray:
+        """
+        Compute the log-mel spectrogram of the provided audio using the PyTorch STFT implementation.
+        """
+        waveform = torch.from_numpy(waveform).type(torch.float32)  # Convert waveform to a PyTorch tensor of float32 type
+
+        window = torch.hann_window(self.n_fft)  # Create a Hann window tensor for STFT
+        stft = torch.stft(waveform, self.n_fft, self.hop_length, window=window, return_complex=True)  # Compute STFT of waveform
+
+        magnitudes = stft[..., :-1].abs() ** 2  # Compute magnitude squared of STFT, excluding the last frame
+
+        mel_filters = torch.from_numpy(self.mel_filters).type(torch.float32)  # Convert mel filters to PyTorch tensor
+        mel_spec = mel_filters.T @ magnitudes  # Apply mel filters to the magnitude spectrogram
+
+        log_spec = torch.clamp(mel_spec, min=1e-10).log10()  # Apply logarithm after clamping for numerical stability
+        log_spec = torch.maximum(log_spec, log_spec.max() - 8.0)  # Clamp values to ensure numerical stability
+        log_spec = (log_spec + 4.0) / 4.0  # Scale values to a range suitable for neural network input
+        return log_spec.numpy()  # Convert back to NumPy array for compatibility
+
+
+    @staticmethod
+    # Copied from transformers.models.wav2vec2.feature_extraction_wav2vec2.Wav2Vec2FeatureExtractor.zero_mean_unit_var_norm
+    def zero_mean_unit_var_norm(
+        input_values: List[np.ndarray], attention_mask: List[np.ndarray], padding_value: float = 0.0
     ) -> List[np.ndarray]:
         """
-        每个列表中的数组都被标准化为零均值和单位方差
+        Every array in the list is normalized to have zero mean and unit variance
         """
-        # 如果存在attention_mask，则将其转换为np.int32类型的数组
+        # 如果提供了注意力掩码，则将其转换为 np.int32 类型的数组
         if attention_mask is not None:
             attention_mask = np.array(attention_mask, np.int32)
+            # 初始化一个空列表来存储归一化后的输入值
             normed_input_values = []
 
-            # 遍历input_values和attention_mask的长度
+            # 遍历输入值列表和对应的注意力掩码长度
             for vector, length in zip(input_values, attention_mask.sum(-1)):
-                # 对每个向量进行标准化处理并添加到normed_input_values列表中
+                # 计算当前向量的均值和方差，并进行归一化处理
                 normed_slice = (vector - vector[:length].mean()) / np.sqrt(vector[:length].var() + 1e-7)
-                # 如果长度小于标准化后的长度，则用padding_value进行填充
+                # 如果当前向量长度小于归一化后的切片长度，则填充指定的 padding_value
                 if length < normed_slice.shape[0]:
                     normed_slice[length:] = padding_value
 
+                # 将归一化后的切片添加到结果列表中
                 normed_input_values.append(normed_slice)
         else:
-            # 如果不存在attention_mask，则对input_values中的每个数组进行标准化处理并存储在normed_input_values中
+            # 如果没有提供注意力掩码，则对输入值列表中的每个数组进行归一化处理
             normed_input_values = [(x - x.mean()) / np.sqrt(x.var() + 1e-7) for x in input_values]
 
+        # 返回归一化后的输入值列表
         return normed_input_values
 
-    # 函数调用
     def __call__(
         self,
         raw_speech: Union[np.ndarray, List[float], List[np.ndarray], List[List[float]]],

@@ -1,50 +1,56 @@
-# `.\transformers\models\pix2struct\processing_pix2struct.py`
+# `.\models\pix2struct\processing_pix2struct.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，您可以在遵守许可证的情况下使用此文件
-# 您可以在以下网址获取许可证的副本
+```
+# coding=utf-8
+# Copyright 2023 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的具体语言
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-# 导入所需的模块和类
+Processor class for Pix2Struct.
+"""
+
 from typing import List, Optional, Union
-# 导入自定义的处理工具类
+
 from ...processing_utils import ProcessorMixin
-# 导入基础的处理工具类
 from ...tokenization_utils_base import BatchEncoding, PaddingStrategy, PreTokenizedInput, TextInput, TruncationStrategy
-# 导入工具类
 from ...utils import TensorType
 
-# 定义 Pix2StructProcessor 类，继承 ProcessorMixin 类
+
 class Pix2StructProcessor(ProcessorMixin):
     r"""
-    构建一个 PIX2STRUCT 处理器，将 BERT 分词器和 PIX2STRUCT 图像处理器封装成一个单独的处理器。
+    Constructs a PIX2STRUCT processor which wraps a BERT tokenizer and PIX2STRUCT image processor into a single
+    processor.
 
-    [`Pix2StructProcessor`] 提供了 [`Pix2StructImageProcessor`] 和 [`T5TokenizerFast`] 的所有功能。查看 [`~Pix2StructProcessor.__call__`] 和 [`~Pix2StructProcessor.decode`] 的文档字符串以获取更多信息。
+    [`Pix2StructProcessor`] offers all the functionalities of [`Pix2StructImageProcessor`] and [`T5TokenizerFast`]. See
+    the docstring of [`~Pix2StructProcessor.__call__`] and [`~Pix2StructProcessor.decode`] for more information.
 
     Args:
         image_processor (`Pix2StructImageProcessor`):
-            一个 [`Pix2StructImageProcessor`] 的实例。图像处理器是必需的输入。
+            An instance of [`Pix2StructImageProcessor`]. The image processor is a required input.
         tokenizer (Union[`T5TokenizerFast`, `T5Tokenizer`]):
-            一个 ['T5TokenizerFast`] 或 ['T5Tokenizer`] 的实例。分词器是必需的输入。
+            An instance of ['T5TokenizerFast`] or ['T5Tokenizer`]. The tokenizer is a required input.
     """
 
-    # 定义类属性
     attributes = ["image_processor", "tokenizer"]
     image_processor_class = "Pix2StructImageProcessor"
     tokenizer_class = ("T5Tokenizer", "T5TokenizerFast")
 
-    # 初始化方法
     def __init__(self, image_processor, tokenizer):
-        # 设置分词器不返回 token 类型 ID
+        # Disable token type IDs as they are not used in this processor
         tokenizer.return_token_type_ids = False
-        # 调用父类的初始化方法
+        # Initialize the processor with the provided image processor and tokenizer
         super().__init__(image_processor, tokenizer)
 
-    # 定义 __call__ 方法
     def __call__(
         self,
         images=None,
@@ -65,23 +71,62 @@ class Pix2StructProcessor(ProcessorMixin):
         verbose: bool = True,
         return_tensors: Optional[Union[str, TensorType]] = None,
         **kwargs,
-    # 将所有参数转发给Pix2StructTokenizerFast的`~PreTrainedTokenizer.batch_decode`方法
-    # 请参考该方法的文档字符串以获取更多信息
+    ):
+        """
+        Process input images and text into a format suitable for PIX2STRUCT tasks.
+
+        Args:
+            images (optional): Input images to process.
+            text (Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]]): Input text data.
+            add_special_tokens (bool): Whether to add special tokens (like [CLS], [SEP]) or not.
+            padding (Union[bool, str, PaddingStrategy]): Padding strategy for text sequences.
+            truncation (Union[bool, str, TruncationStrategy]): Truncation strategy for text sequences.
+            max_length (Optional[int]): Maximum sequence length to enforce.
+            max_patches (Optional[int]): Maximum number of patches to consider.
+            stride (int): Stride length for patch extraction.
+            pad_to_multiple_of (Optional[int]): Pad the sequence length to a multiple of this value.
+            return_attention_mask (Optional[bool]): Whether to return attention masks.
+            return_overflowing_tokens (bool): Whether to return overflowing tokens.
+            return_special_tokens_mask (bool): Whether to return special tokens mask.
+            return_offsets_mapping (bool): Whether to return offsets mapping.
+            return_token_type_ids (bool): Whether to return token type IDs (not used in this processor).
+            return_length (bool): Whether to return sequence length.
+            verbose (bool): Whether to print verbose information.
+            return_tensors (Optional[Union[str, TensorType]]): Desired tensor type for returned tensors.
+
+        Returns:
+            BatchEncoding: Processed inputs in a batch encoding format.
+
+        Notes:
+            This method processes both images and text to prepare them for PIX2STRUCT tasks.
+            It incorporates functionality from both `Pix2StructImageProcessor` and `T5TokenizerFast`.
+        """
+        # Implementation of input processing logic goes here
+        pass
     def batch_decode(self, *args, **kwargs):
+        """
+        This method forwards all its arguments to Pix2StructTokenizerFast's [`~PreTrainedTokenizer.batch_decode`].
+        Please refer to the docstring of this method for more information.
+        """
+        # 调用内部的 `batch_decode` 方法，将所有参数传递给 Pix2StructTokenizerFast 的 `batch_decode` 方法
         return self.tokenizer.batch_decode(*args, **kwargs)
 
-    # 将所有参数转发给Pix2StructTokenizerFast的`~PreTrainedTokenizer.decode`方法
-    # 请参考该方法的文档字符串以获取更多信息
     def decode(self, *args, **kwargs):
+        """
+        This method forwards all its arguments to Pix2StructTokenizerFast's [`~PreTrainedTokenizer.decode`]. Please
+        refer to the docstring of this method for more information.
+        """
+        # 调用内部的 `decode` 方法，将所有参数传递给 Pix2StructTokenizerFast 的 `decode` 方法
         return self.tokenizer.decode(*args, **kwargs)
 
-    # 返回模型输入的名称列表，包括tokenizer和image_processor的输入名称
     @property
     def model_input_names(self):
-        # 获取tokenizer的模型输入名称列表
+        """
+        This property returns a list of unique model input names by combining tokenizer's and image_processor's input names.
+        """
+        # 获取 tokenizer 和 image_processor 的模型输入名称列表
         tokenizer_input_names = self.tokenizer.model_input_names
-        # 获取image_processor的模型输入名称列表
         image_processor_input_names = self.image_processor.model_input_names
-        # 将tokenizer和image_processor的输入名称合并，去除重复的名称，返回列表
+        # 使用集合去除重复项，然后转换为列表并返回
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 ```

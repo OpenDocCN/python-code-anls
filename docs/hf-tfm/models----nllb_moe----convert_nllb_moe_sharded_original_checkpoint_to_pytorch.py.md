@@ -1,157 +1,173 @@
-# `.\transformers\models\nllb_moe\convert_nllb_moe_sharded_original_checkpoint_to_pytorch.py`
+# `.\models\nllb_moe\convert_nllb_moe_sharded_original_checkpoint_to_pytorch.py`
 
-```py
+```
 # 导入必要的库和模块
-import argparse
-import json
-import os
+import argparse  # 用于命令行参数解析
+import json  # 用于处理 JSON 格式数据
+import os  # 提供操作系统相关功能的模块
 
-import torch
-from torch import nn
+import torch  # 张量计算库 PyTorch
+from torch import nn  # PyTorch 的神经网络模块
 
+# 从 transformers 库中导入模型和配置类
 from transformers import NllbMoeConfig, NllbMoeModel
+# 从 transformers 模块中导入数据类型相关的函数
 from transformers.modeling_utils import dtype_byte_size
+# 从 transformers 模块中导入权重相关的常量和函数
 from transformers.utils import WEIGHTS_INDEX_NAME, WEIGHTS_NAME
 
-# 定义一个函数用于删除指定的密钥
+
 def remove_ignore_keys_(state_dict):
+    # 定义需要从 state_dict 中移除的键列表
     ignore_keys = [
-        "encoder.version",
-        "decoder.version",
-        "model.encoder.version",
-        "model.decoder.version",
-        "decoder.output_projection.weight",
-        "_float_tensor",
-        "encoder.embed_positions._float_tensor",
-        "decoder.embed_positions._float_tensor",
+        "encoder.version",  # 版本信息，不需保留
+        "decoder.version",  # 版本信息，不需保留
+        "model.encoder.version",  # 版本信息，不需保留
+        "model.decoder.version",  # 版本信息，不需保留
+        "decoder.output_projection.weight",  # 解码器输出投影权重，不需保留
+        "_float_tensor",  # 浮点数张量，不需保留
+        "encoder.embed_positions._float_tensor",  # 编码器位置嵌入的浮点数张量，不需保留
+        "decoder.embed_positions._float_tensor",  # 解码器位置嵌入的浮点数张量，不需保留
     ]
+    # 逐一移除 ignore_keys 中指定的键
     for k in ignore_keys:
         state_dict.pop(k, None)
 
-# 定义一个函数用于从嵌入层创建线性层
+
 def make_linear_from_emb(emb):
+    # 根据嵌入层 emb 创建一个线性层
     vocab_size, emb_size = emb.weight.shape
     lin_layer = nn.Linear(vocab_size, emb_size, bias=False)
+    # 将线性层的权重设为与嵌入层相同的数据
     lin_layer.weight.data = emb.weight.data
     return lin_layer
 
-# 定义一个函数用于重命名 Fairseq 密钥
+
 def rename_fairseq_keys(state_dict, expert_idx=None):
     new_dict = {}
+    # 遍历 state_dict 的键
     for old_key in state_dict.keys():
         key = old_key
+        # 替换 moe_layer.experts. 为 ffn.experts.expert_，用于重命名键
         if "moe_layer.experts." in key:
             if expert_idx is not None:
                 key = key.replace("moe_layer.experts.0", f"ffn.experts.expert_{expert_idx}")
             else:
                 key = key.replace("moe_layer.experts.", "ffn.experts.expert_")
+        # 将 gate 替换为 ffn.router.classifier，用于重命名键
         if "gate" in key:
             key = key.replace(".moe_layer.gate.wg", ".ffn.router.classifier")
+        # 将 fc2 替换为 ffn.fc2，用于重命名键
         if "fc2" and "experts" not in key:
             key = key.replace(".fc2.", ".ffn.fc2.")
+        # 将 fc1 替换为 ffn.fc1，用于重命名键
         if "fc1" and "experts" not in key:
             key = key.replace(".fc1.", ".ffn.fc1.")
+        # 将 encoder_attn 替换为 cross_attention，用于重命名键
         if ".encoder_attn." in key:
             key = key.replace(".encoder_attn.", ".cross_attention.")
+        # 将 encoder_attn_layer_norm 替换为 cross_attention_layer_norm，用于重命名键
         if "encoder_attn_layer_norm" in key:
             key = key.replace("encoder_attn_layer_norm", "cross_attention_layer_norm")
+        # 将 final_layer_norm 替换为 ff_layer_norm，用于重命名键
         if "final_layer_norm" in key:
             key = key.replace("final_layer_norm", "ff_layer_norm")
+        # 将新键值对加入到 new_dict 中
         new_dict[key] = state_dict[old_key]
     return new_dict
 
-# 定义一个函数用于将 Switch Transformer 模型分片
+
 def shard_on_the_fly(switch_checkpoint_path, dump_path, num_experts, dtype, weights_name: str = WEIGHTS_NAME):
-    sharded_state_dicts = []
-    total_size = 0
-    os.makedirs(dump_path, exist_ok=True)
-
-
-这段代码定义了几个函数用于处理 Switch Transformer 模型的参数。其中包括:
-
-1. `remove_ignore_keys_`函数用于从模型的状态字典中删除指定的密钥。
-2. `make_linear_from_emb`函数用于从嵌入层创建线性层。
-3. `rename_fairseq_keys`函数用于重命名 Fairseq 模型的密钥。
-4. `shard_on_the_fly`函数用于将 Switch Transformer 模型分片。
-
-总的来说,这些函数可以用于处理和转换 Switch Transformer 模型的参数,为后续的模型加载和使用做准备。
-    # 遍历专家数量范围
+    sharded_state_dicts = []  # 初始化空的分片状态字典列表
+    total_size = 0  # 初始化总大小为 0
+    os.makedirs(dump_path, exist_ok=True)  # 创建 dump_path 目录，如果不存在的话
+    # 遍历所有专家的范围，从0到num_experts-1
     for expert in range(num_experts):
-        # 构建每个专家的检查点路径
+        # 构造每个专家的检查点路径，形如"switch_checkpoint_path-rank-{expert}.pt"
         expert_path = switch_checkpoint_path + f"-rank-{expert}.pt"
-        # 如果专家的检查点文件存在
+        # 检查该路径是否是文件
         if os.path.isfile(expert_path):
-            # 加载专家模型状态字典
+            # 如果是文件，加载专家模型的状态字典
             expert_state = torch.load(expert_path)["model"]
-            # 移除无需考虑的键
+            # 移除模型中要忽略的键
             remove_ignore_keys_(expert_state)
-            # 重命名 Fairseq 模型的键
+            # 重命名Fairseq模型中的键，使用专家的索引
             expert_state = rename_fairseq_keys(expert_state, expert)
-            # 构建保存路径，考虑到可能存在多个分片
+            # 构造保存路径，使用weights_name替换后缀为".bin"的部分，形如"-{len(sharded_state_dicts)+1:05d}-of-???.bin"
             save_path = os.path.join(
                 dump_path, weights_name.replace(".bin", f"-{len(sharded_state_dicts)+1:05d}-of-???.bin")
             )
-            # 保存专家模型状态字典
+            # 保存专家模型的状态字典到指定路径
             torch.save(expert_state, save_path)
-            # 记录分片模型状态字典的键
+            # 将专家模型的键集合添加到sharded_state_dicts中
             sharded_state_dicts.append(expert_state.keys())
-            # 累加总参数大小，考虑数据类型的字节大小
+            # 更新总大小，计算专家模型中所有张量的总字节数
             total_size += sum([value.numel() for key, value in expert_state.items()]) * dtype_byte_size(
                 expert_state[list(expert_state)[0]].dtype
             )
-    
-    # 添加最后一个块
+
+    # 添加共享权重模型的最后一个块
+    # 构造保存路径，使用weights_name替换后缀为".bin"的部分，形如"-{len(sharded_state_dicts)+1:05d}-of-???.bin"
     save_path = os.path.join(dump_path, weights_name.replace(".bin", f"-{len(sharded_state_dicts)+1:05d}-of-???.bin"))
-    # 加载共享权重模型状态字典
+    # 加载共享权重模型的状态字典
     shared_weights = torch.load(switch_checkpoint_path + "-shared.pt")["model"]
-    # 移除无需考虑的键
+    # 移除模型中要忽略的键
     remove_ignore_keys_(shared_weights)
-    # 重命名 Fairseq 模型的键
+    # 重命名Fairseq模型中的键，此时专家为None
     shared_weights = rename_fairseq_keys(shared_weights, None)
-    # 将共享权重映射到特定键
+    # 将共享权重中的"decoder.embed_tokens.weight"键映射到"shared.weight"
     shared_weights["shared.weight"] = shared_weights["decoder.embed_tokens.weight"]
-    # 记录共享权重模型状态字典的键
+    # 将共享权重模型的键集合添加到sharded_state_dicts中
     sharded_state_dicts.append(shared_weights.keys())
-    
-    # 如果只有共享权重模型状态字典（在同一文件上保存了虚拟模型/专家）
+
+    # 如果只有共享权重（即dummy模型或专家保存在同一个文件中）
     if len(sharded_state_dicts) == 1:
-        # 保存共享权重模型状态字典
+        # 构造保存路径，直接使用weights_name
         save_path = os.path.join(dump_path, weights_name)
+        # 保存共享权重模型的状态字典到指定路径
         torch.save(shared_weights, save_path)
-        # 返回权重文件名和对应的状态字典键的映射，以及空的索引
+        # 返回只包含一个元素的字典，表示文件名和sharded_state_dicts的第一个元素，以及None
         return {weights_name: sharded_state_dicts[0]}, None
     else:
-        # 保存共享权重模型状态字典
+        # 如果存在多个权重块，保存共享权重模型的状态字典到指定路径
         torch.save(shared_weights, save_path)
-    
-    # 否则，构建权重索引
+
+    # 否则，构建索引
+    # 初始化权重映射字典
     weight_map = {}
+    # 遍历所有权重块的索引和名称
     for idx, shard in enumerate(sharded_state_dicts):
-        # 构建分片权重文件名
+        # 构造每个权重块的文件名，形如"-{idx+1:05d}-of-{len(sharded_state_dicts):05d}.bin"
         shard_file = weights_name.replace(".bin", f"-{idx+1:05d}-of-{len(sharded_state_dicts):05d}.bin")
-        # 重命名临时文件为分片权重文件名
+        # 构造临时文件名，形如"-{idx+1:05d}-of-???.bin"
         temp_filename = os.path.join(dump_path, weights_name.replace(".bin", f"-{idx+1:05d}-of-???.bin"))
+        # 重命名临时文件为最终的权重块文件名
         os.rename(temp_filename, os.path.join(dump_path, shard_file))
-        # 记录权重键和分片权重文件名的映射关系
+        # 遍历当前权重块中的所有键，将其映射到对应的权重块文件名
         for key in shard:
             weight_map[key] = shard_file
-    
+
     # 添加元数据
+    # 构造包含总大小的元数据字典
     metadata = {"total_size": total_size}
+    # 构造包含元数据和权重映射的索引字典
     index = {"metadata": metadata, "weight_map": weight_map}
-    
-    # 写入权重索引到文件
+
+    # 将索引字典以JSON格式写入文件
     with open(os.path.join(dump_path, WEIGHTS_INDEX_NAME), "w", encoding="utf-8") as f:
-        # 序列化索引内容为 JSON 格式，并写入文件
+        # 将索引字典转换为格式化的JSON字符串并写入文件
         content = json.dumps(index, indent=2, sort_keys=True) + "\n"
         f.write(content)
-    
-    # 返回元数据和权重索引
+
+    # 返回元数据和索引字典
     return metadata, index
 if __name__ == "__main__":
-    # 创建参数解析器对象
+    # 如果脚本被直接执行，则开始执行以下操作
+
     parser = argparse.ArgumentParser()
-    # 添加必填参数
+    # 创建参数解析器对象
+
+    # Required parameters
     parser.add_argument(
         "--nllb_moe_checkpoint_path",
         default="/home/arthur_huggingface_co/fairseq/weights/checkpoints/model_moe_54b/checkpoint_2_300000",
@@ -159,8 +175,11 @@ if __name__ == "__main__":
         required=False,
         help="Path to a directory containing a folder per layer. Follows the original Google format.",
     )
-    # 添加参数指定数据类型
+    # 添加必需的参数：nllb_moe_checkpoint_path，表示模型检查点的路径
+
     parser.add_argument("--dtype", default="float32", type=str, required=False, help="dtype of the saved model")
+    # 添加参数：dtype，默认为"float32"，表示保存模型的数据类型
+
     parser.add_argument(
         "--pytorch_dump_folder_path",
         default="/home/arthur_huggingface_co/fairseq/weights/checkpoints/hf-converted-moe-54b",
@@ -168,27 +187,33 @@ if __name__ == "__main__":
         required=False,
         help="Path to the output pytorch model.",
     )
-    # 解析命令行参数，存储在 args 对象中
+    # 添加参数：pytorch_dump_folder_path，表示输出 PyTorch 模型的路径
+
     args = parser.parse_args()
-    # 在运行期间利用函数 shard_on_the_fly() 进行分片处理
+    # 解析命令行参数，并将结果存储在 args 对象中
+
     metadata, index = shard_on_the_fly(
         args.nllb_moe_checkpoint_path,
         args.pytorch_dump_folder_path,
         128,
         args.dtype,
     )
+    # 调用 shard_on_the_fly 函数，使用命令行参数中的路径和参数来执行分片操作，并返回元数据和索引信息
 
-    # 对 NllbMoeConfig 进行配置
     config = NllbMoeConfig.from_pretrained(
         "facebook/nllb-200-3.3B", encoder_sparse_step=4, decoder_sparse_step=4, num_experts=128
     )
-    # 将配置保存到指定路径
+    # 从预训练模型加载配置信息，指定了一些特定参数
+
     config.save_pretrained(args.pytorch_dump_folder_path)
-    # 从指定路径加载 NllbMoeModel 模型
+    # 将配置信息保存到指定的 PyTorch 模型输出路径中
+
     model = NllbMoeModel.from_pretrained(args.pytorch_dump_folder_path)
-    # 打印信息
+    # 从指定路径加载预训练模型
+
     print("Done")
-    # 将模型保存到指定路径
+    # 打印提示信息，表明程序执行完成
+
     model.save_pretrained(args.pytorch_dump_folder_path)
-```  
+    # 将加载的预训练模型保存到指定的 PyTorch 模型输出路径中
 ```

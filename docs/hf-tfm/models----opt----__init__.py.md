@@ -1,18 +1,24 @@
-# `.\transformers\models\opt\__init__.py`
+# `.\models\opt\__init__.py`
 
-```py
-# 版权声明及许可信息
-# 版权声明告知此代码的版权信息及受限制的使用方式
-# 根据 Apache 许可证版本 2.0 进行许可
-# 你不得在没有遵守许可证的情况下使用此文件
-# 你可以在以下网址获取许可证的副本
+```
+# 版权声明和许可信息，声明代码版权和使用许可
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则分发的软件应基于"原样"分发，
-# 没有任何明示或暗示的担保或条件
-# 请查阅许可证以了解特定语言的权限和限制
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入需要的模块和类型
+# 引入必要的类型检查模块
 from typing import TYPE_CHECKING
+
+# 引入内部工具函数和异常类
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -22,16 +28,17 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块的导入结构
+# 定义模块的导入结构，用于延迟加载模块
 _import_structure = {"configuration_opt": ["OPT_PRETRAINED_CONFIG_ARCHIVE_MAP", "OPTConfig"]}
 
-# 检查是否存在 torch，若不存在则报错
+# 检查是否支持 Torch，若不支持则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果支持 Torch，则添加相关模型的导入结构
     _import_structure["modeling_opt"] = [
         "OPT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "OPTForCausalLM",
@@ -41,40 +48,43 @@ else:
         "OPTForQuestionAnswering",
     ]
 
-# 检查是否存在 tf，若不存在则报错
+# 检查是否支持 TensorFlow，若不支持则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果支持 TensorFlow，则添加相关模型的导入结构
     _import_structure["modeling_tf_opt"] = ["TFOPTForCausalLM", "TFOPTModel", "TFOPTPreTrainedModel"]
 
-# 检查是否存在 flax，若不存在则报错
+# 检查是否支持 Flax，若不支持则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果支持 Flax，则添加相关模型的导入结构
     _import_structure["modeling_flax_opt"] = [
         "FlaxOPTForCausalLM",
         "FlaxOPTModel",
         "FlaxOPTPreTrainedModel",
     ]
 
-# 若处于类型检查阶段
+# 如果是类型检查模式，则进行额外的导入
 if TYPE_CHECKING:
-    # 导入类型检查所需要的模块
+    # 导入配置相关的内容
     from .configuration_opt import OPT_PRETRAINED_CONFIG_ARCHIVE_MAP, OPTConfig
-    # 检查是否存在 torch，若不存在则报错
+
     try:
+        # 检查是否支持 Torch，若不支持则跳过
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入相关类型检查所需的模块
+        # 如果支持 Torch，则导入 Torch 相关的模型
         from .modeling_opt import (
             OPT_PRETRAINED_MODEL_ARCHIVE_LIST,
             OPTForCausalLM,
@@ -83,28 +93,31 @@ if TYPE_CHECKING:
             OPTModel,
             OPTPreTrainedModel,
         )
-    # 检查是否存在 tf，若不存在则报错
+
     try:
+        # 检查是否支持 TensorFlow，若不支持则跳过
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入相关类型检查所需的模块
+        # 如果支持 TensorFlow，则导入 TensorFlow 相关的模型
         from .modeling_tf_opt import TFOPTForCausalLM, TFOPTModel, TFOPTPreTrainedModel
-    # 检查是否存在 flax，若不存在则报错
+
     try:
+        # 检查是否支持 Flax，若不支持则跳过
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入相关类型检查所需的模块
+        # 如果支持 Flax，则导入 Flax 相关的模型
         from .modeling_flax_opt import FlaxOPTForCausalLM, FlaxOPTModel, FlaxOPTPreTrainedModel
 
-# 若不处于类型检查阶段
 else:
+    # 如果不是类型检查模式，则使用 LazyModule 进行延迟加载
     import sys
-    # 创建懒加载模块
+
+    # 将当前模块替换为 LazyModule 实例，实现延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

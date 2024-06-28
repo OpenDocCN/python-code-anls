@@ -1,24 +1,10 @@
 # `.\models\electra\__init__.py`
 
-```py
-# 版权声明及许可证声明
-#
-# 版权所有 2020 年 HuggingFace 团队。保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本（“许可证”）授权；
-# 除非遵守许可证，否则不得使用此文件。
-# 您可以在以下链接处获得许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则根据许可证发布的软件
-# 基于“按原样提供”方式分发，不提供任何形式的担保或条件。
-# 有关特定语言版本的详细信息，请参阅特定许可证。
-# 根据许可证规定的权限和限制执行。
-
-# 导入必要的库和模块，检查可用性
+```
+# 引入类型检查模块，用于静态类型检查
 from typing import TYPE_CHECKING
 
+# 从工具模块中引入所需函数和异常类
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -28,28 +14,30 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义每个模块和相应的类或函数
+# 定义导入结构，包含不同模块及其对应的导入内容列表
 _import_structure = {
     "configuration_electra": ["ELECTRA_PRETRAINED_CONFIG_ARCHIVE_MAP", "ElectraConfig", "ElectraOnnxConfig"],
     "tokenization_electra": ["ElectraTokenizer"],
 }
 
-# 检查 tokenizers 是否可用，若不可用则引发异常
+# 检查是否存在 tokenizers 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在 tokenizers 库，则将 ElectraTokenizerFast 添加到导入结构中
     _import_structure["tokenization_electra_fast"] = ["ElectraTokenizerFast"]
 
-# 检查 torch 是否可用，若不可用则引发异常
+# 检查是否存在 torch 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在 torch 库，则将相关的 Electra 模型导入添加到导入结构中
     _import_structure["modeling_electra"] = [
         "ELECTRA_PRETRAINED_MODEL_ARCHIVE_LIST",
         "ElectraForCausalLM",
@@ -64,13 +52,14 @@ else:
         "load_tf_weights_in_electra",
     ]
 
-# 检查 tensorflow 是否可用，若不可用则引发异常
+# 检查是否存在 tensorflow 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在 tensorflow 库，则将相关的 TFElectra 模型导入添加到导入结构中
     _import_structure["modeling_tf_electra"] = [
         "TF_ELECTRA_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFElectraForMaskedLM",
@@ -83,13 +72,14 @@ else:
         "TFElectraPreTrainedModel",
     ]
 
-# 检查 flax 是否可用，若不可用则引发异常
+# 检查是否存在 flax 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果存在 flax 库，则将相关的 FlaxElectra 模型导入添加到导入结构中
     _import_structure["modeling_flax_electra"] = [
         "FlaxElectraForCausalLM",
         "FlaxElectraForMaskedLM",
@@ -102,33 +92,32 @@ else:
         "FlaxElectraPreTrainedModel",
     ]
 
-# 如果是类型检查，则执行以下代码
+# 如果在类型检查环境下
 if TYPE_CHECKING:
-    # 从当前目录下的 configuration_electra 模块中导入 ELECTRA_PRETRAINED_CONFIG_ARCHIVE_MAP, ElectraConfig, ElectraOnnxConfig
-    # 以及从 tokenization_electra 模块中导入 ElectraTokenizer
+    # 空语句，因为在类型检查环境下不需要执行额外的代码
+    pass
+    # 从当前目录中导入以下模块和变量，分别是预训练配置映射、ElectraConfig 类和 ElectraOnnxConfig 类
     from .configuration_electra import ELECTRA_PRETRAINED_CONFIG_ARCHIVE_MAP, ElectraConfig, ElectraOnnxConfig
-    from .tokenization_electra import ElectraTokenizer
+    # 导入 ElectraTokenizer 类，用于处理 Electra 模型的分词器
     
-    # 尝试检测是否安装了 tokenizers 库，若未安装则抛出 OptionalDependencyNotAvailable 异常并捕获
+    # 检查是否安装了 tokenizers 库，若未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
-        # 若未安装 tokenizers 库，则不做任何处理
         pass
     else:
-        # 若安装了 tokenizers 库，则从 tokenization_electra_fast 模块中导入 ElectraTokenizerFast
+        # 若 tokenizers 可用，则从当前目录中导入 ElectraTokenizerFast 类，用于更快速的分词操作
         from .tokenization_electra_fast import ElectraTokenizerFast
     
-    # 尝试检测是否安装了 PyTorch 库，若未安装则抛出 OptionalDependencyNotAvailable 异常并捕获
+    # 检查是否安装了 PyTorch 库，若未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
-        # 若未安装 PyTorch 库，则不做任何处理
         pass
     else:
-        # 若安装了 PyTorch 库，则从 modeling_electra 模块中导入一系列 Electra 模型相关的类和函数
+        # 若 PyTorch 可用，则从当前目录中导入以下 Electra 相关类和函数
         from .modeling_electra import (
             ELECTRA_PRETRAINED_MODEL_ARCHIVE_LIST,
             ElectraForCausalLM,
@@ -143,15 +132,14 @@ if TYPE_CHECKING:
             load_tf_weights_in_electra,
         )
     
-    # 尝试检测是否安装了 TensorFlow 库，若未安装则抛出 OptionalDependencyNotAvailable 异常并捕获
+    # 检查是否安装了 TensorFlow 库，若未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
-        # 若未安装 TensorFlow 库，则不做任何处理
         pass
     else:
-        # 若安装了 TensorFlow 库，则从 modeling_tf_electra 模块中导入一系列 TensorFlow 版本的 Electra 模型相关的类和函数
+        # 若 TensorFlow 可用，则从当前目录中导入以下 TF-Electra 相关类和函数
         from .modeling_tf_electra import (
             TF_ELECTRA_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFElectraForMaskedLM,
@@ -164,15 +152,14 @@ if TYPE_CHECKING:
             TFElectraPreTrainedModel,
         )
     
-    # 尝试检测是否安装了 Flax 库，若未安装则抛出 OptionalDependencyNotAvailable 异常并捕获
+    # 检查是否安装了 Flax 库，若未安装则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
-        # 若未安装 Flax 库，则不做任何处理
         pass
     else:
-        # 若安装了 Flax 库，则从 modeling_flax_electra 模块中导入一系列 Flax 版本的 Electra 模型相关的类和函数
+        # 若 Flax 可用，则从当前目录中导入以下 Flax-Electra 相关类和函数
         from .modeling_flax_electra import (
             FlaxElectraForCausalLM,
             FlaxElectraForMaskedLM,
@@ -184,11 +171,10 @@ if TYPE_CHECKING:
             FlaxElectraModel,
             FlaxElectraPreTrainedModel,
         )
-    ```  
 else:
-    # 导入系统模块
+    # 导入 sys 模块，用于动态设置当前模块为懒加载模块
     import sys
 
-    # 将当前模块注册到 sys.modules 字典中，使之成为一个懒加载模块
+    # 使用 sys.modules 来将当前模块设置为懒加载模块的实例
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

@@ -1,115 +1,147 @@
 # `.\models\layoutlm\tokenization_layoutlm_fast.py`
 
-```py
+```
 # coding=utf-8
-# 版本声明和作者授权声明
-# 指定代码文件的编码格式和版权信息
-# 这段代码是为 LayoutLM 模型设计的标记化类
+# 设置脚本编码为 UTF-8
 
-import json  # 导入 json 模块
-from typing import List, Optional, Tuple  # 导入类型提示模块
+# Copyright 2018 The Microsoft Research Asia LayoutLM Team Authors.
+# 版权声明，指出此代码的版权信息
 
-from tokenizers import normalizers  # 从 tokenizers 模块中导入 normalizers 模块
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 使用 Apache License, Version 2.0 授权许可
 
-from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 从上级目录的 tokenization_utils_fast 模块中导入 PreTrainedTokenizerFast 类
-from ...utils import logging  # 从上级目录的 utils 模块中导入 logging 模块
-from .tokenization_layoutlm import LayoutLMTokenizer  # 从当前目录的 tokenization_layoutlm 模块中导入 LayoutLMTokenizer 类
+# you may not use this file except in compliance with the License.
+# 除非遵循本许可证，否则不能使用本文件
 
-logger = logging.get_logger(__name__)  # 获取名为 __name__ 的 logger 对象
+# You may obtain a copy of the License at
+# 可以在以下网址获取许可证副本
 
-VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}  # 词汇文件名和 tokenizer 文件名
+#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 
-PRETRAINED_VOCAB_FILES_MAP = {  # 预先训练的词汇文件映射
+# Unless required by applicable law or agreed to in writing, software
+# 根据适用法律规定或书面同意的情况下，软件
+
+# distributed under the License is distributed on an "AS IS" BASIS,
+# 分发时遵循"原样"分发
+
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 没有明示或暗示的任何保证或条件
+
+# See the License for the specific language governing permissions and
+# 详见许可证，获取特定语言的权限以及
+
+# limitations under the License.
+# 许可下的限制
+
+""" Tokenization class for model LayoutLM."""
+
+# LayoutLM 模型的分词器类
+
+import json
+# 导入 json 模块，用于处理 JSON 格式数据
+from typing import List, Optional, Tuple
+# 导入 typing 模块，用于类型提示
+
+from tokenizers import normalizers
+# 从 tokenizers 库中导入 normalizers 模块
+
+from ...tokenization_utils_fast import PreTrainedTokenizerFast
+# 从 ...tokenization_utils_fast 中导入 PreTrainedTokenizerFast 类
+from ...utils import logging
+# 从 ...utils 中导入 logging 模块
+from .tokenization_layoutlm import LayoutLMTokenizer
+# 从当前目录下的 tokenization_layoutlm 模块中导入 LayoutLMTokenizer 类
+
+
+logger = logging.get_logger(__name__)
+# 获取当前脚本的日志记录器对象
+
+VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}
+# 定义词汇表文件名和分词器文件名的映射关系
+
+PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "microsoft/layoutlm-base-uncased": (
-            "https://huggingface.co/microsoft/layoutlm-base-uncased/resolve/main/vocab.txt"  # 预先训练的词汇文件的 URL
+            "https://huggingface.co/microsoft/layoutlm-base-uncased/resolve/main/vocab.txt"
         ),
         "microsoft/layoutlm-large-uncased": (
-            "https://huggingface.co/microsoft/layoutlm-large-uncased/resolve/main/vocab.txt"  # 预先训练的词汇文件的 URL
+            "https://huggingface.co/microsoft/layoutlm-large-uncased/resolve/main/vocab.txt"
         ),
     },
     "tokenizer_file": {
         "microsoft/layoutlm-base-uncased": (
-            "https://huggingface.co/microsoft/layoutlm-base-uncased/resolve/main/tokenizer.json"  # 预先训练的 tokenizer 文件的 URL
+            "https://huggingface.co/microsoft/layoutlm-base-uncased/resolve/main/tokenizer.json"
         ),
         "microsoft/layoutlm-large-uncased": (
-            "https://huggingface.co/microsoft/layoutlm-large-uncased/resolve/main/tokenizer.json"  # 预先训练的 tokenizer 文件的 URL
+            "https://huggingface.co/microsoft/layoutlm-large-uncased/resolve/main/tokenizer.json"
         ),
     },
 }
+# 定义预训练模型和对应的词汇表文件及分词器文件的下载地址映射关系
 
-PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {  # 预先训练的位置嵌入大小
-    "microsoft/layoutlm-base-uncased": 512,  # 模型 layoutlm-base-uncased 的位置嵌入大小
-    "microsoft/layoutlm-large-uncased": 512,  # 模型 layoutlm-large-uncased 的位置嵌入大小
+PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
+    "microsoft/layoutlm-base-uncased": 512,
+    "microsoft/layoutlm-large-uncased": 512,
 }
+# 定义不同预训练模型的位置嵌入大小
 
-PRETRAINED_INIT_CONFIGURATION = {  # 预先训练的初始化配置
-    "microsoft/layoutlm-base-uncased": {"do_lower_case": True},  # 模型 layoutlm-base-uncased 的初始化配置
-    "microsoft/layoutlm-large-uncased": {"do_lower_case": True},  # 模型 layoutlm-large-uncased 的初始化配置
+PRETRAINED_INIT_CONFIGURATION = {
+    "microsoft/layoutlm-base-uncased": {"do_lower_case": True},
+    "microsoft/layoutlm-large-uncased": {"do_lower_case": True},
 }
+# 定义不同预训练模型的初始化配置，如是否小写化等设置
 
 
-# 从 transformers.models.bert.tokenization_bert_fast.BertTokenizerFast 中复制来的 LayoutLMTokenizerFast 类
+# Copied from transformers.models.bert.tokenization_bert_fast.BertTokenizerFast with Bert->LayoutLM,BERT->LayoutLM
+# 从 transformers.models.bert.tokenization_bert_fast.BertTokenizerFast 复制并修改为 LayoutLMTokenizerFast
+
 class LayoutLMTokenizerFast(PreTrainedTokenizerFast):
     r"""
     Construct a "fast" LayoutLM tokenizer (backed by HuggingFace's *tokenizers* library). Based on WordPiece.
 
     This tokenizer inherits from [`PreTrainedTokenizerFast`] which contains most of the main methods. Users should
     refer to this superclass for more information regarding those methods.
-    Args:
-        vocab_file (`str`):
-            File containing the vocabulary. 词汇表文件的路径
-        do_lower_case (`bool`, *optional*, defaults to `True`):
-            Whether or not to lowercase the input when tokenizing. 是否在进行标记化时将输入转换为小写
-        unk_token (`str`, *optional*, defaults to `"[UNK]"`):
-            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
-            token instead. 未知标记。不在词汇表中的标记不能转换为ID，会被替换成这个标记
-        sep_token (`str`, *optional*, defaults to `"[SEP]"`):
-            The separator token, which is used when building a sequence from multiple sequences, e.g. two sequences for
-            sequence classification or for a text and a question for question answering. It is also used as the last
-            token of a sequence built with special tokens. 分隔符标记，用于构建来自多个序列的序列，例如用于序列分类的两个序列，或者用于问题回答中的文本和问题。还用作使用特殊标记构建的序列的最后一个标记
-        pad_token (`str`, *optional*, defaults to `"[PAD]"`):
-            The token used for padding, for example when batching sequences of different lengths. 用于填充的标记，例如在对不同长度的序列进行批处理时使用
-        cls_token (`str`, *optional*, defaults to `"[CLS]"`):
-            The classifier token which is used when doing sequence classification (classification of the whole sequence
-            instead of per-token classification). It is the first token of the sequence when built with special tokens. 用于进行序列分类（整个序列的分类而不是按标记的分类）时使用的分类器标记。使用特殊标记构建序列时，它是序列的第一个标记
-        mask_token (`str`, *optional*, defaults to `"[MASK]"`):
-            The token used for masking values. This is the token used when training this model with masked language
-            modeling. This is the token which the model will try to predict. 用于屏蔽值的标记。在使用屏蔽语言建模训练此模型时使用的标记。这是模型将尝试预测的标记
-        clean_text (`bool`, *optional*, defaults to `True`):
-            Whether or not to clean the text before tokenization by removing any control characters and replacing all
-            whitespaces by the classic one. 在进行标记化之前是否清理文本，通过删除任何控制字符并将所有空白字符替换为一个经典的空格
-        tokenize_chinese_chars (`bool`, *optional*, defaults to `True`):
-            Whether or not to tokenize Chinese characters. This should likely be deactivated for Japanese (see [this
-            issue](https://github.com/huggingface/transformers/issues/328)). 是否对中文字符进行标记化。这对于日文可能需要取消激活(参见此问题)
-        strip_accents (`bool`, *optional*):
-            Whether or not to strip all accents. If this option is not specified, then it will be determined by the
-            value for `lowercase` (as in the original LayoutLM). 是否删除所有重音符号。如果没有指定此选项，则其取决于`lowercase`的值(与原始LayoutLM相同)
-        wordpieces_prefix (`str`, *optional*, defaults to `"##"`):
-            The prefix for subwords. 子词的前缀
     """
+    # 构造一个基于 WordPiece 并由 HuggingFace 的 tokenizers 库支持的 "快速" LayoutLM 分词器
 
+    def __init__(
+        self,
+        vocab_file: str,
+        tokenizer_file: str,
+        **kwargs
+    ):
+        # 初始化方法，接受词汇表文件和分词器文件的路径参数及其他关键字参数
+
+        super().__init__(
+            vocab_file=vocab_file,
+            tokenizer_file=tokenizer_file,
+            **kwargs
+        )
+        # 调用父类的初始化方法，传递词汇表文件和分词器文件路径及其他参数
+    # 定义一些常量，这些常量用于初始化 LayoutLMTokenizer 类的实例
     vocab_files_names = VOCAB_FILES_NAMES
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
     slow_tokenizer_class = LayoutLMTokenizer
-
+    
+    # LayoutLMTokenizer 类的构造函数，初始化实例时会调用
     def __init__(
         self,
-        vocab_file=None,
-        tokenizer_file=None,
-        do_lower_case=True,
-        unk_token="[UNK]",
-        sep_token="[SEP]",
-        pad_token="[PAD]",
-        cls_token="[CLS]",
-        mask_token="[MASK]",
-        tokenize_chinese_chars=True,
-        strip_accents=None,
-        **kwargs,
-    ):  # 定义类的构造函数，接受多个参数
-        # 调用父类的构造函数，传入参数初始化父类的实例
+        vocab_file=None,  # 词汇表文件的路径
+        tokenizer_file=None,  # 分词器文件的路径（可选）
+        do_lower_case=True,  # 是否将输入文本转换为小写（默认为 True）
+        unk_token="[UNK]",  # 未知词汇的特殊标记
+        sep_token="[SEP]",  # 分隔符标记，用于多个序列的组合
+        pad_token="[PAD]",  # 填充标记，用于序列的长度不同时进行填充
+        cls_token="[CLS]",  # 分类器标记，用于序列分类任务中的第一个标记
+        mask_token="[MASK]",  # 掩码标记，用于掩码语言建模任务中的掩码预测
+        tokenize_chinese_chars=True,  # 是否分词中文字符（默认为 True）
+        strip_accents=None,  # 是否去除所有的重音符号（默认根据 lowercase 的值确定）
+        **kwargs,  # 其他可选参数
+    ):
+    ):
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -121,60 +153,154 @@ class LayoutLMTokenizerFast(PreTrainedTokenizerFast):
             mask_token=mask_token,
             tokenize_chinese_chars=tokenize_chinese_chars,
             strip_accents=strip_accents,
-            **kwargs, # 传入其他未命名参数
+            **kwargs,
         )
 
-        # 获取规范器的状态信息
+# 调用父类的构造方法，初始化一个新的对象，传入必要的参数和可选参数
+
+
         normalizer_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
-        # 检查是否需要重新设置规范器的参数
+
+# 从后端的标记器（tokenizer）获取其正规化器（normalizer）的状态，并将其解析为 JSON 格式
+
+
         if (
             normalizer_state.get("lowercase", do_lower_case) != do_lower_case
             or normalizer_state.get("strip_accents", strip_accents) != strip_accents
             or normalizer_state.get("handle_chinese_chars", tokenize_chinese_chars) != tokenize_chinese_chars
         ):
-            # 获取规范器的类
+
+# 检查解析出的正规化器状态是否与当前对象的设定不一致，如果不一致则执行下面的操作
+
+
             normalizer_class = getattr(normalizers, normalizer_state.pop("type"))
-            # 更新规范器的参数
             normalizer_state["lowercase"] = do_lower_case
             normalizer_state["strip_accents"] = strip_accents
             normalizer_state["handle_chinese_chars"] = tokenize_chinese_chars
-            # 使用新的参数创建规范器对象
             self.backend_tokenizer.normalizer = normalizer_class(**normalizer_state)
 
-        # 保存参数
+# 根据解析出的正规化器类型，更新正规化器的设置以与当前对象的设定一致
+
+
         self.do_lower_case = do_lower_case
+
+# 更新对象的小写设置为传入的参数值
+
 
     def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
         """
-        通过连接和添加特殊标记，从一个序列或一对序列构建用于序列分类任务的模型输入。
-        LayoutLM序列的格式如下：
+        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        adding special tokens. A LayoutLM sequence has the following format:
 
-        - 单个序列: `[CLS] X [SEP]`
-        - 一对序列: `[CLS] A [SEP] B [SEP]`
+        - single sequence: `[CLS] X [SEP]`
+        - pair of sequences: `[CLS] A [SEP] B [SEP]`
 
-        参数:
+        Args:
             token_ids_0 (`List[int]`):
-                要添加特殊标记的ID列表。
-            token_ids_1 (`List[int]`, *可选*):
-                用于序列对的第二个ID列表。
+                List of IDs to which the special tokens will be added.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
 
-        返回:
-            `List[int]`: 添加了适当的特殊标记的[输入ID](../glossary#input-ids)列表。
+        Returns:
+            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
-        # 添加特殊标记到输入ID列表
         output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
 
-        # 如果存在第二个ID列表，则将其添加到输出列表中
+# 构建模型输入，根据输入的序列或序列对来生成用于序列分类任务的特殊标记，包括连接和添加特殊标记
+
+
         if token_ids_1 is not None:
             output += token_ids_1 + [self.sep_token_id]
 
-        # 返回输出列表
         return output
+
+# 如果有第二个序列，将其添加到输出列表中，并添加分隔符标记后返回输出列表
+
 
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    # 定义一个函数，用于创建用于序列对分类任务的序列掩码
-    def create_sequence_pair_mask(self, token_ids_0: List[int], token_ids_1: Optional[List[int]]) -> List[int]:
+
+# 创建用于 LayoutLM 序列的 token type IDs，根据输入的序列或序列对生成相应的类型 ID 列表```python
+        super().__init__(
+            vocab_file,
+            tokenizer_file=tokenizer_file,
+            do_lower_case=do_lower_case,
+            unk_token=unk_token,
+            sep_token=sep_token,
+            pad_token=pad_token,
+            cls_token=cls_token,
+            mask_token=mask_token,
+            tokenize_chinese_chars=tokenize_chinese_chars,
+            strip_accents=strip_accents,
+            **kwargs,
+        )
+
+# 调用父类的构造方法，初始化一个新的对象，传入必要的参数和可选参数
+
+
+        normalizer_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
+
+# 从后端的标记器（tokenizer）获取其正规化器（normalizer）的状态，并将其解析为 JSON 格式
+
+
+        if (
+            normalizer_state.get("lowercase", do_lower_case) != do_lower_case
+            or normalizer_state.get("strip_accents", strip_accents) != strip_accents
+            or normalizer_state.get("handle_chinese_chars", tokenize_chinese_chars) != tokenize_chinese_chars
+        ):
+
+# 检查解析出的正规化器状态是否与当前对象的设定不一致，如果不一致则执行下面的操作
+
+
+            normalizer_class = getattr(normalizers, normalizer_state.pop("type"))
+            normalizer_state["lowercase"] = do_lower_case
+            normalizer_state["strip_accents"] = strip_accents
+            normalizer_state["handle_chinese_chars"] = tokenize_chinese_chars
+            self.backend_tokenizer.normalizer = normalizer_class(**normalizer_state)
+
+# 根据解析出的正规化器类型，更新正规化器的设置以与当前对象的设定一致
+
+
+        self.do_lower_case = do_lower_case
+
+# 更新对象的小写设置为传入的参数值
+
+
+    def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
+        """
+        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        adding special tokens. A LayoutLM sequence has the following format:
+
+        - single sequence: `[CLS] X [SEP]`
+        - pair of sequences: `[CLS] A [SEP] B [SEP]`
+
+        Args:
+            token_ids_0 (`List[int]`):
+                List of IDs to which the special tokens will be added.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
+
+        Returns:
+            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
+        """
+        output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
+
+# 构建模型输入，根据输入的序列或序列对来生成用于序列分类任务的特殊标记，包括连接和添加特殊标记
+
+
+        if token_ids_1 is not None:
+            output += token_ids_1 + [self.sep_token_id]
+
+        return output
+
+# 如果有第二个序列，将其添加到输出列表中，并添加分隔符标记后返回输出列表
+
+
+    def create_token_type_ids_from_sequences(
+        self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
+
+# 创建用于 LayoutLM 序列的 token type IDs，根据输入的序列或序列对生成相应的类型 ID 列表
+    def create_token_type_ids_from_sequences(self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None) -> List[int]:
         """
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A LayoutLM sequence
         pair mask has the following format:
@@ -182,32 +308,46 @@ class LayoutLMTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs.
+                List of IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            `List[int]`: List of token type IDs according to the given sequence(s).
         """
-
-        # 定义分隔符和类别标识符
+        # Define separators for the beginning and end of the first sequence
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
-
-        # 如果第二个序列的 IDs 为空，则只返回掩码的第一部分（0）
+        
+        # If only one sequence is provided, return a mask with zeros for the first sequence
         if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
-        # 否则返回两个序列的掩码
+        
+        # If two sequences are provided, concatenate their token IDs and return a mask with zeros for the first sequence
+        # and ones for the second sequence
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
-    # 保存词汇表到文件
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
+        """
+        Save the vocabulary of the tokenizer model to the specified directory.
+
+        Args:
+            save_directory (str):
+                Directory path where the vocabulary will be saved.
+            filename_prefix (str, *optional*):
+                Optional prefix for the saved files.
+
+        Returns:
+            Tuple[str]: Tuple containing the filenames saved.
+        """
+        # Save the vocabulary files using the tokenizer model's save method
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
+        # Return the filenames as a tuple
         return tuple(files)
 ```

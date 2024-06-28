@@ -1,141 +1,142 @@
-# `.\transformers\models\rembert\configuration_rembert.py`
+# `.\models\rembert\configuration_rembert.py`
 
-```py
-# 设置编码为 UTF-8
-# 版权声明，保留所有权利
-# 根据 Apache 许可证 2.0 进行许可
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则不得分发此软件
-# 此软件按“原样”提供，不提供任何明示或暗示的保证或条件
-# 请参阅许可证获取特定语言的权限
-""" RemBERT 模型配置 """
-# 导入所需的模块
-from collections import OrderedDict
-from typing import Mapping
+```
+# coding=utf-8
+# Copyright The HuggingFace Team and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入预训练配置类
-from ...configuration_utils import PretrainedConfig
-# 导入 ONNX 配置
-from ...onnx import OnnxConfig
-# 导入日志记录工具
-from ...utils import logging
+""" RemBERT model configuration"""
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+from collections import OrderedDict  # 导入有序字典
+from typing import Mapping  # 导入类型提示 Mapping
 
-# RemBERT 预训练配置文件存档映射
+from ...configuration_utils import PretrainedConfig  # 导入预训练配置类
+from ...onnx import OnnxConfig  # 导入ONNX配置
+from ...utils import logging  # 导入日志工具
+
+
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+
+# RemBERT预训练配置文件映射字典，指定不同模型的配置文件下载链接
 REMBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "google/rembert": "https://huggingface.co/google/rembert/resolve/main/config.json",
-    # 查看所有 RemBERT 模型，请访问 https://huggingface.co/models?filter=rembert
+    # 查看所有RemBERT模型：https://huggingface.co/models?filter=rembert
 }
 
 
-# RemBERT 配置类，继承自 PretrainedConfig
 class RemBertConfig(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`RemBertModel`] 的配置。它用于根据指定的参数实例化一个 RemBERT 模型，
-    定义了模型的架构。使用默认值初始化配置将产生与 RemBERT
-    [google/rembert](https://huggingface.co/google/rembert) 架构相似的配置。
+    This is the configuration class to store the configuration of a [`RemBertModel`]. It is used to instantiate an
+    RemBERT model according to the specified arguments, defining the model architecture. Instantiating a configuration
+    with the defaults will yield a similar configuration to that of the RemBERT
+    [google/rembert](https://huggingface.co/google/rembert) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。有关更多信息，请阅读
-    [`PretrainedConfig`] 的文档。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    示例:
+
+    Example:
 
     ```python
     >>> from transformers import RemBertModel, RemBertConfig
 
-    >>> # 初始化 RemBERT 风格的配置
+    >>> # Initializing a RemBERT rembert style configuration
     >>> configuration = RemBertConfig()
 
-    >>> # 从 RemBERT 风格的配置初始化模型
+    >>> # Initializing a model from the rembert style configuration
     >>> model = RemBertModel(configuration)
 
-    >>> # 访问模型配置
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```"""
 
-    # 模型类型为 "rembert"
-    model_type = "rembert"
+    model_type = "rembert"  # 模型类型为rembert
 
-    # 初始化方法
     def __init__(
         self,
-        vocab_size=250300,
-        hidden_size=1152,
-        num_hidden_layers=32,
-        num_attention_heads=18,
-        input_embedding_size=256,
-        output_embedding_size=1664,
-        intermediate_size=4608,
-        hidden_act="gelu",
-        hidden_dropout_prob=0.0,
-        attention_probs_dropout_prob=0.0,
-        classifier_dropout_prob=0.1,
-        max_position_embeddings=512,
-        type_vocab_size=2,
-        initializer_range=0.02,
-        layer_norm_eps=1e-12,
-        use_cache=True,
-        pad_token_id=0,
-        bos_token_id=312,
-        eos_token_id=313,
-        **kwargs,
-    # 调用父类的初始化方法，初始化模型的参数，包括填充、开始和结束标记的 token ID 等
-    ):
-        # 调用父类的初始化方法，传入填充、开始和结束标记的 token ID，以及其他关键字参数
+        vocab_size=250300,  # 词汇表大小，默认为250300
+        hidden_size=1152,  # 隐藏层大小，默认为1152
+        num_hidden_layers=32,  # 隐藏层层数，默认为32
+        num_attention_heads=18,  # 注意力头数，默认为18
+        input_embedding_size=256,  # 输入嵌入大小，默认为256
+        output_embedding_size=1664,  # 输出嵌入大小，默认为1664
+        intermediate_size=4608,  # 中间层大小，默认为4608
+        hidden_act="gelu",  # 隐藏层激活函数，默认为GELU
+        hidden_dropout_prob=0.0,  # 隐藏层Dropout概率，默认为0.0
+        attention_probs_dropout_prob=0.0,  # 注意力Dropout概率，默认为0.0
+        classifier_dropout_prob=0.1,  # 分类器Dropout概率，默认为0.1
+        max_position_embeddings=512,  # 最大位置嵌入数，默认为512
+        type_vocab_size=2,  # 类型词汇表大小，默认为2
+        initializer_range=0.02,  # 初始化范围，默认为0.02
+        layer_norm_eps=1e-12,  # 层归一化的epsilon，默认为1e-12
+        use_cache=True,  # 是否使用缓存，默认为True
+        pad_token_id=0,  # 填充token的ID，默认为0
+        bos_token_id=312,  # 开始token的ID，默认为312
+        eos_token_id=313,  # 结束token的ID，默认为313
+        **kwargs,  # 其他关键字参数
+        # 调用父类的初始化方法，设置模型的特殊 token ID 和其他关键参数
         super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
 
-        # 设置词汇表大小
+        # 设置模型的词汇表大小
         self.vocab_size = vocab_size
-        # 设置输入嵌入大小
+        # 设置输入词嵌入的维度大小
         self.input_embedding_size = input_embedding_size
-        # 设置输出嵌入大小
+        # 设置输出词嵌入的维度大小
         self.output_embedding_size = output_embedding_size
-        # 设置最大位置嵌入数
+        # 设置最大位置嵌入的数量
         self.max_position_embeddings = max_position_embeddings
-        # 设置隐藏层大小
+        # 设置隐藏层的大小
         self.hidden_size = hidden_size
         # 设置隐藏层数量
         self.num_hidden_layers = num_hidden_layers
-        # 设置注意力头数量
+        # 设置注意力头的数量
         self.num_attention_heads = num_attention_heads
-        # 设置中间层大小
+        # 设置中间层的大小
         self.intermediate_size = intermediate_size
-        # 设置隐藏层激活函数
+        # 设置隐藏层的激活函数
         self.hidden_act = hidden_act
-        # 设置隐藏层 dropout 概率
+        # 设置隐藏层的丢弃率
         self.hidden_dropout_prob = hidden_dropout_prob
-        # 设置注意力机制 dropout 概率
+        # 设置注意力概率的丢弃率
         self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        # 设置分类器 dropout 概率
+        # 设置分类器的丢弃率
         self.classifier_dropout_prob = classifier_dropout_prob
         # 设置初始化范围
         self.initializer_range = initializer_range
-        # 设置类型词汇表大小
+        # 设置类型词汇表的大小
         self.type_vocab_size = type_vocab_size
-        # 设置层归一化 epsilon
+        # 设置层归一化的 epsilon 值
         self.layer_norm_eps = layer_norm_eps
         # 设置是否使用缓存
         self.use_cache = use_cache
-        # 设置是否绑定词嵌入
+        # 设置是否将词嵌入进行绑定
         self.tie_word_embeddings = False
-# 定义一个自定义的 RemBertOnnxConfig 类，继承自 OnnxConfig 类
+# 定义一个自定义的配置类 RemBertOnnxConfig，继承自 OnnxConfig 类
 class RemBertOnnxConfig(OnnxConfig):
 
-    # 定义 inputs 属性，返回一个字符串到整数到字符串的映射的字典
+    # 定义一个属性 inputs，返回一个映射，其键为字符串，值为映射（键为整数，值为字符串）
     @property
-    def inputs(self) -> Mapping[str, Mapping[int, str]:
-        
-        # 如果任务是多项选择的话，定义动态轴包含索引 0: "batch", 1: "choice", 2: "sequence"
+    def inputs(self) -> Mapping[str, Mapping[int, str]]:
+        # 如果任务类型为 "multiple-choice"
         if self.task == "multiple-choice":
+            # 设置动态轴 dynamic_axis 为 {0: "batch", 1: "choice", 2: "sequence"}
             dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
-        else:  # 否则，定义动态轴包含索引 0: "batch", 1: "sequence"
+        else:
+            # 否则设置动态轴 dynamic_axis 为 {0: "batch", 1: "sequence"}
             dynamic_axis = {0: "batch", 1: "sequence"}
         
-        # 返回有序字典，包含三个键值对，键为输入名称，值为动态轴字典
+        # 返回一个有序字典，包含三个键值对，分别是 ("input_ids", dynamic_axis)，("attention_mask", dynamic_axis)，("token_type_ids", dynamic_axis)
         return OrderedDict(
             [
                 ("input_ids", dynamic_axis),
@@ -144,10 +145,9 @@ class RemBertOnnxConfig(OnnxConfig):
             ]
         )
 
-    # 定义 atol_for_validation 属性，返回一个浮点数，用于验证的阈值
+    # 定义一个属性 atol_for_validation，返回一个浮点数，表示验证时的绝对容差
     @property
     def atol_for_validation(self) -> float:
-        
-        # 返回 1e-4 作为验证的阈值
+        # 返回绝对容差的数值，设定为 1e-4
         return 1e-4
 ```

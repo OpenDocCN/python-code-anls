@@ -1,13 +1,22 @@
-# `.\transformers\models\blip_2\processing_blip_2.py`
+# `.\models\blip_2\processing_blip_2.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本授权
-# 除非适用法律要求或书面同意，否则软件按"原样"分发，不提供任何形式的担保或条件
-# 请查看许可证以获取更多信息
+```
+# coding=utf-8
+# Copyright 2023 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-BLIP-2 的处理器类。
+Processor class for BLIP-2.
 """
 
 from typing import List, Optional, Union
@@ -17,32 +26,35 @@ from ...processing_utils import ProcessorMixin
 from ...tokenization_utils_base import BatchEncoding, PaddingStrategy, PreTokenizedInput, TextInput, TruncationStrategy
 from ...utils import TensorType
 
+
 class Blip2Processor(ProcessorMixin):
     r"""
-    构建一个 BLIP-2 处理器，将 BLIP 图像处理器和 OPT/T5 分词器封装成一个单一处理器。
+    Constructs a BLIP-2 processor which wraps a BLIP image processor and an OPT/T5 tokenizer into a single processor.
 
-    [`BlipProcessor`] 提供了 [`BlipImageProcessor`] 和 [`AutoTokenizer`] 的所有功能。更多信息请参阅 [`~BlipProcessor.__call__`] 和 [`~BlipProcessor.decode`] 的文档字符串。
+    [`BlipProcessor`] offers all the functionalities of [`BlipImageProcessor`] and [`AutoTokenizer`]. See the docstring
+    of [`~BlipProcessor.__call__`] and [`~BlipProcessor.decode`] for more information.
 
     Args:
         image_processor (`BlipImageProcessor`):
-            [`BlipImageProcessor`] 的一个实例。图像处理器是一个必需的输入。
+            An instance of [`BlipImageProcessor`]. The image processor is a required input.
         tokenizer (`AutoTokenizer`):
-            [`PreTrainedTokenizer`] 的一个实例。分词器是一个必需的输入。
+            An instance of ['PreTrainedTokenizer`]. The tokenizer is a required input.
     """
 
     attributes = ["image_processor", "tokenizer"]
     image_processor_class = "BlipImageProcessor"
     tokenizer_class = "AutoTokenizer"
 
-    # 从 transformers.models.blip.processing_blip.BlipProcessor.__init__ 复制而来
+    # Copied from transformers.models.blip.processing_blip.BlipProcessor.__init__
     def __init__(self, image_processor, tokenizer):
-        # 禁用分词器返回 token_type_ids
+        # 禁用 tokenizer 的 token_type_ids 返回功能
         tokenizer.return_token_type_ids = False
+        # 调用父类 ProcessorMixin 的构造函数，传入 image_processor 和 tokenizer
         super().__init__(image_processor, tokenizer)
-        # 设置当前处理器为图像处理器
+        # 将当前处理器设置为图像处理器 image_processor
         self.current_processor = self.image_processor
 
-    # 从 transformers.models.blip.processing_blip.BlipProcessor.__call__ 复制而来
+    # Copied from transformers.models.blip.processing_blip.BlipProcessor.__call__
     def __call__(
         self,
         images: ImageInput = None,
@@ -62,20 +74,23 @@ class Blip2Processor(ProcessorMixin):
         verbose: bool = True,
         return_tensors: Optional[Union[str, TensorType]] = None,
         **kwargs,
+    ):
+        # 根据参数设置调用处理器的各种功能
+        pass
     ) -> BatchEncoding:
         """
-        这个方法使用 [`BlipImageProcessor.__call__`] 方法来准备图像以供模型使用，
-        并使用 [`BertTokenizerFast.__call__`] 方法来准备文本以供模型使用。
+        使用 BlipImageProcessor.__call__ 方法准备模型的图像输入，
+        使用 BertTokenizerFast.__call__ 方法准备模型的文本输入。
 
-        请参考上述两个方法的文档字符串以获取更多信息。
+        详细信息请参考上述两个方法的文档字符串。
         """
         if images is None and text is None:
             raise ValueError("You have to specify either images or text.")
 
-        # 仅获取文本
+        # 只处理文本情况
         if images is None:
             self.current_processor = self.tokenizer
-            # 使用 tokenizer 处理文本，返回编码结果
+            # 使用 tokenizer 处理文本编码
             text_encoding = self.tokenizer(
                 text=text,
                 add_special_tokens=add_special_tokens,
@@ -96,11 +111,11 @@ class Blip2Processor(ProcessorMixin):
             )
             return text_encoding
 
-        # 添加像素值
+        # 添加像素值处理
         encoding_image_processor = self.image_processor(images, return_tensors=return_tensors)
 
         if text is not None:
-            # 使用 tokenizer 处理文本，返回编码结果
+            # 使用 tokenizer 处理文本编码
             text_encoding = self.tokenizer(
                 text=text,
                 add_special_tokens=add_special_tokens,
@@ -123,35 +138,32 @@ class Blip2Processor(ProcessorMixin):
             text_encoding = None
 
         if text_encoding is not None:
-            # 更新编码结果
+            # 更新图像处理器的文本编码结果
             encoding_image_processor.update(text_encoding)
 
         return encoding_image_processor
 
-    # 从 transformers.models.blip.processing_blip.BlipProcessor.batch_decode 复制而来，替换 BertTokenizerFast 为 PreTrainedTokenizer
+    # 从 transformers.models.blip.processing_blip.BlipProcessor.batch_decode 复制，并替换为 BertTokenizerFast->PreTrainedTokenizer
     def batch_decode(self, *args, **kwargs):
         """
-        这个方法将其所有参数转发给 PreTrainedTokenizer 的 [`~PreTrainedTokenizer.batch_decode`] 方法。
-        请参考该方法的文档字符串以获取更多信息。
+        此方法将所有参数转发给 PreTrainedTokenizer 的 batch_decode 方法。请参考该方法的文档字符串获取详细信息。
         """
         return self.tokenizer.batch_decode(*args, **kwargs)
-```  
-    # 从transformers.models.blip.processing_blip.BlipProcessor.decode中复制过来，使用BertTokenizerFast->PreTrainedTokenizer
+    # 从 `transformers.models.blip.processing_blip.BlipProcessor.decode` 复制的方法。
+    # 将所有参数和关键字参数转发给 `PreTrainedTokenizer` 的 `decode` 方法。
+    # 请参阅 `PreTrainedTokenizer.decode` 方法的文档字符串以获取更多信息。
     def decode(self, *args, **kwargs):
         """
-        此方法将所有参数转发到PreTrainedTokenizer的[`~PreTrainedTokenizer.decode`]。请参考
-        此方法的文档字符串以获取更多信息。
+        This method forwards all its arguments to PreTrainedTokenizer's [`~PreTrainedTokenizer.decode`]. Please refer to
+        the docstring of this method for more information.
         """
-        # 调用PreTrainedTokenizer的decode方法进行解码，并返回结果
         return self.tokenizer.decode(*args, **kwargs)
 
     @property
-    # 从transformers.models.blip.processing_blip.BlipProcessor.model_input_names中复制过来
+    # 从 `transformers.models.blip.processing_blip.BlipProcessor.model_input_names` 复制的属性。
+    # 获取 `tokenizer` 和 `image_processor` 的模型输入名称，并返回去重后的列表。
     def model_input_names(self):
-        # 获取tokenizer的模型输入名称列表
         tokenizer_input_names = self.tokenizer.model_input_names
-        # 获取image_processor的模型输入名称列表
         image_processor_input_names = self.image_processor.model_input_names
-        # 将tokenizer和image_processor的模型输入名称列表合并成一个列表，并去除重复的元素
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 ```

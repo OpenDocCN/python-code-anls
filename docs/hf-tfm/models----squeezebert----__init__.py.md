@@ -1,54 +1,64 @@
-# `.\transformers\models\squeezebert\__init__.py`
+# `.\models\squeezebert\__init__.py`
 
-```py
-# 版权声明和许可证信息
-# 导入必要的模块和函数
+```
+# 版权声明和许可信息，说明该代码受 Apache License, Version 2.0 版权保护
+#
+# 如果符合许可证要求，可以使用本文件；否则，不得使用
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非法律另有规定或书面同意，否则本软件按“原样”分发，不附带任何明示或暗示的保证或条件
+# 详见许可证了解更多信息
+#
+
+# 引入类型检查
 from typing import TYPE_CHECKING
+
+# 引入必要的依赖和模块
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tokenizers_available, is_torch_available
 
-# 定义模块导入结构
+# 定义要导入的结构
 _import_structure = {
-    # 配置文件
     "configuration_squeezebert": [
-        "SQUEEZEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP",  # 预训练配置文件映射
-        "SqueezeBertConfig",  # SqueezeBert 配置
-        "SqueezeBertOnnxConfig",  # SqueezeBert ONNX 配置
+        "SQUEEZEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP",
+        "SqueezeBertConfig",
+        "SqueezeBertOnnxConfig",
     ],
-    # SqueezeBert 分词器
     "tokenization_squeezebert": ["SqueezeBertTokenizer"],
 }
 
-# 检查 Tokenizers 库是否可用
+# 检查是否有 tokenizers 库可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果可用，将 tokenization_squeezebert_fast 模块添加到导入结构中
     _import_structure["tokenization_squeezebert_fast"] = ["SqueezeBertTokenizerFast"]
 
-# 检查 Torch 库是否可用
+# 检查是否有 torch 库可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果可用，将 modeling_squeezebert 模块添加到导入结构中
     _import_structure["modeling_squeezebert"] = [
-        "SQUEEZEBERT_PRETRAINED_MODEL_ARCHIVE_LIST",  # 预训练模型归档列表
-        "SqueezeBertForMaskedLM",  # 用于 Masked LM 任务的 SqueezeBert 模型
-        "SqueezeBertForMultipleChoice",  # 用于多选题任务的 SqueezeBert 模型
-        "SqueezeBertForQuestionAnswering",  # 用于问答任务的 SqueezeBert 模型
-        "SqueezeBertForSequenceClassification",  # 用于序列分类任务的 SqueezeBert 模型
-        "SqueezeBertForTokenClassification",  # 用于标记分类任务的 SqueezeBert 模型
-        "SqueezeBertModel",  # SqueezeBert 模型
-        "SqueezeBertModule",  # SqueezeBert 模块
-        "SqueezeBertPreTrainedModel",  # SqueezeBert 预训练模型
+        "SQUEEZEBERT_PRETRAINED_MODEL_ARCHIVE_LIST",
+        "SqueezeBertForMaskedLM",
+        "SqueezeBertForMultipleChoice",
+        "SqueezeBertForQuestionAnswering",
+        "SqueezeBertForSequenceClassification",
+        "SqueezeBertForTokenClassification",
+        "SqueezeBertModel",
+        "SqueezeBertModule",
+        "SqueezeBertPreTrainedModel",
     ]
 
-# 如果是类型检查模式
+# 如果是类型检查模式，引入相关模块
 if TYPE_CHECKING:
-    # 导入必要的模块和类
     from .configuration_squeezebert import (
         SQUEEZEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
         SqueezeBertConfig,
@@ -56,7 +66,6 @@ if TYPE_CHECKING:
     )
     from .tokenization_squeezebert import SqueezeBertTokenizer
 
-    # 检查 Tokenizers 库是否可用
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
@@ -65,7 +74,6 @@ if TYPE_CHECKING:
     else:
         from .tokenization_squeezebert_fast import SqueezeBertTokenizerFast
 
-    # 检查 Torch 库是否可用
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -84,10 +92,10 @@ if TYPE_CHECKING:
             SqueezeBertPreTrainedModel,
         )
 
-# 如果不是类型检查模式
+# 如果不是类型检查模式，将当前模块设置为延迟加载模块
 else:
     import sys
 
-    # 创建一个LazyModule对象作为当前模块
+    # 将当前模块替换为延迟加载模块，其中包括导入结构和当前文件的信息
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

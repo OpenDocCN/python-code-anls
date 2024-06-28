@@ -1,22 +1,24 @@
-# `.\transformers\modeling_attn_mask_utils.py`
+# `.\modeling_attn_mask_utils.py`
 
-```py
-# 导入所需模块和类
+```
+# 引入必要的库
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
-# 导入 PyTorch 库
+
+# 导入PyTorch库
 import torch
 
-# 定义一个数据类，用于生成和转换注意力遮罩
+# 定义一个数据类，用于处理注意力掩码转换的实用工具
 @dataclass
 class AttentionMaskConverter:
     """
-    一个实用的注意力遮罩类，可以实现以下功能：
-        - 创建一个因果关系的四维遮罩
-        - 创建一个带有滑动窗口的因果关系的四维遮罩
-        - 将一个二维的注意力遮罩（batch_size, query_length）转换为一个四维的注意力遮罩（batch_size, 1, query_length, key_value_length），该遮罩可以与注意力分数相乘
+    A utility attention mask class that allows one to:
+        - Create a causal 4d mask
+        - Create a causal 4d mask with slided window
+        - Convert a 2d attention mask (batch_size, query_length) to a 4d attention mask (batch_size, 1, query_length,
+          key_value_length) that can be multiplied with attention scores
 
-    例子:
+    Examples:
 
     ```python
     >>> import torch
@@ -29,33 +31,32 @@ class AttentionMaskConverter:
             [-3.4028e+38, -3.4028e+38, -3.4028e+38, -3.4028e+38, -3.4028e+38],
             [-3.4028e+38, -3.4028e+38, -3.4028e+38,  0.0000e+00, -3.4028e+38],
             [-3.4028e+38, -3.4028e+38, -3.4028e+38,  0.0000e+00,  0.0000e+00]]]])
-    ```py
+    ```
 
-    参数:
+    Parameters:
         is_causal (`bool`):
-            注意力遮罩是否应该是单向的（因果关系）或双向的。
+            Whether the attention mask should be a uni-directional (causal) or bi-directional mask.
 
-        sliding_window (`int`, *可选*):
-            如果定义了 `sliding_window` 为正整数，则可以创建滑动窗口遮罩。
+        sliding_window (`int`, *optional*):
+            Optionally, the sliding window masks can be created if `sliding_window` is defined to a positive integer.
     """
 
+    # 定义类的属性，控制注意力掩码的类型和参数
     is_causal: bool
     sliding_window: int
 
-    # 初始化函数
+    # 类的初始化方法，设定初始参数并验证滑动窗口参数的有效性
     def __init__(self, is_causal: bool, sliding_window: Optional[int] = None):
-        # 设置是否为因果关系的遮罩
         self.is_causal = is_causal
-        # 设置滑动窗口的大小
         self.sliding_window = sliding_window
 
-        # 如果滑动窗口大小不为 None 且小于等于 0，则抛出值错误异常
+        # 如果定义了滑动窗口参数，确保其为正整数
         if self.sliding_window is not None and self.sliding_window <= 0:
             raise ValueError(
                 f"Make sure that when passing `sliding_window` that its value is a strictly positive integer, not `{self.sliding_window}`"
             )
 
-    # 将输入的注意力遮罩转换为因果关系的四维遮罩
+    # 方法：生成单向（因果）的四维注意力掩码
     def to_causal_4d(
         self,
         batch_size: int,
@@ -63,19 +64,20 @@ class AttentionMaskConverter:
         key_value_length: int,
         dtype: torch.dtype,
         device: Union[torch.device, "str"] = "cpu",
-``` 
     ) -> Optional[torch.Tensor]:
         """
-        创建一个因果关系的 4D 掩码，形状为 (bsz, head_dim=1, query_length, key_value_length)，并向右上角的三角矩阵（因果关系掩码）添加大的负偏置。
+        Creates a causal 4D mask of (bsz, head_dim=1, query_length, key_value_length) shape and adds large negative
+        bias to upper right hand triangular matrix (causal mask).
         """
+        # 如果不是因果关系，抛出数值错误异常
         if not self.is_causal:
-            raise ValueError(f"请仅在 {self.__class__} 的 `is_causal` 设置为 True 时使用 `to_causal_4d`。")
+            raise ValueError(f"Please use `to_causal_4d` only if {self.__class__} has `is_causal` set to True.")
 
-        # 如果形状未缓存，则创建一个新的因果关系掩码并缓存它
+        # 如果形状未被缓存，创建一个新的因果遮罩并缓存它
         input_shape = (batch_size, query_length)
         past_key_values_length = key_value_length - query_length
 
-        # 创建因果关系掩码
+        # 创建因果遮罩
         # [bsz, seq_len] -> [bsz, 1, tgt_seq_len, src_seq_len]
         causal_4d_mask = None
         if input_shape[-1] > 1 or self.sliding_window is not None:
@@ -101,23 +103,21 @@ class AttentionMaskConverter:
         key_value_length) shape and by adding a large negative bias to not-attended positions. If attention_mask is
         causal, a causal mask will be added.
         """
-        # 定义输入形状为 (bsz, query_length)
+        # 计算输入形状，即(batch_size, query_length)
         input_shape = (attention_mask_2d.shape[0], query_length)
 
-        # 创建因果关系掩码
+        # 创建因果(mask)
         # [bsz, seq_len] -> [bsz, 1, tgt_seq_len, src_seq_len]
         causal_4d_mask = None
-        # 如果输入形状的最后一个维度大于1或者存在滑动窗口，并且是因果关系的
         if (input_shape[-1] > 1 or self.sliding_window is not None) and self.is_causal:
-            # 如果未传入 key_value_length，则抛出异常
             if key_value_length is None:
                 raise ValueError(
                     "This attention mask converter is causal. Make sure to pass `key_value_length` to correctly create a causal mask."
                 )
 
-            # 计算过去键值的长度
+            # 计算过去键值长度
             past_key_values_length = key_value_length - query_length
-            # 创建因果关系的4D掩码
+            # 生成因果(mask)
             causal_4d_mask = self._make_causal_mask(
                 input_shape,
                 dtype,
@@ -125,24 +125,23 @@ class AttentionMaskConverter:
                 past_key_values_length=past_key_values_length,
                 sliding_window=self.sliding_window,
             )
-        # 如果滑动窗口不为空，则抛出未实现的错误
         elif self.sliding_window is not None:
+            # 抛出未实现错误，滑动窗口目前仅支持因果掩蔽
             raise NotImplementedError("Sliding window is currently only implemented for causal masking")
 
-        # 将2D注意力掩码扩展为4D注意力掩码
         # [bsz, seq_len] -> [bsz, 1, tgt_seq_len, src_seq_len]
+        # 扩展注意力(mask)
         expanded_attn_mask = self._expand_mask(attention_mask_2d, dtype, tgt_len=input_shape[-1]).to(
             attention_mask_2d.device
         )
 
-        # 如果存在因果关系的4D掩码，则将其应用到扩展的注意力掩码上，并填充大的负数偏置到未注意的位置
+        # 如果存在因果(mask)，则用大负数填充未注意的位置
         if causal_4d_mask is not None:
             expanded_attn_mask = causal_4d_mask.masked_fill(expanded_attn_mask.bool(), torch.finfo(dtype).min)
 
-        # 扩展的4D掩码
+        # 扩展后的注意力(mask)可能会导致溢出
         expanded_4d_mask = expanded_attn_mask
 
-        # 返回扩展的4D注意力掩码
         return expanded_4d_mask
 
     @staticmethod
@@ -152,190 +151,257 @@ class AttentionMaskConverter:
         device: torch.device,
         past_key_values_length: int = 0,
         sliding_window: Optional[int] = None,
-    ):
         """
-        生成用于双向自注意力的因果掩码。
+        Make causal mask used for bi-directional self-attention.
         """
-        # 获取输入张量的形状
+        # 获取输入的张量形状信息，包括批大小和目标序列长度
         bsz, tgt_len = input_ids_shape
-        # 创建一个形状为(tgt_len, tgt_len)的张量，填充为dtype类型的最小值，存储在设备device上
+
+        # 创建一个与目标长度相同的方形矩阵，用极小的浮点数填充，设备为指定的设备
         mask = torch.full((tgt_len, tgt_len), torch.finfo(dtype).min, device=device)
-        # 创建一个与mask相同大小的张量，用于条件填充
+
+        # 创建一个条件张量，范围是目标长度的整数序列
         mask_cond = torch.arange(mask.size(-1), device=device)
-        # 根据条件填充mask张量
+
+        # 使用条件张量来生成一个下三角矩阵，将其对角线上的元素保持为0
         mask.masked_fill_(mask_cond < (mask_cond + 1).view(mask.size(-1), 1), 0)
 
-        # 将mask张量转换为dtype类型
+        # 将掩码转换为指定的数据类型
         mask = mask.to(dtype)
 
-        # 如果过去的键值长度大于0，则在mask张量的右侧添加0填充
+        # 如果过去键值长度大于0，将0填充的过去键值长度张量连接到现有掩码之前
         if past_key_values_length > 0:
             mask = torch.cat([torch.zeros(tgt_len, past_key_values_length, dtype=dtype, device=device), mask], dim=-1)
 
         # 如果需要，添加下三角滑动窗口掩码
         if sliding_window is not None:
-            # 计算对角线位置
-            diagonal = past_key_values_length - sliding_window + 1
-            # 创建上三角矩阵
-            context_mask = 1 - torch.triu(torch.ones_like(mask, dtype=torch.int), diagonal=diagonal)
-            # 使用dtype类型的最小值填充mask张量
-            mask.masked_fill_(context_mask.bool(), torch.finfo(dtype).min)
+            # 计算对角线的值，用于下三角滑动窗口掩码
+            diagonal = past_key_values_length - sliding_window - 1
 
-        # 返回扩展后的mask张量，形状为[bsz, 1, tgt_len, tgt_len + past_key_values_length]
+            # 创建一个下三角矩阵，掩盖大于对角线值的元素
+            context_mask = torch.tril(torch.ones_like(mask, dtype=torch.bool), diagonal=diagonal)
+
+            # 使用极小的浮点数填充掩码中被标记的位置
+            mask.masked_fill_(context_mask, torch.finfo(dtype).min)
+
+        # 将掩码扩展为四维张量：[bsz, 1, tgt_len, tgt_len + past_key_values_length]
         return mask[None, None, :, :].expand(bsz, 1, tgt_len, tgt_len + past_key_values_length)
 
     @staticmethod
     def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
         """
-        将attention_mask从`[bsz, seq_len]`扩展为`[bsz, 1, tgt_seq_len, src_seq_len]`。
+        Expands attention_mask from `[bsz, seq_len]` to `[bsz, 1, tgt_seq_len, src_seq_len]`.
         """
-        # 获取mask张量的形状
+        # 获取输入掩码的形状信息，包括批大小和源序列长度
         bsz, src_len = mask.size()
-        # 如果tgt_len为None，则将其设置为src_len
+
+        # 如果未提供目标序列长度，则使用源序列长度作为目标序列长度
         tgt_len = tgt_len if tgt_len is not None else src_len
 
-        # 将mask张量扩展为形状为[bsz, 1, tgt_len, src_len]，并转换为dtype类型
+        # 将二维掩码扩展为四维张量，增加两个额外的维度，将其转换为指定的数据类型
         expanded_mask = mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len).to(dtype)
 
-        # 创建反转的掩码，用于填充未被注意的位置
+        # 创建一个反掩码，用1减去扩展的掩码
         inverted_mask = 1.0 - expanded_mask
 
+        # 使用极小的浮点数填充反掩码中被标记的位置
         return inverted_mask.masked_fill(inverted_mask.to(torch.bool), torch.finfo(dtype).min)
 
     @staticmethod
     def _unmask_unattended(
-        expanded_mask: torch.Tensor, attention_mask: torch.Tensor, unmasked_value: Union[bool, float]
-# 准备 4D 因果注意力掩码，从一个形状为 `(batch_size, key_value_length)` 的 2D 掩码创建一个形状为 `(batch_size, 1, query_length, key_value_length)` 的掩码
+        expanded_mask: torch.FloatTensor,
+        min_dtype: float,
+        device: Optional[torch.device] = None
+    ):
+        """
+        Unmasks the unattended positions in the attention matrix.
+        """
+        # fmt: off
+        """
+        Attend to all tokens in masked rows from the expanded attention mask, for example the relevant first rows when
+        using left padding. This is required by F.scaled_dot_product_attention memory-efficient attention path.
+        Details: https://github.com/pytorch/pytorch/issues/110213
 
+        `expanded_mask` is [bsz, num_masks, tgt_seq_len, src_seq_len] or [bsz, tgt_seq_len, src_seq_len].
+        `attention_mask` is [bsz, src_seq_len].
+
+        The dimension num_masks of `expanded_mask` is most often 1, but it can also be the number of heads in the case of alibi attention bias.
+
+        For example, if `expanded_mask` is (e.g. here left-padding case)
+        ```
+        [[[[0, 0, 0],
+           [0, 0, 0],
+           [0, 0, 1]]],
+         [[[1, 0, 0],
+           [1, 1, 0],
+           [1, 1, 1]]],
+         [[[0, 0, 0],
+           [0, 1, 0],
+           [0, 1, 1]]]]
+        ```
+        then the modified `expanded_mask` will be
+        ```
+        [[[[1, 1, 1],   <-- modified
+           [1, 1, 1],   <-- modified
+           [0, 0, 1]]],
+         [[[1, 0, 0],
+           [1, 1, 0],
+           [1, 1, 1]]],
+         [[[1, 1, 1],   <-- modified
+           [0, 1, 0],
+           [0, 1, 1]]]]
+        """
+        # fmt: on
+        # 检查 expanded_mask 的数据类型是否为 torch.bool，若是则抛出 ValueError
+        if expanded_mask.dtype == torch.bool:
+            raise ValueError(
+                "AttentionMaskConverter._unmask_unattended expects a float `expanded_mask`, got a BoolTensor."
+            )
+
+        # 返回一个修改过的 expanded_mask，其中未被完全掩盖的行将保持不变，其他行将被置为零
+        return expanded_mask.mul(~torch.all(expanded_mask == min_dtype, dim=-1, keepdim=True))
+    # 创建一个用于 SDPA（scaled_dot_product_attention）的 4D 因果注意力掩码，形状为 `(batch_size, 1, query_length, key_value_length)`
+    # 从形状为 `(batch_size, key_value_length)` 的 2D 注意力掩码创建
 def _prepare_4d_causal_attention_mask(
-    attention_mask: Optional[torch.Tensor],  # 注意力掩码，可以为 None
-    input_shape: Union[torch.Size, Tuple, List],  # 输入形状，应为一个定义了 `(batch_size, query_length)` 的元组
-    inputs_embeds: torch.Tensor,  # 嵌入的输入，作为 torch 张量
-    past_key_values_length: int,  # 关键值缓存的长度
-    sliding_window: Optional[int] = None,  # 如果模型使用窗口注意力，应传入一个滑动窗口大小，默认为 None
+    attention_mask: Optional[torch.Tensor],
+    input_shape: Union[torch.Size, Tuple, List],
+    inputs_embeds: torch.Tensor,
+    past_key_values_length: int,
+    sliding_window: Optional[int] = None,
 ):
+    """
+    Creates a causal 4D mask of shape `(batch_size, 1, query_length, key_value_length)` from a 2D mask of shape
+    `(batch_size, key_value_length)`
 
-    # 创建注意力掩码转换器，设为因果模式，如果使用窗口注意力，传入滑动窗口大小
+    Args:
+        attention_mask (`torch.Tensor` or `None`):
+            A 2D attention mask of shape `(batch_size, key_value_length)`
+        input_shape (`tuple(int)` or `list(int)` or `torch.Size`):
+            The input shape should be a tuple that defines `(batch_size, query_length)`.
+        inputs_embeds (`torch.Tensor`):
+            The embedded inputs as a torch Tensor.
+        past_key_values_length (`int`):
+            The length of the key value cache.
+        sliding_window (`int`, *optional*):
+            If the model uses windowed attention, a sliding window should be passed.
+    """
+    # 创建一个 AttentionMaskConverter 对象，用于生成因果关系的注意力掩码
     attn_mask_converter = AttentionMaskConverter(is_causal=True, sliding_window=sliding_window)
 
-    # 计算关键值长度，包括输入形状和过去关键值长度
+    # 计算 key_value_length，这里是输入形状的最后一个维度加上过去的键值长度
     key_value_length = input_shape[-1] + past_key_values_length
 
-    # 如果注意力掩码不为空且形状为 2D
+    # 如果输入的 attention_mask 不为空且是 2D 的
     if attention_mask is not None and len(attention_mask.shape) == 2:
-        # 调用掩码转换器，将 2D 控制器转换为 4D
+        # 将 2D 的 attention_mask 转换成 4D 的
         attention_mask = attn_mask_converter.to_4d(
             attention_mask, input_shape[-1], key_value_length=key_value_length, dtype=inputs_embeds.dtype
         )
-    # 如果注意力掩码不为空且形状为 4D
+    # 如果 attention_mask 不为空且是 4D 的
     elif attention_mask is not None and len(attention_mask.shape) == 4:
-        # 期望的形状应为 (batch_size, 1, query_length, key_value_length)
+        # 检查 attention_mask 的形状是否符合预期
         expected_shape = (input_shape[0], 1, input_shape[1], key_value_length)
-        # 如果注意力掩码形状与期望的不同，则引发错误
         if tuple(attention_mask.shape) != expected_shape:
+            # 如果不符合预期，抛出 ValueError
             raise ValueError(
                 f"Incorrect 4D attention_mask shape: {tuple(attention_mask.shape)}; expected: {expected_shape}."
             )
         else:
-            # 如果 4D 掩码形状正确，则反转它并用负无穷填充
+            # 如果 4D 的 attention_mask 形状正确，则反转它并用负无穷填充
             inverted_mask = 1.0 - attention_mask
             attention_mask = inverted_mask.masked_fill(
                 inverted_mask.to(torch.bool), torch.finfo(inputs_embeds.dtype).min
             )
     else:
-        # 如果注意力掩码为空，则调用掩码转换器，创建因果 4D 控制器
+        # 如果 attention_mask 为空或者不是 2D 或 4D 的，则使用 AttentionMaskConverter 生成因果 4D 注意力掩码
         attention_mask = attn_mask_converter.to_causal_4d(
             input_shape[0], input_shape[-1], key_value_length, dtype=inputs_embeds.dtype, device=inputs_embeds.device
         )
 
-    # 返回处理后的注意力掩码
+    # 返回生成的 attention_mask
     return attention_mask
 
 
-# 从 _prepare_4d_causal_attention_mask 适配而来
+# Adapted from _prepare_4d_causal_attention_mask
+# 根据 _prepare_4d_causal_attention_mask 适配
 def _prepare_4d_causal_attention_mask_for_sdpa(
-    attention_mask: Optional[torch.Tensor],  # 注意力掩码，可以为 None
-    input_shape: Union[torch.Size, Tuple, List],  # 输入形状，应为一个定义了 `(batch_size, query_length)` 的元组
-    inputs_embeds: torch.Tensor,  # 嵌入的输入，作为 torch 张量
-    past_key_values_length: int,  # 关键值缓存的长度
-    sliding_window: Optional[int] = None,  # 如果模型使用窗口注意力，应传入一个滑动窗口大小，默认为 None
+    attention_mask: Optional[torch.Tensor],
+    input_shape: Union[torch.Size, Tuple, List],
+    inputs_embeds: torch.Tensor,
+    past_key_values_length: int,
+    sliding_window: Optional[int] = None,
 ):
     """
-    为 `torch.nn.functional.scaled_dot_product_attention` 准备正确的 `attn_mask` 参数。
+    Prepares the correct `attn_mask` argument to be used by `torch.nn.functional.scaled_dot_product_attention`.
 
-    如果 `attention_mask` 参数中没有被掩码的标记，我们将在 `query_length == 1` 和...
+    In case no token is masked in the `attention_mask` argument, we simply set it to `None` for the cases `query_length == 1` and
     """
-    """
-    `key_value_length == query_length`, and rely instead on SDPA `is_causal` argument to use causal/non-causal masks,
-    allowing to dispatch to the flash attention kernel (that can otherwise not be used if a custom `attn_mask` is passed).
-    """
-    # 创建一个AttentionMaskConverter对象，设置is_causal为True，sliding_window为sliding_window参数的值
+    # 创建一个注意力掩码转换器对象，设定为因果关系模式，并指定是否使用滑动窗口
     attn_mask_converter = AttentionMaskConverter(is_causal=True, sliding_window=sliding_window)
 
-    # 计算key_value_length的值
+    # 计算键值对的长度，包括输入形状的最后一个维度和过去键值对的长度
     key_value_length = input_shape[-1] + past_key_values_length
-    # 获取batch_size和query_length
+    # 获取输入形状中的批处理大小和查询长度
     batch_size, query_length = input_shape
 
-    # 检查是否处于追踪状态，如果是则设置is_tracing为True
-    is_tracing = torch.jit.is_tracing() or isinstance(inputs_embeds, torch.fx.Proxy)
+    # 检查是否处于追踪状态，如果是，则需要使用SDPA的`attn_mask`参数而不是自定义的`attention_mask`
+    is_tracing = (
+        torch.jit.is_tracing()
+        or isinstance(inputs_embeds, torch.fx.Proxy)
+        or (hasattr(torch, "_dynamo") and torch._dynamo.is_compiling())
+    )
 
-    # 如果attention_mask不为None
+    # 如果传入了注意力掩码
     if attention_mask is not None:
-        # 如果attention_mask的维度为4
+        # 如果注意力掩码是4维的
         if len(attention_mask.shape) == 4:
-            # 检查attention_mask的形状是否符合预期
+            # 验证注意力掩码的形状是否符合预期
             expected_shape = (input_shape[0], 1, input_shape[1], key_value_length)
             if tuple(attention_mask.shape) != expected_shape:
+                # 抛出值错误，指出注意力掩码的形状不正确
                 raise ValueError(
                     f"Incorrect 4D attention_mask shape: {tuple(attention_mask.shape)}; expected: {expected_shape}."
                 )
             else:
-                # 如果4D mask的形状正确 - 反转它并用负无穷填充
+                # 如果4维掩码形状正确，反转掩码并用负无穷填充
                 inverted_mask = 1.0 - attention_mask.to(inputs_embeds.dtype)
                 attention_mask = inverted_mask.masked_fill(
                     inverted_mask.to(torch.bool), torch.finfo(inputs_embeds.dtype).min
                 )
                 return attention_mask
 
-        # 如果不处于追踪状态且attention_mask全为1
+        # 如果不处于追踪状态，并且所有的注意力掩码值都是1
         elif not is_tracing and torch.all(attention_mask == 1):
             if query_length == 1:
-                # 对于query_length == 1，因果注意力和双向注意力是相同的
+                # 当查询长度为1时，因果关注和双向关注是相同的
                 attention_mask = None
             elif key_value_length == query_length:
+                # 当键值对的长度等于查询长度时，不需要注意力掩码
                 attention_mask = None
             else:
-                # 不幸的是，对于query_length > 1且key_value_length != query_length，我们通常不能忽略注意力掩码，因为SDPA因果掩码生成可能是错误的。
-                # 我们将在SDPA中设置`is_causal=False`，依赖于Transformers的attention_mask，因此在这里不将其设置为None。
-                # 参考：https://github.com/pytorch/pytorch/issues/108108
+                # 对于查询长度大于1且键值长度不等于查询长度的情况，无法忽略注意力掩码，需要特别处理
                 pass
-    # 如果attention_mask为None且query_length > 1且key_value_length != query_length
+
+    # 如果没有传入注意力掩码，并且查询长度大于1且键值长度不等于查询长度
     elif query_length > 1 and key_value_length != query_length:
-        # 参考上面的注释（https://github.com/pytorch/pytorch/issues/108108）。
-        # 丑陋的：我们在这里将其设置为True，以便在以下控制流中调度到`to_causal_4d`。
+        # 将注意力掩码设为True，以便在后续控制流中转到`to_causal_4d`
         attention_mask = True
-    # 如果正在进行跟踪操作
+    # 如果正在进行跟踪（tracing），且未提供注意力掩码（attention_mask），则抛出值错误异常
     elif is_tracing:
-        # 抛出值错误，提示不能在没有提供 attention_mask 的情况下使用 torch.jit.trace 跟踪 SDPA 注意力模块。
-        # 解决此问题的方法是，要么在加载模型时使用参数 `attn_implementation="eager"`，要么在跟踪模型时传递 attention_mask 输入。
         raise ValueError(
             'Attention using SDPA can not be traced with torch.jit.trace when no attention_mask is provided. To solve this issue, please either load your model with the argument `attn_implementation="eager"` or pass an attention_mask input when tracing the model.'
         )
 
-    # 如果 attention_mask 为 None
+    # 如果没有提供 attention_mask，则将 expanded_4d_mask 设置为 None
     if attention_mask is None:
-        # 将扩展后的 4D 注意力掩码设置为 None
         expanded_4d_mask = None
-    # 如果 attention_mask 为 True
+    # 如果 attention_mask 设置为 True，则通过 attn_mask_converter.to_causal_4d 函数生成扩展后的 4D 注意力掩码
     elif attention_mask is True:
-        # 将扩展后的 4D 注意力掩码设置为按因果关系的形式，根据输入形状、key_value_length 和输入嵌入的 dtype、device 转换而来
         expanded_4d_mask = attn_mask_converter.to_causal_4d(
             input_shape[0], input_shape[-1], key_value_length, dtype=inputs_embeds.dtype, device=inputs_embeds.device
         )
-    # 如果 attention_mask 不为 None 且不为 True
+    # 否则，根据给定的 attention_mask 使用 attn_mask_converter.to_4d 函数生成扩展后的 4D 注意力掩码
     else:
-        # 将扩展后的 4D 注意力掩码设置为根据输入的 attention_mask 转换而来，同时考虑 key_value_length 和输入嵌入的 dtype
         expanded_4d_mask = attn_mask_converter.to_4d(
             attention_mask,
             input_shape[-1],
@@ -343,100 +409,118 @@ def _prepare_4d_causal_attention_mask_for_sdpa(
             key_value_length=key_value_length,
         )
 
-        # 从 PyTorch 2.1 开始，使用内存效率较高的注意力后端的 F.scaled_dot_product_attention
-        # 如果在注意力掩码中某些序列完全未被关注，将会产生 NaN 值。详情参见：https://github.com/pytorch/pytorch/issues/110213
-        #
-        # 如果查询长度大于 1，且不是在进行跟踪操作，则执行以下代码块
-        if query_length > 1 and not is_tracing:
-            # 调用 _unmask_unattended 方法，将未关注的序列从扩展后的 4D 注意力掩码中移除，并将其值设为 0.0
+        # 如果不是在跟踪模式下，并且 expanded_4d_mask 存在且在 CUDA 设备上，
+        # 则调用 AttentionMaskConverter._unmask_unattended 函数，处理未注意的部分
+        if not is_tracing and expanded_4d_mask.device.type == "cuda":
             expanded_4d_mask = AttentionMaskConverter._unmask_unattended(
-                expanded_4d_mask, attention_mask, unmasked_value=0.0
+                expanded_4d_mask, min_dtype=torch.finfo(inputs_embeds.dtype).min
             )
 
-    # 返回扩展后的 4D 注意力掩码
+    # 返回生成或处理后的 expanded_4d_mask 注意力掩码
     return expanded_4d_mask
-# 创建一个非因果关系的4D掩码，形状为`(batch_size, 1, query_length, key_value_length)`，从形状为`(batch_size, key_value_length)`的2D掩码中创建
-
+# 创建一个非因果关系的四维注意力掩码，其形状为 `(batch_size, 1, query_length, key_value_length)`，从形状为 `(batch_size, key_value_length)` 的二维掩码创建
 def _prepare_4d_attention_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
     """
-    创建一个非因果关系的4D掩码，形状为`(batch_size, 1, query_length, key_value_length)`，从形状为`(batch_size, key_value_length)`的2D掩码中创建
+    Creates a non-causal 4D mask of shape `(batch_size, 1, query_length, key_value_length)` from a 2D mask of shape
+    `(batch_size, key_value_length)`
 
     Args:
         mask (`torch.Tensor` or `None`):
-            形状为`(batch_size, key_value_length)`的2D注意力掩码
+            A 2D attention mask of shape `(batch_size, key_value_length)`
         dtype (`torch.dtype`):
-            创建的掩码应具有的torch数据类型
+            The torch dtype the created mask shall have.
         tgt_len (`int`):
-            创建的掩码应具有的目标长度或查询长度
+            The target length or query length the created mask shall have.
     """
+    # 调用内部函数 `_expand_mask` 扩展掩码至四维并返回
     return AttentionMaskConverter._expand_mask(mask=mask, dtype=dtype, tgt_len=tgt_len)
 
 
+# 为 SDPA（Scaled Dot-Product Attention）创建非因果四维注意力掩码，形状为 `(batch_size, 1, query_length, key_value_length)`，从形状为 `(batch_size, key_value_length)` 的二维掩码创建
 def _prepare_4d_attention_mask_for_sdpa(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] = None):
     """
-    创建一个非因果关系的4D掩码，形状为`(batch_size, 1, query_length, key_value_length)`，从形状为`(batch_size, key_value_length)`的2D掩码中创建
+    Creates a non-causal 4D mask of shape `(batch_size, 1, query_length, key_value_length)` from a 2D mask of shape
+    `(batch_size, key_value_length)`
 
     Args:
         mask (`torch.Tensor` or `None`):
-            形状为`(batch_size, key_value_length)`的2D注意力掩码
+            A 2D attention mask of shape `(batch_size, key_value_length)`
         dtype (`torch.dtype`):
-            创建的掩码应具有的torch数据类型
+            The torch dtype the created mask shall have.
         tgt_len (`int`):
-            创建的掩码应具有的目标长度或查询长度
+            The target length or query length the created mask shall have.
     """
+    # 获取 batch_size 和 key_value_length 的尺寸
     batch_size, key_value_length = mask.shape
+    # 如果未提供 tgt_len，则默认为 key_value_length
     tgt_len = tgt_len if tgt_len is not None else key_value_length
 
-    # torch.jit.trace和torchdynamo无法捕获控制流`is_causal=attention_mask is None and q_len > 1`，作为SDPA参数使用。我们通过始终在追踪时使用SDPA的`attn_mask`参数来保持与这些追踪工具的兼容性。
-    # 当使用torchdynamo和fullgraph=True时，也需要修复这个问题。
-    is_tracing = torch.jit.is_tracing()
+    # 检查是否处于追踪模式
+    is_tracing = (
+        torch.jit.is_tracing()
+        or isinstance(mask, torch.fx.Proxy)
+        or (hasattr(torch, "_dynamo") and torch._dynamo.is_compiling())
+    )
 
+    # 如果掩码中所有元素均为 1
     if torch.all(mask == 1):
         if is_tracing:
-            pass
+            pass  # 如果处于追踪模式，不做任何操作
         elif tgt_len == 1:
-            # 对于query_length == 1，因果关系注意力和双向注意力是相同的。
+            # 对于 query_length == 1，因果和双向注意力相同，返回 None
             return None
         elif key_value_length == tgt_len:
+            # 如果 key_value_length 等于 tgt_len，返回 None
             return None
         else:
-            # 不幸的是，对于query_length > 1且key_value_length != query_length，我们通常不能忽略注意力掩码，因为SDPA因果掩码生成可能是错误的。我们将在SDPA中将is_causal=False，并依赖于Transformers的attention_mask，因此在这里不将其设置为None。
-            # 参考：https://github.com/pytorch/pytorch/issues/108108
+            # 对于 query_length > 1 且 key_value_length != query_length 的情况，
+            # 我们不能忽略注意力掩码，因为 SDPA 因果掩码的生成可能会出错，
+            # 我们在 SDPA 中将 is_causal=False，并依赖于 Transformers 的 attention_mask，因此在这里不设置为 None。
+            # 参考: https://github.com/pytorch/pytorch/issues/108108
             return AttentionMaskConverter._expand_mask(mask=mask, dtype=dtype, tgt_len=tgt_len)
     else:
+        # 对于其他情况，调用 `_expand_mask` 扩展掩码并返回
         return AttentionMaskConverter._expand_mask(mask=mask, dtype=dtype, tgt_len=tgt_len)
+    # device: torch.device,
+    # 定义一个参数 `device`，类型为 `torch.device`，用于指定张量运算的设备（如CPU或GPU）
 
+    # past_key_values_length: int = 0,
+    # 定义一个参数 `past_key_values_length`，类型为 `int`，默认值为 `0`，用于指定过去的键值对长度
 
-def _create_4d_causal_attention_mask(
-    input_shape: Union[torch.Size, Tuple, List],
+    # sliding_window: Optional[int] = None,
+    # 定义一个参数 `sliding_window`，类型为可选的 `int`，默认值为 `None`，用于指定滑动窗口的大小
+# 创建一个形状为 `(batch_size, 1, query_length, key_value_length)` 的因果性四维掩码
+
+def create_causal_mask(
+    input_shape: Union[tuple[int], list[int], torch.Size],
     dtype: torch.dtype,
     device: torch.device,
-    past_key_values_length: int = 0,
-    sliding_window: Optional[int] = None,
+    sliding_window: Optional[int] = None
 ) -> Optional[torch.Tensor]:
     """
-    # 创建一个因果关系的4D掩码，形状为`(batch_size, 1, query_length, key_value_length)`
+    创建一个形状为 `(batch_size, 1, query_length, key_value_length)` 的因果性四维掩码
 
     Args:
         input_shape (`tuple(int)` or `list(int)` or `torch.Size`):
-            输入形状应该是一个定义了`(batch_size, query_length)`的元组。
+            输入形状应为定义 `(batch_size, query_length)` 的元组。
         dtype (`torch.dtype`):
-            创建的掩码应该具有的 torch 数据类型。
-        device (`int`):
-            创建的掩码应该存在的 torch 设备。
+            所创建掩码的 torch 数据类型。
+        device (`torch.device`):
+            所创建掩码的 torch 设备。
         sliding_window (`int`, *optional*):
-            如果模型使用窗口化注意力，应传入一个滑动窗口值。
+            如果模型使用窗口化注意力，应传入一个滑动窗口大小。
     """
-    # 创建一个 AttentionMaskConverter 对象，is_causal 设置为 True，如果使用窗口化注意力，传入滑动窗口值
+    # 创建一个注意力掩码转换器，设置为因果性，根据是否提供滑动窗口参数决定
     attn_mask_converter = AttentionMaskConverter(is_causal=True, sliding_window=sliding_window)
 
-    # 计算 key_value_length，为过去的键值长度加上输入形状的最后一个维度
+    # 计算 key_value_length，包括过去键值长度和输入形状的最后一个维度
     key_value_length = past_key_values_length + input_shape[-1]
-    # 使用 attn_mask_converter 将掩码转换为因果关系的4D形状
+
+    # 使用掩码转换器生成四维因果性掩码
     attention_mask = attn_mask_converter.to_causal_4d(
         input_shape[0], input_shape[-1], key_value_length, dtype=dtype, device=device
     )
 
-    # 返回生成的 attention_mask
+    # 返回生成的注意力掩码
     return attention_mask
 ```

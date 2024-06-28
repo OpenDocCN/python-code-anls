@@ -1,25 +1,19 @@
-# `.\transformers\models\visual_bert\configuration_visual_bert.py`
+# `.\models\visual_bert\configuration_visual_bert.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，授权使用此文件
-# 只有在遵守许可证的情况下才能使用此文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制
+```
+# 设置文件编码为 UTF-8
 
-""" VisualBERT 模型配置"""
+# 版权声明和许可信息，声明代码版权归 HuggingFace Inc. 团队所有，并遵循 Apache License, Version 2.0
+# 根据许可证，除非符合许可协议，否则不得使用此文件
 
-# 导入必要的模块和类
+# 引入 VisualBERT 模型的配置类 PretrainedConfig 和日志记录工具 logging
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
 
-# 获取日志记录器
+# 获取当前模块的日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 预训练配置文件映射
+# 定义 VisualBERT 预训练模型及其对应的配置文件下载地址映射表
 VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "uclanlp/visualbert-vqa": "https://huggingface.co/uclanlp/visualbert-vqa/resolve/main/config.json",
     "uclanlp/visualbert-vqa-pre": "https://huggingface.co/uclanlp/visualbert-vqa-pre/resolve/main/config.json",
@@ -36,28 +30,31 @@ VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "uclanlp/visualbert-nlvr2-coco-pre": (
         "https://huggingface.co/uclanlp/visualbert-nlvr2-coco-pre/resolve/main/config.json"
     ),
-    # 查看所有 VisualBERT 模型 https://huggingface.co/models?filter=visual_bert
+    # 所有 VisualBERT 模型的列表可在 https://huggingface.co/models?filter=visual_bert 查看
 }
 
-# VisualBERT 配置类，继承自 PretrainedConfig
+# VisualBertConfig 类，继承自 PretrainedConfig 类
 class VisualBertConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`VisualBertModel`] 配置的类。用于根据指定的参数实例化 VisualBERT 模型，定义模型架构。
-    使用默认值实例化配置将产生类似于 VisualBERT [uclanlp/visualbert-vqa-coco-pre](https://huggingface.co/uclanlp/visualbert-vqa-coco-pre) 架构的配置。
+    这是 VisualBERT 模型的配置类，用于存储 [`VisualBertModel`] 的配置信息。根据指定的参数实例化一个 VisualBERT 模型，
+    定义模型架构。使用默认配置实例化一个配置对象将产生类似于 VisualBERT [uclanlp/visualbert-vqa-coco-pre]
+    (https://huggingface.co/uclanlp/visualbert-vqa-coco-pre) 架构的配置。
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
+    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
 
-    示例:
+    Example:
 
     ```python
     >>> from transformers import VisualBertConfig, VisualBertModel
 
     >>> # 初始化一个 VisualBERT visualbert-vqa-coco-pre 风格的配置
     >>> configuration = VisualBertConfig.from_pretrained("uclanlp/visualbert-vqa-coco-pre")
-    ```py
-    # 初始化一个模型（带有随机权重），使用 visualbert-vqa-coco-pre 风格的配置
+    ```
+
+    """
+    # 初始化一个 VisualBertModel 模型，使用给定的配置参数
     model = VisualBertModel(configuration)
-    
-    # 访问模型配置
+
+    # 访问模型的配置信息
     configuration = model.config
 ```

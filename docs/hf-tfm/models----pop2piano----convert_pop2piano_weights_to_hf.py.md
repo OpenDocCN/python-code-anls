@@ -1,30 +1,32 @@
-# `.\transformers\models\pop2piano\convert_pop2piano_weights_to_hf.py`
+# `.\models\pop2piano\convert_pop2piano_weights_to_hf.py`
 
-```py
-# 版权声明和许可证信息
-# 版权归 The HuggingFace Inc. 团队所有，保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"原样"分发的，没有任何明示或暗示的保证或条件
-# 请查看许可证以获取有关权限和限制的具体语言
+```
+# 加载版权声明和许可证信息
+# 版权所有 2023 年 HuggingFace Inc. 团队。保留所有权利。
+# 根据 Apache 许可证 2.0 版本进行许可；
+# 除非符合许可证的要求，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，软件将按“原样”分发，
+# 无任何明示或暗示的担保或条件。
+# 有关特定语言的权限，请参阅许可证。
 
-""" 用于从官方存储库加载 Pop2Piano 模型权重并展示分词器词汇表是如何构建的文件"""
+""" 用于从官方库加载 Pop2Piano 模型权重并展示 tokenizer 词汇构建方法的文件 """
 
-import json
+import json  # 导入 JSON 模块
+import torch  # 导入 PyTorch
 
-import torch
-
-from transformers import Pop2PianoConfig, Pop2PianoForConditionalGeneration
+from transformers import Pop2PianoConfig, Pop2PianoForConditionalGeneration  # 导入 Pop2Piano 相关类
 
 
-########################## MODEL WEIGHTS ##########################
+########################## 模型权重 ##########################
 
-# 这些权重是从官方 pop2piano 存储库下载的
+# 这些权重是从官方 pop2piano 仓库下载的
 # https://huggingface.co/sweetcocoa/pop2piano/blob/main/model-1999-val_0.67311615.ckpt
 official_weights = torch.load("./model-1999-val_0.67311615.ckpt")
-state_dict = {}
+state_dict = {}  # 初始化状态字典
 
 
 # 加载配置并初始化模型
@@ -40,7 +42,7 @@ state_dict["decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight
     "transformer.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight"
 ]
 
-# 加载编码器和解码器的嵌入标记和最终层规范化
+# 加载编码器和解码器的嵌入标记和最终层归一化
 state_dict["encoder.embed_tokens.weight"] = official_weights["state_dict"]["transformer.encoder.embed_tokens.weight"]
 state_dict["decoder.embed_tokens.weight"] = official_weights["state_dict"]["transformer.decoder.embed_tokens.weight"]
 
@@ -56,50 +58,44 @@ state_dict["lm_head.weight"] = official_weights["state_dict"]["transformer.lm_he
 state_dict["mel_conditioner.embedding.weight"] = official_weights["state_dict"]["mel_conditioner.embedding.weight"]
 state_dict["shared.weight"] = official_weights["state_dict"]["transformer.shared.weight"]
 
-# 加载每��编码器块
+# 加载每个编码器块
 for i in range(cfg.num_layers):
-    # 第 0 层
+    # 第 i 层
     state_dict[f"encoder.block.{i}.layer.0.SelfAttention.q.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.0.SelfAttention.q.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的自注意力机制的k权重
+    # 设置编码器（encoder）的每个块（block）中的 SelfAttention 模块的权重参数
     state_dict[f"encoder.block.{i}.layer.0.SelfAttention.k.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.0.SelfAttention.k.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的自注意力机制的v权重
     state_dict[f"encoder.block.{i}.layer.0.SelfAttention.v.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.0.SelfAttention.v.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的自注意力机制的o权重
     state_dict[f"encoder.block.{i}.layer.0.SelfAttention.o.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.0.SelfAttention.o.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的自注意力机制的层归一化权重
     state_dict[f"encoder.block.{i}.layer.0.layer_norm.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.0.layer_norm.weight"
     ]
 
-    # layer 1
-    # 更新状态字典中的键，表示编码器块中第i个层的第二层DenseReluDense层的wi_0权重
+    # 设置编码器（encoder）的每个块（block）中的第二层（layer 1）的 DenseReluDense 模块的权重参数
     state_dict[f"encoder.block.{i}.layer.1.DenseReluDense.wi_0.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.1.DenseReluDense.wi_0.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的第二层DenseReluDense层的wi_1权重
     state_dict[f"encoder.block.{i}.layer.1.DenseReluDense.wi_1.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.1.DenseReluDense.wi_1.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的第二层DenseReluDense层的wo权重
     state_dict[f"encoder.block.{i}.layer.1.DenseReluDense.wo.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.1.DenseReluDense.wo.weight"
     ]
-    # 更新状态字典中的键，表示编码器块中第i个层的第二层层归一化权重
     state_dict[f"encoder.block.{i}.layer.1.layer_norm.weight"] = official_weights["state_dict"][
         f"transformer.encoder.block.{i}.layer.1.layer_norm.weight"
     ]
 # 加载每个解码器块的权重
 
+# 循环遍历6个解码器块
 for i in range(6):
-    # 第0层
+    # 第 0 层
     state_dict[f"decoder.block.{i}.layer.0.SelfAttention.q.weight"] = official_weights["state_dict"][
         f"transformer.decoder.block.{i}.layer.0.SelfAttention.q.weight"
     ]
@@ -116,7 +112,7 @@ for i in range(6):
         f"transformer.decoder.block.{i}.layer.0.layer_norm.weight"
     ]
 
-    # 第1层
+    # 第 1 层
     state_dict[f"decoder.block.{i}.layer.1.EncDecAttention.q.weight"] = official_weights["state_dict"][
         f"transformer.decoder.block.{i}.layer.1.EncDecAttention.q.weight"
     ]
@@ -133,7 +129,7 @@ for i in range(6):
         f"transformer.decoder.block.{i}.layer.1.layer_norm.weight"
     ]
 
-    # 第2层
+    # 第 2 层
     state_dict[f"decoder.block.{i}.layer.2.DenseReluDense.wi_0.weight"] = official_weights["state_dict"][
         f"transformer.decoder.block.{i}.layer.2.DenseReluDense.wi_0.weight"
     ]
@@ -147,57 +143,60 @@ for i in range(6):
         f"transformer.decoder.block.{i}.layer.2.layer_norm.weight"
     ]
 
-# 使用权重来加载模型的状态字典，严格模式
+# 使用加载的状态字典更新模型的权重
 model.load_state_dict(state_dict, strict=True)
 
-# 保存权重
+# 将模型的状态字典保存到文件
 torch.save(state_dict, "./pytorch_model.bin")
 
-# tokenizer
-# tokenize和detokenize方法取自官方实现
-# 链接：https://github.com/sweetcocoa/pop2piano/blob/fac11e8dcfc73487513f4588e8d0c22a22f2fdc5/midi_tokenizer.py#L34
-# 根据给定的索引和 token 类型返回 token 值
+########################## TOKENIZER ##########################
+
+# tokenize 和 detokenize 方法来自官方实现
+
+# 链接: https://github.com/sweetcocoa/pop2piano/blob/fac11e8dcfc73487513f4588e8d0c22a22f2fdc5/midi_tokenizer.py#L34
+# 定义一个函数用于生成特定类型的令牌编号
 def tokenize(idx, token_type, n_special=4, n_note=128, n_velocity=2):
-    # 如果是 TOKEN_TIME，返回计算后的索引值
+    # 如果令牌类型是 TOKEN_TIME，返回对应的编号
     if token_type == "TOKEN_TIME":
         return n_special + n_note + n_velocity + idx
-    # 如果是 TOKEN_VELOCITY，返回计算后的索引值
+    # 如果令牌类型是 TOKEN_VELOCITY，返回对应的编号
     elif token_type == "TOKEN_VELOCITY":
         return n_special + n_note + idx
-    # 如果是 TOKEN_NOTE，返回计算后的索引值
+    # 如果令牌类型是 TOKEN_NOTE，返回对应的编号
     elif token_type == "TOKEN_NOTE":
         return n_special + idx
-    # 如果是 TOKEN_SPECIAL，返回原始索引值
+    # 如果令牌类型是 TOKEN_SPECIAL，返回对应的编号
     elif token_type == "TOKEN_SPECIAL":
         return idx
-    # 如果未知 token 类型，返回 -1
+    # 如果令牌类型不在已知类型中，返回 -1
     else:
         return -1
 
-# 根据索引值和特殊标记数量进行反解析，返回 token 类型和具体值
+
+# link : https://github.com/sweetcocoa/pop2piano/blob/fac11e8dcfc73487513f4588e8d0c22a22f2fdc5/midi_tokenizer.py#L48
+# 定义一个函数用于将令牌编号反向解析为令牌类型和具体编号
 def detokenize(idx, n_special=4, n_note=128, n_velocity=2, time_idx_offset=0):
-    # 如果索引值大于等于 n_special + n_note + n_velocity，返回 TOKEN_TIME 类型和具体值的元组
+    # 根据令牌编号判断其属于哪种类型的令牌，并返回对应的令牌类型和具体编号
     if idx >= n_special + n_note + n_velocity:
         return "TOKEN_TIME", (idx - (n_special + n_note + n_velocity)) + time_idx_offset
-    # 如果索引值大于等于 n_special + n_note，返回 TOKEN_VELOCITY 类型和具体值的元组
     elif idx >= n_special + n_note:
         return "TOKEN_VELOCITY", idx - (n_special + n_note)
-    # 如果索引值大于等于 n_special，返回 TOKEN_NOTE 类型和具体值的元组
     elif idx >= n_special:
         return "TOKEN_NOTE", idx - n_special
-    # 否则返回 TOKEN_SPECIAL 类型和具体值的元组
     else:
         return "TOKEN_SPECIAL", idx
 
-# 创建解码器，将索引值和对应的标记值连接成字符串
+
+# 创建一个空字典用于存储解析后的令牌编号和对应的字符串表示
 decoder = {}
+# 遍历令牌的总数，更新 decoder 字典，将每个令牌编号映射为其解析后的字符串表示
 for i in range(cfg.vocab_size):
     decoder.update({i: f"{detokenize(i)[1]}_{detokenize(i)[0]}"})
 
-# 创建编码器，将解码器中的键值对进行翻转
+# 创建一个 encoder 字典，将 decoder 中的键值对反转，用于编码时快速查找令牌编号
 encoder = {v: k for k, v in decoder.items()}
 
-# 将编码器保存为 JSON 文件
+# 将 encoder 字典保存为 JSON 文件，用于后续使用
 with open("./vocab.json", "w") as file:
     file.write(json.dumps(encoder))
 ```

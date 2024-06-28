@@ -1,73 +1,87 @@
-# `.\transformers\models\videomae\modeling_videomae.py`
+# `.\models\videomae\modeling_videomae.py`
 
-```py
-# 这是一个 PyTorch 实现的 VideoMAE (masked autoencoder) 模型的代码
-# 引入所需的库和类
-# coding=utf-8
-# Copyright 2022 Multimedia Computing Group, Nanjing University and The HuggingFace Inc. team. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+```
+# 设置文件编码为 UTF-8
+# 版权声明，指明版权归属及保留所有权利
+# 根据 Apache License, Version 2.0 许可证使用本文件
+# 除非符合许可证要求，否则不得使用本文件
+# 可在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
+# 本软件根据许可证“按原样”提供，无任何明示或暗示的担保或条件
+# 请参阅许可证了解具体条款和限制
 """ PyTorch VideoMAE (masked autoencoder) model."""
 
+# 导入所需模块和库
+import collections.abc  # 导入 collections.abc 模块
+import math  # 导入 math 模块
+from copy import deepcopy  # 导入 deepcopy 函数
+from dataclasses import dataclass  # 导入 dataclass 装饰器
+from typing import Optional, Set, Tuple, Union  # 导入类型注解相关的类和装饰器
 
-import collections.abc
-import math
-from copy import deepcopy
-from dataclasses import dataclass
-from typing import Optional, Set, Tuple, Union
+import numpy as np  # 导入 NumPy 库并命名为 np
+import torch  # 导入 PyTorch 库
+import torch.utils.checkpoint  # 导入 PyTorch 的 checkpoint 功能
+from torch import nn  # 从 PyTorch 导入 nn 模块
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 从 nn 模块导入损失函数类
 
-import numpy as np
-import torch
-import torch.utils.checkpoint
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-
-from ...activations import ACT2FN
-from ...modeling_outputs import BaseModelOutput, ImageClassifierOutput
-from ...modeling_utils import PreTrainedModel
-from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer
-from ...utils import (
-    ModelOutput,
-    add_start_docstrings,
-    add_start_docstrings_to_model_forward,
-    logging,
-    replace_return_docstrings,
+# 导入 Hugging Face 库中的相关模块和函数
+from ...activations import ACT2FN  # 从 activations 模块导入 ACT2FN 函数
+from ...modeling_outputs import BaseModelOutput, ImageClassifierOutput  # 从 modeling_outputs 导入输出类
+from ...modeling_utils import PreTrainedModel  # 从 modeling_utils 导入预训练模型基类
+from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer  # 导入模型优化相关函数
+from ...utils import (  # 导入通用工具函数和类
+    ModelOutput,  # 导入 ModelOutput 类
+    add_start_docstrings,  # 导入函数，用于向模型方法添加文档字符串
+    add_start_docstrings_to_model_forward,  # 导入函数，用于向模型前向方法添加文档字符串
+    logging,  # 导入 logging 模块
+    replace_return_docstrings,  # 导入函数，用于替换返回文档字符串
 )
-from ...utils.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from .configuration_videomae import VideoMAEConfig
+from ...utils.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD  # 导入常量
+from .configuration_videomae import VideoMAEConfig  # 导入 VideoMAE 模型的配置类
 
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义文档中使用的配置和检查点
+# 用于文档的配置和检查点信息
 _CONFIG_FOR_DOC = "VideoMAEConfig"
 _CHECKPOINT_FOR_DOC = "MCG-NJU/videomae-base"
 
-# 列出支持的预训练模型
+# 预训练模型存档列表
 VIDEOMAE_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "MCG-NJU/videomae-base",
-    # See all VideoMAE models at https://huggingface.co/models?filter=videomae
+    # 可在 https://huggingface.co/models?filter=videomae 查看所有 VideoMAE 模型
 ]
 
 
-# 定义 VideoMAEDecoderOutput 类，用于输出解码结果
 @dataclass
 class VideoMAEDecoderOutput(ModelOutput):
     """
-    Class for VideoMAEDecoder's outputs, with potential hidden states and attentions.
+    VideoMAEDecoder 的输出类，可能包含隐藏状态和注意力权重。
 
     Args:
+        logits (`torch.FloatTensor` of shape `(batch_size, patch_size ** 2 * num_channels)`):
+            像素重构的 logits。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, 返回时 `output_hidden_states=True` 或 `config.output_hidden_states=True`):
+            一个元组，包含 `torch.FloatTensor`（嵌入层输出 + 每个层的输出）的形状为 `(batch_size, sequence_length, hidden_size)`。
+            模型每一层的隐藏状态以及初始嵌入层的输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, 返回时 `output_attentions=True` 或 `config.output_attentions=True`):
+            一个元组，包含 `torch.FloatTensor`（每个层的注意力权重）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            经过注意力 softmax 后的注意力权重，用于计算自注意力头的加权平均值。
+    """
+    # 定义一个变量 logits，类型为 torch 的 FloatTensor，初始值为 None
+    logits: torch.FloatTensor = None
+    # 定义一个变量 hidden_states，类型为 torch 的 FloatTensor 元组，可选类型为 None
+    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    # 定义一个变量 attentions，类型为 torch 的 FloatTensor 元组，可选类型为 None
+    attentions: Optional[Tuple[torch.FloatTensor]] = None
+@dataclass
+class VideoMAEForPreTrainingOutput(ModelOutput):
+    """
+    Class for VideoMAEForPreTraining's outputs, with potential hidden states and attentions.
+
+    Args:
+        loss (`torch.FloatTensor` of shape `(1,)`):
+            Pixel reconstruction loss.
         logits (`torch.FloatTensor` of shape `(batch_size, patch_size ** 2 * num_channels)`):
             Pixel reconstruction logits.
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
@@ -79,91 +93,89 @@ class VideoMAEDecoderOutput(ModelOutput):
             sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
             the self-attention heads.
     """
-    # 定义 logits 变量，类型为 torch.FloatTensor，默认为 None
-    logits: torch.FloatTensor = None
-    # 定义 hidden_states 变量，类型为 Tuple[torch.FloatTensor] 或 None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义 attentions 变量，类型为 Tuple[torch.FloatTensor] 或 None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 创建一个输出类，用于VideoMAEForPreTraining的输出，包含潜在的隐藏状态和注意力
-@dataclass
-class VideoMAEForPreTrainingOutput(ModelOutput):
-    
-    # 损失，形状为(1,)的FloatTensor，用于像素重构损失
+
     loss: Optional[torch.FloatTensor] = None
-    
-    # logits，形状为(batch_size,patch_size ** 2 * num_channels)的FloatTensor，用于像素重构的logits
     logits: torch.FloatTensor = None
-    
-    # hidden_states，类型为tuple(torch.FloatTensor)，可选项，当传入output_hidden_states=True或者config.output_hidden_states=True时返回
-    # 包含模型每一层的隐藏状态，以及初始的嵌入输出
     hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    
-    # attentions，类型为tuple(torch.FloatTensor)，可选项，当传入output_attentions=True或者config.output_attentions=True时返回
-    # 包含每一层的注意力权重，用于计算自注意力头部的加权平均
     attentions: Optional[Tuple[torch.FloatTensor]] = None
 
 
-# sin-cos位置编码函数
-# 使用numpy的示例:
-#   https://github.com/jadore801120/attention-is-all-you-need-pytorch/blob/master/transformer/Models.py#L31
+# sin-cos position encoding
+# https://github.com/jadore801120/attention-is-all-you-need-pytorch/blob/master/transformer/Models.py#L31
 def get_sinusoid_encoding_table(n_position, d_hid):
-    """Sinusoid position encoding table"""
-    
-    # 用于计算每个位置的角度向量
+    """
+    Sinusoid position encoding table.
+
+    Args:
+        n_position (int): Number of positions to encode.
+        d_hid (int): Hidden dimension size.
+
+    Returns:
+        torch.FloatTensor: Sinusoid position encoding table of shape `(1, n_position, d_hid)`.
+    """
+
+    # Define a function to compute position-based angles
     def get_position_angle_vec(position):
         return [position / np.power(10000, 2 * (hid_j // 2) / d_hid) for hid_j in range(d_hid)]
 
-    # 创建n_position个位置的角度表
+    # Create a numpy array for sinusoid table initialization
     sinusoid_table = np.array([get_position_angle_vec(pos_i) for pos_i in range(n_position)])
     
-    # 对角度表中的偶数列进行sin计算
+    # Apply sine and cosine to alternate columns of the sinusoid table
     sinusoid_table[:, 0::2] = np.sin(sinusoid_table[:, 0::2])  # dim 2i
-    
-    # 对角度表中的奇数列进行cos计算
     sinusoid_table[:, 1::2] = np.cos(sinusoid_table[:, 1::2])  # dim 2i+1
 
-    # 将角度表转换为FloatTensor，增加一个维度
+    # Convert the numpy array to a torch tensor and add a batch dimension
     return torch.FloatTensor(sinusoid_table).unsqueeze(0)
 
 
 class VideoMAEEmbeddings(nn.Module):
     """
-    构建patch和position的嵌入层
+    Construct the patch and position embeddings for VideoMAE model.
+
+    Args:
+        config (object): Configuration object containing model settings.
+
+    Attributes:
+        patch_embeddings (VideoMAEPatchEmbeddings): Patch embeddings module.
+        num_patches (int): Number of patches in the input.
+        position_embeddings (torch.FloatTensor): Sinusoid position embeddings tensor.
+        config (object): Configuration object.
     """
 
     def __init__(self, config):
         super().__init__()
 
-        # 创建patch嵌入层对象
+        # Initialize patch embeddings using VideoMAEPatchEmbeddings
         self.patch_embeddings = VideoMAEPatchEmbeddings(config)
         
-        # 获取patch的数量
+        # Determine the number of patches from patch embeddings
         self.num_patches = self.patch_embeddings.num_patches
         
-        # 创建固定的sin-cos位置嵌入
+        # Initialize fixed sin-cos position embeddings
         self.position_embeddings = get_sinusoid_encoding_table(self.num_patches, config.hidden_size)
+        
+        # Store the configuration object
         self.config = config
-    # 定义神经网络的前向传播函数，接受像素数值和可见性掩码作为输入
     def forward(self, pixel_values, bool_masked_pos):
-        # 创建分块嵌入
+        # 创建补丁嵌入
         embeddings = self.patch_embeddings(pixel_values)
-    
+
         # 添加位置嵌入
-        # 将位置嵌入型转为和嵌入张量相同的数据类型和设备，并复制独立张量
+        # 将位置嵌入转换为与embeddings相同类型并复制到相同设备上
         embeddings = embeddings + self.position_embeddings.type_as(embeddings).to(embeddings.device).clone().detach()
-    
-        # 仅保留可见的分块
-        # ~bool_masked_pos 表示可见的分块
+
+        # 只保留可见的补丁
+        # ~bool_masked_pos 表示可见的补丁
         if bool_masked_pos is not None:
             batch_size, _, num_channels = embeddings.shape
-            # 使用掩码过滤掉不可见的分块
             embeddings = embeddings[~bool_masked_pos]
-            # 重塑张量形状，以重新整理分块维度
             embeddings = embeddings.reshape(batch_size, -1, num_channels)
-    
-        # 返回处理后的嵌入张量
+
         return embeddings
+# 视频到补丁嵌入的模块。将形状为 (batch_size, num_frames, num_channels, height, width) 的视频批次转换为
+# 形状为 (batch_size, seq_len, hidden_size) 的张量，以供 Transformer 编码器使用。
+
 class VideoMAEPatchEmbeddings(nn.Module):
     """
     Video to Patch Embedding. This module turns a batch of videos of shape (batch_size, num_frames, num_channels,
@@ -176,8 +188,8 @@ class VideoMAEPatchEmbeddings(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        
-        # 初始化VideoMAEPatchEmbeddings 类
+
+        # 从配置中获取各种参数
         image_size = config.image_size
         patch_size = config.patch_size
         num_channels = config.num_channels
@@ -185,20 +197,23 @@ class VideoMAEPatchEmbeddings(nn.Module):
         num_frames = config.num_frames
         tubelet_size = config.tubelet_size
 
-        # 确保image_size和patch_size为可迭代集合
+        # 如果图像大小和补丁大小不是可迭代对象，则转换为元组
         image_size = image_size if isinstance(image_size, collections.abc.Iterable) else (image_size, image_size)
         patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
-        # 设定image_size和patch_size
+
+        # 设置类属性
         self.image_size = image_size
         self.patch_size = patch_size
         self.tubelet_size = int(tubelet_size)
+
+        # 计算补丁数量 seq_len，即 patches 的数量
         num_patches = (
             (image_size[1] // patch_size[1]) * (image_size[0] // patch_size[0]) * (num_frames // self.tubelet_size)
         )
-        # 设定num_channels和num_patches
         self.num_channels = num_channels
         self.num_patches = num_patches
-        # 初始化卷积层projection
+
+        # 创建用于将视频像素值映射为补丁嵌入的 3D 卷积层
         self.projection = nn.Conv3d(
             in_channels=num_channels,
             out_channels=hidden_size,
@@ -207,50 +222,49 @@ class VideoMAEPatchEmbeddings(nn.Module):
         )
 
     def forward(self, pixel_values):
-        # 获取输入pixel_values的形状信息
+        # 获取输入张量的形状信息
         batch_size, num_frames, num_channels, height, width = pixel_values.shape
-        # 检查通道维度是否正确
+
+        # 检查通道数是否与配置中的一致
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 检查输入图像大小是否匹配模型参数设置
+
+        # 检查输入图像尺寸是否与配置中的一致
         if height != self.image_size[0] or width != self.image_size[1]:
             raise ValueError(
-                f"Input image size ({height}*{width}) doesn't match model ({self.image_size[0]}*{self.image_size[1]}."
+                f"Input image size ({height}*{width}) doesn't match model ({self.image_size[0]}*{self.image_size[1]})."
             )
-        # 将维度重新排列为(batch_size, num_channels, num_frames, height, width)
+
+        # 将像素值排列为 (batch_size, num_channels, num_frames, height, width)
         pixel_values = pixel_values.permute(0, 2, 1, 3, 4)
-        # 使用projection进行特征提取并展平
+
+        # 通过投影层将像素值映射为补丁嵌入，并进行扁平化和转置以适应 Transformer 的输入要求
         embeddings = self.projection(pixel_values).flatten(2).transpose(1, 2)
+
         return embeddings
-
-
-class VideoMAESelfAttention(nn.Module):
-    # 初始化方法，接受一个 VideoMAEConfig 类型的参数
     def __init__(self, config: VideoMAEConfig) -> None:
-        # 调用父类的初始化方法
         super().__init__()
-        # 如果隐藏层大小不能被注意力头的数量整除，并且配置中没有嵌入大小的属性，则引发值错误
+        # 检查隐藏大小是否是注意力头数的倍数，且未定义嵌入大小
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
+            # 如果不是，则引发值错误异常
             raise ValueError(
                 f"The hidden size {config.hidden_size,} is not a multiple of the number of attention "
                 f"heads {config.num_attention_heads}."
             )
 
-        # 设置注意力头的数量
+        # 初始化注意力头数和每个注意力头的大小
         self.num_attention_heads = config.num_attention_heads
-        # 计算每个注意力头的大小
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
-        # 计算所有注意力头的总大小
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 创建查询、键和值的线性层
+        # 初始化查询、键、值的线性变换层
         self.query = nn.Linear(config.hidden_size, self.all_head_size, bias=False)
         self.key = nn.Linear(config.hidden_size, self.all_head_size, bias=False)
         self.value = nn.Linear(config.hidden_size, self.all_head_size, bias=False)
 
-        # 如果配置中指定了 qkv_bias 为 True，则创建查询和值的偏置参数
+        # 如果配置指定了 QKV 的偏置，则初始化偏置参数
         if config.qkv_bias:
             self.q_bias = nn.Parameter(torch.zeros(self.all_head_size))
             self.v_bias = nn.Parameter(torch.zeros(self.all_head_size))
@@ -258,68 +272,64 @@ class VideoMAESelfAttention(nn.Module):
             self.q_bias = None
             self.v_bias = None
 
-        # 创建 dropout 层
+        # 初始化注意力概率的 dropout 层
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
-    # 将输入张量重塑为注意力得分所需的形状
     def transpose_for_scores(self, x: torch.Tensor) -> torch.Tensor:
-        # 计算新的张量形状，将最后两个维度分别设置为注意力头的数量和注意力头的大小
+        # 重塑张量 x 的形状以适应注意力分数计算所需的维度顺序
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
-        # 重塑输入张量的形状
         x = x.view(new_x_shape)
-        # 对张量进行转置，交换最后两个维度的位置
         return x.permute(0, 2, 1, 3)
 
-    # 前向传播方法
     def forward(
         self, hidden_states, head_mask: Optional[torch.Tensor] = None, output_attentions: bool = False
-        # 定义函数参数和返回值的类型注释
+    ):
+        # 正向传播函数定义
+        # 定义函数签名和返回类型注解，可以返回包含 torch.Tensor 的元组
         ) -> Union[Tuple[torch.Tensor, torch.Tensor], Tuple[torch.Tensor]]:
-        # 创建一个与self.v_bias形状相同的零张量，并且不需要梯度
+        # 如果存在查询偏置 self.q_bias，则创建一个与 self.v_bias 相同形状的零张量 k_bias
         k_bias = torch.zeros_like(self.v_bias, requires_grad=False) if self.q_bias is not None else None
-        # 使用线性函数计算keys
+        # 计算键 keys，使用线性变换将 hidden_states 与 self.key.weight 相乘并加上偏置 k_bias
         keys = nn.functional.linear(input=hidden_states, weight=self.key.weight, bias=k_bias)
-        # 使用线性函数计算values
+        # 计算值 values，使用线性变换将 hidden_states 与 self.value.weight 相乘并加上偏置 self.v_bias
         values = nn.functional.linear(input=hidden_states, weight=self.value.weight, bias=self.v_bias)
-        # 使用线性函数计算queries
+        # 计算查询 queries，使用线性变换将 hidden_states 与 self.query.weight 相乘并加上偏置 self.q_bias
         queries = nn.functional.linear(input=hidden_states, weight=self.query.weight, bias=self.q_bias)
 
-        # 对keys进行维度转换
+        # 将 keys、values、queries 转换为多头注意力的格式
         key_layer = self.transpose_for_scores(keys)
-        # 对values进行维度转换
         value_layer = self.transpose_for_scores(values)
-        # 对queries进行维度转换
         query_layer = self.transpose_for_scores(queries)
 
-        # 计算"query"和"key"的点积以获得原始的注意力得分
+        # 计算注意力分数，即查询与键的点积
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
 
-        # 通过除以注意力头大小的平方根来对注意力得分进行归一化
+        # 对注意力分数进行缩放，以提高数值稳定性
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
 
-        # 对注意力得分进行softmax处理，将其归一化为概率
+        # 对注意力分数进行 softmax 归一化，得到注意力概率
         attention_probs = nn.functional.softmax(attention_scores, dim=-1)
 
-        # 进行dropout操作，随机将一些注意力概率设置为0
+        # 使用 dropout 随机丢弃一些注意力概率，以防止过拟合
         attention_probs = self.dropout(attention_probs)
 
-        # 如果输入了head_mask，则将注意力概率与head_mask相乘
+        # 如果存在 head_mask，则将注意力概率与 head_mask 相乘，实现注意力头的屏蔽
         if head_mask is not None:
             attention_probs = attention_probs * head_mask
 
-        # 计算上下文张量，通过将注意力概率与value_layer的点积来实现
+        # 计算上下文向量，即注意力概率与值的加权和
         context_layer = torch.matmul(attention_probs, value_layer)
 
-        # 对context_layer进行维度变换
+        # 将上下文向量进行维度重排，以符合模型输出的形状
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
         context_layer = context_layer.view(new_context_layer_shape)
 
-        # 如果需要输出attention_probs，则返回context_layer和attention_probs，否则只返回context_layer
+        # 根据输出设置，返回上下文向量及注意力概率，或仅返回上下文向量
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
         return outputs
-# 从transformers.models.vit.modeling_vit.ViTSelfOutput复制而来，将ViT换成VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTSelfOutput with ViT->VideoMAE
 class VideoMAESelfOutput(nn.Module):
     """
     The residual connection is defined in VideoMAELayer instead of here (as is the case with other models), due to the
@@ -328,38 +338,46 @@ class VideoMAESelfOutput(nn.Module):
 
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)  # 使用线性层转换隐藏状态的维度
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # 使用dropout进行正则化
+        # 定义一个全连接层，将输入的隐藏状态转换为相同维度的输出
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        # 定义一个 dropout 层，用于随机断开神经元，防止过拟合
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        hidden_states = self.dense(hidden_states)  # 使用线性层转换隐藏状态的维度
-        hidden_states = self.dropout(hidden_states)  # 使用dropout对隐藏状态进行处理
+        # 使用全连接层处理输入的隐藏状态
+        hidden_states = self.dense(hidden_states)
+        # 对处理后的隐藏状态应用 dropout
+        hidden_states = self.dropout(hidden_states)
 
-        return hidden_states  # 返回处理后的隐藏状态
+        return hidden_states
 
 
-# 从transformers.models.vit.modeling_vit.ViTAttention复制而来，将ViT换成VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTAttention with ViT->VideoMAE
 class VideoMAEAttention(nn.Module):
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
-        self.attention = VideoMAESelfAttention(config)  # 创建VideoMAESelfAttention对象
-        self.output = VideoMAESelfOutput(config)  # 创建VideoMAESelfOutput对象
-        self.pruned_heads = set()  # 创建一个空集合用于存储被删减的头部
+        # 创建一个 VideoMAESelfAttention 实例，用于注意力机制
+        self.attention = VideoMAESelfAttention(config)
+        # 创建一个 VideoMAESelfOutput 实例，用于处理注意力输出
+        self.output = VideoMAESelfOutput(config)
+        # 存储需要剪枝的注意力头信息的集合
+        self.pruned_heads = set()
 
     def prune_heads(self, heads: Set[int]) -> None:
         if len(heads) == 0:
             return
+        # 寻找可剪枝的注意力头和相应的索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.attention.num_attention_heads, self.attention.attention_head_size, self.pruned_heads
         )
 
-        # 删减线性层
+        # 剪枝线性层
         self.attention.query = prune_linear_layer(self.attention.query, index)
         self.attention.key = prune_linear_layer(self.attention.key, index)
         self.attention.value = prune_linear_layer(self.attention.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储被删减的头部
+        # 更新超参数并存储剪枝后的头信息
         self.attention.num_attention_heads = self.attention.num_attention_heads - len(heads)
         self.attention.all_head_size = self.attention.attention_head_size * self.attention.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
@@ -370,69 +388,76 @@ class VideoMAEAttention(nn.Module):
         head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
     ) -> Union[Tuple[torch.Tensor, torch.Tensor], Tuple[torch.Tensor]]:
-        self_outputs = self.attention(hidden_states, head_mask, output_attentions)  # 使用attention模块处理隐藏状态
+        # 使用注意力层处理隐藏状态，可能输出注意力权重
+        self_outputs = self.attention(hidden_states, head_mask, output_attentions)
 
-        attention_output = self.output(self_outputs[0], hidden_states)  # 使用output模块处理attention输出和隐藏状态
+        # 使用输出层处理注意力层的输出和输入的隐藏状态
+        attention_output = self.output(self_outputs[0], hidden_states)
 
-        outputs = (attention_output,) + self_outputs[1:]  # 如果有需要输出attention，将其加入到outputs中
-        return outputs  # 返回输出
+        # 如果需要输出注意力权重，则将其添加到输出中
+        outputs = (attention_output,) + self_outputs[1:]  # 如果输出注意力权重，则添加到输出中
+        return outputs
 
 
-# 从transformers.models.vit.modeling_vit.ViTIntermediate复制而来，将ViT换成VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTIntermediate ViT->VideoMAE
 class VideoMAEIntermediate(nn.Module):
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
-        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)  # 使用线性层进行维度转换
+        # 创建一个线性层，将输入隐藏状态转换为中间隐藏层的维度
+        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
+        # 如果配置中隐藏激活函数为字符串，则选择相应的激活函数；否则使用给定的激活函数
         if isinstance(config.hidden_act, str):
-            self.intermediate_act_fn = ACT2FN[config.hidden_act]  # 根据配置选择合适的激活函数
+            self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
-            self.intermediate_act_fn = config.hidden_act  # 使用配置中指定的激活函数
-    # 定义一个前向传播函数，接受隐藏状态张量并返回张量
+            self.intermediate_act_fn = config.hidden_act
+    # 对输入的隐藏状态进行前向传播
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 使用全连接层处理隐藏状态并覆盖原隐藏状态张量
+        # 使用全连接层进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 使用激活函数处理隐藏状态并覆盖原隐藏状态张量
+        # 对线性变换后的结果应用激活函数（可能是ReLU等）
         hidden_states = self.intermediate_act_fn(hidden_states)
-        # 返回处理后的隐藏状态张量
+
+        # 返回处理后的隐藏状态
         return hidden_states
-# 从transformers.models.vit.modeling_vit.ViTOutput复制，并将ViT更改为VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTOutput ViT->VideoMAE
 class VideoMAEOutput(nn.Module):
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
+        # 初始化一个全连接层，将输入特征大小转换为隐藏大小
         self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
+        # 初始化一个dropout层，用于在训练过程中随机置零输入张量的部分元素，防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 使用线性层将输入状态转换为hidden_size维度
+        # 将输入的隐藏状态传入全连接层
         hidden_states = self.dense(hidden_states)
-        # 对hidden_states进行dropout
+        # 对全连接层的输出进行dropout操作
         hidden_states = self.dropout(hidden_states)
 
-        # 将hidden_states与输入张量相加
+        # 将dropout后的输出与输入张量相加，实现残差连接
         hidden_states = hidden_states + input_tensor
 
         return hidden_states
 
 
-# 从transformers.models.vit.modeling_vit.ViTLayer复制，并将ViT更改为VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTLayer with ViT->VideoMAE
 class VideoMAELayer(nn.Module):
     """This corresponds to the Block class in the timm implementation."""
 
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
-        # 配置块的前馈向前分配的块大小
+        # 定义用于分块前馈的块大小
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
-        # 序列长度维度
+        # 定义序列长度维度
         self.seq_len_dim = 1
-        # 创建一个VideoMAEAttention对象
+        # 初始化注意力机制模块
         self.attention = VideoMAEAttention(config)
-        # 创建一个VideoMAEIntermediate对象
+        # 初始化中间层模块
         self.intermediate = VideoMAEIntermediate(config)
-        # 创建一个VideoMAEOutput对象
+        # 初始化输出层模块
         self.output = VideoMAEOutput(config)
-        # 创建一个LayerNorm对象，在输入层之前进行归一化
+        # 初始化一个LayerNorm层，用于对隐藏状态进行归一化处理
         self.layernorm_before = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个LayerNorm对象，在输入层之后进行归一化
         self.layernorm_after = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
     def forward(
@@ -441,43 +466,40 @@ class VideoMAELayer(nn.Module):
         head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
     ) -> Union[Tuple[torch.Tensor, torch.Tensor], Tuple[torch.Tensor]]:
-        # 使用layernorm_before对隐藏状态进行归一化
+        # 在VideoMAE中，先对隐藏状态进行LayerNorm处理，然后应用自注意力机制
         self_attention_outputs = self.attention(
-            self.layernorm_before(hidden_states),  # 在VideoMAE中，进行了layernorm层
+            self.layernorm_before(hidden_states),
             head_mask,
             output_attentions=output_attentions,
         )
-        # 获取self_attention_outputs中的注意力输出
         attention_output = self_attention_outputs[0]
-        # 如果输出注意力权重，则在outputs中添加自注意力
-        outputs = self_attention_outputs[1:]  
+        outputs = self_attention_outputs[1:]  # 如果需要输出注意力权重，则将其添加到输出中
 
         # 第一个残差连接
         hidden_states = attention_output + hidden_states
 
-        # 在这里也应用了layer_norm前馈的均值
+        # 在VideoMAE中，还需在自注意力后再次应用LayerNorm
         layer_output = self.layernorm_after(hidden_states)
-        # 通过intermediate层处理layer_output
+        # 经过中间层处理
         layer_output = self.intermediate(layer_output)
 
-        # 第二个残差连接在这里完成
+        # 第二个残差连接在这里实现
         layer_output = self.output(layer_output, hidden_states)
 
-        # 在outputs中添加层输出
         outputs = (layer_output,) + outputs
 
         return outputs
 
 
-# 从transformers.models.vit.modeling_vit.ViTEncoder复制，并将ViT更改为VideoMAE
+# Copied from transformers.models.vit.modeling_vit.ViTEncoder with ViT->VideoMAE
 class VideoMAEEncoder(nn.Module):
     def __init__(self, config: VideoMAEConfig) -> None:
         super().__init__()
         self.config = config
-        # 创建一个含有config.num_hidden_layers个VideoMAELayer对象的ModuleList
+        # 初始化一个由VideoMAELayer组成的模块列表，每个VideoMAELayer对应一个隐藏层
         self.layer = nn.ModuleList([VideoMAELayer(config) for _ in range(config.num_hidden_layers)])
         self.gradient_checkpointing = False
-    # 定义模型的前向传播方法
+    # 定义一个方法，用于前向传播（推理阶段）的操作，输入参数包括隐藏状态、头部掩码、是否输出注意力权重、是否输出每层隐藏状态、是否返回字典形式的输出
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -486,22 +508,23 @@ class VideoMAEEncoder(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ) -> Union[tuple, BaseModelOutput]:
-        # 如果需要输出隐藏状态，则初始化存储所有隐藏状态的元组
+        # 如果需要输出每层隐藏状态，则初始化一个空元组
         all_hidden_states = () if output_hidden_states else None
-        # 如果需要输出注意力分布，则初始化存储所有注意力分布的元组
+        # 如果需要输出注意力权重，则初始化一个空元组
         all_self_attentions = () if output_attentions else None
 
-        # 遍历每个层进行前向传播
+        # 遍历每个层次的 Transformer 层
         for i, layer_module in enumerate(self.layer):
-            # 如果需要输出隐藏状态，则将当前隐藏状态添加到隐藏状态元组中
+            # 如果需要输出每层隐藏状态，在 all_hidden_states 中添加当前隐藏状态
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 获取当前层的头部掩码，若未提供则置为None
+            # 获取当前层的头部掩码
             layer_head_mask = head_mask[i] if head_mask is not None else None
 
-            # 如果启用渐变检查点且处于训练状态，则使用渐变检查点函数执行当前层的前向传播
+            # 如果启用了梯度检查点技术并且当前处于训练模式
             if self.gradient_checkpointing and self.training:
+                # 使用梯度检查点函数来调用当前层，并传入相应的参数
                 layer_outputs = self._gradient_checkpointing_func(
                     layer_module.__call__,
                     hidden_states,
@@ -509,59 +532,40 @@ class VideoMAEEncoder(nn.Module):
                     output_attentions,
                 )
             else:
-                # 否则直接调用当前层的前向传播方法
+                # 否则直接调用当前层的 __call__ 方法，传入隐藏状态、头部掩码和是否输出注意力权重
                 layer_outputs = layer_module(hidden_states, layer_head_mask, output_attentions)
 
-            # 更新隐藏状态为当前层的输出
+            # 更新隐藏状态为当前层的输出的第一个元素（通常是最终的隐藏状态）
             hidden_states = layer_outputs[0]
 
-            # 如果需要输出注意力分布，则将当前层的注意力分布添加到元组中
+            # 如果需要输出注意力权重，在 all_self_attentions 中添加当前层的注意力权重
             if output_attentions:
                 all_self_attentions = all_self_attentions + (layer_outputs[1],)
 
-        # 如果需要输出隐藏状态，则将最终隐藏状态添加到隐藏状态元组中
+        # 如果需要输出每层隐藏状态，在 all_hidden_states 中添加最终的隐藏状态
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果不返回字典结果，则返回包含有效值的元组
+        # 如果不需要返回字典形式的输出，则返回一个元组，过滤掉为 None 的部分
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
-        # 否则返回具有各项内容的BaseModelOutput对象
+        # 否则返回一个 BaseModelOutput 对象，包括最终的隐藏状态、所有隐藏状态和所有注意力权重
         return BaseModelOutput(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
             attentions=all_self_attentions,
         )
-class VideoMAEPreTrainedModel(PreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
-    
-    # 指定配置类
-    config_class = VideoMAEConfig
-    # 模型前缀
-    base_model_prefix = "videomae"
-    # 主输入名称
-    main_input_name = "pixel_values"
-    # 支持梯度检查点
-    supports_gradient_checkpointing = True
+@add_start_docstrings(
+    "The bare VideoMAE Model transformer outputting raw hidden-states without any specific head on top.",
+    VIDEOMAE_START_DOCSTRING,
+)
 
-    def _init_weights(self, module):
-        """Initialize the weights"""
-        # 如果是线性层或3D卷积层
-        if isinstance(module, (nn.Linear, nn.Conv3d)):
-            # 根据配置中的初始化范围，使用正态分布初始化权重
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有偏置项，将其初始化为零
-            if module.bias is not None:
-                module.bias.data.zero_()
-        # 如果是LayerNorm层
-        elif isinstance(module, nn.LayerNorm):
-            # 将偏置项初始化为零
-            module.bias.data.zero_()
-            # 将权重初始化为1
-            module.weight.data.fill_(1.0)
+模型类的装饰器，用于为 `VideoMAEModel` 添加文档字符串，并且包括了模型的描述信息和参数说明。
+
+
+class VideoMAEModel(VideoMAEPreTrainedModel):
+
+定义了 `VideoMAEModel` 类，它继承自 `VideoMAEPreTrainedModel` 类，是视频多模态自编码器（VideoMAE）的模型类。
 
 
 VIDEOMAE_START_DOCSTRING = r"""
@@ -574,6 +578,9 @@ VIDEOMAE_START_DOCSTRING = r"""
             Initializing with a config file does not load the weights associated with the model, only the
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
+
+`VIDEOMAE_START_DOCSTRING` 是一个原始字符串，用于描述 `VideoMAEModel` 类的基本信息和参数说明。它介绍了模型是如何作为 PyTorch 的 `torch.nn.Module` 子类来使用的，并提供了初始化参数的说明。
+
 
 VIDEOMAE_INPUTS_DOCSTRING = r"""
     Args:
@@ -597,46 +604,46 @@ VIDEOMAE_INPUTS_DOCSTRING = r"""
             Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
+`VIDEOMAE_INPUTS_DOCSTRING` 是一个原始字符串，用于描述 `VideoMAEModel` 类的输入参数。它详细说明了模型接受的各种输入参数，包括像素值、头部掩码、是否返回注意力张量和隐藏状态等。
 
-@add_start_docstrings(
-    "The bare VideoMAE Model transformer outputting raw hidden-states without any specific head on top.",
-    VIDEOMAE_START_DOCSTRING,
-)
-class VideoMAEModel(VideoMAEPreTrainedModel):
-    # 初始化模型，设置配置
+这些注释和文档字符串为 `VideoMAEModel` 类提供了清晰的描述和参数说明，帮助用户了解如何使用和配置该模型。
+    # 初始化函数，接受配置参数并调用父类的初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 将配置保存在类中
+        # 将配置参数保存在实例变量中
         self.config = config
 
-        # 创建视频MAE嵌入层和编码器
+        # 创建视频嵌入对象
         self.embeddings = VideoMAEEmbeddings(config)
+        # 创建视频编码器对象
         self.encoder = VideoMAEEncoder(config)
 
-        # 根据配置选择是否使用均值池化，初始化LayerNorm（如果不使用均值池化）
+        # 根据配置决定是否使用层归一化，如果使用平均池化则不需要层归一化
         if config.use_mean_pooling:
             self.layernorm = None
         else:
+            # 初始化层归一化对象
             self.layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 获取输入嵌入层
+    # 返回输入嵌入对象的方法
     def get_input_embeddings(self):
         return self.embeddings.patch_embeddings
 
-    # 剪枝模型的attention头
+    # 剪枝模型中注意力头的方法
     def _prune_heads(self, heads_to_prune):
         """
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
         class PreTrainedModel
         """
+        # 遍历需要剪枝的层和对应的注意力头
         for layer, heads in heads_to_prune.items():
+            # 调用编码器对象的指定层的注意力机制对象进行注意力头的剪枝操作
             self.encoder.layer[layer].attention.prune_heads(heads)
 
-    # 前向传播函数，接收像素值、遮挡位置、头部遮挡等参数
+    # 模型前向传播方法，用于处理视频输入和其他参数，返回模型输出
     @add_start_docstrings_to_model_forward(VIDEOMAE_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=BaseModelOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -647,43 +654,40 @@ class VideoMAEModel(VideoMAEPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+# 定义 VideoMAEDecoder 类，继承自 nn.Module，用于解码视频MAE模型
 class VideoMAEDecoder(nn.Module):
-    # 定义视频 MAE 解码器类，继承自 PyTorch 的 nn.Module 类
+    # 初始化方法
     def __init__(self, config, num_patches):
-        # 初始化函数，接收配置和补丁数作为参数
         super().__init__()
-        # 调用父类的初始化函数
 
-        # 计算解码器的标签数
+        # 计算解码器输出标签数目
         decoder_num_labels = config.num_channels * config.tubelet_size * config.patch_size**2
 
-        # 深拷贝配置
+        # 深拷贝配置对象，设置解码器配置参数
         decoder_config = deepcopy(config)
-        # 设置解码器的隐藏大小为配置中的解码器隐藏大小
         decoder_config.hidden_size = config.decoder_hidden_size
-        # 设置解码器的隐藏层数为配置中的解码器隐藏层数
         decoder_config.num_hidden_layers = config.decoder_num_hidden_layers
-        # 设置解码器的注意力头数为配置中的解码器注意力头数
         decoder_config.num_attention_heads = config.decoder_num_attention_heads
-        # 设置解码器的中间层大小为配置中的解码器中间层大小
         decoder_config.intermediate_size = config.decoder_intermediate_size
-        # 创建解码器层列表，包含指定数量的 VideoMAELayer 实例
+
+        # 创建解码器层列表，每一层使用 VideoMAELayer 类初始化
         self.decoder_layers = nn.ModuleList(
             [VideoMAELayer(decoder_config) for _ in range(config.decoder_num_hidden_layers)]
         )
 
-        # 实例化 LayerNorm 层，用于规范化隐藏状态
+        # 设置层归一化对象
         self.norm = nn.LayerNorm(config.decoder_hidden_size)
-        # 如果解码器标签数大于 0，则使用线性层；否则使用恒等映射
+
+        # 根据解码器输出标签数目确定头部连接层，如果为零则使用恒等映射
         self.head = (
             nn.Linear(config.decoder_hidden_size, decoder_num_labels) if decoder_num_labels > 0 else nn.Identity()
         )
 
-        # 设置梯度检查点为 False
+        # 是否使用梯度检查点技术，默认关闭
         self.gradient_checkpointing = False
-        # 保存配置
         self.config = config
 
+    # 前向传播方法
     def forward(
         self,
         hidden_states,
@@ -692,21 +696,18 @@ class VideoMAEDecoder(nn.Module):
         output_hidden_states=False,
         return_dict=True,
     ):
-        # 前向传播函数，接收隐藏状态、返回 token 数、是否输出注意力、是否输出隐藏状态、是否返回字典作为参数
-
-        # 如果输出隐藏状态为真，则初始化空元组以保存所有隐藏状态
+        # 初始化存储所有隐藏状态和注意力分数的元组，根据输出标志初始化为 None 或空元组
         all_hidden_states = () if output_hidden_states else None
-        # 如果输出注意力为真，则初始化空元组以保存所有注意力权重
         all_self_attentions = () if output_attentions else None
-        # 遍历解码器的每个层
+
+        # 遍历所有解码器层进行前向传播
         for i, layer_module in enumerate(self.decoder_layers):
-            # 如果输出隐藏状态为真，则将当前隐藏状态添加到 all_hidden_states 中
+            # 如果需要输出隐藏状态，则将当前隐藏状态加入到 all_hidden_states 中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 如果梯度检查点为真且处于训练模式
+            # 如果启用梯度检查点技术并且在训练阶段，则使用 _gradient_checkpointing_func 函数调用
             if self.gradient_checkpointing and self.training:
-                # 使用梯度检查点函数计算当前层的输出
                 layer_outputs = self._gradient_checkpointing_func(
                     layer_module.__call__,
                     hidden_states,
@@ -714,68 +715,71 @@ class VideoMAEDecoder(nn.Module):
                     output_attentions,
                 )
             else:
-                # 否则，直接调用当前层的前向传播函数
+                # 否则正常调用解码器层的前向传播方法
                 layer_outputs = layer_module(hidden_states, head_mask=None, output_attentions=output_attentions)
 
-            # 更新隐藏状态为当前层的输出的第一个元素
+            # 更新隐藏状态为解码器层的输出的第一个元素
             hidden_states = layer_outputs[0]
 
-            # 如果输出注意力为真，则将当前层的注意力权重添加到 all_self_attentions 中
+            # 如果需要输出注意力分数，则将当前层的注意力分数加入到 all_self_attentions 中
             if output_attentions:
                 all_self_attentions = all_self_attentions + (layer_outputs[1],)
 
-        # 如果输出隐藏状态为真，则将当前隐藏状态添加到 all_hidden_states 中
+        # 最后一层解码器的隐藏状态加入到 all_hidden_states 中
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果返回 token 数大于 0，则仅保留最后返回的 token 数量
+        # 如果 return_token_num 大于 0，则截取隐藏状态的后 return_token_num 个片段
         if return_token_num > 0:
             hidden_states = hidden_states[:, -return_token_num:]
 
-        # 对隐藏状态进行规范化
+        # 对最终隐藏状态进行归一化处理
         hidden_states = self.norm(hidden_states)
-        # 将隐藏状态投影到预测器
+
+        # 使用头部连接层计算最终的 logits
         logits = self.head(hidden_states)
 
-        # 如果不返回字典，则返回元组形式的结果
+        # 如果 return_dict 为 False，则返回包含 logits、all_hidden_states 和 all_self_attentions 的元组
         if not return_dict:
             return tuple(v for v in [logits, all_hidden_states, all_self_attentions] if v is not None)
-        # 否则，返回 VideoMAEDecoderOutput 对象
+        # 否则返回 VideoMAEDecoderOutput 对象，包含 logits、all_hidden_states 和 all_self_attentions
         return VideoMAEDecoderOutput(logits=logits, hidden_states=all_hidden_states, attentions=all_self_attentions)
 
 
+# 使用 add_start_docstrings 装饰器为 VideoMAEForPreTraining 类添加文档字符串
 @add_start_docstrings(
     "The VideoMAE Model transformer with the decoder on top for self-supervised pre-training.",
     VIDEOMAE_START_DOCSTRING,
 )
 class VideoMAEForPreTraining(VideoMAEPreTrainedModel):
-    # 用于自监督预训练的 VideoMAE 模型，其顶部是解码器
-    # 初始化函数，接受配置参数并调用父类的初始化方法
+    # 类定义部分省略
+    # 初始化方法，接受一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传递配置对象作为参数
         super().__init__(config)
-        # 将配置参数保存到实例变量中
+        # 将配置对象保存在实例变量中
         self.config = config
 
-        # 创建 VideoMAEModel 实例
+        # 创建 VideoMAEModel 对象并保存在实例变量中
         self.videomae = VideoMAEModel(config)
 
-        # 创建线性层，用于编码器到解码器的映射
+        # 创建一个线性层，用于编码器到解码器的映射，不使用偏置项
         self.encoder_to_decoder = nn.Linear(config.hidden_size, config.decoder_hidden_size, bias=False)
-        # 创建用于掩码标记的参数
+        # 创建一个可学习的参数，用于表示掩码的标记
         self.mask_token = nn.Parameter(torch.zeros(1, 1, config.decoder_hidden_size))
-        # 创建位置编码表
+        
+        # 使用 sinusoid 编码表生成位置嵌入
         self.position_embeddings = get_sinusoid_encoding_table(
             self.videomae.embeddings.num_patches, config.decoder_hidden_size
         )
 
-        # 创建 VideoMAEDecoder 实例
+        # 创建 VideoMAEDecoder 对象，传递配置对象和图像片段数量作为参数
         self.decoder = VideoMAEDecoder(config, num_patches=self.videomae.embeddings.num_patches)
 
-        # 初始化权重并应用最终处理
+        # 调用后初始化方法，执行权重初始化和最终处理操作
         self.post_init()
 
-    # 前向传播函数，接受像素值、掩码位置、头掩码、输出注意力、输出隐藏状态、返回字典等参数
+    # 将输入的视频像素值和掩码的位置信息作为输入，执行前向传播操作
     @add_start_docstrings_to_model_forward(VIDEOMAE_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=VideoMAEForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -786,31 +790,32 @@ class VideoMAEForPreTraining(VideoMAEPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-# 使用 VideoMAE 模型进行视频分类的模型转换器，顶部有一个视频分类头（线性层位于所有标记的平均池化隐藏状态之上），例如用于 ImageNet
+# 定义 VideoMAEForVideoClassification 类，继承自 VideoMAEPreTrainedModel 类，用于视频分类任务的模型转换器
 @add_start_docstrings(
     """VideoMAE Model transformer with a video classification head on top (a linear layer on top of the average pooled hidden
     states of all tokens) e.g. for ImageNet.""",
     VIDEOMAE_START_DOCSTRING,
 )
 class VideoMAEForVideoClassification(VideoMAEPreTrainedModel):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
+        # 调用父类 VideoMAEPreTrainedModel 的初始化方法
         super().__init__(config)
 
-        # 设置标签数量
+        # 设定标签数量
         self.num_labels = config.num_labels
-        # 创建 VideoMAE 模型
+        # 初始化 VideoMAEModel 模型
         self.videomae = VideoMAEModel(config)
 
         # 分类器头部
+        # 如果 config.use_mean_pooling 为 True，则使用 LayerNorm 对象进行归一化处理
         self.fc_norm = nn.LayerNorm(config.hidden_size) if config.use_mean_pooling else None
+        # 根据标签数量初始化线性分类器或恒等映射
         self.classifier = nn.Linear(config.hidden_size, config.num_labels) if config.num_labels > 0 else nn.Identity()
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播方法
+    # 定义前向传播函数
     @add_start_docstrings_to_model_forward(VIDEOMAE_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=ImageClassifierOutput, config_class=_CONFIG_FOR_DOC)
     def forward(

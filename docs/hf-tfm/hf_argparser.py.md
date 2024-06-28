@@ -1,29 +1,49 @@
-# `.\transformers\hf_argparser.py`
+# `.\hf_argparser.py`
 
-```py
-# 引入必要的模块和库
-import dataclasses  # 用于定义数据类
-import json  # 用于 JSON 数据的编解码
-import sys  # 用于与 Python 解释器交互
-import types  # 用于操作 Python 对象的类型
-from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, ArgumentTypeError  # 用于解析命令行参数
-from copy import copy  # 用于复制对象
-from enum import Enum  # 用于定义枚举类型
-from inspect import isclass  # 用于判断对象是否为类
-from pathlib import Path  # 用于处理文件路径
-from typing import Any, Callable, Dict, Iterable, List, Literal, NewType, Optional, Tuple, Union, get_type_hints  # 用于类型提示
+```
+# 版权声明及许可信息
+#
+# 在 Apache 许可证 2.0 版本下使用此文件的声明，表示除非符合许可证，否则不得使用此文件。
+# 您可以在以下网址获得许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则根据“原样”分发的软件是根据许可证分发的，
+# 没有任何形式的明示或暗示担保或条件。
+# 有关更多详细信息，请参阅许可证。
+#
 
-import yaml  # 用于 YAML 数据的编解码
+import dataclasses  # 导入 dataclasses 模块
+import json  # 导入 json 模块
+import sys  # 导入 sys 模块
+import types  # 导入 types 模块
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, ArgumentTypeError  # 从 argparse 模块导入指定内容
+from copy import copy  # 导入 copy 函数
+from enum import Enum  # 导入 Enum 类
+from inspect import isclass  # 导入 isclass 函数
+from pathlib import Path  # 导入 Path 类
+from typing import Any, Callable, Dict, Iterable, List, Literal, NewType, Optional, Tuple, Union, get_type_hints  # 导入 typing 模块中指定内容
 
-# 定义新类型 DataClass
-DataClass = NewType("DataClass", Any)
-# 定义新类型 DataClassType
-DataClassType = NewType("DataClassType", Any)
+import yaml  # 导入 yaml 模块
 
 
-# 从 https://stackoverflow.com/questions/15008758/parsing-boolean-values-with-argparse 引用的函数
-# 将字符串转换为布尔值
+DataClass = NewType("DataClass", Any)  # 定义 DataClass 类型别名
+DataClassType = NewType("DataClassType", Any)  # 定义 DataClassType 类型别名
+
+
 def string_to_bool(v):
+    """
+    解析字符串表示的布尔值。
+
+    Args:
+        v (str): 输入的字符串值。
+
+    Returns:
+        bool: 如果字符串表示真值，则返回 True；否则返回 False。
+
+    Raises:
+        ArgumentTypeError: 如果无法解析字符串为布尔值，抛出异常。
+    """
     if isinstance(v, bool):
         return v
     if v.lower() in ("yes", "true", "t", "y", "1"):
@@ -36,131 +56,134 @@ def string_to_bool(v):
         )
 
 
-# 创建从每个选项的字符串表示到实际值的映射函数，用于支持单个参数的多个值类型
 def make_choice_type_function(choices: list) -> Callable[[str], Any]:
     """
-    Creates a mapping function from each choices string representation to the actual value. Used to support multiple
-    value types for a single argument.
+    创建从每个选择字符串表示到实际值的映射函数。用于支持单个参数的多个值类型。
 
     Args:
-        choices (list): List of choices.
+        choices (list): 选择列表。
 
     Returns:
-        Callable[[str], Any]: Mapping function from string representation to actual value for each choice.
+        Callable[[str], Any]: 从字符串表示到每个选择的实际值的映射函数。
     """
-    # 将选项的字符串表示映射为实际值
     str_to_choice = {str(choice): choice for choice in choices}
-    # 返回映射函数
     return lambda arg: str_to_choice.get(arg, arg)
 
 
-# HfArg 辅助函数，使得创建用于解析的数据类字段更加简洁
 def HfArg(
     *,
-    aliases: Union[str, List[str]] = None,  # 参数的别名列表
-    help: str = None,  # 参数的帮助文本
-    default: Any = dataclasses.MISSING,  # 参数的默认值
-    default_factory: Callable[[], Any] = dataclasses.MISSING,  # 参数的默认工厂函数
-    meta dict = None,  # 参数的元数据
-    **kwargs,  # 其它关键字参数
+    aliases: Union[str, List[str]] = None,
+    help: str = None,
+    default: Any = dataclasses.MISSING,
+    default_factory: Callable[[], Any] = dataclasses.MISSING,
+    metadata: dict = None,
+    **kwargs,
 ) -> dataclasses.Field:
-    """Argument helper enabling a concise syntax to create dataclass fields for parsing with `HfArgumentParser`.
+    """
+    参数辅助函数，允许使用简洁的语法为 `HfArgumentParser` 创建数据类字段。
 
     Example comparing the use of `HfArg` and `dataclasses.field`:
+    示例比较了 `HfArg` 和 `dataclasses.field` 的使用：
     ```
     @dataclass
     class Args:
         regular_arg: str = dataclasses.field(default="Huggingface", metadata={"aliases": ["--example", "-e"], "help": "This syntax could be better!"})
         hf_arg: str = HfArg(default="Huggingface", aliases=["--example", "-e"], help="What a nice syntax!")
-    ```py
+    ```
     """
-    def add_field_metadata(aliases=None, help=None, default=dataclasses.MISSING, default_factory=dataclasses.MISSING, metadata=None, **kwargs):
+    pass  # HfArg 函数主体为空，实现在示例中展示
+    def make_field(aliases=None, help=None, default=dataclasses.MISSING, default_factory=dataclasses.MISSING, metadata=None, **kwargs):
         """
-        将字段的元数据添加到 `dataclasses.Field` 中。
+        Construct a `dataclasses.Field` object with specified properties.
     
         Args:
             aliases (Union[str, List[str]], optional):
-                要传递给 argparse 的别名的单个字符串或字符串列表，例如 `aliases=["--example", "-e"]`。
-                默认为 None。
-            help (str, optional): 可以与 --help 一起显示的帮助字符串，要传递给 argparse。
-                默认为 None。
+                Single string or list of strings of aliases to pass on to argparse, e.g. `aliases=["--example", "-e"]`.
+                Defaults to None.
+            help (str, optional): Help string to pass on to argparse that can be displayed with --help. Defaults to None.
             default (Any, optional):
-                参数的默认值。如果未指定 default 或 default_factory，则参数是必需的。
-                默认为 dataclasses.MISSING。
+                Default value for the argument. If not default or default_factory is specified, the argument is required.
+                Defaults to dataclasses.MISSING.
             default_factory (Callable[[], Any], optional):
-                default_factory 是一个零参数函数，用于初始化字段的值。对于可变类型（例如列表）提供默认值非常有用：`default_factory=list`。
-                与 `default=` 互斥。
-                默认为 dataclasses.MISSING。
-            metadata (dict, optional): 要传递给 `dataclasses.field` 的更多元数据。
-                默认为 None。
+                The default_factory is a 0-argument function called to initialize a field's value. It is useful to provide
+                default values for mutable types, e.g. lists: `default_factory=list`. Mutually exclusive with `default=`.
+                Defaults to dataclasses.MISSING.
+            metadata (dict, optional): Further metadata to pass on to `dataclasses.field`. Defaults to None.
     
         Returns:
-            Field: 具有所需属性的 `dataclasses.Field`。
+            Field: A `dataclasses.Field` with the desired properties.
         """
         if metadata is None:
-            # 重要提示：不要将 dict 用作函数签名中的默认参数，因为 dict 是可变的，并且在函数调用之间是共享的
+            # 如果 metadata 参数为 None，则创建一个空的字典，以避免在函数签名中使用默认参数，因为字典是可变的且在函数调用间共享
             metadata = {}
         if aliases is not None:
+            # 如果传入了 aliases 参数，则将其添加到 metadata 字典中
             metadata["aliases"] = aliases
         if help is not None:
+            # 如果传入了 help 参数，则将其添加到 metadata 字典中
             metadata["help"] = help
     
+        # 创建并返回一个 `dataclasses.Field` 对象，传入指定的参数和 metadata 字典
         return dataclasses.field(metadata=metadata, default=default, default_factory=default_factory, **kwargs)
+# 定义一个名为 HfArgumentParser 的类，它是 argparse.ArgumentParser 的子类
 class HfArgumentParser(ArgumentParser):
     """
-    这个 `argparse.ArgumentParser` 的子类使用数据类上的类型提示生成参数。
+    This subclass of `argparse.ArgumentParser` uses type hints on dataclasses to generate arguments.
 
-    这个类被设计成与原生的 argparse 很好地配合。特别地，你可以在初始化之后向解析器添加更多（非数据类支持的）参数，
-    并在解析后将其作为额外的命名空间返回。可选：要创建子参数组，可以在数据类中使用 `_argument_group_name` 属性。
+    The class is designed to play well with the native argparse. In particular, you can add more (non-dataclass backed)
+    arguments to the parser after initialization and you'll get the output back after parsing as an additional
+    namespace. Optional: To create sub argument groups use the `_argument_group_name` attribute in the dataclass.
     """
 
+    # 定义一个名为 dataclass_types 的实例变量，用来存储数据类类型的可迭代对象
     dataclass_types: Iterable[DataClassType]
 
+    # 初始化方法，接收 dataclass_types 和其他参数
     def __init__(self, dataclass_types: Union[DataClassType, Iterable[DataClassType]], **kwargs):
         """
         Args:
             dataclass_types:
-                数据类类型，或要用解析后的参数“填充”实例的数据类类型列表。
+                Dataclass type, or list of dataclass types for which we will "fill" instances with the parsed args.
             kwargs (`Dict[str, Any]`, *optional*):
-                在常规方式下传递给 `argparse.ArgumentParser()` 的参数。
+                Passed to `argparse.ArgumentParser()` in the regular way.
         """
-        # 使得默认值在使用 --help 时出现
+        # 如果 kwargs 中没有指定 formatter_class，则设置为 ArgumentDefaultsHelpFormatter
         if "formatter_class" not in kwargs:
             kwargs["formatter_class"] = ArgumentDefaultsHelpFormatter
-        # 调用父类初始化方法
+        # 调用父类 ArgumentParser 的初始化方法，传入 kwargs
         super().__init__(**kwargs)
-        # 如果 `dataclass_types` 是数据类，则将其转换为列表
+        # 如果 dataclass_types 是单个数据类而不是列表，则转换为列表
         if dataclasses.is_dataclass(dataclass_types):
             dataclass_types = [dataclass_types]
+        # 将 dataclass_types 转换为列表后存储在 self.dataclass_types 中
         self.dataclass_types = list(dataclass_types)
-        # 为每个数据类添加参数
+        # 遍历每个数据类类型，并为其添加参数到 argparse.ArgumentParser 实例中
         for dtype in self.dataclass_types:
             self._add_dataclass_arguments(dtype)
 
+    # 静态方法，用来添加数据类的参数到 argparse.ArgumentParser 实例中
     @staticmethod
-    # 定义一个方法，用于向 ArgumentParser 添加数据类的参数
+    # 将数据类的参数添加到命令行解析器中
     def _add_dataclass_arguments(self, dtype: DataClassType):
-        # 如果数据类具有 "_argument_group_name" 属性，则创建一个新的参数组
+        # 检查数据类是否定义了参数组名称，如果是，则创建一个新的参数组；否则，使用当前解析器
         if hasattr(dtype, "_argument_group_name"):
             parser = self.add_argument_group(dtype._argument_group_name)
         else:
-            # 否则，使用当前参数解析器
             parser = self
 
         try:
-            # 尝试获取数据类的类型提示
+            # 获取数据类字段的类型提示字典
             type_hints: Dict[str, type] = get_type_hints(dtype)
         except NameError:
-            # 如果类型解析失败，引发运行时错误，提供相关建议
+            # 如果类型解析失败，通常是由于数据类不在全局范围内定义或使用了延迟注释的特性
             raise RuntimeError(
                 f"Type resolution failed for {dtype}. Try declaring the class in global scope or "
                 "removing line of `from __future__ import annotations` which opts in Postponed "
                 "Evaluation of Annotations (PEP 563)"
             )
         except TypeError as ex:
-            # 在 Python 3.9 支持被移除后移除此块
+            # 当 Python 版本低于 3.10 且涉及到 union 类型时，给出详细的错误信息和建议
             if sys.version_info[:2] < (3, 10) and "unsupported operand type(s) for |" in str(ex):
-                # 如果是 Python 版本不支持的错误类型，则提供相关建议
                 python_version = ".".join(map(str, sys.version_info[:3]))
                 raise RuntimeError(
                     f"Type resolution failed for {dtype} on Python {python_version}. Try removing "
@@ -172,17 +195,16 @@ class HfArgumentParser(ArgumentParser):
                 ) from ex
             raise
 
-        # 遍历数据类的字段
+        # 遍历数据类的字段，并解析每个需要初始化的字段
         for field in dataclasses.fields(dtype):
-            # 如果字段不是初始化参数，则跳过
             if not field.init:
-                continue
-            # 更新字段的类型提示
+                continue  # 跳过不需要初始化的字段
+            # 将字段的类型设定为从类型提示中获取的类型
             field.type = type_hints[field.name]
-            # 解析数据类字段并将其添加到参数解析器中
+            # 调用私有方法，将数据类字段解析到命令行解析器中
             self._parse_dataclass_field(parser, field)
 
-    # 将参数解析为数据类的方法
+    # 解析命令行参数到数据类对象中
     def parse_args_into_dataclasses(
         self,
         args=None,
@@ -190,8 +212,6 @@ class HfArgumentParser(ArgumentParser):
         look_for_args_file=True,
         args_filename=None,
         args_file_flag=None,
-```  
-    # 解析一个字典，将其值填充到数据类实例中，不使用 argparse，而是使用字典和数据类类型
     def parse_dict(self, args: Dict[str, Any], allow_extra_keys: bool = False) -> Tuple[DataClass, ...]:
         """
         Alternative helper method that does not use `argparse` at all, instead uses a dict and populating the dataclass
@@ -205,32 +225,30 @@ class HfArgumentParser(ArgumentParser):
 
         Returns:
             Tuple consisting of:
-
                 - the dataclass instances in the same order as they were passed to the initializer.
         """
-        # 创建一个未使用的键集合，用于跟踪未使用的键
+        # 获取所有传入参数字典的键集合
         unused_keys = set(args.keys())
-        # 创建一个空列表，用于存储数据类实例
+        # 初始化空列表，用于存储解析后的数据类实例
         outputs = []
         # 遍历数据类类型列表
         for dtype in self.dataclass_types:
-            # 获取数据类字段的名称集合
+            # 获取数据类字段的名称集合，仅包括可以初始化的字段
             keys = {f.name for f in dataclasses.fields(dtype) if f.init}
-            # 从参数中筛选出符合字段名称的键值对
+            # 从参数字典中选取与数据类字段匹配的键值对
             inputs = {k: v for k, v in args.items() if k in keys}
-            # 更新未使用的键集合，去除已经使用的键
+            # 从未使用的键集合中移除已使用的键
             unused_keys.difference_update(inputs.keys())
-            # 使用筛选后的键值对创建数据类实例
+            # 使用选取的键值对初始化数据类对象
             obj = dtype(**inputs)
-            # 将数据类实例添加到输出列表中
+            # 将初始化后的数据类对象添加到输出列表
             outputs.append(obj)
-        # 如果不允许额外的键且存在未使用的键，则抛出异常
+        # 如果不允许额外的键存在且有未使用的键，抛出异常
         if not allow_extra_keys and unused_keys:
             raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
-        # 返回数据类实例的元组
+        # 返回包含所有数据类实例的元组
         return tuple(outputs)
 
-    # 解析一个 JSON 文件，将其值填充到数据类实例中，不使用 argparse，而是加载 JSON 文件和数据类类型
     def parse_json_file(self, json_file: str, allow_extra_keys: bool = False) -> Tuple[DataClass, ...]:
         """
         Alternative helper method that does not use `argparse` at all, instead loading a json file and populating the
@@ -245,18 +263,16 @@ class HfArgumentParser(ArgumentParser):
 
         Returns:
             Tuple consisting of:
-
                 - the dataclass instances in the same order as they were passed to the initializer.
         """
-        # 使用 utf-8 编码打开 JSON 文件
+        # 打开并读取 JSON 文件
         with open(Path(json_file), encoding="utf-8") as open_json_file:
-            # 读取 JSON 文件内容并解析为字典
             data = json.loads(open_json_file.read())
-        # 使用 parse_dict 方法解析字典数据，并返回数据类实例的元组
+        # 使用 parse_dict 方法解析 JSON 数据，并返回结果
         outputs = self.parse_dict(data, allow_extra_keys=allow_extra_keys)
-        # 返回数据类实例的元组
+        # 返回包含所有数据类实例的元组
         return tuple(outputs)
-    # 解析 YAML 文件的辅助方法，不使用 `argparse`，而是加载一个 YAML 文件并填充数据类类型
+    # 定义一个方法用于解析 YAML 文件，并返回一个元组，其中包含数据类实例。
     def parse_yaml_file(self, yaml_file: str, allow_extra_keys: bool = False) -> Tuple[DataClass, ...]:
         """
         Alternative helper method that does not use `argparse` at all, instead loading a yaml file and populating the
@@ -271,11 +287,10 @@ class HfArgumentParser(ArgumentParser):
 
         Returns:
             Tuple consisting of:
-
                 - the dataclass instances in the same order as they were passed to the initializer.
         """
-        # 使用 `yaml.safe_load` 方法加载 YAML 文件内容，返回一个字典
+        # 使用 pathlib 读取 YAML 文件的文本内容，然后通过 yaml.safe_load 转换为 Python 对象
         outputs = self.parse_dict(yaml.safe_load(Path(yaml_file).read_text()), allow_extra_keys=allow_extra_keys)
-        # 将数据传递给 `parse_dict` 方法进行解析，并返回结果的元组形式
+        # 返回一个包含所有数据类实例的元组
         return tuple(outputs)
 ```

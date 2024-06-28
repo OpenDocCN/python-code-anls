@@ -1,9 +1,10 @@
-# `.\transformers\models\marian\__init__.py`
+# `.\models\marian\__init__.py`
 
-```py
-# 引入类型检查模块
+```
+# 版权声明和许可条款声明，指出版权归 HuggingFace Team 所有，采用 Apache License 2.0
+#
+# 此部分导入所需的模块和函数，从 utils 模块导入必要的依赖检查和工具函数
 from typing import TYPE_CHECKING
-# 引入可选依赖未安装异常
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -14,29 +15,29 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义导入结构字典，包含了模块及其导入内容
+# 定义导入结构，用于组织导入的模块和函数
 _import_structure = {
     "configuration_marian": ["MARIAN_PRETRAINED_CONFIG_ARCHIVE_MAP", "MarianConfig", "MarianOnnxConfig"],
 }
 
-# 尝试检查是否sentencepiece可用，若不可用则引发异常
+# 检查 sentencepiece 是否可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则将MarianTokenizer导入导入结构字典中
+    # 如果可用，则添加 tokenization_marian 模块到导入结构中
     _import_structure["tokenization_marian"] = ["MarianTokenizer"]
 
-# 尝试检查是否torch可用，若不可用则引发异常
+# 检查 torch 是否可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则将modeling_marian模块相关内容导入导入结构字典中
+    # 如果可用，则添加 modeling_marian 模块到导入结构中，包含多个类和常量
     _import_structure["modeling_marian"] = [
         "MARIAN_PRETRAINED_MODEL_ARCHIVE_LIST",
         "MarianForCausalLM",
@@ -45,49 +46,47 @@ else:
         "MarianPreTrainedModel",
     ]
 
-# 尝试检查是否tensorflow可用，若不可用则引发异常
+# 检查 tensorflow 是否可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则将modeling_tf_marian模块相关内容导入导入结构字典中
+    # 如果可用，则添加 modeling_tf_marian 模块到导入结构中，包含多个 TensorFlow 相关的类
     _import_structure["modeling_tf_marian"] = ["TFMarianModel", "TFMarianMTModel", "TFMarianPreTrainedModel"]
 
-# 尝试检查是否flax可用，若不可用则引发异常
+# 检查 flax 是否可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则将modeling_flax_marian模块相关内容导入导入结构字典中
+    # 如果可用，则添加 modeling_flax_marian 模块到导入结构中，包含多个 Flax 相关的类
     _import_structure["modeling_flax_marian"] = ["FlaxMarianModel", "FlaxMarianMTModel", "FlaxMarianPreTrainedModel"]
 
-# 如果是类型检查环境
+# 如果是类型检查阶段，执行以下导入语句
 if TYPE_CHECKING:
-    # 从configuration_marian模块导入相关内容
+    # 从 configuration_marian 模块导入特定类和常量
     from .configuration_marian import MARIAN_PRETRAINED_CONFIG_ARCHIVE_MAP, MarianConfig, MarianOnnxConfig
 
-    # 尝试检查是否sentencepiece可用，若不可用则引发异常
+    # 检查 sentencepiece 是否可用，如果可用则从 tokenization_marian 模块导入 MarianTokenizer 类
     try:
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 若可用，则从tokenization_marian模块导入MarianTokenizer
         from .tokenization_marian import MarianTokenizer
 
-    # 尝试检查是否torch可用，若不可用则引发异常
+    # 检查 torch 是否可用，如果可用则从 modeling_marian 模块导入多个类
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 若可用，则从modeling_marian模块导入相关内容
         from .modeling_marian import (
             MARIAN_PRETRAINED_MODEL_ARCHIVE_LIST,
             MarianForCausalLM,
@@ -96,29 +95,27 @@ if TYPE_CHECKING:
             MarianPreTrainedModel,
         )
 
-    # 尝试检查是否tensorflow可用，若不可用则引发异常
-    try:
-        if not is_tf_available():
-            raise OptionalDependencyNotAvailable()
-    except OptionalDependencyNotAvailable:
-        pass
-    # 如果未导入 TFMarianModel、TFMarianMTModel 和 TFMarianPreTrainedModel，则从 .modeling_tf_marian 模块中导入它们
+    # 不再检查 tensorflow 是否可用，因为这部分代码不在类型检查块内，避免导入 TensorFlow 相关模块
     else:
+        # 如果前面的导入失败，则尝试从当前目录下导入相关模块
         from .modeling_tf_marian import TFMarianModel, TFMarianMTModel, TFMarianPreTrainedModel
-    
-    # 尝试判断是否可以使用 Flax 库
+
     try:
+        # 检查是否没有安装 Flax，如果没有安装则抛出 OptionalDependencyNotAvailable 异常
         if not is_flax_available():
-            # 如果 Flax 不可用，则引发 OptionalDependencyNotAvailable 异常
             raise OptionalDependencyNotAvailable()
-    # 如果引发了 OptionalDependencyNotAvailable 异常，则什么也不做
     except OptionalDependencyNotAvailable:
+        # 如果检测到 OptionalDependencyNotAvailable 异常，则不做任何处理
         pass
-    # 如果 Flax 可用，则从 .modeling_flax_marian 模块中导入 FlaxMarianModel、FlaxMarianMTModel 和 FlaxMarianPreTrainedModel
     else:
+        # 如果没有抛出异常，则尝试从当前目录下导入 Flax 版本的 Marian 模型相关模块
         from .modeling_flax_marian import FlaxMarianModel, FlaxMarianMTModel, FlaxMarianPreTrainedModel
-# 如果之前的条件都不成立，则导入 sys 模块
-import sys
-# 将当前模块名添加到 sys.modules 中，对应的值为一个 _LazyModule 对象，该对象延迟加载模块的属性和子模块
-sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+else:
+    # 如果以上所有的条件都不满足，则执行以下代码块
+
+    # 导入 sys 模块，用于对当前模块进行操作
+    import sys
+
+    # 将当前模块名对应的模块对象替换为一个懒加载模块对象 _LazyModule
+    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

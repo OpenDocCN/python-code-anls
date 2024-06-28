@@ -1,34 +1,50 @@
 # `.\models\deit\configuration_deit.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 遵循 Apache License, Version 2.0
-# 获取许可证的链接
-# 根据适用法律或书面同意的要求，按"原样"分布的软件，没有任何保证或条件，无论是明示的还是暗示的。
-# 有特定语言的特定许可证可以验证权限和限制
-# DeiT 模型配置
-# 导入所需模块
+```
+# coding=utf-8
+# Copyright 2021 Facebook AI Research (FAIR) and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" DeiT model configuration"""
+
+# 从 collections 模块导入 OrderedDict，用于有序字典的支持
 from collections import OrderedDict
+# 导入 Mapping 用于类型提示
 from typing import Mapping
+
+# 从 packaging 模块导入 version，用于版本处理
 from packaging import version
 
-# 导入父类 PretrainedConfig
+# 导入预训练配置的基类 PretrainedConfig
 from ...configuration_utils import PretrainedConfig
+# 导入 OnnxConfig 用于 ONNX 格式配置
 from ...onnx import OnnxConfig
+# 导入 logging 模块中的 get_logger 函数
 from ...utils import logging
 
-# 获取日志记录器
+# 获取 logger 对象
 logger = logging.get_logger(__name__)
 
-# DeiT 预训练配置档案映射表
+# 预训练模型的配置文件映射，包含模型名称及其对应的配置文件 URL
 DEIT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/deit-base-distilled-patch16-224": (
         "https://huggingface.co/facebook/deit-base-patch16-224/resolve/main/config.json"
     ),
-    # 查看所有 DeiT 模型的链接
+    # 查看所有 DeiT 模型的列表：https://huggingface.co/models?filter=deit
 }
-# DeiT 的配置类，继承自 PretrainedConfig
+
+
+# DeiT 模型的配置类，继承自 PretrainedConfig
 class DeiTConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`DeiTModel`]. It is used to instantiate an DeiT
@@ -39,89 +55,91 @@ class DeiTConfig(PretrainedConfig):
 
     Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
     documentation from [`PretrainedConfig`] for more information.
-    # 类型为DeiT
+    """
+    # 模型类型设定为 "deit"
     model_type = "deit"
 
-    # 初始化函数
+    # 初始化函数，定义了模型的各种配置参数
     def __init__(
-        # 隐藏状态的维度，默认为768
+        self,
+        # 编码器层和池化层的维度
         hidden_size=768,
-        # Transformer编码器中隐藏层的数量，默认为12
+        # Transformer 编码器中隐藏层的数量
         num_hidden_layers=12,
-        # Transformer编码器中每个注意力层的注意力头数量，默认为12
+        # Transformer 编码器中每个注意力层的注意力头数
         num_attention_heads=12,
-        # Transformer编码器中“中间”（即前馈）层的维度，默认为3072
+        # Transformer 编码器中"中间"（即前馈）层的维度
         intermediate_size=3072,
-        # 编码器和池化层中的非线性激活函数（函数或字符串），默认为"gelu"，支持"gelu"、"relu"、"selu"和"gelu_new"
+        # 编码器和池化层中的非线性激活函数
         hidden_act="gelu",
-        # 嵌入层、编码器和池化层中所有全连接层的dropout概率，默认为0.0
+        # 嵌入层、编码器和池化层中所有全连接层的 dropout 概率
         hidden_dropout_prob=0.0,
-        # 注意力概率的dropout比例，默认为0.0
+        # 注意力概率的 dropout 比例
         attention_probs_dropout_prob=0.0,
-        # 用于初始化所有权重矩阵的截断正态初始化器的标准差，默认为0.02
+        # 初始化所有权重矩阵的截断正态初始化器的标准差
         initializer_range=0.02,
-        # 层归一化层使用的epsilon，默认为1e-12
+        # 层归一化层使用的 epsilon 值
         layer_norm_eps=1e-12,
-        # 每个图像的大小（分辨率），默认为224
+        # 每个图像的大小（分辨率）
         image_size=224,
-        # 每个补丁的大小（分辨率），默认为16
+        # 每个图像块（patch）的大小（分辨率）
         patch_size=16,
-        # 输入通道的数量，默认为3
+        # 输入通道的数量
         num_channels=3,
-        # 是否向查询、键和值添加偏置，默认为True
+        # 是否为查询、键和值添加偏置
         qkv_bias=True,
-        # 用于掩码图像建模中解码器头部中增加空间分辨率的因子，默认为16
+        # 解码器头部中用于掩蔽图像建模的空间分辨率增加因子
         encoder_stride=16,
-        # 其他参数
         **kwargs,
-        # 调用父类的构造函数
+        ):
+        # 调用父类的初始化方法，传递所有关键字参数
         super().__init__(**kwargs)
 
-        # 设置隐藏层的大小
+        # 初始化模型的隐藏层大小
         self.hidden_size = hidden_size
-        # 设置隐藏层的数量
+        # 设置模型的隐藏层数量
         self.num_hidden_layers = num_hidden_layers
         # 设置注意力头的数量
         self.num_attention_heads = num_attention_heads
         # 设置中间层的大小
         self.intermediate_size = intermediate_size
-        # 设置隐藏层的激活函数
+        # 激活函数类型
         self.hidden_act = hidden_act
-        # 设置隐藏层的丢弃概率
+        # 隐藏层的 dropout 概率
         self.hidden_dropout_prob = hidden_dropout_prob
-        # 设置注意力矩阵的丢弃概率
+        # 注意力概率的 dropout 概率
         self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        # 设置初始化范围
+        # 初始化范围
         self.initializer_range = initializer_range
-        # 设置层归一化的小值偏移量
+        # 层标准化的 epsilon 值
         self.layer_norm_eps = layer_norm_eps
-        # 设置图像的大小
+        # 图像大小
         self.image_size = image_size
-        # 设置图像的patch大小
+        # 图像分块大小
         self.patch_size = patch_size
-        # 设置通道的数量
+        # 图像通道数
         self.num_channels = num_channels
-        # 设置Query、Key和Value的偏置
+        # 是否使用 QKV 偏置
         self.qkv_bias = qkv_bias
-        # 设置编码器的步长
+        # 编码器步长
         self.encoder_stride = encoder_stride
-# 创建一个名为DeiTOnnxConfig的类，并继承自OnnxConfig类
 class DeiTOnnxConfig(OnnxConfig):
-    # 设置torch_onnx_minimum_version属性为1.11
-    torch_onnx_minimum_version = version.parse("1.11")
+    # 定义一个新的配置类 DeiTOnnxConfig，继承自 OnnxConfig 类
 
-    # 定义一个名为inputs的属性，并返回一个有序字典
+    torch_onnx_minimum_version = version.parse("1.11")
+    # 设置 torch 和 ONNX 的最低兼容版本为 1.11
+
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
+        # 定义 inputs 属性，返回一个有序字典，表示输入数据的结构
         return OrderedDict(
             [
-                # 键为"pixel_values"，值为一个字典，表示输入的各维度的名称
                 ("pixel_values", {0: "batch", 1: "num_channels", 2: "height", 3: "width"}),
             ]
         )
 
-    # 定义一个名为atol_for_validation的属性，并返回一个浮点数
     @property
     def atol_for_validation(self) -> float:
+        # 定义 atol_for_validation 属性，返回一个浮点数，表示验证时的容差值
         return 1e-4
 ```

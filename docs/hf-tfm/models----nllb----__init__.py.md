@@ -1,9 +1,22 @@
-# `.\transformers\models\nllb\__init__.py`
+# `.\models\nllb\__init__.py`
 
-```py
-# 引入必要的类型检查模块
+```
+# 版权声明和许可信息
+#
+# 版权所有 2022 年 HuggingFace 团队。保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本（“许可证”）获得许可；
+# 除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则按“原样”分发的软件
+# 在法律许可的范围内提供，不提供任何明示或暗示的担保或条件。
+# 有关详细信息，请参阅许可证。
 from typing import TYPE_CHECKING
-# 引入可选依赖未安装异常模块
+
+# 从 utils 模块导入所需的类和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -12,63 +25,53 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块的导入结构字典
+# 定义一个空的导入结构
 _import_structure = {}
 
-# 尝试检查并导入句子拆分模块
+# 检查是否可用 SentencePiece
 try:
-    # 如果句子拆分模块不可用，则引发可选依赖未安装异常
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
-# 捕获可选依赖未安装异常
 except OptionalDependencyNotAvailable:
     pass
-# 如果没有异常，则执行以下操作
 else:
-    # 在导入结构字典中添加对应的模块和类
+    # 如果可用，将 NllbTokenizer 添加到导入结构中
     _import_structure["tokenization_nllb"] = ["NllbTokenizer"]
 
-# 尝试检查并导入分词器模块
+# 检查是否可用 Tokenizers
 try:
-    # 如果分词器模块不可用，则引发可选依赖未安装异常
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
-# 捕获可选依赖未安装异常
 except OptionalDependencyNotAvailable:
     pass
-# 如果没有异常，则执行以下操作
 else:
-    # 在导入结构字典中添加对应的模块和类
+    # 如果可用，将 NllbTokenizerFast 添加到导入结构中
     _import_structure["tokenization_nllb_fast"] = ["NllbTokenizerFast"]
 
-# 如果是类型检查模式
+# 如果在类型检查模式下
 if TYPE_CHECKING:
     try:
-        # 如果句子拆分模块不可用，则引发可选依赖未安装异常
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获可选依赖未安装异常
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入句子拆分模块中的类
+        # 导入 NllbTokenizer 类型
         from .tokenization_nllb import NllbTokenizer
 
     try:
-        # 如果分词器模块不可用，则引发可选依赖未安装异常
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获可选依赖未安装异常
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入分词器模块中的类
+        # 导入 NllbTokenizerFast 类型
         from .tokenization_nllb_fast import NllbTokenizerFast
 
-# 如果不是类型检查模式
+# 如果不在类型检查模式下
 else:
-    # 导入 sys 模块
     import sys
-    # 将当前模块替换为 LazyModule 类的实例
+
+    # 将当前模块设为懒加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

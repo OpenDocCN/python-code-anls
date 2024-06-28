@@ -1,66 +1,49 @@
-# `.\transformers\models\vision_encoder_decoder\configuration_vision_encoder_decoder.py`
+# `.\models\vision_encoder_decoder\configuration_vision_encoder_decoder.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明版权 2021 年 HuggingFace 公司。
-# 版权声明版权 2018 年，NVIDIA 公司。保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本，除非符合许可证要求，否则不得使用此文件。
-# 您可以在以下网址获取许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非根据适用法律或书面同意，否则根据许可下分发的软件是基于"原样"基础分发的，
-# 没有任何明示或暗示的担保或条件。请查看许可证获取明确的授权和限制。
-
-# 导入必要的类型检查及其它模块
+```
+# 引入需要的模块和类
 from typing import TYPE_CHECKING, Any, Mapping, Optional, OrderedDict
-# 导入版本管理模块
+# 引入版本控制的模块
 from packaging import version
-# 导入配置相关函数
-from ...configuration_utils import PretrainedConfig
-# 导入 ONNX 配置
-from ...onnx import OnnxConfig
-# 导入日志模块
+# 引入日志记录工具
 from ...utils import logging
-# 导入自动配置
+# 引入自动配置模块
 from ..auto.configuration_auto import AutoConfig
 
-# 如果支持类型检查
+# 如果是类型检查阶段，则导入必要的类型
 if TYPE_CHECKING:
-    # 导入预训练标记化基类和张量类型
     from ... import PreTrainedTokenizerBase, TensorType
 
-# 获取日志记录器
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义 VisionEncoderDecoderConfig 类，继承自预训练配置类
+
 class VisionEncoderDecoderConfig(PretrainedConfig):
     r"""
-    [`VisionEncoderDecoderConfig`] 是用于存储一个 [`VisionEncoderDecoderModel`] 的配置类。
-    用于根据指定的参数实例化一个 Vision-Encoder-Text-Decoder 模型，定义编码器和解码器配置。
+    [`VisionEncoderDecoderConfig`] 是配置类，用于存储 [`VisionEncoderDecoderModel`] 的配置信息。
+    用于根据指定的参数实例化一个 Vision-Encoder-Text-Decoder 模型，定义编码器和解码器的配置。
 
-    配置对象继承自 [`PretrainedConfig`] 类，可用于控制模型输出。更多信息请阅读 [`PretrainedConfig`] 的文档。
+    配置对象继承自 [`PretrainedConfig`]，用于控制模型的输出。查阅 [`PretrainedConfig`] 的文档获取更多信息。
 
     Args:
         kwargs (*optional*):
-            Keyword 参数字典。特别是:
+            关键字参数的字典。特别是:
 
-                - **encoder** ([`PretrainedConfig`], *optional*) -- 定义编码器配置的配置对象的一个实例。
-                - **decoder** ([`PretrainedConfig`], *optional*) -- 定义解码器配置的配置对象的一个实例。
+                - **encoder** ([`PretrainedConfig`], *optional*) -- 定义编码器配置的配置对象实例。
+                - **decoder** ([`PretrainedConfig`], *optional*) -- 定义解码器配置的配置对象实例。
 
     Examples:
 
     ```python
     >>> from transformers import BertConfig, ViTConfig, VisionEncoderDecoderConfig, VisionEncoderDecoderModel
 
-    >>> # 初始化一个 ViT & BERT 风格的配置
+    >>> # 初始化 ViT 和 BERT 风格的配置
     >>> config_encoder = ViTConfig()
     >>> config_decoder = BertConfig()
 
     >>> config = VisionEncoderDecoderConfig.from_encoder_decoder_configs(config_encoder, config_decoder)
 
-    >>> # 从 ViT 和 bert-base-uncased 风格配置初始化一个 ViTBert 模型（带有随机权重）
+    >>> # 初始化一个 ViTBert 模型（具有随机权重），从 ViT 和 google-bert/bert-base-uncased 风格的配置开始
     >>> model = VisionEncoderDecoderModel(config=config)
 
     >>> # 访问模型配置
@@ -75,103 +58,95 @@ class VisionEncoderDecoderConfig(PretrainedConfig):
 
     >>> # 从预训练文件夹加载模型和配置
 
-    ```py
-    # 从预训练模型加载配置
+    ```
+    """
+    pass  # VisionEncoderDecoderConfig 类定义结束
+    # 使用预训练模型名称加载视觉编码-解码器配置
     encoder_decoder_config = VisionEncoderDecoderConfig.from_pretrained("my-model")
-    # 从预训练模型加载模型
+    # 使用预训练模型名称加载视觉编码-解码器模型，传入相应的配置
     model = VisionEncoderDecoderModel.from_pretrained("my-model", config=encoder_decoder_config)
-    
-    # 设置模型类型为“vision-encoder-decoder”
+
+
+
+    # 定义模型类型为视觉编码-解码器
     model_type = "vision-encoder-decoder"
-    # 标记为复合模型
+    # 标记该类为组合类
     is_composition = True
-    
-    # 定义模型的初始化方法
+
     def __init__(self, **kwargs):
-        # 调用父类初始化方法
         super().__init__(**kwargs)
-        # 检查是否传入了“encoder”和“decoder”子配置
+        # 检查是否传入了编码器和解码器的配置，否则抛出异常
         if "encoder" not in kwargs or "decoder" not in kwargs:
-            # 抛出数值错误
             raise ValueError(
                 f"A configuraton of type {self.model_type} cannot be instantiated because "
                 f"not both `encoder` and `decoder` sub-configurations are passed, but only {kwargs}"
             )
-    
-        # 弹出并获取编码器和解码器配置
+
+        # 弹出并获取编码器配置和模型类型
         encoder_config = kwargs.pop("encoder")
         encoder_model_type = encoder_config.pop("model_type")
+        # 弹出并获取解码器配置和模型类型
         decoder_config = kwargs.pop("decoder")
         decoder_model_type = decoder_config.pop("model_type")
-    
-        # 根据配置创建编码器和解码器
+
+        # 根据编码器配置创建自动配置对象
         self.encoder = AutoConfig.for_model(encoder_model_type, **encoder_config)
+        # 根据解码器配置创建自动配置对象
         self.decoder = AutoConfig.for_model(decoder_model_type, **decoder_config)
-        # 标记为编码-解码器模型
+        # 标记该模型为编码-解码器结构
         self.is_encoder_decoder = True
-    
-    # 类方法：从编码器和解码器配置实例化一个 VisionEncoderDecoderConfig 对象
+
     @classmethod
     def from_encoder_decoder_configs(
         cls, encoder_config: PretrainedConfig, decoder_config: PretrainedConfig, **kwargs
     ) -> PretrainedConfig:
-        # 设置解码器配置的解码器标志和交叉注意力标志
+        """
+        从预训练的编码器模型配置和解码器模型配置实例化一个 `VisionEncoderDecoderConfig`（或其派生类）。
+
+        返回:
+            [`VisionEncoderDecoderConfig`]: 配置对象的一个实例
+        """
+        # 记录日志信息，设置解码器配置为True和添加交叉注意力机制为True
         logger.info("Setting `config.is_decoder=True` and `config.add_cross_attention=True` for decoder_config")
         decoder_config.is_decoder = True
         decoder_config.add_cross_attention = True
-    
-        # 返回一个 VisionEncoderDecoderConfig 实例
+
+        # 返回使用编码器和解码器配置实例化的类的实例
         return cls(encoder=encoder_config.to_dict(), decoder=decoder_config.to_dict(), **kwargs)
 class VisionEncoderDecoderEncoderOnnxConfig(OnnxConfig):
-    # 定义一个名为 VisionEncoderDecoderEncoderOnnxConfig 的类，它继承自 OnnxConfig 类
-
+    # 定义 Torch ONNX 的最低版本要求为 1.11
     torch_onnx_minimum_version = version.parse("1.11")
-    # 设置一个静态属性 torch_onnx_minimum_version 为版本号 1.11
 
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义一个名为 inputs 的属性，返回一个字符串到整数和字符串的映射
+        # 返回输入规范化的顺序字典，定义了各个输入的维度信息
         return OrderedDict(
             [
                 ("pixel_values", {0: "batch", 1: "num_channels", 2: "height", 3: "width"}),
             ]
         )
-        # 返回一个按指定顺序排列的输入映射
 
     @property
     def atol_for_validation(self) -> float:
-        # 定义一个名为 atol_for_validation 的属性，返回一个浮点数
+        # 返回用于验证的绝对误差容限
         return 1e-4
-        # 返回一个浮点数 0.0001 用于验证的绝对误差值
 
     @property
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义一个名为 outputs 的属性，返回一个字符串到整数和字符串的映射
+        # 返回输出规范化的顺序字典，定义了各个输出的维度信息
         return OrderedDict({"last_hidden_state": {0: "batch", 1: "encoder_sequence"}})
-        # 返回一个按指定顺序排列的输出映射
 
 
 class VisionEncoderDecoderDecoderOnnxConfig(OnnxConfig):
-    # 定义一个名为 VisionEncoderDecoderDecoderOnnxConfig 的类，它继承自 OnnxConfig 类
-
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义一个名为 inputs 的属性，返回一个字符串到整数和字符串的映射
+        # 返回输入规范化的顺序字典，定义了各个公共输入的维度信息
         common_inputs = OrderedDict()
-        # 创建一个有序字典 common_inputs
-
         common_inputs["input_ids"] = {0: "batch", 1: "past_decoder_sequence + sequence"}
-        # 在 common_inputs 中添加键值对，键是 input_ids，值是一个整数到字符串的映射
-
         common_inputs["attention_mask"] = {0: "batch", 1: "past_decoder_sequence + sequence"}
-        # 在 common_inputs 中添加键值对，键是 attention_mask，值是一个整数到字符串的映射
-
         common_inputs["encoder_hidden_states"] = {0: "batch", 1: "encoder_sequence"}
-        # 在 common_inputs 中添加键值对，键是 encoder_hidden_states，值是一个整数到字符串的映射
 
         return common_inputs
-        # 返回 common_inputs
-
 
     def generate_dummy_inputs(
         self,
@@ -181,80 +156,65 @@ class VisionEncoderDecoderDecoderOnnxConfig(OnnxConfig):
         is_pair: bool = False,
         framework: Optional["TensorType"] = None,
     ) -> Mapping[str, Any]:
-        # 定义一个名为 generate_dummy_inputs 的方法，接受一些参数并返回字符串到任意类型的映射
         import torch
-        # 导入 torch 模块
 
         common_inputs = OrderedDict()
-        # 创建一个有序字典 common_inputs
 
+        # 调用父类方法生成虚拟输入
         dummy_input = super().generate_dummy_inputs(
             tokenizer, batch_size=batch_size, seq_length=seq_length, is_pair=is_pair, framework=framework
         )
-        # 调用父类的 generate_dummy_inputs 方法并将结果保存在 dummy_input 中
 
+        # 提取 input_ids 的 batch 和 encoder_sequence 的值
         batch, encoder_sequence = dummy_input["input_ids"].shape
-        # 获取 dummy_input 中 input_ids 的形状，并分别赋给 batch 和 encoder_sequence
-
+        # 创建 encoder_hidden_states 的形状 (batch, encoder_sequence, encoder_hidden_size) 的零张量
         encoder_hidden_states_shape = (batch, encoder_sequence, self._config.encoder_hidden_size)
-        # 定义一个名为 encoder_hidden_states_shape 的变量，存储一个元组
-
         common_inputs["input_ids"] = dummy_input.pop("input_ids")
-        # 弹出并赋值给 common_inputs 中的 input_ids 键
-
         common_inputs["attention_mask"] = dummy_input.pop("attention_mask")
-        # 弹出并赋值给 common_inputs 中的 attention_mask 键
-
         common_inputs["encoder_hidden_states"] = torch.zeros(encoder_hidden_states_shape)
-        # 在 common_inputs 中添加 encoder_hidden_states 键，并赋值为一个全 0 的 tensor
 
         return common_inputs
-        # 返回 common_inputs
 
 
 class VisionEncoderDecoderOnnxConfig(OnnxConfig):
-    # 定义一个名为 VisionEncoderDecoderOnnxConfig 的类，它继承自 OnnxConfig 类
-
     @property
     def inputs(self) -> None:
-        # 定义一个名为 inputs 的属性，返回 None
+        # 空实现，表示没有特定的输入定义
         pass
-        # 什么也不做
 
     def get_encoder_config(self, encoder_config: PretrainedConfig) -> OnnxConfig:
-        # 定义一个名为 get_encoder_config 的方法，接受一个 PretrainedConfig 类型的参数并返回 OnnxConfig 类型的变量
         r"""
-        Returns ONNX encoder config for `VisionEncoderDecoder` model.
+        返回用于 `VisionEncoderDecoder` 模型的 ONNX 编码器配置。
+
+        Args:
+            encoder_config (`PretrainedConfig`):
+                导出到 ONNX 时使用的编码器模型配置。
+
+        Returns:
+            [`VisionEncoderDecoderEncoderOnnxConfig`]: ONNX 配置对象的实例
+        """
+        return VisionEncoderDecoderEncoderOnnxConfig(encoder_config)
+
+    def get_decoder_config(
+        self, encoder_config: PretrainedConfig, decoder_config: PretrainedConfig, feature: str = "default"
+        # 返回用于 `VisionEncoderDecoder` 模型的 ONNX 解码器配置
+    ) -> OnnxConfig:
+        r"""
+        Returns ONNX decoder config for `VisionEncoderDecoder` model.
 
         Args:
             encoder_config (`PretrainedConfig`):
                 The encoder model's configuration to use when exporting to ONNX.
-
-        Returns:
-            [`VisionEncoderDecoderEncoderOnnxConfig`]: An instance of the ONNX configuration object
-        """
-        return VisionEncoderDecoderEncoderOnnxConfig(encoder_config)
-        # 返回一个 VisionEncoderDecoderEncoderOnnxConfig 类的实例对象，传入参数 encoder_config
-
-    def get_decoder_config(
-        self, encoder_config: PretrainedConfig, decoder_config: PretrainedConfig, feature: str = "default"
-    ) -> OnnxConfig:
-        r"""
-        返回用于`VisionEncoderDecoder`模型的ONNX解码器配置。
-
-        Args:
-            encoder_config (`PretrainedConfig`):
-                导出到ONNX时要使用的编码器模型配置。
             decoder_config (`PretrainedConfig`):
-                导出到ONNX时要使用的解码器模型配置。
+                The decoder model's configuration to use when exporting to ONNX
             feature (`str`, *optional*):
-                要导出模型的特征类型。
+                The type of feature to export the model with.
 
         Returns:
-            [`VisionEncoderDecoderDecoderOnnxConfig`]: ONNX配置对象的实例。
+            [`VisionEncoderDecoderDecoderOnnxConfig`]: An instance of the ONNX configuration object.
         """
-        # 将解码器配置的编码器隐藏层大小设置为编码器配置的隐藏层大小
+        # 设置解码器配置的隐藏状态大小为编码器配置的隐藏状态大小
         decoder_config.encoder_hidden_size = encoder_config.hidden_size
-        # 返回ONNX配置对象的实例
+        # 返回一个包含解码器配置和特征的 ONNX 配置对象实例
         return VisionEncoderDecoderDecoderOnnxConfig(decoder_config, feature)
 ```

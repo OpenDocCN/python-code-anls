@@ -1,98 +1,95 @@
-# `.\transformers\models\rag\modeling_rag.py`
+# `.\models\rag\modeling_rag.py`
 
-```py
-# 设定文件编码为 UTF-8
-# 版权声明
-# 版权所有 2020 年，The RAG Authors 和 The HuggingFace Inc. 团队。
-# 根据 Apache 许可证 2.0 版（“许可证”）授权；
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面约定，否则按“原样”分发的软件
-# 没有任何形式的保证或条件，无论是明示条件还是隐含条件。
-# 参见许可证以获取特定语言管理权限和限制。
-"""RAG 模型实现。"""
+```
+# 导入必要的库和模块
+import copy  # 导入深拷贝模块
+from dataclasses import dataclass  # 导入dataclass装饰器
+from typing import Callable, List, Optional, Tuple, Union  # 导入类型提示
 
-# 导入所需的库和模块
-import copy
-from dataclasses import dataclass
-from typing import Callable, List, Optional, Tuple, Union
-import torch
-from torch import nn
-from ...configuration_utils import PretrainedConfig
-from ...generation import BeamSearchScorer, GenerationConfig, LogitsProcessorList, StoppingCriteriaList
-from ...modeling_outputs import ModelOutput
-from ...modeling_utils import PreTrainedModel
-from ...utils import add_start_docstrings_to_model_forward, logging, replace_return_docstrings
-from .configuration_rag import RagConfig
-from .retrieval_rag import RagRetriever
+import torch  # 导入PyTorch库
+from torch import nn  # 导入神经网络模块
+
+# 导入配置相关的工具和类
+from ...configuration_utils import PretrainedConfig  # 导入预训练配置类
+from ...generation import BeamSearchScorer, GenerationConfig, LogitsProcessorList, StoppingCriteriaList  # 导入生成相关类和模块
+from ...modeling_outputs import ModelOutput  # 导入模型输出基类
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型类
+from ...utils import add_start_docstrings_to_model_forward, logging, replace_return_docstrings  # 导入工具类和函数
+
+# 导入RAG模型相关配置和检索器
+from .configuration_rag import RagConfig  # 导入RAG配置类
+from .retrieval_rag import RagRetriever  # 导入RAG检索器类
 
 # 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 文档配置
+# 用于文档的配置名称
 _CONFIG_FOR_DOC = "RagConfig"
 
-# 定义检索增强语言模型边际输出类
 @dataclass
 class RetrievAugLMMarginOutput(ModelOutput):
     """
-    检索增强边际模型输出的基类。
+    检索增强的边际化模型输出的基类。
 
     """
+    loss: Optional[torch.FloatTensor] = None  # 损失值，可选的浮点张量
+    logits: torch.FloatTensor = None  # 对数张量，浮点张量
+    doc_scores: torch.FloatTensor = None  # 文档分数，浮点张量
+    past_key_values: Optional[List[torch.FloatTensor]] = None  # 过去的键值，可选的浮点张量列表
+    retrieved_doc_embeds: Optional[torch.FloatTensor] = None  # 检索到的文档嵌入，可选的浮点张量
+    retrieved_doc_ids: Optional[torch.LongTensor] = None  # 检索到的文档ID，可选的长整型张量
+    context_input_ids: Optional[torch.LongTensor] = None  # 上下文输入ID，可选的长整型张量
+    context_attention_mask: Optional[torch.LongTensor] = None  # 上下文注意力掩码，可选的长整型张量
+    question_encoder_last_hidden_state: Optional[torch.FloatTensor] = None  # 问题编码器最后隐藏状态，可选的浮点张量
+    question_enc_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None  # 问题编码器隐藏状态元组，可选的浮点张量元组
+    question_enc_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None  # 问题编码器注意力元组，可选的浮点张量元组
+    generator_enc_last_hidden_state: Optional[torch.FloatTensor] = None  # 生成器编码器最后隐藏状态，可选的浮点张量
+    generator_enc_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None  # 生成器编码器隐藏状态元组，可选的浮点张量元组
+    generator_enc_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None  # 生成器编码器注意力元组，可选的浮点张量元组
+    generator_dec_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None  # 生成器解码器隐藏状态元组，可选的浮点张量元组
+    generator_dec_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None  # 生成器解码器注意力元组，可选的浮点张量元组
+    generator_cross_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None  # 生成器交叉注意力元组，可选的浮点张量元组
 
-    loss: Optional[torch.FloatTensor] = None
-    logits: torch.FloatTensor = None
-    doc_scores: torch.FloatTensor = None
-    past_key_values: Optional[List[torch.FloatTensor]] = None
-    retrieved_doc_embeds: Optional[torch.FloatTensor] = None
-    retrieved_doc_ids: Optional[torch.LongTensor] = None
-    context_input_ids: Optional[torch.LongTensor] = None
-    context_attention_mask: Optional[torch.LongTensor] = None
-    question_encoder_last_hidden_state: Optional[torch.FloatTensor] = None
-    question_enc_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    question_enc_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    generator_enc_last_hidden_state: Optional[torch.FloatTensor] = None
-    generator_enc_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    generator_enc_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    generator_dec_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    generator_dec_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    generator_cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
-
-# 定义检索增强语言模型输出类
 @dataclass
 class RetrievAugLMOutput(ModelOutput):
     """
-    """
+    检索增强的语言模型输出基类。
 
-    logits: torch.FloatTensor = None
-    doc_scores: torch.FloatTensor = None
-    past_key_values: Optional[List[torch.FloatTensor]] = None
-    retrieved_doc_embeds: Optional[torch.FloatTensor] = None
-    retrieved_doc_ids: Optional[torch.LongTensor] = None
-    context_input_ids: Optional[torch.LongTensor] = None
-    context_attention_mask: Optional[torch.LongTensor] = None
-    # 问题编码器最后隐藏状态（可选）
+    """
+    logits: torch.FloatTensor = None  # 对数张量，浮点张量
+    doc_scores: torch.FloatTensor = None  # 文档分数，浮点张量
+    past_key_values: Optional[List[torch.FloatTensor]] = None  # 过去的键值，可选的浮点张量列表
+    retrieved_doc_embeds: Optional[torch.FloatTensor] = None  # 检索到的文档嵌入，可选的浮点张量
+    retrieved_doc_ids: Optional[torch.LongTensor] = None  # 检索到的文档ID，可选的长整型张量
+    context_input_ids: Optional[torch.LongTensor] = None  # 上下文输入ID，可选的长整型张量
+    context_attention_mask: Optional[torch.LongTensor] = None  # 上下文注意力掩码，可选的长整型张量
+    # 定义问题编码器的最后隐藏状态，初始值为None，类型为可选的浮点张量
     question_encoder_last_hidden_state: Optional[torch.FloatTensor] = None
-    # 问题编码器隐藏状态（可选）
-    question_enc_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 问题编码器注意力权重（可选）
-    question_enc_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 生成器编码器最后隐藏状态（可选）
+    
+    # 定义问题编码器的隐藏状态列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    question_enc_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义问题编码器的注意力列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    question_enc_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义生成器编码器的最后隐藏状态，初始值为None，类型为可选的浮点张量
     generator_enc_last_hidden_state: Optional[torch.FloatTensor] = None
-    # 生成器编码器隐藏状态（可选）
-    generator_enc_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 生成器编码器注意力权重（可选）
-    generator_enc_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 生成器解码器隐藏状态（可选）
-    generator_dec_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 生成器解码器注意力权重（可选）
-    generator_dec_attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 生成器交叉注意力权重（可选）
-    generator_cross_attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 通过继承 PreTrainedModel 类定义 RAG 模型，RAG模型是带有检索功能的生成模型
+    
+    # 定义生成器编码器的隐藏状态列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    generator_enc_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义生成器编码器的注意力列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    generator_enc_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义生成器解码器的隐藏状态列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    generator_dec_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义生成器解码器的注意力列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    generator_dec_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义生成器交叉注意力列表，初始值为None，类型为可选的包含多个浮点张量的元组
+    generator_cross_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 定义一个自定义的 RAG 预训练模型类，继承自 PreTrainedModel
 class RagPreTrainedModel(PreTrainedModel):
     r"""
     RAG models were released with the paper [Retrieval-Augmented Generation for Knowledge-Intensive NLP
@@ -102,18 +99,18 @@ class RagPreTrainedModel(PreTrainedModel):
     generator, the encoder and generator are trainable while the retriever is just an indexed dataset.
 
     """
-    
-    # 指定 RAG 的配置类
+
+    # 指定配置类为 RagConfig
     config_class = RagConfig
-    
-    # 指定 RAG 的基础模型名称前缀
+    # 指定基础模型的前缀为 "rag"
     base_model_prefix = "rag"
 
     @classmethod
     def from_pretrained(cls, *args, **kwargs):
-        # 目前不支持复合模型进行快速初始化
-        # for composite models
+        # 目前不支持快速初始化
+        # 对于复合模型
         kwargs["_fast_init"] = False
+        # 调用父类的 from_pretrained 方法
         return super().from_pretrained(*args, **kwargs)
 
     @classmethod
@@ -123,52 +120,48 @@ class RagPreTrainedModel(PreTrainedModel):
         generator_pretrained_model_name_or_path: str = None,
         retriever: RagRetriever = None,
         **kwargs,
-RAG_START_DOCSTRING = r"""
+    ):
+        # 以下是 RAG 模型的文档字符串定义，描述了模型的结构和使用方法
+        RAG_START_DOCSTRING = r"""
+        RAG is a seq2seq model which encapsulates two core components: a question encoder and a generator. During a forward
+        pass, we encode the input with the question encoder and pass it to the retriever to extract relevant context
+        documents. The documents are then prepended to the input. Such contextualized inputs is passed to the generator.
 
-    RAG is a seq2seq model which encapsulates two core components: a question encoder and a generator. During a forward
-    pass, we encode the input with the question encoder and pass it to the retriever to extract relevant context
-    documents. The documents are then prepended to the input. Such contextualized inputs is passed to the generator.
+        The question encoder can be any *autoencoding* model, preferably [`DPRQuestionEncoder`], and the generator can be
+        any *seq2seq* model, preferably [`BartForConditionalGeneration`].
 
-    The question encoder can be any *autoencoding* model, preferably [`DPRQuestionEncoder`], and the generator can be
-    any *seq2seq* model, preferably [`BartForConditionalGeneration`].
+        The model can be initialized with a [`RagRetriever`] for end-to-end generation or used in combination with the
+        outputs of a retriever in multiple steps---see examples for more details. The model is compatible any
+        *autoencoding* model as the `question_encoder` and any *seq2seq* model with language model head as the `generator`.
+        It has been tested with [`DPRQuestionEncoder`] as the `question_encoder` and [`BartForConditionalGeneration`] or
+        [`T5ForConditionalGeneration`] as the `generator`.
 
-    The model can be initialized with a [`RagRetriever`] for end-to-end generation or used in combination with the
-    outputs of a retriever in multiple steps---see examples for more details. The model is compatible any
-    *autoencoding* model as the `question_encoder` and any *seq2seq* model with language model head as the `generator`.
-    It has been tested with [`DPRQuestionEncoder`] as the `question_encoder` and [`BartForConditionalGeneration`] or
-    [`T5ForConditionalGeneration`] as the `generator`.
+        This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
+        library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+        etc.)
 
-    This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
-    etc.)
-
-    This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
-    Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
-    and behavior.
+        This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
+        Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+        and behavior.
+        """
     Args:
         config ([`RagConfig`]):
-            # 模型配置类，包含模型的所有参数。使用配置文件初始化时不会加载模型的权重，只会加载配置。可以查看 [`~PreTrainedModel.from_pretrained`] 方法来加载模型的权重。
-            Model configuration class with all the parameters of the model. Initializing with a config file does not
-            load the weights associated with the model, only the configuration. Check out the
-            [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+            模型配置类，包含模型的所有参数。通过配置文件初始化不会加载与模型相关的权重，只加载配置信息。
+            若要加载模型权重，请查看 [`~PreTrainedModel.from_pretrained`] 方法。
         question_encoder ([`PreTrainedModel`]):
-            # 一个与 RAG 检索器中的 faiss 索引兼容的编码器模型。
-            An encoder model compatible with the faiss index encapsulated by the `retriever`.
+            编码器模型，与由 `retriever` 封装的 faiss 索引兼容。
         generator ([`PreTrainedModel`]):
-            # 在 RAG 架构中用作生成器的 seq2seq 模型。
-            A seq2seq model used as the generator in the RAG architecture.
+            在 RAG 结构中用作生成器的 seq2seq 模型。
         retriever ([`RagRetriever`]):
-            # 一个检索器类，封装了一个 faiss 索引，用于获取当前输入的上下文文档。
-            A retriever class encapsulating a faiss index queried to obtain context documents for current inputs.
+            检索器类，封装了一个 faiss 索引，用于查询获取当前输入的上下文文档。
 """
-定义了 RAG 前向输入的文档字符串
 """
+
+
 RAG_FORWARD_INPUTS_DOCSTRING = r"""
 """
 
-"""
-基于 RAG_START_DOCSTRING 添加文档字符串到模型的前向方法
-"""
+
 @add_start_docstrings_to_model_forward(RAG_START_DOCSTRING)
 class RagModel(RagPreTrainedModel):
     def __init__(
@@ -176,44 +169,52 @@ class RagModel(RagPreTrainedModel):
         config: Optional[PretrainedConfig] = None,
         question_encoder: Optional[PreTrainedModel] = None,
         generator: Optional[PreTrainedModel] = None,
-        retriever: Optional[RagRetriever] = None,  # 或许可以使用 `set_retriever(...)` 方法
+        retriever: Optional[RagRetriever] = None,  # or maybe just use a `set_retriever(...)` method
         **kwargs,
     ):
         assert config is not None or (
             question_encoder is not None and generator is not None
-        ), "需要提供配置或者问题编码器和生成器。"
+        ), "Either a configuration or an question_encoder and a generator has to be provided."
 
         if config is None:
+            # Constructing a RagConfig object from provided question_encoder and generator configurations
             config = RagConfig.from_question_encoder_generator_configs(
                 question_encoder.config, generator.config, **kwargs
             )
         else:
-            assert isinstance(config, self.config_class), f"config: {config} 必须是类型为 {self.config_class}"
+            assert isinstance(config, self.config_class), f"config: {config} has to be of type {self.config_class}"
         super().__init__(config)
+        
         if question_encoder is None:
+            # If question_encoder is not provided, instantiate a default model using AutoModel
             from ..auto.modeling_auto import AutoModel
-
             question_encoder = AutoModel.from_config(config.question_encoder)
 
         if generator is None:
+            # If generator is not provided, instantiate a default Seq2SeqLM model using AutoModelForSeq2SeqLM
             from ..auto.modeling_auto import AutoModelForSeq2SeqLM
-
             generator = AutoModelForSeq2SeqLM.from_config(config.generator)
 
         self.retriever = retriever
         if self.retriever is not None:
+            # Ensure retriever is of type RagRetriever
             assert isinstance(
                 retriever, RagRetriever
-            ), f"`self.retriever` 的类型为 {type(self.retriever)}, 但应为类型 `RagRetriever`"
+            ), f"`self.retriever` is of type {type(self.retriever)}, but should be of type `RagRetriever`"
             self.retriever = retriever
 
         self.question_encoder = question_encoder
         self.generator = generator
 
+        # Initialize context encoder attributes
         self.ctx_encoder = None
         self.context_encoder_training = False
 
-    @add_start_docstrings_to_model_forward(RAG_FORWARD_INPUTS_DOCSTRING)
+    @add_start_docstrings_to_model_forward(
+        """
+        A RAG-sequence model implementation. It performs RAG-sequence specific marginalization in the forward pass.
+        """
+    )
     @replace_return_docstrings(output_type=RetrievAugLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
@@ -231,15 +232,35 @@ class RagModel(RagPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         output_retrieved: Optional[bool] = None,
         n_docs: Optional[int] = None,
-@add_start_docstrings_to_model_forward(
-    """
-    实现了 RAG-sequence 模型。它在前向传递中执行 RAG-sequence 特定的边际化处理。
-    """,
-    # 定义开始文档字符串的标记
+    ):
+        """
+        Perform a forward pass through the RAG model.
+
+        This method implements specific marginalization for RAG-sequence models.
+
+        Args:
+            input_ids (Optional[torch.LongTensor]): Input tensor of token indices.
+            attention_mask (Optional[torch.Tensor]): Mask tensor indicating which elements in the input should be attended to.
+            encoder_outputs (Optional[Tuple[Tuple[torch.FloatTensor]]]): Outputs of the encoder.
+            decoder_input_ids (Optional[torch.LongTensor]): Input tensor for decoder.
+            decoder_attention_mask (Optional[torch.BoolTensor]): Mask tensor for decoder attention.
+            past_key_values (Optional[Tuple[Tuple[torch.FloatTensor]]]): Cached key-values for faster decoding.
+            doc_scores (Optional[torch.FloatTensor]): Scores indicating relevance of retrieved documents.
+            context_input_ids (Optional[torch.LongTensor]): Tensor of token indices for context.
+            context_attention_mask (Optional[torch.LongTensor]): Mask tensor for context attention.
+            use_cache (Optional[bool]): Whether to use cached values.
+            output_attentions (Optional[bool]): Whether to output attention weights.
+            output_hidden_states (Optional[bool]): Whether to output hidden states.
+            output_retrieved (Optional[bool]): Whether to output retrieved documents.
+            n_docs (Optional[int]): Number of documents to retrieve.
+
+        Returns:
+            RetrievAugLMOutput: Object containing the model outputs.
+        """
+        pass
     RAG_START_DOCSTRING,
-# 定义了 RagSequenceForGeneration 类，继承自 RagPreTrainedModel 类
+# 定义一个继承自 RagPreTrainedModel 的类，用于生成RAG（Retrieval-Augmented Generation）模型的序列
 class RagSequenceForGeneration(RagPreTrainedModel):
-    # 初始化函数，接受一系列参数
     def __init__(
         self,
         config: Optional[PretrainedConfig] = None,
@@ -248,23 +269,23 @@ class RagSequenceForGeneration(RagPreTrainedModel):
         retriever: Optional[RagRetriever] = None,
         **kwargs,
     ):
-        # 断言条件，要求必须提供配置文件或者问题编码器和生成器
+        # 断言语句，要求提供配置信息或者问题编码器和生成器的组合之一
         assert config is not None or (
             question_encoder is not None and generator is not None
         ), "Either a configuration or an encoder and a generator has to be provided."
-        
-        # 如果未提供配置文件，则根据问题编码器和生成器的配置创建配置文件
+
+        # 如果未提供配置信息，则根据提供的问题编码器和生成器配置生成一个 RagConfig 对象
         if config is None:
             config = RagConfig.from_question_encoder_generator_configs(
                 question_encoder.config, generator.config, **kwargs
             )
-        # 调用父类的初始化函数，传入配置文件
+        # 调用父类的初始化方法，传入配置信息
         super().__init__(config)
 
-        # 实例化模型
+        # 实例化 RAG 模型，传入配置信息、问题编码器、生成器和检索器
         self.rag = RagModel(config=config, question_encoder=question_encoder, generator=generator, retriever=retriever)
 
-    # 设置检索器
+    # 设置模型的检索器
     def set_retriever(self, retriever: RagRetriever):
         self.rag.retriever = retriever
 
@@ -273,10 +294,9 @@ class RagSequenceForGeneration(RagPreTrainedModel):
         self.rag.context_encoder_training = True
         self.rag.ctx_encoder = ctx_encoder
 
-    # 重写 forward 方法，添加了文档字符串和替换返回文档字符串的装饰器
+    # 前向传播方法，接收多个输入参数，详细的参数说明由装饰器 @add_start_docstrings_to_model_forward 和 @replace_return_docstrings 提供
     @add_start_docstrings_to_model_forward(RAG_FORWARD_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=RetrievAugLMMarginOutput, config_class=_CONFIG_FOR_DOC)
-    # 前向传播方法，接受多个输入参数
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -296,126 +316,118 @@ class RagSequenceForGeneration(RagPreTrainedModel):
         reduce_loss: Optional[bool] = None,
         labels: Optional[torch.LongTensor] = None,
         n_docs: Optional[int] = None,
-        **kwargs,  # 需要 kwargs 用于生成
-    # 获取检索器的属性
+        **kwargs,  # 需要传递给生成过程的额外参数
+    ):
+        pass  # 实际前向传播逻辑在 RagModel 类中定义
+
+    # 返回模型的检索器属性
     @property
     def retriever(self):
         return self.rag.retriever
 
-    # 获取生成器的属性
+    # 返回模型的生成器属性
     @property
     def generator(self):
         return self.rag.generator
 
-    # 获取问题编码器的属性
+    # 返回模型的问题编码器属性
     @property
     def question_encoder(self):
         return self.rag.question_encoder
 
-    # 禁用梯度计算的装饰器
+    # 使用 torch.no_grad 装饰器，表示该方法不需要计算梯度信息
     @torch.no_grad()
-    # 生成方法，生成模型的输出序列
+    # 定义一个生成方法，用于生成文本序列。
     def generate(
-        # 输入序列的索引，类型为 LongTensor，可选，默认为 None
-        input_ids: Optional[torch.LongTensor] = None,
-        # 注意力掩码，类型为 LongTensor，可选，默认为 None
-        attention_mask: Optional[torch.LongTensor] = None,
-        # 上下文输入序列的索引，类型为 LongTensor，可选，默认为 None
-        context_input_ids: Optional[torch.LongTensor] = None,
-        # 上下文输入序列的注意力掩码，类型为 LongTensor，可选，默认为 None
-        context_attention_mask: Optional[torch.LongTensor] = None,
-        # 文档分数，类型为 FloatTensor，可选，默认为 None
-        doc_scores: Optional[torch.FloatTensor] = None,
-        # 是否执行去重，类型为 bool，可选，默认为 True
-        do_deduplication: Optional[bool] = None,  # defaults to True
-        # 返回序列的数量，类型为 int，可选，默认为 1
-        num_return_sequences: Optional[int] = None,  # defaults to 1
-        # Beam 搜索中的束宽度，类型为 int，可选，默认为 1
-        num_beams: Optional[int] = None,  # defaults to 1
-        # 文档数量，类型为 int，可选
-        n_docs: Optional[int] = None,
-        # 其他模型参数
-        **model_kwargs,
-    # 获取负对数似然损失
+        self,
+        input_ids: Optional[torch.LongTensor] = None,  # 输入序列的索引张量，可以为空
+        attention_mask: Optional[torch.LongTensor] = None,  # 注意力掩码张量，可以为空
+        context_input_ids: Optional[torch.LongTensor] = None,  # 上下文输入序列的索引张量，可以为空
+        context_attention_mask: Optional[torch.LongTensor] = None,  # 上下文输入的注意力掩码张量，可以为空
+        doc_scores: Optional[torch.FloatTensor] = None,  # 文档评分张量，可以为空
+        do_deduplication: Optional[bool] = None,  # 是否去重，默认为True
+        num_return_sequences: Optional[int] = None,  # 返回序列的数量，默认为1
+        num_beams: Optional[int] = None,  # Beam搜索中的Beam大小，默认为1
+        n_docs: Optional[int] = None,  # 文档数量，可以为空
+        **model_kwargs,  # 其他模型相关参数，接收任意关键字参数
+    ):
+        # 定义一个计算负对数似然（Negative Log-Likelihood，NLL）的方法
     def get_nll(
-        # 序列的对数概率，类型为张量，表示预测的序列的对数概率
-        self, seq_logits,
-        # 文档分数，类型为张量，表示文档的分数
-        doc_scores,
-        # 目标序列，类型为张量，表示真实的目标序列
-        target,
-        # 是否减少损失，默认为 False
-        reduce_loss=False,
-        # epsilon 值，用于数值稳定性，默认为 0.0
-        epsilon=0.0,
-        # 是否排除 BOS 分数，默认为 False
-        exclude_bos_score=False,
-        # 文档数量，可选
-        n_docs=None
-        ):
+        self,
+        seq_logits,  # 序列的logits，用于计算NLL
+        doc_scores,  # 文档评分，用于加权序列NLL
+        target,  # 目标序列，用于计算NLL
+        reduce_loss=False,  # 是否减少损失，默认为False
+        epsilon=0.0,  # 平滑项，用于数值稳定性，默认为0.0
+        exclude_bos_score=False,  # 是否排除起始标记得分，默认为False
+        n_docs=None  # 文档数量，可以为空
         # shift tokens left
-        # 将目标张量向左移动，拼接生成新的张量
         target = torch.cat(
             [target[:, 1:], target.new(target.shape[0], 1).fill_(self.config.generator.pad_token_id)], 1
         )
 
-        # 如果未指定 n_docs，则设置为模型配置中的 n_docs
+        # Determine the number of documents to consider, defaulting to self.config.n_docs if not specified
         n_docs = n_docs if n_docs is not None else self.config.n_docs
 
-        # 对于 T5 模型，bos_token_id 可能为空
+        # Determine the beginning of sequence token ID (`bos_token_id`) based on model configuration
         bos_token_id = self.config.bos_token_id or self.config.generator.bos_token_id
         use_bos = bos_token_id is not None and target[:, 0].eq(bos_token_id).all()
 
         def _mask_pads(ll, smooth_obj):
-            # 创建用于指示填充标记位置的掩码
+            # Create a mask for padding tokens in the target sequence
             pad_mask = target.eq(self.config.generator.pad_token_id)
             if pad_mask.any():
-                # 将损失和平滑对象的填充位置置为零
+                # Apply the mask to log-likelihood and smoothing objective
                 ll.masked_fill_(pad_mask, 0.0)
                 smooth_obj.masked_fill_(pad_mask, 0.0)
             return ll.squeeze(-1), smooth_obj.squeeze(-1)
 
-        # 对序列的对数概率进行归一化并重塑形状
+        # Compute log softmax over sequence logits and reshape for RAG sequence marginalization
         seq_logprobs = nn.functional.log_softmax(seq_logits, dim=-1).view(
             seq_logits.shape[0] // n_docs, n_docs, -1, seq_logits.size(-1)
         )  # batch_size x n_docs x tgt_len x #vocab_size
         doc_logprobs = nn.functional.log_softmax(doc_scores, dim=1).unsqueeze(-1).unsqueeze(-1)
 
-        # RAG-sequence 边际概率
+        # RAG-sequence marginalization
         first_token_scores = seq_logprobs[:, :, :1, :]
         second_token_scores = seq_logprobs[:, :, 1:2, :]
         remainder = seq_logprobs[:, :, 2:, :]
         rag_logprobs = torch.cat([first_token_scores, second_token_scores + doc_logprobs, remainder], dim=2)
 
-        # 计算损失
+        # Ensure target tensor matches dimensions of rag_logprobs for indexing
         target = target.unsqueeze(1).unsqueeze(-1).repeat(1, n_docs, 1, 1)
         assert target.dim() == rag_logprobs.dim()
 
+        # Gather log probabilities corresponding to target indices and apply padding mask
         ll = rag_logprobs.gather(dim=-1, index=target)
-        smooth_obj = rag_logprobs.sum(dim=-1, keepdim=True)  # 所有（归一化）对数的总和
+        smooth_obj = rag_logprobs.sum(dim=-1, keepdim=True)  # total sum of all (normalized) logits
 
+        # Apply padding mask to log-likelihood and smoothing objective
         ll, smooth_obj = _mask_pads(ll, smooth_obj)
 
-        # 对标记求和，排除起始标记来计算得分
+        # Sum over tokens to compute loss, optionally excluding beginning of sequence token
         ll = ll[:, :, 1:].sum(2) if exclude_bos_score and use_bos else ll.sum(2)
         smooth_obj = smooth_obj.sum(2)
-        ll = ll.logsumexp(1)  # 对文档求 logsumexp
+        ll = ll.logsumexp(1)  # logsumexp over docs
         smooth_obj = smooth_obj.logsumexp(1)
 
+        # Calculate negative log-likelihood (nll) loss and smoothed loss
         nll_loss = -ll
         smooth_loss = -smooth_obj
 
+        # Optionally reduce loss across batches
         if reduce_loss:
             nll_loss = nll_loss.sum()
             smooth_loss = smooth_loss.sum()
 
+        # Compute final loss using nll_loss, smooth_loss, and epsilon for smoothing
         eps_i = epsilon / rag_logprobs.size(-1)
         loss = (1.0 - epsilon) * nll_loss + eps_i * smooth_loss
         return loss
 
     @staticmethod
     def _cat_and_pad(tensors, pad_token_id):
-        # 拼接并填充张量
+        # Concatenate tensors into a padded tensor with specified pad_token_id
         output = (
             tensors[0].new(sum([t.shape[0] for t in tensors]), max([t.shape[1] for t in tensors])).fill_(pad_token_id)
         )
@@ -424,7 +436,9 @@ class RagSequenceForGeneration(RagPreTrainedModel):
             output[ind : ind + t.shape[0], : t.shape[1]] = t
             ind += t.shape[0]
         return output
-# 添加模型文档字符串到模型前向函数，并对RAG-token特定的边际化进行前向传递
+"""
+一个实现了RAG-token模型的类。在前向传播中执行了RAG-token特定的边缘化操作。
+"""
 @add_start_docstrings_to_model_forward(
     """
     A RAG-token model implementation. It performs RAG-token specific marginalization in the forward pass.
@@ -440,32 +454,33 @@ class RagTokenForGeneration(RagPreTrainedModel):
         retriever: Optional[RagRetriever] = None,
         **kwargs,
     ):
-        # 如果未提供配置，必须提供问题编码器和生成器
+        # 断言：确保提供了配置或者问题编码器和生成器的组合
         assert config is not None or (
             question_encoder is not None and generator is not None
         ), "Either a configuration or an encoder and a generator has to be provided."
-        
+
+        # 如果没有提供配置，则根据问题编码器和生成器的配置创建RAG配置对象
         if config is None:
-            # 根据问题编码器和生成器的配置创建RAG配置
             config = RagConfig.from_question_encoder_generator_configs(
                 question_encoder.config, generator.config, **kwargs
             )
 
+        # 调用父类初始化方法
         super().__init__(config)
 
-        # 实例化模型
+        # 实例化RAG模型
         self.rag = RagModel(config=config, question_encoder=question_encoder, generator=generator, retriever=retriever)
 
     # 设置检索器
     def set_retriever(self, retriever: RagRetriever):
         self.rag.retriever = retriever
 
-    # 用于训练设置上下文编码器
+    # 设置用于训练的上下文编码器
     def set_context_encoder_for_training(self, ctx_encoder: PreTrainedModel):
         self.rag.context_encoder_training = True
         self.rag.ctx_encoder = ctx_encoder
 
-    # 准备用于生成的输入
+    # 准备生成的输入
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
@@ -477,7 +492,7 @@ class RagTokenForGeneration(RagPreTrainedModel):
         n_docs=None,
         **kwargs,
     ):
-        # 如果定义了过去的值，只使用最后的解码器输入id
+        # 如果已经定义了过去的键值对，则只使用最后一个decoder_input_ids
         if past_key_values is not None:
             decoder_input_ids = decoder_input_ids[:, -1:]
 
@@ -493,54 +508,61 @@ class RagTokenForGeneration(RagPreTrainedModel):
             "n_docs": n_docs,
         }
 
-    # 获取检索器
+    # 检索器的属性
     @property
     def retriever(self):
         return self.rag.retriever
 
-    # 获取生成器
+    # 生成器的属性
     @property
     def generator(self):
         return self.rag.generator
 
-    # 获取问题编码器
+    # 问题编码器的属性
     @property
     def question_encoder(self):
         return self.rag.question_encoder
 
     @staticmethod
-    # 重排序生成所需的缓存。受 BART 启发，但我们需要关注文档的额外维度
     def _reorder_cache(past_key_values, beam_idx):
-        # 重新排序堆叠的隐藏状态
+        """Reorders cache for generation. BART-inspired but we need to take care of the extra dimension for docs"""
+
         def _reorder_stacked(hidden_states, new_order):
+            # 计算每个文档的数量
             n_docs = hidden_states.shape[0] // new_order.shape[0]
+            # 将隐藏状态重塑为 [batch_size, n_docs, ...] 的形状
             hidden_states = hidden_states.view(-1, n_docs, *hidden_states.shape[1:])
+            # 根据新的顺序索引选择隐藏状态
             hidden_states = hidden_states.index_select(0, new_order)
+            # 恢复原来的形状
             result = hidden_states.view(-1, *hidden_states.shape[2:])
             return result
 
+        # 初始化重新排序后的缓存
         reordered_past = ()
+        # 遍历每一层的缓存
         for layer_past in past_key_values:
-            # 从解码器层的批次维度中获取正确的批次索引，用于跨越和自注意力
+            # 对每个缓存状态重新排序，并添加到结果中
             reordered_past += (
                 tuple(_reorder_stacked(past_state, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
 
         return reordered_past
 
-    # RAG-token 边际化
     def marginalize(self, seq_logits, doc_scores, n_docs=None):
+        # 如果未提供 n_docs，则使用默认值 self.config.n_docs
         n_docs = n_docs if n_docs is not None else self.config.n_docs
 
-        # 对序列 logits 进行 log_softmax 并重新形状
+        # 对序列的 logits 进行 log_softmax，并重塑为 [batch_size / n_docs, n_docs, ..., num_labels]
         seq_logprobs = nn.functional.log_softmax(seq_logits, dim=-1).view(
             seq_logits.shape[0] // n_docs, n_docs, -1, seq_logits.size(-1)
         )
+        # 对文档分数进行 log_softmax
         doc_logprobs = torch.log_softmax(doc_scores, dim=1)
+        # 计算序列 log_probs 和文档 log_probs 的和，并进行 logsumexp 运算
         log_prob_sum = seq_logprobs + doc_logprobs.unsqueeze(-1).unsqueeze(-1)
         return torch.logsumexp(log_prob_sum, dim=1)
 
-    # RAG 模型的前向传播
     @add_start_docstrings_to_model_forward(RAG_FORWARD_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=RetrievAugLMMarginOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -562,9 +584,10 @@ class RagTokenForGeneration(RagPreTrainedModel):
         reduce_loss: Optional[bool] = None,
         labels: Optional[torch.LongTensor] = None,
         n_docs: Optional[int] = None,
-        **kwargs,  # 生成需要 kwargs
-    @torch.no_grad()
-    # 为生成文本准备输入参数
+        **kwargs,  # 需要用于生成的其他参数
+    ):
+        # 在 forward 方法中使用 torch.no_grad()，确保不计算梯度
+        @torch.no_grad()
     def generate(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -578,22 +601,34 @@ class RagTokenForGeneration(RagPreTrainedModel):
         logits_processor: Optional[LogitsProcessorList] = LogitsProcessorList(),
         stopping_criteria: Optional[StoppingCriteriaList] = StoppingCriteriaList(),
         **kwargs,
-    
-    # 获取输入嵌入层
+    ):
+        """
+        Generate function for the model to generate text outputs based on given inputs.
+        """
+        # Implementation details are encapsulated in the class and not commented here.
+
     def get_input_embeddings(self):
+        """
+        Retrieve input embeddings from the RAG generator.
+        """
         return self.rag.generator.get_input_embeddings()
 
-    # 获取输出嵌入层
     def get_output_embeddings(self):
+        """
+        Retrieve output embeddings from the RAG generator.
+        """
         return self.rag.generator.get_output_embeddings()
 
-    # 设置输出嵌入层
     def set_output_embeddings(self, new_embeddings):
+        """
+        Set new output embeddings for the RAG generator.
+        """
         return self.rag.generator.set_output_embeddings(new_embeddings)
 
-    # 将输入序列向右移动一个位置，并用指定的起始标记填充
     def shift_tokens_right(self, input_ids, start_token_id=None):
-        """Shift input ids one token to the right, and pad with start_token_id"""
+        """
+        Shift input ids one token to the right, and pad with start_token_id.
+        """
         if start_token_id is None:
             start_token_id = self.config.decoder_start_token_id
         shifted_input_ids = input_ids.new_zeros(input_ids.shape)
@@ -601,35 +636,41 @@ class RagTokenForGeneration(RagPreTrainedModel):
         shifted_input_ids[:, 0] = start_token_id
         return shifted_input_ids
 
-    # 计算负对数似然损失函数
     def get_nll(self, seq_logits, doc_scores, target, reduce_loss=False, epsilon=0.0, n_docs=None):
+        """
+        Calculate negative log likelihood loss for sequence logits and document scores.
+        """
         n_docs = n_docs if n_docs is not None else self.config.n_docs
-        # 将目标序列向左移动，以准备计算损失
+
+        # Shift tokens left and handle padding
         target = torch.cat(
             [target[:, 1:], target.new(target.shape[0], 1).fill_(self.config.generator.pad_token_id)], 1
         )
 
-        # 处理填充标记
         def _mask_pads(ll, smooth_obj):
+            """
+            Mask padding tokens in loss calculations.
+            """
             pad_mask = target.eq(self.config.generator.pad_token_id)
             if pad_mask.any():
                 ll.masked_fill_(pad_mask, 0.0)
                 smooth_obj.masked_fill_(pad_mask, 0.0)
             return ll.squeeze(-1), smooth_obj.squeeze(-1)
 
-        # 对生成的文本进行边际化，考虑多个文档的情况
+        # Marginalize logits and calculate log probabilities
         rag_logprobs = self.marginalize(seq_logits, doc_scores, n_docs)
 
         target = target.unsqueeze(-1)
         assert target.dim() == rag_logprobs.dim()
 
-        # 从边际化的概率中收集目标标记的对数概率
+        # Gather log probabilities based on target indices
         ll = rag_logprobs.gather(dim=-1, index=target)
-        smooth_obj = rag_logprobs.sum(dim=-1, keepdim=True)  # 所有（标准化）对数值的总和
+        smooth_obj = rag_logprobs.sum(dim=-1, keepdim=True)  # total sum of all (normalised) logits
         ll, smooth_obj = _mask_pads(ll, smooth_obj)
-        ll = ll.sum(1)  # 各个标记之间求和
+        ll = ll.sum(1)  # sum over tokens
         smooth_obj = smooth_obj.sum(1)
 
+        # Compute final negative log likelihood loss and smooth loss
         nll_loss = -ll
         smooth_loss = -smooth_obj
 

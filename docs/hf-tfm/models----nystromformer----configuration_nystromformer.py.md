@@ -1,87 +1,127 @@
-# `.\transformers\models\nystromformer\configuration_nystromformer.py`
+# `.\models\nystromformer\configuration_nystromformer.py`
 
-```py
-# coding=utf-8
-# 版权 2022 UW-Madison 和 The HuggingFace Inc. 团队保留所有权利。
+```
+# 设置编码格式为 UTF-8
+# 版权声明，版权归属于2022年的UW-Madison和The HuggingFace Inc.团队，保留所有权利
 #
-# 根据 Apache 许可证 2.0 版（“许可证”）授权;
-# 除非符合许可证的要求，否则不得使用此文件。
-# 您可以在以下网址获取许可证副本
+# 根据Apache许可证版本2.0授权使用此文件；
+# 除非遵守许可证的规定，否则您不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则按“原样”分发软件，
-# 无论是明示还是暗示的，都不作任何保证或条件。
-# 有关特定语言的权限，请参阅许可证。
-""" Nystromformer 模型配置"""
+# 除非适用法律要求或书面同意，否则本软件是基于“原样”的基础分发，
+# 没有任何明示或暗示的担保或条件。
+# 有关更多信息，请参阅许可证。
+""" Nystromformer模型配置"""
 
-# 导入预训练配置类
+# 从configuration_utils导入PretrainedConfig类
+# 从utils导入logging模块
 from ...configuration_utils import PretrainedConfig
-# 导入日志记录工具
 from ...utils import logging
 
-# 获取日志记录器
+# 获取logger对象
 logger = logging.get_logger(__name__)
 
-# 预训练配置存档映射
+# 定义Nystromformer预训练模型配置文件映射字典
 NYSTROMFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "uw-madison/nystromformer-512": "https://huggingface.co/uw-madison/nystromformer-512/resolve/main/config.json",
-    # 查看所有 Nystromformer 模型：https://huggingface.co/models?filter=nystromformer
+    # 查看所有Nystromformer模型的列表，网址为https://huggingface.co/models?filter=nystromformer
 }
 
-# Nystromformer 配置类，继承自 PretrainedConfig
+# 定义NystromformerConfig类，继承自PretrainedConfig类
 class NystromformerConfig(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`NystromformerModel`] 的配置。它用于根据指定参数实例化
-    一个 Nystromformer 模型，定义模型架构。使用默认值实例化配置将产生与 Nystromformer
-    [uw-madison/nystromformer-512](https://huggingface.co/uw-madison/nystromformer-512) 架构类似的配置。
+    这是一个配置类，用于存储[`NystromformerModel`]的配置信息。它用于根据指定的参数实例化
+    一个Nystromformer模型，定义模型的架构。使用默认参数实例化一个配置对象将生成与Nystromformer
+    [uw-madison/nystromformer-512](https://huggingface.co/uw-madison/nystromformer-512)架构类似的配置。
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。请阅读
-    [`PretrainedConfig`] 的文档以获取更多信息。
-    Args:
-        # 词汇表大小，用于Nystromformer模型。定义了在调用NystromformerModel时可以表示的不同标记数量
-        vocab_size (`int`, *optional*, defaults to 30000):
-        # 编码器层和池化层的维度大小
-        hidden_size (`int`, *optional*, defaults to 768):
-        # Transformer编码器中隐藏层的数量
-        num_hidden_layers (`int`, *optional*, defaults to 12):
-        # Transformer编码器中每个注意力层的注意力头数量
-        num_attention_heads (`int`, *optional*, defaults to 12):
-        # Transformer编码器中"中间"（即，前馈）层的维度
-        intermediate_size (`int`, *optional*, defaults to 3072):
-        # 编码器和池化层中的非线性激活函数（函数或字符串）。如果是字符串，则支持"gelu"、"relu"、"selu"和"gelu_new"
-        hidden_act (`str` or `function`, *optional*, defaults to `"gelu"`):
-        # 在所有全连接层中的dropout概率，包括嵌入层、编码器和池化层
-        hidden_dropout_prob (`float`, *optional*, defaults to 0.1):
-        # 注意概率的dropout比率
-        attention_probs_dropout_prob (`float`, *optional*, defaults to 0.1):
-        # 模型可能在其中使用的最大序列长度。通常将其设置为较大的值（例如512、1024或2048）
-        max_position_embeddings (`int`, *optional*, defaults to 512):
-        # 在调用NystromformerModel时传递的token_type_ids的词汇表大小
-        type_vocab_size (`int`, *optional*, defaults to 2):
-        # segment-means中使用的序列长度
-        segment_means_seq_len (`int`, *optional*, defaults to 64):
-        # 在Nystrom近似softmax自注意力矩阵中使用的地标点（或Nystrom点）的数量
-        num_landmarks (`int`, *optional*, defaults to 64):
-        # Nystrom近似中使用的深度卷积的卷积核大小
-        conv_kernel_size (`int`, *optional*, defaults to 65):
-        # 是否使用确切系数计算来计算矩阵的Moore-Penrose逆的初始值的迭代方法
-        inv_coeff_init_option (`bool`, *optional*, defaults to `False`):
-        # 初始化所有权重矩阵的截断正态初始化器的标准差
-        initializer_range (`float`, *optional*, defaults to 0.02):
-        # 层归一化层使用的epsilon
-        layer_norm_eps (`float`, *optional*, defaults to 1e-12):
-
-    Example:
-
-    ```python
-    >>> from transformers import NystromformerModel, NystromformerConfig
-    # 初始化一个 Nystromformer uw-madison/nystromformer-512 风格的配置
-    configuration = NystromformerConfig()
+    配置对象继承自[`PretrainedConfig`]，可用于控制模型的输出。有关更多信息，请参阅
+    [`PretrainedConfig`]的文档。
+    # 定义 NystromformerConfig 类，用于配置 Nystromformer 模型的参数
+    class NystromformerConfig:
     
-    # 根据 uw-madison/nystromformer-512 风格的配置初始化一个模型
-    model = NystromformerModel(configuration)
+        # 初始化函数，设置 Nystromformer 模型的各种参数
+        def __init__(
+            self,
+            vocab_size: int = 30000,  # Nystromformer 模型的词汇表大小，默认为 30000
+            hidden_size: int = 768,  # 编码器层和池化层的维度，默认为 768
+            num_hidden_layers: int = 12,  # Transformer 编码器中隐藏层的数量，默认为 12
+            num_attention_heads: int = 12,  # 每个注意力层中的注意力头数，默认为 12
+            intermediate_size: int = 3072,  # Transformer 编码器中"中间"（即前馈）层的维度，默认为 3072
+            hidden_act: str = "gelu",  # 编码器和池化器中的非线性激活函数，默认为 "gelu"
+            hidden_dropout_prob: float = 0.1,  # 嵌入层、编码器和池化器中全连接层的 dropout 概率，默认为 0.1
+            attention_probs_dropout_prob: float = 0.1,  # 注意力概率的 dropout 比率，默认为 0.1
+            max_position_embeddings: int = 512,  # 模型可能使用的最大序列长度，默认为 512
+            type_vocab_size: int = 2,  # 调用 NystromformerModel 时传递的 token_type_ids 的词汇表大小，默认为 2
+            segment_means_seq_len: int = 64,  # segment-means 中使用的序列长度，默认为 64
+            num_landmarks: int = 64,  # Nystrom 近似 softmax 自注意力矩阵时使用的 landmark（或 Nystrom）点数量，默认为 64
+            conv_kernel_size: int = 65,  # Nystrom 近似中使用的深度卷积的内核大小，默认为 65
+            inv_coeff_init_option: bool = False,  # 是否使用精确系数计算来初始化 Moore-Penrose 矩阵的迭代方法的初始值，默认为 False
+            initializer_range: float = 0.02,  # 用于初始化所有权重矩阵的截断正态初始化器的标准差，默认为 0.02
+            layer_norm_eps: float = 1e-12,  # 层归一化层使用的 epsilon，默认为 1e-12
+        ):
+            # 将参数设置为类的属性
+            self.vocab_size = vocab_size
+            self.hidden_size = hidden_size
+            self.num_hidden_layers = num_hidden_layers
+            self.num_attention_heads = num_attention_heads
+            self.intermediate_size = intermediate_size
+            self.hidden_act = hidden_act
+            self.hidden_dropout_prob = hidden_dropout_prob
+            self.attention_probs_dropout_prob = attention_probs_dropout_prob
+            self.max_position_embeddings = max_position_embeddings
+            self.type_vocab_size = type_vocab_size
+            self.segment_means_seq_len = segment_means_seq_len
+            self.num_landmarks = num_landmarks
+            self.conv_kernel_size = conv_kernel_size
+            self.inv_coeff_init_option = inv_coeff_init_option
+            self.initializer_range = initializer_range
+            self.layer_norm_eps = layer_norm_eps
+    # 设置模型类型为 Nystromformer
+    model_type = "nystromformer"
     
-    # 获取模型的配置信息
-    configuration = model.config
+    # 定义一个初始化方法，初始化 NystromformerConfig 类的实例
+    def __init__(
+        self,
+        vocab_size=30000,  # 设置词汇表大小，默认为 30000
+        hidden_size=768,  # 设置隐藏层大小，默认为 768
+        num_hidden_layers=12,  # 设置隐藏层数，默认为 12
+        num_attention_heads=12,  # 设置注意力头数，默认为 12
+        intermediate_size=3072,  # 设置中间层大小，默认为 3072
+        hidden_act="gelu_new",  # 设置隐藏层激活函数，默认为 gelu_new
+        hidden_dropout_prob=0.1,  # 设置隐藏层的 dropout 概率，默认为 0.1
+        attention_probs_dropout_prob=0.1,  # 设置注意力概率的 dropout 概率，默认为 0.1
+        max_position_embeddings=510,  # 设置最大位置编码长度，默认为 510
+        type_vocab_size=2,  # 设置类型词汇表大小，默认为 2
+        segment_means_seq_len=64,  # 设置段落均值序列长度，默认为 64
+        num_landmarks=64,  # 设置地标数，默认为 64
+        conv_kernel_size=65,  # 设置卷积核大小，默认为 65
+        inv_coeff_init_option=False,  # 设置逆系数初始化选项，默认为 False
+        initializer_range=0.02,  # 设置初始化范围，默认为 0.02
+        layer_norm_eps=1e-5,  # 设置层归一化的 epsilon，默认为 1e-5
+        pad_token_id=1,  # 设置填充标记 ID，默认为 1
+        bos_token_id=0,  # 设置起始标记 ID，默认为 0
+        eos_token_id=2,  # 设置结束标记 ID，默认为 2
+        **kwargs,  # 其他可选参数
+    ):
+        # 调用父类的初始化方法，传入 pad_token_id, bos_token_id, eos_token_id 和其他参数
+        super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
+        # 将传入的参数保存为对象的属性
+        self.vocab_size = vocab_size
+        self.max_position_embeddings = max_position_embeddings
+        self.hidden_size = hidden_size
+        self.num_hidden_layers = num_hidden_layers
+        self.num_attention_heads = num_attention_heads
+        self.intermediate_size = intermediate_size
+        self.hidden_act = hidden_act
+        self.hidden_dropout_prob = hidden_dropout_prob
+        self.attention_probs_dropout_prob = attention_probs_dropout_prob
+        self.initializer_range = initializer_range
+        self.type_vocab_size = type_vocab_size
+        self.segment_means_seq_len = segment_means_seq_len
+        self.num_landmarks = num_landmarks
+        self.conv_kernel_size = conv_kernel_size
+        self.inv_coeff_init_option = inv_coeff_init_option
+        self.layer_norm_eps = layer_norm_eps
 ```

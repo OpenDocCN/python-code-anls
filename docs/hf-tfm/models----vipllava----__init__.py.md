@@ -1,61 +1,72 @@
-# `.\transformers\models\vipllava\__init__.py`
+# `.\models\vipllava\__init__.py`
 
-```py
-# 版权声明和许可信息
-# 版权归 HuggingFace 团队所有，保留所有权利。
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证的规定，否则不可使用此文件
-# 可以获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 依据适用法律或书面同意，以"现有的"基础分发软件，不提供任何担保或条件，无论是明示的还是暗示的。
-# 请参阅许可证以获取有关权限和限制的详细信息
+```
+# 版权声明和许可信息，指明代码版权和许可协议
+# Copyright 2023 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入类型检查相关模块
+# 引入类型检查模块
 from typing import TYPE_CHECKING
 
-# 导入必需的依赖
+# 导入可选依赖未可用的异常
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 定义各模块的导入结构
+# 模块导入结构定义
 _import_structure = {"configuration_vipllava": ["VIPLLAVA_PRETRAINED_CONFIG_ARCHIVE_MAP", "VipLlavaConfig"]}
 
-# 检查是否有必需的 Torch 依赖
+# 检查是否可用 torch
 try:
     if not is_torch_available():
+        # 若不可用，则抛出可选依赖不可用异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
+    # 处理可选依赖不可用的情况
     pass
 else:
-    # 添加模型导入结构
+    # 若可用 torch，则添加以下模块到导入结构中
     _import_structure["modeling_vipllava"] = [
         "VIPLLAVA_PRETRAINED_MODEL_ARCHIVE_LIST",
         "VipLlavaForConditionalGeneration",
         "VipLlavaPreTrainedModel",
     ]
 
-# 如果是类型检查环境
+# 如果进行类型检查
 if TYPE_CHECKING:
-    # 导入相关的配置和模型内容
+    # 从 configuration_vipllava 模块导入特定符号
     from .configuration_vipllava import VIPLLAVA_PRETRAINED_CONFIG_ARCHIVE_MAP, VipLlavaConfig
 
-    # 检查 Torch 依赖
+    # 再次检查是否可用 torch
     try:
         if not is_torch_available():
+            # 若不可用，则抛出可选依赖不可用异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 处理可选依赖不可用的情况
         pass
     else:
-        # 导入模型相关内容
+        # 若可用 torch，则从 modeling_vipllava 模块导入特定符号
         from .modeling_vipllava import (
             VIPLLAVA_PRETRAINED_MODEL_ARCHIVE_LIST,
             VipLlavaForConditionalGeneration,
             VipLlavaPreTrainedModel,
         )
 
-# 如果不是类型检查环境
+# 如果不进行类型检查
 else:
+    # 导入 sys 模块
     import sys
 
-    # 将当前模块注册到 sys.modules 中
+    # 动态设置当前模块为 LazyModule，延迟加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
-```  
 ```

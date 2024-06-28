@@ -1,26 +1,22 @@
 # `.\models\electra\modeling_flax_electra.py`
 
-```py
-# 指定文件编码为 utf-8
-# 2021 The Google Flax Team Authors and The HuggingFace Inc. team 版权声明
-# 根据 Apache 许可证 2.0 版本授权使用
-# 详细许可条款请参考 http://www.apache.org/licenses/LICENSE-2.0
-# 软件按"原样"分发，无论明示或暗示都不提供任何担保或条件
-# 有关特定语言规定权限和限制的内容请参考许可证
+```
+# 引入必要的库和模块
+from typing import Callable, Optional, Tuple  # 导入类型提示相关的模块
 
-# 引入所需模块和类型
-from typing import Callable, Optional, Tuple
-import flax
-import flax.linen as nn
-import jax
-import jax.numpy as jnp
-import numpy as np
-from flax.core.frozen_dict import FrozenDict, freeze, unfreeze
-from flax.linen import combine_masks, make_causal_mask
-from flax.linen import partitioning as nn_partitioning
-from flax.linen.attention import dot_product_attention_weights
-from flax.traverse_util import flatten_dict, unflatten_dict
-from jax import lax
+import flax  # 导入 Flax 深度学习库
+import flax.linen as nn  # 导入 Flax 中的线性模块
+import jax  # 导入 JAX，用于自动求导和并行计算
+import jax.numpy as jnp  # 导入 JAX 的 NumPy 接口，用于数组操作
+import numpy as np  # 导入 NumPy，用于常规的数学运算
+from flax.core.frozen_dict import FrozenDict, freeze, unfreeze  # 导入 Flax 中的冻结字典相关模块
+from flax.linen import combine_masks, make_causal_mask  # 导入 Flax 中的掩码组合和因果掩码生成函数
+from flax.linen import partitioning as nn_partitioning  # 导入 Flax 中的模块分割工具
+from flax.linen.attention import dot_product_attention_weights  # 导入 Flax 中的点积注意力权重计算函数
+from flax.traverse_util import flatten_dict, unflatten_dict  # 导入 Flax 中的字典扁平化和反扁平化工具
+from jax import lax  # 导入 JAX 的低级别 API
+
+# 导入输出类和实用函数
 from ...modeling_flax_outputs import (
     FlaxBaseModelOutput,
     FlaxBaseModelOutputWithPastAndCrossAttentions,
@@ -32,43 +28,56 @@ from ...modeling_flax_outputs import (
     FlaxTokenClassifierOutput,
 )
 from ...modeling_flax_utils import (
-    ACT2FN,
-    FlaxPreTrainedModel,
-    append_call_sample_docstring,
-    append_replace_return_docstrings,
-    overwrite_call_docstring,
+    ACT2FN,  # 导入激活函数映射
+    FlaxPreTrainedModel,  # 导入 Flax 预训练模型基类
+    append_call_sample_docstring,  # 导入用于追加调用示例文档字符串的函数
+    append_replace_return_docstrings,  # 导入用于追加替换返回值文档字符串的函数
+    overwrite_call_docstring,  # 导入用于覆盖调用文档字符串的函数
 )
-from ...utils import ModelOutput, add_start_docstrings, add_start_docstrings_to_model_forward, logging
+from ...utils import ModelOutput, add_start_docstrings, add_start_docstrings_to_model_forward, logging  # 导入模型输出、文档字符串添加和日志记录工具
+from .configuration_electra import ElectraConfig  # 导入 Electra 配置类
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器实例
 
-# 用于文档的检查点和配置
-_CHECKPOINT_FOR_DOC = "google/electra-small-discriminator"
-_CONFIG_FOR_DOC = "ElectraConfig"
+_CHECKPOINT_FOR_DOC = "google/electra-small-discriminator"  # 预训练模型的检查点路径
+_CONFIG_FOR_DOC = "ElectraConfig"  # Electra 模型的配置类名称
 
-# 定义 remat 函数和 FlaxElectraForPreTrainingOutput 类
-remat = nn_partitioning.remat
+remat = nn_partitioning.remat  # 设置 remat 变量为模块分割的重组矩阵操作
 
 @flax.struct.dataclass
 class FlaxElectraForPreTrainingOutput(ModelOutput):
     """
-    Output type of [`ElectraForPreTraining`].
-    # 定义函数参数说明:
-    # logits (`jnp.ndarray` of shape `(batch_size, sequence_length, config.vocab_size)`):
-    #   预测语言建模头部的预测分数（SoftMax之前每个词汇标记的分数）。
-    # hidden_states (`tuple(jnp.ndarray)`, *optional*, 当 `output_hidden_states=True` 传递或 `config.output_hidden_states=True` 时返回):
-    #   形状为 `(batch_size, sequence_length, hidden_size)` 的 `jnp.ndarray` 元组（一个用于嵌入输出 + 一个用于每个层的输出）。
-    #   模型在每一层输出的隐藏状态以及初始嵌入输出。
-    # attentions (`tuple(jnp.ndarray)`, *optional*, 当 `output_attentions=True` 传递或 `config.output_attentions=True` 时返回):
-    #   形状为 `(batch_size, num_heads, sequence_length, sequence_length)` 的 `jnp.ndarray` 元组（每个层一个）。
-    #   自注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+    [`ElectraForPreTraining`] 的输出类型。
     """
-    
-    # 定义函数参数
+    # 此类用于定义 Electra 模型预训练的输出结构
+    Args:
+        logits (`jnp.ndarray` of shape `(batch_size, sequence_length, config.vocab_size)`):
+            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+        
+        hidden_states (`tuple(jnp.ndarray)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            Tuple of `jnp.ndarray` (one for the output of the embeddings + one for the output of each layer) of shape
+            `(batch_size, sequence_length, hidden_size)`.
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
+        
+        attentions (`tuple(jnp.ndarray)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            Tuple of `jnp.ndarray` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
+            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+            heads.
+    """
+
+    # 定义 logits 变量，类型为 jnp.ndarray，形状为 (batch_size, sequence_length, config.vocab_size)
     logits: jnp.ndarray = None
+    
+    # 定义 hidden_states 变量，类型为 Optional[Tuple[jnp.ndarray]]，可选参数，当 `output_hidden_states=True` 时返回
+    # 返回一个元组，包含 jnp.ndarray 类型的张量，形状为 (batch_size, sequence_length, hidden_size)
     hidden_states: Optional[Tuple[jnp.ndarray]] = None
+    
+    # 定义 attentions 变量，类型为 Optional[Tuple[jnp.ndarray]]，可选参数，当 `output_attentions=True` 时返回
+    # 返回一个元组，包含 jnp.ndarray 类型的张量，形状为 (batch_size, num_heads, sequence_length, sequence_length)
+    # 表示注意力权重经过 softmax 后的结果，用于计算自注意力头部中的加权平均值。
     attentions: Optional[Tuple[jnp.ndarray]] = None
+# 定义模型的文档字符串，描述该模型从 FlaxPreTrainedModel 继承，并列出了库为所有模型实现的通用方法（如下载、保存和从 PyTorch 模型转换权重）
 ELECTRA_START_DOCSTRING = r"""
 
     This model inherits from [`FlaxPreTrainedModel`]. Check the superclass documentation for the generic methods the
@@ -91,231 +100,231 @@ ELECTRA_START_DOCSTRING = r"""
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
+# 定义模型输入的文档字符串，目前为空白
 ELECTRA_INPUTS_DOCSTRING = r"""
-
-
-
-注释：
-# 电气输入文件文档字符串。 This is a placeholder for documenting the inputs expected by the ELECTRA model. It's currently empty.
+    # 将输入的各项参数打包成一个参数字典，用于传递给模型的前向推断函数
     Args:
         input_ids (`numpy.ndarray` of shape `({0})`):
             输入序列标记在词汇表中的索引。
-
-            可以使用 [`AutoTokenizer`] 获取这些索引。详情请参阅 [`PreTrainedTokenizer.encode`] 和 [`PreTrainedTokenizer.__call__`]。
-
+    
+            可以使用 [`AutoTokenizer`] 获取这些索引。详情见 [`PreTrainedTokenizer.encode`] 和
+            [`PreTrainedTokenizer.__call__`]。
+    
             [什么是输入 ID？](../glossary#input-ids)
         attention_mask (`numpy.ndarray` of shape `({0})`, *optional*):
-            避免对填充的标记索引执行注意力操作的掩码。掩码值在 `[0, 1]` 之间：
-
-            - 对于**未屏蔽**的标记，为 1，
-            - 对于**屏蔽**的标记，为 0。
-
+            避免对填充标记索引执行注意力的掩码。掩码值为 `[0, 1]`：
+    
+            - 1 表示**不屏蔽**的标记，
+            - 0 表示**屏蔽**的标记。
+    
             [什么是注意力掩码？](../glossary#attention-mask)
         token_type_ids (`numpy.ndarray` of shape `({0})`, *optional*):
-            段标记索引，用于指示输入的第一部分和第二部分。索引选择在 `[0, 1]` 范围内：
-
-            - 0 对应于*句子 A*的标记，
-            - 1 对应于*句子 B*的标记。
-
+            段标记索引，指示输入的第一部分和第二部分。索引值为 `[0, 1]`：
+    
+            - 0 对应*句子 A* 的标记，
+            - 1 对应*句子 B* 的标记。
+    
             [什么是标记类型 ID？](../glossary#token-type-ids)
         position_ids (`numpy.ndarray` of shape `({0})`, *optional*):
-            每个输入序列标记在位置嵌入中的位置索引。选择在范围 `[0, config.max_position_embeddings - 1]` 内。
-
+            每个输入序列标记在位置嵌入中的位置索引。选择范围为 `[0, config.max_position_embeddings - 1]`。
         head_mask (`numpy.ndarray` of shape `({0})`, `optional):
-            用于屏蔽注意力模块中选定头部的掩码。掩码值在 `[0, 1]` 之间：
-
-            - 1 表示头部**未被屏蔽**，
-            - 0 表示头部**被屏蔽**。
-
+            选择性屏蔽注意力模块中的头部的掩码。掩码值为 `[0, 1]`：
+    
+            - 1 表示**不屏蔽**的头部，
+            - 0 表示**屏蔽**的头部。
         return_dict (`bool`, *optional*):
-            是否返回 [`~utils.ModelOutput`] 而不是普通元组。
+            是否返回一个 [`~utils.ModelOutput`] 而不是普通的元组。
 """
-用于构建从词嵌入、位置嵌入和标记类型嵌入中得到的嵌入。
+定义一个名为 FlaxElectraEmbeddings 的 nn.Module 类，用于构建包括单词、位置和标记类型嵌入的 embeddings。
+
+config: ElectraConfig
+    # 保存了 Electra 模型的配置信息，如词汇大小、嵌入维度等
+
+dtype: jnp.dtype = jnp.float32
+    # 计算时使用的数据类型，默认为 jnp.float32
+
+setup(self):
+    # 初始化模型的各个组件
+
+    self.word_embeddings = nn.Embed(
+        self.config.vocab_size,
+        self.config.embedding_size,
+        embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
+    )
+    # 创建单词嵌入层，根据词汇大小和嵌入维度进行初始化
+
+    self.position_embeddings = nn.Embed(
+        self.config.max_position_embeddings,
+        self.config.embedding_size,
+        embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
+    )
+    # 创建位置嵌入层，根据最大位置嵌入数和嵌入维度进行初始化
+
+    self.token_type_embeddings = nn.Embed(
+        self.config.type_vocab_size,
+        self.config.embedding_size,
+        embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
+    )
+    # 创建标记类型嵌入层，根据标记类型的数量和嵌入维度进行初始化
+
+    self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
+    # 创建 Layer Normalization 层，使用给定的 epsilon 参数进行初始化
+
+    self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
+    # 创建 Dropout 层，使用给定的 dropout 概率进行初始化
+
+__call__(self, input_ids, token_type_ids, position_ids, attention_mask, deterministic: bool = True):
+    # 定义 __call__ 方法，实现模块的调用功能，接受输入参数并进行处理
+
+    inputs_embeds = self.word_embeddings(input_ids.astype("i4"))
+    # 将输入的词汇 ID 转换为单词嵌入
+
+    position_embeds = self.position_embeddings(position_ids.astype("i4"))
+    # 将位置 ID 转换为位置嵌入
+
+    token_type_embeddings = self.token_type_embeddings(token_type_ids.astype("i4"))
+    # 将标记类型 ID 转换为标记类型嵌入
+
+    hidden_states = inputs_embeds + token_type_embeddings + position_embeds
+    # 将单词、位置和标记类型嵌入求和，形成最终的隐藏状态表示
+
+    hidden_states = self.LayerNorm(hidden_states)
+    # 对隐藏状态进行 Layer Normalization 处理
+
+    hidden_states = self.dropout(hidden_states, deterministic=deterministic)
+    # 对处理后的隐藏状态进行 Dropout 操作
+
+    return hidden_states
+    # 返回处理后的最终隐藏状态
 """
-
-class FlaxElectraEmbeddings(nn.Module):
-    """Construct the embeddings from word, position and token_type embeddings."""
-
-    config: ElectraConfig
-    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
-
-    def setup(self):
-        """
-        配置词嵌入、位置嵌入和标记类型嵌入
-        """
-        self.word_embeddings = nn.Embed(
-            self.config.vocab_size,
-            self.config.embedding_size,
-            embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
-        )
-        self.position_embeddings = nn.Embed(
-            self.config.max_position_embeddings,
-            self.config.embedding_size,
-            embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
-        )
-        self.token_type_embeddings = nn.Embed(
-            self.config.type_vocab_size,
-            self.config.embedding_size,
-            embedding_init=jax.nn.initializers.normal(stddev=self.config.initializer_range),
-        )
-        self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
-
-    # Copied from transformers.models.bert.modeling_flax_bert.FlaxBertEmbeddings.__call__
-    def __call__(self, input_ids, token_type_ids, position_ids, attention_mask, deterministic: bool = True):
-        """
-        执行嵌入操作
-        """
-        # Embed
-        inputs_embeds = self.word_embeddings(input_ids.astype("i4"))
-        position_embeds = self.position_embeddings(position_ids.astype("i4"))
-        token_type_embeddings = self.token_type_embeddings(token_type_ids.astype("i4"))
-
-        # Sum all embeddings
-        hidden_states = inputs_embeds + token_type_embeddings + position_embeds
-
-        # Layer Norm
-        hidden_states = self.LayerNorm(hidden_states)
-        hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        return hidden_states
-
 
 # Copied from transformers.models.bert.modeling_flax_bert.FlaxBertSelfAttention with Bert->Electra
 class FlaxElectraSelfAttention(nn.Module):
     config: ElectraConfig
     causal: bool = False
     dtype: jnp.dtype = jnp.float32  # the dtype of the computation
-
-
-注释：
-    # 初始化方法，用于设置注意力头的维度等参数
+    # 设置函数用于初始化模型的配置
     def setup(self):
         # 计算每个注意力头的维度
         self.head_dim = self.config.hidden_size // self.config.num_attention_heads
-        # 如果隐藏层大小不能被注意力头数整除，则引发 ValueError 异常
+        # 如果隐藏层大小不能被注意力头数整除，抛出数值错误异常
         if self.config.hidden_size % self.config.num_attention_heads != 0:
             raise ValueError(
-                # 异常信息，包含隐藏层大小和注意力头数
                 "`config.hidden_size`: {self.config.hidden_size} has to be a multiple of `config.num_attention_heads` "
                 "                   : {self.config.num_attention_heads}"
             )
 
-        # 初始化查询矩阵的全连接层
+        # 初始化查询（query）的全连接层
         self.query = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 初始化键矩阵的全连接层
+        # 初始化键（key）的全连接层
         self.key = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
-        # 初始化值矩阵的全连接层
+        # 初始化值（value）的全连接层
         self.value = nn.Dense(
             self.config.hidden_size,
             dtype=self.dtype,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
         )
 
-        # 如果是因果注意力，则创建因果掩码
+        # 如果是因果注意力模型，创建一个因果掩码
         if self.causal:
-            # 创建因果掩码，形状为 (1, 最大位置编码数)，数据类型为布尔型
             self.causal_mask = make_causal_mask(
                 jnp.ones((1, self.config.max_position_embeddings), dtype="bool"), dtype="bool"
             )
 
-    # 将隐藏状态分割成多个注意力头
+    # 函数用于将隐藏状态按照注意力头的数量进行分割
     def _split_heads(self, hidden_states):
         return hidden_states.reshape(hidden_states.shape[:2] + (self.config.num_attention_heads, self.head_dim))
 
-    # 将多个注意力头合并成隐藏状态
+    # 函数用于将按注意力头分割后的隐藏状态重新合并
     def _merge_heads(self, hidden_states):
         return hidden_states.reshape(hidden_states.shape[:2] + (self.config.hidden_size,))
 
     @nn.compact
-    # 从 transformers.models.bart.modeling_flax_bart.FlaxBartAttention._concatenate_to_cache 复制过来的注释
+    # 从 transformers.models.bart.modeling_flax_bart.FlaxBartAttention._concatenate_to_cache 复制而来的函数装饰器
     def _concatenate_to_cache(self, key, value, query, attention_mask):
         """
         This function takes projected key, value states from a single input token and concatenates the states to cached
         states from previous steps. This function is slightly adapted from the official Flax repository:
         https://github.com/google/flax/blob/491ce18759622506588784b4fca0e4bf05f8c8cd/flax/linen/attention.py#L252
         """
-        # 检测是否通过缺少现有缓存数据进行初始化。
+        # 检测是否通过缺少现有缓存数据来初始化。
         is_initialized = self.has_variable("cache", "cached_key")
-        # 获取缓存的键（key）数据，如果不存在则初始化为全零数组
+        # 获取或创建缓存的键，若不存在则初始化为零张量，形状与传入的键相同
         cached_key = self.variable("cache", "cached_key", jnp.zeros, key.shape, key.dtype)
-        # 获取缓存的值（value）数据，如果不存在则初始化为全零数组
+        # 获取或创建缓存的值，若不存在则初始化为零张量，形状与传入的值相同
         cached_value = self.variable("cache", "cached_value", jnp.zeros, value.shape, value.dtype)
-        # 获取缓存索引值，如果不存在则初始化为0
+        # 获取或创建缓存索引，若不存在则初始化为整数零
         cache_index = self.variable("cache", "cache_index", lambda: jnp.array(0, dtype=jnp.int32))
 
         if is_initialized:
-            # 获取缓存键（key）数据的形状
+            # 获取当前缓存的维度信息，即批次维度、最大长度、注意力头数和每个头的深度
             *batch_dims, max_length, num_heads, depth_per_head = cached_key.value.shape
-            # 更新键（key）和值（value）缓存，使用新的一维空间切片
+            # 使用新的一维空间片段更新键、值缓存
             cur_index = cache_index.value
             indices = (0,) * len(batch_dims) + (cur_index, 0, 0)
-            # 使用新的键（key）更新缓存的键（key）数据
             key = lax.dynamic_update_slice(cached_key.value, key, indices)
-            # 使用新的值（value）更新缓存的值（value）数据
             value = lax.dynamic_update_slice(cached_value.value, value, indices)
-            # 更新缓存的键（key）和值（value）数据
+            # 更新缓存的键和值
             cached_key.value = key
             cached_value.value = value
-            # 更新缓存索引值
+            # 更新缓存索引，增加已更新的缓存向量数目
             num_updated_cache_vectors = query.shape[1]
             cache_index.value = cache_index.value + num_updated_cache_vectors
-            # 用于缓存的自注意力的因果掩码：我们的单个查询位置只应关注已生成和缓存的那些键位置，而不是剩余的零元素。
+            # 生成因果掩码用于缓存的解码器自注意力：
+            # 我们的单个查询位置只应该参与到已经生成和缓存的键位置，而不是剩余的零元素。
             pad_mask = jnp.broadcast_to(
                 jnp.arange(max_length) < cur_index + num_updated_cache_vectors,
                 tuple(batch_dims) + (1, num_updated_cache_vectors, max_length),
             )
-            # 将缓存掩码与输入的注意力掩码进行合并
+            # 合并掩码，结合当前的注意力掩码
             attention_mask = combine_masks(pad_mask, attention_mask)
-        # 返回更新后的键（key）、值（value）和注意力掩码
+        # 返回更新后的键、值和注意力掩码
         return key, value, attention_mask
-
-    def __call__(
-        self,
-        hidden_states,
-        attention_mask,
-        layer_head_mask,
-        key_value_states: Optional[jnp.ndarray] = None,
-        init_cache: bool = False,
-        deterministic=True,
-        output_attentions: bool = False,
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertSelfOutput复制代码，并将Bert->Electra
+# Copied from transformers.models.bert.modeling_flax_bert.FlaxBertSelfOutput with Bert->Electra
 class FlaxElectraSelfOutput(nn.Module):
-    config: ElectraConfig  # Electra模型的配置
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
+    config: ElectraConfig  # Electra模型的配置对象
+    dtype: jnp.dtype = jnp.float32  # 计算时的数据类型
 
     def setup(self):
-        self.dense = nn.Dense(  # 创建一个全连接层
-            self.config.hidden_size,  # 输出大小为配置文件中的隐藏层大小
-            kernel_init=jax.nn.initializers.normal(self.config.initializer_range),  # 使用正态分布初始化权重
-            dtype=self.dtype,  # 数据类型为设定的类型
+        # 创建一个全连接层，输出维度为配置中的hidden_size，权重初始化为正态分布
+        self.dense = nn.Dense(
+            self.config.hidden_size,
+            kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
+            dtype=self.dtype,
         )
-        self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)  # 针对隐藏层进行 LayerNorm
-        self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)  # 使用指定的丢弃率进行 Dropout
+        # 创建一个LayerNorm层，epsilon值为配置中的layer_norm_eps
+        self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
+        # 创建一个Dropout层，dropout率为配置中的hidden_dropout_prob
+        self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
 
     def __call__(self, hidden_states, input_tensor, deterministic: bool = True):
-        hidden_states = self.dense(hidden_states)  # 全连接层，将隐藏状态转换为指定大小
-        hidden_states = self.dropout(hidden_states, deterministic=deterministic)  # 使用指定的丢弃率进行 Dropout
-        hidden_states = self.LayerNorm(hidden_states + input_tensor)  # 针对隐藏状态进行 LayerNorm，并与输入张量相加
-        return hidden_states  # 返回处理后的隐藏状态
+        # 输入经过全连接层
+        hidden_states = self.dense(hidden_states)
+        # 经过Dropout层，用于随机置零一部分神经元的输出
+        hidden_states = self.dropout(hidden_states, deterministic=deterministic)
+        # 经过LayerNorm层，并加上输入张量，实现残差连接和层归一化
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        return hidden_states
 
 
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertAttention复制代码，并将Bert->Electra
+# Copied from transformers.models.bert.modeling_flax_bert.FlaxBertAttention with Bert->Electra
 class FlaxElectraAttention(nn.Module):
-    config: ElectraConfig  # Electra模型的配置
-    causal: bool = False  # 是否因果的
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
+    config: ElectraConfig  # Electra模型的配置对象
+    causal: bool = False  # 是否是因果注意力
+    dtype: jnp.dtype = jnp.float32  # 计算时的数据类型
 
     def setup(self):
-        self.self = FlaxElectraSelfAttention(self.config, causal=self.causal, dtype=self.dtype)  # 创建自注意力层
-        self.output = FlaxElectraSelfOutput(self.config, dtype=self.dtype)  # 创建自注意力层的输出层
+        # 创建一个FlaxElectraSelfAttention对象，用于自注意力计算
+        self.self = FlaxElectraSelfAttention(self.config, causal=self.causal, dtype=self.dtype)
+        # 创建一个FlaxElectraSelfOutput对象，用于自注意力的输出处理
 
     def __call__(
         self,
@@ -327,8 +336,9 @@ class FlaxElectraAttention(nn.Module):
         deterministic=True,
         output_attentions: bool = False,
     ):
-        # 注意力掩码的形状为(*batch_sizes, kv_length)
-        # FLAX期望: attention_mask.shape == (*batch_sizes, 1, 1, kv_length)，以便广播
+        # 注意力掩码的形状应为(*batch_sizes, kv_length)
+        # FLAX期望的形状为(*batch_sizes, 1, 1, kv_length)，使其能广播
+        # 注意力计算的输出包含在attn_outputs中
         attn_outputs = self.self(
             hidden_states,
             attention_mask,
@@ -337,78 +347,81 @@ class FlaxElectraAttention(nn.Module):
             init_cache=init_cache,
             deterministic=deterministic,
             output_attentions=output_attentions,
-        )  # 通过自注意力层进行计算
-        attn_output = attn_outputs[0]  # 获取注意力计算的输出
-        hidden_states = self.output(attn_output, hidden_states, deterministic=deterministic)  # 应用输出层
+        )
+        attn_output = attn_outputs[0]
+        # 使用self.output对自注意力的输出进行处理，实现残差连接和层归一化
+        hidden_states = self.output(attn_output, hidden_states, deterministic=deterministic)
 
-        outputs = (hidden_states,)  # 构建输出元组
+        outputs = (hidden_states,)
 
-        if output_attentions:  # 如果需要输出注意力
-            outputs += (attn_outputs[1],)  # 将注意力信息添加到输出元组中
+        if output_attentions:
+            outputs += (attn_outputs[1],)
 
-        return outputs  # 返回输出元组
+        return outputs
 
 
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertIntermediate复制代码，并将Bert->Electra
+# Copied from transformers.models.bert.modeling_flax_bert.FlaxBertIntermediate with Bert->Electra
 class FlaxElectraIntermediate(nn.Module):
-    config: ElectraConfig  # Electra模型的配置
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
+    config: ElectraConfig  # Electra模型的配置对象
+    dtype: jnp.dtype = jnp.float32  # 计算时的数据类型
 
     def setup(self):
-        self.dense = nn.Dense(  # 创建一个全连接层
-            self.config.intermediate_size,  # 输出大小为配置文件中的中间层大小
-            kernel_init=jax.nn.initializers.normal(self.config.initializer_range),  # 使用正态分布初始化权重
-            dtype=self.dtype,  # 数据类型为设定的类型
+        # 创建一个全连接层，输出维度为配置中的intermediate_size，权重初始化为正态分布
+        self.dense = nn.Dense(
+            self.config.intermediate_size,
+            kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
+            dtype=self.dtype,
         )
-        self.activation = ACT2FN[self.config.hidden_act]  # 激活函数根据配置文件中的隐藏激活函数选择
-    # 定义类的调用方法，传入参数 hidden_states
+        # 选择一个激活函数，根据配置中的hidden_act确定
+        self.activation = ACT2FN[self.config.hidden_act]
+    # 定义一个特殊方法 __call__()，用于将对象实例像函数一样调用
     def __call__(self, hidden_states):
-        # 使用self.dense对隐藏状态进行线性变换
+        # 使用 self.dense 对象处理 hidden_states，进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 对线性变换后的隐藏状态进行激活函数处理
+        # 使用 self.activation 对象处理 hidden_states，应用激活函数
         hidden_states = self.activation(hidden_states)
-        # 返回处理后的隐藏状态
+        # 返回处理后的 hidden_states
         return hidden_states
-# 从 transformers.models.bert.modeling_flax_bert.FlaxBertOutput 复制代码，并将Bert->Electra
+# Copied from transformers.models.electra.modeling_flax_electra.FlaxElectraOutput with Bert->Electra
 class FlaxElectraOutput(nn.Module):
     config: ElectraConfig
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
 
     def setup(self):
-        # 创建一个全连接层，输出大小为 config.hidden_size，使用正态分布初始化权重
+        # 密集连接层，用于将隐藏状态转换到指定大小的输出空间
         self.dense = nn.Dense(
             self.config.hidden_size,
             kernel_init=jax.nn.initializers.normal(self.config.initializer_range),
             dtype=self.dtype,
         )
-        # 创建一个dropout层，概率为config.hidden_dropout_prob
+        # 随机失活层，以一定的概率丢弃隐藏状态中的部分数据，防止过拟合
         self.dropout = nn.Dropout(rate=self.config.hidden_dropout_prob)
-        # 创建一个LayerNorm层，epsilon为config.layer_norm_eps
+        # 层归一化，用于对输入数据进行归一化处理
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
 
     def __call__(self, hidden_states, attention_output, deterministic: bool = True):
-        # 将隐藏状态传入全连接层
+        # 密集连接层计算，将隐藏状态映射到指定大小的输出空间
         hidden_states = self.dense(hidden_states)
-        # 对全连接层的输出进行dropout
+        # 随机失活操作，根据设定的概率丢弃部分数据，用于防止过拟合
         hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 将dropout后的输出与注意力输出相加，并传入LayerNorm层
+        # 层归一化操作，将处理后的数据进行归一化
         hidden_states = self.LayerNorm(hidden_states + attention_output)
         return hidden_states
 
 
-# 从 transformers.models.bert.modeling_flax_bert.FlaxBertLayer 复制代码，并将Bert->Electra
+# Copied from transformers.models.electra.modeling_flax_electra.FlaxElectraLayer with Bert->Electra
 class FlaxElectraLayer(nn.Module):
     config: ElectraConfig
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
 
     def setup(self):
-        # 创建一个Electra注意力层
+        # Electra 自注意力层，根据配置初始化
         self.attention = FlaxElectraAttention(self.config, causal=self.config.is_decoder, dtype=self.dtype)
-        # 创建一个Electra中间层
+        # Electra 中间层，根据配置初始化
         self.intermediate = FlaxElectraIntermediate(self.config, dtype=self.dtype)
-        # 创建一个Electra输出层
+        # Electra 输出层，根据配置初始化
         self.output = FlaxElectraOutput(self.config, dtype=self.dtype)
-        # 如果需要添加跨注意力，创建一个Electra注意力层
+        # 如果配置中包含跨注意力机制，初始化跨注意力层
         if self.config.add_cross_attention:
             self.crossattention = FlaxElectraAttention(self.config, causal=False, dtype=self.dtype)
 
@@ -422,8 +435,38 @@ class FlaxElectraLayer(nn.Module):
         init_cache: bool = False,
         deterministic: bool = True,
         output_attentions: bool = False,
-    ):
-        # 自注意力机制
+        ):
+        # Electra 自注意力计算，处理隐藏状态和注意力掩码
+        attention_output = self.attention(
+            hidden_states,
+            attention_mask,
+            layer_head_mask,
+            encoder_hidden_states=encoder_hidden_states,
+            encoder_attention_mask=encoder_attention_mask,
+            init_cache=init_cache,
+            deterministic=deterministic,
+            output_attentions=output_attentions,
+        )
+        # Electra 中间层计算，处理注意力输出
+        intermediate_output = self.intermediate(attention_output)
+        # Electra 输出层计算，处理中间层输出和注意力输出
+        layer_output = self.output(intermediate_output, attention_output, deterministic=deterministic)
+        
+        if self.config.add_cross_attention:
+            # 如果配置中包含跨注意力机制，计算跨注意力
+            attention_output = self.crossattention(
+                layer_output,
+                encoder_attention_mask,
+                encoder_hidden_states,
+                layer_head_mask=None,
+                init_cache=init_cache,
+                deterministic=deterministic,
+                output_attentions=output_attentions,
+            )
+        
+        return (layer_output, attention_output) if output_attentions else layer_output
+        # Self Attention
+        # 使用 self.attention 方法对输入的 hidden_states 进行自注意力计算
         attention_outputs = self.attention(
             hidden_states,
             attention_mask,
@@ -432,11 +475,13 @@ class FlaxElectraLayer(nn.Module):
             deterministic=deterministic,
             output_attentions=output_attentions,
         )
-        # 获取自注意力机制的输出
+        # 获取自注意力计算后的输出
         attention_output = attention_outputs[0]
 
-        # 交叉注意力块
+        # Cross-Attention Block
+        # 如果 encoder_hidden_states 不为空，则进行交叉注意力计算
         if encoder_hidden_states is not None:
+            # 使用 self.crossattention 方法进行交叉注意力计算
             cross_attention_outputs = self.crossattention(
                 attention_output,
                 attention_mask=encoder_attention_mask,
@@ -445,46 +490,45 @@ class FlaxElectraLayer(nn.Module):
                 deterministic=deterministic,
                 output_attentions=output_attentions,
             )
+            # 获取交叉注意力计算后的输出
             attention_output = cross_attention_outputs[0]
 
-        # 使用中间层处理注意力输出
+        # 经过注意力计算后，通过 self.intermediate 方法处理中间隐藏层输出
         hidden_states = self.intermediate(attention_output)
-        # 使用输出层处理中间层输出和注意力输出
+        # 使用 self.output 方法根据注意力输出和隐藏层输出生成最终输出
         hidden_states = self.output(hidden_states, attention_output, deterministic=deterministic)
 
-        # 将结果放入元组中
+        # 将最终输出存入元组 outputs 中
         outputs = (hidden_states,)
 
-        # 如果需要输出注意力信息
+        # 如果需要输出注意力权重信息
         if output_attentions:
-            # 放入自注意力的注意力信息
+            # 将自注意力的注意力权重信息添加到 outputs 中
             outputs += (attention_outputs[1],)
-            # 如果有编码器隐藏状态，则放入交叉注意力的注意力信息
+            # 如果存在 encoder_hidden_states，则将交叉注意力的注意力权重信息也添加到 outputs 中
             if encoder_hidden_states is not None:
                 outputs += (cross_attention_outputs[1],)
-        # 返回结果元组
+        
+        # 返回最终的输出元组
         return outputs
-# 根据 transformers.models.bert.modeling_flax_bert.FlaxBertLayerCollection 复制代码，并将其中的 Bert 改为 Electra
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertLayerCollection 复制代码并将 Bert 替换为 Electra
 class FlaxElectraLayerCollection(nn.Module):
-    # Electra 配置
-    config: ElectraConfig
-    # 计算的数据类型，默认为 jnp.float32
-    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
-    # 是否使用梯度检查点
-    gradient_checkpointing: bool = False
+    config: ElectraConfig  # 类属性，指定模型配置为 ElectraConfig 类型
+    dtype: jnp.dtype = jnp.float32  # 计算过程中使用的数据类型，默认为 jnp.float32
+    gradient_checkpointing: bool = False  # 是否开启梯度检查点，默认为 False
 
     def setup(self):
-        # 如果使用梯度检查点
+        # 如果开启了梯度检查点
         if self.gradient_checkpointing:
-            # 使用 remat 函数将 FlaxElectraLayer 转换为 FlaxElectraCheckpointLayer
+            # 使用 remat 函数包装 FlaxElectraLayer 类，指定静态参数索引为 (5, 6, 7)
             FlaxElectraCheckpointLayer = remat(FlaxElectraLayer, static_argnums=(5, 6, 7))
-            # 创建 Electra 层集合，数量为配置中的隐藏层数量，每层使用梯度检查点
+            # 创建 self.layers 列表，包含 num_hidden_layers 个 FlaxElectraCheckpointLayer 实例
             self.layers = [
                 FlaxElectraCheckpointLayer(self.config, name=str(i), dtype=self.dtype)
                 for i in range(self.config.num_hidden_layers)
             ]
         else:
-            # 创建 Electra 层集合，数量为配置中的隐藏层数量，每层不使用梯度检查点
+            # 创建 self.layers 列表，包含 num_hidden_layers 个 FlaxElectraLayer 实例
             self.layers = [
                 FlaxElectraLayer(self.config, name=str(i), dtype=self.dtype)
                 for i in range(self.config.num_hidden_layers)
@@ -492,97 +536,93 @@ class FlaxElectraLayerCollection(nn.Module):
 
     def __call__(
         self,
-        hidden_states,  # 输入的隐藏状态
-        attention_mask,  # 注意力遮罩
-        head_mask,  # 头部遮罩
-        encoder_hidden_states: Optional[jnp.ndarray] = None,  # 编码器的隐藏状态，默认为空
-        encoder_attention_mask: Optional[jnp.ndarray] = None,  # 编码器的注意力遮罩，默认为空
-        init_cache: bool = False,  # 是否初始化缓存，默认为 False
-        deterministic: bool = True,  # 是否确定性，默认为 True
-        output_attentions: bool = False,  # 是否输出注意力，默认为 False
-        output_hidden_states: bool = False,  # 是否输出隐藏状态，默认为 False
-        return_dict: bool = True,  # 是否返回字典，默认为 True
-        # 如果需要输出注意力权重，则初始化一个空元组，否则置为 None
-        all_attentions = () if output_attentions else None
-        # 如果需要输出隐藏状态，则初始化一个空元组，否则置为 None
-        all_hidden_states = () if output_hidden_states else None
-        # 如果需要输出交叉注意力权重且编码器隐藏状态不为空，则初始化一个空元组，否则置为 None
-        all_cross_attentions = () if (output_attentions and encoder_hidden_states is not None) else None
+        hidden_states,
+        attention_mask,
+        head_mask,
+        encoder_hidden_states: Optional[jnp.ndarray] = None,
+        encoder_attention_mask: Optional[jnp.ndarray] = None,
+        init_cache: bool = False,
+        deterministic: bool = True,
+        output_attentions: bool = False,
+        output_hidden_states: bool = False,
+        return_dict: bool = True,
+        ):
+            # 如果不需要输出注意力权重信息，则初始化为空元组；否则置为 None
+            all_attentions = () if output_attentions else None
+            # 如果不需要输出隐藏状态信息，则初始化为空元组；否则置为 None
+            all_hidden_states = () if output_hidden_states else None
+            # 如果不需要输出交叉注意力权重信息，则初始化为空元组；否则置为 None
+            all_cross_attentions = () if (output_attentions and encoder_hidden_states is not None) else None
 
-        # 如果需要使用头部遮罩，则检查头部遮罩的层数是否正确
-        if head_mask is not None:
-            # 如果头部遮罩的层数和当前模型的层数不匹配，则抛出 ValueError
-            if head_mask.shape[0] != (len(self.layers)):
-                raise ValueError(
-                    f"The head_mask should be specified for {len(self.layers)} layers, but it is for {head_mask.shape[0]}."
+            # 检查头部掩码的层数是否正确
+            if head_mask is not None:
+                if head_mask.shape[0] != (len(self.layers)):
+                    raise ValueError(
+                        f"The head_mask should be specified for {len(self.layers)} layers, but it is for                  "
+                        f"       {head_mask.shape[0]}."
+                    )
+
+            # 遍历每一层神经网络层
+            for i, layer in enumerate(self.layers):
+                # 如果需要输出隐藏状态信息，则记录当前层的隐藏状态
+                if output_hidden_states:
+                    all_hidden_states += (hidden_states,)
+
+                # 调用当前层的前向传播方法
+                layer_outputs = layer(
+                    hidden_states,
+                    attention_mask,
+                    head_mask[i] if head_mask is not None else None,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    init_cache,
+                    deterministic,
+                    output_attentions,
                 )
 
-        # 遍历模型的每一层
-        for i, layer in enumerate(self.layers):
-            # 如果需要输出隐藏状态，则将当前隐藏状态添加到全部隐藏状态中
+                # 更新隐藏状态为当前层的输出
+                hidden_states = layer_outputs[0]
+
+                # 如果需要输出注意力权重信息，则记录当前层的注意力权重
+                if output_attentions:
+                    all_attentions += (layer_outputs[1],)
+
+                    # 如果有编码器隐藏状态，则记录当前层的交叉注意力权重
+                    if encoder_hidden_states is not None:
+                        all_cross_attentions += (layer_outputs[2],)
+
+            # 如果需要输出隐藏状态信息，则记录最后一层的隐藏状态
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
 
-            # 调用当前层的前向传播方法，获取当前层的输出
-            layer_outputs = layer(
-                hidden_states,
-                attention_mask,
-                head_mask[i] if head_mask is not None else None,
-                encoder_hidden_states,
-                encoder_attention_mask,
-                init_cache,
-                deterministic,
-                output_attentions,
+            # 组装最终的输出元组
+            outputs = (hidden_states, all_hidden_states, all_attentions, all_cross_attentions)
+
+            # 如果不需要返回字典格式的输出，则返回元组中非空的部分
+            if not return_dict:
+                return tuple(v for v in outputs if v is not None)
+
+            # 返回字典格式的输出，使用特定的输出类
+            return FlaxBaseModelOutputWithPastAndCrossAttentions(
+                last_hidden_state=hidden_states,
+                hidden_states=all_hidden_states,
+                attentions=all_attentions,
+                cross_attentions=all_cross_attentions,
             )
-
-            # 更新当前隐藏状态为当前层的输出
-            hidden_states = layer_outputs[0]
-
-            # 如果需要输出注意力权重，则将当前层的注意力权重添加到全部注意力权重中
-            if output_attentions:
-                all_attentions += (layer_outputs[1],)
-
-                # 如果编码器隐藏状态不为空且需要输出交叉注意力权重，则将当前层的交叉注意力权重添加到全部交叉注意力权重中
-                if encoder_hidden_states is not None:
-                    all_cross_attentions += (layer_outputs[2],)
-
-        # 如果需要输出隐藏状态，则将当前隐藏状态添加到全部隐藏状态中
-        if output_hidden_states:
-            all_hidden_states += (hidden_states,)
-
-        # 将全部输出整合为 outputs 元组
-        outputs = (hidden_states, all_hidden_states, all_attentions, all_cross_attentions)
-
-        # 如果不需要返回字典形式的输出，则将 outputs 元组展平后返回
-        if not return_dict:
-            return tuple(v for v in outputs if v is not None)
-
-        # 否则，返回带过去和交叉注意力的 FlaxBaseModelOutputWithPastAndCrossAttentions 类的实例
-        return FlaxBaseModelOutputWithPastAndCrossAttentions(
-            last_hidden_state=hidden_states,
-            hidden_states=all_hidden_states,
-            attentions=all_attentions,
-            cross_attentions=all_cross_attentions,
-        )
-# 从transformers.models.bert.modeling_flax_bert.FlaxBertEncoder复制代码，并将Bert->Electra
+# 从 transformers.models.bert.modeling_flax_bert.FlaxBertEncoder 复制并修改为使用 Electra 模型
 class FlaxElectraEncoder(nn.Module):
-    # Electra的配置
     config: ElectraConfig
-    # 计算的数据类型
-    dtype: jnp.dtype = jnp.float32  
-    # 梯度检查点
-    gradient_checkpointing: bool = False
+    dtype: jnp.dtype = jnp.float32  # 计算过程中使用的数据类型
+    gradient_checkpointing: bool = False  # 是否使用梯度检查点技术
 
-    # 初始化函数
     def setup(self):
-        # 创建Electra层集合
+        # 初始化 Electra 编码器层集合
         self.layer = FlaxElectraLayerCollection(
             self.config,
             dtype=self.dtype,
             gradient_checkpointing=self.gradient_checkpointing,
         )
 
-    # 调用函数
     def __call__(
         self,
         hidden_states,
@@ -596,7 +636,7 @@ class FlaxElectraEncoder(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 调用Electra层集合
+        # 调用 Electra 编码器层集合来处理输入
         return self.layer(
             hidden_states,
             attention_mask,
@@ -612,65 +652,50 @@ class FlaxElectraEncoder(nn.Module):
 
 
 class FlaxElectraGeneratorPredictions(nn.Module):
-    # Electra的配置
     config: ElectraConfig
-    # 计算的数据类型
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化函数
     def setup(self):
-        # 创建LayerNorm层
+        # 初始化 Electra 生成器预测层的 LayerNorm 和 Dense 层
         self.LayerNorm = nn.LayerNorm(epsilon=self.config.layer_norm_eps, dtype=self.dtype)
-        # 创建全连接层
         self.dense = nn.Dense(self.config.embedding_size, dtype=self.dtype)
 
-    # 调用函数
     def __call__(self, hidden_states):
-        # 全连接层的计算
+        # 执行 Electra 生成器预测过程：Dense -> 激活函数 -> LayerNorm
         hidden_states = self.dense(hidden_states)
-        # 激活函数的应用
         hidden_states = ACT2FN[self.config.hidden_act](hidden_states)
-        # LayerNorm的应用
         hidden_states = self.LayerNorm(hidden_states)
         return hidden_states
 
 
 class FlaxElectraDiscriminatorPredictions(nn.Module):
-    # 鉴别器的预测模块，由两个全连接层组成
+    """用于鉴别器的预测模块，由两个密集层组成。"""
+
     config: ElectraConfig
-    # 计算的数据类型
     dtype: jnp.dtype = jnp.float32
 
-    # 初始化函数
     def setup(self):
-        # 创建全连接层
+        # 初始化 Electra 鉴别器预测层的 Dense 层和 Dense 预测层
         self.dense = nn.Dense(self.config.hidden_size, dtype=self.dtype)
-        # 创建预测全连接层
         self.dense_prediction = nn.Dense(1, dtype=self.dtype)
 
-    # 调用函数
     def __call__(self, hidden_states):
-        # 全连接层的计算
+        # 执行 Electra 鉴别器预测过程：Dense -> 激活函数 -> Dense 预测层
         hidden_states = self.dense(hidden_states)
-        # 激活函数的应用
         hidden_states = ACT2FN[self.config.hidden_act](hidden_states)
-        # 预测全连接层的计算并去掉最后一维
         hidden_states = self.dense_prediction(hidden_states).squeeze(-1)
         return hidden_states
 
 
 class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
     """
-    一个抽象类，处理权重初始化和一个简单的接口，用于下载和加载预训练模型。
+    处理权重初始化和一个简单接口以下载和加载预训练模型的抽象类。
     """
 
-    # Electra的配置类
     config_class = ElectraConfig
-    # 基础模型前缀
     base_model_prefix = "electra"
-    # 模块类别，默认为空
     module_class: nn.Module = None
-    # 初始化函数，用于初始化Electra模型
+    # 初始化方法，用于实例化一个新的对象
     def __init__(
         self,
         config: ElectraConfig,
@@ -681,40 +706,37 @@ class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
         gradient_checkpointing: bool = False,
         **kwargs,
     ):
-        # 根据给定的配置创建Electra模型的类对象
+        # 使用传入的配置和参数初始化模块对象
         module = self.module_class(config=config, dtype=dtype, gradient_checkpointing=gradient_checkpointing, **kwargs)
-        # 调用父类的初始化函数，传入配置、模型类对象等参数
+        # 调用父类的初始化方法，传入配置、模块对象以及其他参数
         super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
 
-    # 启用梯度检查点功能的函数，使得模型可以支持梯度检查点
-    # 从transformers.models.bert.modeling_flax_bert.FlaxBertPreTrainedModel中复制而来
+    # 从transformers库中复制而来，用于启用梯度检查点
     def enable_gradient_checkpointing(self):
-        # 根据当前模型的配置创建新的模型对象，启用梯度检查点功能
+        # 根据当前对象的配置和数据类型，启用模块的梯度检查点功能
         self._module = self.module_class(
             config=self.config,
             dtype=self.dtype,
             gradient_checkpointing=True,
         )
 
-    # 初始化权重的函数
-    # 从transformers.models.bert.modeling_flax_bert.FlaxBertPreTrainedModel中复制而来
+    # 从transformers库中复制而来，用于初始化模型的权重
     def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
-        # 初始化输入张量
+        # 初始化输入的张量
         input_ids = jnp.zeros(input_shape, dtype="i4")
         token_type_ids = jnp.zeros_like(input_ids)
         position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_shape)
         attention_mask = jnp.ones_like(input_ids)
         head_mask = jnp.ones((self.config.num_hidden_layers, self.config.num_attention_heads))
 
-        # 分割随机数种子
+        # 拆分随机数生成器用于参数和dropout
         params_rng, dropout_rng = jax.random.split(rng)
         rngs = {"params": params_rng, "dropout": dropout_rng}
 
         if self.config.add_cross_attention:
-            # 如果模型需要进行跨注意力机制的计算，则初始化额外的输入张量
             encoder_hidden_states = jnp.zeros(input_shape + (self.config.hidden_size,))
             encoder_attention_mask = attention_mask
-            # 调用模型的init方法，初始化模型参数
+            # 使用模块的初始化方法初始化模型的各种参数
             module_init_outputs = self.module.init(
                 rngs,
                 input_ids,
@@ -727,7 +749,7 @@ class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
                 return_dict=False,
             )
         else:
-            # 否则，直接调用模型的init方法初始化模型参数
+            # 使用模块的初始化方法初始化模型的各种参数（无交叉注意力的情况）
             module_init_outputs = self.module.init(
                 rngs, input_ids, attention_mask, token_type_ids, position_ids, head_mask, return_dict=False
             )
@@ -735,8 +757,8 @@ class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
         # 获取随机初始化的参数
         random_params = module_init_outputs["params"]
 
+        # 如果提供了预定义的参数，将缺失的参数补充进去
         if params is not None:
-            # 如果传入了预训练模型的参数，则合并随机初始化的参数和预训练参数
             random_params = flatten_dict(unfreeze(random_params))
             params = flatten_dict(unfreeze(params))
             for missing_key in self._missing_keys:
@@ -744,32 +766,29 @@ class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
             self._missing_keys = set()
             return freeze(unflatten_dict(params))
         else:
-            # 否则，直接返回随机初始化的参数
             return random_params
-
-    # 从transformers.models.bart.modeling_flax_bart.FlaxBartDecoderPreTrainedModel中复制而来
-    # 初始化缓存的函数
-    # 初始化缓存，用于快速自回归解码。batch_size 定义初始化缓存的批处理大小，max_length 定义初始化缓存的最大序列长度
+    # 初始化缓存的方法，用于快速自回归解码
     def init_cache(self, batch_size, max_length):
-        """
+        r"""
         Args:
             batch_size (`int`):
-                用于快速自回归解码的批处理大小。定义了初始化缓存的批处理大小
+                batch_size used for fast auto-regressive decoding. Defines the batch size of the initialized cache.
             max_length (`int`):
-                自回归解码的最大可能长度。定义了初始化缓存的序列长度。
+                maximum possible length for auto-regressive decoding. Defines the sequence length of the initialized
+                cache.
         """
-        # 初始化用于检索缓存的输入变量
+        # 初始化输入变量以检索缓存
         input_ids = jnp.ones((batch_size, max_length), dtype="i4")
         attention_mask = jnp.ones_like(input_ids, dtype="i4")
         position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
 
-        # 初始化变量以检索缓存，并返回解冻（不受限制）的缓存
+        # 使用模型的初始化方法初始化变量，包括输入的 ID、注意力掩码、位置 ID，同时设置返回字典为 False 并初始化缓存
         init_variables = self.module.init(
             jax.random.PRNGKey(0), input_ids, attention_mask, position_ids, return_dict=False, init_cache=True
         )
+        # 返回解冻后的缓存部分
         return unfreeze(init_variables["cache"])
 
-    # 调用模型的方法，添加模型前向传播的文档字符串
     @add_start_docstrings_to_model_forward(ELECTRA_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     def __call__(
         self,
@@ -789,26 +808,26 @@ class FlaxElectraPreTrainedModel(FlaxPreTrainedModel):
         past_key_values: dict = None,
 # 定义一个 FlaxElectraModule 类，继承自 nn.Module
 class FlaxElectraModule(nn.Module):
-    # ElectraConfig 类型的 config 属性
+    # 配置属性，使用 ElectraConfig 类型
     config: ElectraConfig
-    # jnp.float32 类型的 dtype 属性，作为计算的数据类型
+    # 计算中使用的数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
     # 是否使用梯度检查点
     gradient_checkpointing: bool = False
 
-    # 初始化方法
+    # 模块的初始化方法
     def setup(self):
-        # 创建 FlaxElectraEmbeddings 对象
+        # 创建 FlaxElectraEmbeddings 实例，使用给定的配置和数据类型
         self.embeddings = FlaxElectraEmbeddings(self.config, dtype=self.dtype)
-        # 如果嵌入大小不等于隐藏大小，则创建 nn.Dense 对象
+        # 如果嵌入维度不等于隐藏层维度，创建 Dense 层进行投影
         if self.config.embedding_size != self.config.hidden_size:
             self.embeddings_project = nn.Dense(self.config.hidden_size, dtype=self.dtype)
-        # 创建 FlaxElectraEncoder 对象
+        # 创建 FlaxElectraEncoder 实例，使用给定的配置、数据类型和梯度检查点标志
         self.encoder = FlaxElectraEncoder(
             self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
 
-    # 调用方法
+    # 实现调用模块时的行为
     def __call__(
         self,
         input_ids,
@@ -824,15 +843,15 @@ class FlaxElectraModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 调用 embeddings 计算嵌入
+        # 调用 embeddings 方法生成嵌入向量
         embeddings = self.embeddings(
             input_ids, token_type_ids, position_ids, attention_mask, deterministic=deterministic
         )
-        # 如果存在 embeddings_project，对嵌入进行处理
+        # 如果存在 embeddings_project 属性，对 embeddings 进行投影
         if hasattr(self, "embeddings_project"):
             embeddings = self.embeddings_project(embeddings)
 
-        # 返回 encoder 处理后的结果
+        # 调用 encoder 方法对 embeddings 进行编码
         return self.encoder(
             embeddings,
             attention_mask,
@@ -847,78 +866,79 @@ class FlaxElectraModule(nn.Module):
         )
 
 
-# 添加文档头信息到 FlaxElectraModel 类
+# 添加文档字符串说明的装饰器，说明 FlaxElectraModel 是基于 FlaxElectraPreTrainedModel 的模型
 @add_start_docstrings(
     "The bare Electra Model transformer outputting raw hidden-states without any specific head on top.",
     ELECTRA_START_DOCSTRING,
 )
+# 定义 FlaxElectraModel 类，继承自 FlaxElectraPreTrainedModel
 class FlaxElectraModel(FlaxElectraPreTrainedModel):
-    # 指定 module_class 属性为 FlaxElectraModule 类
+    # 模块类设置为 FlaxElectraModule
     module_class = FlaxElectraModule
 
 
-# 添加调用示例文档字符串到 FlaxElectraModel 类
+# 向 FlaxElectraModel 添加调用样本文档字符串的函数说明
 append_call_sample_docstring(FlaxElectraModel, _CHECKPOINT_FOR_DOC, FlaxBaseModelOutput, _CONFIG_FOR_DOC)
 
 
-# 定义一个 FlaxElectraTiedDense 类，继承自 nn.Module
+# 定义 FlaxElectraTiedDense 类，继承自 nn.Module
 class FlaxElectraTiedDense(nn.Module):
     # 嵌入大小属性
     embedding_size: int
-    # jnp.float32 类型的 dtype 属性
+    # 数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
-    # 精度属性
+    # 精度设置，默认为 None
     precision = None
-    # 偏置初始化函数
+    # 偏置初始化函数，默认为全零初始化
     bias_init: Callable[..., np.ndarray] = jax.nn.initializers.zeros
 
-    # 初始化方法
+    # 模块的初始化方法
     def setup(self):
-        # 初始化偏置参数
+        # 创建偏置参数，形状为 (embedding_size,)
         self.bias = self.param("bias", self.bias_init, (self.embedding_size,))
 
-    # 调用方法
+    # 实现调用模块时的行为
     def __call__(self, x, kernel):
-        # 转换 x 和 kernel 为 jnp 数组
+        # 将输入 x 和 kernel 转换为指定数据类型的 jnp 数组
         x = jnp.asarray(x, self.dtype)
         kernel = jnp.asarray(kernel, self.dtype)
-        # 执行 dot_general 运算
+        # 使用 dot_general 函数进行矩阵乘法运算，加上偏置项
         y = lax.dot_general(
             x,
             kernel,
             (((x.ndim - 1,), (0,)), ((), ())),
             precision=self.precision,
         )
-        # 转换偏置参数为 jnp 数组
+        # 将偏置转换为指定数据类型的 jnp 数组后，返回 y 加上 bias 的结果
         bias = jnp.asarray(self.bias, self.dtype)
-        # 返回 y 加上偏置结果
         return y + bias
 
 
-# 定义一个 FlaxElectraForMaskedLMModule 类，继承自 nn.Module
+# 定义 FlaxElectraForMaskedLMModule 类，继承自 nn.Module
 class FlaxElectraForMaskedLMModule(nn.Module):
-    # ElectraConfig 类型的 config 属性
+    # 配置属性，使用 ElectraConfig 类型
     config: ElectraConfig
-    # jnp.float32 类型的 dtype 属性
+    # 数据类型，默认为 jnp.float32
     dtype: jnp.dtype = jnp.float32
     # 是否使用梯度检查点
     gradient_checkpointing: bool = False
-    # 设置模型
+    # 初始化模型设置，在对象的实例化过程中被调用
     def setup(self):
-        # 初始化 Electra 模块
+        # 初始化 Electra 模型模块，使用给定的配置、数据类型和梯度检查点设置
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 初始化 GeneratorPredictions
+        # 初始化生成器预测模块，使用给定的配置和数据类型
         self.generator_predictions = FlaxElectraGeneratorPredictions(config=self.config, dtype=self.dtype)
+        # 如果配置要求共享词嵌入
         if self.config.tie_word_embeddings:
-            # 如果词嵌入需要打包，则使用 TiedDense 层
+            # 使用 Electra 模型的共享词嵌入初始化生成器 LM 头
             self.generator_lm_head = FlaxElectraTiedDense(self.config.vocab_size, dtype=self.dtype)
         else:
-            # 否则使用普通的 Dense 层
+            # 否则，初始化一个普通的全连接层作为生成器 LM 头
             self.generator_lm_head = nn.Dense(self.config.vocab_size, dtype=self.dtype)
 
-    # 调用模块
+    # 在对象被调用时执行的方法，处理输入并生成预测结果
     def __call__(
         self,
         input_ids,
@@ -931,7 +951,7 @@ class FlaxElectraForMaskedLMModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 调用 Electra 模块，获取输出
+        # 将输入传递给 Electra 模型，获取模型输出
         outputs = self.electra(
             input_ids,
             attention_mask,
@@ -943,55 +963,55 @@ class FlaxElectraForMaskedLMModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 获取隐藏层输出
+        # 从模型输出中提取隐藏状态
         hidden_states = outputs[0]
-        # 通过 GeneratorPredictions 获取预测分数
+        # 使用生成器预测模块生成预测分数
         prediction_scores = self.generator_predictions(hidden_states)
 
+        # 如果配置要求共享词嵌入
         if self.config.tie_word_embeddings:
-            # 如果词嵌入需要打包，则共享 Embedding 层
+            # 获取 Electra 模型的共享词嵌入
             shared_embedding = self.electra.variables["params"]["embeddings"]["word_embeddings"]["embedding"]
+            # 使用共享词嵌入调整生成器 LM 头的预测分数
             prediction_scores = self.generator_lm_head(prediction_scores, shared_embedding.T)
         else:
-            # 否则直接使用 Dense 层
+            # 否则，直接使用生成器 LM 头生成预测分数
             prediction_scores = self.generator_lm_head(prediction_scores)
 
+        # 如果不需要返回字典
         if not return_dict:
-            # 如果不需要返回字典，则返回预测分数和其他输出
+            # 返回预测分数和其它输出
             return (prediction_scores,) + outputs[1:]
 
-        # 返回 MaskedLMOutput 字典
+        # 返回封装了预测分数、隐藏状态和注意力的 MaskedLMOutput 对象
         return FlaxMaskedLMOutput(
             logits=prediction_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 导入必要的模块和函数装饰器
 @add_start_docstrings("""Electra Model with a `language modeling` head on top.""", ELECTRA_START_DOCSTRING)
+# 使用装饰器添加模型的文档字符串，指明这是一个在语言建模头部的Electra模型
+
 class FlaxElectraForMaskedLM(FlaxElectraPreTrainedModel):
     module_class = FlaxElectraForMaskedLMModule
 
+# 定义一个FlaxElectraForMaskedLM类，继承自FlaxElectraPreTrainedModel，并指定其模块类为FlaxElectraForMaskedLMModule
 
-# 添加调用示例文档字符串
 append_call_sample_docstring(FlaxElectraForMaskedLM, _CHECKPOINT_FOR_DOC, FlaxMaskedLMOutput, _CONFIG_FOR_DOC)
 
+# 向FlaxElectraForMaskedLM类的__call__方法添加示例的文档字符串，展示了如何调用该模型的示例用法
 
-# 定义用于预训练的 Electra 模型模块
 class FlaxElectraForPreTrainingModule(nn.Module):
-    # 定义模型配置、数据类型和梯度检查点标志
     config: ElectraConfig
     dtype: jnp.dtype = jnp.float32
     gradient_checkpointing: bool = False
 
-    # 模块设置方法
     def setup(self):
-        # 初始化 Electra 模型和判别器预测头
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
         self.discriminator_predictions = FlaxElectraDiscriminatorPredictions(config=self.config, dtype=self.dtype)
 
-    # 模块调用方法
     def __call__(
         self,
         input_ids,
@@ -1004,7 +1024,8 @@ class FlaxElectraForPreTrainingModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 使用 Electra 模型处理输入并获取输出
+        # Model
+        # 调用self.electra模块进行模型计算
         outputs = self.electra(
             input_ids,
             attention_mask,
@@ -1016,15 +1037,15 @@ class FlaxElectraForPreTrainingModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        hidden_states = outputs[0]  # 获取隐藏状态
+        hidden_states = outputs[0]
 
-        logits = self.discriminator_predictions(hidden_states)  # 获取判别器的预测结果
+        # 使用self.discriminator_predictions预测生成的token
+        logits = self.discriminator_predictions(hidden_states)
 
-        # 如果不返回字典，则返回元组形式的输出
         if not return_dict:
             return (logits,) + outputs[1:]
 
-        # 返回预训练模型的输出
+        # 返回预训练输出对象FlaxElectraForPreTrainingOutput
         return FlaxElectraForPreTrainingOutput(
             logits=logits,
             hidden_states=outputs.hidden_states,
@@ -1032,7 +1053,6 @@ class FlaxElectraForPreTrainingModule(nn.Module):
         )
 
 
-# 添加预训练模型的文档字符串
 @add_start_docstrings(
     """
     Electra model with a binary classification head on top as used during pretraining for identifying generated tokens.
@@ -1041,11 +1061,13 @@ class FlaxElectraForPreTrainingModule(nn.Module):
     """,
     ELECTRA_START_DOCSTRING,
 )
+# 使用装饰器添加文档字符串，描述这是一个在预训练过程中用于识别生成token的Electra模型
+
 class FlaxElectraForPreTraining(FlaxElectraPreTrainedModel):
     module_class = FlaxElectraForPreTrainingModule
 
+# 定义一个FlaxElectraForPreTraining类，继承自FlaxElectraPreTrainedModel，并指定其模块类为FlaxElectraForPreTrainingModule
 
-# 预训练模型的文档字符串模板
 FLAX_ELECTRA_FOR_PRETRAINING_DOCSTRING = """
     Returns:
 
@@ -1061,46 +1083,37 @@ FLAX_ELECTRA_FOR_PRETRAINING_DOCSTRING = """
     >>> outputs = model(**inputs)
 
     >>> prediction_logits = outputs.logits
-    ```py
+    ```
 """
 
-# 重写预训练模型的调用文档字符串
 overwrite_call_docstring(
     FlaxElectraForPreTraining,
     ELECTRA_INPUTS_DOCSTRING.format("batch_size, sequence_length") + FLAX_ELECTRA_FOR_PRETRAINING_DOCSTRING,
 )
-# 添加替换的返回文档字符串
-append_replace_return_docstrings(
-    FlaxElectraForPreTraining,  # 从模块中导入FlaxElectraForPreTraining类
-    output_type=FlaxElectraForPreTrainingOutput,  # 设置output_type参数为FlaxElectraForPreTrainingOutput类
-    config_class=_CONFIG_FOR_DOC  # 设置config_class为_CONFIG_FOR_DOC变量
-# Flax 模块，用于为标记分类任务构建 Electra 模型
-class FlaxElectraForTokenClassificationModule(nn.Module):
-    # Electra 配置
-    config: ElectraConfig
-    # 数据类型，默认为 32 位浮点数
-    dtype: jnp.dtype = jnp.float32
-    # 是否使用梯度检查点，默认为 False
-    gradient_checkpointing: bool = False
+# 覆盖FlaxElectraForPreTraining类的__call__方法的文档字符串，展示模型的输入和输出示例用法
+    # 导入FlaxElectraForPreTraining类和FlaxElectraForPreTrainingOutput类型
+    # 使用_CONFIG_FOR_DOC指定的配置类
+    FlaxElectraForPreTraining, output_type=FlaxElectraForPreTrainingOutput, config_class=_CONFIG_FOR_DOC
+)
 
-    # 初始化模块
+
+class FlaxElectraForTokenClassificationModule(nn.Module):
+    config: ElectraConfig  # 类型注解，指定 config 属性的类型为 ElectraConfig
+    dtype: jnp.dtype = jnp.float32  # 设置 dtype 属性，默认为 jnp.float32 类型
+    gradient_checkpointing: bool = False  # 设置 gradient_checkpointing 属性，默认为 False
+
     def setup(self):
-        # 创建 Electra 模型
-        self.electra = FlaxElectraModule(
+        self.electra = FlaxElectraModule(  # 初始化 electra 属性为 FlaxElectraModule 实例
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 分类器的丢弃率
         classifier_dropout = (
-            self.config.classifier_dropout
-            if self.config.classifier_dropout is not None
-            else self.config.hidden_dropout_prob
+            self.config.classifier_dropout  # 获取 config 对象的 classifier_dropout 属性
+            if self.config.classifier_dropout is not None  # 如果其不为 None，则使用该值
+            else self.config.hidden_dropout_prob  # 否则使用 hidden_dropout_prob 属性的值
         )
-        # 丢弃层
-        self.dropout = nn.Dropout(classifier_dropout)
-        # 分类器
-        self.classifier = nn.Dense(self.config.num_labels, dtype=self.dtype)
+        self.dropout = nn.Dropout(classifier_dropout)  # 初始化 dropout 属性为 nn.Dropout 实例
+        self.classifier = nn.Dense(self.config.num_labels, dtype=self.dtype)  # 初始化 classifier 属性为 nn.Dense 实例
 
-    # 调用模块
     def __call__(
         self,
         input_ids,
@@ -1113,8 +1126,8 @@ class FlaxElectraForTokenClassificationModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 模型前向传播
-        outputs = self.electra(
+        # Model
+        outputs = self.electra(  # 调用 self.electra 进行模型计算
             input_ids,
             attention_mask,
             token_type_ids,
@@ -1125,106 +1138,104 @@ class FlaxElectraForTokenClassificationModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 获取隐藏状态
-        hidden_states = outputs[0]
+        hidden_states = outputs[0]  # 获取模型输出的第一个元素，即隐藏状态
 
-        # 应用丢弃层
-        hidden_states = self.dropout(hidden_states, deterministic=deterministic)
-        # 分类
-        logits = self.classifier(hidden_states)
+        hidden_states = self.dropout(hidden_states, deterministic=deterministic)  # 对隐藏状态应用 dropout 操作
+        logits = self.classifier(hidden_states)  # 将隐藏状态传递给分类器生成 logits
 
-        # 如果不返回字典，则返回元组
         if not return_dict:
-            return (logits,) + outputs[1:]
+            return (logits,) + outputs[1:]  # 如果 return_dict 为 False，则返回元组形式的结果
 
-        # 返回 Token 分类器的输出
-        return FlaxTokenClassifierOutput(
+        return FlaxTokenClassifierOutput(  # 返回 FlaxTokenClassifierOutput 对象
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
 
 
-# 添加模型文档字符串
 @add_start_docstrings(
     """
-    带有标记分类头部的 Electra 模型。
+    Electra model with a token classification head on top.
 
-    可以加载鉴别器和生成器到这个模型中。
+    Both the discriminator and generator may be loaded into this model.
     """,
-    ELECTRA_START_DOCSTRING,
+    ELECTRA_START_DOCSTRING,  # 添加文档字符串，结合 ELECTRA_START_DOCSTRING 定义
 )
 class FlaxElectraForTokenClassification(FlaxElectraPreTrainedModel):
-    # 模块类别
-    module_class = FlaxElectraForTokenClassificationModule
+    module_class = FlaxElectraForTokenClassificationModule  # 设置模块类为 FlaxElectraForTokenClassificationModule
 
 
-# 添加调用示例文档字符串
 append_call_sample_docstring(
     FlaxElectraForTokenClassification,
-    _CHECKPOINT_FOR_DOC,
+    _CHECKPOINT_FOR_DOC,  # 添加函数调用示例的文档字符串，使用 _CHECKPOINT_FOR_DOC 参数
     FlaxTokenClassifierOutput,
-    _CONFIG_FOR_DOC,
+    _CONFIG_FOR_DOC,  # 结合 _CONFIG_FOR_DOC 参数
 )
 
 
-# 定义身份函数
 def identity(x, **kwargs):
-    return x
+    return x  # 定义一个简单的函数 identity，返回其输入参数 x
 
 
-# Flax 序列摘要模块，用于计算序列隐藏状态的单个向量摘要
 class FlaxElectraSequenceSummary(nn.Module):
     r"""
-    计算序列隐藏状态的单个向量摘要。
-    # 定义一个参数为config的方法，用于设置模型使用的配置。模型配置类中的相关参数如下：
-    # 
-    # - **summary_use_proj** (`bool`) -- 在向量提取后是否添加投影。
-    # - **summary_proj_to_labels** (`bool`) -- 如果为`True`，则投影输出到 `config.num_labels` 类别（否则输出到 `config.hidden_size`）。
-    # - **summary_activation** (`Optional[str]`) -- 设置为`"tanh"`时，在输出中添加tanh激活函数，其他字符串或`None`则不添加激活函数。
-    # - **summary_first_dropout** (`float`) -- 投影和激活之前的可选的丢弃概率。
-    # - **summary_last_dropout** (`float`)-- 投影和激活之后的可选的丢弃概率。
+    Compute a single vector summary of a sequence hidden states.
     """
-    # 定义一个ElectraConfig类型的属性变量config
-    config: ElectraConfig
-    # 定义一个jnp.dtype类型的属性变量dtype，默认值为jnp.float32
+    Args:
+        config ([`PretrainedConfig`]):
+            The config used by the model. Relevant arguments in the config class of the model are (refer to the actual
+            config class of your model for the default values it uses):
 
+            - **summary_use_proj** (`bool`) -- Add a projection after the vector extraction.
+            - **summary_proj_to_labels** (`bool`) -- If `True`, the projection outputs to `config.num_labels` classes
+              (otherwise to `config.hidden_size`).
+            - **summary_activation** (`Optional[str]`) -- Set to `"tanh"` to add a tanh activation to the output,
+              another string or `None` will add no activation.
+            - **summary_first_dropout** (`float`) -- Optional dropout probability before the projection and activation.
+            - **summary_last_dropout** (`float`)-- Optional dropout probability after the projection and activation.
+    """
+    # 定义一个类变量config，它是一个ElectraConfig对象
+    config: ElectraConfig
+    # 定义一个数据类型变量dtype，默认为jnp.float32
+    dtype: jnp.dtype = jnp.float32
+
+    # 类的初始化方法
     def setup(self):
-        # 将summary属性设置为身份函数
+        # 设置summary初始值为identity函数
         self.summary = identity
-        # 如果模型配置中有 "summary_use_proj" 属性并且设置为True
+        # 检查config对象是否有summary_use_proj属性，并且它为True
         if hasattr(self.config, "summary_use_proj") and self.config.summary_use_proj:
-            # 如果模型配置中有 "summary_proj_to_labels" 属性并且设置为True，并且模型的标签数大于0
+            # 检查config对象是否有summary_proj_to_labels属性，并且它为True，并且config.num_labels大于0
             if (
                 hasattr(self.config, "summary_proj_to_labels")
                 and self.config.summary_proj_to_labels
                 and self.config.num_labels > 0
             ):
-                # 设置num_classes为模型的标签数
+                # 设置num_classes为config.num_labels
                 num_classes = self.config.num_labels
             else:
-                # 否则设置num_classes为模型的隐藏单元数
+                # 否则设置num_classes为config.hidden_size
                 num_classes = self.config.hidden_size
-                # 将summary属性设置为具有num_classes输出节点的全连接层
+            # 将summary设置为一个全连接层nn.Dense，输出维度为num_classes，数据类型为self.dtype
             self.summary = nn.Dense(num_classes, dtype=self.dtype)
 
-        # 获取模型配置中的"summary_activation"属性值
+        # 获取summary_activation字符串属性值
         activation_string = getattr(self.config, "summary_activation", None)
-        # 如果存在激活字符串，则将self.activation设置为相应的激活函数；否则设置为恒等函数
+        # 根据activation_string获取对应的激活函数，如果为None则使用恒等函数lambda x: x
         self.activation = ACT2FN[activation_string] if activation_string else lambda x: x  # noqa F407
 
-        # 将self.first_dropout设置为恒等函数
+        # 设置first_dropout初始值为identity函数
         self.first_dropout = identity
-        # 如果模型配置中有 "summary_first_dropout" 属性并且大于0
+        # 检查config对象是否有summary_first_dropout属性，并且其值大于0
         if hasattr(self.config, "summary_first_dropout") and self.config.summary_first_dropout > 0:
-            # 将self.first_dropout设置为具有丢弃概率为"summary_first_dropout"的Dropout层
+            # 将first_dropout设置为一个Dropout层，丢弃概率为config.summary_first_dropout
             self.first_dropout = nn.Dropout(self.config.summary_first_dropout)
 
-        # 将self.last_dropout设置为恒等函数
+        # 设置last_dropout初始值为identity函数
         self.last_dropout = identity
-        # 如果模型配置中有 "summary_last_dropout" 属性并且大于0
+        # 检查config对象是否有summary_last_dropout属性，并且其值大于0
         if hasattr(self.config, "summary_last_dropout") and self.config.summary_last_dropout > 0:
-            # 将self.last_dropout设置为具有丢弃概率为"summary_last_dropout"的Dropout层
+            # 将last_dropout设置为一个Dropout层，丢弃概率为config.summary_last_dropout
             self.last_dropout = nn.Dropout(self.config.summary_last_dropout)
     def __call__(self, hidden_states, cls_index=None, deterministic: bool = True):
         """
@@ -1239,40 +1250,46 @@ class FlaxElectraSequenceSummary(nn.Module):
         Returns:
             `jnp.ndarray`: The summary of the sequence hidden states.
         """
-        # NOTE: this does "first" type summary always
-        # 取隐藏状态的第一个token作为汇总的向量
+        # NOTE: This function computes a summary vector of the sequence hidden states.
+
+        # Extract the first token's hidden state from each sequence in the batch
         output = hidden_states[:, 0]
-        # 对汇总的向量进行首次的dropout操作
+
+        # Apply dropout to the extracted hidden state
         output = self.first_dropout(output, deterministic=deterministic)
-        # 对汇总的向量进行汇总操作
+
+        # Compute the summary vector using a predefined method
         output = self.summary(output)
-        # 对汇总后的向量进行激活函数处理
+
+        # Apply an activation function to the computed summary vector
         output = self.activation(output)
-        # 对最终的汇总向量进行最后一次的dropout操作
+
+        # Apply dropout to the final output vector before returning
         output = self.last_dropout(output, deterministic=deterministic)
-        # 返回最终的汇总向量
+
+        # Return the final summary vector
         return output
-# 定义一个用于多选题的 ELECTRA 模型的模块类
+# 定义一个基于 Flax 的 Electra 多选题模型的模块类
 class FlaxElectraForMultipleChoiceModule(nn.Module):
-    # 保存 ELECTRA 模型的配置
+    # 指定配置对象为 ElectraConfig
     config: ElectraConfig
-    # 默认数据类型为 32 位浮点数
+    # 指定数据类型为 jnp.float32 的浮点数
     dtype: jnp.dtype = jnp.float32
-    # 是否启用梯度检查点，默认为 False
+    # 梯度检查点，默认为关闭状态
     gradient_checkpointing: bool = False
 
-    # 模块设置函数
+    # 模块初始化方法
     def setup(self):
-        # 创建 ELECTRA 模型对象
+        # 创建 Electra 模型对象
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 创建 ELECTRA 模型的序列摘要对象
+        # 创建序列摘要对象
         self.sequence_summary = FlaxElectraSequenceSummary(config=self.config, dtype=self.dtype)
-        # 创建用于多选题分类的全连接层
+        # 创建分类器对象，使用 Dense 层，输出维度为 1
         self.classifier = nn.Dense(1, dtype=self.dtype)
 
-    # 模块调用函数
+    # 对象调用方法，处理输入并返回输出
     def __call__(
         self,
         input_ids,
@@ -1285,15 +1302,15 @@ class FlaxElectraForMultipleChoiceModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 计算选项的数量
+        # 获取选择题的数量
         num_choices = input_ids.shape[1]
-        # 重塑输入以便适应 ELECTRA 模型的要求
+        # 若输入不为 None，则重塑输入的形状以便处理
         input_ids = input_ids.reshape(-1, input_ids.shape[-1]) if input_ids is not None else None
         attention_mask = attention_mask.reshape(-1, attention_mask.shape[-1]) if attention_mask is not None else None
         token_type_ids = token_type_ids.reshape(-1, token_type_ids.shape[-1]) if token_type_ids is not None else None
         position_ids = position_ids.reshape(-1, position_ids.shape[-1]) if position_ids is not None else None
 
-        # 使用 ELECTRA 模型进行推理
+        # 使用 Electra 模型进行前向传播
         outputs = self.electra(
             input_ids,
             attention_mask,
@@ -1305,21 +1322,21 @@ class FlaxElectraForMultipleChoiceModule(nn.Module):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 获取隐藏状态
+        # 提取隐藏状态
         hidden_states = outputs[0]
-        # 对隐藏状态进行序列摘要，得到汇总输出
+        # 对隐藏状态进行序列摘要
         pooled_output = self.sequence_summary(hidden_states, deterministic=deterministic)
-        # 将汇总输出传入分类器，得到预测的 logits
+        # 使用分类器进行分类，生成逻辑回归结果
         logits = self.classifier(pooled_output)
 
-        # 重塑 logits 以适应多选题的形式
+        # 重塑 logits 的形状以匹配输入的多选题数量
         reshaped_logits = logits.reshape(-1, num_choices)
 
-        # 如果不需要返回字典，则只返回 logits 和可能的额外输出
+        # 如果不返回字典，则返回元组形式的结果
         if not return_dict:
             return (reshaped_logits,) + outputs[1:]
 
-        # 返回经过多选题模型输出封装的结果字典
+        # 返回多选题模型的输出，包括重塑后的 logits，隐藏状态和注意力
         return FlaxMultipleChoiceModelOutput(
             logits=reshaped_logits,
             hidden_states=outputs.hidden_states,
@@ -1327,7 +1344,7 @@ class FlaxElectraForMultipleChoiceModule(nn.Module):
         )
 
 
-# 为 FlaxElectraForMultipleChoice 类添加文档字符串
+# 为 FlaxElectraForMultipleChoice 类添加文档字符串，描述其功能和用途
 @add_start_docstrings(
     """
     ELECTRA Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
@@ -1336,14 +1353,14 @@ class FlaxElectraForMultipleChoiceModule(nn.Module):
     ELECTRA_START_DOCSTRING,
 )
 class FlaxElectraForMultipleChoice(FlaxElectraPreTrainedModel):
-    # 将模块类指定为 FlaxElectraForMultipleChoiceModule
     module_class = FlaxElectraForMultipleChoiceModule
 
 
-# 为 FlaxElectraForMultipleChoice 类的调用函数添加示例文档字符串
+# 为 FlaxElectraForMultipleChoice 类的调用方法添加文档字符串示例
 overwrite_call_docstring(
     FlaxElectraForMultipleChoice, ELECTRA_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length")
 )
+# 为 FlaxElectraForMultipleChoice 类添加调用方法的样例文档字符串
 append_call_sample_docstring(
     FlaxElectraForMultipleChoice,
     _CHECKPOINT_FOR_DOC,
@@ -1352,25 +1369,25 @@ append_call_sample_docstring(
 )
 
 
-# 定义一个用于问答任务的 ELECTRA 模型的模块类
+# 定义一个基于 Flax 的 Electra 问答模型的模块类
 class FlaxElectraForQuestionAnsweringModule(nn.Module):
-    # 保存 ELECTRA 模型的配置
+    # 指定配置对象为 ElectraConfig
     config: ElectraConfig
-    # 默认数据类型为 32 位浮点数
+    # 指定数据类型为 jnp.float32 的浮点数
     dtype: jnp.dtype = jnp.float32
-    # 设置梯度检查点，默认为 False
+    # 设置类中的梯度检查点标志，默认为 False
     gradient_checkpointing: bool = False
-
-    # 初始化方法
+    
+    # 初始化模型设置
     def setup(self):
-        # 创建一个 FlaxElectraModule 对象，传入配置、数据类型和梯度检查点参数
+        # 使用给定的配置、数据类型和梯度检查点设置创建 FlaxElectraModule 实例
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 创建一个具有特定数量标签的全连接层
+        # 创建输出层，用于问题回答任务，输出维度为 self.config.num_labels
         self.qa_outputs = nn.Dense(self.config.num_labels, dtype=self.dtype)
-
-    # 调用方法
+    
+    # 定义对象的调用方法，处理输入并返回预测结果
     def __call__(
         self,
         input_ids,
@@ -1383,7 +1400,7 @@ class FlaxElectraForQuestionAnsweringModule(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 模型推理
+        # 调用 Electra 模型进行前向传播
         outputs = self.electra(
             input_ids,
             attention_mask,
@@ -1397,27 +1414,25 @@ class FlaxElectraForQuestionAnsweringModule(nn.Module):
         )
         # 获取隐藏状态
         hidden_states = outputs[0]
-        # 使用全连接层得到逻辑值
+        # 使用输出层计算起始和结束位置的 logits
         logits = self.qa_outputs(hidden_states)
-        # 将逻辑值按照标签数量划分成起始和结束逻辑值
+        # 按输出类别数将 logits 分割为起始位置和结束位置的 logits
         start_logits, end_logits = logits.split(self.config.num_labels, axis=-1)
-        # 压缩结果维度
+        # 去除最后一个维度上的冗余维度
         start_logits = start_logits.squeeze(-1)
         end_logits = end_logits.squeeze(-1)
-
-        # 如果不返回字典，则返回起始和结束逻辑值和输出的其他内容
+    
+        # 如果不返回字典，则返回元组形式的结果
         if not return_dict:
             return (start_logits, end_logits) + outputs[1:]
-
-        # 返回 FlaxQuestionAnsweringModelOutput 对象
+    
+        # 返回 FlaxQuestionAnsweringModelOutput 对象，包含起始和结束 logits、隐藏状态和注意力
         return FlaxQuestionAnsweringModelOutput(
             start_logits=start_logits,
             end_logits=end_logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 使用指定的文档字符串为 ELECTRA 模型添加起始文档字符串，用于针对提取式问答任务（如 SQuAD）的 span 分类头部
-# 这里的模型在隐藏状态输出的基础上使用线性层来计算 `span start logits` 和 `span end logits`
 @add_start_docstrings(
     """
     ELECTRA Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
@@ -1428,8 +1443,6 @@ class FlaxElectraForQuestionAnsweringModule(nn.Module):
 class FlaxElectraForQuestionAnswering(FlaxElectraPreTrainedModel):
     module_class = FlaxElectraForQuestionAnsweringModule
 
-
-# 附加调用示例的文档字符串，用于 FlaxElectraForQuestionAnswering 类
 append_call_sample_docstring(
     FlaxElectraForQuestionAnswering,
     _CHECKPOINT_FOR_DOC,
@@ -1445,31 +1458,41 @@ class FlaxElectraClassificationHead(nn.Module):
     dtype: jnp.dtype = jnp.float32
 
     def setup(self):
-        # 初始化分类器的全连接层
+        # Initialize a fully connected layer with hidden_size neurons
         self.dense = nn.Dense(self.config.hidden_size, dtype=self.dtype)
-        # 设置分类器的 dropout 操作，如果没有设置，则使用 hidden_dropout_prob
+        
+        # Determine dropout rate based on config values
         classifier_dropout = (
             self.config.classifier_dropout
             if self.config.classifier_dropout is not None
             else self.config.hidden_dropout_prob
         )
+        # Apply dropout with computed rate
         self.dropout = nn.Dropout(classifier_dropout)
-        # 初始化分类器的输出全连接层
+        
+        # Final output layer with num_labels neurons
         self.out_proj = nn.Dense(self.config.num_labels, dtype=self.dtype)
 
     def __call__(self, hidden_states, deterministic: bool = True):
-        # 取第一个特殊标记 <s>（等同于 [CLS]）对应的隐藏状态
+        # Extract the representation of the first token (<s>) from hidden_states
         x = hidden_states[:, 0, :]
-        # 对隐藏状态进行 dropout 操作
+        
+        # Apply dropout to the extracted token representation
         x = self.dropout(x, deterministic=deterministic)
-        # 通过全连接层进行线性变换
+        
+        # Pass through the fully connected layer
         x = self.dense(x)
-        # 使用 GELU 激活函数，Electra 作者使用 GELU 而不是 BERT 中的 tanh
+        
+        # Apply GELU activation function (similar to BERT's tanh)
         x = ACT2FN["gelu"](x)
-        # 再次进行 dropout 操作
+        
+        # Apply dropout again
         x = self.dropout(x, deterministic=deterministic)
-        # 最后通过输出层进行分类
+        
+        # Pass through the output layer
         x = self.out_proj(x)
+        
+        # Return the logits for sequence classification
         return x
 
 
@@ -1479,11 +1502,12 @@ class FlaxElectraForSequenceClassificationModule(nn.Module):
     gradient_checkpointing: bool = False
 
     def setup(self):
-        # 初始化 Electra 模型
+        # Initialize Electra module with specified configuration
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 初始化序列分类任务的分类器
+        
+        # Initialize classification head using the same configuration
         self.classifier = FlaxElectraClassificationHead(config=self.config, dtype=self.dtype)
 
     def __call__(
@@ -1497,47 +1521,18 @@ class FlaxElectraForSequenceClassificationModule(nn.Module):
         output_attentions: bool = False,
         output_hidden_states: bool = False,
         return_dict: bool = True,
-    # 定义模型的前向传播方法
-    def __call__(
-        self,
-        input_ids,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        deterministic=False,
-        output_attentions=False,
-        output_hidden_states=False,
-        return_dict=True,
-    ):
-        # 使用 Electra 模型进行前向传播
-        outputs = self.electra(
-            input_ids,
-            attention_mask,
-            token_type_ids,
-            position_ids,
-            head_mask,
-            deterministic=deterministic,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
-        # 获取 Electra 模型输出的 hidden_states
-        hidden_states = outputs[0]
-        # 使用分类器对 hidden_states 进行分类预测
-        logits = self.classifier(hidden_states, deterministic=deterministic)
-
-        # 如果不返回 dict，则返回 logits 和 outputs 的其它部分
+        # 如果 `return_dict` 为 True，则返回一个命名元组对象 FlaxSequenceClassifierOutput
+        # 包含 logits, hidden_states 和 attentions 这些字段
         if not return_dict:
+            # 如果 `return_dict` 为 False，返回一个元组，包含 logits 和 outputs 的其余部分
             return (logits,) + outputs[1:]
 
-        # 返回一个 FlaxSequenceClassifierOutput 对象，包含 logits, hidden_states 和 attentions
+        # 如果 `return_dict` 为 True，返回一个 FlaxSequenceClassifierOutput 对象
         return FlaxSequenceClassifierOutput(
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 定义一个包含序列分类/回归头部的Electra模型转换器，顶部有一个线性层（放在池化输出之上），例如用于GLUE任务
 @add_start_docstrings(
     """
     Electra Model transformer with a sequence classification/regression head on top (a linear layer on top of the
@@ -1545,10 +1540,14 @@ class FlaxElectraForSequenceClassificationModule(nn.Module):
     """,
     ELECTRA_START_DOCSTRING,
 )
+
+
+
 class FlaxElectraForSequenceClassification(FlaxElectraPreTrainedModel):
     module_class = FlaxElectraForSequenceClassificationModule
 
-# 添加调用示例文档字符串
+
+
 append_call_sample_docstring(
     FlaxElectraForSequenceClassification,
     _CHECKPOINT_FOR_DOC,
@@ -1556,20 +1555,18 @@ append_call_sample_docstring(
     _CONFIG_FOR_DOC,
 )
 
-# 定义用于CausalLM的FlaxElectra模块
+
+
 class FlaxElectraForCausalLMModule(nn.Module):
     config: ElectraConfig
     dtype: jnp.dtype = jnp.float32
     gradient_checkpointing: bool = False
 
     def setup(self):
-        # 创建Electra模块
         self.electra = FlaxElectraModule(
             config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
         )
-        # 创建生成器预测模块
         self.generator_predictions = FlaxElectraGeneratorPredictions(config=self.config, dtype=self.dtype)
-        # 如果配置了词嵌入共享，则创建电气LM头部
         if self.config.tie_word_embeddings:
             self.generator_lm_head = FlaxElectraTiedDense(self.config.vocab_size, dtype=self.dtype)
         else:
@@ -1589,63 +1586,139 @@ class FlaxElectraForCausalLMModule(nn.Module):
         output_attentions: bool = False,
         output_hidden_states: bool = False,
         return_dict: bool = True,
-        ):
-        # 使用 Electra 模型进行推理，传入输入标识符、注意力掩码、标记类型标识符、位置标识符、头部掩码，以及其他参数
-        outputs = self.electra(
-            input_ids,
-            attention_mask,
-            token_type_ids,
-            position_ids,
-            head_mask,
-            encoder_hidden_states=encoder_hidden_states,
-            encoder_attention_mask=encoder_attention_mask,
-            init_cache=init_cache,
-            deterministic=deterministic,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
-        # 获取 Electra 模型输出的隐藏状态
-        hidden_states = outputs[0]
-        # 使用生成器来预测得分
-        prediction_scores = self.generator_predictions(hidden_states)
 
-        # 如果配置了词嵌入的共享属性，则使用共享的嵌入来进行预测
+
+**注释：**
+
+
+# 添加起始文档字符串，描述此模型是基于Electra模型的序列分类/回归头（线性层叠加在汇总输出之上），例如用于GLUE任务。
+@add_start_docstrings(
+    """
+    Electra Model transformer with a sequence classification/regression head on top (a linear layer on top of the
+    pooled output) e.g. for GLUE tasks.
+    """,
+    ELECTRA_START_DOCSTRING,
+)
+
+# 定义用于序列分类的FlaxElectraForSequenceClassification类，继承自FlaxElectraPreTrainedModel类。
+class FlaxElectraForSequenceClassification(FlaxElectraPreTrainedModel):
+    module_class = FlaxElectraForSequenceClassificationModule
+
+# 向FlaxElectraForSequenceClassification类添加调用示例文档字符串。
+append_call_sample_docstring(
+    FlaxElectraForSequenceClassification,
+    _CHECKPOINT_FOR_DOC,
+    FlaxSequenceClassifierOutput,
+    _CONFIG_FOR_DOC,
+)
+
+# 定义用于因果语言模型的FlaxElectraForCausalLMModule类，继承自nn.Module。
+class FlaxElectraForCausalLMModule(nn.Module):
+    config: ElectraConfig  # 类型注解，指定config属性的类型为ElectraConfig。
+    dtype: jnp.dtype = jnp.float32  # 类型注解，指定dtype属性的类型，默认为jnp.float32。
+    gradient_checkpointing: bool = False  # 类型注解，指定gradient_checkpointing属性的类型，默认为False。
+
+    # 模块的设置方法
+    def setup(self):
+        # 创建Electra模块并赋值给self.electra属性，根据配置、数据类型和梯度检查点设置。
+        self.electra = FlaxElectraModule(
+            config=self.config, dtype=self.dtype, gradient_checkpointing=self.gradient_checkpointing
+        )
+        # 创建生成器预测模块并赋值给self.generator_predictions属性，根据配置和数据类型设置。
+        self.generator_predictions = FlaxElectraGeneratorPredictions(config=self.config, dtype=self.dtype)
+        # 如果配置要求共享词嵌入，则创建FlaxElectraTiedDense类型的生成器语言模型头部，否则创建普通的nn.Dense。
         if self.config.tie_word_embeddings:
-            shared_embedding = self.electra.variables["params"]["embeddings"]["word_embeddings"]["embedding"]
-            prediction_scores = self.generator_lm_head(prediction_scores, shared_embedding.T)
-        # 如果没有配置词嵌入的共享属性，则直接使用生成器进行预测
+            self.generator_lm_head = FlaxElectraTiedDense(self.config.vocab_size, dtype=self.dtype)
         else:
-            prediction_scores = self.generator_lm_head(prediction_scores)
+            self.generator_lm_head = nn.Dense(self.config.vocab_size, dtype=self.dtype)
 
-        # 如果不需要返回字典类型，则返回预测得分和其他输出
-        if not return_dict:
-            return (prediction_scores,) + outputs[1:]
+    # 模块的调用方法，接收多个输入参数，执行因果语言模型的计算。
+    def __call__(
+        self,
+        input_ids,
+        attention_mask: Optional[jnp.ndarray] = None,
+        token_type_ids: Optional[jnp.ndarray] = None,
+        position_ids: Optional[jnp.ndarray] = None,
+        head_mask: Optional[jnp.ndarray] = None,
+        encoder_hidden_states: Optional[jnp.ndarray] = None,
+        encoder_attention_mask: Optional[jnp.ndarray] = None,
+        init_cache: bool = False,
+        deterministic: bool = True,
+        output_attentions: bool = False,
+        output_hidden_states: bool = False,
+        return_dict: bool = True,
+        ):
+            # 调用 ELECTRA 模型进行推理，获取输出结果
+            outputs = self.electra(
+                input_ids,
+                attention_mask,
+                token_type_ids,
+                position_ids,
+                head_mask,
+                encoder_hidden_states=encoder_hidden_states,
+                encoder_attention_mask=encoder_attention_mask,
+                init_cache=init_cache,
+                deterministic=deterministic,
+                output_attentions=output_attentions,
+                output_hidden_states=output_hidden_states,
+                return_dict=return_dict,
+            )
+            # 从模型输出中获取隐藏状态
+            hidden_states = outputs[0]
+            # 使用生成器生成预测分数
+            prediction_scores = self.generator_predictions(hidden_states)
 
-        # 如果需要返回字典类型，则返回带有交叉注意力的带有因果语言模型输出的结果
-        return FlaxCausalLMOutputWithCrossAttentions(
-            logits=prediction_scores,
-            hidden_states=outputs.hidden_states,
-            attentions=outputs.attentions,
-            cross_attentions=outputs.cross_attentions,
-        )
-# 添加描述文档到 Electra 模型，该模型在隐藏状态输出之上包括一个语言建模头部（一个线性层），用于自回归任务
-# 这段代码从 transformers.models.bert.modeling_flax_bert.FlaxBertForCausalLM 复制并将 Bert 替换为 Electra
+            # 如果配置指定词嵌入共享
+            if self.config.tie_word_embeddings:
+                # 获取 ELECTRA 模型中的共享词嵌入参数
+                shared_embedding = self.electra.variables["params"]["embeddings"]["word_embeddings"]["embedding"]
+                # 使用共享词嵌入进行生成器的 LM 头部预测
+                prediction_scores = self.generator_lm_head(prediction_scores, shared_embedding.T)
+            else:
+                # 否则，直接使用生成器的 LM 头部进行预测
+                prediction_scores = self.generator_lm_head(prediction_scores)
+
+            # 如果不返回字典形式的输出
+            if not return_dict:
+                # 返回包含预测分数和额外输出的元组
+                return (prediction_scores,) + outputs[1:]
+
+            # 返回 FlaxCausalLMOutputWithCrossAttentions 类的对象，其中包含预测分数、隐藏状态、注意力权重及交叉注意力权重
+            return FlaxCausalLMOutputWithCrossAttentions(
+                logits=prediction_scores,
+                hidden_states=outputs.hidden_states,
+                attentions=outputs.attentions,
+                cross_attentions=outputs.cross_attentions,
+            )
+@add_start_docstrings(
+    """
+    Electra Model with a language modeling head on top (a linear layer on top of the hidden-states output) e.g for
+    autoregressive tasks.
+    """,
+    ELECTRA_START_DOCSTRING,
+)
+# 基于 transformers.models.bert.modeling_flax_bert.FlaxBertForCausalLM 中的代码，将 Bert 替换为 Electra
 class FlaxElectraForCausalLM(FlaxElectraPreTrainedModel):
     module_class = FlaxElectraForCausalLMModule
 
-    # 为生成准备输入，初始化缓存
     def prepare_inputs_for_generation(self, input_ids, max_length, attention_mask: Optional[jax.Array] = None):
+        # 初始化缓存
         batch_size, seq_length = input_ids.shape
+
+        # 使用模型的初始化缓存方法创建过去键值对
         past_key_values = self.init_cache(batch_size, max_length)
-        # 注意，通常需要在 attention_mask 中填充 0，以处理 x > input_ids.shape[-1] 和 x < cache_length 的情况
+        
+        # 注意：通常情况下，需要在 attention_mask 中对超出 input_ids.shape[-1] 和小于 cache_length 的位置填充 0
         # 但由于解码器使用因果遮蔽，这些位置已经被遮蔽了
-        # 因此，我们可以在这里创建一个静态的 attention_mask，对于编译来说更有效
+        # 因此，我们可以在这里创建一个静态的 attention_mask，这对于编译来说更有效
         extended_attention_mask = jnp.ones((batch_size, max_length), dtype="i4")
         if attention_mask is not None:
+            # 计算位置 ID，根据 attention_mask 累积和减去 1
             position_ids = attention_mask.cumsum(axis=-1) - 1
+            # 更新 extended_attention_mask，使用 attention_mask 进行动态更新切片
             extended_attention_mask = lax.dynamic_update_slice(extended_attention_mask, attention_mask, (0, 0))
         else:
+            # 如果没有提供 attention_mask，则广播生成位置 ID
             position_ids = jnp.broadcast_to(jnp.arange(seq_length, dtype="i4")[None, :], (batch_size, seq_length))
 
         return {
@@ -1654,13 +1727,14 @@ class FlaxElectraForCausalLM(FlaxElectraPreTrainedModel):
             "position_ids": position_ids,
         }
 
-    # 更新生成的输入，将模型输出的过去键值和位置标识更新到模型关键字参数中
     def update_inputs_for_generation(self, model_outputs, model_kwargs):
+        # 更新生成过程中的模型参数
         model_kwargs["past_key_values"] = model_outputs.past_key_values
         model_kwargs["position_ids"] = model_kwargs["position_ids"][:, -1:] + 1
         return model_kwargs
 
-# 在 FlaxElectraForCausalLM 上附加调用示例文档字符串
+
+# 将样例调用的文档字符串附加到类 FlaxElectraForCausalLM 上，用于文档化
 append_call_sample_docstring(
     FlaxElectraForCausalLM,
     _CHECKPOINT_FOR_DOC,

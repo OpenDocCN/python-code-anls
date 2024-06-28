@@ -1,59 +1,52 @@
-# `.\transformers\models\wav2vec2_phoneme\tokenization_wav2vec2_phoneme.py`
+# `.\models\wav2vec2_phoneme\tokenization_wav2vec2_phoneme.py`
 
-```py
-# 设置文件编码格式为 utf-8
-# 版权声明
-# 根据 Apache 许可版本 2.0 进行许可
-# 除非符合许可条件，否则不得使用此文件
-# 您可以在以下网址获取许可证副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则按"原样"分发软件
-# 没有任何明示或暗示的担保或条件，包括但不限于
-# 特定目的的适用性和适销性担保
-# 有关特定语言管理权限和限制的详细信息，请参见许可证
-"""Tokenization class for Wav2Vec2Phoneme."""
+```
+# 设置文件编码为UTF-8
 
-# 导入必要的模块
-import json
-import os
-import sys
-from dataclasses import dataclass
-from itertools import groupby
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
+# 版权声明，版权归Facebook Inc.和HuggingFace Inc.团队所有
 
-import numpy as np
+# 引入必要的库和模块
+import json  # 导入处理JSON格式的模块
+import os  # 导入操作系统功能的模块
+import sys  # 导入系统相关的模块
+from dataclasses import dataclass  # 导入用于定义数据类的装饰器
+from itertools import groupby  # 导入用于迭代操作的工具函数
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union  # 导入类型提示相关的工具函数
 
-from ...tokenization_utils import PreTrainedTokenizer
-from ...tokenization_utils_base import AddedToken
-from ...utils import (
-    ModelOutput,
-    is_flax_available,
-    is_tf_available,
-    is_torch_available,
-    logging,
-    requires_backends,
-    to_py_obj,
+import numpy as np  # 导入处理数值数组的库
+
+# 导入HuggingFace库中的相关工具和类
+from ...tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器的基类
+from ...tokenization_utils_base import AddedToken  # 导入添加的特殊标记类
+from ...utils import (  # 导入HuggingFace库中的一些实用工具函数和类
+    ModelOutput,  # 导入模型输出的基类
+    is_flax_available,  # 判断是否可以使用Flax库
+    is_tf_available,  # 判断是否可以使用TensorFlow库
+    is_torch_available,  # 判断是否可以使用PyTorch库
+    logging,  # 日志记录工具
+    requires_backends,  # 判断所需的后端库是否可用
+    to_py_obj,  # 将对象转换为Python对象
 )
 
-# 获取程序日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 如果是类型检查，则导入对应的模块
+# 如果类型检查开启，则根据当前可用的深度学习框架导入相应的库
 if TYPE_CHECKING:
     if is_torch_available():
-        import torch
+        import torch  # 导入PyTorch库
     if is_tf_available():
-        import tensorflow as tf
+        import tensorflow as tf  # 导入TensorFlow库
     if is_flax_available():
-        import jax.numpy as jnp  # noqa: F401
+        import jax.numpy as jnp  # 导入Flax库中的NumPy模块（忽略Flax库导入的警告）
 
-# 定义词汇文件的名称
+# 定义词汇文件和分词器配置文件的名称映射
 VOCAB_FILES_NAMES = {
-    "vocab_file": "vocab.json",
-    "tokenizer_config_file": "tokenizer_config.json",
+    "vocab_file": "vocab.json",  # 词汇表文件名
+    "tokenizer_config_file": "tokenizer_config.json",  # 分词器配置文件名
 }
 
-# 定义预训练词汇文件映射
+# 预训练模型的词汇文件映射，包括对应的下载链接
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "facebook/wav2vec2-lv-60-espeak-cv-ft": (
@@ -67,38 +60,34 @@ PRETRAINED_VOCAB_FILES_MAP = {
     },
 }
 
-# Wav2Vec2Phoneme 没有最大输入长度
+# 预训练模型的位置编码嵌入大小映射，这里给出了一个特定模型的最大输入长度
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {"facebook/wav2vec2-lv-60-espeak-cv-ft": sys.maxsize}
 
-# 定义类型别名 ListOfDict
+# 定义一种数据类型，表示列表中包含字典的结构
 ListOfDict = List[Dict[str, Union[int, str]]]
 
-# 定义 Wav2Vec2PhonemeCTCTokenizerOutput 输出类
 @dataclass
 class Wav2Vec2PhonemeCTCTokenizerOutput(ModelOutput):
     """
-    Output type of [` Wav2Vec2PhonemeCTCTokenizer`], with transcription.
+    [`Wav2Vec2PhonemeCTCTokenizer`]的输出类型，带有音素。
+
     Args:
         text (list of `str` or `str`):
-            Decoded logits in text from. Usually the speech transcription.
-        char_offsets (list of `List[Dict[str, Union[int, str]]]` or `List[Dict[str, Union[int, str]]`):
-            Offsets of the decoded characters. In combination with sampling rate and model downsampling rate char
-            offsets can be used to compute time stamps for each charater. Total logit score of the beam associated with
-            produced text.
+            解码的文本，通常是语音转录。
+        char_offsets (list of `List[Dict[str, Union[int, str]]]` or `List[Dict[str, Union[int, str]]]`):
+            解码字符的偏移量。结合采样率和模型下采样率，可以用来计算每个字符的时间戳。
     """
-    text: Union[List[str], str]
-    char_offsets: Union[List[ListOfDict], ListOfDict] = None
+    text: Union[List[str], str]  # 文本内容，可以是字符串或字符串列表
+    char_offsets: Union[List[ListOfDict], ListOfDict] = None  # 字符的偏移量，可以是列表的列表或列表
 
-# 定义 Wav2Vec2PhonemeCTCTokenizer 类
+
 class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
     """
-    Constructs a Wav2Vec2PhonemeCTC tokenizer.
+    构造一个Wav2Vec2PhonemeCTC分词器。
+    """
     This tokenizer inherits from [`PreTrainedTokenizer`] which contains some of the main methods. Users should refer to
     the superclass for more information regarding such methods.
 
-
-
-    # Args: section for initializing the Tokenizer class with specified arguments and default values
     Args:
         vocab_file (`str`):
             File containing the vocabulary.
@@ -116,71 +105,26 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
             tokenizer, `do_phonemize` should be set to `False`.
         phonemizer_lang (`str`, *optional*, defaults to `"en-us"`):
             The language of the phoneme set to which the tokenizer should phonetize the input text to.
-        phonemizer_backend (`str`, *optional*, defaults to `"espeak"`):
+        phonemizer_backend (`str`, *optional*. defaults to `"espeak"`):
             The backend phonetization library that shall be used by the phonemizer library. Defaults to `espeak-ng`.
-            See the [phonemizer package](https://github.com/bootphon/phonemizer#readme) for more information.
+            See the [phonemizer package](https://github.com/bootphon/phonemizer#readme). for more information.
 
         **kwargs
             Additional keyword arguments passed along to [`PreTrainedTokenizer`]
-    """
-
-    # Set up default mappings and constants for the Tokenizer class
-    vocab_files_names = VOCAB_FILES_NAMES
-    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    model_input_names = ["input_ids", "attention_mask"]
-
-    # Initialize Tokenizer class with specified parameters and default values
-    def __init__(
-        self,
-        vocab_file,
-        bos_token="<s>",
-        eos_token="</s>",
-        unk_token="<unk>",
-        pad_token="<pad>",
-        phone_delimiter_token=" ",
-        word_delimiter_token=None,
-        do_phonemize=True,
-        phonemizer_lang="en-us",
-        phonemizer_backend="espeak",
-        **kwargs,
-    # 初始化函数，设置一些实例属性
-    def __init__(
-        self,
-        unk_token: str,
-        bos_token: str,
-        eos_token: str,
-        pad_token: str,
-        word_delimiter_token: str,
-        phone_delimiter_token: str,
-        vocab_file: str,
-        do_phonemize: bool,
-        phonemizer_lang: str,
-        phonemizer_backend: str,
-        **kwargs,
     ):
-        # 设置单词分隔符，用于分割单词
-        self._word_delimiter_token = word_delimiter_token
-        # 设置电话分隔符，用于分隔电话号码
-        self._phone_delimiter_token = phone_delimiter_token
-        # 设置是否进行音素转换的标志
-        self.do_phonemize = do_phonemize
-        # 设置音素转换所用的语言
-        self.phonemizer_lang = phonemizer_lang
-        # 设置音素转换的后端
-        self.phonemizer_backend = phonemizer_backend
+        self._word_delimiter_token = word_delimiter_token  # 设置单词分隔符令牌
+        self._phone_delimiter_token = phone_delimiter_token  # 设置电话分隔符令牌
+        self.do_phonemize = do_phonemize  # 是否执行音素化操作的标志
+        self.phonemizer_lang = phonemizer_lang  # 音素化使用的语言
+        self.phonemizer_backend = phonemizer_backend  # 音素化使用的后端
 
-        # 如果需要进行音素转换，则初始化音素转换后端
         if do_phonemize:
-            self.init_backend(self.phonemizer_lang)
+            self.init_backend(self.phonemizer_lang)  # 若需执行音素化，则初始化音素化后端
 
-        # 从词汇文件中加载编码器
         with open(vocab_file, encoding="utf-8") as vocab_handle:
-            self.encoder = json.load(vocab_handle)
-        # 根据编码器创建解码器
-        self.decoder = {v: k for k, v in self.encoder.items()}
+            self.encoder = json.load(vocab_handle)  # 从文件中加载编码器映射
+        self.decoder = {v: k for k, v in self.encoder.items()}  # 创建解码器映射，反转编码器的键值对
 
-        # 调用父类的初始化方法，传入相关参数
         super().__init__(
             unk_token=unk_token,
             bos_token=bos_token,
@@ -192,22 +136,19 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
             phonemizer_lang=phonemizer_lang,
             phonemizer_backend=phonemizer_backend,
             **kwargs,
-        )
+        )  # 调用父类的初始化方法，传入相关参数
 
-    # 返回词汇表的大小
     @property
     def vocab_size(self) -> int:
-        return len(self.decoder)
+        return len(self.decoder)  # 返回解码器的大小作为词汇表大小
 
-    # 返回词汇表
     def get_vocab(self) -> Dict:
-        vocab = dict(self.encoder.copy())
-        vocab.update(self.added_tokens_encoder)
-        return vocab
+        vocab = dict(self.encoder.copy())  # 复制编码器的内容作为词汇表
+        vocab.update(self.added_tokens_encoder)  # 添加额外的编码器映射
+        return vocab  # 返回完整的词汇表
 
-    # 添加新的词汇到词汇表
     def _add_tokens(self, new_tokens: Union[List[str], List[AddedToken]], special_tokens: bool = False) -> int:
-        # 重写方法以避免删除词汇
+        # 覆盖方法以避免去除空格！
         to_add = []
         for token in new_tokens:
             if isinstance(token, str):
@@ -215,9 +156,8 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
             else:
                 to_add.append(token)
 
-        return super()._add_tokens(to_add, special_tokens)
+        return super()._add_tokens(to_add, special_tokens)  # 调用父类的添加令牌方法，添加新令牌
 
-    # 初始化音素转换后端
     def init_backend(self, phonemizer_lang: str):
         """
         Initializes the backend.
@@ -225,15 +165,11 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         Args:
             phonemizer_lang (`str`): The language to be used.
         """
-        # 检查是否需要相关后端
-        requires_backends(self, "phonemizer")
-        # 导入音素转换的后端
+        requires_backends(self, "phonemizer")  # 检查必要的后端
         from phonemizer.backend import BACKENDS
 
-        # 选择并初始化指定的后端
-        self.backend = BACKENDS[self.phonemizer_backend](phonemizer_lang, language_switch="remove-flags")
+        self.backend = BACKENDS[self.phonemizer_backend](phonemizer_lang, language_switch="remove-flags")  # 初始化音素化后端
 
-    # 为标记化做准备
     def prepare_for_tokenization(
         self,
         text: str,
@@ -263,20 +199,20 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         Returns:
             `Tuple[str, Dict[str, Any]]`: The prepared text and the unused kwargs.
         """
-        # 如果输入已经分词好，则在文本前加上空格
+        # If `is_split_into_words` is True, prepend a space to `text`
         if is_split_into_words:
             text = " " + text
 
-        # 设置tokenizer是否进行phonetization（发音转换）
+        # Set the instance variable `self.do_phonemize` based on the provided `do_phonemize`
         if do_phonemize is not None:
             self.do_phonemize = do_phonemize
 
-        # 设置正确的发音转换语言
+        # Set the instance variable `self.phonemizer_lang` and initialize backend if `phonemizer_lang` is provided
         if phonemizer_lang is not None:
             self.phonemizer_lang = phonemizer_lang
             self.init_backend(phonemizer_lang)
 
-        # 返回预处理好的文本和未使用的kwargs
+        # Return the modified `text` and an empty dictionary (unused kwargs)
         return (text, {})
 
     def _tokenize(self, text, **kwargs):
@@ -284,42 +220,47 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         Converts a string into a sequence of tokens (string), using the tokenizer.
         """
 
-        # 确保去除文本两端的空格，以防止<unk>出现
+        # Remove leading and trailing whitespace from `text`
         text = text.strip()
 
-        # 如果需要进行发音转换
+        # Phonemize the `text` if `self.do_phonemize` is True
         if self.do_phonemize:
+            # Convert `text` to lowercase
             text = text.lower()
 
-            # 创建发音转换后的音素列表
+            # Generate a list of phonemes for the `text` in `self.phonemizer_lang`
             text = self.phonemize(text, self.phonemizer_lang)
 
-        # 确保音素之间有空格
+        # Split `text` into tokens using whitespace as delimiter
         tokens = text.split(" ")
 
-        # 过滤掉空白的音素
+        # Remove empty tokens from the list
         tokens = list(filter(lambda p: p.strip() != "", tokens))
+
+        # Return the list of tokens
         return tokens
     def phonemize(self, text: str, phonemizer_lang: Optional[str] = None) -> str:
-        # 导入分隔符类
+        # 导入分离器模块
         from phonemizer.separator import Separator
-
-        # 如果设置了词分隔符，则在词之间添加空格
+        
+        # 如果设置了单词分隔符标记，并且不为 None，则加上空格
         word_delimiter = self.word_delimiter_token + " " if self.word_delimiter_token is not None else ""
-        # 如果指定了语言且与当前语言不同，则重新初始化后端
+        
+        # 如果指定了语言且与当前使用的语言不同，则重新初始化后端
         if phonemizer_lang is not None and phonemizer_lang != self.phonemizer_lang:
             self.init_backend(phonemizer_lang)
         else:
+            # 否则使用当前的语言设置
             phonemizer_lang = self.phonemizer_lang
-
-        # 创建分隔符对象定义音节分隔符和词分隔符
+        
+        # 创建分隔符对象，用于指定音素之间的分隔符
         separator = Separator(phone=self.phone_delimiter_token, word=word_delimiter, syllable="")
-        # 对文本进行音素转换
+        
+        # 对输入的文本进行音素化处理，返回一个包含音素的列表，取第一个元素并去除两端空白
         phonemes = self.backend.phonemize(
             [text],
             separator=separator,
         )
-        # 去掉结果中的空格
         phonemes = phonemes[0].strip()
 
         return phonemes
@@ -327,9 +268,8 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
     @property
     def word_delimiter_token(self) -> str:
         """
-        `str`: Word delimiter token. Log an error if used while not having been set.
+        `str`: 单词分隔符标记。如果在尚未设置时使用，则记录错误日志。
         """
-        # 如果词分隔符未设置，则记录错误
         if self._word_delimiter_token is None:
             if self.verbose:
                 logger.error("Using word_delimiter_token, but it is not set yet.")
@@ -339,30 +279,27 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
     @property
     def word_delimiter_token_id(self) -> Optional[int]:
         """
-        `Optional[int]`: Id of the word_delimiter_token in the vocabulary. Returns `None` if the token has not been
-        set.
+        `Optional[int]`: 单词分隔符标记在词汇表中的ID。如果尚未设置，则返回 `None`。
         """
-        # 如果词分隔符未设置，则返回 None
         if self._word_delimiter_token is None:
             return None
         return self.convert_tokens_to_ids(self.word_delimiter_token)
 
     @word_delimiter_token.setter
     def word_delimiter_token(self, value):
-        # 设置词分隔符
+        # 设置单词分隔符标记的值
         self._word_delimiter_token = value
 
     @word_delimiter_token_id.setter
     def word_delimiter_token_id(self, value):
-        # 将词分隔符转换为对应的 ID
+        # 根据给定的值将其转换为词汇表中的ID，并设置为单词分隔符标记
         self._word_delimiter_token = self.convert_tokens_to_ids(value)
 
     @property
     def phone_delimiter_token(self) -> str:
         """
-        `str`: Word delimiter token. Log an error if used while not having been set.
+        `str`: 音素分隔符标记。如果在尚未设置时使用，则记录错误日志。
         """
-        # 如果音素分隔符未设置，则记录错误
         if self._phone_delimiter_token is None:
             if self.verbose:
                 logger.error("Using phone_delimiter_token, but it is not set yet.")
@@ -372,58 +309,63 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
     @property
     def phone_delimiter_token_id(self) -> Optional[int]:
         """
-        `Optional[int]`: Id of the phone_delimiter_token in the vocabulary. Returns `None` if the token has not been
-        set.
+        `Optional[int]`: 音素分隔符标记在词汇表中的ID。如果尚未设置，则返回 `None`。
         """
-        # 如果音素分隔符未设置，则返回 None
         if self._phone_delimiter_token is None:
             return None
         return self.convert_tokens_to_ids(self.phone_delimiter_token)
 
     @phone_delimiter_token.setter
     def phone_delimiter_token(self, value):
-        # 设置音素分隔符
+        # 设置音素分隔符标记的值
         self._phone_delimiter_token = value
 
     @phone_delimiter_token_id.setter
     def phone_delimiter_token_id(self, value):
-        # 将音素分隔符转换为对应的 ID
+        # 根据给定的值将其转换为词汇表中的ID，并设置为音素分隔符标记
         self._phone_delimiter_token = self.convert_tokens_to_ids(value)
 
     def _convert_token_to_id(self, token: str) -> int:
-        """Converts a token (str) in an index (integer) using the vocab."""
-        # 根据词汇表将 token(str) 转换为 ID(integer)
+        """将给定的 token（字符串）转换为索引（整数），使用词汇表进行映射。"""
         return self.encoder.get(token, self.encoder.get(self.unk_token))
-    # 使用词汇表将索引（整数）转换为标记（字符串）
+    # 将索引转换为标记字符串，使用词汇表进行解码
     def _convert_id_to_token(self, index: int) -> str:
-        result = self.decoder.get(index, self.unk_token)  # 通过索引在词汇表中查找对应标记，如果不存在则返回 unk_token
-        return result  # 返回查找到的标记
+        """Converts an index (integer) into a token (str) using the vocabulary."""
+        # 从解码器中获取索引对应的标记，如果不存在则使用未知标记（unk_token）
+        result = self.decoder.get(index, self.unk_token)
+        return result
 
-    # 将连接主时序分类（CTC）输出的标记转换为单个字符串
+    # 将连接主义时间分类（CTC）输出的标记列表转换为单个字符串
     def convert_tokens_to_string(
         self,
-        tokens: List[str],  # 输入标记列表
-        group_tokens: bool = True,  # 是否将相同标记组合成CTC解码中不重复的标记
-        spaces_between_special_tokens: bool = False,  # 特殊标记之间是否加空格
-        filter_word_delimiter_token: bool = True,  # 是否过滤单词分隔标记
-        output_char_offsets: bool = False,  # 是否输出字符偏移信息
+        tokens: List[str],
+        group_tokens: bool = True,
+        spaces_between_special_tokens: bool = False,
+        filter_word_delimiter_token: bool = True,
+        output_char_offsets: bool = False,
     ) -> str:
-        
-        if group_tokens:  # 如果需要组合标记
-            # 使用groupby函数将相同标记进行分组，并统计每组中标记的个数
+        """
+        Converts a connectionist-temporal-classification (CTC) output tokens into a single string.
+        """
+        # 将相同的标记组合成非重复的标记，用于CTC风格的解码
+        if group_tokens:
+            # 使用itertools.groupby按标记分组，并记录每组的长度
             chars, char_repetitions = zip(*((token, len(list(group_iter))) for token, group_iter in groupby(tokens)))
         else:
-            chars = tokens  # 否则直接使用输入的标记列表
-            char_repetitions = len(tokens) * [1]  # 所有标记的个数为1
+            chars = tokens
+            char_repetitions = len(tokens) * [1]
 
-        processed_chars = list(filter(lambda char: char != self.pad_token, chars))  # 过滤掉标记列表中的 pad_token
+        # 过滤掉self.pad_token，这是用作CTC空白标记的特殊标记
+        processed_chars = list(filter(lambda char: char != self.pad_token, chars))
 
-        if filter_word_delimiter_token and self.word_delimiter_token is not None:  # 如果需要过滤单词分隔标记且单词分隔标记不为空
-            processed_chars = list(filter(lambda token: token != self.word_delimiter_token, processed_chars))  # 过滤掉标记列表中的 word_delimiter_token
+        # 如果设置了过滤单词分隔符标记并且存在self.word_delimiter_token，则也过滤该标记
+        if filter_word_delimiter_token and self.word_delimiter_token is not None:
+            processed_chars = list(filter(lambda token: token != self.word_delimiter_token, processed_chars))
 
-        char_offsets = None  # 初始化字符偏移为空
-        if output_char_offsets:  # 如果需要输出字符偏移信息
-            # 根据条件计算字符偏移
+        # 如果需要输出字符偏移量，则计算偏移量
+        char_offsets = None
+        if output_char_offsets:
+            # 计算字符偏移量，需要考虑CTC标记和单词分隔符标记
             word_delimiter_token_for_offsets = (
                 self.word_delimiter_token if filter_word_delimiter_token is True else None
             )
@@ -431,46 +373,47 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
                 char_repetitions, chars, self.pad_token, word_delimiter_token=word_delimiter_token_for_offsets
             )
 
-            if len(char_offsets) != len(processed_chars):  # 如果字符偏移与处理后的标记列表长度不一致
+            # 检查偏移量和处理后的标记列表长度是否一致
+            if len(char_offsets) != len(processed_chars):
                 raise ValueError(
                     f"`char_offsets`: {char_offsets} and `processed_tokens`: {processed_chars}"
                     " have to be of the same length, but are: `len(offsets)`: "
                     f"{len(char_offsets)} and `len(processed_tokens)`: {len(processed_chars)}"
                 )
 
-            # 设置字符偏移的标记为正确的处理标记
+            # 将偏移量中的标记字段设置为正确的处理后的标记
             for i, char in enumerate(processed_chars):
                 char_offsets[i]["char"] = char
 
-        string = " ".join(processed_chars).strip()  # 将处理后的标记列表用空格连接成字符串
+        # 将处理后的标记列表连接成字符串，并去除首尾空格
+        string = " ".join(processed_chars).strip()
 
-        return {"text": string, "char_offsets": char_offsets}  # 返回字符串和字符偏移信息的字典
+        # 返回包含文本字符串和字符偏移量的字典
+        return {"text": string, "char_offsets": char_offsets}
 
+    # 计算字符偏移量的静态方法
     @staticmethod
     def _compute_offsets(
-        char_repetitions: List[int],  # 标记重复次数列表
-        chars: List[str],  # 标记列表
-        ctc_token: int,  # CTC标记
-        word_delimiter_token: Optional[int] = None  # 可选的单词分隔标记
-``` 
+        char_repetitions: List[int], chars: List[str], ctc_token: int, word_delimiter_token: Optional[int] = None
+    ):
     ) -> List[Dict[str, Union[str, int]]]:
-        # 计算字符重复次数的累积和
+        # 将字符重复次数数组转换为累积和数组，用于计算起始和结束索引
         end_indices = np.asarray(char_repetitions).cumsum()
-        # 计算起始索引
         start_indices = np.concatenate(([0], end_indices[:-1]))
 
-        # 为每个字符创建包含起始和结束偏移量的字典
+        # 根据字符、起始索引、结束索引创建偏移量字典列表
         offsets = [
             {"char": t, "start_offset": s, "end_offset": e} for t, s, e in zip(chars, start_indices, end_indices)
         ]
 
-        # 过滤掉 CTC token
+        # 过滤掉 CTC 标记的偏移量
         offsets = list(filter(lambda offsets: offsets["char"] != ctc_token, offsets))
 
-        # 如果需要的话，过滤掉单词分隔符 token
+        # 如果需要，过滤掉单词分隔符标记的偏移量
         if word_delimiter_token is not None:
             offsets = list(filter(lambda offsets: offsets["char"] != word_delimiter_token, offsets))
 
+        # 返回偏移量列表
         return offsets
 
     def _decode(
@@ -484,19 +427,20 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         output_char_offsets: bool = False,
     ) -> str:
         """
-        特殊的 _decode 函数用于 Wav2Vec2PhonemeTokenizer，因为添加的 token 应该和基础词汇表的 token 一样对待，
-        所以必须在整个 token 列表上调用 `convert_tokens_to_string` 函数，而不是分别处理添加的 token
+        特殊的 _decode 函数用于 Wav2Vec2PhonemeTokenizer，因为添加的特殊标记应该与基础词汇表中的标记完全相同，
+        因此必须在整个标记列表上调用 `convert_tokens_to_string` 函数，而不是单独处理添加的标记
         """
-        # 将 token_ids 转换为 tokens
+        # 将 token_ids 转换为 tokens 列表，跳过特殊标记（如果设置）
         filtered_tokens = self.convert_ids_to_tokens(token_ids, skip_special_tokens=skip_special_tokens)
 
         result = []
         for token in filtered_tokens:
+            # 如果设置了跳过特殊标记且 token 是特殊标记之一，则跳过该 token
             if skip_special_tokens and token in self.all_special_ids:
                 continue
             result.append(token)
 
-        # 将 tokens 转换为字符串输出
+        # 将过滤后的 tokens 列表转换为字符串输出
         string_output = self.convert_tokens_to_string(
             result,
             group_tokens=group_tokens,
@@ -507,7 +451,7 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
 
         text = string_output["text"]
 
-        # 如果需要清除 tokenization 空格
+        # 如果需要清除标记化空格，则调用清除空格的函数
         clean_up_tokenization_spaces = (
             clean_up_tokenization_spaces
             if clean_up_tokenization_spaces is not None
@@ -516,13 +460,13 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         if clean_up_tokenization_spaces:
             text = self.clean_up_tokenization(text)
 
-        # 如果需要输出字符偏移
+        # 如果需要输出字符偏移量，则返回带偏移量的特定类型的对象
         if output_char_offsets:
             return Wav2Vec2PhonemeCTCTokenizerOutput(text=text, char_offsets=string_output["char_offsets"])
         else:
             return text
 
-    # 从 `tokenization_utils_base.py` 覆盖���因为我们需要这里的 `output_char_offsets` 文档
+    # 重写自 `tokenization_utils_base.py`，因为这里需要文档说明 `output_char_offsets`
     def decode(
         self,
         token_ids: Union[int, List[int], "np.ndarray", "torch.Tensor", "tf.Tensor"],
@@ -568,7 +512,7 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         # Convert inputs to python lists
         token_ids = to_py_obj(token_ids)
 
-        # Call the private _decode method with specified arguments
+        # Call the internal _decode method with specified parameters
         return self._decode(
             token_ids=token_ids,
             skip_special_tokens=skip_special_tokens,
@@ -587,11 +531,24 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
         clean_up_tokenization_spaces: bool = None,
         output_char_offsets: bool = False,
         **kwargs,
-    def batch_decode(sequences: Union[List[int], List[List[int]], np.ndarray, torch.Tensor, tf.Tensor],
-                     skip_special_tokens: bool = False,
-                     clean_up_tokenization_spaces: bool = True,
-                     output_char_offsets: bool = False,
-                     **kwargs):
+    ):
+        """
+        Batch decodes sequences of token ids into strings or `ModelOutput` objects.
+
+        Args:
+            sequences (`Union[List[int], List[List[int]], np.ndarray, torch.Tensor, tf.Tensor]`):
+                List or batch of tokenized input sequences.
+            skip_special_tokens (`bool`, *optional*, defaults to `False`):
+                Whether or not to remove special tokens in the decoding.
+            clean_up_tokenization_spaces (`bool`, *optional*):
+                Whether or not to clean up the tokenization spaces.
+            output_char_offsets (`bool`, *optional*, defaults to `False`):
+                Whether or not to output character offsets.
+
+        Returns:
+            `List[str]` or `List[~transformers.file_utils.ModelOutput]`: List of decoded sentences or model outputs.
+        """
+    ) -> List[str]:
         """
         Convert a list of lists of token ids into a list of strings by calling decode.
 
@@ -624,6 +581,7 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
             [`~models.wav2vec2.tokenization_wav2vec2_phoneme.Wav2Vec2PhonemeCTCTokenizerOutput`] when
             `output_char_offsets == True`.
         """
+        # Perform batch decoding using self.decode for each sequence in sequences
         batch_decoded = [
             self.decode(
                 seq,
@@ -634,23 +592,28 @@ class Wav2Vec2PhonemeCTCTokenizer(PreTrainedTokenizer):
             )
             for seq in sequences
         ]
+        # Check if output_char_offsets is True
         if output_char_offsets:
-            # transform list of dicts to dict of lists
+            # Transform list of dictionaries to a dictionary of lists
             return Wav2Vec2PhonemeCTCTokenizerOutput({k: [d[k] for d in batch_decoded] for k in batch_decoded[0]})
 
+        # Return the batch_decoded list
         return batch_decoded
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
+        # Check if save_directory exists; log an error and return if not
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
+        # Construct the full path for the vocabulary file
         vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
 
+        # Write the vocabulary (self.encoder) to the vocab_file in JSON format
         with open(vocab_file, "w", encoding="utf-8") as f:
-            # write encoder dictionary to a JSON file
             f.write(json.dumps(self.encoder, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
 
+        # Return the tuple containing the vocab_file path
         return (vocab_file,)
 ```

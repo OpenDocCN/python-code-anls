@@ -2,56 +2,36 @@
 
 ```
 # coding=utf-8
-# 设置脚本文件编码格式为UTF-8
-# 版权声明
-# Copyright 2022 ABEJA, Inc. and The HuggingFace Inc. team. All rights reserved.
-# 版权声明
+# 版权 2022 年 ABEJA, Inc. 和 The HuggingFace Inc. team. 保留所有权利。
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# 根据 Apache License, Version 2.0 许可
-# 只有在符合许可证的情况下才可以使用此文件
-# You may obtain a copy of the License at
-# 您可以在以下网址获取许可证的副本
+# 根据 Apache 许可证 2.0 版本（"许可证"）获得许可;
+# 除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本:
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
-#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# 如果没有按照适用法律规定或书面同意，则根据许可证分发的软件是根据“原样”分发的，
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# 有关特定语言的许可证来管理权限和限制条件
-"""Tokenization classes for GPTNeoXJapanese."""
-# 为GPTNeoXJapanese提供分词类
+# 除非适用法律要求或书面同意，否则本软件是基于"原样"提供的，
+# 没有任何形式的明示或暗示担保或条件。
+# 有关更多详细信息，请参阅许可证。
+"""GPTNeoXJapanese 的标记化类。"""
 import collections
-# 引入collections模块
 import json
-# 引入json模块
 import os
-# 引入os模块
 import re
-# 引入re模块
 from typing import Optional, Tuple
-# 从typing模块中引入Optional, Tuple类型
 
 import numpy as np
-# 引入numpy模块，命名为np
 
 from ...tokenization_utils_fast import PreTrainedTokenizer
-# 从tokenization_utils_fast模块中引入PreTrainedTokenizer
 from ...utils import logging
-# 从utils模块中引入logging
 
+# 获取记录器实例
 logger = logging.get_logger(__name__)
-# 获取当前模块的日志记录器
 
+# 词汇文件名字典
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "emoji_file": "emoji.json"}
-# 定义VOCAB_FILES_NAMES为一个包含'vocab_file'和'emoji_file'的字典
 
+# 预训练词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "abeja/gpt-neox-japanese-2.7b": "https://huggingface.co/abeja/gpt-neox-japanese-2.7b/resolve/main/vocab.txt",
@@ -60,130 +40,98 @@ PRETRAINED_VOCAB_FILES_MAP = {
         "abeja/gpt-neox-japanese-2.7b": "https://huggingface.co/abeja/gpt-neox-japanese-2.7b/resolve/main/emoji.json",
     },
 }
-# 设置预训练时的词汇文件映射关系
 
+# 预训练位置编码大小映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "abeja/gpt-neox-japanese-2.7b": 2048,
 }
-# 设置预训练时的位置嵌入尺寸
+
 
 def load_vocab_and_emoji(vocab_file, emoji_file):
-    """Loads a vocabulary file and emoji file into a dictionary."""
-    # 加载词汇文件和表情符号文件到字典中
+    """加载词汇文件和表情文件到字典中。"""
+    # 打开并加载表情文件为 JSON 格式
     with open(emoji_file, "r", encoding="utf-8") as f:
         emoji = json.loads(f.read())
-    # 以utf-8编码以只读方式打开表情符号文件，将文件内容加载为json格式的数据
 
+    # 初始化字典
     vocab = collections.OrderedDict()
-    # 创建有序字典
     raw_vocab = collections.OrderedDict()
-    # 创建有序字典
     ids_to_tokens = collections.OrderedDict()
-    # 创建有序字典
+
+    # 打开并处理词汇文件
     with open(vocab_file, "r", encoding="utf-8") as f:
         token = f.readlines()
-    # 以utf-8编码以只读方式打开词汇文件，将行数据逐行读入token
+
+    # 格式化处理 token
     token = [[t.rstrip("\n")] if (t == "," or "," not in t) else t.rstrip("\n").split(",") for t in token]
-    # 对读入的token进行处理
+    
+    # 枚举 tokens
     for idx, b in enumerate(token):
         ids_to_tokens[idx] = b
         raw_vocab[",".join(b)] = idx
         for wd in b:
             vocab[wd] = idx
-    # 遍历处理后的token进行处理，创建字典
 
     return vocab, raw_vocab, ids_to_tokens, emoji
-    # 返回词汇表、原始词汇表、标记到词汇的映射、表情符号
+
 
 class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
-    # 通过PreTrainedTokenizer继承创建GPTNeoXJapaneseTokenizer类
     """
-    This tokenizer inherits from [`PreTrainedTokenizer`] and is based on Japanese special Sub-Word-Encoding that is
-    used in this repository (https://github.com/tanreinama/Japanese-BPEEncoder_V2). Check the repository for details.
-    Japanese has a relatively large vocabulary and there is no separation between words. Furthermore, the language is a
-    combination of hiragana, katakana, and kanji, and variants such as "1" and "①" are often used. In order to cope
-    with these, this tokenizer has the following features
-    - Subword-by-subword segmentation, which is intermediate between byte strings and morphological analysis.
-    # 这个分词器继承自[`PreTrainedTokenizer`]，并且基于日本特有的子词编码，该编码在此存储库中使用（https://github.com/tanreinama/Japanese-BPEEncoder_V2）。查看存储库以获取详细信息。
-    # 日语词汇相对较多，且单词之间没有分隔。此外，语言是平假名、片假名和汉字的组合，还经常使用“1”和“①”等变体。为了应对这些情况，这个分词器具有以下特征
-    # - 逐个子字的分割，介于字节串和形态分析之间。
-    # BPEs 是为每个汉字、平假名和片假名字符创建的，不会跨字符类型，比如汉字+平假名或平假名+片假名。
-    # 这是一个基于全字节编码的模型，不需要 <unk> 标记。
-    # 与 UTF 编码无关，如2字节和3字节字符。
-    # 异形文字被转换为相同的 token_id。
-    # 表情符号和表情符号被分组为12种特殊标签。
-    
-    Example:
-    
-    # 导入 GPTNeoXJapaneseTokenizer 类
-    >>> from transformers import GPTNeoXJapaneseTokenizer
-    
-    # 使用预训练模型 'abeja/gpt-neox-japanese-2.7b' 初始化 tokenizer 对象
-    >>> tokenizer = GPTNeoXJapaneseTokenizer.from_pretrained("abeja/gpt-neox-japanese-2.7b")
-    # 你可以确认 "慶応" 和 "慶應" 都被编码为 17749
-    >>> tokenizer("吾輩は猫である🐯。実は慶応(慶應)大学出身")["input_ids"]
-    [30014, 26883, 26638, 27228, 25, 26650, 31732, 31679, 27809, 26638, 17749, 31592, 17749, 31593, 321, 1281]
-    
-    # "慶応" 和 "慶應" 都被解码为 "慶応"
-    >>> tokenizer.decode(tokenizer("吾輩は猫である🐯。実は慶応(慶應)大学出身")["input_ids"])
-    '吾輩は猫である🐯。実は慶応(慶応)大学出身'
-    
-    Args:
-        vocab_file (`str`):
-            词汇表文件的路径。
-        emoji_file (`str`):
-            表情符号文件的路径。
-        unk_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            未知 token。词汇表中没有的 token 无法转换为 ID，会被设置为这个 token。
-        pad_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            用于填充的 token。
-        bos_token (`str`, *optional*, defaults to `"<|startoftext|>"`):
-            序列开始的 token。
-        eos_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            序列结束的 token。
-        do_clean_text (`bool`, *optional*, defaults to `False`):
-            是否对文本进行清理，包括 URL、EMAIL、TEL、日文日期和日文价格。
-    
+    这个标记生成器继承自[`PreTrainedTokenizer`]，基于日本特殊的子词编码，该编码在此代码库中使用
+    （https://github.com/tanreinama/Japanese-BPEEncoder_V2）。详细信息请参阅该代码库。
+    日语词汇相对较大，并且单词之间没有分隔。此外，语言是由平假名、片假名和汉字组成，
+    并且经常使用"1"和"①"等变体。为了应对这些情况，这个标记生成器具有以下功能：
+    - 逐字子词分割，介于字节字符串和形态分析之间。
     """
+    # 导入所需的GPTNeoXJapaneseTokenizer类
+    from transformers import GPTNeoXJapaneseTokenizer
     
-    # 定义一些类属性
-    vocab_files_names = VOCAB_FILES_NAMES
-    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    model_input_names = ["input_ids", "attention_mask"]
+    # 定义GPTNeoXJapaneseTokenizer类，继承自Tokenizer类
+    class GPTNeoXJapaneseTokenizer:
+        # 类变量：定义词汇文件名列表
+        vocab_files_names = VOCAB_FILES_NAMES
+        # 类变量：定义预训练词汇文件映射
+        pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+        # 类变量：定义最大模型输入尺寸
+        max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+        # 类变量：定义模型输入名称列表
+        model_input_names = ["input_ids", "attention_mask"]
     
-    def __init__(
-        self,
-        vocab_file,
-        emoji_file,
-        unk_token="<|endoftext|>",
-        pad_token="<|endoftext|>",
-        bos_token="<|startoftext|>",
-        eos_token="<|endoftext|>",
-        do_clean_text=False,
-        **kwargs,
+        # 初始化方法，接受多个参数
+        def __init__(
+            self,
+            vocab_file,         # 词汇文件路径
+            emoji_file,         # Emoji文件路径
+            unk_token="<|endoftext|>",  # 未知标记的默认值
+            pad_token="<|endoftext|>",  # 填充标记的默认值
+            bos_token="<|startoftext|>",    # 序列开始标记的默认值
+            eos_token="<|endoftext|>",  # 序列结束标记的默认值
+            do_clean_text=False,    # 是否清理文本的标志，默认为False
+            **kwargs,   # 其他关键字参数
+        ):
+            pass    # 初始化方法暂不做任何操作，保留扩展空间
     ):
-        # 如果词汇文件不存在，引发 ValueError 异常
+        # 检查词汇文件是否存在，若不存在则抛出数值错误，指明路径，并建议从预训练模型加载
         if not os.path.isfile(vocab_file):
             raise ValueError(
                 f"Can't find a vocabulary file at path '{vocab_file}'. To load the vocabulary from a Google pretrained"
                 " model use `tokenizer = GPTNeoXJapaneseokenizer.from_pretrained(PRETRAINED_MODEL_NAME)`"
             )
-        # 如果表情文件不存在，引发 ValueError 异常
+        # 检查表情文件是否存在，若不存在则抛出数值错误，指明路径，并建议从预训练模型加载
         if not os.path.isfile(emoji_file):
             raise ValueError(
-                f"Can't find a emoji file at path '{emoji_file}'. To load the emoji information from a Google"
+                f"Can't find an emoji file at path '{emoji_file}'. To load the emoji information from a Google"
                 " pretrained model use `tokenizer = GPTNeoXJapaneseokenizer.from_pretrained(PRETRAINED_MODEL_NAME)`"
             )
-        # 初始化参数
+        # 设定是否进行文本清理的标志位
         self.do_clean_text = do_clean_text
-        # 加载词汇表和表情信息
+        # 载入词汇和表情数据到相应的属性中
         self.vocab, self.raw_vocab, self.ids_to_tokens, self.emoji = load_vocab_and_emoji(vocab_file, emoji_file)
-        # 创建 SubWordJapaneseTokenizer 对象
+        # 初始化日语分词器，并传入必要的词汇、词汇到标记的映射、表情数据
         self.subword_tokenizer = SubWordJapaneseTokenizer(
             vocab=self.vocab, ids_to_tokens=self.ids_to_tokens, emoji=self.emoji
         )
-        # 调用父类的初始化方法
+        # 调用父类初始化方法，传入通用的参数及kwargs
         super().__init__(
             unk_token=unk_token,
             pad_token=pad_token,
@@ -195,30 +143,30 @@ class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
 
     @property
     def vocab_size(self):
-        # 返回词汇表大小
+        # 返回词汇表大小，即 raw_vocab 的长度
         return len(self.raw_vocab)
 
     def get_vocab(self):
-        # 返回词汇表以及添加的标记编码的字典
+        # 返回原始词汇表和添加的特殊标记编码的字典
         return dict(self.raw_vocab, **self.added_tokens_encoder)
 
     def _tokenize(self, text):
-        # 使用子词级别的分词器对文本进行分词
+        # 使用子词日语分词器对文本进行分词处理，根据 do_clean_text 的设置决定是否进行文本清理
         return self.subword_tokenizer.tokenize(text, clean=self.do_clean_text)
 
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
-        # 将 token 转换为对应的 id
+        # 将给定的 token 转换成其对应的 id，若找不到则使用 unk_token 的 id
         return self.vocab.get(token, self.vocab.get(self.unk_token))
 
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
-        # 将索引转换为对应的 token
+        # 将给定的 index 转换成其对应的 token
         return self.subword_tokenizer.convert_id_to_token(index)
 
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
-        # 将一系列 token 转换为单个字符串
+        # 将一系列的 token 转换成单个字符串，并去除首尾空格
         out_string = "".join(tokens).strip()
         return out_string
 
@@ -227,7 +175,7 @@ class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
         """
         A simple chat template that just adds BOS/EOS tokens around messages while discarding role information.
         """
-        # 返回默认的聊天模板，并发出警告
+        # 若未定义聊天模板，则发出警告并使用默认模板，返回该模板字符串
         logger.warning_once(
             "\nNo chat template is defined for this tokenizer - using the default template "
             f"for the {self.__class__.__name__} class. If the default is not appropriate for "
@@ -240,11 +188,11 @@ class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
             "{% endfor %}"
             "{% if add_generation_prompt %} {{ bos_token + eos_token }} {% endif %}"
         )
-    # 保存词汇表和表情符号到指定目录，返回保存的文件路径
+    # 定义一个方法用于保存词汇表到指定目录
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 初始化索引
+        # 初始化索引为0
         index = 0
-        # 判断保存目录是否存在
+        # 检查保存目录是否存在
         if os.path.isdir(save_directory):
             # 构建词汇表文件路径
             vocab_file = os.path.join(
@@ -255,7 +203,7 @@ class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
                 save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["emoji_file"]
             )
         else:
-            # 构建词汇表文件路径
+            # 若保存目录不存在，则在文件名前加上前缀，构建词汇表文件路径
             vocab_file = (
                 (filename_prefix + "-" if filename_prefix else "") + save_directory + VOCAB_FILES_NAMES["vocab_file"]
             )
@@ -263,24 +211,27 @@ class GPTNeoXJapaneseTokenizer(PreTrainedTokenizer):
             emoji_file = (
                 (filename_prefix + "-" if filename_prefix else "") + save_directory + VOCAB_FILES_NAMES["emoji_file"]
             )
-        # 打开词汇表文件，写入词汇表内容
+        
+        # 打开词汇表文件，使用utf-8编码方式写入数据
         with open(vocab_file, "w", encoding="utf-8") as writer:
-            # 遍历词汇表中的索引和词汇
+            # 遍历词汇表中的token索引和token内容
             for token_index, token in self.ids_to_tokens.items():
-                # 检查索引是否连续
+                # 检查索引是否连续，若不连续则发出警告
                 if index != token_index:
                     logger.warning(
                         f"Saving vocabulary to {vocab_file}: vocabulary indices are not consecutive."
                         " Please check that the vocabulary is not corrupted!"
                     )
                     index = token_index
-                # 写入词汇
+                # 将token内容以逗号分隔写入文件，并换行
                 writer.write(",".join(token) + "\n")
+                # 更新索引
                 index += 1
-        # 打开表情符号文件，写入表情符号内容
+        
+        # 打开表情符号文件，使用utf-8编码方式写入JSON格式的表情符号数据
         with open(emoji_file, "w", encoding="utf-8") as writer:
-            # 将表情符号内容写入文件
             json.dump(self.emoji, writer)
+        
         # 返回保存的词汇表文件路径和表情符号文件路径
         return vocab_file, emoji_file
 class SubWordJapaneseTokenizer(object):
@@ -308,10 +259,11 @@ class SubWordJapaneseTokenizer(object):
     """
 
     def __init__(self, vocab, ids_to_tokens, emoji):
-        self.vocab = vocab  # same as swe
-        self.ids_to_tokens = ids_to_tokens  # same as bpe
-        self.emoji = emoji
-        self.maxlen = np.max([len(w) for w in self.vocab.keys()])
+        self.vocab = vocab  # 词汇表，与 swe 相同
+        self.ids_to_tokens = ids_to_tokens  # id 到 token 映射，与 bpe 相同
+        self.emoji = emoji  # 表情符号
+        self.maxlen = np.max([len(w) for w in self.vocab.keys()])  # 计算词汇表中最长词的长度
+        # 定义多个正则表达式用于匹配特定的文本模式
         self.content_repatter1 = re.compile(r"(https?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)")
         self.content_repatter2 = re.compile(r"[A-Za-z0-9\._+]*@[\-_0-9A-Za-z]+(\.[A-Za-z]+)*")
         self.content_repatter3 = re.compile(r"[\(]{0,1}[0-9]{2,4}[\)\-\(]{0,1}[0-9]{2,4}[\)\-]{0,1}[0-9]{3,4}")
@@ -326,152 +278,172 @@ class SubWordJapaneseTokenizer(object):
         )
         keisen = "─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿"
         blocks = "▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟"
-        self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})
+        self.content_trans1 = str.maketrans({k: "<BLOCK>" for k in keisen + blocks})  # 定义字符转换表，将一些特定字符替换为"<BLOCK>"
 
     def __len__(self):
-        return len(self.ids_to_tokens)
-    # 清洗文本内容，替换特定模式的内容为指定标记
+        return len(self.ids_to_tokens)  # 返回 token 到 id 映射的长度
+    # 清理文本内容，替换内容中的特定模式
     def clean_text(self, content):
-        # 使用正则表达式1替换内容中的URL为"<URL>"
+        # 将内容中匹配到的 URL 替换为 "<URL>"
         content = self.content_repatter1.sub("<URL>", content)
-        # 使用正则表达式2替换内容中的EMAIL为"<EMAIL>"
+        # 将内容中匹配到的 EMAIL 替换为 "<EMAIL>"
         content = self.content_repatter2.sub("<EMAIL>", content)
-        # 使用正则表达式3替换内容中的TEL为"<TEL>"
+        # 将内容中匹配到的电话号码替换为 "<TEL>"
         content = self.content_repatter3.sub("<TEL>", content)
-        # 使用正则表达式4替换内容中的DATE为"<DATE>"
+        # 将内容中匹配到的日期替换为 "<DATE>"
         content = self.content_repatter4.sub("<DATE>", content)
-        # 使用正则表达式5替换内容中的DATE为"<DATE>"
+        # 再次将内容中匹配到的日期替换为 "<DATE>"
         content = self.content_repatter5.sub("<DATE>", content)
-        # 使用正则表达式6替换内容中的PRICE为"<PRICE>"
+        # 将内容中匹配到的价格替换为 "<PRICE>"
         content = self.content_repatter6.sub("<PRICE>", content)
-        # 使用content_trans1对content进行翻译
+        # 使用指定的字符映射表进行字符转换
         content = content.translate(self.content_trans1)
-        # 循环直到content中不再包含"<BLOCK><BLOCK>"
+        # 反复检查并替换连续的 "<BLOCK><BLOCK>" 为单个 "<BLOCK>"
         while "<BLOCK><BLOCK>" in content:
             content = content.replace("<BLOCK><BLOCK>", "<BLOCK>")
-        # 返回清洗后的内容
+        # 返回清理后的内容
         return content
-    # 将空格替换为"<SP>"
-    text = text.replace(" ", "<SP>")
-    # 将全角空格替换为"<SP>"
-    text = text.replace("　", "<SP>")
-    # 将换行符替换为"<BR>"
-    text = text.replace("\r\n", "<BR>")
-    text = text.replace("\n", "<BR>")
-    text = text.replace("\r", "<BR>")
-    # 将制表符替换为"<TAB>"
-    text = text.replace("\t", "<TAB>")
-    # 将特殊符号替换为对应的字符
-    text = text.replace("—", "ー")
-    text = text.replace("−", "ー")
-    
-    # 遍历表情字典，将文本中的表情符号替换为对应的字符
-    for k, v in self.emoji["emoji"].items():
-        if k in text:
-            text = text.replace(k, v)
-    
-    # 如果需要清洗文本，则调用clean_text方法进行清洗
-    if clean:
-        text = self.clean_text(text)
-
-    # 检查是否为特殊符号
-    def check_simbol(x):
-        # 将字符编码为字节流
-        e = x.encode()
-        if len(x) == 1 and len(e) == 2:
-            c = (int(e[0]) << 8) + int(e[1])
-            if (
-                (c >= 0xC2A1 and c <= 0xC2BF)
-                or (c >= 0xC780 and c <= 0xC783)
-                or (c >= 0xCAB9 and c <= 0xCBBF)
-                or (c >= 0xCC80 and c <= 0xCDA2)
-            ):
-                return True
-        return False
-
-    # 检查是否为特殊符号
-    def checku2e(x):
-        # 将字符编码为字节流
-        e = x.encode()
-        if len(x) == 1 and len(e) == 3:
-            c = (int(e[0]) << 16) + (int(e[1]) << 8) + int(e[2])
-            if c >= 0xE28080 and c <= 0xE2B07F:
-                return True
-        return False
-
-    pos = 0
-    result = []
-    # 循环处理文本
-    while pos < len(text):
-        # 设置结束位置
-        end = min(len(text), pos + self.maxlen + 1) if text[pos] == "<" else pos + 3
-        candidates = []  # 存储候选词的列表 (token_id, token, pos)
-        # 从结束位置向前遍历
-        for e in range(end, pos, -1):
-            wd = text[pos:e]
-            # 如果词在词汇表中，则加入候选列表
-            if wd in self.vocab:
-                if wd[0] == "<" and len(wd) > 2:
-                    candidates = [(self.vocab[wd], wd, e)]
-                    break
-                else:
-                    candidates.append((self.vocab[wd], wd, e))
-        if len(candidates) > 0:
-            # 选择最小的token_id
-            _, wd, e = sorted(candidates, key=lambda x: x[0])[0]
-            result.append(wd)
-            pos = e
-        else:
-            end = pos + 1
-            wd = text[pos:end]
-            # 检查是否为特殊符号
-            if check_simbol(wd):
-                result.append("<KIGOU>")
-            # 检查是否为特殊符号
-            elif checku2e(wd):
-                result.append("<U2000U2BFF>")
+    # 定义一个方法，用于将文本进行分词处理，并可选地进行清理操作
+    def tokenize(self, text, clean=False):
+        # 将空格替换为特殊标记"<SP>"
+        text = text.replace(" ", "<SP>")
+        # 将全角空格替换为特殊标记"<SP>"
+        text = text.replace("　", "<SP>")
+        # 将Windows风格的换行符替换为特殊标记"<BR>"
+        text = text.replace("\r\n", "<BR>")
+        # 将Unix风格的换行符替换为特殊标记"<BR>"
+        text = text.replace("\n", "<BR>")
+        # 将老式Mac风格的换行符替换为特殊标记"<BR>"
+        text = text.replace("\r", "<BR>")
+        # 将制表符替换为特殊标记"<TAB>"
+        text = text.replace("\t", "<TAB>")
+        # 将特定字符替换为统一的字符"ー"
+        text = text.replace("—", "ー")
+        text = text.replace("−", "ー")
+        
+        # 替换文本中的表情符号为对应的Unicode字符串
+        for k, v in self.emoji["emoji"].items():
+            if k in text:
+                text = text.replace(k, v)
+        
+        # 若clean参数为True，则调用clean_text方法清理文本
+        if clean:
+            text = self.clean_text(text)
+        
+        # 定义一个内部函数，用于检查是否为特定的符号字符
+        def check_simbol(x):
+            e = x.encode()
+            if len(x) == 1 and len(e) == 2:
+                c = (int(e[0]) << 8) + int(e[1])
+                # 判断是否符合日语、朝鲜语等特定范围内的字符编码
+                if (
+                    (c >= 0xC2A1 and c <= 0xC2BF)
+                    or (c >= 0xC780 and c <= 0xC783)
+                    or (c >= 0xCAB9 and c <= 0xCBBF)
+                    or (c >= 0xCC80 and c <= 0xCDA2)
+                ):
+                    return True
+            return False
+        
+        # 定义一个内部函数，用于检查是否为范围内的双字节字符
+        def checku2e(x):
+            e = x.encode()
+            if len(x) == 1 and len(e) == 3:
+                c = (int(e[0]) << 16) + (int(e[1]) << 8) + int(e[2])
+                # 判断是否为Unicode范围内的字符
+                if c >= 0xE28080 and c <= 0xE2B07F:
+                    return True
+            return False
+        
+        # 初始化位置变量
+        pos = 0
+        # 初始化结果列表
+        result = []
+        
+        # 开始处理文本
+        while pos < len(text):
+            # 计算当前处理的结束位置
+            end = min(len(text), pos + self.maxlen + 1) if text[pos] == "<" else pos + 3
+            # 候选列表用于存储可能的token及其信息
+            candidates = []  # (token_id, token, pos)
+            
+            # 从最大长度向当前位置遍历，找到最长的合法token
+            for e in range(end, pos, -1):
+                wd = text[pos:e]
+                if wd in self.vocab:
+                    if wd[0] == "<" and len(wd) > 2:
+                        candidates = [(self.vocab[wd], wd, e)]
+                        break
+                    else:
+                        candidates.append((self.vocab[wd], wd, e))
+            
+            # 若候选列表不为空，则选择token_id最小的token作为结果之一
+            if len(candidates) > 0:
+                _, wd, e = sorted(candidates, key=lambda x: x[0])[0]
+                result.append(wd)
+                pos = e
             else:
-                # 将字符编码为utf-8字节流
-                for i in wd.encode("utf-8"):
-                    result.append("<|byte%d|>" % i)
-            pos = end
-    return result
-    # 将给定索引转换为对应的标记
+                # 若无合法token，则处理单个字符
+                end = pos + 1
+                wd = text[pos:end]
+                # 检查是否为特定符号，若是则添加"<KIGOU>"标记
+                if check_simbol(wd):
+                    result.append("<KIGOU>")
+                # 检查是否为范围内的双字节字符，若是则添加"<U2000U2BFF>"标记
+                elif checku2e(wd):
+                    result.append("<U2000U2BFF>")
+                # 否则，按字节添加"<|byte%d|>"的标记
+                else:
+                    for i in wd.encode("utf-8"):
+                        result.append("<|byte%d|>" % i)
+                pos = end
+        
+        # 返回处理后的结果列表
+        return result
+    # 将给定的索引转换为对应的文本标记
     def convert_id_to_token(self, index, breakline="\n"):
-        # 初始化空列表用于存储单词和字节标记
+        # 初始化一个空列表，用于存储最终的文本标记
         words = []
+        # 初始化一个空列表，用于临时存储字节标记
         byte_tokens = []
-        # 获取索引对应的单词
+        # 获取索引处的标记
         word = self.ids_to_tokens[index][0]
-        # 检查是否为字节标记
+        
+        # 检查是否是字节标记
         if word[:6] == "<|byte" and word[-2:] == "|>":
+            # 提取字节标记的值并添加到字节标记列表中
             byte_tokens.append(int(word[6:-2]))
         else:
-            # 如果存在字节标记，则将其解码为字符串并添加到单词列表中
+            # 如果之前有未处理的字节标记，则解码并添加到最终文本标记列表中
             if len(byte_tokens) > 0:
                 words.append(bytearray(byte_tokens).decode("utf-8", errors="replace"))
                 byte_tokens = []
-            # 根据不同的特殊标记进行处理
+            
+            # 根据特定标记进行处理
             if word[:7] == "<|emoji" and word[-2:] == "|>":
+                # 如果是表情符号标记，则根据索引获取对应的表情符号并添加到文本标记列表中
                 words.append(self.emoji["emoji_inv"][word])
             elif word == "<SP>":
-                words.append(" ")
+                words.append(" ")  # 空格标记
             elif word == "<BR>":
-                words.append(breakline)
+                words.append(breakline)  # 换行符标记
             elif word == "<TAB>":
-                words.append("\t")
+                words.append("\t")  # 制表符标记
             elif word == "<BLOCK>":
-                words.append("▀")
+                words.append("▀")  # 方块字符标记
             elif word == "<KIGOU>":
-                words.append("ǀ")
+                words.append("ǀ")  # 竖线符号标记
             elif word == "<U2000U2BFF>":
-                words.append("‖")
+                words.append("‖")  # 双竖线符号标记
             else:
-                words.append(word)
-        # 如果存在未处理的字节标记，则解码为字符串并添加到单词列表中
+                words.append(word)  # 普通文本标记
+        
+        # 处理最后可能残留的字节标记并添加到文本标记列表中
         if len(byte_tokens) > 0:
             words.append(bytearray(byte_tokens).decode("utf-8", errors="replace"))
-        # 将单词列表连接成文本并返回
+        
+        # 将所有文本标记连接成一个字符串
         text = "".join(words)
+        # 返回转换后的文本字符串
         return text
 ```

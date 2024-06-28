@@ -1,38 +1,52 @@
 # `.\models\gptsan_japanese\configuration_gptsan_japanese.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权归 HuggingFace 公司所有，2023 年
-#
-# 根据 Apache 许可证 2.0 版本使用此文件；
-# 除非符合许可证的条款，否则不得使用此文件。
-# 您可以在以下网址获得许可证的副本：
-#
+```
+# coding=utf-8
+# 指定代码文件的编码格式为UTF-8
+
+# Copyright 2023, HuggingFace Inc.
+# 版权声明，版权归HuggingFace Inc.所有，日期为2023年
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache License, Version 2.0 许可证授权使用本文件
+
+# you may not use this file except in compliance with the License.
+# 除非遵守许可证的规定，否则不得使用本文件
+
+# You may obtain a copy of the License at
+# 可以在以下网址获取许可证的副本
+
 #     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或以书面形式同意，否则未经许可的软件
-# 基于 "原样" 分发，在任何情况下都没有担保或条件，
-# 无论是明示的还是隐含的担保或条件。
-# 请查阅许可证以查看特定语言的权限和限制。
-"""  GPTSAN-japanese 模型配置"""
-# 导入预训练配置类
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 除非法律要求或书面同意，否则按"原样"分发软件，无论是明示还是隐含的，不提供任何担保或条件
+
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 请查阅许可证了解特定语言的授权内容及限制
+
+"""  GPTSAN-japanese model configuration"""
+# 模型配置的文档字符串说明，这是GPTSAN-japanese模型的配置
+
 from ...configuration_utils import PretrainedConfig
-# 导入日志工具
+# 导入PretrainedConfig类，用于存储预训练配置信息
+
 from ...utils import logging
+# 导入logging工具类，用于记录日志
 
-
-# 获取 logger 对象
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器对象
 
-# 预训练配置文件映射
 GPTSAN_JAPANESE_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "tanreinama/GPTSAN-2.8B-spout_is_uniform": (
         "https://huggingface.co/tanreinama/GPTSAN-2.8B-spout_is_uniform/resolve/main/config.json"
     ),
 }
+# 预训练配置映射表，将模型名称映射到其配置文件的URL
 
-
-# GPTSanJapanese 配置类
 class GPTSanJapaneseConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`GPTSanJapaneseModel`]. It is used to instantiate
@@ -44,21 +58,23 @@ class GPTSanJapaneseConfig(PretrainedConfig):
     documentation from [`PretrainedConfig`] for more information.
 
     """
-    
-    # 模型类型
+    # GPTSanJapaneseConfig类的文档字符串，用于存储GPTSanJapaneseModel的配置信息
+
     model_type = "gptsan-japanese"
-    # 推断时需要忽略的键
+    # 模型类型定义为"gptsan-japanese"
+
     keys_to_ignore_at_inference = [
         "past_key_values",
     ]
-    # 属性映射
+    # 推理过程中忽略的键列表，在推理时不使用"past_key_values"
+
     attribute_map = {
         "hidden_size": "d_model",
         "num_attention_heads": "num_heads",
         "num_hidden_layers": "num_layers",
     }
+    # 属性映射字典，将配置中的部分属性名映射为其他名称，如"hidden_size"映射为"d_model"
 
-    # 初始化方法
     def __init__(
         self,
         vocab_size=36000,
@@ -88,54 +104,34 @@ class GPTSanJapaneseConfig(PretrainedConfig):
         eos_token_id=35999,
         **kwargs,
     ):
-        # 设置模型的词汇量大小
-        self.vocab_size = vocab_size
-        # 设置模型的最大位置编码长度
-        self.max_position_embeddings = max_position_embeddings
-        # 设置模型的隐藏层大小
-        self.d_model = d_model
-        # 设置模型前馈网络隐藏层大小
-        self.d_ff = d_ff
-        # 设置模型扩展输出的隐藏层大小
-        self.d_ext = d_ext
-        # 设置模型选择器输出的隐藏层大小
-        self.d_spout = d_spout
-        # 设置模型中的开关层数量
-        self.num_switch_layers = num_switch_layers
-        # 设置模型中扩展层数量
-        self.num_ext_layers = num_ext_layers
-        # 设置模型的总层数量
-        self.num_layers = num_switch_layers + num_ext_layers
-        # 设置模型注意力头的数量
-        self.num_heads = num_heads
-        # 设置模型的专家数量
-        self.num_experts = num_experts
-        # 设置模型每个专家的容量
-        self.expert_capacity = expert_capacity
-        # 设置模型的dropout率
-        self.dropout_rate = dropout_rate
-        # 设置层归一化的 epsilon 值
-        self.layer_norm_epsilon = layer_norm_epsilon
-        # 设置路由器的偏置
-        self.router_bias = router_bias
-        # 设置路由器的抖动噪声
-        self.router_jitter_noise = router_jitter_noise
-        # 设置路由器的数据类型
-        self.router_dtype = router_dtype
-        # 设置路由器是否忽略填充标记
-        self.router_ignore_padding_tokens = router_ignore_padding_tokens
-        # 设置是否输出隐藏状态
-        self.output_hidden_states = output_hidden_states
-        # 设置是否输出注意力分布
-        self.output_attentions = output_attentions
-        # 设置初始化因子
-        self.initializer_factor = initializer_factor
-        # 设置是否输出路由器的 logits
-        self.output_router_logits = output_router_logits
-        # 设置是否使用缓存
-        self.use_cache = use_cache
+        # 初始化方法，用于创建一个新的GPTSanJapaneseConfig对象，设置模型的各种配置参数及其默认值
+        ):
+        # 初始化 TransformerXLConfig 类的实例，设定模型的各种超参数
+        self.vocab_size = vocab_size  # 词汇表大小
+        self.max_position_embeddings = max_position_embeddings  # 最大位置嵌入数
+        self.d_model = d_model  # 模型的隐藏层大小
+        self.d_ff = d_ff  # 前向传播神经网络中间层的大小
+        self.d_ext = d_ext  # 扩展层的大小
+        self.d_spout = d_spout  # 接口层的大小
+        self.num_switch_layers = num_switch_layers  # 切换层的数量
+        self.num_ext_layers = num_ext_layers  # 扩展层的数量
+        self.num_layers = num_switch_layers + num_ext_layers  # 总层数
+        self.num_heads = num_heads  # 注意力头的数量
+        self.num_experts = num_experts  # 专家的数量
+        self.expert_capacity = expert_capacity  # 专家的容量
+        self.dropout_rate = dropout_rate  # 丢弃率
+        self.layer_norm_epsilon = layer_norm_epsilon  # 层归一化的 epsilon 参数
+        self.router_bias = router_bias  # 路由器的偏置
+        self.router_jitter_noise = router_jitter_noise  # 路由器的抖动噪声
+        self.router_dtype = router_dtype  # 路由器的数据类型
+        self.router_ignore_padding_tokens = router_ignore_padding_tokens  # 是否忽略填充标记的路由
+        self.output_hidden_states = output_hidden_states  # 是否输出隐藏状态
+        self.output_attentions = output_attentions  # 是否输出注意力权重
+        self.initializer_factor = initializer_factor  # 初始化因子
+        self.output_router_logits = output_router_logits  # 是否输出路由器的对数
+        self.use_cache = use_cache  # 是否使用缓存
 
-        # 调用父类的构造函数，并传递相关参数
+        # 调用父类 TransformerXLConfig 的初始化方法，设置分隔符、填充符、终止符等参数
         super().__init__(
             separator_token_id=separator_token_id,
             pad_token_id=pad_token_id,

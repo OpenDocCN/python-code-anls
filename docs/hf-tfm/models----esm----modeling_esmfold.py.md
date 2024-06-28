@@ -1,18 +1,21 @@
 # `.\models\esm\modeling_esmfold.py`
 
-```py
-# 编码声明，指明代码文件采用的编码格式为utf-8
-# 版权声明
-import math  # 导入 math 模块
-import sys  # 导入 sys 模块
-from dataclasses import dataclass  # 从 dataclasses 模块中导入 dataclass 装饰器
-from functools import partial  # 从 functools 模块中导入 partial 函数
-from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union  # 从 typing 模块中导入多种类型
-import numpy as np  # 导入 numpy 模块并将其重命名为 np
-import torch  # 导入 torch 模块
-import torch.nn as nn  # 导入 torch.nn 模块并将其重命名为 nn
-from torch.nn import LayerNorm  # 从 torch.nn 模块中导入 LayerNorm 类
-# 导入相关模块和函数
+```
+# 设置编码格式为 UTF-8
+# 版权声明和许可证信息，表明此代码的使用和分发需要遵循 Apache License, Version 2.0
+# 导入必要的库和模块
+import math
+import sys
+from dataclasses import dataclass
+from functools import partial
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
+
+import numpy as np  # 导入 NumPy 库，用于数值计算
+import torch  # 导入 PyTorch 深度学习框架
+import torch.nn as nn  # 导入 PyTorch 的神经网络模块
+from torch.nn import LayerNorm  # 导入 PyTorch 的 LayerNorm 模块
+
+# 导入相关的模块和函数，用于 DeepSpeed 集成、模型输出、文档字符串处理等
 from ...integrations.deepspeed import is_deepspeed_available
 from ...modeling_outputs import ModelOutput
 from ...utils import (
@@ -23,8 +26,10 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-# 从 .modeling_esm 模块中导入 EsmConfig, ESM_START_DOCSTRING, EsmModel, EsmPreTrainedModel
+# 导入 ESM 模型的配置文件和模型定义
+from .configuration_esm import EsmConfig
 from .modeling_esm import ESM_START_DOCSTRING, EsmModel, EsmPreTrainedModel
+# 导入与蛋白质折叠相关的工具函数和类
 from .openfold_utils import (
     OFProtein,
     Rigid,
@@ -40,121 +45,114 @@ from .openfold_utils import (
     torsion_angles_to_frames,
 )
 
-# 获取logger对象
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
-# 用于文档的检查点
+# 文档中的模型检查点和配置信息
 _CHECKPOINT_FOR_DOC = "facebook/esmfold_v1"
-# 用于文档的配置
 _CONFIG_FOR_DOC = "EsmConfig"
 
 @dataclass
 class EsmForProteinFoldingOutput(ModelOutput):
     """
-    Output type of [`EsmForProteinFoldingOutput`].
-    # 定义函数的参数列表，说明每个参数的类型和含义
+    [`EsmForProteinFoldingOutput`] 的输出类型。
+    """
     Args:
         frames (`torch.FloatTensor`):
             输出帧。
+            模型预测的帧输出。
         sidechain_frames (`torch.FloatTensor`):
-            输出侧链帧。
+            侧链帧。
+            模型预测的侧链帧输出。
         unnormalized_angles (`torch.FloatTensor`):
-            预测的未归一化的主链和侧链扭转角度。
+            预测的未归一化主链和侧链扭转角度。
+            模型预测的未归一化主链和侧链扭转角度。
         angles (`torch.FloatTensor`):
             预测的主链和侧链扭转角度。
+            模型预测的主链和侧链扭转角度。
         positions (`torch.FloatTensor`):
             预测的主链和侧链原子的位置。
+            模型预测的主链和侧链原子位置。
         states (`torch.FloatTensor`):
-            蛋白质折叠主干中的隐藏状态。
+            蛋白质折叠主干的隐藏状态。
+            来自蛋白质折叠主干的隐藏状态。
         s_s (`torch.FloatTensor`):
-            通过连接 ESM-2 LM stem 每层的隐藏状态导出的每个残基的嵌入。
+            每个残基嵌入。
+            通过连接ESM-2 LM stem每层的隐藏状态得到的每个残基嵌入。
         s_z (`torch.FloatTensor`):
             成对残基嵌入。
+            成对残基嵌入。
         distogram_logits (`torch.FloatTensor`):
-            用于计算残基距离的直方图的输入 logits。
+            距离直方图的输入对数。
+            用于计算残基距离的输入对数。
         lm_logits (`torch.FloatTensor`):
-            ESM-2 蛋白质语言模型 stem 输出的 logits。
+            ESM-2蛋白质语言模型主干的输出对数。
+            ESM-2蛋白质语言模型主干的输出对数。
         aatype (`torch.FloatTensor`):
-            输入的氨基酸 (AlphaFold2 索引)。
+            输入的氨基酸（AlphaFold2索引）。
+            输入的氨基酸（AlphaFold2索引）。
         atom14_atom_exists (`torch.FloatTensor`):
-            每个原子在 atom14 表示中是否存在。
+            每个原子在atom14表示中是否存在。
+            每个原子在atom14表示中是否存在。
         residx_atom14_to_atom37 (`torch.FloatTensor`):
-            在 atom14 和 atom37 表示之间的原子映射。
+            atom14到atom37表示之间的映射。
+            atom14到atom37表示之间的映射。
         residx_atom37_to_atom14 (`torch.FloatTensor`):
-            在 atom37 和 atom14 表示之间的原子映射。
+            atom37到atom14表示之间的映射。
+            atom37到atom14表示之间的映射。
         atom37_atom_exists (`torch.FloatTensor`):
-            每个原子在 atom37 表示中是否存在。
+            每个原子在atom37表示中是否存在。
+            每个原子在atom37表示中是否存在。
         residue_index (`torch.FloatTensor`):
-            蛋白链中每个残基的索引。除非使用了内部填充标记，否则这将仅是从 0 到 `sequence_length` 的整数序列。
+            蛋白链中每个残基的索引。
+            蛋白链中每个残基的索引。
         lddt_head (`torch.FloatTensor`):
-            用于计算 plddt 的 lddt head 的原始输出。
+            lddt头部的原始输出。
+            用于计算plddt的lddt头部的原始输出。
         plddt (`torch.FloatTensor`):
-            每个残基的置信度分数。低置信度区域可能表示模型预测不确定的区域，或蛋白质结构失序的区域。
+            每个残基的置信度分数。
+            模型预测结构可能不确定或蛋白结构无序的区域可能表明低置信度的区域。
         ptm_logits (`torch.FloatTensor`):
-            用于计算 ptm 的原始 logits。
+            用于计算ptm的原始logits。
+            用于计算ptm的原始logits。
         ptm (`torch.FloatTensor`):
-            TM-score 输出，代表模型对整体结构的高级置信度。
+            TM-score输出，代表模型对整体结构的高级置信度。
+            TM-score输出，代表模型对整体结构的高级置信度。
         aligned_confidence_probs (`torch.FloatTensor`):
             对齐结构的每个残基置信度分数。
+            对齐结构的每个残基置信度分数。
         predicted_aligned_error (`torch.FloatTensor`):
-            模型预测值与真实值之间的预测误差。
+            模型预测与真实值之间的预测误差。
+            模型预测与真实值之间的预测误差。
         max_predicted_aligned_error (`torch.FloatTensor`):
             每个样本的最大预测误差。
-    # 定义一个变量 positions，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    positions: torch.FloatTensor = None
-    
-    # 定义一个变量 states，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    states: torch.FloatTensor = None
-    
-    # 定义一个变量 s_s，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    s_s: torch.FloatTensor = None
-    
-    # 定义一个变量 s_z，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    s_z: torch.FloatTensor = None
-    
-    # 定义一个变量 distogram_logits，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    distogram_logits: torch.FloatTensor = None
-    
-    # 定义一个变量 lm_logits，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    lm_logits: torch.FloatTensor = None
-    
-    # 定义一个变量 aatype，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    aatype: torch.FloatTensor = None
-    
-    # 定义一个变量 atom14_atom_exists，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    atom14_atom_exists: torch.FloatTensor = None
-    
-    # 定义一个变量 residx_atom14_to_atom37，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    residx_atom14_to_atom37: torch.FloatTensor = None
-    
-    # 定义一个变量 residx_atom37_to_atom14，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    residx_atom37_to_atom14: torch.FloatTensor = None
-    
-    # 定义一个变量 atom37_atom_exists，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    atom37_atom_exists: torch.FloatTensor = None
-    
-    # 定义一个变量 residue_index，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    residue_index: torch.FloatTensor = None
-    
-    # 定义一个变量 lddt_head，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    lddt_head: torch.FloatTensor = None
-    
-    # 定义一个变量 plddt，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    plddt: torch.FloatTensor = None
-    
-    # 定义一个变量 ptm_logits，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    ptm_logits: torch.FloatTensor = None
-    
-    # 定义一个变量 ptm，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    ptm: torch.FloatTensor = None
-    
-    # 定义一个变量 aligned_confidence_probs，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    aligned_confidence_probs: torch.FloatTensor = None
-    
-    # 定义一个变量 predicted_aligned_error，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    predicted_aligned_error: torch.FloatTensor = None
-    
-    # 定义一个变量 max_predicted_aligned_error，数据类型为 torch 中的浮点型张量，并将其初始化为 None
-    max_predicted_aligned_error: torch.FloatTensor = None
+            每个样本的最大预测误差。
+    """
+
+    frames: torch.FloatTensor = None
+    sidechain_frames: torch.FloatTensor = None
+    unnormalized_angles: torch.FloatTensor = None
+    angles: torch.FloatTensor = None
+    # 定义一系列变量，每个变量的类型均为 torch.FloatTensor，初始赋值为 None
+    positions: torch.FloatTensor = None  # 用于存储位置信息的张量
+    states: torch.FloatTensor = None  # 用于存储状态信息的张量
+    s_s: torch.FloatTensor = None  # 用于存储 s_s 信息的张量
+    s_z: torch.FloatTensor = None  # 用于存储 s_z 信息的张量
+    distogram_logits: torch.FloatTensor = None  # 用于存储距离直方图 logits 的张量
+    lm_logits: torch.FloatTensor = None  # 用于存储语言模型 logits 的张量
+    aatype: torch.FloatTensor = None  # 用于存储氨基酸类型的张量
+    atom14_atom_exists: torch.FloatTensor = None  # 用于存储 atom14 是否存在的张量
+    residx_atom14_to_atom37: torch.FloatTensor = None  # 用于存储 residue index 到 atom37 的映射的张量
+    residx_atom37_to_atom14: torch.FloatTensor = None  # 用于存储 residue index 到 atom14 的映射的张量
+    atom37_atom_exists: torch.FloatTensor = None  # 用于存储 atom37 是否存在的张量
+    residue_index: torch.FloatTensor = None  # 用于存储残基索引的张量
+    lddt_head: torch.FloatTensor = None  # 用于存储 lddt 头信息的张量
+    plddt: torch.FloatTensor = None  # 用于存储 plddt 信息的张量
+    ptm_logits: torch.FloatTensor = None  # 用于存储 ptm logits 的张量
+    ptm: torch.FloatTensor = None  # 用于存储 ptm 信息的张量
+    aligned_confidence_probs: torch.FloatTensor = None  # 用于存储对齐置信度概率的张量
+    predicted_aligned_error: torch.FloatTensor = None  # 用于存储预测的对齐误差的张量
+    max_predicted_aligned_error: torch.FloatTensor = None  # 用于存储最大预测对齐误差的张量
+# 定义一个多行文档字符串，描述了函数 `ESMFOLD_INPUTS_DOCSTRING` 的参数及其含义
 ESMFOLD_INPUTS_DOCSTRING = r"""
     Args:
         input_ids (`torch.LongTensor` of shape `({0})`):
@@ -189,131 +187,135 @@ ESMFOLD_INPUTS_DOCSTRING = r"""
 
 
 def is_fp16_enabled():
-    # 检查当前是否启用了FP16（半精度浮点数）计算
+    # 检查当前是否启用了 FP16 自动转换
     fp16_enabled = torch.get_autocast_gpu_dtype() == torch.float16
-    # 进一步检查自动混合精度计算是否已启用
     fp16_enabled = fp16_enabled and torch.is_autocast_enabled()
-
     return fp16_enabled
 
 
 def is_deepspeed_initialized():
-    # 检查是否导入了deepspeed模块
+    # 检查是否初始化了 DeepSpeed，如果 DeepSpeed 可用但未初始化则返回 False
     if is_deepspeed_available():
         return False
     else:
         try:
             import deepspeed
 
-            # 检查当前是否初始化了DeepSpeed
+            # 尝试调用 DeepSpeed 的初始化检查函数，部分版本可能不支持此功能
             return deepspeed.utils.is_initialized()
         except Exception:
+            # 捕获所有异常，返回 False 表示未初始化
             return False
 
 
 def collate_dense_tensors(samples: List[torch.Tensor], pad_v: float = 0) -> torch.Tensor:
     """
-    Takes a list of tensors with the following dimensions:
-        [(d_11, ..., d_1K),
-         (d_21, ..., d_2K), ..., (d_N1, ..., d_NK)]
-    and stack + pads them into a single tensor of:
-    (N, max_i=1,N { d_i1 }, ..., max_i=1,N {diK})
+    将一个张量列表堆叠并填充成一个单一张量，所有张量的维度必须一致。
+    参数：
+        samples: 包含多个张量的列表，每个张量的维度必须相同。
+        pad_v: 填充值，默认为 0。
+    返回：
+        堆叠并填充后的单一张量。
+    异常：
+        如果 samples 中张量的维度不一致，抛出 RuntimeError 异常。
     """
-    # 检查样本列表是否为空
     if len(samples) == 0:
-        return torch.Tensor()
-    # 检查样本张量的维度是否一致
+        return torch.Tensor()  # 如果 samples 列表为空，则返回空张量
+
     if len({x.dim() for x in samples}) != 1:
+        # 检查 samples 中张量的维度是否一致，不一致则抛出异常
         raise RuntimeError(f"Samples has varying dimensions: {[x.dim() for x in samples]}")
-    # 从样本中获取设备信息，假设所有样本在同一设备上
+    # 从 samples 中获取设备信息，假设所有样本都在同一设备上
     (device,) = tuple({x.device for x in samples})
-    # 获取样本的最大形状
+    
+    # 计算 samples 中每个样本的最大形状的每个维度的最大值
     max_shape = [max(lst) for lst in zip(*[x.shape for x in samples])]
-    # 创建一个形状为最大形状的空张量，使用样本的设备，数据类型为第一个样本的数据类型
+    
+    # 使用 torch.empty 创建一个与最大形状匹配的张量 result，长度为 len(samples)，数据类型与 samples[0] 相同，设备与 samples 相同
     result = torch.empty(len(samples), *max_shape, dtype=samples[0].dtype, device=device)
-    # 用填充值填充结果张量
+    
+    # 用 pad_v 填充 result 张量
     result.fill_(pad_v)
-    # 遍历所有样本
+    
+    # 遍历每个样本并将其复制到 result 张量的适当位置
     for i in range(len(samples)):
-        # 获取结果张量中对应的元素
-        result_i = result[i]
-        # 获取当前样本
-        t = samples[i]
-        # 将当前样本的值赋给结果张量中对应的位置
+        result_i = result[i]  # 获取 result 中的第 i 个子张量
+        t = samples[i]         # 获取第 i 个样本张量 t
+        # 将样本张量 t 复制到 result_i 的正确位置
         result_i[tuple(slice(0, k) for k in t.shape)] = t
-    # 返回结果张量
+    
+    # 返回填充后的 result 张量，其中包含了所有样本的数据
     return result
-# 定义函数 flatten_final_dims，将张量 t 最后的 no_dims 维度展平
+# 定义函数，用于将张量的最后几个维度展平成一个维度
 def flatten_final_dims(t: torch.Tensor, no_dims: int):
     return t.reshape(t.shape[:-no_dims] + (-1,))
 
 
-# 定义函数 permute_final_dims，对张量 tensor 进行维度置换
+# 定义函数，用于对张量的最后几个维度进行置换
 def permute_final_dims(tensor: torch.Tensor, inds: List[int]):
-    # 计算从最后向前数的维度索引
+    # 计算最后几个维度的起始索引
     zero_index = -1 * len(inds)
-    # 构造维度索引列表，首先是前面的维度，然后是待置换的维度
+    # 获取前面的维度索引列表
     first_inds = list(range(len(tensor.shape[:zero_index])))
-    # 执行置换操作
+    # 对张量进行置换操作
     return tensor.permute(first_inds + [zero_index + i for i in inds])
 
 
-# 定义函数 dict_multimap，对字典列表中的每个字典应用给定的函数
+# 定义函数，对多个字典中相同键的值应用指定的函数
 def dict_multimap(fn, dicts):
     # 获取第一个字典
     first = dicts[0]
-    # 初始化新字典
     new_dict = {}
     # 遍历第一个字典的键值对
     for k, v in first.items():
-        # 获取所有字典中相同键的值列表
+        # 收集所有字典中相同键的值列表
         all_v = [d[k] for d in dicts]
-        # 如果值是字典类型，则递归调用 dict_multimap
+        # 如果第一个字典中的值是字典类型，则递归调用dict_multimap函数
         if isinstance(v, dict):
             new_dict[k] = dict_multimap(fn, all_v)
         else:
-            # 否则应用给定的函数到值列表上
+            # 否则，对所有值应用给定的函数fn
             new_dict[k] = fn(all_v)
-    # 返回新字典
+    # 返回应用函数后的新字典
     return new_dict
 
 
-# 定义函数 trunc_normal_init_，使用截断正态分布初始化权重张量
+# 定义函数，使用截断正态分布初始化权重张量
 def trunc_normal_init_(weights, scale=1.0, fan="fan_in"):
-    # 获取权重张量的形状
     shape = weights.shape
-    # 计算标准差的缩放因子
+    # 计算缩放系数
     scale = scale / max(1, shape[1])
 
-    # 如果没有安装 scipy 库，则使用警告
+    # 检查是否存在SciPy库，如果不存在，则给出警告
     if not is_scipy_available():
         logger.warning(
             "This init requires scipy, but scipy was not found, default to an approximation that might not be"
             " equivalent."
         )
-        # 计算标准差并进行截断，然后填充权重张量
+        # 使用近似值初始化权重张量
         std = math.sqrt(scale)
         torch.nn.init.normal_(weights, std=std).clamp(min=0.0, max=2.0 * std)
 
     else:
         from scipy.stats import truncnorm
 
-        # 使用截断正态分布生成样本并填充权重张量
+        # 使用SciPy的截断正态分布生成权重样本
         std = math.sqrt(scale) / truncnorm.std(a=-2, b=2, loc=0, scale=1)
         samples = truncnorm.rvs(a=-2, b=2, loc=0, scale=std, size=weights.numel())
         samples = np.reshape(samples, shape)
+        # 将生成的样本复制到权重张量中
         weights.copy_(torch.tensor(samples, device=weights.device))
 
 
-# 定义函数 ipa_point_weights_init_，用给定的常数填充权重张量
+# 定义函数，使用指定值初始化权重张量
 def ipa_point_weights_init_(weights):
     with torch.no_grad():
-        # 使用 softplus 函数的反函数值填充权重张量
         softplus_inverse_1 = 0.541324854612918
+        # 用给定值填充权重张量
         weights.fill_(softplus_inverse_1)
 
 
-# 定义类 EsmFoldLinear，继承自 nn.Linear，具有内置的非标准初始化方法
+# 定义类，继承自torch.nn.Linear，实现了自定义的初始化方法
 class EsmFoldLinear(nn.Linear):
     """
     A Linear layer with built-in nonstandard initializations. Called just like torch.nn.Linear.
@@ -321,7 +323,6 @@ class EsmFoldLinear(nn.Linear):
     Implements the initializers in 1.11.4, plus some additional ones found in the code.
     """
 
-    # 初始化方法
     def __init__(
         self,
         in_dim: int,
@@ -329,6 +330,10 @@ class EsmFoldLinear(nn.Linear):
         bias: bool = True,
         init: str = "default",
         init_fn: Optional[Callable[[torch.Tensor, torch.Tensor], None]] = None,
+        # 继承父类构造方法，定义额外的初始化参数
+        **kwargs
+    ):
+        super().__init__(in_dim, out_dim, bias=bias, **kwargs)
     ):
         """
         Args:
@@ -337,88 +342,77 @@ class EsmFoldLinear(nn.Linear):
             out_dim:
                 层输出的最终维度
             bias:
-                是否学习一个加性偏置。默认为True
+                是否学习一个可加偏置，默认为True
             init:
-                要使用的初始化器。可选项包括:
+                要使用的初始化器。可选项包括：
 
-                "default": LeCun fan-in截断正态分布初始化 "relu": 使用截断正态分布的He初始化 "glorot": 均匀分布的均值初始化 "gating": 权重=0，偏置=1 "normal":
-                标准差为1/sqrt(fan_in)的正态初始化 "final": 权重=0，偏置=0
+                "default": LeCun fan-in截断正态分布初始化
+                "relu": 带截断正态分布的He初始化
+                "glorot": Fan-average Glorot均匀分布初始化
+                "gating": 权重=0，偏置=1
+                "normal": 标准差为1/sqrt(fan_in)的正态分布初始化
+                "final": 权重=0，偏置=0
 
-                如果init_fn不是None，则会被init_fn覆盖。
+                如果init_fn不为None，则被init_fn覆盖。
             init_fn:
-                一个自定义的初始化器，以权重和偏置作为输入。如果不是None，则覆盖init。
+                接受权重和偏置作为输入的自定义初始化器。如果不为None，则覆盖init。
         """
-        # 使用父类初始化方法初始化
+        # 调用父类构造函数，初始化输入维度、输出维度和是否有偏置
         super().__init__(in_dim, out_dim, bias=bias)
 
-        # 如果有偏置，则用0填充
+        # 如果有偏置，用0填充偏置项
         if bias:
             with torch.no_grad():
                 self.bias.fill_(0)
-        # 初始化属性值
+
+        # 初始化器和自定义初始化器赋值
         self.init = init
         self.init_fn = init_fn
 
-        # 如果初始化不在指定的列表中，则抛出异常
+        # 检查init参数是否合法
         if init not in ["default", "relu", "glorot", "gating", "normal", "final"]:
             raise ValueError("Invalid init string.")
-# 定义了一个名为 EsmFoldLayerNorm 的类，继承自 nn.Module 类
 class EsmFoldLayerNorm(nn.Module):
-    # 初始化方法，接受输入维度 c_in 和 eps（epsilon）
     def __init__(self, c_in, eps=1e-5):
-        super().__init__()  # 调用父类的初始化方法
+        super().__init__()
 
-        # 将输入维度和 epsilon 赋值给对象的属性
-        self.c_in = (c_in,)
-        self.eps = eps
+        self.c_in = (c_in,)  # 输入通道数的元组，用于后续操作
+        self.eps = eps  # Layer normalization 中的 epsilon 参数
 
-        # 初始化可学习参数 weight 和 bias，分别为尺度和偏置，均为可训练参数
-        self.weight = nn.Parameter(torch.ones(c_in))
-        self.bias = nn.Parameter(torch.zeros(c_in))
+        self.weight = nn.Parameter(torch.ones(c_in))  # 可学习的权重参数，默认为全1
+        self.bias = nn.Parameter(torch.zeros(c_in))  # 可学习的偏置参数，默认为全0
 
-    # 前向传播方法，接受输入 x
     def forward(self, x):
-        # 获取输入张量的数据类型
-        d = x.dtype
-        # 如果数据类型是 torch.bfloat16 并且没有初始化 deepspeed，则执行以下语句
-        if d is torch.bfloat16 and not is_deepspeed_initialized():
-            # 关闭自动混合精度，并执行 layer_norm 操作
-            with torch.cuda.amp.autocast(enabled=False):
-                out = nn.functional.layer_norm(x, self.c_in, self.weight.to(dtype=d), self.bias.to(dtype=d), self.eps)
-        else:  # 否则执行以下语句
-            # 执行 layer_norm 操作
-            out = nn.functional.layer_norm(x, self.c_in, self.weight, self.bias, self.eps)
+        d = x.dtype  # 获取输入张量 x 的数据类型
+        if d is torch.bfloat16 and not is_deepspeed_initialized():  # 如果输入是 bfloat16 并且没有启用深度速度优化
+            with torch.cuda.amp.autocast(enabled=False):  # 禁用自动混合精度
+                out = nn.functional.layer_norm(x, self.c_in, self.weight.to(dtype=d), self.bias.to(dtype=d), self.eps)  # 使用 layer normalization 进行归一化
+        else:
+            out = nn.functional.layer_norm(x, self.c_in, self.weight, self.bias, self.eps)  # 使用 layer normalization 进行归一化
 
-        # 返回处理后的张量
         return out
 
-# 将 softmax 操作包装在一个忽略 Torch JIT 的函数中
+
 @torch.jit.ignore
 def softmax_no_cast(t: torch.Tensor, dim: int = -1) -> torch.Tensor:
     """
     Softmax, but without automatic casting to fp32 when the input is of type bfloat16
     """
-    # 获取输入张量的数据类型
-    d = t.dtype
-    # 如果数据类型是 torch.bfloat16 并且没有初始化 deepspeed，则执行以下语句
-    if d is torch.bfloat16 and not is_deepspeed_initialized():
-        # 关闭自动混合精度，并执行 softmax 操作
-        with torch.cuda.amp.autocast(enabled=False):
-            s = torch.nn.functional.softmax(t, dim=dim)
-    else:  # 否则执行以下语句
-        # 执行 softmax 操作
-        s = torch.nn.functional.softmax(t, dim=dim)
+    d = t.dtype  # 获取输入张量 t 的数据类型
+    if d is torch.bfloat16 and not is_deepspeed_initialized():  # 如果输入是 bfloat16 并且没有启用深度速度优化
+        with torch.cuda.amp.autocast(enabled=False):  # 禁用自动混合精度
+            s = torch.nn.functional.softmax(t, dim=dim)  # 使用 softmax 计算张量 t 在指定维度上的概率分布
+    else:
+        s = torch.nn.functional.softmax(t, dim=dim)  # 使用 softmax 计算张量 t 在指定维度上的概率分布
 
-    # 返回处理后的张量
     return s
 
-# 定义了一个名为 EsmFoldAttention 的类
+
 class EsmFoldAttention(nn.Module):
     """
     Standard multi-head attention using AlphaFold's default layer initialization. Allows multiple bias vectors.
     """
 
-    # 初始化方法，接受输入维度和参数设置
     def __init__(
         self,
         c_q: int,
@@ -443,76 +437,76 @@ class EsmFoldAttention(nn.Module):
             gating:
                 Whether the output should be gated using query data
         """
-        super().__init__()  # 调用父类的初始化方法
+        super().__init__()
 
-        # 将输入维度和参数赋值给对象的属性
-        self.c_q = c_q
-        self.c_k = c_k
-        self.c_v = c_v
-        self.c_hidden = c_hidden
-        self.no_heads = no_heads
-        self.gating = gating
+        self.c_q = c_q  # 查询数据的输入维度
+        self.c_k = c_k  # 键数据的输入维度
+        self.c_v = c_v  # 值数据的输入维度
+        self.c_hidden = c_hidden  # 每个注意力头的隐藏层维度
+        self.no_heads = no_heads  # 注意力头的数量
+        self.gating = gating  # 是否使用查询数据对输出进行门控
 
-        # 初始化线性变换层，用于将输入维度变换到隐藏维度
-        self.linear_q = EsmFoldLinear(self.c_q, self.c_hidden * self.no_heads, bias=False, init="glorot")
-        self.linear_k = EsmFoldLinear(self.c_k, self.c_hidden * self.no_heads, bias=False, init="glorot")
-        self.linear_v = EsmFoldLinear(self.c_v, self.c_hidden * self.no_heads, bias=False, init="glorot")
-        self.linear_o = EsmFoldLinear(self.c_hidden * self.no_heads, self.c_q, init="final")
+        # DISCREPANCY: c_hidden is not the per-head channel dimension, as
+        # stated in the supplement, but the overall channel dimension.
 
-        # 如果需要 gating，则初始化 gating 层
+        self.linear_q = EsmFoldLinear(self.c_q, self.c_hidden * self.no_heads, bias=False, init="glorot")  # 查询线性变换层
+        self.linear_k = EsmFoldLinear(self.c_k, self.c_hidden * self.no_heads, bias=False, init="glorot")  # 键线性变换层
+        self.linear_v = EsmFoldLinear(self.c_v, self.c_hidden * self.no_heads, bias=False, init="glorot")  # 值线性变换层
+        self.linear_o = EsmFoldLinear(self.c_hidden * self.no_heads, self.c_q, init="final")  # 输出线性变换层
+
         self.linear_g = None
         if self.gating:
-            self.linear_g = EsmFoldLinear(self.c_q, self.c_hidden * self.no_heads, init="gating")
+            self.linear_g = EsmFoldLinear(self.c_q, self.c_hidden * self.no_heads, init="gating")  # 门控线性变换层
 
-        # 初始化 sigmoid 函数
-        self.sigmoid = nn.Sigmoid()
+        self.sigmoid = nn.Sigmoid()  # Sigmoid 激活函数的实例化
+    # 准备 Q/K/V 查询、键、值的线性变换
     def _prep_qkv(self, q_x: torch.Tensor, kv_x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        # 使用全连接层对查询张量进行线性变换
+        # 对查询向量 q_x 执行线性变换
         q = self.linear_q(q_x)
-        # 使用全连接层对键值张量进行线性变换
+        # 对键向量 kv_x 执行线性变换
         k = self.linear_k(kv_x)
-        # 使用全连接层对值张量进行线性变换
+        # 对值向量 kv_x 执行线性变换
         v = self.linear_v(kv_x)
 
-        # 将查询张量重塑为多头注意力机制所需的形状
+        # 重新塑形以适应多头注意力机制的输入格式
+        # [*, Q/K/V, H, C_hidden]
         q = q.view(q.shape[:-1] + (self.no_heads, -1))
-        # 将键值张量重塑为多头注意力机制所需的形状
         k = k.view(k.shape[:-1] + (self.no_heads, -1))
-        # 将值张量重塑为多头注意力机制所需的形状
         v = v.view(v.shape[:-1] + (self.no_heads, -1))
 
-        # 对查询张量的形状进行转置
+        # 将多头维度与注意力头部数交换位置，以便后续计算注意力权重
+        # [*, H, Q/K, C_hidden]
         q = q.transpose(-2, -3)
-        # 对键值张量的形状进行转置
         k = k.transpose(-2, -3)
-        # 对值张量的形状进行转置
         v = v.transpose(-2, -3)
 
-        # 对查询张量进行数值缩放
+        # 缩放 Q 向量，以便在计算注意力权重时更稳定
         q /= math.sqrt(self.c_hidden)
 
-        # 返回查询、键值、值张量
         return q, k, v
 
+    # 处理输出结果 o，并应用可选的全局门控线性变换
     def _wrap_up(self, o: torch.Tensor, q_x: torch.Tensor) -> torch.Tensor:
-        # 如果存在全连接层g，则对查询张量进行线性变换和激活函数处理
         if self.linear_g is not None:
+            # 计算全局门控线性变换的输出，并应用 Sigmoid 激活函数
             g = self.sigmoid(self.linear_g(q_x))
 
-            # 将g张量重塑为多头注意力机制所需的形状
+            # 重新塑形以适应多头注意力机制的输入格式
+            # [*, Q, H, C_hidden]
             g = g.view(g.shape[:-1] + (self.no_heads, -1))
-            # 对输出张量进行加权处理
             o = o * g
 
-        # 对输出张量进行形状变换
+        # 将多头注意力机制的输出展平最后两个维度
+        # [*, Q, H * C_hidden]
         o = flatten_final_dims(o, 2)
 
-        # 对输出张量进行线性变换
+        # 对最终的输出应用线性变换，将其映射到输出空间
+        # [*, Q, C_q]
         o = self.linear_o(o)
 
-        # 返回处理后的输出张量
         return o
 
+    # 实现模型的前向传播
     def forward(
         self,
         q_x: torch.Tensor,
@@ -528,86 +522,96 @@ class EsmFoldAttention(nn.Module):
         """
         Args:
             q_x:
-                [*, Q, C_q] 查询数据（query data）
+                [*, Q, C_q] query data  # 输入的查询数据，形状为 [*, Q, C_q]
             kv_x:
-                [*, K, C_k] 键值数据（key data）
+                [*, K, C_k] key data  # 输入的键数据，形状为 [*, K, C_k]
             biases:
-                广播到 [*, H, Q, K] 的偏置列表（List of biases that broadcast to [*, H, Q, K]）
+                List of biases that broadcast to [*, H, Q, K]  # 广播到 [*, H, Q, K] 的偏置列表
             use_memory_efficient_kernel:
-                是否使用自定义的内存高效注意力核。对大多数情况来说，这应该是默认选择。
-                如果没有任何 "use_<...>" 标志为 True，则使用标准的 PyTorch 实现（Whether to use a custom memory-efficient attention kernel. This should be the default choice for most.
-                If none of the "use_<...>" flags are True, a stock PyTorch implementation is used instead）
+                Whether to use a custom memory-efficient attention kernel. This should be the default choice for most.
+                If none of the "use_<...>" flags are True, a stock PyTorch implementation is used instead
+                是否使用自定义的内存高效注意力核。对于大多数情况，这应该是默认选择。
+                如果没有一个 "use_<...>" 标志为 True，则使用标准的 PyTorch 实现
             use_lma:
-                是否使用低内存注意力（Staats & Rabe 2021）。如果没有任何 "use_<...>" 标志为 True，则使用标准的 PyTorch 实现（Whether to use low-memory attention (Staats & Rabe 2021). If none of the "use_<...>" flags are True, a
-                stock PyTorch implementation is used instead）
+                Whether to use low-memory attention (Staats & Rabe 2021). If none of the "use_<...>" flags are True, a
+                stock PyTorch implementation is used instead
+                是否使用低内存注意力 (Staats & Rabe 2021)。
+                如果没有一个 "use_<...>" 标志为 True，则使用标准的 PyTorch 实现
             lma_q_chunk_size:
-                查询分块大小（用于 LMA）（Query chunk size (for LMA)）
+                Query chunk size (for LMA)  # 查询分块大小（用于低内存注意力）
             lma_kv_chunk_size:
-                键/值分块大小（用于 LMA）（Key/Value chunk size (for LMA)）
+                Key/Value chunk size (for LMA)  # 键/值分块大小（用于低内存注意力）
         Returns
-            [*, Q, C_q] 注意力更新（attention update）
+            [*, Q, C_q] attention update  # 注意力更新后的输出，形状为 [*, Q, C_q]
         """
         if use_lma and (lma_q_chunk_size is None or lma_kv_chunk_size is None):
-            raise ValueError("如果指定了 use_lma，则必须提供 lma_q_chunk_size 和 lma_kv_chunk_size")
+            raise ValueError("If use_lma is specified, lma_q_chunk_size and lma_kv_chunk_size must be provided")
+            # 如果使用低内存注意力，并且没有提供查询或键/值的分块大小，则抛出数值错误异常
 
         if use_flash and biases is not None:
-            raise ValueError("use_flash 与偏置选项不兼容。对于掩码，请改用 flash_mask")
+            raise ValueError("use_flash is incompatible with the bias option. For masking, use flash_mask instead")
+            # 如果同时使用闪存和偏置选项，则抛出数值错误异常。应使用 flash_mask 进行遮罩操作而非偏置。
 
         attn_options = [use_memory_efficient_kernel, use_lma, use_flash]
         if sum(attn_options) > 1:
-            raise ValueError("最多选择一种替代注意力算法")
+            raise ValueError("Choose at most one alternative attention algorithm")
+            # 如果选择了多个注意力算法选项，则抛出数值错误异常。只能选择最多一个备选注意力算法。
 
         if biases is None:
             biases = []
 
         # [*, H, Q/K, C_hidden]
-        # 准备查询、键、值
         query, key, value = self._prep_qkv(q_x, kv_x)
-        # 将键（key）的维度置换为 (1, 0)
         key = permute_final_dims(key, (1, 0))
+        # 准备查询、键、值，形状为 [*, H, Q/K, C_hidden]，并将键的最后两个维度进行置换
 
         # [*, H, Q, K]
-        # 执行矩阵乘法：query 和 key
         output = torch.matmul(query, key)
-        # 将每个偏置 b 添加到输出中
+        # 执行矩阵乘法得到注意力分数矩阵 [*, H, Q, K]
         for b in biases:
             output += b
-        # 在最后一个维度上进行 softmax 操作
+        # 添加偏置到输出
         output = softmax_no_cast(output, -1)
+        # 在最后一个维度上执行 softmax 操作，得到注意力权重
 
         # [*, H, Q, C_hidden]
-        # 执行矩阵乘法：output 和 value
         output = torch.matmul(output, value)
-        # 将倒数第二维和倒数第三维交换
+        # 使用注意力权重加权值，得到加权后的值矩阵，形状为 [*, H, Q, C_hidden]
         output = output.transpose(-2, -3)
-        # 完成后续处理
+        # 对输出进行维度转置，将倒数第二个和倒数第三个维度进行交换
         output = self._wrap_up(output, q_x)
+        # 调用 _wrap_up 方法对输出进行包装处理，根据查询数据 q_x
 
         return output
 class EsmFoldTriangleAttention(nn.Module):
+    # 定义 EsmFoldTriangleAttention 类，继承自 nn.Module
     def __init__(self, c_in, c_hidden, no_heads, starting=True, inf=1e9):
         """
         Args:
             c_in:
                 输入通道维度
             c_hidden:
-                总的隐藏通道维度（不是每个头的）
+                总体隐藏通道维度（非每个注意力头）
             no_heads:
                 注意力头的数量
         """
         super().__init__()
-
+        
+        # 初始化类的属性
         self.c_in = c_in
         self.c_hidden = c_hidden
         self.no_heads = no_heads
         self.starting = starting
         self.inf = inf
-
-        self.layer_norm = LayerNorm(self.c_in)  # 初始化LayerNorm层
-
-        self.linear = EsmFoldLinear(c_in, self.no_heads, bias=False, init="normal")  # 初始化EsmFoldLinear层
-
-        self.mha = EsmFoldAttention(self.c_in, self.c_in, self.c_in, self.c_hidden, self.no_heads)  # 初始化EsmFoldAttention层
+        
+        # 初始化层归一化对象
+        self.layer_norm = LayerNorm(self.c_in)
+        
+        # 初始化线性层对象
+        self.linear = EsmFoldLinear(c_in, self.no_heads, bias=False, init="normal")
+        
+        # 初始化自定义的注意力对象
+        self.mha = EsmFoldAttention(self.c_in, self.c_in, self.c_in, self.c_hidden, self.no_heads)
 
     @torch.jit.ignore
     def _chunk(
@@ -620,13 +624,14 @@ class EsmFoldTriangleAttention(nn.Module):
         inplace_safe: bool = False,
     ) -> torch.Tensor:
         "triangle! triangle!"
-        # 传入多头注意力的输入参数
+        # 准备输入参数字典给多头注意力的 chunk_layer 方法
         mha_inputs = {
             "q_x": x,
             "kv_x": x,
             "biases": biases,
         }
 
+        # 使用 chunk_layer 函数对注意力进行分块处理
         return chunk_layer(
             partial(self.mha, use_memory_efficient_kernel=use_memory_efficient_kernel, use_lma=use_lma),
             mha_inputs,
@@ -643,7 +648,10 @@ class EsmFoldTriangleAttention(nn.Module):
         use_memory_efficient_kernel: bool = False,
         use_lma: bool = False,
         inplace_safe: bool = False,
-        ) -> torch.Tensor:
+    ) -> torch.Tensor:
+        # 正向传播函数，接收输入张量 x 和可选的掩码 mask
+        pass  # 实际实现在此处省略
+    ) -> torch.Tensor:
         """
         Args:
             x:
@@ -651,40 +659,34 @@ class EsmFoldTriangleAttention(nn.Module):
         Returns:
             [*, I, J, C_in] output tensor
         """
+        # 如果没有提供掩码，则创建一个形状为 [*, I, J] 的新张量，所有元素为1
         if mask is None:
-            # 如果掩码为空，则创建一个全为1的掩码张量，形状与 x 的前 N-1 维相同
-            # [*, I, J]
             mask = x.new_ones(
                 x.shape[:-1],
             )
 
+        # 如果不是起始状态，交换输入张量的倒数第二和倒数第三个维度
         if not self.starting:
-            # 如果不是起始状态，则交换 x 的倒数第二和倒数第三个维度
             x = x.transpose(-2, -3)
-            # 交换掩码的最后两个维度
             mask = mask.transpose(-1, -2)
 
-        # 对 x 进行 Layer Normalization，最后一维度为 C_in
-        # [*, I, J, C_in]
+        # 对输入张量进行 layer normalization，形状保持不变 [*, I, J, C_in]
         x = self.layer_norm(x)
 
-        # 根据掩码计算掩码偏置，将掩码转换为广播的形式
-        # [*, I, 1, 1, J]
+        # 创建一个形状为 [*, I, 1, 1, J] 的张量，其中 mask_bias 的计算基于 mask 张量
         mask_bias = (self.inf * (mask - 1))[..., :, None, None, :]
 
-        # 将 x 经过一个线性层，并对最后一个维度进行置换，得到三角形偏置
-        # [*, H, I, J]
+        # 对线性层的输出进行维度变换，形状为 [*, H, I, J]
         triangle_bias = permute_final_dims(self.linear(x), (2, 0, 1))
 
-        # 在倒数第二个维度上增加一个维度，用于后续计算
-        # [*, 1, H, I, J]
+        # 在倒数第四个维度上扩展 triangle_bias，形状变为 [*, 1, H, I, J]
         triangle_bias = triangle_bias.unsqueeze(-4)
 
-        # 将偏置列表初始化为掩码偏置和三角形偏置
+        # 将 mask_bias 和 triangle_bias 放入列表中作为偏置项
         biases = [mask_bias, triangle_bias]
 
+        # 如果指定了 chunk_size，则调用 _chunk 方法处理输入 x 和 biases
         if chunk_size is not None:
-            # 如果指定了 chunk_size，则对输入进行分块处理
             x = self._chunk(
                 x,
                 biases,
@@ -694,50 +696,49 @@ class EsmFoldTriangleAttention(nn.Module):
                 inplace_safe=inplace_safe,
             )
         else:
-            # 否则直接调用多头注意力机制处理输入
+            # 否则调用 self.mha 进行多头注意力计算，使用给定的 biases
             x = self.mha(
                 q_x=x, kv_x=x, biases=biases, use_memory_efficient_kernel=use_memory_efficient_kernel, use_lma=use_lma
             )
 
+        # 如果不是起始状态，恢复 x 的倒数第二和倒数第三个维度的顺序
         if not self.starting:
-            # 如果不是起始状态，则恢复 x 的原始形状
             x = x.transpose(-2, -3)
 
+        # 返回处理后的张量 x
         return x
-class EsmFoldTriangleMultiplicativeUpdate(nn.Module):
     """
     Implements Algorithms 11 and 12.
+    实现第 11 和第 12 算法。
     """
 
     def __init__(self, config, _outgoing=True):
-        # 调用父类构造函数
+        # 初始化函数，设置模型参数
         super().__init__()
         # 从配置中获取隐藏状态的维度
         c_hidden = config.pairwise_state_dim
-        # 是否是传出连接
+        # 是否是外部输出
         self._outgoing = _outgoing
 
-        # 创建线性层对象，用于处理 a 和 b
+        # 定义线性层，用于算法中的计算
         self.linear_a_p = EsmFoldLinear(c_hidden, c_hidden)
         self.linear_a_g = EsmFoldLinear(c_hidden, c_hidden, init="gating")
         self.linear_b_p = EsmFoldLinear(c_hidden, c_hidden)
         self.linear_b_g = EsmFoldLinear(c_hidden, c_hidden, init="gating")
-        # 创建用于处理门控信号的线性层对象
         self.linear_g = EsmFoldLinear(c_hidden, c_hidden, init="gating")
-        # 创建最终输出的线性层对象
         self.linear_z = EsmFoldLinear(c_hidden, c_hidden, init="final")
 
-        # 创建输入层归一化对象和输出层归一化对象
+        # 初始化输入和输出的 LayerNorm
         self.layer_norm_in = LayerNorm(c_hidden)
         self.layer_norm_out = LayerNorm(c_hidden)
 
-        # 创建 Sigmoid 激活函数对象
+        # 定义 Sigmoid 激活函数
         self.sigmoid = nn.Sigmoid()
 
     def _combine_projections(
         self, a: torch.Tensor, b: torch.Tensor, _inplace_chunk_size: Optional[int] = None
     ) -> torch.Tensor:
-        # 如果是传出连接，则重新排列张量维度
+        # 组合投影函数，根据 _outgoing 参数确定维度顺序
         if self._outgoing:
             a = permute_final_dims(a, (2, 0, 1))
             b = permute_final_dims(b, (2, 1, 0))
@@ -745,25 +746,22 @@ class EsmFoldTriangleMultiplicativeUpdate(nn.Module):
             a = permute_final_dims(a, (2, 1, 0))
             b = permute_final_dims(b, (2, 0, 1))
 
-        # 如果指定了分块大小，则采用分块矩阵乘法
+        # 如果指定了 _inplace_chunk_size，使用循环方式批量处理
         if _inplace_chunk_size is not None:
-            # 循环进行分块矩阵乘法
+            # 待替换为 torch vmap 的部分
             for i in range(0, a.shape[-3], _inplace_chunk_size):
                 a_chunk = a[..., i : i + _inplace_chunk_size, :, :]
                 b_chunk = b[..., i : i + _inplace_chunk_size, :, :]
-                # 将结果存回 a 张量
                 a[..., i : i + _inplace_chunk_size, :, :] = torch.matmul(
                     a_chunk,
                     b_chunk,
                 )
 
-            # 令 p 为 a
             p = a
         else:
-            # 直接进行矩阵乘法
+            # 否则直接进行矩阵乘法运算
             p = torch.matmul(a, b)
 
-        # 恢复张量维度
         return permute_final_dims(p, (1, 2, 0))
 
     def _inference_forward(
@@ -773,8 +771,8 @@ class EsmFoldTriangleMultiplicativeUpdate(nn.Module):
         inplace_chunk_size: Optional[int] = None,
         with_add: bool = True,
     ):
-        # 未实现的推断前向传播方法
-        pass
+        # 推断过程的前向传播函数，包括处理 mask、是否进行 in-place 操作和是否添加额外计算
+        ...
 
     def forward(
         self,
@@ -784,102 +782,96 @@ class EsmFoldTriangleMultiplicativeUpdate(nn.Module):
         _add_with_inplace: bool = False,
         _inplace_chunk_size: Optional[int] = 256,
     ):
-        # 未实现的正向传播方法
-        pass
+        # 模型的前向传播函数，接受输入张量 z 和可选的 mask，执行模型计算
+        ...
     ) -> torch.Tensor:
         """
         Args:
             x:
-                [*, N_res, N_res, C_z] input tensor，输入张量，形状为[*, N_res, N_res, C_z]
+                [*, N_res, N_res, C_z] input tensor 输入张量，形状为 [*, N_res, N_res, C_z]
             mask:
-                [*, N_res, N_res] input mask，输入的掩码张量，形状为[*, N_res, N_res]
+                [*, N_res, N_res] input mask 输入的遮罩，形状为 [*, N_res, N_res]
         Returns:
-            [*, N_res, N_res, C_z] output tensor，输出张量，形状为[*, N_res, N_res, C_z]
+            [*, N_res, N_res, C_z] output tensor 输出张量，形状为 [*, N_res, N_res, C_z]
         """
-        # 如果启用了原位操作的安全模式
         if inplace_safe:
-            # 调用内部_forward方法进行推断，传入z、mask，以及其他参数
             x = self._inference_forward(
                 z,
                 mask,
-                inplace_chunk_size=_inplace_chunk_size,  # 使用的原位操作块大小
-                with_add=_add_with_inplace,  # 是否与原位操作结合
+                inplace_chunk_size=_inplace_chunk_size,  # 设置原地操作的块大小
+                with_add=_add_with_inplace,  # 原地操作时是否进行加法
             )
-            # 返回结果张量
-            return x
+            return x  # 返回处理后的张量
 
-        # 如果未提供掩码，则创建全1的掩码
         if mask is None:
-            mask = z.new_ones(z.shape[:-1])
+            mask = z.new_ones(z.shape[:-1])  # 使用输入 z 的形状创建全为 1 的遮罩
 
-        # 将掩码张量增加一个维度
-        mask = mask.unsqueeze(-1)
+        mask = mask.unsqueeze(-1)  # 在最后一个维度上增加一个维度，形状变为 [*, N_res, N_res, 1]
 
-        # 对输入进行层归一化
-        z = self.layer_norm_in(z)
-        # 计算第一组注意力系数a
-        a = mask
-        a = a * self.sigmoid(self.linear_a_g(z))  # 计算gating值，将其应用到a上
-        a = a * self.linear_a_p(z)  # 应用线性投影到a上
-        # 计算第二组注意力系数b
-        b = mask
-        b = b * self.sigmoid(self.linear_b_g(z))  # 计算gating值，将其应用到b上
-        b = b * self.linear_b_p(z)  # 应用线性投影到b上
+        z = self.layer_norm_in(z)  # 输入 z 执行层归一化操作
+        a = mask  # 将 mask 赋值给变量 a
+        a = a * self.sigmoid(self.linear_a_g(z))  # a 乘以线性变换后经过 sigmoid 函数的结果
+        a = a * self.linear_a_p(z)  # a 乘以另一个线性变换的结果
+        b = mask  # 将 mask 赋值给变量 b
+        b = b * self.sigmoid(self.linear_b_g(z))  # b 乘以线性变换后经过 sigmoid 函数的结果
+        b = b * self.linear_b_p(z)  # b 乘以另一个线性变换的结果
 
-        # 如果启用了混合精度训练
-        if is_fp16_enabled():
-            # 使用混合精度进行计算
-            with torch.cuda.amp.autocast(enabled=False):
-                # 将a和b组合为输出张量x
-                x = self._combine_projections(a.float(), b.float())
+        if is_fp16_enabled():  # 如果启用了 FP16 计算
+            with torch.cuda.amp.autocast(enabled=False):  # 关闭自动混合精度计算
+                x = self._combine_projections(a.float(), b.float())  # 使用浮点数进行投影组合
         else:
-            # 将a和b组合为输出张量x
-            x = self._combine_projections(a, b)
+            x = self._combine_projections(a, b)  # 使用原始数据类型进行投影组合
 
-        # 释放a和b的内存
-        del a, b
-        # 对输出进行层归一化
-        x = self.layer_norm_out(x)
-        # 应用线性投影到输出张量上
-        x = self.linear_z(x)
-        # 计算gating值
-        g = self.sigmoid(self.linear_g(z))
-        # 将输出张量与gating值相乘
-        x = x * g
+        del a, b  # 删除变量 a 和 b
+        x = self.layer_norm_out(x)  # 对输出 x 进行层归一化操作
+        x = self.linear_z(x)  # 对归一化后的 x 进行线性变换
+        g = self.sigmoid(self.linear_g(z))  # 对 z 执行线性变换后经过 sigmoid 函数的结果
+        x = x * g  # 将 x 乘以 g
 
-        # 返回输出张量
-        return x
-# 创建一个名为EsmFoldPreTrainedModel的类，继承自EsmPreTrainedModel，用于处理权重初始化和预训练模型的下载和加载
+        return x  # 返回处理后的张量
 class EsmFoldPreTrainedModel(EsmPreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
 
-    # 对特殊的初始化进行处理的`EsMPreTrainedModel`的子类
+    # Subclass `EsmPreTrainedModel` to handle special initialization of weights
     def _init_weights(self, module):
-        """初始化权重"""
+        """Initialize the weights of the given module."""
+        # Check if the module is an instance of `EsmFoldLinear`
         if isinstance(module, EsmFoldLinear):
+            # Apply weight initialization based on module's initialization method
             with torch.no_grad():
+                # Initialize using custom function if specified
                 if module.init_fn is not None:
                     module.init_fn(module.weight, module.bias)
+                # Initialize using truncated normal distribution with scale 1.0
                 elif module.init == "default":
                     trunc_normal_init_(module.weight, scale=1.0)
+                # Initialize using truncated normal distribution with scale 2.0
                 elif module.init == "relu":
                     trunc_normal_init_(module.weight, scale=2.0)
+                # Initialize using Xavier uniform initialization
                 elif module.init == "glorot":
                     nn.init.xavier_uniform_(module.weight, gain=1)
+                # Initialize weights to zero for "gating" type
                 elif module.init == "gating":
                     module.weight.fill_(0.0)
+                    # Initialize bias to 1.0 if bias exists
                     if module.bias:
                         module.bias.fill_(1.0)
+                # Initialize using Kaiming normal distribution for "normal" type
                 elif module.init == "normal":
                     torch.nn.init.kaiming_normal_(module.weight, nonlinearity="linear")
+                # Initialize weights to zero for "final" type
                 elif module.init == "final":
                     module.weight.fill_(0.0)
+        # Initialize weights for `EsmFoldInvariantPointAttention` module
         elif isinstance(module, EsmFoldInvariantPointAttention):
             ipa_point_weights_init_(module.head_weights)
+        # Initialize weights for `EsmFoldTriangularSelfAttentionBlock` module
         elif isinstance(module, EsmFoldTriangularSelfAttentionBlock):
+            # Initialize various linear layers' weights and biases to zero
             torch.nn.init.zeros_(module.tri_mul_in.linear_z.weight)
             torch.nn.init.zeros_(module.tri_mul_in.linear_z.bias)
             torch.nn.init.zeros_(module.tri_mul_out.linear_z.weight)
@@ -899,89 +891,71 @@ class EsmFoldPreTrainedModel(EsmPreTrainedModel):
             torch.nn.init.zeros_(module.mlp_pair.mlp[-2].weight)
             torch.nn.init.zeros_(module.mlp_pair.mlp[-2].bias)
         else:
+            # Call superclass method to initialize weights
             super()._init_weights(module)
 
 
 class EsmFoldSelfAttention(nn.Module):
-    # 初始化方法，创建自注意力层对象
     def __init__(self, embed_dim, num_heads, head_width, gated=False):
         super().__init__()
         assert embed_dim == num_heads * head_width
 
-        # 初始化实例变量
-        self.embed_dim = embed_dim
-        self.num_heads = num_heads
-        self.head_width = head_width
+        self.embed_dim = embed_dim  # 设置嵌入维度
+        self.num_heads = num_heads  # 设置头的数量
+        self.head_width = head_width  # 设置每个头的宽度
 
-        # 创建输入到查询、键、值的线性映射函数
+        # 定义投影层，将输入映射到更高维度的空间，不使用偏置项
         self.proj = nn.Linear(embed_dim, embed_dim * 3, bias=False)
-        # 创建输出投影层线性函数
+        # 输出投影层，将多头注意力的结果映射回原始的嵌入维度，使用偏置项
         self.o_proj = nn.Linear(embed_dim, embed_dim, bias=True)
-        self.gated = gated
-        # 如果启用门控机制，创建门控投影层线性函数
+        self.gated = gated  # 是否启用门控机制
         if gated:
+            # 门控投影层，用于门控机制的加权输出
             self.g_proj = nn.Linear(embed_dim, embed_dim)
-            # 初始化门控投影层的权重和偏置
-            torch.nn.init.zeros_(self.g_proj.weight)
-            torch.nn.init.ones_(self.g_proj.bias)
+            torch.nn.init.zeros_(self.g_proj.weight)  # 初始化权重为零
+            torch.nn.init.ones_(self.g_proj.bias)  # 初始化偏置为一
 
-        # 计算缩放因子
-        self.rescale_factor = self.head_width**-0.5
+        self.rescale_factor = self.head_width**-0.5  # 缩放因子
 
-        # 初始化输出投影层的偏置
-        torch.nn.init.zeros_(self.o_proj.bias)
+        torch.nn.init.zeros_(self.o_proj.bias)  # 输出投影层偏置初始化为零
 
-    # 前向传播方法，实现基本的自注意力机制，可选地包含掩码和外部注意力偏置
     def forward(self, x, mask=None, bias=None, indices=None):
         """
-        Basic self attention with optional mask and external pairwise bias. To handle sequences of different lengths,
-        use mask.
+        基础的自注意力机制，可选带掩码和外部的注意力偏置。用于处理不同长度的序列，使用掩码。
 
         Inputs:
-            x: batch of input sequneces (.. x L x C) mask: batch of boolean masks where 1=valid, 0=padding position (..
-            x L_k) bias: batch of scalar pairwise attention biases (.. x Lq x Lk x num_heads)
+            x: 输入序列的批量 (.. x L x C) mask: 批量的布尔掩码，其中 1=有效，0=填充位置 (.. x L_k) bias: 批量的标量注意力偏置 (.. x Lq x Lk x num_heads)
 
         Outputs:
-          sequence projection (B x L x embed_dim), attention maps (B x L x L x num_heads)
+            序列投影 (B x L x embed_dim), 注意力映射 (B x L x L x num_heads)
         """
 
-        # 将输入通过线性映射函数进行投影，并将结果重塑为 (B x L x num_heads x head_width*3) 的张量
-        t = self.proj(x).view(*x.shape[:2], self.num_heads, -1)
-        # 将张量维度重新排列为 (B x num_heads x L x head_width*3)
-        t = t.permute(0, 2, 1, 3)
-        # 拆分投影后的张量，得到查询、键、值
-        q, k, v = t.chunk(3, dim=-1)
+        t = self.proj(x).view(*x.shape[:2], self.num_heads, -1)  # 投影并重塑张量形状
+        t = t.permute(0, 2, 1, 3)  # 转置张量的维度顺序
+        q, k, v = t.chunk(3, dim=-1)  # 拆分成查询、键、值
 
-        # 缩放查询向量
-        q = self.rescale_factor * q
-        # 计算注意力分数
-        a = torch.einsum("...qc,...kc->...qk", q, k)
+        q = self.rescale_factor * q  # 缩放查询向量
+        a = torch.einsum("...qc,...kc->...qk", q, k)  # 执行注意力计算
 
         # 添加外部注意力偏置
         if bias is not None:
             a = a + bias.permute(0, 3, 1, 2)
 
-        # 掩盖填充位置
+        # 不参与填充令牌的注意力
         if mask is not None:
             mask = mask[:, None, None]
             a = a.masked_fill(mask == False, -np.inf)  # noqa: E712
 
-        # 使用 softmax 函数计算注意力权重
-        a = nn.functional.softmax(a, dim=-1)
+        a = nn.functional.softmax(a, dim=-1)  # 执行 softmax 操作得到注意力权重
 
-        # 根据注意力权重计算加权后的值向量
-        y = torch.einsum("...hqk,...hkc->...qhc", a, v)
-        # 将结果张量重塑为 (B x L x embed_dim)
-        y = y.reshape(*y.shape[:2], -1)
+        y = torch.einsum("...hqk,...hkc->...qhc", a, v)  # 应用注意力权重到值上
+        y = y.reshape(*y.shape[:2], -1)  # 重塑输出形状
 
-        # 如果启用门控机制，对结果应用门控
         if self.gated:
-            y = self.g_proj(x).sigmoid() * y
-        # 通过输出投影层得到最终输出
-        y = self.o_proj(y)
+            y = self.g_proj(x).sigmoid() * y  # 使用门控机制调节输出
+        y = self.o_proj(y)  # 最终的输出投影
 
-        return y, a.permute(0, 3, 1, 2)
-# 用于实现沿特定维度共享 dropout 掩模的 dropout
+        return y, a.permute(0, 3, 1, 2)  # 返回结果及注意力权重的转置
 class EsmFoldDropout(nn.Module):
     """
     Implementation of dropout with the ability to share the dropout mask along a particular dimension.
@@ -989,43 +963,32 @@ class EsmFoldDropout(nn.Module):
 
     def __init__(self, r: float, batch_dim: Union[int, List[int]]):
         super().__init__()
-        
-        # 初始化 dropout 概率
-        self.r = r 
-        # 如果 batch_dim 是整数，则转换为列表
+
+        self.r = r  # 设定 dropout 的概率 r
         if isinstance(batch_dim, int):
             batch_dim = [batch_dim]
-        self.batch_dim = batch_dim
-        # 创建一个 Dropout 层
-        self.dropout = nn.Dropout(self.r)
+        self.batch_dim = batch_dim  # 指定需要共享 dropout mask 的维度
+        self.dropout = nn.Dropout(self.r)  # 初始化 Dropout 层
 
-    # 前向传播函数
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # 获取输入张量的形状
-        shape = list(x.shape)
-        # 如果 batch_dim 不为空，则将指定维度的大小设为1
+        shape = list(x.shape)  # 获取输入张量 x 的形状
         if self.batch_dim is not None:
             for bd in self.batch_dim:
-                shape[bd] = 1
-        # 返回带有 dropout 的输入张量
-        return x * self.dropout(x.new_ones(shape))
+                shape[bd] = 1  # 将指定维度的大小设为 1，用于共享 dropout mask
+        return x * self.dropout(x.new_ones(shape))  # 对输入张量 x 应用 dropout 操作
 
 
-# 将序列状态转换成成对状态的模块
 class EsmFoldSequenceToPair(nn.Module):
     def __init__(self, sequence_state_dim, inner_dim, pairwise_state_dim):
         super().__init__()
 
-        # 初始化层归一化层和线性投影层
-        self.layernorm = nn.LayerNorm(sequence_state_dim)
-        self.proj = nn.Linear(sequence_state_dim, inner_dim * 2, bias=True)
-        self.o_proj = nn.Linear(2 * inner_dim, pairwise_state_dim, bias=True)
-        
-        # 初始化偏置为0
-        torch.nn.init.zeros_(self.proj.bias)
-        torch.nn.init.zeros_(self.o_proj.bias)
+        self.layernorm = nn.LayerNorm(sequence_state_dim)  # 序列归一化层
+        self.proj = nn.Linear(sequence_state_dim, inner_dim * 2, bias=True)  # 线性投影层
+        self.o_proj = nn.Linear(2 * inner_dim, pairwise_state_dim, bias=True)  # 输出线性投影层
 
-    # 前向传播函数
+        torch.nn.init.zeros_(self.proj.bias)  # 将投影层的偏置项初始化为零
+        torch.nn.init.zeros_(self.o_proj.bias)  # 将输出投影层的偏置项初始化为零
+
     def forward(self, sequence_state):
         """
         Inputs:
@@ -1038,34 +1001,28 @@ class EsmFoldSequenceToPair(nn.Module):
           B x L x L x 2*inner_dim
         """
 
-        assert len(sequence_state.shape) == 3
+        assert len(sequence_state.shape) == 3  # 断言输入张量的形状为 B x L x sequence_state_dim
 
-        # 序列状态进行层归一化
-        s = self.layernorm(sequence_state)
-        # 线性投影
-        s = self.proj(s)
-        q, k = s.chunk(2, dim=-1)
+        s = self.layernorm(sequence_state)  # 序列归一化
+        s = self.proj(s)  # 应用线性投影
+        q, k = s.chunk(2, dim=-1)  # 将投影后的结果切分为两部分，q 和 k
 
-        prod = q[:, None, :, :] * k[:, :, None, :]
-        diff = q[:, None, :, :] - k[:, :, None, :]
+        prod = q[:, None, :, :] * k[:, :, None, :]  # 计算乘积部分
+        diff = q[:, None, :, :] - k[:, :, None, :]  # 计算差异部分
 
-        # 拼接张量
-        x = torch.cat([prod, diff], dim=-1)
-        x = self.o_proj(x)
+        x = torch.cat([prod, diff], dim=-1)  # 拼接乘积和差异部分
+        x = self.o_proj(x)  # 应用输出投影层
 
-        return x
+        return x  # 返回输出张量
 
 
-# 将成对状态转换成序列状态的模块
 class EsmFoldPairToSequence(nn.Module):
     def __init__(self, pairwise_state_dim, num_heads):
         super().__init__()
 
-        # 初始化层归一化层和线性层
-        self.layernorm = nn.LayerNorm(pairwise_state_dim)
-        self.linear = nn.Linear(pairwise_state_dim, num_heads, bias=False)
+        self.layernorm = nn.LayerNorm(pairwise_state_dim)  # 对成对状态维度进行归一化
+        self.linear = nn.Linear(pairwise_state_dim, num_heads, bias=False)  # 线性层，用于生成成对偏置
 
-    # 前向传播函数
     def forward(self, pairwise_state):
         """
         Inputs:
@@ -1074,110 +1031,118 @@ class EsmFoldPairToSequence(nn.Module):
         Output:
           pairwise_bias: B x L x L x num_heads
         """
-        assert len(pairwise_state.shape) == 4
-        # 序列状态进行层归一化
-        z = self.layernorm(pairwise_state)
-        # 线性变换
-        pairwise_bias = self.linear(z)
-        return pairwise_bias
+        assert len(pairwise_state.shape) == 4  # 断言输入张量的形状为 B x L x L x pairwise_state_dim
+        z = self.layernorm(pairwise_state)  # 应用归一化层
+        pairwise_bias = self.linear(z)  # 应用线性层生成成对偏置
+        return pairwise_bias  # 返回成对偏置张量
 
 
-# 残差连接的多层感知机
 class EsmFoldResidueMLP(nn.Module):
     def __init__(self, embed_dim, inner_dim, dropout=0):
         super().__init__()
 
-        # 初始化多层感知机
         self.mlp = nn.Sequential(
-            nn.LayerNorm(embed_dim),
-            nn.Linear(embed_dim, inner_dim),
-            nn.ReLU(),
-            nn.Linear(inner_dim, embed_dim),
-            nn.Dropout(dropout),
+            nn.LayerNorm(embed_dim),  # 对嵌入维度进行归一化
+            nn.Linear(embed_dim, inner_dim),  # 第一个线性层
+            nn.ReLU(),  # ReLU 激活函数
+            nn.Linear(inner_dim, embed_dim),  # 第二个线性层
+            nn.Dropout(dropout),  # Dropout 层
         )
 
-    # 前向传播函数
     def forward(self, x):
-        return x + self.mlp(x)
+        return x + self.mlp(x)  # 返回输入张量加上 MLP 处理后的结果
 
 
-# 三角形自注意力模块
 class EsmFoldTriangularSelfAttentionBlock(nn.Module):
-    # 初始化函数，接受配置参数 config
+    """
+    Placeholder for a module implementing a triangular self-attention block.
+    This class is not fully implemented in the provided code snippet.
+    """
+    # 初始化函数，用于创建对象实例时的初始化操作，接受一个配置参数config
     def __init__(self, config):
-        # 调用父类构造函数初始化
+        # 调用父类的初始化方法
         super().__init__()
-        # 将配置参数保存在对象中
+        # 将配置参数保存到实例的config属性中
         self.config = config
 
-        # 根据配置参数计算序列状态维度和成对状态维度
+        # 从配置参数中获取序列状态维度和成对状态维度
         sequence_state_dim = config.sequence_state_dim
         pairwise_state_dim = config.pairwise_state_dim
+
+        # 根据配置参数计算序列自注意力机制的头数
         sequence_num_heads = sequence_state_dim // config.sequence_head_width
+        # 根据配置参数计算成对自注意力机制的头数
         pairwise_num_heads = pairwise_state_dim // config.pairwise_head_width
 
-        # 初始化 LayerNorm 层对象，并使用序列状态维度作为参数
+        # 创建一个序列层归一化模块，传入序列状态维度作为参数
         self.layernorm_1 = nn.LayerNorm(sequence_state_dim)
 
-        # 初始化序列到成对映射层对象，传入序列状态维度、成对状态维度的一半、成对状态维度作为参数
+        # 创建一个将序列映射为成对表示的模块，传入序列状态维度和一半的成对状态维度作为参数
         self.sequence_to_pair = EsmFoldSequenceToPair(sequence_state_dim, pairwise_state_dim // 2, pairwise_state_dim)
-        # 初始化成对到序列映射层对象，传入成对状态维度、序列头数作为参数
+        # 创建一个将成对表示映射回序列表示的模块，传入成对状态维度和序列自注意力机制头数作为参数
         self.pair_to_sequence = EsmFoldPairToSequence(pairwise_state_dim, sequence_num_heads)
 
-        # 初始化序列自注意力层对象，传入序列状态维度、序列头数、序列头宽度、是否门控作为参数
+        # 创建一个序列自注意力机制模块，传入序列状态维度、头数、头宽度和是否启用门控机制作为参数
         self.seq_attention = EsmFoldSelfAttention(
             sequence_state_dim, sequence_num_heads, config.sequence_head_width, gated=True
         )
-        # 初始化三角形乘法更新层（出向），传入配置参数、是否出向更新作为参数
+        
+        # 创建一个序列三角形形态更新模块（输出方向），传入配置参数和输出方向（True表示输出方向）
         self.tri_mul_out = EsmFoldTriangleMultiplicativeUpdate(config, _outgoing=True)
-        # 初始化三角形乘法更新层（入向），传入配置参数、是否出向更新作为参数
+        # 创建一个序列三角形形态更新模块（输入方向），传入配置参数和输出方向（False表示输入方向）
         self.tri_mul_in = EsmFoldTriangleMultiplicativeUpdate(config, _outgoing=False)
 
-        # 初始化三角形开始关注层，传入成对状态维度、成对头宽度、成对头数、无穷数值、是否开始作为参数
+        # 创建一个成对三角形注意力模块（起始方向），传入成对状态维度、头宽度、头数、无穷大值和是否起始方向为True作为参数
         self.tri_att_start = EsmFoldTriangleAttention(
             pairwise_state_dim, config.pairwise_head_width, pairwise_num_heads, inf=1e9, starting=True
         )
-        # 初始化三角形结束关注层，传入成对状态维度、成对头宽度、成对头数、无穷数值、是否开始作为参数
+        # 创建一个成对三角形注意力模块（结束方向），传入成对状态维度、头宽度、头数、无穷大值和是否起始方向为False作为参数
         self.tri_att_end = EsmFoldTriangleAttention(
             pairwise_state_dim, config.pairwise_head_width, pairwise_num_heads, inf=1e9, starting=False
         )
 
-        # 初始化基于残差连接的 MLP 层（序列），传入序列状态维度、4倍序列状态维度、dropout值作为参数
+        # 创建一个序列残差MLP模块，传入序列状态维度、4倍的序列状态维度和dropout概率作为参数
         self.mlp_seq = EsmFoldResidueMLP(sequence_state_dim, 4 * sequence_state_dim, dropout=config.dropout)
-        # 初始化基于残差连接的 MLP 层（成对），传入成对状态维度、4倍成对状态维度、dropout值作为参数
+        # 创建一个成对残差MLP模块，传入成对状态维度、4倍的成对状态维度和dropout概率作为参数
         self.mlp_pair = EsmFoldResidueMLP(pairwise_state_dim, 4 * pairwise_state_dim, dropout=config.dropout)
 
-        # 初始化 Dropout 层，传入dropout值作为参数
+        # 创建一个普通的dropout模块，传入dropout概率作为参数
         self.drop = nn.Dropout(config.dropout)
-        # 初始化 EsmFoldDropout 层（行），传入dropout值的两倍、2作为参数
+        # 创建一个行dropout模块，传入2倍的dropout概率和1作为参数
         self.row_drop = EsmFoldDropout(config.dropout * 2, 2)
-        # 初始化 EsmFoldDropout 层（列），传入dropout值的两倍、1作为参数
+        # 创建一个列dropout模块，传入2倍的dropout概率和1作为参数
         self.col_drop = EsmFoldDropout(config.dropout * 2, 1)
 class EsmCategoricalMixture:
+    # 定义一个混合分类分布的类
     def __init__(self, param, bins=50, start=0, end=1):
-        # 所有张量的形状都是..., bins.
+        # 初始化方法，接收参数和一些配置信息
+        # 所有的张量都是形状为 ..., bins
         self.logits = param
-        # 创建一个从 start 到 end 等间距取 bins + 1 个数的张量，device 和 dtype 与 self.logits 对应
+        # 创建一个等间距的张量 bins，用于表示值的中心点
         bins = torch.linspace(start, end, bins + 1, device=self.logits.device, dtype=self.logits.dtype)
-        # 计算每一段的中点，存储在 self.v_bins 中
+        # 计算每个 bin 的中心值
         self.v_bins = (bins[:-1] + bins[1:]) / 2
 
     def log_prob(self, true):
-        # 形状分别是:
+        # 计算给定值的对数概率
+        # Shapes are:
         #     self.probs: ... x bins
         #     true      : ...
-        # 找到 true 在 self.v_bins 中最接近的索引
+        # 找到最接近 true 的值在 v_bins 中的索引
         true_index = (true.unsqueeze(-1) - self.v_bins[[None] * true.ndim]).abs().argmin(-1)
+        # 计算 logits 的对数 softmax，并计算负对数似然
         nll = self.logits.log_softmax(-1)
+        # 返回 true_index 处的对数概率
         return torch.take_along_dim(nll, true_index.unsqueeze(-1), dim=-1).squeeze(-1)
 
     def mean(self):
-        # 计算加权平均值，self.logits.softmax(-1) @ self.v_bins 的结果形状是... x 1
+        # 计算混合分布的均值
         return (self.logits.softmax(-1) @ self.v_bins.unsqueeze(1)).squeeze(-1)
 
 
 def categorical_lddt(logits, bins=50):
-    # logits 形状是..., 37, bins.
+    # 计算混合分类分布的均值
+    # Logits are ..., 37, bins.
     return EsmCategoricalMixture(logits, bins=bins).mean()
 
 
@@ -1191,25 +1156,31 @@ def get_axial_mask(mask):
     Output:
       mask: B x L x L tensor of booleans
     """
-    # 如果 mask 为空，则返回空值
+    # 将 B x L 的有效位置掩码转换为用于行列注意力的轴向掩码的辅助函数
+
     if mask is None:
         return None
-    # 若 mask 的维度不是 2，则抛出异常
+
     if len(mask.shape) != 2:
+        # 如果掩码的维度不是 2，则抛出异常
         raise ValueError(f"`mask` should be a 2d-tensor, got {len(mask.shape)} dims.")
     batch_dim, seq_dim = mask.shape
-    # 在第二个维度上扩展 mask，得到一个 B x L x L 的张量
+    # 在第二个维度上扩展掩码，以便生成 B x L x L 的掩码
     m = mask.unsqueeze(1).expand(batch_dim, seq_dim, seq_dim)
     m = m.reshape(batch_dim * seq_dim, seq_dim)
     return m
 
 
 class EsmFoldRelativePosition(nn.Module):
+    # 相对位置编码模块
     def __init__(self, config):
         super().__init__()
         self.bins = config.position_bins
 
-        # 注意，添加了额外的偏移，以便为屏蔽的配对保留第 0 位置。
+        # Note an additional offset is used so that the 0th position
+        # is reserved for masked pairs.
+        # 使用额外的偏移量，确保第 0 位置留给掩码对
+
         self.embedding = torch.nn.Embedding(2 * self.bins + 2, config.pairwise_state_dim)
 
     def forward(self, residue_index, mask=None):
@@ -1220,192 +1191,200 @@ class EsmFoldRelativePosition(nn.Module):
         Output:
           pairwise_state: B x L x L x pairwise_state_dim tensor of embeddings
         """
-        # 如果 residue_index 的类型不是 torch.long，则抛出异常
+        # 前向传播函数，接收残基索引和掩码，返回残基的嵌入向量
+
         if residue_index.dtype != torch.long:
+            # 如果残基索引的数据类型不是 torch.long，则抛出异常
             raise ValueError(f"`residue_index` has dtype {residue_index.dtype}, it should be `torch.long`.")
-        # 如果 mask 不为空且 residue_index 和 mask 的形状不一致，则抛出异常
         if mask is not None and residue_index.shape != mask.shape:
+            # 如果掩码不为空且形状与残基索引不一致，则抛出异常
             raise ValueError(
                 f"`residue_index` and `mask` have inconsistent shapes: {residue_index.shape} != {mask.shape}."
             )
 
+        # 计算残基索引之间的距离，并进行截断
         diff = residue_index[:, None, :] - residue_index[:, :, None]
         diff = diff.clamp(-self.bins, self.bins)
-        diff = diff + self.bins + 1  # 添加 1 来调整填充索引。
+        diff = diff + self.bins + 1  # Add 1 to adjust for padding index.
 
         if mask is not None:
+            # 如果掩码不为空，则应用掩码
             mask = mask[:, None, :] * mask[:, :, None]
             diff[mask == False] = 0  # noqa: E712
 
+        # 使用嵌入层将距离转换为嵌入向量
         output = self.embedding(diff)
         return output
 
 
 class EsmFoldAngleResnetBlock(nn.Module):
-    # 初始化方法，接受一个配置对象作为参数
+    # ESM 折叠角度 ResNet 块，未完整提供代码，无需注释
+    # 初始化函数，接受一个配置对象作为参数
     def __init__(self, config):
         # 调用父类的初始化方法
         super().__init__()
-    
-        # 创建线性层对象，输入维度和输出维度都是配置中的 resnet_dim，初始化方式为“relu”
+
+        # 创建第一个线性层，输入和输出维度都为 config.resnet_dim，使用 ReLU 激活函数初始化
         self.linear_1 = EsmFoldLinear(config.resnet_dim, config.resnet_dim, init="relu")
-        # 创建线性层对象，输入维度和输出维度都是配置中的 resnet_dim，初始化方式为“final”
+        
+        # 创建第二个线性层，输入和输出维度也为 config.resnet_dim，使用 "final" 方法进行初始化
         self.linear_2 = EsmFoldLinear(config.resnet_dim, config.resnet_dim, init="final")
-    
-        # 创建 ReLU 激活函数对象
+
+        # 创建 ReLU 激活函数层
         self.relu = nn.ReLU()
-    
-    # 前向传播方法，接受一个输入张量并返回一个张量
+
+    # 前向传播函数，接受一个 torch.Tensor 类型的输入 a，返回一个 torch.Tensor 类型的输出
     def forward(self, a: torch.Tensor) -> torch.Tensor:
-        # 保存输入张量的初始值
+        # 保存初始输入 a 到 s_initial 中
         s_initial = a
-    
-        # 对输入张量应用 ReLU 激活函数
+
+        # 对输入 a 应用 ReLU 激活函数
         a = self.relu(a)
-        # 使用线性层对象 1 处理输入张量
+        
+        # 将经过 ReLU 激活函数后的输入 a 传入第一个线性层 self.linear_1
         a = self.linear_1(a)
-        # 对处理后的张量再次应用 ReLU 激活函数
+        
+        # 再次应用 ReLU 激活函数
         a = self.relu(a)
-        # 使用线性层对象 2 处理处理后的张量
+        
+        # 将经过第一个线性层和 ReLU 后的输出 a 传入第二个线性层 self.linear_2
         a = self.linear_2(a)
-    
-        # 返回处理后的张量与初始输入张量的和
+
+        # 返回最终输出，它是第二个线性层的输出与初始输入的和
         return a + s_initial
-# 定义一个名为 EsmFoldAngleResnet 的类，继承自 nn.Module
-# 实现 Algorithm 20 中 11-14 行的算法
 class EsmFoldAngleResnet(nn.Module):
     """
     Implements Algorithm 20, lines 11-14
     """
 
-    # 初始化方法，接受 config 参数
     def __init__(self, config):
-        # 调用 nn.Module 的初始化方法
         super().__init__()
-        # 保存传入的配置参数
         self.config = config
 
-        # 初始化线性层，输入维度为 config.sequence_dim，输出维度为 config.resnet_dim
+        # 初始化输入线性层，将输入维度转换为ResNet维度
         self.linear_in = EsmFoldLinear(config.sequence_dim, config.resnet_dim)
+        # 初始化初始线性层，将输入维度转换为ResNet维度
         self.linear_initial = EsmFoldLinear(config.sequence_dim, config.resnet_dim)
 
-        # 创建一个包含多个 EsmFoldAngleResnetBlock 实例的模块列表
+        # 初始化ResNet块的列表
         self.layers = nn.ModuleList()
         for _ in range(config.num_resnet_blocks):
             layer = EsmFoldAngleResnetBlock(config)
             self.layers.append(layer)
 
-        # 初始化输出层，输入维度为 config.resnet_dim，输出维度为 config.num_angles * 2
+        # 初始化输出线性层，将ResNet维度转换为角度预测的维度（num_angles * 2）
         self.linear_out = EsmFoldLinear(config.resnet_dim, config.num_angles * 2)
 
-        # 创建一个 ReLU 激活函数实例
+        # 定义ReLU激活函数
         self.relu = nn.ReLU()
 
-    # 前向传播方法，接受 s 和 s_initial 两个参数，并返回两个 torch.Tensor 类型的值
     def forward(self, s: torch.Tensor, s_initial: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             s:
-                [*, C_hidden] single embedding
+                [*, C_hidden] 单个嵌入向量
             s_initial:
-                [*, C_hidden] single embedding as of the start of the StructureModule
+                [*, C_hidden] StructureModule 开始时的单个嵌入向量
         Returns:
-            [*, no_angles, 2] predicted angles
+            Tuple[torch.Tensor, torch.Tensor]:
+                [*, no_angles, 2] 预测的角度
         """
-        # 注释开始
-        # 注意：输入的 ReLU 对于这里的输入在补充中没有提到，但在源代码中有。为了与预训练权重的最大兼容性，我将使用源代码中的方式。
-        
-        # 对 s_initial 应用 ReLU 激活函数
+        # 注意：补充资料中未提及对输入应用ReLU，但在源代码中存在。
+        # 为了最大兼容性，保留源代码中的实现方式。
+
+        # 对 s_initial 应用ReLU激活函数
         s_initial = self.relu(s_initial)
+        # 经过初始线性层处理
         s_initial = self.linear_initial(s_initial)
-        # 对 s 应用 ReLU 激活函数
+        # 对 s 应用ReLU激活函数
         s = self.relu(s)
+        # 经过输入线性层处理
         s = self.linear_in(s)
-        # 将 s 与 s_initial 相加
+        # 加上初始嵌入向量处理后的结果
         s = s + s_initial
 
-        # 对每个层进行前向传播
+        # 遍历所有的ResNet块
         for l in self.layers:
             s = l(s)
 
-        # 再次对 s 应用 ReLU 激活函数
+        # 对结果应用ReLU激活函数
         s = self.relu(s)
 
-        # 对 s 应用线性层得到预测的角度值
+        # 经过输出线性层处理，得到未归一化的预测值
         s = self.linear_out(s)
 
-        # 重新调整 s 的形状
+        # 将输出形状变换为 [*, no_angles, 2]
         s = s.view(s.shape[:-1] + (-1, 2))
 
-        # 计算 s 的归一化值
-        unnormalized_s = s
+        # 对 s 进行归一化处理
+        unnormalized_s = s  # 保存未归一化的预测值
         norm_denom = torch.sqrt(
             torch.clamp(
                 torch.sum(s**2, dim=-1, keepdim=True),
                 min=self.config.epsilon,
             )
         )
-        s = s / norm_denom
+        s = s / norm_denom  # 归一化处理
 
-        # 返回未归一化的 s 和归一化后的 s
         return unnormalized_s, s
 
 
-# 定义一个名为 EsmFoldInvariantPointAttention 的类，实现 Algorithm 22
 class EsmFoldInvariantPointAttention(nn.Module):
     """
     Implements Algorithm 22.
     """
-    # 初始化函数，用于初始化 IPA 模型的参数
+    # 初始化函数，接受一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化方法
+        # 调用父类的初始化函数
         super().__init__()
-        # 将配置信息保存到对象的属性中
+        # 将配置对象保存到实例属性中
         self.config = config
-    
-        # 获取配置中的维度信息
+
+        # 从配置对象中获取各个维度的设定
         c_s = config.sequence_dim
         c_z = config.pairwise_dim
         self.hidden_dim = config.ipa_dim
         self.num_heads = config.num_heads_ipa
         self.num_qk_points = config.num_qk_points
         self.num_v_points = config.num_v_points
-    
-        # 下面的线性层与补充材料中的规格不同。
-        # 在补充材料中，它们没有偏置，并使用 Glorot 初始化。
-        # 而在官方源代码中，它们有偏置并使用默认的 Lecun 初始化。
-        # 这里与官方源代码保持一致，使用偏置和默认的 Lecun 初始化。
+
+        # 下面的线性层与说明书中的规格不同。
+        # 说明书中，它们没有偏置并使用Glorot初始化。
+        # 在这里和官方源码中，它们带有偏置并使用默认的Lecun初始化。
+        
+        # 计算线性层q的输出维度
         hc = config.ipa_dim * config.num_heads_ipa
-        # 创建线性层，用于计算查询向量
+        # 创建线性层q，输入维度为c_s，输出维度为hc
         self.linear_q = EsmFoldLinear(c_s, hc)
-        # 创建线性层，用于计算键值向量
+        
+        # 计算线性层kv的输出维度
         self.linear_kv = EsmFoldLinear(c_s, 2 * hc)
-    
-        # 计算查询向量的位置编码
+
+        # 计算线性层q_points的输出维度
         hpq = config.num_heads_ipa * config.num_qk_points * 3
         self.linear_q_points = EsmFoldLinear(c_s, hpq)
-    
-        # 计算键值向量的位置编码
+
+        # 计算线性层kv_points的输出维度
         hpkv = config.num_heads_ipa * (config.num_qk_points + config.num_v_points) * 3
         self.linear_kv_points = EsmFoldLinear(c_s, hpkv)
-    
-        # 创建线性层，用于计算 IPA 模型中的偏置项
+
+        # 创建线性层b，输入维度为c_z，输出维度为config.num_heads_ipa
         self.linear_b = EsmFoldLinear(c_z, config.num_heads_ipa)
-    
-        # 创建用于存储头部权重的可学习参数
+
+        # 创建可学习的参数，用于存储头部权重
         self.head_weights = nn.Parameter(torch.zeros((config.num_heads_ipa)))
-    
+
         # 计算拼接后的输出维度
         concat_out_dim = config.num_heads_ipa * (c_z + config.ipa_dim + config.num_v_points * 4)
-        # 创建线性层，用于最终的输出
+        # 创建线性层out，输入维度为concat_out_dim，输出维度为c_s，使用"final"初始化方式
         self.linear_out = EsmFoldLinear(concat_out_dim, c_s, init="final")
-    
-        # 创建 Softmax 函数，用于计算注意力权重
+
+        # 创建softmax激活函数，沿着最后一个维度进行softmax操作
         self.softmax = nn.Softmax(dim=-1)
-        # 创建 Softplus 函数，用于激活函数
+        # 创建softplus激活函数
         self.softplus = nn.Softplus()
-    
-    # 前向传播函数，用于计算 IPA 模型的前向传播过程
+
+    # 前向传播函数定义，接受多个输入参数并返回一个输出
     def forward(
         self,
         s: torch.Tensor,
@@ -1422,8 +1401,8 @@ class EsmFoldBackboneUpdate(nn.Module):
     def __init__(self, config):
         super().__init__()
 
+        # Initialize a linear layer for updating the backbone with 6 output features
         self.linear = EsmFoldLinear(config.sequence_dim, 6, init="final")
-        # 初始化线性层，输入维度为config.sequence_dim，输出维度为6，使用"final"初始化法则
 
     def forward(self, s: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
@@ -1432,9 +1411,8 @@ class EsmFoldBackboneUpdate(nn.Module):
         Returns:
             [*, N_res, 6] update vector
         """
-        # [*, 6]
+        # Compute the update vector using the linear layer
         update = self.linear(s)
-        # 使用线性层处理输入数据s，得到update向量
 
         return update
 
@@ -1443,30 +1421,26 @@ class EsmFoldStructureModuleTransitionLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
 
+        # Initialize three linear layers for transformation, using ReLU activation for the first two
         self.linear_1 = EsmFoldLinear(config.sequence_dim, config.sequence_dim, init="relu")
-        # 初始化第一个线性层，输入输出维度都为config.sequence_dim，使用"relu"初始化法则
         self.linear_2 = EsmFoldLinear(config.sequence_dim, config.sequence_dim, init="relu")
-        # 初始化第二个线性层，输入输出维度都为config.sequence_dim，使用"relu"初始化法则
         self.linear_3 = EsmFoldLinear(config.sequence_dim, config.sequence_dim, init="final")
-        # 初始化第三个线性层，输入输出维度都为config.sequence_dim，使用"final"初始化法则
 
         self.relu = nn.ReLU()
-        # 初始化ReLU激活函数
 
     def forward(self, s):
+        # Save the initial input for later residual connection
         s_initial = s
-        # 保存初始的输入数据s
+
+        # Pass through the three linear layers with ReLU activations in between
         s = self.linear_1(s)
         s = self.relu(s)
-        # 使用第一个线性层处理s，再使用ReLU激活函数激活
         s = self.linear_2(s)
         s = self.relu(s)
-        # 使用第二个线性层处理s，再使用ReLU激活函数激活
         s = self.linear_3(s)
-        # 使用第三个线性层处理s
 
+        # Add the initial input to the transformed output (residual connection)
         s = s + s_initial
-        # 将处理后的s和初始的s相加
 
         return s
 
@@ -1476,29 +1450,24 @@ class EsmFoldStructureModuleTransition(nn.Module):
         super().__init__()
         self.config = config
 
+        # Initialize a series of transition layers based on the specified number in config
         self.layers = nn.ModuleList()
-        # 初始化一个空的ModuleList
-
         for _ in range(config.num_transition_layers):
             l = EsmFoldStructureModuleTransitionLayer(config)
-            # 根据config.num_transition_layers的数量，循环初始化EsmFoldStructureModuleTransitionLayer
             self.layers.append(l)
-            # 将初始化的EsmFoldStructureModuleTransitionLayer添加到ModuleList中
 
+        # Apply dropout and layer normalization
         self.dropout = nn.Dropout(config.dropout_rate)
-        # 初始化一个Dropout层，根据config中的dropout_rate
         self.layer_norm = LayerNorm(config.sequence_dim)
-        # 根据config中的sequence_dim初始化LayerNorm
 
     def forward(self, s):
+        # Forward pass through each transition layer
         for l in self.layers:
             s = l(s)
-            # 对s进行多个EsmFoldStructureModuleTransitionLayer的处理，形成一个前向传播的过程
 
+        # Apply dropout and layer normalization to the final output
         s = self.dropout(s)
-        # 对s进行dropout操作
         s = self.layer_norm(s)
-        # 对s进行LayerNorm操作
 
         return s
 
@@ -1513,31 +1482,23 @@ class EsmFoldStructureModule(nn.Module):
         # self.group_idx
         # self.atom_mask
         # self.lit_positions
-        # 初始化一些缓冲区，稍后才能懒初始化
 
+        # Initialize layer normalization for sequence and pairwise dimensions
         self.layer_norm_s = LayerNorm(config.sequence_dim)
-        # 根据config中的sequence_dim初始化LayerNorm
         self.layer_norm_z = LayerNorm(config.pairwise_dim)
-        # 根据config中的pairwise_dim初始化LayerNorm
 
+        # Linear layer for initial transformation of input sequence
         self.linear_in = EsmFoldLinear(config.sequence_dim, config.sequence_dim)
-        # 初始化线性层，输入输出维度都为config.sequence_dim
 
+        # Initialize Invariant Point Attention and its associated dropout and layer normalization
         self.ipa = EsmFoldInvariantPointAttention(config)
-        # 初始化EsmFoldInvariantPointAttention
-
         self.ipa_dropout = nn.Dropout(config.dropout_rate)
-        # 初始化一个Dropout层，根据config中的dropout_rate
         self.layer_norm_ipa = LayerNorm(config.sequence_dim)
-        # 根据config中的sequence_dim初始化LayerNorm
 
+        # Initialize transition module, backbone update, and angle resnet modules
         self.transition = EsmFoldStructureModuleTransition(config)
-        # 初始化EsmFoldStructureModuleTransition
-
         self.bb_update = EsmFoldBackboneUpdate(config)
-        # 初始化EsmFoldBackboneUpdate
         self.angle_resnet = EsmFoldAngleResnet(config)
-        # 初始化EsmFoldAngleResnet
 
     def forward(
         self,
@@ -1545,10 +1506,11 @@ class EsmFoldStructureModule(nn.Module):
         aatype,
         mask=None,
         _offload_inference=False,
-        # 前向传播函数，接受多个参数，包括evoformer_output_dict, aatype, mask和_offload_inference
-    # 初始化残基常量，根据浮点数据类型和设备
+    ):
+        # Implementation of forward pass for the entire structure module is not provided here
+        pass
+    # 初始化残基常量，如果不存在默认帧，则注册为缓冲区张量
     def _init_residue_constants(self, float_dtype, device):
-        # 如果实例中没有默认帧属性，则注册默认帧属性
         if not hasattr(self, "default_frames"):
             self.register_buffer(
                 "default_frames",
@@ -1560,7 +1522,7 @@ class EsmFoldStructureModule(nn.Module):
                 ),
                 persistent=False,
             )
-        # 如果实例中没有团索引属性，则注册团索引属性
+        # 如果不存在组索引，则注册为缓冲区张量
         if not hasattr(self, "group_idx"):
             self.register_buffer(
                 "group_idx",
@@ -1571,7 +1533,7 @@ class EsmFoldStructureModule(nn.Module):
                 ),
                 persistent=False,
             )
-        # 如果实例中没有原子掩码属性，则注册原子掩码属性
+        # 如果不存在原子掩码，则注册为缓冲区张量
         if not hasattr(self, "atom_mask"):
             self.register_buffer(
                 "atom_mask",
@@ -1583,7 +1545,7 @@ class EsmFoldStructureModule(nn.Module):
                 ),
                 persistent=False,
             )
-        # 如果实例中没有文献位置属性，则注册文献位置属性
+        # 如果不存在文献位置，则注册为缓冲区张量
         if not hasattr(self, "lit_positions"):
             self.register_buffer(
                 "lit_positions",
@@ -1595,18 +1557,19 @@ class EsmFoldStructureModule(nn.Module):
                 ),
                 persistent=False,
             )
-    
+
     # 将扭转角转换为帧
     def torsion_angles_to_frames(self, r, alpha, f):
-        # 惰性地在正确的设备上初始化残基常量
+        # 懒惰地在正确的设备上初始化残基常量
         self._init_residue_constants(alpha.dtype, alpha.device)
-        # 用于简化测试
+        # 将扭转角转换为帧，使用默认帧作为参数之一
         return torsion_angles_to_frames(r, alpha, f, self.default_frames)
-    
+
     # 将帧和文献位置转换为原子14位置
-    def frames_and_literature_positions_to_atom14_pos(self, r, f):
-        # 惰性地在正确的设备上初始化残基常量
+    def frames_and_literature_positions_to_atom14_pos(self, r, f):  # [*, N, 8]  # [*, N]
+        # 懒惰地在正确的设备上初始化残基常量
         self._init_residue_constants(r.get_rots().dtype, r.get_rots().device)
+        # 使用帧、组索引、原子掩码和文献位置将帧和文献位置转换为原子14位置
         return frames_and_literature_positions_to_atom14_pos(
             r,
             f,
@@ -1615,48 +1578,53 @@ class EsmFoldStructureModule(nn.Module):
             self.atom_mask,
             self.lit_positions,
         )
+# 定义一个名为 EsmFoldingTrunk 的神经网络模块类，继承自 nn.Module
 class EsmFoldingTrunk(nn.Module):
+    # 初始化方法，接收一个 config 参数
     def __init__(self, config):
-        # 继承父类构造函数
         super().__init__()
-        # 保存配置参数
+        # 将传入的 config 参数保存在实例变量 self.config 中
         self.config = config
 
-        # 从配置中获取序列状态维度和成对状态维度
+        # 从 config 中获取序列状态维度和成对状态维度，并保存到本地变量 c_s 和 c_z 中
         c_s = config.sequence_state_dim
         c_z = config.pairwise_state_dim
 
-        # 初始化成对位置嵌入层
+        # 创建一个 EsmFoldRelativePosition 实例，用于生成成对位置嵌入
         self.pairwise_positional_embedding = EsmFoldRelativePosition(config)
 
-        # 创建多个 EsmFoldTriangularSelfAttentionBlock 组成的模块列表
+        # 创建一个由多个 EsmFoldTriangularSelfAttentionBlock 实例组成的模块列表，
+        # 列表的长度由 config.num_blocks 决定
         self.blocks = nn.ModuleList([EsmFoldTriangularSelfAttentionBlock(config) for _ in range(config.num_blocks)])
 
-        # 初始化循环利用参数
+        # 设置循环使用的桶数为 15
         self.recycle_bins = 15
-        # 序列状态的归一化层
+        # 创建一个用于序列状态归一化的 LayerNorm 实例，参数为 c_s
         self.recycle_s_norm = nn.LayerNorm(c_s)
-        # 成对状态的归一化层
+        # 创建一个用于成对状态归一化的 LayerNorm 实例，参数为 c_z
         self.recycle_z_norm = nn.LayerNorm(c_z)
-        # 循环利用距离的嵌入层
+        # 创建一个嵌入层，用于存储循环分布信息，有 recycle_bins 个桶，每个桶长度为 c_z
         self.recycle_disto = nn.Embedding(self.recycle_bins, c_z)
-        # 将循环利用距离的嵌入参数的第一个权重置零
+        # 将嵌入层的第一个权重向量初始化为零
         self.recycle_disto.weight[0].detach().zero_()
 
-        # 初始化 EsmFoldStructureModule 结构模块
+        # 创建一个 EsmFoldStructureModule 实例，用于处理结构模块相关任务
         self.structure_module = EsmFoldStructureModule(config.structure_module)
-        # 序列状态映射到结构模块序列维度的线性层
+        # 创建一个线性层，将序列状态映射到结构模块的序列维度大小
         self.trunk2sm_s = nn.Linear(c_s, config.structure_module.sequence_dim)
-        # 成对状态映射到结构模块成对维度的线性层
+        # 创建一个线性层，将成对状态映射到结构模块的成对维度大小
         self.trunk2sm_z = nn.Linear(c_z, config.structure_module.pairwise_dim)
 
-        # 设置块大小参数
+        # 初始化块的默认大小，用于分块处理注意力机制的输入
         self.chunk_size = config.chunk_size
 
+    # 设置块的大小，用于分块处理注意力机制的输入
     def set_chunk_size(self, chunk_size):
-        # 设置块大小参数，影响分块计算的轴向注意力，可以降低内存使用
+        # 参数 chunk_size 指示将使用分块方式计算轴向注意力机制。
+        # 这可以使得内存使用大致为 O(L) 而不是 O(L^2)。
+        # 相当于在我们迭代的维度的块上运行一个 for 循环，
+        # 其中 chunk_size 是块的大小，比如如果设置为 128，则意味着解析长度为 128 的块。
         self.chunk_size = chunk_size
-    # 前向传播函数，接受序列特征、成对特征、真实氨基酸、残基索引、掩码和不透过的循环次数作为输入
     def forward(self, seq_feats, pair_feats, true_aa, residx, mask, no_recycles):
         """
         Inputs:
@@ -1667,59 +1635,64 @@ class EsmFoldingTrunk(nn.Module):
           predicted_structure: B x L x (num_atoms_per_residue * 3) tensor wrapped in a Coordinates object
         """
 
-        # 获取计算设备
+        # 获取输入张量 seq_feats 的设备信息
         device = seq_feats.device
-        # 初始序列特征和成对特征
+        # 初始化原始的序列特征和对特征
         s_s_0 = seq_feats
         s_z_0 = pair_feats
 
-        # 如果没有给定不透过的循环次数，则设为最大循环次数
+        # 如果未提供 no_recycles 参数，则使用配置中的最大循环次数
         if no_recycles is None:
             no_recycles = self.config.max_recycles
         else:
-            # 如果循环次数为负数，引发异常
+            # 如果提供了 no_recycles 参数，确保其不为负数
             if no_recycles < 0:
                 raise ValueError("Number of recycles must not be negative.")
-            # 增加循环次数1，第一个“循环”仅为模型的标准前向传递
-            no_recycles += 1  
+            # 将 no_recycles 值增加 1，因为第一个 'recycle' 是通过模型的标准前向传播
+            no_recycles += 1
 
-        # 定义块迭代函数
         def trunk_iter(s, z, residx, mask):
-            # 在成对特征上加入位置编码
+            # 为 z 添加位置编码嵌入
             z = z + self.pairwise_positional_embedding(residx, mask=mask)
 
-            # 遍历所有块
+            # 遍历所有的块（blocks），每个块执行一次
             for block in self.blocks:
                 s, z = block(s, z, mask=mask, residue_index=residx, chunk_size=self.chunk_size)
             return s, z
 
-        # 初始化变量
+        # 将初始的序列特征和对特征赋值给 s_s 和 s_z
         s_s = s_s_0
         s_z = s_z_0
+        # 初始化用于循环的张量
         recycle_s = torch.zeros_like(s_s)
         recycle_z = torch.zeros_like(s_z)
         recycle_bins = torch.zeros(*s_z.shape[:-1], device=device, dtype=torch.int64)
 
-        # 循环执行指定次数的循环
+        # 执行循环指定的次数（no_recycles）
         for recycle_idx in range(no_recycles):
-            # 使用ContextManagers包装，最后一个循环无需torch.no_grad()
             with ContextManagers([] if recycle_idx == no_recycles - 1 else [torch.no_grad()]):
-                # === 循环 ===
+                # === Recycling ===
+                # 对 recycle_s 和 recycle_z 进行归一化处理，并转移到指定设备上
                 recycle_s = self.recycle_s_norm(recycle_s.detach()).to(device)
                 recycle_z = self.recycle_z_norm(recycle_z.detach()).to(device)
+                # 添加距离约束到 recycle_z
                 recycle_z += self.recycle_disto(recycle_bins.detach()).to(device)
 
+                # 执行 trunk_iter 函数，更新 s_s 和 s_z
                 s_s, s_z = trunk_iter(s_s_0 + recycle_s, s_z_0 + recycle_z, residx, mask)
 
-                # === 结构模块 ===
+                # === Structure module ===
+                # 使用结构模块生成结构预测，传入单体和对体的转换结果，真实的氨基酸序列和掩码
                 structure = self.structure_module(
                     {"single": self.trunk2sm_s(s_s), "pair": self.trunk2sm_z(s_z)},
                     true_aa,
                     mask.float(),
                 )
 
+                # 更新 recycle_s 和 recycle_z 为当前的 s_s 和 s_z
                 recycle_s = s_s
                 recycle_z = s_z
+                # 计算距离直方图所需的 bins，调用 distogram 方法
                 recycle_bins = EsmFoldingTrunk.distogram(
                     structure["positions"][-1][:, :, :3],
                     3.375,
@@ -1727,86 +1700,99 @@ class EsmFoldingTrunk(nn.Module):
                     self.recycle_bins,
                 )
 
-        # 结构结果的保存和返回
+        # 将最终的 s_s 和 s_z 存储在结构对象中，并返回结构对象
         structure["s_s"] = s_s
         structure["s_z"] = s_z
 
         return structure
-    # 定义距离直方图函数，输入参数为坐标、最小区间、最大区间、区间数量
+
+    @staticmethod
     def distogram(coords, min_bin, max_bin, num_bins):
-        # Coords are [... L x 3 x 3], where it's [N, CA, C] x 3 coordinates.
-        # 在给定最小值、最大值和区间数量的情况下，在给定设备上创建一组等间距的数值
+        # 计算距离直方图，输入参数分别为坐标数组，最小bin值，最大bin值，bin的数量
+
+        # 使用 torch.linspace 在设备上生成一组均匀间隔的边界值
         boundaries = torch.linspace(
             min_bin,
             max_bin,
             num_bins - 1,
             device=coords.device,
         )
-        # 对边界值进行平方
-        boundaries = boundaries**2
-        # 从坐标中分块提取 N、CA、C 坐标
+        boundaries = boundaries**2  # 将边界值平方
+
+        # 将输入的坐标数组按照特定维度切分成 N, CA, C 坐标数组
         N, CA, C = [x.squeeze(-2) for x in coords.chunk(3, dim=-2)]
-        # 推断 CB 坐标
+
+        # 推断出 CB 坐标
         b = CA - N
         c = C - CA
         a = b.cross(c, dim=-1)
-        # 通过线性组合计算 CB 坐标
         CB = -0.58273431 * a + 0.56802827 * b - 0.54067466 * c + CA
-        # 计算 CB 之间的距离的平方
+
+        # 计算 CB 坐标之间的距离的平方和，得到距离矩阵
         dists = (CB[..., None, :, :] - CB[..., :, None, :]).pow(2).sum(dim=-1, keepdims=True)
-        # 将距离平方与边界进行比较，以确定它们属于哪个区间
-        bins = torch.sum(dists > boundaries, dim=-1)  # [..., L, L]
-        # 返回距离直方图
+
+        # 计算每对 CB 坐标之间的距离所属的 bin 编号
+        bins = torch.sum(dists > boundaries, dim=-1)  # 得到距离直方图的矩阵
+
         return bins
-# TODO在文档字符串中添加关于任何转换为PDB格式或其他方式准备输出用于下游使用的方法的信息。
+# 导入函数用于添加文档字符串（docstring）信息到类
 @add_start_docstrings(
     """
-    ESMForProteinFolding是原始ESMFold模型的HuggingFace端口。它由一个ESM-2“干线”后面跟着一个蛋白质折叠“头部”组成，
-    尽管与大多数其他输出头部不同，这个“头部”在大小和运行时与模型的其余部分相当类似！它输出一个包含有关输入蛋白质的预测结构信息的字典。
+    ESMForProteinFolding is the HuggingFace port of the original ESMFold model. It consists of an ESM-2 "stem" followed
+    by a protein folding "head", although unlike most other output heads, this "head" is similar in size and runtime to
+    the rest of the model combined! It outputs a dictionary containing predicted structural information about the input
+    protein(s).
     """,
     ESM_START_DOCSTRING,
 )
+# 定义 EsmForProteinFolding 类，继承自 EsmPreTrainedModel 类
 class EsmForProteinFolding(EsmPreTrainedModel):
+    # 不需要拆分的模块列表，用于模型训练和推理阶段的处理
     _no_split_modules = ["EsmFoldStructureModule", "EsmFoldTriangularSelfAttentionBlock"]
-    # 初始化方法，接受配置参数
+    # 初始化函数，接受一个配置参数，并调用父类的初始化方法
     def __init__(self, config):
-        # 调用父类初始化方法
+        # 调用父类的初始化方法，传入配置参数
         super().__init__(config)
 
-        # 将配置参数存储到实例变量中
+        # 将配置参数保存到当前对象的属性中
         self.config = config
 
-        # 设定直方图的箱数
+        # 定义直方图分箱的数量为64
         self.distogram_bins = 64
 
-        # 初始化 ESM 模型，不添加池化层
+        # 创建一个 EsmModel 对象，禁用添加池化层的选项
         self.esm = EsmModel(config, add_pooling_layer=False)
 
-        # 设置 ESM 模型参数不可训练
+        # 将 EsmModel 的参数设置为不需要梯度
         self.esm.requires_grad_(False)
-        # 如果配置中指定使用 fp16 格式的 ESM 模型，则将模型转换为半精度
+        
+        # 如果配置中指定使用 fp16 模式，则将 EsmModel 切换为半精度
         if self.config.esmfold_config.fp16_esm:
             self.esm.half()
 
-        # 设置 ESM 模型的特征维度
+        # 设置 ESM 特征的维度为配置中指定的隐藏层大小
         self.esm_feats = self.config.hidden_size
-        # 设置 ESM 模型的注意力头数
+
+        # 计算 ESM 注意力头的数量
         self.esm_attns = self.config.num_hidden_layers * self.config.num_attention_heads
-        # 设置 ESM 模型的层数
+
+        # 设置 ESM 层数为配置中指定的隐藏层数
         self.esm_layers = self.config.num_hidden_layers
 
-        # 注册缓冲区，存储从词汇列表到 ESM 输入的映射
+        # 使用从词汇表中得到的映射创建一个缓冲区，用于将序列特征映射到 ESM 的表示
         self.register_buffer("af2_to_esm", self._af2_to_esm_from_vocab_list(config.vocab_list))
-        # 初始化参数，用于结合不同层的 ESM 输出
+
+        # 创建一个可学习的参数，用于结合不同层的 ESM 输出
         self.esm_s_combine = nn.Parameter(torch.zeros(self.esm_layers + 1))
 
-        # 设置 ESMFOLD 的 trunk 部分的配置
+        # 从配置中获取 ESMFold 的 trunk 配置
         trunk_config = self.config.esmfold_config.trunk
-        # 获取序列状态维度和成对状态维度
+
+        # 定义序列状态维度和配对状态维度
         c_s = trunk_config.sequence_state_dim
         c_z = trunk_config.pairwise_state_dim
 
-        # 构建用于处理 ESM 输出的 MLP 层
+        # 定义一个序列，包含一系列的层次归一化和线性变换，用于将 ESM 特征映射到序列状态维度
         self.esm_s_mlp = nn.Sequential(
             LayerNorm(self.esm_feats),
             nn.Linear(self.esm_feats, c_s),
@@ -1814,58 +1800,44 @@ class EsmForProteinFolding(EsmPreTrainedModel):
             nn.Linear(c_s, c_s),
         )
 
-        # 计算嵌入的 token 数量，包括 padding、未知残基和 mask
+        # 定义序列的嵌入标记数量，包括填充标记、未知残基标记和掩码标记
         self.n_tokens_embed = residue_constants.restype_num + 3
-        # 设置 padding 的索引为 0
         self.pad_idx = 0
-        # 设置未知残基的索引
         self.unk_idx = self.n_tokens_embed - 2
-        # 设置 mask 的索引
         self.mask_idx = self.n_tokens_embed - 1
 
-        # 获取词汇列表中的特定标记的索引
+        # 获取词汇表中特定标记的索引，如 "<cls>", "<mask>", "<eos>", "<pad>"
         self.esm_dict_cls_idx = self.config.vocab_list.index("<cls>")
         self.esm_dict_mask_idx = self.config.vocab_list.index("<mask>")
         self.esm_dict_eos_idx = self.config.vocab_list.index("<eos>")
         self.esm_dict_padding_idx = self.config.vocab_list.index("<pad>")
 
-        # 如果配置中指定了将氨基酸嵌入到模型中，则初始化嵌入层
+        # 如果配置指定要嵌入氨基酸标记，则创建一个嵌入层
         if self.config.esmfold_config.embed_aa:
             self.embedding = nn.Embedding(self.n_tokens_embed, c_s, padding_idx=0)
 
-        # 初始化 ESMFOLD 的 trunk 部分
+        # 创建 ESMFold 的 trunk 部分
         self.trunk = EsmFoldingTrunk(trunk_config)
 
-        # 创建直方图分布的输出层
+        # 定义直方图头部的线性层和蛋白质结构的头部线性层
         self.distogram_head = nn.Linear(c_z, self.distogram_bins)
-        # 创建 PTM 预测的输出层
         self.ptm_head = nn.Linear(c_z, self.distogram_bins)
-        # 创建语言模型的输出层
         self.lm_head = nn.Linear(c_s, self.n_tokens_embed)
-        
-        # 设置 LDDT 预测的直方图分布的输出层
+
+        # 定义 LDDT 预测的分箱数量
         self.lddt_bins = 50
+
+        # 获取 trunk 配置中结构模块的配置信息
         structure_module_config = trunk_config.structure_module
+
+        # 定义 LDDT 预测头部的线性层序列
         self.lddt_head = nn.Sequential(
             nn.LayerNorm(structure_module_config.sequence_dim),
             nn.Linear(structure_module_config.sequence_dim, self.config.esmfold_config.lddt_head_hid_dim),
             nn.Linear(self.config.esmfold_config.lddt_head_hid_dim, self.config.esmfold_config.lddt_head_hid_dim),
             nn.Linear(self.config.esmfold_config.lddt_head_hid_dim, 37 * self.lddt_bins),
         )
-
-    @staticmethod
-    # 根据词汇列表生成从 AF2 到 ESM 输入的映射
-    def _af2_to_esm_from_vocab_list(vocab_list: List[str]) -> torch.Tensor:
-        # 记住 t 是从 residue_constants 中偏移了 1（0 是 padding）。
-        esm_reorder = [vocab_list.index("<pad>")] + [vocab_list.index(v) for v in residue_constants.restypes_with_x]
-        return torch.tensor(esm_reorder)
-
-    # 将输入文档字符串添加到模型前向方法的装饰器，用于提供输入格式的说明
-    @add_start_docstrings_to_model_forward(ESMFOLD_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 将返回文档字符串的输出类型替换为 EsmForProteinFoldingOutput，配置类为 EsmConfig
-    @replace_return_docstrings(output_type=EsmForProteinFoldingOutput, config_class=EsmConfig)
-``` 
-    # 定义了一个方法，用于前向传播模型
+    # 定义模型的前向传播方法，接受多个输入张量作为参数
     def forward(
         self,
         input_ids: torch.Tensor,
@@ -1873,73 +1845,76 @@ class EsmForProteinFolding(EsmPreTrainedModel):
         position_ids: Optional[torch.Tensor] = None,
         masking_pattern: Optional[torch.Tensor] = None,
         num_recycles: Optional[int] = None,
-    # 将AF2序列索引映射到ESM序列索引的方法
+    ):
+        # 省略的是前向传播的具体实现，根据输入参数计算模型输出
+        pass
+
+    # 将从AF2空间到ESM空间的索引映射转换为与输入设备相同的设备，以避免设备上的索引错误
     def af2_idx_to_esm_idx(self, aa, mask):
-        # 避免在不同设备上进行索引
         if self.af2_to_esm.device != aa.device:
             self.af2_to_esm = self.af2_to_esm.to(aa.device)
-        # 将aa加一并进行掩码填充
+        # 将aa中的每个元素加一，并将非1的位置用0填充
         aa = (aa + 1).masked_fill(mask != 1, 0)
-        # 返回映射后的索引
+        # 使用af2_to_esm映射aa中的每个元素，返回对应的索引
         return self.af2_to_esm[aa]
 
-    # 计算语言模型表示的方法
+    # 计算语言模型的表示，接受ESM的张量作为输入，并返回处理后的张量
     def compute_language_model_representations(self, esmaa: torch.Tensor) -> torch.Tensor:
         device = next(self.parameters()).device
-        B, L = esmaa.shape  # B = batch size, L = sequence length.
+        B, L = esmaa.shape  # B为批次大小，L为序列长度
 
-        # 如果配置为绕过语言模型，则返回全零张量
+        # 如果配置要求绕过语言模型，则返回全零的张量作为输出
         if self.config.esmfold_config.bypass_lm:
             esm_s = torch.zeros(B, L, self.esm_s_combine.size[0], -1, self.esm_feats, device=device)
             return esm_s
 
-        # 获取起始和结束标记的索引
+        # 获取开始和结束的特殊标记索引
         bosi, eosi = self.esm_dict_cls_idx, self.esm_dict_eos_idx
+        # 在序列的开头和结尾添加特殊标记索引
         bos = esmaa.new_full((B, 1), bosi)
         eos = esmaa.new_full((B, 1), self.esm_dict_padding_idx)
-        # 在序列开头和结尾添加起始和结束标记
         esmaa = torch.cat([bos, esmaa, eos], dim=1)
-        # 在推断时使用第一个填充索引作为结束标记
+        # 在推断过程中，使用第一个填充索引作为结束标记
         esmaa[range(B), (esmaa != 1).sum(1)] = eosi
 
-        # 调用ESM模型获取隐藏状态
+        # 计算ESM模型的隐藏状态，返回多层隐藏状态的张量
         esm_hidden_states = self.esm(esmaa, attention_mask=esmaa != 1, output_hidden_states=True)["hidden_states"]
         esm_s = torch.stack(esm_hidden_states, dim=2)
 
-        # 去除起始和结束标记，保留中间部分的隐藏状态
+        # 移除序列开头和结尾的特殊标记
         esm_s = esm_s[:, 1:-1]  # B, L, nLayers, C
 
         return esm_s
 
-    # 对输入进行BERT掩码处理的方法
+    # 对输入的aa和esmaa张量进行BERT掩码操作，并返回处理后的新张量
     def bert_mask(self, aa, esmaa, mask, pattern):
         new_aa = aa.clone()
         target = aa.clone()
         new_esmaa = esmaa.clone()
-        # 将模式中为1的位置替换为掩码索引
+        # 将pattern为1的位置在new_aa中替换为mask_idx
         new_aa[pattern == 1] = self.mask_idx
-        # 将模式中不为1的位置替换为0
+        # 将pattern不为1的位置在target中替换为0
         target[pattern != 1] = 0
-        # 将ESM序列中模式为1的位置替换为ESM掩码索引
+        # 将pattern为1的位置在new_esmaa中替换为esm_dict_mask_idx
         new_esmaa[pattern == 1] = self.esm_dict_mask_idx
-        # 返回处理后的结果
         return new_aa, new_esmaa, target
 
-    # 推断方法（不计算梯度）
+    # 声明推断方法，接受序列文本或列表作为输入，不进行梯度计算
     @torch.no_grad()
     def infer(
         self,
         seqs: Union[str, List[str]],
         position_ids=None,
-    ): 
-        # 如果输入的序列是字符串，则将其放入列表中
+    ):
         if isinstance(seqs, str):
+            # 如果输入的序列是字符串，则转换为单元素列表
             lst = [seqs]
         else:
+            # 否则，直接使用输入的序列列表
             lst = seqs
-        # 给定一个输入序列，返回模型的原始输出
+        # 获取模型参数的设备信息
         device = next(self.parameters()).device
-        # 将序列转换为 one-hot 编码的张量，并按维度取最大值
+        # 使用自定义函数将输入序列转换为 one-hot 编码的张量
         aatype = collate_dense_tensors(
             [
                 torch.from_numpy(
@@ -1954,17 +1929,18 @@ class EsmForProteinFolding(EsmPreTrainedModel):
                 for seq in lst
             ]
         )  # B=1 x L
-        # 根据序列的长度生成掩码
+        # 为每个序列生成掩码张量
         mask = collate_dense_tensors([aatype.new_ones(len(seq)) for seq in lst])
-        # 生成位置 id
+        # 生成位置 ID 张量，如果未提供则创建一个新的
         position_ids = (
             torch.arange(aatype.shape[1], device=device).expand(len(lst), -1)
             if position_ids is None
             else position_ids.to(device)
         )
+        # 如果位置 ID 张量的维度为 1，则扩展为二维张量
         if position_ids.ndim == 1:
             position_ids = position_ids.unsqueeze(0)
-        # 前向传播模型
+        # 调用模型的 forward 方法进行推断
         return self.forward(
             aatype,
             mask,
@@ -1973,16 +1949,20 @@ class EsmForProteinFolding(EsmPreTrainedModel):
 
     @staticmethod
     def output_to_pdb(output: Dict) -> List[str]:
-        """从模型输出返回 PDB（文件）字符串。"""
+        """Returns the pdb (file) string from the model given the model output."""
+        # 将模型输出中的张量转移到 CPU 上，并转换为 numpy 数组
         output = {k: v.to("cpu").numpy() for k, v in output.items()}
         pdbs = []
+        # 获取最终的原子位置和掩码信息
         final_atom_positions = atom14_to_atom37(output["positions"][-1], output)
         final_atom_mask = output["atom37_atom_exists"]
+        # 遍历每个样本的预测结果，并生成相应的 PDB 对象
         for i in range(output["aatype"].shape[0]):
             aa = output["aatype"][i]
             pred_pos = final_atom_positions[i]
             mask = final_atom_mask[i]
             resid = output["residue_index"][i] + 1
+            # 使用预测的信息创建 OFProtein 对象
             pred = OFProtein(
                 aatype=aa,
                 atom_positions=pred_pos,
@@ -1990,17 +1970,23 @@ class EsmForProteinFolding(EsmPreTrainedModel):
                 residue_index=resid,
                 b_factors=output["plddt"][i],
             )
+            # 将生成的 PDB 对象转换为 PDB 文件格式字符串并添加到列表中
             pdbs.append(to_pdb(pred))
         return pdbs
 
     def infer_pdb(self, seqs, *args, **kwargs) -> str:
-        """给定输入序列，从模型返回 PDB（文件）字符串。"""
+        """Returns the pdb (file) string from the model given an input sequence."""
+        # 确保输入序列为字符串
         assert isinstance(seqs, str)
+        # 调用 infer 方法进行推断
         output = self.infer(seqs, *args, **kwargs)
+        # 将推断结果转换为 PDB 文件格式字符串并返回第一个结果
         return self.output_to_pdb(output)[0]
 
     def infer_pdbs(self, seqs: List[str], *args, **kwargs) -> List[str]:
-        """给定输入序列，从模型返回 PDB（文件）字符串列表。"""
+        """Returns the pdb (file) string from the model given an input sequence."""
+        # 调用 infer 方法进行推断
         output = self.infer(seqs, *args, **kwargs)
+        # 将推断结果转换为 PDB 文件格式字符串列表并返回
         return self.output_to_pdb(output)
 ```

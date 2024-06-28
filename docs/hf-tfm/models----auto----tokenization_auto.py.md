@@ -1,35 +1,34 @@
-# `.\transformers\models\auto\tokenization_auto.py`
+# `.\models\auto\tokenization_auto.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 版权所有 2018 年的 HuggingFace 公司团队
+```
+# coding=utf-8
+# Copyright 2018 The HuggingFace Inc. team.
 #
-# 根据 Apache 许可证 2.0 版（"许可证"）获得许可;
-# 除非符合许可证的规定，否则不得使用此文件。
-# 您可以在以下网址获取许可证副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则本软件根据"原样"分发，
-# 没有任何担保或条件。
-# 有关特定语言的权限，请参阅许可证。
-""" 自动标记器类。"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" Auto Tokenizer class."""
 
-# 导入所需模块
-import importlib
-import json
-import os
-import warnings
-from collections import OrderedDict
-from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+import importlib  # 导入用于动态导入模块的标准库
+import json  # 导入处理 JSON 格式数据的标准库
+import os  # 导入与操作系统交互的标准库
+import warnings  # 导入警告处理相关的标准库
+from collections import OrderedDict  # 导入有序字典的标准库
+from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union  # 导入类型提示相关的标准库
 
-# 导入相关的配置和工具函数
-from ...configuration_utils import PretrainedConfig
-from ...dynamic_module_utils import get_class_from_dynamic_module, resolve_trust_remote_code
-from ...tokenization_utils import PreTrainedTokenizer
-from ...tokenization_utils_base import TOKENIZER_CONFIG_FILE
-from ...utils import (
+from ...configuration_utils import PretrainedConfig  # 导入预训练配置类
+from ...dynamic_module_utils import get_class_from_dynamic_module, resolve_trust_remote_code  # 导入动态模块相关工具函数
+from ...tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器基类
+from ...tokenization_utils_base import TOKENIZER_CONFIG_FILE  # 导入分词器配置文件常量
+from ...utils import (  # 导入一些工具函数
     cached_file,
     extract_commit_hash,
     is_g2p_en_available,
@@ -37,11 +36,9 @@ from ...utils import (
     is_tokenizers_available,
     logging,
 )
-
-# 导入编码解码配置和自动工厂
-from ..encoder_decoder import EncoderDecoderConfig
-from .auto_factory import _LazyAutoMapping
-from .configuration_auto import (
+from ..encoder_decoder import EncoderDecoderConfig  # 导入编码器解码器配置类
+from .auto_factory import _LazyAutoMapping  # 导入自动工厂相关类
+from .configuration_auto import (  # 导入自动配置相关的模块
     CONFIG_MAPPING_NAMES,
     AutoConfig,
     config_class_to_model_type,
@@ -49,147 +46,157 @@ from .configuration_auto import (
     replace_list_option_in_docstrings,
 )
 
-# 检查是否安装了 Tokenizers 库，若安装则导入相应模块，否则置为 None
 if is_tokenizers_available():
-    from ...tokenization_utils_fast import PreTrainedTokenizerFast
+    from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 如果有安装 tokenizers，导入快速分词器
 else:
-    PreTrainedTokenizerFast = None
+    PreTrainedTokenizerFast = None  # 否则将快速分词器设为 None
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 如果是类型检查模式，则定义 TOKENIZER_MAPPING_NAMES，否则置为 None
 if TYPE_CHECKING:
-    # 这将显著提高使用 Microsoft 的 Pylance 语言服务器时的完成建议性能。
+    # 定义一个有序字典，用于存储分词器名称及其对应的模块名和类名元组
     TOKENIZER_MAPPING_NAMES: OrderedDict[str, Tuple[Optional[str], Optional[str]]] = OrderedDict()
 else:
-    # 否则，设置 TOKENIZER_MAPPING_NAMES 为空字典
-    TOKENIZER_MAPPING_NAMES = {}
+    # 如果不是类型检查模式，则 TOKENIZER_MAPPING_NAMES 初始化为空
+    TOKENIZER_MAPPING_NAMES = OrderedDict()
 
-# 创建 TOKENIZER_MAPPING，映射配置到标记器类名
+# 使用 _LazyAutoMapping 类初始化 TOKENIZER_MAPPING
 TOKENIZER_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TOKENIZER_MAPPING_NAMES)
 
-# 创建配置到类型的映射字典
+# 通过 CONFIG_MAPPING_NAMES 创建反向映射字典，用于从映射名称到类型的转换
 CONFIG_TO_TYPE = {v: k for k, v in CONFIG_MAPPING_NAMES.items()}
 
-# 根据类名获取标记器类
+
 def tokenizer_class_from_name(class_name: str):
-    # 若类名为 "PreTrainedTokenizerFast"，则返回 PreTrainedTokenizerFast 类
+    # 根据类名返回相应的分词器类对象
     if class_name == "PreTrainedTokenizerFast":
         return PreTrainedTokenizerFast
 
-    # 遍历 TOKENIZER_MAPPING_NAMES
+    # 遍历 TOKENIZER_MAPPING_NAMES，查找与 class_name 匹配的分词器类
     for module_name, tokenizers in TOKENIZER_MAPPING_NAMES.items():
-        # 若类名在 tokenizers 中，则导入对应模块并返回该类
         if class_name in tokenizers:
             module_name = model_type_to_module_name(module_name)
 
+            # 动态导入 transformers.models 下的指定模块
             module = importlib.import_module(f".{module_name}", "transformers.models")
             try:
-                return getattr(module, class_name)
+                return getattr(module, class_name)  # 返回指定模块下的类对象
             except AttributeError:
                 continue
 
-    # 遍历 TOKENIZER_MAPPING 的额外内容
+    # 如果在 TOKENIZER_MAPPING 中找不到对应的类，尝试从 _extra_content 中查找
     for config, tokenizers in TOKENIZER_MAPPING._extra_content.items():
         for tokenizer in tokenizers:
-            # 如果 tokenizer 的 __name__ 与 class_name 匹配，则返回该 tokenizer
             if getattr(tokenizer, "__name__", None) == class_name:
                 return tokenizer
 
-    # 如果找不到类，则可能是因为缺少依赖。在这种情况下，该类将在主模块中。
-    # 初始化并返回适当的虚拟对象，以获取适当的错误消息。
+    # 如果以上方法都无法找到指定类，则返回 None
+    # 这段代码用于处理未能找到类的情况，可能是由于依赖项缺失导致的
+    # 在这种情况下，该类应该在主要的模块中
+    # 导入 importlib 模块，并使用它来导入名为 "transformers" 的模块
     main_module = importlib.import_module("transformers")
-    # 检查主模块是否包含指定的类名
+    # 检查在导入的模块中是否存在名为 class_name 的属性
     if hasattr(main_module, class_name):
-        # 返回主模块中指定类名的属性
+        # 如果存在，则返回该属性对应的对象或函数
         return getattr(main_module, class_name)
-    
-    # 如果未找到指定类名，则返回 None
+
+    # 如果不存在名为 class_name 的属性，则返回 None
     return None
+# 加载预训练模型的分词器配置信息
 def get_tokenizer_config(
-    # 定义函数，获取预训练模型的分词器配置信息
-    pretrained_model_name_or_path: Union[str, os.PathLike],  # 预训练模型名称或路径
-    cache_dir: Optional[Union[str, os.PathLike]] = None,  # 缓存目录，可选
-    force_download: bool = False,  # 是否强制重新下载配置文件，默认为False
-    resume_download: bool = False,  # 是否恢复下载，默认为False
-    proxies: Optional[Dict[str, str]] = None,  # 代理服务器字典，可选
-    token: Optional[Union[bool, str]] = None,  # HTTP令牌，可选
-    revision: Optional[str] = None,  # 模型版本，可选，默认为"main"
-    local_files_only: bool = False,  # 是否仅从本地文件加载，默认为False
-    subfolder: str = "",  # 模型存储库的子文件夹名称，默认为空字符串
-    **kwargs,  # 其他关键字参数
+    pretrained_model_name_or_path: Union[str, os.PathLike],
+    cache_dir: Optional[Union[str, os.PathLike]] = None,
+    force_download: bool = False,
+    resume_download: bool = False,
+    proxies: Optional[Dict[str, str]] = None,
+    token: Optional[Union[bool, str]] = None,
+    revision: Optional[str] = None,
+    local_files_only: bool = False,
+    subfolder: str = "",
+    **kwargs,
 ):
     """
-    从预训练模型的分词器配置文件中加载分词器配置。
+    Loads the tokenizer configuration from a pretrained model tokenizer configuration.
 
     Args:
         pretrained_model_name_or_path (`str` or `os.PathLike`):
-            可以是以下之一：
+            This can be either:
 
-            - 字符串，托管在huggingface.co模型存储库中的预训练模型配置的*模型ID*。有效的模型ID可以位于根级别，
-              如`bert-base-uncased`，或者在用户或组织名称下命名空间，如`dbmdz/bert-base-german-cased`。
-            - 包含使用[`~PreTrainedTokenizer.save_pretrained`]方法保存的配置文件的*目录*的路径，例如，`./my_model_directory/`。
+            - a string, the *model id* of a pretrained model configuration hosted inside a model repo on
+              huggingface.co.
+            - a path to a *directory* containing a configuration file saved using the
+              [`~PreTrainedTokenizer.save_pretrained`] method, e.g., `./my_model_directory/`.
 
         cache_dir (`str` or `os.PathLike`, *optional*):
-            如果不使用标准缓存，则应将下载的预训练模型配置缓存到其中的目录路径。
-        force_download (`bool`, *optional*, 默认为`False`):
-            是否强制重新下载配置文件并覆盖缓存版本。
-        resume_download (`bool`, *optional*, 默认为`False`):
-            是否删除接收不完整的文件。如果存在此类文件，则尝试恢复下载。
+            Path to a directory in which a downloaded pretrained model configuration should be cached if the standard
+            cache should not be used.
+        force_download (`bool`, *optional*, defaults to `False`):
+            Whether or not to force to (re-)download the configuration files and override the cached versions if they
+            exist.
+        resume_download (`bool`, *optional*, defaults to `False`):
+            Whether or not to delete incompletely received file. Attempts to resume the download if such a file exists.
         proxies (`Dict[str, str]`, *optional*):
-            一个代理服务器字典，用于协议或端点，例如，`{'http': 'foo.bar:3128', 'http://hostname': 'foo.bar:4012'}`。
-            代理服务器将在每个请求上使用。
+            A dictionary of proxy servers to use by protocol or endpoint, e.g., `{'http': 'foo.bar:3128',
+            'http://hostname': 'foo.bar:4012'}.` The proxies are used on each request.
         token (`str` or *bool*, *optional*):
-            用作远程文件的HTTP bearer授权的令牌。如果为`True`，则在运行`huggingface-cli login`时生成的令牌将被使用（存储在`~/.huggingface`中）。
-        revision (`str`, *optional*, 默认为`"main"`):
-            要使用的特定模型版本。它可以是分支名称、标签名称或提交ID，因为我们使用基于git的系统在huggingface.co上存储模型和其他文件，
-            所以`revision`可以是git允许的任何标识符。
-        local_files_only (`bool`, *optional*, 默认为`False`):
-            如果为`True`，将仅尝试从本地文件加载分词器配置。
-        subfolder (`str`, *optional*, 默认为`""`):
-            如果分词器配置位于huggingface.co模型存储库的子文件夹中，您可以在此处指定文件夹名称。
+            The token to use as HTTP bearer authorization for remote files. If `True`, will use the token generated
+            when running `huggingface-cli login` (stored in `~/.huggingface`).
+        revision (`str`, *optional*, defaults to `"main"`):
+            The specific model version to use. It can be a branch name, a tag name, or a commit id, since we use a
+            git-based system for storing models and other artifacts on huggingface.co, so `revision` can be any
+            identifier allowed by git.
+        local_files_only (`bool`, *optional*, defaults to `False`):
+            If `True`, will only try to load the tokenizer configuration from local files.
+        subfolder (`str`, *optional*, defaults to `""`):
+            In case the tokenizer config is located inside a subfolder of the model repo on huggingface.co, you can
+            specify the folder name here.
 
     <Tip>
 
-    当您想要使用私有模型时，传递`token=True`是必需的。
+    Passing `token=True` is required when you want to use a private model.
 
     </Tip>
+
     Returns:
         `Dict`: The configuration of the tokenizer.
 
     Examples:
 
     ```python
-    # Download configuration from huggingface.co and cache.
-    tokenizer_config = get_tokenizer_config("bert-base-uncased")
-    # This model does not have a tokenizer config so the result will be an empty dict.
-    tokenizer_config = get_tokenizer_config("xlm-roberta-base")
+    # 从huggingface.co下载配置文件并进行缓存
+    ```
+    # 获取指定预训练模型的分词器配置信息
+    tokenizer_config = get_tokenizer_config("google-bert/bert-base-uncased")
+    # 由于这个模型没有分词器配置，所以结果将会是一个空字典。
+    tokenizer_config = get_tokenizer_config("FacebookAI/xlm-roberta-base")
 
-    # Save a pretrained tokenizer locally and you can reload its config
+    # 导入transformers库中的AutoTokenizer类，用于自动获取预训练模型的分词器
     from transformers import AutoTokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
+    # 从预训练模型路径中加载分词器
+    tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
+    # 将分词器保存到本地目录"tokenizer-test"中
     tokenizer.save_pretrained("tokenizer-test")
+    # 获取保存的分词器配置信息
     tokenizer_config = get_tokenizer_config("tokenizer-test")
-    ```py"""
-    # 从kwargs中取出use_auth_token参数，如果存在则弹出
+    ```
+    # 处理`use_auth_token`参数的兼容性警告和错误处理逻辑
     use_auth_token = kwargs.pop("use_auth_token", None)
-    # 如果use_auth_token参数不为空，发出警告，该参数即将被移除
     if use_auth_token is not None:
+        # 发出将在Transformers v5中移除`use_auth_token`参数的警告
         warnings.warn(
             "The `use_auth_token` argument is deprecated and will be removed in v5 of Transformers. Please use `token` instead.",
             FutureWarning,
         )
-        # 如果token也不为空，则抛出数值错误，不允许同时设置token和use_auth_token
+        # 如果同时指定了`token`和`use_auth_token`参数，则抛出错误
         if token is not None:
             raise ValueError("`token` and `use_auth_token` are both specified. Please set only the argument `token`.")
-        # 将token设置为use_auth_token的值
+        # 将`use_auth_token`参数的值赋给`token`变量
         token = use_auth_token
 
-    # 获取_commit_hash参数的值，默认为None
+    # 获取kwargs中的_commit_hash参数值
     commit_hash = kwargs.get("_commit_hash", None)
-    # 通过cached_file函数获取tokenizer配置文件的路径
+    # 解析和缓存预训练模型的tokenizer配置文件
     resolved_config_file = cached_file(
         pretrained_model_name_or_path,
         TOKENIZER_CONFIG_FILE,
@@ -201,23 +208,24 @@ def get_tokenizer_config(
         revision=revision,
         local_files_only=local_files_only,
         subfolder=subfolder,
+        _raise_exceptions_for_gated_repo=False,
         _raise_exceptions_for_missing_entries=False,
         _raise_exceptions_for_connection_errors=False,
         _commit_hash=commit_hash,
     )
-    # 如果无法找到tokenizer配置文件，则记录日志并返回空字典
+    # 如果未能定位tokenizer配置文件，则记录日志并返回空字典
     if resolved_config_file is None:
         logger.info("Could not locate the tokenizer configuration file, will try to use the model config instead.")
         return {}
-    # 从配置文件中提取commit_hash
+    
+    # 提取配置文件的提交哈希值
     commit_hash = extract_commit_hash(resolved_config_file, commit_hash)
 
-    # 打开配置文件，读取其中内容到result字典中
+    # 打开配置文件并加载其内容到result字典中
     with open(resolved_config_file, encoding="utf-8") as reader:
         result = json.load(reader)
-    # 将commit_hash存入result字典中
+    # 将提取的提交哈希值存入result字典中的"_commit_hash"键
     result["_commit_hash"] = commit_hash
-    # 返回result字典，即tokenizer的配置信息
     return result
 class AutoTokenizer:
     r"""
@@ -228,7 +236,7 @@ class AutoTokenizer:
     """
 
     def __init__(self):
-        # 抛出环境错误，不能直接实例化此类
+        # 抛出环境错误，阻止直接实例化该类
         raise EnvironmentError(
             "AutoTokenizer is designed to be instantiated "
             "using the `AutoTokenizer.from_pretrained(pretrained_model_name_or_path)` method."
@@ -248,17 +256,17 @@ class AutoTokenizer:
             fast_tokenizer_class ([`PretrainedTokenizerFast`], *optional*):
                 The fast tokenizer to register.
         """
-        # 如果既未传入慢速分词器类也未传入快速分词器类，则抛出值错误
+        # 检查是否提供了慢速或快速的分词器类，否则抛出值错误
         if slow_tokenizer_class is None and fast_tokenizer_class is None:
-            raise ValueError("You need to pass either a `slow_tokenizer_class` or a `fast_tokenizer_class")
-        # 如果传入的慢速分词器类为快速分词器的子类，则抛出值错误
+            raise ValueError("You need to pass either a `slow_tokenizer_class` or a `fast_tokenizer_class`.")
+        # 如果在`slow_tokenizer_class`中传入了快速分词器类，则抛出值错误
         if slow_tokenizer_class is not None and issubclass(slow_tokenizer_class, PreTrainedTokenizerFast):
             raise ValueError("You passed a fast tokenizer in the `slow_tokenizer_class`.")
-        # 如果传入的快速分词器类为慢速分词器的子类，则抛出值错误
+        # 如果在`fast_tokenizer_class`中传入了慢速分词器类，则抛出值错误
         if fast_tokenizer_class is not None and issubclass(fast_tokenizer_class, PreTrainedTokenizer):
             raise ValueError("You passed a slow tokenizer in the `fast_tokenizer_class`.")
 
-        # 如果同时传入慢速分词器类和快速分词器类，并且快速分词器类的慢速分词器类属性与传入的慢速分词器类不一致，则抛出值错误
+        # 如果同时提供了慢速和快速分词器类，并且快速分词器类有一个与传入的慢速分词器类不一致的`slow_tokenizer_class`属性，则抛出值错误
         if (
             slow_tokenizer_class is not None
             and fast_tokenizer_class is not None
@@ -272,7 +280,7 @@ class AutoTokenizer:
                 "so they match!"
             )
 
-        # 如果在TOKENIZER_MAPPING._extra_content中存在配置类，则更新慢速和快速分词器类
+        # 如果已经在TOKENIZER_MAPPING._extra_content中注册了config_class，则尝试使用现有的慢速和快速分词器类
         if config_class in TOKENIZER_MAPPING._extra_content:
             existing_slow, existing_fast = TOKENIZER_MAPPING[config_class]
             if slow_tokenizer_class is None:
@@ -280,6 +288,6 @@ class AutoTokenizer:
             if fast_tokenizer_class is None:
                 fast_tokenizer_class = existing_fast
 
-        # 将配置类及其慢速和快速分词器类注册到TOKENIZER_MAPPING中
+        # 在TOKENIZER_MAPPING中注册config_class与其对应的慢速和快速分词器类的映射
         TOKENIZER_MAPPING.register(config_class, (slow_tokenizer_class, fast_tokenizer_class), exist_ok=exist_ok)
 ```

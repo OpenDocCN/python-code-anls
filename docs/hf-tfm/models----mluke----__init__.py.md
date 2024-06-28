@@ -1,47 +1,44 @@
-# `.\transformers\models\mluke\__init__.py`
+# `.\models\mluke\__init__.py`
 
-```py
-# 版权声明及许可证信息
-# 版权归 The HuggingFace Team 所有，保留所有权利
-# 在 Apache 许可证 2.0 版本下进行许可
-# 除非符合许可证的规定，否则不得使用本文件
-# 您可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非必须按照适用法律或书面同意的方式，否则以“原样”分发的软件
-# 没有任何种类的明示或暗示的担保或条件，包括但不限于
-# 关于特定语言的特定用途的担保或条件
-# 请查看许可证以获取关于特定语言的详细规定和限制
-
-# 导入必要的模块和类
+```
+# 引入类型检查模块
 from typing import TYPE_CHECKING
+
+# 引入自定义的异常类和延迟加载模块的工具函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_sentencepiece_available
 
-# 定义导入结构
+# 定义一个空的导入结构字典
 _import_structure = {}
 
-# 尝试导入 sentencepiece，如果不可用，则引发异常
+# 尝试检测是否存在 SentencePiece 库，如果不存在则引发自定义的异常
 try:
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
+    # 如果依赖项不可用，则忽略异常继续执行
     pass
 else:
+    # 如果依赖项可用，则将 MLukeTokenizer 添加到导入结构中
     _import_structure["tokenization_mluke"] = ["MLukeTokenizer"]
 
-# 如果需要类型检查
+# 如果类型检查开启
 if TYPE_CHECKING:
     try:
+        # 再次检测是否存在 SentencePiece 库，如果不存在则引发自定义的异常
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 如果依赖项不可用，则忽略异常继续执行
         pass
     else:
-        # 从 tokenization_mluke 模块导入 MLukeTokenizer 类
+        # 如果依赖项可用，则从 tokenization_mluke 模块导入 MLukeTokenizer 类
         from .tokenization_mluke import MLukeTokenizer
 
-# 如果不需要类型检查
+# 如果不是类型检查模式
 else:
+    # 导入 sys 模块
     import sys
 
-    # 将当前模块设置为 LazyModule 类
+    # 将当前模块替换为一个延迟加载模块，使用 _LazyModule 进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

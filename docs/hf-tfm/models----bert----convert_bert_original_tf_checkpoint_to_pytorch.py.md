@@ -1,46 +1,54 @@
-# `.\transformers\models\bert\convert_bert_original_tf_checkpoint_to_pytorch.py`
+# `.\models\bert\convert_bert_original_tf_checkpoint_to_pytorch.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证的副本
+```
+# coding=utf-8
+# Copyright 2018 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，没有任何明示或暗示的保证或条件
-# 请查看许可证以获取有关权限和限制的详细信息
-"""将 BERT 检查点转换为 PyTorch 格式。"""
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Convert BERT checkpoint."""
 
-# 导入所需的库
-import argparse
-import torch
-from transformers import BertConfig, BertForPreTraining, load_tf_weights_in_bert
-from transformers.utils import logging
 
-# 设置日志级别为 info
-logging.set_verbosity_info()
+import argparse  # 导入用于处理命令行参数的模块
 
-# 定义函数将 TensorFlow 检查点转换为 PyTorch 格式
+import torch  # 导入 PyTorch 库
+
+from transformers import BertConfig, BertForPreTraining, load_tf_weights_in_bert  # 导入转换所需的类和函数
+from transformers.utils import logging  # 导入日志记录工具
+
+
+logging.set_verbosity_info()  # 设置日志记录的详细程度为 info
+
+
 def convert_tf_checkpoint_to_pytorch(tf_checkpoint_path, bert_config_file, pytorch_dump_path):
-    # 从配置文件中加载 BertConfig
+    # 初始化一个 PyTorch 模型
     config = BertConfig.from_json_file(bert_config_file)
-    print(f"Building PyTorch model from configuration: {config}")
-    # 根据配置文件创建 BertForPreTraining 模型
-    model = BertForPreTraining(config)
+    print(f"Building PyTorch model from configuration: {config}")  # 打印模型配置信息
+    model = BertForPreTraining(config)  # 使用配置创建 BertForPreTraining 模型对象
 
-    # 从 TensorFlow 检查点中加载权重
+    # 从 TensorFlow checkpoint 中加载权重
     load_tf_weights_in_bert(model, config, tf_checkpoint_path)
 
     # 保存 PyTorch 模型
-    print(f"Save PyTorch model to {pytorch_dump_path}")
-    torch.save(model.state_dict(), pytorch_dump_path)
+    print(f"Save PyTorch model to {pytorch_dump_path}")  # 打印保存路径信息
+    torch.save(model.state_dict(), pytorch_dump_path)  # 将模型的状态字典保存到指定路径
 
-# 如果作为独立脚本运行，则解析命令行参数并调用转换函数
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    # 必需参数
+    parser = argparse.ArgumentParser()  # 创建参数解析器对象
+    # 必选参数
     parser.add_argument(
         "--tf_checkpoint_path", default=None, type=str, required=True, help="Path to the TensorFlow checkpoint path."
-    )
+    )  # 添加 TensorFlow checkpoint 路径参数
     parser.add_argument(
         "--bert_config_file",
         default=None,
@@ -50,11 +58,10 @@ if __name__ == "__main__":
             "The config json file corresponding to the pre-trained BERT model. \n"
             "This specifies the model architecture."
         ),
-    )
+    )  # 添加 BERT 配置文件路径参数
     parser.add_argument(
         "--pytorch_dump_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
-    )
-    args = parser.parse_args()
-    # 调用转换函数
-    convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.bert_config_file, args.pytorch_dump_path)
+    )  # 添加输出 PyTorch 模型路径参数
+    args = parser.parse_args()  # 解析命令行参数
+    convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.bert_config_file, args.pytorch_dump_path)  # 调用转换函数并传入参数
 ```

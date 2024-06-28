@@ -1,30 +1,20 @@
 # `.\models\esm\modeling_tf_esm.py`
 
-```py
-# 设置编码为 UTF-8
-# 版权声明，该代码由 Meta 和 HuggingFace Inc. 团队拥有
-# 根据 Apache 许可证 2.0 版本进行许可
-# 除非符合许可证的规定，否则您不得使用此文件
-# 您可以在以下网址获取许可证副本：
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则按“原样”分发本软件
-# 无任何担保或条件，明示或暗示
-# 有关软件的详细信息，请参见许可证
-""" PyTorch ESM model."""
+```
+# 设定编码格式为 UTF-8
 
+# 版权声明和许可证信息
 
-# 导入必要的库和模块
-from __future__ import annotations
-import os
-from typing import Optional, Tuple, Union
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.activations import gelu
-from tensorflow.keras.layers import Dense, Dropout, Embedding, Layer, LayerNormalization
+# 导入所需的库和模块
+from __future__ import annotations  # 使用未来版本的 annotations 特性
 
-# 导入相关函数和类
+import os  # 导入操作系统相关的功能
+from typing import Optional, Tuple, Union  # 引入类型提示需要的数据结构
+
+import numpy as np  # 导入 NumPy 库，用于科学计算
+import tensorflow as tf  # 导入 TensorFlow 深度学习框架
+
+# 导入 HuggingFace Transformers 相关的文件操作和模型输出等
 from ...file_utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward
 from ...modeling_tf_outputs import (
     TFBaseModelOutputWithPastAndCrossAttentions,
@@ -40,109 +30,139 @@ from ...modeling_tf_utils import (
     TFSequenceClassificationLoss,
     TFTokenClassificationLoss,
     get_initializer,
+    keras,
     shape_list,
     unpack_inputs,
 )
 from ...tf_utils import check_embeddings_within_bounds, stable_softmax
-from ...utils import logging
-from .configuration_esm import EsmConfig
+from ...utils import logging  # 导入日志记录工具
+from .configuration_esm import EsmConfig  # 导入 ESM 模型的配置文件
 
-# 获取 logger
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
 # 用于文档的模型检查点和配置信息
 _CHECKPOINT_FOR_DOC = "facebook/esm2_t6_8M_UR50D"
 _CONFIG_FOR_DOC = "EsmConfig"
 
-# 预训练模型的存档列表
+# 预训练模型存档列表
 TF_ESM_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/esm2_t6_8M_UR50D",
     "facebook/esm2_t12_35M_UR50D",
-    # This is not a complete list of all ESM models!
-    # See all ESM models at https://huggingface.co/models?filter=esm
+    # 这里没有列出所有 ESM 模型，可以在 https://huggingface.co/models?filter=esm 查看完整列表
 ]
 
 
-# 旋转张量的一半
 def rotate_half(x):
+    """
+    将张量沿最后一个维度分割成两半，然后进行旋转操作。
+    Args:
+        x: 输入的张量
+
+    Returns:
+        tf.Tensor: 旋转后的张量
+    """
     x1, x2 = tf.split(x, 2, axis=-1)
     return tf.concat((-x2, x1), axis=-1)
 
 
-# 应用旋转位置嵌入
 def apply_rotary_pos_emb(x, cos, sin):
+    """
+    应用旋转位置嵌入到输入张量 x 中。
+    Args:
+        x: 输入的张量
+        cos: 余弦值张量
+        sin: 正弦值张量
+
+    Returns:
+        tf.Tensor: 应用旋转位置嵌入后的张量
+    """
     cos = cos[:, :, : tf.shape(x)[-2], :]
     sin = sin[:, :, : tf.shape(x)[-2], :]
+
     return (x * cos) + (rotate_half(x) * sin)
 
 
-# 使层对称于最后两个维度，用于接触预测
 def symmetrize(x):
-    return x + tf.linalg.matrix_transpose(x)  # Transposes last two dimensions only
+    """
+    对最后两个维度进行转置操作，使层对称化，用于接触预测。
+    Args:
+        x: 输入张量
+
+    Returns:
+        tf.Tensor: 对称化后的张量
+    """
+    return x + tf.linalg.matrix_transpose(x)  # 仅转置最后两个维度
 
 
-# 执行平均乘积校正，用于接触预测
 def average_product_correct(x):
+    """
+    执行平均产品校正，用于接触预测。
+    Args:
+        x: 输入张量
+
+    Returns:
+        tf.Tensor: 校正后的张量
+    """
     a1 = tf.reduce_sum(x, -1, keepdims=True)
     a2 = tf.reduce_sum(x, -2, keepdims=True)
     a12 = tf.reduce_sum(x, (-1, -2), keepdims=True)
+
     avg = a1 * a2
     avg = avg / a12
     normalized = x - avg
     return normalized
 
 
-# 旋转嵌入层
-class TFRotaryEmbedding(Layer):
+class TFRotaryEmbedding(keras.layers.Layer):
     """
-    Rotary position embeddings based on those in
-    [RoFormer](https://huggingface.co/docs/transformers/model_doc/roformer). Query and keys are transformed by rotation
-    matrices which depend on their relative positions.
+    基于 RoFormer 中的旋转位置嵌入，对查询和键进行旋转矩阵变换，依赖它们的相对位置。
     """
 
-    # 初始化方法
+    # 在此类中定义相关的方法和初始化操作
     def __init__(self, dim: int, name=None):
-        # 调用父类的初始化方法
         super().__init__(name=name)
-        # 设置维度
+        # Matt: The PyTorch version of this layer does a lot of work to cache values, but we just rely on TF compilation
+        # and/or XLA to sort out constants like that. It actually may not seem like this layer needs to be stateful at
+        # all when we benefit from TF compilation, but it does. The reason is that self.inv_freq is a buffer in the
+        # original implementation, but all the shared ESM checkpoints were trained with fp16 params. This means that
+        # the inv_freq tensor was stored as a float16, and we need to replicate those lower-precision values or our
+        # models give different outputs from the original.
         self.dim = dim
 
-    # 构建方法
     def build(self, input_shape):
-        # 调用父类的构建方法
         super().build(input_shape)
-        # 添加权重 inv_freq 并初始化
+        # 创建一个名为 "inv_freq" 的权重变量，其形状为 (self.dim // 2,)，数据类型为 tf.float32，初始化为 1.0，不可训练
         self.inv_freq = self.add_weight(
             "inv_freq", shape=(self.dim // 2,), dtype=tf.float32, initializer=get_initializer(1.0), trainable=False
         )
-        # 计算并赋值 inv_freq 的值
+        # 计算 inv_freq 的值，这是一个与序列长度相关的正弦余弦嵌入频率
         self.inv_freq.assign(
             1.0 / (10000 ** (tf.range(start=0, limit=self.dim, delta=2, dtype=tf.float32) / self.dim))
         )
 
-    # 计算余弦和正弦值
     def _compute_cos_sin(self, x, seq_dimension=2):
-        # 获取序列长度
+        # 获取输入张量 x 的序列长度
         seq_len = tf.shape(x)[seq_dimension]
 
-        # 生成频率
+        # 创建一个序列 t，数据类型与 self.inv_freq 相同，长度为 seq_len
         t = tf.range(seq_len, dtype=self.inv_freq.dtype)
+        # 计算频率矩阵 freqs，是 t 和 self.inv_freq 的外积
         freqs = tf.einsum("i, j -> ij", t, self.inv_freq)  # Outer multiplication
+        # 创建正弦和余弦嵌入矩阵 emb，通过连接 freqs 和其自身的拷贝，axis=-1 表示在最后一个维度上连接
         emb = tf.concat((freqs, freqs), axis=-1)[None, None, :, :]
 
         return tf.cos(emb), tf.sin(emb)
 
-    # 调用方法
     def call(self, q: tf.Tensor, k: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
-        # 计算余弦和正弦值
+        # 计算正弦和余弦嵌入矩阵 cos_emb 和 sin_emb，针对张量 k 在序列维度上进行计算
         cos_emb, sin_emb = self._compute_cos_sin(k, seq_dimension=-2)
 
-        # 应用旋转位置嵌入
+        # 应用旋转位置嵌入到输入张量 q 和 k 上，并返回结果
         return (
             apply_rotary_pos_emb(q, cos_emb, sin_emb),
             apply_rotary_pos_emb(k, cos_emb, sin_emb),
         )
-class TFEsmContactPredictionHead(Layer):
+class TFEsmContactPredictionHead(keras.layers.Layer):
     """Performs symmetrization, apc, and computes a logistic regression on the output features"""
 
     def __init__(
@@ -152,225 +172,204 @@ class TFEsmContactPredictionHead(Layer):
         eos_idx: int = 2,
         name=None,
     ):
-        # 初始化函数，设置类的参数和属性
         super().__init__(name=name)
-        self.eos_idx = eos_idx  # 设置 EOS（End of Sequence）的索引
-        self.in_features = in_features  # 输入特征的数量
-        # 创建用于逻辑回归的全连接层
-        self.regression = Dense(1, use_bias=bias, activation="sigmoid", name="regression")
+        self.eos_idx = eos_idx  # 设置 eos 标记的索引值
+        self.in_features = in_features  # 输入特征的维度
+        self.regression = keras.layers.Dense(1, use_bias=bias, activation="sigmoid", name="regression")  # 定义逻辑回归层
 
     def build(self, input_shape=None):
-        # 构建模型层，用于在运行时构建层的权重
         if self.built:
             return
-        self.built = True
+        self.built = True  # 标记层已经构建
         if getattr(self, "regression", None) is not None:
             with tf.name_scope(self.regression.name):
-                # 构建逻辑回归层
-                self.regression.build((None, self.in_features))
+                self.regression.build((None, self.in_features))  # 构建逻辑回归层的计算图
 
     def call(self, tokens, attentions):
-        # 对输入的注意力进行处理
-        # 移除 EOS 令牌的注意力
-        eos_mask = tf.cast(tokens != self.eos_idx, attentions.dtype)
-        eos_mask = tf.expand_dims(eos_mask, 1) * tf.expand_dims(eos_mask, 2)
-        attentions = attentions * eos_mask[:, None, None, :, :]
-        attentions = attentions[..., :-1, :-1]
-        # 移除 CLS 令牌的注意力
-        attentions = attentions[..., 1:, 1:]
-        batch_size, layers, heads, seqlen, _ = shape_list(attentions)
-        # 重新调整注意力矩阵的形状
-        attentions = tf.reshape(attentions, (batch_size, layers * heads, seqlen, seqlen))
+        # remove eos token attentions
+        eos_mask = tf.cast(tokens != self.eos_idx, attentions.dtype)  # 创建一个用于屏蔽 eos 标记的掩码
+        eos_mask = tf.expand_dims(eos_mask, 1) * tf.expand_dims(eos_mask, 2)  # 将掩码扩展到适当的维度
+        attentions = attentions * eos_mask[:, None, None, :, :]  # 使用掩码屏蔽 eos 标记的注意力值
+        attentions = attentions[..., :-1, :-1]  # 移除最后一个维度中的 eos 标记的注意力值
 
-        # 对称化并修正平均乘积注意力
-        attentions = average_product_correct(symmetrize(attentions))
-        attentions = tf.transpose(attentions, perm=(0, 2, 3, 1))
-        # 使用逻辑回归层对注意力进行回归预测
-        return tf.squeeze(self.regression(attentions), 3)
+        # remove cls token attentions
+        attentions = attentions[..., 1:, 1:]  # 移除第一个维度中的 cls 标记的注意力值
+        batch_size, layers, heads, seqlen, _ = shape_list(attentions)  # 获取注意力张量的形状信息
+        attentions = tf.reshape(attentions, (batch_size, layers * heads, seqlen, seqlen))  # 重新整形注意力张量的维度
+
+        # features: batch x channels x tokens x tokens (symmetric)
+        attentions = average_product_correct(symmetrize(attentions))  # 对注意力张量进行对称化和平均产品校正
+        attentions = tf.transpose(attentions, perm=(0, 2, 3, 1))  # 转置注意力张量的维度顺序
+        return tf.squeeze(self.regression(attentions), 3)  # 使用逻辑回归层进行预测，并压缩维度以匹配输出形状
 
 
-class TFEsmEmbeddings(Layer):
+class TFEsmEmbeddings(keras.layers.Layer):
     """
     Same as BertEmbeddings with a tiny tweak for positional embeddings indexing.
     """
-
+    # 初始化函数，用于创建一个新的对象实例
     def __init__(self, config, name=None):
-        # 初始化函数，设置类的参数和属性
+        # 调用父类的初始化函数
         super().__init__(name=name)
-        # 初始化词嵌入层和位置嵌入层
-        self.word_embeddings = Embedding(
+        # 创建词嵌入层，用于将词汇索引映射到向量表示
+        self.word_embeddings = keras.layers.Embedding(
             config.vocab_size,
             config.hidden_size,
             embeddings_initializer=get_initializer(config.initializer_range),
             name="word_embeddings",
         )
-        self.position_embeddings = Embedding(
+        # 创建位置嵌入层，用于表示输入序列中每个位置的信息
+        self.position_embeddings = keras.layers.Embedding(
             config.max_position_embeddings,
             config.hidden_size,
             embeddings_initializer=get_initializer(config.initializer_range),
             name="position_embeddings",
         )
 
+        # 根据配置选择是否添加层归一化操作
         if config.emb_layer_norm_before:
-            # 是否在嵌入层之前使用层归一化
-            self.layer_norm = LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm")
+            self.layer_norm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm")
         else:
             self.layer_norm = None
-        # 确定位置编码类型
+        # 定义位置嵌入类型，默认为绝对位置编码
         self.position_embedding_type = getattr(config, "position_embedding_type", "absolute")
 
+        # 创建位置 ID，用于表示序列中每个位置的索引
         self.position_ids = tf.range(config.max_position_embeddings)[None, :]
-        # 填充标记的索引
+
+        # 定义填充符的索引
         self.padding_idx = config.pad_token_id
-        self.token_dropout = config.token_dropout  # 令牌丢弃概率
-        self.mask_token_id = config.mask_token_id  # 掩码标记的索引
-        self.config = config  # 嵌入层的配置信息
-    def call(
-        self, input_ids=None, attention_mask=None, position_ids=None, inputs_embeds=None, past_key_values_length=0
-    ):
-        # 如果位置 ids 未提供
-        if position_ids is None:
-            # 如果输入 ids 已提供
-            if input_ids is not None:
-                # 从输入的标记 ids 中创建位置 ids，未填充的标记保持填充状态
-                position_ids = create_position_ids_from_input_ids(input_ids, self.padding_idx, past_key_values_length)
-            else:
-                # 从输入的嵌入向量中创建位置 ids
-                position_ids = self.create_position_ids_from_inputs_embeds(inputs_embeds)
+        # 定义是否对 token 进行 dropout 的配置
+        self.token_dropout = config.token_dropout
+        # 定义 mask token 的索引
+        self.mask_token_id = config.mask_token_id
+        # 保存配置对象的引用
+        self.config = config
+        ):
+            if position_ids is None:
+                if input_ids is not None:
+                    # 从输入的标记 IDs 创建位置 IDs。任何填充的标记保持填充状态。
+                    position_ids = create_position_ids_from_input_ids(input_ids, self.padding_idx, past_key_values_length)
+                else:
+                    position_ids = self.create_position_ids_from_inputs_embeds(inputs_embeds)
 
-        # 如果未提供输入的嵌入向量
-        if inputs_embeds is None:
-            # 检查输入的标记 ids 是否在词汇表大小范围内
-            check_embeddings_within_bounds(input_ids, self.config.vocab_size)
-            # 使用输入的标记 ids 获取嵌入向量
-            inputs_embeds = self.word_embeddings(input_ids)
+            if inputs_embeds is None:
+                # 检查输入的标记 IDs 是否在词汇表大小范围内
+                check_embeddings_within_bounds(input_ids, self.config.vocab_size)
+                inputs_embeds = self.word_embeddings(input_ids)
 
-        # 嵌入向量即为预训练模型输入
-        embeddings = inputs_embeds
+            # 注意：如果未来要支持 ESM-1（而不是1b！），则需要在此处支持嵌入比例因子。
+            embeddings = inputs_embeds
 
-        # Matt: ESM 可以以略微不同的方式处理 MLM 中的遮罩。如果 token_dropout 标志为 False，则处理方式与 BERT/RoBERTa 相同。
-        # 如果设置为 True，则将遮罩标记的标记视为选择输入的标记并将其归零。当遮罩标记不存在时，通过使嵌入向量乘以一个因子来补偿
-        # （训练中的未遮罩标记的比例）/（样本中未遮罩标记的比例）。这类似于在评估时放大输出的方式，当实际上没有去除任何值时，
-        # 丢弃层会减小其传递的输出，或者在训练中扩大它们的未丢弃输出（或等效地，在评估时放大输出，当实际上没有丢弃任何值）。
-        if self.token_dropout:
-            # 将遮罩标记的标记所在位置的嵌入向量值设置为 0.0
-            embeddings = tf.where((input_ids == self.mask_token_id)[:, :, None], 0.0, embeddings)
-            # 计算在训练中未遮罩的标记比例
-            mask_ratio_train = 0.15 * 0.8  # 在所有 ESM 模型的训练运行中都是硬编码的比例
-            # 计算样本中观察到的未遮罩标记比例
-            src_lengths = tf.cast(tf.reduce_sum(attention_mask, axis=-1), tf.float32)
-            masked_tokens = input_ids == self.mask_token_id
-            mask_ratio_observed = tf.math.count_nonzero(masked_tokens, dtype=tf.float32, axis=-1) / src_lengths
-            # 对嵌入向量进行调整，使其乘以 (1 - mask_ratio_train) / (1 - mask_ratio_observed)[:, None, None]
-            embeddings = embeddings * (1 - mask_ratio_train) / (1 - mask_ratio_observed)[:, None, None]
+            # Matt: ESM 有处理 MLM 掩码的选项，稍微不同于通常。如果 token_dropout 标志为 False，
+            # 则与 BERT/RoBERTa 处理方式相同。如果设置为 True，则屏蔽的标记被视为选择输入丢失并清零。
+            # 当屏蔽的标记不存在时，通过缩放嵌入来补偿 (训练期间未屏蔽标记的比例) / (样本中未屏蔽标记的比例)。
+            # 这类似于评估期间丢弃层缩小输出的方式（或者等价地，在训练期间缩放未丢弃的输出）。
+            if self.token_dropout:
+                # 将屏蔽标记的嵌入清零
+                embeddings = tf.where((input_ids == self.mask_token_id)[:, :, None], 0.0, embeddings)
+                # 训练时的屏蔽比率，硬编码为所有 ESM 模型训练运行中使用的比率
+                mask_ratio_train = 0.15 * 0.8
+                # 计算源长度
+                src_lengths = tf.cast(tf.reduce_sum(attention_mask, axis=-1), tf.float32)
+                # 检查是否有屏蔽的标记
+                masked_tokens = input_ids == self.mask_token_id
+                # 观察到的屏蔽比率
+                mask_ratio_observed = tf.math.count_nonzero(masked_tokens, dtype=tf.float32, axis=-1) / src_lengths
+                # 缩放嵌入以补偿 mask-dropout
+                embeddings = embeddings * (1 - mask_ratio_train) / (1 - mask_ratio_observed)[:, None, None]
 
-        # 如果位置嵌入类型为 "absolute"
-        if self.position_embedding_type == "absolute":
-            # 获取位置嵌入向��
-            position_embeddings = self.position_embeddings(position_ids)
-            # 将位置嵌入向量与嵌入向量相加
-            embeddings += position_embeddings
+            if self.position_embedding_type == "absolute":
+                # 如果位置嵌入类型为绝对位置，则添加位置嵌入到嵌入中
+                position_embeddings = self.position_embeddings(position_ids)
+                embeddings += position_embeddings
 
-        # 如果层标准化存在
-        if self.layer_norm is not None:
-            # 对嵌入向量进行层标准化
-            embeddings = self.layer_norm(embeddings)
-        # 如果注意力遮罩存在
-        if attention_mask is not None:
-            # 将嵌入向量乘以注意力遮罩
-            embeddings = embeddings * tf.cast(tf.expand_dims(attention_mask, -1), embeddings.dtype)
-        # Matt: 我认为这行代码从 BERT 错误地复制过来了，暂时禁用它。
-        # embeddings = self.dropout(embeddings)
-        # 返回嵌入向量
-        return embeddings
-    # 创建位置编码，从输入的嵌入向量中生成序列位置标识符
-    def create_position_ids_from_inputs_embeds(self, inputs_embeds):
-        """
-        We are provided embeddings directly. We cannot infer which are padded so just generate sequential position ids.
-
-        Args:
-            inputs_embeds: tf.Tensor
-
-        Returns: tf.Tensor
-        """
-        # 获取输入嵌入向量的形状
-        input_shape = shape_list(inputs_embeds)[:-1]
-        # 获取序列长度
-        sequence_length = input_shape[1]
-
-        # 生成序列位置标识符，从padding_idx开始，到序列长度加上padding_idx
-        position_ids = tf.range(
-            start=self.padding_idx + 1, limit=sequence_length + self.padding_idx + 1, dtype=tf.int64
-        )
-        # 将位置标识符广播到输入形状
-        return tf.broadcast_to(tf.expand_dims(position_ids, 0), input_shape)
-
-    # 构建位置编码层
-    def build(self, input_shape=None):
-        # 如果已经构建，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 如果存在词嵌入，则构建词嵌入
-        if getattr(self, "word_embeddings", None) is not None:
-            with tf.name_scope(self.word_embeddings.name):
-                self.word_embeddings.build(None)
-        # 如果存在位置嵌入，则构建位置嵌入
-        if getattr(self, "position_embeddings", None) is not None:
-            with tf.name_scope(self.position_embeddings.name):
-                self.position_embeddings.build(None)
-        # 如果存在层归一化，则构建层归一化
-        if getattr(self, "layer_norm", None) is not None:
-            with tf.name_scope(self.layer_norm.name):
-                self.layer_norm.build([None, None, self.config.hidden_size])
-class TFEsmSelfAttention(Layer):
+            if self.layer_norm is not None:
+                # 如果有层归一化，则对嵌入进行归一化
+                embeddings = self.layer_norm(embeddings)
+            if attention_mask is not None:
+                # 如果存在注意力掩码，则将其应用于嵌入
+                embeddings = embeddings * tf.cast(tf.expand_dims(attention_mask, -1), embeddings.dtype)
+            # Matt: 我认为这行代码从 BERT 复制过来时出错了，暂时禁用它。
+            # embeddings = self.dropout(embeddings)
+            return embeddings
+    # 如果已经构建过模型则直接返回，避免重复构建
+    if self.built:
+        return
+    
+    # 标记模型已经构建
+    self.built = True
+    
+    # 如果存在词嵌入，则构建词嵌入层
+    if getattr(self, "word_embeddings", None) is not None:
+        # 在词嵌入的命名空间下，构建词嵌入层
+        with tf.name_scope(self.word_embeddings.name):
+            self.word_embeddings.build(None)
+    
+    # 如果存在位置嵌入，则构建位置嵌入层
+    if getattr(self, "position_embeddings", None) is not None:
+        # 在位置嵌入的命名空间下，构建位置嵌入层
+        with tf.name_scope(self.position_embeddings.name):
+            self.position_embeddings.build(None)
+    
+    # 如果存在层归一化，则构建层归一化层
+    if getattr(self, "layer_norm", None) is not None:
+        # 在层归一化的命名空间下，构建层归一化层，输入形状为 [None, None, self.config.hidden_size]
+        with tf.name_scope(self.layer_norm.name):
+            self.layer_norm.build([None, None, self.config.hidden_size])
+class TFEsmSelfAttention(keras.layers.Layer):
+    # 定义一个自注意力层的 TensorFlow 扩展类
     def __init__(self, config, position_embedding_type=None, name=None):
-        # 初始化自注意力层对象，设置属性
+        # 初始化函数，设置参数并配置层的名称
         super().__init__(name=name)
-        # 如果隐藏层大小不是注意力头数的倍数且没有嵌入大小属性，则引发异常
+        # 检查隐藏大小是否可以被注意力头数整除，若不能则抛出错误
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
                 f"heads ({config.num_attention_heads})"
             )
 
+        # 设置注意力头数和每个头的大小
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 创建查询、键、值网络层
-        self.query = Dense(
+        # 创建查询、键、值的全连接层
+        self.query = keras.layers.Dense(
             self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="query"
         )
-        self.key = Dense(self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="key")
-        self.value = Dense(
+        self.key = keras.layers.Dense(
+            self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="key"
+        )
+        self.value = keras.layers.Dense(
             self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="value"
         )
 
-        # 创建dropout层
-        self.dropout = Dropout(config.attention_probs_dropout_prob)
+        # 设置注意力概率的 dropout 层
+        self.dropout = keras.layers.Dropout(config.attention_probs_dropout_prob)
+        # 设置位置嵌入类型，默认为绝对位置
         self.position_embedding_type = position_embedding_type or getattr(
             config, "position_embedding_type", "absolute"
         )
-        
-        # 如果采用相对位置编码或旋转编码，则初始化相关属性
         self.rotary_embeddings = None
+        # 如果位置嵌入类型是相对键或者相对键-查询，则创建距离嵌入层
         if self.position_embedding_type == "relative_key" or self.position_embedding_type == "relative_key_query":
             self.max_position_embeddings = config.max_position_embeddings
-            self.distance_embedding = Embedding(
+            self.distance_embedding = keras.layers.Embedding(
                 2 * config.max_position_embeddings - 1,
                 self.attention_head_size,
                 embeddings_initializer=get_initializer(config.initializer_range),
             )
+        # 如果位置嵌入类型是旋转，则创建旋转嵌入对象
         elif self.position_embedding_type == "rotary":
             self.rotary_embeddings = TFRotaryEmbedding(dim=self.attention_head_size, name="rotary_embeddings")
 
-        # 判断是否是解码器
+        # 设置是否为解码器的标志和存储配置信息
         self.is_decoder = config.is_decoder
         self.config = config
 
     def transpose_for_scores(self, x: tf.Tensor) -> tf.Tensor:
-        # 将张量重新形状为[batch_size, num_heads, seq_length, head_size]并转置
+        # 重新排列张量的维度以便进行注意力计算
         new_x_shape = shape_list(x)[:-1] + [self.num_attention_heads, self.attention_head_size]
         x = tf.reshape(x, new_x_shape)
         return tf.transpose(x, perm=(0, 2, 1, 3))
@@ -385,91 +384,96 @@ class TFEsmSelfAttention(Layer):
         past_key_value: Tuple[Tuple[tf.Tensor]] | None = None,
         output_attentions: Optional[bool] = False,
         training: bool = False,
-    # 构建神经网络模型
+        **kwargs
+    ) -> Tuple[tf.Tensor, Optional[Tuple[tf.Tensor]]]:
+        # 定义自注意力层的调用方法，处理输入张量并返回处理后的张量和可选的注意力张量
+    # 定义 build 方法，用于构建模型结构
     def build(self, input_shape=None):
-        # 如果模型已经构建过，则直接返回
+        # 如果已经构建过，直接返回，避免重复构建
         if self.built:
             return
         # 标记模型为已构建状态
         self.built = True
-        # 如果存在查询(query)属性，则使用 TensorFlow 的命名空间为其构建
+        
+        # 如果存在查询（query）属性，则构建查询的结构
         if getattr(self, "query", None) is not None:
+            # 使用查询的名称作为命名空间
             with tf.name_scope(self.query.name):
+                # 构建查询的形状为 [None, None, self.config.hidden_size]
                 self.query.build([None, None, self.config.hidden_size])
-        # 如果存在键(key)属性，则使用 TensorFlow 的命名空间为其构建
+        
+        # 如果存在键（key）属性，则构建键的结构
         if getattr(self, "key", None) is not None:
+            # 使用键的名称作为命名空间
             with tf.name_scope(self.key.name):
+                # 构建键的形状为 [None, None, self.config.hidden_size]
                 self.key.build([None, None, self.config.hidden_size])
-        # 如果存在值(value)属性，则使用 TensorFlow 的命名空间为其构建
+        
+        # 如果存在值（value）属性，则构建值的结构
         if getattr(self, "value", None) is not None:
+            # 使用值的名称作为命名空间
             with tf.name_scope(self.value.name):
+                # 构建值的形状为 [None, None, self.config.hidden_size]
                 self.value.build([None, None, self.config.hidden_size])
-        # 如果存在旋转嵌入(rotary_embeddings)属性，则使用 TensorFlow 的命名空间为其构建
+        
+        # 如果存在旋转嵌入（rotary_embeddings）属性，则构建其结构
         if getattr(self, "rotary_embeddings", None) is not None:
+            # 使用旋转嵌入的名称作为命名空间
             with tf.name_scope(self.rotary_embeddings.name):
+                # 构建旋转嵌入，传入 None 作为输入形状参数
                 self.rotary_embeddings.build(None)
-# 创建名为 TFEsmSelfOutput 的自定义层，继承自 Layer
-class TFEsmSelfOutput(Layer):
-    # 初始化函数
+# 自定义 Keras 层，实现自注意力机制的输出层
+class TFEsmSelfOutput(keras.layers.Layer):
     def __init__(self, config, name=None):
-        # 调用父类的初始化函数
         super().__init__(name=name)
-        # 创建一个全连接层 Dense，用于变换隐藏状态的维度
-        self.dense = Dense(
+        # 创建一个全连接层，用于映射隐藏状态到指定大小的输出空间
+        self.dense = keras.layers.Dense(
             config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-        # 创建一个 Dropout 层，用于在训练时随机断开一定比例的神经元连接，防止过拟合
-        self.dropout = Dropout(config.hidden_dropout_prob)
-        # 保存模型配置
+        # 创建一个 Dropout 层，用于在训练时随机丢弃部分神经元，防止过拟合
+        self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        # 保存配置信息
         self.config = config
 
-    # 前向传播函数
     def call(self, hidden_states, input_tensor, training=False):
-        # 对隐藏状态进行全连接变换
+        # 将隐藏状态通过全连接层映射，并应用激活函数
         hidden_states = self.dense(hidden_states)
-        # 在训练时对变换后的隐藏状态进行随机断开
+        # 在训练模式下，对映射后的输出应用 Dropout
         hidden_states = self.dropout(hidden_states, training=training)
-        # 将变换后的隐藏状态和输入张量相加
+        # 将映射后的输出与输入张量相加，实现残差连接
         hidden_states += input_tensor
-        # 返回相加后的结果
         return hidden_states
 
-    # 构建层的函数
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
         if self.built:
             return
-        # 标记为已构建
         self.built = True
-        # 构建全连接层
+        # 如果层已构建，则直接返回；否则，构建全连接层
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
+                # 构建全连接层，输入形状为 [None, None, hidden_size]
                 self.dense.build([None, None, self.config.hidden_size])
 
 
-# 创建名为 TFEsmAttention 的自定义层，继承自 Layer
-class TFEsmAttention(Layer):
-    # 初始化函数
+# 自定义 Keras 层，实现注意力机制的中间层
+class TFEsmAttention(keras.layers.Layer):
     def __init__(self, config, name=None):
-        # 调用父类的初始化函数
         super().__init__(name=name)
-        # 创建 self 层，实例化 TFEsmSelfAttention 层
+        # 创建自注意力层
         self.self = TFEsmSelfAttention(config, name="self")
-        # 创建 output_layer 层，实例化 TFEsmSelfOutput 层
+        # 创建自注意力层的输出层
         self.output_layer = TFEsmSelfOutput(config, name="output")
-        # 初始化剪枝头信息的集合
+        # 初始化一个空集合，用于存储要剪枝的注意力头
         self.pruned_heads = set()
-        # 创建 LayerNorm 层，用于进行层归一化操作
-        self.LayerNorm = LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 保存模型配置
+        # 创建 LayerNormalization 层，用于对输入进行归一化
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # 保存配置信息
         self.config = config
 
-    # 剪枝头信息的函数
     def prune_heads(self, heads):
-        # 抛出未实现的异常
+        # 剪枝方法暂未实现
         raise NotImplementedError
 
-    # 前向传播函数
     def call(
         self,
         hidden_states,
@@ -481,9 +485,9 @@ class TFEsmAttention(Layer):
         output_attentions=False,
         training=False,
     ):
-        # 对隐藏状态进行层归一化
+        # 对输入的隐藏状态进行 LayerNormalization
         hidden_states_ln = self.LayerNorm(hidden_states)
-        # 通过 self 层处理隐藏状态
+        # 调用自注意力层进行计算，传入各种参数
         self_outputs = self.self(
             hidden_states_ln,
             attention_mask,
@@ -494,133 +498,89 @@ class TFEsmAttention(Layer):
             output_attentions,
             training,
         )
-        # 通过 output_layer 层处理 self 层输出
+        # 将自注意力层的输出传递给输出层，同时传入原始的隐藏状态
         attention_output = self.output_layer(self_outputs[0], hidden_states)
-        # 输出包括 attention_output 和 self_outputs 的其余部分
-        outputs = (attention_output,) + self_outputs[1:]  # add attentions if we output them
-        # 返回输出结果
+        # 组装最终的输出，包括注意力输出和可能的其他信息
+        outputs = (attention_output,) + self_outputs[1:]  # 如果需要输出注意力，将其添加到输出中
         return outputs
 
-    # 构建层的函数
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
         if self.built:
             return
-        # 标记为已构建
         self.built = True
-        # 构建 self 层
+        # 如果层已构建，则直接返回；否则，构建自注意力层和输出层
         if getattr(self, "self", None) is not None:
             with tf.name_scope(self.self.name):
+                # 构建自注意力层
                 self.self.build(None)
-        # 构建 output_layer 层
         if getattr(self, "output_layer", None) is not None:
             with tf.name_scope(self.output_layer.name):
+                # 构建自注意力层的输出层
                 self.output_layer.build(None)
-        # 构建 LayerNorm 层
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
+                # 构建 LayerNormalization 层，输入形状为 [None, None, hidden_size]
                 self.LayerNorm.build([None, None, self.config.hidden_size])
-    # 初始化函数，接受一个 EsmConfig 对象和其他关键字参数
+    # 初始化函数，用于创建一个新的实例
     def __init__(self, config: EsmConfig, **kwargs):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法，传入额外的关键字参数
         super().__init__(**kwargs)
 
-        # 创建一个全连接层，设置单元数为 config.intermediate_size，使用 config.initializer_range 来初始化权重，命名为"dense"
-        self.dense = tf.keras.layers.Dense(
-            units=config.intermediate_size,
-            kernel_initializer=get_initializer(config.initializer_range),
-            name="dense",
+        # 创建一个全连接层，用于处理输入数据
+        self.dense = keras.layers.Dense(
+            units=config.intermediate_size,  # 设置全连接层的输出单元数
+            kernel_initializer=get_initializer(config.initializer_range),  # 初始化权重的方式
+            name="dense",  # 设置层的名称
         )
-        # 保存配置对象
-        self.config = config
+        self.config = config  # 保存配置信息到实例中
 
-    # 调用函数，接受一个 tf.Tensor 类型的 hidden_states 参数，返回一个 tf.Tensor 类型的结果
+    # 调用函数，用于定义模型的前向传播逻辑
     def call(self, hidden_states: tf.Tensor) -> tf.Tensor:
-        # 将 hidden_states 输入到全连接层中得到输出
-        hidden_states = self.dense(inputs=hidden_states)
-        # 使用 gelu 激活函数处理输出
-        hidden_states = tf.nn.gelu(hidden_states)
-        # 返回处理后的结果
-        return hidden_states
+        hidden_states = self.dense(inputs=hidden_states)  # 将输入数据传入全连接层处理
+        hidden_states = tf.nn.gelu(hidden_states)  # 使用GELU激活函数处理全连接层输出
+        return hidden_states  # 返回处理后的数据
 
-    # 构建函数，用于构建层的变量，当已经构建过时直接返回，否则构建并设置构建标志为 True
+    # 构建函数，用于构建模型的层次结构
     def build(self, input_shape=None):
-        if self.built:
+        if self.built:  # 如果模型已经构建过，直接返回
             return
-        self.built = True
-        # 如果存在全连接层，则使用其名字创建命名空间，并构建全连接层的权重变量
+        self.built = True  # 标记模型已构建
+
         if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.hidden_size])
-# 定义 TF 模型类 TFEsmOutput，继承自 Layer 类
-class TFEsmOutput(Layer):
-    # 初始化方法，接受 config 和 name 两个参数
+            with tf.name_scope(self.dense.name):  # 使用全连接层的名称作为命名空间
+                self.dense.build([None, None, self.config.hidden_size])  # 构建全连接层的结构
+# 自定义的 Transformer Encoder 层，继承自 keras.layers.Layer
+class TFEsmLayer(keras.layers.Layer):
+    # 初始化方法，接收配置参数 config 和可选的层名字 name
     def __init__(self, config, name=None):
         # 调用父类的初始化方法
         super().__init__(name=name)
-        # 创建一个全连接层，输出维度为 config.hidden_size，初始化方法为 config.initializer_range，名称为 "dense"
-        self.dense = Dense(
-            config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
-        )
-        # 创建一个 Dropout 层，dropout rate 为 config.hidden_dropout_prob
-        self.dropout = Dropout(config.hidden_dropout_prob)
-        # 将 config 参数保存到实例中
-        self.config = config
-
-    # 定义 call 方法，接受 hidden_states, input_tensor 和 training 三个参数
-    def call(self, hidden_states, input_tensor, training=False):
-        # 将 hidden_states 输入到全连接层中
-        hidden_states = self.dense(hidden_states)
-        # 在全连接层的输出上应用 dropout，如果 training 为 True
-        hidden_states = self.dropout(hidden_states, training=training)
-        # 将输入的 input_tensor 加到 hidden_states 上
-        hidden_states += input_tensor
-        # 返回计算结果
-        return hidden_states
-
-    # 定义 build 方法，接受 input_shape 参数
-    def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
-        if self.built:
-            return
-        # 将 built 属性设置为 True
-        self.built = True
-        # 如果实例中存在 dense 层
-        if getattr(self, "dense", None) is not None:
-            # 使用 dense 层的名称创建一个命名空间
-            with tf.name_scope(self.dense.name):
-                # 构建 dense 层，输入形状为 [None, None, self.config.intermediate_size]
-                self.dense.build([None, None, self.config.intermediate_size])
-
-# 定义 TF 模型类 TFEsmLayer，继承自 Layer 类
-class TFEsmLayer(Layer):
-    # 初始化方法，接受 config 和 name 两个参数
-    def __init__(self, config, name=None):
-        # 调用父类的初始化方法
-        super().__init__(name=name)
-        # 保存一些参数到实例中
+        # 设定前馈传播时的块大小
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
+        # 序列长度维度，设定为1
         self.seq_len_dim = 1
-        # 创建一个 TFEsmAttention 实例，名称为 "attention"
+        # 创建自注意力层 TFEsmAttention 对象
         self.attention = TFEsmAttention(config, name="attention")
+        # 是否作为解码器使用的标志
         self.is_decoder = config.is_decoder
+        # 是否添加交叉注意力机制的标志
         self.add_cross_attention = config.add_cross_attention
-        # 如果 add_cross_attention 为 True 且不是 decoder 模型，则抛出异常
+        # 如果添加了交叉注意力且不是解码器，则引发运行时错误
         if self.add_cross_attention:
             if not self.is_decoder:
                 raise RuntimeError(f"{self} should be used as a decoder model if cross attention is added")
-            # 创建一个 TFEsmAttention 实例
+            # 创建交叉注意力层 TFEsmAttention 对象
             self.crossattention = TFEsmAttention(config)
-        # 创建一个 TFEsmIntermediate 实例，名称为 "intermediate"
+        # 创建中间层对象 TFEsmIntermediate
         self.intermediate = TFEsmIntermediate(config, name="intermediate")
-        # 创建一个 TFEsmOutput 实例，名称为 "output"
+        # 创建输出层对象 TFEsmOutput
         self.output_layer = TFEsmOutput(config, name="output")
-        # 创建一个 LayerNormalization 层，epsilon 为 config.layer_norm_eps，名称为 "LayerNorm"
-        self.LayerNorm = LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 将 config 参数保存到实例中
+        # 创建层归一化对象 LayerNorm
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # 保存配置对象到 self.config
         self.config = config
 
-    # 定义 call 方法，接受一系列参数
+    # 调用方法，实现层的前向传播逻辑
     def call(
         self,
         hidden_states,
@@ -631,103 +591,119 @@ class TFEsmLayer(Layer):
         past_key_value=None,
         output_attentions=False,
         training=False,
-    # 如果过去的键/值不为None，则decoder uni方向的self-attention缓存键/值元组位于位置1,2
-    self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
-    # 进行self-attention计算
-    self_attention_outputs = self.attention(
-        hidden_states,
-        attention_mask,
-        head_mask,
-        output_attentions=output_attentions,
-        past_key_value=self_attn_past_key_value,
-        training=training,
-    )
-    attention_output = self_attention_outputs[0]
-    
-    # 如果是decoder模型，最后一个输出为self-attn缓存的元组
-    if self.is_decoder:
-        outputs = self_attention_outputs[1:-1]
-        present_key_value = self_attention_outputs[-1]
-    else:
-        outputs = self_attention_outputs[1:]  # 如果我们输出注意力权重，添加self注意力
-    
-    cross_attn_present_key_value = None
-    # 如果是decoder模型并且传入了encoder隐藏状态
-    if self.is_decoder and encoder_hidden_states is not None:
-        if not hasattr(self, "crossattention"):
-            raise AttributeError(
-                f"If `encoder_hidden_states` are passed, {self} has to be instantiated"
-                " with cross-attention layers by setting `config.add_cross_attention=True`"
-            )
-    
-        # cross_attn缓存的键/值元组位于过去键/值元组的位置3,4
-        cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
-        # 进行cross-attention计算
-        cross_attention_outputs = self.crossattention(
-            attention_output,
+    ):
+        # 如果过去的键/值对存在，则提取自注意力的缓存键/值对，位置在1和2
+        self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
+        # 使用自注意力模块处理隐藏状态，应用注意力掩码和头掩码，输出注意力信息
+        self_attention_outputs = self.attention(
+            hidden_states,
             attention_mask,
             head_mask,
-            encoder_hidden_states,
-            encoder_attention_mask,
-            cross_attn_past_key_value,
-            output_attentions,
+            output_attentions=output_attentions,
+            past_key_value=self_attn_past_key_value,
             training=training,
         )
-        attention_output = cross_attention_outputs[0]
-        outputs = outputs + cross_attention_outputs[1:-1]  # 如果我们输出注意力权重，添加cross-attention
-    
-        # 在present_key_value元组的位置3,4上添加cross-attn缓存
-        cross_attn_present_key_value = cross_attention_outputs[-1]
-        present_key_value = present_key_value + cross_attn_present_key_value
-    
-    layernorm_output = self.LayerNorm(attention_output)
-    intermediate_output = self.intermediate(hidden_states=layernorm_output)
-    layer_output = self.output_layer(
-        hidden_states=intermediate_output, input_tensor=attention_output, training=training
-    )
-    outputs = (layer_output,) + outputs  # 如果我们输出的话，添加注意力
-    
-    # 如果是decoder，返回注意力键/值作为最后的输出
-    if self.is_decoder:
-        outputs = outputs + (present_key_value,)
-    
-    return outputs
-    # 构建神经网络模型，如果已经构建过则直接返回
+        # 提取自注意力模块的输出结果
+        attention_output = self_attention_outputs[0]
+
+        # 如果是解码器模型，则最后一个输出是自注意力缓存的元组
+        if self.is_decoder:
+            outputs = self_attention_outputs[1:-1]  # 提取除了最后一个元素外的所有元素
+            present_key_value = self_attention_outputs[-1]  # 提取最后一个元素作为当前键/值对
+        else:
+            outputs = self_attention_outputs[1:]  # 如果输出注意力权重，则添加自注意力信息
+
+        cross_attn_present_key_value = None
+        # 如果是解码器且有编码器的隐藏状态
+        if self.is_decoder and encoder_hidden_states is not None:
+            # 如果模型没有交叉注意力层，则抛出异常
+            if not hasattr(self, "crossattention"):
+                raise AttributeError(
+                    f"If `encoder_hidden_states` are passed, {self} has to be instantiated"
+                    " with cross-attention layers by setting `config.add_cross_attention=True`"
+                )
+
+            # 提取交叉注意力模块的缓存键/值对，位置在过去键/值对元组的倒数第二和倒数第一位置
+            cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
+            # 使用交叉注意力模块处理自注意力输出、注意力掩码、头掩码、编码器隐藏状态等信息
+            cross_attention_outputs = self.crossattention(
+                attention_output,
+                attention_mask,
+                head_mask,
+                encoder_hidden_states,
+                encoder_attention_mask,
+                cross_attn_past_key_value,
+                output_attentions,
+                training=training,
+            )
+            # 提取交叉注意力模块的输出结果
+            attention_output = cross_attention_outputs[0]
+            # 添加交叉注意力信息到输出中
+            outputs = outputs + cross_attention_outputs[1:-1]
+
+            # 将交叉注意力的键/值对添加到当前键/值对元组的第三和第四位置
+            cross_attn_present_key_value = cross_attention_outputs[-1]
+            present_key_value = present_key_value + cross_attn_present_key_value
+
+        # 对注意力输出进行 LayerNorm 处理
+        layernorm_output = self.LayerNorm(attention_output)
+        # 使用中间层处理 LayerNorm 后的输出
+        intermediate_output = self.intermediate(hidden_states=layernorm_output)
+        # 使用输出层处理中间层的输出和注意力输出
+        layer_output = self.output_layer(
+            hidden_states=intermediate_output, input_tensor=attention_output, training=training
+        )
+        # 将处理后的输出添加到总输出中
+        outputs = (layer_output,) + outputs
+
+        # 如果是解码器模型，将注意力的键/值对作为最后一个输出返回
+        if self.is_decoder:
+            outputs = outputs + (present_key_value,)
+
+        return outputs
+    # 构建函数，用于构建模型的各个部分
     def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回，避免重复构建
         if self.built:
             return
-        # 设置标记为已构建
+        # 标记模型已经构建
         self.built = True
-        # 如果定义了注意力机制，则构建注意力层
+        
+        # 如果存在注意力层，构建注意力层并设置名称作用域
         if getattr(self, "attention", None) is not None:
             with tf.name_scope(self.attention.name):
                 self.attention.build(None)
-        # 如果定义了中间层，则构建中间层
+        
+        # 如果存在中间层，构建中间层并设置名称作用域
         if getattr(self, "intermediate", None) is not None:
             with tf.name_scope(self.intermediate.name):
                 self.intermediate.build(None)
-        # 如果定义了输出层，则构建输出层
+        
+        # 如果存在输出层，构建输出层并设置名称作用域
         if getattr(self, "output_layer", None) is not None:
             with tf.name_scope(self.output_layer.name):
                 self.output_layer.build(None)
-        # 如果定义了层归一化，则构建层归一化
+        
+        # 如果存在 LayerNorm 层，构建 LayerNorm 层并设置名称作用域，
+        # 输入形状为 [None, None, self.config.hidden_size]
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
                 self.LayerNorm.build([None, None, self.config.hidden_size])
-# 创建一个名为 TFEsmEncoder 的类，继承自 Layer 类
-class TFEsmEncoder(Layer):
-    # 初始化方法，接受 config 和 name 两个参数
+# 定义自定义的 Transformer 编码器层，继承自 Keras 的 Layer 类
+class TFEsmEncoder(keras.layers.Layer):
+    # 初始化方法，接收配置参数和可选的名称
     def __init__(self, config, name=None):
-        # 调用父类的初始化方法
         super().__init__(name=name)
-        # 将参数 config 赋值给实例变量 self.config
+        # 保存配置参数
         self.config = config
-        # 创建一个由 TFEsmLayer 对象组成的列表，列表长度为 config.num_hidden_layers
+        # 创建多个 Transformer 编码层，根据配置中的隐藏层数量
         self.layer = [TFEsmLayer(config, name=f"layer_._{i}") for i in range(config.num_hidden_layers)]
-        # 创建一个 LayerNormalization 层的实例，命名为 "emb_layer_norm_after"
-        self.emb_layer_norm_after = LayerNormalization(epsilon=config.layer_norm_eps, name="emb_layer_norm_after")
+        # 创建一个 LayerNormalization 层，用于对嵌入层之后的结果进行归一化处理
+        self.emb_layer_norm_after = keras.layers.LayerNormalization(
+            epsilon=config.layer_norm_eps, name="emb_layer_norm_after"
+        )
 
-    # call 方法，接受多个参数
+    # 定义调用方法，处理输入数据和各种选项
     def call(
         self,
         hidden_states,
@@ -742,27 +718,26 @@ class TFEsmEncoder(Layer):
         return_dict=True,
         training=False,
     ):
-        # 根据 output_hidden_states 的值确定是否创建 all_hidden_states 变量
+        # 初始化存储所有隐藏状态、自注意力和交叉注意力的元组，如果需要输出的话
         all_hidden_states = () if output_hidden_states else None
-        # 根据 output_attentions 的值确定是否创建 all_self_attentions 变量
         all_self_attentions = () if output_attentions else None
-        # 根据 output_attentions 的值和 self.config.add_cross_attention 的值确定是否创建 all_cross_attentions 变量
         all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
-        # 根据 use_cache 的值确定是否创建 next_decoder_cache 变量
+
+        # 初始化存储下一个解码器缓存的元组，如果需要使用缓存的话
         next_decoder_cache = () if use_cache else None
-        
-        # 遍历 self.layer 列表
+
+        # 遍历所有 Transformer 编码层
         for i, layer_module in enumerate(self.layer):
-            # 根据 output_hidden_states 的值确定是否将 hidden_states 加入到 all_hidden_states 中
+            # 如果需要输出隐藏状态，则将当前层的隐藏状态添加到 all_hidden_states 中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-            
-            # 根据 head_mask 是否为 None 决定是否创建 layer_head_mask 变量
+
+            # 获取当前层的头部掩码
             layer_head_mask = head_mask[i] if head_mask is not None else None
-            # 根据 past_key_values 是否为 None 决定是否创建 past_key_value 变量
+            # 获取当前层的过去键值对（如果有的话）
             past_key_value = past_key_values[i] if past_key_values is not None else None
-            
-            # 调用 layer_module 的 __call__ 方法，并传入相应参数，得到 layer_outputs
+
+            # 调用当前层的处理方法，获取该层的输出结果
             layer_outputs = layer_module(
                 hidden_states,
                 attention_mask,
@@ -773,30 +748,29 @@ class TFEsmEncoder(Layer):
                 output_attentions,
                 training,
             )
-            
-            # 将 layer_outputs 中的第一个元素（hidden_states）赋值给 hidden_states
+
+            # 更新隐藏状态为当前层的输出的第一个元素
             hidden_states = layer_outputs[0]
-            # 根据 use_cache 是否为 True 决定是否将 layer_outputs[-1] 加入到 next_decoder_cache 中
+            # 如果需要使用缓存，则将当前层的输出缓存加入到 next_decoder_cache 中
             if use_cache:
                 next_decoder_cache += (layer_outputs[-1],)
-            # 根据 output_attentions 是否为 True 决定是否将 layer_outputs[1] 加入到 all_self_attentions 中
+            # 如果需要输出注意力分布，则将当前层的自注意力加入到 all_self_attentions 中
             if output_attentions:
                 all_self_attentions = all_self_attentions + (layer_outputs[1],)
-                # 如果 self.config.add_cross_attention 为 True，将 layer_outputs[2] 加入到 all_cross_attentions 中
+                # 如果配置中包含交叉注意力，则将当前层的交叉注意力加入到 all_cross_attentions 中
                 if self.config.add_cross_attention:
                     all_cross_attentions = all_cross_attentions + (layer_outputs[2],)
-        
-        # 根据 self.emb_layer_norm_after 的真假判断是否调用 emb_layer_norm_after 方法
+
+        # 如果存在嵌入层之后的归一化层，则对最终的隐藏状态进行归一化处理
         if self.emb_layer_norm_after:
             hidden_states = self.emb_layer_norm_after(hidden_states)
-        
-        # 根据 output_hidden_states 的值判断是否将 hidden_states 加入到 all_hidden_states 中
+
+        # 如果需要输出所有隐藏状态，则将最终的隐藏状态添加到 all_hidden_states 中
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
-        
-        # 根据 return_dict 的真假判断返回不同的结果
+
+        # 如果不需要以字典形式返回结果，则以元组形式返回多个结果
         if not return_dict:
-            # 如果 return_dict 为 False，则返回指定的几个变量中非 None 的部分
             return tuple(
                 v
                 for v in [
@@ -808,150 +782,139 @@ class TFEsmEncoder(Layer):
                 ]
                 if v is not None
             )
-        else:
-            # 如果 return_dict 为 True，则返回 TFBaseModelOutputWithPastAndCrossAttentions 类的实例
-            return TFBaseModelOutputWithPastAndCrossAttentions(
-                last_hidden_state=hidden_states,
-                past_key_values=next_decoder_cache,
-                hidden_states=all_hidden_states,
-                attentions=all_self_attentions,
-                cross_attentions=all_cross_attentions,
-            )
-    # 构建神经网络模型
-    def build(self, input_shape=None):
-        # 如果模型已经构建过，直接返回
-        if self.built:
-            return
-        # 将模型标记为已构建
-        self.built = True
-        # 如果存在emb_layer_norm_after属性
-        if getattr(self, "emb_layer_norm_after", None) is not None:
-            # 在 TensorFlow 中设置名称范围
-            with tf.name_scope(self.emb_layer_norm_after.name):
-                # 构建emb_layer_norm_after属性
-                self.emb_layer_norm_after.build([None, None, self.config.hidden_size])
-        # 如果存在layer属性
-        if getattr(self, "layer", None) is not None:
-            # 遍历每个层
-            for layer in self.layer:
-                # 在 TensorFlow 中设置名称范围
-                with tf.name_scope(layer.name):
-                    # 构建该层
-                    layer.build(None)
-# 从transformers.models.bert.modeling_tf_bert.TFBertPooler复制并把Bert改成Esm
-class TFEsmPooler(tf.keras.layers.Layer):
-    # 初始化方法，接收EsmConfig类型的config参数
-    def __init__(self, config: EsmConfig, **kwargs):
-        # 调用父类的初始化方法
-        super().__init__(**kwargs)
-
-        # 创建一个全连接层，设置units为config.hidden_size，kernel_initializer为config.initializer_range，激活函数为"tanh"
-        self.dense = tf.keras.layers.Dense(
-            units=config.hidden_size,
-            kernel_initializer=get_initializer(config.initializer_range),
-            activation="tanh",
-            name="dense",
+        
+        # 如果需要以字典形式返回结果，则创建 TFBaseModelOutputWithPastAndCrossAttentions 对象返回
+        return TFBaseModelOutputWithPastAndCrossAttentions(
+            last_hidden_state=hidden_states,
+            past_key_values=next_decoder_cache,
+            hidden_states=all_hidden_states,
+            attentions=all_self_attentions,
+            cross_attentions=all_cross_attentions,
         )
-        # 存储config参数
-        self.config = config
+    # 如果已经构建过网络，则直接返回，避免重复构建
+    if self.built:
+        return
 
-    # 调用方法，接收tf.Tensor类型的hidden_states参数，返回tf.Tensor类型的pooled_output
-    def call(self, hidden_states: tf.Tensor) -> tf.Tensor:
-        # "池化"模型，直接取第一个标记对应的隐藏状态
-        first_token_tensor = hidden_states[:, 0]
-        pooled_output = self.dense(inputs=first_token_tensor)
+    # 标记网络已经构建
+    self.built = True
 
-        return pooled_output
+    # 如果存在额外的嵌入层归一化操作，构建该层
+    if getattr(self, "emb_layer_norm_after", None) is not None:
+        # 在 TensorFlow 的命名空间下构建嵌入层归一化操作
+        with tf.name_scope(self.emb_layer_norm_after.name):
+            # 构建嵌入层归一化操作，指定输入形状为 [None, None, self.config.hidden_size]
+            self.emb_layer_norm_after.build([None, None, self.config.hidden_size])
 
-    # 构建方法，接收input_shape参数，默认为None
-    def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
-        if self.built:
-            return
-        # 设置为已构建状态
-        self.built = True
-        # 如果存在dense属性
-        if getattr(self, "dense", None) is not None:
-            # 在名称空间self.dense.name下构建dense层
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.hidden_size])
+    # 如果存在多层网络结构，逐层构建网络
+    if getattr(self, "layer", None) is not None:
+        # 遍历每一层网络
+        for layer in self.layer:
+            # 在 TensorFlow 的命名空间下构建当前层网络
+            with tf.name_scope(layer.name):
+                # 构建当前层网络，输入形状暂时为 None，表示动态适配
+                layer.build(None)
+"""
+定义一个自定义的 Keras 层 TFEsmPooler，用于 ESM 模型的池化操作。
+从 transformers.models.bert.modeling_tf_bert.TFBertPooler 复制并修改为 ESM。
 
+Parameters:
+    config (EsmConfig): ESM 模型的配置对象，包含模型的各种参数。
 
-# Esm预训练模型类，继承自TFPreTrainedModel
-class TFEsmPreTrainedModel(TFPreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
+Attributes:
+    dense (Dense): 密集连接层，用于处理隐藏状态向量。
+    config (EsmConfig): ESM 模型的配置对象。
 
-    # 配置类为EsmConfig
-    config_class = EsmConfig
-    # 基础模型前缀为"esm"
-
-# ESM_START_DOCSTRING常量
-ESM_START_DOCSTRING = r"""
-
-    This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
-    etc.)
-
-    This model is also a Keras [Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it as a
-    regular Keras model and refer to the TF/Keras documentation for all matters related to general usage and behavior.
-
-    Parameters:
-        config ([`EsmConfig`]): Model configuration class with all the parameters of the
-            model. Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~TFPreTrainedModel.from_pretrained`] method to load the model weights.
+Methods:
+    call(hidden_states: tf.Tensor) -> tf.Tensor:
+        对隐藏状态进行池化操作，只使用第一个 token 对应的隐藏状态。
+    build(input_shape=None):
+        构建层，初始化密集连接层。
 """
 
-# ESM_INPUTS_DOCSTRING常量
-ESM_INPUTS_DOCSTRING = r"""
+"""
+ESM 模型的预训练模型基类 TFEsmPreTrainedModel。
+
+An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+models.
+
+Attributes:
+    config_class (EsmConfig): 模型配置类，指定为 EsmConfig。
+    base_model_prefix (str): 基础模型名称前缀，设为 "esm"。
+
+Notes:
+    该类提供了预训练模型的通用方法，如初始化权重、下载和加载预训练模型等。
+"""
+
+"""
+ESM 模型的输入文档字符串，描述模型的基本信息和使用方法。
+
+This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
+library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+etc.)
+
+This model is also a Keras [Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it as a
+regular Keras model and refer to the TF/Keras documentation for all matters related to general usage and behavior.
+
+Parameters:
+    config ([`EsmConfig`]): Model configuration class with all the parameters of the
+    model. Initializing with a config file does not load the weights associated with the model, only the
+    configuration. Check out the [`~TFPreTrainedModel.from_pretrained`] method to load the model weights.
+"""
+
+"""
+ESM 模型的输入文档字符串，描述输入参数的详细信息和用法示例。
+"""
         Args:
             input_ids (`tf.Tensor` of shape `({0})`):
-                输入序列标记在词汇表中的索引。
+                # 输入序列中的词汇索引。可以使用 `AutoTokenizer` 获取这些索引。参见 `PreTrainedTokenizer.encode` 和 `PreTrainedTokenizer.__call__`。
+                # [什么是输入 ID？](../glossary#input-ids)
+                Indices of input sequence tokens in the vocabulary.
 
-                可以使用 [`AutoTokenizer`] 获取索引。有关详细信息，请参阅 [`PreTrainedTokenizer.encode`] 和 [`PreTrainedTokenizer.__call__`]。
-
-                [什么是输入 ID？](../glossary#input-ids)
             attention_mask (`tf.Tensor` of shape `({0})`, *optional*):
-                避免对填充标记索引执行注意力操作的掩码。掩码值为 `[0, 1]` 中的一个：
+                # 遮罩，用于避免在填充令牌的索引上执行注意力操作。
+                # 遮罩值选在 `[0, 1]`：
+                # - 1 表示 **不遮罩** 的标记，
+                # - 0 表示 **遮罩** 的标记。
+                Mask to avoid performing attention on padding token indices.
 
-                - 对于 **未掩码** 的标记，为 1，
-                - 对于 **掩码** 的标记，为 0。
-
-                [什么是注意力掩码？](../glossary#attention-mask)
             position_ids (`tf.Tensor` of shape `({0})`, *optional*):
-                输入序列标记在位置嵌入中的位置索引。在范围 `[0, config.max_position_embeddings - 1]` 中选择。
+                # 输入序列标记在位置嵌入中的位置索引。选在 `[0, config.max_position_embeddings - 1]` 范围内。
+                # [什么是位置 ID？](../glossary#position-ids)
+                Indices of positions of each input sequence tokens in the position embeddings.
 
-                [什么是位置 ID？](../glossary#position-ids)
             head_mask (`tf.Tensor` of shape `(num_heads,)` or `(num_layers, num_heads)`, *optional*):
-                用于将自注意力模块中的特定头部置零的掩码。掩码值为 `[0, 1]` 中的一个：
-
-                - 表示 **未掩码** 的头部，为 1，
-                - 表示 **掩码** 的头部，为 0。
+                # 用于置空自注意力模块中的选择头部的遮罩。
+                # 遮罩值选在 `[0, 1]`：
+                # - 1 表示头部 **不被遮罩**，
+                # - 0 表示头部 **被遮罩**。
+                Mask to nullify selected heads of the self-attention modules.
 
             inputs_embeds (`tf.Tensor` of shape `({0}, hidden_size)`, *optional*):
-                可选地，您可以选择直接传递嵌入表示，而不是传递 `input_ids`。如果您希望对 `input_ids` 索引转换为关联向量具有更多控制权，则这是有用的，而不是使用模型的内部嵌入查找矩阵。
+                # 可选，直接传递嵌入表示而不是 `input_ids`。如果想要更精确地控制如何将 `input_ids` 索引转换为相关联的向量，这很有用。
+                # 比模型内部嵌入查找矩阵更有控制力。
+                Optionally, instead of passing `input_ids` you can choose to directly pass an embedded representation.
+
             output_attentions (`bool`, *optional*):
-                是否返回所有注意力层的注意力张量。有关更多详细信息，请参见返回的张量中的 `attentions`。
+                # 是否返回所有注意力层的注意力张量。查看返回张量下的 `attentions` 获取更多细节。
+                Whether or not to return the attentions tensors of all attention layers.
+
             output_hidden_states (`bool`, *optional*):
-                是否返回所有层的隐藏状态。有关更多详细信息，请参见返回的张量中的 `hidden_states`。
+                # 是否返回所有层的隐藏状态。查看返回张量下的 `hidden_states` 获取更多细节。
+                Whether or not to return the hidden states of all layers.
+
             return_dict (`bool`, *optional*):
-                是否返回 [`~file_utils.ModelOutput`] 而不是普通元组。
+                # 是否返回 [`~file_utils.ModelOutput`] 而不是普通的元组。
+                Whether or not to return a [`~file_utils.ModelOutput`] instead of a plain tuple.
 """
-定义了一个名为TFEsmMainLayer的类，继承自Layer类
-该类用于输出ESM模型的原始隐藏状态，没有特定的头部
-TFEsmMainLayer可以作为编码器或解码器，如果它作为解码器，则在自注意力层之间添加了一个交叉注意力层，遵循Attention is all you need中描述的架构
-要使其成为解码器，需要使用配置的is_decoder参数设置为True进行初始化
-要在Seq2Seq模型中使用该类，需要将is_decoder参数和add_cross_attention参数都设置为True; 在前向传递中，需要输入encoder_hidden_states。
-"""
+
 
 @add_start_docstrings(
     "The bare ESM Model transformer outputting raw hidden-states without any specific head on top.",
     ESM_START_DOCSTRING,
 )
-class TFEsmMainLayer(Layer):
+class TFEsmMainLayer(keras.layers.Layer):
     """
+    
     The model can behave as an encoder (with only self-attention) as well as a decoder, in which case a layer of
     cross-attention is added between the self-attention layers, following the architecture described in [Attention is
     all you need](https://arxiv.org/abs/1706.03762) by Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
@@ -968,96 +931,98 @@ class TFEsmMainLayer(Layer):
         super().__init__(name=name, **kwargs)
 
         self.config = config
-        self.is_decoder = config.is_decoder
+        self.is_decoder = config.is_decoder  # 初始化解码器标志位
 
-        # 创建一个TFEsmEmbeddings对象，用于处理嵌入层
-        self.embeddings = TFEsmEmbeddings(config, name="embeddings")
-        # 创建一个TFEsmEncoder对象，用于处理编码层
-        self.encoder = TFEsmEncoder(config, name="encoder")
-        # 如果add_pooling_layer为True，则创建一个TFEsmPooler对象，用于在编码层之后添加池化层，否则为None
-        self.pooler = TFEsmPooler(config, name="pooler") if add_pooling_layer else None
-        # 创建一个TFEsmContactPredictionHead对象，用于处理接触预测头部，接触预测头部的输入特征数为self.config.num_hidden_layers * self.config.num_attention_heads，并且有偏置项，名称为"contact_head"
+        self.embeddings = TFEsmEmbeddings(config, name="embeddings")  # 初始化嵌入层
+        self.encoder = TFEsmEncoder(config, name="encoder")  # 初始化编码器
+        self.pooler = TFEsmPooler(config, name="pooler") if add_pooling_layer else None  # 初始化池化层（如果需要）
+
         self.contact_head = TFEsmContactPredictionHead(
             in_features=self.config.num_hidden_layers * self.config.num_attention_heads, bias=True, name="contact_head"
-        )
+        )  # 初始化接触预测头部
 
     def build(self, input_shape=None):
-        # 如果已经构建，则返回
         if self.built:
             return
         self.built = True
-        # 构建TFEsmEmbeddings对象
         if getattr(self, "embeddings", None) is not None:
             with tf.name_scope(self.embeddings.name):
-                self.embeddings.build(None)
-        # 构建TFEsmEncoder对象
+                self.embeddings.build(None)  # 构建嵌入层
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
-                self.encoder.build(None)
-        # 构建TFEsmPooler对象
+                self.encoder.build(None)  # 构建编码器
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
-                self.pooler.build(None)
-        # 构建TFEsmContactPredictionHead对象
+                self.pooler.build(None)  # 构建池化层
         if getattr(self, "contact_head", None) is not None:
             with tf.name_scope(self.contact_head.name):
-                self.contact_head.build(None)
+                self.contact_head.build(None)  # 构建接触预测头部
 
     def get_input_embeddings(self):
-        return self.embeddings.word_embeddings
+        return self.embeddings.word_embeddings  # 获取输入嵌入层的词嵌入
 
     def set_input_embeddings(self, value: tf.Variable):
-        self.embeddings.word_embeddings.weight = value
-        self.embeddings.vocab_size = shape_list(value)[0]
+        self.embeddings.word_embeddings.weight = value  # 设置输入嵌入层的权重
+        self.embeddings.vocab_size = shape_list(value)[0]  # 设置词汇表大小
 
     def _prune_heads(self, heads_to_prune):
-        raise NotImplementedError
-    # 定义一个类方法call，接受多个参数，其中input_ids为TFModelInputType类型或None
-    # attention_mask为np.ndarray或tf.Tensor类型或None
-    # position_ids为np.ndarray或tf.Tensor类型或None
-    # head_mask为np.ndarray或tf.Tensor类型或None
-    # inputs_embeds为np.ndarray或tf.Tensor类型或None
-    # encoder_hidden_states为np.ndarray或tf.Tensor类型或None
-    # encoder_attention_mask为np.ndarray或tf.Tensor类型或None
-    # past_key_values为一个可选的Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]类型参数
-    # use_cache为一个可选的bool类型参数
-    # output_attentions为一个可选的bool类型参数
-    # output_hidden_states为一个可选的bool类型参数
-    # return_dict为一个可选的bool类型参数
-    # training为一个bool类型参数，默认为False
-    # 定义一个类方法predict_contacts，接受tokens和attention_mask两个参数
-    def predict_contacts(self, tokens, attention_mask):
-        # 调用self对象的方法，并传入tokens和attention_mask参数，设置return_dict和output_attentions参数为True
-        attns = self(tokens, attention_mask=attention_mask, return_dict=True, output_attentions=True).attentions
-        # 将attentions列表堆叠为一个张量，axis=1表示沿着列方向堆叠
-        attns = tf.stack(attns, axis=1)  # Matches the original model layout
-        # 在原始模型中，填充标记的注意力完全被置零
-        # 这在大多数情况下都没关系，因为其他标记不会关注它们，
-        # 但是对于需要以注意力为输入的接触预测任务来说很重要
-        # 因此在这里我们必须模仿原始模型的行为
-        # 将attention_mask转换为和attns相同的数据类型
-        attention_mask = tf.cast(attention_mask, attns.dtype)
-        # 将attns和attention_mask相乘，实现对填充token的注意力置零
-        attns *= attention_mask[:, None, None, None]
-        attns *= attention_mask[:, None, None, :, None]
-        # 调用self对象的contact_head方法，传入tokens和attns参数
-        return self.contact_head(tokens, attns)
-# 添加起始文档字符串，描述该模型是一个裸的 ESM 模型转换器，输出没有特定顶部的原始隐藏状态。
-# 引用 ESM_START_DOCSTRING 中的描述
-# 创建 TFEsmModel 类，继承自 TFEsmPreTrainedModel
+        raise NotImplementedError  # 剪枝头部的方法，未实现
+    # 定义一个方法，用于调用模型，接收多种输入参数并返回预测结果
+    def call(
+        self,
+        input_ids: TFModelInputType | None = None,
+        attention_mask: np.ndarray | tf.Tensor | None = None,
+        position_ids: np.ndarray | tf.Tensor | None = None,
+        head_mask: np.ndarray | tf.Tensor | None = None,
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,
+        encoder_hidden_states: np.ndarray | tf.Tensor | None = None,
+        encoder_attention_mask: np.ndarray | tf.Tensor | None = None,
+        past_key_values: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        training: bool = False,
+    ):
+        # 定义一个方法，用于预测模型的接触点（contacts）
+        def predict_contacts(self, tokens, attention_mask):
+            # 调用当前对象（self）的call方法，传入tokens和attention_mask作为输入，
+            # 并设定return_dict和output_attentions参数为True，以获取注意力权重信息。
+            attns = self(tokens, attention_mask=attention_mask, return_dict=True, output_attentions=True).attentions
+            # 将得到的注意力权重列表堆叠成一个张量，维度顺序与原始模型一致
+            attns = tf.stack(attns, axis=1)
+            
+            # 在原始模型中，对于填充标记的注意力权重被完全置零。
+            # 这通常不会有太大影响，因为其他标记不会关注它们，
+            # 但是在接触点预测任务中，它们作为输入需要被模仿。
+            # 因此，这里要做的是将填充标记对应位置的注意力权重置零。
+            attention_mask = tf.cast(attention_mask, attns.dtype)
+            attns *= attention_mask[:, None, None, None]  # 扩展维度匹配注意力权重张量
+            attns *= attention_mask[:, None, None, :, None]  # 扩展维度匹配注意力权重张量
+            
+            # 调用模型的contact_head方法，传入tokens和处理后的注意力权重attns作为参数，
+            # 返回接触点预测的结果。
+            return self.contact_head(tokens, attns)
+# 给 TFEsmModel 类添加文档字符串，描述其作为没有特定顶部头的原始隐藏状态输出的 ES 模型转换器
+@add_start_docstrings(
+    "The bare ESM Model transformer outputting raw hidden-states without any specific head on top.",
+    ESM_START_DOCSTRING,
+)
 class TFEsmModel(TFEsmPreTrainedModel):
-    # 初始化函数，接受一个 EsmConfig 类型的配置参数和其他可选参数
     def __init__(self, config: EsmConfig, add_pooling_layer=True, *inputs, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(config, *inputs, **kwargs)
 
-        # 给对象添加一个名为 esm 的 TFEsmMainLayer 类型的实例
+        # 初始化 ES 模型的主层，根据给定的配置和是否添加池化层
         self.esm = TFEsmMainLayer(config, add_pooling_layer=add_pooling_layer, name="esm")
 
-    # 定义一个 call 方法，接受一系列输入参数 
-    # 使用 @unpack_inputs 装饰器
-    # 在模型前向传播过程中添加起始文档字符串，引用 ESM_INPUTS_DOCSTRING 中的描述
-    # 添加代码示例文档字符串，引用 _CHECKPOINT_FOR_DOC、TFBaseModelOutputWithPoolingAndCrossAttentions、_CONFIG_FOR_DOC 中的描述
+    # 对 call 方法进行装饰，添加文档字符串以描述模型前向传播的输入
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(ESM_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=TFBaseModelOutputWithPoolingAndCrossAttentions,
+        config_class=_CONFIG_FOR_DOC,
+    )
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1073,25 +1038,7 @@ class TFEsmModel(TFEsmPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
-
-
-        # 此处省略了一些参数，不进行详细解释
-        #  实际代码中应包含完整参数列表
-    def forward(
-        self, 
-        input_ids: tf.Tensor, 
-        attention_mask: tf.Tensor = None, 
-        position_ids: tf.Tensor = None, 
-        head_mask: tf.Tensor = None, 
-        inputs_embeds: tf.Tensor = None, 
-        encoder_hidden_states: tf.Tensor = None, 
-        encoder_attention_mask: tf.Tensor = None, 
-        past_key_values: Tuple[Tuple[tf.Tensor]] = None, 
-        use_cache: bool = True, 
-        output_attentions: bool = False, 
-        output_hidden_states: bool = False, 
-        return_dict: bool = True, 
-        training: bool = False
+        # 这里继续列出所有的参数，描述它们的作用和可选性
     ) -> Union[TFBaseModelOutputWithPoolingAndCrossAttentions, Tuple[tf.Tensor]]:
         r"""
         encoder_hidden_states  (`tf.Tensor` of shape `(batch_size, sequence_length, hidden_size)`, *optional*):
@@ -1113,7 +1060,6 @@ class TFEsmModel(TFEsmPreTrainedModel):
             If set to `True`, `past_key_values` key value states are returned and can be used to speed up decoding (see
             `past_key_values`). Set to `False` during training, `True` during generation
         """
-        # 使用ESM模型进行前向传播
         outputs = self.esm(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1129,61 +1075,57 @@ class TFEsmModel(TFEsmPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-        # 返回输出结���
         return outputs
 
-    # 预测接触点的方法
     def predict_contacts(self, tokens, attention_mask):
+        # 调用模型的方法来预测接触点
         return self.esm.predict_contacts(tokens, attention_mask)
 
-    # 构建方法
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
+        # 标记模型已构建
         self.built = True
-        # 如果esm属性存在
         if getattr(self, "esm", None) is not None:
-            # 使用ESM模型的名称进行命名
             with tf.name_scope(self.esm.name):
-                # 构建ESM模型
+                # 构建模型的子模块
                 self.esm.build(None)
-# 为EsmForMaskedLM模型添加文档字符串和ESM_START_DOCSTRING中定义的语言模型头
+# 为模型添加文档字符串，描述其为带有顶部语言建模头的ESM模型
 @add_start_docstrings("""ESM Model with a `language modeling` head on top.""", ESM_START_DOCSTRING)
 class TFEsmForMaskedLM(TFEsmPreTrainedModel, TFMaskedLanguageModelingLoss):
-    # 在加载丢失的键时要忽略的键列表
+    # 在加载过程中忽略缺失的关键字列表
     _keys_to_ignore_on_load_missing = [r"position_ids"]
-    # 在加载意外的键时要忽略的键列表
+    # 在加载过程中忽略意外的关键字列表
     _keys_to_ignore_on_load_unexpected = [r"pooler"]
 
-    # 初始化函数，传入参数为配置config
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
 
-        # 如果配置中指定为解码器，则发出警告
+        # 如果配置指示为decoder，则发出警告
         if config.is_decoder:
             logger.warning(
                 "If you want to use `EsmForMaskedLM` make sure `config.is_decoder=False` for "
                 "bi-directional self-attention."
             )
 
-        # 初始化ESM模型层，不添加池化层，命名为"esm"
+        # 初始化ESM主层，不添加池化层，并命名为"esm"
         self.esm = TFEsmMainLayer(config, add_pooling_layer=False, name="esm")
-        # 初始化ESM语言建模头，命名为"lm_head"
+        # 初始化ESM语言建模头，并命名为"lm_head"
         self.lm_head = TFEsmLMHead(config, name="lm_head")
-        # 如果配置指定词嵌入层要绑定，则确保构建了词嵌入层
+        
+        # 如果需要绑定词嵌入
         if config.tie_word_embeddings:
-            # 确保word embeddings被构建，以便我们有实际可绑定的东西
+            # 确保词嵌入已构建，以便进行绑定
             with tf.name_scope(os.path.join(self._name_scope(), "esm", "embeddings", "word_embeddings")):
                 self.esm.embeddings.word_embeddings.build((None, None))
+            # 将lm_head的解码器设置为与ESM的词嵌入权重相同
             self.lm_head.decoder = self.esm.embeddings.word_embeddings.weights[0]
 
-    # 获取输出嵌入层
+    # 获取输出嵌入
     def get_output_embeddings(self):
         return self.lm_head.decoder
 
-    # 设置输出嵌入层
+    # 设置输出嵌入
     def set_output_embeddings(self, new_embeddings):
         self.lm_head.decoder = new_embeddings
 
@@ -1191,7 +1133,7 @@ class TFEsmForMaskedLM(TFEsmPreTrainedModel, TFMaskedLanguageModelingLoss):
     def get_lm_head(self):
         return self.lm_head
 
-    # 对模型进行前向传播
+    # 模型调用函数，解包输入并添加模型前向传播的文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ESM_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1215,19 +1157,20 @@ class TFEsmForMaskedLM(TFEsmPreTrainedModel, TFMaskedLanguageModelingLoss):
         return_dict: Optional[bool] = None,
         training: bool = False,
         ):
+        # 模型前向传播逻辑在此实现
     ) -> Union[TFMaskedLMOutput, Tuple[tf.Tensor]]:
         r"""
-        labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional`):
+        labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
             config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
             loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`
         kwargs (`Dict[str, any]`, optional, defaults to *{}*):
             Used to hide legacy arguments that have been deprecated.
         """
-        # 设置返回字典，如果未指定则使用配置文件中的返回字典设置
+        # 设置是否返回字典格式的输出，如果未提供，则使用配置中的默认设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用 ESM 模型进行处理
+        # 使用 ESM 模型进行前向传播
         outputs = self.esm(
             input_ids,
             attention_mask=attention_mask,
@@ -1241,18 +1184,23 @@ class TFEsmForMaskedLM(TFEsmPreTrainedModel, TFMaskedLanguageModelingLoss):
             return_dict=return_dict,
             training=training,
         )
+        # 获取模型输出的序列特征
         sequence_output = outputs[0]
+        # 使用语言模型头部生成预测分数
         prediction_scores = self.lm_head(sequence_output)
 
         masked_lm_loss = None
-        # 如果存在标签，则计算 masked language modeling 损失
+        # 如果提供了标签，则计算掩码语言建模损失
         if labels is not None:
             masked_lm_loss = self.hf_compute_loss(labels=labels, logits=prediction_scores)
 
+        # 如果不要求返回字典格式的输出
         if not return_dict:
+            # 构造输出元组，包含预测分数及可能的额外输出
             output = (prediction_scores,) + outputs[2:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
 
+        # 返回 TFMaskedLMOutput 对象，包含损失、预测分数、隐藏状态和注意力权重
         return TFMaskedLMOutput(
             loss=masked_lm_loss,
             logits=prediction_scores,
@@ -1260,45 +1208,42 @@ class TFEsmForMaskedLM(TFEsmPreTrainedModel, TFMaskedLanguageModelingLoss):
             attentions=outputs.attentions,
         )
 
-    # 预测接触点
     def predict_contacts(self, tokens, attention_mask):
+        # 调用 ESM 模型的预测接口，用于生成联系
         return self.esm.predict_contacts(tokens, attention_mask)
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
+        # 如果模型已经构建，则直接返回
         if self.built:
             return
-        # 标记模型已经构建
+        # 设置模型为已构建状态
         self.built = True
-        # 如果存在 ESM 模型，则构建 ESM 模型
+        # 如果存在 ESM 模型，则在命名空间下构建它
         if getattr(self, "esm", None) is not None:
             with tf.name_scope(self.esm.name):
                 self.esm.build(None)
-        # 如果存在 lm_head 模型，则构建 lm_head 模型
+        # 如果存在语言模型头部，则在命名空间下构建它
         if getattr(self, "lm_head", None) is not None:
             with tf.name_scope(self.lm_head.name):
                 self.lm_head.build(None)
-class TFEsmLMHead(Layer):
+class TFEsmLMHead(keras.layers.Layer):
     """ESM Head for masked language modeling."""
 
-    # 初始化方法，设置神经网络层
     def __init__(self, config, name=None):
         super().__init__(name=name)
-        # 创建一个全连接层，隐藏层大小为config.hidden_size
-        self.dense = Dense(
+        # 创建一个全连接层，用于将输入特征映射到隐藏层大小的输出空间
+        self.dense = keras.layers.Dense(
             config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
 
-        # 创建一个 LayerNormalization 层
-        self.layer_norm = LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm")
-        
-        # 根据配置参数判断是否共享词嵌入层
+        # 添加一个 LayerNormalization 层，用于标准化输入向量
+        self.layer_norm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm")
+
+        # 如果设置了 tie_word_embeddings，decoder 为 None；否则创建一个全连接层，用于解码到词汇表大小
         if config.tie_word_embeddings:
             self.decoder = None
         else:
-            # 创建一个全连接层，输出大小为config.vocab_size，不使用偏置
-            self.decoder = Dense(
+            self.decoder = keras.layers.Dense(
                 config.vocab_size,
                 kernel_initializer=get_initializer(config.initializer_range),
                 name="decoder",
@@ -1306,39 +1251,39 @@ class TFEsmLMHead(Layer):
             )
         self.config = config
 
-    # 构建网络结构
     def build(self, input_shape=None):
-        # 在构建之前做一些处理，如设置 bias、建立层的权重等
+        # 分离偏置项以匹配 PT 模型，并允许权重交叉加载工作
+        # 将其放在 build 方法中，以便在将其添加为权重时获得正确的名称
         if self.built:
             return
         self.built = True
-        # 添加 bias 权重
+        # 添加一个名为 "bias" 的权重，形状为 (config.vocab_size,)，并初始化为零，可训练
         self.bias = self.add_weight("bias", shape=(self.config.vocab_size,), initializer="zeros", trainable=True)
-        
-        # 如果存在 dense 层，建立权重
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
+                # 构建 dense 层，输入形状为 [None, None, config.hidden_size]
                 self.dense.build([None, None, self.config.hidden_size])
-        # 如果存在 layer_norm 层，建立权重
         if getattr(self, "layer_norm", None) is not None:
             with tf.name_scope(self.layer_norm.name):
+                # 构建 layer_norm 层，输入形状为 [None, None, config.hidden_size]
                 self.layer_norm.build([None, None, self.config.hidden_size])
-        # 如果存在 decoder 层且不共享词嵌入，建立权重
         if getattr(self, "decoder", None) is not None and not self.config.tie_word_embeddings:
             with tf.name_scope(self.decoder.name):
+                # 构建 decoder 层，输入形状为 [None, None, config.hidden_size]
                 self.decoder.build([None, None, self.config.hidden_size])
 
-    # 获取 bias 权重
     def get_bias(self):
         return {"bias": self.bias}
 
-    # 神经网络前向传播
     def call(self, features):
+        # 经过 dense 层映射特征
         x = self.dense(features)
-        x = gelu(x)
+        # 使用 gelu 激活函数
+        x = tf.nn.gelu(x)
+        # 使用 layer_norm 层标准化输出
         x = self.layer_norm(x)
 
-        # 投影到词汇表大小，添加偏置
+        # 根据 tie_word_embeddings 决定如何将 x 投影回词汇表大小，同时加上偏置
         if self.config.tie_word_embeddings:
             x = tf.matmul(x, self.decoder, transpose_b=True) + self.bias
         else:
@@ -1356,18 +1301,17 @@ class TFEsmLMHead(Layer):
 class TFEsmForSequenceClassification(TFEsmPreTrainedModel, TFSequenceClassificationLoss):
     _keys_to_ignore_on_load_missing = [r"position_ids"]
 
-    # 初始化方法，创建 ESM 模型和分类器
     def __init__(self, config):
         super().__init__(config)
+        # 设置分类或回归任务的标签数量
         self.num_labels = config.num_labels
         self.config = config
 
-        # 创建 ESM 模型
+        # 创建 ESM 主层，不添加池化层，命名为 "esm"
         self.esm = TFEsmMainLayer(config, add_pooling_layer=False, name="esm")
-        # 创建分类器
+        # 创建分类头部，命名为 "classifier"
         self.classifier = TFEsmClassificationHead(config, name="classifier")
 
-    # 解压输入参数，为模型正向传播添加文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ESM_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1375,6 +1319,7 @@ class TFEsmForSequenceClassification(TFEsmPreTrainedModel, TFSequenceClassificat
         output_type=TFSequenceClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 将当前函数用作代码示例的文档字符串，指定了一些参数和返回类型的信息
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1388,61 +1333,61 @@ class TFEsmForSequenceClassification(TFEsmPreTrainedModel, TFSequenceClassificat
         return_dict: Optional[bool] = None,
         training: bool = False,
     ) -> Union[TFSequenceClassifierOutput, Tuple[tf.Tensor]]:
-    r"""
-    labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
-        Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
-        config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
-        `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
-    """
-    return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-    # 调用 ESMM 及相关操作，处理模型的输入和输出
-    outputs = self.esm(
-        input_ids,
-        attention_mask=attention_mask,
-        position_ids=position_ids,
-        head_mask=head_mask,
-        inputs_embeds=inputs_embeds,
-        output_attentions=output_attentions,
-        output_hidden_states=output_hidden_states,
-        return_dict=return_dict,
-        training=training,
-    )
-    # 获取 ESMM 的输出序列
-    sequence_output = outputs[0]
-    # 通过分类器得到预测的 logits
-    logits = self.classifier(sequence_output)
-    
-    # 计算损失值，如果 labels 不为空
-    loss = None if labels is None else self.hf_compute_loss(labels, logits)
-    
-    # 如果不需要返回字典，则构建输出并返回
-    if not return_dict:
-        output = (logits,) + outputs[2:]
-        return ((loss,) + output) if loss is not None else output
-    
-    # 返回 TFSequenceClassifierOutput 类型的输出字典
-    return TFSequenceClassifierOutput(
-        loss=loss,
-        logits=logits,
-        hidden_states=outputs.hidden_states,
-        attentions=outputs.attentions,
-    )
-    
+        r"""
+        labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
+            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
+            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
+        """
+        # 设置 return_dict 变量，若未提供则使用 self.config.use_return_dict 中的默认值
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        # 调用 self.esm 方法，执行序列编码模型的前向传播
+        outputs = self.esm(
+            input_ids,
+            attention_mask=attention_mask,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            training=training,
+        )
+        # 从模型输出中获取序列输出
+        sequence_output = outputs[0]
+        # 将序列输出传递给分类器，生成分类任务的 logits
+        logits = self.classifier(sequence_output)
+
+        # 计算损失，如果 labels 不为 None，则使用 labels 和 logits 计算损失值
+        loss = None if labels is None else self.hf_compute_loss(labels, logits)
+
+        # 如果 return_dict 为 False，则构建输出元组
+        if not return_dict:
+            output = (logits,) + outputs[2:]
+            return ((loss,) + output) if loss is not None else output
+
+        # 如果 return_dict 为 True，则构建 TFSequenceClassifierOutput 对象作为输出
+        return TFSequenceClassifierOutput(
+            loss=loss,
+            logits=logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
+    # 构建模型，设置输入形状并初始化模型的各个组件
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
         if self.built:
             return
         self.built = True
-        # 构建 ESMM 模型
+        # 如果存在 self.esm，则在命名空间 self.esm.name 下构建它
         if getattr(self, "esm", None) is not None:
             with tf.name_scope(self.esm.name):
                 self.esm.build(None)
-        # 构建分类器
+        # 如果存在 self.classifier，则在命名空间 self.classifier.name 下构建它
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build(None)
-# 添加起始文档字符串，描述该模型在顶部的标记分类头部分的作用，例如用于命名实体识别（NER）任务
 @add_start_docstrings(
     """
     ESM Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
@@ -1450,40 +1395,31 @@ class TFEsmForSequenceClassification(TFEsmPreTrainedModel, TFSequenceClassificat
     """,
     ESM_START_DOCSTRING,
 )
-# 定义 TFEsmForTokenClassification 类，继承自 TFEsmPreTrainedModel 和 TFTokenClassificationLoss
 class TFEsmForTokenClassification(TFEsmPreTrainedModel, TFTokenClassificationLoss):
-    # 在加载时忽略的键列表，对于未预期的键
     _keys_to_ignore_on_load_unexpected = [r"pooler"]
-    # 在加载时忽略的键列表，对于缺失的键
     _keys_to_ignore_on_load_missing = [r"position_ids"]
 
-    # 初始化函数，接受配置参数
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置标签数目
+        # 初始化时设置分类标签数量
         self.num_labels = config.num_labels
 
-        # 实例化 ESM 主层，不添加池化层
+        # 创建 ESM 主模型层，不包含池化层
         self.esm = TFEsmMainLayer(config, add_pooling_layer=False, name="esm")
-        # 设置 dropout 层
-        self.dropout = Dropout(config.hidden_dropout_prob)
-        # 设置分类器层
-        self.classifier = Dense(config.num_labels, name="classifier")
-        # 保存配置参数
+        # Dropout 层，用于防止过拟合
+        self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        # 分类器层，将隐藏状态输出转化为分类预测
+        self.classifier = keras.layers.Dense(config.num_labels, name="classifier")
+        # 保存配置信息
         self.config = config
 
-    # 调用方法，用于模型的前向传播
     @unpack_inputs
-    # 添加起始文档字符串到模型的前向传播，描述输入参数的作用和形状
     @add_start_docstrings_to_model_forward(ESM_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 添加代码示例文档字符串到模型的前向传播，描述其用法、参数、返回类型等
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFTokenClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义模型的前向传播方法
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1497,10 +1433,14 @@ class TFEsmForTokenClassification(TFEsmPreTrainedModel, TFTokenClassificationLos
         return_dict: Optional[bool] = None,
         training: bool = False,
     ) -> Union[TFTokenClassifierOutput, Tuple[tf.Tensor]]:
-        # 如果标签存在，则返回字典，否则返回 None
+        r"""
+        labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
+        """
+        # 确定是否返回字典格式的输出结果
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用 ESM 主层的前向传播方法
+        # 调用 ESM 主模型进行前向传播
         outputs = self.esm(
             input_ids,
             attention_mask=attention_mask,
@@ -1516,93 +1456,95 @@ class TFEsmForTokenClassification(TFEsmPreTrainedModel, TFTokenClassificationLos
         # 获取序列输出
         sequence_output = outputs[0]
 
-        # 对序列输出应用 dropout，用于训练时防止过拟合
+        # 在训练时使用 Dropout 层防止过拟合
         sequence_output = self.dropout(sequence_output, training=training)
-        # 应用分类器层，得到预测的标签 logits
+        # 使用分类器层生成分类预测 logits
         logits = self.classifier(sequence_output)
 
-        # 如果标签不存在，则损失为 None，否则计算损失
+        # 如果没有提供标签，则不计算损失
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
 
-        # 如果不返回字典，则返回元组
+        # 根据是否返回字典格式来组织输出
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 TFTokenClassifierOutput 对象，包含损失、logits、隐藏状态和注意力权重
+        # 返回 TFTokenClassifierOutput 格式的结果
         return TFTokenClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    # 构建神经网络模型
-    def build(self, input_shape=None):
-        # 如果模型已经构建好，则直接返回
-        if self.built:
-            return
-        # 标记模型已构建
-        self.built = True
-        # 如果存在 esm 属性，按照 esm 的名字创建命名空间，并构建 esm
-        if getattr(self, "esm", None) is not None:
-            with tf.name_scope(self.esm.name):
-                self.esm.build(None)
-        # 如果存在 classifier 属性，按照 classifier 的名字创建命名空间，并构建 classifier
-        if getattr(self, "classifier", None) is not None:
-            with tf.name_scope(self.classifier.name):
-                self.classifier.build([None, None, self.config.hidden_size])
-class TFEsmClassificationHead(Layer):
+    # 如果模型已经构建好，直接返回，不做重复构建
+    if self.built:
+        return
+    # 将模型标记为已构建状态
+    self.built = True
+    
+    # 如果存在名为"esm"的属性，并且不为None，执行以下操作
+    if getattr(self, "esm", None) is not None:
+        # 在命名空间下以"esm"的名称构建模型
+        with tf.name_scope(self.esm.name):
+            # 调用esm对象的build方法，传入None作为输入形状
+            self.esm.build(None)
+    
+    # 如果存在名为"classifier"的属性，并且不为None，执行以下操作
+    if getattr(self, "classifier", None) is not None:
+        # 在命名空间下以"classifier"的名称构建模型
+        with tf.name_scope(self.classifier.name):
+            # 调用classifier对象的build方法，传入[None, None, self.config.hidden_size]作为输入形状
+            self.classifier.build([None, None, self.config.hidden_size])
+class TFEsmClassificationHead(keras.layers.Layer):
     """Head for sentence-level classification tasks."""
-    # 定义一个用于句子级分类任务的头部
 
     def __init__(self, config, name=None):
         super().__init__(name=name)
-        # 调用父类的构造函数
-        self.dense = Dense(
+        # 定义一个全连接层，用于生成隐藏层大小的输出，激活函数为tanh
+        self.dense = keras.layers.Dense(
             config.hidden_size,
             kernel_initializer=get_initializer(config.initializer_range),
             activation="tanh",
             name="dense",
         )
-        # 创建一个全连接层，用于变换特征向量
-        self.dropout = Dropout(config.hidden_dropout_prob)
-        # 创建一个dropout层，用于防止过拟合
-        self.out_proj = Dense(
+        # 定义一个Dropout层，用于在训练时随机丢弃部分输入，以防止过拟合
+        self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        # 定义一个全连接层，用于生成类别数目大小的输出，激活函数为线性（即无激活函数）
+        self.out_proj = keras.layers.Dense(
             config.num_labels,
             kernel_initializer=get_initializer(config.initializer_range),
             activation="linear",
             name="out_proj",
         )
-        # 创建一个全连接层，用于输出分类结果
         self.config = config
-        # 存储配置信息
 
     def call(self, features, training=False):
+        # 提取features中的第一个位置的向量（对应于<s> token，即[CLS]），作为输入x
         x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
-        # 取出每个样本的第一个token作为特征
+        # 在训练阶段使用dropout随机丢弃部分输入向量，防止过拟合
         x = self.dropout(x, training=training)
-        # 对特征进行dropout操作
+        # 将输入向量x通过全连接层dense进行线性变换，并应用tanh激活函数
         x = self.dense(x)
-        # 对特征进行全连接层变换
+        # 再次在训练阶段使用dropout随机丢弃部分输出向量，防止过拟合
         x = self.dropout(x, training=training)
-        # 再次进行dropout操作
+        # 将处理后的向量x通过全连接层out_proj进行线性变换，生成最终的分类输出
         x = self.out_proj(x)
-        # 对变换后的特征进行全连接层变换，得到最终输出
         return x
 
     def build(self, input_shape=None):
         if self.built:
             return
         self.built = True
-        # 如果已经构建过了，则直接返回
+        # 如果dense层已定义，则建立其内部权重
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
+                # 建立dense层的权重，输入形状为[None, None, hidden_size]
                 self.dense.build([None, None, self.config.hidden_size])
-        # 如果dense层存在，则构建dense层
+        # 如果out_proj层已定义，则建立其内部权重
         if getattr(self, "out_proj", None) is not None:
             with tf.name_scope(self.out_proj.name):
+                # 建立out_proj层的权重，输入形状为[None, None, hidden_size]
                 self.out_proj.build([None, None, self.config.hidden_size])
-        # 如果out_proj层存在，则构建out_proj层
 
 
 def create_position_ids_from_input_ids(input_ids, padding_idx, past_key_values_length=0):
@@ -1611,18 +1553,17 @@ def create_position_ids_from_input_ids(input_ids, padding_idx, past_key_values_l
     are ignored. This is modified from fairseq's `utils.make_positions`.
 
     Args:
-        x: tf.Tensor x:
+        input_ids: 输入的整数张量，表示输入的符号序列
+        padding_idx: 表示填充符号的索引
+        past_key_values_length: 过去键值长度，用于计算增量索引
 
-    Returns: tf.Tensor
+    Returns:
+        tf.Tensor: 包含位置ID的张量，替换非填充符号为其位置数字
     """
-    # 用输入的token序列生成对应的位置id序列
-    # 非填充符号用其位置数字代替。位置数字从padding_idx+1开始。忽略填充符号。
-    # 这是从fairseq的`utils.make_positions`修改的。
-
-    # 计算非填充符号的掩码
+    # 创建一个掩码，标记出不是填充符号的位置
     mask = tf.cast(input_ids != padding_idx, tf.int64)
-    # 计算递增的位置索引
+    # 计算每个位置的增量索引，跳过填充符号，位置编号从padding_idx+1开始
     incremental_indices = (tf.cumsum(mask, axis=1) + past_key_values_length) * mask
+    # 将增量索引加上padding_idx，得到最终的位置ID张量
     return incremental_indices + padding_idx
-    # 返回填充后的位置id序列
 ```

@@ -1,9 +1,10 @@
-# `.\transformers\models\big_bird\__init__.py`
+# `.\models\big_bird\__init__.py`
 
-```py
-# 引入类型检查模块
+```
+# 导入必要的类型检查模块
 from typing import TYPE_CHECKING
-# 引入必要的工具函数和模块
+
+# 导入相关的依赖项和模块
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -14,39 +15,39 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块的导入结构
+# 定义模块的导入结构，包含需要导入的模块和对应的标识符
 _import_structure = {
     "configuration_big_bird": ["BIG_BIRD_PRETRAINED_CONFIG_ARCHIVE_MAP", "BigBirdConfig", "BigBirdOnnxConfig"],
 }
 
-# 检查是否有 SentencePiece 可用，若无则抛出异常
+# 检查是否可用句子分割模块，若不可用则引发异常
 try:
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加相应的 tokenization_big_bird 模块到导入结构中
+    # 若可用，则添加 tokenization_big_bird 模块到导入结构中
     _import_structure["tokenization_big_bird"] = ["BigBirdTokenizer"]
 
-# 检查是否有 Tokenizers 可用，若无则抛出异常
+# 检查是否可用 Tokenizers 库，若不可用则引发异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加相应的 tokenization_big_bird_fast 模块到导入结构中
+    # 若可用，则添加 tokenization_big_bird_fast 模块到导入结构中
     _import_structure["tokenization_big_bird_fast"] = ["BigBirdTokenizerFast"]
 
-# 检查是否有 PyTorch 可用，若无则抛出异常
+# 检查是否可用 Torch 库，若不可用则引发异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加相应的 modeling_big_bird 模块到导入结构中
+    # 若可用，则添加 modeling_big_bird 模块到导入结构中
     _import_structure["modeling_big_bird"] = [
         "BIG_BIRD_PRETRAINED_MODEL_ARCHIVE_LIST",
         "BigBirdForCausalLM",
@@ -62,14 +63,14 @@ else:
         "load_tf_weights_in_big_bird",
     ]
 
-# 检查是否有 Flax 可用，若无则抛出异常
+# 检查是否可用 Flax 库，若不可用则引发异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加相应的 modeling_flax_big_bird 模块到导入结构中
+    # 若可用，则添加 modeling_flax_big_bird 模块到导入结构中
     _import_structure["modeling_flax_big_bird"] = [
         "FlaxBigBirdForCausalLM",
         "FlaxBigBirdForMaskedLM",
@@ -82,44 +83,54 @@ else:
         "FlaxBigBirdPreTrainedModel",
     ]
 
-# 如果是类型检查模式，则进行额外的导入
+# 如果在类型检查模式下，导入额外的配置和模块
 if TYPE_CHECKING:
-    # 引入配置相关的内容
+    # 导入具体的配置、模型和标识符
     from .configuration_big_bird import BIG_BIRD_PRETRAINED_CONFIG_ARCHIVE_MAP, BigBirdConfig, BigBirdOnnxConfig
 
-    # 检查是否有 SentencePiece 可用，若无则抛出异常
+    # 再次检查句子分割模块是否可用，若不可用则引发异常
     try:
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 若可用，则导入相应的 tokenization_big_bird 模块
+        # 若可用，则从 tokenization_big_bird 模块导入 BigBirdTokenizer 类
         from .tokenization_big_bird import BigBirdTokenizer
-    # 检查 tokenizers 库是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
+    # 尝试检查是否安装了 tokenizers 库，若未安装则引发 OptionalDependencyNotAvailable 异常
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获 OptionalDependencyNotAvailable 异常
+    # 捕获 OptionalDependencyNotAvailable 异常，表示 tokenizers 库不可用
     except OptionalDependencyNotAvailable:
-        # 忽略异常，继续执行后续代码
+        # 忽略异常，继续执行
         pass
-    # 若未引发异常，则表示 tokenizers 库可用
     else:
-        # 导入 BigBirdTokenizerFast 类
+        # 若 tokenizers 可用，则从本地目录导入 BigBirdTokenizerFast
         from .tokenization_big_bird_fast import BigBirdTokenizerFast
 
-    # 检查 torch 库是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
+    # 尝试检查是否安装了 torch 库，若未安装则引发 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获 OptionalDependencyNotAvailable 异常
+    # 捕获 OptionalDependencyNotAvailable 异常，表示 torch 库不可用
     except OptionalDependencyNotAvailable:
-        # 忽略异常，继续执行后续代码
+        # 忽略异常，继续执行
         pass
-    # 若未引发异常，则表示 torch 库可用
     else:
-        # 导入 BigBird 模型相关类和函数
+        # 若 torch 可用，则从本地目录导入以下模块：
+        # BIG_BIRD_PRETRAINED_MODEL_ARCHIVE_LIST,
+        # BigBirdForCausalLM,
+        # BigBirdForMaskedLM,
+        # BigBirdForMultipleChoice,
+        # BigBirdForPreTraining,
+        # BigBirdForQuestionAnswering,
+        # BigBirdForSequenceClassification,
+        # BigBirdForTokenClassification,
+        # BigBirdLayer,
+        # BigBirdModel,
+        # BigBirdPreTrainedModel,
+        # load_tf_weights_in_big_bird
         from .modeling_big_bird import (
             BIG_BIRD_PRETRAINED_MODEL_ARCHIVE_LIST,
             BigBirdForCausalLM,
@@ -135,17 +146,25 @@ if TYPE_CHECKING:
             load_tf_weights_in_big_bird,
         )
 
-    # 检查 flax 库是否可用，若不可用则引发 OptionalDependencyNotAvailable 异常
+    # 尝试检查是否安装了 flax 库，若未安装则引发 OptionalDependencyNotAvailable 异常
     try:
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获 OptionalDependencyNotAvailable 异常
+    # 捕获 OptionalDependencyNotAvailable 异常，表示 flax 库不可用
     except OptionalDependencyNotAvailable:
-        # 忽略异常，继续执行后续代码
+        # 忽略异常，继续执行
         pass
-    # 若未引发异常，则表示 flax 库可用
     else:
-        # 导入 FlaxBigBird 模型相关类
+        # 若 flax 可用，则从本地目录导入以下模块：
+        # FlaxBigBirdForCausalLM,
+        # FlaxBigBirdForMaskedLM,
+        # FlaxBigBirdForMultipleChoice,
+        # FlaxBigBirdForPreTraining,
+        # FlaxBigBirdForQuestionAnswering,
+        # FlaxBigBirdForSequenceClassification,
+        # FlaxBigBirdForTokenClassification,
+        # FlaxBigBirdModel,
+        # FlaxBigBirdPreTrainedModel
         from .modeling_flax_big_bird import (
             FlaxBigBirdForCausalLM,
             FlaxBigBirdForMaskedLM,
@@ -157,10 +176,10 @@ if TYPE_CHECKING:
             FlaxBigBirdModel,
             FlaxBigBirdPreTrainedModel,
         )
-# 如果前面的条件不成立，则执行以下操作
+# 如果上述条件不满足，即导入模块失败，则执行以下操作
 else:
-    # 导入 sys 模块，用于系统相关操作
+    # 导入 sys 模块
     import sys
-    # 使用 sys.modules 字典，将当前模块替换为一个懒加载模块对象
+    # 将当前模块更新到 sys.modules 中
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

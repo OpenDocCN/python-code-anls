@@ -1,120 +1,136 @@
 # `.\models\deprecated\mctct\processing_mctct.py`
 
-```py
-# 设置字符编码为 UTF-8
-# 版权声明
-# 版权所有2022年HuggingFace Inc.团队。保留所有权利。
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
-# 根据Apache许可证2.0版（“许可证”）获得许可；您除非遵守许可证，否则不得使用此文件。
-# 您可以在以下位置获取许可证的副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则不对License下分布的软件进行分发，以“原样”为基础，
-# 没有任何形式的担保或条件，无论是明示的还是暗示的。
-# 对特定语言的特定条件下权限和限制，请查看许可证。
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-M-CTC-T的语音处理器类
+Speech processor class for M-CTC-T
 """
-# 引入警告库
 import warnings
-# 引入上下文管理器
 from contextlib import contextmanager
-# 从processing_utils中引入ProcessorMixin
+
 from ....processing_utils import ProcessorMixin
 
-# 创建MCTCTProcessor类，它将MCTCT特征提取器和MCTCT标记器封装为一个处理器
+
 class MCTCTProcessor(ProcessorMixin):
     r"""
-    构造一个MCTCT处理器，将MCTCT特征提取器和MCTCT标记器包装成一个单独的处理器。
+    Constructs a MCTCT processor which wraps a MCTCT feature extractor and a MCTCT tokenizer into a single processor.
 
-    [`MCTCTProcessor`]提供了[`MCTCTFeatureExtractor`]和[`AutoTokenizer`]的所有功能。查看
-    [`~MCTCTProcessor.__call__`]和[`~MCTCTProcessor.decode`]以获取更多信息。
+    [`MCTCTProcessor`] offers all the functionalities of [`MCTCTFeatureExtractor`] and [`AutoTokenizer`]. See the
+    [`~MCTCTProcessor.__call__`] and [`~MCTCTProcessor.decode`] for more information.
 
-    参数:
+    Args:
         feature_extractor (`MCTCTFeatureExtractor`):
-            [`MCTCTFeatureExtractor`]的一个实例。特征提取器是一个必需的输入。
+            An instance of [`MCTCTFeatureExtractor`]. The feature extractor is a required input.
         tokenizer (`AutoTokenizer`):
-            [`AutoTokenizer`]的一个实例。标记器是一个必需的输入。
+            An instance of [`AutoTokenizer`]. The tokenizer is a required input.
     """
 
+    # 类属性，指定特征提取器的类名
     feature_extractor_class = "MCTCTFeatureExtractor"
+    # 类属性，指定分词器的类名
     tokenizer_class = "AutoTokenizer"
 
-    # 初始化方法，接受特征提取器和标记器作为输入
     def __init__(self, feature_extractor, tokenizer):
+        # 调用父类的构造函数，传入特征提取器和分词器实例
         super().__init__(feature_extractor, tokenizer)
-        # 将当前处理器设置为特征提取器
+        # 设置当前处理器为特征提取器实例
         self.current_processor = self.feature_extractor
-        # 标记当前上下文管理器的状态为假
+        # 内部标志，指示是否处于目标上下文管理器中的状态，默认为 False
         self._in_target_context_manager = False
-    def __call__(self, *args, **kwargs):
-        """
-        当在常规模式下使用时，此方法将所有参数转发到MCTCTFeatureExtractor的[`~MCTCTFeatureExtractor.__call__`]，并返回其输出。
-        如果在上下文[`~MCTCTProcessor.as_target_processor`]中使用，此方法将所有参数转发到AutoTokenizer的[`~AutoTokenizer.__call__`]。
-        有关更多信息，请参阅上述两种方法的文档字符串。
-        """
-        # 为了向后兼容
-        if self._in_target_context_manager:
-            return self.current_processor(*args, **kwargs)
+    # 当对象被调用时执行的方法，根据当前上下文执行不同的操作
+    """
+    当对象在正常模式下使用时，此方法将所有参数转发给 MCTCTFeatureExtractor 的 [`~MCTCTFeatureExtractor.__call__`] 并返回其输出。
+    如果在 [`~MCTCTProcessor.as_target_processor`] 上下文中使用，则将所有参数转发给 AutoTokenizer 的 [`~AutoTokenizer.__call__`]。
+    更多信息请参考上述两个方法的文档字符串。
+    """
+    # 对于向后兼容性
+    if self._in_target_context_manager:
+        # 如果处于目标处理器上下文中，直接调用当前处理器的方法，并返回其输出
+        return self.current_processor(*args, **kwargs)
 
-        if "raw_speech" in kwargs:
-            warnings.warn("Using `raw_speech` as a keyword argument is deprecated. Use `audio` instead.")
-            audio = kwargs.pop("raw_speech")
-        else:
-            audio = kwargs.pop("audio", None)
-        sampling_rate = kwargs.pop("sampling_rate", None)
-        text = kwargs.pop("text", None)
-        if len(args) > 0:
-            audio = args[0]
-            args = args[1:]
+    # 如果关键字参数中包含 "raw_speech"，发出警告并使用 "audio" 替代
+    if "raw_speech" in kwargs:
+        warnings.warn("Using `raw_speech` as a keyword argument is deprecated. Use `audio` instead.")
+        audio = kwargs.pop("raw_speech")
+    else:
+        # 否则，尝试从关键字参数中获取 "audio"，默认为 None
+        audio = kwargs.pop("audio", None)
+    # 尝试从关键字参数中获取 "sampling_rate"，默认为 None
+    sampling_rate = kwargs.pop("sampling_rate", None)
+    # 尝试从关键字参数中获取 "text"，默认为 None
+    text = kwargs.pop("text", None)
+    # 如果位置参数 args 不为空，则将第一个参数作为 audio，并从 args 中移除
+    if len(args) > 0:
+        audio = args[0]
+        args = args[1:]
 
-        if audio is None and text is None:
-            raise ValueError("You need to specify either an `audio` or `text` input to process.")
+    # 如果既没有 audio 也没有 text 输入，则抛出 ValueError
+    if audio is None and text is None:
+        raise ValueError("You need to specify either an `audio` or `text` input to process.")
 
-        if audio is not None:
-            inputs = self.feature_extractor(audio, *args, sampling_rate=sampling_rate, **kwargs)
-        if text is not None:
-            encodings = self.tokenizer(text, **kwargs)
+    # 如果有音频输入，则使用 feature_extractor 处理音频数据
+    if audio is not None:
+        inputs = self.feature_extractor(audio, *args, sampling_rate=sampling_rate, **kwargs)
+    # 如果有文本输入，则使用 tokenizer 处理文本数据
+    if text is not None:
+        encodings = self.tokenizer(text, **kwargs)
 
-        if text is None:
-            return inputs
-        elif audio is None:
-            return encodings
-        else:
-            inputs["labels"] = encodings["input_ids"]
-            return inputs
+    # 根据输入情况返回相应的结果
+    if text is None:
+        return inputs  # 如果只有音频输入，则返回音频处理的结果
+    elif audio is None:
+        return encodings  # 如果只有文本输入，则返回文本处理的结果
+    else:
+        inputs["labels"] = encodings["input_ids"]  # 如果既有音频又有文本输入，则将文本处理结果作为标签添加到音频处理结果中
+        return inputs  # 返回整合后的结果字典
 
-    def batch_decode(self, *args, **kwargs):
-        """
-        此方法将所有参数转发到AutoTokenizer的[`~PreTrainedTokenizer.batch_decode`]。请参阅此方法的文档字符串以获取更多信息。
-        """
-        return self.tokenizer.batch_decode(*args, **kwargs)
+# 批量解码方法，将所有参数转发给 AutoTokenizer 的 [`~PreTrainedTokenizer.batch_decode`] 方法
+def batch_decode(self, *args, **kwargs):
+    """
+    此方法将所有参数转发给 AutoTokenizer 的 [`~PreTrainedTokenizer.batch_decode`]。请参考该方法的文档字符串以获取更多信息。
+    """
+    return self.tokenizer.batch_decode(*args, **kwargs)
     def pad(self, *args, **kwargs):
         """
-        当在正常模式下使用时，该方法将所有参数转发到MCTCTFeatureExtractor的[`~MCTCTFeatureExtractor.pad`]并返回其输出。
-        如果在[`~MCTCTProcessor.as_target_processor`]上下文中使用该方法，它将所有参数转发到PreTrainedTokenizer的[`~PreTrainedTokenizer.pad`]。
-        请参考上述两个方法的文档字符串获取更多信息。
+        When used in normal mode, this method forwards all its arguments to MCTCTFeatureExtractor's
+        [`~MCTCTFeatureExtractor.pad`] and returns its output. If used in the context
+        [`~MCTCTProcessor.as_target_processor`] this method forwards all its arguments to PreTrainedTokenizer's
+        [`~PreTrainedTokenizer.pad`]. Please refer to the docstring of the above two methods for more information.
         """
-        # 为了向后兼容
+        # 对于向后兼容性
         if self._in_target_context_manager:
+            # 如果处于目标处理器上下文管理器中，则调用当前处理器的 pad 方法
             return self.current_processor.pad(*args, **kwargs)
 
-        # 获取额外的输入特征和标签
+        # 获取特定参数
         input_features = kwargs.pop("input_features", None)
         labels = kwargs.pop("labels", None)
         if len(args) > 0:
+            # 如果有位置参数，将第一个位置参数作为 input_features，其余作为 args
             input_features = args[0]
             args = args[1:]
 
-        # 如果有输入特征，则对输入特征进行填充
+        # 如果 input_features 不为 None，则调用特征提取器的 pad 方法
         if input_features is not None:
             input_features = self.feature_extractor.pad(input_features, *args, **kwargs)
-        # 如果有标签，则对标签进行填充
+        # 如果 labels 不为 None，则调用标记器的 pad 方法
         if labels is not None:
             labels = self.tokenizer.pad(labels, **kwargs)
 
-        # 如果标签为空，则返回输入特征；如果输入特征为空，则返回标签；否则将标签添加到输入特征中
+        # 根据输入是否为 None，返回相应结果
         if labels is None:
             return input_features
         elif input_features is None:
@@ -125,22 +141,29 @@ class MCTCTProcessor(ProcessorMixin):
 
     def decode(self, *args, **kwargs):
         """
-        该方法将所有参数转发到AutoTokenizer的[`~PreTrainedTokenizer.decode`]。请参考该方法的文档字符串获取更多信息。
+        This method forwards all its arguments to AutoTokenizer's [`~PreTrainedTokenizer.decode`]. Please refer to the
+        docstring of this method for more information.
         """
+        # 将所有参数转发给 tokenizer 的 decode 方法
         return self.tokenizer.decode(*args, **kwargs)
 
     @contextmanager
     def as_target_processor(self):
         """
-        临时设置用于处理输入的分词器。在微调MCTCT时编码标签时很有用。
+        Temporarily sets the tokenizer for processing the input. Useful for encoding the labels when fine-tuning MCTCT.
         """
+        # 发出警告信息，因为该方法即将在 v5 版本中移除
         warnings.warn(
-            "`as_target_processor`已弃用，将在Transformers的v5中移除。您可以通过使用常规`__call__`方法的参数`text`来处理标签
-            (无论是在与音频输入相同的调用中还是在单独的调用中)。
+            "`as_target_processor` is deprecated and will be removed in v5 of Transformers. You can process your "
+            "labels by using the argument `text` of the regular `__call__` method (either in the same call as "
+            "your audio inputs, or in a separate call."
         )
+        # 设置标志位，指示当前处于目标处理器上下文管理器中
         self._in_target_context_manager = True
+        # 将当前处理器设置为 tokenizer
         self.current_processor = self.tokenizer
         yield
+        # 在退出上下文管理器后，将当前处理器设置回特征提取器
         self.current_processor = self.feature_extractor
         self._in_target_context_manager = False
 ```

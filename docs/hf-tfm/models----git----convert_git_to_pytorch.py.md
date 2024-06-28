@@ -1,26 +1,27 @@
 # `.\models\git\convert_git_to_pytorch.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明
-# 根据 Apache License, Version 2.0 的规定，您可以在遵守许可证的前提下使用此文件
-# 有关许可证的详细信息，请访问 http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或在书面形式上同意，否则根据许可证分发的软件均在 "AS IS" 基础上分发，
-# 不提供任何明示或暗示的保证或条件。有关特定语言的许可证，请参阅许可证
-# 在许可证规定的限制下进行权限
-"""从原始存储库中转换 GIT 检查点。
-
-链接: https://github.com/microsoft/GenerativeImage2Text/tree/main"""
-
-# 导入所需的软件包
+```
+# 设置脚本的编码格式为 UTF-8
+# 版权声明，声明代码归 HuggingFace Inc. 团队所有，遵循 Apache License 2.0
+# 获取命令行参数解析器
 import argparse
+# 导入路径处理模块 Path
 from pathlib import Path
+
+# 导入 numpy 库，用于科学计算
 import numpy as np
+# 导入 requests 库，用于发送 HTTP 请求
 import requests
+# 导入 PyTorch 深度学习库
 import torch
+# 从 huggingface_hub 库中导入 hf_hub_download 函数
 from huggingface_hub import hf_hub_download
+# 导入 PIL 库中的 Image 模块，用于图像处理
 from PIL import Image
+# 从 torchvision.transforms 模块导入图像预处理函数
 from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTensor
+
+# 从 transformers 库中导入相关模块和类
 from transformers import (
     AutoTokenizer,
     CLIPImageProcessor,
@@ -30,15 +31,18 @@ from transformers import (
     GitVisionConfig,
     VideoMAEImageProcessor,
 )
+# 从 transformers.utils 模块中导入 logging 模块
 from transformers.utils import logging
 
-# 设置日志显示级别
+# 设置日志输出级别为 INFO
 logging.set_verbosity_info()
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 获取 git 配置信息
+
+# 定义函数，根据模型名称获取 GitConfig 对象
 def get_git_config(model_name):
+    # 根据模型名称设置图像大小
     if "base" in model_name and "vqa" in model_name:
         image_size = 480
     elif "large" in model_name and "vqa" in model_name:
@@ -46,8 +50,10 @@ def get_git_config(model_name):
     else:
         image_size = 224
 
+    # 创建 GitVisionConfig 对象，设置图像大小
     vision_config = GitVisionConfig(image_size=image_size)
 
+    # 如果模型名称中包含 "large"，则设置更大的模型参数
     if "large" in model_name:
         vision_config.patch_size = 14
         vision_config.hidden_size = 1024
@@ -55,162 +61,152 @@ def get_git_config(model_name):
         vision_config.num_hidden_layers = 24
         vision_config.num_attention_heads = 16
 
+    # 根据模型名称判断是否处理视频
     is_video = "vatex" in model_name or "msrvtt" in model_name
+    # 如果处理视频，则设置 num_image_with_embedding 为 6，否则为 None
     num_image_with_embedding = 6 if is_video else None
+    # 创建 GitConfig 对象，包含视觉配置和图像嵌入数量
     config = GitConfig(vision_config=vision_config.to_dict(), num_image_with_embedding=num_image_with_embedding)
 
     return config, image_size, is_video
 
-# 创建要重命名的所有键的列表（左侧是原始名称，右侧是我们的名称）
+
+# 定义函数，创建用于重命名的键列表
 def create_rename_keys(config, prefix=""):
     rename_keys = []
 
-    # 图像编码器
-    # ftm: 关闭
-    rename_keys.append((f"{prefix}image_encoder.class_embedding", "git.image_encoder.vision_model.embeddings.class_embedding"))
-    rename_keys.append((f"{prefix}image_encoder.positional_embedding", "git.image_encoder.vision_model.embeddings.position_embedding.weight"))
-    rename_keys.append((f"{prefix}image_encoder.conv1.weight", "git.image_encoder.vision_model.embeddings.patch_embedding.weight"))
+    # 图像编码器部分的键重命名
+    # ftm: off
+    rename_keys.append(
+        (f"{prefix}image_encoder.class_embedding", "git.image_encoder.vision_model.embeddings.class_embedding")
+    )
+    rename_keys.append(
+        (
+            f"{prefix}image_encoder.positional_embedding",
+            "git.image_encoder.vision_model.embeddings.position_embedding.weight",
+        )
+    )
+    rename_keys.append(
+        (f"{prefix}image_encoder.conv1.weight", "git.image_encoder.vision_model.embeddings.patch_embedding.weight")
+    )
     rename_keys.append((f"{prefix}image_encoder.ln_pre.weight", "git.image_encoder.vision_model.pre_layrnorm.weight"))
     rename_keys.append((f"{prefix}image_encoder.ln_pre.bias", "git.image_encoder.vision_model.pre_layrnorm.bias"))
     rename_keys.append(
         (f"{prefix}image_encoder.ln_post.weight", "git.image_encoder.vision_model.post_layernorm.weight")
     )
-    # 将图像编码器的ln_post.weight键重命名为git.image_encoder.vision_model.post_layernorm.weight，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}image_encoder.ln_post.bias", "git.image_encoder.vision_model.post_layernorm.bias"))
-    # 将图像编码器的ln_post.bias键重命名为git.image_encoder.vision_model.post_layernorm.bias，并添加到rename_keys列表中
+    # 将旧的键和新的键对添加到 rename_keys 列表中，用于重命名权重和偏置项
+
     # fmt: on
     rename_keys.append((f"{prefix}image_encoder.proj", "git.image_encoder.visual_projection.weight"))
-    # 将图像编码器的proj键重命名为git.image_encoder.visual_projection.weight，并添加到rename_keys列表中
+    # 将旧的键和新的键对添加到 rename_keys 列表中，用于重命名视觉投影的权重
 
     # fmt: off
     for i in range(config.vision_config.num_hidden_layers):
-        # 遍历图像编码器层：输出投影，2个前馈神经网络和2个layernorms
+        # 对于每一个视觉编码器的层，依次添加权重和偏置项的重命名对
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.attn.out_proj.weight", f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.out_proj.weight"))
-        # 将图像编码器的transformer.resblocks.{i}.attn.out_proj.weight键重命名为git.image_encoder.vision_model.encoder.layers.{i}.self_attn.out_proj.weight，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.attn.out_proj.bias", f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.out_proj.bias"))
-        # 将图像编码器的transformer.resblocks.{i}.attn.out_proj.bias键重命名为git.image_encoder.vision_model.encoder.layers.{i}.self_attn.out_proj.bias，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.ln_1.weight", f"git.image_encoder.vision_model.encoder.layers.{i}.layer_norm1.weight"))
-        # 将图像编码器的transformer.resblocks.{i}.ln_1.weight键重命名为git.image_encoder.vision_model.encoder.layers.{i}.layer_norm1.weight，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.ln_1.bias", f"git.image_encoder.vision_model.encoder.layers.{i}.layer_norm1.bias"))
-        # 将图像编码器的transformer.resblocks.{i}.ln_1.bias键重命名为git.image_encoder.vision_model.encoder.layers.{i}.layer_norm1.bias，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.mlp.c_fc.weight", f"git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc1.weight"))
-        # 将图像编码器的transformer.resblocks.{i}.mlp.c_fc.weight键重命名为git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc1.weight，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.mlp.c_fc.bias", f"git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc1.bias"))
-        # 将图像编码器的transformer.resblocks.{i}.mlp.c_fc.bias键重命名为git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc1.bias，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.mlp.c_proj.weight", f"git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc2.weight"))
-        # 将图像编码器的transformer.resblocks.{i}.mlp.c_proj.weight键重命名为git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc2.weight，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.mlp.c_proj.bias", f"git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc2.bias"))
-        # 将图像编码器的transformer.resblocks.{i}.mlp.c_proj.bias键重命名为git.image_encoder.vision_model.encoder.layers.{i}.mlp.fc2.bias，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.ln_2.weight", f"git.image_encoder.vision_model.encoder.layers.{i}.layer_norm2.weight"))
-        # 将图像编码器的transformer.resblocks.{i}.ln_2.weight键重命名为git.image_encoder.vision_model.encoder.layers.{i}.layer_norm2.weight，并添加到rename_keys列表中
         rename_keys.append((f"{prefix}image_encoder.transformer.resblocks.{i}.ln_2.bias", f"git.image_encoder.vision_model.encoder.layers.{i}.layer_norm2.bias"))
-        # 将图像编码器的transformer.resblocks.{i}.ln_2.bias键重命名为git.image_encoder.vision_model.encoder.layers.{i}.layer_norm2.bias，并添加到rename_keys列表中
     # fmt: on
 
     # text decoder
     # fmt: off
     rename_keys.append((f"{prefix}textual.embedding.words.weight", "git.embeddings.word_embeddings.weight"))
-    # 将文本解码器的textual.embedding.words.weight键重命名为git.embeddings.word_embeddings.weight，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}textual.embedding.positions.weight", "git.embeddings.position_embeddings.weight"))
-    # 将文本解码器的textual.embedding.positions.weight键重命名为git.embeddings.position_embeddings.weight，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}textual.visual_projection.0.weight", "git.visual_projection.visual_projection.0.weight"))
-    # 将文本解码器的textual.visual_projection.0.weight键重命名为git.visual_projection.visual_projection.0.weight，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}textual.visual_projection.0.bias", "git.visual_projection.visual_projection.0.bias"))
-    # 将文本解码器的textual.visual_projection.0.bias键重命名为git.visual_projection.visual_projection.0.bias，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}textual.visual_projection.1.weight", "git.visual_projection.visual_projection.1.weight"))
-    # 将文本解码器的textual.visual_projection.1.weight键重命名为git.visual_projection.visual_projection.1.weight，并添加到rename_keys列表中
     rename_keys.append((f"{prefix}textual.visual_projection.1.bias", "git.visual_projection.visual_projection.1.bias"))
-    # 将文本解码器的textual.visual_projection.1.bias键重命名为git.visual_projection.visual_projection.1.bias，并添加到rename_keys列表中
-    # 添加需要重命名的键值对到 rename_keys 列表中，用于后续替换模型参数的名称
+    # 将文本解码器相关的旧的键和新的键对添加到 rename_keys 列表中，用于重命名文本嵌入和视觉投影的权重和偏置项
+    # 将需要重命名的键值对添加到 rename_keys 列表中
     rename_keys.append((f"{prefix}textual.embedding.layer_norm.weight", "git.embeddings.LayerNorm.weight"))
     rename_keys.append((f"{prefix}textual.embedding.layer_norm.bias", "git.embeddings.LayerNorm.bias"))
     rename_keys.append((f"{prefix}textual.output.weight", "output.weight"))
     rename_keys.append((f"{prefix}textual.output.bias", "output.bias"))
-    # 遍历模型的每一个隐藏层，重命名对应的参数键名
+    
+    # 遍历配置中指定的隐藏层数量，生成对应的键值对并添加到 rename_keys 中
     for i in range(config.num_hidden_layers):
-        # 重命名注意力机制中的查询参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.query.weight", f"git.encoder.layer.{i}.attention.self.query.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.query.bias", f"git.encoder.layer.{i}.attention.self.query.bias"))
-        # 重命名注意力机制中的键参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.key.weight", f"git.encoder.layer.{i}.attention.self.key.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.key.bias", f"git.encoder.layer.{i}.attention.self.key.bias"))
-        # 重命名注意力机制中的值参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.value.weight", f"git.encoder.layer.{i}.attention.self.value.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.self.value.bias", f"git.encoder.layer.{i}.attention.self.value.bias"))
-        # 重命名注意力机制中的输出参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.output.dense.weight", f"git.encoder.layer.{i}.attention.output.dense.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.output.dense.bias", f"git.encoder.layer.{i}.attention.output.dense.bias"))
-        # 重命名注意力机制中的输出层规范化参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.output.LayerNorm.weight", f"git.encoder.layer.{i}.attention.output.LayerNorm.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.attention.output.LayerNorm.bias", f"git.encoder.layer.{i}.attention.output.LayerNorm.bias"))
-        # 重命名隐藏层前馈网络中的中间层参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.intermediate.dense.weight", f"git.encoder.layer.{i}.intermediate.dense.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.intermediate.dense.bias", f"git.encoder.layer.{i}.intermediate.dense.bias"))
-        # 重命名隐藏层前馈网络中的输出层参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.output.dense.weight", f"git.encoder.layer.{i}.output.dense.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.output.dense.bias", f"git.encoder.layer.{i}.output.dense.bias"))
-        # 重命名隐藏层输出的规范化参数权重
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.output.LayerNorm.weight", f"git.encoder.layer.{i}.output.LayerNorm.weight"))
         rename_keys.append((f"{prefix}textual.transformer.encoder.layer.{i}.output.LayerNorm.bias", f"git.encoder.layer.{i}.output.LayerNorm.bias"))
-    # 结束 fmt 格式化
     # fmt: on
-    # 如果配置中指定了嵌入图像的数量，则重命名键以匹配特定格式
+    # 如果配置中指定了嵌入图像的数量，则执行以下操作
     if config.num_image_with_embedding is not None:
-        # 将键重命名为匹配特定格式的新键
+        # 将以下键值对添加到重命名键列表中，用于重命名图像临时嵌入的索引
         rename_keys.append(("img_temperal_embedding.0", "git.img_temperal_embedding.0"))
         rename_keys.append(("img_temperal_embedding.1", "git.img_temperal_embedding.1"))
         rename_keys.append(("img_temperal_embedding.2", "git.img_temperal_embedding.2"))
         rename_keys.append(("img_temperal_embedding.3", "git.img_temperal_embedding.3"))
         rename_keys.append(("img_temperal_embedding.4", "git.img_temperal_embedding.4"))
         rename_keys.append(("img_temperal_embedding.5", "git.img_temperal_embedding.5"))
-    # 返回重命名后的键列表
+
+    # 返回更新后的重命名键列表
     return rename_keys
-# 重命名字典中的键值对
+# 从字典中移除旧键，将其对应的值保存到变量val中
 def rename_key(dct, old, new):
-    # 弹出旧键对应的值
     val = dct.pop(old)
-    # 如果新键中包含特定字符串，则将值的转置存入新键，否则存入原值
+    # 如果新键中包含特定字符串，则对值进行转置操作
     dct[new] = val.T if "image_encoder.visual_projection" in new else val
 
 
-# 从状态字典中读取查询、键和值
+# 从状态字典中读取查询、键和值，并添加到指定位置的新键名下
 def read_in_q_k_v(state_dict, config, prefix=""):
-    # 获取隐藏层的维度
+    # 获取隐藏层的大小
     dim = config.vision_config.hidden_size
     for i in range(config.vision_config.num_hidden_layers):
-        # 读取输入投影层的权重和偏置
+        # 读取注意力机制中的输入投影层的权重和偏置
         in_proj_weight = state_dict.pop(f"{prefix}image_encoder.transformer.resblocks.{i}.attn.in_proj_weight")
         in_proj_bias = state_dict.pop(f"{prefix}image_encoder.transformer.resblocks.{i}.attn.in_proj_bias")
-        # 将查询、键、值分别添加到状态字典中
+        # 将查询、键和值的投影加入到状态字典中
         state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.q_proj.weight"] = in_proj_weight[:dim, :]
         state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.q_proj.bias"] = in_proj_bias[:dim]
-        state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.k_proj.weight"] = in_proj_weight[dim : dim * 2, :]
-        state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.k_proj.bias"] = in_proj_bias[dim : dim * 2]
+        state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.k_proj.weight"] = in_proj_weight[dim:dim*2, :]
+        state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.k_proj.bias"] = in_proj_bias[dim:dim*2]
         state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.v_proj.weight"] = in_proj_weight[-dim:, :]
         state_dict[f"git.image_encoder.vision_model.encoder.layers.{i}.self_attn.v_proj.bias"] = in_proj_bias[-dim:]
 
 
-# 准备图像，根据模型名获取图像
+# 根据模型名称准备图像数据
 def prepare_img(model_name):
-    # 如果模型名中包含"textvqa"，则从数据集中获取图像，否则从URL中获取图像
     if "textvqa" in model_name:
+        # 如果模型名称包含"textvqa"，则下载并打开示例图像文件
         filepath = hf_hub_download(repo_id="nielsr/textvqa-sample", filename="bus.png", repo_type="dataset")
         image = Image.open(filepath).convert("RGB")
     else:
+        # 否则，从指定的 URL 下载图像文件
         url = "http://images.cocodataset.org/val2017/000000039769.jpg"
         image = Image.open(requests.get(url, stream=True).raw)
 
     return image
 
 
-# 准备视频
+# 准备视频数据，使用decord库进行视频处理
 def prepare_video():
     from decord import VideoReader, cpu
 
-    # 为了能够重现结果，设置随机种子
+    # 设置随机数种子以保证可重现性
     np.random.seed(0)
 
-    # 从视频中抽样一定数量的帧索引
     def sample_frame_indices(clip_len, frame_sample_rate, seg_len):
         """
         Sample a given number of frame indices from the video.
@@ -223,90 +219,117 @@ def prepare_video():
         Returns:
             indices (`List[int]`): List of sampled frame indices
         """
+        # 计算需要采样的帧的数量
         converted_len = int(clip_len * frame_sample_rate)
+        # 在视频长度内随机选择结束帧索引
         end_idx = np.random.randint(converted_len, seg_len)
         start_idx = end_idx - converted_len
+        # 生成均匀分布的帧索引列表，并限制在视频长度范围内
         indices = np.linspace(start_idx, end_idx, num=clip_len)
         indices = np.clip(indices, start_idx, end_idx - 1).astype(np.int64)
         return indices
-    # 视频片段包含300帧（30 FPS时长10秒）
-    # 从指定的资源库下载视频文件，文件名为"eating_spaghetti.mp4"，资源库类型为数据集
+    # 从指定的 HF Hub 仓库下载视频数据集中的特定文件，此处下载的文件是 "eating_spaghetti.mp4"
     file_path = hf_hub_download(repo_id="nielsr/video-demo", filename="eating_spaghetti.mp4", repo_type="dataset")
-    # 创建视频读取器对象，使用单个线程，运行在CPU 0上
+    
+    # 使用 VideoReader 类读取视频文件，设置线程数为 1，在 CPU 0 上执行
     videoreader = VideoReader(file_path, num_threads=1, ctx=cpu(0))
-
-    # 从视频的起始位置开始读取帧
+    
+    # 将视频读取器定位到视频的起始位置
     videoreader.seek(0)
-    # 从视频中抽样6个帧，帧采样率为4，视频长度为len(videoreader)，得到抽样的帧索引列表
+    
+    # 通过 sample_frame_indices 函数从视频中随机抽取 6 个帧的索引
+    # clip_len=6 表示要抽取 6 个帧
+    # frame_sample_rate=4 表示每隔 4 个帧抽取一次
+    # seg_len=len(videoreader) 获取视频的总帧数，作为抽取帧的范围
     indices = sample_frame_indices(clip_len=6, frame_sample_rate=4, seg_len=len(videoreader))
-    # 根据抽样的帧索引列表，从视频中获取对应的帧数据，转换为NumPy数组形式
+    
+    # 从 videoreader 中获取指定 indices 的帧数据，返回一个 numpy 数组
     video = videoreader.get_batch(indices).asnumpy()
-
-    # 返回视频数据
+    
+    # 返回抽取的视频帧数据
     return video
-# 导入 torch 模块中的 no_grad 装饰器，用于禁用梯度计算
+# 声明一个装饰器，用于指示在函数执行过程中不需要计算梯度
 @torch.no_grad()
-# 定义函数用于将模型的权重复制/粘贴/调整到我们的 GIT 结构中
 def convert_git_checkpoint(model_name, pytorch_dump_folder_path, push_to_hub=False):
     """
     Copy/paste/tweak model's weights to our GIT structure.
     """
 
-    # 模型名与其对应的 URL 映射关系
+    # 定义不同模型名称对应的预训练模型下载链接
     model_name_to_url = {
         "git-base": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE/snapshot/model.pt",
-        # 其他模型名与 URL 映射 ...
+        "git-base-coco": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_COCO/snapshot/model.pt",
+        "git-base-textcaps": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_TEXTCAPS/snapshot/model.pt",
+        "git-base-vqav2": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_VQAv2/snapshot/model.pt",
+        "git-base-textvqa": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_TEXTVQA/snapshot/model.pt",  # todo
+        "git-base-vatex": "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_VATEX/snapshot/model.pt",
+        "git-base-msrvtt-qa": (
+            "https://publicgit.blob.core.windows.net/data/output/GIT_BASE_MSRVTT_QA/snapshot/model.pt"
+        ),
+        "git-large": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE/snapshot/model.pt",
+        "git-large-coco": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_COCO/snapshot/model.pt",
+        "git-large-textcaps": (
+            "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_TEXTCAPS/snapshot/model.pt"
+        ),
+        "git-large-vqav2": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_VQAv2/snapshot/model.pt",
+        "git-large-textvqa": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_TEXTVQA/snapshot/model.pt",
+        "git-large-vatex": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_VATEX/snapshot/model.pt",
+        "git-large-msrvtt-qa": (
+            "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_MSRVTT_QA/snapshot/model.pt"
+        ),
+        "git-large-r": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_R/snapshot/model.pt",
+        "git-large-r-coco": "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_R_COCO/snapshot/model.pt",
+        "git-large-r-textcaps": (
+            "https://publicgit.blob.core.windows.net/data/output/GIT_LARGE_R_TEXTCAPS/snapshot/model.pt"
+        ),
     }
 
-    # 模型名与其对应的本地文件路径映射关系
+    # 定义不同模型名称对应的本地路径
     model_name_to_path = {
         "git-large": "/Users/nielsrogge/Documents/GIT/git_large_model.pt",
-        # 其他模型名与本地文件路径映射 ...
+        "git-large-coco": "/Users/nielsrogge/Documents/GIT/git_large_coco_model.pt",
+        "git-large-textcaps": "/Users/nielsrogge/Documents/GIT/git_large_textcaps_model.pt",
+        "git-large-vqav2": "/Users/nielsrogge/Documents/GIT/git_large_vqav2_model.pt",
+        "git-large-textvqa": "/Users/nielsrogge/Documents/GIT/git_large_textvqa_model.pt",
     }
 
-    # 根据模型名获取对应的 GIT 配置、图像大小和是否为视频
+    # 根据模型名称获取相应的 GIT 配置，图像尺寸和是否为视频
     config, image_size, is_video = get_git_config(model_name)
-    # 如果模型名包含"large"且不是视频，并且不是"large-r"，则执行以下操作
+    # 检查模型名称中是否包含"large"，且不是视频模型，且不是"large-r"模型
     if "large" in model_name and not is_video and "large-r" not in model_name:
-        # 打印提示信息，大型检查点下载时间过长
+        # 如果是大模型，从本地加载预训练权重
         checkpoint_path = model_name_to_path[model_name]
-        # 使用torch.load加载检查点文件，并指定映射位置为"cpu"，提取其中的"model"数据
         state_dict = torch.load(checkpoint_path, map_location="cpu")["model"]
-    # 否则，执行以下操作
     else:
-        # 从模型名称到URL的映射中获取检查点URL
+        # 否则，从指定的 URL 加载预训练权重
         checkpoint_url = model_name_to_url[model_name]
-        # 使用torch.hub.load_state_dict_from_url从URL加载状态字典，并指定映射位置为"cpu"，文件名为model_name，提取其中的"model"数据
         state_dict = torch.hub.load_state_dict_from_url(checkpoint_url, map_location="cpu", file_name=model_name)["model"]
-    # 如果模型名为"git-base"，则指定前缀为"module."
+
+    # 根据模型名称确定键名前缀是否为"module."
     prefix = "module." if model_name == "git-base" else ""
-    # 创建重命名键列表
+    # 创建重命名键名的映射列表
     rename_keys = create_rename_keys(config, prefix=prefix)
-    # 对state_dict进行重命名
+    # 对预训练权重中的键名进行重命名
     for src, dest in rename_keys:
         rename_key(state_dict, src, dest)
-    # 读取Q、K、V值
+    # 读取输入、查询和值的权重
     read_in_q_k_v(state_dict, config, prefix=prefix)
-    
-    # 加载HuggingFace模型
-    # 使用GitForCausalLM类实例化模型
+
+    # 加载 HuggingFace 模型
     model = GitForCausalLM(config)
-    # 加载状态字典，并指定非严格模式，返回缺失键和意外键列表
+    # 加载模型权重，允许缺少键名和不期待的键名
     missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
-    # 设置模型为评估模式
     model.eval()
-    
-    # 打印缺失键和意外键
+
     print("Missing keys:", missing_keys)
     print("Unexpected keys:", unexpected_keys)
-    
-    # 断言缺失键与指定列表相等
+
+    # 断言确实缺少的键名和意外的键名
     assert missing_keys == ["git.embeddings.position_ids", "git.image_encoder.vision_model.embeddings.position_ids"]
-    # 断言意外键与指定列表相等
     assert unexpected_keys == ["git.image_encoder.visual_projection.weight"]
-    
-    # 验证结果
-    # 如果是视频，则实例化VideoMAEImageProcessor类，否则实例化CLIPImageProcessor类，并指定图像大小和裁剪大小
+
+    # 验证处理结果
+    # 根据是否为视频选择不同的图像处理器
     image_processor = (
         VideoMAEImageProcessor(
             size={"shortest_edge": image_size}, crop_size={"height": image_size, "width": image_size}
@@ -316,17 +339,19 @@ def convert_git_checkpoint(model_name, pytorch_dump_folder_path, push_to_hub=Fal
             size={"shortest_edge": image_size}, crop_size={"height": image_size, "width": image_size}
         )
     )
-    # 从"bert-base-uncased"模型实例化标记器，指定输入名称列表
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased", model_input_names=["input_ids", "attention_mask"])
-    # 使用GitProcessor类实例化处理器，传入标记器和图像处理器
+    # 根据模型类型选择适当的 tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+        "google-bert/bert-base-uncased", model_input_names=["input_ids", "attention_mask"]
+    )
+    # 创建 GitProcessor 对象，用于处理文本和图像输入
     processor = GitProcessor(tokenizer=tokenizer, image_processor=image_processor)
-    
-    # 如果是视频，则准备视频数据，并通过processor处理后获取像素值
+
     if is_video:
+        # 准备视频并处理像素值
         video = prepare_video()
         pixel_values = processor(images=list(video), return_tensors="pt").pixel_values
-    # 否则，准备图像数据，进行预处理后获取原始像素值
     else:
+        # 准备图像并进行图像转换
         image = prepare_img(model_name)
         image_transforms = Compose(
             [
@@ -336,64 +361,77 @@ def convert_git_checkpoint(model_name, pytorch_dump_folder_path, push_to_hub=Fal
                 Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711)),
             ]
         )
+        # 对原始图像应用转换并获取像素值张量
         original_pixel_values = image_transforms(image).unsqueeze(0)
         pixel_values = processor(images=image, return_tensors="pt").pixel_values
-    
+
         # 断言处理后的像素值与原始像素值接近
         assert torch.allclose(pixel_values, original_pixel_values)
-    
-    # 构建输入标识
+
+    # 创建输入张量
     input_ids = torch.tensor([[101]])
-    # 使用模型预测，并传入像素值
+    # 使用模型生成输出
     outputs = model(input_ids, pixel_values=pixel_values)
-    # 从输出中提取logits
     logits = outputs.logits
-    # 打印logits的前三个值
     print("Logits:", logits[0, -1, :3])
-    
-    # 根据模型名设置预期的切片logits值
+
+    # 根据模型名称选择预期的切片 logits
     if model_name == "git-base":
         expected_slice_logits = torch.tensor([-1.2832, -1.2835, -1.2840])
     elif model_name == "git-base-coco":
         expected_slice_logits = torch.tensor([-0.9925, -0.9930, -0.9935])
+    # 如果模型名称为 "git-base-textcaps"，设置预期的输出 logits
     elif model_name == "git-base-textcaps":
         expected_slice_logits = torch.tensor([-1.2980, -1.2983, -1.2985])
-    # 根据模型名称选择对应的预期切片logits
+    # 如果模型名称为 "git-base-vqav2"，设置预期的输出 logits
     elif model_name == "git-base-vqav2":
         expected_slice_logits = torch.tensor([-0.8570, -0.8568, -0.8561])
+    # 如果模型名称为 "git-base-textvqa"，设置预期的输出 logits
     elif model_name == "git-base-textvqa":
         expected_slice_logits = torch.tensor([-1.4085, -1.4083, -1.4082])
+    # 如果模型名称为 "git-base-vatex"，设置预期的输出 logits
     elif model_name == "git-base-vatex":
         expected_slice_logits = torch.tensor([-1.3451, -1.3447, -1.3447])
+    # 如果模型名称为 "git-base-msrvtt-qa"，设置预期的输出 logits
     elif model_name == "git-base-msrvtt-qa":
         expected_slice_logits = torch.tensor([-0.8554, -0.8550, -0.8540])
+    # 如果模型名称为 "git-large"，设置预期的输出 logits
     elif model_name == "git-large":
         expected_slice_logits = torch.tensor([-1.1708, -1.1707, -1.1705])
+    # 如果模型名称为 "git-large-coco"，设置预期的输出 logits
     elif model_name == "git-large-coco":
         expected_slice_logits = torch.tensor([-1.0425, -1.0423, -1.0422])
+    # 如果模型名称为 "git-large-textcaps"，设置预期的输出 logits
     elif model_name == "git-large-textcaps":
         expected_slice_logits = torch.tensor([-1.2705, -1.2708, -1.2706])
+    # 如果模型名称为 "git-large-vqav2"，设置预期的输出 logits
     elif model_name == "git-large-vqav2":
         expected_slice_logits = torch.tensor([-0.7042, -0.7043, -0.7043])
+    # 如果模型名称为 "git-large-textvqa"，设置预期的输出 logits
     elif model_name == "git-large-textvqa":
         expected_slice_logits = torch.tensor([-0.8590, -0.8592, -0.8590])
+    # 如果模型名称为 "git-large-vatex"，设置预期的输出 logits
     elif model_name == "git-large-vatex":
         expected_slice_logits = torch.tensor([-1.0113, -1.0114, -1.0113])
+    # 如果模型名称为 "git-large-msrvtt-qa"，设置预期的输出 logits
     elif model_name == "git-large-msrvtt-qa":
         expected_slice_logits = torch.tensor([0.0130, 0.0134, 0.0131])
+    # 如果模型名称为 "git-large-r"，设置预期的输出 logits
     elif model_name == "git-large-r":
         expected_slice_logits = torch.tensor([-1.1283, -1.1285, -1.1286])
+    # 如果模型名称为 "git-large-r-coco"，设置预期的输出 logits
     elif model_name == "git-large-r-coco":
         expected_slice_logits = torch.tensor([-0.9641, -0.9641, -0.9641])
+    # 如果模型名称为 "git-large-r-textcaps"，设置预期的输出 logits
     elif model_name == "git-large-r-textcaps":
         expected_slice_logits = torch.tensor([-1.1121, -1.1120, -1.1124])
 
-    # 验证预测的最后三个logits是否与预期的slice logits接近
+    # 断言检查模型输出 logits 的正确性
     assert torch.allclose(logits[0, -1, :3], expected_slice_logits, atol=1e-4)
-    # 打印检查消息
+    # 输出提示信息
     print("Looks ok!")
 
-    # 根据模型名称选择对应的提示语句
+    # 根据模型名称设置不同的提示语句
     prompt = ""
     if "textvqa" in model_name:
         prompt = "what does the front of the bus say at the top?"
@@ -401,56 +439,71 @@ def convert_git_checkpoint(model_name, pytorch_dump_folder_path, push_to_hub=Fal
         prompt = "what does the woman eat?"
     elif "vqa" in model_name:
         prompt = "what are the cats doing?"
-    # 使用分词器处理提示语句，添加特殊标记，生成input_ids
+
+    # 使用分词器处理提示语句，生成输入的 token IDs
     input_ids = tokenizer(prompt, add_special_tokens=False).input_ids
+    # 在 token IDs 前添加特殊 token 的 ID
     input_ids = [processor.tokenizer.cls_token_id] + input_ids
+    # 将输入 token IDs 转换成张量并增加一个维度
     input_ids = torch.tensor(input_ids).unsqueeze(0)
-    # 打印生成字幕的消息
+    # 输出生成标题的提示信息
     print("Generating caption...")
-    # 生成字幕
+    # 使用模型生成标题
     generated_ids = model.generate(pixel_values=pixel_values, input_ids=input_ids, max_length=50)
-    # 打印生成的字幕
+    # 打印生成的标题，跳过特殊 token 的解码
     print("Generated caption:", processor.batch_decode(generated_ids, skip_special_tokens=True))
 
-    # 如果指定了pytorch_dump_folder_path，则保存模型和处理器
+    # 如果指定了 PyTorch 模型保存路径
     if pytorch_dump_folder_path is not None:
+        # 确保路径存在或创建路径
         Path(pytorch_dump_folder_path).mkdir(exist_ok=True)
+        # 输出保存模型和处理器的信息
         print(f"Saving model and processor of {model_name} to {pytorch_dump_folder_path}")
+        # 将模型保存到指定路径
         model.save_pretrained(pytorch_dump_folder_path)
+        # 将处理器保存到指定路径
         processor.save_pretrained(pytorch_dump_folder_path)
-
-    # 如果指定了push_to_hub，则将模型和处理器推送到hub
+    # 如果 push_to_hub 为 True，则执行以下操作
     if push_to_hub:
+        # 打印推送模型和处理器到 hub 的信息，包括模型名称
         print(f"Pushing model and processor of {model_name} to the hub...")
+        # 调用 model 对象的 push_to_hub 方法，将模型推送到 Microsoft 的 hub 中
         model.push_to_hub(f"microsoft/{model_name}")
+        # 调用 processor 对象的 push_to_hub 方法，将处理器推送到 Microsoft 的 hub 中
         processor.push_to_hub(f"microsoft/{model_name}")
-# 如果当前脚本被直接执行，则执行以下代码块
 if __name__ == "__main__":
-    # 创建参数解析器对象
+    # 如果作为主程序运行，执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 添加必需参数：模型名称
+    # 创建参数解析器对象
+
+    # Required parameters
     parser.add_argument(
         "--model_name",
         default="git-base",
         type=str,
         help="Name of the model you'd like to convert.",
     )
-    # 添加必需参数：输出 PyTorch 模型目录的路径
+    # 添加一个必需的参数：模型的名称，如果未提供则默认为"git-base"，类型为字符串
+
     parser.add_argument(
         "--pytorch_dump_folder_path",
         default=None,
         type=str,
         help="Path to the output PyTorch model directory.",
     )
-    # 添加可选参数：是否将模型推送到 Hub
+    # 添加一个参数：PyTorch 模型输出目录的路径，如果未提供则为None，默认类型为字符串
+
     parser.add_argument(
         "--push_to_hub",
         action="store_true",
         help="Whether to push the model to the hub.",
     )
+    # 添加一个参数：是否将模型推送到 hub 上，采用布尔标志方式
 
-    # 解析命令行参数
     args = parser.parse_args()
-    # 调用函数 convert_git_checkpoint，将给定的模型名称、PyTorch 模型目录路径和是否推送到 Hub 作为参数
+    # 解析命令行参数并将其存储在 args 对象中
+
     convert_git_checkpoint(args.model_name, args.pytorch_dump_folder_path, args.push_to_hub)
+    # 调用函数 convert_git_checkpoint，传入解析后的参数：模型名称、输出目录路径、是否推送到 hub
 ```

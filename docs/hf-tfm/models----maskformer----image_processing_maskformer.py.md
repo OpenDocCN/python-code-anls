@@ -1,15 +1,18 @@
-# `.\transformers\models\maskformer\image_processing_maskformer.py`
+# `.\models\maskformer\image_processing_maskformer.py`
 
-```py
-# 设置编码格式为 UTF-8
-# 版权声明以及版权信息
-# 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
-# 可在以下网址获取许可证副本
+```
+# coding=utf-8
+# 版权 2022 年 HuggingFace Inc. 团队保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本进行许可；
+# 除非符合许可证的要求，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本：
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 在适用法律要求或书面同意的情况下，根据许可协议分发的软件
-# 以"原样"分发，不提供任何形式的保证或条件，无论是明示或暗示的
-# 有关特定语言的条件和保证，请参阅许可证
-"""用于 MaskFormer 的图像处理器类"""
+#
+# 除非适用法律要求或书面同意，否则本软件按"原样"提供，不提供任何明示或暗示的担保或条件。
+# 请参阅许可证获取特定语言的权限和限制。
+"""MaskFormer 的图像处理器类。"""
 
 import math
 import warnings
@@ -17,7 +20,6 @@ from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, Tupl
 
 import numpy as np
 
-# 导入必要的工具函数和类
 from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
 from ...image_transforms import (
     PaddingMode,
@@ -37,6 +39,8 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
 from ...utils import (
     IMAGENET_DEFAULT_MEAN,
@@ -50,28 +54,28 @@ from ...utils import (
 # 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 如果支持类型检查
+# 如果是类型检查环境
 if TYPE_CHECKING:
     from transformers import MaskFormerForInstanceSegmentationOutput
 
-# 如果支持 torch 库，则进行相关导入
+# 如果 Torch 可用
 if is_torch_available():
     import torch
     from torch import nn
 
-# 从 DETR 模型的图像处理模块中复制的函数：获取可迭代值中每个元素最大值
+# 从 transformers.models.detr.image_processing_detr.max_across_indices 复制过来
 def max_across_indices(values: Iterable[Any]) -> List[Any]:
     """
-    返回可迭代值中所有索引的最大值。
+    返回可迭代值的所有索引中的最大值。
     """
     return [max(values_i) for values_i in zip(*values)]
 
-# 从 DETR 模型的图像处理模块中复制的函数：获取所有图像中最大的高度和宽度
+# 从 transformers.models.detr.image_processing_detr.get_max_height_width 复制过来
 def get_max_height_width(
     images: List[np.ndarray], input_data_format: Optional[Union[str, ChannelDimension]] = None
 ) -> List[int]:
     """
-    获取批量图像中所有图像的最大高度和宽度。
+    获取批次中所有图像的最大高度和宽度。
     """
     if input_data_format is None:
         input_data_format = infer_channel_dimension_format(images[0])
@@ -84,112 +88,137 @@ def get_max_height_width(
         raise ValueError(f"Invalid channel dimension format: {input_data_format}")
     return (max_height, max_width)
 
-# 从 DETR ���型的图像处理模块中复制的函数：创建像素级掩码
+# 从 transformers.models.detr.image_processing_detr.make_pixel_mask 复制过来
 def make_pixel_mask(
-    image: np.ndarray, output_size: Tuple[int, int], input_data_format: Optional[Union[str, ChannelDimension]] = None
-) -> np.ndarray:
+    # image: np.ndarray 是一个参数，表示输入的图像数据，类型为 numpy 的多维数组
+    # output_size: Tuple[int, int] 是一个参数，表示输出图像的尺寸，以元组形式给出，包含两个整数值
+    # input_data_format: Optional[Union[str, ChannelDimension]] = None 是一个可选参数，用于指定输入数据的格式，可以是字符串或 ChannelDimension 类型的联合类型，如果不提供则默认为 None
+# 根据输入图像创建像素掩码，其中1表示有效像素，0表示填充像素。
+def make_pixel_mask(image: np.ndarray, output_size: Tuple[int, int]) -> np.ndarray:
     """
-    # 为图像创建像素掩码,其中1表示有效像素,0表示填充像素
-    def make_pixel_mask(image, output_size):
-        # 获取图像的输入高度和宽度
-        input_height, input_width = get_image_size(image, channel_dim=input_data_format)
-        # 创建一个全0的掩码矩阵,大小为输出尺寸
-        mask = np.zeros(output_size, dtype=np.int64)
-        # 将有效像素区域(输入高度和宽度)的掩码值设为1
-        mask[:input_height, :input_width] = 1
-        # 返回创建的掩码矩阵
-        return mask
-# 从transformers.models.detr.image_processing_detr中复制的函数，将给定的二进制掩码(`height, width`)转换为运行长度编码(RLE)格式
-def binary_mask_to_rle(mask):
-    """
-    将给定形状为`（height, width）`的二进制掩码转换为运行长度编码（RLE）格式。
+    Make a pixel mask for the image, where 1 indicates a valid pixel and 0 indicates padding.
 
     Args:
-        mask (`torch.Tensor`或`numpy.array`):
-            形状为`（height, width）`的二进制掩码张量，其中0表示背景，1表示目标段ID或类别ID。
-    Returns:
-        `List`: 二进制掩码的运行长度编码列表。有关RLE格式的更多信息，请参考COCO API。
+        image (`np.ndarray`):
+            Image to make the pixel mask for.
+        output_size (`Tuple[int, int]`):
+            Output size of the mask.
     """
+    # 获取图像的高度和宽度
+    input_height, input_width = get_image_size(image, channel_dim=input_data_format)
+    # 创建一个全零的掩码，形状为output_size，数据类型为np.int64
+    mask = np.zeros(output_size, dtype=np.int64)
+    # 将掩码的有效像素部分设为1，根据输入图像的实际大小进行裁剪
+    mask[:input_height, :input_width] = 1
+    return mask
+
+
+# 从transformers.models.detr.image_processing_detr.binary_mask_to_rle复制而来
+def binary_mask_to_rle(mask):
+    """
+    Converts given binary mask of shape `(height, width)` to the run-length encoding (RLE) format.
+
+    Args:
+        mask (`torch.Tensor` or `numpy.array`):
+            A binary mask tensor of shape `(height, width)` where 0 denotes background and 1 denotes the target
+            segment_id or class_id.
+    Returns:
+        `List`: Run-length encoded list of the binary mask. Refer to COCO API for more information about the RLE
+        format.
+    """
+    # 如果mask是torch.Tensor，则转换为numpy数组
     if is_torch_tensor(mask):
         mask = mask.numpy()
 
+    # 将二进制掩码展平为一维数组
     pixels = mask.flatten()
+    # 在数组两端各加一个0，以确保算法正确性
     pixels = np.concatenate([[0], pixels, [0]])
+    # 计算像素值改变的位置索引，构建运行长度编码
     runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
     runs[1::2] -= runs[::2]
     return list(runs)
 
 
-# 从transformers.models.detr.image_processing_detr中复制的函数，将给定的分割映射(`height, width`)转换为运行长度编码（RLE）格式
+# 从transformers.models.detr.image_processing_detr.convert_segmentation_to_rle复制而来
 def convert_segmentation_to_rle(segmentation):
     """
-    将给定形状为`（height, width）`的分割映射转换为运行长度编码（RLE）格式。
+    Converts given segmentation map of shape `(height, width)` to the run-length encoding (RLE) format.
 
     Args:
-        segmentation (`torch.Tensor`或`numpy.array`):
-            形状为`（height, width）`的分割映射，每个值表示一个段或类别ID。
+        segmentation (`torch.Tensor` or `numpy.array`):
+            A segmentation map of shape `(height, width)` where each value denotes a segment or class id.
     Returns:
-        `List[List]`: 一个列表的列表，每个列表是段/类别ID的运行长度编码。
+        `List[List]`: A list of lists, where each list is the run-length encoding of a segment / class id.
     """
+    # 获取分割图中所有唯一的标签值
     segment_ids = torch.unique(segmentation)
 
     run_length_encodings = []
+    # 遍历每个唯一的标签值
     for idx in segment_ids:
+        # 创建与当前标签匹配的二进制掩码
         mask = torch.where(segmentation == idx, 1, 0)
+        # 将二进制掩码转换为运行长度编码（RLE）
         rle = binary_mask_to_rle(mask)
         run_length_encodings.append(rle)
 
     return run_length_encodings
 
 
-# 从transformers.models.detr.image_processing_detr中复制的函数，使用`object_mask_threshold`将给定掩码进行二值化，返回相应的`masks`，`scores`和`labels`值
+# 从transformers.models.detr.image_processing_detr.remove_low_and_no_objects复制而来
 def remove_low_and_no_objects(masks, scores, labels, object_mask_threshold, num_labels):
     """
-    使用`object_mask_threshold`对给定的掩码进行二值化，返回相关的`masks`，`scores`和`labels`值。
+    Binarize the given masks using `object_mask_threshold`, it returns the associated values of `masks`, `scores` and
+    `labels`.
 
     Args:
         masks (`torch.Tensor`):
-            形状为`（num_queries, height, width）`的张量。
+            A tensor of shape `(num_queries, height, width)`.
         scores (`torch.Tensor`):
-            形状为`（num_queries）`的张量。
+            A tensor of shape `(num_queries)`.
         labels (`torch.Tensor`):
-            形状为`（num_queries）`的张量。
+            A tensor of shape `(num_queries)`.
         object_mask_threshold (`float`):
-            介于0和1之间的数字，用于二值化掩码。
+            A number between 0 and 1 used to binarize the masks.
     Raises:
-        `ValueError`: 当所有输入张量的第一个维度不匹配时引发。
-    Returns:
-        `Tuple[`torch.Tensor`, `torch.Tensor`, `torch.Tensor`]`: 不包含区域<`object_mask_threshold`的`masks`，`scores`和`labels`。
+        `ValueError`: Raised when the first dimension doesn't match in all input tensors.
     """
+    # 确保所有输入张量的第一个维度大小相同
+    # 检查输入的`masks`、`scores`和`labels`张量是否具有相同的第一个维度
     if not (masks.shape[0] == scores.shape[0] == labels.shape[0]):
+        # 如果它们的第一个维度不同，抛出数值错误异常
         raise ValueError("mask, scores and labels must have the same shape!")
 
+    # 创建布尔张量 `to_keep`，其中元素为真（True）的条件是标签不等于 `num_labels` 并且得分大于 `object_mask_threshold`
     to_keep = labels.ne(num_labels) & (scores > object_mask_threshold)
 
+    # 返回根据 `to_keep` 布尔张量过滤后的 `masks`、`scores` 和 `labels`
     return masks[to_keep], scores[to_keep], labels[to_keep]
-
-
-# 从transformers.models.detr.image_processing_detr中复制的函数，检查分段的有效性
-# 检查分割的有效性，返回是否存在掩码和掩码对应的二进制数组
+# Copied from transformers.models.detr.image_processing_detr.check_segment_validity
 def check_segment_validity(mask_labels, mask_probs, k, mask_threshold=0.5, overlap_mask_area_threshold=0.8):
-    # 获取与第 k 类相关联的掩码
+    # 获取与第 k 类相关的掩码
     mask_k = mask_labels == k
+    # 计算第 k 类掩码的总面积
     mask_k_area = mask_k.sum()
 
-    # 计算查询 k 中所有内容的面积
+    # 计算预测概率中第 k 类的总面积
     original_area = (mask_probs[k] >= mask_threshold).sum()
+    # 检查是否存在有效掩码
     mask_exists = mask_k_area > 0 and original_area > 0
 
-    # 消除断开的小片段
+    # 消除断开的小段
     if mask_exists:
+        # 计算掩码面积比例
         area_ratio = mask_k_area / original_area
+        # 如果面积比例不大于重叠掩码面积阈值，则认为不存在有效掩码
         if not area_ratio.item() > overlap_mask_area_threshold:
             mask_exists = False
 
     return mask_exists, mask_k
 
 
-# 从 transformers.models.detr.image_processing_detr.compute_segments 复制而来
+# Copied from transformers.models.detr.image_processing_detr.compute_segments
 def compute_segments(
     mask_probs,
     pred_scores,
@@ -202,27 +231,31 @@ def compute_segments(
     height = mask_probs.shape[1] if target_size is None else target_size[0]
     width = mask_probs.shape[2] if target_size is None else target_size[1]
 
+    # 创建一个全零的分割图像，用于存储每个像素的分割标签
     segmentation = torch.zeros((height, width), dtype=torch.int32, device=mask_probs.device)
+    # 用于存储检测到的所有分割结果
     segments: List[Dict] = []
 
     if target_size is not None:
+        # 如果有指定目标尺寸，则插值调整掩码概率张量的尺寸
         mask_probs = nn.functional.interpolate(
             mask_probs.unsqueeze(0), size=target_size, mode="bilinear", align_corners=False
         )[0]
 
     current_segment_id = 0
 
-    # 根据预测分数加权每个掩码
+    # 将每个掩码乘以其预测分数
     mask_probs *= pred_scores.view(-1, 1, 1)
+    # 获取每个像素位置上概率最大的类别标签作为分割标签
     mask_labels = mask_probs.argmax(0)  # [height, width]
 
-    # 跟踪每个类别的实例
+    # 用于记录每个类别的实例数量
     stuff_memory_list: Dict[str, int] = {}
     for k in range(pred_labels.shape[0]):
         pred_class = pred_labels[k].item()
         should_fuse = pred_class in label_ids_to_fuse
 
-        # 检查掩码是否存在且足够大以成为段
+        # 检查是否存在有效的分割掩码并且足够大
         mask_exists, mask_k = check_segment_validity(
             mask_labels, mask_probs, k, mask_threshold, overlap_mask_area_threshold
         )
@@ -233,9 +266,10 @@ def compute_segments(
             else:
                 current_segment_id += 1
 
-            # 将当前对象段添加到最终分割图中
+            # 将当前对象的分割标签添加到最终的分割图像中
             segmentation[mask_k] = current_segment_id
             segment_score = round(pred_scores[k].item(), 6)
+            # 将当前对象的分割信息添加到分割列表中
             segments.append(
                 {
                     "id": current_segment_id,
@@ -250,45 +284,51 @@ def compute_segments(
     return segmentation, segments
 
 
-# TODO: (Amy) 移动到 image_transforms
+# TODO: (Amy) Move to image_transforms
 def convert_segmentation_map_to_binary_masks(
     segmentation_map: "np.ndarray",
+    # segmentation_map 是一个变量，用来表示分割地图，类型为 numpy 数组（np.ndarray）
+
     instance_id_to_semantic_id: Optional[Dict[int, int]] = None,
-    # 定义一个可选的整数类型参数 ignore_index，默认值为 None
+    # instance_id_to_semantic_id 是一个可选的字典类型变量，用来映射实例 ID 到语义 ID，键和值都是整数类型
+
     ignore_index: Optional[int] = None,
-    # 定义一个布尔类型参数 reduce_labels，默认值为 False
+    # ignore_index 是一个可选的整数变量，用来指定在分割过程中忽略的索引值，默认为 None
+
     reduce_labels: bool = False,
-# 如果 reduce_labels 为 True，但未提供 ignore_index，则抛出 ValueError 异常
-if reduce_labels and ignore_index is None:
-    raise ValueError("If `reduce_labels` is True, `ignore_index` must be provided.")
+    # reduce_labels 是一个布尔型变量，用来表示是否需要减少标签的数量，默认为 False
+    ):
+        # 如果 reduce_labels 为 True 但 ignore_index 未提供，则抛出数值错误异常
+        raise ValueError("If `reduce_labels` is True, `ignore_index` must be provided.")
 
-# 如果 reduce_labels 为 True，将 segmentation_map 中值为 0 的元素替换为 ignore_index，其余元素减 1
-if reduce_labels:
-    segmentation_map = np.where(segmentation_map == 0, ignore_index, segmentation_map - 1)
+    if reduce_labels:
+        # 如果 reduce_labels 为 True，则将 segmentation_map 中值为 0 的位置替换为 ignore_index，其它位置减去 1
+        segmentation_map = np.where(segmentation_map == 0, ignore_index, segmentation_map - 1)
 
-# 获取 segmentation_map 中的所有唯一标签
-all_labels = np.unique(segmentation_map)
+    # 获取唯一的标签 ids（基于输入是类别还是实例）
+    all_labels = np.unique(segmentation_map)
 
-# 如果 ignore_index 不为 None，则从 all_labels 中删除 ignore_index
-if ignore_index is not None:
-    all_labels = all_labels[all_labels != ignore_index]
+    # 如果 ignore_index 不为空，则删除背景标签
+    if ignore_index is not None:
+        all_labels = all_labels[all_labels != ignore_index]
 
-# 为每个对象实例生成二进制掩码
-binary_masks = [(segmentation_map == i) for i in all_labels]
-binary_masks = np.stack(binary_masks, axis=0)  # (num_labels, height, width)
+    # 为每个对象实例生成二进制掩码
+    binary_masks = [(segmentation_map == i) for i in all_labels]
+    binary_masks = np.stack(binary_masks, axis=0)  # (num_labels, height, width)
 
-# 将实例 id 转换为类别 id
-if instance_id_to_semantic_id is not None:
-    labels = np.zeros(all_labels.shape[0])
+    # 如果 instance_id_to_semantic_id 不为空，则将实例 ids 转换为类别 ids
+    if instance_id_to_semantic_id is not None:
+        labels = np.zeros(all_labels.shape[0])
 
-    for label in all_labels:
-        class_id = instance_id_to_semantic_id[label + 1 if reduce_labels else label]
-        labels[all_labels == label] = class_id - 1 if reduce_labels else class_id
-else:
-    labels = all_labels
+        for label in all_labels:
+            # 根据 reduce_labels 来选择是否需要对 label 进行调整
+            class_id = instance_id_to_semantic_id[label + 1 if reduce_labels else label]
+            labels[all_labels == label] = class_id - 1 if reduce_labels else class_id
+    else:
+        labels = all_labels
 
-# 返回二进制掩码和标签
-return binary_masks.astype(np.float32), labels.astype(np.int64)
+    # 返回二进制掩码数组和标签数组，掩码为浮点数类型，标签为整数类型
+    return binary_masks.astype(np.float32), labels.astype(np.int64)
 
 
 def get_maskformer_resize_output_image_size(
@@ -300,26 +340,25 @@ def get_maskformer_resize_output_image_size(
     input_data_format: Optional[Union[str, ChannelDimension]] = None,
 ) -> Tuple[int, int]:
     """
-    Computes the output size given the desired size.
+    根据所需大小计算输出图像的大小。
 
     Args:
         image (`np.ndarray`):
-            The input image.
+            输入图像。
         size (`int` or `Tuple[int, int]` or `List[int]` or `Tuple[int]`):
-            The size of the output image.
-        max_size (`int`, *optional*):
-            The maximum size of the output image.
-        size_divisor (`int`, *optional*, defaults to 0):
-            If `size_divisor` is given, the output image size will be divisible by the number.
-        default_to_square (`bool`, *optional*, defaults to `True`):
-            Whether to default to square if no size is provided.
-        input_data_format (`ChannelDimension` or `str`, *optional*):
-            The channel dimension format of the input image. If unset, will use the inferred format from the input.
+            输出图像的大小。
+        max_size (`int`, *可选*):
+            输出图像的最大大小。
+        size_divisor (`int`, *可选*, 默认为 0):
+            如果提供了 `size_divisor`，输出图像大小将可以被此数整除。
+        default_to_square (`bool`, *可选*, 默认为 `True`):
+            如果未提供大小是否默认为正方形。
+        input_data_format (`ChannelDimension` or `str`, *可选*):
+            输入图像的通道维度格式。如果未设置，则使用输入的推断格式。
 
     Returns:
-        `Tuple[int, int]`: The output size.
+        `Tuple[int, int]`: 输出图像的大小。
     """
-    # 计算输出大小
     output_size = get_resize_output_image_size(
         input_image=image,
         size=size,
@@ -328,114 +367,175 @@ def get_maskformer_resize_output_image_size(
         input_data_format=input_data_format,
     )
 
-    # 如果 size_divisor 大于 0，将输出大小调整为可被 size_divisor 整除
     if size_divisor > 0:
         height, width = output_size
         height = int(math.ceil(height / size_divisor) * size_divisor)
         width = int(math.ceil(width / size_divisor) * size_divisor)
         output_size = (height, width)
 
+    # 返回计算后的输出图像大小
     return output_size
 
 
 class MaskFormerImageProcessor(BaseImageProcessor):
     r"""
-    # 构造一个 MaskFormer 图像处理器。该图像处理器可用于准备图像和可选目标，以供模型使用。
-    # 该图像处理器继承自 BaseImageProcessor，其中包含大部分主要方法。用户应参考此超类以获取有关这些方法的更多信息。
-    # 参数：
-    # do_resize（`bool`，*可选*，默认为`True`）：是否调整输入大小到特定的`size`。
-    # size（`int`，*可选*，默认为800）：将输入调整为给定大小。仅在`do_resize`设置为`True`时有效。如果size是一个类似`(width, height)`的序列，输出大小将匹配到这个。如果size是一个整数，图像的较小边将匹配到这个数字。即，如果`height > width`，则图像将重新缩放为`(size * height / width, size)`。
-    # size_divisor（`int`，*可选*，默认为32）：一些骨干网络需要可被某个数字整除的图像。如果未传递，则默认为Swin Transformer中使用的值。
-    # resample（`int`，*可选*，默认为`Resampling.BILINEAR`）：一个可选的重采样滤波器。可以是`PIL.Image.Resampling.NEAREST`、`PIL.Image.Resampling.BOX`、`PIL.Image.Resampling.BILINEAR`、`PIL.Image.Resampling.HAMMING`、`PIL.Image.Resampling.BICUBIC`或`PIL.Image.Resampling.LANCZOS`之一。仅在`do_resize`设置为`True`时有效。
-    # do_rescale（`bool`，*可选*，默认为`True`）：是否将输入重新缩放到特定的`scale`。
-    # rescale_factor（`float`，*可选*，默认为`1/255`）：按给定因子重新缩放输入。仅在`do_rescale`设置为`True`时有效。
-    # do_normalize（`bool`，*可选*，默认为`True`）：是否对输入进行均值和标准差归一化。
-    # image_mean（`int`，*可选*，默认为`[0.485, 0.456, 0.406]`）：每个通道的均值序列，用于归一化图像时使用。默认为ImageNet均值。
-    # image_std（`int`，*可选*，默认为`[0.229, 0.224, 0.225]`）：每个通道的标准差序列，用于归一化图像时使用。默认为ImageNet标准差。
-    # ignore_index（`int`，*可选*）：在分割地图中为背景像素分配的标签。如果提供，用0（背景）表示的分割地图像素将被替换为`ignore_index`。
-    # do_reduce_labels（`bool`，*可选*，默认为`False`）：是否减少所有分割地图的标签值1。通常用于数据集中使用0表示背景，并且背景本身不包含在数据集的所有类中（例如ADE20k）。背景标签将被替换为`ignore_index`。
-    # 定义模型输入的名称列表
-    model_input_names = ["pixel_values", "pixel_mask"]
+    Constructs a MaskFormer image processor. The image processor can be used to prepare image(s) and optional targets
+    for the model.
 
-    # 初始化方法，设置各种参数
+    This image processor inherits from [`BaseImageProcessor`] which contains most of the main methods. Users should
+    refer to this superclass for more information regarding those methods.
+
+    Args:
+        do_resize (`bool`, *optional*, defaults to `True`):
+            Whether to resize the input to a certain `size`.
+        size (`int`, *optional*, defaults to 800):
+            Resize the input to the given size. Only has an effect if `do_resize` is set to `True`. If size is a
+            sequence like `(width, height)`, output size will be matched to this. If size is an int, smaller edge of
+            the image will be matched to this number. i.e, if `height > width`, then image will be rescaled to `(size *
+            height / width, size)`.
+        size_divisor (`int`, *optional*, defaults to 32):
+            Some backbones need images divisible by a certain number. If not passed, it defaults to the value used in
+            Swin Transformer.
+        resample (`int`, *optional*, defaults to `Resampling.BILINEAR`):
+            An optional resampling filter. This can be one of `PIL.Image.Resampling.NEAREST`,
+            `PIL.Image.Resampling.BOX`, `PIL.Image.Resampling.BILINEAR`, `PIL.Image.Resampling.HAMMING`,
+            `PIL.Image.Resampling.BICUBIC` or `PIL.Image.Resampling.LANCZOS`. Only has an effect if `do_resize` is set
+            to `True`.
+        do_rescale (`bool`, *optional*, defaults to `True`):
+            Whether to rescale the input to a certain `scale`.
+        rescale_factor (`float`, *optional*, defaults to `1/ 255`):
+            Rescale the input by the given factor. Only has an effect if `do_rescale` is set to `True`.
+        do_normalize (`bool`, *optional*, defaults to `True`):
+            Whether or not to normalize the input with mean and standard deviation.
+        image_mean (`int`, *optional*, defaults to `[0.485, 0.456, 0.406]`):
+            The sequence of means for each channel, to be used when normalizing images. Defaults to the ImageNet mean.
+        image_std (`int`, *optional*, defaults to `[0.229, 0.224, 0.225]`):
+            The sequence of standard deviations for each channel, to be used when normalizing images. Defaults to the
+            ImageNet std.
+        ignore_index (`int`, *optional*):
+            Label to be assigned to background pixels in segmentation maps. If provided, segmentation map pixels
+            denoted with 0 (background) will be replaced with `ignore_index`.
+        do_reduce_labels (`bool`, *optional*, defaults to `False`):
+            Whether or not to decrement all label values of segmentation maps by 1. Usually used for datasets where 0
+            is used for background, and background itself is not included in all classes of a dataset (e.g. ADE20k).
+            The background label will be replaced by `ignore_index`.
+
+    """
+    # 定义模型输入的名称列表，包含像素值和像素掩码
+    model_input_names = ["pixel_values", "pixel_mask"]
+    
+    # 初始化函数，用于创建和配置数据预处理类的实例
     def __init__(
         self,
-        do_resize: bool = True,
-        size: Dict[str, int] = None,
-        size_divisor: int = 32,
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        do_rescale: bool = True,
-        rescale_factor: float = 1 / 255,
-        do_normalize: bool = True,
-        image_mean: Union[float, List[float]] = None,
-        image_std: Union[float, List[float]] = None,
-        ignore_index: Optional[int] = None,
-        do_reduce_labels: bool = False,
-        **kwargs,
+        do_resize: bool = True,  # 是否进行图像大小调整，默认为True
+        size: Dict[str, int] = None,  # 图像大小的字典，包含宽度和高度
+        size_divisor: int = 32,  # 图像大小调整的除数，用于确保大小是32的倍数
+        resample: PILImageResampling = PILImageResampling.BILINEAR,  # 图像调整时使用的插值方法，默认为双线性插值
+        do_rescale: bool = True,  # 是否进行图像像素值的缩放，默认为True
+        rescale_factor: float = 1 / 255,  # 图像像素值缩放的因子，默认为1/255
+        do_normalize: bool = True,  # 是否进行图像像素值的归一化，默认为True
+        image_mean: Union[float, List[float]] = None,  # 图像归一化时的均值，可以是单个值或列表
+        image_std: Union[float, List[float]] = None,  # 图像归一化时的标准差，可以是单个值或列表
+        ignore_index: Optional[int] = None,  # 可选参数，指定要忽略的标签索引
+        do_reduce_labels: bool = False,  # 是否减少标签数量，默认为False
+        **kwargs,  # 其他可能的关键字参数，灵活配置
     ):
-        # 检查是否有"size_divisibility"参数，如果有则发出警告并使用"size_divisor"代替
-        if "size_divisibility" in kwargs:
-            warnings.warn(
-                "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
-                "`size_divisor` instead.",
-                FutureWarning,
-            )
-            size_divisor = kwargs.pop("size_divisibility")
-        # 检查是否有"max_size"参数，如果有则发出警告并使用"size['longest_edge']"代替
-        if "max_size" in kwargs:
-            warnings.warn(
-                "The `max_size` argument is deprecated and will be removed in v4.27. Please use size['longest_edge']"
-                " instead.",
-                FutureWarning,
-            )
-            # 将max_size设置为私有属性，以便在预处理方法中传递默认值，同时仍然可以将`size`作为整数传递
-            self._max_size = kwargs.pop("max_size")
-        else:
-            self._max_size = 1333
-        # 检查是否有"reduce_labels"参数，如果有则发出警告并使用"do_reduce_labels"代替
-        if "reduce_labels" in kwargs:
-            warnings.warn(
-                "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use "
-                "`do_reduce_labels` instead.",
-                FutureWarning,
-            )
-            do_reduce_labels = kwargs.pop("reduce_labels")
+        ):
+            # 检查是否传入了 `size_divisibility` 参数，如果有则发出警告并使用 `size_divisor` 替代
+            if "size_divisibility" in kwargs:
+                warnings.warn(
+                    "The `size_divisibility` argument is deprecated and will be removed in v4.27. Please use "
+                    "`size_divisor` instead.",
+                    FutureWarning,
+                )
+                size_divisor = kwargs.pop("size_divisibility")
 
-        # 设置size参数的默认值
-        size = size if size is not None else {"shortest_edge": 800, "longest_edge": self._max_size}
-        size = get_size_dict(size, max_size=self._max_size, default_to_square=False)
+            # 检查是否传入了 `max_size` 参数，如果有则发出警告并将其作为私有属性 `_max_size` 存储
+            if "max_size" in kwargs:
+                warnings.warn(
+                    "The `max_size` argument is deprecated and will be removed in v4.27. Please use size['longest_edge']"
+                    " instead.",
+                    FutureWarning,
+                )
+                # 将 `max_size` 作为默认值传递给 `preprocess` 方法的私有属性 `_max_size`
+                self._max_size = kwargs.pop("max_size")
+            else:
+                # 如果未传入 `max_size` 参数，默认设为 1333
+                self._max_size = 1333
 
-        # 调用父类的初始化方法
-        super().__init__(**kwargs)
-        self.do_resize = do_resize
-        self.size = size
-        self.resample = resample
-        self.size_divisor = size_divisor
-        self.do_rescale = do_rescale
-        self.rescale_factor = rescale_factor
-        self.do_normalize = do_normalize
-        self.image_mean = image_mean if image_mean is not None else IMAGENET_DEFAULT_MEAN
-        self.image_std = image_std if image_std is not None else IMAGENET_DEFAULT_STD
-        self.ignore_index = ignore_index
-        self.do_reduce_labels = do_reduce_labels
+            # 检查是否传入了 `reduce_labels` 参数，如果有则发出警告并使用 `do_reduce_labels` 替代
+            if "reduce_labels" in kwargs:
+                warnings.warn(
+                    "The `reduce_labels` argument is deprecated and will be removed in v4.27. Please use "
+                    "`do_reduce_labels` instead.",
+                    FutureWarning,
+                )
+                do_reduce_labels = kwargs.pop("reduce_labels")
 
-    # 类方法
-    @classmethod
+            # 如果未指定 `size` 参数，则设置默认的 `size` 字典，包括 `shortest_edge` 和 `longest_edge`
+            size = size if size is not None else {"shortest_edge": 800, "longest_edge": self._max_size}
+            # 获取处理后的 `size` 字典，确保不超过 `max_size` 的限制
+            size = get_size_dict(size, max_size=self._max_size, default_to_square=False)
+
+            # 调用父类的初始化方法，传入所有的关键字参数
+            super().__init__(**kwargs)
+
+            # 初始化对象的各种属性
+            self.do_resize = do_resize
+            self.size = size
+            self.resample = resample
+            self.size_divisor = size_divisor
+            self.do_rescale = do_rescale
+            self.rescale_factor = rescale_factor
+            self.do_normalize = do_normalize
+            self.image_mean = image_mean if image_mean is not None else IMAGENET_DEFAULT_MEAN
+            self.image_std = image_std if image_std is not None else IMAGENET_DEFAULT_STD
+            self.ignore_index = ignore_index
+            self.do_reduce_labels = do_reduce_labels
+
+            # 定义有效的处理器关键字列表，用于后续处理器方法的调用和验证
+            self._valid_processor_keys = [
+                "images",
+                "segmentation_maps",
+                "instance_id_to_semantic_id",
+                "do_resize",
+                "size",
+                "size_divisor",
+                "resample",
+                "do_rescale",
+                "rescale_factor",
+                "do_normalize",
+                "image_mean",
+                "image_std",
+                "ignore_index",
+                "do_reduce_labels",
+                "return_tensors",
+                "data_format",
+                "input_data_format",
+            ]
+
+        @classmethod
+    # 重写基类的 `from_dict` 方法，用于从字典创建图像处理器对象，并确保参数更新
     def from_dict(cls, image_processor_dict: Dict[str, Any], **kwargs):
         """
-        重写基类的 `from_dict` 方法，确保在使用 from_dict 和 kwargs 创建图像处理器时更新参数，例如 `MaskFormerImageProcessor.from_pretrained(checkpoint, max_size=800)`
+        Overrides the `from_dict` method from the base class to make sure parameters are updated if image processor is
+        created using from_dict and kwargs e.g. `MaskFormerImageProcessor.from_pretrained(checkpoint, max_size=800)`
         """
-        # 复制传入的图像处理器字典，以免修改原始参数
+        # 复制输入的字典，以防修改原始输入
         image_processor_dict = image_processor_dict.copy()
-        # 如果 kwargs 中包含 "max_size"，则更新图像处理器字典中的 "max_size" 参数
+        
+        # 如果 `kwargs` 中包含 `max_size` 参数，则更新到 `image_processor_dict` 中，并从 `kwargs` 中删除
         if "max_size" in kwargs:
             image_processor_dict["max_size"] = kwargs.pop("max_size")
-        # 如果 kwargs 中包含 "size_divisibility"，则更新图像处理器字典中的 "size_divisibility" 参数
+        
+        # 如果 `kwargs` 中包含 `size_divisibility` 参数，则更新到 `image_processor_dict` 中，并从 `kwargs` 中删除
         if "size_divisibility" in kwargs:
             image_processor_dict["size_divisibility"] = kwargs.pop("size_divisibility")
-        # 调用基类的 from_dict 方法，传入更新后的图像处理器字典和 kwargs
+        
+        # 调用基类的 `from_dict` 方法，使用更新后的 `image_processor_dict` 和其余 `kwargs` 创建图像处理器对象
         return super().from_dict(image_processor_dict, **kwargs)
 
+    # 图像调整大小的方法
     def resize(
         self,
         image: np.ndarray,
@@ -445,16 +545,27 @@ class MaskFormerImageProcessor(BaseImageProcessor):
         data_format=None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-    # 定义一个函数，用于将图像调整大小到给定尺寸。尺寸可以是最小尺寸（标量）或`(高度，宽度)`元组。如果尺寸是一个整数，图像的较小边将匹配到这个数字。
-    def resize(
-        image: np.ndarray,
-        size: Dict[str, int],
-        size_divisor: int = 0,
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        data_format: Union[ChannelDimension, str] = None,
-        input_data_format: Union[ChannelDimension, str] = None,
-    ):
-        # 如果参数中包含`max_size`，发出警告并将其移除
+    ) -> np.ndarray:
+        """
+        Resize the image to the given size. Size can be min_size (scalar) or `(height, width)` tuple. If size is an
+        int, smaller edge of the image will be matched to this number.
+
+        Args:
+            image (`np.ndarray`):
+                Image to resize.
+            size (`Dict[str, int]`):
+                The size of the output image.
+            size_divisor (`int`, *optional*, defaults to 0):
+                If `size_divisor` is given, the output image size will be divisible by the number.
+            resample (`PILImageResampling` resampling filter, *optional*, defaults to `PILImageResampling.BILINEAR`):
+                Resampling filter to use when resizing the image.
+            data_format (`ChannelDimension` or `str`, *optional*):
+                The channel dimension format for the output image. If unset, the channel dimension format of the input
+                image is used.
+            input_data_format (`ChannelDimension` or `str`, *optional*):
+                The channel dimension format of the input image. If not provided, it will be inferred.
+        """
+        # Check if the deprecated `max_size` parameter is used and issue a warning
         if "max_size" in kwargs:
             warnings.warn(
                 "The `max_size` parameter is deprecated and will be removed in v4.27. "
@@ -464,22 +575,21 @@ class MaskFormerImageProcessor(BaseImageProcessor):
             max_size = kwargs.pop("max_size")
         else:
             max_size = None
-        # 获取调整后的尺寸字典
+        # Transform `size` into a standardized dictionary format
         size = get_size_dict(size, max_size=max_size, default_to_square=False)
-        # 如果尺寸字典中包含`shortest_edge`和`longest_edge`，则分别赋值给`size`和`max_size`
+        # Handle different formats of `size` and set `size` and `max_size` accordingly
         if "shortest_edge" in size and "longest_edge" in size:
             size, max_size = size["shortest_edge"], size["longest_edge"]
-        # 如果尺寸字典中包含`height`和`width`，则将其转换为元组形式
         elif "height" in size and "width" in size:
             size = (size["height"], size["width"])
             max_size = None
         else:
-            # 抛出数值错误，要求尺寸字典必须包含`height`和`width`键或`shortest_edge`和`longest_edge`键
+            # Raise an error if `size` does not contain expected keys
             raise ValueError(
                 "Size must contain 'height' and 'width' keys or 'shortest_edge' and 'longest_edge' keys. Got"
                 f" {size.keys()}."
             )
-        # 获取调整后的图像尺寸
+        # Compute the output image size after resizing
         size = get_maskformer_resize_output_image_size(
             image=image,
             size=size,
@@ -488,21 +598,15 @@ class MaskFormerImageProcessor(BaseImageProcessor):
             default_to_square=False,
             input_data_format=input_data_format,
         )
-        # 调整图像大小
+        # Resize the input `image` using specified parameters
         image = resize(
             image, size=size, resample=resample, data_format=data_format, input_data_format=input_data_format, **kwargs
         )
-        # 返回调整后的图像
+        # Return the resized image
         return image
 
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.rescale中复制的函数
+    # Copied from transformers.models.detr.image_processing_detr.DetrImageProcessor.rescale
     def rescale(
-        self,
-        image: np.ndarray,
-        rescale_factor: float,
-        data_format: Optional[Union[str, ChannelDimension]] = None,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-    def rescale_image(
         self,
         image: np.ndarray,
         rescale_factor: float,
@@ -532,7 +636,7 @@ class MaskFormerImageProcessor(BaseImageProcessor):
 
     def convert_segmentation_map_to_binary_masks(
         self,
-        segmentation_map: np.ndarray,
+        segmentation_map: "np.ndarray",
         instance_id_to_semantic_id: Optional[Dict[int, int]] = None,
         ignore_index: Optional[int] = None,
         reduce_labels: bool = False,
@@ -542,13 +646,13 @@ class MaskFormerImageProcessor(BaseImageProcessor):
 
         Args:
             segmentation_map (`np.ndarray`):
-                Segmentation map to convert.
-            instance_id_to_semantic_id (`Dict[int, int]`, *optional*):
-                Mapping from instance IDs to semantic IDs.
-            ignore_index (`int`, *optional*):
+                The input segmentation map.
+            instance_id_to_semantic_id (Optional[Dict[int, int]]):
+                Mapping from instance IDs to semantic IDs. If not provided, no mapping is applied.
+            ignore_index (Optional[int]):
                 Index to ignore in the segmentation map.
-            reduce_labels (`bool`):
-                Whether to reduce the number of labels.
+            reduce_labels (bool):
+                Whether to reduce the number of labels in the output.
 
         Returns:
             Binary masks corresponding to the segmentation map.
@@ -564,15 +668,18 @@ class MaskFormerImageProcessor(BaseImageProcessor):
 
     def __call__(self, images, segmentation_maps=None, **kwargs) -> BatchFeature:
         """
-        Call the preprocess method with the given arguments.
+        Callable interface for preprocessing images and segmentation maps.
 
         Args:
-            images: Input images.
-            segmentation_maps: Segmentation maps corresponding to the images.
-            **kwargs: Additional keyword arguments.
+            images:
+                Images to preprocess.
+            segmentation_maps:
+                Segmentation maps associated with the images.
+            **kwargs:
+                Additional keyword arguments for preprocessing.
 
         Returns:
-            BatchFeature object after preprocessing.
+            Preprocessed batch of features.
         """
         return self.preprocess(images, segmentation_maps=segmentation_maps, **kwargs)
 
@@ -591,106 +698,120 @@ class MaskFormerImageProcessor(BaseImageProcessor):
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ):
         """
-        Preprocess the input image with various options.
+        Internal preprocessing function for handling various transformations on images.
 
         Args:
-            image: Input image to preprocess.
-            do_resize: Whether to resize the image.
-            size: Dictionary containing the target size for resizing.
-            size_divisor: Divisor for resizing the image.
-            resample: Resampling method for resizing.
-            do_rescale: Whether to rescale the image.
-            rescale_factor: Factor for rescaling the image.
-            do_normalize: Whether to normalize the image.
-            image_mean: Mean value for normalization.
-            image_std: Standard deviation value for normalization.
-            input_data_format: Format of the input image data.
+            image (ImageInput):
+                Input image to preprocess.
+            do_resize (bool, optional):
+                Whether to resize the image.
+            size (Dict[str, int], optional):
+                Desired size for resizing (width, height).
+            size_divisor (int, optional):
+                Divisor for resizing the image dimensions.
+            resample (PILImageResampling, optional):
+                Resampling method for resizing.
+            do_rescale (bool, optional):
+                Whether to rescale the image.
+            rescale_factor (float, optional):
+                Scaling factor for image rescaling.
+            do_normalize (bool, optional):
+                Whether to normalize the image.
+            image_mean (Union[float, List[float]], optional):
+                Mean values for image normalization.
+            image_std (Union[float, List[float]], optional):
+                Standard deviation values for image normalization.
+            input_data_format (Union[str, ChannelDimension], optional):
+                Format of the input image data.
 
+        Returns:
+            Preprocessed image based on the specified transformations.
         """
-    # 如果需要调整大小，则调用resize方法
-    if do_resize:
-        image = self.resize(
-            image, size=size, size_divisor=size_divisor, resample=resample, input_data_format=input_data_format
-        )
-    # 如果需要重新缩放，则调用rescale方法
-    if do_rescale:
-        image = self.rescale(image, rescale_factor=rescale_factor, input_data_format=input_data_format)
-    # 如果需要归一化，则调用normalize方法
-    if do_normalize:
-        image = self.normalize(image, mean=image_mean, std=image_std, input_data_format=input_data_format)
-    # 返回处理后的图像
-    return image
+    ):
+        # 如果需要调整大小，则调用 resize 方法对图像进行调整
+        if do_resize:
+            image = self.resize(
+                image, size=size, size_divisor=size_divisor, resample=resample, input_data_format=input_data_format
+            )
+        # 如果需要重新缩放，则调用 rescale 方法对图像进行重新缩放
+        if do_rescale:
+            image = self.rescale(image, rescale_factor=rescale_factor, input_data_format=input_data_format)
+        # 如果需要归一化，则调用 normalize 方法对图像进行归一化
+        if do_normalize:
+            image = self.normalize(image, mean=image_mean, std=image_std, input_data_format=input_data_format)
+        # 返回预处理后的图像
+        return image
 
-def _preprocess_image(
-    self,
-    image: ImageInput,
-    do_resize: bool = None,
-    size: Dict[str, int] = None,
-    size_divisor: int = None,
-    resample: PILImageResampling = None,
-    do_rescale: bool = None,
-    rescale_factor: float = None,
-    do_normalize: bool = None,
-    image_mean: Optional[Union[float, List[float]]] = None,
-    image_std: Optional[Union[float, List[float]]] = None,
-    data_format: Optional[Union[str, ChannelDimension]] = None,
-    input_data_format: Optional[Union[str, ChannelDimension]] = None,
-) -> np.ndarray:
-    """Preprocesses a single image."""
-    # 将图像转换为numpy数组
-    image = to_numpy_array(image)
-    # 如果图像已经缩放且需要重新缩放，则发出警告
-    if is_scaled_image(image) and do_rescale:
-        logger.warning_once(
-            "It looks like you are trying to rescale already rescaled images. If the input"
-            " images have pixel values between 0 and 1, set `do_rescale=False` to avoid rescaling them again."
+    def _preprocess_image(
+        self,
+        image: ImageInput,
+        do_resize: bool = None,
+        size: Dict[str, int] = None,
+        size_divisor: int = None,
+        resample: PILImageResampling = None,
+        do_rescale: bool = None,
+        rescale_factor: float = None,
+        do_normalize: bool = None,
+        image_mean: Optional[Union[float, List[float]]] = None,
+        image_std: Optional[Union[float, List[float]]] = None,
+        data_format: Optional[Union[str, ChannelDimension]] = None,
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,
+    ) -> np.ndarray:
+        """Preprocesses a single image."""
+        # 将图像转换为 numpy 数组，因为所有的转换操作都要求输入为 numpy 数组
+        image = to_numpy_array(image)
+        # 如果图像已经进行了缩放，并且需要进行重新缩放，则记录警告信息
+        if is_scaled_image(image) and do_rescale:
+            logger.warning_once(
+                "It looks like you are trying to rescale already rescaled images. If the input"
+                " images have pixel values between 0 and 1, set `do_rescale=False` to avoid rescaling them again."
+            )
+        # 推断图像的通道格式（数据格式）如果未指定
+        if input_data_format is None:
+            input_data_format = infer_channel_dimension_format(image)
+        # 调用 _preprocess 方法进行实际的图像预处理
+        image = self._preprocess(
+            image=image,
+            do_resize=do_resize,
+            size=size,
+            size_divisor=size_divisor,
+            resample=resample,
+            do_rescale=do_rescale,
+            rescale_factor=rescale_factor,
+            do_normalize=do_normalize,
+            image_mean=image_mean,
+            image_std=image_std,
+            input_data_format=input_data_format,
         )
-    # 推断输入数据格式
-    if input_data_format is None:
-        input_data_format = infer_channel_dimension_format(image)
-    # 调用_preprocess方法处理图像
-    image = self._preprocess(
-        image=image,
-        do_resize=do_resize,
-        size=size,
-        size_divisor=size_divisor,
-        resample=resample,
-        do_rescale=do_rescale,
-        rescale_factor=rescale_factor,
-        do_normalize=do_normalize,
-        image_mean=image_mean,
-        image_std=image_std,
-        input_data_format=input_data_format,
-    )
-    # 如果指定了数据格式，则转换图像通道维度格式
-    if data_format is not None:
-        image = to_channel_dimension_format(image, data_format, input_channel_dim=input_data_format)
-    # 返回处理后的图像
-    return image
+        # 如果指定了数据格式，则将图像转换为该格式
+        if data_format is not None:
+            image = to_channel_dimension_format(image, data_format, input_channel_dim=input_data_format)
+        # 返回预处理后的图像 numpy 数组
+        return image
 
-def _preprocess_mask(
-    self,
-    segmentation_map: ImageInput,
-    do_resize: bool = None,
-    size: Dict[str, int] = None,
-    size_divisor: int = 0,
-    input_data_format: Optional[Union[str, ChannelDimension]] = None,
+    def _preprocess_mask(
+        self,
+        segmentation_map: ImageInput,
+        do_resize: bool = None,
+        size: Dict[str, int] = None,
+        size_divisor: int = 0,
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ) -> np.ndarray:
         """Preprocesses a single mask."""
-        # 将分割图转换为 NumPy 数组
+        # 将分割地图转换为 NumPy 数组
         segmentation_map = to_numpy_array(segmentation_map)
-        # 如果分割图缺少通道维度，则添加通道维度，某些转换需要
+        # 如果分割地图的维度为2，添加通道维度，因为某些变换需要
         if segmentation_map.ndim == 2:
             added_channel_dim = True
             segmentation_map = segmentation_map[None, ...]
             input_data_format = ChannelDimension.FIRST
         else:
             added_channel_dim = False
-            # 如果输入数据格式未指定，则推断通道维度格式
+            # 如果输入数据格式未指定，根据分割地图推断通道维度的格式
             if input_data_format is None:
                 input_data_format = infer_channel_dimension_format(segmentation_map, num_channels=1)
         # TODO: (Amy)
-        # 重新设计分割图处理流程，包括减少标签和调整大小，不会丢弃大于255的分割 ID
+        # 重新设计分割地图处理过程，包括减少标签数量和大小调整，不丢弃大于255的分割ID。
         segmentation_map = self._preprocess(
             image=segmentation_map,
             do_resize=do_resize,
@@ -701,7 +822,7 @@ def _preprocess_mask(
             do_normalize=False,
             input_data_format=input_data_format,
         )
-        # 如果为了处理而添加了额外的通道维度，则移除
+        # 如果为了处理而添加了额外的通道维度，则去除它
         if added_channel_dim:
             segmentation_map = segmentation_map.squeeze(0)
         return segmentation_map
@@ -718,15 +839,16 @@ def _preprocess_mask(
         do_rescale: Optional[bool] = None,
         rescale_factor: Optional[float] = None,
         do_normalize: Optional[bool] = None,
-        image_mean: Optional[Union[float, List[float]] = None,
-        image_std: Optional[Union[float, List[float]] = None,
+        image_mean: Optional[Union[float, List[float]]] = None,
+        image_std: Optional[Union[float, List[float]]] = None,
         ignore_index: Optional[int] = None,
         do_reduce_labels: Optional[bool] = None,
         return_tensors: Optional[Union[str, TensorType]] = None,
         data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
-    # 从 transformers.models.detr.image_processing_detr.DetrImageProcessor._pad_image 复制而来
+    ):
+        # 以下代码被复制自 transformers.models.vilt.image_processing_vilt.ViltImageProcessor._pad_image
     def _pad_image(
         self,
         image: np.ndarray,
@@ -734,24 +856,7 @@ def _preprocess_mask(
         constant_values: Union[float, Iterable[float]] = 0,
         data_format: Optional[ChannelDimension] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
-    # 定义一个函数，用于将图像用零填充到指定大小
-    def pad(
-        self,
-        images: List[np.ndarray],  # 输入图像列表
-        constant_values: Union[float, Iterable[float]] = 0,  # 填充值，默认为0
-        return_pixel_mask: bool = True,  # 是否返回像素掩码，默认为True
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 返回的张量类型，默认为None
-        data_format: Optional[ChannelDimension] = None,  # 数据格式，可选
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，可选
-    )
-
-    # 函数注释：用零填充图像到指定大小
-    def pad_image(
-        image: np.ndarray,  # 输入图像
-        output_size: Tuple[int, int],  # 输出大小
-        constant_values: Union[float, Iterable[float]] = 0,  # 填充值，默认为0
-        data_format: Optional[ChannelDimension] = None,  # 数据格式，可选
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，可选
+    # 定义一个方法，用于将图像用零填充到指定的大小
     ) -> np.ndarray:
         """
         Pad an image with zeros to the given size.
@@ -761,12 +866,12 @@ def _preprocess_mask(
         # 获取输出图像的高度和宽度
         output_height, output_width = output_size
 
-        # 计算需要在底部和右侧填充的像素数
+        # 计算需要在图像底部和右侧填充的像素数
         pad_bottom = output_height - input_height
         pad_right = output_width - input_width
-        # 构建填充元组
+        # 定义填充方式为在顶部和左侧不填充，在底部填充pad_bottom行，在右侧填充pad_right列
         padding = ((0, pad_bottom), (0, pad_right))
-        # 对图像进行填充操作
+        # 使用指定的填充方式对图像进行填充
         padded_image = pad(
             image,
             padding,
@@ -778,16 +883,16 @@ def _preprocess_mask(
         # 返回填充后的图像
         return padded_image
 
-    # 从transformers.models.detr.image_processing_detr.DetrImageProcessor.pad复制而来
-    # 函数注释：用零填充图像到指定大小
+    # 以下代码段是从transformers.models.vilt.image_processing_vilt.ViltImageProcessor.pad中复制而来
+    # 定义一个函数pad，用于图像的填充处理
     def pad(
         self,
-        images: List[np.ndarray],  # 输入图像列表
-        constant_values: Union[float, Iterable[float]] = 0,  # 填充值，默认为0
-        return_pixel_mask: bool = True,  # 是否返回像素掩码，默认为True
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 返回的张量类型，默认为None
-        data_format: Optional[ChannelDimension] = None,  # 数据格式，可选
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，可选
+        images: List[np.ndarray],
+        constant_values: Union[float, Iterable[float]] = 0,
+        return_pixel_mask: bool = True,
+        return_tensors: Optional[Union[str, TensorType]] = None,
+        data_format: Optional[ChannelDimension] = None,
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ) -> BatchFeature:
         """
         Pads a batch of images to the bottom and right of the image with zeros to the size of largest height and width
@@ -812,10 +917,10 @@ def _preprocess_mask(
             input_data_format (`ChannelDimension` or `str`, *optional*):
                 The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # Calculate the size for padding based on the maximum height and width in the batch
+        # Calculate the maximum height and width required for padding
         pad_size = get_max_height_width(images, input_data_format=input_data_format)
 
-        # Pad each image in the batch with zeros to match the pad_size
+        # Pad each image in the batch to match `pad_size`
         padded_images = [
             self._pad_image(
                 image,
@@ -826,10 +931,11 @@ def _preprocess_mask(
             )
             for image in images
         ]
-        # Prepare the data dictionary with padded images
+        
+        # Prepare data dictionary to store padded images
         data = {"pixel_values": padded_images}
 
-        # If return_pixel_mask is True, generate pixel masks for each image in the batch
+        # Optionally, generate pixel masks for the padded images
         if return_pixel_mask:
             masks = [
                 make_pixel_mask(image=image, output_size=pad_size, input_data_format=input_data_format)
@@ -837,7 +943,7 @@ def _preprocess_mask(
             ]
             data["pixel_mask"] = masks
 
-        # Return BatchFeature object with the prepared data and tensor type
+        # Return BatchFeature object containing padded images and masks (if generated)
         return BatchFeature(data=data, tensor_type=return_tensors)
 
     def encode_inputs(
@@ -849,32 +955,75 @@ def _preprocess_mask(
         reduce_labels: bool = False,
         return_tensors: Optional[Union[str, TensorType]] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
+    ):
+        """
+        Encodes input data into a format suitable for model input, optionally handling segmentation maps and instance IDs.
+
+        Args:
+            pixel_values_list (`List[ImageInput]`):
+                List of images to encode.
+            segmentation_maps (`ImageInput`, *optional*):
+                Segmentation maps corresponding to images.
+            instance_id_to_semantic_id (`Optional[Union[List[Dict[int, int]], Dict[int, int]]]`, *optional*):
+                Mapping from instance IDs to semantic IDs.
+            ignore_index (`Optional[int]`, *optional*):
+                Index to ignore during encoding.
+            reduce_labels (`bool`, *optional*, defaults to `False`):
+                Whether to reduce the number of unique labels.
+            return_tensors (`Optional[Union[str, TensorType]]`, *optional*):
+                The type of tensors to return (e.g., `'tf'`, `'pt'`, `'np'`, `'jax'`).
+            input_data_format (`Optional[Union[str, ChannelDimension]]`, *optional*):
+                The channel dimension format of the input data.
+
+        Returns:
+            BatchFeature:
+                Encoded inputs wrapped in a `BatchFeature` object.
+        """
+        # Function implementation is omitted for brevity in the comment block
+
     def post_process_segmentation(
         self, outputs: "MaskFormerForInstanceSegmentationOutput", target_size: Tuple[int, int] = None
-    ) -> "torch.Tensor":
+    ):
         """
-        将[`MaskFormerForInstanceSegmentationOutput`]的输出转换为图像分割预测。仅支持PyTorch。
+        Post-processes segmentation outputs to adjust them to a target size if specified.
+
+        Args:
+            outputs (`MaskFormerForInstanceSegmentationOutput`):
+                Model outputs to post-process.
+            target_size (`Tuple[int, int]`, *optional*):
+                Target size to resize the outputs.
+
+        """
+        # Function implementation is omitted for brevity in the comment block
+        ) -> "torch.Tensor":
+        """
+        Converts the output of [`MaskFormerForInstanceSegmentationOutput`] into image segmentation predictions. Only
+        supports PyTorch.
 
         Args:
             outputs ([`MaskFormerForInstanceSegmentationOutput`]):
-                [`MaskFormerForInstanceSegmentation`]的输出。
+                The outputs from [`MaskFormerForInstanceSegmentation`].
 
             target_size (`Tuple[int, int]`, *optional*):
-                如果设置，`masks_queries_logits`将被调整为`target_size`。
+                If set, the `masks_queries_logits` will be resized to `target_size`.
 
         Returns:
             `torch.Tensor`:
-                形状为(`batch_size, num_class_labels, height, width`)的张量。
+                A tensor of shape (`batch_size, num_class_labels, height, width`).
         """
+        # Emit a warning about deprecation of this function
         logger.warning(
-            "`post_process_segmentation`已弃用，并将在Transformers的v5中移除，请使用`post_process_instance_segmentation`",
+            "`post_process_segmentation` is deprecated and will be removed in v5 of Transformers, please use"
+            " `post_process_instance_segmentation`",
             FutureWarning,
         )
 
-        # class_queries_logits的形状为[BATCH, QUERIES, CLASSES + 1]
+        # class_queries_logits has shape [BATCH, QUERIES, CLASSES + 1]
         class_queries_logits = outputs.class_queries_logits
-        # masks_queries_logits的形状为[BATCH, QUERIES, HEIGHT, WIDTH]
+        # masks_queries_logits has shape [BATCH, QUERIES, HEIGHT, WIDTH]
         masks_queries_logits = outputs.masks_queries_logits
+
+        # Resize masks if target_size is provided
         if target_size is not None:
             masks_queries_logits = torch.nn.functional.interpolate(
                 masks_queries_logits,
@@ -882,75 +1031,21 @@ def _preprocess_mask(
                 mode="bilinear",
                 align_corners=False,
             )
-        # 移除空类 `[..., :-1]`
+
+        # Remove the null class from class_queries_logits
         masks_classes = class_queries_logits.softmax(dim=-1)[..., :-1]
-        # mask probs的形状为[BATCH, QUERIES, HEIGHT, WIDTH]
+
+        # Calculate mask probabilities
         masks_probs = masks_queries_logits.sigmoid()
-        # 现在我们想要对查询求和，
+
+        # Perform segmentation by combining class probabilities and mask probabilities
+        # using Einstein summation notation
         # $ out_{c,h,w} =  \sum_q p_{q,c} * m_{q,h,w} $
-        # 其中 $ softmax(p) \in R^{q, c} $ 是掩码类别
-        # 而 $ sigmoid(m) \in R^{q, h, w}$ 是掩码概率
-        # b(atch)q(uery)c(lasses), b(atch)q(uery)h(eight)w(idth)
+        # where $ softmax(p) \in R^{q, c} $ is the mask classes
+        # and $ sigmoid(m) \in R^{q, h, w}$ is the mask probabilities
         segmentation = torch.einsum("bqc, bqhw -> bchw", masks_classes, masks_probs)
 
         return segmentation
-
-    def post_process_semantic_segmentation(
-        self, outputs, target_sizes: Optional[List[Tuple[int, int]]] = None
-    ) -> "torch.Tensor":
-        """
-        Converts the output of [`MaskFormerForInstanceSegmentation`] into semantic segmentation maps. Only supports
-        PyTorch.
-
-        Args:
-            outputs ([`MaskFormerForInstanceSegmentation`]):
-                Raw outputs of the model.
-            target_sizes (`List[Tuple[int, int]]`, *optional*):
-                List of length (batch_size), where each list item (`Tuple[int, int]]`) corresponds to the requested
-                final size (height, width) of each prediction. If left to None, predictions will not be resized.
-        Returns:
-            `List[torch.Tensor]`:
-                A list of length `batch_size`, where each item is a semantic segmentation map of shape (height, width)
-                corresponding to the target_sizes entry (if `target_sizes` is specified). Each entry of each
-                `torch.Tensor` correspond to a semantic class id.
-        """
-        # 获取类别查询的logits，形状为[batch_size, num_queries, num_classes+1]
-        class_queries_logits = outputs.class_queries_logits
-        # 获取掩码查询的logits，形状为[batch_size, num_queries, height, width]
-        masks_queries_logits = outputs.masks_queries_logits
-
-        # 移除空类别 `[..., :-1]`
-        masks_classes = class_queries_logits.softmax(dim=-1)[..., :-1]
-        # 计算掩码概率，形状为[batch_size, num_queries, height, width]
-        masks_probs = masks_queries_logits.sigmoid()
-
-        # 计算语义分割logits，形状为(batch_size, num_classes, height, width)
-        segmentation = torch.einsum("bqc, bqhw -> bchw", masks_classes, masks_probs)
-        batch_size = class_queries_logits.shape[0]
-
-        # 调整logits大小并计算语义分割地图
-        if target_sizes is not None:
-            if batch_size != len(target_sizes):
-                raise ValueError(
-                    "Make sure that you pass in as many target sizes as the batch dimension of the logits"
-                )
-
-            semantic_segmentation = []
-            for idx in range(batch_size):
-                # 调整logits大小
-                resized_logits = torch.nn.functional.interpolate(
-                    segmentation[idx].unsqueeze(dim=0), size=target_sizes[idx], mode="bilinear", align_corners=False
-                )
-                # 获取语义地图
-                semantic_map = resized_logits[0].argmax(dim=0)
-                semantic_segmentation.append(semantic_map)
-        else:
-            # 获取语义分割结果
-            semantic_segmentation = segmentation.argmax(dim=1)
-            semantic_segmentation = [semantic_segmentation[i] for i in range(semantic_segmentation.shape[0])]
-
-        return semantic_segmentation
-
     def post_process_instance_segmentation(
         self,
         outputs,
@@ -960,13 +1055,72 @@ def _preprocess_mask(
         target_sizes: Optional[List[Tuple[int, int]]] = None,
         return_coco_annotation: Optional[bool] = False,
         return_binary_maps: Optional[bool] = False,
-    # 对全景分割输出进行后处理
+    ) -> "torch.Tensor":
+        """
+        Post-processes outputs of an instance segmentation model, optionally converting them into semantic segmentation maps.
+        
+        Args:
+            outputs ([MaskFormerForInstanceSegmentation]):
+                Raw outputs from the instance segmentation model.
+            threshold (float):
+                Threshold value for class probability to consider predictions.
+            mask_threshold (float):
+                Threshold value for mask probabilities to consider the mask prediction.
+            overlap_mask_area_threshold (float):
+                Threshold for overlapping mask areas.
+            target_sizes (List[Tuple[int, int]], optional):
+                List specifying the desired output sizes (height, width) for each prediction.
+                If `None`, predictions will not be resized.
+            return_coco_annotation (bool, optional):
+                Flag indicating whether to return COCO-style annotations.
+            return_binary_maps (bool, optional):
+                Flag indicating whether to return binary maps along with semantic segmentation.
+
+        Returns:
+            List[torch.Tensor]:
+                List of semantic segmentation maps, each of shape (height, width), corresponding to the target_sizes
+                entries if specified. Each entry contains semantic class IDs.
+        """
+        class_queries_logits = outputs.class_queries_logits  # [batch_size, num_queries, num_classes+1]
+        masks_queries_logits = outputs.masks_queries_logits  # [batch_size, num_queries, height, width]
+
+        # Remove the null class `[..., :-1]`
+        masks_classes = class_queries_logits.softmax(dim=-1)[..., :-1]
+        masks_probs = masks_queries_logits.sigmoid()  # [batch_size, num_queries, height, width]
+
+        # Compute segmentation logits of shape (batch_size, num_classes, height, width)
+        segmentation = torch.einsum("bqc, bqhw -> bchw", masks_classes, masks_probs)
+        batch_size = class_queries_logits.shape[0]
+
+        # Resize logits and compute semantic segmentation maps
+        if target_sizes is not None:
+            if batch_size != len(target_sizes):
+                raise ValueError(
+                    "Make sure that you pass in as many target sizes as the batch dimension of the logits"
+                )
+
+            semantic_segmentation = []
+            for idx in range(batch_size):
+                # Resize logits using bilinear interpolation
+                resized_logits = torch.nn.functional.interpolate(
+                    segmentation[idx].unsqueeze(dim=0), size=target_sizes[idx], mode="bilinear", align_corners=False
+                )
+                # Obtain semantic segmentation map by selecting class with highest probability
+                semantic_map = resized_logits[0].argmax(dim=0)
+                semantic_segmentation.append(semantic_map)
+        else:
+            # If target_sizes is None, directly compute semantic segmentation maps
+            semantic_segmentation = segmentation.argmax(dim=1)
+            semantic_segmentation = [semantic_segmentation[i] for i in range(semantic_segmentation.shape[0])]
+
+        return semantic_segmentation
+    # 定义一个方法用于后处理全景分割的输出结果
     def post_process_panoptic_segmentation(
         self,
         outputs,
-        threshold: float = 0.5,  # 阈值设为0.5
-        mask_threshold: float = 0.5,  # 掩码阈值设为0.5
-        overlap_mask_area_threshold: float = 0.8,  # 重叠掩码面积阈值设为0.8
-        label_ids_to_fuse: Optional[Set[int]] = None,  # 要融合的标签ID集合，默认为None
-        target_sizes: Optional[List[Tuple[int, int]]] = None,  # 目标尺寸列表，默认为None
+        threshold: float = 0.5,
+        mask_threshold: float = 0.5,
+        overlap_mask_area_threshold: float = 0.8,
+        label_ids_to_fuse: Optional[Set[int]] = None,
+        target_sizes: Optional[List[Tuple[int, int]]] = None,
 ```

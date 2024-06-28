@@ -1,10 +1,10 @@
-# `.\transformers\models\bert\__init__.py`
+# `.\models\bert\__init__.py`
 
-```py
-# 版权声明和许可信息
-# 从类型提示中导入 TYPE_CHECKING
+```
+# 从 typing 模块导入 TYPE_CHECKING 类型检查工具
 from typing import TYPE_CHECKING
-# 从工具模块中导入必要的函数和异常类
+
+# 从 ...utils 中导入必要的模块和异常类
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -15,30 +15,30 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构
+# 定义一个字典 _import_structure，用于组织各模块需要导入的内容列表
 _import_structure = {
     "configuration_bert": ["BERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "BertConfig", "BertOnnxConfig"],
     "tokenization_bert": ["BasicTokenizer", "BertTokenizer", "WordpieceTokenizer"],
 }
 
-# 检查 tokenizers 是否可用，若不可用则抛出异常
+# 检查是否安装了 tokenizers 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加 tokenization_bert_fast 到导入结构中
+    # 如果安装了 tokenizers，则添加 tokenization_bert_fast 模块到 _import_structure 字典
     _import_structure["tokenization_bert_fast"] = ["BertTokenizerFast"]
 
-# 检查 torch 是否可用，若不可用则抛出异常
+# 检查是否安装了 torch 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加 modeling_bert 到导入结构中
+    # 如果安装了 torch，则添加 modeling_bert 模块到 _import_structure 字典
     _import_structure["modeling_bert"] = [
         "BERT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "BertForMaskedLM",
@@ -55,14 +55,14 @@ else:
         "load_tf_weights_in_bert",
     ]
 
-# 检查 tensorflow 是否可用，若不可用则抛出异常
+# 检查是否安装了 TensorFlow 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加 modeling_tf_bert 到导入结构中
+    # 如果安装了 TensorFlow，则添加 modeling_tf_bert 模块到 _import_structure 字典
     _import_structure["modeling_tf_bert"] = [
         "TF_BERT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFBertEmbeddings",
@@ -79,64 +79,63 @@ else:
         "TFBertPreTrainedModel",
     ]
 
-# 检查 tensorflow_text 是否可用，若不可用则抛出异常
+# 检查是否安装了 TensorFlow Text 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tensorflow_text_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若可用，则添加 tokenization_bert_tf 到导入结构中
+    # 如果安装了 TensorFlow Text，则添加 tokenization_bert_tf 模块到 _import_structure 字典
     _import_structure["tokenization_bert_tf"] = ["TFBertTokenizer"]
 
-# 检查 flax 是否可用，若不可用则抛出异常
+# 检查是否安装了 Flax 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-# 若可用，则继续处理
-    # 将模块"modeling_flax_bert"下的类名添加到_import_structure字典中
+    # 如果安装了 Flax，则继续添加相关内容，未提供完整的代码
+    pass
+    # 将多个模型类名添加到_import_structure字典中的"modeling_flax_bert"键下
     _import_structure["modeling_flax_bert"] = [
-        "FlaxBertForCausalLM",
-        "FlaxBertForMaskedLM",
-        "FlaxBertForMultipleChoice",
-        "FlaxBertForNextSentencePrediction",
-        "FlaxBertForPreTraining",
-        "FlaxBertForQuestionAnswering",
-        "FlaxBertForSequenceClassification",
-        "FlaxBertForTokenClassification",
-        "FlaxBertModel",
-        "FlaxBertPreTrainedModel",
+        "FlaxBertForCausalLM",                   # FlaxBert用于因果语言建模的模型类
+        "FlaxBertForMaskedLM",                   # FlaxBert用于遮蔽语言建模的模型类
+        "FlaxBertForMultipleChoice",             # FlaxBert用于多选题的模型类
+        "FlaxBertForNextSentencePrediction",     # FlaxBert用于下一句预测的模型类
+        "FlaxBertForPreTraining",                # FlaxBert用于预训练的模型类
+        "FlaxBertForQuestionAnswering",          # FlaxBert用于问答的模型类
+        "FlaxBertForSequenceClassification",     # FlaxBert用于序列分类的模型类
+        "FlaxBertForTokenClassification",        # FlaxBert用于标记分类的模型类
+        "FlaxBertModel",                         # FlaxBert模型的基础模型类
+        "FlaxBertPreTrainedModel",               # FlaxBert预训练模型的基础模型类
     ]
-# 如果 TYPE_CHECKING 为真，则导入所需的模块和类
+# 如果在类型检查模式下
 if TYPE_CHECKING:
-    # 导入 BERT 配置映射、配置类和 ONNX 配置类
+    # 导入 BERT 配置相关的模块和类
     from .configuration_bert import BERT_PRETRAINED_CONFIG_ARCHIVE_MAP, BertConfig, BertOnnxConfig
-    # 导入 BERT 分词器基类、基本分词器、Bert 分词器和 Wordpiece 分词器
+    # 导入 BERT 的分词器相关模块和类
     from .tokenization_bert import BasicTokenizer, BertTokenizer, WordpieceTokenizer
 
-    # 尝试检查是否安装了 tokenizers 库
+    # 尝试检查 tokenizers 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
     try:
-        # 如果 tokenizers 库不可用，则引发 OptionalDependencyNotAvailable 异常
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 tokenizers 库可用，则导入 BertTokenizerFast 类
+        # 如果可用，导入快速的 BERT 分词器
         from .tokenization_bert_fast import BertTokenizerFast
 
-    # 尝试检查是否安装了 PyTorch 库
+    # 尝试检查 torch 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
     try:
-        # 如果 PyTorch 库不可用，则引发 OptionalDependencyNotAvailable 异常
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 PyTorch 库可用，则导入一系列与 BERT 相关的模型和类
+        # 如果可用，导入 BERT 相关的模型和类
         from .modeling_bert import (
             BERT_PRETRAINED_MODEL_ARCHIVE_LIST,
             BertForMaskedLM,
@@ -153,15 +152,14 @@ if TYPE_CHECKING:
             load_tf_weights_in_bert,
         )
 
-    # 尝试检查是否安装了 TensorFlow 库
+    # 尝试检查 tensorflow 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
     try:
-        # 如果 TensorFlow 库不可用，则引发 OptionalDependencyNotAvailable 异常
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 TensorFlow 库可用，则导入一系列与 TensorFlow BERT 相关的模型和类
+        # 如果可用，导入 TF 版本的 BERT 相关模型和类
         from .modeling_tf_bert import (
             TF_BERT_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFBertEmbeddings,
@@ -178,26 +176,24 @@ if TYPE_CHECKING:
             TFBertPreTrainedModel,
         )
 
-    # 尝试检查是否安装了 TensorFlow Text 库
+    # 尝试检查 tensorflow_text 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
     try:
-        # 如果 TensorFlow Text 库不可用，则引发 OptionalDependencyNotAvailable 异常
         if not is_tensorflow_text_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 TensorFlow Text 库可用，则导入 TFBertTokenizer 类
+        # 如果可用，导入 TF 版本的 BERT 分词器
         from .tokenization_bert_tf import TFBertTokenizer
 
-    # 尝试检查是否安装了 Flax 库
+    # 尝试检查 flax 是否可用，如果不可用则抛出异常 OptionalDependencyNotAvailable
     try:
-        # 如果 Flax 库不可用，则引发 OptionalDependencyNotAvailable 异常
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果 Flax 库可用，则导入一系列与 Flax BERT 相关的模型和类
+        # 如果可用，导入 Flax 版本的 BERT 相关模型和类
         from .modeling_flax_bert import (
             FlaxBertForCausalLM,
             FlaxBertForMaskedLM,
@@ -211,11 +207,11 @@ if TYPE_CHECKING:
             FlaxBertPreTrainedModel,
         )
 
-# 如果 TYPE_CHECKING 为假，则动态地将当前模块设为懒加载模块
+# 如果不在类型检查模式下
 else:
     # 导入 sys 模块
     import sys
 
-    # 将当前模块设置为懒加载模块，其导入结构由 _import_structure 定义
+    # 将当前模块设置为一个 LazyModule 对象，并导入相关结构和规范
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

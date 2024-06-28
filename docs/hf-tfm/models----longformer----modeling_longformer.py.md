@@ -1,16 +1,20 @@
-# `.\transformers\models\longformer\modeling_longformer.py`
+# `.\models\longformer\modeling_longformer.py`
 
-```py
-# 设定脚本编码格式为 UTF-8
-# 版权声明，分别标注 AI 研究所团队和 HuggingFace 公司团队的版权
-# 根据 Apache 2.0 版本授权许可，禁止未授权使用此文件
-# 可以在下方链接获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非被适用法律要求或经书面同意，否则不能使用本文件
-# 分发的软件将基于“按原样提供”的基础分发，没有任何担保或条件，无论是明示的还是暗示的
-# 关于许可下的特定语言可以查看特定语言所控制的权限以及许可的具体限制，请查看许可证
+```
+# coding=utf-8
+# 版权归 The Allen Institute for AI team 和 The HuggingFace Inc. team 所有。
+#
+# 根据 Apache License, Version 2.0 授权使用本文件；
+# 除非遵守许可证，否则不得使用此文件。
+# 可在以下网址获取许可证副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则根据"现状"分发软件，
+# 没有任何明示或暗示的担保或条件。
+# 有关特定语言的权限，请参阅许可证。
 """PyTorch Longformer model."""
 
-# 导入所需的包和模块
 import math
 from dataclasses import dataclass
 from typing import Optional, Tuple, Union
@@ -20,7 +24,6 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 从 Transformers 中导入所需要的激活函数和辅助函数
 from ...activations import ACT2FN, gelu
 from ...modeling_utils import PreTrainedModel
 from ...pytorch_utils import apply_chunking_to_forward, find_pruneable_heads_and_indices, prune_linear_layer
@@ -32,243 +35,234 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-# 从 Longformer 的配置文件中导入 LongformerConfig 类
 from .configuration_longformer import LongformerConfig
 
-# 初始化 logger 对象
+# 获取记录器，用于记录日志
 logger = logging.get_logger(__name__)
 
-# 以下为用于文档说明的一些常量和列表
+# 用于文档的检查点名称
 _CHECKPOINT_FOR_DOC = "allenai/longformer-base-4096"
+# 用于文档的配置名称
 _CONFIG_FOR_DOC = "LongformerConfig"
 
-# 预训练模型的归档列表
+# 预训练模型的存档列表
 LONGFORMER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "allenai/longformer-base-4096",
     "allenai/longformer-large-4096",
     "allenai/longformer-large-4096-finetuned-triviaqa",
     "allenai/longformer-base-4096-extra.pos.embd.only",
     "allenai/longformer-large-4096-extra.pos.embd.only",
-    # 可在链接 https://huggingface.co/models?filter=longformer 查看所有 Longformer 模型
+    # 所有 Longformer 模型详见 https://huggingface.co/models?filter=longformer
 ]
 
-# 定义一个数据类 LongformerBaseModelOutput，用于作为 Longformer 的输出基类，包括隐藏状态、本地和全局的注意力
+
 @dataclass
 class LongformerBaseModelOutput(ModelOutput):
     """
-    Base class for Longformer's outputs, with potential hidden states, local and global attentions.
-    # 接受参数last_hidden_state，类型为torch.FloatTensor，shape为(batch_size, sequence_length, hidden_size)，代表模型最后一层的隐藏状态序列
+    Longformer 输出的基类，包含潜在的隐藏状态、本地和全局注意力。
+    """
+    pass  # 此处暂时未定义具体内容，仅声明基类
+    # 定义函数参数 `last_hidden_state`，表示模型最后一层的隐藏状态，是一个形状为 `(batch_size, sequence_length, hidden_size)` 的 `torch.FloatTensor`。
     last_hidden_state: torch.FloatTensor
-    # 接受参数hidden_states，默认为None，类型为tuple(torch.FloatTensor)，当传入output_hidden_states=True或者config.output_hidden_states=True时会返回此参数
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化一个可选的 torch.FloatTensor 元组变量 attentions，用于存储注意力机制的输出
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 初始化一个可选的 torch.FloatTensor 元组变量 global_attentions，用于存储全局注意力机制的输出
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
-# 使用 dataclass 装饰器定义 LongformerBaseModelOutputWithPooling 类，该类用于存储 Longformer 模型输出以及最后一层隐藏状态的池化结果
+    # 定义可选参数 `hidden_states`，当 `output_hidden_states=True` 时返回，表示模型每一层的隐藏状态的元组。
+    # 每个元素是一个形状为 `(batch_size, sequence_length, hidden_size)` 的 `torch.FloatTensor`。
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+
+
+```    
+    # 定义可选参数 `attentions`，当 `output_attentions=True` 时返回，表示模型每一层的本地注意力权重的元组。
+    # 每个元素是一个形状为 `(batch_size, num_heads, sequence_length, x + attention_window + 1)` 的 `torch.FloatTensor`。
+    # 这些是经过注意力 softmax 后的本地注意力权重，用于计算自注意力头中的加权平均值。
+    # 前 `x` 个值是对全局注意力掩码中的令牌的注意力权重，剩余的 `attention_window + 1` 个值是对注意力窗口中的令牌的注意力权重。
+    # 注意，前 `x` 个值指的是文本中固定位置的令牌的注意力权重，但剩余的 `attention_window + 1` 个值是相对位置的注意力权重。
+    # 如果注意力窗口包含具有全局注意力的令牌，则相应索引处的注意力权重设置为 0，其值应从第一个 `x` 个注意力权重中访问。
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+
+    # 定义可选参数 `global_attentions`，当 `output_attentions=True` 时返回，表示模型每一层的全局注意力权重的元组。
+    # 每个元素是一个形状为 `(batch_size, num_heads, sequence_length, x)` 的 `torch.FloatTensor`。
+    # 这些是经过注意力 softmax 后的全局注意力权重，用于计算自注意力头中的加权平均值。
+    # 这些是从每个具有全局注意力的令牌到序列中每个令牌的注意力权重。
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 声明一个可选类型的变量 attentions，可以存储 torch.FloatTensor 类型的元组或者为 None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 声明一个可选类型的变量 global_attentions，可以存储 torch.FloatTensor 类型的元组或者为 None
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 使用 @dataclass 装饰器声明一个数据类，用于表示带池化的 Longformer 模型的基本输出
+@dataclass
 class LongformerBaseModelOutputWithPooling(ModelOutput):
     """
-    Base class for Longformer's outputs that also contains a pooling of the last hidden states.
+    Longformer 模型的输出基类，同时包含最后隐藏状态的池化结果。
 
     """
 
-    # 存储最后一层的隐藏状态
+    # 最后的隐藏状态，类型为 torch.FloatTensor
     last_hidden_state: torch.FloatTensor
-    # 存储池化层的输出
+    # 可选项：池化层的输出，类型为 torch.FloatTensor，默认为 None
     pooler_output: torch.FloatTensor = None
-    # 存储所有隐藏状态的元组
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储注意力分布的元组
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储全局注意力的元组
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选项：隐藏状态的元组，包含多个 torch.FloatTensor
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：注意力分布的元组，包含多个 torch.FloatTensor
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：全局注意力的元组，包含多个 torch.FloatTensor
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
-# 使用 dataclass 装饰器定义 LongformerMaskedLMOutput 类，该类用于存储掩码语言模型的输出
+# 使用 @dataclass 装饰器声明一个数据类，用于表示 Longformer 掩码语言模型的输出
 @dataclass
 class LongformerMaskedLMOutput(ModelOutput):
     """
-    Base class for masked language models outputs.
+    Longformer 掩码语言模型输出的基类。
 
     """
 
-    # 存储损失值的可选项
+    # 可选项：损失值，类型为 torch.FloatTensor，默认为 None
     loss: Optional[torch.FloatTensor] = None
-    # 存储逻辑回归输出的张量
+    # 可选项：预测的 logits，类型为 torch.FloatTensor
     logits: torch.FloatTensor = None
-    # 存储所有隐藏状态的元组
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储注意力分布的元组
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储全局注意力的元组
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选项：隐藏状态的元组，包含多个 torch.FloatTensor
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：注意力分布的元组，包含多个 torch.FloatTensor
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：全局注意力的元组，包含多个 torch.FloatTensor
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
-# 使用 dataclass 装饰器定义 LongformerQuestionAnsweringModelOutput 类，该类用于存储问答 Longformer 模型的输出
+# 使用 @dataclass 装饰器声明一个数据类，用于表示 Longformer 问答模型的输出
 @dataclass
 class LongformerQuestionAnsweringModelOutput(ModelOutput):
     """
-    Base class for outputs of question answering Longformer models.
+    Longformer 问答模型输出的基类。
 
     """
 
-    # 存储损失值的可选项
+    # 可选项：损失值，类型为 torch.FloatTensor，默认为 None
     loss: Optional[torch.FloatTensor] = None
-    # 存储起始位置的逻辑回归输出的张量
+    # 可选项：起始位置的 logits，类型为 torch.FloatTensor
     start_logits: torch.FloatTensor = None
-    # 存储结束位置的逻辑回归输出的张量
+    # 可选项：结束位置的 logits，类型为 torch.FloatTensor
     end_logits: torch.FloatTensor = None
-    # 存储所有隐藏状态的元组
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储注意力分布的元组
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 存储全局注意力的元组
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选项：隐藏状态的元组，包含多个 torch.FloatTensor
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：注意力分布的元组，包含多个 torch.FloatTensor
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：全局注意力的元组，包含多个 torch.FloatTensor
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
-# 使用 dataclass 装饰器定义 LongformerSequenceClassifierOutput 类，该类用于存储句子分类模型的输出
+# 使用 @dataclass 装饰器声明一个数据类，用于表示 Longformer 序列分类模型的输出
 @dataclass
 class LongformerSequenceClassifierOutput(ModelOutput):
     """
-    Base class for outputs of sentence classification models.
-    Args:
-        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            分类（或回归，如果`config.num_labels==1`）损失。
-        logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            分类（或回归，如果`config.num_labels==1`）得分（SoftMax 之前）。
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            元组的 `torch.FloatTensor`（一个用于嵌入的输出 + 一个用于每个层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
+    Longformer 序列分类模型输出的基类。
 
-            模型在每个层的输出以及初始嵌入输出的隐藏状态。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组的 `torch.FloatTensor`（每个层一个）的形状为 `(batch_size, num_heads, sequence_length, x + attention_window + 1)`，其中 `x` 是具有全局注意力掩码的令牌数量。
+    """
 
-            在注意力 softmax 之后的局部注意力权重，用于计算自注意力头中的加权平均值。这些是从序列中的每个令牌到具有全局注意力的每个令牌（前 `x` 个值）以及到注意力窗口中的每个令牌（剩余 `attention_window + 1` 个值）的注意力权重。注意，前 `x` 个值是指文本中具有固定位置的令牌，但剩余的 `attention_window + 1` 个值是指具有相对位置的令牌：令牌到自身的注意力权重位于索引 `x + attention_window / 2` 处，前 `attention_window / 2`（后 `attention_window / 2`）个值是令牌到前 `attention_window / 2`（后 `attention_window / 2`）个令牌的注意力权重。如果注意力窗口包含具有全局注意力的令牌，则相应索引处的注意力权重设置为 0；该值应从前 `x` 个注意力权重中访问。如果一个令牌具有全局注意力，则 `attentions` 中对所有其他令牌的注意力权重设置为 0，值应从 `global_attentions` 中访问。
-        global_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            元组的 `torch.FloatTensor`（每个层一个）的形状为 `(batch_size, num_heads, sequence_length, x)`，其中 `x` 是具有全局注意力掩码的令牌数量。
-
-            在注意力 softmax 之后的全局注意力权重，用于计算自注意力头中的加权平均值。这些是具有全局注意力的每个令牌到序列中的每个令牌的注意力权重。
-    # 定义一个可选的浮点类型变量 loss，初始值为 None
+    # 可选项：损失值，类型为 torch.FloatTensor，默认为 None
     loss: Optional[torch.FloatTensor] = None
-    # 定义一个浮点类型变量 logits，初始值为 None
+    # 可选项：预测的 logits，类型为 torch.FloatTensor
     logits: torch.FloatTensor = None
-    # 定义一个可选的元组类型变量 hidden_states，元组内的元素为浮点类型，初始值为 None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的元组类型变量 attentions，元组内的元素为浮点类型，初始值为 None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的元组类型变量 global_attentions，元组内的元素为浮点类型，初始值为 None
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选项：隐藏状态的元组，包含多个 torch.FloatTensor
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：注意力分布的元组，包含多个 torch.FloatTensor
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：全局注意力的元组，包含多个 torch.FloatTensor
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+        Args:
+            loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+                分类（或者当`config.num_labels==1`时为回归）的损失值。
+            logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
+                分类（或者当`config.num_labels==1`时为回归）的分数（SoftMax 之前）。
+            hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+                包含模型每一层输出的隐藏状态的元组，每个元素是一个 `torch.FloatTensor`，形状为 `(batch_size, sequence_length, hidden_size)`。
+
+                模型每一层的输出的隐藏状态以及初始嵌入输出。
+            attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+                包含局部注意力权重的元组，每个元素是一个 `torch.FloatTensor`，形状为 `(batch_size, num_heads, sequence_length, x + attention_window + 1)`，其中 `x` 是具有全局注意力掩码的令牌数量。
+
+                局部注意力softmax后的权重，用于计算自注意力头中的加权平均值。这些是每个令牌到具有全局注意力的每个令牌（前 `x` 个值）和到注意力窗口中的每个令牌（剩余的 `attention_window + 1` 个值）的注意力权重。
+                注意，前 `x` 个值指的是文本中具有固定位置的令牌，但剩余的 `attention_window + 1` 个值指的是具有相对位置的令牌：一个令牌到自身的注意力权重位于索引 `x + attention_window / 2` 处，前 `attention_window / 2`（后 `attention_window / 2`）个值是指前 `attention_window / 2`（后 `attention_window / 2`）个令牌的注意力权重。
+                如果注意力窗口中包含一个具有全局注意力的令牌，则相应索引处的注意力权重设为0；这些值应从前 `x` 个注意力权重中获取。如果一个令牌具有全局注意力，则到`attentions`中的所有其他令牌的注意力权重为0，这些值应从`global_attentions`中获取。
+            global_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+                包含全局注意力权重的元组，每个元素是一个 `torch.FloatTensor`，形状为 `(batch_size, num_heads, sequence_length, x)`，其中 `x` 是具有全局注意力掩码的令牌数量。
+
+                全局注意力softmax后的权重，用于计算自注意力头中的加权平均值。这些是每个具有全局注意力的令牌到序列中的每个令牌的注意力权重。
+    # 定义一个可选的浮点数张量 loss，初始值为 None
+    loss: Optional[torch.FloatTensor] = None
+    
+    # 定义一个浮点数张量 logits，初始值为 None
+    logits: torch.FloatTensor = None
+    
+    # 定义一个可选的元组，包含多个浮点数张量，表示隐藏状态，初始值为 None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义一个可选的元组，包含多个浮点数张量，表示注意力机制，初始值为 None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    
+    # 定义一个可选的元组，包含多个浮点数张量，表示全局注意力机制，初始值为 None
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 @dataclass
 class LongformerMultipleChoiceModelOutput(ModelOutput):
     """
-    Longformer多项选择模型输出的基类。
-
+    Base class for outputs of multiple choice Longformer models.
     """
 
-    loss: Optional[torch.FloatTensor] = None  # 损失值，可选的浮点张量，默认为None
-    logits: torch.FloatTensor = None  # 预测的逻辑回归值，张量
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 隐藏状态，可选的张量元组，默认为None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None  # 注意力张量，可选的张量元组，默认为None
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None  # 全局注意力张量，可选的张量元组，默认为None
+    # 可选项：损失值，用于存储模型的损失值（浮点数张量）
+    loss: Optional[torch.FloatTensor] = None
+    # 输出：逻辑回归值，模型的逻辑回归输出（浮点数张量）
+    logits: torch.FloatTensor = None
+    # 可选项：隐藏状态，包含模型的隐藏状态的元组（浮点数张量的元组）
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：注意力分布，包含模型的注意力分布的元组（浮点数张量的元组）
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选项：全局注意力分布，包含模型的全局注意力分布的元组（浮点数张量的元组）
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
 @dataclass
 class LongformerTokenClassifierOutput(ModelOutput):
     """
-    分词分类模型输出的基类。
-
+    Base class for outputs of token classification models.
     """
-    # 定义函数参数和返回值的说明
-    Args:
-        # 分类损失，是一个形状为`(1,)`的`torch.FloatTensor`张量，当`labels`提供时返回
-        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided) :
-            Classification loss.
-        
-        # 分类得分（SoftMax之前）的张量，具有形状为`(batch_size, sequence_length, config.num_labels)`
-        logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.num_labels)`):
-            Classification scores (before SoftMax).
-
-        # 模型隐藏状态的元组，包含每一层输出和初始嵌入输出
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, sequence_length, hidden_size)`.
-        
-        # 本地注意力权重的元组，用于计算自注意力头中的加权平均值
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length, x +
-            attention_window + 1)`, where `x` is the number of tokens with global attention mask.
-
-            # 在注意力 softmax 之后的本地注意力权重，用于计算自注意力头中的加权平均值
-            # 这些是从序列中的每个标记到具有全局注意力的每个标记的注意力权重
-            # 如果注意力窗口包含具有全局注意力的标记，则相应索引处的注意力权重设置为0；该值应从前`x`个注意力权重中获得
-            # 如果一个标记具有全局注意力，那么`attentions`中对所有其他标记的关注权重被设置为0，值应从`global_attentions`中获取
-            # 具体的计算规则和细节解释
-            Local attentions weights after the attention softmax, used to compute the weighted average in the
-            self-attention heads. Those are the attention weights from every token in the sequence to every token with
-            global attention (first `x` values) and to every token in the attention window (remaining `attention_window
-            + 1` values). Note that the first `x` values refer to tokens with fixed positions in the text, but the
-            remaining `attention_window + 1` values refer to tokens with relative positions: the attention weight of a
-            token to itself is located at index `x + attention_window / 2` and the `attention_window / 2` preceding
-            (succeeding) values are the attention weights to the `attention_window / 2` preceding (succeeding) tokens.
-            If the attention window contains a token with global attention, the attention weight at the corresponding
-            index is set to 0; the value should be accessed from the first `x` attention weights. If a token has global
-            attention, the attention weights to all other tokens in `attentions` is set to 0, the values should be
-            accessed from `global_attentions`.
-        
-        # 全局注意力权重的元组，用于计算自注意力头中的加权平均值
-        global_attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length, x)`,
-            where `x` is the number of tokens with global attention mask.
-
-            # 在注意力 softmax 之后的全局注意力权重，用于自注意力头中的加权平均值的计算
-            # 这些是从具有全局注意力的每个标记到序列中的每个标记的注意力权重
-    """
-
-    # 定义变量 loss 为可选的`torch.FloatTensor`类型，默认值为 None
+    # 定义 loss 变量，用于存储分类损失（如果提供标签的话）
     loss: Optional[torch.FloatTensor] = None
-    # 定义一个类型为torch.FloatTensor的logits变量，并初始化为None
+    # 定义一个变量 logits，类型为 torch 的 FloatTensor，初始值为 None
     logits: torch.FloatTensor = None
-    # 定义一个可选的类型为Tuple[torch.FloatTensor]的hidden_states变量，并初始化为None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的类型为Tuple[torch.FloatTensor]的attentions变量，并初始化为None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # 定义一个可选的类型为Tuple[torch.FloatTensor]的global_attentions变量，并初始化为None
-    global_attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 定义一个变量 hidden_states，类型为一个可选的元组，元组内包含多个 torch 的 FloatTensor 对象，初始值为 None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 定义一个变量 attentions，类型为一个可选的元组，元组内包含多个 torch 的 FloatTensor 对象，初始值为 None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 定义一个变量 global_attentions，类型为一个可选的元组，元组内包含多个 torch 的 FloatTensor 对象，初始值为 None
+    global_attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 计算输入中第一个 `sep_token_id` 的索引位置
 def _get_question_end_index(input_ids, sep_token_id):
-    """
-    Computes the index of the first occurrence of `sep_token_id`.
-    """
-
-    # Find the indices of separator tokens in the input
+    # 找到所有 `sep_token_id` 的索引位置
     sep_token_indices = (input_ids == sep_token_id).nonzero()
     batch_size = input_ids.shape[0]
 
-    # Ensure the shape of sep_token_indices is appropriate
+    # 断言确保 `input_ids` 是二维的
     assert sep_token_indices.shape[1] == 2, "`input_ids` should have two dimensions"
-    # Ensure there are exactly three separator tokens in every sample for question answering
+    # 断言确保每个样本中恰好有三个分隔符 `sep_token_id`
     assert sep_token_indices.shape[0] == 3 * batch_size, (
         f"There should be exactly three separator tokens: {sep_token_id} in every sample for questions answering. You"
         " might also consider to set `global_attention_mask` manually in the forward function to avoid this error."
     )
-    # Extract the index of the first occurrence of the separator token for each sample
+    # 返回每个样本中第一个 `sep_token_id` 的索引
     return sep_token_indices.view(batch_size, 3, 2)[:, 0, 1]
 
 
+# 计算全局注意力掩码，根据 `before_sep_token` 决定在 `sep_token_id` 之前或之后放置注意力
 def _compute_global_attention_mask(input_ids, sep_token_id, before_sep_token=True):
-    """
-    Computes global attention mask by putting attention on all tokens before `sep_token_id` if `before_sep_token is
-    True` else after `sep_token_id`.
-    """
-    # Get the index of the first occurrence of the separator token for each sample
+    # 获取问题结束的索引位置
     question_end_index = _get_question_end_index(input_ids, sep_token_id)
     question_end_index = question_end_index.unsqueeze(dim=1)  # size: batch_size x 1
-    # Create a boolean attention mask with True in locations of global attention
+    
+    # 创建布尔类型的注意力掩码，全局注意力位置为 True
     attention_mask = torch.arange(input_ids.shape[1], device=input_ids.device)
     if before_sep_token is True:
-        # Set True for tokens before the separator token
+        # 将小于 `question_end_index` 的位置设置为 True
         attention_mask = (attention_mask.expand_as(input_ids) < question_end_index).to(torch.bool)
     else:
-        # Set True for tokens after the separator token
+        # 如果不在 `before_sep_token` 模式下，将 `sep_token_id` 之后的位置设置为 True
         attention_mask = (attention_mask.expand_as(input_ids) > (question_end_index + 1)).to(torch.bool) * (
             attention_mask.expand_as(input_ids) < input_ids.shape[-1]
         ).to(torch.bool)
@@ -276,6 +270,7 @@ def _compute_global_attention_mask(input_ids, sep_token_id, before_sep_token=Tru
     return attention_mask
 
 
+# 根据输入的 `input_ids` 和 `padding_idx` 创建位置编号
 def create_position_ids_from_input_ids(input_ids, padding_idx):
     """
     Replace non-padding symbols with their position numbers. Position numbers begin at padding_idx+1. Padding symbols
@@ -286,11 +281,10 @@ def create_position_ids_from_input_ids(input_ids, padding_idx):
 
     Returns: torch.Tensor
     """
-    # Create a mask for non-padding symbols
+    # 创建掩码，标识非填充符号的位置
     mask = input_ids.ne(padding_idx).int()
-    # Compute incremental indices for non-padding symbols
+    # 计算递增的位置编号，从 `padding_idx+1` 开始
     incremental_indices = torch.cumsum(mask, dim=1).type_as(mask) * mask
-    # Add padding index to the incremental indices
     return incremental_indices.long() + padding_idx
 
 
@@ -298,61 +292,69 @@ class LongformerEmbeddings(nn.Module):
     """
     Same as BertEmbeddings with a tiny tweak for positional embeddings indexing.
     """
+    # 初始化函数，接受配置对象 config
     def __init__(self, config):
-        # 初始化函数，继承父类的初始化方法
+        # 调用父类构造函数初始化
         super().__init__()
-        # 创建词嵌入矩阵，vocab_size为词汇表大小，hidden_size为隐藏层大小，padding_idx指定填充的词索引
+        # 创建词嵌入层，根据配置中的词汇大小（vocab_size）和隐藏大小（hidden_size），并设置填充 token 的索引
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=config.pad_token_id)
-        # 创建token类型嵌入矩阵，type_vocab_size为类型词汇表大小，hidden_size为隐藏层大小
+        # 创建标记类型嵌入层，根据配置中的类型词汇大小（type_vocab_size）和隐藏大小（hidden_size）
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
-        # 使用LayerNorm来规范化数据，保持与TensorFlow模型变量名一致，以便能够加载任何TensorFlow检查点文件
+        # 创建 LayerNorm 层，用于规范化隐藏状态向量，保持与 TensorFlow 模型变量名称的一致性，并能够加载任何 TensorFlow 检查点文件
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建dropout层，按照指定的概率丢弃神经元
+        # 创建 Dropout 层，用于在训练过程中随机丢弃部分隐藏状态向量，以防止过拟合
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        # 设定填充索引为pad_token_id
+        # 设置填充 token 的索引，以便后续使用
         self.padding_idx = config.pad_token_id
-        # 创建位置嵌入矩阵，max_position_embeddings为最大位置嵌入数量，padding_idx指定填充的位置
+        # 创建位置嵌入层，根据配置中的最大位置嵌入数（max_position_embeddings）和隐藏大小（hidden_size），并设置填充 token 的索引
         self.position_embeddings = nn.Embedding(
             config.max_position_embeddings, config.hidden_size, padding_idx=self.padding_idx
         )
 
+    # 前向传播函数，接受输入参数 input_ids、token_type_ids、position_ids 和 inputs_embeds
     def forward(self, input_ids=None, token_type_ids=None, position_ids=None, inputs_embeds=None):
-        # 如果位置ids为空
+        # 如果未提供 position_ids 参数
         if position_ids is None:
-            # 如果输入ids不为空
+            # 如果提供了 input_ids 参数
             if input_ids is not None:
-                # 从输入的token ids中创建位置ids。任何填充的token仍然保持填充状态
+                # 根据 input_ids 创建 position_ids，保持任何填充的 token 仍然是填充状态
                 position_ids = create_position_ids_from_input_ids(input_ids, self.padding_idx).to(input_ids.device)
             else:
-                # 如果输入ids为空，则从inputs_embeds中创建位置ids
+                # 否则，从 inputs_embeds 创建 position_ids
                 position_ids = self.create_position_ids_from_inputs_embeds(inputs_embeds)
 
-        # 如果输入ids不为空
+        # 如果提供了 input_ids 参数
         if input_ids is not None:
+            # 获取 input_ids 的形状
             input_shape = input_ids.size()
         else:
+            # 否则，获取 inputs_embeds 的形状，去掉最后一维（即序列长度维度）
             input_shape = inputs_embeds.size()[:-1]
 
-        # 如果token类型ids为空，则创建全零的token类型ids
+        # 如果未提供 token_type_ids 参数，则创建全零的 token_type_ids，形状与 input_shape 相同
         if token_type_ids is None:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=position_ids.device)
 
-        # 如果inputs_embeds为空，则使用word_embeddings获取embeddings
+        # 如果未提供 inputs_embeds 参数，则根据 input_ids 获取对应的词嵌入向量
         if inputs_embeds is None:
             inputs_embeds = self.word_embeddings(input_ids)
-        # 获取位置嵌入
+        # 根据 position_ids 获取对应的位置嵌入向量
         position_embeddings = self.position_embeddings(position_ids)
-        # 获取token类型嵌入
+        # 根据 token_type_ids 获取对应的标记类型嵌入向量
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
 
-        # 将embeddings组合起来
+        # 将词嵌入向量、位置嵌入向量和标记类型嵌入向量相加得到最终的嵌入表示
         embeddings = inputs_embeds + position_embeddings + token_type_embeddings
+        # 对嵌入向量进行 LayerNorm 规范化
         embeddings = self.LayerNorm(embeddings)
+        # 对规范化后的向量进行 Dropout 操作
         embeddings = self.dropout(embeddings)
+        # 返回嵌入向量作为模型的输出
         return embeddings
 
+    # 根据 inputs_embeds 参数创建位置 ids 的函数
     def create_position_ids_from_inputs_embeds(self, inputs_embeds):
         """
         We are provided embeddings directly. We cannot infer which are padded so just generate sequential position ids.
@@ -362,96 +364,90 @@ class LongformerEmbeddings(nn.Module):
 
         Returns: torch.Tensor
         """
-        # 获取输入形状
+        # 获取 inputs_embeds 的形状，去掉最后一维（即序列长度维度）
         input_shape = inputs_embeds.size()[:-1]
         # 获取序列长度
         sequence_length = input_shape[1]
 
-        # 生成顺序位置ids
+        # 生成从 padding_idx + 1 开始，到 padding_idx + 1 + sequence_length 的序列作为位置 ids
         position_ids = torch.arange(
             self.padding_idx + 1, sequence_length + self.padding_idx + 1, dtype=torch.long, device=inputs_embeds.device
         )
+        # 将位置 ids 扩展为与 input_shape 相同的形状，并返回
         return position_ids.unsqueeze(0).expand(input_shape)
-```  
-# 定义一个名为LongformerSelfAttention的类，继承自nn.Module
-class LongformerSelfAttention(nn.Module):
-    # 初始化方法，接收配置参数config和层索引layer_id
-    def __init__(self, config, layer_id):
-        super().__init__()
-        # 如果隐藏大小不能被注意力头数整除，则引发数值错误
-        if config.hidden_size % config.num_attention_heads != 0:
-            raise ValueError(
-                f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
-                f"heads ({config.num_attention_heads})"
-            )
-        # 设置属性值
-        self.num_heads = config.num_attention_heads
-        self.head_dim = int(config.hidden_size / config.num_attention_heads)
-        self.embed_dim = config.hidden_size
+    # LongformerSelfAttention 类的定义，继承自 nn.Module
+    class LongformerSelfAttention(nn.Module):
+        def __init__(self, config, layer_id):
+            super().__init__()
+            # 检查隐藏大小是否是注意力头数的倍数
+            if config.hidden_size % config.num_attention_heads != 0:
+                raise ValueError(
+                    f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
+                    f"heads ({config.num_attention_heads})"
+                )
+            # 设置注意力头数和头部维度
+            self.num_heads = config.num_attention_heads
+            self.head_dim = int(config.hidden_size / config.num_attention_heads)
+            self.embed_dim = config.hidden_size
 
-        # 创建查询、键和值的线性层
-        self.query = nn.Linear(config.hidden_size, self.embed_dim)
-        self.key = nn.Linear(config.hidden_size, self.embed_dim)
-        self.value = nn.Linear(config.hidden_size, self.embed_dim)
+            # 为查询、键和值分别创建线性层
+            self.query = nn.Linear(config.hidden_size, self.embed_dim)
+            self.key = nn.Linear(config.hidden_size, self.embed_dim)
+            self.value = nn.Linear(config.hidden_size, self.embed_dim)
 
-        # 为具有全局注意力的标记创建不同的投影层
-        self.query_global = nn.Linear(config.hidden_size, self.embed_dim)
-        self.key_global = nn.Linear(config.hidden_size, self.embed_dim)
-        self.value_global = nn.Linear(config.hidden_size, self.embed_dim)
+            # 为具有全局注意力的令牌单独创建投影层
+            self.query_global = nn.Linear(config.hidden_size, self.embed_dim)
+            self.key_global = nn.Linear(config.hidden_size, self.embed_dim)
+            self.value_global = nn.Linear(config.hidden_size, self.embed_dim)
 
-        # 设置注意力概率的丢弃率
-        self.dropout = config.attention_probs_dropout_prob
+            # 设置注意力概率的 dropout 率
+            self.dropout = config.attention_probs_dropout_prob
 
-        self.layer_id = layer_id
-        attention_window = config.attention_window[self.layer_id]
-        # 确保attention_window是偶数
-        assert (
-            attention_window % 2 == 0
-        ), f"`attention_window` for layer {self.layer_id} has to be an even value. Given {attention_window}"
-        # 确保attention_window是正数
-        assert (
-            attention_window > 0
-        ), f"`attention_window` for layer {self.layer_id} has to be positive. Given {attention_window}"
+            self.layer_id = layer_id
+            attention_window = config.attention_window[self.layer_id]
+            # 确保 attention_window 是偶数
+            assert (
+                attention_window % 2 == 0
+            ), f"`attention_window` for layer {self.layer_id} has to be an even value. Given {attention_window}"
+            # 确保 attention_window 是正数
+            assert (
+                attention_window > 0
+            ), f"`attention_window` for layer {self.layer_id} has to be positive. Given {attention_window}"
 
-        # 计算单侧注意力窗口大小
-        self.one_sided_attn_window_size = attention_window // 2
+            # 设置单侧注意力窗口大小
+            self.one_sided_attn_window_size = attention_window // 2
 
-        self.config = config
+            self.config = config
 
-    # 前向传播方法
-    def forward(
-        self,
-        hidden_states,
-        attention_mask=None,
-        layer_head_mask=None,
-        is_index_masked=None,
-        is_index_global_attn=None,
-        is_global_attn=None,
-        output_attentions=False,
-    # 静态方法，用于填充并转置最后两个维度
-    @staticmethod
-    def _pad_and_transpose_last_two_dims(hidden_states_padded, padding):
-        """pads rows and then flips rows and columns"""
-        # 对hidden_states_padded进行填充
-        hidden_states_padded = nn.functional.pad(
-            hidden_states_padded, padding
-        )  # padding value is not important because it will be overwritten
-        # 转置最后两个维度
-        hidden_states_padded = hidden_states_padded.view(
-            *hidden_states_padded.size()[:-2], hidden_states_padded.size(-1), hidden_states_padded.size(-2)
-        )
-        return hidden_states_padded
+        def forward(
+            self,
+            hidden_states,
+            attention_mask=None,
+            layer_head_mask=None,
+            is_index_masked=None,
+            is_index_global_attn=None,
+            is_global_attn=None,
+            output_attentions=False,
+        ):
+            # _pad_and_transpose_last_two_dims 方法：填充并转置最后两个维度的静态方法
+            def _pad_and_transpose_last_two_dims(hidden_states_padded, padding):
+                """pads rows and then flips rows and columns"""
+                hidden_states_padded = nn.functional.pad(
+                    hidden_states_padded, padding
+                )  # padding value is not important because it will be overwritten
+                hidden_states_padded = hidden_states_padded.view(
+                    *hidden_states_padded.size()[:-2], hidden_states_padded.size(-1), hidden_states_padded.size(-2)
+                )
+                return hidden_states_padded
 
-    @staticmethod
-    # 定义一个内部方法，用于填充和对角化分块隐藏状态
+            @staticmethod
     def _pad_and_diagonalize(chunked_hidden_states):
         """
         shift every row 1 step right, converting columns into diagonals.
-        将每一行向右移动1步，将列转换为对角线。
 
         Example:
 
-        ```py
+        ```python
         chunked_hidden_states: [
             0.4983,
             2.6918,
@@ -477,42 +473,41 @@ class LongformerSelfAttention(nn.Module):
                        0.0000, -1.8348, 0.7672, 0.2986, 0.0285, 0.0000, 0.0000 0.0000, 0.0000, -0.7584, 0.4206,
                        -0.0405, 0.1599, 0.0000 0.0000, 0.0000, 0.0000, 2.0514, -1.1600, 0.5372, 0.2629 ]
         """
-
         # 获取输入张量的维度信息
         total_num_heads, num_chunks, window_overlap, hidden_dim = chunked_hidden_states.size()
-        # 对输入张量进行填充，使得维度扩展到 window_overlap+1
+        # 在最后一维度上进行填充，增加 window_overlap + 1 个位置的填充
         chunked_hidden_states = nn.functional.pad(
             chunked_hidden_states, (0, window_overlap + 1)
         )  # total_num_heads x num_chunks x window_overlap x (hidden_dim+window_overlap+1). Padding value is not important because it'll be overwritten
-        # 对填充后的张量进行维度变换
+        # 重新调整张量形状，将多维度张量转换为二维张量
         chunked_hidden_states = chunked_hidden_states.view(
             total_num_heads, num_chunks, -1
         )  # total_num_heads x num_chunks x window_overlap*window_overlap+window_overlap
-        # 截取填充后的张量的一部分维度
+        # 去除最后一个维度上的部分数据，保留前面的数据
         chunked_hidden_states = chunked_hidden_states[
             :, :, :-window_overlap
         ]  # total_num_heads x num_chunks x window_overlap*window_overlap
-        # 再次对张量进行维度变换
+        # 将二维张量转换为四维张量，重塑成对角化矩阵的形式
         chunked_hidden_states = chunked_hidden_states.view(
             total_num_heads, num_chunks, window_overlap, window_overlap + hidden_dim
         )
-        # 对填充后的张量进行尺寸裁剪
+        # 去除最后一个维度上多余的数据，保留有效的部分
         chunked_hidden_states = chunked_hidden_states[:, :, :, :-1]
-        # 返回结果张量
+        # 返回处理后的张量结果
         return chunked_hidden_states
 
     @staticmethod
     def _chunk(hidden_states, window_overlap, onnx_export: bool = False):
         """将隐藏状态转换为重叠的块。块大小 = 2w，重叠大小 = w"""
         if not onnx_export:
-            # 将隐藏状态划分为大小为2w的非重叠块
+            # 对于非导出到ONNX的情况，生成大小为2w的非重叠块
             hidden_states = hidden_states.view(
                 hidden_states.size(0),
                 torch.div(hidden_states.size(1), (window_overlap * 2), rounding_mode="trunc"),
                 window_overlap * 2,
                 hidden_states.size(2),
             )
-            # 使用 `as_trided` 让块重叠，重叠大小为 window_overlap
+            # 使用 `as_strided` 方法使块之间重叠，重叠大小为 window_overlap
             chunk_size = list(hidden_states.size())
             chunk_size[1] = chunk_size[1] * 2 - 1
 
@@ -520,13 +515,10 @@ class LongformerSelfAttention(nn.Module):
             chunk_stride[1] = chunk_stride[1] // 2
             return hidden_states.as_strided(size=chunk_size, stride=chunk_stride)
 
-        # 在导出到 ONNX 时，使用单独的逻辑
-        # 因为在 ONNX 导出中不支持 as_strided、unfold 和 2D-张量索引（尚未支持）
-
-        # TODO 用这个替代
+        # 导出到ONNX时，使用以下逻辑，因为 `as_strided`、`unfold` 和二维张量索引在ONNX导出中不受支持（尚未支持）
+        # 当 `unfold` 支持后，使用以下方式进行替换：
         # > return hidden_states.unfold(dimension=1, size=window_overlap * 2, step=window_overlap).transpose(2, 3)
-        # 一旦 `unfold` 支持
-        # 当 hidden_states.size(1) == window_overlap * 2 时，也可以简单地返回 hidden_states.unsqueeze(1)，但那是控制流
+        # 如果 hidden_states.size(1) == window_overlap * 2，则可以简单地返回 hidden_states.unsqueeze(1)，但这需要控制流
 
         chunk_size = [
             hidden_states.size(0),
@@ -544,50 +536,60 @@ class LongformerSelfAttention(nn.Module):
 
     @staticmethod
     def _mask_invalid_locations(input_tensor, affected_seq_len) -> torch.Tensor:
+        # 创建一个影响序列长度为 affected_seq_len 的二维开始位置掩码
         beginning_mask_2d = input_tensor.new_ones(affected_seq_len, affected_seq_len + 1).tril().flip(dims=[0])
         beginning_mask = beginning_mask_2d[None, :, None, :]
+        # 创建一个翻转的结束位置掩码，与开始位置掩码相反
         ending_mask = beginning_mask.flip(dims=(1, 3))
+
+        # 对输入张量的开始位置进行掩码处理
         beginning_input = input_tensor[:, :affected_seq_len, :, : affected_seq_len + 1]
         beginning_mask = beginning_mask.expand(beginning_input.size())
         input_tensor[:, :affected_seq_len, :, : affected_seq_len + 1] = torch.full_like(
             beginning_input, -float("inf")
         ).where(beginning_mask.bool(), beginning_input)
+
+        # 对输入张量的结束位置进行掩码处理
         ending_input = input_tensor[:, -affected_seq_len:, :, -(affected_seq_len + 1) :]
         ending_mask = ending_mask.expand(ending_input.size())
         input_tensor[:, -affected_seq_len:, :, -(affected_seq_len + 1) :] = torch.full_like(
             ending_input, -float("inf")
         ).where(ending_mask.bool(), ending_input)
-    # 该函数计算注意力得分和价值的矩阵乘积并返回
     def _sliding_chunks_matmul_attn_probs_value(
         self, attn_probs: torch.Tensor, value: torch.Tensor, window_overlap: int
     ):
-        # 获取输入张量的各维度大小
+        """
+        Same as _sliding_chunks_query_key_matmul but for attn_probs and value tensors. Returned tensor will be of the
+        same shape as `attn_probs`
+        """
+        # 获取 value 张量的维度信息
         batch_size, seq_len, num_heads, head_dim = value.size()
-    
-        # 确保序列长度是窗口重叠长度的整数倍
+
+        # 断言确保 seq_len 可以被 window_overlap*2 整除
         assert seq_len % (window_overlap * 2) == 0
-        # 确保注意力概率和价值张量有相同的前三个维度
+        # 断言确保 attn_probs 的前三个维度与 value 的前三个维度相同
         assert attn_probs.size()[:3] == value.size()[:3]
-        # 确保注意力概率张量的第四个维度等于 2 * window_overlap + 1
+        # 断言确保 attn_probs 的第四个维度等于 2*window_overlap + 1
         assert attn_probs.size(3) == 2 * window_overlap + 1
-        # 计算块的数量
+        
+        # 计算 chunk 的数量，即将 seq_len 分成大小为 window_overlap 的 chunk 的数量
         chunks_count = torch.div(seq_len, window_overlap, rounding_mode="trunc") - 1
-    
-        # 将批次大小和头数量合并成一个维度，然后将序列长度分块
+        
+        # 将 attn_probs 转置后重塑成形状为 (batch_size*num_heads, chunks_count, window_overlap, 2*window_overlap+1) 的张量
         chunked_attn_probs = attn_probs.transpose(1, 2).reshape(
             batch_size * num_heads,
             torch.div(seq_len, window_overlap, rounding_mode="trunc"),
             window_overlap,
             2 * window_overlap + 1,
         )
-    
-        # 将批次大小和头数量合并成一个维度
+
+        # 将 value 转置后重塑成形状为 (batch_size*num_heads, seq_len, head_dim) 的张量
         value = value.transpose(1, 2).reshape(batch_size * num_heads, seq_len, head_dim)
-    
-        # 在序列开头和结尾添加窗口重叠长度的填充
+
+        # 在序列的开头和结尾各填充 window_overlap 个值为 -1 的元素
         padded_value = nn.functional.pad(value, (0, 0, window_overlap, window_overlap), value=-1)
-    
-        # 将填充后的值分块
+
+        # 将 padded_value 切分成大小为 3*window_overlap 的 chunk，重叠部分为 window_overlap
         chunked_value_size = (batch_size * num_heads, chunks_count + 1, 3 * window_overlap, head_dim)
         chunked_value_stride = padded_value.stride()
         chunked_value_stride = (
@@ -597,43 +599,44 @@ class LongformerSelfAttention(nn.Module):
             chunked_value_stride[2],
         )
         chunked_value = padded_value.as_strided(size=chunked_value_size, stride=chunked_value_stride)
-    
-        # 对chunked_attn_probs进行填充和对角线化
+
+        # 对 chunked_attn_probs 执行 _pad_and_diagonalize 操作
         chunked_attn_probs = self._pad_and_diagonalize(chunked_attn_probs)
-    
-        # 计算结果张量
+
+        # 使用 Einstein Summation (einsum) 进行张量乘法操作，得到 context 张量
         context = torch.einsum("bcwd,bcdh->bcwh", (chunked_attn_probs, chunked_value))
+        
+        # 调整 context 张量的形状，并将第二和第三维度交换位置
         return context.view(batch_size, num_heads, seq_len, head_dim).transpose(1, 2)
-    # 该函数计算全局注意力权重索引，这些索引在整个前向传递过程中都需要使用
     def _get_global_attn_indices(is_index_global_attn):
-        # 帮助变量：计算每个样本中全局注意力权重的数量
+        """计算全局注意力索引，在前向传递中需要的索引"""
+        # 计算每个样本中全局注意力索引的数量
         num_global_attn_indices = is_index_global_attn.long().sum(dim=1)
-        
-        # 批量中最大的全局注意力权重数量
+
+        # 批次中全局注意力索引的最大数量
         max_num_global_attn_indices = num_global_attn_indices.max()
-        
-        # 获取全局注意力权重的索引
+
+        # 全局注意力索引的位置
         is_index_global_attn_nonzero = is_index_global_attn.nonzero(as_tuple=True)
-        
-        # 帮助变量：判断局部索引是否属于全局注意力权重
+
+        # 辅助变量，表示是否是全局注意力的本地索引
         is_local_index_global_attn = torch.arange(
             max_num_global_attn_indices, device=is_index_global_attn.device
         ) < num_global_attn_indices.unsqueeze(dim=-1)
-        
-        # 获取全局注意力权重的非填充值位置
+
+        # 全局注意力索引中非零值的位置
         is_local_index_global_attn_nonzero = is_local_index_global_attn.nonzero(as_tuple=True)
-        
-        # 获取全局注意力权重的填充值位置
+
+        # 全局注意力索引中零值（即填充值）的位置
         is_local_index_no_global_attn_nonzero = (is_local_index_global_attn == 0).nonzero(as_tuple=True)
-        
+
         return (
             max_num_global_attn_indices,
             is_index_global_attn_nonzero,
             is_local_index_global_attn_nonzero,
             is_local_index_no_global_attn_nonzero,
         )
-    
-    # 该函数将全局注意力权重概率与局部注意力权重概率拼接在一起
+
     def _concat_with_global_key_attn_probs(
         self,
         key_vectors,
@@ -644,25 +647,32 @@ class LongformerSelfAttention(nn.Module):
         is_local_index_no_global_attn_nonzero,
     ):
         batch_size = key_vectors.shape[0]
-        
-        # 创建只包含全局注意力权重的 key 向量
+
+        # 仅创建全局键向量
         key_vectors_only_global = key_vectors.new_zeros(
             batch_size, max_num_global_attn_indices, self.num_heads, self.head_dim
         )
+
+        # 将全局注意力索引对应的键向量填充到新创建的张量中
         key_vectors_only_global[is_local_index_global_attn_nonzero] = key_vectors[is_index_global_attn_nonzero]
-        
-        # 计算 query 向量与全局 key 向量的注意力权重
+
+        # (batch_size, seq_len, num_heads, max_num_global_attn_indices)
+        # 使用 Einstein Summation 计算全局键向量对应的注意力概率
         attn_probs_from_global_key = torch.einsum("blhd,bshd->blhs", (query_vectors, key_vectors_only_global))
-        
-        # 需要进行转置，因为 ONNX 导出只支持连续索引
+
+        # 由于 ONNX 导出仅支持连续索引，需要进行转置操作
         attn_probs_from_global_key = attn_probs_from_global_key.transpose(1, 3)
+
+        # 将填充位置的注意力概率置为一个很小的数，以便在处理中被忽略
         attn_probs_from_global_key[
             is_local_index_no_global_attn_nonzero[0], is_local_index_no_global_attn_nonzero[1], :, :
         ] = torch.finfo(attn_probs_from_global_key.dtype).min
+
+        # 再次进行转置，以便输出与原始格式匹配
         attn_probs_from_global_key = attn_probs_from_global_key.transpose(1, 3)
-        
+
         return attn_probs_from_global_key
-    
+
     def _compute_attn_output_with_global_indices(
         self,
         value_vectors,
@@ -670,46 +680,41 @@ class LongformerSelfAttention(nn.Module):
         max_num_global_attn_indices,
         is_index_global_attn_nonzero,
         is_local_index_global_attn_nonzero,
+        is_local_index_no_global_attn_nonzero,
     ):
-    # 计算全局注意力输出
-    def _compute_global_attn_output(
-        self,
-        attn_probs,
-        value_vectors,
-        max_num_global_attn_indices,
-        is_local_index_global_attn_nonzero,
-        is_index_global_attn_nonzero,
-    ):
-        # 获取批次大小
+        # 省略函数体，不在注释范围内
+        ):
+        # 获取批量大小
         batch_size = attn_probs.shape[0]
-    
-        # 仅保留全局注意力权重
+
+        # 仅保留全局注意力的局部注意力概率
         attn_probs_only_global = attn_probs.narrow(-1, 0, max_num_global_attn_indices)
-        # 获取全局注意力对应的值向量
+        
+        # 仅获取全局注意力对应的数值向量
         value_vectors_only_global = value_vectors.new_zeros(
             batch_size, max_num_global_attn_indices, self.num_heads, self.head_dim
         )
         value_vectors_only_global[is_local_index_global_attn_nonzero] = value_vectors[is_index_global_attn_nonzero]
-    
-        # 使用 matmul 计算全局注意力输出
+
+        # 使用 `matmul` 替代 `einsum`，因为在 fp16 下 `einsum` 有时会崩溃
+        # 计算仅全局注意力的输出
         attn_output_only_global = torch.matmul(
             attn_probs_only_global.transpose(1, 2).clone(), value_vectors_only_global.transpose(1, 2).clone()
         ).transpose(1, 2)
-    
-        # 提取非全局注意力部分的注意力权重
+
+        # 重塑非全局注意力的注意力概率
         attn_probs_without_global = attn_probs.narrow(
             -1, max_num_global_attn_indices, attn_probs.size(-1) - max_num_global_attn_indices
         ).contiguous()
-    
-        # 计算非全局注意力部分的注意力输出
+
+        # 使用滑动窗口方法计算包含全局和非全局注意力的注意力输出
         attn_output_without_global = self._sliding_chunks_matmul_attn_probs_value(
             attn_probs_without_global, value_vectors, self.one_sided_attn_window_size
         )
-    
-        # 返回全局和非全局注意力输出的和
+        
+        # 返回全局注意力输出与非全局注意力输出的总和
         return attn_output_only_global + attn_output_without_global
-    
-    # 从隐藏状态计算全局注意力输出
+
     def _compute_global_attn_output_from_hidden(
         self,
         hidden_states,
@@ -719,93 +724,59 @@ class LongformerSelfAttention(nn.Module):
         is_index_global_attn_nonzero,
         is_local_index_no_global_attn_nonzero,
         is_index_masked,
-    ):
-        # 函数实现省略
-        pass
-# 从 transformers.models.bert.modeling_bert.BertSelfOutput 中复制得到 LongformerSelfOutput 类
+# Copied from transformers.models.bert.modeling_bert.BertSelfOutput
+
 class LongformerSelfOutput(nn.Module):
-    # 初始化函数，接收配置参数
     def __init__(self, config):
         super().__init__()
-        # 创建一个全链接层，输入尺寸为配置中的隐藏层尺寸，输出尺寸为配置中的隐藏层尺寸
+        # 定义一个全连接层，输入和输出维度都是 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个 LayerNorm 层，输入尺寸为配置中的隐藏层尺寸，使用配置中的 layer_norm_eps 作为 epsilon 值
+        # LayerNorm 层，对输入进行归一化，eps 参数设置为 config.layer_norm_eps
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个 Dropout 层，使用配置中的 hidden_dropout_prob 作为 dropout 概率值
+        # Dropout 层，按照 config.hidden_dropout_prob 概率随机丢弃输入
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    # 前向传播函数，接收隐状态张量和输入张量，并返回张量
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 使用全链接层处理隐状态
+        # 全连接层 dense 对输入 hidden_states 进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 使用 Dropout 处理隐状态
+        # 对线性变换后的结果进行 Dropout
         hidden_states = self.dropout(hidden_states)
-        # 使用 LayerNorm 处理隐状态和输入张量的和
+        # 对 Dropout 后的结果和输入 input_tensor 进行 LayerNorm
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回处理后的张量
+        # 返回 LayerNorm 结果作为输出
         return hidden_states
 
 
-# 从 transformers.models.bert.modeling_bert.BertIntermediate 中复制得到 LongformerIntermediate 类
-class LongformerIntermediate(nn.Module):
-    # 初始化函数，接收配置参数
-    def __init__(self, config):
-        super().__init__()
-        # 创建一个全链接层，输入尺寸为配置中的隐藏层尺寸，输出尺寸为配置中的 intermediate_size
-        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
-        # 如果配置中的 hidden_act 是字符串类型，则使用对应的激活函数；否则直接使用配置中的 hidden_act 作为激活函数
-        if isinstance(config.hidden_act, str):
-            self.intermediate_act_fn = ACT2FN[config.hidden_act]
-        else:
-            self.intermediate_act_fn = config.hidden_act
-    # 前向传播函数，接受隐藏状态张量作为输入，返回处理后的隐藏状态张量
-    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 使用全连接层处理隐藏状态张量
-        hidden_states = self.dense(hidden_states)
-        # 使用激活函数处理全连接层的输出
-        hidden_states = self.intermediate_act_fn(hidden_states)
-        # 返回处理后的隐藏状态张量
-        return hidden_states
-# 从transformers.models.bert.modeling_bert.BertOutput中复制得到的LongformerOutput类
-class LongformerOutput(nn.Module):
-    # 初始化函数
-    def __init__(self, config):
-        super().__init__()
-        # 创建一个全连接层，将输入的维度从config.intermediate_size转换为config.hidden_size
-        self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 创建一个LayerNorm层，用于对隐藏状态进行归一化
-        self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个dropout层，用于随机丢弃隐藏状态中的一部分数据
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-
-    # 前向传播函数
-    def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态输入到全连接层中
-        hidden_states = self.dense(hidden_states)
-        # 对全连接层的输出进行随机丢弃
-        hidden_states = self.dropout(hidden_states)
-        # 将丢弃后的隐藏状态与输入张量进行相加，并进行归一化
-        hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回归一化后的隐藏状态
-        return hidden_states
-
-# LongformerLayer类，继承自nn.Module类
-class LongformerLayer(nn.Module):
-    # 初始化函数
+class LongformerAttention(nn.Module):
     def __init__(self, config, layer_id=0):
         super().__init__()
-        # 创建LongformerAttention对象
-        self.attention = LongformerAttention(config, layer_id)
-        # 创建LongformerIntermediate对象
-        self.intermediate = LongformerIntermediate(config)
-        # 创建LongformerOutput对象
-        self.output = LongformerOutput(config)
-        # 分块前向传播过程使用的块大小
-        self.chunk_size_feed_forward = config.chunk_size_feed_forward
-        # 序列长度维度
-        self.seq_len_dim = 1
+        # 创建 LongformerSelfAttention 对象，传入 config 和 layer_id
+        self.self = LongformerSelfAttention(config, layer_id)
+        # 创建 LongformerSelfOutput 对象，传入 config
+        self.output = LongformerSelfOutput(config)
+        # 初始化一个空集合，用于存储需要剪枝的注意力头
+        self.pruned_heads = set()
 
-    # 前向传播函数
+    def prune_heads(self, heads):
+        if len(heads) == 0:
+            return
+        # 根据给定的 heads 列表，寻找可剪枝的注意力头和对应的索引
+        heads, index = find_pruneable_heads_and_indices(
+            heads, self.self.num_attention_heads, self.self.attention_head_size, self.pruned_heads
+        )
+
+        # 对 self.self 中的 query、key、value 线性层进行剪枝
+        self.self.query = prune_linear_layer(self.self.query, index)
+        self.self.key = prune_linear_layer(self.self.key, index)
+        self.self.value = prune_linear_layer(self.self.value, index)
+        # 对 self.output 中的 dense 线性层进行剪枝，dim=1 表示在第一个维度上进行剪枝
+        self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
+
+        # 更新超参数并存储被剪枝的头
+        self.self.num_attention_heads = self.self.num_attention_heads - len(heads)
+        self.self.all_head_size = self.self.attention_head_size * self.self.num_attention_heads
+        self.pruned_heads = self.pruned_heads.union(heads)
+
     def forward(
         self,
         hidden_states,
@@ -816,7 +787,94 @@ class LongformerLayer(nn.Module):
         is_global_attn=None,
         output_attentions=False,
     ):
-        # 使用LongformerAttention对象进行注意力计算
+        # 调用 self.self 的 forward 方法，传入相应参数，获取自注意力机制的输出
+        self_outputs = self.self(
+            hidden_states,
+            attention_mask=attention_mask,
+            layer_head_mask=layer_head_mask,
+            is_index_masked=is_index_masked,
+            is_index_global_attn=is_index_global_attn,
+            is_global_attn=is_global_attn,
+            output_attentions=output_attentions,
+        )
+        # 将 self_outputs[0] 和 hidden_states 作为输入，调用 self.output 进行后续处理
+        attn_output = self.output(self_outputs[0], hidden_states)
+        # 返回 attn_output 和 self_outputs 的其余部分作为输出
+        outputs = (attn_output,) + self_outputs[1:]
+        return outputs
+
+
+# Copied from transformers.models.bert.modeling_bert.BertIntermediate
+
+class LongformerIntermediate(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        # 创建一个全连接层，输入维度是 config.hidden_size，输出维度是 config.intermediate_size
+        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
+        # 如果 config.hidden_act 是字符串，则选择对应的激活函数，否则直接使用给定的激活函数
+        if isinstance(config.hidden_act, str):
+            self.intermediate_act_fn = ACT2FN[config.hidden_act]
+        else:
+            self.intermediate_act_fn = config.hidden_act
+    # 前向传播函数，接收隐藏状态张量并返回处理后的张量
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 通过全连接层处理隐藏状态张量
+        hidden_states = self.dense(hidden_states)
+        # 应用激活函数到全连接层输出的隐藏状态张量
+        hidden_states = self.intermediate_act_fn(hidden_states)
+        # 返回处理后的隐藏状态张量
+        return hidden_states
+# Copied from transformers.models.bert.modeling_bert.BertOutput
+# 定义了 LongformerOutput 类，继承自 nn.Module
+class LongformerOutput(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        # 创建一个线性层，将输入特征大小调整为隐藏状态大小
+        self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
+        # 创建 LayerNorm 层，对隐藏状态进行归一化
+        self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        # 创建 Dropout 层，用于随机丢弃隐藏状态中的一些元素，以防止过拟合
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+
+    # 前向传播函数，接受两个张量作为输入并返回一个张量作为输出
+    def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
+        # 使用线性层进行变换
+        hidden_states = self.dense(hidden_states)
+        # 在输出上应用 dropout
+        hidden_states = self.dropout(hidden_states)
+        # 对变换后的隐藏状态应用 LayerNorm，并加上输入张量，形成残差连接
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        # 返回处理后的隐藏状态张量
+        return hidden_states
+
+
+# 定义了 LongformerLayer 类，继承自 nn.Module
+class LongformerLayer(nn.Module):
+    def __init__(self, config, layer_id=0):
+        super().__init__()
+        # 创建 LongformerAttention 对象
+        self.attention = LongformerAttention(config, layer_id)
+        # 创建 LongformerIntermediate 对象
+        self.intermediate = LongformerIntermediate(config)
+        # 创建 LongformerOutput 对象
+        self.output = LongformerOutput(config)
+        # 设置前馈过程的分块大小
+        self.chunk_size_feed_forward = config.chunk_size_feed_forward
+        # 设置序列长度的维度
+        self.seq_len_dim = 1
+
+    # 前向传播函数，接受多个输入参数，并返回多个输出
+    def forward(
+        self,
+        hidden_states,
+        attention_mask=None,
+        layer_head_mask=None,
+        is_index_masked=None,
+        is_index_global_attn=None,
+        is_global_attn=None,
+        output_attentions=False,
+    ):
+        # 使用注意力层进行处理，并获取注意力输出
         self_attn_outputs = self.attention(
             hidden_states,
             attention_mask=attention_mask,
@@ -826,40 +884,37 @@ class LongformerLayer(nn.Module):
             is_global_attn=is_global_attn,
             output_attentions=output_attentions,
         )
-        # 获取注意力计算的输出
+        # 获取注意力输出的第一个元素作为注意力输出
         attn_output = self_attn_outputs[0]
-        # 获取其它输出
-        outputs = self_attn_outputs[1:]
-
-        # 对注意力计算的输出进行分块
+        # 对注意力输出应用分块策略来进行前向传播
         layer_output = apply_chunking_to_forward(
             self.ff_chunk, self.chunk_size_feed_forward, self.seq_len_dim, attn_output
         )
-        # 将分块后的输出与其它输出组成一个元组返回
-        outputs = (layer_output,) + outputs
+        # 将层输出和注意力输出的其余部分组合为输出元组
+        outputs = (layer_output,) + self_attn_outputs[1:]
+        # 返回最终的输出元组
         return outputs
 
-    # 分块的前向传播函数
+    # 前馈分块函数，接受注意力输出并返回层输出
     def ff_chunk(self, attn_output):
-        # 使用LongformerIntermediate对象对注意力计算的输出进行前向传播
+        # 使用中间层进行处理
         intermediate_output = self.intermediate(attn_output)
-        # 使用LongformerOutput对象对输出的中间结果进行前向传播
+        # 使用输出层进行处理，并返回层输出
         layer_output = self.output(intermediate_output, attn_output)
-        # 返回输出结果
         return layer_output
 
-# LongformerEncoder类，继承自nn.Module类
+
+# 定义了 LongformerEncoder 类，继承自 nn.Module
 class LongformerEncoder(nn.Module):
-    # 初始化函数
     def __init__(self, config):
         super().__init__()
         self.config = config
-        # 创建长度为config.num_hidden_layers的nn.ModuleList，每个元素都是一个LongformerLayer对象
+        # 创建 nn.ModuleList 来包含多个 LongformerLayer 对象，每个对象代表一层
         self.layer = nn.ModuleList([LongformerLayer(config, layer_id=i) for i in range(config.num_hidden_layers)])
-        # 梯度检查点在这里是否激活
+        # 默认关闭梯度检查点
         self.gradient_checkpointing = False
 
-    # 前向传播函数
+    # 前向传播函数，接受多个输入参数并返回多个输出
     def forward(
         self,
         hidden_states,
@@ -870,67 +925,72 @@ class LongformerEncoder(nn.Module):
         output_hidden_states=False,
         return_dict=True,
     ):
-        # 循环遍历每个LongformerLayer对象，并进行前向传播
-        # 将前一个LongformerLayer对象的输出作为当前对象的输入
+        # 遍历每一层 LongformerLayer 并调用其 forward 方法进行处理
         for layer_module in self.layer:
-            hidden_states = layer_module(hidden_states, attention_mask, head_mask, padding_len, output_attentions)
-        # 返回结果
+            # 将当前层的输出作为下一层的输入
+            hidden_states = layer_module(
+                hidden_states,
+                attention_mask=attention_mask,
+                layer_head_mask=head_mask,
+                output_attentions=output_attentions,
+            )[0]  # 只保留每层的第一个输出
+        # 返回最终的隐藏状态张量
         return hidden_states
 
-# 从transformers.models.bert.modeling_bert.BertPooler中复制得到的LongformerPooler类
+
+# Copied from transformers.models.bert.modeling_bert.BertPooler
+# 定义了 LongformerPooler 类，继承自 nn.Module
 class LongformerPooler(nn.Module):
-    # 初始化函数
     def __init__(self, config):
         super().__init__()
-        # 创建一个全连接层，将输入的维度从config.hidden_size转换为config.hidden_size
+        # 创建一个线性层，将隐藏状态大小映射回隐藏状态大小
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建一个Tanh层，对输入进行激活函数处理
+        # 创建激活函数层，使用 tanh 激活函数
         self.activation = nn.Tanh()
-    # 前向传播函数，接受隐藏状态张量作为输入，并返回处理后的张量
+    # 定义一个方法 `forward`，接受一个名为 `hidden_states` 的张量作为输入，并返回一个张量作为输出
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 我们通过简单地选择对应于第一个标记的隐藏状态来“汇聚”模型。
-        # 选择隐藏状态张量的所有行（样本）的第一个元素作为汇聚的隐藏状态
+        # 通过取第一个标记对应的隐藏状态来实现模型的"汇聚"操作
         first_token_tensor = hidden_states[:, 0]
-        # 将第一个标记的隐藏状态传递给全连接层，用于降维
+        # 将第一个标记的隐藏状态传递给全连接层 `self.dense`
         pooled_output = self.dense(first_token_tensor)
-        # 应用激活函数
+        # 将全连接层的输出应用激活函数 `self.activation`
         pooled_output = self.activation(pooled_output)
-        # 返回汇聚后的输出张量
+        # 返回经过激活函数处理后的汇聚输出张量
         return pooled_output
-# 从 transformers.models.roberta.modeling_roberta.RobertaLMHead 复制并修改为 LongformerLMHead 类
+# 从transformers.models.roberta.modeling_roberta.RobertaLMHead中复制并修改为LongformerLMHead
 class LongformerLMHead(nn.Module):
     """Longformer Head for masked language modeling."""
 
     def __init__(self, config):
-        # 初始化函数，接受配置参数
         super().__init__()
-        # 创建线性层，用于将输入特征映射到相同大小的特征空间
+        # 定义一个全连接层，输入和输出维度为config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建 LayerNorm 层，用于归一化输入特征
+        # Layer normalization，输入维度为config.hidden_size
         self.layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
-        # 创建线性层，用于将特征映射回词汇表大小的空间
+        # 解码器线性层，将config.hidden_size映射到config.vocab_size
         self.decoder = nn.Linear(config.hidden_size, config.vocab_size)
-        # 创建偏置参数，并将其作为 decoder 的偏置
+        # 偏置项，用于解码器线性层的偏置
         self.bias = nn.Parameter(torch.zeros(config.vocab_size))
+        # 将解码器的偏置设置为自定义的偏置项
         self.decoder.bias = self.bias
 
     def forward(self, features, **kwargs):
-        # 将输入特征通过 dense 层
+        # 全连接层的前向传播
         x = self.dense(features)
-        # 应用 GELU 激活函数
+        # GELU激活函数
         x = gelu(x)
-        # 应用 LayerNorm 归一化
+        # Layer normalization
         x = self.layer_norm(x)
 
-        # 通过 decoder 层将特征映射回词汇表大小的空间
+        # 使用解码器将特征映射到词汇表大小的向量空间
         x = self.decoder(x)
 
-        # 返回结果
         return x
 
     def _tie_weights(self):
-        # 如果 decoder 的偏置所在设备类型为 "meta"，则将其与 bias 参数绑定，否则将 bias 与 decoder 的偏置绑定
+        # 如果解码器的偏置设备类型为"meta"，则将解码器的偏置与自定义的偏置项绑定
+        # 否则，将自定义的偏置项与解码器的偏置绑定
         if self.decoder.bias.device.type == "meta":
             self.decoder.bias = self.bias
         else:
@@ -943,34 +1003,36 @@ class LongformerPreTrainedModel(PreTrainedModel):
     models.
     """
 
-    # 设置 LongformerPreTrainedModel 的配置类为 LongformerConfig
+    # 指定配置类为LongformerConfig
     config_class = LongformerConfig
-    # 设置基础模型前缀为 "longformer"
+    # 基础模型前缀为"longformer"
     base_model_prefix = "longformer"
     # 支持梯度检查点
     supports_gradient_checkpointing = True
-    # 不分割的模块列表
+    # 不进行模块拆分的模块列表
     _no_split_modules = ["LongformerSelfAttention"]
 
     def _init_weights(self, module):
-        """Initialize the weights"""
-        # 初始化权重函数
+        """初始化权重"""
         if isinstance(module, nn.Linear):
-            # 如果是线性层，使用正态分布初始化权重，偏置初始化为零
+            # 略微不同于TF版本，使用正态分布初始化权重
+            # 参考 https://github.com/pytorch/pytorch/pull/5617
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.bias is not None:
                 module.bias.data.zero_()
         elif isinstance(module, nn.Embedding):
-            # 如果是嵌入层，使用正态分布初始化权重，padding_idx 对应的权重初始化为零
+            # 使用正态分布初始化嵌入层权重
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.padding_idx is not None:
+                # 如果有填充索引，则将填充索引对应的权重置为零
                 module.weight.data[module.padding_idx].zero_()
         elif isinstance(module, nn.LayerNorm):
-            # 如果是 LayerNorm 层，偏置初始化为零，权重初始化为 1
+            # 将LayerNorm层的偏置项置零，权重置为1.0
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
 
 
+# 长格式开始文档字符串，描述了LongformerPreTrainedModel类的基本信息和用法
 LONGFORMER_START_DOCSTRING = r"""
 
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
@@ -980,73 +1042,74 @@ LONGFORMER_START_DOCSTRING = r"""
     This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
     Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
     and behavior.
-
-
-"""
     Parameters:
-        config ([`LongformerConfig`]): 模型配置类，包含模型的所有参数。使用配置文件初始化不会加载与模型相关的权重，只会加载配置。查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
+        config ([`LongformerConfig`]): Model configuration class with all the parameters of the
+            model. Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
-# 定义了长形Transformer模型，继承自LongformerPreTrainedModel
+LongformerModel 类的定义，继承自 LongformerPreTrainedModel 类，实现了具有长序列处理能力的自注意力机制。
+"""
+
 @add_start_docstrings(
     "The bare Longformer Model outputting raw hidden-states without any specific head on top.",
     LONGFORMER_START_DOCSTRING,
 )
 class LongformerModel(LongformerPreTrainedModel):
     """
-    This class copied code from [`RobertaModel`] and overwrote standard self-attention with longformer self-attention
-    to provide the ability to process long sequences following the self-attention approach described in [Longformer:
-    the Long-Document Transformer](https://arxiv.org/abs/2004.05150) by Iz Beltagy, Matthew E. Peters, and Arman Cohan.
-    Longformer self-attention combines a local (sliding window) and global attention to extend to long documents
-    without the O(n^2) increase in memory and compute.
+    这个类是从 `RobertaModel` 复制的代码，并用长形自注意力机制覆盖了标准的自注意力机制，
+    以提供处理长序列的能力，遵循 [Longformer: the Long-Document Transformer](https://arxiv.org/abs/2004.05150) 
+    论文中描述的自注意力方法，由 Iz Beltagy、Matthew E. Peters 和 Arman Cohan 提出。
+    
+    Longformer 的自注意力结合了局部（滑动窗口）和全局注意力，可以在不增加 O(n^2) 内存和计算量的情况下扩展到长文档。
 
-    The self-attention module `LongformerSelfAttention` implemented here supports the combination of local and global
-    attention but it lacks support for autoregressive attention and dilated attention. Autoregressive and dilated
-    attention are more relevant for autoregressive language modeling than finetuning on downstream tasks. Future
-    release will add support for autoregressive attention, but the support for dilated attention requires a custom CUDA
-    kernel to be memory and compute efficient.
+    这里实现的 `LongformerSelfAttention` 自注意力模块支持局部和全局注意力的结合，但不支持自回归注意力和扩展注意力。
+    自回归和扩展注意力对于自回归语言建模比下游任务的微调更为重要。未来的版本将添加对自回归注意力的支持，
+    但是对扩展注意力的支持需要一个定制的 CUDA 内核，以确保内存和计算效率。
+
     """
 
-    # 初始化函数
     def __init__(self, config, add_pooling_layer=True):
+        """
+        初始化函数，接受一个配置对象 `config` 和一个布尔值参数 `add_pooling_layer`。
+        """
         super().__init__(config)
         self.config = config
 
-        # 判断config.attention_window的类型，并做相应处理
         if isinstance(config.attention_window, int):
             assert config.attention_window % 2 == 0, "`config.attention_window` has to be an even value"
             assert config.attention_window > 0, "`config.attention_window` has to be positive"
-            config.attention_window = [config.attention_window] * config.num_hidden_layers  # one value per layer
+            config.attention_window = [config.attention_window] * config.num_hidden_layers  # 为每一层设置一个值
         else:
             assert len(config.attention_window) == config.num_hidden_layers, (
                 "`len(config.attention_window)` should equal `config.num_hidden_layers`. "
                 f"Expected {config.num_hidden_layers}, given {len(config.attention_window)}"
             )
 
-        # 初始化LongformerEmbeddings、LongformerEncoder和LongformerPooler
-        self.embeddings = LongformerEmbeddings(config)
-        self.encoder = LongformerEncoder(config)
-        self.pooler = LongformerPooler(config) if add_pooling_layer else None
+        self.embeddings = LongformerEmbeddings(config)  # 初始化 LongformerEmbeddings
+        self.encoder = LongformerEncoder(config)  # 初始化 LongformerEncoder
+        self.pooler = LongformerPooler(config) if add_pooling_layer else None  # 初始化 LongformerPooler，如果 add_pooling_layer 为 True 则初始化，否则为 None
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入的嵌入
     def get_input_embeddings(self):
+        """
+        返回输入嵌入层 `word_embeddings`。
+        """
         return self.embeddings.word_embeddings
 
-    # 设置输入的嵌入
     def set_input_embeddings(self, value):
+        """
+        设置输入嵌入层 `word_embeddings` 的值为 `value`。
+        """
         self.embeddings.word_embeddings = value
 
-    # 剪枝模型的attention头部
     def _prune_heads(self, heads_to_prune):
         """
-        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
-        class PreTrainedModel
+        剪枝模型的注意力头。heads_to_prune: dict，键为层号，值为要在该层中剪枝的注意力头列表。参见 PreTrainedModel 基类。
         """
         for layer, heads in heads_to_prune.items():
             self.encoder.layer[layer].attention.prune_heads(heads)
-    # 辅助函数，用于填充标记和掩码以便与Longformer自注意力实现一起工作
     def _pad_to_window_size(
         self,
         input_ids: torch.Tensor,
@@ -1057,35 +1120,37 @@ class LongformerModel(LongformerPreTrainedModel):
         pad_token_id: int,
     ):
         """A helper function to pad tokens and mask to work with implementation of Longformer self-attention."""
-        # 确定用于填充的大小，即 `attention_window` 参数值设为偶数
+        # 获取注意力窗口大小，若为整数则直接使用，否则取最大值
         attention_window = (
             self.config.attention_window
             if isinstance(self.config.attention_window, int)
             else max(self.config.attention_window)
         )
 
+        # 断言确保 attention_window 是偶数
         assert attention_window % 2 == 0, f"`attention_window` should be an even value. Given {attention_window}"
+        
+        # 获取输入数据的形状信息
         input_shape = input_ids.shape if input_ids is not None else inputs_embeds.shape
         batch_size, seq_len = input_shape[:2]
 
-        # 计算要填充的长度，以使序列长度为 `attention_window` 的整数倍
+        # 计算需要填充的长度，使得序列长度是 attention_window 的整数倍
         padding_len = (attention_window - seq_len % attention_window) % attention_window
 
-        # 如果需要填充
+        # 在 ONNX 导出时需要记录这个分支，即使 padding_len == 0 也是可以的
         if padding_len > 0:
-            # 输出警告信息，显示自动填充的信息
+            # 发出警告，说明输入的长度被自动填充到多个 attention_window 的倍数
             logger.warning_once(
                 f"Input ids are automatically padded from {seq_len} to {seq_len + padding_len} to be a multiple of "
                 f"`config.attention_window`: {attention_window}"
             )
-            # 如果存在 input_ids，则用 pad_token_id 填充
+            # 如果存在 input_ids，则使用 nn.functional.pad 进行填充
             if input_ids is not None:
                 input_ids = nn.functional.pad(input_ids, (0, padding_len), value=pad_token_id)
-            # 如果存在 position_ids，则用 pad_token_id 填充
+            # 如果存在 position_ids，则使用 nn.functional.pad 进行填充，填充值为 pad_token_id
             if position_ids is not None:
-                # 和 modeling_roberta.RobertaEmbeddings 中一样，用 pad_token_id 填充
                 position_ids = nn.functional.pad(position_ids, (0, padding_len), value=pad_token_id)
-            # 如果存在 inputs_embeds，则进行填充
+            # 如果存在 inputs_embeds，则创建一个新的 padding 数据，填充值为 pad_token_id，并拼接在原 inputs_embeds 后面
             if inputs_embeds is not None:
                 input_ids_padding = inputs_embeds.new_full(
                     (batch_size, padding_len),
@@ -1095,33 +1160,33 @@ class LongformerModel(LongformerPreTrainedModel):
                 inputs_embeds_padding = self.embeddings(input_ids_padding)
                 inputs_embeds = torch.cat([inputs_embeds, inputs_embeds_padding], dim=-2)
 
-            # attention_mask 填充，填充值为 0，填充部分的注意力值为 0
+            # 使用 nn.functional.pad 在 attention_mask 上进行填充，填充值为 0，表示填充部分不考虑注意力
             attention_mask = nn.functional.pad(
                 attention_mask, (0, padding_len), value=0
             )  # no attention on the padding tokens
-            # token_type_ids 填充，填充值为 0
+            # 使用 nn.functional.pad 在 token_type_ids 上进行填充，填充值为 0
             token_type_ids = nn.functional.pad(token_type_ids, (0, padding_len), value=0)  # pad with token_type_id = 0
 
-        # 返回填充长度、填充后的 input_ids、attention_mask、token_type_ids、position_ids、inputs_embeds
+        # 返回填充后的信息：padding_len 填充长度，以及可能被填充的 input_ids, attention_mask, token_type_ids, position_ids, inputs_embeds
         return padding_len, input_ids, attention_mask, token_type_ids, position_ids, inputs_embeds
-    # 将局部注意力和全局注意力融合到注意力掩码中
     def _merge_to_attention_mask(self, attention_mask: torch.Tensor, global_attention_mask: torch.Tensor):
-        # longformer 自注意力期望注意力掩码为 0（无注意力），1（局部注意力），2（全局注意力）
-        # (global_attention_mask + 1) => 1 代表局部注意力，2 代表全局注意力
-        # 最终的 attention_mask => 0 代表无注意力，1 代表局部注意力，2 代表全局注意力
+        # longformer self attention expects attention mask to have 0 (no attn), 1 (local attn), 2 (global attn)
+        # (global_attention_mask + 1) => 1 for local attention, 2 for global attention
+        # => final attention_mask => 0 for no attention, 1 for local attention 2 for global attention
+        
+        # 如果传入的 attention_mask 不为空
         if attention_mask is not None:
-            # 如果存在局部注意力掩码，将其与全局注意力掩码相乘并加 1，得到融合后的掩码
+            # 将 attention_mask 乘以 (global_attention_mask + 1)，生成最终的合并后的 attention_mask
             attention_mask = attention_mask * (global_attention_mask + 1)
         else:
-            # 如果没有给定局部注意力掩码，则直接使用全局注意力掩码加 1 作为注意力掩码
+            # 如果没有传入 attention_mask，则直接使用 global_attention_mask + 1 作为 attention_mask
             attention_mask = global_attention_mask + 1
+        
+        # 返回合并后的 attention_mask
         return attention_mask
 
-    # 将长形式模型的输入文档字符串添加到模型的前向方法中
     @add_start_docstrings_to_model_forward(LONGFORMER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 替换返回文档字符串的输出类型为带池化的 Longformer 基础模型输出
     @replace_return_docstrings(output_type=LongformerBaseModelOutputWithPooling, config_class=_CONFIG_FOR_DOC)
-    # 模型的前向传播方法
     def forward(
         self,
         input_ids: Optional[torch.Tensor] = None,
@@ -1134,33 +1199,33 @@ class LongformerModel(LongformerPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-# 为LongformerForMaskedLM模型添加文档字符串
+# 使用装饰器为类添加文档字符串，描述其作为 Longformer 模型和语言建模头部的特性
 @add_start_docstrings("""Longformer Model with a `language modeling` head on top.""", LONGFORMER_START_DOCSTRING)
 class LongformerForMaskedLM(LongformerPreTrainedModel):
-    # 设置共享权重的键值对
+    # 定义用于共享权重的关键字列表
     _tied_weights_keys = ["lm_head.decoder"]
 
-    # 初始化函数，传入配置参数
+    # 初始化方法，接受一个配置对象，并调用父类的初始化方法
     def __init__(self, config):
         super().__init__(config)
 
-        # 初始化Longformer模型，不添加池化层
+        # 创建 Longformer 模型，不包含池化层
         self.longformer = LongformerModel(config, add_pooling_layer=False)
-        # 初始化LongformerLMHead层
+        # 创建 LongformerLMHead 对象作为语言建模头部
         self.lm_head = LongformerLMHead(config)
 
-        # 初始化权重并应用最终处理
+        # 调用初始化权重和应用最终处理的方法
         self.post_init()
 
-    # 获取输出嵌入
+    # 返回语言建模头部的解码器
     def get_output_embeddings(self):
         return self.lm_head.decoder
 
-    # 设置输出嵌入
+    # 设置语言建模头部的解码器
     def set_output_embeddings(self, new_embeddings):
         self.lm_head.decoder = new_embeddings
 
-    # 前向传播函数，接受多种输入参数
+    # 使用装饰器为前向方法添加文档字符串，描述其接受的输入参数和输出类型
     @add_start_docstrings_to_model_forward(LONGFORMER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=LongformerMaskedLMOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1176,23 +1241,19 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, LongformerMaskedLMOutput]:
         r"""
-        定义函数的返回类型注解为 Tuple 或 LongformerMaskedLMOutput
-        
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
-            用于计算掩码语言模型损失的标签。索引应该在 `[-100, 0, ..., config.vocab_size]`内（参见 `input_ids` 文档）。索引设置为`-100`的标记将被忽略（掩码），损失仅对标签为`[0, ..., config.vocab_size]`内的标记进行计算。
-            
+            Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
+            config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
+            loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`
         kwargs (`Dict[str, any]`, optional, defaults to *{}*):
-            用于隐藏已经被弃用的传统参数。
+            Used to hide legacy arguments that have been deprecated.
 
         Returns:
-        返回结果：
-        
-        Mask filling example:
-        掩码填充示例：
 
-        ```py
+        Mask filling example:
+
+        ```python
         >>> from transformers import AutoTokenizer, LongformerForMaskedLM
 
         >>> tokenizer = AutoTokenizer.from_pretrained("allenai/longformer-base-4096")
@@ -1200,9 +1261,8 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
         ```
 
         Let's try a very long input.
-        让我们尝试一个非常长的输入。
 
-        ```py
+        ```python
         >>> TXT = (
         ...     "My friends are <mask> but they eat too many carbs."
         ...     + " That's why I decide not to eat with them." * 300
@@ -1217,10 +1277,9 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
         >>> tokenizer.decode(predictions).split()
         ['healthy', 'skinny', 'thin', 'good', 'vegetarian']
         ```"""
-
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        如果 return_dict 不为空，则使用 return_dict 值；否则使用 self.config.use_return_dict 的值
 
+        # 调用Longformer模型进行预测
         outputs = self.longformer(
             input_ids,
             attention_mask=attention_mask,
@@ -1233,31 +1292,27 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        使用输入参数调用 self.longformer 方法，并将结果赋给 outputs
+        # 获取序列输出
         sequence_output = outputs[0]
-        从 outputs 中获取第一个元素并赋给 sequence_output
+        # 使用语言建模头部生成预测分数
         prediction_scores = self.lm_head(sequence_output)
-        使用 sequence_output 调用 self.lm_head 方法并将结果赋给 prediction_scores
 
         masked_lm_loss = None
-        初始化 masked_lm_loss 为 None
         if labels is not None:
-            如果 labels 不为空：
-            创建交叉熵损失函数实例
+            # 定义交叉熵损失函数
             loss_fct = CrossEntropyLoss()
 
-            将 labels 移动到 prediction_scores 的设备上
+            # 将labels移动到与预测分数相同的设备上
             labels = labels.to(prediction_scores.device)
-            使用 loss_fct 计算损失，并将结果赋给 masked_lm_loss
+            # 计算masked语言建模的损失
             masked_lm_loss = loss_fct(prediction_scores.view(-1, self.config.vocab_size), labels.view(-1))
 
-        如果 return_dict 为假：
-        如果 labels 不为空，则返回 masked_lm_loss 和 output 的元组；否则返回 output
+        if not return_dict:
+            # 如果不使用return_dict，则返回额外的输出
             output = (prediction_scores,) + outputs[2:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
 
-        如果 return_dict 为真：
-        返回 LongformerMaskedLMOutput 对象，包括损失、预测分数、隐藏状态、关注力和全局关注力
+        # 使用LongformerMaskedLMOutput类来返回结果
         return LongformerMaskedLMOutput(
             loss=masked_lm_loss,
             logits=prediction_scores,
@@ -1265,7 +1320,6 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
             attentions=outputs.attentions,
             global_attentions=outputs.global_attentions,
         )
-# 定义一个Longformer模型，该模型在顶部具有序列分类/回归头部（在池化输出之上的线性层），例如用于GLUE任务
 @add_start_docstrings(
     """
     Longformer Model transformer with a sequence classification/regression head on top (a linear layer on top of the
@@ -1274,22 +1328,31 @@ class LongformerForMaskedLM(LongformerPreTrainedModel):
     LONGFORMER_START_DOCSTRING,
 )
 class LongformerForSequenceClassification(LongformerPreTrainedModel):
-    # 初始化函数
+    """
+    Longformer模型，顶部带有序列分类/回归头部（即在汇总输出之上的线性层），例如用于GLUE任务。
+    继承自LongformerPreTrainedModel。
+    """
+
     def __init__(self, config):
+        """
+        初始化方法，接收一个配置参数config。
+
+        Args:
+            config (LongformerConfig): 模型的配置对象。
+
+        """
         super().__init__(config)
-        # 初始化类别数量
         self.num_labels = config.num_labels
         self.config = config
 
-        # 创建LongformerModel对象
+        # 创建Longformer模型，不包含汇总层
         self.longformer = LongformerModel(config, add_pooling_layer=False)
-        # 创建LongformerClassificationHead对象
+        # 创建Longformer分类头部
         self.classifier = LongformerClassificationHead(config)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 前向传播函数
     @add_start_docstrings_to_model_forward(LONGFORMER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint="jpwahle/longformer-base-plagiarism-detection",
@@ -1311,127 +1374,119 @@ class LongformerForSequenceClassification(LongformerPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        # 输入参数及其类型注释
-    # 定义返回类型，可以是元组或 LongformerSequenceClassifierOutput 对象
+    ):
+        """
+        前向传播方法，接收多个输入和控制参数，并返回模型输出。
+
+        Args:
+            input_ids (torch.Tensor, optional): 输入的token IDs张量。Default: None
+            attention_mask (torch.Tensor, optional): 注意力掩码张量。Default: None
+            global_attention_mask (torch.Tensor, optional): 全局注意力掩码张量。Default: None
+            head_mask (torch.Tensor, optional): 头部掩码张量。Default: None
+            token_type_ids (torch.Tensor, optional): token类型IDs张量。Default: None
+            position_ids (torch.Tensor, optional): 位置IDs张量。Default: None
+            inputs_embeds (torch.Tensor, optional): 嵌入输入张量。Default: None
+            labels (torch.Tensor, optional): 标签张量。Default: None
+            output_attentions (bool, optional): 是否返回注意力权重。Default: None
+            output_hidden_states (bool, optional): 是否返回隐藏状态。Default: None
+            return_dict (bool, optional): 是否以字典形式返回输出。Default: None
+
+        Returns:
+            Various depending on the configuration (torch.Tensor or dict of torch.Tensor):
+            根据配置返回不同类型的输出（torch.Tensor或torch.Tensor字典）。
+
+        """
         ) -> Union[Tuple, LongformerSequenceClassifierOutput]:
-            r"""
-            # 文档字符串解释 labels 参数，用于计算分类/回归损失
-            labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
-                # labels 的格式，及其值范围
-                Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
-                config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
-                `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
-            """
-            # 根据 return_dict 是否为 None 设置返回字典的标志
-            return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-            # 如果全局注意力掩码为 None，初始化全局注意力并设置警告
-            if global_attention_mask is None:
-                logger.warning_once("Initializing global attention on CLS token...")
-                # 创建与输入 ID 相同形状的全零张量
-                global_attention_mask = torch.zeros_like(input_ids)
-                # 将第一列设置为 1，表示对 CLS 标记进行全局注意力
-                global_attention_mask[:, 0] = 1
-    
-            # 调用 Longformer 模型，传入各种参数，包括输入 ID、掩码、头部掩码、等
-            outputs = self.longformer(
-                input_ids,
-                attention_mask=attention_mask,
-                global_attention_mask=global_attention_mask,
-                head_mask=head_mask,
-                token_type_ids=token_type_ids,
-                position_ids=position_ids,
-                inputs_embeds=inputs_embeds,
-                output_attentions=output_attentions,
-                output_hidden_states=output_hidden_states,
-                return_dict=return_dict,
-            )
-    
-            # 获取 Longformer 模型输出的第一个元素，通常是序列输出
-            sequence_output = outputs[0]
-            # 通过分类器对序列输出进行分类，得到 logits
-            logits = self.classifier(sequence_output)
-    
-            # 初始化损失为 None
-            loss = None
-            # 如果提供了 labels，则计算损失
-            if labels is not None:
-                # 确保 labels 在与 logits 相同的设备上
-                labels = labels.to(logits.device)
-    
-                # 如果 problem_type 未设置，根据条件自动确定
-                if self.config.problem_type is None:
-                    if self.num_labels == 1:
-                        # 如果只有一个标签，则为回归问题
-                        self.config.problem_type = "regression"
-                    elif self.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
-                        # 如果多个标签且 labels 类型为整数，则为单标签分类
-                        self.config.problem_type = "single_label_classification"
-                    else:
-                        # 否则为多标签分类
-                        self.config.problem_type = "multi_label_classification"
-    
-                # 根据 problem_type 选择适当的损失函数
-                if self.config.problem_type == "regression":
-                    # 使用均方误差损失
-                    loss_fct = MSELoss()
-                    if self.num_labels == 1:
-                        # 单标签回归
-                        loss = loss_fct(logits.squeeze(), labels.squeeze())
-                    else:
-                        # 多标签回归
-                        loss = loss_fct(logits, labels)
-                elif self.config.problem_type == "single_label_classification":
-                    # 使用交叉熵损失
-                    loss_fct = CrossEntropyLoss()
-                    loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-                elif self.config.problem_type == "multi_label_classification":
-                    # 使用带 Logits 的二元交叉熵损失
-                    loss_fct = BCEWithLogitsLoss()
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
+            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
+            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
+        """
+        # 初始化返回字典，如果未提供则根据配置决定是否返回字典
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        # 如果全局注意力掩码未提供，则发出警告并初始化全局注意力掩码，将第一个token设置为全局关注
+        if global_attention_mask is None:
+            logger.warning_once("Initializing global attention on CLS token...")
+            global_attention_mask = torch.zeros_like(input_ids)
+            global_attention_mask[:, 0] = 1  # 在CLS token上开启全局关注
+
+        # 使用Longformer模型进行前向传播
+        outputs = self.longformer(
+            input_ids,
+            attention_mask=attention_mask,
+            global_attention_mask=global_attention_mask,
+            head_mask=head_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
+        sequence_output = outputs[0]  # 获取Longformer模型的序列输出
+        logits = self.classifier(sequence_output)  # 使用分类器对序列输出进行分类得到logits
+
+        loss = None
+        if labels is not None:
+            labels = labels.to(logits.device)  # 将标签移到与logits相同的设备上
+
+            # 确定问题类型（回归、单标签分类、多标签分类）
+            if self.config.problem_type is None:
+                if self.num_labels == 1:
+                    self.config.problem_type = "regression"
+                elif self.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
+                    self.config.problem_type = "single_label_classification"
+                else:
+                    self.config.problem_type = "multi_label_classification"
+
+            # 根据问题类型选择合适的损失函数进行计算损失
+            if self.config.problem_type == "regression":
+                loss_fct = MSELoss()
+                if self.num_labels == 1:
+                    loss = loss_fct(logits.squeeze(), labels.squeeze())
+                else:
                     loss = loss_fct(logits, labels)
-    
-            # 如果不返回字典，输出为元组
-            if not return_dict:
-                # 合并损失和其他输出，并返回
-                output = (logits,) + outputs[2:]
-                return ((loss,) + output) if loss is not None else output
-    
-            # 如果返回字典，创建 LongformerSequenceClassifierOutput 对象
-            return LongformerSequenceClassifierOutput(
-                loss=loss,
-                logits=logits,
-                hidden_states=outputs.hidden_states,
-                attentions=outputs.attentions,
-                global_attentions=outputs.global_attentions,
-            )
+            elif self.config.problem_type == "single_label_classification":
+                loss_fct = CrossEntropyLoss()
+                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
+            elif self.config.problem_type == "multi_label_classification":
+                loss_fct = BCEWithLogitsLoss()
+                loss = loss_fct(logits, labels)
+
+        # 如果不要求返回字典，则返回一个元组
+        if not return_dict:
+            output = (logits,) + outputs[2:]  # 组装输出元组
+            return ((loss,) + output) if loss is not None else output
+
+        # 返回Longformer模型的输出，作为LongformerSequenceClassifierOutput对象
+        return LongformerSequenceClassifierOutput(
+            loss=loss,
+            logits=logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+            global_attentions=outputs.global_attentions,
+        )
 class LongformerClassificationHead(nn.Module):
     """Head for sentence-level classification tasks."""
 
     def __init__(self, config):
         super().__init__()
-        # 创建全连接层，输入维度为config.hidden_size，输出维度为config.hidden_size
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 随机失活层，参数为config.hidden_dropout_prob
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 输出层，输入维度为config.hidden_size，输出维度为config.num_labels
-        self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)  # 定义一个全连接层，输入输出维度为config.hidden_size
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # 定义一个dropout层，概率为config.hidden_dropout_prob
+        self.out_proj = nn.Linear(config.hidden_size, config.num_labels)  # 定义一个全连接层，输入为config.hidden_size，输出为config.num_labels
 
     def forward(self, hidden_states, **kwargs):
-        # 取出hidden_states的第一个位置的token作为输出
-        hidden_states = hidden_states[:, 0, :]  # take <s> token (equiv. to [CLS])
-        # 对输出进行随机失活
-        hidden_states = self.dropout(hidden_states)
-        # 通过全连接层进行线性变换
-        hidden_states = self.dense(hidden_states)
-        # 对输出进行tanh激活
-        hidden_states = torch.tanh(hidden_states)
-        # 通过全连接层进行线性变换
-        hidden_states = self.dropout(hidden_states)
-        # 通过输出层得到最终输出
-        output = self.out_proj(hidden_states)
+        hidden_states = hidden_states[:, 0, :]  # 取hidden_states的第一个token（相当于[CLS]）
+        hidden_states = self.dropout(hidden_states)  # 对hidden_states进行dropout处理
+        hidden_states = self.dense(hidden_states)  # 将hidden_states输入全连接层进行线性变换
+        hidden_states = torch.tanh(hidden_states)  # 对变换后的hidden_states应用tanh激活函数
+        hidden_states = self.dropout(hidden_states)  # 再次对hidden_states进行dropout处理
+        output = self.out_proj(hidden_states)  # 将处理后的hidden_states输入输出层进行线性变换得到最终输出
         return output
 
-# 根据SQuAD / TriviaQA类型问题回答任务，创建Longformer模型和跨度分类头部的模型
+
 @add_start_docstrings(
     """
     Longformer Model with a span classification head on top for extractive question-answering tasks like SQuAD /
@@ -1442,17 +1497,14 @@ class LongformerClassificationHead(nn.Module):
 class LongformerForQuestionAnswering(LongformerPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
-        # 定义类别数量
         self.num_labels = config.num_labels
-        # 创建Longformer模型，不添加池化层
-        self.longformer = LongformerModel(config, add_pooling_layer=False)
-        # 创建全连接层，输入维度为config.hidden_size，输出维度为config.num_labels
-        self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并进行最终处理
-        self.post_init()
+        self.longformer = LongformerModel(config, add_pooling_layer=False)  # 使用LongformerModel初始化一个Longformer层，不加池化层
+        self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)  # 定义一个全连接层，输入维度为config.hidden_size，输出维度为config.num_labels
 
-    # 对Longformer模型进行前向传播
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行初始化权重和最终处理步骤
+
     @add_start_docstrings_to_model_forward(LONGFORMER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=LongformerQuestionAnsweringModelOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1469,36 +1521,37 @@ class LongformerForQuestionAnswering(LongformerPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        
-# 创建Longformer模型和标记分类头部的模型
+
+
+
 @add_start_docstrings(
     """
     Longformer Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g.
     for Named-Entity-Recognition (NER) tasks.
     """,
-LONGFORMER_START_DOCSTRING,
+    LONGFORMER_START_DOCSTRING,
 )
 class LongformerForTokenClassification(LongformerPreTrainedModel):
-    # 构造函数，初始化模型组件
+    # 该类为基于Longformer的标记分类模型，用于例如命名实体识别（NER）任务
+    # 初始化方法，接收一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类构造函数
+        # 调用父类的初始化方法，传入配置对象
         super().__init__(config)
-        # 从配置中获取标签数量并存储
+        # 将配置对象中的标签数量赋给实例变量 num_labels
         self.num_labels = config.num_labels
 
-        # 创建 Longformer 模型实例，不添加池化层
+        # 使用配置对象初始化 Longformer 模型，不添加池化层
         self.longformer = LongformerModel(config, add_pooling_layer=False)
-        # 创建 Dropout 层，用配置中的 dropout 概率
+        # 使用配置对象中的隐藏层 dropout 概率初始化 dropout 层
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 创建一个全连接层，将 hidden_size 映射到标签数量
+        # 使用配置对象中的隐藏大小和标签数量初始化线性分类器
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并进行后续处理
+        # 调用自定义的后初始化方法，用于初始化权重并进行最终处理
         self.post_init()
 
-    # 使用装饰器添加文档字符串，定义模型输入格式
+    # 前向传播方法，根据输入计算输出结果
     @add_start_docstrings_to_model_forward(LONGFORMER_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 使用装饰器添加代码样例文档，提供模型输出类型，配置类，期望输出及损失
     @add_code_sample_docstrings(
         checkpoint="brad1141/Longformer-finetuned-norm",
         output_type=LongformerTokenClassifierOutput,
@@ -1509,39 +1562,28 @@ class LongformerForTokenClassification(LongformerPreTrainedModel):
         ),
         expected_loss=0.63,
     )
-    # 定义前向传播函数
     def forward(
         self,
-        input_ids: Optional[torch.Tensor] = None,  # 可选的输入 ID
-        attention_mask: Optional[torch.Tensor] = None,  # 可选的注意力掩码
-        global_attention_mask: Optional[torch.Tensor] = None,  # 可选的全局注意力掩码
-        head_mask: Optional[torch.Tensor] = None,  # 可选的头部掩码
-        token_type_ids: Optional[torch.Tensor] = None,  # 可选的令牌类型 ID
-        position_ids: Optional[torch.Tensor] = None,  # 可选的位置 ID
-        inputs_embeds: Optional[torch.Tensor] = None,  # 可选的输入嵌入
-        labels: Optional[torch.Tensor] = None,  # 可选的标签
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
-        return_dict: Optional[bool] = None,  # 是否以字典形式返回输出
-    # 该函数用于计算Longformer模型的输出和损失函数
-    def forward(
-        self,
-        input_ids=None,
-        attention_mask=None,
-        global_attention_mask=None,
-        head_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        inputs_embeds=None,
-        labels=None,
-        output_attentions=None,
-        output_hidden_states=None,
-        return_dict=None,
-    ) -> Union[Tuple, LongformerTokenClassifierOutput]:
-        # 如果未指定return_dict，则使用模型默认配置
+        input_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        global_attention_mask: Optional[torch.Tensor] = None,
+        head_mask: Optional[torch.Tensor] = None,
+        token_type_ids: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        labels: Optional[torch.Tensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        ) -> Union[Tuple, LongformerTokenClassifierOutput]:
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
+        """
+        # 确定是否返回字典格式的输出，如果未指定则根据配置决定
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        
-        # 通过Longformer模型获得输出结果
+
+        # 将输入传递给Longformer模型进行处理
         outputs = self.longformer(
             input_ids,
             attention_mask=attention_mask,
@@ -1554,33 +1596,37 @@ class LongformerForTokenClassification(LongformerPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-    
-        # 获取输出的序列编码
+
+        # 获取模型输出的序列输出
         sequence_output = outputs[0]
-    
-        # 对输出序列编码应用dropout
+
+        # 对序列输出应用dropout操作
         sequence_output = self.dropout(sequence_output)
         
-        # 通过分类器层计算logits
+        # 将dropout后的序列输出传递给分类器得到logits
         logits = self.classifier(sequence_output)
-    
-        # 如果存在标签，则计算损失函数
+
+        # 初始化损失为None
         loss = None
+        
+        # 如果提供了标签，则计算损失
         if labels is not None:
+            # 使用交叉熵损失函数
             loss_fct = CrossEntropyLoss()
-            
-            # 将标签转移到logits的设备上
+
+            # 将标签移到与logits相同的设备上
             labels = labels.to(logits.device)
             
             # 计算交叉熵损失
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-    
-        # 如果不使用返回字典，则返回logits以及其他输出
+
+        # 如果不要求返回字典格式的输出
         if not return_dict:
+            # 构造输出元组，包括logits和可能的额外输出状态
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-    
-        # 否则返回LongformerTokenClassifierOutput
+
+        # 返回LongformerTokenClassifierOutput对象，其中包括损失、logits、隐藏状态和注意力权重
         return LongformerTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1588,50 +1634,46 @@ class LongformerForTokenClassification(LongformerPreTrainedModel):
             attentions=outputs.attentions,
             global_attentions=outputs.global_attentions,
         )
-# 引入自定义文档字符串的装饰器，描述了 Longformer 模型结构及其在多选分类任务中的应用
-@add_start_docstrings(
-    """
-    Longformer Model with a multiple choice classification head on top (a linear layer on top of the pooled output and
-    a softmax) e.g. for RocStories/SWAG tasks.
-    """,
-    LONGFORMER_START_DOCSTRING,  # 引入 Longformer 模型的基本文档字符串
-)
-# 定义 Longformer 多选分类模型，继承自 Longformer 预训练模型
+"""
+Longformer Model with a multiple choice classification head on top (a linear layer on top of the pooled output and
+a softmax) e.g. for RocStories/SWAG tasks.
+"""
+# 继承自 LongformerPreTrainedModel 的 Longformer 多选分类模型
 class LongformerForMultipleChoice(LongformerPreTrainedModel):
-    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 创建 Longformer 模型实例
+
+        # 初始化 Longformer 模型
         self.longformer = LongformerModel(config)
-        # 定义 dropout 层，用于随机失活
+        # Dropout 层
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 定义分类器，使用线性层进行多选分类
+        # 分类器，线性层
         self.classifier = nn.Linear(config.hidden_size, 1)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播方法
     @add_start_docstrings_to_model_forward(
-        LONGFORMER_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length")  # 引入输入文档字符串
+        LONGFORMER_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length")
     )
     @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,  # 引入检查点文档字符串
-        output_type=LongformerMultipleChoiceModelOutput,  # 引入输出类型文档字符串
-        config_class=_CONFIG_FOR_DOC,  # 引入配置类文档字符串
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=LongformerMultipleChoiceModelOutput,
+        config_class=_CONFIG_FOR_DOC,
     )
+    # 前向传播函数
     def forward(
         self,
-        input_ids: Optional[torch.Tensor] = None,  # 输入的 token ID
-        token_type_ids: Optional[torch.Tensor] = None,  # token 类型 ID
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码
-        global_attention_mask: Optional[torch.Tensor] = None,  # 全局注意力掩码
-        head_mask: Optional[torch.Tensor] = None,  # 头注意力掩码
-        labels: Optional[torch.Tensor] = None,  # 标签
-        position_ids: Optional[torch.Tensor] = None,  # 位置 ID
-        inputs_embeds: Optional[torch.Tensor] = None,  # 输入的嵌入向量
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
-        return_dict: Optional[bool] = None,  # 是否返回字典
+        input_ids: Optional[torch.Tensor] = None,
+        token_type_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        global_attention_mask: Optional[torch.Tensor] = None,
+        head_mask: Optional[torch.Tensor] = None,
+        labels: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+"""
 ```

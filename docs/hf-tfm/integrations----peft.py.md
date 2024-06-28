@@ -1,304 +1,300 @@
-# `.\transformers\integrations\peft.py`
+# `.\integrations\peft.py`
 
-```py
-# 版权声明和许可信息
-# 版权归 The HuggingFace Team 所有
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础分发的
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的具体语言
+```
+# 导入所需的模块和函数
+import inspect  # 导入 inspect 模块，用于检查和分析 Python 对象的属性和结构
+import warnings  # 导入 warnings 模块，用于管理警告信息
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union  # 从 typing 模块导入类型提示相关的类型
 
-# 导入必要的模块和函数
-import inspect
-import warnings
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 from ..utils import (
-    check_peft_version,
-    find_adapter_config_file,
-    is_accelerate_available,
-    is_peft_available,
-    is_torch_available,
-    logging,
+    check_peft_version,  # 导入 check_peft_version 函数，用于检查 PEFT 版本
+    find_adapter_config_file,  # 导入 find_adapter_config_file 函数，用于查找适配器配置文件
+    is_accelerate_available,  # 导入 is_accelerate_available 函数，用于检查是否可用 accelerate 库
+    is_peft_available,  # 导入 is_peft_available 函数，用于检查是否可用 PEFT 库
+    is_torch_available,  # 导入 is_torch_available 函数，用于检查是否可用 torch 库
+    logging,  # 导入 logging 模块，用于记录日志
 )
 
-# 如果 Accelerate 可用，则导入相关模块和函数
-if is_accelerate_available():
-    from accelerate import dispatch_model
-    from accelerate.utils import get_balanced_memory, infer_auto_device_map
 
-# 支持的最低 PEFT 版本
+if is_accelerate_available():  # 如果 accelerate 库可用，则执行以下导入
+    from accelerate import dispatch_model  # 导入 dispatch_model 函数，用于调度模型
+    from accelerate.utils import get_balanced_memory, infer_auto_device_map  # 导入 get_balanced_memory 和 infer_auto_device_map 函数，用于内存管理和设备映射推断
+
+# PEFT 集成所需的最低版本
 MIN_PEFT_VERSION = "0.5.0"
 
-# 如果是类型检查环境
-if TYPE_CHECKING:
-    # 如果 Torch 可用，则导入 Torch 模块
-    if is_torch_available():
-        import torch
+if TYPE_CHECKING:  # 如果是类型检查阶段，则执行以下导入
+    if is_torch_available():  # 如果 torch 库可用，则导入 torch 库
+        import torch  # 导入 torch 库
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# PEFT 适配器混合类
+
 class PeftAdapterMixin:
     """
-    A class containing all functions for loading and using adapters weights that are supported in PEFT library. For
-    more details about adapters and injecting them on a transformer-based model, check out the documentation of PEFT
-    library: https://huggingface.co/docs/peft/index
+    包含加载和使用 PEFT 库支持的适配器权重的所有函数的类。有关适配器及如何在基于 Transformer 的模型中注入它们的详细信息，
+    请参阅 PEFT 库的文档: https://huggingface.co/docs/peft/index
 
-    Currently supported PEFT methods are all non-prefix tuning methods. Below is the list of supported PEFT methods
-    that anyone can load, train and run with this mixin class:
+    当前支持的 PEFT 方法是所有非前缀调整方法。以下是可以使用此混合类加载、训练和运行的支持的 PEFT 方法列表：
     - Low Rank Adapters (LoRA): https://huggingface.co/docs/peft/conceptual_guides/lora
     - IA3: https://huggingface.co/docs/peft/conceptual_guides/ia3
     - AdaLora: https://arxiv.org/abs/2303.10512
 
-    Other PEFT models such as prompt tuning, prompt learning are out of scope as these adapters are not "injectable"
-    into a torch module. For using these methods, please refer to the usage guide of PEFT library.
+    其他 PEFT 模型，如提示调整、提示学习等因其适配器无法“注入”到 torch 模块而不在讨论范围内。要使用这些方法，请参阅 PEFT 库的使用指南。
 
-    With this mixin, if the correct PEFT version is installed, it is possible to:
-
-    - Load an adapter stored on a local path or in a remote Hub repository, and inject it in the model
-    - Attach new adapters in the model and train them with Trainer or by your own.
-    - Attach multiple adapters and iteratively activate / deactivate them
-    - Activate / deactivate all adapters from the model.
-    - Get the `state_dict` of the active adapter.
+    使用此混合类，如果安装了正确的 PEFT 版本，可以：
+    - 加载存储在本地路径或远程 Hub 存储库中的适配器，并将其注入模型中
+    - 在模型中附加新的适配器，并使用 Trainer 或自己的方法进行训练
+    - 附加多个适配器并迭代地激活/停用它们
+    - 激活/停用模型中的所有适配器
+    - 获取激活适配器的 `state_dict`
     """
 
-    # PEFT 配置是否已加载的标志
-    _hf_peft_config_loaded = False
+    _hf_peft_config_loaded = False  # 初始配置标志，指示 PEFT 配置是否已加载
+   python
     def load_adapter(
         self,
-        peft_model_id: Optional[str] = None,  # 加载适配器的方法，支持指定 PEFT 模型 ID
-        adapter_name: Optional[str] = None,   # 适配器的名称，默认为 None
-        revision: Optional[str] = None,       # 适配器的修订版本，默认为 None
-        token: Optional[str] = None,          # 访问 PEFT API 所需的 token，默认为 None
-        device_map: Optional[str] = "auto",   # 设备映射方式，默认为 "auto"
-        max_memory: Optional[str] = None,     # 最大内存限制，默认为 None
-        offload_folder: Optional[str] = None, # 离线加载的文件夹路径，默认为 None
-        offload_index: Optional[int] = None,  # 离线加载的索引，默认为 None
-        peft_config: Dict[str, Any] = None,   # PEFT 配置信息，默认为 None
-        adapter_state_dict: Optional[Dict[str, "torch.Tensor"]] = None,  # 适配器状态字典，默认为 None
-        adapter_kwargs: Optional[Dict[str, Any]] = None,  # 适配器关键字参数，默认为 None
-    def add_adapter(self, adapter_config, adapter_name: Optional[str] = None) -> None:  # 添加适配器的方法
+        peft_model_id: Optional[str] = None,
+        adapter_name: Optional[str] = None,
+        revision: Optional[str] = None,
+        token: Optional[str] = None,
+        device_map: Optional[str] = "auto",
+        max_memory: Optional[str] = None,
+        offload_folder: Optional[str] = None,
+        offload_index: Optional[int] = None,
+        peft_config: Dict[str, Any] = None,
+        adapter_state_dict: Optional[Dict[str, "torch.Tensor"]] = None,
+        adapter_kwargs: Optional[Dict[str, Any]] = None,
+    ):
         r"""
-        如果您对适配器和 PEFT 方法不熟悉，我们建议您在 PEFT 官方文档中阅读更多信息：https://huggingface.co/docs/peft
+        If you are not familiar with adapters and PEFT methods, we invite you to read more about them on the PEFT
+        official documentation: https://huggingface.co/docs/peft
 
-        在当前模型中添加一个全新的适配器以进行训练。如果未传递适配器名称，则会为适配器分配一个默认名称，以遵循 PEFT 库的约定（在 PEFT 中我们使用 "default" 作为默认适配器名称）。
+        Adds a fresh new adapter to the current model for training purpose. If no adapter name is passed, a default
+        name is assigned to the adapter to follow the convention of PEFT library (in PEFT we use "default" as the
+        default adapter name).
 
         Args:
-            adapter_config (`~peft.PeftConfig`):  # 适配器的配置信息，支持非前缀调整和适应提示方法
-                要添加的适配器的配置，支持的适配器为非前缀调整和适应提示方法
-            adapter_name (`str`, *optional*, defaults to `"default"`):  # 要添加的适配器的名称，默认为 "default"
-                要添加的适配器的名称。如果未传递名称，则会为适配器分配一个默认名称。
+            adapter_config (`~peft.PeftConfig`):
+                The configuration of the adapter to add, supported adapters are non-prefix tuning and adaption prompts
+                methods
+            adapter_name (`str`, *optional*, defaults to `"default"`):
+                The name of the adapter to add. If no name is passed, a default name is assigned to the adapter.
         """
-        check_peft_version(min_version=MIN_PEFT_VERSION)  # 检查 PEFT 的版本是否符合要求
+        # 检查 PEFT 版本是否符合最低要求
+        check_peft_version(min_version=MIN_PEFT_VERSION)
 
-        from peft import PeftConfig, inject_adapter_in_model  # 导入 PEFT 配置和将适配器注入模型的方法
+        # 导入 PEFT 配置和适配器注入函数
+        from peft import PeftConfig, inject_adapter_in_model
 
-        adapter_name = adapter_name or "default"  # 如果未指定适配器名称，则使用默认名称 "default"
+        # 如果未提供适配器名称，则使用默认名称 "default"
+        adapter_name = adapter_name or "default"
 
-        if not self._hf_peft_config_loaded:  # 如果未加载 PEFT 配置
-            self._hf_peft_config_loaded = True  # 设置 PEFT 配置已加载
-        elif adapter_name in self.peft_config:  # 如果适配器名称已经存在于 PEFT 配置中
-            raise ValueError(f"Adapter with name {adapter_name} already exists. Please use a different name.")  # 抛出值错误
+        # 如果 PEFT 配置未加载，则标记为已加载
+        if not self._hf_peft_config_loaded:
+            self._hf_peft_config_loaded = True
+        # 如果同名适配器已存在，则抛出 ValueError 异常
+        elif adapter_name in self.peft_config:
+            raise ValueError(f"Adapter with name {adapter_name} already exists. Please use a different name.")
 
-        if not isinstance(adapter_config, PeftConfig):  # 如果适配器配置不是 PeftConfig 的实例
+        # 如果 adapter_config 不是 PeftConfig 的实例，则抛出 ValueError 异常
+        if not isinstance(adapter_config, PeftConfig):
             raise ValueError(
                 f"adapter_config should be an instance of PeftConfig. Got {type(adapter_config)} instead."
-            )  # 抛出值错误
+            )
 
-        # 检索模型的名称或路径，也可以使用 self.config._name_or_path
-        # 但为了与 PEFT 中的操作保持一致：https://github.com/huggingface/peft/blob/6e783780ca9df3a623992cc4d1d665001232eae0/src/peft/mapping.py#L100
-        adapter_config.base_model_name_or_path = self.__dict__.get("name_or_path", None)  # 设置适配器配置的基础模型名称或路径
-        inject_adapter_in_model(adapter_config, self, adapter_name)  # 将适配器注入模型
+        # 获取模型的名称或路径，以保持与 PEFT 中的一致性
+        adapter_config.base_model_name_or_path = self.__dict__.get("name_or_path", None)
 
-        self.set_adapter(adapter_name)  # 设置适配器
+        # 将适配器注入到模型中
+        inject_adapter_in_model(adapter_config, self, adapter_name)
+
+        # 设置当前模型的适配器
+        self.set_adapter(adapter_name)
     def set_adapter(self, adapter_name: Union[List[str], str]) -> None:
         """
-        设置特定的适配器，强制模型使用该适配器并禁用其他适配器。
+        If you are not familiar with adapters and PEFT methods, we invite you to read more about them on the PEFT
+        official documentation: https://huggingface.co/docs/peft
+
+        Sets a specific adapter by forcing the model to use a that adapter and disable the other adapters.
 
         Args:
             adapter_name (`Union[List[str], str]`):
-                要设置的适配器的名称。也可以是一个字符串列表，以设置多个适配器。
+                The name of the adapter to set. Can be also a list of strings to set multiple adapters.
         """
-        # 检查 PEFT 版本是否符合要求
+        # 检查 PEFT 的最小版本要求
         check_peft_version(min_version=MIN_PEFT_VERSION)
-        # 如果没有加载 PEFT 配置，则抛出异常
+        
+        # 如果尚未加载 PEFT 配置，则引发 ValueError
         if not self._hf_peft_config_loaded:
             raise ValueError("No adapter loaded. Please load an adapter first.")
-        # 如果 adapter_name 是列表
+        
+        # 如果 adapter_name 是一个列表，检查列表中的适配器是否存在于当前配置中
         elif isinstance(adapter_name, list):
-            # 找出缺失的适配器
             missing = set(adapter_name) - set(self.peft_config)
             if len(missing) > 0:
                 raise ValueError(
                     f"Following adapter(s) could not be found: {', '.join(missing)}. Make sure you are passing the correct adapter name(s)."
                     f" current loaded adapters are: {list(self.peft_config.keys())}"
                 )
-        # 如果 adapter_name 不在 peft_config 中
+        
+        # 如果 adapter_name 不在当前配置中，引发 ValueError
         elif adapter_name not in self.peft_config:
             raise ValueError(
                 f"Adapter with name {adapter_name} not found. Please pass the correct adapter name among {list(self.peft_config.keys())}"
             )
 
-        # 导入必要的模块
+        # 导入 PEFT 中必要的模块
         from peft.tuners.tuners_utils import BaseTunerLayer
         from peft.utils import ModulesToSaveWrapper
 
+        # 标记是否成功设置了适配器
         _adapters_has_been_set = False
-
-        # 遍历模型的所有模块
-        for _, module in self.named_modules():
-            if isinstance(module, (BaseTunerLayer, ModulesToSaveWrapper)):
-                # 对于旧版本 PEFT 的向后兼容性
-                if hasattr(module, "set_adapter"):
-                    module.set_adapter(adapter_name)
-                else:
-                    module.active_adapter = adapter_name
-                _adapters_has_been_set = True
-
-        # 如果没有成功设置适配器，则抛出异常
-        if not _adapters_has_been_set:
-            raise ValueError(
-                "Did not succeeded in setting the adapter. Please make sure you are using a model that supports adapters."
-            )
-    # 禁用模型上的所有适配器，使其只使用基础模型进行推理
-    def disable_adapters(self) -> None:
-        r"""
-        如果您对适配器和 PEFT 方法不熟悉，我们邀请您在 PEFT 官方文档中阅读更多信息：https://huggingface.co/docs/peft
-
-        禁用连接到模型的所有适配器。这将导致仅使用基础模型进行推理。
-        """
-        # 检查 PEFT 版本是否符合要求
-        check_peft_version(min_version=MIN_PEFT_VERSION)
-
-        # 如果没有加载 HF PEFT 配置，则引发值错误
-        if not self._hf_peft_config_loaded:
-            raise ValueError("No adapter loaded. Please load an adapter first.")
-
-        # 导入必要的模块和类
-        from peft.tuners.tuners_utils import BaseTunerLayer
-        from peft.utils import ModulesToSaveWrapper
 
         # 遍历模型的所有模块
         for _, module in self.named_modules():
             # 如果模块是 BaseTunerLayer 或 ModulesToSaveWrapper 的实例
             if isinstance(module, (BaseTunerLayer, ModulesToSaveWrapper)):
-                # 最近版本的 PEFT 需要调用 `enable_adapters` 而不是 `disable_adapters`
-                if hasattr(module, "enable_adapters"):
-                    # 调用模块的 enable_adapters 方法，禁用适配器
-                    module.enable_adapters(enabled=False)
+                # 对于兼容旧版 PEFT 的情况，检查是否有 set_adapter 方法
+                if hasattr(module, "set_adapter"):
+                    module.set_adapter(adapter_name)
                 else:
-                    # 直接将模块的 disable_adapters 属性设置为 True
-                    module.disable_adapters = True
+                    # 否则直接设置 active_adapter 属性
+                    module.active_adapter = adapter_name
+                _adapters_has_been_set = True
 
-    # 启用模型上的适配器，模型将使用 `self.active_adapter()`
-    def enable_adapters(self) -> None:
-        """
-        如果您对适配器和 PEFT 方法不熟悉，我们邀请您在 PEFT 官方文档中阅读更多信息：https://huggingface.co/docs/peft
+        # 如果没有成功设置适配器，引发 ValueError
+        if not _adapters_has_been_set:
+            raise ValueError(
+                "Did not succeeded in setting the adapter. Please make sure you are using a model that supports adapters."
+            )
+    def disable_adapters(self) -> None:
+        r"""
+        If you are not familiar with adapters and PEFT methods, we invite you to read more about them on the PEFT
+        official documentation: https://huggingface.co/docs/peft
 
-        启用连接到模型的适配器。模型将使用 `self.active_adapter()`
+        Disable all adapters that are attached to the model. This leads to inferring with the base model only.
         """
         # 检查 PEFT 版本是否符合要求
         check_peft_version(min_version=MIN_PEFT_VERSION)
 
-        # 如果没有加载 HF PEFT 配置，则引发值错误
+        # 如果 PEFT 配置未加载，则抛出数值错误异常
         if not self._hf_peft_config_loaded:
             raise ValueError("No adapter loaded. Please load an adapter first.")
 
-        # 导入必要的模块和类
+        # 导入必要的 PEFT 模块
+        from peft.tuners.tuners_utils import BaseTunerLayer
+        from peft.utils import ModulesToSaveWrapper
+
+        # 遍历模型的所有模块
+        for _, module in self.named_modules():
+            # 检查模块是否属于 BaseTunerLayer 或 ModulesToSaveWrapper 类型
+            if isinstance(module, (BaseTunerLayer, ModulesToSaveWrapper)):
+                # 如果模块具有 enable_adapters 方法，则调用以禁用适配器
+                if hasattr(module, "enable_adapters"):
+                    module.enable_adapters(enabled=False)
+                else:
+                    # 否则，将模块的 disable_adapters 属性设置为 True
+                    module.disable_adapters = True
+
+    def enable_adapters(self) -> None:
+        """
+        If you are not familiar with adapters and PEFT methods, we invite you to read more about them on the PEFT
+        official documentation: https://huggingface.co/docs/peft
+
+        Enable adapters that are attached to the model. The model will use `self.active_adapter()`
+        """
+        # 检查 PEFT 版本是否符合要求
+        check_peft_version(min_version=MIN_PEFT_VERSION)
+
+        # 如果 PEFT 配置未加载，则抛出数值错误异常
+        if not self._hf_peft_config_loaded:
+            raise ValueError("No adapter loaded. Please load an adapter first.")
+
+        # 导入必要的 PEFT 模块
         from peft.tuners.tuners_utils import BaseTunerLayer
 
         # 遍历模型的所有模块
         for _, module in self.named_modules():
-            # 如果模块是 BaseTunerLayer 的实例
+            # 检查模块是否属于 BaseTunerLayer 类型
             if isinstance(module, BaseTunerLayer):
-                # 最近版本的 PEFT 需要调用 `enable_adapters` 而不是 `disable_adapters`
+                # 如果模块具有 enable_adapters 方法，则调用以启用适配器
                 if hasattr(module, "enable_adapters"):
-                    # 调用模块的 enable_adapters 方法，启用适配器
                     module.enable_adapters(enabled=True)
                 else:
-                    # 直接将模块的 disable_adapters 属性设置为 False
+                    # 否则，将模块的 disable_adapters 属性设置为 False
                     module.disable_adapters = False
-    # 获取当前模型的活动适配器
     def active_adapters(self) -> List[str]:
         """
-        如果您对适配器和 PEFT 方法不熟悉，请阅读 PEFT 官方文档获取更多信息：https://huggingface.co/docs/peft
-        
-        获取模型的当前活动适配器。在多适配器推理情况下（将多个适配器组合进行推理），返回所有活动适配器的列表，以便用户可以相应地处理它们。
+        获取当前模型的活跃适配器列表。如果进行多适配器推理（结合多个适配器进行推理），返回所有活跃适配器的列表，以便用户可以相应处理。
 
-        对于旧版本的 PEFT（不支持多适配器推理），`module.active_adapter` 将返回单个字符串。
+        对于之前版本的 PEFT（不支持多适配器推理），`module.active_adapter` 将返回一个单独的字符串。
         """
-        # 检查 PEFT 版本是否满足最低要求
+        # 检查 PEFT 版本是否符合最低要求
         check_peft_version(min_version=MIN_PEFT_VERSION)
 
-        # 检查是否已安装 PEFT
+        # 检查 PEFT 是否可用，如果不可用则抛出 ImportError
         if not is_peft_available():
             raise ImportError("PEFT is not available. Please install PEFT to use this function: `pip install peft`.")
 
-        # 检查是否加载了 PEFT 配置
+        # 如果没有加载 PEFT 配置，抛出 ValueError
         if not self._hf_peft_config_loaded:
             raise ValueError("No adapter loaded. Please load an adapter first.")
 
-        # 导入 PEFT 调谐器工具类
+        # 导入 PEFT 的 BaseTunerLayer
         from peft.tuners.tuners_utils import BaseTunerLayer
 
-        # 遍历模型的命名模块
+        # 遍历模型的所有子模块，查找 BaseTunerLayer 类型的模块，获取其活跃适配器
         for _, module in self.named_modules():
-            # 检查模块是否是 PEFT 调谐器层
             if isinstance(module, BaseTunerLayer):
-                # 获取活动适配器
                 active_adapters = module.active_adapter
                 break
 
-        # 对于旧版本的 PEFT
+        # 对于之前的 PEFT 版本，确保 active_adapters 是列表类型
         if isinstance(active_adapters, str):
             active_adapters = [active_adapters]
 
+        # 返回活跃适配器列表
         return active_adapters
 
-    # 获取活动适配器（已弃用）
     def active_adapter(self) -> str:
-        # 发出警告，该方法已弃用，并将在未来版本中移除
+        """
+        警告：`active_adapter` 方法已弃用，并将在未来版本中移除。
+        """
+        # 发出警告：方法已弃用
         warnings.warn(
             "The `active_adapter` method is deprecated and will be removed in a future version.", FutureWarning
         )
 
-        # 返回活动适配器列表的第一个元素
+        # 返回当前活跃适配器列表中的第一个适配器
         return self.active_adapters()[0]
 
-    # 获取适配器状态字典
     def get_adapter_state_dict(self, adapter_name: Optional[str] = None) -> dict:
         """
-        如果您对适配器和 PEFT 方法不熟悉，请阅读 PEFT 官方文档获取更多信息：https://huggingface.co/docs/peft
-        
-        获取适配器状态字典，该字典应仅包含指定适配器名称适配器的权重张量。如果未传递适配器名称，则使用活动适配器。
+        获取适配器的状态字典，该字典应仅包含指定适配器名称的权重张量。如果未传适配器名称，则使用活跃适配器。
 
         Args:
             adapter_name (`str`, *optional*):
-                要从中获取状态字典的适配器名称。如果未传递名称，则使用活动适配器。
+                要获取状态字典的适配器名称。如果未传适配器名称，则使用活跃适配器。
         """
-        # 检查 PEFT 版本是否满足最低要求
+        # 检查 PEFT 版本是否符合最低要求
         check_peft_version(min_version=MIN_PEFT_VERSION)
 
-        # 检查是否加载了 PEFT 配置
+        # 如果没有加载 PEFT 配置，抛出 ValueError
         if not self._hf_peft_config_loaded:
             raise ValueError("No adapter loaded. Please load an adapter first.")
 
-        # 导入获取 PEFT 模型状态字典的函数
+        # 导入 PEFT 的 get_peft_model_state_dict 函数
         from peft import get_peft_model_state_dict
 
-        # 如果未传递适配器名称，则使用活动适配器
+        # 如果未传适配器名称，使用当前的活跃适配器
         if adapter_name is None:
             adapter_name = self.active_adapter()
 
-        # 获取指定适配器名称的适配器状态字典
+        # 获取指定适配器名称的状态字典
         adapter_state_dict = get_peft_model_state_dict(self, adapter_name=adapter_name)
         return adapter_state_dict
 
-    # 分发加速模型
     def _dispatch_accelerate_model(
         self,
         device_map: str,
@@ -329,31 +325,33 @@ class PeftAdapterMixin:
             offload_index (`int`, *optional*):
                 The offload_index argument to be passed to `accelerate.dispatch_model` method.
         """
+        # Prepare arguments for dispatching the model
         dispatch_model_kwargs = {}
+
         # Safety checker for previous `accelerate` versions
-        # `offload_index` was introduced in https://github.com/huggingface/accelerate/pull/873/
+        # Check if `offload_index` is supported by the `dispatch_model` function
         if "offload_index" in inspect.signature(dispatch_model).parameters:
             dispatch_model_kwargs["offload_index"] = offload_index
 
+        # Get the list of module classes that should not be split during dispatch
         no_split_module_classes = self._no_split_modules
 
-        # Check if device_map is not "sequential"
+        # Calculate balanced memory allocation if device_map is not "sequential"
         if device_map != "sequential":
-            # Calculate balanced memory allocation based on device_map
             max_memory = get_balanced_memory(
                 self,
                 max_memory=max_memory,
                 no_split_module_classes=no_split_module_classes,
                 low_zero=(device_map == "balanced_low_0"),
             )
-        
-        # If device_map is a string, infer the auto device map
+
+        # Infer an automatic device_map if device_map is a string
         if isinstance(device_map, str):
             device_map = infer_auto_device_map(
                 self, max_memory=max_memory, no_split_module_classes=no_split_module_classes
             )
-        
-        # Dispatch the model with specified device_map and offload_folder
+
+        # Dispatch the model with the specified parameters
         dispatch_model(
             self,
             device_map=device_map,

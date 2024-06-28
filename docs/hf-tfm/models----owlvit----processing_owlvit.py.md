@@ -1,22 +1,22 @@
-# `.\transformers\models\owlvit\processing_owlvit.py`
+# `.\models\owlvit\processing_owlvit.py`
 
-```py
+```
 # coding=utf-8
-# 版权所有 2022 年 HuggingFace Inc. 团队。
+# Copyright 2022 The HuggingFace Inc. team.
 #
-# 根据 Apache 许可证 2.0 版本（“许可证”）获得许可;
-# 除非符合许可证，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则软件
-# 按“原样”分发，不提供任何形式的担保
-# 或条件，明示或暗示。
-# 有关许可证的更多信息，请参见
-# 许可证。
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-OWL-ViT 的图像/文本处理器类
+Image/Text processor class for OWL-ViT
 """
 
 import warnings
@@ -30,98 +30,105 @@ from ...utils import is_flax_available, is_tf_available, is_torch_available
 
 class OwlViTProcessor(ProcessorMixin):
     r"""
-    构建一个 OWL-ViT 处理器，将 [`OwlViTImageProcessor`] 和 [`CLIPTokenizer`]/[`CLIPTokenizerFast`] 封装到一个单一的处理器中，
-    继承了图像处理器和分词器的功能。有关更多信息，请参阅 [`~OwlViTProcessor.__call__`] 和 [`~OwlViTProcessor.decode`]。
+    Constructs an OWL-ViT processor which wraps [`OwlViTImageProcessor`] and [`CLIPTokenizer`]/[`CLIPTokenizerFast`]
+    into a single processor that interits both the image processor and tokenizer functionalities. See the
+    [`~OwlViTProcessor.__call__`] and [`~OwlViTProcessor.decode`] for more information.
 
     Args:
         image_processor ([`OwlViTImageProcessor`], *optional*):
-            图像处理器是必需的输入。
+            The image processor is a required input.
         tokenizer ([`CLIPTokenizer`, `CLIPTokenizerFast`], *optional*):
-            分词器是必需的输入。
+            The tokenizer is a required input.
     """
 
     attributes = ["image_processor", "tokenizer"]
+    # 类属性，包含了要初始化的属性名称列表
     image_processor_class = "OwlViTImageProcessor"
+    # 类属性，指定图像处理器的类名
     tokenizer_class = ("CLIPTokenizer", "CLIPTokenizerFast")
+    # 类属性，指定了两种可能的标记化器类名
 
     def __init__(self, image_processor=None, tokenizer=None, **kwargs):
         feature_extractor = None
+        # 初始化特征提取器为 None
         if "feature_extractor" in kwargs:
+            # 如果在参数中有 'feature_extractor'，发出警告
             warnings.warn(
                 "The `feature_extractor` argument is deprecated and will be removed in v5, use `image_processor`"
                 " instead.",
                 FutureWarning,
             )
             feature_extractor = kwargs.pop("feature_extractor")
+            # 弹出 'feature_extractor' 参数并将其赋给特征提取器
 
         image_processor = image_processor if image_processor is not None else feature_extractor
+        # 如果没有指定图像处理器，则使用特征提取器（如果有的话）
         if image_processor is None:
             raise ValueError("You need to specify an `image_processor`.")
+            # 如果图像处理器为空，则抛出值错误异常
         if tokenizer is None:
             raise ValueError("You need to specify a `tokenizer`.")
+            # 如果标记化器为空，则抛出值错误异常
 
         super().__init__(image_processor, tokenizer)
+        # 调用父类的初始化方法，传入图像处理器和标记化器作为参数
 
     def post_process(self, *args, **kwargs):
         """
-        此方法将其所有参数转发给 [`OwlViTImageProcessor.post_process`]。有关更多信息，请参见此方法的文档字符串。
+        This method forwards all its arguments to [`OwlViTImageProcessor.post_process`]. Please refer to the docstring
+        of this method for more information.
         """
         return self.image_processor.post_process(*args, **kwargs)
+        # 调用图像处理器的后处理方法，并将所有参数转发给它
     def post_process_object_detection(self, *args, **kwargs):
         """
-        This method forwards all its arguments to `OwlViTImageProcessor.post_process_object_detection`. Please refer
-        to the docstring of this method for more information.
+        将所有参数转发到 `OwlViTImageProcessor.post_process_object_detection` 方法中。
+        请参阅该方法的文档字符串获取更多信息。
         """
-        # 调用`OwlViTImageProcessor.post_process_object_detection`方法并传递所有参数，返回结果
         return self.image_processor.post_process_object_detection(*args, **kwargs)
 
     def post_process_image_guided_detection(self, *args, **kwargs):
         """
-        This method forwards all its arguments to `OwlViTImageProcessor.post_process_one_shot_object_detection`.
-        Please refer to the docstring of this method for more information.
+        将所有参数转发到 `OwlViTImageProcessor.post_process_one_shot_object_detection` 方法中。
+        请参阅该方法的文档字符串获取更多信息。
         """
-        # 调用`OwlViTImageProcessor.post_process_image_guided_detection`方法并传递所有参数，返回结果
         return self.image_processor.post_process_image_guided_detection(*args, **kwargs)
 
     def batch_decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to CLIPTokenizerFast's `PreTrainedTokenizer.batch_decode`. Please
-        refer to the docstring of this method for more information.
+        将所有参数转发到 CLIPTokenizerFast 的 `~PreTrainedTokenizer.batch_decode` 方法中。
+        请参阅该方法的文档字符串获取更多信息。
         """
-        # 调用`CLIPTokenizerFast`的`PreTrainedTokenizer.batch_decode`方法并传递所有参数，返回结果
         return self.tokenizer.batch_decode(*args, **kwargs)
 
     def decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to CLIPTokenizerFast's `PreTrainedTokenizer.decode`. Please refer to
-        the docstring of this method for more information.
+        将所有参数转发到 CLIPTokenizerFast 的 `~PreTrainedTokenizer.decode` 方法中。
+        请参阅该方法的文档字符串获取更多信息。
         """
-        # 调用`CLIPTokenizerFast`的`PreTrainedTokenizer.decode`方法并传递所有参数，返回结果
         return self.tokenizer.decode(*args, **kwargs)
 
     @property
     def feature_extractor_class(self):
         """
-        This property is deprecated and will be removed in v5. Use `image_processor_class` instead.
+        警告：`feature_extractor_class` 已弃用，并将在 v5 版本中移除。请使用 `image_processor_class` 替代。
+        返回 `image_processor_class`。
         """
-        # 发出警告，提示`feature_extractor_class`已过时，建议使用`image_processor_class`
         warnings.warn(
             "`feature_extractor_class` is deprecated and will be removed in v5. Use `image_processor_class` instead.",
             FutureWarning,
         )
-        # 返回`image_processor_class`
         return self.image_processor_class
 
     @property
     def feature_extractor(self):
         """
-        This property is deprecated and will be removed in v5. Use `image_processor` instead.
+        警告：`feature_extractor` 已弃用，并将在 v5 版本中移除。请使用 `image_processor` 替代。
+        返回 `image_processor`。
         """
-        # 发出警告，提示`feature_extractor`已过时，建议使用`image_processor`
         warnings.warn(
             "`feature_extractor` is deprecated and will be removed in v5. Use `image_processor` instead.",
             FutureWarning,
         )
-        # 返回`image_processor`
         return self.image_processor
 ```

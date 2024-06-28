@@ -1,185 +1,193 @@
-# `.\transformers\models\mobilenet_v1\modeling_mobilenet_v1.py`
+# `.\models\mobilenet_v1\modeling_mobilenet_v1.py`
 
-```py
-# 导入所需的模块和类型定义
+```
+# coding=utf-8
+# Copyright 2022 Apple Inc. and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch MobileNetV1 model."""
+
+from typing import Optional, Union
+
 import torch
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+
 from ...activations import ACT2FN
 from ...modeling_outputs import BaseModelOutputWithPoolingAndNoAttention, ImageClassifierOutputWithNoAttention
 from ...modeling_utils import PreTrainedModel
 from ...utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward, logging
 from .configuration_mobilenet_v1 import MobileNetV1Config
 
-# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 设置文档字符串
+# General docstring
 _CONFIG_FOR_DOC = "MobileNetV1Config"
+
+# Base docstring
 _CHECKPOINT_FOR_DOC = "google/mobilenet_v1_1.0_224"
 _EXPECTED_OUTPUT_SHAPE = [1, 1024, 7, 7]
+
+# Image classification docstring
 _IMAGE_CLASS_CHECKPOINT = "google/mobilenet_v1_1.0_224"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "tabby, tabby cat"
 
-# 预训练模型存档列表
 MOBILENET_V1_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "google/mobilenet_v1_1.0_224",
     "google/mobilenet_v1_0.75_192",
     # See all MobileNetV1 models at https://huggingface.co/models?filter=mobilenet_v1
 ]
 
-# 构建从 TensorFlow 到 PyTorch 的权重映射
 def _build_tf_to_pytorch_map(model, config, tf_weights=None):
+    """
+    A map of modules from TF to PyTorch.
+    """
+    # 初始化一个空的 TF 到 PyTorch 的映射字典
     tf_to_pt_map = {}
 
     if isinstance(model, MobileNetV1ForImageClassification):
+        # 如果模型是 MobileNetV1ForImageClassification 的实例，则获取其 mobilenet_v1 属性
         backbone = model.mobilenet_v1
     else:
+        # 否则，直接使用整个模型作为 backbone
         backbone = model
 
+    # TF 模型中的前缀
     prefix = "MobilenetV1/Conv2d_0/"
+    # 将 TF 中的权重映射到 PyTorch 模型的对应位置
     tf_to_pt_map[prefix + "weights"] = backbone.conv_stem.convolution.weight
     tf_to_pt_map[prefix + "BatchNorm/beta"] = backbone.conv_stem.normalization.bias
     tf_to_pt_map[prefix + "BatchNorm/gamma"] = backbone.conv_stem.normalization.weight
     tf_to_pt_map[prefix + "BatchNorm/moving_mean"] = backbone.conv_stem.normalization.running_mean
     tf_to_pt_map[prefix + "BatchNorm/moving_variance"] = backbone.conv_stem.normalization.running_var
-
-    return tf_to_pt_map
-
-
-本段代码定义了 MobileNetV1 模型的相关设置和实用函数。主要包括以下内容：
-
-1. 导入必要的模块和类型定义。
-2. 获取日志记录器。
-3. 设置文档字符串,包括配置文件、检查点、期望输出形状等。
-4. 预训练模型存档列表。
-5. 定义一个函数 `_build_tf_to_pytorch_map`,用于构建从 TensorFlow 到 PyTorch 的权重映射。该函数会根据模型类型(分类或非分类)获取模型的主要部分,并映射 TensorFlow 权重到对应的 PyTorch 层。
-    # 遍历范围为0到12的数字
+    # 循环遍历范围为 0 到 12
     for i in range(13):
-        # 计算tf_index和pt_index的值
+        # 计算 TensorFlow 中的索引（从 1 开始）
         tf_index = i + 1
+        # 计算 PyTorch 中的索引（每个 i 对应两个）
         pt_index = i * 2
 
-        # 获取backbone层的指针
+        # 获取指定索引的 backbone 层
         pointer = backbone.layer[pt_index]
-        # 构建prefix字符串
+        # 创建 MobileNetV1/Conv2d_{tf_index}_depthwise/ 前缀
         prefix = f"MobilenetV1/Conv2d_{tf_index}_depthwise/"
-        # 将深度可分离卷积的深度权重映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：深度卷积层权重
         tf_to_pt_map[prefix + "depthwise_weights"] = pointer.convolution.weight
-        # 将深度可分离卷积的偏差映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层偏置
         tf_to_pt_map[prefix + "BatchNorm/beta"] = pointer.normalization.bias
-        # 将深度可分离卷积的缩放参数映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层权重
         tf_to_pt_map[prefix + "BatchNorm/gamma"] = pointer.normalization.weight
-        # 将深度可分离卷积的移动平均映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层移动均值
         tf_to_pt_map[prefix + "BatchNorm/moving_mean"] = pointer.normalization.running_mean
-        # 将深度可分离卷积的移动方差映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层移动方差
         tf_to_pt_map[prefix + "BatchNorm/moving_variance"] = pointer.normalization.running_var
 
-        # 获取backbone层的指针
+        # 获取指定索引的 backbone 层
         pointer = backbone.layer[pt_index + 1]
-        # 构建prefix字符串
+        # 创建 MobileNetV1/Conv2d_{tf_index}_pointwise/ 前缀
         prefix = f"MobilenetV1/Conv2d_{tf_index}_pointwise/"
-        # 将逐点卷积的权重映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：逐点卷积层权重
         tf_to_pt_map[prefix + "weights"] = pointer.convolution.weight
-        # 将逐点卷积的偏差映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层偏置
         tf_to_pt_map[prefix + "BatchNorm/beta"] = pointer.normalization.bias
-        # 将逐点卷积的缩放参数映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层权重
         tf_to_pt_map[prefix + "BatchNorm/gamma"] = pointer.normalization.weight
-        # 将逐点卷积的移动平均映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层移动均值
         tf_to_pt_map[prefix + "BatchNorm/moving_mean"] = pointer.normalization.running_mean
-        # 将逐点卷积的移动方差映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：批归一化层移动方差
         tf_to_pt_map[prefix + "BatchNorm/moving_variance"] = pointer.normalization.running_var
 
-    # 如果model是MobileNetV1ForImageClassification的实例
+    # 如果模型是 MobileNetV1ForImageClassification 类型
     if isinstance(model, MobileNetV1ForImageClassification):
-        # 构建prefix字符串
+        # 创建 MobilenetV1/Logits/Conv2d_1c_1x1/ 前缀
         prefix = "MobilenetV1/Logits/Conv2d_1c_1x1/"
-        # 将分类器的权重映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：分类器权重
         tf_to_pt_map[prefix + "weights"] = model.classifier.weight
-        # 将分类器的偏差映射到tf_to_pt_map
+        # 将 TensorFlow 参数映射到 PyTorch 参数：分类器偏置
         tf_to_pt_map[prefix + "biases"] = model.classifier.bias
 
-    # 返回tf_to_pt_map
+    # 返回 TensorFlow 到 PyTorch 参数映射字典
     return tf_to_pt_map
-# 加载 TensorFlow checkpoints 到 PyTorch 模型中
+# 将 TensorFlow 模型的权重加载到 PyTorch 模型中
 def load_tf_weights_in_mobilenet_v1(model, config, tf_checkpoint_path):
-    # 尝试导入 numpy 和 tensorflow 包
     try:
         import numpy as np
         import tensorflow as tf
     except ImportError:
-        # 如果导入失败，则记录错误信息并抛出异常
         logger.error(
             "Loading a TensorFlow models in PyTorch, requires TensorFlow to be installed. Please see "
             "https://www.tensorflow.org/install/ for installation instructions."
         )
         raise
 
-    # 从 TF 模型中加载权重
-    # 获取 TF 检查点中的所有变量
+    # 从 TensorFlow 模型加载权重变量列表
     init_vars = tf.train.list_variables(tf_checkpoint_path)
     tf_weights = {}
     for name, shape in init_vars:
-        # 记录要加载的 TF 权重名称和形状
         logger.info(f"Loading TF weight {name} with shape {shape}")
-        # 加载 TF 变量数据
+        # 加载 TensorFlow 模型的变量数据
         array = tf.train.load_variable(tf_checkpoint_path, name)
         tf_weights[name] = array
 
-    # 构建 TF 到 PyTorch 权重加载映射
+    # 构建 TensorFlow 到 PyTorch 权重映射
     tf_to_pt_map = _build_tf_to_pytorch_map(model, config, tf_weights)
 
-    # 遍历映射，导入权重
     for name, pointer in tf_to_pt_map.items():
         logger.info(f"Importing {name}")
-        # 如果权重名称不在 TF 权重列表中，则跳过
         if name not in tf_weights:
             logger.info(f"{name} not in tf pre-trained weights, skipping")
             continue
 
-        # 获取权重数组
         array = tf_weights[name]
 
-        # 如果权重名称包含 "depthwise_weights"，则进行转置
+        # 根据权重名字中的特定标识进行转置操作
         if "depthwise_weights" in name:
             logger.info("Transposing depthwise")
             array = np.transpose(array, (2, 3, 0, 1))
-        # 如果权重名称包含 "weights"，也进行转置
         elif "weights" in name:
             logger.info("Transposing")
-            # 根据指针形状和数组维度进行转置
-            if len(pointer.shape) == 2:  # 将数据复制到线性层
+            if len(pointer.shape) == 2:  # 复制到线性层
                 array = array.squeeze().transpose()
             else:
                 array = np.transpose(array, (3, 2, 0, 1))
 
-        # 如果指针形状和数组形状不匹配，则引发错误
+        # 检查指针和数组的形状是否匹配
         if pointer.shape != array.shape:
             raise ValueError(f"Pointer shape {pointer.shape} and array shape {array.shape} mismatched")
 
-        # 初始化 PyTorch 权重
         logger.info(f"Initialize PyTorch weight {name} {array.shape}")
+        # 将 NumPy 数组转换为 PyTorch 张量并赋值给指针
         pointer.data = torch.from_numpy(array)
 
-        # 移除已加载的权重
+        # 从字典中移除已处理的权重名字及其特定变体
         tf_weights.pop(name, None)
         tf_weights.pop(name + "/RMSProp", None)
         tf_weights.pop(name + "/RMSProp_1", None)
         tf_weights.pop(name + "/ExponentialMovingAverage", None)
 
-    # 记录未复制到 PyTorch 模型的权重
+    # 打印未复制到 PyTorch 模型中的权重名字列表
     logger.info(f"Weights not copied to PyTorch model: {', '.join(tf_weights.keys())}")
+    # 返回加载了 TensorFlow 权重的 PyTorch 模型
     return model
 
 
+# 将 TensorFlow 风格的 "SAME" 填充应用到卷积层
 def apply_tf_padding(features: torch.Tensor, conv_layer: nn.Conv2d) -> torch.Tensor:
     """
     Apply TensorFlow-style "SAME" padding to a convolution layer. See the notes at:
     https://www.tensorflow.org/api_docs/python/tf/nn#notes_on_padding_2
     """
-    # 获取输入特征的高度和宽度
     in_height, in_width = features.shape[-2:]
-    # 获取卷积层的步长和卷积核大小
     stride_height, stride_width = conv_layer.stride
     kernel_height, kernel_width = conv_layer.kernel_size
 
@@ -194,42 +202,43 @@ def apply_tf_padding(features: torch.Tensor, conv_layer: nn.Conv2d) -> torch.Ten
     else:
         pad_along_width = max(kernel_width - (in_width % stride_width), 0)
 
-    # 计算左右填充量
     pad_left = pad_along_width // 2
     pad_right = pad_along_width - pad_left
-    # 计算垂直方向上的顶部填充大小
+    # 计算垂直方向上的顶部填充量，使用整数除法向下取整
     pad_top = pad_along_height // 2
-    # 计算垂直方向上的底部填充大小
+    # 计算垂直方向上的底部填充量，保证总的填充量为 pad_along_height
     pad_bottom = pad_along_height - pad_top
-
-    # 设置填充边界
+    
+    # 定义填充的元组，顺序为 (左, 右, 上, 下)
     padding = (pad_left, pad_right, pad_top, pad_bottom)
-    # 使用常数值 0.0 对输入特征进行填充操作
+    # 使用 PyTorch 的 nn.functional.pad 函数对 features 进行填充，采用常数填充方式，填充值为 0.0
     return nn.functional.pad(features, padding, "constant", 0.0)
 class MobileNetV1ConvLayer(nn.Module):
+    # 定义 MobileNetV1 模型的卷积层模块
     def __init__(
         self,
-        config: MobileNetV1Config,  # MobileNetV1 模型配置对象
-        in_channels: int,  # 输入通道数
-        out_channels: int,  # 输出通道数
-        kernel_size: int,  # 卷积核大小
-        stride: Optional[int] = 1,  # 卷积步长，默认为1
-        groups: Optional[int] = 1,  # 分组卷积参数，默认为1
-        bias: bool = False,  # 是否使用偏置项，默认为False
-        use_normalization: Optional[bool] = True,  # 是否使用归一化，默认为True
-        use_activation: Optional[bool or str] = True,  # 是否使用激活函数，默认为True，或者可指定激活函数名称
+        config: MobileNetV1Config,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: int,
+        stride: Optional[int] = 1,
+        groups: Optional[int] = 1,
+        bias: bool = False,
+        use_normalization: Optional[bool] = True,
+        use_activation: Optional[bool or str] = True,
     ) -> None:
-        super().__init__()
-        self.config = config  # 保存 MobileNetV1 模型配置对象
+        # 初始化函数，设置各种参数和层
 
-        # 检查输入通道数是否能够被分组数整除
+        super().__init__()
+        self.config = config
+
+        # 检查输入和输出通道数是否能被分组数整除
         if in_channels % groups != 0:
             raise ValueError(f"Input channels ({in_channels}) are not divisible by {groups} groups.")
-        # 检查输出通道数是否能够被分组数整除
         if out_channels % groups != 0:
             raise ValueError(f"Output channels ({out_channels}) are not divisible by {groups} groups.")
 
-        # 根据是否使用 TensorFlow 风格的填充来设置填充大小
+        # 计算填充大小，根据配置是否进行 TensorFlow 风格的填充
         padding = 0 if config.tf_padding else int((kernel_size - 1) / 2)
 
         # 创建卷积层对象
@@ -244,7 +253,7 @@ class MobileNetV1ConvLayer(nn.Module):
             padding_mode="zeros",
         )
 
-        # 如果需要归一化，则创建 BatchNormalization 层对象
+        # 如果使用归一化层，则创建 Batch Normalization 层
         if use_normalization:
             self.normalization = nn.BatchNorm2d(
                 num_features=out_channels,
@@ -256,26 +265,37 @@ class MobileNetV1ConvLayer(nn.Module):
         else:
             self.normalization = None
 
-        # 如果需要激活函数，则创建激活函数对象
+        # 根据配置选择是否使用激活函数，并设置激活函数对象
         if use_activation:
             if isinstance(use_activation, str):
-                self.activation = ACT2FN[use_activation]  # 根据指定名称获取对应的激活函数
+                self.activation = ACT2FN[use_activation]
             elif isinstance(config.hidden_act, str):
-                self.activation = ACT2FN[config.hidden_act]  # 根据配置对象中的隐藏层激活函数名称获取对应的激活函数
+                self.activation = ACT2FN[config.hidden_act]
             else:
-                self.activation = config.hidden_act  # 使用配置对象中定义的激活函数
+                self.activation = config.hidden_act
         else:
             self.activation = None
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:
-        if self.config.tf_padding:  # 如果使用 TensorFlow 风格的填充
-            features = apply_tf_padding(features, self.convolution)  # 应用 TensorFlow 风格的填充
-        features = self.convolution(features)  # 进行卷积操作
-        if self.normalization is not None:  # 如果需要归一化
-            features = self.normalization(features)  # 进行归一化操作
-        if self.activation is not None:  # 如果需要激活函数
-            features = self.activation(features)  # 应用激活函数
-        return features  # 返回处理后的特征张量
+        # 前向传播函数，定义模型的数据流向
+
+        # 如果配置为 TensorFlow 风格的填充，则应用填充函数
+        if self.config.tf_padding:
+            features = apply_tf_padding(features, self.convolution)
+        
+        # 经过卷积层处理
+        features = self.convolution(features)
+        
+        # 如果有归一化层，则应用归一化
+        if self.normalization is not None:
+            features = self.normalization(features)
+        
+        # 如果有激活函数，则应用激活函数
+        if self.activation is not None:
+            features = self.activation(features)
+        
+        # 返回处理后的特征
+        return features
 
 
 class MobileNetV1PreTrainedModel(PreTrainedModel):
@@ -284,28 +304,29 @@ class MobileNetV1PreTrainedModel(PreTrainedModel):
     models.
     """
 
-    config_class = MobileNetV1Config  # 指定模型配置类
-    load_tf_weights = load_tf_weights_in_mobilenet_v1  # 加载 TensorFlow 权重的函数
-    base_model_prefix = "mobilenet_v1"  # 基础模型前缀
-    main_input_name = "pixel_values"  # 主输入名称
-    supports_gradient_checkpointing = False  # 是否支持梯度检查点
-    # 初始化神经网络模块的权重
+    # MobileNetV1 预训练模型的抽象类，用于初始化权重和简单的预训练模型下载和加载接口。
+
+    config_class = MobileNetV1Config
+    load_tf_weights = load_tf_weights_in_mobilenet_v1
+    base_model_prefix = "mobilenet_v1"
+    main_input_name = "pixel_values"
+    supports_gradient_checkpointing = False
     def _init_weights(self, module: Union[nn.Linear, nn.Conv2d]) -> None:
         """Initialize the weights"""
-        # 如果模块是线性层或者卷积层
+        # 检查当前模块是否为线性层或二维卷积层
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 使用正态分布初始化权重
+            # 如果是线性层或二维卷积层，使用正态分布初始化权重，均值为0，标准差为self.config.initializer_range
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有偏置项，将其初始化为零
+            # 如果存在偏置项，将偏置项初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果模块是二维卷积层
+        # 如果当前模块是二维批标准化层
         elif isinstance(module, nn.BatchNorm2d):
-            # 将偏置项初始化为零
+            # 将批标准化层的偏置项初始化为零
             module.bias.data.zero_()
-            # 将权重初始化为全1
+            # 将批标准化层的权重初始化为1
             module.weight.data.fill_(1.0)
-# 这个文档字符串描述了 MobileNetV1 模型的基本信息
+# MOBILENET_V1_START_DOCSTRING 的值是一个原始字符串，用于描述 MobileNetV1Model 的模型信息和参数说明。
 MOBILENET_V1_START_DOCSTRING = r"""
     This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass. Use it
     as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
@@ -317,7 +338,7 @@ MOBILENET_V1_START_DOCSTRING = r"""
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# 这个文档字符串描述了 MobileNetV1 模型的输入参数
+# MOBILENET_V1_INPUTS_DOCSTRING 的值是一个原始字符串，用于描述 MobileNetV1Model 的输入参数说明。
 MOBILENET_V1_INPUTS_DOCSTRING = r"""
     Args:
         pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
@@ -330,24 +351,26 @@ MOBILENET_V1_INPUTS_DOCSTRING = r"""
             Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
-# 这个类是 MobileNetV1 模型的基类，包含了基本的模型结构和功能
+# 使用 @add_start_docstrings 装饰器为 MobileNetV1Model 添加文档字符串，描述了模型输出和模型参数的说明。
 @add_start_docstrings(
     "The bare MobileNetV1 model outputting raw hidden-states without any specific head on top.",
     MOBILENET_V1_START_DOCSTRING,
 )
 class MobileNetV1Model(MobileNetV1PreTrainedModel):
-    # 定义 MobileNetV1 模型的初始化函数
+    # MobileNetV1Model 类的定义，继承自 MobileNetV1PreTrainedModel 类。
+    # 初始化函数，接受 MobileNetV1Config 实例和一个布尔类型参数 add_pooling_layer
     def __init__(self, config: MobileNetV1Config, add_pooling_layer: bool = True):
-        # 调用父类 PyTorch 模型的初始化方法
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 保存配置信息
+        # 将传入的配置信息保存到 self.config 属性中
         self.config = config
-    
-        # 设置初始通道数
+
+        # 设定初始深度为 32
         depth = 32
+        # 根据深度乘数和最小深度计算出初始输出通道数
         out_channels = max(int(depth * config.depth_multiplier), config.min_depth)
-    
-        # 创建卷积层, 设置输入通道数、输出通道数、核大小、步长
+
+        # 创建 MobileNetV1ConvLayer 实例作为卷积的初始层 conv_stem
         self.conv_stem = MobileNetV1ConvLayer(
             config,
             in_channels=config.num_channels,
@@ -355,21 +378,23 @@ class MobileNetV1Model(MobileNetV1PreTrainedModel):
             kernel_size=3,
             stride=2,
         )
-    
-        # 定义各层的步长
+
+        # 预设每个卷积层的步幅
         strides = [1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1]
-    
-        # 创建 MobileNetV1 的卷积层列表
+
+        # 创建一个空的 nn.ModuleList，用于存储所有的卷积层
         self.layer = nn.ModuleList()
+        # 循环创建 13 层卷积层
         for i in range(13):
+            # 每一层卷积层的输入通道数等于上一层的输出通道数
             in_channels = out_channels
-    
-            # 当步长为 2 或者是第一层时, 调整通道数
+
+            # 如果当前层的步幅为 2 或者是第一层（i == 0），则需要更新深度和输出通道数
             if strides[i] == 2 or i == 0:
                 depth *= 2
                 out_channels = max(int(depth * config.depth_multiplier), config.min_depth)
-    
-            # 添加深度可分离卷积层
+
+            # 添加一个深度卷积层
             self.layer.append(
                 MobileNetV1ConvLayer(
                     config,
@@ -380,8 +405,8 @@ class MobileNetV1Model(MobileNetV1PreTrainedModel):
                     groups=in_channels,
                 )
             )
-    
-            # 添加 1x1 卷积层
+
+            # 添加一个 1x1 的卷积层
             self.layer.append(
                 MobileNetV1ConvLayer(
                     config,
@@ -390,142 +415,149 @@ class MobileNetV1Model(MobileNetV1PreTrainedModel):
                     kernel_size=1,
                 )
             )
-    
-        # 如果需要, 添加全局平均池化层
+
+        # 如果 add_pooling_layer 为 True，则创建一个自适应平均池化层
         self.pooler = nn.AdaptiveAvgPool2d((1, 1)) if add_pooling_layer else None
-    
-        # 初始化权重并应用最终处理
+
+        # 调用内部方法完成权重初始化和最终处理
         self.post_init()
-    
-    # 不支持裁剪头的操作
+
+    # 用于剪枝不需要的注意力头，但目前未实现具体功能
     def _prune_heads(self, heads_to_prune):
         raise NotImplementedError
-    
-    # 定义前向传播函数
+
+    # 前向传播函数，接受像素值、是否返回隐藏状态、是否返回字典等参数
+    @add_start_docstrings_to_model_forward(MOBILENET_V1_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=BaseModelOutputWithPoolingAndNoAttention,
+        config_class=_CONFIG_FOR_DOC,
+        modality="vision",
+        expected_output=_EXPECTED_OUTPUT_SHAPE,
+    )
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ):
-        # 在这里实现模型的前向传播逻辑
-        pass
-    # 定义一个方法，接收输入，并返回元组或者BaseModelOutputWithPoolingAndNoAttention类型的值
-    def forward(self, pixel_values, return_dict, output_hidden_states) -> Union[tuple, BaseModelOutputWithPoolingAndNoAttention]:
-        # 检查是否输出隐藏状态，如果没有则使用配置中的输出隐藏状态
+        ) -> Union[tuple, BaseModelOutputWithPoolingAndNoAttention]:
+        # 设置是否输出所有隐藏状态，默认为模型配置中的设置
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 如果没有明确指定返回字典值，使用配置中的返回字典值
+        # 设置是否返回字典形式的输出，默认为模型配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 如果像素值为None，抛出数值错误
+
+        # 如果未指定像素值，抛出数值错误异常
         if pixel_values is None:
             raise ValueError("You have to specify pixel_values")
-    
-        # 使用conv_stem方法来处理像素值
+
+        # 使用卷积层处理输入的像素值
         hidden_states = self.conv_stem(pixel_values)
-    
-        # 如果输出隐藏状态为空，则将all_hidden_states设置为一个空元组，否则设置为None
+
+        # 如果需要输出所有隐藏状态，则初始化一个空元组
         all_hidden_states = () if output_hidden_states else None
-    
-        # 遍历每一层的module方法
+
+        # 遍历每个层次的模块
         for i, layer_module in enumerate(self.layer):
+            # 依次将输入的隐藏状态传递给每个层次的模块进行处理
             hidden_states = layer_module(hidden_states)
-    
-            # 如果输出隐藏状态不为空，则将所有隐藏状态存储在all_hidden_states中
+
+            # 如果需要输出所有隐藏状态，则将当前层的隐藏状态添加到列表中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-    
+
+        # 获取最终的隐藏状态作为最后一个隐藏层的输出
         last_hidden_state = hidden_states
-    
-        # 如果pooler不为空，则使用池化器对最终隐藏状态进行处理
+
+        # 如果定义了池化器，则对最终的隐藏状态进行池化处理并展平
         if self.pooler is not None:
             pooled_output = torch.flatten(self.pooler(last_hidden_state), start_dim=1)
         else:
             pooled_output = None
-    
-        # 如果不需要返回字典，则返回一个元组
+
+        # 如果不需要返回字典形式的输出，则返回一个元组，包含非空的结果
         if not return_dict:
             return tuple(v for v in [last_hidden_state, pooled_output, all_hidden_states] if v is not None)
-    
-        # 返回BaseModelOutputWithPoolingAndNoAttention类型的值
+
+        # 如果需要返回字典形式的输出，则构建一个相应的输出对象
         return BaseModelOutputWithPoolingAndNoAttention(
             last_hidden_state=last_hidden_state,
             pooler_output=pooled_output,
             hidden_states=all_hidden_states,
         )
-# 添加对MobileNetV1模型的文档字符串，解释其用途，并引用了先前定义的常量
+# 使用装饰器添加文档字符串到类的起始部分，描述了该类是基于 MobileNetV1 模型的图像分类模型
 @add_start_docstrings(
     """
     MobileNetV1 model with an image classification head on top (a linear layer on top of the pooled features), e.g. for
     ImageNet.
     """,
-    MOBILENET_V1_START_DOCSTRING,
+    MOBILENET_V1_START_DOCSTRING,  # 添加了来自 MOBILENET_V1_START_DOCSTRING 的文档字符串
 )
-# 定义MobileNetV1ForImageClassification类，继承自MobileNetV1PreTrainedModel类
 class MobileNetV1ForImageClassification(MobileNetV1PreTrainedModel):
-    # 初始化方法，接受一个MobileNetV1Config类型的config对象
     def __init__(self, config: MobileNetV1Config) -> None:
-        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 设置类别数量
+        # 设置分类器的类别数目
         self.num_labels = config.num_labels
-        # 创建MobileNetV1Model实例
+        # 创建 MobileNetV1 模型
         self.mobilenet_v1 = MobileNetV1Model(config)
 
-        # 获取最后一层卷积层的输出通道数
+        # 获取 MobileNetV1 最后一层卷积的输出通道数
         last_hidden_size = self.mobilenet_v1.layer[-1].convolution.out_channels
 
         # 分类器头部
-        # 使用config中的分类器dropout概率创建一个Dropout层
+        # 使用给定的 dropout 概率创建 Dropout 层
         self.dropout = nn.Dropout(config.classifier_dropout_prob, inplace=True)
-        # 根据类别数量判断是否创建一个Linear层或者Identity层
+        # 创建线性层作为分类器，输出维度为最后一层卷积的输出通道数到类别数目的映射
         self.classifier = nn.Linear(last_hidden_size, config.num_labels) if config.num_labels > 0 else nn.Identity()
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 为前向传播方法添加文档字符串，引用了先前定义的常量
+    # 使用装饰器添加模型前向方法的文档字符串，描述了输入参数和期望的输出
     @add_start_docstrings_to_model_forward(MOBILENET_V1_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
-        checkpoint=_IMAGE_CLASS_CHECKPOINT,
-        output_type=ImageClassifierOutputWithNoAttention,
-        config_class=_CONFIG_FOR_DOC,
-        expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
+        checkpoint=_IMAGE_CLASS_CHECKPOINT,  # 提供了模型使用的检查点信息
+        output_type=ImageClassifierOutputWithNoAttention,  # 指定了输出类型
+        config_class=_CONFIG_FOR_DOC,  # 提供了用于文档的配置类信息
+        expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,  # 描述了期望的输出
     )
-    # 定义前向传播方法，接受像素值、是否输出隐藏状态、标签和是否返回字典作为参数
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
         output_hidden_states: Optional[bool] = None,
         labels: Optional[torch.Tensor] = None,
         return_dict: Optional[bool] = None,
+        # 方法参数：pixel_values 接收图像的像素值张量，可以为空
+        # output_hidden_states 控制是否输出隐藏状态的标志，可以为空
+        # labels 接收标签张量，可以为空
+        # return_dict 控制是否返回字典类型的输出，可以为空
+    # 返回类型注解，可以返回元组或者带有无注意力输出的图像分类器输出
     ) -> Union[tuple, ImageClassifierOutputWithNoAttention]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
-            Labels for computing the image classification/regression loss. Indices should be in `[0, ...,
-            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss). If
-            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
+            用于计算图像分类/回归损失的标签。索引应在 `[0, ..., config.num_labels - 1]` 范围内。
+            如果 `config.num_labels == 1`，则计算回归损失（均方误差损失）。
+            如果 `config.num_labels > 1`，则计算分类损失（交叉熵损失）。
         """
-        # 如果 return_dict 有指定的话，使用指定的返回类型，否则使用config中的设定
+        # 如果 return_dict 不为 None，则使用该值；否则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        
-        # 调用 mobilenet_v1 模型进行图像分类
+    
+        # 调用 MobileNetV1 模型进行前向传播，返回输出
         outputs = self.mobilenet_v1(pixel_values, output_hidden_states=output_hidden_states, return_dict=return_dict)
-
-        # 如果 return_dict 为 True，那么通过Pooler层将输出转化为固定维度的特征向量
+    
+        # 如果 return_dict 为 True，则使用 outputs.pooler_output 作为汇聚输出；否则使用 outputs 的第二个元素
         pooled_output = outputs.pooler_output if return_dict else outputs[1]
-
-        # 将池化后的特征向量通过一个全连接层得到可以用于分类的 logits
+    
+        # 对汇聚输出应用 dropout 和分类器，得到 logits
         logits = self.classifier(self.dropout(pooled_output))
-
-        # 初始化损失
+    
+        # 初始化损失为 None
         loss = None
-        # 当有指定labels时开始计算损失
+        # 如果 labels 不为 None，则计算损失
         if labels is not None:
-            # 当问题类型为空时，根据标签数量判断问题的类型
+            # 如果问题类型未定义，则根据情况设置问题类型
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
@@ -533,8 +565,8 @@ class MobileNetV1ForImageClassification(MobileNetV1PreTrainedModel):
                     self.config.problem_type = "single_label_classification"
                 else:
                     self.config.problem_type = "multi_label_classification"
-
-            # 根据问题类型选择合适的损失函数
+    
+            # 根据问题类型计算相应的损失
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.num_labels == 1:
@@ -547,12 +579,13 @@ class MobileNetV1ForImageClassification(MobileNetV1PreTrainedModel):
             elif self.config.problem_type == "multi_label_classification":
                 loss_fct = BCEWithLogitsLoss()
                 loss = loss_fct(logits, labels)
-
-        # 如果 return_dict 为 False，则返回 logits 和隐藏层，否则返回具有 attention 的 ImageClassifierOutputWithNoAttention
+    
+        # 如果 return_dict 为 False，则返回 logits 和 outputs 的其余部分作为输出元组
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-
+    
+        # 如果 return_dict 为 True，则返回 ImageClassifierOutputWithNoAttention 类的实例
         return ImageClassifierOutputWithNoAttention(
             loss=loss,
             logits=logits,

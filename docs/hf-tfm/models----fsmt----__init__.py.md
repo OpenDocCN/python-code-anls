@@ -1,50 +1,47 @@
 # `.\models\fsmt\__init__.py`
 
-```py
-# 版权声明和许可信息
-# 从类型提示中导入 TYPE_CHECKING
+```
+# 导入类型检查工具
 from typing import TYPE_CHECKING
-# 从 utils 模块中导入 OptionalDependencyNotAvailable, _LazyModule, is_torch_available 函数
+
+# 导入自定义的异常和模块延迟加载工具
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 定义 _import_structure 字典，包含模块名称和对应的导入列表
+# 定义模块的导入结构，包括配置、标记化和建模组件
 _import_structure = {
-    # 配置模块 fsmt 的导入信息
     "configuration_fsmt": ["FSMT_PRETRAINED_CONFIG_ARCHIVE_MAP", "FSMTConfig"],
-    # 分词模块 fsmt 的导入信息
     "tokenization_fsmt": ["FSMTTokenizer"],
 }
 
-# 尝试导入 torch，若不可用则引发 OptionalDependencyNotAvailable 异常
+# 检查是否支持 Torch，如果不支持则引发异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 若导入成功，则将建立模型模块 fsmt 的导入信息
 else:
+    # 如果支持 Torch，则添加建模组件到导入结构中
     _import_structure["modeling_fsmt"] = ["FSMTForConditionalGeneration", "FSMTModel", "PretrainedFSMTModel"]
 
-# 若类型检查为真，则进行类型检查相关的导入操作
+# 如果是类型检查模式
 if TYPE_CHECKING:
-    # 从配置模块 fsmt 中导入指定内容
+    # 从配置、标记化和建模模块导入特定类和类型
     from .configuration_fsmt import FSMT_PRETRAINED_CONFIG_ARCHIVE_MAP, FSMTConfig
-    # 从分词模块 fsmt 中导入指定内容
     from .tokenization_fsmt import FSMTTokenizer
 
-    # 尝试导入 torch，若不可用则引发 OptionalDependencyNotAvailable 异常
+    # 再次检查 Torch 是否可用，并在可用时导入建模类和类型
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 若导入成功，则从模型模块 fsmt 中导入指定内容
     else:
         from .modeling_fsmt import FSMTForConditionalGeneration, FSMTModel, PretrainedFSMTModel
 
-# 若不是类型检查，则进行懒加载模块导入的操作
+# 如果不是类型检查模式
 else:
     import sys
-    # 将当前模块设为懒加载模块
+
+    # 将当前模块重新定义为延迟加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

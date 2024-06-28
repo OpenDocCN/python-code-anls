@@ -1,23 +1,36 @@
-# `.\transformers\models\swiftformer\modeling_swiftformer.py`
+# `.\models\swiftformer\modeling_swiftformer.py`
 
-```py
-# 添加编码信息
-# 2023年 MBZUAI 和 The HuggingFace Inc. 团队 版权所有。
+```
+# 设置编码格式为 UTF-8
 
-# 根据 Apache 许可证 2.0 进行许可，除非符合许可证的条款，否则您不得使用此文件。
-# 您可以获得许可证的一份副本，网址为
+# 版权声明和许可协议信息
+# Copyright 2023 MBZUAI and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件都是基于“按原样”分发的，不附带任何明示或暗示的保证或条件。
-# 请参阅许可证以获取特定语言管理权限和限制
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# PyTorch SwiftFormer 模型。
+"""
+PyTorch SwiftFormer model.
+"""
+
 import collections.abc
 from typing import Optional, Tuple, Union
+
 import torch
 import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+
+# 导入自定义模块和类
 from ...activations import ACT2CLS
 from ...modeling_outputs import (
     BaseModelOutputWithNoAttention,
@@ -32,33 +45,35 @@ from ...utils import (
 )
 from .configuration_swiftformer import SwiftFormerConfig
 
-# 获取 logger 对象
+# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# General docstring
+# 用于文档的配置参数说明
 _CONFIG_FOR_DOC = "SwiftFormerConfig"
 
-# Base docstring
+# 用于文档的检查点说明
 _CHECKPOINT_FOR_DOC = "MBZUAI/swiftformer-xs"
+
+# 预期输出形状的说明
 _EXPECTED_OUTPUT_SHAPE = [1, 220, 7, 7]
 
-# Image classification docstring
+# 图像分类任务的检查点说明
 _IMAGE_CLASS_CHECKPOINT = "MBZUAI/swiftformer-xs"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "tabby, tabby cat"
 
-# 预训练模型列表
+# 预训练模型的存档列表
 SWIFTFORMER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "MBZUAI/swiftformer-xs",
-    # 查看所有的 SwiftFormer 模型 https://huggingface.co/models?filter=swiftformer
+    # 查看所有 SwiftFormer 模型，请访问 https://huggingface.co/models?filter=swiftformer
 ]
 
 class SwiftFormerPatchEmbedding(nn.Module):
     """
-    Patch Embedding Layer 由两个 2D 卷积层构成。
+    Patch Embedding Layer constructed of two 2D convolutional layers.
 
-    输入: 形状为`[batch_size, in_channels, height, width]`的张量
+    输入: 形状为 `[batch_size, in_channels, height, width]` 的张量
 
-    输出: 形状为`[batch_size, out_channels, height/4, width/4]`的张量
+    输出: 形状为 `[batch_size, out_channels, height/4, width/4]` 的张量
     """
 
     def __init__(self, config: SwiftFormerConfig):
@@ -66,6 +81,8 @@ class SwiftFormerPatchEmbedding(nn.Module):
 
         in_chs = config.num_channels
         out_chs = config.embed_dims[0]
+        
+        # 定义补丁嵌入层，包括两个二维卷积层
         self.patch_embedding = nn.Sequential(
             nn.Conv2d(in_chs, out_chs // 2, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(out_chs // 2, eps=config.batch_norm_eps),
@@ -76,77 +93,89 @@ class SwiftFormerPatchEmbedding(nn.Module):
         )
 
     def forward(self, x):
+        # 执行补丁嵌入层的前向传播
         return self.patch_embedding(x)
 
-
-# 从 transformers.models.beit.modeling_beit.drop_path 中复制函数
-# 删除路径(随机深度)每个样本(应用于残差块的主路径时)
+# 从 transformers.models.beit.modeling_beit.drop_path 复制过来的函数
 def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = False) -> torch.Tensor:
     """
+    按样本（在残差块的主路径中应用）随机删除路径（随机深度）。
 
+    Args:
+        input (torch.Tensor): 输入张量
+        drop_prob (float, optional): 删除概率，默认为 0.0
+        training (bool, optional): 是否在训练模式中，默认为 False
+
+    Returns:
+        torch.Tensor: 处理后的张量
     """
-    # 如果dropout概率为0，或者不处于训练状态，则直接返回输入
+    # 如果 drop_prob 为 0.0 或者不处于训练模式，则直接返回输入 input，不进行 Dropout
     if drop_prob == 0.0 or not training:
         return input
-    # 计算保留概率
+    
+    # 计算保留节点的概率
     keep_prob = 1 - drop_prob
-    # 计算随机张量的形状
-    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # 适用于不同维度的张量，而不仅仅是2D卷积神经网络
-    # 生成随机张量
+    
+    # 根据输入张量的形状，创建一个随机张量，用于决定每个节点是否保留
+    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # 适用于不同维度的张量，而不仅仅是二维卷积网络
     random_tensor = keep_prob + torch.rand(shape, dtype=input.dtype, device=input.device)
-    # 将随机张量进行二值化处理
-    random_tensor.floor_()
-    # 计算输出，采用DropConnect算法
+    random_tensor.floor_()  # 将随机张量二值化（取整）
+    
+    # 将输入张量除以 keep_prob，然后乘以随机张量，以实现 Dropout 操作
     output = input.div(keep_prob) * random_tensor
-    # 返回输出
+    
+    # 返回经过 Dropout 后的输出张量
     return output
-# 从 transformers.models.beit.modeling_beit.BeitDropPath 复制代码，并将 Beit->Swiftformer
+# Copied from transformers.models.beit.modeling_beit.BeitDropPath with Beit->Swiftformer
 class SwiftFormerDropPath(nn.Module):
-    """对每个样本进行路径丢弃（随机深度），应用于残差块的主路径。"""
+    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
 
     def __init__(self, drop_prob: Optional[float] = None) -> None:
         super().__init__()
         self.drop_prob = drop_prob
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 调用 drop_path 函数，用于在训练时按照给定的概率丢弃部分隐藏状态
         return drop_path(hidden_states, self.drop_prob, self.training)
 
     def extra_repr(self) -> str:
+        # 返回描述当前实例的字符串，包括 drop_prob 的概率值
         return "p={}".format(self.drop_prob)
 
 
 class SwiftFormerEmbeddings(nn.Module):
     """
-    由单个2D卷积和批量归一化层组成的嵌入层。
+    Embeddings layer consisting of a single 2D convolutional and batch normalization layer.
 
-    输入: 形状为`[batch_size, channels, height, width]`的张量
+    Input: tensor of shape `[batch_size, channels, height, width]`
 
-    输出: 形状为`[batch_size, channels, height/stride, width/stride]`的张量
+    Output: tensor of shape `[batch_size, channels, height/stride, width/stride]`
     """
 
     def __init__(self, config: SwiftFormerConfig, index: int):
         super().__init__()
 
-        # 从配置中获取参数
+        # 从配置中获取所需的参数
         patch_size = config.down_patch_size
         stride = config.down_stride
         padding = config.down_pad
         embed_dims = config.embed_dims
 
+        # 获取输入和输出通道数
         in_chans = embed_dims[index]
         embed_dim = embed_dims[index + 1]
 
-        # 确保参数为可迭代对象
+        # 确保 patch_size、stride 和 padding 是可迭代对象
         patch_size = patch_size if isinstance(patch_size, collections.abc.Iterable) else (patch_size, patch_size)
         stride = stride if isinstance(stride, collections.abc.Iterable) else (stride, stride)
         padding = padding if isinstance(padding, collections.abc.Iterable) else (padding, padding)
 
-        # 创建卷积和归一化层
+        # 定义卷积和批量归一化层
         self.proj = nn.Conv2d(in_chans, embed_dim, kernel_size=patch_size, stride=stride, padding=padding)
         self.norm = nn.BatchNorm2d(embed_dim, eps=config.batch_norm_eps)
 
     def forward(self, x):
-        # 进行前向传播
+        # 前向传播过程，依次通过卷积和批量归一化层处理输入张量 x
         x = self.proj(x)
         x = self.norm(x)
         return x
@@ -154,156 +183,69 @@ class SwiftFormerEmbeddings(nn.Module):
 
 class SwiftFormerConvEncoder(nn.Module):
     """
-    `SwiftFormerConvEncoder`，使用3*3和1*1卷积。
+    `SwiftFormerConvEncoder` with 3*3 and 1*1 convolutions.
 
-    输入: 形状为`[batch_size, channels, height, width]`的张量
+    Input: tensor of shape `[batch_size, channels, height, width]`
 
-    输出: 形状为`[batch_size, channels, height, width]`的张量
+    Output: tensor of shape `[batch_size, channels, height, width]`
     """
 
     def __init__(self, config: SwiftFormerConfig, dim: int):
         super().__init__()
         hidden_dim = int(config.mlp_ratio * dim)
 
-        # 创建卷积、归一化、激活和参数层
+        # 定义深度可分离卷积、批量归一化、点卷积层和激活函数
         self.depth_wise_conv = nn.Conv2d(dim, dim, kernel_size=3, padding=1, groups=dim)
         self.norm = nn.BatchNorm2d(dim, eps=config.batch_norm_eps)
         self.point_wise_conv1 = nn.Conv2d(dim, hidden_dim, kernel_size=1)
         self.act = nn.GELU()
         self.point_wise_conv2 = nn.Conv2d(hidden_dim, dim, kernel_size=1)
-        self.drop_path = nn.Identity()
+        self.drop_path = nn.Identity()  # 默认情况下不应用 drop path
         self.layer_scale = nn.Parameter(torch.ones(dim).unsqueeze(-1).unsqueeze(-1), requires_grad=True)
 
     def forward(self, x):
-        # 执行前向传播
         input = x
+        # 执行深度可分离卷积、批量归一化、点卷积和激活函数
         x = self.depth_wise_conv(x)
         x = self.norm(x)
         x = self.point_wise_conv1(x)
         x = self.act(x)
         x = self.point_wise_conv2(x)
+        # 应用 drop path 和缩放因子到输入
         x = input + self.drop_path(self.layer_scale * x)
         return x
 
 
 class SwiftFormerMlp(nn.Module):
     """
-    # 实现包含 1*1 卷积的 MLP 层
-    class MLP(nn.Module):
-    
-        # 初始化函数
-        def __init__(self, config: SwiftFormerConfig, in_features: int):
-            super().__init__()
-            # 计算隐藏层特征数
-            hidden_features = int(in_features * config.mlp_ratio)
-            # 归一化层
-            self.norm1 = nn.BatchNorm2d(in_features, eps=config.batch_norm_eps)
-            # 第一个 1*1 卷积层
-            self.fc1 = nn.Conv2d(in_features, hidden_features, 1)
-            # 激活函数，根据配置选择不同的激活函数
-            act_layer = ACT2CLS[config.hidden_act]
-            self.act = act_layer()
-            # 第二个 1*1 卷积层
-            self.fc2 = nn.Conv2d(hidden_features, in_features, 1)
-            # dropout 层
-            self.drop = nn.Dropout(p=0.0)
-    
-        # 前向传播函数
-        def forward(self, x):
-            # 归一化
-            x = self.norm1(x)
-            # 第一个 1*1 卷积
-            x = self.fc1(x)
-            # 激活函数
-            x = self.act(x)
-            # dropout
-            x = self.drop(x)
-            # 第二个 1*1 卷积
-            x = self.fc2(x)
-            # dropout
-            x = self.drop(x)
-            # 返回结果
-            return x
-# 定义了 SwiftFormerEfficientAdditiveAttention 类，用于 SwiftFormer 模型中的高效加性注意力机制
-class SwiftFormerEfficientAdditiveAttention(nn.Module):
     """
-    Efficient Additive Attention module for SwiftFormer.
+    MLP layer with 1*1 convolutions.
 
     Input: tensor of shape `[batch_size, channels, height, width]`
 
     Output: tensor of shape `[batch_size, channels, height, width]`
     """
 
-    # 初始化函数，接收 SwiftFormerConfig 类型的 config 对象和整数 dim
-    def __init__(self, config: SwiftFormerConfig, dim: int = 512):
-        super().__init__()
+    # 初始化函数，接受配置对象和输入特征数
+    def __init__(self, config: SwiftFormerConfig, in_features: int):
+        super().__init__()  # 调用父类的构造函数
+        hidden_features = int(in_features * config.mlp_ratio)  # 计算隐藏层特征数
+        self.norm1 = nn.BatchNorm2d(in_features, eps=config.batch_norm_eps)  # 批量归一化层
+        self.fc1 = nn.Conv2d(in_features, hidden_features, 1)  # 第一个卷积层，1x1卷积
+        act_layer = ACT2CLS[config.hidden_act]  # 获取激活函数类
+        self.act = act_layer()  # 实例化激活函数对象
+        self.fc2 = nn.Conv2d(hidden_features, in_features, 1)  # 第二个卷积层，1x1卷积
+        self.drop = nn.Dropout(p=0.0)  # Dropout层，概率为0.0，即不进行dropout操作
 
-        # 使用线性变换将维度为 dim 的输入映射到维度为 dim 的输出
-        self.to_query = nn.Linear(dim, dim)
-        self.to_key = nn.Linear(dim, dim)
-
-        # 使用参数初始化权重矩阵 w_g
-        self.w_g = nn.Parameter(torch.randn(dim, 1))
-        self.scale_factor = dim**-0.5  # 设置缩放因子为维度的倒数开平方
-        self.proj = nn.Linear(dim, dim)  # 对输入进行线性变换
-        self.final = nn.Linear(dim, dim)  # 对输入进行最终的线性变换
-
-    # 前向传播函数
+    # 前向传播函数，接受输入张量x
     def forward(self, x):
-        query = self.to_query(x)  # 执行查询的线性变换
-        key = self.to_key(x)  # 执行键的线性变换
-
-        query = torch.nn.functional.normalize(query, dim=-1)  # 对查询进行标准化
-        key = torch.nn.functional.normalize(key, dim=-1)  # 对键进行标准化
-
-        query_weight = query @ self.w_g  # 计算查询的权重
-        scaled_query_weight = query_weight * self.scale_factor  # 缩放查询的权重
-        scaled_query_weight = scaled_query_weight.softmax(dim=-1)  # 对缩放后的查询权重进行 softmax 操作
-
-        global_queries = torch.sum(scaled_query_weight * query, dim=1)  # 计算全局查询向量
-        global_queries = global_queries.unsqueeze(1).repeat(1, key.shape[1], 1)  # 将全局查询向量扩展成与键相同的维度
-
-        out = self.proj(global_queries * key) + query  # 计算输出
-        out = self.final(out)  # 使用最终的线性变换进行处理
-
-        return out  # 返回输出张量
-
-
-# 定义了 SwiftFormerLocalRepresentation 类，用于 SwiftFormer 模型中的局部表示模块
-class SwiftFormerLocalRepresentation(nn.Module):
-    """
-    Local Representation module for SwiftFormer that is implemented by 3*3 depth-wise and point-wise convolutions.
-
-    Input: tensor of shape `[batch_size, channels, height, width]`
-
-    Output: tensor of shape `[batch_size, channels, height, width]`
-    """
-
-    def __init__(self, config: SwiftFormerConfig, dim: int):
-        super().__init__()
-
-        # 定义深度可分离卷积层、批归一化层和两个点卷积层
-        self.depth_wise_conv = nn.Conv2d(dim, dim, kernel_size=3, padding=1, groups=dim)
-        self.norm = nn.BatchNorm2d(dim, eps=config.batch_norm_eps)
-        self.point_wise_conv1 = nn.Conv2d(dim, dim, kernel_size=1)
-        self.act = nn.GELU()  # 使用 GELU 作为激活函数
-        self.point_wise_conv2 = nn.Conv2d(dim, dim, kernel_size=1)
-        self.drop_path = nn.Identity()
-        self.layer_scale = nn.Parameter(torch.ones(dim).unsqueeze(-1).unsqueeze(-1), requires_grad=True)
-
-    # 前向传播函数
-    def forward(self, x):
-        input = x  # 保存输入张量
-        x = self.depth_wise_conv(x)  # 执行深度可分离卷积
-        x = self.norm(x)  # 对卷积结果进行批归一化
-        x = self.point_wise_conv1(x)  # 执行第一个点卷积
-        x = self.act(x)  # 使用 GELU 激活函数
-        x = self.point_wise_conv2(x)  # 执行第二个点卷积
-        x = input + self.drop_path(self.layer_scale * x)  # 添加残差连接并执行 drop path
-        return x  # 返回输出张量
-
-
-# 定义了 SwiftFormerEncoderBlock 类，用于 SwiftFormer 模型中的编码器块
+        x = self.norm1(x)  # 应用批量归一化
+        x = self.fc1(x)  # 第一个卷积层的计算
+        x = self.act(x)  # 应用激活函数
+        x = self.drop(x)  # 应用dropout
+        x = self.fc2(x)  # 第二个卷积层的计算
+        x = self.drop(x)  # 再次应用dropout
+        return x  # 返回计算结果张量
 class SwiftFormerEncoderBlock(nn.Module):
     """
     SwiftFormer Encoder Block for SwiftFormer. It consists of (1) Local representation module, (2)
@@ -313,27 +255,51 @@ class SwiftFormerEncoderBlock(nn.Module):
 
     Output: tensor of shape `[batch_size, channels,height, width]`
     """
-    # 初始化函数，接受配置、维度和丢弃路径作为参数
-    def __init__(self, config: SwiftFormerConfig, dim: int, drop_path: float = 0.0) -> None:
-        # 调用父类的初始化函数
+
+    def __init__(self, config: SwiftFormerConfig, dim: int):
         super().__init__()
 
-        # 从配置中获取层尺度初始化值和是否使用层尺度
+        # 定义局部表示模块，使用3*3深度卷积和点卷积
+        self.local_representations = SwiftFormerLocalRepresentation(config, dim)
+        
+        # 定义注意力模块，使用高效加性注意力
+        self.attention = SwiftFormerEfficientAdditiveAttention(config, dim)
+        
+        # 定义MLP块
+        self.mlp_block = nn.Sequential(
+            nn.Linear(dim, 4 * dim),
+            nn.GELU(),
+            nn.Linear(4 * dim, dim),
+            nn.Dropout(config.dropout),
+        )
+
+    def forward(self, x):
+        # 应用局部表示模块
+        x = self.local_representations(x)
+        
+        # 应用注意力模块
+        x = self.attention(x)
+        
+        # 应用MLP块
+        x = self.mlp_block(x)
+        
+        return x
+    def __init__(self, config: SwiftFormerConfig, dim: int, drop_path: float = 0.0) -> None:
+        super().__init__()
+
+        # 从配置对象中获取层缩放初始化值和是否使用层缩放的标志
         layer_scale_init_value = config.layer_scale_init_value
         use_layer_scale = config.use_layer_scale
 
-        # 创建局部表示、注意力和线性变换层对象
+        # 创建本地表示层、注意力层、线性层和DropPath层
         self.local_representation = SwiftFormerLocalRepresentation(config, dim=dim)
         self.attn = SwiftFormerEfficientAdditiveAttention(config, dim=dim)
         self.linear = SwiftFormerMlp(config, in_features=dim)
-
-        # 创建丢弃路径对象，如果丢弃率大于 0.0，否则创建身份变换
         self.drop_path = SwiftFormerDropPath(drop_path) if drop_path > 0.0 else nn.Identity()
-
-        # 设置是否使用层尺度
         self.use_layer_scale = use_layer_scale
+
+        # 如果使用层缩放，则创建两个层缩放参数
         if use_layer_scale:
-            # 如果使用层尺度，则创建两个可训练的层尺度参数
             self.layer_scale_1 = nn.Parameter(
                 layer_scale_init_value * torch.ones(dim).unsqueeze(-1).unsqueeze(-1), requires_grad=True
             )
@@ -341,32 +307,33 @@ class SwiftFormerEncoderBlock(nn.Module):
                 layer_scale_init_value * torch.ones(dim).unsqueeze(-1).unsqueeze(-1), requires_grad=True
             )
 
-    # 前向传播函数，接受输入张量 x 作为参数
     def forward(self, x):
-        # 将输入张量通过局部表示层
+        # 将输入x传递给本地表示层处理
         x = self.local_representation(x)
-        # 获取张量的形状信息
         batch_size, channels, height, width = x.shape
+        
+        # 如果使用层缩放，则将层缩放因子应用于注意力层和线性层的输出
         if self.use_layer_scale:
-            # 如果使用层尺度，则对局部表示进行层尺度调整
+            # 计算注意力层的输出，并应用层缩放因子和DropPath层
             x = x + self.drop_path(
                 self.layer_scale_1
                 * self.attn(x.permute(0, 2, 3, 1).reshape(batch_size, height * width, channels))
                 .reshape(batch_size, height, width, channels)
                 .permute(0, 3, 1, 2)
             )
-            # 对局部表示进行线性变换和层尺度调整
+            # 计算线性层的输出，并应用层缩放因子和DropPath层
             x = x + self.drop_path(self.layer_scale_2 * self.linear(x))
 
         else:
-            # 如果不使用层尺度，则直接对局部表示进行注意力和线性变换
+            # 如果不使用层缩放，则直接应用注意力层和线性层的输出与DropPath层
             x = x + self.drop_path(
                 self.attn(x.permute(0, 2, 3, 1).reshape(batch_size, height * width, channels))
                 .reshape(batch_size, height, width, channels)
                 .permute(0, 3, 1, 2)
             )
             x = x + self.drop_path(self.linear(x))
-        # 返回处理后的张量
+        
+        # 返回处理后的输出张量x
         return x
 class SwiftFormerStage(nn.Module):
     """
@@ -381,53 +348,54 @@ class SwiftFormerStage(nn.Module):
     def __init__(self, config: SwiftFormerConfig, index: int) -> None:
         super().__init__()
 
-        layer_depths = config.depths  # 获取配置中的层深度列表
-        dim = config.embed_dims[index]  # 获取配置中指定索引处的嵌入维度
-        depth = layer_depths[index]  # 获取当前层的深度
+        layer_depths = config.depths
+        dim = config.embed_dims[index]
+        depth = layer_depths[index]
 
-        blocks = []  # 初始化模块列表
-        for block_idx in range(depth):  # 遍历当前层的每个块
+        blocks = []
+        for block_idx in range(depth):
+            # 计算当前 block 的 drop path rate
             block_dpr = config.drop_path_rate * (block_idx + sum(layer_depths[:index])) / (sum(layer_depths) - 1)
-            # 计算当前块的 drop path rate
 
-            if depth - block_idx <= 1:  # 如果是当前层的最后一个块
+            if depth - block_idx <= 1:
+                # 如果是最后一个 block，则添加 SwiftFormerEncoderBlock
                 blocks.append(SwiftFormerEncoderBlock(config, dim=dim, drop_path=block_dpr))
-                # 添加一个 SwiftFormerEncoderBlock 到模块列表
             else:
+                # 否则添加 SwiftFormerConvEncoder
                 blocks.append(SwiftFormerConvEncoder(config, dim=dim))
-                # 否则添加一个 SwiftFormerConvEncoder 到模块列表
 
-        self.blocks = nn.ModuleList(blocks)  # 将模块列表转换为模块列表
+        self.blocks = nn.ModuleList(blocks)
 
     def forward(self, input):
-        for block in self.blocks:  # 遍历模块列表中的每个块
-            input = block(input)  # 将输入传递给当前块，并更新输入
+        # 依次通过所有的 block 进行前向传播
+        for block in self.blocks:
+            input = block(input)
         return input
 
 
 class SwiftFormerEncoder(nn.Module):
     def __init__(self, config: SwiftFormerConfig) -> None:
         super().__init__()
-        self.config = config  # 存储配置信息
+        self.config = config
 
-        embed_dims = config.embed_dims  # 获取嵌入维度列表
-        downsamples = config.downsamples  # 获取下采样标志列表
-        layer_depths = config.depths  # 获取层深度列表
+        embed_dims = config.embed_dims
+        downsamples = config.downsamples
+        layer_depths = config.depths
 
         # Transformer model
-        network = []  # 初始化网络模块列表
-        for i in range(len(layer_depths)):  # 遍历每个层
-            stage = SwiftFormerStage(config=config, index=i)  # 创建一个 SwiftFormerStage
-            network.append(stage)  # 将 SwiftFormerStage 添加到网络模块列表
+        network = []
+        for i in range(len(layer_depths)):
+            # 创建 SwiftFormerStage，并将其添加到网络中
+            stage = SwiftFormerStage(config=config, index=i)
+            network.append(stage)
             if i >= len(layer_depths) - 1:
                 break
             if downsamples[i] or embed_dims[i] != embed_dims[i + 1]:
-                # 如果需要进行下采样或者嵌入维度发生变化
+                # 如果需要下采样或者维度变化，则添加 SwiftFormerEmbeddings
                 network.append(SwiftFormerEmbeddings(config, index=i))
-                # 添加 SwiftFormerEmbeddings 到网络模块列表
-        self.network = nn.ModuleList(network)  # 将网络模块列表转换为模块列表
+        self.network = nn.ModuleList(network)
 
-        self.gradient_checkpointing = False  # 初始化梯度检查点标志
+        self.gradient_checkpointing = False
 
     def forward(
         self,
@@ -437,174 +405,161 @@ class SwiftFormerEncoder(nn.Module):
     ) -> Union[tuple, BaseModelOutputWithNoAttention]:
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-        )  # 获取输出隐藏状态标志
+        )
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 获取返回字典标志
 
         all_hidden_states = (hidden_states,) if output_hidden_states else None
-        # 如果需要输出隐藏状态，则初始化全部隐藏状态列表，否则设为 None
 
-        for block in self.network:  # 遍历网络模块列表中的每个模块
-            hidden_states = block(hidden_states)  # 传递隐藏状态到当前模块，并更新隐藏状态
+        for block in self.network:
+            # 依次通过所有的 block 进行前向传播
+            hidden_states = block(hidden_states)
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-                # 如果需要输出隐藏状态，则将当前隐藏状态添加到全部隐藏状态列表中
 
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states] if v is not None)
-            # 如果不需要返回字典，则返回隐藏状态和全部隐藏状态的元组
 
+        # 返回 BaseModelOutputWithNoAttention 对象
         return BaseModelOutputWithNoAttention(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
-        )  # 否则返回 Base Model Output Without Attention
+        )
+
+
+class SwiftFormerPreTrainedModel(PreTrainedModel):
+    """
+    This class is not completed in the provided snippet.
+    """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
-    
-    # 定义一个抽象类，用于处理权重初始化以及一个简单的接口用于下载和加载预训练模型
+
+    # 使用 SwiftFormerConfig 类作为配置类
     config_class = SwiftFormerConfig
-    # 基础模型前缀
+    # 模型的基础名称前缀为 "swiftformer"
     base_model_prefix = "swiftformer"
-    # 主要输入名称
+    # 主输入的名称为 "pixel_values"
     main_input_name = "pixel_values"
     # 支持梯度检查点
     supports_gradient_checkpointing = True
 
     def _init_weights(self, module: Union[nn.Linear, nn.Conv2d, nn.LayerNorm]) -> None:
         """Initialize the weights"""
-        # 初始化权重
+        # 如果模块是线性层或者二维卷积层，使用截断正态分布初始化权重
         if isinstance(module, (nn.Conv2d, nn.Linear)):
-            # 对于线性层和卷积层，使用截断正态分布进行权重初始化
             nn.init.trunc_normal_(module.weight, std=0.02)
-            # 如果存在偏置，则将其初始化为常数0
+            # 如果存在偏置项，则初始化为常数 0
             if module.bias is not None:
                 nn.init.constant_(module.bias, 0)
+        # 如果模块是层归一化层，则初始化偏置项为常数 0，权重为常数 1.0
         elif isinstance(module, (nn.LayerNorm)):
-            # 对于 LayerNorm 层，将偏置初始化为常数0，将权重初始化为常数1
             nn.init.constant_(module.bias, 0)
             nn.init.constant_(module.weight, 1.0)
-SWIFTFORMER_START_DOCSTRING = r"""
-    This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass. Use it
-    as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
-    behavior.
+# SWIFTFORMER_START_DOCSTRING 变量，包含了 SwiftFormerModel 类的文档字符串，描述了这个模型是一个 PyTorch 的 nn.Module 子类，
+# 可以像普通的 PyTorch 模块一样使用，详细的使用和行为相关信息可以查阅 PyTorch 文档。
 
-    Parameters:
-        config ([`SwiftFormerConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
-"""
+# SWIFTFORMER_INPUTS_DOCSTRING 变量，包含了 SwiftFormerModel 类的输入文档字符串，描述了模型的输入参数和返回值。
+# pixel_values 参数是一个 torch.FloatTensor，表示像素值，形状为 (batch_size, num_channels, height, width)。
+# output_hidden_states 参数是一个可选的布尔值，指定是否返回所有层的隐藏状态。
+# return_dict 参数是一个可选的布尔值，指定是否返回一个 ModelOutput 对象而不是简单的元组。
 
-SWIFTFORMER_INPUTS_DOCSTRING = r"""
-    Args:
-        pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            Pixel values. Pixel values can be obtained using [`AutoImageProcessor`]. See [`ViTImageProcessor.__call__`]
-            for details.
+# 使用 add_start_docstrings 装饰器为 SwiftFormerModel 类添加了一个开头的文档字符串，描述了它是一个输出原始隐藏状态的
+# SwiftFormer 模型变压器，没有特定的顶部头。
 
-        output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-        return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
-"""
-
-# Define a class decorator that adds docstrings to the SwiftFormerModel class
-@add_start_docstrings(
-    "The bare SwiftFormer Model transformer outputting raw hidden-states without any specific head on top.",
-    SWIFTFORMER_START_DOCSTRING,
-)
 class SwiftFormerModel(SwiftFormerPreTrainedModel):
-    # Define the initialization method for the SwiftFormerModel class
     def __init__(self, config: SwiftFormerConfig):
+        # 调用 SwiftFormerPreTrainedModel 的初始化方法，并传入配置对象 config
         super().__init__(config)
-        # Assign the model configuration
+        # 将传入的配置对象保存到 self.config 中
         self.config = config
 
-        # Initialize the patch embedding layer
+        # 创建 SwiftFormerPatchEmbedding 对象并保存到 self.patch_embed
         self.patch_embed = SwiftFormerPatchEmbedding(config)
-        # Initialize the encoder layer
+        
+        # 创建 SwiftFormerEncoder 对象并保存到 self.encoder
         self.encoder = SwiftFormerEncoder(config)
 
-        # Initialize weights and apply final processing
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # Define the forward method for the SwiftFormerModel class
-    @add_start_docstrings_to_model_forward(SWIFTFORMER_INPUTS_DOCSTRING)
-    @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,
-        output_type=BaseModelOutputWithNoAttention,
-        config_class=_CONFIG_FOR_DOC,
-        modality="vision",
-        expected_output=_EXPECTED_OUTPUT_SHAPE,
-    )
+    # 使用 add_start_docstrings_to_model_forward 装饰器为 forward 方法添加了开头的文档字符串，
+    # 描述了方法的输入参数和输出预期，模型用于 vision 模态。
+
+    # forward 方法，接收 pixel_values, output_hidden_states 和 return_dict 作为输入参数
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        ) -> Union[Tuple, BaseModelOutputWithNoAttention]:
+    ) -> Union[Tuple, BaseModelOutputWithNoAttention]:
         r""" """
-        # 初始化函数，声明返回类型为元组或BaseModelOutputWithNoAttention
+        # 设置函数签名，指定返回类型为元组或BaseModelOutputWithNoAttention类的实例
 
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 将output_hidden_states设置为传入参数值或者self.config.output_hidden_states的值
+        # 如果output_hidden_states不为None，则使用其自身值；否则使用self.config.output_hidden_states的值
 
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 将return_dict设置为传入参数值或者self.config.use_return_dict的值
+        # 如果return_dict不为None，则使用其自身值；否则使用self.config.use_return_dict的值
 
         if pixel_values is None:
             raise ValueError("You have to specify pixel_values")
-        # 如果pixel_values为None，则引发数值错误异常
+        # 如果pixel_values为None，则抛出值错误异常，要求指定pixel_values
 
         embedding_output = self.patch_embed(pixel_values)
-        # 使用self.patch_embed对pixel_values进行嵌入表示
+        # 使用self.patch_embed方法对pixel_values进行嵌入编码
 
         encoder_outputs = self.encoder(
             embedding_output,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 使用self.encoder对嵌入表示进行编码
+        # 调用self.encoder方法对嵌入输出进行编码，传入参数为embedding_output、output_hidden_states和return_dict
 
         if not return_dict:
             return tuple(v for v in encoder_outputs if v is not None)
-        # 如果return_dict为False，则返回encoder_outputs中非空的元素组成的元组
+        # 如果return_dict为False，则返回encoder_outputs中所有非None值的元组
 
         return BaseModelOutputWithNoAttention(
             last_hidden_state=encoder_outputs.last_hidden_state,
             hidden_states=encoder_outputs.hidden_states,
         )
-        # 返回BaseModelOutputWithNoAttention对象，指定最后隐藏状态和隐藏状态
-# 导入必要的 docstrings 和预训练模型
+        # 使用BaseModelOutputWithNoAttention类创建一个实例，传入encoder_outputs的最后隐藏状态和隐藏状态列表作为参数
+# 使用自定义的文档字符串装饰器为类添加描述信息，指定其是基于SwiftFormer模型的图像分类器
 @add_start_docstrings(
     """
     SwiftFormer Model transformer with an image classification head on top (e.g. for ImageNet).
     """,
     SWIFTFORMER_START_DOCSTRING,
 )
-# 定义 SwiftFormerForImageClassification 类，继承自 SwiftFormerPreTrainedModel
+# 声明SwiftFormerForImageClassification类，继承自SwiftFormerPreTrainedModel
 class SwiftFormerForImageClassification(SwiftFormerPreTrainedModel):
+    
+    # 初始化方法，接受一个SwiftFormerConfig类型的参数config，并调用其父类的初始化方法
     def __init__(self, config: SwiftFormerConfig) -> None:
-        # 调用父类的构造函数
         super().__init__(config)
-        # 获取配置中的 embed_dims 参数
+
+        # 从config中获取嵌入维度
         embed_dims = config.embed_dims
-        # 获取配置中的 num_labels 参数
+
+        # 设置类别数量为config中指定的类别数
         self.num_labels = config.num_labels
-        # 创建 SwiftFormerModel 实例
+        # 创建SwiftFormerModel模型实例，并赋值给self.swiftformer
         self.swiftformer = SwiftFormerModel(config)
-        # 创建 BatchNorm2d 层，用于特征归一化
+
+        # 分类器头部
+        # 根据最后一个嵌入维度设置批量归一化层
         self.norm = nn.BatchNorm2d(embed_dims[-1], eps=config.batch_norm_eps)
-        # 如果 num_labels 大于 0，创建线性分类层；否则创建 Identity 层
+        # 如果有类别数量大于0，则创建线性层作为分类头部，否则创建一个恒等映射（nn.Identity()）
         self.head = nn.Linear(embed_dims[-1], self.num_labels) if self.num_labels > 0 else nn.Identity()
-        # 同上，创建分布式分类层
+        # 同上，创建一个用于距离度量的线性层或者恒等映射
         self.dist_head = nn.Linear(embed_dims[-1], self.num_labels) if self.num_labels > 0 else nn.Identity()
-        # 执行最终的参数初始化操作
+
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 定义前向传播方法
+    # 使用自定义的文档字符串装饰器为forward方法添加描述信息，指定其输入和输出类型
     @add_start_docstrings_to_model_forward(SWIFTFORMER_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_IMAGE_CLASS_CHECKPOINT,
@@ -612,13 +567,14 @@ class SwiftFormerForImageClassification(SwiftFormerPreTrainedModel):
         config_class=_CONFIG_FOR_DOC,
         expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
     )
+    # 定义forward方法，接受像素值pixel_values、标签labels以及其他可选参数，并返回一个字典或者张量，具体依赖于return_dict参数
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
         labels: Optional[torch.Tensor] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ):
+        # 函数声明未完成，余下的代码在下一个注释中
         ) -> Union[tuple, ImageClassifierOutputWithNoAttention]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -626,30 +582,36 @@ class SwiftFormerForImageClassification(SwiftFormerPreTrainedModel):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 检查是否应该返回字典
+        # 如果 return_dict 不为 None，则使用传入的 return_dict；否则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 运行基础模型
+        # 运行基础模型，将输入的像素值传递给 Swiftformer 模型
         outputs = self.swiftformer(
             pixel_values,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
 
-        # 获取序列输出
+        # 如果 return_dict 为 False，则从 outputs 中获取最后一个隐藏状态；否则从 outputs 的第一个元素获取序列输出
         sequence_output = outputs.last_hidden_state if return_dict else outputs[0]
 
-        # 运行分类头
+        # 将序列输出应用归一化操作
         sequence_output = self.norm(sequence_output)
+
+        # 将归一化后的序列输出展平，然后在第二个维度上取平均值
         sequence_output = sequence_output.flatten(2).mean(-1)
+
+        # 将平均值后的序列输出传递给分类头部模型和蒸馏头部模型
         cls_out = self.head(sequence_output)
         distillation_out = self.dist_head(sequence_output)
+
+        # 计算 logits，即分类头部模型输出和蒸馏头部模型输出的平均值
         logits = (cls_out + distillation_out) / 2
 
-        # 计算损失
+        # 计算损失值
         loss = None
         if labels is not None:
-            # 确定问题类型
+            # 根据配置文件中的问题类型确定损失函数的类型
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
@@ -658,6 +620,7 @@ class SwiftFormerForImageClassification(SwiftFormerPreTrainedModel):
                 else:
                     self.config.problem_type = "multi_label_classification"
 
+            # 根据问题类型选择相应的损失函数
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.num_labels == 1:
@@ -671,12 +634,11 @@ class SwiftFormerForImageClassification(SwiftFormerPreTrainedModel):
                 loss_fct = BCEWithLogitsLoss()
                 loss = loss_fct(logits, labels)
 
-        # 如果不返回字典
+        # 如果 return_dict 为 False，则返回 logits 和其他输出；否则返回 ImageClassifierOutputWithNoAttention 对象
         if not return_dict:
             output = (logits,) + outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 ImageClassifierOutputWithNoAttention 类型
         return ImageClassifierOutputWithNoAttention(
             loss=loss,
             logits=logits,

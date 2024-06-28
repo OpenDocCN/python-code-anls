@@ -1,58 +1,57 @@
-# `.\transformers\pipelines\audio_utils.py`
+# `.\pipelines\audio_utils.py`
 
-```py
-# 导入模块和库
-# 2023 年版权声明，HuggingFace 团队保留所有权利
-import datetime  # 导入处理日期时间的模块
-import platform  # 导入获取平台信息的模块
-import subprocess  # 导入子进程管理模块
-from typing import Optional, Tuple, Union  # 导入类型提示相关模块
+```
+# 版权声明及导入必要的库和模块
+# 版权 2023 The HuggingFace Team. 保留所有权利。
+import datetime
+import platform
+import subprocess
+from typing import Optional, Tuple, Union
 
-import numpy as np  # 导入数值计算库 NumPy
+import numpy as np
 
 
 def ffmpeg_read(bpayload: bytes, sampling_rate: int) -> np.array:
     """
-    Helper function to read an audio file through ffmpeg.
+    通过ffmpeg读取音频文件的辅助函数。
     """
-    # 设置音频文件的采样率和声道数
+    # 将采样率转换为字符串
     ar = f"{sampling_rate}"
+    # 设置音频通道数为1
     ac = "1"
-    format_for_conversion = "f32le"  # 音频格式为 32 位浮点数（小端）
-    # 构建执行 FFmpeg 命令所需参数列表
+    # 设置转换格式为"f32le"，即32位浮点数，低端序
+    format_for_conversion = "f32le"
+    # 构建ffmpeg命令
     ffmpeg_command = [
-        "ffmpeg",
-        "-i",
-        "pipe:0",
-        "-ac",
-        ac,
-        "-ar",
-        ar,
-        "-f",
-        format_for_conversion,
-        "-hide_banner",
-        "-loglevel",
-        "quiet",
-        "pipe:1",
+        "ffmpeg",                # ffmpeg命令
+        "-i", "pipe:0",          # 输入文件从标准输入(pipe:0)读取
+        "-ac", ac,               # 设置音频通道数
+        "-ar", ar,               # 设置采样率
+        "-f", format_for_conversion,  # 设置输出格式为指定的转换格式
+        "-hide_banner",          # 隐藏ffmpeg的banner信息
+        "-loglevel", "quiet",    # 设置日志级别为静默模式，不输出日志信息
+        "pipe:1",                # 输出音频数据到标准输出(pipe:1)
     ]
 
     try:
-        # 执行 FFmpeg 命令以读取音频文件
+        # 使用subprocess.Popen启动ffmpeg进程，并通过stdin传输输入数据，stdout接收输出数据
         with subprocess.Popen(ffmpeg_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE) as ffmpeg_process:
-            output_stream = ffmpeg_process.communicate(bpayload)  # 通过标准输入流发送音频数据并获取输出流
+            output_stream = ffmpeg_process.communicate(bpayload)  # 传输音频数据并获取输出流
     except FileNotFoundError as error:
-        # 如果找不到 FFmpeg，则抛出错误
+        # 若ffmpeg未找到，则抛出错误
         raise ValueError("ffmpeg was not found but is required to load audio files from filename") from error
-    out_bytes = output_stream[0]  # 获取输出流中的字节数据
-    audio = np.frombuffer(out_bytes, np.float32)  # 将输出流中的字节数据转换为 NumPy 数组
+
+    out_bytes = output_stream[0]   # 获取ffmpeg输出的音频数据字节流
+    audio = np.frombuffer(out_bytes, np.float32)   # 将字节流转换为numpy数组，数据类型为32位浮点数
+
+    # 如果音频数据长度为0，则抛出异常，说明音频文件格式不正确或损坏
     if audio.shape[0] == 0:
-        # 如果音频数据为空，则抛出错误
         raise ValueError(
             "Soundfile is either not in the correct format or is malformed. Ensure that the soundfile has "
             "a valid audio file extension (e.g. wav, flac or mp3) and is not corrupted. If reading from a remote "
             "URL, ensure that the URL is the full address to **download** the audio file."
         )
-    return audio  # 返回读取的音频数据的 NumPy 数组
+    return audio   # 返回解码后的音频数据数组
 
 
 def ffmpeg_microphone(
@@ -61,53 +60,56 @@ def ffmpeg_microphone(
     format_for_conversion: str = "f32le",
 ):
     """
-    Helper function to read raw microphone data.
+    读取原始麦克风数据的辅助函数。
     """
-    ar = f"{sampling_rate}"  # 设置麦克风音频采样率
-    ac = "1"  # 设置声道数为 1
+    # 将采样率转换为字符串
+    ar = f"{sampling_rate}"
+    # 设置音频通道数为1
+    ac = "1"
+
+    # 根据指定的转换格式确定每个音频样本的字节大小
     if format_for_conversion == "s16le":
-        size_of_sample = 2  # 如果音频格式为 16 位整数（小端），每个样本占用 2 字节
+        size_of_sample = 2   # 每个样本为16位整数，即2个字节
     elif format_for_conversion == "f32le":
-        size_of_sample = 4  # 如果音频格式为 32 位浮点数（小端），每个样本占用 4 字节
+        size_of_sample = 4   # 每个样本为32位浮点数，即4个字节
     else:
-        # 如果音频格式不被支持，则抛出错误
         raise ValueError(f"Unhandled format `{format_for_conversion}`. Please use `s16le` or `f32le`")
 
-    system = platform.system()  # 获取当前操作系统信息
+    # 获取当前操作系统类型
+    system = platform.system()
     if system == "Linux":
-        format_ = "alsa"  # 如果是 Linux 系统，使用 ALSA 格式
-        input_ = "default"  # 使用默认音频输入设备
+        format_ = "alsa"     # Linux系统使用alsa音频系统
+        input_ = "default"   # 默认输入设备
     elif system == "Darwin":
-        format_ = "avfoundation"  # 如果是 macOS 系统，使用 AVFoundation 格式
-        input_ = ":0"  # 使用默认音频输入设备
+        format_ = "avfoundation"   # macOS系统使用avfoundation音频系统
+        input_ = ":0"        # 默认音频输入设备
     elif system == "Windows":
-        format_ = "dshow"  # 如果是 Windows 系统，使用 DirectShow 格式
-        input_ = _get_microphone_name()  # 获取麦克风名称
+        format_ = "dshow"    # Windows系统使用dshow音频系统
+        input_ = _get_microphone_name()  # 获取当前连接的麦克风设备名称
 
-    # 构建执行 FFmpeg 命令所需参数列表
+    # 构建ffmpeg命令
     ffmpeg_command = [
-        "ffmpeg",
-        "-f",
-        format_,
-        "-i",
-        input_,
-        "-ac",
-        ac,
-        "-ar",
-        ar,
-        "-f",
-        format_for_conversion,
-        "-fflags",
-        "nobuffer",
-        "-hide_banner",
-        "-loglevel",
-        "quiet",
-        "pipe:1",
+        "ffmpeg",                # ffmpeg命令
+        "-f", format_,           # 指定输入格式为当前系统指定的音频系统
+        "-i", input_,            # 指定输入来源，如默认设备或具体设备名称
+        "-ac", ac,               # 设置音频通道数
+        "-ar", ar,               # 设置采样率
+        "-f", format_for_conversion,  # 设置输出格式为指定的转换格式
+        "-fflags", "nobuffer",   # 设置fflags参数为nobuffer，禁用缓冲
+        "-hide_banner",          # 隐藏ffmpeg的banner信息
+        "-loglevel", "quiet",    # 设置日志级别为静默模式，不输出日志信息
+        "pipe:1",                # 输出音频数据到标准输出(pipe:1)
     ]
-    chunk_len = int(round(sampling_rate * chunk_length_s)) * size_of_sample  # 计算每个音频块的长度
-    iterator = _ffmpeg_stream(ffmpeg_command, chunk_len)  # 调用私有函数返回 FFmpeg 流的迭代器
+
+    # 计算每个数据块的长度
+    chunk_len = int(round(sampling_rate * chunk_length_s)) * size_of_sample
+
+    # 使用私有函数_ffmpeg_stream迭代处理音频流
+    iterator = _ffmpeg_stream(ffmpeg_command, chunk_len)
+
+    # 生成器函数，逐项产生处理后的音频数据块
     for item in iterator:
-        yield item  # 生成每个音频块的迭代器
+        yield item
 
 
 def ffmpeg_microphone_live(
@@ -118,38 +120,18 @@ def ffmpeg_microphone_live(
     format_for_conversion: str = "f32le",
 ):
     """
-    # 定义一个用于通过ffmpeg从麦克风文件中读取音频的辅助函数
-    # 从`stream_chunk_s`开始（如果已定义），输出重叠的部分，直到达到`chunk_length_s`。使用步进来避免在各个块的“边缘”出现错误。
-
-    # 参数：
-    # sampling_rate（`int`）：
-    # 用于从麦克风读取数据时使用的采样率。尝试使用模型的采样率以避免后续重新采样。
-    # chunk_length_s（`float`或`int`）：
-    # 要发送和返回的最大音频块的长度。这包括最终的步进。
-    # stream_chunk_s（`float`或`int`）
-    # 要返回的临时音频的最短长度。
-    # stride_length_s（`float`或`int`或（`float`，`float`），*可选*，默认为`None`）
-    # 要使用的步进长度。步进用于向模型提供关于音频样本的（左，右）的上下文，但不使用该部分进行实际预测。设置这个不会改变块的长度。
-    # format_for_conversion（`str`，默认为`f32le`）
-    # 要由ffmpeg返回的音频样本格式的名称。标准是`f32le`，也可以使用`s16le`。
-
-    # 返回：
-    # 生成器，产生以下形式的字典
-
-    # `{"sampling_rate": int, "raw": np.array(), "partial" bool}`，如果定义了`stride_length_s`，还有一个`"stride" (int, int)`键。
-
-    # `stride`和`raw`都以`samples`表示，`partial`是一个布尔值，表示当前产生项是否是一个完整的块，还是一个部分临时结果，稍后将由另一个更大的块替换。
+    实时读取麦克风音频数据的辅助函数。
     """
-    # 如果stream_chunk_s不为空，则chunk_s等于stream_chunk_s，否则等于chunk_length_s
+    # 如果 stream_chunk_s 不为 None，则将其作为 chunk_s；否则使用 chunk_length_s 作为 chunk_s
     if stream_chunk_s is not None:
         chunk_s = stream_chunk_s
     else:
         chunk_s = chunk_length_s
 
-    # 使用ffmpeg_microphone函数读取麦克风的音频数据
+    # 调用 ffmpeg_microphone 函数获取麦克风的音频流，使用指定的采样率和 chunk_s，同时指定音频格式为 format_for_conversion
     microphone = ffmpeg_microphone(sampling_rate, chunk_s, format_for_conversion=format_for_conversion)
-    
-    # 根据format_for_conversion的值确定dtype和size_of_sample
+
+    # 根据 format_for_conversion 的值选择相应的数据类型 dtype 和每个样本的大小 size_of_sample
     if format_for_conversion == "s16le":
         dtype = np.int16
         size_of_sample = 2
@@ -157,102 +139,118 @@ def ffmpeg_microphone_live(
         dtype = np.float32
         size_of_sample = 4
     else:
+        # 如果 format_for_conversion 不是已处理的格式，则抛出 ValueError 异常
         raise ValueError(f"Unhandled format `{format_for_conversion}`. Please use `s16le` or `f32le`")
 
-    # 如果stride_length_s为None，则stride_length_s等于chunk_length_s的1/6
+    # 如果未指定 stride_length_s，则将 chunk_length_s 的六分之一作为默认值
     if stride_length_s is None:
         stride_length_s = chunk_length_s / 6
-    
-    # 计算chunk_len和stride的左右长度
+
+    # 计算 chunk_length_s 对应的音频数据长度，并转换为字节数
     chunk_len = int(round(sampling_rate * chunk_length_s)) * size_of_sample
+
+    # 如果 stride_length_s 是单个数字（int 或 float），则将其转换为左右两侧相同长度的列表
     if isinstance(stride_length_s, (int, float)):
         stride_length_s = [stride_length_s, stride_length_s]
+
+    # 计算左右两侧 stride 对应的音频数据长度，并转换为字节数
     stride_left = int(round(sampling_rate * stride_length_s[0])) * size_of_sample
     stride_right = int(round(sampling_rate * stride_length_s[1])) * size_of_sample
-    
-    # 记录生成结果的时间
+
+    # 记录当前时间，用于计算音频的时间戳
     audio_time = datetime.datetime.now()
-    # 计算时间差
+
+    # 计算时间增量 delta，表示每次处理的音频数据长度对应的时间长度
     delta = datetime.timedelta(seconds=chunk_s)
-    # 遍历通过麦克风生成的数据块迭代器
+    # 使用 chunk_bytes_iter 函数从 microphone 生成的数据流中迭代获取每个音频片段
     for item in chunk_bytes_iter(microphone, chunk_len, stride=(stride_left, stride_right), stream=True):
-        # 将所有内容还原为 numpy 的规模
+        # 将 item 中的 "raw" 字段重新转换为 numpy 数组
         item["raw"] = np.frombuffer(item["raw"], dtype=dtype)
-        # 调整步长为采样样本大小的比例
+        # 调整 item 中的 "stride" 字段，使其单位符合采样样本的大小
         item["stride"] = (
             item["stride"][0] // size_of_sample,
             item["stride"][1] // size_of_sample,
         )
-        # 设置数据的采样率
+        # 设置 item 中的 "sampling_rate" 字段为指定的采样率
         item["sampling_rate"] = sampling_rate
-        # 累加音频时间
+        # 增加当前音频时间
         audio_time += delta
-        # 如果当前时间超过音频时间加上 10 个增量时间，则跳过
+        # 如果当前时间超过音频时间加上 10 倍的时间间隔，则跳过当前音频片段
         if datetime.datetime.now() > audio_time + 10 * delta:
-            # 我们晚了！！跳过
+            # 我们已经迟到了！！跳过
             continue
-        # 生成数据块
+        # 通过生成器返回当前处理的音频片段
         yield item
-# 从一个迭代器中读取原始字节，并按长度 `chunk_len` 进行分块。可选地添加 `stride` 以获得重叠。
-# `stream` 用于在有部分但不足一个完整的 `chunk_len` 时返回部分结果。
 def chunk_bytes_iter(iterator, chunk_len: int, stride: Tuple[int, int], stream: bool = False):
-    acc = b""  # 初始化一个空的字节串
-    stride_left, stride_right = stride  # 解包 stride 元组
+    """
+    Reads raw bytes from an iterator and does chunks of length `chunk_len`. Optionally adds `stride` to each chunks to
+    get overlaps. `stream` is used to return partial results even if a full `chunk_len` is not yet available.
+    """
+    acc = b""  # 初始化一个空字节串，用于累积迭代器中的原始字节数据
+    stride_left, stride_right = stride  # 将步长参数解包成左右两部分
     if stride_left + stride_right >= chunk_len:
-        raise ValueError(  # 如果 stride 大于等于 chunk_len，抛出异常
+        raise ValueError(
             f"Stride needs to be strictly smaller than chunk_len: ({stride_left}, {stride_right}) vs {chunk_len}"
-        )
-    _stride_left = 0  # 初始化 _stride_left 为 0
-    for raw in iterator:  # 遍历迭代器中的原始数据
-        acc += raw  # 将原始数据添加到累加器中
-        if stream and len(acc) < chunk_len:  # 当 stream 为 True 且累加器长度小于 chunk_len 时
-            stride = (_stride_left, 0)  # 重设 stride 为 (_stride_left, 0)
-            yield {"raw": acc[:chunk_len], "stride": stride, "partial": True}  # 返回部分结果字典
-        else:  # 否则
-            while len(acc) >= chunk_len:  # 当累加器长度大于等于 chunk_len 时
-                stride = (_stride_left, stride_right)  # 设置 stride 为 (_stride_left, stride_right)
-                item = {"raw": acc[:chunk_len], "stride": stride}  # 创建结果字典
-                if stream:  # 如果 stream 为 True
-                    item["partial"] = False  # 设置部分结果标志为 False
-                yield item  # 返回结果字典
-                _stride_left = stride_left  # 更新 _stride_left 为 stride_left
-                acc = acc[chunk_len - stride_left - stride_right :]  # 截取累加器中的剩余数据
-    # 最后一个分块
-    if len(acc) > stride_left:  # 如果累加器中的数据大于 stride_left
-        item = {"raw": acc, "stride": (_stride_left, 0)}  # 创建最后一个分块的结果字典
-        if stream:  # 如果 stream 为 True
-            item["partial"] = False  # 设置部分结果标志为 False
-        yield item  # 返回最后一个分块的结果字典
+        )  # 如果步长大于等于块长度，抛出数值错误异常
+    _stride_left = 0  # 初始化一个内部步长变量为零
+    for raw in iterator:  # 迭代处理输入的迭代器
+        acc += raw  # 将迭代器中的原始数据累加到累积变量中
+        if stream and len(acc) < chunk_len:
+            stride = (_stride_left, 0)  # 如果流模式为真且累积数据长度小于块长度，则使用当前内部步长和零作为步长
+            yield {"raw": acc[:chunk_len], "stride": stride, "partial": True}  # 生成部分结果字典，包含截取的原始数据、步长和部分结果标志
+        else:
+            while len(acc) >= chunk_len:
+                # We are flushing the accumulator
+                stride = (_stride_left, stride_right)  # 当累积数据长度大于等于块长度时，使用当前内部步长和右侧步长作为步长
+                item = {"raw": acc[:chunk_len], "stride": stride}  # 创建包含截取的原始数据和步长的结果字典
+                if stream:
+                    item["partial"] = False  # 如果流模式为真，设置部分结果标志为假
+                yield item  # 生成结果字典
+                _stride_left = stride_left  # 更新内部步长为左侧步长
+                acc = acc[chunk_len - stride_left - stride_right :]  # 更新累积变量，去除已处理的数据部分
+    # Last chunk
+    if len(acc) > stride_left:
+        item = {"raw": acc, "stride": (_stride_left, 0)}  # 处理最后一个块，生成结果字典包含剩余的原始数据和步长
+        if stream:
+            item["partial"] = False  # 如果流模式为真，设置部分结果标志为假
+        yield item  # 生成最后一个结果字典
 
 
-# 内部函数，通过 ffmpeg 创建数据生成器
 def _ffmpeg_stream(ffmpeg_command, buflen: int):
-    bufsize = 2**24  # 16Mb
+    """
+    Internal function to create the generator of data through ffmpeg
+    """
+    bufsize = 2**24  # 16Mo，设置缓冲区大小为 16MB
     try:
-        with subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, bufsize=bufsize) as ffmpeg_process:  # 使用 subprocess 执行 ffmpeg 命令
-            while True:  # 无限循环
-                raw = ffmpeg_process.stdout.read(buflen)  # 从 ffmpeg 进程的标准输出读取数据
-                if raw == b"":  # 如果读取的数据为空字节串
-                    break  # 退出循环
-                yield raw  # 返回读取的数据
-    except FileNotFoundError as error:  # 捕获 FileNotFoundError 异常
-        raise ValueError("ffmpeg was not found but is required to stream audio files from filename") from error  # 抛出异常
+        with subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, bufsize=bufsize) as ffmpeg_process:
+            while True:
+                raw = ffmpeg_process.stdout.read(buflen)  # 从 ffmpeg 进程的标准输出中读取指定长度的数据块
+                if raw == b"":  # 如果读取到的数据为空字节串
+                    break  # 跳出循环
+                yield raw  # 生成读取到的原始数据块
+    except FileNotFoundError as error:
+        raise ValueError("ffmpeg was not found but is required to stream audio files from filename") from error
+        # 如果捕获到文件未找到异常，抛出数值错误异常，指明需要安装 ffmpeg 以从文件名流式传输音频文件
 
 
-# 获取麦克风名称在 Windows 中的函数
 def _get_microphone_name():
-    command = ["ffmpeg", "-list_devices", "true", "-f", "dshow", "-i", ""]  # 创建获取麦克风名称的 ffmpeg 命令
+    """
+    Retrieve the microphone name in Windows .
+    """
+    command = ["ffmpeg", "-list_devices", "true", "-f", "dshow", "-i", ""]  # 定义获取麦克风名称的命令
 
     try:
-        ffmpeg_devices = subprocess.run(command, text=True, stderr=subprocess.PIPE, encoding="utf-8")  # 执行获取麦克风名称的 ffmpeg 命令
-        microphone_lines = [line for line in ffmpeg_devices.stderr.splitlines() if "(audio)" in line]  # 从 stderr 中筛选包含 "(audio)" 的行
+        ffmpeg_devices = subprocess.run(command, text=True, stderr=subprocess.PIPE, encoding="utf-8")  # 执行命令并捕获标准错误
+        microphone_lines = [line for line in ffmpeg_devices.stderr.splitlines() if "(audio)" in line]
+        # 过滤包含"(audio)"的标准错误输出行
 
-        if microphone_lines:  # 如果有麦克风行
-            microphone_name = microphone_lines[0].split('"')[1]  # 获取麦克风名称
+        if microphone_lines:  # 如果找到匹配的麦克风行
+            microphone_name = microphone_lines[0].split('"')[1]  # 解析麦克风名称
             print(f"Using microphone: {microphone_name}")  # 打印使用的麦克风名称
-            return f"audio={microphone_name}"  # 返回麦克风名称
-    except FileNotFoundError:  # 捕获 FileNotFoundError 异常
-        print("ffmpeg was not found. Please install it or make sure it is in your system PATH.")  # 打印 ffmpeg 未找到的消息
+            return f"audio={microphone_name}"  # 返回 ffmpeg 需要的音频设备字符串
+    except FileNotFoundError:
+        print("ffmpeg was not found. Please install it or make sure it is in your system PATH.")
+        # 如果捕获到文件未找到异常，打印消息提示用户安装或将其添加到系统路径中
 
-    return "default"  # 返回默认麦克风名称
+    return "default"  # 默认返回字符串，表示使用默认音频设备
 ```

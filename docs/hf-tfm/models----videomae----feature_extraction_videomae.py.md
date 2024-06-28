@@ -1,25 +1,40 @@
-# `.\transformers\models\videomae\feature_extraction_videomae.py`
+# `.\models\videomae\feature_extraction_videomae.py`
 
-```py
-# 设置编码格式为 UTF-8
-
-# 版权声明
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Feature extractor class for VideoMAE.
+"""
 
 # 导入警告模块
+import warnings
+# 导入日志模块
+from ...utils import logging
+# 导入图像处理类 VideoMAEImageProcessor
+from .image_processing_videomae import VideoMAEImageProcessor
 
-# 从 utils 模块中导入日志记录器
-
-# 从 image_processing_videomae 模块中导入 VideoMAEImageProcessor 类
-
-# 从 logging 模块中获取日志记录器对象
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义 VideoMAEFeatureExtractor 类，继承自 VideoMAEImageProcessor 类
+# VideoMAEFeatureExtractor 类继承自 VideoMAEImageProcessor 类
 class VideoMAEFeatureExtractor(VideoMAEImageProcessor):
-    # 定义初始化方法
+    
+    # 初始化方法，接受任意数量的位置参数和关键字参数
     def __init__(self, *args, **kwargs) -> None:
-        # 发出警告，表示 VideoMAEFeatureExtractor 类已被废弃，并将在 Transformers 版本 5 中移除
-        # 建议使用 VideoMAEImageProcessor 代替
+        # 发出关于类即将在 Transformers 版本 5 中移除的警告
         warnings.warn(
             "The class VideoMAEFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
             " Please use VideoMAEImageProcessor instead.",

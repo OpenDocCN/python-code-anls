@@ -1,113 +1,147 @@
-# `.\transformers\models\mobilenet_v2\configuration_mobilenet_v2.py`
+# `.\models\mobilenet_v2\configuration_mobilenet_v2.py`
 
-```py
-# coding=utf-8
-# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-""" MobileNetV2 model configuration"""
-
-# 从 collections 模块中导入 OrderedDict 类
+```
+# 导入必要的模块和类
 from collections import OrderedDict
-# 导入 Mapping 类型的类型提示
 from typing import Mapping
-# 导入 packaging 模块的 version 函数
+
+# 导入版本管理模块
 from packaging import version
-# 从上级目录中导入 configuration_utils 模块的 PretrainedConfig 类
+
+# 导入配置基类
 from ...configuration_utils import PretrainedConfig
-# 从上级目录中导入 onnx 模块的 OnnxConfig 类
+
+# 导入ONNX配置模块
 from ...onnx import OnnxConfig
-# 从上级目录中导入 utils 模块的 logging 函数
+
+# 导入日志记录工具
 from ...utils import logging
 
-# 获取 logger 对象
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# MobileNetV2 预训练配置文件的映射表
+# 预训练模型配置文件映射表，映射了不同预训练模型的名称和对应的配置文件链接
 MOBILENET_V2_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "google/mobilenet_v2_1.4_224": "https://huggingface.co/google/mobilenet_v2_1.4_224/resolve/main/config.json",
     "google/mobilenet_v2_1.0_224": "https://huggingface.co/google/mobilenet_v2_1.0_224/resolve/main/config.json",
     "google/mobilenet_v2_0.75_160": "https://huggingface.co/google/mobilenet_v2_0.75_160/resolve/main/config.json",
     "google/mobilenet_v2_0.35_96": "https://huggingface.co/google/mobilenet_v2_0.35_96/resolve/main/config.json",
-    # See all MobileNetV2 models at https://huggingface.co/models?filter=mobilenet_v2
+    # 查看所有MobileNetV2模型：https://huggingface.co/models?filter=mobilenet_v2
 }
 
-# MobileNetV2 配置类，继承自 PretrainedConfig
+
 class MobileNetV2Config(PretrainedConfig):
     r"""
-    This is the configuration class to store the configuration of a [`MobileNetV2Model`]. It is used to instantiate a
-    MobileNetV2 model according to the specified arguments, defining the model architecture. Instantiating a
-    configuration with the defaults will yield a similar configuration to that of the MobileNetV2
-    [google/mobilenet_v2_1.0_224](https://huggingface.co/google/mobilenet_v2_1.0_224) architecture.
+    这是一个配置类，用于存储[`MobileNetV2Model`]的配置。根据指定的参数实例化MobileNetV2模型，定义模型架构。
+    使用默认参数实例化配置将产生与MobileNetV2 [google/mobilenet_v2_1.0_224]架构相似的配置。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
-    # 定义函数参数及默认值说明
+    配置对象继承自[`PretrainedConfig`]，可用于控制模型输出。阅读[`PretrainedConfig`]的文档获取更多信息。
+    """
+    
+    def __init__(self, **kwargs):
+        # 调用父类的初始化方法，传递参数给父类构造函数
+        super().__init__(**kwargs)
+
+# 不完整的代码截断，无法提供完整的类定义
     Args:
         num_channels (`int`, *optional*, defaults to 3):
-            输入通道的数量，默认值为3
+            输入图像的通道数，默认为3。
         image_size (`int`, *optional*, defaults to 224):
-            每个图像的大小（分辨率），默认值为224
+            每张图像的分辨率大小，默认为224。
         depth_multiplier (`float`, *optional*, defaults to 1.0):
-            收缩或扩展每一层中通道数量的倍数。默认值为1.0，即网络从32个通道开始。有时也称为“alpha”或“宽度倍增器”。
+            每层中通道数的缩放倍数。默认为1.0，表示网络从32个通道开始。有时也称为“alpha”或“宽度倍增器”。
         depth_divisible_by (`int`, *optional*, defaults to 8):
-            每一层中的通道数量将始终是此数字的倍数，默认值为8
+            每层的通道数始终是此数的倍数，默认为8。
         min_depth (`int`, *optional*, defaults to 8):
-            所有层将至少具有此数量的通道，默认值为8
+            所有层至少具有的通道数，默认为8。
         expand_ratio (`float`, *optional*, defaults to 6.0):
-            每个块中第一层的输出通道数量是输入通道乘以扩展比。默认值为6.0
+            每个块中第一层的输出通道数是输入通道数乘以扩展比例。
         output_stride (`int`, *optional*, defaults to 32):
-            输入特征图和输出特征图的空间分辨率之间的比率。默认情况下，模型将输入维度减小32倍。如果`output_stride`是8或16，则模型会在深度层上使用扩张卷积，而不是常规卷积，从而使特征图永远不会比输入图像小8倍或16倍。
+            输入和输出特征图之间的空间分辨率比例。默认情况下，模型将输入尺寸减少32倍。
+            如果 `output_stride` 是8或16，模型会在深度wise层上使用扩张卷积，以确保特征图不会比输入图像小超过8倍或16倍。
         first_layer_is_expansion (`bool`, *optional*, defaults to `True`):
-            如果非常第一个卷积层也是第一个扩展块的扩展层，则为True，默认值为True。
+            如果第一个卷积层也是第一个扩展块的扩展层，则为True。
         finegrained_output (`bool`, *optional*, defaults to `True`):
-            如果为true，则即使`depth_multiplier`小于1，最终卷积层中的输出通道数量将保持较大（1280），默认为True。
+            如果为True，则最终卷积层中的输出通道数将保持较大值（1280），即使 `depth_multiplier` 小于1。
         hidden_act (`str` or `function`, *optional*, defaults to `"relu6"`):
-            在变压器编码器和卷积层中的非线性激活函数（函数或字符串）。默认值为"relu6"。
+            在Transformer编码器和卷积层中使用的非线性激活函数（函数或字符串）。
         tf_padding (`bool`, *optional*, defaults to `True`):
-            是否在卷积层上使用TensorFlow填充规则，默认值为True。
+            是否在卷积层中使用TensorFlow的填充规则。
         classifier_dropout_prob (`float`, *optional*, defaults to 0.8):
-            附加分类器的丢失率，默认值为0.8。
+            附加分类器的dropout比率。
         initializer_range (`float`, *optional*, defaults to 0.02):
-            用于初始化所有权重矩阵的截断正态初始化器的标准差，默认值为0.02。
+            用于初始化所有权重矩阵的截断正态初始化器的标准差。
         layer_norm_eps (`float`, *optional*, defaults to 0.001):
-            层规范化层使用的ε，默认值为0.001。
+            层归一化层使用的epsilon值。
         semantic_loss_ignore_index (`int`, *optional*, defaults to 255):
-            语义分割模型的丢失函数忽略的索引，默认值为255。
-    
+            语义分割模型损失函数中忽略的索引。
     Example:
+
+    ```python
+    >>> from transformers import MobileNetV2Config, MobileNetV2Model
+
+    >>> # Initializing a "mobilenet_v2_1.0_224" style configuration
+    >>> configuration = MobileNetV2Config()
+    # 定义一个字符串变量，表示模型类型为 MobileNetV2
+    model_type = "mobilenet_v2"
     
-        ```python
-        >>> from transformers import MobileNetV2Config, MobileNetV2Model
+    # 定义 MobileNetV2Model 类，继承自某个父类（未显示出来）
+    class MobileNetV2Model:
     
-        >>> # Initializing a "mobilenet_v2_1.0_224" style configuration
-        >>> configuration = MobileNetV2Config()
-    # 从“mobilenet_v2_1.0_224”样式配置初始化模型
-    model = MobileNetV2Model(configuration)
+        # 初始化方法，设置模型的各项参数和超参数
+        def __init__(
+            self,
+            num_channels=3,  # 输入图像的通道数，默认为3（RGB图像）
+            image_size=224,  # 输入图像的尺寸，默认为224x224像素
+            depth_multiplier=1.0,  # 深度乘数，控制模型的宽度，默认为1.0
+            depth_divisible_by=8,  # 深度可被这个数整除，默认为8
+            min_depth=8,  # 最小深度，默认为8
+            expand_ratio=6.0,  # 扩展比率，默认为6.0
+            output_stride=32,  # 输出步长，默认为32
+            first_layer_is_expansion=True,  # 第一层是否是扩展层，默认为True
+            finegrained_output=True,  # 是否输出细粒度特征，默认为True
+            hidden_act="relu6",  # 隐藏层激活函数，默认为 relu6
+            tf_padding=True,  # 是否使用 TensorFlow 的填充方式，默认为True
+            classifier_dropout_prob=0.8,  # 分类器的 dropout 概率，默认为0.8
+            initializer_range=0.02,  # 初始化范围，默认为0.02
+            layer_norm_eps=0.001,  # Layer Normalization 的 epsilon 参数，默认为0.001
+            semantic_loss_ignore_index=255,  # 语义损失函数中的忽略索引，默认为255
+            **kwargs,  # 其他参数
+        ):
+            # 调用父类的初始化方法，传入其他关键字参数
+            super().__init__(**kwargs)
     
-    # 访问模型配置
-    configuration = model.config
-# 定义一个 MobileNetV2OnnxConfig 类，它继承自 OnnxConfig 类
+            # 如果 depth_multiplier 小于等于0，抛出数值错误异常
+            if depth_multiplier <= 0:
+                raise ValueError("depth_multiplier must be greater than zero.")
+    
+            # 设置模型对象的各项属性
+            self.num_channels = num_channels
+            self.image_size = image_size
+            self.depth_multiplier = depth_multiplier
+            self.depth_divisible_by = depth_divisible_by
+            self.min_depth = min_depth
+            self.expand_ratio = expand_ratio
+            self.output_stride = output_stride
+            self.first_layer_is_expansion = first_layer_is_expansion
+            self.finegrained_output = finegrained_output
+            self.hidden_act = hidden_act
+            self.tf_padding = tf_padding
+            self.classifier_dropout_prob = classifier_dropout_prob
+            self.initializer_range = initializer_range
+            self.layer_norm_eps = layer_norm_eps
+            self.semantic_loss_ignore_index = semantic_loss_ignore_index
+# 定义一个 MobileNetV2OnnxConfig 类，继承自 OnnxConfig 类
 class MobileNetV2OnnxConfig(OnnxConfig):
-    # 定义 torch_onnx_minimum_version 属性，设置为版本号 1.11
+    # 设置 torch 转换为 ONNX 的最低版本要求为 1.11
     torch_onnx_minimum_version = version.parse("1.11")
 
-    # 定义 inputs 属性，返回一个有序字典，键为字符串 "pixel_values"，值为一个字典，包含键值对 {0: "batch"}
+    # 返回模型输入的描述信息，使用有序字典来指定每个输入的名称及其维度信息
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
         return OrderedDict([("pixel_values", {0: "batch"})])
 
-    # 定义 outputs 属性，返回一个有序字典，如果任务为 "image-classification"，则输出键 "logits"，值为一个字典 {0: "batch"}，否则输出键 "last_hidden_state" 和 "pooler_output"，值为字典 {0: "batch"}
+    # 根据任务类型返回模型输出的描述信息，有条件地返回分类器的逻辑输出或者特征提取器的输出
     @property
     def outputs(self) -> Mapping[str, Mapping[int, str]]:
         if self.task == "image-classification":
@@ -115,7 +149,7 @@ class MobileNetV2OnnxConfig(OnnxConfig):
         else:
             return OrderedDict([("last_hidden_state", {0: "batch"}), ("pooler_output", {0: "batch"})])
 
-    # 定义 atol_for_validation 属性，返回一个浮点数 1e-4，用于验证
+    # 返回用于验证时的绝对误差容限
     @property
     def atol_for_validation(self) -> float:
         return 1e-4

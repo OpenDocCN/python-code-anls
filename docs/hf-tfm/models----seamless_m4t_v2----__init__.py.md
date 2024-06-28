@@ -1,27 +1,45 @@
-# `.\transformers\models\seamless_m4t_v2\__init__.py`
+# `.\models\seamless_m4t_v2\__init__.py`
 
-```py
-# 导入必要的模块和函数
+```
+# Copyright 2023 The HuggingFace Team. All rights reserved.
+# 版权声明，版权归HuggingFace团队所有
+
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# Apache License 2.0许可证声明，指定了在符合许可证条件的情况下可以使用本文件的条款
+
 from typing import TYPE_CHECKING
+# 导入TYPE_CHECKING用于类型检查
+
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
+# 从相对路径导入依赖模块和函数
 
-# 定义需要导入的结构
 _import_structure = {
     "configuration_seamless_m4t_v2": ["SEAMLESS_M4T_V2_PRETRAINED_CONFIG_ARCHIVE_MAP", "SeamlessM4Tv2Config"],
 }
+# 定义要导入的结构字典，包含配置和模型
 
-# 检查是否需要导入 torch 模块，如果不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
+# 如果torch不可用，抛出OptionalDependencyNotAvailable异常
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 torch 可用则添加 modeling_seamless_m4t_v2 模块及其下的内容到 _import_structure
     _import_structure["modeling_seamless_m4t_v2"] = [
         "SEAMLESS_M4T_V2_PRETRAINED_MODEL_ARCHIVE_LIST",
         "SeamlessM4Tv2ForTextToSpeech",
@@ -31,10 +49,11 @@ else:
         "SeamlessM4Tv2Model",
         "SeamlessM4Tv2PreTrainedModel",
     ]
+# 如果torch可用，则添加模型相关的导入结构到_import_structure字典
 
-# 如果需要类型检查，则进行相应的模块导入
 if TYPE_CHECKING:
     from .configuration_seamless_m4t_v2 import SEAMLESS_M4T_V2_PRETRAINED_CONFIG_ARCHIVE_MAP, SeamlessM4Tv2Config
+    # 如果正在进行类型检查，则从配置文件导入特定的类和映射
 
     try:
         if not is_torch_available():
@@ -51,10 +70,12 @@ if TYPE_CHECKING:
             SeamlessM4Tv2Model,
             SeamlessM4Tv2PreTrainedModel,
         )
+        # 如果torch可用，则从模型文件导入特定的类和映射
 
-# 如果不需要类型检查，则将 LazyModule 对象绑定到当前模块
 else:
     import sys
-    # 创建 LazyModule 对象，并将其绑定到当前模块
+    # 否则，导入sys模块
+
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+    # 将当前模块注册为懒加载模块，以便在需要时导入指定的结构
 ```

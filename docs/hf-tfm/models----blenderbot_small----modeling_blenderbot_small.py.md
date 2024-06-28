@@ -1,98 +1,108 @@
-# `.\transformers\models\blenderbot_small\modeling_blenderbot_small.py`
+# `.\models\blenderbot_small\modeling_blenderbot_small.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 Facebook, Inc. 和 HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本使用本文件
-# 除非符合许可证要求或书面同意，否则不得使用本文件
-# 您可以在以下网址获得许可证的副本：
+```
+# coding=utf-8
+# Copyright 2021 The Facebook, Inc. and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则本软件基于“原样”提供，
-# 没有任何明示或暗示的保证或条件
-# 请参阅许可证了解特定语言的权限和限制
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """ PyTorch BlenderbotSmall model."""
 
 
-# 导入所需库和模块
-import copy  # 复制对象的库
-import math  # 数学运算库
-from typing import List, Optional, Tuple, Union  # 类型提示的库
+import copy
+import math
+from typing import List, Optional, Tuple, Union
 
-import torch  # PyTorch 库
-import torch.utils.checkpoint  # PyTorch 的检查点库
-from torch import nn  # PyTorch 神经网络库
-from torch.nn import CrossEntropyLoss  # 交叉熵损失函数
+import torch
+import torch.utils.checkpoint
+from torch import nn
+from torch.nn import CrossEntropyLoss
 
-# 导入相关工具函数和模块
-from ...activations import ACT2FN  # 激活函数映射
-from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask  # 准备注意力遮罩的工具函数
-from ...modeling_outputs import (  # 模型输出相关类
+from ...activations import ACT2FN
+from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask
+from ...modeling_outputs import (
     BaseModelOutput,
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
     Seq2SeqLMOutput,
     Seq2SeqModelOutput,
 )
-from ...modeling_utils import PreTrainedModel  # 预训练模型基类
-from ...utils import (  # 工具函数
+from ...modeling_utils import PreTrainedModel
+from ...utils import (
     add_end_docstrings,
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
     logging,
     replace_return_docstrings,
 )
-from .configuration_blenderbot_small import BlenderbotSmallConfig  # BlenderbotSmall 模型配置类
+from .configuration_blenderbot_small import BlenderbotSmallConfig
 
 
-logger = logging.get_logger(__name__)  # 获取日志记录器
+logger = logging.get_logger(__name__)
+
+_CONFIG_FOR_DOC = "BlenderbotSmallConfig"
 
 
-_CONFIG_FOR_DOC = "BlenderbotSmallConfig"  # 用于文档的配置类名称
-
-
-BLENDERBOT_SMALL_PRETRAINED_MODEL_ARCHIVE_LIST = [  # BlenderbotSmall 预训练模型列表
+BLENDERBOT_SMALL_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/blenderbot_small-90M",
-    # 查看所有 BlenderbotSmall 模型的列表请访问：https://huggingface.co/models?filter=blenderbot_small
+    # See all BlenderbotSmall models at https://huggingface.co/models?filter=blenderbot_small
 ]
 
 
-# 从 transformers.models.bart.modeling_bart 中复制的函数，用于向右移动输入标记
+# Copied from transformers.models.bart.modeling_bart.shift_tokens_right
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
     Shift input ids one token to the right.
     """
-    shifted_input_ids = input_ids.new_zeros(input_ids.shape)  # 创建与输入形状相同的零张量
-    shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()  # 将输入标记向右移动一个位置
-    shifted_input_ids[:, 0] = decoder_start_token_id  # 将起始标记设置为解码器起始标记
+    # 创建一个新的张量，形状与输入相同，用于存储右移后的输入ids
+    shifted_input_ids = input_ids.new_zeros(input_ids.shape)
+    # 将输入ids的内容向右移动一个位置
+    shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()
+    # 将decoder起始token id放到每个序列的开头
+    shifted_input_ids[:, 0] = decoder_start_token_id
 
+    # 如果pad_token_id未定义，抛出异常
     if pad_token_id is None:
-        raise ValueError("self.model.config.pad_token_id has to be defined.")  # 如果 pad_token_id 未定义，则引发 ValueError
-    # 将标签中可能存在的 -100 值替换为 pad_token_id
+        raise ValueError("self.model.config.pad_token_id has to be defined.")
+    # 将标签中可能的-100值替换为pad_token_id
     shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
 
-    return shifted_input_ids  # 返回向右移动的输入标记
+    return shifted_input_ids
 
 
-# 从 transformers.models.blenderbot.modeling_blenderbot 中复制的类，用于学习位置嵌入
+# Copied from transformers.models.blenderbot.modeling_blenderbot.BlenderbotLearnedPositionalEmbedding with Blenderbot->BlenderbotSmall
 class BlenderbotSmallLearnedPositionalEmbedding(nn.Embedding):
     """
     This module learns positional embeddings up to a fixed maximum size.
     """
 
     def __init__(self, num_embeddings: int, embedding_dim: int):
-        super().__init__(num_embeddings, embedding_dim)  # 调用父类的初始化方法
-    # 定义了一个名为 forward 的方法，用于计算位置编码
+        super().__init__(num_embeddings, embedding_dim)
     def forward(self, input_ids_shape: torch.Size, past_key_values_length: int = 0):
-        """`input_ids_shape` is expected to be [bsz x seqlen]."""
-        # 从输入的形状中获取 batch size 和 sequence length
+        """
+        `input_ids_shape` is expected to be [bsz x seqlen].
+        Forward pass of the model.
+        """
+        # 从输入的 `input_ids_shape` 中提取 batch size (`bsz`) 和 sequence length (`seq_len`)
         bsz, seq_len = input_ids_shape[:2]
-        # 生成位置编码的索引，范围是 [past_key_values_length, past_key_values_length + seq_len)，类型为 long
+        
+        # 根据 `past_key_values_length` 和当前 `seq_len` 创建一个序列，表示位置编码的位置
         positions = torch.arange(
             past_key_values_length, past_key_values_length + seq_len, dtype=torch.long, device=self.weight.device
         )
-        # 调用父类的 forward 方法计算位置编码
+        
+        # 调用父类的 `forward` 方法，传入位置编码的序列 `positions`，并返回结果
         return super().forward(positions)
-# 从transformers.models.bart.modeling_bart.BartAttention复制而来，将Bart->BlenderbotSmall
+# 从transformers.models.bart.modeling_bart.BartAttention复制过来，将Bart替换为BlenderbotSmall
 class BlenderbotSmallAttention(nn.Module):
     """来自'Attention Is All You Need'论文的多头注意力机制"""
 
@@ -107,35 +117,33 @@ class BlenderbotSmallAttention(nn.Module):
         config: Optional[BlenderbotSmallConfig] = None,
     ):
         super().__init__()
-        # 初始化注意力层的参数
-        self.embed_dim = embed_dim
-        self.num_heads = num_heads
-        self.dropout = dropout
-        self.head_dim = embed_dim // num_heads
-        self.config = config
+        # 初始化模型参数
+        self.embed_dim = embed_dim  # 嵌入维度
+        self.num_heads = num_heads  # 注意力头的数量
+        self.dropout = dropout  # dropout概率
+        self.head_dim = embed_dim // num_heads  # 每个头的维度
+        self.config = config  # BlenderbotSmall配置对象
 
-        # 确保embed_dim能够被num_heads整除
+        # 检查embed_dim是否能被num_heads整除
         if (self.head_dim * num_heads) != self.embed_dim:
             raise ValueError(
-                f"embed_dim必须能够被num_heads整除 (得到 `embed_dim`: {self.embed_dim}"
+                f"embed_dim必须能被num_heads整除 (当前 `embed_dim`: {self.embed_dim}"
                 f" 和 `num_heads`: {num_heads})."
             )
-        # 缩放因子，用于归一化注意力分数
-        self.scaling = self.head_dim**-0.5
-        self.is_decoder = is_decoder
-        self.is_causal = is_causal
+        self.scaling = self.head_dim**-0.5  # 缩放因子
+        self.is_decoder = is_decoder  # 是否为解码器
+        self.is_causal = is_causal  # 是否使用因果注意力
 
-        # 初始化投影矩阵
+        # 线性变换层，用于生成查询、键、值和输出
         self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
-    # 重塑输入张量的形状
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
+        # 将张量重塑为适合多头注意力的形状
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
 
-    # 前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -144,109 +152,115 @@ class BlenderbotSmallAttention(nn.Module):
         attention_mask: Optional[torch.Tensor] = None,
         layer_head_mask: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
-# 从transformers.models.bart.modeling_bart.BartEncoderLayer复制而来，将Bart->BlenderbotSmall，BART->BLENDERBOT_SMALL
+    ):
+        # 实现前向传播逻辑
+        pass  # 由于这只是模型定义，前向传播逻辑尚未实现
+
+
+# 从transformers.models.bart.modeling_bart.BartEncoderLayer复制过来，将Bart替换为BlenderbotSmall，BART替换为BLENDERBOT_SMALL
 class BlenderbotSmallEncoderLayer(nn.Module):
     def __init__(self, config: BlenderbotSmallConfig):
         super().__init__()
-        # 获取配置中的模型维度
-        self.embed_dim = config.d_model
+        self.embed_dim = config.d_model  # 嵌入维度，从配置中获取
 
-        # 初始化自注意力层
+        # 自注意力层及其归一化层
         self.self_attn = BLENDERBOT_SMALL_ATTENTION_CLASSES[config._attn_implementation](
             embed_dim=self.embed_dim,
             num_heads=config.encoder_attention_heads,
             dropout=config.attention_dropout,
             config=config,
         )
-        # 自注意力层的Layer Norm
         self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        self.dropout = config.dropout
-        # 激活函数
-        self.activation_fn = ACT2FN[config.activation_function]
-        self.activation_dropout = config.activation_dropout
-        # 前馈神经网络的第一层和第二层
-        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)
-        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)
-        # 最终的Layer Norm
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
-    # 定义了一个方法，用于前向传播
+        self.dropout = config.dropout  # dropout概率
+        self.activation_fn = ACT2FN[config.activation_function]  # 激活函数
+        self.activation_dropout = config.activation_dropout  # 激活函数的dropout概率
+        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)  # 第一个全连接层
+        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)  # 第二个全连接层
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 最终的归一化层
+    # 定义一个方法 `forward`，用于模型的前向传播
     def forward(
         self,
+        # 输入的隐藏状态，形状为 `(batch, seq_len, embed_dim)`
         hidden_states: torch.FloatTensor,
+        # 注意力掩码，形状为 `(batch, 1, tgt_len, src_len)`，用极大负值表示填充元素
         attention_mask: torch.FloatTensor,
+        # 给定层中的注意力头部掩码，形状为 `(encoder_attention_heads,)`
         layer_head_mask: torch.FloatTensor,
+        # 是否输出所有注意力层的注意力张量，默认为 `False`
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.FloatTensor, Optional[torch.FloatTensor]]:
         """
         Args:
-            hidden_states (`torch.FloatTensor`): 输入层的输入，形状为 `(batch, seq_len, embed_dim)`
-            attention_mask (`torch.FloatTensor`): 注意力掩码，大小为 `(batch, 1, tgt_len, src_len)`，
-                其中填充元素由非常大的负值指示。
-            layer_head_mask (`torch.FloatTensor`): 给定层中注意力头的掩码，大小为 `(encoder_attention_heads,)`。
+            hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
+            attention_mask (`torch.FloatTensor`): attention mask of size
+                `(batch, 1, tgt_len, src_len)` where padding elements are indicated by very large negative values.
+            layer_head_mask (`torch.FloatTensor`): mask for attention heads in a given layer of size
+                `(encoder_attention_heads,)`.
             output_attentions (`bool`, *optional*):
-                是否返回所有注意力层的注意力张量。更多细节请参阅返回的张量中的 `attentions`。
+                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
+                returned tensors for more detail.
         """
-        # 保存残差连接
+        # 将输入的隐藏状态作为残差连接的起点
         residual = hidden_states
-        # 使用自注意力层计算输出
+        # 调用自注意力机制 `self_attn` 进行处理，获取处理后的隐藏状态、注意力权重及可能的所有注意力层输出
         hidden_states, attn_weights, _ = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
             layer_head_mask=layer_head_mask,
             output_attentions=output_attentions,
         )
-        # 对输出应用 dropout
+        # 对处理后的隐藏状态进行 dropout 操作
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 残差连接
+        # 将残差与处理后的隐藏状态相加，形成新的隐藏状态
         hidden_states = residual + hidden_states
-        # 对输出应用自注意力层的 LayerNormalization
+        # 对新的隐藏状态进行自注意力层的归一化处理
         hidden_states = self.self_attn_layer_norm(hidden_states)
 
-        # 保存残差连接
+        # 将当前隐藏状态作为下一层的残差连接起点
         residual = hidden_states
-        # 使用激活函数和全连接层 fc1 计算输出
+        # 经过激活函数后的处理
         hidden_states = self.activation_fn(self.fc1(hidden_states))
-        # 对输出应用 dropout
+        # 对处理后的隐藏状态进行 dropout 操作
         hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
-        # 使用全连接层 fc2 计算输出
+        # 经过第二个线性层 `fc2` 处理
         hidden_states = self.fc2(hidden_states)
-        # 对输出应用 dropout
+        # 对处理后的隐藏状态进行 dropout 操作
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 残差连接
+        # 将残差与处理后的隐藏状态相加，形成新的隐藏状态
         hidden_states = residual + hidden_states
-        # 对输出应用最终的 LayerNormalization
+        # 对新的隐藏状态进行最终层归一化处理
         hidden_states = self.final_layer_norm(hidden_states)
 
-        # 如果输出类型为 torch.float16 且存在无穷大或 NaN 值，则进行修剪
+        # 如果隐藏状态的数据类型为 `torch.float16` 并且存在无穷大或 NaN 值
         if hidden_states.dtype == torch.float16 and (
             torch.isinf(hidden_states).any() or torch.isnan(hidden_states).any()
         ):
+            # 对隐藏状态进行截断处理，确保数值范围在可接受的范围内
             clamp_value = torch.finfo(hidden_states.dtype).max - 1000
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
 
-        # 构建输出元组
+        # 输出结果为包含新的隐藏状态的元组
         outputs = (hidden_states,)
 
-        # 如果需要输出注意力权重，则将注意力权重添加到输出中
+        # 如果需要输出所有注意力层的注意力权重
         if output_attentions:
+            # 将注意力权重也添加到输出结果中
             outputs += (attn_weights,)
 
-        # 返回输出
+        # 返回输出结果
         return outputs
-# 将 BlenderbotSmallAttention 类添加到 BLENDERBOT_SMALL_ATTENTION_CLASSES 字典中
+# 定义一个字典，用于存储针对 BlenderbotSmall 的注意力机制类的映射关系，目前只包含 "eager" 类型
 BLENDERBOT_SMALL_ATTENTION_CLASSES = {
     "eager": BlenderbotSmallAttention,
 }
 
-# 从 transformers.models.bart.modeling_bart.BartDecoderLayer 复制并修改为 BlenderbotSmallDecoderLayer
-# 将 Bart 改为 BlenderbotSmall，BART 改为 BLENDERBOT_SMALL
+# 从 transformers.models.bart.modeling_bart.BartDecoderLayer 复制而来，将 Bart 替换为 BlenderbotSmall，BART 替换为 BLENDERBOT_SMALL
 class BlenderbotSmallDecoderLayer(nn.Module):
     def __init__(self, config: BlenderbotSmallConfig):
         super().__init__()
-        # 获取模型的嵌入维度
-        self.embed_dim = config.d_model
+        self.embed_dim = config.d_model  # 从配置中获取嵌入维度
 
-        # 使用配置中指定的注意力实现类创建自注意力机制
+        # 初始化自注意力层，根据配置选择具体的注意力类，并设置相关参数
         self.self_attn = BLENDERBOT_SMALL_ATTENTION_CLASSES[config._attn_implementation](
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
@@ -255,16 +269,13 @@ class BlenderbotSmallDecoderLayer(nn.Module):
             is_causal=True,
             config=config,
         )
-        # 设置 dropout 概率
-        self.dropout = config.dropout
-        # 获取激活函数
-        self.activation_fn = ACT2FN[config.activation_function]
-        # 设置激活函数的 dropout 概率
-        self.activation_dropout = config.activation_dropout
+        self.dropout = config.dropout  # 设置丢弃率
+        self.activation_fn = ACT2FN[config.activation_function]  # 获取激活函数
+        self.activation_dropout = config.activation_dropout  # 设置激活函数的丢弃率
 
-        # 创建自注意力机制的 LayerNorm 层
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 使用配置中指定的注意力实现类创建编码器-解码器注意力机制
+        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 初始化自注意力层的 LayerNorm
+
+        # 初始化编码器注意力层，同样根据配置选择注意力类，并设置参数
         self.encoder_attn = BLENDERBOT_SMALL_ATTENTION_CLASSES[config._attn_implementation](
             self.embed_dim,
             config.decoder_attention_heads,
@@ -272,15 +283,15 @@ class BlenderbotSmallDecoderLayer(nn.Module):
             is_decoder=True,
             config=config,
         )
-        # 创建编码器-解码器注意力机制的 LayerNorm 层
-        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 创建全连接层的第一个线性变换
-        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
-        # 创建全连接层的第二个线性变换
-        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
-        # 创建最终的 LayerNorm 层
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
+        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 初始化编码器注意力层的 LayerNorm
 
+        # 初始化第一个全连接层和第二个全连接层
+        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
+        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
+
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 初始化最终的 LayerNorm
+
+    # 前向传播函数，定义模型的计算流程，接受一系列输入参数并返回输出
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -292,68 +303,40 @@ class BlenderbotSmallDecoderLayer(nn.Module):
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
         output_attentions: Optional[bool] = False,
         use_cache: Optional[bool] = True,
-    ):
-        # 此处应该有模型的前向传播逻辑，但由于代码截断，无法提供完整的注释
-        pass
-
-# BlenderbotSmallPreTrainedModel 类的定义
-class BlenderbotSmallPreTrainedModel(PreTrainedModel):
-    # BlenderbotSmallConfig 类作为配置类
-    config_class = BlenderbotSmallConfig
-    # 模型的基础名称前缀
-    base_model_prefix = "model"
-    # 是否支持梯度检查点
-    supports_gradient_checkpointing = True
-
-    # 初始化模型权重
-    def _init_weights(self, module):
-        # 从配置中获取初始化的标准差
-        std = self.config.init_std
-        # 如果是线性层
-        if isinstance(module, nn.Linear):
-            # 使用正态分布初始化权重
-            module.weight.data.normal_(mean=0.0, std=std)
-            # 如果有偏置，初始化为零
-            if module.bias is not None:
-                module.bias.data.zero_()
-        # 如果是嵌入层
-        elif isinstance(module, nn.Embedding):
-            # 使用正态分布初始化权重
-            module.weight.data.normal_(mean=0.0, std=std)
-            # 如果有填充索引，将其权重初始化为零
-            if module.padding_idx is not None:
-                module.weight.data[module.padding_idx].zero_()
-
-    # 属性装饰器
-    @property
-    # 生成虚拟输入数据的方法
+    # 定义一个方法，用于生成模型输入的虚拟数据
     def dummy_inputs(self):
-        # 获取配置中的填充标记ID
+        # 获取配置中的填充标记 ID
         pad_token = self.config.pad_token_id
-        # 创建输入ID张量，其中包含两个子张量，每个子张量代表一个句子的输入ID序列
+        # 创建一个张量作为模型输入的示例，包含两个样本的输入序列
         input_ids = torch.tensor([[0, 6, 10, 4, 2], [0, 8, 12, 2, pad_token]], device=self.device)
-        # 构建虚拟输入字典，包含注意力掩码、输入ID以及解码器输入ID
+        # 构建虚拟输入数据字典，包括注意力掩码和输入 ID
         dummy_inputs = {
-            "attention_mask": input_ids.ne(pad_token),  # 根据填充标记ID生成注意力掩码张量
-            "input_ids": input_ids,  # 将输入ID张量加入字典
-            "decoder_input_ids": input_ids,  # 将输入ID张量作为解码器的输入ID加入字典
+            "attention_mask": input_ids.ne(pad_token),  # 生成对应的注意力掩码，标记填充位置为 False
+            "input_ids": input_ids,  # 将创建的输入 ID 添加到字典中
+            "decoder_input_ids": input_ids,  # 将输入 ID 作为解码器的输入 ID，这里简单地复用编码器的输入
         }
-        # 返回虚拟输入字典
+        # 返回包含虚拟输入数据的字典
         return dummy_inputs
+# 定义 BlenderbotSmallStartDocstring 常量，包含模型文档字符串，描述模型继承自 PreTrainedModel 类。
 BLENDERBOT_SMALL_START_DOCSTRING = r"""
-    # 这个模型继承自`PreTrainedModel`。查看超类文档以获取库实现的通用方法（如下载或保存、调整输入嵌入、剪枝头等）。
+    This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
+    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+    etc.)
 
-    # 这个模型也是一个 PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) 的子类。
-    # 将其用作常规的 PyTorch 模块，并参考 PyTorch 文档以获取所有与一般用法和行为相关的事项。
+    This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
+    Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
+    and behavior.
 
-    # 参数:
-    #     config ([`BlenderbotSmallConfig`]):
-    #         具有模型所有参数的模型配置类。使用配置文件初始化不会加载与模型关联的权重，仅加载配置。查看
-    #         [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
+    Parameters:
+        config ([`BlenderbotSmallConfig`]):
+            Model configuration class with all the parameters of the model. Initializing with a config file does not
+            load the weights associated with the model, only the configuration. Check out the
+            [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
+# 定义 BlenderbotSmallGenerationExample 常量，包含对话示例的文档字符串，展示如何使用模型进行对话生成。
 BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
-    # 对话示例:
+    Conversation example:
 
     ```python
     >>> from transformers import AutoTokenizer, BlenderbotSmallForConditionalGeneration
@@ -363,16 +346,16 @@ BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
     >>> tokenizer = AutoTokenizer.from_pretrained(mname)
     >>> UTTERANCE = "My friends are cool but they eat too many carbs."
     >>> print("Human: ", UTTERANCE)
-    # 人类:  我的朋友很酷，但他们吃的碳水化合物太多了。
+    Human:  My friends are cool but they eat too many carbs.
 
     >>> inputs = tokenizer([UTTERANCE], return_tensors="pt")
     >>> reply_ids = model.generate(**inputs)
     >>> print("Bot: ", tokenizer.batch_decode(reply_ids, skip_special_tokens=True)[0])
-    # 机器人: 他们吃什么样的碳水化合物？我不太了解碳水化合物。
+    Bot:  what kind of carbs do they eat? i don't know much about carbs.
 
     >>> REPLY = "I'm not sure"
     >>> print("Human: ", REPLY)
-    # 人类: 我不确定
+    Human: I'm not sure
 
     >>> NEXT_UTTERANCE = (
     ...     "My friends are cool but they eat too many carbs.__end__ __start__what kind of carbs do they eat? "
@@ -382,63 +365,59 @@ BLENDERBOT_SMALL_GENERATION_EXAMPLE = r"""
     >>> inputs = tokenizer([NEXT_UTTERANCE], return_tensors="pt")
     >>> next_reply_ids = model.generate(**inputs)
     >>> print("Bot: ", tokenizer.batch_decode(next_reply_ids, skip_special_tokens=True)[0])
-    # 机器人: 他们吃了很多碳水化合物。碳水化合物含有大量脂肪、蛋白质和脂肪。
-    ```py
+    Bot:  they eat a lot of carbs. carbs are high in fat, protein, and fats.
+    ```
 """
 
+# 定义 BlenderbotSmallInputsDocstring 常量，目前为空字符串，用于描述模型输入的文档字符串。
 BLENDERBOT_SMALL_INPUTS_DOCSTRING = r"""
 """
 
 
 class BlenderbotSmallEncoder(BlenderbotSmallPreTrainedModel):
     """
-    # 由*config.encoder_layers*个自注意力层组成的Transformer编码器。每一层都是一个[`BlenderbotSmallEncoderLayer`]。
+    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
+    [`BlenderbotSmallEncoderLayer`].
 
-    # 参数:
-    #     config: BlenderbotSmallConfig
-    #     embed_tokens (nn.Embedding): 输出嵌入
+    Args:
+        config: BlenderbotSmallConfig
+        embed_tokens (nn.Embedding): output embedding
     """
-    # 初始化方法，接受一个 BlenderbotSmallConfig 类型的参数 config 和一个可选的 nn.Embedding 类型的参数 embed_tokens
     def __init__(self, config: BlenderbotSmallConfig, embed_tokens: Optional[nn.Embedding] = None):
-        # 调用父类的初始化方法
         super().__init__(config)
-
-        # 设置 dropout 概率为 config 中的配置
+        
+        # 从配置中获取dropout和encoder层的dropout比例
         self.dropout = config.dropout
-        # 设置 encoder layer dropout 概率为 config 中的配置
         self.layerdrop = config.encoder_layerdrop
-
-        # 获取 embedding 维度
+        
+        # 设置embedding维度和padding索引
         embed_dim = config.d_model
-        # 获取 padding 的索引
         self.padding_idx = config.pad_token_id
-        # 获取最大源序列长度
         self.max_source_positions = config.max_position_embeddings
-        # 如果配置了 scale embedding，则设置 embed_scale 为 embedding 维度的平方根，否则为 1.0
+        # 如果配置中设置了scale_embedding，则使用sqrt(embed_dim)作为embedding的缩放因子，否则为1.0
         self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0
-
-        # 如果传入了 embed_tokens，则使用传入的 embed_tokens，否则创建一个新的 nn.Embedding
+        
+        # 如果提供了embed_tokens，则直接使用，否则创建一个新的embedding
         if embed_tokens is not None:
             self.embed_tokens = embed_tokens
         else:
             self.embed_tokens = nn.Embedding(config.vocab_size, embed_dim, self.padding_idx)
-
-        # 创建位置 embedding 对象
+        
+        # 创建学习后的位置embedding
         self.embed_positions = BlenderbotSmallLearnedPositionalEmbedding(
             config.max_position_embeddings,
             embed_dim,
         )
-        # 创建多个编码器层，并组成一个 ModuleList
+        # 创建encoder层的ModuleList，包含多个BlenderbotSmallEncoderLayer实例
         self.layers = nn.ModuleList([BlenderbotSmallEncoderLayer(config) for _ in range(config.encoder_layers)])
-        # 创建一个 LayerNorm 对象，对 embedding 进行归一化处理
+        # 对embedding层进行LayerNorm处理
         self.layernorm_embedding = nn.LayerNorm(embed_dim)
-
-        # 是否使用梯度检查点
+        
+        # 设置梯度检查点为False
         self.gradient_checkpointing = False
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 前向传播方法
     def forward(
         self,
         input_ids=None,
@@ -448,55 +427,47 @@ class BlenderbotSmallEncoder(BlenderbotSmallPreTrainedModel):
         output_attentions=None,
         output_hidden_states=None,
         return_dict=None,
+# 定义了一个继承自BlenderbotSmallPreTrainedModel的Transformer解码器类，包含多个BlenderbotSmallDecoderLayer层
 class BlenderbotSmallDecoder(BlenderbotSmallPreTrainedModel):
     """
-    Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`BlenderbotSmallDecoderLayer`]
+    Transformer解码器，由config.decoder_layers个BlenderbotSmallDecoderLayer层组成。
 
     Args:
-        config: BlenderbotSmallConfig
-        embed_tokens (nn.Embedding): output embedding
+        config: BlenderbotSmallConfig的实例，包含模型配置信息
+        embed_tokens (nn.Embedding): 输出的嵌入层
     """
 
     def __init__(self, config: BlenderbotSmallConfig, embed_tokens: Optional[nn.Embedding] = None):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置 dropout 概率
-        self.dropout = config.dropout
-        # 设置层间 dropout 概率
-        self.layerdrop = config.decoder_layerdrop
-        # 设置填充索引
-        self.padding_idx = config.pad_token_id
-        # 设置最大目标位置
-        self.max_target_positions = config.max_position_embeddings
-        # 设置嵌入缩放因子
-        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0
+        self.dropout = config.dropout  # 从配置中获取dropout率
+        self.layerdrop = config.decoder_layerdrop  # 从配置中获取层间dropout率
+        self.padding_idx = config.pad_token_id  # 从配置中获取填充token的索引
+        self.max_target_positions = config.max_position_embeddings  # 从配置中获取最大目标位置数
+        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0  # 根据配置决定是否对嵌入进行缩放
 
-        # 如果提供了嵌入令牌，则使用提供的嵌入令牌，否则创建一个新的嵌入令牌
         if embed_tokens is not None:
-            self.embed_tokens = embed_tokens
+            self.embed_tokens = embed_tokens  # 如果提供了embed_tokens，则使用提供的嵌入层
         else:
-            self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)
+            self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)  # 否则创建新的嵌入层
 
-        # 创建位置嵌入
         self.embed_positions = BlenderbotSmallLearnedPositionalEmbedding(
             config.max_position_embeddings,
             config.d_model,
-        )
-        # 创建多个解码层
-        self.layers = nn.ModuleList([BlenderbotSmallDecoderLayer(config) for _ in range(config.decoder_layers)])
-        # 创建层归一化
-        self.layernorm_embedding = nn.LayerNorm(config.d_model)
+        )  # 学习得到的位置嵌入层
 
-        # 初始化梯度检查点
-        self.gradient_checkpointing = False
+        self.layers = nn.ModuleList([BlenderbotSmallDecoderLayer(config) for _ in range(config.decoder_layers)])  # 创建多个解码层
+        self.layernorm_embedding = nn.LayerNorm(config.d_model)  # 嵌入层的LayerNorm
+
+        self.gradient_checkpointing = False  # 是否使用梯度检查点（暂未启用）
+
         # 初始化权重并应用最终处理
         self.post_init()
 
     def get_input_embeddings(self):
-        return self.embed_tokens
+        return self.embed_tokens  # 获取输入的嵌入层
 
     def set_input_embeddings(self, value):
-        self.embed_tokens = value
+        self.embed_tokens = value  # 设置输入的嵌入层
 
     def forward(
         self,
@@ -512,166 +483,141 @@ class BlenderbotSmallDecoder(BlenderbotSmallPreTrainedModel):
         output_attentions=None,
         output_hidden_states=None,
         return_dict=None,
-
-
-
-@add_start_docstrings(
-    "The bare BlenderbotSmall Model outputting raw hidden-states without any specific head on top.",
-    BLENDERBOT_SMALL_START_DOCSTRING,
-)
-class BlenderbotSmallModel(BlenderbotSmallPreTrainedModel):
-    _tied_weights_keys = ["decoder.embed_tokens.weight", "encoder.embed_tokens.weight"]
-
-    def __init__(self, config: BlenderbotSmallConfig):
-        # 调用父类的初始化方法
-        super().__init__(config)
-
-        padding_idx, vocab_size = config.pad_token_id, config.vocab_size
-        # 创建共享的嵌入层
-        self.shared = nn.Embedding(vocab_size, config.d_model, padding_idx)
-
-        # 创建编码器和解码器
-        self.encoder = BlenderbotSmallEncoder(config, self.shared)
-        self.decoder = BlenderbotSmallDecoder(config, self.shared)
-
-        # 初始化权重并应用最终处理
-        self.post_init()
-
-    def get_input_embeddings(self):
-        return self.shared
-
-    def set_input_embeddings(self, value):
-        self.shared = value
-        self.encoder.embed_tokens = self.shared
-        self.decoder.embed_tokens = self.shared
-
-    def get_encoder(self):
-        return self.encoder
-    # 返回解码器对象
+    ):
+        # 省略了具体的前向传播逻辑，在实际代码中应该包含完整的Transformer解码器的前向传播过程
+        pass
+    # 返回模型的解码器
     def get_decoder(self):
         return self.decoder
 
-    # 在模型的前向传播过程中，接收一系列输入并生成输出
+    # 应用装饰器，将 BLENDERBOT_SMALL_INPUTS_DOCSTRING 添加到模型前向传播方法的文档字符串中
+    # 使用 replace_return_docstrings 函数，将输出类型设为 Seq2SeqModelOutput，并替换配置类为 _CONFIG_FOR_DOC
     @add_start_docstrings_to_model_forward(BLENDERBOT_SMALL_INPUTS_DOCSTRING)
-    # 替换返回值文档字符串，指定输出类型和配置类
     @replace_return_docstrings(output_type=Seq2SeqModelOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs，类型为长整型张量，可选
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码，可选
-        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器输入的 token IDs，可选
-        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器的注意力掩码，可选
-        head_mask: Optional[torch.Tensor] = None,  # 头部掩码，可选
-        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器头部掩码，可选
-        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 交叉注意力头部掩码，可选
-        encoder_outputs: Optional[Union[Tuple, BaseModelOutput]] = None,  # 编码器输出，可选
-        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 过去的键值，可选
-        inputs_embeds: Optional[torch.Tensor] = None,  # 输入的嵌入表示，可选
-        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器输入的嵌入表示，可选
-        use_cache: Optional[bool] = None,  # 是否使用缓存，可选
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可选
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可选
-        return_dict: Optional[bool] = None,  # 是否返回字典形式的结果，可选
-# 添加模型文档字符串，描述 BlenderbotSmall 模型及其用途
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs
+        attention_mask: Optional[torch.Tensor] = None,  # 输入的注意力掩码
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器的 token IDs
+        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器的注意力掩码
+        head_mask: Optional[torch.Tensor] = None,  # 多头注意力机制的掩码
+        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器的多头注意力机制掩码
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 交叉注意力机制的掩码
+        encoder_outputs: Optional[Union[Tuple, BaseModelOutput]] = None,  # 编码器的输出
+        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 用于存储过去的键值对
+        inputs_embeds: Optional[torch.Tensor] = None,  # 嵌入输入
+        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器嵌入输入
+        use_cache: Optional[bool] = None,  # 是否使用缓存
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
+        return_dict: Optional[bool] = None,  # 是否返回字典格式的输出结果
+# 添加文档字符串描述 BlenderbotSmallForConditionalGeneration 类，它是带有语言建模头部的 BlenderbotSmall 模型，可用于摘要生成。
 @add_start_docstrings(
     "The BlenderbotSmall Model with a language modeling head. Can be used for summarization.",
     BLENDERBOT_SMALL_START_DOCSTRING,
 )
-# 定义 BlenderbotSmallForConditionalGeneration 类，继承自 BlenderbotSmallPreTrainedModel
 class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
-    # 模型参数前缀
+    # 设置基础模型前缀为 "model"
     base_model_prefix = "model"
-    # 加载时忽略的键
+    # 在加载时忽略的关键字列表，缺失时的处理方式
     _keys_to_ignore_on_load_missing = ["final_logits_bias"]
-    # 共享权重的键
+    # 指定需要共享权重的键名列表
     _tied_weights_keys = ["decoder.embed_tokens.weight", "encoder.embed_tokens.weight", "lm_head.weight"]
 
-    # 初始化方法，接受 BlenderbotSmallConfig 类型的参数
+    # 初始化方法，接受 BlenderbotSmallConfig 类型的参数 config
     def __init__(self, config: BlenderbotSmallConfig):
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 创建 BlenderbotSmallModel 对象
+        # 使用给定的 config 创建 BlenderbotSmallModel 实例，并赋值给 self.model
         self.model = BlenderbotSmallModel(config)
-        # 注册 final_logits_bias 缓冲区
+        # 注册一个用于偏置的缓冲张量，形状为 (1, self.model.shared.num_embeddings)，初始化为零
         self.register_buffer("final_logits_bias", torch.zeros((1, self.model.shared.num_embeddings)))
-        # 创建线性层 lm_head
+        # 创建一个线性层 lm_head，用于生成最终的输出
         self.lm_head = nn.Linear(config.d_model, self.model.shared.num_embeddings, bias=False)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 获取编码器
+    # 返回当前模型的编码器
     def get_encoder(self):
         return self.model.get_encoder()
 
-    # 获取解码器
+    # 返回当前模型的解码器
     def get_decoder(self):
         return self.model.get_decoder()
 
-    # 调整 token embeddings 大小
+    # 调整 token embeddings 的大小，返回调整后的新的嵌入层
     def resize_token_embeddings(self, new_num_tokens: int, pad_to_multiple_of: Optional[int] = None) -> nn.Embedding:
+        # 调用父类的 resize_token_embeddings 方法，返回新的嵌入层
         new_embeddings = super().resize_token_embeddings(new_num_tokens, pad_to_multiple_of)
+        # 调整 final_logits_bias 的大小以匹配新的嵌入层
         self._resize_final_logits_bias(new_embeddings.weight.shape[0])
         return new_embeddings
 
-    # 调整 final_logits_bias 大小
+    # 调整 final_logits_bias 的大小以匹配新的 token 数量
     def _resize_final_logits_bias(self, new_num_tokens: int) -> None:
+        # 获取当前 final_logits_bias 的旧 token 数量
         old_num_tokens = self.final_logits_bias.shape[-1]
+        # 如果新 token 数量小于等于旧 token 数量，则直接截取现有的部分作为新的偏置
         if new_num_tokens <= old_num_tokens:
             new_bias = self.final_logits_bias[:, :new_num_tokens]
         else:
+            # 否则，创建额外的零偏置，拼接在现有偏置后面，以扩展偏置大小
             extra_bias = torch.zeros((1, new_num_tokens - old_num_tokens), device=self.final_logits_bias.device)
             new_bias = torch.cat([self.final_logits_bias, extra_bias], dim=1)
+        # 注册调整后的 final_logits_bias 为新的偏置
         self.register_buffer("final_logits_bias", new_bias)
 
-    # 获取输出 embeddings
+    # 返回语言建模头部 lm_head
     def get_output_embeddings(self):
         return self.lm_head
 
-    # 设置输出 embeddings
+    # 设置新的输出嵌入到 lm_head
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
 
-    # 添加模型前向方法的文档字符串
+    # 将文档字符串添加到模型前向方法，描述输入格式和返回结果
     @add_start_docstrings_to_model_forward(BLENDERBOT_SMALL_INPUTS_DOCSTRING)
-    # 替��返回值文档字符串
+    # 替换返回值文档字符串为 Seq2SeqLMOutput 类型，使用 _CONFIG_FOR_DOC 配置类
     @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
-    # 添加模型前向方法结束文档字符串
+    # 添加结束文档字符串 BLENDERBOT_SMALL_GENERATION_EXAMPLE
     @add_end_docstrings(BLENDERBOT_SMALL_GENERATION_EXAMPLE)
-    # 定义一个方法用于模型的前向传播
+    # 定义一个前向传播函数，用于执行模型的前向推理过程
     def forward(
-        # 输入的 token IDs，类型为 LongTensor，可选参数，默认为 None
+        self,
+        # 输入序列的标识符，通常是一个长整型张量
         input_ids: Optional[torch.LongTensor] = None,
-        # 注意力掩码，类型为 Tensor，可选参数，默认为 None
+        # 注意力掩码，用于指示模型在哪些位置需要进行注意力计算
         attention_mask: Optional[torch.Tensor] = None,
-        # 解码器的输入 token IDs，类型为 LongTensor，可选参数，默认为 None
+        # 解码器的输入序列标识符，可选参数
         decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力掩码，类型为 LongTensor，可选参数，默认为 None
+        # 解码器的注意力掩码，指示解码器哪些位置需要注意力计算
         decoder_attention_mask: Optional[torch.LongTensor] = None,
-        # 头部掩码，类型为 Tensor，可选参数，默认为 None
+        # 头部掩码，用于屏蔽特定注意力头部的计算
         head_mask: Optional[torch.Tensor] = None,
-        # 解码器头部掩码，类型为 Tensor，可选参数，默认为 None
+        # 解码器头部掩码，用于解码器屏蔽特定注意力头部的计算
         decoder_head_mask: Optional[torch.Tensor] = None,
-        # 交叉注意力头部掩码，类型为 Tensor，可选参数，默认为 None
+        # 交叉注意力头部掩码，用于屏蔽编码器和解码器之间的交叉注意力头部的计算
         cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器输出，类型为 Tuple 或 BaseModelOutput，可选参数，默认为 None
+        # 编码器输出，可以是元组或基本模型输出的联合类型
         encoder_outputs: Optional[Union[Tuple, BaseModelOutput]] = None,
-        # 过去的键值对，类型为 List[torch.FloatTensor]，可选参数，默认为 None
+        # 过去的键值对，用于存储过去计算的注意力权重
         past_key_values: Optional[List[torch.FloatTensor]] = None,
-        # 输入的嵌入向量，类型为 Tensor，可选参数，默认为 None
+        # 输入嵌入，用于直接提供输入的嵌入表示
         inputs_embeds: Optional[torch.Tensor] = None,
-        # 解码器输入的嵌入向量，类型为 torch.FloatTensor，可选参数，默认为 None
+        # 解码器输入嵌入，用于直接提供解码器输入的嵌入表示
         decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 标签，类型为 LongTensor，可选参数，默认为 None
+        # 标签，通常是一个长整型张量，用于模型的监督训练
         labels: Optional[torch.LongTensor] = None,
-        # 是否使用缓存，类型为 bool，可选参数，默认为 None
+        # 是否使用缓存，用于控制是否返回缓存项
         use_cache: Optional[bool] = None,
-        # 是否输出注意力权重，类型为 bool，可选参数，默认为 None
+        # 是否输出注意力权重信息
         output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，类型为 bool，可选参数，默认为 None
+        # 是否输出隐藏状态信息
         output_hidden_states: Optional[bool] = None,
-        # 是否返回字典，类型为 bool，可选参数，默认为 None
+        # 是否以返回字典形式输出
         return_dict: Optional[bool] = None,
-        ) -> Union[Tuple[torch.FloatTensor], Seq2SeqLMOutput]:
+    ) -> Union[Tuple[torch.FloatTensor], Seq2SeqLMOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the masked language modeling loss. Indices should either be in `[0, ...,
@@ -679,25 +625,25 @@ class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
             (masked), the loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`.
 
         Returns:
+            Tuple of masked language modeling loss and model outputs if not in `return_dict` mode,
+            otherwise a `Seq2SeqLMOutput` containing various model outputs.
         """
-        # 设置返回字典，如果未提供则使用配置中的返回字典
+        # Determine whether to use the provided `return_dict` or the default from `self.config`
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 如果提供了标签
+        # If labels are provided, adjust `use_cache` and set `decoder_input_ids` if not already provided
         if labels is not None:
-            # 如果使用缓存，则更改警告信息
             if use_cache:
+                # Warn about the deprecated use of `use_cache` when `labels` are provided
                 logger.warning("The `use_cache` argument is changed to `False` since `labels` is provided.")
-            # 设置使用缓存为 False
             use_cache = False
-            # 如果解码器输入 ID 和解码器输入嵌入均未提供
             if decoder_input_ids is None and decoder_inputs_embeds is None:
-                # 将标签向右移动一个位置，用于解码器输入
+                # Shift the `labels` to the right to align with decoder input format
                 decoder_input_ids = shift_tokens_right(
                     labels, self.config.pad_token_id, self.config.decoder_start_token_id
                 )
 
-        # 使用模型进行前向传播
+        # Pass the input arguments to the underlying model for computation
         outputs = self.model(
             input_ids,
             attention_mask=attention_mask,
@@ -715,24 +661,22 @@ class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 计算语言模型的 logits
+
+        # Compute language modeling logits and add bias for final logits
         lm_logits = self.lm_head(outputs[0]) + self.final_logits_bias
 
         masked_lm_loss = None
-        # 如果提供了标签
+        # If labels are provided, compute the masked language modeling loss
         if labels is not None:
-            # 定义交叉熵损失函数
             loss_fct = CrossEntropyLoss()
-            # 计算掩码语言建模损失
             masked_lm_loss = loss_fct(lm_logits.view(-1, self.config.vocab_size), labels.view(-1))
 
-        # 如果不返回字典
+        # Return the appropriate output based on `return_dict` mode
         if not return_dict:
-            # 组装输出
             output = (lm_logits,) + outputs[1:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
 
-        # 返回 Seq2SeqLMOutput 对象
+        # Return a structured `Seq2SeqLMOutput` containing relevant model outputs
         return Seq2SeqLMOutput(
             loss=masked_lm_loss,
             logits=lm_logits,
@@ -744,7 +688,6 @@ class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
             encoder_hidden_states=outputs.encoder_hidden_states,
             encoder_attentions=outputs.encoder_attentions,
         )
-    # 为生成准备输入数据，用于生成下一个词的序列
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
@@ -757,23 +700,25 @@ class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
         encoder_outputs=None,
         **kwargs,
     ):
-        # 如果过去键值存在，则截断decoder_input_ids
+        # 如果使用了过去的键值（即past_key_values不为None），则根据过去的长度修剪decoder_input_ids
         if past_key_values is not None:
-            # 获取过去键值的长度
+            # 获取过去键值中的第一个元素的长度（过去长度）
             past_length = past_key_values[0][0].shape[2]
 
-            # 一些生成方法已经只传递最后一个输入ID
+            # 一些生成方法可能已经只传递最后一个输入ID
             if decoder_input_ids.shape[1] > past_length:
+                # 如果decoder_input_ids的长度大于过去长度，则移除前缀长度为过去长度
                 remove_prefix_length = past_length
             else:
-                # 默认为旧的行为：仅保留最后一个ID
+                # 默认的旧行为：仅保留最后一个ID
                 remove_prefix_length = decoder_input_ids.shape[1] - 1
 
+            # 修剪decoder_input_ids，仅保留从remove_prefix_length到结尾的部分
             decoder_input_ids = decoder_input_ids[:, remove_prefix_length:]
 
         # 返回包含生成所需输入的字典
         return {
-            "input_ids": None,  # encoder_outputs已经定义。不需要input_ids
+            "input_ids": None,  # encoder_outputs已定义，不需要input_ids
             "encoder_outputs": encoder_outputs,
             "past_key_values": past_key_values,
             "decoder_input_ids": decoder_input_ids,
@@ -781,89 +726,81 @@ class BlenderbotSmallForConditionalGeneration(BlenderbotSmallPreTrainedModel):
             "head_mask": head_mask,
             "decoder_head_mask": decoder_head_mask,
             "cross_attn_head_mask": cross_attn_head_mask,
-            "use_cache": use_cache,  # 将此更改为避免缓存（推测是为了调试）
+            "use_cache": use_cache,  # 更改此项以避免缓存（可能用于调试）
         }
 
     @staticmethod
     def _reorder_cache(past_key_values, beam_idx):
+        # 初始化重新排序后的过去键值
         reordered_past = ()
-        # 对过去键值进行重新排序
+        # 对每一层的过去键值进行重新排序
         for layer_past in past_key_values:
-            # 缓存的交叉注意力状态不必重新排序 -> 它们始终相同
+            # 对于每个过去状态，按照beam_idx重新排序（转换为相同设备）
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past[:2])
                 + layer_past[2:],
             )
+        # 返回重新排序后的过去键值
         return reordered_past
-# 从transformers.models.bart.modeling_bart.BartDecoderWrapper复制代码，将Bart->BlenderbotSmall
-# 定义了一个BlenderbotSmallDecoderWrapper类，用于正确加载预训练检查点，当因果语言模型与EncoderDecoderModel框架结合使用时。
+# 从transformers.models.bart.modeling_bart.BartDecoderWrapper复制并修改为BlenderbotSmallDecoderWrapper
 class BlenderbotSmallDecoderWrapper(BlenderbotSmallPreTrainedModel):
     """
-    This wrapper class is a helper class to correctly load pretrained checkpoints when the causal language model is
-    used in combination with the [`EncoderDecoderModel`] framework.
+    这个包装类是一个辅助类，用于在因果语言模型与EncoderDecoderModel框架结合使用时正确加载预训练检查点。
     """
 
-    # 初始化函数
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
-        # 实例化一个BlenderbotSmallDecoder对象
+        # 创建BlenderbotSmallDecoder对象作为该类的decoder属性
         self.decoder = BlenderbotSmallDecoder(config)
 
-    # 前向传播函数
     def forward(self, *args, **kwargs):
-        # 调用BlenderbotSmallDecoder对象的前向传播函数
+        # 调用self.decoder的forward方法，将所有参数传递给decoder对象
         return self.decoder(*args, **kwargs)
 
 
-# 从transformers.models.bart.modeling_bart.BartForCausalLM复制代码，将Bart->BlenderbotSmall, facebook/bart-base->facebook/blenderbot_small-90M
+# 从transformers.models.bart.modeling_bart.BartForCausalLM复制并修改为BlenderbotSmallForCausalLM
 class BlenderbotSmallForCausalLM(BlenderbotSmallPreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
 
-    # 初始化函数
     def __init__(self, config):
-        # 深度复制配置
+        # 深拷贝配置对象，设置is_decoder为True，is_encoder_decoder为False，并调用父类的初始化方法
         config = copy.deepcopy(config)
-        # 设置is_decoder为True
         config.is_decoder = True
-        # 设置is_encoder_decoder为False
         config.is_encoder_decoder = False
-        # 调用父类的初始化函数
         super().__init__(config)
-        # 实例化一个BlenderbotSmallDecoderWrapper对象
+        # 创建BlenderbotSmallDecoderWrapper对象作为该类的model属性
         self.model = BlenderbotSmallDecoderWrapper(config)
 
-        # 实例化一个线性层作为语言模型头部
+        # 创建一个线性层作为lm_head属性，输出尺寸为config.vocab_size，输入尺寸为config.hidden_size，无偏置
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入嵌入层
     def get_input_embeddings(self):
+        # 返回self.model.decoder的embed_tokens属性作为输入嵌入层
         return self.model.decoder.embed_tokens
 
-    # 设置输入嵌入层
     def set_input_embeddings(self, value):
+        # 设置self.model.decoder的embed_tokens属性为给定的value
         self.model.decoder.embed_tokens = value
 
-    # 获取输出嵌入层
     def get_output_embeddings(self):
+        # 返回self.lm_head作为输出嵌入层
         return self.lm_head
 
-    # 设置输出嵌入层
     def set_output_embeddings(self, new_embeddings):
+        # 设置self.lm_head为给定的new_embeddings
         self.lm_head = new_embeddings
 
-    # 设置解码器
     def set_decoder(self, decoder):
+        # 设置self.model.decoder为给定的decoder对象
         self.model.decoder = decoder
 
-    # 获取解码器
     def get_decoder(self):
+        # 返回self.model.decoder属性
         return self.model.decoder
 
-    # 前向传播函数
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
@@ -880,39 +817,57 @@ class BlenderbotSmallForCausalLM(BlenderbotSmallPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 为生成准备输入的函数
+    ):
+        """
+        这个方法定义了模型的前向传播逻辑，支持各种可选参数。
+        """
+        # 实现在BlenderbotSmallDecoderWrapper对象上的前向传播，将所有参数传递给decoder对象
+        return self.model(input_ids=input_ids, attention_mask=attention_mask,
+                          encoder_hidden_states=encoder_hidden_states,
+                          encoder_attention_mask=encoder_attention_mask, head_mask=head_mask,
+                          cross_attn_head_mask=cross_attn_head_mask, past_key_values=past_key_values,
+                          inputs_embeds=inputs_embeds, labels=labels, use_cache=use_cache,
+                          output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                          return_dict=return_dict)
+
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, attention_mask=None, use_cache=None, **kwargs
-        ):
-            # 如果模型作为编码器-解码器模型中的解码器使用，则动态创建解码器注意力掩码
-            if attention_mask is None:
-                attention_mask = input_ids.new_ones(input_ids.shape)
+    ):
+        """
+        准备生成过程的输入，支持各种可选参数。
+        """
+        # 实现在BlenderbotSmallDecoderWrapper对象上的准备生成输入的逻辑，传递所有参数给decoder对象
+        raise NotImplementedError
+    ):
+        # 如果模型在编码器-解码器模型中作为解码器使用，那么解码器的注意力遮罩将即时创建
+        if attention_mask is None:
+            attention_mask = input_ids.new_ones(input_ids.shape)
 
-            if past_key_values:
-                past_length = past_key_values[0][0].shape[2]
+        if past_key_values:
+            past_length = past_key_values[0][0].shape[2]
 
-                # 一些生成方法已经只传递最后一个输入 ID
-                if input_ids.shape[1] > past_length:
-                    remove_prefix_length = past_length
-                else:
-                    # 默认为旧行为：仅保留最后一个 ID
-                    remove_prefix_length = input_ids.shape[1] - 1
+            # 一些生成方法已经只传递了最后一个输入ID
+            if input_ids.shape[1] > past_length:
+                remove_prefix_length = past_length
+            else:
+                # 默认为旧行为：只保留最终ID
+                remove_prefix_length = input_ids.shape[1] - 1
 
-                input_ids = input_ids[:, remove_prefix_length:]
-            # 第一步，decoder_cached_states 为空
-            return {
-                "input_ids": input_ids,  # encoder_outputs 已定义。不需要 input_ids
-                "attention_mask": attention_mask,
-                "past_key_values": past_key_values,
-                "use_cache": use_cache,
-            }
+            input_ids = input_ids[:, remove_prefix_length:]
+        # 第一步，解码器缓存状态为空
+        return {
+            "input_ids": input_ids,  # encoder_outputs is defined. input_ids not needed
+            "attention_mask": attention_mask,
+            "past_key_values": past_key_values,
+            "use_cache": use_cache,
+        }
 
-        @staticmethod
-        def _reorder_cache(past_key_values, beam_idx):
-            reordered_past = ()
-            for layer_past in past_key_values:
-                reordered_past += (
-                    tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
-                )
-            return reordered_past
+    @staticmethod
+    def _reorder_cache(past_key_values, beam_idx):
+        reordered_past = ()
+        for layer_past in past_key_values:
+            reordered_past += (
+                tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+            )
+        return reordered_past
 ```

@@ -1,58 +1,52 @@
 # `.\models\gpt_neo\convert_gpt_neo_mesh_tf_to_pytorch.py`
 
-```py
-# coding=utf-8
-# 版权所有 2021 年 Eleuther AI 和 HuggingFace Inc. 团队。
-# 根据 Apache 许可证 2.0 版（“许可证”）获得许可
-# 除非符合许可证的规定，否则不得使用此文件
-# 您可以在以下地址获得许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则按“原样”分发软件，
-# 没有任何形式的担保或条件，无论是明示的还是隐含的。
-# 请参阅许可证以获取具体语言规定的权限和限制
-"""Convert GPT Neo checkpoint."""
+```
+# 导入必要的模块和函数
+import argparse  # 导入命令行参数解析模块
+import json  # 导入处理 JSON 格式数据的模块
 
-# 导入所需的库和模块
-import argparse
-import json
-# 从transformers模块中导入GPTNeoConfig、GPTNeoForCausalLM和load_tf_weights_in_gpt_neo
-from transformers import GPTNeoConfig, GPTNeoForCausalLM, load_tf_weights_in_gpt_neo
-from transformers.utils import logging
+from transformers import GPTNeoConfig, GPTNeoForCausalLM, load_tf_weights_in_gpt_neo  # 导入 GPT-Neo 相关的类和函数
+from transformers.utils import logging  # 导入日志记录模块
 
-# 设置日志级别为info
-logging.set_verbosity_info()
 
-# 定义函数，将 TensorFlow 检查点转换为 PyTorch 检查点
+logging.set_verbosity_info()  # 设置日志记录级别为信息
+
+# 定义函数，用于将 TensorFlow 的检查点文件转换为 PyTorch 模型
 def convert_tf_checkpoint_to_pytorch(tf_checkpoint_path, config_file, pytorch_dump_path):
-    # 从配置文件中加载 JSON 配置
+    # 从配置文件中加载 JSON 数据
     config_json = json.load(open(config_file, "r"))
-    # 根据 JSON 配置创建 GPTNeoConfig 对象
+    
+    # 根据加载的配置数据创建 GPTNeoConfig 对象
     config = GPTNeoConfig(
-        hidden_size=config_json["n_embd"],
-        num_layers=config_json["n_layer"],
-        num_heads=config_json["n_head"],
-        attention_types=config_json["attention_types"],
-        max_position_embeddings=config_json["n_positions"],
-        resid_dropout=config_json["res_dropout"],
-        embed_dropout=config_json["embed_dropout"],
-        attention_dropout=config_json["attn_dropout"],
+        hidden_size=config_json["n_embd"],  # 设置隐藏层的大小
+        num_layers=config_json["n_layer"],  # 设置层数
+        num_heads=config_json["n_head"],  # 设置注意力头数
+        attention_types=config_json["attention_types"],  # 设置注意力类型
+        max_position_embeddings=config_json["n_positions"],  # 设置最大位置编码长度
+        resid_dropout=config_json["res_dropout"],  # 设置残差连接的 dropout 率
+        embed_dropout=config_json["embed_dropout"],  # 设置嵌入层的 dropout 率
+        attention_dropout=config_json["attn_dropout"],  # 设置注意力层的 dropout 率
     )
-    # 打印创建的 PyTorch 模型配置信息
+    
+    # 打印配置信息
     print(f"Building PyTorch model from configuration: {config}")
-    # 创建 GPTNeoForCausalLM 模型
+    
+    # 根据配置创建 GPTNeoForCausalLM 模型对象
     model = GPTNeoForCausalLM(config)
 
-    # 从 TensorFlow 检查点加载权重
+    # 加载 TensorFlow 检查点中的权重到 PyTorch 模型中
     load_tf_weights_in_gpt_neo(model, config, tf_checkpoint_path)
 
-    # 保存 PyTorch 模型
+    # 将 PyTorch 模型保存到指定路径
     print(f"Save PyTorch model to {pytorch_dump_path}")
     model.save_pretrained(pytorch_dump_path)
 
-# 当该脚本被直接运行时执行以下操作
+
 if __name__ == "__main__":
+    # 创建命令行参数解析器
     parser = argparse.ArgumentParser()
-    # 添加必需的参数
+
+    # 添加必需的命令行参数
     parser.add_argument(
         "--tf_checkpoint_path", default=None, type=str, required=True, help="Path to the TensorFlow checkpoint path."
     )
@@ -69,7 +63,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pytorch_dump_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
     )
+
+    # 解析命令行参数
     args = parser.parse_args()
-    # 调用 convert_tf_checkpoint_to_pytorch 函数并传递参数
+
+    # 调用转换函数，将 TensorFlow 检查点转换为 PyTorch 模型
     convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.config_file, args.pytorch_dump_path)
 ```

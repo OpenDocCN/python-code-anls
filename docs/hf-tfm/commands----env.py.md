@@ -1,7 +1,7 @@
-# `.\transformers\commands\env.py`
+# `.\commands\env.py`
 
-```py
-# 导入必要的模块
+```
+# 导入所需的模块
 import importlib.util
 import os
 import platform
@@ -10,10 +10,10 @@ from argparse import ArgumentParser
 # 导入 Hugging Face Hub 库
 import huggingface_hub
 
-# 导入当前包的版本信息
+# 导入版本号
 from .. import __version__ as version
 
-# 导入检查加速库是否可用的函数
+# 导入一些实用函数
 from ..utils import (
     is_accelerate_available,
     is_flax_available,
@@ -25,41 +25,38 @@ from ..utils import (
 # 导入基础命令类
 from . import BaseTransformersCLICommand
 
-
-# 创建环境信息命令的工厂函数
+# 定义一个工厂函数，用于创建环境命令对象
 def info_command_factory(_):
     return EnvironmentCommand()
 
-
-# 创建下载命令的工厂函数
+# 定义一个工厂函数，用于创建下载命令对象
 def download_command_factory(args):
     return EnvironmentCommand(args.accelerate_config_file)
 
-
-# 环境信息命令类
+# 环境命令类，继承自基础 Transformers CLI 命令类
 class EnvironmentCommand(BaseTransformersCLICommand):
-    # 注册子命令
+    
+    # 静态方法：注册子命令
     @staticmethod
     def register_subcommand(parser: ArgumentParser):
-        # 创建 'env' 子命令的解析器
+        # 添加一个名为 "env" 的子命令解析器
         download_parser = parser.add_parser("env")
-        # 设置默认函数为获取环境信息的工厂函数
+        # 设置默认的命令函数为 info_command_factory
         download_parser.set_defaults(func=info_command_factory)
-        # 添加 '--accelerate-config_file' 参数，用于指定加速库的配置文件
+        # 添加参数：accelerate-config_file，用于指定加速配置文件的路径
         download_parser.add_argument(
             "--accelerate-config_file",
             default=None,
             help="The accelerate config file to use for the default values in the launching script.",
         )
-        # 设置默认函数为下载命令的工厂函数
+        # 再次设置默认的命令函数为 download_command_factory
         download_parser.set_defaults(func=download_command_factory)
-
-    # 初始化函数
+    
+    # 初始化方法，接受加速配置文件作为参数
     def __init__(self, accelerate_config_file, *args) -> None:
-        # 存储加速库的配置文件路径
         self._accelerate_config_file = accelerate_config_file
 
-    # 格式化字典为字符串
+    # 静态方法：格式化字典为字符串，每个键值对前缀为 "-"，以换行连接
     @staticmethod
     def format_dict(d):
         return "\n".join([f"- {prop}: {val}" for prop, val in d.items()]) + "\n"

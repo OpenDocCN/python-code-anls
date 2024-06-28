@@ -1,71 +1,67 @@
-# `.\transformers\tools\image_segmentation.py`
+# `.\tools\image_segmentation.py`
 
-```py
-#!/usr/bin/env python
-# coding=utf-8
-
-# 版权声明
-# 版权归 The HuggingFace Inc. 团队所有。保留所有权利。
-#
-# 根据 Apache 许可证，版本 2.0 进行许可；
-# 除非符合许可证的规定，否则不得使用此文件。
-# 您可以获取许可证的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则不得基于许可证分发软件
-# 软件按"原样"分发，不附带任何保证或条件，无论是明示或暗示的。
-# 有关特定语言管理权限和限制，请参阅许可证。
-# 导入依赖库
+```
+# 导入必要的库和模块
 import numpy as np
 import torch
 
-# 从本地导入模块
+# 从自定义的模块中导入CLIPSegForImageSegmentation模型
 from ..models.clipseg import CLIPSegForImageSegmentation
+# 从自定义的模块中导入必要的工具函数和类
 from ..utils import is_vision_available, requires_backends
+# 从本地模块中导入基础工具类PipelineTool
 from .base import PipelineTool
 
-# 检查视觉库是否可用，如果可用则导入 PIL 库
+# 如果视觉功能可用，则导入PIL库中的Image类
 if is_vision_available():
     from PIL import Image
 
-# 定义图像分割工具类
+# 定义一个图像分割工具类，继承自PipelineTool基类
 class ImageSegmentationTool(PipelineTool):
-    # 工具描述
+    # 工具描述信息
     description = (
         "This is a tool that creates a segmentation mask of an image according to a label. It cannot create an image. "
         "It takes two arguments named `image` which should be the original image, and `label` which should be a text "
         "describing the elements what should be identified in the segmentation mask. The tool returns the mask."
     )
-    # 默认检查点
+    # 默认的模型检查点路径
     default_checkpoint = "CIDAS/clipseg-rd64-refined"
     # 工具名称
     name = "image_segmenter"
-    # 模型类
+    # 使用的模型类
     model_class = CLIPSegForImageSegmentation
 
-    # 输入和输出参数
+    # 输入参数列表
     inputs = ["image", "text"]
+    # 输出参数列表
     outputs = ["image"]
 
-    # 构造函数
+    # 初始化方法，检查视觉后端支持
     def __init__(self, *args, **kwargs):
+        # 检查并确保视觉后端可用
         requires_backends(self, ["vision"])
+        # 调用父类的初始化方法
         super().__init__(*args, **kwargs)
 
-    # 编码方法，将图像和标签编码成模型输入
+    # 编码方法，将图像和标签转换为模型输入格式
     def encode(self, image: "Image", label: str):
+        # 使用预处理器处理文本和图像，返回PyTorch张量
         return self.pre_processor(text=[label], images=[image], padding=True, return_tensors="pt")
 
-    # 前向传播，获取模型输出
+    # 前向传播方法，执行模型推理
     def forward(self, inputs):
+        # 使用无梯度计算环境执行模型推理，获取logits
         with torch.no_grad():
             logits = self.model(**inputs).logits
         return logits
 
-    # 解码方法，将模型输出解码成图像
+    # 解码方法，将模型输出转换为图像
     def decode(self, outputs):
+        # 将输出张量转换为NumPy数组
         array = outputs.cpu().detach().numpy()
+        # 将数组中小于等于0的值设为0，大于0的值设为1
         array[array <= 0] = 0
         array[array > 0] = 1
+        # 将数组转换为PIL图像，并返回
         return Image.fromarray((array * 255).astype(np.uint8))
 ```

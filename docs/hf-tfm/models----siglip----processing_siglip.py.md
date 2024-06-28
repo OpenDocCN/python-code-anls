@@ -1,54 +1,54 @@
-# `.\transformers\models\siglip\processing_siglip.py`
+# `.\models\siglip\processing_siglip.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本授权
-# 除非符合许可证要求或经书面同意，否则不得使用此文件
-# 您可以在以下网址获取许可证副本
+```
+# coding=utf-8
+# Copyright 2024 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 根据适用法律或书面同意，软件按"原样"分发
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取特定语言的权限和限制
-
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-SigLIP 的图像/文本处理器类。
+Image/Text processor class for SigLIP.
 """
 
 from typing import List, Optional, Union
 
-# 导入所需模块和类
 from ...feature_extraction_utils import BatchFeature
 from ...image_utils import ImageInput
 from ...processing_utils import ProcessorMixin
 from ...tokenization_utils_base import PaddingStrategy, PreTokenizedInput, TextInput, TruncationStrategy
 from ...utils import TensorType
 
-# 定义 SiglipProcessor 类，继承 ProcessorMixin 类
+
 class SiglipProcessor(ProcessorMixin):
     r"""
-    构建一个 Siglip 处理器，将 Siglip 图像处理器和 Siglip 分词器封装成一个单一处理器。
+    Constructs a Siglip processor which wraps a Siglip image processor and a Siglip tokenizer into a single processor.
 
-    [`SiglipProcessor`] 提供了 [`SiglipImageProcessor`] 和 [`SiglipTokenizer`] 的所有功能。查看
-    [`~SiglipProcessor.__call__`] 和 [`~SiglipProcessor.decode`] 以获取更多信息。
+    [`SiglipProcessor`] offers all the functionalities of [`SiglipImageProcessor`] and [`SiglipTokenizer`]. See the
+    [`~SiglipProcessor.__call__`] and [`~SiglipProcessor.decode`] for more information.
 
     Args:
         image_processor ([`SiglipImageProcessor`]):
-            图像处理器是必需的输入。
+            The image processor is a required input.
         tokenizer ([`SiglipTokenizer`]):
-            分词器是必需的输入。
+            The tokenizer is a required input.
     """
 
-    # 定义类属性
     attributes = ["image_processor", "tokenizer"]
     image_processor_class = "SiglipImageProcessor"
     tokenizer_class = "SiglipTokenizer"
 
-    # 初始化方法
     def __init__(self, image_processor, tokenizer):
         super().__init__(image_processor, tokenizer)
 
-    # 调用方法，接受文本、图像等参数
     def __call__(
         self,
         text: Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]] = None,
@@ -57,28 +57,48 @@ class SiglipProcessor(ProcessorMixin):
         truncation: Union[bool, str, TruncationStrategy] = None,
         max_length: int = None,
         return_tensors: Optional[Union[str, TensorType]] = TensorType.PYTORCH,
+    ):
+        """
+        This method combines the functionalities of both image processing and tokenization. It processes input text
+        and/or images according to specified padding, truncation, and max length parameters, and returns processed data
+        in a format based on the return_tensors argument.
+        """
+        raise NotImplementedError
+
     def decode(self, *args, **kwargs):
         """
-        此方法将所有参数转发给 SiglipTokenizer 的 [`~PreTrainedTokenizer.decode`]。请参考
-        此方法的文档字符串以获取更多信息。
+        This method forwards all its arguments to SiglipTokenizer's [`~PreTrainedTokenizer.decode`]. Please refer to
+        the docstring of this method for more information.
         """
         return self.tokenizer.decode(*args, **kwargs)
 
-    # 批量解码方法，将参数转发给 SiglipTokenizer 的 [`~PreTrainedTokenizer.batch_decode`]
     def batch_decode(self, *args, **kwargs):
         """
-        此方法将所有参数转发给 SiglipTokenizer 的 [`~PreTrainedTokenizer.batch_decode`]。请参考
-        此方法的文档字符串以获取更多信息。
+        This method forwards all its arguments to SiglipTokenizer's [`~PreTrainedTokenizer.batch_decode`]. Please
+        refer to the docstring of this method for more information.
         """
         return self.tokenizer.batch_decode(*args, **kwargs)
 
-    # 属性装饰器，从 transformers.models.clip.processing_clip.CLIPProcessor.model_input_names 复制
-    # 定义一个方法，返回模型输入的名称列表
+    @property
     def model_input_names(self):
-        # 获取tokenizer对象的模型输入名称列表
+        """
+        Property method that provides model input names. It is copied from transformers.models.clip.processing_clip.
+        CLIPProcessor.model_input_names with modifications for Siglip and T5.
+        """
+        return {
+            "text": "inputs",
+            "image": "pixel_values",
+            "padding": "padding",
+            "max_length": "max_length",
+            "truncation": "truncation",
+            "return_tensors": "return_tensors",
+        }
+    # 定义方法：获取模型输入的名称列表
+    def model_input_names(self):
+        # 获取分词器的模型输入名称列表
         tokenizer_input_names = self.tokenizer.model_input_names
-        # 获取image_processor对象的模型输入名称列表
+        # 获取图像处理器的模型输入名称列表
         image_processor_input_names = self.image_processor.model_input_names
-        # 将两个列表合并，并去除重复的元素，返回一个新的列表
+        # 将两个列表合并，并去除重复的元素，以列表形式返回结果
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 ```

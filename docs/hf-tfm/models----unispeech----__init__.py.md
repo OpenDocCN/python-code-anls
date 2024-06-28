@@ -1,8 +1,24 @@
-# `.\transformers\models\unispeech\__init__.py`
+# `.\models\unispeech\__init__.py`
 
-```py
-# 导入必要的模块和依赖项，包括类型检查和延迟加载模块
+```
+# Copyright 2021 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 从 typing 模块导入 TYPE_CHECKING
 from typing import TYPE_CHECKING
+
+# 从 ...utils 中导入必要的类和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -11,17 +27,18 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构
+# 定义导入结构
 _import_structure = {"configuration_unispeech": ["UNISPEECH_PRETRAINED_CONFIG_ARCHIVE_MAP", "UniSpeechConfig"]}
 
-# 检查是否有可用的 torch 库，如果没有则引发 OptionalDependencyNotAvailable 异常
+# 检查是否为静态类型检查
 try:
+    # 如果 Torch 不可用则抛出 OptionalDependencyNotAvailable 异常
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果有 torch 库，则添加相应的模型配置和模型类到导入结构中
+    # 如果 Torch 可用，则添加相关模型到 _import_structure 中
     _import_structure["modeling_unispeech"] = [
         "UNISPEECH_PRETRAINED_MODEL_ARCHIVE_LIST",
         "UniSpeechForCTC",
@@ -31,15 +48,19 @@ else:
         "UniSpeechPreTrainedModel",
     ]
 
-# 如果类型检查为真，则从相应模块导入特定类
+# 如果在静态类型检查环境中
 if TYPE_CHECKING:
+    # 从 .configuration_unispeech 中导入必要的类和函数
     from .configuration_unispeech import UNISPEECH_PRETRAINED_CONFIG_ARCHIVE_MAP, UniSpeechConfig
+
     try:
+        # 如果 Torch 不可用则抛出 OptionalDependencyNotAvailable 异常
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 从 .modeling_unispeech 中导入必要的类和函数
         from .modeling_unispeech import (
             UNISPEECH_PRETRAINED_MODEL_ARCHIVE_LIST,
             UniSpeechForCTC,
@@ -48,9 +69,11 @@ if TYPE_CHECKING:
             UniSpeechModel,
             UniSpeechPreTrainedModel,
         )
-# 如果类型检查为假，则将当前模块设为一个延迟加载模块
+
+# 如果不在静态类型检查环境中
 else:
     import sys
-    # 动态设置当前模块
+
+    # 将当前模块设为懒加载模块 _LazyModule 的实例
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

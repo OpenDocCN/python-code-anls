@@ -1,41 +1,64 @@
-# `.\transformers\models\resnet\modeling_tf_resnet.py`
+# `.\models\resnet\modeling_tf_resnet.py`
 
-```py
-# 设置编码格式为utf-8
-# 版权信息
-# 有关许可证的信息
+```
+# coding=utf-8
+# Copyright 2022 Microsoft Research, Inc. and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """ TensorFlow ResNet model."""
 
-# 引入必要的模块
 from typing import Optional, Tuple, Union
+
 import tensorflow as tf
+
 from ...activations_tf import ACT2FN
 from ...modeling_tf_outputs import (
     TFBaseModelOutputWithNoAttention,
     TFBaseModelOutputWithPoolingAndNoAttention,
     TFImageClassifierOutputWithNoAttention,
 )
-from ...modeling_tf_utils import TFPreTrainedModel, TFSequenceClassificationLoss, keras_serializable, unpack_inputs
+from ...modeling_tf_utils import (
+    TFPreTrainedModel,
+    TFSequenceClassificationLoss,
+    keras,
+    keras_serializable,
+    unpack_inputs,
+)
 from ...tf_utils import shape_list
 from ...utils import add_code_sample_docstrings, add_start_docstrings, add_start_docstrings_to_model_forward, logging
 from .configuration_resnet import ResNetConfig
 
-# 获取logger对象
+
 logger = logging.get_logger(__name__)
 
-# 用于文档
+# General docstring
 _CONFIG_FOR_DOC = "ResNetConfig"
+
+# Base docstring
 _CHECKPOINT_FOR_DOC = "microsoft/resnet-50"
 _EXPECTED_OUTPUT_SHAPE = [1, 2048, 7, 7]
+
+# Image classification docstring
 _IMAGE_CLASS_CHECKPOINT = "microsoft/resnet-50"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "tiger cat"
+
 TF_RESNET_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "microsoft/resnet-50",
     # See all resnet models at https://huggingface.co/models?filter=resnet
 ]
 
-# 定义一个卷积层
-class TFResNetConvLayer(tf.keras.layers.Layer):
+
+class TFResNetConvLayer(keras.layers.Layer):
     def __init__(
         self,
         in_channels: int,
@@ -45,62 +68,65 @@ class TFResNetConvLayer(tf.keras.layers.Layer):
         activation: str = "relu",
         **kwargs,
     ) -> None:
-        # 初始化函数
         super().__init__(**kwargs)
+        # Calculate padding value based on kernel size for valid padding
         self.pad_value = kernel_size // 2
-        # 创建一个卷积层
-        self.conv = tf.keras.layers.Conv2D(
+        # Define convolutional layer with specified parameters
+        self.conv = keras.layers.Conv2D(
             out_channels, kernel_size=kernel_size, strides=stride, padding="valid", use_bias=False, name="convolution"
         )
-        # 使用和PyTorch等效的默认动量和epsilon
-        self.normalization = tf.keras.layers.BatchNormalization(epsilon=1e-5, momentum=0.9, name="normalization")
-        # 激活函数
-        self.activation = ACT2FN[activation] if activation is not None else tf.keras.layers.Activation("linear")
+        # Batch normalization layer with predefined epsilon and momentum values
+        self.normalization = keras.layers.BatchNormalization(epsilon=1e-5, momentum=0.9, name="normalization")
+        # Activation function based on provided string or default to linear activation
+        self.activation = ACT2FN[activation] if activation is not None else keras.layers.Activation("linear")
+        # Store input and output channel counts for the layer
         self.in_channels = in_channels
         self.out_channels = out_channels
-
+    # 对输入的 hidden_state 进行卷积操作
     def convolution(self, hidden_state: tf.Tensor) -> tf.Tensor:
-        # 填充以匹配PyTorch Conv2D模型中的填充
+        # 在高度和宽度两个维度上进行填充，以匹配 PyTorch Conv2D 模型的填充方式
         height_pad = width_pad = (self.pad_value, self.pad_value)
+        # 使用 TensorFlow 的 tf.pad 函数对 hidden_state 进行填充操作
         hidden_state = tf.pad(hidden_state, [(0, 0), height_pad, width_pad, (0, 0)])
+        # 使用预先定义的卷积层 conv 对填充后的 hidden_state 进行卷积操作
         hidden_state = self.conv(hidden_state)
-        return hidden_state
-    # 定义神经网络层的调用方法，接受隐藏状态张量和训练标志，返回经过卷积、标准化和激活后的隐藏状态张量
-    def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 将隐藏状态张量输入卷积层
-        hidden_state = self.convolution(hidden_state)
-        # 对卷积后的张量进行标准化处理，根据训练标志决定是否使用训练模式
-        hidden_state = self.normalization(hidden_state, training=training)
-        # 对标准化后的张量进行激活函数处理
-        hidden_state = self.activation(hidden_state)
-        # 返回处理后的隐藏状态张量
+        # 返回卷积后的结果
         return hidden_state
 
-    # 构建神经网络层
+    # 模型的调用方法，用于执行前向传播
+    def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
+        # 调用 convolution 方法对输入的 hidden_state 进行卷积处理
+        hidden_state = self.convolution(hidden_state)
+        # 使用 normalization 方法对卷积后的 hidden_state 进行归一化处理
+        hidden_state = self.normalization(hidden_state, training=training)
+        # 对归一化后的 hidden_state 应用激活函数 activation
+        hidden_state = self.activation(hidden_state)
+        # 返回经过激活函数处理后的结果
+        return hidden_state
+
+    # 在构建模型时被调用，用于定义模型的各个层
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回，不再重复构建
+        # 如果模型已经构建过，直接返回
         if self.built:
             return
-        # 将构建标志设置为已构建
+        # 将模型标记为已构建
         self.built = True
-        # 如果存在卷积层，构建卷积层
+        # 如果已定义卷积层 conv，则构建卷积层，指定输入通道数为 self.in_channels
         if getattr(self, "conv", None) is not None:
             with tf.name_scope(self.conv.name):
-                # 构建卷积层，输入张量的shape为 [None, None, None, self.in_channels]
                 self.conv.build([None, None, None, self.in_channels])
-        # 如果存在标准化层，构建标准化层
+        # 如果已定义归一化层 normalization，则构建归一化层，指定输出通道数为 self.out_channels
         if getattr(self, "normalization", None) is not None:
             with tf.name_scope(self.normalization.name):
-                # 构建标准化层，输入张量的shape为 [None, None, None, self.out_channels]
                 self.normalization.build([None, None, None, self.out_channels])
-class TFResNetEmbeddings(tf.keras.layers.Layer):
+class TFResNetEmbeddings(keras.layers.Layer):
     """
     ResNet Embeddings (stem) composed of a single aggressive convolution.
     """
 
     def __init__(self, config: ResNetConfig, **kwargs) -> None:
         super().__init__(**kwargs)
-        # 创建一个卷积层，用于处理嵌入特征
+        # 创建一个 ResNet 的卷积层，用于嵌入处理
         self.embedder = TFResNetConvLayer(
             config.num_channels,
             config.embedding_size,
@@ -109,43 +135,42 @@ class TFResNetEmbeddings(tf.keras.layers.Layer):
             activation=config.hidden_act,
             name="embedder",
         )
-        # 创建一个最大池化层
-        self.pooler = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding="valid", name="pooler")
-        # 设置通道数
+        # 创建一个最大池化层，用于池化处理
+        self.pooler = keras.layers.MaxPool2D(pool_size=3, strides=2, padding="valid", name="pooler")
         self.num_channels = config.num_channels
 
     def call(self, pixel_values: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 获取输入张量的通道数
+        # 获取输入张量的形状信息
         _, _, _, num_channels = shape_list(pixel_values)
-        # 如果处在 `eager execution` 环境中，并且通道数与配置中的不一致，则引发 ValueError
+        # 如果是即时执行模式并且通道数不匹配，抛出值错误
         if tf.executing_eagerly() and num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-        # 将嵌入层应用于输入张量
-        hidden_state = self.embedder(pixel_values)
-        # 对嵌入特征进行 padding 操作
+        hidden_state = pixel_values
+        # 将输入张量传入嵌入器进行处理
+        hidden_state = self.embedder(hidden_state)
+        # 对处理后的张量进行填充操作
         hidden_state = tf.pad(hidden_state, [[0, 0], [1, 1], [1, 1], [0, 0]])
-        # 使用最大池化层对特征进行池化
+        # 将填充后的张量传入池化层进行处理
         hidden_state = self.pooler(hidden_state)
-        # 返回池化后的特征
         return hidden_state
 
     def build(self, input_shape=None):
         if self.built:
             return
         self.built = True
-        # 如果存在 embedder 属性，则对其进行构建
+        # 如果嵌入器已经存在，建立嵌入器层
         if getattr(self, "embedder", None) is not None:
             with tf.name_scope(self.embedder.name):
                 self.embedder.build(None)
-        # 如果存在 pooler 属性，则对其进行构建
+        # 如果池化层已经存在，建立池化层
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
                 self.pooler.build(None)
 
 
-class TFResNetShortCut(tf.keras.layers.Layer):
+class TFResNetShortCut(keras.layers.Layer):
     """
     ResNet shortcut, used to project the residual features to the correct size. If needed, it is also used to
     downsample the input using `stride=2`.
@@ -153,196 +178,186 @@ class TFResNetShortCut(tf.keras.layers.Layer):
 
     def __init__(self, in_channels: int, out_channels: int, stride: int = 2, **kwargs) -> None:
         super().__init__(**kwargs)
-        # 创建一个卷积层，用于调整残差特征的通道数
-        self.convolution = tf.keras.layers.Conv2D(
+        # 创建一个卷积层，用于调整残差特征到正确的大小，可以选择性地进行下采样
+        self.convolution = keras.layers.Conv2D(
             out_channels, kernel_size=1, strides=stride, use_bias=False, name="convolution"
         )
-        # 创建一个批归一化层，用于规范化特征
-        self.normalization = tf.keras.layers.BatchNormalization(epsilon=1e-5, momentum=0.9, name="normalization")
-        # 设置输入通道数和输出通道数
+        # 使用与 PyTorch 等效部分相同的默认动量和 epsilon 参数
+        self.normalization = keras.layers.BatchNormalization(epsilon=1e-5, momentum=0.9, name="normalization")
         self.in_channels = in_channels
         self.out_channels = out_channels
 
     def call(self, x: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 获取输入张量
         hidden_state = x
-        # 使用卷积层处理输入特征
+        # 通过卷积层处理输入张量
         hidden_state = self.convolution(hidden_state)
-        # 使用批归一化层对特征进行规范化
+        # 通过批量归一化层处理卷积后的特征
         hidden_state = self.normalization(hidden_state, training=training)
-        # 返回处理后的特征
         return hidden_state
-    # 定义 build 方法，用于构建模型层
+    # 定义 build 方法，用于构建网络层
     def build(self, input_shape=None):
         # 如果已经构建过，则直接返回，避免重复构建
         if self.built:
             return
-        # 标记模型层已经构建
+        # 将标记设置为已构建
         self.built = True
-        # 检查是否存在卷积操作，如果存在，则构建卷积层
+        
+        # 如果存在卷积层对象
         if getattr(self, "convolution", None) is not None:
-            # 使用 tf.name_scope 确保命名空间的独立性，将卷积层的构建过程包裹起来
+            # 在命名空间中为卷积层设置名字作用域
             with tf.name_scope(self.convolution.name):
-                # 构建卷积层，指定输入形状为 [None, None, None, self.in_channels]
+                # 使用输入通道数构建卷积层
                 self.convolution.build([None, None, None, self.in_channels])
-        # 检查是否存在归一化操作，如果存在，则构建归一化层
+        
+        # 如果存在归一化层对象
         if getattr(self, "normalization", None) is not None:
-            # 使用 tf.name_scope 确保命名空间的独立性，将归一化层的构建过程包裹起来
+            # 在命名空间中为归一化层设置名字作用域
             with tf.name_scope(self.normalization.name):
-                # 构建归一化层，指定输入形状为 [None, None, None, self.out_channels]
+                # 使用输出通道数构建归一化层
                 self.normalization.build([None, None, None, self.out_channels])
-class TFResNetBasicLayer(tf.keras.layers.Layer):
-    """
-    一个经典的 ResNet 残差层，由两个 `3x3` 卷积层组成。
-    """
+    # 定义 TFResNetBasicLayer 类，表示经典 ResNet 的基本残差层，由两个 3x3 卷积组成
+    class TFResNetBasicLayer(keras.layers.Layer):
+        """
+        A classic ResNet's residual layer composed by two `3x3` convolutions.
+        """
 
-    def __init__(
-        self, in_channels: int, out_channels: int, stride: int = 1, activation: str = "relu", **kwargs
+        def __init__(
+            self, in_channels: int, out_channels: int, stride: int = 1, activation: str = "relu", **kwargs
+        ) -> None:
+            super().__init__(**kwargs)
+            # 确定是否应用快捷连接（shortcut），当输入通道数不等于输出通道数或步长不为 1 时应用
+            should_apply_shortcut = in_channels != out_channels or stride != 1
+            # 第一个 3x3 卷积层，初始化为 TFResNetConvLayer 类的实例
+            self.conv1 = TFResNetConvLayer(in_channels, out_channels, stride=stride, name="layer.0")
+            # 第二个 3x3 卷积层，初始化为 TFResNetConvLayer 类的实例，激活函数设为 None
+            self.conv2 = TFResNetConvLayer(out_channels, out_channels, activation=None, name="layer.1")
+            # 快捷连接层，如果需要应用快捷连接，则初始化为 TFResNetShortCut 类的实例；否则使用线性激活函数
+            self.shortcut = (
+                TFResNetShortCut(in_channels, out_channels, stride=stride, name="shortcut")
+                if should_apply_shortcut
+                else keras.layers.Activation("linear", name="shortcut")
+            )
+            # 激活函数，根据 activation 参数选择对应的激活函数
+            self.activation = ACT2FN[activation]
+
+        def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
+            # 保存输入的隐藏状态作为残差（residual）
+            residual = hidden_state
+            # 经过第一层卷积
+            hidden_state = self.conv1(hidden_state, training=training)
+            # 经过第二层卷积
+            hidden_state = self.conv2(hidden_state, training=training)
+            # 经过快捷连接层
+            residual = self.shortcut(residual, training=training)
+            # 将残差与卷积结果相加
+            hidden_state += residual
+            # 经过激活函数
+            hidden_state = self.activation(hidden_state)
+            # 返回处理后的隐藏状态
+            return hidden_state
+
+        def build(self, input_shape=None):
+            # 如果已经建立，则直接返回
+            if self.built:
+                return
+            # 标记为已建立
+            self.built = True
+            # 构建第一个卷积层 conv1
+            if getattr(self, "conv1", None) is not None:
+                with tf.name_scope(self.conv1.name):
+                    self.conv1.build(None)
+            # 构建第二个卷积层 conv2
+            if getattr(self, "conv2", None) is not None:
+                with tf.name_scope(self.conv2.name):
+                    self.conv2.build(None)
+            # 构建快捷连接层 shortcut
+            if getattr(self, "shortcut", None) is not None:
+                with tf.name_scope(self.shortcut.name):
+                    self.shortcut.build(None)
+
+
+    # 定义 TFResNetBottleNeckLayer 类，表示经典 ResNet 的瓶颈残差层，由三个 3x3 卷积组成
+    class TFResNetBottleNeckLayer(keras.layers.Layer):
+        """
+        A classic ResNet's bottleneck layer composed by three `3x3` convolutions.
+
+        The first `1x1` convolution reduces the input by a factor of `reduction` in order to make the second `3x3`
+        convolution faster. The last `1x1` convolution remaps the reduced features to `out_channels`.
+        """
+
+        def __init__(
+            self,
+            in_channels: int,
+            out_channels: int,
+            stride: int = 1,
+            activation: str = "relu",
+            reduction: int = 4,
+            **kwargs,
     ) -> None:
-        # 调用父类的初始化方法，传递额外的参数
+        # 调用父类的初始化方法，传递所有参数
         super().__init__(**kwargs)
-        # 判断是否需要应用捷径，即输入和输出通道不同或步长不为1
+        # 判断是否应用快捷方式，根据输入通道数、输出通道数和步长来确定
         should_apply_shortcut = in_channels != out_channels or stride != 1
-        # 创建第一个卷积层，名称为"layer.0"
-        self.conv1 = TFResNetConvLayer(in_channels, out_channels, stride=stride, name="layer.0")
-        # 创建第二个卷积层，名称为"layer.1"，不使用激活函数
-        self.conv2 = TFResNetConvLayer(out_channels, out_channels, activation=None, name="layer.1")
-        # 根据是否需要应用捷径，创建捷径层，名称为"shortcut"
-        self.shortcut = (
-            TFResNetShortCut(in_channels, out_channels, stride=stride, name="shortcut")
-            if should_apply_shortcut
-            else tf.keras.layers.Activation("linear", name="shortcut")
-        )
-        # 使用指定的激活函数
-        self.activation = ACT2FN[activation]
-
-    def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 保存输入状态作为残差
-        residual = hidden_state
-        # 通过第一个卷积层
-        hidden_state = self.conv1(hidden_state, training=training)
-        # 通过第二个卷积层
-        hidden_state = self.conv2(hidden_state, training=training)
-        # 应用捷径层到残差
-        residual = self.shortcut(residual, training=training)
-        # 将卷积后的结果与捷径结果相加
-        hidden_state += residual
-        # 使用激活函数处理结果
-        hidden_state = self.activation(hidden_state)
-        # 返回处理后的结果
-        return hidden_state
-
-    def build(self, input_shape=None):
-        # 如果已经构建，直接返回
-        if self.built:
-            return
-        # 设置已构建标志
-        self.built = True
-        # 构建第一个卷积层
-        if getattr(self, "conv1", None) is not None:
-            with tf.name_scope(self.conv1.name):
-                self.conv1.build(None)
-        # 构建第二个卷积层
-        if getattr(self, "conv2", None) is not None:
-            with tf.name_scope(self.conv2.name):
-                self.conv2.build(None)
-        # 构建捷径层
-        if getattr(self, "shortcut", None) is not None:
-            with tf.name_scope(self.shortcut.name):
-                self.shortcut.build(None)
-
-
-class TFResNetBottleNeckLayer(tf.keras.layers.Layer):
-    """
-    一个经典的 ResNet 瓶颈层，由三个 `3x3` 卷积层组成。
-
-    第一个 `1x1` 卷积层通过一个系数为 `reduction` 的因子减少输入以加速第二个 `3x3`
-    卷积层。最后一个 `1x1` 卷积层将减少的特征重新映射到 `out_channels`。
-    """
-
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        stride: int = 1,
-        activation: str = "relu",
-        reduction: int = 4,
-        **kwargs,
-    # 定义了一个 TFResNetBlock 类，继承自 tf.keras.layers.Layer
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        stride: int = 1,
-        reduction: int = 4,
-        activation: str = "gelu",
-        **kwargs
-    ) -> None:
-        # 调用父类的构造函数
-        super().__init__(**kwargs)
-        # 判断是否需要应用快捷连接
-        should_apply_shortcut = in_channels != out_channels or stride != 1
-        # 计算缩减的通道数
+        # 计算减少的通道数，用于第一个卷积层的输出通道数
         reduces_channels = out_channels // reduction
-        # 定义第一个卷积层
+        # 创建第一个卷积层，将输入通道数转换为减少的通道数
         self.conv0 = TFResNetConvLayer(in_channels, reduces_channels, kernel_size=1, name="layer.0")
-        # 定义第二个卷积层
+        # 创建第二个卷积层，将减少的通道数转换为相同的通道数，应用给定的步长
         self.conv1 = TFResNetConvLayer(reduces_channels, reduces_channels, stride=stride, name="layer.1")
-        # 定义第三个卷积层
+        # 创建第三个卷积层，将通道数转换为输出通道数，应用 1x1 的卷积核
         self.conv2 = TFResNetConvLayer(reduces_channels, out_channels, kernel_size=1, activation=None, name="layer.2")
-        # 定义快捷连接层
+        # 创建快捷连接层，如果应用快捷方式则使用 TFResNetShortCut 类，否则使用线性激活
         self.shortcut = (
             TFResNetShortCut(in_channels, out_channels, stride=stride, name="shortcut")
             if should_apply_shortcut
-            else tf.keras.layers.Activation("linear", name="shortcut")
+            else keras.layers.Activation("linear", name="shortcut")
         )
-        # 定义激活函数
+        # 选择激活函数，根据给定的激活函数名称从预定义字典中获取对应的函数
         self.activation = ACT2FN[activation]
-    
-    # 定义前向传播函数
+
     def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 保存输入作为残差连接
+        # 将输入状态保存为残差
         residual = hidden_state
-        # 通过第一个卷积层
+        # 通过第一层卷积层
         hidden_state = self.conv0(hidden_state, training=training)
-        # 通过第二个卷积层
+        # 通过第二层卷积层
         hidden_state = self.conv1(hidden_state, training=training)
-        # 通过第三个卷积层
+        # 通过第三层卷积层
         hidden_state = self.conv2(hidden_state, training=training)
-        # 应用快捷连接
+        # 应用快捷连接，并传入训练状态
         residual = self.shortcut(residual, training=training)
-        # 将残差连接加到卷积结果上
+        # 将残差与卷积结果相加
         hidden_state += residual
-        # 应用激活函数
+        # 应用激活函数到加和的结果
         hidden_state = self.activation(hidden_state)
-        # 返回最终结果
+        # 返回最终的隐藏状态
         return hidden_state
-    
-    # 定义 build 函数，用于初始化模型参数
+
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
+        # 如果模型已经构建，则直接返回
         if self.built:
             return
+        # 标记模型为已构建
         self.built = True
-        # 初始化第一个卷积层的参数
+        # 如果存在 conv0 属性，则构建 conv0
         if getattr(self, "conv0", None) is not None:
             with tf.name_scope(self.conv0.name):
                 self.conv0.build(None)
-        # 初始化第二个卷积层的参数
+        # 如果存在 conv1 属性，则构建 conv1
         if getattr(self, "conv1", None) is not None:
             with tf.name_scope(self.conv1.name):
                 self.conv1.build(None)
-        # 初始化第三个卷积层的参数
+        # 如果存在 conv2 属性，则构建 conv2
         if getattr(self, "conv2", None) is not None:
             with tf.name_scope(self.conv2.name):
                 self.conv2.build(None)
-        # 初始化快捷连接层的参数
+        # 如果存在 shortcut 属性，则构建 shortcut
         if getattr(self, "shortcut", None) is not None:
             with tf.name_scope(self.shortcut.name):
                 self.shortcut.build(None)
-class TFResNetStage(tf.keras.layers.Layer):
+class TFResNetStage(keras.layers.Layer):
     """
-    一个由叠加层组成的ResNet阶段。
+    A ResNet stage composed of stacked layers.
     """
 
     def __init__(
@@ -350,10 +365,10 @@ class TFResNetStage(tf.keras.layers.Layer):
     ) -> None:
         super().__init__(**kwargs)
 
-        # 根据配置选择使用 ResNet 瓶颈层还是基础层作为该阶段的层
+        # 根据配置选择使用瓶颈块或基本块作为每一层的构建单元
         layer = TFResNetBottleNeckLayer if config.layer_type == "bottleneck" else TFResNetBasicLayer
 
-        # 创建包含层的列表，包括一个初始层和多个中间层
+        # 创建当前阶段的层列表，第一层有可能对输入进行下采样
         layers = [layer(in_channels, out_channels, stride=stride, activation=config.hidden_act, name="layers.0")]
         layers += [
             layer(out_channels, out_channels, activation=config.hidden_act, name=f"layers.{i + 1}")
@@ -362,27 +377,26 @@ class TFResNetStage(tf.keras.layers.Layer):
         self.stage_layers = layers
 
     def call(self, hidden_state: tf.Tensor, training: bool = False) -> tf.Tensor:
-        # 依次对层进行前向传播
+        # 依次通过每一层处理隐藏状态
         for layer in self.stage_layers:
             hidden_state = layer(hidden_state, training=training)
         return hidden_state
 
     def build(self, input_shape=None):
-        # 如果已经构建，直接返回
         if self.built:
             return
         self.built = True
-        # 如果存在阶段层，对每个层进行构建
         if getattr(self, "stage_layers", None) is not None:
+            # 对每一层进行构建
             for layer in self.stage_layers:
                 with tf.name_scope(layer.name):
                     layer.build(None)
 
 
-class TFResNetEncoder(tf.keras.layers.Layer):
+class TFResNetEncoder(keras.layers.Layer):
     def __init__(self, config: ResNetConfig, **kwargs) -> None:
         super().__init__(**kwargs)
-        # 根据配置信息，创建 ResNet 编码器的各个阶段
+        # 根据配置创建多个 ResNet 阶段
         self.stages = [
             TFResNetStage(
                 config,
@@ -405,97 +419,55 @@ class TFResNetEncoder(tf.keras.layers.Layer):
         return_dict: bool = True,
         training: bool = False,
     ) -> TFBaseModelOutputWithNoAttention:
-        # 初始化隐藏状态的元组
+        # 初始化隐藏状态元组
         hidden_states = () if output_hidden_states else None
 
-        # 依次对各个阶段进行前向传播
+        # 依次通过每个阶段模块处理隐藏状态
         for stage_module in self.stages:
             if output_hidden_states:
                 hidden_states = hidden_states + (hidden_state,)
 
             hidden_state = stage_module(hidden_state, training=training)
 
+        # 如果需要输出隐藏状态，将当前隐藏状态添加到元组中
         if output_hidden_states:
             hidden_states = hidden_states + (hidden_state,)
 
+        # 根据需要返回输出形式
         if not return_dict:
-            # 根据返回值需求选择性返回结果
             return tuple(v for v in [hidden_state, hidden_states] if v is not None)
 
+        # 返回一个 TFBaseModelOutputWithNoAttention 对象，包含最后的隐藏状态和所有隐藏状态元组
         return TFBaseModelOutputWithNoAttention(last_hidden_state=hidden_state, hidden_states=hidden_states)
-    # 检查模型是否已经构建，如果已构建则直接返回，不进行重复构建
+    # 定义 build 方法，用于构建模型层次结构
     def build(self, input_shape=None):
+        # 如果已经构建过，则直接返回，避免重复构建
         if self.built:
             return
-        # 将模型标记为已构建状态
+        # 将标志位设置为已构建
         self.built = True
-        # 如果模型中存在阶段（stages），则遍历每个阶段
+        # 检查是否定义了 stages 属性
         if getattr(self, "stages", None) is not None:
+            # 遍历每一个层并构建它们
             for layer in self.stages:
-                # 使用 TensorFlow 的命名空间，为当前层设置名称范围
+                # 使用层的名字作为命名空间，构建该层
                 with tf.name_scope(layer.name):
-                    # 构建当前层，传入输入形状为 None（表示动态形状）
                     layer.build(None)
-class TFResNetPreTrainedModel(TFPreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
-
-    # 指定配置类
-    config_class = ResNetConfig
-    # 指定基础模型前缀
-    base_model_prefix = "resnet"
-    # 模型的主要输入名称
-    main_input_name = "pixel_values"
-
-    @property
-    def input_signature(self):
-        # 返回输入的签名，用于指定输入的形状和数据类型
-        return {"pixel_values": tf.TensorSpec(shape=(None, self.config.num_channels, 224, 224), dtype=tf.float32)}
-
-
-RESNET_START_DOCSTRING = r"""
-    This model is a TensorFlow
-    [tf.keras.layers.Layer](https://www.tensorflow.org/api_docs/python/tf/keras/layers/Layer) sub-class. Use it as a
-    regular TensorFlow Module and refer to the TensorFlow documentation for all matter related to general usage and
-    behavior.
-
-    Parameters:
-        config ([`ResNetConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~TFPreTrainedModel.from_pretrained`] method to load the model weights.
-"""
-
-
-RESNET_INPUTS_DOCSTRING = r"""
-    Args:
-        pixel_values (`tf.Tensor` of shape `(batch_size, num_channels, height, width)`):
-            Pixel values. Pixel values can be obtained using [`AutoImageProcessor`]. See
-            [`ConvNextImageProcessor.__call__`] for details.
-
-        output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-        return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
-"""
-
-
 @keras_serializable
-class TFResNetMainLayer(tf.keras.layers.Layer):
-    # 指定配置类
+class TFResNetMainLayer(keras.layers.Layer):
+    # 设置该层使用的配置类
     config_class = ResNetConfig
 
     def __init__(self, config: ResNetConfig, **kwargs) -> None:
         super().__init__(**kwargs)
+        # 初始化层的配置
         self.config = config
-        # 创建嵌入器
+        # 创建 TFResNetEmbeddings 实例作为嵌入器
         self.embedder = TFResNetEmbeddings(config, name="embedder")
-        # 创建编码器
+        # 创建 TFResNetEncoder 实例作为编码器
         self.encoder = TFResNetEncoder(config, name="encoder")
-        # 使用全局平均池化层
-        self.pooler = tf.keras.layers.GlobalAveragePooling2D(keepdims=True)
+        # 创建全局平均池化层，用于池化特征图
+        self.pooler = keras.layers.GlobalAveragePooling2D(keepdims=True)
 
     @unpack_inputs
     def call(
@@ -505,48 +477,45 @@ class TFResNetMainLayer(tf.keras.layers.Layer):
         return_dict: Optional[bool] = None,
         training: bool = False,
     ) -> Union[Tuple[tf.Tensor], TFBaseModelOutputWithPoolingAndNoAttention]:
-        # 如果未指定是否返回隐藏状态，则使用模型配置中的设置
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 如果未指定是否返回字典格式的输出，则使用模型配置中的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # TF 2.0 图像层在 CPU 上运行时无法使用 NCHW 格式。
-        # 我们先转置为 NHWC 格式，然后在完整的前向传播后再转置回来。
+        # TF 2.0 image layers can't use NCHW format when running on CPU.
+        # We transpose to NHWC format and then transpose back after the full forward pass.
         # (batch_size, num_channels, height, width) -> (batch_size, height, width, num_channels)
         pixel_values = tf.transpose(pixel_values, perm=[0, 2, 3, 1])
-        # 将像素值通过嵌入器传递
+        # 使用嵌入器将像素值转换为嵌入输出
         embedding_output = self.embedder(pixel_values, training=training)
 
-        # 将嵌入输出传递给编码器
+        # 使用编码器进行编码
         encoder_outputs = self.encoder(
             embedding_output, output_hidden_states=output_hidden_states, return_dict=return_dict, training=training
         )
 
-        # 获取编码器的最后隐藏状态
+        # 获取最后一个隐藏状态
         last_hidden_state = encoder_outputs[0]
 
-        # 通过池化器获取池化输出
+        # 使用池化器获取池化输出
         pooled_output = self.pooler(last_hidden_state)
 
-        # 将所有输出转置为 NCHW 格式
+        # 将所有输出转置为NCHW格式
         # (batch_size, height, width, num_channels) -> (batch_size, num_channels, height, width)
         last_hidden_state = tf.transpose(last_hidden_state, (0, 3, 1, 2))
         pooled_output = tf.transpose(pooled_output, (0, 3, 1, 2))
         hidden_states = ()
-        # 对所有隐藏状态执行转置
         for hidden_state in encoder_outputs[1:]:
+            # 对所有隐藏状态进行转置为NCHW格式
             hidden_states = hidden_states + tuple(tf.transpose(h, (0, 3, 1, 2)) for h in hidden_state)
 
-        # 如果不返回字典格式的输出，则返回元组
         if not return_dict:
+            # 如果不返回字典，则返回元组形式的输出
             return (last_hidden_state, pooled_output) + hidden_states
 
-        # 如果不返回隐藏状态，则将隐藏状态设置为 None
         hidden_states = hidden_states if output_hidden_states else None
 
-        # 返回 TFBaseModelOutputWithPoolingAndNoAttention 对象
+        # 返回带池化和无注意力机制的基础模型输出
         return TFBaseModelOutputWithPoolingAndNoAttention(
             last_hidden_state=last_hidden_state,
             pooler_output=pooled_output,
@@ -554,32 +523,34 @@ class TFResNetMainLayer(tf.keras.layers.Layer):
         )
 
     def build(self, input_shape=None):
-        # 如果模型已经构建，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果嵌入器存在，则构建嵌入器
         if getattr(self, "embedder", None) is not None:
             with tf.name_scope(self.embedder.name):
+                # 构建嵌入器
                 self.embedder.build(None)
-        # 如果编码器存在，则构建编码器
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
+                # 构建编码器
                 self.encoder.build(None)
-```   
+# 使用装饰器为 TFResNetModel 类添加文档字符串，描述其为不带特定顶部头部的裸 ResNet 模型输出原始特征
 @add_start_docstrings(
     "The bare ResNet model outputting raw features without any specific head on top.",
     RESNET_START_DOCSTRING,
 )
-# 定义 TFResNetModel 类，继承自 TFResNetPreTrainedModel
+# 定义 TFResNetModel 类，继承自 TFResNetPreTrainedModel 类
 class TFResNetModel(TFResNetPreTrainedModel):
+    # 初始化方法，接受一个 ResNetConfig 类型的 config 参数
     def __init__(self, config: ResNetConfig, **kwargs) -> None:
-        # 调用父类构造函数初始化对象
+        # 调用父类的初始化方法
         super().__init__(config, **kwargs)
-        # 创建 TFResNetMainLayer 对象，用于特征提取
+        # 创建一个 TFResNetMainLayer 实例，命名为 "resnet"
         self.resnet = TFResNetMainLayer(config=config, name="resnet")
 
+    # 使用装饰器为 call 方法添加文档字符串，描述其输入和输出
     @add_start_docstrings_to_model_forward(RESNET_INPUTS_DOCSTRING)
+    # 使用装饰器添加代码示例的文档字符串
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFBaseModelOutputWithPoolingAndNoAttention,
@@ -587,8 +558,9 @@ class TFResNetModel(TFResNetPreTrainedModel):
         modality="vision",
         expected_output=_EXPECTED_OUTPUT_SHAPE,
     )
+    # 使用装饰器对输入进行解包，即解开输入的包装
     @unpack_inputs
-    # 定义模型的前向传播函数
+    # 定义 call 方法，接受多个参数并返回相应的值
     def call(
         self,
         pixel_values: tf.Tensor,
@@ -596,32 +568,37 @@ class TFResNetModel(TFResNetPreTrainedModel):
         return_dict: Optional[bool] = None,
         training: bool = False,
     ) -> Union[Tuple[tf.Tensor], TFBaseModelOutputWithPoolingAndNoAttention]:
-        # 如果未指定，使用配置中的参数
+        # 如果 output_hidden_states 为 None，则使用 self.config.output_hidden_states
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
+        # 如果 return_dict 为 None，则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用 TFResNetMainLayer 对象进行前向传播
+        # 调用 self.resnet 的 __call__ 方法，传递相应的参数
         resnet_outputs = self.resnet(
             pixel_values=pixel_values,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
             training=training,
         )
+        # 返回 resnet_outputs
         return resnet_outputs
 
+    # 定义 build 方法，用于构建模型
     def build(self, input_shape=None):
-        # 如果已构建，直接返回
+        # 如果已经构建过，直接返回
         if self.built:
             return
+        # 标记模型为已构建
         self.built = True
-        # 如果存在 resnet 属性，则构建 resnet 层
+        # 如果 self.resnet 存在，则在名为 self.resnet 的命名空间下构建它
         if getattr(self, "resnet", None) is not None:
             with tf.name_scope(self.resnet.name):
                 self.resnet.build(None)
 
 
+# 使用装饰器为 TFResNetForImageClassification 类添加文档字符串，描述其为在顶部带有图像分类头部（线性层位于池化特征之上）的 ResNet 模型
 @add_start_docstrings(
     """
     ResNet Model with an image classification head on top (a linear layer on top of the pooled features), e.g. for
@@ -629,84 +606,95 @@ class TFResNetModel(TFResNetPreTrainedModel):
     """,
     RESNET_START_DOCSTRING,
 )
-# 定义 TFResNetForImageClassification 类，继承自 TFResNetPreTrainedModel 和 TFSequenceClassificationLoss
+# 定义 TFResNetForImageClassification 类，继承自 TFResNetPreTrainedModel 和 TFSequenceClassificationLoss 类
 class TFResNetForImageClassification(TFResNetPreTrainedModel, TFSequenceClassificationLoss):
+    # 初始化方法，接受一个 ResNetConfig 类型的 config 参数
     def __init__(self, config: ResNetConfig, **kwargs) -> None:
-        # 调用父类构造函数初始化对象
+        # 调用父类的初始化方法
         super().__init__(config, **kwargs)
-        # 设置分类标签数目
+        # 设置 self.num_labels 为 config.num_labels
         self.num_labels = config.num_labels
-        # 创建 TFResNetMainLayer 对象，用于特征提取
+        # 创建一个 TFResNetMainLayer 实例，命名为 "resnet"
         self.resnet = TFResNetMainLayer(config, name="resnet")
-        # 分类头部网络
+        # 分类头部
         self.classifier_layer = (
-            tf.keras.layers.Dense(config.num_labels, name="classifier.1")
+            keras.layers.Dense(config.num_labels, name="classifier.1")
             if config.num_labels > 0
-            else tf.keras.layers.Activation("linear", name="classifier.1")
+            else keras.layers.Activation("linear", name="classifier.1")
         )
+        # 设置 self.config 为 config
         self.config = config
 
+    # 定义 classifier 方法，接受一个 tf.Tensor 类型的参数 x，并返回分类器的 logits
     def classifier(self, x: tf.Tensor) -> tf.Tensor:
-        # 将输入展平
-        x = tf.keras.layers.Flatten()(x)
-        # 通过分类器层获取 logits
+        # 使用 Flatten 层展平输入 x
+        x = keras.layers.Flatten()(x)
+        # 将展平后的结果传递给分类器层，得到 logits
         logits = self.classifier_layer(x)
+        # 返回 logits
         return logits
 
+    # 使用装饰器为 call 方法添加文档字符串，描述其输入和输出
     @add_start_docstrings_to_model_forward(RESNET_INPUTS_DOCSTRING)
+    # 使用装饰器添加代码示例的文档字符串
     @add_code_sample_docstrings(
         checkpoint=_IMAGE_CLASS_CHECKPOINT,
         output_type=TFImageClassifierOutputWithNoAttention,
         config_class=_CONFIG_FOR_DOC,
         expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
     )
+    # 使用装饰器对输入进行解包，即解开输入的包装
     @unpack_inputs
-    # 定义一个方法，用于对输入的像素值进行分类或回归预测
     def call(
         self,
-        pixel_values: tf.Tensor = None,  # 像素值张量，默认为空
-        labels: tf.Tensor = None,  # 标签张量，默认为空
-        output_hidden_states: bool = None,  # 是否输出隐藏状态，默认为空
-        return_dict: bool = None,  # 是否返回字典，默认为空
-        training: bool = False,  # 是否进行训练，默认为False
-    ) -> Union[Tuple[tf.Tensor], TFImageClassifierOutputWithNoAttention]:  # 返回值为 tf.Tensor 或 TFImageClassifierOutputWithNoAttention 类型的元组
+        pixel_values: tf.Tensor = None,
+        labels: tf.Tensor = None,
+        output_hidden_states: bool = None,
+        return_dict: bool = None,
+        training: bool = False,
+    ) -> Union[Tuple[tf.Tensor], TFImageClassifierOutputWithNoAttention]:
         r"""
-        labels (`tf.Tensor` of shape `(batch_size,)`, *optional`):
+        labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the image classification/regression loss. Indices should be in `[0, ...,
             config.num_labels - 1]`. If `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict  # 根据传入参数或默认配置来确定是否返回字典类型的输出
+        # 设置返回字典选项，如果未提供则使用配置中的默认设置
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用ResNet模型进行像素值处理，得到输出结果
+        # 调用 ResNet 模型进行前向传播计算
         outputs = self.resnet(
             pixel_values, output_hidden_states=output_hidden_states, return_dict=return_dict, training=training
         )
 
-        # 如果设置了返回字典类型的输出，则使用池化输出；否则使用第二个输出
+        # 如果 return_dict 为 True，则使用 pooler_output 作为输出；否则使用 outputs 的第二个元素作为输出
         pooled_output = outputs.pooler_output if return_dict else outputs[1]
 
-        # 使用分类器对池化输出进行分类
+        # 将池化输出传入分类器进行分类
         logits = self.classifier(pooled_output)
 
-        # 如果没有传入标签，则损失值为空；否则计算损失值
+        # 如果 labels 不为 None，则计算损失；否则损失设为 None
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
 
-        # 如果不需要返回字典类型的输出，则返回分类结果和额外信息；否则返回新的TFImageClassifierOutputWithNoAttention类型的对象
+        # 如果 return_dict 为 False，则返回 logits 和额外的 hidden states；否则返回带有损失、logits 和 hidden states 的对象
         if not return_dict:
             output = (logits,) + outputs[2:]
             return (loss,) + output if loss is not None else output
 
-        return TFImageClassifierOutputWithNoAttention(loss=loss, logits=logits, hidden_states=outputs.hidden_states)  # 返回TFImageClassifierOutputWithNoAttention类型的对象包括损失值、分类结果和隐藏状态
+        return TFImageClassifierOutputWithNoAttention(loss=loss, logits=logits, hidden_states=outputs.hidden_states)
 
-    # 构建模型结构
     def build(self, input_shape=None):
-        if self.built:  # 如果已经构建过，则直接返回
+        # 如果已经构建过网络，直接返回
+        if self.built:
             return
-        self.built = True  # 标记为已构建
-        if getattr(self, "resnet", None) is not None:  # 如果存在ResNet模型
-            with tf.name_scope(self.resnet.name):  # 使用ResNet模型的名字来定义命名空间
-                self.resnet.build(None)  # 构建ResNet模型
-        if getattr(self, "classifier_layer", None) is not None:  # 如果存在分类器层
-            with tf.name_scope(self.classifier_layer.name):  # 使用分类器层的名字来定义命名空间
-                self.classifier_layer.build([None, None, self.config.hidden_sizes[-1]])  # 构建分类器层
+        self.built = True
+
+        # 如果存在 resnet 模型，则构建 resnet
+        if getattr(self, "resnet", None) is not None:
+            with tf.name_scope(self.resnet.name):
+                self.resnet.build(None)
+
+        # 如果存在 classifier_layer，则构建 classifier_layer
+        if getattr(self, "classifier_layer", None) is not None:
+            with tf.name_scope(self.classifier_layer.name):
+                self.classifier_layer.build([None, None, self.config.hidden_sizes[-1]])
 ```

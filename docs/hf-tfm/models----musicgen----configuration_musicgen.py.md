@@ -1,108 +1,116 @@
-# `.\transformers\models\musicgen\configuration_musicgen.py`
+# `.\models\musicgen\configuration_musicgen.py`
 
-```py
-# 设置文件编码为UTF-8
-# 版权所有 2023 年 Meta AI 和 HuggingFace 公司团队。保留所有权利。
+```
+# coding=utf-8
+# Copyright 2023 Meta AI and The HuggingFace Inc. team. All rights reserved.
 #
-# 根据 Apache 许可证，第 2 版（“许可证”），您只有在遵守该许可证的情况下才能使用此文件。
-# 您可以在以下网址获取许可证的副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非法律要求或书面同意，否则根据许可证分发的软件是“按原样”
-# 的基础上分发，不附带任何担保或条件，无论是明示的还是隐含的。
-# 请参阅许可证以查看特定语言规定的权限和限制。
-""" MusicGen 模型配置"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 从模块中导入相关内容
+""" MusicGen model configuration"""
+
+# 导入所需模块和函数
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
 from ..auto.configuration_auto import AutoConfig
 
-# 获取日志记录器对象
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# MusicGen 预训练配置和相应归档映射
+# 预训练模型配置文件映射字典，将模型名称映射到其配置文件的URL
 MUSICGEN_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/musicgen-small": "https://huggingface.co/facebook/musicgen-small/resolve/main/config.json",
-    # 查看所有 MusicGen 模型，请访问 https://huggingface.co/models?filter=musicgen
+    # 查看所有Musicgen模型：https://huggingface.co/models?filter=musicgen
 }
 
-# MusicGen 解码器配置类
+# MusicgenDecoderConfig类，继承自PretrainedConfig类
 class MusicgenDecoderConfig(PretrainedConfig):
     r"""
-    这是用于存储[`MusicgenDecoder`]配置的配置类。用于根据指定参数实例化 MusicGen 解码器，
-    定义模型架构。使用默认值实例化配置将产生类似于 MusicGen [facebook/musicgen-small](https://huggingface.co/facebook/musicgen-small)
-    架构的配置。
+    This is the configuration class to store the configuration of an [`MusicgenDecoder`]. It is used to instantiate a
+    MusicGen decoder according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the MusicGen
+    [facebook/musicgen-small](https://huggingface.co/facebook/musicgen-small) architecture.
 
-    配置对象继承自[`PretrainedConfig`]，用于控制模型输出。有关更多信息，请阅读[`PretrainedConfig`]的文档。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+    """
+    # 定义 MusicgenDecoder 模型的参数及其默认值
     Args:
         vocab_size (`int`, *optional*, defaults to 2048):
-            MusicgenDecoder 模型的词汇表大小。定义在调用 [`MusicgenDecoder`] 时可以表示的不同标记数量。
+            MusicgenDecoder 模型的词汇表大小，定义了在调用 `MusicgenDecoder` 时输入 `inputs_ids` 可表示的不同标记数量。
         hidden_size (`int`, *optional*, defaults to 1024):
-            层和汇聚层的维度。
+            层和池化层的维度。
         num_hidden_layers (`int`, *optional*, defaults to 24):
-            解码器层数。
+            解码器层的数量。
         num_attention_heads (`int`, *optional*, defaults to 16):
-            每个Transformer块中的注意力层的注意头数。
+            Transformer 块中每个注意力层的注意力头数量。
         ffn_dim (`int`, *optional*, defaults to 4096):
-            Transformer 块中 "中间"（通常命名为feed-forward）层的维度。
+            Transformer 块中“中间”（通常称为前馈）层的维度。
         activation_function (`str` or `function`, *optional*, defaults to `"gelu"`):
-            解码器和汇聚层中非线性激活函数（函数或字符串）。支持字符串 `"gelu"`, `"relu"`, `"silu"` 和 `"gelu_new"`。
+            解码器和池化器中的非线性激活函数（函数或字符串）。支持的字符串包括 `"gelu"`, `"relu"`, `"silu"` 和 `"gelu_new"`。
         dropout (`float`, *optional*, defaults to 0.1):
-            用于所有嵌入层、文本编码器和汇聚层中所有全连接层的丢失概率。
+            嵌入层、文本编码器和池化器中所有全连接层的 dropout 概率。
         attention_dropout (`float`, *optional*, defaults to 0.0):
-            注意力概率的丢失比率。
+            注意力概率的 dropout 比率。
         activation_dropout (`float`, *optional*, defaults to 0.0):
-            全连接层内激活的丢失比率。
+            全连接层内部激活的 dropout 比率。
         max_position_embeddings (`int`, *optional*, defaults to 2048):
-            模型可能使用的最大序列长度。通常设置为较大的值（例如 512、1024 或 2048）以防万一。
+            模型可能使用的最大序列长度。通常设置为一个很大的值（例如 512、1024 或 2048）。
         initializer_factor (`float`, *optional*, defaults to 0.02):
             用于初始化所有权重矩阵的截断正态初始化器的标准差。
         layerdrop (`float`, *optional*, defaults to 0.0):
-            解码器的 LayerDrop 概率。有关更多详细信息，请参阅 [LayerDrop paper](see https://arxiv.org/abs/1909.11556)。
+            解码器的 LayerDrop 概率。详细信息请参阅 LayerDrop 论文（见 https://arxiv.org/abs/1909.11556）。
         scale_embedding (`bool`, *optional*, defaults to `False`):
-            通过除以 sqrt(hidden_size) 来缩放嵌入。
+            是否通过 sqrt(hidden_size) 缩放嵌入。
         use_cache (`bool`, *optional*, defaults to `True`):
-            模型是否应返回最后一个键/值注意力（并非所有模型都使用）。
+            模型是否应返回最后的 key/values 注意力（并非所有模型都使用）。
         num_codebooks (`int`, *optional*, defaults to 4):
-            并行转发到模型的码书数量。
+            转发到模型的并行码书数量。
         tie_word_embeddings(`bool`, *optional*, defaults to `False`):
-            输入和输出单词嵌入是否应绑定。
+            是否应绑定输入和输出词嵌入。
         audio_channels (`int`, *optional*, defaults to 1):
-            音频数据中的通道数。单声道为1，立体声为2。立体声模型为左/右输出通道生成单独的音频流。单声道模型生成单个音频流输出。
-    ```
-    # 设置模型类型为音乐生成解码器
+            音频数据中的通道数。单声道为 1，立体声为 2。立体声模型生成左/右输出通道的单独音频流，单声道模型生成单一音频流输出。
+    # 定义模型类型为 "musicgen_decoder"
     model_type = "musicgen_decoder"
-    # 在推断阶段忽略的关键字列表
+    
+    # 在推断阶段忽略的键列表，这些键不会用于推断过程中
     keys_to_ignore_at_inference = ["past_key_values"]
     
-    # 初始化函数，设置模型参数
+    # 定义模型类，包含各种初始化参数
     def __init__(
         self,
-        vocab_size=2048,  # 词汇量大小
-        max_position_embeddings=2048,  # 最大位置编码数
-        num_hidden_layers=24,  # 隐藏层的数量
-        ffn_dim=4096,  # 前馈神经网络的维度
-        num_attention_heads=16,  # 注意力头的数量
-        layerdrop=0.0,  # 层丢弃率
-        use_cache=True,  # 是否使用缓存
-        activation_function="gelu",  # 激活函数
-        hidden_size=1024,  # 隐藏层的尺寸
-        dropout=0.1,  # 丢弃率
-        attention_dropout=0.0,  # 注意力模块的丢弃率
-        activation_dropout=0.0,  # 激活函数的丢弃率
-        initializer_factor=0.02,  # 初始化因子
-        scale_embedding=False,  # 是否缩放嵌入，如果为True，则缩放因子为sqrt(d_model)
-        num_codebooks=4,  # 量化编码书的数量
-        audio_channels=1,  # 音频通道数
-        pad_token_id=2048,  # 填充标记 ID
-        bos_token_id=2048,  # 序列开始标记 ID
-        eos_token_id=None,  # 序列结束标记 ID
-        tie_word_embeddings=False,  # 是否绑定词嵌入
-        **kwargs,  # 其他参数
+        vocab_size=2048,  # 词汇表大小，默认为 2048
+        max_position_embeddings=2048,  # 最大位置编码长度，默认为 2048
+        num_hidden_layers=24,  # 隐藏层的数量，默认为 24
+        ffn_dim=4096,  # FeedForward 层的维度，默认为 4096
+        num_attention_heads=16,  # 注意力头的数量，默认为 16
+        layerdrop=0.0,  # LayerDrop 参数，默认为 0.0
+        use_cache=True,  # 是否使用缓存，默认为 True
+        activation_function="gelu",  # 激活函数类型，默认为 "gelu"
+        hidden_size=1024,  # 隐藏层大小，默认为 1024
+        dropout=0.1,  # 全连接层和注意力层的 Dropout 概率，默认为 0.1
+        attention_dropout=0.0,  # 注意力模型的 Dropout 概率，默认为 0.0
+        activation_dropout=0.0,  # 激活函数的 Dropout 概率，默认为 0.0
+        initializer_factor=0.02,  # 初始化因子，默认为 0.02
+        scale_embedding=False,  # 是否缩放嵌入层，默认为 False；若为 True，则缩放因子为 sqrt(d_model)
+        num_codebooks=4,  # 编码书的数量，默认为 4
+        audio_channels=1,  # 音频通道数，默认为 1
+        pad_token_id=2048,  # 填充标记的 ID，默认为 2048
+        bos_token_id=2048,  # 起始标记的 ID，默认为 2048
+        eos_token_id=None,  # 终止标记的 ID，默认为 None
+        tie_word_embeddings=False,  # 是否绑定词嵌入，默认为 False
+        **kwargs,  # 其他关键字参数
     ):
-        # 设置模型参数
+        # 初始化模型参数
         self.vocab_size = vocab_size
         self.max_position_embeddings = max_position_embeddings
         self.hidden_size = hidden_size
@@ -116,15 +124,15 @@ class MusicgenDecoderConfig(PretrainedConfig):
         self.initializer_factor = initializer_factor
         self.layerdrop = layerdrop
         self.use_cache = use_cache
-        self.scale_embedding = scale_embedding  # 如果为True，则缩放因子为sqrt(d_model)
+        self.scale_embedding = scale_embedding  # 若为 True，则嵌入层缩放因子为 sqrt(d_model)
         self.num_codebooks = num_codebooks
     
-        # 如果音频通道数不是1或2，则引发值错误
+        # 检查音频通道数是否为合法值（1 或 2）
         if audio_channels not in [1, 2]:
             raise ValueError(f"Expected 1 (mono) or 2 (stereo) audio channels, got {audio_channels} channels.")
         self.audio_channels = audio_channels
     
-        # 调用父类的初始化函数，并传递参数
+        # 调用父类的初始化方法，设置特殊的标记 ID 和其他参数
         super().__init__(
             pad_token_id=pad_token_id,
             bos_token_id=bos_token_id,
@@ -132,7 +140,6 @@ class MusicgenDecoderConfig(PretrainedConfig):
             tie_word_embeddings=tie_word_embeddings,
             **kwargs,
         )
-# 定义 Musicgen 模型的配置类，用于存储 MusicgenModel 的配置信息，包括文本编码器、音频编码器和 MusicGen 解码器的配置。
 class MusicgenConfig(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`MusicgenModel`]. It is used to instantiate a
@@ -155,7 +162,7 @@ class MusicgenConfig(PretrainedConfig):
 
     Example:
 
-    ```py
+    ```python
     >>> from transformers import (
     ...     MusicgenConfig,
     ...     MusicgenDecoderConfig,
@@ -188,48 +195,53 @@ class MusicgenConfig(PretrainedConfig):
     >>> # loading model and config from pretrained folder
     >>> musicgen_config = MusicgenConfig.from_pretrained("musicgen-model")
     >>> model = MusicgenForConditionalGeneration.from_pretrained("musicgen-model", config=musicgen_config)
-    ```"""
+    ```
 
-    # 模型类型为 "musicgen"
+    Assigning the model_type class attribute for identification as a 'musicgen' model type.
+    This attribute helps in distinguishing different model types in a system.
+    """
     model_type = "musicgen"
-    # 标记该模型是进行组合的
     is_composition = True
     # 初始化方法，接受任意关键字参数
     def __init__(self, **kwargs):
-        # 调用父类初始化方法
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 检查是否传入了文本编码器、音频编码器和解码器配置信息，若没有则抛出数值错误
+        # 检查是否缺少必要的参数：text_encoder、audio_encoder、decoder
         if "text_encoder" not in kwargs or "audio_encoder" not in kwargs or "decoder" not in kwargs:
+            # 如果缺少任一参数，则抛出数值错误异常
             raise ValueError("Config has to be initialized with text_encoder, audio_encoder and decoder config")
 
-        # 弹出文本编码器配置信息
+        # 从关键字参数中取出并移除 text_encoder 的配置
         text_encoder_config = kwargs.pop("text_encoder")
-        # 弹出文本编码器模型类型
+        # 从 text_encoder_config 中取出并移除 model_type 字段
         text_encoder_model_type = text_encoder_config.pop("model_type")
 
-        # 弹出音频编码器配置信息
+        # 从关键字参数中取出并移除 audio_encoder 的配置
         audio_encoder_config = kwargs.pop("audio_encoder")
-        # 弹出音频编码器模型类型
+        # 从 audio_encoder_config 中取出并移除 model_type 字段
         audio_encoder_model_type = audio_encoder_config.pop("model_type")
 
-        # 弹出解码器配置信息
+        # 从关键字参数中取出 decoder 的配置
         decoder_config = kwargs.pop("decoder")
 
-        # 使用文本编码器模型类型和配置信息创建文本编码器对象
+        # 使用 text_encoder_model_type 和 text_encoder_config 创建文本编码器的配置
         self.text_encoder = AutoConfig.for_model(text_encoder_model_type, **text_encoder_config)
-        # 使用音频编码器模型类型和配置信息创建音频编码器对象
+        # 使用 audio_encoder_model_type 和 audio_encoder_config 创建音频编码器的配置
         self.audio_encoder = AutoConfig.for_model(audio_encoder_model_type, **audio_encoder_config)
-        # 使用解码器配置信息创建解码器对象
+        # 使用 decoder_config 创建解码器的配置
         self.decoder = MusicgenDecoderConfig(**decoder_config)
-        # 标记为编码器-解码器结构
+        # 标记对象为编码器-解码器类型
         self.is_encoder_decoder = True
 
     @classmethod
-    # 从子模型配置信息实例化一个 MusicgenConfig 对象
+    # 类方法：从子模型的配置创建 MusicgenConfig 对象
     def from_sub_models_config(
         cls,
+        # 文本编码器的预训练配置对象
         text_encoder_config: PretrainedConfig,
+        # 音频编码器的预训练配置对象
         audio_encoder_config: PretrainedConfig,
+        # 解码器的音乐生成配置对象
         decoder_config: MusicgenDecoderConfig,
         **kwargs,
     ):
@@ -240,7 +252,7 @@ class MusicgenConfig(PretrainedConfig):
         Returns:
             [`MusicgenConfig`]: An instance of a configuration object
         """
-        # 返回一个基于文本编码器、音频编码器和解码器配置信息的 MusicgenConfig 对象
+        # 使用传入的配置创建一个 MusicgenConfig 对象，并返回
         return cls(
             text_encoder=text_encoder_config.to_dict(),
             audio_encoder=audio_encoder_config.to_dict(),
@@ -249,8 +261,8 @@ class MusicgenConfig(PretrainedConfig):
         )
 
     @property
-    # 这是一个属性，因为您可能想要动态更改编解码器模型
+    # 属性方法：返回音频编码器的采样率
+    # 这是一个属性方法，因为可能需要动态改变编解码器模型
     def sampling_rate(self):
-        # 返回音频编码器的采样率属性
         return self.audio_encoder.sampling_rate
 ```

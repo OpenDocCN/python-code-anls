@@ -1,41 +1,34 @@
 # `.\models\falcon\__init__.py`
 
-```py
-# coding=utf-8
-# 版权声明
-# 本代码版权归 Falcon 作者和 HuggingFace 公司团队所有。保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本（“许可证”）进行许可;
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则按“原样”分发软件
-# 没有任何形式的明示或暗示的保证或条件。
-# 请参阅许可证了解特定的语言管辖权和权限。
+```
+# 设置编码格式为 UTF-8
+# 版权声明，标明 Falcon 作者和 HuggingFace Inc. 团队的版权
+# 根据 Apache License, Version 2.0 许可证，使用该文件需要遵循许可证规定
+# 可以在指定许可证网址获取许可证的副本
+# 根据适用法律或书面同意的情况下，本软件按"原样"提供，无任何明示或暗示的担保
+# 详见许可证以获取特定语言的权限说明
 from typing import TYPE_CHECKING
 
-# 从 utils 模块中导入所需的依赖
+# 从 utils 模块导入必要的依赖项
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
 
-# 定义导入结构
+# 定义模块导入结构
 _import_structure = {
-    "configuration_falcon": ["FALCON_PRETRAINED_CONFIG_ARCHIVE_MAP", "FalconConfig"],  # 导入配置相关内容
+    "configuration_falcon": ["FALCON_PRETRAINED_CONFIG_ARCHIVE_MAP", "FalconConfig"],
 }
 
-# 检查是否有 torch 可用
+# 检查是否存在 torch 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若有 torch 可用，则导入模型相关内容
+    # 如果存在 torch 库，则添加相关模型的导入结构
     _import_structure["modeling_falcon"] = [
         "FALCON_PRETRAINED_MODEL_ARCHIVE_LIST",
         "FalconForCausalLM",
@@ -46,17 +39,18 @@ else:
         "FalconForQuestionAnswering",
     ]
 
-
+# 如果是类型检查阶段，从 configuration_falcon 模块导入相关的配置和类
 if TYPE_CHECKING:
-    # 如果是类型检查阶段，则导入相关内容
     from .configuration_falcon import FALCON_PRETRAINED_CONFIG_ARCHIVE_MAP, FalconConfig
 
+    # 检查是否存在 torch 库，若不存在则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果存在 torch 库，则从 modeling_falcon 模块导入相关的模型类
         from .modeling_falcon import (
             FALCON_PRETRAINED_MODEL_ARCHIVE_LIST,
             FalconForCausalLM,
@@ -67,12 +61,9 @@ if TYPE_CHECKING:
             FalconPreTrainedModel,
         )
 
-
+# 如果不是类型检查阶段，则动态地将当前模块设置为 LazyModule，并指定导入结构和模块规范
 else:
-    # 如果不是类型检查阶段，则进行懒加载
     import sys
 
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
-
-```  
 ```

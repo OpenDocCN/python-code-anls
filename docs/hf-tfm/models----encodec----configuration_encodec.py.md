@@ -1,149 +1,156 @@
 # `.\models\encodec\configuration_encodec.py`
 
-```py
-# 定义了一个配置类 EncodecConfig，用于存储 EncodecModel 的配置信息
+```
+# 设置编码格式为 UTF-8，确保代码可以正确处理各种字符
+# 版权声明，指出版权归 Meta Platforms, Inc. 及其关联公司和 HuggingFace Inc. 团队所有
+# 根据 Apache 许可证 2.0 版本授权，只有在符合许可证的情况下才能使用此文件
+# 可以通过链接获取许可证的副本
+# 根据适用法律或书面同意，软件根据“原样”分发，无任何明示或暗示的保证或条件
+# 请参阅许可证了解具体语言的规定，以及许可证下的限制
+""" EnCodec model configuration"""
+
+# 导入数学库
+import math
+# 导入类型提示模块，用于类型注解
+from typing import Optional
+
+# 导入 numpy 库，用于数值操作
+import numpy as np
+
+# 导入配置工具中的预训练配置类
+from ...configuration_utils import PretrainedConfig
+# 导入日志工具
+from ...utils import logging
+
+# 获取当前模块的日志记录器
+logger = logging.get_logger(__name__)
+
+# 预训练模型的配置文件映射，将模型名称映射到其配置文件的 URL
+ENCODEC_PRETRAINED_CONFIG_ARCHIVE_MAP = {
+    "facebook/encodec_24khz": "https://huggingface.co/facebook/encodec_24khz/resolve/main/config.json",
+    "facebook/encodec_48khz": "https://huggingface.co/facebook/encodec_48khz/resolve/main/config.json",
+}
+
+# EncodecConfig 类，用于存储 Encodec 模型的配置信息
 class EncodecConfig(PretrainedConfig):
+    r"""
+    This is the configuration class to store the configuration of an [`EncodecModel`]. It is used to instantiate a
+    Encodec model according to the specified arguments, defining the model architecture. Instantiating a configuration
+    with the defaults will yield a similar configuration to that of the
+    [facebook/encodec_24khz](https://huggingface.co/facebook/encodec_24khz) architecture.
+
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+
+    Example:
+
+    ```python
+    >>> from transformers import EncodecModel, EncodecConfig
+
+    >>> # Initializing a "facebook/encodec_24khz" style configuration
+    >>> configuration = EncodecConfig()
+
+    >>> # Initializing a model (with random weights) from the "facebook/encodec_24khz" style configuration
+    >>> model = EncodecModel(configuration)
+
+    >>> # Accessing the model configuration
+    >>> configuration = model.config
+    ```
+    """
+
     # 模型类型为 encodec
     model_type = "encodec"
 
-    # 初始化函数，用于设定模型的各项配置参数
+    # 构造方法，初始化 EncodecConfig 实例
     def __init__(
-        # 目标带宽列表，默认为 [1.5, 3.0, 6.0, 12.0, 24.0]
         self,
         target_bandwidths=[1.5, 3.0, 6.0, 12.0, 24.0],
-        # 采样率，默认为 24,000 Hz
         sampling_rate=24_000,
-        # 音频通道数，默认为 1
         audio_channels=1,
-        # 是否进行归一化，默认为 False
         normalize=False,
-        # 分块长度（秒），默认为 None
         chunk_length_s=None,
-        # 重叠长度，默认为 None
         overlap=None,
-        # 隐藏层大小，默认为 128
         hidden_size=128,
-        # 滤波器数量，默认为 32
         num_filters=32,
-        # 残差层数量，默认为 1
         num_residual_layers=1,
-        # 上采样比例列表，默认为 [8, 5, 4, 2]
         upsampling_ratios=[8, 5, 4, 2],
-        # 归一化类型，默认为 "weight_norm"
         norm_type="weight_norm",
-        # 卷积核大小，默认为 7
         kernel_size=7,
-        # 最后一层卷积核大小，默认为 7
         last_kernel_size=7,
-        # 残差卷积核大小，默认为 3
         residual_kernel_size=3,
-        # 膨胀增长率，默认为 2
         dilation_growth_rate=2,
-        # 是否使用因果卷积，默认为 True
         use_causal_conv=True,
-        # 填充模式，默认为 "reflect"
         pad_mode="reflect",
-        # 压缩比例，默认为 2
         compress=2,
-        # LSTM 层数，默认为 2
         num_lstm_layers=2,
-        # 右侧修剪比例，默认为 1.0
         trim_right_ratio=1.0,
-        # 代码本大小，默认为 1024
         codebook_size=1024,
-        # 代码本维度，默认为 None
         codebook_dim=None,
-        # 是否使用卷积作为快捷连接，默认为 True
         use_conv_shortcut=True,
-        # 其他参数，用于接收未指定的配置参数
         **kwargs,
-        # 设置目标带宽
+    ):
         self.target_bandwidths = target_bandwidths
-        # 设置采样率
         self.sampling_rate = sampling_rate
-        # 设置音频通道数
         self.audio_channels = audio_channels
-        # 设置是否进行归一化
         self.normalize = normalize
-        # 设置分块长度（秒）
         self.chunk_length_s = chunk_length_s
-        # 设置重叠率
         self.overlap = overlap
-        # 设置隐藏层大小
         self.hidden_size = hidden_size
-        # 设置卷积核数量
         self.num_filters = num_filters
-        # 设置残差层数量
         self.num_residual_layers = num_residual_layers
-        # 设置上采样比例
         self.upsampling_ratios = upsampling_ratios
-        # 设置规范化类型
         self.norm_type = norm_type
-        # 设置卷积核大小
         self.kernel_size = kernel_size
-        # 设置最后一个卷积核大小
         self.last_kernel_size = last_kernel_size
-        # 设置残差卷积核大小
         self.residual_kernel_size = residual_kernel_size
-        # 设置扩张增长率
         self.dilation_growth_rate = dilation_growth_rate
-        # 设置是否使用因果卷积
         self.use_causal_conv = use_causal_conv
-        # 设置填充模式
         self.pad_mode = pad_mode
-        # 设置是否压缩
         self.compress = compress
-        # 设置LSTM层数
         self.num_lstm_layers = num_lstm_layers
-        # 设置右边裁剪比例
         self.trim_right_ratio = trim_right_ratio
-        # 设置码本大小
         self.codebook_size = codebook_size
-        # 设置码本维度
+        # 设置 codebook_dim，如果未指定，则使用 hidden_size
         self.codebook_dim = codebook_dim if codebook_dim is not None else hidden_size
-        # 设置是否使用卷积快捷方式
         self.use_conv_shortcut = use_conv_shortcut
 
-        # 检查规范化类型是否有效，如果不是则抛出异常
+        # 检查 norm_type 是否为支持的类型，否则抛出 ValueError 异常
         if self.norm_type not in ["weight_norm", "time_group_norm"]:
             raise ValueError(
                 f'self.norm_type must be one of `"weight_norm"`, `"time_group_norm"`), got {self.norm_type}'
             )
 
-        # 继承父类初始化方法
+        # 调用父类的构造方法，传入其他未明确列出的关键字参数
         super().__init__(**kwargs)
 
-    # 这是一个属性，因为你可能想要随时更改分块长度（秒）
+    # 由于 chunk_length_s 可能会在运行时更改，所以这是一个属性
     @property
     def chunk_length(self) -> Optional[int]:
-        # 如果分块长度（秒）为None，则返回None
+        # 如果 chunk_length_s 为 None，则返回 None
         if self.chunk_length_s is None:
             return None
         else:
-            # 否则返回采样率乘以分块长度的结果（采样点数）
+            # 否则返回计算得到的 chunk_length
             return int(self.chunk_length_s * self.sampling_rate)
 
-    # 这是一个属性，因为你可能想要随时更改分块长度（秒）
+    # 由于 chunk_length_s 和 overlap 可能会在运行时更改，所以这是一个属性
     @property
     def chunk_stride(self) -> Optional[int]:
-        # 如果分块长度（秒）或者重叠率为None，则返回None
+        # 如果 chunk_length_s 或 overlap 为 None，则返回 None
         if self.chunk_length_s is None or self.overlap is None:
             return None
         else:
-            # 否则返回分块长度乘以（1.0 - 重叠率）的结果的最大值
+            # 否则返回计算得到的 chunk_stride
             return max(1, int((1.0 - self.overlap) * self.chunk_length))
 
-    # 返回帧率
+    # 计算并返回帧率，这是一个属性
     @property
     def frame_rate(self) -> int:
-        # 计算跳跃长度
-        hop_length = np.prod(self.upsampling_ratios)
-        # 返回采样率除以跳跃长度的结果向上取整
-        return math.ceil(self.sampling_rate / hop_length)
+        hop_length = np.prod(self.upsampling_ratios)  # 计算 upsampling_ratios 的乘积
+        return math.ceil(self.sampling_rate / hop_length)  # 计算并返回帧率
 
-    # 返回量化器数量
+    # 返回 quantizer 的数量，这是一个属性
     @property
     def num_quantizers(self) -> int:
-        # 返回目标带宽最后一个值乘以1000除以（帧率乘以10）的结果向下取整
         return int(1000 * self.target_bandwidths[-1] // (self.frame_rate * 10))
 ```

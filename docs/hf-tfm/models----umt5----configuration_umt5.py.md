@@ -1,103 +1,116 @@
-# `.\transformers\models\umt5\configuration_umt5.py`
+# `.\models\umt5\configuration_umt5.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明，版权属于 The T5 Authors 和 HuggingFace Inc.
-# 根据 Apache License, Version 2.0 许可
-# 如果不符合许可条款，禁止使用该文件
-# 可以在 http://www.apache.org/licenses/LICENSE-2.0 获取许可副本
-# 除非适用法律要求或书面同意，否则根据许可分发的软件是基于“原样”分发的，没有任何种类的保证或条件，明示或暗示
-# 请查看特定语言版本的许可证，以获取权限和限制
-""" 
-UMT5 模型配置"""
-# 引入类型提示的 Mapping 模块
+```
+# coding=utf-8
+# 定义文件编码为UTF-8
+
+# 版权声明，版权归2023年T5作者及HuggingFace Inc.所有
+#
+# 根据Apache许可证2.0版发布；除非符合许可证要求，否则不得使用本文件
+# 可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，本软件是基于“按原样提供”的基础分发的，
+# 没有任何明示或暗示的担保或条件。请参阅许可证了解特定语言的权限和限制。
+""" UMT5模型配置 """
+# 导入所需模块
 from typing import Mapping
 
-# 从...configuration_utils 模块中引入 PretrainedConfig 类
+# 从configuration_utils模块导入预训练配置类PretrainedConfig
 from ...configuration_utils import PretrainedConfig
-# 从...onnx 模块中引入 OnnxSeq2SeqConfigWithPast 类
+# 从onnx模块导入OnnxSeq2SeqConfigWithPast配置类
 from ...onnx import OnnxSeq2SeqConfigWithPast
-# 从...utils 模块中引入 logging 模块
+# 从utils模块导入logging工具
 from ...utils import logging
-引入日志模块并获取 logger
+
+# 获取logger对象
 logger = logging.get_logger(__name__)
 
+# UMT5预训练模型配置文件映射表，将模型名称映射到其配置文件的URL
 UMT5_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "google/umt5-small": "https://huggingface.co/google/umt5-small/resolve/main/config.json",
-    # 查看所有 umt5 模型：https://huggingface.co/models?filter=umt5
+    # 查看所有umt5模型，请访问https://huggingface.co/models?filter=umt5
 }
 
-# UMT5Config 类继承自 PretrainedConfig 类
+# UMT5配置类，继承自PretrainedConfig
 class UMT5Config(PretrainedConfig):
     r"""
-    This is the configuration class to store the configuration of a [`UMT5Model`]. It is used to instantiate a UMT5
-    model according to the specified arguments, defining the model architecture. Instantiating a configuration with the
-    defaults will yield a similar configuration to that of the UMT5
-    [google/umt5-small](https://huggingface.co/google/umt5-small) architecture.
+    这是用于存储[`UMT5Model`]配置的配置类。根据指定的参数实例化UMT5模型，定义模型架构。
+    使用默认值实例化配置将生成类似于UMT5 [google/umt5-small](https://huggingface.co/google/umt5-small) 架构的配置。
 
-    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
-    documentation from [`PretrainedConfig`] for more information.
-    # UMT5 模型的词汇表大小，定义了可以由 `inputs_ids` 表示的不同令牌的数量
-    vocab_size (`int`, *可选*, 默认为 250112):
-        # 编码器层和汇聚层的尺寸
-        d_model (`int`, *可选*, 默认为 512):
-            # 每个注意力头的键、查询、值投影的尺寸。`d_kv` 必须等于 `d_model // num_heads`
-            d_kv (`int`, *可选*, 默认为 64):
-                # 每个 `UMT5Block` 中的中间前馈层的大小
-                d_ff (`int`, *可选*, 默认为 1024):
-                    # Transformer 编码器中的隐藏层数量
-                    num_layers (`int`, *可选*, 默认为 8):
-                        # Transformer 解码器中的隐藏层数量。如果未设置，则使用与 `num_layers` 相同的值
-                        num_decoder_layers (`int`, *可选*):
-                            # Transformer 编码器中每个注意力层的注意力头数量
-                            num_heads (`int`, *可选*, 默认为 6):
-                                # 每个注意力层用于分桶的桶的数量
-                                relative_attention_num_buckets (`int`, *可选*, 默认为 32):
-                                    # 用于桶分离的较长序列的最大距离
-                                    relative_attention_max_distance (`int`, *可选*, 默认为 128):
-                                        # 所有随机失活层的比率
-                                        dropout_rate (`float`, *可选*, 默认为 0.1):
-                                            # 类别器的失活比率
-                                            classifier_dropout (`float`, *可选*, 默认为 0.0):
-                                                # 层归一化层使用的 epsilon
-                                                layer_norm_eps (`float`, *可选*, 默认为 1e-6):
-                                                    # 用于初始化所有权重矩阵的因子（应保持为1，用于内部初始化测试）
-                                                    initializer_factor (`float`, *可选*, 默认为 1):
-                                                        # 要使用的前馈层的类型。应该是 `"relu"` 或 `"gated-gelu"` 之一
-                                                        feed_forward_proj (`string`, *可选*, 默认为 `"gated-gelu"`):
-                                                            # 模型是否应该返回最后一个键/值注意力（不被所有模型使用）
-                                                            use_cache (`bool`, *可选*, 默认为 `True`):
-                                                                # 模型类型为 UMT5
-                                                                model_type = "umt5"
-                                                                # 推理时要忽略的键
-                                                                keys_to_ignore_at_inference = ["past_key_values"]
-    # 初始化函数，用于设置模型的各种参数和属性
+    配置对象继承自[`PretrainedConfig`]，可以用于控制模型的输出。阅读[`PretrainedConfig`]的文档以获取更多信息。
+    """
+    pass  # 空白的配置类，仅作为文档的说明用途
+    # 模型类型为 "umt5"
+    model_type = "umt5"
+    
+    # 推理阶段忽略的关键字列表
+    keys_to_ignore_at_inference = ["past_key_values"]
+    
+    # 属性映射字典，将旧名称映射到新名称
+    attribute_map = {"hidden_size": "d_model", "num_attention_heads": "num_heads", "num_hidden_layers": "num_layers"}
+    # 初始化方法，设置模型的各种参数和默认值
     def __init__(
         self,
-        vocab_size=250112,
-        d_model=512,
-        d_kv=64,
-        d_ff=1024,
-        num_layers=8,
-        num_decoder_layers=None,
-        num_heads=6,
-        relative_attention_num_buckets=32,
-        relative_attention_max_distance=128,
-        dropout_rate=0.1,
-        layer_norm_epsilon=1e-6,
-        initializer_factor=1.0,
-        feed_forward_proj="gated-gelu",
-        is_encoder_decoder=True,
-        use_cache=True,
-        tokenizer_class="T5Tokenizer",
-        tie_word_embeddings=True,
-        pad_token_id=0,
-        eos_token_id=1,
-        decoder_start_token_id=0,
-        classifier_dropout=0.0,
-        **kwargs,
+        vocab_size=250112,  # 词汇表大小，默认为250112
+        d_model=512,  # 模型的维度，默认为512
+        d_kv=64,  # 键值的维度，默认为64
+        d_ff=1024,  # 前馈神经网络中间层的维度，默认为1024
+        num_layers=8,  # 编码器和解码器层数，默认为8
+        num_decoder_layers=None,  # 解码器层数，默认与编码器层数相同
+        num_heads=6,  # 注意力头的数量，默认为6
+        relative_attention_num_buckets=32,  # 相对注意力的桶数量，默认为32
+        relative_attention_max_distance=128,  # 相对注意力的最大距离，默认为128
+        dropout_rate=0.1,  # dropout率，默认为0.1
+        layer_norm_epsilon=1e-6,  # Layer Normalization的epsilon，默认为1e-6
+        initializer_factor=1.0,  # 初始化因子，默认为1.0
+        feed_forward_proj="gated-gelu",  # 前馈网络的投影类型，默认为"gated-gelu"
+        is_encoder_decoder=True,  # 是否为编码器-解码器模型，默认为True
+        use_cache=True,  # 是否使用缓存，默认为True
+        tokenizer_class="T5Tokenizer",  # Tokenizer类的名称，默认为"T5Tokenizer"
+        tie_word_embeddings=True,  # 是否共享编码器和解码器的词嵌入，默认为True
+        pad_token_id=0,  # 填充token的ID，默认为0
+        eos_token_id=1,  # 结束token的ID，默认为1
+        decoder_start_token_id=0,  # 解码器起始token的ID，默认为0
+        classifier_dropout=0.0,  # 分类器的dropout率，默认为0.0
+        **kwargs,  # 其他参数，用于接收未命名的关键字参数
     ):
-        # 调用父类的初始化函数，设置一些通用的属性
+        self.vocab_size = vocab_size  # 初始化词汇表大小
+        self.d_model = d_model  # 初始化模型维度
+        self.d_kv = d_kv  # 初始化键值维度
+        self.d_ff = d_ff  # 初始化前馈神经网络中间层维度
+        self.num_layers = num_layers  # 初始化层数
+        self.num_decoder_layers = (
+            num_decoder_layers if num_decoder_layers is not None else self.num_layers
+        )  # 初始化解码器层数，如果未指定则与编码器层数相同
+        self.num_heads = num_heads  # 初始化注意力头数量
+        self.relative_attention_num_buckets = relative_attention_num_buckets  # 初始化相对注意力的桶数量
+        self.relative_attention_max_distance = relative_attention_max_distance  # 初始化相对注意力的最大距离
+        self.dropout_rate = dropout_rate  # 初始化dropout率
+        self.classifier_dropout = classifier_dropout  # 初始化分类器的dropout率
+        self.layer_norm_epsilon = layer_norm_epsilon  # 初始化Layer Normalization的epsilon
+        self.initializer_factor = initializer_factor  # 初始化初始化因子
+        self.feed_forward_proj = feed_forward_proj  # 初始化前馈网络的投影类型
+        self.use_cache = use_cache  # 初始化是否使用缓存
+    
+        act_info = self.feed_forward_proj.split("-")  # 根据"-"分割前馈网络投影类型
+        self.dense_act_fn = act_info[-1]  # 密集层的激活函数名称
+        self.is_gated_act = act_info[0] == "gated"  # 判断是否为门控激活函数类型
+    
+        # 检查前馈网络投影类型是否合法
+        if len(act_info) > 1 and act_info[0] != "gated" or len(act_info) > 2:
+            raise ValueError(
+                f"`feed_forward_proj`: {feed_forward_proj} is not a valid activation function of the dense layer. "
+                "Please make sure `feed_forward_proj` is of the format `gated-{ACT_FN}` or `{ACT_FN}`, e.g. "
+                "'gated-gelu' or 'relu'"
+            )
+    
+        # 如果前馈网络投影类型为"gated-gelu"，则将密集层的激活函数名称设置为"gelu_new"
+        if feed_forward_proj == "gated-gelu":
+            self.dense_act_fn = "gelu_new"
+    
+        # 调用父类的初始化方法，传递其他参数
         super().__init__(
             is_encoder_decoder=is_encoder_decoder,
             tokenizer_class=tokenizer_class,
@@ -107,89 +120,45 @@ class UMT5Config(PretrainedConfig):
             decoder_start_token_id=decoder_start_token_id,
             **kwargs,
         )
-        # 设置模型的各项参数
-        self.vocab_size = vocab_size
-        self.d_model = d_model
-        self.d_kv = d_kv
-        self.d_ff = d_ff
-        self.num_layers = num_layers
-        # 如果未指定解码器层数，则默认与编码器层数相同
-        self.num_decoder_layers = (
-            num_decoder_layers if num_decoder_layers is not None else self.num_layers
-        )  # default = symmetry
-        self.num_heads = num_heads
-        self.relative_attention_num_buckets = relative_attention_num_buckets
-        self.relative_attention_max_distance = relative_attention_max_distance
-        self.dropout_rate = dropout_rate
-        self.classifier_dropout = classifier_dropout
-        self.layer_norm_epsilon = layer_norm_epsilon
-        self.initializer_factor = initializer_factor
-        self.feed_forward_proj = feed_forward_proj
+# 定义一个继承自OnnxSeq2SeqConfigWithPast的配置类UMT5OnnxConfig，用于配置UMT5模型在ONNX中的设置
 
-        # 解析激活函数信息
-        act_info = self.feed_forward_proj.split("-")
-        self.dense_act_fn = act_info[-1]
-        self.is_gated_act = act_info[0] == "gated"
+@property
+# 从transformers.models.t5.configuration_t5.T5OnnxConfig.inputs中复制的代码片段，定义模型的输入格式
+def inputs(self) -> Mapping[str, Mapping[int, str]]:
+    # 定义通用的输入格式字典
+    common_inputs = {
+        "input_ids": {0: "batch", 1: "encoder_sequence"},
+        "attention_mask": {0: "batch", 1: "encoder_sequence"},
+    }
+    # 如果使用过去信息（use_past为True），更新attention_mask的描述信息
+    if self.use_past:
+        common_inputs["attention_mask"][1] = "past_encoder_sequence + sequence"
+        # 添加decoder_input_ids的描述信息
+        common_inputs["decoder_input_ids"] = {0: "batch"}
+        # 添加decoder_attention_mask的描述信息
+        common_inputs["decoder_attention_mask"] = {0: "batch", 1: "past_decoder_sequence + sequence"}
+    else:
+        # 如果不使用过去信息，更新decoder_input_ids的描述信息
+        common_inputs["decoder_input_ids"] = {0: "batch", 1: "decoder_sequence"}
+        # 更新decoder_attention_mask的描述信息
+        common_inputs["decoder_attention_mask"] = {0: "batch", 1: "decoder_sequence"}
 
-        # 检查激活函数格式是否正确
-        if len(act_info) > 1 and act_info[0] != "gated" or len(act_info) > 2:
-            raise ValueError(
-                f"`feed_forward_proj`: {feed_forward_proj} is not a valid activation function of the dense layer. "
-                "Please make sure `feed_forward_proj` is of the format `gated-{ACT_FN}` or `{ACT_FN}`, e.g. "
-                "'gated-gelu' or 'relu'"
-            )
+    # 如果使用过去信息，调用fill_with_past_key_values_方法填充common_inputs
+    if self.use_past:
+        self.fill_with_past_key_values_(common_inputs, direction="inputs")
 
-        # 如果激活函数为"gated-gelu"，则将激活函数设为"gelu_new"
-        if feed_forward_proj == "gated-gelu":
-            self.dense_act_fn = "gelu_new"
+    # 返回配置好的输入格式字典
+    return common_inputs
 
-    # 返回隐藏层的大小（即模型的维度）
-    @property
-    def hidden_size(self):
-        return self.d_model
+@property
+# 从transformers.models.t5.configuration_t5.T5OnnxConfig.default_onnx_opset中复制的代码片段，定义默认的ONNX操作集版本号
+def default_onnx_opset(self) -> int:
+    # 返回ONNX操作集的版本号
+    return 13
 
-    # 返回注意力头的数量
-    @property
-    def num_attention_heads(self):
-        return self.num_heads
-
-    # 返回隐藏层的数量
-    @property
-    def num_hidden_layers(self):
-        return self.num_layers
-class UMT5OnnxConfig(OnnxSeq2SeqConfigWithPast):
-    @property
-    # 重写了父类的 inputs 属性，返回模型的输入结构
-    def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义常见的输入结构
-        common_inputs = {
-            "input_ids": {0: "batch", 1: "encoder_sequence"},
-            "attention_mask": {0: "batch", 1: "encoder_sequence"},
-        }
-        # 如果使用过去状态，则修改 attention_mask 和 decoder_input_ids 结构
-        if self.use_past:
-            common_inputs["attention_mask"][1] = "past_encoder_sequence + sequence"
-            common_inputs["decoder_input_ids"] = {0: "batch"}
-            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "past_decoder_sequence + sequence"}
-        else:
-            # 否则修改 decoder_input_ids 和 decoder_attention_mask 结构
-            common_inputs["decoder_input_ids"] = {0: "batch", 1: "decoder_sequence"}
-            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "decoder_sequence"}
-
-        # 如果使用过去状态，则填充 inputs 结构
-        if self.use_past:
-            self.fill_with_past_key_values_(common_inputs, direction="inputs")
-
-        # 返回模型的输入结构
-        return common_inputs
-
-    @property
-    # 返回默认的 ONNX 操作集版本号
-    def default_onnx_opset(self) -> int:
-        return 13
-
-    @property
-    # 返回用于验证的容差值
-    def atol_for_validation(self) -> float:
-        return 5e-4
+@property
+# 定义一个属性atol_for_validation，返回浮点数类型的验证绝对容差
+def atol_for_validation(self) -> float:
+    # 返回5e-4作为验证时的绝对容差
+    return 5e-4
 ```

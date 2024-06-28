@@ -1,24 +1,28 @@
-# `.\transformers\models\blip\image_processing_blip.py`
+# `.\models\blip\image_processing_blip.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，没有任何明示或暗示的担保或条件
-# 请查看许可证以了解特定语言的权限和限制
-"""Image processor class for BLIP.""" 的注释
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Image processor class for BLIP."""
 
-# 导入必要的模块和类型提示
 from typing import Dict, List, Optional, Union
-# 导入 numpy 库
+
 import numpy as np
 
-# 导入自定义的图像处理工具函数和类
 from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
-# 导入图像转换函数
 from ...image_transforms import convert_to_rgb, resize, to_channel_dimension_format
-# 导入图像处理工具函数
 from ...image_utils import (
     OPENAI_CLIP_MEAN,
     OPENAI_CLIP_STD,
@@ -30,54 +34,48 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
-# 导入通用工具函数和类型
 from ...utils import TensorType, is_vision_available, logging
 
-# 如果视觉模块可用，则导入 PIL 库
+
 if is_vision_available():
     import PIL
 
-# 获取日志记录器
+
 logger = logging.get_logger(__name__)
 
-# 定义 BLIP 图像处理器类，继承自 BaseImageProcessor 类
+
 class BlipImageProcessor(BaseImageProcessor):
     r"""
     Constructs a BLIP image processor.
+    """
+    """
     Args:
         do_resize (`bool`, *optional*, defaults to `True`):
-            Whether to resize the image's (height, width) dimensions to the specified `size`. Can be overridden by the
-            `do_resize` parameter in the `preprocess` method.
+            是否将图像的（高度，宽度）尺寸调整为指定的 `size`。可以在 `preprocess` 方法的 `do_resize` 参数中被覆盖。
         size (`dict`, *optional*, defaults to `{"height": 384, "width": 384}`):
-            Size of the output image after resizing. Can be overridden by the `size` parameter in the `preprocess`
-            method.
+            调整后的输出图像尺寸。可以在 `preprocess` 方法的 `size` 参数中被覆盖。
         resample (`PILImageResampling`, *optional*, defaults to `Resampling.BICUBIC`):
-            Resampling filter to use if resizing the image. Only has an effect if `do_resize` is set to `True`. Can be
-            overridden by the `resample` parameter in the `preprocess` method.
+            在调整图像大小时使用的重采样滤波器。仅在 `do_resize` 设置为 `True` 时有效。可以在 `preprocess` 方法的 `resample` 参数中被覆盖。
         do_rescale (`bool`, *optional*, defaults to `True`):
-            Whether to rescale the image by the specified scale `rescale_factor`. Can be overridden by the
-            `do_rescale` parameter in the `preprocess` method.
+            是否按指定的缩放比例 `rescale_factor` 进行图像缩放。可以在 `preprocess` 方法的 `do_rescale` 参数中被覆盖。
         rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
-            Scale factor to use if rescaling the image. Only has an effect if `do_rescale` is set to `True`. Can be
-            overridden by the `rescale_factor` parameter in the `preprocess` method.
+            如果进行图像缩放，则使用的缩放因子。仅在 `do_rescale` 设置为 `True` 时有效。可以在 `preprocess` 方法的 `rescale_factor` 参数中被覆盖。
         do_normalize (`bool`, *optional*, defaults to `True`):
-            Whether to normalize the image. Can be overridden by the `do_normalize` parameter in the `preprocess`
-            method.
+            是否对图像进行归一化处理。可以在 `preprocess` 方法的 `do_normalize` 参数中被覆盖。
         image_mean (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_MEAN`):
-            Mean to use if normalizing the image. This is a float or list of floats the length of the number of
-            channels in the image. Can be overridden by the `image_mean` parameter in the `preprocess` method.
+            如果进行图像归一化，则使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以在 `preprocess` 方法的 `image_mean` 参数中被覆盖。
         image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_STD`):
-            Standard deviation to use if normalizing the image. This is a float or list of floats the length of the
-            number of channels in the image. Can be overridden by the `image_std` parameter in the `preprocess` method.
+            如果进行图像归一化，则使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以在 `preprocess` 方法的 `image_std` 参数中被覆盖。
         do_convert_rgb (`bool`, *optional*, defaults to `True`):
-            Whether to convert the image to RGB.
+            是否将图像转换为 RGB 格式。
     """
 
-    # Define the names of the model input
+    # 定义模型输入的名称列表
     model_input_names = ["pixel_values"]
 
-    # Initialize the ImagePreprocessing class with specified parameters
     def __init__(
         self,
         do_resize: bool = True,
@@ -90,70 +88,127 @@ class BlipImageProcessor(BaseImageProcessor):
         image_std: Optional[Union[float, List[float]]] = None,
         do_convert_rgb: bool = True,
         **kwargs,
+    ):
+        """
+        初始化方法，设置图像预处理参数。
+
+        Args:
+            do_resize (`bool`, *optional*, defaults to `True`): 是否将图像的（高度，宽度）尺寸调整为指定的 `size`。
+                可以在 `preprocess` 方法的 `do_resize` 参数中被覆盖。
+            size (`dict`, *optional*, defaults to `{"height": 384, "width": 384}`): 调整后的输出图像尺寸。
+                可以在 `preprocess` 方法的 `size` 参数中被覆盖。
+            resample (`PILImageResampling`, *optional*, defaults to `Resampling.BICUBIC`):
+                在调整图像大小时使用的重采样滤波器。仅在 `do_resize` 设置为 `True` 时有效。
+                可以在 `preprocess` 方法的 `resample` 参数中被覆盖。
+            do_rescale (`bool`, *optional*, defaults to `True`): 是否按指定的缩放比例 `rescale_factor` 进行图像缩放。
+                可以在 `preprocess` 方法的 `do_rescale` 参数中被覆盖。
+            rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
+                如果进行图像缩放，则使用的缩放因子。仅在 `do_rescale` 设置为 `True` 时有效。
+                可以在 `preprocess` 方法的 `rescale_factor` 参数中被覆盖。
+            do_normalize (`bool`, *optional*, defaults to `True`): 是否对图像进行归一化处理。
+                可以在 `preprocess` 方法的 `do_normalize` 参数中被覆盖。
+            image_mean (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_MEAN`):
+                如果进行图像归一化，则使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。
+                可以在 `preprocess` 方法的 `image_mean` 参数中被覆盖。
+            image_std (`float` or `List[float]`, *optional*, defaults to `IMAGENET_STANDARD_STD`):
+                如果进行图像归一化，则使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。
+                可以在 `preprocess` 方法的 `image_std` 参数中被覆盖。
+            do_convert_rgb (`bool`, *optional*, defaults to `True`): 是否将图像转换为 RGB 格式。
+        **kwargs: 其他未明确指定的参数，以字典形式传递。
+        """
+    # 初始化函数，继承父类的初始化方法，并设置一些参数的默认值
     ) -> None:
-        # 调用父类的构造方法初始化对象
+        # 调用父类的初始化方法，传入所有关键字参数
         super().__init__(**kwargs)
-        # 如果传入的尺寸参数为None，则设定默认尺寸为384x384，并确保为方形
+        # 如果 size 参数不为 None，则使用它；否则设置默认的高度和宽度为 384
         size = size if size is not None else {"height": 384, "width": 384}
+        # 根据给定的 size 字典，获取一个符合要求的尺寸字典，确保是正方形
         size = get_size_dict(size, default_to_square=True)
 
-        # 设置是否进行图片大小调整的标志
+        # 设置对象的属性，用于控制是否进行图片缩放和缩放后的尺寸
         self.do_resize = do_resize
-        # 设置图片的大小
         self.size = size
-        # 设置图片的重采样方法
+        # 设置图像缩放时使用的重采样方法，默认为 BICUBIC
         self.resample = resample
-        # 设置是否进行图片大小缩放的标志
+        # 控制是否进行图像的线性缩放
         self.do_rescale = do_rescale
-        # 设置图片缩放的因子
+        # 图像缩放的因子
         self.rescale_factor = rescale_factor
-        # 设置是否进行图片数据归一化的标志
+        # 控制是否进行图像的标准化
         self.do_normalize = do_normalize
-        # 设置图片的均值，如果未提供则使用默认值
+        # 图像标准化的均值，默认使用 OPENAI_CLIP_MEAN
         self.image_mean = image_mean if image_mean is not None else OPENAI_CLIP_MEAN
-        # 设置图片的标准差，如果未提供则使用默认值
+        # 图像标准化的标准差，默认使用 OPENAI_CLIP_STD
         self.image_std = image_std if image_std is not None else OPENAI_CLIP_STD
-        # 设置是否进行RGB转换的标志
+        # 控制是否将图像转换为 RGB 格式
         self.do_convert_rgb = do_convert_rgb
+        # 定义一个包含所有有效处理器键的列表
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "do_convert_rgb",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
 
-    # 从transformers.models.vit.image_processing_vit.ViTImageProcessor.resize方法复制，修改了重采样方法为BICUBIC
+    # 从 transformers.models.vit.image_processing_vit.ViTImageProcessor.resize 复制而来，用于调整图像大小，并将重采样方法从 BILINEAR 改为 BICUBIC
     def resize(
         self,
+        # 图像的 ndarray 数组作为输入
         image: np.ndarray,
+        # 目标尺寸的字典，包含高度和宽度
         size: Dict[str, int],
+        # 图像的重采样方法，默认为 BICUBIC
         resample: PILImageResampling = PILImageResampling.BICUBIC,
+        # 数据格式参数，用于指定通道维度的表示方式
         data_format: Optional[Union[str, ChannelDimension]] = None,
+        # 输入数据的格式参数，用于指定通道维度的表示方式
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
+        # 其他关键字参数
         **kwargs,
     ) -> np.ndarray:
         """
-        将图像调整大小为`(size["height"], size["width"])`。
+        Resize an image to `(size["height"], size["width"])`.
 
         Args:
             image (`np.ndarray`):
-                要调整大小的图像。
+                Image to resize.
             size (`Dict[str, int]`):
-                以`{"height": int, "width": int}`格式指定输出图像的大小的字典。
+                Dictionary in the format `{"height": int, "width": int}` specifying the size of the output image.
             resample (`PILImageResampling`, *optional*, defaults to `PILImageResampling.BICUBIC`):
-                调整图像大小时要使用的`PILImageResampling`滤镜，例如`PILImageResampling.BICUBIC`。
+                `PILImageResampling` filter to use when resizing the image e.g. `PILImageResampling.BICUBIC`.
             data_format (`ChannelDimension` or `str`, *optional*):
-                输出图像的通道维度格式。如果未设置，则使用输入图像的通道维度格式。可以是以下之一：
-                - `"channels_first"`或`ChannelDimension.FIRST`：图像以(num_channels, height, width)格式表示。
-                - `"channels_last"`或`ChannelDimension.LAST`：图像以(height, width, num_channels)格式表示。
-                - `"none"`或`ChannelDimension.NONE`：图像以(height, width)格式表示。
+                The channel dimension format for the output image. If unset, the channel dimension format of the input
+                image is used. Can be one of:
+                - `"channels_first"` or `ChannelDimension.FIRST`: image in (num_channels, height, width) format.
+                - `"channels_last"` or `ChannelDimension.LAST`: image in (height, width, num_channels) format.
+                - `"none"` or `ChannelDimension.NONE`: image in (height, width) format.
             input_data_format (`ChannelDimension` or `str`, *optional*):
-                输入图像的通道维度格式。如果未设置，则从输入图像中推断出通道维度格式。可以是以下之一：
-                - `"channels_first"`或`ChannelDimension.FIRST`：图像以(num_channels, height, width)格式表示。
-                - `"channels_last"`或`ChannelDimension.LAST`：图像以(height, width, num_channels)格式表示。
-                - `"none"`或`ChannelDimension.NONE`：图像以(height, width)格式表示。
+                The channel dimension format for the input image. If unset, the channel dimension format is inferred
+                from the input image. Can be one of:
+                - `"channels_first"` or `ChannelDimension.FIRST`: image in (num_channels, height, width) format.
+                - `"channels_last"` or `ChannelDimension.LAST`: image in (height, width, num_channels) format.
+                - `"none"` or `ChannelDimension.NONE`: image in (height, width) format.
 
         Returns:
-            `np.ndarray`: 调整大小后的图像。
+            `np.ndarray`: The resized image.
         """
+        # 调整输入的大小参数格式，确保其为字典形式
         size = get_size_dict(size)
+        # 检查字典中是否包含必需的 height 和 width 键
         if "height" not in size or "width" not in size:
             raise ValueError(f"The `size` dictionary must contain the keys `height` and `width`. Got {size.keys()}")
+        # 根据输入的 size 字典获取目标输出的尺寸大小
         output_size = (size["height"], size["width"])
+        # 调用 resize 函数对图像进行大小调整，返回调整后的图像数据
         return resize(
             image,
             size=output_size,

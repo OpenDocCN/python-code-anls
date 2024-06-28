@@ -1,23 +1,23 @@
 # `.\models\bloom\tokenization_bloom_fast.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 版权所有 2022 年 HuggingFace Inc. 团队。
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team.
 #
-# 根据 Apache 许可证 2.0 版本（“许可证”）许可；
-# 除非符合许可证，否则不得使用此文件。
-# 您可以在以下网址获取许可证副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则本软件按“原样”分发，
-# 不附带任何明示或暗示的保证或条件。
-# 有关具体语言下方法，请参阅许可证。
-"""Bloom 的分词类。"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Tokenization classes for Bloom."""
 
 
-# 导入所需库
 import pickle
 from typing import Optional, Tuple
 
@@ -26,13 +26,12 @@ from ...tokenization_utils_fast import PreTrainedTokenizerFast
 from ...utils import logging
 
 
-# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 设置词汇文件名称
+# 定义用于存储tokenizer文件名的常量
 VOCAB_FILES_NAMES = {"tokenizer_file": "tokenizer.json"}
 
-# 预训练词汇文件映射
+# 定义预训练模型到tokenizer文件映射的常量
 PRETRAINED_VOCAB_FILES_MAP = {
     "tokenizer_file": {
         "bigscience/tokenizer": "https://huggingface.co/bigscience/tokenizer/blob/main/tokenizer.json",
@@ -46,12 +45,13 @@ PRETRAINED_VOCAB_FILES_MAP = {
 }
 
 
-# BloomTokenizerFast 类，继承自 PreTrainedTokenizerFast 类
 class BloomTokenizerFast(PreTrainedTokenizerFast):
     """
-    构建“快速”Bloom 分词器（由 HuggingFace 的 *tokenizers* 库支持）。基于字节级别的 Byte-Pair-Encoding。
+    Construct a "fast" Bloom tokenizer (backed by HuggingFace's *tokenizers* library). Based on byte-level
+    Byte-Pair-Encoding.
 
-    此分词器已经训练过，将空格视为标记的一部分（有点类似 sentencepiece），因此单词的编码会根据它是否在句子开头（无空格）而不同：
+    This tokenizer has been trained to treat spaces like parts of the tokens (a bit like sentencepiece) so a word will
+    be encoded differently whether it is at the beginning of the sentence (without space) or not:
 
     ```python
     >>> from transformers import BloomTokenizerFast
@@ -62,46 +62,51 @@ class BloomTokenizerFast(PreTrainedTokenizerFast):
 
     >>> tokenizer(" Hello world")["input_ids"]
     [86153, 8876]
-    ```py
+    ```
 
-    当使用 `is_split_into_words=True` 时，可以通过在实例化分词器时传递 `add_prefix_space=True` 来绕过这种行为。
+    You can get around that behavior by passing `add_prefix_space=True` when instantiating this tokenizer, but since
+    the model was not pretrained this way, it might yield a decrease in performance.
 
-    <提示>
+    <Tip>
 
-    当与 `is_split_into_words=True` 一起使用时，需要使用 `add_prefix_space=True` 实例化此分词器。
+    When used with `is_split_into_words=True`, this tokenizer needs to be instantiated with `add_prefix_space=True`.
 
-    </提示>
+    </Tip>
 
-    此分词器继承自 [`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应参考此超类以获取有关这些方法的更多信息。
+    This tokenizer inherits from [`PreTrainedTokenizerFast`] which contains most of the main methods. Users should
+    refer to this superclass for more information regarding those methods.
     """
-    # 参数说明
     Args:
         vocab_file (`str`):
-            词汇表文件的路径。
+            Path to the vocabulary file.
         merges_file (`str`):
-            合并文件的路径。
+            Path to the merges file.
         errors (`str`, *optional*, defaults to `"replace"`):
-            将字节解码为 UTF-8 时遵循的范例。更多信息请参见 [bytes.decode](https://docs.python.org/3/library/stdtypes.html#bytes.decode)。
+            Paradigm to follow when decoding bytes to UTF-8. See
+            [bytes.decode](https://docs.python.org/3/library/stdtypes.html#bytes.decode) for more information.
         unk_token (`str`, *optional*, defaults to `<|endoftext|>`):
-            未知标记。不在词汇表中的标记无法转换为 ID，而是设置为该标记。
+            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
+            token instead.
         bos_token (`str`, *optional*, defaults to `<|endoftext|>`):
-            序列起始标记。
+            The beginning of sequence token.
         eos_token (`str`, *optional*, defaults to `<|endoftext|>`):
-            序列结束标记。
+            The end of sequence token.
         add_prefix_space (`bool`, *optional*, defaults to `False`):
-            是否在输入开头添加一个空格。这允许将开头的单词视为任何其他单词。(Bloom 分词器通过前导空格检测单词的开头)。
+            Whether or not to add an initial space to the input. This allows to treat the leading word just as any
+            other word. (Bloom tokenizer detect beginning of words by the preceding space).
         trim_offsets (`bool`, *optional*, defaults to `True`):
-            后处理步骤是否应修剪偏移量，以避免包括空格。
+            Whether or not the post-processing step should trim offsets to avoid including whitespaces.
     """
-
-    # 定义变量
+    # 定义预训练模型所需的文件名称
     vocab_files_names = VOCAB_FILES_NAMES
+    # 预训练模型的文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 模型输入的名称列表
     model_input_names = ["input_ids", "attention_mask"]
+    # 慢速分词器类，默认为 None
     slow_tokenizer_class = None
-    # No `max_model_input_sizes` as BLOOM uses ALiBi positional embeddings
+    # 没有 `max_model_input_sizes`，因为 BLOOM 使用 ALiBi 位置嵌入
 
-    # 初始化函数
     def __init__(
         self,
         vocab_file=None,
@@ -115,6 +120,7 @@ class BloomTokenizerFast(PreTrainedTokenizerFast):
         clean_up_tokenization_spaces=False,
         **kwargs,
     ):
+        # 调用父类的初始化方法，传递必要的参数和可选参数
         super().__init__(
             vocab_file,
             merges_file,
@@ -127,69 +133,69 @@ class BloomTokenizerFast(PreTrainedTokenizerFast):
             clean_up_tokenization_spaces=clean_up_tokenization_spaces,
             **kwargs,
         )
-        # 更新后端分词器的状态
+        # 序列化后的预分词器和解码器状态
         pre_tok_state = pickle.dumps(self.backend_tokenizer.pre_tokenizer)
         decoder_state = pickle.dumps(self.backend_tokenizer.decoder)
 
+        # 如果需要添加前缀空格，则更新序列化状态以匹配配置
         if add_prefix_space:
-            # 如果 add_prefix_space 为真，则替换状态中的相应字段值
             pre_tok_state = pre_tok_state.replace(b'"add_prefix_space":false', b'"add_prefix_space": true')
             decoder_state = decoder_state.replace(b'"add_prefix_space":false', b'"add_prefix_space": true')
+        # 反序列化并更新后端分词器的预分词器和解码器
         self.backend_tokenizer.pre_tokenizer = pickle.loads(pre_tok_state)
         self.backend_tokenizer.decoder = pickle.loads(decoder_state)
 
-        # 更新 add_prefix_space 属性
+        # 设置类属性，记录是否添加前缀空格
         self.add_prefix_space = add_prefix_space
-    # 重写父类方法_batch_encode_plus()，使用*args和**kwargs作为参数，返回BatchEncoding类型的对象
+    # 定义一个方法 `_batch_encode_plus`，接受任意位置参数和关键字参数，并返回 `BatchEncoding` 对象
     def _batch_encode_plus(self, *args, **kwargs) -> BatchEncoding:
-        # 获取参数中的is_split_into_words值，默认为False
+        # 从关键字参数中获取 `is_split_into_words`，默认为 False
         is_split_into_words = kwargs.get("is_split_into_words", False)
-        # 如果add_prefix_space为False且is_split_into_words为False时，抛出异常
+        # 如果 `add_prefix_space` 为 False 并且 `is_split_into_words` 也为 False，则抛出异常
         if not (self.add_prefix_space or not is_split_into_words):
             raise Exception(
                 f"You need to instantiate {self.__class__.__name__} with add_prefix_space=True to use it with"
                 " pretokenized inputs."
             )
 
-        # 调用父类的_batch_encode_plus()方法，并返回结果
+        # 调用父类的 `_batch_encode_plus` 方法，并传递所有位置参数和关键字参数
         return super()._batch_encode_plus(*args, **kwargs)
 
-    # 重写父类方法_encode_plus()，使用*args和**kwargs作为参数，返回BatchEncoding类型的对象
+    # 定义一个方法 `_encode_plus`，接受任意位置参数和关键字参数，并返回 `BatchEncoding` 对象
     def _encode_plus(self, *args, **kwargs) -> BatchEncoding:
-        # 获取参数中的is_split_into_words值，默认为False
+        # 从关键字参数中获取 `is_split_into_words`，默认为 False
         is_split_into_words = kwargs.get("is_split_into_words", False)
-        
-        # 如果add_prefix_space为False且is_split_into_words为False时，抛出异常
+
+        # 如果 `add_prefix_space` 为 False 并且 `is_split_into_words` 也为 False，则抛出异常
         if not (self.add_prefix_space or not is_split_into_words):
             raise Exception(
                 f"You need to instantiate {self.__class__.__name__} with add_prefix_space=True to use it with"
                 " pretokenized inputs."
             )
 
-        # 调用父类的_encode_plus()方法，并返回结果
+        # 调用父类的 `_encode_plus` 方法，并传递所有位置参数和关键字参数
         return super()._encode_plus(*args, **kwargs)
 
-    # 保存词汇表
+    # 定义一个方法 `save_vocabulary`，接受一个保存目录路径 `save_directory` 和一个可选的文件名前缀 `filename_prefix`，返回一个包含文件名的元组
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 调用_tokenizer.model.save()方法保存模型
+        # 调用 `_tokenizer` 对象的 `model.save` 方法，将模型保存到指定的 `save_directory` 中，并指定文件名前缀 `filename_prefix`
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
-        # 返回文件名组成的元组
+        # 返回保存的文件名构成的元组
         return tuple(files)
 
-    # 默认的聊天模板
     @property
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.default_chat_template复制过来的
+    # 定义一个属性 `default_chat_template`，返回一个简单的聊天模板字符串，该模板忽略角色信息，并用 EOS 标记连接消息
     def default_chat_template(self):
         """
-        Ignore role information and concatenate messages with EOS tokens.
+        A simple chat template that ignores role information and just concatenates messages with EOS tokens.
         """
-        # 打印警告信息
+        # 发出警告日志，提示用户未定义聊天模板，使用默认模板
         logger.warning_once(
             "\nNo chat template is defined for this tokenizer - using the default template "
             f"for the {self.__class__.__name__} class. If the default is not appropriate for "
             "your model, please set `tokenizer.chat_template` to an appropriate template. "
             "See https://huggingface.co/docs/transformers/main/chat_templating for more information.\n"
         )
-        # 返回聊天模板字符串
+        # 返回默认的聊天模板字符串，用于处理消息
         return "{% for message in messages %}" "{{ message.content }}{{ eos_token }}" "{% endfor %}"
 ```

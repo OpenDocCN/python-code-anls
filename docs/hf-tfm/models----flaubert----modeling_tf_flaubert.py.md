@@ -1,26 +1,26 @@
 # `.\models\flaubert\modeling_tf_flaubert.py`
 
-```py
-# 设置编码格式为 UTF-8
-# 版权声明，遵循 Apache License 2.0 协议
-# 引入相关 Python 库
-from __future__ import annotations
-import itertools
-import random
-import warnings
-from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, Union
-import numpy as np
-import tensorflow as tf
-from ...activations_tf import get_tf_activation
-from ...modeling_tf_outputs import (
+```
+# 引入必要的库和模块
+import itertools  # itertools模块用于高效地迭代操作
+import random  # random模块用于生成随机数和随机选择
+import warnings  # warnings模块用于管理警告信息
+from dataclasses import dataclass  # dataclass用于创建数据类，简化数据对象的创建和操作
+from typing import Dict, Optional, Tuple, Union  # 引入类型提示，用于静态类型检查
+
+import numpy as np  # 引入numpy库，用于数值计算
+import tensorflow as tf  # 引入TensorFlow库，用于构建和训练神经网络模型
+
+# 从transformers库中引入所需的TensorFlow相关模块和类
+from ...activations_tf import get_tf_activation  # 从transformers.activations_tf模块导入get_tf_activation函数
+from ...modeling_tf_outputs import (  # 导入transformers.modeling_tf_outputs模块中的各种输出类
     TFBaseModelOutput,
     TFMultipleChoiceModelOutput,
     TFQuestionAnsweringModelOutput,
     TFSequenceClassifierOutput,
     TFTokenClassifierOutput,
 )
-from ...modeling_tf_utils import (
+from ...modeling_tf_utils import (  # 导入transformers.modeling_tf_utils模块中的各种实用函数和类
     TFModelInputType,
     TFMultipleChoiceLoss,
     TFPreTrainedModel,
@@ -30,11 +30,16 @@ from ...modeling_tf_utils import (
     TFSharedEmbeddings,
     TFTokenClassificationLoss,
     get_initializer,
+    keras,
     keras_serializable,
     unpack_inputs,
 )
-from ...tf_utils import check_embeddings_within_bounds, shape_list, stable_softmax
-from ...utils import (
+from ...tf_utils import (  # 导入transformers.tf_utils模块中的各种实用函数
+    check_embeddings_within_bounds,
+    shape_list,
+    stable_softmax,
+)
+from ...utils import (  # 导入transformers.utils模块中的各种实用函数和类
     MULTIPLE_CHOICE_DUMMY_INPUTS,
     ModelOutput,
     add_code_sample_docstrings,
@@ -42,123 +47,122 @@ from ...utils import (
     add_start_docstrings_to_model_forward,
     logging,
 )
-from .configuration_flaubert import FlaubertConfig
-    # 该部分为代码注释，提供了关于如何在 Keras 模型中传递输入的不同方式的说明
-    and layers. Because of this support, when using methods like `model.fit()` things should "just work" for you - just
-    pass your inputs and labels in any format that `model.fit()` supports! If, however, you want to use the second
-    format outside of Keras methods like `fit()` and `predict()`, such as when creating your own layers or models with
-    the Keras `Functional` API, there are three possibilities you can use to gather all the input Tensors in the first
-    positional argument:
+from .configuration_flaubert import FlaubertConfig  # 导入当前目录下的FlaubertConfig配置类
 
-    - a single Tensor with `input_ids` only and nothing else: `model(input_ids)`
-    - a list of varying length with one or several input Tensors IN THE ORDER given in the docstring:
-    `model([input_ids, attention_mask])` or `model([input_ids, attention_mask, token_type_ids])`
-    - a dictionary with one or several input Tensors associated to the input names given in the docstring:
-    `model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
+# 获取日志记录器
+logger = logging.get_logger(__name__)
 
-    # 注意，在创建模型和层时，可以使用不同的方式传递输入。如果在使用 Keras 的方法之外需要传递输入时，
-    # 可以使用这些方式。这些方式包括传递单个张量、传递张量列表或传递张量字典。
+# 定义文档中用到的一些常量
+_CHECKPOINT_FOR_DOC = "flaubert/flaubert_base_cased"
+_CONFIG_FOR_DOC = "FlaubertConfig"
 
-    Note that when creating models and layers with
-    [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) then you don't need to worry
-    about any of this, as you can just pass inputs like you would to any other Python function!
+# 定义Flaubert预训练模型存档列表
+TF_FLAUBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
+    # 查看所有Flaubert模型的存档列表：https://huggingface.co/models?filter=flaubert
+]
 
-    # 当使用子类化创建模型和层时，不需要担心这些，因为可以像传递给任何其他 Python 函数一样传递输入。
+# 定义Flaubert模型的起始文档字符串
+FLAUBERT_START_DOCSTRING = r"""
 
-    </Tip>
+    This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
+    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+    etc.)
 
-    # Parameters 部分提供了函数的参数说明
+    This model is also a [keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
+    as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
+    behavior.
 
-    Parameters:
-        config ([`FlaubertConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+    <Tip>
+
+    TensorFlow models and layers in `transformers` accept two formats as input:
+
+    - having all inputs as keyword arguments (like PyTorch models), or
+    - having all inputs as a list, tuple or dict in the first positional argument.
+
+    The reason the second format is supported is that Keras methods prefer this format when passing inputs to models
+    # Parameters: config ([`FlaubertConfig`]): Model configuration class with all the parameters of the model.
+    # Initializing with a config file does not load the weights associated with the model, only the
+    # configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+    config ([`FlaubertConfig`]):
+        # Model configuration class containing all model parameters.
+        Model configuration class with all the parameters of the model.
+        
+        # Initializing with a config file does not load the weights associated with the model, only the configuration.
+        Initializing with a config file does not load the weights associated with the model, only the configuration.
+        
+        # Check out the [`~PreTrained Model method weights associated Model from explained. contains meaning unknown.
 """
-# 定义一个字符串变量，用于存储 Flaubert 模型输入的文档字符串
+
 FLAUBERT_INPUTS_DOCSTRING = r"""
 """
-# 定义一个函数，生成隐藏状态掩码和可选的注意力掩码
+
+
 def get_masks(slen, lengths, causal, padding_mask=None):
     """
-    生成隐藏状态掩码，并可选生成注意力掩码。
+    Generate hidden states mask, and optionally an attention mask.
     """
-    # 获取 batch size (bs)
+    # 获取批量大小
     bs = shape_list(lengths)[0]
-    # 如果提供了 padding_mask，则使用该掩码
+    # 如果提供了padding_mask，则使用之；否则根据lengths生成mask
     if padding_mask is not None:
         mask = padding_mask
     else:
-        # 否则，创建一个与输入长度相同的范围（alen）
+        # 生成一个长度为slen的序列
         alen = tf.range(slen, dtype=lengths.dtype)
-        # 创建掩码，其中 alen 的元素小于长度的值
+        # 生成mask，标识每个位置是否有效（小于对应的lengths）
         mask = alen < tf.expand_dims(lengths, axis=1)
 
-    # 注意力掩码与 mask 相同，或使用三角形下部注意力（因果的）
+    # attention mask可以是与mask相同，或者是下三角形式的（因果性）
     if causal:
-        # 生成因果注意力掩码
+        # 下三角形式的注意力mask
         attn_mask = tf.less_equal(
             tf.tile(tf.reshape(alen, (1, 1, slen)), (bs, slen, 1)), tf.reshape(alen, (1, slen, 1))
         )
     else:
-        # 否则，注意力掩码与 mask 相同
         attn_mask = mask
 
-    # 进行健全性检查，确保掩码形状与预期相符
+    # 断言检查
     tf.debugging.assert_equal(shape_list(mask), [bs, slen])
     if causal:
-        # 进行健全性检查，确保注意力掩码形状与预期相符
         tf.debugging.assert_equal(shape_list(attn_mask), [bs, slen, slen])
 
-    # 返回 mask 和 attn_mask
     return mask, attn_mask
 
 
-# 定义一个抽象类，用于处理权重初始化和预训练模型的下载和加载
 class TFFlaubertPreTrainedModel(TFPreTrainedModel):
     """
-    处理权重初始化和预训练模型下载和加载的抽象类。
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
     """
 
-    # 指定配置类为 FlaubertConfig
     config_class = FlaubertConfig
-    # 指定基础模型前缀为 "transformer"
     base_model_prefix = "transformer"
 
-    # 定义属性，返回模拟输入
     @property
     def dummy_inputs(self):
-        # 定义一个输入列表
+        # 有时候Flaubert模型包含语言嵌入，如果需要，不要忘记同时构建它们
         inputs_list = tf.constant([[7, 6, 0, 0, 1], [1, 2, 3, 0, 0], [0, 0, 0, 4, 5]], dtype=tf.int32)
-        # 定义一个注意力列表
         attns_list = tf.constant([[1, 1, 0, 0, 1], [1, 1, 1, 0, 0], [1, 0, 0, 1, 1]], dtype=tf.int32)
-        # 如果模型使用语言嵌入并且支持多种语言
         if self.config.use_lang_emb and self.config.n_langs > 1:
-            # 返回包含输入 ID、注意力掩码和语言的字典
             return {
                 "input_ids": inputs_list,
                 "attention_mask": attns_list,
                 "langs": tf.constant([[1, 1, 0, 0, 1], [1, 1, 1, 0, 0], [1, 0, 0, 1, 1]], dtype=tf.int32),
             }
         else:
-            # 否则，只返回包含输入 ID 和注意力掩码的字典
             return {"input_ids": inputs_list, "attention_mask": attns_list}
 
 
-# 使用装饰器为模型类添加起始文档字符串
 @add_start_docstrings(
     "The bare Flaubert Model transformer outputting raw hidden-states without any specific head on top.",
     FLAUBERT_START_DOCSTRING,
 )
-# 定义 Flaubert 模型类
 class TFFlaubertModel(TFFlaubertPreTrainedModel):
-    # 初始化模型
     def __init__(self, config, *inputs, **kwargs):
-        # 使用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
-        # 创建 transformer 层
+        # 初始化transformer模块
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
 
-    # 使用装饰器为模型前向传递方法添加文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(FLAUBERT_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
@@ -166,24 +170,23 @@ class TFFlaubertModel(TFFlaubertPreTrainedModel):
         output_type=TFBaseModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义一个方法，用于调用模型
     def call(
         self,
-        input_ids: np.ndarray | tf.Tensor | None = None,  # 输入的标识符，可以是 numpy 数组、张量或空值
-        attention_mask: np.ndarray | tf.Tensor | None = None,  # 注意力掩码，可以是 numpy 数组、张量或空值
-        langs: np.ndarray | tf.Tensor | None = None,  # 语言标识符，可以是 numpy 数组、张量或空值
-        token_type_ids: np.ndarray | tf.Tensor | None = None,  # 令牌类型标识符，可以是 numpy 数组、张量或空值
-        position_ids: np.ndarray | tf.Tensor | None = None,  # 位置标识符，可以是 numpy 数组、张量或空值
-        lengths: np.ndarray | tf.Tensor | None = None,  # 长度，可以是 numpy 数组、张量或空值
-        cache: Optional[Dict[str, tf.Tensor]] = None,  # 缓存，可以是空值或包含张量的字典
-        head_mask: np.ndarray | tf.Tensor | None = None,  # 头部遮罩，可以是 numpy 数组、张量或空值
-        inputs_embeds: tf.Tensor | None = None,  # 输入的嵌入向量，可以是张量或空值
-        output_attentions: Optional[bool] = None,  # 输出注意力权重，可以是布尔类型或空值
-        output_hidden_states: Optional[bool] = None,  # 输出隐藏状态，可以是布尔类型或空值
-        return_dict: Optional[bool] = None,  # 是否返回字典形式的结果，可以是布尔类型或空值
-        training: Optional[bool] = False,  # 是否训练模型，可以是布尔类型或空值，默认为 False
-    ) -> Union[Tuple, TFBaseModelOutput]:  # 定义返回值的类型注解
-        # 调用转换器模型，传入相应的参数
+        input_ids: np.ndarray | tf.Tensor | None = None,
+        attention_mask: np.ndarray | tf.Tensor | None = None,
+        langs: np.ndarray | tf.Tensor | None = None,
+        token_type_ids: np.ndarray | tf.Tensor | None = None,
+        position_ids: np.ndarray | tf.Tensor | None = None,
+        lengths: np.ndarray | tf.Tensor | None = None,
+        cache: Optional[Dict[str, tf.Tensor]] = None,
+        head_mask: np.ndarray | tf.Tensor | None = None,
+        inputs_embeds: tf.Tensor | None = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        training: Optional[bool] = False,
+    ) -> Union[Tuple, TFBaseModelOutput]:
+        # 调用 Transformer 模型进行前向传播，并返回输出结果
         outputs = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -199,113 +202,133 @@ class TFFlaubertModel(TFFlaubertPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-        # 返回模型输出
+        # 返回 Transformer 的输出结果
         return outputs
 
-    # 定义一个方法，用于构建模型
     def build(self, input_shape=None):
-        # 如果模型已经构建，则直接返回
+        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置模型为已构建
+        # 标记模型已经构建
         self.built = True
-        # 如果模型中存在转换器属性
+        # 如果存在 Transformer 模型，则在 TensorFlow 图中构建它
         if getattr(self, "transformer", None) is not None:
-            # 打开一个名叫 self.transformer.name 的命名空间，构建转换器模型
+            # 使用 Transformer 的名称作为 TensorFlow 名称空间
             with tf.name_scope(self.transformer.name):
+                # 构建 Transformer 模型
                 self.transformer.build(None)
-# 从 transformers.models.xlm.modeling_tf_xlm.TFXLMMultiHeadAttention 复制并修改为 Flaubert 模型的多头注意力机制层
-class TFFlaubertMultiHeadAttention(tf.keras.layers.Layer):
-    NEW_ID = itertools.count()  # 生成唯一标识符计数器
+# 从transformers.models.xlm.modeling_tf_xlm.TFXLMMultiHeadAttention复制并将XLM->Flaubert
+class TFFlaubertMultiHeadAttention(keras.layers.Layer):
+    # 类变量，用于生成每个实例的唯一标识符
+    NEW_ID = itertools.count()
 
     def __init__(self, n_heads, dim, config, **kwargs):
         super().__init__(**kwargs)
-        self.layer_id = next(TFFlaubertMultiHeadAttention.NEW_ID)  # 分配本层的唯一标识符
-        self.dim = dim  # 注意力机制层输出维度
-        self.n_heads = n_heads  # 头的数量
-        self.output_attentions = config.output_attentions  # 是否输出注意力权重
-        assert self.dim % self.n_heads == 0  # 确保输出维度可以被头的数量整除
+        # 为当前实例分配唯一的标识符
+        self.layer_id = next(TFFlaubertMultiHeadAttention.NEW_ID)
+        self.dim = dim  # 注意力机制中向量的维度
+        self.n_heads = n_heads  # 注意力头的数量
+        self.output_attentions = config.output_attentions  # 控制是否输出注意力权重
+        assert self.dim % self.n_heads == 0  # 确保维度可以被注意力头数量整除
 
-        # 初始化查询、键、值、输出的全连接层
-        self.q_lin = tf.keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="q_lin")
-        self.k_lin = tf.keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="k_lin")
-        self.v_lin = tf.keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="v_lin")
-        self.out_lin = tf.keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="out_lin")
-        self.dropout = tf.keras.layers.Dropout(config.attention_dropout)  # 注意力机制中的 dropout 层
-        self.pruned_heads = set()  # 初始化被修剪的注意力头集合
-        self.dim = dim  # 更新维度
+        # 初始化查询、键、值的线性层
+        self.q_lin = keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="q_lin")
+        self.k_lin = keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="k_lin")
+        self.v_lin = keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="v_lin")
+        # 初始化输出线性层
+        self.out_lin = keras.layers.Dense(dim, kernel_initializer=get_initializer(config.init_std), name="out_lin")
+        # 注意力机制中的dropout层
+        self.dropout = keras.layers.Dropout(config.attention_dropout)
+        # 被剪枝掉的注意力头集合
+        self.pruned_heads = set()
+        self.dim = dim  # 注意力机制中向量的维度
 
+    # 未实现的方法，用于剪枝注意力头
     def prune_heads(self, heads):
-        raise NotImplementedError  # 修剪注意力头的方法，未实现
+        raise NotImplementedError
 
     def build(self, input_shape=None):
         if self.built:
             return
         self.built = True
-        # 构建查询、键、值、输出的全连接层
+        # 如果存在查询线性层，则构建查询线性层
         if getattr(self, "q_lin", None) is not None:
             with tf.name_scope(self.q_lin.name):
                 self.q_lin.build([None, None, self.dim])
+        # 如果存在键线性层，则构建键线性层
         if getattr(self, "k_lin", None) is not None:
             with tf.name_scope(self.k_lin.name):
                 self.k_lin.build([None, None, self.dim])
+        # 如果存在值线性层，则构建值线性层
         if getattr(self, "v_lin", None) is not None:
             with tf.name_scope(self.v_lin.name):
                 self.v_lin.build([None, None, self.dim])
+        # 如果存在输出线性层，则构建输出线性层
         if getattr(self, "out_lin", None) is not None:
             with tf.name_scope(self.out_lin.name):
                 self.out_lin.build([None, None, self.dim])
 
 
-# 从 transformers.models.xlm.modeling_tf_xlm.TFXLMTransformerFFN 复制并修改为 Flaubert 模型的前馈神经网络层
-class TFFlaubertTransformerFFN(tf.keras.layers.Layer):
+# 从transformers.models.xlm.modeling_tf_xlm.TFXLMTransformerFFN复制
+class TFFlaubertTransformerFFN(keras.layers.Layer):
     def __init__(self, in_dim, dim_hidden, out_dim, config, **kwargs):
         super().__init__(**kwargs)
 
-        # 初始化前馈神经网络层的全连接层和激活函数
-        self.lin1 = tf.keras.layers.Dense(dim_hidden, kernel_initializer=get_initializer(config.init_std), name="lin1")
-        self.lin2 = tf.keras.layers.Dense(out_dim, kernel_initializer=get_initializer(config.init_std), name="lin2")
-        self.act = get_tf_activation("gelu") if config.gelu_activation else get_tf_activation("relu")  # 获取激活函数
-        self.dropout = tf.keras.layers.Dropout(config.dropout)  # 前馈神经网络中的 dropout 层
+        # 第一个全连接层，用于FFN的第一步变换
+        self.lin1 = keras.layers.Dense(dim_hidden, kernel_initializer=get_initializer(config.init_std), name="lin1")
+        # 第二个全连接层，用于FFN的第二步变换
+        self.lin2 = keras.layers.Dense(out_dim, kernel_initializer=get_initializer(config.init_std), name="lin2")
+        # 激活函数选择，如果配置为GELU激活函数，则使用GELU，否则使用ReLU
+        self.act = get_tf_activation("gelu") if config.gelu_activation else get_tf_activation("relu")
+        # dropout层，用于防止过拟合
+        self.dropout = keras.layers.Dropout(config.dropout)
         self.in_dim = in_dim  # 输入维度
         self.dim_hidden = dim_hidden  # 隐藏层维度
 
     def call(self, input, training=False):
-        x = self.lin1(input)  # 第一个全连接层
-        x = self.act(x)  # 激活函数
-        x = self.lin2(x)  # 第二个全连接层
-        x = self.dropout(x, training=training)  # dropout 层
+        # 第一步变换：输入经过第一个全连接层
+        x = self.lin1(input)
+        # 应用激活函数
+        x = self.act(x)
+        # 第二步变换：经过第二个全连接层
+        x = self.lin2(x)
+        # 应用dropout，只有在训练时才应用dropout
+        x = self.dropout(x, training=training)
 
-        return x  # 返回结果
-    # 在构建模型时，如果已经构建过，则直接返回
+        return x
+    # 定义一个方法 `build`，用于构建模型
     def build(self, input_shape=None):
+        # 如果模型已经构建完成，直接返回，不进行重复构建
         if self.built:
             return
-        # 设置模型已经构建的标志为 True
+        # 将模型标记为已构建状态
         self.built = True
-        # 如果存在 self.lin1 属性，则构建 self.lin1
+        
+        # 检查并构建第一个线性层 `lin1`
         if getattr(self, "lin1", None) is not None:
-            # 使用 TensorFlow 的命名空间为 self.lin1 构建模块
+            # 使用 `lin1` 的名称作为命名空间，构建 `lin1` 层，输入维度为 [None, None, self.in_dim]
             with tf.name_scope(self.lin1.name):
                 self.lin1.build([None, None, self.in_dim])
-        # 如果存在 self.lin2 属性，则构建 self.lin2
+        
+        # 检查并构建第二个线性层 `lin2`
         if getattr(self, "lin2", None) is not None:
-            # 使用 TensorFlow 的命名空间为 self.lin2 构建模块
+            # 使用 `lin2` 的名称作为命名空间，构建 `lin2` 层，输入维度为 [None, None, self.dim_hidden]
             with tf.name_scope(self.lin2.name):
                 self.lin2.build([None, None, self.dim_hidden])
-# 定义一个继承自 tf.keras.layers.Layer 的类 TFFlaubertMainLayer，用于表示 Flaubert 模型中的主要层
+# 定义一个可序列化的 Keras 层，用于处理 Flaubert 模型的主要功能
 @keras_serializable
-class TFFlaubertMainLayer(tf.keras.layers.Layer):
-    # 定义一个属性 config_class，其值为 FlaubertConfig，用于表示该层使用的配置类
+class TFFlaubertMainLayer(keras.layers.Layer):
+    # 配置类指定为 FlaubertConfig
     config_class = FlaubertConfig
 
-    # 初始化函数，接受 config 和其他参数
+    # 初始化函数，接受配置参数 config 和其他关键字参数
     def __init__(self, config, **kwargs):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
 
-        # 初始化该层的各种属性
+        # 将传入的配置参数 config 存储在实例变量 self.config 中
         self.config = config
+        # 从配置中获取并存储各种属性，如头数、语言数、嵌入维度等
         self.n_heads = config.n_heads
         self.n_langs = config.n_langs
         self.dim = config.emb_dim
@@ -322,112 +345,113 @@ class TFFlaubertMainLayer(tf.keras.layers.Layer):
         self.return_dict = config.use_return_dict
         self.max_position_embeddings = config.max_position_embeddings
         self.embed_init_std = config.embed_init_std
-        # 使用 tf.keras.layers.Dropout 创建一个 Dropout 层，用于在模型中应用 dropout
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
-        # 使用 TFSharedEmbeddings 创建一个共享的 Embeddings 层
+
+        # 创建一个 Dropout 层，用于后续的 Dropout 操作
+        self.dropout = keras.layers.Dropout(config.dropout)
+        
+        # 创建共享的嵌入层 TFSharedEmbeddings，用于词嵌入
         self.embeddings = TFSharedEmbeddings(
             self.n_words, self.dim, initializer_range=config.embed_init_std, name="embeddings"
         )
-        # 创建一个 LayerNormalization 层，用于对嵌入层进行归一化处理
-        self.layer_norm_emb = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm_emb")
-        self.attentions = []  # 用于存储多头注意力的层
-        self.layer_norm1 = []  # 用于存储第一个层归一化层
-        self.ffns = []  # 用于存储 feed forward 网络的层
-        self.layer_norm2 = []  # 用于存储第二个层归一化层
+        
+        # 创建层归一化层，用于嵌入层的输出
+        self.layer_norm_emb = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="layer_norm_emb")
+        
+        # 初始化存储注意力、层归一化、前馈神经网络和第二层归一化的列表
+        self.attentions = []
+        self.layer_norm1 = []
+        self.ffns = []
+        self.layer_norm2 = []
 
-        # 循环创建指定数量的多头注意力、归一化层、feed forward 网络和归一化层
+        # 根据层数 self.n_layers 迭代创建注意力、层归一化、前馈神经网络和第二层归一化
         for i in range(self.n_layers):
-            # 创建一个 TFFlaubertMultiHeadAttention 层
+            # 创建多头注意力层 TFFlaubertMultiHeadAttention
             self.attentions.append(
                 TFFlaubertMultiHeadAttention(self.n_heads, self.dim, config=config, name=f"attentions_._{i}")
             )
-            # 创建一个 LayerNormalization 层
+            
+            # 创建第一层归一化层
             self.layer_norm1.append(
-                tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name=f"layer_norm1_._{i}")
+                keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name=f"layer_norm1_._{i}")
             )
-            # 创建一个 TFFlaubertTransformerFFN 层
+            
+            # 创建 Transformer 中的前馈神经网络层 TFFlaubertTransformerFFN
             self.ffns.append(
                 TFFlaubertTransformerFFN(self.dim, self.hidden_dim, self.dim, config=config, name=f"ffns_._{i}")
             )
-            # 创建一个 LayerNormalization 层
+            
+            # 创建第二层归一化层
             self.layer_norm2.append(
-                tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name=f"layer_norm2_._{i}")
+                keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name=f"layer_norm2_._{i}")
             )
-    # 构建模型，初始化各个变量
+    # 在 TensorFlow 名称空间 "position_embeddings" 下创建位置嵌入权重矩阵
     def build(self, input_shape=None):
-        # 添加一个“position_embeddings”的命名空间，用于组织相关操作
         with tf.name_scope("position_embeddings"):
-            # 添加一个权重变量，名称为“embeddings”，形状为[self.max_position_embeddings, self.dim]，初始化方式为self.embed_init_std
+            # 添加权重变量，用于存储位置嵌入矩阵，形状为 [最大位置数, 嵌入维度]
             self.position_embeddings = self.add_weight(
                 name="embeddings",
                 shape=[self.max_position_embeddings, self.dim],
                 initializer=get_initializer(self.embed_init_std),
             )
 
-        # 如果有多个语言并且使用语言嵌入，则继续执行以下代码块
+        # 如果有多语言且使用语言嵌入，创建语言嵌入权重矩阵
         if self.n_langs > 1 and self.use_lang_emb:
-            # 添加一个“lang_embeddings”的命名空间，用于组织相关操作
             with tf.name_scope("lang_embeddings"):
-                # 添加一个权重变量，名称为“embeddings”，形状为[self.n_langs, self.dim]，初始化方式为self.embed_init_std
+                # 添加权重变量，用于存储语言嵌入矩阵，形状为 [语言数, 嵌入维度]
                 self.lang_embeddings = self.add_weight(
                     name="embeddings",
                     shape=[self.n_langs, self.dim],
                     initializer=get_initializer(self.embed_init_std),
                 )
 
-        # 如果已经构建过，则直接返回
+        # 如果已经建立过网络结构，则直接返回
         if self.built:
             return
-        # 设置built为True，表示已经构建过
         self.built = True
-        # 如果self.embeddings存在，则继续执行以下代码块
+
+        # 如果存在 embeddings 属性，则构建 embeddings 属性
         if getattr(self, "embeddings", None) is not None:
-            # 利用self.embeddings变量的名称作为命名空间，组织相关操作
             with tf.name_scope(self.embeddings.name):
-                # 调用self.embeddings的build方法
                 self.embeddings.build(None)
-        # 如果self.layer_norm_emb存在，则继续执行以下代码块
+
+        # 如果存在 layer_norm_emb 属性，则构建 layer_norm_emb 属性
         if getattr(self, "layer_norm_emb", None) is not None:
-            # 利用self.layer_norm_emb变量的名称作为命名空间，组织相关操作
             with tf.name_scope(self.layer_norm_emb.name):
-                # 调用self.layer_norm_emb的build方法，输入形状为[None, None, self.dim]
+                # 构建 layer_norm_emb 属性，形状为 [None, None, 嵌入维度]
                 self.layer_norm_emb.build([None, None, self.dim])
-        # 遍历self.attentions列表中的每一个元素
+
+        # 遍历注意力层列表，构建每个注意力层
         for layer in self.attentions:
-            # 利用layer变量的名称作为命名空间，组织相关操作
             with tf.name_scope(layer.name):
-                # 调用layer的build方法，输入形状为None
                 layer.build(None)
-        # 遍历self.layer_norm1列表中的每一个元素
+
+        # 遍历第一个层归一化列表，构建每个层归一化层
         for layer in self.layer_norm1:
-            # 利用layer变量的名称作为命名空间，组织相关操作
             with tf.name_scope(layer.name):
-                # 调用layer的build方法，输���形状为[None, None, self.dim]
-                layer.build([None, None, self.dim])
-        # 遍历self.ffns列表中的每一个元素
-        for layer in self.ffns:
-            # 利用layer变量的名称作为命名空间，组织相关操作
-            with tf.name_scope(layer.name):
-                # 调用layer的build方法，输入形状为None
-                layer.build(None)
-        # 遍历self.layer_norm2列表中的每一个元素
-        for layer in self.layer_norm2:
-            # 利用layer变量的名称作为命名空间，组织相关操作
-            with tf.name_scope(layer.name):
-                # 调用layer的build方法，输入形状为[None, None, self.dim]
+                # 构建每个层归一化层，形状为 [None, None, 嵌入维度]
                 layer.build([None, None, self.dim])
 
-    # 获取输入嵌入层
+        # 遍历前馈神经网络列表，构建每个前馈神经网络层
+        for layer in self.ffns:
+            with tf.name_scope(layer.name):
+                layer.build(None)
+
+        # 遍历第二个层归一化列表，构建每个层归一化层
+        for layer in self.layer_norm2:
+            with tf.name_scope(layer.name):
+                # 构建每个层归一化层，形状为 [None, None, 嵌入维度]
+                layer.build([None, None, self.dim])
+
+    # 返回 embeddings 属性
     def get_input_embeddings(self):
         return self.embeddings
 
-    # 设置输入嵌入层
+    # 设置 embeddings 属性的值，并更新其词汇大小
     def set_input_embeddings(self, value):
-        # 更新self.embeddings的weight属性为value
         self.embeddings.weight = value
-        # 更新self.embeddings的vocab_size属性为value的shape[0]
+        self.embeddings.vocab_size = shape_list(value)[0]
 
-    # 调用函数
+    # 装饰器，用于解包输入参数并调用模型
     @unpack_inputs
     def call(
         self,
@@ -444,65 +468,54 @@ class TFFlaubertMainLayer(tf.keras.layers.Layer):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
-# 从transformers.models.xlm.modeling_tf_xlm.TFXLMPredLayer中复制了代码，定义了TFFlaubertPredLayer类
-class TFFlaubertPredLayer(tf.keras.layers.Layer):
+# Copied from transformers.models.xlm.modeling_tf_xlm.TFXLMPredLayer
+class TFFlaubertPredLayer(keras.layers.Layer):
     """
-    预测层（交叉熵或自适应softmax）。
+    Prediction layer (cross_entropy or adaptive_softmax).
     """
 
     def __init__(self, config, input_embeddings, **kwargs):
         super().__init__(**kwargs)
 
-        # 是否采用自适应softmax
-        self.asm = config.asm
-        # 词汇表大小
-        self.n_words = config.n_words
-        # 填充索引
-        self.pad_index = config.pad_index
+        self.asm = config.asm  # 是否使用自适应 softmax
+        self.n_words = config.n_words  # 词汇表中的单词数量
+        self.pad_index = config.pad_index  # 填充索引
 
-        # 如果不使用自适应softmax，则使用输入嵌入
         if config.asm is False:
-            self.input_embeddings = input_embeddings
+            self.input_embeddings = input_embeddings  # 输入的嵌入层对象
         else:
-            # 当asm为True时，抛出NotImplementedError异常
-            raise NotImplementedError
+            raise NotImplementedError  # 如果使用自适应 softmax，暂未实现的情况
             # self.proj = nn.AdaptiveLogSoftmaxWithLoss(
             #     in_features=dim,
             #     n_classes=config.n_words,
             #     cutoffs=config.asm_cutoffs,
             #     div_value=config.asm_div_value,
-            #     head_bias=True,  # default is False
+            #     head_bias=True,  # 默认为 False
             # )
 
     def build(self, input_shape):
-        # 输出权重与输入嵌入相同，但每个标记都有一个仅输出的偏置
+        # 输出的权重与输入的嵌入层相同，但是每个标记有一个独立的输出偏置
         self.bias = self.add_weight(shape=(self.n_words,), initializer="zeros", trainable=True, name="bias")
 
         super().build(input_shape)
 
     def get_output_embeddings(self):
-        # 返回输入嵌入
-        return self.input_embeddings
+        return self.input_embeddings  # 返回输入的嵌入层对象
 
     def set_output_embeddings(self, value):
-        # 设置输出嵌入
-        self.input_embeddings.weight = value
-        self.input_embeddings.vocab_size = shape_list(value)[0]
+        self.input_embeddings.weight = value  # 设置输入的嵌入层权重
+        self.input_embeddings.vocab_size = shape_list(value)[0]  # 设置词汇表大小为权重的第一维大小
 
     def get_bias(self):
-        # 获取偏置
-        return {"bias": self.bias}
+        return {"bias": self.bias}  # 返回偏置参数
 
     def set_bias(self, value):
-        # 设置偏置
-        self.bias = value["bias"]
-        self.vocab_size = shape_list(value["bias"])[0]
+        self.bias = value["bias"]  # 设置偏置参数
+        self.vocab_size = shape_list(value["bias"])[0]  # 设置词汇表大小为偏置参数的第一维大小
 
     def call(self, hidden_states):
-        # 将隐藏状态传递到输入嵌入，并进行线性变换
-        hidden_states = self.input_embeddings(hidden_states, mode="linear")
-        # 添加偏置
-        hidden_states = hidden_states + self.bias
+        hidden_states = self.input_embeddings(hidden_states, mode="linear")  # 使用线性模式进行嵌入
+        hidden_states = hidden_states + self.bias  # 加上偏置参数
 
         return hidden_states
 
@@ -510,27 +523,34 @@ class TFFlaubertPredLayer(tf.keras.layers.Layer):
 @dataclass
 class TFFlaubertWithLMHeadModelOutput(ModelOutput):
     """
-    [`TFFlaubertWithLMHeadModel`]输出的基类。
+    Base class for [`TFFlaubertWithLMHeadModel`] outputs.
 
-    参数:
-        logits (`tf.Tensor`，形状为 `(batch_size, sequence_length, config.vocab_size)`):
-            语言建模头的预测得分（SoftMax之前每个词汇标记的得分）。
-        hidden_states (`tuple(tf.Tensor)`，*可选*，当传递`output_hidden_states=True`或`config.output_hidden_states=True`时返回):
-            `tf.Tensor`元组（一个用于嵌入的输出 + 一个用于每个层的输出）的形状为 `(batch_size, sequence_length, hidden_size)`。
+    Args:
+        logits (`tf.Tensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
+            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+        hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            Tuple of `tf.Tensor` (one for the output of the embeddings + one for the output of each layer) of shape
+            `(batch_size, sequence_length, hidden_size)`.
 
-            模型在每一层输出的隐藏状态加上初始嵌入的输出。
-        attentions (`tuple(tf.Tensor)`，*可选*，当传递`output_attentions=True`或`config.output_attentions=True`时返回):
-            `tf.Tensor`元组（每一层一个）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
+        attentions (`tuple(tf.Tensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            Tuple of `tf.Tensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
 
-            在注意力softmax之后的注意力权重，用于计算自注意力头中的加权平均值。
+            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+            heads.
     """
 
-    logits: tf.Tensor = None
-    # 定义hidden_states变量，类型为Tuple[tf.Tensor]，初始赋值为None
+    logits: tf.Tensor = None  # 语言建模头部的预测分数（SoftMax 前的每个词汇标记的分数）
+    # 定义变量 hidden_states，类型为 Tuple[tf.Tensor] 或 None，初始值为 None
     hidden_states: Tuple[tf.Tensor] | None = None
-    # 定义attentions变量，类型为Tuple[tf.Tensor]，初始赋值为None
+    # 定义变量 attentions，类型为 Tuple[tf.Tensor] 或 None，初始值为 None
     attentions: Tuple[tf.Tensor] | None = None
-# 给 TFFlaubertWithLMHeadModel 类添加文档字符串，描述其作为带有语言建模头的 Flaubert 模型转换器
+"""
+The Flaubert Model transformer with a language modeling head on top (linear layer with weights tied to the input
+embeddings).
+"""
+# 导入必要的库和模块
 @add_start_docstrings(
     """
     The Flaubert Model transformer with a language modeling head on top (linear layer with weights tied to the input
@@ -538,49 +558,49 @@ class TFFlaubertWithLMHeadModelOutput(ModelOutput):
     """,
     FLAUBERT_START_DOCSTRING,
 )
+# 定义 TFFlaubertWithLMHeadModel 类，继承自 TFFlaubertPreTrainedModel
 class TFFlaubertWithLMHeadModel(TFFlaubertPreTrainedModel):
-
-    # 初始化方法，接收配置和其他输入参数
+    
+    # 初始化方法
     def __init__(self, config, *inputs, **kwargs):
         # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
-        # 创建 transformer 层，使用 TFFlaubertMainLayer 类
+        # 创建 Flaubert 主层，并命名为 "transformer"
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
-        # 创建预测层，使用 TFFlaubertPredLayer 类，并且传入 transformer 的 embeddings 作为参数
+        # 创建 Flaubert 预测层，并将 embeddings 传入，命名为 "pred_layer_._proj"
         self.pred_layer = TFFlaubertPredLayer(config, self.transformer.embeddings, name="pred_layer_._proj")
         # Flaubert 模型不支持过去的缓存特性
         self.supports_xla_generation = False
 
-    # 获取语言建模头
+    # 获取语言模型头部的方法
     def get_lm_head(self):
         return self.pred_layer
 
-    # 获取前缀偏差的名称
+    # 获取前缀偏置名字的方法（已弃用）
     def get_prefix_bias_name(self):
-        # 引发警告，此方法已经废弃，请使用 `get_bias` 替代
         warnings.warn("The method get_prefix_bias_name is deprecated. Please use `get_bias` instead.", FutureWarning)
         return self.name + "/" + self.pred_layer.name
 
-    # 为生成准备输入
+    # 准备生成所需输入的方法
     def prepare_inputs_for_generation(self, inputs, **kwargs):
+        # 获取配置中的 mask_token_id 和 lang_id
         mask_token_id = self.config.mask_token_id
         lang_id = self.config.lang_id
 
-        # 获取有效批次大小
+        # 获取有效的批处理大小
         effective_batch_size = inputs.shape[0]
-        # 创建一个值全为 mask_token_id 的张量
+        # 创建 mask_token，填充到输入张量的末尾
         mask_token = tf.fill((effective_batch_size, 1), 1) * mask_token_id
-        # 在输入后面拼接 mask_token
         inputs = tf.concat([inputs, mask_token], axis=1)
 
+        # 如果 lang_id 不为 None，则创建相应语言标识符张量
         if lang_id is not None:
-            # 如果 lang_id 存在，则创建一个和 inputs 维度相同的张量，并且值全为 lang_id
             langs = tf.ones_like(inputs) * lang_id
         else:
             langs = None
         return {"input_ids": inputs, "langs": langs}
 
-    # 调用方法，接收多个输入参数，具体参数类型可以是 np.ndarray 或 tf.Tensor，也可以是 None
+    # 定义模型的调用方法，处理输入并执行前向传播
     @unpack_inputs
     @add_start_docstrings_to_model_forward(FLAUBERT_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
@@ -603,24 +623,11 @@ class TFFlaubertWithLMHeadModel(TFFlaubertPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
-    # 定义一个方法，接收一些输入并返回一个元组或TFFlaubertWithLMHeadModelOutput对象
-    def call(
-        self, 
-        input_ids, 
-        attention_mask=None, 
-        langs=None, 
-        token_type_ids=None, 
-        position_ids=None, 
-        lengths=None, 
-        cache=None, 
-        head_mask=None, 
-        inputs_embeds=None, 
-        output_attentions=None, 
-        output_hidden_states=None, 
-        return_dict=True, 
-        training=False
+        **kwargs
+    ):
+        # 方法用于执行模型的前向传播，并接受多种类型的输入参数
     ) -> Union[Tuple, TFFlaubertWithLMHeadModelOutput]:
-        # 使用transformer处理输入并返回输出
+        # 调用 Transformer 模型处理输入数据，返回变换后的输出
         transformer_outputs = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -636,37 +643,36 @@ class TFFlaubertWithLMHeadModel(TFFlaubertPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-        # 获取transformer输出的第一个元素
+        # 从 Transformer 输出中获取主要的输出
         output = transformer_outputs[0]
-        # 使用pred_layer处理transformer的输出并返回结果
+        # 通过预测层对主要输出进行预测
         outputs = self.pred_layer(output)
-    
-        # 如果不需要返回一个字典，就返回一个元组
+
+        # 如果不要求返回字典，则以元组形式返回预测输出和 Transformer 的其余输出
         if not return_dict:
             return (outputs,) + transformer_outputs[1:]
-        
-        # 如果需要返回字典，就返回TFFlaubertWithLMHeadModelOutput对象
+
+        # 如果要求返回字典，则创建 TFFlaubertWithLMHeadModelOutput 对象
         return TFFlaubertWithLMHeadModelOutput(
             logits=outputs, hidden_states=transformer_outputs.hidden_states, attentions=transformer_outputs.attentions
         )
-    
-    # 构建模型，设置参数input_shape=None
+
     def build(self, input_shape=None):
-        # 如果已经构建过了，就直接返回
+        # 如果模型已经构建，则直接返回
         if self.built:
             return
-        # 如果没有构建过，就进行构建
+        # 标记模型为已构建状态
         self.built = True
-        # 如果存在transformer，就在命名空间下构建transformer
+        # 如果存在 Transformer 属性，则构建 Transformer
         if getattr(self, "transformer", None) is not None:
             with tf.name_scope(self.transformer.name):
                 self.transformer.build(None)
-        # 如果存在pred_layer，就在命名空间下构建pred_layer
+        # 如果存在预测层属性，则构建预测层
         if getattr(self, "pred_layer", None) is not None:
             with tf.name_scope(self.pred_layer.name):
                 self.pred_layer.build(None)
-# 添加文档字符串说明Flaubert模型具有顺序分类/回归头（在汇总输出之上的线性层）
-# 例如用于GLUE任务。
+# 添加模型的文档字符串，描述该模型在顶部具有一个用于序列分类/回归的头部（在汇总输出之上的线性层），例如用于GLUE任务。
+# 这里使用了FLAUBERT_START_DOCSTRING和其他相关文档字符串作为起始。
 @add_start_docstrings(
     """
     Flaubert Model with a sequence classification/regression head on top (a linear layer on top of the pooled output)
@@ -674,17 +680,20 @@ class TFFlaubertWithLMHeadModel(TFFlaubertPreTrainedModel):
     """,
     FLAUBERT_START_DOCSTRING,
 )
-# 从transformers.models.xlm.modeling_tf_xlm中复制TFXLMForSequenceClassification代码并将XLM_INPUTS->FLAUBERT_INPUTS,XLM->Flaubert
+# 从transformers.models.xlm.modeling_tf_xlm.TFXLMForSequenceClassification复制而来，
+# 将XLM_INPUTS替换为FLAUBERT_INPUTS，将XLM替换为Flaubert
 class TFFlaubertForSequenceClassification(TFFlaubertPreTrainedModel, TFSequenceClassificationLoss):
     def __init__(self, config, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
         self.num_labels = config.num_labels
 
-        # 初始化Flaubert模型的transformer和sequence_summary
+        # 初始化transformer层，使用TFFlaubertMainLayer
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
+        # 初始化序列汇总层，使用TFSequenceSummary
         self.sequence_summary = TFSequenceSummary(config, initializer_range=config.init_std, name="sequence_summary")
 
-    # 使用装饰器设置函数输入参数和文档字符串
+    # 将输入解包后传递给模型的前向计算，添加了FLAUBERT_INPUTS_DOCSTRING作为模型前向计算的文档字符串
+    # 还包括了checkpoint、output_type、config_class作为代码示例的文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(FLAUBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -711,10 +720,11 @@ class TFFlaubertForSequenceClassification(TFFlaubertPreTrainedModel, TFSequenceC
     ) -> Union[TFSequenceClassifierOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
-            用于计算序列分类/回归损失的标签。索引应该在 `[0, ..., config.num_labels - 1]` 范围内。
-            如果 `config.num_labels == 1`，则计算回归损失（均方损失），如果 `config.num_labels > 1`，则计算分类损失（交叉熵）。
+            Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
+            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
+            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 将输入传递给transformer模型
+        # 调用transformer模型，传入各种参数，获取transformer的输出
         transformer_outputs = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -730,21 +740,21 @@ class TFFlaubertForSequenceClassification(TFFlaubertPreTrainedModel, TFSequenceC
             return_dict=return_dict,
             training=training,
         )
-        # 从transformer输出中获取第一个元素
+        # 获取transformer输出的第一个元素作为输出
         output = transformer_outputs[0]
 
-        # 通过sequence_summary将输出转化为logits
+        # 对输出进行序列摘要，生成logits
         logits = self.sequence_summary(output)
 
-        # 如果标签不为None，则计算损失
+        # 如果labels不为None，计算损失
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
 
-        # 如果return_dict为False，则处理输出
+        # 如果不返回字典形式的结果，则将logits与其余transformer输出拼接在一起返回
         if not return_dict:
             output = (logits,) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回TFSequenceClassifierOutput对象
+        # 返回TFSequenceClassifierOutput对象，包含损失、logits、隐藏状态和注意力权重
         return TFSequenceClassifierOutput(
             loss=loss,
             logits=logits,
@@ -752,45 +762,45 @@ class TFFlaubertForSequenceClassification(TFFlaubertPreTrainedModel, TFSequenceC
             attentions=transformer_outputs.attentions,
         )
 
-    # 创建模型
     def build(self, input_shape=None):
-        # 如果已经构建完毕，则直接返回
+        # 如果已经构建过网络，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果transformer存在，调用其build方法
+        # 如果存在transformer模型，则在其名字域内构建transformer
         if getattr(self, "transformer", None) is not None:
             with tf.name_scope(self.transformer.name):
                 self.transformer.build(None)
-        # 如果sequence_summary存在，调用其build方法
+        # 如果存在sequence_summary模型，则在其名字域内构建sequence_summary
         if getattr(self, "sequence_summary", None) is not None:
             with tf.name_scope(self.sequence_summary.name):
                 self.sequence_summary.build(None)
-# 使用额外的文档字符串装饰器，添加关于模型的介绍性文档字符串
-# 复制自 transformers.models.xlm.modeling_tf_xlm.TFXLMForQuestionAnsweringSimple，将 XLM_INPUTS 替换为 FLAUBERT_INPUTS，将 XLM 替换为 Flaubert
+@add_start_docstrings(
+    """
+    Flaubert Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
+    layer on top of the hidden-states output to compute `span start logits` and `span end logits`).
+    """,
+    FLAUBERT_START_DOCSTRING,
+)
+# 基于 Flaubert 模型，添加了一个面向提取式问答任务（如 SQuAD）的跨度分类头部（在隐藏状态输出之上的线性层，用于计算 `span start logits` 和 `span end logits`）。
 class TFFlaubertForQuestionAnsweringSimple(TFFlaubertPreTrainedModel, TFQuestionAnsweringLoss):
     def __init__(self, config, *inputs, **kwargs):
-        # 调用父类初始化方法
         super().__init__(config, *inputs, **kwargs)
-        # 初始化变量 transformer，使用 TFFlaubertMainLayer 创建 Flaubert 主层
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
-        # 初始化变量 qa_outputs，使用 Dense 层创建拥有 num_labels 个节点的输出层
-        self.qa_outputs = tf.keras.layers.Dense(
+        # 初始化一个全连接层用于问答输出，其输出维度为 config.num_labels，使用指定的初始化方式初始化权重
+        self.qa_outputs = keras.layers.Dense(
             config.num_labels, kernel_initializer=get_initializer(config.init_std), name="qa_outputs"
         )
-        # 存储配置信息
         self.config = config
 
-    # 对输入参数进行解包，进行前向传播
     @unpack_inputs
-    # 添加关于模型前向传播的文档字符串
     @add_start_docstrings_to_model_forward(FLAUBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 添加代码示例文档字符串
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFQuestionAnsweringModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 定义模型的前向传播函数，接受多种输入，并返回一个字典或 TFQuestionAnsweringModelOutput 类型的输出
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -808,10 +818,19 @@ class TFFlaubertForQuestionAnsweringSimple(TFFlaubertPreTrainedModel, TFQuestion
         start_positions: np.ndarray | tf.Tensor | None = None,
         end_positions: np.ndarray | tf.Tensor | None = None,
         training: bool = False,
+        # 可能的训练参数包括起始位置和结束位置，用于指定答案的位置
     ) -> Union[TFQuestionAnsweringModelOutput, Tuple[tf.Tensor]]:
         r"""
-        `call`方法的签名，指定了输入和输出的类型。这里返回的类型可以是TFQuestionAnsweringModelOutput或者包含两个tf.Tensor的元组。
+        start_positions (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the start of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
+        end_positions (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the end of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
         """
+        # 获取transformer模型的输出，包括各种参数和特征
         transformer_outputs = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -827,25 +846,28 @@ class TFFlaubertForQuestionAnsweringSimple(TFFlaubertPreTrainedModel, TFQuestion
             return_dict=return_dict,
             training=training,
         )
+        # 从transformer输出的序列输出中提取结果
         sequence_output = transformer_outputs[0]
 
+        # 使用qa_outputs层对序列输出进行转换，得到起始和结束位置的logits
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = tf.split(logits, 2, axis=-1)
         start_logits = tf.squeeze(start_logits, axis=-1)
         end_logits = tf.squeeze(end_logits, axis=-1)
 
+        # 计算损失函数
         loss = None
         if start_positions is not None and end_positions is not None:
             labels = {"start_position": start_positions}
             labels["end_position"] = end_positions
             loss = self.hf_compute_loss(labels, (start_logits, end_logits))
-        
-        # 如果返回字典的形式，则将损失与输出拼接后返回，否则仅返回输出
+
+        # 如果不返回字典，则输出start_logits、end_logits和transformer_outputs的其余部分
         if not return_dict:
             output = (start_logits, end_logits) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回包含损失、开始位置、结束位置、隐藏状态和注意力权重的TFQuestionAnsweringModelOutput对象
+        # 返回TFQuestionAnsweringModelOutput对象，包括loss、start_logits、end_logits以及其他transformer输出
         return TFQuestionAnsweringModelOutput(
             loss=loss,
             start_logits=start_logits,
@@ -855,20 +877,18 @@ class TFFlaubertForQuestionAnsweringSimple(TFFlaubertPreTrainedModel, TFQuestion
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
+        # 如果模型已经构建，则直接返回
         if self.built:
             return
-        # 标记该模型已经构建
         self.built = True
-        # 构建transformer模型
+        # 如果存在transformer模型，则构建transformer层
         if getattr(self, "transformer", None) is not None:
             with tf.name_scope(self.transformer.name):
                 self.transformer.build(None)
-        # 构建qa_outputs模型
+        # 如果存在qa_outputs层，则构建qa_outputs层
         if getattr(self, "qa_outputs", None) is not None:
             with tf.name_scope(self.qa_outputs.name):
                 self.qa_outputs.build([None, None, self.config.hidden_size])
-# 使用指定的文档字符串来装饰 TFFlaubertForTokenClassification 类，描述了该模型的作用和用途
 @add_start_docstrings(
     """
     Flaubert Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
@@ -876,33 +896,32 @@ class TFFlaubertForQuestionAnsweringSimple(TFFlaubertPreTrainedModel, TFQuestion
     """,
     FLAUBERT_START_DOCSTRING,
 )
-# 从 transformers.models.xlm.modeling_tf_xlm.TFXLMForTokenClassification 复制代码并修改一些参数，以适配 Flaubert 模型
+# 定义了一个用于标记分类任务的 Flaubert 模型，该模型在隐藏状态输出之上添加了一个线性层，用于例如命名实体识别（NER）任务。
+# 此处的注释是一个函数装饰器，用于在类的开头添加文档字符串。
+
 class TFFlaubertForTokenClassification(TFFlaubertPreTrainedModel, TFTokenClassificationLoss):
     def __init__(self, config, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
-        # 记录分类的类别数
         self.num_labels = config.num_labels
 
-        # 使用 TFFlaubertMainLayer 构建 transformer 层
+        # 初始化模型的主要组件
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
-        # 添加 dropout 层
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
-        # 添加分类器，使用全连接层，初始化方式为指定的初始化方法
-        self.classifier = tf.keras.layers.Dense(
+        # 添加一个用于防止过拟合的 dropout 层
+        self.dropout = keras.layers.Dropout(config.dropout)
+        # 分类器层，使用全连接层，输出维度为标签数目
+        self.classifier = keras.layers.Dense(
             config.num_labels, kernel_initializer=get_initializer(config.init_std), name="classifier"
         )
         self.config = config
 
-    # 装饰 call 方法，添加输入参数的文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(FLAUBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 添加示例代码文档字符串
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFTokenClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 模型的前向传播
+    # 定义了模型的前向传播方法
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -919,42 +938,45 @@ class TFFlaubertForTokenClassification(TFFlaubertPreTrainedModel, TFTokenClassif
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: bool = False,
+        # 以下是函数参数列表，包括输入数据和模型的控制参数
+    ) -> Union[TFTokenClassifierOutput, Tuple[tf.Tensor]]:
+        r"""
         labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
         """
-        # 使用transformer处理输入数据，并获取transformer的输出
+        # 调用Transformer模型，传入各种输入参数，并获取输出结果
         transformer_outputs = self.transformer(
-            input_ids=input_ids,  # 输入的token id
-            attention_mask=attention_mask,  # 注意力遮罩
-            langs=langs,  # 语言编码
-            token_type_ids=token_type_ids,  # token类型id
-            position_ids=position_ids,  # 位置id
-            lengths=lengths,  # 输入序列的长度
-            cache=cache,  # 缓存
-            head_mask=head_mask,  # 头部遮罩
-            inputs_embeds=inputs_embeds,  # 输入嵌入
-            output_attentions=output_attentions,  # 是否输出注意力
-            output_hidden_states=output_hidden_states,  # 是否输出隐藏状态
-            return_dict=return_dict,  # 是否返回字典格式结果
-            training=training,  # 是否为训练模式
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            langs=langs,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            lengths=lengths,
+            cache=cache,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            training=training,
         )
-        # 获取transformer的输出的第一个元素作为序列输出
+        # 从Transformer的输出中获取序列输出
         sequence_output = transformer_outputs[0]
 
-        # 对序列输出进行dropout
+        # 对序列输出进行dropout操作，根据训练状态进行不同的处理
         sequence_output = self.dropout(sequence_output, training=training)
-        # 对dropout后的序列输出进行分类得到logits
+        # 将dropout后的输出传入分类器获取logits
         logits = self.classifier(sequence_output)
 
-        # 如果没有传入labels则loss为None，否则使用hf_compute_loss函数计算loss
+        # 如果没有提供labels，则损失为None；否则计算token分类损失
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
 
-        # 如果不返回字典格式结果，将输出结果和loss组成元组返回，如果loss为None则不包含在返回结果中
+        # 如果不返回字典形式的输出，则按元组形式组织返回结果
         if not return_dict:
             output = (logits,) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回字典格式的输出结果
+        # 如果返回字典形式的输出，则组织为TFTokenClassifierOutput对象
         return TFTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -963,19 +985,19 @@ class TFFlaubertForTokenClassification(TFFlaubertPreTrainedModel, TFTokenClassif
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建过网络则直接返回
+        # 如果模型已经构建过，则直接返回
         if self.built:
             return
+        # 标记模型已构建
         self.built = True
-        # 如果存在transformer则构建transformer
+        # 如果存在Transformer模型，则构建Transformer模型
         if getattr(self, "transformer", None) is not None:
             with tf.name_scope(self.transformer.name):
                 self.transformer.build(None)
-        # 如果存在classifier则构建classifier
+        # 如果存在分类器模型，则构建分类器模型
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
-# 添加模型文档字符串作为注释
 @add_start_docstrings(
     """
     Flaubert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
@@ -983,20 +1005,21 @@ class TFFlaubertForTokenClassification(TFFlaubertPreTrainedModel, TFTokenClassif
     """,
     FLAUBERT_START_DOCSTRING,
 )
-# 从transformers.models.xlm.modeling_tf_xlm.TFXLMForMultipleChoice复制而来，将XLM_INPUTS->FLAUBERT_INPUTS,XLM->Flaubert
+# 定义了一个新的 TensorFlow 模型类 TFFlaubertForMultipleChoice，继承自 TFFlaubertPreTrainedModel 和 TFMultipleChoiceLoss
 class TFFlaubertForMultipleChoice(TFFlaubertPreTrainedModel, TFMultipleChoiceLoss):
     def __init__(self, config, *inputs, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 使用Flaubert的主要层创建transformer对象
+        # 创建 Flaubert 主层，并命名为 'transformer'
         self.transformer = TFFlaubertMainLayer(config, name="transformer")
-        # 使用config初始化范围构建TFSequenceSummary层
+        # 创建序列摘要层，使用 TFSequenceSummary 类，初始化范围为 config.init_std，命名为 'sequence_summary'
         self.sequence_summary = TFSequenceSummary(config, initializer_range=config.init_std, name="sequence_summary")
-        # 构建Dense层作为logits_proj
-        self.logits_proj = tf.keras.layers.Dense(
+        # 创建 logits 投影层，使用 Dense 层，输出维度为 1，初始化器使用 config.initializer_range，命名为 'logits_proj'
+        self.logits_proj = keras.layers.Dense(
             1, kernel_initializer=get_initializer(config.initializer_range), name="logits_proj"
         )
-        # 设置self.config为config
+        # 设置实例变量 config 为传入的配置对象
         self.config = config
 
     @property
@@ -1007,13 +1030,14 @@ class TFFlaubertForMultipleChoice(TFFlaubertPreTrainedModel, TFMultipleChoiceLos
         Returns:
             tf.Tensor with dummy inputs
         """
-        # 有时Flaubert具有语言嵌入，如果需要，不要忘记构建它们
+        # 如果配置要求使用语言嵌入并且语言数量大于 1，则返回带有语言信息的输入字典
         if self.config.use_lang_emb and self.config.n_langs > 1:
             return {
                 "input_ids": tf.constant(MULTIPLE_CHOICE_DUMMY_INPUTS, dtype=tf.int32),
                 "langs": tf.constant(MULTIPLE_CHOICE_DUMMY_INPUTS, dtype=tf.int32),
             }
         else:
+            # 否则，只返回包含 input_ids 的输入字典
             return {
                 "input_ids": tf.constant(MULTIPLE_CHOICE_DUMMY_INPUTS, dtype=tf.int32),
             }
@@ -1043,120 +1067,104 @@ class TFFlaubertForMultipleChoice(TFFlaubertPreTrainedModel, TFMultipleChoiceLos
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: bool = False,
-   # 定义函数，返回值为TFMultipleChoiceModelOutput或包含tf.Tensor的元组
-   def forward(
-       input_ids: tf.Tensor = None,
-       attention_mask: tf.Tensor = None,
-       langs: tf.Tensor = None,
-       token_type_ids: tf.Tensor = None,
-       position_ids: tf.Tensor = None,
-       lengths: List[int] = None,
-       cache: Optional[Dict[str, tf.Tensor]] = None,
-       head_mask: Optional[tf.Tensor] = None,
-       inputs_embeds: tf.Tensor = None,
-       output_attentions: bool = False,
-       output_hidden_states: bool = False,
-       return_dict: bool = True,
-       training: bool = False,
-       labels: tf.Tensor = None,
-   ) -> Union[TFMultipleChoiceModelOutput, Tuple[tf.Tensor]]:
-       # 如果input_ids不为空，则获取num_choices和seq_length
-       if input_ids is not None:
-           num_choices = shape_list(input_ids)[1]
-           seq_length = shape_list(input_ids)[2]
-       else:
-           # 如果input_ids为空，则获取num_choices和seq_length
-           num_choices = shape_list(inputs_embeds)[1]
-           seq_length = shape_list(inputs_embeds)[2]
-   
-       # 对input_ids进行reshape，形状为(-1, seq_length)，如果input_ids为空则为None
-       flat_input_ids = tf.reshape(input_ids, (-1, seq_length)) if input_ids is not None else None
-       # 对attention_mask进行reshape，形状为(-1, seq_length)，如果attention_mask为空则为None
-       flat_attention_mask = tf.reshape(attention_mask, (-1, seq_length)) if attention_mask is not None else None
-       # 对token_type_ids进行reshape，形状为(-1, seq_length)，如果token_type_ids为空则为None
-       flat_token_type_ids = tf.reshape(token_type_ids, (-1, seq_length)) if token_type_ids is not None else None
-       # 对position_ids进行reshape，形状为(-1, seq_length)，如果position_ids为空则为None
-       flat_position_ids = tf.reshape(position_ids, (-1, seq_length)) if position_ids is not None else None
-       # 对langs进行reshape，形状为(-1, seq_length)，如果langs为空则为None
-       flat_langs = tf.reshape(langs, (-1, seq_length)) if langs is not None else None
-       # 对inputs_embeds进行reshape，形状为(-1, seq_length, shape_list(inputs_embeds)[3])，如果inputs_embeds为空则为None
-       flat_inputs_embeds = (
-           tf.reshape(inputs_embeds, (-1, seq_length, shape_list(inputs_embeds)[3]))
-           if inputs_embeds is not None
-           else None
-       )
-   
-       # 如果lengths不为空，则发出警告提示不能与Flaubert多选模型一起使用长度参数，请使用attention_mask
-       if lengths is not None:
-           logger.warning(
-               "The `lengths` parameter cannot be used with the Flaubert multiple choice models. Please use the "
-               "attention mask instead.",
-           )
-           lengths = None
-   
-       # 调用transformer方法进行模型的前向传播
-       transformer_outputs = self.transformer(
-           flat_input_ids,
-           flat_attention_mask,
-           flat_langs,
-           flat_token_type_ids,
-           flat_position_ids,
-           lengths,
-           cache,
-           head_mask,
-           flat_inputs_embeds,
-           output_attentions,
-           output_hidden_states,
-           return_dict=return_dict,
-           training=training,
-       )
-       # 获取transformer输出中的第一个元素作为output
-       output = transformer_outputs[0]
-       # 使用sequence_summary方法对output进行处理得到logits
-       logits = self.sequence_summary(output)
-       # 对logits进行处理得到最终输出结果
-       logits = self.logits_proj(logits)
-       # 对logits进行reshape，形状为(-1, num_choices)
-       reshaped_logits = tf.reshape(logits, (-1, num_choices))
-   
-       # 根据labels是否为空判断是否计算损失
-       loss = None if labels is None else self.hf_compute_loss(labels, reshaped_logits)
-   
-       # 如果return_dict为False，则将结果组装成元组返回
-       if not return_dict:
-           output = (reshaped_logits,) + transformer_outputs[1:]
-           return ((loss,) + output) if loss is not None else output
-   
-       # 返回TFMultipleChoiceModelOutput对象
-       return TFMultipleChoiceModelOutput(
-           loss=loss,
-           logits=reshaped_logits,
-           hidden_states=transformer_outputs.hidden_states,
-           attentions=transformer_outputs.attentions,
-       )
-    # 构建模型的方法，初始化模型的输入形状
-    def build(self, input_shape=None):
-        # 如果模型已经构建好了，直接返回，避免重复构建
-        if self.built:
-            return
-        # 将标志位设置为已构建
-        self.built = True
-        # 如果存在 transformer 属性，构建 transformer
-        if getattr(self, "transformer", None) is not None:
-            # 使用 transformer 的名称作为命名空间
-            with tf.name_scope(self.transformer.name):
-                # 构建 transformer
-                self.transformer.build(None)
-        # 如果存在 sequence_summary 属性，构建 sequence_summary
-        if getattr(self, "sequence_summary", None) is not None:
-            # 使用 sequence_summary 的名称作为命名空间
-            with tf.name_scope(self.sequence_summary.name):
-                # 构建 sequence_summary
-                self.sequence_summary.build(None)
-        # 如果存在 logits_proj 属性，构建 logits_proj
-        if getattr(self, "logits_proj", None) is not None:
-            # 使用 logits_proj 的名称作为命名空间
-            with tf.name_scope(self.logits_proj.name):
-                # 构建 logits_proj，指定输入形状为 [None, None, self.config.num_labels]
-                self.logits_proj.build([None, None, self.config.num_labels])
+    # 定义方法的返回类型，可以是 TFMultipleChoiceModelOutput 或者包含 tf.Tensor 的元组
+    -> Union[TFMultipleChoiceModelOutput, Tuple[tf.Tensor]]:
+        # 如果存在 input_ids，则获取选择项数量和序列长度
+        if input_ids is not None:
+            num_choices = shape_list(input_ids)[1]
+            seq_length = shape_list(input_ids)[2]
+        else:
+            # 否则，使用 inputs_embeds 获取选择项数量和序列长度
+            num_choices = shape_list(inputs_embeds)[1]
+            seq_length = shape_list(inputs_embeds)[2]
+
+        # 将 input_ids 重塑为二维张量 (-1, seq_length)，如果 input_ids 不为 None
+        flat_input_ids = tf.reshape(input_ids, (-1, seq_length)) if input_ids is not None else None
+        # 将 attention_mask 重塑为二维张量 (-1, seq_length)，如果 attention_mask 不为 None
+        flat_attention_mask = tf.reshape(attention_mask, (-1, seq_length)) if attention_mask is not None else None
+        # 将 token_type_ids 重塑为二维张量 (-1, seq_length)，如果 token_type_ids 不为 None
+        flat_token_type_ids = tf.reshape(token_type_ids, (-1, seq_length)) if token_type_ids is not None else None
+        # 将 position_ids 重塑为二维张量 (-1, seq_length)，如果 position_ids 不为 None
+        flat_position_ids = tf.reshape(position_ids, (-1, seq_length)) if position_ids is not None else None
+        # 将 langs 重塑为二维张量 (-1, seq_length)，如果 langs 不为 None
+        flat_langs = tf.reshape(langs, (-1, seq_length)) if langs is not None else None
+        # 将 inputs_embeds 重塑为三维张量 (-1, seq_length, shape_list(inputs_embeds)[3])，如果 inputs_embeds 不为 None
+        flat_inputs_embeds = (
+            tf.reshape(inputs_embeds, (-1, seq_length, shape_list(inputs_embeds)[3]))
+            if inputs_embeds is not None
+            else None
+        )
+
+        # 如果 lengths 不为 None，则发出警告并将其设为 None，因为 Flaubert 多选模型不能使用 lengths 参数，应使用 attention mask
+        if lengths is not None:
+            logger.warning(
+                "The `lengths` parameter cannot be used with the Flaubert multiple choice models. Please use the "
+                "attention mask instead.",
+            )
+            lengths = None
+
+        # 调用 transformer 方法，传递所有扁平化后的输入，获取 transformer 的输出
+        transformer_outputs = self.transformer(
+            flat_input_ids,
+            flat_attention_mask,
+            flat_langs,
+            flat_token_type_ids,
+            flat_position_ids,
+            lengths,
+            cache,
+            head_mask,
+            flat_inputs_embeds,
+            output_attentions,
+            output_hidden_states,
+            return_dict=return_dict,
+            training=training,
+        )
+        # 从 transformer_outputs 中获取第一个输出，即 transformer 的输出
+        output = transformer_outputs[0]
+        # 使用 sequence_summary 方法对输出进行汇总
+        logits = self.sequence_summary(output)
+        # 使用 logits_proj 方法对 logits 进行投影
+        logits = self.logits_proj(logits)
+        # 将 logits 重塑为二维张量 (-1, num_choices)
+        reshaped_logits = tf.reshape(logits, (-1, num_choices))
+
+        # 如果 labels 为 None，则损失为 None；否则使用 hf_compute_loss 方法计算损失
+        loss = None if labels is None else self.hf_compute_loss(labels, reshaped_logits)
+
+        # 如果不返回字典形式的结果，则将输出重塑为预期的格式
+        if not return_dict:
+            output = (reshaped_logits,) + transformer_outputs[1:]
+            return ((loss,) + output) if loss is not None else output
+
+        # 返回 TFMultipleChoiceModelOutput 对象，包含损失、logits、隐藏状态和注意力权重
+        return TFMultipleChoiceModelOutput(
+            loss=loss,
+            logits=reshaped_logits,
+            hidden_states=transformer_outputs.hidden_states,
+            attentions=transformer_outputs.attentions,
+        )
+    # 如果模型已经构建完成，则直接返回，不进行重复构建
+    if self.built:
+        return
+    # 将模型标记为已构建状态
+    self.built = True
+
+    # 如果存在 transformer 属性，对 transformer 进行构建
+    if getattr(self, "transformer", None) is not None:
+        # 在 TensorFlow 中为 transformer 创建命名空间，确保命名唯一性
+        with tf.name_scope(self.transformer.name):
+            self.transformer.build(None)
+
+    # 如果存在 sequence_summary 属性，对 sequence_summary 进行构建
+    if getattr(self, "sequence_summary", None) is not None:
+        # 在 TensorFlow 中为 sequence_summary 创建命名空间，确保命名唯一性
+        with tf.name_scope(self.sequence_summary.name):
+            self.sequence_summary.build(None)
+
+    # 如果存在 logits_proj 属性，对 logits_proj 进行构建
+    if getattr(self, "logits_proj", None) is not None:
+        # 在 TensorFlow 中为 logits_proj 创建命名空间，确保命名唯一性
+        with tf.name_scope(self.logits_proj.name):
+            # 构建 logits_proj，指定输入形状为 [None, None, self.config.num_labels]
+            self.logits_proj.build([None, None, self.config.num_labels])
 ```

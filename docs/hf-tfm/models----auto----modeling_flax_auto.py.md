@@ -1,452 +1,481 @@
-# `.\transformers\models\auto\modeling_flax_auto.py`
+# `.\models\auto\modeling_flax_auto.py`
 
-```py
-# 导入所需模块和函数
+```
+# 导入必要的模块和函数
 from collections import OrderedDict
-from ...utils import logging  # 导入相对路径下的模块
-from .auto_factory import _BaseAutoModelClass, _LazyAutoMapping, auto_class_update  # 导入相对路径下的模块和类
-from .configuration_auto import CONFIG_MAPPING_NAMES  # 导入相对路径下的模块
+# 导入日志记录器
+from ...utils import logging
+# 导入自动模型工厂相关类和函数
+from .auto_factory import _BaseAutoModelClass, _LazyAutoMapping, auto_class_update
+# 导入自动配置映射名称
+from .configuration_auto import CONFIG_MAPPING_NAMES
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义 Flax 模型到模型类的映射字典
+# 定义模型名称到类的映射字典，用OrderedDict确保顺序
 FLAX_MODEL_MAPPING_NAMES = OrderedDict(
     [
         # 基础模型映射
-        ("albert", "FlaxAlbertModel"),  # Albert 模型对应的 Flax 模型类名
-        ("bart", "FlaxBartModel"),  # Bart 模型对应的 Flax 模型类名
-        ("beit", "FlaxBeitModel"),  # Beit 模型对应的 Flax 模型类名
-        ("bert", "FlaxBertModel"),  # Bert 模型对应的 Flax 模型类名
-        ("big_bird", "FlaxBigBirdModel"),  # BigBird 模型对应的 Flax 模型类名
-        ("blenderbot", "FlaxBlenderbotModel"),  # Blenderbot 模型对应的 Flax 模型类名
-        ("blenderbot-small", "FlaxBlenderbotSmallModel"),  # Blenderbot-Small 模型对应的 Flax 模型类名
-        ("bloom", "FlaxBloomModel"),  # Bloom 模型对应的 Flax 模型类名
-        ("clip", "FlaxCLIPModel"),  # CLIP 模型对应的 Flax 模型类名
-        ("distilbert", "FlaxDistilBertModel"),  # DistilBert 模型对应的 Flax 模型类名
-        ("electra", "FlaxElectraModel"),  # Electra 模型对应的 Flax 模型类名
-        ("gpt-sw3", "FlaxGPT2Model"),  # GPT-SW3 模型对应的 Flax 模型类名
-        ("gpt2", "FlaxGPT2Model"),  # GPT2 模型对应的 Flax 模型类名
-        ("gpt_neo", "FlaxGPTNeoModel"),  # GPT-Neo 模型对应的 Flax 模型类名
-        ("gptj", "FlaxGPTJModel"),  # GPT-J 模型对应的 Flax 模型类名
-        ("llama", "FlaxLlamaModel"),  # Llama 模型对应的 Flax 模型类名
-        ("longt5", "FlaxLongT5Model"),  # LongT5 模型对应的 Flax 模型类名
-        ("marian", "FlaxMarianModel"),  # Marian 模型对应的 Flax 模型类名
-        ("mbart", "FlaxMBartModel"),  # MBart 模型对应的 Flax 模型类名
-        ("mt5", "FlaxMT5Model"),  # MT5 模型对应的 Flax 模型类名
-        ("opt", "FlaxOPTModel"),  # OPT 模型对应的 Flax 模型类名
-        ("pegasus", "FlaxPegasusModel"),  # Pegasus 模型对应的 Flax 模型类名
-        ("regnet", "FlaxRegNetModel"),  # RegNet 模型对应的 Flax 模型类名
-        ("resnet", "FlaxResNetModel"),  # ResNet 模型对应的 Flax 模型类名
-        ("roberta", "FlaxRobertaModel"),  # Roberta 模型对应的 Flax 模型类名
-        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormModel"),  # Roberta-PreLayerNorm 模型对应的 Flax 模型类名
-        ("roformer", "FlaxRoFormerModel"),  # RoFormer 模型对应的 Flax 模型类名
-        ("t5", "FlaxT5Model"),  # T5 模型对应的 Flax 模型类名
-        ("vision-text-dual-encoder", "FlaxVisionTextDualEncoderModel"),  # Vision-Text-Dual-Encoder 模型对应的 Flax 模型类名
-        ("vit", "FlaxViTModel"),  # ViT 模型对应的 Flax 模型类名
-        ("wav2vec2", "FlaxWav2Vec2Model"),  # Wav2Vec2 模型对应的 Flax 模型类名
-        ("whisper", "FlaxWhisperModel"),  # Whisper 模型对应的 Flax 模型类名
-        ("xglm", "FlaxXGLMModel"),  # XGLM 模型对应的 Flax 模型类名
-        ("xlm-roberta", "FlaxXLMRobertaModel"),  # XLM-Roberta 模型对应的 Flax 模型类名
+        ("albert", "FlaxAlbertModel"),
+        ("bart", "FlaxBartModel"),
+        ("beit", "FlaxBeitModel"),
+        ("bert", "FlaxBertModel"),
+        ("big_bird", "FlaxBigBirdModel"),
+        ("blenderbot", "FlaxBlenderbotModel"),
+        ("blenderbot-small", "FlaxBlenderbotSmallModel"),
+        ("bloom", "FlaxBloomModel"),
+        ("clip", "FlaxCLIPModel"),
+        ("distilbert", "FlaxDistilBertModel"),
+        ("electra", "FlaxElectraModel"),
+        ("gemma", "FlaxGemmaModel"),
+        ("gpt-sw3", "FlaxGPT2Model"),
+        ("gpt2", "FlaxGPT2Model"),
+        ("gpt_neo", "FlaxGPTNeoModel"),
+        ("gptj", "FlaxGPTJModel"),
+        ("llama", "FlaxLlamaModel"),
+        ("longt5", "FlaxLongT5Model"),
+        ("marian", "FlaxMarianModel"),
+        ("mbart", "FlaxMBartModel"),
+        ("mistral", "FlaxMistralModel"),
+        ("mt5", "FlaxMT5Model"),
+        ("opt", "FlaxOPTModel"),
+        ("pegasus", "FlaxPegasusModel"),
+        ("regnet", "FlaxRegNetModel"),
+        ("resnet", "FlaxResNetModel"),
+        ("roberta", "FlaxRobertaModel"),
+        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormModel"),
+        ("roformer", "FlaxRoFormerModel"),
+        ("t5", "FlaxT5Model"),
+        ("vision-text-dual-encoder", "FlaxVisionTextDualEncoderModel"),
+        ("vit", "FlaxViTModel"),
+        ("wav2vec2", "FlaxWav2Vec2Model"),
+        ("whisper", "FlaxWhisperModel"),
+        ("xglm", "FlaxXGLMModel"),
+        ("xlm-roberta", "FlaxXLMRobertaModel"),
     ]
 )
 
+# 定义用于预训练任务的模型名称到类的映射字典，初始化为空OrderedDict
 FLAX_MODEL_FOR_PRETRAINING_MAPPING_NAMES = OrderedDict(
     [
-        # 模型名称与对应的 Flax 模型类的映射关系
-        ("albert", "FlaxAlbertForPreTraining"),  # Albert 模型对应的预训练类
-        ("bart", "FlaxBartForConditionalGeneration"),  # Bart 模型对应的条件生成类
-        ("bert", "FlaxBertForPreTraining"),  # Bert 模型对应的预训练类
-        ("big_bird", "FlaxBigBirdForPreTraining"),  # BigBird 模型对应的预训练类
-        ("electra", "FlaxElectraForPreTraining"),  # Electra 模型对应的预训练类
-        ("longt5", "FlaxLongT5ForConditionalGeneration"),  # LongT5 模型对应的条件生成类
-        ("mbart", "FlaxMBartForConditionalGeneration"),  # MBart 模型对应的条件生成类
-        ("mt5", "FlaxMT5ForConditionalGeneration"),  # MT5 模型对应的条件生成类
-        ("roberta", "FlaxRobertaForMaskedLM"),  # Roberta 模型对应的 Masked LM 类
-        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMaskedLM"),  # Roberta 模型对应的预层归一化的 Masked LM 类
-        ("roformer", "FlaxRoFormerForMaskedLM"),  # RoFormer 模型对应的 Masked LM 类
-        ("t5", "FlaxT5ForConditionalGeneration"),  # T5 模型对应的条件生成类
-        ("wav2vec2", "FlaxWav2Vec2ForPreTraining"),  # Wav2Vec2 模型对应的预训练类
-        ("whisper", "FlaxWhisperForConditionalGeneration"),  # Whisper 模型对应的条件生成类
-        ("xlm-roberta", "FlaxXLMRobertaForMaskedLM"),  # XLM-Roberta 模型对应的 Masked LM 类
+        # 预训练模型到 Flax 模型类的映射关系列表
+    
+        # ("albert", "FlaxAlbertForPreTraining") 表示将 "albert" 映射到 Flax 中的 FlaxAlbertForPreTraining 类
+        ("albert", "FlaxAlbertForPreTraining"),
+    
+        # ("bart", "FlaxBartForConditionalGeneration") 表示将 "bart" 映射到 Flax 中的 FlaxBartForConditionalGeneration 类
+        ("bart", "FlaxBartForConditionalGeneration"),
+    
+        # ("bert", "FlaxBertForPreTraining") 表示将 "bert" 映射到 Flax 中的 FlaxBertForPreTraining 类
+        ("bert", "FlaxBertForPreTraining"),
+    
+        # ("big_bird", "FlaxBigBirdForPreTraining") 表示将 "big_bird" 映射到 Flax 中的 FlaxBigBirdForPreTraining 类
+        ("big_bird", "FlaxBigBirdForPreTraining"),
+    
+        # ("electra", "FlaxElectraForPreTraining") 表示将 "electra" 映射到 Flax 中的 FlaxElectraForPreTraining 类
+        ("electra", "FlaxElectraForPreTraining"),
+    
+        # ("longt5", "FlaxLongT5ForConditionalGeneration") 表示将 "longt5" 映射到 Flax 中的 FlaxLongT5ForConditionalGeneration 类
+        ("longt5", "FlaxLongT5ForConditionalGeneration"),
+    
+        # ("mbart", "FlaxMBartForConditionalGeneration") 表示将 "mbart" 映射到 Flax 中的 FlaxMBartForConditionalGeneration 类
+        ("mbart", "FlaxMBartForConditionalGeneration"),
+    
+        # ("mt5", "FlaxMT5ForConditionalGeneration") 表示将 "mt5" 映射到 Flax 中的 FlaxMT5ForConditionalGeneration 类
+        ("mt5", "FlaxMT5ForConditionalGeneration"),
+    
+        # ("roberta", "FlaxRobertaForMaskedLM") 表示将 "roberta" 映射到 Flax 中的 FlaxRobertaForMaskedLM 类
+        ("roberta", "FlaxRobertaForMaskedLM"),
+    
+        # ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMaskedLM") 表示将 "roberta-prelayernorm" 映射到 Flax 中的 FlaxRobertaPreLayerNormForMaskedLM 类
+        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMaskedLM"),
+    
+        # ("roformer", "FlaxRoFormerForMaskedLM") 表示将 "roformer" 映射到 Flax 中的 FlaxRoFormerForMaskedLM 类
+        ("roformer", "FlaxRoFormerForMaskedLM"),
+    
+        # ("t5", "FlaxT5ForConditionalGeneration") 表示将 "t5" 映射到 Flax 中的 FlaxT5ForConditionalGeneration 类
+        ("t5", "FlaxT5ForConditionalGeneration"),
+    
+        # ("wav2vec2", "FlaxWav2Vec2ForPreTraining") 表示将 "wav2vec2" 映射到 Flax 中的 FlaxWav2Vec2ForPreTraining 类
+        ("wav2vec2", "FlaxWav2Vec2ForPreTraining"),
+    
+        # ("whisper", "FlaxWhisperForConditionalGeneration") 表示将 "whisper" 映射到 Flax 中的 FlaxWhisperForConditionalGeneration 类
+        ("whisper", "FlaxWhisperForConditionalGeneration"),
+    
+        # ("xlm-roberta", "FlaxXLMRobertaForMaskedLM") 表示将 "xlm-roberta" 映射到 Flax 中的 FlaxXLMRobertaForMaskedLM 类
+        ("xlm-roberta", "FlaxXLMRobertaForMaskedLM"),
     ]
-# 定义一个有序字典，用于存储模型名称到对应的 Flax 模型类的映射
-
-# 用于 Masked LM 的模型名称到 Flax 模型类的映射
+# 带有模型名称到对应 Flax 模型类的映射字典，用于 Masked LM 模型
 FLAX_MODEL_FOR_MASKED_LM_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Masked LM mapping
-        ("albert", "FlaxAlbertForMaskedLM"),  # 阿尔伯特模型的映射
-        ("bart", "FlaxBartForConditionalGeneration"),  # 巴特模型的映射
-        ("bert", "FlaxBertForMaskedLM"),  # BERT 模型的映射
-        ("big_bird", "FlaxBigBirdForMaskedLM"),  # 大鸟模型的映射
-        ("distilbert", "FlaxDistilBertForMaskedLM"),  # DistilBERT 模型的映射
-        ("electra", "FlaxElectraForMaskedLM"),  # ELECTRA 模型的映射
-        ("mbart", "FlaxMBartForConditionalGeneration"),  # MBART 模型的映射
-        ("roberta", "FlaxRobertaForMaskedLM"),  # RoBERTa 模型的映射
-        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMaskedLM"),  # RoBERTa 预层归一化模型的映射
-        ("roformer", "FlaxRoFormerForMaskedLM"),  # RoFormer 模型的映射
-        ("xlm-roberta", "FlaxXLMRobertaForMaskedLM"),  # XLM-RoBERTa 模型的映射
+        # 模型为 Masked LM 时的映射
+        ("albert", "FlaxAlbertForMaskedLM"),
+        ("bart", "FlaxBartForConditionalGeneration"),
+        ("bert", "FlaxBertForMaskedLM"),
+        ("big_bird", "FlaxBigBirdForMaskedLM"),
+        ("distilbert", "FlaxDistilBertForMaskedLM"),
+        ("electra", "FlaxElectraForMaskedLM"),
+        ("mbart", "FlaxMBartForConditionalGeneration"),
+        ("roberta", "FlaxRobertaForMaskedLM"),
+        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMaskedLM"),
+        ("roformer", "FlaxRoFormerForMaskedLM"),
+        ("xlm-roberta", "FlaxXLMRobertaForMaskedLM"),
     ]
 )
 
-# 用于 Seq2Seq Causal LM 的模型名称到 Flax 模型类的映射
+# 带有模型名称到对应 Flax 模型类的映射字典，用于 Seq2Seq Causal LM 模型
 FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Seq2Seq Causal LM mapping
-        ("bart", "FlaxBartForConditionalGeneration"),  # 巴特模型的映射
-        ("blenderbot", "FlaxBlenderbotForConditionalGeneration"),  # Blenderbot 模型的映射
-        ("blenderbot-small", "FlaxBlenderbotSmallForConditionalGeneration"),  # 小型 Blenderbot 模型的映射
-        ("encoder-decoder", "FlaxEncoderDecoderModel"),  # 编码解码器模型的映射
-        ("longt5", "FlaxLongT5ForConditionalGeneration"),  # LongT5 模型的映射
-        ("marian", "FlaxMarianMTModel"),  # Marian 模型的映射
-        ("mbart", "FlaxMBartForConditionalGeneration"),  # MBART 模型的映射
-        ("mt5", "FlaxMT5ForConditionalGeneration"),  # MT5 模型的映射
-        ("pegasus", "FlaxPegasusForConditionalGeneration"),  # Pegasus 模型的映射
-        ("t5", "FlaxT5ForConditionalGeneration"),  # T5 模型的映射
+        # 模型为 Seq2Seq Causal LM 时的映射
+        ("bart", "FlaxBartForConditionalGeneration"),
+        ("blenderbot", "FlaxBlenderbotForConditionalGeneration"),
+        ("blenderbot-small", "FlaxBlenderbotSmallForConditionalGeneration"),
+        ("encoder-decoder", "FlaxEncoderDecoderModel"),
+        ("longt5", "FlaxLongT5ForConditionalGeneration"),
+        ("marian", "FlaxMarianMTModel"),
+        ("mbart", "FlaxMBartForConditionalGeneration"),
+        ("mt5", "FlaxMT5ForConditionalGeneration"),
+        ("pegasus", "FlaxPegasusForConditionalGeneration"),
+        ("t5", "FlaxT5ForConditionalGeneration"),
     ]
 )
 
-# 用于图像分类的模型名称到 Flax 模型类的映射
+# 带有模型名称到对应 Flax 模型类的映射字典，用于图像分类模型
 FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Image-classsification
-        ("beit", "FlaxBeitForImageClassification"),  # BEiT 模型的映射
-        ("regnet", "FlaxRegNetForImageClassification"),  # RegNet 模型的映射
-        ("resnet", "FlaxResNetForImageClassification"),  # ResNet 模型的映射
-        ("vit", "FlaxViTForImageClassification"),  # ViT 模型的映射
+        # 图像分类模型的映射
+        ("beit", "FlaxBeitForImageClassification"),
+        ("regnet", "FlaxRegNetForImageClassification"),
+        ("resnet", "FlaxResNetForImageClassification"),
+        ("vit", "FlaxViTForImageClassification"),
     ]
 )
 
-# 用于 Vision 2 Seq 的模型名称到 Flax 模型类的映射
+# 带有模型名称到对应 Flax 模型类的映射字典，用于 Vision 2 Seq 模型
 FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES = OrderedDict(
     [
-        ("vision-encoder-decoder", "FlaxVisionEncoderDecoderModel"),  # 视觉编码解码器模型的映射
+        ("vision-encoder-decoder", "FlaxVisionEncoderDecoderModel"),
     ]
 )
 
-# 用于 Causal LM 的模型名称到 Flax 模型类的映射
+# 带有模型名称到对应 Flax 模型类的映射字典，用于 Causal LM 模型
 FLAX_MODEL_FOR_CAUSAL_LM_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Causal LM mapping
-        ("bart", "FlaxBartForCausalLM"),  # 巴特模型的映射
-        ("bert", "FlaxBertForCausalLM"),  # BERT 模型的映射
-        ("big_bird", "FlaxBigBirdForCausalLM"),  # 大鸟模型的映射
-        ("bloom", "FlaxBloomForCausalLM"),  # Bloom 模型的映射
-        ("electra", "FlaxElectraForCausalLM"),  # ELECTRA 模型的映射
-        ("gpt-sw3", "FlaxGPT2LMHeadModel"),  # GPT-SW3 模型的映射
-        ("gpt2", "FlaxGPT2LMHeadModel"),  # GPT2 模型的映射
-        ("gpt_neo", "FlaxGPTNeoForCausalLM"),  # GPT-Neo 模型的映射
-        ("gptj", "FlaxGPTJForCausalLM"),  # GPT-J 模型的映射
-        ("llama", "FlaxLlamaForCausalLM"),  # Llama 模型的映射
-        ("opt", "FlaxOPTForCausalLM"),  # OPT 模型的映射
-        ("roberta", "FlaxRobertaForCausalLM"),  # RoBERTa 模型的映射
-        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForCausalLM"),  # RoBERTa 预层归一化模型的映射
-        ("xglm", "FlaxXGLMForCausalLM"),  # XGLM 模型的映射
-        ("xlm-roberta", "FlaxXLMRobertaForCausalLM"),  # XLM-RoBERTa 模型的映射
+        # 模型为 Causal LM 时的映射
+        ("bart", "FlaxBartForCausalLM"),
+        ("bert", "FlaxBertForCausalLM"),
+        ("big_bird", "FlaxBigBirdForCausalLM"),
+        ("bloom", "FlaxBloomForCausalLM"),
+        ("electra", "FlaxElectraForCausalLM"),
+        ("gemma", "FlaxGemmaForCausalLM"),
+        ("gpt-sw3", "FlaxGPT2LMHeadModel"),
+        ("gpt2", "FlaxGPT2LMHeadModel"),
+        ("gpt_neo", "FlaxGPTNeoForCausalLM"),
+        ("gptj", "FlaxGPTJForCausalLM"),
+        ("llama", "FlaxLlamaForCausalLM"),
+        ("mistral", "FlaxMistralForCausalLM"),
+        ("opt", "FlaxOPTForCausalLM"),
+        ("roberta", "FlaxRobertaForCausalLM"),
+        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForCausalLM"),
+        ("xglm", "FlaxXGLMForCausalLM"),
+        ("xlm-roberta", "FlaxXLMRobertaForCausalLM"),
     ]
 )
 
-# 用于序列分类的模型名称到 Fl
-    # 用于序列分类任务的模型映射
-    (
-        # 使用 ALBERT 模型的类
-        "albert", "FlaxAlbertForSequenceClassification"
-    ),
-    (
-        # 使用 BART 模型的类
-        "bart", "FlaxBartForSequenceClassification"
-    ),
-    (
-        # 使用 BERT 模型的类
-        "bert", "FlaxBertForSequenceClassification"
-    ),
-    (
-        # 使用 BigBird 模型的类
-        "big_bird", "FlaxBigBirdForSequenceClassification"
-    ),
-    (
-        # 使用 DistilBERT 模型的类
-        "distilbert", "FlaxDistilBertForSequenceClassification"
-    ),
-    (
-        # 使用 Electra 模型的类
-        "electra", "FlaxElectraForSequenceClassification"
-    ),
-    (
-        # 使用 MBART 模型的类
-        "mbart", "FlaxMBartForSequenceClassification"
-    ),
-    (
-        # 使用 RoBERTa 模型的类
-        "roberta", "FlaxRobertaForSequenceClassification"
-    ),
-    (
-        # 使用预层归一化的 RoBERTa 模型的类
-        "roberta-prelayernorm", "FlaxRobertaPreLayerNormForSequenceClassification"
-    ),
-    (
-        # 使用 RoFormer 模型的类
-        "roformer", "FlaxRoFormerForSequenceClassification"
-    ),
-    (
-        # 使用 XLM-RoBERTa 模型的类
-        "xlm-roberta", "FlaxXLMRobertaForSequenceClassification"
-    ),
-# 导入OrderedDict模块，用于创建有序字典
-from collections import OrderedDict
-
-# 创建用于问答任务的模型名称映射字典
+# 带有模型名称到对应 Flax 模型类的映射字典，用于序列分类模型
+FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
+    [
+        # 定义了一系列元组，每个元组包含两个字符串：
+        # 第一个字符串是模型的名称，第二个字符串是用于该模型的序列分类任务的类名
+        ("albert", "FlaxAlbertForSequenceClassification"),
+        ("bart", "FlaxBartForSequenceClassification"),
+        ("bert", "FlaxBertForSequenceClassification"),
+        ("big_bird", "FlaxBigBirdForSequenceClassification"),
+        ("distilbert", "FlaxDistilBertForSequenceClassification"),
+        ("electra", "FlaxElectraForSequenceClassification"),
+        ("mbart", "FlaxMBartForSequenceClassification"),
+        ("roberta", "FlaxRobertaForSequenceClassification"),
+        ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForSequenceClassification"),
+        ("roformer", "FlaxRoFormerForSequenceClassification"),
+        ("xlm-roberta", "FlaxXLMRobertaForSequenceClassification"),
+    ]
+# 定义用于问题回答的模型名称映射字典
 FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING_NAMES = OrderedDict(
     [
-        # 对于问答任务的模型名称映射
+        # 将 "albert" 映射到 FlaxAlbertForQuestionAnswering
         ("albert", "FlaxAlbertForQuestionAnswering"),
+        # 将 "bart" 映射到 FlaxBartForQuestionAnswering
         ("bart", "FlaxBartForQuestionAnswering"),
+        # 将 "bert" 映射到 FlaxBertForQuestionAnswering
         ("bert", "FlaxBertForQuestionAnswering"),
+        # 将 "big_bird" 映射到 FlaxBigBirdForQuestionAnswering
         ("big_bird", "FlaxBigBirdForQuestionAnswering"),
+        # 将 "distilbert" 映射到 FlaxDistilBertForQuestionAnswering
         ("distilbert", "FlaxDistilBertForQuestionAnswering"),
+        # 将 "electra" 映射到 FlaxElectraForQuestionAnswering
         ("electra", "FlaxElectraForQuestionAnswering"),
+        # 将 "mbart" 映射到 FlaxMBartForQuestionAnswering
         ("mbart", "FlaxMBartForQuestionAnswering"),
+        # 将 "roberta" 映射到 FlaxRobertaForQuestionAnswering
         ("roberta", "FlaxRobertaForQuestionAnswering"),
+        # 将 "roberta-prelayernorm" 映射到 FlaxRobertaPreLayerNormForQuestionAnswering
         ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForQuestionAnswering"),
+        # 将 "roformer" 映射到 FlaxRoFormerForQuestionAnswering
         ("roformer", "FlaxRoFormerForQuestionAnswering"),
+        # 将 "xlm-roberta" 映射到 FlaxXLMRobertaForQuestionAnswering
         ("xlm-roberta", "FlaxXLMRobertaForQuestionAnswering"),
     ]
 )
 
-# 创建用于标记分类任务的模型名称映射字典
+# 定义用于标记分类的模型名称映射字典
 FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # 对于标记分类任务的模型名称映射
+        # 将 "albert" 映射到 FlaxAlbertForTokenClassification
         ("albert", "FlaxAlbertForTokenClassification"),
+        # 将 "bert" 映射到 FlaxBertForTokenClassification
         ("bert", "FlaxBertForTokenClassification"),
+        # 将 "big_bird" 映射到 FlaxBigBirdForTokenClassification
         ("big_bird", "FlaxBigBirdForTokenClassification"),
+        # 将 "distilbert" 映射到 FlaxDistilBertForTokenClassification
         ("distilbert", "FlaxDistilBertForTokenClassification"),
+        # 将 "electra" 映射到 FlaxElectraForTokenClassification
         ("electra", "FlaxElectraForTokenClassification"),
+        # 将 "roberta" 映射到 FlaxRobertaForTokenClassification
         ("roberta", "FlaxRobertaForTokenClassification"),
+        # 将 "roberta-prelayernorm" 映射到 FlaxRobertaPreLayerNormForTokenClassification
         ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForTokenClassification"),
+        # 将 "roformer" 映射到 FlaxRoFormerForTokenClassification
         ("roformer", "FlaxRoFormerForTokenClassification"),
+        # 将 "xlm-roberta" 映射到 FlaxXLMRobertaForTokenClassification
         ("xlm-roberta", "FlaxXLMRobertaForTokenClassification"),
     ]
 )
 
-# 创建用于多项选择任务的模型名称映射字典
+# 定义用于多项选择的模型名称映射字典
 FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES = OrderedDict(
     [
-        # 对于多项选择任务的模型名称映射
+        # 将 "albert" 映射到 FlaxAlbertForMultipleChoice
         ("albert", "FlaxAlbertForMultipleChoice"),
+        # 将 "bert" 映射到 FlaxBertForMultipleChoice
         ("bert", "FlaxBertForMultipleChoice"),
+        # 将 "big_bird" 映射到 FlaxBigBirdForMultipleChoice
         ("big_bird", "FlaxBigBirdForMultipleChoice"),
+        # 将 "distilbert" 映射到 FlaxDistilBertForMultipleChoice
         ("distilbert", "FlaxDistilBertForMultipleChoice"),
+        # 将 "electra" 映射到 FlaxElectraForMultipleChoice
         ("electra", "FlaxElectraForMultipleChoice"),
+        # 将 "roberta" 映射到 FlaxRobertaForMultipleChoice
         ("roberta", "FlaxRobertaForMultipleChoice"),
+        # 将 "roberta-prelayernorm" 映射到 FlaxRobertaPreLayerNormForMultipleChoice
         ("roberta-prelayernorm", "FlaxRobertaPreLayerNormForMultipleChoice"),
+        # 将 "roformer" 映射到 FlaxRoFormerForMultipleChoice
         ("roformer", "FlaxRoFormerForMultipleChoice"),
+        # 将 "xlm-roberta" 映射到 FlaxXLMRobertaForMultipleChoice
         ("xlm-roberta", "FlaxXLMRobertaForMultipleChoice"),
     ]
 )
 
-# 创建用于下一句预测任务的模型名称映射字典
+# 定义用于下一个句子预测的模型名称映射字典
 FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING_NAMES = OrderedDict(
     [
-        # 对于下一句预测任务的模型名称映射
+        # 将 "bert" 映射到 FlaxBertForNextSentencePrediction
         ("bert", "FlaxBertForNextSentencePrediction"),
     ]
 )
 
-# 创建用于语音序列到序列任务的模型名称映射字典
+# 定义用于语音序列到序列的模型名称映射字典
 FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES = OrderedDict(
     [
-        # 对于语音序列到序列任务的模型名称映射
+        # 将 "speech-encoder-decoder" 映射到 FlaxSpeechEncoderDecoderModel
         ("speech-encoder-decoder", "FlaxSpeechEncoderDecoderModel"),
+        # 将 "whisper" 映射到 FlaxWhisperForConditionalGeneration
         ("whisper", "FlaxWhisperForConditionalGeneration"),
     ]
 )
 
-# 创建用于音频分类任务的模型名称映射字典
+# 定义用于音频分类的模型名称映射字典
 FLAX_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # 对于音频分类任务的模型名称映射
+        # 将 "whisper" 映射到 FlaxWhisperForAudioClassification
         ("whisper", "FlaxWhisperForAudioClassification"),
     ]
 )
 
-# 创建懒加载模型映射对象，用于预训练任务
+# 定义 Flax 模型映射对象，通过 LazyAutoMapping 进行自动映射
 FLAX_MODEL_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_MAPPING_NAMES)
-# 创建懒加载模型映射对象，用于预训练模型
+# 定义用于预训练的 Flax 模型映射对象
 FLAX_MODEL_FOR_PRETRAINING_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_PRETRAINING_MAPPING_NAMES)
-# 创建懒加载模型映射对象，用于遮盖语言建模任务
+# 定义用于遮盖语言模型的 Flax 模型映射对象
 FLAX_MODEL_FOR_MASKED_LM_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_MASKED_LM_MAPPING_NAMES)
-# 创建懒加载模型映射对象，用于序列到序列因果语言建模任务
-FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING = _LazyAutoMapping(
-    # 导入 CONFIG_MAPPING_NAMES 和 FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
+# 定义用于序列到序列因果语言模型的 Flax 模型映射对象
+FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES)
+    # 导入两个变量：CONFIG_MAPPING_NAMES 和 FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
-# 创建一个 LazyAutoMapping 对象，用于映射图像分类模型配置和模型类名
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING 映射
 FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射视觉到序列模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING 映射
 FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES)
-# 创建一个 LazyAutoMapping 对象，用于映射因果语言模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_CAUSAL_LM_MAPPING 映射
 FLAX_MODEL_FOR_CAUSAL_LM_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_CAUSAL_LM_MAPPING_NAMES)
-# 创建一个 LazyAutoMapping 对象，用于映射序列分类模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING 映射
 FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射问答模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING 映射
 FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射标记分类模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING 映射
 FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射多项选择模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING 映射
 FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射下一句预测模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING 映射
 FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射语音序列到序列模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING 映射
 FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES
 )
-# 创建一个 LazyAutoMapping 对象，用于映射音频分类模型配置和模型类名
+
+# 使用 _LazyAutoMapping 类创建 FLAX_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING 映射
 FLAX_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, FLAX_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES
 )
 
-# 创建 FlaxAutoModel 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModel 类，并将 _model_mapping 设置为 FLAX_MODEL_MAPPING
 class FlaxAutoModel(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_MAPPING
     _model_mapping = FLAX_MODEL_MAPPING
 
-# 更新 FlaxAutoModel 类
+# 使用 auto_class_update 函数更新 FlaxAutoModel
 FlaxAutoModel = auto_class_update(FlaxAutoModel)
 
-# 创建 FlaxAutoModelForPreTraining 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForPreTraining 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_PRETRAINING_MAPPING
 class FlaxAutoModelForPreTraining(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_PRETRAINING_MAPPING
     _model_mapping = FLAX_MODEL_FOR_PRETRAINING_MAPPING
 
-# 更新 FlaxAutoModelForPreTraining 类，添加文档字符串指定为预训练模型
+# 使用 auto_class_update 函数更新 FlaxAutoModelForPreTraining，并设置头部文档为 "pretraining"
 FlaxAutoModelForPreTraining = auto_class_update(FlaxAutoModelForPreTraining, head_doc="pretraining")
 
-# 创建 FlaxAutoModelForCausalLM 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForCausalLM 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_CAUSAL_LM_MAPPING
 class FlaxAutoModelForCausalLM(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_CAUSAL_LM_MAPPING
     _model_mapping = FLAX_MODEL_FOR_CAUSAL_LM_MAPPING
 
-# 更新 FlaxAutoModelForCausalLM 类，添加文档字符串指定为因果语言建模
+# 使用 auto_class_update 函数更新 FlaxAutoModelForCausalLM，并设置头部文档为 "causal language modeling"
 FlaxAutoModelForCausalLM = auto_class_update(FlaxAutoModelForCausalLM, head_doc="causal language modeling")
 
-# 创建 FlaxAutoModelForMaskedLM 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForMaskedLM 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_MASKED_LM_MAPPING
 class FlaxAutoModelForMaskedLM(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_MASKED_LM_MAPPING
     _model_mapping = FLAX_MODEL_FOR_MASKED_LM_MAPPING
 
-# 更新 FlaxAutoModelForMaskedLM 类，添加文档字符串指定为掩码语言建模
+# 使用 auto_class_update 函数更新 FlaxAutoModelForMaskedLM，并设置头部文档为 "masked language modeling"
 FlaxAutoModelForMaskedLM = auto_class_update(FlaxAutoModelForMaskedLM, head_doc="masked language modeling")
 
-# 创建 FlaxAutoModelForSeq2SeqLM 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForSeq2SeqLM 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
 class FlaxAutoModelForSeq2SeqLM(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
     _model_mapping = FLAX_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
 
-# 更新 FlaxAutoModelForSeq2SeqLM 类，添加文档字符串指定为序列到序列语言建模，示例使用 t5-base 检查点
+# 使用 auto_class_update 函数更新 FlaxAutoModelForSeq2SeqLM，并设置头部文档为 "sequence-to-sequence language modeling"，以及示例检查点为 "google-t5/t5-base"
 FlaxAutoModelForSeq2SeqLM = auto_class_update(
-    FlaxAutoModelForSeq2SeqLM, head_doc="sequence-to-sequence language modeling", checkpoint_for_example="t5-base"
+    FlaxAutoModelForSeq2SeqLM,
+    head_doc="sequence-to-sequence language modeling",
+    checkpoint_for_example="google-t5/t5-base",
 )
 
-# 创建 FlaxAutoModelForSequenceClassification 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForSequenceClassification 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING
 class FlaxAutoModelForSequenceClassification(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING
     _model_mapping = FLAX_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING
 
-# 更新 FlaxAutoModelForSequenceClassification 类，添加文档字符串指定为序列分类
+# 使用 auto_class_update 函数更新 FlaxAutoModelForSequenceClassification，并设置头部文档为 "sequence classification"
 FlaxAutoModelForSequenceClassification = auto_class_update(
     FlaxAutoModelForSequenceClassification, head_doc="sequence classification"
 )
 
-# 创建 FlaxAutoModelForQuestionAnswering 类，继承自 _BaseAutoModelClass
+# 定义 FlaxAutoModelForQuestionAnswering 类，并将 _model_mapping 设置为 FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING
 class FlaxAutoModelForQuestionAnswering(_BaseAutoModelClass):
-    # 定义模型映射属性为 FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING
     _model_mapping = FLAX_MODEL_FOR_QUESTION_ANSWERING_MAPPING
 
-# 更新 FlaxAutoModelForQuestionAnswering 类，添加文档字符串指定为问答
+# 使用 auto_class_update 函数更新 FlaxAutoModelForQuestionAnswering，并设置头部文档为 "question answering"
 FlaxAutoModelForQuestionAnswering = auto_class_update(FlaxAutoModelForQuestionAnswering, head_doc="question answering")
+# 定义用于标记分类任务的自动化模型类
 class FlaxAutoModelForTokenClassification(_BaseAutoModelClass):
+    # 指定模型映射到标记分类任务的类别
     _model_mapping = FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
 
-定义了一个名为`FlaxAutoModelForTokenClassification`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING`。
 
-
+# 更新标记分类任务模型类，添加头部文档说明为"token classification"
 FlaxAutoModelForTokenClassification = auto_class_update(
     FlaxAutoModelForTokenClassification, head_doc="token classification"
 )
 
-将`FlaxAutoModelForTokenClassification`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"token classification"，表示这个模型用于标记分类任务。
 
-
+# 定义用于多项选择任务的自动化模型类
 class FlaxAutoModelForMultipleChoice(_BaseAutoModelClass):
+    # 指定模型映射到多项选择任务的类别
     _model_mapping = FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING
 
-定义了一个名为`FlaxAutoModelForMultipleChoice`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_MULTIPLE_CHOICE_MAPPING`。
 
-
+# 更新多项选择任务模型类，添加头部文档说明为"multiple choice"
 FlaxAutoModelForMultipleChoice = auto_class_update(FlaxAutoModelForMultipleChoice, head_doc="multiple choice")
 
-将`FlaxAutoModelForMultipleChoice`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"multiple choice"，表示这个模型用于多项选择任务。
 
-
+# 定义用于下一句预测任务的自动化模型类
 class FlaxAutoModelForNextSentencePrediction(_BaseAutoModelClass):
+    # 指定模型映射到下一句预测任务的类别
     _model_mapping = FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING
 
-定义了一个名为`FlaxAutoModelForNextSentencePrediction`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING`。
 
-
+# 更新下一句预测任务模型类，添加头部文档说明为"next sentence prediction"
 FlaxAutoModelForNextSentencePrediction = auto_class_update(
     FlaxAutoModelForNextSentencePrediction, head_doc="next sentence prediction"
 )
 
-将`FlaxAutoModelForNextSentencePrediction`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"next sentence prediction"，表示这个模型用于下一个句子预测任务。
 
-
+# 定义用于图像分类任务的自动化模型类
 class FlaxAutoModelForImageClassification(_BaseAutoModelClass):
+    # 指定模型映射到图像分类任务的类别
     _model_mapping = FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING
 
-定义了一个名为`FlaxAutoModelForImageClassification`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING`。
 
-
+# 更新图像分类任务模型类，添加头部文档说明为"image classification"
 FlaxAutoModelForImageClassification = auto_class_update(
     FlaxAutoModelForImageClassification, head_doc="image classification"
 )
 
-将`FlaxAutoModelForImageClassification`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"image classification"，表示这个模型用于图像分类任务。
 
-
+# 定义用于视觉到文本建模任务的自动化模型类
 class FlaxAutoModelForVision2Seq(_BaseAutoModelClass):
+    # 指定模型映射到视觉到文本建模任务的类别
     _model_mapping = FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING
 
-定义了一个名为`FlaxAutoModelForVision2Seq`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_VISION_2_SEQ_MAPPING`。
 
-
+# 更新视觉到文本建模任务模型类，添加头部文档说明为"vision-to-text modeling"
 FlaxAutoModelForVision2Seq = auto_class_update(FlaxAutoModelForVision2Seq, head_doc="vision-to-text modeling")
 
-将`FlaxAutoModelForVision2Seq`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"vision-to-text modeling"，表示这个模型用于视觉到文本建模任务。
 
-
+# 定义用于语音序列到序列建模任务的自动化模型类
 class FlaxAutoModelForSpeechSeq2Seq(_BaseAutoModelClass):
+    # 指定模型映射到语音序列到序列建模任务的类别
     _model_mapping = FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING
 
-定义了一个名为`FlaxAutoModelForSpeechSeq2Seq`的类，继承自`_BaseAutoModelClass`类。该类具有一个属性`_model_mapping`，其值为`FLAX_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING`。
 
-
+# 更新语音序列到序列建模任务模型类，添加头部文档说明为"sequence-to-sequence speech-to-text modeling"
 FlaxAutoModelForSpeechSeq2Seq = auto_class_update(
     FlaxAutoModelForSpeechSeq2Seq, head_doc="sequence-to-sequence speech-to-text modeling"
 )
-
-将`FlaxAutoModelForSpeechSeq2Seq`类传递给`auto_class_update`函数，该函数会返回一个更新后的类。在更新后的类中，添加了一个名为`head_doc`的参数，其值为字符串"sequence-to-sequence speech-to-text modeling"，表示这个模型用于序列到序列的语音到文本建模任务。
 ```

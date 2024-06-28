@@ -1,15 +1,20 @@
-# `.\transformers\models\markuplm\tokenization_markuplm_fast.py`
+# `.\models\markuplm\tokenization_markuplm_fast.py`
 
-```py
-# 设置文件编码
-# 版权声明
-# 根据Apache许可证2.0版发布，仅允许在遵守许可证的情况下使用该文件
-# 可在以下网址获取许可证副本
+```
+# 设置文件编码格式为 UTF-8
+# 版权声明：2022 年 HuggingFace Inc. 团队所有
+#
+# 根据 Apache 许可证 2.0 版本使用本文件；
+# 除非符合许可证的规定，否则不得使用本文件。
+# 您可以在以下网址获取许可证的副本：
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 如果适用法律或书面同意要求，软件将按"现状"分发，没有任何形式的担保或条件，无论是明示的还是默示的
-# 请查看特定语言的许可证，以了解权限和限制
+#
+# 除非适用法律要求或书面同意，否则本软件是基于"原样"分发的，无论明示或默示的保证或条件。
+# 有关详细信息，请参阅许可证。
 """
-MARKUPLM的快速标记类。它覆盖了慢速标记器类的2个方法，即_batch_encode_plus和_encode_plus，在其中使用了Rust标记器。
+MarkupLM 的快速标记类。它重写了慢速标记器类的两个方法，即 _batch_encode_plus 和 _encode_plus，
+在这些方法中使用了 Rust 标记器。
 """
 
 import json
@@ -18,8 +23,9 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from tokenizers import pre_tokenizers, processors
 
-# 导入文件工具和其他标记化类
+# 导入文件工具和常量定义
 from ...file_utils import PaddingStrategy, TensorType, add_end_docstrings
+# 导入基础标记工具类
 from ...tokenization_utils_base import (
     ENCODE_KWARGS_DOCSTRING,
     AddedToken,
@@ -30,17 +36,20 @@ from ...tokenization_utils_base import (
     TextInputPair,
     TruncationStrategy,
 )
+# 导入快速标记工具类
 from ...tokenization_utils_fast import PreTrainedTokenizerFast
+# 导入日志工具
 from ...utils import logging
+# 导入特定的标记化类
 from .tokenization_markuplm import MARKUPLM_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING, MarkupLMTokenizer
 
-# 获取日志记录器对象
+# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义标记文件的名称
+# 定义词汇文件的名称映射
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.json", "merges_file": "merges.txt", "tokenizer_file": "tokenizer.json"}
 
-# 预训练标记文件的映射字典
+# 定义预训练模型的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "microsoft/markuplm-base": "https://huggingface.co/microsoft/markuplm-base/resolve/main/vocab.json",
@@ -52,119 +61,103 @@ PRETRAINED_VOCAB_FILES_MAP = {
     },
 }
 
-# 预训练位置嵌入大小的映射字典
+# 定义预训练位置嵌入的尺寸映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "microsoft/markuplm-base": 512,
     "microsoft/markuplm-large": 512,
 }
 
-# 用LRU缓存装饰器缓存函数的返回值
 @lru_cache()
 def bytes_to_unicode():
     """
-    Returns list of utf-8 byte and a mapping to unicode strings. We specifically avoids mapping to whitespace/control
-    characters the bpe code barfs on. The reversible bpe codes work on unicode strings. This means you need a large #
-    of unicode characters in your vocab if you want to avoid UNKs. When you're at something like a 10B token dataset
-    you end up needing around 5K for decent coverage. This is a significant percentage of your normal, say, 32K bpe
-    vocab. To avoid that, we want lookup tables between utf-8 bytes and unicode strings.
+    返回 utf-8 字节列表及其映射到 unicode 字符串的映射表。我们特别避免映射到空格或控制字符，以免在 bpe 编码时出错。
+    可逆的 bpe 编码适用于 unicode 字符串。这意味着如果您希望避免 UNKs，您需要在词汇中包含大量的 unicode 字符。
+    当您处理类似 10B 令牌数据集时，您可能需要约 5K 个 unicode 字符以获得良好的覆盖率。
+    这相当于正常 32K bpe 词汇表的显著比例。为了避免这种情况，我们希望在 utf-8 字节和 unicode 字符串之间建立查找表。
     """
     bs = (
         list(range(ord("!"), ord("~") + 1)) + list(range(ord("¡"), ord("¬") + 1)) + list(range(ord("®"), ord("ÿ") + 1))
     )
     cs = bs[:]
     n = 0
-    # 遍历 0 到 2^8-1 的整数
+    # 循环迭代范围在0到255之间的整数
     for b in range(2**8):
-        # 如果 b 不在 bs 列表中
+        # 如果当前整数不在列表bs中
         if b not in bs:
-            # 将 b 添加到 bs 列表
+            # 将当前整数b添加到bs列表中
             bs.append(b)
-            # 将 2^8 + n 添加到 cs 列表
+            # 向cs列表中添加新的元素，该元素为2的8次方加上当前迭代次数n
             cs.append(2**8 + n)
-            # n 自增 1
+            # 增加迭代计数n的值
             n += 1
-    # 将 cs 列表中的整数转换为对应的字符，组成新的列表
+    
+    # 将cs列表中的每个整数转换为对应的Unicode字符，并形成一个新的列表cs
     cs = [chr(n) for n in cs]
-    # 使用 bs 和 cs 两个列表创建一个字典并返回
+    
+    # 使用zip函数将bs列表和cs列表中的元素一一配对，然后生成一个字典
     return dict(zip(bs, cs))
-# 定义一个函数，返回单词中的符号对集合。单词表示为符号元组（符号为可变长度字符串）。
+# 定义一个函数，用于获取单词中的符号对集合。这里假设单词是由符号元组表示的，每个符号可以是长度可变的字符串。
 def get_pairs(word):
-    # 初始化一个空集合用于存储符号对
+    """
+    Return set of symbol pairs in a word. Word is represented as tuple of symbols (symbols being variable-length
+    strings).
+    """
+    # 初始化一个空集合，用于存储符号对
     pairs = set()
-    # 获取单词的第一个符号作为前一个字符
+    # 获取单词的第一个符号作为前一个符号
     prev_char = word[0]
-    # 遍历单词中除了第一个符号之外的所有符号
+    # 遍历单词中除第一个符号之外的所有符号
     for char in word[1:]:
-        # 将前一个字符和当前字符组成一个符号对，并添加到符号对集合中
+        # 将前一个符号和当前符号作为一个符号对加入到集合中
         pairs.add((prev_char, char))
-        # 更新前一个字符为当前字符，用于下一轮迭代
+        # 更新前一个符号为当前符号，以便下一次迭代使用
         prev_char = char
-    # 返回符号对集合
+    # 返回所有的符号对集合
     return pairs
 
-# 声明一个类MarkupLMTokenizerFast，继承自PreTrainedTokenizerFast
+
 class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
-    """
-    构建一个MarkupLM分词器。基于字节级别的字节对编码（BPE）。
+    r"""
+    Construct a MarkupLM tokenizer. Based on byte-level Byte-Pair-Encoding (BPE).
 
-    [`MarkupLMTokenizerFast`]可用于将HTML字符串转换为标记级输入`input_ids`、`attention_mask`、`token_type_ids`、`xpath_tags_seq`和`xpath_tags_seq`。
-    该分词器继承自[`PreTrainedTokenizer`]，其中包含大部分主要方法。
+    [`MarkupLMTokenizerFast`] can be used to turn HTML strings into to token-level `input_ids`, `attention_mask`,
+    `token_type_ids`, `xpath_tags_seq` and `xpath_tags_seq`. This tokenizer inherits from [`PreTrainedTokenizer`] which
+    contains most of the main methods.
 
-    用户应参考此超类以获取有关这些方法的更多信息。
+    Users should refer to this superclass for more information regarding those methods.
     """
-    # 参数说明：词汇表文件路径
-    vocab_file (`str`):
-        Path to the vocabulary file.
-    # 参数说明：合并文件路径
-    merges_file (`str`):
-        Path to the merges file.
-    # 参数说明：解码字节到 UTF-8 时遇到错误时的处理方式，默认为替换
-    errors (`str`, *optional*, defaults to `"replace"`):
-        Paradigm to follow when decoding bytes to UTF-8. See
-        [bytes.decode](https://docs.python.org/3/library/stdtypes.html#bytes.decode) for more information.
-    # 参数说明：序列开始标记，用于预训练时的起始标记，并可用于序列分类标记
-    bos_token (`str`, *optional*, defaults to `"<s>"`):
-        The beginning of sequence token that was used during pretraining. Can be used a sequence classifier token.
-    # <Tip>提示：当构建序列时使用特殊标记时，不是用于序列开头的标记. 用于序列开头的是 `cls_token`.
-    # 参数说明：序列结束标记
-    eos_token (`str`, *optional*, defaults to `"</s>"`):
-        The end of sequence token.
-    # <Tip>提示：当构建序列使用特殊标记时，不是用于序列结束的标记. 用于序列结束的是 `sep_token`.
-    # 参数说明：分隔标记，用于构建多个序列为一个序列，例如序列分类或问题回答时的分隔标记
-    sep_token (`str`, *optional*, defaults to `"</s>"`):
-        The separator token, which is used when building a sequence from multiple sequences, e.g. two sequences for
-        sequence classification or for a text and a question for question answering. It is also used as the last
-        token of a sequence built with special tokens.
-    # 参数说明：分类标记，用于序列分类任务（整个序列分类而不是每个标记分类）
-    cls_token (`str`, *optional*, defaults to `"<s>"`):
-        The classifier token which is used when doing sequence classification (classification of the whole sequence
-        instead of per-token classification). It is the first token of the sequence when built with special tokens.
-    # 参数说明：未知标记，表示不在词汇表中的标记
-    unk_token (`str`, *optional*, defaults to `"<unk>"`):
-        The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
-        token instead.
-    # 参数说明：填充标记，用于填充不同长度的序列
-    pad_token (`str`, *optional*, defaults to `"<pad>"`):
-        The token used for padding, for example when batching sequences of different lengths.
-    # 参数说明：掩码标记，用于掩码语言模型训练时模型尝试预测的标记
-    mask_token (`str`, *optional*, defaults to `"<mask>"`):
-        The token used for masking values. This is the token used when training this model with masked language
-        modeling. This is the token which the model will try to predict.
-    # 参数说明：是否在输入前添加初始空格，允许将开头的单词视为任何其他单词
-    add_prefix_space (`bool`, *optional*, defaults to `False`):
-        Whether or not to add an initial space to the input. This allows to treat the leading word just as any
-        other word. (RoBERTa tokenizer detect beginning of words by the preceding space).
-    """
-
-    # 词汇表文件名列表
+    # 导入所需的库或模块
+    Args:
+        vocab_file (`str`):
+            # 词汇表文件的路径。
+        merges_file (`str`):
+            # 合并文件的路径。
+        errors (`str`, *optional*, defaults to `"replace"`):
+            # 解码字节为 UTF-8 时遇到错误的处理方式。详见 Python 文档中的 bytes.decode 描述。
+        bos_token (`str`, *optional*, defaults to `"<s>"`):
+            # 在预训练期间用作序列开头的特殊标记。也可用作序列分类器的标记。
+            # <Tip>提示：在使用特殊标记构建序列时，并非使用此标记作为序列的开头标记。实际上使用的是 `cls_token`。</Tip>
+        eos_token (`str`, *optional*, defaults to `"</s>"`):
+            # 序列结尾的特殊标记。
+            # <Tip>提示：在使用特殊标记构建序列时，并非使用此标记作为序列的结尾标记。实际上使用的是 `sep_token`。</Tip>
+        sep_token (`str`, *optional*, defaults to `"</s>"`):
+            # 分隔符标记，在构建来自多个序列的序列时使用，例如序列分类或问题回答中的文本和问题。同时也用作使用特殊标记构建序列的最后一个标记。
+        cls_token (`str`, *optional*, defaults to `"<s>"`):
+            # 分类器标记，在进行序列分类（整个序列而不是每个标记的分类）时使用。在使用特殊标记构建序列时，它是序列的第一个标记。
+        unk_token (`str`, *optional*, defaults to `"<unk>"`):
+            # 未知标记。如果词汇表中不存在的标记，将无法将其转换为 ID，而会被设置为此标记。
+        pad_token (`str`, *optional*, defaults to `"<pad>"`):
+            # 用于填充的标记，例如在对不同长度的序列进行批处理时使用。
+        mask_token (`str`, *optional*, defaults to `"<mask>"`):
+            # 用于掩码值的标记。在使用掩码语言建模训练模型时使用，模型将尝试预测此标记。
+        add_prefix_space (`bool`, *optional*, defaults to `False`):
+            # 是否在输入之前添加一个初始空格。这样可以像对待其他单词一样对待前导单词。（RoBERTa 分词器通过前导空格来检测单词的开头）。
+    
+    # 以下变量可能为预训练模型配置的文件和大小映射提供了默认值
     vocab_files_names = VOCAB_FILES_NAMES
-    # 预训练词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # 预训练位置嵌入的最大输入尺寸
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 慢速分词器类
     slow_tokenizer_class = MarkupLMTokenizer
-    # 初始化方法，用于设置各种参数
     def __init__(
         self,
         vocab_file,
@@ -187,8 +180,34 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
         only_label_first_subword=True,
         trim_offsets=False,
         **kwargs,
-    )
-    # 给定xpath表达式，返回标签ID和相应的下标列表，考虑到最大深度
+    ):
+        """
+        Initialize the class with required and optional parameters for tokenization and tagging.
+
+        Args:
+            vocab_file (str): Path to vocabulary file.
+            merges_file (str): Path to merges file for tokenization.
+            tags_dict (dict): Dictionary mapping tag names to IDs.
+            tokenizer_file (str, optional): Path to tokenizer file. Defaults to None.
+            errors (str, optional): Error handling method during tokenization. Defaults to "replace".
+            bos_token (str, optional): Beginning of sequence token. Defaults to "<s>".
+            eos_token (str, optional): End of sequence token. Defaults to "</s>".
+            sep_token (str, optional): Separator token. Defaults to "</s>".
+            cls_token (str, optional): Classification token. Defaults to "<s>".
+            unk_token (str, optional): Unknown token. Defaults to "<unk>".
+            pad_token (str, optional): Padding token. Defaults to "<pad>".
+            mask_token (str, optional): Mask token. Defaults to "<mask>".
+            add_prefix_space (bool, optional): Whether to add prefix space during tokenization. Defaults to False.
+            max_depth (int, optional): Maximum depth for XPath processing. Defaults to 50.
+            max_width (int, optional): Maximum width for XPath processing. Defaults to 1000.
+            pad_width (int, optional): Padding width for XPath processing. Defaults to 1001.
+            pad_token_label (int, optional): Padding token label for subword tagging. Defaults to -100.
+            only_label_first_subword (bool, optional): Whether to label only the first subword. Defaults to True.
+            trim_offsets (bool, optional): Whether to trim offsets. Defaults to False.
+            **kwargs: Additional keyword arguments.
+        """
+        pass
+
     def get_xpath_seq(self, xpath):
         """
         Given the xpath expression of one particular node (like "/html/body/div/li[1]/div/span[2]"), return a list of
@@ -197,20 +216,16 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
         xpath_tags_list = []
         xpath_subs_list = []
 
-        # 根据"/"分割xpath表达式
         xpath_units = xpath.split("/")
         for unit in xpath_units:
             if not unit.strip():
                 continue
-            # 将标签名和下标分割开
             name_subs = unit.strip().split("[")
             tag_name = name_subs[0]
             sub = 0 if len(name_subs) == 1 else int(name_subs[1][:-1])
-            # 获取标签ID和下标，如果标签名不存在，则使用未知标签ID
             xpath_tags_list.append(self.tags_dict.get(tag_name, self.unk_tag_id))
             xpath_subs_list.append(min(self.max_width, sub))
 
-        # 限制标签ID和下标列表的长度，超过最大深度则截断，不足则使用填充标签ID和填充宽度进行填充
         xpath_tags_list = xpath_tags_list[: self.max_depth]
         xpath_subs_list = xpath_subs_list[: self.max_depth]
         xpath_tags_list += [self.pad_tag_id] * (self.max_depth - len(xpath_tags_list))
@@ -218,7 +233,6 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
 
         return xpath_tags_list, xpath_subs_list
 
-    # 编码文本或文本对，返回相应的输入编码
     @add_end_docstrings(ENCODE_KWARGS_DOCSTRING, MARKUPLM_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
     def __call__(
         self,
@@ -241,9 +255,33 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
         return_length: bool = False,
         verbose: bool = True,
         **kwargs,
-    )
-    # 编码参数文档
-    @add_end_docstrings(ENCODE_KWARGS_DOCSTRING, MARKUPLM_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
+    ):
+        """
+        Encode the input text(s) along with associated parameters into token IDs, token type IDs, and attention masks.
+
+        Args:
+            text (Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]]): Input text or texts.
+            text_pair (Optional[Union[PreTokenizedInput, List[PreTokenizedInput]]], optional): Second input text or texts. Defaults to None.
+            xpaths (Union[List[List[int]], List[List[List[int]]]], optional): List of XPath sequences. Defaults to None.
+            node_labels (Optional[Union[List[int], List[List[int]]]], optional): Node labels corresponding to XPaths. Defaults to None.
+            add_special_tokens (bool, optional): Whether to add special tokens. Defaults to True.
+            padding (Union[bool, str, PaddingStrategy], optional): Padding strategy or maximum length for padding. Defaults to False.
+            truncation (Union[bool, str, TruncationStrategy], optional): Truncation strategy or maximum length for truncation. Defaults to None.
+            max_length (Optional[int], optional): Maximum length of the returned sequences. Defaults to None.
+            stride (int, optional): Stride for overflowing tokens. Defaults to 0.
+            pad_to_multiple_of (Optional[int], optional): Pad to a multiple of specified value. Defaults to None.
+            return_tensors (Optional[Union[str, TensorType]], optional): Type of tensors to return. Defaults to None.
+            return_token_type_ids (Optional[bool], optional): Whether to return token type IDs. Defaults to None.
+            return_attention_mask (Optional[bool], optional): Whether to return attention mask. Defaults to None.
+            return_overflowing_tokens (bool, optional): Whether to return overflowing tokens. Defaults to False.
+            return_special_tokens_mask (bool, optional): Whether to return special tokens mask. Defaults to False.
+            return_offsets_mapping (bool, optional): Whether to return offsets mapping. Defaults to False.
+            return_length (bool, optional): Whether to return length of the encoded sequence. Defaults to False.
+            verbose (bool, optional): Whether to output verbose information. Defaults to True.
+            **kwargs: Additional keyword arguments.
+        """
+        pass
+    # 定义一个方法用于批量编码文本或文本对，并返回批编码结果
     def batch_encode_plus(
         self,
         batch_text_or_text_pairs: Union[
@@ -251,27 +289,26 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             List[TextInputPair],
             List[PreTokenizedInput],
         ],
-        is_pair: bool = None,
-        xpaths: Optional[List[List[List[int]]]] = None,
-        node_labels: Optional[Union[List[int], List[List[int]]]] = None,
-        add_special_tokens: bool = True,
-        padding: Union[bool, str, PaddingStrategy] = False,
-        truncation: Union[bool, str, TruncationStrategy] = None,
-        max_length: Optional[int] = None,
-        stride: int = 0,
-        pad_to_multiple_of: Optional[int] = None,
-        return_tensors: Optional[Union[str, TensorType]] = None,
-        return_token_type_ids: Optional[bool] = None,
-        return_attention_mask: Optional[bool] = None,
-        return_overflowing_tokens: bool = False,
-        return_special_tokens_mask: bool = False,
-        return_offsets_mapping: bool = False,
-        return_length: bool = False,
-        verbose: bool = True,
-        **kwargs,
+        is_pair: bool = None,  # 是否为文本对
+        xpaths: Optional[List[List[List[int]]]] = None,  # XPath信息，用于处理HTML/XML类型的输入
+        node_labels: Optional[Union[List[int], List[List[int]]]] = None,  # 节点标签信息
+        add_special_tokens: bool = True,  # 是否添加特殊标记（如[CLS]和[SEP]）
+        padding: Union[bool, str, PaddingStrategy] = False,  # 填充策略，可以是布尔值、字符串或填充策略对象
+        truncation: Union[bool, str, TruncationStrategy] = None,  # 截断策略，可以是布尔值、字符串或截断策略对象
+        max_length: Optional[int] = None,  # 最大长度限制
+        stride: int = 0,  # 滑动窗口的步长
+        pad_to_multiple_of: Optional[int] = None,  # 将序列填充到某个整数的倍数
+        return_tensors: Optional[Union[str, TensorType]] = None,  # 返回的张量类型
+        return_token_type_ids: Optional[bool] = None,  # 是否返回token_type_ids
+        return_attention_mask: Optional[bool] = None,  # 是否返回attention_mask
+        return_overflowing_tokens: bool = False,  # 是否返回溢出的tokens
+        return_special_tokens_mask: bool = False,  # 是否返回特殊token的掩码
+        return_offsets_mapping: bool = False,  # 是否返回偏移映射
+        return_length: bool = False,  # 是否返回序列长度
+        verbose: bool = True,  # 是否打印详细信息
+        **kwargs,  # 其它关键字参数
     ) -> BatchEncoding:
-        # Backward compatibility for 'truncation_strategy', 'pad_to_max_length'
-        # 获取填充和截断策略以及最大长度参数，并更新kwargs
+        # 处理'padding'、'truncation'、'max_length'等参数，保证向后兼容性
         padding_strategy, truncation_strategy, max_length, kwargs = self._get_padding_truncation_strategies(
             padding=padding,
             truncation=truncation,
@@ -281,6 +318,7 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
+        # 调用内部方法进行批量编码处理，并返回结果
         return self._batch_encode_plus(
             batch_text_or_text_pairs=batch_text_or_text_pairs,
             is_pair=is_pair,
@@ -303,41 +341,41 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
+    # 定义一个方法用于将单个文本（或文本对）进行标记化处理，并返回标记化结果
     def tokenize(self, text: str, pair: Optional[str] = None, add_special_tokens: bool = False, **kwargs) -> List[str]:
-        # 将单个文本或文本对组成批量输入
         batched_input = [(text, pair)] if pair else [text]
-        # 使用tokenizer的encode_batch方法对批量输入进行编码
+        # 调用_tokenizer的encode_batch方法，将文本（或文本对）进行批量编码
         encodings = self._tokenizer.encode_batch(
             batched_input, add_special_tokens=add_special_tokens, is_pretokenized=False, **kwargs
         )
-        # 返回编码结果中第一个元素的tokens列表
+
+        # 返回编码结果中的第一个序列的token列表
         return encodings[0].tokens
 
-    # 添加结束文档字符串参数
+    # 应用函数装饰器，添加文档字符串到下面的函数中
     @add_end_docstrings(ENCODE_KWARGS_DOCSTRING, MARKUPLM_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
-```  
     def encode_plus(
         self,
-        text: Union[TextInput, PreTokenizedInput],  # 定义参数 text 的类型为 Union[TextInput, PreTokenizedInput]
-        text_pair: Optional[PreTokenizedInput] = None,  # 定义参数 text_pair 的类型为 Optional[PreTokenizedInput]，默认为 None
-        xpaths: Optional[List[List[int]]] = None,  # 定义参数 xpaths 的类型为 Optional[List[List[int]]]，默认为 None
-        node_labels: Optional[List[int]] = None,  # 定义参数 node_labels 的类型为 Optional[List[int]]，默认为 None
-        add_special_tokens: bool = True,  # 定义参数 add_special_tokens 的类型为 bool，默认为 True
-        padding: Union[bool, str, PaddingStrategy] = False,  # 定义参数 padding 的类型为 Union[bool, str, PaddingStrategy]，默认为 False
-        truncation: Union[bool, str, TruncationStrategy] = None,  # 定义参数 truncation 的类型为 Union[bool, str, TruncationStrategy]，默认为 None
-        max_length: Optional[int] = None,  # 定义参数 max_length 的类型为 Optional[int]，默认为 None
-        stride: int = 0,  # 定义参数 stride 的类型为 int，默认为 0
-        pad_to_multiple_of: Optional[int] = None,  # 定义参数 pad_to_multiple_of 的类型为 Optional[int]，默认为 None
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 定义参数 return_tensors 的类型为 Optional[Union[str, TensorType]]，默认为 None
-        return_token_type_ids: Optional[bool] = None,  # 定义参数 return_token_type_ids 的类型为 Optional[bool]，默认为 None
-        return_attention_mask: Optional[bool] = None,  # 定义参数 return_attention_mask 的类型为 Optional[bool]，默认为 None
-        return_overflowing_tokens: bool = False,  # 定义参数 return_overflowing_tokens 的类型为 bool，默认为 False
-        return_special_tokens_mask: bool = False,  # 定义参数 return_special_tokens_mask 的类型为 bool，默认为 False
-        return_offsets_mapping: bool = False,  # 定义参数 return_offsets_mapping 的类型为 bool，默认为 False
-        return_length: bool = False,  # 定义参数 return_length 的类型为 bool，默认为 False
-        verbose: bool = True,  # 定义参数 verbose 的类型为 bool，默认为 True
-        **kwargs,  # 接收额外的关键字参数
-    ) -> BatchEncoding:  # 指定返回类型为 BatchEncoding
+        text: Union[TextInput, PreTokenizedInput],
+        text_pair: Optional[PreTokenizedInput] = None,
+        xpaths: Optional[List[List[int]]] = None,
+        node_labels: Optional[List[int]] = None,
+        add_special_tokens: bool = True,
+        padding: Union[bool, str, PaddingStrategy] = False,
+        truncation: Union[bool, str, TruncationStrategy] = None,
+        max_length: Optional[int] = None,
+        stride: int = 0,
+        pad_to_multiple_of: Optional[int] = None,
+        return_tensors: Optional[Union[str, TensorType]] = None,
+        return_token_type_ids: Optional[bool] = None,
+        return_attention_mask: Optional[bool] = None,
+        return_overflowing_tokens: bool = False,
+        return_special_tokens_mask: bool = False,
+        return_offsets_mapping: bool = False,
+        return_length: bool = False,
+        verbose: bool = True,
+        **kwargs,
+    ) -> BatchEncoding:
         """
         Tokenize and prepare for the model a sequence or a pair of sequences. .. warning:: This method is deprecated,
         `__call__` should be used instead.
@@ -350,8 +388,7 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
                 list of list of strings (words of a batch of examples).
         """
 
-        # Backward compatibility for 'truncation_strategy', 'pad_to_max_length'
-        # 获得填充和截断策略，同时处理旧版本的参数名，并且更新 kwargs
+        # 获取填充和截断策略，同时处理过时的参数以保证向后兼容性
         padding_strategy, truncation_strategy, max_length, kwargs = self._get_padding_truncation_strategies(
             padding=padding,
             truncation=truncation,
@@ -361,7 +398,7 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 调用 _encode_plus 方法，并将所有参数传递过去
+        # 调用内部方法 `_encode_plus` 进行实际的编码和准备工作
         return self._encode_plus(
             text=text,
             xpaths=xpaths,
@@ -381,65 +418,66 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             return_offsets_mapping=return_offsets_mapping,
             return_length=return_length,
             verbose=verbose,
-            **kwargs,  # 传递额外的关键字参数
+            **kwargs,
         )
-    class Tokenizer:
-        # 对一批文本或文本对进行编码
-        def _batch_encode_plus(
-            self,
-            batch_text_or_text_pairs: Union[
-                List[TextInput],  # 批处理的文本或文本对
-                List[TextInputPair],  # 批处理的文本对
-                List[PreTokenizedInput],  # 预分词输入
-            ],
-            is_pair: bool = None,  # 标记是否为文本对
-            xpaths: Optional[List[List[List[int]]] = None,  # XPath列表的列表，用于指定与文本相关的标签路径
-            node_labels: Optional[List[List[int]] = None,  # 节点标签列表的列表
-            add_special_tokens: bool = True,  # 是否添加特殊标记
-            padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略
-            truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略
-            max_length: Optional[int] = None,  # 最大长度限制
-            stride: int = 0,  # 步长
-            pad_to_multiple_of: Optional[int] = None,  # 填充至多少的倍数
-            return_tensors: Optional[str] = None,  # 返回的张量类型
-            return_token_type_ids: Optional[bool] = None,  # 是否返回标记类型ID
-            return_attention_mask: Optional[bool] = None,  # 是否返回注意力掩码
-            return_overflowing_tokens: bool = False,  # 是否返回溢出的标记
-            return_special_tokens_mask: bool = False,  # 是否返回特殊标记掩码
-            return_offsets_mapping: bool = False,  # 是否返回偏移映射
-            return_length: bool = False,  # 是否返回长度
-            verbose: bool = True,  # 是否启用详细输出
-        # 对单个文本或文本对进行编码
+    # 定义一个方法用于批量编码文本或文本对，支持多种输入类型
+    def _batch_encode_plus(
+        self,
+        batch_text_or_text_pairs: Union[
+            List[TextInput],
+            List[TextInputPair],
+            List[PreTokenizedInput],
+        ],
+        is_pair: bool = None,  # 是否是文本对
+        xpaths: Optional[List[List[List[int]]]] = None,  # XPath 路径列表，用于定位文本在原始数据中的位置
+        node_labels: Optional[List[List[int]]] = None,  # 节点标签列表，用于标识文本对应的节点信息
+        add_special_tokens: bool = True,  # 是否添加特殊标记（如[CLS]和[SEP]）
+        padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略，默认不填充
+        truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略，默认不截断
+        max_length: Optional[int] = None,  # 最大长度限制
+        stride: int = 0,  # 滑动窗口步长
+        pad_to_multiple_of: Optional[int] = None,  # 填充长度的倍数
+        return_tensors: Optional[str] = None,  # 返回的张量类型
+        return_token_type_ids: Optional[bool] = None,  # 是否返回token type ids
+        return_attention_mask: Optional[bool] = None,  # 是否返回attention mask
+        return_overflowing_tokens: bool = False,  # 是否返回溢出的 tokens
+        return_special_tokens_mask: bool = False,  # 是否返回特殊 tokens 的 mask
+        return_offsets_mapping: bool = False,  # 是否返回偏移映射
+        return_length: bool = False,  # 是否返回长度
+        verbose: bool = True,  # 是否显示详细信息
+    ):
+        # 定义一个方法用于编码单个文本或文本对
         def _encode_plus(
             self,
-            text: Union[TextInput, PreTokenizedInput],  # 文本输入
-            text_pair: Optional[PreTokenizedInput] = None,  # 可选的文本对输入
-            xpaths: Optional[List[List[int]]] = None,  # XPath列表，用于指定与文本相关的标签路径
-            node_labels: Optional[List[int]] = None,  # 节点标签列表
-            add_special_tokens: bool = True,  # 是否添加特殊标记
-            padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略
-            truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略
+            text: Union[TextInput, PreTokenizedInput],  # 输入的文本或预分词的输入
+            text_pair: Optional[PreTokenizedInput] = None,  # 可选的文本对
+            xpaths: Optional[List[List[int]]] = None,  # XPath 路径列表，用于定位文本在原始数据中的位置
+            node_labels: Optional[List[int]] = None,  # 节点标签列表，用于标识文本对应的节点信息
+            add_special_tokens: bool = True,  # 是否添加特殊标记（如[CLS]和[SEP]）
+            padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略，默认不填充
+            truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略，默认不截断
             max_length: Optional[int] = None,  # 最大长度限制
-            stride: int = 0,  # 步长
-            pad_to_multiple_of: Optional[int] = None,  # 填充至多少的倍数
+            stride: int = 0,  # 滑动窗口步长
+            pad_to_multiple_of: Optional[int] = None,  # 填充长度的倍数
             return_tensors: Optional[bool] = None,  # 返回的张量类型
-            return_token_type_ids: Optional[bool] = None,  # 是否返回标记类型ID
-            return_attention_mask: Optional[bool] = None,  # 是否返回注意力掩码
-            return_overflowing_tokens: bool = False,  # 是否返回溢出的标记
-            return_special_tokens_mask: bool = False,  # 是否返回特殊标记掩码
+            return_token_type_ids: Optional[bool] = None,  # 是否返回token type ids
+            return_attention_mask: Optional[bool] = None,  # 是否返回attention mask
+            return_overflowing_tokens: bool = False,  # 是否返回溢出的 tokens
+            return_special_tokens_mask: bool = False,  # 是否返回特殊 tokens 的 mask
             return_offsets_mapping: bool = False,  # 是否返回偏移映射
             return_length: bool = False,  # 是否返回长度
-            verbose: bool = True,  # 是否启用详细输出
+            verbose: bool = True,  # 是否显示详细信息
             **kwargs,  # 其他关键字参数
-    )-> BatchEncoding:
-        # 将输入组成批量输入
-        # 两种选项:
-        # 1) 只有文本，如果文本必须是一个字符串列表
-        # 2) 文本 + 文本对，此时文本 = 字符串，文本对 = 字符串列表
+        ):
+    ) -> BatchEncoding:
+        # 将输入组成批处理输入
+        # 两种选项：
+        # 1) 只有文本，如果文本是字符串列表，则 text 必须是列表
+        # 2) 文本 + 文本对，此时 text 是字符串，text_pair 是字符串列表
         batched_input = [(text, text_pair)] if text_pair else [text]
         batched_xpaths = [xpaths]
         batched_node_labels = [node_labels] if node_labels is not None else None
-        # 调用_batch_encode_plus方法进行批量编码
+        # 调用 _batch_encode_plus 方法进行批处理编码
         batched_output = self._batch_encode_plus(
             batched_input,
             is_pair=bool(text_pair is not None),
@@ -462,8 +500,8 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 如果返回张量为None，则可以移除前导批量轴
-        # 溢出的标记作为一批输出返回，所以在这种情况下保留它们
+        # 如果 return_tensors 是 None 并且不返回 overflowing tokens，则移除首个批处理维度
+        # 在这种情况下，overflowing tokens 作为输出的一个批次被返回，因此保留它们
         if return_tensors is None and not return_overflowing_tokens:
             batched_output = BatchEncoding(
                 {
@@ -473,10 +511,10 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
                 batched_output.encodings,
             )
 
-        # 检查是否需要警告关于序列过长
+        # 检查并警告关于过长序列的情况
         self._eventual_warn_about_too_long_sequence(batched_output["input_ids"], max_length, verbose)
 
-        # 返回批量输出
+        # 返回批处理输出
         return batched_output
 
     def _pad(
@@ -486,12 +524,18 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
         padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,
         pad_to_multiple_of: Optional[int] = None,
         return_attention_mask: Optional[bool] = None,
+    ):
+        # 该方法用于对编码输入进行填充
+        # 返回填充后的编码输入
+        pass
+
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-```py  
+    def build_inputs_with_special_tokens(
+        self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        Build model inputs from a sequence or a pair of sequences for sequence classification tasks by concatenating and
         adding special tokens. A RoBERTa sequence has the following format:
         - single sequence: `<s> X </s>`
         - pair of sequences: `<s> A </s></s> B </s>`
@@ -502,15 +546,16 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
         Returns:
-            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
+            `List[int]`: List of input IDs with the appropriate special tokens added.
         """
         if token_ids_1 is None:
-            # 如果只有一个 token_ids，则返回特殊 token 前后加上特殊 token 的 ID 的列表
+            # Return a single sequence with special tokens `<s>` (CLS), sequence tokens, and `</s>` (SEP)
             return [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
-        # 创建分别包含特殊 token ID 的列表
+        
+        # For a pair of sequences, concatenate special tokens `<s>` (CLS), sequence 1 tokens, `</s>` (SEP),
+        # sequence 2 tokens, and another `</s>` (SEP) at the end
         cls = [self.cls_token_id]
         sep = [self.sep_token_id]
-        # 返回将两个 token_ids 合并，并添加特殊 token ID 后的列表
         return cls + token_ids_0 + sep + token_ids_1 + sep
 
     def create_token_type_ids_from_sequences(
@@ -526,20 +571,32 @@ class MarkupLMTokenizerFast(PreTrainedTokenizerFast):
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
         Returns:
-            `List[int]`: List of zeros.
+            `List[int]`: List of zeros representing token type ids (not used in RoBERTa).
         """
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
 
         if token_ids_1 is None:
-            # 如果只有一个 token_ids，则返回零列表的长度
+            # Return zeros for token type ids for a single sequence with special tokens
             return len(cls + token_ids_0 + sep) * [0]
-        # 如果有两个 token_ids，返回零列表的长度
+        
+        # Return zeros for token type ids for a pair of sequences with special tokens
         return len(cls + token_ids_0 + sep + token_ids_1 + sep) * [0]
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 保存 tokenizer 的模型到指定目录，根据指定的前缀命名
+        """
+        Save the tokenizer's vocabulary to a directory.
+
+        Args:
+            save_directory (str):
+                Directory where the vocabulary files will be saved.
+            filename_prefix (str, *optional*):
+                Optional prefix for the saved files.
+
+        Returns:
+            Tuple[str]: Tuple containing the saved file paths.
+        """
+        # Save the model's vocabulary files to the specified directory with an optional filename prefix
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
-        # 返回保存的文件路径元组
         return tuple(files)
 ```

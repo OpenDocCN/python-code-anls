@@ -1,177 +1,166 @@
-# `.\transformers\pipelines\automatic_speech_recognition.py`
+# `.\pipelines\automatic_speech_recognition.py`
 
-```py
-# 导入必要的模块和类型
-from collections import defaultdict  # 导入 defaultdict 数据结构
-from typing import TYPE_CHECKING, Dict, Optional, Union  # 导入类型提示相关的模块
+```
+# 引入从 collections 模块中导入 defaultdict 类
+from collections import defaultdict
+# 从 typing 模块中导入 TYPE_CHECKING, Dict, Optional, Union 等类型
+from typing import TYPE_CHECKING, Dict, Optional, Union
 
-import numpy as np  # 导入 numpy 库
-import requests  # 导入 requests 库
+# 导入 numpy 库，用于处理数组和矩阵等数据
+import numpy as np
+# 导入 requests 库，用于发送 HTTP 请求
+import requests
 
-# 导入 Hugging Face 库中的模块和工具函数
-from ..tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器
-from ..utils import is_torch_available, is_torchaudio_available, logging  # 导入工具函数和日志记录模块
-from .audio_utils import ffmpeg_read  # 导入音频处理相关的工具函数
-from .base import ChunkPipeline  # 导入音频处理的基础类
+# 从 tokenization_utils 模块中导入 PreTrainedTokenizer 类
+from ..tokenization_utils import PreTrainedTokenizer
+# 从 utils 模块中导入 is_torch_available, is_torchaudio_available, logging 等函数和类
+from ..utils import is_torch_available, is_torchaudio_available, logging
+# 从 audio_utils 模块中导入 ffmpeg_read 函数
+from .audio_utils import ffmpeg_read
+# 从 base 模块中导入 ChunkPipeline 类
+from .base import ChunkPipeline
 
-# 如果是类型检查阶段，则进一步导入类型相关的模块
+# 如果 TYPE_CHECKING 为真，则从 pyctcdecode 模块中导入 BeamSearchDecoderCTC 类
 if TYPE_CHECKING:
-    from pyctcdecode import BeamSearchDecoderCTC  # 导入 CTC 解码器
+    from pyctcdecode import BeamSearchDecoderCTC
+    # 从 feature_extraction_sequence_utils 模块中导入 SequenceFeatureExtractor 类
+    from ..feature_extraction_sequence_utils import SequenceFeatureExtractor
+    # 从 modeling_utils 模块中导入 PreTrainedModel 类
+    from ..modeling_utils import PreTrainedModel
 
-    from ..feature_extraction_sequence_utils import SequenceFeatureExtractor  # 导入序列特征提取器
-    from ..modeling_utils import PreTrainedModel  # 导入预训练模型
-
-# 获取日志记录器对象
+# 获取 logger 实例
 logger = logging.get_logger(__name__)
 
-# 如果 Torch 可用，则进一步导入相关模块
+# 如果 torch 可用，则从 models.auto.modeling_auto 模块中导入 MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES 常量
 if is_torch_available():
-    import torch  # 导入 PyTorch 库
+    import torch
+    from ..models.auto.modeling_auto import MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES
 
-    from ..models.auto.modeling_auto import MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES  # 导入模型映射字典
 
-# 定义一个函数，用于重新缩放音频片段的步长值
 def rescale_stride(stride, ratio):
     """
     Rescales the stride values from audio space to tokens/logits space.
 
     (160_000, 16_000, 16_000) -> (2000, 200, 200) for instance.
     """
-    # 初始化一个空列表，用于存储重新缩放后的步长值
+    # 创建一个空列表用于存放重新缩放后的步幅值
     new_strides = []
-    # 遍历输入的步长值
+    # 遍历输入的每一个步幅值 (input_n, left, right)
     for input_n, left, right in stride:
-        # 计算新的 token 数目，将输入步长值按比例缩放
+        # 计算 token_n，将输入空间的步幅值按比例缩放到 tokens/logits 空间
         token_n = int(round(input_n * ratio))
-        # 根据缩放后的 token 数目重新计算左侧填充值
+        # 计算左侧步幅 left 在 tokens/logits 空间的值
         left = int(round(left / input_n * token_n))
-        # 根据缩放后的 token 数目重新计算右侧填充值
+        # 计算右侧步幅 right 在 tokens/logits 空间的值
         right = int(round(right / input_n * token_n))
-        # 将重新计算得到的步长值组成元组，添加到新的步长列表中
+        # 将缩放后的步幅值组成元组，并添加到新步幅列表中
         new_stride = (token_n, left, right)
         new_strides.append(new_stride)
 
     return new_strides
 
-# 定义一个迭代器函数，用于生成音频片段的迭代器
-def chunk_iter(inputs, feature_extractor, chunk_len, stride_left, stride_right, rescale=True, dtype=None):
-    # 获取输入音频的长度
+
+def chunk_iter(inputs, feature_extractor, chunk_len, stride_left, stride_right, dtype=None):
+    """
+    Iterates over chunks of input data, yielding processed chunks.
+
+    inputs: numpy array, the input data to be chunked
+    feature_extractor: SequenceFeatureExtractor, object for extracting features from chunks
+    chunk_len: int, length of each chunk
+    stride_left: int, left stride length
+    stride_right: int, right stride length
+    dtype: optional, data type to convert processed chunks
+
+    Yields dictionaries containing processed chunk data and metadata.
+    """
+    # 获取输入数据的长度
     inputs_len = inputs.shape[0]
-    # 计算每次迭代的步长
+    # 计算每次迭代的步长，chunk_len - stride_left - stride_right
     step = chunk_len - stride_left - stride_right
-    # 遍历输入数据，以步长 step 分割
+    # 从输入数据的起始位置开始，以步长逐步迭代
     for chunk_start_idx in range(0, inputs_len, step):
-        # 计算每个数据块的起始索引和结束索引
+        # 计算当前 chunk 的结束索引
         chunk_end_idx = chunk_start_idx + chunk_len
-        # 截取输入数据的数据块
+        # 从输入数据中提取当前 chunk
         chunk = inputs[chunk_start_idx:chunk_end_idx]
-        # 使用特征提取器处理数据块，返回张量形式的结果
+        # 使用特征提取器从当前 chunk 提取特征，返回处理后的结果
         processed = feature_extractor(chunk, sampling_rate=feature_extractor.sampling_rate, return_tensors="pt")
-        # 如果指定了数据类型，则将处理结果转换为指定类型的数据
+        # 如果指定了数据类型 dtype，则将处理后的结果转换为指定类型
         if dtype is not None:
             processed = processed.to(dtype=dtype)
-        # 如果数据块是第一个块，则左侧填充为0，否则使用指定的左侧填充步长
+        # 如果 chunk 的起始索引是 0，则左侧步幅为 0；否则与指定的左侧步幅相同
         _stride_left = 0 if chunk_start_idx == 0 else stride_left
-        # 检查是否是最后一个数据块
+        # 如果 chunk 的结束索引超过输入数据长度且右侧步幅大于 0，则说明是最后一个 item
         is_last = chunk_end_idx > inputs_len if stride_right > 0 else chunk_end_idx >= inputs_len
-        # 如果是最后一个数据块，则右侧填充为0，否则使用指定的右侧填充步长
+        # 如果是最后一个 item，则右侧步幅为 0；否则与指定的右侧步幅相同
         _stride_right = 0 if is_last else stride_right
 
-        # 更新数据块长度和填充步长
+        # 记录当前 chunk 的长度
         chunk_len = chunk.shape[0]
+        # 创建步幅元组
         stride = (chunk_len, _stride_left, _stride_right)
-
-        # 如果处理结果中包含"input_features"字段，则获取其长度
-        if "input_features" in processed:
-            processed_len = processed["input_features"].shape[-1]
-        # 否则，如果处理结果中包含"input_values"字段，则获取其长度
-        elif "input_values" in processed:
-            processed_len = processed["input_values"].shape[-1]
-
-        # 如果处理结果的长度不等于数据块长度且需要重新缩放，则重新计算填充步长
-        if processed_len != chunk.shape[-1] and rescale:
-            ratio = processed_len / chunk_len
-            stride = rescale_stride([stride], ratio)[0]
-
-        # 如果数据块长度大于左侧填充步长，则生成当前数据块的信息
+        # 如果当前 chunk 的长度大于左侧步幅，生成包含处理结果和元数据的字典，并返回
         if chunk.shape[0] > _stride_left:
             yield {"is_last": is_last, "stride": stride, **processed}
-
-        # 如果是最后一个数据块，则结束循环
+        # 如果是最后一个 item，则停止迭代
         if is_last:
             break
-# 定义一个函数，用于在两个序列中查找最长公共子序列
 def _fast_find_longest_common_sequence(sequence_left, sequence_right):
     # 获取左序列和右序列的长度
     seq_len_left = len(sequence_left)
     seq_len_right = len(sequence_right)
-    # 创建一个二维列表，用于记录最长公共子序列的长度
+    # 初始化一个二维列表作为计数器，用于记录最长公共子序列的长度
     counter = [[0] * (seq_len_right + 1) for _ in range(seq_len_left + 1)]
-    # 初始化最长公共子序列的长度
     longest = 0
-    # 遍历左序列
+    # 遍历左序列和右序列，填充计数器
     for i in range(seq_len_left):
-        # 遍历右序列
         for j in range(seq_len_right):
-            # 如果左序列的元素等于右序列的元素
+            # 如果左序列和右序列当前位置的元素相同
             if sequence_left[i] == sequence_right[j]:
-                # 获取前一个计数的值
                 previous_counter = counter[i][j] + 1
-                # 更新计数矩阵的值
                 counter[i + 1][j + 1] = previous_counter
                 # 更新最长公共子序列的长度
                 if previous_counter > longest:
                     longest = previous_counter
 
-    # 将计数矩阵转换为 NumPy 数组
+    # 转换计数器为NumPy数组
     counter = np.array(counter)
-    # 获取最长公共子序列在左序列中的起始索引
+    # 找到最长公共子序列在左序列和右序列中的起始索引和长度
     index_left = np.argwhere(counter == longest)[-1][0] - longest if longest != 0 else -1
-    # 获取最长公共子序列在右序列中的起始索引
     index_right = np.argwhere(counter == longest)[-1][1] - longest if longest != 0 else -1
-    # 返回最长公共子序列在左序列和右序列中的起始索引以及最长公共子序列的长度
     return index_left, index_right, longest
 
 
-# 定义一个函数，用于在多个序列中查找最长公共子序列
 def _find_longest_common_sequence(sequences, tokenizer):
-    """
-    TODO  Use a faster algorithm this can probably be done in O(n)
-    using suffix array.
-    It might be tedious to do because of fault tolerance.
-    We actually have a really good property which is that the total sequence
-    MUST be those subsequences in order.
-    Also the algorithm should be more tolerant to errors.
-    """
-    # 获取第一个序列的非特殊标记的令牌 ID
+    # TODO  使用更快的算法，可能可以在O(n)时间内完成，使用后缀数组
+    # 这可能因为容错性而变得繁琐
+    # 我们实际上有一个非常好的性质，即总序列必须按顺序是这些子序列
+    # 此外，该算法应该对错误更加容忍
+    # 从第一个序列中提取不包含特殊标识符的 token ID 组成的列表
     sequence = [tok_id for tok_id in sequences[0][0].tolist() if tok_id not in tokenizer.all_special_ids]
-    # 遍历剩余的序列
+    # 遍历其余的序列
     for new_seq in sequences[1:]:
-        # 获取当前序列的非特殊标记的令牌 ID
+        # 从每个序列中提取不包含特殊标识符的 token ID 组成的列表
         new_sequence = [tok_id for tok_id in new_seq[0].tolist() if tok_id not in tokenizer.all_special_ids]
-        
-        # 初始化索引和最大匹配度
+
         index = 0
         max_ = 0.0
-        # 遍历当前序列中的每个令牌
+        # 遍历新序列，计算最长公共子序列的相关指标
         for i in range(1, len(new_sequence) + 1):
-            # epsilon 用于提高较长的完全匹配的权重
+            # epsilon 用于偏爱长完全匹配
             eps = i / 10000.0
-            # 计算当前子序列和前一序列尾部的匹配数量
+            # 计算匹配的数量和匹配度
             matches = np.sum(np.array(sequence[-i:]) == np.array(new_sequence[:i]))
-            # 计算匹配度
             matching = matches / i + eps
-            # 如果匹配数量大于1且匹配度大于最大匹配度
+            # 如果匹配数大于1且匹配度大于当前最大值，则更新最大值
             if matches > 1 and matching > max_:
                 index = i
                 max_ = matching
-        # 将当前序列中与前一序列匹配的部分添加到总的序列中
+        # 将新序列中从最佳匹配点开始的部分扩展到主序列中
         sequence.extend(new_sequence[index:])
-    # 将总的序列转换为 NumPy 数组并返回
     return np.array(sequence)
 
 
-# 定义一个自动语音识别的流水线类
 class AutomaticSpeechRecognitionPipeline(ChunkPipeline):
     """
     Pipeline that aims at extracting spoken text contained within some audio.
@@ -187,142 +176,116 @@ class AutomaticSpeechRecognitionPipeline(ChunkPipeline):
     >>> transcriber = pipeline(model="openai/whisper-base")
     >>> transcriber("https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac")
     {'text': ' He hoped there would be stew for dinner, turnips and carrots and bruised potatoes and fat mutton pieces to be ladled out in thick, peppered flour-fatten sauce.'}
-    ```py
+    ```
+
+    Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
     """
-    pass
-    # 定义了一个名为`forward`的函数，用于实现推理过程
-    def forward(
-        self,
-        model,
-        feature_extractor,
-        tokenizer,
-        decoder,
-        inputs,
-        attention_mask=None,
-        speaker_label=None,
-        device=None,
-        decoder_start_token_id=None,
-    ):
-        # 如果没有传入`device`参数，则将`device`设置为`model`的设备
-        device = device or next(model.parameters()).device
-        # 通过`feature_extractor`将输入的音频数据编码为特征
-        features = feature_extractor(inputs, return_tensors="pt").input_values.to(device)
-        # 通过`model`对编码后的特征进行前向传播，得到预测结果
-        logits = model.features(features).logits
-        # 如果`decoder`不为空，使用`decoder`对`logits`进行解码，得到最终文本结果
-        if decoder is not None:
-            input_lengths = torch.tensor([features.shape[-1]], device=device)
-            decoded = decoder.decode(logits.permute(1, 0, 2), input_lengths)
-            # 如果指定了解码起始符的标识符，则在解码结果中添加起始符
-            if decoder_start_token_id is not None:
-                decoded = [
-                    tokenizer.decode(  # 使用`tokenizer`将解码结果转换为文本
-                        torch.cat([torch.tensor([decoder_start_token_id, device=device]), d])
-                    ).strip()
-                    for d in decoded
-                ]
-        else:
-            # 如果`decoder`为空，则将`logits`通过`argmax`函数取得预测结果
-            predicted_ids = torch.argmax(logits, dim=-1)
-            # 使用`tokenizer`将预测结果转换为文本
-            decoded = [
-                tokenizer.decode(ids, skip_special_tokens=True).strip()
-                for ids in predicted_ids
-            ]
-        # 返回解码的结果
-        return decoded
-    # 初始化方法，用于创建一个新的对象
+    Arguments:
+        model ([`PreTrainedModel`] or [`TFPreTrainedModel`]):
+            模型将用于通过管道进行预测。必须是继承自[`PreTrainedModel`]（PyTorch）或[`TFPreTrainedModel`]（TensorFlow）的模型。
+        feature_extractor ([`SequenceFeatureExtractor`]):
+            特征提取器将用于对波形进行编码，以供模型使用。
+        tokenizer ([`PreTrainedTokenizer`]):
+            分词器将用于对数据进行编码，以供模型使用。此对象继承自[`PreTrainedTokenizer`]。
+        decoder (`pyctcdecode.BeamSearchDecoderCTC`, *optional*):
+            可选参数，用于语言模型增强解码的PyCTCDecode的BeamSearchDecoderCTC。详见[`Wav2Vec2ProcessorWithLM`]获取更多信息。
+        chunk_length_s (`float`, *optional*, defaults to 0):
+            每个分块的输入长度（秒）。如果`chunk_length_s = 0`，则禁用分块（默认）。
+    
+            <Tip>
+    
+            有关如何有效使用`chunk_length_s`的更多信息，请查看ASR分块博文。
+    
+            </Tip>
+    
+        stride_length_s (`float`, *optional*, defaults to `chunk_length_s / 6`):
+            每个分块左右的步幅长度。仅在`chunk_length_s > 0`时使用。这使得模型能够查看更多的上下文，并更好地推断字母，但管道会丢弃最后的步幅位，以尽可能完美地重构最终结果。
+    
+            <Tip>
+    
+            有关如何有效使用`stride_length_s`的更多信息，请查看ASR分块博文。
+    
+            </Tip>
+    
+        framework (`str`, *optional*):
+            要使用的框架，可以是`"pt"`表示PyTorch或`"tf"`表示TensorFlow。必须安装指定的框架。如果未指定框架，默认使用当前安装的框架。如果未指定框架且两个框架都安装，则默认使用模型的框架，或者如果没有提供模型，则默认使用PyTorch。
+        device (Union[`int`, `torch.device`], *optional*):
+            CPU/GPU设备编号。将其设置为`None`将使用CPU，设置为正整数将在关联的CUDA设备ID上运行模型。
+        torch_dtype (Union[`int`, `torch.dtype`], *optional*):
+            计算的数据类型（dtype）。将其设置为`None`将使用float32精度。设置为`torch.float16`或`torch.bfloat16`将使用相应的半精度dtype。
+    # 初始化方法，接受多个参数来配置模型和处理过程
     def __init__(
         self,
-        # 模型参数，接受一个 PreTrainedModel 类型的参数
-        model: "PreTrainedModel",
-        # 特征提取器参数，可以是 SequenceFeatureExtractor 类型或字符串，可选，默认为 None
-        feature_extractor: Union["SequenceFeatureExtractor", str] = None,
-        # 分词器参数，可选，默认为 None
-        tokenizer: Optional[PreTrainedTokenizer] = None,
-        # 解码器参数，可以是 BeamSearchDecoderCTC 类型或字符串，可选，默认为 None
-        decoder: Optional[Union["BeamSearchDecoderCTC", str]] = None,
-        # 设备参数，可以是整数或 torch.device 类型，可选，默认为 None
-        device: Union[int, "torch.device"] = None,
-        # Torch 数据类型参数，可以是字符串或 torch.dtype 类型，可选，默认为 None
-        torch_dtype: Optional[Union[str, "torch.dtype"]] = None,
-        # 其他关键字参数
-        **kwargs,
+        model: "PreTrainedModel",  # 模型参数，预训练模型对象
+        feature_extractor: Union["SequenceFeatureExtractor", str] = None,  # 特征提取器，可以是对象或者字符串
+        tokenizer: Optional[PreTrainedTokenizer] = None,  # 分词器，可选的预训练分词器对象
+        decoder: Optional[Union["BeamSearchDecoderCTC", str]] = None,  # 解码器，可以是解码器对象或者字符串
+        device: Union[int, "torch.device"] = None,  # 设备参数，可以是整数或者 torch 设备对象
+        torch_dtype: Optional[Union[str, "torch.dtype"]] = None,  # torch 数据类型，可选的字符串或者 torch 数据类型对象
+        **kwargs,  # 其他关键字参数
     ):
-        # 设置模型类型，以便检查是否具有正确的预处理和后处理参数
-        # 如果模型配置的模型类型是 "whisper"
+        # 设置模型类型，以便检查预处理和后处理参数是否正确
         if model.config.model_type == "whisper":
-            # 设置对象类型为 "seq2seq_whisper"
-            self.type = "seq2seq_whisper"
-        # 如果模型类名在 MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES 的值中
+            self.type = "seq2seq_whisper"  # 如果模型类型是 "whisper"，设置类型为 "seq2seq_whisper"
         elif model.__class__.__name__ in MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES.values():
-            # 设置对象类型为 "seq2seq"
-            self.type = "seq2seq"
-        # 如果特征提取器的处理器类存在且以 "WithLM" 结尾，并且解码器不是 None
+            self.type = "seq2seq"  # 如果模型类名在映射字典中的值列表中，则设置类型为 "seq2seq"
         elif (
-            feature_extractor._processor_class
-            and feature_extractor._processor_class.endswith("WithLM")
-            and decoder is not None
+            feature_extractor._processor_class  # 如果特征提取器的处理类存在
+            and feature_extractor._processor_class.endswith("WithLM")  # 并且处理类名称以 "WithLM" 结尾
+            and decoder is not None  # 并且解码器不为 None
         ):
-            # 设置对象类型为 "ctc_with_lm"
-            self.type = "ctc_with_lm"
-            # 设置解码器
-            self.decoder = decoder
-        # 否则
+            self.decoder = decoder  # 设置解码器
+            self.type = "ctc_with_lm"  # 设置类型为 "ctc_with_lm"
         else:
-            # 设置对象类型为 "ctc"
-            self.type = "ctc"
+            self.type = "ctc"  # 否则，设置类型为 "ctc"
 
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传递模型、分词器、特征提取器、设备和其他关键字参数
         super().__init__(model, tokenizer, feature_extractor, device=device, torch_dtype=torch_dtype, **kwargs)
 
-    # 调用方法，用于执行对象的功能
+    # 调用方法，用于处理输入数据
     def __call__(
         self,
-        # 输入参数，可以是 numpy 数组、字节串或字符串
-        inputs: Union[np.ndarray, bytes, str],
-        # 其他关键字参数
-        **kwargs,
+        inputs: Union[np.ndarray, bytes, str],  # 输入参数可以是 numpy 数组、字节流或字符串
+        **kwargs,  # 其他关键字参数
     ):
-    
-    # 参数清理方法，用于清理输入参数
+
+    # 校验参数方法，用于规范化处理参数
     def _sanitize_parameters(
         self,
-        # 分段长度参数，可选
-        chunk_length_s=None,
-        # 步长参数，可选
-        stride_length_s=None,
-        # 忽略警告参数，可选
-        ignore_warning=None,
-        # 解码器关键字参数，可选
-        decoder_kwargs=None,
-        # 返回时间戳参数，可选
-        return_timestamps=None,
-        # 返回语言参数，可选
-        return_language=None,
-        # 生成关键字参数，可选
-        generate_kwargs=None,
-        # 最大新标记数参数，可选
-        max_new_tokens=None,
+        chunk_length_s=None,  # 分块长度（秒）
+        stride_length_s=None,  # 步长长度（秒）
+        ignore_warning=None,  # 是否忽略警告
+        decoder_kwargs=None,  # 解码器关键字参数
+        return_timestamps=None,  # 是否返回时间戳
+        return_language=None,  # 是否返回语言
+        generate_kwargs=None,  # 生成关键字参数
+        max_new_tokens=None,  # 最大新标记数
     ):
-    
-    # 后处理方法，用于处理模型输出结果
+
+    # 后处理方法，用于处理模型输出
     def postprocess(
-        self, model_outputs, decoder_kwargs: Optional[Dict] = None, return_timestamps=None, return_language=None
-```   
-# 寻找时间戳序列的函数，合并每个序列的结尾和下一个序列的开头，由于`WhisperForConditionalGeneration`生成的时间戳是成对的，我们过滤连续的时间戳并只迭代它们。
-# 我们跟踪`time`，表示正在处理的数据块的实际起始时间。我们需要确保将时间戳标记偏移量设置为`time`，以便于分词器正确计算最终的`offset`。
+        self, model_outputs,  # 模型输出
+        decoder_kwargs: Optional[Dict] = None,  # 解码器关键字参数
+        return_timestamps=None,  # 是否返回时间戳
+        return_language=None,  # 是否返回语言
 def _find_timestamp_sequence(sequences, tokenizer, feature_extractor, max_source_positions):
-    # 第一个时间戳标记的索引
+    """
+    Computes the final sequences by merging the end of the nth sequence with the beginning of the n+1th sequence. Since
+    `WhisperForConditionalGeneration` produces the timestamps pairwise, we filter the consecutive timestamps and only
+    iterate over them. We keep track of the `time` which indicates the actual starting time of the chunk that is
+    processed. We need to make sure to offset the timestamps tokens by the `time` in order for the tokenizer to
+    properly compute the final `offset`.
+    """
+    # index of the first timestamp token
+    # 获取第一个时间戳的token索引，这里假设"<|notimestamps|>"是一个特殊标记，用于指示时间戳的开始
     timestamp_begin = tokenizer.convert_tokens_to_ids("<|notimestamps|>") + 1
     items = []
-    # token与时间的近似比例：大约0.2秒
+    # approximation of the token to time ratio : ~0.2seconds
+    # token与时间的近似比例：约为0.2秒，用于计算时间偏移量
     time_precision = feature_extractor.chunk_length / max_source_positions
-    time = 0
+    time = 0  # 初始时间设为0
     result = []
-    # 遍历items的长度
     for i in range(len(items)):
-        result += items[i].tolist()
-    # 返回结果列表
-    return result
+        result += items[i].tolist()  # 将items中的元素转换为列表后添加到result中
+    return result  # 返回合并后的结果列表
 ```

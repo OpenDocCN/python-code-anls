@@ -1,19 +1,24 @@
 # `.\models\idefics\processing_idefics.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明，使用 Apache License 2.0 许可
-# 仅在遵守许可证的情况下使用此文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，
-# 没有任何形式的担保或条件，无论是明示的还是暗示的
-# 请查看许可证以获取有关特定语言的权限和限制
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-# IDEFICS 的 Processor 类
+Processor class for IDEFICS.
 """
 
-# 导入必要的模块和类
 from typing import Callable, List, Optional, Union
 from urllib.parse import urlparse
 
@@ -22,19 +27,21 @@ from ...processing_utils import ProcessorMixin
 from ...tokenization_utils_base import BatchEncoding, PaddingStrategy, TextInput, TruncationStrategy
 from ...utils import TensorType, is_torch_available
 
-# 如果有 torch 可用，则导入 torch 模块
+
 if is_torch_available():
     import torch
 
-# 定义一个特殊的图像标记
+
 IMAGE_TOKEN = "<image>"
 
-# 从 m4.training.packing 复制的函数
-def incremental_to_binary_attention_mask(incremental_mask, num_classes=-1):
-    # 将 [-1, 0, 1] 转换为 [[0, 0], [1, 0], [0, 1]]
 
-    # 如果任何图像索引超过 num_classes，则将其设置为 -1
-    # 超过允许的最大图像数量的单词不会参与任何注意力
+# copied from m4.training.packing
+# 将增量注意力掩码转换为二进制注意力掩码
+def incremental_to_binary_attention_mask(incremental_mask, num_classes=-1):
+    # This function converts: [-1, 0, 1] => [[0, 0], [1, 0], [0, 1]]
+
+    # 如果有任何图像索引超过 num_classes，将它们设置为 -1
+    # 超过允许的最大图像数量的单词不参与任何注意力
     if num_classes != -1:
         incremental_mask[incremental_mask >= num_classes] = -1
 
@@ -44,7 +51,9 @@ def incremental_to_binary_attention_mask(incremental_mask, num_classes=-1):
     attn_mask[negatives, :] = 0
     return attn_mask
 
-# 从 m4.training.packing 复制的函数
+
+# copied from m4.training.packing
+# 为打包的输入 ID 创建图像注意力掩码
 def image_attention_mask_for_packed_input_ids(input_ids, tokenizer):
     image_attention_mask = torch.full_like(input_ids, fill_value=-1)
     next_image_attention_mask = torch.full_like(input_ids, fill_value=-1)
@@ -66,64 +75,73 @@ def image_attention_mask_for_packed_input_ids(input_ids, tokenizer):
 
             if token_id == eod_token_id:
                 seen_eod = True
-    # 遍历输入的批次中的每个索引
+    # 遍历每个批次中的输入 ID
     for batch_idx in range(input_ids.size(0)):
-        # 初始化计数器为-1，标记是否遇到了结束符号
+        # 初始化计数器为-1，表示还未遇到图片标记
         count = -1
+        # 标记是否已经遇到过结束符 (eod_token_id)
         seen_eod = False
-        # 从最后一个 token 开始向前遍历
+        
+        # 倒序遍历当前批次中的输入 ID
         for idx in range(input_ids[batch_idx].size(0) - 1, -1, -1):
-            # 获取当前 token 的 ID
+            # 获取当前位置的 token ID
             token_id = input_ids[batch_idx][idx]
-            # 如果当前 token 是图片 token
+            
+            # 如果当前 token 是图片标记 (image_token_id)
             if token_id == image_token_id:
-                # 计数器加一，更新下一个图片的注意力掩码
+                # 计数器加一，表示遇到了下一个图片标记
                 count += 1
+                # 在下一个图片标记的位置设置注意力掩码为当前计数值
                 next_image_attention_mask[batch_idx][idx] = count
+                # 重置结束符标记为未见过
                 seen_eod = False
             else:
-                # 如果不是图片 token，则更新下一个图片的注意力掩码
+                # 在非图片标记位置设置注意力掩码为当前计数值
                 next_image_attention_mask[batch_idx][idx] = count
-
-            # 如果当前 token 是结束符号 token
+            
+            # 如果当前 token 是结束符 (eod_token_id)
             if token_id == eod_token_id:
+                # 标记已经遇到过结束符
                 seen_eod = True
-
-            # 如果已经遇到了结束符号
+            
+            # 如果已经遇到过结束符
             if seen_eod:
-                # 更新下一个图片的注意力掩码为-1
+                # 在结束符后的位置设置注意力掩码为-1
                 next_image_attention_mask[batch_idx][idx] = -1
-
-        # 获取非负索引
+        
+        # 找出非负索引位置
         non_negative_indices = next_image_attention_mask[batch_idx] != -1
-        # 对非负索引的注意力掩码进行调整
+        # 对非负索引位置的注意力掩码值进行调整
         next_image_attention_mask[batch_idx][non_negative_indices] -= count
         next_image_attention_mask[batch_idx][non_negative_indices] *= -1
-
-    # 返回图片的注意力掩码和下一个图片的注意力掩码
+    
+    # 返回处理后的注意力掩码
     return image_attention_mask, next_image_attention_mask
 def is_url(string):
-    """检查传入的字符串是否包含有效的 URL，且没有其他内容。例如，如果包含空格，则立即使 URL 无效"""
+    """Checks if the passed string contains a valid URL and nothing else. 
+    If a space is included, the URL is immediately invalidated."""
     # 如果字符串中包含空格，则返回 False
     if " " in string:
         return False
-    # 使用 urlparse 函数解析字符串，判断是否包含 scheme 和 netloc
+    # 解析 URL，验证其结构是否符合 URL 标准
     result = urlparse(string)
+    # 检查 URL 是否包含 scheme 和 netloc，若都包含则认为是有效的 URL
     return all([result.scheme, result.netloc])
 
 
 class IdeficsProcessor(ProcessorMixin):
     r"""
-    构建一个 IDEFICS 处理器，将 LLama 分词器和 IDEFICS 图像处理器封装成一个单一处理器。
+    Constructs an IDEFICS processor which wraps a LLama tokenizer and IDEFICS image processor into a single processor.
 
-    [`IdeficsProcessor`] 提供了 [`IdeficsImageProcessor`] 和 [`LlamaTokenizerFast`] 的所有功能。更多信息请参阅 [`~IdeficsProcessor.__call__`] 和 [`~IdeficsProcessor.decode`] 的文档。
+    [`IdeficsProcessor`] offers all the functionalities of [`IdeficsImageProcessor`] and [`LlamaTokenizerFast`]. See
+    the docstring of [`~IdeficsProcessor.__call__`] and [`~IdeficsProcessor.decode`] for more information.
 
     Args:
         image_processor (`IdeficsImageProcessor`):
-            [`IdeficsImageProcessor`] 的一个实例。图像处理器是必需的输入。
+            An instance of [`IdeficsImageProcessor`]. The image processor is a required input.
         tokenizer (`LlamaTokenizerFast`):
-            [`LlamaTokenizerFast`] 的一个实例。分词器是必需的输入。
-        image_size (`int`, *可选*, 默认为 224): 图像大小（假设为正方形图像）
+            An instance of [`LlamaTokenizerFast`]. The tokenizer is a required input.
+        image_size (`int`, *optional*, defaults to 224): Image size (assuming a square image)
     """
 
     attributes = ["image_processor", "tokenizer"]
@@ -131,23 +149,28 @@ class IdeficsProcessor(ProcessorMixin):
     tokenizer_class = "LlamaTokenizerFast"
 
     def __init__(self, image_processor, tokenizer=None, image_size=224, add_end_of_utterance_token=None, **kwargs):
-        # 如果 image_processor 为 None，则引发 ValueError
+        # 检查 image_processor 是否为空，若为空则抛出 ValueError
         if image_processor is None:
             raise ValueError("You need to specify an `image_processor`.")
-        # 如果 tokenizer 为 None，则引发 ValueError
+        # 检查 tokenizer 是否为空，若为空则抛出 ValueError
         if tokenizer is None:
             raise ValueError("You need to specify a `tokenizer`.")
 
+        # 调用父类的初始化方法，传入 image_processor 和 tokenizer
         super().__init__(image_processor, tokenizer)
+        # 将当前的处理器设置为 image_processor
         self.current_processor = self.image_processor
+        # 将图片 token 的 ID 设置为 tokenizer 中 IMAGE_TOKEN 对应的 ID
         self.image_token_id = tokenizer.convert_tokens_to_ids(IMAGE_TOKEN)
 
+        # 设置默认的图片维度，从 image_processor 中获取图像的通道数和尺寸
         self.default_image_dims = (
             self.image_processor.image_num_channels,
             self.image_processor.image_size,
             self.image_processor.image_size,
         )
 
+        # 检查 tokenizer 是否训练过 "<end_of_utterance>" 这个特殊 token
         self.tokenizer_was_trained_with_end_of_utterance_token = (
             True
             if "<end_of_utterance>" in self.tokenizer.special_tokens_map.get("additional_special_tokens", [])
@@ -165,22 +188,46 @@ class IdeficsProcessor(ProcessorMixin):
         add_end_of_utterance_token=None,
         debug=False,
         return_tensors: Optional[Union[str, TensorType]] = TensorType.PYTORCH,
+    ):
+        """
+        This method processes input prompts into tokenized and optionally transformed outputs.
+
+        Args:
+            prompts (Union[List[TextInput], List[List[TextInput]]]): Input prompts to process.
+            padding (Union[bool, str, PaddingStrategy], optional): Padding strategy for tokenized outputs. Defaults to False.
+            truncation (Union[bool, str, TruncationStrategy], optional): Truncation strategy for tokenized outputs. Defaults to None.
+            max_length (Optional[int], optional): Maximum length of the tokenized outputs. Defaults to None.
+            transform (Callable, optional): Transformation function applied after tokenization. Defaults to None.
+            add_eos_token (bool, optional): Whether to add an end-of-sequence token. Defaults to False.
+            add_end_of_utterance_token (None, optional): Placeholder for adding end-of-utterance token. Defaults to None.
+            debug (bool, optional): Whether to enable debug mode. Defaults to False.
+            return_tensors (Optional[Union[str, TensorType]], optional): Output tensor type. Defaults to TensorType.PYTORCH.
+
+        Returns:
+            Dict[str, Any]: Processed outputs based on input prompts.
+        """
+        # 在这里实现具体的处理逻辑，将输入 prompts 处理为 tokenized 和可能转换后的输出
+        pass
+
     def batch_decode(self, *args, **kwargs):
         """
-        此方法将所有参数转发给 LlamaTokenizerFast 的 [`~PreTrainedTokenizer.batch_decode`]。有关更多信息，请参阅此方法的文档。
+        This method forwards all its arguments to LlamaTokenizerFast's [`~PreTrainedTokenizer.batch_decode`]. Please
+        refer to the docstring of this method for more information.
         """
+        # 调用 tokenizer 的 batch_decode 方法，将参数透传给它
         return self.tokenizer.batch_decode(*args, **kwargs)
-    # 定义一个方法用于解码，将所有参数转发给 LlamaTokenizerFast 的 `~PreTrainedTokenizer.decode` 方法。请参考该方法的文档字符串以获取更多信息。
+    # 将所有参数转发到 LlamaTokenizerFast 的 `PreTrainedTokenizer.decode` 方法中，并返回结果
     def decode(self, *args, **kwargs):
+        """
+        This method forwards all its arguments to LlamaTokenizerFast's [`~PreTrainedTokenizer.decode`]. Please refer to
+        the docstring of this method for more information.
+        """
         return self.tokenizer.decode(*args, **kwargs)
 
-    # 返回模型输入的名称列表
+    # 获取模型输入的名称列表，合并并去重来自于 tokenizer 和 image_processor 的输入名称
     @property
     def model_input_names(self):
-        # 获取分词器的模型输入名称列表
         tokenizer_input_names = self.tokenizer.model_input_names
-        # 获取图像处理器的模型输入名称列表
         image_processor_input_names = self.image_processor.model_input_names
-        # 将分词器和图像处理器的输入名称列表合并，并去除重复的名称，返回结果列表
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))
 ```

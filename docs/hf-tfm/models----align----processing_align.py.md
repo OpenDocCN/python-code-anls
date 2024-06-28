@@ -1,22 +1,15 @@
-# `.\transformers\models\align\processing_align.py`
+# `.\models\align\processing_align.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制
-
+```
 """
 Image/Text processor class for ALIGN
 """
 
 # 导入必要的模块和类
-from ...processing_utils import ProcessorMixin
-from ...tokenization_utils_base import BatchEncoding
+from ...processing_utils import ProcessorMixin  # 导入处理工具混合类
+from ...tokenization_utils_base import BatchEncoding  # 导入批量编码类
 
-# 定义 AlignProcessor 类，继承自 ProcessorMixin 类
+
 class AlignProcessor(ProcessorMixin):
     r"""
     Constructs an ALIGN processor which wraps [`EfficientNetImageProcessor`] and
@@ -32,33 +25,56 @@ class AlignProcessor(ProcessorMixin):
     """
 
     # 定义类属性
-    attributes = ["image_processor", "tokenizer"]
-    image_processor_class = "EfficientNetImageProcessor"
-    tokenizer_class = ("BertTokenizer", "BertTokenizerFast")
+    attributes = ["image_processor", "tokenizer"]  # 类属性列表，包含图像处理器和分词器
+    image_processor_class = "EfficientNetImageProcessor"  # 图像处理器类名
+    tokenizer_class = ("BertTokenizer", "BertTokenizerFast")  # 分词器类名（元组形式）
 
-    # 初始化方法，接受 image_processor 和 tokenizer 两个参数
     def __init__(self, image_processor, tokenizer):
+        """
+        Initialize the AlignProcessor with image_processor and tokenizer.
+
+        Args:
+            image_processor: Instance of EfficientNetImageProcessor.
+            tokenizer: Instance of BertTokenizer or BertTokenizerFast.
+        """
         super().__init__(image_processor, tokenizer)
 
-    # 批量解码方法，将参数转发给 BertTokenizerFast 的 batch_decode 方法
     def batch_decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to BertTokenizerFast's [`~PreTrainedTokenizer.batch_decode`]. Please
-        refer to the docstring of this method for more information.
+        This method forwards all its arguments to BertTokenizerFast's [`~PreTrainedTokenizer.batch_decode`].
+        Please refer to the docstring of this method for more information.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            List[str]: Decoded texts.
         """
         return self.tokenizer.batch_decode(*args, **kwargs)
 
-    # 解码方法，将参数转发给 BertTokenizerFast 的 decode 方法
     def decode(self, *args, **kwargs):
         """
-        This method forwards all its arguments to BertTokenizerFast's [`~PreTrainedTokenizer.decode`]. Please refer to
-        the docstring of this method for more information.
+        This method forwards all its arguments to BertTokenizerFast's [`~PreTrainedTokenizer.decode`].
+        Please refer to the docstring of this method for more information.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            str: Decoded text.
         """
         return self.tokenizer.decode(*args, **kwargs)
 
-    # 返回模型输入名称的属性，合并 tokenizer 和 image_processor 的模��输入名称并去重
     @property
     def model_input_names(self):
+        """
+        Property that combines model input names from both tokenizer and image processor.
+
+        Returns:
+            list: List of unique model input names.
+        """
         tokenizer_input_names = self.tokenizer.model_input_names
         image_processor_input_names = self.image_processor.model_input_names
         return list(dict.fromkeys(tokenizer_input_names + image_processor_input_names))

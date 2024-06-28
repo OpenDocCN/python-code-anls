@@ -1,15 +1,19 @@
-# `.\transformers\pipelines\object_detection.py`
+# `.\pipelines\object_detection.py`
 
-```py
-# 从typing模块导入Any, Dict, List, Union类
+```
+# 从 typing 模块中导入 Any, Dict, List, Union 类型
 from typing import Any, Dict, List, Union
 
-# 从..utils包中导入add_end_docstrings, is_torch_available, is_vision_available, logging, requires_backends方法
+# 从 ..utils 模块中导入必要的函数和类
 from ..utils import add_end_docstrings, is_torch_available, is_vision_available, logging, requires_backends
-# 从.base模块中导入PIPELINE_INIT_ARGS, Pipeline类
-from .base import PIPELINE_INIT_ARGS, Pipeline
+# 从 .base 模块中导入 Pipeline 类和 build_pipeline_init_args 函数
+from .base import Pipeline, build_pipeline_init_args
 
-# 如果torch可用，则导入torch模块，并从..models.auto.modeling_auto模块导入MODEL_FOR_OBJECT_DETECTION_MAPPING_NAMES, MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES
+# 如果 vision 可用，从 ..image_utils 模块中导入 load_image 函数
+if is_vision_available():
+    from ..image_utils import load_image
+
+# 如果 torch 可用，导入 torch 模块和必要的类
 if is_torch_available():
     import torch
     from ..models.auto.modeling_auto import (
@@ -17,16 +21,15 @@ if is_torch_available():
         MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES,
     )
 
-# 从logging模块导入logger对象
+# 从 logging 模块中获取当前模块的 logger
 logger = logging.get_logger(__name__)
 
-# 定义Prediction为包含任意类型的字典，Predictions为Prediction的列表
+# 定义用于预测结果的类型别名
 Prediction = Dict[str, Any]
 Predictions = List[Prediction]
 
-# 使用装饰器向ObjectDetectionPipeline类添加文档字符串，文档字符串内容为PIPELINE_INIT_ARGS
-@add_end_docstrings(PIPELINE_INIT_ARGS)
-# 定义ObjectDetectionPipeline类，继承自Pipeline基类
+# 使用装饰器为 ObjectDetectionPipeline 类添加文档字符串
+@add_end_docstrings(build_pipeline_init_args(has_image_processor=True))
 class ObjectDetectionPipeline(Pipeline):
     """
     Object detection pipeline using any `AutoModelForObjectDetection`. This pipeline predicts bounding boxes of objects
@@ -42,7 +45,7 @@ class ObjectDetectionPipeline(Pipeline):
     [{'score': 0.997, 'label': 'bird', 'box': {'xmin': 69, 'ymin': 171, 'xmax': 396, 'ymax': 507}}, {'score': 0.999, 'label': 'bird', 'box': {'xmin': 398, 'ymin': 105, 'xmax': 767, 'ymax': 507}}]
 
     >>> # x, y  are expressed relative to the top left hand corner.
-    ```py
+    ```
 
     Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
 
@@ -52,102 +55,109 @@ class ObjectDetectionPipeline(Pipeline):
     See the list of available models on [huggingface.co/models](https://huggingface.co/models?filter=object-detection).
     """
 
-    # 定义初始化方法，接收任意多的位置参数和关键字参数
+    # 初始化方法，继承自 Pipeline 类的初始化方法
     def __init__(self, *args, **kwargs):
-        # 调用父类Pipeline的初始化方法
         super().__init__(*args, **kwargs)
 
-        # 如果框架是"tf"，则抛出带有错误信息的异常提示
+        # 如果使用的框架是 "tf"，抛出 ValueError 异常
         if self.framework == "tf":
             raise ValueError(f"The {self.__class__} is only available in PyTorch.")
 
-        # 确保环境中有"vision"后端
+        # 确保依赖的后端库已加载，这里要求加载 "vision"
         requires_backends(self, "vision")
-        # 复制MODEL_FOR_OBJECT_DETECTION_MAPPING_NAMES到mapping，并更新为MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES
+
+        # 复制对象检测模型映射，并更新为包含对象分类映射的名称
         mapping = MODEL_FOR_OBJECT_DETECTION_MAPPING_NAMES.copy()
         mapping.update(MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES)
-        # 检查模型类型是否匹配规定的映射
+        
+        # 检查模型类型是否符合预期
         self.check_model_type(mapping)
 
-    # 定义_sanitize_parameters方法，处理参数
+    # 私有方法，用于处理和清理参数
     def _sanitize_parameters(self, **kwargs):
         preprocess_params = {}
-        # 如果关键字参数中有"timeout"，则加入预处理参数中
+        # 如果参数中包含 "timeout"，则将其添加到预处理参数中
         if "timeout" in kwargs:
             preprocess_params["timeout"] = kwargs["timeout"]
         postprocess_kwargs = {}
-        # 如果关键字参数中有"threshold"，则加入后处理参数中
+        # 如果参数中包含 "threshold"，则将其添加到后处理参数中
         if "threshold" in kwargs:
             postprocess_kwargs["threshold"] = kwargs["threshold"]
-        # 返回预处理参数、空字典、后处理参数
         return preprocess_params, {}, postprocess_kwargs
-    # 定义一个特殊方法，该方法接收任意数量的位置参数和关键字参数，返回值可以是 Predictions 或 List[Prediction] 类型
+    # 调用对象实例时执行的方法，用于检测输入图像中的对象（边界框和类别）
+
     def __call__(self, *args, **kwargs) -> Union[Predictions, List[Prediction]]:
         """
-        检测输入的图像中的对象（边界框和类别）。
+        Detect objects (bounding boxes & classes) in the image(s) passed as inputs.
 
         Args:
             images (`str`, `List[str]`, `PIL.Image` or `List[PIL.Image]`):
-                pipeline 处理三种类型的图像：
+                The pipeline handles three types of images:
 
-                - 包含指向图像的 HTTP(S) 链接的字符串
-                - 包含图像的本地路径的字符串
-                - 直接在 PIL 中加载的图像
+                - A string containing an HTTP(S) link pointing to an image
+                - A string containing a local path to an image
+                - An image loaded in PIL directly
 
-                pipeline 接受单个图像或一批图像。批处理中的图像必须都是相同格式：全都是 HTTP(S) 链接，全都是本地路径，或者全都是 PIL 图像。
+                The pipeline accepts either a single image or a batch of images. Images in a batch must all be in the
+                same format: all as HTTP(S) links, all as local paths, or all as PIL images.
             threshold (`float`, *optional*, defaults to 0.9):
-                进行预测所需的概率阈值。
+                The probability necessary to make a prediction.
             timeout (`float`, *optional*, defaults to None):
-                从网页获取图像的最大等待时间（秒）。如果为 None，没有设置超时时间，调用可能会一直阻塞。
+                The maximum time in seconds to wait for fetching images from the web. If None, no timeout is set and
+                the call may block forever.
 
         Return:
-            包含结果的字典列表或字典列表的列表。如果输入是单个图像，将返回一个字典列表；如果输入是多个图像，将返回一个与每个图像对应的字典列表的列表。
+            A list of dictionaries or a list of list of dictionaries containing the result. If the input is a single
+            image, will return a list of dictionaries, if the input is a list of several images, will return a list of
+            list of dictionaries corresponding to each image.
 
-            字典包含以下键：
+            The dictionaries contain the following keys:
 
-            - **label** (`str`) -- 模型识别的类别标签。
-            - **score** (`float`) -- 模型为该标签打分。
-            - **box** (`List[Dict[str, int]]`) -- 在图像原始大小中检测到的对象的边界框。
+            - **label** (`str`) -- The class label identified by the model.
+            - **score** (`float`) -- The score attributed by the model for that label.
+            - **box** (`List[Dict[str, int]]`) -- The bounding box of detected object in image's original size.
         """
 
         return super().__call__(*args, **kwargs)
 
-    # 对图像进行预处理
+    # 对输入图像进行预处理，返回模型所需的输入格式
     def preprocess(self, image, timeout=None):
-        # 加载图像，获取图像对象
+        # 载入图像，根据需要设置超时时间
         image = load_image(image, timeout=timeout)
-        # 获取目标尺寸
+        # 获取图像的高度和宽度并组成张量
         target_size = torch.IntTensor([[image.height, image.width]])
-        # 处理图像输入，转换成 PyTorch 格式
+        # 使用图像处理器处理图像，返回PyTorch格式的输入
         inputs = self.image_processor(images=[image], return_tensors="pt")
-        # 如果存在分词器，将文本和边界框传给分词器，返回 PyTorch 格式
+        # 如果存在分词器，则使用分词器对文本和边界框进行处理，并返回PyTorch格式的输入
         if self.tokenizer is not None:
             inputs = self.tokenizer(text=inputs["words"], boxes=inputs["boxes"], return_tensors="pt")
+        # 将图像的目标尺寸添加到输入中
         inputs["target_size"] = target_size
         return inputs
 
-    # 执行模型的前向传播
+    # 模型的内部前向传播方法，处理模型输入并返回模型输出
     def _forward(self, model_inputs):
-        # 弹出目标尺寸，执行模型的前向传播
+        # 弹出目标尺寸以避免传递给模型
         target_size = model_inputs.pop("target_size")
+        # 使用模型进行前向传播，获取输出
         outputs = self.model(**model_inputs)
-        # 包装模型输出，添加目标尺寸
+        # 构建模型的输出对象，并将目标尺寸添加到输出中
         model_outputs = outputs.__class__({"target_size": target_size, **outputs})
-        # 如果存在分词器，添加模型输入中的边界框
+        # 如果存在分词器，则将边界框信息添加到模型输出中
         if self.tokenizer is not None:
             model_outputs["bbox"] = model_inputs["bbox"]
         return model_outputs
     def postprocess(self, model_outputs, threshold=0.9):
-        # 获取目标尺寸
+        # 获取模型输出中的目标尺寸
         target_size = model_outputs["target_size"]
-        # 如果存在分词器
         if self.tokenizer is not None:
-            # 这是 LayoutLMForTokenClassification 的一个变体。
-            # OCR 获取了框并且模型对单词进行了分类。
+            # 这是 LayoutLMForTokenClassification 的变种。
+            # OCR 获取了文本框，模型对单词进行了分类。
+            # 从目标尺寸中获取高度和宽度
             height, width = target_size[0].tolist()
 
-            # 将边界框反归一化
             def unnormalize(bbox):
+                # 将归一化的边界框坐标转换为原始坐标
                 return self._get_bounding_box(
                     torch.Tensor(
                         [
@@ -159,38 +169,37 @@ class ObjectDetectionPipeline(Pipeline):
                     )
                 )
 
-            # 计算分数和类别
+            # 计算模型输出中的得分和类别
             scores, classes = model_outputs["logits"].squeeze(0).softmax(dim=-1).max(dim=-1)
-            # 将类别转换为标签
+            # 根据预测的类别获取类别标签
             labels = [self.model.config.id2label[prediction] for prediction in classes.tolist()]
-            # 反归一化边界框
+            # 将模型输出的边界框进行反归一化处理
             boxes = [unnormalize(bbox) for bbox in model_outputs["bbox"].squeeze(0)]
-            # 设置键和注释
             keys = ["score", "label", "box"]
-            # 创建注释列表，筛选出分数高于阈值的项
+            # 创建注释列表，包含得分、标签和边界框
             annotation = [dict(zip(keys, vals)) for vals in zip(scores.tolist(), labels, boxes) if vals[0] > threshold]
         else:
             # 这是一个常规的 ForObjectDetectionModel
-            # 对目标检测模型的原始注释进行后处理
+            # 对象检测后处理，获取原始注释信息
             raw_annotations = self.image_processor.post_process_object_detection(model_outputs, threshold, target_size)
             raw_annotation = raw_annotations[0]
+            # 获取原始注释中的分数、标签和边界框
             scores = raw_annotation["scores"]
             labels = raw_annotation["labels"]
             boxes = raw_annotation["boxes"]
 
-            # 将得分、标签和边界框转换为列表形式
+            # 将分数、标签和边界框转换为列表形式
             raw_annotation["scores"] = scores.tolist()
             raw_annotation["labels"] = [self.model.config.id2label[label.item()] for label in labels]
             raw_annotation["boxes"] = [self._get_bounding_box(box) for box in boxes]
 
-            # 将原始注释转换为特定格式的注释列表
+            # 构建注释列表，包含得分、标签和边界框
             keys = ["score", "label", "box"]
             annotation = [
                 dict(zip(keys, vals))
                 for vals in zip(raw_annotation["scores"], raw_annotation["labels"], raw_annotation["boxes"])
             ]
 
-        # 返回注释列表
         return annotation
 
     def _get_bounding_box(self, box: "torch.Tensor") -> Dict[str, int]:
@@ -198,15 +207,15 @@ class ObjectDetectionPipeline(Pipeline):
         将列表 [xmin, xmax, ymin, ymax] 转换为字典 { "xmin": xmin, ... }
 
         Args:
-            box (`torch.Tensor`): 包含边界框坐标的张量，格式为 [xmin, xmax, ymin, ymax]。
+            box (`torch.Tensor`): 包含角落格式坐标的张量。
 
         Returns:
-            bbox (`Dict[str, int]`): 包含边界框坐标的字典，格式为 {"xmin": xmin, ...}。
+            bbox (`Dict[str, int]`): 包含角落格式坐标的字典。
         """
-        # 如果框架不是 PyTorch，抛出错误
         if self.framework != "pt":
+            # 如果框架不是 PyTorch，则抛出数值错误
             raise ValueError("The ObjectDetectionPipeline is only available in PyTorch.")
-        # 将边界框转换为字典格式
+        # 将边界框张量转换为整数列表，并命名为边界框
         xmin, ymin, xmax, ymax = box.int().tolist()
         bbox = {
             "xmin": xmin,

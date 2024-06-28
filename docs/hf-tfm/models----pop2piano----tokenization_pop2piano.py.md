@@ -1,59 +1,91 @@
-# `.\transformers\models\pop2piano\tokenization_pop2piano.py`
+# `.\models\pop2piano\tokenization_pop2piano.py`
 
-```py
-# 设置代码文件的编码格式为 UTF-8
+```
+# coding=utf-8
+# Copyright 2023 The Pop2Piano Authors and The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Tokenization class for Pop2Piano.
+"""
 
-# 版权声明，版权归 The Pop2Piano Authors 和 The HuggingFace Inc. team 所有
-# 根据 Apache 许可证 2.0 版本进行许可
-# 除非符合许可证要求或经书面同意，否则不得使用此文件
-# 可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 根据许可证要求，在"原样"的基础上分发软件，不提供任何担保或条件，无论是明示的还是暗示的 
-# 详细了解特定语言对权限的限制和限制条件，请参见许可证
-"""Pop2Piano 的分词类"""
-
-# 导入各种模块
 import json
 import os
 from typing import List, Optional, Tuple, Union
+
 import numpy as np
+
 from ...feature_extraction_utils import BatchFeature
 from ...tokenization_utils import AddedToken, BatchEncoding, PaddingStrategy, PreTrainedTokenizer, TruncationStrategy
 from ...utils import TensorType, is_pretty_midi_available, logging, requires_backends, to_numpy
 
-# 如果 pretty_midi 模块可用，则导入
 if is_pretty_midi_available():
     import pretty_midi
 
-# 获取 logger 对象
 logger = logging.get_logger(__name__)
 
-# 设置文件名常量 
+# 定义词汇文件的名称，"vocab" 对应 "vocab.json"
 VOCAB_FILES_NAMES = {
     "vocab": "vocab.json",
 }
 
-# 预训练模型文件名映射
+# 预训练模型所需的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab": {
         "sweetcocoa/pop2piano": "https://huggingface.co/sweetcocoa/pop2piano/blob/main/vocab.json",
     },
 }
 
-# 定义一个函数，将时间标记转换为音符标记
+
 def token_time_to_note(number, cutoff_time_idx, current_idx):
+    """
+    将时间令牌转换为音符索引。
+
+    Args:
+        number (int): 时间令牌的数量。
+        cutoff_time_idx (int or None): 时间截止索引（可选）。
+        current_idx (int): 当前索引位置。
+
+    Returns:
+        int: 更新后的当前索引位置。
+    """
     current_idx += number
-    # 如果指定了截止时间索引，则将当前索引与之进行比较
     if cutoff_time_idx is not None:
         current_idx = min(current_idx, cutoff_time_idx)
+
     return current_idx
 
-# 定义一个函数，将音符标记转换为音符对象
+
 def token_note_to_note(number, current_velocity, default_velocity, note_onsets_ready, current_idx, notes):
+    """
+    将音符令牌转换为音符。
+
+    Args:
+        number (int): 音符令牌的数量。
+        current_velocity (int): 当前速度。
+        default_velocity (int): 默认速度。
+        note_onsets_ready (list or None): 准备好的音符发生时刻的列表或 None。
+        current_idx (int): 当前索引位置。
+        notes (list): 音符列表。
+
+    Returns:
+        list: 更新后的音符列表。
+    """
     if note_onsets_ready[number] is not None:
-        # 带有起始时间的偏移
+        # 偏移与起始
         onset_idx = note_onsets_ready[number]
         if onset_idx < current_idx:
-            # 在前一个音符开始后进行时间转移
+            # 前一个音符后的时间偏移
             offset_idx = current_idx
             notes.append([onset_idx, offset_idx, number, default_velocity])
             onsets_ready = None if current_velocity == 0 else current_idx
@@ -62,29 +94,24 @@ def token_note_to_note(number, current_velocity, default_velocity, note_onsets_r
         note_onsets_ready[number] = current_idx
     return notes
 
-# 定义 Pop2PianoTokenizer 类，继承自 PreTrainedTokenizer
+
 class Pop2PianoTokenizer(PreTrainedTokenizer):
     """
-    构造一个 Pop2Piano 分词器。此分词器不需要训练。
-
-    这个分词器继承自[`PreTrainedTokenizer`]，其中包含大多数主要方法。用户应参考
-    这个超类以获取有关这些方法���更多信息。
+    构造 Pop2Piano 分词器。此分词器不需要训练。
 
     Args:
-        vocab (`str`):
-            包含词汇表的词汇文件的路径。
-        default_velocity (`int`, *optional*, defaults to 77):
-            确定在创建 MIDI 音符时要使用的默认速度。
-        num_bars (`int`, *optional*, defaults to 2):
-            确定每个标记的截止时间索引。
+        vocab (`str`): 包含词汇表的文件路径。
+        default_velocity (`int`, *optional*, 默认为 77):
+            创建 MIDI 音符时使用的默认速度。
+        num_bars (`int`, *optional*, 默认为 2):
+            每个令牌的截止时间索引。
     """
 
     model_input_names = ["token_ids", "attention_mask"]
     vocab_files_names = VOCAB_FILES_NAMES
-    # 加载预训练词汇文件映射
+    # 使用预训练的词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
 
-    # 初始化方法
     def __init__(
         self,
         vocab,
@@ -96,13 +123,13 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         bos_token="2",
         **kwargs,
     ):
-        # 根据传入的未知标记初始化 AddedToken 对象，确保左右两边不会被删除
+        # 初始化未知标记
         unk_token = AddedToken(unk_token, lstrip=False, rstrip=False) if isinstance(unk_token, str) else unk_token
-        # 根据传入的结束标记初始化 AddedToken 对象，确保左右两边不会被删除
+        # 初始化结束标记
         eos_token = AddedToken(eos_token, lstrip=False, rstrip=False) if isinstance(eos_token, str) else eos_token
-        # 根据传入的填充标记初始化 AddedToken 对象，确保左右两边不会被删除
+        # 初始化填充标记
         pad_token = AddedToken(pad_token, lstrip=False, rstrip=False) if isinstance(pad_token, str) else pad_token
-        # 根据传入的起始标记初始化 AddedToken 对象，确保左右两边不会被删除
+        # 初始化开始标记
         bos_token = AddedToken(bos_token, lstrip=False, rstrip=False) if isinstance(bos_token, str) else bos_token
 
         # 设置默认速度和小节数
@@ -113,10 +140,10 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         with open(vocab, "rb") as file:
             self.encoder = json.load(file)
 
-        # 创建编码器的反向映射
+        # 创建解码器的映射
         self.decoder = {v: k for k, v in self.encoder.items()}
 
-        # 调用父类的初始化方法
+        # 调用父类初始化方法
         super().__init__(
             unk_token=unk_token,
             eos_token=eos_token,
@@ -127,48 +154,48 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
 
     @property
     def vocab_size(self):
-        """返回标记器的词汇量大小。"""
+        """Returns the vocabulary size of the tokenizer."""
+        # 返回词汇表大小
         return len(self.encoder)
 
     def get_vocab(self):
-        """返回标记器的词汇表。"""
+        """Returns the vocabulary of the tokenizer."""
+        # 返回标记器的词汇表，包括新增的标记
         return dict(self.encoder, **self.added_tokens_encoder)
 
     def _convert_id_to_token(self, token_id: int) -> list:
         """
-        将由转换器生成的标记 ID 解码为音符。
+        Decodes the token ids generated by the transformer into notes.
 
         Args:
             token_id (`int`):
-                表示由转换器生成要转换为 Midi 标记的 ID。
+                This denotes the ids generated by the transformers to be converted to Midi tokens.
 
         Returns:
-            `List`: 包含标记类型 (`str`) 和值 (`int`) 的列表。
+            `List`: A list consists of token_type (`str`) and value (`int`).
         """
-
-        # 获取标记 ID 对应的类型和值
+        # 将转换器生成的标记 ID 解码为音符
         token_type_value = self.decoder.get(token_id, f"{self.unk_token}_TOKEN_TIME")
-        # 分割类型和值
         token_type_value = token_type_value.split("_")
-        # 提取类型和值
         token_type, value = "_".join(token_type_value[1:]), int(token_type_value[0])
 
         return [token_type, value]
 
     def _convert_token_to_id(self, token, token_type="TOKEN_TIME") -> int:
         """
-        将 Midi 标记编码为转换器生成的标记 ID。
+        Encodes the Midi tokens to transformer generated token ids.
 
         Args:
             token (`int`):
-                表示标记值。
+                This denotes the token value.
             token_type (`str`):
-                表示标记的类型。有四种类型的 Midi 标记，如 "TOKEN_TIME"、"TOKEN_VELOCITY"、"TOKEN_NOTE" 和 "TOKEN_SPECIAL"。
+                This denotes the type of the token. There are four types of midi tokens such as "TOKEN_TIME",
+                "TOKEN_VELOCITY", "TOKEN_NOTE" and "TOKEN_SPECIAL".
 
         Returns:
-            `int`: 返回标记的 ID。
+            `int`: returns the id of the token.
         """
-        # 获取标记和类型对应的 ID
+        # 将 Midi 标记编码为转换器生成的标记 ID
         return self.encoder.get(f"{token}_{token_type}", int(self.unk_token))
 
     def relative_batch_tokens_ids_to_notes(
@@ -192,25 +219,34 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
                 Denotes the cutoff time index for each note in generated Midi.
         """
 
+        # Initialize notes to None
         notes = None
 
+        # Iterate through each index in tokens
         for index in range(len(tokens)):
+            # Fetch tokens for the current index
             _tokens = tokens[index]
+            # Calculate start index for the current batch
             _start_idx = beat_offset_idx + index * bars_per_batch * 4
+            # Calculate cutoff time index for the current batch
             _cutoff_time_idx = cutoff_time_idx + _start_idx
+            # Convert relative tokens to notes using specified indices
             _notes = self.relative_tokens_ids_to_notes(
                 _tokens,
                 start_idx=_start_idx,
                 cutoff_time_idx=_cutoff_time_idx,
             )
 
+            # Check if _notes is empty
             if len(_notes) == 0:
                 pass
+            # If notes is None, assign _notes; otherwise concatenate to existing notes
             elif notes is None:
                 notes = _notes
             else:
                 notes = np.concatenate((notes, _notes), axis=0)
 
+        # If notes is still None, return an empty list; otherwise, return notes
         if notes is None:
             return []
         return notes
@@ -239,19 +275,21 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
             cutoff_time_idx (`int`, *optional*, defaults to 12):
                 Denotes the cutoff time index for each note in generated Midi.
         """
+        # Set beat_offset_idx to 0 if it's None
         beat_offset_idx = 0 if beat_offset_idx is None else beat_offset_idx
+        # Convert tokens to notes using relative_batch_tokens_ids_to_notes method
         notes = self.relative_batch_tokens_ids_to_notes(
             tokens=tokens,
             beat_offset_idx=beat_offset_idx,
             bars_per_batch=bars_per_batch,
             cutoff_time_idx=cutoff_time_idx,
         )
+        # Convert notes to Midi using notes_to_midi method
         midi = self.notes_to_midi(notes, beatstep, offset_sec=beatstep[beat_offset_idx])
         return midi
 
     # Taken from the original code
     # Please see https://github.com/sweetcocoa/pop2piano/blob/fac11e8dcfc73487513f4588e8d0c22a22f2fdc5/midi_tokenizer.py#L257
-    # 将相对 tokens 转换为 notes，以便用于创建 Pretty Midi 对象
     def relative_tokens_ids_to_notes(self, tokens: np.ndarray, start_idx: float, cutoff_time_idx: float = None):
         """
         Converts relative tokens to notes which will then be used to create Pretty Midi objects.
@@ -264,29 +302,36 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
             cutoff_time_idx (`float`, *optional*):
                 A parameter used while converting tokens to notes.
         """
-        # 将 tokens 转换为对应的单词列表
+        # 将 tokens 转换为对应的词汇列表
         words = [self._convert_id_to_token(token) for token in tokens]
 
         # 初始化当前索引和当前速度
         current_idx = start_idx
         current_velocity = 0
-        # 初始化用于记录音符开始的列表
+
+        # 准备音符的起始时间列表，根据已定义的音符种类数量动态生成
         note_onsets_ready = [None for i in range(sum([k.endswith("NOTE") for k in self.encoder.keys()]) + 1)]
         notes = []
-        # 遍历单词列表
+
+        # 遍历 tokens 对应的词汇列表
         for token_type, number in words:
+            # 处理特殊 token
             if token_type == "TOKEN_SPECIAL":
                 if number == 1:
                     break
+
+            # 处理时间 token
             elif token_type == "TOKEN_TIME":
-                # 根据时间 token 转换为音符
                 current_idx = token_time_to_note(
                     number=number, cutoff_time_idx=cutoff_time_idx, current_idx=current_idx
                 )
+
+            # 处理速度 token
             elif token_type == "TOKEN_VELOCITY":
                 current_velocity = number
+
+            # 处理音符 token
             elif token_type == "TOKEN_NOTE":
-                # 根据音符 token 转换为音符
                 notes = token_note_to_note(
                     number=number,
                     current_velocity=current_velocity,
@@ -295,10 +340,12 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
                     current_idx=current_idx,
                     notes=notes,
                 )
+
             else:
+                # 抛出异常，未知的 token 类型
                 raise ValueError("Token type not understood!")
 
-        # 对于每个音高，强制偏移（offset）如果没有偏移
+        # 对于每个音高和其对应的音符起始时间，若起始时间未定义，则强制定义一个偏移量
         for pitch, note_onset in enumerate(note_onsets_ready):
             if note_onset is not None:
                 if cutoff_time_idx is None:
@@ -309,7 +356,7 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
                 offset_idx = max(current_idx, cutoff)
                 notes.append([note_onset, offset_idx, pitch, self.default_velocity])
 
-        # 如果 notes 长度为 0，则返回空列表，否则对 notes 进行排序后返回
+        # 若 notes 为空则返回空列表，否则对 notes 按照音符起始时间排序并返回
         if len(notes) == 0:
             return []
         else:
@@ -330,35 +377,40 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
                 This represents the offset seconds which is used while creating each Pretty Midi Note.
         """
 
-        # 确保依赖库已安装
+        # 检查是否需要 Pretty MIDI 后端支持
         requires_backends(self, ["pretty_midi"])
 
-        # 创建一个新的 PrettyMIDI 对象，设置分辨率和初始速度
+        # 创建一个新的 PrettyMIDI 对象，设置分辨率为384，初始节奏为120.0 BPM
         new_pm = pretty_midi.PrettyMIDI(resolution=384, initial_tempo=120.0)
-        # 创建一个新的 Instrument 对象，默认程序为 0
+        
+        # 创建一个新的乐器对象，使用默认音色（program=0）
         new_inst = pretty_midi.Instrument(program=0)
-        # 创建一个空的 Note 列表
+        
+        # 存储新创建的音符对象的列表
         new_notes = []
 
-        # 遍历输入的音符
+        # 遍历输入的音符数组，并创建相应的 Pretty MIDI 音符对象
         for onset_idx, offset_idx, pitch, velocity in notes:
-            # 创建一个新的 Note 对象，设置音高、起始时间和结束时间
+            # 创建一个新的音符对象
             new_note = pretty_midi.Note(
                 velocity=velocity,
                 pitch=pitch,
                 start=beatstep[onset_idx] - offset_sec,
                 end=beatstep[offset_idx] - offset_sec,
             )
-            # 将新的 Note 对象添加到 Note 列表中
+            # 将新创建的音符对象添加到列表中
             new_notes.append(new_note)
         
-        # 将 Note 列表赋值给新的 Instrument 对象
+        # 将新创建的音符列表设置为乐器对象的音符列表
         new_inst.notes = new_notes
-        # 将新的 Instrument 对象添加到新的 PrettyMIDI 对象中
+        
+        # 将乐器对象添加到 PrettyMIDI 对象中
         new_pm.instruments.append(new_inst)
-        # 移除无效的音符
+        
+        # 删除无效的音符（例如持续时间为0的音符）
         new_pm.remove_invalid_notes()
-        # 返回新的 PrettyMIDI 对象
+        
+        # 返回创建的 PrettyMIDI 对象
         return new_pm
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
@@ -371,20 +423,21 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
             filename_prefix (`Optional[str]`, *optional*):
                 A prefix to add to the names of the files saved by the tokenizer.
         """
-        # 检查保存目录是否存在
+        # 检查保存目录是否存在，如果不存在则记录错误并返回
         if not os.path.isdir(save_directory):
-            # 如果不存在，则记录错误并返回
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
 
-        # 保存编码器的词汇表字典到指定目录下
+        # 构建要保存的词汇文件的完整路径
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab"]
         )
+        
+        # 将编码器的词汇表以 JSON 格式写入到文件中
         with open(out_vocab_file, "w") as file:
             file.write(json.dumps(self.encoder))
 
-        # 返回保存的文件路径的元组
+        # 返回保存的文件路径的元组形式
         return (out_vocab_file,)
 
     def encode_plus(
@@ -395,20 +448,11 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         **kwargs,
     ):
         """
-        Encodes a single set of notes into a dictionary containing the input_ids, attention_mask, and token_type_ids.
-
-        Args:
-            notes (Union[np.ndarray, List[pretty_midi.Note]]):
-                The input notes to be encoded.
-            truncation_strategy (Optional[TruncationStrategy], *optional*):
-                The truncation strategy to apply. Defaults to None.
-            max_length (Optional[int], *optional*):
-                The maximum length of the sequence. Defaults to None.
-            **kwargs:
-                Additional keyword arguments passed to the tokenizer.
+        Placeholder function for encoding notes into a format suitable for model input.
+        This is meant to be overridden by subclasses.
         """
-        # 编码单个音符集合为包含 input_ids、attention_mask 和 token_type_ids 的字典
-        # 省略部分代码
+        # 此方法用于将音符编码为模型输入格式，应由子类重写具体实现
+        pass
 
     def batch_encode_plus(
         self,
@@ -418,20 +462,11 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         **kwargs,
     ):
         """
-        Encodes a batch of notes into a list of dictionaries, each containing the input_ids, attention_mask, and token_type_ids.
-
-        Args:
-            notes (Union[np.ndarray, List[pretty_midi.Note]]):
-                The batch of notes to be encoded.
-            truncation_strategy (Optional[TruncationStrategy], *optional*):
-                The truncation strategy to apply. Defaults to None.
-            max_length (Optional[int], *optional*):
-                The maximum length of the sequences. Defaults to None.
-            **kwargs:
-                Additional keyword arguments passed to the tokenizer.
+        Placeholder function for batch encoding notes into a format suitable for model input.
+        This is meant to be overridden by subclasses.
         """
-        # 编码批量音符集合为包含 input_ids、attention_mask 和 token_type_ids 的字典列表
-        # 省略部分代码
+        # 此方法用于批量将音符编码为模型输入格式，应由子类重写具体实现
+        pass
     ) -> BatchEncoding:
         r"""
         This is the `batch_encode_plus` method for `Pop2PianoTokenizer`. It converts the midi notes to the transformer
@@ -455,15 +490,16 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         encoded_batch_token_ids = []
         for i in range(len(notes)):
             encoded_batch_token_ids.append(
+                # Call the `encode_plus` method to convert each batch of midi notes into token ids
                 self.encode_plus(
-                    notes[i],
-                    truncation_strategy=truncation_strategy,
-                    max_length=max_length,
-                    **kwargs,
-                )["token_ids"]
+                    notes[i],  # Pass each batch of midi notes to the `encode_plus` method
+                    truncation_strategy=truncation_strategy,  # Specify the truncation strategy
+                    max_length=max_length,  # Specify the maximum length for padding/truncation
+                    **kwargs,  # Additional keyword arguments
+                )["token_ids"]  # Retrieve the token ids from the returned BatchEncoding
             )
 
-        return BatchEncoding({"token_ids": encoded_batch_token_ids})
+        return BatchEncoding({"token_ids": encoded_batch_token_ids})  # Return BatchEncoding containing token ids
 
     def __call__(
         self,
@@ -482,47 +518,45 @@ class Pop2PianoTokenizer(PreTrainedTokenizer):
         **kwargs,
     ):
         """
-        This method is used to tokenizes a set of midi notes into token ids.
+        This method allows the tokenizer object to be called as a function, enabling batch encoding of midi notes.
 
         Args:
             notes (Union[np.ndarray, List[pretty_midi.Note], List[List[pretty_midi.Note]]]):
-                The midi notes to be tokenized. It can be either a numpy array of shape `[batch_size, sequence_length, 4]`
-                or a list of pretty_midi.Note objects.
-            padding (Union[bool, str, PaddingStrategy], optional):
-                Controls padding. See `BatchEncoding` for more options.
-            truncation (Union[bool, str, TruncationStrategy], optional):
-                Controls truncation. See `BatchEncoding` for more options.
-            max_length (int, optional):
-                Maximum length of the returned list and optionally padding length.
-            pad_to_multiple_of (int, optional):
-                Pad to a multiple of this length if provided and padding is turned on.
-            return_attention_mask (bool, optional):
-                Whether to return the attention mask.
-            return_tensors (Optional[Union[str, TensorType]], optional):
-                The type of tensors to return. See `BatchEncoding` for more options.
-            verbose (bool, optional):
-                Whether to print status information during tokenization.
+                Midi notes to be tokenized. Can be a numpy array or a nested list of pretty_midi.Note objects.
+            padding (Union[bool, str, PaddingStrategy], optional): Whether to pad sequences to the same length. Defaults to False.
+            truncation (Union[bool, str, TruncationStrategy], optional): Truncation strategy for sequences longer than `max_length`. Defaults to None.
+            max_length (int, optional): Maximum length of the returned sequences after padding/truncation. Defaults to None.
+            pad_to_multiple_of (int, optional): Pad the sequence length to a multiple of this value. Defaults to None.
+            return_attention_mask (bool, optional): Whether to return attention masks. Defaults to None.
+            return_tensors (Union[str, TensorType], optional): Return tensors format. Defaults to None.
+            verbose (bool, optional): Whether to print information about encoding. Defaults to True.
             **kwargs: Additional keyword arguments passed to `encode_plus`.
 
         Returns:
-            BatchEncoding: A `BatchEncoding` containing the token ids.
+            BatchEncoding: Contains token ids and optionally attention masks and tensor format.
         """
+        # Code for __call__ method implementation goes here
+        pass
 
     def batch_decode(
         self,
         token_ids,
         feature_extractor_output: BatchFeature,
         return_midi: bool = True,
+        **kwargs,
     ):
         """
-        Decodes a batch of token ids into midi notes.
+        This method decodes a batch of token ids back into MIDI representation.
 
         Args:
-            token_ids (List[List[int]]): The token ids to decode.
-            feature_extractor_output (BatchFeature): The feature extractor output.
-            return_midi (bool, optional): Whether to return midi notes.
+            token_ids (list): List of token ids to be decoded.
+            feature_extractor_output (BatchFeature): Output from feature extractor.
+            return_midi (bool, optional): Whether to return MIDI objects. Defaults to True.
+            **kwargs: Additional keyword arguments.
 
         Returns:
-            Union[List[pretty_midi.Note], List[List[pretty_midi.Note]]]: The decoded midi notes.
+            Dependent on `return_midi`, returns MIDI objects or other format as specified.
         """
+        # Code for batch_decode method implementation goes here
+        pass
 ```

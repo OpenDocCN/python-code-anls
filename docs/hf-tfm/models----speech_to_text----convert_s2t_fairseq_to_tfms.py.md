@@ -1,15 +1,17 @@
-# `.\transformers\models\speech_to_text\convert_s2t_fairseq_to_tfms.py`
+# `.\models\speech_to_text\convert_s2t_fairseq_to_tfms.py`
 
-```py
-# 导入所需的库
-import argparse
-import torch
-from torch import nn
-from transformers import Speech2TextConfig, Speech2TextForConditionalGeneration
+```
+# 导入必要的库
+import argparse  # 导入 argparse 库，用于处理命令行参数
 
-# 定义函数用于移除忽略的键
+import torch  # 导入 PyTorch 库
+from torch import nn  # 导入 PyTorch 中的 nn 模块，用于神经网络构建
+
+from transformers import Speech2TextConfig, Speech2TextForConditionalGeneration  # 导入 transformers 库中的 Speech2TextConfig 和 Speech2TextForConditionalGeneration 类
+
+# 定义函数，移除 state_dict 中指定的键
 def remove_ignore_keys_(state_dict):
-    # 定义需要忽略的键列表
+    # 需要移除的键列表
     ignore_keys = [
         "encoder.version",
         "decoder.version",
@@ -20,115 +22,113 @@ def remove_ignore_keys_(state_dict):
         "encoder.embed_positions._float_tensor",
         "decoder.embed_positions._float_tensor",
     ]
-    # 遍历忽略的键，从状态字典中移除这些键
+    # 从 state_dict 中移除指定的键
     for k in ignore_keys:
         state_dict.pop(k, None)
 
-# 定义函数用于重命名键
+# 定义函数，重命名 state_dict 中的键名
 def rename_keys(s_dict):
-    keys = list(s_dict.keys())
-    # 遍历状态字典的键
+    keys = list(s_dict.keys())  # 获取 state_dict 的所有键名
+    # 遍历键名列表
     for key in keys:
-        # 替换包含"transformer_layers"的键名
+        # 替换包含 "transformer_layers" 的键名为 "layers"
         if "transformer_layers" in key:
             s_dict[key.replace("transformer_layers", "layers")] = s_dict.pop(key)
-        # 替换包含"subsample"的键名
+        # 替换包含 "subsample" 的键名为 "conv"
         elif "subsample" in key:
             s_dict[key.replace("subsample", "conv")] = s_dict.pop(key)
 
-# 定义函数用于将嵌入层转换为线性层
+# 定义函数，根据输入的嵌入层创建线性层
 def make_linear_from_emb(emb):
-    # 获取嵌入层的词汇大小和嵌入维度大小
-    vocab_size, emb_size = emb.weight.shape
-    # 创建一个线性层，从嵌入层权重初始化线性层权重
-    lin_layer = nn.Linear(vocab_size, emb_size, bias=False)
-    lin_layer.weight.data = emb.weight.data
+    vocab_size, emb_size = emb.weight.shape  # 获取嵌入层的词汇大小和嵌入维度
+    lin_layer = nn.Linear(vocab_size, emb_size, bias=False)  # 创建一个无偏置的线性层
+    lin_layer.weight.data = emb.weight.data  # 将嵌入层的权重数据复制到线性层的权重中
     return lin_layer
 
-# 定义函数用于将fairseq模型的检查点转换为transformers模型的权重
+# 定义函数，将 Fairseq 的语音到文本检查点转换为 Transformers 模型
 def convert_fairseq_s2t_checkpoint_to_tfms(checkpoint_path, pytorch_dump_folder_path):
-    # 加载fairseq模型的检查点
-    m2m_100 = torch.load(checkpoint_path, map_location="cpu")
-    args = m2m_100["args"]
-    state_dict = m2m_100["model"]
-    lm_head_weights = state_dict["decoder.output_projection.weight"]
+    m2m_100 = torch.load(checkpoint_path, map_location="cpu")  # 加载 Fairseq 检查点
+    args = m2m_100["args"]  # 获取模型参数
+    state_dict = m2m_100["model"]  # 获取模型的 state_dict
+    lm_head_weights = state_dict["decoder.output_projection.weight"]  # 获取解码器输出投影层的权重
 
-    # 移除忽略的键
-    remove_ignore_keys_(state_dict)
-    # 重命名键
-    rename_keys(state_dict)
+    remove_ignore_keys_(state_dict)  # 调用函数移除不需要的键名
+    rename_keys(state_dict)  # 调用函数重命名键名
 
-    # 获取词汇大小
-    vocab_size = state_dict["decoder.embed_tokens.weight"].shape[0]
+    vocab_size = state_dict["decoder.embed_tokens.weight"].shape[0]  # 获取嵌入层的词汇大小
 
-    # 检查是否共享解码器的输入和输出嵌入
-    tie_embeds = args.share_decoder_input_output_embed
+    tie_embeds = args.share_decoder_input_output_embed  # 检查是否共享解码器的输入输出嵌入
 
-    # 解码器卷积核大小列表
-    conv_kernel_sizes = [int(i) for i in args.conv_kernel_sizes.split(",")]
-    # 创建一个Speech2TextConfig对象，用于配置语音转文本模型
+    conv_kernel_sizes = [int(i) for i in args.conv_kernel_sizes.split(",")]  # 解析卷积核大小列表
+    # 创建一个语音到文本转换模型的配置对象，配置包括词汇大小、最大源和目标位置、编码器和解码器层数、注意力头数等
     config = Speech2TextConfig(
-        vocab_size=vocab_size,  # 词汇表大小
-        max_source_positions=args.max_source_positions,  # 输入序列的最大长度
-        max_target_positions=args.max_target_positions,  # 输出序列的最大长度
-        encoder_layers=args.encoder_layers,  # 编码器层数
-        decoder_layers=args.decoder_layers,  # 解码器层数
-        encoder_attention_heads=args.encoder_attention_heads,  # 编码器注意力头数
-        decoder_attention_heads=args.decoder_attention_heads,  # 解码器注意力头数
-        encoder_ffn_dim=args.encoder_ffn_embed_dim,  # 编码器中FFN层的维度
-        decoder_ffn_dim=args.decoder_ffn_embed_dim,  # 解码器中FFN层的维度
-        d_model=args.encoder_embed_dim,  # 模型维度
-        dropout=args.dropout,  # Dropout率
-        attention_dropout=args.attention_dropout,  # 注意力机制中的Dropout率
-        activation_dropout=args.activation_dropout,  # 激活函数中的Dropout率
-        activation_function="relu",  # 激活函数类型
-        num_conv_layers=len(conv_kernel_sizes),  # 卷积层的数量
-        conv_channels=args.conv_channels,  # 卷积层的通道数
-        conv_kernel_sizes=conv_kernel_sizes,  # 卷积核的尺寸列表
-        input_feat_per_channel=args.input_feat_per_channel,  # 每个通道的输入特征数
-        input_channels=args.input_channels,  # 输入通道数
-        tie_word_embeddings=tie_embeds,  # 是否绑定词嵌入
-        num_beams=5,  # Beam搜索中的Beam数
-        max_length=200,  # 生成序列的最大长度
-        use_cache=True,  # 是否使用缓存
-        decoder_start_token_id=2,  # 解码器起始标记的ID
-        early_stopping=True,  # 是否启用早停策略
+        vocab_size=vocab_size,
+        max_source_positions=args.max_source_positions,
+        max_target_positions=args.max_target_positions,
+        encoder_layers=args.encoder_layers,
+        decoder_layers=args.decoder_layers,
+        encoder_attention_heads=args.encoder_attention_heads,
+        decoder_attention_heads=args.decoder_attention_heads,
+        encoder_ffn_dim=args.encoder_ffn_embed_dim,
+        decoder_ffn_dim=args.decoder_ffn_embed_dim,
+        d_model=args.encoder_embed_dim,
+        dropout=args.dropout,
+        attention_dropout=args.attention_dropout,
+        activation_dropout=args.activation_dropout,
+        activation_function="relu",
+        num_conv_layers=len(conv_kernel_sizes),
+        conv_channels=args.conv_channels,
+        conv_kernel_sizes=conv_kernel_sizes,
+        input_feat_per_channel=args.input_feat_per_channel,
+        input_channels=args.input_channels,
+        tie_word_embeddings=tie_embeds,
+        num_beams=5,
+        max_length=200,
+        use_cache=True,
+        decoder_start_token_id=2,
+        early_stopping=True,
     )
-    
-    # 创建一个Speech2TextForConditionalGeneration模型对象
+
+    # 使用上面配置的模型配置对象创建语音到文本转换模型
     model = Speech2TextForConditionalGeneration(config)
-    
-    # 加载模型的状态字典，并返回缺失和意外的键
+
+    # 加载模型的状态字典，并忽略丢失的一些键，记录下丢失的和不期望的键
     missing, unexpected = model.model.load_state_dict(state_dict, strict=False)
-    
-    # 如果有缺失的权重，并且缺失的键不是下列预定义的键集合中的子集，则抛出异常
+
+    # 如果有丢失的键，并且丢失的键不在预期的键集合内，则抛出值错误异常
     if len(missing) > 0 and not set(missing) <= {
         "encoder.embed_positions.weights",
         "decoder.embed_positions.weights",
     }:
         raise ValueError(
-            "Only `encoder.embed_positions.weights` and `decoder.embed_positions.weights`  are allowed to be missing,"
+            "Only `encoder.embed_positions.weights` and `decoder.embed_positions.weights` are allowed to be missing,"
             f" but all the following weights are missing {missing}"
         )
-    
-    # 如果词嵌入是绑定的，则通过解码器的嵌入词嵌入创建一个线性层，并将其分配给模型的语言模型头部
+
+    # 如果要求绑定嵌入，则将语言模型头部替换为从嵌入中创建的线性层；否则，直接加载预训练的语言模型头部权重
     if tie_embeds:
         model.lm_head = make_linear_from_emb(model.model.decoder.embed_tokens)
     else:
-        # 否则，将预训练的语言模型头部的权重数据赋给模型的语言模型头部
         model.lm_head.weight.data = lm_head_weights
-    
-    # 将模型保存到指定的PyTorch模型保存路径
+
+    # 将模型保存到指定的 PyTorch 模型保存路径
     model.save_pretrained(pytorch_dump_folder_path)
-# 如果当前脚本被直接执行（而不是被导入为模块）
 if __name__ == "__main__":
-    # 创建参数解析器对象
+    # 如果当前脚本作为主程序运行，则执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 添加必需的参数
+    # 创建参数解析器对象
+
+    # 必选参数
     parser.add_argument("--fairseq_path", type=str, help="Path to the fairseq model (.pt) file.")
+    # 添加一个参数选项，指定 fairseq 模型文件的路径，类型为字符串
+
     parser.add_argument("--pytorch_dump_folder_path", default=None, type=str, help="Path to the output PyTorch model.")
-    # 解析命令行参数
+    # 添加一个参数选项，指定输出 PyTorch 模型的文件夹路径，默认值为 None，类型为字符串
+
     args = parser.parse_args()
-    # 调用函数将 fairseq 模型转换为 PyTorch 模型
+    # 解析命令行参数，并将其存储在 args 变量中
+
     convert_fairseq_s2t_checkpoint_to_tfms(args.fairseq_path, args.pytorch_dump_folder_path)
+    # 调用函数 convert_fairseq_s2t_checkpoint_to_tfms，传入 fairseq 模型文件路径和 PyTorch 输出文件夹路径作为参数
 ```

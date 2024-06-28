@@ -1,24 +1,31 @@
 # `.\models\deprecated\transfo_xl\__init__.py`
 
-```py
-# 版权声明和许可协议信息
-# 从其他模块导入的模块和函数
-from typing import TYPE_CHECKING
-from ....utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_available, is_torch_available
+```
+# 导入必要的模块和函数
 
-# 定义模块导入结构
+# 引入类型检查器的模块
+from typing import TYPE_CHECKING
+
+# 引入自定义的异常：OptionalDependencyNotAvailable，_LazyModule等
+from ....utils import OptionalDependencyNotAvailable, _LazyModule
+
+# 引入判断是否可用的函数：is_tf_available, is_torch_available
+from ....utils import is_tf_available, is_torch_available
+
+# 定义导入结构的字典，包含不同模块对应的导入内容
 _import_structure = {
     "configuration_transfo_xl": ["TRANSFO_XL_PRETRAINED_CONFIG_ARCHIVE_MAP", "TransfoXLConfig"],
     "tokenization_transfo_xl": ["TransfoXLCorpus", "TransfoXLTokenizer"],
 }
 
-# 尝试导入 torch，如果不可用，则引发异常
+# 尝试导入 Torch 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果 Torch 可用，则添加相关模块到导入结构中
     _import_structure["modeling_transfo_xl"] = [
         "TRANSFO_XL_PRETRAINED_MODEL_ARCHIVE_LIST",
         "AdaptiveEmbedding",
@@ -29,13 +36,14 @@ else:
         "load_tf_weights_in_transfo_xl",
     ]
 
-# 尝试导入 tensorflow，如果不可用，则引发异常
+# 尝试导入 TensorFlow 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果 TensorFlow 可用，则添加相关模块到导入结构中
     _import_structure["modeling_tf_transfo_xl"] = [
         "TF_TRANSFO_XL_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFAdaptiveEmbedding",
@@ -46,17 +54,19 @@ else:
         "TFTransfoXLPreTrainedModel",
     ]
 
-# 如果是类型检查阶段，导入特定模块
+# 如果是类型检查环境，导入类型相关的模块
 if TYPE_CHECKING:
     from .configuration_transfo_xl import TRANSFO_XL_PRETRAINED_CONFIG_ARCHIVE_MAP, TransfoXLConfig
     from .tokenization_transfo_xl import TransfoXLCorpus, TransfoXLTokenizer
 
+    # 尝试导入 Torch 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果 Torch 可用，则导入相关模块到当前作用域
         from .modeling_transfo_xl import (
             TRANSFO_XL_PRETRAINED_MODEL_ARCHIVE_LIST,
             AdaptiveEmbedding,
@@ -67,26 +77,29 @@ if TYPE_CHECKING:
             load_tf_weights_in_transfo_xl,
         )
 
+    # 尝试导入 TensorFlow 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果条件不成立，则从当前目录下的modeling_tf_transfo_xl模块中导入以下内容：
-    # TF_TRANSFO_XL_PRETRAINED_MODEL_ARCHIVE_LIST：TRANSFO_XL模型预训练模型文件存档列表
-    # TFAdaptiveEmbedding：可适应的嵌入层
-    # TFTransfoXLForSequenceClassification：用于序列分类的TransfoXL模型
-    # TFTransfoXLLMHeadModel：TransfoXL的语言建模头模型
-    # TFTransfoXLMainLayer：TransfoXL的主要层
-    # TFTransfoXLModel：TransfoXL模型
-    # TFTransfoXLPreTrainedModel：TransfoXL的预训练模型
-```  
-# 否则，如果进入了这个分支，说明没有找到要导入的模块
+    else:
+        # 如果条件不满足之前的任何情况，则执行以下导入操作
+        # 从当前目录的.modeling_tf_transfo_xl模块中导入以下内容：
+        from .modeling_tf_transfo_xl import (
+            TF_TRANSFO_XL_PRETRAINED_MODEL_ARCHIVE_LIST,
+            TFAdaptiveEmbedding,
+            TFTransfoXLForSequenceClassification,
+            TFTransfoXLLMHeadModel,
+            TFTransfoXLMainLayer,
+            TFTransfoXLModel,
+            TFTransfoXLPreTrainedModel,
+        )
 else:
-    # 导入 sys 模块，用于访问和操作 Python 解释器的运行时环境
+    # 导入 sys 模块，用于操作 Python 解释器的系统相关功能
     import sys
-    # 使用 sys.modules[__name__] 将当前模块替换为 _LazyModule 类的实例
-    # __name__ 是当前模块的名称，__file__ 是当前模块的文件名，_import_structure 是一个字典
-    # module_spec=__spec__ 将 __spec__ 参数传递给 _LazyModule 类的构造函数
+
+    # 设置当前模块的名称对应的模块对象为 _LazyModule 类的实例，用于延迟加载模块
+    # 这里将当前模块的名称、文件路径、导入结构和模块规范传递给 _LazyModule 构造函数
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

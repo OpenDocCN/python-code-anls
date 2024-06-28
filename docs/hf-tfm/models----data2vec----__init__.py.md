@@ -1,36 +1,51 @@
 # `.\models\data2vec\__init__.py`
 
-```py
-# 版权声明及许可信息
+```
+# Copyright 2022 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-from typing import TYPE_CHECKING  # 导入类型检查模块
+from typing import TYPE_CHECKING
 
-from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_available, is_torch_available  # 从内部模块导入一些函数和类
+# 从 HuggingFace 的 utils 模块导入必要的异常和工具函数
+from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_available, is_torch_available
 
-# 定义一个字典，存储模块的导入结构
+# 定义一个结构，用于存储不同模块的导入信息
 _import_structure = {
-    "configuration_data2vec_audio": ["DATA2VEC_AUDIO_PRETRAINED_CONFIG_ARCHIVE_MAP", "Data2VecAudioConfig"],  # 音频数据模型的配置
-    "configuration_data2vec_text": [  # 文本数据模型的配置
+    "configuration_data2vec_audio": ["DATA2VEC_AUDIO_PRETRAINED_CONFIG_ARCHIVE_MAP", "Data2VecAudioConfig"],
+    "configuration_data2vec_text": [
         "DATA2VEC_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP",
         "Data2VecTextConfig",
         "Data2VecTextOnnxConfig",
     ],
-    "configuration_data2vec_vision": [  # 视觉数据模型的配置
+    "configuration_data2vec_vision": [
         "DATA2VEC_VISION_PRETRAINED_CONFIG_ARCHIVE_MAP",
         "Data2VecVisionConfig",
         "Data2VecVisionOnnxConfig",
     ],
 }
 
-# 检查是否导入了 torch 库
+# 尝试检查是否 Torch 可用，若不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
-except OptionalDependencyNotAvailable:  # 如果依赖项不可用，则捕获并忽略异常
+except OptionalDependencyNotAvailable:
+    # 如果 Torch 不可用，则忽略异常继续执行
     pass
-else:  # 如果依赖项可用，则执行以下代码
+else:
+    # 如果 Torch 可用，则扩展 _import_structure 添加相关的模型定义
     _import_structure["modeling_data2vec_audio"] = [
-        "DATA2VEC_AUDIO_PRETRAINED_MODEL_ARCHIVE_LIST",  # 音频数据模型的预训练模型档案列表
+        "DATA2VEC_AUDIO_PRETRAINED_MODEL_ARCHIVE_LIST",
         "Data2VecAudioForAudioFrameClassification",
         "Data2VecAudioForCTC",
         "Data2VecAudioForSequenceClassification",
@@ -39,7 +54,7 @@ else:  # 如果依赖项可用，则执行以下代码
         "Data2VecAudioPreTrainedModel",
     ]
     _import_structure["modeling_data2vec_text"] = [
-        "DATA2VEC_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST",  # 文本数据模型的预训练模型档案列表
+        "DATA2VEC_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "Data2VecTextForCausalLM",
         "Data2VecTextForMaskedLM",
         "Data2VecTextForMultipleChoice",
@@ -50,7 +65,7 @@ else:  # 如果依赖项可用，则执行以下代码
         "Data2VecTextPreTrainedModel",
     ]
     _import_structure["modeling_data2vec_vision"] = [
-        "DATA2VEC_VISION_PRETRAINED_MODEL_ARCHIVE_LIST",  # 视觉数据模型的预训练模型档案列表
+        "DATA2VEC_VISION_PRETRAINED_MODEL_ARCHIVE_LIST",
         "Data2VecVisionForImageClassification",
         "Data2VecVisionForMaskedImageModeling",
         "Data2VecVisionForSemanticSegmentation",
@@ -58,37 +73,33 @@ else:  # 如果依赖项可用，则执行以下代码
         "Data2VecVisionPreTrainedModel",
     ]
 
-if is_tf_available():  # 如果导入了 TensorFlow 库
-    _import_structure["modeling_tf_data2vec_vision"] = [
-        "TFData2VecVisionForImageClassification",
-        "TFData2VecVisionForSemanticSegmentation",
-        "TFData2VecVisionModel",
-        "TFData2VecVisionPreTrainedModel",
-    ]
+# 如果是在类型检查模式下，导入额外的类型相关信息
+if TYPE_CHECKING:
+    from .configuration_data2vec_audio import DATA2VEC_AUDIO_PRETRAINED_CONFIG_ARCHIVE_MAP, Data2VecAudioConfig
 
-if TYPE_CHECKING:  # 如果是类型检查
-    from .configuration_data2vec_audio import DATA2VEC_AUDIO_PRETRAINED_CONFIG_ARCHIVE_MAP, Data2VecAudioConfig  # 导入音频数据模型的配置
-    # 从configuration_data2vec_text模块中导入需要的变量和类
+# 注意：此处的代码没有返回值，仅用于定义模块导入结构和在特定条件下导入额外的类型信息
+    # 从配置文件中导入文本数据2vec的预训练配置映射和相关类
     from .configuration_data2vec_text import (
         DATA2VEC_TEXT_PRETRAINED_CONFIG_ARCHIVE_MAP,
         Data2VecTextConfig,
         Data2VecTextOnnxConfig,
     )
-    # 从configuration_data2vec_vision模块中导入需要的变量和类
+    # 从配置文件中导入视觉数据2vec的预训练配置映射和相关类
     from .configuration_data2vec_vision import (
         DATA2VEC_VISION_PRETRAINED_CONFIG_ARCHIVE_MAP,
         Data2VecVisionConfig,
         Data2VecVisionOnnxConfig,
     )
     
-    # 检查是否有torch可用，如果没有则抛出OptionalDependencyNotAvailable异常
     try:
+        # 检查是否已经安装了torch，如果没有则引发OptionalDependencyNotAvailable异常
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 如果OptionalDependencyNotAvailable异常被引发，则什么都不做，继续执行后续代码
         pass
     else:
-        # 如果有torch可用，则从modeling_data2vec_audio模块中导入需要的变量和类
+        # 如果没有异常发生，则导入音频数据2vec的预训练模型和相关类
         from .modeling_data2vec_audio import (
             DATA2VEC_AUDIO_PRETRAINED_MODEL_ARCHIVE_LIST,
             Data2VecAudioForAudioFrameClassification,
@@ -98,7 +109,7 @@ if TYPE_CHECKING:  # 如果是类型检查
             Data2VecAudioModel,
             Data2VecAudioPreTrainedModel,
         )
-        # 从modeling_data2vec_text模块中导入需要的变量和类
+        # 导入文本数据2vec的预训练模型和相关类
         from .modeling_data2vec_text import (
             DATA2VEC_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST,
             Data2VecTextForCausalLM,
@@ -110,7 +121,7 @@ if TYPE_CHECKING:  # 如果是类型检查
             Data2VecTextModel,
             Data2VecTextPreTrainedModel,
         )
-        # 从modeling_data2vec_vision模块中导入需要的变量和类
+        # 导入视觉数据2vec的预训练模型和相关类
         from .modeling_data2vec_vision import (
             DATA2VEC_VISION_PRETRAINED_MODEL_ARCHIVE_LIST,
             Data2VecVisionForImageClassification,
@@ -119,20 +130,19 @@ if TYPE_CHECKING:  # 如果是类型检查
             Data2VecVisionModel,
             Data2VecVisionPreTrainedModel,
         )
+    
+    # 如果TensorFlow可用，导入TensorFlow版本的视觉数据2vec模型和相关类
     if is_tf_available():
-        # 如果有tensorflow可用，则从modeling_tf_data2vec_vision模块中导入需要的变量和类
         from .modeling_tf_data2vec_vision import (
             TFData2VecVisionForImageClassification,
             TFData2VecVisionForSemanticSegmentation,
             TFData2VecVisionModel,
             TFData2VecVisionPreTrainedModel,
         )
-# 如果不是第一次导入该模块，执行以下操作
 else:
-    # 导入sys模块，用于访问Python解释器的功能
+    # 导入 sys 模块，用于动态操作模块信息
     import sys
-    # 使用sys.modules字典，将当前模块替换为_LazyModule对象
-    # __name__是模块的名称，__file__是模块的文件名，_import_structure是模块的导入结构
-    # __spec__是模块的规范对象，包含有关模块的信息
+
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

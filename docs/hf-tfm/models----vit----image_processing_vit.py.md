@@ -1,21 +1,16 @@
-# `.\transformers\models\vit\image_processing_vit.py`
+# `.\models\vit\image_processing_vit.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本使用此文件，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“原样”分发的，没有任何明示或暗示的保证或条件
-# 请查看许可证以获取有关特定语言的权限和限制
-"""ViT 的图像处理器类。"""
-
+```
+# 导入必要的库和模块，包括类型提示、NumPy等
 from typing import Dict, List, Optional, Union
 
 import numpy as np
 
-# 导入必要的模块和函数
+# 导入自定义的图像处理工具函数和类
 from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
+# 导入图像变换函数和常量
 from ...image_transforms import resize, to_channel_dimension_format
+# 导入图像处理相关的工具函数和常量，如均值、标准差、通道格式等
 from ...image_utils import (
     IMAGENET_STANDARD_MEAN,
     IMAGENET_STANDARD_STD,
@@ -27,16 +22,20 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
+# 导入通用的工具函数，如日志记录
 from ...utils import TensorType, logging
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义 ViTImageProcessor 类，继承自 BaseImageProcessor 类
+# 定义一个 ViT 图像处理器类，继承自 BaseImageProcessor 类
 class ViTImageProcessor(BaseImageProcessor):
     r"""
     Constructs a ViT image processor.
+    """
     Args:
         do_resize (`bool`, *optional*, defaults to `True`):
             Whether to resize the image's (height, width) dimensions to the specified `(size["height"],
@@ -63,9 +62,10 @@ class ViTImageProcessor(BaseImageProcessor):
             Standard deviation to use if normalizing the image. This is a float or list of floats the length of the
             number of channels in the image. Can be overridden by the `image_std` parameter in the `preprocess` method.
     """
-
+    # 设置模型输入名称为"pixel_values"
     model_input_names = ["pixel_values"]
 
+    # 初始化函数，设置各个参数的默认值，可以通过`preprocess`方法中的对应参数进行覆盖
     def __init__(
         self,
         do_resize: bool = True,
@@ -74,54 +74,47 @@ class ViTImageProcessor(BaseImageProcessor):
         do_rescale: bool = True,
         rescale_factor: Union[int, float] = 1 / 255,
         do_normalize: bool = True,
-        image_mean: Optional[Union[float, List[float]] = None,
-        image_std: Optional[Union[float, List[float]] = None,
+        image_mean: Optional[Union[float, List[float]]] = None,
+        image_std: Optional[Union[float, List[float]]] = None,
         **kwargs,
-    # 初始化函数，设置各种参数
-    def __init__(self, size: Optional[Union[int, Tuple[int, int]]] = None, do_resize: bool = True, do_rescale: bool = False,
-                 do_normalize: bool = False, resample: PILImageResampling = PILImageResampling.BILINEAR,
-                 rescale_factor: float = 1.0, image_mean: Optional[Union[float, Tuple[float, float, float]]] = None,
-                 image_std: Optional[Union[float, Tuple[float, float, float]]] = None, **kwargs) -> None:
-        # 调用父类的初始化函数
+    ) -> None:
+        # 调用父类初始化方法，并传递所有关键字参数
         super().__init__(**kwargs)
-        # 如果没有指定大小，则设置默认大小为 224x224
+        # 如果 size 参数不为 None，则使用指定的尺寸；否则使用默认尺寸 {"height": 224, "width": 224}
         size = size if size is not None else {"height": 224, "width": 224}
-        # 将大小参数转换为字典格式
+        # 根据 size 获取一个标准化的尺寸字典
         size = get_size_dict(size)
-        # 设置是否进行 resize 操作的标志
+        # 初始化是否执行 resize 操作的标志
         self.do_resize = do_resize
-        # 设置是否进行 rescale 操作的标志
+        # 初始化是否执行 rescale 操作的标志
         self.do_rescale = do_rescale
-        # 设置是否进行 normalize 操作的标志
+        # 初始化是否执行 normalize 操作的标志
         self.do_normalize = do_normalize
-        # 设置图片大小
+        # 将 size 存储到对象属性中
         self.size = size
-        # 设置重采样方法
+        # 设定图像 resize 时使用的 resample 方法
         self.resample = resample
-        # 设置缩放因子
+        # 设定图像 rescale 时的缩放因子
         self.rescale_factor = rescale_factor
-        # 设置图片均值，如果未指定则使用默认值
+        # 如果 image_mean 不为 None，则使用给定的 image_mean；否则使用 IMAGENET_STANDARD_MEAN
         self.image_mean = image_mean if image_mean is not None else IMAGENET_STANDARD_MEAN
-        # 设置图片标准差，如果未指定则使用默认值
+        # 如果 image_std 不为 None，则使用给定的 image_std；否则使用 IMAGENET_STANDARD_STD
         self.image_std = image_std if image_std is not None else IMAGENET_STANDARD_STD
-
-    # 图片 resize 函数
-    def resize(
-        self,
-        image: np.ndarray,
-        size: Dict[str, int],
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        data_format: Optional[Union[str, ChannelDimension]] = None,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        **kwargs,
-    def resize_image(
-        self,
-        image: np.ndarray,
-        size: Dict[str, int],
-        resample: PILImageResampling = PILImageResampling.BILINEAR,
-        data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        **kwargs,
+        # 初始化一个有效的处理器键列表，用于检查处理器的有效性
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
     ) -> np.ndarray:
         """
         Resize an image to `(size["height"], size["width"])`.
@@ -149,14 +142,10 @@ class ViTImageProcessor(BaseImageProcessor):
         Returns:
             `np.ndarray`: The resized image.
         """
-        # Convert size to a standardized format
-        size = get_size_dict(size)
-        # Check if the required keys are present in the size dictionary
+        size = get_size_dict(size)  # 获取调整大小后的字典格式大小
         if "height" not in size or "width" not in size:
             raise ValueError(f"The `size` dictionary must contain the keys `height` and `width`. Got {size.keys()}")
-        # Extract the height and width values from the size dictionary
-        output_size = (size["height"], size["width"])
-        # Resize the image using the specified parameters
+        output_size = (size["height"], size["width"])  # 获取调整后的输出大小
         return resize(
             image,
             size=output_size,
@@ -181,4 +170,37 @@ class ViTImageProcessor(BaseImageProcessor):
         data_format: Union[str, ChannelDimension] = ChannelDimension.FIRST,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
         **kwargs,
+        ):
+        """
+        Preprocesses a batch of images including resizing, rescaling, normalization, and tensor conversion.
+
+        Args:
+            images (`ImageInput`):
+                Batch of input images.
+            do_resize (`bool`, *optional*):
+                Whether to resize the images. If `True`, resizing will be performed according to `size`.
+            size (`Dict[str, int]`, *optional*):
+                Dictionary specifying the target size for resizing each image in the batch.
+            resample (`PILImageResampling`, *optional*):
+                Resampling method to use for resizing, default is `PILImageResampling.BILINEAR`.
+            do_rescale (`bool`, *optional*):
+                Whether to rescale the images. If `True`, images will be scaled by `rescale_factor`.
+            rescale_factor (`float`, *optional*):
+                Scaling factor for rescaling images.
+            do_normalize (`bool`, *optional*):
+                Whether to normalize the images.
+            image_mean (`float` or `List[float]`, *optional*):
+                Mean values for normalization.
+            image_std (`float` or `List[float]`, *optional*):
+                Standard deviation values for normalization.
+            return_tensors (`str` or `TensorType`, *optional*):
+                If specified, converts the output to the desired tensor type (e.g., `"torch"` or `"tensorflow"`).
+            data_format (`str` or `ChannelDimension`, *optional*):
+                The channel dimension format for the output images.
+            input_data_format (`str` or `ChannelDimension`, *optional*):
+                The channel dimension format for the input images.
+
+        Returns:
+            `np.ndarray` or `TensorType`: Preprocessed batch of images.
+        """
 ```

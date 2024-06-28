@@ -1,10 +1,10 @@
-# `.\transformers\models\resnet\__init__.py`
+# `.\models\resnet\__init__.py`
 
-```py
-# 从 typing 模块中导入 TYPE_CHECKING，用于类型检查
+```
+# 引入类型检查模块
 from typing import TYPE_CHECKING
 
-# 从 utils 模块中导入所需函数和类
+# 从工具模块中引入必要的异常和工具函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -13,19 +13,19 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构
+# 定义一个字典，包含了需要导入的结构
 _import_structure = {
     "configuration_resnet": ["RESNET_PRETRAINED_CONFIG_ARCHIVE_MAP", "ResNetConfig", "ResNetOnnxConfig"]
 }
 
-# 检查是否导入了 torch 库，若未导入则抛出异常
+# 尝试导入 torch 相关模块，如果不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 torch 库，则将相关模块添加到导入结构中
+    # 如果可用，添加 torch 模型相关结构到导入结构字典中
     _import_structure["modeling_resnet"] = [
         "RESNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "ResNetForImageClassification",
@@ -34,14 +34,14 @@ else:
         "ResNetBackbone",
     ]
 
-# 检查是否导入了 tensorflow 库，若未导入则抛出异常
+# 尝试导入 TensorFlow 相关模块，如果不可用则抛出异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 tensorflow 库，则将相关模块添加到导入结构中
+    # 如果可用，添加 TensorFlow 模型相关结构到导入结构字典中
     _import_structure["modeling_tf_resnet"] = [
         "TF_RESNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFResNetForImageClassification",
@@ -49,33 +49,31 @@ else:
         "TFResNetPreTrainedModel",
     ]
 
-# 检查是否导入了 flax 库，若未导入则抛出异常
+# 尝试导入 Flax 相关模块，如果不可用则抛出异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 flax 库，则将相关模块添加到导入结构中
+    # 如果可用，添加 Flax 模型相关结构到导入结构字典中
     _import_structure["modeling_flax_resnet"] = [
         "FlaxResNetForImageClassification",
         "FlaxResNetModel",
         "FlaxResNetPreTrainedModel",
     ]
 
-# 如果是类型检查阶段，则导入额外的模块以进行类型检查
+# 如果处于类型检查模式，从相应模块导入必要的类型和配置
 if TYPE_CHECKING:
-    # 从 configuration_resnet 模块中导入所需内容
     from .configuration_resnet import RESNET_PRETRAINED_CONFIG_ARCHIVE_MAP, ResNetConfig, ResNetOnnxConfig
 
-    # 检查是否导入了 torch 库，若未导入则抛出异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 若导入了 torch 库，则从 modeling_resnet 模块中导入所需内容
+        # 导入 torch 模型相关的类型和类
         from .modeling_resnet import (
             RESNET_PRETRAINED_MODEL_ARCHIVE_LIST,
             ResNetBackbone,
@@ -84,14 +82,13 @@ if TYPE_CHECKING:
             ResNetPreTrainedModel,
         )
 
-    # 检查是否导入了 tensorflow 库，若未导入则抛出异常
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 若导入了 tensorflow 库，则从 modeling_tf_resnet 模块中导入所需内容
+        # 导入 TensorFlow 模型相关的类型和类
         from .modeling_tf_resnet import (
             TF_RESNET_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFResNetForImageClassification,
@@ -99,19 +96,19 @@ if TYPE_CHECKING:
             TFResNetPreTrainedModel,
         )
 
-    # 检查是否导入了 flax 库，若未导入则抛出异常
     try:
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-```  
-    # 如果不是第一个条件成立，则从当前包中导入以下模块
+    # 如果前面的条件不满足，导入以下模块中的指定类和函数
     from .modeling_flax_resnet import FlaxResNetForImageClassification, FlaxResNetModel, FlaxResNetPreTrainedModel
-# 如果当前模块不存在，则执行这段代码
 else:
-    # 导入 sys 模块
+    # 如果前面的条件都不满足，则执行以下代码块
     import sys
-    # 创建一个懒加载模块对象，并将其设置为当前模块的实例
+    # 导入系统模块 sys
+
+    # 使用当前模块的名称作为键，将 _LazyModule 对象赋值给 sys.modules 中的相应条目
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
+    # 这里假设 _LazyModule 是一个自定义的模块加载器类，将当前模块注册到 sys.modules 中
 ```

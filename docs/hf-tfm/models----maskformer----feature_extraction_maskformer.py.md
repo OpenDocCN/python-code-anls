@@ -1,41 +1,40 @@
-# `.\transformers\models\maskformer\feature_extraction_maskformer.py`
+# `.\models\maskformer\feature_extraction_maskformer.py`
 
-```py
-# 设置文件编码为utf-8
-
-# 版权声明，版权归The HuggingFace Inc.团队所有
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
 #
-# 根据Apache许可证2.0版本（“许可证”）授权
-# 您不得使用此文件，除非遵守许可证
-# 您可以在以下网址获取许可证的副本
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则软件在“原样”基础上分发
-# 没有任何种类的保证或条件，无论是明示还是默示
-# 有关特定语言管理权限和
-# 限制在许可证下。
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Feature extractor class for MaskFormer.
+"""
 
-"""MaskFormer的特征提取器类。"""
+import warnings  # 导入警告模块
 
-# 引入必要的库
-import warnings
+from ...utils import logging  # 导入日志工具
+from .image_processing_maskformer import MaskFormerImageProcessor  # 导入MaskFormerImageProcessor类
 
-from ...utils import logging
-from .image_processing_maskformer import MaskFormerImageProcessor
 
-# 获取logger对象
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 定义特征提取器类，继承自MaskFormerImageProcessor类
+
 class MaskFormerFeatureExtractor(MaskFormerImageProcessor):
     def __init__(self, *args, **kwargs) -> None:
-        # 发出警告，提示MaskFormerFeatureExtractor类已弃用，并将在Transformers的第5版中移除
+        # 发出警告，提示MaskFormerFeatureExtractor类在将来的版本中将被移除
         warnings.warn(
             "The class MaskFormerFeatureExtractor is deprecated and will be removed in version 5 of Transformers."
             " Please use MaskFormerImageProcessor instead.",
             FutureWarning,
         )
-        # 调用父类的初始化方法
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # 调用父类的构造函数，初始化MaskFormerImageProcessor的实例
 ```

@@ -1,92 +1,97 @@
 # `.\models\encodec\feature_extraction_encodec.py`
 
-```py
-# 设置编码为 UTF-8，确保支持中文注释等特殊字符
-# 版权声明，指明版权归 The HuggingFace Inc. team 所有
-# 使用 Apache 许可证 2.0 版本，允许自由使用，但需包含许可证和版权声明
-# 获取完整的许可证内容
-# 如果符合适用法律要求或以书面形式同意，则按"原样"提供，不提供任何明示或暗示的保证或条件
-# 根据许可证分发的软件是按"原样"分发的，不附带任何明示或暗示的保证或条件，包括但不限于适销性、特定用途适用性和非侵权性。
-# 详见许可证
-"""EnCodec 的特征提取器类。"""
+```
+# 指定代码文件的编码格式为UTF-8
 
-# 引入需要的类型提示
+# 版权声明，声明此代码版权归HuggingFace Inc.团队所有，保留所有权利
+
+# 根据Apache License, Version 2.0许可证使用本文件。您除非遵守许可证，否则不得使用本文件。
+# 您可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
+
+# 如果适用法律要求或书面同意，软件按"原样"分发，不附带任何明示或暗示的担保或条件。
+
+# 导入必要的库
+"""Feature extractor class for EnCodec."""
+
 from typing import List, Optional, Union
 
-# 引入 NumPy 库
-import numpy as np
+import numpy as np  # 导入NumPy库
 
-# 引入相关的特征提取工具
+# 导入相关的特征提取工具和实用函数
 from ...feature_extraction_sequence_utils import SequenceFeatureExtractor
 from ...feature_extraction_utils import BatchFeature
-# 引入填充策略和张量类型
 from ...utils import PaddingStrategy, TensorType, logging
 
-# 获取日志记录器
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-
-# 定义 EncodecFeatureExtractor 类，继承自 SequenceFeatureExtractor 类
+# 定义EnCodecFeatureExtractor类，继承自SequenceFeatureExtractor类
 class EncodecFeatureExtractor(SequenceFeatureExtractor):
     r"""
-    构建一个 EnCodec 特征提取器。
+    Constructs an EnCodec feature extractor.
 
-    这个特征提取器继承自 [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`]，其中包含大多数主要方法。用户应该参考此超类以获取有关这些方法的更多信息。
+    This feature extractor inherits from [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`] which contains
+    most of the main methods. Users should refer to this superclass for more information regarding those methods.
 
-    使用默认值实例化特征提取器将产生类似于 [facebook/encodec_24khz](https://huggingface.co/facebook/encodec_24khz) 架构的配置。
+    Instantiating a feature extractor with the defaults will yield a similar configuration to that of the
+    [facebook/encodec_24khz](https://huggingface.co/facebook/encodec_24khz) architecture.
 
-    参数:
-        feature_size (`int`, *可选*, 默认为 1):
-            提取特征的特征维度。对于单声道使用 1，立体声使用 2。
-        sampling_rate (`int`, *可选*, 默认为 24000):
-            应该数字化音频波形的采样率，以赫兹（Hz）表示。
-        padding_value (`float`, *可选*, 默认为 0.0):
-            用于填充值的值。
-        chunk_length_s (`float`, *可选*):
-            如果定义了，则音频将预处理为长度为 `chunk_length_s` 的块，然后进行编码。
-        overlap (`float`, *可选*):
-            定义每个块之间的重叠。它用于计算 `chunk_stride`，使用以下公式：`int((1.0 - self.overlap) * self.chunk_length)`。
+    Args:
+        feature_size (`int`, *optional*, defaults to 1):
+            The feature dimension of the extracted features. Use 1 for mono, 2 for stereo.
+        sampling_rate (`int`, *optional*, defaults to 24000):
+            The sampling rate at which the audio waveform should be digitalized expressed in hertz (Hz).
+        padding_value (`float`, *optional*, defaults to 0.0):
+            The value that is used to fill the padding values.
+        chunk_length_s (`float`, *optional*):
+            If defined the audio is pre-processed into chunks of lengths `chunk_length_s` and then encoded.
+        overlap (`float`, *optional*):
+            Defines the overlap between each chunk. It is used to compute the `chunk_stride` using the following
+            formulae : `int((1.0 - self.overlap) * self.chunk_length)`.
+
     """
 
     # 模型输入的名称列表
     model_input_names = ["input_values", "padding_mask"]
 
-    # 初始化方法
+    # 构造函数，初始化EnCodecFeatureExtractor对象
     def __init__(
         self,
-        feature_size: int = 1,
-        sampling_rate: int = 24000,
-        padding_value: float = 0.0,
-        chunk_length_s: float = None,
-        overlap: float = None,
-        **kwargs,
+        feature_size: int = 1,  # 特征维度，默认为1
+        sampling_rate: int = 24000,  # 采样率，默认为24000
+        padding_value: float = 0.0,  # 填充值，默认为0.0
+        chunk_length_s: float = None,  # 分块长度（秒），可选参数
+        overlap: float = None,  # 分块重叠度，可选参数
+        **kwargs,  # 其他关键字参数
     ):
-        # 调用父类的初始化方法，传入参数
+        # 调用父类的构造函数
         super().__init__(feature_size=feature_size, sampling_rate=sampling_rate, padding_value=padding_value, **kwargs)
-        # 设置块长度（秒）
+        # 设置分块长度属性
         self.chunk_length_s = chunk_length_s
-        # 设置重叠率
+        # 设置分块重叠度属性
         self.overlap = overlap
 
-    # 这是一个属性，因为你可能想动态更改 chunk_length_s
+    # chunk_length_s属性的getter，作为属性，可以动态更改chunk_length_s的值
     @property
-    # 返回数据块的长度，以采样率为单位，如果数据块长度未定义则返回空值
+    # 如果未设置 chunk_length_s，则返回 None，表示长度未定义
     def chunk_length(self) -> Optional[int]:
         if self.chunk_length_s is None:
             return None
         else:
+            # 计算并返回采样率乘以 chunk_length_s 的整数值，作为 chunk 的长度
             return int(self.chunk_length_s * self.sampling_rate)
 
-    # 这是一个属性，因为您可能希望动态更改chunk_length_s
+    # 这是一个属性，因为你可能想动态更改 chunk_length_s
     @property
-    # 返回数据块的步幅，以采样率为单位，如果数据块长度或重叠未定义则返回空值
     def chunk_stride(self) -> Optional[int]:
+        # 如果 chunk_length_s 或 overlap 未定义，则返回 None，表示步长未定义
         if self.chunk_length_s is None or self.overlap is None:
             return None
         else:
+            # 计算并返回步长值，确保至少为 1，根据 overlap 和 chunk_length 计算得出
             return max(1, int((1.0 - self.overlap) * self.chunk_length))
 
-    # 声明一个调用方法，接受原始音频数据、填充、截断、最大长度、返回的张量类型和采样率等参数
+    # 函数调用运算符重载，用于将音频数据处理成模型所需格式
     def __call__(
         self,
         raw_audio: Union[np.ndarray, List[float], List[np.ndarray], List[List[float]]],

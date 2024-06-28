@@ -1,162 +1,124 @@
-# `.\transformers\models\bert\tokenization_bert_tf.py`
+# `.\models\bert\tokenization_bert_tf.py`
 
-```py
-import os  # 导入操作系统模块
-from typing import List, Union  # 导入类型提示模块
+```
+    # 导入所需的标准库和模块
+    import os
+    from typing import List, Union
 
-import tensorflow as tf  # 导入 TensorFlow 库
-from tensorflow_text import BertTokenizer as BertTokenizerLayer  # 从 tensorflow_text 模块导入 BertTokenizerLayer 类
-from tensorflow_text import FastBertTokenizer, ShrinkLongestTrimmer, case_fold_utf8, combine_segments, pad_model_inputs  # 导入其他相关功能模块
+    # 导入 TensorFlow 库
+    import tensorflow as tf
+    # 导入 TensorFlow Text 库中的 BERT 分词器
+    from tensorflow_text import BertTokenizer as BertTokenizerLayer
+    from tensorflow_text import FastBertTokenizer, ShrinkLongestTrimmer, case_fold_utf8, combine_segments, pad_model_inputs
 
-from .tokenization_bert import BertTokenizer  # 从当前包中导入 tokenization_bert 模块的 BertTokenizer 类
+    # 导入自定义的 Keras 辅助函数
+    from ...modeling_tf_utils import keras
+    # 导入自定义的 BERT 分词器
+    from .tokenization_bert import BertTokenizer
 
+    # 定义一个 Keras 层，用于在图中进行 BERT 分词
+    class TFBertTokenizer(keras.layers.Layer):
+        """
+        This is an in-graph tokenizer for BERT. It should be initialized similarly to other tokenizers, using the
+        `from_pretrained()` method. It can also be initialized with the `from_tokenizer()` method, which imports settings
+        from an existing standard tokenizer object.
 
-class TFBertTokenizer(tf.keras.layers.Layer):  # 定义 TFBertTokenizer 类，继承自 TensorFlow 的 Layer 类
-    """
-    This is an in-graph tokenizer for BERT. It should be initialized similarly to other tokenizers, using the
-    `from_pretrained()` method. It can also be initialized with the `from_tokenizer()` method, which imports settings
-    from an existing standard tokenizer object.
-
-    In-graph tokenizers, unlike other Hugging Face tokenizers, are actually Keras layers and are designed to be run
-    when the model is called, rather than during preprocessing. As a result, they have somewhat more limited options
-    than standard tokenizer classes. They are most useful when you want to create an end-to-end model that goes
-    straight from `tf.string` inputs to outputs.
-    """
-```  
-    Args:
-        vocab_list (`list`):
-            List containing the vocabulary. 词汇表列表
-        do_lower_case (`bool`, *optional*, defaults to `True`):
-            Whether or not to lowercase the input when tokenizing. 是否在标记化时将输入转换为小写
-        cls_token_id (`str`, *optional*, defaults to `"[CLS]"`):
-            The classifier token which is used when doing sequence classification (classification of the whole sequence
-            instead of per-token classification). It is the first token of the sequence when built with special tokens.
-            用于序列分类时使用的分类器标记（对整个序列进行分类而不是对每个标记进行分类）。当使用特殊标记构建序列时，它是序列的第一个标记。
-        sep_token_id (`str`, *optional*, defaults to `"[SEP]"`):
-            The separator token, which is used when building a sequence from multiple sequences, e.g. two sequences for
-            sequence classification or for a text and a question for question answering. It is also used as the last
-            token of a sequence built with special tokens.
-            用于从多个序列构建序列时使用的分隔符标记，例如，用于序列分类的两个序列或用于文本和问题的问题回答。它也用作使用特殊标记构建的序列的最后一个标记。
-        pad_token_id (`str`, *optional*, defaults to `"[PAD]"`):
-            The token used for padding, for example when batching sequences of different lengths.
-            用于填充的标记，例如在批处理不同长度的序列时使用。
-        padding (`str`, defaults to `"longest"`):
-            The type of padding to use. Can be either `"longest"`, to pad only up to the longest sample in the batch,
-            or `"max_length", to pad all inputs to the maximum length supported by the tokenizer.
-            要使用的填充类型。可以是“longest”，仅填充到批处理中最长的样本，或“max_length”，将所有输入填充到令牌化器支持的最大长度。
-        truncation (`bool`, *optional*, defaults to `True`):
-            Whether to truncate the sequence to the maximum length. 是否将序列截断到最大长度
-        max_length (`int`, *optional*, defaults to `512`):
-            The maximum length of the sequence, used for padding (if `padding` is "max_length") and/or truncation (if
-            `truncation` is `True`).
-            序列的最大长度，用于填充（如果`padding`为“max_length”）和/或截断（如果`truncation`为`True`）。
-        pad_to_multiple_of (`int`, *optional*, defaults to `None`):
-            If set, the sequence will be padded to a multiple of this value.
-            如果设置，序列将填充到此值的倍数。
-        return_token_type_ids (`bool`, *optional*, defaults to `True`):
-            Whether to return token_type_ids. 是否返回 token_type_ids
-        return_attention_mask (`bool`, *optional*, defaults to `True`):
-            Whether to return the attention_mask. 是否返回 attention_mask
-        use_fast_bert_tokenizer (`bool`, *optional*, defaults to `True`):
-            If True, will use the FastBertTokenizer class from Tensorflow Text. If False, will use the BertTokenizer
-            class instead. BertTokenizer supports some additional options, but is slower and cannot be exported to
-            TFLite.
-            如果为 True，则将使用来自 Tensorflow Text 的 FastBertTokenizer 类。如果为 False，则将使用 BertTokenizer 类。BertTokenizer 支持一些额外选项，但速度较慢且无法导出到 TFLite。
-    """
-
+        In-graph tokenizers, unlike other Hugging Face tokenizers, are actually Keras layers and are designed to be run
+        when the model is called, rather than during preprocessing. As a result, they have somewhat more limited options
+        than standard tokenizer classes. They are most useful when you want to create an end-to-end model that goes
+        straight from `tf.string` inputs to outputs.
+        """
+    # 初始化函数，用于创建一个 Tokenizer 对象
     def __init__(
         self,
-        vocab_list: List,
-        do_lower_case: bool,
-        cls_token_id: int = None,
-        sep_token_id: int = None,
-        pad_token_id: int = None,
-        padding: str = "longest",
-        truncation: bool = True,
-        max_length: int = 512,
-        pad_to_multiple_of: int = None,
-        return_token_type_ids: bool = True,
-        return_attention_mask: bool = True,
-        use_fast_bert_tokenizer: bool = True,
-        **tokenizer_kwargs,
+        vocab_list: List,                   # 词汇表列表，包含了 Tokenizer 所需的词汇
+        do_lower_case: bool,                # 是否将输入文本转换为小写进行分词
+        cls_token_id: int = None,           # 分类器标记的 ID，在序列分类中用作序列的第一个标记
+        sep_token_id: int = None,           # 分隔符标记的 ID，在构建序列时用于多序列的分隔
+        pad_token_id: int = None,           # 填充标记的 ID，在批处理不同长度的序列时使用
+        padding: str = "longest",           # 填充类型，可以是"longest"或"max_length"
+        truncation: bool = True,            # 是否对序列进行截断，使其不超过最大长度
+        max_length: int = 512,              # 序列的最大长度，用于填充和截断
+        pad_to_multiple_of: int = None,     # 如果设置，序列将填充到此值的倍数
+        return_token_type_ids: bool = True, # 是否返回 token_type_ids
+        return_attention_mask: bool = True, # 是否返回 attention_mask
+        use_fast_bert_tokenizer: bool = True,  # 是否使用 FastBertTokenizer 类（Tensorflow Text）进行分词
+        **tokenizer_kwargs,                 # 其他可能传递给 tokenizer 的参数
         ):
-        # 调用父类的构造函数
-        super().__init__()
-        # 如果使用快速的BERT分词器
-        if use_fast_bert_tokenizer:
-            # 使用FastBertTokenizer创建tf_tokenizer对象
-            self.tf_tokenizer = FastBertTokenizer(
-                vocab_list, token_out_type=tf.int64, lower_case_nfd_strip_accents=do_lower_case, **tokenizer_kwargs
-            )
-        else:
-            # 创建静态词汇表查找表
-            lookup_table = tf.lookup.StaticVocabularyTable(
-                tf.lookup.KeyValueTensorInitializer(
-                    keys=vocab_list,
-                    key_dtype=tf.string,
-                    values=tf.range(tf.size(vocab_list, out_type=tf.int64), dtype=tf.int64),
-                    value_dtype=tf.int64,
-                ),
-                num_oov_buckets=1,
-            )
-            # 使用BertTokenizerLayer创建tf_tokenizer对象
-            self.tf_tokenizer = BertTokenizerLayer(
-                lookup_table, token_out_type=tf.int64, lower_case=do_lower_case, **tokenizer_kwargs
-            )
+            super().__init__()
+            # 调用父类的初始化方法
 
-        # 设置对象的属性
-        self.vocab_list = vocab_list
-        self.do_lower_case = do_lower_case
-        self.cls_token_id = cls_token_id or vocab_list.index("[CLS]")
-        self.sep_token_id = sep_token_id or vocab_list.index("[SEP]")
-        self.pad_token_id = pad_token_id or vocab_list.index("[PAD]")
-        self.paired_trimmer = ShrinkLongestTrimmer(max_length - 3, axis=1)  # Allow room for special tokens
-        self.max_length = max_length
-        self.padding = padding
-        self.truncation = truncation
-        self.pad_to_multiple_of = pad_to_multiple_of
-        self.return_token_type_ids = return_token_type_ids
-        self.return_attention_mask = return_attention_mask
+            if use_fast_bert_tokenizer:
+                # 如果使用快速的 BERT 分词器
+                self.tf_tokenizer = FastBertTokenizer(
+                    vocab_list, token_out_type=tf.int64, lower_case_nfd_strip_accents=do_lower_case, **tokenizer_kwargs
+                )
+            else:
+                # 否则使用静态词汇表创建查找表
+                lookup_table = tf.lookup.StaticVocabularyTable(
+                    tf.lookup.KeyValueTensorInitializer(
+                        keys=vocab_list,
+                        key_dtype=tf.string,
+                        values=tf.range(tf.size(vocab_list, out_type=tf.int64), dtype=tf.int64),
+                        value_dtype=tf.int64,
+                    ),
+                    num_oov_buckets=1,
+                )
+                # 使用查找表创建 BERT 分词器层
+                self.tf_tokenizer = BertTokenizerLayer(
+                    lookup_table, token_out_type=tf.int64, lower_case=do_lower_case, **tokenizer_kwargs
+                )
 
-    # 类方法
-    @classmethod
+            self.vocab_list = vocab_list
+            self.do_lower_case = do_lower_case
+            # 设置特殊 token 的索引，如果未提供则从 vocab_list 中获取
+            self.cls_token_id = vocab_list.index("[CLS]") if cls_token_id is None else cls_token_id
+            self.sep_token_id = vocab_list.index("[SEP]") if sep_token_id is None else sep_token_id
+            self.pad_token_id = vocab_list.index("[PAD]") if pad_token_id is None else pad_token_id
+            # 初始化用于截断最长序列的 paired_trimmer
+            self.paired_trimmer = ShrinkLongestTrimmer(max_length - 3, axis=1)  # Allow room for special tokens
+            self.max_length = max_length
+            self.padding = padding
+            self.truncation = truncation
+            self.pad_to_multiple_of = pad_to_multiple_of
+            self.return_token_type_ids = return_token_type_ids
+            self.return_attention_mask = return_attention_mask
     def from_tokenizer(cls, tokenizer: "PreTrainedTokenizerBase", **kwargs):  # noqa: F821
         """
-        从现有的 `Tokenizer` 初始化一个 `TFBertTokenizer`。
+        Initialize a `TFBertTokenizer` from an existing `Tokenizer`.
 
         Args:
             tokenizer (`PreTrainedTokenizerBase`):
-                用于初始化 `TFBertTokenizer` 的分词器。
+                The tokenizer to use to initialize the `TFBertTokenizer`.
 
         Examples:
 
-        ```py
+        ```python
         from transformers import AutoTokenizer, TFBertTokenizer
 
-        tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+        tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
         tf_tokenizer = TFBertTokenizer.from_tokenizer(tokenizer)
         ```
         """
-        # 获取参数中的 do_lower_case，如果没有则使用 tokenizer 的值
+        # Retrieve the 'do_lower_case' parameter from kwargs; if not provided, use tokenizer's setting
         do_lower_case = kwargs.pop("do_lower_case", None)
         do_lower_case = tokenizer.do_lower_case if do_lower_case is None else do_lower_case
-        # 获取参数中的 cls_token_id，如果没有则使用 tokenizer 的值
+        # Retrieve the 'cls_token_id' parameter from kwargs; if not provided, use tokenizer's setting
         cls_token_id = kwargs.pop("cls_token_id", None)
         cls_token_id = tokenizer.cls_token_id if cls_token_id is None else cls_token_id
-        # 获取参数中的 sep_token_id，如果没有则使用 tokenizer 的值
+        # Retrieve the 'sep_token_id' parameter from kwargs; if not provided, use tokenizer's setting
         sep_token_id = kwargs.pop("sep_token_id", None)
         sep_token_id = tokenizer.sep_token_id if sep_token_id is None else sep_token_id
-        # 获取参数中的 pad_token_id，如果没有则使用 tokenizer 的值
+        # Retrieve the 'pad_token_id' parameter from kwargs; if not provided, use tokenizer's setting
         pad_token_id = kwargs.pop("pad_token_id", None)
         pad_token_id = tokenizer.pad_token_id if pad_token_id is None else pad_token_id
 
-        # 获取 tokenizer 的词汇表
+        # Get the vocabulary dictionary from the tokenizer and sort it by indices
         vocab = tokenizer.get_vocab()
-        # 按照词汇表中的索引排序
         vocab = sorted(vocab.items(), key=lambda x: x[1])
-        # 提取词汇表中的词项
+        # Extract just the vocabulary tokens into a list
         vocab_list = [entry[0] for entry in vocab]
-        # 使用参数和提取的词汇表初始化 TFBertTokenizer
+        # Instantiate a new TFBertTokenizer using the retrieved parameters and vocab_list
         return cls(
             vocab_list=vocab_list,
             do_lower_case=do_lower_case,
@@ -169,38 +131,38 @@ class TFBertTokenizer(tf.keras.layers.Layer):  # 定义 TFBertTokenizer 类，�
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path: Union[str, os.PathLike], *init_inputs, **kwargs):
         """
-        从预训练的分词器实例化一个 `TFBertTokenizer`。
+        Instantiate a `TFBertTokenizer` from a pre-trained tokenizer.
 
         Args:
             pretrained_model_name_or_path (`str` or `os.PathLike`):
-                预训练分词器的名称或路径。
+                The name or path to the pre-trained tokenizer.
 
         Examples:
 
-        ```py
+        ```python
         from transformers import TFBertTokenizer
 
-        tf_tokenizer = TFBertTokenizer.from_pretrained("bert-base-uncased")
+        tf_tokenizer = TFBertTokenizer.from_pretrained("google-bert/bert-base-uncased")
         ```
         """
         try:
-            # 尝试使用 BertTokenizer 实例化分词器
+            # Attempt to create a BertTokenizer instance from the provided pretrained_model_name_or_path
             tokenizer = BertTokenizer.from_pretrained(pretrained_model_name_or_path, *init_inputs, **kwargs)
         except:  # noqa: E722
+            # If the above fails, fall back to using BertTokenizerFast
             from .tokenization_bert_fast import BertTokenizerFast
 
-            # 如果出错，则使用 BertTokenizerFast 实例化分词器
             tokenizer = BertTokenizerFast.from_pretrained(pretrained_model_name_or_path, *init_inputs, **kwargs)
-        # 从分词器实例化 TFBertTokenizer
+        # Call from_tokenizer to create a TFBertTokenizer instance using the obtained tokenizer
         return cls.from_tokenizer(tokenizer, **kwargs)
 
     def unpaired_tokenize(self, texts):
-        # 如果设置了 do_lower_case，则进行小写转换
+        # If do_lower_case is True, convert texts to lowercase using case_fold_utf8
         if self.do_lower_case:
             texts = case_fold_utf8(texts)
-        # 使用 tf_tokenizer 进行分词
+        # Tokenize texts using tf_tokenizer's tokenize method
         tokens = self.tf_tokenizer.tokenize(texts)
-        # 合并维度
+        # Merge dimensions from 1 to -1 in tokens
         return tokens.merge_dims(1, -1)
 
     def call(
@@ -213,14 +175,14 @@ class TFBertTokenizer(tf.keras.layers.Layer):  # 定义 TFBertTokenizer 类，�
         pad_to_multiple_of=None,
         return_token_type_ids=None,
         return_attention_mask=None,
-    # 获取配置信息的方法，返回一个包含各项配置信息的字典
+    # 定义一个方法，用于获取配置信息的字典
     def get_config(self):
-        # 返回包含以下配置信息的字典：
+        # 返回包含各种配置项的字典
         return {
-            "vocab_list": self.vocab_list,  # 词汇表列表
-            "do_lower_case": self.do_lower_case,  # 是否进行小写处理的布尔值
-            "cls_token_id": self.cls_token_id,  # [CLS] 标记的 ID
-            "sep_token_id": self.sep_token_id,  # [SEP] 标记的 ID
-            "pad_token_id": self.pad_token_id,  # 填充标记的 ID
+            "vocab_list": self.vocab_list,       # 返回实例的词汇表列表
+            "do_lower_case": self.do_lower_case, # 返回是否执行小写转换的布尔值
+            "cls_token_id": self.cls_token_id,   # 返回类别标记的 ID
+            "sep_token_id": self.sep_token_id,   # 返回分隔标记的 ID
+            "pad_token_id": self.pad_token_id,   # 返回填充标记的 ID
         }
 ```

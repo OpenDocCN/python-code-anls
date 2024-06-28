@@ -1,57 +1,75 @@
-# `.\transformers\models\xlnet\tokenization_xlnet.py`
+# `.\models\xlnet\tokenization_xlnet.py`
 
-```py
-# 导入所需库和模块
-import os  # 用于操作系统相关功能
-import unicodedata  # 用于 Unicode 字符处理
-from shutil import copyfile  # 用于复制文件
-from typing import Any, Dict, List, Optional, Tuple  # 用于类型提示
+```
+# coding=utf-8
+# 代码文件的版权声明和许可信息，遵循 Apache License, Version 2.0
+# 详细信息可查看 http://www.apache.org/licenses/LICENSE-2.0
 
-import sentencepiece as spm  # 导入 sentencepiece 库，用于分词
+# 导入标准库和第三方库
+import os
+import unicodedata
+from shutil import copyfile
+from typing import Any, Dict, List, Optional, Tuple
 
-from ...tokenization_utils import AddedToken, PreTrainedTokenizer  # 导入基础的 Tokenizer 类和添加的 Token 类
-from ...utils import SPIECE_UNDERLINE, logging  # 导入 SPIECE_UNDERLINE 和 logging 相关内容
+# 导入 sentencepiece 库，用于分词
+import sentencepiece as spm
 
-# 获取 logger 对象，用于记录日志
+# 导入自定义的模块和工具函数
+from ...tokenization_utils import AddedToken, PreTrainedTokenizer
+from ...utils import SPIECE_UNDERLINE, logging
+
+# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义词汇文件名常量
+# 定义词汇文件的名称
 VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}
 
 # 定义预训练模型的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
-        "xlnet-base-cased": "https://huggingface.co/xlnet-base-cased/resolve/main/spiece.model",
-        "xlnet-large-cased": "https://huggingface.co/xlnet-large-cased/resolve/main/spiece.model",
+        "xlnet/xlnet-base-cased": "https://huggingface.co/xlnet/xlnet-base-cased/resolve/main/spiece.model",
+        "xlnet/xlnet-large-cased": "https://huggingface.co/xlnet/xlnet-large-cased/resolve/main/spiece.model",
     }
 }
 
-# 定义预训练模型的位置编码大小映射
+# 定义预训练模型的位置嵌入尺寸
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
-    "xlnet-base-cased": None,
-    "xlnet-large-cased": None,
+    "xlnet/xlnet-base-cased": None,
+    "xlnet/xlnet-large-cased": None,
 }
 
-# 定义 XLNet tokenizer 类
+# 定义各个语段的标识符常量
+SEG_ID_A = 0
+SEG_ID_B = 1
+SEG_ID_CLS = 2
+SEG_ID_SEP = 3
+SEG_ID_PAD = 4
+
+# XLNetTokenizer 类，继承自 PreTrainedTokenizer 类
 class XLNetTokenizer(PreTrainedTokenizer):
     """
-    Construct an XLNet tokenizer. Based on [SentencePiece](https://github.com/google/sentencepiece).
+    构建一个 XLNet 分词器，基于 SentencePiece。
 
-    This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
-    this superclass for more information regarding those methods.
+    该分词器继承自 `PreTrainedTokenizer`，其中包含大多数主要方法。用户应参考该超类以获取关于这些方法的更多信息。
 
     Attributes:
         sp_model (`SentencePieceProcessor`):
-            The *SentencePiece* processor that is used for every conversion (string, tokens and IDs).
+            用于所有转换（字符串、token 和 ID）的 SentencePiece 处理器。
     """
 
-    # 定义词汇文件名和预训练模型词汇文件映射
+    # 类属性：词汇文件的名称
     vocab_files_names = VOCAB_FILES_NAMES
+
+    # 类属性：预训练模型的词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+
+    # 类属性：预训练模型的最大输入尺寸
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+
+    # 类属性：填充位置为左侧
     padding_side = "left"
 
-    # 初始化 XLNet tokenizer
+    # 初始化方法
     def __init__(
         self,
         vocab_file,
@@ -65,28 +83,27 @@ class XLNetTokenizer(PreTrainedTokenizer):
         pad_token="<pad>",
         cls_token="<cls>",
         mask_token="<mask>",
-        additional_special_tokens=["
-    # 定义了一个函数，用来初始化一个新的tokenizer对象
-    def __init__(
-        self, vocab_file, merges_file, errors="replace", special_tokens=None, verbose=True,
-        bos_token=self.bos_token, eos_token=self.eos_token, unk_token=self.unk_token,
-        sep_token=self.sep_token, pad_token=self.pad_token, cls_token=self.cls_token, mask_token=self.mask_token,
-        additional_special_tokens=self.additional_special_tokens, sp_model_kwargs=None,
+        additional_special_tokens=["<eop>", "<eod>"],
+        sp_model_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs,
     ) -> None:
-        # 如果mask_token是字符串，那么将其作为特殊字符处理，否则保持原样
+        # 定义一个函数，初始化一个 Mask token 对象，可以作为普通单词处理，即保留前面的空格
         mask_token = AddedToken(mask_token, lstrip=True, special=True) if isinstance(mask_token, str) else mask_token
-        # 如果sp_model_kwargs为空，则创建一个空字典
+
+        # 初始化参数，如果没有传入 sp_model_kwargs，则设为空字典
         self.sp_model_kwargs = {} if sp_model_kwargs is None else sp_model_kwargs
-        # 初始化一些实例变量
-        self.do_lower_case = do_lower_case
-        self.remove_space = remove_space
-        self.keep_accents = keep_accents
-        self.vocab_file = vocab_file
-        # 根据给定的参数创建一个SentencePieceProcessor对象
+
+        # 设置对象属性
+        self.do_lower_case = do_lower_case  # 是否进行小写处理
+        self.remove_space = remove_space    # 是否移除空格
+        self.keep_accents = keep_accents    # 是否保留重音符号
+        self.vocab_file = vocab_file        # 词汇文件路径
+
+        # 使用 SentencePieceProcessor 初始化 self.sp_model 对象，传入 sp_model_kwargs 参数
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
-        # 从给定的vocab_file中加载模型
-        self.sp_model.Load(vocab_file)
-        # 调用父类的构造函数进行初始化
+        self.sp_model.Load(vocab_file)  # 载入指定的词汇文件
+
+        # 调用父类的初始化方法，传入多个参数和关键字参数
         super().__init__(
             do_lower_case=do_lower_case,
             remove_space=remove_space,
@@ -102,99 +119,105 @@ class XLNetTokenizer(PreTrainedTokenizer):
             sp_model_kwargs=self.sp_model_kwargs,
             **kwargs,
         )
-        # 初始化_pad_token_type_id变量为3
+
+        # 设置内部变量 _pad_token_type_id 的值为 3
         self._pad_token_type_id = 3
 
-    # 返回vocab的大小
     @property
     def vocab_size(self):
+        # 返回 self.sp_model 中的词汇大小
         return len(self.sp_model)
 
-    # 获取vocab并返回一个包含词汇表的字典
     def get_vocab(self):
+        # 创建词汇表字典，将词汇 ID 映射为对应的 token，并更新额外特殊 token 的编码
         vocab = {self.convert_ids_to_tokens(i): i for i in range(self.vocab_size)}
         vocab.update(self.added_tokens_encoder)
         return vocab
 
-    # 获取当前对象的状态
     def __getstate__(self):
+        # 复制对象的状态字典
         state = self.__dict__.copy()
-        state["sp_model"] = None
+        state["sp_model"] = None  # 将 sp_model 设置为 None，用于对象序列化时的状态保存
         return state
 
-    # 设定当前对象的状态
     def __setstate__(self, d):
+        # 恢复对象的状态
         self.__dict__ = d
-        # 为了向后兼容，如果不存在sp_model_kwargs，则将其初始化为空字典
+
+        # 为了向后兼容性，在恢复状态后，如果没有 sp_model_kwargs 属性，则设为一个空字典
         if not hasattr(self, "sp_model_kwargs"):
             self.sp_model_kwargs = {}
-        # 用给定的sp_model_kwargs参数创建一个SentencePieceProcessor对象，然后加载���型
+
+        # 重新初始化 self.sp_model 对象，载入指定的词汇文件
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
         self.sp_model.Load(self.vocab_file)
 
-    # 对输入文本进行预处理，包括去除空格、替换引号、处理重音符号、转换为小写等
     def preprocess_text(self, inputs):
-        # 如果指定要去除空格，则去除输入文本中的空格
+        # 预处理文本函数，根据对象的属性进行文本处理
+
+        # 如果 remove_space 为 True，则移除多余的空格
         if self.remove_space:
             outputs = " ".join(inputs.strip().split())
         else:
             outputs = inputs
-        # 替换一些特殊字符
+
+        # 替换特定的引号符号
         outputs = outputs.replace("``", '"').replace("''", '"')
-        # 如果不保留重音符号，则将输出进行规范化，并删除其中的重音符号
+
+        # 如果不保留重音符号，则使用 NFC 规范化和移除所有的组合字符
         if not self.keep_accents:
             outputs = unicodedata.normalize("NFKD", outputs)
             outputs = "".join([c for c in outputs if not unicodedata.combining(c)])
-        # 如果需要转换为小写，则将输出文本转换为小写
+
+        # 如果 do_lower_case 为 True，则将文本转换为小写
         if self.do_lower_case:
             outputs = outputs.lower()
 
-        # 返回最终处理后的文本
         return outputs
-    # 将文本分词成单词列表
     def _tokenize(self, text: str) -> List[str]:
         """Tokenize a string."""
-        # 预处理文本
+        # 对输入文本进行预处理
         text = self.preprocess_text(text)
-        # 使用句子处理模型对文本进行编码，得到分词后的结果
+        # 使用预训练的分词模型对文本进行分词，返回分词后的结果
         pieces = self.sp_model.encode(text, out_type=str)
         new_pieces = []
-        # 遍历分词后的结果
+        # 遍历每个分词结果
         for piece in pieces:
-            # 处理分词结果，将逗号+数字的情况处理为独立的子词
+            # 如果分词长度大于1且以逗号结尾并且倒数第二个字符是数字
             if len(piece) > 1 and piece[-1] == str(",") and piece[-2].isdigit():
+                # 对满足条件的分词进行进一步处理，去除特殊字符并拆分为更小的片段
                 cur_pieces = self.sp_model.EncodeAsPieces(piece[:-1].replace(SPIECE_UNDERLINE, ""))
-                # 进一步处理子词开头结尾的情况
+                # 如果原始分词不以特殊字符开头但当前分词片段以特殊字符开头，则进行调整
                 if piece[0] != SPIECE_UNDERLINE and cur_pieces[0][0] == SPIECE_UNDERLINE:
                     if len(cur_pieces[0]) == 1:
                         cur_pieces = cur_pieces[1:]
                     else:
                         cur_pieces[0] = cur_pieces[0][1:]
-                # 将处理后的子词加入到新的分词结果列表中
+                # 将处理后的分词片段添加到新的分词列表中
                 cur_pieces.append(piece[-1])
                 new_pieces.extend(cur_pieces)
             else:
+                # 将不需要进一步处理的分词直接添加到新的分词列表中
                 new_pieces.append(piece)
-        # 返回处理后的分词结果
+
         return new_pieces
 
-    # 将单词转换为对应的 ID
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
+        # 使用预训练的分词模型将分词转换为对应的 id
         return self.sp_model.PieceToId(token)
 
-    # 将 ID 转换为对应的单词
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
+        # 使用预训练的分词模型将 id 转换为对应的分词
         return self.sp_model.IdToPiece(index)
 
-    # 将 token 列表转换为字符串
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (strings for sub-words) in a single string."""
+        # 将分词序列转换为单个字符串，并替换特殊字符为空格
         out_string = "".join(tokens).replace(SPIECE_UNDERLINE, " ").strip()
         return out_string
 
-    # 解码操作，将 ID 列表解码为文本
     def _decode(
         self,
         token_ids: List[int],
@@ -202,81 +225,96 @@ class XLNetTokenizer(PreTrainedTokenizer):
         clean_up_tokenization_spaces: bool = None,
         spaces_between_special_tokens: bool = True,
         **kwargs,
-    # 定义一个方法，返回字符串类型
-    def __call__(self, token_ids: List[int], skip_special_tokens: bool = False, clean_up_tokenization_spaces: Optional[bool] = None,) -> str:
-        # 使用kwargs.pop方法获取并删除"use_source_tokenizer"参数的值，默认为False
+    ):
+        """Decode a list of token IDs back into a string."""
+        # 略
+    ) -> str:
+        # 从 kwargs 中弹出 "use_source_tokenizer" 参数，默认为 False
         self._decode_use_source_tokenizer = kwargs.pop("use_source_tokenizer", False)
 
-        # 转换token_ids中的id为特殊token，并过滤特殊token
+        # 将 token_ids 转换为 tokens，跳过特殊 token
         filtered_tokens = self.convert_ids_to_tokens(token_ids, skip_special_tokens=skip_special_tokens)
 
-        # 遍历过滤后的token
-        sub_texts = []  # 存储子文本
-        current_sub_text = []  # 存储当前子文本
+        # 避免混合字节级和 Unicode 的情况，特别是对于字节级 BPT
+        # 需要分别构建添加的 token 和字节级 token 的字符串
+        # 参考：https://github.com/huggingface/transformers/issues/1133
+        sub_texts = []
+        current_sub_text = []
         for token in filtered_tokens:
-            # 如果需要跳过特殊token并且当前token是特殊token，继续下一次循环
             if skip_special_tokens and token in self.all_special_ids:
                 continue
-            # 如果当前token在添加token编码器中
             if token in self.added_tokens_encoder:
-                # 如果当前子文本不为空，将其转换为字符串并添加到sub_texts列表中，然后重置当前子文本
+                # 如果当前有未处理完的子字符串，先转换为字符串并添加到 sub_texts
                 if current_sub_text:
                     sub_texts.append(self.convert_tokens_to_string(current_sub_text))
                     current_sub_text = []
-                sub_texts.append(token)  # 将当前token添加到sub_texts列表中
+                # 直接添加特殊 token 到 sub_texts
+                sub_texts.append(token)
             else:
-                current_sub_text.append(token)  # 添加当前token到当前子文本中
-        # 如果当前子文本不为空，将其转换为字符串并添加到sub_texts列表中
+                # 将普通 token 添加到当前的子字符串
+                current_sub_text.append(token)
+        # 处理最后一个子字符串
         if current_sub_text:
             sub_texts.append(self.convert_tokens_to_string(current_sub_text))
 
-        # 重新构建文本，没有特殊token之间没有空格
+        # 模仿 Rust 分词器的行为：
+        # 默认情况下，特殊 token 之间没有空格
         text = "".join(sub_texts)
 
-        # 如果传入参数clean_up_tokenization_spaces不为空，则使用传入的值，否则使用clean_up_tokenization_spaces的默认值
+        # 是否清理 tokenization 中的空格，默认为 self.clean_up_tokenization_spaces
         clean_up_tokenization_spaces = (
             clean_up_tokenization_spaces
             if clean_up_tokenization_spaces is not None
             else self.clean_up_tokenization_spaces
         )
-        # 如果需要清理token化空格，则执行清理操作并返回结果
+        # 如果需要清理空格，则调用 clean_up_tokenization 方法清理 text
         if clean_up_tokenization_spaces:
             clean_text = self.clean_up_tokenization(text)
             return clean_text
         else:
             return text
 
-    # 定义一个方法，用于构建带有特殊token的模型输入
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
-        adding special tokens. An XLNet sequence has the following format:
+        通过连接和添加特殊 token，构建用于序列分类任务的模型输入。对于 XLNet，序列的格式如下：
 
-        - single sequence: `X <sep> <cls>`
-        - pair of sequences: `A <sep> B <sep> <cls>`
+        - 单个序列：`X <sep> <cls>`
+        - 序列对：`A <sep> B <sep> <cls>`
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs to which the special tokens will be added.
+                将添加特殊 token 的 ID 列表。
             token_ids_1 (`List[int]`, *optional*):
-                Optional second list of IDs for sequence pairs.
+                可选的第二个 ID 列表，用于序列对。
 
         Returns:
-            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
+            `List[int]`: 包含适当特殊 token 的输入 ID 列表。
         """
-        sep = [self.sep_token_id]  # 分隔符的token id列表
-        cls = [self.cls_token_id]  # 类别分割符的token id列表
-        # 如果token_ids_1为空，则返回token_ids_0 + 分隔符 + 类别分割符
+        sep = [self.sep_token_id]  # 分隔 token 的 ID 列表
+        cls = [self.cls_token_id]  # 类别 token 的 ID 列表
         if token_ids_1 is None:
-            return token_ids_0 + sep + cls
-        # 如果token_ids_1不为空，则返回token_ids_0 + 分隔符 + token_ids_1 + 分隔符 + 类别分割符
-        return token_ids_0 + sep + token_ids_1 + sep + cls
+            return token_ids_0 + sep + cls  # 返回单个序列的输入 ID 列表
+        return token_ids_0 + sep + token_ids_1 + sep + cls  # 返回序列对的输入 ID 列表
 
-    # 定义一个方法，用于获取特殊token的掩码
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
+    ):
+        """
+        生成特殊 token 的掩码，用于标识输入中的特殊 token。
+
+        Args:
+            token_ids_0 (`List[int]`):
+                第一个序列的 token ID 列表。
+            token_ids_1 (`List[int]`, *optional*):
+                可选的第二个序列的 token ID 列表。
+            already_has_special_tokens (`bool`):
+                指示输入 token 是否已经包含特殊 token。
+
+        Returns:
+            `List[int]`: 包含特殊 token 掩码的列表。
+        """
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
     ) -> List[int]:
@@ -295,19 +333,17 @@ class XLNetTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
         """
-
+        # If the token list already has special tokens, delegate to the superclass method
         if already_has_special_tokens:
             return super().get_special_tokens_mask(
                 token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
             )
-        # 如果已经包含特殊标记，则调用父类的get_special_tokens_mask方法
-
+        
+        # If token_ids_1 exists, create a mask for sequence pairs with special tokens
         if token_ids_1 is not None:
             return ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1)) + [1, 1]
-        # 如果有第二个序列ids，则返回第一个ids列表后加1，再加第二个ids列表再加1，最后加两个1
-
+        # Otherwise, create a mask for a single sequence with special tokens
         return ([0] * len(token_ids_0)) + [1, 1]
-        # 如果只有一个ids列表，则返回ids列表后加两个1
 
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
@@ -319,7 +355,7 @@ class XLNetTokenizer(PreTrainedTokenizer):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
@@ -332,36 +368,38 @@ class XLNetTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
         """
+        # Separator token for XLNet
         sep = [self.sep_token_id]
+        # Class segment ID for XLNet
         cls_segment_id = [2]
 
+        # If token_ids_1 is None, return mask for single sequence
         if token_ids_1 is None:
             return len(token_ids_0 + sep) * [0] + cls_segment_id
-        # 如果token_ids_1为空，则返回第一个ids列表加上sep的长度的0，并添加一个cls_segment_id
-
+        
+        # Otherwise, return mask for sequence pair
         return len(token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1] + cls_segment_id
-        # 如果token_ids_1不为空，则返回第一个ids列表加上sep的长度的0，再加上第二个ids列表加上sep的长度的1，并添加一个cls_segment_id
-    # 将词汇表保存到指定目录中
+    # 定义一个方法用于保存词汇表到指定目录
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 检查输入的保存目录是否为目录
+        # 检查保存目录是否存在，如果不存在则记录错误并返回
         if not os.path.isdir(save_directory):
-            # 如果不是目录, 记录错误日志并返回
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
-        # 构建输出文件的完整路径, 包括前缀(如果提供)和默认文件名
+
+        # 构建输出词汇表文件路径，根据可选的前缀和默认的词汇表文件名组合而成
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-    
-        # 如果当前词汇表文件路径和输出路径不同, 且当前词汇表文件存在, 则将其复制到输出路径
+
+        # 如果当前词汇表文件与输出文件不是同一个文件，并且当前词汇表文件存在，则进行复制操作
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file) and os.path.isfile(self.vocab_file):
             copyfile(self.vocab_file, out_vocab_file)
-        # 如果当前词汇表文件不存在, 则将序列化的词汇表模型内容写入输出文件
+        # 如果当前词汇表文件不存在，则将序列化的模型写入到输出文件中
         elif not os.path.isfile(self.vocab_file):
             with open(out_vocab_file, "wb") as fi:
                 content_spiece_model = self.sp_model.serialized_model_proto()
                 fi.write(content_spiece_model)
-    
-        # 返回输出文件的完整路径
+
+        # 返回保存的输出词汇表文件路径的元组形式
         return (out_vocab_file,)
 ```

@@ -1,98 +1,101 @@
-# `.\transformers\models\bros\configuration_bros.py`
+# `.\models\bros\configuration_bros.py`
 
-```py
-# coding=utf-8
-# 版权声明
-# 本文件使用 Apache 许可证 2.0 授权
-# 你可以在遵守许可证的前提下使用本文件
-# 可以在 http://www.apache.org/licenses/LICENSE-2.0 获取许可证的副本
-# 本文件分发的内容基于“原样”提供，不提供任何明示或暗示的保证或条件
-# 包括但不限于适销性、特定用途适用性和非侵权性的保证
-# 请查阅许可证了解具体的条款和条件
-
-""" Bros 模型配置"""
-
-# 导入预训练配置类
+```
+# 导入所需模块和类
 from ...configuration_utils import PretrainedConfig
-# 导入日志记录工具
 from ...utils import logging
 
-# 获取日志记录器
+# 获取 logger 对象用于记录日志
 logger = logging.get_logger(__name__)
 
-# 预训练模型配置文件映射
+# 预训练配置与 URL 映射表，用于不同的 Bros 模型
 BROS_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "jinho8345/bros-base-uncased": "https://huggingface.co/jinho8345/bros-base-uncased/blob/main/config.json",
     "jinho8345/bros-large-uncased": "https://huggingface.co/jinho8345/bros-large-uncased/blob/main/config.json",
 }
 
-
+# BrosConfig 类，继承自 PretrainedConfig，用于存储 Bros 模型的配置信息
 class BrosConfig(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`BrosModel`] 或 [`TFBrosModel`] 的配置。它用于根据指定的参数实例化 Bros 模型，
-    定义模型架构。使用默认参数实例化配置将产生与 Bros
-    [jinho8345/bros-base-uncased](https://huggingface.co/jinho8345/bros-base-uncased) 架构相似的配置。
+    This is the configuration class to store the configuration of a [`BrosModel`] or a [`TFBrosModel`]. It is used to
+    instantiate a Bros model according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the Bros
+    [jinho8345/bros-base-uncased](https://huggingface.co/jinho8345/bros-base-uncased) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读
-    [`PretrainedConfig`] 的文档以获取更多信息。
-```  
-    # Bros模型配置类，定义了Bros模型的各种参数设置
-    class BrosConfig:
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+    """
+    # 定义 Bros 模型的配置类 BrosConfig，用于设置模型参数
+    Args:
+        vocab_size (`int`, *optional*, defaults to 30522):
+            Bros 模型的词汇表大小，定义了在调用 `BrosModel` 或 `TFBrosModel` 时可以表示的不同 token 数量。
+        hidden_size (`int`, *optional*, defaults to 768):
+            编码器层和池化层的维度大小。
+        num_hidden_layers (`int`, *optional*, defaults to 12):
+            Transformer 编码器中的隐藏层数量。
+        num_attention_heads (`int`, *optional*, defaults to 12):
+            Transformer 编码器中每个注意力层的注意力头数量。
+        intermediate_size (`int`, *optional*, defaults to 3072):
+            Transformer 编码器中“中间层”（通常称为前馈层）的维度大小。
+        hidden_act (`str` or `Callable`, *optional*, defaults to `"gelu"`):
+            编码器和池化器中的非线性激活函数（函数或字符串）。支持的字符串有 `"gelu"`, `"relu"`, `"silu"` 和 `"gelu_new"`。
+        hidden_dropout_prob (`float`, *optional*, defaults to 0.1):
+            嵌入层、编码器和池化器中所有全连接层的 dropout 概率。
+        attention_probs_dropout_prob (`float`, *optional*, defaults to 0.1):
+            注意力概率的 dropout 比率。
+        max_position_embeddings (`int`, *optional*, defaults to 512):
+            此模型可能使用的最大序列长度。通常设置为较大的值（例如 512、1024 或 2048）以防万一。
+        type_vocab_size (`int`, *optional*, defaults to 2):
+            在调用 `BrosModel` 或 `TFBrosModel` 时传递的 `token_type_ids` 的词汇表大小。
+        initializer_range (`float`, *optional*, defaults to 0.02):
+            用于初始化所有权重矩阵的截断正态初始化器的标准差。
+        layer_norm_eps (`float`, *optional*, defaults to 1e-12):
+            层归一化层使用的 epsilon 值。
+        pad_token_id (`int`, *optional*, defaults to 0):
+            词汇表中填充 token 的索引。
+        dim_bbox (`int`, *optional*, defaults to 8):
+            边界框坐标的维度大小。 (x0, y1, x1, y0, x1, y1, x0, y1)
+        bbox_scale (`float`, *optional*, defaults to 100.0):
+            边界框坐标的缩放因子。
+        n_relations (`int`, *optional*, defaults to 1):
+            SpadeEE（实体提取）、SpadeEL（实体链接）头部的关系数量。
+        classifier_dropout_prob (`float`, *optional*, defaults to 0.1):
+            分类器头部的 dropout 比率。
     
-        # Bros模型的词汇表大小，定义了可以由调用BrosModel或TFBrosModel时传递的inputs_ids表示的不同标记数
-        def __init__(
-            self,
-            vocab_size: int = 30522,
-            # 编码器层和池化层的维度
-            hidden_size: int = 768,
-            # Transformer编码器中隐藏层的数量
-            num_hidden_layers: int = 12,
-            # Transformer编码器中每个注意力层的注意力头数
-            num_attention_heads: int = 12,
-            # Transformer编码器中“中间”（通常称为前馈）层的维度
-            intermediate_size: int = 3072,
-            # 编码器和池化层中的非线性激活函数
-            hidden_act: Union[str, Callable] = "gelu",
-            # 嵌入层、编码器和池化器中所有全连接层的dropout概率
-            hidden_dropout_prob: float = 0.1,
-            # 注意力概率的dropout比率
-            attention_probs_dropout_prob: float = 0.1,
-            # 此模型可能与之一起使用的最大序列长度
-            max_position_embeddings: int = 512,
-            # 调用BrosModel或TFBrosModel时传递的token_type_ids的词汇表大小
-            type_vocab_size: int = 2,
-            # 用于初始化所有权重矩阵的截断正态初始化器的标准差
-            initializer_range: float = 0.02,
-            # 层归一化层使用的epsilon
-            layer_norm_eps: float = 1e-12,
-            # token词汇表中填充标记的索引
-            pad_token_id: int = 0,
-            # 边界框坐标的维度（x0，y1，x1，y0，x1，y1，x0，y1）
-            dim_bbox: int = 8,
-            # 边界框坐标的比例因子
-            bbox_scale: float = 100.0,
-            # SpadeEE（实体提取）、SpadeEL（实体链接）头的关系数量
-            n_relations: int = 1,
-            # 分类器头的dropout比率
-            classifier_dropout_prob: float = 0.1,
-        ):
-            pass
+    Examples:
     
-        # 初始化一个BROS jinho8345/bros-base-uncased风格的配置
-        def from_pretrained(cls, pretrained_model_name_or_path: str, **kwargs) -> "PretrainedConfig":
-            pass
+    ```python
+    >>> from transformers import BrosConfig, BrosModel
+    
+    >>> # Initializing a BROS jinho8345/bros-base-uncased style configuration
     >>> configuration = BrosConfig()
-
-    >>> # Initializing a model from the jinho8345/bros-base-uncased style configuration
+    
+    
+    # 创建一个BrosConfig的实例对象并赋值给configuration变量
+    configuration = BrosConfig()
+    
+    
+    
+    >>> # 使用jinho8345/bros-base-uncased风格配置初始化一个模型
     >>> model = BrosModel(configuration)
-
-    >>> # Accessing the model configuration
+    
+    
+    # 使用BrosConfig实例对象configuration初始化一个BrosModel模型
+    model = BrosModel(configuration)
+    
+    
+    
+    >>> # 获取模型的配置信息
     >>> configuration = model.config
-    ```py
-    # 设置模型类型为 "bros"
+    
+    
+    # 获取模型model的配置信息，并赋值给configuration变量
+    configuration = model.config
+    
+    
+    
     model_type = "bros"
-
-    # 定义 BrosConfig 类
+    
     def __init__(
         self,
         vocab_size=30522,
@@ -114,7 +117,36 @@ class BrosConfig(PretrainedConfig):
         classifier_dropout_prob=0.1,
         **kwargs,
     ):
-        # 调用父类的初始化方法，设置模型的基本参数
+    
+    
+    # 设置模型的类型为"bros"
+    model_type = "bros"
+    
+    # 初始化函数，用于创建BrosConfig的实例
+    def __init__(
+        self,
+        vocab_size=30522,
+        hidden_size=768,
+        num_hidden_layers=12,
+        num_attention_heads=12,
+        intermediate_size=3072,
+        hidden_act="gelu",
+        hidden_dropout_prob=0.1,
+        attention_probs_dropout_prob=0.1,
+        max_position_embeddings=512,
+        type_vocab_size=2,
+        initializer_range=0.02,
+        layer_norm_eps=1e-12,
+        pad_token_id=0,
+        dim_bbox=8,
+        bbox_scale=100.0,
+        n_relations=1,
+        classifier_dropout_prob=0.1,
+        **kwargs,
+    ):
+    
+    
+    
         super().__init__(
             vocab_size=vocab_size,
             hidden_size=hidden_size,
@@ -131,8 +163,28 @@ class BrosConfig(PretrainedConfig):
             pad_token_id=pad_token_id,
             **kwargs,
         )
-
-        # 设置模型的额外参数
+    
+    
+    # 调用父类的初始化方法，初始化模型的各种参数
+    super().__init__(
+        vocab_size=vocab_size,
+        hidden_size=hidden_size,
+        num_hidden_layers=num_hidden_layers,
+        num_attention_heads=num_attention_heads,
+        intermediate_size=intermediate_size,
+        hidden_act=hidden_act,
+        hidden_dropout_prob=hidden_dropout_prob,
+        attention_probs_dropout_prob=attention_probs_dropout_prob,
+        max_position_embeddings=max_position_embeddings,
+        type_vocab_size=type_vocab_size,
+        initializer_range=initializer_range,
+        layer_norm_eps=layer_norm_eps,
+        pad_token_id=pad_token_id,
+        **kwargs,
+    )
+    
+    
+    
         self.dim_bbox = dim_bbox
         self.bbox_scale = bbox_scale
         self.n_relations = n_relations
@@ -140,4 +192,14 @@ class BrosConfig(PretrainedConfig):
         self.dim_bbox_sinusoid_emb_1d = self.dim_bbox_sinusoid_emb_2d // self.dim_bbox
         self.dim_bbox_projection = self.hidden_size // self.num_attention_heads
         self.classifier_dropout_prob = classifier_dropout_prob
+    
+    
+    # 初始化模型的特定属性和超参数
+    self.dim_bbox = dim_bbox
+    self.bbox_scale = bbox_scale
+    self.n_relations = n_relations
+    self.dim_bbox_sinusoid_emb_2d = self.hidden_size // 4
+    self.dim_bbox_sinusoid_emb_1d = self.dim_bbox_sinusoid_emb_2d // self.dim_bbox
+    self.dim_bbox_projection = self.hidden_size // self.num_attention_heads
+    self.classifier_dropout_prob = classifier_dropout_prob
 ```

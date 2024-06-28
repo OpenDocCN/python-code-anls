@@ -1,21 +1,20 @@
 # `.\models\efficientformer\modeling_efficientformer.py`
 
-```py
+```
 # coding=utf-8
-# 设置文件编码为UTF-8
-
-# 2022年Snapchat Research和The HuggingFace Inc.团队版权所有。
-# 根据Apache许可证第2.0版("许可证")授权;
-# 您不得使用此文件，除非符合许可证的规定。
-# 您可以在以下地址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
+# 版权 2022 年 Snapchat 研究团队和 HuggingFace Inc. 团队。保留所有权利。
 #
-# 除非适用法律要求或写入协议，否则不得分发软件
-# 根据许可证的规定，在"原样"的基础上分发
-# 没有任何明示或暗示的保证或条件
-# 有关特定语言的权限和限制，请参阅许可证
+# 根据 Apache 许可证 2.0 版本（“许可证”）许可;
+# 除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则软件按“原样”分发，
+# 不提供任何明示或暗示的担保或条件。
+# 请参阅许可证了解特定语言下的权限和限制。
 
-""" PyTorch EfficientFormer model."""
+""" PyTorch EfficientFormer 模型。"""
 
 import itertools
 from dataclasses import dataclass
@@ -38,7 +37,7 @@ from ...utils import (
 )
 from .configuration_efficientformer import EfficientFormerConfig
 
-# 获取Logger实例
+
 logger = logging.get_logger(__name__)
 
 # General docstring
@@ -52,26 +51,24 @@ _EXPECTED_OUTPUT_SHAPE = [1, 49, 448]
 _IMAGE_CLASS_CHECKPOINT = "snap-research/efficientformer-l1-300"
 _IMAGE_CLASS_EXPECTED_OUTPUT = "Egyptian cat"
 
-# EfficientFormer预训练模型列表
+
 EFFICIENTFORMER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "snap-research/efficientformer-l1-300",
-    # 查看所有EfficientFormer模型 https://huggingface.co/models?filter=efficientformer
+    # See all EfficientFormer models at https://huggingface.co/models?filter=efficientformer
 ]
 
 
 class EfficientFormerPatchEmbeddings(nn.Module):
     """
-    This class performs downsampling between two stages. For the input tensor with the shape [batch_size, num_channels,
-    height, width] it produces output tensor with the shape [batch_size, num_channels, height/stride, width/stride]
+    此类在两个阶段之间执行下采样。对于形状为 [batch_size, num_channels, height, width] 的输入张量，
+    它生成形状为 [batch_size, num_channels, height/stride, width/stride] 的输出张量。
     """
-    # EfficientFormerPatchEmbeddings类，用于在两个阶段之间进行下采样，对于形状为[batch_size, num_channels, height, width]的输入张量，
-    # 它产生形状为[batch_size, num_channels, height/stride, width/stride]的输出张量
+
     def __init__(self, config: EfficientFormerConfig, num_channels: int, embed_dim: int, apply_norm: bool = True):
-        # 初始化函数
         super().__init__()
         self.num_channels = num_channels
 
-        # 创建卷积层，用于投影
+        # 使用 nn.Conv2d 定义投影层，用于下采样操作
         self.projection = nn.Conv2d(
             num_channels,
             embed_dim,
@@ -79,145 +76,175 @@ class EfficientFormerPatchEmbeddings(nn.Module):
             stride=config.downsample_stride,
             padding=config.downsample_pad,
         )
-        # 如果apply_norm为真，则创建批归一化层，否则创建单位矩阵层
+        # 根据 apply_norm 参数选择是否添加批标准化层或恒等映射
         self.norm = nn.BatchNorm2d(embed_dim, eps=config.batch_norm_eps) if apply_norm else nn.Identity()
-    # 定义一个前向传播函数，接收像素数值作为输入，返回处理后的数据
+    # 定义前向传播方法，接受像素值张量作为输入，并返回处理后的张量
     def forward(self, pixel_values: torch.Tensor) -> torch.Tensor:
-        # 获取输入数据的批处理大小、通道数、高度和宽度
+        # 获取输入张量的批处理大小、通道数、高度和宽度
         batch_size, num_channels, height, width = pixel_values.shape
-        # 如果输入数据的通道数与预设的通道数不匹配，抛出数值错误异常
+        
+        # 检查通道数是否与模型配置中设置的通道数一致，如果不一致则抛出数值错误异常
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
             )
-
-        # 通过投影层处理输入数据，得到嵌入向量
+        
+        # 将输入张量投影到嵌入空间中
         embeddings = self.projection(pixel_values)
-        # 对嵌入向量进行归一化处理
+        
+        # 对投影后的张量进行规范化处理
         embeddings = self.norm(embeddings)
 
-        # 返回处理后的嵌入向量
+        # 返回处理后的嵌入张量作为前向传播的输出
         return embeddings
 class EfficientFormerSelfAttention(nn.Module):
     def __init__(self, dim: int, key_dim: int, num_heads: int, attention_ratio: int, resolution: int):
         super().__init__()
 
-        self.num_heads = num_heads  # 存储注意力头的数量
-        self.key_dim = key_dim  # 存储键的维度
-        self.attention_ratio = attention_ratio  # 存储注意力扩展比率
-        self.scale = key_dim**-0.5  # 缩放参数
-        self.total_key_dim = key_dim * num_heads  # 总键的维度
-        self.expanded_key_dim = int(attention_ratio * key_dim)  # 扩展后的键的维度
-        self.total_expanded_key_dim = int(self.expanded_key_dim * num_heads)  # 总扩展键的维度
-        hidden_size = self.total_expanded_key_dim + self.total_key_dim * 2  # 隐藏层的尺寸
-        self.qkv = nn.Linear(dim, hidden_size)  # 将输入维度映射到隐藏层
-        self.projection = nn.Linear(self.total_expanded_key_dim, dim)  # 投影操作将扩展键的维度映射回原始维度
-        points = list(itertools.product(range(resolution), range(resolution)))  # 生成坐标点列表
-        num_points = len(points)  # 坐标点的数量
-        attention_offsets = {}  # 存储注意力偏移量的字典
-        idxs = []  # 存储偏移量索引的列表
-        for point_1 in points:  # 遍历所有坐标点
-            for point_2 in points:  # 再次遍历所有坐标点
-                offset = (abs(point_1[0] - point_2[0]), abs(point_1[1] - point_2[1]))  # 计算偏移量
-                if offset not in attention_offsets:  # 如果偏移量不在字典中
-                    attention_offsets[offset] = len(attention_offsets)  # 添加到字典中
-                idxs.append(attention_offsets[offset])  # 将偏移量索引添加到列表中
-        self.attention_biases = torch.nn.Parameter(torch.zeros(num_heads, len(attention_offsets)))  # 定义注意力偏置参数
-        self.register_buffer("attention_bias_idxs", torch.LongTensor(idxs).view(num_points, num_points))  # 注册注意力偏置索引作为缓冲区
+        self.num_heads = num_heads
+        self.key_dim = key_dim
+        self.attention_ratio = attention_ratio
+        self.scale = key_dim**-0.5
+        self.total_key_dim = key_dim * num_heads
+        self.expanded_key_dim = int(attention_ratio * key_dim)
+        self.total_expanded_key_dim = int(self.expanded_key_dim * num_heads)
+        
+        # Calculate the hidden size based on key dimensions and attention ratios
+        hidden_size = self.total_expanded_key_dim + self.total_key_dim * 2
+        
+        # Linear transformation for Q, K, V inputs
+        self.qkv = nn.Linear(dim, hidden_size)
+        
+        # Linear projection for output
+        self.projection = nn.Linear(self.total_expanded_key_dim, dim)
+        
+        # Generate all possible pairs of points in the resolution
+        points = list(itertools.product(range(resolution), range(resolution)))
+        num_points = len(points)
+        
+        # Create unique offsets and assign indices to them
+        attention_offsets = {}
+        idxs = []
+        for point_1 in points:
+            for point_2 in points:
+                offset = (abs(point_1[0] - point_2[0]), abs(point_1[1] - point_2[1]))
+                if offset not in attention_offsets:
+                    attention_offsets[offset] = len(attention_offsets)
+                idxs.append(attention_offsets[offset])
+        
+        # Define attention biases as a parameter
+        self.attention_biases = torch.nn.Parameter(torch.zeros(num_heads, len(attention_offsets)))
+        
+        # Register buffer for storing attention bias indices
+        self.register_buffer("attention_bias_idxs", torch.LongTensor(idxs).view(num_points, num_points))
 
     @torch.no_grad()
     def train(self, mode=True):
-        super().train(mode)  # 调用父类的训练方法
-        if mode and hasattr(self, "ab"):  # 如果模式为True且self对象具有属性"ab"
-            del self.ab  # 删除"ab"属性
+        super().train(mode)
+        
+        # Delete existing attention biases if training mode is enabled
+        if mode and hasattr(self, "ab"):
+            del self.ab
         else:
-            self.ab = self.attention_biases[:, self.attention_bias_idxs]  # 计算并存储注意力偏置
-    # 前向传播函数，用于执行自注意力机制
+            # Store attention biases sliced by precomputed indices
+            self.ab = self.attention_biases[:, self.attention_bias_idxs]
+    # 定义前向传播函数，接受隐藏状态张量和是否输出注意力权重的标志，返回元组类型的张量
     def forward(self, hidden_states: torch.Tensor, output_attentions: bool = False) -> Tuple[torch.Tensor]:
-        # 获取输入张量的维度信息
+        # 获取隐藏状态张量的批量大小、序列长度和通道数
         batch_size, sequence_length, num_channels = hidden_states.shape
-        # 使用全连接层进行查询、键、值的映射
+        
+        # 使用 self.qkv 对象处理隐藏状态张量，得到查询、键、值张量
         qkv = self.qkv(hidden_states)
-        # 将输出张量按照指定维度进行分割，得到查询、键、值张量
+        
+        # 将处理后的 qkv 张量重塑并分割成查询层、键层、值层
         query_layer, key_layer, value_layer = qkv.reshape(batch_size, sequence_length, self.num_heads, -1).split(
             [self.key_dim, self.key_dim, self.expanded_key_dim], dim=3
         )
-        # 调整张量的维度顺序，使得通道维度在前，以便进行矩阵乘法
+        
+        # 对查询层、键层、值层的维度进行重新排列
         query_layer = query_layer.permute(0, 2, 1, 3)
         key_layer = key_layer.permute(0, 2, 1, 3)
         value_layer = value_layer.permute(0, 2, 1, 3)
 
-        # 如果模型处于推理状态，则将存储在设备上的注意力偏置张量与计算的注意力偏置相结合
+        # 如果不处于训练状态，则将 self.ab 张量移动到与 attention_biases 的设备相同
         if not self.training:
             self.ab = self.ab.to(self.attention_biases.device)
-        # 计算注意力得分，包括矩阵乘法、缩放和注意力偏置
+        
+        # 计算注意力概率，考虑缩放因子和注意力偏置
         attention_probs = (torch.matmul(query_layer, key_layer.transpose(-2, -1))) * self.scale + (
             self.attention_biases[:, self.attention_bias_idxs] if self.training else self.ab
         )
-
-        # 对注意力得分进行 softmax 操作，得到注意力权重
+        
+        # 对注意力概率进行 softmax 归一化
         attention_probs = attention_probs.softmax(dim=-1)
 
-        # 使用注意力权重对值张量进行加权求和，得到上下文张量
+        # 计算上下文层，将注意力概率应用于值层，再进行维度转置
         context_layer = torch.matmul(attention_probs, value_layer).transpose(1, 2)
-        # 调整上下文张量的维度，以便后续的投影操作
+        
+        # 将上下文层重塑为(batch_size, sequence_length, total_expanded_key_dim)
         context_layer = context_layer.reshape(batch_size, sequence_length, self.total_expanded_key_dim)
-        # 使用投影层进行维度转换
+        
+        # 使用投影层处理上下文层，得到最终输出的上下文层
         context_layer = self.projection(context_layer)
 
-        # 根据需要是否返回注意力权重
+        # 如果输出注意力权重，则将其加入输出元组
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
-        # 返回输出结果
+        # 返回最终输出的元组
         return outputs
-# 定义一个 EfficientFormerConvStem 类，用于构建 EfficientFormer 模型的卷积块
+# 定义一个 EfficientFormerConvStem 类，继承自 nn.Module 类
 class EfficientFormerConvStem(nn.Module):
+    # 初始化函数，接受 EfficientFormerConfig 类型的 config 参数和一个整数 out_channels 参数
     def __init__(self, config: EfficientFormerConfig, out_channels: int):
+        # 调用父类 nn.Module 的初始化函数
         super().__init__()
 
-        # 定义第一个卷积层，输入通道数为 config.num_channels，输出通道数为 out_channels // 2，卷积核大小为 3x3，步长为 2，填充为 1
+        # 创建一个 2D 卷积层，输入通道数为 config.num_channels，输出通道数为 out_channels // 2，卷积核大小为 3x3，步幅为 2，填充为 1
         self.convolution1 = nn.Conv2d(config.num_channels, out_channels // 2, kernel_size=3, stride=2, padding=1)
-        # 定义第一个批归一化层，通道数为 out_channels // 2，epsilon 为 config.batch_norm_eps
+        # 创建一个批标准化层，输入通道数为 out_channels // 2，epsilon 参数为 config.batch_norm_eps
         self.batchnorm_before = nn.BatchNorm2d(out_channels // 2, eps=config.batch_norm_eps)
 
-        # 定义第二个卷积层，输入通道数为 out_channels // 2，输出通道数为 out_channels，卷积核大小为 3x3，步长为 2，填充为 1
+        # 创建第二个 2D 卷积层，输入通道数为 out_channels // 2，输出通道数为 out_channels，卷积核大小为 3x3，步幅为 2，填充为 1
         self.convolution2 = nn.Conv2d(out_channels // 2, out_channels, kernel_size=3, stride=2, padding=1)
-        # 定义第二个批归一化层，通道数为 out_channels，epsilon 为 config.batch_norm_eps
+        # 创建第二个批标准化层，输入通道数为 out_channels，epsilon 参数为 config.batch_norm_eps
         self.batchnorm_after = nn.BatchNorm2d(out_channels, eps=config.batch_norm_eps)
 
-        # 定义激活函数为 ReLU
+        # 创建一个 ReLU 激活函数
         self.activation = nn.ReLU()
 
-    # 前向传播方法
+    # 前向传播函数，接受一个名为 pixel_values 的 torch.Tensor 输入，返回一个 torch.Tensor 输出
     def forward(self, pixel_values: torch.Tensor) -> torch.Tensor:
-        # 经过第一个卷积层和批归一化层后的特征
+        # 对输入 pixel_values 进行第一次卷积和批标准化，然后应用激活函数
         features = self.batchnorm_before(self.convolution1(pixel_values))
-        # 经过激活函数
         features = self.activation(features)
-        # 经过第二个卷积层和批归一化层后的特征
+        # 对前一步得到的特征再进行一次卷积和批标准化，然后再应用激活函数
         features = self.batchnorm_after(self.convolution2(features))
-        # 经过激活函数
         features = self.activation(features)
 
+        # 返回处理后的特征
         return features
 
 
-# 定义一个 EfficientFormerPooling 类，用于构建 EfficientFormer 模型的池化层
+# 定义一个 EfficientFormerPooling 类，继承自 nn.Module 类
 class EfficientFormerPooling(nn.Module):
+    # 初始化函数，接受一个整数 pool_size 参数
     def __init__(self, pool_size: int):
+        # 调用父类 nn.Module 的初始化函数
         super().__init__()
-        # 定义平均池化层，池化核大小为 pool_size x pool_size，步长为 1，填充大小为池化核大小的一半，不包含填充
+        # 创建一个平均池化层，池化大小为 pool_size x pool_size，步幅为 1，填充大小为 pool_size // 2，不包括填充部分到计算中
         self.pool = nn.AvgPool2d(pool_size, stride=1, padding=pool_size // 2, count_include_pad=False)
 
-    # 前向传播方法
+    # 前向传播函数，接受一个名为 hidden_states 的 torch.Tensor 输入，返回一个 torch.Tensor 输出
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 对隐藏状态进行池化操作
+        # 对输入 hidden_states 执行平均池化操作，然后从原始 hidden_states 中减去池化结果
         output = self.pool(hidden_states) - hidden_states
+        # 返回处理后的输出
         return output
 
 
-# 定义一个 EfficientFormerDenseMlp 类，用于构建 EfficientFormer 模型的全连接层
+# 定义一个 EfficientFormerDenseMlp 类，继承自 nn.Module 类
 class EfficientFormerDenseMlp(nn.Module):
+    # 初始化函数，接受一个 EfficientFormerConfig 类型的 config 参数，整数 in_features、hidden_features 和 out_features 参数
     def __init__(
         self,
         config: EfficientFormerConfig,
@@ -225,38 +252,42 @@ class EfficientFormerDenseMlp(nn.Module):
         hidden_features: Optional[int] = None,
         out_features: Optional[int] = None,
     ):
+        # 调用父类 nn.Module 的初始化函数
         super().__init__()
-        # 如果未指定隐藏层特征数，则设置为输入特征数
+        # 如果未提供 out_features，则设置为输入的 in_features
         out_features = out_features or in_features
+        # 如果未提供 hidden_features，则设置为输入的 in_features
         hidden_features = hidden_features or in_features
 
-        # 输入全连接层，输入特征数为 in_features，输出特征数为 hidden_features
+        # 创建一个线性层，输入特征数为 in_features，输出特征数为 hidden_features
         self.linear_in = nn.Linear(in_features, hidden_features)
-        # 激活函数
+        # 根据配置中的 hidden_act 属性选择相应的激活函数
         self.activation = ACT2FN[config.hidden_act]
-        # Dropout 层，丢弃概率为 config.hidden_dropout_prob
+        # 创建一个以 config.hidden_dropout_prob 为概率丢弃部分神经元的 dropout 层
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 输出全连接层，输入特征数为 hidden_features，输出特征数为 out_features
+        # 创建一个线性层，输入特征数为 hidden_features，输出特征数为 out_features
         self.linear_out = nn.Linear(hidden_features, out_features)
 
-    # 前向传播方法
+    # 前向传播函数，接受一个名为 hidden_states 的 torch.Tensor 输入，返回一个 torch.Tensor 输出
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 输入全连接层
+        # 对输入 hidden_states 进行线性变换
         hidden_states = self.linear_in(hidden_states)
-        # 激活函数
+        # 应用预先选择的激活函数
         hidden_states = self.activation(hidden_states)
-        # Dropout 层
+        # 对激活后的结果应用 dropout
         hidden_states = self.dropout(hidden_states)
-        # 输出全连接层
+        # 再次进行线性变换
         hidden_states = self.linear_out(hidden_states)
-        # Dropout 层
+        # 再次应用 dropout
         hidden_states = self.dropout(hidden_states)
 
+        # 返回处理后的输出
         return hidden_states
 
 
-# 定义一个 EfficientFormerConvMlp 类，用于构建 EfficientFormer 模型的卷积全连接混合层
+# 定义一个 EfficientFormerConvMlp 类，继承自 nn.Module 类
 class EfficientFormerConvMlp(nn.Module):
+    # 初始化函数，接受一个 EfficientFormerConfig 类型的 config 参数，整数 in_features、hidden_features 和 out_features 参数，以及一个浮点数 drop 参数，默认为 0.0
     def __init__(
         self,
         config: EfficientFormerConfig,
@@ -264,83 +295,94 @@ class EfficientFormerConvMlp(nn.Module):
         hidden_features: Optional[int] = None,
         out_features: Optional[int] = None,
         drop: float = 0.0,
-    # 定义一个类，继承自 nn.Module 类
     ):
-        # 调用父类的构造函数
+        # 调用父类 nn.Module 的初始化函数
         super().__init__()
-        # 如果输出特征数未指定，则与输入特征数相同
+        # 如果未提供 out_features，则设置为输入的 in_features
         out_features = out_features or in_features
-        # 如果隐藏特征数未指定，则与输入特征数相同
+        # 如果未提供 hidden_features，则设置为输入的 in_features
+        hidden_features = hidden_features or in_features
+    ):
+        # 调用父类的初始化方法
+        super().__init__()
+        # 如果未指定输出特征数，则默认与输入特征数相同
+        out_features = out_features or in_features
+        # 如果未指定隐藏层特征数，则默认与输入特征数相同
         hidden_features = hidden_features or in_features
 
-        # 第一个卷积层，输入特征数为 in_features，输出特征数为 hidden_features，卷积核大小为 1x1
+        # 定义第一个卷积层，输入特征数为in_features，输出特征数为hidden_features，卷积核大小为1x1
         self.convolution1 = nn.Conv2d(in_features, hidden_features, 1)
-        # 激活函数根据配置文件中的隐藏激活函数选择对应的激活函数
+        # 根据配置选择激活函数
         self.activation = ACT2FN[config.hidden_act]
-        # 第二个卷积层，输入特征数为 hidden_features，输出特征数为 out_features，卷积核大小为 1x1
+        # 定义第二个卷积层，输入特征数为hidden_features，输出特征数为out_features，卷积核大小为1x1
         self.convolution2 = nn.Conv2d(hidden_features, out_features, 1)
-        # Dropout 层，概率为 drop
+        # 定义一个Dropout层，用于防止过拟合
         self.dropout = nn.Dropout(drop)
 
-        # 第一个批标准化层，输入特征数为 hidden_features，epsilon 为配置文件中的批标准化 epsilon 值
+        # 定义第一个批归一化层，对hidden_features个通道的特征进行归一化，epsilon设为config中的batch_norm_eps
         self.batchnorm_before = nn.BatchNorm2d(hidden_features, eps=config.batch_norm_eps)
-        # 第二个批标准化层，输入特征数为 out_features，epsilon 为配置文件中的批标准化 epsilon 值
+        # 定义第二个批归一化层，对out_features个通道的特征进行归一化，epsilon设为config中的batch_norm_eps
         self.batchnorm_after = nn.BatchNorm2d(out_features, eps=config.batch_norm_eps)
 
-    # 前向传播函数，接收隐藏状态作为输入，返回处理后的隐藏状态
     def forward(self, hidden_state: torch.Tensor) -> torch.Tensor:
-        # 第一个卷积层处理隐藏状态
+        # 第一层卷积操作，将hidden_state作为输入
         hidden_state = self.convolution1(hidden_state)
-        # 第一个批标准化层处理卷积结果
+        # 第一层卷积后进行批归一化操作
         hidden_state = self.batchnorm_before(hidden_state)
 
-        # 使用激活函数处理批标准化后的结果
+        # 使用指定的激活函数对特征进行非线性变换
         hidden_state = self.activation(hidden_state)
-        # Dropout 层处理激活后的结果
+        # 对特征进行Dropout操作，以减少过拟合风险
         hidden_state = self.dropout(hidden_state)
-        # 第二个卷积层处理dropout后的结果
+        # 第二层卷积操作
         hidden_state = self.convolution2(hidden_state)
 
-        # 第二个批标准化层处理卷积后的结果
+        # 第二层卷积后进行批归一化操作
         hidden_state = self.batchnorm_after(hidden_state)
-        # Dropout 层处理批标准化后的结果
+        # 再次对特征进行Dropout操作
         hidden_state = self.dropout(hidden_state)
 
-        # 返回处理后的隐藏状态
+        # 返回最终的特征表示
         return hidden_state
-# 从transformers.models.convnext.modeling_convnext.drop_path中复制了drop_path函数
+# Copied from transformers.models.convnext.modeling_convnext.drop_path
 def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = False) -> torch.Tensor:
     """
-    为每个样本丢弃路径（随机深度），当应用于残差块的主路径时。
+    Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
 
-    Ross Wightman的评论：这与我为EfficientNet等网络创建的DropConnect实现相同，
-    然而，原始名称具有误导性，因为'Drop Connect'是在另一篇论文中描述的不同形式的丢失连接...
-    参见讨论：https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ...
-    我选择更改层和参数名称为'drop path'，而不是将DropConnect作为层名称混合使用，并将'survival rate'用作参数。
+    Comment by Ross Wightman: This is the same as the DropConnect impl I created for EfficientNet, etc networks,
+    however, the original name is misleading as 'Drop Connect' is a different form of dropout in a separate paper...
+    See discussion: https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... I've opted for changing the
+    layer and argument names to 'drop path' rather than mix DropConnect as a layer name and use 'survival rate' as the
+    argument.
     """
+    # 如果 dropout 概率为 0 或者不处于训练模式，则直接返回输入
     if drop_prob == 0.0 or not training:
-        # 如果丢失概率为0或者不处于训练模式，则直接返回输入
         return input
+    # 计算保留的概率
     keep_prob = 1 - drop_prob
-    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # 适用于不同维度张量，而不仅仅是2D卷积网络
+    # 生成与输入形状相同的随机张量，用于随机丢弃路径
+    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets
     random_tensor = keep_prob + torch.rand(shape, dtype=input.dtype, device=input.device)
-    random_tensor.floor_()  # 二值化
+    random_tensor.floor_()  # 将随机张量二值化
+    # 计算输出，将输入按照保留概率进行缩放，并且乘以随机张量
     output = input.div(keep_prob) * random_tensor
     return output
 
 
-# 从transformers.models.beit.modeling_beit.BeitDropPath中复制了EfficientFormerDropPath类，将Beit->EfficientFormer
+# Copied from transformers.models.beit.modeling_beit.BeitDropPath with Beit->EfficientFormer
 class EfficientFormerDropPath(nn.Module):
-    """每个样本（当应用于残差块的主路径时）丢弃路径（随机深度）。"""
+    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
 
     def __init__(self, drop_prob: Optional[float] = None) -> None:
         super().__init__()
         self.drop_prob = drop_prob
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 调用上面定义的 drop_path 函数来实现 drop path 功能
         return drop_path(hidden_states, self.drop_prob, self.training)
 
     def extra_repr(self) -> str:
+        # 返回描述对象的字符串，包括 drop_prob 参数的信息
         return "p={}".format(self.drop_prob)
 
 
@@ -349,183 +391,127 @@ class EfficientFormerFlat(nn.Module):
         super().__init__()
 
     def forward(self, hidden_states: torch.Tensor) -> Tuple[torch.Tensor]:
-        # 将隐藏状态展平为2维并转置
+        # 将输入张量展平，并且交换维度以适应特定的输出格式
         hidden_states = hidden_states.flatten(2).transpose(1, 2)
         return hidden_states
 
 
 class EfficientFormerMeta3D(nn.Module):
-    # 初始化方法
+    # 这里是定义的一个类，暂未提供具体实现
+    # 初始化函数，用于创建 EfficientFormer 类的实例，接收配置对象、维度和可选的 drop_path 参数
     def __init__(self, config: EfficientFormerConfig, dim: int, drop_path: float = 0.0):
         # 调用父类的初始化方法
         super().__init__()
-
-        # 创建 EfficientFormerSelfAttention 对象，token_mixer 用于处理令牌混合
+    
+        # 创建 EfficientFormerSelfAttention 实例，用于处理 token_mixer 的自注意力机制
         self.token_mixer = EfficientFormerSelfAttention(
-            dim=config.dim,
-            key_dim=config.key_dim,
-            num_heads=config.num_attention_heads,
-            attention_ratio=config.attention_ratio,
-            resolution=config.resolution,
+            dim=config.dim,                     # 设置维度参数
+            key_dim=config.key_dim,             # 设置键的维度
+            num_heads=config.num_attention_heads,  # 设置注意力头的数量
+            attention_ratio=config.attention_ratio,  # 设置注意力机制的比率
+            resolution=config.resolution,       # 设置分辨率参数
         )
-
-        # 创建 LayerNorm 层，layernorm1 用于对输入进行归一化
+    
+        # 创建 LayerNorm 层，用于第一层的归一化
         self.layernorm1 = nn.LayerNorm(dim, eps=config.layer_norm_eps)
+        # 创建 LayerNorm 层，用于第二层的归一化
         self.layernorm2 = nn.LayerNorm(dim, eps=config.layer_norm_eps)
-
+    
         # 计算 MLP 隐藏层的维度
         mlp_hidden_dim = int(dim * config.mlp_expansion_ratio)
-        # 创建 EfficientFormerDenseMlp 对象，mlp 用于多层感知机的计算
+        # 创建 EfficientFormerDenseMlp 实例，用于多层感知机操作
         self.mlp = EfficientFormerDenseMlp(config, in_features=dim, hidden_features=mlp_hidden_dim)
-
-        # 创建 EfficientFormerDropPath 对象，用于应用 DropPath（一种正则化方法）
+    
+        # 如果 drop_path 大于 0，则创建 EfficientFormerDropPath 实例，否则创建单位函数（Identity）
         self.drop_path = EfficientFormerDropPath(drop_path) if drop_path > 0.0 else nn.Identity()
-        # 检查是否使用层标度
+    
+        # 检查是否使用层缩放
         self.use_layer_scale = config.use_layer_scale
         if config.use_layer_scale:
-            # 创建用于层标度的参数
+            # 创建可学习的参数，初始化为 config.layer_scale_init_value 倍的 dim 维度张量，用于第一层的缩放
             self.layer_scale_1 = nn.Parameter(config.layer_scale_init_value * torch.ones((dim)), requires_grad=True)
+            # 创建可学习的参数，初始化为 config.layer_scale_init_value 倍的 dim 维度张量，用于第二层的缩放
             self.layer_scale_2 = nn.Parameter(config.layer_scale_init_value * torch.ones((dim)), requires_grad=True)
-
-    # 前向传播方法
+    
+    # 前向传播函数，接收隐藏状态张量和输出注意力权重的标志，返回元组类型的张量
     def forward(self, hidden_states: torch.Tensor, output_attentions: bool = False) -> Tuple[torch.Tensor]:
-        # 使用 token_mixer 对输入的 hidden_states 进行自注意力计算，得到 self_attention_outputs
+        # 进行 token_mixer 的自注意力计算，并应用第一层的 LayerNorm
         self_attention_outputs = self.token_mixer(self.layernorm1(hidden_states), output_attentions)
-        # 取 self_attention_outputs 的第一个值作为 attention_output
         attention_output = self_attention_outputs[0]
-        # 存储 self_attention_outputs 中除了第一个值外的其它值到 outputs 中，如果需要输出注意力权重，则包含注意力权重
-        outputs = self_attention_outputs[1:]
-
-        # 如果使用层标度
+        outputs = self_attention_outputs[1:]  # 如果输出注意力权重，则添加自注意力权重信息到 outputs 中
+    
+        # 如果使用层缩放，则按照层缩放因子进行加权和操作，否则直接应用 drop_path 和 MLP
         if self.use_layer_scale:
-            # 计算 layer_output，并应用 drop_path 和层标度
             layer_output = hidden_states + self.drop_path(
                 self.layer_scale_1.unsqueeze(0).unsqueeze(0) * attention_output
             )
-            # 再次计算 layer_output，并应用 drop_path 和层标度，同时使用 mlp 对结果进行计算
             layer_output = layer_output + self.drop_path(
                 self.layer_scale_2.unsqueeze(0).unsqueeze(0) * self.mlp(self.layernorm2(layer_output))
             )
         else:
-            # 计算 layer_output，并应用 drop_path
             layer_output = hidden_states + self.drop_path(attention_output)
-            # 再次计算 layer_output，并应用 drop_path，同时使用 mlp 对结果进行计算
             layer_output = layer_output + self.drop_path(self.mlp(self.layernorm2(layer_output)))
-
-        # 将 layer_output 添加到 outputs 中
+    
+        # 将最终的层输出添加到 outputs 中，并返回
         outputs = (layer_output,) + outputs
-
-        # 返回 outputs
+    
         return outputs
-class EfficientFormerMeta3DLayers(nn.Module):
-    # EfficientFormerMeta3DLayers 类的初始化函数
+# 定义一个 EfficientFormerMeta4DLayers 类，继承自 nn.Module 类
+class EfficientFormerMeta4DLayers(nn.Module):
+    # 初始化方法，接收一个 EfficientFormerConfig 类型的 config 参数
     def __init__(self, config: EfficientFormerConfig):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 计算每个块的丢弃路径
+        
+        # 计算每个块的 drop path 值列表
         drop_paths = [
             config.drop_path_rate * (block_idx + sum(config.depths[:-1]))
-            for block_idx in range(config.num_meta3d_blocks)
+            for block_idx in range(config.num_meta4d_blocks)
         ]
-        # 创建一个包含多个 EfficientFormerMeta3D 实例的模块列表
+        
+        # 使用列表推导式创建一个 nn.ModuleList，包含多个 EfficientFormerMeta4D 实例化对象
         self.blocks = nn.ModuleList(
-            [EfficientFormerMeta3D(config, config.hidden_sizes[-1], drop_path=drop_path) for drop_path in drop_paths]
+            [EfficientFormerMeta4D(config, config.hidden_sizes[-1], drop_path=drop_path) for drop_path in drop_paths]
         )
 
-    # EfficientFormerMeta3DLayers 类的前向传播函数
+    # 前向传播方法，接收输入的 hidden_states 张量和一个布尔类型的 output_attentions 参数，返回一个元组
     def forward(self, hidden_states: torch.Tensor, output_attentions: bool = False) -> Tuple[torch.Tensor]:
-        # 如果要输出注意力权重，则初始化一个空元组用于存储所有的注意力权重
+        # 如果 output_attentions 为 False，则初始化一个空元组 all_attention_outputs
         all_attention_outputs = () if output_attentions else None
 
-        # 遍历每个块
+        # 遍历 self.blocks 中的每个 layer_module
         for layer_module in self.blocks:
-            # 如果 hidden_states 是元组，则取第一个元素
+            # 如果 hidden_states 是元组，则取其第一个元素
             if isinstance(hidden_states, tuple):
                 hidden_states = hidden_states[0]
 
-            # 调用当前块的前向传播函数
-            hidden_states = layer_module(hidden_states, output_attentions)
+            # 调用当前层的 layer_module 进行前向传播，更新 hidden_states
+            hidden_states = layer_module(hidden_states)
 
-            # 如果要输出注意力权重，则将当前块的注意力权重加入到 all_attention_outputs 中
+            # 如果 output_attentions 为 True，则将当前层的注意力输出加入 all_attention_outputs 元组中
             if output_attentions:
                 all_attention_outputs = all_attention_outputs + (hidden_states[1],)
 
-        # 如果要输出注意力权重，则返回隐藏状态和所有注意力权重
+        # 如果 output_attentions 为 True，则构造输出元组 outputs
         if output_attentions:
             outputs = (hidden_states[0],) + all_attention_outputs
             return outputs
 
-        # 否则，只返回隐藏状态
+        # 返回最终的 hidden_states
         return hidden_states
-
-
-class EfficientFormerMeta4D(nn.Module):
-    # EfficientFormerMeta4D 类的初始化函数
-    def __init__(self, config: EfficientFormerConfig, dim: int, drop_path: float = 0.0):
-        # 调用父类的初始化函数
-        super().__init__()
-        # 如果未指定池化大小，则使用默认值 3
-        pool_size = config.pool_size if config.pool_size is not None else 3
-        # 创建一个 EfficientFormerPooling 实例用于 token 混合
-        self.token_mixer = EfficientFormerPooling(pool_size=pool_size)
-        # 计算 MLP 隐藏层维度
-        mlp_hidden_dim = int(dim * config.mlp_expansion_ratio)
-        # 创建一个 EfficientFormerConvMlp 实例用于 MLP 操作
-        self.mlp = EfficientFormerConvMlp(
-            config, in_features=dim, hidden_features=mlp_hidden_dim, drop=config.hidden_dropout_prob
-        )
-        # 如果丢弃路径大于 0，则创建一个 EfficientFormerDropPath 实例，否则使用恒等映射
-        self.drop_path = EfficientFormerDropPath(drop_path) if drop_path > 0.0 else nn.Identity()
-        # 是否使用层缩放
-        self.use_layer_scale = config.use_layer_scale
-        # 如果使用层缩放，则创建两个可训练参数来进行缩放
-        if config.use_layer_scale:
-            self.layer_scale_1 = nn.Parameter(config.layer_scale_init_value * torch.ones((dim)), requires_grad=True)
-            self.layer_scale_2 = nn.Parameter(config.layer_scale_init_value * torch.ones((dim)), requires_grad=True)
-
-    # EfficientFormerMeta4D 类的前向传播函数
-    def forward(self, hidden_states: torch.Tensor) -> Tuple[torch.Tensor]:
-        # 对输入进行 token 混合
-        outputs = self.token_mixer(hidden_states)
-
-        # 如果使用层缩放
-        if self.use_layer_scale:
-            # 第一次层缩放和丢弃路径后的输出
-            layer_output = hidden_states + self.drop_path(self.layer_scale_1.unsqueeze(-1).unsqueeze(-1) * outputs)
-            # 第二次层缩放和丢弃路径后的输出
-            layer_output = layer_output + self.drop_path(
-                self.layer_scale_2.unsqueeze(-1).unsqueeze(-1) * self.mlp(layer_output)
-            )
-        else:
-            # 使用丢弃路径后的输出
-            layer_output = hidden_states + self.drop_path(outputs)
-            # 使用 MLP 输出再次进行丢弃路径后的输出
-            layer_output = layer_output + self.drop_path(self.mlp(layer_output))
-
-        # 返回层输出
-        return layer_output
-
-
-class EfficientFormerMeta4DLayers(nn.Module):
-    # EfficientFormerMeta4DLayers 类的初始化函数
-    def __init__(self, config: EfficientFormerConfig):
-        # 调用父类的初始化函数
-        super().__init__()
-        # 省略了这个类的初始化代码，因为在提供的代码中缺失
-    # 初始化方法，接收配置和阶段索引作为参数
     def __init__(self, config: EfficientFormerConfig, stage_idx: int):
         # 调用父类的初始化方法
         super().__init__()
-        # 计算当前阶段的层数
+        # 根据给定阶段索引获取层的数量
         num_layers = (
             config.depths[stage_idx] if stage_idx != -1 else config.depths[stage_idx] - config.num_meta3d_blocks
         )
-        # 计算每个 block 的 drop_path
+        # 计算每个块的丢弃路径率并存储在列表中
         drop_paths = [
             config.drop_path_rate * (block_idx + sum(config.depths[:stage_idx])) for block_idx in range(num_layers)
         ]
 
-        # 创建包含多个 EfficientFormerMeta4D 对象的模块列表
+        # 创建包含各个块的模块列表
         self.blocks = nn.ModuleList(
             [
                 EfficientFormerMeta4D(config, config.hidden_sizes[stage_idx], drop_path=drop_path)
@@ -533,238 +519,240 @@ class EfficientFormerMeta4DLayers(nn.Module):
             ]
         )
 
-    # 前向传播方法，接收隐藏状态的张量作为参数，返回多个张量组成的元组
     def forward(self, hidden_states: torch.Tensor) -> Tuple[torch.Tensor]:
-        # 遍历每个 block 模块进行前向传播
+        # 遍历每个块模块并对输入的隐藏状态进行处理
         for layer_module in self.blocks:
             hidden_states = layer_module(hidden_states)
-        # 返回更新后的隐藏状态
+        # 返回处理后的隐藏状态
         return hidden_states
-# EfficientFormerEncoder 类: 实现 EfficientFormerEncoder 模块，用于编码输入的隐藏状态
-class EfficientFormerEncoder(nn.Module):
-    # 初始化函数，接收 EfficientFormerConfig 类实例作为配置参数
-    def __init__(self, config: EfficientFormerConfig):
-        # 调用父类的初始化函数
+class EfficientFormerIntermediateStage(nn.Module):
+    def __init__(self, config: EfficientFormerConfig, index: int):
         super().__init__()
-        # 将配置参数保存到类中
+        # 创建 EfficientFormerMeta4DLayers 实例作为中间层处理器
+        self.meta4D_layers = EfficientFormerMeta4DLayers(config, index)
+
+    def forward(self, hidden_states: torch.Tensor) -> Tuple[torch.Tensor]:
+        # 调用中间层处理器处理隐藏状态张量
+        hidden_states = self.meta4D_layers(hidden_states)
+        return hidden_states
+
+
+class EfficientFormerLastStage(nn.Module):
+    def __init__(self, config: EfficientFormerConfig):
+        super().__init__()
+        # 创建 EfficientFormerMeta4DLayers 实例作为最后阶段处理器
+        self.meta4D_layers = EfficientFormerMeta4DLayers(config, -1)
+        # 创建 EfficientFormerFlat 实例用于扁平化处理
+        self.flat = EfficientFormerFlat()
+        # 创建 EfficientFormerMeta3DLayers 实例作为三维层处理器
+        self.meta3D_layers = EfficientFormerMeta3DLayers(config)
+
+    def forward(self, hidden_states: torch.Tensor, output_attentions: bool = False) -> Tuple[torch.Tensor]:
+        # 调用最后阶段处理器处理隐藏状态张量
+        hidden_states = self.meta4D_layers(hidden_states)
+        # 调用扁平化处理器处理隐藏状态张量
+        hidden_states = self.flat(hidden_states)
+        # 调用三维层处理器处理隐藏状态张量和注意力输出标志
+        hidden_states = self.meta3D_layers(hidden_states, output_attentions)
+        return hidden_states
+
+
+class EfficientFormerEncoder(nn.Module):
+    def __init__(self, config: EfficientFormerConfig):
+        super().__init__()
         self.config = config
-        # 计算中间阶段的数量，即 depths 列表长度减 1
         num_intermediate_stages = len(config.depths) - 1
-        # 计算 downsamples 列表，用于确定是否需要下采样
+        # 根据配置计算是否需要降采样
         downsamples = [
             config.downsamples[i] or config.hidden_sizes[i] != config.hidden_sizes[i + 1]
             for i in range(num_intermediate_stages)
         ]
-        # 创建空的 intermediate_stages 列表
         intermediate_stages = []
 
-        # 循环创建中间阶段的模块
+        # 构建中间阶段模块列表
         for i in range(num_intermediate_stages):
-            # 将 EfficientFormerIntermediateStage 实例添加到 intermediate_stages 列表中
+            # 添加 EfficientFormerIntermediateStage 实例到中间阶段列表
             intermediate_stages.append(EfficientFormerIntermediateStage(config, i))
-            # 如果当前阶段需要下采样，则将 EfficientFormerPatchEmbeddings 实例添加到 intermediate_stages 列表中
+            # 如果需要降采样，添加 EfficientFormerPatchEmbeddings 实例到中间阶段列表
             if downsamples[i]:
                 intermediate_stages.append(
                     EfficientFormerPatchEmbeddings(config, config.hidden_sizes[i], config.hidden_sizes[i + 1])
                 )
 
-        # 将 intermediate_stages 列表转换为 ModuleList 类实例，保存到类中
+        # 使用 nn.ModuleList 封装中间阶段模块列表
         self.intermediate_stages = nn.ModuleList(intermediate_stages)
-        # 创建 EfficientFormerLastStage 实例，保存到类中
+        # 创建 EfficientFormerLastStage 实例作为最后阶段处理器
         self.last_stage = EfficientFormerLastStage(config)
 
-    # 前向传播函数，接收输入的隐藏状态等参数，返回编码后的隐藏状态
     def forward(
         self,
         hidden_states: torch.Tensor,
         output_hidden_states: bool = False,
         output_attentions: bool = False,
         return_dict: bool = True,
-        ):
-        # 循环遍历中间阶段的模块，并依次对输入的隐藏状态进行编码
-        for stage in self.intermediate_stages:
-            hidden_states = stage(hidden_states)
-        # 对最后一个阶段的模块进行编码
-        hidden_states = self.last_stage(hidden_states)
-
-        # 返回编码后的隐藏状态
-        return hidden_states
-        ) -> BaseModelOutput:
-        # 初始化变量 all_hidden_states 和 all_self_attentions，根据输出设置是否为空元组
+    ) -> BaseModelOutput:
         all_hidden_states = () if output_hidden_states else None
         all_self_attentions = () if output_attentions else None
 
-        # 如果输出隐藏层状态，则将当前隐藏状态添加到 all_hidden_states 中
+        # 如果输出隐藏状态，初始化一个空元组用于存储所有隐藏状态
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 遍历中间层，并对隐藏状态进行处理
+        # 遍历中间层模块并逐层计算隐藏状态
         for layer_module in self.intermediate_stages:
             hidden_states = layer_module(hidden_states)
-            # 如果输出隐藏层状态，则将当前隐藏状态添加到 all_hidden_states 中
+            # 如果输出隐藏状态，将当前层的隐藏状态加入到存储中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 处理最后一层，并获取输出结果
+        # 调用最后一个阶段模块计算最终输出
         layer_output = self.last_stage(hidden_states, output_attentions=output_attentions)
 
-        # 如果输出注意力权重，则将当前层的注意力权重添加到 all_self_attentions 中
+        # 如果输出注意力权重，将当前层的注意力权重加入到存储中
         if output_attentions:
             all_self_attentions = all_self_attentions + layer_output[1:]
 
-        # 如果输出隐藏层状态，则将当前层的隐藏状态添加到 all_hidden_states 中
+        # 如果输出隐藏状态，将最后一层的隐藏状态加入到存储中
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (layer_output[0],)
 
-        # 如果不返回字典形式的结果，则返回元组
+        # 如果不返回字典形式的结果，将各部分非空的结果组成元组返回
         if not return_dict:
             return tuple(v for v in [layer_output[0], all_hidden_states, all_self_attentions] if v is not None)
-        
-        # 返回字典形式的结果
+
+        # 返回以字典形式封装的 BaseModelOutput 对象
         return BaseModelOutput(
             last_hidden_state=layer_output[0],
             hidden_states=all_hidden_states,
             attentions=all_self_attentions,
         )
-```  
-class EfficientFormerPreTrainedModel(PreTrainedModel):
-    """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
-    """
-
-    # 指定配置类为 EfficientFormerConfig
-    config_class = EfficientFormerConfig
-    # 基础模型前缀为 "efficientformer"
-    base_model_prefix = "efficientformer"
-    # 主输入名称为 "pixel_values"
-    main_input_name = "pixel_values"
-    # 不支持梯度检查点
-    supports_gradient_checkpointing = False
-
-    def _init_weights(self, module: nn.Module):
-        """Initialize the weights"""
-        # 如果模块为线性层或二维卷积层，使用正态分布初始化权重
-        if isinstance(module, (nn.Linear, nn.Conv2d)):
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有偏置，初始化为 0
-            if module.bias is not None:
-                module.bias.data.zero_()
-        # 如果模块为 LayerNormalization 层，初始化偏置为 0，权重为 1
-        elif isinstance(module, nn.LayerNorm):
-            module.bias.data.zero_()
-            module.weight.data.fill_(1.0)
-
-
-EFFICIENTFORMER_START_DOCSTRING = r"""
-    This model is a PyTorch [nn.Module](https://pytorch.org/docs/stable/nn.html#nn.Module) subclass. Use it as a
-    regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and behavior.
-
-    Parameters:
-        config ([`EfficientFormerConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
-"""
-
-EFFICIENTFORMER_INPUTS_DOCSTRING = r"""
-    Args:
-        pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            Pixel values. Pixel values can be obtained using [`ViTImageProcessor`]. See
-            [`ViTImageProcessor.preprocess`] for details.
-        output_attentions (`bool`, *optional*):
-            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
-            tensors for more detail.
-        output_hidden_states (`bool`, *optional*):
-            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
-            more detail.
-        return_dict (`bool`, *optional*):
-            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
-"""
-
-
 @add_start_docstrings(
     "The bare EfficientFormer Model transformer outputting raw hidden-states without any specific head on top.",
     EFFICIENTFORMER_START_DOCSTRING,
 )
 class EfficientFormerModel(EfficientFormerPreTrainedModel):
+    """
+    EfficientFormerModel extends EfficientFormerPreTrainedModel and represents a transformer model architecture 
+    without specific task heads.
+
+    Args:
+        config (EfficientFormerConfig): The configuration class for initializing the model.
+
+    Attributes:
+        patch_embed (EfficientFormerConvStem): Patch embedding layer.
+        encoder (EfficientFormerEncoder): Transformer encoder.
+        layernorm (nn.LayerNorm): Layer normalization for the final output.
+
+    Methods:
+        forward: Implements the forward pass of the model.
+
+    Inherits from:
+        EfficientFormerPreTrainedModel: Handles weights initialization and pretrained model loading interface.
+    """
+
     def __init__(self, config: EfficientFormerConfig):
         super().__init__(config)
         self.config = config
 
-        # 初始化 patch_embed
+        # Initialize patch embedding layer
         self.patch_embed = EfficientFormerConvStem(config, config.hidden_sizes[0])
-        # 初始化 encoder
+        # Initialize transformer encoder
         self.encoder = EfficientFormerEncoder(config)
-        # 初始化 layernorm
+        # Layer normalization for the final output
         self.layernorm = nn.LayerNorm(config.hidden_sizes[-1], eps=config.layer_norm_eps)
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
     @add_start_docstrings_to_model_forward(EFFICIENTFORMER_INPUTS_DOCSTRING)
-    # 使用 add_code_sample_docstrings 装饰器添加文档字符串，包括模型 checkpoint、输出类型、配置类、模态、预期输出形状等信息
+    def forward(self, pixel_values, output_attentions=False, output_hidden_states=False, return_dict=True):
+        """
+        Defines the forward pass of EfficientFormerModel.
+
+        Args:
+            pixel_values (torch.FloatTensor): Input pixel values of shape (batch_size, num_channels, height, width).
+            output_attentions (bool, optional): Whether to return attention tensors of all layers.
+            output_hidden_states (bool, optional): Whether to return hidden states of all layers.
+            return_dict (bool, optional): Whether to return a ModelOutput instead of a tuple.
+
+        Returns:
+            ModelOutput or tuple:
+                Depending on `return_dict`, either:
+                - ModelOutput if `return_dict=True` (default),
+                - A tuple of torch.FloatTensor otherwise.
+        """
+        pass  # Placeholder for the actual implementation of the forward method
+    # 使用 @add_code_sample_docstrings 装饰器添加文档字符串，用于代码示例的文档化
     @add_code_sample_docstrings(
-        checkpoint=_CHECKPOINT_FOR_DOC,
-        output_type=BaseModelOutputWithPooling,
-        config_class=_CONFIG_FOR_DOC,
-        modality="vision",
-        expected_output=_EXPECTED_OUTPUT_SHAPE,
+        checkpoint=_CHECKPOINT_FOR_DOC,  # 指定文档化的检查点（checkpoint）
+        output_type=BaseModelOutputWithPooling,  # 指定输出类型为包含汇总的基础模型输出
+        config_class=_CONFIG_FOR_DOC,  # 指定用于文档化的配置类
+        modality="vision",  # 指定模态性（此处为视觉）
+        expected_output=_EXPECTED_OUTPUT_SHAPE,  # 指定预期输出的形状
     )
-    # 定义前向传播方法，接受像素值张量、是否输出注意力、是否输出隐藏状态、是否返回字典等参数
+    # 定义前向传播方法，接收输入的像素值、是否输出注意力、是否输出隐藏状态、是否返回字典等参数，返回联合类型的结果或基础模型输出
     def forward(
         self,
-        pixel_values: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
+        pixel_values: Optional[torch.Tensor] = None,  # 输入参数：像素值，默认为空
+        output_attentions: Optional[bool] = None,  # 输入参数：是否输出注意力，默认为空
+        output_hidden_states: Optional[bool] = None,  # 输入参数：是否输出隐藏状态，默认为空
+        return_dict: Optional[bool] = None,  # 输入参数：是否返回字典，默认为空
     ) -> Union[tuple, BaseModelOutput]:
-        # 如果未提供像素值张量，抛出数值错误
+        # 如果未提供像素值，则抛出数值错误
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+        # 根据输入或配置设定是否输出注意力
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
+        # 根据输入或配置设定是否输出隐藏状态
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        # 根据输入或配置设定是否使用返回字典
 
         if pixel_values is None:
             raise ValueError("You have to specify pixel_values")
+        # 如果像素值为空，则引发数值错误异常
 
-        # 使用 patch_embed 方法对像素值张量进行处理得到嵌入输出
+        # 将像素值传递给 patch_embed 方法进行嵌入
         embedding_output = self.patch_embed(pixel_values)
-        # 将嵌入输出传入编码器得到编码器输出
+        # 使用编码器处理嵌入输出，根据参数设定是否输出注意力和隐藏状态
         encoder_outputs = self.encoder(
             embedding_output, output_attentions=output_attentions, output_hidden_states=output_hidden_states
         )
 
-        # 获取编码器输出的序列部分
+        # 获取编码器的序列输出
         sequence_output = encoder_outputs[0]
-        # 对序列部分进行 layernorm 处理
+        # 对序列输出进行层归一化处理
         sequence_output = self.layernorm(sequence_output)
 
-        # 如果不需要返回字典形式的输出
         if not return_dict:
-            # 将序列部分作为头部输出，加上编码器的其他输出（隐藏状态和注意力）
+            # 如果不要求返回字典，则返回元组形式的头部输出和编码器其他输出状态
             head_outputs = (sequence_output,)
             return head_outputs + encoder_outputs[1:]
 
-        # 如果需要返回字典形式的输出，构造 BaseModelOutput 对象
+        # 否则，返回基础模型输出对象，包含最终隐藏状态、所有隐藏状态和注意力
         return BaseModelOutput(
             last_hidden_state=sequence_output,
             hidden_states=encoder_outputs.hidden_states,
             attentions=encoder_outputs.attentions,
         )
-# 在 EfficientFormer 模型的基础上，添加一个图片分类头部（即在 [CLS] 标记的最终隐藏状态上面的一个线性层）来进行图像分类
+# 使用自定义的文档字符串描述 EfficientFormer 模型，这是一个在顶部增加了图像分类头部的转换器模型，例如用于 ImageNet 数据集的场景。
+@add_start_docstrings(
+    """
+    EfficientFormer Model transformer with an image classification head on top (a linear layer on top of the final
+    hidden state of the [CLS] token) e.g. for ImageNet.
+    """,
+    EFFICIENTFORMER_START_DOCSTRING,
+)
 class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
     def __init__(self, config: EfficientFormerConfig):
-        # 继承 EfficientFormerPreTrainedModel 的初始化
         super().__init__(config)
 
-        # 获取标签数量
+        # 初始化模型的标签数量
         self.num_labels = config.num_labels
-        # 创建 EfficientFormer 模型
+        # 初始化 EfficientFormer 模型
         self.efficientformer = EfficientFormerModel(config)
 
         # 分类器头部
-        # 如果标签数量大于 0，创建线性层；否则创建 Identity 层
         self.classifier = (
             nn.Linear(config.hidden_sizes[-1], config.num_labels) if config.num_labels > 0 else nn.Identity()
         )
@@ -772,7 +760,13 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 模型前向传播
+    @add_start_docstrings_to_model_forward(EFFICIENTFORMER_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_IMAGE_CLASS_CHECKPOINT,
+        output_type=ImageClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+        expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
+    )
     def forward(
         self,
         pixel_values: Optional[torch.Tensor] = None,
@@ -780,6 +774,9 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+    ):
+        # 此方法用于模型的前向传播，接受输入参数如像素值、标签等，并返回模型输出
+        # 具体文档化细节参见 add_start_docstrings_to_model_forward 和 add_code_sample_docstrings 装饰器
     ) -> Union[tuple, ImageClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -787,10 +784,10 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 设置返回字典，如果未提供则使用配置中的默认值
+        # 如果 return_dict 不为 None，则使用给定的值，否则使用 self.config.use_return_dict 的值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用 EfficientFormer 进行前向传播
+        # 使用 Efficientformer 处理输入的像素值，根据参数设置输出注意力和隐藏状态，并返回相应的对象或字典
         outputs = self.efficientformer(
             pixel_values,
             output_attentions=output_attentions,
@@ -798,19 +795,17 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 提取序列输出
+        # 从 Efficientformer 的输出中获取序列输出
         sequence_output = outputs[0]
 
-        # 通过分类器获取 logits
+        # 将序列输出传入分类器，计算 logits
         logits = self.classifier(sequence_output.mean(-2))
 
-        # 初始化损失为 None
+        # 初始化 loss 为 None
         loss = None
-        # 如果存在标签
         if labels is not None:
-            # 如果问题类型未指定
+            # 确定问题类型（回归或分类）
             if self.config.problem_type is None:
-                # 根据标签数量确定问题类型
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
                 elif self.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
@@ -818,7 +813,7 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
                 else:
                     self.config.problem_type = "multi_label_classification"
 
-            # 根据问题类型计算损失
+            # 根据问题类型选择相应的损失函数和计算损失
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.num_labels == 1:
@@ -832,89 +827,76 @@ class EfficientFormerForImageClassification(EfficientFormerPreTrainedModel):
                 loss_fct = BCEWithLogitsLoss()
                 loss = loss_fct(logits, labels)
 
-        # 如果不要求返回字典，则将输出组装成元组返回
+        # 如果 return_dict 为 False，则按照一定格式返回输出
         if not return_dict:
             output = (logits,) + outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 ImageClassifierOutput 类的实例，包括损失、logits、隐藏状态和注意力权重
+        # 如果 return_dict 为 True，则构造 ImageClassifierOutput 对象并返回
         return ImageClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 使用 dataclass 装饰器定义类 EfficientFormerForImageClassificationWithTeacherOutput，继承自 ModelOutput
+# 用于存储图像分类模型输出的数据类，继承自`ModelOutput`
 @dataclass
 class EfficientFormerForImageClassificationWithTeacherOutput(ModelOutput):
     """
-    Output type of [`EfficientFormerForImageClassificationWithTeacher`].
+    [`EfficientFormerForImageClassificationWithTeacher`] 的输出类型。
 
     Args:
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            Prediction scores as the average of the cls_logits and distillation logits.
+            预测分数，是 `cls_logits` 和 `distillation_logits` 的平均值。
         cls_logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            Prediction scores of the classification head (i.e. the linear layer on top of the final hidden state of the
-            class token).
+            分类头部的预测分数（即最终隐藏状态的类标记之上的线性层）。
         distillation_logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            Prediction scores of the distillation head (i.e. the linear layer on top of the final hidden state of the
-            distillation token).
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
-            plus the initial embedding outputs.
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
-            the self-attention heads.
+            蒸馏头部的预测分数（即最终隐藏状态的蒸馏标记之上的线性层）。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, 当 `output_hidden_states=True` 传递或 `config.output_hidden_states=True` 时返回):
+            `torch.FloatTensor` 元组（一个用于嵌入的输出 + 每层的输出）的形状为 `(batch_size, sequence_length, hidden_size)`。
+            模型在每层输出的隐藏状态加上初始嵌入的输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, 当 `output_attentions=True` 传递或 `config.output_attentions=True` 时返回):
+            `torch.FloatTensor` 元组（每层一个）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            在注意力 softmax 之后的注意力权重，用于计算自注意力头中的加权平均值。
     """
 
-    logits: torch.FloatTensor = None
-    cls_logits: torch.FloatTensor = None
-    distillation_logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
 
-
-# 使用 add_start_docstrings 装饰器为 EfficientFormerForImageClassificationWithTeacher 类添加文档字符串
+# 基于 `EfficientFormerPreTrainedModel` 的图像分类头部模型变换器，包含两个线性层（一个在 [CLS] 标记的最终隐藏状态之上，一个在蒸馏标记的最终隐藏状态之上），例如用于 ImageNet。
 @add_start_docstrings(
     """
-    EfficientFormer Model transformer with image classification heads on top (a linear layer on top of the final hidden
-    state of the [CLS] token and a linear layer on top of the final hidden state of the distillation token) e.g. for
-    ImageNet.
+    `EfficientFormer` 模型变换器，其顶部包含图像分类头部（一个在 [CLS] 标记的最终隐藏状态之上的线性层，一个在蒸馏标记的最终隐藏状态之上的线性层），
+    例如用于 ImageNet。
 
     <Tip warning={true}>
 
-           This model supports inference-only. Fine-tuning with distillation (i.e. with a teacher) is not yet
-           supported.
+           此模型仅支持推断。目前不支持使用蒸馏进行微调（即带有教师模型）。
 
     </Tip>
     """,
     EFFICIENTFORMER_START_DOCSTRING,
 )
-# 定义类 EfficientFormerForImageClassificationWithTeacher，继承自 EfficientFormerPreTrainedModel
 class EfficientFormerForImageClassificationWithTeacher(EfficientFormerPreTrainedModel):
-    # 初始化方法，接受一个 EfficientFormerConfig 对象作为配置参数
+    # 初始化函数，接受一个 EfficientFormerConfig 类型的参数 config
     def __init__(self, config: EfficientFormerConfig):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传入 config 参数
         super().__init__(config)
 
-        # 保存配置中的标签数量
+        # 将配置中的 num_labels 属性赋值给当前对象的 num_labels 属性
         self.num_labels = config.num_labels
-        # 创建 EfficientFormerModel 模型
+        # 根据配置创建一个 EfficientFormerModel 对象，并赋值给当前对象的 efficientformer 属性
         self.efficientformer = EfficientFormerModel(config)
 
-        # 分类器头部，根据配置中的标签数量决定是创建线性层还是 Identity 层
+        # 分类器头部，根据配置中的 hidden_size 和 num_labels 创建线性分类器或者恒等映射
         self.classifier = nn.Linear(config.hidden_size, config.num_labels) if config.num_labels > 0 else nn.Identity()
-        # 蒸馏头，根据配置中的标签数量决定是创建线性层还是 Identity 层
+        # 蒸馏头部，根据配置中的 hidden_size 和 num_labels 创建线性分类器或者恒等映射
         self.distillation_classifier = (
             nn.Linear(config.hidden_size, config.num_labels) if config.num_labels > 0 else nn.Identity()
         )
 
-        # 初始化权重并应用最终处理
+        # 调用初始化权重和应用最终处理的函数
         self.post_init()
 
-    # 前向传播方法，接受输入像素值、是否输出注意力、是否输出隐藏状态、是否返回字典类型的参数，返回模型输出
+    # 前向传播函数，接受多个参数，返回一个包含预测输出的对象或元组
     @add_start_docstrings_to_model_forward(EFFICIENTFORMER_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_IMAGE_CLASS_CHECKPOINT,
@@ -929,9 +911,9 @@ class EfficientFormerForImageClassificationWithTeacher(EfficientFormerPreTrained
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
     ) -> Union[tuple, EfficientFormerForImageClassificationWithTeacherOutput]:
-        # 如果返回字典类型参数为 None，则使用配置中的 use_return_dict
+        # 如果 return_dict 参数为 None，则使用配置中的 use_return_dict 属性
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 调用 EfficientFormerModel 的前向传播方法，获取模型输出
+        # 调用 EfficientFormerModel 的前向传播方法，传入相应参数，并获取输出
         outputs = self.efficientformer(
             pixel_values,
             output_attentions=output_attentions,
@@ -939,24 +921,23 @@ class EfficientFormerForImageClassificationWithTeacher(EfficientFormerPreTrained
             return_dict=return_dict,
         )
 
-        # 获取模型输出的序列部分
+        # 从输出中获取序列输出（通常是模型最后一层的输出）
         sequence_output = outputs[0]
 
-        # 使用分类器对序列输出求均值得到分类预测
+        # 对序列输出进行均值池化，并通过分类器头部获取分类器预测结果
         cls_logits = self.classifier(sequence_output.mean(-2))
-        # 使用蒸馏分类器对序列输出求均值得到蒸馏预测
+        # 对序列输出进行均值池化，并通过蒸馏头部获取蒸馏预测结果
         distillation_logits = self.distillation_classifier(sequence_output.mean(-2))
 
-        # 在推理过程中，返回两个分类器预测的平均值
+        # 在推断过程中，返回两个分类器预测结果的平均值作为最终预测值
         logits = (cls_logits + distillation_logits) / 2
 
-        # 如果不返回字典类型参数
+        # 如果 return_dict 为 False，则返回一个包含所有输出和预测结果的元组
         if not return_dict:
-            # 返回模型输出
             output = (logits, cls_logits, distillation_logits) + outputs[1:]
             return output
 
-        # 返回 EfficientFormerForImageClassificationWithTeacherOutput 类型的模型输出
+        # 如果 return_dict 为 True，则返回一个包含输出对象及相关属性的 EfficientFormerForImageClassificationWithTeacherOutput 对象
         return EfficientFormerForImageClassificationWithTeacherOutput(
             logits=logits,
             cls_logits=cls_logits,

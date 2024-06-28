@@ -1,10 +1,10 @@
 # `.\models\layoutxlm\__init__.py`
 
-```py
-# 从 typing 模块中导入 TYPE_CHECKING 常量，用于检查类型
+```
+# 引入必要的类型检查模块
 from typing import TYPE_CHECKING
 
-# 从当前包的 utils 模块中导入相关函数和异常
+# 从工具包中引入所需的依赖项和工具函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -14,63 +14,57 @@ from ...utils import (
     is_vision_available,
 )
 
-# 定义模块的导入结构，用于延迟加载
+# 定义模块的导入结构
 _import_structure = {"processing_layoutxlm": ["LayoutXLMProcessor"]}
 
-# 检查是否 SentencePiece 库可用
+# 检查是否安装了句子分词工具，如果没有则抛出异常
 try:
     if not is_sentencepiece_available():
-        # 如果不可用，则抛出异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加 tokenization_layoutxlm 到导入结构中
+    # 如果可用，则将 LayoutXLMTokenizer 导入结构中
     _import_structure["tokenization_layoutxlm"] = ["LayoutXLMTokenizer"]
 
-# 检查是否 Tokenizers 库可用
+# 检查是否安装了 Tokenizers 库，如果没有则抛出异常
 try:
     if not is_tokenizers_available():
-        # 如果不可用，则抛出异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加 tokenization_layoutxlm_fast 到导入结构中
+    # 如果可用，则将 LayoutXLMTokenizerFast 导入结构中
     _import_structure["tokenization_layoutxlm_fast"] = ["LayoutXLMTokenizerFast"]
 
-# 如果是类型检查模式
+# 如果正在进行类型检查，执行以下操作
 if TYPE_CHECKING:
-    # 从当前包中的 processing_layoutxlm 模块导入 LayoutXLMProcessor 类
+    # 从当前模块中导入 LayoutXLMProcessor 类
     from .processing_layoutxlm import LayoutXLMProcessor
 
-    # 再次检查是否 SentencePiece 库可用
+    # 再次检查句子分词工具是否可用，如果可用则从相应模块导入 LayoutXLMTokenizer 类
     try:
         if not is_sentencepiece_available():
-            # 如果不可用，则抛出异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果可用，则从当前包中的 tokenization_layoutxlm 模块导入 LayoutXLMTokenizer 类
         from .tokenization_layoutxlm import LayoutXLMTokenizer
 
-    # 再次检查是否 Tokenizers 库可用
+    # 再次检查 Tokenizers 是否可用，如果可用则从相应模块导入 LayoutXLMTokenizerFast 类
     try:
         if not is_tokenizers_available():
-            # 如果不可用，则抛出异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果可用，则从当前包中的 tokenization_layoutxlm_fast 模块导入 LayoutXLMTokenizerFast 类
         from .tokenization_layoutxlm_fast import LayoutXLMTokenizerFast
 
-# 如果不是类型检查模式
+# 如果不是类型检查阶段，则进行模块的懒加载处理
 else:
     # 导入 sys 模块
     import sys
 
-    # 使用 _LazyModule 类将当前模块设为延迟加载模块
+    # 创建一个 LazyModule 对象，将当前模块注册为 LazyModule
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

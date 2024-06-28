@@ -1,26 +1,28 @@
 # `.\models\layoutlmv2\tokenization_layoutlmv2_fast.py`
 
-```py
-# 设置编码格式为 UTF-8
-# 版权声明
+```
+# 设定编码方式为 UTF-8
+# 版权声明 2021 年 HuggingFace Inc. 团队所有
 #
-# 授权条款
-# 本文件基于Apache许可证 2.0版授权, 除非在协议条款下不得使用本文件
-# 您可以获得许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则软件按"原样"分发基础上
-# 没有任何明示或暗示的担保或条件，包括但不限于
-# 特定目的实用性，不违反权利或不侵犯权利
-
+# 根据 Apache 许可证 2.0 版本授权，除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按"原样"分发，不附带任何明示或暗示的保证或条件。
+# 有关更多详细信息，请参阅许可证。
 """
-快速tokenization 类别为 LayoutLMv2。重写了慢 tokenizer 类别的 2 个方法，即 _batch_encode_plus 和 _encode_plus，其中使用了 Rust tokenizer。
+LayoutLMv2 的快速分词器类。覆盖了慢分词器类的两个方法：_batch_encode_plus 和 _encode_plus，其中使用了 Rust 分词器。
 """
-import json  # 导入 json 模块
-from typing import Dict, List, Optional, Tuple, Union  # 导入类型提示必需的模块
 
-from tokenizers import normalizers  # 从 tokenizers 模块中导入 normalizers
+import json
+from typing import Dict, List, Optional, Tuple, Union
 
-from ...tokenization_utils_base import (  # 从 tokenization_utils_base 模块导入 BatchEncoding, EncodedInput, PaddingStrategy, PreTokenizedInput, TensorType, TextInput, TextInputPair, TruncationStrategy
+# 导入正则化工具
+from tokenizers import normalizers
+
+# 导入基础分词器和快速分词器的相关工具和类
+from ...tokenization_utils_base import (
     BatchEncoding,
     EncodedInput,
     PaddingStrategy,
@@ -30,75 +32,67 @@ from ...tokenization_utils_base import (  # 从 tokenization_utils_base 模块�
     TextInputPair,
     TruncationStrategy,
 )
-from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 从 tokenization_utils_fast 模块中导入 PreTrainedTokenizerFast
-from ...utils import add_end_docstrings, logging  # 从 utils 模块中导入 add_end_docstrings, logging
-from .tokenization_layoutlmv2 import (  # 从 tokenization_layoutlmv2 模块中导入 LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING, LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING, LayoutLMv2Tokenizer
+
+# 导入 LayoutLMv2 的快速分词器类
+from ...tokenization_utils_fast import PreTrainedTokenizerFast
+
+# 导入日志工具和 LayoutLMv2 分词器的相关类
+from ...utils import add_end_docstrings, logging
+from .tokenization_layoutlmv2 import (
     LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING,
     LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING,
     LayoutLMv2Tokenizer,
 )
 
-logger = logging.get_logger(__name__)  # 获得 logger 对象
+# 获取日志记录器
+logger = logging.get_logger(__name__)
 
-VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}  # VOCAB_FILES_NAMES 字典
+# 定义词汇表和分词器文件的名称
+VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}
 
-PRETRAINED_VOCAB_FILES_MAP = {  # PRETRAINED_VOCAB_FILES_MAP 字典
-    "vocab_file": {  # "vocab_file" 字典
-        "microsoft/layoutlmv2-base-uncased": (  # "microsoft/layoutlmv2-base-uncased" 键值对
-            "https://huggingface.co/microsoft/layoutlmv2-base-uncased/resolve/main/vocab.txt"  # 对应的值
+# 预训练模型的词汇表文件映射
+PRETRAINED_VOCAB_FILES_MAP = {
+    "vocab_file": {
+        "microsoft/layoutlmv2-base-uncased": (
+            "https://huggingface.co/microsoft/layoutlmv2-base-uncased/resolve/main/vocab.txt"
         ),
     },
-    "tokenizer_file": {  # "tokenizer_file"字典
-        "microsoft/layoutlmv2-base-uncased": (  # "microsoft/layoutlmv2-base-uncased"键值对
-            "https://huggingface.co/microsoft/layoutlmv2-base-uncased/resolve/main/tokenizer.json"  # 对应的值
+    "tokenizer_file": {
+        "microsoft/layoutlmv2-base-uncased": (
+            "https://huggingface.co/microsoft/layoutlmv2-base-uncased/resolve/main/tokenizer.json"
         ),
     },
 }
 
-PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {  # PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES 字典
-    "microsoft/layoutlmv2-base-uncased": 512,  # "microsoft/layoutlmv2-base-uncased" 键值对
+# 预训练模型的位置嵌入大小
+PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
+    "microsoft/layoutlmv2-base-uncased": 512,
 }
 
-PRETRAINED_INIT_CONFIGURATION = {  # PRETRAINED_INIT_CONFIGURATION 字典
-    "microsoft/layoutlmv2-base-uncased": {"do_lower_case": True},  # "microsoft/layoutlmv2-base-uncased" 键值对
+# 预训练模型的初始化配置
+PRETRAINED_INIT_CONFIGURATION = {
+    "microsoft/layoutlmv2-base-uncased": {"do_lower_case": True},
 }
 
 
-class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2TokenizerFast 类，继承自 PreTrainedTokenizerFast 类
+class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):
     r"""
-    使用 HuggingFace 的 *tokenizers* 库构建 "fast" LayoutLMv2 tokenizer。基于 WordPiece。
+    构建一个基于 HuggingFace 的 *tokenizers* 库支持的"快速" LayoutLMv2 分词器。基于 WordPiece。
 
-    该 tokenizer 继承自 [`PreTrainedTokenizerFast`]，其中包含大部分主要方法。用户应参考该超类以获取有关这些方法的更多信息。
-    # 参数说明:
-    # vocab_file (`str`): 词汇表文件名。
-    # do_lower_case (`bool`, *optional*, defaults to `True`): 在标记化时是否将输入转换为小写。
-    # unk_token (`str`, *optional*, defaults to `"[UNK]"`): 未知标记。词汇表中没有的标记无法转换为 ID，会被设置为此标记。
-    # sep_token (`str`, *optional*, defaults to `"[SEP]"`): 分隔符标记，用于从多个序列构建序列时使用，例如用于序列分类或文本和问题的问题回答。还用作带有特殊标记的序列的最后一个标记。
-    # pad_token (`str`, *optional*, defaults to `"[PAD]"`): 用于填充的标记，例如当批处理不同长度的序列时。
-    # cls_token (`str`, *optional*, defaults to `"[CLS]"`): 分类器标记，在进行序列分类（整个序列而不是每个标记的分类）时使用。它是使用特殊标记构建序列时的第一个标记。
-    # mask_token (`str`, *optional*, defaults to `"[MASK]"`): 用于掩码值的标记。这是在使用掩码语言建模训练此模型时使用的标记。这是模型将尝试预测的标记。
-    # cls_token_box (`List[int]`, *optional*, defaults to `[0, 0, 0, 0]`): 用于特殊 [CLS] 标记的边界框。
-    # sep_token_box (`List[int]`, *optional*, defaults to `[1000, 1000, 1000, 1000]`): 用于特殊 [SEP] 标记的边界框。
-    # pad_token_box (`List[int]`, *optional*, defaults to `[0, 0, 0, 0]`): 用于特殊 [PAD] 标记的边界框。
-    # pad_token_label (`int`, *optional*, defaults to -100): 用于填充标记的标签。默认为 -100，这是 PyTorch 的 CrossEntropyLoss 的 `ignore_index`。
-    # only_label_first_subword (`bool`, *optional*, defaults to `True`): 是否仅标记第一个子词（如果提供了单词标签）。
-    # tokenize_chinese_chars (`bool`, *optional*, defaults to `True`): 是否标记化中文字符。对于日语，这可能应该取消激活（参见此问题）。
-    # strip_accents (`bool`, *optional*): 是否去除所有重音符号。如果未指定此选项，则将由 `lowercase` 的值确定（与原始 LayoutLMv2 相同）。
-    """
-
-    # 词汇表文件名列表
+    该分词器继承自 [`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应参考此超类以获取更多关于这些方法的信息。
+    # 初始化词汇文件名列表，使用预定义的全局常量
     vocab_files_names = VOCAB_FILES_NAMES
-    # 预训练词汇表文件映射
+    # 预训练模型的词汇文件映射，包含文件名到预训练模型配置的映射关系
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # 预训练初始化配置
+    # 预训练模型初始化的配置，包含了预定义的配置参数
     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
-    # 初始化类的静态变量，使用预训练的位置嵌入大小
+    # 将预训练模型的位置嵌入大小赋值给 max_model_input_sizes
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 指定慢速分词器的类为 LayoutLMv2Tokenizer
 
+    # 将 LayoutLMv2Tokenizer 类赋值给 slow_tokenizer_class
     slow_tokenizer_class = LayoutLMv2Tokenizer
 
-    # 初始化方法
+    # 初始化函数，用于创建一个 LayoutLMv2Tokenizer 对象
     def __init__(
         self,
         vocab_file=None,
@@ -118,7 +112,7 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
         strip_accents=None,
         **kwargs,
     ):
-        # 调用父类的初始化方法，传入相应的参数
+        # 调用父类的初始化方法，设置相关属性
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -138,122 +132,63 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
             **kwargs,
         )
 
-        # 获取预训练分词器的状态信息
+        # 从 backend_tokenizer 中获取当前的标准化状态
         pre_tok_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
-        # 检查是否需要调整预训练分词器的参数
+
+        # 检查预处理器的小写和去重音选项是否与参数中的设置一致，若不一致则更新预处理器状态
         if (
             pre_tok_state.get("lowercase", do_lower_case) != do_lower_case
             or pre_tok_state.get("strip_accents", strip_accents) != strip_accents
         ):
-            # 获取预训练分词器的类
+            # 获取预处理器的类，并更新参数
             pre_tok_class = getattr(normalizers, pre_tok_state.pop("type"))
-            # 更新参数
             pre_tok_state["lowercase"] = do_lower_case
             pre_tok_state["strip_accents"] = strip_accents
-            # 更新预训练分词器
+            # 实例化新的预处理器对象
             self.backend_tokenizer.normalizer = pre_tok_class(**pre_tok_state)
 
-        # 设置实例变量的值
+        # 设置实例的属性
         self.do_lower_case = do_lower_case
-
-        # 添加额外属性
         self.cls_token_box = cls_token_box
         self.sep_token_box = sep_token_box
         self.pad_token_box = pad_token_box
         self.pad_token_label = pad_token_label
         self.only_label_first_subword = only_label_first_subword
 
-    # 添加文档结束字符串
+    # 将函数的装饰器添加到当前类中
     @add_end_docstrings(LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING, LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
-    # 定义类的调用方法，用于对输入文本或文本对进行编码
-    def __call__(
-        self,
-        # 输入文本，可以是单个文本、预分词后的文本或其列表形式
-        text: Union[TextInput, PreTokenizedInput, List[TextInput], List[PreTokenizedInput]],
-        # 输入文本对，可以是预分词后的文本对或其列表形式
-        text_pair: Optional[Union[PreTokenizedInput, List[PreTokenizedInput]]] = None,
-        # 文本框坐标，可以是列表形式，用于处理图像中的文本
-        boxes: Union[List[List[int]], List[List[List[int]]]] = None,
-        # 单词标签，可以是单个标签列表或其列表形式，用于处理图像中的标签
-        word_labels: Optional[Union[List[int], List[List[int]]]] = None,
-        # 是否添加特殊标记，如[CLS]和[SEP]
-        add_special_tokens: bool = True,
-        # 填充策略，可以是布尔值、字符串或填充策略对象
-        padding: Union[bool, str, PaddingStrategy] = False,
-        # 截断策略，可以是布尔值、字符串或截断策略对象
-        truncation: Union[bool, str, TruncationStrategy] = None,
-        # 最大长度限制
-        max_length: Optional[int] = None,
-        # 步长
-        stride: int = 0,
-        # 填充至的倍数
-        pad_to_multiple_of: Optional[int] = None,
-        # 返回张量类型
-        return_tensors: Optional[Union[str, TensorType]] = None,
-        # 是否返回标记类型 IDs
-        return_token_type_ids: Optional[bool] = None,
-        # 是否返回注意力掩码
-        return_attention_mask: Optional[bool] = None,
-        # 是否返回溢出的标记
-        return_overflowing_tokens: bool = False,
-        # 是否返回特殊标记掩码
-        return_special_tokens_mask: bool = False,
-        # 是否返回偏移映射
-        return_offsets_mapping: bool = False,
-        # 是否返回长度
-        return_length: bool = False,
-        # 是否冗长输出
-        verbose: bool = True,
-        # 其他关键字参数
-        **kwargs,
     @add_end_docstrings(LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING, LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
-    # 批量编码多个文本或文本对
+    # 使用装饰器添加文档字符串，其中包含 LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING 和 LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING 的内容
     def batch_encode_plus(
         self,
-        # 批量文本或文本对，可以是文本输入、文本对输入或预分词文本输入的列表形式
         batch_text_or_text_pairs: Union[
             List[TextInput],
             List[TextInputPair],
             List[PreTokenizedInput],
         ],
-        # 是否为文本对
         is_pair: bool = None,
-        # 文本框坐标，可以是列表形式，用于处理图像中的文本
         boxes: Optional[List[List[List[int]]]] = None,
-        # 单词标签，可以是单个标签列表或其列表形式，用于处理图像中的标签
         word_labels: Optional[Union[List[int], List[List[int]]]] = None,
-        # 是否添加特殊标记，如[CLS]和[SEP]
         add_special_tokens: bool = True,
-        # 填充策略，可以是布尔值、字符串或填充策略对象
         padding: Union[bool, str, PaddingStrategy] = False,
-        # 截断策略，可以是布尔值、字符串或截断策略对象
         truncation: Union[bool, str, TruncationStrategy] = None,
-        # 最大长度限制
         max_length: Optional[int] = None,
-        # 步长
         stride: int = 0,
-        # 填充至的倍数
         pad_to_multiple_of: Optional[int] = None,
-        # 返回张量类型
         return_tensors: Optional[Union[str, TensorType]] = None,
-        # 是否返回标记类型 IDs
         return_token_type_ids: Optional[bool] = None,
-        # 是否返回注意力掩码
         return_attention_mask: Optional[bool] = None,
-        # 是否返回溢出的标记
         return_overflowing_tokens: bool = False,
-        # 是否返回特殊标记掩码
         return_special_tokens_mask: bool = False,
-        # 是否返回偏移映射
         return_offsets_mapping: bool = False,
-        # 是否返回长度
         return_length: bool = False,
-        # 是否冗长输出
         verbose: bool = True,
-        # 其他关键字参数
         **kwargs,
-    ) -> BatchEncoding:
-        # 为了向后兼容 'truncation_strategy', 'pad_to_max_length'，获取填充和截断策略以及其他相关参数
+    ):
+    # batch_encode_plus 方法用于批量编码文本或文本对，并返回编码后的结果
+        ) -> BatchEncoding:
+        # 为了向后兼容 'truncation_strategy', 'pad_to_max_length' 参数
+        # 调用内部方法获取填充和截断策略以及其他参数
         padding_strategy, truncation_strategy, max_length, kwargs = self._get_padding_truncation_strategies(
             padding=padding,
             truncation=truncation,
@@ -263,7 +198,7 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
             **kwargs,
         )
 
-        # 调用 _batch_encode_plus 方法进行批量编码
+        # 调用内部方法进行批量编码处理，并返回结果
         return self._batch_encode_plus(
             batch_text_or_text_pairs=batch_text_or_text_pairs,
             is_pair=is_pair,
@@ -286,19 +221,17 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
             **kwargs,
         )
 
-    # 对文本进行分词
     def tokenize(self, text: str, pair: Optional[str] = None, add_special_tokens: bool = False, **kwargs) -> List[str]:
-        # 如果有文本对，则将其组成批量输入
+        # 将输入文本和可选的配对文本构成批量输入
         batched_input = [(text, pair)] if pair else [text]
-        # 使用 Tokenizer 的 encode_batch 方法对批量输入进行编码
+        # 使用内部的分词器对批量输入进行编码处理
         encodings = self._tokenizer.encode_batch(
             batched_input, add_special_tokens=add_special_tokens, is_pretokenized=False, **kwargs
         )
 
-        # 返回编码结果的第一个样本的 tokens
+        # 返回第一个编码结果的 tokens 属性，即分词后的文本列表
         return encodings[0].tokens
 
-    # 对文本进行编码，并提供额外参数的接口
     @add_end_docstrings(LAYOUTLMV2_ENCODE_KWARGS_DOCSTRING, LAYOUTLMV2_ENCODE_PLUS_ADDITIONAL_KWARGS_DOCSTRING)
     def encode_plus(
         self,
@@ -321,34 +254,10 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
         return_length: bool = False,
         verbose: bool = True,
         **kwargs,
-    def __call__(
-        self,
-        text: Union[
-            str,
-            List[str],
-            List[List[str]]
-        ],
-        text_pair: Optional[
-            Union[
-                List[str],
-                List[int]
-            ]
-        ] = None,
-        padding: Union[bool, str, PaddingStrategy] = True,
-        truncation: Union[bool, str, TruncationStrategy] = False,
-        max_length: Optional[int] = None,
-        stride: int = 0,
-        is_split_into_words: bool = False,
-        pad_to_multiple_of: Optional[int] = None,
-        return_tensors: Optional[Union[str, TensorType]] = None,
-        return_token_type_ids: Optional[bool] = None,
-        return_attention_mask: Optional[bool] = None,
-        return_overflowing_tokens: bool = False,
-        return_special_tokens_mask: bool = False,
-        return_offsets_mapping: bool = False,
-        return_length: bool = False,
-        verbose: bool = True,
-        **kwargs,
+        ):
+        # 使用特定的文本和配对文本、框、单词标签等信息进行编码处理
+        # 设置默认添加特殊标记，以及填充和截断策略
+        # 返回编码后的结果，根据参数选择是否返回张量形式的数据
     ) -> BatchEncoding:
         """
         Tokenize and prepare for the model a sequence or a pair of sequences. .. warning:: This method is deprecated,
@@ -363,7 +272,7 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
         """
 
         # Backward compatibility for 'truncation_strategy', 'pad_to_max_length'
-        # 获取填充和截断策略以及相关参数，用于后续处理
+        # 获取填充和截断策略，以及其他相关参数
         padding_strategy, truncation_strategy, max_length, kwargs = self._get_padding_truncation_strategies(
             padding=padding,
             truncation=truncation,
@@ -373,7 +282,7 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
             **kwargs,
         )
 
-        # 调用内部方法进行编码处理，返回编码结果
+        # 调用内部方法 `_encode_plus` 进行编码
         return self._encode_plus(
             text=text,
             boxes=boxes,
@@ -420,72 +329,76 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
         return_offsets_mapping: bool = False,
         return_length: bool = False,
         verbose: bool = True,
-    # 定义一个内部函数，用于将文本数据转换为 BatchEncoding 格式
     def _encode_plus(
         self,
-        text: Union[TextInput, PreTokenizedInput],  # 输入文本数据，可以是单文本或预分词后的文本
-        text_pair: Optional[PreTokenizedInput] = None,  # 第二个文本数据，可为空
-        boxes: Optional[List[List[int]]] = None,  # 文本框的坐标信息，可为空
-        word_labels: Optional[List[int]] = None,  # 单词的标签信息，可为空
-        add_special_tokens: bool = True,  # 是否添加特殊标记
-        padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略
-        truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略
-        max_length: Optional[int] = None,  # 最大长度限制
-        stride: int = 0,  # 步幅大小
-        pad_to_multiple_of: Optional[int] = None,  # 填充到指定的长度
-        return_tensors: Optional[bool] = None,  # 返回张量或数组
-        return_token_type_ids: Optional[bool] = None,  # 是否返回 token 类型 ID
-        return_attention_mask: Optional[bool] = None,  # 是否返回注意力蒙版
-        return_overflowing_tokens: bool = False,  # 是否返回溢出的 token
-        return_special_tokens_mask: bool = False,  # 是否返回特殊 token 蒙版
-        return_offsets_mapping: bool = False,  # 返回偏移映射
-        return_length: bool = False,  # 返回长度
-        verbose: bool = True,  # 是否输出详细信息
-        **kwargs,  # 其他关键字参数
-    ) -> BatchEncoding:  # 返回 BatchEncoding 对象
-        # 将输入转换为批处理输入
-        batched_input = [(text, text_pair)] if text_pair else [text]  # 创建批处理输入
-        batched_boxes = [boxes]  # 创建批处理文本框
-        batched_word_labels = [word_labels] if word_labels is not None else None  # 创建批处理单词标签
-        # 调用内部的批处理编码方法
+        text: Union[TextInput, PreTokenizedInput],  # 定义函数参数text，可以是单文本或预分词文本输入
+        text_pair: Optional[PreTokenizedInput] = None,  # 可选参数，用于处理文本对
+        boxes: Optional[List[List[int]]] = None,  # 可选参数，用于处理边界框信息
+        word_labels: Optional[List[int]] = None,  # 可选参数，用于处理单词级别标签
+        add_special_tokens: bool = True,  # 是否添加特殊token，默认为True
+        padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,  # 填充策略，默认不填充
+        truncation_strategy: TruncationStrategy = TruncationStrategy.DO_NOT_TRUNCATE,  # 截断策略，默认不截断
+        max_length: Optional[int] = None,  # 可选参数，最大长度限制
+        stride: int = 0,  # 步长，默认为0
+        pad_to_multiple_of: Optional[int] = None,  # 可选参数，填充到某个倍数
+        return_tensors: Optional[bool] = None,  # 可选参数，返回张量形式
+        return_token_type_ids: Optional[bool] = None,  # 可选参数，返回token类型IDs
+        return_attention_mask: Optional[bool] = None,  # 可选参数，返回注意力掩码
+        return_overflowing_tokens: bool = False,  # 是否返回溢出的token，默认不返回
+        return_special_tokens_mask: bool = False,  # 是否返回特殊token的掩码，默认不返回
+        return_offsets_mapping: bool = False,  # 是否返回偏移映射，默认不返回
+        return_length: bool = False,  # 是否返回长度，默认不返回
+        verbose: bool = True,  # 是否显示详细信息，默认为True
+        **kwargs,  # 其他未指定的关键字参数
+    ) -> BatchEncoding:
+        # 将输入文本处理为批次输入
+        # 有两种选项：
+        # 1) 只有text，此时text必须是str的列表
+        # 2) text + text_pair，此时text是str，text_pair是str的列表
+        batched_input = [(text, text_pair)] if text_pair else [text]
+        # 将边界框信息处理为批次边界框
+        batched_boxes = [boxes]
+        # 将单词级别标签处理为批次标签
+        batched_word_labels = [word_labels] if word_labels is not None else None
+        # 使用_batch_encode_plus方法处理批次输入
         batched_output = self._batch_encode_plus(
             batched_input,
-            is_pair=bool(text_pair is not None),  # 是否有第二个文本
-            boxes=batched_boxes,  # 文本框信息
-            word_labels=batched_word_labels,  # 单词标签信息
-            add_special_tokens=add_special_tokens,  # 是否添加特殊标记
+            is_pair=bool(text_pair is not None),  # 是否是文本对
+            boxes=batched_boxes,  # 批次边界框信息
+            word_labels=batched_word_labels,  # 批次单词级别标签
+            add_special_tokens=add_special_tokens,  # 是否添加特殊token
             padding_strategy=padding_strategy,  # 填充策略
             truncation_strategy=truncation_strategy,  # 截断策略
             max_length=max_length,  # 最大长度限制
-            stride=stride,  # 步幅大小
-            pad_to_multiple_of=pad_to_multiple_of,  # 填充到指定长度的倍数
-            return_tensors=return_tensors,  # 返回张量或数组
-            return_token_type_ids=return_token_type_ids,  # 返回 token 类型 ID
-            return_attention_mask=return_attention_mask,  # 返回注意力蒙版
-            return_overflowing_tokens=return_overflowing_tokens,  # 返回溢出的 token
-            return_special_tokens_mask=return_special_tokens_mask,  # 返回特殊 token 蒙版
-            return_offsets_mapping=return_offsets_mapping,  # 返回偏移映射
-            return_length=return_length,  # 返回长度
-            verbose=verbose,  # 输出详细信息
-            **kwargs,  # 其他关键字参数
+            stride=stride,  # 步长
+            pad_to_multiple_of=pad_to_multiple_of,  # 填充到某个倍数
+            return_tensors=return_tensors,  # 是否返回张量形式
+            return_token_type_ids=return_token_type_ids,  # 是否返回token类型IDs
+            return_attention_mask=return_attention_mask,  # 是否返回注意力掩码
+            return_overflowing_tokens=return_overflowing_tokens,  # 是否返回溢出的token
+            return_special_tokens_mask=return_special_tokens_mask,  # 是否返回特殊token的掩码
+            return_offsets_mapping=return_offsets_mapping,  # 是否返回偏移映射
+            return_length=return_length,  # 是否返回长度
+            verbose=verbose,  # 是否显示详细信息
+            **kwargs,  # 其他未指定的关键字参数
         )
 
-        # 如果返回张量为空，并且不返回溢出的 token，则删除首个批处理轴
-        # 如果溢出的 token 返回为批处理输出，则在此情况下保留它们
+        # 如果返回的张量为None，并且不返回溢出的token，则移除批次输出的前导批次轴
+        # 如果返回的值为批次的输出，则在这种情况下保留它们
         if return_tensors is None and not return_overflowing_tokens:
             batched_output = BatchEncoding(
                 {
                     key: value[0] if len(value) > 0 and isinstance(value[0], list) else value
                     for key, value in batched_output.items()
                 },
-                batched_output.encodings,  # 编码信息
+                batched_output.encodings,
             )
 
-        # 检查序列长度是否过长，并给出警告
+        # 检查并警告处理后序列过长的情况
         self._eventual_warn_about_too_long_sequence(batched_output["input_ids"], max_length, verbose)
 
-        return batched_output  # 返回批处理输出
-    # 定义一个内部方法用于填充输入序列，可以接受单个字典或批量编码的字典
+        # 返回处理后的批次输出
+        return batched_output
     def _pad(
         self,
         encoded_inputs: Union[Dict[str, EncodedInput], BatchEncoding],
@@ -493,23 +406,39 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
         padding_strategy: PaddingStrategy = PaddingStrategy.DO_NOT_PAD,
         pad_to_multiple_of: Optional[int] = None,
         return_attention_mask: Optional[bool] = None,
-    # 从序列构建特殊标记的模型输入，用于序列分类任务
-    def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
+    ):
         """
-        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
-        adding special tokens. A BERT sequence has the following format:
-
-        - single sequence: `[CLS] X [SEP]`
-        - pair of sequences: `[CLS] A [SEP] B [SEP]`
+        Pad encoded inputs according to specified parameters.
 
         Args:
-            token_ids_0 (`List[int]`):
-                List of IDs to which the special tokens will be added.
-            token_ids_1 (`List[int]`, *optional*):
-                Optional second list of IDs for sequence pairs.
+            encoded_inputs (Union[Dict[str, EncodedInput], BatchEncoding]):
+                Dictionary or batch encoding containing encoded inputs.
+            max_length (Optional[int], *optional*):
+                Maximum length to pad or truncate the sequences.
+            padding_strategy (PaddingStrategy):
+                Strategy for padding the sequences.
+            pad_to_multiple_of (Optional[int], *optional*):
+                Pad to a multiple of this value.
+            return_attention_mask (Optional[bool], *optional*):
+                Whether to return attention mask.
 
         Returns:
-            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
+            Union[Dict[str, torch.Tensor], BatchEncoding]:
+                Padded and encoded inputs.
+        """
+
+    def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
+        """
+        Build model inputs from a sequence or a pair of sequences by adding special tokens.
+
+        Args:
+            token_ids_0 (List[int]):
+                List of IDs for the first sequence.
+            token_ids_1 (List[int], *optional*):
+                Optional list of IDs for the second sequence.
+
+        Returns:
+            List[int]: List of input IDs with added special tokens.
         """
         output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
 
@@ -518,23 +447,20 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
 
         return output
 
-    # 从两个序列中创建用于序列对分类任务的 mask
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        Create a mask from the two sequences passed to be used in a sequence-pair classification task. A BERT sequence
-        pair mask has the following format: :: 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 | first sequence | second
-        sequence | If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
+        Create token type IDs from sequences for sequence-pair classification tasks.
 
         Args:
-            token_ids_0 (`List[int]`):
-                List of IDs.
-            token_ids_1 (`List[int]`, *optional*):
-                Optional second list of IDs for sequence pairs.
+            token_ids_0 (List[int]):
+                List of IDs for the first sequence.
+            token_ids_1 (List[int], *optional*):
+                Optional list of IDs for the second sequence.
 
         Returns:
-            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            List[int]: List of token type IDs indicating the sequence segments.
         """
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
@@ -542,8 +468,19 @@ class LayoutLMv2TokenizerFast(PreTrainedTokenizerFast):  # 定义 LayoutLMv2Toke
             return len(cls + token_ids_0 + sep) * [0]
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
-    # 保存词汇表到指定文件夹
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
+        """
+        Save the vocabulary of the tokenizer model.
+
+        Args:
+            save_directory (str):
+                Directory to save the vocabulary files.
+            filename_prefix (Optional[str], *optional*):
+                Prefix for the vocabulary filenames.
+
+        Returns:
+            Tuple[str]: Tuple containing the paths of the saved files.
+        """
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
         return tuple(files)
 ```

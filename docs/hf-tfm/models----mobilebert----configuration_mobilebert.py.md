@@ -1,113 +1,125 @@
-# `.\transformers\models\mobilebert\configuration_mobilebert.py`
+# `.\models\mobilebert\configuration_mobilebert.py`
 
-```py
-# 设置编码方式为utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，你不得使用此文件，除非符合许可证的规定
-# 你可以从以下网址获取许可证的副本
+```
+# coding=utf-8
+# 指定文件编码为 UTF-8
+
+# Copyright 2020 The HuggingFace Team. All rights reserved.
+# 版权声明，保留所有权利
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache License, Version 2.0 进行许可，允许在特定条件下使用、复制、修改和分发本软件
+# you may not use this file except in compliance with the License.
+# 除非符合许可协议，否则不能使用此文件
+
+# You may obtain a copy of the License at
+# 您可以在以下网址获取许可协议的副本
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或经书面同意，否则按"原样"分发的软件将按
-# "不带任何担保或条件"基础分发，无论是明示还是暗示的
-# 请查看许可证以获取特定语言的模型输出和限制信息
-"""MobileBERT模型配置"""
-from collections import OrderedDict  # 从collections模块导入OrderedDict类
-from typing import Mapping  # 从typing模块导入Mapping类
 
-from ...configuration_utils import PretrainedConfig  # 从...引入模块中的PretrainedConfig类
-from ...onnx import OnnxConfig  # 从...引入模块中的OnnxConfig类
-from ...utils import logging  # 从...引入模块中的logging类
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 除非适用法律要求或书面同意，否则依据 "原样" 分发本软件，不提供任何明示或暗示的保证或条件
 
-# 获取logger实例，用于记录日志
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 查阅许可协议，了解权限和限制
+
+""" MobileBERT model configuration"""
+# MobileBERT 模型配置
+
+from collections import OrderedDict
+# 导入 OrderedDict 类，用于有序字典的支持
+from typing import Mapping
+# 导入 Mapping 类型提示，用于支持映射类型的提示
+
+from ...configuration_utils import PretrainedConfig
+# 从配置工具中导入预训练配置类 PretrainedConfig
+from ...onnx import OnnxConfig
+# 从 onnx 模块导入 OnnxConfig
+from ...utils import logging
+# 从 utils 中导入 logging 模块
+
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器
 
-# MobileBERT预训练配置存档映射
 MOBILEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "google/mobilebert-uncased": "https://huggingface.co/google/mobilebert-uncased/resolve/main/config.json"
 }
-
+# 预训练模型配置存档映射，提供模型名称到预训练配置文件的 URL 映射
 
 class MobileBertConfig(PretrainedConfig):
     r"""
-    这是用于存储[`MobileBertModel`] 或 [`TFMobileBertModel`]配置的配置类。它用于根据指定的参数实例化MobileBERT模型，定义模型架构。
-    使用默认值实例化配置将产生类似于MobileBERT[google/mobilebert-uncased](https://huggingface.co/google/mobilebert-uncased)架构的配置。
+    This is the configuration class to store the configuration of a [`MobileBertModel`] or a [`TFMobileBertModel`]. It
+    is used to instantiate a MobileBERT model according to the specified arguments, defining the model architecture.
+    Instantiating a configuration with the defaults will yield a similar configuration to that of the MobileBERT
+    [google/mobilebert-uncased](https://huggingface.co/google/mobilebert-uncased) architecture.
 
-    配置对象继承自[`PretrainedConfig`]，可用于控制模型输出。阅读[`PretrainedConfig`]的文档以获取更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    示例：
+
+    Examples:
 
     ```python
     >>> from transformers import MobileBertConfig, MobileBertModel
 
-    >>> # 初始化一个MobileBERT配置
+    >>> # Initializing a MobileBERT configuration
     >>> configuration = MobileBertConfig()
 
-    >>> # 从上述配置初始化一个（具有随机权重）模型
+    >>> # Initializing a model (with random weights) from the configuration above
     >>> model = MobileBertModel(configuration)
 
-    >>> # 访问模型配置
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py
+    ```
 
-    属性：pretrained_config_archive_map（Dict[str, str]）：包含所有可用预训练检查点的字典。
+    Attributes: pretrained_config_archive_map (Dict[str, str]): A dictionary containing all the available pre-trained
+    checkpoints.
     """
+    # MobileBERT 配置类，用于存储 [`MobileBertModel`] 或 [`TFMobileBertModel`] 的配置。
+    # 根据指定参数实例化 MobileBERT 模型，定义模型架构。
+    # 使用默认配置实例化将产生与 MobileBERT [google/mobilebert-uncased](https://huggingface.co/google/mobilebert-uncased) 架构类似的配置。
+
+    # 配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。详细信息请阅读 [`PretrainedConfig`] 的文档。
 
     pretrained_config_archive_map = MOBILEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP
+    # 预训练模型配置存档映射，存储所有可用的预训练检查点
+
     model_type = "mobilebert"
-    # 这是一个初始化函数，用于设置模型的各种超参数
+    # 模型类型设定为 "mobilebert"
+    # 初始化函数，用于初始化一个多头注意力模型的参数
     def __init__(
         self,
-        # 词汇表大小
-        vocab_size=30522,
-        # 隐藏层大小
-        hidden_size=512,
-        # 隐藏层数量
-        num_hidden_layers=24,
-        # 注意力头的数量
-        num_attention_heads=4,
-        # 中间层大小
-        intermediate_size=512,
-        # 隐藏层激活函数
-        hidden_act="relu",
-        # 隐藏层dropout概率
-        hidden_dropout_prob=0.0,
-        # 注意力层dropout概率
-        attention_probs_dropout_prob=0.1,
-        # 最大位置编码长度
-        max_position_embeddings=512,
-        # 类型 token 的数量
-        type_vocab_size=2,
-        # 初始化范围
-        initializer_range=0.02,
-        # Layer Norm 的 epsilon 值
-        layer_norm_eps=1e-12,
-        # Pad token ID
-        pad_token_id=0,
-        # 嵌入层大小
-        embedding_size=128,
-        # 是否使用三元输入
-        trigram_input=True,
-        # 是否使用bottleneck
-        use_bottleneck=True,
-        # bottleneck 层大小
-        intra_bottleneck_size=128,
-        # 是否在注意力层使用bottleneck
-        use_bottleneck_attention=False,
-        # 是否在 key 和 query 共享 bottleneck
-        key_query_shared_bottleneck=True,
-        # 前馈网络数量
-        num_feedforward_networks=4,
-        # 归一化类型
-        normalization_type="no_norm",
-        # 是否使用分类器激活
-        classifier_activation=True,
-        # 分类器dropout概率
-        classifier_dropout=None,
+        vocab_size=30522,  # 词汇表大小，默认为30522
+        hidden_size=512,  # 隐藏层大小，默认为512
+        num_hidden_layers=24,  # 隐藏层的数量，默认为24层
+        num_attention_heads=4,  # 注意力头的数量，默认为4个
+        intermediate_size=512,  # 中间层大小，默认为512
+        hidden_act="relu",  # 隐藏层激活函数，默认为ReLU
+        hidden_dropout_prob=0.0,  # 隐藏层的dropout概率，默认为0.0（不使用）
+        attention_probs_dropout_prob=0.1,  # 注意力机制的dropout概率，默认为0.1
+        max_position_embeddings=512,  # 最大位置嵌入大小，默认为512
+        type_vocab_size=2,  # 类型词汇表大小，默认为2
+        initializer_range=0.02,  # 初始化范围，默认为0.02
+        layer_norm_eps=1e-12,  # 层归一化的epsilon值，默认为1e-12
+        pad_token_id=0,  # 填充token的ID，默认为0
+        embedding_size=128,  # 嵌入大小，默认为128
+        trigram_input=True,  # 是否使用trigram输入，默认为True
+        use_bottleneck=True,  # 是否使用瓶颈结构，默认为True
+        intra_bottleneck_size=128,  # 瓶颈内部大小，默认为128
+        use_bottleneck_attention=False,  # 是否使用瓶颈的注意力，默认为False
+        key_query_shared_bottleneck=True,  # 键和查询是否共享瓶颈，默认为True
+        num_feedforward_networks=4,  # 前馈网络的数量，默认为4
+        normalization_type="no_norm",  # 归一化类型，默认为"no_norm"
+        classifier_activation=True,  # 分类器是否激活，默认为True
+        classifier_dropout=None,  # 分类器的dropout概率，默认为None
         **kwargs,
     ):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传递填充token的ID和其他关键字参数
         super().__init__(pad_token_id=pad_token_id, **kwargs)
-    
-        # 设置模型的各种超参数
+
+        # 初始化模型的各种参数
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.num_hidden_layers = num_hidden_layers
@@ -129,35 +141,32 @@ class MobileBertConfig(PretrainedConfig):
         self.num_feedforward_networks = num_feedforward_networks
         self.normalization_type = normalization_type
         self.classifier_activation = classifier_activation
-    
-        # 根据是否使用bottleneck设置真实的隐藏层大小
+
+        # 根据是否使用瓶颈结构来确定真实的隐藏层大小
         if self.use_bottleneck:
             self.true_hidden_size = intra_bottleneck_size
         else:
             self.true_hidden_size = hidden_size
-    
-        # 设置分类器dropout概率
+
+        # 分类器的dropout概率
         self.classifier_dropout = classifier_dropout
-# 从transformers.models.bert.configuration_bert.BertOnnxConfig中拷贝代码并将Bert更改为MobileBert
+# 从 transformers.models.bert.configuration_bert.BertOnnxConfig 复制的代码，创建了 MobileBertOnnxConfig 类，用于配置 MobileBert 模型的 ONNX 格式设置。
 class MobileBertOnnxConfig(OnnxConfig):
-    # inputs方法的实现
+    # 定义 inputs 属性，返回一个映射，其中键为字符串，值为映射，映射的键为整数，值为字符串。
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 如果任务是"multiple-choice"，则设置dynamic_axis字典的键值对
-        # 键为0，值为"batch"；键为1，值为"choice"；键为2，值为"sequence"
+        # 如果任务是多选项问题 ("multiple-choice")，则定义动态轴为 {0: "batch", 1: "choice", 2: "sequence"}。
         if self.task == "multiple-choice":
             dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
-        # 如果任务不是"multiple-choice"，则设置dynamic_axis字典的键值对
-        # 键为0，值为"batch"；键为1，值为"sequence"
+        # 否则，定义动态轴为 {0: "batch", 1: "sequence"}。
         else:
             dynamic_axis = {0: "batch", 1: "sequence"}
-        # 返回一个有序字典，包含键值对元组：("input_ids", dynamic_axis)、
-        # ("attention_mask", dynamic_axis)和("token_type_ids", dynamic_axis)
+        # 返回一个有序字典，包含输入名称到动态轴的映射。
         return OrderedDict(
             [
-                ("input_ids", dynamic_axis),
-                ("attention_mask", dynamic_axis),
-                ("token_type_ids", dynamic_axis),
+                ("input_ids", dynamic_axis),  # 输入名称 "input_ids" 映射到 dynamic_axis 中的值。
+                ("attention_mask", dynamic_axis),  # 输入名称 "attention_mask" 映射到 dynamic_axis 中的值。
+                ("token_type_ids", dynamic_axis),  # 输入名称 "token_type_ids" 映射到 dynamic_axis 中的值。
             ]
         )
 ```

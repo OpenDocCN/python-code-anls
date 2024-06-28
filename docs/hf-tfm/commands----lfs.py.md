@@ -1,6 +1,6 @@
-# `.\transformers\commands\lfs.py`
+# `.\commands\lfs.py`
 
-```py
+```
 """
 Implementation of a custom transfer agent for the transfer type "multipart" for git-lfs.
 
@@ -15,27 +15,24 @@ To launch debugger while developing:
 path = /path/to/transformers/.env/bin/python args = -m debugpy --listen 5678 --wait-for-client
 /path/to/transformers/src/transformers/commands/transformers_cli.py lfs-multipart-upload ```"""
 
-import json
-import os
-import subprocess
-import sys
-import warnings
-from argparse import ArgumentParser
-from contextlib import AbstractContextManager
-from typing import Dict, List, Optional
+import json  # 导入处理 JSON 的模块
+import os  # 导入操作系统功能的模块
+import subprocess  # 导入运行外部命令的模块
+import sys  # 导入与 Python 解释器交互的模块
+import warnings  # 导入警告处理的模块
+from argparse import ArgumentParser  # 从 argparse 模块中导入 ArgumentParser 类
+from contextlib import AbstractContextManager  # 从 contextlib 模块中导入 AbstractContextManager 类
+from typing import Dict, List, Optional  # 导入类型提示相关的模块
 
-import requests
+import requests  # 导入处理 HTTP 请求的模块
 
-from ..utils import logging
-from . import BaseTransformersCLICommand
+from ..utils import logging  # 从相对路径中导入 logging 模块
+from . import BaseTransformersCLICommand  # 从当前目录中导入 BaseTransformersCLICommand 类
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器对象，并赋值给 logger 变量  # pylint: disable=invalid-name
 
-# 定义 lfs-multipart-upload 命令
-LFS_MULTIPART_UPLOAD_COMMAND = "lfs-multipart-upload"
+LFS_MULTIPART_UPLOAD_COMMAND = "lfs-multipart-upload"  # 定义一个常量，指定 LFS 多部分上传命令的名称
 
-# 自定义 LfsCommands 类，实现 git-lfs 的 "multipart" 传输类型的自定义传输代理
 class LfsCommands(BaseTransformersCLICommand):
     """
     Implementation of a custom transfer agent for the transfer type "multipart" for git-lfs. This lets users upload
@@ -54,10 +51,8 @@ class LfsCommands(BaseTransformersCLICommand):
     This command is called by lfs directly and is not meant to be called by the user.
     """
 
-    # 注册子命令
     @staticmethod
     def register_subcommand(parser: ArgumentParser):
-        # 添加 lfs-enable-largefiles 命令
         enable_parser = parser.add_parser(
             "lfs-enable-largefiles",
             help=(
@@ -65,9 +60,8 @@ class LfsCommands(BaseTransformersCLICommand):
             ),
         )
         enable_parser.add_argument("path", type=str, help="Local path to repository you want to configure.")
-        enable_parser.set_defaults(func=lambda args: LfsEnableCommand(args))
+        enable_parser.set_defaults(func=lambda args: LfsEnableCommand(args))  # 设置默认的命令处理函数为 LfsEnableCommand 类的实例化
 
-        # 添加 lfs-multipart-upload 命令
         upload_parser = parser.add_parser(
             LFS_MULTIPART_UPLOAD_COMMAND,
             help=(
@@ -75,62 +69,55 @@ class LfsCommands(BaseTransformersCLICommand):
                 "Command will get called by git-lfs, do not call it directly."
             ),
         )
-        upload_parser.set_defaults(func=lambda args: LfsUploadCommand(args))
+        upload_parser.set_defaults(func=lambda args: LfsUploadCommand(args))  # 设置默认的命令处理函数为 LfsUploadCommand 类的实例化
 
-# 定义 LfsEnableCommand 类
 class LfsEnableCommand:
     def __init__(self, args):
-        self.args = args
-    # 在运行方法中发出警告，提示通过 transformers-cli 管理仓库已不推荐，建议使用 `huggingface-cli` 代替
-    warnings.warn(
-        "Managing repositories through transformers-cli is deprecated. Please use `huggingface-cli` instead."
-    )
-    # 获取本地路径并确保其为有效的 Git 仓库路径
-    local_path = os.path.abspath(self.args.path)
-    if not os.path.isdir(local_path):
-        # 若路径不是有效的 Git 仓库，则打印错误信息并退出
-        print("This does not look like a valid git repo.")
-        exit(1)
-    # 设置 Git LFS 的自定义传输配置，使用 transformers-cli
-    subprocess.run(
-        "git config lfs.customtransfer.multipart.path transformers-cli".split(), check=True, cwd=local_path
-    )
-    # 设置 Git LFS 的自定义传输参数，指定上传命令
-    subprocess.run(
-        f"git config lfs.customtransfer.multipart.args {LFS_MULTIPART_UPLOAD_COMMAND}".split(),
-        check=True,
-        cwd=local_path,
-    )
-    # 打印提示信息，说明本地仓库已经设置好以处理大文件
-    print("Local repo set up for largefiles")
-# 定义一个函数，将消息以行分隔的 JSON 格式写入标准输出
+        self.args = args  # 初始化类实例时，将参数保存到实例属性中
+    def run(self):
+        # 发出警告信息，提示使用 `huggingface-cli` 取代 `transformers-cli` 管理仓库
+        warnings.warn(
+            "Managing repositories through transformers-cli is deprecated. Please use `huggingface-cli` instead."
+        )
+        # 获取指定路径的绝对路径
+        local_path = os.path.abspath(self.args.path)
+        # 如果指定路径不是一个目录，则输出错误信息并退出程序
+        if not os.path.isdir(local_path):
+            print("This does not look like a valid git repo.")
+            exit(1)
+        # 设置 git-lfs 的自定义传输程序路径为 `transformers-cli`，在指定路径下执行
+        subprocess.run(
+            "git config lfs.customtransfer.multipart.path transformers-cli".split(), check=True, cwd=local_path
+        )
+        # 设置 git-lfs 的自定义传输程序参数为预定义的 `LFS_MULTIPART_UPLOAD_COMMAND` 值，在指定路径下执行
+        subprocess.run(
+            f"git config lfs.customtransfer.multipart.args {LFS_MULTIPART_UPLOAD_COMMAND}".split(),
+            check=True,
+            cwd=local_path,
+        )
+        # 输出信息，表示本地仓库已设置好以处理大文件
+        print("Local repo set up for largefiles")
+# 将字典消息转换为 JSON 格式并写入标准输出
 def write_msg(msg: Dict):
-    # 将消息字典转换成 JSON 格式并添加换行符
-    msg = json.dumps(msg) + "\n"
-    # 将消息写入标准输出
-    sys.stdout.write(msg)
-    # 立即刷新标准输出缓冲区
-    sys.stdout.flush()
+    msg = json.dumps(msg) + "\n"  # 转换字典消息为 JSON 字符串，并添加换行符
+    sys.stdout.write(msg)  # 将 JSON 字符串写入标准输出
+    sys.stdout.flush()  # 刷新标准输出缓冲区，确保消息被写入
 
-# 定义一个函数，从标准输入读取行分隔的 JSON 格式消息
+# 从标准输入读取一行 JSON 格式的消息
 def read_msg() -> Optional[Dict]:
-    # 从标准输入读取一行并去除首尾空白字符，解析成 JSON 格式消息
-    msg = json.loads(sys.stdin.readline().strip())
+    msg = json.loads(sys.stdin.readline().strip())  # 读取并解析 JSON 格式的消息
 
-    # 如果消息中含有 "terminate" 字段，表示接收到终止消息，则返回 None
     if "terminate" in (msg.get("type"), msg.get("event")):
-        # 收到终止消息
+        # 如果消息中包含 "terminate" 类型或事件，表示终止消息已接收
         return None
 
-    # 如果消息中的 "event" 字段不是 "download" 或 "upload"，则记录日志并退出程序
     if msg.get("event") not in ("download", "upload"):
-        logger.critical("Received unexpected message")
-        sys.exit(1)
+        logger.critical("Received unexpected message")  # 记录关键错误日志，表示接收到意外的消息
+        sys.exit(1)  # 非预期消息时退出程序
 
-    # 返回解析后的消息字典
-    return msg
+    return msg  # 返回解析后的消息字典
 
-# 定义一个上下文管理器类，实现仅读取文件的指定部分
+# 用于从文件中读取指定范围的数据的上下文管理器类
 class FileSlice(AbstractContextManager):
     """
     File-like object that only reads a slice of a file
@@ -138,75 +125,62 @@ class FileSlice(AbstractContextManager):
     Inspired by stackoverflow.com/a/29838711/593036
     """
 
-    # 初始化方法，接受文件路径、起始偏移和读取限制参数
     def __init__(self, filepath: str, seek_from: int, read_limit: int):
-        self.filepath = filepath
-        self.seek_from = seek_from
-        self.read_limit = read_limit
-        self.n_seen = 0
+        self.filepath = filepath  # 文件路径
+        self.seek_from = seek_from  # 读取起始位置
+        self.read_limit = read_limit  # 读取数据限制大小
+        self.n_seen = 0  # 已读取的字节数
 
-    # 进入上下文时执行的方法
     def __enter__(self):
-        # 打开文件并将文件指针移动到指定位置
-        self.f = open(self.filepath, "rb")
-        self.f.seek(self.seek_from)
-        return self
+        self.f = open(self.filepath, "rb")  # 打开文件以供读取
+        self.f.seek(self.seek_from)  # 设置文件读取的起始位置
+        return self  # 返回 FileSlice 对象本身作为上下文管理器
 
-    # 返回文件内容的长度
     def __len__(self):
-        # 获取文件总长度
-        total_length = os.fstat(self.f.fileno()).st_size
-        # 返回实际可读取的长度，不超过读取限制
-        return min(self.read_limit, total_length - self.seek_from)
+        total_length = os.fstat(self.f.fileno()).st_size  # 获取文件总大小
+        return min(self.read_limit, total_length - self.seek_from)  # 返回实际可读取的数据长度
 
-    # 读取文件内容的方法
     def read(self, n=-1):
-        # 如果已经读取了指定长度的内容，则返回空字节串
         if self.n_seen >= self.read_limit:
-            return b""
-        # 计算剩余可读取的字节数
-        remaining_amount = self.read_limit - self.n_seen
-        # 读取文件内容，不超过剩余可读取的字节数
+            return b""  # 如果已读取数据超出限制，则返回空字节串
+
+        remaining_amount = self.read_limit - self.n_seen  # 剩余可读取的数据量
+        # 读取数据，不超过剩余可读取的数据量或指定的 n 字节
         data = self.f.read(remaining_amount if n < 0 else min(n, remaining_amount))
-        # 更新已读取的字节数
-        self.n_seen += len(data)
-        return data
+        self.n_seen += len(data)  # 更新已读取的字节数
+        return data  # 返回读取的数据
 
-    # 迭代器方法，每次迭代返回读取的数据
     def __iter__(self):
-        yield self.read(n=4 * 1024 * 1024)
+        yield self.read(n=4 * 1024 * 1024)  # 以迭代器方式返回每次最多 4MB 的数据
 
-    # 退出上下文时执行的方法，关闭文件
     def __exit__(self, *args):
-        self.f.close()
+        self.f.close()  # 关闭文件
 
-# 定义一个类，表示 LFS 上传命令
+# LFS 上传命令类，初始化时接收参数
 class LfsUploadCommand:
-    # 初始化方法，接受参数并保存到实例属性中
     def __init__(self, args):
-        self.args = args
-    # 定义一个方法，用于运行自定义的传输过程
+        self.args = args  # 初始化 LFS 上传命令的参数
     def run(self):
-        # 从标准输入读取一行数据，并将其解析为 JSON 格式，获取初始化信息
+        # 立即在调用自定义传输过程后，git-lfs通过标准输入发送初始化数据到进程中。
+        # 这向进程提供了关于配置的有用信息。
         init_msg = json.loads(sys.stdin.readline().strip())
-        # 检查初始化信息是否正确，如果不正确则发送错误消息并退出程序
+        # 如果初始化消息不是"init"事件且操作不是"upload"，则写入错误消息并退出程序。
         if not (init_msg.get("event") == "init" and init_msg.get("operation") == "upload"):
             write_msg({"error": {"code": 32, "message": "Wrong lfs init operation"}})
             sys.exit(1)
 
-        # 响应初始化信息，发送一个空的确认消息到标准输出
+        # 传输过程应使用初始化结构中的信息，并执行任何一次性设置任务。
+        # 然后通过标准输出响应一个简单的空确认结构。
         write_msg({})
 
-        # 在初始化交换之后，git-lfs 将会发送任意数量的传输请求到传输过程的标准输入中，按顺序进行处理
+        # 初始化交换后，git-lfs将按序列发送任意数量的传输请求到传输进程的标准输入。
         while True:
-            # 读取传输请求消息
             msg = read_msg()
             if msg is None:
-                # 当所有传输请求都被处理完毕时，git-lfs 将会发送一个终止事件到传输过程的标准输入中
-                # 接收到此消息后，传输过程应该进行清理并终止，不需要响应
+                # 当所有传输都已处理完毕时，git-lfs将向传输进程的标准输入发送终止事件。
+                # 收到此消息后，传输进程应清理并终止。不需要响应。
                 sys.exit(0)
 
-            # 获取传输请求中的相关信息
             oid = msg["oid"]
             filepath = msg["path"]
             completion_url = msg["action"]["href"]
@@ -215,19 +189,21 @@ class LfsUploadCommand:
             presigned_urls: List[str] = list(header.values())
 
             parts = []
-            # 遍历预签名 URL 列表，按照指定的块大小上传数据
             for i, presigned_url in enumerate(presigned_urls):
+                # 使用FileSlice从文件中读取数据片段，根据chunk_size和偏移量进行读取。
                 with FileSlice(filepath, seek_from=i * chunk_size, read_limit=chunk_size) as data:
+                    # 发送PUT请求上传数据片段到预签名的URL。
                     r = requests.put(presigned_url, data=data)
                     r.raise_for_status()
-                    # 将上传结果添加到 parts 列表中
+                    # 添加上传片段的ETag和序号到parts列表。
                     parts.append(
                         {
                             "etag": r.headers.get("etag"),
                             "partNumber": i + 1,
                         }
                     )
-                    # 为了支持数据上传/下载时的进度报告，传输过程应该向标准输出发送消息
+                    # 为了支持数据上传/下载过程中的进度报告，
+                    # 传输进程应向标准输出发送消息。
                     write_msg(
                         {
                             "event": "progress",
@@ -236,9 +212,9 @@ class LfsUploadCommand:
                             "bytesSinceLast": chunk_size,
                         }
                     )
-                    # 不是精确的，但可以接受
+                    # 不是精确的进度报告，但可以接受。
 
-            # 向完成 URL 发送 POST 请求，包含上传完成的信息
+            # 发送包含oid和已上传部分信息的POST请求到完成URL。
             r = requests.post(
                 completion_url,
                 json={
@@ -248,6 +224,6 @@ class LfsUploadCommand:
             )
             r.raise_for_status()
 
-            # 发送完成事件消息到标准输出
+            # 发送完成事件到标准输出。
             write_msg({"event": "complete", "oid": oid})
 ```

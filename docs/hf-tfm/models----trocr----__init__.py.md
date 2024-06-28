@@ -1,19 +1,10 @@
-# `.\transformers\models\trocr\__init__.py`
+# `.\models\trocr\__init__.py`
 
-```py
-# 2021年版权声明
-#
-# 根据 Apache 许可证 2.0 版本进行许可; 除非符合许可证的要求，否则不得使用此文件
-# 您可以在以下位置获得许可证的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则不得基于 "AS IS" 基础发布软件，
-# 没有明示或暗示的担保或条件。
-# 查看许可证以获取特定语言中的权限和限制
+```
+# 导入必要的类型检查模块
 from typing import TYPE_CHECKING
 
-# 导入工具包中定义的依赖项和类型判断
+# 导入必要的依赖项和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -22,41 +13,46 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义导入结构
+# 定义模块导入结构
 _import_structure = {
     "configuration_trocr": ["TROCR_PRETRAINED_CONFIG_ARCHIVE_MAP", "TrOCRConfig"],
     "processing_trocr": ["TrOCRProcessor"],
 }
 
-# 尝试导入 torch，如果不可用则引发异常
+# 检查是否可以使用 Torch，若不可用则引发异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果 Torch 可用，添加相关模块到导入结构中
     _import_structure["modeling_trocr"] = [
         "TROCR_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TrOCRForCausalLM",
         "TrOCRPreTrainedModel",
     ]
 
-# 如果是类型检查，则导入特定模块和类
+# 如果是类型检查模式
 if TYPE_CHECKING:
+    # 导入类型检查所需的配置和处理模块
     from .configuration_trocr import TROCR_PRETRAINED_CONFIG_ARCHIVE_MAP, TrOCRConfig
     from .processing_trocr import TrOCRProcessor
 
+    # 再次检查 Torch 是否可用，若不可用则引发异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 导入类型检查所需的模型处理模块
         from .modeling_trocr import TROCR_PRETRAINED_MODEL_ARCHIVE_LIST, TrOCRForCausalLM, TrOCRPreTrainedModel
 
-# 如果不是类型检查，则将 LazyModule 添加到当前模块
+# 如果不是类型检查模式
 else:
     import sys
-    # 将 LazyModule 添加到当前模块
+
+    # 将当前模块注册为 LazyModule，并使用指定的导入结构
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

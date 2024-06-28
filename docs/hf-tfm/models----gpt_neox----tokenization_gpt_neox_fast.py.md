@@ -1,132 +1,157 @@
 # `.\models\gpt_neox\tokenization_gpt_neox_fast.py`
 
-```py
-# 设置脚本编码为 UTF-8
-# 版权声明
-# Apache 许可证 2.0 版本
-# 获取许可证的网址
-# 在适用法律要求或书面同意的情况下，根据"AS IS"基础分发软件，不附带任何形式的担保或条件，无论是明示的还是暗示的
-# 查看特定语言的限制和权限的许可证
-"""GPTNeoX 的 Tokenization 类。"""
-# 导入必要的库
+```
+# 设置脚本文件的编码格式为UTF-8
+# 版权声明，指出此代码的版权归EleutherAI和The HuggingFace Inc.团队所有
+#
+# 根据Apache许可证2.0版进行许可，除非符合许可证的规定，否则不得使用此文件
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，本软件是基于“原样”提供的，不提供任何明示或暗示的保证或条件
+# 请参阅许可证以获取特定语言的许可证详细信息
+"""GPTNeoX的标记类。"""
+# 导入json模块，用于处理JSON格式的数据
 import json
+# 导入Optional和Tuple用于类型提示
 from typing import Optional, Tuple
-# 从 tokenizers 库导入 pre_tokenizers
+
+# 从tokenizers库中导入pre_tokenizers模块
 from tokenizers import pre_tokenizers
-# 从 tokenization_utils_fast 中导入 PreTrainedTokenizerFast
-# 从 utils 中导入 logging
+
+# 从tokenization_utils_fast模块中导入PreTrainedTokenizerFast类
 from ...tokenization_utils_fast import PreTrainedTokenizerFast
+# 从utils模块中导入logging函数
 from ...utils import logging
 
-# 获取 logger 对象
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# VOCAB_FILES_NAMES 字典，存储 tokenizer 文件相关的文件名
+# 定义词汇文件名字典
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.json", "merges_file": "merges.txt", "tokenizer_file": "tokenizer.json"}
 
-# PRETRAINED_VOCAB_FILES_MAP 字典，存储预训练 tokenizer 和其文件的映射关系
+# 预训练词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "tokenizer_file": {
         "EleutherAI/gpt-neox-20b": "https://huggingface.co/EleutherAI/gpt-neox-20b/resolve/main/tokenizer.json",
     },
 }
 
-# PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES 字典，存储预训练 tokenizer 和其位置嵌入大小的映射关系
+# 预训练位置嵌入大小
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "gpt-neox-20b": 2048,
 }
 
-# 定义 GPTNeoXTokenizerFast 类，继承 PreTrainedTokenizerFast
+
 class GPTNeoXTokenizerFast(PreTrainedTokenizerFast):
     """
-    构建一个 "快速" GPT-NeoX-20B tokenizer（由 HuggingFace 的 *tokenizers* 库支持）。基于字节级 
-    Byte-Pair-Encoding。
-    
-    这个 tokenizer 已经经过训练，以将空格视为词元的一部分（有点像 sentencepiece），因此一个单词被编码时，
-    它在句子中是否位于开头（无空格）会有不同的编码：
+    构建一个“快速”的GPT-NeoX-20B标记生成器（由HuggingFace的*tokenizers*库支持）。基于字节级Byte-Pair-Encoding。
+
+    这个标记生成器被训练成将空格视为标记的一部分（类似于sentencepiece），因此单词的编码会根据其是否位于句子开头（没有空格）而不同：
 
     ```python
     >>> from transformers import GPTNeoXTokenizerFast
 
-    >>> tokenizer = GPTNeoXTokenizerFast.from_pretrained("gpt2")
+    >>> tokenizer = GPTNeoXTokenizerFast.from_pretrained("openai-community/gpt2")
     >>> tokenizer("Hello world")["input_ids"]
     [15496, 995]
 
     >>> tokenizer(" Hello world")["input_ids"]
     [18435, 995]
-    ```py
+    ```
 
-    可以通过在实例化这个 tokenizer 时传递 `add_prefix_space=True` 来解决这个行为，但由于模型没有以这种方式
-    预训练，这可能会降低性能。
+    如果在实例化标记生成器时传递`add_prefix_space=True`，可以绕过此行为，但由于模型未用此方式进行预训练，可能会降低性能。
 
     <Tip>
 
-    当与 `is_split_into_words=True` 一起使用时，需要使用 `add_prefix_space=True` 实例化这个 tokenizer。
+    当与`is_split_into_words=True`一起使用时，应使用`add_prefix_space=True`实例化此标记生成器。
 
     </Tip>
 
-    这个 tokenizer 继承自 [`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应该参考这个超类了解这些方法的更多信息。
-    
-    # 初始化一个 GPT2Tokenizer 对象
+    此标记生成器继承自[`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应参考此超类以获取有关这些方法的更多信息。
+
+    """
+    Args:
+        vocab_file (`str`):
+            Path to the vocabulary file.
+        merges_file (`str`):
+            Path to the merges file.
+        errors (`str`, *optional*, defaults to `"replace"`):
+            Paradigm to follow when decoding bytes to UTF-8. See
+            [bytes.decode](https://docs.python.org/3/library/stdtypes.html#bytes.decode) for more information.
+        unk_token (`str`, *optional*, defaults to `<|endoftext|>`):
+            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
+            token instead.
+        bos_token (`str`, *optional*, defaults to `<|endoftext|>`):
+            The beginning of sequence token.
+        eos_token (`str`, *optional*, defaults to `<|endoftext|>`):
+            The end of sequence token.
+        add_prefix_space (`bool`, *optional*, defaults to `False`):
+            Whether or not to add an initial space to the input. This allows to treat the leading word just as any
+            other word. (GPTNeoX tokenizer detect beginning of words by the preceding space).
+        trim_offsets (`bool`, *optional*, defaults to `True`):
+            Whether or not the post-processing step should trim offsets to avoid including whitespaces.
+    """
+
+    # 定义常量：用于存储预定义的词汇文件名列表
+    vocab_files_names = VOCAB_FILES_NAMES
+    # 定义常量：用于存储预定义的词汇文件映射字典
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 定义常量：用于存储预定义的最大模型输入大小列表
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 定义常量：用于存储预定义的模型输入名称列表
+    model_input_names = ["input_ids", "attention_mask"]
+
     def __init__(
         self,
-        vocab_file=None,  # 词汇表文件路径，默认为 None
-        merges_file=None,  # 合并文件路径，默认为 None
-        tokenizer_file=None,  # 分词器文件路径，默认为 None
-        unk_token="<|endoftext|>",  # 未知 token，默认为 "<|endoftext|>"
-        bos_token="<|endoftext|>",  # 序列起始 token，默认为 "<|endoftext|>"
-        eos_token="<|endoftext|>",  # 序列结束 token，默认为 "<|endoftext|>"
-        add_prefix_space=False,  # 是否在输入的开头添加空格，默认为 False
-        **kwargs,  # 其他参数
+        vocab_file=None,
+        merges_file=None,
+        tokenizer_file=None,
+        unk_token="<|endoftext|>",
+        bos_token="<|endoftext|>",
+        eos_token="<|endoftext|>",
+        add_prefix_space=False,
+        **kwargs,
     ):
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，传递参数以配置tokenizer
         super().__init__(
-            vocab_file,  # 词汇表文件路径
-            merges_file,  # 合并文件路径
-            tokenizer_file=tokenizer_file,  # 分词器文件路径
-            unk_token=unk_token,  # 未知 token
-            bos_token=bos_token,  # 序列起始 token
-            eos_token=eos_token,  # 序列结束 token
-            add_prefix_space=add_prefix_space,  # 是否在输入的开头添加空格
-            **kwargs,  # 其他参数
+            vocab_file,
+            merges_file,
+            tokenizer_file=tokenizer_file,
+            unk_token=unk_token,
+            bos_token=bos_token,
+            eos_token=eos_token,
+            add_prefix_space=add_prefix_space,
+            **kwargs,
         )
-        
-        # 从 backend_tokenizer 中加载预分词器状态
+
+        # 获取当前tokenizer的预处理状态，并更新其中的add_prefix_space选项
         pre_tok_state = json.loads(self.backend_tokenizer.pre_tokenizer.__getstate__())
-        # 如果预分词器状态中的 add_prefix_space 参数不等于传入的 add_prefix_space 参数
         if pre_tok_state.get("add_prefix_space", add_prefix_space) != add_prefix_space:
-            # 获取预分词器类型并创建相应的预分词器类
+            # 根据预处理器类型动态获取类，并根据更新后的状态重新配置预处理器
             pre_tok_class = getattr(pre_tokenizers, pre_tok_state.pop("type"))
-            # 更新预分词器状态中的 add_prefix_space 参数
             pre_tok_state["add_prefix_space"] = add_prefix_space
-            # 重新设置 backend_tokenizer 的预分词器
             self.backend_tokenizer.pre_tokenizer = pre_tok_class(**pre_tok_state)
 
-        # 保存是否添加前缀空格的参数
+        # 设置类属性，用于存储是否添加前导空格的标志
         self.add_prefix_space = add_prefix_space
 
-    # 保存词汇表
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 调用 tokenizer.model.save 方法保存词汇表
+        # 调用底层tokenizer模型的保存方法，保存模型到指定目录，并返回保存的文件名元组
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
-        # 返回保存的文件名
         return tuple(files)
 
-    # 返回默认的对话模板
     @property
-    # 从 transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.default_chat_template 复制过来的
-    # 默认的聊天模板，忽略角色信息，只是用 EOS 标记连接消息
-    def default_chat_template(self):
-        """
-        A simple chat template that ignores role information and just concatenates messages with EOS tokens.
-        """
-        # 如果没有为这个分词器定义聊天模板，则使用默认模板
-        logger.warning_once(
-            "\nNo chat template is defined for this tokenizer - using the default template "
-            f"for the {self.__class__.__name__} class. If the default is not appropriate for "
-            "your model, please set `tokenizer.chat_template` to an appropriate template. "
-            "See https://huggingface.co/docs/transformers/main/chat_templating for more information.\n"
-        )
-        # 返回用于连接消息的字符串模板
-        return "{% for message in messages %}" "{{ message.content }}{{ eos_token }}" "{% endfor %}"
+    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.default_chat_template复制而来
+    # 定义一个默认的聊天模板函数，用于生成聊天内容，忽略角色信息，并使用 EOS 标记连接消息。
+    logger.warning_once(
+        # 发出一次性警告日志，指示没有为此分词器定义聊天模板，而是使用默认模板。
+        "\nNo chat template is defined for this tokenizer - using the default template "
+        f"for the {self.__class__.__name__} class. If the default is not appropriate for "
+        "your model, please set `tokenizer.chat_template` to an appropriate template. "
+        "See https://huggingface.co/docs/transformers/main/chat_templating for more information.\n"
+    )
+    # 返回一个字符串模板，用于格式化聊天消息，每条消息后附加 EOS 标记。
+    return "{% for message in messages %}" "{{ message.content }}{{ eos_token }}" "{% endfor %}"
 ```

@@ -1,35 +1,44 @@
-# `.\transformers\models\vit\feature_extraction_vit.py`
+# `.\models\vit\feature_extraction_vit.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用此文件
-# 可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“原样”分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制
-"""ViT 的特征提取器类。"""
+```
+# coding=utf-8
+# 定义文件编码格式为 UTF-8
 
-# 导入警告模块
+# 版权声明和许可证信息，指定代码的版权和使用条款
+# Copyright 2021 The HuggingFace Inc. team. All rights reserved.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Feature extractor class for ViT."""
+# 导入警告模块，用于向用户显示警告信息
 import warnings
 
-# 导入日志记录工具
+# 导入 logging 模块，用于记录日志
 from ...utils import logging
-# 从 image_processing_vit 模块导入 ViTImageProcessor 类
+# 从本地模块中导入 ViTImageProcessor 类
 from .image_processing_vit import ViTImageProcessor
 
-# 获取 logger 对象
+# 获取当前模块的日志记录器对象
 logger = logging.get_logger(__name__)
 
-# ViTFeatureExtractor 类继承自 ViTImageProcessor 类
+# 定义 ViTFeatureExtractor 类，继承自 ViTImageProcessor 类
 class ViTFeatureExtractor(ViTImageProcessor):
-    # 初始化方法
     def __init__(self, *args, **kwargs) -> None:
-        # 发出警告，提示 ViTFeatureExtractor 类已弃用，将在 Transformers 的第 5 版中移除，请使用 ViTImageProcessor 替代
+        # 发出关于类被弃用的警告信息，建议使用 ViTImageProcessor 类代替
         warnings.warn(
             "The class ViTFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please"
             " use ViTImageProcessor instead.",
             FutureWarning,
         )
-        # 调用父类的初始化方法
+        # 调用父类的构造函数，传入所有参数和关键字参数
         super().__init__(*args, **kwargs)
 ```

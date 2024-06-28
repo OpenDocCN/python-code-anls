@@ -1,36 +1,45 @@
-# `.\transformers\models\mobilebert\convert_mobilebert_original_tf_checkpoint_to_pytorch.py`
+# `.\models\mobilebert\convert_mobilebert_original_tf_checkpoint_to_pytorch.py`
 
-```py
-import argparse  # 导入 argparse 模块，用于解析命令行参数
+```
+# 导入必要的模块和库
+import argparse  # 用于解析命令行参数
 
-import torch  # 导入 PyTorch 库
+import torch  # 导入PyTorch库
 
-from transformers import MobileBertConfig, MobileBertForPreTraining, load_tf_weights_in_mobilebert  # 导入 MobileBERT 相关类和函数
-from transformers.utils import logging  # 导入 logging 模块
+# 从transformers库中导入MobileBertConfig、MobileBertForPreTraining和load_tf_weights_in_mobilebert函数
+from transformers import MobileBertConfig, MobileBertForPreTraining, load_tf_weights_in_mobilebert
 
-logging.set_verbosity_info()  # 设置 logging 模块的日志级别为 info
+# 从transformers.utils中导入logging模块
+from transformers.utils import logging
 
+# 设置日志输出级别为info
+logging.set_verbosity_info()
 
+# 定义函数：将TensorFlow的checkpoint转换为PyTorch的模型
 def convert_tf_checkpoint_to_pytorch(tf_checkpoint_path, mobilebert_config_file, pytorch_dump_path):
-    # 初始化 PyTorch 模型配置
+    # 从配置文件中加载MobileBERT模型的配置
     config = MobileBertConfig.from_json_file(mobilebert_config_file)
-    # 输出 PyTorch 模型配置信息
+    # 打印配置信息
     print(f"Building PyTorch model from configuration: {config}")
-    # 根据配置创建 MobileBERT 预训练模型
+    # 根据配置创建MobileBERT的预训练模型
     model = MobileBertForPreTraining(config)
-    # 从 TensorFlow checkpoint 加载权重到 PyTorch 模型
+    # 加载TensorFlow的checkpoint中的权重到PyTorch模型中
     model = load_tf_weights_in_mobilebert(model, config, tf_checkpoint_path)
-    # 保存 PyTorch 模型
+    # 打印保存PyTorch模型的路径
     print(f"Save PyTorch model to {pytorch_dump_path}")
+    # 将PyTorch模型的状态字典保存到指定路径
     torch.save(model.state_dict(), pytorch_dump_path)
 
 
+# 主程序入口
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()  # 创建命令行参数解析器
-    # 添加命令行参数
+    # 创建命令行参数解析器
+    parser = argparse.ArgumentParser()
+    # 添加必选参数：TensorFlow的checkpoint路径
     parser.add_argument(
         "--tf_checkpoint_path", default=None, type=str, required=True, help="Path to the TensorFlow checkpoint path."
     )
+    # 添加必选参数：MobileBERT模型配置文件的路径
     parser.add_argument(
         "--mobilebert_config_file",
         default=None,
@@ -41,11 +50,12 @@ if __name__ == "__main__":
             "This specifies the model architecture."
         ),
     )
+    # 添加必选参数：输出的PyTorch模型路径
     parser.add_argument(
         "--pytorch_dump_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
     )
-    args = parser.parse_args()  # 解析命令行参数
-    # 调用函数将 TensorFlow checkpoint 转换为 PyTorch 模型
+    # 解析命令行参数
+    args = parser.parse_args()
+    # 调用转换函数，将TensorFlow的checkpoint转换为PyTorch模型
     convert_tf_checkpoint_to_pytorch(args.tf_checkpoint_path, args.mobilebert_config_file, args.pytorch_dump_path)
-```  
 ```

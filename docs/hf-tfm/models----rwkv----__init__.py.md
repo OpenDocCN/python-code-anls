@@ -1,30 +1,36 @@
-# `.\transformers\models\rwkv\__init__.py`
+# `.\models\rwkv\__init__.py`
 
-```py
-# 导入所需的类型检查模块
+```
+# 版权声明和许可证信息，指出此代码版权归HuggingFace团队所有，并遵循Apache License, Version 2.0。
+#
+# 如果不满足许可证的要求，禁止使用此文件。可以从以下链接获取许可证的副本：
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按"原样"提供，不附带任何明示或暗示的保证或条件。
+# 有关详细信息，请参阅许可证。
+
 from typing import TYPE_CHECKING
 
-# 导入所需的工具函数、异常类和懒加载模块
+# 从utils模块中导入所需的类和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
 
-# 定义需要导入的模块结构，包括配置和建模两个部分
+# 定义了模块的导入结构
 _import_structure = {
     "configuration_rwkv": ["RWKV_PRETRAINED_CONFIG_ARCHIVE_MAP", "RwkvConfig", "RwkvOnnxConfig"],
 }
 
-# 检查是否已经安装了 Torch 库
+# 检查是否有torch库可用，如果不可用，则抛出OptionalDependencyNotAvailable异常
 try:
     if not is_torch_available():
-        # 如果未安装，则抛出异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果已安装 Torch，则导入建模部分的模块
+    # 如果torch可用，将modeling_rwkv模块添加到导入结构中
     _import_structure["modeling_rwkv"] = [
         "RWKV_PRETRAINED_MODEL_ARCHIVE_LIST",
         "RwkvForCausalLM",
@@ -32,29 +38,26 @@ else:
         "RwkvPreTrainedModel",
     ]
 
-# 如果当前环境支持类型检查
+# 如果当前是类型检查阶段，导入所需的类型定义
 if TYPE_CHECKING:
-    # 导入配置部分的模块和类
     from .configuration_rwkv import RWKV_PRETRAINED_CONFIG_ARCHIVE_MAP, RwkvConfig, RwkvOnnxConfig
 
-    # 再次检查是否已安装 Torch
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入建模部分的模块和类
         from .modeling_rwkv import (
             RWKV_PRETRAINED_MODEL_ARCHIVE_LIST,
             RwkvForCausalLM,
             RwkvModel,
             RwkvPreTrainedModel,
         )
-# 如果不支持类型检查
+# 如果不是类型检查阶段，则在sys.modules中注册一个LazyModule
 else:
     import sys
 
-    # 动态创建一个懒加载模块，并将其设置为当前模块
+    # 使用_LazyModule类将当前模块注册到sys.modules中，以实现惰性加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

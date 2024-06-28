@@ -1,15 +1,26 @@
 # `.\models\dpr\configuration_dpr.py`
 
-```py
-# coding=utf-8
-# 载入预训练配置类 PretrainedConfig 和 logging 工具
-from ...configuration_utils import PretrainedConfig
-from ...utils import logging
+```
+# 设置文件编码为UTF-8
+# 版权所有 2010 年，DPR 作者，The Hugging Face Team.
+#
+# 根据 Apache 许可证 2.0 版本授权，除非符合许可证的要求，否则不得使用此文件。
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则按"原样"分发的软件，
+# 没有任何明示或暗示的担保或条件。
+# 请查看许可证以获取详细的权利和限制信息。
+""" DPR 模型配置"""
 
-# 获取 logger 对象
-logger = logging.get_logger(__name__)
+from ...configuration_utils import PretrainedConfig  # 导入预训练模型的配置类
+from ...utils import logging  # 导入日志工具
 
-# DPR 预训练配置文件的映射表，将模型名称映射到对应的配置文件地址
+
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+
+# 定义 DPR 预训练模型与配置文件的映射关系
 DPR_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/dpr-ctx_encoder-single-nq-base": (
         "https://huggingface.co/facebook/dpr-ctx_encoder-single-nq-base/resolve/main/config.json"
@@ -31,60 +42,59 @@ DPR_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     ),
 }
 
-# DPRConfig 类，存储 DPRModel 的配置信息
+
 class DPRConfig(PretrainedConfig):
     r"""
-    [`DPRConfig`] 是用于存储 *DPRModel* 的配置信息的配置类。
+    [`DPRConfig`] 是用于存储 *DPRModel* 配置的配置类。
 
-    这是用于存储 [`DPRContextEncoder`]、[`DPRQuestionEncoder`] 或 [`DPRReader`] 的配置信息的配置类。
-    该类用于根据指定的参数实例化 DPR 模型的组件，定义模型组件的架构。使用默认值实例化配置将产生类似于 DPRContextEncoder
+    这是用于存储 [`DPRContextEncoder`], [`DPRQuestionEncoder`] 或 [`DPRReader`] 的配置类。根据指定的参数实例化 DPR 模型组件，
+    定义模型组件的架构。使用默认值实例化配置将产生类似于 DPRContextEncoder
     [facebook/dpr-ctx_encoder-single-nq-base](https://huggingface.co/facebook/dpr-ctx_encoder-single-nq-base)
     架构的配置。
 
-    这个类是 [`BertConfig`] 的子类。请查看超类以获取所有 kwargs 的文档。
+    该类是 [`BertConfig`] 的子类。请查看超类以获取所有 kwargs 的文档。
 
     示例:
 
     ```python
     >>> from transformers import DPRConfig, DPRContextEncoder
 
-    >>> # 初始化一个 DPR facebook/dpr-ctx_encoder-single-nq-base 风格的配置
+    >>> # 初始化 DPR facebook/dpr-ctx_encoder-single-nq-base 风格的配置
     >>> configuration = DPRConfig()
 
-    >>> # 使用 facebook/dpr-ctx_encoder-single-nq-base 风格的配置初始化一个模型（随机权重）
+    >>> # 使用配置初始化一个模型（随机权重）来自 facebook/dpr-ctx_encoder-single-nq-base 风格的配置
     >>> model = DPRContextEncoder(configuration)
 
     >>> # 访问模型配置
     >>> configuration = model.config
-    ```py"""
-```  
-    # 模型类型设为 "dpr"
+    ```
+    # 设定模型类型为 "dpr"
     model_type = "dpr"
-
-    # 初始化函数，设定模型参数
+    
+    # 定义一个初始化方法，用于初始化模型参数和配置
     def __init__(
         self,
-        vocab_size=30522,  # 词汇表大小，默认为30522
-        hidden_size=768,  # 隐藏层大小，默认为768
-        num_hidden_layers=12,  # 隐藏层层数，默认为12
-        num_attention_heads=12,  # 注意力头数，默认为12
-        intermediate_size=3072,  # 中间层大小，默认为3072
-        hidden_act="gelu",  # 隐藏层激活函数，默认为gelu
-        hidden_dropout_prob=0.1,  # 隐藏层dropout概率，默认为0.1
-        attention_probs_dropout_prob=0.1,  # 注意力概率dropout概率，默认为0.1
-        max_position_embeddings=512,  # 最大位置嵌入，默认为512
-        type_vocab_size=2,  # 类型词汇表大小，默认为2
-        initializer_range=0.02,  # 初始化范围，默认为0.02
-        layer_norm_eps=1e-12,  # 层归一化epsilon值，默认为1e-12
-        pad_token_id=0,  # 填充token的id，默认为0
-        position_embedding_type="absolute",  # 位置嵌入类型，默认为绝对位置嵌入
-        projection_dim: int = 0,  # 投影维度，默认为0
+        vocab_size=30522,
+        hidden_size=768,
+        num_hidden_layers=12,
+        num_attention_heads=12,
+        intermediate_size=3072,
+        hidden_act="gelu",
+        hidden_dropout_prob=0.1,
+        attention_probs_dropout_prob=0.1,
+        max_position_embeddings=512,
+        type_vocab_size=2,
+        initializer_range=0.02,
+        layer_norm_eps=1e-12,
+        pad_token_id=0,
+        position_embedding_type="absolute",
+        projection_dim: int = 0,
         **kwargs,
     ):
-        # 调用父类的初始化函数，设定填充token的id
+        # 调用父类的初始化方法，传入 pad_token_id 和其他关键字参数
         super().__init__(pad_token_id=pad_token_id, **kwargs)
-
-        # 设置模型参数
+    
+        # 设置模型的各种参数
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.num_hidden_layers = num_hidden_layers

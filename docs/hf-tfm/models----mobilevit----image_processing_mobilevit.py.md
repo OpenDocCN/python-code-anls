@@ -1,19 +1,49 @@
-# `.\transformers\models\mobilevit\image_processing_mobilevit.py`
+# `.\models\mobilevit\image_processing_mobilevit.py`
 
-```py
-# 设定文件编码为 UTF-8
-# 版权声明
-# 定义了一个用于MobileViT的图像处理类
-# 引入必要的库和模块
-"""Image processor class for MobileViT."""  # MobileViT的图像处理类
+```
+# coding=utf-8
+# 定义文件编码格式为 UTF-8
 
-from typing import Dict, List, Optional, Tuple, Union  # 导入类型提示所需的模块
+# Copyright 2022 The HuggingFace Inc. team. All rights reserved.
+# 版权声明，保留所有权利
 
-import numpy as np  # 导入NumPy库，用于数组处理
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache License, Version 2.0 许可证授权
 
-from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict  # 导入图像处理相关的模块
-from ...image_transforms import flip_channel_order, get_resize_output_image_size, resize, to_channel_dimension_format  # 导入图像变换相关的模块
-from ...image_utils import (  # 导入图像处理工具相关的模块
+# you may not use this file except in compliance with the License.
+# 除非符合许可证，否则不得使用此文件
+
+# You may obtain a copy of the License at
+# 您可以在以下网址获取许可证副本
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 除非法律要求或书面同意，否则软件依"原样"分发，不附任何明示或暗示的担保或条件
+
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 请查阅许可证获取详细的权限和限制条款
+
+"""Image processor class for MobileViT."""
+# MobileViT 的图像处理器类
+
+from typing import Dict, List, Optional, Tuple, Union
+# 引入必要的类型提示模块
+
+import numpy as np
+# 导入 NumPy 库
+
+from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
+# 从图像处理工具中导入基础图像处理器、批量特征和获取尺寸字典函数
+
+from ...image_transforms import flip_channel_order, get_resize_output_image_size, resize, to_channel_dimension_format
+# 从图像变换模块导入反转通道顺序、获取调整后图像大小、调整大小和转换通道维度格式函数
+
+from ...image_utils import (
     ChannelDimension,
     ImageInput,
     PILImageResampling,
@@ -22,103 +52,123 @@ from ...image_utils import (  # 导入图像处理工具相关的模块
     make_list_of_images,
     to_numpy_array,
     valid_images,
+    validate_kwargs,
+    validate_preprocess_arguments,
 )
-from ...utils import TensorType, is_torch_available, is_torch_tensor, is_vision_available, logging  # 导入相关的工具和判断模块
+# 从图像工具模块导入相关函数和枚举类型
 
-# 如果有torch库的话，导入torch
+from ...utils import TensorType, is_torch_available, is_torch_tensor, is_vision_available, logging
+# 从工具模块导入张量类型、检查是否有 Torch 库、是否为 Torch 张量、是否可用 Vision 模块和日志记录函数
+
 if is_vision_available():
-    import PIL  # 如果有视觉库可用，导入PIL库
+    import PIL
+    # 如果 Vision 可用，导入 PIL 库
 
 if is_torch_available():
-    import torch  # 如果有torch可用，导入torch库
+    import torch
+    # 如果 Torch 可用，导入 Torch 库
 
-# 获取 logger
 logger = logging.get_logger(__name__)
-# 创建MobileViT的图像处理类，继承自BaseImageProcessor
+# 获取当前模块的日志记录器对象
+
+
 class MobileViTImageProcessor(BaseImageProcessor):
-    # 构造函数
     r"""
     Constructs a MobileViT image processor.
-```  # 构造一个 MobileViT 图像处理类。
-    # 定义类的初始化方法
-        Args:
-            do_resize (`bool`, *optional*, defaults to `True`):
-                Whether to resize the image's (height, width) dimensions to the specified `size`. Can be overridden by the
-                `do_resize` parameter in the `preprocess` method.
-            size (`Dict[str, int]` *optional*, defaults to `{"shortest_edge": 224}`):
-                Controls the size of the output image after resizing. Can be overridden by the `size` parameter in the
-                `preprocess` method.
-            resample (`PILImageResampling`, *optional*, defaults to `Resampling.BILINEAR`):
-                Defines the resampling filter to use if resizing the image. Can be overridden by the `resample` parameter
-                in the `preprocess` method.
-            do_rescale (`bool`, *optional*, defaults to `True`):
-                Whether to rescale the image by the specified scale `rescale_factor`. Can be overridden by the `do_rescale`
-                parameter in the `preprocess` method.
-            rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
-                Scale factor to use if rescaling the image. Can be overridden by the `rescale_factor` parameter in the
-                `preprocess` method.
-            do_center_crop (`bool`, *optional*, defaults to `True`):
-                Whether to crop the input at the center. If the input size is smaller than `crop_size` along any edge, the
-                image is padded with 0's and then center cropped. Can be overridden by the `do_center_crop` parameter in
-                the `preprocess` method.
-            crop_size (`Dict[str, int]`, *optional*, defaults to `{"height": 256, "width": 256}`):
-                Desired output size `(size["height"], size["width"])` when applying center-cropping. Can be overridden by
-                the `crop_size` parameter in the `preprocess` method.
-            do_flip_channel_order (`bool`, *optional*, defaults to `True`):
-                Whether to flip the color channels from RGB to BGR. Can be overridden by the `do_flip_channel_order`
-                parameter in the `preprocess` method.
-        """
-    
-        # 模型输入的名称列表
-        model_input_names = ["pixel_values"]
-    
-        # 定义类的初始化方法
-        def __init__(
-            self,
-            do_resize: bool = True,
-            size: Dict[str, int] = None,
-            resample: PILImageResampling = PILImageResampling.BILINEAR,
-            do_rescale: bool = True,
-            rescale_factor: Union[int, float] = 1 / 255,
-            do_center_crop: bool = True,
-            crop_size: Dict[str, int] = None,
-            do_flip_channel_order: bool = True,
-            **kwargs,
-    # 这是一个图像处理类的初始化方法
+    构建 MobileViT 图像处理器类
+    """
+    """
+    Args:
+        do_resize (`bool`, *optional*, defaults to `True`):
+            Whether to resize the image's (height, width) dimensions to the specified `size`.
+            Can be overridden by the `do_resize` parameter in the `preprocess` method.
+        size (`Dict[str, int]` *optional*, defaults to `{"shortest_edge": 224}`):
+            Controls the size of the output image after resizing.
+            Can be overridden by the `size` parameter in the `preprocess` method.
+        resample (`PILImageResampling`, *optional*, defaults to `Resampling.BILINEAR`):
+            Defines the resampling filter to use if resizing the image.
+            Can be overridden by the `resample` parameter in the `preprocess` method.
+        do_rescale (`bool`, *optional*, defaults to `True`):
+            Whether to rescale the image by the specified scale `rescale_factor`.
+            Can be overridden by the `do_rescale` parameter in the `preprocess` method.
+        rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
+            Scale factor to use if rescaling the image.
+            Can be overridden by the `rescale_factor` parameter in the `preprocess` method.
+        do_center_crop (`bool`, *optional*, defaults to `True`):
+            Whether to crop the input at the center.
+            Can be overridden by the `do_center_crop` parameter in the `preprocess` method.
+        crop_size (`Dict[str, int]`, *optional*, defaults to `{"height": 256, "width": 256}`):
+            Desired output size `(size["height"], size["width"])` when applying center-cropping.
+            Can be overridden by the `crop_size` parameter in the `preprocess` method.
+        do_flip_channel_order (`bool`, *optional*, defaults to `True`):
+            Whether to flip the color channels from RGB to BGR.
+            Can be overridden by the `do_flip_channel_order` parameter in the `preprocess` method.
+    """
+
+    # 定义模型输入的名称列表，这里只有一个元素 "pixel_values"
+    model_input_names = ["pixel_values"]
+
     def __init__(
         self,
         do_resize: bool = True,
-        size: Optional[Union[Dict[str, int], int]] = {"shortest_edge": 224},
+        size: Dict[str, int] = None,
         resample: PILImageResampling = PILImageResampling.BILINEAR,
         do_rescale: bool = True,
-        rescale_factor: float = 1 / 255.0,
+        rescale_factor: Union[int, float] = 1 / 255,
         do_center_crop: bool = True,
-        crop_size: Optional[Union[Dict[str, int], int]] = {"height": 256, "width": 256},
-        do_flip_channel_order: bool = False,
+        crop_size: Dict[str, int] = None,
+        do_flip_channel_order: bool = True,
         **kwargs,
+    ):
+        # 初始化函数，设定图像预处理参数的默认值和类型，参数都可以在 preprocess 方法中被覆盖
+        pass
+    # 定义类的初始化方法，继承自父类
     ) -> None:
-        # 调用父类的初始化方法
+        # 调用父类的初始化方法，并传递关键字参数
         super().__init__(**kwargs)
-        # 设置图像大小，如果未指定则默认为最短边长224像素
+        # 如果 size 参数不为 None，则设置为指定值；否则使用默认的 {"shortest_edge": 224}
         size = size if size is not None else {"shortest_edge": 224}
-        # 将图像大小转换为字典格式
+        # 调用函数 get_size_dict，获取处理后的 size 字典，不强制为正方形
         size = get_size_dict(size, default_to_square=False)
-        # 设置裁剪大小，如果未指定则默认为256x256
+        # 如果 crop_size 参数不为 None，则设置为指定值；否则使用默认的 {"height": 256, "width": 256}
         crop_size = crop_size if crop_size is not None else {"height": 256, "width": 256}
-        # 将裁剪大小转换为字典格式
+        # 调用函数 get_size_dict，获取处理后的 crop_size 字典
         crop_size = get_size_dict(crop_size, param_name="crop_size")
-    
-        # 将各种参数赋值给实例属性
+
+        # 设置类的属性，指示是否执行 resize 操作
         self.do_resize = do_resize
+        # 设置类的属性，指定 resize 操作的大小
         self.size = size
+        # 设置类的属性，指定 resize 操作的插值方法
         self.resample = resample
+        # 设置类的属性，指示是否执行 rescale 操作
         self.do_rescale = do_rescale
+        # 设置类的属性，指定 rescale 操作的因子
         self.rescale_factor = rescale_factor
+        # 设置类的属性，指示是否执行中心裁剪操作
         self.do_center_crop = do_center_crop
+        # 设置类的属性，指定中心裁剪操作的大小
         self.crop_size = crop_size
+        # 设置类的属性，指示是否执行通道顺序翻转操作
         self.do_flip_channel_order = do_flip_channel_order
-    
-    # 定义了一个resize方法，用于调整图像大小
+        # 设置类的属性，有效的处理器键列表
+        self._valid_processor_keys = [
+            "images",
+            "segmentation_maps",
+            "do_resize",
+            "size",
+            "resample",
+            "do_rescale",
+            "rescale_factor",
+            "do_center_crop",
+            "crop_size",
+            "do_flip_channel_order",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
+
+    # 从 transformers.models.mobilenet_v1.image_processing_mobilenet_v1.MobileNetV1ImageProcessor.resize 复制而来，将 PILImageResampling.BICUBIC 替换为 PILImageResampling.BILINEAR
     def resize(
         self,
         image: np.ndarray,
@@ -131,38 +181,34 @@ class MobileViTImageProcessor(BaseImageProcessor):
         """
         Resize an image. The shortest edge of the image is resized to size["shortest_edge"], with the longest edge
         resized to keep the input aspect ratio.
-    
+
         Args:
             image (`np.ndarray`):
                 Image to resize.
             size (`Dict[str, int]`):
                 Size of the output image.
             resample (`PILImageResampling`, *optional*, defaults to `PILImageResampling.BILINEAR`):
-                Resampling filter to use when resiizing the image.
+                Resampling filter to use when resizing the image.
             data_format (`str` or `ChannelDimension`, *optional*):
                 The channel dimension format of the image. If not provided, it will be the same as the input image.
             input_data_format (`ChannelDimension` or `str`, *optional*):
                 The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # 如果size中包含"shortest_edge"键，则根据shortest_edge调整图像大小，并保持原有长宽比
-        if "shortest_edge" in size:
-            size = size["shortest_edge"]
-            default_to_square = False
-        # 如果size中包含"height"和"width"键，则根据它们调整图像大小
-        elif "height" in size and "width" in size:
-            size = (size["height"], size["width"])
-        # 否则抛出ValueError异常
+        default_to_square = True  # 默认将图像调整为正方形
+        if "shortest_edge" in size:  # 如果 `size` 中包含 "shortest_edge"
+            size = size["shortest_edge"]  # 将 `size` 调整为最短边的大小
+            default_to_square = False  # 不再默认将图像调整为正方形
+        elif "height" in size and "width" in size:  # 如果 `size` 中包含 "height" 和 "width"
+            size = (size["height"], size["width"])  # 将 `size` 调整为给定的高度和宽度
         else:
-            raise ValueError("Size must contain either 'shortest_edge' or 'height' and 'width'.")
-    
-        # 根据图像尺寸和指定的大小计算输出图像的尺寸
+            raise ValueError("Size must contain either 'shortest_edge' or 'height' and 'width'.")  # 抛出数值错误，要求 `size` 包含 'shortest_edge' 或 'height' 和 'width'
+
         output_size = get_resize_output_image_size(
             image,
             size=size,
             default_to_square=default_to_square,
             input_data_format=input_data_format,
-        )
-        # 调用resize函数调整图像大小并返回结果
+        )  # 获取调整后的图像大小
         return resize(
             image,
             size=output_size,
@@ -170,7 +216,8 @@ class MobileViTImageProcessor(BaseImageProcessor):
             data_format=data_format,
             input_data_format=input_data_format,
             **kwargs,
-        )
+        )  # 返回调整后的图像
+
     def flip_channel_order(
         self,
         image: np.ndarray,
@@ -189,6 +236,7 @@ class MobileViTImageProcessor(BaseImageProcessor):
                 The channel dimension format of the input image. If not provided, it will be inferred.
         """
         return flip_channel_order(image, data_format=data_format, input_data_format=input_data_format)
+        # 调用函数 `flip_channel_order` 对图像颜色通道顺序进行翻转
 
     def __call__(self, images, segmentation_maps=None, **kwargs):
         """
@@ -198,7 +246,7 @@ class MobileViTImageProcessor(BaseImageProcessor):
         passed in as positional arguments.
         """
         return super().__call__(images, segmentation_maps=segmentation_maps, **kwargs)
-
+        # 调用父类的 `__call__` 方法，预处理一批图像和可选的分割地图
     def _preprocess(
         self,
         image: ImageInput,
@@ -212,22 +260,23 @@ class MobileViTImageProcessor(BaseImageProcessor):
         crop_size: Optional[Dict[str, int]] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ):
+        # 如果需要进行尺寸调整，则调用 resize 方法
         if do_resize:
-            # 如果需要改变尺寸，则调用resize方法
             image = self.resize(image=image, size=size, resample=resample, input_data_format=input_data_format)
 
+        # 如果需要进行尺度重置，则调用 rescale 方法
         if do_rescale:
-            # 如果需要重新缩放，则调用rescale方法
             image = self.rescale(image=image, scale=rescale_factor, input_data_format=input_data_format)
 
+        # 如果需要进行中心裁剪，则调用 center_crop 方法
         if do_center_crop:
-            # 如果需要中心裁剪，则调用center_crop方法
             image = self.center_crop(image=image, size=crop_size, input_data_format=input_data_format)
 
+        # 如果需要反转通道顺序，则调用 flip_channel_order 方法
         if do_flip_channel_order:
-            # 如果需要翻转通道顺序，则调用flip_channel_order方法
             image = self.flip_channel_order(image, input_data_format=input_data_format)
 
+        # 返回预处理后的图像
         return image
 
     def _preprocess_image(
@@ -245,19 +294,21 @@ class MobileViTImageProcessor(BaseImageProcessor):
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ) -> np.ndarray:
         """Preprocesses a single image."""
-        # 所有的转换都需要 numpy 数组作为输入
+        # 将输入图像转换为 numpy 数组
         image = to_numpy_array(image)
-        # 如果输入图像已经缩放，并且需要重新缩放，则发出警告
+
+        # 如果图像已经被缩放且需要重新缩放，则发出警告
         if is_scaled_image(image) and do_rescale:
             logger.warning_once(
                 "It looks like you are trying to rescale already rescaled images. If the input"
                 " images have pixel values between 0 and 1, set `do_rescale=False` to avoid rescaling them again."
             )
+
+        # 推断图像通道维度格式，如果未指定则进行推断
         if input_data_format is None:
-            # 推断输入图像通道维度的格式
             input_data_format = infer_channel_dimension_format(image)
 
-        # 预处理图像
+        # 调用 _preprocess 方法进行图像预处理
         image = self._preprocess(
             image=image,
             do_resize=do_resize,
@@ -271,9 +322,10 @@ class MobileViTImageProcessor(BaseImageProcessor):
             input_data_format=input_data_format,
         )
 
-        # 调整图像通道维度格式
+        # 将图像转换为指定的通道维度格式
         image = to_channel_dimension_format(image, data_format, input_channel_dim=input_data_format)
 
+        # 返回处理后的图像
         return image
 
     def _preprocess_mask(
@@ -284,20 +336,27 @@ class MobileViTImageProcessor(BaseImageProcessor):
         do_center_crop: bool = None,
         crop_size: Dict[str, int] = None,
         input_data_format: Optional[Union[str, ChannelDimension]] = None,
+    ):
+        # 这个方法用于预处理分割图像（掩模），与 _preprocess_image 方法类似但不包含缩放和反转通道顺序的选项
+        # 这里可以实现相应的分割图像预处理逻辑
+        pass
     ) -> np.ndarray:
         """Preprocesses a single mask."""
+        # 将分割地图转换为 NumPy 数组，确保数据类型一致
         segmentation_map = to_numpy_array(segmentation_map)
-        # 如果分割图是二维的，添加通道维度
+        
+        # 如果分割地图的维度为2，则添加通道维度，某些变换需要这样做
         if segmentation_map.ndim == 2:
             added_channel_dim = True
-            segmentation_map = segmentation_map[None, ...]
-            input_data_format = ChannelDimension.FIRST
+            segmentation_map = segmentation_map[None, ...]  # 在第一个维度上添加一个维度
+            input_data_format = ChannelDimension.FIRST  # 设置数据格式为通道维度在第一个位置
         else:
             added_channel_dim = False
+            # 如果未指定输入数据格式，则推断通道维度格式
             if input_data_format is None:
-                # 推断分割图通道维度的格式
                 input_data_format = infer_channel_dimension_format(segmentation_map, num_channels=1)
 
+        # 对分割地图进行预处理
         segmentation_map = self._preprocess(
             image=segmentation_map,
             do_resize=do_resize,
@@ -309,30 +368,16 @@ class MobileViTImageProcessor(BaseImageProcessor):
             do_flip_channel_order=False,
             input_data_format=input_data_format,
         )
-        # 如果为处理而添加了额外的通道维度，则移除
+        
+        # 如果之前添加了额外的通道维度，则去除它，恢复原始形状
         if added_channel_dim:
             segmentation_map = segmentation_map.squeeze(0)
+        
+        # 将分割地图转换为 int64 数据类型
         segmentation_map = segmentation_map.astype(np.int64)
+        
+        # 返回预处理后的分割地图
         return segmentation_map
-    # 定义一个预处理函数，用于对输入的图像进行预处理
-    def preprocess(
-        self,
-        images: ImageInput,  # 输入的图像数据
-        segmentation_maps: Optional[ImageInput] = None,  # 分割图的数据，可选
-        do_resize: bool = None,  # 是否调整大小
-        size: Dict[str, int] = None,  # 调整的大小
-        resample: PILImageResampling = None,  # 重采样方法
-        do_rescale: bool = None,  # 是否调整比例
-        rescale_factor: float = None,  # 调整的比例因子
-        do_center_crop: bool = None,  # 是否中心裁剪
-        crop_size: Dict[str, int] = None,  # 裁剪的大小
-        do_flip_channel_order: bool = None,  # 是否翻转通道顺序
-        return_tensors: Optional[Union[str, TensorType]] = None,  # 是否返回张量
-        data_format: ChannelDimension = ChannelDimension.FIRST,  # 数据格式
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据的格式
-        **kwargs,  # 其他参数
-    # 从transformers.models.beit.image_processing_beit.BeitImageProcessor.post_process_semantic_segmentation中复制并将Beit->MobileViT
-    # 定义一个用于后处理语义分割输出的函数
     def post_process_semantic_segmentation(self, outputs, target_sizes: List[Tuple] = None):
         """
         Converts the output of [`MobileViTForSemanticSegmentation`] into semantic segmentation maps. Only supports PyTorch.
@@ -342,37 +387,46 @@ class MobileViTImageProcessor(BaseImageProcessor):
                 Raw outputs of the model.
             target_sizes (`List[Tuple]` of length `batch_size`, *optional*):
                 List of tuples corresponding to the requested final size (height, width) of each prediction. If unset,
-                predictions will not be resized.  # 目标尺寸，如果未设置，则表示预测结果不会被调整大小
+                predictions will not be resized.
 
         Returns:
             semantic_segmentation: `List[torch.Tensor]` of length `batch_size`, where each item is a semantic
             segmentation map of shape (height, width) corresponding to the target_sizes entry (if `target_sizes` is
-            specified). Each entry of each `torch.Tensor` correspond to a semantic class id.  # 返回语义分割列表，每个项都是一个语义分割图
+            specified). Each entry of each `torch.Tensor` correspond to a semantic class id.
+        """
+        # TODO: add support for other frameworks
 
-        # TODO: add support for other frameworks  # 添加对其他框架的支持
-        logits = outputs.logits  # 获取输出的logits
+        # Extract logits from the model outputs
+        logits = outputs.logits
 
-        # 调整logits的大小并计算语义分割图  # 调整logits的大小并计算语义分割图
-        if target_sizes is not None:  # 如果存在目标尺寸
-            if len(logits) != len(target_sizes):  # 如果logits的长度与目标尺寸的长度不一致
+        # Resize logits and compute semantic segmentation maps
+        if target_sizes is not None:
+            # Check if the number of logits matches the number of target sizes
+            if len(logits) != len(target_sizes):
                 raise ValueError(
                     "Make sure that you pass in as many target sizes as the batch dimension of the logits"
-                )  # 抛出值错误
+                )
 
-            if is_torch_tensor(target_sizes):  # 如果目标尺寸是torch张量
-                target_sizes = target_sizes.numpy()  # 转换为numpy格式
+            # Convert target_sizes to numpy array if it's a torch tensor
+            if is_torch_tensor(target_sizes):
+                target_sizes = target_sizes.numpy()
 
-            semantic_segmentation = []  # 初始化语义分割列表
+            semantic_segmentation = []
 
-            for idx in range(len(logits)):  # 遍历logits
+            # Iterate over each logits tensor
+            for idx in range(len(logits)):
+                # Resize logits using bilinear interpolation
                 resized_logits = torch.nn.functional.interpolate(
                     logits[idx].unsqueeze(dim=0), size=target_sizes[idx], mode="bilinear", align_corners=False
-                )  # 插值调整logits大小
-                semantic_map = resized_logits[0].argmax(dim=0)  # 计算语义分割图
-                semantic_segmentation.append(semantic_map)  # 添加到语义分割列表中
-        else:  # 如果不存在目标尺寸
-            semantic_segmentation = logits.argmax(dim=1)  # 计算logits的最大值索引
-            semantic_segmentation = [semantic_segmentation[i] for i in range(semantic_segmentation.shape[0])]  # 重新组织成列表形式
+                )
+                # Extract semantic segmentation map by taking the argmax along the channel dimension
+                semantic_map = resized_logits[0].argmax(dim=0)
+                semantic_segmentation.append(semantic_map)
+        else:
+            # Compute semantic segmentation maps directly from logits
+            semantic_segmentation = logits.argmax(dim=1)
+            semantic_segmentation = [semantic_segmentation[i] for i in range(semantic_segmentation.shape[0])]
 
-        return semantic_segmentation  # 返回语义分割结果
+        # Return the list of semantic segmentation maps
+        return semantic_segmentation
 ```

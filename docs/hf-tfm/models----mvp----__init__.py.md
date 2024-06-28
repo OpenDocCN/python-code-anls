@@ -1,8 +1,7 @@
-# `.\transformers\models\mvp\__init__.py`
+# `.\models\mvp\__init__.py`
 
-```py
-# 这是一个 HuggingFace 团队的版权文件，包含了一些导入和类型检查的代码
-# Copyright 2022 The HuggingFace Team. All rights reserved.
+```
+# 版权声明和许可证信息，说明此代码的版权和使用许可
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,36 +14,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# 引入类型检查模块中的 TYPE_CHECKING 类型
 from typing import TYPE_CHECKING
 
-# 从 utils 模块导入一些依赖检查的函数
+# 从 utils 模块中导入必要的工具和函数
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tokenizers_available, is_torch_available
 
-
-# 定义了一个导入结构字典，包含了一些子模块
+# 定义模块的导入结构字典，包含不同模块和对应的导入内容列表
 _import_structure = {
     "configuration_mvp": ["MVP_PRETRAINED_CONFIG_ARCHIVE_MAP", "MvpConfig", "MvpOnnxConfig"],
     "tokenization_mvp": ["MvpTokenizer"],
 }
 
-# 检查是否有 tokenizers 依赖，如果没有则引发 OptionalDependencyNotAvailable 异常
+# 尝试导入 tokenizers_mvp_fast 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果有 tokenizers 依赖，则将 tokenization_mvp_fast 模块添加到导入结构中
     _import_structure["tokenization_mvp_fast"] = ["MvpTokenizerFast"]
 
-# 检查是否有 torch 依赖，如果没有则引发 OptionalDependencyNotAvailable 异常
+# 尝试导入 torch 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果有 torch 依赖，则将 modeling_mvp 模块添加到导入结构中
+    # 如果 torch 可用，则将 modeling_mvp 模块添加到导入结构中
     _import_structure["modeling_mvp"] = [
         "MVP_PRETRAINED_MODEL_ARCHIVE_LIST",
         "MvpForCausalLM",
@@ -55,27 +54,29 @@ else:
         "MvpPreTrainedModel",
     ]
 
-# 如果是类型检查的环境，则导入相应的类
+# 如果当前处于类型检查状态
 if TYPE_CHECKING:
+    # 导入配置相关的类和常量
     from .configuration_mvp import MVP_PRETRAINED_CONFIG_ARCHIVE_MAP, MvpConfig, MvpOnnxConfig
+    # 导入 tokenizers 模块的相关类，如果不可用则忽略
     from .tokenization_mvp import MvpTokenizer
 
-    # 检查是否有 tokenizers 依赖，如果有则导入 MvpTokenizerFast
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 导入 tokenizers_mvp_fast 模块的快速 tokenizer 类，如果可用的话
         from .tokenization_mvp_fast import MvpTokenizerFast
 
-    # 检查是否有 torch 依赖，如果有则导入 modeling_mvp 中的类
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 导入 modeling_mvp 模块中的各种模型类，如果 torch 可用的话
         from .modeling_mvp import (
             MVP_PRETRAINED_MODEL_ARCHIVE_LIST,
             MvpForCausalLM,
@@ -86,9 +87,10 @@ if TYPE_CHECKING:
             MvpPreTrainedModel,
         )
 
-# 如果不是类型检查的环境，则使用懒加载模块
+# 如果不处于类型检查状态，则将当前模块设置为 LazyModule 的代理模块
 else:
     import sys
 
+    # 将当前模块替换为 LazyModule，实现延迟导入
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

@@ -1,10 +1,31 @@
-# `.\transformers\models\clvp\processing_clvp.py`
+# `.\models\clvp\processing_clvp.py`
 
-```py
-# 导入ProcessorMixin类
+```
+# coding=utf-8
+# Copyright 2023 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Processor class for CLVP
+"""
+
+
 from ...processing_utils import ProcessorMixin
 
-# 定义ClvpProcessor类，继承自ProcessorMixin类
+# 导入处理工具类 ProcessorMixin
+
+
 class ClvpProcessor(ProcessorMixin):
     """
     Constructs a CLVP processor which wraps a CLVP Feature Extractor and a CLVP Tokenizer into a single processor.
@@ -19,7 +40,6 @@ class ClvpProcessor(ProcessorMixin):
             An instance of [`ClvpTokenizer`]. The tokenizer is a required input.
     """
 
-    # 定义类属性
     feature_extractor_class = "ClvpFeatureExtractor"
     tokenizer_class = "ClvpTokenizer"
     model_input_names = [
@@ -28,57 +48,54 @@ class ClvpProcessor(ProcessorMixin):
         "attention_mask",
     ]
 
-    # 初始化方法
     def __init__(self, feature_extractor, tokenizer):
+        # 初始化方法，接收 CLVP Feature Extractor 和 CLVP Tokenizer 实例，并调用父类构造函数
         super().__init__(feature_extractor, tokenizer)
 
-    # __call__方法，用于处理输入
     def __call__(self, *args, **kwargs):
         """
         Forwards the `audio` and `sampling_rate` arguments to [`~ClvpFeatureExtractor.__call__`] and the `text`
         argument to [`~ClvpTokenizer.__call__`]. Please refer to the doctsring of the above two methods for more
         information.
         """
-
-        # 从kwargs中弹出raw_speech、sampling_rate和text参数
+        
         raw_speech = kwargs.pop("raw_speech", None)
         sampling_rate = kwargs.pop("sampling_rate", None)
         text = kwargs.pop("text", None)
 
-        # 如果raw_speech和text都为None，则抛出错误
         if raw_speech is None and text is None:
+            # 如果既没有原始语音输入也没有文本输入，则抛出数值错误
             raise ValueError("You need to specify either an `raw_speech` or `text` input to process.")
 
-        # 如果raw_speech不为None
         if raw_speech is not None:
-            # 调用feature_extractor处理raw_speech，并传递sampling_rate和kwargs
+            # 如果有原始语音输入，则调用 CLVP Feature Extractor 处理原始语音和采样率参数
             inputs = self.feature_extractor(raw_speech, sampling_rate=sampling_rate, **kwargs)
-        
-        # 如果text不为None
         if text is not None:
-            # 调用tokenizer处理text，并传递kwargs
+            # 如果有文本输入，则调用 CLVP Tokenizer 处理文本参数
             encodings = self.tokenizer(text, **kwargs)
 
-        # 如果text为None，则返回inputs
         if text is None:
+            # 如果只有原始语音输入，则返回 CLVP Feature Extractor 的输出
             return inputs
-        # 如果raw_speech为None，则返回encodings
         elif raw_speech is None:
+            # 如果只有文本输入，则返回 CLVP Tokenizer 的输出
             return encodings
-        # 如果raw_speech和text都不为None
         else:
-            # 将encodings中的input_ids和attention_mask赋值给inputs对应的键
+            # 如果同时有原始语音和文本输入，则将 CLVP Tokenizer 的输出合并到 CLVP Feature Extractor 的输出中，并返回
             inputs["input_ids"] = encodings["input_ids"]
             inputs["attention_mask"] = encodings["attention_mask"]
             return inputs
 
-    # 从transformers.models.whisper.processing_whisper.WhisperProcessor.batch_decode复制而来，将Whisper替换为Clvp
-    # 这个方法将所有参数转发到ClvpTokenizer的`~PreTrainedTokenizer.batch_decode`方法。请参考此方法的文档字符串以获取更多信息。
+    # Copied from transformers.models.whisper.processing_whisper.WhisperProcessor.batch_decode with Whisper->Clvp
+    # 此方法将所有参数转发给 ClvpTokenizer 的 `batch_decode` 方法。
+    # 请参考该方法的文档字符串获取更多信息。
     def batch_decode(self, *args, **kwargs):
         return self.tokenizer.batch_decode(*args, **kwargs)
 
-    # 从transformers.models.whisper.processing_whisper.WhisperProcessor.decode复制并替换Whisper为Clvp
-    # 此方法将所有参数转发到ClvpTokenizer的`~PreTrainedTokenizer.decode`方法。请参考此方法的文档字符串以获取更多信息。
+    # 从 transformers.models.whisper.processing_whisper.WhisperProcessor.decode 复制而来，
+    # 将 Whisper 替换为 Clvp
+    # 此方法将所有参数转发给 ClvpTokenizer 的 `decode` 方法。
+    # 请参考该方法的文档字符串获取更多信息。
     def decode(self, *args, **kwargs):
         return self.tokenizer.decode(*args, **kwargs)
 ```

@@ -1,227 +1,160 @@
-# `.\transformers\models\qwen2\tokenization_qwen2.py`
+# `.\models\qwen2\tokenization_qwen2.py`
 
-```py
-# coding=utf-8
-# 声明文件编码格式和版权信息
-
-# 导入必要的库
-import json
-import os
-import unicodedata
-from functools import lru_cache
-from typing import Optional, Tuple
-
-# 导入 regex 库并命名为 re
-import regex as re
-
-# 导入 Hugging Face Transformers 库中的一些模块和函数
-from ...tokenization_utils import AddedToken, PreTrainedTokenizer
-from ...utils import logging
-
-# 获取日志记录器
-logger = logging.get_logger(__name__)
-
-# 定义词汇文件名字典
+```
+# 定义常量，指定文件名字典，包括词汇表文件和合并文件
 VOCAB_FILES_NAMES = {
-    "vocab_file": "vocab.json",
-    "merges_file": "merges.txt",
+    "vocab_file": "vocab.json",     # 词汇表文件名
+    "merges_file": "merges.txt",    # 合并文件名
 }
 
-# 定义预训练词汇文件映射
+# 定义预训练模型的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
-    "vocab_file": {"qwen/qwen-tokenizer": "https://huggingface.co/qwen/qwen-tokenizer/resolve/main/vocab.json"},
-    "merges_file": {"qwen/qwen-tokenizer": "https://huggingface.co/qwen/qwen-tokenizer/resolve/main/merges.txt"},
+    "vocab_file": {"qwen/qwen-tokenizer": "https://huggingface.co/qwen/qwen-tokenizer/resolve/main/vocab.json"},   # 词汇表文件映射
+    "merges_file": {"qwen/qwen-tokenizer": "https://huggingface.co/qwen/qwen-tokenizer/resolve/main/merges.txt"},  # 合并文件映射
 }
 
-# 定义最大模型输入大小
-MAX_MODEL_INPUT_SIZES = {"qwen/qwen-tokenizer": 32768}
+# 定义预训练模型最大输入尺寸
+MAX_MODEL_INPUT_SIZES = {"qwen/qwen-tokenizer": 32768}   # 模型最大输入尺寸映射
 
-# 定义预分词正则表达式
+# 定义用于预分词的正则表达式模式
 PRETOKENIZE_REGEX = r"""(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+"""
+    # 匹配缩写词和单词、数字、非字母数字字符、空白行、空格
 
-# 使用 lru_cache 装饰器缓存函数结果，提高性能
 @lru_cache()
-# 从字节到 Unicode 的映射函数，来自于 GPT-2 模型的实现
+# 从 transformers.models.gpt2.tokenization_gpt2.bytes_to_unicode 复制而来
 def bytes_to_unicode():
     """
-    Returns list of utf-8 byte and a mapping to unicode strings. We specifically avoids mapping to whitespace/control
-    characters the bpe code barfs on.
+    返回 utf-8 字节列表及其与 Unicode 字符的映射表。避免映射到空白字符或控制字符，以避免 BPE 代码错误。
 
-    The reversible bpe codes work on unicode strings. This means you need a large # of unicode characters in your vocab
-    if you want to avoid UNKs. When you're at something like a 10B token dataset you end up needing around 5K for
-    decent coverage. This is a significant percentage of your normal, say, 32K bpe vocab. To avoid that, we want lookup
-    tables between utf-8 bytes and unicode strings.
+    可逆的 BPE 代码在 Unicode 字符串上工作。这意味着如果要避免 UNK（未知标记），需要在词汇表中包含大量的 Unicode 字符。
+    例如，对于约 100 亿个标记的数据集，您大约需要包含 5000 个 Unicode 字符才能获得良好的覆盖率。
     """
-    # 定义 Unicode 编码范围
+    # 定义 Unicode 字节和 Unicode 字符映射表的起始范围
     bs = (
         list(range(ord("!"), ord("~") + 1)) + list(range(ord("¡"), ord("¬") + 1)) + list(range(ord("®"), ord("ÿ") + 1))
     )
     cs = bs[:]
     n = 0
-    # 将不在 bs 中的字节添加到 bs 和 cs 中，并进行编码
     for b in range(2**8):
         if b not in bs:
             bs.append(b)
             cs.append(2**8 + n)
             n += 1
     cs = [chr(n) for n in cs]
-    # 返回字节到 Unicode 的映射字典
+    # 返回 Unicode 字节到字符的映射字典
     return dict(zip(bs, cs))
 
 
-# 从 GPT-2 模型实现中复制的函数，用于获取词对
+# 从 transformers.models.gpt2.tokenization_gpt2.get_pairs 复制而来
 def get_pairs(word):
     """
-    Return set of symbol pairs in a word.
+    返回单词中的符号对集合。
 
-    Word is represented as tuple of symbols (symbols being variable-length strings).
+    单词表示为符号元组（符号是长度可变的字符串）。
     """
+    # 初始化符号对集合和前一个字符
     pairs = set()
     prev_char = word[0]
+    # 遍历单词中的字符，生成符号对集合
     for char in word[1:]:
         pairs.add((prev_char, char))
         prev_char = char
+    # 返回符号对集合
     return pairs
 
 
-# 定义 Qwen2Tokenizer 类，继承自 PreTrainedTokenizer 类
 class Qwen2Tokenizer(PreTrainedTokenizer):
     """
-    Qwen2Tokenizer 类
-    Construct a Qwen2 tokenizer. Based on byte-level Byte-Pair-Encoding.
-
-    Same with GPT2Tokenzier, this tokenizer has been trained to treat spaces like parts of the tokens so a word will
-    be encoded differently whether it is at the beginning of the sentence (without space) or not:
-
-    ```python
-    >>> from transformers import Qwen2Tokenizer
-
-    >>> tokenizer = Qwen2Tokenizer.from_pretrained("Qwen/Qwen-tokenizer")
-    >>> tokenizer("Hello world")["input_ids"]
-    [9707, 1879]
-
-    >>> tokenizer(" Hello world")["input_ids"]
-    [21927, 1879]
-    ```py
-    This is expected.
-
-    You should not use GPT2Tokenizer instead, because of the different pretokenization rules.
-
-    This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
-    this superclass for more information regarding those methods.
-
-    Args:
-        vocab_file (`str`):
-            Path to the vocabulary file.
-        merges_file (`str`):
-            Path to the merges file.
-        errors (`str`, *optional*, defaults to `"replace"`):
-            Paradigm to follow when decoding bytes to UTF-8. See
-            [bytes.decode](https://docs.python.org/3/library/stdtypes.html#bytes.decode) for more information.
-        unk_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
-            token instead.
-        bos_token (`str`, *optional*):
-            The beginning of sequence token. Not applicable for this tokenizer.
-        eos_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            The end of sequence token.
-        pad_token (`str`, *optional*, defaults to `"<|endoftext|>"`):
-            The token used for padding, for example when batching sequences of different lengths.
-        clean_up_tokenization_spaces (`bool`, *optional*, defaults to `False`):
-            Whether or not the model should cleanup the spaces that were added when splitting the input text during the
-            tokenization process. Not applicable to this tokenizer, since tokenization does not add spaces.
-        split_special_tokens (`bool`, *optional*, defaults to `False`):
-            Whether or not the special tokens should be split during the tokenization process. The default behavior is
-            to not split special tokens. This means that if `<|endoftext|>` is the `eos_token`, then `tokenizer.tokenize("<|endoftext|>") =
-            ['<|endoftext|>`]. Otherwise, if `split_special_tokens=True`, then `tokenizer.tokenize("<|endoftext|>")` will be give `['<',
-            '|', 'endo', 'ft', 'ext', '|', '>']`. This argument is only supported for `slow` tokenizers for the moment.
+    Qwen2 的 tokenizer 类，继承自 PreTrainedTokenizer 类。
     """
-
+    # 定义一个 Qwen2 tokenizer，基于字节级的 Byte-Pair-Encoding。
+    
+    # 和 GPT2Tokenizer 类似，此分词器经过训练以将空格视为标记的一部分，因此一个单词在句子开头（没有空格）和其他位置可能会被编码成不同的标记：
+    
     vocab_files_names = VOCAB_FILES_NAMES
-    # Mapping of pretrained vocabulary files to names
+    # 从 transformers 库导入的文件名列表，包含词汇文件名
+    
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # Maximum model input sizes
+    # 预训练模型词汇文件的映射，用于指定各种预训练模型的词汇文件
+    
     max_model_input_sizes = MAX_MODEL_INPUT_SIZES
-    # Input names for the model
+    # 不同模型的最大输入长度限制，以 token 数量计算
+    
     model_input_names = ["input_ids", "attention_mask"]
+    # 模型输入所需的标记名称列表，包括输入 IDs 和注意力掩码
+    # 初始化方法，用于创建一个新的tokenizer对象
     def __init__(
         self,
-        vocab_file,
-        merges_file,
-        errors="replace",
-        unk_token="<|endoftext|>",
-        bos_token=None,
-        eos_token="<|endoftext|>",
-        pad_token="<|endoftext|>",
-        clean_up_tokenization_spaces=False,
-        split_special_tokens=False,
-        **kwargs,
+        vocab_file,  # 词汇文件路径，用于指定词汇表
+        merges_file,  # 合并文件路径，用于指定BPE合并规则
+        errors="replace",  # 解码错误处理方式，默认替换错误字符
+        unk_token="<|endoftext|>",  # 未知标记，默认为特定的结束标记
+        bos_token=None,  # 开始标记，如果指定则创建特殊的添加标记对象
+        eos_token="<|endoftext|>",  # 结束标记，默认为特定的结束标记
+        pad_token="<|endoftext|>",  # 填充标记，默认为特定的结束标记
+        clean_up_tokenization_spaces=False,  # 是否清除标记化空格
+        split_special_tokens=False,  # 是否拆分特殊标记
+        **kwargs,  # 其他关键字参数
     ):
-        # 如果给定的开始标记不是字符串，则保持它不变；如果是字符串，则将其包装为特殊的 AddedToken 对象
+        # 如果bos_token是字符串，则创建一个特殊的添加标记对象，不进行左右剥离
         bos_token = (
             AddedToken(bos_token, lstrip=False, rstrip=False, special=True, normalized=False)
             if isinstance(bos_token, str)
             else bos_token
         )
-        # 如果给定的结束标记不是字符串，则保持它不变；如果是字符串，则将其包装为特殊的 AddedToken 对象
+        # 如果eos_token是字符串，则创建一个特殊的添加标记对象，不进行左右剥离
         eos_token = (
             AddedToken(eos_token, lstrip=False, rstrip=False, special=True, normalized=False)
             if isinstance(eos_token, str)
             else eos_token
         )
-        # 如果给定的未知标记不是字符串，则保持它不变；如果是字符串，则将其包装为特殊的 AddedToken 对象
+        # 如果unk_token是字符串，则创建一个特殊的添加标记对象，不进行左右剥离
         unk_token = (
             AddedToken(unk_token, lstrip=False, rstrip=False, special=True, normalized=False)
             if isinstance(unk_token, str)
             else unk_token
         )
-        # 如果给定的填充标记不是字符串，则保持它不变；如果是字符串，则将其包装为特殊的 AddedToken 对象
+        # 如果pad_token是字符串，则创建一个特殊的添加标记对象，不进行左右剥离
         pad_token = (
             AddedToken(pad_token, lstrip=False, rstrip=False, special=True, normalized=False)
             if isinstance(pad_token, str)
             else pad_token
         )
 
-        # 使用 utf-8 编码打开词汇文件，加载编码器（从单词到索引的映射）
+        # 从vocab_file中加载词汇表到self.encoder
         with open(vocab_file, encoding="utf-8") as vocab_handle:
             self.encoder = json.load(vocab_handle)
-        # 创建解码器（从索引到单词的映射）
+        # 创建self.decoder，将self.encoder的键值对颠倒
         self.decoder = {v: k for k, v in self.encoder.items()}
-        # 设定在解码过程中处理错误的方式
-        self.errors = errors  # how to handle errors in decoding
-        # 创建字节到 Unicode 的映射
-        self.byte_encoder = bytes_to_unicode()
-        # 创建 Unicode 到字节的映射
+        self.errors = errors  # 设置解码时的错误处理方式
+        self.byte_encoder = bytes_to_unicode()  # 使用字节到Unicode的编码器
+        # 创建self.byte_decoder，将self.byte_encoder的键值对颠倒
         self.byte_decoder = {v: k for k, v in self.byte_encoder.items()}
-        # 初始化 BPE 合并列表为空
         bpe_merges = []
-        # 使用 utf-8 编码打开合并文件，加载 BPE 合并列表
+        # 从merges_file中读取BPE合并规则，创建bpe_merges列表
         with open(merges_file, encoding="utf-8") as merges_handle:
             for line in merges_handle:
                 line = line.strip()
-                # 忽略空行和以 # 开头的注释行
                 if not line or line.startswith("#"):
                     continue
-                # 将合并规则按空格分割并加入到 BPE 合并列表中
                 bpe_merges.append(tuple(line.split()))
-        # 创建 BPE 合并到其索引的映射
+        # 使用BPE合并规则创建self.bpe_ranks字典
         self.bpe_ranks = dict(zip(bpe_merges, range(len(bpe_merges))))
-        # 初始化缓存字典，用于存储编码后的文本和 BPE 单词的分割
-        # 注意：缓存可能会无限增长，并且对于运行时间较长的进程（特别是对于不使用空格分隔单词的语言，例如中文的文本），缓存可能会变得非常大；
-        # 技术上不算是内存泄漏，但看起来像是一个。
-        # GPT2Tokenizer 也存在同样的问题，因此我们保持一致。
-        self.cache = {}
-
-        # 使用预定义的正则表达式编译标记化前正则表达式
+        
+        # 注意：缓存可以无限增长，对于长时间运行的进程（特别是没有空格分隔单词的语言文本，如中文），缓存可能会变得非常大。
+        # 这不是内存泄漏，但看起来像是。GPT2Tokenizer也有同样的问题，因此我们保持一致。
+        self.cache = {}  # 初始化缓存，用于存储tokenization的结果
+        
+        # 编译预处理的正则表达式模式，用于分隔文本
         self.pat = re.compile(PRETOKENIZE_REGEX)
 
-        # 如果 add_prefix_space 为 True，则发出警告，因为此类不支持该功能，设置为 True 没有任何效果
+        # 如果kwargs中包含"add_prefix_space"并且其值为True，则发出警告
         if kwargs.get("add_prefix_space", False):
             logger.warning_once(
-                f"{self.__class__.__name} does not support `add_prefix_space`, setting it to True has no effect."
+                f"{self.__class__.__name__} does not support `add_prefix_space`, setting it to True has no effect."
             )
 
-        # 调用父类的初始化方法，设置错误处理方式、开始标记、结束标记、填充标记、未知标记、清理标记化空格、分割特殊标记等参数
+        # 调用父类的初始化方法，设置错误处理方式、开始标记、结束标记、填充标记、未知标记等
         super().__init__(
             errors=errors,
             bos_token=bos_token,
@@ -233,25 +166,26 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
             **kwargs,
         )
 
-    # 返回词汇表大小的属性方法
     @property
+    # 返回词汇表大小
     def vocab_size(self) -> int:
         return len(self.encoder)
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.get_vocab复制而来，返回包含编码器和添加的特殊token编码器的字典
+    # 从 GPT2Tokenizer 类中复制而来，返回词汇表的字典，包括编码器和添加的特殊标记编码器
     def get_vocab(self):
         return dict(self.encoder, **self.added_tokens_encoder)
-    
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.bpe复制而来，将输入token进行BPE编码
+
+    # 从 GPT2Tokenizer 类中复制而来，执行 BPE（字节对编码）算法，将 token 分解为 BPE tokens
     def bpe(self, token):
         if token in self.cache:
             return self.cache[token]
         word = tuple(token)
         pairs = get_pairs(word)
-    
+
         if not pairs:
             return token
-    
+
         while True:
+            # 找出当前最小的 bigram，根据 bpe_ranks 中的排序
             bigram = min(pairs, key=lambda pair: self.bpe_ranks.get(pair, float("inf")))
             if bigram not in self.bpe_ranks:
                 break
@@ -267,7 +201,7 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
                 else:
                     new_word.extend(word[i:j])
                     i = j
-    
+
                 if word[i] == first and i < len(word) - 1 and word[i + 1] == second:
                     new_word.append(first + second)
                     i += 2
@@ -280,38 +214,43 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
                 break
             else:
                 pairs = get_pairs(word)
+        # 将 tuple 转换为字符串，并缓存结果
         word = " ".join(word)
         self.cache[token] = word
         return word
-    
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer._tokenize复制而来，将输入的字符串进行分词处理
+
+    # 从 GPT2Tokenizer 类中复制而来，对文本进行分词处理
     def _tokenize(self, text):
         """Tokenize a string."""
         bpe_tokens = []
         for token in re.findall(self.pat, text):
+            # 将 token 转换为 UTF-8 编码的字节，并用 byte_encoder 映射到 unicode 字符串，避免 BPE 的控制标记（在我们的情况下是空格）
             token = "".join(
                 self.byte_encoder[b] for b in token.encode("utf-8")
-            )  # Maps all our bytes to unicode strings, avoiding control tokens of the BPE (spaces in our case)
+            )
+            # 使用 BPE 算法处理 token，将结果拆分为多个 BPE token，并添加到 bpe_tokens 中
             bpe_tokens.extend(bpe_token for bpe_token in self.bpe(token).split(" "))
         return bpe_tokens
-    
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer._convert_token_to_id复制而来，将输入的token转换为对应的id
+
+    # 从 GPT2Tokenizer 类中复制而来，将 token 转换为其对应的 id
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
         return self.encoder.get(token, self.encoder.get(self.unk_token))
-    
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer._convert_id_to_token复制而来，将输入的id转换为对应的token
+
+    # 从 GPT2Tokenizer 类中复制而来，将 id 转换为其对应的 token
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
         return self.decoder.get(index)
-    
-    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.convert_tokens_to_string复制而来，将输入的token序列转换为单个字符串
+
+    # 从 GPT2Tokenizer 类中复制而来，将 tokens 序列转换为单个字符串
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
         text = "".join(tokens)
+        # 使用 byte_decoder 将每个字符的字节解码为 UTF-8 字符串，并处理可能的错误
         text = bytearray([self.byte_decoder[c] for c in text]).decode("utf-8", errors=self.errors)
         return text
-    # 定义一个方法用于将模型输出的token_ids解码成字符串
+    # `spaces_between_special_tokens`默认为True，用于慢速标记器中的_decode，无法在其他地方配置，
+    # 但对于Qwen2Tokenizer，它应该默认为False
     def decode(
         self,
         token_ids,
@@ -320,8 +259,7 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
         spaces_between_special_tokens: bool = False,
         **kwargs,
     ) -> str:
-        # 如果`spaces_between_special_tokens`没有被指定，则默认为 False
-        # 这对于 _decode 在慢速分词器中默认为 True，但对于 Qwen2Tokenizer 应该默认为 False
+        # 调用父类方法来解码token_ids为字符串
         return super().decode(
             token_ids,
             skip_special_tokens=skip_special_tokens,
@@ -330,28 +268,26 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
             **kwargs,
         )
 
-    # 从 transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.save_vocabulary 中复制的方法
-    # 用于保存词汇表到磁盘
+    # 从transformers.models.gpt2.tokenization_gpt2.GPT2Tokenizer.save_vocabulary复制而来
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 检查保存路径是否为目录
+        # 如果保存路径不是目录，则记录错误并返回
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
-        # 构建词汇表文件的路径
+        # 构建词汇表文件名和合并文件名
         vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-        # 构建BPE合并文件的路径
         merge_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["merges_file"]
         )
 
-        # 将词汇表保存到文件中
+        # 将编码器内容以JSON格式写入词汇表文件
         with open(vocab_file, "w", encoding="utf-8") as f:
             f.write(json.dumps(self.encoder, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
 
-        # 写入 BPE 合并操作到文件中
         index = 0
+        # 将BPE标记和它们的索引写入合并文件
         with open(merge_file, "w", encoding="utf-8") as writer:
             writer.write("#version: 0.2\n")
             for bpe_tokens, token_index in sorted(self.bpe_ranks.items(), key=lambda kv: kv[1]):
@@ -364,14 +300,10 @@ class Qwen2Tokenizer(PreTrainedTokenizer):
                 writer.write(" ".join(bpe_tokens) + "\n")
                 index += 1
 
-        # 返回保存的文件路径
         return vocab_file, merge_file
 
-    # 对文本进行标准化，准备进行分词
+    # 准备文本进行标记化前的预处理，包括Unicode规范化和传递额外的参数
     def prepare_for_tokenization(self, text, **kwargs):
-        # 使用 NFC 标准化文本
         text = unicodedata.normalize("NFC", text)
-        # 返回标准化后的文本及其他参数
         return (text, kwargs)
-```  
 ```

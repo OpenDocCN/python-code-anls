@@ -1,140 +1,117 @@
-# `.\transformers\models\levit\convert_levit_timm_to_pytorch.py`
+# `.\models\levit\convert_levit_timm_to_pytorch.py`
 
-```py
-# coding=utf-8
-# 导入所需的模块和库
-# 加载命令行参数解析器
-import argparse
-# 导入 json 模块
-import json
-# 导入有序字典类
-from collections import OrderedDict
-# 导入 functools 中的 partial 函数
-from functools import partial
-# 导入 pathlib 中的 Path 类
-from pathlib import Path
+```
+# 设置编码格式为 UTF-8
+# 版权声明，这段代码由 HuggingFace Inc. 团队版权所有，遵循 Apache License, Version 2.0 授权
+#
+# 根据许可证规定，除非符合许可证的条件，否则不得使用此文件
+# 可以在以下网址获取许可证副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按"原样"分发，
+# 没有任何形式的担保或条件，无论是明示的还是默示的。
+# 详见许可证了解更多信息。
+"""从 timm 转换 LeViT 检查点。"""
 
-# 导入 timm 模块
-import timm
-# 导入 torch 库
-import torch
-# 导入 Hugging Face Hub 中的 hf_hub_download 函数
-from huggingface_hub import hf_hub_download
+# 导入必要的库和模块
+import argparse  # 用于解析命令行参数
+import json  # 用于处理 JSON 格式数据
+from collections import OrderedDict  # 有序字典，用于按照插入顺序存储键值对
+from functools import partial  # 用于创建偏函数
+from pathlib import Path  # 处理文件路径的类库
 
-# 导入 transformers 库中的相关模块和函数
-# 导入 LevitConfig 类
-from transformers import LevitConfig
-# 导入 LevitForImageClassificationWithTeacher 类
-from transformers import LevitForImageClassificationWithTeacher
-# 导入 LevitImageProcessor 类
-from transformers import LevitImageProcessor
-# 导入 transformers 库中的 logging 模块
-from transformers.utils import logging
+import timm  # 提供预训练模型的创建和管理
+import torch  # PyTorch 深度学习框架
+from huggingface_hub import hf_hub_download  # 用于从 HuggingFace Hub 下载模型和文件
 
-# 设置日志输出等级为 info
+from transformers import LevitConfig, LevitForImageClassificationWithTeacher, LevitImageProcessor  # LeViT 模型相关类
+from transformers.utils import logging  # 日志记录模块
+
+# 设置日志输出为 info 级别
 logging.set_verbosity_info()
-# 获取日志记录器
 logger = logging.get_logger()
 
-
-# 定义函数 convert_weight_and_push，用于转换权重并推送到 Hugging Face Hub
-# hidden_sizes：隐藏层大小
-# name：模型名称
-# config：LevitConfig 配置对象
-# save_directory：保存目录
-# push_to_hub：是否推送到 Hub，默认为 True
+# 定义函数：转换权重并推送到 Hub
 def convert_weight_and_push(
     hidden_sizes: int, name: str, config: LevitConfig, save_directory: Path, push_to_hub: bool = True
 ):
-    # 打印转换信息
     print(f"Converting {name}...")
 
     # 禁用梯度计算
     with torch.no_grad():
-        # 根据隐藏层大小选择对应的 Levit 模型
+        # 根据不同的 hidden_sizes 加载不同的 LeViT 模型
         if hidden_sizes == 128:
             if name[-1] == "S":
                 from_model = timm.create_model("levit_128s", pretrained=True)
             else:
                 from_model = timm.create_model("levit_128", pretrained=True)
-        if hidden_sizes == 192:
+        elif hidden_sizes == 192:
             from_model = timm.create_model("levit_192", pretrained=True)
-        if hidden_sizes == 256:
+        elif hidden_sizes == 256:
             from_model = timm.create_model("levit_256", pretrained=True)
-        if hidden_sizes == 384:
+        elif hidden_sizes == 384:
             from_model = timm.create_model("levit_384", pretrained=True)
 
         # 设置模型为评估模式
         from_model.eval()
-        # 创建我们的 LevitForImageClassificationWithTeacher 模型
         our_model = LevitForImageClassificationWithTeacher(config).eval()
-        # 创建 Hugging Face 权重的有序字典
         huggingface_weights = OrderedDict()
 
-        # 获取原始模型的权重
+        # 获取源模型的权重，并根据键的映射将其赋给新模型
         weights = from_model.state_dict()
         og_keys = list(from_model.state_dict().keys())
         new_keys = list(our_model.state_dict().keys())
         print(len(og_keys), len(new_keys))
-        # 将原始模型的权重复制到我们的模型中
         for i in range(len(og_keys)):
             huggingface_weights[new_keys[i]] = weights[og_keys[i]]
         our_model.load_state_dict(huggingface_weights)
 
-        # 创建一个输入张量
+        # 创建随机输入张量并计算两个模型的输出结果
         x = torch.randn((2, 3, 224, 224))
-        # 获取原始模型的输出
         out1 = from_model(x)
-        # 获取我们模型的输出
         out2 = our_model(x).logits
 
-    # 检查模型输出是否一致
+    # 检查两个模型输出是否相等
     assert torch.allclose(out1, out2), "The model logits don't match the original one."
 
-    # 设置检查点名称
+    # 设置检查点名称为模型名称
     checkpoint_name = name
     print(checkpoint_name)
 
-    # 如果设置为推送到 Hub，则保存模型和处理器并推送到 Hub
+    # 如果指定推送到 Hub，则保存模型和相关处理器，并输出推送成功信息
     if push_to_hub:
         our_model.save_pretrained(save_directory / checkpoint_name)
         image_processor = LevitImageProcessor()
         image_processor.save_pretrained(save_directory / checkpoint_name)
 
-        # 打印推送信息
         print(f"Pushed {checkpoint_name}")
 
-
-# 定义函数 convert_weights_and_push，用于转换权重并推送到 Hugging Face Hub
-# save_directory：保存目录
-# model_name：模型名称，默认为 None
-# push_to_hub：是否推送到 Hub，默认为 True
+# 定义函数：转换权重并推送到 Hub
 def convert_weights_and_push(save_directory: Path, model_name: str = None, push_to_hub: bool = True):
-    # 设置文件名
     filename = "imagenet-1k-id2label.json"
-    # 设置标签数量
     num_labels = 1000
-    # 期望的形状为 (1, num_labels)
+    # 预期模型输出的形状为 (1, num_labels)
     expected_shape = (1, num_labels)
-    
-    # GitHub 仓库 ID
+
+    # 定义用于下载模型配置的 Hugging Face 仓库 ID
     repo_id = "huggingface/label-files"
-    # 标签数量
+    # 将 num_labels 赋值给变量 num_labels
     num_labels = num_labels
-    # 从文件中加载 ID 到标签的映射关系
+    # 使用 Hugging Face Hub 下载指定文件名的数据集，并加载为 JSON 格式
     id2label = json.load(open(hf_hub_download(repo_id, filename, repo_type="dataset"), "r"))
-    # 将 ID 到标签的映射关系转换为整数型的字典
+    # 将 id2label 中的键转换为整数类型，并保留原始值
     id2label = {int(k): v for k, v in id2label.items()}
-    
-    # ID 到标签的映射关系
+
+    # 将 id2label 赋值给变量 id2label
     id2label = id2label
-    # 标签到 ID 的映射关系
+    # 创建一个将标签映射到 ID 的字典
     label2id = {v: k for k, v in id2label.items()}
-    
-    # ImageNet 预训练配置，部分函数参数已经设置为预定义值
+
+    # 定义一个部分应用的函数，使用 ImageNet 预训练配置创建 LevitConfig
     ImageNetPreTrainedConfig = partial(LevitConfig, num_labels=num_labels, id2label=id2label, label2id=label2id)
-    
-    # 不同模型名称对应的隐藏层大小
+
+    # 定义不同 Levit 模型名称到隐藏层大小的映射关系
     names_to_hidden_sizes = {
         "levit-128S": 128,
         "levit-128": 128,
@@ -142,8 +119,8 @@ def convert_weights_and_push(save_directory: Path, model_name: str = None, push_
         "levit-256": 256,
         "levit-384": 384,
     }
-    
-    # 不同模型名称对应的配置信息
+
+    # 定义不同 Levit 模型名称到其配置对象的映射关系
     names_to_config = {
         "levit-128S": ImageNetPreTrainedConfig(
             hidden_sizes=[128, 256, 384],
@@ -152,66 +129,90 @@ def convert_weights_and_push(save_directory: Path, model_name: str = None, push_
             key_dim=[16, 16, 16],
             drop_path_rate=0,
         ),
-        # levit-128, levit-192, levit-256, levit-384 配置类似，仅 hidden_sizes, num_attention_heads, depths, key_dim, drop_path_rate 不同
+        "levit-128": ImageNetPreTrainedConfig(
+            hidden_sizes=[128, 256, 384],
+            num_attention_heads=[4, 8, 12],
+            depths=[4, 4, 4],
+            key_dim=[16, 16, 16],
+            drop_path_rate=0,
+        ),
+        "levit-192": ImageNetPreTrainedConfig(
+            hidden_sizes=[192, 288, 384],
+            num_attention_heads=[3, 5, 6],
+            depths=[4, 4, 4],
+            key_dim=[32, 32, 32],
+            drop_path_rate=0,
+        ),
+        "levit-256": ImageNetPreTrainedConfig(
+            hidden_sizes=[256, 384, 512],
+            num_attention_heads=[4, 6, 8],
+            depths=[4, 4, 4],
+            key_dim=[32, 32, 32],
+            drop_path_rate=0,
+        ),
+        "levit-384": ImageNetPreTrainedConfig(
+            hidden_sizes=[384, 512, 768],
+            num_attention_heads=[6, 9, 12],
+            depths=[4, 4, 4],
+            key_dim=[32, 32, 32],
+            drop_path_rate=0.1,
+        ),
     }
-    
-    # 如果有指定模型名称，则将该模型的权重转换并推送到 Hub
+
+    # 如果给定了模型名称，则转换权重并推送到指定的 Hub
     if model_name:
         convert_weight_and_push(
             names_to_hidden_sizes[model_name], model_name, names_to_config[model_name], save_directory, push_to_hub
         )
-    # 否则，遍历所有模型名称及其配置，将权重转换并推送到 Hub
-    else:
+    else:  # 否则对所有模型进行转换权重并推送操作
         for model_name, config in names_to_config.items():
             convert_weight_and_push(names_to_hidden_sizes[model_name], model_name, config, save_directory, push_to_hub)
-    # 返回配置和期望形状
+    
+    # 返回最终的配置对象和预期的输出形状
     return config, expected_shape
-# 判断当前模块是否作为主程序运行
 if __name__ == "__main__":
-    # 创建命令行参数解析器
+    # 如果当前脚本作为主程序执行，则执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 必要参数的添加
+    # 创建命令行参数解析器对象
+
+    # 必选参数
     parser.add_argument(
-        # 指定模型名称的参数
         "--model_name",
-        # 默认值为 None
         default=None,
-        # 参数类型为字符串
         type=str,
-        # 参数用途说明
-        help="你想转换的模型名称，它必须是支持的 Levit* 架构之一",
+        help="The name of the model you wish to convert, it must be one of the supported Levit* architecture,",
     )
-    # 添加 PyTorch 模型输出目录路径的参数
+    # 添加模型名称参数，指定需要转换的模型名称，必须是支持的 Levit* 架构之一
+
     parser.add_argument(
         "--pytorch_dump_folder_path",
-        # 默认输出目录
         default="levit-dump-folder/",
-        # 参数类型为路径
         type=Path,
-        # 是否为必需参数
         required=False,
-        # 参数用途说明
-        help="PyTorch 模型输出目录的路径",
+        help="Path to the output PyTorch model directory.",
     )
-    # 添加是否将模型推送到集中式仓库的参数，作为布尔开关
-    parser.add_argument("--push_to_hub", action="store_true", help="将模型和图像处理器推送到中央仓库")
-    parser.add_argument(
-        # 添加相反意义的参数，禁止推送到中央仓库
-        "--no-push_to_hub",
-        # 目标参数的指定
-        dest="push_to_hub",
-        # 设置操作为 'store_false'，即如果传递了此参数，`push_to_hub` 将为 False
-        action="store_false",
-        # 参数用途说明
-        help="不将模型和图像处理器推送到中央仓库",
-    )
+    # 添加 PyTorch 模型输出文件夹路径参数，默认为 'levit-dump-folder/'，指定输出 PyTorch 模型的目录路径
 
-    # 解析命令行参数并赋值给 `args`
+    parser.add_argument("--push_to_hub", action="store_true", help="Push model and image processor to the hub")
+    # 添加推送到 Hub 的选项参数，如果设置该参数，则推送模型和图像处理器到 Hub
+
+    parser.add_argument(
+        "--no-push_to_hub",
+        dest="push_to_hub",
+        action="store_false",
+        help="Do not push model and image processor to the hub",
+    )
+    # 添加不推送到 Hub 的选项参数，设置该参数则不将模型和图像处理器推送到 Hub
+
     args = parser.parse_args()
-    # 获取解析到的 PyTorch 模型输出目录路径
+    # 解析命令行参数，将参数存储在 args 对象中
+
     pytorch_dump_folder_path: Path = args.pytorch_dump_folder_path
-    # 创建目录，如果目录已存在则不会引发错误
+    # 获取 PyTorch 模型输出文件夹路径，并将其赋值给 pytorch_dump_folder_path 变量
     pytorch_dump_folder_path.mkdir(exist_ok=True, parents=True)
-    # 将权重转换并推送到指定目录或中央仓库
+    # 创建 PyTorch 模型输出文件夹，如果不存在则创建，确保存在父文件夹路径
+
     convert_weights_and_push(pytorch_dump_folder_path, args.model_name, args.push_to_hub)
+    # 调用函数，将权重转换并推送到指定的 PyTorch 模型文件夹路径，使用指定的模型名称和推送到 Hub 的标志
 ```

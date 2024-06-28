@@ -1,29 +1,118 @@
-# `.\transformers\models\nat\modeling_nat.py`
+# `.\models\nat\modeling_nat.py`
 
-```py
-# 设置编码器输出的数据结构，包括可能的隐藏状态和注意力信息
+```
+# coding=utf-8
+# Copyright 2022 SHI Labs and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch Neighborhood Attention Transformer model."""
+
+# Importing necessary libraries and modules
+import math
+from dataclasses import dataclass
+from typing import Optional, Tuple, Union
+
+import torch
+import torch.utils.checkpoint
+from torch import nn
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+
+# Importing activation function mappings
+from ...activations import ACT2FN
+# Importing output classes
+from ...modeling_outputs import BackboneOutput
+# Importing utility functions for model handling
+from ...modeling_utils import PreTrainedModel
+# Importing pruning utilities for linear layers
+from ...pytorch_utils import find_pruneable_heads_and_indices, prune_linear_layer
+# Importing various utility functions and classes
+from ...utils import (
+    ModelOutput,
+    OptionalDependencyNotAvailable,
+    add_code_sample_docstrings,
+    add_start_docstrings,
+    add_start_docstrings_to_model_forward,
+    is_natten_available,
+    logging,
+    replace_return_docstrings,
+    requires_backends,
+)
+# Importing backbone utility functions
+from ...utils.backbone_utils import BackboneMixin
+# Importing configuration class for Nat model
+from .configuration_nat import NatConfig
+
+# Checking availability of external module 'natten'
+if is_natten_available():
+    # Importing specific functions from 'natten.functional'
+    from natten.functional import natten2dav, natten2dqkrpb
+else:
+    # Define placeholder functions if 'natten' is not available
+    def natten2dqkrpb(*args, **kwargs):
+        raise OptionalDependencyNotAvailable()
+
+    def natten2dav(*args, **kwargs):
+        raise OptionalDependencyNotAvailable()
+
+# Setting up logging for the module
+logger = logging.get_logger(__name__)
+
+# General documentation strings
+_CONFIG_FOR_DOC = "NatConfig"
+
+# Base documentation strings
+_CHECKPOINT_FOR_DOC = "shi-labs/nat-mini-in1k-224"
+_EXPECTED_OUTPUT_SHAPE = [1, 7, 7, 512]
+
+# Image classification documentation strings
+_IMAGE_CLASS_CHECKPOINT = "shi-labs/nat-mini-in1k-224"
+_IMAGE_CLASS_EXPECTED_OUTPUT = "tiger cat"
+
+# List of pretrained model archives for Nat model
+NAT_PRETRAINED_MODEL_ARCHIVE_LIST = [
+    "shi-labs/nat-mini-in1k-224",
+    # See all Nat models at https://huggingface.co/models?filter=nat
+]
+
+# Definition of dataclass for NatEncoderOutput
 @dataclass
 class NatEncoderOutput(ModelOutput):
     """
-    Nat 编码器的输出，包括可能的隐藏状态和注意力信息。
-    """
-    # 定义函数参数说明
+    Nat encoder's outputs, with potential hidden states and attentions.
+"""
+    # 定义函数的参数及其类型注解，以下为函数的输入参数
+    
     Args:
         last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            模型最后一层输出的隐藏状态序列。
+            模型最后一层的隐藏状态序列。
+            Sequence of hidden-states at the output of the last layer of the model.
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            模型每层输出的隐藏状态序列组成的元组。
+            模型在每一层输出的隐藏状态的元组。
+            Tuple of `torch.FloatTensor` representing hidden-states of the model at the output of each layer.
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            用于计算自注意力头中加权平均值的注意力权重。
+            模型在每一层输出的注意力权重的元组，用于计算自注意力头中的加权平均值。
+            Tuple of `torch.FloatTensor` representing attention weights after attention softmax.
         reshaped_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            包含空间维度的每层输出隐藏状态序列组成的元组。
+            模型在每一层输出的隐藏状态的元组，包含了空间维度重塑后的输出。
+            Tuple of `torch.FloatTensor` representing hidden-states of the model at the output of each layer, reshaped to include spatial dimensions.
+    """
     
-        # 初始化函数参数变量
-        last_hidden_state: torch.FloatTensor = None
-        hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-        attentions: Optional[Tuple[torch.FloatTensor]] = None
-        reshaped_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-# 定义一个数据类，表示 NAT 模型的输出，同时包含最后隐藏状态的汇聚。
+    # 初始化函数的参数，默认值为None
+    last_hidden_state: torch.FloatTensor = None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    reshaped_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 创建一个数据类 NatModelOutput，继承自 ModelOutput 类，用于表示 NAT 模型的输出，包括最后隐藏状态的汇总信息。
 @dataclass
 class NatModelOutput(ModelOutput):
     """
@@ -31,86 +120,94 @@ class NatModelOutput(ModelOutput):
 
     Args:
         last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
-            模型最后一层的隐藏状态的序列。
+            Sequence of hidden-states at the output of the last layer of the model.
         pooler_output (`torch.FloatTensor` of shape `(batch_size, hidden_size)`, *optional*, returned when `add_pooling_layer=True` is passed):
-            最后一层隐藏状态的平均池化。
+            Average pooling of the last layer hidden-state.
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            一个元组，包含 `torch.FloatTensor`（一个用于嵌入输出 + 一个用于每个阶段输出）的形状为 `(batch_size, sequence_length, hidden_size)`。
+            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each stage) of
+            shape `(batch_size, sequence_length, hidden_size)`.
 
-            每层模型的隐藏状态加上初始嵌入输出。
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            一个元组，包含 `torch.FloatTensor`（每个阶段一个）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            Tuple of `torch.FloatTensor` (one for each stage) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
 
-            注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
+            heads.
         reshaped_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            一个元组，包含 `torch.FloatTensor`（一个用于嵌入输出 + 一个用于每个阶段输出）的形状为 `(batch_size, hidden_size, height, width)`。
+            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each stage) of
+            shape `(batch_size, hidden_size, height, width)`.
 
-            每层模型的隐藏状态加上初始嵌入输出，重塑以包括空间维度。
+            Hidden-states of the model at the output of each layer plus the initial embedding outputs reshaped to
+            include the spatial dimensions.
     """
 
+    # 定义类的属性，用于存储 NAT 模型的输出信息
     last_hidden_state: torch.FloatTensor = None
     pooler_output: Optional[torch.FloatTensor] = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    reshaped_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    reshaped_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
-# 定义一个数据类，表示图像分类的 NAT 输出。
+# 创建一个数据类 NatImageClassifierOutput，继承自 ModelOutput 类，用于表示 NAT 图像分类的输出。
 @dataclass
 class NatImageClassifierOutput(ModelOutput):
     """
     Nat outputs for image classification.
+    """
+    """
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            分类（如果config.num_labels==1，则为回归）损失。
-            （如果提供了`labels`，则返回）。
+            分类（如果 `config.num_labels==1` 则为回归）损失。
+            分类损失或回归损失的张量。
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            分类（如果config.num_labels==1，则为回归）得分（SoftMax之前）。
+            分类（如果 `config.num_labels==1` 则为回归）得分（SoftMax 之前）。
+            模型输出的分类或回归得分（经过 SoftMax 之前的）。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor`元组（包含嵌入输出和每个阶段的输出），
-            形状为`(batch_size, sequence_length, hidden_size)`。
+            `torch.FloatTensor` 元组（当 `output_hidden_states=True` 传入或 `config.output_hidden_states=True` 时返回），
+            包含形状为 `(batch_size, sequence_length, hidden_size)` 的张量。
 
             每个层的模型隐藏状态以及初始嵌入输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            `torch.FloatTensor`元组（每个阶段一个），
-            形状为`(batch_size, num_heads, sequence_length, sequence_length)`。
+            `torch.FloatTensor` 元组（当 `output_attentions=True` 传入或 `config.output_attentions=True` 时返回），
+            包含形状为 `(batch_size, num_heads, sequence_length, sequence_length)` 的张量。
 
-            注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
+            经过注意力 softmax 后的注意力权重，用于计算自注意力头部的加权平均值。
         reshaped_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor`元组（包含嵌入输出和每个阶段的输出），
-            形状为`(batch_size, hidden_size, height, width)`。
+            `torch.FloatTensor` 元组（当 `output_hidden_states=True` 传入或 `config.output_hidden_states=True` 时返回），
+            包含形状为 `(batch_size, hidden_size, height, width)` 的张量。
 
-            每个层的模型隐藏状态以及初始嵌入输出，重塑以包含空间维度。
+            每个层的模型隐藏状态以及初始嵌入输出重塑为包括空间维度。
     """
 
+    # 可选的损失张量，当提供 `labels` 时返回
     loss: Optional[torch.FloatTensor] = None
+    # 分类或回归得分张量，形状为 `(batch_size, config.num_labels)`
     logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    reshaped_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选的隐藏状态张量元组，当 `output_hidden_states=True` 时返回
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的注意力权重张量元组，当 `output_attentions=True` 时返回
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的重塑后的隐藏状态张量元组，当 `output_hidden_states=True` 时返回
+    reshaped_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
 class NatEmbeddings(nn.Module):
     """
     Construct the patch and position embeddings.
     """
 
     def __init__(self, config):
-        # 初始化 NatEmbeddings 类
         super().__init__()
 
-        # 创建 NatPatchEmbeddings 对象
-        self.patch_embeddings = NatPatchEmbeddings(config)
+        self.patch_embeddings = NatPatchEmbeddings(config)  # 创建补丁嵌入对象
 
-        # 初始化 LayerNorm 和 Dropout 层
-        self.norm = nn.LayerNorm(config.embed_dim)
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.norm = nn.LayerNorm(config.embed_dim)  # 初始化 LayerNorm 层
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # 初始化 Dropout 层
 
     def forward(self, pixel_values: Optional[torch.FloatTensor]) -> Tuple[torch.Tensor]:
-        # 对输入的像素值进行嵌入处理
-        embeddings = self.patch_embeddings(pixel_values)
-        embeddings = self.norm(embeddings)
-
-        # 对嵌入结果进行 Dropout 处理
-        embeddings = self.dropout(embeddings)
+        embeddings = self.patch_embeddings(pixel_values)  # 获取补丁嵌入向量
+        embeddings = self.norm(embeddings)  # 应用 LayerNorm
+        embeddings = self.dropout(embeddings)  # 应用 Dropout
 
         return embeddings
 
@@ -123,34 +220,30 @@ class NatPatchEmbeddings(nn.Module):
     """
 
     def __init__(self, config):
-        # 初始化 NatPatchEmbeddings 类
         super().__init__()
         patch_size = config.patch_size
         num_channels, hidden_size = config.num_channels, config.embed_dim
         self.num_channels = num_channels
 
         if patch_size == 4:
-            pass
+            pass  # 当 patch_size 为 4 时，无需额外操作
         else:
-            # 如果补丁大小不为4，引发异常
-            raise ValueError("Dinat only supports patch size of 4 at the moment.")
+            # TODO: Support arbitrary patch sizes.
+            raise ValueError("Dinat only supports patch size of 4 at the moment.")  # 报错：当前仅支持 patch 大小为 4
 
-        # 创建卷积层进行特征映射
         self.projection = nn.Sequential(
             nn.Conv2d(self.num_channels, hidden_size // 2, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1)),
             nn.Conv2d(hidden_size // 2, hidden_size, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1)),
-        )
+        )  # 初始化卷积投影层
 
     def forward(self, pixel_values: Optional[torch.FloatTensor]) -> torch.Tensor:
         _, num_channels, height, width = pixel_values.shape
-        # 检查像素值的通道数与配置是否匹配
         if num_channels != self.num_channels:
             raise ValueError(
                 "Make sure that the channel dimension of the pixel values match with the one set in the configuration."
-            )
-        # 对像素值进行特征映射
-        embeddings = self.projection(pixel_values)
-        embeddings = embeddings.permute(0, 2, 3, 1)
+            )  # 检查通道维度是否匹配配置中设置的通道维度
+        embeddings = self.projection(pixel_values)  # 对输入进行投影
+        embeddings = embeddings.permute(0, 2, 3, 1)  # 调整维度顺序，使得最后一维为 hidden_size
 
         return embeddings
 
@@ -167,58 +260,61 @@ class NatDownsampler(nn.Module):
     """
 
     def __init__(self, dim: int, norm_layer: nn.Module = nn.LayerNorm) -> None:
-        # 初始化 NatDownsampler 类
         super().__init__()
         self.dim = dim
-        # 创建卷积层进行降采样
         self.reduction = nn.Conv2d(dim, 2 * dim, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-        self.norm = norm_layer(2 * dim)
+        self.norm = norm_layer(2 * dim)  # 初始化规范化层
 
     def forward(self, input_feature: torch.Tensor) -> torch.Tensor:
-        # 对输入特征进行卷积降采样
-        input_feature = self.reduction(input_feature.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)
-        input_feature = self.norm(input_feature)
+        input_feature = self.reduction(input_feature.permute(0, 3, 1, 2)).permute(0, 2, 3, 1)  # 执行卷积降采样
+        input_feature = self.norm(input_feature)  # 应用规范化层
         return input_feature
-
-
-# Copied from transformers.models.beit.modeling_beit.drop_path
+# 定义一个函数，用于在神经网络中按概率丢弃路径（随机深度）以减少模型复杂度
 def drop_path(input: torch.Tensor, drop_prob: float = 0.0, training: bool = False) -> torch.Tensor:
     """
-    在每个样本上应用路径丢弃（随机深度），当应用于残差块的主路径时。
-
-    Ross Wightman 的注释：这与我为 EfficientNet 等网络创建的 DropConnect 实现相同，但原始名称是具有误导性的，
-    因为 'Drop Connect' 是另一篇论文中的一种不同形式的丢弃...
-    参见讨论：https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... 我选择更改层和参数名称为
-    'drop path' 而不是混用 DropConnect 作为层名称，并使用 'survival rate' 作为参数。
+    Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
+    
+    Comment by Ross Wightman: This is the same as the DropConnect impl I created for EfficientNet, etc networks,
+    however, the original name is misleading as 'Drop Connect' is a different form of dropout in a separate paper...
+    See discussion: https://github.com/tensorflow/tpu/issues/494#issuecomment-532968956 ... I've opted for changing the
+    layer and argument names to 'drop path' rather than mix DropConnect as a layer name and use 'survival rate' as the
+    argument.
     """
+    # 如果丢弃概率为0或者不处于训练模式，则直接返回输入
     if drop_prob == 0.0 or not training:
         return input
+    # 计算保留的概率
     keep_prob = 1 - drop_prob
-    shape = (input.shape[0],) + (1,) * (input.ndim - 1)  # 适用于不同维度张量，而不仅仅是 2D ConvNets
+    # 为了支持不同维度的张量，创建与输入形状相同的随机张量
+    shape = (input.shape[0],) + (1,) * (input.ndim - 1)
     random_tensor = keep_prob + torch.rand(shape, dtype=input.dtype, device=input.device)
-    random_tensor.floor_()  # 二值化
+    random_tensor.floor_()  # 将随机张量二值化
+    # 应用随机深度丢弃操作并返回输出
     output = input.div(keep_prob) * random_tensor
     return output
 
 
-# 从 transformers.models.beit.modeling_beit.BeitDropPath 复制而来，将 Beit->Nat
+# 从transformers.models.beit.modeling_beit.BeitDropPath中复制的类，修改为NatDropPath
 class NatDropPath(nn.Module):
-    """每个样本上应用路径丢弃（随机深度），当应用于残差块的主路径时。"""
+    """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks)."""
 
     def __init__(self, drop_prob: Optional[float] = None) -> None:
         super().__init__()
         self.drop_prob = drop_prob
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 调用前面定义的drop_path函数，传递当前对象的dropout概率和训练模式
         return drop_path(hidden_states, self.drop_prob, self.training)
 
     def extra_repr(self) -> str:
+        # 返回描述对象的额外字符串表示，显示dropout概率
         return "p={}".format(self.drop_prob)
 
 
 class NeighborhoodAttention(nn.Module):
     def __init__(self, config, dim, num_heads, kernel_size):
         super().__init__()
+        # 检查隐藏层大小是否能被注意力头数量整除
         if dim % num_heads != 0:
             raise ValueError(
                 f"The hidden size ({dim}) is not a multiple of the number of attention heads ({num_heads})"
@@ -229,91 +325,94 @@ class NeighborhoodAttention(nn.Module):
         self.all_head_size = self.num_attention_heads * self.attention_head_size
         self.kernel_size = kernel_size
 
-        # rpb is learnable relative positional biases; same concept is used Swin.
+        # rpb是可学习的相对位置偏置，与Swin中的概念相同
         self.rpb = nn.Parameter(torch.zeros(num_heads, (2 * self.kernel_size - 1), (2 * self.kernel_size - 1)))
 
+        # 创建用于查询、键、值的线性变换层
         self.query = nn.Linear(self.all_head_size, self.all_head_size, bias=config.qkv_bias)
         self.key = nn.Linear(self.all_head_size, self.all_head_size, bias=config.qkv_bias)
         self.value = nn.Linear(self.all_head_size, self.all_head_size, bias=config.qkv_bias)
 
+        # 使用配置中的注意力概率丢弃层
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
     def transpose_for_scores(self, x):
+        # 调整张量形状以便计算注意力分数
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
         x = x.view(new_x_shape)
         return x.permute(0, 3, 1, 2, 4)
- def forward(
+    # 定义前向传播方法，接受隐藏状态和是否输出注意力矩阵作为参数，返回元组类型的输出
+    def forward(
         self,
         hidden_states: torch.Tensor,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 将输入的 hidden_states 通过 self.query、self.key 和 self.value 线性变换得到查询、键和值
+        # 通过查询（query）权重网络处理隐藏状态，以备计算注意力得分
         query_layer = self.transpose_for_scores(self.query(hidden_states))
+        # 通过键（key）权重网络处理隐藏状态，以备计算注意力得分
         key_layer = self.transpose_for_scores(self.key(hidden_states))
+        # 通过值（value）权重网络处理隐藏状态，以备计算注意力得分
         value_layer = self.transpose_for_scores(self.value(hidden_states))
 
-        # 在计算注意力权重之前，对查询进行缩放，将 query_layer 除以 sqrt(attention_head_size)
-        # 这样做通常更高效，因为注意力权重通常是一个比查询更大的张量
-        # 这样做不会改变结果，因为标量可以在矩阵乘法中交换
+        # 在计算注意力权重之前应用缩放因子，通常更高效，因为注意力权重通常比查询向量更大
+        # 由于矩阵乘法中标量是可交换的，因此结果相同
         query_layer = query_layer / math.sqrt(self.attention_head_size)
 
-        # 计算“查询”和“键”之间的注意力得分，并添加相对位置偏差
+        # 计算“查询”和“键”的归一化注意力得分，并添加相对位置偏置
         attention_scores = natten2dqkrpb(query_layer, key_layer, self.rpb, self.kernel_size, 1)
 
         # 将注意力得分归一化为概率
         attention_probs = nn.functional.softmax(attention_scores, dim=-1)
 
-        # 这实际上是通过丢弃整个 token 来进行自我注意，这可能看起来有点不寻常，但其来自于原始 Transformer 论文
-        # 这里的 self.dropout 是一个 Dropout 层，用于对 attention_probs 进行随机丢弃
+        # 通过丢弃操作随机地“丢弃”一些注意力概率，这在原始Transformer论文中有所提及
         attention_probs = self.dropout(attention_probs)
 
-        # 通过将注意力概率权重与值进行加权求和，得到注意力上下文向量
+        # 计算加权后的值（value）以生成上下文向量
         context_layer = natten2dav(attention_probs, value_layer, self.kernel_size, 1)
-        # 将上下文向量的维度进行调整和置换
+        # 调整上下文向量的维度顺序，以便进一步处理
         context_layer = context_layer.permute(0, 2, 3, 1, 4).contiguous()
+        # 将调整后的上下文向量形状改变为全头尺寸
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
         context_layer = context_layer.view(new_context_layer_shape)
 
-        # 根据是否需要输出 attention_probs，来构建输出元组
+        # 根据是否需要输出注意力矩阵，选择性地返回上下文向量和注意力概率
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
+        # 返回输出元组
         return outputs
-# 邻域注意力输出模块
+# 定义一个邻域注意力输出模块的神经网络模型
 class NeighborhoodAttentionOutput(nn.Module):
     def __init__(self, config, dim):
         super().__init__()
-        # 定义一个线性层将输入转换为输出维度
+        # 初始化一个线性层，用于将输入维度为dim的张量线性变换为维度仍为dim的输出张量
         self.dense = nn.Linear(dim, dim)
-        # 定义一个dropout层以防止过拟合
+        # 初始化一个dropout层，使用config中指定的概率进行dropout操作
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
-    # 前向传播函数
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态传入线性层并进行激活
+        # 将输入张量hidden_states通过线性层self.dense进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 将激活后的结果传入dropout层
+        # 对线性变换后的张量进行dropout操作
         hidden_states = self.dropout(hidden_states)
 
-        # 返回处理后的隐藏状态
         return hidden_states
 
 
-# 邻域注意力模块
+# 定义一个邻域注意力模块的神经网络模型
 class NeighborhoodAttentionModule(nn.Module):
     def __init__(self, config, dim, num_heads, kernel_size):
         super().__init__()
-        # 定义自注意力层
+        # 初始化一个邻域自注意力模块，使用config、dim、num_heads和kernel_size参数进行初始化
         self.self = NeighborhoodAttention(config, dim, num_heads, kernel_size)
-        # 定义注意力输出层
+        # 初始化一个邻域注意力输出模块，使用config和dim参数进行初始化
         self.output = NeighborhoodAttentionOutput(config, dim)
-        # 定义一个存储已剪枝头的集合
+        # 初始化一个集合，用于存储需要剪枝的注意力头
         self.pruned_heads = set()
 
-    # 剪枝注意力头的函数
     def prune_heads(self, heads):
         if len(heads) == 0:
             return
-        # 找到可以剪枝的头和对应的索引
+        # 调用find_pruneable_heads_and_indices函数，找到可剪枝的注意力头和对应的索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.self.num_attention_heads, self.self.attention_head_size, self.pruned_heads
         )
@@ -324,162 +423,160 @@ class NeighborhoodAttentionModule(nn.Module):
         self.self.value = prune_linear_layer(self.self.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储已剪枝的头
+        # 更新超参数并存储剪枝的注意力头
         self.self.num_attention_heads = self.self.num_attention_heads - len(heads)
         self.self.all_head_size = self.self.attention_head_size * self.self.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
-    # 前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 获取自注意力的输出
+        # 调用self.self的forward方法，对隐藏状态进行自注意力操作
         self_outputs = self.self(hidden_states, output_attentions)
-        # 将自注意力输出传入注意力输出层
+        # 调用self.output的forward方法，将自注意力操作的输出和输入隐藏状态作为输入计算注意力输出
         attention_output = self.output(self_outputs[0], hidden_states)
-        # 将注意力输出与其他输出组成元组返回
+        # 构造输出元组，如果需要输出注意力，将它们加入到输出元组中
         outputs = (attention_output,) + self_outputs[1:]
         return outputs
 
 
-# NAT中间层模块
+# 定义一个邻域中间层的神经网络模型
 class NatIntermediate(nn.Module):
     def __init__(self, config, dim):
         super().__init__()
-        # 定义一个线性层用于扩展特征维度
+        # 初始化一个线性层，用于将输入维度为dim的张量线性变换为维度为config.mlp_ratio * dim的输出张量
         self.dense = nn.Linear(dim, int(config.mlp_ratio * dim))
-        # 定义一个激活函数
+        # 根据config中指定的隐藏层激活函数类型，选择对应的激活函数ACT2FN进行初始化
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
 
-    # 前向传播函数
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态传入线性层并进行激活
+        # 将输入张量hidden_states通过线性层self.dense进行线性变换
         hidden_states = self.dense(hidden_states)
+        # 将线性变换后的张量通过选择的激活函数self.intermediate_act_fn进行非线性变换
         hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
 
 
-# NAT输出模块
+# 定义一个邻域输出层的神经网络模型
 class NatOutput(nn.Module):
     def __init__(self, config, dim):
         super().__init__()
-        # 定义一个线性层用于缩减特征维度
+        # 初始化一个线性层，用于将输入维度为config.mlp_ratio * dim的张量线性变换为维度为dim的输出张量
         self.dense = nn.Linear(int(config.mlp_ratio * dim), dim)
-        # 定义一个dropout层以防止过拟合
+        # 初始化一个dropout层，使用config中指定的概率进行dropout操作
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-    # 定义一个前向传播方法，接受隐藏状态作为输入，并返回处理后的隐藏状态
+    # 定义一个方法 `forward`，用于模型的前向传播过程，接受隐藏状态作为输入张量，并返回处理后的张量作为输出
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 将隐藏状态通过全连接层进行线性变换
+        # 将输入张量通过全连接层 `self.dense` 进行线性变换
         hidden_states = self.dense(hidden_states)
-        # 对线性变换后的隐藏状态进行dropout操作，以减少过拟合风险
+        # 对线性变换后的张量进行 dropout 操作，以防止过拟合
         hidden_states = self.dropout(hidden_states)
-        # 返回处理后的隐藏状态
+        # 返回经过线性变换和 dropout 处理后的张量作为输出
         return hidden_states
-# 定义一个名为NatLayer的类，继承自nn.Module
 class NatLayer(nn.Module):
-    # 初始化方法
     def __init__(self, config, dim, num_heads, drop_path_rate=0.0):
         super().__init__()
-        # 设置前馈的块大小
+        # 设置前馈分块大小
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
         # 设置卷积核大小
         self.kernel_size = config.kernel_size
-        # 使用LayerNorm对输入进行归一化处理
+        # 应用层归一化在注意力模块之前
         self.layernorm_before = nn.LayerNorm(dim, eps=config.layer_norm_eps)
-        # 创建邻域注意力模块
+        # 创建注意力模块
         self.attention = NeighborhoodAttentionModule(config, dim, num_heads, kernel_size=self.kernel_size)
-        # 设置删除路径的比率
+        # 根据丢弃路径率设置丢弃路径层
         self.drop_path = NatDropPath(drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
-        # 对输出进行归一化处理
+        # 应用层归一化在注意力模块之后
         self.layernorm_after = nn.LayerNorm(dim, eps=config.layer_norm_eps)
         # 创建自然语言中间层
         self.intermediate = NatIntermediate(config, dim)
-        # 创建自然语言输出
+        # 创建自然语言输出层
         self.output = NatOutput(config, dim)
-        # 初始化层比例参数
+        # 如果配置允许，创建层缩放参数
         self.layer_scale_parameters = (
             nn.Parameter(config.layer_scale_init_value * torch.ones((2, dim)), requires_grad=True)
             if config.layer_scale_init_value > 0
             else None
         )
 
-    # 判断是否需要对隐藏状态进行填充
     def maybe_pad(self, hidden_states, height, width):
-        # 设置卷积窗口大小
+        # 设置窗口大小为卷积核大小
         window_size = self.kernel_size
         pad_values = (0, 0, 0, 0, 0, 0)
+        # 如果输入的高度或宽度小于窗口大小，则进行填充
         if height < window_size or width < window_size:
-            # 计算需要填充的值
             pad_l = pad_t = 0
             pad_r = max(0, window_size - width)
             pad_b = max(0, window_size - height)
             pad_values = (0, 0, pad_l, pad_r, pad_t, pad_b)
-            # 对隐藏状态进行填充
             hidden_states = nn.functional.pad(hidden_states, pad_values)
         return hidden_states, pad_values
 
-    # 前向传播方法
     def forward(
         self,
         hidden_states: torch.Tensor,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        # 获取隐藏状态的形状信息
+        # 获取批处理大小、高度、宽度和通道数
         batch_size, height, width, channels = hidden_states.size()
+        # 保存输入的快捷连接
         shortcut = hidden_states
 
-        # 对隐藏状态进行归一化处理
+        # 应用层归一化在注意力模块之前
         hidden_states = self.layernorm_before(hidden_states)
-        # 如果隐藏状态小于卷积核大小，进行填充
+        # 如果输入的大小小于卷积核大小，则进行填充
         hidden_states, pad_values = self.maybe_pad(hidden_states, height, width)
 
+        # 获取填充后的高度和宽度
         _, height_pad, width_pad, _ = hidden_states.shape
 
-        # 获取注意力输出
+        # 应用注意力模块
         attention_outputs = self.attention(hidden_states, output_attentions=output_attentions)
 
+        # 获取注意力输出
         attention_output = attention_outputs[0]
 
-        # 判断是否进行了填充
+        # 检查是否进行了填充
         was_padded = pad_values[3] > 0 or pad_values[5] > 0
         if was_padded:
+            # 如果进行了填充，则裁剪注意力输出以匹配原始输入的尺寸
             attention_output = attention_output[:, :height, :width, :].contiguous()
 
-        # 如果存在层比例参数，则进行比例调整
+        # 如果存在层缩放参数，则应用第一个参数到注意力输出
         if self.layer_scale_parameters is not None:
             attention_output = self.layer_scale_parameters[0] * attention_output
 
-        # 对隐藏状态添加删除路径后得到新的隐藏状态
+        # 计算最终的隐藏状态，结合快捷连接和丢弃路径
         hidden_states = shortcut + self.drop_path(attention_output)
 
-        # 对层输出进行归一化处理
+        # 应用层归一化在注意力模块之后
         layer_output = self.layernorm_after(hidden_states)
-        # 输出层结果
+        # 经过中间层和输出层处理的最终输出
         layer_output = self.output(self.intermediate(layer_output))
 
-        # 如果存在层比例参数，则进行比例调整
+        # 如果存在层缩放参数，则应用第二个参数到最终输出
         if self.layer_scale_parameters is not None:
             layer_output = self.layer_scale_parameters[1] * layer_output
 
-        # 对层输出添加删除路径后得到新的层输出
+        # 结合快捷连接和丢弃路径到最终输出
         layer_output = hidden_states + self.drop_path(layer_output)
 
-        # 如果输出注意力结果，则返回包含注意力结果的元组，否则只返回层输出结果
+        # 返回层输出，如果需要，还返回注意力输出
         layer_outputs = (layer_output, attention_outputs[1]) if output_attentions else (layer_output,)
         return layer_outputs
-    # 初始化函数，设置模型参数
+    # 初始化函数，用于初始化一个神经网络模型
     def __init__(self, config, dim, depth, num_heads, drop_path_rate, downsample):
-        # 调用父类初始化函数
+        # 调用父类的初始化函数
         super().__init__()
-        # 初始化模型的配置、维度等参数
-        self.config = config
-        self.dim = dim
-        # 创建模型层列表
+        # 将传入的参数保存到对象的属性中
+        self.config = config  # 保存配置信息
+        self.dim = dim  # 保存输入的维度信息
+        # 创建神经网络层的列表，每一层是一个 NatLayer 对象
         self.layers = nn.ModuleList(
             [
                 NatLayer(
@@ -488,79 +585,78 @@ class NatLayer(nn.Module):
                     num_heads=num_heads,
                     drop_path_rate=drop_path_rate[i],
                 )
-                for i in range(depth)
+                for i in range(depth)  # 根据指定的深度创建对应数量的层
             ]
         )
 
-        # 池化层
+        # 如果存在下采样层，则创建该下采样层对象
         if downsample is not None:
             self.downsample = downsample(dim=dim, norm_layer=nn.LayerNorm)
         else:
-            self.downsample = None
+            self.downsample = None  # 否则置为 None
 
-        # 初始化指针
+        # 初始化一个指示变量，用于标记指向状态
         self.pointing = False
 
-    # 前向传播函数
+    # 前向传播函数，用于定义数据在模型中的正向流动过程
     def forward(
         self,
         hidden_states: torch.Tensor,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 获取隐藏状态的大小
-        _, height, width, _ = hidden_states.size()
+        _, height, width, _ = hidden_states.size()  # 获取输入张量的高度和宽度信息
+        # 遍历所有层，并将输入张量按顺序传递给每一层进行处理
         for i, layer_module in enumerate(self.layers):
-            # 对每个模型层进行前向传播
             layer_outputs = layer_module(hidden_states, output_attentions)
-            hidden_states = layer_outputs[0]
+            hidden_states = layer_outputs[0]  # 更新隐藏状态
 
-        hidden_states_before_downsampling = hidden_states
-        # 如果存在池化层，则应用池化
+        hidden_states_before_downsampling = hidden_states  # 保存下采样之前的隐藏状态
+        # 如果存在下采样层，则对隐藏状态进行下采样处理
         if self.downsample is not None:
             hidden_states = self.downsample(hidden_states_before_downsampling)
 
-        # 组装输出
-        stage_outputs = (hidden_states, hidden_states_before_downsampling)
+        stage_outputs = (hidden_states, hidden_states_before_downsampling)  # 构造阶段输出元组
 
-        # 如果需要输出注意力矩阵，则补充到输出中
+        # 如果需要输出注意力权重，则将每一层的注意力权重也加入到输出中
         if output_attentions:
             stage_outputs += layer_outputs[1:]
-        return stage_outputs
-# 定义一个自然语言编码器的神经网络模型
+
+        return stage_outputs  # 返回阶段输出元组
 class NatEncoder(nn.Module):
-    # 初始化函数
+    # 自然编码器的类定义，继承自nn.Module
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__()
-        # 确定自然语言编码器的层级数量
+        # 初始化方法，接受一个配置对象作为参数
+
+        # 获取层级深度列表的长度
         self.num_levels = len(config.depths)
-        # 保存配置信息
+        # 将配置对象保存在self.config中
         self.config = config
-        # 计算每一层的丢弃路径比例
+        # 根据drop_path_rate参数创建一个线性间隔的列表
         dpr = [x.item() for x in torch.linspace(0, config.drop_path_rate, sum(config.depths))]
-        # 创建每一层的自然语言编码器阶段
+        
+        # 创建一个模块列表，每个元素是一个NatStage对象
         self.levels = nn.ModuleList(
             [
                 NatStage(
-                    # 配置信息
                     config=config,
-                    # 计算每一层的维度
+                    # 设置每一层的嵌入维度
                     dim=int(config.embed_dim * 2**i_layer),
-                    # 每一层的深度
+                    # 设置每一层的深度
                     depth=config.depths[i_layer],
-                    # 每一层的头数
+                    # 设置每一层的头数
                     num_heads=config.num_heads[i_layer],
-                    # 每一层的丢弃路径比例
+                    # 设置每一层的drop_path_rate值
                     drop_path_rate=dpr[sum(config.depths[:i_layer]) : sum(config.depths[: i_layer + 1])],
-                    # 如果不是最后一层，则使用自然语言下采样器，否则为None
+                    # 设置是否下采样，最后一层不进行下采样
                     downsample=NatDownsampler if (i_layer < self.num_levels - 1) else None,
                 )
-                # 遍历每一层
+                # 对每一个层级进行循环
                 for i_layer in range(self.num_levels)
             ]
         )
 
-    # 前向传播函数
+    # 前向传播方法定义
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -568,256 +664,255 @@ class NatEncoder(nn.Module):
         output_hidden_states: Optional[bool] = False,
         output_hidden_states_before_downsampling: Optional[bool] = False,
         return_dict: Optional[bool] = True,
-    # 定义函数，输入为隐藏状态和是否输出隐藏状态，输出为元组或 NatEncoderOutput 结果
     ) -> Union[Tuple, NatEncoderOutput]:
-        # 如果需要输出隐藏状态，则初始化 all_hidden_states 为空元组，否则为 None
         all_hidden_states = () if output_hidden_states else None
-        # 如果需要输出隐藏状态，则初始化 all_reshaped_hidden_states 为空元组，否则为 None
         all_reshaped_hidden_states = () if output_hidden_states else None
-        # 如果需要输出注意力矩阵，则初始化 all_self_attentions 为空元组，否则为 None
         all_self_attentions = () if output_attentions else None
 
-        # 如果需要输出隐藏状态
         if output_hidden_states:
-            # 重排隐藏状态张量的维度，从 b h w c 重排为 b c h w
+            # 将隐藏状态重排列为 b h w c -> b c h w
             reshaped_hidden_state = hidden_states.permute(0, 3, 1, 2)
-            # 将当前隐藏状态添加到 all_hidden_states 中
+            # 将当前隐藏状态添加到所有隐藏状态元组中
             all_hidden_states += (hidden_states,)
-            # 将重排后的隐藏状态添加到 all_reshaped_hidden_states 中
+            # 将重排列后的隐藏状态添加到所有重排列隐藏状态元组中
             all_reshaped_hidden_states += (reshaped_hidden_state,)
 
-        # 对每个层进行迭代
         for i, layer_module in enumerate(self.levels):
-            # 调用当前层的前向传播方法
+            # 调用每个层模块处理隐藏状态和注意力输出
             layer_outputs = layer_module(hidden_states, output_attentions)
 
-            # 更新隐藏状态为当前层输出的隐藏状态
+            # 更新当前隐藏状态为当前层的隐藏状态输出
             hidden_states = layer_outputs[0]
-            # 记录当前层经过下采样之前的隐藏状态
+            # 更新在下采样之前的隐藏状态为当前层的下采样前隐藏状态输出
             hidden_states_before_downsampling = layer_outputs[1]
 
-            # 如果需要输出隐藏状态以及隐藏状态下采样之前的隐藏状态
             if output_hidden_states and output_hidden_states_before_downsampling:
-                # 重排下采样之前的隐藏状态张量的维度，从 b h w c 重排为 b c h w
+                # 将下采样前的隐藏状态重排列为 b h w c -> b c h w
                 reshaped_hidden_state = hidden_states_before_downsampling.permute(0, 3, 1, 2)
-                # 将下采样之前的隐藏状态添加到 all_hidden_states 中
+                # 将下采样前的隐藏状态添加到所有隐藏状态元组中
                 all_hidden_states += (hidden_states_before_downsampling,)
-                # 将重排后的下采样之前的隐藏状态添加到 all_reshaped_hidden_states 中
+                # 将重排列后的下采样前的隐藏状态添加到所有重排列隐藏状态元组中
                 all_reshaped_hidden_states += (reshaped_hidden_state,)
-            # 如果需要输出隐藏状态但不需要隐藏状态下采样之前的隐藏状态
             elif output_hidden_states and not output_hidden_states_before_downsampling:
-                # 重排隐藏状态张量的维度，从 b h w c 重排为 b c h w
+                # 将当前隐藏状态重排列为 b h w c -> b c h w
                 reshaped_hidden_state = hidden_states.permute(0, 3, 1, 2)
-                # 将当前隐藏状态添加到 all_hidden_states 中
+                # 将当前隐藏状态添加到所有隐藏状态元组中
                 all_hidden_states += (hidden_states,)
-                # 将重排后��隐藏状态添加到 all_reshaped_hidden_states 中
+                # 将重排列后的当前隐藏状态添加到所有重排列隐藏状态元组中
                 all_reshaped_hidden_states += (reshaped_hidden_state,)
 
-            # 如果需要输出注意力矩阵，则将当前层的注意力矩阵添加到 all_self_attentions 中
             if output_attentions:
+                # 将当前层的注意力输出添加到所有自注意力元组中
                 all_self_attentions += layer_outputs[2:]
 
-        # 如果不需要返回字典形式的结果
         if not return_dict:
-            # 返回隐藏状态、所有隐藏状态和所有注意力矩阵的元组
+            # 如果不返回字典形式的输出，则返回非空元组的组成部分
             return tuple(v for v in [hidden_states, all_hidden_states, all_self_attentions] if v is not None)
 
-        # 返回 NatEncoderOutput 类的实例，包括最后的隐藏状态、所有隐藏状态、所有注意力矩阵和重排后的所有隐藏状态
+        # 返回按照 NatEncoderOutput 结构组织的输出字典
         return NatEncoderOutput(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
             attentions=all_self_attentions,
             reshaped_hidden_states=all_reshaped_hidden_states,
         )
-# 抽象基类，用于处理权重初始化和加载预训练模型的简单接口
 class NatPreTrainedModel(PreTrainedModel):
-    # 配置类
+    """
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
+    """
+
+    # 指定配置类为 NatConfig
     config_class = NatConfig
-    # 基础模型前缀
+    # 基础模型前缀设定为 "nat"
     base_model_prefix = "nat"
-    # 主要输入名称
+    # 主输入名称设定为 "pixel_values"
     main_input_name = "pixel_values"
 
-    # 初始化权重
     def _init_weights(self, module):
-        # 如果是线性层或卷积层
+        """Initialize the weights"""
+        # 如果是线性层或卷积层，使用正态分布初始化权重
         if isinstance(module, (nn.Linear, nn.Conv2d)):
-            # 用正态分布初始化权重，标准差为配置的初始化范围
+            # 与 TF 版本稍有不同，TF 使用截断正态分布进行初始化
+            # 参考 https://github.com/pytorch/pytorch/pull/5617
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有偏置项，将其初始化为0
+            # 如果存在偏置，初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果是层归一化层
+        # 如果是 LayerNorm 层，初始化偏置为零，权重为全1
         elif isinstance(module, nn.LayerNorm):
-            # 将偏置项初始化为0，权重初始化为1
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
 
 
-# 开始文档字符串
 NAT_START_DOCSTRING = r"""
-    这是一个PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module)的子类。可以作为常规的PyTorch Module使用，并参考PyTorch文档了解更多关于一般用法和行为的信息。
+    This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) sub-class. Use
+    it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
+    behavior.
 
-    参数:
-        config ([`NatConfig`]): 包含模型所有参数的配置类。
-            使用配置文件初始化不会加载与模型关联的权重，只会加载配置。
-            查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
+    Parameters:
+        config ([`NatConfig`]): Model configuration class with all the parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-
-# 输入文档字符串
+# NatModel 类的文档字符串
 NAT_INPUTS_DOCSTRING = r"""
-    参数:
+    Args:
         pixel_values (`torch.FloatTensor` of shape `(batch_size, num_channels, height, width)`):
-            像素值。可以使用 [`AutoImageProcessor`] 获得像素值。详见 [`ViTImageProcessor.__call__`]。
+            Pixel values. Pixel values can be obtained using [`AutoImageProcessor`]. See [`ViTImageProcessor.__call__`]
+            for details.
 
         output_attentions (`bool`, *optional*):
-            是否返回所有注意力层的注意力张量。更多详情见返回张量部分的 `attentions`。
+            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
+            tensors for more detail.
         output_hidden_states (`bool`, *optional*):
-            是否返回所有层的隐藏状态。更多详情见返回张量部分的 `hidden_states`。
+            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
+            more detail.
         return_dict (`bool`, *optional*):
-            是否返回一个 [`~utils.ModelOutput`] 而不是一个普通元组。
+            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
-
-# 添加开始文档字符串
+# 使用 add_start_docstrings 装饰 NatModel 类，添加其描述信息和参数文档字符串
 @add_start_docstrings(
     "The bare Nat Model transformer outputting raw hidden-states without any specific head on top.",
     NAT_START_DOCSTRING,
 )
-# NatModel 类
 class NatModel(NatPreTrainedModel):
     pass
-    # 定义 NatModel 类，继承自 nn.Module
-        def __init__(self, config, add_pooling_layer=True):
-            # 调用父类 nn.Module 的构造函数
-            super().__init__(config)
-            # 检查所需的后端是否可用
-            requires_backends(self, ["natten"])
-            # 保存配置参数
-            self.config = config
-            # 获取金字塔层数
-            self.num_levels = len(config.depths)
-            # 计算最终特征维度
-            self.num_features = int(config.embed_dim * 2 ** (self.num_levels - 1))
-            # 创建嵌入层
-            self.embeddings = NatEmbeddings(config)
-            # 创建编码器
-            self.encoder = NatEncoder(config)
-            # 创建层归一化层
-            self.layernorm = nn.LayerNorm(self.num_features, eps=config.layer_norm_eps)
-            # 创建自适应平均池化层
-            self.pooler = nn.AdaptiveAvgPool1d(1) if add_pooling_layer else None
-            # 进行权重初始化
-            self.post_init()
-    
-        # 获取输入嵌入层
-        def get_input_embeddings(self):
-            return self.embeddings.patch_embeddings
-    
-        # 剪枝注意力头
-        def _prune_heads(self, heads_to_prune):
-            for layer, heads in heads_to_prune.items():
-                self.encoder.layer[layer].attention.prune_heads(heads)
-    
-        # 前向传播
-        @add_start_docstrings_to_model_forward(NAT_INPUTS_DOCSTRING)
-        @add_code_sample_docstrings(
-            checkpoint=_CHECKPOINT_FOR_DOC,
-            output_type=NatModelOutput,
-            config_class=_CONFIG_FOR_DOC,
-            modality="vision",
-            expected_output=_EXPECTED_OUTPUT_SHAPE,
-        )
-        def forward(
-            self,
-            pixel_values: Optional[torch.FloatTensor] = None,
-            output_attentions: Optional[bool] = None,
-            output_hidden_states: Optional[bool] = None,
-            return_dict: Optional[bool] = None,
-        ):
-    # 根据函数的参数设置是否输出注意力权重
-        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-    # 根据函数的参数设置是否输出隐藏状态
-        output_hidden_states = (
-            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-        )
-    # 根据函数的参数设置是否返回字典形式的输出
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+    def __init__(self, config, add_pooling_layer=True):
+        super().__init__(config)
 
-    # 如果未传入像素值，则抛出数值错误
-        if pixel_values is None:
-            raise ValueError("You have to specify pixel_values")
+        # 确保模型需要的后端库已经加载
+        requires_backends(self, ["natten"])
 
-    # 将像素值传入嵌入层得到嵌入输出
-        embedding_output = self.embeddings(pixel_values)
+        # 设置配置信息
+        self.config = config
+        # 确定模型深度的层数
+        self.num_levels = len(config.depths)
+        # 计算特征向量的维度
+        self.num_features = int(config.embed_dim * 2 ** (self.num_levels - 1))
 
-    # 将嵌入输出传入编码器，根据参数输出注意力权重和隐藏状态
-        encoder_outputs = self.encoder(
-            embedding_output,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
+        # 初始化自然语言嵌入层
+        self.embeddings = NatEmbeddings(config)
+        # 初始化自然语言编码器
+        self.encoder = NatEncoder(config)
 
-    # 获取编码器输出中的序列输出并进行 LayerNorm 处理
-        sequence_output = encoder_outputs[0]
-        sequence_output = self.layernorm(sequence_output)
+        # 使用指定的层归一化函数初始化
+        self.layernorm = nn.LayerNorm(self.num_features, eps=config.layer_norm_eps)
+        # 如果需要添加池化层，则初始化自适应平均池化层
+        self.pooler = nn.AdaptiveAvgPool1d(1) if add_pooling_layer else None
 
-    # 初始化池化输出为 None，并且如果存在池化层，则进行池化操作
-        pooled_output = None
-        if self.pooler is not None:
-            pooled_output = self.pooler(sequence_output.flatten(1, 2).transpose(1, 2))
-            pooled_output = torch.flatten(pooled_output, 1)
+        # 初始化权重并进行最终处理
+        self.post_init()
 
-    # 如果不返回字典形式的输出，则将需要返回的内容组成元组输出
-        if not return_dict:
-            output = (sequence_output, pooled_output) + encoder_outputs[1:]
+    def get_input_embeddings(self):
+        # 返回嵌入层中的补丁嵌入
+        return self.embeddings.patch_embeddings
 
-            return output
+    def _prune_heads(self, heads_to_prune):
+        """
+        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
+        class PreTrainedModel
+        """
+        # 遍历需要修剪的层和对应的头部信息
+        for layer, heads in heads_to_prune.items():
+            # 在编码器中修剪指定层的注意力头
+            self.encoder.layer[layer].attention.prune_heads(heads)
 
-    # 如果返回字典形式的输出，则返回经过格式处理的输出结构体 NatModelOutput
-        return NatModelOutput(
-            last_hidden_state=sequence_output,
-            pooler_output=pooled_output,
-            hidden_states=encoder_outputs.hidden_states,
-            attentions=encoder_outputs.attentions,
-            reshaped_hidden_states=encoder_outputs.reshaped_hidden_states,
-        )
-    # 使用 add_start_docstrings 装饰器添加模型类的文档字符串
+    @add_start_docstrings_to_model_forward(NAT_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=NatModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+        modality="vision",
+        expected_output=_EXPECTED_OUTPUT_SHAPE,
+    )
+    def forward(
+        self,
+        pixel_values: Optional[torch.FloatTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    # 输出注意力张量，如果未指定则使用配置中的输出注意力设置
+    output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+    # 输出隐藏状态张量，如果未指定则使用配置中的输出隐藏状态设置
+    output_hidden_states = (
+        output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+    )
+    # 返回字典标志，如果未指定则使用配置中的返回字典设置
+    return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+    # 如果未提供像素值，则抛出数值错误
+    if pixel_values is None:
+        raise ValueError("You have to specify pixel_values")
+
+    # 将像素值嵌入到嵌入层中
+    embedding_output = self.embeddings(pixel_values)
+
+    # 编码器处理嵌入输出
+    encoder_outputs = self.encoder(
+        embedding_output,
+        output_attentions=output_attentions,
+        output_hidden_states=output_hidden_states,
+        return_dict=return_dict,
+    )
+
+    # 获取编码器的序列输出
+    sequence_output = encoder_outputs[0]
+    # 应用层归一化到序列输出
+    sequence_output = self.layernorm(sequence_output)
+
+    # 初始化池化输出为 None
+    pooled_output = None
+    # 如果存在池化器，则对序列输出进行池化操作
+    if self.pooler is not None:
+        pooled_output = self.pooler(sequence_output.flatten(1, 2).transpose(1, 2))
+        pooled_output = torch.flatten(pooled_output, 1)
+
+    # 如果不使用返回字典形式
+    if not return_dict:
+        # 返回序列输出，池化输出以及可能的其他编码器输出
+        output = (sequence_output, pooled_output) + encoder_outputs[1:]
+        return output
+
+    # 如果使用返回字典形式，则返回自定义的模型输出对象
+    return NatModelOutput(
+        last_hidden_state=sequence_output,
+        pooler_output=pooled_output,
+        hidden_states=encoder_outputs.hidden_states,
+        attentions=encoder_outputs.attentions,
+        reshaped_hidden_states=encoder_outputs.reshaped_hidden_states,
+    )
+# 使用装饰器为类添加文档字符串，描述其作为 Nat 模型变换器和图像分类头的功能，该头部是在 [CLS] 标记的最终隐藏状态之上的线性层
+@add_start_docstrings(
     """
     Nat Model transformer with an image classification head on top (a linear layer on top of the final hidden state of
     the [CLS] token) e.g. for ImageNet.
-    """
-    # 继承自 NatPreTrainedModel 的 NatForImageClassification 类
-    # 通过该装饰器添加文档字符串
-    @add_start_docstrings(
+    """,
     NAT_START_DOCSTRING,
-    )
+)
 class NatForImageClassification(NatPreTrainedModel):
-    # 初始化函数，接受参数 config
     def __init__(self, config):
-        # 调用父类的初始化函数
         super().__init__(config)
 
-        # 需要 natten 后端支持
+        # 检查所需的后端是否已加载
         requires_backends(self, ["natten"])
 
-        # 记录标签数量
+        # 初始化分类器的标签数量
         self.num_labels = config.num_labels
-        # 创建 NatModel 对象
+        # 创建 NatModel 实例
         self.nat = NatModel(config)
 
         # 分类器头部
         self.classifier = (
-            # 如果标签数量大于 0，则创建线性层；否则创建一个恒等函数
             nn.Linear(self.nat.num_features, config.num_labels) if config.num_labels > 0 else nn.Identity()
         )
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 使用 add_start_docstrings_to_model_forward 和 add_code_sample_docstrings 装饰器添加前向传播函数的文档字符串
+    # 使用装饰器添加模型前向方法的文档字符串，描述其输入参数
     @add_start_docstrings_to_model_forward(NAT_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_IMAGE_CLASS_CHECKPOINT,
@@ -825,7 +920,6 @@ class NatForImageClassification(NatPreTrainedModel):
         config_class=_CONFIG_FOR_DOC,
         expected_output=_IMAGE_CLASS_EXPECTED_OUTPUT,
     )
-    # 前向传播函数，接受多个输入参数
     def forward(
         self,
         pixel_values: Optional[torch.FloatTensor] = None,
@@ -833,36 +927,35 @@ class NatForImageClassification(NatPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 计算图像分类或回归的损失函数
-    def forward(
-        self,
-        pixel_values,
-        labels=None,
-        output_attentions=None,
-        output_hidden_states=None,
-        return_dict=None,
-    ) -> Union[Tuple, NatImageClassifierOutput]:
-        # 判断是否使用return_dict，如果未指定则使用self.config.use_return_dict
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the image classification/regression loss. Indices should be in `[0, ...,
+            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
+            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
+        """
+        # 如果 return_dict 不为 None，则使用 return_dict；否则使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        
-        # 调用self.nat函数获取输出
+
+        # 调用自然语言处理模型进行处理，根据参数设置输出注意力权重和隐藏状态
         outputs = self.nat(
             pixel_values,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        
-        # 从输出中获取池化后的输出
+
+        # 获取池化后的输出，通常用于分类任务
         pooled_output = outputs[1]
-        
-        # 将池化后的输出传入分类器得到logits
+
+        # 使用分类器对池化后的输出进行分类，得到预测的 logits
         logits = self.classifier(pooled_output)
-        
-        # 如果提供了labels，则计算损失函数
+
+        # 初始化损失为 None
         loss = None
+
+        # 如果提供了标签 labels，则计算损失
         if labels is not None:
-            # 自动判断问题类型(回归或分类)
+            # 如果问题类型未指定，则根据标签类型确定问题类型
             if self.config.problem_type is None:
                 if self.num_labels == 1:
                     self.config.problem_type = "regression"
@@ -870,26 +963,31 @@ class NatForImageClassification(NatPreTrainedModel):
                     self.config.problem_type = "single_label_classification"
                 else:
                     self.config.problem_type = "multi_label_classification"
-            
-            # 根据不同问题类型计算损失函数
+
+            # 根据问题类型选择对应的损失函数
             if self.config.problem_type == "regression":
                 loss_fct = MSELoss()
                 if self.num_labels == 1:
+                    # 对于单标签回归任务，计算均方误差损失
                     loss = loss_fct(logits.squeeze(), labels.squeeze())
                 else:
+                    # 对于多标签回归任务，计算均方误差损失
                     loss = loss_fct(logits, labels)
             elif self.config.problem_type == "single_label_classification":
+                # 对于单标签分类任务，计算交叉熵损失
                 loss_fct = CrossEntropyLoss()
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
             elif self.config.problem_type == "multi_label_classification":
+                # 对于多标签分类任务，计算二元交叉熵损失
                 loss_fct = BCEWithLogitsLoss()
                 loss = loss_fct(logits, labels)
-        
-        # 根据return_dict决定返回形式
+
+        # 如果不需要返回字典形式的输出，则按照元组的形式返回结果
         if not return_dict:
-            output = (logits,) + outputs[2:]
+            output = (logits,) + outputs[2:]  # outputs[2:] 包含额外的隐藏状态信息
             return ((loss,) + output) if loss is not None else output
-    
+
+        # 返回自定义的输出类 NatImageClassifierOutput，包含损失、logits、隐藏状态和注意力权重等信息
         return NatImageClassifierOutput(
             loss=loss,
             logits=logits,
@@ -897,56 +995,63 @@ class NatForImageClassification(NatPreTrainedModel):
             attentions=outputs.attentions,
             reshaped_hidden_states=outputs.reshaped_hidden_states,
         )
-# 用于添加初始文档字符串，描述 NAT 骨干网络的用途，可与 DETR 和 MaskFormer 等框架一起使用
+# 使用装饰器添加文档字符串，描述这个类的作用是提供 NAT 的主干结构，可用于 DETR 和 MaskFormer 等框架。
+# NAT_START_DOCSTRING 是预定义的一部分文档字符串内容。
 @add_start_docstrings(
     "NAT backbone, to be used with frameworks like DETR and MaskFormer.",
     NAT_START_DOCSTRING,
 )
-# 定义 NatBackbone 类，继承自 NatPreTrainedModel 和 BackboneMixin
 class NatBackbone(NatPreTrainedModel, BackboneMixin):
-    # 构造函数，初始化类实例
     def __init__(self, config):
-        # 调用父类 NatPreTrainedModel 的构造函数
+        # 调用父类的构造函数，初始化 NAT 模型的配置
         super().__init__(config)
-        # 调用 BackboneMixin 的 _init_backbone 方法
+        # 调用父类的方法，初始化主干结构
         super()._init_backbone(config)
 
-        # 确保依赖的后端库已加载
+        # 检查并确保需要的后端支持模块 "natten" 已经加载
         requires_backends(self, ["natten"])
 
         # 初始化嵌入层
         self.embeddings = NatEmbeddings(config)
         # 初始化编码器
         self.encoder = NatEncoder(config)
-
-        # 计算特征数，用于定义层次结构
+        
+        # 计算每个特征层的通道数，并将其保存在列表中
         self.num_features = [config.embed_dim] + [int(config.embed_dim * 2**i) for i in range(len(config.depths))]
 
-        # 为输出特征的隐藏状态添加层归一化
+        # 为输出特征层的隐藏状态添加层归一化层
         hidden_states_norms = {}
         for stage, num_channels in zip(self.out_features, self.channels):
             hidden_states_norms[stage] = nn.LayerNorm(num_channels)
         self.hidden_states_norms = nn.ModuleDict(hidden_states_norms)
 
-        # 初始化权重并应用最终处理
+        # 执行初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入嵌入
+    # 获取输入嵌入层的方法
     def get_input_embeddings(self):
         return self.embeddings.patch_embeddings
 
-    # 前向传播方法，定义了模型的计算流程
+    # 重写 forward 方法，添加输入文档字符串和返回值文档字符串，指定了输入参数和返回输出类型
     @add_start_docstrings_to_model_forward(NAT_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=BackboneOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
-        pixel_values: torch.Tensor,  # 输入像素值张量
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
-        output_attentions: Optional[bool] = None,  # 是否输出注意力
-        return_dict: Optional[bool] = None,  # 是否返回字典形式的结果
-        ) -> BackboneOutput:
+        pixel_values: torch.Tensor,
+        output_hidden_states: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        ):
         """
+        根据输入的参数返回BackboneOutput对象。
+
+        Parameters:
+            return_dict (bool, optional): 控制是否返回字典形式的输出，默认从self.config.use_return_dict获取。
+            output_hidden_states (bool, optional): 控制是否输出隐藏状态，默认从self.config.output_hidden_states获取。
+            output_attentions (bool, optional): 控制是否输出注意力，默认从self.config.output_attentions获取。
+
         Returns:
+            BackboneOutput: 包含特征图、隐藏状态和注意力的输出对象。
 
         Examples:
 
@@ -971,20 +1076,21 @@ class NatBackbone(NatPreTrainedModel, BackboneMixin):
         >>> feature_maps = outputs.feature_maps
         >>> list(feature_maps[-1].shape)
         [1, 512, 7, 7]
-        ```py"""
-        # 如果 return_dict 参数为 None，则使用模型配置中的默认值
+        ```
+        """
+        # 如果未提供return_dict参数，则使用self.config.use_return_dict的设置
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 如果 output_hidden_states 参数为 None，则使用模型配置中的默认值
+        # 如果未提供output_hidden_states参数，则使用self.config.output_hidden_states的设置
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 如果 output_attentions 参数为 None，则使用模型配置中的默认值
+        # 如果未提供output_attentions参数，则使用self.config.output_attentions的设置
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
 
-        # 使用输入像素值计算嵌入输出
+        # 对输入的像素值进行嵌入处理，获取嵌入输出
         embedding_output = self.embeddings(pixel_values)
 
-        # 对嵌入输出进行编码
+        # 将嵌入输出传入编码器，获取编码器的输出
         outputs = self.encoder(
             embedding_output,
             output_attentions=output_attentions,
@@ -993,34 +1099,31 @@ class NatBackbone(NatPreTrainedModel, BackboneMixin):
             return_dict=True,
         )
 
-        # 获取编码后的隐藏状态
+        # 获取重塑后的隐藏状态
         hidden_states = outputs.reshaped_hidden_states
 
         # 初始化特征图为空元组
         feature_maps = ()
-        # 遍历每个阶段的名称和隐藏状态
+        # 遍历阶段名称和隐藏状态，将符合输出特征要求的阶段的处理后的隐藏状态添加到特征图中
         for stage, hidden_state in zip(self.stage_names, hidden_states):
-            # 如果当前阶段在所需输出特征中
             if stage in self.out_features:
-                # 转置隐藏状态以匹配预期形状
+                # TODO can we simplify this? 可以简化这部分代码吗？
                 batch_size, num_channels, height, width = hidden_state.shape
                 hidden_state = hidden_state.permute(0, 2, 3, 1).contiguous()
-                # 重新形状隐藏状态以应用标准化
                 hidden_state = hidden_state.view(batch_size, height * width, num_channels)
                 hidden_state = self.hidden_states_norms[stage](hidden_state)
                 hidden_state = hidden_state.view(batch_size, height, width, num_channels)
                 hidden_state = hidden_state.permute(0, 3, 1, 2).contiguous()
-                # 添加处理后的隐藏状态到特征图中
                 feature_maps += (hidden_state,)
 
-        # 如果不返回字典，则返回特征图和可能的隐藏状态
+        # 如果不需要返回字典形式的输出，则构造输出元组
         if not return_dict:
             output = (feature_maps,)
             if output_hidden_states:
                 output += (outputs.hidden_states,)
             return output
 
-        # 返回带有特征图、隐藏状态和注意力的字典
+        # 返回BackboneOutput对象，包含特征图、隐藏状态和注意力
         return BackboneOutput(
             feature_maps=feature_maps,
             hidden_states=outputs.hidden_states if output_hidden_states else None,

@@ -1,9 +1,10 @@
-# `.\transformers\models\xlnet\__init__.py`
+# `.\models\xlnet\__init__.py`
 
-```py
-# 导入必要的模块和函数
+```
+# 导入必要的模块和函数，包括类型检查功能
 from typing import TYPE_CHECKING
-# 从 utils 模块中导入所需的工具函数和异常类
+
+# 从工具包中导入相关模块和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -13,37 +14,37 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义需要导入的模块和函数的结构
+# 定义模块导入结构字典，用于组织需要导入的模块和函数
 _import_structure = {"configuration_xlnet": ["XLNET_PRETRAINED_CONFIG_ARCHIVE_MAP", "XLNetConfig"]}
 
-# 检查是否存在 sentencepiece，若不存在则抛出异常
+# 检查是否安装了 sentencepiece 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 如果存在则导入相关模块和函数
 else:
+    # 如果安装了 sentencepiece 库，则添加相关的 XLNetTokenizer 到导入结构中
     _import_structure["tokenization_xlnet"] = ["XLNetTokenizer"]
 
-# 检查是否存在 tokenizers，若不存在则抛出异常
+# 检查是否安装了 tokenizers 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 如果存在则导入相关模块和函数
 else:
+    # 如果安装了 tokenizers 库，则添加相关的 XLNetTokenizerFast 到导入结构中
     _import_structure["tokenization_xlnet_fast"] = ["XLNetTokenizerFast"]
 
-# 检查是否存在 torch，若不存在则抛出异常
+# 检查是否安装了 torch 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 如果存在则导入相关模块和函数
 else:
+    # 如果安装了 torch 库，则添加相关的 XLNet 模型组件到导入结构中
     _import_structure["modeling_xlnet"] = [
         "XLNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "XLNetForMultipleChoice",
@@ -57,14 +58,14 @@ else:
         "load_tf_weights_in_xlnet",
     ]
 
-# 检查是否存在 tensorflow，若不存在则抛出异常
+# 检查是否安装了 tensorflow 库，如果未安装则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 如果存在则导入相关模块和函数
 else:
+    # 如果安装了 tensorflow 库，则添加相关的 TensorFlow XLNet 模型组件到导入结构中
     _import_structure["modeling_tf_xlnet"] = [
         "TF_XLNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFXLNetForMultipleChoice",
@@ -77,7 +78,7 @@ else:
         "TFXLNetPreTrainedModel",
     ]
 
-# 如果是 TYPE_CHECKING 模式，则导入对应的模块和函数
+# 如果是类型检查模式，则导入相关的类型定义
 if TYPE_CHECKING:
     from .configuration_xlnet import XLNET_PRETRAINED_CONFIG_ARCHIVE_MAP, XLNetConfig
 
@@ -87,6 +88,7 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果安装了 sentencepiece 库，则从 tokenization_xlnet 模块中导入 XLNetTokenizer
         from .tokenization_xlnet import XLNetTokenizer
 
     try:
@@ -95,17 +97,18 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果安装了 tokenizers 库，则从 tokenization_xlnet_fast 模块中导入 XLNetTokenizerFast
         from .tokenization_xlnet_fast import XLNetTokenizerFast
-    # 尝试检查是否存在 torch 库，如果不存在则抛出 OptionalDependencyNotAvailable 异常
+    # 尝试检查是否存在 Torch 库，如果不存在则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获 OptionalDependencyNotAvailable 异常，不做任何处理
+    # 捕获 OptionalDependencyNotAvailable 异常，表示 Torch 库不可用
     except OptionalDependencyNotAvailable:
         pass
-    # 如果没有抛出任何异常，则执行下面的语句
+    # 如果 Torch 库可用，则执行以下代码块
     else:
-        # 从 modeling_xlnet 模块导入相关函数和类
+        # 从当前目录下的 modeling_xlnet 模块导入以下符号
         from .modeling_xlnet import (
             XLNET_PRETRAINED_MODEL_ARCHIVE_LIST,
             XLNetForMultipleChoice,
@@ -119,16 +122,16 @@ if TYPE_CHECKING:
             load_tf_weights_in_xlnet,
         )
 
-    # 尝试检查是否存在 tensorflow 库，如果不存在则抛出 OptionalDependencyNotAvailable 异常
+    # 尝试检查是否存在 TensorFlow 库，如果不存在则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
-    # 捕获 OptionalDependencyNotAvailable 异常，不做任何处理
+    # 捕获 OptionalDependencyNotAvailable 异常，表示 TensorFlow 库不可用
     except OptionalDependencyNotAvailable:
         pass
-    # 如果没有抛出任何异常，则执行下面的语句
+    # 如果 TensorFlow 库可用，则执行以下代码块
     else:
-        # 从 modeling_tf_xlnet 模块导入相关函数和类
+        # 从当前目录下的 modeling_tf_xlnet 模块导入以下符号
         from .modeling_tf_xlnet import (
             TF_XLNET_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFXLNetForMultipleChoice,
@@ -141,9 +144,11 @@ if TYPE_CHECKING:
             TFXLNetPreTrainedModel,
         )
 else:
-    # 导入 sys 模块
+    # 如果不在以上的情况下，则导入 sys 模块
     import sys
-
-    # 将当前模块加入到 sys.modules 中
+    
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
+    # __name__ 是当前模块的名称，__file__ 是当前文件的路径
+    # _import_structure 是导入的结构信息，module_spec=__spec__ 是模块的规范信息
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

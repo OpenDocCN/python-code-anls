@@ -1,24 +1,39 @@
-# `.\transformers\models\tapas\__init__.py`
+# `.\models\tapas\__init__.py`
 
-```py
-# 导入类型检查模块
+```
+# Copyright 2020 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from typing import TYPE_CHECKING
-# 导入必要的依赖项检查模块
+
+# 从 ...utils 中导入 OptionalDependencyNotAvailable、_LazyModule、is_tf_available 和 is_torch_available
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_available, is_torch_available
 
-# 定义并初始化需要导入的模块及其子模块的结构
+# 定义一个字典 _import_structure，用于存储不同模块的导入结构
 _import_structure = {
     "configuration_tapas": ["TAPAS_PRETRAINED_CONFIG_ARCHIVE_MAP", "TapasConfig"],
     "tokenization_tapas": ["TapasTokenizer"],
 }
 
-# 检查是否有可用的 torch
+# 尝试导入 torch 版本的 Tapas 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果可用，则将相关模块添加到 _import_structure 中
     _import_structure["modeling_tapas"] = [
         "TAPAS_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TapasForMaskedLM",
@@ -29,13 +44,14 @@ else:
         "load_tf_weights_in_tapas",
     ]
 
-# 检查是否有可用的 tensorflow
+# 尝试导入 TensorFlow 版本的 Tapas 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 如果可用，则将相关模块添加到 _import_structure 中
     _import_structure["modeling_tf_tapas"] = [
         "TF_TAPAS_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFTapasForMaskedLM",
@@ -45,21 +61,17 @@ else:
         "TFTapasPreTrainedModel",
     ]
 
-# 如果是类型检查环境，导入所需模块和子模块
+# 如果是类型检查阶段，导入具体的类型和模块
 if TYPE_CHECKING:
-    # 导入 tapas 的相关配置
     from .configuration_tapas import TAPAS_PRETRAINED_CONFIG_ARCHIVE_MAP, TapasConfig
-    # 导入 tapas 的 tokenizer
     from .tokenization_tapas import TapasTokenizer
 
-    # 检查是否有可用的 torch
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入 tapas 的建模相关模块
         from .modeling_tapas import (
             TAPAS_PRETRAINED_MODEL_ARCHIVE_LIST,
             TapasForMaskedLM,
@@ -70,14 +82,12 @@ if TYPE_CHECKING:
             load_tf_weights_in_tapas,
         )
 
-    # 检查是否有可用的 tensorflow
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入 tapas 的 tensorflow 建模相关模块
         from .modeling_tf_tapas import (
             TF_TAPAS_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFTapasForMaskedLM,
@@ -87,10 +97,9 @@ if TYPE_CHECKING:
             TFTapasPreTrainedModel,
         )
 
-# 如果不是类型检查环境，使用 _LazyModule 创建模块并懒加载所需的模块
+# 如果不是类型检查阶段，则动态加载模块，并将当前模块替换为 _LazyModule 的实例
 else:
     import sys
 
-    # 创建懒加载模块 _LazyModule
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

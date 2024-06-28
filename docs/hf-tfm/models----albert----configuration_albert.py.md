@@ -1,95 +1,102 @@
-# `.\transformers\models\albert\configuration_albert.py`
+# `.\models\albert\configuration_albert.py`
 
-```py
-# 设置文件编码为 utf-8
-# 版权声明，包括作者和团队信息
-# 版权声明，版权所有，保留所有权利
-# 根据 Apache 许可证 2.0 版本，只有在遵守许可证的情况下才能使用此文件
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“原样”分发的，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关特定语言的权限和限制
-""" ALBERT 模型配置 """
-# 导入必要的库
+```
+# 引入 OrderedDict 用于有序字典，Mapping 用于类型提示
 from collections import OrderedDict
 from typing import Mapping
-# 导入预训练配置和 ONNX 配置
+
+# 引入预训练配置工具类 PretrainedConfig 和 OnnxConfig
 from ...configuration_utils import PretrainedConfig
 from ...onnx import OnnxConfig
 
-# ALBERT 预训练配置映射
+# ALBERT 预训练模型配置文件映射字典，将模型名称映射到对应的配置文件 URL
 ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
-    "albert-base-v1": "https://huggingface.co/albert-base-v1/resolve/main/config.json",
-    "albert-large-v1": "https://huggingface.co/albert-large-v1/resolve/main/config.json",
-    "albert-xlarge-v1": "https://huggingface.co/albert-xlarge-v1/resolve/main/config.json",
-    "albert-xxlarge-v1": "https://huggingface.co/albert-xxlarge-v1/resolve/main/config.json",
-    "albert-base-v2": "https://huggingface.co/albert-base-v2/resolve/main/config.json",
-    "albert-large-v2": "https://huggingface.co/albert-large-v2/resolve/main/config.json",
-    "albert-xlarge-v2": "https://huggingface.co/albert-xlarge-v2/resolve/main/config.json",
-    "albert-xxlarge-v2": "https://huggingface.co/albert-xxlarge-v2/resolve/main/config.json",
+    "albert/albert-base-v1": "https://huggingface.co/albert/albert-base-v1/resolve/main/config.json",
+    "albert/albert-large-v1": "https://huggingface.co/albert/albert-large-v1/resolve/main/config.json",
+    "albert/albert-xlarge-v1": "https://huggingface.co/albert/albert-xlarge-v1/resolve/main/config.json",
+    "albert/albert-xxlarge-v1": "https://huggingface.co/albert/albert-xxlarge-v1/resolve/main/config.json",
+    "albert/albert-base-v2": "https://huggingface.co/albert/albert-base-v2/resolve/main/config.json",
+    "albert/albert-large-v2": "https://huggingface.co/albert/albert-large-v2/resolve/main/config.json",
+    "albert/albert-xlarge-v2": "https://huggingface.co/albert/albert-xlarge-v2/resolve/main/config.json",
+    "albert/albert-xxlarge-v2": "https://huggingface.co/albert/albert-xxlarge-v2/resolve/main/config.json",
 }
 
-# ALBERT 配置类，继承自预训练配置类
+# AlbertConfig 类，继承自 PretrainedConfig，用于存储 ALBERT 模型的配置信息
 class AlbertConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`AlbertModel`] 或 [`TFAlbertModel`] 配置的配置类。根据指定的参数实例化 ALBERT 模型，定义模型架构。
-    使用默认值实例化配置将产生类似于 ALBERT [albert-xxlarge-v2](https://huggingface.co/albert-xxlarge-v2) 架构的配置。
+    这是一个配置类，用于存储 [`AlbertModel`] 或 [`TFAlbertModel`] 的配置。根据指定的参数实例化一个 ALBERT 模型配置，
+    定义模型的架构。使用默认参数实例化配置将得到与 ALBERT [albert/albert-xxlarge-v2] 相似的配置。
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
+    配置对象继承自 [`PretrainedConfig`]，可用于控制模型的输出。阅读 [`PretrainedConfig`] 的文档获取更多信息。
 
-    示例:
+    示例：
 
     ```python
     >>> from transformers import AlbertConfig, AlbertModel
 
-    >>> # 初始化一个 ALBERT-xxlarge 风格的配置
+    >>> # 初始化 ALBERT-xxlarge 风格的配置
     >>> albert_xxlarge_configuration = AlbertConfig()
 
-    >>> # 初始化一个 ALBERT-base 风格的配置
+    >>> # 初始化 ALBERT-base 风格的配置
     >>> albert_base_configuration = AlbertConfig(
     ...     hidden_size=768,
     ...     num_attention_heads=12,
     ...     intermediate_size=3072,
     ... )
 
-    >>> # 从 ALBERT-base 风格的配置初始化一个模型（���有随机权重）
+    >>> # 使用 ALBERT-base 风格的配置初始化一个模型（带有随机权重）
+
+    ```
+    ```
     >>> model = AlbertModel(albert_xxlarge_configuration)
-
-    >>> # 访问模型配置
+    
+    
+    # 创建一个 AlbertModel 的实例，使用给定的配置 albert_xxlarge_configuration
+    model = AlbertModel(albert_xxlarge_configuration)
+    
+    
+    
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py
-    """
+    
+    
+    # 获取模型的配置信息并赋值给 configuration 变量
+    configuration = model.config
+    
+    
+    
     model_type = "albert"
-
-    # 定义 ALBERT 模型的初始化方法，设置各种参数
+    
+    
+    
     def __init__(
         self,
-        vocab_size=30000,  # 词汇表大小，默认为 30000
-        embedding_size=128,  # 嵌入层维度，默认为 128
-        hidden_size=4096,  # 隐藏层大小，默认为 4096
-        num_hidden_layers=12,  # 隐藏层的数量，默认为 12
-        num_hidden_groups=1,  # 隐藏层的组数，默认为 1
-        num_attention_heads=64,  # 注意力头的数量，默认为 64
-        intermediate_size=16384,  # 中间层大小，默认为 16384
-        inner_group_num=1,  # 内部组数量，默认为 1
-        hidden_act="gelu_new",  # 隐藏层激活函数，默认为 "gelu_new"
-        hidden_dropout_prob=0,  # 隐藏层的 dropout 概率，默认为 0
-        attention_probs_dropout_prob=0,  # 注意力概率 dropout 概率，默认为 0
-        max_position_embeddings=512,  # 最大位置嵌入，默认为 512
-        type_vocab_size=2,  # 类型词汇表大小，默认为 2
-        initializer_range=0.02,  # 初始化范围，默认为 0.02
-        layer_norm_eps=1e-12,  # 层归一化的 epsilon，默认为 1e-12
-        classifier_dropout_prob=0.1,  # 分类器的 dropout 概率，默认为 0.1
-        position_embedding_type="absolute",  # 位置嵌入类型，默认为 "absolute"
-        pad_token_id=0,  # 填充 token 的 id，默认为 0
-        bos_token_id=2,  # 开始 token 的 id，默认为 2
-        eos_token_id=3,  # 结束 token 的 id，默认为 3
+        vocab_size=30000,
+        embedding_size=128,
+        hidden_size=4096,
+        num_hidden_layers=12,
+        num_hidden_groups=1,
+        num_attention_heads=64,
+        intermediate_size=16384,
+        inner_group_num=1,
+        hidden_act="gelu_new",
+        hidden_dropout_prob=0,
+        attention_probs_dropout_prob=0,
+        max_position_embeddings=512,
+        type_vocab_size=2,
+        initializer_range=0.02,
+        layer_norm_eps=1e-12,
+        classifier_dropout_prob=0.1,
+        position_embedding_type="absolute",
+        pad_token_id=0,
+        bos_token_id=2,
+        eos_token_id=3,
         **kwargs,
     ):
-        # 调用父类的初始化方法，设置填充、开始和结束 token 的 id
+        # 调用父类的构造函数，并传入相关的特殊 token id 参数
         super().__init__(pad_token_id=pad_token_id, bos_token_id=bos_token_id, eos_token_id=eos_token_id, **kwargs)
-
-        # 设置模型的各种参数
+    
+        # 初始化 AlbertModel 的各种参数
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
         self.hidden_size = hidden_size
@@ -107,23 +114,24 @@ class AlbertConfig(PretrainedConfig):
         self.layer_norm_eps = layer_norm_eps
         self.classifier_dropout_prob = classifier_dropout_prob
         self.position_embedding_type = position_embedding_type
-# 从transformers.models.bert.configuration_bert.BertOnnxConfig复制并将Robert替换为Albert
+# 从 transformers.models.bert.configuration_bert.BertOnnxConfig 复制并修改为 AlbertOnnxConfig 类，用于处理 Albert 模型的配置
 class AlbertOnnxConfig(OnnxConfig):
-    # 定义inputs属性，返回输入的映射关系
+    
+    # 定义 inputs 属性，返回一个映射，表示输入张量的动态轴
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 如果任务是多项选择，则动态轴为{0: "batch", 1: "choice", 2: "sequence"}
+        # 根据任务类型设定动态轴的不同设置
         if self.task == "multiple-choice":
             dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
-        # 否则动态轴为{0: "batch", 1: "sequence"}
         else:
             dynamic_axis = {0: "batch", 1: "sequence"}
-        # 返回有序字典，包含输入名称和对应的动态轴
+        
+        # 返回一个有序字典，指定模型输入张量名称与对应的动态轴
         return OrderedDict(
             [
-                ("input_ids", dynamic_axis),
-                ("attention_mask", dynamic_axis),
-                ("token_type_ids", dynamic_axis),
+                ("input_ids", dynamic_axis),        # 模型输入张量 input_ids 对应的动态轴
+                ("attention_mask", dynamic_axis),  # 模型输入张量 attention_mask 对应的动态轴
+                ("token_type_ids", dynamic_axis),  # 模型输入张量 token_type_ids 对应的动态轴
             ]
         )
 ```

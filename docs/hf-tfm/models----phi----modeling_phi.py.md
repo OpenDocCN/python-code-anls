@@ -1,36 +1,37 @@
-# `.\transformers\models\phi\modeling_phi.py`
+# `.\models\phi\modeling_phi.py`
 
-```py
-# 使用UTF-8编码
-
-# 版权信息
-
-# Apache许可证，版本2.0（“许可证”）下的2023 Microsoft和HuggingFace Inc.团队。保留所有权利。
-# 除非符合许可证，否则不得使用此文件。
-# 可以在以下网址获取许可证的副本：
+```
+# coding=utf-8
+# 版权 2023 Microsoft 和 HuggingFace Inc. 团队。保留所有权利。
+#
+# 根据 Apache 许可证 2.0 版本（“许可证”）许可;
+# 除非符合许可证的规定，否则您不得使用此文件。
+# 您可以在以下网址获取许可证副本：
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则根据“许可证”分发的软件
-# 是基于“按原样”基础分发的，不附带任何形式的保证或条件。
-# 有关许可证的特定权限，请参阅许可证。
+# 除非适用法律要求或书面同意，否则软件将根据“原样”分发，
+# 没有任何明示或暗示的保证或条件。
+# 有关详细信息，请参阅许可证。
 
-"""PyTorch Phi模型。"""
+""" PyTorch Phi model. """
 
-# 导入依赖库
 import math
 from typing import List, Optional, Tuple, Union
 
 import torch
 import torch.nn.functional as F
 import torch.utils.checkpoint
+from packaging import version
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 导入其他模块
 from ...activations import ACT2FN
 from ...cache_utils import Cache, DynamicCache
-from ...modeling_attn_mask_utils import _prepare_4d_causal_attention_mask
+from ...modeling_attn_mask_utils import (
+    _prepare_4d_causal_attention_mask,
+    _prepare_4d_causal_attention_mask_for_sdpa,
+)
 from ...modeling_outputs import (
     BaseModelOutputWithPast,
     CausalLMOutputWithPast,
@@ -42,131 +43,128 @@ from ...utils import (
     add_code_sample_docstrings,
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
+    get_torch_version,
     is_flash_attn_2_available,
     is_flash_attn_greater_or_equal_2_10,
     logging,
     replace_return_docstrings,
 )
-
-# 导入配置文件
 from .configuration_phi import PhiConfig
 
-# 判断是否可以使用“flash_attn”模块
+# 如果支持 Flash Attention 2，则导入相应函数和模块
 if is_flash_attn_2_available():
-    # 导入“flash_attn”模块中的函数和类
     from flash_attn import flash_attn_func, flash_attn_varlen_func
     from flash_attn.bert_padding import index_first_axis, pad_input, unpad_input  # noqa
 
-# 使用Hugging Face的日志工具
+# 获取全局日志记录器
 logger = logging.get_logger(__name__)
 
+# 用于文档的检查点和配置名称
 _CHECKPOINT_FOR_DOC = "microsoft/phi-1"
 _CONFIG_FOR_DOC = "PhiConfig"
 
-# 预训练模型列表
+# 预训练模型归档列表
 PHI_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "microsoft/phi-1",
     "microsoft/phi-1_5",
     "microsoft/phi-2",
-    # See all Phi models at https://huggingface.co/models?filter=phi
+    # 查看所有 Phi 模型：https://huggingface.co/models?filter=phi
 ]
 
 
-# 从transformers.models.llama.modeling_llama._get_unpad_data复制
+# 从 transformers.models.llama.modeling_llama._get_unpad_data 复制的函数
+# 用于获取去除填充数据的辅助函数
 def _get_unpad_data(attention_mask):
-    # 计算batch中每个样本的序列长度
     seqlens_in_batch = attention_mask.sum(dim=-1, dtype=torch.int32)
-    # 找到为1的元素的索引
     indices = torch.nonzero(attention_mask.flatten(), as_tuple=False).flatten()
-    # 找到batch中的最大序列长度
     max_seqlen_in_batch = seqlens_in_batch.max().item()
-    # 计算累积的序列长度
-    cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.torch.int32), (1, 0))
+    cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.int32), (1, 0))
     return (
         indices,
         cu_seqlens,
-        max_seqlen_in_batch, # 返回计算结果
+        max_seqlen_in_batch,
     )
 
 
-# 从transformers.models.llama.modeling_llama.LlamaRotaryEmbedding复制，将Llama替换为Phi
+# 从 transformers.models.mistral.modeling_mistral.MistralRotaryEmbedding 复制的类
+# 将 Mistral 替换为 Phi，用于实现 PhiRotaryEmbedding 的旋转嵌入类
 class PhiRotaryEmbedding(nn.Module):
-    # 初始化函数，用于初始化 Sinusoidal Positional Embedding 模块
+    # 初始化函数，用于初始化一个位置编码器对象
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
 
-        # 设置维度、最大位置编码长度和基数
+        # 设置对象的维度
         self.dim = dim
+        # 设置最大位置编码长度，默认为2048
         self.max_position_embeddings = max_position_embeddings
+        # 设置基数，默认为10000
         self.base = base
 
-        # 计算频率的倒数，用于计算位置编码
-        inv_freq = 1.0 / (self.base ** (torch.arange(0, self.dim, 2).float().to(device) / self.dim))
-        # 注册为缓冲，使其在模型保存和加载时保持不变
+        # 计算逆频率向量，用于位置编码
+        inv_freq = 1.0 / (self.base ** (torch.arange(0, self.dim, 2, dtype=torch.int64).float().to(device) / self.dim))
+        # 将逆频率向量注册为缓冲区，使其可以被PyTorch持久化管理
         self.register_buffer("inv_freq", inv_freq, persistent=False)
 
-        # 构建余弦和正弦缓存，以便在序列长度改变时使用
+        # 构建余弦和正弦缓存，以便`torch.jit.trace`方法可以正常工作
         self._set_cos_sin_cache(
             seq_len=max_position_embeddings, device=self.inv_freq.device, dtype=torch.get_default_dtype()
         )
 
-    # 设置余弦和正弦缓存
+    # 设置余弦和正弦缓存的私有方法
     def _set_cos_sin_cache(self, seq_len, device, dtype):
         # 记录当前缓存的最大序列长度
         self.max_seq_len_cached = seq_len
-        # 生成序列长度的张量
-        t = torch.arange(self.max_seq_len_cached, device=device, dtype=self.inv_freq.dtype)
+        # 创建序列长度张量t，设备为指定设备，数据类型与inv_freq相同
+        t = torch.arange(self.max_seq_len_cached, device=device, dtype=torch.int64).type_as(self.inv_freq)
 
-        # 计算频率乘以序列长度得到频率张量
+        # 计算频率张量
         freqs = torch.outer(t, self.inv_freq)
-        # 按最后一个维度连接频率张量和其副本，用于计算余弦和正弦值
+        # 按最后一个维度连接余弦和正弦值，形成位置编码矩阵
         emb = torch.cat((freqs, freqs), dim=-1)
-        # 注册为缓冲，使其在模型保存和加载时保持不变
+        # 将余弦值注册为缓冲区，并指定数据类型为dtype，使其可以被PyTorch持久化管理
         self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)
+        # 将正弦值注册为缓冲区，并指定数据类型为dtype，使其可以被PyTorch持久化管理
         self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)
 
-    # 正向传播函数，用于获取余弦和正弦位置编码
+    # 前向传播方法，用于位置编码器的前向计算
     def forward(self, x, seq_len=None):
         # x: [bs, num_attention_heads, seq_len, head_size]
-        # 如果序列长度超过当前缓存的最大序列长度，则重新设置余弦和正弦缓存
+        # 如果传入的序列长度大于当前缓存的最大序列长度，则重新设置余弦和正弦缓存
         if seq_len > self.max_seq_len_cached:
             self._set_cos_sin_cache(seq_len=seq_len, device=x.device, dtype=x.dtype)
 
-        # 返回截取后的余弦和正弦缓存，用于位置编码
+        # 返回当前缓存中的余弦和正弦值，截取到seq_len长度，并将数据类型转换为x的数据类型
         return (
             self.cos_cached[:seq_len].to(dtype=x.dtype),
             self.sin_cached[:seq_len].to(dtype=x.dtype),
         )
-# 从 transformers.models.llama.modeling_llama.LlamaLinearScalingRotaryEmbedding 复制过来并将 Llama->Phi
+# 从transformers.models.falcon.modeling_falcon.FalconLinearScalingRotaryEmbedding复制并将Falcon更改为Phi
 class PhiLinearScalingRotaryEmbedding(PhiRotaryEmbedding):
-    """扩展了线性缩放的 PhiRotaryEmbedding。感谢 Reddit 用户 /u/kaiokendev"""
+    """PhiRotaryEmbedding扩展了线性缩放。感谢Reddit用户/u/kaiokendev"""
 
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None, scaling_factor=1.0):
-        self.scaling_factor = scaling_factor
-        调用父类的构造函数，初始化 PhiRotaryEmbedding
+        self.scaling_factor = scaling_factor  # 设置缩放因子
         super().__init__(dim, max_position_embeddings, base, device)
 
     def _set_cos_sin_cache(self, seq_len, device, dtype):
-        self.max_seq_len_cached = seq_len
-        t = torch.arange(self.max_seq_len_cached, device=device, dtype=self.inv_freq.dtype)
-        t = t / self.scaling_factor
+        self.max_seq_len_cached = seq_len  # 设置缓存的最大序列长度
+        t = torch.arange(self.max_seq_len_cached, device=device, dtype=torch.int64).type_as(self.inv_freq)
+        t = t / self.scaling_factor  # 缩放t以调整频率
 
-        freqs = torch.outer(t, self.inv_freq)
-        # 与论文中不同，但使用了不同的排列顺序，以获得相同的计算结果
-        emb = torch.cat((freqs, freqs), dim=-1)
-        创建缓存的余弦值和正弦值张量
-        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)
-        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)
+        freqs = torch.outer(t, self.inv_freq)  # 计算频率
+        # 与论文不同，但使用不同的排列顺序以获得相同的计算结果
+        emb = torch.cat((freqs, freqs), dim=-1)  # 构造正弦和余弦的缓存
+        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)  # 注册余弦缓存
+        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)  # 注册正弦缓存
 
 
-# 从 transformers.models.llama.modeling_llama.LlamaDynamicNTKScalingRotaryEmbedding 复制过来并将 Llama->Phi
+# 从transformers.models.falcon.modeling_falcon.FalconDynamicNTKScalingRotaryEmbedding复制并将Falcon更改为Phi
 class PhiDynamicNTKScalingRotaryEmbedding(PhiRotaryEmbedding):
-    """扩展了动态 NTK 缩放的 PhiRotaryEmbedding。感谢 Reddit 用户 /u/bloc97 和 /u/emozilla"""
+    """PhiRotaryEmbedding扩展了动态NTK缩放。感谢Reddit用户/u/bloc97和/u/emozilla"""
 
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None, scaling_factor=1.0):
-        self.scaling_factor = scaling_factor
-        调用父类的构造函数，初始化 PhiRotaryEmbedding
+        self.scaling_factor = scaling_factor  # 设置缩放因子
         super().__init__(dim, max_position_embeddings, base, device)
 
     def _set_cos_sin_cache(self, seq_len, device, dtype):
@@ -175,100 +173,99 @@ class PhiDynamicNTKScalingRotaryEmbedding(PhiRotaryEmbedding):
         if seq_len > self.max_position_embeddings:
             base = self.base * (
                 (self.scaling_factor * seq_len / self.max_position_embeddings) - (self.scaling_factor - 1)
-            ) ** (self.dim / (self.dim - 2))
-            inv_freq = 1.0 / (base ** (torch.arange(0, self.dim, 2).float().to(device) / self.dim))
-            创建缓存的逆频率张量
-            self.register_buffer("inv_freq", inv_freq, persistent=False)
+            ) ** (self.dim / (self.dim - 2))  # 计算基础值
+            inv_freq = 1.0 / (base ** (torch.arange(0, self.dim, 2, dtype=torch.int64).float().to(device) / self.dim))
+            self.register_buffer("inv_freq", inv_freq, persistent=False)  # 注册频率反向
 
-        t = torch.arange(self.max_seq_len_cached, device=device, dtype=self.inv_freq.dtype)
+        t = torch.arange(self.max_seq_len_cached, device=device, dtype=torch.int64).type_as(self.inv_freq)
 
-        freqs = torch.outer(t, self.inv_freq)
-        # 与论文中不同，但使用了不同的排列顺序，以获得相同的计算结果
-        emb = torch.cat((freqs, freqs), dim=-1)
-        创建缓存的余弦值和正弦值张量
-        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)
-        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)
+        freqs = torch.outer(t, self.inv_freq)  # 计算频率
+        # 与论文不同，但使用不同的排列顺序以获得相同的计算结果
+        emb = torch.cat((freqs, freqs), dim=-1)  # 构造正弦和余弦的缓存
+        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)  # 注册余弦缓存
+        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)  # 注册正弦缓存
 
 
-# 从 transformers.models.llama.modeling_llama.rotate_half 复制过来
+# 从transformers.models.llama.modeling_llama.rotate_half复制
 def rotate_half(x):
     """旋转输入张量一半的隐藏维度。"""
-    将输入张量的一半维度进行旋转
-    x1 = x[..., : x.shape[-1] // 2]
-    x2 = x[..., x.shape[-1] // 2 :]
-    返回连接后的张量
-    return torch.cat((-x2, x1), dim=-1)
+    x1 = x[..., : x.shape[-1] // 2]  # 取前一半维度
+    x2 = x[..., x.shape[-1] // 2 :]  # 取后一半维度
+    return torch.cat((-x2, x1), dim=-1)  # 连接负后半部分和前半部分
 
 
-# 从 transformers.models.llama.modeling_llama.apply_rotary_pos_emb 复制过来
+# 从transformers.models.mistral.modeling_mistral.apply_rotary_pos_emb复制
+# 将给定的旋转位置嵌入应用到查询和键张量上。
+
 def apply_rotary_pos_emb(q, k, cos, sin, position_ids, unsqueeze_dim=1):
-    """Applies Rotary Position Embedding to the query and key tensors.
-
-    Args:
-        q (`torch.Tensor`): The query tensor.  # 接收查询张量
-        k (`torch.Tensor`): The key tensor.    # 接收键张量
-        cos (`torch.Tensor`): The cosine part of the rotary embedding.  # 余弦部分的旋转嵌入
-        sin (`torch.Tensor`): The sine part of the rotary embedding.    # 正弦部分的旋转嵌入
-        position_ids (`torch.Tensor`):
-            The position indices of the tokens corresponding to the query and key tensors. For example, this can be
-            used to pass offsetted position ids when working with a KV-cache.  # 与查询和键张量对应的令牌的位置索引，用于处理KV缓存时传递偏移的位置id
-        unsqueeze_dim (`int`, *optional*, defaults to 1):
-            The 'unsqueeze_dim' argument specifies the dimension along which to unsqueeze cos[position_ids] and
-            sin[position_ids] so that they can be properly broadcasted to the dimensions of q and k. For example, note
-            that cos[position_ids] and sin[position_ids] have the shape [batch_size, seq_len, head_dim]. Then, if q and
-            k have the shape [batch_size, heads, seq_len, head_dim], then setting unsqueeze_dim=1 makes
-            cos[position_ids] and sin[position_ids] broadcastable to the shapes of q and k. Similarly, if q and k have
-            the shape [batch_size, seq_len, heads, head_dim], then set unsqueeze_dim=2.  # 'unsqueeze_dim'参数指定沿着哪个维度对cos[position_ids]和sin[position_ids]进行展开，以使它们可以正确地广播到q和k的维度。例如，注意cos[position_ids]和sin[position_ids]的形状是[batch_size, seq_len, head_dim]。然后，如果q和k的形状是[batch_size, heads, seq_len, head_dim]，那么设置unsqueeze_dim=1将cos[position_ids]和sin[position_ids]广播到q和k的形状。类似地，如果q和k的形状是[batch_size, seq_len, heads, head_dim]，则设置unsqueeze_dim=2。
-    Returns:
-        `tuple(torch.Tensor)` comprising of the query and key tensors rotated using the Rotary Position Embedding.  # 返回由使用旋转位置嵌入旋转的查询和键张量组成的元组。
     """
-    # 沿着指定的维度对cos[position_ids]和sin[position_ids]进行展开，以便可以正确地广播到q和k的维度
+    Args:
+        q (`torch.Tensor`): 查询张量。
+        k (`torch.Tensor`): 键张量。
+        cos (`torch.Tensor`): 旋转嵌入的余弦部分。
+        sin (`torch.Tensor`): 旋转嵌入的正弦部分。
+        position_ids (`torch.Tensor`): 表示与查询和键张量对应的位置索引。
+        unsqueeze_dim (`int`, *可选*, 默认为 1):
+            'unsqueeze_dim' 参数指定沿其进行展开的维度，以便将 cos[position_ids] 和 sin[position_ids] 广播到 q 和 k 的维度。
+            例如，如果 cos[position_ids] 和 sin[position_ids] 的形状为 [batch_size, seq_len, head_dim]，
+            当 q 和 k 的形状为 [batch_size, heads, seq_len, head_dim] 时，设置 unsqueeze_dim=1 使得它们可以正确广播到 q 和 k 的形状。
+            同样地，如果 q 和 k 的形状为 [batch_size, seq_len, heads, head_dim]，则设置 unsqueeze_dim=2。
+
+    Returns:
+        `tuple(torch.Tensor)`: 返回应用了旋转位置嵌入后的查询和键张量。
+    """
+    # 根据位置索引选择并展开余弦部分
     cos = cos[position_ids].unsqueeze(unsqueeze_dim)
+    # 根据位置索引选择并展开正弦部分
     sin = sin[position_ids].unsqueeze(unsqueeze_dim)
-    # 应用旋转位置嵌入到查询张量，并得到旋转后的查询张量
+    # 应用旋转位置嵌入到查询张量上
     q_embed = (q * cos) + (rotate_half(q) * sin)
-    # 应用旋转位置嵌入到键张量，并得到旋转后的键张量
+    # 应用旋转位置嵌入到键张量上
     k_embed = (k * cos) + (rotate_half(k) * sin)
-    # 返回旋转后的查询和键张量组成的元组
     return q_embed, k_embed
-# 从transformers.models.clip.modeling_clip.CLIPMLP复制而来，将CLIP替换为Phi
+
+
+# 从 transformers.models.clip.modeling_clip.CLIPMLP 复制，并将 CLIP 替换为 Phi
 class PhiMLP(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.activation_fn = ACT2FN[config.hidden_act]
-        self.fc1 = nn.Linear(config.hidden_size, config.intermediate_size)
-        self.fc2 = nn.Linear(config.intermediate_size, config.hidden_size)
+        self.activation_fn = ACT2FN[config.hidden_act]  # 使用给定的激活函数
+        self.fc1 = nn.Linear(config.hidden_size, config.intermediate_size)  # 第一层线性变换
+        self.fc2 = nn.Linear(config.intermediate_size, config.hidden_size)  # 第二层线性变换
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 第一层线性变换
         hidden_states = self.fc1(hidden_states)
+        # 应用激活函数
         hidden_states = self.activation_fn(hidden_states)
+        # 第二层线性变换
         hidden_states = self.fc2(hidden_states)
         return hidden_states
 
 
-# 从transformers.models.llama.modeling_llama.repeat_kv复制而来，将llama替换为phi
+# 从 transformers.models.llama.modeling_llama.repeat_kv 复制，并将 llama 替换为 phi
 def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
     """
-    这相当于torch.repeat_interleave(x, dim=1, repeats=n_rep)。隐藏状态从(batch, num_key_value_heads, seqlen, head_dim)变为(batch, num_attention_heads, seqlen, head_dim)
+    这是 torch.repeat_interleave(x, dim=1, repeats=n_rep) 的等效实现。
+    将隐藏状态从 (batch, num_key_value_heads, seqlen, head_dim) 扩展为 (batch, num_attention_heads, seqlen, head_dim)。
     """
     batch, num_key_value_heads, slen, head_dim = hidden_states.shape
     if n_rep == 1:
         return hidden_states
+    # 在第二个维度上扩展隐藏状态
     hidden_states = hidden_states[:, :, None, :, :].expand(batch, num_key_value_heads, n_rep, slen, head_dim)
+    # 返回调整形状后的隐藏状态张量
     return hidden_states.reshape(batch, num_key_value_heads * n_rep, slen, head_dim)
+    # 定义 PhiAttention 类，实现多头注意力机制，参考自 'Attention Is All You Need' 论文
+    """Multi-headed attention from 'Attention Is All You Need' paper"""
 
-
-class PhiAttention(nn.Module):
-    """来自'Attention Is All You Need'论文的多头注意力"""
-    # 初始化函数，接受 PhiConfig 对象和可选的层索引作为参数
     def __init__(self, config: PhiConfig, layer_idx: Optional[int] = None):
-        # 调用父类的初始化函数
         super().__init__()
-        # 保存传入的配置对象和层索引
+        # 初始化配置和层索引
         self.config = config
         self.layer_idx = layer_idx
-        # 如果未传入层索引，则发出警告
+        # 如果未传入 layer_idx，发出警告，因为在使用缓存时可能导致前向调用时的错误
         if layer_idx is None:
             logger.warning_once(
                 f"Instantiating {self.__class__.__name__} without passing a `layer_idx` is not recommended and will "
@@ -276,59 +273,65 @@ class PhiAttention(nn.Module):
                 "when creating this class."
             )
 
-        # 从配置对象中获取参数值
+        # 设置注意力机制的丢弃率
         self.attention_dropout = config.attention_dropout
+        # 隐藏层大小、注意力头数、每个头的维度
         self.hidden_size = config.hidden_size
         self.num_heads = config.num_attention_heads
         self.head_dim = self.hidden_size // self.num_heads
+        # 键值头的数量及每组的头数
         self.num_key_value_heads = config.num_key_value_heads
         self.num_key_value_groups = self.num_heads // self.num_key_value_heads
+        # 最大位置嵌入数、Rope 参数、部分旋转因子
         self.max_position_embeddings = config.max_position_embeddings
         self.rope_theta = config.rope_theta
         self.partial_rotary_factor = config.partial_rotary_factor
+        # 是否因果
         self.is_causal = True
 
-        # 检查隐藏大小是否可以被头数整除
+        # 检查 hidden_size 是否可以被 num_heads 整除，否则抛出数值错误
         if (self.head_dim * self.num_heads) != self.hidden_size:
             raise ValueError(
                 f"hidden_size must be divisible by num_heads (got `hidden_size`: {self.hidden_size}"
                 f" and `num_heads`: {self.num_heads})."
             )
 
-        # 初始化线性层对象
+        # 初始化查询、键、值的线性投影层
         self.q_proj = nn.Linear(self.hidden_size, self.num_heads * self.head_dim, bias=True)
         self.k_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=True)
         self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=True)
+        # 初始化密集层
         self.dense = nn.Linear(self.num_heads * self.head_dim, self.hidden_size, bias=True)
 
-        # 如果配置中指定了 qk_layernorm，则初始化 LayerNorm 层对象
+        # 如果配置中要求进行查询和键的 LayerNorm
         self.qk_layernorm = config.qk_layernorm
         if self.qk_layernorm:
+            # 初始化查询的 LayerNorm
             self.q_layernorm = nn.LayerNorm(
                 config.hidden_size // self.num_heads, eps=config.layer_norm_eps, elementwise_affine=True
             )
+            # 初始化键的 LayerNorm
             self.k_layernorm = nn.LayerNorm(
                 config.hidden_size // self.num_heads, eps=config.layer_norm_eps, elementwise_affine=True
             )
 
-        # ��始化绳索参数
+        # 初始化 ROPE（Relative Position Encoding）参数
         self._init_rope()
-    # 初始化 RoPE（Rotary Positional Embedding）对象
     def _init_rope(self):
-        # 如果配置中未指定 RoPE 缩放参数
+        # 检查配置中是否设置了 RoPE 的缩放参数
         if self.config.rope_scaling is None:
-            # 创建 PhiRotaryEmbedding 对象
+            # 若未设置，则使用 PhiRotaryEmbedding 初始化 RoPE
             self.rotary_emb = PhiRotaryEmbedding(
                 int(self.partial_rotary_factor * self.head_dim),
                 max_position_embeddings=self.max_position_embeddings,
                 base=self.rope_theta,
             )
         else:
-            # 获取 RoPE 缩放类型和缩放因子
+            # 若设置了缩放参数，则根据类型选择不同的 RoPE 初始化方式
             scaling_type = self.config.rope_scaling["type"]
             scaling_factor = self.config.rope_scaling["factor"]
-            # 根据不同的缩放类型创建不同的 RoPE 对象
             if scaling_type == "linear":
+                # 使用 PhiLinearScalingRotaryEmbedding 初始化 RoPE
                 self.rotary_emb = PhiLinearScalingRotaryEmbedding(
                     int(self.partial_rotary_factor * self.head_dim),
                     max_position_embeddings=self.max_position_embeddings,
@@ -336,6 +339,7 @@ class PhiAttention(nn.Module):
                     base=self.rope_theta,
                 )
             elif scaling_type == "dynamic":
+                # 使用 PhiDynamicNTKScalingRotaryEmbedding 初始化 RoPE
                 self.rotary_emb = PhiDynamicNTKScalingRotaryEmbedding(
                     int(self.partial_rotary_factor * self.head_dim),
                     max_position_embeddings=self.max_position_embeddings,
@@ -343,10 +347,9 @@ class PhiAttention(nn.Module):
                     base=self.rope_theta,
                 )
             else:
-                # 抛出异常，未知的 RoPE 缩放类型
+                # 抛出异常，若未知 RoPE 缩放类型
                 raise ValueError(f"Unknown RoPE scaling type {scaling_type}")
 
-    # 前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -355,6 +358,7 @@ class PhiAttention(nn.Module):
         past_key_value: Optional[Cache] = None,
         output_attentions: bool = False,
         use_cache: bool = False,
+# 定义 PhiFlashAttention2 类，继承自 PhiAttention 类。此模块用于实现 Phi flash attention，其中权重与 PhiAttention 相同。
 class PhiFlashAttention2(PhiAttention):
     """
     Phi flash attention module. This module inherits from `PhiAttention` as the weights of the module stays
@@ -362,63 +366,71 @@ class PhiFlashAttention2(PhiAttention):
     flash attention and deal with padding tokens in case the input contains any of them.
     """
 
-    # Copied from transformers.models.llama.modeling_llama.LlamaFlashAttention2.__init__
+    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2.__init__ 复制而来
+    # 初始化方法，调用父类的初始化方法，并设置一些额外的属性
     def __init__(self, *args, **kwargs):
-        # 调用父类的构造函数
         super().__init__(*args, **kwargs)
 
         # TODO: Should be removed once Flash Attention for RoCm is bumped to 2.1.
         # flash_attn<2.1 generates top-left aligned causal mask, while what is needed here is bottom-right alignement, that was made default for flash_attn>=2.1. This attribute is used to handle this difference. Reference: https://github.com/Dao-AILab/flash-attention/releases/tag/v2.1.0.
         # Beware that with flash_attn<2.1, using q_seqlen != k_seqlen (except for the case q_seqlen == 1) produces a wrong mask (top-left).
-        # 设置属性以处理 Flash Attention 版本差异
+        # 标志变量，用于确定是否使用顶部左对齐的因果掩码，这取决于 flash_attn 的版本是否大于等于 2.1
         self._flash_attn_uses_top_left_mask = not is_flash_attn_greater_or_equal_2_10()
 
-    def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.LongTensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_value: Optional[Cache] = None,
-        output_attentions: bool = False,
-        use_cache: bool = False,
-        **kwargs,
-    # Copied from transformers.models.llama.modeling_llama.LlamaFlashAttention2._flash_attention_forward
+    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2._flash_attention_forward 复制而来
+    # 前向传播方法，处理注意力机制的计算
     def _flash_attention_forward(
-        self, query_states, key_states, value_states, attention_mask, query_length, dropout=0.0, softmax_scale=None
+        self,
+        query_states,                # 查询状态的张量
+        key_states,                  # 键状态的张量
+        value_states,                # 值状态的张量
+        attention_mask,              # 注意力掩码，限制注意力计算的范围
+        query_length,                # 查询长度
+        dropout=0.0,                 # Dropout 比率，默认为 0.0
+        softmax_scale=None,          # Softmax 缩放因子，默认为 None
+        **kwargs,
+    ):
     ):
         """
-        调用 Flash Attention 的前向方法 - 如果输入的隐藏状态包含至少一个填充标记，则首先取消填充输入，然后计算注意力分数并填充最终的注意力分数。
+        Calls the forward method of Flash Attention - if the input hidden states contain at least one padding token
+        first unpad the input, then computes the attention scores and pad the final attention scores.
 
         Args:
             query_states (`torch.Tensor`):
-                要传递给 Flash Attention API 的输入查询状态
+                Input query states to be passed to Flash Attention API
             key_states (`torch.Tensor`):
-                要传递给 Flash Attention API 的输入键状态
+                Input key states to be passed to Flash Attention API
             value_states (`torch.Tensor`):
-                要传递给 Flash Attention API 的输入值状态
+                Input value states to be passed to Flash Attention API
             attention_mask (`torch.Tensor`):
-                填充掩码 - 对应于大小为 `(batch_size, seq_len)` 的张量，其中 0 表示填充标记的位置，1 表示非填充标记的位置。
-            dropout (`int`, *optional*):
-                注意力丢弃率
+                The padding mask - corresponds to a tensor of size `(batch_size, seq_len)` where 0 stands for the
+                position of padding tokens and 1 for the position of non-padding tokens.
+            dropout (`float`):
+                Attention dropout
             softmax_scale (`float`, *optional*):
-                在应用 softmax 之前的 QK^T 的缩放。默认为 1 / sqrt(head_dim)
+                The scaling of QK^T before applying softmax. Default to 1 / sqrt(head_dim)
         """
+        # Determine if causal masking is needed based on `_flash_attn_uses_top_left_mask`
         if not self._flash_attn_uses_top_left_mask:
             causal = self.is_causal
         else:
-            # TODO: 一旦 Flash Attention for RoCm 升级到 2.1，删除 `query_length != 1` 检查。有关详细信息，请参阅 LlamaFlashAttention2 __init__ 中的注释。
+            # TODO: Remove the `query_length != 1` check once Flash Attention for RoCm is bumped to 2.1. For details, please see the comment in LlamaFlashAttention2 __init__.
             causal = self.is_causal and query_length != 1
 
-        # 序列中至少包含一个填充标记
+        # Check if there are padding tokens in the attention_mask
         if attention_mask is not None:
             batch_size = query_states.shape[0]
+            # Unpad the input sequences based on attention_mask
             query_states, key_states, value_states, indices_q, cu_seq_lens, max_seq_lens = self._upad_input(
                 query_states, key_states, value_states, attention_mask, query_length
             )
 
+            # Separate sequence lengths for queries and keys
             cu_seqlens_q, cu_seqlens_k = cu_seq_lens
+            # Maximum sequence lengths in the batch for queries and keys
             max_seqlen_in_batch_q, max_seqlen_in_batch_k = max_seq_lens
 
+            # Compute attention scores for un-padded inputs
             attn_output_unpad = flash_attn_varlen_func(
                 query_states,
                 key_states,
@@ -432,84 +444,111 @@ class PhiFlashAttention2(PhiAttention):
                 causal=causal,
             )
 
+            # Pad the attention scores back to the original input sequence length
             attn_output = pad_input(attn_output_unpad, indices_q, batch_size, query_length)
         else:
+            # If no padding mask, compute attention scores directly
             attn_output = flash_attn_func(
                 query_states, key_states, value_states, dropout, softmax_scale=softmax_scale, causal=causal
             )
 
         return attn_output
 
-    # 从 transformers.models.llama.modeling_llama.LlamaFlashAttention2._upad_input 复制而来
-    # 用于处理输入数据，根据注意力掩码获取未填充数据的索引、当前序列长度和批次中的最大序列长度
+    # Copied from transformers.models.llama.modeling_llama.LlamaFlashAttention2._upad_input
+    # 定义一个私有方法 `_upad_input`，接受多个输入参数用于处理注意力机制的输入数据
     def _upad_input(self, query_layer, key_layer, value_layer, attention_mask, query_length):
-        # 获取未填充数据的索引、当前序列长度和批次中的最大序列长度
+        # 从注意力掩码中获取未填充数据的索引、当前序列长度和批次中最大序列长度
         indices_k, cu_seqlens_k, max_seqlen_in_batch_k = _get_unpad_data(attention_mask)
-        # 获取批次大小、键值序列长度、键值头数和头维度
+        
+        # 获取 key_layer 的形状信息
         batch_size, kv_seq_len, num_key_value_heads, head_dim = key_layer.shape
 
-        # 重新组织键层数据，根据未填充数据的索引
+        # 使用索引重排 key_layer，以处理未填充的数据
         key_layer = index_first_axis(
             key_layer.reshape(batch_size * kv_seq_len, num_key_value_heads, head_dim), indices_k
         )
-        # 重新组织值层数据，根据未填充数据的索引
+        
+        # 使用索引重排 value_layer，以处理未填充的数据
         value_layer = index_first_axis(
             value_layer.reshape(batch_size * kv_seq_len, num_key_value_heads, head_dim), indices_k
         )
         
-        # 如果查询长度等于键值序列长度
+        # 根据 query_length 的不同情况，处理 query_layer
         if query_length == kv_seq_len:
-            # 重新组织查询层数据，根据未填充数据的索引
+            # 若 query_length 等于 kv_seq_len，则直接重排 query_layer
             query_layer = index_first_axis(
                 query_layer.reshape(batch_size * kv_seq_len, self.num_heads, head_dim), indices_k
             )
-            cu_seqlens_q = cu_seqlens_k
-            max_seqlen_in_batch_q = max_seqlen_in_batch_k
-            indices_q = indices_k
-        # 如果查询长度为1
+            cu_seqlens_q = cu_seqlens_k  # 使用相同的未填充长度信息
+            max_seqlen_in_batch_q = max_seqlen_in_batch_k  # 使用相同的最大序列长度信息
+            indices_q = indices_k  # 使用相同的索引信息
         elif query_length == 1:
+            # 若 query_length 等于 1，则处理成单个长度的序列
             max_seqlen_in_batch_q = 1
-            # 生成一个序列长度为批次大小的张量
             cu_seqlens_q = torch.arange(
                 batch_size + 1, dtype=torch.int32, device=query_layer.device
-            )  # There is a memcpy here, that is very bad.
-            indices_q = cu_seqlens_q[:-1]
-            query_layer = query_layer.squeeze(1)
+            )  # 在设备上创建一个整数张量
+            indices_q = cu_seqlens_q[:-1]  # 使用序列长度创建索引
+            query_layer = query_layer.squeeze(1)  # 压缩 query_layer 的第一个维度
         else:
-            # 假设左填充，根据查询长度截取注意力掩码
+            # 否则，根据 query_length 处理未填充的输入数据
+            # 注意：此处可能会存在左填充的情况
             attention_mask = attention_mask[:, -query_length:]
-            # 处理未填充输入数据
             query_layer, indices_q, cu_seqlens_q, max_seqlen_in_batch_q = unpad_input(query_layer, attention_mask)
 
-        # 返回处理后的查询层、键层、值层、查询索引、当前序列长度元组、最大序列长度元组
+        # 返回处理后的多个数据和元组
         return (
-            query_layer,
-            key_layer,
-            value_layer,
-            indices_q,
-            (cu_seqlens_q, cu_seqlens_k),
-            (max_seqlen_in_batch_q, max_seqlen_in_batch_k),
+            query_layer,  # 查询层
+            key_layer,  # 键层
+            value_layer,  # 值层
+            indices_q,  # 查询索引
+            (cu_seqlens_q, cu_seqlens_k),  # 未填充长度元组
+            (max_seqlen_in_batch_q, max_seqlen_in_batch_k),  # 批次中最大序列长度元组
         )
-# 定义一个字典，将字符串映射到对应的注意力类
+class PhiSdpaAttention(PhiAttention):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Determine if contiguous QKV tensors are required based on Torch version
+        self.require_contiguous_qkv = version.parse(get_torch_version()) < version.parse("2.2.0")
+
+    """
+    SDPA attention module using torch.nn.functional.scaled_dot_product_attention. This module inherits from
+    `PhiAttention` as the weights of the module stays untouched. The only changes are on the forward pass to adapt to
+    SDPA API.
+    """
+
+    # Adapted from PhiAttention.forward
+    def forward(
+        self,
+        hidden_states: torch.Tensor,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_value: Optional[Cache] = None,
+        output_attentions: bool = False,
+        use_cache: bool = False,
+    ):
+        # Placeholder for SDPA-specific forward pass; implementation details are omitted here
+        pass
+
 PHI_ATTENTION_CLASSES = {
     "eager": PhiAttention,
     "flash_attention_2": PhiFlashAttention2,
+    "sdpa": PhiSdpaAttention,
 }
 
-# 定义 PhiDecoderLayer 类，继承自 nn.Module
+
 class PhiDecoderLayer(nn.Module):
     def __init__(self, config: PhiConfig, layer_idx: int):
         super().__init__()
-        # 初始化 self_attn 属性为根据配置选择的注意力类的实例
+        # Initialize self-attention mechanism based on configuration
         self.self_attn = PHI_ATTENTION_CLASSES[config._attn_implementation](config, layer_idx=layer_idx)
-        # 初始化 mlp 属性为 PhiMLP 类的实例
+        # Initialize multi-layer perceptron for the layer
         self.mlp = PhiMLP(config)
-        # 初始化 input_layernorm 属性为 LayerNorm 类的实例
+        # Layer normalization for input to the layer
         self.input_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 初始化 resid_dropout 属性为 Dropout 类的实例
+        # Dropout applied to the residual connection
         self.resid_dropout = nn.Dropout(config.resid_pdrop)
 
-    # 定义前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -518,33 +557,30 @@ class PhiDecoderLayer(nn.Module):
         output_attentions: Optional[bool] = False,
         use_cache: Optional[bool] = False,
         past_key_value: Optional[Tuple[torch.Tensor]] = None,
-    ) -> Tuple[torch.FloatTensor, Optional[Tuple[torch.FloatTensor, torch.FloatTensor]]]:
+    ):
+        # Placeholder for forward pass through the decoder layer; details are application-specific and omitted here
+        pass
         """
         Args:
             hidden_states (`torch.FloatTensor`):
-                input to the layer of shape `(batch, seq_len, embed_dim)`
-            attention_mask (`torch.FloatTensor`, *optional*): attention mask of size
-                `(batch, 1, tgt_len, src_len)` where padding elements are indicated by very large negative values.
+                输入到层的张量，形状为 `(batch, seq_len, embed_dim)`
+            attention_mask (`torch.FloatTensor`, *optional*):
+                注意力掩码，形状为 `(batch, 1, tgt_len, src_len)`，其中填充元素由非常大的负值表示。
             position_ids (`torch.LongTensor` of shape `({0})`, *optional*):
-                Indices of positions of each input sequence tokens in the position embeddings. Selected in the range
-                `[0, config.n_positions - 1]`. [What are position IDs?](../glossary#position-ids)
+                每个输入序列标记在位置嵌入中的位置索引。选在范围 `[0, config.n_positions - 1]`。[什么是位置ID?](../glossary#position-ids)
             output_attentions (`bool`, *optional*):
-                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
-                returned tensors for more detail.
+                是否返回所有注意力层的注意力张量。有关更多细节，请查看返回的张量中的 `attentions`。
             use_cache (`bool`, *optional*):
-                If set to `True`, `past_key_values` key value states are returned and can be used to speed up decoding
-                (see `past_key_values`).
-            past_key_value (`Tuple(torch.FloatTensor)`, *optional*): cached past key and value projection states
+                如果设置为 `True`，则返回 `past_key_values` 键值状态，可以用于加速解码（参见 `past_key_values`）。
+            past_key_value (`Tuple(torch.FloatTensor)`, *optional*):
+                缓存的过去键和值投影状态。
         """
 
-        # 保存输入的 hidden_states 作为残差连接的基准
-        residual = hidden_states
+        residual = hidden_states  # 保存输入张量作为残差连接的一部分
 
-        # 对输入的 hidden_states 进行 LayerNorm 处理
-        hidden_states = self.input_layernorm(hidden_states)
+        hidden_states = self.input_layernorm(hidden_states)  # 输入张量经过层归一化处理
 
-        # Self Attention
-        # 调用 self_attn 进行自注意力计算
+        # 自注意力机制
         attn_outputs, self_attn_weights, present_key_value = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
@@ -553,26 +589,20 @@ class PhiDecoderLayer(nn.Module):
             output_attentions=output_attentions,
             use_cache=use_cache,
         )
-        # 对自注意力输出进行残差连接和 Dropout 处理
-        attn_outputs = self.resid_dropout(attn_outputs)
+        attn_outputs = self.resid_dropout(attn_outputs)  # 对自注意力输出应用残差dropout
 
-        # Feed Forward
-        # 对 hidden_states 进行 MLP 处理
-        feed_forward_hidden_states = self.resid_dropout(self.mlp(hidden_states))
-        # 将自注意力输出、MLP 输出和残差连接起来
-        hidden_states = attn_outputs + feed_forward_hidden_states + residual
-        outputs = (hidden_states,)
+        feed_forward_hidden_states = self.resid_dropout(self.mlp(hidden_states))  # 经过MLP处理后的前馈隐藏状态，应用残差dropout
+        hidden_states = attn_outputs + feed_forward_hidden_states + residual  # 最终的层输出，结合自注意力输出、前馈隐藏状态和残差连接
+        outputs = (hidden_states,)  # 输出结果为包含隐藏状态的元组
 
-        # 如果需要输出注意力权重，则将其加入到输出中
         if output_attentions:
-            outputs += (self_attn_weights,)
+            outputs += (self_attn_weights,)  # 如果需要返回注意力权重，则将注意力权重添加到输出元组中
 
-        # 如果需要使用缓存，则将 present_key_value 加入到输出中
         if use_cache:
-            outputs += (present_key_value,)
+            outputs += (present_key_value,)  # 如果需要缓存，则将当前的键值状态添加到输出元组中
 
-        return outputs
-# 定义一个字符串常量，包含关于 Phi 模型的文档字符串
+        return outputs  # 返回最终的输出结果
+# 定义文档字符串，描述 PhiPreTrainedModel 类继承自 PreTrainedModel，并指向其通用方法和 PyTorch 模块用法
 PHI_START_DOCSTRING = r"""
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
@@ -589,48 +619,46 @@ PHI_START_DOCSTRING = r"""
             [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# 为 Phi 模型添加文档字符串
+# 添加装饰器注释，说明 PhiPreTrainedModel 类是一个输出原始隐藏状态的 Phi 模型，无特定的输出层
 @add_start_docstrings(
     "The bare Phi Model outputting raw hidden-states without any specific head on top.",
     PHI_START_DOCSTRING,
 )
+# 定义 PhiPreTrainedModel 类，继承自 PreTrainedModel
 class PhiPreTrainedModel(PreTrainedModel):
-    # 定义 Phi 模型的配置类
-    config_class = PhiConfig
-    # 模型的基础名称前缀
-    base_model_prefix = "model"
-    # 支持梯度检查点
-    supports_gradient_checkpointing = True
-    # 不需要拆分的模块
-    _no_split_modules = ["PhiDecoderLayer"]
-    # 跳过设备放置的键
-    _skip_keys_device_placement = "past_key_values"
-    # 支持 Flash Attention 2
-    _supports_flash_attn_2 = True
-    # 支持缓存类
-    _supports_cache_class = True
+    config_class = PhiConfig  # 设置配置类为 PhiConfig
+    base_model_prefix = "model"  # 基础模型前缀为 "model"
+    supports_gradient_checkpointing = True  # 支持梯度检查点
+    _no_split_modules = ["PhiDecoderLayer"]  # 不进行模块分割的模块列表，包含 PhiDecoderLayer
+    _skip_keys_device_placement = "past_key_values"  # 跳过键设备放置，指定为 "past_key_values"
+    _supports_flash_attn_2 = True  # 支持 flash attention 2
+    _supports_sdpa = True  # 支持 SDPA（Scaled Dot-Product Attention）
+    _supports_cache_class = True  # 支持缓存类
 
-    # 初始化模型权重
+    # 初始化模型权重的方法
     def _init_weights(self, module):
-        std = self.config.initializer_range
-        if isinstance(module, nn.Linear):
-            module.weight.data.normal_(mean=0.0, std=std)
-            if module.bias is not None:
-                module.bias.data.zero_()
-        elif isinstance(module, nn.Embedding):
-            module.weight.data.normal_(mean=0.0, std=std)
-            if module.padding_idx is not None:
-                module.weight.data[module.padding_idx].zero_()
+        std = self.config.initializer_range  # 获取初始化范围
+        if isinstance(module, nn.Linear):  # 如果是线性层
+            module.weight.data.normal_(mean=0.0, std=std)  # 初始化权重为正态分布
+            if module.bias is not None:  # 如果存在偏置
+                module.bias.data.zero_()  # 初始化偏置为零
+        elif isinstance(module, nn.Embedding):  # 如果是嵌入层
+            module.weight.data.normal_(mean=0.0, std=std)  # 初始化权重为正态分布
+            if module.padding_idx is not None:  # 如果存在填充索引
+                module.weight.data[module.padding_idx].zero_()  # 初始化填充索引处权重为零
 
-# 定义 Phi 模型的输入文档字符串
+
+# 定义输入文档字符串 PHI_INPUTS_DOCSTRING（此处省略了具体内容）
 PHI_INPUTS_DOCSTRING = r"""
 """
 
-# 为 Phi 模型添加文档字符串
+
+# 添加装饰器注释，说明 PhiModel 类是一个输出原始隐藏状态的 Phi 模型，无特定的输出层
 @add_start_docstrings(
     "The bare Phi Model outputting raw hidden-states without any specific head on top.",
     PHI_START_DOCSTRING,
 )
+# 定义 PhiModel 类，继承自 PhiPreTrainedModel
 class PhiModel(PhiPreTrainedModel):
     """
     Transformer decoder consisting of *config.num_hidden_layers* layers. Each layer is a [`PhiDecoderLayer`]
@@ -638,86 +666,112 @@ class PhiModel(PhiPreTrainedModel):
     Args:
         config: PhiConfig
     """
-
-    # 初始化 Phi 模型
+    # 初始化方法，接受一个 PhiConfig 类型的配置对象作为参数
     def __init__(self, config: PhiConfig):
+        # 调用父类的初始化方法，传递配置对象作为参数
         super().__init__(config)
+        # 设置填充索引为配置对象中的 pad_token_id
         self.padding_idx = config.pad_token_id
+        # 设置词汇表大小为配置对象中的 vocab_size
         self.vocab_size = config.vocab_size
 
-        # 创建词嵌入层
+        # 创建一个词嵌入层对象，参数为词汇表大小、隐藏层大小和填充索引
         self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)
+        # 创建一个丢弃层对象，丢弃率为配置对象中的 embd_pdrop
         self.embed_dropout = nn.Dropout(config.embd_pdrop)
-        # 创建多层解码器
+        # 创建多层解码器，每一层使用 PhiDecoderLayer 类初始化，层数由配置对象中的 num_hidden_layers 决定
         self.layers = nn.ModuleList(
             [PhiDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
         )
+        # 创建最终的 LayerNorm 层，大小为配置对象中的 hidden_size，epsilon 参数为配置对象中的 layer_norm_eps
         self.final_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        self._use_flash_attention_2 = config._attn_implementation == "flash_attention_2"
 
+        # 根据配置对象中的 _attn_implementation 属性判断是否使用 Flash Attention 2.0
+        self._use_flash_attention_2 = config._attn_implementation == "flash_attention_2"
+        # 根据配置对象中的 _attn_implementation 属性判断是否使用 Self-Dual-Path Attention (SDPA)
+        self._use_sdpa = config._attn_implementation == "sdpa"
+
+        # 是否开启梯度检查点，默认为 False
         self.gradient_checkpointing = False
-        # 初始化权重并应用最终处理
+        # 执行后续的初始化和权重设置
         self.post_init()
-    # 获取输入的嵌入向量
+
+    # 获取输入词嵌入层对象的方法
     def get_input_embeddings(self):
         return self.embed_tokens
 
-    # 设置输入的嵌入向量
+    # 设置输入词嵌入层对象的方法
     def set_input_embeddings(self, value):
         self.embed_tokens = value
 
-    # 在模型前向传播函数中添加文档字符串注释
+    # 根据 PHI_INPUTS_DOCSTRING 给 forward 方法添加文档字符串的装饰器
     @add_start_docstrings_to_model_forward(PHI_INPUTS_DOCSTRING)
     def forward(
         self,
-        input_ids: torch.LongTensor = None,  # 输入的 token ID
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码
-        position_ids: Optional[torch.LongTensor] = None,  # 位置 ID
-        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 过去的键值对
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入向量
-        use_cache: Optional[bool] = None,  # 是否使用缓存
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
-        return_dict: Optional[bool] = None,  # 是否返回字典形式的结果
+        input_ids: torch.LongTensor = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_values: Optional[List[torch.FloatTensor]] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+# 定义一个自定义模型类 PhiForCausalLM，继承自 PhiPreTrainedModel 类
 class PhiForCausalLM(PhiPreTrainedModel):
+    # 定义类变量 _tied_weights_keys，指定需要共享权重的键名列表
     _tied_weights_keys = ["lm_head.weight"]
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.__init__中复制过来的代码，将Llama替换为Phi，bias=False改为bias=True
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.__init__ 复制而来，
+    # 使用给定的配置初始化对象
     def __init__(self, config):
+        # 调用父类 PhiPreTrainedModel 的初始化方法
         super().__init__(config)
+        # 使用给定配置初始化 PhiModel 对象，并将其赋给 self.model
         self.model = PhiModel(config)
+        # 从配置中获取词汇表大小，并赋值给 self.vocab_size
         self.vocab_size = config.vocab_size
+        # 创建一个线性层，用于语言模型的输出，输入维度为 config.hidden_size，输出维度为 config.vocab_size
+        # 同时设置 bias=True，表示包含偏置项
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=True)
 
-        # 初始化权重并应用最终处理
+        # 调用对象的后初始化方法，用于权重初始化和其他必要的处理
         self.post_init()
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.get_input_embeddings中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.get_input_embeddings 复制而来，
+    # 返回模型的输入嵌入层对象 self.model.embed_tokens
     def get_input_embeddings(self):
         return self.model.embed_tokens
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.set_input_embeddings中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.set_input_embeddings 复制而来，
+    # 设置模型的输入嵌入层对象为给定的 value
     def set_input_embeddings(self, value):
         self.model.embed_tokens = value
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.get_output_embeddings中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.get_output_embeddings 复制而来，
+    # 返回模型的输出嵌入层对象 self.lm_head，用于语言模型的输出
     def get_output_embeddings(self):
         return self.lm_head
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.set_output_embeddings中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.set_output_embeddings 复制而来，
+    # 设置模型的输出嵌入层对象为新的嵌入层 new_embeddings
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.set_decoder中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.set_decoder 复制而来，
+    # 设置模型的解码器部分为给定的 decoder
     def set_decoder(self, decoder):
         self.model = decoder
 
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.get_decoder中复制过来的代码
+    # 从 transformers.models.llama.modeling_llama.LlamaForCausalLM.get_decoder 复制而来，
+    # 返回模型的解码器部分 self.model
     def get_decoder(self):
         return self.model
 
-    @add_start_docstrings_to_model_forward(PHI_INPUTS_DOCSTRING)
-    @replace_return_docstrings(output_type=CausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)
+    # 使用装饰器 @add_start_docstrings_to_model_forward(PHI_INPUTS_DOCSTRING) 和
+    # @replace_return_docstrings(output_type=CausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)，
+    # 从 transformers.models.persimmon.modeling_persimmon.PersimmonForCausalLM.prepare_inputs_for_generation 复制而来，
+    # 准备生成过程的输入参数，支持多种输入格式和选项
     def forward(
         self,
         input_ids: torch.LongTensor = None,
@@ -730,35 +784,40 @@ class PhiForCausalLM(PhiPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM.prepare_inputs_for_generation中复制过来的代码
+    ):
+        # 实际的模型前向传播逻辑会在这里定义
+        pass
+
+    # 从 transformers.models.persimmon.modeling_persimmon.PersimmonForCausalLM.prepare_inputs_for_generation 复制而来，
+    # 准备生成过程的输入参数，支持多种输入格式和选项
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, attention_mask=None, inputs_embeds=None, **kwargs
     ):
-        # 如果过去的键值不为空
+        # 实现输入生成准备的逻辑，具体内容会依赖具体需求和实现
+        pass
+        ):
         if past_key_values is not None:
-            # 如果过去的键值是缓存对象
             if isinstance(past_key_values, Cache):
-                # 获取缓存序列长度
                 cache_length = past_key_values.get_seq_length()
-                # 获取已见标记的数量
                 past_length = past_key_values.seen_tokens
-                # 获取最大缓存长度
                 max_cache_length = past_key_values.get_max_length()
             else:
-                # 如果过去的键值不是缓存对象，则获取其维度信息
                 cache_length = past_length = past_key_values[0][0].shape[2]
                 max_cache_length = None
 
-            # 保留未处理的标记：
-            # 1 - 如果注意力掩码的长度超过了输入标记的长度，则说明一些输入是作为缓存的一部分传递的
+            # Keep only the unprocessed tokens:
+            # 1 - If the length of the attention_mask exceeds the length of input_ids, then we are in a setting where
+            # some of the inputs are exclusively passed as part of the cache (e.g. when passing input_embeds as
+            # input)
             if attention_mask is not None and attention_mask.shape[1] > input_ids.shape[1]:
                 input_ids = input_ids[:, -(attention_mask.shape[1] - past_length) :]
-            # 2 - 如果过去的长度小于输入标记的长度，则输入标记包含所有输入标记。我们可以根据过去的长度丢弃输入标记。
+            # 2 - If the past_length is smaller than input_ids', then input_ids holds all input tokens. We can discard
+            # input_ids based on the past_length.
             elif past_length < input_ids.shape[1]:
                 input_ids = input_ids[:, past_length:]
-            # 3 - 否则（past_length >= input_ids.shape[1]），假设输入标记只包含未处理的标记。
+            # 3 - Otherwise (past_length >= input_ids.shape[1]), let's assume input_ids only has unprocessed tokens.
 
-            # 如果我们即将超过最大缓存长度，则需要裁剪输入注意力掩码。
+            # If we are about to go beyond the maximum cache length, we need to crop the input attention mask.
             if (
                 max_cache_length is not None
                 and attention_mask is not None
@@ -768,13 +827,13 @@ class PhiForCausalLM(PhiPreTrainedModel):
 
         position_ids = kwargs.get("position_ids", None)
         if attention_mask is not None and position_ids is None:
-            # 为批量生成动态创建位置标识
+            # create position_ids on the fly for batch generation
             position_ids = attention_mask.long().cumsum(-1) - 1
             position_ids.masked_fill_(attention_mask == 0, 1)
             if past_key_values:
                 position_ids = position_ids[:, -input_ids.shape[1] :]
 
-        # 如果传递了`inputs_embeds`，我们只想在第一个生成步骤中使用它们
+        # if `inputs_embeds` are passed, we only want to use them in the 1st generation step
         if inputs_embeds is not None and past_key_values is None:
             model_inputs = {"inputs_embeds": inputs_embeds}
         else:
@@ -789,44 +848,62 @@ class PhiForCausalLM(PhiPreTrainedModel):
             }
         )
         return model_inputs
-
-    @staticmethod
-    # 从transformers.models.llama.modeling_llama.LlamaForCausalLM._reorder_cache中复制
-    # 重新排序缓存中的过去键值对
+    # 定义一个函数 `_reorder_cache`，用于重新排序缓存数据 `past_key_values`，基于 `beam_idx` 提供的索引
     def _reorder_cache(past_key_values, beam_idx):
-        # 初始化重新排序后的过去键值对元组
+        # 初始化一个空元组 `reordered_past`，用于存储重新排序后的缓存数据
         reordered_past = ()
-        # 遍历每一层的过去键值对
+        # 遍历 `past_key_values` 中的每一层的缓存数据 `layer_past`
         for layer_past in past_key_values:
-            # 将每一层的过去状态按照beam_idx重新排序，并转移到相同设备上
+            # 对于每个 `layer_past` 中的缓存状态 `past_state`，按照 `beam_idx` 提供的索引重新排序并存储
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
-        # 返回重新排序后的过去键值对
+        # 返回重新排序后的缓存数据 `reordered_past`
         return reordered_past
-# 定义 PhiForSequenceClassification 类，带有一个线性层的序列分类头部
-# PhiForSequenceClassification 使用最后一个标记进行分类，与其他因果模型（例如 GPT-2）一样
-# 由于它在最后一个标记上进行分类，需要知道最后一个标记的位置。如果配置中定义了 pad_token_id，则在每行中找到不是填充标记的最后一个标记
-# 如果未定义 pad_token_id，则简单地取每行批次中的最后一个值。当传递 inputs_embeds 而不是 input_ids 时，无法猜测填充标记，因此执行相同操作（取每行批次中的最后一个值）
+@add_start_docstrings(
+    """
+    The PhiModel with a sequence classification head on top (linear layer).
+
+    [`PhiForSequenceClassification`] uses the last token in order to do the classification, as other causal models
+    (e.g. GPT-2) do.
+
+    Since it does classification on the last token, it requires to know the position of the last token. If a
+    `pad_token_id` is defined in the configuration, it finds the last token that is not a padding token in each row. If
+    no `pad_token_id` is defined, it simply takes the last value in each row of the batch. Since it cannot guess the
+    padding tokens when `inputs_embeds` are passed instead of `input_ids`, it does the same (take the last value in
+    each row of the batch).
+    """,
+    PHI_START_DOCSTRING,
+)
 class PhiForSequenceClassification(PhiPreTrainedModel):
+    # PhiForSequenceClassification 类，继承自 PhiPreTrainedModel
+
     def __init__(self, config):
         super().__init__(config)
+        # 调用父类的构造函数初始化模型配置
+
         self.num_labels = config.num_labels
+        # 设置分类标签数目为配置中的 num_labels
+
         self.model = PhiModel(config)
+        # 创建 PhiModel 对象，使用给定的配置参数
+
         self.score = nn.Linear(config.hidden_size, self.num_labels, bias=False)
+        # 创建一个线性层，用于分类，输入大小为隐藏层大小，输出大小为标签数目，无偏置项
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
+        # 执行初始化权重和应用最终处理的方法
 
-    # 获取输入嵌入
     def get_input_embeddings(self):
         return self.model.embed_tokens
+        # 返回模型的输入嵌入层对象
 
-    # 设置输入嵌入
     def set_input_embeddings(self, value):
         self.model.embed_tokens = value
+        # 设置模型的输入嵌入层对象为给定的值
 
-    # 前向传播函数
+    @add_start_docstrings_to_model_forward(PHI_INPUTS_DOCSTRING)
     def forward(
         self,
         input_ids: torch.LongTensor = None,
@@ -839,37 +916,48 @@ class PhiForSequenceClassification(PhiPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        # 前向传播方法，接受多种输入参数，包括 input_ids, attention_mask 等
 
 
 
-# 定义 PhiForTokenClassification 类，带有一个线性层的标记分类头部，例如用于命名实体识别（NER）任务
+@add_start_docstrings(
+    """
+    PhiModel with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
+    Named-Entity-Recognition (NER) tasks.
+    """,
+    PHI_START_DOCSTRING,
+)
 class PhiForTokenClassification(PhiPreTrainedModel):
-    # 初始化 Token 分类器模型
+    # PhiForTokenClassification 类，继承自 PhiPreTrainedModel
+    # 初始化函数，接受一个 PhiConfig 类型的参数 config
     def __init__(self, config: PhiConfig):
-        # 调用父类的初始化方法
+        # 调用父类的初始化函数，传入 config 参数
         super().__init__(config)
-        # 设置标签数量
+        # 设置实例变量 num_labels，从 config 参数中获取
         self.num_labels = config.num_labels
 
-        # 创建 Phi 模型对象
+        # 使用 config 参数初始化 PhiModel 类的实例，并赋值给 self.model
         self.model = PhiModel(config)
-        
-        # 根据配置文件中的参数设置分类器的 dropout
+
+        # 根据 config 参数设置分类器的 dropout 率
         if hasattr(config, "classifier_dropout") and config.classifier_dropout is not None:
             classifier_dropout = config.classifier_dropout
         elif hasattr(config, "hidden_dropout") and config.hidden_dropout is not None:
             classifier_dropout = config.hidden_dropout
         else:
             classifier_dropout = 0.1
-        # 创建一个 dropout 层
+
+        # 使用 nn.Dropout 类初始化 self.dropout，设置 dropout 率为 classifier_dropout
         self.dropout = nn.Dropout(classifier_dropout)
-        # 创建一个线性层作为分类器
+
+        # 使用 nn.Linear 类初始化 self.classifier，设置输入维度为 config.hidden_size，输出维度为 config.num_labels
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # 调用 self.post_init() 方法，进行权重初始化和最终处理
+        # (假设 self.post_init() 方法用于权重初始化和最终处理，具体细节未提供)
         self.post_init()
 
-    # 重写 forward 方法，用于模型的前向传播
+    # 前向传播函数，接受多个输入参数
     @add_start_docstrings_to_model_forward(PHI_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -888,17 +976,17 @@ class PhiForTokenClassification(PhiPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         **deprecated_arguments,
-    ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
+        ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 确定是否返回字典
+        # 初始化 return_dict，如果未指定则使用模型配置中的设定
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 将输入传递给模型进行处理
+        # 调用模型进行前向传播计算
         model_outputs = self.model(
             input_ids,
             past_key_values=past_key_values,
@@ -912,27 +1000,32 @@ class PhiForTokenClassification(PhiPreTrainedModel):
 
         # 获取模型输出的隐藏状态
         hidden_states = model_outputs[0]
-        # 对隐藏状态进行dropout处理
+        # 对隐藏状态进行 dropout 处理
         hidden_states = self.dropout(hidden_states)
-        # 使用分类器对隐藏状态进行分类
+        # 将处理后的隐藏状态输入分类器，得到预测 logits
         logits = self.classifier(hidden_states)
 
+        # 初始化损失为 None
         loss = None
+        # 如果给定了标签，计算损失
         if labels is not None:
-            # 将标签移动到正确的设备以启用模型并行处理
+            # 将标签移动到对应设备，以支持模型并行计算
             labels = labels.to(logits.device)
+            # 获取批次大小和序列长度
             batch_size, seq_length = labels.shape
+            # 定义交叉熵损失函数
             loss_fct = CrossEntropyLoss()
             # 计算交叉熵损失
             loss = loss_fct(
                 logits.view(batch_size * seq_length, self.num_labels), labels.view(batch_size * seq_length)
             )
 
+        # 如果不需要返回字典形式的结果，则根据情况返回输出
         if not return_dict:
             output = (logits,) + model_outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回TokenClassifierOutput对象
+        # 如果需要返回字典形式的结果，则构造 TokenClassifierOutput 并返回
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,

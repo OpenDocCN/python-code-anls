@@ -1,13 +1,9 @@
-# `.\transformers\models\switch_transformers\__init__.py`
+# `.\models\switch_transformers\__init__.py`
 
-```py
-# 版权声明和许可信息
-# 此处是关于HuggingFace团队的版权声明和许可信息，告知使用者在遵守许可协议的情况下才能使用此文件
-#
-# 导入必要的类型检查模块
+```
+# 导入必要的模块和函数
 from typing import TYPE_CHECKING
-
-# 导入所需的工具函数和模块
+# 从 utils 模块导入所需的异常和函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -18,7 +14,7 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块的导入结构
+# 定义模块的导入结构，包括配置和模型相关内容
 _import_structure = {
     "configuration_switch_transformers": [
         "SWITCH_TRANSFORMERS_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -27,14 +23,14 @@ _import_structure = {
     ]
 }
 
-# 检查torch包是否可用，若不可用则抛出OptionalDependencyNotAvailable异常
+# 检查是否 Torch 可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果torch可用，则添加modeling_switch_transformers模块到导入结构中
+    # 如果 Torch 可用，则导入模型相关内容到模块导入结构中
     _import_structure["modeling_switch_transformers"] = [
         "SWITCH_TRANSFORMERS_PRETRAINED_MODEL_ARCHIVE_LIST",
         "SwitchTransformersEncoderModel",
@@ -45,23 +41,20 @@ else:
         "SwitchTransformersSparseMLP",
     ]
 
-# 如果是类型检查阶段
+# 如果是类型检查阶段，则从相应的模块导入配置和模型内容
 if TYPE_CHECKING:
-    # 导入配置类和模型类
     from .configuration_switch_transformers import (
         SWITCH_TRANSFORMERS_PRETRAINED_CONFIG_ARCHIVE_MAP,
         SwitchTransformersConfig,
         SwitchTransformersOnnxConfig,
     )
 
-    # 检查torch包是否可用，若不可用则抛出OptionalDependencyNotAvailable异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入模型类
         from .modeling_switch_transformers import (
             SWITCH_TRANSFORMERS_PRETRAINED_MODEL_ARCHIVE_LIST,
             SwitchTransformersEncoderModel,
@@ -72,11 +65,10 @@ if TYPE_CHECKING:
             SwitchTransformersTop1Router,
         )
 
-# 如果不是类型检查阶段
+# 如果不是类型检查阶段，则将当前模块设为延迟加载模块
 else:
     import sys
 
-    # 将当前模块设置为延迟加载模块
+    # 使用 _LazyModule 将当前模块设为延迟加载模块，确保按需导入内容
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
-```  
 ```

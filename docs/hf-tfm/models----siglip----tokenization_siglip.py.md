@@ -1,17 +1,37 @@
-# `.\transformers\models\siglip\tokenization_siglip.py`
+# `.\models\siglip\tokenization_siglip.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本授权
+```
+# coding=utf-8
+# 设定文件编码为 UTF-8
+
+# Copyright 2024 The HuggingFace Inc. team.
+# 版权声明，版权归 The HuggingFace Inc. 团队所有
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 根据 Apache License, Version 2.0 授权许可
+
+# you may not use this file except in compliance with the License.
 # 除非符合许可证要求，否则不得使用此文件
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的详细信息
-""" Tokenization class for SigLIP model."""
 
-# 导入所需的库
+# You may obtain a copy of the License at
+# 您可以在以下网址获取许可证的副本
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 除非适用法律要求或书面同意，否则依据 "AS IS" 分发本软件，
+# 无论是明示的还是隐含的，不包括任何形式的担保或条件
+
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 请参阅许可证以了解有关权限和限制的详细信息
+
+""" Tokenization class for SigLIP model."""
+# 为 SigLIP 模型设计的分词类
+
 import os
 import re
 import string
@@ -19,46 +39,62 @@ import warnings
 from shutil import copyfile
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
-import sentencepiece as spm
+import sentencepiece as spm  # 导入 sentencepiece 库
 
-# 导入其他必要的模块
-from ...convert_slow_tokenizer import import_protobuf
-from ...tokenization_utils import PreTrainedTokenizer
-from ...tokenization_utils_base import AddedToken
+from ...convert_slow_tokenizer import import_protobuf  # 导入从 protobuf 导入的函数
+from ...tokenization_utils import PreTrainedTokenizer  # 导入预训练分词器基类
+from ...tokenization_utils_base import AddedToken  # 导入添加的 token 类型
 
-# 如果是类型检查，则导入 TextInput 类
+
 if TYPE_CHECKING:
-    from ...tokenization_utils_base import TextInput
-from ...utils import logging, requires_backends
+    from ...tokenization_utils_base import TextInput  # 导入文本输入类型
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+from ...utils import logging, requires_backends  # 导入日志记录和后端要求
 
-# 定义词汇文件名
-VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}
 
-# 预训练模型的词汇文件映射
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+
+VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}  # 词汇文件的名称映射
+
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "google/siglip-base-patch16-224": "https://huggingface.co/google/siglip-base-patch16-224/resolve/main/spiece.model",
     }
 }
 
-# 预训练模型的位置嵌入大小
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "google/siglip-base-patch16-224": 256,
 }
 
-# SentencePiece 的下划线符号
-SPIECE_UNDERLINE = "▁"
+SPIECE_UNDERLINE = "▁"  # SentencePiece 使用的前缀符号
 
-# SiglipTokenizer 类，继承自 PreTrainedTokenizer
+
 class SiglipTokenizer(PreTrainedTokenizer):
     """
     Construct a Siglip tokenizer. Based on [SentencePiece](https://github.com/google/sentencepiece).
 
     This tokenizer inherits from [`PreTrainedTokenizer`] which contains most of the main methods. Users should refer to
     this superclass for more information regarding those methods.
+    """
+    # Siglip 分词器的构造函数，基于 SentencePiece
+
+    def __init__(
+        self,
+        vocab_file=None,
+        tokenizer_file=None,
+        do_lower_case=False,
+        remove_space=True,
+        keep_accents=False,
+        unk_token="[UNK]",
+        sep_token="[SEP]",
+        pad_token="[PAD]",
+        cls_token="[CLS]",
+        mask_token="[MASK]",
+        **kwargs
+    ):
+        # 初始化函数，设置分词器的各种参数
+        pass
+    """
     Args:
         vocab_file (`str`):
             [SentencePiece](https://github.com/google/sentencepiece) file (generally has a *.spm* extension) that
@@ -93,11 +129,13 @@ class SiglipTokenizer(PreTrainedTokenizer):
             Whether or not to lowercase the input when tokenizing.
     """
 
+    # Define constants related to tokenizer vocabulary files and models
     vocab_files_names = VOCAB_FILES_NAMES
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
     model_input_names = ["input_ids", "attention_mask"]
 
+    # Constructor method for the Tokenizer class
     def __init__(
         self,
         vocab_file,
@@ -109,90 +147,25 @@ class SiglipTokenizer(PreTrainedTokenizer):
         model_max_length=64,
         do_lower_case=True,
         **kwargs,
-    # 定义方法，初始化 Tokenizer 类
-    ) -> None:
-        # 检查是否需要后端支持 "protobuf"
-        requires_backends(self, "protobuf")
-
-        # 初始化 pad_token
-        pad_token = (
-            AddedToken(pad_token, rstrip=True, lstrip=True, normalized=False, special=True)
-            if isinstance(pad_token, str)
-            else pad_token
-        )
-        # 初始化 unk_token
-        unk_token = (
-            AddedToken(unk_token, rstrip=True, lstrip=True, normalized=False, special=True)
-            if isinstance(unk_token, str)
-            else unk_token
-        )
-        # 初始化 eos_token
-        eos_token = (
-            AddedToken(eos_token, rstrip=True, lstrip=True, normalized=False, special=True)
-            if isinstance(eos_token, str)
-            else eos_token
-        )
-
-        # 如果 sp_model_kwargs 为 None，则初始化为空字典
-        self.sp_model_kwargs = {} if sp_model_kwargs is None else sp_model_kwargs
-
-        # 设置是否小写
-        self.do_lower_case = do_lower_case
-        self.vocab_file = vocab_file
-
-        # 创建 sp_model 用于处理 SentencePiece
-        self.sp_model = self.get_spm_processor()
-        self.vocab_file = vocab_file
-
-        # 调用父类的初始化方法，并传入相应参数
-        super().__init__(
-            eos_token=eos_token,
-            unk_token=unk_token,
-            pad_token=pad_token,
-            additional_special_tokens=additional_special_tokens,
-            sp_model_kwargs=self.sp_model_kwargs,
-            model_max_length=model_max_length,
-            do_lower_case=do_lower_case,
-            **kwargs,
-        )
-
-    # 定义方法，获取 spm 处理器
-    def get_spm_processor(self):
-        # 初始化 SentencePieceProcessor 实例
-        tokenizer = spm.SentencePieceProcessor(**self.sp_model_kwargs)
-        # 从vocab_file读取序列化的模型
-        with open(self.vocab_file, "rb") as f:
-            sp_model = f.read()
-            model_pb2 = import_protobuf()
-            model = model_pb2.ModelProto.FromString(sp_model)
-            # 设置正则化规范
-            normalizer_spec = model_pb2.NormalizerSpec()
-            normalizer_spec.add_dummy_prefix = False
-            model.normalizer_spec.MergeFrom(normalizer_spec)
-            sp_model = model.SerializeToString()
-            # 加载序列化后的模型
-            tokenizer.LoadFromSerializedProto(sp_model)
-        return tokenizer
-
+    ):
     @property
-    # 获取词表大小
-    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.vocab_size
+    # 返回词汇表的大小，基于 SentencePiece 模型的词汇量
     def vocab_size(self):
         return self.sp_model.get_piece_size()
 
-    # 获取词表
     # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.get_vocab
     def get_vocab(self):
-        # 转换词汇 ID 为词汇
+        # 创建词汇表字典，将词汇 ID 映射到对应的词汇
         vocab = {self.convert_ids_to_tokens(i): i for i in range(self.vocab_size)}
-        # 更新特殊标记编码器
+        # 更新词汇表字典，加入额外的特殊标记的映射
         vocab.update(self.added_tokens_encoder)
         return vocab
 
-    # 获取特殊标记掩码
     # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.get_special_tokens_mask
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
+    ) -> torch.Tensor:
+        # 返回特殊标记的掩码张量，用于标记哪些是特殊标记
     ) -> List[int]:
         """
         Retrieve sequence ids from a token list that has no special tokens added. This method is called when adding
@@ -209,34 +182,33 @@ class SiglipTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
         """
-        # 如果已经有特殊标记，则直接调用父类的方法获取特殊标记掩码
+        # If the token list already has special tokens, delegate to the base class's method
         if already_has_special_tokens:
             return super().get_special_tokens_mask(
                 token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
             )
 
-        # 一般情况：存在一些特殊标记
+        # Calculate special tokens mask for the normal case (with special tokens)
         if token_ids_1 is None:
-            # 生成只含有序列标记的特殊标记掩码
-            return ([0] * len(token_ids_0)) + [1]
-        # 对于序列对，生成相应的特殊标记掩码
-        return ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1)) + [1]
+            return ([0] * len(token_ids_0)) + [1]  # No sequence pair, return mask for token_ids_0
+        else:
+            return ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1)) + [1]  # Return mask for token_ids_0 and token_ids_1
 
-    # 从 token_ids 列表中删除 EOS 标记，并确保不重复添加 EOS 标记
+    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer._add_eos_if_not_present
     def _add_eos_if_not_present(self, token_ids: List[int]) -> List[int]:
         """Do not add eos again if user already added it."""
+        # Check if eos_token_id is already present at the end of token_ids
         if len(token_ids) > 0 and token_ids[-1] == self.eos_token_id:
-            # 如果最后一个 token 已经是 EOS 标记，则发出警告并直接返回 token_ids
+            # Warn if eos_token is already present to prevent duplication in future versions
             warnings.warn(
                 f"This sequence already has {self.eos_token}. In future versions this behavior may lead to duplicated"
                 " eos tokens being added."
             )
-            return token_ids
+            return token_ids  # Return unchanged token_ids if eos_token is already present
         else:
-            # 如果最后一个 token 不是 EOS 标记，则添加 EOS 标记后返回
-            return token_ids + [self.eos_token_id]
+            return token_ids + [self.eos_token_id]  # Add eos_token_id to token_ids and return
 
-    # 创建用于序列对分类任务的 token_type_ids，T5 模型不使用 token_type_ids，因此返回全零列表
+    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.create_token_type_ids_from_sequences
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
@@ -253,17 +225,30 @@ class SiglipTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: List of zeros.
         """
-        eos = [self.eos_token_id]
+        eos = [self.eos_token_id]  # Create a list containing eos_token_id
 
+        # Calculate token type ids assuming the presence of EOS tokens
         if token_ids_1 is None:
-            # 对于单个序列，返回全零列表
-            return len(token_ids_0 + eos) * [0]
-        # 对于序列对，返回全零列表
-        return len(token_ids_0 + eos + token_ids_1 + eos) * [0]
+            return len(token_ids_0 + eos) * [0]  # Return zero mask for token_ids_0 + eos
+        else:
+            return len(token_ids_0 + eos + token_ids_1 + eos) * [0]  # Return zero mask for token_ids_0 + eos + token_ids_1 + eos
 
-    # 构建带有特殊标记的输入列表
+    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.build_inputs_with_special_tokens
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
+    ):
+        """
+        Build model inputs from a sequence or a pair of sequences, including adding special tokens.
+
+        Args:
+            token_ids_0 (`List[int]`):
+                List of IDs for the first sequence.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional list of IDs for the second sequence in a pair.
+
+        Returns:
+            `List[int]`: A list of token IDs with added special tokens.
+        """
     ) -> List[int]:
         """
         Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
@@ -281,43 +266,44 @@ class SiglipTokenizer(PreTrainedTokenizer):
         Returns:
             `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
-        # 添加序列结束符号（End of Sequence）到第一个序列中，如果不存在的话
+        # Ensure the first sequence ends with an end-of-sequence token if not already present
         token_ids_0 = self._add_eos_if_not_present(token_ids_0)
+        
+        # If only one sequence is provided, return it with added special tokens
         if token_ids_1 is None:
-            # 如果只有一个序列，直接返回第一个序列
             return token_ids_0
         else:
-            # 如果有两个序列，添加序列结束符号到第二个序列中，如果不存在的话，然后将两个序列连接返回
+            # Ensure the second sequence ends with an end-of-sequence token if not already present
             token_ids_1 = self._add_eos_if_not_present(token_ids_1)
+            # Concatenate both sequences with their respective special tokens added
             return token_ids_0 + token_ids_1
 
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer.__getstate__中复制过来的
+    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.__getstate__
     def __getstate__(self):
-        # 复制Tokenizer对象的字典形式状态
+        # Create a copy of the object's state dictionary
         state = self.__dict__.copy()
-        # 将特殊的SP模型设置为None
+        # Set the 'sp_model' attribute to None to avoid pickling issues
         state["sp_model"] = None
         return state
 
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer.__setstate__中复制过来的
+    # Copied from transformers.models.t5.tokenization_t5.T5Tokenizer.__setstate__
     def __setstate__(self, d):
-        # 将Tokenizer对象的状态设置为指定的状态
+        # Restore the object's state from the provided dictionary
         self.__dict__ = d
 
-        # 为了向后兼容性
+        # Ensure backward compatibility by initializing 'sp_model_kwargs' if absent
         if not hasattr(self, "sp_model_kwargs"):
             self.sp_model_kwargs = {}
 
-        # 使用特殊的参数初始化SP模型
+        # Initialize 'sp_model' using SentencePieceProcessor with saved parameters
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
-        # 加载SP模型的词汇文件
         self.sp_model.Load(self.vocab_file)
 
-    # 移除文本中的标点符号
     def remove_punctuation(self, text: str) -> str:
+        # Remove all punctuation characters from the input text
         return text.translate(str.maketrans("", "", string.punctuation))
 
-    # 来源: https://github.com/google-research/big_vision/blob/3b8e5ab6ad4f96e32b32826f9e1b8fd277914f9c/big_vision/evaluators/proj/image_text/prompt_engineering.py#L94
+    # source: https://github.com/google-research/big_vision/blob/3b8e5ab6ad4f96e32b32826f9e1b8fd277914f9c/big_vision/evaluators/proj/image_text/prompt_engineering.py#L94
     def canonicalize_text(self, text, *, keep_punctuation_exact_string=None):
         """Returns canonicalized `text` (puncuation removed).
 
@@ -328,36 +314,37 @@ class SiglipTokenizer(PreTrainedTokenizer):
                 If provided, then this exact string is kept. For example providing '{}' will keep any occurrences of '{}'
                 (but will still remove '{' and '}' that appear separately).
         """
-        # 如果提供了一个特殊的字符串，将该字符串保留在文本中
         if keep_punctuation_exact_string:
-            # 对文本按照特殊的字符串进行分割，然后移除标点符号，最后再用特殊字符串连接起来
-            text = keep_punctuation_exact_string.join(self.remove_punctuation(part) for part in text.split(keep_punctuation_exact_string))
+            # Replace occurrences of 'keep_punctuation_exact_string' with itself after removing punctuation
+            text = keep_punctuation_exact_string.join(
+                self.remove_punctuation(part) for part in text.split(keep_punctuation_exact_string)
+            )
         else:
-            # 移除文本中的标点符号
+            # Remove all punctuation characters from the entire text
             text = self.remove_punctuation(text)
-        # 替换文本中多个连续空格为一个空格，并去除首尾空格
+        
+        # Replace multiple spaces with a single space, then strip leading and trailing spaces
         text = re.sub(r"\s+", " ", text)
         text = text.strip()
 
         return text
-```  
+    # 将文本转换为标记列表的方法
     def tokenize(self, text: "TextInput", add_special_tokens=False, **kwargs) -> List[str]:
         """
         Converts a string to a list of tokens.
         """
-        # 使用父类的tokenize方法将文本转换为标记列表
+        # 使用父类的方法将文本转换为标记列表
         tokens = super().tokenize(SPIECE_UNDERLINE + text.replace(SPIECE_UNDERLINE, " "), **kwargs)
 
-        # 如果tokens的长度大于1并且第一个token等于SPIECE_UNDERLINE，且第二个token是特殊标记中的一个，则把第一个token去除
+        # 如果标记数大于1且第一个标记是SPIECE_UNDERLINE，并且第二个标记是特殊标记之一，则移除第一个标记
         if len(tokens) > 1 and tokens[0] == SPIECE_UNDERLINE and tokens[1] in self.all_special_tokens:
             tokens = tokens[1:]
-        # 返回处理后的tokens
         return tokens
 
     @property
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer.unk_token_length复制过来
+    # 从transformers.models.t5.tokenization_t5.T5Tokenizer.unk_token_length中复制而来
     def unk_token_length(self):
-        # 返回未知标记的长度
+        # 返回未知标记的编码长度
         return len(self.sp_model.encode(str(self.unk_token)))
 
     def _tokenize(self, text, **kwargs):
@@ -372,80 +359,68 @@ class SiglipTokenizer(PreTrainedTokenizer):
         Thus we always encode `f"{unk_token}text"` and strip the `unk_token`. Here is an example with `unk_token = "<unk>"` and `unk_token_length = 4`.
         `self.tokenizer.sp_model.encode("<unk> Hey", out_type = str)[4:]`.
         """
-        # 规范文本
+        # 规范化文本，保持标点符号的精确性
         text = self.canonicalize_text(text, keep_punctuation_exact_string=None)
-        # 使用sentencepiece模型对文本进行编码并以字符串形式输出
+        # 使用句子片段模型对文本进行编码
         tokens = self.sp_model.encode(text, out_type=str)
 
-        # 1. 编码字符串+前缀 例如: "<unk> Hey"
+        # 1. 编码字符串 + 前缀，例如 "<unk> Hey"
         tokens = self.sp_model.encode(self.unk_token + text, out_type=str)
-        # 2. 从 ['<','unk','>', '▁Hey'] 中移除self.unk_token
+        # 2. 从 ['<','unk','>', '▁Hey'] 中移除 self.unk_token
         return tokens[self.unk_token_length :] if len(tokens) >= self.unk_token_length else tokens
 
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer._convert_token_to_id复制过来
+    # 从transformers.models.t5.tokenization_t5.T5Tokenizer._convert_token_to_id中复制而来
     def _convert_token_to_id(self, token):
         """Converts a token (str) in an id using the vocab."""
-        # 使用vocab将token转换为id
+        # 使用词汇表将标记转换为标识符
         return self.sp_model.piece_to_id(token)
 
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer._convert_id_to_token复制过来
+    # 从transformers.models.t5.tokenization_t5.T5Tokenizer._convert_id_to_token中复制而来
     def _convert_id_to_token(self, index):
         """Converts an index (integer) in a token (str) using the vocab."""
-        # 使用vocab将id转换为token
+        # 使用词汇表将标识符转换为标记
         token = self.sp_model.IdToPiece(index)
         return token
 
-    # 从transformers.models.t5.tokenization_t5.T5Tokenizer.convert_tokens_to_string复制过来
-    # 将 tokens 序列转换为单个字符串
     def convert_tokens_to_string(self, tokens):
         """Converts a sequence of tokens (string) in a single string."""
-        # 用于存储当前子 token
         current_sub_tokens = []
-        # 删除手动添加的前缀空格
-        tokens[0] = tokens[0].lstrip(SPIECE_UNDERLINE)
-        # 初始化输出字符串
         out_string = ""
-        # 初始化前一个 token 是否为特殊 token 的标志
         prev_is_special = False
-        # 循环遍历 tokens
         for token in tokens:
-            # 确保特殊 token 不是使用 sentencepiece 模型进行解码
+            # 确保特殊标记不使用句子片段模型解码
             if token in self.all_special_tokens:
-                # 如果前一个 token 不是特殊 token，则添加空格
                 if not prev_is_special:
                     out_string += " "
-                # 使用 sentencepiece 模型解码当前子 token，并添加到输出字符串中
                 out_string += self.sp_model.decode(current_sub_tokens) + token
                 prev_is_special = True
                 current_sub_tokens = []
             else:
-                # 添加当前 token 到当前子 token
                 current_sub_tokens.append(token)
                 prev_is_special = False
-        # 使用 sentencepiece 模型解码当前子 token，并添加到输出字符串中
         out_string += self.sp_model.decode(current_sub_tokens)
-        # 去除输出字符串两侧的空格并返回
         return out_string.strip()
-
-    # 保存词汇表文件到指定目录
-    # 从 transformers.models.t5.tokenization_t5.T5Tokenizer.save_vocabulary 复制而来
+    # 从 transformers.models.t5.tokenization_t5.T5Tokenizer.save_vocabulary 复制而来的方法
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 如果保存目录不存在，则输出错误信息并返回
+        # 如果保存目录不存在，则记录错误信息并返回
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
-        # 设置输出的词汇表文件路径
+        
+        # 拼接输出的词汇文件路径
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
-        # 如果当前词汇表文件路径与输出路径不同，且当前词汇表文件存在，则复制当前词汇表文件到输出路径
+        
+        # 如果当前词汇文件路径与输出路径不同，并且当前词汇文件存在，则复制当前词汇文件到输出路径
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file) and os.path.isfile(self.vocab_file):
             copyfile(self.vocab_file, out_vocab_file)
-        # 如果当前词汇表文件不存在，则将 sentencepiece 模型序列化的内容写入输出路径
+        # 如果当前词汇文件不存在，则将序列化后的模型内容写入输出文件
         elif not os.path.isfile(self.vocab_file):
             with open(out_vocab_file, "wb") as fi:
                 content_spiece_model = self.sp_model.serialized_model_proto()
                 fi.write(content_spiece_model)
-        # 返回输出的词汇表文件路径
+        
+        # 返回输出文件的路径元组
         return (out_vocab_file,)
 ```

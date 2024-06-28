@@ -1,40 +1,28 @@
-# `.\transformers\models\mixtral\__init__.py`
+# `.\models\mixtral\__init__.py`
 
-```py
-# 版权声明
-# 版权所有©2023年Mixtral AI和The HuggingFace Inc.团队。
-#
-# 根据Apache许可证2.0版（“许可证”）获得许可；
-# 除非符合许可证的条款，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则不得基于"AS IS"的基础上分发软件，
-# 没有任何种类的明示或默示的担保或条件。
-# 请参阅许可证以获取特定语言的权限和限制。
-# 类型检查
+```
+# 导入需要的模块和函数
 from typing import TYPE_CHECKING
-
-# 从utils模块中导入相关内容
+# 从项目内部工具中导入必要的异常和工具函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
     is_torch_available,
 )
 
-# 指定导入结构
+# 定义模块的导入结构，指定哪些类和函数可以被外部导入
 _import_structure = {
     "configuration_mixtral": ["MIXTRAL_PRETRAINED_CONFIG_ARCHIVE_MAP", "MixtralConfig"],
 }
 
-# 捕获可能发生的依赖不可用的异常
+# 检查是否 Torch 可用，如果不可用则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果依赖可用，增加导入结构中的模型相关内容
+    # 如果 Torch 可用，则添加额外的模型类到导入结构中
     _import_structure["modeling_mixtral"] = [
         "MixtralForCausalLM",
         "MixtralModel",
@@ -42,16 +30,18 @@ else:
         "MixtralForSequenceClassification",
     ]
 
-# 如果类型是检查的，则根据类型导入相关内容
+# 如果是类型检查阶段，则从配置和模型模块导入特定类和常量
 if TYPE_CHECKING:
     from .configuration_mixtral import MIXTRAL_PRETRAINED_CONFIG_ARCHIVE_MAP, MixtralConfig
 
+    # 再次检查 Torch 是否可用，如果不可用则忽略
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 如果 Torch 可用，则从模型模块导入额外的模型类
         from .modeling_mixtral import (
             MixtralForCausalLM,
             MixtralForSequenceClassification,
@@ -59,9 +49,10 @@ if TYPE_CHECKING:
             MixtralPreTrainedModel,
         )
 
-# 如果类型不是检查的，则将其设置为懒加载模块
+# 如果不是类型检查阶段，则将当前模块注册为一个 LazyModule
 else:
     import sys
 
+    # 动态将当前模块替换为 LazyModule 对象，这样在导入时会延迟加载模块内容
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

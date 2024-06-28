@@ -1,50 +1,43 @@
-# `.\transformers\models\clvp\feature_extraction_clvp.py`
+# `.\models\clvp\feature_extraction_clvp.py`
 
-```py
+```
 # coding=utf-8
-# 声明文件编码为 UTF-8
-# Copyright 2023 The HuggingFace Inc. team.
-# 版权声明，指明版权归 The HuggingFace Inc. team 所有
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# 以 Apache 许可证版本 2.0 进行许可
-# you may not use this file except in compliance with the License.
-# 除非符合许可证的规定，否则不能使用该文件
-# You may obtain a copy of the License at
-# 你可以在以下网址获取许可证的一份拷贝
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# 在适用法律允许的范围内，按“原样”提供软件，不提供任何担保或条件，无论是明示的还是暗示的。
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# 没有任何形式的担保或条件，无论是明示的还是暗示的
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# 请参阅许可证，了解特定语言的权限和限制。
-#
+# 定义了文件编码格式为 UTF-8
+
+# 版权声明，声明代码版权归 HuggingFace Inc. 团队所有
+# 根据 Apache 许可证版本 2.0 发布，除非符合许可证规定，否则不得使用此文件
+# 可以在以下网址获取许可证的副本：http://www.apache.org/licenses/LICENSE-2.0
+
+# 如果适用法律要求或书面同意，以“原样”方式分发本软件，不提供任何形式的担保或条件
+# 请参阅许可证了解具体的法律条文及其约束
+# 此处导入需要的模块和类
 """
 Feature extractor class for CLVP
 """
-# CLVP 特征提取器类
 
+# 导入必要的模块
 from typing import List, Optional, Union
 
+# 导入 NumPy 库，用于处理数值计算
 import numpy as np
 
+# 导入音频相关的工具函数
 from ...audio_utils import mel_filter_bank, spectrogram, window_function
+
+# 导入特征提取的序列工具函数
 from ...feature_extraction_sequence_utils import SequenceFeatureExtractor
+
+# 导入特征提取的批处理功能
 from ...feature_extraction_utils import BatchFeature
+
+# 导入自定义的张量类型和日志记录工具
 from ...utils import TensorType, logging
 
-# 导入必要的模块和类
-
+# 获取当前文件的日志记录器
 logger = logging.get_logger(__name__)
 
-# 获取 logger 实例
 
+# 定义 CLVP 特征提取器类，继承自 SequenceFeatureExtractor 类
 class ClvpFeatureExtractor(SequenceFeatureExtractor):
     r"""
     Constructs a CLVP feature extractor.
@@ -55,33 +48,32 @@ class ClvpFeatureExtractor(SequenceFeatureExtractor):
     This class extracts log-mel-spectrogram features from raw speech using a custom numpy implementation of the `Short
     Time Fourier Transform` which should match pytorch's `torch.stft` equivalent.
     """
-    # 构造一个 CLVP 特征提取器
-    # 该特征提取器继承自 [`~feature_extraction_sequence_utils.SequenceFeatureExtractor`]，其中包含大多数主要方法。用户应参考此超类，了解有关这些方法的更多信息。
-    # 此类从原始语音中提取对数梅尔频谱图特征，使用自定义的 numpy 实现了 `短时傅里叶变换`，应与 pytorch 的 `torch.stft` 等效。
-``` 
     Args:
         feature_size (`int`, *optional*, defaults to 80):
-            提取特征的特征维度。
+            The feature dimension of the extracted features.
         sampling_rate (`int`, *optional*, defaults to 22050):
-            表示音频文件应以何种频率（赫兹）进行数字化的采样率。
+            The sampling rate at which the audio files should be digitalized expressed in hertz (Hz).
         default_audio_length (`int`, *optional*, defaults to 6):
-            原始音频的默认长度，以秒为单位。如果在 `__call__` 中未设置 `max_length`，则默认为 `default_audio_length` * `self.sampling_rate`。
+            The default length of raw audio in seconds. If `max_length` is not set during `__call__` then it will
+            automatically be set to default_audio_length * `self.sampling_rate`.
         hop_length (`int`, *optional*, defaults to 256):
-            用于获取梅尔频率系数的 STFT 中的重叠窗口的长度。
+            Length of the overlapping windows for the STFT used to obtain the Mel Frequency coefficients.
         chunk_length (`int`, *optional*, defaults to 30):
-            用于修剪和填充较长或较短音频序列的 `sampling_rate` 个样本的最大块数。
+            The maximum number of chunks of `sampling_rate` samples used to trim and pad longer or shorter audio
+            sequences.
         n_fft (`int`, *optional*, defaults to 1024):
-            傅立叶变换的大小。
+            Size of the Fourier transform.
         padding_value (`float`, *optional*, defaults to 0.0):
-            用于填充音频的填充值。应对应于静音。
+            Padding value used to pad the audio. Should correspond to silences.
         mel_norms (`list` of length `feature_size`, *optional*):
-            如果提供了 `mel_norms`，则将用于沿每个梅尔滤波器对数梅尔频谱进行归一化。
+            If `mel_norms` is provided then it will be used to normalize the log-mel spectrograms along each
+            mel-filter.
         return_attention_mask (`bool`, *optional*, defaults to `False`):
-            是否返回注意力掩码。如果保持默认设置，它将返回注意力掩码。
+            Whether to return the attention mask. If left to the default, it will return the attention mask.
 
-            [注意力掩码是什么？](../glossary#attention-mask)
+            [What are attention masks?](../glossary#attention-mask)
     """
-
+    # 定义模型输入的名称，包括输入特征和注意力掩码
     model_input_names = ["input_features", "attention_mask"]
 
     def __init__(
@@ -97,6 +89,7 @@ class ClvpFeatureExtractor(SequenceFeatureExtractor):
         return_attention_mask=False,  # pad inputs to max length with silence token (zero) and no attention mask
         **kwargs,
     ):
+        # 调用父类的初始化方法，设置基本参数
         super().__init__(
             feature_size=feature_size,
             sampling_rate=sampling_rate,
@@ -104,15 +97,16 @@ class ClvpFeatureExtractor(SequenceFeatureExtractor):
             return_attention_mask=return_attention_mask,
             **kwargs,
         )
+        # 设置其他参数和属性
         self.n_fft = n_fft
         self.hop_length = hop_length
         self.chunk_length = chunk_length
-        self.n_samples = chunk_length * sampling_rate
-        self.nb_max_frames = self.n_samples // hop_length
+        self.n_samples = chunk_length * sampling_rate  # 计算每个片段的采样数
+        self.nb_max_frames = self.n_samples // hop_length  # 计算最大帧数
         self.sampling_rate = sampling_rate
         self.default_audio_length = default_audio_length
         self.mel_norms = mel_norms
-        # 创建梅尔滤波器组成的数组
+        # 计算梅尔滤波器组
         self.mel_filters = mel_filter_bank(
             num_frequency_bins=1 + (n_fft // 2),
             num_mel_filters=feature_size,
@@ -127,25 +121,25 @@ class ClvpFeatureExtractor(SequenceFeatureExtractor):
         This method first computes the log-mel spectrogram of the provided audio then applies normalization along the
         each mel-filterbank, if `mel_norms` is provided.
         """
-        # 计算提供音频的对数梅尔频谱图，然后根据 `mel_norms` 进行每个梅尔滤波器的归一化
+        # 计算音频的对数梅尔频谱图
         log_spec = spectrogram(
-            waveform,  # 输入音频波形
-            window_function(self.n_fft, "hann"),  # 汉宁窗口函数
-            frame_length=self.n_fft,  # 帧长度
-            hop_length=self.hop_length,  # 帧之间的跳跃长度
-            power=2.0,  # 指定功率
-            mel_filters=self.mel_filters,  # 梅尔滤波器的参数
-            log_mel=None,  # 不进行对数变换
+            waveform,
+            window_function(self.n_fft, "hann"),
+            frame_length=self.n_fft,
+            hop_length=self.hop_length,
+            power=2.0,
+            mel_filters=self.mel_filters,
+            log_mel=None,
         )
 
-        # 对计算出的对数梅尔频谱图进行对数变换，并进行截断和裁剪
+        # 对计算得到的对数梅尔频谱图进行对数处理，并进行上下限裁剪
         log_spec = np.log(np.clip(log_spec, a_min=1e-5, a_max=None))
 
-        # 如果提供了 `mel_norms`，则对对数梅尔频谱图进行归一化处理
+        # 如果提供了 `mel_norms`，则对对数梅尔频谱图进行归一化
         if self.mel_norms is not None:
             log_spec = log_spec / np.array(self.mel_norms)[:, None]
 
-        # 返回对数梅尔频谱图
+        # 返回处理后的对数梅尔频谱图作为结果
         return log_spec
 
     def __call__(

@@ -1,10 +1,10 @@
-# `.\transformers\models\unispeech_sat\__init__.py`
+# `.\models\unispeech_sat\__init__.py`
 
-```py
-# 导入类型检查模块，用于检查是否支持类型检查
+```
+# 导入必要的模块和函数，包括依赖检查和异常处理
 from typing import TYPE_CHECKING
 
-# 导入必要的工具函数和异常
+# 导入自定义的异常类和延迟加载模块函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -13,19 +13,19 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构，包含配置和模型
+# 定义模块的导入结构，包括配置和模型相关内容
 _import_structure = {
     "configuration_unispeech_sat": ["UNISPEECH_SAT_PRETRAINED_CONFIG_ARCHIVE_MAP", "UniSpeechSatConfig"],
 }
 
-# 检查是否支持 PyTorch，若不支持则引发可选依赖不可用异常
+# 检查是否可以导入 torch，如果不行则引发 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若支持 PyTorch，则添加 UniSpeechSat 相关模型到导入结构中
+    # 如果可以导入 torch，则添加与模型相关的导入内容
     _import_structure["modeling_unispeech_sat"] = [
         "UNISPEECH_SAT_PRETRAINED_MODEL_ARCHIVE_LIST",
         "UniSpeechSatForAudioFrameClassification",
@@ -37,19 +37,16 @@ else:
         "UniSpeechSatPreTrainedModel",
     ]
 
-# 如果是类型检查环境
+# 如果是类型检查阶段，导入配置和模型相关内容的具体类
 if TYPE_CHECKING:
-    # 导入 UNISPEECH_SAT 配置相关内容
     from .configuration_unispeech_sat import UNISPEECH_SAT_PRETRAINED_CONFIG_ARCHIVE_MAP, UniSpeechSatConfig
 
-    # 再次检查是否支持 PyTorch，若不支持则引发可选依赖不可用异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 导入 UNISPEECH_SAT 模型相关内容
         from .modeling_unispeech_sat import (
             UNISPEECH_SAT_PRETRAINED_MODEL_ARCHIVE_LIST,
             UniSpeechSatForAudioFrameClassification,
@@ -61,12 +58,10 @@ if TYPE_CHECKING:
             UniSpeechSatPreTrainedModel,
         )
 
-# 如果不是类型检查环境，则进行惰性加载
+# 如果不是类型检查阶段，则将模块注册为懒加载模块，以延迟加载相关内容
 else:
     import sys
 
-    # 将当前模块替换为惰性加载模块
+    # 将当前模块注册为懒加载模块，用于实现模块的延迟导入
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
-
-```  
 ```

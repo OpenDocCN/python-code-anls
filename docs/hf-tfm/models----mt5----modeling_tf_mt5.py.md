@@ -1,19 +1,35 @@
-# `.\transformers\models\mt5\modeling_tf_mt5.py`
+# `.\models\mt5\modeling_tf_mt5.py`
 
-```py
-# 指定编码方式为 UTF-8
-# 版权声明及许可证信息
-# 导入日志记录工具
-# 导入 mT5 模型相关类和配置
-# 导入 mT5 模型配置类
-# 获取日志记录器
-# 用于文档的配置名称
-# mT5 模型的 TensorFlow 实现
+```
+# 设置文件编码为UTF-8
+# 版权声明，指出代码的版权归属
+# 版权使用协议，告知可在Apache License Version 2.0下使用
+# 获取Apache License Version 2.0的具体内容链接
+# 如果不是根据许可证中规定的，不得使用此文件
+# 在适用法律下，本软件按"原样"提供，没有任何明示或暗示的担保或条件
+# 参见许可证以了解特定语言的权限
+""" Tensorflow mT5 model."""
+
+# 从相对路径导入logging工具
+from ...utils import logging
+# 从T5的TensorFlow模型中导入编码器模型、有条件生成模型和基础模型
+from ..t5.modeling_tf_t5 import TFT5EncoderModel, TFT5ForConditionalGeneration, TFT5Model
+# 从当前目录下的配置文件中导入MT5的配置类
+from .configuration_mt5 import MT5Config
+
+# 获取logger对象
+logger = logging.get_logger(__name__)
+
+# 文档字符串，用于生成文档
+_CONFIG_FOR_DOC = "T5Config"
+
+# TFMT5Model类，继承自TFT5Model类，用于MT5模型的TensorFlow实现
 class TFMT5Model(TFT5Model):
     r"""
-    此类覆盖了 [`TFT5Model`]。请查看超类以获取适当的文档和使用示例。
+    This class overrides [`TFT5Model`]. Please check the superclass for the appropriate documentation alongside usage
+    examples.
 
-    示例：
+    Examples:
 
     ```python
     >>> from transformers import TFMT5Model, AutoTokenizer
@@ -27,19 +43,21 @@ class TFMT5Model(TFT5Model):
 
     >>> outputs = model(input_ids=inputs["input_ids"], decoder_input_ids=labels["input_ids"])
     >>> hidden_states = outputs.last_hidden_state
-    ```py"""
+    ```"""
 
-    # 模型类型
+    # 模型类型为"mt5"
     model_type = "mt5"
-    # 配置类
+    # 配置类为MT5Config
     config_class = MT5Config
 
 
+# TFMT5ForConditionalGeneration类，继承自TFT5ForConditionalGeneration类，用于带条件生成的MT5模型的TensorFlow实现
 class TFMT5ForConditionalGeneration(TFT5ForConditionalGeneration):
     r"""
-    此类覆盖了 [`TFT5ForConditionalGeneration`]。请查看超类以获取适当的文档和使用示例。
+    This class overrides [`TFT5ForConditionalGeneration`]. Please check the superclass for the appropriate
+    documentation alongside usage examples.
 
-    示例：
+    Examples:
 
     ```python
     >>> from transformers import TFMT5ForConditionalGeneration, AutoTokenizer
@@ -52,39 +70,44 @@ class TFMT5ForConditionalGeneration(TFT5ForConditionalGeneration):
 
     >>> outputs = model(**inputs)
     >>> loss = outputs.loss
-    ```py"""
+    ```"""
 
-    # 模型类型
+    # 模型类型为"mt5"
     model_type = "mt5"
-    # 配置类
+    # 配置类为MT5Config
     config_class = MT5Config
 
 
+# TFMT5EncoderModel类，继承自TFT5EncoderModel类，用于MT5编码器模型的TensorFlow实现
 class TFMT5EncoderModel(TFT5EncoderModel):
     r"""
-    此类覆盖了 [`TFT5EncoderModel`]。请查看超类以获取适当的文档和使用示例。
+    This class overrides [`TFT5EncoderModel`]. Please check the superclass for the appropriate documentation alongside
+    usage examples.
 
-    示例：
+    Examples:
 
     ```python
     >>> from transformers import TFMT5EncoderModel, AutoTokenizer
 
     >>> model = TFMT5EncoderModel.from_pretrained("google/mt5-small")
-    # 使用预训练的 Google MT5-small 模型的分词器
+    # 设置tokenizer为从预训练模型"google/mt5-small"加载的自动分词器
     tokenizer = AutoTokenizer.from_pretrained("google/mt5-small")
-    # 给定待处理的文章内容
+    
+    # 设置一个新闻文章的示例文本
     article = "UN Offizier sagt, dass weiter verhandelt werden muss in Syrien."
-    # 使用分词器对文章进行编码得到输入张量
+    
+    # 使用tokenizer对文章进行分词并返回TensorFlow格式的输入ID
     input_ids = tokenizer(article, return_tensors="tf").input_ids
-    # 使用模型进行推断
+    
+    # 对输入ID进行模型推理，获取模型的输出
     outputs = model(input_ids)
-    # 获取模型输出中最后一层的隐藏状态
+    
+    # 从模型的输出中提取最后一个隐藏状态的表示
     hidden_state = outputs.last_hidden_state
     
-    
-    
-    # 模型类型为 MT5
+    # 设置模型类型为"mt5"，这里暂存了模型的类型信息
     model_type = "mt5"
-    # 配置类为 MT5Config
+    
+    # 设置配置类为MT5Config，用于模型配置的加载和管理
     config_class = MT5Config
 ```

@@ -1,9 +1,27 @@
-# `.\transformers\models\regnet\__init__.py`
+# `.\models\regnet\__init__.py`
 
-```py
-# 导入必要的模块和函数
+```
+# 版权声明和许可证信息
+#
+# Copyright 2022 The HuggingFace Team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 导入类型检查相关模块
 from typing import TYPE_CHECKING
 
+# 导入必要的依赖和模块
+# 引入了一些特定的异常和工具函数
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -12,17 +30,17 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构
+# 定义了一个导入结构的字典，包含了模块和其对应的导入内容
 _import_structure = {"configuration_regnet": ["REGNET_PRETRAINED_CONFIG_ARCHIVE_MAP", "RegNetConfig"]}
 
-# 检查是否导入了 torch，若未导入则引发异常
+# 检查是否可用 Torch，如果不可用则抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 torch，则添加 torch 特定模块到导入结构中
+    # 如果可用，添加 Torch 模型相关的导入内容到导入结构字典中
     _import_structure["modeling_regnet"] = [
         "REGNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "RegNetForImageClassification",
@@ -30,14 +48,13 @@ else:
         "RegNetPreTrainedModel",
     ]
 
-# 检查是否导入了 tensorflow，若未导入则引发异常
+# 类似地检查 TensorFlow 的可用性，并添加相应的导入内容到导入结构字典中
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 tensorflow，则添加 tensorflow 特定模块到导入结构中
     _import_structure["modeling_tf_regnet"] = [
         "TF_REGNET_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFRegNetForImageClassification",
@@ -45,25 +62,23 @@ else:
         "TFRegNetPreTrainedModel",
     ]
 
-# 检查是否导入了 flax，若未导入则引发异常
+# 类似地检查 Flax 的可用性，并添加相应的导入内容到导入结构字典中
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 若导入了 flax，则添加 flax 特定模块到导入结构中
     _import_structure["modeling_flax_regnet"] = [
         "FlaxRegNetForImageClassification",
         "FlaxRegNetModel",
         "FlaxRegNetPreTrainedModel",
     ]
 
-# 若为类型检查模式，则进一步导入相应的模块
+# 如果是类型检查阶段，则导入更多的内容以支持类型检查
 if TYPE_CHECKING:
     from .configuration_regnet import REGNET_PRETRAINED_CONFIG_ARCHIVE_MAP, RegNetConfig
 
-    # 导入 torch 特定模块（若可用）
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
@@ -77,7 +92,6 @@ if TYPE_CHECKING:
             RegNetPreTrainedModel,
         )
 
-    # 导入 tensorflow 特定模块（若可用）
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
@@ -91,26 +105,23 @@ if TYPE_CHECKING:
             TFRegNetPreTrainedModel,
         )
 
-    # 导入 flax 特定模块（若可用）
+    # Flax 在类型检查中的导入暂时略过，因为前面已经处理过了
     try:
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果条件不满足，则执行以下代码块
     else:
-        # 从当前目录的modeling_flax_regnet模块中导入以下类：
-        # FlaxRegNetForImageClassification，FlaxRegNetModel，FlaxRegNetPreTrainedModel
+        # 如果前面的条件不满足，则执行以下代码块
+        # 从当前目录下的 `modeling_flax_regnet` 模块中导入以下三个类
         from .modeling_flax_regnet import (
             FlaxRegNetForImageClassification,
             FlaxRegNetModel,
             FlaxRegNetPreTrainedModel,
         )
-# 如果不满足上面的所有条件，则执行以下代码块
 else:
-    # 导入sys模块，用于操作Python运行时的环境变量和函数
+    # 如果条件不满足，导入 sys 模块
     import sys
-    # 将当前模块的名字(__name__)和当前文件的路径(__file__)传给_LazyModule类，创建一个惰性加载的模块对象
-    # _LazyModule用于在首次访问模块代码时才会导入依赖的模块，可以在程序运行时减少初始化时间和资源的开销
+    # 将当前模块替换为一个懒加载模块，传入当前模块名、文件路径和导入结构
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure)
 ```

@@ -1,48 +1,51 @@
-# `.\transformers\models\xglm\modeling_flax_xglm.py`
+# `.\models\xglm\modeling_flax_xglm.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明
-# 使用 Apache 许可版本 2.0 许可
-# 如果没有遵守许可证，不得使用此文件
-# 可以在以下网址获取许可证副本
+```
+# coding=utf-8
+# Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或经书面同意，否则不得分发包含此文件的软件
-# 软件基于“现状”分发，没有任何明示或默示的保证或条件
-# 请阅读特定语言的许可证，了解权限和限制
-""" Flax XGLM 模型。"""
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" Flax XGLM model."""
 
-# 导入模块
+# 导入需要的库和模块
 import math
 import random
 from functools import partial
 from typing import Optional, Tuple
 
-import flax.linen as nn
-import jax
-import jax.numpy as jnp
-import numpy as np
-from flax.core.frozen_dict import FrozenDict, freeze, unfreeze
-from flax.linen import combine_masks, make_causal_mask
-from flax.linen.attention import dot_product_attention_weights
-from flax.traverse_util import flatten_dict, unflatten_dict
-from jax import lax
-from jax.random import PRNGKey
+import flax.linen as nn  # 导入Flax的linen模块，通常用来定义神经网络模型
+import jax  # 导入JAX，用于自动求导和数组计算
+import jax.numpy as jnp  # 导入JAX的NumPy接口，用于数组操作
+import numpy as np  # 导入NumPy，通用的数值计算库
+from flax.core.frozen_dict import FrozenDict, freeze, unfreeze  # 导入Flax的FrozenDict，用于不可变字典的操作
+from flax.linen import combine_masks, make_causal_mask  # 导入Flax的函数和类
+from flax.linen.attention import dot_product_attention_weights  # 导入Flax的注意力机制函数
+from flax.traverse_util import flatten_dict, unflatten_dict  # 导入Flax的工具函数，用于字典扁平化和反扁平化
+from jax import lax  # 导入JAX的lax模块，用于定义和执行JAX原语
+from jax.random import PRNGKey  # 导入JAX的随机数生成器
 
 from ...modeling_flax_outputs import (
     FlaxBaseModelOutputWithPastAndCrossAttentions,
     FlaxCausalLMOutputWithCrossAttentions,
-)
-from ...modeling_flax_utils import ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring
-from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging
-from .configuration_xglm import XGLMConfig
+)  # 导入自定义的Flax模型输出类
+from ...modeling_flax_utils import ACT2FN, FlaxPreTrainedModel, append_call_sample_docstring  # 导入自定义的Flax模型和工具函数
+from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward, logging  # 导入自定义的工具函数和日志模块
+from .configuration_xglm import XGLMConfig  # 导入XGLM模型的配置文件
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 文档中需要的示例模型和配置
-_CHECKPOINT_FOR_DOC = "facebook/xglm-564M"
-_CONFIG_FOR_DOC = "XGLMConfig"
+_CHECKPOINT_FOR_DOC = "facebook/xglm-564M"  # 文档中的预训练模型名
+_CONFIG_FOR_DOC = "XGLMConfig"  # 文档中的配置文件名
 
 XGLM_START_DOCSTRING = r"""
     This model inherits from [`FlaxPreTrainedModel`]. Check the superclass documentation for the generic methods the
@@ -59,56 +62,72 @@ XGLM_START_DOCSTRING = r"""
     - [Automatic Differentiation](https://jax.readthedocs.io/en/latest/jax.html#automatic-differentiation)
     - [Vectorization](https://jax.readthedocs.io/en/latest/jax.html#vectorization-vmap)
     - [Parallelization](https://jax.readthedocs.io/en/latest/jax.html#parallelization-pmap)
-    # 定义函数参数和类型提示
-    # config：[`XGLMConfig`]，模型配置类，包含模型的所有参数
-    #         使用配置文件进行初始化不会加载模型关联的权重，只会加载配置。查看[`~FlaxPreTrainedModel.from_pretrained`]方法以加载模型权重。
-    # dtype：`jax.numpy.dtype`，*可选参数*，默认为`jax.numpy.float32`
-    #        计算的数据类型。可以是`jax.numpy.float32`、`jax.numpy.float16`（在 GPU 上）、`jax.numpy.bfloat16`（在 TPU 上）之一。
-    #        这可用于在 GPU 或 TPU 上启用混合精度训练或半精度推理。如果指定，所有计算将使用给定的`dtype`进行。
-    #        **请注意，这仅指定计算的dtype，不影响模型参数的dtype。**
-    #        如果您希望更改模型参数的dtype，请参阅[`~FlaxPreTrainedModel.to_fp16`]和[`~FlaxPreTrainedModel.to_bf16`]。
 """
-# XGLM_INPUTS_DOCSTRING是一个文档字符串，用于描述函数create_sinusoidal_positions的输入参数的作用和格式
+    # 定义一个函数，接受以下参数:
+    #   config (`XGLMConfig`)：包含模型所有参数的配置类。
+    #       使用配置文件初始化不会加载与模型关联的权重，只加载配置。
+    #       可以查看 [`~FlaxPreTrainedModel.from_pretrained`] 方法来加载模型权重。
+    #   dtype (`jax.numpy.dtype`, *可选*, 默认为 `jax.numpy.float32`)：
+    #       计算的数据类型。可以是 `jax.numpy.float32`、`jax.numpy.float16`（在GPU上）、`jax.numpy.bfloat16`（在TPU上）之一。
+    #
+    #       这可以用于在GPU或TPU上启用混合精度训练或半精度推断。如果指定，则所有计算将使用给定的 `dtype` 执行。
+    #
+    #       **注意，这仅指定计算的dtype，不影响模型参数的dtype。**
+    #
+    #       如果要更改模型参数的dtype，请参阅 [`~FlaxPreTrainedModel.to_fp16`] 和 [`~FlaxPreTrainedModel.to_bf16`]。
+"""
 XGLM_INPUTS_DOCSTRING = r"""
     Args:
         input_ids (`jnp.ndarray` of shape `(batch_size, sequence_length)`):
-            输入序列标记在词汇表中的索引。默认情况下将忽略填充。
+            Indices of input sequence tokens in the vocabulary. Padding will be ignored by default should you provide
+            it.
 
-            可以使用`AutoTokenizer`获取索引。有关详情，请参见`PreTrainedTokenizer.encode`和`PreTrainedTokenizer.__call__`。
+            Indices can be obtained using [`AutoTokenizer`]. See [`PreTrainedTokenizer.encode`] and
+            [`PreTrainedTokenizer.__call__`] for details.
 
-            [什么是输入ID？](../glossary#input-ids)
+            [What are input IDs?](../glossary#input-ids)
         attention_mask (`jnp.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            避免对填充标记索引执行注意力的掩码。选择范围在`[0, 1]`：
+            Mask to avoid performing attention on padding token indices. Mask values selected in `[0, 1]`:
 
-            - 1表示**未屏蔽**的标记，
-            - 0表示**屏蔽**的标记。
+            - 1 for tokens that are **not masked**,
+            - 0 for tokens that are **masked**.
 
-            [什么是注意力掩码？](../glossary#attention-mask)
+            [What are attention masks?](../glossary#attention-mask)
         position_ids (`numpy.ndarray` of shape `(batch_size, sequence_length)`, *optional*):
-            输入序列标记在位置嵌入中的位置索引。选择范围在`[0, config.max_position_embeddings - 1]`。
+            Indices of positions of each input sequence tokens in the position embeddings. Selected in the range `[0,
+            config.max_position_embeddings - 1]`.
         output_attentions (`bool`, *optional*):
-            是否返回所有注意力层的注意力张量。有关更多细节，请参见返回张量中的`attentions`。
+            Whether or not to return the attentions tensors of all attention layers. See `attentions` under returned
+            tensors for more detail.
         output_hidden_states (`bool`, *optional*):
-            是否返回所有层的隐藏状态。有关更多细节，请参见返回张量中的`hidden_states`。
+            Whether or not to return the hidden states of all layers. See `hidden_states` under returned tensors for
+            more detail.
         return_dict (`bool`, *optional*):
-            是否返回[`~utils.ModelOutput`]而不是普通元组。
+            Whether or not to return a [`~utils.ModelOutput`] instead of a plain tuple.
 """
 
-# 创建正弦位置编码，用于Transformer模型的位置编码
+
 def create_sinusoidal_positions(n_pos, dim, padding_idx=1):
+    # Calculate half of the dimension for sinusoidal embedding
     half_dim = dim // 2
+    # Compute the exponential term for sinusoidal embedding
     emb = math.log(10000) / (half_dim - 1)
     emb = np.exp(np.arange(half_dim) * -emb)
+    # Expand dimensions to perform element-wise multiplication
     emb = np.expand_dims(np.arange(n_pos), 1) * np.expand_dims(emb, 0)
+    # Concatenate sine and cosine transformations of embeddings
     emb = np.concatenate([np.sin(emb), np.cos(emb)], 1)
+    # Reshape the embedding to match desired dimensions
     emb = np.reshape(emb, (n_pos, dim))
 
+    # If padding index is specified, zero out its embedding
     if padding_idx is not None:
         emb[padding_idx, :] = 0
 
+    # Convert embedding to JAX array
     return jnp.array(emb)
 
-# 定义FlaxXGLMAttention类，用于XGLM模型的注意力机制
+
 class FlaxXGLMAttention(nn.Module):
     config: XGLMConfig
     embed_dim: int
@@ -116,20 +135,19 @@ class FlaxXGLMAttention(nn.Module):
     dropout: float = 0.0
     causal: bool = False
     bias: bool = True
-    dtype: jnp.dtype = jnp.float32  # 计算的数据类型
-    # 在模型设置时进行的操作
+    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
     def setup(self) -> None:
-        # 将每个头所需的维度计算出来
+        # 计算每个头部的维度
         self.head_dim = self.embed_dim // self.num_heads
 
-        # 检查 embed_dim 能否被 num_heads 整除
+        # 检查 embed_dim 是否能被 num_heads 整除，否则抛出数值错误
         if self.head_dim * self.num_heads != self.embed_dim:
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim} "
                 f"and `num_heads`: {self.num_heads})."
             )
 
-        # 定义一个 nn.Dense 的偏函数 dense，为之后创建全连接层做准备
+        # 定义部分应用了部分参数的 Dense 层构造函数
         dense = partial(
             nn.Dense,
             self.embed_dim,
@@ -138,219 +156,216 @@ class FlaxXGLMAttention(nn.Module):
             kernel_init=jax.nn.initializers.normal(self.config.init_std),
         )
 
-        # 创建输入 q, k, v 的全连接层
+        # 初始化查询、键、值、输出投影层
         self.q_proj, self.k_proj, self.v_proj = dense(), dense(), dense()
-
-        # 创建输出层全连接层
         self.out_proj = dense()
 
-        # 创建一个丢弃层
+        # 初始化 Dropout 层
         self.dropout_layer = nn.Dropout(rate=self.dropout)
 
-        # 如果是因果的注意力机制，创建一个因果遮盖
+        # 如果需要引入因果注意力机制，则创建对应的因果掩码
         if self.causal:
             self.causal_mask = make_causal_mask(
                 jnp.ones((1, self.config.max_position_embeddings), dtype="bool"), dtype="bool"
             )
 
-    # 将 hidden_states 沿着最后两个维度拆分成 (batch_size, num_heads, seq_len, head_dim) 的形状
     def _split_heads(self, hidden_states):
+        # 将隐藏状态张量按头部分割
         return hidden_states.reshape(hidden_states.shape[:2] + (self.num_heads, self.head_dim))
 
-    # 将 hidden_states 沿着倒数第二个维度合并成 (batch_size, seq_len, embed_dim) 的形状
     def _merge_heads(self, hidden_states):
+        # 将分割后的头部重新合并
         return hidden_states.reshape(hidden_states.shape[:2] + (self.embed_dim,))
 
-    # 使用 nn.compact 声明一个层的子类
     @nn.compact
-    # 将新计算的 key 和 value 添加到缓存中
     def _concatenate_to_cache(self, key, value, query, attention_mask):
-        # 检查是否已初始化缓存
+        """
+        This function takes projected key, value states from a single input token and concatenates the states to cached
+        states from previous steps. This function is slighly adapted from the official Flax repository:
+        https://github.com/google/flax/blob/491ce18759622506588784b4fca0e4bf05f8c8cd/flax/linen/attention.py#L252
+        """
+        # 检测是否正在初始化，通过检查是否存在缓存数据来判断
         is_initialized = self.has_variable("cache", "cached_key")
-        # 获取缓存的 key 和 value
+        # 获取或创建缓存的键值对应的变量，如果不存在则创建一个全零数组
         cached_key = self.variable("cache", "cached_key", jnp.zeros, key.shape, key.dtype)
+        # 获取或创建缓存的值对应的变量，如果不存在则创建一个全零数组
         cached_value = self.variable("cache", "cached_value", jnp.zeros, value.shape, value.dtype)
-        # 获取缓存索引
+        # 获取或创建缓存索引对应的变量，如果不存在则创建一个值为0的整数数组
         cache_index = self.variable("cache", "cache_index", lambda: jnp.array(0, dtype=jnp.int32))
-    
-        # 如果已初始化
+
         if is_initialized:
-            # 获取缓存的最大长度和头数
+            # 提取当前缓存的维度信息，包括批次维度、最大长度、头数、每头深度
             *batch_dims, max_length, num_heads, depth_per_head = cached_key.value.shape
-            # 更新缓存的 key 和 value
+            # 使用新的一维空间切片更新键和值的缓存
             cur_index = cache_index.value
             indices = (0,) * len(batch_dims) + (cur_index, 0, 0)
             key = lax.dynamic_update_slice(cached_key.value, key, indices)
             value = lax.dynamic_update_slice(cached_value.value, value, indices)
+            # 更新缓存中的键和值
             cached_key.value = key
             cached_value.value = value
-            # 更新缓存索引
+            # 更新缓存索引，增加已更新的缓存向量数目
             num_updated_cache_vectors = query.shape[1]
             cache_index.value = cache_index.value + num_updated_cache_vectors
-            # 更新注意力掩码以考虑缓存
+            # 用于缓存的因果掩码：我们的单个查询位置应该只关注已生成和缓存的键位置，而不是剩余的零元素。
             pad_mask = jnp.broadcast_to(
                 jnp.arange(max_length) < cur_index + num_updated_cache_vectors,
                 tuple(batch_dims) + (1, num_updated_cache_vectors, max_length),
             )
+            # 将因果掩码和传入的注意力掩码结合起来
             attention_mask = combine_masks(pad_mask, attention_mask)
-    
+        # 返回更新后的键、值和注意力掩码
         return key, value, attention_mask
-    
-    # 这是自注意力层的前向传播
-    def __call__(
-        self,
-        hidden_states: jnp.ndarray,
-        key_value_states: Optional[jnp.ndarray] = None,
-        attention_mask: Optional[jnp.ndarray] = None,
-        init_cache: bool = False,
-        deterministic: bool = True,
-    ):
-# 定义FlaxXGLMDecoderLayer类
-class FlaxXGLMDecoderLayer(nn.Module):
-    # XGLMConfig类型的配置参数
-    config: XGLMConfig
-    # 数据类型，默认为float32
-    dtype: jnp.dtype = jnp.float32
+    # 定义一个 FlaxXGLMDecoderLayer 类，继承自 nn.Module
+    class FlaxXGLMDecoderLayer(nn.Module):
+        # 类变量：XGLMConfig 类型的 config 变量
+        config: XGLMConfig
+        # 类变量：jnp.float32 类型的 dtype，默认为 jnp.float32
+        dtype: jnp.dtype = jnp.float32
 
-    # 初始化函数
-    def setup(self) -> None:
-        # 嵌入维度等于配置参数的d_model
-        self.embed_dim = self.config.d_model
-        # 自注意力机制
-        self.self_attn = FlaxXGLMAttention(
-            config=self.config,
-            embed_dim=self.embed_dim,
-            num_heads=self.config.attention_heads,
-            dropout=self.config.attention_dropout,
-            causal=True,
-            dtype=self.dtype,
-        )
-        # 对自注意力结果进行层归一化
-        self.self_attn_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
-        # dropout层
-        self.dropout_layer = nn.Dropout(rate=self.config.dropout)
-        # 激活函数，默认为config.activation_function
-        self.activation_fn = ACT2FN[self.config.activation_function]
-        # 激活函数后的dropout层
-        self.activation_dropout_layer = nn.Dropout(rate=self.config.activation_dropout)
-
-        # 如果需要添加跨注意力机制
-        if self.config.add_cross_attention:
-            # 跨注意力机制
-            self.encoder_attn = FlaxXGLMAttention(
+        # 初始化方法，无返回值
+        def setup(self) -> None:
+            # 实例变量：self.embed_dim 等于 config.d_model
+            self.embed_dim = self.config.d_model
+            # 实例变量：self.self_attn 是一个 FlaxXGLMAttention 实例
+            # 根据给定的 config 参数进行初始化
+            self.self_attn = FlaxXGLMAttention(
                 config=self.config,
                 embed_dim=self.embed_dim,
-                num_heads=self.config.decoder_attention_heads,
+                num_heads=self.config.attention_heads,
                 dropout=self.config.attention_dropout,
+                causal=True,
                 dtype=self.dtype,
             )
-            # 对跨注意力机制结果进行层归一化
-            self.encoder_attn_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
+            # 实例变量：self.self_attn_layer_norm 是一个 LayerNorm 实例
+            # 根据 dtype 参数进行初始化
+            self.self_attn_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
+            # 实例变量：self.dropout_layer 是一个 Dropout 层实例
+            # 根据 config.dropout 参数进行初始化
+            self.dropout_layer = nn.Dropout(rate=self.config.dropout)
+            # 实例变量：self.activation_fn 是一个激活函数，根据 config.activation_function 选择
+            self.activation_fn = ACT2FN[self.config.activation_function]
+            # 实例变量：self.activation_dropout_layer 是一个 Dropout 层实例
+            # 根据 config.activation_dropout 参数进行初始化
+            self.activation_dropout_layer = nn.Dropout(rate=self.config.activation_dropout)
 
-        # 第一个全连接层
-        self.fc1 = nn.Dense(
-            self.config.ffn_dim,
-            dtype=self.dtype,
-            kernel_init=jax.nn.initializers.normal(self.config.init_std),
-        )
-        
-        # 第二个全连接层
-        self.fc2 = nn.Dense(
-            self.embed_dim, dtype=self.dtype, kernel_init=jax.nn.initializers.normal(self.config.init_std)
-        )
-        # 全连接层输出结果进行层归一化
-        self.final_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
+            # 如果 config.add_cross_attention 为 True，则初始化下面的变量
+            if self.config.add_cross_attention:
+                # 实例变量：self.encoder_attn 是一个 FlaxXGLMAttention 实例
+                # 根据给定的 config 参数进行初始化
+                self.encoder_attn = FlaxXGLMAttention(
+                    config=self.config,
+                    embed_dim=self.embed_dim,
+                    num_heads=self.config.decoder_attention_heads,
+                    dropout=self.config.attention_dropout,
+                    dtype=self.dtype,
+                )
+                # 实例变量：self.encoder_attn_layer_norm 是一个 LayerNorm 实例
+                # 根据 dtype 参数进行初始化
+                self.encoder_attn_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
 
-    # 调用函数
-    # 从transformers库中的FlaxMBartDecoderLayer类进行修改
-    def __call__(
-        self,
-        hidden_states: jnp.ndarray,
-        attention_mask: jnp.ndarray,
-        encoder_hidden_states: Optional[jnp.ndarray] = None,
-        encoder_attention_mask: Optional[jnp.ndarray] = None,
-        init_cache: bool = False,
-        output_attentions: bool = True,
-        deterministic: bool = True,
-    # 定义函数，接收隐藏层状态作为输入，返回元组中包含一个 JAX 数组的输出
-    ) -> Tuple[jnp.ndarray]:
-        # 将隐藏层状态复制给残差变量
+            # 实例变量：self.fc1 是一个全连接层实例
+            # 输入维度为 self.config.ffn_dim，输出维度为 self.embed_dim
+            # 根据 dtype 参数和 self.config.init_std 进行初始化
+            self.fc1 = nn.Dense(
+                self.config.ffn_dim,
+                dtype=self.dtype,
+                kernel_init=jax.nn.initializers.normal(self.config.init_std),
+            )
+            # 实例变量：self.fc2 是一个全连接层实例
+            # 输入维度为 self.embed_dim，输出维度为 self.embed_dim
+            # 根据 dtype 参数和 self.config.init_std 进行初始化
+            self.fc2 = nn.Dense(
+                self.embed_dim, dtype=self.dtype, kernel_init=jax.nn.initializers.normal(self.config.init_std)
+            )
+            # 实例变量：self.final_layer_norm 是一个 LayerNorm 实例
+            # 根据 dtype 参数进行初始化
+            self.final_layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
+
+        # 重写 __call__ 方法，用于实例调用时的行为
+        # 可以接收多种输入参数并处理
+        # 来自 transformers.models.mbart.modeling_flax_mbart.FlaxMBartDecoderLayer.__call__
+        def __call__(
+            self,
+            hidden_states: jnp.ndarray,  # 输入的隐藏状态，类型为 jnp.ndarray
+            attention_mask: jnp.ndarray,  # 注意力掩码，类型为 jnp.ndarray
+            encoder_hidden_states: Optional[jnp.ndarray] = None,  # 编码器的隐藏状态，可选参数，默认为 None
+            encoder_attention_mask: Optional[jnp.ndarray] = None,  # 编码器的注意力掩码，可选参数，默认为 None
+            init_cache: bool = False,  # 是否初始化缓存，类型为布尔值，默认为 False
+            output_attentions: bool = True,  # 是否输出注意力权重，类型为布尔值，默认为 True
+            deterministic: bool = True,  # 是否确定性计算，类型为布尔值，默认为 True
+            # 返回值类型为 Tuple[jnp.ndarray, Optional[jnp.ndarray]]
+            # 其中第一个元素为输出的隐藏状态，第二个元素为注意力权重，可选
+            ) -> Tuple[jnp.ndarray, Optional[jnp.ndarray]]:
+        ) -> Tuple[jnp.ndarray]:
+        # 保存残差连接（Residual Connection）的输入隐藏状态
         residual = hidden_states
-        # 对隐藏状态进行自注意力机制的规范化
+        # 应用自注意力机制前的层归一化
         hidden_states = self.self_attn_layer_norm(hidden_states)
 
         # 自注意力机制
-        # 调用 self_attn 方法处理隐藏状态，并得到自注意力权重
         hidden_states, self_attn_weights = self.self_attn(
             hidden_states=hidden_states, attention_mask=attention_mask, init_cache=init_cache
         )
-        # 对隐藏状态进行 dropout 操作
+        # 应用 dropout
         hidden_states = self.dropout_layer(hidden_states, deterministic=deterministic)
-        # 将残差与新的隐藏状态相加
+        # 添加残差连接
         hidden_states = residual + hidden_states
 
         # 交叉注意力块
         cross_attn_weights = None
-        # 如果存在编码器的隐藏状态
         if encoder_hidden_states is not None:
-            # 将隐藏状态复制给残差变量
+            # 保存残差连接
             residual = hidden_states
-            # 对隐藏状态进行编码器注意力机制的规范化
+
+            # 应用编码器注意力块前的层归一化
             hidden_states = self.encoder_attn_layer_norm(hidden_states)
-            # 调用 encoder_attn 方法处理隐藏状态，并得到交叉注意力权重
+            # 应用编码器注意力机制
             hidden_states, cross_attn_weights = self.encoder_attn(
                 hidden_states=hidden_states,
                 key_value_states=encoder_hidden_states,
                 attention_mask=encoder_attention_mask,
             )
-            # 对隐藏状态进行 dropout 操作
+            # 应用 dropout
             hidden_states = self.dropout_layer(hidden_states, deterministic=deterministic)
-            # 将残差与新的隐藏状态相加
+            # 添加残差连接
             hidden_states = residual + hidden_states
 
         # 全连接层
-        # 将隐藏状态复制给残差变量
         residual = hidden_states
-        # 对隐藏状态进行最终层规范化
+        # 应用最终层归一化
         hidden_states = self.final_layer_norm(hidden_states)
-        # 对隐藏状态进行激活函数处理
+        # 应用激活函数
         hidden_states = self.activation_fn(self.fc1(hidden_states))
-        # 对隐藏状态进行激活函数的 dropout 操作
+        # 应用激活函数后的 dropout
         hidden_states = self.activation_dropout_layer(hidden_states, deterministic=deterministic)
-        # 经过第二个全连接层的处理
+        # 应用最后的线性变换
         hidden_states = self.fc2(hidden_states)
-        # 对隐藏状态进行 dropout 操作
+        # 应用 dropout
         hidden_states = self.dropout_layer(hidden_states, deterministic=deterministic)
-        # 将残差与新的隐藏状态相加
+        # 添加残差连接
         hidden_states = residual + hidden_states
 
-        # 输出
+        # 准备输出
         outputs = (hidden_states,)
 
-        # 如果需要输出注意力权重
+        # 如果需要输出注意力权重，则添加到输出中
         if output_attentions:
-            # 将自注意力权重和交叉注意力权重加入���输出中
             outputs += (self_attn_weights, cross_attn_weights)
 
-        # 返回结果输出
         return outputs
-# 定义一个名为FlaxXGLMDecoderLayerCollection的类，继承自nn.Module类
 class FlaxXGLMDecoderLayerCollection(nn.Module):
-    # 类属性：XGLMConfig类型的config变量
     config: XGLMConfig
-    # 类属性：jnp.float32类型的dtype变量，默认为jnp.float32
-    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
 
-    # 初始化方法
     def setup(self):
-        # 生成包含self.config.num_layers个FlaxXGLMDecoderLayer对象的列表，命名为self.layers
+        # 初始化所有的解码器层，并根据配置添加到层列表中
         self.layers = [
             FlaxXGLMDecoderLayer(self.config, name=str(i), dtype=self.dtype) for i in range(self.config.num_layers)
         ]
-        # 设置类属性self.layerdrop为self.config.layerdrop
+        # 设置层间隔概率（LayerDrop）
         self.layerdrop = self.config.layerdrop
 
-    # 调用方法
     def __call__(
         self,
         hidden_states,
@@ -363,26 +378,25 @@ class FlaxXGLMDecoderLayerCollection(nn.Module):
         output_hidden_states: bool = False,
         return_dict: bool = True,
     ):
-        # 如果output_hidden_states为True，则初始化空的元组all_hidden_states；否则初始化为None
+        # 如果需要输出隐藏状态，则初始化存储所有隐藏状态的元组
         all_hidden_states = () if output_hidden_states else None
-        # 如果output_attentions为True，则初始化空的元组all_self_attns；否则初始化为None
+        # 如果需要输出注意力权重，则初始化存储所有自注意力权重的元组
         all_self_attns = () if output_attentions else None
-        # 如果output_attentions为True且encoder_hidden_states不为None，则初始化空的元组all_cross_attentions；否则初始化为None
+        # 如果需要输出交叉注意力权重且存在编码器隐藏状态，则初始化存储所有交叉注意力权重的元组
         all_cross_attentions = () if (output_attentions and encoder_hidden_states is not None) else None
 
-        # 遍历self.layers中的每个decoder_layer
+        # 遍历所有解码器层
         for decoder_layer in self.layers:
-            # 如果output_hidden_states为True，则将hidden_states添加到all_hidden_states
             if output_hidden_states:
+                # 如果需要输出隐藏状态，则将当前隐藏状态添加到存储所有隐藏状态的元组中
                 all_hidden_states += (hidden_states,)
-                # 添加LayerDrop（参考https://arxiv.org/abs/1909.11556）
-            # 生成0到1之间的随机浮点数dropout_probability
+                # 添加层间隔概率（LayerDrop），详见论文 https://arxiv.org/abs/1909.11556
             dropout_probability = random.uniform(0, 1)
-            # 如果非确定性计算且dropout_probability小于self.layerdrop，则将layer_outputs设置为(None, None, None)
             if not deterministic and (dropout_probability < self.layerdrop):
+                # 如果不是确定性计算且随机丢弃概率小于层间隔概率，则设置层输出为None
                 layer_outputs = (None, None, None)
-            # 否则将layer_outputs设置为decoder_layer的输出
             else:
+                # 否则，调用当前解码器层进行前向计算
                 layer_outputs = decoder_layer(
                     hidden_states,
                     attention_mask=attention_mask,
@@ -393,27 +407,28 @@ class FlaxXGLMDecoderLayerCollection(nn.Module):
                     deterministic=deterministic,
                 )
 
-            # 更新hidden_states为layer_outputs的第一个元素
+            # 更新当前隐藏状态为解码器层的输出的第一个元素
             hidden_states = layer_outputs[0]
-            # 如果output_attentions为True，则将layer_outputs的第二个元素添加到all_self_attns
             if output_attentions:
+                # 如果需要输出注意力权重，则将当前解码器层的自注意力权重添加到存储所有自注意力权重的元组中
                 all_self_attns += (layer_outputs[1],)
-                # 如果encoder_hidden_states不为None，则将layer_outputs的第三个元素添加到all_cross_attentions
+
                 if encoder_hidden_states is not None:
+                    # 如果存在编码器隐藏状态，则将当前解码器层的交叉注意力权重添加到存储所有交叉注意力权重的元组中
                     all_cross_attentions += (layer_outputs[2],)
 
-        # 如果output_hidden_states为True，则将hidden_states添加到all_hidden_states
+        # 添加来自最后一个解码器层的隐藏状态
         if output_hidden_states:
             all_hidden_states += (hidden_states,)
 
-        # 将结果存储在outputs中
+        # 构建模型输出，根据需要返回不同的数据结构
         outputs = (hidden_states, all_hidden_states, all_self_attns, all_cross_attentions)
 
-        # 如果return_dict为False，则返回outputs中的非None值组成的元组
         if not return_dict:
+            # 如果不需要返回字典形式的输出，则只返回非空的元组元素
             return tuple(v for v in outputs if v is not None)
 
-        # 否则返回FlaxBaseModelOutputWithPastAndCrossAttentions类型的对象
+        # 否则，返回包含各类注意力权重和隐藏状态的字典形式的输出
         return FlaxBaseModelOutputWithPastAndCrossAttentions(
             last_hidden_state=hidden_states,
             hidden_states=all_hidden_states,
@@ -422,231 +437,255 @@ class FlaxXGLMDecoderLayerCollection(nn.Module):
         )
 
 
-# 定义一个名为FlaxXGLMModule的类，继承自nn.Module类
 class FlaxXGLMModule(nn.Module):
-    # 类属性：XGLMConfig类型的config变量
     config: XGLMConfig
-    # 类属性：jnp.float32类型的dtype变量，默认为jnp.float32
-    dtype: jnp.dtype = jnp.float32  # the dtype of the computation
-        # 设置 dropout 层，丢弃率为配置文件中指定的值
+    dtype: jnp.dtype = jnp.float32  # 计算时使用的数据类型
+    # 设置模型的初始配置
+    def setup(self):
+        # 初始化 dropout 层
         self.dropout_layer = nn.Dropout(rate=self.config.dropout)
 
-        # 初始化词嵌入维度为配置文件中指定的模型维度
+        # 获取嵌入维度、填充索引、最大目标位置和嵌入缩放因子的配置信息
         embed_dim = self.config.d_model
-        # 获取填充索引，用于填充序列
         self.padding_idx = self.config.pad_token_id
-        # 获取最大目标位置，用于生成位置编码
         self.max_target_positions = self.config.max_position_embeddings
-        # 计算词嵌入的缩放因子，如果配置文件中指定了缩放，则为模型维度的平方根，否则为1.0
         self.embed_scale = math.sqrt(self.config.d_model) if self.config.scale_embedding else 1.0
 
-        # 初始化词嵌入层，词汇大小为配置文件中指定的值，词嵌入维度为模型维度，
-        # 初始化方式为正态分布初始化，标准差为配置文件中指定的值
+        # 创建词嵌入矩阵，指定词汇表大小和嵌入维度，使用正态分布初始化
         self.embed_tokens = nn.Embed(
             self.config.vocab_size,
             embed_dim,
             embedding_init=jax.nn.initializers.normal(self.config.init_std),
         )
 
-        # XGLM 模型的设定是如果指定了填充索引，则将嵌入id偏移2，并相应调整num_embeddings。
-        # 其他模型没有这种处理方式
+        # XGLM 模型的特殊设置：如果指定了填充索引，将嵌入 id 偏移 2，并相应调整 num_embeddings
+        # 其他模型不需要此调整
         self.offset = 2
-        # 初始化位置编码，最大位置编码为配置文件中指定的最大位置编码加上偏移值，维度为词嵌入维度
+        # 创建 sinusoidal 位置嵌入，考虑偏移量和嵌入维度
         self.embed_positions = create_sinusoidal_positions(
             self.config.max_position_embeddings + self.offset, embed_dim
         )
-        # 初始化 XGLM 解码器层集合，包括多个解码器层
+        
+        # 初始化 XGLM 解码器层集合
         self.layers = FlaxXGLMDecoderLayerCollection(self.config, self.dtype)
-        # 初始化层归一化，数据类型为配置文件中指定的数据类型，ε为1e-05
+        # 初始化 LayerNorm 层，设置类型和 epsilon 值
         self.layer_norm = nn.LayerNorm(dtype=self.dtype, epsilon=1e-05)
-    # 获取输入的形状
-        input_shape = input_ids.shape
-        # 将输入的 ID 重塑为二维数组
-        input_ids = input_ids.reshape(-1, input_shape[-1])
 
-        # 对输入 ID 进行嵌入处理，并乘以嵌入比例
-        inputs_embeds = self.embed_tokens(input_ids) * self.embed_scale
-
-        # 嵌入位置信息
-        position_ids = position_ids + self.offset
-        positions = jnp.take(self.embed_positions, position_ids, axis=0)
-
-        # 将嵌入的输入和位置信息相加，得到隐藏状态
-        hidden_states = inputs_embeds + positions
-        # 对隐藏状态进行丢弃层处理
-        hidden_states = self.dropout_layer(hidden_states, deterministic=deterministic)
-
-        # 通过层处理输入，得到输出
-        outputs = self.layers(
-            hidden_states,
-            attention_mask,
-            encoder_hidden_states,
-            encoder_attention_mask,
-            deterministic=deterministic,
-            init_cache=init_cache,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-        )
-
-        # 获取最后的隐藏状态
-        last_hidden_states = outputs[0]
-        # 对最后的隐藏状态进行层归一化处理
-        last_hidden_states = self.layer_norm(last_hidden_states)
-
-        # 初始化隐藏状态为空
-        hidden_states = None
-        # 如果需要输出所有隐藏状态
-        if output_hidden_states:
-            # 获取所有隐藏状态
-            hidden_states = outputs[1]
-            # 将最后的隐藏状态添加到所有隐藏状态里面
-            hidden_states = hidden_states[:-1] + (last_hidden_states,)
-
-        # 如果不需要返回字典类型结果
-        if not return_dict:
-            # 构建输出结果
-            outputs = (last_hidden_states, hidden_states) + (outputs[2:] if output_hidden_states else outputs[1:])
-            return tuple(v for v in outputs if v is not None)
-
-        # 返回带有过去和交叉注意力的 FlaxBaseModelOutputWithPastAndCrossAttentions 结果
-        return FlaxBaseModelOutputWithPastAndCrossAttentions(
-            last_hidden_state=last_hidden_states,
-            hidden_states=hidden_states,
-            attentions=outputs.attentions,
-            cross_attentions=outputs.cross_attentions,
-        )
-``` 
-class FlaxXGLMPreTrainedModel(FlaxPreTrainedModel):
-    # 定义基于 XGLMConfig 的模型配置类
-    config_class = XGLMConfig
-    # 基本模型前缀
-    base_model_prefix: str = "model"
-    # 模块类别
-    module_class: nn.Module = None
-
-    def __init__(
-        self,
-        config: XGLMConfig,
-        input_shape: Tuple[int] = (1, 1),
-        seed: int = 0,
-        dtype: jnp.dtype = jnp.float32,
-        _do_init: bool = True,
-        **kwargs,
-    ):
-        # 创建模型模块
-        module = self.module_class(config=config, dtype=dtype, **kwargs)
-        super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
-
-    def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
-        # 初始化输入张量
-        input_ids = jnp.zeros(input_shape, dtype="i4")
-        attention_mask = jnp.ones_like(input_ids)
-        position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_shape)
-        params_rng, dropout_rng = jax.random.split(rng)
-        rngs = {"params": params_rng, "dropout": dropout_rng}
-
-        if self.config.add_cross_attention:
-            encoder_hidden_states = jnp.zeros(input_shape + (self.config.n_embd,))
-            encoder_attention_mask = attention_mask
-            # 初始化模块并获取输出
-            module_init_outputs = self.module.init(
-                rngs,
-                input_ids,
-                attention_mask,
-                position_ids,
-                encoder_hidden_states,
-                encoder_attention_mask,
-                return_dict=False,
-            )
-        else:
-            # 初始化模块并获取输出
-            module_init_outputs = self.module.init(rngs, input_ids, attention_mask, position_ids, return_dict=False)
-
-        random_params = module_init_outputs["params"]
-
-        if params is not None:
-            random_params = flatten_dict(unfreeze(random_params))
-            params = flatten_dict(unfreeze(params))
-            for missing_key in self._missing_keys:
-                params[missing_key] = random_params[missing_key]
-            self._missing_keys = set()
-            return freeze(unflatten_dict(params))
-        else:
-            return random_params
-
-    def init_cache(self, batch_size, max_length):
-        r"""
-        Args:
-            batch_size (`int`):
-                batch_size used for fast auto-regressive decoding. Defines the batch size of the initialized cache.
-            max_length (`int`):
-                maximum possible length for auto-regressive decoding. Defines the sequence length of the initialized
-                cache.
-        """
-        # 初始化用于检索缓存的输入变量
-        input_ids = jnp.ones((batch_size, max_length), dtype="i4")
-        attention_mask = jnp.ones_like(input_ids, dtype="i4")
-        position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
-
-        # 初始化模块并获取输出缓存
-        init_variables = self.module.init(
-            jax.random.PRNGKey(0), input_ids, attention_mask, position_ids, return_dict=False, init_cache=True
-        )
-        return unfreeze(init_variables["cache"])
-    # 给模型的前向传播函数添加文档字符串，文档字符串内容为 XGLM_INPUTS_DOCSTRING
-    @add_start_docstrings_to_model_forward(XGLM_INPUTS_DOCSTRING)
-    # 定义模型的前向传播函数
+    # 定义模型调用方法
     def __call__(
-        # 定义输入数据的变量类型和默认值
         self,
-        input_ids: jnp.ndarray,
-        attention_mask: Optional[jnp.ndarray] = None,
-        position_ids: Optional[jnp.ndarray] = None,
+        input_ids,
+        attention_mask,
+        position_ids,
         encoder_hidden_states: Optional[jnp.ndarray] = None,
         encoder_attention_mask: Optional[jnp.ndarray] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        train: bool = False,
-        params: dict = None,
-        past_key_values: dict = None,
-        dropout_rng: PRNGKey = None,
-        # 检查是否输出注意力权重，如果未指定则使用配置中的默认值
+        init_cache: bool = False,
+        output_attentions: bool = False,
+        output_hidden_states: bool = False,
+        return_dict: bool = True,
+        deterministic: bool = True,
+        ):
+            # 获取输入张量的形状
+            input_shape = input_ids.shape
+            # 将输入张量重新整形为二维张量，保留最后一个维度不变
+            input_ids = input_ids.reshape(-1, input_shape[-1])
+
+            # 使用模型的词嵌入层对输入张量进行嵌入，并乘以嵌入缩放因子
+            inputs_embeds = self.embed_tokens(input_ids) * self.embed_scale
+
+            # 嵌入位置信息
+            position_ids = position_ids + self.offset
+            positions = jnp.take(self.embed_positions, position_ids, axis=0)
+
+            # 将词嵌入和位置嵌入相加得到隐藏状态
+            hidden_states = inputs_embeds + positions
+            # 使用 dropout 层对隐藏状态进行处理，根据 deterministic 参数确定是否使用确定性的 dropout
+            hidden_states = self.dropout_layer(hidden_states, deterministic=deterministic)
+
+            # 将隐藏状态传入模型的层中进行处理
+            outputs = self.layers(
+                hidden_states,
+                attention_mask,
+                encoder_hidden_states,
+                encoder_attention_mask,
+                deterministic=deterministic,
+                init_cache=init_cache,
+                output_attentions=output_attentions,
+                output_hidden_states=output_hidden_states,
+                return_dict=return_dict,
+            )
+
+            # 获取模型输出中的最后一个隐藏状态，并进行层归一化处理
+            last_hidden_states = outputs[0]
+            last_hidden_states = self.layer_norm(last_hidden_states)
+
+            hidden_states = None
+            # 如果需要输出所有隐藏状态，则将其从模型输出中提取并添加最后一个隐藏状态
+            if output_hidden_states:
+                hidden_states = outputs[1]
+                hidden_states = hidden_states[:-1] + (last_hidden_states,)
+
+            # 根据 return_dict 决定如何返回模型输出
+            if not return_dict:
+                # 如果不需要返回字典形式的结果，则根据需要组合输出
+                outputs = (last_hidden_states, hidden_states) + (outputs[2:] if output_hidden_states else outputs[1:])
+                # 过滤掉空值并返回元组形式的结果
+                return tuple(v for v in outputs if v is not None)
+
+            # 如果需要返回字典形式的结果，则构建 FlaxBaseModelOutputWithPastAndCrossAttentions 对象
+            return FlaxBaseModelOutputWithPastAndCrossAttentions(
+                last_hidden_state=last_hidden_states,
+                hidden_states=hidden_states,
+                attentions=outputs.attentions,
+                cross_attentions=outputs.cross_attentions,
+            )
+    # 定义 FlaxXGLMPreTrainedModel 类，继承自 FlaxPreTrainedModel 类
+    class FlaxXGLMPreTrainedModel(FlaxPreTrainedModel):
+        # 指定配置类为 XGLMConfig
+        config_class = XGLMConfig
+        # 指定基础模型前缀为 "model"
+        base_model_prefix: str = "model"
+        # 模块类默认为空
+        module_class: nn.Module = None
+
+        # 初始化方法，接受配置、输入形状、种子、数据类型等参数
+        def __init__(
+            self,
+            config: XGLMConfig,
+            input_shape: Tuple[int] = (1, 1),
+            seed: int = 0,
+            dtype: jnp.dtype = jnp.float32,
+            _do_init: bool = True,
+            **kwargs,
+        ):
+            # 使用模块类和其他参数初始化模块
+            module = self.module_class(config=config, dtype=dtype, **kwargs)
+            # 调用父类的初始化方法，传入配置、模块、输入形状、种子、数据类型等参数
+            super().__init__(config, module, input_shape=input_shape, seed=seed, dtype=dtype, _do_init=_do_init)
+
+        # 初始化权重方法，接受随机数种子、输入形状和参数字典等参数
+        def init_weights(self, rng: jax.random.PRNGKey, input_shape: Tuple, params: FrozenDict = None) -> FrozenDict:
+            # 初始化输入张量
+            input_ids = jnp.zeros(input_shape, dtype="i4")
+            # 创建与 input_ids 类型相同的全1张量作为 attention_mask
+            attention_mask = jnp.ones_like(input_ids)
+            # 根据 input_ids 的形状广播生成位置编码张量
+            position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_shape)
+            # 切分随机数种子为 params_rng 和 dropout_rng
+            params_rng, dropout_rng = jax.random.split(rng)
+            # 创建随机数字典 rngs，用于参数和 dropout
+            rngs = {"params": params_rng, "dropout": dropout_rng}
+
+            # 如果配置中包含跨注意力机制
+            if self.config.add_cross_attention:
+                # 创建与 input_shape 和配置的嵌入维度大小相同的全0隐藏状态张量
+                encoder_hidden_states = jnp.zeros(input_shape + (self.config.n_embd,))
+                # 将 attention_mask 用作编码器的注意力掩码
+                encoder_attention_mask = attention_mask
+                # 使用模块的初始化方法进行初始化，传入随机数字典、input_ids、attention_mask、position_ids、隐藏状态张量及其注意力掩码
+                module_init_outputs = self.module.init(
+                    rngs,
+                    input_ids,
+                    attention_mask,
+                    position_ids,
+                    encoder_hidden_states,
+                    encoder_attention_mask,
+                    return_dict=False,
+                )
+            else:
+                # 否则，只使用 input_ids、attention_mask、position_ids 进行模块的初始化
+                module_init_outputs = self.module.init(rngs, input_ids, attention_mask, position_ids, return_dict=False)
+
+            # 获取随机初始化的模型参数
+            random_params = module_init_outputs["params"]
+
+            # 如果提供了预定义的参数，将随机参数与已有参数进行合并
+            if params is not None:
+                # 展平并解冻随机参数和已有参数
+                random_params = flatten_dict(unfreeze(random_params))
+                params = flatten_dict(unfreeze(params))
+                # 将随机参数中缺失的键加入已有参数中
+                for missing_key in self._missing_keys:
+                    params[missing_key] = random_params[missing_key]
+                self._missing_keys = set()
+                # 冻结并重新构造参数字典
+                return freeze(unflatten_dict(params))
+            else:
+                # 否则，直接返回随机初始化的参数
+                return random_params
+
+        # 初始化缓存方法，用于快速自回归解码
+        def init_cache(self, batch_size, max_length):
+            """
+            Args:
+                batch_size (`int`):
+                    用于快速自回归解码的批处理大小。定义初始化缓存的批处理大小。
+                max_length (`int`):
+                    自回归解码的最大可能长度。定义初始化缓存的序列长度。
+            """
+            # 初始化用于检索缓存的输入变量
+            input_ids = jnp.ones((batch_size, max_length), dtype="i4")
+            # 创建与 input_ids 类型相同的全1张量作为 attention_mask
+            attention_mask = jnp.ones_like(input_ids, dtype="i4")
+            # 根据 input_ids 的形状广播生成位置编码张量
+            position_ids = jnp.broadcast_to(jnp.arange(jnp.atleast_2d(input_ids).shape[-1]), input_ids.shape)
+
+            # 使用模块的初始化方法初始化变量，包括 input_ids、attention_mask、position_ids，并请求返回缓存
+            init_variables = self.module.init(
+                jax.random.PRNGKey(0), input_ids, attention_mask, position_ids, return_dict=False, init_cache=True
+            )
+            # 返回解冻后的初始化缓存
+            return unfreeze(init_variables["cache"])
+    # 将模型的前向传播方法装饰为添加文档字符串，用于模型输入参数的说明
+    @add_start_docstrings_to_model_forward(XGLM_INPUTS_DOCSTRING)
+    # 定义模型的调用方法，接受多个参数作为输入
+    def __call__(
+        self,
+        input_ids: jnp.ndarray,  # 输入的token IDs，作为模型的输入
+        attention_mask: Optional[jnp.ndarray] = None,  # 可选的注意力掩码，指示哪些token需要注意
+        position_ids: Optional[jnp.ndarray] = None,  # 可选的位置IDs，用于指示token的位置信息
+        encoder_hidden_states: Optional[jnp.ndarray] = None,  # 可选的编码器隐藏状态，用于encoder-decoder模型
+        encoder_attention_mask: Optional[jnp.ndarray] = None,  # 可选的编码器注意力掩码
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否输出所有层的隐藏状态
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回结果
+        train: bool = False,  # 是否处于训练模式
+        params: dict = None,  # 模型参数字典
+        past_key_values: dict = None,  # 过去的键值，用于存储前一次的状态信息
+        dropout_rng: PRNGKey = None,  # 随机数生成器，用于Dropout层的随机掩码
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-        # 检查是否输出隐藏状态，如果未指定则使用配置中的默认值
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-        # 检查是否返回字典型输出，如果未指定则使用配置中的默认值
         return_dict = return_dict if return_dict is not None else self.config.return_dict
 
-        # 如果传入了 encoder_hidden_states 但没有 encoder_attention_mask，则创建一个全 1 的注意力掩码
         if encoder_hidden_states is not None and encoder_attention_mask is None:
             batch_size, sequence_length = encoder_hidden_states.shape[:2]
             encoder_attention_mask = jnp.ones((batch_size, sequence_length))
 
         # 准备编码器的输入
+        # 如果 attention_mask 为空，则使用与 input_ids 相同形状的全 1 数组
         if attention_mask is None:
             attention_mask = jnp.ones_like(input_ids)
+        # 如果 position_ids 为空，则广播形状为 (batch_size, sequence_length) 的序列长度数组
         if position_ids is None:
             batch_size, sequence_length = input_ids.shape
             position_ids = jnp.broadcast_to(jnp.arange(sequence_length)[None, :], (batch_size, sequence_length))
 
-        # 处理任何 PRNG（伪随机数生成器）需求
+        # 如果需要处理任何伪随机数生成器 (PRNG)，则构建相应的字典
         rngs = {"dropout": dropout_rng} if dropout_rng is not None else {}
 
         inputs = {"params": params or self.params}
 
-        # 如果传入了 past_key_values，则 cache 已经初始化，需要传入 init_cache 标志以确保使用缓存
-        # 必须确保将 cache 标记为可变，以便 FlaxXGLMAttention 模块可以修改它
+        # 如果 past_key_values 被传递，则初始化了缓存，并传递一个私有标志 init_cache 以确保使用缓存。
+        # 必须确保缓存被标记为可变，以便 FlaxXGLMAttention 模块可以更改它。
         if past_key_values:
             inputs["cache"] = past_key_values
             mutable = ["cache"]
         else:
             mutable = False
 
-        # 应用模块
+        # 调用模块的 apply 方法，传递输入参数
         outputs = self.module.apply(
             inputs,
             input_ids=jnp.array(input_ids, dtype="i4"),
@@ -662,7 +701,7 @@ class FlaxXGLMPreTrainedModel(FlaxPreTrainedModel):
             mutable=mutable,
         )
 
-        # 将更新后的 cache 添加到模型输出中
+        # 将更新后的缓存添加到模型输出中
         if past_key_values is not None and return_dict:
             outputs, past_key_values = outputs
             outputs["past_key_values"] = unfreeze(past_key_values["cache"])
@@ -671,17 +710,18 @@ class FlaxXGLMPreTrainedModel(FlaxPreTrainedModel):
             outputs, past_key_values = outputs
             outputs = outputs[:1] + (unfreeze(past_key_values["cache"]),) + outputs[1:]
 
+        # 返回模型输出
         return outputs
-# 导入必要的模块和函数
+# 为了给 FlaxXGLMModel 类添加文档字符串，指定它输出原始隐藏状态而没有特定的顶部头部。
 @add_start_docstrings(
     "The bare XGLM Model transformer outputting raw hidden-states without any specific head on top.",
     XGLM_START_DOCSTRING,
 )
-# 定义一个类，用于替换具有特定头部的原始隐藏状态的XGLM模型
 class FlaxXGLMModel(FlaxXGLMPreTrainedModel):
     module_class = FlaxXGLMModule
 
-# 在调用样例文档字符串中添加FlaxXGLMModel相关信息
+
+# 添加调用示例的文档字符串给 FlaxXGLMModel 类
 append_call_sample_docstring(
     FlaxXGLMModel,
     _CHECKPOINT_FOR_DOC,
@@ -689,13 +729,15 @@ append_call_sample_docstring(
     _CONFIG_FOR_DOC,
 )
 
-# 定义一个FlaxXGLMForCausalLMModule类
+
 class FlaxXGLMForCausalLMModule(nn.Module):
     config: XGLMConfig
     dtype: jnp.dtype = jnp.float32  # 计算的数据类型
 
     def setup(self):
+        # 使用配置和数据类型初始化 FlaxXGLMModule 模型
         self.model = FlaxXGLMModule(self.config, self.dtype)
+        # 初始化语言模型头部，是一个全连接层，不使用偏置
         self.lm_head = nn.Dense(
             self.config.vocab_size,
             use_bias=False,
@@ -716,7 +758,7 @@ class FlaxXGLMForCausalLMModule(nn.Module):
         return_dict: bool = True,
         deterministic: bool = True,
     ):
-        # 调用模型处理输入数据
+        # 调用模型进行前向传播
         outputs = self.model(
             input_ids,
             attention_mask,
@@ -732,15 +774,19 @@ class FlaxXGLMForCausalLMModule(nn.Module):
 
         hidden_states = outputs[0]
 
+        # 如果配置要求词嵌入共享，则使用共享的嵌入层参数进行计算
         if self.config.tie_word_embeddings:
             shared_embedding = self.model.variables["params"]["embed_tokens"]["embedding"]
             lm_logits = self.lm_head.apply({"params": {"kernel": shared_embedding.T}}, hidden_states)
         else:
+            # 否则直接使用语言模型头部进行计算
             lm_logits = self.lm_head(hidden_states)
 
+        # 如果不需要返回字典格式，则返回元组
         if not return_dict:
             return (lm_logits,) + outputs[1:]
 
+        # 返回带有交叉注意力输出的 FlaxCausalLMOutputWithCrossAttentions 对象
         return FlaxCausalLMOutputWithCrossAttentions(
             logits=lm_logits,
             hidden_states=outputs.hidden_states,
@@ -748,7 +794,8 @@ class FlaxXGLMForCausalLMModule(nn.Module):
             cross_attentions=outputs.cross_attentions,
         )
 
-# 添加FlaxXGLMForCausalLM类的文档字符串
+
+# 为 FlaxXGLMForCausalLM 类添加文档字符串，描述其为带有语言建模头部的 XGLM 模型变换器
 @add_start_docstrings(
     """
     The XGLM Model transformer with a language modeling head on top (linear layer with weights tied to the input
@@ -756,44 +803,48 @@ class FlaxXGLMForCausalLMModule(nn.Module):
     """,
     XGLM_START_DOCSTRING,
 )
-# 定义FlaxXGLMForCausalLM类
 class FlaxXGLMForCausalLM(FlaxXGLMPreTrainedModel):
     module_class = FlaxXGLMForCausalLMModule
-    # 准备模型生成所需的输入数据
+    # 为生成准备输入数据，初始化缓存
     def prepare_inputs_for_generation(self, input_ids, max_length, attention_mask: Optional[jax.Array] = None):
-        # 初始化缓存
+        # 获取输入张量的批量大小和序列长度
         batch_size, seq_length = input_ids.shape
+
+        # 使用 self.init_cache 方法初始化过去键值对
         past_key_values = self.init_cache(batch_size, max_length)
         
-        # 创建一个大小为 (batch_size, max_length) 的全 1 attention mask
+        # 创建一个扩展的注意力掩码，初始化为全1数组
         extended_attention_mask = jnp.ones((batch_size, max_length), dtype="i4")
         
-        # 如果提供了 attention_mask, 则更新 extended_attention_mask
+        # 如果给定了 attention_mask，则根据其累积和更新位置 ID，并将 attention_mask 的值复制到扩展的注意力掩码中对应位置
         if attention_mask is not None:
             position_ids = attention_mask.cumsum(axis=-1) - 1
             extended_attention_mask = lax.dynamic_update_slice(extended_attention_mask, attention_mask, (0, 0))
-        # 如果没有提供 attention_mask, 则创建一个 position_ids 张量
         else:
+            # 否则，根据序列长度广播生成位置 ID
             position_ids = jnp.broadcast_to(jnp.arange(seq_length, dtype="i4")[None, :], (batch_size, seq_length))
-    
+
+        # 返回包含过去键值对、扩展注意力掩码和位置 ID 的字典
         return {
             "past_key_values": past_key_values,
             "attention_mask": extended_attention_mask,
             "position_ids": position_ids,
         }
-    
-    # 更新模型生成所需的输入数据
+
+    # 更新生成的输入数据，将模型输出的过去键值对和更新后的位置 ID 存入 model_kwargs 中
     def update_inputs_for_generation(self, model_outputs, model_kwargs):
-        # 更新 past_key_values
         model_kwargs["past_key_values"] = model_outputs.past_key_values
-        # 更新 position_ids
         model_kwargs["position_ids"] = model_kwargs["position_ids"][:, -1:] + 1
         return model_kwargs
-# 调用函数append_call_sample_docstring，传入参数为FlaxXGLMForCausalLM、_CHECKPOINT_FOR_DOC、FlaxCausalLMOutputWithCrossAttentions和_CONFIG_FOR_DOC
+# 调用函数 `append_call_sample_docstring`，将以下参数传递给它：
+# - FlaxXGLMForCausalLM: 作为第一个参数传递的类或函数
+# - _CHECKPOINT_FOR_DOC: 作为第二个参数传递的变量或值
+# - FlaxCausalLMOutputWithCrossAttentions: 作为第三个参数传递的类或函数
+# - _CONFIG_FOR_DOC: 作为第四个参数传递的变量或值
 append_call_sample_docstring(
-    FlaxXGLMForCausalLM,
-    _CHECKPOINT_FOR_DOC,
-    FlaxCausalLMOutputWithCrossAttentions,
-    _CONFIG_FOR_DOC,
+    FlaxXGLMForCausalLM,  # 第一个参数，传递类或函数 FlaxXGLMForCausalLM
+    _CHECKPOINT_FOR_DOC,   # 第二个参数，传递变量或值 _CHECKPOINT_FOR_DOC
+    FlaxCausalLMOutputWithCrossAttentions,  # 第三个参数，传递类或函数 FlaxCausalLMOutputWithCrossAttentions
+    _CONFIG_FOR_DOC,  # 第四个参数，传递变量或值 _CONFIG_FOR_DOC
 )
 ```

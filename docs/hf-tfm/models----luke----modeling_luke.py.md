@@ -1,10 +1,22 @@
-# `.\transformers\models\luke\modeling_luke.py`
+# `.\models\luke\modeling_luke.py`
 
-```py
-# 指定编码格式为 UTF-8
+```
+# coding=utf-8
+# Copyright Studio Ousia and The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""PyTorch LUKE model."""
 
-# 引入必要的库
-# 注意：这里使用了相对导入，即从当前包中导入模块
 import math
 from dataclasses import dataclass
 from typing import Optional, Tuple, Union
@@ -14,8 +26,6 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 从外部模块中导入一些函数和类
-# 注意：这里是从父包(huggingface)中导入相关内容
 from ...activations import ACT2FN, gelu
 from ...modeling_outputs import BaseModelOutput, BaseModelOutputWithPooling
 from ...modeling_utils import PreTrainedModel
@@ -29,38 +39,51 @@ from ...utils import (
     replace_return_docstrings,
 )
 
-# 获取日志记录器
+# 获取日志记录器实例
 logger = logging.get_logger(__name__)
 
-# 用于文档的配置和检查点说明
+# 用于文档的配置和检查点
 _CONFIG_FOR_DOC = "LukeConfig"
 _CHECKPOINT_FOR_DOC = "studio-ousia/luke-base"
 
-# 预训练模型的存档列表
+# 预训练模型存档列表
 LUKE_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "studio-ousia/luke-base",
     "studio-ousia/luke-large",
-    # 在 https://huggingface.co/models?filter=luke 查看所有 LUKE 模型
+    # 查看所有 LUKE 模型：https://huggingface.co/models?filter=luke
 ]
 
-# 用于存储 LUKE 模型输出的基类，包含汇聚层结果
+
 @dataclass
 class BaseLukeModelOutputWithPooling(BaseModelOutputWithPooling):
     """
     Base class for outputs of the LUKE model.
-    # 函数参数说明：
-    # last_hidden_state: 模型最后一层输出的隐藏状态序列，形状为(batch_size, sequence_length, hidden_size)
-    # entity_last_hidden_state: 实体最后一层输出的隐藏状态序列，形状为(batch_size, entity_length, hidden_size)
-    # pooler_output: 经过线性层和Tanh激活函数处理过的序列中第一个标记（分类标记）的最后一层隐藏状态，形状为(batch_size, hidden_size)
-    # hidden_states: 可选参数，当output_hidden_states=True时返回，是一个元组，包含每一层的隐藏状态，形状为(batch_size, sequence_length, hidden_size)
-    # entity_hidden_states: 可选参数，当output_hidden_states=True时返回，是一个元组，包含每一层实体的隐藏状态，形状为(batch_size, entity_length, hidden_size)
-    # attentions: 可选参数，当output_attentions=True时返回，是一个元组，包含每一层的注意力权重，形状为(batch_size, num_heads, sequence_length + entity_length, sequence_length + entity_length)
-
-    # 将实体的最后一层隐藏状态初始化为None
+    """
+    # 定义函数的参数及其类型说明
+    Args:
+        last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
+            模型最后一层输出的隐藏状态序列。
+        entity_last_hidden_state (`torch.FloatTensor` of shape `(batch_size, entity_length, hidden_size)`):
+            实体的最后一层隐藏状态序列。
+        pooler_output (`torch.FloatTensor` of shape `(batch_size, hidden_size)`):
+            经过线性层和Tanh激活函数处理过的序列中第一个标记（分类标记）的最后一层隐藏状态。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            元组，包含模型每一层的隐藏状态（从嵌入层开始，每层一个张量），形状为 `(batch_size, sequence_length, hidden_size)`。
+            当 `output_hidden_states=True` 时返回。
+        entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            元组，包含实体的每一层隐藏状态（从嵌入层开始，每层一个张量），形状为 `(batch_size, entity_length, hidden_size)`。
+            当 `output_hidden_states=True` 时返回。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            元组，包含每一层的注意力权重张量，形状为 `(batch_size, num_heads, sequence_length + entity_length, sequence_length + entity_length)`。
+            注意力权重经过 softmax 处理，用于计算自注意力头中的加权平均值。
+    
+    
+    
+    # 声明实体的最后隐藏状态和实体隐藏状态，类型分别为 torch.FloatTensor 和 Optional[Tuple[torch.FloatTensor, ...]]
     entity_last_hidden_state: torch.FloatTensor = None
-    # 将实体的隐藏状态初始化为None
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-# 使用 @dataclass 装饰器定义一个数据类 BaseLukeModelOutput，继承自BaseModelOutput
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 使用 dataclass 装饰器定义一个名为 BaseLukeModelOutput 的数据类，作为模型输出的基类
+@dataclass
 class BaseLukeModelOutput(BaseModelOutput):
     """
     Base class for model's outputs, with potential hidden states and attentions.
@@ -68,168 +91,114 @@ class BaseLukeModelOutput(BaseModelOutput):
     Args:
         last_hidden_state (`torch.FloatTensor` of shape `(batch_size, sequence_length, hidden_size)`):
             Sequence of hidden-states at the output of the last layer of the model.
-            
         entity_last_hidden_state (`torch.FloatTensor` of shape `(batch_size, entity_length, hidden_size)`):
             Sequence of entity hidden-states at the output of the last layer of the model.
-            
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
             shape `(batch_size, sequence_length, hidden_size)`.
-            
+
             Hidden-states of the model at the output of each layer plus the initial embedding outputs.
-            
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
             shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
             layer plus the initial entity embedding outputs.
-            
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True` is passed):
+        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`.
-            
+
             Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
             heads.
     """
 
-    # 定义类属性 entity_last_hidden_state，默认值为 None，数据类型为 torch.FloatTensor
+    # 定义实体最后隐藏状态，类型为 torch.FloatTensor，默认为 None
     entity_last_hidden_state: torch.FloatTensor = None
-    # 定义类属性 entity_hidden_states，默认值为 None，数据类型为 Optional[Tuple[torch.FloatTensor]]
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-
-
-# 使用 @dataclass 装饰器定义一个数据类 LukeMaskedLMOutput，继承自ModelOutput
-class LukeMaskedLMOutput(ModelOutput):
-    """
-    Base class for model's outputs, with potential hidden states and attentions.
-    # 标记loss，当提供`labels`时返回
-    loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-        The sum of masked language modeling (MLM) loss and entity prediction loss.
-    
-    # 标记mlm_loss，当提供`labels`时返回
-    mlm_loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-        Masked language modeling (MLM) loss.
-    
-    # 标记mep_loss，当提供`labels`时返回
-    mep_loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-        Masked entity prediction (MEP) loss.
-    
-    # 标记logits
-    logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-        Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
-    
-    # 标记entity_logits
-    entity_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-        Prediction scores of the entity prediction head (scores for each entity vocabulary token before SoftMax).
-    
-    # 标记hidden_states，当`output_hidden_states=True`被传递或`config.output_hidden_states=True`时返回
-    hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-        Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-        shape `(batch_size, sequence_length, hidden_size)`.
-        
-        Hidden-states of the model at the output of each layer plus the initial embedding outputs.
-    
-    # 标记entity_hidden_states，当`output_hidden_states=True`被传递或`config.output_hidden_states=True`时返回
-    entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-        Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-        shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
-        layer plus the initial entity embedding outputs.
-    
-    # 标记attentions，当`output_attentions=True`被传递或`config.output_attentions=True`时返回
-    attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-        Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-        sequence_length)`.
-        
-        Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
-        heads.
-    """
-
-    # 标记loss，类型为Optional[torch.FloatTensor]
-    loss: Optional[torch.FloatTensor] = None
-    
-    # 标记mlm_loss，类型为Optional[torch.FloatTensor]
-    mlm_loss: Optional[torch.FloatTensor] = None
-    
-    # 标记mep_loss，类型为Optional[torch.FloatTensor]
-    mep_loss: Optional[torch.FloatTensor] = None
-    
-    # 标记logits，类型为torch.FloatTensor
-    logits: torch.FloatTensor = None
-    
-    # 标记entity_logits，类型为torch.FloatTensor
-    entity_logits: torch.FloatTensor = None
-    
-    # 标记hidden_states，类型为Optional[Tuple[torch.FloatTensor]]
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    
-    # 标记entity_hidden_states，类型为Optional[Tuple[torch.FloatTensor]]
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    
-    # 标记attentions，类型为Optional[Tuple[torch.FloatTensor]]
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 定义实体隐藏状态的元组，类型为 Optional[Tuple[torch.FloatTensor, ...]]，默认为 None
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    Args:
+        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+            The sum of masked language modeling (MLM) loss and entity prediction loss.
+            当提供 `labels` 参数时返回，表示掩码语言建模（MLM）损失和实体预测损失的总和。
+        mlm_loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+            Masked language modeling (MLM) loss.
+            当提供 `labels` 参数时返回，表示掩码语言建模（MLM）损失。
+        mep_loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
+            Masked entity prediction (MEP) loss.
+            当提供 `labels` 参数时返回，表示掩码实体预测（MEP）损失。
+        logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
+            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+            语言建模头部的预测分数（SoftMax 之前的每个词汇标记的分数）。
+        entity_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
+            Prediction scores of the entity prediction head (scores for each entity vocabulary token before SoftMax).
+            实体预测头部的预测分数（SoftMax 之前的每个实体词汇标记的分数）。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
+            shape `(batch_size, sequence_length, hidden_size)`.
+            模型在每个层输出后的隐藏状态的元组，包括初始嵌入输出。
+        entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
+            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
+            shape `(batch_size, entity_length, hidden_size)`.
+            模型在每个层输出后的实体隐藏状态的元组，包括初始实体嵌入输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
+            sequence_length)`.
+            注意力权重在经过注意力 softmax 后的结果，用于计算自注意力头部的加权平均值。
+# 定义一个数据类 EntityClassificationOutput，继承自 ModelOutput
 @dataclass
 class EntityClassificationOutput(ModelOutput):
     """
-    Outputs of entity classification models.
-
-    定义实体分类模型的输出类
+    实体分类模型的输出结果。
 
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            Classification loss.
+            分类损失。
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            Classification scores (before SoftMax).
+            分类得分（SoftMax 之前）。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
-            plus the initial embedding outputs.
+            包含每一层的输出的元组 `torch.FloatTensor`，形状为 `(batch_size, sequence_length, hidden_size)`。
+            模型每一层的隐藏状态加上初始嵌入的输出。
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
-            layer plus the initial entity embedding outputs.
+            实体的隐藏状态的元组 `torch.FloatTensor`，形状为 `(batch_size, entity_length, hidden_size)`。
+            模型每一层的实体隐藏状态加上初始实体嵌入的输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
-            the self-attention heads.
-    """
+            自注意力头中用于计算加权平均的注意力权重的元组 `torch.FloatTensor`，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            注意力 softmax 后的注意力权重。
 
+    """
     loss: Optional[torch.FloatTensor] = None
     logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-
-
-@dataclass
-class EntityPairClassificationOutput(ModelOutput):
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
     """
-    Outputs of entity pair classification models.
-
-    定义实体对分类模型的输出类
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            Classification loss.  # 分类损失
+            分类损失。
+            如果提供了 `labels` 参数，则返回分类损失。
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            Classification scores (before SoftMax).  # 分类分数（SoftMax之前）
+            分类分数（SoftMax 之前的输出）。
+            形状为 `(batch_size, config.num_labels)` 的分类分数。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, sequence_length, hidden_size)`. Hidden-states of the model at the output of each layer
-            plus the initial embedding outputs.  # 隐藏状态，每层的输出（包括初始嵌入输出）
+            模型隐藏状态，包括每一层的输出和初始嵌入的输出。
+            形状为 `(batch_size, sequence_length, hidden_size)` 的元组，第一个元素是嵌入的输出，后续元素是每一层的输出。
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
-            layer plus the initial entity embedding outputs.  # 实体隐藏状态，每层的输出（包括初始实体嵌入输出）
+            实体的隐藏状态，包括每一层的输出和初始实体嵌入的输出。
+            形状为 `(batch_size, entity_length, hidden_size)` 的元组，第一个元素是实体嵌入的输出，后续元素是每一层的输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`. Attentions weights after the attention softmax, used to compute the weighted average in
-            the self-attention heads.  # 注意力权重，经过注意力Softmax后的值，用于计算自注意力头的加权平均值
+            注意力权重，用于计算自注意力头中的加权平均值。
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)` 的元组，每个元素对应一个层的注意力权重。
     """
 
-    loss: Optional[torch.FloatTensor] = None  # 分类损失，默认为None
-    logits: torch.FloatTensor = None  # 分类分数，默认为None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 隐藏状态，默认为None
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 实体隐藏状态，默认为None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None  # 注意力权重，默认为None
-# 定义了一个名为 EntitySpanClassificationOutput 的数据类，用于存储实体跨度分类模型的输出结果
+    # 可选的分类损失，形状为 `(1,)` 的 `torch.FloatTensor`
+    loss: Optional[torch.FloatTensor] = None
+    # 分类分数（SoftMax 之前的输出），形状为 `(batch_size, config.num_labels)` 的 `torch.FloatTensor`
+    logits: torch.FloatTensor = None
+    # 可选的模型隐藏状态元组，包含每层的输出和初始嵌入的输出
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的实体隐藏状态元组，包含每层的输出和初始实体嵌入的输出
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的注意力权重元组，用于计算自注意力头中的加权平均值
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 定义一个数据类，用于存储实体跨度分类模型的输出结果
 @dataclass
 class EntitySpanClassificationOutput(ModelOutput):
     """
@@ -237,25 +206,19 @@ class EntitySpanClassificationOutput(ModelOutput):
 
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, 当提供 `labels` 时返回):
-            分类损失。
+            分类损失值。
         logits (`torch.FloatTensor` of shape `(batch_size, entity_length, config.num_labels)`):
-            分类得分（SoftMax 前）。
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, 当传递 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回):
-            元组 `torch.FloatTensor`（一个用于嵌入输出，每个层输出一个）的形状为 `(batch_size, sequence_length, hidden_size)`。
-            模型在每一层输出的隐藏状态，加上初始嵌入输出。
-        entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, 当传递 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回):
-            元组 `torch.FloatTensor`（一个用于嵌入输出，每个层输出一个）的形状为 `(batch_size, entity_length, hidden_size)`。
-            模型在每一层输出的实体隐藏状态，加上初始实体嵌入输出。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, 当传递 `output_attentions=True` 或 `config.output_attentions=True` 时返回):
-            元组 `torch.FloatTensor`（每层一个）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
-            在注意力 SoftMax 之后的注意力权重，用于计算自注意力头中的加权平均值。
+            分类分数（SoftMax 之前的）。
+        hidden_states (`tuple(torch.FloatTensor)`, *optional*, 当 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回):
+            由两部分组成的元组 `torch.FloatTensor` （一个用于嵌入的输出 + 一个用于每层输出），形状为 `(batch_size, sequence_length, hidden_size)`。
+            模型在每层输出结束时的隐藏状态，加上初始嵌入输出。
+        entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, 当 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回):
+            由两部分组成的元组 `torch.FloatTensor` （一个用于嵌入的输出 + 一个用于每层输出），形状为 `(batch_size, entity_length, hidden_size)`。
+            模型在每层输出结束时实体的隐藏状态，加上初始实体嵌入输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, 当 `output_attentions=True` 或 `config.output_attentions=True` 时返回):
+            由每一层的 `torch.FloatTensor` 组成的元组，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            注意力 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
     """
-
-    loss: Optional[torch.FloatTensor] = None
-    logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
 
 
 @dataclass
@@ -263,35 +226,32 @@ class LukeSequenceClassifierOutput(ModelOutput):
     """
     句子分类模型的输出结果。
     """
-```  
+    """
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            分类（或者当 `config.num_labels==1` 时是回归）损失值。
+            分类（或回归，如果 `config.num_labels==1`）的损失值。
+            如果提供 `labels`，则返回损失值。
         logits (`torch.FloatTensor` of shape `(batch_size, config.num_labels)`):
-            分类（或者当 `config.num_labels==1` 时是回归）得分（SoftMax 之前）。
+            分类（或回归，如果 `config.num_labels==1`）的分数（SoftMax 之前）。
+            模型的输出分数。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            由 `torch.FloatTensor` 组成的元组（如果模型有嵌入层，则包含嵌入层的输出，以及每个层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
-
-            模型在每个层输出的隐藏状态以及可选的初始嵌入输出。
+            模型在每一层的隐藏状态以及可选的初始嵌入输出的元组。
+            形状为 `(batch_size, sequence_length, hidden_size)`。
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            由 `torch.FloatTensor` 组成的元组（包含嵌入层的输出和每个层的输出），形状为 `(batch_size, entity_length, hidden_size)`。模型在每个层输出的实体隐藏状态以及初始实体嵌入输出。
+            实体的隐藏状态，包括每一层的输出以及初始实体嵌入输出的元组。
+            形状为 `(batch_size, entity_length, hidden_size)`。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            由 `torch.FloatTensor` 组成的元组（每个层一个），形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
-
-            在注意力 softmax 之后的注意力权重，用于计算自注意力头中的加权平均值。
+            注意力权重的元组，每个层级一个。
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            在自注意力机制中用于计算加权平均值的注意力权重。
     """
 
-    loss: Optional[torch.FloatTensor] = None  # 损失值，默认为空
-    logits: torch.FloatTensor = None  # 分类（或者回归）得分，默认为空张量
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 隐藏状态，默认为空元组
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None  # 实体隐藏状态，默认为空元组
-    attentions: Optional[Tuple[torch.FloatTensor]] = None  # 注意力权重，默认为空元组
-from dataclasses import dataclass
-from typing import Optional, Tuple
-import torch
-from transformers.modeling_outputs import ModelOutput
-
-# 定义一个数据类，用于存储标记分类模型的输出结果
+    loss: Optional[torch.FloatTensor] = None
+    logits: torch.FloatTensor = None
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 使用 dataclass 装饰器定义一个名为 LukeTokenClassifierOutput 的数据类，它继承自 ModelOutput。
 @dataclass
 class LukeTokenClassifierOutput(ModelOutput):
     """
@@ -299,166 +259,145 @@ class LukeTokenClassifierOutput(ModelOutput):
 
     Args:
         loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided) :
-            Classification loss. 分类损失
+            Classification loss.
+            分类损失，当提供 `labels` 参数时返回，数据类型为 `torch.FloatTensor`，形状为 `(1,)`。
         logits (`torch.FloatTensor` of shape `(batch_size, sequence_length, config.num_labels)`):
-            Classification scores (before SoftMax). 分类分数（SoftMax 之前）
+            Classification scores (before SoftMax).
+            分类分数（SoftMax 之前的输出），数据类型为 `torch.FloatTensor`，形状为 `(batch_size, sequence_length, config.num_labels)`。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings, if the model has an embedding layer, +
             one for the output of each layer) of shape `(batch_size, sequence_length, hidden_size)`.
 
             Hidden-states of the model at the output of each layer plus the optional initial embedding outputs.
-            每个层次的模型隐藏状态，以及可选的初始嵌入输出
+            可选项。当传入 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回，
+            返回一个元组，包含 `torch.FloatTensor` 类型的张量（如果模型有嵌入层，则包含嵌入层的输出，
+            否则包含每一层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
             Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
             shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
             layer plus the initial entity embedding outputs.
-            每个层次的实体隐藏状态，以及初始实体嵌入输出
+            可选项。当传入 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回，
+            返回一个元组，包含 `torch.FloatTensor` 类型的张量（一个用于嵌入层的输出，另一个包含每一层的输出），
+            形状为 `(batch_size, entity_length, hidden_size)`。用于表示每一层的实体隐藏状态以及初始实体嵌入输出。
         attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
             Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
             sequence_length)`.
 
             Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
             heads.
-            注意力权重在注意力 SoftMax 之后的值，用于计算自注意力头部的加权平均值
+            可选项。当传入 `output_attentions=True` 或 `config.output_attentions=True` 时返回，
+            返回一个元组，包含 `torch.FloatTensor` 类型的张量（每一层一个），形状为 `(batch_size, num_heads, sequence_length,
+            sequence_length)`。表示经过注意力 softmax 后的注意力权重，用于计算自注意力头部的加权平均值。
     """
-
-    # 分类损失
+    
+    # 分类损失，数据类型为 `torch.FloatTensor`，可选项。
     loss: Optional[torch.FloatTensor] = None
-    # 分类分数（SoftMax 之前）
+    # 分类分数（SoftMax 之前的输出），数据类型为 `torch.FloatTensor`，默认为 `None`。
     logits: torch.FloatTensor = None
-    # 每个层次的模型隐藏状态，以及可选的初始嵌入输出
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 每个层次的实体隐藏状态，以及初始实体嵌入输出
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # 注意力权重在注意力 SoftMax 之后的值，用于计算自注意力头部的加权平均值
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 隐藏状态，数据类型为 `tuple`，包含 `torch.FloatTensor` 的元组，可选项。
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 实体隐藏状态，数据类型为 `tuple`，包含 `torch.FloatTensor` 的元组，可选项。
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 注意力权重，数据类型为 `tuple`，包含 `torch.FloatTensor` 的元组，可选项。
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
+# 使用 dataclass 装饰器定义一个名为 LukeQuestionAnsweringModelOutput 的数据类，它继承自 ModelOutput。
 @dataclass
 class LukeQuestionAnsweringModelOutput(ModelOutput):
     """
     Outputs of question answering models.
     """
 
-```py  
-    Args:
-        loss (`torch.FloatTensor` of shape `(1,)`, *optional*, returned when `labels` is provided):
-            Total span extraction loss is the sum of a Cross-Entropy for the start and end positions.
-        # loss参数，类型为torch.FloatTensor，形状为(1,)，可选参数，当提供`labels`时返回
-        # 总跨度抽取损失是起始和结束位置的交叉熵之和。
-
-        start_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length)`):
-            Span-start scores (before SoftMax).
-        # start_logits参数，类型为torch.FloatTensor，形状为(batch_size, sequence_length)
-        # 跨度的起始得分（softmax之前）。
-
-        end_logits (`torch.FloatTensor` of shape `(batch_size, sequence_length)`):
-            Span-end scores (before SoftMax).
-        # end_logits参数，类型为torch.FloatTensor，形状为(batch_size, sequence_length)
-        # 跨度的结束得分（softmax之前）。
-
-        hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings, if the model has an embedding layer, +
-            one for the output of each layer) of shape `(batch_size, sequence_length, hidden_size)`.
-            # 隐藏状态参数，类型为元组(torch.FloatTensor)，可选参数，在传递`output_hidden_states=True`或者`config.output_hidden_states=True`时返回
-            # torch.FloatTensor元组，如果模型具有嵌入层，则输出嵌入的结果，以及每个层的输出
-            # 形状为(batch_size, sequence_length, hidden_size)。
-
-        entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `torch.FloatTensor` (one for the output of the embeddings + one for the output of each layer) of
-            shape `(batch_size, entity_length, hidden_size)`. Entity hidden-states of the model at the output of each
-            layer plus the initial entity embedding outputs.
-            # 实体隐藏状态参数，类型为元组(torch.FloatTensor)，可选参数，在传递`output_hidden_states=True`或者`config.output_hidden_states=True`时返回
-            # torch.FloatTensor元组，一个是嵌入的输出，另一个是每一层的输出，形状为(batch_size, entity_length, hidden_size)。
-            # 模型在每一层的实体隐藏状态，还包括初始实体嵌入输出。
-
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `torch.FloatTensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`.
-            # 注意力参数，类型为元组(torch.FloatTensor)，可选参数，在传递`output_attentions=True`或者`config.output_attentions=True`时返回
-            # torch.FloatTensor元组，每层的注意力权重，形状为(batch_size, num_heads, sequence_length, sequence_length)。
-            # 注意力softmax后的权重，用于在自注意力头中计算加权平均值。
-    """
-
+    # 这里将不添加额外的注释，因为类本身并没有额外的字段或说明。
+    # 损失函数（如果提供了`labels`则会返回），总体抽取损失由起始和结束位置的交叉熵之和组成
     loss: Optional[torch.FloatTensor] = None
-    # loss参数，类型为Optional[torch.FloatTensor]，默认值为None
 
+    # 起始位置的分数（softmax之前的张量），形状为`(batch_size, sequence_length)`
     start_logits: torch.FloatTensor = None
-    # start_logits参数，类型为torch.FloatTensor，默认值为None
 
+    # 结束位置的分数（softmax之前的张量），形状为`(batch_size, sequence_length)`
     end_logits: torch.FloatTensor = None
-    # end_logits参数，类型为torch.FloatTensor，默认值为None
 
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # hidden_states参数，类型为Optional[Tuple[torch.FloatTensor]]，默认值为None
+    # 模型每层的隐藏状态的元组（如果设置了`output_hidden_states=True`或`config.output_hidden_states=True`时返回）
+    # 包含嵌入层的输出（如果模型有嵌入层）和每层的输出，形状为`(batch_size, sequence_length, hidden_size)`
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
 
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    # entity_hidden_states参数，类型为Optional[Tuple[torch.FloatTensor]]，默认值为None
+    # 实体每层的隐藏状态的元组（如果设置了`output_hidden_states=True`或`config.output_hidden_states=True`时返回）
+    # 包含嵌入层的输出和每层的输出，形状为`(batch_size, entity_length, hidden_size)`
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
 
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
-    # attentions参数，类型为Optional[Tuple[torch.FloatTensor]]，默认值为None
-# 定义 LukeMultipleChoiceModelOutput 类，用于多项选择模型的输出
+    # 注意力权重的元组（如果设置了`output_attentions=True`或`config.output_attentions=True`时返回）
+    # 每层的注意力权重，形状为`(batch_size, num_heads, sequence_length, sequence_length)`
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
+# 定义一个数据类 LukeMultipleChoiceModelOutput，继承自 ModelOutput
 @dataclass
 class LukeMultipleChoiceModelOutput(ModelOutput):
     """
-    多项选择模型的输出。
+    多选模型的输出结果。
 
     Args:
         loss (`torch.FloatTensor` of shape *(1,)*, *optional*, returned when `labels` is provided):
-            分类损失。
+            分类损失值。
         logits (`torch.FloatTensor` of shape `(batch_size, num_choices)`):
-            *num_choices* 是输入张量的第二个维度。（参见上面的 *input_ids*）。
+            `num_choices` 是输入张量的第二个维度。参见上文中的 `input_ids`。
 
             分类分数（SoftMax 之前）。
         hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor` 元组（如果模型有嵌入层则为一个，以及每一层的输出）的形状为 `(batch_size, sequence_length, hidden_size)`。
+            一个元组，包含 `torch.FloatTensor`（如果模型有嵌入层，则包含嵌入层输出，以及每一层的输出），
+            形状为 `(batch_size, sequence_length, hidden_size)`。
 
-            每层模型的隐藏状态加上可选的初始嵌入输出。
+            模型在每一层输出的隐藏状态，以及可选的初始嵌入输出。
         entity_hidden_states (`tuple(torch.FloatTensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            `torch.FloatTensor` 元组（嵌入层的一个输出加上每一层的输出）的形状为 `(batch_size, entity_length, hidden_size)`。每层模型的实体隐藏状态加上初始实体嵌入输出。
-        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            `torch.FloatTensor` 元组（每个层一个）的形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+            一个元组，包含 `torch.FloatTensor`（包含嵌入层输出以及每一层的输出），
+            形状为 `(batch_size, entity_length, hidden_size)`。
 
-            注意力 softmax 之后的注意力权重，用于计算自注意力头中的加权平均值。
+            模型在每一层输出的实体隐藏状态，以及初始实体嵌入输出。
+        attentions (`tuple(torch.FloatTensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
+            一个元组，包含 `torch.FloatTensor`（每一层一个），
+            形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+
+            注意力机制 softmax 后的注意力权重，用于计算自注意力头中的加权平均值。
     """
 
+    # 可选的分类损失值
     loss: Optional[torch.FloatTensor] = None
+    # 分类分数（SoftMax 之前）
     logits: torch.FloatTensor = None
-    hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    entity_hidden_states: Optional[Tuple[torch.FloatTensor]] = None
-    attentions: Optional[Tuple[torch.FloatTensor]] = None
+    # 可选的隐藏状态元组
+    hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的实体隐藏状态元组
+    entity_hidden_states: Optional[Tuple[torch.FloatTensor, ...]] = None
+    # 可选的注意力权重元组
+    attentions: Optional[Tuple[torch.FloatTensor, ...]] = None
 
 
-# 定义 LukeEmbeddings 类，与 BertEmbeddings 类相同，但对于位置嵌入的索引有微小的调整。
+# 定义一个类 LukeEmbeddings，与 BertEmbeddings 类相同，但稍作修改以支持位置嵌入索引
 class LukeEmbeddings(nn.Module):
     """
-    与 BertEmbeddings 类相同，但对于位置嵌入的索引有微小的调整。
+    与 BertEmbeddings 类似，但稍作修改以支持位置嵌入索引。
     """
-    # 初始化函数，接收一个配置参数
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__()
-        # 创建词嵌入层，根据词汇表大小、隐藏层大小和填充标记来初始化
+        # 定义词嵌入层，根据配置参数创建词嵌入矩阵，大小为 vocab_size * hidden_size，其中使用 pad_token_id 进行填充
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=config.pad_token_id)
-        # 创建位置嵌入层，根据最大位置数和隐藏层大小来初始化
+        # 定义位置嵌入层，根据配置参数创建位置嵌入矩阵，大小为 max_position_embeddings * hidden_size
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
-        # 创建标记类型嵌入层，根据类型词汇表大小和隐藏层大小来初始化
+        # 定义类型嵌入层，根据配置参数创建类型嵌入矩阵，大小为 type_vocab_size * hidden_size
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
-        # 初始化 LayerNorm 层，根据隐藏层大小和层归一化项来初始化
+        # 使用 TensorFlow 模型变量名命名的 LayerNorm 层，用于标准化隐藏层输出，eps 为配置参数中的 layer_norm_eps
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 初始化丢弃层，根据隐藏层丢弃概率来初始化
+        # 定义 Dropout 层，用于随机失活，丢弃概率为 hidden_dropout_prob
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        # 终端拷贝
-        # 初始化填充标记
+        # 设置 padding_idx 属性，用于输入序列中的填充标记
         self.padding_idx = config.pad_token_id
-        # 重新创建位置嵌入层，根据最大位置数、隐藏层大小和填充标记来初始化
+        # 重新定义位置嵌入层，使用与输入序列相同的参数配置，并指定填充标记
         self.position_embeddings = nn.Embedding(
             config.max_position_embeddings, config.hidden_size, padding_idx=self.padding_idx
         )
 
-    # 正向传播函数
     def forward(
         self,
         input_ids=None,
@@ -466,49 +405,40 @@ class LukeEmbeddings(nn.Module):
         position_ids=None,
         inputs_embeds=None,
     ):
-        # 如果位置标记为空
         if position_ids is None:
-            # 如果输入标记不为空
             if input_ids is not None:
-                # 从输入标记创建位置标记。任何填充的标记仍然保持填充
+                # 根据输入的 token ids 创建位置 ids，保持填充的 token 仍然是填充状态
                 position_ids = create_position_ids_from_input_ids(input_ids, self.padding_idx).to(input_ids.device)
             else:
-                # 从输入嵌入创建位置标记
+                # 如果没有输入 token ids，则根据 inputs_embeds 创建位置 ids
                 position_ids = self.create_position_ids_from_inputs_embeds(inputs_embeds)
 
-        # 如果输入标记不为空
         if input_ids is not None:
-            # 获取输入形状
             input_shape = input_ids.size()
         else:
-            # 获取输入嵌入形状
             input_shape = inputs_embeds.size()[:-1]
 
-        # 如果标记类型为空
         if token_type_ids is None:
-            # 创建一个全零的标记类型，其形状与输入相同
+            # 如果没有指定 token_type_ids，则创建全零的 token 类型 ids
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
 
-        # 如果输入嵌入为空
         if inputs_embeds is None:
-            # 使用词嵌入层获取输入标记的嵌入
+            # 如果没有提供 inputs_embeds，则使用 word_embeddings 对 input_ids 进行嵌入
             inputs_embeds = self.word_embeddings(input_ids)
 
-        # 获取位置嵌入
+        # 根据位置 ids 获取位置嵌入向量
         position_embeddings = self.position_embeddings(position_ids)
-        # 获取标记类型嵌入
+        # 根据 token_type_ids 获取类型嵌入向量
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
 
-        # 计算嵌入向量
+        # 将输入的嵌入向量、位置嵌入向量和类型嵌入向量相加
         embeddings = inputs_embeds + position_embeddings + token_type_embeddings
-        # 进行层归一化
+        # 对合并后的嵌入向量进行 LayerNorm 处理
         embeddings = self.LayerNorm(embeddings)
-        # 进行丢弃操作
+        # 对处理后的向量进行随机失活
         embeddings = self.dropout(embeddings)
-        # 返回嵌入向量
         return embeddings
 
-    # 从输入嵌入创建位置标记的函数
     def create_position_ids_from_inputs_embeds(self, inputs_embeds):
         """
         We are provided embeddings directly. We cannot infer which are padded so just generate sequential position ids.
@@ -518,221 +448,162 @@ class LukeEmbeddings(nn.Module):
 
         Returns: torch.Tensor
         """
-        # 获取输入形状
         input_shape = inputs_embeds.size()[:-1]
-        # 获取序列长度
         sequence_length = input_shape[1]
 
-        # 生成连续的位置标记
+        # 生成与输入嵌入向量维度相匹配的位置 ids
         position_ids = torch.arange(
             self.padding_idx + 1, sequence_length + self.padding_idx + 1, dtype=torch.long, device=inputs_embeds.device
         )
-        # 返回位置标记
         return position_ids.unsqueeze(0).expand(input_shape)
 class LukeEntityEmbeddings(nn.Module):
-    # 定义 LukeEntityEmbeddings 类，继承自 nn.Module
+    # Luke 实体嵌入模块，继承自 nn.Module
     def __init__(self, config: LukeConfig):
-        # 构造函数，接受 LukeConfig 类型的参数 config
         super().__init__()
-        # 调用父类的构造函数
-
         self.config = config
-        # 将传入的配置参数保存在类的成员变量中
 
+        # 实体嵌入层，使用 nn.Embedding 创建一个词汇表大小为 config.entity_vocab_size，
+        # 嵌入维度为 config.entity_emb_size 的嵌入层，padding 索引为 0
         self.entity_embeddings = nn.Embedding(config.entity_vocab_size, config.entity_emb_size, padding_idx=0)
-        # 创建一个嵌入层，输入为实体的词汇大小，输出为实体的嵌入大小，使用零作为填充值的索引
-
+        
+        # 如果实体嵌入维度不等于隐藏层大小，创建一个线性层用于将实体嵌入维度转换到隐藏层大小
         if config.entity_emb_size != config.hidden_size:
-            # 如果实体嵌入的大小与隐藏层大小不相等
             self.entity_embedding_dense = nn.Linear(config.entity_emb_size, config.hidden_size, bias=False)
-            # 创建一个线性变换层，将实体嵌入的大小转换成隐藏层大小，不使用偏置
 
+        # 位置嵌入层，使用 nn.Embedding 创建一个最大位置嵌入大小为 config.max_position_embeddings，
+        # 嵌入维度为 config.hidden_size
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
-        # 创建一个位置编码的嵌入层，输入为最大位置编码数，输出为隐藏层大小
-
+        
+        # 类型嵌入层，使用 nn.Embedding 创建一个类型词汇表大小为 config.type_vocab_size，
+        # 嵌入维度为 config.hidden_size
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
-        # 创建一个 token 类型的嵌入层，输入为 token 类型的词汇大小，输出为隐藏层大小
 
+        # Layer normalization 层，输入大小为 config.hidden_size，epsilon 为 config.layer_norm_eps
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个 LayerNormalization 层，对隐藏层进行归一化处理，eps 参数为归一化时的偏移量
-
+        
+        # Dropout 层，概率为 config.hidden_dropout_prob
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 创建一个丢弃层，根据隐藏层的概率进行丢弃操作
 
+    # 前向传播函数定义
     def forward(
         self, entity_ids: torch.LongTensor, position_ids: torch.LongTensor, token_type_ids: torch.LongTensor = None
     ):
-        # 正向传播函数，接受实体 ID、位置 ID、token 类型 ID 作为输入
-
+        # 如果 token_type_ids 为 None，则初始化为全零的与 entity_ids 大小相同的张量
         if token_type_ids is None:
             token_type_ids = torch.zeros_like(entity_ids)
-            # 如果 token 类型 ID 为空，则使用与实体 ID 相同大小的零张量代替
 
+        # 获取实体嵌入，通过实体嵌入层获取对应的实体嵌入向量
         entity_embeddings = self.entity_embeddings(entity_ids)
-        # 通过实体 ID 查找实体嵌入
-
+        
+        # 如果实体嵌入维度不等于隐藏层大小，则通过线性层进行维度转换
         if self.config.entity_emb_size != self.config.hidden_size:
-            # 如果实体嵌入的大小不等于隐藏层大小
             entity_embeddings = self.entity_embedding_dense(entity_embeddings)
-            # 使用线性变换层将实体嵌入的大小转换成隐藏层大小
 
+        # 获取位置嵌入，通过位置嵌入层获取对应的位置嵌入向量，同时根据位置索引进行裁剪和掩码处理
         position_embeddings = self.position_embeddings(position_ids.clamp(min=0))
-        # 通过位置 ID 查找位置嵌入，并将负值位置 ID 设为零
-
         position_embedding_mask = (position_ids != -1).type_as(position_embeddings).unsqueeze(-1)
-        # 创建一个位置编码的掩码，排除特殊值-1，维度为位置嵌入的维度
-
         position_embeddings = position_embeddings * position_embedding_mask
-        # 将位置嵌入与掩码相乘，过滤无效位置编码
-
         position_embeddings = torch.sum(position_embeddings, dim=-2)
-        # 沿位置 ID 维度求和
-
         position_embeddings = position_embeddings / position_embedding_mask.sum(dim=-2).clamp(min=1e-7)
-        # 对位置编码做归一化处理
 
+        # 获取类型嵌入，通过类型嵌入层获取对应的类型嵌入向量
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
-        # 通过 token 类型 ID 查找 token 类型嵌入
 
+        # 将实体嵌入、位置嵌入和类型嵌入进行相加得到最终的嵌入向量
         embeddings = entity_embeddings + position_embeddings + token_type_embeddings
-        # 将实体嵌入、位置嵌入和 token 类型嵌入相加得到整体嵌入
-
+        
+        # 应用 Layer normalization 层
         embeddings = self.LayerNorm(embeddings)
-        # 对整体嵌入进行 LayerNormalization 处理
-
+        
+        # 应用 Dropout 层
         embeddings = self.dropout(embeddings)
-        # 对处理后的嵌入进行丢弃操作
 
+        # 返回最终的嵌入向量
         return embeddings
-        # 返回处理后的嵌入结果
-    # 初始化函数，用于创建一个新的实例
+    # 初始化方法，接受一个配置参数对象
     def __init__(self, config):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 检查隐藏大小是否是注意力头数的倍数，如果不是且没有嵌入大小，则引发值错误
+        
+        # 检查隐藏层大小是否是注意力头数的整数倍，且不存在嵌入大小属性
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
+            # 如果不是整数倍则抛出数值错误异常
             raise ValueError(
                 f"The hidden size {config.hidden_size,} is not a multiple of the number of attention "
                 f"heads {config.num_attention_heads}."
             )
-
-        # 设置注意力头数和每个注意力头的大小
+        
+        # 将注意力头数和每个注意力头的大小设置为配置中的值
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
-        # 设置是否使用实体感知注意力
+        
+        # 根据配置设置是否使用实体感知注意力
         self.use_entity_aware_attention = config.use_entity_aware_attention
 
-        # 创建查询、键和值的线性层
+        # 创建用于查询、键和值的线性变换层
         self.query = nn.Linear(config.hidden_size, self.all_head_size)
         self.key = nn.Linear(config.hidden_size, self.all_head_size)
         self.value = nn.Linear(config.hidden_size, self.all_head_size)
 
-        # 如果使用实体感知注意力，则创建额外的线性层
+        # 如果使用实体感知注意力，则额外创建实体到词的查询层和实体到实体的查询层
         if self.use_entity_aware_attention:
             self.w2e_query = nn.Linear(config.hidden_size, self.all_head_size)
             self.e2w_query = nn.Linear(config.hidden_size, self.all_head_size)
             self.e2e_query = nn.Linear(config.hidden_size, self.all_head_size)
 
-        # 创建一个丢弃层，用于在注意力计算中应用丢弃
+        # 创建注意力概率的丢弃层
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
 
-    # 将输入张量重排为适合注意力计算的形状
+    # 将输入张量转换为适合注意力分数计算的形状
     def transpose_for_scores(self, x):
-        # 计算新的形状，保持批次大小不变，但增加了注意力头数和每个头的大小
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
-        # 重排张量以匹配新形状
         x = x.view(*new_x_shape)
-        # 调换维度以匹配注意力计算所需的形状
         return x.permute(0, 2, 1, 3)
 
-    # 正向传播函数，用于执行模型的前向计算
+    # 前向传播方法定义，接受词的隐藏状态、实体的隐藏状态等参数
     def forward(
         self,
-        word_hidden_states,  # 单词隐藏状态
-        entity_hidden_states,  # 实体隐藏状态
-        attention_mask=None,  # 注意力掩码
-        head_mask=None,  # 头部掩码
-        output_attentions=False,  # 是否输出注意力权重
-# 从transformers.models.bert.modeling_bert.BertSelfOutput中复制代码
+        word_hidden_states,
+        entity_hidden_states,
+        attention_mask=None,
+        head_mask=None,
+        output_attentions=False,
+# Copied from transformers.models.bert.modeling_bert.BertSelfOutput
+
 class LukeSelfOutput(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 使用全连接层处理输入，输出维度与配置中隐藏层大小相同
+        # 线性层，输入维度为 config.hidden_size，输出维度为 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # LayerNorm层，对隐藏层进行归一化处理
+        # LayerNorm 层，对输入的最后一个维度进行归一化，eps 是归一化的参数
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # Dropout层，对隐藏层进行随机失活
+        # Dropout 层，根据 config.hidden_dropout_prob 概率丢弃输入
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 全连接层处理隐藏层状态
+        # 线性变换
         hidden_states = self.dense(hidden_states)
-        # Dropout层处理隐藏层状态
+        # Dropout 操作
         hidden_states = self.dropout(hidden_states)
-        # LayerNorm层对处理后的隐藏层状态进行归一化，并与输入张量相加
+        # LayerNorm 归一化并加上输入 tensor
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
         return hidden_states
 
 
-# 从transformers.models.bert.modeling_bert.BertIntermediate中复制代码
-class LukeIntermediate(nn.Module):
+class LukeAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 使用全连接层处理输入，输出维度为中间大小
-        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
-        # 如果隐藏激活函数是字符串，则使用预定义的激活函数映射表中的激活函数，否则使用配置中定义的激活函数
-        if isinstance(config.hidden_act, str):
-            self.intermediate_act_fn = ACT2FN[config.hidden_act]
-        else:
-            self.intermediate_act_fn = config.hidden_act
+        # LUKE 自注意力机制模块
+        self.self = LukeSelfAttention(config)
+        # LUKE 自注意力输出模块
+        self.output = LukeSelfOutput(config)
+        # 头部剪枝集合，用于存储不参与注意力计算的头部
+        self.pruned_heads = set()
 
-    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 全连接层处理隐藏层状态
-        hidden_states = self.dense(hidden_states)
-        # 使用中间激活函数处理全连接层输出
-        hidden_states = self.intermediate_act_fn(hidden_states)
-        return hidden_states
-
-
-# 从transformers.models.bert.modeling_bert.BertOutput中复制代码
-class LukeOutput(nn.Module):
-    # 初始化函数，接受一个配置参数
-    def __init__(self, config):
-        # 调用父类的初始化函数
-        super().__init__()
-        # 创建一个线性层，输入大小为 config.intermediate_size，输出大小为 config.hidden_size
-        self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 创建一个 LayerNorm 层，输入大小为 config.hidden_size，eps 为 config.layer_norm_eps
-        self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个 dropout 层，概率为 config.hidden_dropout_prob
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-    
-    # 前向传播函数，接受两个张量参数，返回一个张量
-    def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 使用 dense 层处理 hidden_states
-        hidden_states = self.dense(hidden_states)
-        # 使用 dropout 层处理 hidden_states
-        hidden_states = self.dropout(hidden_states)
-        # 使用 LayerNorm 层对 hidden_states 和 input_tensor 进行残差连接和 LayerNorm 处理
-        hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回处理后的 hidden_states
-        return hidden_states
-# LukeLayer 是一个 PyTorch 模块，它定义了一个 Transformer 层
-class LukeLayer(nn.Module):
-    def __init__(self, config):
-        # 调用父类的初始化方法
-        super().__init__()
-        # 设置 feed-forward 子层的 chunk 大小
-        self.chunk_size_feed_forward = config.chunk_size_feed_forward
-        # 设置序列长度维度为 1
-        self.seq_len_dim = 1
-        # 创建注意力子层
-        self.attention = LukeAttention(config)
-        # 创建中间子层
-        self.intermediate = LukeIntermediate(config)
-        # 创建输出子层
-        self.output = LukeOutput(config)
+    def prune_heads(self, heads):
+        # LUKE 不支持注意力头部的剪枝操作，抛出未实现错误
+        raise NotImplementedError("LUKE does not support the pruning of attention heads")
 
     def forward(
         self,
@@ -742,10 +613,114 @@ class LukeLayer(nn.Module):
         head_mask=None,
         output_attentions=False,
     ):
-        # 获取 word 隐状态的长度
+        # 计算 word_hidden_states 的第二个维度大小
+        word_size = word_hidden_states.size(1)
+        # 使用 LUKE 自注意力机制进行计算
+        self_outputs = self.self(
+            word_hidden_states,
+            entity_hidden_states,
+            attention_mask,
+            head_mask,
+            output_attentions,
+        )
+        # 如果 entity_hidden_states 为 None，则将 self_outputs 的第一个元素作为 concat_self_outputs
+        if entity_hidden_states is None:
+            concat_self_outputs = self_outputs[0]
+            concat_hidden_states = word_hidden_states
+        else:
+            # 否则将 self_outputs 的前两个元素在第二维度上连接，并将 hidden_states 连接在一起
+            concat_self_outputs = torch.cat(self_outputs[:2], dim=1)
+            concat_hidden_states = torch.cat([word_hidden_states, entity_hidden_states], dim=1)
+
+        # 输出注意力计算的结果
+        attention_output = self.output(concat_self_outputs, concat_hidden_states)
+
+        # 截取 word_attention_output 和 entity_attention_output
+        word_attention_output = attention_output[:, :word_size, :]
+        if entity_hidden_states is None:
+            entity_attention_output = None
+        else:
+            entity_attention_output = attention_output[:, word_size:, :]
+
+        # 如果输出注意力信息，则将其添加到输出元组中
+        outputs = (word_attention_output, entity_attention_output) + self_outputs[2:]
+
+        return outputs
+
+
+# Copied from transformers.models.bert.modeling_bert.BertIntermediate
+
+class LukeIntermediate(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        # 线性层，输入维度为 config.hidden_size，输出维度为 config.intermediate_size
+        self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
+        # 中间激活函数，根据配置选择激活函数
+        if isinstance(config.hidden_act, str):
+            self.intermediate_act_fn = ACT2FN[config.hidden_act]
+        else:
+            self.intermediate_act_fn = config.hidden_act
+
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        # 线性变换
+        hidden_states = self.dense(hidden_states)
+        # 中间激活函数变换
+        hidden_states = self.intermediate_act_fn(hidden_states)
+        return hidden_states
+
+
+# Copied from transformers.models.bert.modeling_bert.BertOutput
+
+class LukeOutput(nn.Module):
+    # 该类未完整提供，应该包括更多的代码才能完全注释
+    pass
+    # 初始化函数，用于创建一个新的神经网络模块实例
+    def __init__(self, config):
+        # 调用父类的初始化方法，确保正确地初始化神经网络模块
+        super().__init__()
+        # 创建一个全连接层，将输入特征的维度转换为隐藏层的维度
+        self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
+        # 创建一个层归一化层，用于标准化隐藏层的输出
+        self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        # 创建一个dropout层，用于在训练过程中随机丢弃部分隐藏层的输出，以防止过拟合
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+
+    # 前向传播函数，接收隐藏状态和输入张量作为输入，并返回处理后的隐藏状态张量
+    def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
+        # 使用全连接层进行线性变换，将隐藏状态张量转换到隐藏层的维度
+        hidden_states = self.dense(hidden_states)
+        # 对线性变换后的隐藏状态张量进行dropout操作，以随机丢弃部分输出，防止过拟合
+        hidden_states = self.dropout(hidden_states)
+        # 使用层归一化层对dropout后的隐藏状态张量进行归一化处理，加上输入张量，得到最终的隐藏状态张量
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        # 返回处理后的隐藏状态张量作为前向传播的输出
+        return hidden_states
+# 定义了一个名为 LukeLayer 的神经网络模块，继承自 nn.Module
+class LukeLayer(nn.Module):
+    # 初始化函数，接收一个配置参数 config
+    def __init__(self, config):
+        super().__init__()
+        # 设置当前层的前向传播中使用的参数
+        self.chunk_size_feed_forward = config.chunk_size_feed_forward
+        self.seq_len_dim = 1
+        # 初始化注意力模块、中间层模块和输出层模块
+        self.attention = LukeAttention(config)
+        self.intermediate = LukeIntermediate(config)
+        self.output = LukeOutput(config)
+
+    # 前向传播函数，接收多个参数：word_hidden_states, entity_hidden_states, attention_mask, head_mask 等
+    def forward(
+        self,
+        word_hidden_states,
+        entity_hidden_states,
+        attention_mask=None,
+        head_mask=None,
+        output_attentions=False,
+    ):
+        # 获取输入 word_hidden_states 的第二维度大小
         word_size = word_hidden_states.size(1)
 
-        # 计算注意力输出
+        # 调用注意力模块的前向传播，获取自注意力的输出
         self_attention_outputs = self.attention(
             word_hidden_states,
             entity_hidden_states,
@@ -753,51 +728,55 @@ class LukeLayer(nn.Module):
             head_mask,
             output_attentions=output_attentions,
         )
-
-        # 根据是否有 entity 隐状态拼接注意力输出
+        
+        # 根据是否有实体隐藏状态，选择不同的连接方式
         if entity_hidden_states is None:
             concat_attention_output = self_attention_outputs[0]
         else:
             concat_attention_output = torch.cat(self_attention_outputs[:2], dim=1)
 
-        # 添加注意力权重输出（如果有的话）
-        outputs = self_attention_outputs[2:]
+        # 如果需要输出注意力权重，则将其添加到输出中
+        outputs = self_attention_outputs[2:]  # 如果需要输出注意力权重，则添加自注意力的输出
 
-        # 应用分块前馈神经网络
+        # 将前向传播应用于 chunk 分块，得到当前层的输出
         layer_output = apply_chunking_to_forward(
             self.feed_forward_chunk, self.chunk_size_feed_forward, self.seq_len_dim, concat_attention_output
         )
-        # 分割 word 和 entity 输出
+        
+        # 提取出词的层的输出
         word_layer_output = layer_output[:, :word_size, :]
+        
+        # 根据是否有实体隐藏状态，提取出实体的层的输出
         if entity_hidden_states is None:
             entity_layer_output = None
         else:
             entity_layer_output = layer_output[:, word_size:, :]
 
-        # 组合输出
+        # 将词层和实体层的输出，以及可能的注意力权重输出，放入 outputs 中返回
         outputs = (word_layer_output, entity_layer_output) + outputs
 
         return outputs
 
+    # 定义 feed_forward_chunk 方法，用于前向传播中的块处理
     def feed_forward_chunk(self, attention_output):
-        # 计算中间层输出
+        # 中间层的输出
         intermediate_output = self.intermediate(attention_output)
-        # 计算输出层输出
+        # 输出层的输出
         layer_output = self.output(intermediate_output, attention_output)
         return layer_output
 
 
-# LukeEncoder 是一个 PyTorch 模块，它定义了 LUKE 模型的编码器
+# 定义了一个名为 LukeEncoder 的神经网络模块，继承自 nn.Module
 class LukeEncoder(nn.Module):
+    # 初始化函数，接收一个配置参数 config
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__()
         self.config = config
-        # 创建多个 LukeLayer 层
+        # 创建多个 LukeLayer 层，根据配置中的层数
         self.layer = nn.ModuleList([LukeLayer(config) for _ in range(config.num_hidden_layers)])
-        # 设置是否使用梯度检查点
         self.gradient_checkpointing = False
 
+    # LukeEncoder 的前向传播函数，接收多个参数：word_hidden_states, entity_hidden_states, attention_mask 等
     def forward(
         self,
         word_hidden_states,
@@ -808,25 +787,38 @@ class LukeEncoder(nn.Module):
         output_hidden_states=False,
         return_dict=True,
     ):
-        # 省略后续代码
-        # 初始化保存所有单词隐藏状态的元组，如果不需要输出隐藏状态则为 None
+        # 逐层调用 LukeLayer 的前向传播函数
+        for layer_module in self.layer:
+            # 对每一层进行前向传播
+            word_hidden_states, entity_hidden_states = layer_module(
+                word_hidden_states,
+                entity_hidden_states,
+                attention_mask,
+                head_mask,
+                output_attentions=output_attentions,
+            )
+
+        # 返回最终的词和实体隐藏状态
+        return word_hidden_states, entity_hidden_states
+        ):
+        # 初始化空元组以存储所有层的隐藏状态（如果需要输出）
         all_word_hidden_states = () if output_hidden_states else None
-        # 初始化保存所有实体隐藏状态的元组，如果不需要输出隐藏状态则为 None
         all_entity_hidden_states = () if output_hidden_states else None
-        # 初始化保存所有自注意力值的元组，如果不需要输出注意力值则为 None
         all_self_attentions = () if output_attentions else None
 
-        # 遍历每个层
+        # 遍历模型的每一层
         for i, layer_module in enumerate(self.layer):
-            # 如果需要输出隐藏状态，则将当前步骤的隐藏状态保存到相应的元组中
+            # 如果需要输出隐藏状态，则将当前层的隐藏状态添加到相应的元组中
             if output_hidden_states:
                 all_word_hidden_states = all_word_hidden_states + (word_hidden_states,)
                 all_entity_hidden_states = all_entity_hidden_states + (entity_hidden_states,)
 
-            # 获取当前层的头部遮罩
+            # 获取当前层的头部掩码（如果有的话）
             layer_head_mask = head_mask[i] if head_mask is not None else None
-            # 如果启用梯度检查点且处于训练状态，则使用梯度检查点函数计算当前层的输出
+
+            # 根据梯度检查点和训练模式选择不同的前向传播方法
             if self.gradient_checkpointing and self.training:
+                # 使用梯度检查点函数进行前向传播
                 layer_outputs = self._gradient_checkpointing_func(
                     layer_module.__call__,
                     word_hidden_states,
@@ -836,7 +828,7 @@ class LukeEncoder(nn.Module):
                     output_attentions,
                 )
             else:
-                # 否则直接调用当前层的前向计算
+                # 普通的前向传播
                 layer_outputs = layer_module(
                     word_hidden_states,
                     entity_hidden_states,
@@ -845,23 +837,23 @@ class LukeEncoder(nn.Module):
                     output_attentions,
                 )
 
-            # 更新当前步骤的单词隐藏状态
+            # 更新当前层的词级隐藏状态
             word_hidden_states = layer_outputs[0]
 
-            # 如果存在实体隐藏状态，则更新当前步骤的实体隐藏状态
+            # 如果实体级别的隐藏状态不为None，则更新
             if entity_hidden_states is not None:
                 entity_hidden_states = layer_outputs[1]
 
-            # 如果需要输出注意力值，则将当前步骤的注意力值保存到相应的元组中
+            # 如果需要输出注意力权重，则将当前层的注意力权重添加到元组中
             if output_attentions:
                 all_self_attentions = all_self_attentions + (layer_outputs[2],)
 
-        # 如果需要输出隐藏状态，则将最终的隐藏状态保存到相应的元组中
+        # 如果需要输出隐藏状态，则将最终层的隐藏状态添加到相应的元组中
         if output_hidden_states:
             all_word_hidden_states = all_word_hidden_states + (word_hidden_states,)
             all_entity_hidden_states = all_entity_hidden_states + (entity_hidden_states,)
 
-        # 如果不需要返回字典形式，则返回包含所有结果的元组
+        # 如果不需要返回字典形式的输出，则返回包含非None值的元组
         if not return_dict:
             return tuple(
                 v
@@ -874,7 +866,7 @@ class LukeEncoder(nn.Module):
                 ]
                 if v is not None
             )
-        # 返回以 BaseLukeModelOutput 格式组织的结果
+        # 返回一个BaseLukeModelOutput对象，包含不同层级的最终隐藏状态和注意力权重
         return BaseLukeModelOutput(
             last_hidden_state=word_hidden_states,
             hidden_states=all_word_hidden_states,
@@ -882,114 +874,98 @@ class LukeEncoder(nn.Module):
             entity_last_hidden_state=entity_hidden_states,
             entity_hidden_states=all_entity_hidden_states,
         )
-# 这是一个 LukePooler 类，它继承自 nn.Module。它的作用是对输入的隐藏状态进行池化操作，获取第一个token的隐藏状态作为输出。
+# Copied from transformers.models.bert.modeling_bert.BertPooler
+# 从 transformers 库中的 BertPooler 类复制而来
+
 class LukePooler(nn.Module):
     def __init__(self, config):
-        # 调用父类的构造函数
         super().__init__()
-        # 定义一个线性层，输入和输出的维度都是 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 定义一个 Tanh 激活函数
         self.activation = nn.Tanh()
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 取出隐藏状态的第一个token的向量
+        # We "pool" the model by simply taking the hidden state corresponding
+        # to the first token.
+        # 通过获取第一个 token 对应的隐藏状态来实现模型的“池化”
         first_token_tensor = hidden_states[:, 0]
-        # 通过线性层和激活函数处理第一个token的向量
         pooled_output = self.dense(first_token_tensor)
         pooled_output = self.activation(pooled_output)
-        # 返回处理后的向量
         return pooled_output
 
 
-# EntityPredictionHeadTransform 类用于对实体预测头的隐藏状态进行变换
 class EntityPredictionHeadTransform(nn.Module):
     def __init__(self, config):
-        # 调用父类的构造函数
         super().__init__()
-        # 定义一个线性层，输入维度是 config.hidden_size，输出维度是 config.entity_emb_size
         self.dense = nn.Linear(config.hidden_size, config.entity_emb_size)
-        # 获取激活函数
         if isinstance(config.hidden_act, str):
             self.transform_act_fn = ACT2FN[config.hidden_act]
         else:
             self.transform_act_fn = config.hidden_act
-        # 定义一个LayerNorm层
         self.LayerNorm = nn.LayerNorm(config.entity_emb_size, eps=config.layer_norm_eps)
 
     def forward(self, hidden_states):
-        # 先通过线性层和激活函数处理输入
         hidden_states = self.dense(hidden_states)
         hidden_states = self.transform_act_fn(hidden_states)
-        # 再通过LayerNorm层处理
         hidden_states = self.LayerNorm(hidden_states)
-        # 返回变换后的隐藏状态
         return hidden_states
 
 
-# EntityPredictionHead 类用于实体预测任务的预测头
 class EntityPredictionHead(nn.Module):
     def __init__(self, config):
-        # 调用父类的构造函数
         super().__init__()
         self.config = config
-        # 定义一个 EntityPredictionHeadTransform 模块
         self.transform = EntityPredictionHeadTransform(config)
-        # 定义一个线性层，用于从 entity_emb_size 维度映射到 entity_vocab_size 维度
         self.decoder = nn.Linear(config.entity_emb_size, config.entity_vocab_size, bias=False)
-        # 定义一个 bias 参数
         self.bias = nn.Parameter(torch.zeros(config.entity_vocab_size))
 
     def forward(self, hidden_states):
-        # 先通过 EntityPredictionHeadTransform 模块处理输入
         hidden_states = self.transform(hidden_states)
-        # 再通过线性层和 bias 得到最终的预测结果
         hidden_states = self.decoder(hidden_states) + self.bias
+
         return hidden_states
 
 
-# LukePreTrainedModel 是一个抽象基类，用于处理模型权重初始化和加载预训练模型
 class LukePreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
-    # 指定配置类为 LukeConfig
+    # LukePreTrainedModel 类的抽象基类，处理权重初始化和预训练模型的下载加载接口
+
     config_class = LukeConfig
-    # 指定基模型前缀为 "luke"
     base_model_prefix = "luke"
-    # 支持梯度检查点
     supports_gradient_checkpointing = True
-    # 指定模型中不需要分割的模块
     _no_split_modules = ["LukeAttention", "LukeEntityEmbeddings"]
-    # 初始化模型的权重
+    # 初始化神经网络模块的权重
     def _init_weights(self, module: nn.Module):
-        # 如果模块是线性层
+        """Initialize the weights"""
+        # 如果是线性层
         if isinstance(module, nn.Linear):
-            # 使用正态分布初始化权重
+            # 使用正态分布初始化权重，均值为0，标准差为配置中的初始化范围
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果偏置项存在，则将其设为0
+            # 如果存在偏置项，将其初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果模块是嵌入层
+        # 如果是嵌入层
         elif isinstance(module, nn.Embedding):
-            # 如果是用于偏置参数的嵌入，则将权重设为0
-            if module.embedding_dim == 1:  
+            # 如果嵌入维度为1，通常用于偏置参数的嵌入，将权重初始化为零
+            if module.embedding_dim == 1:
                 module.weight.data.zero_()
-            # 否则，使用正态分布初始化权重
             else:
+                # 否则使用正态分布初始化权重，均值为0，标准差为配置中的初始化范围
                 module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果有填充索引，则将填充索引对应的权重设为0
+            # 如果有填充索引，将对应的权重初始化为零
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
-        # 如果模块是层归一化层
+        # 如果是层归一化层
         elif isinstance(module, nn.LayerNorm):
-            # 将偏置项设为0
+            # 将偏置项初始化为零
             module.bias.data.zero_()
-            # 将权重设为1
+            # 将权重初始化为1（通常用于缩放归一化的权重）
             module.weight.data.fill_(1.0)
-# LUKE 模型的起始文档字符串，提供了有关该模型的一些常规信息
+# LUKE_START_DOCSTRING 定义了该模型的文档字符串，提供了关于模型的继承、参数初始化和基本使用的描述信息。
 LUKE_START_DOCSTRING = r"""
+
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
     etc.)
@@ -1004,76 +980,114 @@ LUKE_START_DOCSTRING = r"""
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# LUKE 模型输入的文档字符串，描述了模型的输入
+# LUKE_INPUTS_DOCSTRING 没有给出具体的文档字符串内容，在实际代码中应当补充相关描述信息。
 LUKE_INPUTS_DOCSTRING = r"""
 """
 
-# 用于添加文档字符串的装饰器
+
+# 使用装饰器 @add_start_docstrings 将以下类的文档字符串与额外的描述信息合并，提供了对 LUKE 模型转换器的描述
+# 和 LUKE_START_DOCSTRING 中定义的模型文档信息。
 @add_start_docstrings(
     "The bare LUKE model transformer outputting raw hidden-states for both word tokens and entities without any"
     " specific head on top.",
     LUKE_START_DOCSTRING,
 )
-# LukeModel 类定义
 class LukeModel(LukePreTrainedModel):
+    # 初始化方法，接收配置和是否添加池化层的参数，构建 LUKE 模型的组件。
     def __init__(self, config: LukeConfig, add_pooling_layer: bool = True):
-        # 调用父类的构造函数
         super().__init__(config)
         self.config = config
 
-        # 创建 LUKE 词嵌入层
+        # 初始化模型的嵌入层、实体嵌入层和编码器。
         self.embeddings = LukeEmbeddings(config)
-        # 创建 LUKE 实体嵌入层
         self.entity_embeddings = LukeEntityEmbeddings(config)
-        # 创建 LUKE 编码器
         self.encoder = LukeEncoder(config)
 
-        # 根据配置决定是否创建池化层
+        # 如果指定添加池化层，则初始化池化器。
         self.pooler = LukePooler(config) if add_pooling_layer else None
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并应用最终处理。
         self.post_init()
 
-    # 获取词嵌入层
+    # 获取输入嵌入层（词嵌入层）。
     def get_input_embeddings(self):
         return self.embeddings.word_embeddings
 
-    # 设置词嵌入层
+    # 设置输入嵌入层（词嵌入层）的值。
     def set_input_embeddings(self, value):
         self.embeddings.word_embeddings = value
 
-    # 获取实体嵌入层
+    # 获取实体嵌入层。
     def get_entity_embeddings(self):
         return self.entity_embeddings.entity_embeddings
 
-    # 设置实体嵌入层
+    # 设置实体嵌入层的值。
     def set_entity_embeddings(self, value):
         self.entity_embeddings.entity_embeddings = value
 
-    # 不支持裁剪注意力头
+    # 实现了头部修剪的方法，但在 LUKE 中未实现头部的修剪操作。
     def _prune_heads(self, heads_to_prune):
         raise NotImplementedError("LUKE does not support the pruning of attention heads")
 
-    # 添加文档字符串到模型的 forward 方法
+    # 使用装饰器 @add_start_docstrings_to_model_forward 将以下方法的输入描述与 LUKE_INPUTS_DOCSTRING 结合，
+    # 提供了模型前向传播方法的输入描述和相关配置信息。
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=BaseLukeModelOutputWithPooling, config_class=_CONFIG_FOR_DOC)
-    # 定义一个方法用于模型的前向传播
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的词元 ID，可选的长整型张量，默认为 None
-        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力掩码，可选的浮点张量，默认为 None
-        token_type_ids: Optional[torch.LongTensor] = None,  # 词元类型 ID，可选的长整型张量，默认为 None
-        position_ids: Optional[torch.LongTensor] = None,  # 位置 ID，可选的长整型张量，默认为 None
-        entity_ids: Optional[torch.LongTensor] = None,  # 实体 ID，可选的长整型张量，默认为 None
-        entity_attention_mask: Optional[torch.FloatTensor] = None,  # 实体的注意力掩码，可选的浮点张量，默认为 None
-        entity_token_type_ids: Optional[torch.LongTensor] = None,  # 实体的词元类型 ID，可选的长整型张量，默认为 None
-        entity_position_ids: Optional[torch.LongTensor] = None,  # 实体的位置 ID，可选的长整型张量，默认为 None
-        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码，可选的浮点张量，默认为 None
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入，可选的浮点张量，默认为 None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力，默认为 None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为 None
-        return_dict: Optional[bool] = None,  # 是否返回字典，默认为 None
-    # 定义一个方法用于生成扩展的注意力掩码
+        input_ids: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.FloatTensor] = None,
+        token_type_ids: Optional[torch.LongTensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        entity_ids: Optional[torch.LongTensor] = None,
+        entity_attention_mask: Optional[torch.FloatTensor] = None,
+        entity_token_type_ids: Optional[torch.LongTensor] = None,
+        entity_position_ids: Optional[torch.LongTensor] = None,
+        head_mask: Optional[torch.FloatTensor] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    ):
+        """
+        Executes the forward pass for the model.
+
+        Arguments:
+            input_ids (`torch.LongTensor`, *optional*):
+                Indices of input sequence tokens in the vocabulary.
+            attention_mask (`torch.FloatTensor`, *optional*):
+                Mask to avoid performing attention on padding tokens.
+            token_type_ids (`torch.LongTensor`, *optional*):
+                Segment token indices to indicate first and second portions of the inputs.
+            position_ids (`torch.LongTensor`, *optional*):
+                Indices of positions of each input sequence tokens in the position embeddings.
+            entity_ids (`torch.LongTensor`, *optional*):
+                Indices of entity sequence tokens in the vocabulary.
+            entity_attention_mask (`torch.FloatTensor`, *optional*):
+                Mask to avoid performing attention on padding tokens in entity tokens.
+            entity_token_type_ids (`torch.LongTensor`, *optional*):
+                Segment token indices to indicate first and second portions of the entity inputs.
+            entity_position_ids (`torch.LongTensor`, *optional*):
+                Indices of positions of each entity sequence tokens in the position embeddings.
+            head_mask (`torch.FloatTensor`, *optional*):
+                Mask to nullify selected heads of the self-attention modules.
+            inputs_embeds (`torch.FloatTensor`, *optional*):
+                Optionally instead of input_ids, you can pass pre-computed embeddings.
+            output_attentions (`bool`, *optional*):
+                Whether to output the attentions tensors.
+            output_hidden_states (`bool`, *optional*):
+                Whether to output the hidden states tensors.
+            return_dict (`bool`, *optional*):
+                Whether to return a dict instead of a tuple.
+
+        Returns:
+            `torch.Tensor` The extended attention mask, with the same dtype as `attention_mask.dtype`.
+        """
+        # Implementation of the forward pass for the model goes here
+        # ...
+        pass
+
+
     def get_extended_attention_mask(
         self, word_attention_mask: torch.LongTensor, entity_attention_mask: Optional[torch.LongTensor]
     ):
@@ -1083,154 +1097,102 @@ class LukeModel(LukePreTrainedModel):
         Arguments:
             word_attention_mask (`torch.LongTensor`):
                 Attention mask for word tokens with ones indicating tokens to attend to, zeros for tokens to ignore.
-                词元的注意力掩码，其中 1 表示要关注的词元，0 表示要忽略的词元。
             entity_attention_mask (`torch.LongTensor`, *optional*):
                 Attention mask for entity tokens with ones indicating tokens to attend to, zeros for tokens to ignore.
-                实体词元的注意力掩码，其中 1 表示要关注的词元，0 表示要忽略的词元。
 
         Returns:
             `torch.Tensor` The extended attention mask, with a the same dtype as `attention_mask.dtype`.
-            扩展后的注意力掩码，与 attention_mask.dtype 相同的数据类型。
         """
-        # 将词元的注意力掩码赋值给注意力掩码
+        # Initialize the attention_mask with word_attention_mask
         attention_mask = word_attention_mask
-        # 如果存在实体的注意力掩码
+
+        # Concatenate entity_attention_mask if provided
         if entity_attention_mask is not None:
-            # 将实体的注意力掩码与词元的注意力掩码在最后一个维度上拼接起来
             attention_mask = torch.cat([attention_mask, entity_attention_mask], dim=-1)
 
-        # 如果注意力掩码的维度为 3
+        # Ensure attention_mask is extended properly based on its dimensionality
         if attention_mask.dim() == 3:
-            # 在第二个维度上添加一个维度，形成广播后的注意力掩码
             extended_attention_mask = attention_mask[:, None, :, :]
-        # 如果注意力掩码的维度为 2
         elif attention_mask.dim() == 2:
-            # 在第二个和第三个维度上各添加一个维度，形成广播后的注意力掩码
             extended_attention_mask = attention_mask[:, None, None, :]
-        # 如果注意力掩码的维度既不是 3 也不是 2
         else:
-            # 抛出 ValueError 异常，提示注意力掩码的形状错误
             raise ValueError(f"Wrong shape for attention_mask (shape {attention_mask.shape})")
 
-        # 将扩展后的注意力掩码转换为指定数据类型，确保与模型中的数据类型兼容（用于 fp16 兼容性）
+        # Ensure dtype compatibility for fp16
         extended_attention_mask = extended_attention_mask.to(dtype=self.dtype)
-        # 将掩码中的 1 替换为负无穷，确保对未来词元和被屏蔽词元的忽略
+
+        # Handle floating-point precision compatibility
         extended_attention_mask = (1.0 - extended_attention_mask) * torch.finfo(self.dtype).min
-        # 返回扩展后的注意力掩码
+
         return extended_attention_mask
-# 根据输入的input_ids和padding_idx创建位置ID：非填充符号替换为它们的位置编号，位置编号从padding_idx+1开始，忽略填充符号。这是从fairseq的`utils.make_positions`修改而来。
-def create_position_ids_from_input_ids(input_ids, padding_idx):
-    # 这里的一系列强制转换和类型转换是精心平衡的，既可以与ONNX导出一起工作，也可以与XLA一起工作。
-    # 用input_ids中不等于padding_idx的元素创建掩码（mask）
-    mask = input_ids.ne(padding_idx).int()
-    # 先创建一个累积的掩码（mask）然后类型转换，再乘以掩码（mask）
-    incremental_indices = (torch.cumsum(mask, dim=1).type_as(mask)) * mask
-    # 返回长整型的incremental_indices和padding_idx的和
-    return incremental_indices.long() + padding_idx
-
-
-# 从transformers.models.roberta.modeling_roberta.RobertaLMHead复制的
-# 用于遮蔽语言建模的Roberta头
-class LukeLMHead(nn.Module):
-    """用于遮蔽语言建模的Roberta头"""
-    
-    def __init__(self, config):
-        super().__init__()
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        self.layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-
-        self.decoder = nn.Linear(config.hidden_size, config.vocab_size)
-        self.bias = nn.Parameter(torch.zeros(config.vocab_size))
-        self.decoder.bias = self.bias
-
-    def forward(self, features, **kwargs):
-        x = self.dense(features)
-        x = gelu(x)  # 使用GELU激活函数
-        x = self.layer_norm(x)
-
-        # 通过偏置将其投影回词汇表的大小
-        x = self.decoder(x)
-
-        return x
-
-    def _tie_weights(self):
-        # 如果这两个权重被断开连接（在TPU上或当偏置被调整大小时），将它们绑定在一起
-        # 用于加速兼容性和不破坏向后兼容性
-        if self.decoder.bias.device.type == "meta":
-            self.decoder.bias = self.bias
-        else:
-            self.bias = self.decoder.bias
-
-
+# LUKE 模型用于带有语言建模头和顶部实体预测头的任务，支持掩码语言建模和掩码实体预测。
 @add_start_docstrings(
     """
-    LUKE模型带有用于遮蔽语言建模和遮蔽实体预测的语言建模头和实体预测头。
+    LUKE 模型带有语言建模头和顶部实体预测头，支持掩码语言建模和掩码实体预测。
     """,
     LUKE_START_DOCSTRING,
 )
 class LukeForMaskedLM(LukePreTrainedModel):
+    # 用于绑定权重的键列表，包括语言建模头和实体预测头的权重
     _tied_weights_keys = ["lm_head.decoder.weight", "lm_head.decoder.bias", "entity_predictions.decoder.weight"]
 
     def __init__(self, config):
+        # 调用父类初始化方法，传入配置参数
         super().__init__(config)
 
+        # 初始化 LUKE 模型
         self.luke = LukeModel(config)
 
+        # 初始化语言建模头
         self.lm_head = LukeLMHead(config)
+
+        # 初始化实体预测头
         self.entity_predictions = EntityPredictionHead(config)
 
+        # 交叉熵损失函数用于计算损失
         self.loss_fn = nn.CrossEntropyLoss()
 
         # 初始化权重并应用最终处理
         self.post_init()
 
     def tie_weights(self):
+        # 调用父类方法来绑定权重
         super().tie_weights()
-        # 绑定或克隆权重
+
+        # 绑定或克隆实体预测头的权重到 LUKE 模型的实体嵌入
         self._tie_or_clone_weights(self.entity_predictions.decoder, self.luke.entity_embeddings.entity_embeddings)
 
     def get_output_embeddings(self):
+        # 返回语言建模头的解码器权重
         return self.lm_head.decoder
 
     def set_output_embeddings(self, new_embeddings):
+        # 设置新的输出嵌入到语言建模头的解码器中
         self.lm_head.decoder = new_embeddings
 
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 使用装饰器替换返回文档字符串，指定输出类型和配置类
+    # 重写父类的前向方法，详细描述输入参数的文档字符串
+    def forward(self, **kwargs):
+    # 使用装饰器替换返回文档字符串，指定输出类型为LukeMaskedLMOutput，配置类为_CONFIG_FOR_DOC
     @replace_return_docstrings(output_type=LukeMaskedLMOutput, config_class=_CONFIG_FOR_DOC)
-    # 定义模型的前向传播方法，并接收以下参数
-
-    # 输入的标记 ID，数据类型为可选的长整型张量
-    input_ids: Optional[torch.LongTensor] = None,
-    # 注意力遮罩，数据类型为可选的浮点张量
-    attention_mask: Optional[torch.FloatTensor] = None,
-    # 标记类型 ID，数据类型为可选的长整型张量
-    token_type_ids: Optional[torch.LongTensor] = None,
-    # 位置 ID，数据类型为可选的长整型张量
-    position_ids: Optional[torch.LongTensor] = None,
-    # 实体 ID，数据类型为可选的长整型张量
-    entity_ids: Optional[torch.LongTensor] = None,
-    # 实体注意力遮罩，数据类型为可选的长整型张量
-    entity_attention_mask: Optional[torch.LongTensor] = None,
-    # 实体标记类型 ID，数据类型为可选的长整型张量
-    entity_token_type_ids: Optional[torch.LongTensor] = None,
-    # 实体位置 ID，数据类型为可选的长整型张量
-    entity_position_ids: Optional[torch.LongTensor] = None,
-    # 标签，数据类型为可选的长整型张量
-    labels: Optional[torch.LongTensor] = None,
-    # 实体标签，数据类型为可选的长整型张量
-    entity_labels: Optional[torch.LongTensor] = None,
-    # 头部遮罩，数据类型为可选的浮点张量
-    head_mask: Optional[torch.FloatTensor] = None,
-    # 输入嵌入，数据类型为可选的浮点张量
-    inputs_embeds: Optional[torch.FloatTensor] = None,
-    # 输出注意力，数据类型为可选的布尔值
-    output_attentions: Optional[bool] = None,
-    # 输出隐藏状态，数据类型为可选的布尔值
-    output_hidden_states: Optional[bool] = None,
-    # 返回字典，数据类型为可选的布尔值
-    return_dict: Optional[bool] = None,
-# 在 LUKE 模型的基础上添加分类头部，用于实体分类任务，例如 Open Entity
+    # 定义模型的前向传播方法
+    def forward(
+        self,
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs，类型为可选的长整型张量
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩，类型为可选的浮点数张量
+        token_type_ids: Optional[torch.LongTensor] = None,  # token 类型 IDs，类型为可选的长整型张量
+        position_ids: Optional[torch.LongTensor] = None,  # 位置 IDs，类型为可选的长整型张量
+        entity_ids: Optional[torch.LongTensor] = None,  # 实体 IDs，类型为可选的长整型张量
+        entity_attention_mask: Optional[torch.LongTensor] = None,  # 实体注意力遮罩，类型为可选的长整型张量
+        entity_token_type_ids: Optional[torch.LongTensor] = None,  # 实体 token 类型 IDs，类型为可选的长整型张量
+        entity_position_ids: Optional[torch.LongTensor] = None,  # 实体位置 IDs，类型为可选的长整型张量
+        labels: Optional[torch.LongTensor] = None,  # 标签，类型为可选的长整型张量
+        entity_labels: Optional[torch.LongTensor] = None,  # 实体标签，类型为可选的长整型张量
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部遮罩，类型为可选的浮点数张量
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入嵌入，类型为可选的浮点数张量
+        output_attentions: Optional[bool] = None,  # 是否输出注意力信息，类型为可选的布尔值
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态信息，类型为可选的布尔值
+        return_dict: Optional[bool] = None,  # 是否返回字典，类型为可选的布尔值
 @add_start_docstrings(
     """
     The LUKE model with a classification head on top (a linear layer on top of the hidden state of the first entity
@@ -1242,19 +1204,15 @@ class LukeForEntityClassification(LukePreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 初始化 LUKE 模型
-        self.luke = LukeModel(config)
+        self.luke = LukeModel(config)  # 初始化 LUKE 模型
 
-        # 设置分类数目和 dropout 层
-        self.num_labels = config.num_labels
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 分类器是一个线性层，将隐藏状态映射到标签空间
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+        self.num_labels = config.num_labels  # 类别数量
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # Dropout 层
+        self.classifier = nn.Linear(config.hidden_size, config.num_labels)  # 分类器线性层
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播函数，接受多种输入，并返回输出
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=EntityClassificationOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1273,7 +1231,9 @@ class LukeForEntityClassification(LukePreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-# 在 LUKE 模型的基础上添加分类头部，用于实体对分类任务，例如 TACRED
+
+
+
 @add_start_docstrings(
     """
     The LUKE model with a classification head on top (a linear layer on top of the hidden states of the two entity
@@ -1285,40 +1245,49 @@ class LukeForEntityPairClassification(LukePreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 初始化 LUKE 模型
-        self.luke = LukeModel(config)
+        self.luke = LukeModel(config)  # 初始化 LUKE 模型
 
-        # 设置分类数目和 dropout 层
-        self.num_labels = config.num_labels
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 分类器是一个线性层，将两个实体的隐藏状态映射到标签空间
-        self.classifier = nn.Linear(config.hidden_size * 2, config.num_labels, False)
+        self.num_labels = config.num_labels  # 类别数量
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)  # Dropout 层
+        self.classifier = nn.Linear(config.hidden_size * 2, config.num_labels, False)  # 用于实体对分类的线性层
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播函数，接受多种输入，并返回输出
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=EntityPairClassificationOutput, config_class=_CONFIG_FOR_DOC)
-```  
-    # 此方法用于模型的前向传播
+    # 前向传播函数，用于模型的前向推断过程
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的token ID序列，类型为可选的长整型张量，默认为None
-        attention_mask: Optional[torch.FloatTensor] = None,  # 用于指示哪些位置需要被忽略的注意力掩码，类型为可选的浮点数张量，默认为None
-        token_type_ids: Optional[torch.LongTensor] = None,  # 输入的token类型ID序列，类型为可选的长整型张量，默认为None
-        position_ids: Optional[torch.LongTensor] = None,  # 输入的token位置ID序列，类型为可选的长整型张量，默认为None
-        entity_ids: Optional[torch.LongTensor] = None,  # 实体ID序列，类型为可选的长整型张量，默认为None
-        entity_attention_mask: Optional[torch.FloatTensor] = None,  # 实体的注意力掩码，类型为可选的浮点数张量，默认为None
-        entity_token_type_ids: Optional[torch.LongTensor] = None,  # 实体的token类型ID序列，类型为可选的长整型张量，默认为None
-        entity_position_ids: Optional[torch.LongTensor] = None,  # 实体的token位置ID序列，类型为可选的长整型张量，默认为None
-        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码，类型为可选的浮点数张量，默认为None
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入张量，类型为可选的浮点数张量，默认为None
-        labels: Optional[torch.LongTensor] = None,  # 标签序列，类型为可选的长整型张量，默认为None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，默认为None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为None
-        return_dict: Optional[bool] = None,  # 是否返回字典，默认为None
-# 为LUKE模型添加一个基于span分类的头部（线性层叠加在隐藏状态输出之上），用于诸如命名实体识别之类的任务
+        # 输入的token IDs，类型为torch.LongTensor，可选参数
+        input_ids: Optional[torch.LongTensor] = None,
+        # 注意力掩码，指定哪些元素是padding的，类型为torch.FloatTensor，可选参数
+        attention_mask: Optional[torch.FloatTensor] = None,
+        # token类型IDs，用于区分两个句子的token，类型为torch.LongTensor，可选参数
+        token_type_ids: Optional[torch.LongTensor] = None,
+        # 位置IDs，指定每个token在序列中的位置，类型为torch.LongTensor，可选参数
+        position_ids: Optional[torch.LongTensor] = None,
+        # 实体IDs，用于指示实体的token序列，类型为torch.LongTensor，可选参数
+        entity_ids: Optional[torch.LongTensor] = None,
+        # 实体注意力掩码，指定实体token的padding，类型为torch.FloatTensor，可选参数
+        entity_attention_mask: Optional[torch.FloatTensor] = None,
+        # 实体token类型IDs，区分实体token的两个句子，类型为torch.LongTensor，可选参数
+        entity_token_type_ids: Optional[torch.LongTensor] = None,
+        # 实体位置IDs，指定每个实体token在序列中的位置，类型为torch.LongTensor，可选参数
+        entity_position_ids: Optional[torch.LongTensor] = None,
+        # 头部掩码，指定要执行注意力操作的头部，类型为torch.FloatTensor，可选参数
+        head_mask: Optional[torch.FloatTensor] = None,
+        # 输入的嵌入表示，类型为torch.FloatTensor，可选参数
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        # 标签，用于计算损失的真实标签，类型为torch.LongTensor，可选参数
+        labels: Optional[torch.LongTensor] = None,
+        # 是否输出注意力权重，类型为bool，可选参数
+        output_attentions: Optional[bool] = None,
+        # 是否输出隐藏状态，类型为bool，可选参数
+        output_hidden_states: Optional[bool] = None,
+        # 是否返回一个字典格式的输出，类型为bool，可选参数
+        return_dict: Optional[bool] = None,
+# 使用自定义的文档字符串初始化 LUKE 模型，添加了一个在隐藏状态输出之上的跨度分类头部，用于诸如命名实体识别等任务
 @add_start_docstrings(
     """
     The LUKE model with a span classification head on top (a linear layer on top of the hidden states output) for tasks
@@ -1330,17 +1299,20 @@ class LukeForEntitySpanClassification(LukePreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
-        # 初始化LUKE模型
+        # 初始化 LUKE 模型
         self.luke = LukeModel(config)
 
+        # 获取标签数量和隐藏层的 dropout 概率
         self.num_labels = config.num_labels
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
+
+        # 线性层用于分类，输入维度是隐藏层大小的三倍
         self.classifier = nn.Linear(config.hidden_size * 3, config.num_labels)
 
-        # 初始化权重并进行最终处理
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 定义前向传播方法
+    # 重写 forward 方法，注解详细描述了模型的输入参数及其用途
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=EntitySpanClassificationOutput, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -1362,7 +1334,9 @@ class LukeForEntitySpanClassification(LukePreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
 
-# 为LUKE模型添加一个基于序列分类/回归的头部（线性层叠加在汇总输出之上），用于GLUE任务等
+
+
+# 使用自定义的文档字符串初始化 LUKE 模型，添加了一个在汇总输出之上的序列分类/回归头部，例如 GLUE 任务
 @add_start_docstrings(
     """
     The LUKE Model transformer with a sequence classification/regression head on top (a linear layer on top of the
@@ -1374,56 +1348,52 @@ class LukeForSequenceClassification(LukePreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
 
+        # 获取标签数量
         self.num_labels = config.num_labels
-        # 初始化LUKE模型
+
+        # 初始化 LUKE 模型
         self.luke = LukeModel(config)
-        # 配置Dropout层
+
+        # 根据配置使用分类器的 dropout 或者隐藏层的 dropout 概率
         self.dropout = nn.Dropout(
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
+
+        # 线性层用于分类，输入维度是隐藏层大小
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # Initialize weights and apply final processing
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 定义前向传播方法
+    # 重写 forward 方法，注解详细描述了模型的输入参数及其用途
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=LukeSequenceClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义forward方法，用于模型的前向传播
+    # 定义前向传播方法，接受多个可选的输入参数，用于模型的输入和控制
     def forward(
-        # 输入的token id序列，类型为LongTensor，可选参数
-        input_ids: Optional[torch.LongTensor] = None,
-        # 注意力掩码，用于指示模型在输入中要关注的位置，类型为FloatTensor，可选参数
-        attention_mask: Optional[torch.FloatTensor] = None,
-        # token类型id序列，用于指示不同句子的token属于哪个句子，类型为LongTensor，可选参数
-        token_type_ids: Optional[torch.LongTensor] = None,
-        # 位置id序列，用于指示每个token在输入中的位置，类型为LongTensor，可选参数
-        position_ids: Optional[torch.LongTensor] = None,
-        # 实体id序列，用于标识实体，类型为LongTensor，可选参数
-        entity_ids: Optional[torch.LongTensor] = None,
-        # 实体注意力掩码，用于指示模型在实体id位置要关注的位置，类型为FloatTensor，可选参数
-        entity_attention_mask: Optional[torch.FloatTensor] = None,
-        # 实体token类型id序列，用于指示不同实体的token属于哪个实体，类型为LongTensor，可选参数
-        entity_token_type_ids: Optional[torch.LongTensor] = None,
-        # 实体位置id序列，用于指示每个实体token在输入中的位置，类型为LongTensor，可选参数
-        entity_position_ids: Optional[torch.LongTensor] = None,
-        # 头部掩码，用于在多头注意力中指定哪些头部应该被忽略，类型为FloatTensor，可选参数
-        head_mask: Optional[torch.FloatTensor] = None,
-        # 输入的嵌入向量，类型为FloatTensor，可选参数
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 标签，用于计算损失，类型为FloatTensor，可选参数
-        labels: Optional[torch.FloatTensor] = None,
-        # 是否输出注意力权重，类型为bool，可选参数
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，类型为bool，可选参数
-        output_hidden_states: Optional[bool] = None,
-        # 是否以字典形式返回结果，类型为bool，可选参数
-        return_dict: Optional[bool] = None,
-# 导入所需模块或类
+        self,
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的token IDs，类型为长整型Tensor，可选
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力掩码，类型为浮点数Tensor，可选
+        token_type_ids: Optional[torch.LongTensor] = None,  # token类型IDs，类型为长整型Tensor，可选
+        position_ids: Optional[torch.LongTensor] = None,  # 位置IDs，类型为长整型Tensor，可选
+        entity_ids: Optional[torch.LongTensor] = None,  # 实体IDs，类型为长整型Tensor，可选
+        entity_attention_mask: Optional[torch.FloatTensor] = None,  # 实体的注意力掩码，类型为浮点数Tensor，可选
+        entity_token_type_ids: Optional[torch.LongTensor] = None,  # 实体的token类型IDs，类型为长整型Tensor，可选
+        entity_position_ids: Optional[torch.LongTensor] = None,  # 实体的位置IDs，类型为长整型Tensor，可选
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部掩码，类型为浮点数Tensor，可选
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入表示，类型为浮点数Tensor，可选
+        labels: Optional[torch.FloatTensor] = None,  # 标签，类型为浮点数Tensor，可选
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可选布尔值
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可选布尔值
+        return_dict: Optional[bool] = None,  # 是否返回字典形式的输出，可选布尔值
+"""
+The LUKE Model with a token classification head on top (a linear layer on top of the hidden-states output). To
+solve Named-Entity Recognition (NER) task using LUKE, `LukeForEntitySpanClassification` is more suitable than this
+class.
+"""
 @add_start_docstrings(
     """
     The LUKE Model with a token classification head on top (a linear layer on top of the hidden-states output). To
@@ -1432,28 +1402,25 @@ class LukeForSequenceClassification(LukePreTrainedModel):
     """,
     LUKE_START_DOCSTRING,
 )
-# 定义一个继承自 LukePreTrainedModel 的类 LukeForTokenClassification
 class LukeForTokenClassification(LukePreTrainedModel):
-    # 初始化方法，接受一个配置对象作为参数
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 获取标签数量
         self.num_labels = config.num_labels
 
-        # 创建 LUKE 模型对象，不添加池化层
+        # Initialize the LUKE model backbone without adding pooling layer
         self.luke = LukeModel(config, add_pooling_layer=False)
-        # 创建一个 Dropout 层，用于防止过拟合
+        
+        # Dropout layer for regularization
         self.dropout = nn.Dropout(
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
-        # 创建一个全连接层，用于分类
+        
+        # Linear layer for token classification, output dimension is num_labels
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 前向传播方法
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -1476,30 +1443,17 @@ class LukeForTokenClassification(LukePreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        # 输入参数的类型和含义
-    # 这个函数是一个 PyTorch 模型的前向传播函数。它接收一些输入张量，
-    # 并返回预测结果和一些可选的辅助输出。
-    def forward(
-        self,
-        input_ids: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        token_type_ids: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.Tensor] = None,
-        entity_ids: Optional[torch.Tensor] = None,
-        entity_attention_mask: Optional[torch.Tensor] = None,
-        entity_token_type_ids: Optional[torch.Tensor] = None,
-        entity_position_ids: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        inputs_embeds: Optional[torch.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        labels: Optional[torch.Tensor] = None,
-        return_dict: Optional[bool] = None,
     ) -> Union[Tuple, LukeTokenClassifierOutput]:
-        # 根据输入参数的情况，设置是否使用返回字典的模式
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the multiple choice classification loss. Indices should be in `[0, ...,
+            num_choices-1]` where `num_choices` is the size of the second dimension of the input tensors. (See
+            `input_ids` above)
+        """
+        # 根据 return_dict 是否为 None 来确定是否使用 self.config.use_return_dict
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 将输入传递给 self.luke 模型,获得输出
+
+        # 调用 LUKE 模型进行前向传播
         outputs = self.luke(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1515,32 +1469,37 @@ class LukeForTokenClassification(LukePreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=True,
         )
-    
-        # 从模型输出中获取序列输出
+
+        # 获取模型最后一层的隐藏状态作为序列输出
         sequence_output = outputs.last_hidden_state
-    
-        # 对序列输出应用dropout
+
+        # 对序列输出进行 dropout 操作
         sequence_output = self.dropout(sequence_output)
-    
-        # 将序列输出传递给分类器,得到logits
+        
+        # 将 dropout 后的输出传入分类器，得到 logits
         logits = self.classifier(sequence_output)
-    
-        # 如果提供了标签,则计算交叉熵损失
+
+        # 初始化 loss 为 None
         loss = None
         if labels is not None:
-            # 将标签移动到logits的设备上,以支持模型并行
+            # 将 labels 移动到正确的设备上，以支持模型并行计算
             labels = labels.to(logits.device)
+            # 定义交叉熵损失函数
             loss_fct = CrossEntropyLoss()
+            # 计算交叉熵损失
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-    
-        # 根据返回模式,返回相应的输出
+
+        # 如果 return_dict 为 False，则返回一个元组，包含 loss, logits, outputs.hidden_states,
+        # outputs.entity_hidden_states, outputs.attentions 中不为 None 的部分
         if not return_dict:
             return tuple(
                 v
                 for v in [loss, logits, outputs.hidden_states, outputs.entity_hidden_states, outputs.attentions]
                 if v is not None
             )
-    
+
+        # 如果 return_dict 为 True，则返回 LukeTokenClassifierOutput 对象，包含 loss, logits,
+        # outputs.hidden_states, outputs.entity_hidden_states, outputs.attentions
         return LukeTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1548,92 +1507,114 @@ class LukeForTokenClassification(LukePreTrainedModel):
             entity_hidden_states=outputs.entity_hidden_states,
             attentions=outputs.attentions,
         )
-# 在 LUKE 模型的基础上添加一个用于抽取式问答任务的跨度分类头部
-# 包括一个线性层，用于计算“跨度起始对数”和“跨度终点对数”以及隐藏状态输出的线性层。
+@add_start_docstrings(
+    """
+    The LUKE Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
+    layers on top of the hidden-states output to compute `span start logits` and `span end logits`).
+    """,
+    LUKE_START_DOCSTRING,
+)
 class LukeForQuestionAnswering(LukePreTrainedModel):
+    """
+    LUKE模型，用于支持抽取式问答任务（如SQuAD），在隐藏状态输出的顶部增加一个用于计算“起始位置logits”和“结束位置logits”的线性层。
+    继承自LukePreTrainedModel。
+    """
+
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__(config)
-        
-        # 记录标签数量
+
         self.num_labels = config.num_labels
 
-        # 初始化 LUKE 模型，并禁用添加池化层
+        # 初始化LUKE模型，不添加池化层
         self.luke = LukeModel(config, add_pooling_layer=False)
         
-        # 添加一个线性层用于 QA 输出
+        # QA输出层，用于生成答案的线性层
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 定义前向传播方法
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=LukeQuestionAnsweringModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    def forward(self, ...
+    def forward(
+        self,
+        input_ids: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.FloatTensor] = None,
+        token_type_ids: Optional[torch.LongTensor] = None,
+        position_ids: Optional[torch.FloatTensor] = None,
+        entity_ids: Optional[torch.LongTensor] = None,
+        entity_attention_mask: Optional[torch.FloatTensor] = None,
+        entity_token_type_ids: Optional[torch.LongTensor] = None,
+        entity_position_ids: Optional[torch.LongTensor] = None,
+        head_mask: Optional[torch.FloatTensor] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        start_positions: Optional[torch.LongTensor] = None,
+        end_positions: Optional[torch.LongTensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    ):
+        """
+        正向传播方法，接收多种输入并生成相应的输出。
+        参数与返回值的详细说明参见LUKE_INPUTS_DOCSTRING。
+        """
+        # 实现正向传播逻辑的具体内容
+        pass
 
 
-
-# 在 LUKE 模型的基础上添加一个用于多项选择分类任务头部
-# 包括一个线性层，用于在汇总输出上进行多项选择分类的 softmax，例如 RocStories/SWAG 任务。
+@add_start_docstrings(
+    """
+    The LUKE Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
+    softmax) e.g. for RocStories/SWAG tasks.
+    """,
+    LUKE_START_DOCSTRING,
+)
 class LukeForMultipleChoice(LukePreTrainedModel):
+    """
+    LUKE模型，用于多选分类任务（例如RocStories/SWAG），在汇总输出的顶部增加一个线性层和softmax激活函数。
+    继承自LukePreTrainedModel。
+    """
+
     def __init__(self, config):
-        # 调用父类初始化方法
         super().__init__(config)
 
-        # 初始化 LUKE 模型
+        # 初始化LUKE模型
         self.luke = LukeModel(config)
         
-        # 添加一个丢弃层，使用配置中的分类器丢弃率或隐藏层丢弃率，如果没有指定则使用默认值
+        # Dropout层，用于防止过拟合
         self.dropout = nn.Dropout(
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
         
-        # 添加一个线性层用于分类
+        # 分类器线性层，输出为1，用于多选分类任务
         self.classifier = nn.Linear(config.hidden_size, 1)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 定义前向传播方法
     @add_start_docstrings_to_model_forward(LUKE_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=LukeMultipleChoiceModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义一个前向传播函数，接受多个输入参数，都是可选的 Torch 张量
-    def forward(
-        # 输入序列的 ID，是一个长整型 Torch 张量
-        input_ids: Optional[torch.LongTensor] = None,
-        # 注意力掩码，是一个浮点数 Torch 张量
-        attention_mask: Optional[torch.FloatTensor] = None,
-        # 标记类型 ID，是一个长整型 Torch 张量
-        token_type_ids: Optional[torch.LongTensor] = None,
-        # 位置 ID，是一个长整型 Torch 张量
-        position_ids: Optional[torch.LongTensor] = None,
-        # 实体 ID，是一个长整型 Torch 张量
-        entity_ids: Optional[torch.LongTensor] = None,
-        # 实体注意力掩码，是一个浮点数 Torch 张量
-        entity_attention_mask: Optional[torch.FloatTensor] = None,
-        # 实体标记类型 ID，是一个长整型 Torch 张量
-        entity_token_type_ids: Optional[torch.LongTensor] = None,
-        # 实体位置 ID，是一个长整型 Torch 张量
-        entity_position_ids: Optional[torch.LongTensor] = None,
-        # 头部掩码，是一个浮点数 Torch 张量
-        head_mask: Optional[torch.FloatTensor] = None,
-        # 输入嵌入特征，是一个浮点数 Torch 张量
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 标签，是一个浮点数 Torch 张量
-        labels: Optional[torch.FloatTensor] = None,
-        # 是否输出注意力矩阵，是一个布尔值
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，是一个布尔值
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典结果，是一个布尔值
-        return_dict: Optional[bool] = None,
+    # 定义模型的前向传播方法，接受多个可选的输入参数：
+    # - input_ids: 输入的token IDs序列，类型为torch.LongTensor，默认为None
+    # - attention_mask: 注意力掩码，类型为torch.FloatTensor，默认为None
+    # - token_type_ids: token类型IDs，类型为torch.LongTensor，默认为None
+    # - position_ids: 位置IDs，类型为torch.LongTensor，默认为None
+    # - entity_ids: 实体IDs，类型为torch.LongTensor，默认为None
+    # - entity_attention_mask: 实体的注意力掩码，类型为torch.FloatTensor，默认为None
+    # - entity_token_type_ids: 实体的token类型IDs，类型为torch.LongTensor，默认为None
+    # - entity_position_ids: 实体的位置IDs，类型为torch.LongTensor，默认为None
+    # - head_mask: 头部掩码，类型为torch.FloatTensor，默认为None
+    # - inputs_embeds: 输入的嵌入向量，类型为torch.FloatTensor，默认为None
+    # - labels: 标签，类型为torch.FloatTensor，默认为None
+    # - output_attentions: 是否输出注意力权重，类型为bool，默认为None
+    # - output_hidden_states: 是否输出隐藏状态，类型为bool，默认为None
+    # - return_dict: 是否以字典形式返回结果，类型为bool，默认为None
 ```

@@ -1,30 +1,31 @@
-# `.\transformers\models\vitmatte\convert_vitmatte_to_hf.py`
+# `.\models\vitmatte\convert_vitmatte_to_hf.py`
 
 ```
-# 设置文件编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本，使用此文件需要遵守许可证规定
-# 可以在以下链接获取许可证的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"AS IS"的基础，没有任何明示或暗示的担保或条件
-# 请查看许可证以获取有关权限和限制的具体语言
-# 用于从原始存储库转换 VitMatte 检查点
-# URL: https://github.com/hustvl/ViTMatte
+# 加载 argparse 库，用于处理命令行参数
+import argparse
 
-import argparse  # 导入解析命令行参数的模块
-import requests  # 导入发送 HTTP 请求的模块
-import torch  # 导入 PyTorch 深度学习框架
-from huggingface_hub import hf_hub_download  # 从 Hugging Face Hub 下载模型
-from PIL import Image  # 导入 Python Imaging Library 用于图像处理
+# 加载 requests 库，用于发送 HTTP 请求
+import requests
 
-from transformers import VitDetConfig, VitMatteConfig, VitMatteForImageMatting, VitMatteImageProcessor  # 导入 VitMatte 相关模块
+# 加载 PyTorch 库，用于深度学习模型操作
+import torch
 
-# 获取配置信息
+# 从 huggingface_hub 库中导入 hf_hub_download 函数，用于从 HF Hub 下载模型
+from huggingface_hub import hf_hub_download
+
+# 从 PIL 库中导入 Image 类，用于图像处理
+from PIL import Image
+
+# 从 transformers 库中导入 VitDetConfig, VitMatteConfig, VitMatteForImageMatting, VitMatteImageProcessor 类
+from transformers import VitDetConfig, VitMatteConfig, VitMatteForImageMatting, VitMatteImageProcessor
+
+
 def get_config(model_name):
+    # 根据模型名称确定隐藏层大小和注意力头数
     hidden_size = 384 if "small" in model_name else 768
     num_attention_heads = 6 if "small" in model_name else 12
 
-    # 设置 VitDetConfig 配置信息
+    # 创建 VitDetConfig 实例，定义了图像检测器的配置
     backbone_config = VitDetConfig(
         num_channels=4,
         image_size=512,
@@ -35,17 +36,22 @@ def get_config(model_name):
         use_absolute_position_embeddings=True,
         use_relative_position_embeddings=True,
         window_size=14,
+        # 定义用于全局注意力的窗口块索引
         window_block_indices=[0, 1, 3, 4, 6, 7, 9, 10],
+        # 定义残差块索引
         residual_block_indices=[2, 5, 8, 11],
         out_features=["stage12"],
     )
 
+    # 创建并返回 VitMatteConfig 实例，包含了 VitDetConfig 和隐藏层大小
     return VitMatteConfig(backbone_config=backbone_config, hidden_size=hidden_size)
+
 
 # 创建需要重命名的键值对列表
 def create_rename_keys(config):
     rename_keys = []
 
+    # 格式化设置关闭以保留对应代码块的缩进
     # stem
     rename_keys.append(("backbone.pos_embed", "backbone.embeddings.position_embeddings"))
     rename_keys.append(("backbone.patch_embed.proj.weight", "backbone.embeddings.projection.weight"))
@@ -53,13 +59,15 @@ def create_rename_keys(config):
 
     return rename_keys
 
-# 重命名键值对
+
+# 重命名字典中的键
 def rename_key(dct, old, new):
     val = dct.pop(old)
     dct[new] = val
 
-# 转换 VitMatte 检查点
+
 def convert_vitmatte_checkpoint(model_name, pytorch_dump_folder_path, push_to_hub):
+    # 获取配置信息
     config = get_config(model_name)
 
     # 加载原始状态字典
@@ -71,59 +79,66 @@ def convert_vitmatte_checkpoint(model_name, pytorch_dump_folder_path, push_to_hu
     }
 
     filename = model_name_to_filename[model_name]
+    # 从 HF Hub 下载模型文件路径
     filepath = hf_hub_download(repo_id="nielsr/vitmatte-checkpoints", filename=filename, repo_type="model")
+    # 使用 torch.load() 加载模型文件到 state_dict 中，使用 CPU 进行映射
     state_dict = torch.load(filepath, map_location="cpu")
 
-    # 重命名键
-    # 遍历 state_dict 的副本中的所有键
+    # 待续：重命名键
+
+
+这段代码中，我们需要继续完成 `convert_vitmatte_checkpoint` 函数内的代码注释。
+    # 遍历 state_dict 的拷贝中的所有键
     for key in state_dict.copy().keys():
         # 弹出当前键对应的值
         val = state_dict.pop(key)
-        # 如果键中包含"backbone.blocks"，则替换为"backbone.encoder.layer"
+        # 如果键中包含 "backbone.blocks"，替换为 "backbone.encoder.layer"
         if "backbone.blocks" in key:
             key = key.replace("backbone.blocks", "backbone.encoder.layer")
-        # 如果键中包含"attn"，则替换为"attention"
+        # 如果键中包含 "attn"，替换为 "attention"
         if "attn" in key:
             key = key.replace("attn", "attention")
-        # 如果键中包含"fusion_blks"，则替换为"fusion_blocks"
+        # 如果键中包含 "fusion_blks"，替换为 "fusion_blocks"
         if "fusion_blks" in key:
             key = key.replace("fusion_blks", "fusion_blocks")
-        # 如果键中包含"bn"，则替换为"batch_norm"
+        # 如果键中包含 "bn"，替换为 "batch_norm"
         if "bn" in key:
             key = key.replace("bn", "batch_norm")
-        # 将更新后的键值对重新加入 state_dict
+        # 将更新后的键和原始值存回 state_dict
         state_dict[key] = val
 
-    # 生成重命名键的列表
+    # 创建重命名后的键列表
     rename_keys = create_rename_keys(config)
-    # 遍历重命名键列表，对 state_dict 进行键的重命名
+    # 遍历重命名列表，逐一更新 state_dict 的键
     for src, dest in rename_keys:
         rename_key(state_dict, src, dest)
 
-    # 创建 VitMatteImageProcessor 实例
+    # 创建模型处理器对象
     processor = VitMatteImageProcessor()
-    # 创建 VitMatteForImageMatting 模型实例
+    # 创建 VitMatte 模型对象
     model = VitMatteForImageMatting(config)
     # 设置模型为评估模式
     model.eval()
 
-    # 加载 state_dict 到模型中
+    # 加载 state_dict 到模型
     model.load_state_dict(state_dict)
 
-    # 从网络加载示例图片和 trimap
+    # 从网络获取示例图像并转换为 RGB 格式
     url = "https://github.com/hustvl/ViTMatte/blob/main/demo/bulb_rgb.png?raw=true"
     image = Image.open(requests.get(url, stream=True).raw).convert("RGB")
+    # 从网络获取示例图像的 trimap
     url = "https://github.com/hustvl/ViTMatte/blob/main/demo/bulb_trimap.png?raw=true"
     trimap = Image.open(requests.get(url, stream=True).raw)
 
-    # 使用 processor 处理图片和 trimap，返回像素值
+    # 使用 processor 处理图像和 trimap，返回像素值张量
     pixel_values = processor(images=image, trimaps=trimap.convert("L"), return_tensors="pt").pixel_values
 
-    # 使用模型预测 alpha 值
+    # 禁用梯度计算
     with torch.no_grad():
+        # 使用模型预测 alpha 通道值
         alphas = model(pixel_values).alphas
 
-    # 根据模型名称设置预期的 alpha 值切片
+    # 根据模型名称选择期望的 alpha 值切片
     if model_name == "vitmatte-small-composition-1k":
         expected_slice = torch.tensor([[0.9977, 0.9987, 0.9990], [0.9980, 0.9998, 0.9998], [0.9983, 0.9998, 0.9998]])
     elif model_name == "vitmatte-base-composition-1k":
@@ -133,27 +148,35 @@ def convert_vitmatte_checkpoint(model_name, pytorch_dump_folder_path, push_to_hu
     elif model_name == "vitmatte-base-distinctions-646":
         expected_slice = torch.tensor([[0.9963, 0.9998, 0.9999], [0.9995, 1.0000, 1.0000], [0.9992, 0.9999, 1.0000]])
 
-    # 断言模型预测的 alpha 值与预期值接近
+    # 断言模型预测的 alpha 值切片与期望的切片在指定的容差范围内相近
     assert torch.allclose(alphas[0, 0, :3, :3], expected_slice, atol=1e-4)
-    # 打印结果
+    # 打印确认消息
     print("Looks ok!")
 
-    # 如果指定了 pytorch_dump_folder_path，则保存模型和 processor
+    # 如果指定了 PyTorch 模型保存文件夹路径
     if pytorch_dump_folder_path is not None:
+        # 打印保存模型和处理器的消息
         print(f"Saving model and processor of {model_name} to {pytorch_dump_folder_path}")
+        # 将模型保存到指定路径
         model.save_pretrained(pytorch_dump_folder_path)
+        # 将处理器保存到指定路径
         processor.save_pretrained(pytorch_dump_folder_path)
 
-    # 如果需要推送到 Hub
+    # 如果指定推送到 Hub
     if push_to_hub:
+        # 打印推送模型和处理器到 Hub 的消息
         print(f"Pushing model and processor for {model_name} to hub")
+        # 推送模型到指定 Hub 仓库
         model.push_to_hub(f"hustvl/{model_name}")
+        # 推送处理器到指定 Hub 仓库
         processor.push_to_hub(f"hustvl/{model_name}")
-# 如果当前脚本被直接执行，则执行以下代码
 if __name__ == "__main__":
-    # 创建参数解析器对象
+    # 如果这个脚本是直接运行的主程序，则执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 添加必需参数
+    # 创建一个参数解析器对象
+
+    # 必需的参数
     parser.add_argument(
         "--model_name",
         default="vitmatte-small-composition-1k",
@@ -164,19 +187,23 @@ if __name__ == "__main__":
             "vitmatte-small-distinctions-646",
             "vitmatte-base-distinctions-646",
         ],
-        help="Name of the VitMatte model you'd like to convert.",
+        help="Name of the VitMatte model you'd like to convert."
     )
-    # 添加参数：输出 PyTorch 模型目录的路径
+    # 添加一个参数选项，用于指定 VitMatte 模型的名称，有预设的几个选择
+
     parser.add_argument(
         "--pytorch_dump_folder_path", default=None, type=str, help="Path to the output PyTorch model directory."
     )
-    # 添加参数：是否将转换后的模型推送到 🤗 hub
+    # 添加一个参数选项，用于指定输出 PyTorch 模型的目录路径
+
     parser.add_argument(
         "--push_to_hub", action="store_true", help="Whether or not to push the converted model to the 🤗 hub."
     )
+    # 添加一个参数选项，表示是否将转换后的模型推送到 🤗 hub
 
     # 解析命令行参数
     args = parser.parse_args()
-    # 调用函数，将 VitMatte 检查点转换为 PyTorch 模型
+
+    # 调用函数 convert_vitmatte_checkpoint，传入命令行参数中指定的模型名称、输出目录路径和是否推送到 hub 的选项
     convert_vitmatte_checkpoint(args.model_name, args.pytorch_dump_folder_path, args.push_to_hub)
 ```

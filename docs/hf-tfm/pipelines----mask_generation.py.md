@@ -1,128 +1,134 @@
-# `.\transformers\pipelines\mask_generation.py`
+# `.\pipelines\mask_generation.py`
 
-```py
-# 从 collections 模块中导入 defaultdict 类
-from collections import defaultdict
-# 从 typing 模块中导入 Optional 类型提示
-from typing import Optional
+```
+from collections import defaultdict  # 导入 defaultdict 类，用于创建默认值为列表的字典
+from typing import Optional  # 导入 Optional 类型，表示某些参数可选
 
-# 从上一级目录中的 image_utils 模块导入 load_image 函数
-from ..image_utils import load_image
-# 从上一级目录中的 utils 模块导入 add_end_docstrings, is_torch_available, logging, requires_backends 函数
-from ..utils import (
-    add_end_docstrings,
-    is_torch_available,
-    logging,
-    requires_backends,
+from ..image_utils import load_image  # 导入 load_image 函数，用于加载图像
+from ..utils import (  # 导入多个工具函数和类
+    add_end_docstrings,  # 添加文档结尾的装饰器
+    is_torch_available,  # 检查是否可用 Torch 库
+    logging,  # 记录日志相关功能
+    requires_backends,  # 检查所需后端
 )
-# 从 .base 模块中导入 PIPELINE_INIT_ARGS, ChunkPipeline 类
-from .base import PIPELINE_INIT_ARGS, ChunkPipeline
+from .base import ChunkPipeline, build_pipeline_init_args  # 导入 ChunkPipeline 类和初始化参数构建函数
 
-# 检查是否安装了 PyTorch
-if is_torch_available():
-    # 导入 torch 模块
-    import torch
+if is_torch_available():  # 如果 Torch 库可用
+    import torch  # 导入 Torch 库
 
-    # 从 ..models.auto.modeling_auto 模块中导入 MODEL_FOR_MASK_GENERATION_MAPPING_NAMES 常量
+    from ..models.auto.modeling_auto import MODEL_FOR_MASK_GENERATION_MAPPING_NAMES  # 导入自动掩模生成模型映射名称
 
-# 获取 logger 实例
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 使用装饰器添加文档字符串描述，继承 ChunkPipeline
-@add_end_docstrings(PIPELINE_INIT_ARGS)
-class MaskGenerationPipeline(ChunkPipeline):
+
+@add_end_docstrings(  # 使用装饰器添加文档结尾
+    build_pipeline_init_args(has_image_processor=True),  # 使用构建管道初始化参数函数，指定有图像处理器
+    r"""
+        points_per_batch (*optional*, int, default to 64):
+            设置模型同时运行的点数。数字越高可能速度更快但使用更多 GPU 内存。
+        output_bboxes_mask (`bool`, *optional*, default to `False`):
+            是否输出边界框预测。
+        output_rle_masks (`bool`, *optional*, default to `False`):
+            是否以 RLE 格式输出掩码。""",
+)
+class MaskGenerationPipeline(ChunkPipeline):  # 定义掩模生成管道类，继承自 ChunkPipeline
     """
-    Automatic mask generation for images using `SamForMaskGeneration`. This pipeline predicts binary masks for an
-    image, given an image. It is a `ChunkPipeline` because you can seperate the points in a mini-batch in order to
-    avoid OOM issues. Use the `points_per_batch` argument to control the number of points that will be processed at the
-    same time. Default is `64`.
+    自动为图像生成掩模，使用 `SamForMaskGeneration` 模型。该管道预测给定图像的二进制掩模。它是一个 `ChunkPipeline`，
+    因为可以将小批量中的点分开处理，以避免内存不足问题。使用 `points_per_batch` 参数控制同时处理的点数，默认为 `64`。
 
-    The pipeline works in 3 steps:
-        1. `preprocess`: A grid of 1024 points evenly separated is generated along with bounding boxes and point
-           labels.
-            For more details on how the points and bounding boxes are created, check the `_generate_crop_boxes`
-            function. The image is also preprocessed using the `image_processor`. This function `yields` a minibatch of
-            `points_per_batch`.
+    该管道工作分为三个步骤：
+        1. `preprocess`: 生成一个均匀分布的 1024 个点网格，以及边界框和点标签。
+            更多关于如何创建点和边界框的细节，请查看 `_generate_crop_boxes` 函数。同时使用 `image_processor` 预处理图像。
+            该函数生成一个 `points_per_batch` 的小批量。
 
-        2. `forward`: feeds the outputs of `preprocess` to the model. The image embedding is computed only once.
-            Calls both `self.model.get_image_embeddings` and makes sure that the gradients are not computed, and the
-            tensors and models are on the same device.
+        2. `forward`: 将 `preprocess` 的输出馈送到模型。仅计算图像嵌入一次。
+            调用 `self.model.get_image_embeddings`，确保不计算梯度，并且张量和模型在同一设备上。
 
-        3. `postprocess`: The most important part of the automatic mask generation happens here. Three steps
-            are induced:
-                - image_processor.postprocess_masks (run on each minibatch loop): takes in the raw output masks,
-                  resizes them according
-                to the image size, and transforms there to binary masks.
-                - image_processor.filter_masks (on each minibatch loop): uses both `pred_iou_thresh` and
-                  `stability_scores`. Also
-                applies a variety of filters based on non maximum suppression to remove bad masks.
-                - image_processor.postprocess_masks_for_amg applies the NSM on the mask to only keep relevant ones.
+        3. `postprocess`: 自动掩模生成的最重要部分发生在这里。包括三个步骤：
+            - image_processor.postprocess_masks（在每个小批量循环中运行）：处理原始输出掩模，根据图像大小调整它们的大小，并将其转换为二进制掩模。
+            - image_processor.filter_masks（在每个小批量循环中运行）：使用 `pred_iou_thresh` 和 `stability_scores`，以及基于非最大抑制的各种过滤器，去除不良掩模。
+            - image_processor.postprocess_masks_for_amg：对掩模应用 NSM，仅保留相关掩模。
+
+    示例：
+
+    ```python
+    >>> from transformers import pipeline
     ```
-    # 该函数是一个 Segmentation 管道类的初始化函数
-    def __init__(self, **kwargs):
-        # 调用父类的初始化函数
-        super().__init__(**kwargs)
-        # 检查是否支持 vision 和 torch 后端
-        requires_backends(self, "vision")
-        requires_backends(self, "torch")
-        # 如果不是 PyTorch 框架，则抛出错误
-        if self.framework != "pt":
-            raise ValueError(f"The {self.__class__} is only available in PyTorch.")
-        # 检查模型类型是否符合 mask-generation 任务
-        self.check_model_type(MODEL_FOR_MASK_GENERATION_MAPPING_NAMES)
-    # 对传入的参数进行过滤和预处理，分成预处理参数、后处理参数和前向传递参数
-    def _sanitize_parameters(self, **kwargs):
-        # 定义预处理参数字典和后处理参数字典
-        preprocess_kwargs = {}
-        postprocess_kwargs = {}
-        forward_params = {}
-        # 预处理参数
-        # 如果传入参数中有"points_per_batch"，则将其存入preprocess_kwargs中
-        if "points_per_batch" in kwargs:
-            preprocess_kwargs["points_per_batch"] = kwargs["points_per_batch"]
-        # 如果传入参数中有"points_per_crop"，则将其存入preprocess_kwargs中
-        if "points_per_crop" in kwargs:
-            preprocess_kwargs["points_per_crop"] = kwargs["points_per_crop"]
-        # 如果传入参数中有"crops_n_layers"，则将其存入preprocess_kwargs中
-        if "crops_n_layers" in kwargs:
-            preprocess_kwargs["crops_n_layers"] = kwargs["crops_n_layers"]
-        # 如果传入参数中有"crop_overlap_ratio"，则将其存入preprocess_kwargs中
-        if "crop_overlap_ratio" in kwargs:
-            preprocess_kwargs["crop_overlap_ratio"] = kwargs["crop_overlap_ratio"]
-        # 如果传入参数中有"crop_n_points_downscale_factor"，则将其存入preprocess_kwargs中
-        if "crop_n_points_downscale_factor" in kwargs:
-            preprocess_kwargs["crop_n_points_downscale_factor"] = kwargs["crop_n_points_downscale_factor"]
-        # 如果传入参数中有"timeout"，则将其存入preprocess_kwargs中
-        if "timeout" in kwargs:
-            preprocess_kwargs["timeout"] = kwargs["timeout"]
-        # 后处理参数
-        # 如果传入参数中有"pred_iou_thresh"，则将其存入forward_params中
-        if "pred_iou_thresh" in kwargs:
-            forward_params["pred_iou_thresh"] = kwargs["pred_iou_thresh"]
-        # 如果传入参数中有"stability_score_offset"，则将其存入forward_params中
-        if "stability_score_offset" in kwargs:
-            forward_params["stability_score_offset"] = kwargs["stability_score_offset"]
-        # 如果传入参数中有"mask_threshold"，则将其存入forward_params中
-        if "mask_threshold" in kwargs:
-            forward_params["mask_threshold"] = kwargs["mask_threshold"]
-        # 如果传入参数中有"stability_score_thresh"，则将其存入forward_params中
-        if "stability_score_thresh" in kwargs:
-            forward_params["stability_score_thresh"] = kwargs["stability_score_thresh"]
-        # 如果传入参数中有"crops_nms_thresh"，则将其存入postprocess_kwargs中
-        if "crops_nms_thresh" in kwargs:
-            postprocess_kwargs["crops_nms_thresh"] = kwargs["crops_nms_thresh"]
-        # 如果传入参数中有"output_rle_mask"，则将其存入postprocess_kwargs中
-        if "output_rle_mask" in kwargs:
-            postprocess_kwargs["output_rle_mask"] = kwargs["output_rle_mask"]
-        # 如果传入参数中有"output_bboxes_mask"，则将其存入postprocess_kwargs中
-        if "output_bboxes_mask" in kwargs:
-            postprocess_kwargs["output_bboxes_mask"] = kwargs["output_bboxes_mask"]
-        # 返回处理后的预处理参数、前向传递参数和后处理参数
-        return preprocess_kwargs, forward_params, postprocess_kwargs
-    # 定义 __call__ 方法，用于生成二进制分割掩码
+    >>> generator = pipeline(model="facebook/sam-vit-base", task="mask-generation")
+    # 使用预定义的pipeline函数创建一个生成器，用于执行模型推断任务，指定模型和任务类型为“mask-generation”。
+    
+    >>> outputs = generator(
+    ...     "http://images.cocodataset.org/val2017/000000039769.jpg",
+    ... )
+    # 使用生成器执行推断任务，输入为指定的图像URL。该步骤将返回推断结果。
+    
+    >>> outputs = generator(
+    ...     "https://huggingface.co/datasets/Narsil/image_dummy/raw/main/parrots.png", points_per_batch=128
+    ... )
+    # 再次使用生成器执行推断任务，输入为另一个图像URL，并设置额外的参数points_per_batch为128。该步骤将返回推断结果。
+    
+    """
+    Learn more about the basics of using a pipeline in the [pipeline tutorial](../pipeline_tutorial)
+    
+    This segmentation pipeline can currently be loaded from [`pipeline`] using the following task identifier:
+    `"mask-generation"`.
+    
+    See the list of available models on [huggingface.co/models](https://huggingface.co/models?filter=mask-generation).
+    """
+    # 提供了有关使用管道的基础信息，并指出此分割管道可使用task标识符“mask-generation”从[`pipeline`]加载。
+    
+    class YourClassName:
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            requires_backends(self, "vision")
+            requires_backends(self, "torch")
+    
+            if self.framework != "pt":
+                raise ValueError(f"The {self.__class__} is only available in PyTorch.")
+    
+            self.check_model_type(MODEL_FOR_MASK_GENERATION_MAPPING_NAMES)
+        # 初始化类的构造函数，进行基本的设置和检查，确保所需的后端库和框架为PyTorch。
+    
+        def _sanitize_parameters(self, **kwargs):
+            preprocess_kwargs = {}
+            postprocess_kwargs = {}
+            forward_params = {}
+    
+            # 预处理参数
+            if "points_per_batch" in kwargs:
+                preprocess_kwargs["points_per_batch"] = kwargs["points_per_batch"]
+            if "points_per_crop" in kwargs:
+                preprocess_kwargs["points_per_crop"] = kwargs["points_per_crop"]
+            if "crops_n_layers" in kwargs:
+                preprocess_kwargs["crops_n_layers"] = kwargs["crops_n_layers"]
+            if "crop_overlap_ratio" in kwargs:
+                preprocess_kwargs["crop_overlap_ratio"] = kwargs["crop_overlap_ratio"]
+            if "crop_n_points_downscale_factor" in kwargs:
+                preprocess_kwargs["crop_n_points_downscale_factor"] = kwargs["crop_n_points_downscale_factor"]
+            if "timeout" in kwargs:
+                preprocess_kwargs["timeout"] = kwargs["timeout"]
+    
+            # 后处理参数
+            if "pred_iou_thresh" in kwargs:
+                forward_params["pred_iou_thresh"] = kwargs["pred_iou_thresh"]
+            if "stability_score_offset" in kwargs:
+                forward_params["stability_score_offset"] = kwargs["stability_score_offset"]
+            if "mask_threshold" in kwargs:
+                forward_params["mask_threshold"] = kwargs["mask_threshold"]
+            if "stability_score_thresh" in kwargs:
+                forward_params["stability_score_thresh"] = kwargs["stability_score_thresh"]
+            if "crops_nms_thresh" in kwargs:
+                postprocess_kwargs["crops_nms_thresh"] = kwargs["crops_nms_thresh"]
+            if "output_rle_mask" in kwargs:
+                postprocess_kwargs["output_rle_mask"] = kwargs["output_rle_mask"]
+            if "output_bboxes_mask" in kwargs:
+                postprocess_kwargs["output_bboxes_mask"] = kwargs["output_bboxes_mask"]
+    
+            return preprocess_kwargs, forward_params, postprocess_kwargs
+        # 对传入的参数进行清理和预处理，将预处理、前向和后处理的参数分别整理到三个字典中。
     def __call__(self, image, *args, num_workers=None, batch_size=None, **kwargs):
         """
-        生成二进制分割掩码
+        通过调用实例对象，生成二进制分割掩码
 
         Args:
             inputs (`np.ndarray` or `bytes` or `str` or `dict`):
@@ -130,116 +136,107 @@ class MaskGenerationPipeline(ChunkPipeline):
             mask_threshold (`float`, *optional*, defaults to 0.0):
                 将预测的掩码转换为二进制值时使用的阈值。
             pred_iou_thresh (`float`, *optional*, defaults to 0.88):
-                应用于模型预测的掩码质量的过滤阈值，范围为 `[0,1]`。
+                应用于模型预测掩码质量的过滤阈值，取值范围为 `[0,1]`。
             stability_score_thresh (`float`, *optional*, defaults to 0.95):
-                在模型的掩码预测二值化截断值变化下，使用掩码稳定性的过滤阈值，范围为 `[0,1]`。
+                应用于模型掩码预测稳定性的过滤阈值，取值范围为 `[0,1]`。
             stability_score_offset (`int`, *optional*, defaults to 1):
-                计算稳定性分数时截断值的偏移量。
+                在计算稳定性分数时，用于偏移截断的量。
             crops_nms_thresh (`float`, *optional*, defaults to 0.7):
-                用于非最大抑制的盒子 IoU 截断，用于过滤重复的掩码。
+                由非极大值抑制使用的框 IoU 截断，用于过滤重复的掩码。
             crops_n_layers (`int`, *optional*, defaults to 0):
-                如果 `crops_n_layers>0`，则将再次在图像的剪裁上运行掩码预测。 设置要运行的层数，其中每个层都有 2**i_layer 个图像剪裁。
+                如果 `crops_n_layers>0`，则将再次对图像的裁剪运行掩码预测。设置运行的层数，每层有 2**i_layer 个图像裁剪。
             crop_overlap_ratio (`float`, *optional*, defaults to `512 / 1500`):
-                设置剪裁之间的重叠程度。在第一层剪裁中，剪裁将以图像长度的该分数重叠。具有更多剪裁的后续层会缩小此重叠。
+                设置裁剪重叠的程度。在第一层裁剪中，裁剪将以图像长度的这一分数重叠。随后的层级通过更多的裁剪减少此重叠。
             crop_n_points_downscale_factor (`int`, *optional*, defaults to `1`):
-                在第 n 层采样的每边点的数量按 crop_n_points_downscale_factor**n 缩小。
+                在第 n 层采样的每边点数按 crop_n_points_downscale_factor**n 缩小。
             timeout (`float`, *optional*, defaults to None):
-                从网络获取图像的最长等待时间（以秒为单位）。如果为 None，则不设置超时，并且调用可能会永远阻塞。
+                从网页获取图像的最大等待时间（秒）。如果为 None，则不设置超时，调用可能会一直阻塞。
 
         Return:
-            `Dict`: 一个包含以下键的字典：
-                - **mask** (`PIL.Image`) -- 作为原始图像的 PIL 图像 `(width, height)` 形状的检测到对象的二进制掩码。如果未找到对象，则返回填充了零的掩码。
-                - **score** (*optional* `float`) -- 可选地，当模型能够估计标签和掩码描述的 "对象" 的置信度时。
+            `Dict`: 包含以下键的字典：
+                - **mask** (`PIL.Image`) -- 检测到对象的二进制掩码，作为原始图像 `(width, height)` 的 PIL 图像。如果未检测到对象，则返回一个填充零的掩码。
+                - **score** (*optional* `float`) -- 可选，当模型能够估计标签和掩码描述的 "对象" 的置信度时。
+
         """
-        # 调用父类的 __call__ 方法，并传递参数
         return super().__call__(image, *args, num_workers=num_workers, batch_size=batch_size, **kwargs)
-    # 预处理图像并生成用于模型推理的数据
     def preprocess(
         self,
         image,
-        points_per_batch=64,
-        crops_n_layers: int = 0,
-        crop_overlap_ratio: float = 512 / 1500,
-        points_per_crop: Optional[int] = 32,
-        crop_n_points_downscale_factor: Optional[int] = 1,
-        timeout: Optional[float] = None,
+        points_per_batch=64,  # 每批处理的点数，默认为64
+        crops_n_layers: int = 0,  # 裁剪层数，默认为0
+        crop_overlap_ratio: float = 512 / 1500,  # 裁剪重叠比例，默认为512/1500
+        points_per_crop: Optional[int] = 32,  # 每个裁剪的点数，默认为32
+        crop_n_points_downscale_factor: Optional[int] = 1,  # 裁剪点数缩放因子，默认为1
+        timeout: Optional[float] = None,  # 超时时间，默认为None
     ):
-        # 加载输入图像
-        image = load_image(image, timeout=timeout)
-        # 获取目标图像尺寸
-        target_size = self.image_processor.size["longest_edge"]
-        # 生成裁剪框、网格点、裁剪后图像和输入标签
+        image = load_image(image, timeout=timeout)  # 调用load_image函数加载图像，可以设置超时时间
+        target_size = self.image_processor.size["longest_edge"]  # 获取图像处理器中最长边的尺寸作为目标尺寸
         crop_boxes, grid_points, cropped_images, input_labels = self.image_processor.generate_crop_boxes(
             image, target_size, crops_n_layers, crop_overlap_ratio, points_per_crop, crop_n_points_downscale_factor
-        )
-        # 处理输入图像并返回张量格式
-        model_inputs = self.image_processor(images=cropped_images, return_tensors="pt")
-        
-        # 在设备上执行推理
-        with self.device_placement():
-            if self.framework == "pt":
-                inference_context = self.get_inference_context()
-                with inference_context():
-                    model_inputs = self._ensure_tensor_on_device(model_inputs, device=self.device)
-                    image_embeddings = self.model.get_image_embeddings(model_inputs.pop("pixel_values"))
-                    model_inputs["image_embeddings"] = image_embeddings
-    
-        # 计算网格点的数量
-        n_points = grid_points.shape[1]
-        # 如果 points_per_batch 为 None，则返回所有点
-        points_per_batch = points_per_batch if points_per_batch is not None else n_points
-    
-        # 如果 points_per_batch 小于等于 0，则抛出错误
-        if points_per_batch <= 0:
+        )  # 使用图像处理器生成裁剪框、网格点、裁剪后的图像和输入标签
+
+        model_inputs = self.image_processor(images=cropped_images, return_tensors="pt")  # 使用图像处理器处理裁剪后的图像，返回PyTorch张量格式的模型输入
+
+        with self.device_placement():  # 使用设备分配上下文管理器
+            if self.framework == "pt":  # 如果框架是PyTorch
+                inference_context = self.get_inference_context()  # 获取推断上下文
+                with inference_context():  # 使用推断上下文管理器
+                    model_inputs = self._ensure_tensor_on_device(model_inputs, device=self.device)  # 确保模型输入张量位于指定设备上
+                    image_embeddings = self.model.get_image_embeddings(model_inputs.pop("pixel_values"))  # 获取图像嵌入向量
+                    model_inputs["image_embeddings"] = image_embeddings  # 将图像嵌入向量添加到模型输入中
+
+        n_points = grid_points.shape[1]  # 获取网格点的数量
+        points_per_batch = points_per_batch if points_per_batch is not None else n_points  # 如果指定了每批处理的点数则使用，否则使用网格点的数量
+
+        if points_per_batch <= 0:  # 如果每批处理的点数小于等于0
             raise ValueError(
                 "Cannot have points_per_batch<=0. Must be >=1 to returned batched outputs. "
                 "To return all points at once, set points_per_batch to None"
-            )
-    
-        # 分批生成输出
-        for i in range(0, n_points, points_per_batch):
-            batched_points = grid_points[:, i : i + points_per_batch, :, :]
-            labels = input_labels[:, i : i + points_per_batch]
-            is_last = i == n_points - points_per_batch
+            )  # 抛出数值错误异常，要求每批处理的点数必须大于等于1，或者设置为None以一次返回所有点
+
+        for i in range(0, n_points, points_per_batch):  # 遍历网格点，每次处理points_per_batch个点
+            batched_points = grid_points[:, i : i + points_per_batch, :, :]  # 分批次获取网格点
+            labels = input_labels[:, i : i + points_per_batch]  # 获取对应的输入标签
+            is_last = i == n_points - points_per_batch  # 判断是否是最后一批
+
             yield {
-                "input_points": batched_points,
-                "input_labels": labels,
-                "input_boxes": crop_boxes,
-                "is_last": is_last,
-                **model_inputs,
+                "input_points": batched_points,  # 返回批次的输入点
+                "input_labels": labels,  # 返回对应的输入标签
+                "input_boxes": crop_boxes,  # 返回裁剪框
+                "is_last": is_last,  # 返回是否是最后一批
+                **model_inputs,  # 返回模型输入的其它内容
             }
-    
-    # 前向传播函数
+
     def _forward(
         self,
         model_inputs,
-        pred_iou_thresh=0.88,
-        stability_score_thresh=0.95,
-        mask_threshold=0,
-        stability_score_offset=1,
+        pred_iou_thresh=0.88,  # 预测IOU阈值，默认为0.88
+        stability_score_thresh=0.95,  # 稳定性分数阈值，默认为0.95
+        mask_threshold=0,  # 掩码阈值，默认为0
+        stability_score_offset=1,  # 稳定性分数偏移量，默认为1
     ):
-    ):
-        # 从模型输入中弹出输入框信息
+        # 从模型输入中弹出"input_boxes"，并保存在input_boxes变量中
         input_boxes = model_inputs.pop("input_boxes")
-        # 从模型输入中弹出是否为最后一个批次信息
+        # 从模型输入中弹出"is_last"，并保存在is_last变量中
         is_last = model_inputs.pop("is_last")
-        # 从模型输入中弹出原始尺寸信息，并转换为列表
+        # 从模型输入中弹出"original_sizes"，并将其转换为列表保存在original_sizes变量中
         original_sizes = model_inputs.pop("original_sizes").tolist()
-        # 从模型输入中弹出调整后输入尺寸信息，并转换为列表
+        # 从模型输入中弹出"reshaped_input_sizes"，并将其转换为列表保存在reshaped_input_sizes变量中
         reshaped_input_sizes = model_inputs.pop("reshaped_input_sizes").tolist()
 
-        # 使用模型对模型的输入进行预测
+        # 使用模型进行推理，将模型输入传递给模型并获取模型输出
         model_outputs = self.model(**model_inputs)
 
-        # 预处理过程在此处进行，以避免将所有掩模的CPU GPU复制
+        # 在这里进行后处理，以避免复制所有掩码的CPU GPU
+        # 从模型输出中获取"pred_masks"，即低分辨率掩码
         low_resolution_masks = model_outputs["pred_masks"]
-        # 对低分辨率掩模进行后处理，得到掩模，同时应用指定的阈值并进行二值化
+        # 调用图像处理器的方法对掩码进行后处理，得到更高分辨率的掩码
         masks = self.image_processor.post_process_masks(
             low_resolution_masks, original_sizes, reshaped_input_sizes, mask_threshold, binarize=False
         )
-        # 获取模型输出的IoU分数
+        # 从模型输出中获取"iou_scores"，即IoU分数
         iou_scores = model_outputs["iou_scores"]
-        # 筛选掩模，IoU分数和边界框，应用指定的阈值
+        # 使用图像处理器的方法对掩码进行筛选，得到最终的掩码、IoU分数和边界框
         masks, iou_scores, boxes = self.image_processor.filter_masks(
             masks[0],
             iou_scores[0],
@@ -250,7 +247,7 @@ class MaskGenerationPipeline(ChunkPipeline):
             mask_threshold,
             stability_score_offset,
         )
-        # 返回结果字典
+        # 返回处理后的结果，包括掩码、is_last标志、边界框和IoU分数
         return {
             "masks": masks,
             "is_last": is_last,
@@ -258,7 +255,7 @@ class MaskGenerationPipeline(ChunkPipeline):
             "iou_scores": iou_scores,
         }
 
-    # 后处理方法
+    # 定义后处理方法，用于整合多个模型输出并生成最终的掩码和分数
     def postprocess(
         self,
         model_outputs,
@@ -266,45 +263,40 @@ class MaskGenerationPipeline(ChunkPipeline):
         output_bboxes_mask=False,
         crops_nms_thresh=0.7,
     ):
-        # 初始化存储所有分数、所有掩模和所有边界框的列表
+        # 存储所有模型输出的IoU分数、掩码和边界框
         all_scores = []
         all_masks = []
         all_boxes = []
-        # 遍历模型输出
         for model_output in model_outputs:
-            # 弹出IoU分数，并添加到分数列表中
+            # 弹出模型输出中的"IoU_scores"并添加到all_scores列表中
             all_scores.append(model_output.pop("iou_scores"))
-            # 扩展掩模列表
+            # 扩展模型输出中的"masks"并添加到all_masks列表中
             all_masks.extend(model_output.pop("masks"))
-            # 弹出边界框信息，并添加到边界框列表中
+            # 弹出模型输出中的"boxes"并添加到all_boxes列表中
             all_boxes.append(model_output.pop("boxes"))
 
-        # 对所有IoU分数和边界框进行连接
+        # 使用PyTorch的方法连接所有IoU分数和边界框
         all_scores = torch.cat(all_scores)
         all_boxes = torch.cat(all_boxes)
-        # 对所有掩模、所有分数和所有边界框进行后处理，生成掩模，IoU分数，RLE掩模和边界框
+        # 调用图像处理器的方法进行掩码生成的后处理，得到输出掩码、IoU分数、RLE掩码和边界框
         output_masks, iou_scores, rle_mask, bounding_boxes = self.image_processor.post_process_for_mask_generation(
             all_masks, all_scores, all_boxes, crops_nms_thresh
         )
 
-        # 初始化额外信息字典
+        # 创建默认字典，用于存储额外的输出结果
         extra = defaultdict(list)
-        # 遍历模型输出中的每个输出
         for output in model_outputs:
-            # 遍历每个输出项，添加到额外信息字典中
             for k, v in output.items():
                 extra[k].append(v)
 
-        # 初始化可选项字典
+        # 创建可选项字典，根据需要添加RLE掩码或边界框
         optional = {}
-        # 如果需要输出RLE掩模，则将其添加到可选项字典中
         if output_rle_mask:
             optional["rle_mask"] = rle_mask
 
-        # 如果需要输出边界框掩模，则将其添加到可选项字典中
         if output_bboxes_mask:
             optional["bounding_boxes"] = bounding_boxes
 
-        # 返回结果字典，包括掩模，分数，可选项和额外信息
+        # 返回最终处理结果，包括输出掩码、IoU分数以及额外的输出结果
         return {"masks": output_masks, "scores": iou_scores, **optional, **extra}
 ```

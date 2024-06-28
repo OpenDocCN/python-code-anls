@@ -1,67 +1,62 @@
 # `.\models\deprecated\trajectory_transformer\__init__.py`
 
-```py
-# 版权声明和许可协议信息
-
-# 导入类型检查模块
+```
+# 引入类型检查工具
 from typing import TYPE_CHECKING
-
-# 导入自定义的工具模块和异常类
+# 引入自定义的异常：依赖未安装异常和懒加载模块
 from ....utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 定义模块导入结构
+# 定义模块的导入结构
 _import_structure = {
     "configuration_trajectory_transformer": [
-        "TRAJECTORY_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP",
-        "TrajectoryTransformerConfig",
+        "TRAJECTORY_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP",  # 预训练配置文件映射
+        "TrajectoryTransformerConfig",  # 轨迹变换器配置类
     ],
 }
 
-# 检查是否存在 torch 库
+# 检查是否存在 Torch 库，如果不存在则引发异常
 try:
     if not is_torch_available():
-        # 如果不存在，抛出自定义的依赖未安装异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
-# 如果存在，执行以下代码块
 else:
-    # 更新导入结构字典，增加模型相关模块
+    # 如果 Torch 可用，则添加以下模块到导入结构中
     _import_structure["modeling_trajectory_transformer"] = [
-        "TRAJECTORY_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",
-        "TrajectoryTransformerModel",
-        "TrajectoryTransformerPreTrainedModel",
-        "load_tf_weights_in_trajectory_transformer",
+        "TRAJECTORY_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST",  # 预训练模型存档列表
+        "TrajectoryTransformerModel",  # 轨迹变换器模型类
+        "TrajectoryTransformerPreTrainedModel",  # 轨迹变换器预训练模型类
+        "load_tf_weights_in_trajectory_transformer",  # 在轨迹变换器中加载 TensorFlow 权重
     ]
 
-# 如果处于类型检查模式
+
+# 如果正在进行类型检查
 if TYPE_CHECKING:
-    # 导入配置和模型相关的类和方法
+    # 从配置模块中导入所需的符号
     from .configuration_trajectory_transformer import (
-        TRAJECTORY_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP,
-        TrajectoryTransformerConfig,
+        TRAJECTORY_TRANSFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP,  # 预训练配置文件映射
+        TrajectoryTransformerConfig,  # 轨迹变换器配置类
     )
 
-    # 再次检查是否存在 torch 库
+    # 再次检查 Torch 库的可用性
     try:
         if not is_torch_available():
-            # 如果不存在，抛出自定义的依赖未安装异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果存在，导入模型相关的类和方法
     else:
+        # 从建模模块中导入所需的符号
         from .modeling_trajectory_transformer import (
-            TRAJECTORY_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST,
-            TrajectoryTransformerModel,
-            TrajectoryTransformerPreTrainedModel,
-            load_tf_weights_in_trajectory_transformer,
+            TRAJECTORY_TRANSFORMER_PRETRAINED_MODEL_ARCHIVE_LIST,  # 预训练模型存档列表
+            TrajectoryTransformerModel,  # 轨迹变换器模型类
+            TrajectoryTransformerPreTrainedModel,  # 轨迹变换器预训练模型类
+            load_tf_weights_in_trajectory_transformer,  # 在轨迹变换器中加载 TensorFlow 权重
         )
 
-# 如果不处于类型检查模式
+# 如果不是在类型检查模式下
 else:
-    # 导入 sys 模块
     import sys
-    # 将当前模块设置为惰性模块
+
+    # 将当前模块设置为懒加载模块，以便在需要时才加载其内容
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

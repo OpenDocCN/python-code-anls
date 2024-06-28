@@ -1,190 +1,129 @@
-# `.\transformers\models\wav2vec2_bert\convert_wav2vec2_seamless_checkpoint.py`
+# `.\models\wav2vec2_bert\convert_wav2vec2_seamless_checkpoint.py`
 
-```py
-# 导入必要的库和模块
-import argparse
-import torch
-import torchaudio
-from fairseq2.data import Collater
-from fairseq2.data.audio import WaveformToFbankConverter
-from fairseq2.nn.padding import get_seqs_and_padding_mask
-from seamless_communication.models.conformer_shaw import load_conformer_shaw_model
-from transformers import SeamlessM4TFeatureExtractor, Wav2Vec2BertConfig, Wav2Vec2BertModel, logging
-
-# 设置日志的输出级别为 info
-logging.set_verbosity_info()
-logger = logging.get_logger(__name__)
-
-# 定义一个字典，用于映射源模型和目标模型的权重名称
-wav2vec_convert_list = [
-    ("encoder_frontend.model_dim_proj", "feature_projection.projection"),
-    ("encoder_frontend.post_extract_layer_norm", "feature_projection.layer_norm"),
-    ("encoder_frontend.pos_encoder.conv", "encoder.pos_conv_embed.conv"),
-    ("encoder.inner.layers", "encoder.layers"),
-    ("encoder.inner_layer_norm", "encoder.layer_norm"),
-    ("encoder.adaptor_layers", "adapter.layers"),
-    ("inner_proj", "intermediate_dense"),
-    ("self_attn.output_proj", "self_attn.linear_out"),
-    ("output_proj", "output_dense"),
-    ("self_attn.k_proj", "self_attn.linear_k"),
-    ("self_attn.v_proj", "self_attn.linear_v"),
-    ("self_attn.q_proj", "self_attn.linear_q"),
-    ("self_attn.sdpa.u_bias", "self_attn.pos_bias_u"),
-    ("self_attn.sdpa.v_bias", "self_attn.pos_bias_v"),
-    ("self_attn.sdpa.rel_k_embed", "self_attn.distance_embedding"),
-    ("self_attn.sdpa.r_proj", "self_attn.linear_pos"),
-    ("conv.pointwise_conv1", "conv_module.pointwise_conv1"),
-    ("conv.pointwise_conv2", "conv_module.pointwise_conv2"),
-    ("conv.depthwise_conv", "conv_module.depthwise_conv"),
-    ("conv.layer_norm", "conv_module.depthwise_layer_norm"),
-    ("conv_layer_norm", "conv_module.layer_norm"),
-    ("encoder.proj1", "intermediate_ffn.intermediate_dense"),
-    ("encoder.proj2", "intermediate_ffn.output_dense"),
-    ("encoder.layer_norm", "inner_layer_norm"),
-    ("masker.temporal_mask_embed", "masked_spec_embed"),
-]
-
-# 定义一个集合，用于存储需要删除的键
-keys_to_remove = {
-    "quantizer.entry_proj",
-    "final_proj",
-    "final_target_proj",
-    "quantizer.entries",
-    "quantizer.num_updates",
-}
-
-# 定义一个函数，用于计算模型的参数数量
+```
+# 定义函数用于计算模型参数总数，不包括特定键名的参数
 def param_count(model):
     return sum(p[1].numel() for p in model.named_parameters() if "final_proj" not in p[0])
 
-# 定义一个函数，用于转换模型权重
+
+# 定义私有函数，用于转换模型参数
 def _convert_model(
     original_model,
     hf_model,
     convert_list,
 ):
+    # 获取原始模型的状态字典
     state_dict = original_model.state_dict()
-
-
-这段代码的主要功能是转换一个原始的 Wav2Vec2Bert 模型的权重到 Hugging Face 的 Wav2Vec2BertModel 模型。具体来说:
-
-1. 导入必要的库和模块。
-2. 设置日志的输出级别为 `info`。
-3. 定义一个字典 `wav2vec_convert_list`，用于映射源模型和目标模型的权重名称。
-4. 定义一个集合 `keys_to_remove`，用于存储需要删除的键。
-5. 定义一个函数 `param_count`，用于计算模型的参数数量。
-6. 定义一个函数 `_convert_model`，用于转换模型权重。
-
-这个函数将在后续的代码中被调用。
-    # 遍历状态字典的键值对列表
+    # 遍历状态字典中的键值对列表
     for k, v in list(state_dict.items()):
-        # 复制当前键，准备修改
+        # 复制键，准备进行重命名
         new_key = k
-        # 遍历要转换的层名称对列表
+        # 遍历转换列表，将符合条件的旧层名替换为新层名
         for old_layer_name, new_layer_name in convert_list:
-            # 如果当前键包含旧层名称，则用新层名称替换
             if old_layer_name in new_key:
                 new_key = new_key.replace(old_layer_name, new_layer_name)
-    
-        # 对 ".layer_norm" 的特殊处理，如果在新键中且前一个字符是数字，则替换为 "final_layer_norm"
+
+        # 手动处理层归一化的情况
         if ".layer_norm" in new_key and new_key.split(".layer_norm")[0][-1].isnumeric():
             new_key = new_key.replace("layer_norm", "final_layer_norm")
-    
-        # 检查是否应该将当前键添加到新的状态字典中
+
+        # 检查是否需要移除当前键
         add_key = True
-        # 遍历需要移除的键列表
         for key in keys_to_remove:
-            # 如果当前键包含需要移除的键，则将其从状态字典中移除，并设置 add_key 为 False
             if key in new_key:
+                # 如果键中包含需要移除的关键词，则从状态字典中移除该键值对
                 state_dict.pop(k)
                 add_key = False
                 break
-    
-        # 如果 add_key 为 True，则将当前键添加到新的状态字典中
+
+        # 如果不需要移除，则将更新后的键值对添加回状态字典中
         if add_key:
             state_dict[new_key] = state_dict.pop(k)
-    
-    # 计算状态字典中额外的键，即在模型预训练参数中没有的键
+
+    # 计算多余的键（存在于状态字典中但不在预期模型中的）
     extra_keys = set(state_dict.keys()) - set(hf_model.state_dict().keys())
-    # 过滤掉不必要的参数，例如 "num_updates"
+    # 过滤掉不必要的参数（如包含"num_updates"的键）
     extra_keys = set({k for k in extra_keys if "num_updates" not in k})
-    # 计算模型预训练参数中缺失的键
+    # 计算缺失的键（存在于预期模型中但不在状态字典中的）
     missing_keys = set(hf_model.state_dict().keys()) - set(state_dict.keys())
-    
-    # 如果存在额外的键，则抛出 ValueError 异常
+
+    # 如果存在多余的键，则抛出数值错误异常
     if len(extra_keys) != 0:
         raise ValueError(f"extra keys found: {extra_keys}")
-    # 如果存在缺失的键，则抛出 ValueError 异常
+    # 如果存在缺失的键，则抛出数值错误异常
     if len(missing_keys) != 0:
         raise ValueError(f"missing keys: {missing_keys}")
-    
-    # 加载新的状态字典到模型中，严格检查键和形状是否匹配
+
+    # 使用更新后的状态字典加载预训练模型的状态
     hf_model.load_state_dict(state_dict, strict=True)
-    # 计算模型参数的数量
+    # 计算加载后模型的参数数量
     n_params = param_count(hf_model)
-    
-    # 记录模型加载完成，并打印模型参数数量（以百万为单位）
+
+    # 记录模型加载完成并输出参数数量（以百万为单位）
     logger.info(f"model loaded: {round(n_params/1e6,1)}M params")
-    
+
     # 将模型设置为评估模式
     hf_model.eval()
-    # 删除状态字典以释放内存
+    # 删除状态字典，释放内存
     del state_dict
-    
-    # 返回加载完成的模型
+
+    # 返回加载并配置好的模型
     return hf_model
-# 禁用 PyTorch 中的梯度计算
+# 使用 @torch.no_grad() 装饰器，确保在模型推断过程中不进行梯度计算
 @torch.no_grad()
+# 定义函数 convert_wav2vec2_bert_checkpoint，用于将模型权重从 Wav2Vec2 转换到 Transformers 设计
 def convert_wav2vec2_bert_checkpoint(
-    checkpoint_path,  # 检查点路径
-    pytorch_dump_folder_path,  # 输出 PyTorch 模型路径
-    config_path=None,  # 配置文件路径
-    repo_id=None,  # 推送到 HuggingFace 仓库的 ID
+    checkpoint_path,
+    pytorch_dump_folder_path,
+    config_path=None,
+    repo_id=None,
 ):
     """
-    将模型的权重复制/粘贴/调整到 transformers 设计中。
+    Copy/paste/tweak model's weights to transformers design.
     """
-    # 如果指定了配置文件路径，则读取配置并设置激活函数为 swish
+    # 如果提供了 config_path，则从预训练的配置文件加载 Wav2Vec2BertConfig，并设置隐藏层激活函数为 "swish"
     if config_path is not None:
         config = Wav2Vec2BertConfig.from_pretrained(config_path, hidden_act="swish")
-    # 否则使用默认配置，不应用频谱扩增
     else:
+        # 否则创建一个新的 Wav2Vec2BertConfig 对象，关闭 spec-augment
         config = Wav2Vec2BertConfig(apply_spec_augment=False)
 
-    # 创建 Wav2Vec2BertModel 实例
+    # 根据配置创建 Wav2Vec2BertModel 模型对象
     hf_wav2vec = Wav2Vec2BertModel(config)
 
-    # 加载检查点模型，设置数据类型为 float32
+    # 加载 Conformer 模型，将其类型转换为 torch.float32，并设为评估模式
     model = load_conformer_shaw_model(checkpoint_path, dtype=torch.float32)
-    # 将模型设置为评估模式
     model.eval()
 
-    # 将检查点模型转换为 HuggingFace 模型
+    # 将 Conformer 模型的权重转换到 hf_wav2vec 模型中，使用预定义的转换列表 wav2vec_convert_list
     hf_wav2vec = _convert_model(model, hf_wav2vec, wav2vec_convert_list)
 
-    # 将转换后的模型保存到指定路径
+    # 将转换后的 hf_wav2vec 模型保存到指定的 PyTorch 转储文件夹中
     hf_wav2vec.save_pretrained(pytorch_dump_folder_path)
 
-    # 如果指定了仓库 ID，则将模型推送到 HuggingFace 仓库
+    # 如果提供了 repo_id，则将 hf_wav2vec 模型推送到指定的仓库，并创建 pull request
     if repo_id:
         hf_wav2vec.push_to_hub(repo_id, create_pr=True)
 
-    # 保存特征提取器
+    # 创建 SeamlessM4TFeatureExtractor 特征提取器对象，设置填充值为 1
     fe = SeamlessM4TFeatureExtractor(padding_value=1)
+    # 将特征提取器的处理器类设为 "Wav2Vec2BertProcessor"
     fe._set_processor_class("Wav2Vec2BertProcessor")
+    # 将特征提取器保存到指定的 PyTorch 转储文件夹中
     fe.save_pretrained(pytorch_dump_folder_path)
 
-    # 如果指定了仓库 ID，则将特征提取器推送到 HuggingFace 仓库
+    # 如果提供了 repo_id，则将特征提取器推送到指定的仓库，并创建 pull request
     if repo_id:
         fe.push_to_hub(repo_id, create_pr=True)
 
-    # 如果指定了音频路径，则进行模型输出验证
+    # 如果提供了 args.audio_path，则加载音频文件，并进行必要的预处理和特征提取
     if args.audio_path:
-        # 加载音频数据并重采样到特征提取器的采样率
+        # 加载音频文件，并获取波形和采样率
         waveform, sample_rate = torchaudio.load(args.audio_path)
+        # 使用特征提取器的采样率对波形进行重新采样
         waveform = torchaudio.functional.resample(waveform, sample_rate, fe.sampling_rate)
 
-        # 创建 Fbank 转换器和 Collater 对象
+        # 创建 WaveformToFbankConverter 对象，将波形转换为 FBANK 特征
         fbank_converter = WaveformToFbankConverter(
             num_mel_bins=80,
             waveform_scale=2**15,
@@ -192,32 +131,34 @@ def convert_wav2vec2_bert_checkpoint(
             standardize=True,
             dtype=torch.float32,
         )
+        # 创建 Collater 对象，用于对 FBANK 特征进行填充
         collater = Collater(pad_value=1)
 
-        # 对音频数据进行预处理
+        # 构建解码后的音频字典 decoded_audio
         decoded_audio = {"waveform": waveform.T, "sample_rate": fe.sampling_rate, "format": -1}
+        # 对解码后的音频数据应用特征提取器，并获取 FBANK 特征及其填充掩码
         src = collater(fbank_converter(decoded_audio))["fbank"]
         seqs, padding_mask = get_seqs_and_padding_mask(src)
 
-        # 获取原始模型的输出
+        # 在推断模式下运行模型的前端编码器和编码器，获取原始输出和填充掩码
         with torch.inference_mode():
             seqs, padding_mask = model.encoder_frontend(seqs, padding_mask)
             original_output, padding_mask = model.encoder(seqs, padding_mask)
 
-        # 评估转换后的模型
+        # 将 hf_wav2vec 模型设为评估模式
         hf_wav2vec.eval()
 
-        # 将音频数据输入转换后的模型
+        # 使用特征提取器对音频进行编码，并通过 hf_wav2vec 模型获取输出
         inputs = fe(waveform, return_tensors="pt", padding=True)
         with torch.no_grad():
             outputs = hf_wav2vec(**inputs)
 
-        # 比较原始模型和转换后模型的输出
+        # 使用 torch.testing.assert_close 检查原始模型输出和转换后模型输出的相似性
         torch.testing.assert_close(original_output, outputs.last_hidden_state, atol=5e-3, rtol=5e-3)
 
 
+# 如果当前脚本作为主程序运行，则解析命令行参数
 if __name__ == "__main__":
-    # 解析命令行参数
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--pytorch_dump_folder_path",
@@ -242,16 +183,10 @@ if __name__ == "__main__":
         help="If specified, check that the original model and the converted model produce the same outputs.",
     )
 
+    # 解析命令行参数
     args = parser.parse_args()
-    # 调用函数将 wav2vec2 模型的检查点转换为适用于 BERT 模型的检查点
+    # 调用函数 convert_wav2vec2_bert_checkpoint，将指定的参数传递给它
     convert_wav2vec2_bert_checkpoint(
-        # 指定原始 wav2vec2 模型的检查点路径
-        args.checkpoint_path,
-        # 指定转换后的检查点保存路径
-        args.pytorch_dump_folder_path,
-        # 指定转换所需的配置文件路径
-        args.config_path,
-        # 指定转换所需的资源库 ID
-        args.repo_id
+        args.checkpoint_path, args.pytorch_dump_folder_path, args.config_path, args.repo_id
     )
 ```

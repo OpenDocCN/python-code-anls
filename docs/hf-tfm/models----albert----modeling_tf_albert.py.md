@@ -1,18 +1,32 @@
-# `.\transformers\models\albert\modeling_tf_albert.py`
+# `.\models\albert\modeling_tf_albert.py`
 
-```py
-# 导入所需模块和库
-from __future__ import annotations
+```
+# 设置编码格式为 UTF-8，确保代码中可以正确处理各种字符
+# 版权声明，版权归 OpenAI Team Authors 和 HuggingFace Inc. team 所有
+# 版权声明，版权归 NVIDIA CORPORATION 所有，保留所有权利
+#
+# 根据 Apache 许可证 2.0 版本使用本文件
+# 除非符合许可证的相关法律要求或书面同意，否则不得使用本文件
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，不附带任何明示或暗示的担保或条件。
+# 有关详细信息，请参阅许可证。
 
-import math  # 导入数学函数库
-from dataclasses import dataclass  # 从 dataclasses 模块导入 dataclass 装饰器
-from typing import Dict, Optional, Tuple, Union  # 导入类型提示相关的模块
+""" TF 2.0 ALBERT model."""
 
-import numpy as np  # 导入 NumPy 库并使用别名 np
-import tensorflow as tf  # 导入 TensorFlow 库并使用别名 tf
+from __future__ import annotations  # 允许在类型注释中使用未定义的类型名称
 
-from ...activations_tf import get_tf_activation  # 从 activations_tf 模块导入 get_tf_activation 函数
-from ...modeling_tf_outputs import (  # 从 modeling_tf_outputs 模块导入多个输出类
+import math  # 导入数学库，用于执行数学运算
+from dataclasses import dataclass  # 导入 dataclass 用于创建不可变对象
+from typing import Dict, Optional, Tuple, Union  # 导入类型注释支持的类型
+
+import numpy as np  # 导入 NumPy 库，用于数值计算
+import tensorflow as tf  # 导入 TensorFlow 库，用于构建和训练深度学习模型
+
+from ...activations_tf import get_tf_activation  # 导入自定义函数，用于获取 TensorFlow 激活函数
+from ...modeling_tf_outputs import (  # 导入模型输出相关类
     TFBaseModelOutput,
     TFBaseModelOutputWithPooling,
     TFMaskedLMOutput,
@@ -21,7 +35,7 @@ from ...modeling_tf_outputs import (  # 从 modeling_tf_outputs 模块导入多�
     TFSequenceClassifierOutput,
     TFTokenClassifierOutput,
 )
-from ...modeling_tf_utils import (  # 从 modeling_tf_utils 模块导入多个实用函数和类
+from ...modeling_tf_utils import (  # 导入模型工具函数
     TFMaskedLanguageModelingLoss,
     TFModelInputType,
     TFMultipleChoiceLoss,
@@ -30,116 +44,151 @@ from ...modeling_tf_utils import (  # 从 modeling_tf_utils 模块导入多个�
     TFSequenceClassificationLoss,
     TFTokenClassificationLoss,
     get_initializer,
-    keras_serializable,
-    unpack_inputs,
+    keras,  # TensorFlow 的高级 API
+    keras_serializable,  # 可序列化的 Keras
+    unpack_inputs,  # 解包输入数据的函数
 )
-from ...tf_utils import (  # 从 tf_utils 模块导入实用函数
-    check_embeddings_within_bounds,
-    shape_list,
-    stable_softmax,
+from ...tf_utils import (  # 导入 TensorFlow 实用函数
+    check_embeddings_within_bounds,  # 检查嵌入向量是否在边界范围内
+    shape_list,  # 获取张量的形状列表
+    stable_softmax,  # 稳定的 softmax 函数
 )
-from ...utils import (  # 从 utils 模块导入实用函数
-    ModelOutput,
-    add_code_sample_docstrings,
-    add_start_docstrings,
-    add_start_docstrings_to_model_forward,
-    logging,
-    replace_return_docstrings,
+from ...utils import (  # 导入实用工具函数
+    ModelOutput,  # 模型输出类
+    add_code_sample_docstrings,  # 添加代码示例的文档字符串
+    add_start_docstrings,  # 添加函数的起始文档字符串
+    add_start_docstrings_to_model_forward,  # 添加模型前向传播的起始文档字符串
+    logging,  # 日志记录工具
+    replace_return_docstrings,  # 替换返回值的文档字符串
 )
+from .configuration_albert import AlbertConfig  # 导入 ALBERT 模型配置类
 
-# 设置日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
-# 用于文档的模型检查点和配置
-_CHECKPOINT_FOR_DOC = "albert-base-v2"
-_CONFIG_FOR_DOC = "AlbertConfig"
+_CHECKPOINT_FOR_DOC = "albert/albert-base-v2"  # 文档中使用的模型检查点名称
+_CONFIG_FOR_DOC = "AlbertConfig"  # 文档中使用的配置名称
 
-# 预训练的 TF Albert 模型存档列表
-TF_ALBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
-    "albert-base-v1",
-    "albert-large-v1",
-    "albert-xlarge-v1",
-    "albert-xxlarge-v1",
-    "albert-base-v2",
-    "albert-large-v2",
-    "albert-xlarge-v2",
-    "albert-xxlarge-v2",
-    # 在 https://huggingface.co/models?filter=albert 查看所有 ALBERT 模型
+TF_ALBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [  # ALBERT 预训练模型的列表
+    "albert/albert-base-v1",
+    "albert/albert-large-v1",
+    "albert/albert-xlarge-v1",
+    "albert/albert-xxlarge-v1",
+    "albert/albert-base-v2",
+    "albert/albert-large-v2",
+    "albert/albert-xlarge-v2",
+    "albert/albert-xxlarge-v2",
+    # 查看所有 ALBERT 模型：https://huggingface.co/models?filter=albert
 ]
+
 
 class TFAlbertPreTrainingLoss:
     """
-    适用于 ALBERT 预训练的损失函数，即通过结合 SOP + MLM 预训练语言模型的任务。
-    .. 注意：任何标签为 -100 的将在损失计算中被忽略（以及相应的对数概率）。
+    适用于 ALBERT 预训练的损失函数，即通过结合 SOP + MLM 的语言模型预训练任务。
+    .. 注意:: 在损失计算中，任何标签为 -100 的样本将被忽略（以及对应的 logits）。
     """
+    def hf_compute_loss(self, labels: tf.Tensor, logits: tf.Tensor) -> tf.Tensor:
+        # 定义损失函数为稀疏分类交叉熵，从 logits 计算，不进行降维
+        loss_fn = keras.losses.SparseCategoricalCrossentropy(from_logits=True, reduction=keras.losses.Reduction.NONE)
+        
+        if self.config.tf_legacy_loss:
+            # 确保只有标签不等于 -100 的位置会计算损失
+            masked_lm_active_loss = tf.not_equal(tf.reshape(tensor=labels["labels"], shape=(-1,)), -100)
+            # 使用布尔掩码从 logits 中筛选出有效位置的预测值
+            masked_lm_reduced_logits = tf.boolean_mask(
+                tensor=tf.reshape(tensor=logits[0], shape=(-1, shape_list(logits[0])[2])),
+                mask=masked_lm_active_loss,
+            )
+            # 使用布尔掩码从标签中筛选出有效位置的真实值
+            masked_lm_labels = tf.boolean_mask(
+                tensor=tf.reshape(tensor=labels["labels"], shape=(-1,)), mask=masked_lm_active_loss
+            )
+            # 确保只有标签不等于 -100 的位置会计算损失
+            sentence_order_active_loss = tf.not_equal(
+                tf.reshape(tensor=labels["sentence_order_label"], shape=(-1,)), -100
+            )
+            # 使用布尔掩码从 logits 中筛选出有效位置的预测值
+            sentence_order_reduced_logits = tf.boolean_mask(
+                tensor=tf.reshape(tensor=logits[1], shape=(-1, 2)), mask=sentence_order_active_loss
+            )
+            # 使用布尔掩码从标签中筛选出有效位置的真实值
+            sentence_order_label = tf.boolean_mask(
+                tensor=tf.reshape(tensor=labels["sentence_order_label"], shape=(-1,)), mask=sentence_order_active_loss
+            )
+            # 计算掩码语言模型的损失
+            masked_lm_loss = loss_fn(y_true=masked_lm_labels, y_pred=masked_lm_reduced_logits)
+            # 计算序列顺序预测的损失
+            sentence_order_loss = loss_fn(y_true=sentence_order_label, y_pred=sentence_order_reduced_logits)
+            # 将掩码语言模型损失按照序列顺序预测的数量均匀化
+            masked_lm_loss = tf.reshape(tensor=masked_lm_loss, shape=(-1, shape_list(sentence_order_loss)[0]))
+            masked_lm_loss = tf.reduce_mean(input_tensor=masked_lm_loss, axis=0)
 
-class TFAlbertEmbeddings(tf.keras.layers.Layer):
-    """
-    从单词、位置和 token_type 嵌入构建嵌入。
-    """
-    # 初始化函数，用于创建一个新的AlbertEmbeddings对象
+            return masked_lm_loss + sentence_order_loss
+
+        # 将负标签裁剪为零，避免 NaN 和错误，这些位置后续将被掩盖
+        unmasked_lm_losses = loss_fn(y_true=tf.nn.relu(labels["labels"]), y_pred=logits[0])
+        # 确保只有标签不等于 -100 的位置会计算损失
+        lm_loss_mask = tf.cast(labels["labels"] != -100, dtype=unmasked_lm_losses.dtype)
+        masked_lm_losses = unmasked_lm_losses * lm_loss_mask
+        reduced_masked_lm_loss = tf.reduce_sum(masked_lm_losses) / tf.reduce_sum(lm_loss_mask)
+
+        sop_logits = tf.reshape(logits[1], (-1, 2))
+        # 将负标签裁剪为零，避免 NaN 和错误，这些位置后续将被掩盖
+        unmasked_sop_loss = loss_fn(y_true=tf.nn.relu(labels["sentence_order_label"]), y_pred=sop_logits)
+        sop_loss_mask = tf.cast(labels["sentence_order_label"] != -100, dtype=unmasked_sop_loss.dtype)
+
+        masked_sop_loss = unmasked_sop_loss * sop_loss_mask
+        reduced_masked_sop_loss = tf.reduce_sum(masked_sop_loss) / tf.reduce_sum(sop_loss_mask)
+
+        return tf.reshape(reduced_masked_lm_loss + reduced_masked_sop_loss, (1,))
+    """Construct the embeddings from word, position and token_type embeddings."""
+
     def __init__(self, config: AlbertConfig, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(**kwargs)
 
-        # 将传入的配置参数保存到对象中
+        # 初始化层的配置和参数
         self.config = config
-        # 获取嵌入向量的大小
-        self.embedding_size = config.embedding_size
-        # 获取最大位置嵌入的长度
-        self.max_position_embeddings = config.max_position_embeddings
-        # 获取初始化权重的范围
-        self.initializer_range = config.initializer_range
-        # 创建一个 LayerNormalization 层，用于规范化输入数据
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 创建一个 Dropout 层，用于在训练中进行随机失活
-        self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
+        self.embedding_size = config.embedding_size  # 嵌入向量的维度大小
+        self.max_position_embeddings = config.max_position_embeddings  # 最大位置嵌入数量
+        self.initializer_range = config.initializer_range  # 初始化范围
+        # 层归一化操作，使用配置中的 epsilon 参数
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+        # Dropout 操作，使用配置中的 dropout 比率
+        self.dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)
 
-    # 构建函数，用于构建模型中的各个层
     def build(self, input_shape=None):
-        # 在 "word_embeddings" 命名空间下创建权重张量
         with tf.name_scope("word_embeddings"):
+            # 添加词嵌入权重矩阵，形状为 [词汇表大小, 嵌入维度大小]
             self.weight = self.add_weight(
                 name="weight",
-                # 设置权重的形状为 [词汇表大小, 嵌入向量大小]
                 shape=[self.config.vocab_size, self.embedding_size],
-                # 使用指定的初始化器来初始化权重
                 initializer=get_initializer(self.initializer_range),
             )
 
-        # 在 "token_type_embeddings" 命名空间下创建权重张量
         with tf.name_scope("token_type_embeddings"):
+            # 添加 token_type 嵌入权重矩阵，形状为 [token_type 数量, 嵌入维度大小]
             self.token_type_embeddings = self.add_weight(
                 name="embeddings",
-                # 设置权重的形状为 [token 类型数, 嵌入向量大小]
                 shape=[self.config.type_vocab_size, self.embedding_size],
-                # 使用指定的初始化器来初始化权重
                 initializer=get_initializer(self.initializer_range),
             )
 
-        # 在 "position_embeddings" 命名空间下创建权重张量
         with tf.name_scope("position_embeddings"):
+            # 添加位置嵌入权重矩阵，形状为 [最大位置嵌入数量, 嵌入维度大小]
             self.position_embeddings = self.add_weight(
                 name="embeddings",
-                # 设置权重的形状为 [最大位置嵌入长度, 嵌入向量大小]
                 shape=[self.max_position_embeddings, self.embedding_size],
-                # 使用指定的初始化器来初始化权重
                 initializer=get_initializer(self.initializer_range),
             )
 
-        # 如果已经构建过了，则直接返回
         if self.built:
             return
-        # 标记为已构建
         self.built = True
-        # 如果存在 LayerNorm 层，则构建该层
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
-                # 构建 LayerNorm 层，指定输入的形状为 [None, None, 嵌入向量大小]
+                # 构建层归一化的结构，输入形状为 [None, None, 嵌入维度大小]
                 self.LayerNorm.build([None, None, self.config.embedding_size])
 
-    # 模型调用函数，用于执行前向传播
-    # 从 transformers.models.bert.modeling_tf_bert.TFBertEmbeddings.call 复制而来
+    # Copied from transformers.models.bert.modeling_tf_bert.TFBertEmbeddings.call
     def call(
         self,
         input_ids: tf.Tensor = None,
@@ -155,85 +204,86 @@ class TFAlbertEmbeddings(tf.keras.layers.Layer):
         Returns:
             final_embeddings (`tf.Tensor`): output embedding tensor.
         """
-        # 检查是否提供了 input_ids 或 input_embeds，若没有则引发 ValueError
+        # 检查输入参数，确保至少提供了 `input_ids` 或 `inputs_embeds`
         if input_ids is None and inputs_embeds is None:
             raise ValueError("Need to provide either `input_ids` or `input_embeds`.")
 
-        # 如果提供了 input_ids，则根据其从权重中获取嵌入向量
+        # 如果提供了 `input_ids`，从权重矩阵中根据索引收集对应的嵌入向量
         if input_ids is not None:
-            # 检查输入的 id 是否在有效范围内
             check_embeddings_within_bounds(input_ids, self.config.vocab_size)
             inputs_embeds = tf.gather(params=self.weight, indices=input_ids)
 
-        # 获取输入嵌入向量的形状
+        # 获取输入嵌入张量的形状
         input_shape = shape_list(inputs_embeds)[:-1]
 
-        # 如果未提供 token_type_ids，则创建与输入形状相同的全零张量
+        # 如果未提供 `token_type_ids`，则创建一个形状与输入嵌入张量相同的张量，并用0填充
         if token_type_ids is None:
             token_type_ids = tf.fill(dims=input_shape, value=0)
 
-        # 如果未提供 position_ids，则创建一个范围从 past_key_values_length 到 input_shape[1]+past_key_values_length 的张量
+        # 如果未提供 `position_ids`，则根据序列长度和历史键值长度生成位置索引张量
         if position_ids is None:
             position_ids = tf.expand_dims(
                 tf.range(start=past_key_values_length, limit=input_shape[1] + past_key_values_length), axis=0
             )
 
-        # 根据 position_ids 获取位置嵌入向量
+        # 根据位置索引从位置嵌入矩阵中收集位置嵌入向量
         position_embeds = tf.gather(params=self.position_embeddings, indices=position_ids)
-        # 根据 token_type_ids 获取 token 类型嵌入向量
+        # 根据 token_type_ids 从 token_type_embeddings 中收集 token 类型嵌入向量
         token_type_embeds = tf.gather(params=self.token_type_embeddings, indices=token_type_ids)
-        # 将输入嵌入向量、位置嵌入向量和 token 类型嵌入向量相加得到最终的嵌入向量
+        # 将输入嵌入向量、位置嵌入向量和 token 类型嵌入向量相加，得到最终的嵌入向量
         final_embeddings = inputs_embeds + position_embeds + token_type_embeds
-        # 对最终嵌入向量进行 LayerNormalization
+        # 对最终的嵌入向量进行 LayerNormalization 处理
         final_embeddings = self.LayerNorm(inputs=final_embeddings)
-        # 对最终嵌入向量进行 dropout 处理
+        # 在训练模式下对最终嵌入向量进行 dropout 处理
         final_embeddings = self.dropout(inputs=final_embeddings, training=training)
 
+        # 返回最终的嵌入向量作为输出
         return final_embeddings
-class TFAlbertAttention(tf.keras.layers.Layer):
     """Contains the complete attention sublayer, including both dropouts and layer norm."""
 
     def __init__(self, config: AlbertConfig, **kwargs):
         super().__init__(**kwargs)
 
-        # 检查隐藏层大小是否能被注意力头数整除
         if config.hidden_size % config.num_attention_heads != 0:
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number "
                 f"of attention heads ({config.num_attention_heads})"
             )
 
-        # 设置注意力头数和注意力头大小
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
         self.sqrt_att_head_size = math.sqrt(self.attention_head_size)
         self.output_attentions = config.output_attentions
 
-        # 定义查询、键、值以及密集层
-        self.query = tf.keras.layers.Dense(
+        # Initialize Dense layers for query, key, value, and dense transformations
+        self.query = keras.layers.Dense(
             units=self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="query"
         )
-        self.key = tf.keras.layers.Dense(
+        self.key = keras.layers.Dense(
             units=self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="key"
         )
-        self.value = tf.keras.layers.Dense(
+        self.value = keras.layers.Dense(
             units=self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="value"
         )
-        self.dense = tf.keras.layers.Dense(
+        self.dense = keras.layers.Dense(
             units=config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 两个不同的 dropout 概率；参见 https://github.com/google-research/albert/blob/master/modeling.py#L971-L993
-        self.attention_dropout = tf.keras.layers.Dropout(rate=config.attention_probs_dropout_prob)
-        self.output_dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
+
+        # Layer normalization for post-attention processing
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
+
+        # Dropout layers with specified dropout rates
+        self.attention_dropout = keras.layers.Dropout(rate=config.attention_probs_dropout_prob)
+        self.output_dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)
+
         self.config = config
 
     def transpose_for_scores(self, tensor: tf.Tensor, batch_size: int) -> tf.Tensor:
-        # 从 [batch_size, seq_length, all_head_size] 重塑为 [batch_size, seq_length, num_attention_heads, attention_head_size]
+        # Reshape from [batch_size, seq_length, all_head_size] to [batch_size, seq_length, num_attention_heads, attention_head_size]
         tensor = tf.reshape(tensor=tensor, shape=(batch_size, -1, self.num_attention_heads, self.attention_head_size))
 
-        # 将张量从 [batch_size, seq_length, num_attention_heads, attention_head_size] 转置为 [batch_size, num_attention_heads, seq_length, attention_head_size]
+        # Transpose the tensor from [batch_size, seq_length, num_attention_heads, attention_head_size] to [batch_size, num_attention_heads, seq_length, attention_head_size]
         return tf.transpose(tensor, perm=[0, 2, 1, 3])
 
     def call(
@@ -243,126 +293,129 @@ class TFAlbertAttention(tf.keras.layers.Layer):
         head_mask: tf.Tensor,
         output_attentions: bool,
         training: bool = False,
-    # 定义函数的输入和输出类型，此函数返回一个包含 Tensor 的元组
     ) -> Tuple[tf.Tensor]:
-        # 获取输入张量的批大小
+        # 获取输入张量的批量大小
         batch_size = shape_list(input_tensor)[0]
-        # 使用输入张量计算混合查询层
+        # 调用 self.query 方法，生成混合查询层张量
         mixed_query_layer = self.query(inputs=input_tensor)
-        # 使用输入张量计算混合键层
+        # 调用 self.key 方法，生成混合键层张量
         mixed_key_layer = self.key(inputs=input_tensor)
-        # 使用输入张量计算混合值层
+        # 调用 self.value 方法，生成混合值层张量
         mixed_value_layer = self.value(inputs=input_tensor)
-        # 通过变换对分数进行归一化
+        # 将混合查询层张量转置以适应注意力分数计算的形状
         query_layer = self.transpose_for_scores(mixed_query_layer, batch_size)
+        # 将混合键层张量转置以适应注意力分数计算的形状
         key_layer = self.transpose_for_scores(mixed_key_layer, batch_size)
+        # 将混合值层张量转置以适应注意力分数计算的形状
         value_layer = self.transpose_for_scores(mixed_value_layer, batch_size)
 
-        # 计算原始注意力分数，使用“查询”和“键”的点积
-        # (batch size, num_heads, seq_len_q, seq_len_k)
+        # 计算查询和键之间的点积，得到原始的注意力分数
+        # 形状为 (batch size, num_heads, seq_len_q, seq_len_k)
         attention_scores = tf.matmul(query_layer, key_layer, transpose_b=True)
-        # 计算缩放的点积注意力分数
+        # 计算缩放因子 dk，并将注意力分数除以 dk
         dk = tf.cast(self.sqrt_att_head_size, dtype=attention_scores.dtype)
         attention_scores = tf.divide(attention_scores, dk)
 
         if attention_mask is not None:
-            # 应用注意力掩码（在 TFAlbertModel 的 call() 函数中预先计算）
+            # 如果存在注意力掩码，应用注意力掩码
             attention_scores = tf.add(attention_scores, attention_mask)
 
-        # 将注意力分数归一化为概率
+        # 将注意力分数归一化为概率值
         attention_probs = stable_softmax(logits=attention_scores, axis=-1)
 
-        # 对注意力概率进行丢弃
+        # 对注意力概率值进行 dropout 处理
         attention_probs = self.attention_dropout(inputs=attention_probs, training=training)
 
-        # 如果有需要，对头进行掩码处理
+        # 如果存在头部掩码，将注意力概率值与头部掩码相乘
         if head_mask is not None:
             attention_probs = tf.multiply(attention_probs, head_mask)
 
-        # 计算上下文向量，将注意力概率与值层相乘
+        # 计算上下文张量，将注意力概率值与值层张量相乘
         context_layer = tf.matmul(attention_probs, value_layer)
+        # 对上下文张量进行转置操作，调整其形状
         context_layer = tf.transpose(context_layer, perm=[0, 2, 1, 3])
 
-        # 重新调整张量形状
-        # (batch_size, seq_len_q, all_head_size)
+        # 调整上下文张量的形状，以适应下一层网络的输入要求
+        # 形状为 (batch_size, seq_len_q, all_head_size)
         context_layer = tf.reshape(tensor=context_layer, shape=(batch_size, -1, self.all_head_size))
-        # 输出包含上下文层和注意力概率的元组
+        # 将上下文张量作为 self_outputs 的第一个元素
         self_outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
-        # 获取隐藏状态
+        # 获取 self_outputs 的第一个元素作为隐藏状态张量
         hidden_states = self_outputs[0]
-        # 全连接层
+        # 将隐藏状态张量传递给全连接层进行线性变换
         hidden_states = self.dense(inputs=hidden_states)
-        # 对输出进行丢弃
+        # 对线性变换后的隐藏状态进行 dropout 处理
         hidden_states = self.output_dropout(inputs=hidden_states, training=training)
-        # 添加输入张量到注意力输出并进行层归一化
+        # 将 dropout 后的隐藏状态与输入张量相加，并应用 LayerNorm
         attention_output = self.LayerNorm(inputs=hidden_states + input_tensor)
 
-        # 如果输出注意力，则添加到输出中
+        # 如果需要输出注意力分数，则将注意力分数添加到输出中
         outputs = (attention_output,) + self_outputs[1:]
 
-        # 返回输出
+        # 返回最终的输出
         return outputs
-```  
-    # 构建神经网络模型，如果已经构建过则直接返回
-    def build(self, input_shape=None):
-        if self.built:
-            return
-        # 设置标志位表示已经构建过
-        self.built = True
-        # 如果存在查询操作，则构建查询操作
-        if getattr(self, "query", None) is not None:
-            with tf.name_scope(self.query.name):
-                self.query.build([None, None, self.config.hidden_size])
-        # 如果存在键操作，则构建键操作
-        if getattr(self, "key", None) is not None:
-            with tf.name_scope(self.key.name):
-                self.key.build([None, None, self.config.hidden_size])
-        # 如果存在值操作，则构建值操作
-        if getattr(self, "value", None) is not None:
-            with tf.name_scope(self.value.name):
-                self.value.build([None, None, self.config.hidden_size])
-        # 如果存在密集层操作，则构建密集层操作
-        if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.hidden_size])
-        # 如果存在层归一化操作，则构建层归一化操作
-        if getattr(self, "LayerNorm", None) is not None:
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build([None, None, self.config.hidden_size])
-# 定义 TFAlbertLayer 类，继承自 tf.keras.layers.Layer
-class TFAlbertLayer(tf.keras.layers.Layer):
-    # 初始化函数，接受配置参数 config 和其他关键字参数
+    # 如果已经构建过网络结构，则直接返回，不再重复构建
+    if self.built:
+        return
+    # 将标记置为已构建
+    self.built = True
+    
+    # 如果存在查询（query）模块，根据其名称创建作用域，并构建其形状
+    if getattr(self, "query", None) is not None:
+        with tf.name_scope(self.query.name):
+            self.query.build([None, None, self.config.hidden_size])
+    
+    # 如果存在键（key）模块，根据其名称创建作用域，并构建其形状
+    if getattr(self, "key", None) is not None:
+        with tf.name_scope(self.key.name):
+            self.key.build([None, None, self.config.hidden_size])
+    
+    # 如果存在值（value）模块，根据其名称创建作用域，并构建其形状
+    if getattr(self, "value", None) is not None:
+        with tf.name_scope(self.value.name):
+            self.value.build([None, None, self.config.hidden_size])
+    
+    # 如果存在密集层（dense），根据其名称创建作用域，并构建其形状
+    if getattr(self, "dense", None) is not None:
+        with tf.name_scope(self.dense.name):
+            self.dense.build([None, None, self.config.hidden_size])
+    
+    # 如果存在层归一化（LayerNorm），根据其名称创建作用域，并构建其形状
+    if getattr(self, "LayerNorm", None) is not None:
+        with tf.name_scope(self.LayerNorm.name):
+            self.LayerNorm.build([None, None, self.config.hidden_size])
+class TFAlbertLayer(keras.layers.Layer):
     def __init__(self, config: AlbertConfig, **kwargs):
-        # 调用父类初始化函数
         super().__init__(**kwargs)
 
-        # 创建 self.attention 属性，值为 TFAlbertAttention 类的实例对象，命名为 "attention"
+        # 初始化注意力层，使用给定的配置
         self.attention = TFAlbertAttention(config, name="attention")
-        # 创建 self.ffn 属性，值为全连接层(Dense)对象，用于前馈网络，设置神经元数和初始化方式
-        self.ffn = tf.keras.layers.Dense(
+        
+        # 初始化前馈神经网络层，使用给定的中间大小和初始化器范围
+        self.ffn = keras.layers.Dense(
             units=config.intermediate_size, kernel_initializer=get_initializer(config.initializer_range), name="ffn"
         )
 
-        # 根据配置中隐藏层激活函数的类型，选择相应的激活函数或者使用配置中指定的激活函数
+        # 根据配置获取激活函数，或者使用默认的激活函数
         if isinstance(config.hidden_act, str):
             self.activation = get_tf_activation(config.hidden_act)
         else:
             self.activation = config.hidden_act
 
-        # 创建 self.ffn_output 属性，值为全连接层(Dense)对象，用于前馈网络输出，设置神经元数和初始化方式
-        self.ffn_output = tf.keras.layers.Dense(
+        # 初始化前馈神经网络输出层，使用给定的隐藏大小和初始化器范围
+        self.ffn_output = keras.layers.Dense(
             units=config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="ffn_output"
         )
-        # 创建 self.full_layer_layer_norm 属性，值为 LayerNormalization 层对象，设置 epsilon 值
-        self.full_layer_layer_norm = tf.keras.layers.LayerNormalization(
+        
+        # 初始化全层标准化层，使用给定的 epsilon 参数
+        self.full_layer_layer_norm = keras.layers.LayerNormalization(
             epsilon=config.layer_norm_eps, name="full_layer_layer_norm"
         )
-        # 创建 self.dropout 属性，值为 Dropout 层对象，设置 dropout rate
-        self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
-        # 保存配置参数到 self.config 属性
+        
+        # 初始化 dropout 层，使用给定的隐藏 dropout 概率
+        self.dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)
         self.config = config
 
-    # call 方法用于实现层的正向传播，接受输入张量和一些掩码张量等参数，返回一个元组
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -371,7 +424,7 @@ class TFAlbertLayer(tf.keras.layers.Layer):
         output_attentions: bool,
         training: bool = False,
     ) -> Tuple[tf.Tensor]:
-        # 调用 self.attention 对象的 call 方法进行注意力计算，并返回相关输出
+        # 调用注意力层，获取注意力输出
         attention_outputs = self.attention(
             input_tensor=hidden_states,
             attention_mask=attention_mask,
@@ -379,60 +432,57 @@ class TFAlbertLayer(tf.keras.layers.Layer):
             output_attentions=output_attentions,
             training=training,
         )
-        # 使用前馈网络进行计算
-        ffn_output = self.ffn(inputs=attention_outputs[0])
-        # 应用激活函数
-        ffn_output = self.activation(ffn_output)
-        # 再次使用全连接层进行计算
-        ffn_output = self.ffn_output(inputs=ffn_output)
-        # 对输出进行 dropout 处理
+        
+        # 前馈神经网络计算过程
+        ffn_output = self.ffn(inputs=attention_outputs[0])  # 使用注意力输出作为输入
+        ffn_output = self.activation(ffn_output)  # 应用激活函数
+        ffn_output = self.ffn_output(inputs=ffn_output)  # 再次使用前馈神经网络输出层
+        
+        # 应用 dropout 操作
         ffn_output = self.dropout(inputs=ffn_output, training=training)
-        # 将 dropout 处理后的输出和注意力计算的结果相加，并进行 LayerNormalization 处理
+        
+        # 添加全层标准化层，结合注意力输出和前馈神经网络输出
         hidden_states = self.full_layer_layer_norm(inputs=ffn_output + attention_outputs[0])
 
-        # 如果需要输出注意力权重，则将注意力输出添加到返回结果中
+        # 如果需要输出注意力，则将注意力输出包含在结果中
         outputs = (hidden_states,) + attention_outputs[1:]
 
-        # 返回计算结果
         return outputs
 
-    # build 方法用于构建层，根据输入形状构建内部的网络层
     def build(self, input_shape=None):
-        # 如果已经构建过了，则直接返回
         if self.built:
             return
-        # 设置标志为已构建
         self.built = True
+        
         # 构建注意力层
         if getattr(self, "attention", None) is not None:
             with tf.name_scope(self.attention.name):
                 self.attention.build(None)
-        # 构建前馈网络
+        
+        # 构建前馈神经网络层
         if getattr(self, "ffn", None) is not None:
             with tf.name_scope(self.ffn.name):
                 self.ffn.build([None, None, self.config.hidden_size])
-        # 构建前馈网络输出层
+        
+        # 构建前馈神经网络输出层
         if getattr(self, "ffn_output", None) is not None:
             with tf.name_scope(self.ffn_output.name):
                 self.ffn_output.build([None, None, self.config.intermediate_size])
-        # 构建 LayerNormalization 层
+        
+        # 构建全层标准化层
         if getattr(self, "full_layer_layer_norm", None) is not None:
             with tf.name_scope(self.full_layer_layer_norm.name):
                 self.full_layer_layer_norm.build([None, None, self.config.hidden_size])
-
-
-class TFAlbertLayerGroup(tf.keras.layers.Layer):
-    # 初始化函数，接受一个 AlbertConfig 对象和其他关键字参数
+    # 使用传入的 AlbertConfig 对象初始化模型，调用父类的初始化方法
     def __init__(self, config: AlbertConfig, **kwargs):
-        # 调用父类的初始化函数
         super().__init__(**kwargs)
 
-        # 创建 Albert 层列表，包含指定数量的 Albert 层
+        # 创建多个 AlbertLayer 层组成的列表，每个层有一个唯一的名称
         self.albert_layers = [
             TFAlbertLayer(config, name=f"albert_layers_._{i}") for i in range(config.inner_group_num)
         ]
 
-    # 调用函数，对输入的隐藏状态进行 Albert 层的处理
+    # 模型的调用方法，接收隐藏状态、注意力掩码、头部掩码等输入，输出模型的隐藏状态、层的隐藏状态和注意力分数（如果有的话）
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -442,18 +492,18 @@ class TFAlbertLayerGroup(tf.keras.layers.Layer):
         output_hidden_states: bool,
         training: bool = False,
     ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
-        # 如果需要输出隐藏状态，则初始化一个空的元组
+        # 如果需要输出隐藏状态，则创建一个空元组用于存储每个层的隐藏状态
         layer_hidden_states = () if output_hidden_states else None
-        # 如果需要输出注意力权重，则初始化一个空的元组
+        # 如果需要输出注意力分数，则创建一个空元组用于存储每个层的注意力分数
         layer_attentions = () if output_attentions else None
 
-        # 遍历 Albert 层列表，并对每一层进行处理
+        # 遍历所有 AlbertLayer 层
         for layer_index, albert_layer in enumerate(self.albert_layers):
-            # 如果需要输出隐藏状态，则将当前隐藏状态添加到隐藏状态元组中
+            # 如果需要输出隐藏状态，则将当前层的隐藏状态添加到存储中
             if output_hidden_states:
                 layer_hidden_states = layer_hidden_states + (hidden_states,)
 
-            # 调用当前 Albert 层的处理函数，得到该层的输出
+            # 调用当前 AlbertLayer 层的处理方法，更新隐藏状态
             layer_output = albert_layer(
                 hidden_states=hidden_states,
                 attention_mask=attention_mask,
@@ -461,59 +511,57 @@ class TFAlbertLayerGroup(tf.keras.layers.Layer):
                 output_attentions=output_attentions,
                 training=training,
             )
-            # 更新隐藏状态为当前层的输出
+            # 更新主要的隐藏状态为当前层的输出隐藏状态
             hidden_states = layer_output[0]
 
-            # 如果需要输出注意力权重，则将当前层的注意力权重添加到注意力权重元组中
+            # 如果需要输出注意力分数，则将当前层的注意力分数添加到存储中
             if output_attentions:
                 layer_attentions = layer_attentions + (layer_output[1],)
 
-        # 添加最后一层的隐藏状态到隐藏状态元组中
+        # 添加最后一层的隐藏状态到存储中（如果需要输出隐藏状态）
         if output_hidden_states:
             layer_hidden_states = layer_hidden_states + (hidden_states,)
 
-        # 返回处理后的结果，注意过滤掉空值
+        # 返回隐藏状态、层的隐藏状态和注意力分数的元组，去除其中为 None 的部分
         return tuple(v for v in [hidden_states, layer_hidden_states, layer_attentions] if v is not None)
 
-    # 构建函数，用于构建模型的层
+    # 构建模型，在第一次调用前进行模型的构建
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置构建标志为 True
         self.built = True
-        # 如果已经初始化了 Albert 层列表，则对每一层进行构建
+        # 如果已经创建了 AlbertLayer 层，则依次构建每一层
         if getattr(self, "albert_layers", None) is not None:
             for layer in self.albert_layers:
-                # 在当前层的命名空间下构建该层
+                # 使用每个层的名称创建一个命名空间，并调用层的构建方法
                 with tf.name_scope(layer.name):
                     layer.build(None)
-class TFAlbertTransformer(tf.keras.layers.Layer):
-    # 定义 TFAlbertTransformer 类，继承自 tf.keras.layers.Layer
+# 定义一个名为TFAlbertTransformer的类，继承自keras的Layer类
+class TFAlbertTransformer(keras.layers.Layer):
+    # 初始化方法，接受config和其他参数
     def __init__(self, config: AlbertConfig, **kwargs):
-        # 初始化函数，接受 AlbertConfig 类型的 config 参数和其他关键字参数
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 调用父类的初始化函数
 
+        # 从config中获取隐藏层的数量和组数
         self.num_hidden_layers = config.num_hidden_layers
-        # 隐藏层的数量
         self.num_hidden_groups = config.num_hidden_groups
-        # 隐藏层分组的数量
+        # 计算每个隐藏组中的层的数量
         self.layers_per_group = int(config.num_hidden_layers / config.num_hidden_groups)
-        # 每个隐藏组中的层数
-        self.embedding_hidden_mapping_in = tf.keras.layers.Dense(
+        # 创建一个Dense层来映射嵌入的隐藏状态
+        self.embedding_hidden_mapping_in = keras.layers.Dense(
             units=config.hidden_size,
             kernel_initializer=get_initializer(config.initializer_range),
             name="embedding_hidden_mapping_in",
         )
-        # 创建一个全连接层，用于将输入映射到隐藏层
+        # 创建多个ALBERT层组，数量等于隐藏组的数量
         self.albert_layer_groups = [
             TFAlbertLayerGroup(config, name=f"albert_layer_groups_._{i}") for i in range(config.num_hidden_groups)
         ]
-        # 创建 AlbertLayerGroup 对象的列表
+        # 保存config
         self.config = config
-        # 保存配置信息
 
+    # 定义处理输入数据的方法
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -524,18 +572,17 @@ class TFAlbertTransformer(tf.keras.layers.Layer):
         return_dict: bool,
         training: bool = False,
     ) -> Union[TFBaseModelOutput, Tuple[tf.Tensor]]:
-        # 定义 call 方法，接受多个参数并返回 TFBaseModelOutput 或 Tuple[tf.Tensor] 类型的结果
+        # 使用Dense层处理输入的隐藏状态
         hidden_states = self.embedding_hidden_mapping_in(inputs=hidden_states)
-        # 将输入数据映射到隐藏层
+        # 初始化存储注意力权重和隐藏状态的变量
         all_attentions = () if output_attentions else None
-        # 如果需要输出注意力权重，则初始化 all_attentions 为空元组，否则为 None
         all_hidden_states = (hidden_states,) if output_hidden_states else None
-        # 如果需要输出隐藏状态，则初始化 all_hidden_states 为包含 hidden_states 的元组，否则为 None
 
+        # 循环遍历每个隐藏层
         for i in range(self.num_hidden_layers):
-            # 遍历隐藏层
+            # 计算当前层所在的隐藏组的索引
             group_idx = int(i / (self.num_hidden_layers / self.num_hidden_groups))
-            # 计算隐藏组的索引
+            # 调用对应的ALBERT层组，处理隐藏状态
             layer_group_output = self.albert_layer_groups[group_idx](
                 hidden_states=hidden_states,
                 attention_mask=attention_mask,
@@ -544,147 +591,149 @@ class TFAlbertTransformer(tf.keras.layers.Layer):
                 output_hidden_states=output_hidden_states,
                 training=training,
             )
-            # 调用 AlbertLayerGroup 对象的 call 方法
+            # 更新隐藏状态
             hidden_states = layer_group_output[0]
 
+            # 如果需要输出注意力权重，则将当前层的注意力权重添加到存储变量中
             if output_attentions:
                 all_attentions = all_attentions + layer_group_output[-1]
-                # 如果需要输出注意力权重，则更新 all_attentions
 
+            # 如果需要输出隐藏状态，则将当前层的隐藏状态添加到存储变量中
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
-                # 如果需要输出隐藏状态，则更新 all_hidden_states
 
+        # 如果不需要返回字典形式的结果，则将所有结果组合成一个元组返回
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states, all_attentions] if v is not None)
-            # 如果不需要返回字典，则返回包含非空值的元组
 
+        # 如果需要返回字典形式的结果，则创建一个TFBaseModelOutput对象并返回
         return TFBaseModelOutput(
             last_hidden_state=hidden_states, hidden_states=all_hidden_states, attentions=all_attentions
         )
-        # 返回 TFBaseModelOutput 对象
-    # 构建模型，如果已经构建过则直接返回
+    # 定义 build 方法，用于构建模型的结构
     def build(self, input_shape=None):
+        # 如果模型已经构建过，则直接返回，避免重复构建
         if self.built:
             return
-        # 标记模型已经构建
+        # 将模型标记为已构建状态
         self.built = True
-        # 如果存在嵌入层映射，则构建嵌入层映射
+        
+        # 如果存在 embedding_hidden_mapping_in 属性
         if getattr(self, "embedding_hidden_mapping_in", None) is not None:
-            # 使用嵌入层映射的名称作为命名空间
+            # 使用 tf.name_scope 来限定命名空间，命名为 embedding_hidden_mapping_in 的名称
             with tf.name_scope(self.embedding_hidden_mapping_in.name):
-                # 构建嵌入层映射
+                # 使用 embedding_hidden_mapping_in 属性构建层，输入形状为 [None, None, self.config.embedding_size]
                 self.embedding_hidden_mapping_in.build([None, None, self.config.embedding_size])
-        # 如果存在 ALBERT 层组，则逐个构建每个 ALBERT 层
+        
+        # 如果存在 albert_layer_groups 属性
         if getattr(self, "albert_layer_groups", None) is not None:
+            # 遍历 albert_layer_groups 中的每个层
             for layer in self.albert_layer_groups:
-                # 使用 ALBERT 层的名称作为命名空间
+                # 使用 tf.name_scope 来限定命名空间，命名为 layer 的名称
                 with tf.name_scope(layer.name):
-                    # 构建 ALBERT 层
+                    # 构建当前层，输入形状为 None（未指定特定输入形状）
                     layer.build(None)
-# TFAlbertPreTrainedModel 类，用于处理权重初始化以及下载和加载预训练模型的简单接口
-class TFAlbertPreTrainedModel(TFPreTrainedModel):
     """
-    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
-    models.
+    处理权重初始化、预训练模型下载和加载的抽象类。
     """
-
-    # AlbertConfig 类的引用，用于配置模型
+    
+    # 配置类为 AlbertConfig
     config_class = AlbertConfig
-    # 模型的基础名称前缀
+    # 基础模型前缀为 "albert"
     base_model_prefix = "albert"
 
-
-# TFAlbertMLMHead 类，用于处理 Albert 模型的 Masked Language Model 头部
-class TFAlbertMLMHead(tf.keras.layers.Layer):
-    # 初始化函数
-    def __init__(self, config: AlbertConfig, input_embeddings: tf.keras.layers.Layer, **kwargs):
+class TFAlbertMLMHead(keras.layers.Layer):
+    def __init__(self, config: AlbertConfig, input_embeddings: keras.layers.Layer, **kwargs):
         super().__init__(**kwargs)
 
-        # 配置对象
         self.config = config
-        # 嵌入维度大小
         self.embedding_size = config.embedding_size
-        # 全连接层，用于转换输入特征
-        self.dense = tf.keras.layers.Dense(
+        
+        # 创建一个全连接层，用于预测下一个词的特征
+        self.dense = keras.layers.Dense(
             config.embedding_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-        # 激活函数
+        
+        # 根据配置中的激活函数类型，获取激活函数
         if isinstance(config.hidden_act, str):
             self.activation = get_tf_activation(config.hidden_act)
         else:
             self.activation = config.hidden_act
+        
+        # LayerNormalization 层，用于归一化输入的词嵌入
+        self.LayerNorm = keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
 
-        # LayerNormalization 层，用于标准化输入特征
-        self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
-
-        # 解码器，用于输出权重
+        # 输入词嵌入层，用于解码器的输出权重
         self.decoder = input_embeddings
 
-    # 构建函数
     def build(self, input_shape=None):
-        # 输出偏置
+        # 增加偏置项，用于每个词汇的输出偏置
         self.bias = self.add_weight(shape=(self.config.vocab_size,), initializer="zeros", trainable=True, name="bias")
+        
+        # 解码器的偏置项，用于每个词汇的解码偏置
         self.decoder_bias = self.add_weight(
             shape=(self.config.vocab_size,), initializer="zeros", trainable=True, name="decoder/bias"
         )
 
+        # 如果已经构建，则直接返回
         if self.built:
             return
         self.built = True
+        
         # 构建全连接层
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
                 self.dense.build([None, None, self.config.hidden_size])
+        
         # 构建 LayerNormalization 层
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
                 self.LayerNorm.build([None, None, self.config.embedding_size])
 
-    # 获取输出权重
-    def get_output_embeddings(self) -> tf.keras.layers.Layer:
+    def get_output_embeddings(self) -> keras.layers.Layer:
+        # 返回解码器的词嵌入层
         return self.decoder
 
-    # 设置输出权重
     def set_output_embeddings(self, value: tf.Variable):
+        # 设置解码器的权重
         self.decoder.weight = value
         self.decoder.vocab_size = shape_list(value)[0]
 
-    # 获取偏置
     def get_bias(self) -> Dict[str, tf.Variable]:
+        # 返回偏置项字典
         return {"bias": self.bias, "decoder_bias": self.decoder_bias}
 
-    # 设置偏置
     def set_bias(self, value: tf.Variable):
+        # 设置偏置项的值
         self.bias = value["bias"]
         self.decoder_bias = value["decoder_bias"]
         self.config.vocab_size = shape_list(value["bias"])[0]
     # 使用全连接层对隐藏状态进行线性变换
     hidden_states = self.dense(inputs=hidden_states)
-    # 应用激活函数
+    # 应用激活函数对线性变换后的隐藏状态进行非线性变换
     hidden_states = self.activation(hidden_states)
-    # 对隐藏状态进行 Layer Normalization
+    # 应用层归一化操作对隐藏状态进行归一化处理
     hidden_states = self.LayerNorm(inputs=hidden_states)
-    # 获取序列长度
+    # 获取隐藏状态张量的第二个维度，即序列长度
     seq_length = shape_list(tensor=hidden_states)[1]
-    # 将隐藏状态重塑为二维张量
+    # 对隐藏状态张量进行形状重塑，将其转换为二维张量
     hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, self.embedding_size])
-    # 使用矩阵乘法进行线性变换，其中权重为 decoder 的权重矩阵的转置
+    # 对重塑后的隐藏状态张量与解码器权重矩阵进行矩阵乘法运算
     hidden_states = tf.matmul(a=hidden_states, b=self.decoder.weight, transpose_b=True)
-    # 将结果重新塑造为三维张量
+    # 将矩阵乘法结果的张量形状重塑为三维张量，恢复为序列长度相关的形状
     hidden_states = tf.reshape(tensor=hidden_states, shape=[-1, seq_length, self.config.vocab_size])
-    # 添加解码器偏置
+    # 对矩阵乘法结果张量添加偏置项
     hidden_states = tf.nn.bias_add(value=hidden_states, bias=self.decoder_bias)
 
-    # 返回隐藏状态
+    # 返回经过线性变换、激活函数、归一化、矩阵乘法、偏置项处理后的隐藏状态张量
     return hidden_states
-# 使用 keras_serializable 装饰器将类 TFAlbertMainLayer 序列化为 Keras 模型
+# 使用 keras_serializable 装饰器将类 TFAlbertMainLayer 序列化为 Keras 层
 @keras_serializable
-class TFAlbertMainLayer(tf.keras.layers.Layer):
+class TFAlbertMainLayer(keras.layers.Layer):
     # 设置配置类为 AlbertConfig
     config_class = AlbertConfig
 
-    # 初始化方法，接受 AlbertConfig 对象和是否添加池化层的参数
+    # 初始化函数，接受 AlbertConfig 类型的 config 和一个布尔值 add_pooling_layer
     def __init__(self, config: AlbertConfig, add_pooling_layer: bool = True, **kwargs):
         # 调用父类的初始化方法
         super().__init__(**kwargs)
@@ -692,13 +741,15 @@ class TFAlbertMainLayer(tf.keras.layers.Layer):
         # 保存传入的配置对象
         self.config = config
 
-        # 创建 TFAlbertEmbeddings 对象
+        # 创建 TFAlbertEmbeddings 层，并命名为 "embeddings"
         self.embeddings = TFAlbertEmbeddings(config, name="embeddings")
-        # 创建 TFAlbertTransformer 对象
+
+        # 创建 TFAlbertTransformer 层，并命名为 "encoder"
         self.encoder = TFAlbertTransformer(config, name="encoder")
-        # 如果需要添加池化层，则创建 Dense 层作为池化层
+
+        # 如果 add_pooling_layer 为 True，则创建一个 Dense 层作为池化层，否则为 None
         self.pooler = (
-            tf.keras.layers.Dense(
+            keras.layers.Dense(
                 units=config.hidden_size,
                 kernel_initializer=get_initializer(config.initializer_range),
                 activation="tanh",
@@ -708,16 +759,16 @@ class TFAlbertMainLayer(tf.keras.layers.Layer):
             else None
         )
 
-    # 获取输入嵌入层对象
-    def get_input_embeddings(self) -> tf.keras.layers.Layer:
+    # 返回输入嵌入层 embeddings
+    def get_input_embeddings(self) -> keras.layers.Layer:
         return self.embeddings
 
-    # 设置输入嵌入层的权重
+    # 设置输入嵌入层的权重值和词汇大小
     def set_input_embeddings(self, value: tf.Variable):
         self.embeddings.weight = value
         self.embeddings.vocab_size = shape_list(value)[0]
 
-    # 剪枝模型中的头部
+    # 未实现的方法，用于剪枝模型中的头部
     def _prune_heads(self, heads_to_prune):
         """
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
@@ -725,7 +776,7 @@ class TFAlbertMainLayer(tf.keras.layers.Layer):
         """
         raise NotImplementedError
 
-    # 调用方法，接受多个输入参数
+    # 使用 unpack_inputs 装饰器，处理输入的各种参数
     @unpack_inputs
     def call(
         self,
@@ -739,138 +790,114 @@ class TFAlbertMainLayer(tf.keras.layers.Layer):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         training: bool = False,
-    # 构建模型，接受输入形状参数
+    ):
+        # 函数内容未提供
+
+    # 构建层，如果已经构建则直接返回
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果存在嵌入层对象，则构建嵌入层
+        
+        # 如果存在嵌入层 embeddings，则构建其内部结构
         if getattr(self, "embeddings", None) is not None:
             with tf.name_scope(self.embeddings.name):
                 self.embeddings.build(None)
-        # 如果存在编码器对象，则构建编码器
+        
+        # 如果存在编码器 encoder，则构建其内部结构
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
                 self.encoder.build(None)
-        # 如果存在池化层对象，则构建池化层
+        
+        # 如果存在池化层 pooler，则构建其内部结构，输入形状为 [None, None, self.config.hidden_size]
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
                 self.pooler.build([None, None, self.config.hidden_size])
 
 
-# 使用 dataclass 装饰器将类 TFAlbertForPreTrainingOutput 转换为数据类
+# 使用 dataclass 装饰器创建 TFAlbertForPreTrainingOutput 类，继承自 ModelOutput
 @dataclass
 class TFAlbertForPreTrainingOutput(ModelOutput):
     """
     Output type of [`TFAlbertForPreTraining`].
-    Args:
-        prediction_logits (`tf.Tensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-            预测语言建模头部的预测分数（SoftMax之前每个词汇标记的分数）。
-        sop_logits (`tf.Tensor` of shape `(batch_size, 2)`):
-            下一个序列预测（分类）头部的预测分数（SoftMax之前的True/False延续分数）。
-        hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            形状为`(batch_size, sequence_length, hidden_size)`的`tf.Tensor`元组。
-
-            每个层的输出隐藏状态加上初始嵌入输出。
-        attentions (`tuple(tf.Tensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            形状为`(batch_size, num_heads, sequence_length, sequence_length)`的`tf.Tensor`元组。
-
-            在注意力SoftMax之后的注意力权重，用于计算自注意力头部中的加权平均值。
     """
-
     loss: tf.Tensor = None
+    # 损失值，初始化为 None
+
     prediction_logits: tf.Tensor = None
+    # 语言建模头部的预测分数张量，形状为 `(batch_size, sequence_length, config.vocab_size)`，在 SoftMax 之前的分数。
+
     sop_logits: tf.Tensor = None
+    # 下一个序列预测（分类）头部的预测分数张量，形状为 `(batch_size, 2)`，在 SoftMax 之前的分数，表示 True/False 的延续。
+
     hidden_states: Tuple[tf.Tensor] | None = None
+    # 当 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回的隐藏状态元组，
+    # 包含每个层的输出张量和初始嵌入输出，形状为 `(batch_size, sequence_length, hidden_size)`。
+
     attentions: Tuple[tf.Tensor] | None = None
-# 定义 ALBERT 模型的文档字符串，包含了模型的继承关系和使用提示
-ALBERT_START_DOCSTRING = r"""
+    # 当 `output_attentions=True` 或 `config.output_attentions=True` 时返回的注意力张量元组，
+    # 包含每个层的注意力权重张量，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+"""
+    这个模型继承自 `TFPreTrainedModel`。查看超类文档以获取库实现的通用方法，比如下载或保存模型、调整输入嵌入大小、修剪头等。
 
-    This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
-    etc.)
-
-    This model is also a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
-    as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
-    behavior.
+    这个模型也是 [keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) 的子类。将其用作常规的 TF 2.0 Keras 模型，并参考 TF 2.0 文档，以获取所有与一般使用和行为相关的信息。
 
     <Tip>
 
-    TensorFlow models and layers in `transformers` accept two formats as input:
+    `transformers` 中的 TensorFlow 模型和层接受两种输入格式：
 
-    - having all inputs as keyword arguments (like PyTorch models), or
-    - having all inputs as a list, tuple or dict in the first positional argument.
+    - 将所有输入作为关键字参数（类似于 PyTorch 模型），或者
+    - 将所有输入作为列表、元组或字典传递给第一个位置参数。
 
-    The reason the second format is supported is that Keras methods prefer this format when passing inputs to models
-    and layers. Because of this support, when using methods like `model.fit()` things should "just work" for you - just
-    pass your inputs and labels in any format that `model.fit()` supports! If, however, you want to use the second
-    format outside of Keras methods like `fit()` and `predict()`, such as when creating your own layers or models with
-    the Keras `Functional` API, there are three possibilities you can use to gather all the input Tensors in the first
-    positional argument:
+    支持第二种格式的原因在于，Keras 方法在将输入传递给模型和层时更喜欢这种格式。由于这种支持，当使用诸如 `model.fit()` 这样的方法时，只需传递模型支持的任何格式的输入和标签即可！然而，如果您想在 Keras 方法之外使用第二种格式，比如在使用 Keras `Functional` API 创建自己的层或模型时，可以使用三种可能性来收集第一个位置参数中的所有输入张量：
 
-    - a single Tensor with `input_ids` only and nothing else: `model(input_ids)`
-    - a list of varying length with one or several input Tensors IN THE ORDER given in the docstring:
-    `model([input_ids, attention_mask])` or `model([input_ids, attention_mask, token_type_ids])`
-    - a dictionary with one or several input Tensors associated to the input names given in the docstring:
-    `model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
+    - 只有 `input_ids` 的单个张量：`model(input_ids)`
+    - 长度可变的列表，按照文档字符串中给定的顺序包含一个或多个输入张量：`model([input_ids, attention_mask])` 或 `model([input_ids, attention_mask, token_type_ids])`
+    - 一个字典，将一个或多个输入张量与文档字符串中给定的输入名称相关联：`model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
 
-    Note that when creating models and layers with
-    [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) then you don't need to worry
-    about any of this, as you can just pass inputs like you would to any other Python function!
+    请注意，当使用 [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) 创建模型和层时，您无需担心这些问题，因为可以像将输入传递给任何其他 Python 函数一样传递输入！
 
     </Tip>
 
     Args:
-        config ([`AlbertConfig`]): Model configuration class with all the parameters of the model.
-            Initializing with a config file does not load the weights associated with the model, only the
-            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
+        config ([`AlbertConfig`]): 包含模型所有参数的模型配置类。
+            使用配置文件初始化不会加载与模型关联的权重，仅加载配置。查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
 """
 
-# 定义 ALBERT 模型的输入文档字符串
-ALBERT_INPUTS_DOCSTRING = r"""
-"""
-
-# 添加起始文档字符串到 ALBERT 模型类中
 @add_start_docstrings(
-    "The bare Albert Model transformer outputting raw hidden-states without any specific head on top.",
+    "不带任何特定头部的裸 Albert 模型变压器输出原始隐藏状态。",
     ALBERT_START_DOCSTRING,
 )
-# 定义 TFAlbertModel 类，继承自 TFAlbertPreTrainedModel
 class TFAlbertModel(TFAlbertPreTrainedModel):
-    # 初始化方法
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 创建 ALBERT 主层对象
         self.albert = TFAlbertMainLayer(config, name="albert")
 
-    # 解包输入参数
     @unpack_inputs
-    # 使用装饰器添加模型输入的文档字符串，描述输入参数的含义和格式
+    # 使用装饰器添加模型前向传播的文档字符串，指定ALBERT模型输入的批次大小和序列长度
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 使用装饰器添加代码示例的文档字符串，描述模型的检查点、输出类型和配置类
+    # 使用装饰器添加代码示例的文档字符串，包括检查点、输出类型、配置类等信息
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFBaseModelOutputWithPooling,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义模型的调用方法，接受输入参数并返回模型输出
+    # 定义模型的前向传播方法，接收多个可能为None的输入参数，并返回模型输出
     def call(
         self,
-        input_ids: TFModelInputType | None = None,  # 输入的 token ID 序列，默认为 None
-        attention_mask: np.ndarray | tf.Tensor | None = None,  # 注意力遮罩，默认为 None
-        token_type_ids: np.ndarray | tf.Tensor | None = None,  # token 类型 ID，默认为 None
-        position_ids: np.ndarray | tf.Tensor | None = None,  # 位置 ID，默认为 None
-        head_mask: np.ndarray | tf.Tensor | None = None,  # 头部遮罩，默认为 None
-        inputs_embeds: np.ndarray | tf.Tensor | None = None,  # 嵌入向量，默认为 None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力，默认为 None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为 None
-        return_dict: Optional[bool] = None,  # 是否以字典形式返回，默认为 None
-        training: Optional[bool] = False,  # 是否处于训练模式，默认为 False
-    ) -> Union[TFBaseModelOutputWithPooling, Tuple[tf.Tensor]]:  # 返回类型为模型输出或元组
-        # 调用 ALBERT 模型的 call 方法，传递参数并获取输出
+        input_ids: TFModelInputType | None = None,  # 输入的token ID序列，可以为None
+        attention_mask: np.ndarray | tf.Tensor | None = None,  # 注意力遮罩，可以为None
+        token_type_ids: np.ndarray | tf.Tensor | None = None,  # token类型ID，可以为None
+        position_ids: np.ndarray | tf.Tensor | None = None,  # 位置ID，可以为None
+        head_mask: np.ndarray | tf.Tensor | None = None,  # 头部遮罩，可以为None
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,  # 输入的嵌入表示，可以为None
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，默认为None
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，默认为None
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回输出，默认为None
+        training: Optional[bool] = False,  # 是否处于训练模式，默认为False
+    ) -> Union[TFBaseModelOutputWithPooling, Tuple[tf.Tensor]]:
+        # 调用ALBERT模型的前向传播方法，传递所有参数，并接收输出
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -883,52 +910,59 @@ class TFAlbertModel(TFAlbertPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-        # 返回模型输出
+        # 返回ALBERT模型的输出
         return outputs
 
-    # 构建模型，设置模型的构建过程
+    # 构建方法，用于构建模型
     def build(self, input_shape=None):
-        # 如果模型已构建，则直接返回
+        # 如果模型已经构建完成，直接返回
         if self.built:
             return
-        # 标记模型已构建
+        # 标记模型已经构建
         self.built = True
-        # 如果模型包含 ALBERT 模型，则构建 ALBERT 模型
+        # 如果模型的albert属性存在
         if getattr(self, "albert", None) is not None:
-            # 在指定的命名空间下构建 ALBERT 模型
+            # 在albert的命名空间内构建albert模型
             with tf.name_scope(self.albert.name):
-                # 构建 ALBERT 模型，传入输入形状为 None
+                # 构建albert模型，不需要输入形状参数
                 self.albert.build(None)
-# 使用 Albert 模型进行预训练，包含一个用于掩码语言建模的头部和一个用于句子顺序预测（分类）的头部
+"""
+Albert Model with two heads on top for pretraining: a `masked language modeling` head and a `sentence order
+prediction` (classification) head.
+"""
+# 继承 TFAlbertPreTrainedModel 和 TFAlbertPreTrainingLoss 类，实现预训练模型
 @add_start_docstrings(
     """
     Albert Model with two heads on top for pretraining: a `masked language modeling` head and a `sentence order
     prediction` (classification) head.
     """,
-    ALBERT_START_DOCSTRING,
+    ALBERT_START_DOCSTRING,  # 添加 Albert 模型的起始文档字符串
 )
 class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
-    # 在从 PT 模型加载 TF 模型时，带有 '.' 的名称表示授权的意外/缺失层
+    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
+    # 在从 PyTorch 模型加载 TF 模型时，带 '.' 的名称表示被授权的意外/缺失的层
     _keys_to_ignore_on_load_unexpected = [r"predictions.decoder.weight"]
 
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
 
-        # 获取标签数量
+        # 初始化 Albert 预训练模型，设定标签数
         self.num_labels = config.num_labels
 
-        # 创建 Albert 主层
+        # Albert 主层，使用 TFAlbertMainLayer 初始化，命名为 "albert"
         self.albert = TFAlbertMainLayer(config, name="albert")
-        # 创建掩码语言建模头部
+
+        # Albert MLM 头部，使用 TFAlbertMLMHead 初始化，输入嵌入使用 self.albert.embeddings，命名为 "predictions"
         self.predictions = TFAlbertMLMHead(config, input_embeddings=self.albert.embeddings, name="predictions")
-        # 创建句子顺序预测头部
+
+        # Albert SOP 分类头部，使用 TFAlbertSOPHead 初始化，命名为 "sop_classifier"
         self.sop_classifier = TFAlbertSOPHead(config, name="sop_classifier")
 
-    # 获取语言建模头部
-    def get_lm_head(self) -> tf.keras.layers.Layer:
+    # 返回 MLM 头部
+    def get_lm_head(self) -> keras.layers.Layer:
         return self.predictions
 
-    # 模型调用方法，包括输入参数和输出文档字符串
+    # 模型的前向传播函数，接受一系列输入，参照 ALBERT_INPUTS_DOCSTRING 添加起始文档字符串
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=TFAlbertForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
@@ -946,18 +980,21 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
         labels: np.ndarray | tf.Tensor | None = None,
         sentence_order_label: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
+        **kwargs,
     ) -> Union[TFAlbertForPreTrainingOutput, Tuple[tf.Tensor]]:
+        # 省略的部分对于模型前向传播的具体实现，输出和配置信息
+        ) -> Union[TFAlbertForPreTrainingOutput, Tuple[tf.Tensor]]:
         r"""
         Return:
 
         Example:
 
-        ```py
+        ```python
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFAlbertForPreTraining
 
-        >>> tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")
-        >>> model = TFAlbertForPreTraining.from_pretrained("albert-base-v2")
+        >>> tokenizer = AutoTokenizer.from_pretrained("albert/albert-base-v2")
+        >>> model = TFAlbertForPreTraining.from_pretrained("albert/albert-base-v2")
 
         >>> input_ids = tf.constant(tokenizer.encode("Hello, my dog is cute", add_special_tokens=True))[None, :]
         >>> # Batch size 1
@@ -967,7 +1004,7 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
         >>> sop_logits = outputs.sop_logits
         ```"""
 
-        # 调用 albert 模型进行预测
+        # 调用 self.albert 模型进行预测
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -980,27 +1017,29 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
             return_dict=return_dict,
             training=training,
         )
-        # 获取序列输出和汇总输出
+        # 提取模型输出的序列输出和池化输出
         sequence_output, pooled_output = outputs[:2]
-        # 通过预测模型获取预测分数
+        # 使用 predictions 层生成预测分数
         prediction_scores = self.predictions(hidden_states=sequence_output)
-        # 通过句子顺序分类器获取句子顺序分数
+        # 使用 sop_classifier 层生成 SOP 分类分数
         sop_scores = self.sop_classifier(pooled_output=pooled_output, training=training)
+        # 初始化总损失
         total_loss = None
 
-        # 如果存在标签和句子顺序标签
+        # 如果有标签和句子顺序标签，则计算损失
         if labels is not None and sentence_order_label is not None:
+            # 构建标签字典
             d_labels = {"labels": labels}
             d_labels["sentence_order_label"] = sentence_order_label
-            # 计算总损失
+            # 使用 hf_compute_loss 计算总损失
             total_loss = self.hf_compute_loss(labels=d_labels, logits=(prediction_scores, sop_scores))
 
-        # 如果不返回字典
+        # 如果 return_dict 为 False，则返回扁平化的输出元组
         if not return_dict:
             output = (prediction_scores, sop_scores) + outputs[2:]
             return ((total_loss,) + output) if total_loss is not None else output
 
-        # 返回 TFAlbertForPreTrainingOutput 对象
+        # 如果 return_dict 为 True，则返回 TFAlbertForPreTrainingOutput 对象
         return TFAlbertForPreTrainingOutput(
             loss=total_loss,
             prediction_logits=prediction_scores,
@@ -1009,64 +1048,95 @@ class TFAlbertForPreTraining(TFAlbertPreTrainedModel, TFAlbertPreTrainingLoss):
             attentions=outputs.attentions,
         )
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
+        # 如果已经构建过，则直接返回
         if self.built:
             return
+        # 设置构建标志为 True
         self.built = True
-        # 如果存在 albert 模型
+        # 如果存在 self.albert 属性，则构建 self.albert 模型
         if getattr(self, "albert", None) is not None:
             with tf.name_scope(self.albert.name):
                 self.albert.build(None)
-        # 如果存在预测模型
+        # 如果存在 self.predictions 属性，则构建 self.predictions 层
         if getattr(self, "predictions", None) is not None:
             with tf.name_scope(self.predictions.name):
                 self.predictions.build(None)
-        # 如果存在句子顺序分类器
+        # 如果存在 self.sop_classifier 属性，则构建 self.sop_classifier 层
         if getattr(self, "sop_classifier", None) is not None:
             with tf.name_scope(self.sop_classifier.name):
                 self.sop_classifier.build(None)
-class TFAlbertSOPHead(tf.keras.layers.Layer):
+# 定义 TFAlbertSOPHead 类，继承自 keras 的 Layer 类
+class TFAlbertSOPHead(keras.layers.Layer):
+    
+    # 初始化方法，接受 AlbertConfig 类型的 config 参数和其他关键字参数
     def __init__(self, config: AlbertConfig, **kwargs):
-        super().__init__(**kwargs)  # 调用父类构造函数初始化对象
-
-        self.dropout = tf.keras.layers.Dropout(rate=config.classifier_dropout_prob)  # 定义 dropout 层，用于随机失活
-        self.classifier = tf.keras.layers.Dense(  # 定义全连接层，用于分类任务
-            units=config.num_labels,  # 分类的类别数
-            kernel_initializer=get_initializer(config.initializer_range),  # 权重初始化器
-            name="classifier",  # 层名称
+        super().__init__(**kwargs)
+        
+        # 使用 config 的 classifier_dropout_prob 属性创建一个 Dropout 层
+        self.dropout = keras.layers.Dropout(rate=config.classifier_dropout_prob)
+        
+        # 使用 config 的 num_labels 属性和 initializer_range 属性创建一个全连接 Dense 层
+        self.classifier = keras.layers.Dense(
+            units=config.num_labels,
+            kernel_initializer=get_initializer(config.initializer_range),
+            name="classifier",
         )
-        self.config = config  # 存储配置信息
+        
+        # 将 config 参数存储在实例变量中
+        self.config = config
 
+    # call 方法用于定义层的前向传播逻辑
     def call(self, pooled_output: tf.Tensor, training: bool) -> tf.Tensor:
-        dropout_pooled_output = self.dropout(inputs=pooled_output, training=training)  # 应用 dropout
-        logits = self.classifier(inputs=dropout_pooled_output)  # 计算分类结果的 logits
+        # 对输入的 pooled_output 应用 Dropout 操作
+        dropout_pooled_output = self.dropout(inputs=pooled_output, training=training)
+        
+        # 将 Dropout 后的输出传递给全连接 Dense 层，得到 logits
+        logits = self.classifier(inputs=dropout_pooled_output)
 
-        return logits  # 返回分类结果的 logits
+        # 返回 logits
+        return logits
 
+    # build 方法用于构建层，在此方法中创建层的变量
     def build(self, input_shape=None):
-        if self.built:  # 如果已经构建过，直接返回
+        # 如果层已经构建过，直接返回
+        if self.built:
             return
-        self.built = True  # 标记已构建
-        if getattr(self, "classifier", None) is not None:  # 如果分类器已定义
-            with tf.name_scope(self.classifier.name):  # 使用分类器的名称作为命名空间
-                self.classifier.build([None, None, self.config.hidden_size])  # 构建分类器的参数
+        
+        # 将层标记为已构建
+        self.built = True
+        
+        # 如果 self.classifier 存在，则在名为 self.classifier 的命名作用域下构建全连接层
+        if getattr(self, "classifier", None) is not None:
+            with tf.name_scope(self.classifier.name):
+                self.classifier.build([None, None, self.config.hidden_size])
 
+
+# 使用装饰器 @add_start_docstrings 添加文档字符串描述 Albert Model 的语言建模头部
 @add_start_docstrings("""Albert Model with a `language modeling` head on top.""", ALBERT_START_DOCSTRING)
 class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss):
-    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
+    
+    # 定义 _keys_to_ignore_on_load_unexpected 属性，用于在加载 TF 模型时忽略指定的层
+    # 名称中带有 '.' 表示的是从 PT 模型加载 TF 模型时可能会出现的未预期的或丢失的层
     _keys_to_ignore_on_load_unexpected = [r"pooler", r"predictions.decoder.weight"]
 
+    # 初始化方法，接受 AlbertConfig 类型的 config 参数和其他位置和关键字参数
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
-        super().__init__(config, *inputs, **kwargs)  # 调用父类构造函数初始化对象
+        # 调用父类 TFAlbertPreTrainedModel 的初始化方法
+        super().__init__(config, *inputs, **kwargs)
+        
+        # 创建 TFAlbertMainLayer 类的实例 albert，设置 add_pooling_layer=False，命名为 "albert"
+        self.albert = TFAlbertMainLayer(config, add_pooling_layer=False, name="albert")
+        
+        # 创建 TFAlbertMLMHead 类的实例 predictions，设置 input_embeddings 为 self.albert.embeddings，命名为 "predictions"
+        self.predictions = TFAlbertMLMHead(config, input_embeddings=self.albert.embeddings, name="predictions")
 
-        self.albert = TFAlbertMainLayer(config, add_pooling_layer=False, name="albert")  # Albert 主层
-        self.predictions = TFAlbertMLMHead(config, input_embeddings=self.albert.embeddings, name="predictions")  # 预测层
+    # 返回预测头部的方法，返回 self.predictions
+    def get_lm_head(self) -> keras.layers.Layer:
+        return self.predictions
 
-    def get_lm_head(self) -> tf.keras.layers.Layer:
-        return self.predictions  # 返回语言模型头部
-
+    # 使用装饰器 @unpack_inputs、@add_start_docstrings_to_model_forward 和 @replace_return_docstrings
+    # 添加文档字符串描述 call 方法的输入和输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=TFMaskedLMOutput, config_class=_CONFIG_FOR_DOC)
@@ -1083,44 +1153,6 @@ class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss)
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-    ) -> Union[TFMaskedLMOutput, Tuple[tf.Tensor]]:
-        r"""
-        labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
-            Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
-            config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
-            loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`
-
-        Returns:
-
-        Example:
-
-        ```py
-        >>> import tensorflow as tf
-        >>> from transformers import AutoTokenizer, TFAlbertForMaskedLM
-
-        >>> tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")
-        >>> model = TFAlbertForMaskedLM.from_pretrained("albert-base-v2")
-
-        >>> # add mask_token
-        >>> inputs = tokenizer(f"The capital of [MASK] is Paris.", return_tensors="tf")
-        >>> logits = model(**inputs).logits
-
-        >>> # retrieve index of [MASK]
-        >>> mask_token_index = tf.where(inputs.input_ids == tokenizer.mask_token_id)[0][1]
-        >>> predicted_token_id = tf.math.argmax(logits[0, mask_token_index], axis=-1)
-        >>> tokenizer.decode(predicted_token_id)
-        'france'
-        ```
-
-        ```py
-        >>> labels = tokenizer("The capital of France is Paris.", return_tensors="tf")["input_ids"]
-        >>> labels = tf.where(inputs.input_ids == tokenizer.mask_token_id, labels, -100)
-        >>> outputs = model(**inputs, labels=labels)
-        >>> round(float(outputs.loss), 2)
-        0.81
-        ```
-        """
-        # 调用 Albert 模型，传入输入参数并获取输出
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1133,45 +1165,45 @@ class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss)
             return_dict=return_dict,
             training=training,
         )
-        # 从输出中获取序列输出
+        # 从 ALBERT 模型中获取输出结果，包括序列输出和其他选项
         sequence_output = outputs[0]
-        # 根据序列输出计算预测分数
+        # 使用序列输出计算预测得分
         prediction_scores = self.predictions(hidden_states=sequence_output, training=training)
-        # 如果存在标签，则计算损失
+        # 如果提供了标签，计算损失；否则损失为 None
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=prediction_scores)
 
-        # 如果不需要以字典形式返回结果
+        # 如果不要求返回字典形式的结果，按顺序返回预测得分和其他输出
         if not return_dict:
-            # 构造输出元组，如果损失不为空，则添加损失到输出元组中
             output = (prediction_scores,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 以 TFMaskedLMOutput 对象的形式返回结果
+        # 否则，返回 TFMaskedLMOutput 对象，包括损失、预测得分、隐藏状态和注意力权重
         return TFMaskedLMOutput(
             loss=loss,
             logits=prediction_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    # 构建模型，根据输入形状进行构建
+    # 定义 build 方法，用于构建模型
     def build(self, input_shape=None):
-        # 如果模型已经构建完成，则直接返回，不进行重复构建
+        # 如果已经构建过，直接返回，避免重复构建
         if self.built:
             return
-        # 标记模型已构建
+        # 设置标记表示已经构建
         self.built = True
-        # 如果存在 Albert 模型，则构建 Albert 模型
+        
+        # 如果模型中存在名为 albert 的属性，开始构建 albert 部分
         if getattr(self, "albert", None) is not None:
-            # 在 TensorFlow 中为 Albert 模型创建命名空间
+            # 使用 albert 的名称作为命名空间，开始构建 albert
             with tf.name_scope(self.albert.name):
-                # 根据输入形状构建 Albert 模型
                 self.albert.build(None)
-        # 如果存在预测层，则构建预测层
+        
+        # 如果模型中存在名为 predictions 的属性，开始构建 predictions 部分
         if getattr(self, "predictions", None) is not None:
-            # 在 TensorFlow 中为预测层创建命名空间
+            # 使用 predictions 的名称作为命名空间，开始构建 predictions
             with tf.name_scope(self.predictions.name):
-                # 根据输入形状构建预测层
                 self.predictions.build(None)
+# 使用装饰器添加文档字符串，描述了这个类的用途和结构
 @add_start_docstrings(
     """
     Albert Model transformer with a sequence classification/regression head on top (a linear layer on top of the pooled
@@ -1179,23 +1211,33 @@ class TFAlbertForMaskedLM(TFAlbertPreTrainedModel, TFMaskedLanguageModelingLoss)
     """,
     ALBERT_START_DOCSTRING,
 )
+# 定义 TFAlbertForSequenceClassification 类，继承自 TFAlbertPreTrainedModel 和 TFSequenceClassificationLoss
 class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClassificationLoss):
-    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
-    _keys_to_ignore_on_load_unexpected = [r"predictions"]  # 在从 PT 模型加载 TF 模型时忽略的未预期/缺失的层
-    _keys_to_ignore_on_load_missing = [r"dropout"]  # 在从 PT 模型加载 TF 模型时忽略的未找到的层
+    # 在加载过程中忽略的不期望/缺失的层名称列表
+    _keys_to_ignore_on_load_unexpected = [r"predictions"]
+    # 在加载过程中忽略的缺失的层名称列表
+    _keys_to_ignore_on_load_missing = [r"dropout"]
 
+    # 构造方法，初始化类的实例
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
+        # 调用父类的构造方法
         super().__init__(config, *inputs, **kwargs)
 
-        self.num_labels = config.num_labels  # 分类标签数量
+        # 设置类别数目
+        self.num_labels = config.num_labels
 
-        self.albert = TFAlbertMainLayer(config, name="albert")  # Albert 主层
-        self.dropout = tf.keras.layers.Dropout(rate=config.classifier_dropout_prob)  # dropout 层
-        self.classifier = tf.keras.layers.Dense(
+        # 创建 Albert 主层，使用给定的配置和名称
+        self.albert = TFAlbertMainLayer(config, name="albert")
+        # 添加 Dropout 层，使用给定的分类器 dropout 概率
+        self.dropout = keras.layers.Dropout(rate=config.classifier_dropout_prob)
+        # 添加 Dense 层作为分类器，设置输出单元数为类别数目，使用给定的初始化器范围和名称
+        self.classifier = keras.layers.Dense(
             units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
-        )  # 分类器线性层
-        self.config = config  # 模型配置
+        )
+        # 保存配置对象
+        self.config = config
 
+    # 使用装饰器添加文档字符串，描述了 call 方法的输入和输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1205,19 +1247,21 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
         expected_output="'LABEL_1'",
         expected_loss=0.12,
     )
+    # 定义 call 方法，实现模型的前向传播
     def call(
         self,
-        input_ids: TFModelInputType | None = None,  # 输入 token IDs
-        attention_mask: np.ndarray | tf.Tensor | None = None,  # 注意力遮罩
-        token_type_ids: np.ndarray | tf.Tensor | None = None,  # token 类型 IDs
-        position_ids: np.ndarray | tf.Tensor | None = None,  # 位置 IDs
-        head_mask: np.ndarray | tf.Tensor | None = None,  # 头部遮罩
-        inputs_embeds: np.ndarray | tf.Tensor | None = None,  # 输入嵌入
-        output_attentions: Optional[bool] = None,  # 是否返回注意力权重
-        output_hidden_states: Optional[bool] = None,  # 是否返回隐藏状态
-        return_dict: Optional[bool] = None,  # 是否以字典形式返回结果
-        labels: np.ndarray | tf.Tensor | None = None,  # 标签
-        training: Optional[bool] = False,  # 是否处于训练模式
+        input_ids: TFModelInputType | None = None,
+        attention_mask: np.ndarray | tf.Tensor | None = None,
+        token_type_ids: np.ndarray | tf.Tensor | None = None,
+        position_ids: np.ndarray | tf.Tensor | None = None,
+        head_mask: np.ndarray | tf.Tensor | None = None,
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        labels: np.ndarray | tf.Tensor | None = None,
+        training: Optional[bool] = False,
+        # 可选的输入参数，用于自动解包输入
     ) -> Union[TFSequenceClassifierOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
@@ -1225,7 +1269,7 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 调用 ALBERT 模型，传入输入的各项参数，返回模型输出
+        # 调用 ALBERT 模型进行前向传播，获取模型输出
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1238,22 +1282,21 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
             return_dict=return_dict,
             training=training,
         )
-        # 从 ALBERT 模型输出中获取池化后的输出
+        # 从 ALBERT 模型输出中获取汇聚输出
         pooled_output = outputs[1]
-        # 对池化输出进行 dropout 处理
+        # 对汇聚输出应用 dropout，以防止过拟合
         pooled_output = self.dropout(inputs=pooled_output, training=training)
-        # 将池化后的输出传入分类器，得到 logits
+        # 使用分类器模型对汇聚输出进行分类，得到预测 logits
         logits = self.classifier(inputs=pooled_output)
-        # 计算损失，如果没有标签则损失为 None
+        # 如果提供了标签，则计算损失值
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=logits)
 
-        # 如果不要求返回字典，则构建返回的元组
+        # 如果不要求返回字典，则按顺序返回 logits 和可能的额外输出
         if not return_dict:
-            # 将 logits 与额外的输出组成元组返回，如果损失不为 None 则加入损失
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 如果要求返回字典，则构建 TFSequenceClassifierOutput 对象返回
+        # 返回 TFSequenceClassifierOutput 对象，包括损失、logits、隐藏状态和注意力权重
         return TFSequenceClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1262,81 +1305,104 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建过了，则直接返回
         if self.built:
             return
-        # 将构建标志置为 True
         self.built = True
-        # 如果 ALBERT 模型已经存在，则构建 ALBERT 模型
+        # 如果模型已经构建过，则直接返回
         if getattr(self, "albert", None) is not None:
+            # 使用 ALBERT 模型的名字空间构建模型
             with tf.name_scope(self.albert.name):
                 self.albert.build(None)
-        # 如果分类器存在，则构建分类器
+        # 如果存在分类器模型，则使用分类器的名字空间构建模型
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
-    # 定义一个带有标记分类头部的 Albert 模型，用于命名实体识别（NER）等任务
-    @add_start_docstrings(
-        """
-        Albert Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
-        Named-Entity-Recognition (NER) tasks.
-        """,
-        ALBERT_START_DOCSTRING,
-    )
-    class TFAlbertForTokenClassification(TFAlbertPreTrainedModel, TFTokenClassificationLoss):
-        # 在加载 TF 模型时，带有 '.' 的名称表示授权的意外/缺失层
-        _keys_to_ignore_on_load_unexpected = [r"pooler", r"predictions"]
-        _keys_to_ignore_on_load_missing = [r"dropout"]
+@add_start_docstrings(
+    """
+    Albert Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
+    Named-Entity-Recognition (NER) tasks.
+    """,
+    ALBERT_START_DOCSTRING,
+)
+class TFAlbertForTokenClassification(TFAlbertPreTrainedModel, TFTokenClassificationLoss):
+    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
+    # 定义在从 PyTorch 模型加载 TF 模型时，可以忽略的意外/缺失层的名称列表
+    _keys_to_ignore_on_load_unexpected = [r"pooler", r"predictions"]
+    # 定义在从 PyTorch 模型加载 TF 模型时，可以忽略的缺失层的名称列表
+    _keys_to_ignore_on_load_missing = [r"dropout"]
 
-        def __init__(self, config: AlbertConfig, *inputs, **kwargs):
-            super().__init__(config, *inputs, **kwargs)
+    def __init__(self, config: AlbertConfig, *inputs, **kwargs):
+        # 调用父类构造函数初始化模型
+        super().__init__(config, *inputs, **kwargs)
 
-            # 获取标签数量
-            self.num_labels = config.num_labels
+        # 从配置中获取标签数量
+        self.num_labels = config.num_labels
 
-            # 创建 Albert 主层
-            self.albert = TFAlbertMainLayer(config, add_pooling_layer=False, name="albert")
-            # 获取分类器的丢弃概率
-            classifier_dropout_prob = (
-                config.classifier_dropout_prob
-                if config.classifier_dropout_prob is not None
-                else config.hidden_dropout_prob
-            )
-            # 创建丢弃层
-            self.dropout = tf.keras.layers.Dropout(rate=classifier_dropout_prob)
-            # 创建分类器层
-            self.classifier = tf.keras.layers.Dense(
-                units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
-            )
-            self.config = config
+        # 创建 Albert 主层对象，不添加池化层，并命名为 "albert"
+        self.albert = TFAlbertMainLayer(config, add_pooling_layer=False, name="albert")
 
-        # 模型调用方法
-        @unpack_inputs
-        @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-        @add_code_sample_docstrings(
-            checkpoint=_CHECKPOINT_FOR_DOC,
-            output_type=TFTokenClassifierOutput,
-            config_class=_CONFIG_FOR_DOC,
+        # 根据配置中的分类器丢弃率或者隐藏层丢弃率，创建 Dropout 层
+        classifier_dropout_prob = (
+            config.classifier_dropout_prob
+            if config.classifier_dropout_prob is not None
+            else config.hidden_dropout_prob
         )
-        def call(
-            self,
-            input_ids: TFModelInputType | None = None,
-            attention_mask: np.ndarray | tf.Tensor | None = None,
-            token_type_ids: np.ndarray | tf.Tensor | None = None,
-            position_ids: np.ndarray | tf.Tensor | None = None,
-            head_mask: np.ndarray | tf.Tensor | None = None,
-            inputs_embeds: np.ndarray | tf.Tensor | None = None,
-            output_attentions: Optional[bool] = None,
-            output_hidden_states: Optional[bool] = None,
-            return_dict: Optional[bool] = None,
-            labels: np.ndarray | tf.Tensor | None = None,
-            training: Optional[bool] = False,
+        self.dropout = keras.layers.Dropout(rate=classifier_dropout_prob)
+
+        # 创建分类器 Dense 层，用于标签分类，初始化方式使用配置中的范围初始化
+        self.classifier = keras.layers.Dense(
+            units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
+        )
+
+        # 将配置对象保存到模型中
+        self.config = config
+
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=TFTokenClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    def call(
+        self,
+        input_ids: TFModelInputType | None = None,
+        attention_mask: np.ndarray | tf.Tensor | None = None,
+        token_type_ids: np.ndarray | tf.Tensor | None = None,
+        position_ids: np.ndarray | tf.Tensor | None = None,
+        head_mask: np.ndarray | tf.Tensor | None = None,
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        labels: np.ndarray | tf.Tensor | None = None,
+        training: Optional[bool] = False,
+        **kwargs,
+    ):
+        """
+        Performs forward pass of the model.
+        """
+        # 调用父类的 `call` 方法，执行模型的前向传播
+        return super().call(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            labels=labels,
+            training=training,
+            **kwargs,
+        )
     ) -> Union[TFTokenClassifierOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
         """
-        # 调用 ALBERT 模型进行前向传播，获取输出结果
+        # 调用 ALBERT 模型，获取模型的输出结果
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1349,23 +1415,23 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
             return_dict=return_dict,
             training=training,
         )
-        # 获取 ALBERT 模型的输出序列
+        # 从 ALBERT 模型的输出中获取序列输出
         sequence_output = outputs[0]
-        # 对输出序列进行 dropout 处理
+        # 对序列输出应用 dropout 操作，用于防止过拟合
         sequence_output = self.dropout(inputs=sequence_output, training=training)
-        # 将处理后的序列输入分类器，得到分类结果
+        # 将 dropout 后的序列输出输入分类器，得到 logits（预测结果）
         logits = self.classifier(inputs=sequence_output)
-        # 如果有标签，则计算损失
+        # 如果提供了标签，则计算损失值
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=logits)
 
-        # 如果不返回字典形式的结果
+        # 如果不需要返回字典形式的输出
         if not return_dict:
-            # 组装输出结果
+            # 组装输出元组
             output = (logits,) + outputs[2:]
-            # 返回结果
+            # 如果有损失值，则将损失值作为输出的第一个元素
             return ((loss,) + output) if loss is not None else output
 
-        # 返回字典形式的结果
+        # 返回 TFTokenClassifierOutput 对象，包含损失值、logits、隐藏状态和注意力权重
         return TFTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -1373,47 +1439,57 @@ class TFAlbertForSequenceClassification(TFAlbertPreTrainedModel, TFSequenceClass
             attentions=outputs.attentions,
         )
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
+        # 如果模型已经构建完成，则直接返回
         if self.built:
             return
+        # 将模型标记为已构建
         self.built = True
-        # 如果 ALBERT 模型存在，则构建 ALBERT 模型
+        # 如果存在 ALBERT 模型，则构建 ALBERT 模型
         if getattr(self, "albert", None) is not None:
             with tf.name_scope(self.albert.name):
                 self.albert.build(None)
-        # 如果分类器存在，则构建分类器
+        # 如果存在分类器模型，则构建分类器模型
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
+                # 构建分类器模型，输入形状为 [None, None, self.config.hidden_size]
                 self.classifier.build([None, None, self.config.hidden_size])
-# 定义一个带有用于提取问题-回答任务的跨度分类头部的 Albert 模型，例如 SQuAD（在隐藏状态输出之上的线性层，用于计算“跨度起始对数”和“跨度结束对数”）。
-@add_start_docstrings(
-    """
-    Albert Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
-    layer on top of the hidden-states output to compute `span start logits` and `span end logits`).
-    """,
-    ALBERT_START_DOCSTRING,
-)
+"""
+Albert Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear
+layer on top of the hidden-states output to compute `span start logits` and `span end logits`).
+"""
+# 使用 Albert 模型，添加一个用于抽取式问答任务（如 SQuAD）的跨度分类头部（在隐藏状态输出顶部的线性层，用于计算“跨度起始对数”和“跨度终止对数”）。
+
+# 导入 ALBERT_START_DOCSTRING 作为注释的一部分
+@add_start_docstrings(ALBERT_START_DOCSTRING)
+
+# 定义 TFAlbertForQuestionAnswering 类，继承自 TFAlbertPreTrainedModel 和 TFQuestionAnsweringLoss
 class TFAlbertForQuestionAnswering(TFAlbertPreTrainedModel, TFQuestionAnsweringLoss):
-    # 在加载 TF 模型时，带有 '.' 的名称表示授权的意外/缺失层
+
+    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
+    # _keys_to_ignore_on_load_unexpected 是在从 PT 模型加载 TF 模型时允许的未预期/丢失的层的名称列表
     _keys_to_ignore_on_load_unexpected = [r"pooler", r"predictions"]
 
+    # 初始化方法，接收一个 AlbertConfig 类型的 config 对象和其他位置参数
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
 
-        # 获取标签数量
+        # 设置类属性 num_labels 等于 config 中的 num_labels
         self.num_labels = config.num_labels
 
-        # 创建 Albert 主层对象
+        # 初始化 Albert 主层对象，设置不添加池化层，并命名为 "albert"
         self.albert = TFAlbertMainLayer(config, add_pooling_layer=False, name="albert")
-        # 创建用于问题-回答任务的输出层
-        self.qa_outputs = tf.keras.layers.Dense(
+
+        # 初始化 QA 输出层，使用 Dense 层，单元数为 config 中的 num_labels，使用指定的初始化器范围初始化权重，命名为 "qa_outputs"
+        self.qa_outputs = keras.layers.Dense(
             units=config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="qa_outputs"
         )
+
+        # 将 config 对象保存为类属性
         self.config = config
 
-    # 调用模型前向传播
+    # 调用方法，用装饰器添加了多个文档字符串，说明了输入和输出的详细信息，以及模型的用法示例
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1450,7 +1526,6 @@ class TFAlbertForQuestionAnswering(TFAlbertPreTrainedModel, TFQuestionAnsweringL
             Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
             are not taken into account for computing the loss.
         """
-        # 传入的参数包括起始位置和结束位置的标签张量，用于计算标记分类损失
         outputs = self.albert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1463,31 +1538,38 @@ class TFAlbertForQuestionAnswering(TFAlbertPreTrainedModel, TFQuestionAnsweringL
             return_dict=return_dict,
             training=training,
         )
-        # 获取模型输出中的序列输出
+        # 获取 ALBERT 模型的输出，包括序列输出、注意力权重等
+
         sequence_output = outputs[0]
-        # 将序列输出传递给QA输出层，获得logits
+        # 从 ALBERT 输出中提取序列输出
+
         logits = self.qa_outputs(inputs=sequence_output)
-        # 将logits分割为起始和结束logits
+        # 将序列输出传递给 QA 输出层，得到预测的开始和结束位置的 logits
+        
         start_logits, end_logits = tf.split(value=logits, num_or_size_splits=2, axis=-1)
-        # 去除多余的维度
+        # 将 logits 沿最后一个维度分割为开始和结束 logits
+        
         start_logits = tf.squeeze(input=start_logits, axis=-1)
         end_logits = tf.squeeze(input=end_logits, axis=-1)
-        # 初始化损失为None
+        # 移除 logits 的单维度，以匹配预期的形状
+
         loss = None
 
-        # 如果存在起始位置和结束位置的标签，则计算损失
         if start_positions is not None and end_positions is not None:
             labels = {"start_position": start_positions}
             labels["end_position"] = end_positions
-            loss = self.hf_compute_loss(labels=labels, logits=(start_logits, end_logits))
+            # 构建标签字典，包含开始和结束位置的真实标签
 
-        # 如果不要求返回字典，则返回输出
+            loss = self.hf_compute_loss(labels=labels, logits=(start_logits, end_logits))
+            # 使用损失计算函数计算开始和结束位置的损失
+
         if not return_dict:
             output = (start_logits, end_logits) + outputs[2:]
+            # 如果不返回字典形式的结果，构建输出元组
 
             return ((loss,) + output) if loss is not None else output
+            # 如果有损失，则在输出元组前添加损失；否则只返回输出元组
 
-        # 如果要求返回字典，则返回TFQuestionAnsweringModelOutput对象
         return TFQuestionAnsweringModelOutput(
             loss=loss,
             start_logits=start_logits,
@@ -1495,51 +1577,60 @@ class TFAlbertForQuestionAnswering(TFAlbertPreTrainedModel, TFQuestionAnsweringL
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
+        # 返回 TFQuestionAnsweringModelOutput 对象，包含损失、开始和结束 logits、隐藏状态和注意力权重
 
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 将构建状态设置为True
+        # 如果模型已经建立过，则直接返回
+
         self.built = True
-        # 如果存在albert模型，则构建albert模型
+        # 将模型标记为已建立
+
         if getattr(self, "albert", None) is not None:
             with tf.name_scope(self.albert.name):
                 self.albert.build(None)
-        # 如果存在qa_outputs模型，则构建qa_outputs模型
+        # 如果存在 ALBERT 模型，使用其名称作为作用域，构建 ALBERT 模型
+
         if getattr(self, "qa_outputs", None) is not None:
             with tf.name_scope(self.qa_outputs.name):
                 self.qa_outputs.build([None, None, self.config.hidden_size])
-# 使用 Albert 模型在顶部添加了一个用于多选分类的分类头部（在池化输出的顶部添加了一个线性层和一个 softmax 层），例如用于 RocStories/SWAG 任务
+        # 如果存在 QA 输出层，使用其名称作为作用域，构建 QA 输出层
+"""
+Albert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
+softmax) e.g. for RocStories/SWAG tasks.
+"""
 @add_start_docstrings(
     """
-    Albert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and a
-    softmax) e.g. for RocStories/SWAG tasks.
+    Albert 模型，顶部带有一个多选分类头部（在汇总输出的基础上添加一个线性层和 softmax），例如 RocStories/SWAG 任务。
     """,
     ALBERT_START_DOCSTRING,
 )
 class TFAlbertForMultipleChoice(TFAlbertPreTrainedModel, TFMultipleChoiceLoss):
-    # 当从 PT 模型加载 TF 模型时，以 '.' 结尾的名称代表了预授权的意外/缺失的层
+    """
+    names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
+    """
     _keys_to_ignore_on_load_unexpected = [r"pooler", r"predictions"]
-    # 当从 PT 模型加载 TF 模型时，代表了预授权的缺失的层
+    # List of keys ignored when certain layers are missing during TF model loading from PT model
     _keys_to_ignore_on_load_missing = [r"dropout"]
 
     def __init__(self, config: AlbertConfig, *inputs, **kwargs):
-        # 调用 TFAlbertPreTrainedModel 的初始化函数
+        """
+        Initialize TFAlbertForMultipleChoice model
+        """
         super().__init__(config, *inputs, **kwargs)
 
-        # 初始化 Albert 主层
+        # Initialize Albert main layer with provided configuration
         self.albert = TFAlbertMainLayer(config, name="albert")
-        # 添加 dropout 层
-        self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
-        # 添加分类器
-        self.classifier = tf.keras.layers.Dense(
+        # Dropout layer with dropout rate set from configuration
+        self.dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)
+        # Classifier dense layer initialized with specific initializer range from configuration
+        self.classifier = keras.layers.Dense(
             units=1, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
         )
-        # 设置配置参数
+        # Store the configuration object for reference
         self.config = config
 
-    # 模型前向传播函数
     @unpack_inputs
     @add_start_docstrings_to_model_forward(ALBERT_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length"))
     @add_code_sample_docstrings(
@@ -1560,42 +1651,47 @@ class TFAlbertForMultipleChoice(TFAlbertPreTrainedModel, TFMultipleChoiceLoss):
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
+        ):
+        """
+        Perform forward pass of TFAlbertForMultipleChoice model.
+        """
     ) -> Union[TFMultipleChoiceModelOutput, Tuple[tf.Tensor]]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
             Labels for computing the multiple choice classification loss. Indices should be in `[0, ..., num_choices]`
             where `num_choices` is the size of the second dimension of the input tensors. (See `input_ids` above)
         """
-        # 如果提供了 input_ids，则获取其第二维度的大小作为选择数量，获取序列长度
+
+        # 如果提供了 input_ids，则获取 num_choices 和 seq_length
         if input_ids is not None:
             num_choices = shape_list(input_ids)[1]
             seq_length = shape_list(input_ids)[2]
+        # 否则，从 inputs_embeds 获取 num_choices 和 seq_length
         else:
-            # 否则，获取 inputs_embeds 的第二维度的大小作为选择数量，获取序列长度
             num_choices = shape_list(inputs_embeds)[1]
             seq_length = shape_list(inputs_embeds)[2]
 
-        # 将 input_ids 平坦化为二维张量（若提供），否则设为 None
+        # 将 input_ids 展平成二维张量，如果 input_ids 不为 None
         flat_input_ids = tf.reshape(input_ids, (-1, seq_length)) if input_ids is not None else None
-        # 将 attention_mask 平坦化为二维张量（若提供），否则设为 None
+        # 将 attention_mask 展平成二维张量，如果 attention_mask 不为 None
         flat_attention_mask = (
             tf.reshape(tensor=attention_mask, shape=(-1, seq_length)) if attention_mask is not None else None
         )
-        # 将 token_type_ids 平坦化为二维张量（若提供），否则设为 None
+        # 将 token_type_ids 展平成二维张量，如果 token_type_ids 不为 None
         flat_token_type_ids = (
             tf.reshape(tensor=token_type_ids, shape=(-1, seq_length)) if token_type_ids is not None else None
         )
-        # 将 position_ids 平坦化为二维张量（若提供），否则设为 None
+        # 将 position_ids 展平成二维张量，如果 position_ids 不为 None
         flat_position_ids = (
             tf.reshape(tensor=position_ids, shape=(-1, seq_length)) if position_ids is not None else None
         )
-        # 将 inputs_embeds 平坦化为三维张量（若提供），否则设为 None
+        # 将 inputs_embeds 展平成三维张量，如果 inputs_embeds 不为 None
         flat_inputs_embeds = (
             tf.reshape(tensor=inputs_embeds, shape=(-1, seq_length, shape_list(inputs_embeds)[3]))
             if inputs_embeds is not None
             else None
         )
-        # 使用 ALBERT 模型处理平坦化后的输入
+        # 使用 ALBERT 模型进行推断
         outputs = self.albert(
             input_ids=flat_input_ids,
             attention_mask=flat_attention_mask,
@@ -1608,44 +1704,45 @@ class TFAlbertForMultipleChoice(TFAlbertPreTrainedModel, TFMultipleChoiceLoss):
             return_dict=return_dict,
             training=training,
         )
-        # 提取汇聚的输出，应用 dropout，然后通过分类器获取 logits
+        # 获取池化后的输出
         pooled_output = outputs[1]
+        # 应用 dropout
         pooled_output = self.dropout(inputs=pooled_output, training=training)
+        # 使用分类器进行预测
         logits = self.classifier(inputs=pooled_output)
-        # 将 logits 重新整形为二维张量
+        # 将 logits 重新形状为二维张量
         reshaped_logits = tf.reshape(tensor=logits, shape=(-1, num_choices))
-        # 若提供了 labels，则计算损失
+        # 如果提供了 labels，则计算损失
         loss = None if labels is None else self.hf_compute_loss(labels=labels, logits=reshaped_logits)
 
-        # 若不要求返回字典，则返回相应的输出
+        # 如果不需要返回字典格式的输出，则返回相应的结果元组
         if not return_dict:
             output = (reshaped_logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 否则，返回包含 loss、logits、hidden_states 和 attentions 的 TFMultipleChoiceModelOutput 对象
+        # 如果需要返回字典格式的输出，则构造 TFMultipleChoiceModelOutput 对象并返回
         return TFMultipleChoiceModelOutput(
             loss=loss,
             logits=reshaped_logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    # 构建模型，如果已经构建过则直接返回
-    def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
-        if self.built:
-            return
-        # 标记为已构建
-        self.built = True
-        # 如果存在 albert 属性，则构建 albert 模型
-        if getattr(self, "albert", None) is not None:
-            # 使用 albert 的名称作为命名空间
-            with tf.name_scope(self.albert.name):
-                # 构建 albert 模型
-                self.albert.build(None)
-        # 如果存在 classifier 属性，则构建 classifier 模型
-        if getattr(self, "classifier", None) is not None:
-            # 使用 classifier 的名称作为命名空间
-            with tf.name_scope(self.classifier.name):
-                # 构建 classifier 模型，输入形状为 [None, None, self.config.hidden_size]
-                self.classifier.build([None, None, self.config.hidden_size])
+    # 如果模型已经构建，直接返回，避免重复构建
+    if self.built:
+        return
+    # 标记模型已经构建
+    self.built = True
+    
+    # 如果存在属性 self.albert，则构建 self.albert 模型
+    if getattr(self, "albert", None) is not None:
+        # 使用 self.albert 的名称作为命名空间，并构建该模型
+        with tf.name_scope(self.albert.name):
+            self.albert.build(None)
+    
+    # 如果存在属性 self.classifier，则构建 self.classifier 模型
+    if getattr(self, "classifier", None) is not None:
+        # 使用 self.classifier 的名称作为命名空间，并构建该模型
+        with tf.name_scope(self.classifier.name):
+            # 构建 classifier 模型，传入输入形状 [None, None, self.config.hidden_size]
+            self.classifier.build([None, None, self.config.hidden_size])
 ```

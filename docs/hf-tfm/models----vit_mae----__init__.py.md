@@ -1,10 +1,10 @@
-# `.\transformers\models\vit_mae\__init__.py`
+# `.\models\vit_mae\__init__.py`
 
-```py
-# 保留版权声明
-
-# 引入必要的依赖
+```
+# 引入依赖类型检查
 from typing import TYPE_CHECKING
+
+# 引入内部工具函数和异常类
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -13,17 +13,17 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义需要导入的结构
+# 定义模块导入结构
 _import_structure = {"configuration_vit_mae": ["VIT_MAE_PRETRAINED_CONFIG_ARCHIVE_MAP", "ViTMAEConfig"]}
 
-# 检查是否有 torch 可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查是否支持 Torch，若不支持则抛出异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 导入 torch 模型相关结构
+    # 若支持 Torch，则添加相关模型定义到导入结构中
     _import_structure["modeling_vit_mae"] = [
         "VIT_MAE_PRETRAINED_MODEL_ARCHIVE_LIST",
         "ViTMAEForPreTraining",
@@ -32,30 +32,33 @@ else:
         "ViTMAEPreTrainedModel",
     ]
 
-# 检查是否有 tensorflow 可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查是否支持 TensorFlow，若不支持则抛出异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 导入 tensorflow 模型相关结构
+    # 若支持 TensorFlow，则添加相关模型定义到导入结构中
     _import_structure["modeling_tf_vit_mae"] = [
         "TFViTMAEForPreTraining",
         "TFViTMAEModel",
         "TFViTMAEPreTrainedModel",
     ]
 
-# 检查是否为类型检查阶段，如果是则导入类型检查所需的结构
+# 如果处于类型检查模式
 if TYPE_CHECKING:
+    # 从特定模块导入配置和模型定义
     from .configuration_vit_mae import VIT_MAE_PRETRAINED_CONFIG_ARCHIVE_MAP, ViTMAEConfig
 
     try:
+        # 再次检查是否支持 Torch，若不支持则抛出异常
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 若支持 Torch，则从模型定义中导入相关类
         from .modeling_vit_mae import (
             VIT_MAE_PRETRAINED_MODEL_ARCHIVE_LIST,
             ViTMAEForPreTraining,
@@ -65,16 +68,18 @@ if TYPE_CHECKING:
         )
 
     try:
+        # 再次检查是否支持 TensorFlow，若不支持则抛出异常
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
+        # 若支持 TensorFlow，则从模型定义中导入相关类
         from .modeling_tf_vit_mae import TFViTMAEForPreTraining, TFViTMAEModel, TFViTMAEPreTrainedModel
 
-# 如果不是类型检查，将模块设为懒加载模块
+# 如果不处于类型检查模式
 else:
+    # 动态创建一个懒加载模块，用于按需导入所需的模型和配置
     import sys
-    # 创建懒加载模块，添加必要的结构，并设定模块规范
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

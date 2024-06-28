@@ -1,42 +1,40 @@
-# `.\transformers\models\xmod\convert_xmod_original_pytorch_checkpoint_to_pytorch.py`
+# `.\models\xmod\convert_xmod_original_pytorch_checkpoint_to_pytorch.py`
 
 ```
-# coding=utf-8
-# 版权声明
+# 设置编码格式为 UTF-8
+# 版权声明及许可信息
+# 引入 argparse 用于命令行参数解析
+# 从 pathlib 模块中引入 Path 类
+# 引入 fairseq 库
+# 引入 torch 库
+# 从 fairseq 的 xmod 模块中引入 XMODModel 类别名为 FairseqXmodModel
+# 从 packaging 模块中引入 version 函数
+# 从 transformers 库中引入 XmodConfig, XmodForMaskedLM, XmodForSequenceClassification 类
+# 从 transformers.utils 中引入 logging 模块
 
-"""Convert X-MOD checkpoint."""
-
-# 导入需要的模块
-import argparse
-from pathlib import Path
-import fairseq
-import torch
-from fairseq.models.xmod import XMODModel as FairseqXmodModel
-from packaging import version
-from transformers import XmodConfig, XmodForMaskedLM, XmodForSequenceClassification
-from transformers.utils import logging
-
-# 检查 fairseq 版本是否符合要求
 if version.parse(fairseq.__version__) < version.parse("0.12.2"):
+    # 如果 fairseq 版本小于 0.12.2，则抛出异常
     raise Exception("requires fairseq >= 0.12.2")
 if version.parse(fairseq.__version__) > version.parse("2"):
+    # 如果 fairseq 版本大于 2，则抛出异常
     raise Exception("requires fairseq < v2")
 
-# 设置日志信息
+# 设置日志输出等级为 INFO
 logging.set_verbosity_info()
+# 获取日志记录器对象
 logger = logging.get_logger(__name__)
 
-# 定义示例文本和语言
+# 示例文本
 SAMPLE_TEXT = "Hello, World!"
+# 示例语言标识
 SAMPLE_LANGUAGE = "en_XX"
 
-# 将 X-MOD 检查点转换为 PyTorch 模型
 def convert_xmod_checkpoint_to_pytorch(
     xmod_checkpoint_path: str, pytorch_dump_folder_path: str, classification_head: bool
 ):
-    # 定义数据目录
+    # 数据目录
     data_dir = Path("data_bin")
-    # 从预训练模型中加载 X-MOD 模型
+    # 从预训练模型路径加载 FairseqXmodModel 模型
     xmod = FairseqXmodModel.from_pretrained(
         model_name_or_path=str(Path(xmod_checkpoint_path).parent),
         checkpoint_file=Path(xmod_checkpoint_path).name,
@@ -48,13 +46,14 @@ def convert_xmod_checkpoint_to_pytorch(
         sentencepiece_model=str(Path(xmod_checkpoint_path).parent / "sentencepiece.bpe.model"),
         src_dict=str(data_dir / "dict.txt"),
     )
-    # 关闭 dropout
+    # 设置模型为评估模式，禁用 dropout
     xmod.eval()
+    # 打印模型信息
     print(xmod)
 
-    # 获取 X-MOD 模型的句子编码器
+    # 获取 xmod 模型的句子编码器
     xmod_sent_encoder = xmod.model.encoder.sentence_encoder
-    # 定义用于转换的配置
+    # 根据 xmod 模型的配置创建 XmodConfig 对象
     config = XmodConfig(
         vocab_size=xmod_sent_encoder.embed_tokens.num_embeddings,
         hidden_size=xmod.cfg.model.encoder_embed_dim,
@@ -63,7 +62,7 @@ def convert_xmod_checkpoint_to_pytorch(
         intermediate_size=xmod.cfg.model.encoder_ffn_embed_dim,
         max_position_embeddings=514,
         type_vocab_size=1,
-        layer_norm_eps=1e-5,  # PyTorch 默认值
+        layer_norm_eps=1e-5,  # PyTorch 默认值，与 fairseq 兼容
         pre_norm=xmod.cfg.model.encoder_normalize_before,
         adapter_reduction_factor=getattr(xmod.cfg.model, "bottleneck", 2),
         adapter_layer_norm=xmod.cfg.model.adapter_layer_norm,
@@ -71,13 +70,13 @@ def convert_xmod_checkpoint_to_pytorch(
         ln_before_adapter=xmod.cfg.model.ln_before_adapter,
         languages=xmod.cfg.model.languages,
     )
-    # 如果有分类头，则设置标签数量
+    # 如果需要分类头部，则设置配置对象的标签数量为模型特定分类头的输出权重行数
     if classification_head:
         config.num_labels = xmod.model.classification_heads["mnli"].out_proj.weight.shape[0]
-    # 输出配置信息
+    # 打印 X-MOD 的配置信息
     print("Our X-MOD config:", config)
 
-    # 根据是否是分类任务选择不同的模型
+    # 根据是否有分类头选择模型类型，并设置为评估模式
     model = XmodForSequenceClassification(config) if classification_head else XmodForMaskedLM(config)
     model.eval()
 
@@ -87,23 +86,24 @@ def convert_xmod_checkpoint_to_pytorch(
     model.roberta.embeddings.position_embeddings.weight = xmod_sent_encoder.embed_positions.weight
     model.roberta.embeddings.token_type_embeddings.weight.data = torch.zeros_like(
         model.roberta.embeddings.token_type_embeddings.weight
-    )  # 将其归零，因为 xmod 不使用它们
+    )  # 将其置零因为 xmod 不使用它们
 
     model.roberta.embeddings.LayerNorm.weight = xmod_sent_encoder.layernorm_embedding.weight
     model.roberta.embeddings.LayerNorm.bias = xmod_sent_encoder.layernorm_embedding.bias
 
+    # 如果存在层归一化，则复制编码器层归一化的权重和偏置
     if xmod_sent_encoder.layer_norm is not None:
         model.roberta.encoder.LayerNorm.weight = xmod_sent_encoder.layer_norm.weight
         model.roberta.encoder.LayerNorm.bias = xmod_sent_encoder.layer_norm.bias
 
+    # 如果是分类头，复制分类器的权重和偏置
     if classification_head:
-        # 分类头权重
         model.classifier.dense.weight = xmod.model.classification_heads["mnli"].dense.weight
         model.classifier.dense.bias = xmod.model.classification_heads["mnli"].dense.bias
         model.classifier.out_proj.weight = xmod.model.classification_heads["mnli"].out_proj.weight
         model.classifier.out_proj.bias = xmod.model.classification_heads["mnli"].out_proj.bias
     else:
-        # 语言模型头权重
+        # 如果是语言模型头，复制语言模型头的权重和偏置
         model.lm_head.dense.weight = xmod.model.encoder.lm_head.dense.weight
         model.lm_head.dense.bias = xmod.model.encoder.lm_head.dense.bias
         model.lm_head.layer_norm.weight = xmod.model.encoder.lm_head.layer_norm.weight
@@ -111,8 +111,8 @@ def convert_xmod_checkpoint_to_pytorch(
         model.lm_head.decoder.weight = xmod.model.encoder.lm_head.weight
         model.lm_head.decoder.bias = xmod.model.encoder.lm_head.bias
 
-    # 检验两个模型输出是否相同
-    input_ids = xmod.encode(SAMPLE_TEXT).unsqueeze(0)  # 批次大小为 1
+    # 检查模型输出是否一致
+    input_ids = xmod.encode(SAMPLE_TEXT).unsqueeze(0)  # 批量大小为 1
     model.roberta.set_default_language(SAMPLE_LANGUAGE)
 
     our_output = model(input_ids)[0]
@@ -122,33 +122,42 @@ def convert_xmod_checkpoint_to_pytorch(
         their_output = xmod.model(input_ids, lang_id=[SAMPLE_LANGUAGE])[0]
     print(our_output.shape, their_output.shape)
     max_absolute_diff = torch.max(torch.abs(our_output - their_output)).item()
-    print(f"max_absolute_diff = {max_absolute_diff}")  # 大约为 1e-7
+    print(f"max_absolute_diff = {max_absolute_diff}")  # 约为 1e-7
     success = torch.allclose(our_output, their_output, atol=1e-3)
     print("Do both models output the same tensors?", "🔥" if success else "💩")
     if not success:
         raise Exception("Something went wRoNg")
 
-    # 创建存储路径
+    # 创建目录以保存 PyTorch 模型
     Path(pytorch_dump_folder_path).mkdir(parents=True, exist_ok=True)
     print(f"Saving model to {pytorch_dump_folder_path}")
     model.save_pretrained(pytorch_dump_folder_path)
-# 如果当前脚本被直接执行
 if __name__ == "__main__":
-    # 创建一个参数解析器对象
+    # 如果当前脚本作为主程序执行，则执行以下代码块
+
     parser = argparse.ArgumentParser()
-    # 添加必需参数
+    # 创建参数解析器对象
+
+    # 必选参数
     parser.add_argument(
         "--xmod_checkpoint_path", default=None, type=str, required=True, help="Path the official PyTorch dump."
     )
+    # 添加一个参数，指定官方 PyTorch 模型的路径，类型为字符串，必选项
+
     parser.add_argument(
         "--pytorch_dump_folder_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
     )
+    # 添加一个参数，指定输出 PyTorch 模型的文件夹路径，类型为字符串，必选项
+
     parser.add_argument(
         "--classification_head", action="store_true", help="Whether to convert a final classification head."
     )
+    # 添加一个参数，表示是否要转换最终的分类头部，这是一个布尔值参数
+
     # 解析命令行参数
     args = parser.parse_args()
-    # 调用函数将XMOD检查点转换为PyTorch格式
+
+    # 调用函数，将 xmod 模型转换为 PyTorch 模型
     convert_xmod_checkpoint_to_pytorch(
         args.xmod_checkpoint_path, args.pytorch_dump_folder_path, args.classification_head
     )

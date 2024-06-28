@@ -1,29 +1,47 @@
-# `.\transformers\models\mobilebert\tokenization_mobilebert_fast.py`
+# `.\models\mobilebert\tokenization_mobilebert_fast.py`
 
-```py
-# 导入必要的模块和类型提示
+```
+# coding=utf-8
+# 设置文件编码为UTF-8
+
+# Copyright 2020 The HuggingFace Team. All rights reserved.
+# 版权声明
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 根据 Apache 许可证 2.0 版本授权，除非符合许可证要求，否则不得使用本文件
+# 可以在以下网址获取许可证副本：
+# http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，不提供任何明示或暗示的担保或条件
+# 有关详细信息，请参阅许可证
+
+"""Tokenization classes for MobileBERT."""
+# MobileBERT 的分词类
+
 import json
 from typing import List, Optional, Tuple
 
-# 导入 tokenizers 模块中的 normalizers 函数
 from tokenizers import normalizers
 
-# 从 tokenization_utils_fast 中导入 PreTrainedTokenizerFast 类
 from ...tokenization_utils_fast import PreTrainedTokenizerFast
-
-# 导入 logging 模块
 from ...utils import logging
-
-# 从 tokenization_mobilebert 中导入 MobileBertTokenizer 类
 from .tokenization_mobilebert import MobileBertTokenizer
 
-# 获取 logger 对象
+# 导入必要的模块和类
+
 logger = logging.get_logger(__name__)
 
-# 定义词汇文件名的映射
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}
 
-# 定义预训练词汇文件的映射
+# 定义词汇文件和分词器文件的名称映射字典
+
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {"mobilebert-uncased": "https://huggingface.co/google/mobilebert-uncased/resolve/main/vocab.txt"},
     "tokenizer_file": {
@@ -31,19 +49,29 @@ PRETRAINED_VOCAB_FILES_MAP = {
     },
 }
 
-# 定义预训练位置嵌入大小的映射
+# 预训练模型的词汇文件和分词器文件映射字典
+
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {"mobilebert-uncased": 512}
 
-# 定义预训练初始化配置
+# 预训练模型的位置嵌入大小字典，此处是 MobileBERT-uncased 的大小为 512
+
 PRETRAINED_INIT_CONFIGURATION = {}
 
+# 预训练模型的初始化配置为空字典
 
-# 从 transformers.models.bert.tokenization_bert_fast.BertTokenizerFast 复制而来，将其中的 BERT 替换为 MobileBERT，Bert 替换为 MobileBert
+
+# Copied from transformers.models.bert.tokenization_bert_fast.BertTokenizerFast with BERT->MobileBERT,Bert->MobileBert
+# 从 transformers.models.bert.tokenization_bert_fast.BertTokenizerFast 复制而来，将 BERT 替换为 MobileBERT，Bert 替换为 MobileBert
 class MobileBertTokenizerFast(PreTrainedTokenizerFast):
     r"""
-    构建一个“快速”的 MobileBERT 分词器（基于 HuggingFace 的 *tokenizers* 库）。基于 WordPiece。
+    Construct a "fast" MobileBERT tokenizer (backed by HuggingFace's *tokenizers* library). Based on WordPiece.
 
-    该分词器继承自 [`PreTrainedTokenizerFast`]，其中包含大多数主要方法。用户应该参考此超类以获取有关这些方法的更多信息。
+    This tokenizer inherits from [`PreTrainedTokenizerFast`] which contains most of the main methods. Users should
+    refer to this superclass for more information regarding those methods.
+    """
+
+# 构造一个“快速” MobileBERT 分词器，基于 HuggingFace 的 tokenizers 库，基于 WordPiece
+# 此分词器继承自 PreTrainedTokenizerFast，包含大多数主要方法，用户可以参考该超类获取更多方法信息
     Args:
         vocab_file (`str`):
             File containing the vocabulary.
@@ -76,12 +104,15 @@ class MobileBertTokenizerFast(PreTrainedTokenizerFast):
         wordpieces_prefix (`str`, *optional*, defaults to `"##"`):
             The prefix for subwords.
     """
-    # 定义一些预设的参数和值，用于构建tokenizer实例
+    # These constants define the file names expected for different vocabularies
     vocab_files_names = VOCAB_FILES_NAMES
+    # This maps the expected pretrained vocabulary files for different models
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # This specifies the initial configuration for pretrained models
     pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION
+    # This maps maximum input sizes for pretrained models that use positional embeddings
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    slow_tokenizer_class = MobileBertTokenizer
+    # This defines the class of the tokenizer which will be used, MobileBertTokenizer in this case
 
     def __init__(
         self,
@@ -96,8 +127,8 @@ class MobileBertTokenizerFast(PreTrainedTokenizerFast):
         tokenize_chinese_chars=True,
         strip_accents=None,
         **kwargs,
-        ):
-        # 调用父类的初始化方法，传入参数
+    ):
+        # 调用父类的构造函数，初始化模型的词汇文件、分词器文件等参数
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -112,56 +143,57 @@ class MobileBertTokenizerFast(PreTrainedTokenizerFast):
             **kwargs,
         )
 
-        # 获取当前 backend_tokenizer 对象的 normalizer_state
+        # 从后端分词器获取当前的正常化状态
         normalizer_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
-        # 检查 normalizer_state 是否与实例化时传入的参数不一致，若不一致则重新设置 normalizer_state
+        # 检查正常化器状态是否与初始化时的参数相匹配，若不匹配则更新
         if (
             normalizer_state.get("lowercase", do_lower_case) != do_lower_case
             or normalizer_state.get("strip_accents", strip_accents) != strip_accents
             or normalizer_state.get("handle_chinese_chars", tokenize_chinese_chars) != tokenize_chinese_chars
         ):
-            # 重新设置 normalizer_state
+            # 获取正常化器的类名，并根据当前设置更新状态
             normalizer_class = getattr(normalizers, normalizer_state.pop("type"))
             normalizer_state["lowercase"] = do_lower_case
             normalizer_state["strip_accents"] = strip_accents
             normalizer_state["handle_chinese_chars"] = tokenize_chinese_chars
-            # 更新 backend_tokenizer 的 normalizer
+            # 更新后端分词器的正常化器
             self.backend_tokenizer.normalizer = normalizer_class(**normalizer_state)
 
-        # 设置实例对象属性 do_lower_case
+        # 设置当前实例的小写参数
         self.do_lower_case = do_lower_case
 
-    # 创建特殊标记的输入序列
     def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
         """
-        通过连接和添加特殊标记，从序列或序列对构建模型输入，用于序列分类任务。MobileBERT 序列具有以下格式：
+        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        adding special tokens. A MobileBERT sequence has the following format:
 
-        - 单个序列: `[CLS] X [SEP]`
-        - 序列对: `[CLS] A [SEP] B [SEP]`
+        - single sequence: `[CLS] X [SEP]`
+        - pair of sequences: `[CLS] A [SEP] B [SEP]`
 
         Args:
             token_ids_0 (`List[int]`):
-                要添加特殊标记的 ID 列表。
+                List of IDs to which the special tokens will be added.
             token_ids_1 (`List[int]`, *optional*):
-                可选的第二个序列ID列表，用于序列对。
+                Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: 包含适当特殊标记的[input IDs](../glossary#input-ids)列表。
+            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
-        # 构建包含特殊标记的输入序列
+        # 构建模型输入，根据输入的token_ids_0和token_ids_1连接和添加特殊标记
         output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
 
-        # 若有第二个序列，则将第二个序列的 token_ids_1 和特殊标记添加到输出中
+        # 如果有第二个序列token_ids_1，则将其加入到输出中
         if token_ids_1 is not None:
             output += token_ids_1 + [self.sep_token_id]
 
+        # 返回包含特殊标记的输入列表
         return output
 
-    # 从序列构建 token 类型 ID
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
-    # 定义函数，用于生成用于序列对分类任务的遮罩
-    def create_mask(self, token_ids_0: List[int], token_ids_1: Optional[List[int]]) -> List[int]:
+    def create_mobilebert_sequence_classification_mask(
+        self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
+    ) -> List[int]:
         """
         Create a mask from the two sequences passed to be used in a sequence-pair classification task. A MobileBERT sequence
         pair mask has the following format:
@@ -169,31 +201,44 @@ class MobileBertTokenizerFast(PreTrainedTokenizerFast):
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
         | first sequence    | second sequence |
-        ```py
+        ```
 
         If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs.
+                List of IDs for the first sequence.
             token_ids_1 (`List[int]`, *optional*):
                 Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
+            `List[int]`: List of token type IDs according to the given sequence(s).
         """
-        # 定义分隔符和CLS标记
+        # Define separator and classifier tokens
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
-        # 如果token_ids_1为None，只返回第一部分遮罩（全为0）
+        
+        # If token_ids_1 is None, return mask for single sequence
         if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
+        
+        # Return mask for sequence pair
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
-    # 定义函数，保存词汇表
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 调用tokenizer模块的save方法将词汇表保存到指定目录下
+        """
+        Save the tokenizer model's vocabulary to a specified directory.
+
+        Args:
+            save_directory (str):
+                Directory path where the vocabulary files will be saved.
+            filename_prefix (Optional[str]):
+                Optional prefix for the saved files.
+
+        Returns:
+            Tuple[str]: Tuple containing the filenames where the vocabulary is saved.
+        """
+        # Save the tokenizer model's vocabulary to the specified directory
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
-        # 返回保存的文件路径元组
         return tuple(files)
 ```

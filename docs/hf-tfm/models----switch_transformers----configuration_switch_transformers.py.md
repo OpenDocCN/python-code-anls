@@ -1,134 +1,90 @@
-# `.\transformers\models\switch_transformers\configuration_switch_transformers.py`
+# `.\models\switch_transformers\configuration_switch_transformers.py`
 
-```py
-# 设置文件编码格式为utf-8
-# 版权声明
-# 根据Apache License, Version 2.0，如未遵守协议，不得使用此文件
-# 可在http://www.apache.org/licenses/LICENSE-2.0获取协议副本
-# 根据适用法律或书面同意，软件分发基于“原样”基础，无论明示或暗示，均无任何保证或条件
-# 请参阅特定语言下的许可证以获取权限和限制
-# Switch Transformers 模型配置信息
-# 从公共库导入预先配置的类
-from ...configuration_utils import PretrainedConfig
-from ...utils import logging
+```
+# coding=utf-8
+# Copyright 2022, Google and HuggingFace Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" Switch Transformers model configuration"""
+from ...configuration_utils import PretrainedConfig  # 导入预训练配置类
+from ...utils import logging  # 导入日志模块
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
 
-# 预训练配置存档映射
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+
 SWITCH_TRANSFORMERS_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "google/switch-base-8": "https://huggingface.co/google/switch-base-8/blob/main/config.json",
 }
 
-# SwitchTransformers配置类
 class SwitchTransformersConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`SwitchTransformersModel`] 配置的配置类。它用于根据指定参数实例化SwitchTransformers模型，
-    定义模型体系结构。使用默认值实例化配置将产生与SwitchTransformers 
-    [google/switch-base-8](https://huggingface.co/google/switch-base-8)结构类似的配置。
-
-    配置对象继承自 [`PretrainedConfig`] 可用于控制模型输出。阅读来自 [`PretrainedConfig`] 的文档以获取更多信息。
-
-    """
-
-    # 模型类型为 "switch_transformers"
-    model_type = "switch_transformers"
-    # 推断时忽略的键（past_key_values）
-    keys_to_ignore_at_inference = ["past_key_values"]
-    # 属性映射
-    attribute_map = {"hidden_size": "d_model", "num_attention_heads": "num_heads", "num_hidden_layers": "num_layers"}
-
-    # 初始化函数
-    def __init__(
-        self,
-        vocab_size=32128,
-        d_model=768,
-        d_kv=64,
-        d_ff=2048,
-        expert_capacity=64,
-        num_layers=12,
-        num_sparse_encoder_layers=3,
-        num_decoder_layers=12,
-        num_sparse_decoder_layers=3,
-        num_heads=12,
-        num_experts=8,
-        router_bias=False,
-        router_jitter_noise=0.01,
-        router_dtype="float32",
-        router_ignore_padding_tokens=False,
-        relative_attention_num_buckets=32,
-        relative_attention_max_distance=128,
-        dropout_rate=0.1,
-        layer_norm_epsilon=1e-6,
-        router_z_loss_coef=0.001,
-        router_aux_loss_coef=0.001,
-        initializer_factor=1.0,
-        dense_act_fn="relu",
-        is_encoder_decoder=True,
-        add_router_probs=False,
-        use_cache=True,
-        pad_token_id=0,
-        eos_token_id=1,
-        **kwargs,
+    This is the configuration class to store the configuration of a [`SwitchTransformersModel`]. It is used to
+    instantiate a SwitchTransformers model according to the specified arguments, defining the model architecture.
+    Instantiating a configuration with the defaults will yield a similar configuration to that of the
+    SwitchTransformers [google/switch-base-8](https://huggingface.co/google/switch-base
         ):
-        # 初始化模型的参数：词汇表大小、模型维度、键值对维度、前馈网络维度
-        self.vocab_size = vocab_size
-        self.d_model = d_model
-        self.d_kv = d_kv
-        self.d_ff = d_ff
+        # 初始化 Transformer 参数
+        self.vocab_size = vocab_size  # 设置词汇表大小
+        self.d_model = d_model  # 设置 Transformer 模型的维度大小
+        self.d_kv = d_kv  # 设置键和值的维度大小
+        self.d_ff = d_ff  # 设置前馈网络的隐藏层大小
 
-        # 编码器层数、解码器层数、稀疏编码器层数、稀疏解码器层数
-        self.num_sparse_encoder_layers = num_sparse_encoder_layers
-        self.num_layers = num_layers
+        self.num_sparse_encoder_layers = num_sparse_encoder_layers  # 编码器中稀疏层的数量
+        self.num_layers = num_layers  # 总层数
         self.num_decoder_layers = (
             num_decoder_layers if num_decoder_layers is not None else self.num_layers
-        )  # 默认与编码器对称
-        self.num_sparse_decoder_layers = num_sparse_decoder_layers
+        )  # 解码器层数，默认与总层数相同
+        self.num_sparse_decoder_layers = num_sparse_decoder_layers  # 解码器中稀疏层的数量
 
-        # 计算每几层编码器设置一个稀疏层
+        # 每隔多少层设置一个稀疏层，用于编码器
         if self.num_sparse_encoder_layers > 0:
             self.encoder_sparse_step = self.num_layers // self.num_sparse_encoder_layers
         else:
-            self.encoder_sparse_step = self.num_layers  # HACK: 这将创建0个稀疏层
+            self.encoder_sparse_step = self.num_layers  # 如果没有稀疏层，则步长为总层数，这会创建0个稀疏层
 
-        # 计算每几层解码器设置一个稀疏层
+        # 每隔多少层设置一个稀疏层，用于解码器
         if self.num_sparse_decoder_layers > 0:
             self.decoder_sparse_step = self.num_decoder_layers // self.num_sparse_decoder_layers
         else:
-            self.decoder_sparse_step = self.num_decoder_layers  # HACK: 这将创建0个稀疏层
+            self.decoder_sparse_step = self.num_decoder_layers  # 如果没有稀疏层，则步长为总层数，这会创建0个稀疏层
 
-        # 头数、专家数、专家容量、路由器偏差、路由器抖动噪声、路由器数据类型
-        self.num_heads = num_heads
-        self.num_experts = num_experts
-        self.expert_capacity = expert_capacity
-        self.router_bias = router_bias
-        self.router_jitter_noise = router_jitter_noise
+        self.num_heads = num_heads  # 设置注意力头的数量
+        self.num_experts = num_experts  # 设置专家的数量
+        self.expert_capacity = expert_capacity  # 设置每个专家的容量
+        self.router_bias = router_bias  # 设置路由器偏置
+        self.router_jitter_noise = router_jitter_noise  # 设置路由器抖动噪声
         if router_dtype not in ["float32", "float16", "bfloat16"]:
             raise ValueError(f"`router_dtype` must be one of 'float32', 'float16' or 'bfloat16', got {router_dtype}")
-        self.router_dtype = router_dtype
+        self.router_dtype = router_dtype  # 设置路由器数据类型
 
-        # 是否忽略填充令牌、相对注意力桶数、相对注意力最大距离
-        self.router_ignore_padding_tokens = router_ignore_padding_tokens
-        self.relative_attention_num_buckets = relative_attention_num_buckets
-        self.relative_attention_max_distance = relative_attention_max_distance
+        self.router_ignore_padding_tokens = router_ignore_padding_tokens  # 是否忽略填充标记的路由
+        self.relative_attention_num_buckets = relative_attention_num_buckets  # 相对注意力的桶数量
+        self.relative_attention_max_distance = relative_attention_max_distance  # 相对注意力的最大距离
 
-        # 丢弃率、层规范化epsilon、初始化因子、使用缓存、添加路由器概率
-        self.dropout_rate = dropout_rate
-        self.layer_norm_epsilon = layer_norm_epsilon
-        self.initializer_factor = initializer_factor
-        self.use_cache = use_cache
-        self.add_router_probs = add_router_probs
+        self.dropout_rate = dropout_rate  # 设置丢弃率
+        self.layer_norm_epsilon = layer_norm_epsilon  # 层归一化的 epsilon 值
+        self.initializer_factor = initializer_factor  # 初始化因子
+        self.use_cache = use_cache  # 是否使用缓存
+        self.add_router_probs = add_router_probs  # 是否添加路由概率
 
-        # 路由器z损失系数、路由器辅助损失系数、稠密激活函数
-        self.router_z_loss_coef = router_z_loss_coef
-        self.router_aux_loss_coef = router_aux_loss_coef
-        self.dense_act_fn = dense_act_fn
+        self.router_z_loss_coef = router_z_loss_coef  # 路由 Z 损失系数
+        self.router_aux_loss_coef = router_aux_loss_coef  # 路由辅助损失系数
+        self.dense_act_fn = dense_act_fn  # 密集层的激活函数
 
-        # 调用父类的初始化方法，传入填充令牌ID、结束令牌ID、是否是编码器解码器模型、其他参数
         super().__init__(
-            pad_token_id=pad_token_id,
-            eos_token_id=eos_token_id,
-            is_encoder_decoder=is_encoder_decoder,
-            **kwargs,
+            pad_token_id=pad_token_id,  # 填充标记 ID
+            eos_token_id=eos_token_id,  # 终止标记 ID
+            is_encoder_decoder=is_encoder_decoder,  # 是否是编码解码器
+            **kwargs,  # 其它关键字参数
         )
 ```

@@ -1,35 +1,25 @@
-# `.\transformers\models\roformer\tokenization_roformer_fast.py`
+# `.\models\roformer\tokenization_roformer_fast.py`
 
-```py
-# 指定编码为 utf-8
-# 版权声明
-# 根据 Apache 许可证 2.0 版本授权，仅在符合许可证下才能使用该文件
-# 可以在以下链接获取许可证副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律或书面同意，否则根据"AS IS"基础分发软件
-# 没有任何明示或暗示的担保或条件，参见许可证以获取特定语言的权限和
-# 限制
-"""RoFormer"的标记化类。"""
-# 导入必要的库和模块
-import json
-# 导入类型提示的工具
-from typing import List, Optional, Tuple
-# 导入 tokenizers 库中的必要组件
-from tokenizers import normalizers
-from tokenizers.pre_tokenizers import BertPreTokenizer, PreTokenizer
-# 导入 logging 模块
-from ...utils import logging
-from .tokenization_roformer import RoFormerTokenizer
-# 导入 JiebaPreTokenizer 类
-from .tokenization_utils import JiebaPreTokenizer
+```
+# 导入必要的模块和库
+import json  # 导入 json 模块，用于处理 JSON 格式数据
+from typing import List, Optional, Tuple  # 导入类型提示相关的模块
 
-# 获取 logger 对象
+from tokenizers import normalizers  # 导入 tokenizers 库中的 normalizers 模块
+from tokenizers.pre_tokenizers import BertPreTokenizer, PreTokenizer  # 导入 tokenizers 库中的预分词器类
+
+from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 从上级目录导入 PreTrainedTokenizerFast 类
+from ...utils import logging  # 从上级目录导入 logging 模块
+from .tokenization_roformer import RoFormerTokenizer  # 从当前目录导入 RoFormerTokenizer 类
+from .tokenization_utils import JiebaPreTokenizer  # 从当前目录导入 JiebaPreTokenizer 类
+
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义词汇文件名
+# 定义用于 RoFormer 的词汇文件和 tokenizer 文件的名称映射
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt", "tokenizer_file": "tokenizer.json"}
 
-# 预先训练的词汇文件映射
+# 定义预训练模型的词汇文件映射，以及它们对应的下载链接
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "junnyu/roformer_chinese_small": "https://huggingface.co/junnyu/roformer_chinese_small/resolve/main/vocab.txt",
@@ -49,7 +39,7 @@ PRETRAINED_VOCAB_FILES_MAP = {
     }
 }
 
-# 预训练位置嵌入大小
+# 定义预训练模型的位置编码大小映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "junnyu/roformer_chinese_small": 1536,
     "junnyu/roformer_chinese_base": 1536,
@@ -59,7 +49,7 @@ PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "junnyu/roformer_small_generator": 128,
 }
 
-# 预先训练的初始配置
+# 定义预训练模型的初始化配置映射，指定是否小写化
 PRETRAINED_INIT_CONFIGURATION = {
     "junnyu/roformer_chinese_small": {"do_lower_case": True},
     "junnyu/roformer_chinese_base": {"do_lower_case": True},
@@ -68,15 +58,33 @@ PRETRAINED_INIT_CONFIGURATION = {
     "junnyu/roformer_small_discriminator": {"do_lower_case": True},
     "junnyu/roformer_small_generator": {"do_lower_case": True},
 }
-    # RoFormerTokenizerFast 类几乎与 BertTokenizerFast 完全相同,都是从头到尾进行标记化:
-    # 标点分割和词块。在对中文进行标记时,它们之间存在一些差异。
+
+
+class RoFormerTokenizerFast(PreTrainedTokenizerFast):
+    r"""
+    Construct a "fast" RoFormer tokenizer (backed by HuggingFace's *tokenizers* library).
+    # `RoFormerTokenizerFast`几乎与`BertTokenizerFast`相同，实现端到端的分词：
+    # 标点符号分割和WordPiece。它们在处理中文时有些差异。
     
-    # 该标记器继承自 PreTrainedTokenizerFast 类,其中包含大多数主要方法。
-    # 用户应该参考这个父类以了解这些方法的更多信息。
+    # 此分词器继承自`PreTrainedTokenizerFast`，其中包含大部分主要方法。用户应该
+    # 参考这个超类以获取有关这些方法的更多信息。
     
-    # 示例:
-    # 从"junnyu/roformer_chinese_base"加载预训练的 RoFormerTokenizerFast 
-    # 并使用它对句子进行标记化。
+    # 示例：
+    #
+    # ```python
+    # >>> from transformers import RoFormerTokenizerFast
+    #
+    # >>> tokenizer = RoFormerTokenizerFast.from_pretrained("junnyu/roformer_chinese_base")
+    # >>> tokenizer.tokenize("今天天气非常好。")
+    # ['今', '天', '天', '气', '非常', '好', '。']
+    # ```
+    
+    vocab_files_names = VOCAB_FILES_NAMES  # 获取词汇文件的名称列表
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP  # 获取预训练词汇文件的映射
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES  # 获取预训练位置嵌入的最大模型输入尺寸
+    pretrained_init_configuration = PRETRAINED_INIT_CONFIGURATION  # 获取预训练初始化配置
+    slow_tokenizer_class = RoFormerTokenizer  # 慢速分词器类为RoFormerTokenizer
+    
     def __init__(
         self,
         vocab_file=None,
@@ -91,7 +99,7 @@ PRETRAINED_INIT_CONFIGURATION = {
         strip_accents=None,
         **kwargs,
     ):
-        # 调用父类 PreTrainedTokenizerFast 的 __init__ 方法
+        # 调用父类的初始化方法，设置基本的分词器参数
         super().__init__(
             vocab_file,
             tokenizer_file=tokenizer_file,
@@ -106,8 +114,9 @@ PRETRAINED_INIT_CONFIGURATION = {
             **kwargs,
         )
     
-        # 获取标准化器的状态,并检查是否需要更新标准化器的参数
+        # 从后端分词器的normalizer状态中加载JSON数据
         normalizer_state = json.loads(self.backend_tokenizer.normalizer.__getstate__())
+        # 如果normalizer的lowercase属性与当前设置不符，则更新
         if (
             normalizer_state.get("lowercase", do_lower_case) != do_lower_case
             or normalizer_state.get("strip_accents", strip_accents) != strip_accents
@@ -115,42 +124,48 @@ PRETRAINED_INIT_CONFIGURATION = {
             normalizer_class = getattr(normalizers, normalizer_state.pop("type"))
             normalizer_state["lowercase"] = do_lower_case
             normalizer_state["strip_accents"] = strip_accents
+            # 更新后端分词器的normalizer
             self.backend_tokenizer.normalizer = normalizer_class(**normalizer_state)
     
-        # 设置自定义的预标记器
+        # 确保正确设置自定义的PreTokenizer
         vocab = self.backend_tokenizer.get_vocab()
         self.backend_tokenizer.pre_tokenizer = PreTokenizer.custom(JiebaPreTokenizer(vocab))
     
         self.do_lower_case = do_lower_case
     
-    # 保存和加载状态时,需要更新预标记器为默认的 BertPreTokenizer
     def __getstate__(self):
         state = self.__dict__.copy()
+        # 将分词器的pre_tokenizer设置为BertPreTokenizer()
         state["_tokenizer"].pre_tokenizer = BertPreTokenizer()
         return state
     
     def __setstate__(self, d):
         self.__dict__ = d
+        # 获取当前分词器的词汇表
         vocab = self.__dict__["_tokenizer"].get_vocab()
+        # 将分词器的pre_tokenizer设置为自定义的JiebaPreTokenizer
         self.__dict__["_tokenizer"].pre_tokenizer = PreTokenizer.custom(JiebaPreTokenizer(vocab))
     def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
         """
-        从一个序列或一个序列对构建模型输入，用于序列分类任务，通过连接和添加特殊标记。RoFormer 序列的格式如下：
+        Build model inputs from a sequence or a pair of sequence for sequence classification tasks by concatenating and
+        adding special tokens. A RoFormer sequence has the following format:
 
-        - 单个序列：`[CLS] X [SEP]`
-        - 序列对：`[CLS] A [SEP] B [SEP]`
+        - single sequence: `[CLS] X [SEP]`
+        - pair of sequences: `[CLS] A [SEP] B [SEP]`
 
         Args:
             token_ids_0 (`List[int]`):
-                将添加特殊标记的 ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                序列对的可选第二个 ID 列表。
+                List of IDs to which the special tokens will be added.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: 带有适当特殊标记的 [input IDs](../glossary#input-ids) 列表。
+            `List[int]`: List of [input IDs](../glossary#input-ids) with the appropriate special tokens.
         """
+        # Initialize output with CLS token ID, token_ids_0, and SEP token ID
         output = [self.cls_token_id] + token_ids_0 + [self.sep_token_id]
 
+        # If token_ids_1 is provided, concatenate token_ids_1 and SEP token ID
         if token_ids_1 is not None:
             output += token_ids_1 + [self.sep_token_id]
 
@@ -160,31 +175,50 @@ PRETRAINED_INIT_CONFIGURATION = {
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        从传递的两个序列创建一个用于序列对分类任务的掩码。RoFormer 序列对掩码的格式如下：
+        Create a mask from the two sequences passed to be used in a sequence-pair classification task. A RoFormer
+        sequence pair mask has the following format:
 
         ```
         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1
-        | 第一个序列    | 第二个序列 |
-        ```py
+        | first sequence    | second sequence |
+        ```
 
-        如果 `token_ids_1` 是 `None`，则此方法仅返回掩码的第一部分（0s）。
+        If `token_ids_1` is `None`, this method only returns the first portion of the mask (0s).
 
         Args:
             token_ids_0 (`List[int]`):
-                ID 列表。
-            token_ids_1 (`List[int]`, *可选*):
-                序列对的可选第二个 ID 列表。
+                List of IDs.
+            token_ids_1 (`List[int]`, *optional*):
+                Optional second list of IDs for sequence pairs.
 
         Returns:
-            `List[int]`: 根据给定序列返回的 [token type IDs](../glossary#token-type-ids) 列表。
+            `List[int]`: List of [token type IDs](../glossary#token-type-ids) according to the given sequence(s).
         """
+        # Define SEP and CLS tokens as lists
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
+
+        # If token_ids_1 is None, return a list of zeros corresponding to token_ids_0 + CLS + SEP
         if token_ids_1 is None:
             return len(cls + token_ids_0 + sep) * [0]
+        
+        # Return a concatenated list of zeros for token_ids_0 + CLS + SEP and ones for token_ids_1 + SEP
         return len(cls + token_ids_0 + sep) * [0] + len(token_ids_1 + sep) * [1]
 
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
+        """
+        Save the tokenizer's vocabulary to a directory.
+
+        Args:
+            save_directory (str):
+                Directory to save the vocabulary files.
+            filename_prefix (str, *optional*):
+                Prefix for the vocabulary files.
+
+        Returns:
+            `Tuple[str]`: Tuple of file paths where the vocabulary was saved.
+        """
+        # Save the model vocabulary using the tokenizer's save method
         files = self._tokenizer.model.save(save_directory, name=filename_prefix)
         return tuple(files)
 
@@ -196,6 +230,27 @@ PRETRAINED_INIT_CONFIGURATION = {
         push_to_hub=False,
         **kwargs,
     ):
+        """
+        Save the pretrained model and its tokenizer.
+
+        Args:
+            save_directory (str):
+                Directory to save the pretrained model.
+            legacy_format (str, *optional*):
+                Legacy format compatibility.
+            filename_prefix (str, *optional*):
+                Prefix for the saved files.
+            push_to_hub (bool):
+                Whether to push the saved model to the Hugging Face model hub.
+            **kwargs:
+                Additional arguments passed to the superclass method.
+
+        Returns:
+            `Any`: Output of the superclass's `save_pretrained` method.
+        """
+        # Set the pre_tokenizer to BertPreTokenizer before saving
         self.backend_tokenizer.pre_tokenizer = BertPreTokenizer()
+        
+        # Call the superclass's save_pretrained method with the specified arguments
         return super().save_pretrained(save_directory, legacy_format, filename_prefix, push_to_hub, **kwargs)
 ```

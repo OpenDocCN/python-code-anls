@@ -1,81 +1,76 @@
-# `.\transformers\models\bros\convert_bros_to_pytorch.py`
+# `.\models\bros\convert_bros_to_pytorch.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明和许可信息
-"""Convert Bros checkpoints."""
+```
+# 设置脚本的编码格式为 UTF-8
+# 版权声明，指明版权归属于 HuggingFace Inc. 团队
+#
+# 根据 Apache 许可证 2.0 版本，除非符合许可证规定，否则不得使用本文件
+# 您可以在以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则按“原样”提供本软件，不提供任何形式的明示或暗示保证或条件。
+# 请参阅许可证获取特定语言的权限和限制。
+"""将 Bros 检查点转换为 HuggingFace 模型格式"""
 
-# 导入模块
-import argparse
+import argparse  # 导入命令行参数解析模块
 
-# 导入原始的 Bros 模块
-import bros  # original repo
-# 导入 PyTorch 库
-import torch
+import bros  # 原始仓库
+import torch  # 导入 PyTorch 模块
 
-# 导入 transformers 库中的 BrosConfig、BrosModel 和 BrosProcessor 类
-from transformers import BrosConfig, BrosModel, BrosProcessor
-# 从 transformers 库中导入 logging 模块
-from transformers.utils import logging
-
-# 设置日志级别为 INFO
-logging.set_verbosity_info()
-# 获取当前模块的日志记录器
-logger = logging.get_logger(__name__)
+from transformers import BrosConfig, BrosModel, BrosProcessor  # 导入转换所需的模块和类
+from transformers.utils import logging  # 导入日志记录模块
 
 
-# 根据模型名称获取 BrosConfig 对象
+logging.set_verbosity_info()  # 设置日志记录的详细级别为 info
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+
+
 def get_configs(model_name):
-    # 从预训练模型加载 BrosConfig 对象
+    """获取指定模型的配置信息"""
     bros_config = BrosConfig.from_pretrained(model_name)
     return bros_config
 
 
-# 删除忽略的键
 def remove_ignore_keys_(state_dict):
-    # 要删除的键列表
+    """移除指定的忽略键（如果存在）"""
     ignore_keys = [
         "embeddings.bbox_sinusoid_emb.inv_freq",
     ]
-    # 遍历要删除的键列表
     for k in ignore_keys:
-        # 如果键存在，则删除对应的键值对
         state_dict.pop(k, None)
 
 
-# 重命名键名
 def rename_key(name):
-    # 重命名 "embeddings.bbox_projection.weight" 键名为 "bbox_embeddings.bbox_projection.weight"
+    """根据约定重命名给定的键"""
     if name == "embeddings.bbox_projection.weight":
         name = "bbox_embeddings.bbox_projection.weight"
 
-    # 重命名 "embeddings.bbox_sinusoid_emb.x_pos_emb.inv_freq" 键名为 "bbox_embeddings.bbox_sinusoid_emb.x_pos_emb.inv_freq"
     if name == "embeddings.bbox_sinusoid_emb.x_pos_emb.inv_freq":
         name = "bbox_embeddings.bbox_sinusoid_emb.x_pos_emb.inv_freq"
 
-    # 重命名 "embeddings.bbox_sinusoid_emb.y_pos_emb.inv_freq" 键名为 "bbox_embeddings.bbox_sinusoid_emb.y_pos_emb.inv_freq"
     if name == "embeddings.bbox_sinusoid_emb.y_pos_emb.inv_freq":
         name = "bbox_embeddings.bbox_sinusoid_emb.y_pos_emb.inv_freq"
 
     return name
 
 
-# 转换状态字典
 def convert_state_dict(orig_state_dict, model):
-    # 重命名键名
+    """将原始模型状态字典转换为适用于 HuggingFace 模型的格式"""
+    # 重命名键
     for key in orig_state_dict.copy().keys():
         val = orig_state_dict.pop(key)
         orig_state_dict[rename_key(key)] = val
 
-    # 删除忽略的键
+    # 移除忽略的键
     remove_ignore_keys_(orig_state_dict)
 
     return orig_state_dict
 
 
-# 转换 Bros 检查点
 def convert_bros_checkpoint(model_name, pytorch_dump_folder_path=None, push_to_hub=False):
-    # 加载原始模型
+    """将 Bros 模型检查点转换为 HuggingFace 模型格式"""
+    # 加载原始的 Bros 模型
     original_model = bros.BrosModel.from_pretrained(model_name).eval()
 
     # 加载 HuggingFace 模型
@@ -83,18 +78,14 @@ def convert_bros_checkpoint(model_name, pytorch_dump_folder_path=None, push_to_h
     model = BrosModel.from_pretrained(model_name, config=bros_config)
     model.eval()
 
-    # 获取原始模型的状态字典
     state_dict = original_model.state_dict()
-    # 转换状态字典
     new_state_dict = convert_state_dict(state_dict, model)
-    # 加载转换后的状态字典到 HuggingFace 模型
     model.load_state_dict(new_state_dict)
 
     # 验证结果
 
-    # 原始的 BROS 模型需要每个边界框四个点（8个浮点值），准备形状为 [batch_size, seq_len, 8] 的边界框
-```  
-    # 创建包含边界框数据的张量
+    # 原始的 BROS 模型需要每个边界框 4 个点（8 个浮点数），准备形状为 [batch_size, seq_len, 8] 的边界框
+    # 创建一个包含边界框信息的张量，用于定义对象的位置和大小
     bbox = torch.tensor(
         [
             [
@@ -109,40 +100,40 @@ def convert_bros_checkpoint(model_name, pytorch_dump_folder_path=None, push_to_h
         ]
     )
 
-    # 从预训练模型名称创建 BrosProcessor 对象
+    # 从预训练模型加载 BrosProcessor 对象，用于处理文本输入
     processor = BrosProcessor.from_pretrained(model_name)
 
-    # 对输入文本进行编码，并将边界框数据添加到编码结果中
+    # 使用 processor 对象处理输入文本，将边界框信息添加到编码结果中
     encoding = processor("His name is Rocco.", return_tensors="pt")
     encoding["bbox"] = bbox
 
-    # 获取原始模型的隐藏状态
+    # 使用原始模型生成输入编码的最后隐藏状态
     original_hidden_states = original_model(**encoding).last_hidden_state
     # pixel_values = processor(image, return_tensors="pt").pixel_values
 
-    # 获取当前模型的隐藏状态
+    # 使用微调后的模型生成输入编码的最后隐藏状态
     last_hidden_states = model(**encoding).last_hidden_state
 
-    # 检查原始模型和当前模型的隐藏状态是否非常接近
+    # 断言原始模型和微调后模型的最后隐藏状态在一定误差范围内相等
     assert torch.allclose(original_hidden_states, last_hidden_states, atol=1e-4)
 
-    # 如果指定了 PyTorch 模型保存路径，则保存模型和处理器
+    # 如果指定了 PyTorch 模型保存路径，则保存微调后的模型和 processor 对象
     if pytorch_dump_folder_path is not None:
         print(f"Saving model and processor to {pytorch_dump_folder_path}")
         model.save_pretrained(pytorch_dump_folder_path)
         processor.save_pretrained(pytorch_dump_folder_path)
 
-    # 如果需要推送到 Hub，则将模型和处理器推送到指定 Hub 仓库
+    # 如果需要将模型和 processor 推送到 Hub 上，则执行推送操作
     if push_to_hub:
         model.push_to_hub("jinho8345/" + model_name.split("/")[-1], commit_message="Update model")
         processor.push_to_hub("jinho8345/" + model_name.split("/")[-1], commit_message="Update model")
-# 如果当前脚本作为主程序执行
 if __name__ == "__main__":
-    # 创建命令行参数解析器对象
+    # 如果当前脚本作为主程序运行，则执行以下代码块
+
+    # 创建参数解析器
     parser = argparse.ArgumentParser()
 
-    # 必选参数
-    # 添加模型名称参数
+    # 添加必需的参数
     parser.add_argument(
         "--model_name",
         default="jinho8345/bros-base-uncased",
@@ -150,7 +141,7 @@ if __name__ == "__main__":
         type=str,
         help="Name of the original model you'd like to convert.",
     )
-    # 添加 PyTorch 模型输出目录参数
+    # 添加参数：输出 PyTorch 模型目录的路径
     parser.add_argument(
         "--pytorch_dump_folder_path",
         default=None,
@@ -158,7 +149,7 @@ if __name__ == "__main__":
         type=str,
         help="Path to the output PyTorch model directory.",
     )
-    # 添加是否推送至 🤗 hub 的参数
+    # 添加参数：是否推送转换后的模型和处理器到 🤗 hub
     parser.add_argument(
         "--push_to_hub",
         action="store_true",
@@ -167,6 +158,7 @@ if __name__ == "__main__":
 
     # 解析命令行参数
     args = parser.parse_args()
-    # 调用函数转换 Bros 检查点
+
+    # 调用函数 convert_bros_checkpoint，传入解析后的参数
     convert_bros_checkpoint(args.model_name, args.pytorch_dump_folder_path, args.push_to_hub)
 ```

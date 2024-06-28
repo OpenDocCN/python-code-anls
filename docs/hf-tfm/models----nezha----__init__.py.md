@@ -1,27 +1,23 @@
-# `.\transformers\models\nezha\__init__.py`
+# `.\models\nezha\__init__.py`
 
-```py
-# 导入需要的模块和类型
-# 首先导入必要的模块和类型，包括了自定义的utils模块、判断tokenizers是否可用的函数、判断torch是否可用的函数、TYPE_CHECKING类型
+```
+# 导入必要的模块和函数，包括自定义的异常和延迟加载模块
 from typing import TYPE_CHECKING
-
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tokenizers_available, is_torch_available
 
-# 定义模块的导入结构
-# 定义一个字典来存储模块的导入结构
+# 定义模块的导入结构，包含配置和模型类名称
 _import_structure = {
     "configuration_nezha": ["NEZHA_PRETRAINED_CONFIG_ARCHIVE_MAP", "NezhaConfig"],
 }
 
-# 检查torch是否可用
-# 如果torch不可用，则抛出OptionalDependencyNotAvailable异常
-# 否则，将NEZHA_PRETRAINED_MODEL_ARCHIVE_LIST, NezhaForNextSentencePrediction, NezhaForMaskedLM, NezhaForPreTraining等模块添加到_import_structure字典中
+# 检查是否有 torch 库可用，若不可用则引发自定义的依赖不可用异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
+    # 若 torch 可用，则添加模型相关的导入结构
     _import_structure["modeling_nezha"] = [
         "NEZHA_PRETRAINED_MODEL_ARCHIVE_LIST",
         "NezhaForNextSentencePrediction",
@@ -35,9 +31,7 @@ else:
         "NezhaPreTrainedModel",
     ]
 
-
-# 类型检查
-# 如果TYPE_CHECKING为True，则导入模块的相关类
+# 如果是类型检查阶段，则导入配置和模型类名
 if TYPE_CHECKING:
     from .configuration_nezha import NEZHA_PRETRAINED_CONFIG_ARCHIVE_MAP, NezhaConfig
 
@@ -60,10 +54,10 @@ if TYPE_CHECKING:
             NezhaPreTrainedModel,
         )
 
-
-# 如果TYPE_CHECKING不为True，则使用_LazyModule创建模块
+# 如果不是类型检查阶段，则进行模块的延迟加载和替换
 else:
     import sys
 
+    # 将当前模块替换为 LazyModule 实例，进行延迟加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

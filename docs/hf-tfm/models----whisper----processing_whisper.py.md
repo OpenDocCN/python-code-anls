@@ -1,88 +1,132 @@
-# `.\transformers\models\whisper\processing_whisper.py`
+# `.\models\whisper\processing_whisper.py`
 
-```py
-# 设置文件编码为 utf-8
+```
+# coding=utf-8
+# 文件编码声明，使用 UTF-8 编码
+# Copyright 2022 The HuggingFace Inc. team.
+# 版权声明，标明代码版权归 HuggingFace Inc. 团队所有
 
-# 版权声明
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 遵循 Apache License, Version 2.0 许可协议，允许在特定条件下使用本代码
+# you may not use this file except in compliance with the License.
+# 除非符合许可协议的条件，否则禁止使用本文件
+# You may obtain a copy of the License at
+# 可以在上述许可协议链接处获取完整的许可协议文本
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 根据适用法律或书面同意，本软件按“原样”分发，不提供任何担保或条件
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# 不提供任何担保或条件，包括但不限于特定用途的适销性或适用性
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 请参阅许可协议以了解权限和限制的具体条款
 
-# 导入处理工具类的ProcessorMixin
+"""
+Speech processor class for Whisper
+"""
+# 注释: Whisper 的语音处理器类
 
-# 定义WhisperProcessor类，继承ProcessorMixin
+from ...processing_utils import ProcessorMixin
+# 导入处理工具类 ProcessorMixin
 
-    # 构造WhisperProcessor类，将Whisper特征提取器和Whisper标记器封装成单个处理器
+class WhisperProcessor(ProcessorMixin):
+    r"""
+    Constructs a Whisper processor which wraps a Whisper feature extractor and a Whisper tokenizer into a single
+    processor.
+    
+    构建 Whisper 处理器，将 Whisper 特征提取器和 Whisper 分词器封装到一个处理器中
 
-    # ['WhisperProcessor'] 提供了['WhisperFeatureExtractor']和['WhisperTokenizer']的所有功能。详细信息请参阅['~WhisperProcessor.__call__']和['~WhisperProcessor.decode']
+    [`WhisperProcessor`] offers all the functionalities of [`WhisperFeatureExtractor`] and [`WhisperTokenizer`]. See
+    the [`~WhisperProcessor.__call__`] and [`~WhisperProcessor.decode`] for more information.
+    
+    WhisperProcessor 提供了所有 WhisperFeatureExtractor 和 WhisperTokenizer 的功能。查看 `~WhisperProcessor.__call__` 和 `~WhisperProcessor.decode` 获取更多信息
 
-    # 初始化函数
-    # 参数
-        # feature_extractor（'WhisperFeatureExtractor'）：WhisperFeatureExtractor的实例。特征提取器为必需输入。
-        # tokenizer（'WhisperTokenizer'）：WhisperTokenizer的实例。标记器为必需输入。
+    Args:
+        feature_extractor (`WhisperFeatureExtractor`):
+            An instance of [`WhisperFeatureExtractor`]. The feature extractor is a required input.
+        tokenizer (`WhisperTokenizer`):
+            An instance of [`WhisperTokenizer`]. The tokenizer is a required input.
+    """
+    # 参数说明：feature_extractor 是 WhisperFeatureExtractor 实例，tokenizer 是 WhisperTokenizer 实例
 
-    # 设置feature_extractor_class为"WhisperFeatureExtractor"
-    # 设置tokenizer_class为"WhisperTokenizer"
+    feature_extractor_class = "WhisperFeatureExtractor"
+    # 类属性：特征提取器类名为 WhisperFeatureExtractor
+    tokenizer_class = "WhisperTokenizer"
+    # 类属性：分词器类名为 WhisperTokenizer
 
-    # 初始化函数
-    # 参数
-        # feature_extractor：特征提取器
-        # tokenizer：标记器
-    # 调用父类的初始化函数，传入feature_extractor和tokenizer
+    def __init__(self, feature_extractor, tokenizer):
+        super().__init__(feature_extractor, tokenizer)
+        # 调用父类的初始化方法，使用 feature_extractor 和 tokenizer 进行初始化
+        self.current_processor = self.feature_extractor
+        # 设置当前处理器为特征提取器对象
+        self._in_target_context_manager = False
+        # 设置目标上下文管理器状态为 False
 
-    # 设置当前处理器为feature_extractor
-    # 设置_in_target_context_manager为False
-
-    # 获取解码器提示的ID
-    # 参数
-        # task：任务
-        # language：语言
-        # no_timestamps：是否包含时间戳
-        # 调用tokenizer的get_decoder_prompt_ids方法，传入对应参数
-    # 定义一个类方法，将`audio`参数传递给WhisperFeatureExtractor的`__call__`方法，将`text`参数传递给WhisperTokenizer的`__call__`方法。请参考上述两个方法的文档字符串以获取更多信息。
+    def get_decoder_prompt_ids(self, task=None, language=None, no_timestamps=True):
+        return self.tokenizer.get_decoder_prompt_ids(task=task, language=language, no_timestamps=no_timestamps)
+        # 调用分词器的方法获取解码器提示符的 ID
     def __call__(self, *args, **kwargs):
-        # 为了向后兼容
+        """
+        Forwards the `audio` argument to WhisperFeatureExtractor's [`~WhisperFeatureExtractor.__call__`] and the `text`
+        argument to [`~WhisperTokenizer.__call__`]. Please refer to the doctsring of the above two methods for more
+        information.
+        """
+        # 如果在目标上下文管理器中，则调用当前处理器并返回结果
         if self._in_target_context_manager:
             return self.current_processor(*args, **kwargs)
 
-        # 从kwargs中获取`audio`、`sampling_rate`和`text`参数
+        # 从 kwargs 中弹出 `audio`, `sampling_rate`, `text` 参数
         audio = kwargs.pop("audio", None)
         sampling_rate = kwargs.pop("sampling_rate", None)
         text = kwargs.pop("text", None)
-        
-        # 如果args中有参数，将第一个参数视为audio，其余参数视为args
+        # 如果有额外的位置参数，将第一个作为 `audio` 参数处理，其余作为 args
         if len(args) > 0:
             audio = args[0]
             args = args[1:]
 
-        # 如果既没有audio也没有text输入，则抛出异常
+        # 如果 `audio` 和 `text` 都为 None，则抛出 ValueError
         if audio is None and text is None:
             raise ValueError("You need to specify either an `audio` or `text` input to process.")
 
-        # 如果有audio输入，则使用feature_extractor处理
+        # 如果有 `audio`，调用特征提取器处理音频输入
         if audio is not None:
             inputs = self.feature_extractor(audio, *args, sampling_rate=sampling_rate, **kwargs)
-        # 如果有text输入，则使用tokenizer处理
+        # 如果有 `text`，调用分词器处理文本输入
         if text is not None:
             encodings = self.tokenizer(text, **kwargs)
 
-        # 如果只有text输入，则返回inputs
+        # 如果 `text` 为 None，返回特征提取器处理的结果
         if text is None:
             return inputs
-        # 如果只有audio输入，则返回encodings
+        # 如果 `audio` 为 None，返回分词器处理的结果
         elif audio is None:
             return encodings
         else:
-            # 将encodings中的"input_ids"作为labels添加到inputs中，然后返回inputs
+            # 将分词器的编码结果作为特征提取器结果的标签
             inputs["labels"] = encodings["input_ids"]
             return inputs
 
-    # 定义一个方法，将其参数全部转发给WhisperTokenizer的`batch_decode`方法。请参考该方法的文档字符串以获取更多信息。
     def batch_decode(self, *args, **kwargs):
+        """
+        This method forwards all its arguments to WhisperTokenizer's [`~PreTrainedTokenizer.batch_decode`]. Please
+        refer to the docstring of this method for more information.
+        """
+        # 调用分词器的批量解码方法并返回结果
         return self.tokenizer.batch_decode(*args, **kwargs)
 
-    # 定义一个方法，将其参数全部转发给WhisperTokenizer的`decode`方法。请参考该方法的文档字符串以获取更多信息。
     def decode(self, *args, **kwargs):
+        """
+        This method forwards all its arguments to WhisperTokenizer's [`~PreTrainedTokenizer.decode`]. Please refer to
+        the docstring of this method for more information.
+        """
+        # 调用分词器的解码方法并返回结果
         return self.tokenizer.decode(*args, **kwargs)
 
-    # 定义一个方法，将文本输入转换为prompt_ids。返回结果可以是numpy数组或torch张量，取决于return_tensors参数。
     def get_prompt_ids(self, text: str, return_tensors="np"):
+        # 调用分词器的获取提示符编号方法并返回结果
         return self.tokenizer.get_prompt_ids(text, return_tensors=return_tensors)
 ```

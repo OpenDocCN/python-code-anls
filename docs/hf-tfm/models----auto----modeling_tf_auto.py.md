@@ -1,421 +1,472 @@
-# `.\transformers\models\auto\modeling_tf_auto.py`
+# `.\models\auto\modeling_tf_auto.py`
 
-```py
-# 导入警告模块
+```
+# 指定编码格式为UTF-8
+
+# 版权声明和许可证信息，告知代码的版权和许可使用条款
+# 版权归The HuggingFace Inc.团队所有，许可类型为Apache License, Version 2.0
+# 除非符合许可证规定，否则不得使用此文件
+
+# 引入警告模块，用于处理警告信息
 import warnings
-# 导入有序字典模块
-from collections import OrderedDict
-# 导入日志记录工具
-from ...utils import logging
-# 从自动生成的模型工厂中导入基类和惰性自动生成的映射
-from .auto_factory import _BaseAutoModelClass, _LazyAutoMapping, auto_class_update
-# 从自动生成的配置映射中导入配置名称
-from .configuration_auto import CONFIG_MAPPING_NAMES
-# 获取日志记录器
-logger = logging.get_logger(__name__)
-# 定义 TensorFlow 模型的映射名称为有序字典
-TF_MODEL_MAPPING_NAMES = OrderedDict(
-    [
-        # 定义模型名称与对应的 TensorFlow 模型类的映射关系
-        ("albert", "TFAlbertModel"),
-        ("bart", "TFBartModel"),
-        ("bert", "TFBertModel"),
-        ("blenderbot", "TFBlenderbotModel"),
-        ("blenderbot-small", "TFBlenderbotSmallModel"),
-        ("blip", "TFBlipModel"),
-        ("camembert", "TFCamembertModel"),
-        ("clip", "TFCLIPModel"),
-        ("convbert", "TFConvBertModel"),
-        ("convnext", "TFConvNextModel"),
-        ("convnextv2", "TFConvNextV2Model"),
-        ("ctrl", "TFCTRLModel"),
-        ("cvt", "TFCvtModel"),
-        ("data2vec-vision", "TFData2VecVisionModel"),
-        ("deberta", "TFDebertaModel"),
-        ("deberta-v2", "TFDebertaV2Model"),
-        ("deit", "TFDeiTModel"),
-        ("distilbert", "TFDistilBertModel"),
-        ("dpr", "TFDPRQuestionEncoder"),
-        ("efficientformer", "TFEfficientFormerModel"),
-        ("electra", "TFElectraModel"),
-        ("esm", "TFEsmModel"),
-        ("flaubert", "TFFlaubertModel"),
-        ("funnel", ("TFFunnelModel", "TFFunnelBaseModel")),
-        ("gpt-sw3", "TFGPT2Model"),
-        ("gpt2", "TFGPT2Model"),
-        ("gptj", "TFGPTJModel"),
-        ("groupvit", "TFGroupViTModel"),
-        ("hubert", "TFHubertModel"),
-        ("layoutlm", "TFLayoutLMModel"),
-        ("layoutlmv3", "TFLayoutLMv3Model"),
-        ("led", "TFLEDModel"),
-        ("longformer", "TFLongformerModel"),
-        ("lxmert", "TFLxmertModel"),
-        ("marian", "TFMarianModel"),
-        ("mbart", "TFMBartModel"),
-        ("mobilebert", "TFMobileBertModel"),
-        ("mobilevit", "TFMobileViTModel"),
-        ("mpnet", "TFMPNetModel"),
-        ("mt5", "TFMT5Model"),
-        ("openai-gpt", "TFOpenAIGPTModel"),
-        ("opt", "TFOPTModel"),
-        ("pegasus", "TFPegasusModel"),
-        ("regnet", "TFRegNetModel"),
-        ("rembert", "TFRemBertModel"),
-        ("resnet", "TFResNetModel"),
-        ("roberta", "TFRobertaModel"),
-        ("roberta-prelayernorm", "TFRobertaPreLayerNormModel"),
-        ("roformer", "TFRoFormerModel"),
-        ("sam", "TFSamModel"),
-        ("segformer", "TFSegformerModel"),
-        ("speech_to_text", "TFSpeech2TextModel"),
-        ("swin", "TFSwinModel"),
-        ("t5", "TFT5Model"),
-        ("tapas", "TFTapasModel"),
-        ("transfo-xl", "TFTransfoXLModel"),
-        ("vision-text-dual-encoder", "TFVisionTextDualEncoderModel"),
-        ("vit", "TFViTModel"),
-        ("vit_mae", "TFViTMAEModel"),
-        ("wav2vec2", "TFWav2Vec2Model"),
-        ("whisper", "TFWhisperModel"),
-        ("xglm", "TFXGLMModel"),
-        ("xlm", "TFXLMModel"),
-        ("xlm-roberta", "TFXLMRobertaModel"),
-        ("xlnet", "TFXLNetModel"),
-    ]
-# 导入 OrderedDict 类，用于创建有序字典
+
+# 引入有序字典模块，用于保存模型映射关系的有序字典
 from collections import OrderedDict
 
-# 包含了各种模型和对应的 TensorFlow 类名，用于预训练映射
+# 从当前包中的utils模块中导入logging工具
+from ...utils import logging
+
+# 从当前包中的.auto_factory模块导入自动模型工厂的基类和映射类相关函数
+from .auto_factory import _BaseAutoModelClass, _LazyAutoMapping, auto_class_update
+
+# 从当前包中的.configuration_auto模块导入配置映射名称
+from .configuration_auto import CONFIG_MAPPING_NAMES
+
+# 获取或创建当前模块的日志记录器对象
+logger = logging.get_logger(__name__)
+
+# 定义TensorFlow模型映射名称的有序字典，用于存储模型名称和类别的映射关系
+TF_MODEL_MAPPING_NAMES = OrderedDict(
+    # 定义一个列表，包含模型名称到对应 TensorFlow 模型类的映射关系
+    
+    [
+        # "albert" 模型对应的 TensorFlow 模型类为 "TFAlbertModel"
+        ("albert", "TFAlbertModel"),
+        # "bart" 模型对应的 TensorFlow 模型类为 "TFBartModel"
+        ("bart", "TFBartModel"),
+        # "bert" 模型对应的 TensorFlow 模型类为 "TFBertModel"
+        ("bert", "TFBertModel"),
+        # "blenderbot" 模型对应的 TensorFlow 模型类为 "TFBlenderbotModel"
+        ("blenderbot", "TFBlenderbotModel"),
+        # "blenderbot-small" 模型对应的 TensorFlow 模型类为 "TFBlenderbotSmallModel"
+        ("blenderbot-small", "TFBlenderbotSmallModel"),
+        # "blip" 模型对应的 TensorFlow 模型类为 "TFBlipModel"
+        ("blip", "TFBlipModel"),
+        # "camembert" 模型对应的 TensorFlow 模型类为 "TFCamembertModel"
+        ("camembert", "TFCamembertModel"),
+        # "clip" 模型对应的 TensorFlow 模型类为 "TFCLIPModel"
+        ("clip", "TFCLIPModel"),
+        # "convbert" 模型对应的 TensorFlow 模型类为 "TFConvBertModel"
+        ("convbert", "TFConvBertModel"),
+        # "convnext" 模型对应的 TensorFlow 模型类为 "TFConvNextModel"
+        ("convnext", "TFConvNextModel"),
+        # "convnextv2" 模型对应的 TensorFlow 模型类为 "TFConvNextV2Model"
+        ("convnextv2", "TFConvNextV2Model"),
+        # "ctrl" 模型对应的 TensorFlow 模型类为 "TFCTRLModel"
+        ("ctrl", "TFCTRLModel"),
+        # "cvt" 模型对应的 TensorFlow 模型类为 "TFCvtModel"
+        ("cvt", "TFCvtModel"),
+        # "data2vec-vision" 模型对应的 TensorFlow 模型类为 "TFData2VecVisionModel"
+        ("data2vec-vision", "TFData2VecVisionModel"),
+        # "deberta" 模型对应的 TensorFlow 模型类为 "TFDebertaModel"
+        ("deberta", "TFDebertaModel"),
+        # "deberta-v2" 模型对应的 TensorFlow 模型类为 "TFDebertaV2Model"
+        ("deberta-v2", "TFDebertaV2Model"),
+        # "deit" 模型对应的 TensorFlow 模型类为 "TFDeiTModel"
+        ("deit", "TFDeiTModel"),
+        # "distilbert" 模型对应的 TensorFlow 模型类为 "TFDistilBertModel"
+        ("distilbert", "TFDistilBertModel"),
+        # "dpr" 模型对应的 TensorFlow 模型类为 "TFDPRQuestionEncoder"
+        ("dpr", "TFDPRQuestionEncoder"),
+        # "efficientformer" 模型对应的 TensorFlow 模型类为 "TFEfficientFormerModel"
+        ("efficientformer", "TFEfficientFormerModel"),
+        # "electra" 模型对应的 TensorFlow 模型类为 "TFElectraModel"
+        ("electra", "TFElectraModel"),
+        # "esm" 模型对应的 TensorFlow 模型类为 "TFEsmModel"
+        ("esm", "TFEsmModel"),
+        # "flaubert" 模型对应的 TensorFlow 模型类为 "TFFlaubertModel"
+        ("flaubert", "TFFlaubertModel"),
+        # "funnel" 模型对应的 TensorFlow 模型类为 ("TFFunnelModel", "TFFunnelBaseModel")
+        ("funnel", ("TFFunnelModel", "TFFunnelBaseModel")),
+        # "gpt-sw3" 模型对应的 TensorFlow 模型类为 "TFGPT2Model"
+        ("gpt-sw3", "TFGPT2Model"),
+        # "gpt2" 模型对应的 TensorFlow 模型类为 "TFGPT2Model"
+        ("gpt2", "TFGPT2Model"),
+        # "gptj" 模型对应的 TensorFlow 模型类为 "TFGPTJModel"
+        ("gptj", "TFGPTJModel"),
+        # "groupvit" 模型对应的 TensorFlow 模型类为 "TFGroupViTModel"
+        ("groupvit", "TFGroupViTModel"),
+        # "hubert" 模型对应的 TensorFlow 模型类为 "TFHubertModel"
+        ("hubert", "TFHubertModel"),
+        # "layoutlm" 模型对应的 TensorFlow 模型类为 "TFLayoutLMModel"
+        ("layoutlm", "TFLayoutLMModel"),
+        # "layoutlmv3" 模型对应的 TensorFlow 模型类为 "TFLayoutLMv3Model"
+        ("layoutlmv3", "TFLayoutLMv3Model"),
+        # "led" 模型对应的 TensorFlow 模型类为 "TFLEDModel"
+        ("led", "TFLEDModel"),
+        # "longformer" 模型对应的 TensorFlow 模型类为 "TFLongformerModel"
+        ("longformer", "TFLongformerModel"),
+        # "lxmert" 模型对应的 TensorFlow 模型类为 "TFLxmertModel"
+        ("lxmert", "TFLxmertModel"),
+        # "marian" 模型对应的 TensorFlow 模型类为 "TFMarianModel"
+        ("marian", "TFMarianModel"),
+        # "mbart" 模型对应的 TensorFlow 模型类为 "TFMBartModel"
+        ("mbart", "TFMBartModel"),
+        # "mobilebert" 模型对应的 TensorFlow 模型类为 "TFMobileBertModel"
+        ("mobilebert", "TFMobileBertModel"),
+        # "mobilevit" 模型对应的 TensorFlow 模型类为 "TFMobileViTModel"
+        ("mobilevit", "TFMobileViTModel"),
+        # "mpnet" 模型对应的 TensorFlow 模型类为 "TFMPNetModel"
+        ("mpnet", "TFMPNetModel"),
+        # "mt5" 模型对应的 TensorFlow 模型类为 "TFMT5Model"
+        ("mt5", "TFMT5Model"),
+        # "openai-gpt" 模型对应的 TensorFlow 模型类为 "TFOpenAIGPTModel"
+        ("openai-gpt", "TFOpenAIGPTModel"),
+        # "opt" 模型对应的 TensorFlow 模型类为 "TFOPTModel"
+        ("opt", "TFOPTModel"),
+        # "pegasus" 模型对应的 TensorFlow 模型类为 "TFPegasusModel"
+        ("pegasus", "TFPegasusModel"),
+        # "regnet" 模型对应的 TensorFlow 模型类为 "TFRegNetModel"
+        ("regnet", "TFRegNetModel"),
+        # "rembert" 模型对应的 TensorFlow 模型类为 "TFRemBertModel"
+        ("rembert", "TFRemBertModel"),
+        # "resnet" 模型对应的 TensorFlow 模型类为 "TFResNetModel"
+        ("resnet", "TFResNetModel"),
+        # "roberta" 模型对应的 TensorFlow 模型类为 "TFRobertaModel"
+        ("roberta", "TFRobertaModel"),
+        # "roberta-prelayernorm" 模型对应的 TensorFlow 模型类为 "TFRobertaPreLayerNormModel"
+        ("roberta-prelayernorm", "TFRobertaPreLayerNormModel"),
+        # "roformer" 模型对应的 TensorFlow 模型类为 "TFRoFormerModel"
+        ("roformer", "TFRoFormerModel"),
+        # "sam" 模型对应的 TensorFlow 模型类为 "TFSamModel"
+        ("sam", "TFSamModel"),
+        # "segformer" 模型对应的 TensorFlow 模型类为 "TFSegformerModel"
+        ("segformer", "TFSegformerModel"),
+        # "speech_to_text" 模型对应的 TensorFlow 模型类为 "TFSpeech2TextModel"
+        ("speech_to_text", "TFSpeech2TextModel"),
+        # "swin" 模型对应的 TensorFlow 模型类为 "TFSwinModel"
+        ("swin", "TFSwinModel"),
+        # "t5" 模型对应的 TensorFlow 模型类
+# 定义一个有序字典，映射模型名称到TensorFlow模型类名，用于预训练模型的映射
 TF_MODEL_FOR_PRETRAINING_MAPPING_NAMES = OrderedDict(
     [
-        # 模型名 "albert" 对应的 TensorFlow 类名 "TFAlbertForPreTraining"
+        # 各种预训练模型的映射关系
         ("albert", "TFAlbertForPreTraining"),
-        # 模型名 "bart" 对应的 TensorFlow 类名 "TFBartForConditionalGeneration"
         ("bart", "TFBartForConditionalGeneration"),
-        # 模型名 "bert" 对应的 TensorFlow 类名 "TFBertForPreTraining"
         ("bert", "TFBertForPreTraining"),
-        # 模型名 "camembert" 对应的 TensorFlow 类名 "TFCamembertForMaskedLM"
         ("camembert", "TFCamembertForMaskedLM"),
-        # 模型名 "ctrl" 对应的 TensorFlow 类名 "TFCTRLLMHeadModel"
         ("ctrl", "TFCTRLLMHeadModel"),
-        # 模型名 "distilbert" 对应的 TensorFlow 类名 "TFDistilBertForMaskedLM"
         ("distilbert", "TFDistilBertForMaskedLM"),
-        # 模型名 "electra" 对应的 TensorFlow 类名 "TFElectraForPreTraining"
         ("electra", "TFElectraForPreTraining"),
-        # 模型名 "flaubert" 对应的 TensorFlow 类名 "TFFlaubertWithLMHeadModel"
         ("flaubert", "TFFlaubertWithLMHeadModel"),
-        # 模型名 "funnel" 对应的 TensorFlow 类名 "TFFunnelForPreTraining"
         ("funnel", "TFFunnelForPreTraining"),
-        # 模型名 "gpt-sw3" 对应的 TensorFlow 类名 "TFGPT2LMHeadModel"
         ("gpt-sw3", "TFGPT2LMHeadModel"),
-        # 模型名 "gpt2" 对应的 TensorFlow 类名 "TFGPT2LMHeadModel"
         ("gpt2", "TFGPT2LMHeadModel"),
-        # 模型名 "layoutlm" 对应的 TensorFlow 类名 "TFLayoutLMForMaskedLM"
         ("layoutlm", "TFLayoutLMForMaskedLM"),
-        # 模型名 "lxmert" 对应的 TensorFlow 类名 "TFLxmertForPreTraining"
         ("lxmert", "TFLxmertForPreTraining"),
-        # 模型名 "mobilebert" 对应的 TensorFlow 类名 "TFMobileBertForPreTraining"
         ("mobilebert", "TFMobileBertForPreTraining"),
-        # 模型名 "mpnet" 对应的 TensorFlow 类名 "TFMPNetForMaskedLM"
         ("mpnet", "TFMPNetForMaskedLM"),
-        # 模型名 "openai-gpt" 对应的 TensorFlow 类名 "TFOpenAIGPTLMHeadModel"
         ("openai-gpt", "TFOpenAIGPTLMHeadModel"),
-        # 模型名 "roberta" 对应的 TensorFlow 类名 "TFRobertaForMaskedLM"
         ("roberta", "TFRobertaForMaskedLM"),
-        # 模型名 "roberta-prelayernorm" 对应的 TensorFlow 类名 "TFRobertaPreLayerNormForMaskedLM"
         ("roberta-prelayernorm", "TFRobertaPreLayerNormForMaskedLM"),
-        # 模型名 "t5" 对应的 TensorFlow 类名 "TFT5ForConditionalGeneration"
         ("t5", "TFT5ForConditionalGeneration"),
-        # 模型名 "tapas" 对应的 TensorFlow 类名 "TFTapasForMaskedLM"
         ("tapas", "TFTapasForMaskedLM"),
-        # 模型名 "transfo-xl" 对应的 TensorFlow 类名 "TFTransfoXLLMHeadModel"
         ("transfo-xl", "TFTransfoXLLMHeadModel"),
-        # 模型名 "vit_mae" 对应的 TensorFlow 类名 "TFViTMAEForPreTraining"
         ("vit_mae", "TFViTMAEForPreTraining"),
-        # 模型名 "xlm" 对应的 TensorFlow 类名 "TFXLMWithLMHeadModel"
         ("xlm", "TFXLMWithLMHeadModel"),
-        # 模型名 "xlm-roberta" 对应的 TensorFlow 类名 "TFXLMRobertaForMaskedLM"
         ("xlm-roberta", "TFXLMRobertaForMaskedLM"),
-        # 模型名 "xlnet" 对应的 TensorFlow 类名 "TFXLNetLMHeadModel"
         ("xlnet", "TFXLNetLMHeadModel"),
     ]
 )
 
-# 包含了各种模型和对应的 TensorFlow 类名，用于带有 LM heads 的模型映射
+# 定义另一个有序字典，映射模型名称到TensorFlow模型类名，用于带有语言模型头部的模型的映射
 TF_MODEL_WITH_LM_HEAD_MAPPING_NAMES = OrderedDict(
     [
-        # 模型名 "albert" 对应的 TensorFlow 类名 "TFAlbertForMaskedLM"
+        # 各种带有语言模型头部的模型的映射关系
         ("albert", "TFAlbertForMaskedLM"),
-        # 模型名 "bart" 对应的 TensorFlow 类名 "TFBartForConditionalGeneration"
         ("bart", "TFBartForConditionalGeneration"),
-        # 模型名 "bert" 对应的 TensorFlow 类名 "TFBertForMaskedLM"
         ("bert", "TFBertForMaskedLM"),
-        # 模型名 "camembert" 对应的 TensorFlow 类名 "TFCamembertForMaskedLM"
         ("camembert", "TFCamembertForMaskedLM"),
-        # 模型名 "convbert" 对应的 TensorFlow 类名 "TFConvBertForMaskedLM"
         ("convbert", "TFConvBertForMaskedLM"),
-        # 模型名 "ctrl" 对应的 TensorFlow 类名 "TFCTRLLMHeadModel"
         ("ctrl", "TFCTRLLMHeadModel"),
-        # 模型名 "distilbert" 对应的 TensorFlow 类名 "TFDistilBertForMaskedLM"
         ("distilbert", "TFDistilBertForMaskedLM"),
-        # 模型名 "electra" 对应的 TensorFlow 类名 "TFElectraForMaskedLM"
         ("electra", "TFElectraForMaskedLM"),
-        # 模型名 "esm" 对应的 TensorFlow 类名 "TFEsmForMaskedLM"
         ("esm", "TFEsmForMaskedLM"),
-        # 模型名 "flaubert" 对应的 TensorFlow 类名 "TFFlaubertWithLMHeadModel"
-        ("flaubert", "TFFlaubert
-    [
-        # 定义了不同模型和对应的 TensorFlow 模型类名
-        ("bert", "TFBertLMHeadModel"),  # BERT 模型对应的 TensorFlow 模型类名
-        ("camembert", "TFCamembertForCausalLM"),  # CamemBERT 模型对应的 TensorFlow 模型类名
-        ("ctrl", "TFCTRLLMHeadModel"),  # CTRL 模型对应的 TensorFlow 模型类名
-        ("gpt-sw3", "TFGPT2LMHeadModel"),  # GPT-SW3 模型对应的 TensorFlow 模型类名
-        ("gpt2", "TFGPT2LMHeadModel"),  # GPT-2 模型对应的 TensorFlow 模型类名
-        ("gptj", "TFGPTJForCausalLM"),  # GPT-J 模型对应的 TensorFlow 模型类名
-        ("openai-gpt", "TFOpenAIGPTLMHeadModel"),  # OpenAI GPT 模型对应的 TensorFlow 模型类名
-        ("opt", "TFOPTForCausalLM"),  # OPT 模型对应的 TensorFlow 模型类名
-        ("rembert", "TFRemBertForCausalLM"),  # RemBERT 模型对应的 TensorFlow 模型类名
-        ("roberta", "TFRobertaForCausalLM"),  # RoBERTa 模型对应的 TensorFlow 模型类名
-        ("roberta-prelayernorm", "TFRobertaPreLayerNormForCausalLM"),  # RoBERTa with pre-layer normalization 模型对应的 TensorFlow 模型类名
-        ("roformer", "TFRoFormerForCausalLM"),  # RoFormer 模型对应的 TensorFlow 模型类名
-        ("transfo-xl", "TFTransfoXLLMHeadModel"),  # Transformer-XL 模型对应的 TensorFlow 模型类名
-        ("xglm", "TFXGLMForCausalLM"),  # XGLM 模型对应的 TensorFlow 模型类名
-        ("xlm", "TFXLMWithLMHeadModel"),  # XLM 模型对应的 TensorFlow 模型类名
-        ("xlm-roberta", "TFXLMRobertaForCausalLM"),  # XLM-RoBERTa 模型对应的 TensorFlow 模型类名
-        ("xlnet", "TFXLNetLMHeadModel"),  # XLNet 模型对应的 TensorFlow 模型类名
+        ("flaubert", "TFFlaubertWithLMHeadModel"),
+        ("funnel", "TFFunnelForMaskedLM"),
+        ("gpt-sw3", "TFGPT2LMHeadModel"),
+        ("gpt2", "TFGPT2LMHeadModel"),
+        ("gptj", "TFGPTJForCausalLM"),
+        ("layoutlm", "TFLayoutLMForMaskedLM"),
+        ("led", "TFLEDForConditionalGeneration"),
+        ("longformer", "TFLongformerForMaskedLM"),
+        ("marian", "TFMarianMTModel"),
+        ("mobilebert", "TFMobileBertForMaskedLM"),
+        ("mpnet", "TFMPNetForMaskedLM"),
+        ("openai-gpt", "TFOpenAIGPTLMHeadModel"),
+        ("rembert", "TFRemBertForMaskedLM"),
+        ("roberta", "TFRobertaForMaskedLM"),
+        ("roberta-prelayernorm", "TFRobertaPreLayerNormForMaskedLM"),
+        ("roformer", "TFRoFormerForMaskedLM"),
+        ("speech_to_text", "TFSpeech2TextForConditionalGeneration"),
+        ("t5", "TFT5ForConditionalGeneration"),
+        ("tapas", "TFTapasForMaskedLM"),
+        ("transfo-xl", "TFTransfoXLLMHeadModel"),
+        ("whisper", "TFWhisperForConditionalGeneration"),
+        ("xlm", "TFXLMWithLMHeadModel"),
+        ("xlm-roberta", "TFXLMRobertaForMaskedLM"),
+        ("xlnet", "TFXLNetLMHeadModel"),
     ]
-# 导入OrderedDict模块，用于创建有序字典
-from collections import OrderedDict
+)
 
-# 定义TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING_NAMES，包含模型名称和对应类名的有序字典
+# 定义另一个有序字典，映射模型名称到TensorFlow模型类名，用于因果语言模型的映射
+TF_MODEL_FOR_CAUSAL_LM_MAPPING_NAMES = OrderedDict(
+    [
+        # 定义一个列表，包含了多个元组，每个元组代表了一个模型及其对应的类名
+        # 第一个元素是模型的缩写或名称，第二个元素是该模型对应的 TensorFlow 类名
+    
+        # 模型 "bert" 对应的类是 "TFBertLMHeadModel"
+        ("bert", "TFBertLMHeadModel"),
+    
+        # 模型 "camembert" 对应的类是 "TFCamembertForCausalLM"
+        ("camembert", "TFCamembertForCausalLM"),
+    
+        # 模型 "ctrl" 对应的类是 "TFCTRLLMHeadModel"
+        ("ctrl", "TFCTRLLMHeadModel"),
+    
+        # 模型 "gpt-sw3" 对应的类是 "TFGPT2LMHeadModel"
+        ("gpt-sw3", "TFGPT2LMHeadModel"),
+    
+        # 模型 "gpt2" 对应的类是 "TFGPT2LMHeadModel"
+        ("gpt2", "TFGPT2LMHeadModel"),
+    
+        # 模型 "gptj" 对应的类是 "TFGPTJForCausalLM"
+        ("gptj", "TFGPTJForCausalLM"),
+    
+        # 模型 "openai-gpt" 对应的类是 "TFOpenAIGPTLMHeadModel"
+        ("openai-gpt", "TFOpenAIGPTLMHeadModel"),
+    
+        # 模型 "opt" 对应的类是 "TFOPTForCausalLM"
+        ("opt", "TFOPTForCausalLM"),
+    
+        # 模型 "rembert" 对应的类是 "TFRemBertForCausalLM"
+        ("rembert", "TFRemBertForCausalLM"),
+    
+        # 模型 "roberta" 对应的类是 "TFRobertaForCausalLM"
+        ("roberta", "TFRobertaForCausalLM"),
+    
+        # 模型 "roberta-prelayernorm" 对应的类是 "TFRobertaPreLayerNormForCausalLM"
+        ("roberta-prelayernorm", "TFRobertaPreLayerNormForCausalLM"),
+    
+        # 模型 "roformer" 对应的类是 "TFRoFormerForCausalLM"
+        ("roformer", "TFRoFormerForCausalLM"),
+    
+        # 模型 "transfo-xl" 对应的类是 "TFTransfoXLLMHeadModel"
+        ("transfo-xl", "TFTransfoXLLMHeadModel"),
+    
+        # 模型 "xglm" 对应的类是 "TFXGLMForCausalLM"
+        ("xglm", "TFXGLMForCausalLM"),
+    
+        # 模型 "xlm" 对应的类是 "TFXLMWithLMHeadModel"
+        ("xlm", "TFXLMWithLMHeadModel"),
+    
+        # 模型 "xlm-roberta" 对应的类是 "TFXLMRobertaForCausalLM"
+        ("xlm-roberta", "TFXLMRobertaForCausalLM"),
+    
+        # 模型 "xlnet" 对应的类是 "TFXLNetLMHeadModel"
+        ("xlnet", "TFXLNetLMHeadModel"),
+    ]
+# 模型到类的映射，用于模型在 TensorFlow 中的命名
 TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING_NAMES = OrderedDict(
     [
-        # deit模型对应TFDeiTForMaskedImageModeling类
-        ("deit", "TFDeiTForMaskedImageModeling"),
-        # swin模型对应TFSwinForMaskedImageModeling类
-        ("swin", "TFSwinForMaskedImageModeling"),
+        ("deit", "TFDeiTForMaskedImageModeling"),  # DEIT模型对应的命名为TFDeiTForMaskedImageModeling
+        ("swin", "TFSwinForMaskedImageModeling"),  # Swin模型对应的命名为TFSwinForMaskedImageModeling
     ]
 )
 
-# 定义TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES，包含图像分类模型名称和对应类名的有序字典
+# 图像分类模型到类的映射
 TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Image-classsification
-        # convnext模型对应TFConvNextForImageClassification类
-        ("convnext", "TFConvNextForImageClassification"),
-        # convnextv2模型对应TFConvNextV2ForImageClassification类
-        ("convnextv2", "TFConvNextV2ForImageClassification"),
-        # cvt模型对应TFCvtForImageClassification类
-        ("cvt", "TFCvtForImageClassification"),
-        # data2vec-vision模型对应TFData2VecVisionForImageClassification类
-        ("data2vec-vision", "TFData2VecVisionForImageClassification"),
-        # deit模型对应TFDeiTForImageClassification和TFDeiTForImageClassificationWithTeacher类
-        ("deit", ("TFDeiTForImageClassification", "TFDeiTForImageClassificationWithTeacher")),
-        # efficientformer模型对应TFEfficientFormerForImageClassification和TFEfficientFormerForImageClassificationWithTeacher类
+        # 图像分类模型
+        ("convnext", "TFConvNextForImageClassification"),  # ConvNext模型对应的命名为TFConvNextForImageClassification
+        ("convnextv2", "TFConvNextV2ForImageClassification"),  # ConvNextV2模型对应的命名为TFConvNextV2ForImageClassification
+        ("cvt", "TFCvtForImageClassification"),  # CVT模型对应的命名为TFCvtForImageClassification
+        ("data2vec-vision", "TFData2VecVisionForImageClassification"),  # Data2Vec-Vision模型对应的命名为TFData2VecVisionForImageClassification
+        ("deit", ("TFDeiTForImageClassification", "TFDeiTForImageClassificationWithTeacher")),  # DEIT模型对应的命名为TFDeiTForImageClassification和TFDeiTForImageClassificationWithTeacher
         (
             "efficientformer",
-            ("TFEfficientFormerForImageClassification", "TFEfficientFormerForImageClassificationWithTeacher"),
+            ("TFEfficientFormerForImageClassification", "TFEfficientFormerForImageClassificationWithTeacher"),  # EfficientFormer模型对应的命名为TFEfficientFormerForImageClassification和TFEfficientFormerForImageClassificationWithTeacher
         ),
-        # mobilevit模型对应TFMobileViTForImageClassification类
-        ("mobilevit", "TFMobileViTForImageClassification"),
-        # regnet模型对应TFRegNetForImageClassification类
-        ("regnet", "TFRegNetForImageClassification"),
-        # resnet模型对应TFResNetForImageClassification类
-        ("resnet", "TFResNetForImageClassification"),
-        # segformer模型对应TFSegformerForImageClassification类
-        ("segformer", "TFSegformerForImageClassification"),
-        # swin模型对应TFSwinForImageClassification类
-        ("swin", "TFSwinForImageClassification"),
-        # vit模型对应TFViTForImageClassification类
-        ("vit", "TFViTForImageClassification"),
+        ("mobilevit", "TFMobileViTForImageClassification"),  # MobileViT模型对应的命名为TFMobileViTForImageClassification
+        ("regnet", "TFRegNetForImageClassification"),  # RegNet模型对应的命名为TFRegNetForImageClassification
+        ("resnet", "TFResNetForImageClassification"),  # ResNet模型对应的命名为TFResNetForImageClassification
+        ("segformer", "TFSegformerForImageClassification"),  # Segformer模型对应的命名为TFSegformerForImageClassification
+        ("swin", "TFSwinForImageClassification"),  # Swin模型对应的命名为TFSwinForImageClassification
+        ("vit", "TFViTForImageClassification"),  # ViT模型对应的命名为TFViTForImageClassification
     ]
 )
 
-# 定义TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING_NAMES，包含零样本图像分类模型名称和对应类名的有序字典
+# 零样本图像分类模型到类的映射
 TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Zero Shot Image Classification mapping
-        # blip模型对应TFBlipModel类
-        ("blip", "TFBlipModel"),
-        # clip模型对应TFCLIPModel类
-        ("clip", "TFCLIPModel"),
+        # 零样本图像分类模型映射
+        ("blip", "TFBlipModel"),  # BLIP模型对应的命名为TFBlipModel
+        ("clip", "TFCLIPModel"),  # CLIP模型对应的命名为TFCLIPModel
     ]
 )
 
-# 定义TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING_NAMES，包含语义分割模型名称和对应类名的有序字典
+# 语义分割模型到类的映射
 TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Semantic Segmentation mapping
-        # data2vec-vision模型对应TFData2VecVisionForSemanticSegmentation类
-        ("data2vec-vision", "TFData2VecVisionForSemanticSegmentation"),
-        # mobilevit模型对应TFMobileViTForSemanticSegmentation类
-        ("mobilevit", "TFMobileViTForSemanticSegmentation"),
-        # segformer模型对应TFSegformerForSemanticSegmentation类
-        ("segformer", "TFSegformerForSemanticSegmentation"),
+        # 语义分割模型映射
+        ("data2vec-vision", "TFData2VecVisionForSemanticSegmentation"),  # Data2Vec-Vision模型对应的命名为TFData2VecVisionForSemanticSegmentation
+        ("mobilevit", "TFMobileViTForSemanticSegmentation"),  # MobileViT模型对应的命名为TFMobileViTForSemanticSegmentation
+        ("segformer", "TFSegformerForSemanticSegmentation"),  # Segformer模型对应的命名为TFSegformerForSemanticSegmentation
     ]
 )
 
-# 定义TF_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES，包含图像到序列模型名称和对应类名的有序字典
+# 视觉到序列模型到类的映射
 TF_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES = OrderedDict(
     [
-        # blip模型对应TFBlipForConditionalGeneration类
-        ("blip", "TFBlipForConditionalGeneration"),
-        # vision-encoder-decoder模型对应TFVisionEncoderDecoderModel类
-        ("vision-encoder-decoder", "TFVisionEncoderDecoderModel"),
+        ("blip", "TFBlipForConditionalGeneration"),  # BLIP模型对应的命名为TFBlipForConditionalGeneration
+        ("vision-encoder-decoder", "TFVisionEncoderDecoderModel"),  # Vision-Encoder-Decoder模型对应的命名为TFVisionEncoderDecoderModel
     ]
 )
 
-# 定义TF_MODEL_FOR_MASKED_LM_MAPPING_NAMES，包含Masked LM模型名称和对应类名的有序字典
+# Masked LM模型到类的映射
 TF_MODEL_FOR_MASKED_LM_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Masked LM mapping
-        # albert模型对应TFAlbertForMaskedLM类
-        ("albert", "TFAlbertForMaskedLM"),
-        # bert模型对应TFBertForMaskedLM类
-        ("bert", "TFBertForMaskedLM"),
-        # camembert模型对应TFCamembertForMaskedLM类
-        ("camembert", "TFCamembertForMaskedLM"),
-        # convbert模型对应TFConvBertForMaskedLM类
-        ("convbert", "TFConvBertForMaskedLM"),
-        # deberta模型对应TFDebertaForMaskedLM类
-        ("deberta", "TFDebertaForMaskedLM"),
-        # deberta-v2模型对应TFDebertaV2ForMaskedLM类
-        ("deberta-v2", "TFDebertaV2ForMaskedLM"),
-        # distilbert模型对应TFDistilBertForMaskedLM类
-        ("distilbert", "TFDistilBertForMaskedLM"),
-        # electra模型对应TFElectraForMaskedLM类
-        ("electra", "TFElectraForMaskedLM"),
-        # esm模型对应TFEsmForMaskedLM类
-        ("esm", "TFEsmForMaskedLM"),
-        # flaubert模型对应TFFlaubertWithLMHeadModel类
-        ("flaubert", "TFFlaubertWithLMHeadModel"),
-        # funnel模型对应TFFunnelForMaskedLM类
-        ("funnel", "TFFunnelForMaskedLM"),
-        # layoutlm模型对应TFLayoutLMForMaskedLM类
-        ("layoutlm", "TFLayoutLMForMaskedLM"),
-        # longformer模型对应TFLongformerForMaskedLM类
-        ("longformer", "TFLongformerForMaskedLM"),
-        # mobilebert模型对应TFMobileBertForMaskedLM类
-        ("mobile
-# 定义一个有序字典，用于将模型名称映射到相应的序列到序列因果语言模型类
+        # Masked LM模型映射
+        ("albert", "TFAlbertForMaskedLM"),  # ALBERT模型对应的命名为TFAlbertForMaskedLM
+        ("bert", "TFBertForMaskedLM"),  # BERT模型对应的命名为TFBertForMaskedLM
+        ("camembert", "TFCamembertForMaskedLM"),  # Camembert模型对应的命名为TFCamembertForMaskedLM
+        ("convbert", "TFConvBertForMaskedLM"),  # ConvBERT模型对应的命名为TFConvBertForMaskedLM
+        ("deberta", "TFDebertaForMaskedLM"),  # DeBERTa模型对应的命名为TFDebertaForMaskedLM
+        ("deberta-v2", "TFDebertaV2ForMaskedLM"),  # DeBERTa-v2模型对应的命名为TFDebertaV2ForMaskedLM
+        ("distilbert", "TFDistilBertForMaskedLM"),  # DistilBERT模型对应的命名为TFDistilBertForMaskedLM
+        ("electra", "TFElectraForMaskedLM"),  # Electra模型对应的命名为TFElectraForMaskedLM
+        ("esm", "TFEsmForMaskedLM"),  # ESM模型对应的命名为TFEsmForMaskedLM
+        ("flaubert", "TFFlaubertWithLMHeadModel"),  # FlauBERT模型对应的命名为TFFlaubertWithLMHeadModel
+        ("funnel", "TFFunnelForMaskedLM"),  # Funnel模型对应的命名为TFFunnelForMaskedLM
+        ("layoutlm", "TFLayoutLMForMaskedLM"),  # LayoutLM模型对应的命名为TFLayoutLMForMaskedLM
+        ("longformer", "TFLongformerForMaskedLM"),  # Longformer模型对应的命名为TFLongformerForMaskedLM
+        ("mobilebert", "TFMobileBertForMaskedLM"),  # MobileBERT模型对应的命名为TFMobileBertForMaskedLM
+        ("mpnet", "TFMPNetForMaskedLM"),  # MPNet模型对应的命名为TFMPNetForMaskedLM
+        ("rembert", "TFRemBertForMaskedLM"),  # RemBERT模型对应的命名为TFRemBertForMaskedLM
+        ("roberta", "TFRobertaForMaskedLM"),  # RoBERTa模型对应的命名为TFRobertaForMaskedLM
+        ("roberta-prelayernorm", "TFRobertaPreLayerNormForMaskedLM"),  # RoBERTa-prelayernorm模型对应的命名为TFRobertaPreLayerNormForMaskedLM
+        ("roformer", "TFRoFormerForMaskedLM"),  # RoFormer模型对应的命名为TFRoFormerForMaskedLM
+        ("tapas", "TFTapasForMaskedLM"),  # TAPAS模型对应的命名为TFTapasForMaskedLM
+        ("xlm", "TFXLMWithLMHeadModel"),  # XLM模型对应的命名为TFXLMWithLMHeadModel
+        ("xlm-roberta", "TFXLMRobertaForMaskedLM"),  # XLM-RoBERTa模型对应的命名为TFXLMRobertaForMaskedLM
+    ]
+)
+# 创建一个有序字典，用于将模型名称映射到对应的 TensorFlow 序列到序列因果语言建模模型类名
 TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES = OrderedDict(
     [
-        # 用于序列到序列因果语言模型的模型映射
-        ("bart", "TFBartForConditionalGeneration"),  # BART模型
-        ("blenderbot", "TFBlenderbotForConditionalGeneration"),  # Blenderbot模型
-        ("blenderbot-small", "TFBlenderbotSmallForConditionalGeneration"),  # 小型Blenderbot模型
-        ("encoder-decoder", "TFEncoderDecoderModel"),  # 编码器-解码器模型
-        ("led", "TFLEDForConditionalGeneration"),  # LED模型
-        ("marian", "TFMarianMTModel"),  # Marian模型
-        ("mbart", "TFMBartForConditionalGeneration"),  # MBART模型
-        ("mt5", "TFMT5ForConditionalGeneration"),  # MT5模型
-        ("pegasus", "TFPegasusForConditionalGeneration"),  # Pegasus模型
-        ("t5", "TFT5ForConditionalGeneration"),  # T5模型
+        # Model for Seq2Seq Causal LM mapping
+        ("bart", "TFBartForConditionalGeneration"),  # BART模型的条件生成器
+        ("blenderbot", "TFBlenderbotForConditionalGeneration"),  # Blenderbot模型的条件生成器
+        ("blenderbot-small", "TFBlenderbotSmallForConditionalGeneration"),  # 小型Blenderbot模型的条件生成器
+        ("encoder-decoder", "TFEncoderDecoderModel"),  # 编码-解码模型
+        ("led", "TFLEDForConditionalGeneration"),  # LED模型的条件生成器
+        ("marian", "TFMarianMTModel"),  # Marian机器翻译模型
+        ("mbart", "TFMBartForConditionalGeneration"),  # mBART模型的条件生成器
+        ("mt5", "TFMT5ForConditionalGeneration"),  # MT5模型的条件生成器
+        ("pegasus", "TFPegasusForConditionalGeneration"),  # Pegasus模型的条件生成器
+        ("t5", "TFT5ForConditionalGeneration"),  # T5模型的条件生成器
     ]
 )
 
-# 定义一个有序字典，用于将语音序列到序列模型的名称映射到相应的类
+# 创建一个有序字典，用于将模型名称映射到对应的 TensorFlow 语音序列到序列模型类名
 TF_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES = OrderedDict(
     [
-        ("speech_to_text", "TFSpeech2TextForConditionalGeneration"),  # 语音到文本模型
-        ("whisper", "TFWhisperForConditionalGeneration"),  # Whisper模型
+        ("speech_to_text", "TFSpeech2TextForConditionalGeneration"),  # 语音转文本模型的条件生成器
+        ("whisper", "TFWhisperForConditionalGeneration"),  # Whisper模型的条件生成器
     ]
 )
 
-# 定义一个有序字典，用于将序列分类模型的名称映射到相应的类
+# 创建一个有序字典，用于将模型名称映射到对应的 TensorFlow 序列分类模型类名
 TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # 用于序列分类的模型映射
-        ("albert", "TFAlbertForSequenceClassification"),  # ALBERT模型
-        ("bart", "TFBartForSequenceClassification"),  # BART模型
-        ("bert", "TFBertForSequenceClassification"),  # BERT模型
-        ("camembert", "TFCamembertForSequenceClassification"),  # CamemBERT模型
-        ("convbert", "TFConvBertForSequenceClassification"),  # ConvBERT模型
-        ("ctrl", "TFCTRLForSequenceClassification"),  # CTRL模型
-        ("deberta", "TFDebertaForSequenceClassification"),  # DeBERTa模型
-        ("deberta-v2", "TFDebertaV2ForSequenceClassification"),  # DeBERTa-v2模型
-        ("distilbert", "TFDistilBertForSequenceClassification"),  # DistilBERT模型
-        ("electra", "TFElectraForSequenceClassification"),  # ELECTRA模型
-        ("esm", "TFEsmForSequenceClassification"),  # ESM模型
-        ("flaubert", "TFFlaubertForSequenceClassification"),  # FlauBERT模型
-        ("funnel", "TFFunnelForSequenceClassification"),  # Funnel模型
-        ("gpt-sw3", "TFGPT2ForSequenceClassification"),  # GPT-SW3模型
-        ("gpt2", "TFGPT2ForSequenceClassification"),  # GPT-2模型
-        ("gptj", "TFGPTJForSequenceClassification"),  # GPT-J模型
-        ("layoutlm", "TFLayoutLMForSequenceClassification"),  # LayoutLM模型
-        ("layoutlmv3", "TFLayoutLMv3ForSequenceClassification"),  # LayoutLMv3模型
-        ("longformer", "TFLongformerForSequenceClassification"),  # Longformer模型
-        ("mobilebert", "TFMobileBertForSequenceClassification"),  # MobileBERT模型
-        ("mpnet", "TFMPNetForSequenceClassification"),  # MPNet模型
-        ("openai-gpt", "TFOpenAIGPTForSequenceClassification"),  # OpenAI GPT模型
-        ("rembert", "TFRemBertForSequenceClassification"),  # RemBERT模型
-        ("roberta", "TFRobertaForSequenceClassification"),  # RoBERTa模型
-        ("roberta-prelayernorm", "TFRobertaPreLayerNormForSequenceClassification"),  # RoBERTa PreLayerNorm模型
-        ("roformer", "TFRoFormerForSequenceClassification"),  # RoFormer模型
-        ("tapas", "TFTapasForSequenceClassification"),  # Tapas模型
-        ("transfo-xl", "TFTransfoXLForSequenceClassification"),  # TransfoXL模型
-        ("xlm", "TFXLMForSequenceClassification"),  # XLM模型
-        ("xlm-roberta", "TFXLMRobertaForSequenceClassification"),  # XLM-RoBERTa模型
-        ("xlnet", "TFXLNetForSequenceClassification"),  # XLNet模型
+        # Model for Sequence Classification mapping
+        ("albert", "TFAlbertForSequenceClassification"),  # Albert模型的序列分类器
+        ("bart", "TFBartForSequenceClassification"),  # BART模型的序列分类器
+        ("bert", "TFBertForSequenceClassification"),  # BERT模型的序列分类器
+        ("camembert", "TFCamembertForSequenceClassification"),  # CamemBERT模型的序列分类器
+        ("convbert", "TFConvBertForSequenceClassification"),  # ConvBERT模型的序列分类器
+        ("ctrl", "TFCTRLForSequenceClassification"),  # CTRL模型的序列分类器
+        ("deberta", "TFDebertaForSequenceClassification"),  # DeBERTa模型的序列分类器
+        ("deberta-v2", "TFDebertaV2ForSequenceClassification"),  # DeBERTa-v2模型的序列分类器
+        ("distilbert", "TFDistilBertForSequenceClassification"),  # DistilBERT模型的序列分类器
+        ("electra", "TFElectraForSequenceClassification"),  # Electra模型的序列分类器
+        ("esm", "TFEsmForSequenceClassification"),  # ESM模型的序列分类器
+        ("flaubert", "TFFlaubertForSequenceClassification"),  # FlauBERT模型的序列分类器
+        ("funnel", "TFFunnelForSequenceClassification"),  # Funnel模型的序列分类器
+        ("gpt-sw3", "TFGPT2ForSequenceClassification"),  # GPT-SW3模型的序列分类器
+        ("gpt2", "TFGPT2ForSequenceClassification"),  # GPT-2模型的序列分类器
+        ("gptj", "TFGPTJForSequenceClassification"),  # GPT-J模型的序列分类器
+        ("layoutlm", "TFLayoutLMForSequenceClassification"),  # LayoutLM模型的序列分类器
+        ("layoutlmv3", "TFLayoutLMv3ForSequenceClassification"),  # LayoutLMv3模型的序列分类器
+        ("longformer", "TFLongformerForSequenceClassification"),  # Longformer模型的序列分类器
+        ("mobilebert", "TFMobileBertForSequenceClassification"),  # MobileBERT模型的序列分类器
+        ("mpnet", "TFMPNetForSequenceClassification"),  # MPNet模型的序列分类器
+        ("openai-gpt", "TFOpenAIGPTForSequenceClassification"),  # OpenAI-GPT模型的序列分类器
+        ("rembert", "TFRemBertForSequenceClassification"),  # RemBERT模型的序列分类器
+        ("roberta", "TFRobertaForSequenceClassification"),  # RoBERTa模型的序列分类器
+        ("roberta-prelayernorm", "TFRobertaPreLayerNormForSequenceClassification"),  # RoBERTa-prelayernorm模型的序列分类器
+        ("roformer", "TFRoFormerForSequenceClassification"),  # RoFormer模型的序列分类器
+        ("tapas", "TFTapasForSequenceClassification"),  # TAPAS模型的序列分类器
+        ("transfo-xl", "TFTransfoXLForSequenceClassification"),  # TransfoXL模型的序列分类器
+        ("xlm", "TFXLMForSequenceClassification"),  # XLM模型的序列分类器
+        ("xlm-roberta", "TFXLMRobertaForSequenceClassification"),  # XLM-RoBERTa模型的序列分类器
+        ("xlnet", "TFXLNetForSequenceClassification"),  # XLNet模型的序列分类器
     ]
 )
 
-# 定义一个有序字典，用于将问答模型的名称映射到相应的类
+# 创建一个有序字典，用于将模型名称映射到对应的 TensorFlow 问答模型类名
 TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING_NAMES = OrderedDict(
-    # 这里省略了映射关系的声明，将在下面补充
-)
-    # 定义了一个列表，包含了各种预训练模型和相应的问题回答模型映射关系
+    # 定义了一个模型到类的映射关系列表，用于问答任务
     [
-        # 使用 ALBERT 模型的问题回答模型
+        # 使用 ALBERT 模型进行问答的类
         ("albert", "TFAlbertForQuestionAnswering"),
-        # 使用 BERT 模型的问题回答模型
+        # 使用 BERT 模型进行问答的类
         ("bert", "TFBertForQuestionAnswering"),
-        # 使用 CamemBERT 模型的问题回答模型
+        # 使用 CamemBERT 模型进行问答的类
         ("camembert", "TFCamembertForQuestionAnswering"),
-        # 使用 ConvBERT 模型的问题回答模型
+        # 使用 ConvBERT 模型进行问答的类
         ("convbert", "TFConvBertForQuestionAnswering"),
-        # 使用 DeBERTa 模型的问题回答模型
+        # 使用 DeBERTa 模型进行问答的类
         ("deberta", "TFDebertaForQuestionAnswering"),
-        # 使用 DeBERTa-v2 模型的问题回答模型
+        # 使用 DeBERTa-v2 模型进行问答的类
         ("deberta-v2", "TFDebertaV2ForQuestionAnswering"),
-        # 使用 DistilBERT 模型的问题回答模型
+        # 使用 DistilBERT 模型进行问答的类
         ("distilbert", "TFDistilBertForQuestionAnswering"),
-        # 使用 ELECTRA 模型的问题回答模型
+        # 使用 Electra 模型进行问答的类
         ("electra", "TFElectraForQuestionAnswering"),
-        # 使用 FlauBERT 模型的问题回答模型
+        # 使用 FlauBERT 模型进行问答的类
         ("flaubert", "TFFlaubertForQuestionAnsweringSimple"),
-        # 使用 Funnel 模型的问题回答模型
+        # 使用 Funnel 模型进行问答的类
         ("funnel", "TFFunnelForQuestionAnswering"),
-        # 使用 GPT-J 模型的问题回答模型
+        # 使用 GPT-J 模型进行问答的类
         ("gptj", "TFGPTJForQuestionAnswering"),
-        # 使用 LayoutLMv3 模型的问题回答模型
+        # 使用 LayoutLMv3 模型进行问答的类
         ("layoutlmv3", "TFLayoutLMv3ForQuestionAnswering"),
-        # 使用 Longformer 模型的问题回答模型
+        # 使用 Longformer 模型进行问答的类
         ("longformer", "TFLongformerForQuestionAnswering"),
-        # 使用 MobileBERT 模型的问题回答模型
+        # 使用 MobileBERT 模型进行问答的类
         ("mobilebert", "TFMobileBertForQuestionAnswering"),
-        # 使用 MPNet 模型的问题回答模型
+        # 使用 MPNet 模型进行问答的类
         ("mpnet", "TFMPNetForQuestionAnswering"),
-        # 使用 RemBERT 模型的问题回答模型
+        # 使用 RemBERT 模型进行问答的类
         ("rembert", "TFRemBertForQuestionAnswering"),
-        # 使用 RoBERTa 模型的问题回答模型
+        # 使用 RoBERTa 模型进行问答的类
         ("roberta", "TFRobertaForQuestionAnswering"),
-        # 使用 RoBERTa-prelayernorm 模型的问题回答模型
+        # 使用 RoBERTa-prelayernorm 模型进行问答的类
         ("roberta-prelayernorm", "TFRobertaPreLayerNormForQuestionAnswering"),
-        # 使用 RoFormer 模型的问题回答模型
+        # 使用 RoFormer 模型进行问答的类
         ("roformer", "TFRoFormerForQuestionAnswering"),
-        # 使用 XLM 模型的问题回答模型
+        # 使用 XLM 模型进行问答的类
         ("xlm", "TFXLMForQuestionAnsweringSimple"),
-        # 使用 XLM-RoBERTa 模型的问题回答模型
+        # 使用 XLM-RoBERTa 模型进行问答的类
         ("xlm-roberta", "TFXLMRobertaForQuestionAnswering"),
-        # 使用 XLNet 模型的问题回答模型
+        # 使用 XLNet 模型进行问答的类
         ("xlnet", "TFXLNetForQuestionAnsweringSimple"),
     ]
-# 定义 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES 字典，映射模型名称到对应的类名
+# 导入 OrderedDict 类型，用于创建有序字典，记录模型名称到 TensorFlow 类的映射关系
 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES = OrderedDict([("wav2vec2", "TFWav2Vec2ForSequenceClassification")])
 
-# 定义 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES 字典，映射模型名称到对应的类名
+# 导入 OrderedDict 类型，用于创建有序字典，记录模型名称到 TensorFlow 类的映射关系
 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES = OrderedDict(
     [
         ("layoutlm", "TFLayoutLMForQuestionAnswering"),
@@ -423,18 +474,18 @@ TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES = OrderedDict(
     ]
 )
 
-# 定义 TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING_NAMES 字典，映射模型名称到对应的类名
+# 导入 OrderedDict 类型，用于创建有序字典，记录模型名称到 TensorFlow 类的映射关系
 TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Table Question Answering mapping
+        # 用于表格问答的模型映射
         ("tapas", "TFTapasForQuestionAnswering"),
     ]
 )
 
-# 定义 TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES 字典，映射模型名称到对应的类名
+# 导入 OrderedDict 类型，用于创建有序字典，记录模型名称到 TensorFlow 类的映射关系
 TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     [
-        # Model for Token Classification mapping
+        # 用于标记分类的模型映射
         ("albert", "TFAlbertForTokenClassification"),
         ("bert", "TFBertForTokenClassification"),
         ("camembert", "TFCamembertForTokenClassification"),
@@ -461,10 +512,11 @@ TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES = OrderedDict(
     ]
 )
 
-# 定义 TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES 字典
+# 导入 OrderedDict 类型，用于创建有序字典，记录模型名称到 TensorFlow 类的映射关系
 TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES = OrderedDict(
+    # 此处是多选题的模型映射
     [
-        # 定义了不同模型和对应的多选题模型类名的映射关系
+        # 模型名称和对应的TensorFlow模型类名，用于多选题任务
         ("albert", "TFAlbertForMultipleChoice"),
         ("bert", "TFBertForMultipleChoice"),
         ("camembert", "TFCamembertForMultipleChoice"),
@@ -485,286 +537,307 @@ TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES = OrderedDict(
         ("xlm-roberta", "TFXLMRobertaForMultipleChoice"),
         ("xlnet", "TFXLNetForMultipleChoice"),
     ]
-# 导入 OrderedDict 模块，用于创建有序字典
-from collections import OrderedDict
-
-# 定义下一个句子预测模型到 TensorFlow 模型类名的映射关系字典
+# 创建一个有序字典，用于将模型名称映射到相应的 TensorFlow 下一句预测模型类名
 TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING_NAMES = OrderedDict(
     [
-        # BERT 模型对应的 TensorFlow 下一个句子预测模型类名
         ("bert", "TFBertForNextSentencePrediction"),
-        # MobileBERT 模型对应的 TensorFlow 下一个句子预测模型类名
         ("mobilebert", "TFMobileBertForNextSentencePrediction"),
     ]
 )
 
-# 定义掩码生成模型到 TensorFlow 模型类名的映射关系字典
+# 创建一个有序字典，用于将模型名称映射到相应的 TensorFlow 掩码生成模型类名
 TF_MODEL_FOR_MASK_GENERATION_MAPPING_NAMES = OrderedDict(
     [
-        # SAM 模型对应的 TensorFlow 模型类名
         ("sam", "TFSamModel"),
     ]
 )
 
-# 定义文本编码模型到 TensorFlow 模型类名的映射关系字典
+# 创建一个有序字典，用于将模型名称映射到相应的 TensorFlow 文本编码模型类名
 TF_MODEL_FOR_TEXT_ENCODING_MAPPING_NAMES = OrderedDict(
     [
-        # ALBERT 模型对应的 TensorFlow 模型类名
         ("albert", "TFAlbertModel"),
-        # BERT 模型对应的 TensorFlow 模型类名
         ("bert", "TFBertModel"),
-        # ConvBERT 模型对应的 TensorFlow 模型类名
         ("convbert", "TFConvBertModel"),
-        # DeBERTa 模型对应的 TensorFlow 模型类名
         ("deberta", "TFDebertaModel"),
-        # DeBERTa-v2 模型对应的 TensorFlow 模型类名
         ("deberta-v2", "TFDebertaV2Model"),
-        # DistilBERT 模型对应的 TensorFlow 模型类名
         ("distilbert", "TFDistilBertModel"),
-        # Electra 模型对应的 TensorFlow 模型类名
         ("electra", "TFElectraModel"),
-        # FlauBERT 模型对应的 TensorFlow 模型类名
         ("flaubert", "TFFlaubertModel"),
-        # Longformer 模型对应的 TensorFlow 模型类名
         ("longformer", "TFLongformerModel"),
-        # MobileBERT 模型对应的 TensorFlow 模型类名
         ("mobilebert", "TFMobileBertModel"),
-        # MT5 模型对应的 TensorFlow 模型类名
         ("mt5", "TFMT5EncoderModel"),
-        # RemBERT 模型对应的 TensorFlow 模型类名
         ("rembert", "TFRemBertModel"),
-        # RoBERTa 模型对应的 TensorFlow 模型类名
         ("roberta", "TFRobertaModel"),
-        # RoBERTa-prelayernorm 模型对应的 TensorFlow 模型类名
         ("roberta-prelayernorm", "TFRobertaPreLayerNormModel"),
-        # RoFormer 模型对应的 TensorFlow 模型类名
         ("roformer", "TFRoFormerModel"),
-        # T5 模型对应的 TensorFlow 模型类名
         ("t5", "TFT5EncoderModel"),
-        # XLM 模型对应的 TensorFlow 模型类名
         ("xlm", "TFXLMModel"),
-        # XLM-RoBERTa 模型对应的 TensorFlow 模型类名
         ("xlm-roberta", "TFXLMRobertaModel"),
     ]
 )
 
-# 定义 TensorFlow 模型的通用映射字典，用于自动映射配置名称到 TensorFlow 模型类名
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_MAPPING_NAMES
 TF_MODEL_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_PRETRAINING_MAPPING_NAMES
 TF_MODEL_FOR_PRETRAINING_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_FOR_PRETRAINING_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_WITH_LM_HEAD_MAPPING_NAMES
 TF_MODEL_WITH_LM_HEAD_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_WITH_LM_HEAD_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
 TF_MODEL_FOR_CAUSAL_LM_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_FOR_CAUSAL_LM_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING_NAMES
 TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES
 TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING_NAMES
 TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING_NAMES
 TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES
 TF_MODEL_FOR_VISION_2_SEQ_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_MASKED_LM_MAPPING_NAMES
 TF_MODEL_FOR_MASKED_LM_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_FOR_MASKED_LM_MAPPING_NAMES)
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
 TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
 TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES
 TF_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING_NAMES
 TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING_NAMES
 )
+
+# 创建 LazyAutoMapping 对象，将 CONFIG_MAPPING_NAMES 映射到 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES
 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING = _LazyAutoMapping(
-    # 导入 CONFIG_MAPPING_NAMES 和 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES 这两个变量
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 表格问答模型
+)
+    # 导入模块中的特定变量，CONFIG_MAPPING_NAMES 和 TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES
+    CONFIG_MAPPING_NAMES, TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING_NAMES
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING_NAMES
 TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING_NAMES
 )
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 标记分类模型
+
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES
 TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING_NAMES
 )
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 多选模型
+
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES
 TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING_NAMES
 )
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 下一句预测模型
+
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING_NAMES
 TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING_NAMES
 )
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 音频分类模型
+
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES
 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING_NAMES
 )
 
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 掩码生成模型
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_MASK_GENERATION_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_MASK_GENERATION_MAPPING_NAMES
 TF_MODEL_FOR_MASK_GENERATION_MAPPING = _LazyAutoMapping(
     CONFIG_MAPPING_NAMES, TF_MODEL_FOR_MASK_GENERATION_MAPPING_NAMES
 )
 
-# 创建一个自动映射，将配置名称映射到相应的 TensorFlow 文本编码模型
-TF_MODEL_FOR_TEXT_ENCODING_MAPPING = _LazyAutoMapping(CONFIG_MAPPING_NAMES, TF_MODEL_FOR_TEXT_ENCODING_MAPPING_NAMES)
+# 使用 _LazyAutoMapping 类创建 TF_MODEL_FOR_TEXT_ENCODING_MAPPING 对象，映射配置名称到 TF_MODEL_FOR_TEXT_ENCODING_MAPPING_NAMES
+TF_MODEL_FOR_TEXT_ENCODING_MAPPING = _LazyAutoMapping(
+    CONFIG_MAPPING_NAMES, TF_MODEL_FOR_TEXT_ENCODING_MAPPING_NAMES
+)
 
 
-# 定义 TFAutoModelForMaskGeneration 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_MASK_GENERATION_MAPPING 自动映射
 class TFAutoModelForMaskGeneration(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_MASK_GENERATION_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_MASK_GENERATION_MAPPING
 
 
-# 定义 TFAutoModelForTextEncoding 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_TEXT_ENCODING_MAPPING 自动映射
 class TFAutoModelForTextEncoding(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_TEXT_ENCODING_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_TEXT_ENCODING_MAPPING
 
 
-# 定义 TFAutoModel 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_MAPPING 自动映射
 class TFAutoModel(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_MAPPING
 
-# 对 TFAutoModel 类进行自动更新
+
 TFAutoModel = auto_class_update(TFAutoModel)
 
 
-# 定义 TFAutoModelForAudioClassification 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING 自动映射
 class TFAutoModelForAudioClassification(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_AUDIO_CLASSIFICATION_MAPPING
 
 
-# 对 TFAutoModelForAudioClassification 类进行自动更新，添加头部文档为 "audio classification"
 TFAutoModelForAudioClassification = auto_class_update(
     TFAutoModelForAudioClassification, head_doc="audio classification"
 )
 
 
-# 定义 TFAutoModelForPreTraining 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_PRETRAINING_MAPPING 自动映射
 class TFAutoModelForPreTraining(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_PRETRAINING_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_PRETRAINING_MAPPING
 
 
-# 对 TFAutoModelForPreTraining 类进行自动更新，添加头部文档为 "pretraining"
 TFAutoModelForPreTraining = auto_class_update(TFAutoModelForPreTraining, head_doc="pretraining")
 
 
-# 私有类，故意私有，公共类将添加弃用警告。
+# Private on purpose, the public class will add the deprecation warnings.
 class _TFAutoModelWithLMHead(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_WITH_LM_HEAD_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_WITH_LM_HEAD_MAPPING
 
 
-# 对 _TFAutoModelWithLMHead 类进行自动更新，添加头部文档为 "language modeling"
 _TFAutoModelWithLMHead = auto_class_update(_TFAutoModelWithLMHead, head_doc="language modeling")
 
 
-# 定义 TFAutoModelForCausalLM 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_CAUSAL_LM_MAPPING 自动映射
 class TFAutoModelForCausalLM(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_CAUSAL_LM_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_CAUSAL_LM_MAPPING
 
 
-# 对 TFAutoModelForCausalLM 类进行自动更新，添加头部文档为 "causal language modeling"
 TFAutoModelForCausalLM = auto_class_update(TFAutoModelForCausalLM, head_doc="causal language modeling")
 
 
-# 定义 TFAutoModelForMaskedImageModeling 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING 自动映射
 class TFAutoModelForMaskedImageModeling(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_MASKED_IMAGE_MODELING_MAPPING
 
 
-# 对 TFAutoModelForMaskedImageModeling 类进行自动更新，添加头部文档为 "masked image modeling"
 TFAutoModelForMaskedImageModeling = auto_class_update(
     TFAutoModelForMaskedImageModeling, head_doc="masked image modeling"
 )
 
 
-# 定义 TFAutoModelForImageClassification 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING 自动映射
 class TFAutoModelForImageClassification(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING
 
 
-# 对 TFAutoModelForImageClassification 类进行自动更新，添加头部文档为 "image classification"
 TFAutoModelForImageClassification = auto_class_update(
     TFAutoModelForImageClassification, head_doc="image classification"
 )
 
 
-# 定义 TFAutoModelForZeroShotImageClassification 类，继承自 _BaseAutoModelClass，使用 TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING 自动映射
 class TFAutoModelForZeroShotImageClassification(_BaseAutoModelClass):
+    # 设置类属性 _model_mapping 为 TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING，用于自动模型选择
     _model_mapping = TF_MODEL_FOR_ZERO_SHOT_IMAGE_CLASSIFICATION_MAPPING
 
 
-# 对 TFAutoModelForZeroShotImageClassification 类进行自动更新
 TFAutoModelForZeroShotImageClassification = auto_class_update(
-    # 导入 TFAutoModelForZeroShotImageClassification 类，用于零样本图像分类
+    TFAutoModelForZeroShotImageClassification,
+    head_doc="zero-shot image classification"
+)
     TFAutoModelForZeroShotImageClassification, head_doc="zero-shot image classification"
+
+
+# 导入 TensorFlow 自动模型用于零样本图像分类，指定头部文档为“zero-shot image classification”
 class TFAutoModelForSemanticSegmentation(_BaseAutoModelClass):
-    # 语义分割模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于语义分割任务
     _model_mapping = TF_MODEL_FOR_SEMANTIC_SEGMENTATION_MAPPING
 
 
-# 更新语义分割模型自动化类的文档头
+# 更新 TFAutoModelForSemanticSegmentation 类，添加头部文档描述为“semantic segmentation”
 TFAutoModelForSemanticSegmentation = auto_class_update(
     TFAutoModelForSemanticSegmentation, head_doc="semantic segmentation"
 )
 
 
 class TFAutoModelForVision2Seq(_BaseAutoModelClass):
-    # 视觉到文本建模模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于视觉到文本任务
     _model_mapping = TF_MODEL_FOR_VISION_2_SEQ_MAPPING
 
 
-# 更新视觉到文本建模模型自动化类的文档头
-TFAutoModelForVision2Seq = auto_class_update(TFAutoModelForVision2Seq, head_doc="vision-to-text modeling")
+# 更新 TFAutoModelForVision2Seq 类，添加头部文档描述为“vision-to-text modeling”
+TFAutoModelForVision2Seq = auto_class_update(
+    TFAutoModelForVision2Seq, head_doc="vision-to-text modeling"
+)
 
 
 class TFAutoModelForMaskedLM(_BaseAutoModelClass):
-    # 掩码语言建模模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于掩码语言建模任务
     _model_mapping = TF_MODEL_FOR_MASKED_LM_MAPPING
 
 
-# 更新掩码语言建模模型自动化类的文档头
-TFAutoModelForMaskedLM = auto_class_update(TFAutoModelForMaskedLM, head_doc="masked language modeling")
+# 更新 TFAutoModelForMaskedLM 类，添加头部文档描述为“masked language modeling”
+TFAutoModelForMaskedLM = auto_class_update(
+    TFAutoModelForMaskedLM, head_doc="masked language modeling"
+)
 
 
 class TFAutoModelForSeq2SeqLM(_BaseAutoModelClass):
-    # 序列到序列因果语言建模模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于序列到序列因果语言建模任务
     _model_mapping = TF_MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING
 
 
-# 更新序列到序列因果语言建模模型自动化类的文档头和示例检查点
+# 更新 TFAutoModelForSeq2SeqLM 类，添加头部文档描述为“sequence-to-sequence language modeling”，
+# 并指定一个示例的检查点名称为“google-t5/t5-base”
 TFAutoModelForSeq2SeqLM = auto_class_update(
-    TFAutoModelForSeq2SeqLM, head_doc="sequence-to-sequence language modeling", checkpoint_for_example="t5-base"
+    TFAutoModelForSeq2SeqLM,
+    head_doc="sequence-to-sequence language modeling",
+    checkpoint_for_example="google-t5/t5-base",
 )
 
 
 class TFAutoModelForSequenceClassification(_BaseAutoModelClass):
-    # 序列分类模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于序列分类任务
     _model_mapping = TF_MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING
 
 
-# 更新序列分类模型自动化类的文档头
+# 更新 TFAutoModelForSequenceClassification 类，添加头部文档描述为“sequence classification”
 TFAutoModelForSequenceClassification = auto_class_update(
     TFAutoModelForSequenceClassification, head_doc="sequence classification"
 )
 
 
 class TFAutoModelForQuestionAnswering(_BaseAutoModelClass):
-    # 问题回答模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于问答任务
     _model_mapping = TF_MODEL_FOR_QUESTION_ANSWERING_MAPPING
 
 
-# 更新问题回答模型自动化类的文档头
-TFAutoModelForQuestionAnswering = auto_class_update(TFAutoModelForQuestionAnswering, head_doc="question answering")
+# 更新 TFAutoModelForQuestionAnswering 类，添加头部文档描述为“question answering”
+TFAutoModelForQuestionAnswering = auto_class_update(
+    TFAutoModelForQuestionAnswering, head_doc="question answering"
+)
 
 
 class TFAutoModelForDocumentQuestionAnswering(_BaseAutoModelClass):
-    # 文档问题回答模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于文档问答任务
     _model_mapping = TF_MODEL_FOR_DOCUMENT_QUESTION_ANSWERING_MAPPING
 
 
-# 更新文档问题回答模型自动化类的文档头和示例检查点
+# 更新 TFAutoModelForDocumentQuestionAnswering 类，添加头部文档描述为“document question answering”，
+# 并指定一个示例的检查点名称和修订版本号
 TFAutoModelForDocumentQuestionAnswering = auto_class_update(
     TFAutoModelForDocumentQuestionAnswering,
     head_doc="document question answering",
@@ -773,11 +846,12 @@ TFAutoModelForDocumentQuestionAnswering = auto_class_update(
 
 
 class TFAutoModelForTableQuestionAnswering(_BaseAutoModelClass):
-    # 表格问题回答模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于表格问答任务
     _model_mapping = TF_MODEL_FOR_TABLE_QUESTION_ANSWERING_MAPPING
 
 
-# 更新表格问题回答模型自动化类的文档头和示例检查点
+# 更新 TFAutoModelForTableQuestionAnswering 类，添加头部文档描述为“table question answering”，
+# 并指定一个示例的检查点名称为“google/tapas-base-finetuned-wtq”
 TFAutoModelForTableQuestionAnswering = auto_class_update(
     TFAutoModelForTableQuestionAnswering,
     head_doc="table question answering",
@@ -786,70 +860,69 @@ TFAutoModelForTableQuestionAnswering = auto_class_update(
 
 
 class TFAutoModelForTokenClassification(_BaseAutoModelClass):
-    # 标记分类模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于标记分类任务
     _model_mapping = TF_MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING
 
 
-# 更新标记分类模型自动化类的文档头
+# 更新 TFAutoModelForTokenClassification 类，添加头部文档描述为“token classification”
 TFAutoModelForTokenClassification = auto_class_update(
     TFAutoModelForTokenClassification, head_doc="token classification"
 )
 
 
 class TFAutoModelForMultipleChoice(_BaseAutoModelClass):
-    # 多项选择模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于多项选择任务
     _model_mapping = TF_MODEL_FOR_MULTIPLE_CHOICE_MAPPING
 
 
-# 更新多项选择模型自动化类的文档头
-TFAutoModelForMultipleChoice = auto_class_update(TFAutoModelForMultipleChoice, head_doc="multiple choice")
+# 更新 TFAutoModelForMultipleChoice 类，添加头部文档描述为“multiple choice”
+TFAutoModelForMultipleChoice = auto_class_update(
+    TFAutoModelForMultipleChoice, head_doc="multiple choice"
+)
 
 
 class TFAutoModelForNextSentencePrediction(_BaseAutoModelClass):
-    # 下一句预测模型自动化类
+    # 定义自动化创建的 TensorFlow 模型类，用于下一句预测任务
     _model_mapping = TF_MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING
 
 
-# 更新下一句预测模型自动化类的文档头
+# 更新 TFAutoModelForNextSentencePrediction 类，添加头部文档描述为“next sentence prediction”
 TFAutoModelForNextSentencePrediction = auto_class_update(
     TFAutoModelForNextSentencePrediction, head_doc="next sentence prediction"
 )
-# 定义了一个名为 TFAutoModelForSpeechSeq2Seq 的类，继承自 _BaseAutoModelClass 类
 class TFAutoModelForSpeechSeq2Seq(_BaseAutoModelClass):
-    # 设置模型映射表，用于自动加载预训练模型
+    # 定义了一个名为 TFAutoModelForSpeechSeq2Seq 的类，继承自 _BaseAutoModelClass
     _model_mapping = TF_MODEL_FOR_SPEECH_SEQ_2_SEQ_MAPPING
+    # 设置了一个类变量 _model_mapping，用于映射语音序列到序列模型
 
-# 使用 auto_class_update 函数更新 TFAutoModelForSpeechSeq2Seq 类的文档字符串
+# 对 TFAutoModelForSpeechSeq2Seq 类进行更新，添加了头部文档信息，说明其为序列到序列语音转文本建模
 TFAutoModelForSpeechSeq2Seq = auto_class_update(
     TFAutoModelForSpeechSeq2Seq, head_doc="sequence-to-sequence speech-to-text modeling"
 )
 
-# 定义了一个名为 TFAutoModelWithLMHead 的类，继承自 _TFAutoModelWithLMHead 类
+
 class TFAutoModelWithLMHead(_TFAutoModelWithLMHead):
-    # 定义了一个从配置创建模型的类方法
     @classmethod
     def from_config(cls, config):
-        # 发出警告，提醒用户该类将来会被移除，并建议使用其他类
+        # 发出警告，提醒该类即将被弃用，建议使用特定的子类代替
         warnings.warn(
             "The class `TFAutoModelWithLMHead` is deprecated and will be removed in a future version. Please use"
             " `TFAutoModelForCausalLM` for causal language models, `TFAutoModelForMaskedLM` for masked language models"
             " and `TFAutoModelForSeq2SeqLM` for encoder-decoder models.",
             FutureWarning,
         )
-        # 调用父类的 from_config 方法
+        # 调用父类方法，从给定的配置中创建对象
         return super().from_config(config)
 
-    # 定义了一个从预训练模型创建模型的类方法
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
-        # 发出警告，提醒用户该类将来会被移除，并建议使用其他类
+        # 发出警告，提醒该类即将被弃用，建议使用特定的子类代替
         warnings.warn(
             "The class `TFAutoModelWithLMHead` is deprecated and will be removed in a future version. Please use"
             " `TFAutoModelForCausalLM` for causal language models, `TFAutoModelForMaskedLM` for masked language models"
             " and `TFAutoModelForSeq2SeqLM` for encoder-decoder models.",
             FutureWarning,
         )
-        # 调用父类的 from_pretrained 方法
+        # 调用父类方法，从预训练模型名或路径创建对象
         return super().from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
-```  
 ```

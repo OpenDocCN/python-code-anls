@@ -1,27 +1,37 @@
 # `.\models\data2vec\modeling_data2vec_text.py`
 
-```py
-# 设置代码文件编码为 UTF-8
+```
+# 设置文件编码为UTF-8，确保支持中文等多种字符集
+# 版权声明，告知代码的版权归属于The HuggingFace Inc.团队
+#
+# 根据Apache许可证2.0版授权使用本文件
+# 除非符合许可证的要求，否则不得使用本文件
+# 可以从以下网址获取许可证的副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则本软件按“原样”分发，
+# 没有任何明示或暗示的保证或条件
+# 请查看许可证了解具体语言的权限和限制
+"""PyTorch Data2VecText model."""
 
-# 版权声明
-# 版权归属于 2022 年 HuggingFace Inc. 团队。
-# 根据 Apache 许可证 2.0 版本获得授权，除非符合许可证，否则不得使用此文件。
-# 您可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或经书面同意，否则根据许可证分发的软件
-# 按"原样"分发，不提供任何明示或暗示的保证或条件。
-# 请参阅许可证了解具体语言授权限制和不适用担保
-
-# 引入 PyTorch 和相关定义
+# 导入数学库，用于数学运算
 import math
+# 导入类型提示工具，用于函数参数和返回值的类型注释
 from typing import List, Optional, Tuple, Union
+
+# 导入PyTorch相关库
 import torch
+# 导入PyTorch中的checkpoint工具
 import torch.utils.checkpoint
+# 导入PyTorch中的神经网络模块
 from torch import nn
+# 导入PyTorch中的损失函数：二分类交叉熵损失、多分类交叉熵损失、均方误差损失
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 引入相关的输出类型
+# 导入激活函数映射表和GELU激活函数
 from ...activations import ACT2FN, gelu
+# 导入模型输出类，包括基础输出、带过去和交叉注意力的基础输出、带池化和交叉注意力的基础输出、因果语言模型输出和交叉注意力、掩码语言模型输出、多选模型输出、问答模型输出、序列分类器输出、标记分类器输出
 from ...modeling_outputs import (
     BaseModelOutputWithPastAndCrossAttentions,
     BaseModelOutputWithPoolingAndCrossAttentions,
@@ -32,10 +42,11 @@ from ...modeling_outputs import (
     SequenceClassifierOutput,
     TokenClassifierOutput,
 )
-
-# 引入模型相关的工具函数
+# 导入模型工具类，包括预训练模型和一些工具函数
 from ...modeling_utils import PreTrainedModel
+# 导入PyTorch工具类，应用前向传播分块、找到可修剪头和索引、修剪线性层
 from ...pytorch_utils import apply_chunking_to_forward, find_pruneable_heads_and_indices, prune_linear_layer
+# 导入通用工具，包括添加代码示例文档字符串、添加起始文档字符串、将起始文档字符串添加到模型前向方法、日志记录、替换返回文档字符串
 from ...utils import (
     add_code_sample_docstrings,
     add_start_docstrings,
@@ -43,173 +54,167 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
+# 导入Data2VecText的配置类
 from .configuration_data2vec_text import Data2VecTextConfig
 
-# 获取日志记录器
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 隐藏状态的起始位置
+# Data2VecText模型中隐藏状态的起始位置常量
 _HIDDEN_STATES_START_POSITION = 2
 
-# 用于文档的检查点
+# 文档中常用的检查点示例
 _CHECKPOINT_FOR_DOC = "facebook/data2vec-text-base"
+# 文档中常用的配置示例
 _CONFIG_FOR_DOC = "Data2VecTextConfig"
 
-# 预训练模型存档列表
+# Data2VecText预训练模型的存档列表
 DATA2VEC_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "facebook/data2vec-text-base",
-    # 查看所有的 Data2Vec 模型列表: https://huggingface.co/models?filter=data2vec-text
+    # 更多Data2VecText模型示例请查看 https://huggingface.co/models?filter=data2vec-text
 ]
 
-# 从 transformers.models.roberta.modeling_roberta.RobertaEmbeddings 复制到 Data2VecTextForTextEmbeddings
+# 从transformers.models.roberta.modeling_roberta.RobertaEmbeddings复制并修改为Data2VecText
 class Data2VecTextForTextEmbeddings(nn.Module):
     """
     Same as BertEmbeddings with a tiny tweak for positional embeddings indexing.
     """
-
-    # 从 transformers.models.bert.modeling_bert.BertEmbeddings.__init__ 复制过来的
-    # 初始化函数，接受配置参数，并调用父类的初始化方法
+    
+    # 从transformers.models.bert.modeling_bert.BertEmbeddings.__init__复制
+    # 初始化函数，接受一个配置对象作为参数
     def __init__(self, config):
         # 调用父类的初始化方法
         super().__init__()
-        # 创建词嵌入层，根据词汇量、隐藏层大小和填充标记创建词嵌入矩阵
+        # 初始化词嵌入层，根据配置文件指定词汇表大小、隐藏层大小，并设置填充标记索引
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=config.pad_token_id)
-        # 创建位置嵌入层，根据最大位置嵌入数量和隐藏层大小创建位置嵌入矩阵
+        # 初始化位置嵌入层，根据配置文件指定最大位置嵌入数和隐藏层大小
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
-        # 创建标记类型嵌入层，根据标记类型词汇量和隐藏层大小创建标记类型嵌入矩阵
+        # 初始化标记类型嵌入层，根据配置文件指定类型词汇表大小和隐藏层大小
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
-        # self.LayerNorm 不使用蛇形命名法以保持与 TensorFlow 模型变量名的一致性，并能够加载任何 TensorFlow 检查点文件
-        # 创建层归一化层，根据隐藏层大小和层归一化参数创建层归一化层
+        # LayerNorm 的命名不使用蛇形命名法，以便与 TensorFlow 模型变量名保持一致，并能够加载任何 TensorFlow 检查点文件
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建 dropout 层，根据隐藏层 dropout 概率创建 dropout 层
+        # 初始化 Dropout 层，使用配置文件中的隐藏层 dropout 概率
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # position_ids (1, len position emb) 在序列化时是连续的，并在序列化时导出
-        # 根据配置中的位置嵌入类型创建位置嵌入类型标志
+        # 位置嵌入类型，默认为绝对位置嵌入
         self.position_embedding_type = getattr(config, "position_embedding_type", "absolute")
-        # 注册位置嵌入矩阵，持久性为 False
+        # 注册一个缓冲区变量 position_ids，包含从 0 到最大位置嵌入数的序列，不持久化
         self.register_buffer(
             "position_ids", torch.arange(config.max_position_embeddings).expand((1, -1)), persistent=False
         )
-        # 注册标记类型嵌入矩阵，持久性为 False
+        # 注册一个缓冲区变量 token_type_ids，初始化为与 position_ids 相同形状的全零张量，不持久化
         self.register_buffer(
             "token_type_ids", torch.zeros(self.position_ids.size(), dtype=torch.long), persistent=False
         )
 
-        # End copy
-        # 设置填充标记 ID
+        # 设置填充标记索引为配置文件中的 pad_token_id
         self.padding_idx = config.pad_token_id
-        # 创建位置嵌入层，根据最大位置嵌入数量、隐藏层大小和填充标记创建位置嵌入矩阵
+        # 初始化位置嵌入层，根据配置文件指定最大位置嵌入数和隐藏层大小，使用与 padding_idx 相同的填充索引
         self.position_embeddings = nn.Embedding(
             config.max_position_embeddings, config.hidden_size, padding_idx=self.padding_idx
         )
-
-    # 前向传播函数
-    def forward(
-        self, input_ids=None, token_type_ids=None, position_ids=None, inputs_embeds=None, past_key_values_length=0
         ):
-            # 如果未提供位置 id，则根据输入 token id 创建位置 id。任何填充的 token 保持填充状态。
-            if position_ids is None:
-                if input_ids is not None:
+            如果没有提供位置 id：
+                如果提供了输入 token id：
+                    # 根据输入 token id 创建位置 id。任何填充的 token 保持填充状态。
                     position_ids = create_position_ids_from_input_ids(input_ids, self.padding_idx, past_key_values_length)
-                else:
+                否则：
+                    # 根据输入的嵌入张量创建位置 id
                     position_ids = self.create_position_ids_from_inputs_embeds(inputs_embeds)
 
-            # 如果提供了输入 token id，则获取其形状
-            if input_ids is not None:
-                input_shape = input_ids.size()
-            else:
-                input_shape = inputs_embeds.size()[:-1]
-
-            # 获取序列长度
-            seq_length = input_shape[1]
-
-            # 将 token_type_ids 设置为构造函数中注册的缓冲区，其中全部为零。这通常发生在自动生成时，
-            # 注册的缓冲区可以在不传递 token_type_ids 的情况下帮助用户跟踪模型，解决了问题 #5664
-            if token_type_ids is None:
-                if hasattr(self, "token_type_ids"):
-                    # 获取注册的 token_type_ids 缓冲区，并截取与序列长度相同的部分
-                    buffered_token_type_ids = self.token_type_ids[:, :seq_length]
-                    # 扩展为与输入形状相同的张量
-                    buffered_token_type_ids_expanded = buffered_token_type_ids.expand(input_shape[0], seq_length)
-                    token_type_ids = buffered_token_type_ids_expanded
-                else:
-                    # 如果未注册 token_type_ids，则创建全部为零的张量
-                    token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
-
-            # 如果未提供输入嵌入，则使用 word_embeddings 层对输入 token id 进行嵌入
-            if inputs_embeds is None:
-                inputs_embeds = self.word_embeddings(input_ids)
-            # 使用 token_type_embeddings 层对 token_type_ids 进行嵌入
-            token_type_embeddings = self.token_type_embeddings(token_type_ids)
-
-            # 将输入嵌入和 token 类型嵌入相加
-            embeddings = inputs_embeds + token_type_embeddings
-            # 如果位置嵌入类型为 "absolute"，则使用位置嵌入层对位置 id 进行嵌入，并将结果加到 embeddings 上
-            if self.position_embedding_type == "absolute":
-                position_embeddings = self.position_embeddings(position_ids)
-                embeddings += position_embeddings
-            # 对 embeddings 进行 LayerNorm 处理
-            embeddings = self.LayerNorm(embeddings)
-            # 对 embeddings 进行 dropout 处理
-            embeddings = self.dropout(embeddings)
-            # 返回 embeddings
-            return embeddings
-
-        def create_position_ids_from_inputs_embeds(self, inputs_embeds):
-            """
-            We are provided embeddings directly. We cannot infer which are padded so just generate sequential position ids.
-
-            Args:
-                inputs_embeds: torch.Tensor
-
-            Returns: torch.Tensor
-            """
-            # 获取输入嵌入的形状
+        如果提供了输入 token id：
+            # 获取输入 token id 的形状
+            input_shape = input_ids.size()
+        否则：
+            # 获取输入嵌入张量的形状（去掉最后一个维度，即序列长度）
             input_shape = inputs_embeds.size()[:-1]
-            # 获取序列长度
-            sequence_length = input_shape[1]
 
-            # 生成从 padding_idx + 1 到 sequence_length + padding_idx + 1 的顺序位置 id
-            position_ids = torch.arange(
-                self.padding_idx + 1, sequence_length + self.padding_idx + 1, dtype=torch.long, device=inputs_embeds.device
-            )
-            # 将位置 id 扩展为与输入形状相同的张量
-            return position_ids.unsqueeze(0).expand(input_shape)
-# 从 transformers.models.roberta.modeling_roberta.RobertaSelfAttention 复制代码，修改类名为 Data2VecTextSelfAttention
+        # 获取序列长度
+        seq_length = input_shape[1]
+
+        # 将 token_type_ids 设置为构造函数中注册的缓冲区，通常情况下全为零。这有助于用户在跟踪模型时不传递 token_type_ids，解决问题 #5664
+        如果 token_type_ids 为空：
+            如果 self 中有 "token_type_ids" 属性：
+                # 使用已注册的缓冲区的 token_type_ids，截取到序列长度的部分并扩展为与输入形状相同大小
+                buffered_token_type_ids = self.token_type_ids[:, :seq_length]
+                buffered_token_type_ids_expanded = buffered_token_type_ids.expand(input_shape[0], seq_length)
+                token_type_ids = buffered_token_type_ids_expanded
+            否则：
+                # 创建全零的 token_type_ids，其形状与输入相同，数据类型为 long，设备为 self.position_ids 的设备
+                token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=self.position_ids.device)
+
+        如果 inputs_embeds 为空：
+            # 使用 word_embeddings 方法根据输入 token id 获取嵌入张量
+            inputs_embeds = self.word_embeddings(input_ids)
+        # 使用 token_type_embeddings 方法根据 token_type_ids 获取 token type 嵌入张量
+        token_type_embeddings = self.token_type_embeddings(token_type_ids)
+
+        # 将输入嵌入张量和 token type 嵌入张量相加得到最终嵌入张量
+        embeddings = inputs_embeds + token_type_embeddings
+
+        如果 self.position_embedding_type == "absolute"：
+            # 如果使用绝对位置嵌入类型，则根据位置 ids 获取位置嵌入张量并加到最终嵌入张量上
+            position_embeddings = self.position_embeddings(position_ids)
+            embeddings += position_embeddings
+
+        # 对最终嵌入张量进行 LayerNorm 规范化
+        embeddings = self.LayerNorm(embeddings)
+        # 对最终嵌入张量进行 dropout 处理
+        embeddings = self.dropout(embeddings)
+        # 返回最终嵌入张量
+        return embeddings
+
+    def create_position_ids_from_inputs_embeds(self, inputs_embeds):
+        """
+        直接提供嵌入张量，无法推断哪些是填充的，因此生成顺序的位置 id。
+
+        Args:
+            inputs_embeds: torch.Tensor
+
+        Returns: torch.Tensor
+        """
+        # 获取输入嵌入张量的形状（去掉最后一个维度，即序列长度）
+        input_shape = inputs_embeds.size()[:-1]
+        # 获取序列长度
+        sequence_length = input_shape[1]
+
+        # 创建顺序的位置 id，从 self.padding_idx + 1 开始，到 sequence_length + self.padding_idx + 1 结束
+        position_ids = torch.arange(
+            self.padding_idx + 1, sequence_length + self.padding_idx + 1, dtype=torch.long, device=inputs_embeds.device
+        )
+        # 扩展位置 id 的维度，使其与输入张量形状相同
+        return position_ids.unsqueeze(0).expand(input_shape)
+# Copied from transformers.models.roberta.modeling_roberta.RobertaSelfAttention with Roberta->Data2VecText
 class Data2VecTextSelfAttention(nn.Module):
     def __init__(self, config, position_embedding_type=None):
         super().__init__()
-        # 检查 hidden_size 是否是 num_attention_heads 的倍数，如果不是则抛出异常
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
                 f"heads ({config.num_attention_heads})"
             )
 
-        # 设置注意力头数和每个头的大小
         self.num_attention_heads = config.num_attention_heads
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 创建查询、键、值的 Linear 层
+        # Linear transformation for query, key, and value tensors
         self.query = nn.Linear(config.hidden_size, self.all_head_size)
         self.key = nn.Linear(config.hidden_size, self.all_head_size)
         self.value = nn.Linear(config.hidden_size, self.all_head_size)
 
-        # 创建 Dropout 层
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
         self.position_embedding_type = position_embedding_type or getattr(
             config, "position_embedding_type", "absolute"
         )
-        # 如果使用相对位置嵌入，创建距离嵌入层
+        # Conditionally initialize distance embeddings based on position_embedding_type
         if self.position_embedding_type == "relative_key" or self.position_embedding_type == "relative_key_query":
             self.max_position_embeddings = config.max_position_embeddings
             self.distance_embedding = nn.Embedding(2 * config.max_position_embeddings - 1, self.attention_head_size)
 
         self.is_decoder = config.is_decoder
 
-    # 将输入张量重塑为注意力得分所需要的形状
+    # Reshape the tensor for multi-head attention computation
     def transpose_for_scores(self, x: torch.Tensor) -> torch.Tensor:
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
         x = x.view(new_x_shape)
@@ -224,39 +229,41 @@ class Data2VecTextSelfAttention(nn.Module):
         encoder_attention_mask: Optional[torch.FloatTensor] = None,
         past_key_value: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
         output_attentions: Optional[bool] = False,
-# 从 transformers.models.bert.modeling_bert.BertSelfOutput 复制代码，修改类名为 Data2VecTextSelfOutput
+# Copied from transformers.models.bert.modeling_bert.BertSelfOutput
 class Data2VecTextSelfOutput(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 创建全连接层 dense
+        # Fully connected layer for self-output transformation
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 创建 LayerNorm 层
+        # Layer normalization to stabilize learning
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建 Dropout 层
+        # Dropout regularization to prevent overfitting
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    # 前向传播函数定义
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
+        # Linear transformation followed by dropout
         hidden_states = self.dense(hidden_states)
         hidden_states = self.dropout(hidden_states)
+        # Residual connection followed by layer normalization
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
         return hidden_states
-# 从transformers.models.bert.modeling_bert.BertAttention复制并修改的Data2VecTextAttention类
+# Copied from transformers.models.bert.modeling_bert.BertAttention with Bert->Data2VecText
+# 定义 Data2VecTextAttention 类，继承自 nn.Module，用于处理 Data2VecText 模型的自注意力机制
+
 class Data2VecTextAttention(nn.Module):
     def __init__(self, config, position_embedding_type=None):
         super().__init__()
-        # 初始化self属性为Data2VecTextSelfAttention类对象
+        # 初始化 self 层，使用 Data2VecTextSelfAttention 类处理自注意力机制
         self.self = Data2VecTextSelfAttention(config, position_embedding_type=position_embedding_type)
-        # 初始化output属性为Data2VecTextSelfOutput类对象
+        # 初始化 output 层，使用 Data2VecTextSelfOutput 类处理自注意力机制的输出
         self.output = Data2VecTextSelfOutput(config)
-        # 初始化pruned_heads属性为空集合
+        # 初始化一个空集合，用于存储被剪枝的注意力头
         self.pruned_heads = set()
 
-    # 剪枝头部
     def prune_heads(self, heads):
         if len(heads) == 0:
             return
-        # 找到可剪枝的头部及其索引
+        # 调用 find_pruneable_heads_and_indices 函数找到可以剪枝的注意力头及其索引
         heads, index = find_pruneable_heads_and_indices(
             heads, self.self.num_attention_heads, self.self.attention_head_size, self.pruned_heads
         )
@@ -267,12 +274,11 @@ class Data2VecTextAttention(nn.Module):
         self.self.value = prune_linear_layer(self.self.value, index)
         self.output.dense = prune_linear_layer(self.output.dense, index, dim=1)
 
-        # 更新超参数并存储剪枝头部
+        # 更新超参数并存储被剪枝的头
         self.self.num_attention_heads = self.self.num_attention_heads - len(heads)
         self.self.all_head_size = self.self.attention_head_size * self.self.num_attention_heads
         self.pruned_heads = self.pruned_heads.union(heads)
 
-    # 前向传播函数
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -283,7 +289,7 @@ class Data2VecTextAttention(nn.Module):
         past_key_value: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
-        # 调用self属性的前向传播函数
+        # 调用 self 层处理输入的隐藏状态和相关的参数
         self_outputs = self.self(
             hidden_states,
             attention_mask,
@@ -293,78 +299,78 @@ class Data2VecTextAttention(nn.Module):
             past_key_value,
             output_attentions,
         )
-        # 通过output属性，将self_outputs[0]和hidden_states传入得到attention_output
+        # 调用 output 层处理 self 层的输出和原始的隐藏状态，得到注意力机制的输出
         attention_output = self.output(self_outputs[0], hidden_states)
-        # 输出结果
-        outputs = (attention_output,) + self_outputs[1:]  # 如果输出了attention，将其添加到结果中
+        # 如果需要输出注意力权重，则将它们添加到 outputs 中
+        outputs = (attention_output,) + self_outputs[1:]  # 如果有的话，添加注意力权重
         return outputs
 
 
-# 从transformers.models.bert.modeling_bert.BertIntermediate复制的Data2VecTextIntermediate类
+# Copied from transformers.models.bert.modeling_bert.BertIntermediate
+# 定义 Data2VecTextIntermediate 类，继承自 nn.Module，用于处理 Data2VecText 模型的中间层
+
 class Data2VecTextIntermediate(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 初始化dense属性为一个线性层
+        # 初始化一个线性层，将输入的隐藏状态映射到中间层的大小
         self.dense = nn.Linear(config.hidden_size, config.intermediate_size)
-        # 判断config.hidden_act的类型并选取对应的激活函数
+        # 如果 config.hidden_act 是字符串，则使用对应的激活函数，否则直接使用配置中的激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = ACT2FN[config.hidden_act]
         else:
             self.intermediate_act_fn = config.hidden_act
 
-    # 前向传播函数
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 通过dense属性对hidden_states进行线性变换
+        # 将输入的隐藏状态通过线性层映射到中间层的大小
         hidden_states = self.dense(hidden_states)
-        # 通过intermediate_act_fn对hidden_states进行激活
+        # 使用中间层的激活函数处理映射后的结果
         hidden_states = self.intermediate_act_fn(hidden_states)
         return hidden_states
 
 
-# 从transformers.models.bert.modeling_bert.BertOutput复制的Data2VecTextOutput类
+# Copied from transformers.models.bert.modeling_bert.BertOutput
+# 定义 Data2VecTextOutput 类，继承自 nn.Module，用于处理 Data2VecText 模型的输出层
 class Data2VecTextOutput(nn.Module):
-    # 初始化函数，接受一个配置对象作为参数
+    # 初始化方法，接受一个名为 config 的参数
     def __init__(self, config):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 创建一个全连接层，输入维度为配置对象中的中间尺寸，输出维度为配置对象中的隐藏尺寸
+        # 创建一个线性层，将输入特征的大小设为 config.intermediate_size，输出特征的大小设为 config.hidden_size
         self.dense = nn.Linear(config.intermediate_size, config.hidden_size)
-        # 创建一个 LayerNorm 层，输入维度为配置对象中的隐藏尺寸，epsilon 参数为配置对象中的层归一化 epsilon
+        # 创建一个 LayerNorm 层，输入特征的大小为 config.hidden_size，使用 config.layer_norm_eps 作为 epsilon 参数
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
-        # 创建一个 Dropout 层，丢弃概率为配置对象中的隐藏层 Dropout 概率
+        # 创建一个 Dropout 层，使用 config.hidden_dropout_prob 作为丢弃概率
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    # 前向传播函数，接受两个张量作为输入，返回一个张量作为输出
+    # 前向传播方法，接受两个参数 hidden_states 和 input_tensor，返回一个 torch.Tensor 类型的值
     def forward(self, hidden_states: torch.Tensor, input_tensor: torch.Tensor) -> torch.Tensor:
-        # 使用全连接层对隐藏状态进行线性变换
+        # 将 hidden_states 输入到 self.dense 线性层中，得到输出 hidden_states
         hidden_states = self.dense(hidden_states)
-        # 对线性变换后的隐藏状态进行 Dropout 操作
+        # 对 hidden_states 应用 dropout 操作
         hidden_states = self.dropout(hidden_states)
-        # 对 Dropout 后的隐藏状态进行层归一化，并与输入张量相加
+        # 将 dropout 后的 hidden_states 与 input_tensor 相加，并输入到 self.LayerNorm 层中进行归一化处理
         hidden_states = self.LayerNorm(hidden_states + input_tensor)
-        # 返回经过处理后的隐藏状态张量
+        # 返回归一化后的 hidden_states
         return hidden_states
-# 从transformers.models.bert.modeling_bert.BertLayer中复制代码，并将Bert->Data2VecText
+# 从 transformers.models.bert.modeling_bert.BertLayer 复制并修改为 Data2VecTextLayer
 class Data2VecTextLayer(nn.Module):
     def __init__(self, config):
-        # 调用父类的构造函数
         super().__init__()
-        # 设置前向传播中的块大小
+        # 初始化模型的配置参数
         self.chunk_size_feed_forward = config.chunk_size_feed_forward
-        # 序列长度维度的索引
+        # 序列长度维度设定为 1
         self.seq_len_dim = 1
-        # 初始化注意力机制
+        # 初始化自注意力层
         self.attention = Data2VecTextAttention(config)
-        # 是否为解码器
+        # 是否为解码器模型
         self.is_decoder = config.is_decoder
-        # 是否添加跨注意力
+        # 是否添加交叉注意力
         self.add_cross_attention = config.add_cross_attention
-        # 如果添加了跨注意力
+        # 如果添加了交叉注意力但不是解码器模型，则引发错误
         if self.add_cross_attention:
-            # 如果不是解码器则引发值错误
             if not self.is_decoder:
                 raise ValueError(f"{self} should be used as a decoder model if cross attention is added")
-            # 初始化跨注意力机制
+            # 初始化交叉注意力层，并使用绝对位置编码
             self.crossattention = Data2VecTextAttention(config, position_embedding_type="absolute")
         # 初始化中间层
         self.intermediate = Data2VecTextIntermediate(config)
@@ -382,9 +388,8 @@ class Data2VecTextLayer(nn.Module):
         output_attentions: Optional[bool] = False,
     ) -> Tuple[torch.Tensor]:
         # decoder uni-directional self-attention cached key/values tuple is at positions 1,2
-        # 如果有过去的键/值缓存，则从中提取自注意力部分的键/值，否则为None
         self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
-        # 使用自注意力模块处理隐藏状态
+        # Perform self-attention mechanism using the stored key/value pairs from previous steps if available
         self_attention_outputs = self.attention(
             hidden_states,
             attention_mask,
@@ -392,29 +397,32 @@ class Data2VecTextLayer(nn.Module):
             output_attentions=output_attentions,
             past_key_value=self_attn_past_key_value,
         )
-        # 提取自注意力模块的输出
+        # Extract the attention output from self-attention mechanism
         attention_output = self_attention_outputs[0]
 
-        # 如果是解码器，最后一个输出是自注意力缓存的元组
+        # if decoder, the last output is tuple of self-attn cache
         if self.is_decoder:
+            # Exclude the first and the last element of self_attention_outputs which are the attention output
+            # and the present_key_value respectively
             outputs = self_attention_outputs[1:-1]
+            # Retrieve the present key/value tuple from self-attention outputs
             present_key_value = self_attention_outputs[-1]
         else:
-            outputs = self_attention_outputs[1:]  # 如果输出注意力权重则加入自注意力部分
+            # Include all elements except the first element (attention_output) if output_attentions is enabled
+            outputs = self_attention_outputs[1:]  # add self attentions if we output attention weights
 
         cross_attn_present_key_value = None
-        # 如果是解码器并且有编码器的隐藏状态
         if self.is_decoder and encoder_hidden_states is not None:
-            # 如果没有交叉注意力层，则抛出异常
             if not hasattr(self, "crossattention"):
+                # Raise an error if cross-attention layers are expected but not instantiated
                 raise ValueError(
                     f"If `encoder_hidden_states` are passed, {self} has to be instantiated with cross-attention layers"
                     " by setting `config.add_cross_attention=True`"
                 )
 
-            # 在过去的键/值缓存元组的位置3,4上提取交叉注意力的键/值缓存
+            # cross_attn cached key/values tuple is at positions 3,4 of past_key_value tuple
             cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
-            # 使用交叉注意力模块处理自注意力模块的输出
+            # Perform cross-attention mechanism using stored key/value pairs from previous steps if available
             cross_attention_outputs = self.crossattention(
                 attention_output,
                 attention_mask,
@@ -424,102 +432,91 @@ class Data2VecTextLayer(nn.Module):
                 cross_attn_past_key_value,
                 output_attentions,
             )
-            # 提取交叉注意力模块的输出
+            # Extract the attention output from cross-attention mechanism
             attention_output = cross_attention_outputs[0]
-            outputs = outputs + cross_attention_outputs[1:-1]  # 如果输出注意力权重则加入交叉注意力部分
+            # Combine outputs with cross-attention outputs excluding the first and the last element
+            outputs = outputs + cross_attention_outputs[1:-1]  # add cross attentions if we output attention weights
 
-            # 将交叉注意力的缓存加入到现在的键/值缓存元组的位置3,4上
+            # add cross-attn cache to positions 3,4 of present_key_value tuple
             cross_attn_present_key_value = cross_attention_outputs[-1]
+            # Concatenate present_key_value with cross-attn present_key_value
             present_key_value = present_key_value + cross_attn_present_key_value
 
-        # 对注意力输出应用分块处理，并返回结果
+        # Apply chunking to the forward pass of the feed forward layer
         layer_output = apply_chunking_to_forward(
             self.feed_forward_chunk, self.chunk_size_feed_forward, self.seq_len_dim, attention_output
         )
+        # Combine layer_output with outputs
         outputs = (layer_output,) + outputs
 
-        # 如果是解码器，将注意力的键/值作为最后的输出
+        # if decoder, return the attn key/values as the last output
         if self.is_decoder:
+            # Append present_key_value to outputs if the model is a decoder
             outputs = outputs + (present_key_value,)
 
+        # Return all outputs of the transformer layer
         return outputs
 
-    # 处理前馈部分的函数
     def feed_forward_chunk(self, attention_output):
-        # 通过中间层处理注意力输出
+        # Apply feed forward chunk processing using intermediate and output layers
         intermediate_output = self.intermediate(attention_output)
-        # 通过输出层处理中间层输出和注意力输出
         layer_output = self.output(intermediate_output, attention_output)
-        # 返回处理结果
         return layer_output
-# 从transformers.models.bert.modeling_bert.BertEncoder复制并修改了类名为Data2VecTextEncoder
+# 从 transformers.models.bert.modeling_bert.BertEncoder 复制而来，将 Bert 替换为 Data2VecText
 class Data2VecTextEncoder(nn.Module):
-    # 初始化Data2VecTextEncoder类
     def __init__(self, config):
         super().__init__()
-        # 保存配置信息到self.config
         self.config = config
-        # 创建一个包含多个Data2VecTextLayer对象的ModuleList，数量为config.num_hidden_layers
+        # 创建一个 nn.ModuleList，包含 config.num_hidden_layers 个 Data2VecTextLayer 的实例
         self.layer = nn.ModuleList([Data2VecTextLayer(config) for _ in range(config.num_hidden_layers)])
-        # 设置梯度检查点为False
         self.gradient_checkpointing = False
 
-    # 前向传播函数
     def forward(
         self,
-        # 隐藏状态张量
         hidden_states: torch.Tensor,
-        # 注意力掩码
         attention_mask: Optional[torch.FloatTensor] = None,
-        # 头掩码
         head_mask: Optional[torch.FloatTensor] = None,
-        # 编码器隐藏状态
         encoder_hidden_states: Optional[torch.FloatTensor] = None,
-        # 编码器注意力掩码
         encoder_attention_mask: Optional[torch.FloatTensor] = None,
-        # 过去的键值
         past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
-        # 是否使用缓存
         use_cache: Optional[bool] = None,
-        # 输出注意力
         output_attentions: Optional[bool] = False,
-        # 输出隐藏状态
         output_hidden_states: Optional[bool] = False,
-        # 是否返回字典
         return_dict: Optional[bool] = True,
         ) -> Union[Tuple[torch.Tensor], BaseModelOutputWithPastAndCrossAttentions]:
-        # 如果不输出隐藏状态，那么将其设置为一个空元组
+        # 如果不需要输出隐藏状态，则初始化为空元组；否则为 None
         all_hidden_states = () if output_hidden_states else None
-        # 如果不输出注意力，那么将其设置为一个空元组
+        # 如果不需要输出注意力权重，则初始化为空元组；否则为 None
         all_self_attentions = () if output_attentions else None
-        # 如果不输出交叉注意力，或者配置中不包含交叉注意力，那么将其设置为一个空元组
+        # 如果不需要输出交叉注意力权重或配置不支持，则初始化为空元组；否则为 None
         all_cross_attentions = () if output_attentions and self.config.add_cross_attention else None
 
-        # 如果启用了渐变检查点且处于训练状态下
+        # 如果启用了梯度检查点且处于训练模式
         if self.gradient_checkpointing and self.training:
-            # 如果使用缓存，则发出警告并设置 use_cache=False
+            # 如果 use_cache 设置为 True，则发出警告并将其设置为 False
             if use_cache:
                 logger.warning_once(
                     "`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`..."
                 )
                 use_cache = False
 
-        # 如果不使用缓存，则将 next_decoder_cache 设置为一个空元组
+        # 如果 use_cache 为 True，则初始化下一个解码器缓存为空元组；否则为 None
         next_decoder_cache = () if use_cache else None
-        # 遍历所有层
+
+        # 遍历所有的解码器层
         for i, layer_module in enumerate(self.layer):
-            # 如果输出隐藏状态，则将当前隐藏状态添加到 all_hidden_states 中
+            # 如果需要输出隐藏状态，则添加当前层的隐藏状态到 all_hidden_states
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 如果 head_mask 存在，那么将其设置为 layer_head_mask
+            # 如果有头部掩码，则使用当前层对应的头部掩码；否则为 None
             layer_head_mask = head_mask[i] if head_mask is not None else None
-            # 如果 past_key_values 存在，那么将其设置为 past_key_value
+            # 如果有过去的键值对，则使用当前层对应的过去键值对；否则为 None
             past_key_value = past_key_values[i] if past_key_values is not None else None
 
-            # 如果启用了渐变检查点且处于训练状态下
+            # 如果启用了梯度检查点且处于训练模式
             if self.gradient_checkpointing and self.training:
-                # 使用渐变检查点的函数来计算层的输出
+                # 使用梯度检查点函数进行前向传播计算
                 layer_outputs = self._gradient_checkpointing_func(
                     layer_module.__call__,
                     hidden_states,
@@ -531,7 +528,7 @@ class Data2VecTextEncoder(nn.Module):
                     output_attentions,
                 )
             else:
-                # 否则，直接调用层模块来计算输出
+                # 否则直接调用当前层的前向传播函数
                 layer_outputs = layer_module(
                     hidden_states,
                     attention_mask,
@@ -542,23 +539,23 @@ class Data2VecTextEncoder(nn.Module):
                     output_attentions,
                 )
 
-            # 更新隐藏状态
+            # 更新隐藏状态为当前层输出的隐藏状态
             hidden_states = layer_outputs[0]
-            # 如果使用缓存，则将当前层的输出添加到 next_decoder_cache 中
+            # 如果 use_cache 为 True，则更新下一个解码器缓存
             if use_cache:
                 next_decoder_cache += (layer_outputs[-1],)
-            # 如果输出注意力，将当前层的自注意力信息添加到 all_self_attentions 中
+            # 如果需要输出注意力权重，则添加当前层输出的注意力权重到 all_self_attentions
             if output_attentions:
                 all_self_attentions = all_self_attentions + (layer_outputs[1],)
-                # 如果配置中包含交叉注意力，则将当前层的交叉注意力信息添加到 all_cross_attentions 中
+                # 如果模型配置支持交叉注意力，则添加当前层输出的交叉注意力到 all_cross_attentions
                 if self.config.add_cross_attention:
                     all_cross_attentions = all_cross_attentions + (layer_outputs[2],)
 
-        # 如果输出隐藏状态，将最后一个隐藏状态添加到 all_hidden_states 中
+        # 如果需要输出隐藏状态，则添加最终隐藏状态到 all_hidden_states
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果不返回字典，就返回一个包含指定内容的元组
+        # 如果 return_dict 为 False，则返回一个元组，包含非空值
         if not return_dict:
             return tuple(
                 v
@@ -571,7 +568,7 @@ class Data2VecTextEncoder(nn.Module):
                 ]
                 if v is not None
             )
-        # 否则，返回一个包含指定内容的 BaseModelOutputWithPastAndCrossAttentions 对象
+        # 否则返回一个 BaseModelOutputWithPastAndCrossAttentions 对象
         return BaseModelOutputWithPastAndCrossAttentions(
             last_hidden_state=hidden_states,
             past_key_values=next_decoder_cache,
@@ -579,68 +576,57 @@ class Data2VecTextEncoder(nn.Module):
             attentions=all_self_attentions,
             cross_attentions=all_cross_attentions,
         )
-# 定义一个自定义的模型 `Data2VecTextPooler` 用于文本池化。
-
+# Copied from transformers.models.bert.modeling_bert.BertPooler
 class Data2VecTextPooler(nn.Module):
-  
-  # 初始化函数，接收配置信息作为参数
     def __init__(self, config):
         super().__init__()
-        # 定义一个全连接层，输入和输出大小均为隐藏层大小
+        # 初始化一个全连接层，输入和输出维度均为 config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 定义一个激活函数
+        # 激活函数为双曲正切函数
         self.activation = nn.Tanh()
 
-    # 前向传播函数，接收隐藏状态的张量作为输入，返回经过池化处理后的输出张量
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 将第一个标记对应的隐藏状态作为池化后的输出
+        # 从隐藏状态中取出第一个 token 对应的隐藏状态作为池化输出
         first_token_tensor = hidden_states[:, 0]
-        # 经过全连接层处理
+        # 将第一个 token 的隐藏状态传入全连接层
         pooled_output = self.dense(first_token_tensor)
-        # 经过激活函数处理
+        # 使用激活函数处理全连接层的输出
         pooled_output = self.activation(pooled_output)
-        # 返回池化后的输出
+        # 返回池化后的输出张量
         return pooled_output
 
-
-# 定义一个预训练模型类 `Data2VecTextPreTrainedModel`，并继承自 `PreTrainedModel`。
 
 class Data2VecTextPreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
-  
-    # 模型的配置类为 `Data2VecTextConfig`
+
     config_class = Data2VecTextConfig
-    # 基础模型的前缀为 "data2vec_text"
     base_model_prefix = "data2vec_text"
-    # 是否支持梯度检查点
     supports_gradient_checkpointing = True
-    # 不需要分割的模块列表
     _no_split_modules = ["Data2VecTextForTextEmbeddings", "Data2VecTextLayer"]
 
-    # 初始化模型权重的函数
     def _init_weights(self, module):
         """Initialize the weights"""
         if isinstance(module, nn.Linear):
-            # 权重初始化为标准正态分布
+            # 使用正态分布初始化线性层的权重，标准差为 self.config.initializer_range
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.bias is not None:
-                # 偏置初始化为0
+                # 如果有偏置项，则将其初始化为零
                 module.bias.data.zero_()
         elif isinstance(module, nn.Embedding):
-            # 权重初始化为标准正态分布
+            # 使用正态分布初始化嵌入层的权重，标准差为 self.config.initializer_range
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.padding_idx is not None:
-                # 如果存在padding_idx，则将其对应的权重初始化为0
+                # 如果指定了 padding_idx，则将其对应的权重初始化为零
                 module.weight.data[module.padding_idx].zero_()
         elif isinstance(module, nn.LayerNorm):
             if hasattr(module, "bias") and module.bias is not None:
-                # 如果存在偏置，则将其初始化为0
+                # 如果有偏置项，则将其初始化为零
                 module.bias.data.zero_()
             if hasattr(module, "weight") and module.weight is not None:
-                # 如果存在权重，则将其初始化为1
+                # 如果有权重项，则将其初始化为全 1
                 module.weight.data.fill_(1.0)
 
 
@@ -656,136 +642,92 @@ DATA2VECTEXT_START_DOCSTRING = r"""
     This model is also a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) subclass.
     Use it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage
     and behavior.
-    # 参数：
-    # config ([`Data2VecTextConfig`]): 模型配置类，包含模型的所有参数。
-    # 用配置文件初始化不会加载与模型关联的权重，只加载配置信息。
-    # 查看 [`~PreTrainedModel.from_pretrained`] 方法以加载模型权重。
 """
-
-# DATA2VECTEXT_INPUTS_DOCSTRING: Data2VecText模型的输入参数说明文档字符串
-DATA2VECTEXT_INPUTS_DOCSTRING = r"""
-    Args:
-        input_ids (`torch.LongTensor` of shape `({0})`):
-            输入序列标记在词汇表中的索引。
-
-            可以使用[`AutoTokenizer`]获取索引。详情请见[`PreTrainedTokenizer.encode`]和
-            [`PreTrainedTokenizer.__call__`]。
-
-            [input IDs是什么?](../glossary#input-ids)
-        attention_mask (`torch.FloatTensor` of shape `({0})`, *optional*):
-            避免对填充标记索引执行注意力计算的掩码。掩码值选在 `[0, 1]` 之间：
-
-            - 1表示**未屏蔽**的标记,
-            - 0表示**屏蔽**的标记。
-
-            [注意力掩码是什么?](../glossary#attention-mask)
-        token_type_ids (`torch.LongTensor` of shape `({0})`, *optional*):
-            分段标记索引，指示输入的第一部分和第二部分。索引选在 `[0,
-            1]` 之间：
-
-            - 0 对应*句子A*的标记,
-            - 1 对应*句子B*的标记。
-
-            [标记类型ID是什么?](../glossary#token-type-ids)
-        position_ids (`torch.LongTensor` of shape `({0})`, *optional*):
-            输入序列标记在位置嵌入中的位置索引。选在范围 `[0,
-            config.max_position_embeddings - 1]` 之间。
-
-            [位置ID是什么?](../glossary#position-ids)
-        head_mask (`torch.FloatTensor` of shape `(num_heads,)` or `(num_layers, num_heads)`, *optional*):
-            空值化自注意力模块的选择头部的掩码。掩码值选在 `[0, 1]` 之间:
-
-            - 1表示头部**未屏蔽**,
-            - 0表示头部**屏蔽**。
-
-        inputs_embeds (`torch.FloatTensor` of shape `({0}, hidden_size)`, *optional*):
-            选择直接传递嵌入表示代替 `input_ids`。如果需要对如何将 `input_ids`索引转换为相关向量有更多控制权，那么这是很有用的，而不是使用模型的内部嵌入查找矩阵。
-        output_attentions (`bool`, *optional*):
-            是否返回所有注意力层的注意力张量。更多详情请见返回张量下的`attentions`。
-        output_hidden_states (`bool`, *optional*):
-            是否返回所有层的隐藏状态。更多详情请见返回张量下的`hidden_states`。
-        return_dict (`bool`, *optional*):
-            是否返回[`~utils.ModelOutput`]而不是普通元组。
-
+    Parameters:
+        config ([`Data2VecTextConfig`]): Model configuration class with all the parameters of the
+            model. Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
-
+定义了一个多行字符串常量，用于文档字符串的输入参数说明。
+"""
 
 @add_start_docstrings(
     "The bare Data2VecText Model for text transformer outputting raw hidden-states without any specific head on top.",
     DATA2VECTEXT_START_DOCSTRING,
 )
-class Data2VecTextModel(Data2VecTextPreTrainedModel):
     """
-    # 这个模型可以表现为编码器（只有自注意力）或解码器,在后者情况下,在自注意力层之间添加一层交叉注意力,遵循 Attention is all you need 论文中描述的架构。
-        The model can behave as an encoder (with only self-attention) as well as a decoder, in which case a layer of
-        cross-attention is added between the self-attention layers, following the architecture described in *Attention is
-        all you need*_ by Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomex, Lukasz
-        Kaiser and Illia Polosukhin.
-    
-        # 如果要作为解码器使用,需要在配置中将 is_decoder 参数设置为 True。
-        # 如果要在 Seq2Seq 模型中使用,需要将 is_decoder 和 add_cross_attention 参数都设置为 True,并在前向传播中输入 encoder_hidden_states。
-        To behave as an decoder the model needs to be initialized with the `is_decoder` argument of the configuration set
-        to `True`. To be used in a Seq2Seq model, the model needs to initialized with both `is_decoder` argument and
-        `add_cross_attention` set to `True`; an `encoder_hidden_states` is then expected as an input to the forward pass.
-    
-        .. _*Attention is all you need*: https://arxiv.org/abs/1706.03762
-    
+    The model can behave as an encoder (with only self-attention) as well as a decoder, in which case a layer of
+    cross-attention is added between the self-attention layers, following the architecture described in *Attention is
+    all you need*_ by Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz
+    Kaiser and Illia Polosukhin.
+
+    To behave as a decoder, the model needs to be initialized with the `is_decoder` argument of the configuration set
+    to `True`. To be used in a Seq2Seq model, the model needs to initialized with both `is_decoder` argument and
+    `add_cross_attention` set to `True`; an `encoder_hidden_states` is then expected as an input to the forward pass.
+
+    .. _*Attention is all you need*: https://arxiv.org/abs/1706.03762
+
+    """
+
+    # 初始化函数，用于初始化模型
+    def __init__(self, config, add_pooling_layer=True):
+        # 调用父类的初始化方法
+        super().__init__(config)
+        # 将配置信息保存在实例中
+        self.config = config
+
+        # 初始化词嵌入层
+        self.embeddings = Data2VecTextForTextEmbeddings(config)
+        # 初始化文本编码器
+        self.encoder = Data2VecTextEncoder(config)
+
+        # 根据需要添加池化层
+        self.pooler = Data2VecTextPooler(config) if add_pooling_layer else None
+
+        # 执行后续的初始化操作
+        self.post_init()
+
+    # 获取输入词嵌入的方法
+    def get_input_embeddings(self):
+        return self.embeddings.word_embeddings
+
+    # 设置输入词嵌入的方法
+    def set_input_embeddings(self, value):
+        self.embeddings.word_embeddings = value
+
+    # 剪枝模型中注意力头部的方法
+    def _prune_heads(self, heads_to_prune):
         """
-    
-        # 初始化模型,包括文本嵌入、编码器和池化层
-        def __init__(self, config, add_pooling_layer=True):
-            super().__init__(config)
-            self.config = config
-    
-            self.embeddings = Data2VecTextForTextEmbeddings(config)
-            self.encoder = Data2VecTextEncoder(config)
-    
-            self.pooler = Data2VecTextPooler(config) if add_pooling_layer else None
-    
-            # 初始化权重并应用最终处理
-            self.post_init()
-    
-        # 获取输入嵌入层
-        def get_input_embeddings(self):
-            return self.embeddings.word_embeddings
-    
-        # 设置输入嵌入层
-        def set_input_embeddings(self, value):
-            self.embeddings.word_embeddings = value
-    
-        # 修剪模型头部
-        def _prune_heads(self, heads_to_prune):
-            """
-            Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
-            class PreTrainedModel
-            """
-            for layer, heads in heads_to_prune.items():
-                self.encoder.layer[layer].attention.prune_heads(heads)
-    
-        # 前向传播函数
-        @add_start_docstrings_to_model_forward(DATA2VECTEXT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-        @add_code_sample_docstrings(
-            checkpoint=_CHECKPOINT_FOR_DOC,
-            output_type=BaseModelOutputWithPoolingAndCrossAttentions,
-            config_class=_CONFIG_FOR_DOC,
-        )
-        # 复制自 transformers.models.bert.modeling_bert.BertModel.forward
-        def forward(
-            self,
-            input_ids: Optional[torch.Tensor] = None,
-            attention_mask: Optional[torch.Tensor] = None,
-            token_type_ids: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.Tensor] = None,
-            head_mask: Optional[torch.Tensor] = None,
-            inputs_embeds: Optional[torch.Tensor] = None,
-            encoder_hidden_states: Optional[torch.Tensor] = None,
-            encoder_attention_mask: Optional[torch.Tensor] = None,
-            past_key_values: Optional[List[torch.FloatTensor]] = None,
-            use_cache: Optional[bool] = None,
-            output_attentions: Optional[bool] = None,
-            output_hidden_states: Optional[bool] = None,
-            return_dict: Optional[bool] = None,
-# 创建一个带有LM头部的Data2VecText模型，用于CLM微调
+        Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
+        class PreTrainedModel
+        """
+        for layer, heads in heads_to_prune.items():
+            # 对指定层的注意力头部进行剪枝
+            self.encoder.layer[layer].attention.prune_heads(heads)
+
+    # 覆盖的前向传播方法，实现模型的前向计算
+    @add_start_docstrings_to_model_forward(DATA2VECTEXT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=BaseModelOutputWithPoolingAndCrossAttentions,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    # 从 transformers.models.bert.modeling_bert.BertModel.forward 复制过来的
+    def forward(
+        self,
+        input_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        token_type_ids: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.Tensor] = None,
+        head_mask: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        encoder_hidden_states: Optional[torch.Tensor] = None,
+        encoder_attention_mask: Optional[torch.Tensor] = None,
+        past_key_values: Optional[List[torch.FloatTensor]] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
 @add_start_docstrings(
     """Data2VecText Model with a `language modeling` head on top for CLM fine-tuning.""", DATA2VECTEXT_START_DOCSTRING
 )
@@ -798,22 +740,22 @@ class Data2VecTextForCausalLM(Data2VecTextPreTrainedModel):
         if not config.is_decoder:
             logger.warning("If you want to use `Data2VecTextLMHeadModel` as a standalone, add `is_decoder=True.`")
 
-        # 初始化Data2VecText模型和LM头部
+        # 初始化 Data2VecTextModel，不包含池化层
         self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)
+        # 初始化语言模型头部 Data2VecTextLMHead
         self.lm_head = Data2VecTextLMHead(config)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输出嵌入
     def get_output_embeddings(self):
+        # 返回语言模型头部的解码器权重
         return self.lm_head.decoder
 
-    # 设置输出嵌入
     def set_output_embeddings(self, new_embeddings):
+        # 设置语言模型头部的解码器权重
         self.lm_head.decoder = new_embeddings
 
-    # 前向传播方法
     @add_start_docstrings_to_model_forward(DATA2VECTEXT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
     def forward(
@@ -832,72 +774,77 @@ class Data2VecTextForCausalLM(Data2VecTextPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 为生成准备输入数据的方法
+    ):
+        # 模型前向传播函数，详细参数说明参见 add_start_docstrings_to_model_forward 的注释
+        ...
+
     def prepare_inputs_for_generation(self, input_ids, past_key_values=None, attention_mask=None, **model_kwargs):
         input_shape = input_ids.shape
-        # 如果模型用作编码器-解码器模型的解码器，会动态创建解码器注意力掩码
+        # 如果没有提供注意力遮罩，创建全为1的遮罩
         if attention_mask is None:
             attention_mask = input_ids.new_ones(input_shape)
 
-        # 如果使用过去的键值，会截取输入的解码器id
+        # 如果传入了过去的键值对，裁剪输入的 input_ids
         if past_key_values is not None:
             past_length = past_key_values[0][0].shape[2]
 
-            # 一些生成方法已经只传递最后一个输入ID
+            # 一些生成方法可能只传递最后一个输入 ID
             if input_ids.shape[1] > past_length:
                 remove_prefix_length = past_length
             else:
-                # 默认使用旧的行为：保留最终ID
+                # 默认的旧行为：只保留最后一个 ID
                 remove_prefix_length = input_ids.shape[1] - 1
 
             input_ids = input_ids[:, remove_prefix_length:]
 
+        # 返回包含准备好的输入信息的字典
         return {"input_ids": input_ids, "attention_mask": attention_mask, "past_key_values": past_key_values}
-    # 重新排列缓存中的过去键和值，以适应beam搜索后的顺序
+    # 定义一个方法 `_reorder_cache`，用于重排序缓存中的过去键值
     def _reorder_cache(self, past_key_values, beam_idx):
-        # 初始化重新排列后的过去键和值
+        # 初始化一个空的元组用于存储重排序后的过去键值
         reordered_past = ()
-        # 遍历每一层的过去键和值
+        # 遍历传入的 past_key_values 中的每一层的过去状态
         for layer_past in past_key_values:
-            # 将过去键和值按照beam_idx中的索引重新排列，并添加到reordered_past中
+            # 对于每一层的过去状态，按照 beam_idx 给定的顺序进行索引选择，并转移到对应的设备上
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+                # 将重排序后的每一层的过去状态添加到 reordered_past 中
             )
-        # 返回重新排列后的过去键和值
+        # 返回重排序后的 past_key_values
         return reordered_past
-# 为 Data2VecTextForMaskedLM 类添加文档字符串，描述该类具有一个在其顶部的语言建模头部
+# 给 Data2VecTextForMaskedLM 类添加文档字符串，描述其作为一个在顶部带有语言建模头部的 data2vec 模型
+@add_start_docstrings("""data2vec Model with a `language modeling` head on top.""", DATA2VECTEXT_START_DOCSTRING)
 class Data2VecTextForMaskedLM(Data2VecTextPreTrainedModel):
-    # 定义需要共享参数的键值对
+    # 定义与权重绑定的关键字列表
     _tied_weights_keys = ["lm_head.decoder.weight", "lm_head.decoder.bias"]
 
-    # 初始化函数，接受 config 参数
     def __init__(self, config):
-        # 调用父类初始化函数
+        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 如果配置中指定为解码器，则发出警告信息
+        # 如果配置指定为解码器，发出警告提示
         if config.is_decoder:
             logger.warning(
                 "If you want to use `Data2VecTextForMaskedLM` make sure `config.is_decoder=False` for "
                 "bi-directional self-attention."
             )
 
-        # 创建 Data2VecTextModel 对象和 Data2VecTextLMHead 对象
+        # 初始化 data2vec_text 模型和 lm_head
         self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)
         self.lm_head = Data2VecTextLMHead(config)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 返回 lm_head.decoder 作为输出嵌入层
+    # 返回 lm_head 的解码器
     def get_output_embeddings(self):
         return self.lm_head.decoder
 
-    # 设置 lm_head.decoder 为新的嵌入层
+    # 设置 lm_head 的解码器的新嵌入
     def set_output_embeddings(self, new_embeddings):
         self.lm_head.decoder = new_embeddings
 
-    # 前向传播函数
+    # 为 forward 方法添加模型输入的文档字符串和代码示例的文档字符串
     @add_start_docstrings_to_model_forward(DATA2VECTEXT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -919,7 +866,7 @@ class Data2VecTextForMaskedLM(Data2VecTextPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, MaskedLMOutput]:
+        ) -> Union[Tuple, MaskedLMOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
@@ -928,10 +875,10 @@ class Data2VecTextForMaskedLM(Data2VecTextPreTrainedModel):
         kwargs (`Dict[str, any]`, optional, defaults to *{}*):
             Used to hide legacy arguments that have been deprecated.
         """
-        # 确定是否返回字典类型的输出结果，若未指定则使用配置中的设定
+        # 根据 return_dict 是否为 None，决定是否使用配置中的 use_return_dict 值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 将输入序列转换为向量表示
+        # 调用 data2vec_text 方法，生成预测输出
         outputs = self.data2vec_text(
             input_ids,
             attention_mask=attention_mask,
@@ -945,59 +892,60 @@ class Data2VecTextForMaskedLM(Data2VecTextPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 获取序列输出
+        # 获取预测输出的序列部分
         sequence_output = outputs[0]
-        # 预测下一个词的概率分布
+        # 将序列输出送入语言模型头部，生成预测分数
         prediction_scores = self.lm_head(sequence_output)
 
         masked_lm_loss = None
-        # 如果存在标签，则计算掩码语言模型损失
+        # 如果 labels 不为 None，则计算 masked language modeling 损失
         if labels is not None:
             # 使用交叉熵损失函数
             loss_fct = CrossEntropyLoss()
 
-            # 将标签转移到与预测得分相同的设备上
+            # 将 labels 移动到与 prediction_scores 相同的设备上
             labels = labels.to(prediction_scores.device)
-            # 计算掩码语言模型损失
+            # 计算 masked language modeling 损失
             masked_lm_loss = loss_fct(prediction_scores.view(-1, self.config.vocab_size), labels.view(-1))
 
-        # 如果不需要返回字典类型的输出结果，则组装输出元组
+        # 如果 return_dict 为 False，则返回一个包含预测分数和其他输出的元组
         if not return_dict:
             output = (prediction_scores,) + outputs[2:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
 
-        # 返回掩码语言模型的输出结果
+        # 如果 return_dict 为 True，则返回一个 MaskedLMOutput 对象，包含损失、预测分数、隐藏状态和注意力
         return MaskedLMOutput(
             loss=masked_lm_loss,
             logits=prediction_scores,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 从transformers.models.roberta.modeling_roberta.RobertaLMHead复制而来，将Roberta替换为Data2VecText
+# 从transformers.models.roberta.modeling_roberta.RobertaLMHead复制并将Roberta改为Data2VecText
 class Data2VecTextLMHead(nn.Module):
-    """用于数据2文本头部的遮盖语言建模。"""
+    """Data2VecText Head for masked language modeling."""
 
     def __init__(self, config):
         super().__init__()
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)  # 创建一个全连接层
-        self.layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)  # 创建一个LayerNormalization层
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
-        self.decoder = nn.Linear(config.hidden_size, config.vocab_size)  # 创建一个全连接层
-        self.bias = nn.Parameter(torch.zeros(config.vocab_size))  # 创建一个参数张量
-        self.decoder.bias = self.bias  # 设置解码器的偏置
+        # 线性层，将隐藏状态映射回词汇表大小
+        self.decoder = nn.Linear(config.hidden_size, config.vocab_size)
+        self.bias = nn.Parameter(torch.zeros(config.vocab_size))
+        self.decoder.bias = self.bias
 
     def forward(self, features, **kwargs):
-        x = self.dense(features)  # 将输入通过全连接层
-        x = gelu(x)  # 将输入应用GELU激活函数
-        x = self.layer_norm(x)  # 将输入通过LayerNormalization层
+        x = self.dense(features)  # 使用dense层进行线性变换
+        x = gelu(x)  # 应用GELU激活函数
+        x = self.layer_norm(x)  # 应用LayerNorm
 
-        # 通过偏置将其投影回词汇表的大小
+        # 使用decoder层将特征映射回词汇表大小
         x = self.decoder(x)
 
         return x
 
     def _tie_weights(self):
-        # 当这两个权重被断开连接时把它们捆绑在一起（在TPU上或者当偏置被重新调整大小时）
+        # 当这两个权重断开连接时（在TPU上或者当偏置被重新调整大小时），用于绑定这两个权重
         # 为了加速兼容性和不破坏向后兼容性
         if self.decoder.bias.device.type == "meta":
             self.decoder.bias = self.bias
@@ -1007,18 +955,18 @@ class Data2VecTextLMHead(nn.Module):
 
 @add_start_docstrings(
     """
-    用于顶部有序列分类/回归头部的Data2VecText模型转换器（在池化输出之上有一个线性层），例如用于GLUE任务。
+    Data2VecText模型变换器，顶部带有序列分类/回归头（汇总输出的线性层），例如用于GLUE任务。
     """,
     DATA2VECTEXT_START_DOCSTRING,
 )
 class Data2VecTextForSequenceClassification(Data2VecTextPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
-        self.num_labels = config.num_labels  # 设置标签数量
+        self.num_labels = config.num_labels
         self.config = config
 
-        self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)  # 创建Data2VecText模型
-        self.classifier = Data2VecTextClassificationHead(config)  # 创建Data2VecText的分类头部
+        self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)  # 初始化Data2VecText模型
+        self.classifier = Data2VecTextClassificationHead(config)  # 初始化Data2VecText分类头部
 
         # 初始化权重并应用最终处理
         self.post_init()
@@ -1048,11 +996,10 @@ class Data2VecTextForSequenceClassification(Data2VecTextPreTrainedModel):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        定义函数的输入参数和返回类型，该函数用于进行序列分类或回归任务的计算。labels参数表示用于计算损失的标签，如果config.num_labels为1，则进行回归任务计算（使用均方差损失），如果config.num_labels大于1，则进行分类任务计算（使用交叉熵损失）。
-
+        # 根据需要决定是否使用返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        初始化return_dict变量，检查return_dict是否为None，如果是则使用self.config.use_return_dict的值。
 
+        # 调用 data2vec_text 方法，获取模型的输出
         outputs = self.data2vec_text(
             input_ids,
             attention_mask=attention_mask,
@@ -1064,114 +1011,93 @@ class Data2VecTextForSequenceClassification(Data2VecTextPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        调用self.data2vec_text方法，对输入进行文本向量化。
-
+        # 从模型输出中获取序列输出
         sequence_output = outputs[0]
-        获取outputs的第一个元素，作为序列的输出。
-
+        # 将序列输出传入分类器获取 logits
         logits = self.classifier(sequence_output)
-        使用self.classifier方法对sequence_output进行分类得到预测结果logits。
 
+        # 初始化损失值
         loss = None
-        初始化loss变量，用于表示损失值，初始值为None。
-
+        # 如果提供了标签，进行损失计算
         if labels is not None:
-            判断labels是否为空，如果不为空进行下面的操作。
-
+            # 将标签移动到 logits 的设备上
             labels = labels.to(logits.device)
-            将labels转移到与logits相同的设备上，以便后续计算。
 
+            # 根据问题类型设置配置的问题类型
             if self.config.problem_type is None:
-                判断self.config.problem_type是否为空，如果为空进行下面的操作。
-
                 if self.num_labels == 1:
-                    判断类别数是否为1，如果是进行下面的操作。
-
                     self.config.problem_type = "regression"
-                    将问题类型设为回归任务。
-
                 elif self.num_labels > 1 and (labels.dtype == torch.long or labels.dtype == torch.int):
-                    判断类别数是否大于1且labels的数据类型是否为torch.long或torch.int，如果是进行下面的操作。
-
                     self.config.problem_type = "single_label_classification"
-                    将问题类型设为单标签分���任务。
-
                 else:
-                    进行下面的操作。
-
                     self.config.problem_type = "multi_label_classification"
-                    将问题类型设为多标签分类任务。
 
+            # 根据不同的问题类型选择损失函数
             if self.config.problem_type == "regression":
-                判断问题类型是否为回归任务，如果是进行下面的操作。
-
                 loss_fct = MSELoss()
-                初始化loss_fct为均方差损失函数。
-
                 if self.num_labels == 1:
-                    判断类别数是否为1，如果是进行下面的操作。
-
+                    # 对于单标签回归任务，计算 MSE 损失
                     loss = loss_fct(logits.squeeze(), labels.squeeze())
-                    计算损失值，使用logits.squeeze()和labels.squeeze()作为参数。
-
                 else:
-                    进行下面的操作。
-
+                    # 对于多标签回归任务，计算 MSE 损失
                     loss = loss_fct(logits, labels)
-                    计算损失值，使用logits和labels作为参数。
-
             elif self.config.problem_type == "single_label_classification":
-                判断问题类型是否为单标签分类任务，如果是进行下面的操作。
-
+                # 对于单标签分类任务，计算交叉熵损失
                 loss_fct = CrossEntropyLoss()
-                初始化loss_fct为交叉熵损失函数。
-
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-                计算损失值，使用logits.view(-1, self.num_labels)和labels.view(-1)作为参数。
-
             elif self.config.problem_type == "multi_label_classification":
-                判断问题类型是否为多标签分类任务，如果是进行下面的操作。
-
+                # 对于多标签分类任务，计算带 logits 的 BCE 损失
                 loss_fct = BCEWithLogitsLoss()
-                初始化loss_fct为带Logits的二元交叉熵损失函数。
-
                 loss = loss_fct(logits, labels)
-                计算损失值，使用logits和labels作为参数。
 
+        # 如果不要求返回字典形式的输出，则返回元组
         if not return_dict:
-            判断return_dict是否为False，如果是进行下面的操作。
-
             output = (logits,) + outputs[2:]
-            将logits和outputs的后两个元素组成元组output。
-
             return ((loss,) + output) if loss is not None else output
-            如果loss不为空，将loss和output组成元组返回，否则返回output。
 
+        # 返回带有损失、logits、隐藏状态和注意力的 SequenceClassifierOutput 对象
         return SequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-        返回SequenceClassifierOutput对象，包含损失值loss、预测结果logits、隐藏状态hidden_states和注意力attentions。
-# 使用多项选择分类头 (线性层 + softmax) 的 Data2VecText 模型，用于 RocStories/SWAG 任务
+# 添加文档字符串描述模型基础信息和任务应用场景
+@add_start_docstrings(
+    """
+    Data2VecText Model with a multiple choice classification head on top (a linear layer on top of the pooled output
+    and a softmax) e.g. for RocStories/SWAG tasks.
+    """,
+    DATA2VECTEXT_START_DOCSTRING,
+)
+# 定义一个新的类 Data2VecTextForMultipleChoice，继承自 Data2VecTextPreTrainedModel
 class Data2VecTextForMultipleChoice(Data2VecTextPreTrainedModel):
-    # 初始化函数，接受一个配置参数
+    # 初始化方法
     def __init__(self, config):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 创建 Data2VecText 模型
+        # 创建一个 Data2VecTextModel 对象
         self.data2vec_text = Data2VecTextModel(config)
-        # 创建一个丢弃层
+        # 添加一个 dropout 层，使用配置中的隐藏层dropout概率
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # 创建一个线性层，用于多项选择分类
+        # 添加一个线性层用于分类，输入大小为配置中的隐藏层大小，输出为1（用于二分类）
         self.classifier = nn.Linear(config.hidden_size, 1)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # forward 函数
+    # 添加文档字符串描述模型前向传播的输入参数
+    @add_start_docstrings_to_model_forward(
+        DATA2VECTEXT_INPUTS_DOCSTRING.format("batch_size, num_choices, sequence_length")
+    )
+    # 添加代码示例文档字符串，包含模型输出类型、检查点和配置信息
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=MultipleChoiceModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    # 前向传播方法定义
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1184,6 +1110,7 @@ class Data2VecTextForMultipleChoice(Data2VecTextPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        # 后续还有更多的参数，但这里不对其进行注释
     ):
     ) -> Union[Tuple, MultipleChoiceModelOutput]:
         r"""
@@ -1192,27 +1119,27 @@ class Data2VecTextForMultipleChoice(Data2VecTextPreTrainedModel):
             num_choices-1]` where `num_choices` is the size of the second dimension of the input tensors. (See
             `input_ids` above)
         """
-        # 根据 return_dict 参数判断是否使用返回字典
+        # 如果 return_dict 参数为 None，则使用 self.config.use_return_dict 决定是否返回字典格式的输出
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 获取 input_ids 张量的第二个维度，即选择个数
+        # 计算选择题数量，根据 input_ids 的第二维度确定，如果 input_ids 为 None，则根据 inputs_embeds 的第二维度确定
         num_choices = input_ids.shape[1] if input_ids is not None else inputs_embeds.shape[1]
 
-        # 根据是否存在 input_ids，确定是否需要展平 input_ids 张量
+        # 将 input_ids 展平为二维张量，用于模型输入，如果 input_ids 为 None，则 flat_input_ids 也为 None
         flat_input_ids = input_ids.view(-1, input_ids.size(-1)) if input_ids is not None else None
-        # 根据是否存在 position_ids，确定是否需要展平 position_ids 张量
+        # 将 position_ids 展平为二维张量，如果 position_ids 为 None，则 flat_position_ids 也为 None
         flat_position_ids = position_ids.view(-1, position_ids.size(-1)) if position_ids is not None else None
-        # 根据是否存在 token_type_ids，确定是否需要展平 token_type_ids 张量
+        # 将 token_type_ids 展平为二维张量，如果 token_type_ids 为 None，则 flat_token_type_ids 也为 None
         flat_token_type_ids = token_type_ids.view(-1, token_type_ids.size(-1)) if token_type_ids is not None else None
-        # 根据是否存在 attention_mask，确定是否需要展平 attention_mask 张量
+        # 将 attention_mask 展平为二维张量，如果 attention_mask 为 None，则 flat_attention_mask 也为 None
         flat_attention_mask = attention_mask.view(-1, attention_mask.size(-1)) if attention_mask is not None else None
-        # 根据是否存在 inputs_embeds，确定是否需要展平 inputs_embeds 张量
+        # 将 inputs_embeds 展平为三维张量，如果 inputs_embeds 为 None，则 flat_inputs_embeds 也为 None
         flat_inputs_embeds = (
             inputs_embeds.view(-1, inputs_embeds.size(-2), inputs_embeds.size(-1))
             if inputs_embeds is not None
             else None
         )
 
-        # 调用 data2vec_text 方法进行计算
+        # 调用模型的 data2vec_text 方法，传入展平后的张量作为参数，并获取模型输出
         outputs = self.data2vec_text(
             flat_input_ids,
             position_ids=flat_position_ids,
@@ -1224,34 +1151,31 @@ class Data2VecTextForMultipleChoice(Data2VecTextPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 获取计算后的 pooled_output
+        # 获取模型输出中的汇聚输出，即模型的汇总表示
         pooled_output = outputs[1]
 
-        # 对 pooled_output 应用 dropout
+        # 对汇聚输出应用 dropout 操作，以防止过拟合
         pooled_output = self.dropout(pooled_output)
-        # 通过 classifier 获取 logits
+        # 将汇聚输出传入分类器，计算分类 logits
         logits = self.classifier(pooled_output)
-        # 将 logits 重塑为形状为 (-1, num_choices) 的张量
+        # 重新调整 logits 的形状为 (batch_size, num_choices)
         reshaped_logits = logits.view(-1, num_choices)
 
+        # 初始化 loss 为 None
         loss = None
-        # 判断是否存在 labels
+        # 如果 labels 不为 None，则计算交叉熵损失
         if labels is not None:
-            # 定义 CrossEntropyLoss 作为损失函数
             loss_fct = CrossEntropyLoss()
-
-            # 将 labels 移到 reshaped_logits 设备上
+            # 将 labels 转移到 reshaped_logits 的设备上，计算交叉熵损失
             labels = labels.to(reshaped_logits.device)
-            # 计算损失值
             loss = loss_fct(reshaped_logits, labels)
 
-        # 判断是否使用返回字典
+        # 如果 return_dict 为 False，则返回一个元组
         if not return_dict:
-            # 如果不使用返回字典，则将输出重新组合，并返回
             output = (reshaped_logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 如果使用返回字典，则返回 MultipleChoiceModelOutput 对象
+        # 如果 return_dict 为 True，则返回一个 MultipleChoiceModelOutput 对象
         return MultipleChoiceModelOutput(
             loss=loss,
             logits=reshaped_logits,
@@ -1266,23 +1190,16 @@ class Data2VecTextForMultipleChoice(Data2VecTextPreTrainedModel):
     DATA2VECTEXT_START_DOCSTRING,
 )
 class Data2VecTextForTokenClassification(Data2VecTextPreTrainedModel):
-    # 初始化 Token Classification 模型，继承自 Data2VecTextPreTrainedModel
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 获取标签类别数量
-        self.num_labels = config.num_labels
+        self.num_labels = config.num_labels  # 从配置中获取标签数目
 
-        # 实例化 Data2VecTextModel 模型，不添加池化层
-        self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)
-        # 获取分类器 dropout 参数，如果为空则使用隐藏层 dropout 参数
+        self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)  # 初始化Data2VecText模型，不添加池化层
         classifier_dropout = (
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
-        # 定义 dropout 层
-        self.dropout = nn.Dropout(classifier_dropout)
-        # 线性层，用于分类
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+        self.dropout = nn.Dropout(classifier_dropout)  # 使用分类器的dropout或者隐藏层的dropout概率
+        self.classifier = nn.Linear(config.hidden_size, config.num_labels)  # 线性层，将隐藏状态映射到标签数目
 
         # 初始化权重并应用最终处理
         self.post_init()
@@ -1293,7 +1210,6 @@ class Data2VecTextForTokenClassification(Data2VecTextPreTrainedModel):
         output_type=TokenClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 模型前向传播方法
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -1306,24 +1222,36 @@ class Data2VecTextForTokenClassification(Data2VecTextPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 此函数定义用于计算token分类任务的前向计算和损失
-    def forward(
-        self,
-        input_ids=None,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        inputs_embeds=None,
-        labels=None,
-        output_attentions=None,
-        output_hidden_states=None,
-        return_dict=None,
+    ):
+        """
+        Perform a forward pass through the model with optional inputs and outputs.
+
+        Args:
+            input_ids (Optional[torch.LongTensor]): The input tensor of token indices.
+            attention_mask (Optional[torch.FloatTensor]): The attention mask tensor.
+            token_type_ids (Optional[torch.LongTensor]): The token type IDs tensor.
+            position_ids (Optional[torch.LongTensor]): The position IDs tensor.
+            head_mask (Optional[torch.FloatTensor]): The head mask tensor.
+            inputs_embeds (Optional[torch.FloatTensor]): The embedded input tensors.
+            labels (Optional[torch.LongTensor]): The tensor of labels for classification.
+            output_attentions (Optional[bool]): Whether to output attentions.
+            output_hidden_states (Optional[bool]): Whether to output hidden states.
+            return_dict (Optional[bool]): Whether to return outputs as a dictionary.
+
+        Returns:
+            TokenClassifierOutput: Output object with logits and optional additional outputs.
+        """
+        # 实现模型的前向传播逻辑，生成对应的输出对象
+        pass  # placeholder, 实际逻辑应填充在这里
     ) -> Union[Tuple, TokenClassifierOutput]:
-        # 根据输入参数 return_dict 确定是否使用 return_dict 机制，如果为 None 则使用配置文件中的设置
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
+        """
+        # 如果 return_dict 为 None，则使用 self.config.use_return_dict 决定返回值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        
-        # 调用 data2vec_text 函数进行前向计算，获取输出结果
+
+        # 将输入传递给 data2vec_text 方法，获取输出结果
         outputs = self.data2vec_text(
             input_ids,
             attention_mask=attention_mask,
@@ -1335,77 +1263,87 @@ class Data2VecTextForTokenClassification(Data2VecTextPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        
-        # 取出序列输出结果
+
+        # 从输出中获取序列输出
         sequence_output = outputs[0]
-        
-        # 对序列输出进行 dropout 操作
+
+        # 对序列输出应用 dropout
         sequence_output = self.dropout(sequence_output)
         
-        # 将 dropout 后的序列输出送入分类器得到 logits
+        # 将 dropout 后的输出传递给分类器，得到 logits
         logits = self.classifier(sequence_output)
-        
-        # 如果提供了 labels，则计算分类损失
+
+        # 初始化损失为 None
         loss = None
+        
+        # 如果提供了标签，则计算交叉熵损失
         if labels is not None:
             loss_fct = CrossEntropyLoss()
+
+            # 将标签转移到 logits 的设备上，并计算损失
             labels = labels.to(logits.device)
             loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
-        
-        # 根据 return_dict 机制返回结果
+
+        # 如果 return_dict 为 False，则构造输出元组
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-        
+
+        # 如果 return_dict 为 True，则构造 TokenClassifierOutput 对象并返回
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-# 从transformers.models.roberta.modeling_roberta.RobertaClassificationHead复制并改名为Data2VecTextClassificationHead
+# 从transformers.models.roberta.modeling_roberta.RobertaClassificationHead复制并修改为Data2VecTextClassificationHead
 class Data2VecTextClassificationHead(nn.Module):
-    """用于句子级分类任务的头部。"""
+    """用于句子级分类任务的头部模块。"""
 
     def __init__(self, config):
         super().__init__()
-        # 创建一个全连接层，将输入的特征维度映射到隐藏层维度
+        # 全连接层，输入和输出大小为config.hidden_size
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        # 计算分类器的丢弃率，如果没有指定，则使用隐藏层丢弃率
+        # 分类器的dropout率，如果未指定则使用config.hidden_dropout_prob
         classifier_dropout = (
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
+        # Dropout层
         self.dropout = nn.Dropout(classifier_dropout)
-        # 创建一个全连接层，将隐藏层维度映射到类别数量维度
+        # 输出投影层，将hidden_size映射到num_labels
         self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
 
     def forward(self, features, **kwargs):
-        # 取出features中每个句子的第一个token对应的特征作为输入
-        x = features[:, 0, :]  # 拿到<s> token（等同于[CLS]）
+        # 取features的第一个token（等同于[CLS]）
+        x = features[:, 0, :]
+        # 应用dropout
         x = self.dropout(x)
-        # 将输入特征映射到隐藏层维度
+        # 全连接层
         x = self.dense(x)
+        # 使用tanh激活函数
         x = torch.tanh(x)
+        # 再次应用dropout
         x = self.dropout(x)
-        # 将隐藏层映射到类别数量维度
+        # 输出投影层
         x = self.out_proj(x)
         return x
 
 
 @add_start_docstrings(
     """
-    Data2VecText模型的一个span分类头部，用于提取式问答任务（例如SQuAD），在隐藏状态输出的基础上计算`span start logits`和`span end logits`。
+    Data2VecText模型的问题回答任务头部，用于像SQuAD这样的抽取式问答任务（在隐藏状态输出之上使用线性层来计算“起始位置logits”和“结束位置logits”）。
     """,
     DATA2VECTEXT_START_DOCSTRING,
 )
 class Data2VecTextForQuestionAnswering(Data2VecTextPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
+        # 标签数量
         self.num_labels = config.num_labels
 
-        # 创建一个Data2VecTextModel，不添加池化层
+        # Data2VecText模型的实例，不包含池化层
         self.data2vec_text = Data2VecTextModel(config, add_pooling_layer=False)
-        # 创建一个全连接层，将隐藏层维度映射到类别数量维度
+        # 问题回答输出层，全连接层将hidden_size映射到num_labels
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
         # 初始化权重并应用最终处理
@@ -1430,96 +1368,95 @@ class Data2VecTextForQuestionAnswering(Data2VecTextPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    def forward(
-            self,
-            input_ids: torch.LongTensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            token_type_ids: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.Tensor] = None,
-            head_mask: Optional[torch.Tensor] = None,
-            inputs_embeds: Optional[torch.Tensor] = None,
-            start_positions: Optional[torch.LongTensor] = None,
-            end_positions: Optional[torch.LongTensor] = None,
-            return_dict: Optional[bool] = None,
-            output_attentions: Optional[bool] = None,
-            output_hidden_states: Optional[bool] = None,
         ) -> Union[Tuple, QuestionAnsweringModelOutput]:
-            r"""
-            start_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
-                Labels for position (index) of the start of the labelled span for computing the token classification loss.
-                Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
-                are not taken into account for computing the loss.
-            end_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
-                Labels for position (index) of the end of the labelled span for computing the token classification loss.
-                Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
-                are not taken into account for computing the loss.
-            """
-            # 是否返回字典形式的结果，如果未指定，则使用配置中的默认设置
-            return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-            # 将输入数据传入模型中进行前向传播
-            outputs = self.data2vec_text(
-                input_ids,
-                attention_mask=attention_mask,
-                token_type_ids=token_type_ids,
-                position_ids=position_ids,
-                head_mask=head_mask,
-                inputs_embeds=inputs_embeds,
-                output_attentions=output_attentions,
-                output_hidden_states=output_hidden_states,
-                return_dict=return_dict,
-            )
-    
-            # 从模型输出中获取序列输出
-            sequence_output = outputs[0]
-    
-            # 通过序列输出计算答案开始和结束的对数概率
-            logits = self.qa_outputs(sequence_output)
-            start_logits, end_logits = logits.split(1, dim=-1)
-            start_logits = start_logits.squeeze(-1).contiguous()
-            end_logits = end_logits.squeeze(-1).contiguous()
-    
-            total_loss = None
-            # 如果提供了答案的开始和结束位置，则计算损失
-            if start_positions is not None and end_positions is not None:
-                # 如果是多 GPU 运行，添加一个维度
-                if len(start_positions.size()) > 1:
-                    start_positions = start_positions.squeeze(-1)
-                if len(end_positions.size()) > 1:
-                    end_positions = end_positions.squeeze(-1)
-                # 有时开始/结束位置超出了模型输入，这些位置被忽略
-                ignored_index = start_logits.size(1)
-                start_positions = start_positions.clamp(0, ignored_index)
-                end_positions = end_positions.clamp(0, ignored_index)
-    
-                # 定义交叉熵损失函数，忽略指定的索引位置
-                loss_fct = CrossEntropyLoss(ignore_index=ignored_index)
-                start_loss = loss_fct(start_logits, start_positions)
-                end_loss = loss_fct(end_logits, end_positions)
-                # 计算总损失
-                total_loss = (start_loss + end_loss) / 2
-    
-            # 如果不返回字典形式的结果，则返回损失和其他输出
-            if not return_dict:
-                output = (start_logits, end_logits) + outputs[2:]
-                return ((total_loss,) + output) if total_loss is not None else output
-    
-            # 返回 QuestionAnsweringModelOutput 类的实例，其中包含损失、答案开始和结束的对数概率，以及其他输出
-            return QuestionAnsweringModelOutput(
-                loss=total_loss,
-                start_logits=start_logits,
-                end_logits=end_logits,
-                hidden_states=outputs.hidden_states,
-                attentions=outputs.attentions,
-            )
-# 从输入的 input_ids 中创建位置 ID。非填充符号被替换为它们的位置数字。位置数字从 padding_idx+1 开始。填充符号被忽略。这是修改自 fairseq 的 `utils.make_positions`。
+        r"""
+        start_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the start of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
+        end_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the end of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
+        """
+        # 初始化 return_dict，如果未提供则使用配置中的默认设置
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
+        # 调用 data2vec_text 方法，将输入数据转换为向量表示
+        outputs = self.data2vec_text(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
+
+        # 从输出中获取序列输出（通常是模型的最后一层隐藏状态）
+        sequence_output = outputs[0]
+
+        # 将序列输出传递给 qa_outputs 模型，获得问题回答的 logits
+        logits = self.qa_outputs(sequence_output)
+
+        # 将 logits 拆分为开始和结束位置的预测 logits
+        start_logits, end_logits = logits.split(1, dim=-1)
+        start_logits = start_logits.squeeze(-1).contiguous()  # 去除多余的维度并保持连续性
+        end_logits = end_logits.squeeze(-1).contiguous()
+
+        total_loss = None
+        if start_positions is not None and end_positions is not None:
+            # 如果 start_positions 或 end_positions 的维度大于 1，则去除多余的维度
+            if len(start_positions.size()) > 1:
+                start_positions = start_positions.squeeze(-1)
+            if len(end_positions.size()) > 1:
+                end_positions = end_positions.squeeze(-1)
+            
+            # 忽略超出模型输入范围的 start/end positions
+            ignored_index = start_logits.size(1)
+            start_positions = start_positions.clamp(0, ignored_index)
+            end_positions = end_positions.clamp(0, ignored_index)
+
+            # 定义交叉熵损失函数，忽略指定的 ignore_index
+            loss_fct = CrossEntropyLoss(ignore_index=ignored_index)
+            start_loss = loss_fct(start_logits, start_positions)
+            end_loss = loss_fct(end_logits, end_positions)
+
+            # 计算开始位置和结束位置损失的平均值作为总损失
+            total_loss = (start_loss + end_loss) / 2
+
+        if not return_dict:
+            # 如果不要求返回字典，则返回 start_logits, end_logits 和其它可能的输出
+            output = (start_logits, end_logits) + outputs[2:]
+            return ((total_loss,) + output) if total_loss is not None else output
+
+        # 返回一个 QuestionAnsweringModelOutput 对象，包含损失、开始和结束位置的 logits，以及其它可能的输出
+        return QuestionAnsweringModelOutput(
+            loss=total_loss,
+            start_logits=start_logits,
+            end_logits=end_logits,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
 def create_position_ids_from_input_ids(input_ids, padding_idx, past_key_values_length=0):
-    # 连串的类型转换和转型在这里被精心平衡，以便同时适用于 ONNX 导出和 XLA。
-    # 根据 input_ids 中是否是填充符号创建一个遮罩 mask
+    """
+    Replace non-padding symbols with their position numbers. Position numbers begin at padding_idx+1. Padding symbols
+    are ignored. This is modified from fairseq's `utils.make_positions`.
+
+    Args:
+        input_ids: torch.Tensor, input tensor containing token IDs
+        padding_idx: int, index of padding token
+        past_key_values_length: int, optional, length of past key values
+
+    Returns:
+        torch.Tensor, tensor of position IDs corresponding to input_ids
+    """
+    # 创建一个掩码，标记非填充符号的位置为1，填充符号位置为0
     mask = input_ids.ne(padding_idx).int()
-    # 在遮罩上累加，得到递增的位置索引，然后再加上过去的键值长度，最后再乘以遮罩
+    # 根据掩码累积计数，并添加过去键值长度，然后乘以掩码，以得到增量索引
     incremental_indices = (torch.cumsum(mask, dim=1).type_as(mask) + past_key_values_length) * mask
-    # 得到位置索引后，加上 padding_idx 即可得到最终位置 ID
+    # 将增量索引转换为长整型，并加上填充索引，得到最终的位置 ID
     return incremental_indices.long() + padding_idx
 ```

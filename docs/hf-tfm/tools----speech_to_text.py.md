@@ -1,59 +1,57 @@
-# `.\transformers\tools\speech_to_text.py`
+# `.\tools\speech_to_text.py`
 
-```py
+```
 #!/usr/bin/env python
-# 声明 Python 脚本的解释器为在环境变量中搜索的第一个 Python 解释器
-# 设定编码格式为 utf-8
+# coding=utf-8
 
-# 版权声明
-# 版权所有2023年 HuggingFace Inc. 团队保留所有权利
-# 根据 Apache 许可证 2.0 版本（“许可证”）许可
-# 您只能在符合许可证的情况下使用此文件
-# 您可以在以下网址获得许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面协议同意，否则不得分发软件
-# 依"原样"的方式分发，没有任何形式的担保或条件，无论是明示的还是暗示的。
-# 请查看许可证以了解有关特定语言和限制的详细信息
+# Copyright 2023 The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+# 导入必要的模块和类
 from ..models.whisper import WhisperForConditionalGeneration, WhisperProcessor
-# 从上层目录中的models.whisper模块导入WhisperForConditionalGeneration和WhisperProcessor类
 from .base import PipelineTool
-# 从当前目录中的base模块导入PipelineTool类
 
-
+# 定义一个继承自PipelineTool的子类SpeechToTextTool
 class SpeechToTextTool(PipelineTool):
-    # 定义SpeechToTextTool类，继承自PipelineTool类
+    # 默认的模型检查点路径
     default_checkpoint = "openai/whisper-base"
-    # 默认的检查点为"openai/whisper-base"
+    # 工具的描述信息
     description = (
         "This is a tool that transcribes an audio into text. It takes an input named `audio` and returns the "
         "transcribed text."
     )
-    # 工具的描述信息，将音频转录为文本，以 `audio` 为输入并返回转录的文本
+    # 工具的名称
     name = "transcriber"
-    # 工具的名称为"transcriber"
+    # 预处理器类，用于处理输入数据
     pre_processor_class = WhisperProcessor
-    # 前处理器类为WhisperProcessor类
+    # 模型类，用于生成输出
     model_class = WhisperForConditionalGeneration
-    # 模型类为WhisperForConditionalGeneration类
 
+    # 定义输入的名称列表
     inputs = ["audio"]
-    # 输入要求包含音频
+    # 定义输出的名称列表
     outputs = ["text"]
-    # 输出结果为文本
 
+    # 编码方法，将输入的音频转换成模型可以处理的张量形式
     def encode(self, audio):
-        # 定义encode方法，接收参数audio
         return self.pre_processor(audio, return_tensors="pt").input_features
-        # 使用pre_processor的方法处理音频，并返回input_features
 
+    # 前向传播方法，使用模型生成输出
     def forward(self, inputs):
-        # 定义forward方法，接收参数inputs
         return self.model.generate(inputs=inputs)
-        # 使用模型生成结果并返回
 
+    # 解码方法，将模型输出的张量转换成文本形式
     def decode(self, outputs):
-        # 定义decode方法，接收参数outputs
         return self.pre_processor.batch_decode(outputs, skip_special_tokens=True)[0]
-        # 使用pre_processor的batch_decode方法解码输出，跳过特殊标记后返回结果的第一个元素
 ```

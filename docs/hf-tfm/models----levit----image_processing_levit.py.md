@@ -1,19 +1,20 @@
-# `.\transformers\models\levit\image_processing_levit.py`
+# `.\models\levit\image_processing_levit.py`
 
-```py
-# 定义了 LeViT 的图像处理器类
-from typing import Dict, Iterable, Optional, Union  # 引入需要的类型提示模块
+```
+# 引入必要的库和模块
+from typing import Dict, Iterable, Optional, Union
 
-import numpy as np  # 引入 numpy 模块
+import numpy as np  # 导入 NumPy 库
 
-from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict  # 引入需要的图像处理工具模块
+# 导入图像处理相关的工具函数和类
+from ...image_processing_utils import BaseImageProcessor, BatchFeature, get_size_dict
 from ...image_transforms import (
     get_resize_output_image_size,
     resize,
     to_channel_dimension_format,
-)  # 引入图像变换相关函数
+)
 from ...image_utils import (
-    IMAGENET_DEFAULT_MEAN,
+    IMAGENET_DEFAULT_MEAN,  # 导入图像处理的常量，如默认均值和标准差
     IMAGENET_DEFAULT_STD,
     ChannelDimension,
     ImageInput,
@@ -23,74 +24,69 @@ from ...image_utils import (
     make_list_of_images,
     to_numpy_array,
     valid_images,
-)  # 引入图像相关工具
-from ...utils import TensorType, logging  # 引入需要的工具模块
+    validate_kwargs,
+    validate_preprocess_arguments,
+)
+from ...utils import TensorType, logging  # 导入工具函数和日志记录器
 
-logger = logging.get_logger(__name__) # 获取日志记录器
-    # 定义函数参数:
-    # 是否调整输入图像的最短边以匹配指定大小。可以被`preprocess`方法中的`do_resize`参数覆盖。
-    # 默认为`True`
-    do_resize (`bool`, *optional*, defaults to `True`):
-    
-    # 调整大小后的输出图像大小。如果大小是一个具有键"width"和"height"的字典，那么图像将被调整大小为`(size["height"], size["width"])`。
-    # 如果大小是具有键"shortest_edge"的字典，则最短边值`c`将被重新缩放为`int(c * (256/224))`。
-    # 图像的较小边将与此值匹配，即，如果height>width，则图像将被缩放为`(size["shortest_egde"] * height / width, size["shortest_egde"])`。
-    # 可被`preprocess`方法中的`size`参数覆盖。
-    size (`Dict[str, int]`, *optional*, defaults to `{"shortest_edge": 224}`):
-    
-    # 如果调整图像大小，则使用的重采样滤波器。可以被`preprocess`方法中的`resample`参数覆盖。
-    resample (`PILImageResampling`, *optional*, defaults to `Resampling.BICUBIC`):
-    
-    # 是否居中裁剪输入为`(crop_size["height"], crop_size["width"])`。可以被`preprocess`方法中的`do_center_crop`参数覆盖。
-    do_center_crop (`bool`, *optional*, defaults to `True`):
-    
-    # `center_crop`之后的期望图像大小。可以被`preprocess`方法中的`crop_size`参数覆盖。
-    crop_size (`Dict`, *optional*, defaults to `{"height": 224, "width": 224}`):
-    
-    # 控制是否通过指定的缩放因子`rescale_factor`对图像进行重新缩放。可以被`preprocess`方法中的`do_rescale`参数覆盖。
-    do_rescale (`bool`, *optional*, defaults to `True`):
-    
-    # 如果重新缩放图像，则使用的缩放因子。可以被`preprocess`方法中的`rescale_factor`参数覆盖。
-    rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
-    
-    # 控制是否对图像进行标准化。可以被`preprocess`方法中的`do_normalize`参数覆盖。
-    do_normalize (`bool`, *optional*, defaults to `True`):
-    
-    # 如果对图像进行标准化，则使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以被`preprocess`方法中的`image_mean`参数覆盖。
-    image_mean (`List[int]`, *optional*, defaults to `[0.485, 0.456, 0.406]`):
-    
-    # 如果对图像进行标准化，则使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以被`preprocess`方法中的`image_std`参数覆盖。
-    image_std (`List[int]`, *optional*, defaults to `[0.229, 0.224, 0.225]`):
-    
-    # 模型输入的名称列表
+# 获取当前模块的日志记录器
+logger = logging.get_logger(__name__)
+
+
+class LevitImageProcessor(BaseImageProcessor):
+    r"""
+    Constructs a LeViT image processor.
+    """
+    Args:
+        do_resize (`bool`, *optional*, defaults to `True`):
+            是否调整输入图像的最短边至 int(256/224 * size)，可以在 `preprocess` 方法中的 `do_resize` 参数中覆盖。
+        size (`Dict[str, int]`, *optional*, defaults to `{"shortest_edge": 224}`):
+            调整后的输出图像尺寸。如果 `size` 是一个包含 "width" 和 "height" 键的字典，图像将被调整至 `(size["height"], size["width"])`。如果 `size` 是一个包含 "shortest_edge" 键的字典，最短边的值 `c` 将被重新缩放为 `int(c * (256/224))`。图像的较小边将被匹配到此值，例如，如果 height > width，则图像将被缩放至 `(size["shortest_edge"] * height / width, size["shortest_edge"])`。可以在 `preprocess` 方法中的 `size` 参数中覆盖。
+        resample (`PILImageResampling`, *optional*, defaults to `Resampling.BICUBIC`):
+            如果调整图像大小，使用的重采样滤波器。可以在 `preprocess` 方法中的 `resample` 参数中覆盖。
+        do_center_crop (`bool`, *optional*, defaults to `True`):
+            是否对输入图像进行中心裁剪至 `(crop_size["height"], crop_size["width"])`。可以在 `preprocess` 方法中的 `do_center_crop` 参数中覆盖。
+        crop_size (`Dict`, *optional*, defaults to `{"height": 224, "width": 224}`):
+            `center_crop` 后的期望图像尺寸。可以在 `preprocess` 方法中的 `crop_size` 参数中覆盖。
+        do_rescale (`bool`, *optional*, defaults to `True`):
+            控制是否按指定的比例因子 `rescale_factor` 重新缩放图像。可以在 `preprocess` 方法中的 `do_rescale` 参数中覆盖。
+        rescale_factor (`int` or `float`, *optional*, defaults to `1/255`):
+            如果重新缩放图像，要使用的缩放因子。可以在 `preprocess` 方法中的 `rescale_factor` 参数中覆盖。
+        do_normalize (`bool`, *optional*, defaults to `True`):
+            控制是否对图像进行归一化。可以在 `preprocess` 方法中的 `do_normalize` 参数中覆盖。
+        image_mean (`List[int]`, *optional*, defaults to `[0.485, 0.456, 0.406]`):
+            如果归一化图像，要使用的均值。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以在 `preprocess` 方法中的 `image_mean` 参数中覆盖。
+        image_std (`List[int]`, *optional*, defaults to `[0.229, 0.224, 0.225]`):
+            如果归一化图像，要使用的标准差。这是一个浮点数或与图像通道数相同长度的浮点数列表。可以在 `preprocess` 方法中的 `image_std` 参数中覆盖。
+    """
+
     model_input_names = ["pixel_values"]
-    # 初始化方法，用于初始化图像预处理器对象
     def __init__(
         self,
-        do_resize: bool = True,  # 是否执行调整大小操作，默认为True
-        size: Dict[str, int] = None,  # 图像大小的字典，默认为None
-        resample: PILImageResampling = PILImageResampling.BICUBIC,  # 重采样方法，默认为双三次插值
-        do_center_crop: bool = True,  # 是否执行中心裁剪，默认为True
-        crop_size: Dict[str, int] = None,  # 裁剪大小的字典，默认为None
-        do_rescale: bool = True,  # 是否执行重新缩放，默认为True
-        rescale_factor: Union[int, float] = 1 / 255,  # 重新缩放因子，默认为1/255
-        do_normalize: bool = True,  # 是否执行归一化，默认为True
-        image_mean: Optional[Union[float, Iterable[float]]] = IMAGENET_DEFAULT_MEAN,  # 图像均值，默认为ImageNet的均值
-        image_std: Optional[Union[float, Iterable[float]]] = IMAGENET_DEFAULT_STD,  # 图像标准差，默认为ImageNet的标准差
-        **kwargs,  # 其他参数
+        do_resize: bool = True,
+        size: Dict[str, int] = None,
+        resample: PILImageResampling = PILImageResampling.BICUBIC,
+        do_center_crop: bool = True,
+        crop_size: Dict[str, int] = None,
+        do_rescale: bool = True,
+        rescale_factor: Union[int, float] = 1 / 255,
+        do_normalize: bool = True,
+        image_mean: Optional[Union[float, Iterable[float]]] = IMAGENET_DEFAULT_MEAN,
+        image_std: Optional[Union[float, Iterable[float]]] = IMAGENET_DEFAULT_STD,
+        **kwargs,
     ) -> None:
         # 调用父类初始化方法
         super().__init__(**kwargs)
-        # 如果size为None，则将size设置为{"shortest_edge": 224}
+        # 如果 size 参数为 None，则设置默认的最短边为 224
         size = size if size is not None else {"shortest_edge": 224}
-        # 获取调整后的size字典
+        # 根据给定的 size 参数获取大小的字典，确保不会默认为正方形
         size = get_size_dict(size, default_to_square=False)
-        # 如果crop_size为None，则将crop_size设置为{"height": 224, "width": 224}
+        # 如果 crop_size 参数为 None，则设置默认的高度和宽度均为 224
         crop_size = crop_size if crop_size is not None else {"height": 224, "width": 224}
-        # 获取调整后的crop_size字典
+        # 根据给定的 crop_size 参数获取裁剪大小的字典
         crop_size = get_size_dict(crop_size, param_name="crop_size")
-    
-        # 初始化各属性
+
+        # 初始化类成员变量
         self.do_resize = do_resize
         self.size = size
         self.resample = resample
@@ -101,16 +97,23 @@ logger = logging.get_logger(__name__) # 获取日志记录器
         self.do_normalize = do_normalize
         self.image_mean = image_mean if image_mean is not None else IMAGENET_DEFAULT_MEAN
         self.image_std = image_std if image_std is not None else IMAGENET_DEFAULT_STD
-    
-    # 图像调整大小方法
-    def resize(
-        self,
-        image: np.ndarray,  # 输入图像的numpy数组表示
-        size: Dict[str, int],  # 调整后的图像大小字典
-        resample: PILImageResampling = PILImageResampling.BICUBIC,  # 重采样方法，默认为双三次插值
-        data_format: Optional[Union[str, ChannelDimension]] = None,  # 数据格式，默认为None
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据格式，默认为None
-        **kwargs,  # 其他参数
+        # 设置有效的处理器关键字列表，包括图像处理相关的参数和数据格式参数
+        self._valid_processor_keys = [
+            "images",
+            "do_resize",
+            "size",
+            "resample",
+            "do_center_crop",
+            "crop_size",
+            "do_rescale",
+            "rescale_factor",
+            "do_normalize",
+            "image_mean",
+            "image_std",
+            "return_tensors",
+            "data_format",
+            "input_data_format",
+        ]
     ) -> np.ndarray:
         """
         Resize an image.
@@ -131,31 +134,34 @@ logger = logging.get_logger(__name__) # 获取日志记录器
                 `c` is rescaled to int(`c` * (256/224)). The smaller edge of the image will be matched to this value
                 i.e, if height > width, then image will be rescaled to (size * height / width, size).
             resample (`PILImageResampling`, *optional*, defaults to `PILImageResampling.BICUBIC`):
-                Resampling filter to use when resiizing the image.
+                Resampling filter to use when resizing the image.
             data_format (`str` or `ChannelDimension`, *optional*):
                 The channel dimension format of the image. If not provided, it will be the same as the input image.
             input_data_format (`ChannelDimension` or `str`, *optional*):
                 The channel dimension format of the input image. If not provided, it will be inferred.
         """
-        # 获取尺寸字典，不默认使用正方形
+        # Determine the target size dictionary based on input size parameters
         size_dict = get_size_dict(size, default_to_square=False)
-        # 如果尺寸字典中含有键 "shortest_edge"
+
+        # Check if 'shortest_edge' is specified in size dictionary
         if "shortest_edge" in size:
-            # 计算最短边的大小
+            # Calculate the length of the shortest edge based on the scaling factor (256/224)
             shortest_edge = int((256 / 224) * size["shortest_edge"])
-            # 获取调整后的图像大小
+            # Determine the output size after resizing based on the calculated shortest edge
             output_size = get_resize_output_image_size(
                 image, size=shortest_edge, default_to_square=False, input_data_format=input_data_format
             )
-            # 将调整后的大小组成尺寸字典
+            # Update size_dict to reflect the height and width after resizing
             size_dict = {"height": output_size[0], "width": output_size[1]}
-        # 如果尺寸字典中不含有 "height" 或 "width" 键
+
+        # Ensure that the size_dict contains both 'height' and 'width' keys
         if "height" not in size_dict or "width" not in size_dict:
-            # 抛出值错误异常
+            # Raise an error if the size_dict does not have the required keys
             raise ValueError(
                 f"Size dict must have keys 'height' and 'width' or 'shortest_edge'. Got {size_dict.keys()}"
             )
-        # 返回调整大小后的图像
+
+        # Resize the image to the specified dimensions using the resize function
         return resize(
             image,
             size=(size_dict["height"], size_dict["width"]),
@@ -164,37 +170,22 @@ logger = logging.get_logger(__name__) # 获取日志记录器
             input_data_format=input_data_format,
             **kwargs,
         )
-    # 图像预处理函数，对输入的图像进行预处理
+    # 定义一个预处理方法，用于处理图像数据
     def preprocess(
-        # 输入的图像数据，可以是单个图像或图像列表
         self,
-        images: ImageInput,
-        # 是否进行调整图像大小的操作
-        do_resize: Optional[bool] = None,
-        # 调整图像大小的目标尺寸
-        size: Optional[Dict[str, int]] = None,
-        # 重新采样方法
-        resample: PILImageResampling = None,
-        # 是否进行中心裁剪操作
-        do_center_crop: Optional[bool] = None,
-        # 中心裁剪的目标尺寸
-        crop_size: Optional[Dict[str, int]] = None,
-        # 是否进行图像尺度调整
-        do_rescale: Optional[bool] = None,
-        # 图像尺度调整的尺度因子
-        rescale_factor: Optional[float] = None,
-        # 是否进行图像归一化
-        do_normalize: Optional[bool] = None,
-        # 图像归一化的均值
-        image_mean: Optional[Union[float, Iterable[float]]] = None,
-        # 图像归一化的标准差
-        image_std: Optional[Union[float, Iterable[float]]] = None,
-        # 返回的数据类型，如张量
-        return_tensors: Optional[TensorType] = None,
-        # 数据格式，通道维度的顺序
-        data_format: ChannelDimension = ChannelDimension.FIRST,
-        # 输入数据的格式
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        # 其他参数
-        **kwargs,
+        images: ImageInput,  # 图像输入，可以是单张图像或图像列表
+        do_resize: Optional[bool] = None,  # 是否调整大小的标志，默认为None
+        size: Optional[Dict[str, int]] = None,  # 调整大小的目标尺寸，字典形式，包含宽和高
+        resample: PILImageResampling = None,  # 调整大小时使用的重采样方法，默认为None
+        do_center_crop: Optional[bool] = None,  # 是否进行中心裁剪的标志，默认为None
+        crop_size: Optional[Dict[str, int]] = None,  # 中心裁剪的目标尺寸，字典形式，包含宽和高
+        do_rescale: Optional[bool] = None,  # 是否进行重新缩放的标志，默认为None
+        rescale_factor: Optional[float] = None,  # 重新缩放的因子，默认为None
+        do_normalize: Optional[bool] = None,  # 是否进行归一化的标志，默认为None
+        image_mean: Optional[Union[float, Iterable[float]]] = None,  # 图像归一化的均值，默认为None
+        image_std: Optional[Union[float, Iterable[float]]] = None,  # 图像归一化的标准差，默认为None
+        return_tensors: Optional[TensorType] = None,  # 返回的张量类型，默认为None
+        data_format: ChannelDimension = ChannelDimension.FIRST,  # 数据的通道格式，默认为第一通道
+        input_data_format: Optional[Union[str, ChannelDimension]] = None,  # 输入数据的通道格式，默认为None
+        **kwargs,  # 其他可能的关键字参数，以字典形式接收
 ```

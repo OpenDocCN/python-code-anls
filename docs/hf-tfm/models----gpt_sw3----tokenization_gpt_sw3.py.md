@@ -1,30 +1,28 @@
 # `.\models\gpt_sw3\tokenization_gpt_sw3.py`
 
-```py
+```
 """The tokenizer used by the GPT-SW3 models."""
 
-# 导入所需的模块和库
-import os
-import re
-import unicodedata
-from shutil import copyfile
-from typing import Any, Dict, List, Optional, Tuple, Union
+# 引入所需的模块和库
+import os  # 提供了与操作系统交互的功能
+import re  # 提供了正则表达式操作支持
+import unicodedata  # 提供了对 Unicode 数据库的访问
+from shutil import copyfile  # 提供了文件和目录的操作函数
+from typing import Any, Dict, List, Optional, Tuple, Union  # 提供了类型提示支持
 
-import sentencepiece as spm
+import sentencepiece as spm  # 引入 SentencePiece 库用于分词
 
-from ...tokenization_utils import PreTrainedTokenizer
-from ...utils import is_torch_available, logging
+# 引入所需的自定义模块和函数
+from ...tokenization_utils import PreTrainedTokenizer  # 引入预训练的 tokenizer 类
+from ...utils import is_torch_available, logging  # 引入用于检查 Torch 是否可用和日志记录的工具函数
 
-# 检查是否有 torch 可用
-if is_torch_available():
-    import torch
 
-# 获取 logger 实例
-logger = logging.get_logger(__name__)
-# 词汇文件的名称
-VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}
+if is_torch_available():  # 检查是否安装了 Torch，如果是则引入 Torch
+    import torch  # 引入 Torch 库
 
-# 预训练模型词汇文件的映射
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
+VOCAB_FILES_NAMES = {"vocab_file": "spiece.model"}  # 定义词汇文件名字典
+
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "AI-Sweden-Models/gpt-sw3-126m": "https://huggingface.co/AI-Sweden-Models/gpt-sw3-126m/resolve/main/spiece.model",
@@ -37,7 +35,6 @@ PRETRAINED_VOCAB_FILES_MAP = {
     }
 }
 
-# 预训练位置嵌入大小的映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "AI-Sweden-Models/gpt-sw3-126m": 2048,
     "AI-Sweden-Models/gpt-sw3-356m": 2048,
@@ -63,77 +60,64 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
     >>> tokenizer = GPTSw3Tokenizer.from_pretrained("AI-Sweden-Models/gpt-sw3-126m")
     >>> tokenizer("Svenska är kul!")["input_ids"]
     [1814, 377, 3617, 63504]
-    ```py
+    ```
+    """
     Args:
         vocab_file (`str`):
             [SentencePiece](https://github.com/google/sentencepiece) file (generally has a *.spm* extension) that
             contains the vocabulary necessary to instantiate a tokenizer.
-            实例化分词器所需的词汇文件路径，通常具有 *.spm* 扩展名。
         do_lower_case (`bool`, *optional*, defaults to `False`):
             Whether or not to lowercase the input when tokenizing.
-            在分词时是否将输入转换为小写，默认为 `False`。
         remove_space (`bool`, *optional*, defaults to `False`):
             Whether or not to strip the text when tokenizing (removing excess spaces before and after the string).
-            在分词时是否删除文本中的空格（删除字符串前后的多余空格），默认为 `False`。
         keep_accents (`bool`, *optional*, defaults to `False`):
             Whether or not to keep accents when tokenizing.
-            在分词时是否保留重音符号，默认为 `False`。
         pad_token (`str`, *optional*):
             The token used for padding, for example when batching sequences of different lengths. If not provided, will
             default to '<pad>' or '<unk>' depending on model size.
-            用于填充的标记，例如当批处理不同长度的序列时。如果未提供，则默认为 '<pad>' 或 '<unk>'，取决于模型大小。
         unk_token (`str`, *optional*):
             The unknown token. A token that is not in the vocabulary cannot be converted to an ID and is set to be this
             token instead. If not provided, will default to '<unk>'.
-            未知标记。不在词汇表中的标记无法转换为 ID，并将其设置为此标记。如果未提供，则默认为 '<unk>'。
         eos_token (`str`, *optional*):
             The end of sequence token seen during pretraining. If not provided, will default to '<|endoftext|>'
-            预训练期间遇到的序列结束标记。如果未提供，则默认为 '<|endoftext|>'。
         bos_token (`str`, *optional*):
             The beginning of sequence token that can be used for downstream task, was not seen during pretraining. If
             not provided, will default to '<s>' or '<|endoftext|>', depending on model size.
-            用于下游任务的序列开始标记，在预训练期间未见过。如果未提供，则默认为 '<s>' 或 '<|endoftext|>'，取决于模型大小。
         sp_model_kwargs (`dict`, *optional*):
             Will be passed to the `SentencePieceProcessor.__init__()` method. The [Python wrapper for
             SentencePiece](https://github.com/google/sentencepiece/tree/master/python) can be used, among other things,
             to set:
 
             - `enable_sampling`: Enable subword regularization.
-              启用子词正则化。
             - `nbest_size`: Sampling parameters for unigram. Invalid for BPE-Dropout.
 
               - `nbest_size = {0,1}`: No sampling is performed.
-                不执行采样。
               - `nbest_size > 1`: samples from the nbest_size results.
-                从 nbest_size 个结果中采样。
               - `nbest_size < 0`: assuming that nbest_size is infinite and samples from the all hypothesis (lattice)
                 using forward-filtering-and-backward-sampling algorithm.
-                假设 nbest_size 为无穷大，并使用前向过滤和后向采样算法从所有假设（格）中进行采样。
 
             - `alpha`: Smoothing parameter for unigram sampling, and dropout probability of merge operations for
               BPE-dropout.
-              一元采样的平滑参数，以及 BPE-dropout 的合并操作的丢弃概率。
 
     Attributes:
         sp_model (`SentencePieceProcessor`):
             The *SentencePiece* processor that is used for every conversion (string, tokens and IDs).
-            用于每次转换（字符串、标记和 ID）的 *SentencePiece* 处理器。
         whitespaces (`set`):
             The whitespaces that are replaced in the whitespace normalization in preprocessing.
-            在预处理中用于空格归一化的空格。
         non_printing_characters_re (`Pattern`):
             The compiled regular expression to remove non-printing characters in preprocessing.
-            用于在预处理中删除非打印字符的编译正则表达式。
     """
 
+    # List of vocabulary files' names
     vocab_files_names = VOCAB_FILES_NAMES
+    # Map of pretrained vocabulary files
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
-    # 定义最大模型输入尺寸为预训练位置嵌入大小
+    # 将预训练模型的位置编码嵌入大小赋值给变量
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 定义模型输入的名称列表
+    # 模型输入的名称列表
     model_input_names = ["input_ids", "attention_mask"]
 
-    # 初始化函数，接受多个参数
+    # 初始化函数，接收多个参数来配置分词器
     def __init__(
         self,
         vocab_file,
@@ -147,10 +131,10 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
         sp_model_kwargs: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> None:
-        # 如果 sp_model_kwargs 为 None，则设置为空字典
+        # 如果 sp_model_kwargs 是 None，则设置为空字典
         self.sp_model_kwargs = {} if sp_model_kwargs is None else sp_model_kwargs
 
-        # 获取参数中的 name_or_path，如果为 None，则设置为 "None"，并发出警告
+        # 获取 kwargs 中的 name_or_path 参数，如果不存在则警告并设置为 "None"
         name_or_path = kwargs.get("name_or_path")
         if name_or_path is None:
             logger.warning(
@@ -159,9 +143,11 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             )
             name_or_path = "None"
 
-        # 根据条件设置 eos_token 和 unk_token 的默认值
+        # 根据情况设置 eos_token 和 unk_token 的默认值
         eos_token = "<|endoftext|>" if eos_token is None else eos_token
         unk_token = "<unk>" if unk_token is None else unk_token
+        
+        # 如果 name_or_path 包含 "gpt-sw3-7b"，则设置 pad_token 和 bos_token 的值
         if "gpt-sw3-7b" in name_or_path:
             pad_token = unk_token if pad_token is None else pad_token
             bos_token = eos_token if bos_token is None else bos_token
@@ -169,27 +155,27 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             pad_token = "<pad>" if pad_token is None else pad_token
             bos_token = "<s>" if bos_token is None else bos_token
 
-        # 设置对象的属性值
+        # 设置对象的属性
         self.do_lower_case = do_lower_case
         self.remove_space = remove_space
         self.keep_accents = keep_accents
         self.vocab_file = vocab_file
 
-        # 使用 spm.SentencePieceProcessor 初始化 self.sp_model
+        # 使用 SentencePieceProcessor 初始化 self.sp_model
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
         self.sp_model.Load(vocab_file)
 
-        # 用于输入文本中空格的规范化
+        # 用于输入文本中空白字符的规范化
         # fmt : off
         self.whitespaces = {" ", " ", " ", " ", " ", "　", " ", " ", " ", " ", "￼", ""}
         # fmt : on
 
-        # 用于在预处理中移除非打印字符（例如一些 Unicode 控制字符）的正则表达式
+        # 正则表达式，用于在预处理中移除非打印字符（例如某些 Unicode 控制字符）
         self.non_printing_characters_re = re.compile(
             f"[{''.join(map(chr, list(range(0, 9)) + list(range(11, 32)) + list(range(127, 160)) + [160, 173, 8203]))}]"
         )
 
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(
             do_lower_case=do_lower_case,
             remove_space=remove_space,
@@ -202,38 +188,40 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             **kwargs,
         )
 
-    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.__getstate__ 复制的函数
+    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.__getstate__ 复制的方法
+    # 返回对象的状态字典，将 sp_model 设为 None
     def __getstate__(self):
         state = self.__dict__.copy()
         state["sp_model"] = None
         return state
 
-    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.__setstate__ 复制的函数
-    # 重写 __setstate__ 方法，将传入的字典赋值给对象的 __dict__ 属性
+    # Copied from transformers.models.albert.tokenization_albert.AlbertTokenizer.__setstate__
+    # 用于反序列化对象状态，将给定的字典 d 直接赋给对象的 __dict__ 属性
     def __setstate__(self, d):
         self.__dict__ = d
 
-        # 为了向后兼容性，如果对象没有 sp_model_kwargs 属性，则设置为空字典
+        # 用于向后兼容性检查，如果对象没有属性 "sp_model_kwargs"，则设置为空字典
         if not hasattr(self, "sp_model_kwargs"):
             self.sp_model_kwargs = {}
 
-        # 使用 sp_model_kwargs 创建 SentencePieceProcessor 对象，并加载词汇文件
+        # 使用 SentencePieceProcessor 初始化 self.sp_model 对象，传入 self.sp_model_kwargs 的参数
         self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
+        # 加载词汇文件到 self.sp_model
         self.sp_model.Load(self.vocab_file)
 
     @property
-    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.vocab_size 复制属性
+    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.vocab_size 处复制的属性
+    # 返回当前对象 self.sp_model 的词汇大小，即词汇表中的条目数
     def vocab_size(self) -> int:
-        # 返回 SentencePieceProcessor 对象的长度作为词汇量大小
         return len(self.sp_model)
 
-    # 预处理文本，去除非打印字符，规范化空白字符，进行 NFC Unicode 规范化
+    # 对给定文本进行预处理，返回处理后的文本
     def preprocess_text(self, text: str) -> str:
         """
-        Returns the preprocessed text. This procedure is identical to what was used when training the tokenizer.
+        返回预处理后的文本。该过程与训练标记器时使用的过程相同。
         """
 
-        # 去除非打印字符
+        # 移除非打印字符
         text = self.non_printing_characters_re.sub("", text)
 
         # 规范化空白字符
@@ -243,37 +231,37 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
         text = unicodedata.normalize("NFC", text)
         return text
 
-    # 对文本进行分词处理
+    # 将给定文本进行标记化处理，返回标记化后的列表
     def _tokenize(self, text: str, **kwargs) -> List[str]:
         text = self.preprocess_text(text)
         return self.sp_model.encode(text, out_type=str)
 
-    # 将 token 转换为 id
+    # 将给定的 token (str) 转换为其对应的 id (int)，使用当前对象的词汇表进行转换
     def _convert_token_to_id(self, token: str) -> int:
-        """Converts a token (str) to an id (int) using the vocab."""
+        """将 token (str) 转换为 id (int)，使用词汇表进行转换。"""
         return self.sp_model.PieceToId(token)
 
-    # 将 id 转换为 token
+    # 将给定的 id (int) 转换为其对应的 token (str)，使用当前对象的词汇表进行转换
     def _convert_id_to_token(self, index: int) -> str:
-        """Converts an index (int) to a token (str) using the vocab."""
+        """将 id (int) 转换为 token (str)，使用词汇表进行转换。"""
         return self.sp_model.IdToPiece(index)
 
     @staticmethod
-    # 清理分词结果的方法，覆盖默认的清理方法
+    # 返回输入字符串本身，用于覆盖默认的清理函数
     def clean_up_tokenization(out_string: str) -> str:
-        """Returns the input string, this function is overridden to remove the default clean up."""
+        """返回输入的字符串，此函数用于移除默认的清理行为。"""
         return out_string
 
-    # 将一系列 token 转换为单个字符串
+    # 将一系列 token (字符串) 转换为单个字符串，特殊 token 保持不变
     def convert_tokens_to_string(self, tokens: List[str]) -> str:
-        """Converts a sequence of tokens (strings) to a single string. Special tokens remain intact."""
+        """将一系列 token (字符串) 转换为单个字符串。特殊 token 保持不变。"""
         current_sub_tokens = []
         out_string = ""
         prev_is_special = False
         for token in tokens:
-            # 确保特殊 token 不会被 SentencePiece 模型解码
+            # 确保特殊 token 不使用 sentencepiece 模型解码
             if token in self.all_special_tokens:
-                # TODO: 检查是否需要，因为它确保了 decode(encode(doc)) != doc，通过在解码文档中添加额外的空格
+                # TODO: 检查是否需要这一步骤，它确保 decode(encode(doc)) != doc，通过在解码文档中添加额外的空格来实现
                 if not prev_is_special:
                     out_string += " "
 
@@ -287,32 +275,33 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
 
         return out_string
 
-    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.get_vocab 复制方法
+    # 从 transformers.models.albert.tokenization_albert.AlbertTokenizer.get_vocab 处复制的方法
+    # 返回当前对象的词汇表，包含 token 到 id 的映射
     def get_vocab(self) -> Dict[str, int]:
-        # 创建词汇表字典，将 token 转换为 id
         vocab = {self.convert_ids_to_tokens(i): i for i in range(self.vocab_size)}
         vocab.update(self.added_tokens_encoder)
         return vocab
-    # 从transformers.models.albert.tokenization_albert.AlbertTokenizer.save_vocabulary中复制的方法
+    # 从transformers.models.albert.tokenization_albert.AlbertTokenizer.save_vocabulary方法复制而来
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 检查保存目录是否存在
+        # 检查保存目录是否存在，如果不存在则记录错误并返回
         if not os.path.isdir(save_directory):
             logger.error(f"Vocabulary path ({save_directory}) should be a directory")
             return
-        # 设置输出词汇表文件路径
+        # 拼接输出的词汇表文件路径
         out_vocab_file = os.path.join(
             save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
         )
 
-        # 如果词汇表文件路径与当前词汇表文件路径不同且当前词汇表文件存在，则复制当前词汇表文件到输出路径
+        # 如果当前词汇表文件路径不等于输出路径，并且当前词汇表文件存在，则复制当前词汇表文件到输出路径
         if os.path.abspath(self.vocab_file) != os.path.abspath(out_vocab_file) and os.path.isfile(self.vocab_file):
             copyfile(self.vocab_file, out_vocab_file)
-        # 如果当前词汇表文件不存在，则将序列化的模型内容写入输出路径
+        # 如果当前词汇表文件不存在，则将序列化的 sp_model 内容写入到输出文件
         elif not os.path.isfile(self.vocab_file):
             with open(out_vocab_file, "wb") as fi:
                 content_spiece_model = self.sp_model.serialized_model_proto()
                 fi.write(content_spiece_model)
 
+        # 返回输出文件路径的元组
         return (out_vocab_file,)
 
     def encode_fast(
@@ -336,24 +325,25 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             `List[int]`, `List[List[int]]`, or `torch.Tensor`: The encoded text(s) as token ids.
         """
 
-        # 如果输入为单个字符串，则预处理文本并使用原始SP tokenizer对其进行编码
+        # 如果输入是单个字符串，则预处理文本并使用 sp_model 进行编码
         if isinstance(text, str):
             text = self.preprocess_text(text)
             token_ids = self.sp_model.encode(text)
-        # 如果输入为字符串列表，则对每个字符串进行预处理并使用原始SP tokenizer对其进行编码
+        # 如果输入是字符串列表，则分别预处理每个文本并使用 sp_model 进行编码
         else:
             text = [self.preprocess_text(t) for t in text]
             token_ids = self.sp_model.encode(text)
 
-        # 如果return_tensors为True或"pt"，则将token_ids转换为PyTorch张量
+        # 如果需要返回 PyTorch 张量，则转换编码后的结果为张量
         if return_tensors is True or return_tensors == "pt":
             token_ids = torch.tensor(token_ids)
 
+        # 返回编码后的 token_ids
         return token_ids
 
     def decode_fast(self, token_ids: Union[int, List[int]]) -> str:
         """
-        Encodes a text or batch of texts to token ids using preprocessing and the raw SP tokenizer. This has reduced
+        Decodes a text or batch of texts from token ids using preprocessing and the raw SP tokenizer. This has reduced
         functionality but is often much faster.
 
         Args:
@@ -363,20 +353,25 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             `str`: Decoded text
         """
 
-        # 使用原始SP tokenizer对token_ids进行解码
+        # 使用 sp_model 对 token_ids 进行解码，返回解码后的文本
         return self.sp_model.decode(token_ids)
 
     @property
-    # 默认的聊天模板，格式化消息类似即时通讯聊天记录，使用"User:"和"Bot:"字符串标记消息前缀，消息之间添加BOS标记
+    # 定义一个默认的聊天模板函数，用于格式化消息，类似即时通讯的聊天记录，消息前面有 "User:" 和 "Bot:" 字符串。消息之间使用 BOS 标记分隔。
     def default_chat_template(self):
-        # 如果未定义聊天模板，则使用默认模板，并给出警告信息
+        """
+        This chat template formats messages like an instant messenger chat log, with "User:" and "Bot:" strings
+        preceding messages. BOS tokens are added between all messages.
+        """
+        # 记录一次警告，提示没有为该分词器定义聊天模板，将使用该类的默认模板。如果默认模板不适合您的模型，请设置 `tokenizer.chat_template` 为合适的模板。
+        # 查看 https://huggingface.co/docs/transformers/main/chat_templating 获取更多信息。
         logger.warning_once(
             "\nNo chat template is defined for this tokenizer - using the default template "
             f"for the {self.__class__.__name__} class. If the default is not appropriate for "
             "your model, please set `tokenizer.chat_template` to an appropriate template. "
             "See https://huggingface.co/docs/transformers/main/chat_templating for more information.\n"
         )
-        # 返回默认的聊天模板
+        # 返回格式化后的聊天模板字符串，包括 EOS 标记和 BOS 标记在每条消息之间，处理 messages 列表中的每一条消息并添加对应的角色前缀。
         return (
             "{{ eos_token }}{{ bos_token }}"
             "{% for message in messages %}"
@@ -384,6 +379,6 @@ class GPTSw3Tokenizer(PreTrainedTokenizer):
             "{% else %}{{ 'Bot: ' + message['content']}}{% endif %}"
             "{{ message['text'] }}{{ bos_token }}"
             "{% endfor %}"
-            "Bot:"
+            "Bot:"  # 最后追加一个固定的 "Bot:" 字符串，表示消息结束
         )
 ```

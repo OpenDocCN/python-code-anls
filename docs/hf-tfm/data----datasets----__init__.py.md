@@ -1,11 +1,9 @@
-# `.\transformers\data\datasets\__init__.py`
+# `.\data\datasets\__init__.py`
 
-```py
-# 导入相关模块
+```
+# 引入自定义模块中的不同数据集类和训练参数类
 
-# 导入 GlueDataset 和 GlueDataTrainingArguments 类
 from .glue import GlueDataset, GlueDataTrainingArguments
-# 导入语言建模相关的数据集类
 from .language_modeling import (
     LineByLineTextDataset,
     LineByLineWithRefDataset,
@@ -13,6 +11,5 @@ from .language_modeling import (
     TextDataset,
     TextDatasetForNextSentencePrediction,
 )
-# 导入 SquadDataset 和 SquadDataTrainingArguments 类
 from .squad import SquadDataset, SquadDataTrainingArguments
 ```

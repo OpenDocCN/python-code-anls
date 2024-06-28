@@ -1,39 +1,25 @@
-# `.\transformers\models\mistral\__init__.py`
+# `.\models\mistral\__init__.py`
 
-```py
-# 版权声明
-# 版权归 Mistral AI 和 The HuggingFace Inc. 团队所有，保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本许可;
-# 除非符合许可证，否则您不得使用此文件。
-# 您可以在以下位置获取许可证的副本:
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或经书面同意，软件分发将基于"按原样"的基础，
-# 没有任何形式的明示或暗示的担保或条件。
-# 请查阅许可证以了解特定语言下的权限和限制。
+```
+# 引入需要的模块和函数
 from typing import TYPE_CHECKING
 
-# 从 utils 中导入必要的模块
-from ...utils import (
-    OptionalDependencyNotAvailable,
-    _LazyModule,
-    is_torch_available,
-)
+# 引入自定义异常和延迟加载模块
+from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_flax_available, is_torch_available
 
-# 定义模块的导入结构
+# 定义模块导入结构
 _import_structure = {
     "configuration_mistral": ["MISTRAL_PRETRAINED_CONFIG_ARCHIVE_MAP", "MistralConfig"],
 }
 
-# 尝试导入 torch 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
+# 检查是否可用 Torch，若不可用则引发自定义异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果导入成功，则添加到导入结构中
+    # 如果可用，添加 Mistral 模型相关的导入结构
     _import_structure["modeling_mistral"] = [
         "MistralForCausalLM",
         "MistralModel",
@@ -41,19 +27,32 @@ else:
         "MistralForSequenceClassification",
     ]
 
-# 如果是类型检查阶段
+# 检查是否可用 Flax，若不可用则引发自定义异常
+try:
+    if not is_flax_available():
+        raise OptionalDependencyNotAvailable()
+except OptionalDependencyNotAvailable:
+    pass
+else:
+    # 如果可用，添加 FlaxMistral 模型相关的导入结构
+    _import_structure["modeling_flax_mistral"] = [
+        "FlaxMistralForCausalLM",
+        "FlaxMistralModel",
+        "FlaxMistralPreTrainedModel",
+    ]
+
+# 如果在类型检查模式下
 if TYPE_CHECKING:
-    # 从 configuration_mistral 中导入指定的类
+    # 导入 Mistral 配置相关的类和函数
     from .configuration_mistral import MISTRAL_PRETRAINED_CONFIG_ARCHIVE_MAP, MistralConfig
 
-    # 类型检查阶段尝试导入 torch 模块，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 在类型检查阶段，从 modeling_mistral 中导入指定的类
+        # 导入 Mistral 模型相关的类和函数
         from .modeling_mistral import (
             MistralForCausalLM,
             MistralForSequenceClassification,
@@ -61,10 +60,23 @@ if TYPE_CHECKING:
             MistralPreTrainedModel,
         )
 
-# 如果不是类型检查阶段
+    try:
+        if not is_flax_available():
+            raise OptionalDependencyNotAvailable()
+    except OptionalDependencyNotAvailable:
+        pass
+    else:
+        # 导入 FlaxMistral 模型相关的类和函数
+        from .modeling_flax_mistral import (
+            FlaxMistralForCausalLM,
+            FlaxMistralModel,
+            FlaxMistralPreTrainedModel,
+        )
+
+# 如果不是类型检查模式，则进行延迟加载模块的设置
 else:
     import sys
 
-    # 将当前模块的命名空间指向 LazyModule 的实例
+    # 将当前模块设置为延迟加载模块
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

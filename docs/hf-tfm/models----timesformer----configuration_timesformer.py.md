@@ -1,128 +1,88 @@
-# `.\transformers\models\timesformer\configuration_timesformer.py`
+# `.\models\timesformer\configuration_timesformer.py`
 
-```py
-# 设置编码为utf-8
-# 版权声明
-# 根据Apache License, Version 2.0许可，可以使用此文件
-# 请遵守许可的规定
-# 可以从以下网址获得许可的副本
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则不得使用此文件
-# 根据"AS IS"基础分发软件，并没有任何种类的保证或条件，无论是明示的还是默示的
-# 请查阅许可协议以获取更多关于特定语言控制输出和限制的信息
-"""TimeSformer模型配置"""
+```
+# coding=utf-8
+# 定义编码方式为 UTF-8
 
-# 从导入的包中引入预训练配置和日志功能
+# 导入预训练配置类 PretrainedConfig 和日志工具 logging
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
 
-# 从日志中获取logger
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 预训练配置映射到配置档案
+# 定义预训练模型配置文件的映射字典，指定了模型名称和其对应的配置文件链接
 TIMESFORMER_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/timesformer": "https://huggingface.co/facebook/timesformer/resolve/main/config.json",
 }
 
-# Timesformer配置类，用于存储TimesformerModel的配置
-# 用于根据指定参数实例化TimeSformer模型，定义模型体系结构
-# 使用默认参数实例化配置将产生类似于TimeSformer的配置
-# [facebook/timesformer-base-finetuned-k600](https://huggingface.co/facebook/timesformer-base-finetuned-k600) 架构
-# 配置对象继承自PretrainedConfig，可用于控制模型输出。阅读PretrainedConfig的文档以获取更多信息。
-    Args:
-        image_size (`int`, *optional*, defaults to 224):
-            The size (resolution) of each image.
-        patch_size (`int`, *optional*, defaults to 16):
-            The size (resolution) of each patch.
-        num_channels (`int`, *optional*, defaults to 3):
-            The number of input channels.
-        num_frames (`int`, *optional*, defaults to 8):
-            The number of frames in each video.
-        hidden_size (`int`, *optional*, defaults to 768):
-            Dimensionality of the encoder layers and the pooler layer.
-        num_hidden_layers (`int`, *optional*, defaults to 12):
-            Number of hidden layers in the Transformer encoder.
-        num_attention_heads (`int`, *optional*, defaults to 12):
-            Number of attention heads for each attention layer in the Transformer encoder.
-        intermediate_size (`int`, *optional*, defaults to 3072):
-            Dimensionality of the "intermediate" (i.e., feed-forward) layer in the Transformer encoder.
-        hidden_act (`str` or `function`, *optional*, defaults to `"gelu"`):
-            The non-linear activation function (function or string) in the encoder and pooler. If string, `"gelu"`,
-            `"relu"`, `"selu"` and `"gelu_new"` are supported.
-        hidden_dropout_prob (`float`, *optional*, defaults to 0.0):
-            The dropout probabilitiy for all fully connected layers in the embeddings, encoder, and pooler.
-        attention_probs_dropout_prob (`float`, *optional*, defaults to 0.0):
-            The dropout ratio for the attention probabilities.
-        initializer_range (`float`, *optional*, defaults to 0.02):
-            The standard deviation of the truncated_normal_initializer for initializing all weight matrices.
-        layer_norm_eps (`float`, *optional*, defaults to 1e-06):
-            The epsilon used by the layer normalization layers.
-        qkv_bias (`bool`, *optional*, defaults to `True`):
-            Whether to add a bias to the queries, keys and values.
-        attention_type (`str`, *optional*, defaults to `"divided_space_time"`):
-            The attention type to use. Must be one of `"divided_space_time"`, `"space_only"`, `"joint_space_time"`.
-        drop_path_rate (`float`, *optional*, defaults to 0):
-            The dropout ratio for stochastic depth.
+# TimesformerConfig 类，继承自 PretrainedConfig 类，用于存储 TimeSformer 模型的配置信息
+class TimesformerConfig(PretrainedConfig):
+    r"""
+    This is the configuration class to store the configuration of a [`TimesformerModel`]. It is used to instantiate a
+    TimeSformer model according to the specified arguments, defining the model architecture. Instantiating a
+    configuration with the defaults will yield a similar configuration to that of the TimeSformer
+    [facebook/timesformer-base-finetuned-k600](https://huggingface.co/facebook/timesformer-base-finetuned-k600)
+    architecture.
 
-    Example:
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+    # 设置默认参数：图像尺寸为224像素，每个补丁(patch)的尺寸为16像素，输入通道数为3
+    # 每个视频包含8帧，编码器和池化器层的隐藏层大小为768维
+    # Transformer编码器中隐藏层的数量为12，每个注意力层中的注意力头数为12
+    # Transformer编码器中"中间"（即前馈）层的维度为3072
+    # 编码器和池化器中的非线性激活函数为GELU
+    # 嵌入层、编码器和池化器中所有全连接层的丢弃概率为0.0
+    # 注意力概率的丢弃比例为0.0
+    # 初始化所有权重矩阵的截断正态分布标准差为0.02
+    # 层归一化层使用的epsilon为1e-06
+    # 是否向查询、键和值添加偏置
+    # 使用的注意力类型为"divided_space_time"
+    # 随机深度的丢弃比率为0
 
-    ```python
-    >>> from transformers import TimesformerConfig, TimesformerModel
-
-    >>> # Initializing a TimeSformer timesformer-base style configuration
-    >>> configuration = TimesformerConfig()
-
-    >>> # Initializing a model from the configuration
-    >>> model = TimesformerModel(configuration)
-
-    >>> # Accessing the model configuration
-    >>> configuration = model.config
-    ```py"""
-
-    # 设定模型类型为 "timesformer"
+    # 将模型类型设置为"timesformer"
     model_type = "timesformer"
-    # 初始化函数，设置模型的各种参数
+    # 初始化函数，用于初始化一个自定义的神经网络模型
     def __init__(
         self,
-        image_size=224,  # 图像大小，默认为224像素
-        patch_size=16,  # 分块大小，默认为16像素
-        num_channels=3,  # 图像通道数，默认为3（RGB）
-        num_frames=8,  # 帧数，默认为8帧
-        hidden_size=768,  # 隐藏层大小，默认为768
-        num_hidden_layers=12,  # 隐藏层层数，默认为12层
-        num_attention_heads=12,  # 注意力头数，默认为12个
-        intermediate_size=3072,  # 中间层大小，默认为3072
-        hidden_act="gelu",  # 隐藏层激活函数，默认为gelu
-        hidden_dropout_prob=0.0,  # 隐藏层丢弃率，默认为0
-        attention_probs_dropout_prob=0.0,  # 注意力机制丢弃率，默认为0
-        initializer_range=0.02,  # 初始化范围，默认为0.02
-        layer_norm_eps=1e-6,  # 层归一化的 epsilon 值，默认为1e-6
-        qkv_bias=True,  # 是否在 QKV 线性层添加偏置，默认为True
-        attention_type="divided_space_time",  # 注意力类型，默认为"divided_space_time"
-        drop_path_rate=0,  # 路径丢弃率，默认为0
+        image_size=224,  # 图像输入大小，默认为224
+        patch_size=16,  # 每个patch的大小，默认为16
+        num_channels=3,  # 输入图像的通道数，默认为3（RGB）
+        num_frames=8,  # 输入视频帧数，默认为8
+        hidden_size=768,  # Transformer模型中隐藏层的大小，默认为768
+        num_hidden_layers=12,  # Transformer模型中隐藏层的数量，默认为12
+        num_attention_heads=12,  # Transformer模型中注意力头的数量，默认为12
+        intermediate_size=3072,  # Transformer模型中Feedforward层的中间大小，默认为3072
+        hidden_act="gelu",  # 隐藏层的激活函数，默认为GELU
+        hidden_dropout_prob=0.0,  # 隐藏层的dropout概率，默认为0（无dropout）
+        attention_probs_dropout_prob=0.0,  # 注意力层的dropout概率，默认为0（无dropout）
+        initializer_range=0.02,  # 初始化权重的范围，默认为0.02
+        layer_norm_eps=1e-6,  # LayerNorm层的epsilon值，默认为1e-6
+        qkv_bias=True,  # 是否在QKV（查询、键、值）矩阵中使用偏置项，默认为True
+        attention_type="divided_space_time",  # 注意力机制的类型，默认为“divided_space_time”
+        drop_path_rate=0,  # DropPath层的drop率，默认为0（无drop）
         **kwargs,
     ):
-        
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(**kwargs)
 
-        # 设置模型的各个参数值
-        self.image_size = image_size
-        self.patch_size = patch_size
-        self.num_channels = num_channels
-        self.num_frames = num_frames
+        # 设置对象的属性值
+        self.image_size = image_size  # 图像输入大小
+        self.patch_size = patch_size  # 每个patch的大小
+        self.num_channels = num_channels  # 输入图像的通道数
+        self.num_frames = num_frames  # 输入视频帧数
 
-        self.hidden_size = hidden_size
-        self.num_hidden_layers = num_hidden_layers
-        self.num_attention_heads = num_attention_heads
-        self.intermediate_size = intermediate_size
-        self.hidden_act = hidden_act
-        self.hidden_dropout_prob = hidden_dropout_prob
-        self.attention_probs_dropout_prob = attention_probs_dropout_prob
-        self.initializer_range = initializer_range
-        self.layer_norm_eps = layer_norm_eps
-        self.qkv_bias = qkv_bias
+        self.hidden_size = hidden_size  # Transformer模型中隐藏层的大小
+        self.num_hidden_layers = num_hidden_layers  # Transformer模型中隐藏层的数量
+        self.num_attention_heads = num_attention_heads  # Transformer模型中注意力头的数量
+        self.intermediate_size = intermediate_size  # Transformer模型中Feedforward层的中间大小
+        self.hidden_act = hidden_act  # 隐藏层的激活函数
+        self.hidden_dropout_prob = hidden_dropout_prob  # 隐藏层的dropout概率
+        self.attention_probs_dropout_prob = attention_probs_dropout_prob  # 注意力层的dropout概率
+        self.initializer_range = initializer_range  # 初始化权重的范围
+        self.layer_norm_eps = layer_norm_eps  # LayerNorm层的epsilon值
+        self.qkv_bias = qkv_bias  # 是否在QKV（查询、键、值）矩阵中使用偏置项
 
-        self.attention_type = attention_type
-        self.drop_path_rate = drop_path_rate
+        self.attention_type = attention_type  # 注意力机制的类型
+        self.drop_path_rate = drop_path_rate  # DropPath层的drop率
 ```

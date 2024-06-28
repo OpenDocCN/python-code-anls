@@ -1,19 +1,10 @@
-# `.\transformers\models\roberta_prelayernorm\__init__.py`
+# `.\models\roberta_prelayernorm\__init__.py`
 
-```py
-# 版权声明和许可证信息
-# 版权 2022 年由 HuggingFace 团队所有。保留所有权利
-# 根据 Apache 许可证 2.0 版本许可
-# 在遵守此许可证的前提下可以使用此文件
-# 您可以获取许可证的副本
-# 请访问 http://www.apache.org/licenses/LICENSE-2.0
-# 未经有关法律规定或协议书面同意
-# 根据许可证分发的软件以 "原样" 分发
-# 没有任何明示或暗示的保证或条件
-# 查看许可证以获取具体语言的规定和限制
-
-# 引入必要的模块和函数
+```
+# 引入类型检查依赖，用于在类型检查环境下做条件导入
 from typing import TYPE_CHECKING
+
+# 从工具模块中导入相关工具和异常
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -22,7 +13,7 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义需要导入的结构
+# 定义模块导入结构的字典，用于存储模块路径和名称
 _import_structure = {
     "configuration_roberta_prelayernorm": [
         "ROBERTA_PRELAYERNORM_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -31,14 +22,14 @@ _import_structure = {
     ],
 }
 
-# 检查 PyTorch 是否可用
+# 检查是否支持 Torch 库，若不支持则引发依赖不可用异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 PyTorch 可用则导入相关模块
+    # 如果支持 Torch 库，则添加相关模型的路径和名称到导入结构字典
     _import_structure["modeling_roberta_prelayernorm"] = [
         "ROBERTA_PRELAYERNORM_PRETRAINED_MODEL_ARCHIVE_LIST",
         "RobertaPreLayerNormForCausalLM",
@@ -51,14 +42,14 @@ else:
         "RobertaPreLayerNormPreTrainedModel",
     ]
 
-# 检查 TensorFlow 是否可用
+# 检查是否支持 TensorFlow 库，若不支持则引发依赖不可用异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 TensorFlow 可用则导入相关模块
+    # 如果支持 TensorFlow 库，则添加相关模型的路径和名称到导入结构字典
     _import_structure["modeling_tf_roberta_prelayernorm"] = [
         "TF_ROBERTA_PRELAYERNORM_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFRobertaPreLayerNormForCausalLM",
@@ -72,14 +63,14 @@ else:
         "TFRobertaPreLayerNormPreTrainedModel",
     ]
 
-# 检查 Flax 是否可用
+# 检查是否支持 Flax 库，若不支持则引发依赖不可用异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Flax 可用则导入相关模块
+    # 如果支持 Flax 库，则添加相关模型的路径和名称到导入结构字典
     _import_structure["modeling_flax_roberta_prelayernorm"] = [
         "FlaxRobertaPreLayerNormForCausalLM",
         "FlaxRobertaPreLayerNormForMaskedLM",
@@ -91,25 +82,23 @@ else:
         "FlaxRobertaPreLayerNormPreTrainedModel",
     ]
 
-
-# 如果是类型检查阶段
+# 如果在类型检查环境下
 if TYPE_CHECKING:
-    # 导入所需的模块和类
+    # 导入 RoBERTa 预训练模型配置文件映射和配置类
     from .configuration_roberta_prelayernorm import (
         ROBERTA_PRELAYERNORM_PRETRAINED_CONFIG_ARCHIVE_MAP,
         RobertaPreLayerNormConfig,
         RobertaPreLayerNormOnnxConfig,
     )
     
-    # 尝试检测是否安装了 torch 库，如果未安装则引发 OptionalDependencyNotAvailable 异常
+    # 检查是否存在 Torch 库可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果能成功导入 torch 库，则执行以下代码
     else:
-        # 导入相关的模型定义和类
+        # 导入 RoBERTa 预训练模型相关类（基于 Torch）
         from .modeling_roberta_prelayernorm import (
             ROBERTA_PRELAYERNORM_PRETRAINED_MODEL_ARCHIVE_LIST,
             RobertaPreLayerNormForCausalLM,
@@ -122,15 +111,14 @@ if TYPE_CHECKING:
             RobertaPreLayerNormPreTrainedModel,
         )
     
-    # 尝试检测是否安装了 tensorflow 库，如果未安装则引发 OptionalDependencyNotAvailable 异常
+    # 检查是否存在 TensorFlow 库可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_tf_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果能成功导入 tensorflow 库，则执行以下代码
     else:
-        # 导入相关的模型定义和类
+        # 导入 RoBERTa 预训练模型相关类（基于 TensorFlow）
         from .modeling_tf_roberta_prelayernorm import (
             TF_ROBERTA_PRELAYERNORM_PRETRAINED_MODEL_ARCHIVE_LIST,
             TFRobertaPreLayerNormForCausalLM,
@@ -144,15 +132,14 @@ if TYPE_CHECKING:
             TFRobertaPreLayerNormPreTrainedModel,
         )
     
-    # 尝试检测是否安装了 flax 库，如果未安装则引发 OptionalDependencyNotAvailable 异常
+    # 检查是否存在 Flax 库可用，如果不可用则抛出 OptionalDependencyNotAvailable 异常
     try:
         if not is_flax_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
-    # 如果能成功导入 flax 库，则执行以下代码
     else:
-        # 导入相关的模型定义和类
+        # 导入 RoBERTa 预训练模型相关类（基于 Flax）
         from .modeling_flax_roberta_prelayernorm import (
             FlaxRobertaPreLayerNormForCausalLM,
             FlaxRobertaPreLayerNormForMaskedLM,
@@ -163,12 +150,10 @@ if TYPE_CHECKING:
             FlaxRobertaPreLayerNormModel,
             FlaxRobertaPreLayerNormPreTrainedModel,
         )
-# 如果前面的条件不满足，执行这个分支
 else:
-    # 导入 Python 内置的 sys 模块
+    # 导入系统模块 sys
     import sys
 
-    # 使用 _LazyModule 对象替换当前模块的 sys.modules 条目
-    # 这样可以实现懒加载，即在实际使用该模块时才完全加载
+    # 将当前模块的名字作为键，将一个特定的 _LazyModule 对象作为值，存入 sys.modules 字典中
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

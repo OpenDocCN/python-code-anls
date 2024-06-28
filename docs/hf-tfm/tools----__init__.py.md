@@ -1,23 +1,27 @@
-# `.\transformers\tools\__init__.py`
+# `.\tools\__init__.py`
 
-```py
+```
 #!/usr/bin/env python
 # coding=utf-8
 
-# 版权声明
-# 版权所有 © 2023 年 HuggingFace Inc. 团队。保留所有权利。
+# Copyright 2023 The HuggingFace Inc. team. All rights reserved.
 #
-# 根据 Apache 许可证 2.0 版本（“许可证”）获得许可；
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证的副本：
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于“按原样”分发的，
-# 没有任何明示或暗示的担保或条件。
-# 请查看许可证以获取特定语言的权限和限制。
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 导入必要的类型检查工具
 from typing import TYPE_CHECKING
 
+# 导入自定义的异常
 from ..utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -30,14 +34,14 @@ _import_structure = {
     "base": ["PipelineTool", "RemoteTool", "Tool", "launch_gradio_demo", "load_tool"],
 }
 
-# 检查是否存在 torch 库
+# 尝试导入 Torch，若不可用则抛出自定义异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果存在 torch 库，则添加以下模块到导入结构中
+    # 如果 Torch 可用，扩展导入结构
     _import_structure["document_question_answering"] = ["DocumentQuestionAnsweringTool"]
     _import_structure["image_captioning"] = ["ImageCaptioningTool"]
     _import_structure["image_question_answering"] = ["ImageQuestionAnsweringTool"]
@@ -49,20 +53,18 @@ else:
     _import_structure["text_to_speech"] = ["TextToSpeechTool"]
     _import_structure["translation"] = ["TranslationTool"]
 
-# 如果是类型检查模式
+# 如果进行类型检查，则进一步导入具体模块
 if TYPE_CHECKING:
-    # 导入特定模块
     from .agents import Agent, AzureOpenAiAgent, HfAgent, LocalAgent, OpenAiAgent
     from .base import PipelineTool, RemoteTool, Tool, launch_gradio_demo, load_tool
 
-    # 再次检查是否存在 torch 库
     try:
         if not is_torch_available():
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
         pass
     else:
-        # 如果存在 torch 库，则导入以下模块
+        # 如果 Torch 可用，详细导入相关工具类
         from .document_question_answering import DocumentQuestionAnsweringTool
         from .image_captioning import ImageCaptioningTool
         from .image_question_answering import ImageQuestionAnsweringTool
@@ -76,6 +78,6 @@ if TYPE_CHECKING:
 else:
     import sys
 
-    # 将当前模块设置为 LazyModule
+    # 如果不是类型检查，使用 LazyModule 进行懒加载
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

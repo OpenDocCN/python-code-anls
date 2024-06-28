@@ -1,56 +1,64 @@
-# `.\transformers\models\mixtral\configuration_mixtral.py`
+# `.\models\mixtral\configuration_mixtral.py`
 
-```py
-# 设置文件编码为utf-8
-# 版权声明
-# 根据Apache许可证进行许可
-# 查看许可证信息：http://www.apache.org/licenses/LICENSE-2.0
-# 软件按"AS IS"基础分发，不带任何明示或暗示的担保和条件
-# 查看限制和特定语言的许可证
-""" Mixtral 模型配置"""
+```
+# 设置编码格式为 UTF-8
+# 版权声明，包括公司和团队
+# 在 Apache License 2.0 下授权使用该文件
+# 可以在指定许可证下使用此文件，详见链接
+# 如果不符合条件，则不能使用此文件
+# 根据法律要求或书面同意，分发的软件以“原样”分发
+# 没有任何明示或暗示的保证或条件
+# 详见许可证以了解特定的语言权限
 
-# 导入预训练配置类
+""" Mixtral model configuration"""
+
+# 从 transformers 库中导入预训练配置类 PretrainedConfig
 from ...configuration_utils import PretrainedConfig
-# 导入日志模块
+# 导入 logging 模块
 from ...utils import logging
 
-# 获取日志记录器
+# 获取 logger 对象
 logger = logging.get_logger(__name__)
 
-# 预训练配置文件映射
+# 预训练配置文件映射字典，指定 Mixtral 预训练模型和其配置文件的链接
 MIXTRAL_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "mistral-ai/Mixtral-8x7B": "https://huggingface.co/mistral-ai/Mixtral-8x7B/resolve/main/config.json",
 }
 
-# Mixtral 配置类继承自预训练配置类
+# MixtralConfig 类，继承自 PretrainedConfig 类
 class MixtralConfig(PretrainedConfig):
     r"""
-    这是一个配置类，用于存储 [`MixtralModel`] 的配置。它被用于根据指定的参数实例化Mixtral模型，定义模型架构。
-    使用默认值实例化配置将产生类似于Mixtral-7B-v0.1或Mixtral-7B-Instruct-v0.1的配置。
+    This is the configuration class to store the configuration of a [`MixtralModel`]. It is used to instantiate an
+    Mixtral model according to the specified arguments, defining the model architecture. Instantiating a configuration
+    with the defaults will yield a similar configuration to that of the Mixtral-7B-v0.1 or Mixtral-7B-Instruct-v0.1.
 
     [mixtralai/Mixtral-8x7B](https://huggingface.co/mixtralai/Mixtral-8x7B)
     [mixtralai/Mixtral-7B-Instruct-v0.1](https://huggingface.co/mixtralai/Mixtral-7B-Instruct-v0.1)
 
-    配置对象继承自[`PretrainedConfig`]，可用于控制模型输出。阅读[`PretrainedConfig`]的文档以获取更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
+
 
     ```python
     >>> from transformers import MixtralModel, MixtralConfig
 
-    >>> # 初始化一个Mixtral 7B风格的配置
+    >>> # Initializing a Mixtral 7B style configuration
     >>> configuration = MixtralConfig()
 
-    >>> # 使用Mixtral 7B风格的配置初始化一个模型
+    >>> # Initializing a model from the Mixtral 7B style configuration
     >>> model = MixtralModel(configuration)
 
-    >>> # 访问模型配置
+    >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```
+    """
 
-    # 模型类型为mixtral
+    # 模型类型为 mixtral
     model_type = "mixtral"
-    # 推理时要忽略的键
+    # 推断时忽略的键
     keys_to_ignore_at_inference = ["past_key_values"]
 
+    # 构造函数，定义 MixtralConfig 的各项配置参数
     def __init__(
         self,
         vocab_size=32000,
@@ -76,40 +84,78 @@ class MixtralConfig(PretrainedConfig):
         output_router_logits=False,
         router_aux_loss_coef=0.001,
         **kwargs,
-        # 初始化Transformer模型的参数
-        self.vocab_size = vocab_size
-        self.max_position_embeddings = max_position_embeddings
-        self.hidden_size = hidden_size
-        self.intermediate_size = intermediate_size
-        self.num_hidden_layers = num_hidden_layers
-        self.num_attention_heads = num_attention_heads
-        self.sliding_window = sliding_window
-
-        # 为了向后兼容性
-        # 如果未指定num_key_value_heads，则设为num_attention_heads
-        if num_key_value_heads is None:
-            num_key_value_heads = num_attention_heads
-
-        self.num_key_value_heads = num_key_value_heads
-        self.hidden_act = hidden_act
-        self.initializer_range = initializer_range
-        self.rms_norm_eps = rms_norm_eps
-        self.use_cache = use_cache
-        self.rope_theta = rope_theta
-        self.attention_dropout = attention_dropout
-
-        # 设定Transformer模型的专家数目参数
-        self.num_experts_per_tok = num_experts_per_tok
-        self.num_local_experts = num_local_experts
-        self.output_router_logits = output_router_logits
-        self.router_aux_loss_coef = router_aux_loss_coef
-
-        # 调用父类的构造函数，设定一些通用参数
+    ):
+        # 调用父类 PretrainedConfig 的构造函数
         super().__init__(
+            vocab_size=vocab_size,
+            hidden_size=hidden_size,
+            intermediate_size=intermediate_size,
+            num_hidden_layers=num_hidden_layers,
+            num_attention_heads=num_attention_heads,
+            num_key_value_heads=num_key_value_heads,
+            hidden_act=hidden_act,
+            max_position_embeddings=max_position_embeddings,
+            initializer_range=initializer_range,
+            rms_norm_eps=rms_norm_eps,
+            use_cache=use_cache,
             pad_token_id=pad_token_id,
             bos_token_id=bos_token_id,
             eos_token_id=eos_token_id,
             tie_word_embeddings=tie_word_embeddings,
+            rope_theta=rope_theta,
+            sliding_window=sliding_window,
+            attention_dropout=attention_dropout,
+            num_experts_per_tok=num_experts_per_tok,
+            num_local_experts=num_local_experts,
+            output_router_logits=output_router_logits,
+            router_aux_loss_coef=router_aux_loss_coef,
             **kwargs,
         )
+        ):
+            # 初始化模型参数：词汇表大小、最大位置嵌入、隐藏层大小、中间层大小、隐藏层数量、注意力头数量、滑动窗口大小
+            self.vocab_size = vocab_size
+            self.max_position_embeddings = max_position_embeddings
+            self.hidden_size = hidden_size
+            self.intermediate_size = intermediate_size
+            self.num_hidden_layers = num_hidden_layers
+            self.num_attention_heads = num_attention_heads
+            self.sliding_window = sliding_window
+
+            # 为了向后兼容性
+            # 如果未提供 num_key_value_heads，则将其设置为 num_attention_heads
+            if num_key_value_heads is None:
+                num_key_value_heads = num_attention_heads
+
+            # 设置 key-value 头的数量
+            self.num_key_value_heads = num_key_value_heads
+            # 设置隐藏层激活函数
+            self.hidden_act = hidden_act
+            # 设置初始化范围
+            self.initializer_range = initializer_range
+            # RMS 归一化的 epsilon 值
+            self.rms_norm_eps = rms_norm_eps
+            # 是否使用缓存
+            self.use_cache = use_cache
+            # ROPE 损失函数参数
+            self.rope_theta = rope_theta
+            # 注意力机制的 dropout 概率
+            self.attention_dropout = attention_dropout
+
+            # 每个 token 的专家数量
+            self.num_experts_per_tok = num_experts_per_tok
+            # 本地专家的数量
+            self.num_local_experts = num_local_experts
+            # 是否输出路由器的 logits
+            self.output_router_logits = output_router_logits
+            # 路由器辅助损失系数
+            self.router_aux_loss_coef = router_aux_loss_coef
+
+            # 调用父类的初始化方法，设置模型的特殊标记 ID 和其他参数
+            super().__init__(
+                pad_token_id=pad_token_id,
+                bos_token_id=bos_token_id,
+                eos_token_id=eos_token_id,
+                tie_word_embeddings=tie_word_embeddings,
+                **kwargs,
+            )
 ```

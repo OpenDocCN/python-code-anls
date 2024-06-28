@@ -1,28 +1,34 @@
-# `.\transformers\models\bigbird_pegasus\modeling_bigbird_pegasus.py`
+# `.\models\bigbird_pegasus\modeling_bigbird_pegasus.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权归 Google Research 团队和 HuggingFace Inc. 团队所有
-# 根据 Apache 许可证 2.0 版本授权，除非符合许可证，否则不得使用此文件
-# 可以在以下网址获取许可证副本：http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则本软件按"原样"分发，不附带任何担保或条件
-# 查看许可证以获取详细信息
-""" PyTorch BigBirdPegasus 模型。"""
+```
+# coding=utf-8
+# Copyright 2021 Google Research The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch BigBirdPegasus model."""
 
-# 导入所需的模块
-import copy
-import math
-from typing import List, Optional, Tuple, Union
+import copy  # 导入 copy 模块用于复制对象
+import math  # 导入 math 模块用于数学运算
+from typing import List, Optional, Tuple, Union  # 导入类型提示相关的类和函数
 
-import numpy as np
-import torch
-from torch import nn
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
+import numpy as np  # 导入 NumPy 库用于数值计算
+import torch  # 导入 PyTorch 库
+from torch import nn  # 导入 PyTorch 的神经网络模块
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 导入损失函数
 
-# 导入自定义模块和类
-from ...activations import ACT2FN
-from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask
-from ...modeling_outputs import (
+from ...activations import ACT2FN  # 导入激活函数映射
+from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask  # 导入辅助注意力掩码函数
+from ...modeling_outputs import (  # 导入模型输出相关类
     BaseModelOutput,
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -31,8 +37,8 @@ from ...modeling_outputs import (
     Seq2SeqQuestionAnsweringModelOutput,
     Seq2SeqSequenceClassifierOutput,
 )
-from ...modeling_utils import PreTrainedModel
-from ...utils import (
+from ...modeling_utils import PreTrainedModel  # 导入预训练模型的基类
+from ...utils import (  # 导入工具函数
     add_code_sample_docstrings,
     add_end_docstrings,
     add_start_docstrings,
@@ -40,69 +46,61 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-from .configuration_bigbird_pegasus import BigBirdPegasusConfig
+from .configuration_bigbird_pegasus import BigBirdPegasusConfig  # 导入配置类
 
-# 获取日志记录器
-logger = logging.get_logger(__name__)
+logger = logging.get_logger(__name__)  # 获取日志记录器
 
-# 文档中用到的变量
-_CHECKPOINT_FOR_DOC = "google/bigbird-pegasus-large-arxiv"
-_CONFIG_FOR_DOC = "BigBirdPegasusConfig"
-_EXPECTED_OUTPUT_SHAPE = [1, 7, 1024]
+_CHECKPOINT_FOR_DOC = "google/bigbird-pegasus-large-arxiv"  # 文档中使用的预训练模型检查点名称
+_CONFIG_FOR_DOC = "BigBirdPegasusConfig"  # 文档中使用的配置类名称
+_EXPECTED_OUTPUT_SHAPE = [1, 7, 1024]  # 预期输出的形状
 
-# BigBirdPegasus 预训练模型列表
-BIGBIRD_PEGASUS_PRETRAINED_MODEL_ARCHIVE_LIST = [
+BIGBIRD_PEGASUS_PRETRAINED_MODEL_ARCHIVE_LIST = [  # 预训练模型的列表
     "google/bigbird-pegasus-large-arxiv",
     "google/bigbird-pegasus-large-pubmed",
     "google/bigbird-pegasus-large-bigpatent",
-    # 更多 BigBirdPegasus 模型请查看：https://huggingface.co/models?filter=bigbird_pegasus
+    # See all BigBirdPegasus models at https://huggingface.co/models?filter=bigbird_pegasus
 ]
 
-# 将输入的 token 向右移动一个位置
+
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
-    将输入的 token 向右移动一个位置。
+    Shift input ids one token to the right.
     """
-    # 创建一个新的张量，形状与输入相同，并填充为零
-    shifted_input_ids = input_ids.new_zeros(input_ids.shape)
-    # 将输入的 token 向右移动一个位置
-    shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()
-    # 将解码器起始 token 放在第一个位置
-    shifted_input_ids[:, 0] = decoder_start_token_id
+    shifted_input_ids = input_ids.new_zeros(input_ids.shape)  # 创建与 input_ids 形状相同的零张量
+    shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()  # 将 input_ids 向右移动一位
+    shifted_input_ids[:, 0] = decoder_start_token_id  # 在第一列填充 decoder_start_token_id
 
-    # 如果未定义 pad_token_id，则抛出 ValueError
     if pad_token_id is None:
-        raise ValueError("self.model.config.pad_token_id has to be defined.")
-    # 将标签中可能存在的 -100 值替换为 pad_token_id
+        raise ValueError("self.model.config.pad_token_id has to be defined.")  # 如果 pad_token_id 未定义则引发 ValueError
+    # 将 shifted_input_ids 中可能的 -100 值替换为 pad_token_id
     shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
 
-    return shifted_input_ids
+    return shifted_input_ids  # 返回右移后的 input_ids
 
 
-# BigBirdPegasus 学习到的位置嵌入类
 class BigBirdPegasusLearnedPositionalEmbedding(nn.Embedding):
     """
-    这个模块学习位置嵌入，最大尺寸固定。
+    This module learns positional embeddings up to a fixed maximum size.
     """
 
     def __init__(self, num_embeddings: int, embedding_dim: int):
-        super().__init__(num_embeddings, embedding_dim)
-    # 定义一个方法，用于计算位置编码
+        super().__init__(num_embeddings, embedding_dim)  # 调用父类 nn.Embedding 的构造方法，初始化位置嵌入层
     def forward(self, input_ids_shape: torch.Size, past_key_values_length: int = 0):
         """`input_ids_shape` is expected to be [bsz x seqlen]."""
-        # 获取输入的 batch size 和序列长度
+        # 从输入参数 `input_ids_shape` 中获取 batch size 和 sequence length
         bsz, seq_len = input_ids_shape[:2]
-        # 生成位置编码的序列，范围从 past_key_values_length 到 past_key_values_length + seq_len
+        # 生成一个序列，表示位置编码，起始位置从 `past_key_values_length` 到 `past_key_values_length + seq_len`
         positions = torch.arange(
             past_key_values_length, past_key_values_length + seq_len, dtype=torch.long, device=self.weight.device
         )
-        # 调用父类的 forward 方法，传入位置编码序列
+        # 调用父类的 `forward` 方法，传入位置编码 `positions`，并返回结果
         return super().forward(positions)
-# 从transformers.models.big_bird.modeling_big_bird.BigBirdSelfAttention复制代码，并将BigBird替换为BigBirdPegasus
+# Copied from transformers.models.big_bird.modeling_big_bird.BigBirdSelfAttention with BigBird->BigBirdPegasus
+# 定义了 BigBirdPegasusSelfAttention 类，继承自 nn.Module
 class BigBirdPegasusSelfAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
-        # 检查隐藏大小是否是注意力头数的倍数，如果不是则引发错误
+        # 检查隐藏层大小是否是注意力头数的整数倍，如果不是则抛出 ValueError 异常
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
@@ -113,21 +111,22 @@ class BigBirdPegasusSelfAttention(nn.Module):
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 创建查询、键、值的线性层
+        # 定义用于查询、键、值的线性变换层，输入大小为隐藏大小，输出大小为所有头的大小
         self.query = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
         self.key = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
         self.value = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
 
-        # 创建dropout层
+        # 定义用于dropout的层，以及是否作为解码器的标志
         self.dropout = nn.Dropout(config.attention_probs_dropout_prob)
         self.is_decoder = config.is_decoder
 
-    # 将输入张量重塑为注意力分数计算所需的形状
+    # 将输入张量转换为注意力分数的形状
     def transpose_for_scores(self, x):
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
         x = x.view(*new_x_shape)
         return x.permute(0, 2, 1, 3)
 
+    # 前向传播函数，接收隐藏状态等多个参数，执行自注意力机制
     def forward(
         self,
         hidden_states,
@@ -137,7 +136,12 @@ class BigBirdPegasusSelfAttention(nn.Module):
         encoder_attention_mask=None,
         past_key_value=None,
         output_attentions=False,
-# 从transformers.models.big_bird.modeling_big_bird.BigBirdBlockSparseAttention复制代码，并将BigBird替换为BigBirdPegasus
+    ):
+
+
+
+# Copied from transformers.models.big_bird.modeling_big_bird.BigBirdBlockSparseAttention with BigBird->BigBirdPegasus
+# 定义了 BigBirdPegasusBlockSparseAttention 类，继承自 nn.Module
 class BigBirdPegasusBlockSparseAttention(nn.Module):
     def __init__(self, config, seed=None):
         super().__init__()
@@ -145,7 +149,7 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         self.max_seqlen = config.max_position_embeddings
         self.seed = seed
 
-        # 检查隐藏大小是否是注意力头数的倍数，如果不是则引发错误
+        # 检查隐藏大小是否是注意力头数的整数倍，否则抛出 ValueError 异常
         if config.hidden_size % config.num_attention_heads != 0:
             raise ValueError(
                 f"The hidden size {config.hidden_size} is not a multiple of the number of attention "
@@ -159,16 +163,15 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         self.attention_head_size = int(config.hidden_size / config.num_attention_heads)
         self.all_head_size = self.num_attention_heads * self.attention_head_size
 
-        # 创建查询、键、值的线性层
+        # 定义用于查询、键、值的线性变换层，输入大小为隐藏大小，输出大小为所有头的大小
         self.query = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
         self.key = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
         self.value = nn.Linear(config.hidden_size, self.all_head_size, bias=config.use_bias)
     def transpose_for_scores(self, x):
-        # 计算新的张量形状，将最后两个维度调整为多头注意力的形状
+        # 计算转置后张量的新形状，以便用于注意力计算
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
-        # 调整张量形状
+        # 对输入张量进行形状变换
         x = x.view(*new_x_shape)
-        # 对张量进行维度置换，以符合注意力计算的要求
         return x.permute(0, 2, 1, 3)
 
     def forward(
@@ -181,27 +184,27 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         to_blocked_mask=None,
         output_attentions=None,
     ):
-        # 当前此“类”不能在解码器中使用。
+        # 当前这个类不能用于解码器
 
-        # 获取隐藏状态张量的大小
+        # 获取隐藏状态张量的维度信息
         batch_size, seqlen, _ = hidden_states.size()
         to_seq_length = from_seq_length = seqlen
         from_block_size = to_block_size = self.block_size
 
-        # 如果查询序列长度不是块大小的倍数，则引发错误
+        # 检查查询侧序列长度是否是块大小的倍数
         if from_seq_length % from_block_size != 0:
             raise ValueError("Query sided sequence length must be multiple of block size")
 
-        # 如果键/值序列长度不是块大小的倍数，则引发错误
+        # 检查键/值侧序列长度是否是块大小的倍数
         if to_seq_length % to_block_size != 0:
             raise ValueError("Key/Value sided sequence length must be multiple of block size")
 
-        # 对隐藏状态进行查询、键、值的线性变换并转置，以准备进行注意力计算
+        # 对查询、键、值进行转置，以便进行注意力计算
         query_layer = self.transpose_for_scores(self.query(hidden_states))
         key_layer = self.transpose_for_scores(self.key(hidden_states))
         value_layer = self.transpose_for_scores(self.value(hidden_states))
 
-        # 执行 BigBird 块稀疏注意力机制
+        # 调用自定义的大鸟块稀疏注意力机制
         context_layer, attention_probs = self.bigbird_block_sparse_attention(
             query_layer,
             key_layer,
@@ -225,31 +228,29 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
             output_attentions=output_attentions,
         )
 
-        # 重新构造上下文张量的形状
+        # 将上下文层重新变形为原始形状
         context_layer = context_layer.contiguous().view(batch_size, from_seq_length, -1)
 
-        # 如果需要输出注意力矩阵，则将其包含在输出中
+        # 如果需要输出注意力权重，将其包含在输出中
         outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
         return outputs
 
     @staticmethod
     def torch_bmm_nd(inp_1, inp_2, ndim=None):
-        """Fast nd matrix multiplication"""
-        # 快速的 n 维矩阵乘法
-        # 替代 torch.einsum 的更快方法 ("bhqk,bhkd->bhqd")
+        """快速的多维矩阵乘法"""
+        # 使用torch.bmm更快地实现torch.einsum ("bhqk,bhkd->bhqd")的功能
         return torch.bmm(inp_1.reshape((-1,) + inp_1.shape[-2:]), inp_2.reshape((-1,) + inp_2.shape[-2:])).view(
             inp_1.shape[: ndim - 2] + (inp_1.shape[ndim - 2], inp_2.shape[ndim - 1])
         )
 
     @staticmethod
     def torch_bmm_nd_transpose(inp_1, inp_2, ndim=None):
-        """Fast nd matrix multiplication with transpose"""
-        # 快速的带转置的 n 维矩阵乘法
-        # 替代 torch.einsum 的更快方法 (bhqd,bhkd->bhqk)
+        """带转置的快速多维矩阵乘法"""
+        # 使用torch.bmm更快地实现torch.einsum ("bhqd,bhkd->bhqk")的功能
         return torch.bmm(
             inp_1.reshape((-1,) + inp_1.shape[-2:]), inp_2.reshape((-1,) + inp_2.shape[-2:]).transpose(1, 2)
         ).view(inp_1.shape[: ndim - 2] + (inp_1.shape[ndim - 2], inp_2.shape[ndim - 2]))
-    # 定义一个方法，用于执行大型稀疏注意力计算
+    @staticmethod
     def bigbird_block_sparse_attention(
         self,
         query_layer,
@@ -273,16 +274,31 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         plan_num_rand_blocks,
         output_attentions,
     ):
-    
-    # 定义一个静态方法，用于在 batch_dims=2 时执行 torch.gather 操作
+        # 实现BigBird模型中的稀疏块注意力机制
+        # 参数说明:
+        # - query_layer, key_layer, value_layer: 查询、键、值的张量
+        # - band_mask: 带状掩码，限制注意力只在一定带状范围内
+        # - from_mask, to_mask: 来源和目标的掩码，限制注意力的有效范围
+        # - from_blocked_mask, to_blocked_mask: 分块的掩码，用于分块注意力机制
+        # - n_heads: 注意力头的数量
+        # - n_rand_blocks: 随机块的数量
+        # - attention_head_size: 注意力头的尺寸
+        # - from_block_size, to_block_size: 来源和目标块的尺寸
+        # - batch_size: 批次大小
+        # - from_seq_len, to_seq_len: 来源和目标序列的长度
+        # - seed: 随机种子
+        # - plan_from_length: 计划的来源长度
+        # - plan_num_rand_blocks: 计划的随机块数量
+        # - output_attentions: 是否输出注意力权重
+
+        # 实现tf.gather类似的torch版本的功能，当batch_dims=2时
     @staticmethod
     def torch_gather_b2(params, indices):
-        # 这个操作等同于 tf.gather，当 batch_dims=2 时
+        # 此操作相当于tf.gather，当batch_dims=2时
 
-        # 检查 params 和 indices 的前两个维度是否相同
         if params.shape[:2] != indices.shape[:2]:
             raise ValueError(
-                "Make sure that the first two dimensions of params and indices are identical,                 but"
+                "Make sure that the first two dimensions of params and indices are identical, but"
                 f" they are params: {params.shape[:2]} vs. indices: {indices.shape[:2]}"
             )
         num_indices_to_gather = indices.shape[-2] * indices.shape[-1]
@@ -299,7 +315,6 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         out = out_flattened.reshape(params.shape[:2] + (num_indices_to_gather,) + params.shape[3:])
         return out
 
-    # 静态方法，用于从输入创建随机掩码
     @staticmethod
     def _create_rand_mask_from_inputs(
         from_blocked_mask,
@@ -312,42 +327,62 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         from_block_size,
     ):
         """
-        从一个2D张量掩码创建3D注意力掩码。
+        Create 3D attention mask from a 2D tensor mask.
 
         Args:
-            from_blocked_mask: 形状为[batch_size, from_seq_length//from_block_size, from_block_size]的2D张量掩码。
-            to_blocked_mask: 形状为[batch_size, to_seq_length//to_block_size, to_block_size]的int32张量掩码。
-            rand_attn: 形状为[batch_size, num_attention_heads, from_seq_length//from_block_size-2, num_rand_blocks]的张量。
-            num_attention_heads: int。注意力头的数量。
-            num_rand_blocks: int。每行的随机块数。
-            batch_size: int。计算的批量大小。
-            from_seq_length: int。来自序列的长度。
-            from_block_size: int。来自序列中块的大小。
+            from_blocked_mask: 2D Tensor of shape [batch_size,
+                from_seq_length//from_block_size, from_block_size].
+                输入的来自的序列被块化后的掩码，形状为 [batch_size, from_seq_length//from_block_size, from_block_size]。
+            to_blocked_mask: int32 Tensor of shape [batch_size,
+                to_seq_length//to_block_size, to_block_size].
+                输入的目标序列被块化后的掩码，形状为 [batch_size, to_seq_length//to_block_size, to_block_size]。
+            rand_attn: [batch_size, num_attention_heads,
+                from_seq_length//from_block_size-2, num_rand_blocks]
+                随机注意力的掩码，形状为 [batch_size, num_attention_heads, from_seq_length//from_block_size-2, num_rand_blocks]。
+            num_attention_heads: int. Number of attention heads.
+                注意力头的数量。
+            num_rand_blocks: int. Number of random chunks per row.
+                每行的随机块数。
+            batch_size: int. Batch size for computation.
+                计算的批次大小。
+            from_seq_length: int. length of from sequence.
+                输入序列的长度。
+            from_block_size: int. size of block in from sequence.
+                输入序列中的块大小。
 
         Returns:
-            形状为[batch_size, num_attention_heads, from_seq_length//from_block_size-2, from_block_size, num_rand_blocks*to_block_size]的float张量。
+            float Tensor of shape [batch_size, num_attention_heads, from_seq_length//from_block_size-2,
+                from_block_size, num_rand_blocks*to_block_size].
+            返回形状为 [batch_size, num_attention_heads, from_seq_length//from_block_size-2,
+                from_block_size, num_rand_blocks*to_block_size] 的浮点数张量。
         """
         num_windows = from_seq_length // from_block_size - 2
+        # 根据输入序列的块大小计算窗口数
         rand_mask = torch.stack([p1[i1.flatten()] for p1, i1 in zip(to_blocked_mask, rand_attn)])
+        # 使用目标序列的掩码和随机注意力创建随机掩码
         rand_mask = rand_mask.view(batch_size, num_attention_heads, num_windows, num_rand_blocks * from_block_size)
+        # 通过 einsum 操作组合来自序列的掩码和随机掩码
         rand_mask = torch.einsum("blq,bhlk->bhlqk", from_blocked_mask[:, 1:-1], rand_mask)
         return rand_mask
 
     @staticmethod
     def _get_rand_attn_plan(from_seq_length, from_block_size, num_rand_blocks):
         """
-        给出随机注意力放置计划。
+        Gives the plan of where to put random attention.
 
         Args:
-            from_seq_length: int。来自序列的长度。
-            from_block_size: int。来自序列中块的大小。
-            num_rand_blocks: int。每行的随机块数。
+            from_seq_length: int. length of from sequence.
+                输入序列的长度。
+            from_block_size: int. size of block in from sequence.
+                输入序列中的块大小。
+            num_rand_blocks: int. Number of random chunks per row.
+                每行的随机块数。
 
         Returns:
-            plan_from_length: 来自块计划的结束位置。
-            plan_num_rand_blocks: 每个块的随机结束位置数量。
+            plan_from_length: ending location of from block plan_num_rand_blocks: number of random ending location for
+                each block
+            返回计划的输入序列块结束位置和每个块的随机结束位置的计划。
         """
-
         plan_from_length = []
         plan_num_rand_blocks = []
         if (2 * num_rand_blocks + 5) < (from_seq_length // from_block_size):
@@ -386,59 +421,60 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         """
         # using this method when from_seq_length in [1024, 3072, 4096]
 
-        # 如果 from_seq_length 除以 from_block_size 不等于 to_seq_length 除以 to_block_size，则抛出数值错误
+        # 检查是否 from_seq_length 和 to_seq_length 的块数相等，否则抛出异常
         if from_seq_length // from_block_size != to_seq_length // to_block_size:
             raise ValueError("Error the number of blocks needs to be same!")
 
-        # 创建一个大小为 from_seq_length//from_block_size-2 by num_rand_blocks 的全零矩阵
+        # 创建一个全零数组，表示随机注意力的邻接列表
         rand_attn = np.zeros((from_seq_length // from_block_size - 2, num_rand_blocks), dtype=np.int32)
-        # 在推断（评估）过程中不使用随机性，直接返回全零矩阵
+
+        # 推理阶段（非训练状态），直接返回全零的随机注意力邻接列表
         if not self.training:
             return rand_attn
-        # 创建中间序列，范围从1到to_seq_length // to_block_size - 2
+
+        # 创建中间序列，用于生成随机块索引
         middle_seq = np.arange(1, to_seq_length // to_block_size - 1, dtype=np.int32)
         last = to_seq_length // to_block_size - 1
-        # 如果 last_idx 大于 (2 * to_block_size)，则将 last 限制为 (last_idx // to_block_size) - 1
+
+        # 根据 last_idx 的值确定最后一个块的索引范围
         if last_idx > (2 * to_block_size):
             last = (last_idx // to_block_size) - 1
 
-        r = num_rand_blocks  # shorthand
-        # 遍历 from_seq_length // from_block_size - 1 次，从第二个块开始到倒数第二个块
+        r = num_rand_blocks  # 缩写 r 表示 num_rand_blocks
+
+        # 循环创建每行的随机注意力邻接列表
         for i in range(1, from_seq_length // from_block_size - 1):
             start = i - 2
             end = i
-            # 如果当前是第一个块
+
             if i == 1:
-                # 从中间序列中的第三个元素到最后一个元素中随机选择 r 个元素
+                # 对第一行进行随机排列选择中间序列中的块索引
                 rand_attn[i - 1, :] = np.random.permutation(middle_seq[2:last])[:r]
-            # 如果当前是第二个块
             elif i == 2:
-                # 从中间序列中的第四个元素到最后一个元素中随机选择 r 个元素
+                # 对第二行进行随机排列选择中间序列中的块索引
                 rand_attn[i - 1, :] = np.random.permutation(middle_seq[3:last])[:r]
-            # 如果当前是倒数第三个块
             elif i == from_seq_length // from_block_size - 3:
-                # 从中间序列中的第一个元素到最后一个元素中随机选择 r 个元素
+                # 对倒数第三行进行随机排列选择中间序列中的块索引
                 rand_attn[i - 1, :] = np.random.permutation(middle_seq[:last])[:r]
-            # 如果当前是倒数第二个块
             elif i == from_seq_length // from_block_size - 2:
-                # 从中间序列中的第一个元素到最后一个元素中随机选择 r 个元素
+                # 对倒数第二行进行随机排列选择中间序列中的块索引
                 rand_attn[i - 1, :] = np.random.permutation(middle_seq[:last])[:r]
             else:
-                # 如果起始索引大于最后一个索引，将起始索引设置为最后一个索引，并从中间序列的开头选择 r 个元素
                 if start > last:
                     start = last
+                    # 如果起始大于最后一个块的索引，则选择中间序列中的前 start 个块索引进行随机排列
                     rand_attn[i - 1, :] = np.random.permutation(middle_seq[:start])[:r]
-                # 如果结束索引加一等于最后一个索引，从中间序列的开头选择 r 个元素
                 elif (end + 1) == last:
+                    # 如果结束索引的下一个等于最后一个块的索引，则选择中间序列中的前 start 个块索引进行随机排列
                     rand_attn[i - 1, :] = np.random.permutation(middle_seq[:start])[:r]
-                # 否则，从连接起始索引和结束索引加一之后到最后一个索引之间的元素中随机选择 r 个元素
                 else:
+                    # 否则，选择中间序列中除了指定的 start 和 end 块索引外的其余块索引进行随机排列
                     rand_attn[i - 1, :] = np.random.permutation(
                         np.concatenate((middle_seq[:start], middle_seq[end + 1 : last]))
                     )[:r]
-        # 返回随机注意力的邻接列表
+
+        # 返回生成的随机注意力邻接列表
         return rand_attn
-    # 定义一个方法，用于生成带有头部的大鸟块随机掩码
     def _bigbird_block_rand_mask_with_head(
         self,
         from_seq_length,
@@ -455,8 +491,32 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         global_block_left=1,
         global_block_right=1,
     ):
+        """
+        Generates a random mask for BigBird attention with head.
+
+        Args:
+            from_seq_length: int. Length of the source sequence.
+            to_seq_length: int. Length of the target sequence.
+            from_block_size: int. Block size of the source sequence.
+            to_block_size: int. Block size of the target sequence.
+            num_heads: int. Number of attention heads.
+            plan_from_length: int. Planned length of the source sequence.
+            plan_num_rand_blocks: int. Planned number of random blocks.
+            window_block_left: int. Number of blocks of window to the left of a block.
+            window_block_right: int. Number of blocks of window to the right of a block.
+            global_block_top: int. Number of blocks globally used at the top.
+            global_block_bottom: int. Number of blocks globally used at the bottom.
+            global_block_left: int. Number of blocks globally used to the left.
+            global_block_right: int. Number of blocks globally used to the right.
+
+        Returns:
+            Random mask with head for BigBird attention.
+        """
+        # Implementation of random mask generation for BigBird attention
+        pass
+
+
     @staticmethod
-    # 定义一个静态方法，用于获取单个块的行注意力
     def _get_single_block_row_attention(
         block_id,
         to_start_block_id,
@@ -468,94 +528,114 @@ class BigBirdPegasusBlockSparseAttention(nn.Module):
         global_block_right=1,
     ):
         """
-        对于单个行块，获取随机行注意力。
+        For a single row block, get random row attention.
 
         Args:
-            block_id: int. 行的块ID。
-            to_start_block_id: int. 随机注意力列的起始ID。
-            to_end_block_id: int. 随机注意力列的结束ID。
-            num_rand_blocks: int. 要选择的随机块数。
-            window_block_left: int. 块左侧窗口中的块数。
-            window_block_right: int. 块右侧窗口中的块数。
-            global_block_left: int. 左侧全局使用的块数。
-            global_block_right: int. 右侧全局使用的块数。
+            block_id: int. Block ID of the row.
+            to_start_block_id: int. Start ID of the target blocks for random attention.
+            to_end_block_id: int. End ID of the target blocks for random attention.
+            num_rand_blocks: int. Number of random blocks to be selected.
+            window_block_left: int. Number of blocks of window to the left of a block.
+            window_block_right: int. Number of blocks of window to the right of a block.
+            global_block_left: int. Number of blocks globally used to the left.
+            global_block_right: int. Number of blocks globally used to the right.
 
         Returns:
-            包含大小为num_rand_blocks的随机注意力向量的行。
+            Array containing the selected random attention vector of size num_rand_blocks.
         """
-        # 生成要选择随机注意力的to_blocks列表
+        # List of to_blocks from which to choose random attention
         to_block_list = np.arange(to_start_block_id, to_end_block_id, dtype=np.int32)
-        # 对块进行排列
+        # Permute the blocks
         perm_block = np.random.permutation(to_block_list)
 
-        # 当前块ID的非法块，使用窗口
+        # Illegal blocks for the current block id, using window
         illegal_blocks = list(range(block_id - window_block_left, block_id + window_block_right + 1))
 
-        # 在开头和结尾添加块
+        # Add blocks at the start and at the end
         illegal_blocks.extend(list(range(global_block_left)))
         illegal_blocks.extend(list(range(to_end_block_id - global_block_right, to_end_block_id)))
 
-        # 第二个from_block不能在倒数第二个to_block上选择随机注意力
+        # The second from_block cannot choose random attention on second last to_block
         if block_id == 1:
             illegal_blocks.append(to_end_block_id - 2)
 
-        # 倒数第二个from_block不能在第二个to_block上选择随机注意力
+        # The second last from_block cannot choose random attention on second to_block
         if block_id == to_end_block_id - 2:
             illegal_blocks.append(1)
 
-        selected_random_blokcs = []
+        selected_random_blocks = []
 
         for i in range(to_end_block_id - to_start_block_id):
             if perm_block[i] not in illegal_blocks:
-                selected_random_blokcs.append(perm_block[i])
-            if len(selected_random_blokcs) == num_rand_blocks:
+                selected_random_blocks.append(perm_block[i])
+            if len(selected_random_blocks) == num_rand_blocks:
                 break
-        return np.array(selected_random_blokcs, dtype=np.int32)
+        return np.array(selected_random_blocks, dtype=np.int32)
+# 定义 BigBirdPegasusEncoderAttention 类，继承自 nn.Module，用于编码器部分的注意力机制
 class BigBirdPegasusEncoderAttention(nn.Module):
+    # 初始化方法，接受配置参数 config 和种子参数 seed（可选）
     def __init__(self, config, seed=None):
         super().__init__()
-        self.config = config  # 初始化模型配置
-        self.seed = seed  # 设定种子用于随机数生成
+        # 将配置参数 config 和种子参数 seed 存储在实例中
+        self.config = config
+        self.seed = seed
 
-        self.attention_type = config.attention_type  # 从配置中获取注意力类型
+        # 从配置中获取注意力类型并存储在实例变量中
+        self.attention_type = config.attention_type
 
+        # 根据不同的注意力类型选择对应的注意力模块
         if self.attention_type == "original_full":
-            self.self = BigBirdPegasusSelfAttention(config)  # 如果是原始的全局注意力，使用对应的自注意力模块
+            self.self = BigBirdPegasusSelfAttention(config)
         elif self.attention_type == "block_sparse":
-            self.self = BigBirdPegasusBlockSparseAttention(config, seed)  # 如果是块稀疏注意力，使用对应的自注意力模块
+            self.self = BigBirdPegasusBlockSparseAttention(config, seed)
         else:
+            # 如果注意力类型不是预期的值，抛出 ValueError 异常
             raise ValueError(
                 f"attention_type can either be original_full or block_sparse, but is {self.config.attention_type}"
-            )  # 如果注意力类型不合法，抛出数值错误异常
+            )
 
-        self.output = nn.Linear(config.hidden_size, config.hidden_size, bias=config.use_bias)  # 线性变换层用于输出
+        # 定义输出层，将隐藏状态映射回原始维度
+        self.output = nn.Linear(config.hidden_size, config.hidden_size, bias=config.use_bias)
 
+    # 设置注意力类型的方法，接受字符串类型的 value 参数
     def set_attention_type(self, value: str):
+        # 如果 value 不在允许的类型列表中，则抛出 ValueError 异常
         if value not in ["original_full", "block_sparse"]:
             raise ValueError(
                 f"attention_type can only be set to either 'original_full' or 'block_sparse', but is {value}"
-            )  # 如果设置的注意力类型不合法，抛出数值错误异常
-        # 如果注意力类型已经正确设置，则直接返回
+            )
+        
+        # 如果 value 和当前注意力类型相同，则不做任何操作直接返回
         if value == self.attention_type:
             return
 
-        self.attention_type = value  # 更新注意力类型
+        # 将实例的 attention_type 设置为新的 value
+        self.attention_type = value
+        
+        # 根据新的 attention_type 重新设置 self.self 对象
         if value == "original_full":
-            # 将所有权重复制到新的全局注意力类中
+            # 复制所有权重到新的完全注意力类
             attn_weights = BigBirdPegasusSelfAttention(self.config)
         else:
-            # 将所有权重复制到新的稀疏注意力类中
+            # 复制所有权重到新的稀疏注意力类
             attn_weights = BigBirdPegasusBlockSparseAttention(self.config, self.seed)
 
-        attn_weights.query = self.self.query  # 复制查询权重
-        attn_weights.value = self.self.value  # 复制值权重
-        attn_weights.key = self.self.key  # 复制键权重
-        self.self = attn_weights  # 更新自注意力模块
-        self.attention_type = value  # 更新注意力类型
+        # 将当前 self.self 的 query、value、key 属性复制到新的 attn_weights 对象
+        attn_weights.query = self.self.query
+        attn_weights.value = self.self.value
+        attn_weights.key = self.self.key
+        
+        # 更新实例的 self.self 为新的 attn_weights
+        self.self = attn_weights
+        
+        # 同时更新实例的 attention_type
+        self.attention_type = value
 
+        # 如果不处于训练模式，则将 self.self 设为评估状态
         if not self.training:
-            self.self.eval()  # 如果不处于训练模式，将自注意力模块设置为评估模式
+            self.self.eval()
 
+    # 前向传播方法，接受多个输入参数并返回输出
     def forward(
         self,
         hidden_states,
@@ -569,29 +649,33 @@ class BigBirdPegasusEncoderAttention(nn.Module):
         from_blocked_mask=None,
         to_blocked_mask=None,
     ):
-        # 扩展维度以在自注意力模块中进行乘法操作
+        # 如果 head_mask 不为 None，则将其扩展一个维度以便在自注意力模块中进行乘法操作
         head_mask = head_mask.reshape(1, -1, 1, 1) if head_mask is not None else None
 
+        # 根据配置中的 attention_type 选择不同的 self.self 模块进行计算
         if self.config.attention_type == "original_full":
+            # 使用完全注意力模块进行计算
             self_outputs = self.self(
                 hidden_states,
                 attention_mask,
                 head_mask,
                 past_key_value=past_key_value,
                 output_attentions=output_attentions,
-            )  # 如果是原始的全局注意力，调用对应的自注意力模块
+            )
         else:
+            # 使用稀疏注意力模块进行计算
             self_outputs = self.self(
                 hidden_states, band_mask, from_mask, to_mask, from_blocked_mask, to_blocked_mask, output_attentions
-            )  # 如果是块稀疏注意力，调用对应的自注意力模块
+            )
 
-        attention_output = self.output(self_outputs[0])  # 输出层处理注意力输出
-        outputs = (attention_output,) + self_outputs[1:]  # 如果需要输出注意力权重，则添加到输出中
+        # 将注意力输出通过输出层映射回原始维度
+        attention_output = self.output(self_outputs[0])
+        
+        # 如果需要输出注意力矩阵，则在输出元组中包含它们
+        outputs = (attention_output,) + self_outputs[1:]  # 如果需要，添加注意力矩阵到输出元组中
         return outputs
 
-
-# 从transformers.models.bart.modeling_bart.BartAttention复制而来，将BartConfig->BigBirdPegasusConfig，Bart->BigBirdPegasusDecoder
-```  
+# 从 transformers.models.bart.modeling_bart.BartAttention 复制并修改为 BigBirdPegasusDecoderConfig->BigBirdPegasusConfig, Bart->BigBirdPegasusDecoder
 class BigBirdPegasusDecoderAttention(nn.Module):
     """Multi-headed attention from 'Attention Is All You Need' paper"""
 
@@ -606,90 +690,53 @@ class BigBirdPegasusDecoderAttention(nn.Module):
         config: Optional[BigBirdPegasusConfig] = None,
     ):
         super().__init__()
-        # 初始化注意力机制的参数
-        self.embed_dim = embed_dim
-        self.num_heads = num_heads
-        self.dropout = dropout
-        self.head_dim = embed_dim // num_heads
-        self.config = config
+        self.embed_dim = embed_dim  # 设置注意力机制的嵌入维度
+        self.num_heads = num_heads  # 设置注意力头的数量
+        self.dropout = dropout  # 设置dropout率
+        self.head_dim = embed_dim // num_heads  # 计算每个注意力头的维度
+        self.config = config  # 设置配置参数
 
-        # 确保头的维度整除嵌入维度
         if (self.head_dim * num_heads) != self.embed_dim:
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
             )
-        # 缩放因子
-        self.scaling = self.head_dim**-0.5
-        self.is_decoder = is_decoder
-        self.is_causal = is_causal
+        self.scaling = self.head_dim**-0.5  # 缩放因子，用于调整注意力分布
+        self.is_decoder = is_decoder  # 是否为解码器
+        self.is_causal = is_causal  # 是否是因果的
 
-        # 初始化线性映射层
-        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
-        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
-        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
-        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # 线性变换k
+        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # 线性变换v
+        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # 线性变换q
+        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # 输出变换
 
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
-        # 将张量重塑为多头形式
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
+        # 将输入张量reshape为(batch_size, seq_len, num_heads, head_dim)的形状，并进行维度转置和连续化处理
 
     def forward(
         self,
-        hidden_states: torch.Tensor,
-        key_value_states: Optional[torch.Tensor] = None,
-        past_key_value: Optional[Tuple[torch.Tensor]] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        layer_head_mask: Optional[torch.Tensor] = None,
-        output_attentions: bool = False,
-):
-        # 注意力机制的前向传播
-        pass
-
-class BigBirdPegasusEncoderLayer(nn.Module):
-    def __init__(self, config: BigBirdPegasusConfig, seed=None):
-        super().__init__()
-        # 初始化编码器层的参数
-        self.attention_type = config.attention_type
-        self.embed_dim = config.d_model
-        self.self_attn = BigBirdPegasusEncoderAttention(config, seed=seed)
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        self.dropout = config.dropout
-        self.activation_fn = ACT2FN[config.activation_function]
-        self.activation_dropout = config.activation_dropout
-        self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)
-        self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
-
-    def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: torch.Tensor,
-        layer_head_mask: torch.Tensor,
-        band_mask=None,
-        from_mask=None,
-        to_mask=None,
-        from_blocked_mask=None,
-        to_blocked_mask=None,
-        output_attentions: bool = False,
-):
-        # 编码器层的前向传播
-        pass
+        hidden_states: torch.Tensor,  # 输入的隐藏状态张量
+        key_value_states: Optional[torch.Tensor] = None,  # 键值对状态张量（可选）
+        past_key_value: Optional[Tuple[torch.Tensor]] = None,  # 过去的键值对（可选）
+        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码（可选）
+        layer_head_mask: Optional[torch.Tensor] = None,  # 层级头掩码（可选）
+        output_attentions: bool = False,  # 是否输出注意力权重
     ):
         """
         Args:
-            hidden_states (`torch.FloatTensor`): 形状为 `(batch, seq_len, embed_dim)` 的层的输入
-            attention_mask (`torch.FloatTensor`): 大小为 `(batch, 1, tgt_len, src_len)` 的注意力掩码，
-                其中填充元素由非常大的负值表示。
-            output_attentions (`bool`, *可选*):
-                是否返回所有注意力层的注意力张量。有关更多详细信息，请参阅返回张量下的`attentions`。
+            hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
+            attention_mask (`torch.FloatTensor`): attention mask of size
+                `(batch, 1, tgt_len, src_len)` where padding elements are indicated by very large negative values.
+            output_attentions (`bool`, *optional*):
+                Whether or not to return the attentions tensors of all attention layers. See `attentions` under
+                returned tensors for more detail.
         """
-        # 保存残差连接
-        residual = hidden_states
-        # 对输入进行自注意力层归一化
-        hidden_states = self.self_attn_layer_norm(hidden_states)
+        residual = hidden_states  # 保存输入 hidden_states 作为残差连接的基础
 
-        # 自注意力计算及其输出
+        hidden_states = self.self_attn_layer_norm(hidden_states)  # 对输入 hidden_states 进行层归一化
+
+        # 使用 self-attention 模块处理归一化后的 hidden_states
         self_attention_outputs = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
@@ -701,85 +748,102 @@ class BigBirdPegasusEncoderLayer(nn.Module):
             from_blocked_mask=from_blocked_mask,
             to_blocked_mask=to_blocked_mask,
         )
-        # 更新隐藏状态
-        hidden_states = self_attention_outputs[0]
+        hidden_states = self_attention_outputs[0]  # 更新 hidden_states 为 self-attention 的输出结果
 
-        # 使用丢弃操作进行正则化
+        # 对 hidden_states 进行 dropout 处理
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 更新隐藏状态
+
+        # 残差连接：将残差加回到处理后的 hidden_states
         hidden_states = residual + hidden_states
 
-        # 保存残差连接
-        residual = hidden_states
-        # 对输入进行最终层归一化
-        hidden_states = self.final_layer_norm(hidden_states)
-        # 应用激活函数
-        hidden_states = self.activation_fn(self.fc1(hidden_states))
+        residual = hidden_states  # 更新残差连接的基础为当前的 hidden_states
 
-        # 第二个全连接层
-        hidden_states = self.fc2(hidden_states)
-        # 使用丢弃操作进行正则化
-        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 更新隐藏状态
+        hidden_states = self.final_layer_norm(hidden_states)  # 对 hidden_states 进行最终的层归一化
+        hidden_states = self.activation_fn(self.fc1(hidden_states))  # 经过激活函数和第一个全连接层处理
+
+        hidden_states = self.fc2(hidden_states)  # 第二个全连接层处理
+        hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)  # dropout 处理
+
+        # 残差连接：将残差加回到处理后的 hidden_states
         hidden_states = residual + hidden_states
 
-        # 如果隐藏状态的数据类型为 torch.float16 并且存在 inf 或 nan
+        # 如果 hidden_states 的数据类型为 torch.float16，并且包含无穷大或 NaN 值，则进行数值截断处理
         if hidden_states.dtype == torch.float16 and (
             torch.isinf(hidden_states).any() or torch.isnan(hidden_states).any()
         ):
-            # 将隐藏状态限制在一个较小的范围内
             clamp_value = torch.finfo(hidden_states.dtype).max - 1000
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
 
-        # 输出包含隐藏状态
-        outputs = (hidden_states,)
+        outputs = (hidden_states,)  # 将最终的 hidden_states 打包为输出元组
 
-        # 如果需要输出注意力，将注意力张量添加到输出中
         if output_attentions:
-            outputs += (self_attention_outputs[1],)
+            outputs += (self_attention_outputs[1],)  # 如果需要返回 attentions，则将 attentions 加入输出元组
 
-        return outputs
+        return outputs  # 返回最终输出元组，包含处理后的 hidden_states 和可能的 attentions
 
     def set_attention_type(self, value: str):
-        if value not in ["original_full", "block_sparse"]:
+        if value not in ["original_full", "block_sparse"]:  # 检查输入值是否合法
             raise ValueError(
                 f"attention_type can only be set to either 'original_full' or 'block_sparse', but is {value}"
             )
-        # 如果给定的值与当前的注意力类型一致，则直接返回
+        # 如果 attention_type 已经正确设置，则直接返回，无需修改
         if value == self.attention_type:
             return
-        # 否则更新注意力类型
-        self.attention_type = value
-        self.self_attn.set_attention_type(value)
+        self.attention_type = value  # 更新 attention_type 为新的值
+        self.self_attn.set_attention_type(value)  # 更新 self-attention 模块的 attention_type
+# 定义 BigBirdPegasusDecoderLayer 类，继承自 nn.Module
 class BigBirdPegasusDecoderLayer(nn.Module):
+    
+    # 初始化方法，接受一个 BigBirdPegasusConfig 类型的参数 config
     def __init__(self, config: BigBirdPegasusConfig):
         super().__init__()
+        
+        # 设置 embed_dim 属性为 config.d_model
         self.embed_dim = config.d_model
+        
+        # 创建 BigBirdPegasusDecoderAttention 对象并赋给 self.self_attn 属性
         self.self_attn = BigBirdPegasusDecoderAttention(
-            embed_dim=self.embed_dim,  # 设置自注意力机制的嵌入维度
-            num_heads=config.decoder_attention_heads,  # 自注意力机制的头数
-            dropout=config.attention_dropout,  # 自注意力机制的dropout比率
-            is_decoder=True,  # 表明这是解码器层
-            bias=config.use_bias,  # 是否使用偏置
+            embed_dim=self.embed_dim,
+            num_heads=config.decoder_attention_heads,
+            dropout=config.attention_dropout,
+            is_decoder=True,
+            bias=config.use_bias,
         )
-        self.dropout = config.dropout  # dropout比率
-        self.activation_fn = ACT2FN[config.activation_function]  # 激活函数
-        self.activation_dropout = config.activation_dropout  # 激活函数的dropout比率
+        
+        # 设置 dropout 属性为 config.dropout
+        self.dropout = config.dropout
+        
+        # 根据配置中的激活函数名称获取相应的激活函数，并赋给 self.activation_fn 属性
+        self.activation_fn = ACT2FN[config.activation_function]
+        
+        # 设置 activation_dropout 属性为 config.activation_dropout
+        self.activation_dropout = config.activation_dropout
 
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 自注意力机制后的LayerNorm
+        # 创建 nn.LayerNorm 对象并赋给 self.self_attn_layer_norm 属性
+        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
+        
+        # 创建 BigBirdPegasusDecoderAttention 对象并赋给 self.encoder_attn 属性
         self.encoder_attn = BigBirdPegasusDecoderAttention(
-            self.embed_dim,  # 编码器注意力机制的嵌入维度
-            config.decoder_attention_heads,  # 编码器注意力机制的头数
-            dropout=config.attention_dropout,  # 编码器注意力机制的dropout比率
-            is_decoder=True,  # 表明这是解码器层
-            bias=config.use_bias,  # 是否使用偏置
+            self.embed_dim,
+            config.decoder_attention_heads,
+            dropout=config.attention_dropout,
+            is_decoder=True,
+            bias=config.use_bias,
         )
-        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 编码器注意力机制后的LayerNorm
-        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)  # 全连接层1
-        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)  # 全连接层2
-        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 最终的LayerNorm
+        
+        # 创建 nn.LayerNorm 对象并赋给 self.encoder_attn_layer_norm 属性
+        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)
+        
+        # 创建 nn.Linear 对象并赋给 self.fc1 属性，用于第一个全连接层
+        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
+        
+        # 创建 nn.Linear 对象并赋给 self.fc2 属性，用于第二个全连接层
+        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
+        
+        # 创建 nn.LayerNorm 对象并赋给 self.final_layer_norm 属性
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)
 
-    # 从transformers.models.mbart.modeling_mbart.MBartDecoderLayer.forward复制而来
+    # 定义 forward 方法，执行模型的前向传播
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -792,10 +856,15 @@ class BigBirdPegasusDecoderLayer(nn.Module):
         output_attentions: Optional[bool] = False,
         use_cache: Optional[bool] = True,
     ):
-# 从transformers.models.bart.modeling_bart.BartClassificationHead 复制而来，将Bart改为BigBirdPegasus
-class BigBirdPegasusClassificationHead(nn.Module):
-    """用于句子级分类任务的头部模块。"""
+        # 略
+        pass
 
+
+# 定义 BigBirdPegasusClassificationHead 类，继承自 nn.Module
+class BigBirdPegasusClassificationHead(nn.Module):
+    """Head for sentence-level classification tasks."""
+
+    # 初始化方法，接受 input_dim、inner_dim、num_classes、pooler_dropout 四个参数
     def __init__(
         self,
         input_dim: int,
@@ -804,59 +873,86 @@ class BigBirdPegasusClassificationHead(nn.Module):
         pooler_dropout: float,
     ):
         super().__init__()
-        self.dense = nn.Linear(input_dim, inner_dim)  # 全连接层
-        self.dropout = nn.Dropout(p=pooler_dropout)  # dropout层
-        self.out_proj = nn.Linear(inner_dim, num_classes)  # 输出层
+        
+        # 创建 nn.Linear 对象并赋给 self.dense 属性，用于密集连接层
+        self.dense = nn.Linear(input_dim, inner_dim)
+        
+        # 创建 nn.Dropout 对象并赋给 self.dropout 属性，用于 dropout 操作
+        self.dropout = nn.Dropout(p=pooler_dropout)
+        
+        # 创建 nn.Linear 对象并赋给 self.out_proj 属性，用于最终的线性变换
+        self.out_proj = nn.Linear(inner_dim, num_classes)
 
+    # 定义 forward 方法，执行模型的前向传播
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        hidden_states = self.dropout(hidden_states)  # 应用dropout
-        hidden_states = self.dense(hidden_states)  # 全连接层
-        hidden_states = torch.tanh(hidden_states)  # Tanh激活函数
-        hidden_states = self.dropout(hidden_states)  # 应用dropout
-        hidden_states = self.out_proj(hidden_states)  # 输出层
+        # 应用 dropout 操作到 hidden_states
+        hidden_states = self.dropout(hidden_states)
+        
+        # 通过全连接层 self.dense 进行线性变换
+        hidden_states = self.dense(hidden_states)
+        
+        # 应用 tanh 激活函数
+        hidden_states = torch.tanh(hidden_states)
+        
+        # 再次应用 dropout 操作
+        hidden_states = self.dropout(hidden_states)
+        
+        # 通过最终的线性变换 self.out_proj 得到最终输出
+        hidden_states = self.out_proj(hidden_states)
+        
+        # 返回最终的输出张量
         return hidden_states
 
 
+# 定义 BigBirdPegasusPreTrainedModel 类，继承自 PreTrainedModel
 class BigBirdPegasusPreTrainedModel(PreTrainedModel):
-    config_class = BigBirdPegasusConfig  # 使用的配置类
-    base_model_prefix = "model"  # 基础模型的前缀
-    supports_gradient_checkpointing = True  # 支持梯度检查点
-    _no_split_modules = ["BigBirdPegasusEncoderLayer", "BigBirdPegasusDecoderLayer"]  # 不分割的模块列表
-    _skip_keys_device_placement = "past_key_values"  # 跳过的键设备放置
-    # 初始化模型参数的权重
+    
+    # 设置 config_class 属性为 BigBirdPegasusConfig 类
+    config_class = BigBirdPegasusConfig
+    
+    # 设置 base_model_prefix 属性为 "model"
+    base_model_prefix = "model"
+    
+    # 设置 supports_gradient_checkpointing 属性为 True
+    supports_gradient_checkpointing = True
+    
+    # 设置 _no_split_modules 属性为 ["BigBirdPegasusEncoderLayer", "BigBirdPegasusDecoderLayer"]
+    _no_split_modules = ["BigBirdPegasusEncoderLayer", "BigBirdPegasusDecoderLayer"]
+    
+    # 设置 _skip_keys_device_placement 属性为 "past_key_values"
+    _skip_keys_device_placement = "past_key_values"
+    # 初始化模块的权重，根据模块类型设置不同的初始化标准差
     def _init_weights(self, module):
-        # 获取初始化标准差
         std = self.config.init_std
-        # 如果是线性层
+        # 如果是线性层模块
         if isinstance(module, nn.Linear):
             # 使用正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=std)
-            # 如果存在偏置项，将其初始化为零
+            # 如果存在偏置项，则将其初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
-        # 如果是嵌入层
+        # 如果是嵌入层模块
         elif isinstance(module, nn.Embedding):
             # 使用正态分布初始化权重
             module.weight.data.normal_(mean=0.0, std=std)
-            # 如果存在填充索引，将填充索引对应的权重初始化为零
+            # 如果存在填充索引，则将其对应的权重初始化为零
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
 
-    # 返回虚拟输入，用于模型推理
     @property
+    # 返回虚拟的输入数据，用于模型测试
     def dummy_inputs(self):
-        # 获取填充标记
+        # 获取填充标记的 ID
         pad_token = self.config.pad_token_id
-        # 创建虚拟输入张量
+        # 创建输入 ID 张量，包含两个示例句子的 ID 序列
         input_ids = torch.tensor([[0, 6, 10, 4, 2], [0, 8, 12, 2, pad_token]], device=self.device)
-        # 构建虚拟输入字典
+        # 构建虚拟输入字典，包括注意力掩码和输入 ID
         dummy_inputs = {
-            "attention_mask": input_ids.ne(pad_token),
-            "input_ids": input_ids,
+            "attention_mask": input_ids.ne(pad_token),  # 注意力掩码表示哪些位置是填充的
+            "input_ids": input_ids,  # 实际输入的 ID 序列
         }
         # 返回虚拟输入字典
         return dummy_inputs
-# 定义 BigBirdPegasus 模型的起始文档字符串，包含模型的继承关系、参数说明等信息
 BIGBIRD_PEGASUS_START_DOCSTRING = r"""
     This model inherits from [`PreTrainedModel`]. Check the superclass documentation for the generic methods the
     library implements for all its model (such as downloading or saving, resizing the input embeddings etc.)
@@ -872,11 +968,10 @@ BIGBIRD_PEGASUS_START_DOCSTRING = r"""
             [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
-# 定义 BigBirdPegasus 模型的生成示例文档字符串，包含摘要示例代码
 BIGBIRD_PEGASUS_GENERATION_EXAMPLE = r"""
     Summarization example:
 
-    ```py
+    ```python
     >>> from transformers import AutoTokenizer, BigBirdPegasusForConditionalGeneration
 
     >>> model = BigBirdPegasusForConditionalGeneration.from_pretrained("google/bigbird-pegasus-large-arxiv")
@@ -899,78 +994,75 @@ BIGBIRD_PEGASUS_GENERATION_EXAMPLE = r"""
     ```
 """
 
-# 定义 BigBirdPegasus 模型的输入文档字符串
 BIGBIRD_PEGASUS_INPUTS_DOCSTRING = r"""
+    Placeholder for documenting inputs for BigBirdPegasus models.
 """
 
-# 定义 BigBirdPegasus 模型的独立���入文档字符串
 BIGBIRD_PEGASUS_STANDALONE_INPUTS_DOCSTRING = r"""
+    Placeholder for documenting standalone inputs for BigBirdPegasus models.
+"""
     Args:
         input_ids (`torch.LongTensor` of shape `(batch_size, sequence_length)`):
-            # 输入序列标记在词汇表中的索引。默认情况下会忽略填充。
-            # 使用 [`ProphetNetTokenizer`] 可以获得这些索引。有关详情，请参阅 [`PreTrainedTokenizer.encode`] 和 [`PreTrainedTokenizer.__call__`]。
+            # 输入序列标记在词汇表中的索引。默认情况下，忽略填充标记。
+
+            # 可以使用 `ProphetNetTokenizer` 来获取这些索引。详见 `PreTrainedTokenizer.encode` 和 `PreTrainedTokenizer.__call__`。
+
             # [什么是输入 ID？](../glossary#input-ids)
         attention_mask (`torch.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
-            # 避免在填充标记索引上执行注意力的掩码。掩码值在 `[0, 1]` 之间：
+            # 避免对填充标记进行注意力计算的掩码张量。掩码值在 `[0, 1]` 范围内：
 
-            # - 对于 **未掩码** 的标记，掩码值为 1，
-            # - 对于 **掩码** 的标记，掩码值为 0。
+            # - 1 表示 **未被掩码** 的标记，
+            # - 0 表示 **被掩码** 的标记。
 
             # [什么是注意力掩码？](../glossary#attention-mask)
         output_attentions (`bool`, *optional*):
-            # 是否返回所有注意力层的注意力张量。有关更多详细信息，请参见返回的张量下的 `attentions`。
+            # 是否返回所有注意力层的注意力张量。详见返回的张量中的 `attentions` 获取更多细节。
         output_hidden_states (`bool`, *optional*):
-            # 是否返回所有层的隐藏状态。有关更多详细信息，请参见返回的张量下的 `hidden_states`。
+            # 是否返回所有层的隐藏状态。详见返回的张量中的 `hidden_states` 获取更多细节。
         return_dict (`bool`, *optional*):
-            # 是否返回一个 [`~utils.ModelOutput`] 而不是一个普通的元组。
-```py  
-# 定义一个 BigBirdPegasusEncoder 类，继承自 BigBirdPegasusPreTrainedModel
-class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
+            # 是否返回 [`~utils.ModelOutput`] 而不是普通的元组。
     """
-    Transformer 编码器，由 config.encoder_layers 个自注意力层组成。每个层都是一个 BigBirdPegasusEncoderLayer。
+    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
+    [`BigBirdPegasusEncoderLayer`].
 
     Args:
         config: BigBirdPegasusConfig
-        embed_tokens (nn.Embedding): 输出嵌入
+        embed_tokens (nn.Embedding): output embedding
     """
 
     def __init__(self, config: BigBirdPegasusConfig, embed_tokens: Optional[nn.Embedding] = None):
-        # 调用父类构造函数
         super().__init__(config)
 
-        # 初始化各种参数
-        self.attention_type = config.attention_type
-        self.block_size = config.block_size
+        self.attention_type = config.attention_type  # 从配置中获取注意力类型
+        self.block_size = config.block_size  # 从配置中获取块大小
 
-        self.dropout = config.dropout
-        self.layerdrop = config.encoder_layerdrop
+        self.dropout = config.dropout  # 从配置中获取 dropout 率
+        self.layerdrop = config.encoder_layerdrop  # 从配置中获取层级 dropout 率
 
-        embed_dim = config.d_model
-        self.padding_idx = config.pad_token_id
-        self.max_source_positions = config.max_position_embeddings
-        self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0
+        embed_dim = config.d_model  # 从配置中获取嵌入维度
+        self.padding_idx = config.pad_token_id  # 从配置中获取填充标识符
+        self.max_source_positions = config.max_position_embeddings  # 从配置中获取最大位置嵌入
+        self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0  # 根据配置设置嵌入缩放因子
 
-        # 初始化嵌入层
-        self.embed_tokens = nn.Embedding(config.vocab_size, embed_dim, self.padding_idx)
+        self.embed_tokens = nn.Embedding(config.vocab_size, embed_dim, self.padding_idx)  # 初始化嵌入层
 
-        # 如果传入了 embed_tokens，则使用传入的权重
         if embed_tokens is not None:
-            self.embed_tokens.weight = embed_tokens.weight
+            self.embed_tokens.weight = embed_tokens.weight  # 如果提供了外部嵌入，则使用其权重
 
-        # 初始化位置编码
         self.embed_positions = BigBirdPegasusLearnedPositionalEmbedding(
             config.max_position_embeddings,
             embed_dim,
-        )
-        # 初始化编码器层
-        self.layers = nn.ModuleList([BigBirdPegasusEncoderLayer(config, seed=i) for i in range(config.encoder_layers)])
-        self.layernorm_embedding = nn.LayerNorm(embed_dim)
+        )  # 初始化位置嵌入
 
-        self.gradient_checkpointing = False
+        self.layers = nn.ModuleList([BigBirdPegasusEncoderLayer(config, seed=i) for i in range(config.encoder_layers)])
+        # 创建多层编码器层，并存储在模块列表中
+
+        self.layernorm_embedding = nn.LayerNorm(embed_dim)  # 初始化嵌入层归一化层
+
+        self.gradient_checkpointing = False  # 梯度检查点设置为 False
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 前向传播函数
     def forward(
         self,
         input_ids: Optional[torch.Tensor] = None,
@@ -980,27 +1072,27 @@ class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+    ):
+        pass  # 此处为前向传播函数的占位符，实际执行模型推理过程
+
     def set_attention_type(self, value: str):
-        # 设置注意力类型
-        if value not in ["original_full", "block_sparse"]:
+        if value not in ["original_full", "block_sparse"]:  # 检查传入的注意力类型是否合法
             raise ValueError(
                 f"attention_type can only be set to either 'original_full' or 'block_sparse', but is {value}"
             )
         # 如果注意力类型已经正确设置，则直接返回
         if value == self.attention_type:
             return
-        self.attention_type = value
-        # 设置每个编码器层的注意力类型
+        self.attention_type = value  # 更新注意力类型为新值
         for layer in self.layers:
-            layer.set_attention_type(value)
+            layer.set_attention_type(value)  # 更新每个编码器层的注意力类型
 
-    @staticmethod  # 从 transformers.models.big_bird.modeling_big_bird.BigBirdModel.create_masks_for_block_sparse_attn 复制
+    @staticmethod  # 静态方法，用于生成块稀疏注意力的掩码，从 Transformers 源代码复制而来
+    # transformers.models.big_bird.modeling_big_bird.BigBirdModel.create_masks_for_block_sparse_attn
     def create_masks_for_block_sparse_attn(attention_mask: torch.Tensor, block_size: int):
-        # 获取 batch_size 和 seq_length
         batch_size, seq_length = attention_mask.size()
-        # 检查 seq_length 是否是 block_size 的倍数
+        # 检查序列长度是否是块大小的倍数，如果不是则抛出异常
         if seq_length % block_size != 0:
-            # 如果不是，抛出数值错误
             raise ValueError(
                 f"Sequence length must be multiple of block size, but sequence length is {seq_length}, while block"
                 f" size is {block_size}."
@@ -1008,33 +1100,30 @@ class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
 
         def create_band_mask_from_inputs(from_blocked_mask, to_blocked_mask):
             """
-            Create 3D attention mask from a 2D tensor mask.
+            从二维张量掩码创建三维注意力掩码。
 
             Args:
-                from_blocked_mask: 2D Tensor of shape [batch_size,
-                from_seq_length//from_block_size, from_block_size].
-                to_blocked_mask: int32 Tensor of shape [batch_size,
-                to_seq_length//to_block_size, to_block_size].
+                from_blocked_mask: 形状为 [batch_size, from_seq_length//from_block_size, from_block_size] 的二维张量掩码。
+                to_blocked_mask: 形状为 [batch_size, to_seq_length//to_block_size, to_block_size] 的整数张量掩码。
 
             Returns:
-                float Tensor of shape [batch_size, 1, from_seq_length//from_block_size-4, from_block_size,
-                3*to_block_size].
+                形状为 [batch_size, 1, from_seq_length//from_block_size-4, from_block_size, 3*to_block_size] 的浮点张量。
             """
-            # 拼接 to_blocked_mask 的部分
+            # 构造用于填充的扩展阻塞掩码
             exp_blocked_to_pad = torch.cat(
                 [to_blocked_mask[:, 1:-3], to_blocked_mask[:, 2:-2], to_blocked_mask[:, 3:-1]], dim=2
             )
-            # 使用 einsum 创建 band_mask
+            # 使用 Einstein Summation Notation 创建带状掩码
             band_mask = torch.einsum("blq,blk->blqk", from_blocked_mask[:, 2:-2], exp_blocked_to_pad)
             band_mask.unsqueeze_(1)
             return band_mask
 
-        # 将 attention_mask 转换为 block 形式
+        # 将注意力掩码视图重新形状为块大小的块编码器掩码
         blocked_encoder_mask = attention_mask.view(batch_size, seq_length // block_size, block_size)
-        # 创建 band_mask
+        # 创建带状掩码
         band_mask = create_band_mask_from_inputs(blocked_encoder_mask, blocked_encoder_mask)
 
-        # 创建 from_mask 和 to_mask
+        # 创建来自掩码和去掩码
         from_mask = attention_mask.view(batch_size, 1, seq_length, 1)
         to_mask = attention_mask.view(batch_size, 1, 1, seq_length)
 
@@ -1042,15 +1131,14 @@ class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
 
     def _pad_to_block_size(self, hidden_states: torch.Tensor, attention_mask: torch.Tensor):
         """A helper function to pad tokens and mask to work with implementation of BigBird block-sparse attention."""
-        # 填充 tokens 和 mask 以适应 BigBird block-sparse attention 的实现
-        # 获取 block_size
+        # 填充函数，用于与 BigBird 块稀疏注意力实现一起工作的辅助函数
+        # 填充
         block_size = self.config.block_size
         batch_size, seq_len = hidden_states.shape[:2]
 
-        # 计算需要填充的长度
         padding_len = (block_size - seq_len % block_size) % block_size
         if padding_len > 0:
-            # 如果需要填充，警告并进行填充
+            # 如果需要填充，警告并自动填充输入 ID 和嵌入到块大小的倍数
             logger.warning_once(
                 f"Input ids are automatically padded from {seq_len} to {seq_len + padding_len} to be a multiple of "
                 f"`config.block_size`: {block_size}"
@@ -1061,7 +1149,7 @@ class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
             inputs_embeds_padding = self.embed_tokens(input_ids_padding)
             hidden_states = torch.cat([hidden_states, inputs_embeds_padding], dim=-2)
 
-            # 对 attention_mask 进行填充
+            # 使用 nn.functional.pad 对注意力掩码进行填充，填充部分的注意力为0
             attention_mask = nn.functional.pad(
                 attention_mask, (0, padding_len), value=0
             )  # no attention on the padding tokens
@@ -1069,72 +1157,38 @@ class BigBirdPegasusEncoder(BigBirdPegasusPreTrainedModel):
         return padding_len, hidden_states, attention_mask
 class BigBirdPegasusDecoder(BigBirdPegasusPreTrainedModel):
     """
-    Transformer 解码器，由 *config.decoder_layers* 层组成。每一层都是一个 [`BigBirdPegasusDecoderLayer`]
+    Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`BigBirdPegasusDecoderLayer`]
 
     Args:
         config: BigBirdPegasusConfig
-        embed_tokens (nn.Embedding): 输出的嵌入
+        embed_tokens (nn.Embedding): output embedding
     """
 
     def __init__(self, config: BigBirdPegasusConfig, embed_tokens: Optional[nn.Embedding] = None):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置丢弃率
-        self.dropout = config.dropout
-        # 设置层丢弃率
-        self.layerdrop = config.decoder_layerdrop
-        # 设置填充索引
-        self.padding_idx = config.pad_token_id
-        # 设置最大目标位置
-        self.max_target_positions = config.max_position_embeddings
-        # 设置嵌入尺度
-        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0
+        self.dropout = config.dropout  # 从配置中获取 dropout 概率
+        self.layerdrop = config.decoder_layerdrop  # 从配置中获取层级 dropout 概率
+        self.padding_idx = config.pad_token_id  # 从配置中获取填充标记的索引
+        self.max_target_positions = config.max_position_embeddings  # 从配置中获取最大目标位置数
+        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0  # 根据配置计算嵌入尺度
 
-        # 初始化嵌入层
-        self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)
+        self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)  # 初始化词嵌入层
 
-        # 如果提供了外部嵌入，则使用外部嵌入的权重
         if embed_tokens is not None:
-            self.embed_tokens.weight = embed_tokens.weight
+            self.embed_tokens.weight = embed_tokens.weight  # 如果提供了预训练的嵌入层，则使用它
 
-        # 初始化位置嵌入
         self.embed_positions = BigBirdPegasusLearnedPositionalEmbedding(
             config.max_position_embeddings,
             config.d_model,
-        )
-        # 初始化解码器层
-        self.layers = nn.ModuleList([BigBirdPegasusDecoderLayer(config) for _ in range(config.decoder_layers)])
-        # 初始化嵌入层的 LayerNorm
-        self.layernorm_embedding = nn.LayerNorm(config.d_model)
+        )  # 初始化位置编码器
 
-        # 是否使用梯度检查点
-        self.gradient_checkpointing = False
-        # 初始化权重并应用最终处理
-        self.post_init()
+        self.layers = nn.ModuleList([BigBirdPegasusDecoderLayer(config) for _ in range(config.decoder_layers)])  # 创建多层解码器层
+        self.layernorm_embedding = nn.LayerNorm(config.d_model)  # 应用层归一化到嵌入层
 
-    # 获取输入嵌入
-    def get_input_embeddings(self):
-        return self.embed_tokens
+        self.gradient_checkpointing = False  # 初始化梯度检查点
 
-    # 设置输入嵌入
-    def set_input_embeddings(self, value):
-        self.embed_tokens = value
-
-    # 前向传播函数
-    def forward(
-        self,
-        input_ids: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        encoder_hidden_states: Optional[torch.Tensor] = None,
-        encoder_attention_mask: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.Tensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行初始化权重和最终处理
 
 
 
@@ -1148,45 +1202,46 @@ class BigBirdPegasusModel(BigBirdPegasusPreTrainedModel):
     def __init__(self, config: BigBirdPegasusConfig):
         super().__init__(config)
 
-        # 获取填充索引和词汇量大小
         padding_idx, vocab_size = config.pad_token_id, config.vocab_size
-        # 共享嵌入层
-        self.shared = nn.Embedding(vocab_size, config.d_model, padding_idx)
+        self.shared = nn.Embedding(vocab_size, config.d_model, padding_idx)  # 初始化共享的嵌入层
 
-        # 初始化编码器和解码器
-        self.encoder = BigBirdPegasusEncoder(config, self.shared)
-        self.decoder = BigBirdPegasusDecoder(config, self.shared)
+        self.encoder = BigBirdPegasusEncoder(config, self.shared)  # 创建BigBirdPegasus编码器，使用共享嵌入
+        self.decoder = BigBirdPegasusDecoder(config, self.shared)  # 创建BigBirdPegasus解码器，使用共享嵌入
 
-        # 初始化权重并应用最终处理
-        self.post_init()
-    # 返回输入嵌入层
+        # Initialize weights and apply final processing
+        self.post_init()  # 执行初始化权重和最终处理
+    # 返回输入的共享输入嵌入
     def get_input_embeddings(self):
         return self.shared
 
-    # 设置输入嵌入层
+    # 设置共享输入嵌入，并更新编码器和解码器的嵌入
     def set_input_embeddings(self, value):
         self.shared = value
         self.encoder.embed_tokens = self.shared
         self.decoder.embed_tokens = self.shared
 
-    # 绑定权重
+    # 如果配置要求词嵌入共享，则绑定编码器和解码器的嵌入权重
     def _tie_weights(self):
-        # 如果配置中设置了词嵌入共享，则将编码器和解码器的嵌入权重绑定到共享的嵌入层
         if self.config.tie_word_embeddings:
             self._tie_or_clone_weights(self.encoder.embed_tokens, self.shared)
             self._tie_or_clone_weights(self.decoder.embed_tokens, self.shared)
 
-    # 获取编码器
+    # 返回编码器对象
     def get_encoder(self):
         return self.encoder
 
-    # 获取解码器
+    # 返回解码器对象
     def get_decoder(self):
         return self.decoder
 
-    # 使用装饰器为模型的前向传播方法添加文档字符串
-    # 使用装饰器添加代码示例文档字符串
-    # 从transformers.models.bart.modeling_bart.BartModel.forward复制而来，将Bart->BigBirdPegasus
+    @add_start_docstrings_to_model_forward(BIGBIRD_PEGASUS_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=Seq2SeqModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+        expected_output=_EXPECTED_OUTPUT_SHAPE,
+    )
+    # 从 transformers.models.bart.modeling_bart.BartModel.forward 复制的代码，并将 Bart 替换为 BigBirdPegasus
     def forward(
         self,
         input_ids: torch.LongTensor = None,
@@ -1204,121 +1259,123 @@ class BigBirdPegasusModel(BigBirdPegasusPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-# 添加模型文档字符串，说明这是一个带有语言建模头的BigBirdPegasus模型，可用于摘要生成
-# 从transformers.models.bart.modeling_bart.BartForConditionalGeneration复制代码，并将Bart->BigBirdPegasus, BART->BIGBIRD_PEGASUS
+# 使用装饰器为类添加文档字符串，描述了 BigBirdPegasusForConditionalGeneration 模型的用途和摘要功能
+@add_start_docstrings(
+    "The BigBirdPegasus Model with a language modeling head. Can be used for summarization.",
+    BIGBIRD_PEGASUS_START_DOCSTRING,
+)
+# 从 transformers.models.bart.modeling_bart.BartForConditionalGeneration 复制代码，并将 Bart 替换为 BigBirdPegasus，BART 替换为 BIGBIRD_PEGASUS
 class BigBirdPegasusForConditionalGeneration(BigBirdPegasusPreTrainedModel):
-    # 指定基础模型前缀为"model"
+    # 设置模型主体的前缀为 "model"
     base_model_prefix = "model"
-    # 指定需要共享权重的键
+    # 定义在加载过程中需要忽略的键名列表，这些键名对应缺失时不会引发警告
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight", "lm_head.weight"]
-    # 指定加载时忽略的键
+    # 定义加载时忽略的关键字列表，指定不会加载的额外逻辑
     _keys_to_ignore_on_load_missing = ["final_logits_bias"]
 
+    # 初始化函数，接受 BigBirdPegasusConfig 类型的配置对象
     def __init__(self, config: BigBirdPegasusConfig):
+        # 调用父类的初始化方法，传入配置对象
         super().__init__(config)
-        # 创建BigBirdPegasusModel模型
+        # 创建 BigBirdPegasusModel 实例并赋值给 self.model
         self.model = BigBirdPegasusModel(config)
-        # 注册缓冲区"final_logits_bias"，初始化为全零向量
+        # 注册一个缓冲区，初始化为全零向量，维度是 (1, self.model.shared.num_embeddings)
         self.register_buffer("final_logits_bias", torch.zeros((1, self.model.shared.num_embeddings)))
-        # 创建线性层lm_head，用于语言建模
+        # 创建一个线性层，作为语言模型头，输入大小为 config.d_model，输出大小为 self.model.shared.num_embeddings，不使用偏置
         self.lm_head = nn.Linear(config.d_model, self.model.shared.num_embeddings, bias=False)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取编码器
+    # 获取编码器部分的方法，返回 self.model 的编码器
     def get_encoder(self):
         return self.model.get_encoder()
 
-    # 获取解码器
+    # 获取解码器部分的方法，返回 self.model 的解码器
     def get_decoder(self):
         return self.model.get_decoder()
 
-    # 调整token嵌入的大小
+    # 调整 token embeddings 大小的方法，返回新的嵌入层对象
     def resize_token_embeddings(self, new_num_tokens: int, pad_to_multiple_of: Optional[int] = None) -> nn.Embedding:
+        # 调用父类的 resize_token_embeddings 方法，返回新的嵌入层对象
         new_embeddings = super().resize_token_embeddings(new_num_tokens, pad_to_multiple_of)
-        # 调整final_logits_bias的大小以匹配新的嵌入大小
+        # 调整 final_logits_bias 的大小以匹配新的 token 数量
         self._resize_final_logits_bias(new_embeddings.weight.shape[0])
         return new_embeddings
 
-    # 调整final_logits_bias的大小
+    # 调整 final_logits_bias 大小的私有方法，不返回任何内容
     def _resize_final_logits_bias(self, new_num_tokens: int) -> None:
+        # 获取旧的 token 数量
         old_num_tokens = self.final_logits_bias.shape[-1]
+        # 如果新的 token 数量小于等于旧的 token 数量，则截取 final_logits_bias
         if new_num_tokens <= old_num_tokens:
             new_bias = self.final_logits_bias[:, :new_num_tokens]
+        # 如果新的 token 数量大于旧的 token 数量，则在最后增加零偏置
         else:
             extra_bias = torch.zeros((1, new_num_tokens - old_num_tokens), device=self.final_logits_bias.device)
             new_bias = torch.cat([self.final_logits_bias, extra_bias], dim=1)
+        # 注册新的 final_logits_bias 缓冲区
         self.register_buffer("final_logits_bias", new_bias)
 
-    # 获取输出嵌入
+    # 获取输出嵌入层的方法，返回 self.lm_head
     def get_output_embeddings(self):
         return self.lm_head
 
-    # 设置输出嵌入
+    # 设置输出嵌入层的方法，接受新的嵌入层作为参数
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
 
-    # 添加模型前向方法的文档字符串
-    # 替换返回文档字符串，指定输出类型为Seq2SeqLMOutput，配置类为_CONFIG_FOR_DOC
-    # 添加生成示例的结束文档字符串
-    # 定义一个前向传播函数，接受多个输入参数
+    # 使用装饰器添加文档字符串，描述了 model_forward 方法的输入和输出
+    @add_start_docstrings_to_model_forward(BIGBIRD_PEGASUS_INPUTS_DOCSTRING)
+    # 替换返回值的文档字符串，指定输出类型为 Seq2SeqLMOutput，配置类为 _CONFIG_FOR_DOC
+    @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
+    # 添加结尾的文档字符串，提供 BIGBIRD_PEGASUS_GENERATION_EXAMPLE 的生成示例
+    @add_end_docstrings(BIGBIRD_PEGASUS_GENERATION_EXAMPLE)
+    # 定义模型的前向传播方法，用于执行推断或训练过程中的正向计算
     def forward(
-        # 输入的 token IDs，数据类型为 LongTensor
-        input_ids: torch.LongTensor = None,
-        # 注意力掩码，数据类型为可选的 Tensor
-        attention_mask: Optional[torch.Tensor] = None,
-        # 解码器的输入 token IDs，数据类型为可选的 LongTensor
-        decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力掩码，数据类型为可选的 LongTensor
-        decoder_attention_mask: Optional[torch.LongTensor] = None,
-        # 头部掩码，数据类型为可选的 Tensor
-        head_mask: Optional[torch.Tensor] = None,
-        # 解码器的头部掩码，数据类型为可选的 Tensor
-        decoder_head_mask: Optional[torch.Tensor] = None,
-        # 交叉注意力头部掩码，数据类型为可选的 Tensor
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器输出，数据类型为可选的 FloatTensor 列表
-        encoder_outputs: Optional[List[torch.FloatTensor]] = None,
-        # 过去的键值对，数据类型为可选的 FloatTensor 列表
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        # 输入的嵌入向量，数据类型为可选的 FloatTensor
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 解码器的输入嵌入向量，数据类型为可选的 FloatTensor
-        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 标签，数据类型为可选的 LongTensor
-        labels: Optional[torch.LongTensor] = None,
-        # 是否使用缓存，数据类型为可选的布尔值
-        use_cache: Optional[bool] = None,
-        # 是否输出注意力权重，数据类型为可选的布尔值
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，数据类型为可选的布尔值
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典，数据类型为可选的布尔值
-        return_dict: Optional[bool] = None,
+        self,
+        input_ids: torch.LongTensor = None,  # 输入序列的token IDs，类型为长整型张量
+        attention_mask: Optional[torch.Tensor] = None,  # 注意力掩码，可选的张量类型
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器输入的token IDs，可选的长整型张量
+        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器注意力掩码，可选的长整型张量
+        head_mask: Optional[torch.Tensor] = None,  # 头部掩码，可选的张量
+        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器头部掩码，可选的张量
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 跨注意力头部掩码，可选的张量
+        encoder_outputs: Optional[List[torch.FloatTensor]] = None,  # 编码器输出的列表，包含浮点张量
+        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 过去的键值对列表，包含浮点张量
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入嵌入，可选的浮点张量
+        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器输入嵌入，可选的浮点张量
+        labels: Optional[torch.LongTensor] = None,  # 标签，可选的长整型张量
+        use_cache: Optional[bool] = None,  # 是否使用缓存，可选的布尔值
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可选的布尔值
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可选的布尔值
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回结果，可选的布尔值
     ) -> Union[Tuple, Seq2SeqLMOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the masked language modeling loss. Indices should either be in `[0, ...,
             config.vocab_size]` or -100 (see `input_ids` docstring). Tokens with indices set to `-100` are ignored
             (masked), the loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`.
-        返回值类型可以是元组或Seq2SeqLMOutput对象
-        
+
+        Returns:
+            Return type annotation indicating the function returns either a tuple or `Seq2SeqLMOutput`.
+
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        # 确定是否返回字典类型的结果，若未指定，则根据配置决定
 
+        # If labels are provided, adjust `use_cache` behavior and prepare `decoder_input_ids`
         if labels is not None:
             if use_cache:
+                # Warn if `use_cache` is `True` because `labels` are provided; set `use_cache` to `False`
                 logger.warning("The `use_cache` argument is changed to `False` since `labels` is provided.")
             use_cache = False
-            # 如果提供了标签，且use_cache为True，则给出警告并将use_cache设为False
+            # If `decoder_input_ids` are not provided, shift `labels` for decoder inputs
             if decoder_input_ids is None and decoder_inputs_embeds is None:
                 decoder_input_ids = shift_tokens_right(
                     labels, self.config.pad_token_id, self.config.decoder_start_token_id
                 )
-            # 如果没有提供解码器输入ID和解码器输入嵌入，并且提供了标签，则创建解码器输入ID，将标签右移一位作为输入
 
+        # Pass the input arguments to the model for processing
         outputs = self.model(
             input_ids,
             attention_mask=attention_mask,
@@ -1336,24 +1393,24 @@ class BigBirdPegasusForConditionalGeneration(BigBirdPegasusPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        # 使用模型进行前向传播，根据参数传递相应的输入和掩码，并根据需要返回字典形式的输出
 
+        # Generate logits for language modeling head and adjust with final bias
         lm_logits = self.lm_head(outputs[0])
         lm_logits = lm_logits + self.final_logits_bias.to(lm_logits.device)
-        # 计算语言模型的logits，加上最终的logits偏置
 
         masked_lm_loss = None
+        # Compute masked language modeling loss if labels are provided
         if labels is not None:
-            labels = labels.to(lm_logits.device)
-            loss_fct = CrossEntropyLoss()
+            labels = labels.to(lm_logits.device)  # Ensure labels are on the same device as logits
+            loss_fct = CrossEntropyLoss()  # Define the loss function
             masked_lm_loss = loss_fct(lm_logits.view(-1, self.config.vocab_size), labels.view(-1))
-            # 如果提供了标签，则计算masked语言建模损失
 
+        # If `return_dict` is `False`, return outputs as a tuple
         if not return_dict:
             output = (lm_logits,) + outputs[1:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
-            # 如果不返回字典，则构造输出元组，包含logits和其他输出信息
 
+        # If `return_dict` is `True`, return structured `Seq2SeqLMOutput`
         return Seq2SeqLMOutput(
             loss=masked_lm_loss,
             logits=lm_logits,
@@ -1365,87 +1422,74 @@ class BigBirdPegasusForConditionalGeneration(BigBirdPegasusPreTrainedModel):
             encoder_hidden_states=outputs.encoder_hidden_states,
             encoder_attentions=outputs.encoder_attentions,
         )
-        # 返回Seq2SeqLMOutput对象，包含损失、logits和其他输出信息
-    # 为生成准备输入的函数，用于生成模型的推理过程
     def prepare_inputs_for_generation(
         self,
-        # 解码器的输入 ID
         decoder_input_ids,
-        # 过去的键值对（用于记忆），默认为 None
         past_key_values=None,
-        # 注意力遮罩，指示模型关注哪些位置的输入
         attention_mask=None,
-        # 解码器的注意力遮罩，指示解码器关注哪些位置的输入
         decoder_attention_mask=None,
-        # 头部遮罩，用于控制多头注意力中的头部的掩码
         head_mask=None,
-        # 解码器头部遮罩，用于控制解码器中的多头注意力中的头部的掩码
         decoder_head_mask=None,
-        # 交叉注意力头部遮罩，用于控制编码器-解码器注意力中的多头注意力中的头部的掩码
         cross_attn_head_mask=None,
-        # 是否使用缓存，用于控制是否缓存中间计算结果
         use_cache=None,
-        # 编码器输出，用于生成
         encoder_outputs=None,
         **kwargs,
     ):
-        # 如果使用过去的键值对（用于记忆）
+        # 如果使用了过去的键值（past_key_values），则根据其长度修剪 decoder_input_ids
         if past_key_values is not None:
-            # 获取过去键值对中的过去长度
             past_length = past_key_values[0][0].shape[2]
 
-            # 一些生成方法可能已经只传递最后一个输入 ID
+            # 有些生成方法已经只传递了最后一个输入 ID
             if decoder_input_ids.shape[1] > past_length:
                 remove_prefix_length = past_length
             else:
-                # 默认为旧的行为：仅保留最后一个 ID
+                # 默认旧行为：仅保留最后一个 ID
                 remove_prefix_length = decoder_input_ids.shape[1] - 1
 
-            # 从解码器输入 ID 中删除前缀长度
             decoder_input_ids = decoder_input_ids[:, remove_prefix_length:]
 
-        # 返回生成所需的输入
+        # 返回准备好的输入字典，用于生成
         return {
-            "input_ids": None,  # 编码器输出已定义，不需要输入 ID
-            "encoder_outputs": encoder_outputs,  # 编码器输出
-            "past_key_values": past_key_values,  # 过去的键值对
-            "decoder_input_ids": decoder_input_ids,  # 解码器输入 ID
-            "attention_mask": attention_mask,  # 注意力遮罩
-            "decoder_attention_mask": decoder_attention_mask,  # 解码器注意力遮罩
-            "head_mask": head_mask,  # 头部遮罩
-            "decoder_head_mask": decoder_head_mask,  # 解码器头部遮罩
-            "cross_attn_head_mask": cross_attn_head_mask,  # 交叉注意力头部遮罩
-            "use_cache": use_cache,  # 更改此选项以避免缓存（可能用于调试）
+            "input_ids": None,  # encoder_outputs 已定义，input_ids 不需要
+            "encoder_outputs": encoder_outputs,
+            "past_key_values": past_key_values,
+            "decoder_input_ids": decoder_input_ids,
+            "attention_mask": attention_mask,
+            "decoder_attention_mask": decoder_attention_mask,
+            "head_mask": head_mask,
+            "decoder_head_mask": decoder_head_mask,
+            "cross_attn_head_mask": cross_attn_head_mask,
+            "use_cache": use_cache,  # 更改此处以避免缓存（推测是为了调试）
         }
 
-    # 从标签准备解码器输入 ID 的函数
     def prepare_decoder_input_ids_from_labels(self, labels: torch.Tensor):
-        # 将标签向右移动一位以准备解码器的输入 ID
+        # 将标签右移一个位置，以准备解码器的输入
         return shift_tokens_right(labels, self.config.pad_token_id, self.config.decoder_start_token_id)
 
-    # 重新排列缓存的函数，用于重新排序缓存中的键值对
     @staticmethod
     def _reorder_cache(past_key_values, beam_idx):
-        # 重新排序过的过去键值对
         reordered_past = ()
         for layer_past in past_key_values:
-            # 缓存的交叉注意力状态不需要重新排序->它们始终相同
+            # 缓存的交叉注意力状态无需重新排序 -> 它们始终相同
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past[:2])
                 + layer_past[2:],
             )
+        # 返回重新排序后的过去键值
         return reordered_past
-# 定义一个带有序列分类/头部的 BigBirdPegasus 模型，例如用于 GLUE 任务
+@add_start_docstrings(
+    """
+    BigBirdPegasus model with a sequence classification/head on top (a linear layer on top of the pooled output) e.g.
+    for GLUE tasks.
+    """,
+    BIGBIRD_PEGASUS_START_DOCSTRING,
+)
 class BigBirdPegasusForSequenceClassification(BigBirdPegasusPreTrainedModel):
-    # 定义共享权重的键值对
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
     def __init__(self, config: BigBirdPegasusConfig, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(config, **kwargs)
-        # 创建 BigBirdPegasus 模型
         self.model = BigBirdPegasusModel(config)
-        # 创建分类头部
         self.classification_head = BigBirdPegasusClassificationHead(
             config.d_model,
             config.d_model,
@@ -1453,10 +1497,16 @@ class BigBirdPegasusForSequenceClassification(BigBirdPegasusPreTrainedModel):
             config.classifier_dropout,
         )
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 定义前向传播方法
+    @add_start_docstrings_to_model_forward(BIGBIRD_PEGASUS_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=Seq2SeqSequenceClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    # Copied from transformers.models.bart.modeling_bart.BartForSequenceClassification.forward
     def forward(
         self,
         input_ids: torch.LongTensor = None,
@@ -1475,33 +1525,69 @@ class BigBirdPegasusForSequenceClassification(BigBirdPegasusPreTrainedModel):
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
     ):
-        # 前向传播逻辑
+        """
+        Forward pass for the BigBirdPegasusForSequenceClassification model.
 
-# 定义一个带有问题回答的 BigBirdPegasus 模型，用于提取性问题回答任务，如 SQuAD
+        Args:
+            input_ids (torch.LongTensor, optional): Input token IDs. Defaults to None.
+            attention_mask (torch.Tensor, optional): Attention mask. Defaults to None.
+            decoder_input_ids (torch.LongTensor, optional): Decoder input token IDs. Defaults to None.
+            decoder_attention_mask (torch.LongTensor, optional): Decoder attention mask. Defaults to None.
+            head_mask (torch.Tensor, optional): Head mask. Defaults to None.
+            decoder_head_mask (torch.Tensor, optional): Decoder head mask. Defaults to None.
+            cross_attn_head_mask (torch.Tensor, optional): Cross-attention head mask. Defaults to None.
+            encoder_outputs (List[torch.FloatTensor], optional): Encoder outputs. Defaults to None.
+            inputs_embeds (torch.FloatTensor, optional): Embedded inputs. Defaults to None.
+            decoder_inputs_embeds (torch.FloatTensor, optional): Embedded decoder inputs. Defaults to None.
+            labels (torch.LongTensor, optional): Labels for classification. Defaults to None.
+            use_cache (bool, optional): Whether to use cache. Defaults to None.
+            output_attentions (bool, optional): Whether to output attentions. Defaults to None.
+            output_hidden_states (bool, optional): Whether to output hidden states. Defaults to None.
+            return_dict (bool, optional): Whether to return a dictionary. Defaults to None.
+
+        Returns:
+            Seq2SeqSequenceClassifierOutput or dict: Sequence classification output.
+        """
+        # Actual implementation of the forward pass follows in the code of the function.
+        pass
+
+
+@add_start_docstrings(
+    """
+    BigBirdPegasus Model with a span classification head on top for extractive question-answering tasks like SQuAD (a
+    linear layer on top of the hidden-states output to compute `span start logits` and `span end logits`).
+    """,
+    BIGBIRD_PEGASUS_START_DOCSTRING,
+)
 class BigBirdPegasusForQuestionAnswering(BigBirdPegasusPreTrainedModel):
-    # 定义共享权重的键值对
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
     def __init__(self, config):
-        # 调用父类的初始化方法
         super().__init__(config)
 
-        # 设置标签数量为 2
+        # Set number of output labels to 2 for question answering (start and end positions)
         config.num_labels = 2
         self.num_labels = config.num_labels
 
-        # 创建 BigBirdPegasus 模型
         self.model = BigBirdPegasusModel(config)
-        # 创建问题回答输出层
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # Initialize weights and apply final processing
         self.post_init()
 
-    # 定义前向传播方法
+    @add_start_docstrings_to_model_forward(BIGBIRD_PEGASUS_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=Seq2SeqQuestionAnsweringModelOutput,
+        config_class=_CONFIG_FOR_DOC,
+    )
+    # 使用装饰器添加代码示例的文档字符串，指定相关的检查点、输出类型和配置类
+
+    # 以下内容是从 transformers.models.bart.modeling_bart.BartForQuestionAnswering.forward 复制而来
+
     def forward(
         self,
-        input_ids: torch.LongTensor = None,
+        input_ids: torch.Tensor = None,
         attention_mask: Optional[torch.Tensor] = None,
         decoder_input_ids: Optional[torch.LongTensor] = None,
         decoder_attention_mask: Optional[torch.LongTensor] = None,
@@ -1509,82 +1595,93 @@ class BigBirdPegasusForQuestionAnswering(BigBirdPegasusPreTrainedModel):
         decoder_head_mask: Optional[torch.Tensor] = None,
         cross_attn_head_mask: Optional[torch.Tensor] = None,
         encoder_outputs: Optional[List[torch.FloatTensor]] = None,
+        start_positions: Optional[torch.LongTensor] = None,
+        end_positions: Optional[torch.LongTensor] = None,
         inputs_embeds: Optional[torch.FloatTensor] = None,
         decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
         use_cache: Optional[bool] = None,
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ):
-        # 前向传播逻辑
-        # 返回字典，包含模型的前向传播输出
-        return_dict: Optional[bool] = None,
-# 从 transformers.models.pegasus.modeling_pegasus.PegasusDecoderWrapper 复制代码，将 Pegasus 替换为 BigBirdPegasus
+
+
+
+        # 前向传播函数，接受多个参数用于模型推断
+        # input_ids: 输入序列的 token IDs
+        # attention_mask: 注意力掩码，指定哪些位置是填充的
+        # decoder_input_ids: 解码器输入的 token IDs
+        # decoder_attention_mask: 解码器的注意力掩码
+        # head_mask: 多头注意力机制的掩码
+        # decoder_head_mask: 解码器多头注意力的掩码
+        # cross_attn_head_mask: 跨注意力头的掩码
+        # encoder_outputs: 编码器输出的列表
+        # start_positions: 答案开始位置的 token IDs
+        # end_positions: 答案结束位置的 token IDs
+        # inputs_embeds: 嵌入式输入的张量
+        # decoder_inputs_embeds: 解码器输入的嵌入式张量
+        # use_cache: 是否使用缓存
+        # output_attentions: 是否输出注意力权重
+        # output_hidden_states: 是否输出隐藏状态
+        # return_dict: 是否返回字典形式的输出
+# 从transformers.models.pegasus.modeling_pegasus.PegasusDecoderWrapper复制代码，并将Pegasus更改为BigBirdPegasus
 class BigBirdPegasusDecoderWrapper(BigBirdPegasusPreTrainedModel):
     """
     This wrapper class is a helper class to correctly load pretrained checkpoints when the causal language model is
     used in combination with the [`EncoderDecoderModel`] framework.
     """
 
-    # 初始化方法，接受配置参数并调用父类的初始化方法
     def __init__(self, config):
         super().__init__(config)
-        # 创建 BigBirdPegasusDecoder 实例并赋值给 self.decoder
+        # 初始化BigBirdPegasusDecoder对象作为decoder
         self.decoder = BigBirdPegasusDecoder(config)
 
-    # 前向传播方法，调用 self.decoder 的前向传播方法，并返回结果
     def forward(self, *args, **kwargs):
+        # 调用decoder的forward方法，并将参数传递下去
         return self.decoder(*args, **kwargs)
 
 
 class BigBirdPegasusForCausalLM(BigBirdPegasusPreTrainedModel):
-    # 定义与权重共享相关的键名
     _tied_weights_keys = ["lm_head.weight"]
 
-    # 初始化方法，接受配置参数并调用父类的初始化方法
     def __init__(self, config):
-        # 对配置进行深拷贝
+        # 深度拷贝config对象，设定为decoder模式，并关闭encoder-decoder模式
         config = copy.deepcopy(config)
-        # 设置为解码器
         config.is_decoder = True
-        # 设置为非编码器解码器
         config.is_encoder_decoder = False
         super().__init__(config)
-        # 创建 BigBirdPegasusDecoderWrapper 实例并赋值给 self.model
+        # 初始化BigBirdPegasusDecoderWrapper对象作为model
         self.model = BigBirdPegasusDecoderWrapper(config)
 
-        # 创建线性层以用作语言模型头部，输入大小为隐藏层大小，输出大小为词汇表大小，无偏置
+        # 初始化线性层，作为lm_head，用于生成输出
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
         # 初始化权重并进行最终处理
         self.post_init()
 
-    # 获取输入嵌入
     def get_input_embeddings(self):
+        # 返回decoder的embed_tokens作为输入的嵌入层
         return self.model.decoder.embed_tokens
 
-    # 设置输入嵌入
     def set_input_embeddings(self, value):
+        # 设置decoder的embed_tokens为新的值
         self.model.decoder.embed_tokens = value
 
-    # 获取输出嵌入
     def get_output_embeddings(self):
+        # 返回lm_head作为输出的嵌入层
         return self.lm_head
 
-    # 设置输出嵌入
     def set_output_embeddings(self, new_embeddings):
+        # 设置lm_head为新的输出嵌入层
         self.lm_head = new_embeddings
 
-    # 设置解码器
     def set_decoder(self, decoder):
+        # 设置decoder模型为给定的decoder对象
         self.model.decoder = decoder
 
-    # 获取解码器
     def get_decoder(self):
+        # 返回当前的decoder对象
         return self.model.decoder
 
-    # 前向传播方法，调用 self.model.decoder 的前向传播方法，并返回结果，使用参数替换文档字符串
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
     def forward(
         self,
@@ -1601,20 +1698,33 @@ class BigBirdPegasusForCausalLM(BigBirdPegasusPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    # 准备用于生成的输入方法，将参数透传到 BigBirdPegasusDecoderWrapper 实例的同名方法
+    ):
+        """
+        Forward pass for the BigBirdPegasusForCausalLM model.
+        """
+        # 实现模型的前向传播，接受多种输入参数，并返回输出结果
+        ...
+
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, attention_mask=None, use_cache=None, **kwargs
-        # 如果模型作为编码器-解码器模型的解码器使用，则动态创建解码器注意力掩码
+    ):
+        """
+        Prepare inputs for generation based on the BigBirdPegasusForCausalLM model.
+        """
+        # 准备生成模型输入的方法，接受多种参数，并返回适用于生成的输入
+        ...
+    ):
+        # 如果模型被用作编码器-解码器模型中的解码器，注意力遮罩会即时创建
         if attention_mask is None:
-            # 如果没有提供注意力掩码，则创建一个全为1的掩码，与输入张量的形状相同
+            # 如果注意力遮罩为空，则创建一个与输入张量形状相同的全为1的张量作为注意力遮罩
             attention_mask = input_ids.new_ones(input_ids.shape)
 
         if past_key_values:
-            # 如果提供了过去的键值对，则只取输入张量的最后一个标记
+            # 如果有过去的键值状态，则只保留输入张量的最后一个位置作为当前输入
             input_ids = input_ids[:, -1:]
-        # 第一步，decoder_cached_states为空
+        # 返回一个包含各种输出和状态的字典
         return {
-            "input_ids": input_ids,  # encoder_outputs已定义，不需要input_ids
+            "input_ids": input_ids,  # encoder_outputs 已经定义，不再需要 input_ids
             "attention_mask": attention_mask,
             "past_key_values": past_key_values,
             "use_cache": use_cache,
@@ -1624,9 +1734,10 @@ class BigBirdPegasusForCausalLM(BigBirdPegasusPreTrainedModel):
     def _reorder_cache(past_key_values, beam_idx):
         reordered_past = ()
         for layer_past in past_key_values:
+            # 对每一层的过去状态按照 beam_idx 重新排序，并转移到正确的设备上
             reordered_past += (
-                # 重新排序过去的键值对，根据beam索引
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
+        # 返回重新排序后的过去状态
         return reordered_past
 ```

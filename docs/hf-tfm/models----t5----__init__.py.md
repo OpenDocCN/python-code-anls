@@ -1,13 +1,8 @@
-# `.\transformers\models\t5\__init__.py`
+# `.\models\t5\__init__.py`
 
-```py
-# 版权声明以及许可证信息
-# 这段代码实现了对HuggingFace团队的依赖和导入结构进行配置
-
-# 导入依赖库，包括类型检查
+```
+# 导入必要的模块和函数
 from typing import TYPE_CHECKING
-
-# 导入工具方法和模块
 from ...utils import (
     OptionalDependencyNotAvailable,
     _LazyModule,
@@ -18,37 +13,37 @@ from ...utils import (
     is_torch_available,
 )
 
-# 定义模块导入结构
+# 定义一个字典，用于存储导入结构
 _import_structure = {"configuration_t5": ["T5_PRETRAINED_CONFIG_ARCHIVE_MAP", "T5Config", "T5OnnxConfig"]}
 
-# 检查SentencePiece是否可用，如果不可用则抛出异常
+# 检查是否存在 sentencepiece，并根据情况抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_sentencepiece_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加T5Tokenizer到导入结构中
+    # 如果存在 sentencepiece，则导入 T5Tokenizer 到 tokenization_t5
     _import_structure["tokenization_t5"] = ["T5Tokenizer"]
 
-# 检查Tokenizers是否可用，如果不可用则抛出异常
+# 检查是否存在 tokenizers，并根据情况抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tokenizers_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加T5TokenizerFast到导入结构中
+    # 如果存在 tokenizers，则导入 T5TokenizerFast 到 tokenization_t5_fast
     _import_structure["tokenization_t5_fast"] = ["T5TokenizerFast"]
 
-# 检查PyTorch是否可用，如果不可用则抛出异常
+# 检查是否存在 torch，并根据情况抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加T5相关模型到导入结构中
+    # 如果存在 torch，则导入 T5 相关的模型和函数到 modeling_t5
     _import_structure["modeling_t5"] = [
         "T5_PRETRAINED_MODEL_ARCHIVE_LIST",
         "T5EncoderModel",
@@ -58,16 +53,17 @@ else:
         "load_tf_weights_in_t5",
         "T5ForQuestionAnswering",
         "T5ForSequenceClassification",
+        "T5ForTokenClassification",
     ]
 
-# 检查TensorFlow是否可用，如果不可用则抛出异常
+# 检查是否存在 tensorflow，并根据情况抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_tf_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加TF版T5相关模型到导入结构中
+    # 如果存在 tensorflow，则导入 T5 相关的模型和函数到 modeling_tf_t5
     _import_structure["modeling_tf_t5"] = [
         "TF_T5_PRETRAINED_MODEL_ARCHIVE_LIST",
         "TFT5EncoderModel",
@@ -76,14 +72,14 @@ else:
         "TFT5PreTrainedModel",
     ]
 
-# 检查Flax是否可用，如果不可用则抛出异常
+# 检查是否存在 flax，并根据情况抛出 OptionalDependencyNotAvailable 异常
 try:
     if not is_flax_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果可用，则添加Flax版T5相关模型到导入结构中
+    # 如果存在 flax，则导入 T5 相关的模型和函数到 modeling_flax_t5
     _import_structure["modeling_flax_t5"] = [
         "FlaxT5EncoderModel",
         "FlaxT5ForConditionalGeneration",
@@ -91,11 +87,11 @@ else:
         "FlaxT5PreTrainedModel",
     ]
 
-# 如��是类型检查模式，则从配置模块中导入相关内容
+# 如果是类型检查阶段，导入必要的类型和函数定义
 if TYPE_CHECKING:
     from .configuration_t5 import T5_PRETRAINED_CONFIG_ARCHIVE_MAP, T5Config, T5OnnxConfig
 
-    # 如果SentencePiece可用，从tokenization_t5模块导入T5Tokenizer
+    # 再次检查是否存在 sentencepiece 并导入 T5Tokenizer
     try:
         if not is_sentencepiece_available():
             raise OptionalDependencyNotAvailable()
@@ -104,70 +100,78 @@ if TYPE_CHECKING:
     else:
         from .tokenization_t5 import T5Tokenizer
 
-    # 如果Tokenizers可用，继续执行其他类型检查相关的导入
+    # 再次检查是否存在 tokenizers 并导入 T5Tokenizer
     try:
         if not is_tokenizers_available():
             raise OptionalDependencyNotAvailable()
-    except OptionalDependencyNotAvailable:
-        pass
-    # 如果 torch 不可用，尝试导入 T5TokenizerFast
-    else:
+    # 尝试导入 T5TokenizerFast，如果 OptionalDependencyNotAvailable 异常发生则跳过
+    try:
         from .tokenization_t5_fast import T5TokenizerFast
-    
-    # 如果 torch 不可用，抛出异常
-    try:
-        if not is_torch_available():
-            raise OptionalDependencyNotAvailable()
-    # 如果抛出异常，则不执行以下代码
+    # 如果 OptionalDependencyNotAvailable 异常发生，则什么也不做，跳过
     except OptionalDependencyNotAvailable:
         pass
-    # 如果 torch 可用，则导入与 T5 相关的模型类
+    # 如果没有异常发生，则导入成功，可以继续后续操作
     else:
-        from .modeling_t5 import (
-            T5_PRETRAINED_MODEL_ARCHIVE_LIST,
-            T5EncoderModel,
-            T5ForConditionalGeneration,
-            T5ForQuestionAnswering,
-            T5ForSequenceClassification,
-            T5Model,
-            T5PreTrainedModel,
-            load_tf_weights_in_t5,
-        )
-    
-    # 如果 TensorFlow 不可用，抛出异常
-    try:
-        if not is_tf_available():
-            raise OptionalDependencyNotAvailable()
-    # 如果抛出异常，则不执行以下代码
-    except OptionalDependencyNotAvailable:
-        pass
-    # 如果 TensorFlow 可用，则导入与 TF-T5 相关的模型类
-    else:
-        from .modeling_tf_t5 import (
-            TF_T5_PRETRAINED_MODEL_ARCHIVE_LIST,
-            TFT5EncoderModel,
-            TFT5ForConditionalGeneration,
-            TFT5Model,
-            TFT5PreTrainedModel,
-        )
-    
-    # 如果 Flax 不可用，抛出异常
-    try:
-        if not is_flax_available():
-            raise OptionalDependencyNotAvailable()
-    # 如果抛出异常，则不执行以下代码
-    except OptionalDependencyNotAvailable:
-        pass
-    # 如果 Flax 可用，则导入与 Flax-T5 相关的模型类
-    else:
-        from .modeling_flax_t5 import (
-            FlaxT5EncoderModel,
-            FlaxT5ForConditionalGeneration,
-            FlaxT5Model,
-            FlaxT5PreTrainedModel,
-        )
-# 如果不是前面的条件，即导入失败，则导入sys模块
-import sys
-# 将当前模块添加到sys模块的modules字典中
-sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+        # 尝试检查是否 Torch 可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
+        try:
+            if not is_torch_available():
+                raise OptionalDependencyNotAvailable()
+        # 如果 OptionalDependencyNotAvailable 异常发生，则跳过
+        except OptionalDependencyNotAvailable:
+            pass
+        # 如果没有异常发生，则 Torch 可用，继续导入相关模块
+        else:
+            # 导入 T5 相关的 PyTorch 模型和函数
+            from .modeling_t5 import (
+                T5_PRETRAINED_MODEL_ARCHIVE_LIST,
+                T5EncoderModel,
+                T5ForConditionalGeneration,
+                T5ForQuestionAnswering,
+                T5ForSequenceClassification,
+                T5ForTokenClassification,
+                T5Model,
+                T5PreTrainedModel,
+                load_tf_weights_in_t5,
+            )
+
+        # 尝试检查是否 TensorFlow 可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
+        try:
+            if not is_tf_available():
+                raise OptionalDependencyNotAvailable()
+        # 如果 OptionalDependencyNotAvailable 异常发生，则跳过
+        except OptionalDependencyNotAvailable:
+            pass
+        # 如果没有异常发生，则 TensorFlow 可用，继续导入相关模块
+        else:
+            # 导入 T5 相关的 TensorFlow 模型和函数
+            from .modeling_tf_t5 import (
+                TF_T5_PRETRAINED_MODEL_ARCHIVE_LIST,
+                TFT5EncoderModel,
+                TFT5ForConditionalGeneration,
+                TFT5Model,
+                TFT5PreTrainedModel,
+            )
+
+        # 尝试检查是否 Flax 可用，如果不可用则引发 OptionalDependencyNotAvailable 异常
+        try:
+            if not is_flax_available():
+                raise OptionalDependencyNotAvailable()
+        # 如果 OptionalDependencyNotAvailable 异常发生，则跳过
+        except OptionalDependencyNotAvailable:
+            pass
+        # 如果没有异常发生，则 Flax 可用，继续导入相关模块
+        else:
+            # 导入 T5 相关的 Flax 模型和函数
+            from .modeling_flax_t5 import (
+                FlaxT5EncoderModel,
+                FlaxT5ForConditionalGeneration,
+                FlaxT5Model,
+                FlaxT5PreTrainedModel,
+            )
+else:
+    # 导入 sys 模块，用于操作 Python 解释器的系统功能
+    import sys
+
+    # 将当前模块注册到 sys.modules 中，使用 _LazyModule 进行延迟加载
+    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

@@ -1,146 +1,142 @@
 # `.\models\blenderbot_small\tokenization_blenderbot_small_fast.py`
 
-```py
-# 指定 Python 文件使用 UTF-8 编码
-# 声明版权和许可相关信息，使用 Apache License 2.0
-# 文件头部版权和许可说明
-# 许可证相关网址
-# 提示许可证 "按原样" 提供，不提供任何担保或保证
-"""快速 BlenderbotSmall 的分词类。"""
-from typing import List, Optional  # 引入类型提示库，指定变量或函数参数的类型
+```
+# coding=utf-8
+# Copyright 2021, The Facebook, Inc. and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Fast tokenization class for BlenderbotSmall."""
+from typing import List, Optional
 
-from tokenizers import ByteLevelBPETokenizer  # 引入字节级 BPE 分词器
+from tokenizers import ByteLevelBPETokenizer
 
-from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 引入预训练分词器的快速版本
-from ...utils import logging  # 引入日志记录工具
-from .tokenization_blenderbot_small import BlenderbotSmallTokenizer  # 引入慢速 BlenderbotSmall 分词器
+from ...tokenization_utils_fast import PreTrainedTokenizerFast  # 导入父类
+from ...utils import logging  # 导入日志模块
+from .tokenization_blenderbot_small import BlenderbotSmallTokenizer  # 导入慢速Tokenizer类
 
-logger = logging.get_logger(__name__)  # 获取日志记录器实例
 
-# 定义字典，包含词汇文件、合并文件、分词器配置文件的名称
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器对象
+
 VOCAB_FILES_NAMES = {
-    "vocab_file": "vocab.json",
-    "merges_file": "merges.txt",
-    "tokenizer_config_file": "tokenizer_config.json",
+    "vocab_file": "vocab.json",  # 词汇表文件名
+    "merges_file": "merges.txt",  # 合并文件名
+    "tokenizer_config_file": "tokenizer_config.json",  # Tokenizer配置文件名
 }
 
-# 定义预训练模型中词汇文件的位置
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "facebook/blenderbot_small-90M": "https://huggingface.co/facebook/blenderbot_small-90M/resolve/main/vocab.json"
-    },
+    },  # 预训练词汇文件映射
     "merges_file": {
         "facebook/blenderbot_small-90M": "https://huggingface.co/facebook/blenderbot_small-90M/resolve/main/merges.txt"
-    },
+    },  # 预训练合并文件映射
     "tokenizer_config_file": {
         "facebook/blenderbot_small-90M": (
             "https://huggingface.co/facebook/blenderbot_small-90M/resolve/main/tokenizer_config.json"
         )
-    },
+    },  # 预训练Tokenizer配置文件映射
 }
 
-# 定义预训练模型中的最大位置嵌入大小
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
-    "facebook/blenderbot_small-90M": 512,  # 最大嵌入大小为 512
+    "facebook/blenderbot_small-90M": 512,  # 预训练位置嵌入尺寸
 }
 
-# 定义一个快速的 BlenderbotSmall 分词器类
+
 class BlenderbotSmallTokenizerFast(PreTrainedTokenizerFast):
     """
-    构造一个快速的 BlenderbotSmall 分词器（基于 HuggingFace 的 *tokenizers* 库）。
+    Construct a "fast" BlenderbotSmall tokenizer (backed by HuggingFace's *tokenizers* library).
 
-    参数:
+    Args:
         vocab_file (`str`):
-            词汇文件的路径。
+            Path to the vocabulary file.
     """
 
-    # 定义分词器的词汇文件名称
-    vocab_files_names = VOCAB_FILES_NAMES
-    # 定义预训练模型中词汇文件的映射
-    pretrained_vocab_files_map = PRETRAINED_VOC_FILES_MAP
-    # 定义预训练模型中最大输入大小
-    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
-    # 引用慢速分词器类
-    slow_tokenizer_class = BlenderbotSmallTokenizer
+    vocab_files_names = VOCAB_FILES_NAMES  # 设置词汇文件名属性
+    pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP  # 设置预训练词汇文件映射属性
+    max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES  # 设置最大模型输入尺寸属性
+    slow_tokenizer_class = BlenderbotSmallTokenizer  # 设置慢速Tokenizer类属性
 
-    # 定义构造函数，初始化分词器
     def __init__(
         self,
-        vocab_file=None,
-        merges_file=None,
-        unk_token="<|endoftext|>",  # 默认未知词汇符号
-        bos_token="<|endoftext|>",  # 默认起始符号
-        eos_token="<|endoftext|>",  # 默认结束符号
-        add_prefix_space=False,  # 是否在词汇前添加前缀空格
-        trim_offsets=True,  # 是否修剪偏移
+        vocab_file=None,  # 词汇文件路径，默认为None
+        merges_file=None,  # 合并文件路径，默认为None
+        unk_token="<|endoftext|>",  # 未知标记，默认为"<|endoftext|>"
+        bos_token="<|endoftext|>",  # 开始序列标记，默认为"<|endoftext|>"
+        eos_token="<|endoftext|>",  # 结束序列标记，默认为"<|endoftext|>"
+        add_prefix_space=False,  # 是否在前缀之前加空格，默认为False
+        trim_offsets=True,  # 是否修剪偏移量，默认为True
         **kwargs,
     ):
-        # 调用父类构造函数，初始化 ByteLevelBPETokenizer
         super().__init__(
             ByteLevelBPETokenizer(
-                vocab=vocab_file,
-                merges=merges_file,
-                add_prefix_space=add_prefix_space,
-                trim_offsets=trim_offsets,
+                vocab=vocab_file,  # 使用指定的词汇文件初始化ByteLevelBPETokenizer
+                merges=merges_file,  # 使用指定的合并文件初始化ByteLevelBPETokenizer
+                add_prefix_space=add_prefix_space,  # 设置是否在前缀之前加空格
+                trim_offsets=trim_offsets,  # 设置是否修剪偏移量
             ),
-            bos_token=bos_token,
-            eos_token=eos_token,
-            unk_token=unk_token,
+            bos_token=bos_token,  # 设置开始序列标记
+            eos_token=eos_token,  # 设置结束序列标记
+            unk_token=unk_token,  # 设置未知标记
             **kwargs,
         )
-        # 是否添加前缀空格
-        self.add_prefix_space = add_prefix_space
-    # 根据给定的token_ids_0和token_ids_1构建带有特殊标记的输入序列
+        self.add_prefix_space = add_prefix_space  # 初始化是否在前缀之前加空格属性
     def build_inputs_with_special_tokens(self, token_ids_0, token_ids_1=None):
-        # 将bos_token_id添加到token_ids_0的开头，将eos_token_id添加到token_ids_0的结尾
+        # 构建包含特殊标记的输入序列
         output = [self.bos_token_id] + token_ids_0 + [self.eos_token_id]
-        # 如果token_ids_1为空，则直接返回output
         if token_ids_1 is None:
+            # 如果只有一个输入序列，则返回包含特殊标记的序列
             return output
-        # 如果token_ids_1不为空，则在output后面添加eos_token_id，token_ids_1，和eos_token_id，并返回
+
+        # 如果有两个输入序列，将它们连接起来，并添加结束标记
         return output + [self.eos_token_id] + token_ids_1 + [self.eos_token_id]
 
-    # 根据token_ids_0和token_ids_1创建token type ids，用于序列对分类任务
     def create_token_type_ids_from_sequences(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
         """
-        Create a mask from the two sequences passed to be used in a sequence-pair classification task. BlenderbotSmall
-        does not make use of token type ids, therefore a list of zeros is returned.
+        从传入的两个序列创建用于序列对分类任务的类型标识。BlenderbotSmall 不使用 token type ids，因此返回一个全为零的列表。
 
         Args:
             token_ids_0 (`List[int]`):
-                List of IDs.
+                ID 的列表。
             token_ids_1 (`List[int]`, *optional*):
-                Optional second list of IDs for sequence pairs.
+                第二个序列的 ID 列表，用于序列对。
 
         Returns:
-            `List[int]`: List of zeros.
+            `List[int]`: 全为零的列表。
         """
-        # 定义分隔符和类别标记
         sep = [self.sep_token_id]
         cls = [self.cls_token_id]
-        # 如果token_ids_1为空，则返回长度为len(cls + token_ids_0 + sep)的全0列表
+
         if token_ids_1 is None:
+            # 如果只有一个输入序列，返回一个全为零的列表
             return len(cls + token_ids_0 + sep) * [0]
-        # 如果token_ids_1不为空，则返回长度为len(cls + token_ids_0 + sep + sep + token_ids_1 + sep)的全0列表
+        # 如果有两个输入序列，返回一个全为零的列表，包含特殊标记和分隔符
         return len(cls + token_ids_0 + sep + sep + token_ids_1 + sep) * [0]
 
-    # 获取默认的聊天模板
     @property
-    # Copied from transformers.models.blenderbot.tokenization_blenderbot.BlenderbotTokenizer.default_chat_template
+    # 从 transformers.models.blenderbot.tokenization_blenderbot.BlenderbotTokenizer.default_chat_template 复制过来
     def default_chat_template(self):
         """
-        A very simple chat template that just adds whitespace between messages.
+        一个非常简单的聊天模板，只在消息之间添加空白。
         """
-        # 如果没有为tokenizer定义聊天模板，则使用默认模板并发出警告
         logger.warning_once(
             "\nNo chat template is defined for this tokenizer - using the default template "
             f"for the {self.__class__.__name__} class. If the default is not appropriate for "
             "your model, please set `tokenizer.chat_template` to an appropriate template. "
             "See https://huggingface.co/docs/transformers/main/chat_templating for more information.\n"
         )
-        # 返回默认的聊天模板
+        # 返回一个用于聊天的默认模板字符串
         return (
             "{% for message in messages %}"
             "{% if message['role'] == 'user' %}{{ ' ' }}{% endif %}"

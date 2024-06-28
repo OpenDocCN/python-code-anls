@@ -1,6 +1,6 @@
-# `.\transformers\models\mobilebert\modeling_tf_mobilebert.py`
+# `.\models\mobilebert\modeling_tf_mobilebert.py`
 
-```py
+```
 # coding=utf-8
 # Copyright 2018 The Google AI Language Team Authors and The HuggingFace Inc. team.
 # Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
@@ -18,7 +18,6 @@
 # limitations under the License.
 """ TF 2.0 MobileBERT model."""
 
-
 from __future__ import annotations
 
 import warnings
@@ -28,9 +27,8 @@ from typing import Optional, Tuple, Union
 import numpy as np
 import tensorflow as tf
 
-# 从 transformers.activations_tf 模块中导入 get_tf_activation 函数
+# Importing specific modules and classes from other files in the package
 from ...activations_tf import get_tf_activation
-# 从 transformers.modeling_tf_outputs 模块中导入各种输出类型
 from ...modeling_tf_outputs import (
     TFBaseModelOutput,
     TFBaseModelOutputWithPooling,
@@ -41,7 +39,6 @@ from ...modeling_tf_outputs import (
     TFSequenceClassifierOutput,
     TFTokenClassifierOutput,
 )
-# 从 transformers.modeling_tf_utils 模块中导入各种工具函数和类
 from ...modeling_tf_utils import (
     TFMaskedLanguageModelingLoss,
     TFModelInputType,
@@ -52,12 +49,11 @@ from ...modeling_tf_utils import (
     TFSequenceClassificationLoss,
     TFTokenClassificationLoss,
     get_initializer,
+    keras,
     keras_serializable,
     unpack_inputs,
 )
-# 从 transformers.tf_utils 模块中导入一些工具函数
 from ...tf_utils import check_embeddings_within_bounds, shape_list, stable_softmax
-# 从 transformers.utils 模块中导入各种工具函数和类
 from ...utils import (
     ModelOutput,
     add_code_sample_docstrings,
@@ -66,11 +62,12 @@ from ...utils import (
     logging,
     replace_return_docstrings,
 )
-# 从 transformers.models.mobilebert.configuration_mobilebert 模块中导入 MobileBertConfig
 from .configuration_mobilebert import MobileBertConfig
 
-
+# Setting up logging for this module
 logger = logging.get_logger(__name__)
+
+# Documentation constants for different tasks/models
 
 _CHECKPOINT_FOR_DOC = "google/mobilebert-uncased"
 _CONFIG_FOR_DOC = "MobileBertConfig"
@@ -92,195 +89,181 @@ _CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION = "vumichien/emo-mobilebert"
 _SEQ_CLASS_EXPECTED_OUTPUT = "'others'"
 _SEQ_CLASS_EXPECTED_LOSS = "4.72"
 
+# List of pretrained model archives for MobileBERT
 TF_MOBILEBERT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "google/mobilebert-uncased",
     # See all MobileBERT models at https://huggingface.co/models?filter=mobilebert
 ]
 
-
-# 这个类是从 transformers.models.bert.modeling_tf_bert.TFBertPreTrainingLoss 复制过来的
-# 它定义了一个 MobileBERT 预训练任务的损失函数
+# Definition of a custom loss class for MobileBERT pretraining tasks
 class TFMobileBertPreTrainingLoss:
     """
-    这个类定义了一个 MobileBERT 预训练任务的损失函数。
-    它基于 BERT 的预训练方式,包括 Masked Language Modeling 和 Next Sentence Prediction 两种任务。
-    这个类负责计算在这两种任务上的损失函数值。
+    Placeholder class definition for the MobileBERT pre-training loss.
+    This class is likely intended to be implemented later.
     """
-    pass
-    # 创建适合BERT-like预训练的损失函数，即组合NSP（下一句预测）和MLM（遮蔽语言模型）的预训练任务。
-    # 注意：-100的任何标签都会在损失计算中被忽略（以及对应的logits）。
+    Loss function suitable for BERT-like pretraining, that is, the task of pretraining a language model by combining
+    NSP + MLM. .. note:: Any label of -100 will be ignored (along with the corresponding logits) in the loss
+    computation.
     """
+
+    # 定义一个计算损失函数，适用于类似BERT的预训练任务，即结合NSP（Next Sentence Prediction）和MLM（Masked Language Modeling）
     def hf_compute_loss(self, labels: tf.Tensor, logits: tf.Tensor) -> tf.Tensor:
-        # 创建一个带有逻辑回归输出的稀疏分类交叉熵损失函数
-        loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(
-            from_logits=True, reduction=tf.keras.losses.Reduction.NONE
-        )
-    
-        # 将负标签剪裁为零以避免NaN和错误-这些位置在后续的遮蔽中仍然会被遮蔽
-        # 使用损失函数计算未遮蔽的语言模型损失
+        # 使用稀疏分类交叉熵损失函数，适用于逻辑回归（logits），保留每个样本的独立损失
+        loss_fn = keras.losses.SparseCategoricalCrossentropy(from_logits=True, reduction=keras.losses.Reduction.NONE)
+
+        # 将负标签截断为零，以避免NaN和错误，这些位置稍后会被掩盖
         unmasked_lm_losses = loss_fn(y_true=tf.nn.relu(labels["labels"]), y_pred=logits[0])
-        # 确保只有不等于-100的标签才会被用于损失计算
+        # 确保仅计算不等于-100的标签的损失
         lm_loss_mask = tf.cast(labels["labels"] != -100, dtype=unmasked_lm_losses.dtype)
-        # 使用遮蔽后的标签和损失计算得到遮蔽的语言模型损失
         masked_lm_losses = unmasked_lm_losses * lm_loss_mask
-        # 计算遮蔽后的语言模型损失的平均值
         reduced_masked_lm_loss = tf.reduce_sum(masked_lm_losses) / tf.reduce_sum(lm_loss_mask)
-    
-        # 将负标签剪裁为零以避免NaN和错误-这些位置在后续的遮蔽中仍然会被遮蔽
-        # 使用损失函数计算未遮蔽的下一句预测损失
+
+        # 再次将负标签截断为零，避免NaN和错误，这些位置稍后会被掩盖
         unmasked_ns_loss = loss_fn(y_true=tf.nn.relu(labels["next_sentence_label"]), y_pred=logits[1])
-        # 确保只有不等于-100的标签才会被用于损失计算
         ns_loss_mask = tf.cast(labels["next_sentence_label"] != -100, dtype=unmasked_ns_loss.dtype)
-        # 使用遮蔽后的标签和损失计算得到遮蔽的下一句预测损失
         masked_ns_loss = unmasked_ns_loss * ns_loss_mask
-        # 计算遮蔽后的下一句预测损失的平均值
+
         reduced_masked_ns_loss = tf.reduce_sum(masked_ns_loss) / tf.reduce_sum(ns_loss_mask)
-    
-        # 返回减少的遮蔽语言模型损失和遮蔽下一句预测损失的和
+
+        # 返回损失的张量形状
         return tf.reshape(reduced_masked_lm_loss + reduced_masked_ns_loss, (1,))
-class TFMobileBertIntermediate(tf.keras.layers.Layer):
-    # 初始化中间层，接收配置参数和其他关键字参数
+class TFMobileBertIntermediate(keras.layers.Layer):
+    # 初始化中间层，包括一个全连接层和激活函数
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
 
-        # 创建全连接层，输出维度为中间层大小
-        self.dense = tf.keras.layers.Dense(config.intermediate_size, name="dense")
+        # 创建全连接层，使用配置中的中间层大小，命名为"dense"
+        self.dense = keras.layers.Dense(config.intermediate_size, name="dense")
 
-        # 检查隐藏层激活函数是否为字符串，如果是，则获取对应的 TensorFlow 激活函数；否则直接使用配置中的激活函数
+        # 根据配置选择激活函数，如果是字符串则通过辅助函数获取对应的 TensorFlow 激活函数
         if isinstance(config.hidden_act, str):
             self.intermediate_act_fn = get_tf_activation(config.hidden_act)
         else:
             self.intermediate_act_fn = config.hidden_act
         self.config = config
 
-    # 定义调用方法，对输入的隐藏状态进行中间层处理
+    # 定义调用方法，对输入的隐藏状态执行全连接层和激活函数操作
     def call(self, hidden_states):
-        # 通过全连接层处理隐藏状态
         hidden_states = self.dense(hidden_states)
-        # 应用中间层激活函数
         hidden_states = self.intermediate_act_fn(hidden_states)
 
         return hidden_states
 
-    # 构建层，用于配置模型的内部参数
+    # 构建层，确保只构建一次，并设置全连接层的输入形状
     def build(self, input_shape=None):
         if self.built:
             return
         self.built = True
-        # 如果已经构建过，则直接返回
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
-                # 构建全连接层，输入维度为 [None, None, true_hidden_size]
+                # 设置全连接层的输入形状，其中 None 表示批量大小可变
                 self.dense.build([None, None, self.config.true_hidden_size])
 
 
-class TFLayerNorm(tf.keras.layers.LayerNormalization):
-    # 初始化 LayerNorm 层，接收特征大小以及其他参数
+class TFLayerNorm(keras.layers.LayerNormalization):
+    # 初始化 LayerNormalization 层，指定特征大小
     def __init__(self, feat_size, *args, **kwargs):
         self.feat_size = feat_size
         super().__init__(*args, **kwargs)
 
-    # 构建层，用于配置模型的内部参数
+    # 构建层，设置输入形状为 [None, None, feat_size]
     def build(self, input_shape=None):
         super().build([None, None, self.feat_size])
 
 
-class TFNoNorm(tf.keras.layers.Layer):
-    # 初始化不使用标准化的层，接收特征大小和其他关键字参数
+class TFNoNorm(keras.layers.Layer):
+    # 初始化不进行归一化的层，指定特征大小和其他参数
     def __init__(self, feat_size, epsilon=None, **kwargs):
         super().__init__(**kwargs)
         self.feat_size = feat_size
 
-    # 构建层，用于配置模型的内部参数
+    # 构建层，设置偏置和权重参数的形状，并调用父类的 build 方法
     def build(self, input_shape):
-        # 添加偏置参数
         self.bias = self.add_weight("bias", shape=[self.feat_size], initializer="zeros")
-        # 添加权重参数
         self.weight = self.add_weight("weight", shape=[self.feat_size], initializer="ones")
         super().build(input_shape)
 
-    # 定义调用方法，对输入进行处理，不使用标准化，只进行偏置和缩放
+    # 定义调用方法，对输入执行加权和加偏操作
     def call(self, inputs: tf.Tensor):
         return inputs * self.weight + self.bias
 
 
-# 定义标准化方法的字典，根据配置类型选择对应的标准化方法
+# 定义一个字典，将字符串类型的归一化方式映射到对应的类
 NORM2FN = {"layer_norm": TFLayerNorm, "no_norm": TFNoNorm}
 
 
-class TFMobileBertEmbeddings(tf.keras.layers.Layer):
-    # 构建嵌入层，用于构建来自单词、位置和令牌类型的嵌入
+class TFMobileBertEmbeddings(keras.layers.Layer):
+    """Construct the embeddings from word, position and token_type embeddings."""
+
+    # 初始化嵌入层，包括词、位置和类型嵌入的构建
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
 
-        # 是否使用三元组输入
+        # 从配置中获取三元输入标志、嵌入大小等信息
         self.trigram_input = config.trigram_input
-        # 嵌入大小
         self.embedding_size = config.embedding_size
         self.config = config
-        # 隐藏层大小
         self.hidden_size = config.hidden_size
-        # 最大位置嵌入
         self.max_position_embeddings = config.max_position_embeddings
-        # 初始化范围
         self.initializer_range = config.initializer_range
-        # 嵌入转换层，将输入转换为隐藏层大小
-        self.embedding_transformation = tf.keras.layers.Dense(config.hidden_size, name="embedding_transformation")
 
-        # LayerNorm 层，用于标准化嵌入层输出
-        # self.LayerNorm 名称没有使用蛇形命名以保持与 TensorFlow 模型变量名称一致，并能够加载任何 TensorFlow 检查点文件
+        # 创建嵌入转换层，将输入转换为隐藏大小的表示，命名为"embedding_transformation"
+        self.embedding_transformation = keras.layers.Dense(config.hidden_size, name="embedding_transformation")
+
+        # 创建归一化层，根据配置中的归一化类型选择对应的类，设置 epsilon 和名称
+        # 这里保持不改变 TensorFlow 模型变量名称，以便能够加载任何 TensorFlow 检查点文件
         self.LayerNorm = NORM2FN[config.normalization_type](
             config.hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
         )
-        # 丢弃层，用于减少过拟合
-        self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
-        # 嵌入输入大小，如果使用三元组输入，则嵌入大小乘以3，否则等于嵌入大小
+
+        # 创建 dropout 层，根据配置中的隐藏层 dropout 概率设置丢弃率
+        self.dropout = keras.layers.Dropout(rate=config.hidden_dropout_prob)
+
+        # 计算嵌入输入大小，考虑是否使用三元输入
         self.embedded_input_size = self.embedding_size * (3 if self.trigram_input else 1)
-    # 构建词嵌入层
+    # 定义 build 方法，用于构建模型的各个部分
     def build(self, input_shape=None):
-        # 在 TensorFlow 图中创建一个命名作用域，用于包裹词嵌入操作
+        # 在 "word_embeddings" 命名空间下创建权重变量
         with tf.name_scope("word_embeddings"):
-            # 添加权重张量用于词嵌入，初始化为指定形状和初始化器的随机值
             self.weight = self.add_weight(
                 name="weight",
                 shape=[self.config.vocab_size, self.embedding_size],
                 initializer=get_initializer(initializer_range=self.initializer_range),
             )
 
-        # 在 TensorFlow 图中创建一个命名作用域，用于包裹标记类型嵌入操作
+        # 在 "token_type_embeddings" 命名空间下创建 token 类型的嵌入权重变量
         with tf.name_scope("token_type_embeddings"):
-            # 添加标记类型嵌入的权重张量，初始化为指定形状和初始化器的随机值
             self.token_type_embeddings = self.add_weight(
                 name="embeddings",
                 shape=[self.config.type_vocab_size, self.hidden_size],
                 initializer=get_initializer(initializer_range=self.initializer_range),
             )
 
-        # 在 TensorFlow 图中创建一个命名作用域，用于包裹位置嵌入操作
+        # 在 "position_embeddings" 命名空间下创建位置编码的嵌入权重变量
         with tf.name_scope("position_embeddings"):
-            # 添加位置嵌入的权重张量，初始化为指定形状和初始化器的随机值
             self.position_embeddings = self.add_weight(
                 name="embeddings",
                 shape=[self.max_position_embeddings, self.hidden_size],
                 initializer=get_initializer(initializer_range=self.initializer_range),
             )
 
-        # 如果层已经构建完毕，直接返回
+        # 如果模型已经构建过，直接返回
         if self.built:
             return
-        # 设置标志位，表示层已构建
+        
+        # 标记模型为已构建状态
         self.built = True
-        # 如果存在嵌入变换层，则构建该层
+        
+        # 如果存在 embedding_transformation 属性，构建对应的变换层
         if getattr(self, "embedding_transformation", None) is not None:
-            # 在 TensorFlow 图中创建一个命名作用域，用于包裹嵌入变换层的构建操作
             with tf.name_scope(self.embedding_transformation.name):
-                # 构建嵌入变换层，输入形状为 [None, None, self.embedded_input_size]
+                # 使用 build 方法构建 embedding_transformation 层
                 self.embedding_transformation.build([None, None, self.embedded_input_size])
-        # 如果存在 LayerNorm 层，则构建该层
+        
+        # 如果存在 LayerNorm 属性，构建 LayerNorm 层
         if getattr(self, "LayerNorm", None) is not None:
-            # 在 TensorFlow 图中创建一个命名作用域，用于包裹 LayerNorm 层的构建操作
             with tf.name_scope(self.LayerNorm.name):
-                # 构建 LayerNorm 层，输入形状为 None
+                # 使用 build 方法构建 LayerNorm 层
                 self.LayerNorm.build(None)
     def call(self, input_ids=None, position_ids=None, token_type_ids=None, inputs_embeds=None, training=False):
         """
@@ -289,30 +272,24 @@ class TFMobileBertEmbeddings(tf.keras.layers.Layer):
         Returns:
             final_embeddings (`tf.Tensor`): output embedding tensor.
         """
-        # 断言确保输入不为空
+        # 断言确保 input_ids 或 inputs_embeds 至少有一个不为 None
         assert not (input_ids is None and inputs_embeds is None)
 
-        # 如果输入的是 token IDs，则从 embedding 表中获取对应的 embeddings
+        # 如果传入了 input_ids，则根据 input_ids 从权重矩阵中获取对应的嵌入向量
         if input_ids is not None:
-            # 检查 token IDs 是否在词汇表大小范围内
             check_embeddings_within_bounds(input_ids, self.config.vocab_size)
-            # 从 embedding 表中根据 token IDs 索引获取 embeddings
             inputs_embeds = tf.gather(params=self.weight, indices=input_ids)
 
-        # 获取输入 embeddings 的形状
+        # 获取输入嵌入张量的形状，去掉最后一维（用于嵌入维度）
         input_shape = shape_list(inputs_embeds)[:-1]
 
-        # 如果 token_type_ids 为空，则将其填充为 0
+        # 如果未提供 token_type_ids，则创建一个与输入嵌入张量形状相同的张量，并填充为 0
         if token_type_ids is None:
             token_type_ids = tf.fill(dims=input_shape, value=0)
 
-        # 如果采用三元输入模式
+        # 如果设定了 trigram_input 标志
         if self.trigram_input:
-            # 从论文 MobileBERT: a Compact Task-Agnostic BERT for Resource-Limited Devices 中引用
-            #
-            # BERT 模型中的 embedding 表占据了模型大小的相当大一部分。为了压缩 embedding 层，我们将 embedding 维度
-            # 缩减为 128 在 MobileBERT 中，然后，我们在原始 token embedding 上应用了一个核大小为 3 的 1D 卷积，
-            # 以产生一个 512 维的输出。
+            # 根据 MobileBERT 论文中的描述，对输入嵌入张量进行 trigram 输入处理
             inputs_embeds = tf.concat(
                 [
                     tf.pad(inputs_embeds[:, 1:], ((0, 0), (0, 1), (0, 0))),
@@ -322,221 +299,211 @@ class TFMobileBertEmbeddings(tf.keras.layers.Layer):
                 axis=2,
             )
 
-        # 如果采用三元输入模式或者 embedding_size 不等于 hidden_size
+        # 如果设定了 trigram_input 标志或者 embedding_size 不等于 hidden_size
         if self.trigram_input or self.embedding_size != self.hidden_size:
-            # 对输入 embeddings 进行变换
+            # 对输入嵌入张量进行额外的嵌入转换处理
             inputs_embeds = self.embedding_transformation(inputs_embeds)
 
-        # 如果 position_ids 为空，则创建默认的 position_ids
+        # 如果未提供 position_ids，则创建一个一维张量，包含从 0 到输入张量最后维度长度的范围值
         if position_ids is None:
             position_ids = tf.expand_dims(tf.range(start=0, limit=input_shape[-1]), axis=0)
 
-        # 从 position_embeddings 表中获取 position embeddings
+        # 根据 position_ids 获取位置嵌入张量
         position_embeds = tf.gather(params=self.position_embeddings, indices=position_ids)
-        # 从 token_type_embeddings 表中获取 token type embeddings
+        # 根据 token_type_ids 获取 token 类型嵌入张量
         token_type_embeds = tf.gather(params=self.token_type_embeddings, indices=token_type_ids)
-        # 计算最终的 embeddings
+        # 最终的嵌入张量由输入嵌入张量、位置嵌入张量和 token 类型嵌入张量相加而得
         final_embeddings = inputs_embeds + position_embeds + token_type_embeds
-        # 应用 Layer Normalization
+        # 应用 LayerNorm 层进行标准化处理
         final_embeddings = self.LayerNorm(inputs=final_embeddings)
-        # 应用 dropout
+        # 根据训练状态应用 dropout 层
         final_embeddings = self.dropout(inputs=final_embeddings, training=training)
 
-        # 返回最终的 embeddings
+        # 返回最终的嵌入张量
         return final_embeddings
-class TFMobileBertSelfAttention(tf.keras.layers.Layer):
-    # 创建 TFMobileBertSelfAttention 类，继承自 tf.keras.layers.Layer
     def __init__(self, config, **kwargs):
-        # 初始化函数，接受配置参数和其他关键字参数
         super().__init__(**kwargs)
-        # 调用父类的初始化函数
+        # 检查隐藏层大小是否能被注意力头数整除
         if config.hidden_size % config.num_attention_heads != 0:
-            # 检查隐藏层大小是否为注意力头数的倍数，否则引发数值错误
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
                 f"heads ({config.num_attention_heads}"
             )
 
+        # 设置注意力头数和是否输出注意力权重的配置
         self.num_attention_heads = config.num_attention_heads
-        # 设置注意力头数
         self.output_attentions = config.output_attentions
-        # 设置是否输出注意力结果
+        # 确保隐藏层大小能被注意力头数整除
         assert config.hidden_size % config.num_attention_heads == 0
-        # 断言隐藏层大小与注意力头数之比为0
+        # 计算每个注意力头的大小和所有注意力头的总大小
         self.attention_head_size = int(config.true_hidden_size / config.num_attention_heads)
-        # 计算注意力头的大小
         self.all_head_size = self.num_attention_heads * self.attention_head_size
-        # 计算总的头大小
 
-        self.query = tf.keras.layers.Dense(
+        # 初始化查询、键、值矩阵的全连接层
+        self.query = keras.layers.Dense(
             self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="query"
         )
-        # query 层
-        self.key = tf.keras.layers.Dense(
+        self.key = keras.layers.Dense(
             self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="key"
         )
-        # key 层
-        self.value = tf.keras.layers.Dense(
+        self.value = keras.layers.Dense(
             self.all_head_size, kernel_initializer=get_initializer(config.initializer_range), name="value"
         )
-        # value 层
 
-        self.dropout = tf.keras.layers.Dropout(config.attention_probs_dropout_prob)
-        # dropout 层
+        # 初始化 dropout 层，并设置注意力概率
+        self.dropout = keras.layers.Dropout(config.attention_probs_dropout_prob)
         self.config = config
-        # 设置 config 参数
 
     def transpose_for_scores(self, x, batch_size):
-        # 为注意力重新排列张量的形状，从 [batch_size, seq_length, all_head_size] 转换成 [batch_size, seq_length, num_attention_heads, attention_head_size]
+        # 将输入张量 x 从 [batch_size, seq_length, all_head_size] 重塑为 [batch_size, seq_length, num_attention_heads, attention_head_size]
         x = tf.reshape(x, (batch_size, -1, self.num_attention_heads, self.attention_head_size))
         return tf.transpose(x, perm=[0, 2, 1, 3])
-        # 返回转置后的张量
 
     def call(
         self, query_tensor, key_tensor, value_tensor, attention_mask, head_mask, output_attentions, training=False
-        # call 方法，接受 query_tensor, key_tensor, value_tensor, attention_mask, head_mask, output_attentions 和 training 参数
-    # 获取注意力掩码的批处理大小
     ):
-        # 通过 self.query 方法对查询张量进行处理
-        mixed_query_layer = self.query(query_tensor)
-        # 通过 self.key 方法对键张量进行处理
-        mixed_key_layer = self.key(key_tensor)
-        # 通过 self.value 方法对值张量进行处理
-        mixed_value_layer = self.value(value_tensor)
-        # 调整维度以便用于计算注意力得分
-        query_layer = self.transpose_for_scores(mixed_query_layer, batch_size)
-        key_layer = self.transpose_for_scores(mixed_key_layer, batch_size)
-        value_layer = self.transpose_for_scores(mixed_value_layer, batch_size)
+        # 实现自注意力机制的前向传播
+        ):
+            # 获取 batch_size
+            batch_size = shape_list(attention_mask)[0]
+            # 计算 query 的混合层
+            mixed_query_layer = self.query(query_tensor)
+            # 计算 key 的混合层
+            mixed_key_layer = self.key(key_tensor)
+            # 计算 value 的混合层
+            mixed_value_layer = self.value(value_tensor)
+            # 调整混合后的 query 层为得分计算做准备
+            query_layer = self.transpose_for_scores(mixed_query_layer, batch_size)
+            # 调整混合后的 key 层为得分计算做准备
+            key_layer = self.transpose_for_scores(mixed_key_layer, batch_size)
+            # 调整混合后的 value 层为得分计算做准备
+            value_layer = self.transpose_for_scores(mixed_value_layer, batch_size)
 
-        # 计算“查询”和“键”的点积，得到原始的注意力分数
-        attention_scores = tf.matmul(
-            query_layer, key_layer, transpose_b=True
-        )  # (batch size, num_heads, seq_len_q, seq_len_k)
-        # 计算缩放因子
-        dk = tf.cast(shape_list(key_layer)[-1], dtype=attention_scores.dtype)
-        attention_scores = attention_scores / tf.math.sqrt(dk)
+            # 计算 "query" 和 "key" 之间的点积，得到原始的注意力分数
+            attention_scores = tf.matmul(
+                query_layer, key_layer, transpose_b=True
+            )  # (batch size, num_heads, seq_len_q, seq_len_k)
+            # 缩放注意力分数
+            dk = tf.cast(shape_list(key_layer)[-1], dtype=attention_scores.dtype)
+            attention_scores = attention_scores / tf.math.sqrt(dk)
 
-        if attention_mask is not None:
-            # 对注意力掩码进行类型转换并加到注意力得分中
-            attention_mask = tf.cast(attention_mask, dtype=attention_scores.dtype)
-            attention_scores = attention_scores + attention_mask
+            # 如果有注意力掩码，应用它（在 TFMobileBertModel call() 函数中预先计算）
+            if attention_mask is not None:
+                attention_mask = tf.cast(attention_mask, dtype=attention_scores.dtype)
+                attention_scores = attention_scores + attention_mask
 
-        # 将注意力得分归一化为概率
-        attention_probs = stable_softmax(attention_scores, axis=-1)
+            # 将注意力分数归一化为概率
+            attention_probs = stable_softmax(attention_scores, axis=-1)
 
-        # 通过 dropout 方法对注意力概率进行处理
-        attention_probs = self.dropout(attention_probs, training=training)
+            # 对注意力概率进行 dropout
+            attention_probs = self.dropout(attention_probs, training=training)
 
-        # 如果存在头掩码，将其应用到注意力概率上
-        if head_mask is not None:
-            attention_probs = attention_probs * head_mask
+            # 如果有头部掩码，应用头部掩码
+            if head_mask is not None:
+                attention_probs = attention_probs * head_mask
 
-        # 计算上下文张量，即注意力概率和值的乘积
-        context_layer = tf.matmul(attention_probs, value_layer)
+            # 计算上下文向量
+            context_layer = tf.matmul(attention_probs, value_layer)
 
-        # 调整上下文张量的维度
-        context_layer = tf.transpose(context_layer, perm=[0, 2, 1, 3])
-        context_layer = tf.reshape(
-            context_layer, (batch_size, -1, self.all_head_size)
-        )  # (batch_size, seq_len_q, all_head_size)
+            # 转置和重塑上下文向量
+            context_layer = tf.transpose(context_layer, perm=[0, 2, 1, 3])
+            context_layer = tf.reshape(
+                context_layer, (batch_size, -1, self.all_head_size)
+            )  # (batch_size, seq_len_q, all_head_size)
 
-        # 返回输出，包括上下文张量和注意力概率
-        outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
+            # 返回输出结果，根据是否需要返回注意力概率
+            outputs = (context_layer, attention_probs) if output_attentions else (context_layer,)
 
-        return outputs
+            return outputs
 
-    # 构建方法，用于构建自注意力层
-    def build(self, input_shape=None):
-        # 如果已经构建，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 检查是否存在查询、键、值方法，如果存在则构建它们的形状
-        if getattr(self, "query", None) is not None:
-            with tf.name_scope(self.query.name):
-                self.query.build([None, None, self.config.true_hidden_size])
-        if getattr(self, "key", None) is not None:
-            with tf.name_scope(self.key.name):
-                self.key.build([None, None, self.config.true_hidden_size])
-        if getattr(self, "value", None) is not None:
-            with tf.name_scope(self.value.name):
-                self.value.build(
-                    [
-                        None,
-                        None,
-                        self.config.true_hidden_size
-                        if self.config.use_bottleneck_attention
-                        else self.config.hidden_size,
-                    ]
-                )
-# 定义 TFMobileBertSelfOutput 类，用于 MobileBERT 模型的自注意力输出部分
-class TFMobileBertSelfOutput(tf.keras.layers.Layer):
-    # 初始化方法，接受配置信息和其他关键字参数
+        def build(self, input_shape=None):
+            if self.built:
+                return
+            self.built = True
+            # 如果已经定义了 query 层，建立它
+            if getattr(self, "query", None) is not None:
+                with tf.name_scope(self.query.name):
+                    self.query.build([None, None, self.config.true_hidden_size])
+            # 如果已经定义了 key 层，建立它
+            if getattr(self, "key", None) is not None:
+                with tf.name_scope(self.key.name):
+                    self.key.build([None, None, self.config.true_hidden_size])
+            # 如果已经定义了 value 层，建立它
+            if getattr(self, "value", None) is not None:
+                with tf.name_scope(self.value.name):
+                    self.value.build(
+                        [
+                            None,
+                            None,
+                            self.config.true_hidden_size
+                            if self.config.use_bottleneck_attention
+                            else self.config.hidden_size,
+                        ]
+                    )
+# 定义 TFMobileBertSelfOutput 类，继承自 keras.layers.Layer
+class TFMobileBertSelfOutput(keras.layers.Layer):
+    
+    # 初始化方法，接收 config 和其他关键字参数
     def __init__(self, config, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 是否使用瓶颈层的标志
+        # 根据 config 设置是否使用瓶颈层
         self.use_bottleneck = config.use_bottleneck
-        # 创建一个全连接层，用于将隐藏状态映射到指定大小的输出空间
-        self.dense = tf.keras.layers.Dense(
+        # 创建一个全连接层，用于变换隐藏状态的维度
+        self.dense = keras.layers.Dense(
             config.true_hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-        # 创建 LayerNorm 层，用于对输入进行归一化处理
+        # 根据 config 设置归一化层，例如 LayerNorm
         self.LayerNorm = NORM2FN[config.normalization_type](
             config.true_hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
         )
-        # 如果不使用瓶颈层，则创建一个 Dropout 层
+        # 如果不使用瓶颈层，则创建一个 dropout 层，用于训练时随机丢弃部分神经元
         if not self.use_bottleneck:
-            self.dropout = tf.keras.layers.Dropout(config.hidden_dropout_prob)
-        # 保存配置信息
+            self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        # 保存 config 对象
         self.config = config
 
-    # 调用方法，实现自注意力输出层的前向传播逻辑
+    # 定义调用方法，用于前向传播计算
     def call(self, hidden_states, residual_tensor, training=False):
-        # 将隐藏状态经过全连接层映射到指定大小的输出空间
+        # 使用全连接层变换隐藏状态
         hidden_states = self.dense(hidden_states)
-        # 如果不使用瓶颈层，则对输出进行 Dropout 处理
+        # 如果不使用瓶颈层，则对变换后的隐藏状态进行 dropout 处理
         if not self.use_bottleneck:
             hidden_states = self.dropout(hidden_states, training=training)
-        # 将输出与残差张量相加后通过 LayerNorm 层进行归一化处理
+        # 将变换后的隐藏状态与残差张量相加，并通过归一化层处理
         hidden_states = self.LayerNorm(hidden_states + residual_tensor)
-        # 返回处理后的输出
         return hidden_states
 
-    # 构建方法，用于构建层的内部结构
+    # 构建方法，用于构建层次结构
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置构建标志为 True
         self.built = True
-        # 构建全连接层
+        # 如果存在全连接层，则构建该层
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
                 self.dense.build([None, None, self.config.true_hidden_size])
-        # 构建 LayerNorm 层
+        # 如果存在归一化层，则构建该层
         if getattr(self, "LayerNorm", None) is not None:
             with tf.name_scope(self.LayerNorm.name):
                 self.LayerNorm.build(None)
 
 
-# 定义 TFMobileBertAttention 类，用于 MobileBERT 模型的注意力层
-class TFMobileBertAttention(tf.keras.layers.Layer):
-    # 初始化方法，接受配置信息和其他关键字参数
+# 定义 TFMobileBertAttention 类，继承自 keras.layers.Layer
+class TFMobileBertAttention(keras.layers.Layer):
+    
+    # 初始化方法，接收 config 和其他关键字参数
     def __init__(self, config, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(**kwargs)
         # 创建自注意力层对象
         self.self = TFMobileBertSelfAttention(config, name="self")
-        # 创建自注意力输出层对象
+        # 创建 TFMobileBertSelfOutput 层对象，用于处理自注意力层的输出
         self.mobilebert_output = TFMobileBertSelfOutput(config, name="output")
 
-    # 剪枝头部的方法，暂未实现
+    # 头部剪枝方法，抛出未实现错误
     def prune_heads(self, heads):
-        # 抛出未实现异常
         raise NotImplementedError
 
-    # 调用方法，实现注意力层的前向传播逻辑
+    # 定义调用方法，用于前向传播计算
     def call(
         self,
         query_tensor,
@@ -548,337 +515,272 @@ class TFMobileBertAttention(tf.keras.layers.Layer):
         output_attentions,
         training=False,
     ):
-        # 调用自注意力层进行计算
+        # 使用自注意力层处理输入张量
         self_outputs = self.self(
             query_tensor, key_tensor, value_tensor, attention_mask, head_mask, output_attentions, training=training
         )
-        # 将自注意力层的输出作为输入，经过自注意力输出层进行计算
+        # 使用 TFMobileBertSelfOutput 层处理自注意力层的输出和层输入张量
         attention_output = self.mobilebert_output(self_outputs[0], layer_input, training=training)
-        # 将输出打包成元组，如果需要输出注意力权重，则添加到元组中
-        outputs = (attention_output,) + self_outputs[1:]
-        # 返回计算结果
+        # 构造输出元组，包含注意力输出和可能的额外输出
+        outputs = (attention_output,) + self_outputs[1:]  # 如果需要额外的注意力输出，则添加
         return outputs
 
-    # 构建方法，用于构建层的内部结构
+    # 构建方法，用于构建层次结构
     def build(self, input_shape=None):
-        # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置构建标志为 True
         self.built = True
-        # 构建自注意力层
+        # 如果存在自注意力层，则构建该层
         if getattr(self, "self", None) is not None:
             with tf.name_scope(self.self.name):
                 self.self.build(None)
-        # 构建自注意力输出层
+        # 如果存在 TFMobileBertSelfOutput 层，则构建该层
         if getattr(self, "mobilebert_output", None) is not None:
             with tf.name_scope(self.mobilebert_output.name):
                 self.mobilebert_output.build(None)
 
 
-# 定义 TFOutputBottleneck 类
-class TFOutputBottleneck(tf.keras.layers.Layer):
-``` 
-    # 初始化函数，接受config和其他关键字参数
-    def __init__(self, config, **kwargs):
-        # 调用父类的初始化函数
-        super().__init__(**kwargs)
-        # 创建一个全连接层，节点数为config.hidden_size，命名为"dense"
-        self.dense = tf.keras.layers.Dense(config.hidden_size, name="dense")
-        # 创建一个LayerNorm层，节点数为config.hidden_size，epsilon为config.layer_norm_eps，命名为"LayerNorm"
-        self.LayerNorm = NORM2FN[config.normalization_type](
-            config.hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
-        )
-        # 创建一个dropout层，丢弃概率为config.hidden_dropout_prob
-        self.dropout = tf.keras.layers.Dropout(config.hidden_dropout_prob)
-        # 将config保存在对象的config属性中
-        self.config = config
-
-    # 对象的调用函数，接受hidden_states、residual_tensor和training参数
-    def call(self, hidden_states, residual_tensor, training=False):
-        # 经过全连接层处理
-        layer_outputs = self.dense(hidden_states)
-        # 经过dropout处理
-        layer_outputs = self.dropout(layer_outputs, training=training)
-        # 经过LayerNorm处理并与residual_tensor相加，返回处理后的结果
-        layer_outputs = self.LayerNorm(layer_outputs + residual_tensor)
-        return layer_outputs
-
-    # 构建函数，接受input_shape参数
-    def build(self, input_shape=None):
-        # 如果已经构建，则直接返回
-        if self.built:
-            return
-        # 设置已构建标志为True
-        self.built = True
-        # 如果存在dense属性，则构建dense层
-        if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.true_hidden_size])
-        # 如果存在LayerNorm属性，则构建LayerNorm层
-        if getattr(self, "LayerNorm", None) is not None:
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build(None)
-# 创建一个TFMobileBertOutput类，继承自tf.keras.layers.Layer类
-class TFMobileBertOutput(tf.keras.layers.Layer):
-    # 初始化函数，接收config和**kwargs参数
-    def __init__(self, config, **kwargs):
-        # 调用父类初始化函数
-        super().__init__(**kwargs)
-        # 根据配置参数设置是否使用瓶颈层
-        self.use_bottleneck = config.use_bottleneck
-        # 创建一个全连接层，输出维度为config.true_hidden_size，使用config.initializer_range来初始化权重矩阵，名称为"dense"
-        self.dense = tf.keras.layers.Dense(
-            config.true_hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
-        )
-        # 创建一个LayerNorm层，输入维度为config.true_hidden_size，使用config.layer_norm_eps作为epsilon，名称为"LayerNorm"
-        self.LayerNorm = NORM2FN[config.normalization_type](
-            config.true_hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
-        )
-        # 如果不使用瓶颈层，在这里创建一个dropout层，使用config.hidden_dropout_prob作为dropout率
-        if not self.use_bottleneck:
-            self.dropout = tf.keras.layers.Dropout(config.hidden_dropout_prob)
-        # 否则，在这里创建一个TFOutputBottleneck瓶颈层，接收config参数，名称为"bottleneck"
-        else:
-            self.bottleneck = TFOutputBottleneck(config, name="bottleneck")
-        # 保存config参数
-        self.config = config
-
-    # 前向传播函数，接收hidden_states, residual_tensor_1, residual_tensor_2和training参数
-    def call(self, hidden_states, residual_tensor_1, residual_tensor_2, training=False):
-        # 首先通过全连接层对hidden_states进行变换
-        hidden_states = self.dense(hidden_states)
-        # 如果不使用瓶颈层，在这里对hidden_states进行dropout操作
-        if not self.use_bottleneck:
-            hidden_states = self.dropout(hidden_states, training=training)
-            # 将dropout后的hidden_states与residual_tensor_1相加，并经过LayerNorm层
-            hidden_states = self.LayerNorm(hidden_states + residual_tensor_1)
-        # 否则，将hidden_states与residual_tensor_1相加，并通过LayerNorm层
-        else:
-            hidden_states = self.LayerNorm(hidden_states + residual_tensor_1)
-            # 再将输出与residual_tensor_2一起输入到瓶颈层中
-            hidden_states = self.bottleneck(hidden_states, residual_tensor_2)
-        # 返回hidden_states
-        return hidden_states
-
-    # 构建函数，用于构建层中的子层
-    def build(self, input_shape=None):
-        # 如果已经构建了层，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 如果存在dense层，则调用该层的build函数来构建该层的子层
-        if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.intermediate_size])
-        # 如果存在LayerNorm层，则调用该层的build函数来构建该层的子层
-        if getattr(self, "LayerNorm", None) is not None:
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build(None)
-        # 如果存在瓶颈层，则调用该层的build函数来 构建该层的子层
-        if getattr(self, "bottleneck", None) is not None:
-            with tf.name_scope(self.bottleneck.name):
-                self.bottleneck.build(None)
-
-
-class TFBottleneckLayer(tf.keras.layers.Layer):
-    # 初始化函数，接收config和**kwargs参数
-    def __init__(self, config, **kwargs):
-        # 调用父类初始化函数
-        super().__init__(**kwargs)
-        # 创建一个全连接层，输入维度为config.hidden_size，输出维度为config.intra_bottleneck_size，名称为"dense"
-        self.dense = tf.keras.layers.Dense(config.intra_bottleneck_size, name="dense")
-        # 创建一个LayerNorm层，输入维度为config.intra_bottleneck_size，使用config.layer_norm_eps作为epsilon，名称为"LayerNorm"
-        self.LayerNorm = NORM2FN[config.normalization_type](
-            config.intra_bottleneck_size, epsilon=config.layer_norm_eps, name="LayerNorm"
-        )
-        # 保存config参数
-        self.config = config
-
-    # 前向传播函数，接收inputs作为输入
-    def call(self, inputs):
-        # 输入经过全连接层变换
-        hidden_states = self.dense(inputs)
-        # 经过LayerNorm层
-        hidden_states = self.LayerNorm(hidden_states)
-        # 返回hidden_states
-        return hidden_states
-
-    # 构建函数，用于构建层中的子层
-    def build(self, input_shape=None):
-        # 如果已经构建了层，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 如果存在dense层，则调用该层的build函数来构建该层的子层
-        if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.hidden_size])
-        # 如果存在LayerNorm层，则调用该层的build函数来构建该层的子层
-        if getattr(self, "LayerNorm", None) is not None:
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build(None)
-
-
-class TFBottleneck(tf.keras.layers.Layer):
-    ...
-
-
-注释：
-    # 初始化方法，用于创建一个新的实例对象。它接受一个config参数和可选的关键字参数kwargs。
-    # 调用父类的初始化方法，用于初始化继承的属性。
+# 定义 TFOutputBottleneck 类，继承自 keras.layers.Layer
+class TFOutputBottleneck(keras.layers.Layer):
+    # 初始化方法，用于创建对象时初始化各个成员变量和层对象
     def __init__(self, config, **kwargs):
         # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 从config中获取是否使用共享的瓶颈层和是否使用瓶颈注意力的标志，并将其保存到当前实例对象中
+        # 创建一个全连接层对象，用于变换隐藏状态的维度
+        self.dense = keras.layers.Dense(config.hidden_size, name="dense")
+        # 创建一个归一化层对象，根据配置选择不同的归一化类型
+        self.LayerNorm = NORM2FN[config.normalization_type](
+            config.hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
+        )
+        # 创建一个 Dropout 层对象，用于在训练时进行随机失活
+        self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        # 存储配置对象，以便后续使用
+        self.config = config
+
+    # 调用方法，用于实际执行神经网络的前向计算过程
+    def call(self, hidden_states, residual_tensor, training=False):
+        # 线性变换层，将隐藏状态映射到新的空间
+        layer_outputs = self.dense(hidden_states)
+        # 在训练时对输出进行 Dropout 处理，防止过拟合
+        layer_outputs = self.dropout(layer_outputs, training=training)
+        # 应用归一化层，处理残差连接和变换后的输出
+        layer_outputs = self.LayerNorm(layer_outputs + residual_tensor)
+        # 返回处理后的输出
+        return layer_outputs
+
+    # 构建方法，用于构建网络层的内部结构
+    def build(self, input_shape=None):
+        # 如果已经构建过网络层，直接返回
+        if self.built:
+            return
+        # 标记当前网络层已构建
+        self.built = True
+        # 如果存在 dense 层对象，则根据配置构建该层
+        if getattr(self, "dense", None) is not None:
+            with tf.name_scope(self.dense.name):
+                self.dense.build([None, None, self.config.true_hidden_size])
+        # 如果存在 LayerNorm 层对象，则构建该层
+        if getattr(self, "LayerNorm", None) is not None:
+            with tf.name_scope(self.LayerNorm.name):
+                self.LayerNorm.build(None)
+class TFMobileBertOutput(keras.layers.Layer):
+    def __init__(self, config, **kwargs):
+        super().__init__(**kwargs)
+        self.use_bottleneck = config.use_bottleneck  # 根据配置决定是否使用瓶颈层
+        self.dense = keras.layers.Dense(
+            config.true_hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
+        )  # 创建全连接层，用于转换输入的隐藏状态维度
+        self.LayerNorm = NORM2FN[config.normalization_type](
+            config.true_hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
+        )  # 根据配置选择合适的归一化层
+        if not self.use_bottleneck:
+            self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)  # 如果不使用瓶颈层，则创建Dropout层
+        else:
+            self.bottleneck = TFOutputBottleneck(config, name="bottleneck")  # 如果使用瓶颈层，则创建瓶颈层对象
+        self.config = config  # 保存配置信息
+
+    def call(self, hidden_states, residual_tensor_1, residual_tensor_2, training=False):
+        hidden_states = self.dense(hidden_states)  # 经过全连接层转换隐藏状态
+        if not self.use_bottleneck:
+            hidden_states = self.dropout(hidden_states, training=training)  # 如果不使用瓶颈层，则应用Dropout
+            hidden_states = self.LayerNorm(hidden_states + residual_tensor_1)  # 对输入和残差进行归一化和残差连接
+        else:
+            hidden_states = self.LayerNorm(hidden_states + residual_tensor_1)  # 对输入和残差进行归一化和残差连接
+            hidden_states = self.bottleneck(hidden_states, residual_tensor_2)  # 经过瓶颈层处理残差
+        return hidden_states  # 返回处理后的隐藏状态
+
+    def build(self, input_shape=None):
+        if self.built:
+            return
+        self.built = True
+        if getattr(self, "dense", None) is not None:
+            with tf.name_scope(self.dense.name):
+                self.dense.build([None, None, self.config.intermediate_size])  # 构建全连接层
+        if getattr(self, "LayerNorm", None) is not None:
+            with tf.name_scope(self.LayerNorm.name):
+                self.LayerNorm.build(None)  # 构建归一化层
+        if getattr(self, "bottleneck", None) is not None:
+            with tf.name_scope(self.bottleneck.name):
+                self.bottleneck.build(None)  # 构建瓶颈层
+
+
+class TFBottleneckLayer(keras.layers.Layer):
+    def __init__(self, config, **kwargs):
+        super().__init__(**kwargs)
+        self.dense = keras.layers.Dense(config.intra_bottleneck_size, name="dense")  # 创建瓶颈层的全连接层
+        self.LayerNorm = NORM2FN[config.normalization_type](
+            config.intra_bottleneck_size, epsilon=config.layer_norm_eps, name="LayerNorm"
+        )  # 根据配置选择合适的归一化层
+        self.config = config  # 保存配置信息
+
+    def call(self, inputs):
+        hidden_states = self.dense(inputs)  # 经过全连接层转换输入
+        hidden_states = self.LayerNorm(hidden_states)  # 对转换后的数据进行归一化
+        return hidden_states  # 返回处理后的数据
+
+    def build(self, input_shape=None):
+        if self.built:
+            return
+        self.built = True
+        if getattr(self, "dense", None) is not None:
+            with tf.name_scope(self.dense.name):
+                self.dense.build([None, None, self.config.hidden_size])  # 构建全连接层
+        if getattr(self, "LayerNorm", None) is not None:
+            with tf.name_scope(self.LayerNorm.name):
+                self.LayerNorm.build(None)  # 构建归一化层
+
+
+class TFBottleneck(keras.layers.Layer):
+    # 这里是 TFBottleneck 类的定义，暂时没有额外的代码需要注释
+    def __init__(self, config, **kwargs):
+        super().__init__(**kwargs)
         self.key_query_shared_bottleneck = config.key_query_shared_bottleneck
         self.use_bottleneck_attention = config.use_bottleneck_attention
-        # 创建一个TFBottleneckLayer实例对象，用于输入瓶颈层
+        # 使用传入的配置信息初始化共享瓶颈层和注意力机制的使用标志
         self.bottleneck_input = TFBottleneckLayer(config, name="input")
-        # 如果使用共享的瓶颈层，则创建一个用于注意力的瓶颈层
+        # 如果设置了共享瓶颈层，初始化注意力机制的瓶颈层
         if self.key_query_shared_bottleneck:
             self.attention = TFBottleneckLayer(config, name="attention")
 
-    # 调用方法，用于执行实际的层逻辑，传入hidden_states作为输入
     def call(self, hidden_states):
-        # 该方法可以返回三种不同的值组合。这些不同的值利用了瓶颈层，这些瓶颈层是用于将隐藏状态投影到低维向量的线性层，
-        # 从而降低内存使用量。这些线性层具有在训练过程中学习的权重。
+        # 这个方法可以返回三种不同的元组值。这些不同的值利用了瓶颈层，这些线性层用于将隐藏状态投影到一个低维向量，
+        # 从而减少内存使用。这些线性层的权重在训练期间学习。
         #
-        # 如果config.use_bottleneck_attention为True，它将返回瓶颈层的结果四次，分别用于键、查询、值和“层输入”，
-        # 以供注意力层使用。这个瓶颈层用于投影隐藏状态。最后一个“层输入”将在计算注意力分数后用作注意力自我输出中的残差张量。
+        # 如果 `config.use_bottleneck_attention` 为真，则会四次返回瓶颈层的结果，
+        # 分别用于键、查询、值和“层输入”，供注意力层使用。
+        # 这个瓶颈层用于投影隐藏层。这个“层输入”将在计算完注意力分数后，作为注意力自输出中的残差张量使用。
         #
-        # 如果不是config.use_bottleneck_attention且config.key_query_shared_bottleneck为True，这将返回四个值，
-        # 其中三个已通过瓶颈层传递：通过相同瓶颈层传递的查询和键，以及要在注意力自我输出中应用的残差层，通过另一个瓶颈层。
+        # 如果不使用 `config.use_bottleneck_attention` 且使用了 `config.key_query_shared_bottleneck`，
+        # 则会返回四个值，其中三个经过了瓶颈层处理：查询和键通过同一个瓶颈层，而在注意力自输出中，通过另一个瓶颈层处理残差层。
         #
-        # 最后，在最后一种情况下，查询、键和值的值是没有经过瓶颈层的隐藏状态，而残余层将是通过瓶颈层传递的此值。
-        
-        # 对隐藏状态进行瓶颈化处理
+        # 最后一种情况，查询、键和值的值为未经瓶颈处理的隐藏状态，而残差层则经过了瓶颈处理。
+
         bottlenecked_hidden_states = self.bottleneck_input(hidden_states)
-        # 如果使用瓶颈注意力，则返回四次瓶颈化处理后的隐藏状态
+        # 根据配置决定返回哪些值的元组
         if self.use_bottleneck_attention:
             return (bottlenecked_hidden_states,) * 4
-        # 如果不使用瓶颈注意力但使用共享的瓶颈层，则返回四个值：共享注意力输入、共享注意力输入、隐藏状态和瓶颈化处理后的隐藏状态
         elif self.key_query_shared_bottleneck:
             shared_attention_input = self.attention(hidden_states)
             return (shared_attention_input, shared_attention_input, hidden_states, bottlenecked_hidden_states)
-        # 如果既不使用瓶颈注意力也不使用共享的瓶颈层，则返回四个值：隐藏状态、隐藏状态、隐藏状态和瓶颈化处理后的隐藏状态
         else:
             return (hidden_states, hidden_states, hidden_states, bottlenecked_hidden_states)
 
-    # 构建方法，用于构建层的权重
+    def build(self, input_shape=None):
+        # 如果已经构建过，直接返回
+        if self.built:
+            return
+        self.built = True
+        # 如果存在瓶颈输入层，构建该层
+        if getattr(self, "bottleneck_input", None) is not None:
+            with tf.name_scope(self.bottleneck_input.name):
+                self.bottleneck_input.build(None)
+        # 如果存在注意力瓶颈层，构建该层
+        if getattr(self, "attention", None) is not None:
+            with tf.name_scope(self.attention.name):
+                self.attention.build(None)
+# 定义一个 Keras 自定义层 TFMobileBertLayer，继承自 keras.layers.Layer 类
+class TFMobileBertLayer(keras.layers.Layer):
+    # 初始化方法，接受 config 和其他关键字参数
+    def __init__(self, config, **kwargs):
+        super().__init__(**kwargs)
+        # 根据 config 配置决定是否使用瓶颈结构
+        self.use_bottleneck = config.use_bottleneck
+        # 存储 feedforward 网络的数量
+        self.num_feedforward_networks = config.num_feedforward_networks
+        # 创建 TFMobileBertAttention 层，命名为 "attention"
+        self.attention = TFMobileBertAttention(config, name="attention")
+        # 创建 TFMobileBertIntermediate 层，命名为 "intermediate"
+        self.intermediate = TFMobileBertIntermediate(config, name="intermediate")
+        # 创建 TFMobileBertOutput 层，命名为 "output"
+        self.mobilebert_output = TFMobileBertOutput(config, name="output")
+
+        # 如果使用瓶颈结构，创建 TFBottleneck 层，命名为 "bottleneck"
+        if self.use_bottleneck:
+            self.bottleneck = TFBottleneck(config, name="bottleneck")
+        
+        # 如果 feedforward 网络数量大于1，创建多个 TFFFNLayer 层
+        if config.num_feedforward_networks > 1:
+            # 使用列表推导创建多个 TFFFNLayer 实例，命名为 "ffn.{i}"
+            self.ffn = [TFFFNLayer(config, name=f"ffn.{i}") for i in range(config.num_feedforward_networks - 1)]
+
+    # call 方法定义了层的前向传播逻辑
+    def call(self, hidden_states):
+        # 调用注意力层处理隐藏状态
+        attention_output = self.attention(hidden_states)
+        # 调用中间层处理注意力输出
+        intermediate_output = self.intermediate(attention_output)
+        # 调用 MobileBERT 输出层处理中间层输出和原始隐藏状态
+        mobilebert_output = self.mobilebert_output(intermediate_output, hidden_states)
+        
+        # 如果使用瓶颈结构，将输出传入瓶颈层
+        if self.use_bottleneck:
+            mobilebert_output = self.bottleneck(mobilebert_output)
+        
+        # 对于每个 feedforward 网络，依次调用处理
+        if self.num_feedforward_networks > 1:
+            for ffn_layer in self.ffn:
+                mobilebert_output = ffn_layer(mobilebert_output)
+        
+        # 返回处理后的输出
+        return mobilebert_output
+
+    # build 方法用于构建层，包括初始化权重等操作
     def build(self, input_shape=None):
         # 如果已经构建过，则直接返回
         if self.built:
             return
-        # 设置构建标志为True
         self.built = True
-        # 如果存在bottleneck_input属性，则构建瓶颈输入层
-        if getattr(self, "bottleneck_input", None) is not None:
-            with tf.name_scope(self.bottleneck_input.name):
-                self.bottleneck_input.build(None)
-        # 如果存在attention属性，则构建注意力层
-        if getattr(self, "attention", None) is not None:
-            with tf.name_scope(self.attention.name):
-                self.attention.build(None)
-# TFFFNOutput 是一个 Keras 层，负责处理前馈神经网络的输出
-class TFFFNOutput(tf.keras.layers.Layer):
-    def __init__(self, config, **kwargs):
-        # 调用父类的构造函数
-        super().__init__(**kwargs)
-        # 创建一个全连接层，用于计算隐藏状态的输出
-        self.dense = tf.keras.layers.Dense(config.true_hidden_size, name="dense")
-        # 创建一个层归一化层，用于对输出进行归一化处理
-        self.LayerNorm = NORM2FN[config.normalization_type](
-            config.true_hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm"
-        )
-        # 保存配置信息
-        self.config = config
-
-    # 定义前向传播过程
-    def call(self, hidden_states, residual_tensor):
-        # 使用全连接层处理隐藏状态
-        hidden_states = self.dense(hidden_states)
-        # 将处理后的隐藏状态和残差相加，然后进行层归一化
-        hidden_states = self.LayerNorm(hidden_states + residual_tensor)
-        return hidden_states
-
-    # 定义模型构建过程
-    def build(self, input_shape=None):
-        # 如果模型已经构建过了，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 构建全连接层
-        if getattr(self, "dense", None) is not None:
-            with tf.name_scope(self.dense.name):
-                self.dense.build([None, None, self.config.intermediate_size])
-        # 构建层归一化层
-        if getattr(self, "LayerNorm", None) is not None:
-            with tf.name_scope(self.LayerNorm.name):
-                self.LayerNorm.build(None)
-
-# TFFFNLayer 是一个 Keras 层，负责处理前馈神经网络的计算
-class TFFFNLayer(tf.keras.layers.Layer):
-    def __init__(self, config, **kwargs):
-        # 调用父类的构造函数
-        super().__init__(**kwargs)
-        # 创建中间层和输出层
-        self.intermediate = TFMobileBertIntermediate(config, name="intermediate")
-        self.mobilebert_output = TFFFNOutput(config, name="output")
-
-    # 定义前向传播过程
-    def call(self, hidden_states):
-        # 计算中间层的输出
-        intermediate_output = self.intermediate(hidden_states)
-        # 计算输出层的输出
-        layer_outputs = self.mobilebert_output(intermediate_output, hidden_states)
-        return layer_outputs
-
-    # 定义模型构建过程
-    def build(self, input_shape=None):
-        # 如果模型已经构建过了，则直接返回
-        if self.built:
-            return
-        self.built = True
-        # 构建中间层
+        
+        # 如果存在 intermediate 层，则构建该层
         if getattr(self, "intermediate", None) is not None:
             with tf.name_scope(self.intermediate.name):
                 self.intermediate.build(None)
-        # 构建输出层
+        
+        # 如果存在 MobileBERT 输出层，则构建该层
         if getattr(self, "mobilebert_output", None) is not None:
             with tf.name_scope(self.mobilebert_output.name):
                 self.mobilebert_output.build(None)
-
-# TFMobileBertLayer 是一个 Keras 层，负责处理 MobileBERT 模型的一个层
-class TFMobileBertLayer(tf.keras.layers.Layer):
-    def __init__(self, config, **kwargs):
-        # 调用父类的构造函数
-        super().__init__(**kwargs)
-        # 保存配置信息
-        self.use_bottleneck = config.use_bottleneck
-        self.num_feedforward_networks = config.num_feedforward_networks
-        # 创建注意力层、中间层和输出层
-        self.attention = TFMobileBertAttention(config, name="attention")
-        self.intermediate = TFMobileBertIntermediate(config, name="intermediate")
-        self.mobilebert_output = TFMobileBertOutput(config, name="output")
-
-        # 如果使用瓶颈层，则创建一个瓶颈层
-        if self.use_bottleneck:
-            self.bottleneck = TFBottleneck(config, name="bottleneck")
-        # 如果需要多个前馈神经网络，则创建相应数量的 TFFFNLayer
-        if config.num_feedforward_networks > 1:
-            self.ffn = [TFFFNLayer(config, name=f"ffn.{i}") for i in range(config.num_feedforward_networks - 1)]
-    # 定义一个函数，接收隐藏状态、注意力掩码、头遮罩、输出注意力和训练标志作为参数
+        
+        # 如果使用瓶颈结构，构建瓶颈层
+        if self.use_bottleneck and getattr(self, "bottleneck", None) is not None:
+            with tf.name_scope(self.bottleneck.name):
+                self.bottleneck.build(None)
+        
+        # 如果有多个 feedforward 网络，依次构建每个网络层
+        if self.num_feedforward_networks > 1:
+            for ffn_layer in self.ffn:
+                with tf.name_scope(ffn_layer.name):
+                    ffn_layer.build(None)
+    # 定义一个方法，用于处理网络的前向传播，接受隐藏状态、注意力掩码、头掩码、是否输出注意力权重以及训练标志
     def call(self, hidden_states, attention_mask, head_mask, output_attentions, training=False):
-        # 如果使用瓶颈结构
+        # 如果使用瓶颈层，调用瓶颈层方法生成查询、键、值张量以及层输入
         if self.use_bottleneck:
-            # 使用瓶颈结构处理隐藏状态
             query_tensor, key_tensor, value_tensor, layer_input = self.bottleneck(hidden_states)
         else:
-            # 否则复制隐藏状态四份作为查询、键、值、层输入
+            # 否则复制隐藏状态作为查询、键、值张量，同时层输入也设为隐藏状态
             query_tensor, key_tensor, value_tensor, layer_input = [hidden_states] * 4
 
-        # 使用注意力机制处理输入并获取注意力输出
+        # 调用注意力层进行注意力计算，传入查询、键、值张量、层输入、注意力掩码、头掩码、是否输出注意力权重以及训练标志
         attention_outputs = self.attention(
             query_tensor,
             key_tensor,
@@ -890,25 +792,22 @@ class TFMobileBertLayer(tf.keras.layers.Layer):
             training=training,
         )
 
-        # 从注意力输出中提取注意力值
+        # 从注意力输出中获取注意力张量
         attention_output = attention_outputs[0]
         s = (attention_output,)
 
-        # 如果存在多个前馈网络
+        # 如果存在多个前馈网络，则依次对注意力输出进行处理
         if self.num_feedforward_networks != 1:
-            # 遍历前馈网络
             for i, ffn_module in enumerate(self.ffn):
-                # 使用前馈网络处理注意力输出
                 attention_output = ffn_module(attention_output)
-                # 将处理后的输出添加到元组中
                 s += (attention_output,)
 
-        # 使用中间层处理注意力输出
+        # 经过中间层处理注意力输出得到中间输出
         intermediate_output = self.intermediate(attention_output)
-        # 使用移动BERT输出层处理注意力输出、隐藏状态
+        # 经过MobileBERT输出层处理中间输出、注意力输出以及隐藏状态，得到层输出
         layer_output = self.mobilebert_output(intermediate_output, attention_output, hidden_states, training=training)
 
-        # 构建输出元组，包括处理后的层输出、注意力值，以及其他相关的值
+        # 构造最终输出，包括层输出、注意力输出的其它部分以及可能的注意力张量
         outputs = (
             (layer_output,)
             + attention_outputs[1:]
@@ -922,41 +821,45 @@ class TFMobileBertLayer(tf.keras.layers.Layer):
                 intermediate_output,
             )
             + s
-        )  # 如果有输出注意力，则添加到输出中
+        )  # 如果需要输出注意力权重，则添加进输出中
 
+        # 返回构造好的输出
         return outputs
 
-    # 构建网络
+    # 构建网络层，如果已经构建过则直接返回
     def build(self, input_shape=None):
-        # 如果已经构建过则直接返回
         if self.built:
             return
         self.built = True
-        # 检查并构建注意力、中间层、移动BERT输出层、瓶颈层和前馈网络
+        # 如果注意力层存在，则逐一构建它们
         if getattr(self, "attention", None) is not None:
             with tf.name_scope(self.attention.name):
                 self.attention.build(None)
+        # 如果中间层存在，则逐一构建它们
         if getattr(self, "intermediate", None) is not None:
             with tf.name_scope(self.intermediate.name):
                 self.intermediate.build(None)
+        # 如果MobileBERT输出层存在，则逐一构建它们
         if getattr(self, "mobilebert_output", None) is not None:
             with tf.name_scope(self.mobilebert_output.name):
                 self.mobilebert_output.build(None)
+        # 如果瓶颈层存在，则逐一构建它们
         if getattr(self, "bottleneck", None) is not None:
             with tf.name_scope(self.bottleneck.name):
                 self.bottleneck.build(None)
+        # 如果前馈网络存在，则逐一构建它们
         if getattr(self, "ffn", None) is not None:
             for layer in self.ffn:
                 with tf.name_scope(layer.name):
                     layer.build(None)
-class TFMobileBertEncoder(tf.keras.layers.Layer):
+class TFMobileBertEncoder(keras.layers.Layer):
+    # TFMobileBertEncoder 类定义，继承自 keras 的 Layer 类
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
-        # 设置是否输出注意力权重
+        # 初始化输出参数的标志
         self.output_attentions = config.output_attentions
-        # 设置是否输出所有隐藏层的状态
         self.output_hidden_states = config.output_hidden_states
-        # 创建多层 MobileBERT 层
+        # 创建多个 TFMobileBertLayer 层组成的列表
         self.layer = [TFMobileBertLayer(config, name=f"layer_._{i}") for i in range(config.num_hidden_layers)]
 
     def call(
@@ -969,60 +872,57 @@ class TFMobileBertEncoder(tf.keras.layers.Layer):
         return_dict,
         training=False,
     ):
-        # 初始化存储所有隐藏状态的变量
+        # 初始化存储所有隐藏状态和注意力的元组
         all_hidden_states = () if output_hidden_states else None
-        # 初始化存储所有注意力权重的变量
         all_attentions = () if output_attentions else None
-        # 遍历每一层 MobileBERT 层
+        # 遍历所有层并调用它们的 call 方法
         for i, layer_module in enumerate(self.layer):
-            # 如果需要输出所有隐藏状态，则保存当前隐藏状态
             if output_hidden_states:
                 all_hidden_states = all_hidden_states + (hidden_states,)
 
-            # 调用当前层的处理函数
+            # 调用当前层的 call 方法，计算输出
             layer_outputs = layer_module(
                 hidden_states, attention_mask, head_mask[i], output_attentions, training=training
             )
 
-            # 更新隐藏状态为当前层的输出
             hidden_states = layer_outputs[0]
 
-            # 如果需要输出注意力权重，则保存当前层的注意力权重
             if output_attentions:
                 all_attentions = all_attentions + (layer_outputs[1],)
 
-        # 添加最后一层的隐藏状态到所有隐藏状态中
+        # 添加最后一层的隐藏状态
         if output_hidden_states:
             all_hidden_states = all_hidden_states + (hidden_states,)
 
-        # 如果不返回字典，则返回指定的值
+        # 根据 return_dict 决定返回值的形式
         if not return_dict:
             return tuple(v for v in [hidden_states, all_hidden_states, all_attentions] if v is not None)
-        # 如果返回字典，则创建 TFBaseModelOutput 对象返回
+        # 返回 TFBaseModelOutput 对象，包含最后的隐藏状态、所有隐藏状态和注意力
         return TFBaseModelOutput(
             last_hidden_state=hidden_states, hidden_states=all_hidden_states, attentions=all_attentions
         )
 
     def build(self, input_shape=None):
+        # 如果已经构建过，直接返回
         if self.built:
             return
         self.built = True
-        # 如果已经构建过了，则直接返回
+        # 构建每一层
         if getattr(self, "layer", None) is not None:
-            # 遍历每一层 MobileBERT 层，并构建之
             for layer in self.layer:
                 with tf.name_scope(layer.name):
                     layer.build(None)
 
 
-class TFMobileBertPooler(tf.keras.layers.Layer):
+class TFMobileBertPooler(keras.layers.Layer):
+    # TFMobileBertPooler 类定义，继承自 keras 的 Layer 类
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
-        # 设置是否激活分类器
+        # 根据配置决定是否激活分类器的激活函数
         self.do_activate = config.classifier_activation
-        # 如果需要激活，则创建一个全连接层
         if self.do_activate:
-            self.dense = tf.keras.layers.Dense(
+            # 如果激活，创建一个全连接层，使用 tanh 激活函数
+            self.dense = keras.layers.Dense(
                 config.hidden_size,
                 kernel_initializer=get_initializer(config.initializer_range),
                 activation="tanh",
@@ -1031,201 +931,175 @@ class TFMobileBertPooler(tf.keras.layers.Layer):
         self.config = config
 
     def call(self, hidden_states):
-        # 取第一个标记对应的隐藏状态作为汇聚结果
+        # 通过获取第一个 token 对应的隐藏状态来实现模型的 "汇聚"
         first_token_tensor = hidden_states[:, 0]
-        # 如果不需要激活，则直接返回第一个标记对应的隐藏状态
         if not self.do_activate:
+            # 如果不需要激活，直接返回第一个 token 的隐藏状态
             return first_token_tensor
         else:
-            # 如果需要激活，则通过全连接层进行激活
+            # 否则，通过全连接层处理第一个 token 的隐藏状态
             pooled_output = self.dense(first_token_tensor)
             return pooled_output
 
     def build(self, input_shape=None):
+        # 如果已经构建过，直接返回
         if self.built:
             return
         self.built = True
-        # 如果已经构建过了，则直接返回
+        # 如果存在全连接层，构建该层
         if getattr(self, "dense", None) is not None:
             with tf.name_scope(self.dense.name):
-                # 构建全连接层
                 self.dense.build([None, None, self.config.hidden_size])
-class TFMobileBertPredictionHeadTransform(tf.keras.layers.Layer):
-    # 定义 TFMobileBertPredictionHeadTransform 类，继承自 tf.keras.layers.Layer
+class TFMobileBertPredictionHeadTransform(keras.layers.Layer):
+    # TFMobileBert 模型的预测头变换层，用于处理隐藏状态
     def __init__(self, config, **kwargs):
-        # 初始化方法，接受 config 参数和可选的关键字参数
         super().__init__(**kwargs)
-        # 调用父类的初始化方法
-        self.dense = tf.keras.layers.Dense(
+        # 定义一个全连接层，输出维度为 config.hidden_size，使用指定的初始化方法
+        self.dense = keras.layers.Dense(
             config.hidden_size, kernel_initializer=get_initializer(config.initializer_range), name="dense"
         )
-        # 创建一个全连接层，设置隐藏单元数量和初始化方式
+        # 根据配置选择激活函数，或者直接使用给定的激活函数对象
         if isinstance(config.hidden_act, str):
-            # 检查 config.hidden_act 是否为字符串
             self.transform_act_fn = get_tf_activation(config.hidden_act)
-            # 如果是字符串，则调用 get_tf_activation 函数，将结果保存到 transform_act_fn 中
         else:
             self.transform_act_fn = config.hidden_act
-            # 否则直接将 config.hidden_act 保存到 transform_act_fn 中
+        # 创建 LayerNorm 层，用于归一化隐藏状态向量
         self.LayerNorm = NORM2FN["layer_norm"](config.hidden_size, epsilon=config.layer_norm_eps, name="LayerNorm")
-        # 创建 LayerNorm 层
         self.config = config
-        # 保存 config 参数
 
+    # 定义调用函数，实现层的前向传播
     def call(self, hidden_states):
-        # 定义 call 方法，接受 hidden_states 参数
+        # 全连接层处理隐藏状态向量
         hidden_states = self.dense(hidden_states)
-        # 应用全连接层到 hidden_states 上
+        # 应用激活函数变换
         hidden_states = self.transform_act_fn(hidden_states)
-        # 应用激活函数到 hidden_states 上
+        # 归一化处理
         hidden_states = self.LayerNorm(hidden_states)
-        # 应用 LayerNorm 到 hidden_states 上
         return hidden_states
-        # 返回处理后的 hidden_states
 
+    # 构建层的方法，用于创建层的权重
     def build(self, input_shape=None):
-        # 定义 build 方法，接受 input_shape 参数，默认为 None
         if self.built:
             return
-            # 如果已经构建了，则直接返回
         self.built = True
-        # 设置 built 属性为 True
+        # 如果存在 dense 层，则构建 dense 层的权重
         if getattr(self, "dense", None) is not None:
-            # 检查是否存在 dense 属性
             with tf.name_scope(self.dense.name):
                 self.dense.build([None, None, self.config.hidden_size])
-                # 使用 name_scope 设置命名空间，构建 dense 层
+        # 如果存在 LayerNorm 层，则构建 LayerNorm 层的权重
         if getattr(self, "LayerNorm", None) is not None:
-            # 检查是否存在 LayerNorm 属性
             with tf.name_scope(self.LayerNorm.name):
                 self.LayerNorm.build(None)
-                # 使用 name_scope 设置命名空间，构建 LayerNorm 层
 
 
-class TFMobileBertLMPredictionHead(tf.keras.layers.Layer):
-    # 定义 TFMobileBertLMPredictionHead 类，继承自 tf.keras.layers.Layer
+class TFMobileBertLMPredictionHead(keras.layers.Layer):
+    # TFMobileBert 模型的语言模型预测头层
     def __init__(self, config, **kwargs):
-        # 初始化方法，接受 config 参数和可选的关键字参数
         super().__init__(**kwargs)
-        # 调用父类的初始化方法
+        # 创建预测头变换层对象
         self.transform = TFMobileBertPredictionHeadTransform(config, name="transform")
-        # 创建 TFMobileBertPredictionHeadTransform 实例
         self.config = config
-        # 保存 config 参数
 
+    # 构建方法，用于创建层的权重
     def build(self, input_shape=None):
-        # 定义 build 方法，接受 input_shape 参数，默认为 None
+        # 创建偏置项权重，形状为 (config.vocab_size,)
         self.bias = self.add_weight(shape=(self.config.vocab_size,), initializer="zeros", trainable=True, name="bias")
-        # 添加名为 bias 的权重，形状为 (config.vocab_size,)，初始值为 "zeros"，可训练，名称为 "bias"
+        # 创建全连接层的权重，形状为 (config.hidden_size - config.embedding_size, config.vocab_size)
         self.dense = self.add_weight(
             shape=(self.config.hidden_size - self.config.embedding_size, self.config.vocab_size),
             initializer="zeros",
             trainable=True,
             name="dense/weight",
         )
-        # 添加名为 dense 的权重，形状为 (config.hidden_size - config.embedding_size, config.vocab_size)，初始值为 "zeros"，可训练，名称为 "dense/weight"
+        # 创建解码器权重，形状为 (config.vocab_size, config.embedding_size)
         self.decoder = self.add_weight(
             shape=(self.config.vocab_size, self.config.embedding_size),
             initializer="zeros",
             trainable=True,
             name="decoder/weight",
         )
-        # 添加名为 decoder 的权重，形状为 (config.vocab_size, config.embedding_size)，初始值为 "zeros"，可训练，名称为 "decoder/weight"
 
         if self.built:
             return
-            # 如果已经构建了，则直接返回
         self.built = True
-        # 设置 built 属性为 True
+        # 如果存在 transform 层，则构建 transform 层的权重
         if getattr(self, "transform", None) is not None:
-            # 检查是否存在 transform 属性
             with tf.name_scope(self.transform.name):
                 self.transform.build(None)
-                # 使用 name_scope 设置命名空间，构建 transform 层
 
+    # 获取输出的嵌入向量
     def get_output_embeddings(self):
-        # 定义 get_output_embeddings 方法
         return self
-        # 返回当前实例
 
+    # 设置输出的嵌入向量
     def set_output_embeddings(self, value):
-        # 定义 set_output_embeddings 方法，接受 value 参数
         self.decoder = value
-        # 将 value 赋值给 decoder
         self.config.vocab_size = shape_list(value)[0]
-        # 获取 value 的形状并将第一个元素赋值给 config.vocab_size
 
+    # 获取偏置项
     def get_bias(self):
-        # 定义 get_bias 方法
         return {"bias": self.bias}
-        # 返回一个包含 bias 属性的字典
 
+    # 设置偏置项
     def set_bias(self, value):
-        # 定义 set_bias 方法，接受 value 参数
         self.bias = value["bias"]
-        # 将 value 中的 bias 赋值给实例的 bias 属性
         self.config.vocab_size = shape_list(value["bias"])[0]
-        # 获取 value 中 bias 的形状并将第一个元素赋值给 config.vocab_size
-    # 定义一个方法，接受隐藏状态作为参数
+    # 定义一个方法，用于处理传入的隐藏状态数据
     def call(self, hidden_states):
-        # 对隐藏状态进行转换
+        # 调用transform方法，对隐藏状态进行转换处理
         hidden_states = self.transform(hidden_states)
-        # 计算隐藏状态和解码器的转置以及密集层的矩阵乘积
+        # 使用矩阵乘法将转换后的隐藏状态与decoder和dense张量的连接进行乘法运算
         hidden_states = tf.matmul(hidden_states, tf.concat([tf.transpose(self.decoder), self.dense], axis=0))
-        # 添加偏置
+        # 将偏置项加到乘法结果上
         hidden_states = hidden_states + self.bias
-        # 返回处理后的隐藏状态
+        # 返回处理后的隐藏状态数据
         return hidden_states
-class TFMobileBertMLMHead(tf.keras.layers.Layer):
-    # 创建自定义的 TensorFlow 移动 Bert MLM 头部
+class TFMobileBertMLMHead(keras.layers.Layer):
     def __init__(self, config, **kwargs):
-        # 初始化函数
         super().__init__(**kwargs)
-        # 创建预测对象
+        # 初始化 MLM 预测头部，使用 MobileBertLMPredictionHead 类
         self.predictions = TFMobileBertLMPredictionHead(config, name="predictions")
 
     def call(self, sequence_output):
-        # 调用函数，对序列输出进行预测
+        # 调用 predictions 对象进行序列输出的预测评分
         prediction_scores = self.predictions(sequence_output)
         return prediction_scores
 
     def build(self, input_shape=None):
-        # 构建函数，如果已经构建则直接返回，否则构建预测对象
         if self.built:
             return
         self.built = True
         if getattr(self, "predictions", None) is not None:
             with tf.name_scope(self.predictions.name):
+                # 构建 predictions 对象，传入 None 的输入形状
                 self.predictions.build(None)
 
 
 @keras_serializable
-class TFMobileBertMainLayer(tf.keras.layers.Layer):
-    # 自定义的 TF 移动 Bert 主层
+class TFMobileBertMainLayer(keras.layers.Layer):
     config_class = MobileBertConfig
 
     def __init__(self, config, add_pooling_layer=True, **kwargs):
-        # 初始化函数
         super().__init__(**kwargs)
-        # 初始化属性
+
+        # 初始化 MobileBertMainLayer，配置各种属性
         self.config = config
         self.num_hidden_layers = config.num_hidden_layers
         self.output_attentions = config.output_attentions
         self.output_hidden_states = config.output_hidden_states
         self.return_dict = config.use_return_dict
-        # 创建嵌入层对象
+
+        # 初始化 MobileBertEmbeddings、MobileBertEncoder 和可选的 MobileBertPooler 层
         self.embeddings = TFMobileBertEmbeddings(config, name="embeddings")
-        # 创建编码器对象
         self.encoder = TFMobileBertEncoder(config, name="encoder")
-        # 如果需要添加池化层，则创建池化层对象
         self.pooler = TFMobileBertPooler(config, name="pooler") if add_pooling_layer else None
 
     def get_input_embeddings(self):
-        # 获取输入嵌入层对象
+        # 返回嵌入层对象
         return self.embeddings
 
     def set_input_embeddings(self, value):
-        # 设置输入嵌入层对象
+        # 设置嵌入层的权重和词汇大小
         self.embeddings.weight = value
         self.embeddings.vocab_size = shape_list(value)[0]
 
@@ -1234,6 +1108,7 @@ class TFMobileBertMainLayer(tf.keras.layers.Layer):
         Prunes heads of the model. heads_to_prune: dict of {layer_num: list of heads to prune in this layer} See base
         class PreTrainedModel
         """
+        # 剪枝模型中的注意力头部，heads_to_prune 参数为要剪枝的头部字典
         raise NotImplementedError
 
     @unpack_inputs
@@ -1249,25 +1124,29 @@ class TFMobileBertMainLayer(tf.keras.layers.Layer):
         output_hidden_states=None,
         return_dict=None,
         training=False,
-    # 构建函数
+    ):
+        # 执行 MobileBertMainLayer 的前向传播，支持参数解包和可选的返回字典模式
+        ...
+
     def build(self, input_shape=None):
-        # 如果已经构建则直接返回
         if self.built:
             return
         self.built = True
         if getattr(self, "embeddings", None) is not None:
             with tf.name_scope(self.embeddings.name):
+                # 构建 embeddings 对象，传入 None 的输入形状
                 self.embeddings.build(None)
         if getattr(self, "encoder", None) is not None:
             with tf.name_scope(self.encoder.name):
+                # 构建 encoder 对象，传入 None 的输入形状
                 self.encoder.build(None)
         if getattr(self, "pooler", None) is not None:
             with tf.name_scope(self.pooler.name):
+                # 构建 pooler 对象，传入 None 的输入形状
                 self.pooler.build(None)
 
 
 class TFMobileBertPreTrainedModel(TFPreTrainedModel):
-    # TF 移动 Bert 预训练模型的抽象类
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
@@ -1279,49 +1158,44 @@ class TFMobileBertPreTrainedModel(TFPreTrainedModel):
 
 @dataclass
 class TFMobileBertForPreTrainingOutput(ModelOutput):
-    """
+    # TFMobileBert 预训练模型的输出数据结构
+    ...
+    # 定义一个类似于 Type 注释的多行字符串，描述了 `TFMobileBertForPreTraining` 的输出类型信息
     Output type of [`TFMobileBertForPreTraining`].
-
+    
     Args:
         prediction_logits (`tf.Tensor` of shape `(batch_size, sequence_length, config.vocab_size)`):
-            Prediction scores of the language modeling head (scores for each vocabulary token before SoftMax).
+            预测语言建模头部的预测分数（在 SoftMax 之前的每个词汇标记的分数）。
         seq_relationship_logits (`tf.Tensor` of shape `(batch_size, 2)`):
-            Prediction scores of the next sequence prediction (classification) head (scores of True/False continuation
-            before SoftMax).
+            下一个序列预测（分类）头部的预测分数（在 SoftMax 之前的 True/False 连续性的分数）。
         hidden_states (`tuple(tf.Tensor)`, *optional*, returned when `output_hidden_states=True` is passed or when `config.output_hidden_states=True`):
-            Tuple of `tf.Tensor` (one for the output of the embeddings + one for the output of each layer) of shape
-            `(batch_size, sequence_length, hidden_size)`.
-
-            Hidden-states of the model at the output of each layer plus the initial embedding outputs.
+            一个元组，包含 `tf.Tensor` 的输出（一个用于嵌入的输出 + 每个层的输出），形状为 `(batch_size, sequence_length, hidden_size)`。
+    
+            模型在每个层输出的隐藏状态以及初始嵌入的输出。
         attentions (`tuple(tf.Tensor)`, *optional*, returned when `output_attentions=True` is passed or when `config.output_attentions=True`):
-            Tuple of `tf.Tensor` (one for each layer) of shape `(batch_size, num_heads, sequence_length,
-            sequence_length)`.
-
-            Attentions weights after the attention softmax, used to compute the weighted average in the self-attention
-            heads.
+            一个元组，包含每个层的 `tf.Tensor`，形状为 `(batch_size, num_heads, sequence_length, sequence_length)`。
+    
+            注意力 softmax 后的注意力权重，用于在自注意力头部中计算加权平均值。
+    
     """
-
-    # 损失值，用于模型训练时的优化
+    
+    # 定义可选的损失张量
     loss: tf.Tensor | None = None
-    # 语言模型头部的预测得分，即 SoftMax 之前的每个词汇标记的得分
+    # 定义预测语言建模头部的预测分数张量
     prediction_logits: tf.Tensor = None
-    # 下一个序列预测（分类）头部的预测得分，即 SoftMax 之前的 True/False 继续的得分
+    # 定义下一个序列预测头部的预测分数张量
     seq_relationship_logits: tf.Tensor = None
-    # 模型每一层输出的隐藏状态，包括初始嵌入输出
+    # 定义隐藏状态的元组张量，可选返回，当 `output_hidden_states=True` 或 `config.output_hidden_states=True` 时返回
     hidden_states: Tuple[tf.Tensor] | None = None
-    # 每一层的注意力权重，用于计算自注意力头中的加权平均值
+    # 定义注意力权重的元组张量，可选返回，当 `output_attentions=True` 或 `config.output_attentions=True` 时返回
     attentions: Tuple[tf.Tensor] | None = None
-
-
-MOBILEBERT_START_DOCSTRING = r"""
-
-    This model inherits from [`TFPreTrainedModel`]. Check the superclass documentation for the generic methods the
-    library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
+"""
+    This model inherits from `TFPreTrainedModel`. Check the superclass documentation for the generic methods the
+    library implements for all its models (such as downloading or saving, resizing the input embeddings, pruning heads
     etc.)
 
-    This model is also a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
-    as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
-    behavior.
+    This model is also a `keras.Model` subclass. Use it as a regular TF 2.0 Keras Model and refer to the TF 2.0
+    documentation for all matters related to general usage and behavior.
 
     <Tip>
 
@@ -1335,39 +1209,57 @@ MOBILEBERT_START_DOCSTRING = r"""
     pass your inputs and labels in any format that `model.fit()` supports! If, however, you want to use the second
     format outside of Keras methods like `fit()` and `predict()`, such as when creating your own layers or models with
     the Keras `Functional` API, there are three possibilities you can use to gather all the input Tensors in the first
-    # 在使用模型时，可以采取不同的参数格式：
-    # - 一个仅包含 `input_ids` 的 Tensor：`model(input_ids)`
-    # - 一个长度可变的列表，其中包含按照文档字符串中给定顺序的一个或多个输入 Tensor：`model([input_ids, attention_mask])` 或 `model([input_ids, attention_mask, token_type_ids])`
-    # - 一个字典，其中包含一个或多个与文档字符串中给定输入名称相关联的输入 Tensor：`model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
-    
-    # 需要注意的是，在使用[子类化](https://keras.io/guides/making_new_layers_and_models_via_subclassing/)创建模型和层时，不需要担心这些细节，可以像对其他 Python 函数一样传递输入！
-    
-    # 参数：
-    # config ([`MobileBertConfig`]): 包含模型所有参数的模型配置类。
-    # 使用配置文件初始化模型时不会加载与模型相关的权重，只加载配置。可以查看[`~PreTrainedModel.from_pretrained`]方法来加载模型权重。
+    positional argument:
+
+    - a single Tensor with `input_ids` only and nothing else: `model(input_ids)`
+    - a list of varying length with one or several input Tensors IN THE ORDER given in the docstring:
+      `model([input_ids, attention_mask])` or `model([input_ids, attention_mask, token_type_ids])`
+    - a dictionary with one or several input Tensors associated to the input names given in the docstring:
+      `model({"input_ids": input_ids, "token_type_ids": token_type_ids})`
+
+    Note that when creating models and layers with
+    [subclassing](https://keras.io/guides/making_new_layers_and_models_via_subclassing/) then you don't need to worry
+    about any of this, as you can just pass inputs like you would to any other Python function!
+
+    </Tip>
+
+    Parameters:
+        config (`MobileBertConfig`): Model configuration class with all the parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the `PreTrainedModel.from_pretrained` method to load the model weights.
 """
 
-MOBILEBERT_INPUTS_DOCSTRING = r"""
+"""
+    The bare MobileBert Model transformer outputting raw hidden-states without any specific head on top.
+
+    This model inherits the documentation from `MOBILEBERT_START_DOCSTRING`, which provides detailed information about
+    its usage with TensorFlow 2.0, input formats, and integration with Keras.
+
+    Parameters:
+        *inputs: Variable length input arguments to allow flexible input formats as described in the `MOBILEBERT_START_DOCSTRING`.
+        **kwargs: Additional keyword arguments passed to the superclass constructor.
 """
 
-# 添加 MobileBert Model 类的定义，继承自 TFMobileBertPreTrainedModel
-# 该模型输出原始隐藏状态，没有特定的顶部头部
-# 通过装饰器添加了注释
+@add_start_docstrings(
+    "The bare MobileBert Model transformer outputting raw hidden-states without any specific head on top.",
+    MOBILEBERT_START_DOCSTRING,
+)
 class TFMobileBertModel(TFMobileBertPreTrainedModel):
     def __init__(self, config, *inputs, **kwargs):
-        # 调用父类构造函数
         super().__init__(config, *inputs, **kwargs)
-        # 创建 MobileBert 主层
+        # Instantiate the core MobileBERT main layer with the provided configuration
         self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
 
-    # 定义模型调用方法
     @unpack_inputs
+    # 将模型的前向方法文档化，添加关于输入参数的说明，使用装饰器实现
     @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    # 添加代码示例的文档字符串，包括模型的检查点、输出类型、配置类等信息
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TFBaseModelOutputWithPooling,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 定义模型的前向传播方法
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1381,7 +1273,7 @@ class TFMobileBertModel(TFMobileBertPreTrainedModel):
         return_dict: Optional[bool] = None,
         training: Optional[bool] = False,
     ) -> Union[Tuple, TFBaseModelOutputWithPooling]:
-        # 调用 MobileBert 主层，返回输出
+        # 调用 MobileBERT 模型的前向方法，传递各种输入参数
         outputs = self.mobilebert(
             input_ids=input_ids,
             attention_mask=attention_mask,
@@ -1394,51 +1286,51 @@ class TFMobileBertModel(TFMobileBertPreTrainedModel):
             return_dict=return_dict,
             training=training,
         )
-
+        # 返回模型前向传播的输出结果
         return outputs
 
-    # 构建方法
+    # 构建模型的方法，用于初始化模型结构
     def build(self, input_shape=None):
-        # 如果已经构建过，直接返回
+        # 如果模型已经构建完成，则直接返回
         if self.built:
             return
-        # 标记为已构建
+        # 设置模型已构建的标志为 True
         self.built = True
-        # 如果存在 MobileBert 实例
+        # 如果存在 MobileBERT 模型，则在命名空间下构建该模型
         if getattr(self, "mobilebert", None) is not None:
-            # 在 MobileBert 主层下建立模型
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-
-# 添加 MobileBert For PreTraining 类的定义，继承自 TFMobileBertPreTrainedModel 和 TFMobileBertPreTrainingLoss
-# 在预训练期间，该模型在顶部有两个头部：一个是“masked language modeling”头部，另一个是“next sentence prediction (classification)”头部
-# 通过装饰器添加了注释
+"""
+MobileBert Model with two heads on top as done during the pretraining: a `masked language modeling` head and a
+`next sentence prediction (classification)` head.
+"""
+# 定义 TFMobileBertForPreTraining 类，继承自 TFMobileBertPreTrainedModel 和 TFMobileBertPreTrainingLoss
 class TFMobileBertForPreTraining(TFMobileBertPreTrainedModel, TFMobileBertPreTrainingLoss):
+
     def __init__(self, config, *inputs, **kwargs):
-        # 调用父类构造函数
+        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
-        # 创建 MobileBert 主层
+        # 创建 TFMobileBertMainLayer 实例，并命名为 'mobilebert'
         self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
-        # 创建 MLM 头部
+        # 创建 TFMobileBertMLMHead 实例，并命名为 'predictions'
         self.predictions = TFMobileBertMLMHead(config, name="predictions___cls")
-        # 创建 NSP 头部
+        # 创建 TFMobileBertOnlyNSPHead 实例，并命名为 'seq_relationship'
         self.seq_relationship = TFMobileBertOnlyNSPHead(config, name="seq_relationship___cls")
 
-    # 获取语言建模头部
     def get_lm_head(self):
+        # 返回 predictions 的预测结果
         return self.predictions.predictions
-    # 发出警告，提示该方法已经废弃，建议使用 `get_bias` 替代
+
     def get_prefix_bias_name(self):
+        # 发出警告，指示 get_prefix_bias_name 方法已过时，建议使用 'get_bias' 方法代替
         warnings.warn("The method get_prefix_bias_name is deprecated. Please use `get_bias` instead.", FutureWarning)
-        # 返回包含特定字符串的名称，由当前对象的属性名组成
+        # 返回包含预测名称路径的字符串
         return self.name + "/" + self.predictions.name + "/" + self.predictions.predictions.name
 
-    # 标记输入参数解包，为模型 forward 方法添加起始字符串注释，替换模型 forward 方法返回结果的字符串注释
     @unpack_inputs
     @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=TFMobileBertForPreTrainingOutput, config_class=_CONFIG_FOR_DOC)
     def call(
-        # 定义模型 forward 方法的输入参数
         self,
         input_ids: TFModelInputType | None = None,
         attention_mask: np.ndarray | tf.Tensor | None = None,
@@ -1452,102 +1344,104 @@ class TFMobileBertForPreTraining(TFMobileBertPreTrainedModel, TFMobileBertPreTra
         labels: np.ndarray | tf.Tensor | None = None,
         next_sentence_label: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-    # 指定返回值的类型为 Union[Tuple, TFMobileBertForPreTrainingOutput]
-        ) -> Union[Tuple, TFMobileBertForPreTrainingOutput]:
-            # 文档字符串，解释函数返回值和示例代码的作用
-            r"""
-            Return:
-    
-            Examples:
-    
-            ```py
-            >>> import tensorflow as tf
-            >>> from transformers import AutoTokenizer, TFMobileBertForPreTraining
-    
-            >>> tokenizer = AutoTokenizer.from_pretrained("google/mobilebert-uncased")
-            >>> model = TFMobileBertForPreTraining.from_pretrained("google/mobilebert-uncased")
-            >>> input_ids = tf.constant(tokenizer.encode("Hello, my dog is cute"))[None, :]  # 批处理大小为1
-            >>> outputs = model(input_ids)  # 调用模型
-            >>> prediction_scores, seq_relationship_scores = outputs[:2]  # 提取前两个输出值
-            ```"""
-            # 调用 MobileBert 模型，传入输入参数
-            outputs = self.mobilebert(
-                input_ids,  # 输入的标记 ID
-                attention_mask=attention_mask,  # 注意力掩码
-                token_type_ids=token_type_ids,  # 标记类型 ID
-                position_ids=position_ids,  # 位置 ID
-                head_mask=head_mask,  # 头部掩码
-                inputs_embeds=inputs_embeds,  # 输入嵌入
-                output_attentions=output_attentions,  # 是否输出注意力
-                output_hidden_states=output_hidden_states,  # 是否输出隐藏状态
-                return_dict=return_dict,  # 是否返回字典
-                training=training,  # 是否在训练模式
-            )
-    
-            # 提取 MobileBert 模型的序列输出和池化输出
-            sequence_output, pooled_output = outputs[:2]
-            # 使用序列输出计算预测得分
-            prediction_scores = self.predictions(sequence_output)
-            # 使用池化输出计算序列关系得分
-            seq_relationship_score = self.seq_relationship(pooled_output)
-    
-            # 初始化总损失为 None
-            total_loss = None
-            # 如果提供了标签和下一个句子标签，则计算总损失
-            if labels is not None and next_sentence_label is not None:
-                d_labels = {"labels": labels}  # 创建一个包含标签的字典
-                d_labels["next_sentence_label"] = next_sentence_label  # 添加下一个句子标签
-                # 使用提供的标签和 logits 计算总损失
-                total_loss = self.hf_compute_loss(labels=d_labels, logits=(prediction_scores, seq_relationship_score))
-    
-            # 如果不返回字典形式，则返回元组形式的输出
-            if not return_dict:
-                output = (prediction_scores, seq_relationship_score) + outputs[2:]  # 合并预测得分、关系得分和其他输出
-                # 如果有总损失，则将其添加到元组中返回
-                return ((total_loss,) + output) if total_loss is not None else output
-    
-            # 如果返回字典形式，则创建一个 TFMobileBertForPreTrainingOutput 对象
-            return TFMobileBertForPreTrainingOutput(
-                loss=total_loss,  # 总损失
-                prediction_logits=prediction_scores,  # 预测得分
-                seq_relationship_logits=seq_relationship_score,  # 序列关系得分
-                hidden_states=outputs.hidden_states,  # 隐藏状态
-                attentions=outputs.attentions,  # 注意力
-            )
-    
-        # 构建方法，主要用于初始化模型中的组件
-        def build(self, input_shape=None):
-            # 如果模型已构建，直接返回
-            if self.built:
-                return
-            # 设置已构建标志为 True
-            self.built = True
-            # 如果 mobilebert 属性存在，则调用其构建方法
-            if getattr(self, "mobilebert", None) is not None:
-                with tf.name_scope(self.mobilebert.name):  # 为构建阶段设置命名空间
-                    self.mobilebert.build(None)  # 构建 MobileBert
-            # 如果 predictions 属性存在，则调用其构建方法
-            if getattr(self, "predictions", None) is not None:
-                with tf.name_scope(self.predictions.name):  # 为构建阶段设置命名空间
-                    self.predictions.build(None)  # 构建预测层
-            # 如果 seq_relationship 属性存在，则调用其构建方法
-            if getattr(self, "seq_relationship", None) is not None:
-                with tf.name_scope(self.seq_relationship.name):  # 为构建阶段设置命名空间
-                    self.seq_relationship.build(None)  # 构建序列关系层
-    
-        # 重命名 TensorFlow 权重到 PyTorch 权重的方法
-        def tf_to_pt_weight_rename(self, tf_weight):
-            # 如果 TensorFlow 权重名是 "cls.predictions.decoder.weight"
-            if tf_weight == "cls.predictions.decoder.weight":
-                # 将其映射到 PyTorch 中对应的权重名
-                return tf_weight, "mobilebert.embeddings.word_embeddings.weight"
-            else:
-                # 否则保持原名
-                return (tf_weight,)
-# 用于为TFMobileBertForMaskedLM类添加文档字符串，指定为一个带有"language modeling"头的MobileBert模型
+    ) -> Union[Tuple, TFMobileBertForPreTrainingOutput]:
+        r"""
+        返回类型注释，此函数返回一个元组或者 TFMobileBertForPreTrainingOutput 对象。
+
+        示例：
+
+        ```python
+        >>> import tensorflow as tf
+        >>> from transformers import AutoTokenizer, TFMobileBertForPreTraining
+
+        >>> tokenizer = AutoTokenizer.from_pretrained("google/mobilebert-uncased")
+        >>> model = TFMobileBertForPreTraining.from_pretrained("google/mobilebert-uncased")
+        >>> input_ids = tf.constant(tokenizer.encode("Hello, my dog is cute"))[None, :]  # Batch size 1
+        >>> outputs = model(input_ids)
+        >>> prediction_scores, seq_relationship_scores = outputs[:2]
+        ```
+
+        执行模型的前向传播，生成预测分数和序列关系分数。
+
+        Parameters:
+        - input_ids (tf.Tensor): 输入的 token IDs
+        - attention_mask (Optional[tf.Tensor]): 注意力掩码
+        - token_type_ids (Optional[tf.Tensor]): token 类型 IDs
+        - position_ids (Optional[tf.Tensor]): 位置 IDs
+        - head_mask (Optional[tf.Tensor]): 头部掩码
+        - inputs_embeds (Optional[tf.Tensor]): 输入嵌入
+        - output_attentions (Optional[bool]): 是否输出注意力
+        - output_hidden_states (Optional[bool]): 是否输出隐藏状态
+        - return_dict (Optional[bool]): 是否以字典形式返回结果
+        - training (Optional[bool]): 是否处于训练模式
+
+        Returns:
+        - 如果 return_dict=False，则返回一个元组 (total_loss, prediction_scores, seq_relationship_scores, hidden_states, attentions) 或者 (prediction_scores, seq_relationship_scores, hidden_states, attentions)。
+        - 如果 return_dict=True，则返回一个 TFMobileBertForPreTrainingOutput 对象，包含 loss, prediction_logits, seq_relationship_logits, hidden_states, attentions 字段。
+
+        Raises:
+        - 无异常抛出。
+
+        """
+        outputs = self.mobilebert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            training=training,
+        )
+
+        sequence_output, pooled_output = outputs[:2]
+        prediction_scores = self.predictions(sequence_output)
+        seq_relationship_score = self.seq_relationship(pooled_output)
+
+        total_loss = None
+        if labels is not None and next_sentence_label is not None:
+            d_labels = {"labels": labels}
+            d_labels["next_sentence_label"] = next_sentence_label
+            total_loss = self.hf_compute_loss(labels=d_labels, logits=(prediction_scores, seq_relationship_score))
+
+        if not return_dict:
+            output = (prediction_scores, seq_relationship_score) + outputs[2:]
+            return ((total_loss,) + output) if total_loss is not None else output
+
+        return TFMobileBertForPreTrainingOutput(
+            loss=total_loss,
+            prediction_logits=prediction_scores,
+            seq_relationship_logits=seq_relationship_score,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
+    def build(self, input_shape=None):
+        if self.built:
+            return
+        self.built = True
+        if getattr(self, "mobilebert", None) is not None:
+            with tf.name_scope(self.mobilebert.name):
+                self.mobilebert.build(None)
+        if getattr(self, "predictions", None) is not None:
+            with tf.name_scope(self.predictions.name):
+                self.predictions.build(None)
+        if getattr(self, "seq_relationship", None) is not None:
+            with tf.name_scope(self.seq_relationship.name):
+                self.seq_relationship.build(None)
+
+    def tf_to_pt_weight_rename(self, tf_weight):
+        if tf_weight == "cls.predictions.decoder.weight":
+            return tf_weight, "mobilebert.embeddings.word_embeddings.weight"
+        else:
+            return (tf_weight,)
+# 使用装饰器为类添加文档字符串，描述该类是带有顶部语言建模头的 MobileBert 模型
 @add_start_docstrings("""MobileBert Model with a `language modeling` head on top.""", MOBILEBERT_START_DOCSTRING)
 class TFMobileBertForMaskedLM(TFMobileBertPreTrainedModel, TFMaskedLanguageModelingLoss):
-    # 当从PT模型加载TF模型时，带有‘.’的名称表示授权的意外/缺失层
+    # 在从 PT 模型加载 TF 模型时，忽略特定名称的层
+    # 包含'.'的名称表示在加载时是授权的意外/丢失层
     _keys_to_ignore_on_load_unexpected = [
         r"pooler",
         r"seq_relationship___cls",
@@ -1557,22 +1451,21 @@ class TFMobileBertForMaskedLM(TFMobileBertPreTrainedModel, TFMaskedLanguageModel
     def __init__(self, config, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
 
-        # 初始化MobileBert模型的主层，不添加池化层，指定名称为"mobilebert"
+        # 初始化 MobileBert 主层，不添加池化层，命名为"mobilebert"
         self.mobilebert = TFMobileBertMainLayer(config, add_pooling_layer=False, name="mobilebert")
-        # 初始化MobileBert模型的MLM头，指定名称为"predictions___cls"
+        # 初始化 MobileBert 的语言建模头，命名为"predictions___cls"
         self.predictions = TFMobileBertMLMHead(config, name="predictions___cls")
 
-    # 获取语言模型头
+    # 返回语言建模头的预测部分
     def get_lm_head(self):
         return self.predictions.predictions
 
-    # 获取前缀偏置名称
+    # 返回前缀偏置名称，该方法已弃用，将来将使用`get_bias`替代
     def get_prefix_bias_name(self):
-        # 发出警告，此方法被弃用，建议使用`get_bias`替代
         warnings.warn("The method get_prefix_bias_name is deprecated. Please use `get_bias` instead.", FutureWarning)
         return self.name + "/" + self.mlm.name + "/" + self.mlm.predictions.name
 
-    # 定义call方法，实现模型的前向传播
+    # 使用装饰器为前向传播方法添加文档字符串，描述输入参数和预期输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1582,6 +1475,7 @@ class TFMobileBertForMaskedLM(TFMobileBertPreTrainedModel, TFMaskedLanguageModel
         expected_output="'paris'",
         expected_loss=0.57,
     )
+    # 前向传播方法，接收多个输入参数，返回模型输出或损失
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -1595,71 +1489,75 @@ class TFMobileBertForMaskedLM(TFMobileBertPreTrainedModel, TFMaskedLanguageModel
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-    # 定义一个 Union 类型提示，可以返回 Tuple 或 TFMaskedLMOutput
-        ) -> Union[Tuple, TFMaskedLMOutput]:
-            r"""
-            labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
-                Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
-                config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
-                loss is only computed for the tokens with labels
-            """
-            # 通过 mobilebert 模型处理输入数据，获得序列输出
-            outputs = self.mobilebert(
-                input_ids,
-                attention_mask=attention_mask,
-                token_type_ids=token_type_ids,
-                position_ids=position_ids,
-                head_mask=head_mask,
-                inputs_embeds=inputs_embeds,
-                output_attentions=output_attentions,
-                output_hidden_states=output_hidden_states,
-                return_dict=return_dict,
-                training=training,
-            )
-            sequence_output = outputs[0]
-            # 使用 predictions 层计算预测分数
-            prediction_scores = self.predictions(sequence_output, training=training)
-    
-            # 如果提供了 labels，则计算 masked language modeling loss
-            loss = None if labels is None else self.hf_compute_loss(labels, prediction_scores)
-    
-            # 根据 return_dict 参数返回适当的输出
-            if not return_dict:
-                output = (prediction_scores,) + outputs[2:]
-                return ((loss,) + output) if loss is not None else output
-    
-            return TFMaskedLMOutput(
-                loss=loss,
-                logits=prediction_scores,
-                hidden_states=outputs.hidden_states,
-                attentions=outputs.attentions,
-            )
-    
-        # 构建模型
-        def build(self, input_shape=None):
-            if self.built:
-                return
-            self.built = True
-            # 构建 mobilebert 模型
-            if getattr(self, "mobilebert", None) is not None:
-                with tf.name_scope(self.mobilebert.name):
-                    self.mobilebert.build(None)
-            # 构建 predictions 层
-            if getattr(self, "predictions", None) is not None:
-                with tf.name_scope(self.predictions.name):
-                    self.predictions.build(None)
-    
-        # 定义权重转换函数
-        def tf_to_pt_weight_rename(self, tf_weight):
-            if tf_weight == "cls.predictions.decoder.weight":
-                return tf_weight, "mobilebert.embeddings.word_embeddings.weight"
-            else:
-                return (tf_weight,)
-class TFMobileBertOnlyNSPHead(tf.keras.layers.Layer):
+    ) -> Union[Tuple, TFMaskedLMOutput]:
+        r"""
+        labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the masked language modeling loss. Indices should be in `[-100, 0, ...,
+            config.vocab_size]` (see `input_ids` docstring) Tokens with indices set to `-100` are ignored (masked), the
+            loss is only computed for the tokens with labels
+        """
+        # 使用 `->` 表示函数的返回类型注解，这里返回的是一个元组或者 TFMaskedLMOutput 对象
+        outputs = self.mobilebert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            training=training,
+        )
+        # 获取模型输出的序列输出，通常是模型的第一个输出
+        sequence_output = outputs[0]
+        # 将序列输出传入预测模块，生成预测得分
+        prediction_scores = self.predictions(sequence_output, training=training)
+
+        # 如果没有提供标签，则损失设为 None；否则计算预测损失
+        loss = None if labels is None else self.hf_compute_loss(labels, prediction_scores)
+
+        # 如果 return_dict 为 False，则返回的输出包括预测得分和可能的额外输出
+        if not return_dict:
+            output = (prediction_scores,) + outputs[2:]
+            return ((loss,) + output) if loss is not None else output
+
+        # 如果 return_dict 为 True，则返回 TFMaskedLMOutput 对象，包括损失、预测得分、隐藏状态和注意力权重
+        return TFMaskedLMOutput(
+            loss=loss,
+            logits=prediction_scores,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
+    def build(self, input_shape=None):
+        # 如果模型已经构建，则直接返回，避免重复构建
+        if self.built:
+            return
+        # 将模型标记为已构建状态
+        self.built = True
+        # 如果存在 mobilebert 模型，则构建其子模块
+        if getattr(self, "mobilebert", None) is not None:
+            with tf.name_scope(self.mobilebert.name):
+                self.mobilebert.build(None)
+        # 如果存在 predictions 模型，则构建其子模块
+        if getattr(self, "predictions", None) is not None:
+            with tf.name_scope(self.predictions.name):
+                self.predictions.build(None)
+
+    def tf_to_pt_weight_rename(self, tf_weight):
+        # 将特定的 TensorFlow 权重名称映射为 PyTorch 权重名称
+        if tf_weight == "cls.predictions.decoder.weight":
+            return tf_weight, "mobilebert.embeddings.word_embeddings.weight"
+        else:
+            return (tf_weight,)
+# MobileBert 只有下一句预测（NSP）头部的层定义
+class TFMobileBertOnlyNSPHead(keras.layers.Layer):
     def __init__(self, config, **kwargs):
         super().__init__(**kwargs)
-        # 创建一个全连接层，用于进行序列关系预测，输出维度为2
-        self.seq_relationship = tf.keras.layers.Dense(2, name="seq_relationship")
+        # 创建一个全连接层用于下一句预测，输出维度为2，命名为"seq_relationship"
+        self.seq_relationship = keras.layers.Dense(2, name="seq_relationship")
+        # 保存配置信息
         self.config = config
 
     def call(self, pooled_output):
@@ -1668,30 +1566,35 @@ class TFMobileBertOnlyNSPHead(tf.keras.layers.Layer):
         return seq_relationship_score
 
     def build(self, input_shape=None):
-        # 如果已经构建完成，直接返回
         if self.built:
             return
         self.built = True
-        # 如果存在序列关系全连接层，构建对应的神经网络层
+        # 如果已经构建过，则直接返回；否则构建全连接层，输入形状为[None, None, self.config.hidden_size]
         if getattr(self, "seq_relationship", None) is not None:
             with tf.name_scope(self.seq_relationship.name):
                 self.seq_relationship.build([None, None, self.config.hidden_size])
 
+
 @add_start_docstrings(
-    """MobileBert Model with a `next sentence prediction (classification)` head on top.""",
+    """MobileBert 模型，顶部带有`下一句预测（分类）`头部。""",
     MOBILEBERT_START_DOCSTRING,
 )
+# TFMobileBertForNextSentencePrediction 继承自 TFMobileBertPreTrainedModel 和 TFNextSentencePredictionLoss
 class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextSentencePredictionLoss):
-    # 在从 PyTorch 模型加载到 TensorFlow 模型时，忽略指定的层名称
+    # 当从 PT 模型加载 TF 模型时，命名中带有'.'的层表示可接受的未预期/缺失层
     _keys_to_ignore_on_load_unexpected = [r"predictions___cls", r"cls.predictions"]
 
     def __init__(self, config, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
-        # 创建 MobileBert 主层，并命名为 "mobilebert"
+
+        # 创建 MobileBert 主层，命名为"mobilebert"
         self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
-        # 创建仅包含序列关系预测的头部，命名为 "seq_relationship___cls"
+        # 创建仅有下一句预测头部的层，命名为"seq_relationship___cls"
         self.cls = TFMobileBertOnlyNSPHead(config, name="seq_relationship___cls")
 
+    # 解压输入参数
+    # 添加模型前向传播的文档字符串
+    # 替换返回文档字符串，输出类型为 TFNextSentencePredictorOutput，配置类为 _CONFIG_FOR_DOC
     @unpack_inputs
     @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @replace_return_docstrings(output_type=TFNextSentencePredictorOutput, config_class=_CONFIG_FOR_DOC)
@@ -1708,13 +1611,13 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
         return_dict: Optional[bool] = None,
         next_sentence_label: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-    ) -> Union[Tuple, TFNextSentencePredictorOutput]:
+        ) -> Union[Tuple, TFNextSentencePredictorOutput]:
         r"""
-        Return: 返回值类型的说明
+        返回模型的输出结果或损失值。
 
-        Examples: 示例用法
+        Examples:
 
-        ```py
+        ```python
         >>> import tensorflow as tf
         >>> from transformers import AutoTokenizer, TFMobileBertForNextSentencePrediction
 
@@ -1727,7 +1630,8 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
 
         >>> logits = model(encoding["input_ids"], token_type_ids=encoding["token_type_ids"])[0]
         ```"""
-        获取 MobileBERT 模型的输出
+
+        # 调用 MobileBERT 模型来进行预测
         outputs = self.mobilebert(
             input_ids,
             attention_mask=attention_mask,
@@ -1740,24 +1644,26 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
             return_dict=return_dict,
             training=training,
         )
-        # 从 MobileBERT 的输出中获取池化后的输出
+
+        # 提取池化后的输出
         pooled_output = outputs[1]
-        # 使用分类层对池化后的输出进行分类，得到下一句预测的得分
+
+        # 将池化输出传入分类层，得到下一个句子关系的分数
         seq_relationship_scores = self.cls(pooled_output)
 
-        # 计算下一句预测的损失
+        # 计算下一个句子关系的损失值
         next_sentence_loss = (
             None
             if next_sentence_label is None
             else self.hf_compute_loss(labels=next_sentence_label, logits=seq_relationship_scores)
         )
 
-        # 如果不返回字典形式的结果，则构造输出元组
+        # 如果不要求返回字典，则组装输出
         if not return_dict:
             output = (seq_relationship_scores,) + outputs[2:]
             return ((next_sentence_loss,) + output) if next_sentence_loss is not None else output
 
-        # 返回 TFNextSentencePredictorOutput 类型的结果
+        # 返回 TFNextSentencePredictorOutput 对象，包含损失值、分数、隐藏状态和注意力权重
         return TFNextSentencePredictorOutput(
             loss=next_sentence_loss,
             logits=seq_relationship_scores,
@@ -1766,93 +1672,90 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建了模型，则直接返回
         if self.built:
             return
-        # 设置模型已构建标志为 True
         self.built = True
-        # 如果存在 MobileBERT 模型，则构建 MobileBERT
+
+        # 如果模型已经构建，则直接返回
         if getattr(self, "mobilebert", None) is not None:
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-        # 如果存在分类层，则构建分类层
+
+        # 如果分类层已经存在，则构建分类层
         if getattr(self, "cls", None) is not None:
             with tf.name_scope(self.cls.name):
                 self.cls.build(None)
-    @add_start_docstrings(
-        """
-        MobileBert Model transformer with a sequence classification/regression head on top (a linear layer on top of the
-        pooled output) e.g. for GLUE tasks.
-        """,
-        MOBILEBERT_START_DOCSTRING,
-    )
-    class TFMobileBertForSequenceClassification(TFMobileBertPreTrainedModel, TFSequenceClassificationLoss):
-        # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
-        _keys_to_ignore_on_load_unexpected = [
-            r"predictions___cls",
-            r"seq_relationship___cls",
-            r"cls.predictions",
-            r"cls.seq_relationship",
-        ]
-        _keys_to_ignore_on_load_missing = [r"dropout"]
+# 使用装饰器为类添加文档字符串，描述了 MobileBert 模型的用途，特别是在顶部增加了一个线性层用于序列分类或回归任务，例如 GLUE 任务
+@add_start_docstrings(
+    """
+    MobileBert Model transformer with a sequence classification/regression head on top (a linear layer on top of the
+    pooled output) e.g. for GLUE tasks.
+    """,
+    MOBILEBERT_START_DOCSTRING,
+)
+class TFMobileBertForSequenceClassification(TFMobileBertPreTrainedModel, TFSequenceClassificationLoss):
+    # 当从 PyTorch 模型加载到 TF 模型时，忽略的层名列表，包括预期未找到或多余的层
+    _keys_to_ignore_on_load_unexpected = [
+        r"predictions___cls",
+        r"seq_relationship___cls",
+        r"cls.predictions",
+        r"cls.seq_relationship",
+    ]
+    # 当从 PyTorch 模型加载到 TF 模型时，忽略的缺失层名列表
+    _keys_to_ignore_on_load_missing = [r"dropout"]
 
-        def __init__(self, config, *inputs, **kwargs):
-            # 初始化 TFMobileBertForSequenceClassification 类
-            super().__init__(config, *inputs, **kwargs)
-            # 获得标签数
-            self.num_labels = config.num_labels
+    def __init__(self, config, *inputs, **kwargs):
+        # 调用父类构造函数初始化模型配置
+        super().__init__(config, *inputs, **kwargs)
+        # 设定模型输出的类别数目
+        self.num_labels = config.num_labels
 
-            # 创建 MobileBert 主层对象
-            self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
-            # 判断是否有分类器的 dropout 参数，如果没有则用隐藏层的 dropout 参数
-            classifier_dropout = (
-                config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
-            )
-            self.dropout = tf.keras.layers.Dropout(classifier_dropout)
-            # 创建分类器
-            self.classifier = tf.keras.layers.Dense(
-                config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
-            )
-            self.config = config
-
-        @unpack_inputs
-        @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-        @add_code_sample_docstrings(
-            checkpoint=_CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
-            output_type=TFSequenceClassifierOutput,
-            config_class=_CONFIG_FOR_DOC,
-            expected_output=_SEQ_CLASS_EXPECTED_OUTPUT,
-            expected_loss=_SEQ_CLASS_EXPECTED_LOSS,
+        # 创建 MobileBert 主层，使用给定的配置，命名为 "mobilebert"
+        self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
+        # 根据配置设定分类器的 dropout 率，如果未指定，则使用隐藏层 dropout 率
+        classifier_dropout = (
+            config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
-        def call(
-            self,
-            input_ids: TFModelInputType | None = None,
-            attention_mask: np.ndarray | tf.Tensor | None = None,
-            token_type_ids: np.ndarray | tf.Tensor | None = None,
-            position_ids: np.ndarray | tf.Tensor | None = None,
-            head_mask: np.ndarray | tf.Tensor | None = None,
-            inputs_embeds: np.ndarray | tf.Tensor | None = None,
-            output_attentions: Optional[bool] = None,
-            output_hidden_states: Optional[bool] = None,
-            return_dict: Optional[bool] = None,
-            labels: np.ndarray | tf.Tensor | None = None,
-            training: Optional[bool] = False,
-    # 根据输入的标签计算序列分类/回归损失
+        # 创建一个 dropout 层，应用于分类器
+        self.dropout = keras.layers.Dropout(classifier_dropout)
+        # 创建一个全连接层作为分类器，设定输出类别数，使用指定范围的初始化器初始化权重
+        self.classifier = keras.layers.Dense(
+            config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
+        )
+        # 保存配置对象
+        self.config = config
+
+    # 使用装饰器定义模型的前向传播函数，并添加详细的文档字符串描述其输入参数和预期输出
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_SEQUENCE_CLASSIFICATION,
+        output_type=TFSequenceClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+        expected_output=_SEQ_CLASS_EXPECTED_OUTPUT,
+        expected_loss=_SEQ_CLASS_EXPECTED_LOSS,
+    )
     def call(
         self,
-        input_ids,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        inputs_embeds=None,
-        output_attentions=None,
-        output_hidden_states=None,
-        return_dict=None,
-        labels=None,
-        training=False,
+        input_ids: TFModelInputType | None = None,
+        attention_mask: np.ndarray | tf.Tensor | None = None,
+        token_type_ids: np.ndarray | tf.Tensor | None = None,
+        position_ids: np.ndarray | tf.Tensor | None = None,
+        head_mask: np.ndarray | tf.Tensor | None = None,
+        inputs_embeds: np.ndarray | tf.Tensor | None = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        labels: np.ndarray | tf.Tensor | None = None,
+        training: Optional[bool] = False,
     ) -> Union[Tuple, TFSequenceClassifierOutput]:
-        # 通过 mobilebert 模型获取输出，包括隐藏状态和注意力权重
+        r"""
+        labels (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for computing the sequence classification/regression loss. Indices should be in `[0, ...,
+            config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
+            `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
+        """
+        # 调用 MobileBERT 模型进行前向传播，获取输出结果
         outputs = self.mobilebert(
             input_ids,
             attention_mask=attention_mask,
@@ -1865,45 +1768,45 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
             return_dict=return_dict,
             training=training,
         )
-        # 获取池化输出
+        # 从 MobileBERT 输出中获取池化后的表示，用于分类器输入
         pooled_output = outputs[1]
-        
-        # 对池化输出进行 dropout 操作
+
+        # 对池化后的表示应用 dropout，用于模型训练时的正则化
         pooled_output = self.dropout(pooled_output, training=training)
-        # 将池化输出传入分类器得到分类结果
+        # 将池化后的表示输入分类器，得到预测 logits
         logits = self.classifier(pooled_output)
-    
-        # 如果传入了标签，则计算损失
+
+        # 如果存在标签，则计算损失；否则损失置为 None
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
-    
-        # 如果不需要返回 dict，则返回元组
+
+        # 如果不需要返回 dict 格式的结果，则按照 tuple 形式返回输出
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-    
-        # 返回 TFSequenceClassifierOutput 对象
+
+        # 返回 TFSequenceClassifierOutput 格式的结果，包括损失、预测 logits、隐藏状态和注意力权重
         return TFSequenceClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
         )
-    
-    # 构建模型
+
     def build(self, input_shape=None):
-        # 如果已经构建过则直接返回
+        # 如果模型已经构建，则直接返回，避免重复构建
         if self.built:
             return
+        # 将模型标记为已构建状态
         self.built = True
-        # 构建 mobilebert 子模型
+        # 如果存在 MobileBERT 模型，则构建 MobileBERT
         if getattr(self, "mobilebert", None) is not None:
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-        # 构建分类器子模型
+        # 如果存在分类器，则构建分类器，指定输入形状为 [None, None, 隐藏层大小]
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
-# 定义用于问答任务的 MobileBert 模型
+# 使用特定的文档字符串为类添加描述信息，说明这是一个在移动端BERT模型基础上构建的用于抽取式问答任务（如SQuAD）的模型
 @add_start_docstrings(
     """
     MobileBert Model with a span classification head on top for extractive question-answering tasks like SQuAD (a
@@ -1912,7 +1815,7 @@ class TFMobileBertForNextSentencePrediction(TFMobileBertPreTrainedModel, TFNextS
     MOBILEBERT_START_DOCSTRING,
 )
 class TFMobileBertForQuestionAnswering(TFMobileBertPreTrainedModel, TFQuestionAnsweringLoss):
-    # 定义在加载预训练模型时忽略的意外/缺失层名称
+    # 在从PyTorch模型加载为TensorFlow模型时，以下层的名称中包含'.'，表示这些层可以忽略或出现未预期的情况
     _keys_to_ignore_on_load_unexpected = [
         r"pooler",
         r"predictions___cls",
@@ -1922,18 +1825,23 @@ class TFMobileBertForQuestionAnswering(TFMobileBertPreTrainedModel, TFQuestionAn
     ]
 
     def __init__(self, config, *inputs, **kwargs):
+        # 调用父类的初始化方法
         super().__init__(config, *inputs, **kwargs)
-        # 设置标签数量
+        # 设置模型的标签数量
         self.num_labels = config.num_labels
 
-        # 创建 MobileBert 主体层
+        # 创建MobileBERT主层，不添加池化层，命名为"mobilebert"
         self.mobilebert = TFMobileBertMainLayer(config, add_pooling_layer=False, name="mobilebert")
-        # 创建用于计算 span 起始和结束位置的全连接层
-        self.qa_outputs = tf.keras.layers.Dense(
+        
+        # 创建用于问答任务输出的全连接层，输出大小为config.num_labels，使用指定的初始化器初始化权重，命名为"qa_outputs"
+        self.qa_outputs = keras.layers.Dense(
             config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="qa_outputs"
         )
+        
+        # 保存配置信息
         self.config = config
 
+    # 使用特定的装饰器为call方法添加文档字符串，描述模型前向传播的输入和输出
     @unpack_inputs
     @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
     @add_code_sample_docstrings(
@@ -1959,22 +1867,18 @@ class TFMobileBertForQuestionAnswering(TFMobileBertPreTrainedModel, TFQuestionAn
         start_positions: np.ndarray | tf.Tensor | None = None,
         end_positions: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
-    # 定义函数，接受输入并返回包含start和end位置的元组或TFQuestionAnsweringModelOutput类型的对象
-    def predict(
-        input_ids: tf.Tensor,
-        attention_mask: Optional[tf.Tensor] = None,
-        token_type_ids: Optional[tf.Tensor] = None,
-        position_ids: Optional[tf.Tensor] = None,
-        head_mask: Optional[tf.Tensor] = None,
-        inputs_embeds: Optional[tf.Tensor] = None,
-        start_positions: Optional[tf.Tensor] = None,
-        end_positions: Optional[tf.Tensor] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = True,
-        training: bool = False,
     ) -> Union[Tuple, TFQuestionAnsweringModelOutput]:
-        # 获取输出结果，调用mobilebert模型进行推理
+        r"""
+        start_positions (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the start of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
+        end_positions (`tf.Tensor` of shape `(batch_size,)`, *optional*):
+            Labels for position (index) of the end of the labelled span for computing the token classification loss.
+            Positions are clamped to the length of the sequence (`sequence_length`). Position outside of the sequence
+            are not taken into account for computing the loss.
+        """
+        # 调用 MobileBERT 模型进行推断，获取模型输出
         outputs = self.mobilebert(
             input_ids,
             attention_mask=attention_mask,
@@ -1987,27 +1891,29 @@ class TFMobileBertForQuestionAnswering(TFMobileBertPreTrainedModel, TFQuestionAn
             return_dict=return_dict,
             training=training,
         )
+        # 获取模型输出的序列输出部分
         sequence_output = outputs[0]
 
-        # 获取logits并进行分割得到start和end的logits
+        # 通过输出序列计算问答任务的 logits
         logits = self.qa_outputs(sequence_output)
+        # 将 logits 沿着最后一个维度分割为 start_logits 和 end_logits
         start_logits, end_logits = tf.split(logits, 2, axis=-1)
+        # 去除 start_logits 和 end_logits 的最后一个维度，使其形状变为 (batch_size,)
         start_logits = tf.squeeze(start_logits, axis=-1)
         end_logits = tf.squeeze(end_logits, axis=-1)
 
-        # 初始化loss值为None
         loss = None
-        # 如果有start_positions和end_positions，则计算损失
+        # 如果提供了 start_positions 和 end_positions，则计算损失
         if start_positions is not None and end_positions is not None:
             labels = {"start_position": start_positions, "end_position": end_positions}
             loss = self.hf_compute_loss(labels, (start_logits, end_logits))
 
-        # 如果return_dict为False，则返回元组类型的输出
+        # 如果 return_dict=False，返回扩展的输出元组
         if not return_dict:
             output = (start_logits, end_logits) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 如果return_dict为True，则返回TFQuestionAnsweringModelOutput类型的对象
+        # 如果 return_dict=True，返回 TFQuestionAnsweringModelOutput 对象
         return TFQuestionAnsweringModelOutput(
             loss=loss,
             start_logits=start_logits,
@@ -2016,49 +1922,52 @@ class TFMobileBertForQuestionAnswering(TFMobileBertPreTrainedModel, TFQuestionAn
             attentions=outputs.attentions,
         )
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已经构建，则直接返回
+        # 如果模型已经构建完成，则直接返回
         if self.built:
             return
         self.built = True
-        # 如果mobilebert模型存在，则构建mobilebert模型
+        # 如果存在 MobileBERT 模型，则构建 MobileBERT
         if getattr(self, "mobilebert", None) is not None:
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-        # 如果qa_outputs模型存在，则构建qa_outputs模型
+        # 如果存在 QA 输出层，则构建 QA 输出层
         if getattr(self, "qa_outputs", None) is not None:
             with tf.name_scope(self.qa_outputs.name):
                 self.qa_outputs.build([None, None, self.config.hidden_size])
-# 这是一个带有多项选择分类头的 MobileBert 模型
-# 它可以用于 RocStories/SWAG 等任务
-@add_start_docstrings(
-    """
-    MobileBert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and
-    a softmax) e.g. for RocStories/SWAG tasks.
-    """,
-    MOBILEBERT_START_DOCSTRING,
-)
+"""
+MobileBert Model with a multiple choice classification head on top (a linear layer on top of the pooled output and
+a softmax) e.g. for RocStories/SWAG tasks.
+"""
+# 定义 TFMobileBertForMultipleChoice 类，用于在 MobileBert 模型基础上添加多选分类头部的功能
 class TFMobileBertForMultipleChoice(TFMobileBertPreTrainedModel, TFMultipleChoiceLoss):
-    # 这些是在从 PyTorch 模型加载 TensorFlow 模型时忽略的意外/缺失层的名称
+
+    # 当从 PT 模型加载 TF 模型时，以下名称表示可以忽略的未预期/丢失的层
     _keys_to_ignore_on_load_unexpected = [
         r"predictions___cls",
         r"seq_relationship___cls",
         r"cls.predictions",
         r"cls.seq_relationship",
     ]
+
+    # 当从 PT 模型加载 TF 模型时，以下名称表示可以忽略的缺失的层
     _keys_to_ignore_on_load_missing = [r"dropout"]
 
     def __init__(self, config, *inputs, **kwargs):
         super().__init__(config, *inputs, **kwargs)
-        # 创建 MobileBert 的主要层
+
+        # 创建 TFMobileBertMainLayer 实例作为模型的主体部分
         self.mobilebert = TFMobileBertMainLayer(config, name="mobilebert")
-        # 添加一个 dropout 层
-        self.dropout = tf.keras.layers.Dropout(config.hidden_dropout_prob)
-        # 添加一个用于分类的全连接层
-        self.classifier = tf.keras.layers.Dense(
+        
+        # 创建 Dropout 层，使用配置中指定的隐藏层 dropout 概率
+        self.dropout = keras.layers.Dropout(config.hidden_dropout_prob)
+        
+        # 创建分类器 Dense 层，用于多选分类，输出维度为1
+        self.classifier = keras.layers.Dense(
             1, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
         )
+        
+        # 存储模型配置
         self.config = config
 
     @unpack_inputs
@@ -2070,6 +1979,7 @@ class TFMobileBertForMultipleChoice(TFMobileBertPreTrainedModel, TFMultipleChoic
         output_type=TFMultipleChoiceModelOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 定义模型的前向传播方法
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -2089,32 +1999,27 @@ class TFMobileBertForMultipleChoice(TFMobileBertPreTrainedModel, TFMultipleChoic
             Labels for computing the multiple choice classification loss. Indices should be in `[0, ..., num_choices]`
             where `num_choices` is the size of the second dimension of the input tensors. (See `input_ids` above)
         """
-        # 如果输入了 input_ids，则获取其第二维的大小为 num_choices
+        # 如果提供了 input_ids，则获取 num_choices 和 seq_length
         if input_ids is not None:
             num_choices = shape_list(input_ids)[1]
-            # 获取输入的序列长度
             seq_length = shape_list(input_ids)[2]
         else:
-            # 否则，获取 inputs_embeds 的第二维的大小为 num_choices
+            # 否则，从 inputs_embeds 中获取 num_choices 和 seq_length
             num_choices = shape_list(inputs_embeds)[1]
-            # 获取输入的序列长度
             seq_length = shape_list(inputs_embeds)[2]
 
-        # 将输入的 input_ids 展平为二维张量，如果没有输入 input_ids，则置为 None
+        # 将 input_ids 和相关的张量重新整形为二维张量
         flat_input_ids = tf.reshape(input_ids, (-1, seq_length)) if input_ids is not None else None
-        # 将输入的 attention_mask 展平为二维张量，如果没有输入 attention_mask，则置为 None
         flat_attention_mask = tf.reshape(attention_mask, (-1, seq_length)) if attention_mask is not None else None
-        # 将输入的 token_type_ids 展平为二维张量，如果没有输入 token_type_ids，则置为 None
         flat_token_type_ids = tf.reshape(token_type_ids, (-1, seq_length)) if token_type_ids is not None else None
-        # 将输入的 position_ids 展平为二维张量，如果没有输入 position_ids，则置为 None
         flat_position_ids = tf.reshape(position_ids, (-1, seq_length)) if position_ids is not None else None
-        # 将输入的 inputs_embeds 展平为三维张量，如果没有输入 inputs_embeds，则置为 None
         flat_inputs_embeds = (
             tf.reshape(inputs_embeds, (-1, seq_length, shape_list(inputs_embeds)[3]))
             if inputs_embeds is not None
             else None
         )
-        # 使用 MobileBERT 模型处理输入，并返回输出结果
+        
+        # 调用 MobileBERT 模型进行前向传播
         outputs = self.mobilebert(
             flat_input_ids,
             flat_attention_mask,
@@ -2127,26 +2032,26 @@ class TFMobileBertForMultipleChoice(TFMobileBertPreTrainedModel, TFMultipleChoic
             return_dict=return_dict,
             training=training,
         )
-        # 获取池化后的输出
+        
+        # 获取池化后的输出，并应用 dropout
         pooled_output = outputs[1]
-        # 对池化后的输出进行 dropout 处理
         pooled_output = self.dropout(pooled_output, training=training)
-        # 使用分类器对池化后的输出进行分类，得到 logits
+        
+        # 使用分类器得到 logits
         logits = self.classifier(pooled_output)
-        # 将 logits 重新调整形状为二维张量
+        
+        # 重新整形 logits 为二维张量
         reshaped_logits = tf.reshape(logits, (-1, num_choices))
 
         # 如果提供了 labels，则计算损失
         loss = None if labels is None else self.hf_compute_loss(labels, reshaped_logits)
 
-        # 如果不要求返回字典形式的输出
+        # 如果不需要返回字典形式的输出，则返回 reshaped_logits 和其他输出项
         if not return_dict:
-            # 构建输出元组
             output = (reshaped_logits,) + outputs[2:]
-            # 如果存在损失，则将损失添加到输出元组中
             return ((loss,) + output) if loss is not None else output
 
-        # 返回字典形式的输出
+        # 如果需要返回字典形式的输出，则构建 TFMultipleChoiceModelOutput 对象
         return TFMultipleChoiceModelOutput(
             loss=loss,
             logits=reshaped_logits,
@@ -2154,25 +2059,40 @@ class TFMobileBertForMultipleChoice(TFMobileBertPreTrainedModel, TFMultipleChoic
             attentions=outputs.attentions,
         )
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已经构建过模型，则直接返回
+        # 如果模型已经建立，则直接返回
         if self.built:
             return
-        # 设置模型为已构建状态
+        
+        # 标记模型为已建立状态
         self.built = True
-        # 如果存在 MobileBERT 模型，则构建 MobileBERT
+        
+        # 如果存在 MobileBERT 模型，则构建其结构
         if getattr(self, "mobilebert", None) is not None:
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-        # 如果存在分类器，则构建分类器
+        
+        # 如果存在分类器，则构建其结构，输入形状为 [None, None, self.config.hidden_size]
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])
-# 使用装饰器添加模型的文档字符串，介绍带有标记分类头的 MobileBert 模型，例如用于命名实体识别（NER）任务
-# 继承 TFMobileBertPreTrainedModel 和 TFTokenClassificationLoss 类
+"""
+MobileBert Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g.
+for Named-Entity-Recognition (NER) tasks.
+"""
+@add_start_docstrings(
+    """
+    MobileBert Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g.
+    for Named-Entity-Recognition (NER) tasks.
+    """,
+    MOBILEBERT_START_DOCSTRING,
+)
 class TFMobileBertForTokenClassification(TFMobileBertPreTrainedModel, TFTokenClassificationLoss):
-    # 加载 TF 模型时要忽略的键列表，表示预期未授权的意外/缺失层
+    """
+    Subclass of TFMobileBertPreTrainedModel and TFTokenClassificationLoss for token classification tasks,
+    incorporating MobileBert architecture.
+    """
+    # names with a '.' represents the authorized unexpected/missing layers when a TF model is loaded from a PT model
     _keys_to_ignore_on_load_unexpected = [
         r"pooler",
         r"predictions___cls",
@@ -2180,33 +2100,47 @@ class TFMobileBertForTokenClassification(TFMobileBertPreTrainedModel, TFTokenCla
         r"cls.predictions",
         r"cls.seq_relationship",
     ]
-    # 加载 TF 模型时要忽略的键列表，表示预期缺失的层
+    # List of keys to ignore when certain layers are missing during model loading
     _keys_to_ignore_on_load_missing = [r"dropout"]
 
-    # 初始化方法，接受配置和其他参数
     def __init__(self, config, *inputs, **kwargs):
-        # 调用父类的初始化方法
+        """
+        Initialize TFMobileBertForTokenClassification model.
+
+        Args:
+            config (MobileBertConfig): Configuration object specifying model parameters.
+            *inputs: Variable length argument list for additional inputs.
+            **kwargs: Additional keyword arguments.
+        """
         super().__init__(config, *inputs, **kwargs)
-        # 设置模型的标签数量
         self.num_labels = config.num_labels
-        # 创建 MobileBert 主层对象，不添加池化层，命名为"mobilebert"
+
+        # Initialize MobileBertMainLayer without pooling layer for token classification
         self.mobilebert = TFMobileBertMainLayer(config, add_pooling_layer=False, name="mobilebert")
-        # 设置分类器的丢弃率
+        
+        # Set dropout rate for classifier layer based on config
         classifier_dropout = (
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
-        # 创建丢弃层对象
-        self.dropout = tf.keras.layers.Dropout(classifier_dropout)
-        # 创建全连接层，用于标记分类
-        self.classifier = tf.keras.layers.Dense(
+        self.dropout = keras.layers.Dropout(classifier_dropout)
+        
+        # Linear classification layer for token classification
+        self.classifier = keras.layers.Dense(
             config.num_labels, kernel_initializer=get_initializer(config.initializer_range), name="classifier"
         )
-        # 保存配置对象
+        
+        # Store the configuration object for reference
         self.config = config
 
-    # 使用装饰器 unpack_inputs 对输入进行解包，使得输入可以直接传入函数中
-    # 使用装饰器 add_start_docstrings_to_model_forward 添加模型前向传播的文档字符串，介绍输入格式
-    # 使用装饰器 add_code_sample_docstrings 添加模型示例的文档字符串，介绍检查点、输出类型、配置类和预期输出
+    @unpack_inputs
+    @add_start_docstrings_to_model_forward(MOBILEBERT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_TOKEN_CLASSIFICATION,
+        output_type=TFTokenClassifierOutput,
+        config_class=_CONFIG_FOR_DOC,
+        expected_output=_TOKEN_CLASS_EXPECTED_OUTPUT,
+        expected_loss=_TOKEN_CLASS_EXPECTED_LOSS,
+    )
     def call(
         self,
         input_ids: TFModelInputType | None = None,
@@ -2220,12 +2154,49 @@ class TFMobileBertForTokenClassification(TFMobileBertPreTrainedModel, TFTokenCla
         return_dict: Optional[bool] = None,
         labels: np.ndarray | tf.Tensor | None = None,
         training: Optional[bool] = False,
+        **kwargs,
+    ):
+        """
+        Perform forward pass of TFMobileBertForTokenClassification model.
+
+        Args:
+            input_ids (TFModelInputType, optional): Tensor of input token IDs.
+            attention_mask (np.ndarray or tf.Tensor, optional): Tensor of attention masks.
+            token_type_ids (np.ndarray or tf.Tensor, optional): Tensor of token type IDs.
+            position_ids (np.ndarray or tf.Tensor, optional): Tensor of position IDs.
+            head_mask (np.ndarray or tf.Tensor, optional): Tensor of head masks.
+            inputs_embeds (np.ndarray or tf.Tensor, optional): Tensor of input embeddings.
+            output_attentions (bool, optional): Whether to output attentions.
+            output_hidden_states (bool, optional): Whether to output hidden states.
+            return_dict (bool, optional): Whether to return a dictionary.
+            labels (np.ndarray or tf.Tensor, optional): Tensor of labels for token classification.
+            training (bool, optional): Whether in training mode.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            TFTokenClassifierOutput or dict: Output of the model.
+        """
+        # Forward pass through MobileBert model
+        return self.mobilebert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+            training=training,
+            labels=labels,
+            **kwargs,
+        )
     ) -> Union[Tuple, TFTokenClassifierOutput]:
         r"""
         labels (`tf.Tensor` of shape `(batch_size, sequence_length)`, *optional*):
             Labels for computing the token classification loss. Indices should be in `[0, ..., config.num_labels - 1]`.
         """
-        # 调用 MobileBERT 模型来获取输出结果
+        # 调用 MobileBERT 模型进行推断或训练，获取输出结果
         outputs = self.mobilebert(
             input_ids,
             attention_mask=attention_mask,
@@ -2238,24 +2209,23 @@ class TFMobileBertForTokenClassification(TFMobileBertPreTrainedModel, TFTokenCla
             return_dict=return_dict,
             training=training,
         )
-        # 获取模型输出的序列结果
+        # 获取 MobileBERT 模型的序列输出
         sequence_output = outputs[0]
 
-        # 对序列结果进行 dropout 处理
+        # 对序列输出应用 dropout，用于防止过拟合
         sequence_output = self.dropout(sequence_output, training=training)
-        
-        # 通过分类器获取 logits
+        # 将 dropout 后的输出传入分类器，生成分类 logits
         logits = self.classifier(sequence_output)
 
-        # 如果有标签，则计算损失
+        # 如果存在标签，计算损失值
         loss = None if labels is None else self.hf_compute_loss(labels, logits)
 
-        # 如果不使用返回字典形式，则构建返回结果
+        # 如果不需要返回字典，返回分类 logits 和可能的附加输出
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 如果使用返回字典形式，则返回 TFTokenClassifierOutput 对象
+        # 返回 TFTokenClassifierOutput 对象，包括损失、logits、隐藏状态和注意力权重
         return TFTokenClassifierOutput(
             loss=loss,
             logits=logits,
@@ -2264,15 +2234,16 @@ class TFMobileBertForTokenClassification(TFMobileBertPreTrainedModel, TFTokenCla
         )
 
     def build(self, input_shape=None):
-        # 如果已经构建，则直接返回
+        # 如果已经构建过模型，直接返回
         if self.built:
             return
+        # 设置构建状态为已完成
         self.built = True
-        # 如果存在 MobileBERT 模型，则构建 MobileBERT 模型
+        # 如果存在 MobileBERT 模型，构建 MobileBERT
         if getattr(self, "mobilebert", None) is not None:
             with tf.name_scope(self.mobilebert.name):
                 self.mobilebert.build(None)
-        # 如果存在分类器，则构建分类器
+        # 如果存在分类器模型，构建分类器
         if getattr(self, "classifier", None) is not None:
             with tf.name_scope(self.classifier.name):
                 self.classifier.build([None, None, self.config.hidden_size])

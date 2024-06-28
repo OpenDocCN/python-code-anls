@@ -1,57 +1,68 @@
 # `.\models\esm\configuration_esm.py`
 
-```py
-# 设定编码为 utf-8
-# 版权声明，版权所有，Meta 和 HuggingFace 公司团队，保留所有权利。
-# 根据 Apache 许可证 2.0 版本，您不得使用此文件，除非符合许可证的规定。
-# 您可以从以下网址获取许可证的副本
+```
+"""
+# coding=utf-8
+# Copyright 2022 Meta and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件是基于"原样"的基础分发的，
-# 没有任何明示或暗示的担保或条件。请查看许可证，了解特定语言的具体授权和限制。
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" ESM model configuration"""
 
-# 导入必要的包和模块
+# Import necessary modules
 from dataclasses import asdict, dataclass
 from typing import Optional
-# 导入配置工具类
+
+# Import configuration utilities
 from ...configuration_utils import PretrainedConfig
-# 导入日志工具
 from ...utils import logging
 
-# 使用 logging 模块获取记录器
+# Get logger for this module
 logger = logging.get_logger(__name__)
 
-# TODO 待更新
-# ESM 预训练模型配置文件映射，指向对应模型的配置文件链接
+# TODO Update this
+# Mapping of pretrained model names to their configuration URLs
 ESM_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/esm-1b": "https://huggingface.co/facebook/esm-1b/resolve/main/config.json",
-    # 查看所有 ESM 模型 https://huggingface.co/models?filter=esm
+    # See all ESM models at https://huggingface.co/models?filter=esm
 }
 
-# ESM 模型配置类，用于存储 [`ESMModel`] 的配置信息
+# Configuration class for the ESM model, inheriting from PretrainedConfig
 class EsmConfig(PretrainedConfig):
     r"""
-    这是用于存储 [`ESMModel`] 配置的配置类。根据指定的参数实例化 ESM 模型，定义模型架构。
-    使用默认值实例化配置将产生类似于 ESM [facebook/esm-1b](https://huggingface.co/facebook/esm-1b) 架构的配置。
+    This is the configuration class to store the configuration of a [`ESMModel`]. It is used to instantiate a ESM model
+    according to the specified arguments, defining the model architecture. Instantiating a configuration with the
+    defaults will yield a similar configuration to that of the ESM
+    [facebook/esm-1b](https://huggingface.co/facebook/esm-1b) architecture.
 
-    配置对象继承自 [`PretrainedConfig`]，可用于控制模型输出。阅读 [`PretrainedConfig`] 的文档以获取更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    用法示例：
+
+    Examples:
 
     ```python
     >>> from transformers import EsmModel, EsmConfig
 
-    >>> # 初始化 ESM facebook/esm-1b 风格配置 >>> configuration = EsmConfig()
+    >>> # Initializing a ESM facebook/esm-1b style configuration >>> configuration = EsmConfig()
 
-    >>> # 从配置初始化模型 >>> model = ESMModel(configuration)
+    >>> # Initializing a model from the configuration >>> model = ESMModel(configuration)
 
-    >>> # 访问模型配置 >>> configuration = model.config
-    ```py
+    >>> # Accessing the model configuration >>> configuration = model.config
+    ```
     """
 
-    # 模型类型为 "esm"
     model_type = "esm"
 
-    # 初始化方法定义了 ESM 配置的各个参数
     def __init__(
         self,
         vocab_size=None,
@@ -74,11 +85,10 @@ class EsmConfig(PretrainedConfig):
         esmfold_config=None,
         vocab_list=None,
         **kwargs,
-        ):   
-        # 调用父类的构造方法，并传入参数 pad_token_id、mask_token_id 以及其他关键字参数
+    ):
         super().__init__(pad_token_id=pad_token_id, mask_token_id=mask_token_id, **kwargs)
+        # 调用父类的初始化方法，传入特定的参数来初始化当前类
 
-        # 设置词汇表大小、隐藏层大小、隐藏层数量、注意力头数量等模型参数
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
         self.num_hidden_layers = num_hidden_layers
@@ -94,29 +104,33 @@ class EsmConfig(PretrainedConfig):
         self.emb_layer_norm_before = emb_layer_norm_before
         self.token_dropout = token_dropout
         self.is_folding_model = is_folding_model
-        
-        # 判断是否为折叠模型，如果是，则根据传入的参数初始化折叠配置和词汇表
+        # 初始化多个模型配置的参数
+
         if is_folding_model:
-            if esmfold_config is None:  # 如果esmfold_config为None，则使用默认值
+            if esmfold_config is None:
                 logger.info("No esmfold_config supplied for folding model, using default values.")
+                # 如果没有提供 esmfold_config 参数，则使用默认配置并记录日志信息
                 esmfold_config = EsmFoldConfig()
-            elif isinstance(esmfold_config, dict):  # 如果esmfold_config是字典类型，则使用其提供的配置参数
+            elif isinstance(esmfold_config, dict):
                 esmfold_config = EsmFoldConfig(**esmfold_config)
+                # 如果 esmfold_config 是一个字典，则根据字典内容创建 EsmFoldConfig 对象
             self.esmfold_config = esmfold_config
-            if vocab_list is None:  # 如果没有提供vocab_list，则使用默认的词汇表
+            if vocab_list is None:
                 logger.warning("No vocab_list supplied for folding model, assuming the ESM-2 vocabulary!")
+                # 如果没有提供 vocab_list 参数，则假设使用 ESM-2 词汇表，并记录警告信息
                 self.vocab_list = get_default_vocab_list()
             else:
                 self.vocab_list = vocab_list
-        else:  # 如果不是折叠模型，则将折叠配置和词汇表设置为None
+                # 否则，使用提供的 vocab_list 参数
+        else:
             self.esmfold_config = None
             self.vocab_list = None
-        
-        # 判断是否配置了使用 ESM 的注意力图，如果配置了，则抛出异常
+            # 如果不是折叠模型，则将 esmfold_config 和 vocab_list 设置为 None
+
         if self.esmfold_config is not None and getattr(self.esmfold_config, "use_esm_attn_map", False):
             raise ValueError("The HuggingFace port of ESMFold does not support use_esm_attn_map at this time!")
+            # 如果 esmfold_config 不为 None，且其属性 use_esm_attn_map 为 True，则抛出值错误异常
 
-    # 将当前实例序列化为Python字典
     def to_dict(self):
         """
         Serializes this instance to a Python dictionary. Override the default [`~PretrainedConfig.to_dict`].
@@ -124,46 +138,51 @@ class EsmConfig(PretrainedConfig):
         Returns:
             `Dict[str, any]`: Dictionary of all the attributes that make up this configuration instance,
         """
-        output = super().to_dict()  # 调用父类的to_dict方法，获得基本配置字典
-        # 如果配置了esmfold_config，则将其序列化为字典并添加到输出字典中
+        output = super().to_dict()
+        # 调用父类的 to_dict 方法，将父类的序列化结果添加到 output 字典中
+
         if isinstance(self.esmfold_config, EsmFoldConfig):
             output["esmfold_config"] = self.esmfold_config.to_dict()
-        return output  # 返回输出字典
-# 声明一个数据类 EsmFoldConfig，用于配置 ESM 折叠模型的参数
+            # 如果 esmfold_config 是 EsmFoldConfig 类型的对象，则将其序列化为字典并加入 output 中
+
+        return output
+        # 返回包含当前实例所有属性的字典作为序列化结果
+# 数据类 EsmFoldConfig，用于配置 ESM 折叠模型的参数
 @dataclass
 class EsmFoldConfig:
-    # ESM 模型类型，默认为 None
+    # ESM 类型，默认为 None
     esm_type: str = None
     # 是否使用 FP16 格式的 ESM
     fp16_esm: bool = True
-    # 是否使用 ESM 的注意力图
+    # 是否使用 ESM 注意力映射
     use_esm_attn_map: bool = False
-    # 是否关闭 ESM 的两两注意力
+    # 是否剔除 ESM 的成对序列
     esm_ablate_pairwise: bool = False
-    # 是否关闭 ESM 的序列注意力
+    # 是否剔除 ESM 的序列
     esm_ablate_sequence: bool = False
-    # ESM 输入的丢弃率，默认为 0
+    # ESM 输入的 dropout 概率
     esm_input_dropout: float = 0
 
-    # 是否嵌入氨基酸特征，默认为 True
+    # 是否嵌入氨基酸信息
     embed_aa: bool = True
     # 是否绕过语言模型
     bypass_lm: bool = False
 
-    # LDDT 头部隐藏维度，默认为 128
+    # LDDT 头部隐藏维度
     lddt_head_hid_dim: int = 128
-    # TrunkConfig 对象，用于配置 Trunk 模型
+    # EsmFoldConfig 的 trunk 配置，如果为 None 则使用默认配置
     trunk: "TrunkConfig" = None
 
-    # 初始化函数，在初始化对象后执行，如果 trunk 为空，则初始化为 TrunkConfig 对象
+    # 初始化方法，在对象创建后调用，处理 trunk 属性
     def __post_init__(self):
+        # 如果 trunk 为 None，则使用默认的 TrunkConfig
         if self.trunk is None:
             self.trunk = TrunkConfig()
-        # 如果 trunk 是字典，则将其转换为 TrunkConfig 对象
+        # 如果 trunk 是 dict 类型，则将其转换为 TrunkConfig 对象
         elif isinstance(self.trunk, dict):
             self.trunk = TrunkConfig(**self.trunk)
 
-    # 将实例序列化为 Python 字典的方法，覆盖默认的 `~PretrainedConfig.to_dict`
+    # 将当前实例序列化为 Python 字典的方法
     def to_dict(self):
         """
         Serializes this instance to a Python dictionary. Override the default [`~PretrainedConfig.to_dict`].
@@ -171,91 +190,92 @@ class EsmFoldConfig:
         Returns:
             `Dict[str, any]`: Dictionary of all the attributes that make up this configuration instance,
         """
-        # 将实例转换为字典形式
+        # 将当前实例转换为字典
         output = asdict(self)
-        # 将 trunk 属性转换为字典形式
+        # 将 trunk 属性也转换为字典
         output["trunk"] = self.trunk.to_dict()
         return output
 
 
-# 声明一个数据类 TrunkConfig，用于配置 Trunk 模型的参数
+# 数据类 TrunkConfig，用于配置 ESM 折叠模型的 trunk 参数
 @dataclass
 class TrunkConfig:
-    # Trunk 模型的块数，默认为 48
+    # trunk 的块数
     num_blocks: int = 48
-    # 序列状态维度，默认为 1024
+    # 序列状态维度
     sequence_state_dim: int = 1024
-    # 两两状态维度，默认为 128
+    # 成对状态维度
     pairwise_state_dim: int = 128
-    # 序列头部宽度，默认为 32
+    # 序列头部宽度
     sequence_head_width: int = 32
-    # 两两头部宽度，默认为 32
+    # 成对头部宽度
     pairwise_head_width: int = 32
-    # 位置分箱数，默认为 32
+    # 位置分箱数
     position_bins: int = 32
-    # 丢弃率，默认为 0
+    # dropout 概率
     dropout: float = 0
-    # 层丢弃率，默认为 0
+    # 层丢弃概率
     layer_drop: float = 0
-    # 是否在 CPU 上进行梯度检查点，默认为 False
+    # 是否使用 CPU 梯度检查点
     cpu_grad_checkpoint: bool = False
-    # 最大循环次数，默认为 4
+    # 最大循环次数
     max_recycles: int = 4
-    # 分块大小，默认为 128
+    # 分块大小
     chunk_size: Optional[int] = 128
-    # StructureModuleConfig 对象，用于配置结构模块
+    # 结构模块配置
     structure_module: "StructureModuleConfig" = None
-    # 初始化方法，用于在对象创建后进行初始化操作
+    # 初始化方法，在对象实例化后自动调用。确保配置的正确性和一致性。
     def __post_init__(self):
-        # 如果结构模块为空，则使用默认配置
+        # 如果结构模块未指定，则使用默认的结构模块配置
         if self.structure_module is None:
             self.structure_module = StructureModuleConfig()
-        # 如果结构模块是字典形式，则转换为结构模块配置对象
+        # 如果结构模块是一个字典，则将其转换为结构模块配置对象
         elif isinstance(self.structure_module, dict):
             self.structure_module = StructureModuleConfig(**self.structure_module)
 
-        # 检查最大循环次数是否为正数，若不是则引发 ValueError 异常
+        # 检查最大循环次数是否大于零，否则抛出数值错误异常
         if self.max_recycles <= 0:
             raise ValueError(f"`max_recycles` should be positive, got {self.max_recycles}.")
-        # 检查序列状态维度是否为序列头宽度的整数倍，若不是则引发 ValueError 异常
+        
+        # 检查序列状态维度是否是其自身的倍数，否则抛出数值错误异常
         if self.sequence_state_dim % self.sequence_state_dim != 0:
             raise ValueError(
                 "`sequence_state_dim` should be a round multiple of `sequence_state_dim`, got"
                 f" {self.sequence_state_dim} and {self.sequence_state_dim}."
             )
-        # 检查成对状态维度是否为成对头宽度的整数倍，若不是则引发 ValueError 异常
+        
+        # 检查成对状态维度是否是其自身的倍数，否则抛出数值错误异常
         if self.pairwise_state_dim % self.pairwise_state_dim != 0:
             raise ValueError(
                 "`pairwise_state_dim` should be a round multiple of `pairwise_state_dim`, got"
                 f" {self.pairwise_state_dim} and {self.pairwise_state_dim}."
             )
 
-        # 计算序列头数
+        # 计算序列头的数量，确保序列状态维度与序列头宽度的乘积相等
         sequence_num_heads = self.sequence_state_dim // self.sequence_head_width
-        # 计算成对头数
-        pairwise_num_heads = self.pairwise_state_dim // self.pairwise_head_width
-
-        # 检查序列状态维度是否等于序列头数乘以序列头宽度，若不是则引发 ValueError 异常
         if self.sequence_state_dim != sequence_num_heads * self.sequence_head_width:
             raise ValueError(
                 "`sequence_state_dim` should be equal to `sequence_num_heads * sequence_head_width, got"
                 f" {self.sequence_state_dim} != {sequence_num_heads} * {self.sequence_head_width}."
             )
-        # 检查成对状态维度是否等于成对头数乘以成对头宽度，若不是则引发 ValueError 异常
+        
+        # 计算成对头的数量，确保成对状态维度与成对头宽度的乘积相等
+        pairwise_num_heads = self.pairwise_state_dim // self.pairwise_head_width
         if self.pairwise_state_dim != pairwise_num_heads * self.pairwise_head_width:
             raise ValueError(
                 "`pairwise_state_dim` should be equal to `pairwise_num_heads * pairwise_head_width, got"
                 f" {self.pairwise_state_dim} != {pairwise_num_heads} * {self.pairwise_head_width}."
             )
-        # 检查成对状态维度是否为偶数，若不是则引发 ValueError 异常
+        
+        # 检查成对状态维度是否为偶数，否则抛出数值错误异常
         if self.pairwise_state_dim % 2 != 0:
             raise ValueError(f"`pairwise_state_dim` should be even, got {self.pairwise_state_dim}.")
 
-        # 检查丢弃率是否小于0.4，若不是则引发 ValueError 异常
+        # 检查丢弃率是否小于0.4，否则抛出数值错误异常
         if self.dropout >= 0.4:
             raise ValueError(f"`dropout` should not be greater than 0.4, got {self.dropout}.")
 
-    # 将配置实例序列化为 Python 字典的方法，覆盖默认的 `~PretrainedConfig.to_dict` 方法
+    # 将当前实例序列化为Python字典的方法。覆盖默认的to_dict方法。
     def to_dict(self):
         """
         Serializes this instance to a Python dictionary. Override the default [`~PretrainedConfig.to_dict`].
@@ -263,45 +283,47 @@ class TrunkConfig:
         Returns:
             `Dict[str, any]`: Dictionary of all the attributes that make up this configuration instance,
         """
-        # 将对象转换为字典形式，并序列化结构模块配置对象
+        # 将对象的所有属性转换为字典
         output = asdict(self)
+        # 将结构模块属性转换为其对应的字典表示
         output["structure_module"] = self.structure_module.to_dict()
         return output
-# 定义一个数据类，用于存储结构模块的配置信息
 @dataclass
 class StructureModuleConfig:
     """
+    定义了结构模块的配置参数的数据类。
+
     Args:
         sequence_dim:
-            Single representation channel dimension  # 单一表示通道维度
+            单一表示通道的维度
         pairwise_dim:
-            Pair representation channel dimension  # 成对表示通道维度
+            成对表示通道的维度
         ipa_dim:
-            IPA hidden channel dimension  # IPA 隐藏通道维度
+            IPA 隐藏通道的维度
         resnet_dim:
-            Angle resnet (Alg. 23 lines 11-14) hidden channel dimension  # 角度 Resnet (Alg. 23 lines 11-14) 隐藏通道维度
+            Angle resnet（Alg. 23 lines 11-14）隐藏通道的维度
         num_heads_ipa:
-            Number of IPA heads  # IPA 的头数
+            IPA 头的数量
         num_qk_points:
-            Number of query/key points to generate during IPA  # 在 IPA 过程中生成的查询/键点数
+            在IPA期间生成的查询/键点的数量
         num_v_points:
-            Number of value points to generate during IPA  # 在 IPA 过程中生成的值点数
+            在IPA期间生成的值点的数量
         dropout_rate:
-            Dropout rate used throughout the layer  # 在整个层中使用的 dropout 率
+            层中使用的dropout率
         num_blocks:
-            Number of structure module blocks  # 结构模块块数
+            结构模块的块数量
         num_transition_layers:
-            Number of layers in the single representation transition (Alg. 23 lines 8-9)  # 单一表示转换中的层数 (Alg. 23 lines 8-9)
+            单一表示转换中的层数（Alg. 23 lines 8-9）
         num_resnet_blocks:
-            Number of blocks in the angle resnet  # 角度 Resnet 中的块数
+            Angle resnet 中的块数量
         num_angles:
-            Number of angles to generate in the angle resnet  # 角度 Resnet 中生成的角度数
+            Angle resnet 中生成的角度数量
         trans_scale_factor:
-            Scale of single representation transition hidden dimension  # 单一表示转换隐藏维度的比例
+            单一表示转换的隐藏维度的比例因子
         epsilon:
-            Small number used in angle resnet normalization  # 角度 Resnet 归一化中使用的小数
+            Angle resnet 归一化中使用的小数值
         inf:
-            Large number used for attention masking  # 用于注意力掩模的大数字
+            用于注意力屏蔽的大数值
     """
 
     sequence_dim: int = 384
@@ -320,13 +342,20 @@ class StructureModuleConfig:
     epsilon: float = 1e-8
     inf: float = 1e5
 
-    # 将配置信息转换为字典格式
     def to_dict(self):
+        """
+        将数据类实例转换为字典的方法。
+        """
         return asdict(self)
 
 
-# 获取默认的词汇列表
 def get_default_vocab_list():
+    """
+    返回默认的词汇表列表。
+
+    Returns:
+        tuple: 包含默认词汇的元组
+    """
     return (
         "<cls>",
         "<pad>",

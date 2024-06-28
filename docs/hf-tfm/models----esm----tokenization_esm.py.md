@@ -1,26 +1,34 @@
 # `.\models\esm\tokenization_esm.py`
 
-```py
-# 设置文件编码为 UTF-8
-
-# 导入所需模块和函数
+```
+# coding=utf-8
+# Copyright 2022 Meta and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Tokenization classes for ESM."""
 import os
-from typing import List, Optional, Union
+from typing import List, Optional
 
-# 从 tokenization_utils 模块中导入 PreTrainedTokenizer 类
 from ...tokenization_utils import PreTrainedTokenizer
-# 从 tokenization_utils_base 模块中导入 AddedToken 类
-from ...tokenization_utils_base import AddedToken
-# 从 utils 模块中导入 logging 函数
 from ...utils import logging
 
-# 获取 logger 对象
+# 获取名为 logging 的日志记录器
 logger = logging.get_logger(__name__)
 
-# 定义文件名常量
+# 定义词汇文件的名称
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt"}
 
-# 定义预训练词汇文件映射常量
+# 定义预训练模型对应的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "facebook/esm2_t6_8M_UR50D": "https://huggingface.co/facebook/esm2_t6_8M_UR50D/resolve/main/vocab.txt",
@@ -28,33 +36,34 @@ PRETRAINED_VOCAB_FILES_MAP = {
     },
 }
 
-# 定义预训练位置嵌入大小常量
+# 定义预训练模型对应的位置嵌入大小映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "facebook/esm2_t6_8M_UR50D": 1024,
     "facebook/esm2_t12_35M_UR50D": 1024,
 }
 
-# 定义加载词汇文件的函数
+
 def load_vocab_file(vocab_file):
-    # 打开词汇文件，并按行读取
+    # 打开给定路径的词汇文件，并将内容按行读取为列表
     with open(vocab_file, "r") as f:
         lines = f.read().splitlines()
-        # 返回去除每行空格后的列表
         return [l.strip() for l in lines]
 
-# 定义 EsmTokenizer 类，继承自 PreTrainedTokenizer
+
 class EsmTokenizer(PreTrainedTokenizer):
     """
     Constructs an ESM tokenizer.
     """
 
-    # 定义类属性
+    # 设置类属性：词汇文件名
     vocab_files_names = VOCAB_FILES_NAMES
+    # 设置类属性：预训练模型对应的词汇文件映射
     pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
+    # 设置类属性：预训练模型对应的位置嵌入大小映射
     max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
+    # 设置类属性：模型输入名称列表
     model_input_names = ["input_ids", "attention_mask"]
 
-    # 初始化方法
     def __init__(
         self,
         vocab_file,
@@ -65,7 +74,10 @@ class EsmTokenizer(PreTrainedTokenizer):
         eos_token="<eos>",
         **kwargs,
     ):
-        # 调用父类的初始化方法
+        # 加载词汇文件中的所有词汇，并构建词汇表
+        self.all_tokens = load_vocab_file(vocab_file)
+        self._id_to_token = dict(enumerate(self.all_tokens))
+        self._token_to_id = {tok: ind for ind, tok in enumerate(self.all_tokens)}
         super().__init__(
             unk_token=unk_token,
             cls_token=cls_token,
@@ -74,49 +86,41 @@ class EsmTokenizer(PreTrainedTokenizer):
             eos_token=eos_token,
             **kwargs,
         )
-        # 加载词汇文件中的所有词汇
-        self.all_tokens = load_vocab_file(vocab_file)
-        # 创建 ID 到词汇的映射字典
-        self._id_to_token = dict(enumerate(self.all_tokens))
-        # 创建词汇到 ID 的映射字典
-        self._token_to_id = {tok: ind for ind, tok in enumerate(self.all_tokens)}
 
         # TODO, all the tokens are added? But they are also part of the vocab... bit strange.
         # none of them are special, but they all need special splitting.
 
-        # 定义不需拆分的唯一词汇列表
+        # 将所有词汇加入到不需要拆分的特殊标记列表中
         self.unique_no_split_tokens = self.all_tokens
-        # 更新 Trie 数据结构以支持词汇拆分
+        # 更新基于特殊标记列表的 Trie 数据结构
         self._update_trie(self.unique_no_split_tokens)
 
-    # 将 ID 转换为词汇的方法
     def _convert_id_to_token(self, index: int) -> str:
+        # 根据索引将其转换为对应的词汇，若索引不存在则返回未知标记
         return self._id_to_token.get(index, self.unk_token)
-    # 将给定token转换为对应的id，如果找不到则返回未知token对应的id
-    def _convert_token_to_id(self, token: str) -> int:
-        return self._token_to_id.get(token, self._token_to_id.get(self.unk_token))
 
-    # 将输入的文本进行分词处理，以空格为分隔符
+    def _convert_token_to_id(self, token: str) -> int:
+        # 根据词汇将其转换为对应的索引，若词汇不存在则返回未知标记的索引
+        return self._token_to_id.get(token, self._token_to_id.get(self.unk_token))
+    # 将输入文本按空格分割，返回分割后的列表作为结果
     def _tokenize(self, text, **kwargs):
         return text.split()
 
-    # 获取词汇表的大小，包括添加的特殊token
-    def get_vocab_size(self, with_added_tokens=False):
-        return len(self._id_to_token)
-
-    # 返回词汇表，将token映射为对应的id
+    # 返回包含基础词汇的字典，包括_token_to_id和added_tokens_encoder的合并
     def get_vocab(self):
-        return {token: i for i, token in enumerate(self.all_tokens)}
+        base_vocab = self._token_to_id.copy()
+        base_vocab.update(self.added_tokens_encoder)
+        return base_vocab
 
-    # 将给定token转换为对应的id，如果找不到则返回未知token对应的id
+    # 根据给定的token返回其对应的id，如果token不存在则返回unk_token对应的id
     def token_to_id(self, token: str) -> int:
         return self._token_to_id.get(token, self._token_to_id.get(self.unk_token))
 
-    # 根据index返回对应的token，如果找不到则返回未知token
+    # 根据给定的index返回对应的token，如果index不存在则返回unk_token
     def id_to_token(self, index: int) -> str:
         return self._id_to_token.get(index, self.unk_token)
 
-    # 构建包含特殊token的输入，支持单输入和双输入
+    # 构建包含特殊token的输入列表，处理单个或两个序列的情况
     def build_inputs_with_special_tokens(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None
     ) -> List[int]:
@@ -129,26 +133,25 @@ class EsmTokenizer(PreTrainedTokenizer):
                 return cls + token_ids_0 + sep
         elif self.eos_token_id is None:
             raise ValueError("Cannot tokenize multiple sequences when EOS token is not set!")
-        return cls + token_ids_0 + sep + token_ids_1 + sep  # 多输入总是有一个EOS token
+        return cls + token_ids_0 + sep + token_ids_1 + sep  # 多个输入始终有一个EOS token
 
-    # 获取特殊token的mask，支持单输入和双输入
+    # 获取不包含特殊token的token列表的特殊token掩码
     def get_special_tokens_mask(
         self, token_ids_0: List, token_ids_1: Optional[List] = None, already_has_special_tokens: bool = False
     ) -> List[int]:
         """
-        Retrieves sequence ids from a token list that has no special tokens added. This method is called when adding
-        special tokens using the tokenizer `prepare_for_model` or `encode_plus` methods.
-
+        检索没有添加特殊token的token列表的序列id。当使用tokenizer的`prepare_for_model`或`encode_plus`方法添加特殊token时调用此方法。
+        
         Args:
             token_ids_0 (`List[int]`):
-                List of ids of the first sequence.
-            token_ids_1 (`List[int]`, *optional*):
-                List of ids of the second sequence.
-            already_has_special_tokens (`bool`, *optional*, defaults to `False`):
-                Whether or not the token list is already formatted with special tokens for the model.
+                第一个序列的id列表。
+            token_ids_1 (`List[int]`, *可选*):
+                第二个序列的id列表。
+            already_has_special_tokens (`bool`, *可选*, 默认为 `False`):
+                token列表是否已经格式化包含了模型的特殊token。
 
         Returns:
-            A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
+            一个整数列表，范围为[0, 1]：1表示特殊token，0表示序列token。
         """
         if already_has_special_tokens:
             if token_ids_1 is not None:
@@ -158,27 +161,22 @@ class EsmTokenizer(PreTrainedTokenizer):
                 )
 
             return [1 if token in self.all_special_ids else 0 for token in token_ids_0]
+        
+        # 创建一个mask列表，标识特殊token的位置
         mask = [1] + ([0] * len(token_ids_0)) + [1]
         if token_ids_1 is not None:
             mask += [0] * len(token_ids_1) + [1]
         return mask
-    # 保存词汇表到指定目录，并指定文件名前缀
+
+    # 将词汇表保存到指定目录下的文件中，文件名由filename_prefix和vocab.txt组成
     def save_vocabulary(self, save_directory, filename_prefix):
-        # 构建文件路径
         vocab_file = os.path.join(save_directory, (filename_prefix + "-" if filename_prefix else "") + "vocab.txt")
-        # 打开文件，并写入所有的词汇
         with open(vocab_file, "w") as f:
             f.write("\n".join(self.all_tokens))
-        # 返回保存的文件路径
         return (vocab_file,)
-    
-    # 获取词汇表大小
+
+    # 返回词汇表的大小，即all_tokens的长度
     @property
     def vocab_size(self) -> int:
-        return self.get_vocab_size(with_added_tokens=False)
-    
-    # 添加新的词汇到词汇表中
-    def _add_tokens(self, new_tokens: Union[List[str], List[AddedToken]], special_tokens: bool = False) -> int:
-        # 调用父类方法添加新的词汇，设置special_tokens为True
-        return super()._add_tokens(new_tokens, special_tokens=True)
+        return len(self.all_tokens)
 ```

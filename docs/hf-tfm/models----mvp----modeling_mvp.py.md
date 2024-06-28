@@ -1,29 +1,33 @@
-# `.\transformers\models\mvp\modeling_mvp.py`
+# `.\models\mvp\modeling_mvp.py`
 
-```py
-# 设置文件编码为utf-8
-# 版权声明
-# 基于Apache许可证2.0授权，可以在不违反许可证的情况下使用此文件
-# 可以通过以下链接获得许可证副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则在"AS IS"的基础上分发软件
-# 没有任何形式的保证或条件，无论明示或暗示
-# 请参阅许可证以获取特定语言的权限和限制
-
+```
+# coding=utf-8
+# Copyright 2022 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """ PyTorch MVP model."""
-# 上面的文字是程序的版权声明和许可证内容
-import copy  # 导入拷贝模块
-import math  # 导入数学模块
-from typing import List, Optional, Tuple, Union  # 导入类型提示模块
+import copy
+import math
+from typing import List, Optional, Tuple, Union
 
-import torch  # 导入torch模块
-import torch.utils.checkpoint  # 导入torch.utils.checkpoint模块
-from torch import nn  # 从torch中导入nn模块
-from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss  # 从torch.nn中导入BCEWithLogitsLoss、CrossEntropyLoss、MSELoss类
+import torch
+import torch.utils.checkpoint
+from torch import nn
+from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-from ...activations import ACT2FN  # 从指定路径中导入ACT2FN
-from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask  # 从指定路径中导入_prepare_4d_attention_mask、_prepare_4d_causal_attention_mask函数
-from ...modeling_outputs import (  # 从指定路径中导入各种输出类
+from ...activations import ACT2FN
+from ...modeling_attn_mask_utils import _prepare_4d_attention_mask, _prepare_4d_causal_attention_mask
+from ...modeling_outputs import (
     BaseModelOutput,
     BaseModelOutputWithPastAndCrossAttentions,
     CausalLMOutputWithCrossAttentions,
@@ -32,8 +36,8 @@ from ...modeling_outputs import (  # 从指定路径中导入各种输出类
     Seq2SeqQuestionAnsweringModelOutput,
     Seq2SeqSequenceClassifierOutput,
 )
-from ...modeling_utils import PreTrainedModel  # 从指定路径中导入PreTrainedModel类
-from ...utils import (  # 从指定路径中导入各种辅助函数
+from ...modeling_utils import PreTrainedModel
+from ...utils import (
     add_code_sample_docstrings,
     add_end_docstrings,
     add_start_docstrings,
@@ -41,17 +45,18 @@ from ...utils import (  # 从指定路径中导入各种辅助函数
     logging,
     replace_return_docstrings,
 )
-from .configuration_mvp import MvpConfig  # 从指定路径中导入MvpConfig类
+from .configuration_mvp import MvpConfig
 
-logger = logging.get_logger(__name__)  # 通过logging模块获取日志对象
 
-_CHECKPOINT_FOR_DOC = "RUCAIBox/mvp"  # 定义_CHECKPOINT_FOR_DOC变量
-_CONFIG_FOR_DOC = "MvpConfig"  # 定义_CONFIG_FOR_DOC变量
+logger = logging.get_logger(__name__)
+
+_CHECKPOINT_FOR_DOC = "RUCAIBox/mvp"
+_CONFIG_FOR_DOC = "MvpConfig"
 
 # Base model docstring
-_EXPECTED_OUTPUT_SHAPE = [1, 8, 1024]  # 定义_EXPECTED_OUTPUT_SHAPE变量
+_EXPECTED_OUTPUT_SHAPE = [1, 8, 1024]
 
-MVP_PRETRAINED_MODEL_ARCHIVE_LIST = [  # 定义MVP_PRETRAINED_MODEL_ARCHIVE_LIST变量
+MVP_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "RUCAIBox/mvp",
     "RUCAIBox/mvp-data-to-text",
     "RUCAIBox/mvp-open-dialog",
@@ -70,51 +75,59 @@ MVP_PRETRAINED_MODEL_ARCHIVE_LIST = [  # 定义MVP_PRETRAINED_MODEL_ARCHIVE_LIST
     # See all MVP models at https://huggingface.co/models?filter=mvp
 ]
 
+
 # Copied from transformers.models.bart.modeling_bart.shift_tokens_right
 def shift_tokens_right(input_ids: torch.Tensor, pad_token_id: int, decoder_start_token_id: int):
     """
     Shift input ids one token to the right.
+    
+    Args:
+        input_ids (torch.Tensor): Tensor of input ids.
+        pad_token_id (int): The id of the padding token in the model's configuration.
+        decoder_start_token_id (int): The id of the decoder's start token.
     """
-    # 将输入id向右移动一个标记位
+    # Create a tensor of zeros with the same shape as input_ids
     shifted_input_ids = input_ids.new_zeros(input_ids.shape)
+    # Shift input ids one position to the right
     shifted_input_ids[:, 1:] = input_ids[:, :-1].clone()
+    # Place the decoder start token at the beginning of each sequence
     shifted_input_ids[:, 0] = decoder_start_token_id
 
     if pad_token_id is None:
-        # 抛出异常
+        # Raise an error if pad_token_id is not defined
         raise ValueError("self.model.config.pad_token_id has to be defined.")
-    # 用pad_token_id替换标签中可能的-100值
+    # Replace possible -100 values in labels by `pad_token_id`
     shifted_input_ids.masked_fill_(shifted_input_ids == -100, pad_token_id)
-    # 返回移位后的输入 ID 序列
-        return shifted_input_ids
-# 这个类实现了可学习的位置编码，用于模型中的位置信息编码
+    # 返回经过移位处理后的输入 ID 列表
+    return shifted_input_ids
+# 从 transformers.models.bart.modeling_bart.BartLearnedPositionalEmbedding 复制并修改为 Mvp
 class MvpLearnedPositionalEmbedding(nn.Embedding):
     """
-    这个模块学习到固定最大尺寸的位置编码。
+    This module learns positional embeddings up to a fixed maximum size.
     """
 
     def __init__(self, num_embeddings: int, embedding_dim: int):
-        # MVP 模型中如果指定了 padding_idx，则位置编码 id 会偏移 2，并相应调整 num_embeddings
-        # 其他模型没有这种处理方式
+        # 如果指定了 padding_idx，则将 embedding ids 偏移 2，并相应地调整 num_embeddings
+        # 其他模型没有这个 hack
         self.offset = 2
         super().__init__(num_embeddings + self.offset, embedding_dim)
 
     def forward(self, input_ids: torch.Tensor, past_key_values_length: int = 0):
-        """输入 input_ids 的形状应该是 [bsz x seqlen]。"""
-
+        """`input_ids' shape is expected to be [bsz x seqlen]."""
+        
+        # 获取 batch size 和序列长度
         bsz, seq_len = input_ids.shape[:2]
-        # 根据当前序列长度和之前的 key/value 计算位置编码索引
+        # 根据序列长度生成位置信息张量，加上偏移量 self.offset
         positions = torch.arange(
             past_key_values_length, past_key_values_length + seq_len, dtype=torch.long, device=self.weight.device
         ).expand(bsz, -1)
-
-        # 返回对应的位置编码
+        
+        # 调用父类的 forward 方法来计算位置编码的 embedding
         return super().forward(positions + self.offset)
 
 
-# 这个类实现了多头注意力机制
 class MvpAttention(nn.Module):
-    """来自 'Attention Is All You Need' 论文的多头注意力机制"""
+    """Multi-headed attention from 'Attention Is All You Need' paper"""
 
     def __init__(
         self,
@@ -125,28 +138,30 @@ class MvpAttention(nn.Module):
         bias: bool = True,
     ):
         super().__init__()
+        # 初始化注意力机制的参数
         self.embed_dim = embed_dim
         self.num_heads = num_heads
         self.dropout = dropout
         self.head_dim = embed_dim // num_heads
 
-        # 检查嵌入维度是否能被头数整除
+        # 检查 embed_dim 必须能被 num_heads 整除，否则抛出 ValueError
         if (self.head_dim * num_heads) != self.embed_dim:
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
             )
+        # 缩放因子，用于注意力分数计算
         self.scaling = self.head_dim**-0.5
         self.is_decoder = is_decoder
 
-        # 定义注意力机制所需的线性变换层
+        # 初始化线性变换层，用于查询、键、值和输出的线性映射
         self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
-        # 重塑张量形状以适应多头注意力计算
+        # 将 tensor 重塑为 [bsz, num_heads, seq_len, head_dim] 的形状
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
 
     def forward(
@@ -159,46 +174,34 @@ class MvpAttention(nn.Module):
         attn_prompt: Optional[torch.Tensor] = None,
         output_attentions: bool = False,
     ):
-        # 多头注意力机制的前向传播
-
-class MvpEncoderLayer(nn.Module):
-    # MVP 编码器层的实现
-    # 初始化函数，接受一个MvpConfig类型的参数config
+        # 省略了 forward 方法的具体实现部分
+        pass  # 实现在其他地方
+    # 初始化方法，接受一个MvpConfig类型的配置参数config
     def __init__(self, config: MvpConfig):
-        # 调用父类的初始化函数
+        # 调用父类的初始化方法
         super().__init__()
-        # 设置嵌入维度为config中的模型维度
+        # 设置嵌入维度为config中定义的模型维度d_model
         self.embed_dim = config.d_model
-        # 初始化self attention层，使用MvpAttention类
+        # 创建自注意力层对象，使用MvpAttention类，设置参数包括嵌入维度、注意力头数、注意力层的dropout
         self.self_attn = MvpAttention(
             embed_dim=self.embed_dim,
             num_heads=config.encoder_attention_heads,
             dropout=config.attention_dropout,
         )
-        # 初始化self attention层后的LayerNorm层
+        # 创建自注意力层的LayerNorm层，输入维度为embed_dim
         self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 设置dropout概率为config中的dropout概率
+        # 设置全连接层的dropout概率
         self.dropout = config.dropout
-        # 设置激活函数为config中指定的激活函数类型对应的函数
+        # 根据配置中的激活函数选择相应的激活函数
         self.activation_fn = ACT2FN[config.activation_function]
-        # 设置激活函数的dropout概率为config中的激活函数dropout概率
+        # 设置激活函数的dropout概率
         self.activation_dropout = config.activation_dropout
-        # 初始化全连接层fc1，输入维度为嵌入维度，输出维度为config中的FFN维度
+        # 创建第一个全连接层，输入维度为embed_dim，输出维度为encoder_ffn_dim
         self.fc1 = nn.Linear(self.embed_dim, config.encoder_ffn_dim)
-        # 初始化全连接层fc2，输入维度为config中的FFN维度，输出维度为嵌入维度
+        # 创建第二个全连接层，输入维度为encoder_ffn_dim，输出维度为embed_dim
         self.fc2 = nn.Linear(config.encoder_ffn_dim, self.embed_dim)
-        # 初始化最终的LayerNorm层，输入维度为嵌入维度
+        # 创建最终的LayerNorm层，输入维度为embed_dim
         self.final_layer_norm = nn.LayerNorm(self.embed_dim)
-
-    # 前向传播函数，接受多个torch.FloatTensor类型的参数
-    def forward(
-        self,
-        hidden_states: torch.FloatTensor,
-        attention_mask: torch.FloatTensor,
-        layer_head_mask: torch.FloatTensor,
-        self_attn_prompt: torch.FloatTensor,
-        output_attentions: Optional[bool] = False,
-    ) -> Tuple[torch.FloatTensor, Optional[torch.FloatTensor]]:
         """
         Args:
             hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
@@ -212,9 +215,9 @@ class MvpEncoderLayer(nn.Module):
                 Whether or not to return the attentions tensors of all attention layers. See `attentions` under
                 returned tensors for more detail.
         """
-        # 保存输入的隐藏状态，用于残差连接
+        # 将输入的 hidden_states 赋值给 residual，用于后续残差连接
         residual = hidden_states
-        # 进行自注意力计算
+        # 调用 self_attn 方法，执行自注意力计算
         hidden_states, attn_weights, _ = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
@@ -222,88 +225,80 @@ class MvpEncoderLayer(nn.Module):
             attn_prompt=self_attn_prompt,
             output_attentions=output_attentions,
         )
-        # 对隐藏状态进行dropout操作
+        # 对 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 残差连接
+        # 执行残差连接
         hidden_states = residual + hidden_states
-        # 对得到的结果进行Layer Norm
+        # 对连接后的 hidden_states 应用 layer normalization
         hidden_states = self.self_attn_layer_norm(hidden_states)
 
-        # 保存上一次的隐藏状态，用于残差连接
+        # 再次使用 residual 记录当前 hidden_states，用于下一步残差连接
         residual = hidden_states
-        # 使用激活函数计算隐藏状态
+        # 通过 fc1 和激活函数执行全连接层计算
         hidden_states = self.activation_fn(self.fc1(hidden_states))
-        # 对隐藏状态进行dropout操作
+        # 对 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
-        # 通过全连接层计算隐藏状态
+        # 通过 fc2 执行全连接层计算
         hidden_states = self.fc2(hidden_states)
-        # 对隐藏状态进行dropout操作
+        # 对 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 残差连接
+        # 执行残差连接
         hidden_states = residual + hidden_states
-        # 对得到的结果进行Layer Norm
+        # 对连接后的 hidden_states 应用 layer normalization
         hidden_states = self.final_layer_norm(hidden_states)
 
-        # 如果隐藏状态的数据类型为torch.float16且包含无穷大或NaN值
+        # 如果 hidden_states 的数据类型为 torch.float16，并且包含无穷大或 NaN 值，则进行截断处理
         if hidden_states.dtype == torch.float16 and (
             torch.isinf(hidden_states).any() or torch.isnan(hidden_states).any()
         ):
-            # 根据数据类型设置clamp_value的值
             clamp_value = torch.finfo(hidden_states.dtype).max - 1000
-            # 对隐藏状态进��值裁剪
             hidden_states = torch.clamp(hidden_states, min=-clamp_value, max=clamp_value)
 
-        # 设置输出为隐藏状态
+        # 将最终结果存入 outputs 中
         outputs = (hidden_states,)
 
-        # 如果需要输出注意力权重
+        # 如果设置了 output_attentions=True，则将注意力权重 attn_weights 添加到 outputs 中一并返回
         if output_attentions:
-            # 将注意力权重也加入到输出中
             outputs += (attn_weights,)
 
-        # 返回输出值
         return outputs
-# 定义MvpDecoderLayer类，继承自nn.Module
+# 定义一个名为 MvpDecoderLayer 的类，继承自 nn.Module 类，用于 MVP 模型的解码器层
 class MvpDecoderLayer(nn.Module):
-    # 初始化方法接受MvpConfig类型的config参数
     def __init__(self, config: MvpConfig):
         super().__init__()
-        # 将d_model值赋给embed_dim属性
-        self.embed_dim = config.d_model
+        self.embed_dim = config.d_model  # 设置编码维度为配置中的模型维度大小
 
-        # 初始化self_attn属性为MvpAttention实例，传入相关参数
+        # 创建自注意力机制（self-attention）对象，用于解码器，配置包括维度、注意力头数、dropout 等
         self.self_attn = MvpAttention(
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
             dropout=config.attention_dropout,
             is_decoder=True,
         )
-        # 将dropout的值赋给dropout属性
-        self.dropout = config.dropout
-        # 将指定的activation_function转换为对应激活函数的函数，并赋给activation_fn属性
-        self.activation_fn = ACT2FN[config.activation_function]
-        # 将activation_dropout的值赋给activation_dropout属性
 
-        self.activation_dropout = config.activation_dropout
+        self.dropout = config.dropout  # 设置模型的全局dropout比例
+        self.activation_fn = ACT2FN[config.activation_function]  # 获取激活函数
+        self.activation_dropout = config.activation_dropout  # 获取激活函数的dropout比例
 
-        # 初始化self_attn_layer_norm属性为nn.LayerNorm的实例，传入embed_dim参数
-        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 初始化encoder_attn属性为MvpAttention实例，传入相关参数
+        self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 对自注意力输出进行 layer normalization
+
+        # 创建编码器-解码器注意力机制对象，配置包括维度、注意力头数、dropout 等
         self.encoder_attn = MvpAttention(
             self.embed_dim,
             config.decoder_attention_heads,
             dropout=config.attention_dropout,
             is_decoder=True,
         )
-        # 初始化encoder_attn_layer_norm属性为nn.LayerNorm的实例，传入embed_dim参数
-        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)
-        # 初始化fc1属性为nn.Linear的实例，传入embed_dim和decoder_ffn_dim参数
-        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
-        # 初始化fc2属性为nn.Linear的实例，传入decoder_ffn_dim和embed_dim参数
-        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
-        # 初始化final_layer_norm属性为nn.LayerNorm的实例，传入embed_dim参数
+        self.encoder_attn_layer_norm = nn.LayerNorm(self.embed_dim)  # 对编码器-解码器注意力输出进行 layer normalization
 
-    # 前向传播方法，接受多个参数
+        # 全连接层 1，输入维度为 embed_dim，输出维度为配置中的解码器前馈神经网络维度
+        self.fc1 = nn.Linear(self.embed_dim, config.decoder_ffn_dim)
+        # 全连接层 2，输入维度为配置中的解码器前馈神经网络维度，输出维度为 embed_dim
+        self.fc2 = nn.Linear(config.decoder_ffn_dim, self.embed_dim)
+
+        self.final_layer_norm = nn.LayerNorm(self.embed_dim)  # 对最终输出进行 layer normalization
+
+    # 前向传播函数，接受多个输入张量，执行解码器层的前向计算
     def forward(
         self,
         hidden_states: torch.Tensor,
@@ -318,11 +313,15 @@ class MvpDecoderLayer(nn.Module):
         output_attentions: Optional[bool] = False,
         use_cache: Optional[bool] = True,
     ):
-# 定义MvpClassificationHead类，继承自nn.Module，用于句子级分类任务
+        # 省略前向传播函数的具体实现，因为只需要注释每个参数和输入的作用
+        pass
+
+
+# 定义一个名为 MvpClassificationHead 的类，继承自 nn.Module 类，用于 MVP 模型的分类头部
+# 适用于句子级分类任务
 class MvpClassificationHead(nn.Module):
     """Head for sentence-level classification tasks."""
 
-    # 初始化方法接受input_dim、inner_dim、num_classes、pooler_dropout参数
     def __init__(
         self,
         input_dim: int,
@@ -331,105 +330,94 @@ class MvpClassificationHead(nn.Module):
         pooler_dropout: float,
     ):
         super().__init__()
-        # 初始化dense属性为nn.Linear的实例，传入input_dim和inner_dim参数
+        # 全连接层，输入维度为 input_dim，输出维度为 inner_dim
         self.dense = nn.Linear(input_dim, inner_dim)
-        # 初始化dropout属性为nn.Dropout的实例，传入pooler_dropout参数
-        self.dropout = nn.Dropout(p=pooler_dropout)
-        # 初始化out_proj属性为nn.Linear的实例，传入inner_dim和num_classes参数
+        self.dropout = nn.Dropout(p=pooler_dropout)  # dropout 层，使用给定的 dropout 比例
+        # 输出投影层，输入维度为 inner_dim，输出维度为类别数 num_classes
+        self.out_proj = nn.Linear(inner_dim, num_classes)
 
-    # 前向传播方法，接受hidden_states参数，返回torch.Tensor类型的值
+    # 前向传播函数，接受隐藏状态张量作为输入，执行分类头部的前向计算
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        # 对hidden_states进行dropout操作
-        hidden_states = self.dropout(hidden_states)
-        # 将经过dense层的结果赋给hidden_states
-        hidden_states = self.dense(hidden_states)
-        # 对hidden_states进行tanh激活函数操作
-        hidden_states = torch.tanh(hidden_states)
-        # 再次对hidden_states进行dropout操作
-        hidden_states = self.dropout(hidden_states)
-        # 将经过out_proj层的结果赋给hidden_states
-        hidden_states = self.out_proj(hidden_states)
-        # 返回hidden_states
-        return hidden_states
+        hidden_states = self.dropout(hidden_states)  # 应用 dropout 到隐藏状态
+        hidden_states = self.dense(hidden_states)  # 进行全连接层计算
+        hidden_states = torch.tanh(hidden_states)  # 应用 tanh 激活函数
+        hidden_states = self.dropout(hidden_states)  # 再次应用 dropout
+        hidden_states = self.out_proj(hidden_states)  # 输出投影到类别数维度
+        return hidden_states  # 返回最终的隐藏状态
 
 
-# 定义MvpPrompt类，层次提示器，用于编码器或解码器
+# 定义一个名为 MvpPrompt 的类，继承自 nn.Module 类，用于 MVP 模型的编码器或解码器的逐层提示
 class MvpPrompt(nn.Module):
     """Layer-wise prompt for encoder or decoder."""
-    # 构建自定义的 Transformer 编码器模型
+    # 初始化函数，用于设置模型参数和层次结构
     def __init__(self, config, num_layers, num_heads):
-        # 调用父类的初始化方法
         super().__init__()
-        # 设置提示长度
+        # 从配置中获取提示文本长度并赋值给实例变量
         self.prompt_length = config.prompt_length
-        # 设置层数
+        # 将层数赋值给实例变量
         self.num_layers = num_layers
-        # 设置注意力头数
+        # 将头数赋值给实例变量
         self.num_heads = num_heads
-        # 计算每个注意力头的维度
+        # 计算每个头的维度
         self.head_dim = config.d_model // num_heads
-        # 创建一个 Dropout 层
+        # 根据配置中的 dropout 概率创建一个 dropout 层
         self.dropout = nn.Dropout(p=config.dropout)
-        # 创建一个可学习的提示词嵌入层
+        # 创建一个提示文本的嵌入层，大小为 (提示文本长度, 模型维度)
         self.prompt_embedding = nn.Embedding(config.prompt_length, config.d_model)
-        # 创建一个包含三个线性层和一个 GELU 激活函数的序列模型
+        # 创建一个序列模块，用于处理提示文本的转换
         self.prompt_trans = nn.Sequential(
+            # 线性层，将模型维度映射到中间维度
             nn.Linear(config.d_model, config.prompt_mid_dim),
+            # GELU 激活函数
             nn.GELU(),
+            # 再次线性映射，将中间维度映射为 (层数 * 2 * 模型维度)
             nn.Linear(config.prompt_mid_dim, num_layers * 2 * config.d_model),
         )
-    
-    # 前向传播
+
+    # 前向传播函数，用于计算模型的输出
     def forward(self, prompt_ids: torch.Tensor) -> Tuple[torch.Tensor]:
-        # 根据提示词 ID 获取提示词的嵌入向量
+        # 将输入的提示文本 IDs 转换为嵌入表示，并通过提示文本转换模块进行转换
         prompt = self.prompt_trans(self.prompt_embedding(prompt_ids))
-        # 调整提示词向量的形状为 (prompt_length, num_layers * 2, num_heads, head_dim)
+        # 将转换后的结果重新形状为 (提示文本长度, 层数 * 2, 头数, 每个头的维度)
         prompt = prompt.view(self.prompt_length, self.num_layers * 2, self.num_heads, self.head_dim)
-        # 对提示词向量应用 Dropout
+        # 对转换后的结果应用 dropout
         prompt = self.dropout(prompt)
-        # 将提示词向量的维度顺序调整为 (num_layers * 2, num_heads, prompt_length, head_dim)
+        # 将维度重新排序，顺序为 (层数 * 2, 头数, 提示文本长度, 每个头的维度)，并按照指定维度拆分成多个张量
         prompt = prompt.permute([1, 2, 0, 3]).split(2)
-        # 返回分裂后的提示词向量
+        # 返回处理后的张量元组作为模型的输出
         return prompt
 class MvpPreTrainedModel(PreTrainedModel):
-    # 设置配置类为 MvpConfig
+    # 指定配置类为 MvpConfig
     config_class = MvpConfig
-    # 设置基础模型前缀为 "model"
+    # 基础模型前缀为 "model"
     base_model_prefix = "model"
-    # 开启梯度检查点支持
+    # 支持梯度检查点
     supports_gradient_checkpointing = True
 
     def _init_weights(self, module):
-        # 从配置中获取初始化标准差
+        # 初始化权重函数，根据配置中的初始标准差进行初始化
         std = self.config.init_std
-        # 如果是线性层模块
         if isinstance(module, nn.Linear):
-            # 权重初始化为正态分布
+            # 如果是线性层，使用正态分布初始化权重，偏置初始化为零
             module.weight.data.normal_(mean=0.0, std=std)
             if module.bias is not None:
-                # 偏置初始化为零
                 module.bias.data.zero_()
-        # 如果是嵌入层模块
         elif isinstance(module, nn.Embedding):
-            # 权重初始化为正态分布
+            # 如果是嵌入层，使用正态分布初始化权重，对于填充索引，将其权重初始化为零
             module.weight.data.normal_(mean=0.0, std=std)
             if module.padding_idx is not None:
-                # 对应填充索引的权重初始化为零
                 module.weight.data[module.padding_idx].zero_()
 
     @property
     def dummy_inputs(self):
-        # 获取填充标记
+        # 获取虚拟输入示例，包括输入的填充标记和输入 ID
         pad_token = self.config.pad_token_id
-        # 创建输入张量
         input_ids = torch.tensor([[0, 6, 10, 4, 2], [0, 8, 12, 2, pad_token]], device=self.device)
-        # 构建虚拟输入字典
         dummy_inputs = {
-            "attention_mask": input_ids.ne(pad_token),
-            "input_ids": input_ids,
+            "attention_mask": input_ids.ne(pad_token),  # 生成注意力遮罩
+            "input_ids": input_ids,  # 输入 ID
         }
         return dummy_inputs
-
 
 
 MVP_START_DOCSTRING = r"""
@@ -449,9 +437,8 @@ MVP_START_DOCSTRING = r"""
 """
 
 MVP_INPUTS_DOCSTRING = r"""
+    Placeholder for inputs documentation.
 """
-
-
 
 MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
     Example of summarization:
@@ -472,7 +459,7 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
 
     >>> loss = model(**inputs, labels=labels).loss
     >>> loss.backward()
-    ```py
+    ```
 
     Inference after the model fine-tuned
     ```python
@@ -480,98 +467,92 @@ MVP_CONDITIONAL_GENERATION_EXAMPLE = r"""
     ...     generated_ids = model.generate(**inputs)
 
     >>> generated_text = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    ```py
+    ```
 """
-
-
 
 MVP_SEQUENCE_CLASSIFICATION_SAMPLE = r"""
     Example of single-label classification:
 
     Fine-tuning a model on `num_labels` classes
     ```python
-    # 导入 PyTorch 库
+    Placeholder for sequence classification sample.
+    # 导入PyTorch库
     import torch
-    # 从 transformers 库中导入 AutoTokenizer 和 MvpForSequenceClassification 类
+    # 从transformers库中导入AutoTokenizer和MvpForSequenceClassification类
     from transformers import AutoTokenizer, MvpForSequenceClassification
     
-    # 设定类别数目，例如，这是一个二分类任务
-    num_labels = 2  
-    # 使用预训练模型的标记器进行初始化
+    # 设置类别数为2，示例中是一个二分类任务
+    num_labels = 2
+    # 使用预训练模型"RUCAIBox/mvp"初始化分词器
     tokenizer = AutoTokenizer.from_pretrained("RUCAIBox/mvp")
-    # 使用预训练的 MVP 模型进行序列分类任务的初始化
+    # 使用预训练模型"RUCAIBox/mvp"初始化序列分类模型，并指定类别数
     model = MvpForSequenceClassification.from_pretrained("RUCAIBox/mvp", num_labels=num_labels)
     
-    # 对输入文本进行标记化并转换为 PyTorch 张量
+    # 对输入文本进行分词和转换为PyTorch张量格式
     inputs = tokenizer("Classify: Hello, my dog is cute", return_tensors="pt")
-    # 为输入文本设置真实标签
-    labels = torch.tensor(1)  
+    # 设置输入文本对应的真实标签
+    labels = torch.tensor(1)
     
-    # 使用模型对输入进行前向传播并计算损失
+    # 使用模型进行前向传播并计算损失
     loss = model(**inputs, labels=labels).loss
-    # 对损失进行反向传播
+    # 根据损失计算梯度
     loss.backward()
     
-    # 模型微调后的推理
+    # 在模型微调后进行推理
+    # 禁用梯度计算
     with torch.no_grad():
-        # 使用模型进行推理得到 logits
+        # 获取模型的输出日志概率
         logits = model(**inputs).logits
     
-    # 根据 logits 得到预测的类别 ID
+    # 获取预测的类别ID，即输出概率最高的类别
     predicted_class_id = logits.argmax()
-# MVP问答样例代码
+"""
 MVP_QUESTION_ANSWERING_SAMPLE = r"""
     Example:
 
-    # 微调问答模型，支持抽取式和生成式问答
-    利用 `BartForConditionalGeneration` 模型进行微调
-    ```py
+    Fine-tuning a model for extrative question answering, and our model also supports generative question answering
+    using `BartForConditionalGeneration`
+    ```python
     >>> import torch
     >>> from transformers import AutoTokenizer, MvpForQuestionAnswering
 
-    # 加载预训练的 tokenizer 和问答模型
     >>> tokenizer = AutoTokenizer.from_pretrained("RUCAIBox/mvp")
     >>> model = MvpForQuestionAnswering.from_pretrained("RUCAIBox/mvp")
 
-    # 输入问题和上下文，转换为模型输入格式
     >>> inputs = tokenizer(
     ...     "Answer the following question: Who was Jim Henson? [SEP] Jim Henson was a nice puppet",
     ...     return_tensors="pt",
     ... )
-    # 设置正确答案的起始和结束位置
     >>> target_start_index = torch.tensor([18])
     >>> target_end_index = torch.tensor([19])
 
-    # 计算损失并反向传播
     >>> loss = model(**inputs, start_positions=target_start_index, end_positions=target_end_index).loss
     >>> loss.backward()
     ```
 
-    # 微调后的推理过程
-    ```py
+    Inference after the model fine-tuned
+    ```python
     >>> with torch.no_grad():
     ...     outputs = model(**inputs)
 
-    # 预测答案的起始和结束位置
     >>> answer_start_index = outputs.start_logits.argmax()
     >>> answer_end_index = outputs.end_logits.argmax()
 
-    # 根据预测位置获取答案
     >>> predict_answer_tokens = inputs.input_ids[0, answer_start_index : answer_end_index + 1]
     >>> predict_answer = tokenizer.decode(predict_answer_tokens)
     ```
 """
 
 
-# MVP编码器模块
 class MvpEncoder(MvpPreTrainedModel):
     """
-    Transformer 编码器，包含 *config.encoder_layers* 个自注意力层。每个层都是 [`MvpEncoderLayer`]。
+    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
+    [`MvpEncoderLayer`].
 
-    参数:
-        config: MvpConfig 配置
-        embed_tokens (nn.Embedding): 输出嵌入层
-        use_prompt (bool): 是否使用提示
+    Args:
+        config: MvpConfig
+        embed_tokens (nn.Embedding): output embedding
+        use_prompt (bool): whether to use prompt
     """
 
     def __init__(
@@ -579,135 +560,143 @@ class MvpEncoder(MvpPreTrainedModel):
     ):
         super().__init__(config)
 
+        # Dropout rate as specified in the configuration
         self.dropout = config.dropout
+        # Layer dropout rate as specified in the configuration
         self.layerdrop = config.encoder_layerdrop
 
         embed_dim = config.d_model
+        # Padding index for the embeddings
         self.padding_idx = config.pad_token_id
+        # Maximum position embeddings allowed
         self.max_source_positions = config.max_position_embeddings
+        # Embedding scale factor
         self.embed_scale = math.sqrt(embed_dim) if config.scale_embedding else 1.0
 
-        # 如果提供了嵌入层，使用它；否则创建一个新的嵌入层
         if embed_tokens is not None:
+            # Use provided embedding tokens
             self.embed_tokens = embed_tokens
         else:
+            # Otherwise, create new embedding tokens
             self.embed_tokens = nn.Embedding(config.vocab_size, embed_dim, self.padding_idx)
 
-        # 位置嵌入层
+        # Learned positional embeddings
         self.embed_positions = MvpLearnedPositionalEmbedding(
             config.max_position_embeddings,
             embed_dim,
         )
-        # 编码器层列表
+        # List of encoder layers
         self.layers = nn.ModuleList([MvpEncoderLayer(config) for _ in range(config.encoder_layers)])
+        # Layer normalization for embeddings
         self.layernorm_embedding = nn.LayerNorm(embed_dim)
 
         self.use_prompt = use_prompt
         if use_prompt:
+            # Length of the prompt
             self.prompt_length = config.prompt_length
+            # Self-attention mechanism for prompts
             self.self_attn_prompt = MvpPrompt(
                 config,
                 config.encoder_layers,
                 config.encoder_attention_heads,
             )
 
+        # Gradient checkpointing disabled by default
         self.gradient_checkpointing = False
-        # 初始化权重并进行最终处理
+        # Initialize weights and apply final processing
         self.post_init()
-    # 获取输入嵌入
+    # 定义一个方法，用于获取输入的嵌入表示
     def get_input_embeddings(self):
-        # 返回嵌入令牌
+        # 返回存储在对象中的嵌入表示
         return self.embed_tokens
 
-    # 设置输入嵌入
+    # 定义一个方法，用于设置输入的嵌入表示
     def set_input_embeddings(self, value):
-        # 将输入嵌入设置为给定值
+        # 将传入的值赋给对象中的嵌入表示
         self.embed_tokens = value
 
-    # 前向传播函数，接收一系列输入，并返回模型的输出
+    # 定义模型的前向传播方法
     def forward(
         self,
-        input_ids: torch.LongTensor = None,                 # 输入的token IDs
-        attention_mask: Optional[torch.Tensor] = None,      # 表示哪些token要被attention，哪些不用
-        head_mask: Optional[torch.Tensor] = None,           # 头部遮罩，用于屏蔽不需要的attention头
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入向量
-        output_attentions: Optional[bool] = None,           # 是否输出注意力权重
-        output_hidden_states: Optional[bool] = None,        # 是否输出隐藏状态
-        return_dict: Optional[bool] = None,                 # 是否以字典形式返回输出
-# 定义 MvpDecoder 类，继承自 MvpPreTrainedModel
+        input_ids: torch.LongTensor = None,  # 输入的token id张量，默认为None
+        attention_mask: Optional[torch.Tensor] = None,  # 注意力遮罩张量，可选
+        head_mask: Optional[torch.Tensor] = None,  # 头部遮罩张量，可选
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入表示张量，可选
+        output_attentions: Optional[bool] = None,  # 是否输出注意力张量，可选
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态张量，可选
+        return_dict: Optional[bool] = None,  # 是否以字典形式返回结果，可选
+# 定义一个名为 MvpDecoder 的类，继承自 MvpPreTrainedModel
 class MvpDecoder(MvpPreTrainedModel):
     """
-    Transformer 解码器，由 config.decoder_layers 指定的层数组成。每个层是一个 MvpDecoderLayer 类的实例。
-    
-    参数:
-        config: MvpConfig 配置对象
-        embed_tokens (nn.Embedding): 输出嵌入
-        use_prompt (bool): 是否使用提示
+    Transformer 解码器，由 config.decoder_layers 层组成。每层是一个 `MvpDecoderLayer` 对象。
+
+    Args:
+        config: MvpConfig 对象，配置参数
+        embed_tokens (nn.Embedding): 输出的嵌入层
+        use_prompt (bool): 是否使用提示语
     """
 
+    # 初始化方法，接受配置 config、嵌入层 embed_tokens 和是否使用提示语 use_prompt 作为参数
     def __init__(
-        # 初始化函数，接收 MvpConfig 配置对象、嵌入张量、以及是否使用提示的标志
         self, config: MvpConfig, embed_tokens: Optional[nn.Embedding] = None, use_prompt: Optional[bool] = False
     ):
-        # 调用基类的初始化函数
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置解码器的 dropout 和 layerdrop
-        self.dropout = config.dropout
-        self.layerdrop = config.decoder_layerdrop
-        # 设置填充索引和目标最大位置
-        self.padding_idx = config.pad_token_id
-        self.max_target_positions = config.max_position_embeddings
-        # 根据配置决定嵌入的缩放因子
-        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0
-
-        # 如果提供了嵌入张量，使用该张量；否则，创建一个新的嵌入层
+        
+        # 设置类的属性
+        self.dropout = config.dropout  # dropout 概率
+        self.layerdrop = config.decoder_layerdrop  # 层间 dropout 概率
+        self.padding_idx = config.pad_token_id  # 填充 token 的索引
+        self.max_target_positions = config.max_position_embeddings  # 最大目标位置
+        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0  # 嵌入层的缩放因子
+        
+        # 如果提供了 embed_tokens，则使用提供的，否则创建一个新的 nn.Embedding
         if embed_tokens is not None:
             self.embed_tokens = embed_tokens
         else:
             self.embed_tokens = nn.Embedding(config.vocab_size, config.d_model, self.padding_idx)
 
-        # 创建位置嵌入层
+        # 创建学习得到的位置嵌入层
         self.embed_positions = MvpLearnedPositionalEmbedding(
             config.max_position_embeddings,
             config.d_model,
         )
-        # 创建多个解码器层，并添加到模块列表中
+        
+        # 创建多个 MvpDecoderLayer 层，以列表形式存储在 self.layers 中
         self.layers = nn.ModuleList([MvpDecoderLayer(config) for _ in range(config.decoder_layers)])
-        # 创建 LayerNorm 层，用于嵌入层
+        
+        # 对嵌入层进行 LayerNorm 处理
         self.layernorm_embedding = nn.LayerNorm(config.d_model)
 
-        # 设置是否使用提示，并根据配置创建提示模块
+        # 如果 use_prompt 为 True，则创建 prompt 相关的属性
         self.use_prompt = use_prompt
         if use_prompt:
-            # 设置提示长度
-            self.prompt_length = config.prompt_length
-            # 创建自注意力提示模块
+            self.prompt_length = config.prompt_length  # 提示语长度
             self.self_attn_prompt = MvpPrompt(
                 config,
                 config.decoder_layers,
                 config.decoder_attention_heads,
             )
-            # 创建交叉注意力提示模块
             self.cross_attn_prompt = MvpPrompt(
                 config,
                 config.decoder_layers,
                 config.decoder_attention_heads,
             )
 
-        # 设置梯度检查点标志，默认值为 False
-        self.gradient_checkpointing = False
+        self.gradient_checkpointing = False  # 梯度检查点，默认为 False
+        
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入嵌入层的方法
+    # 获取输入嵌入层 embed_tokens
     def get_input_embeddings(self):
         return self.embed_tokens
 
-    # 设置输入嵌入层的方法
+    # 设置输入嵌入层 embed_tokens 的值
     def set_input_embeddings(self, value):
         self.embed_tokens = value
 
-    # 前向传递方法，接收输入和可选参数
+    # 前向传播方法，接受多种输入参数，并返回输出
     def forward(
         self,
         input_ids: torch.LongTensor = None,
@@ -722,69 +711,62 @@ class MvpDecoder(MvpPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-
-# 添加起始文档字符串
-@add_start_docstrings(
-    "输出原始隐藏状态的 MVP 模型，没有任何特定的头部。",
-    MVP_START_DOCSTRING,
-)
-# 定义 MvpModel 类，继承自 MvpPreTrainedModel
-class MvpModel(MvpPreTrainedModel):
-    # 在加载时忽略的键列表
-    _keys_to_ignore_on_load_unexpected = ["final_logits_bias"]
-    # 模型预定义的绑定权重键
+    ):
+        # 此处未完全显示，因为代码截断了一部分，应完整显示 forward 方法的实现
+        ...
+    # 定义存储编码器和解码器权重的键列表
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
     
-    # 初始化模型
+    # 模型初始化函数，接受一个MvpConfig类型的配置参数
     def __init__(self, config: MvpConfig):
         # 调用父类的初始化方法
         super().__init__(config)
     
-        # 从配置中获取 padding_idx 和 vocab_size
+        # 从配置中获取填充索引和词汇表大小
         padding_idx, vocab_size = config.pad_token_id, config.vocab_size
-        # 获取是否使用提示的配置
+        # 根据配置决定是否使用提示（prompt）
         self.use_prompt = config.use_prompt
-        # 创建共享的词嵌入层
+        # 创建一个共享的嵌入层对象，将词汇表大小、模型维度和填充索引作为参数
         self.shared = nn.Embedding(vocab_size, config.d_model, padding_idx)
     
-        # 创建编码器和解码器模块
+        # 创建编码器和解码器对象，传入配置、共享的嵌入层对象和是否使用提示作为参数
         self.encoder = MvpEncoder(config, self.shared, config.use_prompt)
         self.decoder = MvpDecoder(config, self.shared, config.use_prompt)
     
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
     
-    # 获取输入嵌入层
+    # 获取输入嵌入层对象的方法
     def get_input_embeddings(self):
         return self.shared
     
-    # 设置输入嵌入层
+    # 设置输入嵌入层对象的方法
     def set_input_embeddings(self, value):
         self.shared = value
+        # 将编码器和解码器的嵌入层对象设置为共享的嵌入层对象
         self.encoder.embed_tokens = self.shared
         self.decoder.embed_tokens = self.shared
     
-    # 获取编码器模块
+    # 获取编码器对象的方法
     def get_encoder(self):
         return self.encoder
     
-    # 获取解码器模块
+    # 获取解码器对象的方法
     def get_decoder(self):
         return self.decoder
     
-    # 设置轻量级微调
+    # 设置轻量级调整的方法，要求必须使用提示（prompt）
     def set_lightweight_tuning(self):
-        # 确保使用了提示
         assert self.use_prompt, "If you want to use lightweight tuning, make sure that `use_prompt=True`."
     
-        # 冻结所有参数
+        # 冻结整个模型的梯度
         self.requires_grad_(False)
-        # 只微调提示参数
+        # 解冻编码器和解码器中的提示（prompt）自注意力机制的权重
         self.encoder.self_attn_prompt.requires_grad_(True)
         self.decoder.self_attn_prompt.requires_grad_(True)
         self.decoder.cross_attn_prompt.requires_grad_(True)
     
-    # 前向传播
+    # 前向传播方法，带有详细的文档字符串注释
     @add_start_docstrings_to_model_forward(MVP_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
@@ -809,137 +791,114 @@ class MvpModel(MvpPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ):
-        # 在此处编写注释
-# 使用装饰器添加模型文档字符串的起始部分，描述了带语言建模头部的 MVP 模型，可用于各种文本生成任务
+# 添加类的文档字符串，描述这个类用于带有语言建模头部的MVP模型，适用于各种文本生成任务。
 @add_start_docstrings(
     "The MVP Model with a language modeling head. Can be used for various text generation tasks.", MVP_START_DOCSTRING
 )
-# 定义了一个 MvpForConditionalGeneration 类，继承自 MvpPreTrainedModel 类
 class MvpForConditionalGeneration(MvpPreTrainedModel):
-    # 定义了一个列表，包含需要共享权重的键
+    # 定义了权重共享的关键键名列表
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight", "lm_head.weight"]
 
-    # 初始化方法，接收一个 MvpConfig 类型的参数 config
     def __init__(self, config: MvpConfig):
-        # 调用父类的初始化方法
         super().__init__(config)
-        # 创建一个 MvpModel 对象并赋值给 self.model
+        # 根据给定配置初始化MVP模型
         self.model = MvpModel(config)
-        # 使用零张量初始化 final_logits_bias 属性，其形状为 (1, self.model.shared.num_embeddings)
+        # 注册一个缓冲区，存储最终对数偏置，形状为(1, 共享编码器的词汇表大小)
         self.register_buffer("final_logits_bias", torch.zeros((1, self.model.shared.num_embeddings)))
-        # 创建一个线性层 lm_head，输入维度为 config.d_model，输出维度为 self.model.shared.num_embeddings，没有偏置项
+        # 初始化线性层LM头部，输入维度为config.d_model，输出维度为共享编码器的词汇表大小，无偏置
         self.lm_head = nn.Linear(config.d_model, self.model.shared.num_embeddings, bias=False)
 
-        # 调用后处理方法
+        # 执行初始化权重和应用最终处理
         self.post_init()
 
-    # 获取编码器
     def get_encoder(self):
+        # 返回模型的编码器部分
         return self.model.get_encoder()
 
-    # 获取解码器
     def get_decoder(self):
+        # 返回模型的解码器部分
         return self.model.get_decoder()
 
-    # 调整 token embeddings 的大小
     def resize_token_embeddings(self, new_num_tokens: int, pad_to_multiple_of: Optional[int] = None) -> nn.Embedding:
-        # 调用父类的 resize_token_embeddings 方法
+        # 调整词嵌入的大小，并且更新最终对数偏置
         new_embeddings = super().resize_token_embeddings(new_num_tokens, pad_to_multiple_of)
-        # 调整 final_logits_bias 的大小以匹配新的 token 数量
         self._resize_final_logits_bias(new_num_tokens)
         return new_embeddings
 
-    # 调整 final_logits_bias 的大小
     def _resize_final_logits_bias(self, new_num_tokens: int) -> None:
-        # 获取旧的 token 数量
+        # 调整最终对数偏置的大小以匹配新的词汇表大小
         old_num_tokens = self.final_logits_bias.shape[-1]
-        # 如果新的 token 数量小于等于旧的 token 数量
         if new_num_tokens <= old_num_tokens:
-            # 则截取现有的 final_logits_bias
             new_bias = self.final_logits_bias[:, :new_num_tokens]
         else:
-            # 否则创建额外的偏置项，然后拼接到 final_logits_bias 后面
             extra_bias = torch.zeros((1, new_num_tokens - old_num_tokens), device=self.final_logits_bias.device)
             new_bias = torch.cat([self.final_logits_bias, extra_bias], dim=1)
-        # 注册调整大小后的 final_logits_bias
         self.register_buffer("final_logits_bias", new_bias)
 
-    # 获取输出的 embeddings
     def get_output_embeddings(self):
+        # 返回LM头部的输出词嵌入
         return self.lm_head
 
-    # 设置输出的 embeddings
     def set_output_embeddings(self, new_embeddings):
+        # 设置LM头部的输出词嵌入
         self.lm_head = new_embeddings
 
-    # 设置轻量级调参
     def set_lightweight_tuning(self):
-        # 设置模型为轻量级调参模式
+        # 设置轻量级调整，即冻结LM头部的梯度更新
         self.model.set_lightweight_tuning()
-        # 冻结 lm_head 的梯度
         self.lm_head.requires_grad_(False)
 
-    # 添加模型前向传播方法的文档字符串的起始部分
+    # 添加模型前向传播的文档字符串，使用MVP模型输入的文档字符串
     @add_start_docstrings_to_model_forward(MVP_INPUTS_DOCSTRING)
-    # 替换模型前向传播方法的返回值文档字符串
+    # 替换返回值文档字符串，输出类型为Seq2SeqLMOutput，使用_CONFIG_FOR_DOC作为配置类
     @replace_return_docstrings(output_type=Seq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
-    # 添加模型前向传播方法的文档字符串的结尾部分
+    # 添加模型前向传播结束的文档字符串，使用MVP条件生成示例文档字符串
     @add_end_docstrings(MVP_CONDITIONAL_GENERATION_EXAMPLE)
+    # 此方法用于执行 Transformer 模型的前向传播。
     def forward(
         self,
-        input_ids: torch.LongTensor = None,  # 输入的序列的id表示，数据类型为torch.LongTensor，默认为None
-        attention_mask: Optional[torch.Tensor] = None,  # 输入的序列的注意力掩码，数据类型为torch.Tensor，默认为None
-        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器的输入序列的id表示，数据类型为torch.LongTensor，默认为None
-        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器的输入序列的注意力掩码，数据类型为torch.LongTensor，默认为None
-        head_mask: Optional[torch.Tensor] = None,  # 多头注意力机制的掩码，数据类型为torch.Tensor，默认为None
-        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器多头注意力机制的掩码，数据类型为torch.Tensor，默认为None
-        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 交叉注意力机制的多头掩码，数据类型为torch.Tensor，默认为None
-        encoder_outputs: Optional[List[torch.FloatTensor]] = None,  # 编码器的输出，数据类型为List[torch.FloatTensor]，默认为None
-        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 编码器过去的键值对，数据类型为List[torch.FloatTensor]，默认为None
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 嵌入后的输入序列，数据类型为torch.FloatTensor，默认为None
-        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 嵌入后的解码器输入序列，数据类型为torch.FloatTensor，默认为None
-        labels: Optional[torch.LongTensor] = None,  # 标签序列的id表示，数据类型为torch.LongTensor，默认为None
-        use_cache: Optional[bool] = None,  # 是否使用缓存，数据类型为bool，默认为None
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，数据类型为bool，默认为None
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，数据类型为bool，默认为None
-        return_dict: Optional[bool] = None,  # 是否返回字典，数据类型为bool，默认为None
-    # 此函数用于计算序列到序列的语言模型的输出
-    def forward(
-        self,
-        input_ids: Optional[torch.Tensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        decoder_input_ids: Optional[torch.Tensor] = None,
-        encoder_outputs: Optional[Tuple[torch.Tensor]] = None,
-        decoder_attention_mask: Optional[torch.Tensor] = None,
-        head_mask: Optional[torch.Tensor] = None,
-        decoder_head_mask: Optional[torch.Tensor] = None,
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        past_key_values: Optional[Tuple[Tuple[torch.Tensor]]] = None,
-        inputs_embeds: Optional[torch.Tensor] = None,
-        decoder_inputs_embeds: Optional[torch.Tensor] = None,
-        labels: Optional[torch.Tensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
+        input_ids: torch.LongTensor = None,  # 输入序列的 token IDs
+        attention_mask: Optional[torch.Tensor] = None,  # 输入序列的注意力掩码
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器输入的 token IDs
+        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器的注意力掩码
+        head_mask: Optional[torch.Tensor] = None,  # 多头注意力机制的掩码
+        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器的多头注意力机制的掩码
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 跨层注意力机制的多头掩码
+        encoder_outputs: Optional[List[torch.FloatTensor]] = None,  # 编码器的输出
+        past_key_values: Optional[List[torch.FloatTensor]] = None,  # 过去的键值对，用于生成
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入嵌入向量
+        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器输入嵌入向量
+        labels: Optional[torch.LongTensor] = None,  # 真实标签
+        use_cache: Optional[bool] = None,  # 是否使用缓存
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态
+        return_dict: Optional[bool] = None,  # 是否返回结果字典
     ) -> Union[Tuple, Seq2SeqLMOutput]:
-        # 判断是否使用返回字典的形式
+        r"""
+        labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
+            Labels for computing the masked language modeling loss. Indices should either be in `[0, ...,
+            config.vocab_size]` or -100 (see `input_ids` docstring). Tokens with indices set to `-100` are ignored
+            (masked), the loss is only computed for the tokens with labels in `[0, ..., config.vocab_size]`.
+
+        Returns:
+            Returns either a tuple or a `Seq2SeqLMOutput` containing masked language model output.
+
+        """
+        # Determine whether to use the return_dict based on provided argument or default configuration
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-    
-        # 如果提供了标签(labels)
+
+        # Adjust use_cache if labels are provided, and issue a warning if necessary
         if labels is not None:
-            # 如果使用了缓存(use_cache)，则警告并禁用缓存
             if use_cache:
                 logger.warning("The `use_cache` argument is changed to `False` since `labels` is provided.")
             use_cache = False
-            # 如果没有decoder_input_ids和decoder_inputs_embeds，则从labels中移位生成decoder_input_ids
+            # If decoder input is not provided, shift labels for decoder input preparation
             if decoder_input_ids is None and decoder_inputs_embeds is None:
                 decoder_input_ids = shift_tokens_right(
                     labels, self.config.pad_token_id, self.config.decoder_start_token_id
                 )
-    
-        # 调用self.model方法获取模型输出
+
+        # Pass the inputs to the model for computation
         outputs = self.model(
             input_ids,
             attention_mask=attention_mask,
@@ -957,21 +916,22 @@ class MvpForConditionalGeneration(MvpPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-    
-        # 计算语言模型预测输出logits
+        
+        # Compute logits for the language model head and add final logits bias
         lm_logits = self.lm_head(outputs[0]) + self.final_logits_bias
-    
-        # 如果提供了标签(labels)，计算masked language modeling损失
+
         masked_lm_loss = None
+        # Calculate masked language model loss if labels are provided
         if labels is not None:
             loss_fct = CrossEntropyLoss()
             masked_lm_loss = loss_fct(lm_logits.view(-1, self.config.vocab_size), labels.view(-1))
-    
-        # 根据return_dict标志返回不同的输出格式
+
+        # Return the appropriate output format based on return_dict flag
         if not return_dict:
             output = (lm_logits,) + outputs[1:]
             return ((masked_lm_loss,) + output) if masked_lm_loss is not None else output
-    
+
+        # Return Seq2SeqLMOutput containing detailed output components
         return Seq2SeqLMOutput(
             loss=masked_lm_loss,
             logits=lm_logits,
@@ -983,38 +943,35 @@ class MvpForConditionalGeneration(MvpPreTrainedModel):
             encoder_hidden_states=outputs.encoder_hidden_states,
             encoder_attentions=outputs.encoder_attentions,
         )
-    # 为生成器准备输入，根据参数准备输入数据和配置信息
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
-        past_key_values=None,  # 过去的键值，用于生成
-        attention_mask=None,  # 注意力掩码
-        head_mask=None,  # 头部掩码
-        decoder_head_mask=None,  # 解码器头部掩码
-        cross_attn_head_mask=None,  # 交叉注意力头部掩码
-        use_cache=None,  # 是否使用缓存
-        encoder_outputs=None,  # 编码器输出
+        past_key_values=None,
+        attention_mask=None,
+        head_mask=None,
+        decoder_head_mask=None,
+        cross_attn_head_mask=None,
+        use_cache=None,
+        encoder_outputs=None,
         **kwargs,
     ):
-        # 如果使用过去的键值
+        # 如果使用了过去的键值（用于生成过程中），则裁剪decoder_input_ids
         if past_key_values is not None:
-            # 获取过去的键值的长度
             past_length = past_key_values[0][0].shape[2]
 
-            # 如果解码器输入的长度大于过去的长度
+            # 一些生成方法已经只传递最后一个输入ID
             if decoder_input_ids.shape[1] > past_length:
-                # 移除前缀部分的长度为过去的长度
                 remove_prefix_length = past_length
             else:
-                # 默认的旧行为：只保留最后一个输入 ID
+                # 默认行为：仅保留最后一个ID
                 remove_prefix_length = decoder_input_ids.shape[1] - 1
 
-            # 重新赋值解码器输入，只保留后缀
+            # 裁剪掉不需要的前缀部分
             decoder_input_ids = decoder_input_ids[:, remove_prefix_length:]
 
-        # 返回准备好的输入
+        # 返回准备好的输入字典
         return {
-            "input_ids": None,  # encoder_outputs is defined. input_ids not needed
+            "input_ids": None,  # encoder_outputs已定义，不需要input_ids
             "encoder_outputs": encoder_outputs,
             "past_key_values": past_key_values,
             "decoder_input_ids": decoder_input_ids,
@@ -1022,25 +979,25 @@ class MvpForConditionalGeneration(MvpPreTrainedModel):
             "head_mask": head_mask,
             "decoder_head_mask": decoder_head_mask,
             "cross_attn_head_mask": cross_attn_head_mask,
-            "use_cache": use_cache,  # change this to avoid caching (presumably for debugging)
+            "use_cache": use_cache,  # 更改此处以避免缓存（可能是为了调试目的）
         }
 
-    # 从标签准备解码器输入 ID
     def prepare_decoder_input_ids_from_labels(self, labels: torch.Tensor):
+        # 将标签右移一个位置以作为解码器的输入
         return shift_tokens_right(labels, self.config.pad_token_id, self.config.decoder_start_token_id)
 
-    # 重新排列缓存
     @staticmethod
     def _reorder_cache(past_key_values, beam_idx):
         reordered_past = ()
         for layer_past in past_key_values:
-            # 缓存的交叉注意力状态不需要重新排列 -> 它们始终相同
+            # 缓存的交叉注意力状态无需重新排序 -> 它们始终保持不变
             reordered_past += (
+                # 根据beam_idx对层的过去状态进行重新排序
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past[:2])
                 + layer_past[2:],
             )
         return reordered_past
-# 使用特定的文档字符串初始化一个包含序列分类/头部的 Mvp 模型（在汇总输出之上的线性层），例如 GLUE 任务
+# 添加模型文档字符串，用于描述带有顶部序列分类/头部（池化输出顶部的线性层）的 MVP 模型，例如用于 GLUE 任务。
 @add_start_docstrings(
     """
     Mvp model with a sequence classification/head on top (a linear layer on top of the pooled output) e.g. for GLUE
@@ -1049,14 +1006,15 @@ class MvpForConditionalGeneration(MvpPreTrainedModel):
     MVP_START_DOCSTRING,
 )
 class MvpForSequenceClassification(MvpPreTrainedModel):
-    # 用于指定共享权重的键值对
+    # 定义权重共享的关键键列表
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
     def __init__(self, config: MvpConfig, **kwargs):
+        # 调用父类构造函数
         super().__init__(config, **kwargs)
         # 初始化 MvpModel
         self.model = MvpModel(config)
-        # 初始化序列分类头
+        # 初始化 MvpClassificationHead，用于分类任务
         self.classification_head = MvpClassificationHead(
             config.d_model,
             config.d_model,
@@ -1064,16 +1022,18 @@ class MvpForSequenceClassification(MvpPreTrainedModel):
             config.classifier_dropout,
         )
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 设置轻量级调整
+    # 设置轻量级调优
     def set_lightweight_tuning(self):
         self.model.set_lightweight_tuning()
+        # 设置分类头部的梯度为 False，以便冻结它
         self.classification_head.requires_grad_(False)
 
-    # 前向传播方法，添加了文档字符串注释
+    # 添加模型前向传播的文档字符串
     @add_start_docstrings_to_model_forward(MVP_INPUTS_DOCSTRING)
+    # 添加模型前向传播的结束文档字符串，用于序列分类任务的示例
     @add_end_docstrings(MVP_SEQUENCE_CLASSIFICATION_SAMPLE)
     def forward(
         self,
@@ -1095,7 +1055,7 @@ class MvpForSequenceClassification(MvpPreTrainedModel):
 
 
 
-# 使用特定的文档字符串初始化一个包含用于抽取式问答任务的跨度分类头部的 Mvp 模型（用于计算 `跨度起始对数` 和 `跨度结束对数` 的隐藏状态输出之上的线性层）
+# 添加模型文档字符串，用于描述带有顶部抽取式问答任务的 MVP 模型，例如用于 SQuAD 的线性层输出隐藏状态以计算 `span start logits` 和 `span end logits`。
 @add_start_docstrings(
     """
     MVP Model with a span classification head on top for extractive question-answering tasks like SQuAD (a linear layer
@@ -1104,80 +1064,68 @@ class MvpForSequenceClassification(MvpPreTrainedModel):
     MVP_START_DOCSTRING,
 )
 class MvpForQuestionAnswering(MvpPreTrainedModel):
-    # 用于指定共享权重的键值对
+    # 定义权重共享的关键键列表
     _tied_weights_keys = ["encoder.embed_tokens.weight", "decoder.embed_tokens.weight"]
 
     def __init__(self, config):
+        # 调用父类构造函数
         super().__init__(config)
 
-        # 设定类别数为 2（开始和结束的跨度）
+        # 设置问题回答任务的标签数量为 2
         config.num_labels = 2
         self.num_labels = config.num_labels
 
         # 初始化 MvpModel
         self.model = MvpModel(config)
-        # 初始化 QA 输出层
+        # 初始化用于问答任务的线性层
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 设置轻量级调整
+    # 设置轻量级调优
     def set_lightweight_tuning(self):
         self.model.set_lightweight_tuning()
+        # 设置问答任务线性层的梯度为 False，以便冻结它
         self.qa_outputs.requires_grad_(False)
 
-    # 前向传播方法，添加了文档字符串注释
+    # 添加模型前向传播的文档字符串
     @add_start_docstrings_to_model_forward(MVP_INPUTS_DOCSTRING)
+    # 添加模型前向传播的结束文档字符串，用于抽取式问答任务的示例
     @add_end_docstrings(MVP_QUESTION_ANSWERING_SAMPLE)
-    # 定义一个方法，用于进行前向传播计算
+    # 定义 Transformer 模型的前向传播方法，用于执行模型推断或训练时的前向计算
     def forward(
         self,
-        # 输入的标识符张量，默认为None
-        input_ids: torch.Tensor = None,
-        # 注意力掩码，默认为None
-        attention_mask: Optional[torch.Tensor] = None,
-        # 解码器输入的标识符张量，默认为None
-        decoder_input_ids: Optional[torch.LongTensor] = None,
-        # 解码器的注意力掩码，默认为None
-        decoder_attention_mask: Optional[torch.LongTensor] = None,
-        # 头掩码，默认为None
-        head_mask: Optional[torch.Tensor] = None,
-        # 解码器头掩码，默认为None
-        decoder_head_mask: Optional[torch.Tensor] = None,
-        # 交叉注意力头掩码，默认为None
-        cross_attn_head_mask: Optional[torch.Tensor] = None,
-        # 编码器输出，默认为None
-        encoder_outputs: Optional[List[torch.FloatTensor]] = None,
-        # 开始位置，默认为None
-        start_positions: Optional[torch.LongTensor] = None,
-        # 结束位置，默认为None
-        end_positions: Optional[torch.LongTensor] = None,
-        # 输入的嵌入，默认为None
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 解码器输入的嵌入，默认为None
-        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,
-        # 是否使用缓存，默认为None
-        use_cache: Optional[bool] = None,
-        # 输出注意力，默认为None
-        output_attentions: Optional[bool] = None,
-        # 输出隐藏状态，默认为None
-        output_hidden_states: Optional[bool] = None,
-        # 返回字典，默认为None
-        return_dict: Optional[bool] = None,
-# 从transformers.models.bart.modeling_bart.BartDecoderWrapper复制而来，将Bart替换为Mvp
+        input_ids: torch.Tensor = None,  # 输入序列的 token IDs
+        attention_mask: Optional[torch.Tensor] = None,  # 输入序列的注意力掩码，标记哪些位置是真实的 token
+        decoder_input_ids: Optional[torch.LongTensor] = None,  # 解码器输入序列的 token IDs
+        decoder_attention_mask: Optional[torch.LongTensor] = None,  # 解码器输入序列的注意力掩码
+        head_mask: Optional[torch.Tensor] = None,  # 多头注意力机制的掩码
+        decoder_head_mask: Optional[torch.Tensor] = None,  # 解码器多头注意力机制的掩码
+        cross_attn_head_mask: Optional[torch.Tensor] = None,  # 跨注意力头的掩码
+        encoder_outputs: Optional[List[torch.FloatTensor]] = None,  # 编码器输出的列表，包含不同层的隐藏状态
+        start_positions: Optional[torch.LongTensor] = None,  # 序列开始位置的索引
+        end_positions: Optional[torch.LongTensor] = None,  # 序列结束位置的索引
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入表示
+        decoder_inputs_embeds: Optional[torch.FloatTensor] = None,  # 解码器输入的嵌入表示
+        use_cache: Optional[bool] = None,  # 是否使用缓存进行推断
+        output_attentions: Optional[bool] = None,  # 是否返回注意力权重
+        output_hidden_states: Optional[bool] = None,  # 是否返回所有隐藏状态
+        return_dict: Optional[bool] = None,  # 是否返回字典形式的输出
+        ):
+# 从 transformers.models.mvp.modeling_mvp.MvpDecoderWrapper 复制，并将 Bart 改为 Mvp
 class MvpDecoderWrapper(MvpPreTrainedModel):
     """
-    This wrapper class is a helper class to correctly load pretrained checkpoints when the causal language model is
-    used in combination with the [`EncoderDecoderModel`] framework.
+    这个包装类是一个辅助类，用于在使用 [`EncoderDecoderModel`] 框架与因果语言模型结合时正确加载预训练检查点。
     """
 
     def __init__(self, config):
         super().__init__(config)
-        # 初始化MvpDecoder对象
+        # 初始化 MvpDecoder 对象
         self.decoder = MvpDecoder(config)
 
     def forward(self, *args, **kwargs):
+        # 调用 MvpDecoder 的 forward 方法
         return self.decoder(*args, **kwargs)
 
 
@@ -1185,48 +1133,48 @@ class MvpForCausalLM(MvpPreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
 
     def __init__(self, config):
-        # 深拷贝config对象
         config = copy.deepcopy(config)
-        # 设置config中的is_decoder和is_encoder_decoder属性
+        # 标记该模型为解码器，非编码器解码器结构
         config.is_decoder = True
         config.is_encoder_decoder = False
         super().__init__(config)
-        # 初始化MvpDecoderWrapper对象
+        # 使用 MvpDecoderWrapper 封装模型
         self.model = MvpDecoderWrapper(config)
 
-        # 初始化一个线性层用于LM头部
+        # 初始化语言模型头部，一个线性层
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
         # 初始化权重并应用最终处理
         self.post_init()
 
-    # 获取输入的嵌入对象
     def get_input_embeddings(self):
+        # 返回模型中的嵌入层
         return self.model.decoder.embed_tokens
 
-    # 设置输入的嵌入对象
     def set_input_embeddings(self, value):
+        # 设置模型中的嵌入层
         self.model.decoder.embed_tokens = value
 
-    # 获取输出的嵌入对象
     def get_output_embeddings(self):
+        # 返回语言模型头部的嵌入层
         return self.lm_head
 
-    # 设置输出的嵌入对象
     def set_output_embeddings(self, new_embeddings):
+        # 设置语言模型头部的嵌入层
         self.lm_head = new_embeddings
 
-    # 设置解码器
     def set_decoder(self, decoder):
+        # 设置解码器
         self.model.decoder = decoder
 
-    # 获取解码器
     def get_decoder(self):
+        # 返回解码器
         return self.model.decoder
 
-    # 设置轻量级调整
     def set_lightweight_tuning(self):
+        # 设置轻量级调整
         self.model.set_lightweight_tuning()
+        # 冻结语言模型头部的梯度
         self.lm_head.requires_grad_(False)
 
     @replace_return_docstrings(output_type=CausalLMOutputWithCrossAttentions, config_class=_CONFIG_FOR_DOC)
@@ -1245,55 +1193,51 @@ class MvpForCausalLM(MvpPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+    ):
+        # 模型前向传播方法，支持参数详见函数签名
+        ...
+
     def prepare_inputs_for_generation(
         self, input_ids, past_key_values=None, attention_mask=None, use_cache=None, **kwargs
-    # 该函数用于创建用于解码器模型的注意力掩码
-    def prepare_decoder_input_ids_from_labels(
-        self,
-        labels,
-        decoder_input_ids=None,
-        attention_mask=None,
-        past_key_values=None,
-        use_cache=None,
     ):
-        # 如果没有传入注意力掩码，则新建一个全1的注意力掩码
+        # 为生成准备输入的方法，支持参数详见函数签名
+        ...
+    ):
+        # 如果模型作为编码器-解码器模型的解码器使用，解码器注意力遮罩在需要时动态创建
         if attention_mask is None:
+            # 如果注意力遮罩为空，创建一个全为1的新张量，形状与input_ids相同
             attention_mask = input_ids.new_ones(input_ids.shape)
-    
-        # 如果有过去的关键值（用于生成）
+
         if past_key_values:
-            # 获取过去序列的长度
+            # 获取过去键值的长度（通常是序列长度）
             past_length = past_key_values[0][0].shape[2]
-    
-            # 如果输入序列长度大于过去序列长度，则从输入序列中除去过去序列长度部分
+
+            # 一些生成方法已经只传递最后一个输入ID
             if input_ids.shape[1] > past_length:
+                # 如果输入ID序列长度大于过去长度，计算需要移除的前缀长度
                 remove_prefix_length = past_length
-            # 否则，保留输入序列的最后一个ID
             else:
+                # 否则，默认行为：仅保留最后一个ID
                 remove_prefix_length = input_ids.shape[1] - 1
-    
-            # 从输入序列中除去过去序列部分
+
+            # 从输入ID中移除前缀部分，保留剩余部分作为新的输入ID
             input_ids = input_ids[:, remove_prefix_length:]
-    
-        # 返回包含输入ID、注意力掩码、过去关键值和是否使用缓存的字典
+        # 返回字典，包含模型需要的输入信息和状态信息
         return {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "past_key_values": past_key_values,
-            "use_cache": use_cache,
+            "input_ids": input_ids,  # encoder_outputs is defined. input_ids not needed
+            "attention_mask": attention_mask,  # 注意力遮罩，用于指定哪些位置需要关注
+            "past_key_values": past_key_values,  # 过去的键值状态，用于生成模型的历史信息
+            "use_cache": use_cache,  # 是否使用缓存，以提高生成效率
         }
-    
-    # 该函数用于根据给定的 beam_idx 重新排序过去的关键值
+
     @staticmethod
     def _reorder_cache(past_key_values, beam_idx):
-        # 初始化重新排序后的过去关键值
         reordered_past = ()
-        # 遍历每一层的过去关键值
         for layer_past in past_key_values:
-            # 对每一层的过去关键值进行重新排序
+            # 根据beam_idx重新排列过去的状态信息
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
-        # 返回重新排序后的过去关键值
+        # 返回重新排列后的过去状态
         return reordered_past
 ```

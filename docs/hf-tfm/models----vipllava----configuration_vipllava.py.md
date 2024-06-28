@@ -1,155 +1,89 @@
-# `.\transformers\models\vipllava\configuration_vipllava.py`
+# `.\models\vipllava\configuration_vipllava.py`
 
-```py
-# 设置编码格式为 utf-8
-# 版权声明，版权归 Microsoft Research、University of Wisconsin-Madison 和 HuggingFace Inc. 团队所有
-# 以 Apache 许可证 Version 2.0 (许可证) 授权
-# 你不得使用本文件，除非符合许可证规定
-# 可以在以下网址获取许可证的副本
-# http://www.apache.org/licenses/LICENSE-2.0
-# 除非适用法律要求或书面同意，否则根据许可证分发的软件都是基于"AS IS"基础分发的，
-# 没有任何明示或暗示的担保或条件
-# 请查看许可证以获取关于特定语言的具体权限和限制
-""" VipLlava 模型配置 """
+```
+# 定义模块的版权信息和许可协议
+# coding=utf-8
+# Copyright 2023 Microsoft Research & University of Wisconsin-Madison and the HuggingFace Inc. team. All rights reserved.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# 导入必要的模块和类
+""" VipLlava model configuration"""
+
+# 引入警告模块
+import warnings
+
+# 从 transformers 包中引入预训练配置类 PretrainedConfig
 from ...configuration_utils import PretrainedConfig
+# 从 transformers.utils 中引入日志记录功能
 from ...utils import logging
+# 从 transformers.modeling_auto 中引入配置映射
 from ..auto import CONFIG_MAPPING
 
-# 获取日志记录器实例
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
-# 预训练模型配置文件的下载链接映射
+# 定义预训练模型配置文件的映射
 VIPLLAVA_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "ybelkada/vip-llava-7b-hf": "https://huggingface.co/llava-hf/vip-llava-7b-hf/resolve/main/config.json",
 }
 
-# VipLlava 模型配置类，继承自 PretrainedConfig 类
+# 定义 VipLlavaConfig 类，继承自 PretrainedConfig 类
 class VipLlavaConfig(PretrainedConfig):
     r"""
-    这是一个配置保存 `VipLlavaForConditionalGeneration` 模型的配置类。根据指定的参数实例化一个 VipLlava 模型，定义模型架构。
-    使用默认值实例化配置将得到类似 VipLlava-9B 的配置。
+    This is the configuration class to store the configuration of a [`VipLlavaForConditionalGeneration`]. It is used to instantiate an
+    VipLlava model according to the specified arguments, defining the model architecture. Instantiating a configuration
+    with the defaults will yield a similar configuration to that of the VipLlava-9B.
 
-    例如：[ybelkada/vip-llava-7b-hf](https://huggingface.co/ybelkada/vip-llava-7b-hf)
+    e.g. [ybelkada/vip-llava-7b-hf](https://huggingface.co/ybelkada/vip-llava-7b-hf)
 
-    配置对象继承自 `PretrainedConfig`，可用于控制模型输出。阅读 `PretrainedConfig` 的文档以获取更多信息。
+    Configuration objects inherit from [`PretrainedConfig`] and can be used to control the model outputs. Read the
+    documentation from [`PretrainedConfig`] for more information.
 
-    参数:
+    Args:
         vision_config (`VipLlavaVisionConfig`,  *optional*):
-            自定义视觉配置或字典
+            Custom vision config or dict
         text_config (`Union[AutoConfig, dict]`, *optional*):
-            文本骨干的配置对象。可以是 `LlamaConfig` 或 `MistralConfig` 中的任何一个。
+            The config object of the text backbone. Can be any of `LlamaConfig` or `MistralConfig`.
         ignore_index (`int`, *optional*, defaults to -100):
-            损失函数的忽略索引。
+            The ignore index for the loss function.
         image_token_index (`int`, *optional*, defaults to 32000):
-            用于编码图像提示的图像令牌索引。
+            The image token index to encode the image prompt.
         projector_hidden_act (`str`, *optional*, defaults to `"gelu"`):
-            多模态投影仪使用的激活函数。
+            The activation function used by the multimodal projector.
         projector_layernorm_eps (`float`, *optional*, defaults to 1e-05):
-            投影层规范层的层标准化 epsilon
+            The layer norm epsilon of the projector layernorm
         vision_feature_layers (`List[int]`, *optional*, defaults to `[-2, -5, -8, -11, 6]`):
-            从中选择视觉特征的层列表。
-        vocab_size (`int`, *optional*, defaults to 32000):
-            VipLlava 模型的词汇量。定义 `~VipLlavaForConditionalGeneration` 调用时所传递的 `inputs_ids` 可表示的不同令牌数。
+            The list of layers to select the vision features from.
 
-    示例:
+    Example:
 
     ```python
-    # 导入所需的类
     >>> from transformers import VipLlavaForConditionalGeneration, VipLlavaConfig, CLIPVisionConfig, LlamaConfig
 
-    # 初始化 CLIP-vision 配置
+    >>> # Initializing a CLIP-vision config
     >>> vision_config = CLIPVisionConfig()
 
-    # 初始化 Llama 配置
+    >>> # Initializing a Llama config
     >>> text_config = LlamaConfig()
 
-    # 初始化一个 vipllava-7b 风格的配置
+    ```
+
+    """
+    # 初始化一个 VipLlava vipllava-7b 风格的配置
     >>> configuration = VipLlavaConfig(vision_config, text_config)
 
     # 使用 vipllava-7b 风格的配置初始化一个模型
     >>> model = VipLlavaForConditionalGeneration(configuration)
 
-    # 访问模型配置
+    # 获取模型的配置信息
     >>> configuration = model.config
-    ```py
-
-    # 模型类型
-    model_type = "vipllava"
-    # 是否为组合模型
-    is_composition = False
-
-    # 初始化函数
-    def __init__(
-        self,
-        vision_config=None,
-        text_config=None,
-        ignore_index=-100,
-        image_token_index=32000,
-        projector_hidden_act="gelu",
-        projector_layernorm_eps=1e-5,
-        vision_feature_layers=[-2, -5, -8, -11, 6],
-        vocab_size=32000,
-        **kwargs,
-    ):
-        # 设置忽略索引
-        self.ignore_index = ignore_index
-        # 图像标记索引
-        self.image_token_index = image_token_index
-        # 投影层激活函数
-        self.projector_hidden_act = projector_hidden_act
-        # 投影层层归一化的 epsilon
-        self.projector_layernorm_eps = projector_layernorm_eps
-        # 视觉特征提取层
-        self.vision_feature_layers = vision_feature_layers
-        # 词汇表大小
-        self.vocab_size = vocab_size
-
-        # 视觉配置
-        self.vision_config = vision_config
-
-        # 如果传入的视觉配置是字典
-        if isinstance(self.vision_config, dict):
-            # 设置模型类型
-            vision_config["model_type"] = (
-                vision_config["model_type"] if "model_type" in vision_config else "clip_vision_model"
-            )
-            # 根据模型类型创建相应的配置
-            self.vision_config = CONFIG_MAPPING[vision_config["model_type"]](**vision_config)
-        # 如果未传入视觉配置
-        elif vision_config is None:
-            # 使用默认的 CLIP 视觉模型配置
-            self.vision_config = CONFIG_MAPPING["clip_vision_model"](
-                intermediate_size=4096,
-                hidden_size=1024,
-                patch_size=14,
-                image_size=336,
-                num_hidden_layers=24,
-                num_attention_heads=16,
-                vocab_size=32000,
-                projection_dim=768,
-            )
-        # 设置词汇表大小
-        self.vocab_size = self.vocab_size
-
-        # 文本配置
-        self.text_config = text_config
-
-        # 如果传入的文本配置是字典
-        if isinstance(self.text_config, dict):
-            # 设置模型类型
-            text_config["model_type"] = text_config["model_type"] if "model_type" in text_config else "llama"
-            # 根据模型类型创建相应的配置
-            self.text_config = CONFIG_MAPPING[text_config["model_type"]](**text_config)
-            # 更新词汇表大小
-            self.vocab_size = self.text_config.vocab_size
-        # 如果未传入文本配置
-        elif text_config is None:
-            # 使用默认的 Llama 文本模型配置
-            self.text_config = CONFIG_MAPPING["llama"]()
-
-        # 调用父类的初始化函数
-        super().__init__(**kwargs)
-```  
 ```

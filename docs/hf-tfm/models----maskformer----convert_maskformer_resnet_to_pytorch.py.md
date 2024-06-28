@@ -1,14 +1,21 @@
-# `.\transformers\models\maskformer\convert_maskformer_resnet_to_pytorch.py`
+# `.\models\maskformer\convert_maskformer_resnet_to_pytorch.py`
 
 ```
-# 设置脚本的编码格式为 utf-8
-# 版权声明，版权归 The HuggingFace Inc. 团队所有
-# 使用 Apache 许可证 2.0 版本，只有在遵守许可证的情况下才能使用该文件
-# 可以从以下地址获取许可证副本 http://www.apache.org/licenses/LICENSE-2.0
-# 未经适用法律或书面同意，不得使用此文件
-# 分发的软件基于"原样"基础分发，没有任何明示或暗示的担保或条件
-# 查看许可证以了解特定语言的权限和限制
-"""将原始仓库中具有 ResNet 骨干的 MaskFormer 检查点转换为 Hugging Face 模型。URL:
+# coding=utf-8
+# Copyright 2022 The HuggingFace Inc. team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Convert MaskFormer checkpoints with ResNet backbone from the original repository. URL:
 https://github.com/facebookresearch/MaskFormer"""
 
 
@@ -26,33 +33,29 @@ from transformers import MaskFormerConfig, MaskFormerForInstanceSegmentation, Ma
 from transformers.utils import logging
 
 
-logging.set_verbosity_info()
-# 设置日志记录器
-logger = logging.get_logger(__name__)
+logging.set_verbosity_info()  # 设置日志输出级别为信息级别
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器
 
 
 def get_maskformer_config(model_name: str):
-    # 如果模型名称包含"resnet101c"
+    # 根据模型名称获取相应的 MaskFormer 配置
     if "resnet101c" in model_name:
-        # TODO 添加 ResNet-C 骨干的支持，该骨干使用 "deeplab" stem
-        raise NotImplementedError("To do")
-    # 如果模型名称包含"resnet101"
+        # TODO add support for ResNet-C backbone, which uses a "deeplab" stem
+        raise NotImplementedError("To do")  # 抛出未实现的错误，提示需要添加对 ResNet-C 的支持
     elif "resnet101" in model_name:
-        # 使用预训练的 ResNet-101 配置，输出特征有["stage1", "stage2", "stage3", "stage4"]
+        # 使用 Microsoft 的 ResNet-101 作为骨干网络配置
         backbone_config = ResNetConfig.from_pretrained(
             "microsoft/resnet-101", out_features=["stage1", "stage2", "stage3", "stage4"]
         )
     else:
-        # 使用预训练的 ResNet-50 配置，输出特征有["stage1", "stage2", "stage3", "stage4"]
+        # 默认使用 Microsoft 的 ResNet-50 作为骨干网络配置
         backbone_config = ResNetConfig.from_pretrained(
             "microsoft/resnet-50", out_features=["stage1", "stage2", "stage3", "stage4"]
         )
-    # 创建 MaskFormer 模型配置，使用 ResNet 骨干配置
     config = MaskFormerConfig(backbone_config=backbone_config)
 
-    # 获取存储库 ID
+    # 根据模型名称设置相应的标签数量和文件名
     repo_id = "huggingface/label-files"
-    # 根据模型名称设置不同的标签数量和文件名
     if "ade20k-full" in model_name:
         config.num_labels = 847
         filename = "maskformer-ade20k-full-id2label.json"
@@ -73,52 +76,59 @@ def get_maskformer_config(model_name: str):
         config.num_labels = 65
         filename = "mapillary-vistas-id2label.json"
 
-    # 加载 id 到标签的映射关系
+    # 从 HF Hub 下载指定的标签文件，并加载为 id 到 label 的映射字典
     id2label = json.load(open(hf_hub_download(repo_id, filename, repo_type="dataset"), "r"))
-    id2label = {int(k): v for k, v in id2label.items()}
+    id2label = {int(k): v for k, v in id2label.items()}  # 将 id 转换为整数类型
     config.id2label = id2label
-    config.label2id = {v: k for k, v in id2label.items()}
+    config.label2id = {v: k for k, v in id2label.items()}  # 构建 label 到 id 的映射字典
 
     return config
 
 
 def create_rename_keys(config):
-    # 创建重命名键列表
     rename_keys = []
-    # stem
-    # fmt: off
-    # 添加重命名键对，将原骨干的权重命名为新模型的权重
+    # 添加重命名键，映射 backbone.stem.conv1.weight 到 model.pixel_level_module.encoder.embedder.embedder.convolution.weight
     rename_keys.append(("backbone.stem.conv1.weight", "model.pixel_level_module.encoder.embedder.embedder.convolution.weight"))
-    # 将键值对元组添加到列表中，用于重命名模型参数
+    # 添加新的键值对到 rename_keys 列表中，用于将模型中的特定参数路径重命名为新路径
     rename_keys.append(("backbone.stem.conv1.norm.weight", "model.pixel_level_module.encoder.embedder.embedder.normalization.weight"))
     rename_keys.append(("backbone.stem.conv1.norm.bias", "model.pixel_level_module.encoder.embedder.embedder.normalization.bias"))
     rename_keys.append(("backbone.stem.conv1.norm.running_mean", "model.pixel_level_module.encoder.embedder.embedder.normalization.running_mean"))
     rename_keys.append(("backbone.stem.conv1.norm.running_var", "model.pixel_level_module.encoder.embedder.embedder.normalization.running_var"))
-    # 格式设置：开启格式化
+
+    # 在 fmt: on 之后的代码段，用于指示代码风格格式化工具保持打开状态
+
     # stages
     # FPN
-    # 格式设置：关闭格式化
+
+    # 在 fmt: off 之后的代码段，用于指示代码风格格式化工具关闭格式化
+
+    # 将 sem_seg_head.layer_4 的权重重命名为 model.pixel_level_module.decoder.fpn.stem.0 的权重
     rename_keys.append(("sem_seg_head.layer_4.weight", "model.pixel_level_module.decoder.fpn.stem.0.weight"))
+    # 将 sem_seg_head.layer_4 的归一化权重重命名为 model.pixel_level_module.decoder.fpn.stem.1 的权重
     rename_keys.append(("sem_seg_head.layer_4.norm.weight", "model.pixel_level_module.decoder.fpn.stem.1.weight"))
+    # 将 sem_seg_head.layer_4 的归一化偏置重命名为 model.pixel_level_module.decoder.fpn.stem.1 的偏置
     rename_keys.append(("sem_seg_head.layer_4.norm.bias", "model.pixel_level_module.decoder.fpn.stem.1.bias"))
-    # 使用 zip 函数创建索引范围并同时迭代两个列表，用于重命名模型参数
+
+    # 针对一系列逆序的源索引和目标索引，将 sem_seg_head.adapter_{source_index} 的权重和归一化参数
+    # 重命名为 model.pixel_level_module.decoder.fpn.layers.{target_index} 下的对应投影层权重和偏置
     for source_index, target_index in zip(range(3, 0, -1), range(0, 3)):
-        # 逐层重命名适配器和卷积层参数
         rename_keys.append((f"sem_seg_head.adapter_{source_index}.weight", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.proj.0.weight"))
         rename_keys.append((f"sem_seg_head.adapter_{source_index}.norm.weight", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.proj.1.weight"))
         rename_keys.append((f"sem_seg_head.adapter_{source_index}.norm.bias", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.proj.1.bias"))
         rename_keys.append((f"sem_seg_head.layer_{source_index}.weight", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.block.0.weight"))
         rename_keys.append((f"sem_seg_head.layer_{source_index}.norm.weight", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.block.1.weight"))
         rename_keys.append((f"sem_seg_head.layer_{source_index}.norm.bias", f"model.pixel_level_module.decoder.fpn.layers.{target_index}.block.1.bias"))
-    # 重命名掩码特征的参数
+
+    # 将 sem_seg_head.mask_features 的权重重命名为 model.pixel_level_module.decoder.mask_projection 的权重
     rename_keys.append(("sem_seg_head.mask_features.weight", "model.pixel_level_module.decoder.mask_projection.weight"))
+    # 将 sem_seg_head.mask_features 的偏置重命名为 model.pixel_level_module.decoder.mask_projection 的偏置
     rename_keys.append(("sem_seg_head.mask_features.bias", "model.pixel_level_module.decoder.mask_projection.bias"))
-    # 格式设置：开启格式化
+
+    # 在 fmt: on 之后的代码段，用于指示代码风格格式化工具保持打开状态
 
     # Transformer decoder
-    # 格式设置：关闭格式化
+    # fmt: off
     for idx in range(config.decoder_config.decoder_layers):
-        # 针对每一层 decoder，将对应的参数名映射到新的模型参数名
         # self-attention out projection
         rename_keys.append((f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.self_attn.out_proj.weight", f"model.transformer_module.decoder.layers.{idx}.self_attn.out_proj.weight"))
         rename_keys.append((f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.self_attn.out_proj.bias", f"model.transformer_module.decoder.layers.{idx}.self_attn.out_proj.bias"))
@@ -141,123 +151,99 @@ def create_rename_keys(config):
         rename_keys.append((f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.norm3.weight", f"model.transformer_module.decoder.layers.{idx}.final_layer_norm.weight"))
         rename_keys.append((f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.norm3.bias", f"model.transformer_module.decoder.layers.{idx}.final_layer_norm.bias"))
 
-    # 将最后一个映射的参数名映射到新的模型的参数名
+    # Add renaming for the final layer norm weight
     rename_keys.append(("sem_seg_head.predictor.transformer.decoder.norm.weight", "model.transformer_module.decoder.layernorm.weight"))
-    # 将键的重命名信息添加到重命名键列表中
+    # 将旧的键值对添加到重命名列表中，用新的键值对替换
     rename_keys.append(("sem_seg_head.predictor.transformer.decoder.norm.bias", "model.transformer_module.decoder.layernorm.bias"))
     # fmt: on
-    
-    # 开启格式化（fmt: on）
-    
-    # 头部操作
-    # fmt: off
-    # 将查询嵌入权重的重命名信息添加到重命名键列表中
-    rename_keys.append(("sem_seg_head.predictor.query_embed.weight", "model.transformer_module.queries_embedder.weight"))
-    
-    # 将输入投影权重的重命名信息添加到重命名键列表中
-    rename_keys.append(("sem_seg_head.predictor.input_proj.weight", "model.transformer_module.input_projection.weight"))
-    # 将输入投影偏差的重命名信息添加到重命名键列表中
-    rename_keys.append(("sem_seg_head.predictor.input_proj.bias", "model.transformer_module.input_projection.bias"))
-    
-    # 将类别嵌入权重的重命名信息添加到重命名键列表中
-    rename_keys.append(("sem_seg_head.predictor.class_embed.weight", "class_predictor.weight"))
-    # 将类别嵌入偏差的重命名信息添加到重命名键列表中
-    rename_keys.append(("sem_seg_head.predictor.class_embed.bias", "class_predictor.bias"))
-    
-    # 遍历三个层级，将每个层级的蒙版嵌入权重和偏差的重命名信息添加到重命名键列表中
-    for i in range(3):
-        rename_keys.append((f"sem_seg_head.predictor.mask_embed.layers.{i}.weight", f"mask_embedder.{i}.0.weight"))
-        rename_keys.append((f"sem_seg_head.predictor.mask_embed.layers.{i}.bias", f"mask_embedder.{i}.0.bias"))
-    # fmt: on
-    
-    # 返回重命名键列表
-    return rename_keys
-# 更改字典中的键名，将旧键名替换为新键名
+
+    # 以下是将语句组织成一个块并且将其关闭
+
+    # 网络，
+# 从字典 dct 中弹出键 old 对应的值，并赋值给变量 val
 def rename_key(dct, old, new):
-    # 从字典中移除旧键并获取其值
     val = dct.pop(old)
-    # 将该值赋给新键名
+    # 将键 new 添加到字典 dct，并将其值设为 val
     dct[new] = val
 
 
-# 将每层解码器的矩阵拆分为查询（queries）、键（keys）和值（values）
+# 将每个编码器层的矩阵拆分为查询（queries）、键（keys）和值（values）
 def read_in_decoder_q_k_v(state_dict, config):
-    # 关闭代码格式化检查
     # fmt: off
-    # 获取解码器的隐藏层大小
+    # 从配置中获取解码器隐藏层的大小
     hidden_size = config.decoder_config.hidden_size
-    # 遍历解码器中的所有层
+    # 遍历所有解码器层
     for idx in range(config.decoder_config.decoder_layers):
-        # 从状态字典中移除自注意力的输入投影矩阵和偏差
+        # 读取自注意力输入投影层的权重和偏置
         in_proj_weight = state_dict.pop(f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.self_attn.in_proj_weight")
         in_proj_bias = state_dict.pop(f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.self_attn.in_proj_bias")
-        # 在状态字典中添加查询的权重和偏差
+        # 将查询（q_proj）、键（k_proj）和值（v_proj）添加到状态字典中
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.q_proj.weight"] = in_proj_weight[: hidden_size, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.q_proj.bias"] = in_proj_bias[:config.hidden_size]
-        # 在状态字典中添加键的权重和偏差
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.k_proj.weight"] = in_proj_weight[hidden_size : hidden_size * 2, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.k_proj.bias"] = in_proj_bias[hidden_size : hidden_size * 2]
-        # 在状态字典中添加值的权重和偏差
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.v_proj.weight"] = in_proj_weight[-hidden_size :, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.self_attn.v_proj.bias"] = in_proj_bias[-hidden_size :]
-        # 从状态字典中移除交叉注意力的输入投影矩阵和偏差
+        
+        # 读取交叉注意力输入投影层的权重和偏置
         in_proj_weight = state_dict.pop(f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.multihead_attn.in_proj_weight")
         in_proj_bias = state_dict.pop(f"sem_seg_head.predictor.transformer.decoder.layers.{idx}.multihead_attn.in_proj_bias")
-        # 在状态字典中添加交叉注意力的查询的权重和偏差
+        # 将查询（q_proj）、键（k_proj）和值（v_proj）添加到状态字典中
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.q_proj.weight"] = in_proj_weight[: hidden_size, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.q_proj.bias"] = in_proj_bias[:config.hidden_size]
-        # 在状态字典中添加交叉注意力的键的权重和偏差
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.k_proj.weight"] = in_proj_weight[hidden_size : hidden_size * 2, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.k_proj.bias"] = in_proj_bias[hidden_size : hidden_size * 2]
-        # 在状态字典中添加交叉注意力的值的权重和偏差
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.v_proj.weight"] = in_proj_weight[-hidden_size :, :]
         state_dict[f"model.transformer_module.decoder.layers.{idx}.encoder_attn.v_proj.bias"] = in_proj_bias[-hidden_size :]
-    # 重新打开代码格式化检查
     # fmt: on
 
 
-# 准备一张包含可爱小猫的图像，作为后续步骤的验证输入
+# 我们将在一张可爱猫咪的图片上验证我们的结果
 def prepare_img() -> torch.Tensor:
-    # 定义图片的 URL 地址
+    # 定义一个 URL 变量，指向一个图像文件的地址
     url = "http://images.cocodataset.org/val2017/000000039769.jpg"
-    # 使用 requests 库发出 GET 请求，获取图片数据流，并交给 Image.open() 函数打开图片
+    # 使用 requests 库发送 GET 请求，获取图像文件的内容流
+    # 并使用 Image.open 方法打开流，返回一个图像对象
     im = Image.open(requests.get(url, stream=True).raw)
-    # 返回打开的图片对象
+    # 返回获取的图像对象
     return im
-# 使用 torch.no_grad() 修饰的函数，表示在此函数中的操作将不会计算梯度
 @torch.no_grad()
+# 使用装饰器 torch.no_grad() 包装函数，确保在该函数内部的所有操作都不会进行梯度计算
+
 def convert_maskformer_checkpoint(
     model_name: str, checkpoint_path: str, pytorch_dump_folder_path: str, push_to_hub: bool = False
 ):
     """
-    复制/粘贴/调整模型的权重到我们的 MaskFormer 结构中。
+    Copy/paste/tweak model's weights to our MaskFormer structure.
     """
-    # 获取指定模型的配置信息
+    # 根据模型名称获取对应的 MaskFormer 配置信息
     config = get_maskformer_config(model_name)
 
-    # 读取原始 state_dict
+    # 从文件中加载原始的状态字典数据
     with open(checkpoint_path, "rb") as f:
         data = pickle.load(f)
     state_dict = data["model"]
 
-    # 重命名键名
+    # 根据预定义的映射关系重命名状态字典中的键
     rename_keys = create_rename_keys(config)
     for src, dest in rename_keys:
         rename_key(state_dict, src, dest)
+    
+    # 读取 Decoder 部分的 q, k, v 参数信息并更新到状态字典中
     read_in_decoder_q_k_v(state_dict, config)
 
-    # 更新为 torch 张量
+    # 将状态字典中的 numpy 数组转换为 torch 张量
     for key, value in state_dict.items():
         state_dict[key] = torch.from_numpy(value)
 
-    # 加载模型
+    # 加载 MaskFormer 模型，并设为评估模式
     model = MaskFormerForInstanceSegmentation(config)
     model.eval()
 
-    # 加载权重
+    # 加载状态字典到模型中
     model.load_state_dict(state_dict)
 
-    # 验证结果
+    # 验证模型预期输出
     image = prepare_img()
     if "vistas" in model_name:
         ignore_index = 65
@@ -266,13 +252,17 @@ def convert_maskformer_checkpoint(
     else:
         ignore_index = 255
     reduce_labels = True if "ade" in model_name else False
+    
+    # 创建图像处理器实例，用于处理模型的输出
     image_processor = MaskFormerImageProcessor(ignore_index=ignore_index, reduce_labels=reduce_labels)
 
+    # 准备输入数据
     inputs = image_processor(image, return_tensors="pt")
 
+    # 调用模型进行推理
     outputs = model(**inputs)
 
-    # 根据模型名称设置预期的 logits
+    # 根据模型名称设置预期的 logits 值
     if model_name == "maskformer-resnet50-ade":
         expected_logits = torch.tensor(
             [[6.7710, -0.1452, -3.5687], [1.9165, -1.0010, -1.8614], [3.6209, -0.2950, -1.3813]]
@@ -281,42 +271,61 @@ def convert_maskformer_checkpoint(
         expected_logits = torch.tensor(
             [[4.0381, -1.1483, -1.9688], [2.7083, -1.9147, -2.2555], [3.4367, -1.3711, -2.1609]]
         )
-    # 省略其他模型的预期 logits
-    # 检查输出的 class_queries_logits 是否与预期值接近
+    elif model_name == "maskformer-resnet50-coco-stuff":
+        expected_logits = torch.tensor(
+            [[3.2309, -3.0481, -2.8695], [5.4986, -5.4242, -2.4211], [6.2100, -5.2279, -2.7786]]
+        )
+    elif model_name == "maskformer-resnet101-coco-stuff":
+        expected_logits = torch.tensor(
+            [[4.7188, -3.2585, -2.8857], [6.6871, -2.9181, -1.2487], [7.2449, -2.2764, -2.1874]]
+        )
+    elif model_name == "maskformer-resnet101-cityscapes":
+        expected_logits = torch.tensor(
+            [[-1.8861, -1.5465, 0.6749], [-2.3677, -1.6707, -0.0867], [-2.2314, -1.9530, -0.9132]]
+        )
+    elif model_name == "maskformer-resnet50-vistas":
+        expected_logits = torch.tensor(
+            [[-6.3917, -1.5216, -1.1392], [-5.5335, -4.5318, -1.8339], [-4.3576, -4.0301, 0.2162]]
+        )
+    elif model_name == "maskformer-resnet50-ade20k-full":
+        expected_logits = torch.tensor(
+            [[3.6146, -1.9367, -3.2534], [4.0099, 0.2027, -2.7576], [3.3913, -2.3644, -3.9519]]
+        )
+    elif model_name == "maskformer-resnet101-ade20k-full":
+        expected_logits = torch.tensor(
+            [[3.2211, -1.6550, -2.7605], [2.8559, -2.4512, -2.9574], [2.6331, -2.6775, -2.1844]]
+        )
+    # 断言：检查模型输出的前三个类别查询的对数概率是否与预期值在给定的误差范围内相等
     assert torch.allclose(outputs.class_queries_logits[0, :3, :3], expected_logits, atol=1e-4)
-    # 输出提示信息，表示检查通过
+    # 打印消息，表示检查通过
     print("Looks ok!")
-    
-    # 如果指定了保存路径
+
+    # 如果提供了 PyTorch 模型保存路径
     if pytorch_dump_folder_path is not None:
-        # 输出保存模型和图像处理器的信息
+        # 打印消息，指示正在保存模型和图像处理器到指定路径
         print(f"Saving model and image processor of {model_name} to {pytorch_dump_folder_path}")
-        # 创建保存路径
+        # 确保保存路径存在，如果不存在则创建
         Path(pytorch_dump_folder_path).mkdir(exist_ok=True)
-        # 保存模型
+        # 将模型保存到指定路径
         model.save_pretrained(pytorch_dump_folder_path)
-        # 保存图像处理器
+        # 将图像处理器保存到指定路径
         image_processor.save_pretrained(pytorch_dump_folder_path)
-    
-    # 如果需要推送到 Hub
+
+    # 如果需要推送到模型中心（hub）
     if push_to_hub:
-        # 输出推送模型和图像处理器的信息
+        # 打印消息，表示正在推送模型和图像处理器到中心（hub）
         print(f"Pushing model and image processor of {model_name} to the hub...")
-        # 推送模型到 Hub
+        # 将模型推送到模型中心（hub）
         model.push_to_hub(f"facebook/{model_name}")
-        # 推送图像处理器到 Hub
+        # 将图像处理器推送到模型中心（hub）
         image_processor.push_to_hub(f"facebook/{model_name}")
-# 当该脚本作为主程序运行时，执行以下操作
 if __name__ == "__main__":
-    # 创建一个参数解析器对象
+    # 如果脚本作为主程序运行，则执行以下代码
+
     parser = argparse.ArgumentParser()
-    # 定义需要的参数
+    # 创建参数解析器对象
+
     # Required parameters
-    # 添加 model_name 参数
-    # 默认值为 "maskformer-resnet50-ade"
-    # 数据类型为字符串，必须提供
-    # 可选值包括一系列 MaskFormer 模型名称
-    # 添加参数的帮助信息
     parser.add_argument(
         "--model_name",
         default="maskformer-resnet50-ade",
@@ -334,33 +343,31 @@ if __name__ == "__main__":
         ],
         help=("Name of the MaskFormer model you'd like to convert",),
     )
-    # 添加 checkpoint_path 参数
-    # 数据类型为字符串，必须提供
-    # 添加参数的帮助信息
+    # 添加必需的参数：模型名称，指定默认值和可选的模型名称列表
+
     parser.add_argument(
         "--checkpoint_path",
         type=str,
         required=True,
         help=("Path to the original pickle file (.pkl) of the original checkpoint.",),
     )
-    # 添加 pytorch_dump_folder_path 参数
-    # 数据类型为字符串，默认为 None
-    # 添加参数的帮助信息
+    # 添加参数：原始检查点文件的路径，必须提供路径值
+
     parser.add_argument(
         "--pytorch_dump_folder_path", default=None, type=str, help="Path to the output PyTorch model directory."
     )
-    # 添加 push_to_hub 参数
-    # 如果出现则为 True，否则为 False
-    # 添加参数的帮助信息
+    # 添加参数：输出 PyTorch 模型的目录路径，默认为 None
+
     parser.add_argument(
         "--push_to_hub", action="store_true", help="Whether or not to push the converted model to the 🤗 hub."
     )
+    # 添加参数：是否将转换后的模型推送到 🤗 hub
 
-    # 解析命令行参数
     args = parser.parse_args()
-    # 调用 convert_maskformer_checkpoint 函数
-    # 参数为上面定义的参数
+    # 解析命令行参数并返回一个命名空间对象 args
+
     convert_maskformer_checkpoint(
         args.model_name, args.checkpoint_path, args.pytorch_dump_folder_path, args.push_to_hub
     )
+    # 调用函数 convert_maskformer_checkpoint，传递命令行参数中的模型名称、检查点路径、PyTorch 模型输出路径和推送标志作为参数
 ```

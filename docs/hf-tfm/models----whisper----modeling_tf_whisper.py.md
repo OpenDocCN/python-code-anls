@@ -1,30 +1,33 @@
-# `.\transformers\models\whisper\modeling_tf_whisper.py`
+# `.\models\whisper\modeling_tf_whisper.py`
 
-```py
-# 设置脚本编码为 UTF-8
-# 版权声明
-# 版权所有 2022 年 OpenAI 作者和 HuggingFace Inc. 团队。保留所有权利。
+```
+# 设置文件编码为 UTF-8
+# Copyright 2022 The OpenAI Authors and The HuggingFace Inc. team. All rights reserved.
 #
-# 根据 Apache 许可证 2.0 版本（“许可证”）获得许可；
-# 除非符合许可证，否则您不得使用此文件。
-# 您可以在以下网址获得许可证副本：
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则软件
-# 按“原样”分发，不提供任何明示或暗示的保证
-# 或适用于特定用途的条件。
-# 有关详细信息，请参阅许可证。
-""" TensorFlow Whisper 模型。"""
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" TensorFlow Whisper model."""
 
-# 引入必要的库
+
 from __future__ import annotations
+
 import math
 import random
 from typing import Dict, List, Optional, Tuple, Union
+
 import numpy as np
 import tensorflow as tf
-# 导入相关模块和类
+
+# 导入自定义模块
 from ...activations_tf import get_tf_activation
 from ...generation.configuration_utils import GenerationConfig
 from ...generation.tf_logits_process import TFLogitsProcessorList
@@ -38,6 +41,7 @@ from ...modeling_tf_utils import (
     TFCausalLanguageModelingLoss,
     TFModelInputType,
     TFPreTrainedModel,
+    keras,
     keras_serializable,
     unpack_inputs,
 )
@@ -46,107 +50,115 @@ from ...utils import add_start_docstrings, add_start_docstrings_to_model_forward
 from .configuration_whisper import WhisperConfig
 from .tokenization_whisper import TASK_IDS, TO_LANGUAGE_CODE
 
-# 获取 logger 对象
+# 获取日志记录器
 logger = logging.get_logger(__name__)
 
-# 用于文档的配置字符串
+# 用于文档的配置信息
 _CONFIG_FOR_DOC = "WhisperConfig"
 
-# 预训练模型存档列表
+# 预训练模型的存档列表
 TF_WHISPER_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "openai/whisper-base",
-    # 查看所有 Whisper 模型 https://huggingface.co/models?filter=whisper
+    # 查看所有 Whisper 模型：https://huggingface.co/models?filter=whisper
 ]
 
-# 用于生成大负数的常量
+# 定义一个大负数常量
 LARGE_NEGATIVE = -1e8
 
-# 用于初始化位置嵌入的正弦函数
+
 def sinusoidal_embedding_init(shape, dtype=tf.float32) -> tf.Tensor:
-    """返回用于位置嵌入的正弦函数"""
+    """Returns sinusoids for positional embedding"""
+    # 解构形状元组
     length, channels = shape
+    # 如果通道数不能被2整除，则抛出异常
     if channels % 2 != 0:
         raise ValueError(
-            f"正弦位置嵌入的通道数必须为 2 的倍数，当前通道数为 {channels}。"
+            f"Number of channels has to be divisible by 2 for sinusoidal positional embeddings, got {channels} channels."
         )
+    # 计算时间尺度增量的对数
     log_timescale_increment = math.log(10000) / (channels // 2 - 1)
+    # 计算时间尺度的倒数
     inv_timescales = tf.exp(-log_timescale_increment * tf.range(channels // 2, dtype=tf.float32))
+    # 缩放时间
     scaled_time = tf.reshape(tf.range(length, dtype=tf.float32), (-1, 1)) * tf.reshape(inv_timescales, (1, -1))
+    # 合并正弦和余弦的时间编码
     return tf.cast(tf.concat([tf.sin(scaled_time), tf.cos(scaled_time)], axis=1), dtype)
+
 
 # 从 transformers.models.bart.modeling_tf_bart.shift_tokens_right 复制的函数
 def shift_tokens_right(input_ids: tf.Tensor, pad_token_id: int, decoder_start_token_id: int):
-    """将输入的 tokens 向右移动一位"""
+    # 将 pad_token_id 和 decoder_start_token_id 转换为与 input_ids 相同的数据类型
     pad_token_id = tf.cast(pad_token_id, input_ids.dtype)
     decoder_start_token_id = tf.cast(decoder_start_token_id, input_ids.dtype)
-``` 
-    # 创建一个形状为(input_ids的行数, 1)的张量，其中填充值为decoder_start_token_id
+    # 创建起始标记的张量，用于decoder输入的起始
     start_tokens = tf.fill(
         (shape_list(input_ids)[0], 1), tf.convert_to_tensor(decoder_start_token_id, input_ids.dtype)
     )
-    # 将start_tokens与input_ids的前n-1列拼接起来，形成shifted_input_ids
+    
+    # 将输入的ids向左移动一个位置，用于生成decoder输入序列
     shifted_input_ids = tf.concat([start_tokens, input_ids[:, :-1]], -1)
-    # 将shifted_input_ids中可能的-100值替换为pad_token_id
+    
+    # 将labels中可能的-100值替换为`pad_token_id`
     shifted_input_ids = tf.where(
         shifted_input_ids == -100,
         tf.fill(shape_list(shifted_input_ids), tf.convert_to_tensor(pad_token_id, input_ids.dtype)),
         shifted_input_ids,
     )
 
-    # 断言shifted_input_ids里的值必须为正数或-100
+    # 断言`shifted_input_ids`中的值大于等于0或者为-100
     assert_gte0 = tf.debugging.assert_greater_equal(shifted_input_ids, tf.constant(0, dtype=input_ids.dtype))
 
-    # 确保断言操作被调用，通过将结果包装在一个无操作的身份操作中
+    # 确保断言操作被调用，通过在结果外包装一个identity no-op
     with tf.control_dependencies([assert_gte0]):
         shifted_input_ids = tf.identity(shifted_input_ids)
 
     return shifted_input_ids
-# 从transformers.models.bart.modeling_tf_bart._make_causal_mask中复制而来的函数，用于生成用于双向自注意力的因果掩码
+# 从transformers库中复制的函数，用于生成用于自注意力的因果遮罩
 def _make_causal_mask(input_ids_shape: tf.TensorShape, past_key_values_length: int = 0):
     """
     Make causal mask used for bi-directional self-attention.
-    生成用于双向自注意力的因果掩码。
     """
     # 获取批量大小
     bsz = input_ids_shape[0]
-    # 获取目标长度
+    # 获取目标序列长度
     tgt_len = input_ids_shape[1]
-    # 创建形状为(tgt_len, tgt_len)的由-LARGE_NEGATIVE填充的全1矩阵
+    # 创建一个形状为(tgt_len, tgt_len)的矩阵，并用大负数初始化
     mask = tf.ones((tgt_len, tgt_len)) * LARGE_NEGATIVE
-    # 创建掩码条件，形状为(mask的最后一个维度的长度)
+    # 创建一个与tgt_len长度相等的序列
     mask_cond = tf.range(shape_list(mask)[-1])
 
-    # 将掩码的下三角部分置零
+    # 将 mask 中小于 mask_cond + 1 的位置置为0
     mask = tf.where(mask_cond < tf.reshape(mask_cond + 1, (shape_list(mask)[-1], 1)), 0.0, mask)
 
-    # 如果有过去的键值对长度大于0，则将全零部分拼接到掩码左侧
+    # 如果过去键值长度大于0，则在mask的左侧连接一个形状为(tgt_len, past_key_values_length)的零矩阵
     if past_key_values_length > 0:
         mask = tf.concat([tf.zeros((tgt_len, past_key_values_length)), mask], axis=-1)
 
+    # 返回形状为(bsz, 1, tgt_len, tgt_len)的mask矩阵
     return tf.tile(mask[None, None, :, :], (bsz, 1, 1, 1))
 
 
-# 从transformers.models.bart.modeling_tf_bart._expand_mask中复制而来的函数，用于扩展掩码
+# 从transformers库中复制的函数，用于将注意力遮罩从[bsz, seq_len]扩展到[bsz, 1, tgt_seq_len, src_seq_len]
 def _expand_mask(mask: tf.Tensor, tgt_len: Optional[int] = None):
     """
     Expands attention_mask from `[bsz, seq_len]` to `[bsz, 1, tgt_seq_len, src_seq_len]`.
-    将注意力掩码从`[bsz, seq_len]`扩展到`[bsz, 1, tgt_seq_len, src_seq_len]`。
     """
-    # 获取源序列长度
+    # 获取输入mask的源序列长度
     src_len = shape_list(mask)[1]
-    # 如果未指定目标长度，则将目标长度设为与源序列长度相同
+    # 如果未提供tgt_len，则使用源序列长度
     tgt_len = tgt_len if tgt_len is not None else src_len
-    # 创建常数张量1
+    # 创建一个常数张量，值为1.0
     one_cst = tf.constant(1.0)
-    # 将掩码转换为与one_cst相同的数据类型
+    # 将mask转换为与one_cst相同的数据类型
     mask = tf.cast(mask, dtype=one_cst.dtype)
-    # 在第2和第3维度上复制掩码，使其形状为`[bsz, 1, tgt_seq_len, src_seq_len]`
+    # 在第二维上将mask扩展为形状为[bsz, 1, tgt_len, src_len]的张量
     expanded_mask = tf.tile(mask[:, None, None, :], (1, 1, tgt_len, 1))
 
+    # 返回形状为[bsz, 1, tgt_len, src_len]的扩展后的遮罩，其中未覆盖区域的值乘以一个大负数
     return (one_cst - expanded_mask) * LARGE_NEGATIVE
 
 
-class TFWhisperPositionalEmbedding(tf.keras.layers.Layer):
+class TFWhisperPositionalEmbedding(keras.layers.Layer):
     def __init__(
         self,
         num_positions: int,
@@ -156,14 +168,13 @@ class TFWhisperPositionalEmbedding(tf.keras.layers.Layer):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        # 初始化位置嵌入层
         self.num_positions = num_positions
         self.embedding_dim = embedding_dim
         self.padding_idx = padding_idx
-        self.embedding_initializer = tf.keras.initializers.get(embedding_initializer)
+        self.embedding_initializer = keras.initializers.get(embedding_initializer)
 
     def build(self, input_shape):
-        # 添加权重
+        # 添加名为'weight'的权重，形状为[num_positions, embedding_dim]，由embedding_initializer初始化
         self.weight = self.add_weight(
             name="weight",
             shape=[self.num_positions, self.embedding_dim],
@@ -173,15 +184,15 @@ class TFWhisperPositionalEmbedding(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, input_ids, past_key_values_length=0):
-        # 将过去键值对的长度转换为tf.int32类型
+        # 将past_key_values_length转换为tf.int32类型
         past_key_values_length = tf.cast(past_key_values_length, tf.int32)
-        # 生成gather的索引
+        # 创建一个序列，从past_key_values_length开始，步长为1，长度为input_ids的第二个维度的长度
         gather_indices = tf.range(tf.shape(input_ids)[1], delta=1) + past_key_values_length
-        # 通过gather获取位置嵌入张量
+        # 返回根据gather_indices从self.weight中收集的张量
         return tf.gather(self.weight, gather_indices)
 
 
-class TFWhisperAttention(tf.keras.layers.Layer):
+class TFWhisperAttention(keras.layers.Layer):
     """Multi-headed attention from 'Attention Is All You Need' paper"""
 
     def __init__(
@@ -192,42 +203,32 @@ class TFWhisperAttention(tf.keras.layers.Layer):
         is_decoder: bool = False,
         bias: bool = True,
         **kwargs,
-        # 调用父类构造方法初始化对象
+    ):
         super().__init__(**kwargs)
-        # 初始化嵌入维度
         self.embed_dim = embed_dim
-        # 初始化头数
         self.num_heads = num_heads
-        # 初始化丢弃层
-        self.dropout = tf.keras.layers.Dropout(dropout)
-        # 初始化头维度
+        self.dropout = keras.layers.Dropout(dropout)
         self.head_dim = embed_dim // num_heads
 
-        # 检查头维度乘以头数是否等于嵌入维度，若不等则抛出 ValueError
         if (self.head_dim * num_heads) != self.embed_dim:
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
             )
-        # 初始化缩放因子
         self.scaling = self.head_dim**-0.5
-        # 初始化是否为解码器标志
         self.is_decoder = is_decoder
 
-        # 初始化 k 投影层
-        self.k_proj = tf.keras.layers.Dense(embed_dim, use_bias=False, name="k_proj")
-        # 初始化 v 投影层
-        self.v_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="v_proj")
-        # 初始化 q 投影层
-        self.q_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="q_proj")
-        # 初始化输出投影层
-        self.out_proj = tf.keras.layers.Dense(embed_dim, use_bias=bias, name="out_proj")
+        # 初始化用于处理输入的线性层，不使用偏置
+        self.k_proj = keras.layers.Dense(embed_dim, use_bias=False, name="k_proj")
+        self.v_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="v_proj")
+        self.q_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="q_proj")
+        self.out_proj = keras.layers.Dense(embed_dim, use_bias=bias, name="out_proj")
 
-    # 从transformers.models.bart.modeling_tf_bart.TFBartAttention._shape中复制而来，将tensor重塑为指定形状
+    # 从 transformers.models.bart.modeling_tf_bart.TFBartAttention._shape 复制而来，用于整形张量
     def _shape(self, tensor: tf.Tensor, seq_len: int, bsz: int):
         return tf.transpose(tf.reshape(tensor, (bsz, seq_len, self.num_heads, self.head_dim)), (0, 2, 1, 3))
 
-    # 从transformers.models.bart.modeling_tf_bart.TFBartAttention.call中复制而来，定义了注意力机制的计算过程
+    # 从 transformers.models.bart.modeling_tf_bart.TFBartAttention.call 复制而来，用于执行注意力计算
     def call(
         self,
         hidden_states: tf.Tensor,
@@ -236,11 +237,12 @@ class TFWhisperAttention(tf.keras.layers.Layer):
         attention_mask: tf.Tensor | None = None,
         layer_head_mask: tf.Tensor | None = None,
         training: Optional[bool] = False,
-    # 构建注意力层的方法，用来确认是否已经构建完成，并对 k 投影层、v 投影层、q 投影层和输出投影层进行构建
-    def build(self, input_shape=None):
+    ):
+        # 如果已经构建则直接返回
         if self.built:
             return
         self.built = True
+        # 构建各个线性层
         if getattr(self, "k_proj", None) is not None:
             with tf.name_scope(self.k_proj.name):
                 self.k_proj.build([None, None, self.embed_dim])
@@ -253,95 +255,116 @@ class TFWhisperAttention(tf.keras.layers.Layer):
         if getattr(self, "out_proj", None) is not None:
             with tf.name_scope(self.out_proj.name):
                 self.out_proj.build([None, None, self.embed_dim])
-# 从transformers.models.speech_to_text.modeling_tf_speech_to_text.TFSpeech2TextEncoderLayer复制了代码，并将Speech2Text->Whisper
-class TFWhisperEncoderLayer(tf.keras.layers.Layer):
+# 从transformers.models.speech_to_text.modeling_tf_speech_to_text.TFSpeech2TextEncoderLayer复制并修改为Whisper
+class TFWhisperEncoderLayer(keras.layers.Layer):
     def __init__(self, config: WhisperConfig, **kwargs):
         super().__init__(**kwargs)
-        self.embed_dim = config.d_model  # 从config中获取嵌入维度
-        self.self_attn = TFWhisperAttention(  # 创建自注意力层
+        # 初始化层参数
+        self.embed_dim = config.d_model  # 设置嵌入维度为config中的d_model
+        # 创建自注意力层对象，使用Whisper的注意力头数和dropout参数
+        self.self_attn = TFWhisperAttention(
             self.embed_dim, config.encoder_attention_heads, dropout=config.attention_dropout, name="self_attn"
         )
-        self.self_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")  # 创建自注意力层后的LayerNormalization
-        self.dropout = tf.keras.layers.Dropout(config.dropout)  # 设置dropout层
-        self.activation_fn = get_tf_activation(config.activation_function)  # 获取激活函数
-        self.activation_dropout = tf.keras.layers.Dropout(config.activation_dropout)  # 设置激活函数的dropout层
-        self.fc1 = tf.keras.layers.Dense(config.encoder_ffn_dim, name="fc1")  # 创建第一个全连接层
-        self.fc2 = tf.keras.layers.Dense(self.embed_dim, name="fc2")  # 创建第二个全连接层
-        self.final_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")  # 创建最终的LayerNormalization
-        self.config = config  # 存储配置信息
+        # 创建LayerNormalization层，用于自注意力层的归一化
+        self.self_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
+        # 创建dropout层，用于全连接层之前的随机失活
+        self.dropout = keras.layers.Dropout(config.dropout)
+        # 获取激活函数
+        self.activation_fn = get_tf_activation(config.activation_function)
+        # 创建dropout层，用于激活函数之后的随机失活
+        self.activation_dropout = keras.layers.Dropout(config.activation_dropout)
+        # 创建全连接层1，输入维度为config中的encoder_ffn_dim，输出维度保持一致
+        self.fc1 = keras.layers.Dense(config.encoder_ffn_dim, name="fc1")
+        # 创建全连接层2，输入和输出维度都为嵌入维度
+        self.fc2 = keras.layers.Dense(self.embed_dim, name="fc2")
+        # 创建LayerNormalization层，用于最终层的归一化
+        self.final_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
+        # 保存配置信息
+        self.config = config
 
     def call(
         self, hidden_states: tf.Tensor, attention_mask: tf.Tensor, layer_head_mask: tf.Tensor, training: bool = False
     ):
         """
         Args:
-            hidden_states (`tf.Tensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
-            attention_mask (`tf.Tensor`): attention mask of size
-                `(batch, 1, tgt_len, src_len)` where padding elements are indicated by very large negative values.
-            layer_head_mask (`tf.Tensor`): mask for attention heads in a given layer of size
-                `(encoder_attention_heads,)`
+            hidden_states (`tf.Tensor`): 输入到层的张量，形状为`(batch, seq_len, embed_dim)`
+            attention_mask (`tf.Tensor`): 注意力遮罩，形状为`(batch, 1, tgt_len, src_len)`，用极大的负值表示填充元素
+            layer_head_mask (`tf.Tensor`): 给定层中注意力头的遮罩，形状为`(encoder_attention_heads,)`
+            training (bool): 是否处于训练模式
         """
-        residual = hidden_states  # 保存输入hidden_states的副本
-        hidden_states = self.self_attn_layer_norm(hidden_states)  # 使用LayerNormalization处理输入hidden_states
-        hidden_states, self_attn_weights, _ = self.self_attn(  # 通过自注意力层处理hidden_states，同时获取自注意力权重
+        residual = hidden_states  # 保存输入张量作为残差连接的起始点
+        hidden_states = self.self_attn_layer_norm(hidden_states)  # 对输入进行自注意力归一化处理
+        # 调用自注意力层，获取输出张量、注意力权重和未使用的附加信息
+        hidden_states, self_attn_weights, _ = self.self_attn(
             hidden_states=hidden_states,
             attention_mask=attention_mask,
             layer_head_mask=layer_head_mask,
             training=training,
         )
 
-        tf.debugging.assert_equal(  # 断言保证hidden_states和residual的形状相同
+        # 断言自注意力层没有改变查询张量的形状
+        tf.debugging.assert_equal(
             shape_list(hidden_states),
             shape_list(residual),
             message=f"Self attn modified the shape of query {shape_list(residual)} to {shape_list(hidden_states)}",
         )
 
-        hidden_states = self.dropout(hidden_states, training=training)  # 使用dropout层处理hidden_states
-        hidden_states = residual + hidden_states  # 将处理后的hidden_states和residual相加
+        hidden_states = self.dropout(hidden_states, training=training)  # 应用dropout到自注意力层输出
+        hidden_states = residual + hidden_states  # 执行残差连接
 
-        residual = hidden_states  # 保存上一步操作后的hidden_states副本
-        hidden_states = self.final_layer_norm(hidden_states)  # 使用LayerNormalization处理hidden_states
-        hidden_states = self.activation_fn(self.fc1(hidden_states))  # 使用激活函数和第一个全连接层处理hidden_states
-        hidden_states = self.activation_dropout(hidden_states, training=training)  # 使用dropout层处理激活函数后的hidden_states
-        hidden_states = self.fc2(hidden_states)  # 使用第二个全连接层处理hidden_states
-        hidden_states = self.dropout(hidden_states, training=training)  # 使用dropout层处理hidden_states
-        hidden_states = residual + hidden_states  # 将处理后的hidden_states和residual相加
+        residual = hidden_states  # 更新残差连接的起始点
+        hidden_states = self.final_layer_norm(hidden_states)  # 对输出进行最终归一化处理
+        hidden_states = self.activation_fn(self.fc1(hidden_states))  # 应用激活函数到第一个全连接层
+        hidden_states = self.activation_dropout(hidden_states, training=training)  # 应用dropout到激活函数输出
+        hidden_states = self.fc2(hidden_states)  # 应用第二个全连接层
+        hidden_states = self.dropout(hidden_states, training=training)  # 应用dropout到第二个全连接层输出
+        hidden_states = residual + hidden_states  # 执行最终的残差连接
 
-        return hidden_states, self_attn_weights  # 返回处理后的hidden_states和自注意力权重
-    # 构建模型，如果已经构建过则直接返回
+        return hidden_states, self_attn_weights  # 返回处理后的张量和自注意力权重
+    # 在构建网络层之前，检查是否已经构建过，如果已构建则直接返回，避免重复构建
     def build(self, input_shape=None):
         if self.built:
             return
-        # 设置标记为已构建
+        
+        # 设置标志位，表示网络已经构建
         self.built = True
-        # 如果存在 self_attn，则构建 self_attn，并设置名字空间
+        
+        # 如果存在 self_attn 属性，则构建 self attention 层
         if getattr(self, "self_attn", None) is not None:
             with tf.name_scope(self.self_attn.name):
+                # 调用 self attention 层的 build 方法，传入 None 作为输入形状
                 self.self_attn.build(None)
-        # 如果存在 self_attn_layer_norm，则构建 self_attn_layer_norm，并设置名字空间
+        
+        # 如果存在 self_attn_layer_norm 属性，则构建 layer normalization 层
         if getattr(self, "self_attn_layer_norm", None) is not None:
             with tf.name_scope(self.self_attn_layer_norm.name):
+                # 调用 layer normalization 层的 build 方法，传入形状为 [None, None, self.embed_dim]
                 self.self_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在 fc1，则构建 fc1，并设置名字空间
+        
+        # 如果存在 fc1 属性，则构建第一个全连接层
         if getattr(self, "fc1", None) is not None:
             with tf.name_scope(self.fc1.name):
+                # 调用第一个全连接层的 build 方法，传入形状为 [None, None, self.embed_dim]
                 self.fc1.build([None, None, self.embed_dim])
-        # 如果存在 fc2，则构建 fc2，并设置名字空间
+        
+        # 如果存在 fc2 属性，则构建第二个全连接层
         if getattr(self, "fc2", None) is not None:
             with tf.name_scope(self.fc2.name):
+                # 调用第二个全连接层的 build 方法，传入形状为 [None, None, self.config.encoder_ffn_dim]
                 self.fc2.build([None, None, self.config.encoder_ffn_dim])
-        # 如果存在 final_layer_norm，则构建 final_layer_norm，并设置名字空间
+        
+        # 如果存在 final_layer_norm 属性，则构建最终的 layer normalization 层
         if getattr(self, "final_layer_norm", None) is not None:
             with tf.name_scope(self.final_layer_norm.name):
+                # 调用最终 layer normalization 层的 build 方法，传入形状为 [None, None, self.embed_dim]
                 self.final_layer_norm.build([None, None, self.embed_dim])
-# 从transformers.models.speech_to_text.modeling_tf_speech_to_text.TFSpeech2TextDecoderLayer复制并修改为Whisper
-class TFWhisperDecoderLayer(tf.keras.layers.Layer):
+# 从transformers.models.speech_to_text.modeling_tf_speech_to_text.TFSpeech2TextDecoderLayer复制而来，更名为TFWhisperDecoderLayer
+class TFWhisperDecoderLayer(keras.layers.Layer):
     def __init__(self, config: WhisperConfig, **kwargs):
         super().__init__(**kwargs)
-        # 设置嵌入维度为config中的d_model
-        self.embed_dim = config.d_model
+        self.embed_dim = config.d_model  # 设置嵌入维度为config中的d_model值
 
-        # 初始化self_attn为TFWhisperAttention对象，用于自注意力机制
+        # 创建自注意力层，用于处理decoder自身的注意力机制
         self.self_attn = TFWhisperAttention(
             embed_dim=self.embed_dim,
             num_heads=config.decoder_attention_heads,
@@ -349,16 +372,13 @@ class TFWhisperDecoderLayer(tf.keras.layers.Layer):
             name="self_attn",
             is_decoder=True,
         )
-        # 添加丢弃层，根据config中的dropout设置
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
-        # 获取激活函数
-        self.activation_fn = get_tf_activation(config.activation_function)
-        # 添加激活函数的丢弃层，根据config中的activation_dropout设置
-        self.activation_dropout = tf.keras.layers.Dropout(config.activation_dropout)
+        self.dropout = keras.layers.Dropout(config.dropout)  # dropout层，用于模型训练过程中的随机失活
+        self.activation_fn = get_tf_activation(config.activation_function)  # 激活函数，根据config中的激活函数类型获取对应的激活函数
+        self.activation_dropout = keras.layers.Dropout(config.activation_dropout)  # 激活函数后的dropout层
 
-        # 初始化self_attn_layer_norm为LayerNormalization层，用于归一化自注意力机制的输出
-        self.self_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")
-        # 初始化encoder_attn为TFWhisperAttention对象，用于编码解码注意力机制
+        self.self_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="self_attn_layer_norm")  # 自注意力层的归一化层
+
+        # 创建与encoder交互的注意力层，用于decoder与encoder交互信息
         self.encoder_attn = TFWhisperAttention(
             self.embed_dim,
             config.decoder_attention_heads,
@@ -366,16 +386,13 @@ class TFWhisperDecoderLayer(tf.keras.layers.Layer):
             name="encoder_attn",
             is_decoder=True,
         )
-        # 初始化encoder_attn_layer_norm为LayerNormalization层，用于归一化编码解码注意力机制的输出
-        self.encoder_attn_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="encoder_attn_layer_norm")
-        # 初始化fc1为全连接层，设置输出维度为config中的decoder_ffn_dim
-        self.fc1 = tf.keras.layers.Dense(config.decoder_ffn_dim, name="fc1")
-        # 初始化fc2为全连接层，设置输出维度为self.embed_dim
-        self.fc2 = tf.keras.layers.Dense(self.embed_dim, name="fc2")
-        # 初始化final_layer_norm为LayerNormalization层，用于归一化最终的输出
-        self.final_layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")
-        # 保存config
-        self.config = config
+        self.encoder_attn_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="encoder_attn_layer_norm")  # 与encoder交互注意力层的归一化层
+
+        self.fc1 = keras.layers.Dense(config.decoder_ffn_dim, name="fc1")  # 全连接层1
+        self.fc2 = keras.layers.Dense(self.embed_dim, name="fc2")  # 全连接层2，输出维度与嵌入维度相同
+
+        self.final_layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="final_layer_norm")  # 最终的归一化层
+        self.config = config  # 保存配置信息
 
     def call(
         self,
@@ -387,77 +404,84 @@ class TFWhisperDecoderLayer(tf.keras.layers.Layer):
         cross_attn_layer_head_mask: tf.Tensor | None = None,
         past_key_value: Tuple[tf.Tensor] | None = None,
         training=False,
-    # 构建神经网络模型，如果已经构建则直接返回
-    def build(self, input_shape=None):
-        if self.built:
-            return
-        self.built = True
-        # 如果存在注意力机制，构建自注意力层并指定名字空间
-        if getattr(self, "self_attn", None) is not None:
-            with tf.name_scope(self.self_attn.name):
-                self.self_attn.build(None)
-        # 如果存在自注意力层归一化，构建自注意力层归一化并指定名字空间
-        if getattr(self, "self_attn_layer_norm", None) is not None:
-            with tf.name_scope(self.self_attn_layer_norm.name):
-                self.self_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在编码器注意力机制，构建编码器注意力层并指定名字空间
-        if getattr(self, "encoder_attn", None) is not None:
-            with tf.name_scope(self.encoder_attn.name):
-                self.encoder_attn.build(None)
-        # 如果存在编码器注意力层归一化，构建编码器注意力层归一化并指定名字空间
-        if getattr(self, "encoder_attn_layer_norm", None) is not None:
-            with tf.name_scope(self.encoder_attn_layer_norm.name):
-                self.encoder_attn_layer_norm.build([None, None, self.embed_dim])
-        # 如果存在全连接层1，构建全连接层1并指定名字空间
-        if getattr(self, "fc1", None) is not None:
-            with tf.name_scope(self.fc1.name):
-                self.fc1.build([None, None, self.embed_dim])
-        # 如果存在全连接层2，构建全连接层2并指定名字空间
-        if getattr(self, "fc2", None) is not None:
-            with tf.name_scope(self.fc2.name):
-                self.fc2.build([None, None, self.config.decoder_ffn_dim])
-        # 如果存在最终的层归一化，构建最终的层归一化并指定名字空间
-        if getattr(self, "final_layer_norm", None) is not None:
-            with tf.name_scope(self.final_layer_norm.name):
-                self.final_layer_norm.build([None, None, self.embed_dim])
+    # 如果模型已经建立，则直接返回，不再重复建立
+    if self.built:
+        return
+    
+    # 设置标志位，表示模型已经建立
+    self.built = True
+    
+    # 如果存在自注意力层，则构建自注意力层
+    if getattr(self, "self_attn", None) is not None:
+        with tf.name_scope(self.self_attn.name):
+            self.self_attn.build(None)
+    
+    # 如果存在自注意力层归一化层，则构建该层，输入形状为[None, None, self.embed_dim]
+    if getattr(self, "self_attn_layer_norm", None) is not None:
+        with tf.name_scope(self.self_attn_layer_norm.name):
+            self.self_attn_layer_norm.build([None, None, self.embed_dim])
+    
+    # 如果存在编码器注意力层，则构建编码器注意力层
+    if getattr(self, "encoder_attn", None) is not None:
+        with tf.name_scope(self.encoder_attn.name):
+            self.encoder_attn.build(None)
+    
+    # 如果存在编码器注意力层归一化层，则构建该层，输入形状为[None, None, self.embed_dim]
+    if getattr(self, "encoder_attn_layer_norm", None) is not None:
+        with tf.name_scope(self.encoder_attn_layer_norm.name):
+            self.encoder_attn_layer_norm.build([None, None, self.embed_dim])
+    
+    # 如果存在第一个全连接层，则构建该层，输入形状为[None, None, self.embed_dim]
+    if getattr(self, "fc1", None) is not None:
+        with tf.name_scope(self.fc1.name):
+            self.fc1.build([None, None, self.embed_dim])
+    
+    # 如果存在第二个全连接层，则构建该层，输入形状为[None, None, self.config.decoder_ffn_dim]
+    if getattr(self, "fc2", None) is not None:
+        with tf.name_scope(self.fc2.name):
+            self.fc2.build([None, None, self.config.decoder_ffn_dim])
+    
+    # 如果存在最终归一化层，则构建该层，输入形状为[None, None, self.embed_dim]
+    if getattr(self, "final_layer_norm", None) is not None:
+        with tf.name_scope(self.final_layer_norm.name):
+            self.final_layer_norm.build([None, None, self.embed_dim])
 class TFWhisperPreTrainedModel(TFPreTrainedModel):
-    # 设置配置类为 WhisperConfig
+    # 指定配置类为WhisperConfig，用于配置模型参数
     config_class = WhisperConfig
-    # 模型基类的前缀为 "model"
+    # 模型基础名称前缀为"model"
     base_model_prefix = "model"
-    # 主输入名称为 "input_features"
+    # 主要输入名称为"input_features"
     main_input_name = "input_features"
 
     def _get_feat_extract_output_lengths(self, input_lengths: tf.Tensor) -> int:
         """
-        Computes the output length of the convolutional layers
         计算卷积层的输出长度
         """
-        # 计算输入长度
+        # 根据公式计算卷积层的输出长度
         input_lengths = (input_lengths - 1) // 2 + 1
 
-        # 返回输出长度
         return input_lengths
 
     @property
     def dummy_inputs(self) -> Dict[str, tf.Tensor]:
         """
-        Dummy inputs to build the network.
+        构建网络所需的虚拟输入
 
         Returns:
-            `Dict[str, tf.Tensor]`: The dummy inputs.
+            `Dict[str, tf.Tensor]`: 虚拟输入字典
         """
-        # 返回虚拟输入，包括主输入和解码器输入
         return {
+            # 创建形状为[1, num_mel_bins, max_source_positions * 2 - 1]的均匀分布随机张量
             self.main_input_name: tf.random.uniform(
                 [1, self.config.num_mel_bins, self.config.max_source_positions * 2 - 1], dtype=tf.float32
             ),
+            # 固定形状为[[1, 3]]的整数张量作为decoder的输入id
             "decoder_input_ids": tf.constant([[1, 3]], dtype=tf.int32),
         }
 
     @property
     def input_signature(self):
-        # 返回输入签名，指定了输入的形状和类型
+        # 定义输入签名，指定输入张量的形状和数据类型
         return {
             "input_features": tf.TensorSpec((None, self.config.num_mel_bins, None), tf.float32, name="input_features"),
             "decoder_input_ids": tf.TensorSpec((None, None), tf.int32, name="decoder_input_ids"),
@@ -470,7 +494,7 @@ WHISPER_START_DOCSTRING = r"""
     library implements for all its model (such as downloading or saving, resizing the input embeddings, pruning heads
     etc.)
 
-    This model is also a [tf.keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
+    This model is also a [keras.Model](https://www.tensorflow.org/api_docs/python/tf/keras/Model) subclass. Use it
     as a regular TF 2.0 Keras Model and refer to the TF 2.0 documentation for all matter related to general usage and
     behavior.
 
@@ -486,57 +510,65 @@ WHISPER_INPUTS_DOCSTRING = r"""
 
 
 @keras_serializable
-class TFWhisperEncoder(tf.keras.layers.Layer):
-    # 设置配置类为 WhisperConfig
+class TFWhisperEncoder(keras.layers.Layer):
+    # 指定配置类为WhisperConfig，用于配置编码器参数
     config_class = WhisperConfig
     """
-    Transformer encoder consisting of *config.encoder_layers* self attention layers. Each layer is a
-    [`TFWhisperEncoderLayer`].
+    Transformer编码器，包含config.encoder_layers个自注意力层。每一层是一个[`TFWhisperEncoderLayer`].
 
     Args:
         config: WhisperConfig
-        embed_tokens (TFWhisperEmbedding): output embedding
+        embed_tokens (TFWhisperEmbedding): 输出嵌入
     """
-    # 初始化 Whisper 编码器类
+    # 初始化方法，接收一个WhisperConfig对象和其他关键字参数
     def __init__(self, config: WhisperConfig, **kwargs):
         # 调用父类的初始化方法
         super().__init__(**kwargs)
-        # 保存配置信息
+        # 将传入的config对象保存到self.config中
         self.config = config
-        # 获取编码器的 dropout 率
+        # 从config对象中获取encoder_layerdrop属性并保存到self.layerdrop中
         self.layerdrop = config.encoder_layerdrop
-    
-        # 设置一些模型参数
+
+        # 从config对象中获取d_model属性并保存到self.embed_dim中
         self.embed_dim = config.d_model
+        # 从config对象中获取num_mel_bins属性并保存到self.num_mel_bins中
         self.num_mel_bins = config.num_mel_bins
+        # 从config对象中获取pad_token_id属性并保存到self.padding_idx中
         self.padding_idx = config.pad_token_id
+        # 从config对象中获取max_source_positions属性并保存到self.max_source_positions中
         self.max_source_positions = config.max_source_positions
+        # 如果config对象中的scale_embedding为True，则计算并保存self.embed_scale为self.embed_dim的平方根，否则为1.0
         self.embed_scale = math.sqrt(self.embed_dim) if config.scale_embedding else 1.0
-    
-        # 创建第一个 1D 卷积层
-        self.conv1 = tf.keras.layers.Conv1D(self.embed_dim, kernel_size=3, strides=1, padding="valid", name="conv1")
-        # 创建第二个 1D 卷积层
-        self.conv2 = tf.keras.layers.Conv1D(self.embed_dim, kernel_size=3, strides=2, padding="valid", name="conv2")
-    
-        # 创建位置编码层
+
+        # 在call()方法中添加填充以匹配PyTorch实现
+        # 创建第一个卷积层，设置卷积核大小为3，步长为1，padding方式为"valid"，并命名为"conv1"
+        self.conv1 = keras.layers.Conv1D(self.embed_dim, kernel_size=3, strides=1, padding="valid", name="conv1")
+        # 创建第二个卷积层，设置卷积核大小为3，步长为2，padding方式为"valid"，并命名为"conv2"
+        self.conv2 = keras.layers.Conv1D(self.embed_dim, kernel_size=3, strides=2, padding="valid", name="conv2")
+
+        # 创建位置嵌入层TFWhisperPositionalEmbedding对象，设置位置数量为self.max_source_positions，嵌入维度为self.embed_dim，
+        # 使用sinusoidal_embedding_init作为初始化方法，并命名为"embed_positions"
         self.embed_positions = TFWhisperPositionalEmbedding(
             num_positions=self.max_source_positions,
             embedding_dim=self.embed_dim,
             embedding_initializer=sinusoidal_embedding_init,
             name="embed_positions",
         )
+        # 设置位置嵌入层为不可训练状态
         self.embed_positions.trainable = False
-    
-        # 创建编码器层
+
+        # 创建编码器层列表，包含config.encoder_layers个TFWhisperEncoderLayer对象，每个对象命名为"layers.{i}"，其中i为层的索引
         self.encoder_layers = [TFWhisperEncoderLayer(config, name=f"layers.{i}") for i in range(config.encoder_layers)]
-        # 创建层归一化层
-        self.layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
-    
-        # 创建 dropout 层
-        self.dropout = tf.keras.layers.Dropout(config.dropout)
-    
-    # 实现编码器的前向传播
+        
+        # 创建LayerNormalization层，设置epsilon为1e-5，并命名为"layer_norm"
+        self.layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")
+
+        # 创建Dropout层，设置dropout率为config.dropout
+        self.dropout = keras.layers.Dropout(config.dropout)
+
+    # 解包输入参数的装饰器函数，定义在call()方法上
     @unpack_inputs
+    # 定义call()方法，接收多个参数，用于模型的前向传播
     def call(
         self,
         input_features=None,
@@ -545,30 +577,8 @@ class TFWhisperEncoder(tf.keras.layers.Layer):
         output_hidden_states=None,
         return_dict=None,
         training=False,
-    ):
-        # 根据输入的 shape 进行构建
-    def build(self, input_shape=None):
-        if self.built:
-            return
-        self.built = True
-        if getattr(self, "conv1", None) is not None:
-            with tf.name_scope(self.conv1.name):
-                self.conv1.build([None, None, self.num_mel_bins])
-        if getattr(self, "conv2", None) is not None:
-            with tf.name_scope(self.conv2.name):
-                self.conv2.build([None, None, self.embed_dim])
-        if getattr(self, "embed_positions", None) is not None:
-            with tf.name_scope(self.embed_positions.name):
-                self.embed_positions.build(None)
-        if getattr(self, "layer_norm", None) is not None:
-            with tf.name_scope(self.layer_norm.name):
-                self.layer_norm.build([None, None, self.config.d_model])
-        if getattr(self, "encoder_layers", None) is not None:
-            for layer in self.encoder_layers:
-                with tf.name_scope(layer.name):
-                    layer.build(None)
 @keras_serializable
-class TFWhisperDecoder(tf.keras.layers.Layer):
+class TFWhisperDecoder(keras.layers.Layer):
     config_class = WhisperConfig
     """
     Transformer decoder consisting of *config.decoder_layers* layers. Each layer is a [`TFWhisperDecoderLayer`]
@@ -580,50 +590,53 @@ class TFWhisperDecoder(tf.keras.layers.Layer):
     def __init__(self, config: WhisperConfig, **kwargs):
         super().__init__(**kwargs)
         self.config = config
-        self.dropout = tf.keras.layers.Dropout(config.dropout)  # 初始化一个丢弃层，用于在训练时进行随机丢弃
-        self.layerdrop = config.decoder_layerdrop  # 记录层级丢弃率
-        self.padding_idx = config.pad_token_id  # 记录填充 token 的索引
-        self.max_target_positions = config.max_target_positions  # 记录目标序列的最大长度
-        self.max_source_positions = config.max_source_positions  # 记录源序列的最大长度
-        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0  # 计算嵌入尺度，用于缩放嵌入向量
+        self.dropout = keras.layers.Dropout(config.dropout)  # 初始化一个丢弃层，使用配置中的丢弃率
+        self.layerdrop = config.decoder_layerdrop  # 设置层级丢弃率
+        self.padding_idx = config.pad_token_id  # 设置填充标记索引
+        self.max_target_positions = config.max_target_positions  # 最大目标位置数
+        self.max_source_positions = config.max_source_positions  # 最大源位置数
+        self.embed_scale = math.sqrt(config.d_model) if config.scale_embedding else 1.0  # 如果配置中启用了嵌入缩放，则计算嵌入缩放值，否则为1.0
 
-        self.embed_tokens = tf.keras.layers.Embedding(
+        self.embed_tokens = keras.layers.Embedding(
             input_dim=config.vocab_size,
             output_dim=config.d_model,
-            embeddings_initializer=tf.keras.initializers.TruncatedNormal(stddev=self.config.init_std),  # 使用截断正态分布初始化嵌入层的参数
+            embeddings_initializer=keras.initializers.TruncatedNormal(stddev=self.config.init_std),
             name="embed_tokens",
-        )
+        )  # 初始化嵌入层，用于将输入标记映射到向量空间
+
         self.embed_positions = TFWhisperPositionalEmbedding(
-            self.max_target_positions, config.d_model, name="embed_positions"  # 初始化位置编码层
+            self.max_target_positions, config.d_model, name="embed_positions"
+        )  # 初始化位置编码器，用于为输入位置信息生成嵌入向量
 
-        self.decoder_layers = [TFWhisperDecoderLayer(config, name=f"layers.{i}") for i in range(config.decoder_layers)]  # 初始化一系列 Transformer 解码层
+        self.decoder_layers = [TFWhisperDecoderLayer(config, name=f"layers.{i}") for i in range(config.decoder_layers)]
+        # 初始化多层解码器层，每一层是一个 TFWhisperDecoderLayer 对象，索引命名为 layers.{i}
 
-        self.layer_norm = tf.keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")  # 初始化层归一化层
+        self.layer_norm = keras.layers.LayerNormalization(epsilon=1e-5, name="layer_norm")  # 初始化层归一化层
 
     def get_input_embeddings(self):
-        return self.embed_tokens  # 获取输入嵌入层
+        return self.embed_tokens  # 返回输入嵌入层对象
 
     def set_input_embeddings(self, value):
-        self.embed_tokens = value  # 设置输入嵌入层
+        self.embed_tokens = value  # 设置输入嵌入层对象为指定值
 
     def _prepare_decoder_attention_mask(self, attention_mask, input_shape, past_key_values_length):
         # create causal mask
         # [bsz, seq_len] -> [bsz, 1, tgt_seq_len, src_seq_len]
-        batch_size, seq_len = input_shape[0], input_shape[1]  # 获取输入形状
+        batch_size, seq_len = input_shape[0], input_shape[1]
 
         combined_attention_mask = tf.cond(
             tf.math.greater(seq_len, 1),
-            lambda: _make_causal_mask(input_shape, past_key_values_length=past_key_values_length),  # 创建因果掩码
-            lambda: _expand_mask(tf.ones((batch_size, seq_len + past_key_values_length)), tgt_len=seq_len),  # 扩展掩码
-        )
+            lambda: _make_causal_mask(input_shape, past_key_values_length=past_key_values_length),
+            lambda: _expand_mask(tf.ones((batch_size, seq_len + past_key_values_length)), tgt_len=seq_len),
+        )  # 根据输入形状和过去键值长度生成解码器注意力掩码
 
         if attention_mask is not None:
             # [bsz, seq_len] -> [bsz, 1, tgt_seq_len, src_seq_len]
-            expanded_attn_mask = _expand_mask(attention_mask, tgt_len=input_shape[-1])  # 扩展注意力掩码
+            expanded_attn_mask = _expand_mask(attention_mask, tgt_len=input_shape[-1])
             combined_attention_mask = (
-                expanded_attn_mask if combined_attention_mask is None else expanded_attn_mask + combined_attention_mask  # 合并掩码
-            )
-        return combined_attention_mask  # 返回合并后的注意力掩码
+                expanded_attn_mask if combined_attention_mask is None else expanded_attn_mask + combined_attention_mask
+            )  # 如果存在输入的注意力掩码，则扩展和组合注意力掩码
+        return combined_attention_mask
 
     @unpack_inputs
     def call(
@@ -641,67 +654,73 @@ class TFWhisperDecoder(tf.keras.layers.Layer):
         output_hidden_states=None,
         return_dict=None,
         training=False,
-    # 构建自定义层的方法，如果已经构建过则直接返回
+    # 构建模型，如果已经构建过，则直接返回
     def build(self, input_shape=None):
         if self.built:
             return
-        # 标记已经构建过
+        
+        # 设置标志为已构建
         self.built = True
-        # 如果存在嵌入标记，则构建嵌入层
+        
+        # 如果存在嵌入词向量（embed_tokens）属性，则构建它
         if getattr(self, "embed_tokens", None) is not None:
             with tf.name_scope(self.embed_tokens.name):
                 self.embed_tokens.build(None)
-        # 如果存在嵌入位置标记，则构建嵌入位置层
+        
+        # 如果存在嵌入位置信息（embed_positions）属性，则构建它
         if getattr(self, "embed_positions", None) is not None:
             with tf.name_scope(self.embed_positions.name):
                 self.embed_positions.build(None)
-        # 如果存在层标准化标记，则构建层标准化层
+        
+        # 如果存在层归一化（layer_norm）属性，则构建它
         if getattr(self, "layer_norm", None) is not None:
             with tf.name_scope(self.layer_norm.name):
+                # 构建层归一化，传入的形状为 [None, None, self.config.d_model]
                 self.layer_norm.build([None, None, self.config.d_model])
-        # 如果存在解码层，则依次构建解码层
+        
+        # 如果存在解码器层（decoder_layers）属性，则依次构建每一层
         if getattr(self, "decoder_layers", None) is not None:
             for layer in self.decoder_layers:
                 with tf.name_scope(layer.name):
+                    # 构建当前解码器层，传入的形状为 None（未指定具体输入形状）
                     layer.build(None)
-# 为 TFWhisperMainLayer 类添加文档字符串和序列化支持装饰器
+# 添加模型的文档字符串，描述该层的输出是裸的隐藏状态，没有特定的头部信息
 @add_start_docstrings(
     "The bare Whisper Model outputting raw hidden-states without any specific head on top.",
     WHISPER_START_DOCSTRING,
 )
+# 使该类可以序列化为Keras模型
 @keras_serializable
-class TFWhisperMainLayer(tf.keras.layers.Layer):
-    # 使用 WhisperConfig 作为配置类
+class TFWhisperMainLayer(keras.layers.Layer):
+    # 指定配置类为WhisperConfig
     config_class = WhisperConfig
 
-    # 初始化方法，接受 WhisperConfig 类型的配置参数
+    # 初始化方法，接受WhisperConfig对象作为参数
     def __init__(self, config: WhisperConfig, **kwargs):
-        # 调用父类初始化方法
         super().__init__(**kwargs)
-        # 将传入的配置参数赋值给实例变量 config
         self.config = config
-        # 创建 TFWhisperEncoder 实例并命名为 encoder
+        # 创建Whisper编码器对象
         self.encoder = TFWhisperEncoder(config, name="encoder")
-        # 创建 TFWhisperDecoder 实例并命名为 decoder
+        # 创建Whisper解码器对象
         self.decoder = TFWhisperDecoder(config, name="decoder")
 
-    # 获取输入嵌入层对象的方法
+    # 返回解码器的嵌入层
     def get_input_embeddings(self):
         return self.decoder.embed_tokens
 
-    # 设置输入嵌入层对象的方法
+    # 设置解码器的嵌入层
     def set_input_embeddings(self, value):
         self.decoder.embed_tokens = value
 
-    # 获取编码器对象的方法
+    # 返回编码器对象
     def get_encoder(self):
         return self.encoder
 
-    # 获取解码器对象的方法
+    # 返回解码器对象
     def get_decoder(self):
         return self.decoder
 
-    # call 方法，用于模型前向传播
+    # 模型前向传播方法，处理输入特征和解码器的各种输入及其掩码
     @add_start_docstrings_to_model_forward(WHISPER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TFSeq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
     @unpack_inputs
@@ -723,90 +742,87 @@ class TFWhisperMainLayer(tf.keras.layers.Layer):
         return_dict=None,
         training=False,
     ):
-        # 方法主体部分略，用于模型前向传播
+        # 方法内部建立模型结构，确保只建立一次
+        def build(self, input_shape=None):
+            if self.built:
+                return
+            self.built = True
+            # 如果存在编码器对象，则在名称作用域内建立编码器
+            if getattr(self, "encoder", None) is not None:
+                with tf.name_scope(self.encoder.name):
+                    self.encoder.build(None)
+            # 如果存在解码器对象，则在名称作用域内建立解码器
+            if getattr(self, "decoder", None) is not None:
+                with tf.name_scope(self.decoder.name):
+                    self.decoder.build(None)
 
 
-# 为 TFWhisperModel 类添加文档字符串
+# 添加模型的文档字符串，描述该模型输出裸的隐藏状态，没有特定的头部信息
 @add_start_docstrings(
     "The bare Whisper Model outputting raw hidden-states without any specific head on top.",
     WHISPER_START_DOCSTRING,
 )
+# TFWhisperModel继承自TFWhisperPreTrainedModel类
 class TFWhisperModel(TFWhisperPreTrainedModel):
-    # 初始化方法，接受 WhisperConfig 类型的配置参数
+    # 初始化方法，接受WhisperConfig对象作为参数
     def __init__(self, config: WhisperConfig, **kwargs):
-        # 调用父类初始化方法
         super().__init__(config, **kwargs)
-        # 创建 TFWhisperMainLayer 实例并命名为 model
+        # 创建TFWhisperMainLayer模型对象作为该模型的一部分
         self.model = TFWhisperMainLayer(config, name="model")
 
-    # 获取输入嵌入层对象的方法
+    # 返回解码器的嵌入层
     def get_input_embeddings(self):
         return self.model.decoder.embed_tokens
 
-    # 设置输入嵌入层对象的方法
+    # 设置解码器的嵌入层
     def set_input_embeddings(self, value):
         self.model.decoder.embed_tokens = value
 
-    # 获取编码器对象的方法
+    # 返回模型的编码器对象
     def get_encoder(self):
         return self.model.encoder
 
-    # 获取解码器对象的方法
+    # 返回模型的解码器对象
     def get_decoder(self):
         return self.model.decoder
 
-    # 获取解码器对象的方法
+    # 返回模型的解码器对象
     def decoder(self):
         return self.model.decoder
 
-    # 获取编码器对象的方法
+    # 返回模型的编码器对象
     def encoder(self):
         return self.model.encoder
 
-    # call 方法，用于模型前向传播
+    # 模型前向传播方法，处理输入特征和解码器的各种输入及其掩码
     @add_start_docstrings_to_model_forward(WHISPER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TFSeq2SeqModelOutput, config_class=_CONFIG_FOR_DOC)
     @unpack_inputs
-    # 定义了一个方法，用于调用模型进行推理或训练
     def call(
-        # 输入特征，可以是 TFModelInputType 类型或 None
         self,
-        input_features: TFModelInputType | None = None,
-        # 解码器输入的 token IDs，可以是 numpy 数组、tf.Tensor 或 None
-        decoder_input_ids: np.ndarray | tf.Tensor | None = None,
-        # 解码器注意力掩码，可以是 numpy 数组、tf.Tensor 或 None
-        decoder_attention_mask: np.ndarray | tf.Tensor | None = None,
-        # 解码器位置 IDs，可以是 numpy 数组、tf.Tensor 或 None
-        decoder_position_ids: np.ndarray | tf.Tensor | None = None,
-        # 头部掩码，可以是 numpy 数组、tf.Tensor 或 None
-        head_mask: np.ndarray | tf.Tensor | None = None,
-        # 解码器头部掩码，可以是 numpy 数组、tf.Tensor 或 None
-        decoder_head_mask: np.ndarray | tf.Tensor | None = None,
-        # 跨注意力头部掩码，可以是 numpy 数组、tf.Tensor 或 None
-        cross_attn_head_mask: np.ndarray | tf.Tensor | None = None,
-        # 编码器输出，可以是包含一组 numpy 数组或 tf.Tensor 的元组，或 None
-        encoder_outputs: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,
-        # 过去的键值对，可以是包含一组 numpy 数组或 tf.Tensor 的元组，或 None
-        past_key_values: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,
-        # 解码器输入的嵌入，可以是包含一组 numpy 数组或 tf.Tensor 的元组，或 None
-        decoder_inputs_embeds: Optional[Tuple[Union[np.ndarray, tf.Tensor]]] = None,
-        # 是否使用缓存，可以是布尔值或 None
-        use_cache: Optional[bool] = None,
-        # 是否输出注意力权重，可以是布尔值或 None
-        output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态，可以是布尔值或 None
-        output_hidden_states: Optional[bool] = None,
-        # 是否返回字典形式的输出，可以是布尔值或 None
-        return_dict: Optional[bool] = None,
-        # 是否处于训练状态，布尔值，默认为 False
-        training: bool = False,
-    ) -> Union[Tuple[tf.Tensor], TFSeq2SeqModelOutput]:
-        r"""
-        返回值:
+        input_features: TFModelInputType | None = None,  # 输入特征，可以是 TensorFlow 模型的输入类型或空
+        decoder_input_ids: np.ndarray | tf.Tensor | None = None,  # 解码器输入的 token IDs，可以是 NumPy 数组、TensorFlow 张量或空
+        decoder_attention_mask: np.ndarray | tf.Tensor | None = None,  # 解码器的注意力掩码，可以是 NumPy 数组、TensorFlow 张量或空
+        decoder_position_ids: np.ndarray | tf.Tensor | None = None,  # 解码器的位置 IDs，可以是 NumPy 数组、TensorFlow 张量或空
+        head_mask: np.ndarray | tf.Tensor | None = None,  # 头部掩码，可以是 NumPy 数组、TensorFlow 张量或空
+        decoder_head_mask: np.ndarray | tf.Tensor | None = None,  # 解码器头部掩码，可以是 NumPy 数组、TensorFlow 张量或空
+        cross_attn_head_mask: np.ndarray | tf.Tensor | None = None,  # 跨注意力头部掩码，可以是 NumPy 数组、TensorFlow 张量或空
+        encoder_outputs: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,  # 编码器的输出，可选，包含 NumPy 数组或 TensorFlow 张量的元组的元组
+        past_key_values: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,  # 过去的键值对，可选，包含 NumPy 数组或 TensorFlow 张量的元组的元组
+        decoder_inputs_embeds: Optional[Tuple[Union[np.ndarray, tf.Tensor]]] = None,  # 解码器的嵌入输入，可选，包含 NumPy 数组或 TensorFlow 张量的元组
+        use_cache: Optional[bool] = None,  # 是否使用缓存，可选布尔值
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可选布尔值
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可选布尔值
+        return_dict: Optional[bool] = None,  # 是否返回字典格式结果，可选布尔值
+        training: bool = False,  # 是否处于训练模式，默认为 False
+    ) -> Union[Tuple[tf.Tensor], TFSeq2SeqModelOutput]:  # 返回值可以是 TensorFlow 张量的元组或 TFSeq2SeqModelOutput 类型
 
-        示例:
-
-         ```py
+        """
+        Returns:
+        
+        Example:
+        
+         ```python
          >>> import tensorflow as tf
          >>> from transformers import TFWhisperModel, AutoFeatureExtractor
          >>> from datasets import load_dataset
@@ -820,153 +836,132 @@ class TFWhisperModel(TFWhisperPreTrainedModel):
          >>> last_hidden_state = model(input_features, decoder_input_ids=decoder_input_ids).last_hidden_state
          >>> list(last_hidden_state.shape)
          [1, 2, 512]
-         ```"""
-        # 调用内部模型进行处理，传递所有参数
-        outputs = self.model(
-            input_features=input_features,
-            decoder_input_ids=decoder_input_ids,
-            decoder_attention_mask=decoder_attention_mask,
-            decoder_position_ids=decoder_position_ids,
-            head_mask=head_mask,
-            decoder_head_mask=decoder_head_mask,
-            cross_attn_head_mask=cross_attn_head_mask,
-            encoder_outputs=encoder_outputs,
-            past_key_values=past_key_values,
-            decoder_inputs_embeds=decoder_inputs_embeds,
-            use_cache=use_cache,
-            output_attentions=output_attentions,
-            output_hidden_states=output_hidden_states,
-            return_dict=return_dict,
-            training=training,
+         ```
+        """
+        
+        outputs = self.model(  # 调用模型的主体部分，传入各种参数进行计算
+            input_features=input_features,  # 输入特征
+            decoder_input_ids=decoder_input_ids,  # 解码器输入的 token IDs
+            decoder_attention_mask=decoder_attention_mask,  # 解码器的注意力掩码
+            decoder_position_ids=decoder_position_ids,  # 解码器的位置 IDs
+            head_mask=head_mask,  # 头部掩码
+            decoder_head_mask=decoder_head_mask,  # 解码器头部掩码
+            cross_attn_head_mask=cross_attn_head_mask,  # 跨注意力头部掩码
+            encoder_outputs=encoder_outputs,  # 编码器的输出
+            past_key_values=past_key_values,  # 过去的键值对
+            decoder_inputs_embeds=decoder_inputs_embeds,  # 解码器的嵌入输入
+            use_cache=use_cache,  # 是否使用缓存
+            output_attentions=output_attentions,  # 是否输出注意力权重
+            output_hidden_states=output_hidden_states,  # 是否输出隐藏状态
+            return_dict=return_dict,  # 是否返回字典格式结果
+            training=training,  # 是否处于训练模式
         )
-        # 返回模型输出
-        return outputs
-    ```py 
-        # 为服务输出设置函数，接受输出为参数
-        def serving_output(self, output):
-            # 如果配置使用缓存，则从输出的过去键值对元组中获取第二个元素作为pkv；否则设置为None
-            pkv = tf.tuple(output.past_key_values)[1] if self.config.use_cache else None
-            # 如果配置输出隐藏层状态，则将输出的解码器隐藏状态转换为张量；否则设置为None
-            dec_hs = tf.convert_to_tensor(output.decoder_hidden_states) if self.config.output_hidden_states else None
-            # 如果配置输出注意力权重，则将输出的解码器注意力权重转换为张量；否则设置为None
-            dec_attns = tf.convert_to_tensor(output.decoder_attentions) if self.config.output_attentions else None
-            # 如果配置输出注意力权重，则将输出的交叉注意力权重转换为张量；否则设置为None
-            cross_attns = tf.convert_to_tensor(output.cross_attentions) if self.config.output_attentions else None
-            # 如果配置输出隐藏层状态，则将输出的编码器隐藏状态转换为张量；否则设置为None
-            enc_hs = tf.convert_to_tensor(output.encoder_hidden_states) if self.config.output_hidden_states else None
-            # 如果配置输出注意力权重，则将输出的编码器注意力权重转换为张量；否则设置为None
-            enc_attns = tf.convert_to_tensor(output.encoder_attentions) if self.config.output_attentions else None
-            # 返回TFSeq2SeqModelOutput对象
-            return TFSeq2SeqModelOutput(
-                last_hidden_state=output.last_hidden_state,  # 最后隐藏层状态
-                past_key_values=pkv,  # 过去键值对
-                decoder_hidden_states=dec_hs,  # 解码器隐藏层状态
-                decoder_attentions=dec_attns,  # 解码器注意力权重
-                cross_attentions=cross_attns,  # 交叉注意力权重
-                encoder_last_hidden_state=output.encoder_last_hidden_state,  # 编码器最后隐藏层状态
-                encoder_hidden_states=enc_hs,  # 编码器隐藏层状态
-                encoder_attentions=enc_attns,  # 编码器注意力权重
-            )
-    
-        # 构建模型
-        def build(self, input_shape=None):
-            # 如果已经构建过，则直接返回
-            if self.built:
-                return
-            # 设置构建标志为True
-            self.built = True
-            # 如果已经存在模型对象
-            if getattr(self, "model", None) is not None:
-                # 在模型的名称作用域下构建模型
-                with tf.name_scope(self.model.name):
-                    self.model.build(None)
-# 使用装饰器添加模型的文档字符串，描述该模型的作用和用途
+        return outputs  # 返回模型计算的结果
+    # 定义一个方法用于生成服务端输出
+    def serving_output(self, output):
+        # 如果配置要求使用缓存，则获取输出中的过去键值对的第二个元素
+        pkv = tf.tuple(output.past_key_values)[1] if self.config.use_cache else None
+        # 如果配置要求输出隐藏状态，则将输出中的解码器隐藏状态转换为张量
+        dec_hs = tf.convert_to_tensor(output.decoder_hidden_states) if self.config.output_hidden_states else None
+        # 如果配置要求输出注意力分布，则将输出中的解码器注意力分布转换为张量
+        dec_attns = tf.convert_to_tensor(output.decoder_attentions) if self.config.output_attentions else None
+        # 如果配置要求输出交叉注意力分布，则将输出中的交叉注意力分布转换为张量
+        cross_attns = tf.convert_to_tensor(output.cross_attentions) if self.config.output_attentions else None
+        # 如果配置要求输出隐藏状态，则将输出中的编码器隐藏状态转换为张量
+        enc_hs = tf.convert_to_tensor(output.encoder_hidden_states) if self.config.output_hidden_states else None
+        # 如果配置要求输出注意力分布，则将输出中的编码器注意力分布转换为张量
+        enc_attns = tf.convert_to_tensor(output.encoder_attentions) if self.config.output_attentions else None
+
+        # 返回一个 TFSeq2SeqModelOutput 对象，包含以下属性
+        return TFSeq2SeqModelOutput(
+            last_hidden_state=output.last_hidden_state,  # 最后一个隐藏状态
+            past_key_values=pkv,  # 过去的键值对
+            decoder_hidden_states=dec_hs,  # 解码器隐藏状态
+            decoder_attentions=dec_attns,  # 解码器注意力分布
+            cross_attentions=cross_attns,  # 交叉注意力分布
+            encoder_last_hidden_state=output.encoder_last_hidden_state,  # 编码器最后一个隐藏状态
+            encoder_hidden_states=enc_hs,  # 编码器隐藏状态
+            encoder_attentions=enc_attns,  # 编码器注意力分布
+        )
+
+    # 构建方法用于创建模型
+    def build(self, input_shape=None):
+        # 如果已经构建过，直接返回
+        if self.built:
+            return
+        # 设置已构建标志为 True
+        self.built = True
+        # 如果存在模型对象
+        if getattr(self, "model", None) is not None:
+            # 使用模型的名称空间，构建模型
+            with tf.name_scope(self.model.name):
+                self.model.build(None)
 @add_start_docstrings(
     "The Whisper Model with a language modeling head. Can be used for automatic speech recognition.",
     WHISPER_START_DOCSTRING,
 )
-# 定义 TFWhisperForConditionalGeneration 类，继承自 TFWhisperPreTrainedModel 和 TFCausalLanguageModelingLoss
 class TFWhisperForConditionalGeneration(TFWhisperPreTrainedModel, TFCausalLanguageModelingLoss):
-    # 定义模型的前缀
     base_model_prefix = "model"
-    # 定义加载时需要忽略的键列表
     _keys_to_ignore_on_load_missing = [
         r"encoder.version",
         r"decoder.version",
         r"proj_out.weight",
     ]
-    # 定义保存时需要忽略的键列表
     _keys_to_ignore_on_save = [
         r"proj_out.weight",
     ]
 
-    # 定义初始化方法，接受 WhisperConfig 类型的 config 参数
     def __init__(self, config: WhisperConfig, **kwargs):
-        # 调用父类的初始化方法
         super().__init__(config, **kwargs)
-        # 初始化 model 属性，使用 TFWhisperMainLayer 类来创建对象
         self.model = TFWhisperMainLayer(config, name="model")
 
-    # 定义获取编码器的方法
+    # 返回模型的编码器部分
     def get_encoder(self):
         return self.model.get_encoder()
 
-    # 定义获取解码器的方法
+    # 返回模型的解码器部分
     def get_decoder(self):
         return self.model.get_decoder()
 
-    # 定义获取输出嵌入的方法
+    # 返回模型的输出嵌入层
     def get_output_embeddings(self):
         return self.get_input_embeddings()
 
-    # 定义设置输出嵌入的方法
+    # 设置模型的输出嵌入层
     def set_output_embeddings(self, value):
         self.set_input_embeddings(value)
 
-    # 定义调整 token 嵌入大小的方法
-    def resize_token_embeddings(self, new_num_tokens: int) -> tf.keras.layers.Embedding:
+    # 调整模型的Token嵌入层大小
+    def resize_token_embeddings(self, new_num_tokens: int) -> keras.layers.Embedding:
         new_embeddings = super().resize_token_embeddings(new_num_tokens)
         return new_embeddings
 
-    # 定义 call 方法，用于模型的前向传播
+    # 模型前向传播函数，用于生成输出序列
     @add_start_docstrings_to_model_forward(WHISPER_INPUTS_DOCSTRING)
     @replace_return_docstrings(output_type=TFSeq2SeqLMOutput, config_class=_CONFIG_FOR_DOC)
     @unpack_inputs
     def call(
         self,
-        # 输入特征
         input_features: TFModelInputType | None = None,
-        # 解码器输入的 token IDs
         decoder_input_ids: np.ndarray | tf.Tensor | None = None,
-        # 解码器的注意力遮罩
         decoder_attention_mask: np.ndarray | tf.Tensor | None = None,
-        # 解码器的位置 IDs
         decoder_position_ids: np.ndarray | tf.Tensor | None = None,
-        # 头部遮罩
         head_mask: np.ndarray | tf.Tensor | None = None,
-        # 解码器头部遮罩
         decoder_head_mask: np.ndarray | tf.Tensor | None = None,
-        # 跨 attention 头部遮罩
         cross_attn_head_mask: np.ndarray | tf.Tensor | None = None,
-        # 编码器输出
         encoder_outputs: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,
-        # 过去的 key-values 对
         past_key_values: Optional[Tuple[Tuple[Union[np.ndarray, tf.Tensor]]]] = None,
-        # 解码器输入嵌入
         decoder_inputs_embeds: Optional[Tuple[Union[np.ndarray, tf.Tensor]]] = None,
-        # 标签
         labels: np.ndarray | tf.Tensor | None = None,
-        # 是否使用缓存
         use_cache: Optional[bool] = None,
-        # 是否输出注意力
         output_attentions: Optional[bool] = None,
-        # 是否输出隐藏状态
         output_hidden_states: Optional[bool] = None,
-        # 是否返回字典
         return_dict: Optional[bool] = None,
-        # 是否训练
         training: bool = False,
-    # 定义 generate 方法，用于生成文本
+    ):
+        # 此处实现模型的具体前向计算逻辑，生成对应的输出
+
+    # 生成函数，用于生成模型的输出序列
     def generate(
         self,
         inputs: Optional[tf.Tensor] = None,
@@ -980,22 +975,24 @@ class TFWhisperForConditionalGeneration(TFWhisperPreTrainedModel, TFCausalLangua
         prompt_ids: Optional[tf.Tensor] = None,
         return_token_timestamps=None,
         **kwargs,
-    # 定义一个方法，用于处理模型的输出
+    ):
+        # 此处实现生成函数的逻辑，用于根据输入生成模型的输出序列
     def serving_output(self, output):
-        # 如果使用缓存，则获取过去的关键数值
+        # 如果配置要求使用缓存，则从输出的过去键值对中获取第一个元素，否则为 None
         pkv = tf.tuple(output.past_key_values)[1] if self.config.use_cache else None
-        # 如果配置要求输出隐藏状态，则将输出的解码器隐藏状态转换为张量
+        # 如果配置要求输出隐藏状态，则将输出的解码器隐藏状态转换为张量，否则为 None
         dec_hs = tf.convert_to_tensor(output.decoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置要求输出注意力权重，则将输出的解码器注意力权重转换为张量
+        # 如果配置要求输出注意力权重，则将输出的解码器注意力权重转换为张量，否则为 None
         dec_attns = tf.convert_to_tensor(output.decoder_attentions) if self.config.output_attentions else None
-        # 如果配置要求输出交叉注意力权重，则将输出的交叉注意力权重转换为张量
+        # 如果配置要求输出注意力权重，则将输出的交叉注意力权重转换为张量，否则为 None
         cross_attns = tf.convert_to_tensor(output.cross_attentions) if self.config.output_attentions else None
-        # 如果配置要求输出隐藏状态，则将输出的编码器隐藏状态转换为张量
+        # 如果配置要求输出隐藏状态，则将输出的编码器隐藏状态转换为张量，否则为 None
         enc_hs = tf.convert_to_tensor(output.encoder_hidden_states) if self.config.output_hidden_states else None
-        # 如果配置要求输出注意力权重，则将输出的编码器注意力权重转换为张量
+        # 如果配置要求输出注意力权重，则将输出的编码器注意力权重转换为张量，否则为 None
         enc_attns = tf.convert_to_tensor(output.encoder_attentions) if self.config.output_attentions else None
 
-        # 返回 Seq2Seq 模型的输出
+        # 返回 TFSeq2SeqLMOutput 对象，其中包括 logits、过去键值对、解码器隐藏状态、解码器注意力权重、
+        # 交叉注意力权重、编码器最后隐藏状态、编码器隐藏状态、编码器注意力权重
         return TFSeq2SeqLMOutput(
             logits=output.logits,
             past_key_values=pkv,
@@ -1007,7 +1004,6 @@ class TFWhisperForConditionalGeneration(TFWhisperPreTrainedModel, TFCausalLangua
             encoder_attentions=enc_attns,
         )
 
-    # 准备生成的输入
     def prepare_inputs_for_generation(
         self,
         decoder_input_ids,
@@ -1018,25 +1014,26 @@ class TFWhisperForConditionalGeneration(TFWhisperPreTrainedModel, TFCausalLangua
         decoder_attention_mask=None,
         **kwargs,
     ):
-        # 如果使用过去的关键数值，则截取解码器输入的标识符
+        # 如果 past_key_values 不为 None，则仅保留 decoder_input_ids 的最后一个位置的标记
         if past_key_values is not None:
             decoder_input_ids = decoder_input_ids[:, -1:]
 
-        # 如果存在解码器的注意力遮罩，则计算解码器位置标识符
+        # 如果存在 decoder_attention_mask，则使用累积和计算 decoder_position_ids 的最后一个位置
         if decoder_attention_mask is not None:  # xla
             decoder_position_ids = tf.math.cumsum(decoder_attention_mask, axis=-1, exclusive=True)[:, -1:]
-        # 如果没有使用 xla 并且使用过去的关键数值，则获取过去关键数值的长度作为解码器位置标识符
+        # 如果没有 xla 并且存在 past，则使用 past_key_values 中的信息计算 decoder_position_ids
         elif past_key_values is not None:  # no xla + past
             decoder_position_ids = past_key_values[0][0].shape[2]
-        # 如果没有使用 xla 且没有使用过去的关键数值，则使用解码器输入的长度作为解码器位置标识符
+        # 否则，计算 decoder_position_ids 为 decoder_input_ids 的长度范围
         else:  # no xla + no past
             decoder_position_ids = tf.range(decoder_input_ids.shape[1])
-        # 将解码器位置标识符广播到解码器输入的形状
+        # 将 decoder_position_ids 广播到与 decoder_input_ids 形状相同
         decoder_position_ids = tf.broadcast_to(decoder_position_ids, decoder_input_ids.shape)
 
-        # 返回包含模型输入信息的字典
+        # 返回输入生成的准备数据字典，包括输入特征、编码器输出、过去键值对、解码器输入标识、缓存使用情况、
+        # 解码器注意力掩码、解码器位置标识
         return {
-            "input_features": None,  # 为了让 Keras.layer.__call__ 正常运行，需要传入该参数
+            "input_features": None,  # 传递 None 是为了满足 Keras.layer.__call__ 的要求
             "encoder_outputs": encoder_outputs,
             "past_key_values": past_key_values,
             "decoder_input_ids": decoder_input_ids,
@@ -1045,14 +1042,13 @@ class TFWhisperForConditionalGeneration(TFWhisperPreTrainedModel, TFCausalLangua
             "decoder_position_ids": decoder_position_ids,
         }
 
-    # 构建模型
     def build(self, input_shape=None):
-        # 如果已构建，则直接返回
+        # 如果已经构建，则直接返回
         if self.built:
             return
-        # 设置为已构建
+        # 标记为已经构建
         self.built = True
-        # 如果模型存在，则为模型建立名称
+        # 如果模型存在，则在其命名作用域内构建模型
         if getattr(self, "model", None) is not None:
             with tf.name_scope(self.model.name):
                 self.model.build(None)

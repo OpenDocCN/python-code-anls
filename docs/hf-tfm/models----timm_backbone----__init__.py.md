@@ -1,52 +1,55 @@
-# `.\transformers\models\timm_backbone\__init__.py`
+# `.\models\timm_backbone\__init__.py`
 
-```py
-# 禁用 flake8 对当前模块的检查，防止出现 "F401 '...' imported but unused" 警告
-# 由于需要保持其他警告，所以无法忽略这种警告，因此完全不检查这个模块
+```
+# flake8: noqa
+# 禁止 flake8 对本模块进行检查，因为无法忽略 "F401 '...' imported but unused" 警告，而保留其他警告。
 
-# 版权声明，版权归 2023 年的 HuggingFace 团队所有
+# Copyright 2023 The HuggingFace Team. All rights reserved.
+# 版权 2023 年 HuggingFace 团队。保留所有权利。
 #
-# 根据 Apache 许可证，版本 2.0 进行许可；
-# 除非符合该许可证，否则不得使用此文件
-# 你可以在下面链接处获得该许可证的副本
+# 根据 Apache 许可证 2.0 版本进行许可；
+# 除非符合许可证的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本：
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 除非适用法律要求或书面同意，否则按“原样”分发基于该许可证的软件,
-# 没有任何形式的担保或条件，不管是明示的还是暗示的
-# 查看许可证以获取有关特定语言的权限和限制
+# 除非适用法律要求或书面同意，否则根据此许可证分发的软件是基于“按原样”提供的，不附带任何明示或暗示的保证或条件。
+# 请查阅许可证了解具体的法律语言和权限限制。
 
 from typing import TYPE_CHECKING
 
-# 导入必要的依赖
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available
 
-# 初始化导入结构字典，包含配置和模型的键
+# 定义模块的导入结构
 _import_structure = {"configuration_timm_backbone": ["TimmBackboneConfig"]}
 
-# 检查 Torch 是否可用，如果不可用则抛出异常
 try:
+    # 检查是否有可用的 Torch
     if not is_torch_available():
+        # 如果没有可用的 Torch，则抛出 OptionalDependencyNotAvailable 异常
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
+    # 如果出现 OptionalDependencyNotAvailable 异常，则什么也不做，继续执行
     pass
 else:
-    # 如果 Torch 可用，则将模型结构添加到导入结构字典中
+    # 如果没有异常，则将 TimmBackbone 添加到导入结构中
     _import_structure["modeling_timm_backbone"] = ["TimmBackbone"]
 
 # 如果是类型检查阶段
 if TYPE_CHECKING:
-    # 从配置文件中导入 TimmBackboneConfig
+    # 导入配置文件的 TimmBackboneConfig 类
     from .configuration_timm_backbone import TimmBackboneConfig
 
-    # 检查 Torch 是否可用，如果不可用则抛出异常
     try:
+        # 再次检查是否有可用的 Torch
         if not is_torch_available():
+            # 如果没有可用的 Torch，则抛出 OptionalDependencyNotAvailable 异常
             raise OptionalDependencyNotAvailable()
     except OptionalDependencyNotAvailable:
+        # 如果出现 OptionalDependencyNotAvailable 异常，则什么也不做，继续执行
         pass
     else:
-        # 如果 Torch 可用，则从模型文件中导入 TimmBackbone
+        # 如果没有异常，则导入 modeling_timm_backbone 模块的 TimmBackbone 类
         from .modeling_timm_backbone import TimmBackbone
 
 # 如果不是类型检查阶段
@@ -54,6 +57,6 @@ else:
     # 导入 sys 模块
     import sys
 
-    # 将当前模块设置为 LazyModule，传入文件名、导入结构和模块规范
+    # 将当前模块替换为 _LazyModule 的实例，延迟加载模块内容
     sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
 ```

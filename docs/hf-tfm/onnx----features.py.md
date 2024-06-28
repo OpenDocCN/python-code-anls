@@ -1,28 +1,25 @@
-# `.\transformers\onnx\features.py`
+# `.\onnx\features.py`
 
-```py
-# 导入必要的模块和库
-import os
-from functools import partial, reduce
-from typing import TYPE_CHECKING, Callable, Dict, Optional, Tuple, Type, Union
+```
+import os  # 导入标准库 os，用于与操作系统交互
+from functools import partial, reduce  # 从 functools 模块导入 partial 和 reduce 函数
+from typing import TYPE_CHECKING, Callable, Dict, Optional, Tuple, Type, Union  # 导入类型提示相关的库
 
-import transformers
+import transformers  # 导入 transformers 库，用于自然语言处理模型
 
-# 从 transformers 包导入相关模块和函数
-from .. import PretrainedConfig, is_tf_available, is_torch_available
-from ..utils import TF2_WEIGHTS_NAME, WEIGHTS_NAME, logging
-from .config import OnnxConfig
+from .. import PretrainedConfig, is_tf_available, is_torch_available  # 导入相对路径下的模块和函数
+from ..utils import TF2_WEIGHTS_NAME, WEIGHTS_NAME, logging  # 导入相对路径下的工具函数和常量
+from .config import OnnxConfig  # 导入当前目录下的 config 模块中的 OnnxConfig 类
 
-# 如果是类型检查环境，则导入相关的类型注释
+
 if TYPE_CHECKING:
-    from transformers import PreTrainedModel, TFPreTrainedModel
+    from transformers import PreTrainedModel, TFPreTrainedModel  # 根据 TYPE_CHECKING 导入相关类型
 
-# 获取日志记录器，并禁用无效名称警告
-logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
+logger = logging.get_logger(__name__)  # 获取当前模块的日志记录器对象，用于记录日志信息，名称为当前模块名，如果名字无效则禁用
 
-# 如果 PyTorch 可用，则导入相关的 AutoModel 类
-if is_torch_available():
-    from transformers.models.auto import (
+
+if is_torch_available():  # 如果系统支持 torch
+    from transformers.models.auto import (  # 导入 torch 下的自动模型选择
         AutoModel,
         AutoModelForCausalLM,
         AutoModelForImageClassification,
@@ -39,9 +36,9 @@ if is_torch_available():
         AutoModelForTokenClassification,
         AutoModelForVision2Seq,
     )
-# 如果 TensorFlow 可用，则导入相关的 TFAutoModel 类
-if is_tf_available():
-    from transformers.models.auto import (
+
+if is_tf_available():  # 如果系统支持 tensorflow
+    from transformers.models.auto import (  # 导入 tensorflow 下的自动模型选择
         TFAutoModel,
         TFAutoModelForCausalLM,
         TFAutoModelForMaskedLM,
@@ -52,17 +49,17 @@ if is_tf_available():
         TFAutoModelForSequenceClassification,
         TFAutoModelForTokenClassification,
     )
-# 如果 PyTorch 和 TensorFlow 都不可用，则输出警告
-if not is_torch_available() and not is_tf_available():
-    logger.warning(
+
+if not is_torch_available() and not is_tf_available():  # 如果系统既不支持 torch 也不支持 tensorflow
+    logger.warning(  # 记录警告信息，提醒用户无法导出模型
         "The ONNX export features are only supported for PyTorch or TensorFlow. You will not be able to export models"
         " without one of these libraries installed."
     )
 
 
-def supported_features_mapping(
-    *supported_features: str, onnx_config_cls: str = None
-) -> Dict[str, Callable[[PretrainedConfig], OnnxConfig]]:
+def supported_features_mapping(  # 定义函数 supported_features_mapping，用于生成支持特性与其对应 OnnxConfig 的映射关系
+    *supported_features: str, onnx_config_cls: str = None  # 支持的特性名称（可变参数），以及指定的 OnnxConfig 类的全名
+) -> Dict[str, Callable[[PretrainedConfig], OnnxConfig]]:  # 返回字典类型，键为特性名称，值为对应的 OnnxConfig 构造函数
     """
     Generate the mapping between supported the features and their corresponding OnnxConfig for a given model.
 
@@ -73,109 +70,138 @@ def supported_features_mapping(
     Returns:
         The dictionary mapping a feature to an OnnxConfig constructor.
     """
-    # 如果未提供 OnnxConfig 类名，则抛出一个异常
-    if onnx_config_cls is None:
+    if onnx_config_cls is None:  # 如果未提供 OnnxConfig 类的全名，则抛出 ValueError 异常
         raise ValueError("A OnnxConfig class must be provided")
 
-    # 获取 OnnxConfig 类
-    config_cls = transformers
-    for attr_name in onnx_config_cls.split("."):
+    config_cls = transformers  # 初始化配置类为 transformers 模块
+    for attr_name in onnx_config_cls.split("."):  # 根据类名字符串分割，逐层获取属性
         config_cls = getattr(config_cls, attr_name)
-
-    # 创建一个字典，将每个特性映射到对应的 OnnxConfig 构造函数
-    mapping = {}
-    for feature in supported_features:
-        if "-with-past" in feature:
-            task = feature.replace("-with-past", "")
-            mapping[feature] = partial(config_cls.with_past, task=task)
+    mapping = {}  # 初始化空字典，用于存储特性与构造函数的映射关系
+    for feature in supported_features:  # 遍历所有支持的特性名称
+        if "-with-past" in feature:  # 如果特性名称包含 "-with-past"
+            task = feature.replace("-with-past", "")  # 提取任务名称
+            mapping[feature] = partial(config_cls.with_past, task=task)  # 使用部分函数生成配置类的构造函数
         else:
-            mapping[feature] = partial(config_cls.from_model_config, task=feature)
+            mapping[feature] = partial(config_cls.from_model_config, task=feature)  # 使用部分函数生成配置类的构造函数
 
-    return mapping
+    return mapping  # 返回特性与构造函数的映射字典
 
 
-class FeaturesManager:
-    # 用于存储各任务对应的 AutoModel 和 TFAutoModel 的字典
-    _TASKS_TO_AUTOMODELS = {}
-    _TASKS_TO_TF_AUTOMODELS = {}
-    # 如果已经安装了torch库
+class FeaturesManager:  # 定义特性管理器类
+    _TASKS_TO_AUTOMODELS = {}  # 空字典，用于存储任务与自动模型的映射关系
+    _TASKS_TO_TF_AUTOMODELS = {}  # 空字典，用于存储任务与 TensorFlow 自动模型的映射关系
+    # 如果 torch 库可用，则定义一个任务到自动模型类的映射字典
     if is_torch_available():
-        # 设置任务类型到自动模型类的映射关系
         _TASKS_TO_AUTOMODELS = {
-            "default": AutoModel,  # 默认类型的自动模型
-            "masked-lm": AutoModelForMaskedLM,  # 掩码语言模型的自动模型
-            "causal-lm": AutoModelForCausalLM,  # 因果语言模型的自动模型
-            "seq2seq-lm": AutoModelForSeq2SeqLM,  # 序列到序列语言模型的自动模型
-            "sequence-classification": AutoModelForSequenceClassification,  # 序列分类的自动模型
-            "token-classification": AutoModelForTokenClassification,  # 标记分类的自动模型
-            "multiple-choice": AutoModelForMultipleChoice,  # 多项选择的自动模型
-            "object-detection": AutoModelForObjectDetection,  # 目标检测的自动模型
-            "question-answering": AutoModelForQuestionAnswering,  # 问答的自动模型
-            "image-classification": AutoModelForImageClassification,  # 图像分类的自动模型
-            "image-segmentation": AutoModelForImageSegmentation,  # 图像分割的自动模型
-            "masked-im": AutoModelForMaskedImageModeling,  # 掩模图像建模的自动模型
-            "semantic-segmentation": AutoModelForSemanticSegmentation,  # 语义分割的自动模型
-            "vision2seq-lm": AutoModelForVision2Seq,  # 视觉到序列语言模型的自动模型
-            "speech2seq-lm": AutoModelForSpeechSeq2Seq,  # 语音到序列语言模型的自动模型
+            "default": AutoModel,
+            "masked-lm": AutoModelForMaskedLM,
+            "causal-lm": AutoModelForCausalLM,
+            "seq2seq-lm": AutoModelForSeq2SeqLM,
+            "sequence-classification": AutoModelForSequenceClassification,
+            "token-classification": AutoModelForTokenClassification,
+            "multiple-choice": AutoModelForMultipleChoice,
+            "object-detection": AutoModelForObjectDetection,
+            "question-answering": AutoModelForQuestionAnswering,
+            "image-classification": AutoModelForImageClassification,
+            "image-segmentation": AutoModelForImageSegmentation,
+            "masked-im": AutoModelForMaskedImageModeling,
+            "semantic-segmentation": AutoModelForSemanticSegmentation,
+            "vision2seq-lm": AutoModelForVision2Seq,
+            "speech2seq-lm": AutoModelForSpeechSeq2Seq,
         }
-    # 如果已经安装了tensorflow库
+    
+    # 如果 tensorflow 库可用，则定义一个任务到 TensorFlow 自动模型类的映射字典
     if is_tf_available():
-        # 设置任务类型到tensorflow自动模型类的映射关系
         _TASKS_TO_TF_AUTOMODELS = {
-            "default": TFAutoModel,  # 默认类型的tensorflow自动模型
-            "masked-lm": TFAutoModelForMaskedLM,  # 掩码语言模型的tensorflow自动模型
-            "causal-lm": TFAutoModelForCausalLM,  # 因果语言模型的tensorflow自动模型
-            "seq2seq-lm": TFAutoModelForSeq2SeqLM,  # 序列到序列语言模型的tensorflow自动模型
-            "sequence-classification": TFAutoModelForSequenceClassification,  # 序列分类的tensorflow自动模型
-            "token-classification": TFAutoModelForTokenClassification,  # 标记分类的tensorflow自动模型
-            "multiple-choice": TFAutoModelForMultipleChoice,  # 多项选择的tensorflow自动模型
-            "question-answering": TFAutoModelForQuestionAnswering,  # 问答的tensorflow自动模型
-            "semantic-segmentation": TFAutoModelForSemanticSegmentation,  # 语义分割的tensorflow自动模型
+            "default": TFAutoModel,
+            "masked-lm": TFAutoModelForMaskedLM,
+            "causal-lm": TFAutoModelForCausalLM,
+            "seq2seq-lm": TFAutoModelForSeq2SeqLM,
+            "sequence-classification": TFAutoModelForSequenceClassification,
+            "token-classification": TFAutoModelForTokenClassification,
+            "multiple-choice": TFAutoModelForMultipleChoice,
+            "question-answering": TFAutoModelForQuestionAnswering,
+            "semantic-segmentation": TFAutoModelForSemanticSegmentation,
         }
 
-    # 支持的模型类型和其支持的特性以及工厂的集合
+    # 定义一个集合，包含所有支持的特性，特性由各个模型类型支持的特性的并集组成
     AVAILABLE_FEATURES = sorted(reduce(lambda s1, s2: s1 | s2, (v.keys() for v in _SUPPORTED_MODEL_TYPE.values())))
 
+    # 静态方法：根据模型类型获取支持的特性列表
     @staticmethod
     def get_supported_features_for_model_type(
         model_type: str, model_name: Optional[str] = None
-    # 定义一个静态方法，用于检索模型类型的特性与对应的OnnxConfig构造函数映射
-    # 参数model_type（`str`）：要检索支持特性的模型类型
-    # 参数model_name（`str`，*可选*）：模型对象的名称属性，仅用于异常消息
-    # 返回值：每个特性到对应的OnnxConfig构造函数的字典
-    def get_feature_to_config_map(model_type: str, model_name: str = None) -> Dict[str, Callable[[PretrainedConfig], OnnxConfig]]:
-        # 将模型类型转换为小写
+    ) -> Dict[str, Callable[[PretrainedConfig], OnnxConfig]]:
+        """
+        Tries to retrieve the feature -> OnnxConfig constructor map from the model type.
+
+        Args:
+            model_type (`str`):
+                The model type to retrieve the supported features for.
+            model_name (`str`, *optional*):
+                The name attribute of the model object, only used for the exception message.
+
+        Returns:
+            The dictionary mapping each feature to a corresponding OnnxConfig constructor.
+        """
+        # 将 model_type 转换为小写
         model_type = model_type.lower()
-        # 如果模型类型不在SUPPORTED_MODEL_TYPE中，则抛出KeyError异常
+        # 检查 model_type 是否在支持的模型类型中
         if model_type not in FeaturesManager._SUPPORTED_MODEL_TYPE:
+            # 准备错误信息，如果提供了 model_name，则将其包含在错误信息中
             model_type_and_model_name = f"{model_type} ({model_name})" if model_name else model_type
+            # 抛出 KeyError 异常，说明给定的模型类型不被支持
             raise KeyError(
                 f"{model_type_and_model_name} is not supported yet. "
                 f"Only {list(FeaturesManager._SUPPORTED_MODEL_TYPE.keys())} are supported. "
                 f"If you want to support {model_type} please propose a PR or open up an issue."
             )
-        # 返回SUPPORTED_MODEL_TYPE中模型类型对应的值
+        # 返回 model_type 对应的 OnnxConfig 构造函数字典
         return FeaturesManager._SUPPORTED_MODEL_TYPE[model_type]
 
-    # 定义一个静态方法，用于将特性名称中的"-with-past"替换为空字符串
     @staticmethod
     def feature_to_task(feature: str) -> str:
+        """
+        Converts a feature string by removing the '-with-past' suffix.
+
+        Args:
+            feature (`str`):
+                The feature string to be converted.
+
+        Returns:
+            The feature string with '-with-past' suffix removed.
+        """
         return feature.replace("-with-past", "")
 
-    # 定义一个静态方法，用于验证导出的框架选择是否正确可用，否则抛出异常
     @staticmethod
     def _validate_framework_choice(framework: str):
+        """
+        Validates if the framework requested for the export is both correct and available, otherwise throws an
+        exception.
+
+        Args:
+            framework (`str`):
+                The framework requested for ONNX export.
+
+        Raises:
+            ValueError: If the provided framework is not 'pt' or 'tf'.
+            RuntimeError: If the requested framework is 'pt' but PyTorch is not available,
+                          or if the requested framework is 'tf' but TensorFlow is not available.
+        """
+        # 检查 framework 是否在支持的框架列表中
         if framework not in ["pt", "tf"]:
+            # 抛出 ValueError 异常，说明只支持 'pt' 或 'tf' 两种框架
             raise ValueError(
                 f"Only two frameworks are supported for ONNX export: pt or tf, but {framework} was provided."
             )
+        # 如果 framework 是 'pt'，检查是否可以导出到 ONNX
         elif framework == "pt" and not is_torch_available():
+            # 抛出 RuntimeError 异常，说明无法使用 PyTorch 导出模型到 ONNX
             raise RuntimeError("Cannot export model to ONNX using PyTorch because no PyTorch package was found.")
+        # 如果 framework 是 'tf'，检查是否可以导出到 ONNX
         elif framework == "tf" and not is_tf_available():
+            # 抛出 RuntimeError 异常，说明无法使用 TensorFlow 导出模型到 ONNX
             raise RuntimeError("Cannot export model to ONNX using TensorFlow because no TensorFlow package was found.")
-
-    # 定义一个静态方法
-    @staticmethod
     def get_model_class_for_feature(feature: str, framework: str = "pt") -> Type:
         """
         Attempts to retrieve an AutoModel class from a feature name.
@@ -189,16 +215,16 @@ class FeaturesManager:
         Returns:
             The AutoModel class corresponding to the feature.
         """
-        # 将特征名称映射到任务类型
+        # 根据特征名称获取对应的任务
         task = FeaturesManager.feature_to_task(feature)
-        # 验证框架选择的有效性
+        # 验证选择的框架是否有效
         FeaturesManager._validate_framework_choice(framework)
-        # 根据框架类型选择任务到AutoModel类的映射字典
+        # 根据选择的框架确定任务到AutoModel类的映射
         if framework == "pt":
             task_to_automodel = FeaturesManager._TASKS_TO_AUTOMODELS
         else:
             task_to_automodel = FeaturesManager._TASKS_TO_TF_AUTOMODELS
-        # 检查任务是否在映射字典中
+        # 如果任务不在映射中，则抛出KeyError异常
         if task not in task_to_automodel:
             raise KeyError(
                 f"Unknown task: {feature}. Possible values are {list(FeaturesManager._TASKS_TO_AUTOMODELS.values())}"
@@ -224,42 +250,45 @@ class FeaturesManager:
 
         Returns:
             The framework to use for the export.
-
         """
-        # 如果用户指定了框架，直接返回用户指定的框架
+        # 如果用户指定了框架，则直接返回该框架
         if framework is not None:
             return framework
 
-        # 框架映射字典，用于判断模型所使用的框架
+        # 框架映射关系
         framework_map = {"pt": "PyTorch", "tf": "TensorFlow"}
-        # 导出器映射字典，用于导出模型到ONNX格式
+        # 导出器映射关系
         exporter_map = {"pt": "torch", "tf": "tf2onnx"}
 
-        # 判断模型是否是一个目录
+        # 如果模型路径是一个目录
         if os.path.isdir(model):
-            # 检查模型目录中是否有PyTorch的权重文件
+            # 检查是否存在PyTorch的权重文件
             if os.path.isfile(os.path.join(model, WEIGHTS_NAME)):
                 framework = "pt"
-            # 检查模型目录中是否有TensorFlow的权重文件
+            # 检查是否存在TensorFlow的权重文件
             elif os.path.isfile(os.path.join(model, TF2_WEIGHTS_NAME)):
                 framework = "tf"
             else:
+                # 如果无法确定框架，则抛出FileNotFoundError异常
                 raise FileNotFoundError(
                     "Cannot determine framework from given checkpoint location."
                     f" There should be a {WEIGHTS_NAME} for PyTorch"
                     f" or {TF2_WEIGHTS_NAME} for TensorFlow."
                 )
+            # 记录日志，表示找到本地模型
             logger.info(f"Local {framework_map[framework]} model found.")
         else:
-            # 如果当前环境支持PyTorch，选择PyTorch作为默认框架
+            # 如果PyTorch可用，则选择PyTorch框架
             if is_torch_available():
                 framework = "pt"
-            # 如果当前环境支持TensorFlow，选择TensorFlow作为默认框架
+            # 如果TensorFlow可用，则选择TensorFlow框架
             elif is_tf_available():
                 framework = "tf"
             else:
+                # 如果环境中既没有PyTorch也没有TensorFlow，则抛出EnvironmentError异常
                 raise EnvironmentError("Neither PyTorch nor TensorFlow found in environment. Cannot export to ONNX.")
 
+        # 记录日志，表示使用导出器将模型导出为ONNX格式
         logger.info(f"Framework not requested. Using {exporter_map[framework]} to export to ONNX.")
 
         return framework
@@ -267,34 +296,32 @@ class FeaturesManager:
         feature: str, model: str, framework: str = None, cache_dir: str = None
     ) -> Union["PreTrainedModel", "TFPreTrainedModel"]:
         """
-        Attempts to retrieve a model from a model's name and the feature to be enabled.
+        Attempts to retrieve a model instance based on the given feature and model name.
 
         Args:
             feature (`str`):
-                The feature required.
+                The specific feature required by the model.
             model (`str`):
-                The name of the model to export.
+                The name of the model to retrieve.
             framework (`str`, *optional*, defaults to `None`):
-                The framework to use for the export. See `FeaturesManager.determine_framework` for the priority should
-                none be provided.
+                The framework to use for model instantiation. If not provided, determined by `FeaturesManager.determine_framework`.
 
         Returns:
-            The instance of the model.
-
+            Union["PreTrainedModel", "TFPreTrainedModel"]: The instantiated model object.
         """
         framework = FeaturesManager.determine_framework(model, framework)
-        # 根据模型名称和特征尝试检索模型
+        # 获取特定 feature 对应的模型类
         model_class = FeaturesManager.get_model_class_for_feature(feature, framework)
         try:
-            # 尝试从已训练好的模型中加载模型
+            # 尝试从预训练模型加载指定模型
             model = model_class.from_pretrained(model, cache_dir=cache_dir)
         except OSError:
-            # 在导出到 ONNX 之前在 PyTorch 中加载 TensorFlow 模型
             if framework == "pt":
+                # 若出错且框架为 PyTorch，尝试加载 TensorFlow 模型并转换为 PyTorch 格式
                 logger.info("Loading TensorFlow model in PyTorch before exporting to ONNX.")
                 model = model_class.from_pretrained(model, from_tf=True, cache_dir=cache_dir)
             else:
-                # 在导出到 ONNX 之前在 TensorFlow 中加载 PyTorch 模型
+                # 若出错且框架不是 PyTorch，尝试加载 PyTorch 模型并转换为 TensorFlow 格式
                 logger.info("Loading PyTorch model in TensorFlow before exporting to ONNX.")
                 model = model_class.from_pretrained(model, from_pt=True, cache_dir=cache_dir)
         return model
@@ -304,22 +331,27 @@ class FeaturesManager:
         model: Union["PreTrainedModel", "TFPreTrainedModel"], feature: str = "default"
     ) -> Tuple[str, Callable]:
         """
-        Check whether or not the model has the requested features.
+        Checks if a given model supports a specified feature.
 
         Args:
-            model: The model to export.
-            feature: The name of the feature to check if it is available.
+            model (Union["PreTrainedModel", "TFPreTrainedModel"]):
+                The model instance to check.
+            feature (`str`, *optional*, defaults to `"default"`):
+                The feature name to verify if supported.
 
         Returns:
-            (str) The type of the model (OnnxConfig) The OnnxConfig instance holding the model export properties.
-
+            Tuple[str, Callable]:
+                - The type of the model (`str`).
+                - Callable function from `FeaturesManager._SUPPORTED_MODEL_TYPE` corresponding to the feature.
         """
+        # 获取模型类型并替换下划线为破折号
         model_type = model.config.model_type.replace("_", "-")
+        # 获取模型名称（如果有）
         model_name = getattr(model, "name", "")
-        # 获取模型类型和模型名称支持的特性
+        # 获取模型支持的特性列表
         model_features = FeaturesManager.get_supported_features_for_model_type(model_type, model_name=model_name)
+        # 检查指定特性是否在支持的特性列表中
         if feature not in model_features:
-            # 如果请求的特性不在支持列表中，则引发错误
             raise ValueError(
                 f"{model.config.model_type} doesn't support feature {feature}. Supported values are: {model_features}"
             )
@@ -328,17 +360,16 @@ class FeaturesManager:
 
     def get_config(model_type: str, feature: str) -> OnnxConfig:
         """
-        Gets the OnnxConfig for a model_type and feature combination.
+        Retrieves the configuration for a specified model type and feature combination.
 
         Args:
             model_type (`str`):
-                The model type to retrieve the config for.
+                The type of model to fetch the configuration for.
             feature (`str`):
-                The feature to retrieve the config for.
+                The feature to retrieve the configuration for.
 
         Returns:
-            `OnnxConfig`: config for the combination
+            `OnnxConfig`: Configuration object for the specified model type and feature.
         """
-        # 获取给定模型类型和特性组合的配置
         return FeaturesManager._SUPPORTED_MODEL_TYPE[model_type][feature]
 ```

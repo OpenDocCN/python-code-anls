@@ -1,13 +1,16 @@
 # `.\models\flava\__init__.py`
 
-```py
-# 引入类型检查模块
+```
+# 版权声明及导入必要的类型检查
+# Meta Platforms 作者和 The HuggingFace Team 版权声明
+# Apache License, Version 2.0 版权许可，可以在指定条件下使用此文件
+# 如果未按许可条件使用，可能会出现限制和法律责任
 from typing import TYPE_CHECKING
 
-# 引入必要的依赖
+# 导入异常处理相关依赖
 from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_available, is_vision_available
 
-# 定义待导入的结构
+# 定义导入结构，包含需要导入的模块和类
 _import_structure = {
     "configuration_flava": [
         "FLAVA_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -19,26 +22,26 @@ _import_structure = {
     ],
 }
 
-# 检查视觉库是否可用，若不可用则抛出异常
+# 检查是否存在视觉处理相关的依赖，若不存在则引发异常
 try:
     if not is_vision_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果视觉库可用，则添加特征提取相关模块结构
+    # 添加视觉特征提取相关的导入结构
     _import_structure["feature_extraction_flava"] = ["FlavaFeatureExtractor"]
     _import_structure["image_processing_flava"] = ["FlavaImageProcessor"]
     _import_structure["processing_flava"] = ["FlavaProcessor"]
 
-# 检查 Torch 库是否可用，若不可用则抛出异常
+# 检查是否存在 Torch 相关的依赖，若不存在则引发异常
 try:
     if not is_torch_available():
         raise OptionalDependencyNotAvailable()
 except OptionalDependencyNotAvailable:
     pass
 else:
-    # 如果 Torch 库可用，则添加建模相关模块结构
+    # 添加模型相关的导入结构
     _import_structure["modeling_flava"] = [
         "FLAVA_PRETRAINED_MODEL_ARCHIVE_LIST",
         "FlavaForPreTraining",
@@ -50,7 +53,7 @@ else:
         "FlavaTextModel",
     ]
 
-# 如果是类型检查，引入相应的模块
+# 如果是类型检查阶段，则导入具体模块
 if TYPE_CHECKING:
     from .configuration_flava import (
         FLAVA_PRETRAINED_CONFIG_ARCHIVE_MAP,
@@ -88,9 +91,14 @@ if TYPE_CHECKING:
             FlavaTextModel,
         )
 
-# 如果不是类型检查，引入系统模块
 else:
+    # 如果不是类型检查阶段，则直接导入 sys 模块
     import sys
-    # 将当前模块注册到sys.modules中，使用懒加载模式
-    sys.modules[__name__] = _LazyModule(__name__, globals()["__file__"], _import_structure, module_spec=__spec__)
+    # 将当前模块注册到 sys.modules 中，使用 LazyModule 进行延迟加载
+    sys.modules[__name__] = _LazyModule(
+        __name__,  # 当前模块的名称
+        globals()["__file__"],  # 当前模块的文件路径
+        _import_structure,  # 导入结构的定义
+        module_spec=__spec__  # 当前模块的规范对象
+    )
 ```

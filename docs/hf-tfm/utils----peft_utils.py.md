@@ -1,117 +1,86 @@
-# `.\transformers\utils\peft_utils.py`
+# `.\utils\peft_utils.py`
 
-```py
-# 导入必要的模块
-import importlib
-import os
-from typing import Dict, Optional, Union
+```
+# 导入模块和库
+import importlib  # 用于动态导入模块
+import os  # 系统操作相关功能
+from typing import Dict, Optional, Union  # 引入类型提示
 
-# 导入版本控制模块
-from packaging import version
+# 从外部导入相关模块和函数
+from packaging import version  # 版本管理
+from .hub import cached_file  # 从本地导入 cached_file 函数
+from .import_utils import is_peft_available  # 从本地导入 is_peft_available 函数
 
-# 导入自定义模块
-from .hub import cached_file
-from .import_utils import is_peft_available
-
-# 定义常量，适配器配置文件名和权重文件名
+# 定义常量：适配器配置文件名、适配器模型权重文件名、安全张量适配器模型权重文件名
 ADAPTER_CONFIG_NAME = "adapter_config.json"
 ADAPTER_WEIGHTS_NAME = "adapter_model.bin"
 ADAPTER_SAFE_WEIGHTS_NAME = "adapter_model.safetensors"
 
-# 查找适配器配置文件的函数
+
 def find_adapter_config_file(
-    model_id: str,
-    cache_dir: Optional[Union[str, os.PathLike]] = None,
-    force_download: bool = False,
-    resume_download: bool = False,
-    proxies: Optional[Dict[str, str]] = None,
-    token: Optional[Union[bool, str]] = None,
-    revision: Optional[str] = None,
-    local_files_only: bool = False,
-    subfolder: str = "",
-    _commit_hash: Optional[str] = None,
+    model_id: str,  # 模型标识符
+    cache_dir: Optional[Union[str, os.PathLike]] = None,  # 缓存目录，默认为 None
+    force_download: bool = False,  # 是否强制下载，默认为 False
+    resume_download: bool = False,  # 是否恢复下载，默认为 False
+    proxies: Optional[Dict[str, str]] = None,  # 代理设置，默认为 None
+    token: Optional[Union[bool, str]] = None,  # 访问令牌，默认为 None
+    revision: Optional[str] = None,  # 版本标识符，默认为 None
+    local_files_only: bool = False,  # 仅使用本地文件，默认为 False
+    subfolder: str = "",  # 子文件夹，默认为空字符串
+    _commit_hash: Optional[str] = None,  # 提交哈希值，默认为 None
 ) -> Optional[str]:
     r"""
-    Simply checks if the model stored on the Hub or locally is an adapter model or not, return the path of the adapter
-    config file if it is, None otherwise.
-    Args:
-        model_id (`str`):
-            要查找的模型的标识符，可以是本地路径，也可以是 Hub 上存储库的 id。
-        cache_dir (`str` or `os.PathLike`, *optional*):
-            下载预训练模型配置文件时应缓存的目录路径，如果不想使用标准缓存。
-        force_download (`bool`, *optional*, defaults to `False`):
-            是否强制重新下载配置文件并覆盖已存在的缓存版本。
-        resume_download (`bool`, *optional*, defaults to `False`):
-            是否删除接收不完整的文件。如果存在这样的文件，则尝试恢复下载。
-        proxies (`Dict[str, str]`, *optional*):
-            要使用的代理服务器字典，按协议或端点划分，例如，`{'http': 'foo.bar:3128', 'http://hostname': 'foo.bar:4012'}`。
-            代理服务器将在每个请求上使用。
-        token (`str` or *bool*, *optional*):
-            用作远程文件的 HTTP bearer 授权的令牌。如果为 `True`，将使用运行 `huggingface-cli login` 时生成的令牌（存储在 `~/.huggingface` 中）。
-        revision (`str`, *optional*, defaults to `"main"`):
-            要使用的特定模型版本。它可以是分支名称、标签名称或提交 id，因为我们在 huggingface.co 上使用基于 git 的系统存储模型和其他工件，所以 `revision` 可以是 git 允许的任何标识符。
-
-            <Tip>
-
-            要测试您在 Hub 上提交的拉取请求，可以传递 `revision="refs/pr/<pr_number>"。
-
-            </Tip>
-
-        local_files_only (`bool`, *optional*, defaults to `False`):
-            如果为 `True`，将仅尝试从本地文件加载 tokenizer 配置。
-        subfolder (`str`, *optional*, defaults to `""`):
-            如果相关文件位于 huggingface.co 上模型存储库的子文件夹中，可以在此处指定文件夹名称。
+    简单检查存储在 Hub 或本地的模型是否为适配器模型，如果是，则返回适配器配置文件的路径，否则返回 None。
     """
-    # 适配器缓存文件名初始化为 None
+    # 初始化一个变量用于存储适配器配置文件的本地路径，默认为 None
     adapter_cached_filename = None
-    # 如果模型标识符为 None，则返回 None
+    # 如果 model_id 为空，则直接返回 None
     if model_id is None:
         return None
-    # 如果模型标识符是一个目录
+    # 如果 model_id 是一个目录路径
     elif os.path.isdir(model_id):
-        # 列出目录中的文件
+        # 获取该目录下的所有文件列表
         list_remote_files = os.listdir(model_id)
-        # 如果适配器配置文件在列表中
+        # 检查 ADAPTER_CONFIG_NAME 是否在文件列表中
         if ADAPTER_CONFIG_NAME in list_remote_files:
-            # 设置适配器缓存文件名为适配器配置文件的路径
+            # 如果找到了适配器配置文件，设置适配器配置文件的本地路径
             adapter_cached_filename = os.path.join(model_id, ADAPTER_CONFIG_NAME)
-    else:
-        # 否则，从缓存或远程下载适配器配置文件
-        adapter_cached_filename = cached_file(
-            model_id,
-            ADAPTER_CONFIG_NAME,
-            cache_dir=cache_dir,
-            force_download=force_download,
-            resume_download=resume_download,
-            proxies=proxies,
-            token=token,
-            revision=revision,
-            local_files_only=local_files_only,
-            subfolder=subfolder,
-            _commit_hash=_commit_hash,
-            _raise_exceptions_for_missing_entries=False,
-            _raise_exceptions_for_connection_errors=False,
-        )
+    # 否则，从缓存中获取适配器配置文件的文件名
+    adapter_cached_filename = cached_file(
+        model_id,  # 模型ID
+        ADAPTER_CONFIG_NAME,  # 适配器配置文件名
+        cache_dir=cache_dir,  # 缓存目录
+        force_download=force_download,  # 是否强制下载
+        resume_download=resume_download,  # 是否恢复下载
+        proxies=proxies,  # 代理设置
+        token=token,  # 访问令牌
+        revision=revision,  # 版本号
+        local_files_only=local_files_only,  # 仅本地文件
+        subfolder=subfolder,  # 子文件夹
+        _commit_hash=_commit_hash,  # 提交哈希值
+        _raise_exceptions_for_gated_repo=False,  # 是否为受限仓库抛出异常
+        _raise_exceptions_for_missing_entries=False,  # 是否为缺失条目抛出异常
+        _raise_exceptions_for_connection_errors=False,  # 是否为连接错误抛出异常
+    )
 
-    # 返回适配器缓存文件名
-    return adapter_cached_filename
-# 检查 PEFT 的版本是否兼容
+# 返回适配器配置文件的文件名
+return adapter_cached_filename
 def check_peft_version(min_version: str) -> None:
     r"""
-    Checks if the version of PEFT is compatible.
+    检查 PEFT 的版本是否兼容。
 
     Args:
-        version (`str`):
-            The version of PEFT to check against.
+        min_version (`str`):
+            要检查兼容性的 PEFT 版本。
     """
-    # 检查是否已安装 PEFT
+    # 检查 PEFT 是否可用
     if not is_peft_available():
         raise ValueError("PEFT is not installed. Please install it with `pip install peft`")
 
-    # 检查 PEFT 的版本是否兼容
+    # 获取当前 PEFT 的版本并与指定的最小版本比较
     is_peft_version_compatible = version.parse(importlib.metadata.version("peft")) >= version.parse(min_version)
 
-    # 如果版本不兼容，则抛出异常
+    # 如果当前 PEFT 版本不兼容，则抛出异常
     if not is_peft_version_compatible:
         raise ValueError(
             f"The version of PEFT you are using is not compatible, please use a version that is greater"

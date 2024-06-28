@@ -1,23 +1,23 @@
-# `.\transformers\models\biogpt\modeling_biogpt.py`
+# `.\models\biogpt\modeling_biogpt.py`
 
-```py
-# 设置编码为 UTF-8
-# 版权声明
-# 版权所有 2022 年 HuggingFace 团队和微软研究 AI4Science。保留所有权利。
-# 
-# 根据 Apache 许可证 2.0 版（“许可证”）获得许可；
-# 除非符合许可证的规定，否则您不得使用此文件。
-# 您可以在以下网址获取许可证副本：
-# 
+```
+# coding=utf-8
+# Copyright 2022 The HuggingFace Team and Microsoft Research AI4Science All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
-# 除非适用法律要求或书面同意，否则软件
-# 根据“按原样”分发的基础分发，
-# 没有任何明示或暗示的保证或条件。
-# 有关特定语言的权限，请参阅许可证。
-""" PyTorch BioGPT 模型。"""
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+""" PyTorch BioGPT model."""
 
-# 导入所需库
+
 import math
 from typing import Optional, Tuple, Union
 
@@ -26,7 +26,6 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-# 导入自定义库和函数
 from ...activations import ACT2FN
 from ...modeling_attn_mask_utils import _prepare_4d_causal_attention_mask
 from ...modeling_outputs import (
@@ -44,141 +43,147 @@ from ...utils import (
 )
 from .configuration_biogpt import BioGptConfig
 
-# 获取日志记录器
+
 logger = logging.get_logger(__name__)
 
-# 文档中使用的模型和配置信息
 _CHECKPOINT_FOR_DOC = "microsoft/biogpt"
 _CONFIG_FOR_DOC = "BioGptConfig"
 
-# 预训练模型存档列表
+
 BIOGPT_PRETRAINED_MODEL_ARCHIVE_LIST = [
     "microsoft/biogpt",
     "microsoft/BioGPT-Large",
-    # 查看所有 BioGPT 模型 https://huggingface.co/models?filter=biogpt
+    # See all BioGPT models at https://huggingface.co/models?filter=biogpt
 ]
 
-# 从 transformers.models.opt.modeling_opt.OPTLearnedPositionalEmbedding 复制的代码，用于 BioGpt
+
+# Copied from transformers.models.opt.modeling_opt.OPTLearnedPositionalEmbedding with OPT->BioGpt
 class BioGptLearnedPositionalEmbedding(nn.Embedding):
     """
-    此模块学习固定最大大小的位置嵌入。
+    This module learns positional embeddings up to a fixed maximum size.
     """
 
     def __init__(self, num_embeddings: int, embedding_dim: int):
-        # 对于 BioGpt，如果指定了 padding_idx，则通过偏移嵌入 id 2 并相应地调整 num_embeddings。
-        # 其他模型没有此偏移的设置。
+        # BioGpt is set up so that if padding_idx is specified then offset the embedding ids by 2
+        # and adjust num_embeddings appropriately. Other models don't have this hack
         self.offset = 2
         super().__init__(num_embeddings + self.offset, embedding_dim)
 
     def forward(self, attention_mask: torch.LongTensor, past_key_values_length: int = 0):
-        """`input_ids_shape` 期望为 [bsz x seqlen]。"""
+        """`input_ids_shape` is expected to be [bsz x seqlen]."""
         attention_mask = attention_mask.long()
 
-        # 根据 attention_mask 创建位置
+        # create positions depending on attention_mask
         positions = (torch.cumsum(attention_mask, dim=1).type_as(attention_mask) * attention_mask).long() - 1
 
-        # 如果 past_key_values_length > 0，则截断位置
+        # cut positions if `past_key_values_length` is > 0
         positions = positions[:, past_key_values_length:]
 
         return super().forward(positions + self.offset)
 
-# 从 transformers.models.bart.modeling_bart.BartAttention 复制的代码，用于 BioGpt
+
+# Copied from transformers.models.bart.modeling_bart.BartAttention with Bart->BioGpt
 class BioGptAttention(nn.Module):
+    """
+    Placeholder for the BioGPT Attention module.
+    This class will define the attention mechanism for BioGPT.
+    Actual implementation details will be filled in later.
+    """
+    
+    # Placeholder for attention module, actual implementation details pending.
     """Multi-headed attention from 'Attention Is All You Need' paper"""
 
-    # 定义多头注意力机制的初始化方法
+    # 初始化函数，定义多头注意力模型的参数和层
     def __init__(
         self,
-        embed_dim: int,  # 输入嵌入维度
-        num_heads: int,  # 头数
-        dropout: float = 0.0,  # dropout 概率，默认为 0
-        is_decoder: bool = False,  # 是否为解码器，默认为 False
-        bias: bool = True,  # 是否包含偏置，默认为 True
-        is_causal: bool = False,  # 是否是因果注意力，默认为 False
-        config: Optional[BioGptConfig] = None,  # 配置对象，默认为 None
+        embed_dim: int,
+        num_heads: int,
+        dropout: float = 0.0,
+        is_decoder: bool = False,
+        bias: bool = True,
+        is_causal: bool = False,
+        config: Optional[BioGptConfig] = None,
     ):
-        super().__init__()
-        # 初始化参数
-        self.embed_dim = embed_dim  # 嵌入维度
-        self.num_heads = num_heads  # 注意力头数
-        self.dropout = dropout  # dropout 概率
-        self.head_dim = embed_dim // num_heads  # 每个头的维度
-        self.config = config  # 配置对象
+        super().__init__()  # 调用父类的初始化函数
+        self.embed_dim = embed_dim  # 设置嵌入维度
+        self.num_heads = num_heads  # 设置注意力头的数量
+        self.dropout = dropout  # 设置dropout比例
+        self.head_dim = embed_dim // num_heads  # 计算每个头的维度
+        self.config = config  # 设置配置参数
 
-        # 检查嵌入维度是否可以被头数整除
         if (self.head_dim * num_heads) != self.embed_dim:
+            # 检查嵌入维度是否能被注意力头数整除
             raise ValueError(
                 f"embed_dim must be divisible by num_heads (got `embed_dim`: {self.embed_dim}"
                 f" and `num_heads`: {num_heads})."
             )
-        # 缩放因子
-        self.scaling = self.head_dim**-0.5
+        self.scaling = self.head_dim**-0.5  # 缩放因子，用于调整注意力分数的大小
         self.is_decoder = is_decoder  # 是否为解码器
-        self.is_causal = is_causal  # 是否是因果注意力
+        self.is_causal = is_causal  # 是否使用因果注意力
 
-        # 初始化线性投影层
-        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # K 投影层
-        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # V 投影层
-        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # Q 投影层
-        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)  # 输出投影层
+        # 初始化四个线性投影层，用于对输入进行线性变换
+        self.k_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+        self.v_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+        self.q_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
+        self.out_proj = nn.Linear(embed_dim, embed_dim, bias=bias)
 
-    # 将张量变换为期望形状
+    # 将输入张量重塑为适合多头注意力计算的形状
     def _shape(self, tensor: torch.Tensor, seq_len: int, bsz: int):
         return tensor.view(bsz, seq_len, self.num_heads, self.head_dim).transpose(1, 2).contiguous()
 
-    # 前向传播方法
+    # 前向传播函数，实现多头注意力的计算过程
     def forward(
         self,
-        hidden_states: torch.Tensor,  # 输入张量
-        key_value_states: Optional[torch.Tensor] = None,  # K/V 张量
-        past_key_value: Optional[Tuple[torch.Tensor]] = None,  # 上一步的 K/V
-        attention_mask: Optional[torch.Tensor] = None,  # 注意力遮罩
-        layer_head_mask: Optional[torch.Tensor] = None,  # 层级头掩码
-        output_attentions: bool = False,  # 是否输出注意力权重
-```  
+        hidden_states: torch.Tensor,
+        key_value_states: Optional[torch.Tensor] = None,
+        past_key_value: Optional[Tuple[torch.Tensor]] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        layer_head_mask: Optional[torch.Tensor] = None,
+        output_attentions: bool = False,
+# 定义一个名为 BioGptDecoderLayer 的自定义神经网络层，继承自 nn.Module
 class BioGptDecoderLayer(nn.Module):
-    # 定义一个类，表示 BioGpt 解码器的一个层
+    # 初始化函数，接受一个名为 config 的 BioGptConfig 类型参数
     def __init__(self, config: BioGptConfig):
-        # 初始化函数
+        # 调用父类 nn.Module 的初始化函数
         super().__init__()
-        # 隐藏层大小即嵌入维度
+        # 设置隐藏层大小为配置中的 hidden_size
         self.embed_dim = config.hidden_size
 
-        # 自注意力机制层
+        # 创建一个名为 self_attn 的 BioGptAttention 实例
         self.self_attn = BioGptAttention(
             embed_dim=self.embed_dim,
             num_heads=config.num_attention_heads,
             dropout=config.attention_probs_dropout_prob,
             is_decoder=True,
         )
-        # 随机失活率
+
+        # 设置隐藏层的 dropout 概率为配置中的 hidden_dropout_prob
         self.dropout = config.hidden_dropout_prob
-        # 激活函数
+        # 根据配置中的 hidden_act 选择激活函数，并赋值给 activation_fn
         self.activation_fn = ACT2FN[config.hidden_act]
-        # 激活函数的失活率
+        # 设置激活函数的 dropout 概率为配置中的 activation_dropout
         self.activation_dropout = config.activation_dropout
 
-        # 自注意力机制层的 LayerNorm 归一化
+        # 创建一个具有 LayerNorm 的自注意力层，输入维度为 embed_dim
         self.self_attn_layer_norm = nn.LayerNorm(self.embed_dim)
 
-        # 全连接层1
+        # 创建一个线性层，输入维度为 embed_dim，输出维度为 intermediate_size
         self.fc1 = nn.Linear(self.embed_dim, config.intermediate_size)
-        # 全连接层2
+        # 创建一个线性层，输入维度为 intermediate_size，输出维度为 embed_dim
         self.fc2 = nn.Linear(config.intermediate_size, self.embed_dim)
-        # 最终的 LayerNorm 归一化
+        # 创建一个具有 LayerNorm 的最终层，输入维度为 embed_dim
         self.final_layer_norm = nn.LayerNorm(self.embed_dim)
 
+    # 前向传播函数，接受多个输入参数，并返回计算结果
     def forward(
         self,
-        hidden_states: torch.Tensor,
-        attention_mask: Optional[torch.Tensor] = None,
-        layer_head_mask: Optional[torch.Tensor] = None,
-        past_key_value: Optional[Tuple[torch.Tensor]] = None,
-        output_attentions: Optional[bool] = False,
-        use_cache: Optional[bool] = True,
-    ):
-        # 前向传播函数，用于计算模型的输出
-    ) -> Tuple[torch.FloatTensor, Optional[Tuple[torch.FloatTensor, torch.FloatTensor]]]:
+        hidden_states: torch.Tensor,  # 隐藏状态的张量输入
+        attention_mask: Optional[torch.Tensor] = None,  # 可选的注意力掩码张量输入
+        layer_head_mask: Optional[torch.Tensor] = None,  # 可选的层头掩码张量输入
+        past_key_value: Optional[Tuple[torch.Tensor]] = None,  # 可选的过去键值元组输入
+        output_attentions: Optional[bool] = False,  # 是否输出注意力权重，默认为 False
+        use_cache: Optional[bool] = True,  # 是否使用缓存，默认为 True
+        ) -> Tuple[torch.FloatTensor, Optional[Tuple[torch.FloatTensor, torch.FloatTensor]]]:
         """
         Args:
             hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
@@ -194,16 +199,16 @@ class BioGptDecoderLayer(nn.Module):
                 If set to `True`, `past_key_values` key value states are returned and can be used to speed up decoding
                 (see `past_key_values`).
         """
-        # 保存输入 hidden_states 作为残差连接的基准
+        # 保留输入的原始状态，用于残差连接
         residual = hidden_states
 
-        # 对 hidden_states 进行 Layer Normalization
+        # 对输入的 hidden_states 进行 layer normalization
         hidden_states = self.self_attn_layer_norm(hidden_states)
 
         # Self Attention
-        # 获取过去的 key 和 value 用于缓存
+        # 如果有过去的 key/value 缓存，则提取前两个位置的缓存，否则为 None
         self_attn_past_key_value = past_key_value[:2] if past_key_value is not None else None
-        # 进行自注意力计算
+        # 执行 self-attention 操作，返回更新后的 hidden_states、self attention 权重和当前的 key/value 缓存
         hidden_states, self_attn_weights, present_key_value = self.self_attn(
             hidden_states=hidden_states,
             past_key_value=self_attn_past_key_value,
@@ -211,83 +216,83 @@ class BioGptDecoderLayer(nn.Module):
             layer_head_mask=layer_head_mask,
             output_attentions=output_attentions,
         )
-        # 对 hidden_states 进行 Dropout
+        # 对更新后的 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 将残差连接到当前 hidden_states
+        # 将残差与更新后的 hidden_states 相加，实现残差连接
         hidden_states = residual + hidden_states
 
         # Fully Connected
-        # 保存当前 hidden_states 作为残差连接的基准
+        # 保留输入的原始状态，用于残差连接
         residual = hidden_states
-        # 对 hidden_states 进行 Layer Normalization
+        # 对输入的 hidden_states 进行 layer normalization
         hidden_states = self.final_layer_norm(hidden_states)
-        # 第一个全连接层
+        # 执行第一个全连接层的操作
         hidden_states = self.fc1(hidden_states)
-        # 激活函数
+        # 应用激活函数
         hidden_states = self.activation_fn(hidden_states)
-        # 对 hidden_states 进行 Dropout
+        # 对更新后的 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.activation_dropout, training=self.training)
-        # 第二个全连接层
+        # 执行第二个全连接层的操作
         hidden_states = self.fc2(hidden_states)
-        # 对 hidden_states 进行 Dropout
+        # 对更新后的 hidden_states 应用 dropout
         hidden_states = nn.functional.dropout(hidden_states, p=self.dropout, training=self.training)
-        # 将残差连接到当前 hidden_states
+        # 将残差与更新后的 hidden_states 相加，实现残差连接
         hidden_states = residual + hidden_states
 
         # 构建输出元组
         outputs = (hidden_states,)
 
-        # 如果需要输出注意力权重，则添加到输出元组中
+        # 如果需要输出 attentions，则将 self attention 的权重添加到输出中
         if output_attentions:
             outputs += (self_attn_weights,)
 
-        # 如果需要使用缓存，则添加到输出元组中
+        # 如果需要使用缓存，则将当前的 key/value 缓存添加到输出中
         if use_cache:
             outputs += (present_key_value,)
 
+        # 返回最终的输出元组
         return outputs
 class BioGptPreTrainedModel(PreTrainedModel):
     """
-    一个抽象类，用于处理权重初始化和一个简单的接口，用于下载和加载预训练模型。
+    An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
+    models.
     """
 
-    # 指定模型配置类
+    # 指定配置类
     config_class = BioGptConfig
-    # 模型名称前缀
+    # 模型名前缀
     base_model_prefix = "biogpt"
-    # 是否支持梯度检查点
+    # 支持梯度检查点
     supports_gradient_checkpointing = True
 
     def _init_weights(self, module):
-        """初始化权重"""
+        """Initialize the weights"""
         if isinstance(module, nn.Linear):
-            # 对于线性层，使用正态分布初始化权重
-            # 与 TF 版本稍有不同，TF 版本使用截断正态分布进行初始化
-            # 参考：https://github.com/pytorch/pytorch/pull/5617
+            # 如果是线性层，使用正态分布初始化权重，偏置置零
+            # 与 TF 版本稍有不同，TF 使用截断正态分布初始化
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果存在偏置，则初始化为零
             if module.bias is not None:
                 module.bias.data.zero_()
         elif isinstance(module, nn.Embedding):
-            # 对于嵌入层，使用正态分布初始化权重
+            # 如果是嵌入层，使用正态分布初始化权重，特定位置索引处权重置零
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            # 如果存在 padding_idx，则将其对应的权重初始化为零
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
         elif isinstance(module, nn.LayerNorm):
-            # 对于 LayerNorm 层，初始化偏置为零，权重为1
+            # 如果是层归一化层，偏置置零，权重置为1
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
 
 
 BIOGPT_START_DOCSTRING = r"""
-    此模型是 PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) 的子类。将其用作
-    常规 PyTorch 模块，并参考 PyTorch 文档以了解与一般用法和行为相关的所有内容。
+    This model is a PyTorch [torch.nn.Module](https://pytorch.org/docs/stable/nn.html#torch.nn.Module) sub-class. Use
+    it as a regular PyTorch Module and refer to the PyTorch documentation for all matter related to general usage and
+    behavior.
 
-    参数:
-        config ([`~BioGptConfig`]): 具有模型所有参数的模型配置类。
-            使用配置文件进行初始化不会加载与模型关联的权重，仅加载配置。查看 [`~PreTrainedModel.from_pretrained`] 
-            方法以加载模型权重。
+    Parameters:
+        config ([`~BioGptConfig`]): Model configuration class with all the parameters of the model.
+            Initializing with a config file does not load the weights associated with the model, only the
+            configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
 
 BIOGPT_INPUTS_DOCSTRING = r"""
@@ -295,7 +300,7 @@ BIOGPT_INPUTS_DOCSTRING = r"""
 
 
 @add_start_docstrings(
-    "输出原始隐藏状态而没有特定头部的裸BioGPT模型变换器。",
+    "The bare BioGPT Model transformer outputting raw hidden-states without any specific head on top.",
     BIOGPT_START_DOCSTRING,
 )
 class BioGptModel(BioGptPreTrainedModel):
@@ -306,21 +311,20 @@ class BioGptModel(BioGptPreTrainedModel):
         self.dropout = config.hidden_dropout_prob
         self.embed_dim = config.hidden_size
         self.padding_idx = config.pad_token_id
-        # 如果配置要求，将嵌入层缩放
         self.embed_scale = math.sqrt(config.hidden_size) if config.scale_embedding else 1.0
 
-        # 初始化嵌入层和位置嵌入
+        # 嵌入层：词汇量大小为 config.vocab_size，嵌入维度为 self.embed_dim，使用 padding_idx 进行填充
         self.embed_tokens = nn.Embedding(config.vocab_size, self.embed_dim, self.padding_idx)
+        # 学习到的位置嵌入：最大位置嵌入数为 config.max_position_embeddings，嵌入维度为 self.embed_dim
         self.embed_positions = BioGptLearnedPositionalEmbedding(config.max_position_embeddings, self.embed_dim)
 
-        # 初始化 Transformer 的各层
+        # 层列表：包含 config.num_hidden_layers 个 BioGptDecoderLayer 层
         self.layers = nn.ModuleList([BioGptDecoderLayer(config) for _ in range(config.num_hidden_layers)])
-        # 初始化 LayerNorm 层
+        # 层归一化层：输入维度为 self.embed_dim
         self.layer_norm = nn.LayerNorm(self.embed_dim)
 
-        # 梯度检查点标志，默认关闭
         self.gradient_checkpointing = False
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
     def get_input_embeddings(self):
@@ -328,63 +332,65 @@ class BioGptModel(BioGptPreTrainedModel):
 
     def set_input_embeddings(self, value):
         self.embed_tokens = value
-    # 将模型输入的描述添加到模型前向传播方法的文档字符串中
+    # 使用装饰器将下面的函数添加文档字符串，文档字符串包含有关输入参数的信息
     @add_start_docstrings_to_model_forward(BIOGPT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
-    # 将代码示例的描述添加到模型前向传播方法的文档字符串中
+    # 使用装饰器添加代码示例文档字符串，指定模型的检查点、输出类型、配置类等信息
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=BaseModelOutputWithPastAndCrossAttentions,
         config_class=_CONFIG_FOR_DOC,
     )
-    # 定义模型的前向传播方法
+    # 定义模型的前向传播函数
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs，可选
-        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩，可选
-        head_mask: Optional[torch.FloatTensor] = None,  # 头部遮罩，可选
-        inputs_embeds: Optional[torch.FloatTensor] = None,  # 输入的嵌入向量，可选
-        past_key_values: Optional[Tuple[Tuple[torch.Tensor]]] = None,  # 过去的键值对，可选
-        use_cache: Optional[bool] = None,  # 是否使用缓存，可选
-        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可选
-        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可选
-        return_dict: Optional[bool] = None,  # 是否以字典形式返回结果，可选
-# 使用装饰器为类添加文档字符串，描述了该模型的作用以及用途
+        input_ids: Optional[torch.LongTensor] = None,  # 输入的 token IDs 张量，可以为 None
+        attention_mask: Optional[torch.FloatTensor] = None,  # 注意力遮罩张量，可以为 None
+        head_mask: Optional[torch.FloatTensor] = None,  # 头部遮罩张量，可以为 None
+        inputs_embeds: Optional[torch.FloatTensor] = None,  # 嵌入输入张量，可以为 None
+        past_key_values: Optional[Tuple[Tuple[torch.Tensor]]] = None,  # 过去的键值对，可以为 None
+        use_cache: Optional[bool] = None,  # 是否使用缓存，可以为 None
+        output_attentions: Optional[bool] = None,  # 是否输出注意力权重，可以为 None
+        output_hidden_states: Optional[bool] = None,  # 是否输出隐藏状态，可以为 None
+        return_dict: Optional[bool] = None,  # 是否返回字典格式的输出，可以为 None
+# 为 BioGPT 模型添加文档字符串，说明其具有顶部的语言建模头用于 CLM 微调
 @add_start_docstrings(
     """BioGPT Model with a `language modeling` head on top for CLM fine-tuning.""", BIOGPT_START_DOCSTRING
 )
-# 定义了一个新的类 BioGptForCausalLM，继承自 BioGptPreTrainedModel 类
+# 定义 BioGptForCausalLM 类，继承自 BioGptPreTrainedModel 类
 class BioGptForCausalLM(BioGptPreTrainedModel):
-    # 定义了一个列表，包含了需要绑定权重的关键字
+    # 定义权重绑定的键值列表
     _tied_weights_keys = ["output_projection.weight"]
 
-    # 初始化方法，接受一个参数 config
+    # 初始化函数，接收一个配置对象 config
     def __init__(self, config):
         # 调用父类的初始化方法
         super().__init__(config)
 
-        # 创建一个 BioGptModel 类的实例，并将其赋值给 self.biogpt 属性
+        # 创建一个 BioGptModel 实例，并赋值给 self.biogpt
         self.biogpt = BioGptModel(config)
-        # 创建一个线性层，将输入的特征映射到输出词汇表大小的空间，并将其赋值给 self.output_projection 属性
+        # 创建一个线性层，用于将隐藏状态映射到词汇表大小的输出
         self.output_projection = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
-        # 调用自定义的后初始化方法
+        # 初始化权重并应用最终处理
         self.post_init()
 
-    # 返回输出嵌入层的方法
+    # 获取输出词嵌入的方法
     def get_output_embeddings(self):
         return self.output_projection
 
-    # 设置输出嵌入层的方法
+    # 设置输出词嵌入的方法
     def set_output_embeddings(self, new_embeddings):
         self.output_projection = new_embeddings
 
-    # 前向传播方法，接受多个输入参数
+    # 为 forward 方法添加文档字符串，描述输入参数的作用，使用给定的模板
     @add_start_docstrings_to_model_forward(BIOGPT_INPUTS_DOCSTRING.format("batch_size, sequence_length"))
+    # 添加代码示例的文档字符串，指定检查点、输出类型和配置类
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=CausalLMOutputWithCrossAttentions,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 前向传播方法，接收多个可选的输入参数
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -404,10 +410,10 @@ class BioGptForCausalLM(BioGptPreTrainedModel):
             `labels = input_ids` Indices are selected in `[-100, 0, ..., config.vocab_size]` All labels set to `-100`
             are ignored (masked), the loss is only computed for labels in `[0, ..., config.vocab_size]`
         """
-        # 确定是否返回字典形式的输出结果
+        # 根据需要确定是否使用返回字典
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 调用预训练模型进行前向传播
+        # 将输入传递给预训练模型并获取输出
         outputs = self.biogpt(
             input_ids,
             attention_mask=attention_mask,
@@ -420,30 +426,27 @@ class BioGptForCausalLM(BioGptPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 获取模型输出的序列输出
+        # 从模型输出中提取序列输出（即预测的序列）
         sequence_output = outputs[0]
-        # 将序列输出投影到词汇表大小的空间
+        # 将序列输出投影到预测分数（logits）空间
         prediction_scores = self.output_projection(sequence_output)
 
-        # 初始化语言模型损失为 None
         lm_loss = None
-        # 如果提供了标签
         if labels is not None:
-            # 我们进行下一个标记的预测；将预测分数和输入 id 向后移动一个位置
+            # 如果有提供标签，计算语言建模的损失
+            # 预测的分数向左移动一位，以便进行下一个标记的预测
             shifted_prediction_scores = prediction_scores[:, :-1, :].contiguous()
             labels = labels[:, 1:].contiguous()
-            # 使用交叉熵损失函数计算语言模型损失
+            # 使用交叉熵损失函数计算损失
             loss_fct = CrossEntropyLoss()
             lm_loss = loss_fct(shifted_prediction_scores.view(-1, self.config.vocab_size), labels.view(-1))
 
-        # 如果不需要返回字典形式的输出结果
         if not return_dict:
-            # 组装输出元组
+            # 如果不需要返回字典，构建输出元组
             output = (prediction_scores,) + outputs[1:]
-            # 返回输出元组，如果语言模型损失不为 None 则包含在其中
             return ((lm_loss,) + output) if lm_loss is not None else output
 
-        # 返回带有交叉注意力的因果语言模型输出
+        # 如果需要返回字典，构建包含附加信息的对象
         return CausalLMOutputWithCrossAttentions(
             loss=lm_loss,
             logits=prediction_scores,
@@ -452,32 +455,29 @@ class BioGptForCausalLM(BioGptPreTrainedModel):
             attentions=outputs.attentions,
             cross_attentions=outputs.cross_attentions,
         )
-
-    # 为生成准备输入
-    def prepare_inputs_for_generation(
-        self, input_ids, attention_mask, inputs_embeds=None, past_key_values=None, **kwargs
-        # 如果 past_key_values 不为 None，则只保留输入 ID 的最后一个 token
+        # 如果 past_key_values 参数不为 None，则根据定义的行为保留输入的最后几个 token
         if past_key_values is not None:
-            # 获取 past_key_values 中第一个元素的 shape 的第三个维度，即过去的长度
+            # 获取第一个 past_key_values 的第一个元素的形状的第三个维度长度
             past_length = past_key_values[0][0].shape[2]
 
-            # 如果输入 ID 的长度大于过去的长度，则移除前缀长度为过去的长度
+            # 如果输入的 input_ids 长度大于 past_length，则保留最后 past_length 个 token
             if input_ids.shape[1] > past_length:
                 remove_prefix_length = past_length
             else:
-                # 否则，默认保留最后一个 ID
+                # 否则，默认保留最后一个 token
                 remove_prefix_length = input_ids.shape[1] - 1
 
+            # 更新 input_ids，仅保留所需的部分
             input_ids = input_ids[:, remove_prefix_length:]
 
-        # 如果 inputs_embeds 不为 None 且 past_key_values 为 None，则使用 inputs_embeds 作为模型输入
+        # 如果 inputs_embeds 不为 None 且 past_key_values 为 None，则将其作为模型输入
         if inputs_embeds is not None and past_key_values is None:
             model_inputs = {"inputs_embeds": inputs_embeds}
         else:
-            # 否则，使用 input_ids 作为模型输入
+            # 否则，默认使用 input_ids 作为模型输入
             model_inputs = {"input_ids": input_ids}
 
-        # 更新 model_inputs 字典，包括 attention_mask、past_key_values 和 use_cache
+        # 更新 model_inputs 字典，添加 attention_mask、past_key_values 和 use_cache 参数
         model_inputs.update(
             {
                 "attention_mask": attention_mask,
@@ -486,51 +486,63 @@ class BioGptForCausalLM(BioGptPreTrainedModel):
             }
         )
 
-        # 返回更新后的 model_inputs
+        # 返回组装好的模型输入
         return model_inputs
 
-    # 重新排序缓存 past_key_values，根据 beam_idx
     @staticmethod
     def _reorder_cache(past_key_values, beam_idx):
+        # 重新排序 past_key_values 中的数据，根据给定的 beam_idx
         reordered_past = ()
-        # 遍历 past_key_values 中的每一层
         for layer_past in past_key_values:
-            # 对每个 past_state 根据 beam_idx 进行重新排序，并添加到 reordered_past 中
+            # 对每层的 past_state 执行重新排序操作，根据 beam_idx
             reordered_past += (
                 tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
             )
         # 返回重新排序后的 past_key_values
         return reordered_past
-# 定义一个带有标记分类头部的 BioGPT 模型，用于命名实体识别等任务
+# 使用装饰器为类添加文档字符串，描述了这是一个在 BioGPT 模型基础上增加了标记分类头的模型，用于命名实体识别（NER）任务
+@add_start_docstrings(
+    """
+    BioGPT Model with a token classification head on top (a linear layer on top of the hidden-states output) e.g. for
+    Named-Entity-Recognition (NER) tasks.
+    """,
+    BIOGPT_START_DOCSTRING,
+)
+# 定义 BioGptForTokenClassification 类，继承自 BioGptPreTrainedModel
 class BioGptForTokenClassification(BioGptPreTrainedModel):
+    # 初始化函数，接受一个配置参数 config
     def __init__(self, config):
-        # 调用父类构造函数初始化模型
+        # 调用父类的初始化方法
         super().__init__(config)
-        # 设置标签数量
+        # 设置类别数量为配置中的 num_labels
         self.num_labels = config.num_labels
 
-        # 创建一个 BioGptModel 模型
+        # 创建一个 BioGptModel 对象，并将其赋值给 self.biogpt
         self.biogpt = BioGptModel(config)
-        # 检查是否有分类器丢弃率，如果没有则使用隐藏层丢弃率
+
+        # 检查配置中是否有 classifier_dropout 属性，并根据其值设置分类器的 dropout
         if hasattr(config, "classifier_dropout") and config.classifier_dropout is not None:
             classifier_dropout = config.classifier_dropout
         else:
+            # 否则使用配置中的 hidden_dropout_prob 作为 dropout
             classifier_dropout = config.hidden_dropout_prob
-        # 创建一个丢弃层
+        # 创建一个 Dropout 层，用于模型训练中的随机失活
         self.dropout = nn.Dropout(classifier_dropout)
-        # 创建一个线性层用于分类
+
+        # 创建一个全连接层，将隐藏状态的输出映射到 num_labels 大小的向量
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
-        # 执行初始化后的操作
+        # 调用模型初始化后的处理函数，用于进一步初始化工作
         self.post_init()
 
-    # 重写 forward 函数
+    # 使用装饰器为 forward 方法添加文档字符串，描述了其输入参数和输出
     @add_start_docstrings_to_model_forward(BIOGPT_INPUTS_DOCSTRING)
     @add_code_sample_docstrings(
         checkpoint=_CHECKPOINT_FOR_DOC,
         output_type=TokenClassifierOutput,
         config_class=_CONFIG_FOR_DOC,
     )
+    # 前向传播方法定义，接受多个输入参数和返回值
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -544,6 +556,12 @@ class BioGptForTokenClassification(BioGptPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+
+        # 前向传播方法的具体实现部分尚未提供，在此处省略
+        pass
+
+
+这段代码定义了一个 `BioGptForTokenClassification` 类，它是在 `BioGptPreTrainedModel` 基础上构建的，用于处理标记分类任务，例如命名实体识别（NER）。类中的 `forward` 方法尚未具体实现前向传播逻辑，但通过装饰器和注释详细描述了输入参数和输出，以及一些样例和模型配置的文档。
     ) -> Union[Tuple, TokenClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -551,10 +569,10 @@ class BioGptForTokenClassification(BioGptPreTrainedModel):
             config.num_labels - 1]`. If `config.num_labels == 1` a regression loss is computed (Mean-Square loss), If
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
-        # 如果 return_dict 不为 None，则使用传入的值；否则使用模型配置中的默认值
+        # 如果 return_dict 不是 None，则使用传入的 return_dict 值；否则使用 self.config.use_return_dict 的值
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-        # 使用 BERT 模型进行前向传播
+        # 调用 biogpt 模型进行推断
         transformer_outputs = self.biogpt(
             input_ids,
             past_key_values=past_key_values,
@@ -567,61 +585,80 @@ class BioGptForTokenClassification(BioGptPreTrainedModel):
             return_dict=return_dict,
         )
 
-        # 从 BERT 输出中获取隐藏状态
+        # 获取模型输出的 hidden states
         hidden_states = transformer_outputs[0]
-        # 对隐藏状态进行 Dropout 操作
+        # 对 hidden states 进行 dropout 处理
         hidden_states = self.dropout(hidden_states)
-        # 使用分类器对隐藏状态进行分类，得到预测的 logits
+        # 使用分类器得到 logits
         logits = self.classifier(hidden_states)
 
         loss = None
-        # 如果 labels 不为空，则计算损失
+        # 如果提供了 labels，则计算损失
         if labels is not None:
-            # 使用交叉熵损失函数
             loss_fct = CrossEntropyLoss()
-            # 仅保留损失的有效部分
+            # 只保留 attention_mask 中激活部分的损失
             if attention_mask is not None:
                 active_loss = attention_mask.view(-1) == 1
                 active_logits = logits.view(-1, self.num_labels)
-                # 仅保留激活的标签
+                # 使用 active_loss 选择性地处理 labels
                 active_labels = torch.where(
                     active_loss, labels.view(-1), torch.tensor(loss_fct.ignore_index).type_as(labels)
                 )
                 # 计算损失
                 loss = loss_fct(active_logits, active_labels)
             else:
+                # 计算整体的损失
                 loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
 
-        # 如果不需要返回字典，则返回模型输出
+        # 如果不需要返回字典形式的输出，则返回一个元组
         if not return_dict:
             output = (logits,) + transformer_outputs[2:]
             return ((loss,) + output) if loss is not None else output
 
-        # 返回 TokenClassifierOutput 类型的输出
+        # 返回 TokenClassifierOutput 对象，包括损失、logits、hidden states 和 attentions
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,
             hidden_states=transformer_outputs.hidden_states,
             attentions=transformer_outputs.attentions,
         )
-# 定义一个带有顺序分类头的 BioGpt 模型转换器（线性层）
-# [`BioGptForSequenceClassification`] 使用最后一个标记进行分类，与其他因果模型（例如 GPT-2）一样。
-# 由于它在最后一个标记上进行分类，因此需要知道最后一个标记的位置。如果在配置中定义了 `pad_token_id`，则在每一行中找到不是填充标记的最后一个标记。如果没有定义 `pad_token_id`，则简单地取每一行批次中的最后一个值。由于无法猜测当传递 `inputs_embeds` 而不是 `input_ids` 时的填充标记，它执行相同的操作（取每一行批次中的最后一个值）。
+# 使用装饰器为类添加文档字符串，描述了 BioGptForSequenceClassification 模型的作用和工作原理
+@add_start_docstrings(
+    """
+    The BioGpt Model transformer with a sequence classification head on top (linear layer).
+
+    [`BioGptForSequenceClassification`] uses the last token in order to do the classification, as other causal models
+    (e.g. GPT-2) do.
+
+    Since it does classification on the last token, it is required to know the position of the last token. If a
+    `pad_token_id` is defined in the configuration, it finds the last token that is not a padding token in each row. If
+    no `pad_token_id` is defined, it simply takes the last value in each row of the batch. Since it cannot guess the
+    padding tokens when `inputs_embeds` are passed instead of `input_ids`, it does the same (take the last value in
+    each row of the batch).
+    """,
+    BIOGPT_START_DOCSTRING,
+)
 class BioGptForSequenceClassification(BioGptPreTrainedModel):
     def __init__(self, config: BioGptConfig):
-        # 调用父类的初始化方法
+        # 调用父类构造函数初始化模型配置
         super().__init__(config)
-        # 获取标签数量
+        # 从配置中获取类别数量
         self.num_labels = config.num_labels
-        # 初始化 BioGpt 模型
+        # 初始化 BioGptModel 模型
         self.biogpt = BioGptModel(config)
-        # 初始化线性层
+        # 使用线性层进行分类，输出维度为隐藏层大小到类别数量的映射
         self.score = nn.Linear(config.hidden_size, self.num_labels, bias=False)
 
-        # 初始化权重并应用最终处理
+        # 初始化权重并进行最终处理
         self.post_init()
 
-    # 前向传播函数
+    # 使用装饰器为 forward 方法添加文档字符串，描述了输入参数和输出的详细说明
+    @add_start_docstrings_to_model_forward(BIOGPT_INPUTS_DOCSTRING)
+    @add_code_sample_docstrings(
+        checkpoint=_CHECKPOINT_FOR_DOC,
+        output_type=SequenceClassifierOutputWithPast,
+        config_class=_CONFIG_FOR_DOC,
+    )
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -634,11 +671,14 @@ class BioGptForSequenceClassification(BioGptPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+    ):
+        # 实现模型的前向传播逻辑，具体细节通过装饰器文档字符串提供
+
+    # 获取输入的嵌入层（embeddings）
     def get_input_embeddings(self):
-        # 返回嵌入标记
         return self.biogpt.embed_tokens
 
+    # 设置输入的嵌入层（embeddings）
     def set_input_embeddings(self, value):
-        # 设置输入嵌入
         self.biogpt.embed_tokens = value
 ```

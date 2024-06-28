@@ -1,41 +1,60 @@
-# `.\transformers\models\m2m_100\configuration_m2m_100.py`
+# `.\models\m2m_100\configuration_m2m_100.py`
 
-```py
-# 设置文件编码为 UTF-8
-# 版权声明，版权属于 Fairseq 作者和 HuggingFace Inc. 团队，保留所有权利。
-#
-# 根据 Apache 许可证 2.0 版本许可，除非符合许可您不得使用此文件。
-# 您可以在以下网址获取许可的副本
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# 除非适用法律要求或书面同意，否则依照此许可分发的软件将按“原样”分布，
-# 没有任何明示或暗示的担保或条件。请查看许可证以获得有关权限和限制的更多信息。
-"""M2M100 模型配置"""
-# 导入所需的类和函数
+```
+# coding=utf-8
+# 定义了文件的编码格式为 UTF-8
+
+# Copyright 2021 The Fairseq Authors and The HuggingFace Inc. team. All rights reserved.
+# 版权声明，保留所有权利
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# 依据 Apache License, Version 2.0 授权许可，详细条款可在此获取：http://www.apache.org/licenses/LICENSE-2.0
+
+# You may obtain a copy of the License at
+# 可在上述网址获取许可证副本
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 除非适用法律要求或书面同意，本软件按"原样"分发，不附带任何明示或暗示的担保或条件。
+# 详细信息请参阅许可证
+
+""" M2M100 model configuration"""
+# M2M100 模型配置
+
 from collections import OrderedDict
+# 导入 OrderedDict 数据结构
+
 from typing import Any, Mapping, Optional
-# 从 transformers 库中导入预训练的 tokenizer
+# 导入类型提示
+
 from ... import PreTrainedTokenizer
-# 从 configuration_utils 模块中导入预训练配置基类 PretrainedConfig
+# 导入预训练的 Tokenizer
+
 from ...configuration_utils import PretrainedConfig
-# 从 onnx 模块中导入相关配置类和函数
+# 导入配置工具中的预训练配置
+
 from ...onnx import OnnxConfig, OnnxSeq2SeqConfigWithPast
+# 导入 ONNX 相关配置
+
 from ...onnx.utils import compute_effective_axis_dimension
-# 从 utils 模块中导入相关类和函数
+# 导入计算有效轴维度的工具函数
+
 from ...utils import TensorType, is_torch_available, logging
+# 导入工具函数：张量类型、是否可用 Torch、日志记录
 
-# 获取 logger 实例，用于记录日志信息
 logger = logging.get_logger(__name__)
+# 获取当前模块的日志记录器
 
-# 包含 M2M100 预训练模型配置文件的 URL 映射
 M2M_100_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "facebook/m2m100_418M": "https://huggingface.co/facebook/m2m100_418M/resolve/main/config.json",
-    # 查看所有 M2M100 模型的信息 https://huggingface.co/models?filter=m2m_100
+    # 预训练模型的存档映射，链接指向 M2M100 模型的配置文件
+    # 查看所有 M2M100 模型，请访问 https://huggingface.co/models?filter=m2m_100
 }
 
 
-# M2M100 配置类，继承自预训练配置基类 PretrainedConfig
 class M2M100Config(PretrainedConfig):
     r"""
     This is the configuration class to store the configuration of a [`M2M100Model`]. It is used to instantiate an
@@ -60,99 +79,103 @@ class M2M100Config(PretrainedConfig):
 
     >>> # Accessing the model configuration
     >>> configuration = model.config
-    ```py"""
+    ```
+    """
+    # M2M100 模型的配置类，用于存储和实例化模型的配置参数
 
-    # 模型类型为 "m2m_100"
     model_type = "m2m_100"
-    # 推断时忽略的键列表为 ["past_key_values"]
+    # 模型类型为 "m2m_100"
+
     keys_to_ignore_at_inference = ["past_key_values"]
-    # 属性映射字典，将属性映射到 encoder_attention_heads 和 d_model
+    # 推断过程中忽略的键名列表，例如 "past_key_values"
+
     attribute_map = {"num_attention_heads": "encoder_attention_heads", "hidden_size": "d_model"}
-    # 初始化Transformer模型的参数
+    # 属性映射，将外部命名映射到内部模型使用的命名，例如 "num_attention_heads" 映射到 "encoder_attention_heads"
+    # 初始化函数，用于创建一个新的Transformer模型实例
     def __init__(
         self,
-        vocab_size=128112,  # 词汇表大小
-        max_position_embeddings=1024,  # 最大位置编码长度
-        encoder_layers=12,  # 编码器层数
-        encoder_ffn_dim=4096,  # 编码器中前馈网络的维度
-        encoder_attention_heads=16,  # 编码器中注意力头的数量
-        decoder_layers=12,  # 解码器层数
-        decoder_ffn_dim=4096,  # 解码器中前馈网络的维度
-        decoder_attention_heads=16,  # 解码器中注意力头的数量
-        encoder_layerdrop=0.05,  # 编码器层的随机丢弃比例
-        decoder_layerdrop=0.05,  # 解码器层的随机丢弃比例
-        use_cache=True,  # 是否使用缓存
-        is_encoder_decoder=True,  # 是否是编码-解码模型
-        activation_function="relu",  # 激活函数
-        d_model=1024,  # 模型维度
-        dropout=0.1,  # 普通丢弃比例
-        attention_dropout=0.1,  # 注意力层的丢弃比例
-        activation_dropout=0.0,  # 激活函数的丢弃比例
-        init_std=0.02,  # 参数初始化的标准差
-        decoder_start_token_id=2,  # 解码器的起始标记ID
-        scale_embedding=True,  # 是否缩放嵌入，如果为True，则缩放因子为sqrt(d_model)
-        pad_token_id=1,  # 填充标记ID
-        bos_token_id=0,  # 起始标记ID
-        eos_token_id=2,  # 结束标记ID
-        **kwargs,  # 其他参数
+        vocab_size=128112,  # 词汇表大小，默认为128112
+        max_position_embeddings=1024,  # 最大位置编码数，默认为1024
+        encoder_layers=12,  # 编码器层数，默认为12层
+        encoder_ffn_dim=4096,  # 编码器中间层维度，默认为4096
+        encoder_attention_heads=16,  # 编码器注意力头数，默认为16个
+        decoder_layers=12,  # 解码器层数，默认为12层
+        decoder_ffn_dim=4096,  # 解码器中间层维度，默认为4096
+        decoder_attention_heads=16,  # 解码器注意力头数，默认为16个
+        encoder_layerdrop=0.05,  # 编码器层dropout率，默认为0.05
+        decoder_layerdrop=0.05,  # 解码器层dropout率，默认为0.05
+        use_cache=True,  # 是否使用缓存，默认为True
+        is_encoder_decoder=True,  # 是否是编码-解码结构，默认为True
+        activation_function="relu",  # 激活函数类型，默认为ReLU
+        d_model=1024,  # 模型维度，默认为1024
+        dropout=0.1,  # 全连接层和注意力层的dropout率，默认为0.1
+        attention_dropout=0.1,  # 注意力层中的dropout率，默认为0.1
+        activation_dropout=0.0,  # 激活函数中的dropout率，默认为0.0
+        init_std=0.02,  # 参数初始化标准差，默认为0.02
+        decoder_start_token_id=2,  # 解码器起始标记ID，默认为2
+        scale_embedding=True,  # 是否对嵌入进行缩放，默认为True
+        pad_token_id=1,  # 填充标记ID，默认为1
+        bos_token_id=0,  # 起始标记ID，默认为0
+        eos_token_id=2,  # 结束标记ID，默认为2
+        **kwargs,  # 其他关键字参数，用于传递给父类初始化函数
     ):
-        # 将参数赋值给实例变量
-        self.vocab_size = vocab_size
-        self.max_position_embeddings = max_position_embeddings
-        self.d_model = d_model
-        self.encoder_ffn_dim = encoder_ffn_dim
-        self.encoder_layers = encoder_layers
-        self.encoder_attention_heads = encoder_attention_heads
-        self.decoder_ffn_dim = decoder_ffn_dim
-        self.decoder_layers = decoder_layers
-        self.decoder_attention_heads = decoder_attention_heads
-        self.dropout = dropout
-        self.attention_dropout = attention_dropout
-        self.activation_dropout = activation_dropout
-        self.activation_function = activation_function
-        self.init_std = init_std
-        self.encoder_layerdrop = encoder_layerdrop
-        self.decoder_layerdrop = decoder_layerdrop
-        self.use_cache = use_cache
-        self.num_hidden_layers = encoder_layers
-        self.scale_embedding = scale_embedding  # 如果为True，则缩放因子为sqrt(d_model)
-    
-        # 调用父类的初始化方法
+        self.vocab_size = vocab_size  # 初始化词汇表大小
+        self.max_position_embeddings = max_position_embeddings  # 初始化最大位置编码数
+        self.d_model = d_model  # 初始化模型维度
+        self.encoder_ffn_dim = encoder_ffn_dim  # 初始化编码器中间层维度
+        self.encoder_layers = encoder_layers  # 初始化编码器层数
+        self.encoder_attention_heads = encoder_attention_heads  # 初始化编码器注意力头数
+        self.decoder_ffn_dim = decoder_ffn_dim  # 初始化解码器中间层维度
+        self.decoder_layers = decoder_layers  # 初始化解码器层数
+        self.decoder_attention_heads = decoder_attention_heads  # 初始化解码器注意力头数
+        self.dropout = dropout  # 初始化全连接层和注意力层的dropout率
+        self.attention_dropout = attention_dropout  # 初始化注意力层中的dropout率
+        self.activation_dropout = activation_dropout  # 初始化激活函数中的dropout率
+        self.activation_function = activation_function  # 初始化激活函数类型
+        self.init_std = init_std  # 初始化参数初始化标准差
+        self.encoder_layerdrop = encoder_layerdrop  # 初始化编码器层dropout率
+        self.decoder_layerdrop = decoder_layerdrop  # 初始化解码器层dropout率
+        self.use_cache = use_cache  # 初始化是否使用缓存
+        self.num_hidden_layers = encoder_layers  # 初始化隐藏层的数量为编码器层数
+        self.scale_embedding = scale_embedding  # 初始化是否对嵌入进行缩放
+
+        # 调用父类的初始化函数，传入相关参数
         super().__init__(
-            pad_token_id=pad_token_id,
-            bos_token_id=bos_token_id,
-            eos_token_id=eos_token_id,
-            is_encoder_decoder=is_encoder_decoder,
-            decoder_start_token_id=decoder_start_token_id,
-            **kwargs,
+            pad_token_id=pad_token_id,  # 传入填充标记ID
+            bos_token_id=bos_token_id,  # 传入起始标记ID
+            eos_token_id=eos_token_id,  # 传入结束标记ID
+            is_encoder_decoder=is_encoder_decoder,  # 传入是否是编码-解码结构
+            decoder_start_token_id=decoder_start_token_id,  # 传入解码器起始标记ID
+            **kwargs,  # 传入其他关键字参数
         )
 class M2M100OnnxConfig(OnnxSeq2SeqConfigWithPast):
     @property
     def inputs(self) -> Mapping[str, Mapping[int, str]]:
-        # 定义常见的输入格式，使用 OrderedDict 以保持顺序
+        # 定义通用的输入格式字典
         common_inputs = OrderedDict(
             [
-                ("input_ids", {0: "batch", 1: "encoder_sequence"}),  # 编码器输入的标识符
-                ("attention_mask", {0: "batch", 1: "encoder_sequence"}),  # 编码器输入的注意力掩码
+                ("input_ids", {0: "batch", 1: "encoder_sequence"}),
+                ("attention_mask", {0: "batch", 1: "encoder_sequence"}),
             ]
         )
 
-        # 如果使用过去的状态，添加解码器的输入格式
+        # 根据是否使用过去状态，确定decoder的输入格式
         if self.use_past:
-            common_inputs["decoder_input_ids"] = {0: "batch"}  # 解码器输入的标识符
-            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "past_decoder_sequence + sequence"}  # 解码器输入的注意力掩码
+            common_inputs["decoder_input_ids"] = {0: "batch"}
+            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "past_decoder_sequence + sequence"}
         else:
-            common_inputs["decoder_input_ids"] = {0: "batch", 1: "decoder_sequence"}  # 解码器输入的标识符
-            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "decoder_sequence"}  # 解码器输入的注意力掩码
+            common_inputs["decoder_input_ids"] = {0: "batch", 1: "decoder_sequence"}
+            common_inputs["decoder_attention_mask"] = {0: "batch", 1: "decoder_sequence"}
 
-        # 如果使用过去的状态，填充常见输入格式
+        # 如果使用过去状态，调用填充过去键值的方法，填充通用输入字典
         if self.use_past:
             self.fill_with_past_key_values_(common_inputs, direction="inputs")
-        # 返回常见的输入格式
+        # 返回最终的输入格式字典
         return common_inputs
 
-    # 从BARTOnnxConfig._generate_dummy_inputs_for_sequence_classification_and_question_answering中复制而来
-    # 更好的命名应该是_generate_dummy_inputs_for_encoder_and_decoder，但为了能够检查复制是否与BART所做的一致，将其保留下来，以便在需要时进行更新。
+    # 从BartOnnxConfig._generate_dummy_inputs_for_sequence_classification_and_question_answering复制而来
+    # 名称更适合是_generate_dummy_inputs_for_encoder_and_decoder，因为M2M100不支持序列分类和问答，
+    # 但保留此名称以便检查副本是否与BART的匹配，并在需要时进行更新。
     def _generate_dummy_inputs_for_sequence_classification_and_question_answering(
         self,
         tokenizer: PreTrainedTokenizer,
@@ -161,24 +184,25 @@ class M2M100OnnxConfig(OnnxSeq2SeqConfigWithPast):
         is_pair: bool = False,
         framework: Optional[TensorType] = None,
     ) -> Mapping[str, Any]:
-        # 从OnnxConfig.generate_dummy_inputs中复制而来，为了代码清晰性，没有使用super(OnnxConfigWithPast, self).generate_dummy_inputs
-        # 如果动态轴（-1），则将固定维度设置为2个样本，以避免ONNX所做的优化
+        # 从OnnxConfig.generate_dummy_inputs复制而来
+        # 为了代码清晰性，没有使用super(OnnxConfigWithPast, self).generate_dummy_inputs。
+        # 如果动态轴（-1），则前向传播时采用固定维度的2个样本以避免ONNX做的优化。
         batch_size = compute_effective_axis_dimension(
             batch_size, fixed_dimension=OnnxConfig.default_fixed_batch, num_token_to_add=0
         )
 
-        # 如果动态轴（-1），则将固定维度设置为8个标记，以避免ONNX所做的优化
+        # 如果动态轴（-1），则前向传播时采用固定维度的8个标记以避免ONNX做的优化。
         token_to_add = tokenizer.num_special_tokens_to_add(is_pair)
         seq_length = compute_effective_axis_dimension(
             seq_length, fixed_dimension=OnnxConfig.default_fixed_sequence, num_token_to_add=token_to_add
         )
 
-        # 根据计算的批量和序列生成虚拟输入
+        # 根据计算的批次和序列长度生成虚拟输入
         dummy_input = [" ".join([tokenizer.unk_token]) * seq_length] * batch_size
         common_inputs = dict(tokenizer(dummy_input, return_tensors=framework))
         return common_inputs
 
-    # 从transformers.models.bart.configuration_bart.BartOnnxConfig._generate_dummy_inputs_for_default_and_seq2seq_lm中复制而来
+    # 从transformers.models.bart.configuration_bart.BartOnnxConfig._generate_dummy_inputs_for_default_and_seq2seq_lm复制而来
     def _generate_dummy_inputs_for_default_and_seq2seq_lm(
         self,
         tokenizer: PreTrainedTokenizer,
@@ -187,31 +211,36 @@ class M2M100OnnxConfig(OnnxSeq2SeqConfigWithPast):
         is_pair: bool = False,
         framework: Optional[TensorType] = None,
         ) -> Mapping[str, Any]:
-        # 为序列分类和问答任务生成编码器输入
+        # 生成编码器输入数据
         encoder_inputs = self._generate_dummy_inputs_for_sequence_classification_and_question_answering(
             tokenizer, batch_size, seq_length, is_pair, framework
         )
 
-        # 生成解码器输入
+        # 生成解码器输入数据
+        # 如果使用过去信息，则解码器序列长度为1，否则与编码器序列长度相同
         decoder_seq_length = seq_length if not self.use_past else 1
         decoder_inputs = self._generate_dummy_inputs_for_sequence_classification_and_question_answering(
             tokenizer, batch_size, decoder_seq_length, is_pair, framework
         )
+        # 将解码器输入数据格式化为以"decoder_"开头的命名格式
         decoder_inputs = {f"decoder_{name}": tensor for name, tensor in decoder_inputs.items()}
-        # 组合编码器和解码器的输入
+        # 整合编码器和解码器的输入数据
         common_inputs = dict(**encoder_inputs, **decoder_inputs)
 
-        # 如果使用过去信息
         if self.use_past:
-            # 如果没有安装 PyTorch，则抛出异常
+            # 检查是否安装了 PyTorch，如果没有则抛出异常
             if not is_torch_available():
                 raise ValueError("Cannot generate dummy past_keys inputs without PyTorch installed.")
             else:
                 import torch
+            
+            # 获取批次大小和编码器序列长度
             batch, encoder_seq_length = common_inputs["input_ids"].shape
+            # 获取解码器输入序列长度
             decoder_seq_length = common_inputs["decoder_input_ids"].shape[1]
+            # 获取注意力头的数量
             num_encoder_attention_heads, num_decoder_attention_heads = self.num_attention_heads
-            # 计算编码器和解码器的形状
+            # 定义编码器和解码器的形状
             encoder_shape = (
                 batch,
                 num_encoder_attention_heads,
@@ -226,20 +255,21 @@ class M2M100OnnxConfig(OnnxSeq2SeqConfigWithPast):
                 self._config.hidden_size // num_decoder_attention_heads,
             )
 
-            # 在解码器注意力掩码后面添加全 1 张量
+            # 扩展解码器注意力掩码，以确保其长度与decoder_past_length相同
             common_inputs["decoder_attention_mask"] = torch.cat(
                 [common_inputs["decoder_attention_mask"], torch.ones(batch, decoder_past_length)], dim=1
             )
 
-            # 初始化 past_key_values 列表
+            # 初始化过去键值列表
             common_inputs["past_key_values"] = []
-            # 如果模型配置中存在编码器和解码器层的数量，则都予以考虑
+
+            # 根据模型配置中的编码器和解码器层数，初始化过去键值对
             num_encoder_layers, num_decoder_layers = self.num_layers
             min_num_layers = min(num_encoder_layers, num_decoder_layers)
             max_num_layers = max(num_encoder_layers, num_decoder_layers) - min_num_layers
             remaining_side_name = "encoder" if num_encoder_layers > num_decoder_layers else "decoder"
 
-            # 为编码器和解码器的 past_key_values 添加初始化值
+            # 对于最小层数，初始化过去键值对为零张量
             for _ in range(min_num_layers):
                 common_inputs["past_key_values"].append(
                     (
@@ -249,11 +279,13 @@ class M2M100OnnxConfig(OnnxSeq2SeqConfigWithPast):
                         torch.zeros(encoder_shape),
                     )
                 )
-            # TODO: test this.
+
+            # 添加剩余层数的过去键值对，如果是编码器优先，则使用编码器的形状，否则使用解码器的形状
             shape = encoder_shape if remaining_side_name == "encoder" else decoder_shape
             for _ in range(min_num_layers, max_num_layers):
                 common_inputs["past_key_values"].append((torch.zeros(shape), torch.zeros(shape)))
-        # 返回合并后的输入
+
+        # 返回整合了所有输入数据的字典
         return common_inputs
     # 将函数_generate_dummy_inputs_for_default_and_seq2seq_lm赋值给generate_dummy_inputs变量
     generate_dummy_inputs = _generate_dummy_inputs_for_default_and_seq2seq_lm

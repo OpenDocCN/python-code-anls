@@ -1,40 +1,53 @@
 # `.\models\cpmant\tokenization_cpmant.py`
 
-```py
-# Tokenization classes for CPMAnt: CPMAnt的分词类
-
-
+```
+# 设置文件编码为 UTF-8
+# 版权声明及许可信息
+#
+# 根据 Apache 许可证 2.0 版本进行许可，除非符合许可证中的规定，否则不得使用此文件。
+# 您可以在以下网址获取许可证副本：
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# 除非适用法律要求或书面同意，否则根据许可证分发的软件是按“原样”基础分发的，
+# 没有任何明示或暗示的保证或条件。请参阅许可证获取具体语言的权限和限制。
+"""CPMAnt 的标记化类。"""
+# 导入必要的库
 import collections
 import os
 from typing import List, Optional, Tuple
 
+# 导入条件依赖库
 from transformers.utils import is_jieba_available, requires_backends
 
-
+# 如果 jieba 库可用，则导入
 if is_jieba_available():
     import jieba
 
+# 导入通用工具函数和日志记录
 from ...tokenization_utils import PreTrainedTokenizer
 from ...utils import logging
 
-
+# 获取当前模块的日志记录器
 logger = logging.get_logger(__name__)
 
+# 定义词汇文件的名称映射
 VOCAB_FILES_NAMES = {"vocab_file": "vocab.txt"}
 
+# 定义预训练模型的词汇文件映射
 PRETRAINED_VOCAB_FILES_MAP = {
     "vocab_file": {
         "openbmb/cpm-ant-10b": "https://huggingface.co/openbmb/cpm-ant-10b/blob/main/vocab.txt",
     },
 }
 
+# 定义预训练模型的位置编码大小映射
 PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES = {
     "openbmb/cpm-ant-10b": 1024,
 }
 
-
 def load_vocab(vocab_file):
-    """Loads a vocabulary file into a dictionary."""
+    """加载词汇文件到字典中。"""
     vocab = collections.OrderedDict()
     with open(vocab_file, "r", encoding="utf-8") as reader:
         tokens = reader.readlines()
@@ -43,14 +56,15 @@ def load_vocab(vocab_file):
         vocab[token] = index
     return vocab
 
-
 class WordpieceTokenizer(object):
+    """基于词片段的标记化器。"""
     def __init__(self, vocab, unk_token="<unk>", max_input_chars_per_word=200):
         self.vocab = vocab
         self.unk_token = unk_token
         self.max_input_chars_per_word = max_input_chars_per_word
 
     def tokenize(self, token):
+        """将单词标记化为词片段列表。"""
         chars = list(token)
         if len(chars) > self.max_input_chars_per_word:
             return [self.unk_token]
@@ -75,21 +89,45 @@ class WordpieceTokenizer(object):
 
         return sub_tokens
 
-
 class CpmAntTokenizer(PreTrainedTokenizer):
     """
-    Construct a CPMAnt tokenizer. Based on byte-level Byte-Pair-Encoding.
+    构造一个 CPMAnt 标记化器。基于字节级别的字节对编码。
+    
+    继承自 PreTrainedTokenizer 类。
     """
-    # 定义一个类（初始化参数包括词汇文件路径以及可选的特殊标记）
-    class SomeClass:
-        # 设置一些默认的词汇文件名和映射
+    pass
+    # 定义类，用于处理特定的词汇表和标记化任务
+    class BartTokenizer(BertTokenizer):
+        """
+        Args:
+            vocab_file (`str`):
+                Path to the vocabulary file.
+            bod_token (`str`, *optional*, defaults to `"<d>"`):
+                The beginning of document token.
+            eod_token (`str`, *optional*, defaults to `"</d>"`):
+                The end of document token.
+            bos_token (`str`, *optional*, defaults to `"<s>"`):
+                The beginning of sequence token.
+            eos_token (`str`, *optional*, defaults to `"</s>"`):
+                The end of sequence token.
+            pad_token (`str`, *optional*, defaults to `"<pad>"`):
+                The token used for padding.
+            unk_token (`str`, *optional*, defaults to `"<unk>"`):
+                The unknown token.
+            line_token (`str`, *optional*, defaults to `"</n>"`):
+                The line token.
+            space_token (`str`, *optional*, defaults to `"</_>"`):
+                The space token.
+        """
+    
+        # 配置类变量，指定相关文件名和映射
         vocab_files_names = VOCAB_FILES_NAMES
         pretrained_vocab_files_map = PRETRAINED_VOCAB_FILES_MAP
         max_model_input_sizes = PRETRAINED_POSITIONAL_EMBEDDINGS_SIZES
         model_input_names = ["input_ids", "attention_mask"]
         add_prefix_space = False
     
-        # 初始化函数，包括词汇文件路径和一些可选特殊标记
+        # 初始化方法，加载词汇表并进行相关配置
         def __init__(
             self,
             vocab_file,
@@ -104,24 +142,29 @@ class CpmAntTokenizer(PreTrainedTokenizer):
             padding_side="left",
             **kwargs,
         ):
-            # 使用外部库jieba，确保其可用
+            # 要求后端库为 "jieba"
             requires_backends(self, ["jieba"])
             self.bod_token = bod_token
             self.eod_token = eod_token
-            # 从词汇文件加载编码器
+            # 加载并设置词汇表编码器
             self.encoder = load_vocab(vocab_file)
-            # 将空格和换行符加入编码器中
+            # 将空格和换行符的编码对应到词汇表中
             self.encoder[" "] = self.encoder[space_token]
             self.encoder["\n"] = self.encoder[line_token]
-            # 从编码器中删除空格和换行符
+    
+            # 删除空格和换行符的原始编码
             del self.encoder[space_token]
             del self.encoder[line_token]
-            # 对编码器按值进行排序并创建其对应的解码器
+    
+            # 按编码值排序并转为有序字典
             self.encoder = collections.OrderedDict(sorted(self.encoder.items(), key=lambda x: x[1]))
+            # 创建反向词汇表
             self.decoder = {v: k for k, v in self.encoder.items()}
-            # 使用编码器和未知标记初始化词分词仪
+    
+            # 使用词块化器设置词块化方法
             self.wordpiece_tokenizer = WordpieceTokenizer(vocab=self.encoder, unk_token=unk_token)
-            # 调用父类初始化函数
+    
+            # 调用父类的初始化方法
             super().__init__(
                 bod_token=bod_token,
                 eod_token=eod_token,
@@ -150,138 +193,134 @@ class CpmAntTokenizer(PreTrainedTokenizer):
         def newline_id(self):
             return self.encoder["\n"]
     
-        # 返回词汇大小
+        # 返回词汇表大小
         @property
         def vocab_size(self) -> int:
             return len(self.encoder)
     
-        # 获取编码器
+        # 获取词汇表
         def get_vocab(self):
             return dict(self.encoder, **self.added_tokens_encoder)
-    # 将字符串进行分词处理
+    # 将输入文本进行分词处理，并返回分词后的结果列表
     def _tokenize(self, text):
-        """Tokenize a string."""
-        # 初始化一个空列表用于存储分词后的结果
         output_tokens = []
-        # 使用结巴分词对字符串进行分词处理
+        # 使用结巴分词库对文本进行分词，cut_all=False表示精确模式
         for x in jieba.cut(text, cut_all=False):
-            # 将结巴分词结果逐个进行词片段处理，并将处理后的词片段添加到结果列表中
+            # 对每个分词结果进行 WordPiece 分词处理，并将处理后的结果添加到输出列表中
             output_tokens.extend(self.wordpiece_tokenizer.tokenize(x))
-        # 返回分词结果列表
         return output_tokens
 
-    # 将 id 序列解码成字符串
+    # 将标识符列表解码为字符串
     def _decode(self, token_ids, **kwargs):
-        """Decode ids into a string."""
-        # 过滤掉小于 0 的 token_ids
+        # 移除小于0的无效标识符
         token_ids = [i for i in token_ids if i >= 0]
-        # 过滤掉特殊标记的 token_ids（pad_token_id, eos_token_id, bos_token_id）
+        # 移除特殊的标识符，如 padding、结束和开始标记
         token_ids = [
             x for x in token_ids if x != self.pad_token_id and x != self.eos_token_id and x != self.bos_token_id
         ]
-        # 调用父类的 _decode 方法进行解码，并传入其他方式的参数
+        # 调用父类的解码方法解码标识符列表为字符串
         return super()._decode(token_ids, **kwargs)
 
-    # 检查 token 是否在编码器中
+    # 检查给定的标识符是否在编码器（词汇表）中
     def check(self, token):
         return token in self.encoder
 
-    # 将 tokens 列表转换为字符串
+    # 将标记列表转换为字符串
     def convert_tokens_to_string(self, tokens: List[str]) -> str:
         return "".join(tokens)
 
-    # 将 token 转换为对应的 id
+    # 将标记（字符串）转换为其在词汇表中对应的标识符
     def _convert_token_to_id(self, token):
-        """Converts a token (str) in an id using the vocab."""
         return self.encoder.get(token, self.encoder.get(self.unk_token))
 
-    # 将 id 转换为对应的 token
+    # 将标识符（整数）转换为其在词汇表中对应的标记（字符串）
     def _convert_id_to_token(self, index):
-        """Converts an index (integer) in a token (str) using the vocab."""
         return self.decoder.get(index, self.unk_token)
 
-    # 保存词汇表到文件
+    # 将词汇表保存到指定的目录下
     def save_vocabulary(self, save_directory: str, filename_prefix: Optional[str] = None) -> Tuple[str]:
-        # 如果保存的目录已经存在，则生成词汇表文件路径
+        # 如果保存目录存在，则构造词汇表文件路径
         if os.path.isdir(save_directory):
             vocab_file = os.path.join(
                 save_directory, (filename_prefix + "-" if filename_prefix else "") + VOCAB_FILES_NAMES["vocab_file"]
             )
-        else:  # 如果保存的目录不存在，则直接使用保存路径
+        else:
+            # 否则，直接使用指定的文件路径
             vocab_file = (filename_prefix + "-" if filename_prefix else "") + save_directory
-        # 初始化 index 变量
+        
         index = 0
-        # 如果空格存在于编码器中，则进行替换操作
+        # 处理特殊字符
         if " " in self.encoder:
             self.encoder["</_>"] = self.encoder[" "]
             del self.encoder[" "]
-        # 如果换行存在于编码器中，则进行替换操作
         if "\n" in self.encoder:
             self.encoder["</n>"] = self.encoder["\n"]
             del self.encoder["\n"]
-        # 对编码器进行排序
+        
+        # 按照标识符的索引值对编码器进行排序，并转换为有序字典
         self.encoder = collections.OrderedDict(sorted(self.encoder.items(), key=lambda x: x[1]))
-        # 将编码器中的信息保存到文件中
+
+        # 将排序后的词汇表写入到文件中
         with open(vocab_file, "w", encoding="utf-8") as writer:
             for token, token_index in self.encoder.items():
-                # 检查词汇表索引是否连续，如果不连续则输出警告信息
+                # 检查索引是否连续，如果不连续则记录警告信息
                 if index != token_index:
                     logger.warning(
                         f"Saving vocabulary to {vocab_file}: vocabulary indices are not consecutive."
                         " Please check that the vocabulary is not corrupted!"
                     )
-                    # 更新索引值
                     index = token_index
-                # 写入 token 到文件中
                 writer.write(token + "\n")
-                # 更新索引值
                 index += 1
+        
         # 返回保存的词汇表文件路径
         return (vocab_file,)
     def build_inputs_with_special_tokens(self, token_ids_0: List[int], token_ids_1: List[int] = None) -> List[int]:
         """
-        从一个或一对序列构建用于序列分类任务的模型输入，通过连接和添加特殊标记。一个 CPMAnt 序列的格式如下：
+        Build model inputs from a sequence or a pair of sequences for sequence classification tasks by concatenating and
+        adding special tokens. A CPMAnt sequence has the following format:
 
-        - 单个序列: `[BOS] Sequence`.
+        - single sequence: `[BOS] Sequence`.
 
         Args:
-            token_ids_0 (`List[int]`): 将要添加特殊标记的第一个标记化序列。
-            token_ids_1 (`List[int]`, *可选*): 将要添加特殊标记的可选第二个标记化序列。
+            token_ids_0 (`List[int]`): The first tokenized sequence that special tokens will be added.
+            token_ids_1 (`List[int]`): The optional second tokenized sequence that special tokens will be added.
 
         Returns:
-            `List[int]`: 带有特殊标记的模型输入。
+            `List[int]`: The model input with special tokens.
         """
-        # 如果没有第二个序列，则只添加起始特殊标记并返回
+        # 如果没有第二个序列，则返回带有起始特殊标记的第一个序列
         if token_ids_1 is None:
             return [self.bos_token_id] + token_ids_0
-        # 否则，连接两个序列并添加起始特殊标记，并返回
+        # 如果有第二个序列，则连接两个序列，并在中间添加起始特殊标记
         return [self.bos_token_id] + token_ids_0 + [self.bos_token_id] + token_ids_1
 
     def get_special_tokens_mask(
         self, token_ids_0: List[int], token_ids_1: Optional[List[int]] = None, already_has_special_tokens: bool = False
     ) -> List[int]:
         """
-        从没有添加特殊标记的标记列表中检索序列 ID。此方法在使用 tokenizer 的 `prepare_for_model` 方法添加特殊标记时调用。
+        Retrieve sequence ids from a token list that has no special tokens added. This method is called when adding
+        special tokens using the tokenizer `prepare_for_model` method.
 
         Args:
-            token_ids_0 (`List[int]`): ID 列表。
-            token_ids_1 (`List[int]`, *可选*): 序列对的可选第二个 ID 列表。
-            already_has_special_tokens (`bool`, *可选*, 默认为 `False`):
-                标记列表是否已经格式化为模型的特殊标记。
+            token_ids_0 (`List[int]`): List of IDs.
+            token_ids_1 (`List[int]`, *optional*): Optional second list of IDs for sequence pairs.
+            already_has_special_tokens (`bool`, *optional*, defaults to `False`):
+                Whether or not the token list is already formatted with special tokens for the model.
 
         Returns:
-            `List[int]`: 一个整数列表，范围在 [0, 1] 内：1 表示特殊标记，0 表示序列标记。
+            `List[int]`: A list of integers in the range [0, 1]: 1 for a special token, 0 for a sequence token.
         """
 
-        # 如果已经包含特殊标记，则调用父类的方法返回结果
+        # 如果输入的 token_ids_0 和 token_ids_1 已经包含特殊标记，则调用父类方法处理
         if already_has_special_tokens:
             return super().get_special_tokens_mask(
                 token_ids_0=token_ids_0, token_ids_1=token_ids_1, already_has_special_tokens=True
             )
 
-        # 如果有第二个序列，则返回带有特殊标记的掩码列表
+        # 如果有第二个序列，则返回一个列表，以1开头表示起始特殊标记，接着全为0表示序列 token，再以1结尾表示第二个起始特殊标记
         if token_ids_1 is not None:
             return [1] + ([0] * len(token_ids_0)) + [1] + ([0] * len(token_ids_1))
-        # 否则，返回只包含第一个序列的带有特殊标记的掩码列表
+        # 如果只有一个序列，则返回一个列表，以1开头表示起始特殊标记，接着全为0表示序列 token
         return [1] + ([0] * len(token_ids_0))
 ```
