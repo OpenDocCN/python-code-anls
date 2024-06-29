@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_numeric.py`
 
-```
+```py
 # 导入系统模块
 import sys
 # 导入警告模块

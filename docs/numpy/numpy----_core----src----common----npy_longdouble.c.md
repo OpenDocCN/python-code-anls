@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_longdouble.c`
 
-```
+```py
 /*
  * 定义宏，指定使用的 NumPy API 版本，禁用过时的 API
  */

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\func2subr.py`
 
-```
+```py
 """
 Rules for building C/API module with f2py2e.
 

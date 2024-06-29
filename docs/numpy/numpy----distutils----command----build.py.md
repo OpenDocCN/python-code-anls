@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\build.py`
 
-```
+```py
 # 导入所需的模块
 import os
 import sys

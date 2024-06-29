@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\arrayprint.py`
 
-```
+```py
 # 导入NumPy库，简称为np
 import numpy as np
 

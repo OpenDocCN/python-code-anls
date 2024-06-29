@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\special_integer_comparisons.cpp`
 
-```
+```py
 /*
  * 包含 Python.h 头文件，提供 Python C API 功能支持。
  */

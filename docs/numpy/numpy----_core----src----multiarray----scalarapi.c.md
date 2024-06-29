@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\scalarapi.c`
 
-```
+```py
 /*
    定义 NPY_NO_DEPRECATED_API 为 NPY_API_VERSION，避免使用已废弃的 NumPy API 版本
    定义 _MULTIARRAYMODULE，用于多维数组模块

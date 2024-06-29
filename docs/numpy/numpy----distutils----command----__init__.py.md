@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\__init__.py`
 
-```
+```py
 # 导入distutils.command模块
 """distutils.command
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_build_ext.py`
 
-```
+```py
 '''Tests for numpy.distutils.build_ext.'''
 
 import os  # 导入操作系统接口模块

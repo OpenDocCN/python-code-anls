@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\tokenize.cpp`
 
-```
+```py
 /*
     How parsing quoted fields works:
 

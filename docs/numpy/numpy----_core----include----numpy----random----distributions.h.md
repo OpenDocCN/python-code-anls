@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\random\distributions.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_RANDOM_DISTRIBUTIONS_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_RANDOM_DISTRIBUTIONS_H_
 

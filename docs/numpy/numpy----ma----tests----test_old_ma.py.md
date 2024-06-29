@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\test_old_ma.py`
 
-```
+```py
 # 导入 reduce 函数用于累积计算，pickle 用于对象序列化
 from functools import reduce
 import pickle

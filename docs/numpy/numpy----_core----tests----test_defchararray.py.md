@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_defchararray.py`
 
-```
+```py
 import pytest  # 导入 pytest 测试框架
 
 import numpy as np  # 导入 NumPy 库

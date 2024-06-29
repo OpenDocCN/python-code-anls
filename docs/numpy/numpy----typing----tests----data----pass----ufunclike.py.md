@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ufunclike.py`
 
-```
+```py
 from __future__ import annotations
 from typing import Any, Optional
 import numpy as np

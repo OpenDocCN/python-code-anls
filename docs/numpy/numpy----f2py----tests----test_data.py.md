@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_data.py`
 
-```
+```py
 # 导入必要的模块：os、pytest、numpy
 import os
 import pytest

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\memmap.pyi`
 
-```
+```py
 # 导入 numpy 库中的 memmap 函数，并将其命名为 memmap，以便在当前代码中直接使用
 from numpy import memmap as memmap
 

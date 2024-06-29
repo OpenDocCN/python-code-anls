@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937-test-data-gen.c`
 
-```
+```py
 /*
  * 生成测试用的 CSV 文件
  *

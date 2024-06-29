@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testFortran.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 import sys  # 导入系统模块 sys

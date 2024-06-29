@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\test_runtime.py`
 
-```
+```py
 """Test the runtime usage of `numpy.typing`."""
 
 # 导入必要的模块和函数

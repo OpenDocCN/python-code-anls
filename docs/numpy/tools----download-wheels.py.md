@@ -1,6 +1,6 @@
 # `.\numpy\tools\download-wheels.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Script to download NumPy wheels from the Anaconda staging area.

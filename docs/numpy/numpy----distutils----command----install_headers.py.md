@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\install_headers.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 从 distutils.command.install_headers 模块导入 install_headers 类，用作老的 install_headers

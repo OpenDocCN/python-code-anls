@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_generator_mt19937.py`
 
-```
+```py
 # 导入必要的标准库和第三方库
 import os.path           # 导入处理文件路径的标准库
 import sys               # 导入系统相关的标准库

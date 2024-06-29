@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_app.py`
 
-```
+```py
 from .common import Benchmark  # 导入Benchmark类，来自.common模块
 
 import numpy as np  # 导入NumPy库，用于科学计算

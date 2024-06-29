@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\bitwise_ops.pyi`
 
-```
+```py
 import numpy as np
 
 # 创建一个64位整数的 numpy 对象 i8

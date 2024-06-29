@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_nanfunctions_impl.py`
 
-```
+```py
 """
 Functions that ignore NaN.
 

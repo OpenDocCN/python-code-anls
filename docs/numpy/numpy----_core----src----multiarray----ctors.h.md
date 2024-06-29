@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\ctors.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_CTORS_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_CTORS_H_
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\numpy_tag.h`
 
-```
+```py
 #ifndef _NPY_COMMON_TAG_H_
 #define _NPY_COMMON_TAG_H_
 

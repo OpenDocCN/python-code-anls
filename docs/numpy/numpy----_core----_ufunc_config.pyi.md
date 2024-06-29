@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\_ufunc_config.pyi`
 
-```
+```py
 from collections.abc import Callable
 from typing import Any, Literal, TypedDict
 from numpy import _SupportsWrite

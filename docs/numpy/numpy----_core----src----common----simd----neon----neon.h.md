@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\neon\neon.h`
 
-```
+```py
 #ifndef _NPY_SIMD_H_
     #error "Not a standalone header"
 #endif

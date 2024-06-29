@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_avx.c`
 
-```
+```py
 #if defined(DETECT_FEATURES) && defined(__INTEL_COMPILER)
     /*
      * 当使用 Intel 编译器时，与 GCC 和 CLANG 不同，它会暴露所有支持的指令集，

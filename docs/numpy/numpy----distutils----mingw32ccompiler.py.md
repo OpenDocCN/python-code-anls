@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\mingw32ccompiler.py`
 
-```
+```py
 """
 Support code for building Python extensions on Windows.
 

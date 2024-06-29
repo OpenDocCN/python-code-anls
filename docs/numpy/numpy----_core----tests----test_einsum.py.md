@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_einsum.py`
 
-```
+```py
 # 导入 itertools 库，用于生成迭代器的工具函数
 import itertools
 # 导入 sys 库，提供对 Python 解释器的访问和操作功能

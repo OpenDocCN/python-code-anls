@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\_shell_utils.py`
 
-```
+```py
 """
 Helper functions for interacting with the shell, and consuming shell-style
 parameters provided in config files.

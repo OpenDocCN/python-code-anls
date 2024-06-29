@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\capi_maps.py`
 
-```
+```py
 """
 Copyright 1999 -- 2011 Pearu Peterson all rights reserved.
 Copyright 2011 -- present NumPy Developers.

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\util.py`
 
-```
+```py
 """
 Utility functions for
 

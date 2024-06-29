@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_utils\_inspect.py`
 
-```
+```py
 """
 Subset of inspect module from upstream python
 

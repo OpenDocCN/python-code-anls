@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\binop_override.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_BINOP_OVERRIDE_H_
 #define NUMPY_CORE_SRC_COMMON_BINOP_OVERRIDE_H_
 

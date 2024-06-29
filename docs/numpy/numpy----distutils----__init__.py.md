@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\__init__.py`
 
-```
+```py
 """
 An enhanced distutils, providing support for Fortran compilers, for BLAS,
 LAPACK and other common libraries for numerical computing, and more.

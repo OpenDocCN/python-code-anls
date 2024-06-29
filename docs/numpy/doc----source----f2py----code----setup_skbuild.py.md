@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\f2py\code\setup_skbuild.py`
 
-```
+```py
 # 导入 skbuild 库中的 setup 函数，用于配置和安装 Python 包
 from skbuild import setup
 

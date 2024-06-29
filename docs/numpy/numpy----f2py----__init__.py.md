@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\__init__.py`
 
-```
+```py
 #!/usr/bin/env python3
 """Fortran to Python Interface Generator.
 

@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Farray.h`
 
-```
+```py
 #ifndef FARRAY_H
 #define FARRAY_H
 

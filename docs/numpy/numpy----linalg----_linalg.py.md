@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\_linalg.py`
 
-```
+```py
 """Lite version of scipy.linalg.
 
 Notes

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\logfactorial.h`
 
-```
+```py
 #ifndef LOGFACTORIAL_H
 #define LOGFACTORIAL_H
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\npy_static_data.c`
 
-```
+```py
 /* numpy static data structs and initialization */
 
 /* Define NPY_NO_DEPRECATED_API to ensure we use the latest API version */

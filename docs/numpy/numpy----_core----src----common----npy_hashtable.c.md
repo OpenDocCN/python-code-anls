@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_hashtable.c`
 
-```
+```py
 /*
  * This functionality is designed specifically for the ufunc machinery to
  * dispatch based on multiple DTypes. Since this is designed to be used

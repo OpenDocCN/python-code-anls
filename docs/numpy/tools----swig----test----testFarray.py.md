@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testFarray.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 # 导入系统模块

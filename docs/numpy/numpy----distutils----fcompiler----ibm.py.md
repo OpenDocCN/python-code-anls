@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\ibm.py`
 
-```
+```py
 import os  # 导入操作系统接口模块
 import re  # 导入正则表达式模块
 import sys  # 导入系统模块

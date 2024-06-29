@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_ufunc.py`
 
-```
+```py
 # 引入警告模块，用于管理警告消息的显示
 import warnings
 # itertools 提供用于构建迭代器的工具

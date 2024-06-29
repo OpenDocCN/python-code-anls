@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_vsx3.c`
 
-```
+```py
 #ifndef __VSX__
     #error "VSX is not supported"
 #endif

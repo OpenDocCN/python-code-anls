@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\fujitsu.py`
 
-```
+```py
 """
 fujitsu
 

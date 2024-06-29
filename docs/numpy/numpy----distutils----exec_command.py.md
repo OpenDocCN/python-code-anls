@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\exec_command.py`
 
-```
+```py
 """
 exec_command
 

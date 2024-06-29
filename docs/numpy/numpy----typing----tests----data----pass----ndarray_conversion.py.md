@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ndarray_conversion.py`
 
-```
+```py
 # 导入标准库 os 和临时文件模块 tempfile
 import os
 import tempfile

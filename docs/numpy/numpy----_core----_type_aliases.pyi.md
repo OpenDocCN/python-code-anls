@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\_type_aliases.pyi`
 
-```
+```py
 # 导入 numpy 库中的 generic 类型
 from numpy import generic
 

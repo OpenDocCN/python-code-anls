@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_matlib.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，命名为 np
 import numpy.matlib  # 导入 NumPy 的 matlib 模块
 from numpy.testing import assert_array_equal, assert_  # 从 NumPy 的 testing 模块导入两个断言函数

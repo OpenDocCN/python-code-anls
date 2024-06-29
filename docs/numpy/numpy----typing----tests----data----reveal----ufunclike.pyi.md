@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ufunclike.pyi`
 
-```
+```py
 # 导入 sys 模块，用于系统相关操作
 import sys
 # 导入 Any 类型，表示可以是任何类型的变量

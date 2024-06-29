@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\rows.c`
 
-```
+```py
 #include <Python.h> 
 // 包含 Python 头文件
 

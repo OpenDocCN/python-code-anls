@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_system_info.py`
 
-```
+```py
 import os  # 导入操作系统接口模块
 import shutil  # 导入高级文件操作模块
 import pytest  # 导入用于编写简单有效的单元测试的模块

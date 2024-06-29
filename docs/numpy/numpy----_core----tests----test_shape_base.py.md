@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_shape_base.py`
 
-```
+```py
 import pytest  # 导入 pytest 库，用于单元测试
 import numpy as np  # 导入 NumPy 库，用于数值计算和数组操作
 from numpy._core import (  # 导入 NumPy 的核心功能模块

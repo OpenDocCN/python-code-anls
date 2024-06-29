@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\__init__.py`
 
-```
+```py
 """
 Discrete Fourier Transform (:mod:`numpy.fft`)
 =============================================

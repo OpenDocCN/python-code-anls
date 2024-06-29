@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\dtype_api.h`
 
-```
+```py
 /*
  * The public DType API
  */

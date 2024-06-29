@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pytesttester.py`
 
-```
+```py
 """
 Pytest test running.
 

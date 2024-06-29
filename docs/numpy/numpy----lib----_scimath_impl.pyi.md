@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_scimath_impl.pyi`
 
-```
+```py
 # 导入必要的类型提示和函数定义
 from typing import overload, Any
 

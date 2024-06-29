@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\x86_simd_argsort.dispatch.cpp`
 
-```
+```py
 #ifndef __CYGWIN__
 #ifndef __CYGWIN__ 检查是否未定义宏 __CYGWIN__
 #include "x86_simd_qsort.hpp"

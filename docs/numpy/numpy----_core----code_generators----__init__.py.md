@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\__init__.py`
 
-```
+```py
 # 导入必要的模块：os（操作系统接口）、shutil（高级文件操作）、datetime（日期和时间相关操作）
 import os
 import shutil

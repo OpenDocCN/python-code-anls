@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\rec.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 AR_i8: npt.NDArray[np.int64]  # 声明一个类型为 int64 的 NumPy 数组类型标注

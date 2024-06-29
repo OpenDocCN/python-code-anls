@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_arraysetops_impl.py`
 
-```
+```py
 """
 Set operations for arrays based on sorting.
 

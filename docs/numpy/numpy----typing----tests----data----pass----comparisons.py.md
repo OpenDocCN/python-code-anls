@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\comparisons.py`
 
-```
+```py
 from __future__ import annotations  # 导入 future 模块中的 annotations 特性，用于支持注解的类型提示
 
 from typing import Any  # 导入 Any 类型，表示可以是任意类型

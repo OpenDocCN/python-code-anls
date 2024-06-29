@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\shape_base.pyi`
 
-```
+```py
 # 导入必要的模块和类型定义
 from collections.abc import Sequence
 from typing import TypeVar, overload, Any, SupportsIndex

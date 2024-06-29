@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_d_lapack.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.
@@ -16389,7 +16389,7 @@ GIVPTR (input) INTEGER
 
     DLALSA is an intermediate step in solving the least squares problem
     by computing the SVD of the coefficient matrix in compact form (The
-    ```
+    ```py
     singular vectors are computed as products of simple orthorgonal
     matrices.).
 
@@ -42217,7 +42217,7 @@ The annotations follow the structure and format required, providing clear explan
 /* L20: */
     }
 
-```    
+```py    
         dsytd2_(uplo, &kk, &a[a_offset], lda, &d__[1], &e[1], &tau[1], &iinfo);
     } else {
 
@@ -42226,7 +42226,7 @@ The annotations follow the structure and format required, providing clear explan
         i__1 = nb;
         for (i__ = 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1) {
 
-```    
+```py    
              Reduce columns i:i+nb-1 to tridiagonal form and form the
              matrix W which is needed to update the unreduced part of
              the matrix
@@ -42236,7 +42236,7 @@ The annotations follow the structure and format required, providing clear explan
             dlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &
                 tau[i__], &work[1], &ldwork);
 
-```    
+```py    
              Update the unreduced submatrix A(i+ib:n,i+ib:n), using
              an update of the form:  A := A - V*W' - W*V'
 
@@ -42246,7 +42246,7 @@ The annotations follow the structure and format required, providing clear explan
                 i__ * a_dim1], lda, &work[nb + 1], &ldwork, &c_b15, &a[
                 i__ + nb + (i__ + nb) * a_dim1], lda);
 
-```    
+```py    
              Copy subdiagonal elements back into A, and diagonal
              elements into D
 
@@ -42260,7 +42260,7 @@ The annotations follow the structure and format required, providing clear explan
 /* L40: */
         }
 
-```    
+```py    
         i__1 = *n - i__ + 1;
         dsytd2_(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
             &tau[i__], &iinfo);
@@ -42270,7 +42270,7 @@ The annotations follow the structure and format required, providing clear explan
     work[1] = (doublereal) lwkopt;
     return 0;
 
-```    
+```py    
 } /* dsytrd_ */
 
 ```    

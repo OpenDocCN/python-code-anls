@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\string_ufuncs.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_UMATH_STRING_UFUNCS_H_
 #define _NPY_CORE_SRC_UMATH_STRING_UFUNCS_H_
 

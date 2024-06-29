@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\msvc9compiler.py`
 
-```
+```py
 import os  # 导入操作系统相关的模块
 from distutils.msvc9compiler import MSVCCompiler as _MSVCCompiler  # 导入MSVC编译器相关模块
 

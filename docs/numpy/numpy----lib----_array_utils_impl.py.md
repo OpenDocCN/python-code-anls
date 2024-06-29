@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_array_utils_impl.py`
 
-```
+```py
 """
 Miscellaneous utils.
 """

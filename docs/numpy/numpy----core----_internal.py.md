@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\_internal.py`
 
-```
+```py
 # 从 numpy._core._internal 模块导入 _reconstruct 函数
 # 该函数用于从 pickle 数据中重建 ndarray 数组对象
 # 注意：numpy.core._internal._reconstruct 函数名称在 NumPy 1.0 之前的版本中用于 ndarray 的 pickle 数据，

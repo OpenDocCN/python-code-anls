@@ -1,6 +1,6 @@
 # `.\numpy\doc\postprocess.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Post-processes HTML and Latex files output by Sphinx.

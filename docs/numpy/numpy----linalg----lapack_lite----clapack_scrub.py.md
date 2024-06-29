@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\clapack_scrub.py`
 
-```
+```py
 #!/usr/bin/env python2.7
 # WARNING! This a Python 2 script. Read README.rst for rationale.
 # 引入必要的模块和库

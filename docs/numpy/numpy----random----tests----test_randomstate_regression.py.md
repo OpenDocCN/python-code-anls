@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_randomstate_regression.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 

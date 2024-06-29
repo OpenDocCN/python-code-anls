@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\tests\test_utils.py`
 
-```
+```py
 import warnings
 import sys
 import os

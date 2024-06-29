@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_cblas.h`
 
-```
+```py
 /*
  * This header provides numpy a consistent interface to CBLAS code. It is needed
  * because not all providers of cblas provide cblas.h. For instance, MKL provides

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\examples\cython\setup.py`
 
-```
+```py
 """
 Provide python-space access to the functions exposed in numpy/__init__.pxd
 for testing.

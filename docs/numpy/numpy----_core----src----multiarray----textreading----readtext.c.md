@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\readtext.c`
 
-```
+```py
 // 引入必要的头文件和库
 
 #define PY_SSIZE_T_CLEAN

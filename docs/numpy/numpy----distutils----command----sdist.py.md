@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\sdist.py`
 
-```
+```py
 # 导入sys模块
 import sys
 # 检查是否在sys模块中存在setuptools模块

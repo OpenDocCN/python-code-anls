@@ -1,6 +1,6 @@
 # `.\numpy\tools\commitstats.py`
 
-```
+```py
 # 使用命令行执行 SVN log 命令，获取最近 2300 条提交日志，并将输出保存到 output.txt 文件中
 command = 'svn log -l 2300 > output.txt'
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_polynomial_impl.py`
 
-```
+```py
 """
 Functions to operate on polynomials.
 

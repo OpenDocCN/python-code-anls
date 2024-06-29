@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Array2.h`
 
-```
+```py
 #ifndef ARRAY2_H
 #define ARRAY2_H
 

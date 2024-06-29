@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\_locales.py`
 
-```
+```py
 # 导入系统和本地化模块
 import sys
 import locale

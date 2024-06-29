@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\_umath_tests.dispatch.c`
 
-```
+```py
 /**
  * Testing the utilities of the CPU dispatcher
  *

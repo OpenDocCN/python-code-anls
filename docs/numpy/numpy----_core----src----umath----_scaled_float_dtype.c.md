@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\_scaled_float_dtype.c`
 
-```
+```py
 /*
  * This file implements a basic scaled float64 DType.  The reason is to have
  * a simple parametric DType for testing.  It is not meant to be a useful

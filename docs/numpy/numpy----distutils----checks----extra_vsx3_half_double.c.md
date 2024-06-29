@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\extra_vsx3_half_double.c`
 
-```
+```py
 /**
  * 主函数，程序入口点
  */

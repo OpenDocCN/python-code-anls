@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_abstract_interface.py`
 
-```
+```py
 # 从 pathlib 模块导入 Path 类，用于处理文件路径
 from pathlib import Path
 # 导入 pytest 模块，用于编写和运行测试用例

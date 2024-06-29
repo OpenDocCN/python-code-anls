@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\nv.py`
 
-```
+```py
 # 导入 FCompiler 类，用于自定义编译器
 from numpy.distutils.fcompiler import FCompiler
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_utils.py`
 
-```
+```py
 import pytest  # 导入 pytest 库
 
 import numpy as np  # 导入 NumPy 库，并使用 np 别名

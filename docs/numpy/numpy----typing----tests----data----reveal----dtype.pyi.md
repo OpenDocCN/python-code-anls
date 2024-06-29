@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\dtype.pyi`
 
-```
+```py
 import sys
 import ctypes as ct               # 导入 ctypes 库并使用别名 ct
 from typing import Any           # 导入 typing 库中的 Any 类型

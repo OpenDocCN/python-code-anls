@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_extending.py`
 
-```
+```py
 # 导入需要的模块和库
 from importlib.util import spec_from_file_location, module_from_spec  # 导入模块动态加载相关函数
 import os  # 导入操作系统相关功能

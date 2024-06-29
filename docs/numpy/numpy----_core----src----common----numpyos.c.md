@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\numpyos.c`
 
-```
+```py
 /*
  * 定义宏，确保使用最新的 NumPy API 版本
  */

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\literal.py`
 
-```
+```py
 # 导入未来的注释支持，以便在类型提示中使用类型的字符串表示
 from __future__ import annotations
 

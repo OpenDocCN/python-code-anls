@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\numerictypes.pyi`
 
-```
+```py
 # 导入 numpy 库，并将其重命名为 np
 import numpy as np
 

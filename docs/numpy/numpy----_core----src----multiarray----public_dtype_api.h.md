@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\public_dtype_api.h`
 
-```
+```py
 /*
  * This file exports the private function that exposes the DType API
  *

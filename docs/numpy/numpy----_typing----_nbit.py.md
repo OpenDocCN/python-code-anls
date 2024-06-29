@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_nbit.py`
 
-```
+```py
 # 导入必要的模块 `Any`，用于类型提示
 from typing import Any
 

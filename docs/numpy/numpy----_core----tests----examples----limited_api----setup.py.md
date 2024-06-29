@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\examples\limited_api\setup.py`
 
-```
+```py
 """
 Build an example package using the limited Python C API.
 """

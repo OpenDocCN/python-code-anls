@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\environment.py`
 
-```
+```py
 # 导入 os 模块
 import os
 # 从 distutils.dist 模块中导入 Distribution 类

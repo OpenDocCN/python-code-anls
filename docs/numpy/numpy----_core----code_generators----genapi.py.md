@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\genapi.py`
 
-```
+```py
 """
 Get API information encoded in C files.
 

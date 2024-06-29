@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_config.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.

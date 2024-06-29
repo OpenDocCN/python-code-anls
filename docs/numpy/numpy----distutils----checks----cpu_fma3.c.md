@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_fma3.c`
 
-```
+```py
 #if defined(DETECT_FEATURES) && defined(__INTEL_COMPILER)
     /*
      * 如果定义了DETECT_FEATURES并且定义了__INTEL_COMPILER，则编译器将暴露所有支持的内部函数，

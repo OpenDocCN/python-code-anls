@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\__init__.py`
 
-```
+```py
 # 定义一个函数，接受一个整数参数 n
 def is_prime(n):
     # 边界条件，如果 n 小于等于 1，则直接返回 False

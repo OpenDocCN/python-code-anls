@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_lazyloading.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入 importlib 库，用于动态加载模块

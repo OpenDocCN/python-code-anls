@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\npy_pkg_config.py`
 
-```
+```py
 import sys
 import re
 import os

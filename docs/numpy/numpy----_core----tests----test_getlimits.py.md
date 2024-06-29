@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_getlimits.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 # 导入 numpy 库

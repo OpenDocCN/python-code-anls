@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\numerictypes.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于在属性未找到时执行
 def __getattr__(attr_name):
     # 从 numpy._core 模块导入 numerictypes 对象

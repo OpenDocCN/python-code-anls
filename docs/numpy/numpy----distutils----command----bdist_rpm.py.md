@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\bdist_rpm.py`
 
-```
+```py
 import os
 import sys
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\mem_overlap.c`
 
-```
+```py
 /*
   Solving memory overlap integer programs and bounded Diophantine equations with
   positive coefficients.

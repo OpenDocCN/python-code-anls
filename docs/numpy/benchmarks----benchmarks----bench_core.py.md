@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_core.py`
 
-```
+```py
 # 从.common模块导入Benchmark类
 from .common import Benchmark
 

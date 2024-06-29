@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_fpmath.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_NPY_NPY_FPMATH_H_
 #define NUMPY_CORE_SRC_COMMON_NPY_NPY_FPMATH_H_
 

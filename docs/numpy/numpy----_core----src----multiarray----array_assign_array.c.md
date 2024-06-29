@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_assign_array.c`
 
-```
+```py
 /*
  * This file implements assignment from an ndarray to another ndarray.
  *

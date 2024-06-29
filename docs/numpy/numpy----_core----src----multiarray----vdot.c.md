@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\vdot.c`
 
-```
+```py
 /*
  * 定义宏，禁用已弃用的 NumPy API，并指定使用当前版本的 API
  * 定义宏，指示要包含 multiarray 模块

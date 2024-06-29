@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_type_aliases.py`
 
-```
+```py
 """
 Due to compatibility, numpy has a very large number of different naming
 conventions for the scalar types (those subclassing from `numpy.generic`).

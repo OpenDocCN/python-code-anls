@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\verify_c_api_version.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入必要的库
 import os

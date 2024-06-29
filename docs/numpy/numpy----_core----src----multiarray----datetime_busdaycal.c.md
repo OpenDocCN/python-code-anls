@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime_busdaycal.c`
 
-```
+```py
 /*
  * This file implements an object encapsulating a business day
  * calendar object for accelerating NumPy datetime business day functions.

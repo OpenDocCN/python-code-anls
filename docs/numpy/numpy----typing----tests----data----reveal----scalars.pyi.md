@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\scalars.pyi`
 
-```
+```py
 import sys
 from typing import Any, Literal  # 导入需要使用的类型提示工具
 

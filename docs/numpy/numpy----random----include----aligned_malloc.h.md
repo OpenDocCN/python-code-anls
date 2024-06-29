@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\include\aligned_malloc.h`
 
-```
+```py
 #ifndef _RANDOMDGEN__ALIGNED_MALLOC_H_
 #define _RANDOMDGEN__ALIGNED_MALLOC_H_
 

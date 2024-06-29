@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_mixins.py`
 
-```
+```py
 # 导入必要的模块
 import numbers           # 导入 numbers 模块，用于处理数字相关操作
 import operator          # 导入 operator 模块，提供了各种运算符的函数实现

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\arrayscalars.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_
 

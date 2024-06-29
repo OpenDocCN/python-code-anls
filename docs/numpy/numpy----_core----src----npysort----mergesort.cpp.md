@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\mergesort.cpp`
 
-```
+```py
 /*
  * The purpose of this module is to add faster sort functions
  * that are type-specific.  This is done by altering the

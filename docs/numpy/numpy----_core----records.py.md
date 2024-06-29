@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\records.py`
 
-```
+```py
 """
 This module contains a set of functions for record arrays.
 """

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\common.c`
 
-```
+```py
 /*
  * Define NPY_NO_DEPRECATED_API to use the latest NumPy API version.
  * Define _MULTIARRAYMODULE to indicate this module includes multi-array support.

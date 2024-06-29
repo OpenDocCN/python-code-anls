@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\npy_buffer.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_NPY_BUFFER_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_NPY_BUFFER_H_
 

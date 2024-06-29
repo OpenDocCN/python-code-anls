@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\linalg.py`
 
-```
+```py
 # 定义一个特殊的方法 __getattr__，用于在获取不存在的属性时执行
 def __getattr__(attr_name):
     # 导入警告模块，用于输出警告信息

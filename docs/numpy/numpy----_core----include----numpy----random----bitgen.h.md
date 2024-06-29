@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\random\bitgen.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_RANDOM_BITGEN_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_RANDOM_BITGEN_H_
 

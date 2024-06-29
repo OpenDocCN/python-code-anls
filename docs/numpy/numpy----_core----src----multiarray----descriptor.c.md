@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\descriptor.c`
 
-```
+```py
 /* Array Descr Object */
 
 /* Define to use the latest NumPy API version */

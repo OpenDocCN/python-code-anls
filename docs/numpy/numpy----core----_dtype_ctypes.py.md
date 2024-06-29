@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\_dtype_ctypes.py`
 
-```
+```py
 # 定义一个特殊的函数 __getattr__，用于在对象中获取指定属性的方法
 def __getattr__(attr_name):
     # 从 numpy._core 模块中导入 _dtype_ctypes 对象

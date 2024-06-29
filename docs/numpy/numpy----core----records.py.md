@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\records.py`
 
-```
+```py
 # 定义一个特殊的方法，用于动态获取对象的属性
 def __getattr__(attr_name):
     # 从 numpy._core.records 模块中导入 records 对象

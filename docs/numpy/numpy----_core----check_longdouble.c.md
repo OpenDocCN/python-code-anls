@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\check_longdouble.c`
 
-```
+```py
 /* 
  * "before" 是一个长度为 16 字节的数组，用于确保它和 "x" 之间没有填充。
  * 我们假设没有比 16 字节更大或者对齐要求更严格的 "long double" 类型。

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\tests\test_deprecations.py`
 
-```
+```py
 """Test deprecation and future warnings.
 
 """

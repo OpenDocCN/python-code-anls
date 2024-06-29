@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\_multiarray_umath.py`
 
-```
+```py
 # 从 numpy._core 模块中导入 _multiarray_umath 对象
 from numpy._core import _multiarray_umath
 # 从 numpy 模块中导入 ufunc 类型

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_randomstate.py`
 
-```
+```py
 import hashlib  # 导入用于哈希计算的 hashlib 库
 import pickle  # 导入用于序列化和反序列化的 pickle 库
 import sys  # 导入系统相关的模块

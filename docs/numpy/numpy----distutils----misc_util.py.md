@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\misc_util.py`
 
-```
+```py
 # 导入标准库模块
 import os           # 提供与操作系统交互的功能
 import re           # 提供正则表达式操作

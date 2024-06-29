@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_scalarbuffer.py`
 
-```
+```py
 """
 Test scalar buffer interface adheres to PEP 3118
 """

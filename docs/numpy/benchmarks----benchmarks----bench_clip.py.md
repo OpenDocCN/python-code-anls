@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_clip.py`
 
-```
+```py
 # 从.common模块中导入Benchmark类
 from .common import Benchmark
 # 导入NumPy库并使用别名np

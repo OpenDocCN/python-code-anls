@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\constants.pyi`
 
-```
+```py
 # 导入 NumPy 库，用于科学计算和数组操作
 import numpy as np
 

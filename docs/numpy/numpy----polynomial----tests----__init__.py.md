@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\__init__.py`
 
-```
+```py
 # 导入Python内置的json模块，用于处理JSON格式数据
 import json
 

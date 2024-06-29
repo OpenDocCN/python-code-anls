@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\false_positives.pyi`
 
-```
+```py
 `
 # 导入 numpy 库并简化为 np，提供高效的数组操作功能
 import numpy as np

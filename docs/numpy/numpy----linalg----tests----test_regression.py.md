@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\tests\test_regression.py`
 
-```
+```py
 # 导入警告模块，用于处理警告信息
 import warnings
 

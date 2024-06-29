@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\arithmetic.pyi`
 
-```
+```py
 from typing import Any
 
 import numpy as np

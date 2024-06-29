@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\vec\conversion.h`
 
-```
+```py
 // 如果没有定义 NPY_SIMD，则输出错误提示信息
 #ifndef NPY_SIMD
     #error "Not a standalone header"

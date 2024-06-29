@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\alloc.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_ALLOC_H_   // 如果未定义 NUMPY_CORE_SRC_MULTIARRAY_ALLOC_H_ 则执行下面的代码
 #define NUMPY_CORE_SRC_MULTIARRAY_ALLOC_H_   // 定义 NUMPY_CORE_SRC_MULTIARRAY_ALLOC_H_
 

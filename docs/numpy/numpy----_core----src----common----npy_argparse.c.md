@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_argparse.c`
 
-```
+```py
 /**
  * Define NPY_NO_DEPRECATED_API to use the latest NumPy API version.
  * This prevents the use of deprecated API features.

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\test_core.py`
 
-```
+```py
 """
 Tests suite for MaskedArray & subclassing.
 

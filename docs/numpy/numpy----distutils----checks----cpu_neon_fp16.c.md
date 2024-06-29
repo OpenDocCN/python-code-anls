@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_neon_fp16.c`
 
-```
+```py
 #ifdef _MSC_VER
     // 如果编译器是 MSC，则包含 Intrinsics 头文件
     #include <Intrin.h>

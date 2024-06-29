@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\shape.c`
 
-```
+```py
 /* 定义 NPY_NO_DEPRECATED_API 为 NPY_API_VERSION */
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 /* 定义 _MULTIARRAYMODULE */

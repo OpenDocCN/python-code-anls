@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\simple_py3.py`
 
-```
+```py
 import numpy as np  # 导入NumPy库，通常用于数值计算
 
 array = np.array([1, 2])  # 创建一个NumPy数组，包含元素1和2

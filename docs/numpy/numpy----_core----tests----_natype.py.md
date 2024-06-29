@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\_natype.py`
 
-```
+```py
 # Vendored implementation of pandas.NA, adapted from pandas/_libs/missing.pyx
 #
 # This is vendored to avoid adding pandas as a test dependency.

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\arithmetic.py`
 
-```
+```py
 from __future__ import annotations
 # 引入未来的语法特性，确保代码在较老版本的 Python 中也能运行
 

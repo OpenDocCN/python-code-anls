@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\index_tricks.py`
 
-```
+```py
 # 导入未来的注释，允许使用类型注释的特性
 from __future__ import annotations
 # 导入 Any 类型，表示可以是任何类型

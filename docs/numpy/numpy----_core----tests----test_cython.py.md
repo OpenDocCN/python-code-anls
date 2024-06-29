@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_cython.py`
 
-```
+```py
 # 导入 datetime 模块中的 datetime 类，用于处理日期和时间
 from datetime import datetime
 # 导入 os 模块，提供了访问操作系统功能的接口

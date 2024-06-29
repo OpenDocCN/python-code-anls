@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\flagsobject.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_FLAGSOBJECT_H_
 #define NUMPY_CORE_SRC_FLAGSOBJECT_H_
 

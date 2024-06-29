@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fujitsuccompiler.py`
 
-```
+```py
 # 导入 UnixCCompiler 类，用于扩展 FujitsuCCompiler 类
 from distutils.unixccompiler import UnixCCompiler
 

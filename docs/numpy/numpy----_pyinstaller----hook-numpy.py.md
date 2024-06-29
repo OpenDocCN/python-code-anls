@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pyinstaller\hook-numpy.py`
 
-```
+```py
 # 导入必要的模块和函数
 """This hook should collect all binary files and any hidden modules that numpy
 needs.

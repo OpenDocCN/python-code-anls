@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\warnings_and_errors.pyi`
 
-```
+```py
 import numpy.exceptions as ex
 创建一个别名为 ex 的模块，用于导入 numpy 库中的异常类
 

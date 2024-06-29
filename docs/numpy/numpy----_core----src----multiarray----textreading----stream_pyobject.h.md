@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\stream_pyobject.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_STREAM_PYOBJECT_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_STREAM_PYOBJECT_H_
 

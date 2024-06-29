@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\polyutils.py`
 
-```
+```py
 # 导入操作符和函数工具
 import operator
 # 导入函数工具包装，用于函数操作

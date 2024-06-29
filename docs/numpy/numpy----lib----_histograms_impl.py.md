@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_histograms_impl.py`
 
-```
+```py
 """
 Histogram-related functions
 """

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\chebyshev.py`
 
-```
+```py
 # 将切比雪夫级数转换为 z 级数的函数
 def _cseries_to_zseries(c):
     """Convert Chebyshev series to z-series.

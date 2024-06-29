@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\feature_detection_stdio.h`
 
-```
+```py
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <fcntl.h>

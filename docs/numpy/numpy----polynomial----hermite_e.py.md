@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\hermite_e.py`
 
-```
+```py
 """
 ===================================================================
 HermiteE Series, "Probabilists" (:mod:`numpy.polynomial.hermite_e`)

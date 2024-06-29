@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\intdiv.h`
 
-```
+```py
 /**
  * This header implements `npyv_divisor_*` intrinsics used for computing the parameters
  * of fast integer division, while division intrinsics `npyv_divc_*` are defined in

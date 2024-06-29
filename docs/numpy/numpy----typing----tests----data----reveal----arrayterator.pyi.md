@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arrayterator.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入 Any 类型用于泛型
 from collections.abc import Generator  # 导入 Generator 类型用于定义生成器对象

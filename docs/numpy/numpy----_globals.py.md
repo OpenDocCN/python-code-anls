@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_globals.py`
 
-```
+```py
 """
 Module defining global singleton classes.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\array_constructors.py`
 
-```
+```py
 from typing import Any  # 导入必要的类型提示模块
 
 import numpy as np  # 导入 NumPy 库

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\array_utils.py`
 
-```
+```py
 # 从 _array_utils_impl 模块中导入指定的函数和变量
 from ._array_utils_impl import (
     __all__,                 # 导入模块中定义的所有公共接口的列表

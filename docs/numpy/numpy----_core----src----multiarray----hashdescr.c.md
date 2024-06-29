@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\hashdescr.c`
 
-```
+```py
 /*
  * Define NPY_NO_DEPRECATED_API to the current NPY_API_VERSION
  * and _MULTIARRAYMODULE for compilation purposes.

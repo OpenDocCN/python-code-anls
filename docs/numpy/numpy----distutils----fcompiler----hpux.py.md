@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\hpux.py`
 
-```
+```py
 # 从 numpy.distutils.fcompiler 模块导入 FCompiler 类
 from numpy.distutils.fcompiler import FCompiler
 

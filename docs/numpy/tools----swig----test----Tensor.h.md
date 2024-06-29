@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Tensor.h`
 
-```
+```py
 // 如果未定义 TENSOR_H，则进入条件编译，避免重复包含
 #ifndef TENSOR_H
 // 定义 TENSOR_H，确保此头文件只被包含一次

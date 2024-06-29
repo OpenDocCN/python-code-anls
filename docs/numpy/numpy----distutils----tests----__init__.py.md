@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\__init__.py`
 
-```
+```py
 # 导入所需模块：os 模块用于与操作系统交互，subprocess 模块用于启动新进程执行系统命令
 import os
 import subprocess

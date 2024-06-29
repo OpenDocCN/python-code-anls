@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_docs.py`
 
-```
+```py
 # 导入 pytest 库，用于运行测试
 import pytest
 # 导入 numpy 库并使用 np 别名

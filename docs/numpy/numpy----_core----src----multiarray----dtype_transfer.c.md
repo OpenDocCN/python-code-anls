@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dtype_transfer.c`
 
-```
+```py
 /*
  * This file contains low-level loops for data type transfers.
  * In particular the function PyArray_GetDTypeTransferFunction is

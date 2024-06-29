@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_direct.py`
 
-```
+```py
 import os  # 导入操作系统相关功能
 from os.path import join  # 导入路径拼接函数
 import sys  # 导入系统相关功能

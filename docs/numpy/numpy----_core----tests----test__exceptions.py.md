@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test__exceptions.py`
 
-```
+```py
 """
 Tests of the ._exceptions module. Primarily for exercising the __str__ methods.
 """

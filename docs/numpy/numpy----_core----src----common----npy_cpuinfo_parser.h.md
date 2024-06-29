@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_cpuinfo_parser.h`
 
-```
+```py
 /*
  * Copyright (C) 2010 The Android Open Source Project
  * All rights reserved.

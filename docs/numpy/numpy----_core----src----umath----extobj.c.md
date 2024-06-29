@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\extobj.c`
 
-```
+```py
 /* 定义宏，指定使用的 NumPy API 版本 */
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 /* 定义宏，标识当前编译环境为多维数组模块 */

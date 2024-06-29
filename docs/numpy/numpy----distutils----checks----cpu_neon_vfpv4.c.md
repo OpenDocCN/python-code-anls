@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_neon_vfpv4.c`
 
-```
+```py
 #ifdef _MSC_VER
     #include <Intrin.h>  // 如果是 MSC 编译器，则包含 Intrin 头文件
 #endif

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\generate_umath_doc.py`
 
-```
+```py
 # 导入必要的模块
 import sys  # 系统相关的操作
 import os   # 系统路径操作

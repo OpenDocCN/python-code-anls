@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\multiarray.py`
 
-```
+```py
 # 导入 numpy 库并为变量指定类型
 import numpy as np
 import numpy.typing as npt

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_shape_base_impl.pyi`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入集合抽象基类中的 Callable 和 Sequence 类

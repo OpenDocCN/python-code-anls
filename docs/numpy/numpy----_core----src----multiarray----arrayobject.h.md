@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\arrayobject.h`
 
-```
+```py
 #ifndef _MULTIARRAYMODULE
 #error You should not include this
 #endif

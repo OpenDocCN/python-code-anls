@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\npyio.pyi`
 
-```
+```py
 import pathlib                      # 导入pathlib模块，用于处理路径
 from typing import IO               # 导入IO类型，用于类型注解
 

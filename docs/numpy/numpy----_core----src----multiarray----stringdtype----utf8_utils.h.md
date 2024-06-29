@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\utf8_utils.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_UTF8_UTILS_H_
 #define _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_UTF8_UTILS_H_
 

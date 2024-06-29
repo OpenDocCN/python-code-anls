@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_2_compat.h`
 
-```
+```py
 /*
  * This header file defines relevant features which:
  * - Require runtime inspection depending on the NumPy version.

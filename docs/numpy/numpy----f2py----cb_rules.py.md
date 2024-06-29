@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\cb_rules.py`
 
-```
+```py
 """
 Build call-back mechanism for f2py2e.
 

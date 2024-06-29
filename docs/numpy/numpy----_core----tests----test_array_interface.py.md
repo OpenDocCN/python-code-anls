@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_array_interface.py`
 
-```
+```py
 # 导入系统相关模块
 import sys
 # 导入 pytest 测试框架模块

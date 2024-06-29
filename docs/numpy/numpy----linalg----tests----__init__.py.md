@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\tests\__init__.py`
 
-```
+```py
 # 导入所需模块：Counter 是一个用于计数的工具，defaultdict 是一种带有默认值的字典
 from collections import Counter, defaultdict
 

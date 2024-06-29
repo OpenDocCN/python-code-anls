@@ -1,6 +1,6 @@
 # `.\numpy\tools\functions_missing_types.py`
 
-```
+```py
 #!/usr/bin/env python
 """Find the functions in a module missing type annotations.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\philox\philox-test-data-gen.c`
 
-```
+```py
 /*
  * 生成测试用的 CSV 文件
  *

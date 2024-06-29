@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_src_pyf.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 

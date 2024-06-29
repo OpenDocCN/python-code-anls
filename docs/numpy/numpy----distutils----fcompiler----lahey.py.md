@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\lahey.py`
 
-```
+```py
 # 导入标准库 os
 import os
 

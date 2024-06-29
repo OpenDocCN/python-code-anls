@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_add_newdocs.py`
 
-```
+```py
 # 导入需要的函数和模块，用于更新 C 扩展模块中对象的文档字符串而无需重新编译
 from numpy._core.function_base import add_newdoc
 from numpy._core.overrides import array_function_like_doc

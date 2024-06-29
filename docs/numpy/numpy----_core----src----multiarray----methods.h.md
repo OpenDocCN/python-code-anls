@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\methods.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_METHODS_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_METHODS_H_
 

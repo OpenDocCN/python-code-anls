@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_examples\cython\extending.pyx`
 
-```
+```py
 # 使用 Python3 解释器执行该脚本
 #!/usr/bin/env python3
 

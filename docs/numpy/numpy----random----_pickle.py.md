@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\_pickle.py`
 
-```
+```py
 # 从本地模块中导入不同的随机数生成器类和函数
 from .bit_generator import BitGenerator
 from .mtrand import RandomState

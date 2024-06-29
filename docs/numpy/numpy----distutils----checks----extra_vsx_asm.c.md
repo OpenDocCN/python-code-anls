@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\extra_vsx_asm.c`
 
-```
+```py
 /**
  * Testing ASM VSX register number fixer '%x<n>'
  *

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\testing.pyi`
 
-```
+```py
 # 导入所需的模块和包
 import re  # 导入正则表达式模块
 import sys  # 导入系统相关的模块

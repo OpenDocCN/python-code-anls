@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_log.py`
 
-```
+```py
 import io  # 导入用于处理输入输出的模块
 import re  # 导入正则表达式模块
 from contextlib import redirect_stdout  # 导入上下文管理器，用于重定向标准输出流

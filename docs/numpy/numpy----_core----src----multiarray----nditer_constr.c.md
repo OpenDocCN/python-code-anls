@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\nditer_constr.c`
 
-```
+```py
 /*
  * This file implements the construction, copying, and destruction
  * aspects of NumPy's nditer.

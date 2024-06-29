@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\modules.py`
 
-```
+```py
 # 导入 numpy 库，使用 np 作为别名
 import numpy as np
 # 从 numpy 中导入 f2py 模块

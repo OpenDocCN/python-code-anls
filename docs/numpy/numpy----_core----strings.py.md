@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\strings.py`
 
-```
+```py
 """
 This module contains a set of functions for vectorized string
 operations.

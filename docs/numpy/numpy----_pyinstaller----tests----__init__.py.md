@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pyinstaller\tests\__init__.py`
 
-```
+```py
 # 从 numpy.testing 模块导入 IS_WASM 和 IS_EDITABLE 常量
 from numpy.testing import IS_WASM, IS_EDITABLE
 # 导入 pytest 模块，用于测试框架

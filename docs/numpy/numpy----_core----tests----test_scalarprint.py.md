@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_scalarprint.py`
 
-```
+```py
 # 导入所需的模块和库
 import code
 import platform

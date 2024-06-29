@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Tensor.cxx`
 
-```
+```py
 // 包含标准库头文件 <stdlib.h> 和 <math.h>
 #include <stdlib.h>
 #include <math.h>

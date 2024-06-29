@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\libdivide\libdivide.h`
 
-```
+```py
 // libdivide.h - 优化的整数除法
 // https://libdivide.com
 //

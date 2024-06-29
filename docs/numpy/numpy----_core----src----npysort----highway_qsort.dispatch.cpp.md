@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\highway_qsort.dispatch.cpp`
 
-```
+```py
 #include "highway_qsort.hpp"
 #include "hwy/contrib/sort/vqsort-inl.h"
 

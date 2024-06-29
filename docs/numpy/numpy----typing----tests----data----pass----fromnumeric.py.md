@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\fromnumeric.py`
 
-```
+```py
 """Tests for :mod:`numpy._core.fromnumeric`."""
 
 # 导入 numpy 库

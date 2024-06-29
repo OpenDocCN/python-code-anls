@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_size.py`
 
-```
+```py
 # 导入必要的模块
 import os             # 操作系统功能模块
 import pytest         # 测试框架 pytest

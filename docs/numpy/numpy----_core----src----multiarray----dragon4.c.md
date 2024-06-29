@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dragon4.c`
 
-```
+```py
 /*
  * 版权所有（c）2014 Ryan Juckett
  *

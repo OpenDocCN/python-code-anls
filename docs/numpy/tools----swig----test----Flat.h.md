@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Flat.h`
 
-```
+```py
 #ifndef FLAT_H
 #define FLAT_H
 

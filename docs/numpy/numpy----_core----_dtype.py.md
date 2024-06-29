@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_dtype.py`
 
-```
+```py
 """
 A place for code to be called from the implementation of np.dtype
 

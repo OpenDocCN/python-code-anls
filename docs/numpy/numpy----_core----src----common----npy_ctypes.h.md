@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_ctypes.h`
 
-```
+```py
 /*
  * 检查一个 Python 类型是否是 ctypes 类型。
  *

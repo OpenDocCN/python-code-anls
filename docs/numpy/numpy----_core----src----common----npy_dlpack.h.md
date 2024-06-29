@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_dlpack.h`
 
-```
+```py
 // 引入 Python.h 头文件，用于与 Python 解释器交互
 #include "Python.h"
 // 引入 dlpack.h 头文件，这是 DLPack 库的头文件

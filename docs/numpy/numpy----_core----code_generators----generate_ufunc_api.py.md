@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\generate_ufunc_api.py`
 
-```
+```py
 # 导入标准库模块 os，用于操作操作系统相关功能
 import os
 # 导入 argparse 库，用于命令行参数解析

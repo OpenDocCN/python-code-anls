@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_generator_mt19937_regressions.py`
 
-```
+```py
     # 导入必要的测试断言函数
     from numpy.testing import (assert_, assert_array_equal)
     # 导入 NumPy 库并使用别名 np

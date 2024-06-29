@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\mapping.c`
 
-```
+```py
 /*
  * Define macro to specify the NPY API version without deprecated features
  */

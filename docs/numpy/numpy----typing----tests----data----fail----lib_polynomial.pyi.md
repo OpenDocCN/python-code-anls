@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\lib_polynomial.pyi`
 
-```
+```py
 import numpy as np  # 导入NumPy库，用于科学计算
 import numpy.typing as npt  # 导入NumPy的类型标注模块，用于类型注解
 

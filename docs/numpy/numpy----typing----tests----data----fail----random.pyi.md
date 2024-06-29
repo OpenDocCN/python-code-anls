@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\random.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 SEED_FLOAT: float = 457.3  # 浮点型种子值

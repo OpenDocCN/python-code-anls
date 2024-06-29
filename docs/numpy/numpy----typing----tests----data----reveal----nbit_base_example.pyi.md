@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\nbit_base_example.pyi`
 
-```
+```py
 import sys
 from typing import TypeVar
 

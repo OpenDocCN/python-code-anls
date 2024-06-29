@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\philox\philox.c`
 
-```
+```py
 # 包含 "philox.h" 头文件，这里假设包含了 Philox 算法的定义和声明
 #include "philox.h"
 

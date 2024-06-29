@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_nanfunctions.py`
 
-```
+```py
 # 引入警告模块，用于管理和控制警告信息的显示
 import warnings
 # 引入 pytest 模块，用于编写和运行测试用例

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\unixccompiler.py`
 
-```
+```py
 """
 unixccompiler - can handle very long argument lists for ar.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_print.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 

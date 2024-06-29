@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\array_like.pyi`
 
-```
+```py
 # 导入 NumPy 库
 import numpy as np
 # 导入 ArrayLike 类型提示

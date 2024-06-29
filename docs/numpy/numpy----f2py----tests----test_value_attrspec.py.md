@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_value_attrspec.py`
 
-```
+```py
 # 导入标准库 os 和 pytest 模块
 import os
 import pytest

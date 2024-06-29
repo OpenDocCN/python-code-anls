@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\_private\__init__.py`
 
-```
+```py
 # 导入需要使用的模块：os（操作系统接口）、shutil（高级文件操作模块）
 import os
 import shutil

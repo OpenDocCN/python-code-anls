@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\ma\extras.pyi`
 
-```
+```py
 from typing import Any
 
 from numpy.lib._index_tricks_impl import AxisConcatenator

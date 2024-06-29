@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\ucsnarrow.c`
 
-```
+```py
 /*
  * 定义宏，禁用已弃用的 NumPy API，并设置为当前 API 版本
  */

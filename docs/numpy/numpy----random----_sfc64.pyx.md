@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_sfc64.pyx`
 
-```
+```py
 #cython: binding=True
 # 导入所需的库
 import numpy as np

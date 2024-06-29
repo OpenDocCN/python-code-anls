@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\neon\arithmetic.h`
 
-```
+```py
 #ifndef NPY_SIMD
     // 如果未定义 NPY_SIMD，则抛出错误消息 "Not a standalone header"
     #error "Not a standalone header"

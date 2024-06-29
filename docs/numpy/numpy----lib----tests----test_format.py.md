@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_format.py`
 
-```
+```py
 # doctest
 r''' Test the .npy file format.
 

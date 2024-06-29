@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\strfuncs.c`
 
-```
+```py
 /*
  * 定义以避免使用已弃用的 NumPy API 版本
  */

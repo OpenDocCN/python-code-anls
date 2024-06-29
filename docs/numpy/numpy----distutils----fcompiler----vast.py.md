@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\vast.py`
 
-```
+```py
 import os  # 导入标准库 os
 
 from numpy.distutils.fcompiler.gnu import GnuFCompiler  # 从 numpy 的 distutils 子模块中导入 GnuFCompiler 类

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\gnu.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入操作系统接口模块

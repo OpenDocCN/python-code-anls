@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_twodim_base_impl.py`
 
-```
+```py
 """ Basic functions for manipulating 2d arrays
 
 """

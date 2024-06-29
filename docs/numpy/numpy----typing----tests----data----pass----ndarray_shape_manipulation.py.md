@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ndarray_shape_manipulation.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 
 nd1 = np.array([[1, 2], [3, 4]])

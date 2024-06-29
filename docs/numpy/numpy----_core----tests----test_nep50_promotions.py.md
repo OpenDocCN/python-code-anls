@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_nep50_promotions.py`
 
-```
+```py
 """
 This file adds basic tests to test the NEP 50 style promotion compatibility
 mode.  Most of these test are likely to be simply deleted again once NEP 50

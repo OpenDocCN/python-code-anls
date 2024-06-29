@@ -1,6 +1,6 @@
 # `.\numpy\tools\linter.py`
 
-```
+```py
 import os
 import sys
 import subprocess

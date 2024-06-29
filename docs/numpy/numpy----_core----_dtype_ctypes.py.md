@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_dtype_ctypes.py`
 
-```
+```py
 """
 Conversion from ctypes to dtype.
 

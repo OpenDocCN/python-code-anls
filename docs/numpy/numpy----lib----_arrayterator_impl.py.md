@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_arrayterator_impl.py`
 
-```
+```py
 """
 A buffered iterator for big arrays.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\clip.cpp`
 
-```
+```py
 /**
  * This module provides the inner loops for the clip ufunc
  */

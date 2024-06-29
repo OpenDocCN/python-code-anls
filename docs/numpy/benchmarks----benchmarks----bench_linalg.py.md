@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_linalg.py`
 
-```
+```py
 # 导入必要的模块和函数
 from .common import Benchmark, get_squares_, get_indexes_rand, TYPES1
 import numpy as np

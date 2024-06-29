@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\matrixlib\__init__.pyi`
 
-```
+```py
 # 从 numpy._pytesttester 模块中导入 PytestTester 类
 from numpy._pytesttester import PytestTester
 

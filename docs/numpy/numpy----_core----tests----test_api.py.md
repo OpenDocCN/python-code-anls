@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_api.py`
 
-```
+```py
 # 导入 sys 模块，用于获取系统相关信息
 import sys
 

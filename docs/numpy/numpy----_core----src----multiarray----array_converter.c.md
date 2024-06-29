@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_converter.c`
 
-```
+```py
 /*
  * This file defines an _array_converter object used internally in NumPy to
  * deal with `__array_wrap__` and `result_type()` for multiple arguments

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\pathccompiler.py`
 
-```
+```py
 # 导入 UnixCCompiler 类，用于扩展 PathScaleCCompiler
 from distutils.unixccompiler import UnixCCompiler
 

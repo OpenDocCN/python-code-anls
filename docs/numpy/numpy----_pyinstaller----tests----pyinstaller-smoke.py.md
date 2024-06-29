@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pyinstaller\tests\pyinstaller-smoke.py`
 
-```
+```py
 """A crude *bit of everything* smoke test to verify PyInstaller compatibility.
 
 PyInstaller typically goes wrong by forgetting to package modules, extension

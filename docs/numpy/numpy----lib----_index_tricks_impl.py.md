@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_index_tricks_impl.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于创建偏函数
 import sys  # 导入 sys 模块，提供对解释器相关的操作
 import math  # 导入 math 模块，提供数学函数

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_arraysetops.py`
 
-```
+```py
 """Test functions for 1D array set operations.
 
 """

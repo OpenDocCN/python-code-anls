@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\getlimits.py`
 
-```
+```py
 # 定义一个特殊的属性访问方法，用于动态获取属性值
 def __getattr__(attr_name):
     # 从 numpy._core 模块中导入 getlimits 函数

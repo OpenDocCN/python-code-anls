@@ -1,6 +1,6 @@
 # `.\numpy\tools\refguide_check.py`
 
-```
+```py
 """
 refguide_check.py [OPTIONS] [-- ARGS]
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_mingw32ccompiler.py`
 
-```
+```py
 import shutil`
 import shutil  # 导入 shutil 模块，用于文件和目录操作
 import subprocess  # 导入 subprocess 模块，用于执行外部命令和获取输出

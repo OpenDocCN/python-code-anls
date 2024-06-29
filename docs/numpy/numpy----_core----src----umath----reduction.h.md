@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\reduction.h`
 
-```
+```py
 #ifndef _NPY_PRIVATE__REDUCTION_H_
 #define _NPY_PRIVATE__REDUCTION_H_
 

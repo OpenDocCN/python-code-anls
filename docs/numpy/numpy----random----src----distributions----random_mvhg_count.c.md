@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\random_mvhg_count.c`
 
-```
+```py
 /*
  *  random_multivariate_hypergeometric_count
  *

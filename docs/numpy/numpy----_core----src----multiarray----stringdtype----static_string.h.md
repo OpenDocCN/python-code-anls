@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\static_string.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_STATIC_STRING_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_STATIC_STRING_H_
 

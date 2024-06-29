@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\type_check.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于访问系统相关的信息
 from typing import Any, Literal  # 导入typing模块中的Any和Literal类型
 

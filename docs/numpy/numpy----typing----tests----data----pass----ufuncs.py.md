@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ufuncs.py`
 
-```
+```py
 # 导入 numpy 库，约定使用 np 作为别名
 import numpy as np
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_datasource.py`
 
-```
+```py
 """
 A file interface for handling local and remote data files.
 

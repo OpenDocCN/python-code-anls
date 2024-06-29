@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\f2py\__init__.pyi`
 
-```
+```py
 # 导入标准库模块
 import os
 # 导入 subprocess 模块，用于执行外部命令

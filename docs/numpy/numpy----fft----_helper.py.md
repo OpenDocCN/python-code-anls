@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\_helper.py`
 
-```
+```py
 """
 Discrete Fourier Transforms - _helper.py
 

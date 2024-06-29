@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_mixed.py`
 
-```
+```py
 import os
 import textwrap
 import pytest

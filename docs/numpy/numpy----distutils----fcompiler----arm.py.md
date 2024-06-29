@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\arm.py`
 
-```
+```py
 # 导入所需模块和库
 import sys
 from numpy.distutils.fcompiler import FCompiler, dummy_fortran_file

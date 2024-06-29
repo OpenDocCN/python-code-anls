@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\ctypeslib.pyi`
 
-```
+```py
 # NOTE: Numpy's mypy plugin is used for importing the correct
 # platform-specific `ctypes._SimpleCData[int]` sub-type
 # 导入正确的平台特定的 `ctypes._SimpleCData[int]` 子类型，使用了 Numpy 的 mypy 插件

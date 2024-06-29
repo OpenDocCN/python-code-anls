@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\legacy_dtype_implementation.c`
 
-```
+```py
 /*
  * 此部分代码定义了一些用于比较和判断旧版数据类型的函数和宏。
  * 这些函数和宏主要用于处理旧版数据类型，可能在将来被弃用和移除。

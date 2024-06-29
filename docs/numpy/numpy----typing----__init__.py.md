@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\__init__.py`
 
-```
+```py
 """
 ============================
 Typing (:mod:`numpy.typing`)

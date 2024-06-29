@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\_internal.pyi`
 
-```
+```py
 # 从 typing 模块中导入需要的类型：Any（任意类型）、TypeVar（类型变量）、overload（函数重载）、Generic（泛型）
 import ctypes as ct
 

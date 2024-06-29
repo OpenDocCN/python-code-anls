@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_array_coercion.py`
 
-```
+```py
 """
 Tests for array coercion, mainly through testing `np.array` results directly.
 Note that other such tests exist, e.g., in `test_api.py` and many corner-cases

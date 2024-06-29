@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_io.py`
 
-```
+```py
 # 导入系统相关模块
 import sys
 # 垃圾回收模块，用于管理内存中无用对象的回收

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_array_from_pyobj.py`
 
-```
+```py
 import os
 import sys
 import copy

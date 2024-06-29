@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\ufunc_config.pyi`
 
-```
+```py
 """
 Typing tests for `numpy._core._ufunc_config`.
 """

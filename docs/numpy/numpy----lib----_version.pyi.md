@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_version.pyi`
 
-```
+```py
 # 定义一个模块级别的变量 __all__，用于指定在使用 import * 时应该导入的符号列表
 __all__: list[str]
 

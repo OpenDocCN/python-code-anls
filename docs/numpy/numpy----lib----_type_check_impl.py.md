@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_type_check_impl.py`
 
-```
+```py
 """Automatically adapted for numpy Sep 19, 2005 by convertcode.py
 
 """

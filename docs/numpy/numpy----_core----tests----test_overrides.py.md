@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_overrides.py`
 
-```
+```py
 # 导入inspect模块，用于获取对象的信息
 import inspect
 # 导入sys模块，提供与解释器交互的功能

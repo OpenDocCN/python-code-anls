@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\fft\__init__.pyi`
 
-```
+```py
 # 导入 numpy 库中的 PytestTester 类
 from numpy._pytesttester import PytestTester
 

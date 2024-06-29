@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_recfunctions.py`
 
-```
+```py
 # 导入pytest模块，用于测试和断言
 import pytest
 

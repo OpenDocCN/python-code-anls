@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_type_check.py`
 
-```
+```py
 # 导入 NumPy 库，并从中导入一些函数和类
 import numpy as np
 from numpy import (

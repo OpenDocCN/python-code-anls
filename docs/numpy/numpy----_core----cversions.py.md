@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\cversions.py`
 
-```
+```py
 """Simple script to compute the api hash of the current API.
 
 The API has is defined by numpy_api_order and ufunc_api_order.

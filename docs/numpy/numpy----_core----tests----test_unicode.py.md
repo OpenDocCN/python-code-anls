@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_unicode.py`
 
-```
+```py
 import pytest  # 导入 pytest 库
 
 import numpy as np  # 导入 NumPy 库，命名为 np

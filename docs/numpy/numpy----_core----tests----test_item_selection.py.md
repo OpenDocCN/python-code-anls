@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_item_selection.py`
 
-```
+```py
 import sys  # 导入sys模块，用于获取系统相关信息
 
 import pytest  # 导入pytest模块，用于编写和运行测试用例

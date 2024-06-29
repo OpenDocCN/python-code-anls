@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\src\fortranobject.c`
 
-```
+```py
 /*
   This file implements: FortranObject, array_from_pyobj, copy_ND_array
 

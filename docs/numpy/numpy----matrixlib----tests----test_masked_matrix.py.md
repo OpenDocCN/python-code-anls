@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_masked_matrix.py`
 
-```
+```py
 import pickle  # 导入 pickle 库，用于对象的序列化和反序列化
 
 import numpy as np  # 导入 NumPy 库，进行科学计算

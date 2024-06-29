@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\str_to_int.h`
 
-```
+```py
 /*
  * 定义头文件防止重复包含
  */

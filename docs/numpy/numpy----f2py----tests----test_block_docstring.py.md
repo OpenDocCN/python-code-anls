@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_block_docstring.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入 pytest 测试框架

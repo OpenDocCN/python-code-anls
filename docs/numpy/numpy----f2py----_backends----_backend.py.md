@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_backends\_backend.py`
 
-```
+```py
 # 引入从 Python 3.7 开始的类型注解特性，用于声明类型
 from __future__ import annotations
 

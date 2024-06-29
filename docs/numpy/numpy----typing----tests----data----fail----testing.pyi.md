@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\testing.pyi`
 
-```
+```py
 # 导入 NumPy 库，并引入 NumPy 类型注解
 import numpy as np
 import numpy.typing as npt

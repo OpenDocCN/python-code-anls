@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\npyio.pyi`
 
-```
+```py
 import re  # 导入正则表达式模块
 import sys  # 导入系统相关的模块
 import zipfile  # 导入处理 ZIP 文件的模块

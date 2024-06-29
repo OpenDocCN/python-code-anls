@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\tests\__init__.py`
 
-```
+```py
 # 导入 datetime 模块中的 datetime 类
 from datetime import datetime
 

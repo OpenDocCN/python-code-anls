@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\char\__init__.pyi`
 
-```
+```py
 # 从 numpy._core.defchararray 模块中导入一系列字符串操作函数，用于操作字符数组
 
 from numpy._core.defchararray import (

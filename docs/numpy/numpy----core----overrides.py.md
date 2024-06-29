@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\overrides.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于动态获取属性的值
 def __getattr__(attr_name):
     # 从 numpy._core 模块中导入 overrides 函数

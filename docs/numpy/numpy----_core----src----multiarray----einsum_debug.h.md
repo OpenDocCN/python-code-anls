@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\einsum_debug.h`
 
-```
+```py
 /*
  * This file provides debug macros used by the other einsum files.
  *

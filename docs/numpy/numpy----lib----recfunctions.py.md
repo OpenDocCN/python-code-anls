@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\recfunctions.py`
 
-```
+```py
 """
 Collection of utilities to manipulate structured arrays.
 

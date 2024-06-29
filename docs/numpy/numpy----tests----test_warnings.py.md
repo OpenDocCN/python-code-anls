@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_warnings.py`
 
-```
+```py
 """
 Tests which scan for certain occurrences in the code, they may not find
 all of these occurrences but should catch almost all.

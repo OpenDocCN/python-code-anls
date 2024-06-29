@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\cpuinfo.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 cpuinfo

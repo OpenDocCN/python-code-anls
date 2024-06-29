@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\data\generate_umath_validation_data.cpp`
 
-```
+```py
 /*
  * 包含标准库头文件
  */

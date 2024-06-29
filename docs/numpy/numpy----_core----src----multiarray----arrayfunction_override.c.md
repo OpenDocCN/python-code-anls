@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\arrayfunction_override.c`
 
-```
+```py
 /*
  * Define NPY_NO_DEPRECATED_API to use the latest NumPy API version.
  * This helps in avoiding deprecated features.

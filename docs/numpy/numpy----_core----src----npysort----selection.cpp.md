@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\selection.cpp`
 
-```
+```py
 /*
  *
  * The code is loosely based on the quickselect from

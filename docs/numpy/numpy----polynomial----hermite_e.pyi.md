@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\polynomial\hermite_e.pyi`
 
-```
+```py
 # 引入必要的类型提示模块
 from typing import Any
 

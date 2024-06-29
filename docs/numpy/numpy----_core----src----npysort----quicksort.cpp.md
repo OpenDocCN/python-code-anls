@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\quicksort.cpp`
 
-```
+```py
 /* -*- c -*- */
 
 /*

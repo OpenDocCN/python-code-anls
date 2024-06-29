@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_cpu_features.py`
 
-```
+```py
 # 导入必要的模块：sys, platform, re, pytest
 # 从 numpy._core._multiarray_umath 中导入特定的 CPU 相关功能
 import sys, platform, re, pytest

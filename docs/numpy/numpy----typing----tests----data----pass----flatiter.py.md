@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\flatiter.py`
 
-```
+```py
 # 导入 NumPy 库，简写为 np
 import numpy as np
 

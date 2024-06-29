@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\ufunc_override.c`
 
-```
+```py
 /*
  * 定义宏，禁用所有已弃用的 NumPy API，使用当前版本的 API
  */

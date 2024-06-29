@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\testing\_private\utils.pyi`
 
-```
+```py
 import os
 import sys
 import ast

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_distributor_init.py`
 
-```
+```py
 """
 Distributor init file
 

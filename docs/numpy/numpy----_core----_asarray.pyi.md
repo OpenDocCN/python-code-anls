@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\_asarray.pyi`
 
-```
+```py
 # 导入所需模块和类型定义
 from collections.abc import Iterable
 from typing import Any, TypeVar, overload, Literal

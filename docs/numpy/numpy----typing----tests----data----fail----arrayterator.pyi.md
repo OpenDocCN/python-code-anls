@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\arrayterator.pyi`
 
-```
+```py
 import numpy as np  # 导入NumPy库
 import numpy.typing as npt  # 导入NumPy类型定义模块
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\conv_template.py`
 
-```
+```py
 # 解析输入字符串中的重复块结构，返回第一级重复块的起始和结束标记
 def parse_structure(astr, level):
     """

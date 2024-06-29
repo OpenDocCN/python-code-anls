@@ -1,6 +1,6 @@
 # `.\numpy\numpy\dtypes.py`
 
-```
+```py
 """
 This module is home to specific dtypes related functionality and their classes.
 For more general information about dtypes, also see `numpy.dtype` and

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\public_dtype_api.c`
 
-```
+```py
 /*NUMPY_API
  *
  * Initialize a new DType.  It must currently be a static Python C type that

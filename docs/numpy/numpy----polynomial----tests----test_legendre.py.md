@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_legendre.py`
 
-```
+```py
 """Tests for legendre module.
 
 """

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\array_assign.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_ARRAY_ASSIGN_H_
 #define NUMPY_CORE_SRC_COMMON_ARRAY_ASSIGN_H_
 

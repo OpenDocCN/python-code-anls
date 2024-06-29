@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\__init__.cython-30.pxd`
 
-```
+```py
 # NumPy static imports for Cython >= 3.0
 #
 # If any of the PyArray_* functions are called, import_array must be

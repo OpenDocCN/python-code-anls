@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\__init__.py`
 
-```
+```py
 # 导入 NumPy 中的线性代数模块，该模块提供了各种线性代数函数的实现
 from . import linalg  # deprecated in NumPy 2.0，在 NumPy 2.0 中已弃用的 linalg 子模块导入
 

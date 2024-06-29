@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\c_distributions.pxd`
 
-```
+```py
 # 导入必要的模块和类型定义
 # 设置 Cython 编译选项：禁用循环包装、空指针检查、边界检查，启用 C 除法，语言级别为 Python 3
 #cython: wraparound=False, nonecheck=False, boundscheck=False, cdivision=True, language_level=3

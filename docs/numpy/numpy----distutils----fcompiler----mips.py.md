@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\mips.py`
 
-```
+```py
 # 导入必要的模块和类
 from numpy.distutils.cpuinfo import cpu
 from numpy.distutils.fcompiler import FCompiler

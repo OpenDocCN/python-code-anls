@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\_utils.py`
 
-```
+```py
 # 导入警告模块，用于生成警告信息
 import warnings
 

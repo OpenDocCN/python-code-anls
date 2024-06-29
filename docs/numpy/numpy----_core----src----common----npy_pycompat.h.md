@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_pycompat.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_NPY_PYCOMPAT_H_
 // 如果未定义宏 NUMPY_CORE_SRC_COMMON_NPY_PYCOMPAT_H_，则开始条件编译
 #define NUMPY_CORE_SRC_COMMON_NPY_PYCOMPAT_H_

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\shape.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_SHAPE_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_SHAPE_H_
 

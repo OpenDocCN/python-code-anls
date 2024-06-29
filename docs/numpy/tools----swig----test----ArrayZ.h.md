@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\ArrayZ.h`
 
-```
+```py
 #ifndef ARRAYZ_H
 #define ARRAYZ_H
 

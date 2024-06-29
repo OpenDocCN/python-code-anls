@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\setup.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 # 导入 Extension 和 setup 函数

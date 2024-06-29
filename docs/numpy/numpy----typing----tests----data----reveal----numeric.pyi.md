@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\numeric.pyi`
 
-```
+```py
 """
 Tests for :mod:`_core.numeric`.
 

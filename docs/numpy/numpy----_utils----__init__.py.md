@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_utils\__init__.py`
 
-```
+```py
 """
 This is a module for defining private helpers which do not depend on the
 rest of NumPy.

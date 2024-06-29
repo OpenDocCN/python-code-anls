@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\array_api_info.pyi`
 
-```
+```py
 # 导入系统相关的模块
 import sys
 # 导入 List 类型的泛型支持

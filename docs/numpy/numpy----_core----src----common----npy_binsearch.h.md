@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_binsearch.h`
 
-```
+```py
 #ifndef __NPY_BINSEARCH_H__
 #define __NPY_BINSEARCH_H__
 

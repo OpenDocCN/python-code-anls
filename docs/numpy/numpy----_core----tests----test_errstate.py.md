@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_errstate.py`
 
-```
+```py
 # 导入 pytest 模块，用于编写和运行测试用例
 import pytest
 # 导入 sysconfig 模块，用于访问 Python 系统配置信息

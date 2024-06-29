@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pyinstaller\__init__.py`
 
-```
+```py
 # 导入所需的模块：datetime 和 timedelta
 from datetime import datetime, timedelta
 

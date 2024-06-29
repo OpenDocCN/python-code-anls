@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\buffer.c`
 
-```
+```py
 /*
  * 定义 NPY_NO_DEPRECATED_API，避免使用已废弃的 NumPy API 版本
  * 定义 _MULTIARRAYMODULE，暂未说明具体用途

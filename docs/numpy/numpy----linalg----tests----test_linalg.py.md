@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\tests\test_linalg.py`
 
-```
+```py
 # 导入所需的标准库和第三方库模块
 import os
 import sys

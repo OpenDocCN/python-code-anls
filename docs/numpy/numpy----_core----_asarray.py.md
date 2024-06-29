@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_asarray.py`
 
-```
+```py
 """
 Functions in the ``as*array`` family that promote array-likes into arrays.
 

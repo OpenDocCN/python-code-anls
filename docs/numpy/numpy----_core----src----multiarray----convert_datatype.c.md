@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\convert_datatype.c`
 
-```
+```py
 /*
  * 定义宏，指定使用的 NumPy API 版本
  * 禁用已弃用的 NumPy API

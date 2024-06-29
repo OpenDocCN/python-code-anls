@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\_private\extbuild.py`
 
-```
+```py
 # 导入需要的库和模块
 import os
 import pathlib

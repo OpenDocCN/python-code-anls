@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\bitwise_ops.py`
 
-```
+```py
 # 导入NumPy库，通常用np作为别名
 import numpy as np
 

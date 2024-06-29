@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\npysort_heapsort.h`
 
-```
+```py
 #ifndef __NPY_SORT_HEAPSORT_H__
 #define __NPY_SORT_HEAPSORT_H__
 

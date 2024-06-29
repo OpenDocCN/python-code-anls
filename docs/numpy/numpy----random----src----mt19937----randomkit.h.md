@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\randomkit.h`
 
-```
+```py
 /*
  * Random kit 1.3
  */

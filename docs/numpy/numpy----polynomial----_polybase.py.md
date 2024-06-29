@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\_polybase.py`
 
-```
+```py
 """
 Abstract base class for the various polynomial Classes.
 

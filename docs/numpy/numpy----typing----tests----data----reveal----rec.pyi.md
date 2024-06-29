@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\rec.pyi`
 
-```
+```py
 import io  # 导入io模块，用于处理文件和流相关的操作
 import sys  # 导入sys模块，用于访问系统相关的参数和功能
 from typing import Any  # 从typing模块导入Any类型，表示任意类型的对象

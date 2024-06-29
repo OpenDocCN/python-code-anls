@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\char.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，通常用 np 作为别名
 
 AR_U: npt.NDArray[np.str_]  # 定义 AR_U 变量，类型为 NumPy 字符串数组

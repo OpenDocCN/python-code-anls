@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\format.py`
 
-```
+```py
 """
 Binary serialization
 

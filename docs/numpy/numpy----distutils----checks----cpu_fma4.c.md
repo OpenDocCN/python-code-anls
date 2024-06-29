@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_fma4.c`
 
-```
+```py
 #include <immintrin.h>
 #ifdef _MSC_VER
     #include <ammintrin.h>  // 包含适用于 Microsoft 编译器的特定头文件，用于 AVX 指令集

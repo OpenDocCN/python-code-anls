@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_return_logical.py`
 
-```
+```py
 import pytest  # 导入 pytest 库
 
 from numpy import array  # 从 numpy 库导入 array 函数

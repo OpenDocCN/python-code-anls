@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\SuperTensor.cxx`
 
-```
+```py
 // 包含标准库头文件
 #include <stdlib.h>
 #include <math.h>

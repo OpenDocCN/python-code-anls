@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\__init__.py`
 
-```
+```py
 """
 Contains FCompiler, an abstract base class that defines the interface
 for the numpy.distutils Fortran compiler abstraction model.

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\laguerre.py`
 
-```
+```py
 # 引入必要的库和模块
 import numpy as np  # 引入 NumPy 库，用于数值计算
 import numpy.linalg as la  # 引入 NumPy 的线性代数模块
@@ -241,7 +241,7 @@ def lagfromroots(roots):
 
 def lagadd(c1, c2):
     """
-    ```
+    ```py
     Add one Laguerre series to another.
 
     Returns the sum of two Laguerre series `c1` + `c2`.  The arguments

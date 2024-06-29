@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_f2cmap.py`
 
-```
+```py
 # 导入名为 util 的当前目录下的模块
 from . import util
 # 导入 NumPy 库，并将其命名为 np

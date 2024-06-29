@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\polynomial\chebyshev.pyi`
 
-```
+```py
 # 导入必要的类型引用
 from typing import Any
 # 导入必要的函数和类

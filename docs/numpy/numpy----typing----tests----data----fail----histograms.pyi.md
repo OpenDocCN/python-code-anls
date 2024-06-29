@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\histograms.pyi`
 
-```
+```py
 import numpy as np  # 导入NumPy库，通常用np作为别名
 import numpy.typing as npt  # 导入NumPy类型定义模块，用于类型提示
 

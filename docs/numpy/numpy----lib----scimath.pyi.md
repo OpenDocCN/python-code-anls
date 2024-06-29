@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\scimath.pyi`
 
-```
+```py
 # 导入科学数学函数库中的部分函数和变量
 from ._scimath_impl import (
     # 导入所有公开的函数和变量

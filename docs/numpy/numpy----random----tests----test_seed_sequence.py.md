@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_seed_sequence.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_compare

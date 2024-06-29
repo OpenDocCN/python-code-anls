@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\arraywrap.c`
 
-```
+```py
 /*
  * Definitions for dealing with array-wrap or array-prepare.
  */

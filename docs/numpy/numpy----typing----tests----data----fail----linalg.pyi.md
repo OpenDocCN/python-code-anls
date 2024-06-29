@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\linalg.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 AR_f8: npt.NDArray[np.float64]  # 定义 AR_f8 变量，类型为 NumPy 的 float64 类型数组

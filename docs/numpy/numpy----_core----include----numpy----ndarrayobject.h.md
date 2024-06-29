@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\ndarrayobject.h`
 
-```
+```py
 /*
  * DON'T INCLUDE THIS DIRECTLY.
  */

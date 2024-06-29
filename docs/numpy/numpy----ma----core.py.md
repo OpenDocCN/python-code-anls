@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\core.py`
 
-```
+```py
 """
 numpy.ma : 处理缺失或无效值的包。
 

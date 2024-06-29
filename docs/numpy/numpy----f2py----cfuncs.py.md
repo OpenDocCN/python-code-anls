@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\cfuncs.py`
 
-```
+```py
 """
 C declarations, CPP macros, and C functions for f2py2e.
 Only required declarations/macros/functions will be used.
@@ -925,7 +925,7 @@ character_from_pyobj(character* v, PyObject *obj, const char *errmess) {
 }
 
 
-```  
+```py  
 # 为 C 函数 'char_from_pyobj' 添加注释  
 static int
 char_from_pyobj(char* v, PyObject *obj, const char *errmess) {

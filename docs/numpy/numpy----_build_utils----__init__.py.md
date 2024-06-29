@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_build_utils\__init__.py`
 
-```
+```py
 # 不要使用已弃用的 NumPy C API。将此定义为固定版本而不是 NPY_API_VERSION，以避免在 NumPy 引入新的弃用功能时破坏已发布的 SciPy 版本的编译。在 setup.py 中使用::
 #
 #   config.add_extension('_name', sources=['source_fname'], **numpy_nodepr_api)

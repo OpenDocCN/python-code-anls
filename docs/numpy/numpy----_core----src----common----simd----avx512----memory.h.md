@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\avx512\memory.h`
 
-```
+```py
 #ifndef NPY_SIMD
     // 如果没有定义 NPY_SIMD 宏，则输出错误信息 "Not a standalone header"
     #error "Not a standalone header"

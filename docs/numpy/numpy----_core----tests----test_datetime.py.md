@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_datetime.py`
 
-```
+```py
 # 导入标准库中的 datetime 和 pickle 模块
 import datetime
 import pickle

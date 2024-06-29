@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_dtype_like.py`
 
-```
+```py
 # 从 collections.abc 模块导入 Sequence 抽象基类
 from collections.abc import Sequence
 # 导入类型提示模块中的必要类和函数

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\override.h`
 
-```
+```py
 #ifndef _NPY_UMATH_OVERRIDE_H
 #define _NPY_UMATH_OVERRIDE_H
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_pytesttester.pyi`
 
-```
+```py
 from collections.abc import Iterable
 from typing import Literal as L
 

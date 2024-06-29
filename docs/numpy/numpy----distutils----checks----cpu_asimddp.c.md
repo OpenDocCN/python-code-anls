@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_asimddp.c`
 
-```
+```py
 #ifdef _MSC_VER
     // 如果是 Microsoft Visual C++ 编译器
     #include <Intrin.h>

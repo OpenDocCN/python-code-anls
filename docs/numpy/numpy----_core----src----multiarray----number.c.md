@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\number.c`
 
-```
+```py
 /*
  * 定义宏，确保使用的 NumPy API 版本没有废弃的部分
  */

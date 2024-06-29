@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\__init__.py`
 
-```
+```py
 # 定义一个名为 `calculate_total` 的函数，接受一个参数 `items`
 def calculate_total(items):
     # 初始化变量 `total` 为 0

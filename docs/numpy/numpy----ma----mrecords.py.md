@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\mrecords.py`
 
-```
+```py
 """
 Defines the equivalent of numpy.recarrays for masked arrays,
 where fields can be accessed as attributes.

@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\__init__.py`
 
-```
+```py
 # 导入名为 common 的当前目录下的模块
 from . import common
 # 导入 sys 和 os 模块

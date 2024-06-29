@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\ufunc_type_resolution.c`
 
-```
+```py
 /*
  * NOTE: The type resolution defined in this file is considered legacy.
  *

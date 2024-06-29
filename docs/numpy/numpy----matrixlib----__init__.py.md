@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\__init__.py`
 
-```
+```py
 """Sub-package containing the matrix class and related functions.
 
 """

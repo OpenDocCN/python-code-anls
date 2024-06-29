@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_philox.pyx`
 
-```
+```py
 #cython: binding=True
 # 导入CPython的PyCapsule_New函数，用于创建Python对象的C扩展对象
 

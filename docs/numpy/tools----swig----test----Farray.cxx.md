@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Farray.cxx`
 
-```
+```py
 // 包含自定义头文件 "Farray.h" 和标准头文件 <sstream>
 #include "Farray.h"
 #include <sstream>

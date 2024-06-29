@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\simd_utils.h`
 
-```
+```py
 #ifndef _NPY_SIMD_UTILS_H
 #define _NPY_SIMD_UTILS_H
 

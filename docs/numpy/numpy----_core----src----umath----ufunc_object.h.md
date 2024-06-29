@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\ufunc_object.h`
 
-```
+```py
 #ifndef _NPY_UMATH_UFUNC_OBJECT_H_
 #define _NPY_UMATH_UFUNC_OBJECT_H_
 

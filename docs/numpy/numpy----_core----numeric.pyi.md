@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\numeric.pyi`
 
-```
+```py
 # 从 collections.abc 导入 Callable 和 Sequence 类型
 from collections.abc import Callable, Sequence
 # 导入 typing 模块的多个类型和装饰器

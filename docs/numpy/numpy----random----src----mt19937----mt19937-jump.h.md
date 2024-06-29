@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937-jump.h`
 
-```
+```py
 #pragma once
 #include "mt19937.h"
 #include <stdlib.h>

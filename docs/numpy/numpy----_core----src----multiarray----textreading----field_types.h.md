@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\field_types.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_FIELD_TYPES_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_FIELD_TYPES_H_
 

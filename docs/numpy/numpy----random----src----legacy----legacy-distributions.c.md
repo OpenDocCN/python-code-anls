@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\legacy\legacy-distributions.c`
 
-```
+```py
 /*
  * This file contains generation code for distribution that have been modified
  * since Generator was introduced. These are preserved using identical code

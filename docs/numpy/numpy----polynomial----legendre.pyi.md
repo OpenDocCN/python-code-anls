@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\polynomial\legendre.pyi`
 
-```
+```py
 # 引入类型提示中的 Any 类型
 from typing import Any
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\mixins.py`
 
-```
+```py
 """
 Mixin classes for custom array types that don't inherit from ndarray.
 """

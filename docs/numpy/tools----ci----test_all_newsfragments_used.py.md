@@ -1,6 +1,6 @@
 # `.\numpy\tools\ci\test_all_newsfragments_used.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入系统相关的库
 import sys

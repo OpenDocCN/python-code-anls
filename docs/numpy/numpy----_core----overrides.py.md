@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\overrides.py`
 
-```
+```py
 # 导入必要的模块：collections, functools, os
 # 导入自定义模块中的 set_module 和 getargspec 函数
 """Implementation of __array_function__ overrides from NEP-18."""

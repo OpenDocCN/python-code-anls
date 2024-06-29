@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_misc_util.py`
 
-```
+```py
 # 从os.path模块中导入join、sep和dirname函数
 from os.path import join, sep, dirname
 

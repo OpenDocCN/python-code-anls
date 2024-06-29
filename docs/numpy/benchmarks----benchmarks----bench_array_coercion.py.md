@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_array_coercion.py`
 
-```
+```py
 # 从.common模块导入Benchmark类，用于性能基准测试
 from .common import Benchmark
 # 导入NumPy库，用于数组操作

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c.c`
 
-```
+```py
 /*
   Functions here are copied from the source code for libf2c.
 

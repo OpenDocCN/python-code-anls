@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\fft\_helper.pyi`
 
-```
+```py
 # 导入必要的类型和函数
 from typing import Any, TypeVar, overload, Literal as L
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\use_rules.py`
 
-```
+```py
 """
 Build 'use others module data' mechanism for f2py2e.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\compat\tests\__init__.py`
 
-```
+```py
 # 定义一个名为find_duplicate的函数，接收一个参数nums，该参数是一个整数列表
 def find_duplicate(nums):
     # 创建一个空集合dup_set，用于存储出现过的数字

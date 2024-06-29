@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_callback.py`
 
-```
+```py
 import math  # 导入 math 模块，提供数学函数支持
 import textwrap  # 导入 textwrap 模块，提供文本包装和填充功能
 import sys  # 导入 sys 模块，提供对解释器相关的操作访问

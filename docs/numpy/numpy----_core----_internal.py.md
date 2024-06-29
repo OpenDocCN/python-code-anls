@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_internal.py`
 
-```
+```py
 """
 A place for internal code
 

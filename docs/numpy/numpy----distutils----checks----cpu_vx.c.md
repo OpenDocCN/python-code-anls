@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_vx.c`
 
-```
+```py
 #if (__VEC__ < 10301) || (__ARCH__ < 11)
     #error VX not supported
 #endif

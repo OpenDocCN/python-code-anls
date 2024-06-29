@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_overrides.py`
 
-```
+```py
 # 导入Benchmark类，用于性能基准测试
 from .common import Benchmark
 

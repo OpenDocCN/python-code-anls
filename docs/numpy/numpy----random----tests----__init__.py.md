@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\__init__.py`
 
-```
+```py
 # 定义一个函数 `calculate_circle_area`，用于计算圆的面积
 def calculate_circle_area(radius):
     # 导入数学库，以便使用其中的圆周率常量 PI

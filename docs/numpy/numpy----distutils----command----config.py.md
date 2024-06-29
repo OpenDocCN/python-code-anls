@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\config.py`
 
-```
+```py
 # 导入必要的模块和库
 import os
 import signal

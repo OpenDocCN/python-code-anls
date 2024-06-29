@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\extension.py`
 
-```
+```py
 """
 distutils.extension
 

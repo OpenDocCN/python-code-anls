@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_cpu.h`
 
-```
+```py
 /*
  * This block defines CPU-specific macros based on the detected CPU architecture.
  * The macros determine the target CPU and are used for conditional compilation.

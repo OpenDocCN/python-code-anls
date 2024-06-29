@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_configtool.py`
 
-```
+```py
 # 导入所需的标准库和第三方库
 import os
 import subprocess

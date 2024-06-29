@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\field_types.c`
 
-```
+```py
 /*
  * 包含必要的头文件来引入所需的类型和函数声明
  */

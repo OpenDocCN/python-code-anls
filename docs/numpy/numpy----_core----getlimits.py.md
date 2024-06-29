@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\getlimits.py`
 
-```
+```py
 """Machine limits for Float32 and Float64 and (long double) if available...
 
 """

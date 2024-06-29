@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\conf.py`
 
-```
+```py
 # 导入必要的标准库和第三方库
 import os            # 操作系统接口
 import re            # 正则表达式

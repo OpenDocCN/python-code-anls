@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arrayprint.pyi`
 
-```
+```py
 import sys
 import contextlib
 from collections.abc import Callable

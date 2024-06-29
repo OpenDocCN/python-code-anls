@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testSuperTensor.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 import sys  # 导入系统模块sys，用于处理系统相关的功能

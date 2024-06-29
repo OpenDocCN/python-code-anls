@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_common.py`
 
-```
+```py
 # 导入 pytest 模块，用于测试
 import pytest
 # 导入 numpy 模块并重命名为 np，用于数值计算和数组操作

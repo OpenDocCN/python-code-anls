@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\g95.py`
 
-```
+```py
 # 导入FCompiler类
 from numpy.distutils.fcompiler import FCompiler
 

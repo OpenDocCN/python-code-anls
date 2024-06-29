@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\fromnumeric.pyi`
 
-```
+```py
 """Tests for :mod:`numpy._core.fromnumeric`."""
 
 # 导入 numpy 库，并使用类型定义模块 numpy.typing

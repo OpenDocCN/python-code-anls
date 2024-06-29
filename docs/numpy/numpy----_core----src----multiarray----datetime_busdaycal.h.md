@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime_busdaycal.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_DATETIME_BUSDAYCAL_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_DATETIME_BUSDAYCAL_H_
 

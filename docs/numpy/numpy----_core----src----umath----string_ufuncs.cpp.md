@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\string_ufuncs.cpp`
 
-```
+```py
 /*
  * 包含必要的头文件：Python.h 用于 Python C API，以及与 NumPy 相关的头文件。
  */

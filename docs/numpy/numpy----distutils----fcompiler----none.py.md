@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\none.py`
 
-```
+```py
 # 导入 numpy.distutils.fcompiler 模块中的 FCompiler 类
 from numpy.distutils.fcompiler import FCompiler
 # 导入 numpy.distutils 中的 customized_fcompiler 函数

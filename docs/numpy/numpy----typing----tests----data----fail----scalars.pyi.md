@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\scalars.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关的操作
 import numpy as np  # 导入numpy库，并使用np作为别名
 

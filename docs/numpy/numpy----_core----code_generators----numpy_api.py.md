@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\numpy_api.py`
 
-```
+```py
 """Here we define the exported functions, types, etc... which need to be
 exported through a global C pointer.
 

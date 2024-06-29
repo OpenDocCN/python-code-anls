@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_shape_base_impl.py`
 
-```
+```py
 # 导入 functools 模块，用于创建偏函数
 import functools
 # 导入 warnings 模块，用于警告处理

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\halffloat.cpp`
 
-```
+```py
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 /*
  * 如果设置为1，转换过程中会尝试在需要时触发浮点系统的下溢、上溢和无效异常。

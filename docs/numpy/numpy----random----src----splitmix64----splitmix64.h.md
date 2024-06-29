@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\splitmix64\splitmix64.h`
 
-```
+```py
 # 包含 C 语言标准库 inttypes.h，提供整数类型定义
 #include <inttypes.h>
 

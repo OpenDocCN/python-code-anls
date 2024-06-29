@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_polynomial.py`
 
-```
+```py
 import numpy as np
 from numpy.testing import (
     assert_, assert_equal, assert_array_equal, assert_almost_equal,

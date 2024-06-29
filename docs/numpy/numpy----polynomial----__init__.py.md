@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\__init__.py`
 
-```
+```py
 """
 A sub-package for efficiently dealing with polynomials.
 

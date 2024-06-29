@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_chebyshev.py`
 
-```
+```py
 """Tests for chebyshev module.
 
 """

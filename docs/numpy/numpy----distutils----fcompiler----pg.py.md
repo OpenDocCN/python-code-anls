@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\pg.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 

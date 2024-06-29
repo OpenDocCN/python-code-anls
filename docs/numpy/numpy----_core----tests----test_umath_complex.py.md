@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_umath_complex.py`
 
-```
+```py
 # 导入系统相关的模块
 import sys
 # 导入平台相关的模块

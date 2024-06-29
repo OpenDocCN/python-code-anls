@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_s_lapack.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.
@@ -19437,7 +19437,7 @@ L30:
             k = i__ + 2;
         }
 L40:
-    ```python`
+    ```py`
         # 如果 k 小于等于 kend，则执行以下操作
         if (k <= kend) {
             # 如果 k 等于 i__ + 1，则计算 evi

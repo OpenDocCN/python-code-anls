@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_1_7_deprecated_api.h`
 
-```
+```py
 #ifndef NPY_DEPRECATED_INCLUDES
 #error "Should never include npy_*_*_deprecated_api directly."
 #endif

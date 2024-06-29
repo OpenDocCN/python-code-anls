@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_smoke.py`
 
-```
+```py
 # 导入pickle模块，用于对象序列化和反序列化
 import pickle
 # 导入functools模块的partial函数，用于创建偏函数
@@ -1143,7 +1143,7 @@ class TestPhilox(RNG):
         # 调用额外的设置方法
         cls._extra_setup()
 
-```    
+```py    
 
 ```    
 class TestSFC64(RNG):
@@ -1164,7 +1164,7 @@ class TestSFC64(RNG):
         # 调用额外的设置方法
         cls._extra_setup()
 
-```    
+```py    
 
 ```    
 class TestPCG64(RNG):
@@ -1185,7 +1185,7 @@ class TestPCG64(RNG):
         # 调用额外的设置方法
         cls._extra_setup()
 
-```    
+```py    
 
 ```    
 class TestPCG64DXSM(RNG):
@@ -1206,7 +1206,7 @@ class TestPCG64DXSM(RNG):
         # 调用额外的设置方法
         cls._extra_setup()
 
-```    
+```py    
 
 ```    
 class TestDefaultRNG(RNG):

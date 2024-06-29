@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\descriptor.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_DESCRIPTOR_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_DESCRIPTOR_H_
 

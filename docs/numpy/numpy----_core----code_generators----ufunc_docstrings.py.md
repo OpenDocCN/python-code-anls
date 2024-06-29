@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\ufunc_docstrings.py`
 
-```
+```py
 """
 Docstrings for generated ufuncs
 

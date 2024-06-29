@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\string_buffer.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_UMATH_STRING_BUFFER_H_
 #define _NPY_CORE_SRC_UMATH_STRING_BUFFER_H_
 

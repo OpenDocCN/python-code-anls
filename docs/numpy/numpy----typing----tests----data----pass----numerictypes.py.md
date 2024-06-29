@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\numerictypes.py`
 
-```
+```py
 # 导入 NumPy 库，命名为 np
 import numpy as np
 

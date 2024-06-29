@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_io.py`
 
-```
+```py
 from .common import Benchmark, get_squares, get_squares_
 import numpy as np
 from io import SEEK_SET, StringIO, BytesIO

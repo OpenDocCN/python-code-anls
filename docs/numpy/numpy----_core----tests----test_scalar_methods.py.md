@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_scalar_methods.py`
 
-```
+```py
 """
 Test the scalar constructors, which also do type-coercion
 """

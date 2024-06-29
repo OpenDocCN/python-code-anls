@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_half.py`
 
-```
+```py
 # 导入 platform 模块，用于获取平台信息
 import platform
 # 导入 pytest 模块，用于编写和运行测试用例

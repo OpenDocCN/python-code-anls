@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_examples\cython\extending_distributions.pyx`
 
-```
+```py
 #!/usr/bin/env python3
 #cython: language_level=3
 """

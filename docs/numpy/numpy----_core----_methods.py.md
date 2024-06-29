@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_methods.py`
 
-```
+```py
 """
 Array methods which are called by both the C-code for the method
 and the Python code for the NumPy-namespace function

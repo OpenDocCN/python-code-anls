@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\multiarray.pyi`
 
-```
+```py
 # 导入内置模块和库
 import builtins
 import os

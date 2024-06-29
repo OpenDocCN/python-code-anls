@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_ufunclike.py`
 
-```
+```py
 import numpy as np  # 导入NumPy库
 
 from numpy import fix, isposinf, isneginf  # 从NumPy中导入fix, isposinf, isneginf函数

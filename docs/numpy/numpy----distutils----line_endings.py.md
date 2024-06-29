@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\line_endings.py`
 
-```
+```py
 # 导入必要的库：os（操作系统相关）、re（正则表达式）、sys（系统相关）
 import os
 import re

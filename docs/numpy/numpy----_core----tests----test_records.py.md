@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_records.py`
 
-```
+```py
 # 导入 collections.abc 模块，这是 Python 中抽象基类集合的一部分
 import collections.abc
 # 导入 textwrap 模块，用于文本的换行和填充

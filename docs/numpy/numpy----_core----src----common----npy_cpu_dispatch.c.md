@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_cpu_dispatch.c`
 
-```
+```py
 // 定义宏，禁用过时的 NumPy API，并设置为当前 API 版本
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 // 定义宏，标识该文件属于多维数组模块

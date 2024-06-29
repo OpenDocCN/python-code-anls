@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_regression.py`
 
-```
+```py
 # 导入所需的库和模块
 import os
 import pytest

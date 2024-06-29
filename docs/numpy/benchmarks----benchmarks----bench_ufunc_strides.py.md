@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_ufunc_strides.py`
 
-```
+```py
 # 从 common 模块导入 Benchmark 类和 get_data 函数
 from .common import Benchmark, get_data
 

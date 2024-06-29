@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\splitmix64\splitmix64.c`
 
-```
+```py
 /*  Written in 2015 by Sebastiano Vigna (vigna@acm.org)
 
 To the extent possible under law, the author has dedicated all copyright

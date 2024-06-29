@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\abstractdtypes.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_ABSTRACTDTYPES_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_ABSTRACTDTYPES_H_
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_no_deprecated_api.h`
 
-```
+```py
 /*
  * This include file is provided for inclusion in Cython *.pyd files where
  * one would like to define the NPY_NO_DEPRECATED_API macro. It can be

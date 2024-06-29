@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_npyio_impl.py`
 
-```
+```py
 """
 IO related functions.
 """

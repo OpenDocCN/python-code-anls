@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\defchararray.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于在获取不存在的属性时进行处理
 def __getattr__(attr_name):
     # 从 numpy._core 模块中导入 defchararray 对象

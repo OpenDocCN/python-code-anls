@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\ufunc_type_resolution.h`
 
-```
+```py
 #ifndef _NPY_PRIVATE__UFUNC_TYPE_RESOLUTION_H_
 #define _NPY_PRIVATE__UFUNC_TYPE_RESOLUTION_H_
 

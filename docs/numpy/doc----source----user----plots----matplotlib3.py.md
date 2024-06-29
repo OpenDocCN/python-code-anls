@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\user\plots\matplotlib3.py`
 
-```
+```py
 # 导入 NumPy 库，通常用于处理数组和数值计算
 import numpy as np
 # 导入 Matplotlib 的 pyplot 模块，用于绘图操作

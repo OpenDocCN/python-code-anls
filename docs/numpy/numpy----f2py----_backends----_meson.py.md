@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_backends\_meson.py`
 
-```
+```py
     # 从 __future__ 导入 annotations 特性，用于支持注解类型提示
     from __future__ import annotations
 

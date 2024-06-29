@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Fortran.h`
 
-```
+```py
 #ifndef FORTRAN_H
 #define FORTRAN_H
 

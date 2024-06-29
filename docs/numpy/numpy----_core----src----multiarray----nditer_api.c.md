@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\nditer_api.c`
 
-```
+```py
 /*
  * This file implements most of the main API functions of NumPy's nditer.
  * This excludes functions specialized using the templating system.

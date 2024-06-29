@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\conversions.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_CONVERSIONS_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_CONVERSIONS_H_
 

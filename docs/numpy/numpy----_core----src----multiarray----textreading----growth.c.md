@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\growth.c`
 
-```
+```py
 /*
  * 宏定义，用于设置 NumPy 不使用过时的 API 版本，使用当前的 API 版本
  */

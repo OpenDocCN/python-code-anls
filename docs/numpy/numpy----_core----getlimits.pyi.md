@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\getlimits.pyi`
 
-```
+```py
 # 从 numpy 模块中导入特定名称的函数和对象，并使用 as 关键字进行重命名
 from numpy import (
     finfo as finfo,  # 导入 finfo 函数并重命名为 finfo

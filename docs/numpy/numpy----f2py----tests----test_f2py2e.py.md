@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_f2py2e.py`
 
-```
+```py
 # 导入必要的模块和库
 import textwrap, re, sys, subprocess, shlex
 from pathlib import Path

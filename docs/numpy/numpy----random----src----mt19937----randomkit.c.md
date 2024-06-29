@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\randomkit.c`
 
-```
+```py
 /* Random kit 1.3 */
 
 /* static char const rcsid[] =

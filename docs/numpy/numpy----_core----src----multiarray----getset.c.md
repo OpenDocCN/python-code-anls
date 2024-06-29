@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\getset.c`
 
-```
+```py
 /* Array Descr Object */
 
 /* Define to prevent deprecated API usage */

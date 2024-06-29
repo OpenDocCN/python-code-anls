@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_matrix_linalg.py`
 
-```
+```py
 # 导入 NumPy 库并起一个别名 np
 import numpy as np
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\arrayprint.pyi`
 
-```
+```py
 from collections.abc import Callable
 from typing import Any
 

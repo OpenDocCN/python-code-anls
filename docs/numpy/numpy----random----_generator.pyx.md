@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_generator.pyx`
 
-```
+```py
 # 导入必要的模块和函数
 #!python
 #cython: wraparound=False, nonecheck=False, boundscheck=False, cdivision=True, language_level=3, binding=True

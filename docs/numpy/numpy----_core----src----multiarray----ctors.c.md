@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\ctors.c`
 
-```
+```py
 /*
  * 定义常量，指定使用的 NumPy API 版本
  * 禁用已弃用的 NumPy API

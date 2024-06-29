@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\__init__.pyi`
 
-```
+```py
 # 导入内置模块和第三方库
 import builtins              # 内置模块，提供Python的内置函数和异常
 import sys                   # 内置模块，提供与Python解释器相关的功能

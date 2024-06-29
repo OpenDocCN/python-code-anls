@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\_neighborhood_iterator_imp.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY__NEIGHBORHOOD_IMP_H_
 #error You should not include this header directly
 #endif

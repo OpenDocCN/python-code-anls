@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_defmatrix.py`
 
-```
+```py
 import collections.abc  # 导入 collections.abc 模块
 
 import numpy as np  # 导入 NumPy 库

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\item_selection.c`
 
-```
+```py
 /*
  * 定义 NPY_NO_DEPRECATED_API 以及 _MULTIARRAYMODULE 宏
  */

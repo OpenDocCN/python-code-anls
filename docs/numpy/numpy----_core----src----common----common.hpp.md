@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\src\common\common.hpp`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_COMMON_HPP
 #define NUMPY_CORE_SRC_COMMON_COMMON_HPP
 /*

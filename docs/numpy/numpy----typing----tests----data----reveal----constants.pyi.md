@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\constants.pyi`
 
-```
+```py
 # 导入 sys 模块，用于访问系统相关的功能
 import sys
 

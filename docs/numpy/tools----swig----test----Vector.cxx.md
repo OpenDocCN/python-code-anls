@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Vector.cxx`
 
-```
+```py
 // 包含标准库头文件：stdlib.h（包含通用函数）、math.h（包含数学函数）、iostream（输入输出流）
 #include <stdlib.h>
 #include <math.h>

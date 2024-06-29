@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\dummymodule.c`
 
-```
+```py
 /*
  * -*- c -*-
  */

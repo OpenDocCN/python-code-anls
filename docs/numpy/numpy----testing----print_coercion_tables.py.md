@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\print_coercion_tables.py`
 
-```
+```py
 # 指定 Python 解释器为当前环境的 Python 3
 #!/usr/bin/env python3
 """Prints type-coercion tables for the built-in NumPy types

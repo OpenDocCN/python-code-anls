@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\f2py\code\setup_example.py`
 
-```
+```py
 # 从 numpy.distutils.core 模块导入 Extension 类
 from numpy.distutils.core import Extension
 

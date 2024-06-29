@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\can_cast_table.h`
 
-```
+```py
 /*
  * This file defines a compile time constant casting table for use in
  * a few situations:

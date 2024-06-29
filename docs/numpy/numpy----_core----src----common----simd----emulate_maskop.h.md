@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\emulate_maskop.h`
 
-```
+```py
 /**
  * This header is used internally by all current supported SIMD extensions,
  * except for AVX512.

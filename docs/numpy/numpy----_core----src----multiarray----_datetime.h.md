@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\_datetime.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY__DATETIME_H_
 #define NUMPY_CORE_SRC_MULTIARRAY__DATETIME_H_
 

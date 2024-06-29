@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_asimd.c`
 
-```
+```py
 #ifdef _MSC_VER
     #include <Intrin.h>
 #endif

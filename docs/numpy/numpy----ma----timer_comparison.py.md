@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\timer_comparison.py`
 
-```
+```py
 # 导入用于计时的模块
 import timeit
 # 导入 reduce 函数，用于对序列进行累积计算

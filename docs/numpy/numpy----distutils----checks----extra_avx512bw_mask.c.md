@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\extra_avx512bw_mask.c`
 
-```
+```py
 #include <immintrin.h>
 /**
  * 测试 AVX-512 BW 掩码操作的效果，具体包括：

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_character.py`
 
-```
+```py
 # 导入 pytest 模块，用于测试
 import pytest
 # 导入 textwrap 模块，用于处理字符串的缩进和格式

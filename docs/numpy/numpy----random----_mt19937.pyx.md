@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_mt19937.pyx`
 
-```
+```py
 #cython: binding=True
 # 引入operator模块，用于操作符函数的标准操作
 import operator

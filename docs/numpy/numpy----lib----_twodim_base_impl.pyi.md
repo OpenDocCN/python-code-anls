@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_twodim_base_impl.pyi`
 
-```
+```py
 # 导入内建模块和函数
 import builtins
 # 导入抽象基类中的可调用对象和序列

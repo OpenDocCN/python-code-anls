@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_common.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_COMMON_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_NPY_COMMON_H_
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\calculation.c`
 
-```
+```py
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 // 定义宏，指定不使用已弃用的 NumPy API 版本
 

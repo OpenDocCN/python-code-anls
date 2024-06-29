@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\cblasfuncs.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_CBLASFUNCS_H_
 #define NUMPY_CORE_SRC_COMMON_CBLASFUNCS_H_
 

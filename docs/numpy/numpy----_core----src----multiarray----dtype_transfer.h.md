@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dtype_transfer.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_DTYPE_TRANSFER_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_DTYPE_TRANSFER_H_
 

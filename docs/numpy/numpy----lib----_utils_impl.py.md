@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_utils_impl.py`
 
-```
+```py
 # 导入必要的模块
 import os  # 导入操作系统模块
 import sys  # 导入系统模块

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\pcg64\pcg64.orig.c`
 
-```
+```py
 // 包含自定义的pcg64随机数生成器头文件
 #include "pcg64.orig.h"
 

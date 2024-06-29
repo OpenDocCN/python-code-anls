@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\reference\random\performance.py`
 
-```
+```py
 from timeit import repeat  # 导入计时器函数
 import pandas as pd  # 导入 pandas 库
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_nanfunctions_impl.pyi`
 
-```
+```py
 # 导入 numpy 中的一系列函数，从 fromnumeric 模块中导入的函数列表
 from numpy._core.fromnumeric import (
     amin,      # 导入计算数组元素最小值的函数

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\arrayprint.pyi`
 
-```
+```py
 # 导入必要的模块和类型
 from collections.abc import Callable
 from typing import Any, Literal, TypedDict, SupportsIndex

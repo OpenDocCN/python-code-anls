@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_add_docstring.py`
 
-```
+```py
 """A module for creating docstrings for sphinx ``data`` domains."""
 
 # 导入正则表达式和文本包装模块

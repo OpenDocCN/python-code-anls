@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\dtype.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_DTYPE_H_
 #define _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_DTYPE_H_
 

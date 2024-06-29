@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\index_tricks.pyi`
 
-```
+```py
 import sys
 from typing import Any, Literal  # 导入必要的模块和类型提示
 

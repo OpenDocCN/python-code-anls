@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\compaq.py`
 
-```
+```py
 # 导入操作系统和系统模块
 import os
 import sys

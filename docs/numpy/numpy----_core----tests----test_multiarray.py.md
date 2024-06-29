@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_multiarray.py`
 
-```
+```py
 from __future__ import annotations
 # 引入用于类型提示的特殊导入语法，使得类型提示可以在类定义中使用
 

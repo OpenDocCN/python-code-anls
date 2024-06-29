@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\__init__.py`
 
-```
+```py
 """
 The `numpy.core` submodule exists solely for backward compatibility
 purposes. The original `core` was renamed to `_core` and made private.

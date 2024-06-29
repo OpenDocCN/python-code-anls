@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\ma\core.pyi`
 
-```
+```py
 # 导入必要的模块和类型声明
 from collections.abc import Callable
 from typing import Any, TypeVar

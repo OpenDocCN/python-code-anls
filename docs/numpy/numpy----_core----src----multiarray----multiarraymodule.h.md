@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\multiarraymodule.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_MULTIARRAYMODULE_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_MULTIARRAYMODULE_H_
 

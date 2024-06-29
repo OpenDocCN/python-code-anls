@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\nested_sequence.pyi`
 
-```
+```py
 # 导入Sequence抽象基类，用于声明序列类型变量
 from collections.abc import Sequence
 # 导入_NestedSequence类型变量，这是一个内部类型，用于声明嵌套序列

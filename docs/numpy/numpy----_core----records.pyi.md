@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\records.pyi`
 
-```
+```py
 # 导入标准库 os，用于与操作系统交互
 import os
 # 从 collections.abc 模块导入 Sequence 和 Iterable 类型，用于声明支持序列和可迭代的抽象基类

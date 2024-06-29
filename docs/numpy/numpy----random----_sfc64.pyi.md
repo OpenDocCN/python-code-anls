@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_sfc64.pyi`
 
-```
+```py
 # 引入必要的类型定义
 from typing import TypedDict
 

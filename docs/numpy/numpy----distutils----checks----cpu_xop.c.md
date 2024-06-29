@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_xop.c`
 
-```
+```py
 # 包含 AVX2 指令集的头文件
 #include <immintrin.h>
 # 如果是 MSVC 编译器，则包含该头文件

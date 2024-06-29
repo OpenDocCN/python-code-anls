@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\arrayterator.py`
 
-```
+```py
 # 导入将来版本的特性模块，支持类型注解
 from __future__ import annotations
 

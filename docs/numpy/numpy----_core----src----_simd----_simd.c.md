@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\_simd\_simd.c`
 
-```
+```py
 #include "_simd.h"
 
 #include "numpy/npy_math.h"

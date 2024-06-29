@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\_examples\numba\extending.py`
 
-```
+```py
 # 导入必要的库：numpy 和 numba
 import numpy as np
 import numba as nb

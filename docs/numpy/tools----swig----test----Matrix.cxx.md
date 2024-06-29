@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Matrix.cxx`
 
-```
+```py
 // 引入标准库头文件
 #include <stdlib.h>
 #include <math.h>

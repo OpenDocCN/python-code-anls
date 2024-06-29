@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\random.pyi`
 
-```
+```py
 import sys
 import threading
 from typing import Any
@@ -1042,7 +1042,7 @@ assert_type(def_gen.binomial(I_arr_10, D_arr_0p5), npt.NDArray[np.int64])
 # 确保 def_gen.binomial 返回的结果类型为 npt.NDArray[np.int64]
 assert_type(def_gen.binomial(I_arr_like_10, D_arr_like_0p5), npt.NDArray[np.int64])
 # 确保 def_gen.binomial 返回的结果类型为 npt.NDArray[np.int64]
-assert_type(def_gen.binomial(I_arr_10, D_arr_0p5, size=1), n```python
+assert_type(def_gen.binomial(I_arr_10, D_arr_0p5, size=1), n```py
 # 确保 def_gen.noncentral_f 返回的结果类型为 npt.NDArray[np.float64]
 assert_type(def_gen.noncentral_f(0.1, 0.5, 0.9, size=1), npt.NDArray[np.float64])
 # 确保 def_gen.noncentral_f 返回的结果类型为 npt.NDArray[np.float64]

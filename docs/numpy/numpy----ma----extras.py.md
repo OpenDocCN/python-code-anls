@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\extras.py`
 
-```
+```py
 # 定义一个函数，用于创建一个指定形状和数据类型的全遮蔽数组
 def masked_all(shape, dtype=float):
     # 返回一个全遮蔽的数组，形状由参数 shape 指定，数据类型由参数 dtype 指定

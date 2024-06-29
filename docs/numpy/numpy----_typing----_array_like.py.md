@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_array_like.py`
 
-```
+```py
 from __future__ import annotations
 # 导入未来版本兼容性的模块
 

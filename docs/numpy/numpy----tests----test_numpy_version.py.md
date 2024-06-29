@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_numpy_version.py`
 
-```
+```py
 """
 Check the numpy version is valid.
 

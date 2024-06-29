@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\simple.py`
 
-```
+```py
 """Simple expression that should pass with mypy."""
 import operator  # 导入 operator 模块
 

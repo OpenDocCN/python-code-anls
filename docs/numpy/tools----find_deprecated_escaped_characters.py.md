@@ -1,6 +1,6 @@
 # `.\numpy\tools\find_deprecated_escaped_characters.py`
 
-```
+```py
 #!/usr/bin/env python3
 r"""
 Look for escape sequences deprecated in Python 3.6.

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\ufuncobject.h`
 
-```
+```py
 /*
  * 定义一个条件编译宏，用于防止重复包含 numpy 的 ufunc 相关头文件
  */

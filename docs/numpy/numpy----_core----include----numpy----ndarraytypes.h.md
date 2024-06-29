@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\ndarraytypes.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_NDARRAYTYPES_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_NDARRAYTYPES_H_
 

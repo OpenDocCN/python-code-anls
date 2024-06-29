@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\__init__.py`
 
-```
+```py
 """
 =============
 Masked Arrays

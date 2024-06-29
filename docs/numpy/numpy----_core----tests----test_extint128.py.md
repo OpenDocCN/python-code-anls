@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_extint128.py`
 
-```
+```py
 # 引入必要的模块和库
 import itertools  # 提供迭代工具的函数
 import contextlib  # 上下文管理器的支持

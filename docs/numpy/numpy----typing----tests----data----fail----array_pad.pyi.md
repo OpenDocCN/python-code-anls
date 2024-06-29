@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\array_pad.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 import numpy.typing as npt  # 导入 NumPy 的类型提示模块，用于类型注解
 

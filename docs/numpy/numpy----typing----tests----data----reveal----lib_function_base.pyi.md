@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\lib_function_base.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入 Any 类型
 from collections.abc import Callable  # 导入 Callable 抽象基类

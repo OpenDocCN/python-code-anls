@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\modules.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于访问系统相关信息
 import types  # 导入types模块，用于操作Python类型信息
 

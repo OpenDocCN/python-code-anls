@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_version.py`
 
-```
+```py
 """Utility to compare (NumPy) version strings.
 
 The NumpyVersion class allows properly comparing numpy version strings.

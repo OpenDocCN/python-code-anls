@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Flat.cxx`
 
-```
+```py
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>

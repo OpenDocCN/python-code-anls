@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\reduction.c`
 
-```
+```py
 /*
  * This file implements generic methods for computing reductions on arrays.
  *

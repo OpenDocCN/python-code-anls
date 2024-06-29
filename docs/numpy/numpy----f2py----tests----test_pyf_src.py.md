@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_pyf_src.py`
 
-```
+```py
 # 导入必要的模块和函数，这段代码从numpy.distutils移植而来
 from numpy.f2py._src_pyf import process_str  # 导入process_str函数，用于处理字符串
 from numpy.testing import assert_equal  # 导入assert_equal函数，用于比较两个值是否相等

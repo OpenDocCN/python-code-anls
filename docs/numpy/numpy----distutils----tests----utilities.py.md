@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\utilities.py`
 
-```
+```py
 # 从numpy.f2py.tests.util导入IS_WASM，用于测试build_ext
 from numpy.testing import IS_WASM
 # 导入textwrap模块，用于处理文本格式

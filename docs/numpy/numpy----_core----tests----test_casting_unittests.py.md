@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_casting_unittests.py`
 
-```
+```py
 """
 The tests exercise the casting machinery in a more low-level manner.
 The reason is mostly to test a new implementation of the casting machinery.
@@ -123,7 +123,7 @@ def _get_cancast_table():
         i . ~ ~ # = = . . . . . ~ ~ = = ~ = = = = = = . =
         l . ~ ~ ~ # # . . . . . ~ ~ = = ~ = = = = = = . =
         q . ~ ~ ~ # # . . . . . ~ ~ = = ~ = = = = = = . =
-        B . ~ = = = = # = = = =```
+        B . ~ = = = = # = = = =```py
         # 创建一个多行字符串，其中包含表格，用于定义数据类型间的类型转换关系
         table = textwrap.dedent("""
             X ? b h i l q B H I L Q e f d g F D G S U V O M m

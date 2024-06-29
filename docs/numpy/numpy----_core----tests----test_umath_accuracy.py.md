@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_umath_accuracy.py`
 
-```
+```py
 # 导入 NumPy 库，别名为 np
 import numpy as np
 # 导入操作系统相关的功能模块 os

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\fft\_pocketfft.pyi`
 
-```
+```py
 # 从 collections.abc 模块中导入 Sequence 类型
 from collections.abc import Sequence
 # 从 typing 模块中导入 Literal 别名 L

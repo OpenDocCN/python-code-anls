@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test__datasource.py`
 
-```
+```py
 import os  # 导入操作系统模块
 import pytest  # 导入 pytest 测试框架
 from tempfile import mkdtemp, mkstemp, NamedTemporaryFile  # 导入临时文件和目录创建相关的函数

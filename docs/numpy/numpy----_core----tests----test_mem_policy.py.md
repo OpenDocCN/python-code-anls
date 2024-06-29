@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_mem_policy.py`
 
-```
+```py
 # 引入必要的模块和库
 import asyncio
 import gc  # 垃圾回收模块

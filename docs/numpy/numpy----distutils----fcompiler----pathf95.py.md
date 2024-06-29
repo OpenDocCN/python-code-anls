@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\pathf95.py`
 
-```
+```py
 # 导入 FCompiler 类，该类位于 numpy.distutils.fcompiler 模块中
 from numpy.distutils.fcompiler import FCompiler
 

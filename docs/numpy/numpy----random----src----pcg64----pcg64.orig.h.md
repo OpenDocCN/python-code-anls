@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\pcg64\pcg64.orig.h`
 
-```
+```py
 /*
  * PCG Random Number Generation for C.
  *

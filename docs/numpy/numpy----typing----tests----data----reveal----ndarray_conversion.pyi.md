@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ndarray_conversion.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于访问系统特定参数和功能
 from typing import Any  # 导入Any类型，用于指示可以是任何类型的对象
 

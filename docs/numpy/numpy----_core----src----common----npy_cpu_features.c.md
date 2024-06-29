@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_cpu_features.c`
 
-```
+```py
 /*
  * Include necessary headers for CPU feature detection and definition.
  * These headers ensure that CPU baseline definitions are accessible.

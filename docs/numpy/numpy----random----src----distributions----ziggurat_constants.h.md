@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\ziggurat_constants.h`
 
-```
+```py
 // 定义一个静态常量数组 ki_double，包含64位无符号整数，表示双精度浮点数的位模式
 static const uint64_t ki_double[] = {
     // 下面是具体的双精度浮点数位模式数据

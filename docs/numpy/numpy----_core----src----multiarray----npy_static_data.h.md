@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\npy_static_data.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_STATIC_DATA_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_STATIC_DATA_H_
 

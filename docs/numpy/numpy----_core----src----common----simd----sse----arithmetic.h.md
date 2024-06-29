@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\sse\arithmetic.h`
 
-```
+```py
 #ifndef NPY_SIMD
     #error "Not a standalone header"
 #endif

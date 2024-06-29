@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\polynomial.py`
 
-```
+```py
 # 定义一个模块级别变量，包含此模块公开的所有函数和常量的列表
 __all__ = [
     'polyzero', 'polyone', 'polyx', 'polydomain', 'polyline', 'polyadd',

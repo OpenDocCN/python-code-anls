@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\bitwise_ops.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入 Any 类型
 

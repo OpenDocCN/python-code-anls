@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_numerictypes.py`
 
-```
+```py
 # 导入必要的模块和库
 import sys  # 导入 sys 模块
 import itertools  # 导入 itertools 模块

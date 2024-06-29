@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\npy_math.c`
 
-```
+```py
 /*
  * vim:syntax=c
  * This file is compiled into the npy_math library with externally visible

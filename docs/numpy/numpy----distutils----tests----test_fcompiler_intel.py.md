@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_fcompiler_intel.py`
 
-```
+```py
 # 导入所需的模块和函数
 import numpy.distutils.fcompiler  # 导入 numpy.distutils.fcompiler 模块
 from numpy.testing import assert_  # 从 numpy.testing 模块导入 assert_ 函数

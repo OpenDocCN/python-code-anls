@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\legacy_array_method.h`
 
-```
+```py
 #ifndef _NPY_LEGACY_ARRAY_METHOD_H
 #define _NPY_LEGACY_ARRAY_METHOD_H
 

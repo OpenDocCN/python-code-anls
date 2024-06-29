@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_exec_command.py`
 
-```
+```py
 # 导入所需模块
 import os              # 提供与操作系统交互的功能
 import pytest          # 提供用于编写和运行测试的框架

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\install_clib.py`
 
-```
+```py
 import os
 from distutils.core import Command
 from distutils.ccompiler import new_compiler

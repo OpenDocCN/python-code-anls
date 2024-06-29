@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\matrixlib\defmatrix.pyi`
 
-```
+```py
 # 导入必要的模块和类型定义
 from collections.abc import Sequence, Mapping  # 导入 collections.abc 模块中的 Sequence 和 Mapping
 from typing import Any  # 导入 typing 模块中的 Any 类型

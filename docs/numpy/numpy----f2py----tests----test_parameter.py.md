@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_parameter.py`
 
-```
+```py
 import os  # 导入操作系统模块
 import pytest  # 导入 pytest 测试框架
 

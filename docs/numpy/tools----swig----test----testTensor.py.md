@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testTensor.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 # 导入数学库中的平方根函数

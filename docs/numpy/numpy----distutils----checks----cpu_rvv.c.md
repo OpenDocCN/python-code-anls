@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_rvv.c`
 
-```
+```py
 #ifndef __riscv_vector
   #error RVV not supported  // 如果未定义 __riscv_vector，抛出错误提示RVV不支持
 #endif

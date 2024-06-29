@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_reloading.py`
 
-```
+```py
 # 导入系统相关模块
 import sys
 # 导入子进程管理模块

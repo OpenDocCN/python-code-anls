@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_quoted_character.py`
 
-```
+```py
 """See https://github.com/numpy/numpy/pull/10676.
 
 """

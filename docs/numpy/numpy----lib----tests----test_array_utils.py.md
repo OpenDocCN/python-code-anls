@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_array_utils.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 from numpy.lib import array_utils  # 从 NumPy 库中导入 array_utils 模块

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\rec\__init__.pyi`
 
-```
+```py
 # 导入 numpy._core.records 模块中的特定组件
 from numpy._core.records import (
     record as record,              # 导入 record 别名为 record

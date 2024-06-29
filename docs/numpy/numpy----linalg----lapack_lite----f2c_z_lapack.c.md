@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_z_lapack.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.
@@ -6758,7 +6758,7 @@ dbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &
         zlacrm_(m, m, &u[u_offset], ldu, &rwork[iru], m, &a[a_offset],
              lda, &rwork[nrwork]);
 
-```    
+```py    
         # Multiply the complex matrix U by the real matrix RWORK(IRU),
         # storing the result in A. This operation combines the transformation
         # represented by U with the real matrix stored in RWORK(IRU).
@@ -6911,7 +6911,7 @@ dbdsdc_("L", "I", m, &s[1], &rwork[ie], &rwork[iru], m, &
         # ie is set to 1, nrwork is initialized to ie + *m,
         # itauq is set to 1, itaup is set to itauq + *m,
         # nwork is set to itaup + *m.
-        ```
+        ```py
 /*
              Bidiagonalize A
              (CWorkspace: need 2*M+N, prefer 2*M+(M+N)*NB)

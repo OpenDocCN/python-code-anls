@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\arm64_exports.c`
 
-```
+```py
 #if defined(__arm64__) && defined(__APPLE__)
 #include <math.h>
 /*

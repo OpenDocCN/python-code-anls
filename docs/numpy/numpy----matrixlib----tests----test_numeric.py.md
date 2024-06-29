@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_numeric.py`
 
-```
+```py
 import numpy as np                              # 导入NumPy库，用于科学计算
 from numpy.testing import assert_equal          # 从NumPy的测试模块导入断言函数assert_equal，用于比较测试结果
 

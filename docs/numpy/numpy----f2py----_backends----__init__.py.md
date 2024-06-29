@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_backends\__init__.py`
 
-```
+```py
 # 定义一个函数，用于根据给定的 name 参数生成不同的构建后端生成器
 def f2py_build_generator(name):
     # 如果 name 参数为 "meson"

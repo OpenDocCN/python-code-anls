@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\stringdtype_ufuncs.cpp`
 
-```
+```py
 /* Ufunc implementations for the StringDType class */
 
 #define PY_SSIZE_T_CLEAN

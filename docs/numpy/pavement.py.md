@@ -1,6 +1,6 @@
 # `.\numpy\pavement.py`
 
-```
+```py
 r"""
 This paver file is intended to help with the release process as much as
 possible. It relies on virtualenv to generate 'bootstrap' environments as

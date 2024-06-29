@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_histograms.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 # 从 NumPy 中导入直方图相关函数和断言方法

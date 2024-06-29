@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime_strings.c`
 
-```
+```py
 /*
  * This file implements string parsing and creation for NumPy datetime.
  *

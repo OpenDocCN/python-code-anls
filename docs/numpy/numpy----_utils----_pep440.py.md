@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_utils\_pep440.py`
 
-```
+```py
 """Utility to compare pep440 compatible version strings.
 
 The LooseVersion and StrictVersion classes that distutils provides don't

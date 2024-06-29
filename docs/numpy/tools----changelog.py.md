@@ -1,6 +1,6 @@
 # `.\numpy\tools\changelog.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Script to generate contributor and pull request lists

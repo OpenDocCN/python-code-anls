@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ndarray_misc.py`
 
-```
+```py
 """
 Tests for miscellaneous (non-magic) ``np.ndarray``/``np.generic`` methods.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_return_complex.py`
 
-```
+```py
 import pytest  # 导入 pytest 测试框架
 
 from numpy import array  # 从 numpy 中导入 array 类

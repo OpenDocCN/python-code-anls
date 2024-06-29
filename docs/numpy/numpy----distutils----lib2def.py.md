@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\lib2def.py`
 
-```
+```py
 import re
 import sys
 import subprocess

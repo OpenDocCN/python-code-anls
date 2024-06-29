@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\common_rules.py`
 
-```
+```py
 """
 Build common block mechanism for f2py2e.
 

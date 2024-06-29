@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\multiarray.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 i8: np.int64  # 定义别名 i8 为 np.int64

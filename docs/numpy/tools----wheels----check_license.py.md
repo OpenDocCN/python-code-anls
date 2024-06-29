@@ -1,6 +1,6 @@
 # `.\numpy\tools\wheels\check_license.py`
 
-```
+```py
 #!/usr/bin/env python
 """
 check_license.py [MODULE]

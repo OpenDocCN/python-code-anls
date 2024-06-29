@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_abc.py`
 
-```
+```py
 # 导入需要的模块
 from numpy.testing import assert_
 

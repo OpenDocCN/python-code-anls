@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_hermite.py`
 
-```
+```py
 """Tests for hermite module.
 
 """

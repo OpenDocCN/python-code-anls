@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_mem_overlap.py`
 
-```
+```py
 import itertools  # 导入 itertools 模块，用于生成迭代器的工具函数
 import pytest  # 导入 pytest 模块，用于编写和运行测试用例
 

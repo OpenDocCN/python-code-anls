@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_shape_base.py`
 
-```
+```py
 # 导入自定义的Benchmark类，该类用于性能基准测试
 from .common import Benchmark
 

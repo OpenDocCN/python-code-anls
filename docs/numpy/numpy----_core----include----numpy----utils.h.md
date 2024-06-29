@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\utils.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_UTILS_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_UTILS_H_
 

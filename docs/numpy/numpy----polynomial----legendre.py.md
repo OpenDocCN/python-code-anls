@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\legendre.py`
 
-```
+```py
 """
 ==================================================
 Legendre Series (:mod:`numpy.polynomial.legendre`)

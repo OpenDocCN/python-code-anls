@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\array_constructors.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 import numpy.typing as npt  # 导入 NumPy 的类型提示模块
 

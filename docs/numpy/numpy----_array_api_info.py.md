@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_array_api_info.py`
 
-```
+```py
 """
 Array API Inspection namespace
 

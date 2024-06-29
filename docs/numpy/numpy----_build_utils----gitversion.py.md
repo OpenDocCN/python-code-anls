@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_build_utils\gitversion.py`
 
-```
+```py
 #!/usr/bin/env python3
 import os  # 导入操作系统相关功能的模块
 import textwrap  # 导入文本包装模块

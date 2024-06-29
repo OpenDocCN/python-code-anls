@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_arraypad_impl.pyi`
 
-```
+```py
 # 导入必要的类型提示和模块
 from typing import (
     Literal as L,  # 导入类型别名 L 用于定义字符串字面量类型

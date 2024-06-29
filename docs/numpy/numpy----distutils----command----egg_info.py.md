@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\egg_info.py`
 
-```
+```py
 # 导入sys模块
 import sys
 

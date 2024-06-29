@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_nested_sequence.py`
 
-```
+```py
 """
 A module containing the `_NestedSequence` protocol.
 """

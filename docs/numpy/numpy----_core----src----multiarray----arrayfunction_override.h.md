@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\arrayfunction_override.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_ARRAYFUNCTION_OVERRIDE_H_
 // 如果没有定义 NUMPY_CORE_SRC_MULTIARRAY_ARRAYFUNCTION_OVERRIDE_H_，则执行以下代码
 #define NUMPY_CORE_SRC_MULTIARRAY_ARRAYFUNCTION_OVERRIDE_H_

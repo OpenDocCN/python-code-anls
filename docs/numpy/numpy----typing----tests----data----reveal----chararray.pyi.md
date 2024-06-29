@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\chararray.pyi`
 
-```
+```py
 # 导入sys模块，用于访问系统相关功能
 import sys
 # 导入Any类型用于灵活类型声明

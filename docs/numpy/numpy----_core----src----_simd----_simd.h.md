@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\_simd\_simd.h`
 
-```
+```py
 /**
  * A module to expose the NumPy C SIMD vectorization interface "NPYV" for testing purposes.
  *

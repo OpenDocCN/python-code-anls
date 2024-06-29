@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\function_base.py`
 
-```
+```py
 # 定义一个函数 __getattr__，用于获取指定属性名的属性值
 def __getattr__(attr_name):
     # 从 numpy._core 中导入 function_base 模块

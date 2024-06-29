@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_umath.py`
 
-```
+```py
 # 导入标准库和第三方库
 import platform             # 导入 platform 库，用于获取平台信息
 import warnings             # 导入 warnings 库，用于警告处理

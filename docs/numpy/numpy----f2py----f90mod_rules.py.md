@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\f90mod_rules.py`
 
-```
+```py
 """
 Build F90 module support for f2py2e.
 

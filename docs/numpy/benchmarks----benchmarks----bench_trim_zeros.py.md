@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_trim_zeros.py`
 
-```
+```py
 # 从.common模块中导入Benchmark类，用于性能基准测试
 from .common import Benchmark
 

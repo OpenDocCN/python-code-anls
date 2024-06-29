@@ -22,13 +22,13 @@ Then install spin:
 This builds in the `build/` directory, and installs into the `build-install` directory.
 
 Then run the test suite or a shell via `spin`:
-```
+```py
 spin test
 spin ipython
 ```
 
 Alternatively, to use the package, add it to your `PYTHONPATH`:
-```
+```py
 export PYTHONPATH=${PWD}/build/lib64/python3.10/site-packages  # may vary
 pytest --pyargs numpy
 ```
@@ -48,7 +48,7 @@ For a more complete developer experience than editable installs, consider using
 
 - Fedora does not distribute `openblas.pc`. Install the following file in `~/lib/pkgconfig/openblas.pc`:
 
-```
+```py
 prefix=/usr
 includedir=${prefix}/include
 libdir=${prefix}/lib64
@@ -62,6 +62,6 @@ Libs: -L${libdir} -lopenblas
 
 Then build with:
 
-```
+```py
 spin build -- -Dpkg_config_path=${HOME}/lib/pkgconfig
 ```

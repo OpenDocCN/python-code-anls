@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_array_api_info.pyi`
 
-```
+```py
 from typing import TypedDict, Optional, Union, Tuple, List
 from numpy._typing import DtypeLike
 

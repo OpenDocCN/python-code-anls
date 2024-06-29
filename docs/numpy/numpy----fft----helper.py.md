@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\helper.py`
 
-```
+```py
 # 定义一个特殊的属性获取方法，用于获取 numpy.fft._helper 模块中的特定属性
 def __getattr__(attr_name):
     # 导入警告模块，用于发出警告信息

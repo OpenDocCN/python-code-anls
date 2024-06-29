@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_function_base.py`
 
-```
+```py
 # 导入运算符模块，提供对Python内置操作符的额外支持
 import operator
 # 引入警告模块，用于处理警告信息

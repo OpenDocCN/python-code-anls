@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\bit_generator.pyi`
 
-```
+```py
 import abc  # 导入抽象基类模块
 from threading import Lock  # 导入线程锁对象
 from collections.abc import Callable, Mapping, Sequence  # 导入抽象基类的Callable、Mapping、Sequence

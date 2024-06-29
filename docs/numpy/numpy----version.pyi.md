@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\version.pyi`
 
-```
+```py
 # 定义变量 version，用于存储版本号，类型为字符串
 version: str
 

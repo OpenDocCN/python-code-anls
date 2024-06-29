@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\casts.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_CASTS_H_
 // 如果 _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_CASTS_H_ 宏未定义，则执行以下操作
 #define _NPY_CORE_SRC_MULTIARRAY_STRINGDTYPE_CASTS_H_

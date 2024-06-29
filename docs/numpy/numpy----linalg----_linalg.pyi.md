@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\linalg\_linalg.pyi`
 
-```
+```py
 # 从 collections.abc 导入 Iterable 类，支持可迭代对象的抽象基类
 from collections.abc import Iterable
 # 从 typing 模块导入多个类型别名和函数重载相关的声明

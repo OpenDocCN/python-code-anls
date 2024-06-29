@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Matrix.h`
 
-```
+```py
 // 如果未定义过 MATRIX_H，则开始定义 MATRIX_H
 #ifndef MATRIX_H
 #define MATRIX_H

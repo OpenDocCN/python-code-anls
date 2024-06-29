@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\__init__.py`
 
-```
+```py
 """
 Contains the core of NumPy: ndarray, ufuncs, dtypes, etc.
 

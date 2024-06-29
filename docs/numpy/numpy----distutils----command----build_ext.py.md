@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\build_ext.py`
 
-```
+```py
 """
 # 导入所需要的模块
 import os  # 导入操作系统模块

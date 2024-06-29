@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_isocbind.py`
 
-```
+```py
 """
 ISO_C_BINDING maps for f2py2e.
 Only required declarations/macros/functions will be used.

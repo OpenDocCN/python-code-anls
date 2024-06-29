@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_numpy_config.py`
 
-```
+```py
 """
 Check the numpy config is valid.
 """

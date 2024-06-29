@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\ccompiler.py`
 
-```
+```py
 import os
 import re
 import sys

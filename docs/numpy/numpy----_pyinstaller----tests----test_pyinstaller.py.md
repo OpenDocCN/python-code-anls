@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_pyinstaller\tests\test_pyinstaller.py`
 
-```
+```py
 # 导入必要的模块
 import subprocess  # 子进程管理模块，用于执行外部命令
 from pathlib import Path  # 提供处理文件和目录路径的类和函数

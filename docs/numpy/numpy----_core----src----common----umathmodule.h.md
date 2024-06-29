@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\umathmodule.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_UMATHMODULE_H_
 #define NUMPY_CORE_SRC_COMMON_UMATHMODULE_H_
 

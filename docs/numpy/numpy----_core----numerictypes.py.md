@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\numerictypes.py`
 
-```
+```py
 """
 numerictypes: Define the numeric type objects
 

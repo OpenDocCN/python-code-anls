@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_npy_pkg_config.py`
 
-```
+```py
 import os  # 导入标准库 os
 
 from numpy.distutils.npy_pkg_config import read_config, parse_flags  # 导入 numpy.distutils.npy_pkg_config 中的 read_config 和 parse_flags 函数

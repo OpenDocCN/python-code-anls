@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_fcompiler_nagfor.py`
 
-```
+```py
 # 导入所需模块和函数
 from numpy.testing import assert_
 import numpy.distutils.fcompiler

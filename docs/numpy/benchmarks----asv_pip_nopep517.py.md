@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\asv_pip_nopep517.py`
 
-```
+```py
 """
 This file is used by asv_compare.conf.json.tpl.
 """

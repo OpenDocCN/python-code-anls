@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_array_api_info.py`
 
-```
+```py
 # 导入 numpy 库并导入 pytest 库
 import numpy as np
 import pytest

@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\common.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np  # 导入NumPy库，用于科学计算
 import random  # 导入random库，用于生成随机数

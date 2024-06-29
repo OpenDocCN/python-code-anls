@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\iterators.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_ITERATORS_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_ITERATORS_H_
 

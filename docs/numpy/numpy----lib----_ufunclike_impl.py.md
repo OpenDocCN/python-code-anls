@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_ufunclike_impl.py`
 
-```
+```py
 """
 Module of functions that are like ufuncs in acting on arrays and optionally
 storing results in an output array.

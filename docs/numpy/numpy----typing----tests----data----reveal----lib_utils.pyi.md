@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\lib_utils.pyi`
 
-```
+```py
 import sys
 from io import StringIO
 

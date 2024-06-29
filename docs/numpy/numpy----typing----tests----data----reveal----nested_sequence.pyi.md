@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\nested_sequence.pyi`
 
-```
+```py
 # 导入 sys 模块，用于访问系统相关的功能
 import sys
 # 从 collections.abc 模块导入 Sequence 类型，用于声明序列类型的变量

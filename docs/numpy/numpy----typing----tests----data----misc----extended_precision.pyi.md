@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\misc\extended_precision.pyi`
 
-```
+```py
 import sys
 # 导入系统模块
 

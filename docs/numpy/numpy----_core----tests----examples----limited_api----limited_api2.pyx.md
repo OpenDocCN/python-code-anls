@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\tests\examples\limited_api\limited_api2.pyx`
 
-```
+```py
 #cython: language_level=3
 # 设置 Cython 的语言级别为 3，以支持较新的语言特性和语法
 

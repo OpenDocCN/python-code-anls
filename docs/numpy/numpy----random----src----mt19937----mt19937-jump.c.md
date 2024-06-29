@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937-jump.c`
 
-```
+```py
 /* 包含头文件 "mt19937-jump.h" 和 "mt19937.h" */
 #include "mt19937-jump.h"
 #include "mt19937.h"

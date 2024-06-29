@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_char_codes.py`
 
-```
+```py
 from typing import Literal
 
 # 定义布尔类型的字面量类型

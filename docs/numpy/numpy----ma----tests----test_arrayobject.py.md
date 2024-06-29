@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\test_arrayobject.py`
 
-```
+```py
 # 导入 pytest 库，用于单元测试
 import pytest
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_fcompiler_gnu.py`
 
-```
+```py
 # 导入必要的断言函数
 from numpy.testing import assert_
 

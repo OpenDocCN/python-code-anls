@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\dtype.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 dtype_obj = np.dtype(np.str_)  # 创建一个数据类型对象，表示字符串

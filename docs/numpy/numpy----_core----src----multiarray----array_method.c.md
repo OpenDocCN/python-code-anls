@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_method.c`
 
-```
+```py
 /*
  * This file implements an abstraction layer for "Array methods", which
  * work with a specific DType class input and provide low-level C function

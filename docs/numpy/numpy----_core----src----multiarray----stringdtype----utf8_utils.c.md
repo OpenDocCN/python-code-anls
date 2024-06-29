@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\utf8_utils.c`
 
-```
+```py
 // 导入 Python.h 头文件，包含 Python C API
 #include <Python.h>
 // 定义 NPY_NO_DEPRECATED_API 为 NPY_API_VERSION，避免使用废弃的 API

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_arraypad_impl.py`
 
-```
+```py
 """
 The arraypad module contains a group of functions to pad values onto the edges
 of an n-dimensional array.

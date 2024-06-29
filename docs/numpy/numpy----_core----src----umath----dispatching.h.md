@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\dispatching.h`
 
-```
+```py
 #ifndef _NPY_DISPATCHING_H
 #define _NPY_DISPATCHING_H
 

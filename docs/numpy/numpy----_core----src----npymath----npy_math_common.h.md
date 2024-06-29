@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\npy_math_common.h`
 
-```
+```py
 /*
  * Common headers needed by every npy math compilation unit
  */

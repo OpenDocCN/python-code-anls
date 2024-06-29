@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\tokenize.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_TOKENIZE_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_TOKENIZE_H_
 

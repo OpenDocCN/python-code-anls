@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\multiarraymodule.c`
 
-```
+```py
 /*
   Python Multiarray Module -- A useful collection of functions for creating and
   using ndarrays
@@ -2002,7 +2002,7 @@ array_asanyarray(PyObject *NPY_UNUSED(ignored),
 }
 
 
-``````c
+``````py
 // 定义名为 array_ascontiguousarray 的静态函数，用于将输入对象转换为 NumPy 连续数组
 static PyObject *
 array_ascontiguousarray(PyObject *NPY_UNUSED(ignored),

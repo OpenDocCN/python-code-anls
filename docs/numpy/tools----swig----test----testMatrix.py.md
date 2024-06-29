@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testMatrix.py`
 
-```
+```py
 # 指定 Python 解释器路径，使脚本可以在环境中独立运行
 #!/usr/bin/env python3
 

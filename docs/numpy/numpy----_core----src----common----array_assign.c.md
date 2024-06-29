@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\array_assign.c`
 
-```
+```py
 /*
  * This file implements some helper functions for the array assignment
  * routines. The actual assignment routines are in array_assign_*.c

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\linalg.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关操作
 from typing import Any  # 导入Any类型，表示可以是任何类型的变量
 

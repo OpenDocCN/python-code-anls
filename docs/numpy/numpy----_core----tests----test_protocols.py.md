@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_protocols.py`
 
-```
+```py
 # 导入 pytest 库，用于编写和运行测试用例
 import pytest
 # 导入 warnings 库，用于处理警告信息

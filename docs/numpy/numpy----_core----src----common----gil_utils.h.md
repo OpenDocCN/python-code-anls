@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\gil_utils.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_GIL_UTILS_H_
 #define NUMPY_CORE_SRC_COMMON_GIL_UTILS_H_
 

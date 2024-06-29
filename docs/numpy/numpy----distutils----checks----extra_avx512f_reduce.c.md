@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\extra_avx512f_reduce.c`
 
-```
+```py
 #include <immintrin.h>
 /**
  * The following intrinsics don't have direct native support but compilers

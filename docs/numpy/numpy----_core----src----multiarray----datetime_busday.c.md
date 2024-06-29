@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime_busday.c`
 
-```
+```py
 /*
  * This file implements business day functionality for NumPy datetime.
  *

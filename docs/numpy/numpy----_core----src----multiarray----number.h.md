@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\number.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_NUMBER_H_
 // 如果未定义 NUMPY_CORE_SRC_MULTIARRAY_NUMBER_H_ 宏，则开始条件编译防护
 #define NUMPY_CORE_SRC_MULTIARRAY_NUMBER_H_

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test__iotools.py`
 
-```
+```py
 # 导入时间模块
 import time
 # 从日期模块中导入日期类

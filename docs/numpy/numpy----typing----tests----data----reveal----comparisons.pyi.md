@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\comparisons.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于访问与Python解释器相关的系统功能
 import fractions  # 导入fractions模块，支持有理数的运算
 import decimal  # 导入decimal模块，支持高精度的十进制浮点数运算

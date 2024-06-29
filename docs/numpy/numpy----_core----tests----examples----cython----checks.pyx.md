@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\tests\examples\cython\checks.pyx`
 
-```
+```py
 """
 Functions in this module give python-space wrappers for cython functions
 exposed in numpy/__init__.pxd, so they can be tested in test_cython.py

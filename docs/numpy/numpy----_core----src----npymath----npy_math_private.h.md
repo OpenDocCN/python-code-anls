@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\npy_math_private.h`
 
-```
+```py
 /*
  *
  * ====================================================

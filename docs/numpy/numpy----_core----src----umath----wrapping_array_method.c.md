@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\wrapping_array_method.c`
 
-```
+```py
 /*
  * This file defines most of the machinery in order to wrap an existing ufunc
  * loop for use with a different set of dtypes.

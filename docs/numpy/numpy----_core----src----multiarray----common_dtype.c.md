@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\common_dtype.c`
 
-```
+```py
 /*
  * 定义以下宏，以确保使用 NumPy 的最新 API 版本并禁用过时的 API。
  * _MULTIARRAYMODULE 是为了在编译期间定义多维数组模块。

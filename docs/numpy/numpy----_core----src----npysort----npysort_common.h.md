@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\npysort_common.h`
 
-```
+```py
 #ifndef __NPY_SORT_COMMON_H__
 #define __NPY_SORT_COMMON_H__
 

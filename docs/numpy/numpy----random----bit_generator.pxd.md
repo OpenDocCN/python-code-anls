@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\bit_generator.pxd`
 
-```
+```py
 # 导入必要的Cython模块和类型定义
 cimport numpy as np
 from libc.stdint cimport uint32_t, uint64_t

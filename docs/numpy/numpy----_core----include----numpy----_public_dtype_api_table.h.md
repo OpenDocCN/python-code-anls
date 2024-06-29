@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\_public_dtype_api_table.h`
 
-```
+```py
 /*
  * Public exposure of the DType Classes.  These are tricky to expose
  * via the Python API, so they are exposed through this header for now.

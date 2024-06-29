@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\array_utils.pyi`
 
-```
+```py
 # 从 _array_utils_impl 模块中导入以下几个成员：
 # - __all__: 所有需要公开的模块成员列表
 # - byte_bounds: 用于计算字节边界的函数或变量

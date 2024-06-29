@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\twodim_base.pyi`
 
-```
+```py
 # 导入必要的类型和函数
 from typing import Any, TypeVar
 

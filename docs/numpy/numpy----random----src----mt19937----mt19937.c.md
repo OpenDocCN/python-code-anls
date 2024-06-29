@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937.c`
 
-```
+```py
 /*
  * Seed the mt19937 PRNG state with a given seed value.
  * The function initializes the state's key array using Knuth's PRNG method.

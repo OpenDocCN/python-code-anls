@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\pcg64\pcg64-test-data-gen.c`
 
-```
+```py
 /*
  * 生成测试用的 CSV 文件
  *

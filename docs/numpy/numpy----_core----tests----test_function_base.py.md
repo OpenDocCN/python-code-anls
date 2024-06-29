@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_function_base.py`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关的操作
 
 import pytest  # 导入pytest模块，用于编写和运行测试用例

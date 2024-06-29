@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\flagsobject.c`
 
-```
+```py
 /*
  * Array Flags Object
  * 定义了一些与数组标志相关的宏和函数

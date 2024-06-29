@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_creation.py`
 
-```
+```py
 # 从当前包中导入Benchmark类、TYPES1常量和get_squares_函数
 from .common import Benchmark, TYPES1, get_squares_
 

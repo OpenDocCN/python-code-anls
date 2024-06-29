@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\install.py`
 
-```
+```py
 # 导入 sys 模块
 import sys
 # 检查 setuptools 是否在 sys 模块中

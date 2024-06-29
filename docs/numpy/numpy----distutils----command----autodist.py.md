@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\autodist.py`
 
-```
+```py
 """This module implements additional tests ala autoconf which can be useful.
 
 """

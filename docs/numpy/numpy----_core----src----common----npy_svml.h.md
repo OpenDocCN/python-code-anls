@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_svml.h`
 
-```
+```py
 // 如果 NPY_SIMD 为真，并且定义了 NPY_HAVE_AVX512_SPR 和 NPY_CAN_LINK_SVML，则声明下列函数
 extern void __svml_exps32(const npy_half*, npy_half*, npy_intp);
 extern void __svml_exp2s32(const npy_half*, npy_half*, npy_intp);

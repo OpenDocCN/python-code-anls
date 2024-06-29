@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\defmatrix.py`
 
-```
+```py
 __all__ = ['matrix', 'bmat', 'asmatrix']
 
 # 导入所需模块和库

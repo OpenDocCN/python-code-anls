@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\shape_base.py`
 
-```
+```py
 # 定义导出的函数和变量名列表，用于模块导入时指定可导出的内容
 __all__ = ['atleast_1d', 'atleast_2d', 'atleast_3d', 'block', 'hstack',
            'stack', 'vstack']

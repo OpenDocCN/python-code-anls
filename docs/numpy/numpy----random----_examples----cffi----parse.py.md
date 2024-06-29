@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\_examples\cffi\parse.py`
 
-```
+```py
 # 导入os模块，用于处理文件路径等操作
 import os
 

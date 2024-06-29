@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\numpy_distribution.py`
 
-```
+```py
 # XXX: 处理 setuptools ?
 # 从 distutils.core 模块导入 Distribution 类
 from distutils.core import Distribution

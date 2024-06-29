@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\src\npysort\heapsort.hpp`
 
-```
+```py
 #ifndef NUMPY_SRC_COMMON_NPYSORT_HEAPSORT_HPP
 #define NUMPY_SRC_COMMON_NPYSORT_HEAPSORT_HPP
 

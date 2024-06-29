@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_blas.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.
@@ -603,7 +603,7 @@ L20:
              supplied as zero then C need not be set on input.
              Unchanged on exit.
 
-```    
+```py    
     C      - COMPLEX          array of DIMENSION ( LDC, n ).
              Before entry, the leading  m by n  part of the array  C must
              contain the matrix  C,  except when  beta  is zero, in which
@@ -618,7 +618,7 @@ L20:
              max( 1, m ).
              Unchanged on exit.
 
-```    
+```py    
     Further Details
     ===============
 
@@ -4943,7 +4943,7 @@ L20:
             }
         }
     }
-```cpp`
+```py`
 /* L50: 结束 if (trans) 的条件判断，开始 else 分支 */
         } else {
 /* L51: 设置循环变量 j 的上界为 *n */

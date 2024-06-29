@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\abstractdtypes.c`
 
-```
+```py
 /*
  * 定义宏以避免使用已弃用的 NumPy API 版本，并指定多维数组模块。
  */

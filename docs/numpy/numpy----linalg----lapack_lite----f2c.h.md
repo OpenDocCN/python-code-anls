@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c.h`
 
-```
+```py
 /* f2c.h  --  Standard Fortran to C header file */
 
 /**  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\diagnose.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入必要的模块
 import os  # 导入操作系统接口模块

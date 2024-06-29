@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_ufunc.py`
 
-```
+```py
 # 导入从 common 模块中的 Benchmark、get_squares_、TYPES1 和 DLPACK_TYPES
 # 注意：'.' 表示当前目录
 

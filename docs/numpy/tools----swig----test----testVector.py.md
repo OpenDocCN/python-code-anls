@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testVector.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 import sys

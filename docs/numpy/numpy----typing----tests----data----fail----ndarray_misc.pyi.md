@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\ndarray_misc.pyi`
 
-```
+```py
 """
 Tests for miscellaneous (non-magic) ``np.ndarray``/``np.generic`` methods.
 

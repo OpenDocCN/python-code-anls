@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dtypemeta.c`
 
-```
+```py
 /* Array Descr Object */
 /* 定义一个宏，设置 NumPy 的 API 版本 */
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\x86_simd_qsort_16bit.dispatch.cpp`
 
-```
+```py
 /*
  * 包含 x86 SIMD 快速排序头文件
  */

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_common.pyx`
 
-```
+```py
 # 导入必要的模块和函数
 # 设置 Cython 编译器的参数，关闭部分安全检查以提高性能
 # 使用 namedtuple 定义一个接口，包含多个字段

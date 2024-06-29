@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\multiarray.py`
 
-```
+```py
 """
 Create the numpy._core.multiarray namespace for backward compatibility. 
 In v1.16 the multiarray and umath c-extension modules were merged into 

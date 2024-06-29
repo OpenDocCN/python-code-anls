@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\multiarray.pyi`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入 datetime 模块并使用别名 dt

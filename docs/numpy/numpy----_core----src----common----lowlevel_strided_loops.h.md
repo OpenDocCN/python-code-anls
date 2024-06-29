@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\lowlevel_strided_loops.h`
 
-```
+```py
 // 检查是否定义了 NUMPY_CORE_SRC_COMMON_LOWLEVEL_STRIDED_LOOPS_H_，如果没有则定义
 #ifndef NUMPY_CORE_SRC_COMMON_LOWLEVEL_STRIDED_LOOPS_H_
 // 宏定义，用于导入相关头文件

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_multiarray.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 from numpy.testing import assert_, assert_equal, assert_array_equal  # 导入测试工具函数
 

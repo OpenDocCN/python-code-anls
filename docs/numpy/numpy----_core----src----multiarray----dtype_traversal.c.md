@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dtype_traversal.c`
 
-```
+```py
 /*
  * This file is similar to the low-level loops for data type transfer
  * in `dtype_transfer.c` but for those which only require visiting

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\__init__.py`
 
-```
+```py
 """
 Common test support for all numpy test scripts.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test__version.py`
 
-```
+```py
 """Tests for the NumpyVersion class.
 
 """

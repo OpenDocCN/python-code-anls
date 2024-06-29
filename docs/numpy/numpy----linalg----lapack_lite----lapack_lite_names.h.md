@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\lapack_lite_names.h`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.

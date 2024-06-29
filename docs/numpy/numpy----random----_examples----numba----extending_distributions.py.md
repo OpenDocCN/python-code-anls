@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\_examples\numba\extending_distributions.py`
 
-```
+```py
 """
 在这个示例中，构建所需的库需要NumPy的源代码分发或NumPy的git存储库的克隆，因为distributions.c没有包含在二进制分发中。
 

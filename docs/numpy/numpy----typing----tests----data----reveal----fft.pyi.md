@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\fft.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入 Any 类型
 

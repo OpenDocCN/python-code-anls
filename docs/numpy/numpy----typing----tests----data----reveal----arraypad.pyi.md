@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arraypad.pyi`
 
-```
+```py
 # 导入系统模块sys
 import sys
 # 从collections.abc模块中导入Mapping类

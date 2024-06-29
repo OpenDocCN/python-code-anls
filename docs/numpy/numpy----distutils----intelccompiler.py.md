@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\intelccompiler.py`
 
-```
+```py
 # 导入平台模块，用于获取操作系统信息
 import platform
 

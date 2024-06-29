@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\strings.pyi`
 
-```
+```py
 # 引入类型提示所需的模块和类型定义
 from typing import Any, overload
 

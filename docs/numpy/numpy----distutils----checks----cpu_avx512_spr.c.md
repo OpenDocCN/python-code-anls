@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_avx512_spr.c`
 
-```
+```py
 #if defined(DETECT_FEATURES) && defined(__INTEL_COMPILER)
     /*
      * 如果定义了 DETECT_FEATURES 并且使用 Intel 编译器，

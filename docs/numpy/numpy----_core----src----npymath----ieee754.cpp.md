@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npymath\ieee754.cpp`
 
-```
+```py
 /*
  * -*- c -*-
  *

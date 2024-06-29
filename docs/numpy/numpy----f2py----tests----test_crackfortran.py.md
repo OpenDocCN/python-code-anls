@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_crackfortran.py`
 
-```
+```py
 import importlib  # 导入标准库 importlib，用于动态加载模块
 import codecs  # 导入标准库 codecs，提供编码和解码的工具函数
 import time  # 导入标准库 time，提供时间相关的函数

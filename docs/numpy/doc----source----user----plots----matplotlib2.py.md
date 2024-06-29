@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\user\plots\matplotlib2.py`
 
-```
+```py
 import matplotlib.pyplot as plt  # 导入matplotlib的绘图模块，命名为plt
 import numpy as np  # 导入numpy数值计算库，命名为np
 

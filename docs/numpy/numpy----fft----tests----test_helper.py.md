@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\tests\test_helper.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 from numpy.testing import assert_array_almost_equal

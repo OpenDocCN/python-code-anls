@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_user_array_impl.py`
 
-```
+```py
 """
 Container class for backward compatibility with NumArray.
 

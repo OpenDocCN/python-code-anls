@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Array2.cxx`
 
-```
+```py
 // 包含 Array2 类的声明文件
 #include "Array2.h"
 // 包含用于字符串流操作的头文件

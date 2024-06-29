@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\mtrand.pyi`
 
-```
+```py
 # 导入内置模块 builtins，提供内置函数和异常
 import builtins
 # 从 collections.abc 模块导入 Callable 抽象基类，用于支持函数调用的类型提示
@@ -298,7 +298,7 @@ class RandomState:
         size: None = ...,
         dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,
     ) -> int32: ...
-    ```
+    ```py
     # 方法的重载定义，接受不同的参数组合来支持返回不同数据类型的整数
 
     @overload
@@ -320,7 +320,7 @@ class RandomState:
         size: None = ...,
         dtype: dtype[long] | type[long] | _LongCodes | _SupportsDType[dtype[long]] = ...,
     ) -> long: ...
-    ```
+    ```py
     # 又一种重载定义，支持返回 `long` 类型的整数
 
     @overload
@@ -341,7 +341,7 @@ class RandomState:
         high: None | _ArrayLikeInt_co = ...,
         size: None | _ShapeLike = ...,
     ) -> NDArray[long]: ...
-    ```
+    ```py
     # 支持接受数组形式的 `low` 参数，并返回一个 `NDArray[long]` 类型的数组
 
     @overload
@@ -363,7 +363,7 @@ class RandomState:
         size: None | _ShapeLike = ...,
         dtype: dtype[int8] | type[int8] | _Int8Codes | _SupportsDType[dtype[int8]] = ...,
     ) -> NDArray[int8]: ...
-    ```
+    ```py
     # 支持接受数组形式的 `low` 参数，并返回一个 `NDArray[int8]` 类型的整数数组
 
     @overload
@@ -385,7 +385,7 @@ class RandomState:
         size: None | _ShapeLike = ...,
         dtype: dtype[int32] | type[int32] | _Int32Codes | _SupportsDType[dtype[int32]] = ...,
     ) -> NDArray[int32]: ...
-    ```
+    ```py
     # 支持接受数组形式的 `low` 参数，并返回一个 `NDArray[int32]` 类型的整数数组
 
     @overload
@@ -400,7 +400,7 @@ class RandomState:
     # 支持接受数组形式的 `low` 参数，并返回一个 `NDArray[int64]` 类型的整数数组
 
     @overload
-    ```
+    ```py
     # 最后一种重载定义，支持不同的参数组合，以适应不同的调用需求
     def randint(  # type: ignore[misc]
         self,

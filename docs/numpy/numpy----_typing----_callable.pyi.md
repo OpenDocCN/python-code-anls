@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_typing\_callable.pyi`
 
-```
+```py
 """
 A module with various ``typing.Protocol`` subclasses that implement
 the ``__call__`` magic method.

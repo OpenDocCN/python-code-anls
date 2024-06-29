@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test__all__.py`
 
-```
+```py
 # 导入collections模块和numpy模块
 import collections
 import numpy as np

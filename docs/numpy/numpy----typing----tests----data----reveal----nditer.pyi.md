@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\nditer.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于访问系统相关信息
 from typing import Any  # 从typing模块导入Any类型
 

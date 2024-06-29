@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_ccompiler_opt.py`
 
-```
+```py
 import re, textwrap, os
 from os import sys, path
 from distutils.errors import DistutilsError

@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_itemselection.py`
 
-```
+```py
 # 从common模块中导入Benchmark类和TYPES1变量
 from .common import Benchmark, TYPES1
 

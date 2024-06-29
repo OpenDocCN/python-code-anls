@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_random.py`
 
-```
+```py
 # 导入警告模块，用于管理警告消息
 import warnings
 
@@ -2111,7 +2111,7 @@ class TestBroadcast:
         assert_raises(ValueError, neg_binom, n, bad_p_two * 3)
 
 
-```  
+```py  
     # 测试泊松分布生成器函数
     def test_poisson(self):
         # 获取最大允许的泊松分布参数值
@@ -2163,7 +2163,7 @@ class TestBroadcast:
             assert_raises(ValueError, zipf, [0, 0, np.nan])
 
 
-```  
+```py  
     # 测试几何分布生成器函数
     def test_geometric(self):
         # 初始化参数

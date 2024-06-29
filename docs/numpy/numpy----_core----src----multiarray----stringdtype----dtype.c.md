@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\dtype.c`
 
-```
+```py
 /* StringDType 类的实现 */
 #define PY_SSIZE_T_CLEAN  // 清除 Python 中使用的 ssize_t 的宏定义
 #include <Python.h>       // Python C API 的主头文件

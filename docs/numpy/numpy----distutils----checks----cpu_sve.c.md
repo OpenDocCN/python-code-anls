@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_sve.c`
 
-```
+```py
 # 包含 ARM SVE 指令集的头文件
 
 # 定义一个函数，接收两个 svint64_t 类型的参数并返回一个整数

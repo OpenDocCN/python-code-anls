@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\make_lite.py`
 
-```
+```py
 #!/usr/bin/env python2.7
 # WARNING! This a Python 2 script. Read README.rst for rationale.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_typing\_ufunc.pyi`
 
-```
+```py
 """
 A module with private type-check-only `numpy.ufunc` subclasses.
 

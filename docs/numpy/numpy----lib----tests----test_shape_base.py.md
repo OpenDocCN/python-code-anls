@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_shape_base.py`
 
-```
+```py
 # 导入所需的库和模块
 import numpy as np  # 导入 NumPy 库，用于数值计算
 import functools  # 导入 functools 模块，用于函数操作

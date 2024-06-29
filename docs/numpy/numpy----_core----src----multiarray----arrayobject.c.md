@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\arrayobject.c`
 
-```
+```py
 /*
   提供多维数组作为Python的基本对象类型。
 

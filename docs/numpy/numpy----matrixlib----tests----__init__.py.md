@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\__init__.py`
 
-```
+```py
 # 定义一个名为 `merge_sort` 的函数，用于执行归并排序算法
 def merge_sort(arr):
     # 如果输入数组长度小于等于1，则直接返回数组本身，无需排序

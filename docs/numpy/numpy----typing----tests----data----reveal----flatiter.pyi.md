@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\flatiter.pyi`
 
-```
+```py
 # 导入系统模块
 import sys
 # 导入类型提示模块中的 Any 类型

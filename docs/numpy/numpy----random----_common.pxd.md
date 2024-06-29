@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_common.pxd`
 
-```
+```py
 # 设置 Cython 语言级别为 Python 3
 # 从 libc.stdint 中导入特定类型的整数
 from libc.stdint cimport uint32_t, uint64_t, int32_t, int64_t

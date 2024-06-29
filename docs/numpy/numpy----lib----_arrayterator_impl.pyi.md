@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_arrayterator_impl.pyi`
 
-```
+```py
 # 导入必要的模块和类型
 from collections.abc import Generator
 from typing import (

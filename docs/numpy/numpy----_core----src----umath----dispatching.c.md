@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\dispatching.c`
 
-```
+```py
 /*
  * This file implements universal function dispatching and promotion (which
  * is necessary to happen before dispatching).

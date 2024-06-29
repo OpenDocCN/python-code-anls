@@ -1,6 +1,6 @@
 # `.\numpy\doc\neps\conf.py`
 
-```
+```py
 #
 # NumPy Enhancement Proposals documentation build configuration file, created by
 # sphinx-quickstart on Mon Dec 11 12:45:09 2017.

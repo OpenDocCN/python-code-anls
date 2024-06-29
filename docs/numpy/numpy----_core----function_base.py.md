@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\function_base.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于创建偏函数
 import warnings  # 导入 warnings 模块，用于警告处理
 import operator  # 导入 operator 模块，用于操作符函数

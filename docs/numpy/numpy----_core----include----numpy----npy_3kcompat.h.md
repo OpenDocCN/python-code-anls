@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_3kcompat.h`
 
-```
+```py
 /*
  * This is a convenience header file providing compatibility utilities
  * for supporting different minor versions of Python 3.

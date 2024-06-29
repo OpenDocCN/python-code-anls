@@ -1,6 +1,6 @@
 # `.\numpy\doc\conftest.py`
 
-```
+```py
 """
 Pytest configuration and fixtures for the Numpy test suite.
 """

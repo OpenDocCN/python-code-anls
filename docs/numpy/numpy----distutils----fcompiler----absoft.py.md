@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\absoft.py`
 
-```
+```py
 # 导入操作系统模块
 import os
 

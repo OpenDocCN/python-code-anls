@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\introspect.py`
 
-```
+```py
 """
 Introspection helper functions.
 """

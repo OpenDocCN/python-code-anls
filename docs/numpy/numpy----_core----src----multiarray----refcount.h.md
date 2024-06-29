@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\refcount.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_REFCOUNT_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_REFCOUNT_H_
 

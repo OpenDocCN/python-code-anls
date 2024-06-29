@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\random_hypergeometric.c`
 
-```
+```py
 /*
  *  Generate a sample from the hypergeometric distribution.
  *

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\static_string.c`
 
-```
+```py
 /*
  * Static string API
  *

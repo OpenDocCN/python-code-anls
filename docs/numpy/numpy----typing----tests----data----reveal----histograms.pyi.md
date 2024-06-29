@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\histograms.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关操作
 from typing import Any  # 从typing模块导入Any类型，用于类型提示
 

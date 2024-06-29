@@ -1,6 +1,6 @@
 # `.\numpy\numpy\compat\py3k.py`
 
-```
+```py
 """
 Python 3.X compatibility tools.
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_type_check_impl.pyi`
 
-```
+```py
 # 从 collections.abc 导入 Container 和 Iterable 接口
 from collections.abc import Container, Iterable
 # 从 typing 模块导入 Literal 别名 L，Any 类型，overload 装饰器，TypeVar 类型变量和 Protocol 协议

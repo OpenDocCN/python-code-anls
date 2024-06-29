@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\npy_2_complexcompat.h`
 
-```
+```py
 /* This header is designed to be copy-pasted into downstream packages, since it provides
    a compatibility layer between the old C struct complex types and the new native C99
    complex types. The new macros are in numpy/npy_math.h, which is why it is included here. */

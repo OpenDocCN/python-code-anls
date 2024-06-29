@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\highway_qsort_16bit.dispatch.cpp`
 
-```
+```py
 // 包含自定义的排序头文件 "highway_qsort.hpp"
 #include "highway_qsort.hpp"
 // 定义宏 VQSORT_ONLY_STATIC 为 1，用于特定的静态排序

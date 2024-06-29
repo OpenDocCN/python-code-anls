@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\logfactorial.c`
 
-```
+```py
 /*
  *  logfact[k] holds log(k!) for k = 0, 1, 2, ..., 125.
  *  logfact数组存储了0到125的阶乘的自然对数值。

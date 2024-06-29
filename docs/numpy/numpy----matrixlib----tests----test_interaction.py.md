@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_interaction.py`
 
-```
+```py
 """
 Tests of interaction of matrix with other parts of numpy.
 

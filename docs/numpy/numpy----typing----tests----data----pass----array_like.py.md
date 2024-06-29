@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\array_like.py`
 
-```
+```py
 # 导入未来的语法特性，用于支持类型注解中的 annotations
 from __future__ import annotations
 

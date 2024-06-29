@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\ufunc_object.c`
 
-```
+```py
 /*
  * Python Universal Functions Object -- Math for all types, plus fast
  * arrays math

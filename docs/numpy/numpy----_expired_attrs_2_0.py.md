@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_expired_attrs_2_0.py`
 
-```
+```py
 """
 Dict of expired attributes that are discontinued since 2.0 release.
 Each item is associated with a migration note.

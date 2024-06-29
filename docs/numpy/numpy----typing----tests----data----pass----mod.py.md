@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\mod.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，通常用于科学计算
 
 f8 = np.float64(1)  # 创建一个 64 位浮点数对象 f8，赋值为 1

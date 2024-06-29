@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_shape.py`
 
-```
+```py
 # 导入 Sequence 抽象基类，用于定义序列类型的抽象接口
 from collections.abc import Sequence
 # 导入 Union 和 SupportsIndex 用于类型注解

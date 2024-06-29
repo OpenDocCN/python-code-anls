@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_semicolon_split.py`
 
-```
+```py
 # 导入必要的模块和库：platform、pytest、numpy
 import platform
 import pytest

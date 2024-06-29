@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\sfc64\sfc64.h`
 
-```
+```py
 #ifndef _RANDOMDGEN__SFC64_H_
 #define _RANDOMDGEN__SFC64_H_
 

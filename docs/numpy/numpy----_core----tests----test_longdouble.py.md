@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_longdouble.py`
 
-```
+```py
 # 引入警告模块，用于管理警告信息
 import warnings
 # 引入平台模块，用于获取平台相关信息

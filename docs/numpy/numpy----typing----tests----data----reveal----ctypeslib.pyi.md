@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ctypeslib.pyi`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关的操作
 import ctypes as ct  # 导入ctypes模块，并使用别名ct，用于与C语言兼容的数据类型和函数接口
 from typing import Any  # 从typing模块中导入Any类型，表示可以是任意类型的对象

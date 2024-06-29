@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\dev\examples\doxy_func.h`
 
-```
+```py
 /**
  * This a simple brief.
  *

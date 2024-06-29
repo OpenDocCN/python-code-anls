@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testFlat.py`
 
-```
+```py
 # 定义一个单元测试类 FlatTestCase，继承自 unittest.TestCase
 class FlatTestCase(unittest.TestCase):
 

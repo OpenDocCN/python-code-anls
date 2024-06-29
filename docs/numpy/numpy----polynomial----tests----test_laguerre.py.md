@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_laguerre.py`
 
-```
+```py
 """Tests for laguerre module.
 
 """

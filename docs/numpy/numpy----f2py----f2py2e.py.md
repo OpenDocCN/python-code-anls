@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\f2py2e.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 

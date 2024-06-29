@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\dev\examples\doxy_rst.h`
 
-```
+```py
 /**
  * A comment block contains reST markup.
  * @rst

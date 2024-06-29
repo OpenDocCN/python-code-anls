@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\__init__.py`
 
-```
+```py
 # 导入所需的模块：os 用于操作文件系统，re 用于正则表达式处理
 import os
 import re

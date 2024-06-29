@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\test_deprecations.py`
 
-```
+```py
 # 导入 pytest 库，用于测试和断言
 import pytest
 # 导入 numpy 库，并用 np 别名表示

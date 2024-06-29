@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\philox\philox-benchmark.c`
 
-```
+```py
 /*
  * Simple benchmark command
  *

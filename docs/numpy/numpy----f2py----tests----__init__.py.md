@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\__init__.py`
 
-```
+```py
 # 从 numpy.testing 模块中导入 IS_WASM 和 IS_EDITABLE 常量
 from numpy.testing import IS_WASM, IS_EDITABLE
 # 从 pytest 模块中导入 pytest 函数或类

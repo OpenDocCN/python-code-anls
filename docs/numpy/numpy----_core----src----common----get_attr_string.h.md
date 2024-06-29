@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\get_attr_string.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_GET_ATTR_STRING_H_
 #define NUMPY_CORE_SRC_COMMON_GET_ATTR_STRING_H_
 

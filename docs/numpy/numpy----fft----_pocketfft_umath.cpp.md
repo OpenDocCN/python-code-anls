@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\_pocketfft_umath.cpp`
 
-```
+```py
 /*
  * This file is part of pocketfft.
  * Licensed under a 3-clause BSD style license - see LICENSE.md

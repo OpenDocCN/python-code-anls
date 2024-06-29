@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_utils_impl.pyi`
 
-```
+```py
 # 导入必要的模块和类型声明
 from typing import (
     Any,

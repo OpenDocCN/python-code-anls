@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\refcount.c`
 
-```
+```py
 /*
  * This module corresponds to the `Special functions for NPY_OBJECT`
  * section in the numpy reference for C-API.

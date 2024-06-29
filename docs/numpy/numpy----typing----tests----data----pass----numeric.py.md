@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\numeric.py`
 
-```
+```py
 """
 Tests for :mod:`numpy._core.numeric`.
 

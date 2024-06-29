@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\polynomial\polyutils.pyi`
 
-```
+```py
 # 定义全局变量 __all__，表示在使用 from module import * 时应该导入的符号列表
 __all__: list[str]
 

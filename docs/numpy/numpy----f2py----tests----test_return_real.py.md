@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_return_real.py`
 
-```
+```py
 # 导入必要的模块
 import platform  # 导入平台模块，用于获取操作系统信息
 import pytest  # 导入 pytest 测试框架

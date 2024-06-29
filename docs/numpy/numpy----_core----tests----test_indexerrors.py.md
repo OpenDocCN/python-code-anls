@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_indexerrors.py`
 
-```
+```py
 # 导入 NumPy 库，并从中导入测试相关的函数
 import numpy as np
 from numpy.testing import (

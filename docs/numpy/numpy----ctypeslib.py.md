@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ctypeslib.py`
 
-```
+```py
 """
 ============================
 ``ctypes`` Utility Functions

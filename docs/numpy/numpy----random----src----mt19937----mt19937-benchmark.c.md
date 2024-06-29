@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937-benchmark.c`
 
-```
+```py
 /*
  * 编译命令行示例（Windows下）：
  * cl mt19937-benchmark.c mt19937.c /Ox

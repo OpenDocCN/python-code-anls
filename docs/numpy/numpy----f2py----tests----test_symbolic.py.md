@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_symbolic.py`
 
-```
+```py
 # 导入 pytest 模块，用于单元测试
 import pytest
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_philox.pyi`
 
-```
+```py
 from typing import TypedDict  # 导入 TypedDict 类型提示
 
 from numpy import uint64  # 从 numpy 库中导入 uint64 类型

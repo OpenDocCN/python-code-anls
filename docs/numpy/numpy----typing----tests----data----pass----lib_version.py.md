@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\lib_version.py`
 
-```
+```py
 # 从 numpy 库中导入 NumpyVersion 类
 from numpy.lib import NumpyVersion
 

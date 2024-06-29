@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\include\legacy-distributions.h`
 
-```
+```py
 #ifndef _RANDOMDGEN__DISTRIBUTIONS_LEGACY_H_
 #define _RANDOMDGEN__DISTRIBUTIONS_LEGACY_H_
 

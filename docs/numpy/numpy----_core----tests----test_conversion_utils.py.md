@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_conversion_utils.py`
 
-```
+```py
 """
 Tests for numpy/_core/src/multiarray/conversion_utils.c
 """

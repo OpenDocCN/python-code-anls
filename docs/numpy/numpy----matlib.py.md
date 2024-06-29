@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matlib.py`
 
-```
+```py
 import warnings
 
 # 在导入 numpy.matlib 的过程中，如果使用 matrix 类别会出现弃用警告

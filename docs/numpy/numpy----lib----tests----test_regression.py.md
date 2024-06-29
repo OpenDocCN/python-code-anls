@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_regression.py`
 
-```
+```py
 import os  # 导入操作系统模块
 
 import numpy as np  # 导入NumPy库

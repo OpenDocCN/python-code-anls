@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\armccompiler.py`
 
-```
+```py
 from distutils.unixccompiler import UnixCCompiler                              
 
 class ArmCCompiler(UnixCCompiler):

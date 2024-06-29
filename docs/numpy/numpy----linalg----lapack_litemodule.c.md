@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_litemodule.c`
 
-```
+```py
 /*
  * 此模块由Doug Heisterkamp贡献
  * Jim Hugunin进行了修改

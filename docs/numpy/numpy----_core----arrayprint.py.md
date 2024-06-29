@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\arrayprint.py`
 
-```
+```py
 """Array printing function
 
 $Id: arrayprint.py,v 1.9 2005/09/13 13:58:44 teoliphant Exp $

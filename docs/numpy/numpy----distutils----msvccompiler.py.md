@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\msvccompiler.py`
 
-```
+```py
 import os  # 导入操作系统模块
 from distutils.msvccompiler import MSVCCompiler as _MSVCCompiler  # 导入 MSVC 编译器类
 from .system_info import platform_bits  # 导入平台位数信息

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\nag.py`
 
-```
+```py
 # 导入 sys 模块，用于获取系统相关信息
 import sys
 # 导入 re 模块，用于正则表达式操作

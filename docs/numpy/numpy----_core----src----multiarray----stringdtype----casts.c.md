@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\stringdtype\casts.c`
 
-```
+```py
 /*
 定义了一个宏函数 ANY_TO_STRING_RESOLVE_DESCRIPTORS，用于处理类型转换描述符的解析和处理。
 此宏函数展开后，会生成一个静态函数 any_to_string_SAFE_resolve_descriptors 和一个静态函数 any_to_string_SAME_KIND_resolve_descriptors。

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\einsum_sumprod.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_EINSUM_SUMPROD_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_EINSUM_SUMPROD_H_
 

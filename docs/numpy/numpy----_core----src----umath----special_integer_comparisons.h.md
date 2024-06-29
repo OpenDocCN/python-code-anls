@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\special_integer_comparisons.h`
 
-```
+```py
 #ifndef _NPY_CORE_SRC_UMATH_SPECIAL_COMPARISONS_H_
 // 如果 _NPY_CORE_SRC_UMATH_SPECIAL_COMPARISONS_H_ 宏未定义，则执行以下内容
 #define _NPY_CORE_SRC_UMATH_SPECIAL_COMPARISONS_H_

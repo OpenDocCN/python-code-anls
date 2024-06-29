@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\sequence.c`
 
-```
+```py
 /* 定义以 NPY_API_VERSION 为基准的 NumPy 废弃 API 版本 */
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 

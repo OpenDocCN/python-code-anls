@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ufuncs.pyi`
 
-```
+```py
 import sys
 from typing import Literal, Any  # 导入 Literal 和 Any 类型
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_build_utils\gcc_build_bitness.py`
 
-```
+```py
 # 导入正则表达式和子进程模块
 import re
 from subprocess import run, PIPE

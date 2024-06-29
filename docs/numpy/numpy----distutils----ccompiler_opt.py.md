@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\ccompiler_opt.py`
 
-```
+```py
 # 导入必要的模块
 import atexit  # 导入 atexit 模块，用于注册退出函数
 import inspect  # 导入 inspect 模块，用于检查对象信息

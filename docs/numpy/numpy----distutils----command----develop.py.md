@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\develop.py`
 
-```
+```py
 """
 用于重写 setuptools 中的 develop 命令，以确保我们从 build_src 或 build_scripts 生成的文件被正确转换为真实文件并具有文件名。
 

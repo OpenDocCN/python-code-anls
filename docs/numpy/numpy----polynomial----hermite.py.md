@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\hermite.py`
 
-```
+```py
 # 导入NumPy库并指定别名np，导入NumPy的线性代数模块别名为la
 import numpy as np
 import numpy.linalg as la
@@ -1370,7 +1370,7 @@ def hermroots(c):
     r.sort()
     # 返回排序后的特征值数组
     return r
-    ```
+    ```py
     # 将给定的 x 和 n 作为参数，计算规范化 Hermite 多项式的值
     def _normed_hermite_n(x, n):
         """

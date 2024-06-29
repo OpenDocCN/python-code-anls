@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_stride_tricks_impl.pyi`
 
-```
+```py
 # 导入必要的模块和类型
 from collections.abc import Iterable  # 导入 Iterable 抽象基类
 from typing import Any, TypeVar, overload, SupportsIndex  # 导入类型注解相关模块

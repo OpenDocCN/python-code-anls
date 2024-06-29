@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\f2c_c_lapack.c`
 
-```
+```py
 /*
  * NOTE: This is generated code. Look in numpy/linalg/lapack_lite for
  *       information on remaking this file.
@@ -3325,7 +3325,7 @@ S       (output) REAL array, dimension (min(M,N))
 
            print("Result:", result)
     # 打印处理结果
-    ```
+    ```py
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -8564,27 +8564,27 @@ d__[i__1] = a[i__2].r;
              Copy superdiagonal elements back into A, and diagonal
              elements into D
 */
-```  
+```py  
 将超对角元素复制回 A 矩阵，并将对角元素复制到 D 数组中。
 
 ```  
         i__3 = i__ + nb - 1;
         for (j = i__; j <= i__3; ++j) {
-```  
+```py  
 循环遍历列索引 `i__` 到 `i__ + nb - 1` 之间的列。
 
 ```  
         i__4 = j - 1 + j * a_dim1;
         i__5 = j - 1;
         a[i__4].r = e[i__5], a[i__4].i = 0.f;
-```  
+```py  
 将超对角元素 `e[j-1]` 复制到 A 矩阵的 `(j-1, j)` 位置，并将虚部设为 0。
 
 ```  
         i__4 = j;
         i__5 = j + j * a_dim1;
         d__[i__4] = a[i__5].r;
-```  
+```py  
 将对角元素 `a[j, j]` 的实部复制到 D 数组的 `j` 位置。
 
 ```  
@@ -8592,13 +8592,13 @@ d__[i__1] = a[i__2].r;
         }
 /* L20: */
     }
-```  
+```py  
 循环结束标签。
 
 ```  
     chetd2_(uplo, &kk, &a[a_offset], lda, &d__[1], &e[1], &tau[1], &iinfo);
     } else {
-```  
+```py  
 调用 `chetd2_` 函数来处理带有给定参数的矩阵操作。
 
 ```  
@@ -8607,14 +8607,14 @@ d__[i__1] = a[i__2].r;
              matrix W which is needed to update the unreduced part of
              the matrix
 */
-```  
+```py  
 将列 `i:i+nb-1` 缩减为三对角形式，并形成矩阵 W，以更新矩阵的未减少部分。
 
 ```  
         i__3 = *n - i__ + 1;
         clatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &
             tau[i__], &work[1], &ldwork);
-```  
+```py  
 调用 `clatrd_` 函数来处理特定部分的带有给定参数的矩阵操作。
 
 ```  
@@ -8622,7 +8622,7 @@ d__[i__1] = a[i__2].r;
              Update the unreduced submatrix A(i+nb:n,i+nb:n), using
              an update of the form:  A := A - V*W' - W*V'
 */
-```  
+```py  
 使用形式为 `A := A - V*W' - W*V'` 的更新来更新未减少的子矩阵 `A(i+nb:n,i+nb:n)`。
 
 ```  
@@ -8631,7 +8631,7 @@ d__[i__1] = a[i__2].r;
         cher2k_(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb +
             i__ * a_dim1], lda, &work[nb + 1], &ldwork, &c_b1034, &a[
             i__ + nb + (i__ + nb) * a_dim1], lda);
-```  
+```py  
 调用 `cher2k_` 函数来执行 Hermitian rank-2k 更新操作。
 
 ```  
@@ -8639,27 +8639,27 @@ d__[i__1] = a[i__2].r;
              Copy subdiagonal elements back into A, and diagonal
              elements into D
 */
-```  
+```py  
 将次对角线元素复制回 A 矩阵，并将对角元素复制到 D 数组中。
 
 ```  
         i__3 = i__ + nb - 1;
         for (j = i__; j <= i__3; ++j) {
-```  
+```py  
 循环遍历列索引 `i__` 到 `i__ + nb - 1` 之间的列。
 
 ```  
         i__4 = j + 1 + j * a_dim1;
         i__5 = j;
         a[i__4].r = e[i__5], a[i__4].i = 0.f;
-```  
+```py  
 将次对角线元素 `e[j]` 复制到 A 矩阵的 `(j+1, j)` 位置，并将虚部设为 0。
 
 ```  
         i__4 = j;
         i__5 = j + j * a_dim1;
         d__[i__4] = a[i__5].r;
-```  
+```py  
 将对角元素 `a[j, j]` 的实部复制到 D 数组的 `j` 位置。
 
 ```  
@@ -8667,30 +8667,30 @@ d__[i__1] = a[i__2].r;
         }
 /* L40: */
     }
-```  
+```py  
 循环结束标签。
 
 ```  
     i__1 = *n - i__ + 1;
     chetd2_(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
         &tau[i__], &iinfo);
-```  
+```py  
 调用 `chetd2_` 函数来处理带有给定参数的矩阵操作。
 
 ```  
     work[1].r = (real) lwkopt, work[1].i = 0.f;
     return 0;
-```  
+```py  
 设置工作数组的第一个元素为 `lwkopt` 的实部，并返回 0。
 
 ```  
 /*     End of CHETRD */
-```  
+```py  
 `CHETRD` 函数的结束标记。
 
 ```  
 } /* chetrd_ */
-```  
+```py  
 `chetrd_` 子程序的结束标记。
 
 ```  
@@ -8698,7 +8698,7 @@ d__[i__1] = a[i__2].r;
      integer *ihi, singlecomplex *h__, integer *ldh, singlecomplex *w, singlecomplex *z__,
     integer *ldz, singlecomplex *work, integer *lwork, integer *info)
 {
-```  
+```py  
 `chseqr_` 子程序的开始标记。
 
 ```  
@@ -8708,7 +8708,7 @@ d__[i__1] = a[i__2].r;
     real r__1, r__2, r__3;
     singlecomplex q__1;
     char ch__1[2];
-```  
+```py  
 声明系统生成的本地变量。
 
 ```  
@@ -8721,7 +8721,7 @@ d__[i__1] = a[i__2].r;
     static logical initz;
     static singlecomplex workl[49];
     static logical wantt, wantz;
-```  
+```py  
 声明本地变量和外部函数。
 
 ```  
@@ -14581,7 +14581,7 @@ doublereal clange_(char *norm, integer *m, integer *n, singlecomplex *a, integer
 
     ! WORK    (workspace) REAL array, dimension (MAX(1,LWORK))
     !         当 NORM = 'I' 时，要求 LWORK >= M；否则，WORK 不被引用。
-   ```
+   ```py
 /* Parameter adjustments */
 a_dim1 = *lda;
 a_offset = 1 + a_dim1;
@@ -24232,14 +24232,14 @@ if (upper) {
             xmax = (r__1 = x[i__3].r, dabs(r__1)) + (r__2 =
                 r_imag(&x[i__]), dabs(r__2));
 
-```    
+```py    
             }
         }
 
 ```    
         } else if (lsame_(trans, "T")) {
 
-```    
+```py    
 /*           Solve A**T * x = b */
 
 ```    
@@ -24247,7 +24247,7 @@ if (upper) {
         i__1 = jinc;
         for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
-```    
+```py    
 /*
                 Compute x(j) = b(j) - sum A(k,j)*x(k).
                                       k<>j
@@ -24261,7 +24261,7 @@ if (upper) {
         rec = 1.f / dmax(xmax,1.f);
         if (cnorm[j] > (bignum - xj) * rec) {
 
-```    
+```py    
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
 
 ```    
@@ -24278,7 +24278,7 @@ if (upper) {
                  dabs(r__2));
             if (tjj > 1.f) {
 
-```    
+```py    
 /*
                          Divide by A(j,j) when scaling x if A(j,j) > 1.
 
@@ -24298,7 +24298,7 @@ if (upper) {
             }
         }
 
-```    
+```py    
         csumj.r = 0.f, csumj.i = 0.f;
         if (uscal.r == 1.f && uscal.i == 0.f) {
 
@@ -24308,7 +24308,7 @@ if (upper) {
                    call CDOTU to perform the dot product.
 */
 
-```    
+```py    
             if (upper) {
             i__3 = j - 1;
             cdotu_(&q__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1],
@@ -28334,7 +28334,7 @@ N       (input) INTEGER
     - `integer *` 类型的指针（整数数组）
   - 返回类型: `void`
 
-```    
+```py    
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *,
         integer *, integer *, ftnlen, ftnlen);
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_machar.py`
 
-```
+```py
 """
 Machine arithmetic - determine the parameters of the
 floating-point arithmetic system

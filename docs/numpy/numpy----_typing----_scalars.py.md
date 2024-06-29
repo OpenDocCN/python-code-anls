@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_scalars.py`
 
-```
+```py
 # 引入必要的类型声明模块，Union 用于指定多个类型中的一个作为类型注解
 from typing import Union, Any
 

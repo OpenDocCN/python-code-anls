@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\stream_pyobject.c`
 
-```
+```py
 /*
  * C side structures to provide capabilities to read Python file like objects
  * in chunks, or iterate through iterables with each result representing a

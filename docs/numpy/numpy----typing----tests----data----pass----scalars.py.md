@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\scalars.py`
 
-```
+```py
 import sys  # 导入系统模块sys，用于访问系统相关功能
 import datetime as dt  # 导入datetime模块并命名为dt，用于处理日期和时间
 

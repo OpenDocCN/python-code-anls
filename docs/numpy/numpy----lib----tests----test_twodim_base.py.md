@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_twodim_base.py`
 
-```
+```py
 """Test functions for matrix module
 
 """

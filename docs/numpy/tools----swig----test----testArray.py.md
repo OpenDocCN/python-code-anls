@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\testArray.py`
 
-```
+```py
 #!/usr/bin/env python3
 # System imports
 import sys  # 导入系统模块sys，用于访问系统相关功能

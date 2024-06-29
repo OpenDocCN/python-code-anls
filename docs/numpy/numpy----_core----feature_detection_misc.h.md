@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\feature_detection_misc.h`
 
-```
+```py
 # 包含标准库 <stddef.h>，用于提供 size_t 类型的定义
 #include <stddef.h>
 

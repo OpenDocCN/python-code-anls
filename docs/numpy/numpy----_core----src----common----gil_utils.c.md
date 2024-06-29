@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\gil_utils.c`
 
-```
+```py
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 #define _MULTIARRAYMODULE
 

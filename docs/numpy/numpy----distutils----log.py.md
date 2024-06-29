@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\log.py`
 
-```
+```py
 # Colored log
 # 引入 sys 模块，用于访问系统标准输入输出等功能
 import sys

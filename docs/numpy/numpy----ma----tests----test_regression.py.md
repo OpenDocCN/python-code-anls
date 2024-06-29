@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\tests\test_regression.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，通常用于数值计算
 from numpy.testing import (  # 从 NumPy 的 testing 模块导入以下函数和类
     assert_, assert_array_equal, assert_allclose, suppress_warnings

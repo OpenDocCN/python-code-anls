@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\matrix.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入需要的类型提示
 

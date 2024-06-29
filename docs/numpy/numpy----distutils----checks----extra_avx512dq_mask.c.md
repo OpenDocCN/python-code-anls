@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\extra_avx512dq_mask.c`
 
-```
+```py
 /**
  * Test DQ mask operations due to:
  *  - MSVC has supported it since vs2019 see,

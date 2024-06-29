@@ -1,6 +1,6 @@
 # `.\numpy\numpy\compat\__init__.py`
 
-```
+```py
 """
 python
 """

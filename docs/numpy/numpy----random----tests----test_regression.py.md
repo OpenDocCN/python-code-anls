@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\test_regression.py`
 
-```
+```py
 # 导入必要的模块和函数
 import sys
 from numpy.testing import (

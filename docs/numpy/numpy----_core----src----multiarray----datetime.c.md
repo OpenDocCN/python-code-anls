@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime.c`
 
-```
+```py
 /*
  * This file implements core functionality for NumPy datetime.
  *

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_scimath_impl.py`
 
-```
+```py
 """
 Wrapper functions to more user-friendly calling of certain math functions
 whose output data-type is different than the input data-type in certain

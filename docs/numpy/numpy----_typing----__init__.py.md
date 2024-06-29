@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\__init__.py`
 
-```
+```py
 # 导入 `numpy.typing` 的私有模块。
 from __future__ import annotations
 

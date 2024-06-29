@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_lib.py`
 
-```
+```py
 """Benchmarks for `numpy.lib`."""
 
 # 从common模块导入Benchmark类

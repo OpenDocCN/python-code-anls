@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\warnings_and_errors.py`
 
-```
+```py
 import numpy.exceptions as ex
 创建了一个别名 ex，用于引用 numpy.exceptions 模块
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ufunc_config.py`
 
-```
+```py
 """Typing tests for `numpy._core._ufunc_config`."""
 
 import numpy as np  # 导入 numpy 库

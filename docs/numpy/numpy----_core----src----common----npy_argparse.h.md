@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_argparse.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_NPY_ARGPARSE_H
 #define NUMPY_CORE_SRC_COMMON_NPY_ARGPARSE_H
 

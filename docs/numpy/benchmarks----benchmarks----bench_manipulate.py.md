@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_manipulate.py`
 
-```
+```py
 from .common import Benchmark, get_squares_, TYPES1, DLPACK_TYPES
 # 导入必要的模块和函数
 

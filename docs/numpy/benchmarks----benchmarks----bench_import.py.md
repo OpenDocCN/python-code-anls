@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_import.py`
 
-```
+```py
 # 导入 subprocess 模块中的 call 函数，用于执行外部命令
 # 导入 sys 模块中的 executable 变量，表示当前 Python 解释器的路径
 # 导入 timeit 模块中的 default_timer 函数，用于获取当前时间

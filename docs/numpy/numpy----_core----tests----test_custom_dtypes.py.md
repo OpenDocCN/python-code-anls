@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_custom_dtypes.py`
 
-```
+```py
 import sys  # 导入sys模块，用于系统相关操作
 
 from tempfile import NamedTemporaryFile  # 导入NamedTemporaryFile类，用于创建临时文件

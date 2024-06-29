@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\umathmodule.c`
 
-```
+```py
 /*
  * _UMATHMODULE IS needed in __ufunc_api.h, included from numpy/ufuncobject.h.
  * This is a mess and it would be nice to fix it. It has nothing to do with

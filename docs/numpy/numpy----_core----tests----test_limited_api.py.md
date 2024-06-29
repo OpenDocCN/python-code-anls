@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_limited_api.py`
 
-```
+```py
 # 导入标准库和第三方库
 import os                      # 导入操作系统功能模块
 import shutil                  # 导入文件和目录操作模块

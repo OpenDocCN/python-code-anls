@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_arraysetops_impl.pyi`
 
-```
+```py
 # 导入必要的类型和函数声明
 from typing import (
     Any,

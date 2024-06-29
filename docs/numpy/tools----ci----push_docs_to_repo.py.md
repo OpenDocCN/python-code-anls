@@ -1,6 +1,6 @@
 # `.\numpy\tools\ci\push_docs_to_repo.py`
 
-```
+```py
 #!/usr/bin/env python3
 
 import argparse  # 导入用于解析命令行参数的模块

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_stride_tricks.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 # 从 numpy._core._rational_tests 模块中导入 rational 函数

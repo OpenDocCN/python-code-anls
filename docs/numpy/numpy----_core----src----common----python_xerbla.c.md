@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\python_xerbla.c`
 
-```
+```py
 /*
   From the original manpage:
   --------------------------

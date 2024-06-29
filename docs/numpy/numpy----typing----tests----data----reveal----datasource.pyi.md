@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\datasource.pyi`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入路径处理模块 Path 从 typing 模块导入 IO 和 Any 类型

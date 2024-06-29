@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_scripts.py`
 
-```
+```py
 """ Test scripts
 
 Test that we can run executable scripts that have been installed with numpy.

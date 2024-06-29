@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_vxe.c`
 
-```
+```py
 #if (__VEC__ < 10302) || (__ARCH__ < 12)
     #error VXE not supported
 #endif

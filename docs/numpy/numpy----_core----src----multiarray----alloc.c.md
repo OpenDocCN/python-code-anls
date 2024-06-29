@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\alloc.c`
 
-```
+```py
 /*
  * 定义 NPY_NO_DEPRECATED_API 以及 _MULTIARRAYMODULE，这些是预处理器宏
  * NPY_SSIZE_T_CLEAN 用于确保 Py_ssize_t 被定义为 size_t，这是一种约定

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\_rational_tests.c`
 
-```
+```py
 /* Fixed size rational numbers exposed to Python */
 
 /* 包含必要的头文件：Python.h 和 structmember.h */

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\ma\testutils.py`
 
-```
+```py
 # 导入Python标准库中的operator模块，用于操作符和函数的标准集合
 import operator
 

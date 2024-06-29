@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\fast_loop_macros.h`
 
-```
+```py
 /**
  * 宏定义，用于构建快速的ufunc内部循环。
  *

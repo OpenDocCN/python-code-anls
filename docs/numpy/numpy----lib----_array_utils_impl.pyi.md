@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_array_utils_impl.pyi`
 
-```
+```py
 # 导入必要的类型提示
 from typing import Any, Iterable, Tuple
 

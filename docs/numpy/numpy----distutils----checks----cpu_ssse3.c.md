@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_ssse3.c`
 
-```
+```py
 #if defined(DETECT_FEATURES) && defined(__INTEL_COMPILER)
     /*
      * 如果定义了 DETECT_FEATURES 和 __INTEL_COMPILER，

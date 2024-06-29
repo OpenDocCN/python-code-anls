@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\clip.h`
 
-```
+```py
 #ifndef _NPY_UMATH_CLIP_H_
 #define _NPY_UMATH_CLIP_H_
 

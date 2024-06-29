@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\generate_umath.py`
 
-```
+```py
 """
 Generate the code to build all the internal ufuncs. At the base is the defdict:
 a dictionary of Ufunc classes. This is fed to make_code to generate

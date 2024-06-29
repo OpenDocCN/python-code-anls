@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\test_isfile.py`
 
-```
+```py
 # 导入必要的库和模块
 import os
 import sys

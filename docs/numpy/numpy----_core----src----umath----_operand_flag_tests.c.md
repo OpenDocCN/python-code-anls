@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\_operand_flag_tests.c`
 
-```
+```py
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 

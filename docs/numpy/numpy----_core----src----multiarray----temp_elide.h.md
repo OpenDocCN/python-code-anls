@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\temp_elide.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEMP_ELIDE_H_
 // 如果未定义 NUMPY_CORE_SRC_MULTIARRAY_TEMP_ELIDE_H_ 宏，则执行以下内容
 #define NUMPY_CORE_SRC_MULTIARRAY_TEMP_ELIDE_H_

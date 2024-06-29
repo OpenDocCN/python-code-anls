@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\checks\cpu_sse41.c`
 
-```
+```py
 #if defined(DETECT_FEATURES) && defined(__INTEL_COMPILER)
     /*
      * 如果定义了DETECT_FEATURES和__INTEL_COMPILER，说明正在使用Intel编译器，

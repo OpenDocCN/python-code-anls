@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\mt19937\mt19937.h`
 
-```
+```py
 #pragma once
 // 防止头文件重复包含
 

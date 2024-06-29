@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_assumed_shape.py`
 
-```
+```py
 # 导入必要的库和模块
 import os  # 导入操作系统相关的功能
 import pytest  # 导入 pytest 测试框架

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_ufunc_config.py`
 
-```
+```py
 """
 Functions for changing global ufunc configuration
 

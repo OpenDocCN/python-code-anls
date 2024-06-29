@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_memmap.py`
 
-```
+```py
 import sys
 import os
 import mmap

@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\user\plots\matplotlib1.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 模块，并简写为 plt
 import matplotlib.pyplot as plt
 # 导入 numpy 模块，并简写为 np

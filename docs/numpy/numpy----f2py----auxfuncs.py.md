@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\auxfuncs.py`
 
-```
+```py
 # 引入 pprint 模块，用于美化打印输出
 import pprint
 # 引入 sys 模块，用于访问系统相关功能

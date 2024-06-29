@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_indexing.py`
 
-```
+```py
 # 从common模块导入Benchmark类和其他函数和变量
 from .common import (
     Benchmark, get_square_, get_indexes_, get_indexes_rand_, TYPES1)

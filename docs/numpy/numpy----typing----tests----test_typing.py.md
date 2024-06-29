@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\test_typing.py`
 
-```
+```py
 # 从未来模块导入 annotations 特性，用于支持类型注解
 from __future__ import annotations
 

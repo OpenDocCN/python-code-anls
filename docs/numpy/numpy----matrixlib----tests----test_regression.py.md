@@ -1,6 +1,6 @@
 # `.\numpy\numpy\matrixlib\tests\test_regression.py`
 
-```
+```py
 import numpy as np  # 导入NumPy库，用于数值计算
 from numpy.testing import assert_, assert_equal, assert_raises  # 导入NumPy测试模块的断言方法
 

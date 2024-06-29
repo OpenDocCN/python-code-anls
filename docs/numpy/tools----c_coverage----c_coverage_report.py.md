@@ -1,6 +1,6 @@
 # `.\numpy\tools\c_coverage\c_coverage_report.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 A script to create C code-coverage reports based on the output of

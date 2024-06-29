@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\dlpack.c`
 
-```
+```py
 /*
  * 定义宏，指定使用的 NumPy API 版本，避免使用已废弃的 API
  */

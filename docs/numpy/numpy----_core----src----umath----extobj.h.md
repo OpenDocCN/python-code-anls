@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\extobj.h`
 
-```
+```py
 #ifndef _NPY_PRIVATE__EXTOBJ_H_
 #define _NPY_PRIVATE__EXTOBJ_H_
 

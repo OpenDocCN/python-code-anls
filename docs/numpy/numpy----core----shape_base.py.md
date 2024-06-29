@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\shape_base.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于在访问对象的属性失败时自定义处理
 def __getattr__(attr_name):
     # 从 numpy._core 模块导入 shape_base 对象

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_cpu_dispatcher.py`
 
-```
+```py
 from numpy._core._multiarray_umath import (
     __cpu_features__, __cpu_baseline__, __cpu_dispatch__
 )

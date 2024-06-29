@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\einsumfunc.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 import numpy.typing as npt  # 导入 NumPy 类型注解模块，用于类型提示
 

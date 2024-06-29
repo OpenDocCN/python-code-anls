@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_public_api.py`
 
-```
+```py
 # 导入系统相关模块
 import sys
 # 系统配置模块

@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_reduce.py`
 
-```
+```py
 from .common import Benchmark, TYPES1, get_squares  # 导入所需模块和函数
 
 import numpy as np  # 导入 NumPy 库

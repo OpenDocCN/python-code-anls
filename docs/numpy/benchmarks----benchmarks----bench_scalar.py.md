@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_scalar.py`
 
-```
+```py
 # 从共享库中导入 Benchmark 类和 TYPES1 常量
 from .common import Benchmark, TYPES1
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\__init__.py`
 
-```
+```py
 """
 ``numpy.lib`` is mostly a space for implementing functions that don't
 belong in core or in another NumPy submodule with a clear purpose

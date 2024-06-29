@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\linalg\__init__.pyi`
 
-```
+```py
 # 从 numpy.linalg._linalg 导入多个函数，重命名为相应的本地名称
 from numpy.linalg._linalg import (
     matrix_power as matrix_power,  # 导入 matrix_power 函数并重命名为 matrix_power

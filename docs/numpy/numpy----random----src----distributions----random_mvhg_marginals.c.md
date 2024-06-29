@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\random_mvhg_marginals.c`
 
-```
+```py
 #include "numpy/random/distributions.h"
 #include <stdint.h>
 #include <stddef.h>

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\_struct_ufunc_tests.c`
 
-```
+```py
 /*
  * struct_ufunc_test.c
  * This is the C code for creating your own

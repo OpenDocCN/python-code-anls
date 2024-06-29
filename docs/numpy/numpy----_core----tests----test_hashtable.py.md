@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_hashtable.py`
 
-```
+```py
 # 导入 pytest 模块，用于测试
 import pytest
 

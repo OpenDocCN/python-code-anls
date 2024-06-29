@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\random.py`
 
-```
+```py
 from __future__ import annotations  # 导入未来的类型注释功能
 
 from typing import Any  # 导入 Any 类型，表示可以是任意类型

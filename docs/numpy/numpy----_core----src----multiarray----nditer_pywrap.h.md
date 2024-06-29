@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\nditer_pywrap.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_NDITER_PYWRAP_H_
 // 如果未定义 NUMPY_CORE_SRC_MULTIARRAY_NDITER_PYWRAP_H_ 宏，则开始条件编译保护
 

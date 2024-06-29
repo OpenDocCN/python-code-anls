@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_fcompiler.py`
 
-```
+```py
 # 从 numpy.testing 模块导入 assert_ 函数
 from numpy.testing import assert_
 # 从 numpy.distutils.fcompiler 模块导入

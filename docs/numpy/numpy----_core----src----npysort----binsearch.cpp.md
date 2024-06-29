@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\npysort\binsearch.cpp`
 
-```
+```py
 /* -*- c -*- */
 
 // 禁用已弃用的 NumPy API

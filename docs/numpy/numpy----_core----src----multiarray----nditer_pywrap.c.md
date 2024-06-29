@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\nditer_pywrap.c`
 
-```
+```py
 /*
  * This file implements the CPython wrapper of NpyIter
  *

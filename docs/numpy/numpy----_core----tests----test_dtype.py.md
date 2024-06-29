@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_dtype.py`
 
-```
+```py
 # 导入系统相关模块
 import sys
 # 导入运算符模块，用于操作符的函数集合

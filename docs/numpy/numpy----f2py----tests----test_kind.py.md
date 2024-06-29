@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_kind.py`
 
-```
+```py
 # 导入必要的模块和库
 import sys  # 导入系统模块
 import os  # 导入操作系统模块

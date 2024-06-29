@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\numeric.py`
 
-```
+```py
 # 导入 functools 模块，用于支持创建偏函数
 import functools
 # 导入 itertools 模块，用于高效的迭代器循环

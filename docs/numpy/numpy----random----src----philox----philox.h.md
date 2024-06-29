@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\philox\philox.h`
 
-```
+```py
 // 如果未定义 _RANDOMDGEN__PHILOX_H_，则定义该头文件
 #ifndef _RANDOMDGEN__PHILOX_H_
 #define _RANDOMDGEN__PHILOX_H_

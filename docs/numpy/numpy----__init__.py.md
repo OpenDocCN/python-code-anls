@@ -1,6 +1,6 @@
 # `.\numpy\numpy\__init__.py`
 
-```
+```py
 """
 NumPy
 =====

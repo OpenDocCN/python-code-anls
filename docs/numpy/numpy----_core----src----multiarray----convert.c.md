@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\convert.c`
 
-```
+```py
 /*
  * 设置 NPY_NO_DEPRECATED_API 到 NPY_API_VERSION，避免使用过时的 NumPy API
  * 定义 _MULTIARRAYMODULE，用于多维数组模块

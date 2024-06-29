@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_arrayprint.py`
 
-```
+```py
 # 导入必要的模块和库
 import sys  # 导入系统相关的功能模块
 import gc  # 导入垃圾回收模块

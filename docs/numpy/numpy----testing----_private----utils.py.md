@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\_private\utils.py`
 
-```
+```py
 """
 Utility function to facilitate testing.
 

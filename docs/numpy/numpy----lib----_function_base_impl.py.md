@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_function_base_impl.py`
 
-```
+```py
 # 导入内置模块和第三方库
 import builtins  # 内置函数和异常
 import collections.abc  # 抽象基类集合

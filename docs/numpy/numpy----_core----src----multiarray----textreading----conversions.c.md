@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\conversions.c`
 
-```
+```py
 /*
  * Include Python.h header file to interface with Python API.
  */

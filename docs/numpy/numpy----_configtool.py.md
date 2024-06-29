@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_configtool.py`
 
-```
+```py
 # 导入必要的模块
 import argparse  # 导入命令行参数解析模块
 from pathlib import Path  # 导入处理路径的模块

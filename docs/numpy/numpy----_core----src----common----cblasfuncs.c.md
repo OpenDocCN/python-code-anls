@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\cblasfuncs.c`
 
-```
+```py
 /*
  * This module provides a BLAS optimized matrix multiply,
  * inner product and dot for numpy arrays

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\_examples\cffi\extending.py`
 
-```
+```py
 """
 Use cffi to access any of the underlying C functions from distributions.h
 """

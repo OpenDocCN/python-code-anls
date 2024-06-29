@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\overrides.py`
 
-```
+```py
 # 导入测试 `__array_function__` 和 ufunc 重写实现的工具
 
 from numpy._core.overrides import ARRAY_FUNCTIONS as _array_functions

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\build_scripts.py`
 
-```
+```py
 # 修改了从函数构建脚本的build_scripts版本的脚本
 from distutils.command.build_scripts import build_scripts as old_build_scripts  # 从distutils.command.build_scripts导入build_scripts
 from numpy.distutils import log  # 从numpy.distutils导入log

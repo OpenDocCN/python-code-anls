@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_iotools.py`
 
-```
+```py
 """A collection of functions designed to help I/O with ascii files.
 
 """

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\neon\memory.h`
 
-```
+```py
 #ifndef NPY_SIMD
     // 如果未定义 NPY_SIMD 宏，则报错，此头文件不是独立可用的
     #error "Not a standalone header"

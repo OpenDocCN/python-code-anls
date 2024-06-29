@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\numerictypes.pyi`
 
-```
+```py
 ```python`
 # 导入必要的类型和函数
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_regression.py`
 
-```
+```py
 import copy  # 导入copy模块，用于深拷贝和浅拷贝操作
 import sys  # 导入sys模块，用于访问系统相关的变量和函数
 import gc  # 导入gc模块，用于垃圾回收

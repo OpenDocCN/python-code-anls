@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\_backends\_distutils.py`
 
-```
+```py
 # 从 _backend 模块导入 Backend 类
 from ._backend import Backend
 

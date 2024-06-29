@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_assign_scalar.c`
 
-```
+```py
 /*
  * This file implements assignment from a scalar to an ndarray.
  *

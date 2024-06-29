@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\symbolic.py`
 
-```
+```py
 """
 Fortran/C symbolic expressions
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_nditer.py`
 
-```
+```py
 # 导入系统和 pytest 模块
 import sys
 import pytest

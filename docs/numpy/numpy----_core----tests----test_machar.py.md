@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_machar.py`
 
-```
+```py
 """
 Test machar. Given recent changes to hardcode type data, we might want to get
 rid of both MachAr and this test at some point.

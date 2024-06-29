@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\SuperTensor.h`
 
-```
+```py
 // 定义条件编译宏，防止头文件重复包含
 #ifndef SUPERTENSOR_H
 #define SUPERTENSOR_H

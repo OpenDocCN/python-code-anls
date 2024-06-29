@@ -1,6 +1,6 @@
 # `.\numpy\tools\check_installed_files.py`
 
-```
+```py
 """
 Check if all the test and .pyi files are installed after building.
 

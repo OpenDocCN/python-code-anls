@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\__init__.py`
 
-```
+```py
 """
 ========================
 Random Number Generation

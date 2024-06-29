@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_indexing.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 # 导入警告模块 warnings

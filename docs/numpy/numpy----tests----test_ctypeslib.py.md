@@ -1,6 +1,6 @@
 # `.\numpy\numpy\tests\test_ctypeslib.py`
 
-```
+```py
 # 导入系统相关的模块
 import sys
 # 提供对 Python 系统配置信息的访问

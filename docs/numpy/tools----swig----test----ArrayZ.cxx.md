@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\ArrayZ.cxx`
 
-```
+```py
 // 包含自定义头文件 ArrayZ.h 和标准输入输出流头文件
 #include "ArrayZ.h"
 #include <iostream>

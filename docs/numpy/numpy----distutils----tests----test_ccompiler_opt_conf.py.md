@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_ccompiler_opt_conf.py`
 
-```
+```py
 import unittest                         # 导入单元测试框架 unittest
 from os import sys, path                # 导入 os 模块中的 sys 和 path 函数
 

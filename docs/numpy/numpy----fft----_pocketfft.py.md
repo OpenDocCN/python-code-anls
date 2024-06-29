@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\_pocketfft.py`
 
-```
+```py
 # 定义一个偏函数，用于分派数组函数调用，指定模块为 'numpy.fft'
 array_function_dispatch = functools.partial(
     overrides.array_function_dispatch, module='numpy.fft')

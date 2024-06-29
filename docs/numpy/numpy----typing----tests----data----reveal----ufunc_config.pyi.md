@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ufunc_config.pyi`
 
-```
+```py
 """Typing tests for `_core._ufunc_config`."""
 
 # 导入 sys 模块，用于访问 Python 解释器相关信息

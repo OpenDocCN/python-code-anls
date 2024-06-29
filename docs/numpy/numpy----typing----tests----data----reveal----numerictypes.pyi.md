@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\numerictypes.pyi`
 
-```
+```py
 # 导入 sys 模块，用于访问系统相关的功能
 import sys
 # 导入 Literal 类型提示，用于指定字面量类型

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\tests\test_from_template.py`
 
-```
+```py
 # 从 numpy.distutils.from_template 模块中导入 process_str 函数
 from numpy.distutils.from_template import process_str
 # 从 numpy.testing 模块中导入 assert_equal 函数

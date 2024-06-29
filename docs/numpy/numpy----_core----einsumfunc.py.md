@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\einsumfunc.py`
 
-```
+```py
 """
 Implementation of optimized einsum.
 
@@ -1253,7 +1253,7 @@ def einsum(*operands, out=None, optimize=False, **kwargs):
     # 查看更多详细信息，请参阅 :py:func:`numpy.einsum_path`。
 
 
-```    
+```py    
     Examples
     --------
     >>> a = np.arange(25).reshape(5,5)

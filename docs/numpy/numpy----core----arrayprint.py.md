@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\arrayprint.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于在对象中获取指定属性的值
 def __getattr__(attr_name):
     # 从 numpy._core.arrayprint 模块中导入 arrayprint 函数

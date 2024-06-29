@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\ufunclike.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，约定别名为 np
 import numpy.typing as npt  # 导入 NumPy 的类型定义模块，约定别名为 npt
 

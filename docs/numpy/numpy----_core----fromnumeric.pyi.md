@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\_core\fromnumeric.pyi`
 
-```
+```py
 from collections.abc import Sequence  # 导入 Sequence 抽象基类
 from typing import Any, overload, TypeVar, Literal, SupportsIndex  # 导入类型相关模块
 

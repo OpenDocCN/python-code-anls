@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\src\fortranobject.h`
 
-```
+```py
 #ifndef Py_FORTRANOBJECT_H
 #define Py_FORTRANOBJECT_H
 #ifdef __cplusplus

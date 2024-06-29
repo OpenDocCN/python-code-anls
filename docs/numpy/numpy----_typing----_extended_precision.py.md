@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_typing\_extended_precision.py`
 
-```
+```py
 # 导入 NumPy 库，用于科学计算和数组操作
 import numpy as np
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\multiarray.py`
 
-```
+```py
 # 从 numpy._core 模块中导入 multiarray 对象
 from numpy._core import multiarray
 

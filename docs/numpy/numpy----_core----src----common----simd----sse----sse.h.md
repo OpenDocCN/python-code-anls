@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\sse\sse.h`
 
-```
+```py
 #ifndef _NPY_SIMD_H_
     #error "Not a standalone header"  // 如果没有包含在主头文件中，则报错
 #endif

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\npy_simd_data.h`
 
-```
+```py
 #ifndef __NPY_SIMD_DATA_H_
 #define __NPY_SIMD_DATA_H_
 

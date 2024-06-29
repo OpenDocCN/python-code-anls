@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\fromnumeric.py`
 
-```
+```py
 """
 Module containing non-deprecated functions borrowed from Numeric.
 

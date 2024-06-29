@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_converter.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_ARRAY_CONVERTER_H_
 // 如果未定义 NUMPY_CORE_SRC_MULTIARRAY_ARRAY_CONVERTER_H_ 宏，则开始条件编译
 #define NUMPY_CORE_SRC_MULTIARRAY_ARRAY_CONVERTER_H_

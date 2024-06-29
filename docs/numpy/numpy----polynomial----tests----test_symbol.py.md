@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_symbol.py`
 
-```
+```py
 """
 Tests related to the ``symbol`` attribute of the ABCPolyBase class.
 """

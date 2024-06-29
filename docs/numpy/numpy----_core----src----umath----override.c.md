@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\override.c`
 
-```
+```py
 /*
  * 定义 NPY_NO_DEPRECATED_API 为 NPY_API_VERSION，禁用过时 API
  * 定义 NO_IMPORT_ARRAY，禁止导入数组

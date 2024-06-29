@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\fromnumeric.pyi`
 
-```
+```py
 """Tests for :mod:`_core.fromnumeric`."""
 
 # 导入系统和类型相关的模块

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_multithreading.py`
 
-```
+```py
 import concurrent.futures  # 导入并发执行的 futures 模块
 import threading  # 导入线程模块
 

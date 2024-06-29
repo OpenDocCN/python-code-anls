@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_packbits.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np  # 导入NumPy库
 from numpy.testing import assert_array_equal, assert_equal, assert_raises  # 导入NumPy测试相关的函数和类

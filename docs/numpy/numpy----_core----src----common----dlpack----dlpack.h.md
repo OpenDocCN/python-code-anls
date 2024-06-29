@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\dlpack\dlpack.h`
 
-```
+```py
 // 根据以下链接获取的代码片段：
 // https://github.com/dmlc/dlpack/blob/bbd2f4d32427e548797929af08cfe2a9cbb3cf12/include/dlpack/dlpack.h
 // 并在其中为 DLManagedTensorVersioned 添加了 typedef

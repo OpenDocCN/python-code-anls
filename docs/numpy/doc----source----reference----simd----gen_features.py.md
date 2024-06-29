@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\reference\simd\gen_features.py`
 
-```
+```py
 """
 Generate CPU features tables from CCompilerOpt
 """

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\config_compiler.py`
 
-```
+```py
 # 从distutils.core模块中导入Command类
 from distutils.core import Command
 # 从numpy.distutils模块中导入log函数

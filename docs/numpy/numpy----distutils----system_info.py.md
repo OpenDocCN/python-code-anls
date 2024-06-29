@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\system_info.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 This file defines a set of system_info classes for getting

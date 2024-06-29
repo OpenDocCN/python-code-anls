@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\doc\source\dev\examples\doxy_class.hpp`
 
-```
+```py
 /**
  *  Template to represent limbo numbers.
  *

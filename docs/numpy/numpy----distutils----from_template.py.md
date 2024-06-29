@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\from_template.py`
 
-```
+```py
 """
 process_file(filename)
 

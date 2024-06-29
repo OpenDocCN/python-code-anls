@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\_polynomial_impl.pyi`
 
-```
+```py
 # 导入需要的类型和函数
 from typing import (
     Literal as L,            # 别名 L 用于定义文字字面值类型

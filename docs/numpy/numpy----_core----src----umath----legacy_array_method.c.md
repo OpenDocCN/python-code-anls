@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\umath\legacy_array_method.c`
 
-```
+```py
 /*
  * This file defines most of the machinery in order to wrap legacy style
  * ufunc loops into new style arraymethods.

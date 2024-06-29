@@ -1,6 +1,6 @@
 # `.\numpy\numpy\polynomial\tests\test_polynomial.py`
 
-```
+```py
 """Tests for polynomial module.
 
 """

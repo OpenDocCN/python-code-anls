@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_string_helpers.py`
 
-```
+```py
 """
 String-handling utilities to avoid locale-dependence.
 

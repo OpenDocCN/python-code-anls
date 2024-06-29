@@ -1,6 +1,6 @@
 # `.\numpy\doc\preprocess.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 指定解释器
 import subprocess

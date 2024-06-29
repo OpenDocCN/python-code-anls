@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\build_clib.py`
 
-```
+```py
 # 修改了构建库的版本，使其能处理 Fortran 源文件
 import os  # 导入 os 模块
 from glob import glob  # 从 glob 模块导入 glob 函数

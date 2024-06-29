@@ -1,6 +1,6 @@
 # `.\numpy\numpy\fft\tests\test_pocketfft.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np  # 导入NumPy库
 import pytest  # 导入pytest库用于单元测试

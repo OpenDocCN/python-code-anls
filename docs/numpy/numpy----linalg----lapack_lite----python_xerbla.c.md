@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\python_xerbla.c`
 
-```
+```py
 /*
   定义宏以清除 Py_ssize_t 的定义
   包含 Python.h 头文件

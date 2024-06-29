@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\user\conftest.py`
 
-```
+```py
 # 从 numpy 的 conftest 模块导入 dt_config 对象，用于 doctesting 配置
 from numpy.conftest import dt_config    # noqa: F401
 

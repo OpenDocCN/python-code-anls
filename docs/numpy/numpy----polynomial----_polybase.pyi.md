@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\polynomial\_polybase.pyi`
 
-```
+```py
 # 导入 abc 模块，用于定义抽象基类
 import abc
 # 导入 Any 和 ClassVar 类型提示

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_simd.py`
 
-```
+```py
 # NOTE: Please avoid the use of numpy.testing since NPYV intrinsics
 # may be involved in their functionality.
 import pytest, math, re

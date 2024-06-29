@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\array_constructors.pyi`
 
-```
+```py
 import sys
 from typing import Any, TypeVar
 from pathlib import Path

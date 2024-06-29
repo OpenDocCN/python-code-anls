@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\datetime_busday.h`
 
-```
+```py
 /*
  * This header guards prevent multiple inclusions of the header file
  * NUMPY_CORE_SRC_MULTIARRAY_DATETIME_BUSDAY_H_ defines a unique identifier

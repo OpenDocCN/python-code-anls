@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_cpu_dispatch_distutils.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_COMMON_NPY_CPU_DISPATCH_DISTUTILS_H_
 #define NUMPY_CORE_SRC_COMMON_NPY_CPU_DISPATCH_DISTUTILS_H_
 #ifndef NUMPY_CORE_SRC_COMMON_NPY_CPU_DISPATCH_H_

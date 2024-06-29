@@ -1,6 +1,6 @@
 # `.\numpy\numpy\core\numeric.py`
 
-```
+```py
 # 定义一个特殊方法 __getattr__，用于在当前作用域中动态获取属性
 def __getattr__(attr_name):
     # 从 numpy._core 模块中导入 numeric 对象

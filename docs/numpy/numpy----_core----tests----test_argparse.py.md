@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_argparse.py`
 
-```
+```py
 """
 Tests for the private NumPy argument parsing functionality.
 They mainly exists to ensure good test coverage without having to try the

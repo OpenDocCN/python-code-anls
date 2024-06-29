@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\mypy_plugin.py`
 
-```
+```py
 """A mypy_ plugin for managing a number of platform-specific annotations.
 Its functionality can be split into three distinct parts:
 

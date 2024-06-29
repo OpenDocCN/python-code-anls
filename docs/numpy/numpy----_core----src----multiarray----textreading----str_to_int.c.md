@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\str_to_int.c`
 
-```
+```py
 #include <Python.h>
 
 # 包含 Python.h 头文件，这是与 Python 解释器通信的主要头文件

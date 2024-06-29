@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\index_tricks.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于科学计算
 
 AR_LIKE_i: list[int]  # 定义 AR_LIKE_i 为整数类型的列表

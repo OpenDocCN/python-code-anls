@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\array_coercion.c`
 
-```
+```py
 // 定义以避免使用废弃的 NumPy API 版本
 #define NPY_NO_DEPRECATED_API NPY_API_VERSION
 // 定义用于标识 Multiarray 模块

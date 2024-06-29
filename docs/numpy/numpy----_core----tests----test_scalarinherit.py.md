@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_scalarinherit.py`
 
-```
+```py
 """ Test printing of scalar types.
 
 """

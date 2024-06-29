@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_dlpack.py`
 
-```
+```py
 # 导入系统相关模块和 pytest 模块
 import sys
 import pytest

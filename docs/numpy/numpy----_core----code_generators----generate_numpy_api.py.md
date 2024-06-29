@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\code_generators\generate_numpy_api.py`
 
-```
+```py
 #!/usr/bin/env python3
 # 导入标准库模块
 import os

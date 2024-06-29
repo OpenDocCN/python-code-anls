@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\memmap.py`
 
-```
+```py
 # 从 contextlib 模块中导入 nullcontext 上下文管理器，用于创建一个空的上下文
 from contextlib import nullcontext
 # 导入 operator 模块，用于一些操作符的函数形式

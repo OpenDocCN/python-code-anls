@@ -1,6 +1,6 @@
 # `.\numpy\benchmarks\benchmarks\bench_random.py`
 
-```
+```py
 from .common import Benchmark  # 导入 Benchmark 类
 
 import numpy as np  # 导入 NumPy 库

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_return_character.py`
 
-```
+```py
 # 导入 pytest 测试框架
 import pytest
 

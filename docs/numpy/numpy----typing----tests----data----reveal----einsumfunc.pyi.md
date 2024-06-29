@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\einsumfunc.pyi`
 
-```
+```py
 # 导入 sys 模块，用于版本信息检查
 import sys
 # 导入 Any 类型，用于类型提示

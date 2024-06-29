@@ -1,6 +1,6 @@
 # `.\numpy\tools\check_openblas_version.py`
 
-```
+```py
 """
 usage: check_openblas_version.py <min_version>
 

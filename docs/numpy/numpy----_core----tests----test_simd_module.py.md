@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_simd_module.py`
 
-```
+```py
 import pytest
 from numpy._core._simd import targets
 

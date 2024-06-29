@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\iterators.c`
 
-```
+```py
 /*
  * 定义宏，禁用过时的 NumPy API 并设置为当前版本
  */

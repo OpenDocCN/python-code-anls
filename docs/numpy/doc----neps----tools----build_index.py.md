@@ -1,6 +1,6 @@
 # `.\numpy\doc\neps\tools\build_index.py`
 
-```
+```py
 """
 Scan the directory of nep files and extract their metadata.  The
 metadata is passed to Jinja for filling out the toctrees for various NEP

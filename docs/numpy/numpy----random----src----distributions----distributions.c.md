@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\distributions\distributions.c`
 
-```
+```py
 /* 包含头文件 numpy/random/distributions.h */
 #include "numpy/random/distributions.h"
 /* 包含头文件 ziggurat_constants.h */

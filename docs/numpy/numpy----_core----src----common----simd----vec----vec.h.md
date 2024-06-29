@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\simd\vec\vec.h`
 
-```
+```py
 /**
  * This block of code defines SIMD (Single Instruction, Multiple Data) types and macros
  * tailored for different SIMD architectures and compilers.

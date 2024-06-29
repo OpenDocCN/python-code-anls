@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_isoc.py`
 
-```
+```py
 # 从当前目录导入util模块
 from . import util
 # 导入numpy库，并重命名为np

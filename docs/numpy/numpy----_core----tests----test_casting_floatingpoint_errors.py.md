@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_casting_floatingpoint_errors.py`
 
-```
+```py
 # 导入 pytest 库，用于编写和运行测试用例
 import pytest
 # 从 pytest 库中导入 param 对象，用于参数化测试用例

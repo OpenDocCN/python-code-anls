@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\test_scalarmath.py`
 
-```
+```py
 # 导入上下文管理模块
 import contextlib
 # 导入系统相关模块

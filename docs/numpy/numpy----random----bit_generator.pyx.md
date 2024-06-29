@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\bit_generator.pyx`
 
-```
+```py
 #cython: binding=True
 """
 BitGenerator base class and SeedSequence used to seed the BitGenerators.

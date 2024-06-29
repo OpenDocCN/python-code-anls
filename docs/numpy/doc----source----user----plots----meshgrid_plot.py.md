@@ -1,6 +1,6 @@
 # `.\numpy\doc\source\user\plots\meshgrid_plot.py`
 
-```
+```py
 # 导入 NumPy 库，用于科学计算
 import numpy as np
 # 导入 Matplotlib 库中的 pyplot 模块，用于绘图

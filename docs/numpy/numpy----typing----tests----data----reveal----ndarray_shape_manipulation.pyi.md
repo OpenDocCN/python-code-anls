@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ndarray_shape_manipulation.pyi`
 
-```
+```py
 # 导入系统模块 sys
 # 从 typing 模块中导入 Any 类型
 import sys

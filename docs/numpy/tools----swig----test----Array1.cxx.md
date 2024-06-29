@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Array1.cxx`
 
-```
+```py
 // 引入自定义头文件 Array1.h
 #include "Array1.h"
 // 引入标准输入输出流库

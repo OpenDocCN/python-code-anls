@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\lib\mixins.pyi`
 
-```
+```py
 from abc import ABCMeta, abstractmethod
 from typing import Literal as L, Any
 

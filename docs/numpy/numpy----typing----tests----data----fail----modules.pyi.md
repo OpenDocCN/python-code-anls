@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\modules.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，使用 np 作为别名
 
 np.testing.bob  # E: Module has no attribute，尝试访问 np.testing 模块中的 bob 属性，但该属性不存在

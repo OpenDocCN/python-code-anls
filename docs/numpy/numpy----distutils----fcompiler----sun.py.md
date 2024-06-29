@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\fcompiler\sun.py`
 
-```
+```py
 # 从 numpy.distutils.ccompiler 模块中导入 simple_version_match 函数
 from numpy.distutils.ccompiler import simple_version_match
 # 从 numpy.distutils.fcompiler 模块中导入 FCompiler 类

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\common\npy_extint128.h`
 
-```
+```py
 /* 
    定义一个条件编译保护，防止多次包含本头文件
 */

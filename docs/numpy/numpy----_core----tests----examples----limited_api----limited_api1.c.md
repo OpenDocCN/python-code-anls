@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\tests\examples\limited_api\limited_api1.c`
 
-```
+```py
 #define Py_LIMITED_API 0x03060000
 
 # 定义了 Py_LIMITED_API 宏，指定了 Python 的限制 API 版本为 0x03060000

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_modules.py`
 
-```
+```py
 # 导入 pytest 模块，用于编写和运行测试
 import pytest
 # 导入 textwrap 模块，用于处理文本的缩进和格式化

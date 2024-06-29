@@ -1,6 +1,6 @@
 # `.\numpy\numpy\linalg\lapack_lite\fortran.py`
 
-```
+```py
 # WARNING! This a Python 2 script. Read README.rst for rationale.
 # 引入 re 和 itertools 模块
 import re

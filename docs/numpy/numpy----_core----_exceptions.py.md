@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\_exceptions.py`
 
-```
+```py
 """
 Various richly-typed exceptions, that also help us deal with string formatting
 in python where it's easier.

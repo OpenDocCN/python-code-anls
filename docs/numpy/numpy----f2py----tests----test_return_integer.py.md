@@ -1,6 +1,6 @@
 # `.\numpy\numpy\f2py\tests\test_return_integer.py`
 
-```
+```py
 # 导入 pytest 模块，用于编写和运行测试
 import pytest
 

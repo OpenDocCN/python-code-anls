@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\mtrand.pyx`
 
-```
+```py
 # 导入运算符模块，提供了各种运算符的函数实现
 import operator
 # 导入警告模块，用于发出警告信息

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arithmetic.pyi`
 
-```
+```py
 import sys
 from typing import Any  # 导入 Any 类型，表示可以接受任何类型的参数
 

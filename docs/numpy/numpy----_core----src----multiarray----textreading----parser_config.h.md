@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\textreading\parser_config.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_PARSER_CONFIG_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_TEXTREADING_PARSER_CONFIG_H_
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_arrayterator.py`
 
-```
+```py
 # 导入从 operator 模块中的 mul 函数和 functools 模块中的 reduce 函数
 from operator import mul
 from functools import reduce

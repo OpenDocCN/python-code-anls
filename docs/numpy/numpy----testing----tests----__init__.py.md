@@ -1,6 +1,6 @@
 # `.\numpy\numpy\testing\tests\__init__.py`
 
-```
+```py
 # 定义一个函数，参数为一个列表对象 lst
 def process_list(lst):
     # 创建一个空列表 new_lst

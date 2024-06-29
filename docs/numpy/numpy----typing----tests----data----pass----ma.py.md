@@ -1,6 +1,6 @@
 # `.\numpy\numpy\typing\tests\data\pass\ma.py`
 
-```
+```py
 # 导入必要的模块和类型
 from typing import Any
 # 导入 NumPy 库及其子模块，用于科学计算和数组处理

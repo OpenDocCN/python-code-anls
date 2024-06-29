@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\random\_pcg64.pyx`
 
-```
+```py
 #cython: binding=True
 # 导入必要的库和模块
 import numpy as np

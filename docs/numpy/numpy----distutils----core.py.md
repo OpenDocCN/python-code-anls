@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\core.py`
 
-```
+```py
 # 导入 sys 模块，用于系统相关操作
 import sys
 # 从 distutils.core 模块导入 Distribution 类，用于处理发行版相关任务

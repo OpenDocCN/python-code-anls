@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\include\numpy\halffloat.h`
 
-```
+```py
 #ifndef NUMPY_CORE_INCLUDE_NUMPY_HALFFLOAT_H_
 #define NUMPY_CORE_INCLUDE_NUMPY_HALFFLOAT_H_
 

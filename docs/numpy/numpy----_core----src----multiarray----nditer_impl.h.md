@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\nditer_impl.h`
 
-```
+```py
 /*
  * This is a PRIVATE INTERNAL NumPy header, intended to be used *ONLY*
  * by the iterator implementation code. All other internal NumPy code

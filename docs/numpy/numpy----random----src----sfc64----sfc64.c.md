@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\src\sfc64\sfc64.c`
 
-```
+```py
 #include "sfc64.h"
 
 /* 设置 sfc64 状态的种子值

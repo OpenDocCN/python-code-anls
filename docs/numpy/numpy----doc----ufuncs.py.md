@@ -1,6 +1,6 @@
 # `.\numpy\numpy\doc\ufuncs.py`
 
-```
+```py
 """
 ===================
 Universal Functions

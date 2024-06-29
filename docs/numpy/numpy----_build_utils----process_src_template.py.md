@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_build_utils\process_src_template.py`
 
-```
+```py
 #!/usr/bin/env python3
 import sys  # 导入 sys 模块，用于访问系统相关的功能
 import os  # 导入 os 模块，用于访问操作系统功能，如路径操作等

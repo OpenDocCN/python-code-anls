@@ -1,6 +1,6 @@
 # `.\numpy\tools\swig\test\Vector.h`
 
-```
+```py
 #ifndef VECTOR_H
 #define VECTOR_H
 

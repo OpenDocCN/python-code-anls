@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\temp_elide.c`
 
-```
+```py
 /*
  * 定义宏以确保使用最新的 NumPy API 版本，并声明 _MULTIARRAYMODULE 宏
  */

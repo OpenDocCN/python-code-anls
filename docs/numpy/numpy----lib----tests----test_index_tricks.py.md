@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\tests\test_index_tricks.py`
 
-```
+```py
 import pytest  # 导入 pytest 模块
 
 import numpy as np  # 导入 numpy 库，并使用 np 别名

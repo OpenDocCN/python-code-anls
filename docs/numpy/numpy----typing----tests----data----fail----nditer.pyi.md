@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\nditer.pyi`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库
 
 class Test(np.nditer): ...  # E: 无法继承自 final 类

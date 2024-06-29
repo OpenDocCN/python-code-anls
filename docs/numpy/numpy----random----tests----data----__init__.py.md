@@ -1,6 +1,6 @@
 # `.\numpy\numpy\random\tests\data\__init__.py`
 
-```
+```py
 # 导入必要的模块：os模块用于与操作系统交互，shutil模块用于高级文件操作
 import os
 import shutil

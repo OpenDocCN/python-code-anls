@@ -1,6 +1,6 @@
 # `.\numpy\numpy\lib\_stride_tricks_impl.py`
 
-```
+```py
 """
 Utilities that manipulate strides to achieve desirable effects.
 

@@ -1,6 +1,6 @@
 # `.\numpy\numpy\_core\src\multiarray\compiled_base.h`
 
-```
+```py
 #ifndef NUMPY_CORE_SRC_MULTIARRAY_COMPILED_BASE_H_
 #define NUMPY_CORE_SRC_MULTIARRAY_COMPILED_BASE_H_
 

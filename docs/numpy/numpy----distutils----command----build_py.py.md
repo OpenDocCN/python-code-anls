@@ -1,6 +1,6 @@
 # `.\numpy\numpy\distutils\command\build_py.py`
 
-```
+```py
 # 从distutils.command.build_py导入build_py作为old_build_py
 from distutils.command.build_py import build_py as old_build_py
 # 从numpy.distutils.misc_util导入is_string

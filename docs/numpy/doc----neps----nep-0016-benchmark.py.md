@@ -1,6 +1,6 @@
 # `.\numpy\doc\neps\nep-0016-benchmark.py`
 
-```
+```py
 # 导入性能测试模块 perf
 import perf
 # 导入抽象基类模块 abc
