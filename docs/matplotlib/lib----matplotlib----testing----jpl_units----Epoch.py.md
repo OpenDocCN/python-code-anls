@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\Epoch.py`
 
-```
+```py
 """Epoch module."""
 
 import functools

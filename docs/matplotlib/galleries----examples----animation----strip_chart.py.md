@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\strip_chart.py`
 
-```
+```py
 """
 ============
 Oscilloscope

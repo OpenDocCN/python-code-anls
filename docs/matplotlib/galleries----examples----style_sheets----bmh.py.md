@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\bmh.py`
 
-```
+```py
 """
 ========================================
 Bayesian Methods for Hackers style sheet

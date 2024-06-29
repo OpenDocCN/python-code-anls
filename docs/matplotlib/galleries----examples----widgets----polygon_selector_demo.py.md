@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\polygon_selector_demo.py`
 
-```
+```py
 """
 =======================================================
 Select indices from a collection using polygon selector

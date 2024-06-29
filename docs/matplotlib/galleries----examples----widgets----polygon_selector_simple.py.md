@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\polygon_selector_simple.py`
 
-```
+```py
 """
 ================
 Polygon Selector

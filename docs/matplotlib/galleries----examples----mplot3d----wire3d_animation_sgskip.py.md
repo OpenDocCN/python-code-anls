@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\wire3d_animation_sgskip.py`
 
-```
+```py
 """
 ===========================
 Animate a 3D wireframe plot

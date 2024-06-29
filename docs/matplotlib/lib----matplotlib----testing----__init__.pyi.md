@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\__init__.pyi`
 
-```
+```py
 # 导入所需模块和类型定义
 from collections.abc import Callable
 import subprocess

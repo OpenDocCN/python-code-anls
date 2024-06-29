@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\scale.py`
 
-```
+```py
 """
 Scales define the distribution of data values on an axis, e.g. a log scaling.
 They are defined as subclasses of `ScaleBase`.

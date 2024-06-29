@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\widgets.py`
 
-```
+```py
 """
 GUI neutral widgets
 ===================

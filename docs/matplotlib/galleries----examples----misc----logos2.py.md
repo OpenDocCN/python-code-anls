@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\logos2.py`
 
-```
+```py
 """
 ===============
 Matplotlib logo

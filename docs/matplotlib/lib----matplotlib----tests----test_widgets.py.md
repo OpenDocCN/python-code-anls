@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_widgets.py`
 
-```
+```py
 # 导入必要的模块和函数
 import functools
 import io

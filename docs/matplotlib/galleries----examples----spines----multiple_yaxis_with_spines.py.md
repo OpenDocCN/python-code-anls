@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\spines\multiple_yaxis_with_spines.py`
 
-```
+```py
 r"""
 ===========================
 Multiple y-axis with Spines

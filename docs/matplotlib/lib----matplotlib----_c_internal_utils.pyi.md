@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_c_internal_utils.pyi`
 
-```
+```py
 # 检查当前显示器是否有效
 def display_is_valid() -> bool:
     ...

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_pyplot.py`
 
-```
+```py
 # 导入 difflib 模块，用于生成文本差异比较的统一格式的 diff
 import difflib
 

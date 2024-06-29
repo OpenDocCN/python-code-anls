@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\markevery_demo.py`
 
-```
+```py
 """
 ==============
 Markevery Demo

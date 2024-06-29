@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\radar_chart.py`
 
-```
+```py
 """
 ======================================
 Radar chart (aka spider or star chart)

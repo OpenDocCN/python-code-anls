@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\box3d.py`
 
-```
+```py
 """
 ===================
 3D box surface plot

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_pgf.py`
 
-```
+```py
 import codecs  # 导入 codecs 模块，用于处理各种编解码操作
 import datetime  # 导入 datetime 模块，用于处理日期和时间
 import functools  # 导入 functools 模块，提供高阶函数和操作工具

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\legend.pyi`
 
-```
+```py
 # 从 matplotlib 库中导入特定模块和类
 from matplotlib.axes import Axes
 from matplotlib.artist import Artist

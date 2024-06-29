@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\contour.pyi`
 
-```
+```py
 # 导入 matplotlib 库中需要的模块和类
 import matplotlib.cm as cm
 from matplotlib.artist import Artist

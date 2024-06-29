@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_nbagg.py`
 
-```
+```py
 # 导入所需的库和模块
 import os  # 导入操作系统相关功能的模块
 from pathlib import Path  # 导入用于处理路径的模块

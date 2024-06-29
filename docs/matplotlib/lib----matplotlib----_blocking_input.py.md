@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_blocking_input.py`
 
-```
+```py
 # 定义一个函数，用于阻塞式地运行图形对象的事件循环，并监听交互事件。
 # 
 # 参数：

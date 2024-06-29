@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\animation.py`
 
-```
+```py
 # TODO:
 # * Documentation -- this will need a new section of the User's Guide.
 #      Both for Animations and just timers.

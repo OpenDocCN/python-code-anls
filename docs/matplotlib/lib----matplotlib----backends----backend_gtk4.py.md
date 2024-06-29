@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_gtk4.py`
 
-```
+```py
 # 导入必要的模块和库
 import functools
 import io

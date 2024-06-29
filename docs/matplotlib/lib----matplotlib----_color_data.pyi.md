@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_color_data.pyi`
 
-```
+```py
 # 从当前目录的 typing 模块中导入 ColorType 类型
 from .typing import ColorType
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\multiple_axes.py`
 
-```
+```py
 """
 =======================
 Multiple Axes animation

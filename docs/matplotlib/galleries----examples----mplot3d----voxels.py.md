@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\voxels.py`
 
-```
+```py
 """
 ==========================
 3D voxel / volumetric plot

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\contourf3d_2.py`
 
-```
+```py
 """
 ===================================
 将填充轮廓投影到图形上

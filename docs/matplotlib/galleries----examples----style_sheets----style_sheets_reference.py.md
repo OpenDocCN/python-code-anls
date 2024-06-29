@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\style_sheets_reference.py`
 
-```
+```py
 """
 ======================
 Style sheets reference

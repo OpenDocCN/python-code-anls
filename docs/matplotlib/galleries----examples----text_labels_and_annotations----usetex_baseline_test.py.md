@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\usetex_baseline_test.py`
 
-```
+```py
 """
 ====================
 Usetex Baseline Test

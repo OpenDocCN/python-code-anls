@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\tests\__init__.py`
 
-```
+```py
 # 导入 Path 类
 from pathlib import Path
 

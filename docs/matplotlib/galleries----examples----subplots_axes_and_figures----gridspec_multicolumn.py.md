@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\gridspec_multicolumn.py`
 
-```
+```py
 """
 =======================================================
 Using Gridspec to make multi-column/row subplot layouts

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\tests\test_axislines.py`
 
-```
+```py
 @image_comparison(['SubplotZero.png'], style='default')
 def test_SubplotZero():
     # 设置文本的字符间距因子为6，用于测试图像重新生成时可以移除这行。

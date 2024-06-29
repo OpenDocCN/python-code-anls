@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_cm_listed.py`
 
-```
+```py
 # 从.colors模块中导入ListedColormap类
 from .colors import ListedColormap
 

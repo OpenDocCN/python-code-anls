@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\UnitDbl.py`
 
-```
+```py
 """UnitDbl module."""
 
 import functools

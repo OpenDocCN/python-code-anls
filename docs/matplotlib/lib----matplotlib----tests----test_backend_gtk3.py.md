@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_gtk3.py`
 
-```
+```py
 from matplotlib import pyplot as plt  # 导入 matplotlib 的 pyplot 模块
 
 import pytest  # 导入 pytest 测试框架

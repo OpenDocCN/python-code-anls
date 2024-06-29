@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_qt.py`
 
-```
+```py
 # 导入 functools 模块，用于高阶函数操作
 import functools
 # 导入 os 模块，提供对操作系统的接口

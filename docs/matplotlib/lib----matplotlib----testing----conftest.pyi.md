@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\conftest.pyi`
 
-```
+```py
 # 导入 types 模块中的 ModuleType 类，用于定义模块类型的 fixture
 from types import ModuleType
 

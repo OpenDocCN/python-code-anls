@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\floating_axes.py`
 
-```
+```py
 """
 An experimental support for curvilinear grid.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_colorbar.py`
 
-```
+```py
 # 导入platform模块，用于获取系统平台信息
 import platform
 

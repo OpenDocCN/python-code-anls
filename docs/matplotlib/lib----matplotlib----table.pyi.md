@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\table.pyi`
 
-```
+```py
 # 导入所需的类和模块
 from .artist import Artist             # 导入Artist类
 from .axes import Axes                 # 导入Axes类

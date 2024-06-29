@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sankey.pyi`
 
-```
+```py
 # 从 matplotlib.axes 模块中导入 Axes 类
 from matplotlib.axes import Axes
 

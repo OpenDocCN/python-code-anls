@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_scanline_u.h`
 
-```
+```py
 #ifndef AGG_SCANLINE_U_INCLUDED
 #define AGG_SCANLINE_U_INCLUDED
 

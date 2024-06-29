@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\fourier_demo_wx_sgskip.py`
 
-```
+```py
 """
 ===============
 Fourier Demo WX

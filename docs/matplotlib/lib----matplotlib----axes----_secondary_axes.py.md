@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_secondary_axes.py`
 
-```
+```py
 import numbers  # 导入 numbers 模块，用于数值类型的支持
 
 import numpy as np  # 导入 numpy 库，并简写为 np

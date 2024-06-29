@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\figure.pyi`
 
-```
+```py
 # 从 collections.abc 导入 Callable、Hashable 和 Iterable 类型
 from collections.abc import Callable, Hashable, Iterable
 # 导入 os 模块

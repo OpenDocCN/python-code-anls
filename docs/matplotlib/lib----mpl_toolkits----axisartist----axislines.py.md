@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axislines.py`
 
-```
+```py
 """
 Axislines includes modified implementation of the Axes class. The
 biggest difference is that the artists responsible for drawing the axis spine,

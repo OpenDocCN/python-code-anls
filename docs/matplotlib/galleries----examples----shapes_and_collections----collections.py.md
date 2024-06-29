@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\collections.py`
 
-```
+```py
 # 导入需要的库
 import matplotlib.pyplot as plt  # 导入绘图库 matplotlib
 import numpy as np  # 导入数值计算库 numpy

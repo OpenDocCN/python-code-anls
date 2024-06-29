@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_font_manager.py`
 
-```
+```py
 # 导入必要的模块和库
 from io import BytesIO, StringIO  # 导入字节流和字符串流模块
 import gc  # 导入垃圾回收模块

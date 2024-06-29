@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\slider_snap_demo.py`
 
-```
+```py
 # 导入必要的库
 import matplotlib.pyplot as plt  # 导入 matplotlib 的 pyplot 模块，并简称为 plt
 import numpy as np  # 导入 numpy 库，并简称为 np

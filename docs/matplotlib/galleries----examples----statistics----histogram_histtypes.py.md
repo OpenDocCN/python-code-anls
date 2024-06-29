@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\histogram_histtypes.py`
 
-```
+```py
 """
 ================================================================
 Demo of the histogram function's different ``histtype`` settings

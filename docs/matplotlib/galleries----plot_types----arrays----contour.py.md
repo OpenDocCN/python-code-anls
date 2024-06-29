@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\contour.py`
 
-```
+```py
 """
 ================
 contour(X, Y, Z)

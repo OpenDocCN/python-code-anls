@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\semilogx_demo.py`
 
-```
+```py
 """
 ========
 Log Axis

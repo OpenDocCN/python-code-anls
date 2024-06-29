@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\multicursor.py`
 
-```
+```py
 """
 ===========
 Multicursor

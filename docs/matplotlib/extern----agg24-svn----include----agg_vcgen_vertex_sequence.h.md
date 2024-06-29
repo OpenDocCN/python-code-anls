@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_vcgen_vertex_sequence.h`
 
-```
+```py
 // 重置生成器状态，清空所有顶点数据，并设置为未就绪状态
 inline void vcgen_vertex_sequence::remove_all()
 {

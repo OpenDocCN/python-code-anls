@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\voxels_simple.py`
 
-```
+```py
 """
 =========================
 voxels([x, y, z], filled)

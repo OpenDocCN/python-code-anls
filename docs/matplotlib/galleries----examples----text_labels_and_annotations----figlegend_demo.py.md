@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\figlegend_demo.py`
 
-```
+```py
 # 导入matplotlib.pyplot库，用于绘图
 import matplotlib.pyplot as plt
 # 导入numpy库，用于生成数据

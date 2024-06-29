@@ -15,6 +15,7 @@
 +   [LLM4Decompile 源码解析](docs/LLM4Decompile/README.md)
 +   [Lucidrains 系列项目源码解析](docs/lucidrains/README.md)
 +   [Marker 源码解析](docs/marker/README.md)
++   [Matplotlib 源码解析](docs/matplotlib/README.md)
 +   [MetaGPT 源码解析](docs/MetaGPT-ai/README.md)
 +   [NumPy 源码解析](docs/numpy/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)

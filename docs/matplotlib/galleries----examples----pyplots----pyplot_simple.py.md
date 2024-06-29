@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pyplots\pyplot_simple.py`
 
-```
+```py
 """
 ===========
 Simple plot

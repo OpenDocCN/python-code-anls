@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\colorbar.py`
 
-```
+```py
 """
 Colorbars are a visualization of the mapping from scalar values to colors.
 In Matplotlib they are drawn into a dedicated `~.axes.Axes`.

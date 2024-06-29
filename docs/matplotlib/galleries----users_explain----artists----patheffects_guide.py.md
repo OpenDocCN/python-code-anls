@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\artists\patheffects_guide.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/advance/patheffects_guide
 

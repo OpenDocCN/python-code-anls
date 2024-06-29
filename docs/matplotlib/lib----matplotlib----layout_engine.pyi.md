@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\layout_engine.pyi`
 
-```
+```py
 from matplotlib.figure import Figure  # 导入Figure类，用于创建和管理图形对象
 
 from typing import Any  # 导入Any类型，用于灵活类型注解

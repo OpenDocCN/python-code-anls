@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\fillbetween3d.py`
 
-```
+```py
 """
 =====================
 Fill between 3D lines

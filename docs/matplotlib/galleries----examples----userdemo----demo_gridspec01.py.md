@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\demo_gridspec01.py`
 
-```
+```py
 """
 =================
 subplot2grid demo

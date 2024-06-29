@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_webagg.py`
 
-```
+```py
 import os  # 导入操作系统模块
 import sys  # 导入系统相关的模块
 import pytest  # 导入 pytest 测试框架

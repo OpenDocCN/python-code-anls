@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\gridspec.pyi`
 
-```
+```py
 from typing import Any, Literal, overload  # 导入类型提示相关模块
 
 from numpy.typing import ArrayLike  # 导入数组类型相关模块

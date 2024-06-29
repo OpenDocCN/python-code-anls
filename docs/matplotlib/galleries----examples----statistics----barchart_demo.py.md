@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\barchart_demo.py`
 
-```
+```py
 """
 ===================================
 Percentiles as horizontal bar chart

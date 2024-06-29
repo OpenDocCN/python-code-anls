@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_marker.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于数值计算
 import matplotlib.pyplot as plt  # 导入 Matplotlib 的 pyplot 模块，用于绘图
 from matplotlib import markers  # 导入 Matplotlib 的 markers 模块，用于处理标记样式

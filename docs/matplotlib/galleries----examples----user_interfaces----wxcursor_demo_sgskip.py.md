@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\wxcursor_demo_sgskip.py`
 
-```
+```py
 """
 =====================
 Adding a cursor in WX

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_renderer_outline_image.h`
 
-```
+```py
 // 定义了一个模板类 line_image_scale，用于对图像进行线性缩放处理
 template<class Source> class line_image_scale
 {

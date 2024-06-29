@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\pick_event_demo2.py`
 
-```
+```py
 """
 =================
 Pick event demo 2

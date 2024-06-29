@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\simple_annotate01.py`
 
-```
+```py
 import matplotlib.pyplot as plt  # 导入matplotlib的pyplot模块，用于绘图
 
 import matplotlib.patches as mpatches  # 导入matplotlib的patches模块，用于绘制图形

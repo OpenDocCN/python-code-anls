@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_text.py`
 
-```
+```py
 # 导入需要的模块和函数
 from datetime import datetime
 import io

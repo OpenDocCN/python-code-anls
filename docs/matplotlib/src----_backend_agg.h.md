@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_backend_agg.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /* _backend_agg.h

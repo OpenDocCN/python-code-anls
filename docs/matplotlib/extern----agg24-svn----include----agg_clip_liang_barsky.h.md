@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_clip_liang_barsky.h`
 
-```
+```py
 #ifndef AGG_CLIP_LIANG_BARSKY_INCLUDED
 // 如果 AGG_CLIP_LIANG_BARSKY_INCLUDED 宏未定义，则定义以下内容
 #define AGG_CLIP_LIANG_BARSKY_INCLUDED

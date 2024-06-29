@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\geo.py`
 
-```
+```py
 import numpy as np
 
 import matplotlib as mpl

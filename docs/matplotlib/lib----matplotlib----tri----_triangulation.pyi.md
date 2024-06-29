@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triangulation.pyi`
 
-```
+```py
 # 导入 _tri 模块中的 Triangulation 类
 # 这个模块是 Matplotlib 的一个内部模块，用于处理三角剖分相关的功能
 from matplotlib import _tri

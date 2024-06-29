@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\demo_gridspec03.py`
 
-```
+```py
 """
 =============
 GridSpec demo

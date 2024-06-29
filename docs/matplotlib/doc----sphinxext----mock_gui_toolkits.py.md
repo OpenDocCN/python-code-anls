@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\mock_gui_toolkits.py`
 
-```
+```py
 import sys  # 导入系统模块sys，用于操作系统相关功能
 from unittest.mock import MagicMock  # 从unittest.mock模块导入MagicMock类，用于创建虚拟对象
 

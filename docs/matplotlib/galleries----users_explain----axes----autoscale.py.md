@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\autoscale.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/intermediate/autoscale
 

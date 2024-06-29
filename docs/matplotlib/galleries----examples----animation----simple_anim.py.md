@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\simple_anim.py`
 
-```
+```py
 """
 ==================
 Animated line plot

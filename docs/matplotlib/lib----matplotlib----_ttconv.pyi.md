@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_ttconv.pyi`
 
-```
+```py
 # 定义一个函数，输入为一个整数 n
 def is_prime(n):
     # 如果 n 小于等于 1，直接返回 False，因为小于等于 1 的数都不是质数

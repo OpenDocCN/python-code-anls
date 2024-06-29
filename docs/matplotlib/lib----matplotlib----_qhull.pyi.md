@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_qhull.pyi`
 
-```
+```py
 # 导入必要的模块 BytesIO 用于处理二进制数据，zipfile 用于处理 ZIP 文件
 from io import BytesIO
 import zipfile

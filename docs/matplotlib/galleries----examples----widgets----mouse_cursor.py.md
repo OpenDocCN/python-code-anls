@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\mouse_cursor.py`
 
-```
+```py
 """
 ============
 Mouse Cursor

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_legend.py`
 
-```
+```py
 import collections
 import itertools
 import platform

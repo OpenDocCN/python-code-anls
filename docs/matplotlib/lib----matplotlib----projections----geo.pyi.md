@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\geo.pyi`
 
-```
+```py
 # 从 matplotlib.axes 中导入 Axes 类，用于创建自定义的地理坐标轴
 # 从 matplotlib.ticker 中导入 Formatter 类，用于格式化坐标轴上的刻度
 # 从 matplotlib.transforms 中导入 Transform 类，用于坐标变换

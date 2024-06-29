@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\customized_violin.py`
 
-```
+```py
 """
 =========================
 Violin plot customization

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\fig_axes_customize_simple.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 模块作为 plt 别名
 import matplotlib.pyplot as plt
 

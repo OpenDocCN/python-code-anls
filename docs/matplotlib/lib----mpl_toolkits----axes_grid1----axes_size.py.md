@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\axes_size.py`
 
-```
+```py
 """
 Provides classes of simple units that will be used with `.AxesDivider`
 class (or others) to determine the size of each Axes. The unit

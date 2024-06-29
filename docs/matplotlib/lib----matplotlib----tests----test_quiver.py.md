@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_quiver.py`
 
-```
+```py
 # 导入 platform 和 sys 模块
 import platform
 import sys

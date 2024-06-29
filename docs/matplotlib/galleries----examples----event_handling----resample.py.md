@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\resample.py`
 
-```
+```py
 """
 ===============
 Resampling Data

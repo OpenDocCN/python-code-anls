@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_path.pyi`
 
-```
+```py
 # 从 collections.abc 模块导入 Sequence 类
 from collections.abc import Sequence
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\agg_workaround.h`
 
-```
+```py
 #ifndef MPL_AGG_WORKAROUND_H
 #define MPL_AGG_WORKAROUND_H
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\pgf_fonts.py`
 
-```
+```py
 """
 =========
 PGF fonts

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axisline_style.py`
 
-```
+```py
 """
 Provides classes to style the axis lines.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\annotate_explain.py`
 
-```
+```py
 """
 ================
 Annotate Explain

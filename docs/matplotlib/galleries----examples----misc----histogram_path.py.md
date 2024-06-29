@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\histogram_path.py`
 
-```
+```py
 """
 ========================================================
 Building histograms using Rectangles and PolyCollections

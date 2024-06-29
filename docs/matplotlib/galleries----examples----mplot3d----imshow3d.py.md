@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\imshow3d.py`
 
-```
+```py
 """
 ===============
 2D images in 3D

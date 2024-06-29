@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\lorenz_attractor.py`
 
-```
+```py
 """
 ================
 Lorenz attractor

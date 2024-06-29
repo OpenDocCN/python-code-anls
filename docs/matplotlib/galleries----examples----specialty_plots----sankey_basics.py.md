@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\sankey_basics.py`
 
-```
+```py
 """
 ================
 The Sankey class

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\text3d.py`
 
-```
+```py
 """
 ======================
 Text annotations in 3D

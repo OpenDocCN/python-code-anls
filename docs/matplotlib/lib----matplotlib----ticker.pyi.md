@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\ticker.pyi`
 
-```
+```py
 from collections.abc import Callable, Sequence  # 导入标准库中的 Callable 和 Sequence 抽象基类
 from typing import Any, Literal  # 导入用于类型提示的 Any 和 Literal
 

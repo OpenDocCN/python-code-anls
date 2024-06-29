@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_template.py`
 
-```
+```py
 """
 Backend-loading machinery tests, using variations on the template backend.
 """

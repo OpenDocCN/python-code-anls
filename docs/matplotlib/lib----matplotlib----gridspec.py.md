@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\gridspec.py`
 
-```
+```py
 r"""
 :mod:`~matplotlib.gridspec` contains classes that help to layout multiple
 `~.axes.Axes` in a grid-like pattern within a figure.

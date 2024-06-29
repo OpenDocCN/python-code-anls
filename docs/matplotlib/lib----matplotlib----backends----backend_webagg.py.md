@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_webagg.py`
 
-```
+```py
 """Displays Agg images in the browser, with interactivity."""
 
 # The WebAgg backend is divided into two modules:

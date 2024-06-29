@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\keyword_plotting.py`
 
-```
+```py
 """
 ======================
 Plotting with keywords

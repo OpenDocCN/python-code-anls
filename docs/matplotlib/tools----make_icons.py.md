@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\make_icons.py`
 
-```
+```py
 #!/usr/bin/env python
 """
 Generates the Matplotlib icon, and the toolbar icon images from the FontAwesome

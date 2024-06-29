@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\image_thumbnail_sgskip.py`
 
-```
+```py
 """
 ===============
 Image Thumbnail

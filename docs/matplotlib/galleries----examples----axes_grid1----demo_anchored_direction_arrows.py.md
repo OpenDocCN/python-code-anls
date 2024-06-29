@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_anchored_direction_arrows.py`
 
-```
+```py
 """
 ========================
 Anchored Direction Arrow

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\subplot3d.py`
 
-```
+```py
 """
 ====================
 3D plots as subplots

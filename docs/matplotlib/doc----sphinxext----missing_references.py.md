@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\missing_references.py`
 
-```
+```py
 """
 Thispython
 """

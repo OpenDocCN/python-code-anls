@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\ft2font.pyi`
 
-```
+```py
 from typing import BinaryIO, Literal, TypedDict, overload
 # 引入需要的类型和注解相关模块
 

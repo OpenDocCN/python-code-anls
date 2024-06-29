@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\hinton_demo.py`
 
-```
+```py
 """
 ===============
 Hinton diagrams

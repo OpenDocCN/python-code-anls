@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\make_room_for_ylabel_using_axesgrid.py`
 
-```
+```py
 """
 ====================================
 Make room for ylabel using axes_grid

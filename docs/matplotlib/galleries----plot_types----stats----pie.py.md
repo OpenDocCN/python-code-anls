@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\pie.py`
 
-```
+```py
 """
 ======
 pie(x)

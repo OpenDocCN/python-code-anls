@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\scatter_demo2.py`
 
-```
+```py
 """
 =============
 Scatter Demo2

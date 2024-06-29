@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\cache_zenodo_svg.py`
 
-```
+```py
 # 导入 urllib.request 模块，用于处理 URL 相关操作
 import urllib.request
 # 导入 BytesIO 类，用于在内存中操作二进制数据

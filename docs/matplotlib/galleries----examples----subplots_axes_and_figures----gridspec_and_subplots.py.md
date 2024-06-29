@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\gridspec_and_subplots.py`
 
-```
+```py
 """
 ==================================================
 Combining two subplots using subplots and GridSpec

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\multiple_figs_demo.py`
 
-```
+```py
 """
 ===================================
 Managing multiple figures in pyplot

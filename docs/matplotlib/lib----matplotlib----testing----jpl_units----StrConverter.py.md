@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\StrConverter.py`
 
-```
+```py
 """StrConverter module containing class StrConverter."""
 
 import numpy as np  # 导入 NumPy 库

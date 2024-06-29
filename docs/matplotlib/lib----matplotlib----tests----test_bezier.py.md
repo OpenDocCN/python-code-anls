@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_bezier.py`
 
-```
+```py
 """
 Tests specific to the bezier module.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\integral.py`
 
-```
+```py
 """
 ==================================
 Integral as the area under a curve

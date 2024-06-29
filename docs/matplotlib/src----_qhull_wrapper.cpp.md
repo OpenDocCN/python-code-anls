@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_qhull_wrapper.cpp`
 
-```
+```py
 /*
  * Wrapper module for libqhull, providing Delaunay triangulation.
  *

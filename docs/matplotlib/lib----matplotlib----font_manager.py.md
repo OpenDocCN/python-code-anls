@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\font_manager.py`
 
-```
+```py
 # 导入必要的模块和库
 from __future__ import annotations  # 导入 future 模块以支持类型注释
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_axes.py`
 
-```
+```py
 import functools
 import itertools
 import logging

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\filled_step.py`
 
-```
+```py
 """
 =========================
 Hatch-filled histograms

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\__init__.py`
 
-```
+```py
 # 从当前包（或模块）中导入Axes3D类
 from .axes3d import Axes3D
 

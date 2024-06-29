@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\scalarformatter.py`
 
-```
+```py
 """
 ==========================
 The default tick formatter

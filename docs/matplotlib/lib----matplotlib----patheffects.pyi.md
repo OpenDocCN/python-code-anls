@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\patheffects.pyi`
 
-```
+```py
 from collections.abc import Iterable, Sequence
 from typing import Any
 

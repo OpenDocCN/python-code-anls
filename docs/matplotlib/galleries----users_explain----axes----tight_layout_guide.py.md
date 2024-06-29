@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\tight_layout_guide.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorial/intermediate/tight_layout_guide
 

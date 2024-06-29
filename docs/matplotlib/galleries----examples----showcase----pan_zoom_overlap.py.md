@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\pan_zoom_overlap.py`
 
-```
+```py
 # 导入 matplotlib 库
 import matplotlib.pyplot as plt
 

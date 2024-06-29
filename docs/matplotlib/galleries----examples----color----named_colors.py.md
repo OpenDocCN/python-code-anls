@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\named_colors.py`
 
-```
+```py
 """
 ====================
 List of named colors

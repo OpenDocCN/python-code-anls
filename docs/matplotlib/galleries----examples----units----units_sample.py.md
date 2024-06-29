@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\units_sample.py`
 
-```
+```py
 """
 ======================
 Inches and Centimeters

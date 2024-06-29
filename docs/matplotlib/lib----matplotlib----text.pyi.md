@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\text.pyi`
 
-```
+```py
 # 导入所需模块和类
 from .artist import Artist
 from .backend_bases import RendererBase

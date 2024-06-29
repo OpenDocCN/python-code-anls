@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\share_axis_lims_views.py`
 
-```
+```py
 """
 Sharing axis limits and views
 =============================

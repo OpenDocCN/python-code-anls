@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\custom_shaded_3d_surface.py`
 
-```
+```py
 """
 =======================================
 Custom hillshading in a 3D surface plot

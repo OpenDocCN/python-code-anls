@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\dates.py`
 
-```
+```py
 """
 Matplotlib provides sophisticated date plotting capabilities, standing on the
 shoulders of python :mod:`datetime` and the add-on module dateutil_.

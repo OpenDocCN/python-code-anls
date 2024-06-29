@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_backend_agg_wrapper.cpp`
 
-```
+```py
 /* 包含自定义的头文件 mplutils.h */
 #include "mplutils.h"
 /* 包含自定义的头文件 numpy_cpp.h */

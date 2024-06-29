@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\tickedstroke_demo.py`
 
-```
+```py
 """
 =======================
 TickedStroke patheffect

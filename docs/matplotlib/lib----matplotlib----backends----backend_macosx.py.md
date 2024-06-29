@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_macosx.py`
 
-```
+```py
 import os  # 导入标准库 os
 
 import matplotlib as mpl  # 导入 matplotlib 库，使用 mpl 别名

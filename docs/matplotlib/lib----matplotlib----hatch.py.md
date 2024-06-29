@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\hatch.py`
 
-```
+```py
 """Contains classes for generating hatch patterns."""
 
 # 导入必要的库

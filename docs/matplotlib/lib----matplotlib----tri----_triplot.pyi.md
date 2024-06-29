@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triplot.pyi`
 
-```
+```py
 # 导入绘图所需的类和函数
 from matplotlib.tri._triangulation import Triangulation
 from matplotlib.axes import Axes

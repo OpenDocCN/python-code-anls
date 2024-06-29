@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\platform\mac\agg_mac_pmap.h`
 
-```
+```py
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4 
 // Copyright (C) 2002-2005 Maxim Shemanarev (McSeem)

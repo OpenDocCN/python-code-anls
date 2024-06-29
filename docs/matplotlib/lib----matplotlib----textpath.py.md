@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\textpath.py`
 
-```
+```py
 from collections import OrderedDict
 import logging
 import urllib.parse

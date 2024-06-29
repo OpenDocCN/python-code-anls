@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\widgets.pyi`
 
-```
+```py
 # 导入需要的类型提示模块和字面量类型
 from typing import Any, Literal
 

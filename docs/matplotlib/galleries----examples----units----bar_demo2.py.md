@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\bar_demo2.py`
 
-```
+```py
 """
 ===================
 Bar demo with units

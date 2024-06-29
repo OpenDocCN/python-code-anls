@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_path.h`
 
-```
+```py
 // C++ 头文件保护开始，防止多次包含该头文件
 #ifndef MPL_PATH_H
 #define MPL_PATH_H

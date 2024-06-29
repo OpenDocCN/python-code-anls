@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\parasite_simple.py`
 
-```
+```py
 """
 ===============
 Parasite Simple

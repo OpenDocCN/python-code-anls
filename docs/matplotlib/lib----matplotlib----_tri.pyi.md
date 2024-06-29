@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_tri.pyi`
 
-```
+```py
 # 这是一个使用 C++ 实现的私有模块
 # 因此，这些类型存根过于通用，但允许它们作为公共方法的返回类型
 from typing import Any, final

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\spectrum_demo.py`
 
-```
+```py
 """
 ========================
 Spectrum representations

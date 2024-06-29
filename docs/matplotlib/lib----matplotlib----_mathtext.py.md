@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_mathtext.py`
 
-```
+```py
 """
 Implementation details for :mod:`.mathtext`.
 """

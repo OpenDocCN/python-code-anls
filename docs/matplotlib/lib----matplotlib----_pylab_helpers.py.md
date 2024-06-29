@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_pylab_helpers.py`
 
-```
+```py
     def set_active(cls, manager):
         """
         Set *manager* as the active figure manager.

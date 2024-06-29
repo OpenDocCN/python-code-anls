@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\tests\__init__.py`
 
-```
+```py
 # 导入Path类，用于处理文件和目录路径
 from pathlib import Path
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\contour_corner_mask.py`
 
-```
+```py
 """
 ===================
 Contour Corner Mask

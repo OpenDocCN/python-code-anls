@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_bbox_tight.py`
 
-```
+```py
 # 导入所需模块和函数
 from io import BytesIO  # 导入字节流处理模块
 import platform  # 导入平台信息模块

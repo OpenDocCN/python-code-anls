@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\poly_editor.py`
 
-```
+```py
 """
 ===========
 Poly Editor

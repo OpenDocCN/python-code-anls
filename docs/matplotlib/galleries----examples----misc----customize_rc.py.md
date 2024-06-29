@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\customize_rc.py`
 
-```
+```py
 """
 ============
 Customize Rc

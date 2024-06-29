@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_tk.py`
 
-```
+```py
 # 导入 functools 模块，用于创建装饰器
 import functools
 # 导入 importlib 模块，用于动态导入模块

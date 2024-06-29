@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\web_backend\js\mpl.js`
 
-```
+```py
 /* Put everything inside the global mpl namespace */
 /* 将所有内容放在全局的 mpl 命名空间中 */
 window.mpl = {};

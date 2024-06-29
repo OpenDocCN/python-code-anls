@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\tests\test_axes3d.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于函数式编程的工具
 import itertools  # 导入 itertools 模块，用于创建迭代器的函数
 import platform   # 导入 platform 模块，用于访问平台相关的属性和功能

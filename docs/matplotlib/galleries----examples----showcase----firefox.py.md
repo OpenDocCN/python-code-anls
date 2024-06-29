@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\firefox.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 

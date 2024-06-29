@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\pgf_texsystem.py`
 
-```
+```py
 """
 =============
 PGF texsystem

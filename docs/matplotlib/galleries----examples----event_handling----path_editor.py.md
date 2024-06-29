@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\path_editor.py`
 
-```
+```py
 """
 ===========
 Path editor

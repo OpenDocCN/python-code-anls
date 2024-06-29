@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_backend_gtk.py`
 
-```
+```py
 """
 Common code for GTK3 and GTK4 backends.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\color_by_yvalue.py`
 
-```
+```py
 """
 ================
 Color by y-value

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\inset_locator_demo.py`
 
-```
+```py
 # %%
 # 导入 matplotlib.pyplot 库，用于绘图操作
 import matplotlib.pyplot as plt

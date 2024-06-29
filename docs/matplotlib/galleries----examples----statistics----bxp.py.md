@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\bxp.py`
 
-```
+```py
 """
 =============================================
 Separate calculation and plotting of boxplots

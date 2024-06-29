@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\double_pendulum.py`
 
-```
+```py
 """
 ===========================
 The double pendulum problem

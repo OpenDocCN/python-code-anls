@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\eventplot_demo.py`
 
-```
+```py
 """
 ==============
 Eventplot demo

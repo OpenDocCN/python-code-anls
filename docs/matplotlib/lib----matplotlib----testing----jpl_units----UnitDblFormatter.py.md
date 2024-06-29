@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\UnitDblFormatter.py`
 
-```
+```py
 """UnitDblFormatter module containing class UnitDblFormatter."""
 
 # 导入 matplotlib 的 ticker 模块，用于格式化标签

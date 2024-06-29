@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\__init__.py`
 
-```
+```py
 # 从当前包中导入特定模块和函数
 from . import axes_size as Size
 # 从当前包中导入 Divider、SubplotDivider 和 make_axes_locatable 函数

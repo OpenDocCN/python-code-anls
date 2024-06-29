@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\pong_sgskip.py`
 
-```
+```py
 """
 ====
 Pong

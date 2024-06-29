@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\py_exceptions.h`
 
-```
+```py
 #ifndef MPL_PY_EXCEPTIONS_H
 #define MPL_PY_EXCEPTIONS_H
 

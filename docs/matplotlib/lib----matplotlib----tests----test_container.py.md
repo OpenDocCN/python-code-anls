@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_container.py`
 
-```
+```py
 import numpy as np
 import matplotlib.pyplot as plt
 

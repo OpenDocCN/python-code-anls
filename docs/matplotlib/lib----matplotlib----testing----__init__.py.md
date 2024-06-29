@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\__init__.py`
 
-```
+```py
 """
 Helper functions for testing.
 """

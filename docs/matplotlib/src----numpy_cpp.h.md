@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\numpy_cpp.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 // 防止多次包含头文件

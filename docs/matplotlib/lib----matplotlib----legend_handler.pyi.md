@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\legend_handler.pyi`
 
-```
+```py
 # 导入必要的模块和类
 from collections.abc import Callable, Sequence           # 导入必要的集合和类型
 from matplotlib.artist import Artist                    # 导入画家类

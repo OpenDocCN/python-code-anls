@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\github_stats.py`
 
-```
+```py
 #!/usr/bin/env python
 """
 Simple tools to query github.com and gather stats about issues.

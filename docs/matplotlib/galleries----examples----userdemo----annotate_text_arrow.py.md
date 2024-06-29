@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\annotate_text_arrow.py`
 
-```
+```py
 """
 ===================
 Annotate Text Arrow

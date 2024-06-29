@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\legend.py`
 
-```
+```py
 """
 The legend module defines the Legend class, which is responsible for
 drawing legends associated with Axes and/or figures.

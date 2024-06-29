@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\image_transparency_blend.py`
 
-```
+```py
 """
 ==========================================
 Blend transparency with color in 2D images

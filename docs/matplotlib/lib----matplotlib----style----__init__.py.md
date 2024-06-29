@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\style\__init__.py`
 
-```
+```py
 # 从当前包（或模块）的core模块中导入指定的变量和函数
 from .core import available, context, library, reload_library, use
 

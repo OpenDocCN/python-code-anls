@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\hist3d.py`
 
-```
+```py
 """
 ==============================
 Create 3D histogram of 2D data

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\ci\check_wheel_licenses.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Check that all specified .whl files have the correct LICENSE files included.

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_tools.pyi`
 
-```
+```py
 import enum  # 导入枚举模块
 from matplotlib import cbook  # 导入 matplotlib 的 cbook 模块
 from matplotlib.axes import Axes  # 导入 matplotlib 的 Axes 类

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\text_commands.py`
 
-```
+```py
 """
 =============
 Text Commands

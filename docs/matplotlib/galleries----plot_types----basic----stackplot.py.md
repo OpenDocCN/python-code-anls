@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\basic\stackplot.py`
 
-```
+```py
 """
 ===============
 stackplot(x, y)

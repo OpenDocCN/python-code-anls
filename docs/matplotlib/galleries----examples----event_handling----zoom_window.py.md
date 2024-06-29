@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\zoom_window.py`
 
-```
+```py
 """
 ===========
 Zoom Window

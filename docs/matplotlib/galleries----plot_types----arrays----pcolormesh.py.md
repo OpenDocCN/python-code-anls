@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\pcolormesh.py`
 
-```
+```py
 """
 ===================
 pcolormesh(X, Y, Z)

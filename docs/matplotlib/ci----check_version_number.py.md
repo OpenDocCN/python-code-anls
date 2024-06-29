@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\ci\check_version_number.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Check that the version number of the installed Matplotlib does not start with 0

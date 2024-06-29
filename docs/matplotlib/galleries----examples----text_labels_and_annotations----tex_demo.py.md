@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\tex_demo.py`
 
-```
+```py
 """
 ==================================
 Rendering math equations using TeX

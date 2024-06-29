@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_managers.pyi`
 
-```
+```py
 from matplotlib import backend_tools, widgets
 # 导入 matplotlib 中的工具和小部件模块
 

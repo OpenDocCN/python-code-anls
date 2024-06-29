@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\dviread.py`
 
-```
+```py
 """
 A module for reading dvi files output by TeX. Several limitations make
 this not (currently) useful as a general-purpose dvi preprocessor, but

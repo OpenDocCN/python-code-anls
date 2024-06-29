@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\engineering_formatter.py`
 
-```
+```py
 """
 =========================================
 Labeling ticks using engineering notation

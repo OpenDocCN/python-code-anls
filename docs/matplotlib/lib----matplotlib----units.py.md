@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\units.py`
 
-```
+```py
 ```python`
 """
 这里的类提供了对自定义类与 Matplotlib 的支持，例如那些没有暴露数组接口但知道如何将自己转换为数组的类。

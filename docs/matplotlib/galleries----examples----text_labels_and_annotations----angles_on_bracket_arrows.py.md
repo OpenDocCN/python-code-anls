@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\angles_on_bracket_arrows.py`
 
-```
+```py
 """
 ===================================
 Angle annotations on bracket arrows

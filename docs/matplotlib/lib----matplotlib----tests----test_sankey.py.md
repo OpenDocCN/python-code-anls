@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_sankey.py`
 
-```
+```py
 import pytest  # 导入 pytest 库
 from numpy.testing import assert_allclose, assert_array_equal  # 从 numpy.testing 导入两个断言函数
 

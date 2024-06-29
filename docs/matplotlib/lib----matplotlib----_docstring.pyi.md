@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_docstring.pyi`
 
-```
+```py
 # 导入必要的类型和函数签名定义
 from typing import Any, Callable, TypeVar, overload
 

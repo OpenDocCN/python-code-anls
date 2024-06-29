@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\artist_reference.py`
 
-```
+```py
 """
 .. _artist_reference:
 

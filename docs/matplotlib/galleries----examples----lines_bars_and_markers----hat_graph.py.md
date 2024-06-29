@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\hat_graph.py`
 
-```
+```py
 """
 =========
 Hat graph

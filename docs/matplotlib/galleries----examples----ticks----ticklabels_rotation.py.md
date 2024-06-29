@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\ticklabels_rotation.py`
 
-```
+```py
 """
 ====================
 Rotating tick labels

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\basic\bar.py`
 
-```
+```py
 """
 ==============
 bar(x, height)

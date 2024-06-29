@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\embedding_in_tk_sgskip.py`
 
-```
+```py
 """
 ===============
 Embedding in Tk

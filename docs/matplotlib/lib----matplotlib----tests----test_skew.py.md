@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_skew.py`
 
-```
+```py
 """
 Testing that skewed Axes properly work.
 """

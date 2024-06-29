@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\fancyarrow_demo.py`
 
-```
+```py
 """
 ================================
 Annotation arrow style reference

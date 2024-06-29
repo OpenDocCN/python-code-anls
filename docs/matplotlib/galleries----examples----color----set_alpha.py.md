@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\set_alpha.py`
 
-```
+```py
 """
 =================================
 设置颜色的透明度值的几种方法

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\spines\spines_dropped.py`
 
-```
+```py
 """
 ==============
 Dropped spines

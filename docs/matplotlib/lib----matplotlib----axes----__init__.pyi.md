@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\__init__.pyi`
 
-```
+```py
 # 从 typing 模块中导入 TypeVar 类型变量
 from typing import TypeVar
 

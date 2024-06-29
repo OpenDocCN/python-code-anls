@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\mathtext_wx_sgskip.py`
 
-```
+```py
 """
 ======================
 Display mathtext in WX

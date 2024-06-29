@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_parasite_axes.py`
 
-```
+```py
 """
 ==================
 Parasite Axes demo

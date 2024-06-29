@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_axisline_style.py`
 
-```
+```py
 """
 ================
 Axis line styles

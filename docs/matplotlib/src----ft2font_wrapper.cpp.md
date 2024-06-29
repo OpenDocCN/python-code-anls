@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\ft2font_wrapper.cpp`
 
-```
+```py
 #include "mplutils.h"
 #include "ft2font.h"
 #include "py_converters.h"

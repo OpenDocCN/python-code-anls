@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\__init__.py`
 
-```
+```py
 """
 A sample set of units for use with testing unit conversion
 of Matplotlib routines.  These are used because they use very strict

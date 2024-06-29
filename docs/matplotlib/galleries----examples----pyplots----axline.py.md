@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pyplots\axline.py`
 
-```
+```py
 """
 ==============
 Infinite lines

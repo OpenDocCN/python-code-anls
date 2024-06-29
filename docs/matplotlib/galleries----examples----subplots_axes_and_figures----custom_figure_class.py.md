@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\custom_figure_class.py`
 
-```
+```py
 """
 ========================
 Custom Figure subclasses

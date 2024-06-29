@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\demo_constrained_layout.py`
 
-```
+```py
 """
 =====================================
 Resizing Axes with constrained layout

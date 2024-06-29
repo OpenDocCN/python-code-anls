@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\contour_manual.py`
 
-```
+```py
 """
 ==============
 Manual Contour

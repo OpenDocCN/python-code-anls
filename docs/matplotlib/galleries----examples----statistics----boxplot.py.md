@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\boxplot.py`
 
-```
+```py
 """
 =================================
 Artist customization in box plots

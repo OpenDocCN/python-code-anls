@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\tricontourf3d.py`
 
-```
+```py
 """
 =================================
 Triangular 3D filled contour plot

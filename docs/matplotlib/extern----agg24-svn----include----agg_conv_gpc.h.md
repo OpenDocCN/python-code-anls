@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_conv_gpc.h`
 
-```
+```py
         // 构造函数：初始化两个多边形的源，设定操作类型为给定的 gpc_op_e 类型
         conv_gpc(source_a_type& a, source_b_type& b, gpc_op_e op = gpc_or) :
             m_src_a(&a),

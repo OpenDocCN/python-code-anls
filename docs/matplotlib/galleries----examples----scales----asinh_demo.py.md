@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\asinh_demo.py`
 
-```
+```py
 """
 ============
 Asinh Demo

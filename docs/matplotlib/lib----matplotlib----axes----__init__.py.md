@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\__init__.py`
 
-```
+```py
 # 从当前包中导入 _base 模块
 from . import _base
 # 从 _axes 模块中导入 Axes 类，忽略 F401 类型的警告

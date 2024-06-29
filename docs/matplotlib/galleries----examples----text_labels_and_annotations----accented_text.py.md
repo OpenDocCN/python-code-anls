@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\accented_text.py`
 
-```
+```py
 r"""
 =============
 Accented text

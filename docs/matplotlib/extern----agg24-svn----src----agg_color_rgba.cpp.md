@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\agg_color_rgba.cpp`
 
-```
+```py
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2009 John Horigan (http://www.antigrain.com)

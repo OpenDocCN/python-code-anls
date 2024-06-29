@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_fontconfig_pattern.py`
 
-```
+```py
 # 定义一个用于解析 fontconfig 模式的函数，接受一个 pattern 参数
 @lru_cache
 def parse_fontconfig_pattern(pattern):

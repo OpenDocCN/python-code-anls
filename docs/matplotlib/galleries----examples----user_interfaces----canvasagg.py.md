@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\canvasagg.py`
 
-```
+```py
 # 导入所需模块
 from PIL import Image  # 导入PIL库中的Image模块
 import numpy as np  # 导入numpy库，并使用np作为别名

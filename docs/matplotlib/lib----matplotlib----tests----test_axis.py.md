@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_axis.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于处理数值数组
 
 import matplotlib.pyplot as plt  # 导入 matplotlib.pyplot 库，用于绘图

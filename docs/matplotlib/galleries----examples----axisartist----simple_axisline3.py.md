@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\simple_axisline3.py`
 
-```
+```py
 """
 ================
 Simple Axisline3

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_docstring.py`
 
-```
+```py
 # 导入 inspect 模块
 import inspect
 

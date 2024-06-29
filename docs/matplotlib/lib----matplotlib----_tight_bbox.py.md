@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_tight_bbox.py`
 
-```
+```py
 """
 Helper module for the *bbox_inches* parameter in `.Figure.savefig`.
 """

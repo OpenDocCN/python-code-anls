@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_registry.py`
 
-```
+```py
 from collections.abc import Sequence
 from typing import Any
 

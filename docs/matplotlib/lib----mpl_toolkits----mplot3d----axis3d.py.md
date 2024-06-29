@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\axis3d.py`
 
-```
+```py
 # axis3d.py, original mplot3d version by John Porter
 # Created: 23 Sep 2005
 # Parts rewritten by Reinier Heeres <reinier@heeres.eu>

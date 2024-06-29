@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\category.py`
 
-```
+```py
 """
 Plotting of string "category" data: ``plot(['d', 'f', 'a'], [1, 2, 3])`` will
 plot three points with x-axis values of 'd', 'f', 'a'.

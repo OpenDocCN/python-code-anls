@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_wx.py`
 
-```
+```py
 """
 A wxPython backend for matplotlib.
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tripcolor.py`
 
-```
+```py
     # 导入NumPy库，通常用于数值计算
     import numpy as np
 

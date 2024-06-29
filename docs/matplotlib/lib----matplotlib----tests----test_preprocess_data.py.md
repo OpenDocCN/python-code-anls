@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_preprocess_data.py`
 
-```
+```py
 # 导入正则表达式和系统模块
 import re
 import sys

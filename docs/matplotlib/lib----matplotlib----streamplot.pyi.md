@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\streamplot.pyi`
 
-```
+```py
 # 从 matplotlib 库中导入需要使用的类和函数
 from matplotlib.axes import Axes
 from matplotlib.colors import Normalize, Colormap

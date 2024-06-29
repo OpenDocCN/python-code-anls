@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_image_wrapper.cpp`
 
-```
+```py
 /* 将 C++ 代码包含在 Pybind11 的头文件中，这是一个 C++ 和 Python 之间的桥梁 */
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>

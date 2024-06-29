@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\ttconv\pprdrv_tt2.cpp`
 
-```
+```py
 /*
  * Modified for use within matplotlib
  * 5 July 2007

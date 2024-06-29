@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\ttconv\ttutil.cpp`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /*

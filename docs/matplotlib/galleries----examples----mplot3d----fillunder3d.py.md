@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\fillunder3d.py`
 
-```
+```py
 """
 =========================
 Fill under 3D line graphs

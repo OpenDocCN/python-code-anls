@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_edge_colorbar.py`
 
-```
+```py
 """
 ===============================
 Per-row or per-column colorbars

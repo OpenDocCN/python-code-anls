@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\simple_axisartist1.py`
 
-```
+```py
 """
 =============================
 Custom spines with axisartist

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_polar.py`
 
-```
+```py
 # 导入 NumPy 库，并使用别名 np
 import numpy as np
 # 从 NumPy 测试模块中导入 assert_allclose 函数

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\texmanager.pyi`
 
-```
+```py
 from .backend_bases import RendererBase  # 导入 RendererBase 类，来自于 .backend_bases 模块
 
 from matplotlib.typing import ColorType  # 导入 ColorType 类型，来自于 matplotlib.typing 模块

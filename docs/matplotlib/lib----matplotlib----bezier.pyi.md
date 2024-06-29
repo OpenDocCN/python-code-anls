@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\bezier.pyi`
 
-```
+```py
 from collections.abc import Callable  # 导入 Callable 类，用于函数签名类型提示
 from typing import Literal  # 导入 Literal 类型，用于定义特定值的类型
 

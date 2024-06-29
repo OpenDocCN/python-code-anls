@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_internal_utils.py`
 
-```
+```py
 """
 Internal debugging utilities, that are not expected to be used in the rest of
 the codebase.

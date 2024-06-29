@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\keypress_demo.py`
 
-```
+```py
 """
 ==============
 Keypress event

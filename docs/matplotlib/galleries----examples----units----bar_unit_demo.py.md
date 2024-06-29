@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\bar_unit_demo.py`
 
-```
+```py
 """
 =========================
 Group barchart with units

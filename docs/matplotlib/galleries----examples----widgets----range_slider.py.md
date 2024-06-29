@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\range_slider.py`
 
-```
+```py
 """
 ======================================
 Thresholding an Image with RangeSlider

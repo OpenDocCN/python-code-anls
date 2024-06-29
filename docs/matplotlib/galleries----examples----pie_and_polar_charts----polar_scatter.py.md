@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\polar_scatter.py`
 
-```
+```py
 """
 ==========================
 Scatter plot on polar axis

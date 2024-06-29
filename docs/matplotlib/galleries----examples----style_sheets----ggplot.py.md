@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\ggplot.py`
 
-```
+```py
 """
 ==================
 ggplot style sheet

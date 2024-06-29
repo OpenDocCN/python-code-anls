@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\colorbar_basics.py`
 
-```
+```py
 """
 ========
 Colorbar

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\ticker.py`
 
-```
+```py
 """
 Tick locating and formatting
 ============================

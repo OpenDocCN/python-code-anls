@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\figure_title.py`
 
-```
+```py
 """
 =============================================
 Figure labels: suptitle, supxlabel, supylabel

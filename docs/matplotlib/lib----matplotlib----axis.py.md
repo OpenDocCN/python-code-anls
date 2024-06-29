@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axis.py`
 
-```
+```py
 """
 Classes for the ticks and x- and y-axis.
 """

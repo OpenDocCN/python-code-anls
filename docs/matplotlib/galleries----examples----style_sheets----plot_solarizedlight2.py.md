@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\plot_solarizedlight2.py`
 
-```
+```py
 """
 ==========================
 Solarized Light stylesheet

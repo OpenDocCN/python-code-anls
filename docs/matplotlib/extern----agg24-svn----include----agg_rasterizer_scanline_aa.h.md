@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_rasterizer_scanline_aa.h`
 
-```
+```py
 #ifndef AGG_RASTERIZER_SCANLINE_AA_INCLUDED
 #define AGG_RASTERIZER_SCANLINE_AA_INCLUDED
 
@@ -307,5 +307,5 @@ namespace agg
 #endif
 
 
-这段代码看起来是 C/C++ 的预处理器条件编译代码块的结尾部分。在这里，```}``` 闭合了之前打开的条件编译块，```#endif``` 则用于结束这个条件编译块，使得在条件满足时编译器可以继续处理下面的代码。
+这段代码看起来是 C/C++ 的预处理器条件编译代码块的结尾部分。在这里，```}```py 闭合了之前打开的条件编译块，```#endif```py 则用于结束这个条件编译块，使得在条件满足时编译器可以继续处理下面的代码。
 ```

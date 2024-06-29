@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\contour3d_3.py`
 
-```
+```py
 """
 =====================================
 Project contour profiles onto a graph

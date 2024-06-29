@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_vcgen_contour.h`
 
-```
+```py
         //----------------------------------------------------------vcgen_contour
         //
         // See Implementation agg_vcgen_contour.cpp

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pyplots\pyplot_text.py`
 
-```
+```py
 """
 ==============================
 Text and mathtext using pyplot

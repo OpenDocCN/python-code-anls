@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_artist.py`
 
-```
+```py
 # 导入所需的库
 import io
 from itertools import chain

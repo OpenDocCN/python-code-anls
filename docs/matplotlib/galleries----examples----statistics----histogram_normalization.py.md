@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\histogram_normalization.py`
 
-```
+```py
 """
 .. redirect-from:: /gallery/statistics/histogram_features
 

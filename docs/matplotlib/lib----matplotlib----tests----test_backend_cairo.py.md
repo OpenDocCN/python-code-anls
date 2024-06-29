@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_cairo.py`
 
-```
+```py
 # 导入 NumPy 库，用于处理数组和数学运算
 import numpy as np
 

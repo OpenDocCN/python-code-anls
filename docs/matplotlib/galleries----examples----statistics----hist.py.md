@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\hist.py`
 
-```
+```py
 """
 ==========
 Histograms

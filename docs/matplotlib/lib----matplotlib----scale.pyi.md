@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\scale.pyi`
 
-```
+```py
 # 从 matplotlib.axis 模块导入 Axis 类
 # 从 matplotlib.transforms 模块导入 Transform 类
 from matplotlib.axis import Axis

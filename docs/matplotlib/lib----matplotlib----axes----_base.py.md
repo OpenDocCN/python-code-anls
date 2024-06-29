@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_base.py`
 
-```
+```py
 from collections.abc import Iterable, Sequence
 from contextlib import ExitStack
 import functools

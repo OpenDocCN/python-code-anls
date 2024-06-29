@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\agg_line_profile_aa.cpp`
 
-```
+```py
     //---------------------------------------------------------------------
     // 设置线条轮廓的宽度
     void line_profile_aa::width(double w)

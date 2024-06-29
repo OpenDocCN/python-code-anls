@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\histogram_cumulative.py`
 
-```
+```py
 """
 =================================
 Plotting cumulative distributions

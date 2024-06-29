@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\generate_matplotlibrc.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Generate matplotlirc for installs.

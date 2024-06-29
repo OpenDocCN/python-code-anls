@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\arrow_guide.py`
 
-```
+```py
 # 导入matplotlib库中的pyplot模块，并用plt作为别名
 import matplotlib.pyplot as plt
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_enums.pyi`
 
-```
+```py
 # 导入枚举类 Enum
 from enum import Enum
 

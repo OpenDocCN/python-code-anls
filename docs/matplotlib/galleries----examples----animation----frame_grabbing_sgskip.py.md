@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\frame_grabbing_sgskip.py`
 
-```
+```py
 """
 ==============
 Frame grabbing

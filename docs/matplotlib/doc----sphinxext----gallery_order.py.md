@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\gallery_order.py`
 
-```
+```py
 """
 Configuration for the order of gallery sections and examples.
 Paths are relative to the conf.py file.

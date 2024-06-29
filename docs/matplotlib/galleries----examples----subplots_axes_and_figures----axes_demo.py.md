@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\axes_demo.py`
 
-```
+```py
 """
 =========
 Axes Demo

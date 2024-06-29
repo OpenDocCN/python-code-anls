@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\advanced_hillshading.py`
 
-```
+```py
 """
 ===========
 Hillshading

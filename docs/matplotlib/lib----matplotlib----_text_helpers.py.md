@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_text_helpers.py`
 
-```
+```py
 """
 Low-level text helper utilities.
 """

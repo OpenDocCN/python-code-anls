@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_tkcairo.py`
 
-```
+```py
 import sys  # 导入系统模块，用于系统相关操作
 
 import numpy as np  # 导入 NumPy 库，用于数值计算

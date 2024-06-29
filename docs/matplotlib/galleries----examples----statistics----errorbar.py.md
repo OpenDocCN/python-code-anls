@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\errorbar.py`
 
-```
+```py
 """
 =================
 Errorbar function

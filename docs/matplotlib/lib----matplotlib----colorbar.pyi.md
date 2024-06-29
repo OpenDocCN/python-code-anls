@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\colorbar.pyi`
 
-```
+```py
 # 导入 matplotlib 库中特定模块，用于自定义图形的边框样式
 import matplotlib.spines as mspines
 # 从 matplotlib 库中导入特定模块，包括颜色映射、集合、颜色、轮廓等

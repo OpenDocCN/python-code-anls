@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\contourf_log.py`
 
-```
+```py
 """
 ============================
 Contourf and log color scale

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\inset_locator_demo2.py`
 
-```
+```py
 """
 ====================
 Inset locator demo 2

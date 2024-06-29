@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backends_interactive.py`
 
-```
+```py
 import functools
 import importlib
 import importlib.util

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\simple_axesgrid.py`
 
-```
+```py
 """
 ================
 Simple ImageGrid

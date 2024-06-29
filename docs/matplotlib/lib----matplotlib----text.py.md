@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\text.py`
 
-```
+```py
 """
 Classes for including text in a figure.
 """

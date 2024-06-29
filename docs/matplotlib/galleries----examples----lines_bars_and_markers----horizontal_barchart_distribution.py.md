@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\horizontal_barchart_distribution.py`
 
-```
+```py
 """
 =============================================
 Discrete distribution as horizontal bar chart

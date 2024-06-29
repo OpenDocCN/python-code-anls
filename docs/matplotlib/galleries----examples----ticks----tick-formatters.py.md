@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\tick-formatters.py`
 
-```
+```py
 """
 ===============
 Tick formatters

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\scales.py`
 
-```
+```py
 """
 ======
 Scales

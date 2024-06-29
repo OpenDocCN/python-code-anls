@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\typing.py`
 
-```
+```py
 """
 Typing support for Matplotlib
 

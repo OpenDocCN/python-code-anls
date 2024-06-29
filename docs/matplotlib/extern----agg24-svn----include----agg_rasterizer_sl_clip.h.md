@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_rasterizer_sl_clip.h`
 
-```
+```py
 #ifndef AGG_RASTERIZER_SL_CLIP_INCLUDED
 // 如果 AGG_RASTERIZER_SL_CLIP_INCLUDED 宏未定义，则开始定义它，避免重复包含
 #define AGG_RASTERIZER_SL_CLIP_INCLUDED

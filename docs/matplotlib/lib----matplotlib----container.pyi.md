@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\container.pyi`
 
-```
+```py
 # 从 matplotlib.artist 模块导入 Artist 类
 from matplotlib.artist import Artist
 # 从 matplotlib.lines 模块导入 Line2D 类

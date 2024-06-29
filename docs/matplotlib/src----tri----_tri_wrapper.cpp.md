@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\tri\_tri_wrapper.cpp`
 
-```
+```py
 #include "_tri.h"  // 引入自定义的 _tri.h 头文件
 
 using namespace pybind11::literals;  // 使用 pybind11 命名空间下的 literals

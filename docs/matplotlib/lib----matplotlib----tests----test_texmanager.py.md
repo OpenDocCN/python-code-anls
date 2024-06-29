@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_texmanager.py`
 
-```
+```py
 # 导入标准库和第三方模块
 import os
 from pathlib import Path

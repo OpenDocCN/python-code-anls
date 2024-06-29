@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\individual_colors_from_cmap.py`
 
-```
+```py
 """
 ===========================================
 Selecting individual colors from a colormap

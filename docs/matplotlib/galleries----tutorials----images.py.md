@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\tutorials\images.py`
 
-```
+```py
 # %%
 # .. _importing_data:
 #

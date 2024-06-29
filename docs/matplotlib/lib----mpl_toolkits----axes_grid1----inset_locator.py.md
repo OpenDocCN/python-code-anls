@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\inset_locator.py`
 
-```
+```py
 """
 A collection of functions and objects for creating or placing inset axes.
 """
@@ -502,7 +502,7 @@ def zoomed_inset_axes(parent_axes, zoom, loc='upper right',
     -------
     ```
     # 返回新创建的插图坐标系对象，可以用来进一步绘图或操作
-    ```
+    ```py
     -------
     inset_axes : *axes_class*
         Inset axes object created.

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\mosaic.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，命名为 plt
 import matplotlib.pyplot as plt
 # 导入 numpy 库，命名为 np

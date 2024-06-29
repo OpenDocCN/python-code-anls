@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_embedded_raster_fonts.h`
 
-```
+```py
 #ifndef AGG_EMBEDDED_RASTER_FONTS_INCLUDED
 // 如果 AGG_EMBEDDED_RASTER_FONTS_INCLUDED 宏未定义，则执行以下代码
 #define AGG_EMBEDDED_RASTER_FONTS_INCLUDED

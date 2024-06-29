@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pyplots\pyplot_three.py`
 
-```
+```py
 """
 ===========================
 Multiple lines using pyplot

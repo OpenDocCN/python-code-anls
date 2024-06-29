@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\errorbar_plot.py`
 
-```
+```py
 """
 ==========================
 errorbar(x, y, yerr, xerr)

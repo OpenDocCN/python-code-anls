@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_animation_data.py`
 
-```
+```py
 // JavaScript模板用于HTMLWriter
 
 // 包含外部样式表的链接，加载FontAwesome图标库

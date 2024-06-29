@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\text_alignment.py`
 
-```
+```py
 # %%
 # The following plot demonstrates text alignment relative to a rectangle within the plot.
 

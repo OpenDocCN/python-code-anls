@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_tkagg.pyi`
 
-```
+```py
 import numpy as np
 from numpy.typing import NDArray
 

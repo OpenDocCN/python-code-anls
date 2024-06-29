@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\registry.pyi`
 
-```
+```py
 # 导入必要的枚举类型和模块类型
 from enum import Enum
 from types import ModuleType

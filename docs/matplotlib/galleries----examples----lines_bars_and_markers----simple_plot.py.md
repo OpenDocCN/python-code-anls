@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\simple_plot.py`
 
-```
+```py
 """
 ===========
 Simple Plot

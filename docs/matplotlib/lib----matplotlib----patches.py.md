@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\patches.py`
 
-```
+```py
 """
 Patches are `.Artist`\s with a face color and an edge color.
 """

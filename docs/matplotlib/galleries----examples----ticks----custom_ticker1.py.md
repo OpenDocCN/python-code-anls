@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\custom_ticker1.py`
 
-```
+```py
 """
 =============
 Custom Ticker

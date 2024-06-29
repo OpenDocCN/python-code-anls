@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_enums.py`
 
-```
+```py
 # 引入枚举类 Enum 和 auto 方法
 from enum import Enum, auto
 # 从 matplotlib 模块中引入 _docstring

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\registry.py`
 
-```
+```py
 from enum import Enum  # 导入枚举类型模块
 
 import importlib  # 导入动态导入模块

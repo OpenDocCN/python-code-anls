@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tritools.py`
 
-```
+```py
 """
 Tools for triangular grids.
 """

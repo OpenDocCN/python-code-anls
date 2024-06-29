@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\scatter3d.py`
 
-```
+```py
 """
 ==============
 3D scatterplot

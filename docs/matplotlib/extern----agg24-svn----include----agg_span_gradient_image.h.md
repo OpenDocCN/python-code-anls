@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_span_gradient_image.h`
 
-```
+```py
 //----------------------------------------------------------------------------
 // AGG Contribution Pack - Gradients 1 (AGG CP - Gradients 1)
 // http://milan.marusinec.sk/aggcp

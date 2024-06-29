@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_path_wrapper.cpp`
 
-```
+```py
 py::list
 convert_polygon_vector(std::vector<Polygon> &polygons)
 {

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_determinism.py`
 
-```
+```py
 """
 Test output reproducibility.
 """

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\embedding_webagg_sgskip.py`
 
-```
+```py
 # 导入必要的模块和库
 import argparse  # 解析命令行参数
 import io  # 用于流处理

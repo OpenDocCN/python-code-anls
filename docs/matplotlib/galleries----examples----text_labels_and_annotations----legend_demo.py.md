@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\legend_demo.py`
 
-```
+```py
 """
 ===========
 Legend Demo

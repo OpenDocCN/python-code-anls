@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\rasterization_demo.py`
 
-```
+```py
 """
 =================================
 Rasterization for vector graphics

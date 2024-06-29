@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_svg.py`
 
-```
+```py
 # 导入 datetime 模块，用于处理日期和时间
 import datetime
 # 从 io 模块中导入 BytesIO 类，用于操作二进制数据的内存缓冲区

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axes_rgb.py`
 
-```
+```py
 from matplotlib import _api  # 导入 matplotlib 中的 _api 模块
 
 from mpl_toolkits.axes_grid1.axes_rgb import (  # 导入 axes_rgb 模块中的 make_rgb_axes 和 RGBAxes 类

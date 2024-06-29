@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\histogram_multihist.py`
 
-```
+```py
 """
 =====================================================
 The histogram (hist) function with multiple data sets

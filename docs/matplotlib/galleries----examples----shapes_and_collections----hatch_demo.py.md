@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\hatch_demo.py`
 
-```
+```py
 """
 ==========
 Hatch demo

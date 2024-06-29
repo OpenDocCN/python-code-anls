@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\logit_demo.py`
 
-```
+```py
 """
 ================
 Logit Demo

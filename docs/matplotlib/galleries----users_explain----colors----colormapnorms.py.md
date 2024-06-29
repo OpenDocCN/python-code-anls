@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\colors\colormapnorms.py`
 
-```
+```py
 # 导入必要的库
 import matplotlib.pyplot as plt  # 导入 matplotlib 的 pyplot 模块，并重命名为 plt
 import numpy as np  # 导入 numpy 库，并重命名为 np

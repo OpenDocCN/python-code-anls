@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_style.py`
 
-```
+```py
 from contextlib import contextmanager
 from pathlib import Path
 from tempfile import TemporaryDirectory

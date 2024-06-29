@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triangulation.py`
 
-```
+```py
 # 导入系统模块 sys
 import sys
 

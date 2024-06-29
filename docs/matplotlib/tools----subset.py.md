@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\subset.py`
 
-```
+```py
 #!/usr/bin/env python
 #
 # Copyright 2010-2012, Google Inc.

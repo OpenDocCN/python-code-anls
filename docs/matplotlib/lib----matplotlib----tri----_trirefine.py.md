@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_trirefine.py`
 
-```
+```py
 """
 Mesh refinement for triangular grids.
 """

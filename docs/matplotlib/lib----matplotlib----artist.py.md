@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\artist.py`
 
-```
+```py
 def allow_rasterization(draw):
     """
     Decorator for Artist.draw method. Provides routines

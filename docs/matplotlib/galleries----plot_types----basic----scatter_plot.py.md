@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\basic\scatter_plot.py`
 
-```
+```py
 """
 =============
 scatter(x, y)

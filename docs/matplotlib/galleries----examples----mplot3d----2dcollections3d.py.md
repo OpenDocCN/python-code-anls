@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\2dcollections3d.py`
 
-```
+```py
 """
 =======================
 Plot 2D data on 3D plot

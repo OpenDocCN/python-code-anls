@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_c_internal_utils.cpp`
 
-```
+```py
 /* Python.h 必须在任何系统头文件之前包含，
    以确保可见性宏被正确设置。 */
 #include <Python.h>

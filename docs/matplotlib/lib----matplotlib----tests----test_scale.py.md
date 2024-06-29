@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_scale.py`
 
-```
+```py
 # 导入copy模块，用于深复制对象
 import copy
 

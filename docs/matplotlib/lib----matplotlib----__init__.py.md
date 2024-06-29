@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\__init__.py`
 
-```
+```py
 """
 An object-oriented plotting library.
 

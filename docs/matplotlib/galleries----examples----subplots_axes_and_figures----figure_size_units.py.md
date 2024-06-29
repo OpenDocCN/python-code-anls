@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\figure_size_units.py`
 
-```
+```py
 """
 ==============================
 Figure size in different units

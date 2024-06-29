@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\demo_tight_layout.py`
 
-```
+```py
 """
 ===============================
 Resizing Axes with tight layout

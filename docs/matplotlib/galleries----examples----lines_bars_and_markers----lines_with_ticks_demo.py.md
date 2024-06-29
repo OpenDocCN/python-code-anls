@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\lines_with_ticks_demo.py`
 
-```
+```py
 """
 ==============================
 Lines with a ticked patheffect

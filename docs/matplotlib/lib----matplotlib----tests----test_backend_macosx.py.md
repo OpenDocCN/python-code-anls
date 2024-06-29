@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_macosx.py`
 
-```
+```py
 import os  # 导入操作系统模块
 
 import pytest  # 导入 pytest 测试框架

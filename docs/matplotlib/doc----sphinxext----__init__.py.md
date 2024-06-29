@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\__init__.py`
 
-```
+```py
 # 导入requests库，用于发送HTTP请求和处理响应
 import requests
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_wxagg.py`
 
-```
+```py
 # 导入 wx 模块，用于与 wxPython GUI 库进行交互
 import wx
 

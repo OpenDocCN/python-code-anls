@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\quick_start.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/introductory/usage
 .. redirect-from:: /tutorials/introductory/quick_start

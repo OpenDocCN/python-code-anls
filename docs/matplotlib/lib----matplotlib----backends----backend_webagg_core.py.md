@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_webagg_core.py`
 
-```
+```py
 """Displays Agg images in the browser, with interactivity."""
 # 导入所需的模块和库
 import asyncio  # 异步IO库，用于异步操作

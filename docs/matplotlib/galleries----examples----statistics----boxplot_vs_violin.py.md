@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\boxplot_vs_violin.py`
 
-```
+```py
 """
 ===================================
 Box plot vs. violin plot comparison

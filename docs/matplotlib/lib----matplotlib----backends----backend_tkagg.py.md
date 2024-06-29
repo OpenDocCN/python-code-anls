@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_tkagg.py`
 
-```
+```py
 from . import _backend_tk
 from .backend_agg import FigureCanvasAgg
 from ._backend_tk import _BackendTk, FigureCanvasTk

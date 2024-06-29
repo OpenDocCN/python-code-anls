@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\grayscale.py`
 
-```
+```py
 """
 =====================
 Grayscale style sheet

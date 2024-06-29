@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\basic_units.py`
 
-```
+```py
 """
 .. _basic_units:
 

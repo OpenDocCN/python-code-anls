@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_subplots.py`
 
-```
+```py
 import itertools  # 导入 itertools 模块，用于生成迭代器的工具函数
 import platform  # 导入 platform 模块，用于访问平台相关的系统信息
 

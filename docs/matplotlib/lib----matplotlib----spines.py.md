@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\spines.py`
 
-```
+```py
 # 导入MutableMapping抽象基类
 from collections.abc import MutableMapping
 # 导入functools模块

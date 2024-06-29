@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\span_regions.py`
 
-```
+```py
 """
 ==========================================================
 Shade regions defined by a logical mask using fill_between

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\platform\sdl\agg_platform_support.cpp`
 
-```
+```py
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -285,7 +285,7 @@ platform_specific::~platform_specific()
     }
 
 
-```    
+```py    
     //------------------------------------------------------------------------
     // 初始化平台支持
     bool platform_support::init(unsigned width, unsigned height, unsigned flags)

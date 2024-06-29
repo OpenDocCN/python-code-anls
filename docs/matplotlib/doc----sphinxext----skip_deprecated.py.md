@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\skip_deprecated.py`
 
-```
+```py
 # 跳过已弃用的成员
 
 # 定义一个函数，用于在自动文档生成过程中跳过特定的成员

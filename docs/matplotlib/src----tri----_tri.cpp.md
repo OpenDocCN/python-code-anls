@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\tri\_tri.cpp`
 
-```
+```py
 /* 这个文件广泛使用断言来辅助代码开发和调试。
  * 标准的 Matplotlib 构建会禁用断言，因此不会影响性能。
  * 要启用断言，需要取消定义 NDEBUG 宏，可以通过向 Meson 配置传递 ``b_ndebug=false`` 来实现。

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_offsetbox.py`
 
-```
+```py
 # 导入必要的模块和函数
 from collections import namedtuple
 import io

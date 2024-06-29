@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\affine_image.py`
 
-```
+```py
 """
 ============================
 Affine transform of an image

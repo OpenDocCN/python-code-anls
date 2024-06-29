@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\mpl_with_glade3_sgskip.py`
 
-```
+```py
 """
 =======================
 Matplotlib with Glade 3

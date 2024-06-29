@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\mpl_axes.py`
 
-```
+```py
 import matplotlib.axes as maxes  # 导入 matplotlib.axes 模块并重命名为 maxes
 from matplotlib.artist import Artist  # 导入 matplotlib.artist 模块中的 Artist 类
 from matplotlib.axis import XAxis, YAxis  # 导入 matplotlib.axis 模块中的 XAxis 和 YAxis 类

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\violin.py`
 
-```
+```py
 """
 =============
 violinplot(D)

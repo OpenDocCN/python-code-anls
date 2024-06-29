@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\cbook.py`
 
-```
+```py
 """
 A collection of utility functions and classes.  Originally, many
 (but not all) were from the Python Cookbook -- hence the name cbook.

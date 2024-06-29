@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\EpochConverter.py`
 
-```
+```py
 """EpochConverter module containing class EpochConverter."""
 
 from matplotlib import cbook, units

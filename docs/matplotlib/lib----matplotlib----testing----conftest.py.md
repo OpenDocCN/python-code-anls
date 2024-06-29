@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\conftest.py`
 
-```
+```py
 # 导入 pytest 库，用于编写和运行测试
 import pytest
 # 导入 sys 库，用于与 Python 解释器交互

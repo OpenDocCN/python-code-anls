@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\font_indexing.py`
 
-```
+```py
 """
 =============
 Font indexing

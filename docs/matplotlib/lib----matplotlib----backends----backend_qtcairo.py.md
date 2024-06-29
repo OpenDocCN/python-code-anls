@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_qtcairo.py`
 
-```
+```py
 import ctypes  # 导入 ctypes 库，用于处理 C 数据类型和调用 DLLs
 
 from .backend_cairo import cairo, FigureCanvasCairo  # 导入 cairo 和 FigureCanvasCairo 类

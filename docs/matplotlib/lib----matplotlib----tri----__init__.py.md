@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\__init__.py`
 
-```
+```py
 """
 Unstructured triangular grid functions.
 """

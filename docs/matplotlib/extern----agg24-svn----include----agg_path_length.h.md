@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_path_length.h`
 
-```
+```py
 #ifndef AGG_PATH_LENGTH_INCLUDED
 #define AGG_PATH_LENGTH_INCLUDED
 

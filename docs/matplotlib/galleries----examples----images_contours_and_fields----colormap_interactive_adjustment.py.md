@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\colormap_interactive_adjustment.py`
 
-```
+```py
 """
 ========================================
 Interactive Adjustment of Colormap Range

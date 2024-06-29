@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_bases.py`
 
-```
+```py
 """
 Abstract base classes define the primitives that renderers and
 graphics contexts must implement to serve as a Matplotlib backend.

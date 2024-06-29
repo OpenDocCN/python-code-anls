@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\hexbin.py`
 
-```
+```py
 """
 ===============
 hexbin(x, y, C)

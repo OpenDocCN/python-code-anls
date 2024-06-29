@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\tinypages\range6.py`
 
-```
+```py
 # 导入 matplotlib 库中的 pyplot 模块，用于绘图
 from matplotlib import pyplot as plt
 

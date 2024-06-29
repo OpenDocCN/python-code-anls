@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\hexbin_demo.py`
 
-```
+```py
 """
 =====================
 Hexagonal binned plot

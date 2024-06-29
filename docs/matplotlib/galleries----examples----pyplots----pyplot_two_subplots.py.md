@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pyplots\pyplot_two_subplots.py`
 
-```
+```py
 """
 =========================
 Two subplots using pyplot

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_agg_filter.py`
 
-```
+```py
 @image_comparison(baseline_images=['agg_filter_alpha'],
                   extensions=['png', 'pdf'])
 def test_agg_filter_alpha():

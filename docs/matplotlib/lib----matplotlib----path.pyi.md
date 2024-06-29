@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\path.pyi`
 
-```
+```py
 # 导入曲线生成相关的类
 from .bezier import BezierSegment
 # 导入几何变换相关的类和边界框类

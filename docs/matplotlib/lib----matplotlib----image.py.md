@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\image.py`
 
-```
+```py
 """
 The image module supports basic image loading, rescaling and display
 operations.

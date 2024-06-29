@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\embedding_in_wx2_sgskip.py`
 
-```
+```py
 """
 ==================
 Embedding in wx #2

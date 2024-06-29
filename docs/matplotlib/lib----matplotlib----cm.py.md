@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\cm.py`
 
-```
+```py
 """
 Builtin colormaps, colormap handling utilities, and the `ScalarMappable` mixin.
 

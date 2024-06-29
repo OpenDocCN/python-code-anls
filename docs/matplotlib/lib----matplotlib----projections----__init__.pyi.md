@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\__init__.pyi`
 
-```
+```py
 from .geo import (
     AitoffAxes as AitoffAxes,  # 导入 AitoffAxes 类并重命名为 AitoffAxes
     HammerAxes as HammerAxes,  # 导入 HammerAxes 类并重命名为 HammerAxes

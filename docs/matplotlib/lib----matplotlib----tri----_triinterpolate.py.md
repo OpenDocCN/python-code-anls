@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triinterpolate.py`
 
-```
+```py
 """
 Interpolation inside triangular grids.
 """

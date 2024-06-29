@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\ttconv\truetype.h`
 
-```
+```py
 /*
  * -*- mode: c; c-basic-offset: 4 -*-
  */

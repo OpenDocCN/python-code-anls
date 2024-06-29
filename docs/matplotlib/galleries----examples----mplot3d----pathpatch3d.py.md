@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\pathpatch3d.py`
 
-```
+```py
 # 导入需要的库
 import matplotlib.pyplot as plt  # 导入 matplotlib 的 pyplot 模块并重命名为 plt
 import numpy as np  # 导入 numpy 库并重命名为 np

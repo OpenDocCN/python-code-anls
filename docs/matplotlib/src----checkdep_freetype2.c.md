@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\checkdep_freetype2.c`
 
-```
+```py
 #ifdef __has_include
   #if !__has_include(<ft2build.h>)
     #error "FreeType version 2.3 or higher is required. \

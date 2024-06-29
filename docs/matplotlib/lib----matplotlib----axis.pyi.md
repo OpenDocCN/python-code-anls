@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axis.pyi`
 
-```
+```py
 from collections.abc import Callable, Iterable, Sequence  # 导入必要的集合类型
 import datetime  # 导入日期时间模块
 from typing import Any, Literal, overload  # 引入类型提示相关模块

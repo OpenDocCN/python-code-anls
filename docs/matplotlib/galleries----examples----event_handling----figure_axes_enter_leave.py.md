@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\figure_axes_enter_leave.py`
 
-```
+```py
 """
 ==================================
 Figure/Axes enter and leave events

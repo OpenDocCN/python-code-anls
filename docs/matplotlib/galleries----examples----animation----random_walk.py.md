@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\random_walk.py`
 
-```
+```py
 """
 =======================
 Animated 3D random walk

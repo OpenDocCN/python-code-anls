@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\timeline.py`
 
-```
+```py
 """
 ===============================================
 Creating a timeline with lines, dates, and text

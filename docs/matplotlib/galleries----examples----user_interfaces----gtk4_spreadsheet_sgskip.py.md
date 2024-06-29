@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\gtk4_spreadsheet_sgskip.py`
 
-```
+```py
 """
 ================
 GTK4 spreadsheet

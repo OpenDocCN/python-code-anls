@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\anscombe.py`
 
-```
+```py
 """
 ==================
 Anscombe's quartet

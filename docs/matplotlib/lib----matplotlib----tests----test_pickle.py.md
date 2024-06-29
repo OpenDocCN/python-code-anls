@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_pickle.py`
 
-```
+```py
 from io import BytesIO  # 导入 BytesIO 类，用于创建二进制数据的内存缓冲区
 import ast  # 导入 ast 模块，用于处理抽象语法树
 import pickle  # 导入 pickle 模块，用于序列化 Python 对象

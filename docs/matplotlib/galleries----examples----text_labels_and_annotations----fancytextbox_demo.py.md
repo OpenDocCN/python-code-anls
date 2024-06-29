@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\fancytextbox_demo.py`
 
-```
+```py
 """
 ==================
 Styling text boxes

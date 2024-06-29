@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_api\deprecation.py`
 
-```
+```py
 # 导入上下文管理、函数装饰器、检查函数结构、数学运算和警告模块
 import contextlib
 import functools

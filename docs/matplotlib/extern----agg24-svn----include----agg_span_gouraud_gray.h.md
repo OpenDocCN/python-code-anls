@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_span_gouraud_gray.h`
 
-```
+```py
 // 定义条件编译，确保此文件只被编译一次
 #ifndef AGG_SPAN_GOURAUD_GRAY_INCLUDED
 #define AGG_SPAN_GOURAUD_GRAY_INCLUDED

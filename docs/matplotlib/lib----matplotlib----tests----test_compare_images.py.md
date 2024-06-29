@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_compare_images.py`
 
-```
+```py
 # 引入必要的模块和库：Path和shutil用于文件路径操作和复制，pytest用于测试框架，approx用于近似比较，compare_images和_image_directories来自matplotlib.testing用于图像比较。
 from pathlib import Path  # 导入路径操作模块Path
 import shutil  # 导入文件操作模块shutil

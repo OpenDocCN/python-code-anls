@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_lines.py`
 
-```
+```py
 """
 Tests specific to the lines module.
 """

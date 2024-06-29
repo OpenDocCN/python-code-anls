@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\barbs.py`
 
-```
+```py
 """
 =================
 barbs(X, Y, U, V)

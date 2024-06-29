@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\animations\animations.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/introductory/animation_tutorial
 

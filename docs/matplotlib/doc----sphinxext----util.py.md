@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\util.py`
 
-```
+```py
 import sys
 
 

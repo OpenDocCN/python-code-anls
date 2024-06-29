@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_getattr.py`
 
-```
+```py
 from importlib import import_module  # 导入模块动态加载函数 import_module
 from pkgutil import walk_packages  # 导入包工具模块的 walk_packages 函数
 

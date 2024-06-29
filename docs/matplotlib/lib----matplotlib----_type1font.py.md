@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_type1font.py`
 
-```
+```py
 """
 A class representing a Type 1 font.
 

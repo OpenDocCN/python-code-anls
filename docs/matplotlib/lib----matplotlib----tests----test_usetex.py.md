@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_usetex.py`
 
-```
+```py
 @pytest.mark.parametrize("fontsize", [8, 10, 12])
 def test_minus_no_descent(fontsize):
     # 使用 pytest 的 parametrize 装饰器来定义测试参数化，测试不同的 fontsize 值

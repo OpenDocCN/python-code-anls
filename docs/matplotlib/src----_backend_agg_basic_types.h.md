@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_backend_agg_basic_types.h`
 
-```
+```py
 #ifndef MPL_BACKEND_AGG_BASIC_TYPES_H
 #define MPL_BACKEND_AGG_BASIC_TYPES_H
 

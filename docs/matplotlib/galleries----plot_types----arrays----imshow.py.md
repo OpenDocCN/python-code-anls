@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\imshow.py`
 
-```
+```py
 """
 =========
 imshow(Z)

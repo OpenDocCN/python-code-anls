@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\confidence_ellipse.py`
 
-```
+```py
 #
 # This section imports necessary libraries for plotting and numerical operations.
 import matplotlib.pyplot as plt

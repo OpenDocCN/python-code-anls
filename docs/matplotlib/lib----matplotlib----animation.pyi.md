@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\animation.pyi`
 
-```
+```py
 # 导入 abc 模块，用于定义抽象基类
 import abc
 # 从 collections.abc 中导入 Callable、Collection、Iterable、Sequence、Generator 类

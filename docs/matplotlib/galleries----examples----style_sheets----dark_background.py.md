@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\dark_background.py`
 
-```
+```py
 """
 ===========================
 Dark background style sheet

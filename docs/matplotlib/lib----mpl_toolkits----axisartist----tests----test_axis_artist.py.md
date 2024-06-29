@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\tests\test_axis_artist.py`
 
-```
+```py
 import matplotlib.pyplot as plt  # 导入 matplotlib 的 pyplot 模块，并简写为 plt
 from matplotlib.testing.decorators import image_comparison  # 导入 matplotlib 的测试装饰器 image_comparison
 

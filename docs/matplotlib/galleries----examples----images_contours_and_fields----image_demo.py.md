@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\image_demo.py`
 
-```
+```py
 """
 ========================
 Many ways to plot images

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\collections.py`
 
-```
+```py
 """
 Classes for the efficient drawing of large collections of objects that
 share most properties, e.g., a large number of line segments or

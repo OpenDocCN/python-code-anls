@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_backend_pdf_ps.py`
 
-```
+```py
 """
 Common functionality between the PDF and PS backends.
 """

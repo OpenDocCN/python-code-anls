@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\dynamic_image.py`
 
-```
+```py
 """
 =================================================
 Animated image using a precomputed list of images

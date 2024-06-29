@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\container.py`
 
-```
+```py
 # 从 matplotlib 库中导入 cbook 模块
 from matplotlib import cbook
 # 从 matplotlib.artist 模块中导入 Artist 类

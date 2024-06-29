@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\tick_xlabel_top.py`
 
-```
+```py
 """
 ==================================
 Move x-axis tick labels to the top

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_mathtext.py`
 
-```
+```py
 # 从未来导入注释，允许在函数签名中使用类型提示的字符串表示法
 from __future__ import annotations
 

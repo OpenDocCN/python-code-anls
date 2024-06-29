@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\agg_embedded_raster_fonts.cpp`
 
-```
+```py
 namespace agg
 {
     // 定义多个字体的字节流数组，每个数组存储一个特定字体的字节数据

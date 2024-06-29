@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\bars3d.py`
 
-```
+```py
 """
 ========================================
 Create 2D bar graphs in different planes

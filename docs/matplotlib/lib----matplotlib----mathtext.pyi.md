@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\mathtext.pyi`
 
-```
+```py
 import os  # 导入标准库os，用于操作操作系统相关功能
 from typing import Generic, IO, Literal, TypeVar, overload  # 导入类型提示相关模块
 

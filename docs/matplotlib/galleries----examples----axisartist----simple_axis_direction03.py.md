@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\simple_axis_direction03.py`
 
-```
+```py
 """
 ==========================================
 Simple axis tick label and tick directions

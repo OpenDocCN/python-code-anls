@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\parasite_axes.py`
 
-```
+```py
 from matplotlib import _api, cbook  # 导入需要的模块
 import matplotlib.artist as martist  # 导入matplotlib的artist模块，用于图形元素的管理
 import matplotlib.transforms as mtransforms  # 导入matplotlib的transforms模块，用于坐标变换

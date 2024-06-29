@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\axes_zoom_effect.py`
 
-```
+```py
 """
 ================
 Axes Zoom Effect

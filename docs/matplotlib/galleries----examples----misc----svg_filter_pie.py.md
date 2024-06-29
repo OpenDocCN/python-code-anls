@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\svg_filter_pie.py`
 
-```
+```py
 """
 ==============
 SVG filter pie

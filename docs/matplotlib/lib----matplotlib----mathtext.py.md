@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\mathtext.py`
 
-```
+```py
 r"""
 A module for parsing a subset of the TeX math syntax and rendering it to a
 Matplotlib backend.

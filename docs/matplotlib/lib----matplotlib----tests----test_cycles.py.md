@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_cycles.py`
 
-```
+```py
 # 导入 contextlib 模块，用于处理上下文管理
 # 导入 StringIO 类从 io 模块中，用于创建内存中的文本 I/O 流
 import contextlib

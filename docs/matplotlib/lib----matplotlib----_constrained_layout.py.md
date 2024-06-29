@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_constrained_layout.py`
 
-```
+```py
 """
 Adjust subplot layouts so that there are no overlapping Axes or Axes
 decorations.  All Axes decorations are dealt with (labels, ticks, titles,

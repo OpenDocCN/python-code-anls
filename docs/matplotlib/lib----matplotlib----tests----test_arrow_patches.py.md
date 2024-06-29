@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_arrow_patches.py`
 
-```
+```py
 import pytest
 import platform
 import matplotlib.pyplot as plt

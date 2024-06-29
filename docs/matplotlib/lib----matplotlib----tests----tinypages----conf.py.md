@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\tinypages\conf.py`
 
-```
+```py
 # 导入必要的库，sphinx 是用于生成文档的工具，packaging.version 是用于处理版本号的模块
 
 import sphinx  # 导入sphinx模块

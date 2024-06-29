@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triinterpolate.pyi`
 
-```
+```py
 # 从 matplotlib.tri 模块中导入 Triangulation 和 TriFinder 类
 from matplotlib.tri import Triangulation, TriFinder
 

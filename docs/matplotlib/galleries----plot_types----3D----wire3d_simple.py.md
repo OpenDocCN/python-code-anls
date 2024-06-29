@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\wire3d_simple.py`
 
-```
+```py
 """
 =======================
 plot_wireframe(X, Y, Z)

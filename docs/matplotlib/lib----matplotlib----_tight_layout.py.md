@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_tight_layout.py`
 
-```
+```py
 """
 Routines to adjust subplot params so that subplots are
 nicely fit in the figure. In doing so, only axis labels, tick labels, Axes

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\coords_report.py`
 
-```
+```py
 """
 =============
 Coords Report

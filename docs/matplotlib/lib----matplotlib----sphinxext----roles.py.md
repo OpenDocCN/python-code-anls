@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sphinxext\roles.py`
 
-```
+```py
 """
 Custom roles for the Matplotlib documentation.
 

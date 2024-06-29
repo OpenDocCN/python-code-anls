@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\angle_annotation.py`
 
-```
+```py
 """
 ===========================
 Scale invariant angle label

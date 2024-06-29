@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\scatter_hist_locatable_axes.py`
 
-```
+```py
 """
 ==================================
 Scatter Histogram (Locatable Axes)

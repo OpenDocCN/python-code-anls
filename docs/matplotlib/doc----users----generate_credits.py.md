@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\users\generate_credits.py`
 
-```
+```py
 #!/usr/bin/env python
 #
 # This script generates credits.rst with an up-to-date list of contributors

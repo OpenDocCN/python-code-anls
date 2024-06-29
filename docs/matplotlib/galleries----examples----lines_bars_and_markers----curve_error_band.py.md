@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\curve_error_band.py`
 
-```
+```py
 """
 =====================
 Curve with error band

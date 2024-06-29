@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\quiver3d.py`
 
-```
+```py
 """
 ==============
 3D quiver plot

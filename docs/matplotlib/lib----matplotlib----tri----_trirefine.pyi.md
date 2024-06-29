@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_trirefine.pyi`
 
-```
+```py
 from typing import Literal, overload  # 导入类型提示工具
 
 import numpy as np  # 导入NumPy库

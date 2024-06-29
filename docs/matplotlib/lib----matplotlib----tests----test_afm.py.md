@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_afm.py`
 
-```
+```py
 # 导入所需模块
 from io import BytesIO  # 导入 BytesIO 类，用于操作二进制数据流
 import pytest  # 导入 pytest 模块，用于编写和运行测试

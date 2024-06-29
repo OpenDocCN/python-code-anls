@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\colors.py`
 
-```
+```py
 # 导入必要的模块和库
 import base64  # 导入base64模块，用于处理base64编码解码操作
 from collections.abc import Sized, Sequence, Mapping  # 导入集合抽象基类中的Sized, Sequence, Mapping，用于处理集合类的操作

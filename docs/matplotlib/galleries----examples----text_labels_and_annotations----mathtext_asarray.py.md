@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\mathtext_asarray.py`
 
-```
+```py
 """
 =======================
 Convert texts to images

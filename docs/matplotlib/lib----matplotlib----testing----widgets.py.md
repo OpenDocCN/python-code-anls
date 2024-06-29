@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\widgets.py`
 
-```
+```py
 """
 ========================
 Widget testing utilities

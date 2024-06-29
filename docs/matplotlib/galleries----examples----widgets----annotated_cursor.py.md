@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\annotated_cursor.py`
 
-```
+```py
 """
 ================
 Annotated cursor

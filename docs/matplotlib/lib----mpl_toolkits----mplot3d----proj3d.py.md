@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\proj3d.py`
 
-```
+```py
 """
 Various transforms used for by the 3D code
 """

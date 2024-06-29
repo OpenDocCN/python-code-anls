@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\style\core.pyi`
 
-```
+```py
 from collections.abc import Generator
 import contextlib
 

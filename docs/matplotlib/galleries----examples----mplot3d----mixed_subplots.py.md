@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\mixed_subplots.py`
 
-```
+```py
 """
 =============================
 2D and 3D Axes in same figure

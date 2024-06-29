@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\mri_with_eeg.py`
 
-```
+```py
 """
 ============
 MRI with EEG

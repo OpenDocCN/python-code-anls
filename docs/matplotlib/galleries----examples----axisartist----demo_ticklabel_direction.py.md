@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_ticklabel_direction.py`
 
-```
+```py
 """
 ===================
 Ticklabel direction

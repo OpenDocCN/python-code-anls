@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\color_demo.py`
 
-```
+```py
 """
 ==========
 Color Demo

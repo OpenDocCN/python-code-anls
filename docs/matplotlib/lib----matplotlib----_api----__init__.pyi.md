@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_api\__init__.pyi`
 
-```
+```py
 # 导入必要的模块和类
 from collections.abc import Callable, Generator, Mapping, Sequence
 from typing import Any, Iterable, TypeVar, overload

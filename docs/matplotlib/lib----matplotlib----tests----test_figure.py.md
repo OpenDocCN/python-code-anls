@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_figure.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入深拷贝功能
 from datetime import datetime  # 导入日期时间处理功能

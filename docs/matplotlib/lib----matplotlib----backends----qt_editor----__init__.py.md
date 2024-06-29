@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\qt_editor\__init__.py`
 
-```
+```py
 # 定义一个名为 reverse_string 的函数，接收一个字符串作为参数
 def reverse_string(s):
     # 使用切片操作[::-1]来翻转字符串s，并将结果返回

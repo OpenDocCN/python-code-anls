@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\ft2font.cpp`
 
-```
+```py
 /**
  * -*- mode: c++; c-basic-offset: 4 -*-
  */

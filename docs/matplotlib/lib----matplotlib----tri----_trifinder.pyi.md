@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_trifinder.pyi`
 
-```
+```py
 from matplotlib.tri import Triangulation
 from numpy.typing import ArrayLike
 

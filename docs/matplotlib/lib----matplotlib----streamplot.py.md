@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\streamplot.py`
 
-```
+```py
 """
 Streamline plotting for 2D vector fields.
 

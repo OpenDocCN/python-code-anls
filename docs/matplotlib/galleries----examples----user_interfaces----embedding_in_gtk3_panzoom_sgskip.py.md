@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\embedding_in_gtk3_panzoom_sgskip.py`
 
-```
+```py
 """
 ===========================================
 Embedding in GTK3 with a navigation toolbar

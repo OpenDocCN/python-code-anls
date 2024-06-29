@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\mlab.pyi`
 
-```
+```py
 # 从 collections.abc 模块导入 Callable 类型
 from collections.abc import Callable
 # 导入 functools 模块

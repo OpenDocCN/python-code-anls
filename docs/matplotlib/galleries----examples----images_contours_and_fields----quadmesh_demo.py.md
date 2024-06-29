@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\quadmesh_demo.py`
 
-```
+```py
 """
 =============
 QuadMesh Demo

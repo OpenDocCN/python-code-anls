@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_qtagg.py`
 
-```
+```py
 """
 Render to qt from agg.
 """

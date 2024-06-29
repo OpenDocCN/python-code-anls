@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_basic.py`
 
-```
+```py
 import builtins
 import os
 import sys

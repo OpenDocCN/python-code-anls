@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\watermark_text.py`
 
-```
+```py
 """
 ==============
 Text watermark

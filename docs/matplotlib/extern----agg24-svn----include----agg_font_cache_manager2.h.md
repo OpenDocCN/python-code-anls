@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_font_cache_manager2.h`
 
-```
+```py
 // 定义一个命名空间agg，用于组织AGG库的相关代码
 namespace agg {
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\ticks_too_many.py`
 
-```
+```py
 # %%
 # Example 1: Strings can lead to an unexpected order of number ticks
 # ------------------------------------------------------------------

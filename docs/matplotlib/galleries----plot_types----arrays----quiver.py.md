@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\quiver.py`
 
-```
+```py
 """
 ==================
 quiver(X, Y, U, V)

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\custom_scale.py`
 
-```
+```py
 """
 .. _custom_scale:
 

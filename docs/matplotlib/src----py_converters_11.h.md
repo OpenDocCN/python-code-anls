@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\py_converters_11.h`
 
-```
+```py
 #ifndef MPL_PY_CONVERTERS_11_H
 #define MPL_PY_CONVERTERS_11_H
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\polys3d.py`
 
-```
+```py
 """
 ====================
 Generate 3D polygons

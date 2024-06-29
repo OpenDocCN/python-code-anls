@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\agg_trans_single_path.cpp`
 
-```
+```py
     //------------------------------------------------------------------------
     // 构造函数，初始化变量
     trans_single_path::trans_single_path() :

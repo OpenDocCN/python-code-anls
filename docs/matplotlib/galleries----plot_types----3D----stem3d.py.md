@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\stem3d.py`
 
-```
+```py
 """
 =============
 stem(x, y, z)

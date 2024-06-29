@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\hatch.pyi`
 
-```
+```py
 # `
 from matplotlib.path import Path  # 导入 matplotlib.path 中的 Path 类，用于创建路径对象
 

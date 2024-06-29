@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\zoom_inset_axes.py`
 
-```
+```py
 """
 ======================
 Zoom region inset Axes

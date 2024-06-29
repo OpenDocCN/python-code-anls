@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\py_adaptors.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 #ifndef MPL_PY_ADAPTORS_H

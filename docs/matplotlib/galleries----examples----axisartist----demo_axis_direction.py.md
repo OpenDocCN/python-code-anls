@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_axis_direction.py`
 
-```
+```py
 """
 ===================
 axis_direction demo

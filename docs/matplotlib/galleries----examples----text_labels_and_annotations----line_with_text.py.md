@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\line_with_text.py`
 
-```
+```py
 """
 =======================
 Artist within an artist

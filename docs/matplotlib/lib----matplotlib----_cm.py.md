@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_cm.py`
 
-```
+```py
 """
 Nothing here but dictionaries for generating LinearSegmentedColormaps,
 and a dictionary of these dictionaries.

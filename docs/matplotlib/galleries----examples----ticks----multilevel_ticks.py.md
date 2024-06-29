@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\multilevel_ticks.py`
 
-```
+```py
 """
 =========================
 Multilevel (nested) ticks

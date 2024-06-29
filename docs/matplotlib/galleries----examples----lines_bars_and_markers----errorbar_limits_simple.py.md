@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\errorbar_limits_simple.py`
 
-```
+```py
 """
 ========================
 Errorbar limit selection

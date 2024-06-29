@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\auto_ticks.py`
 
-```
+```py
 """
 ====================================
 Automatically setting tick positions

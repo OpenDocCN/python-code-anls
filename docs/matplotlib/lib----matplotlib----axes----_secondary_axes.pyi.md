@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_secondary_axes.pyi`
 
-```
+```py
 from matplotlib.axes._base import _AxesBase
 from matplotlib.axis import Tick
 

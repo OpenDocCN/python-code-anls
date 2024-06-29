@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_colorbar_with_inset_locator.py`
 
-```
+```py
 """
 .. _demo-colorbar-with-inset-locator:
 

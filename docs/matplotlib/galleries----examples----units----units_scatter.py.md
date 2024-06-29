@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\units_scatter.py`
 
-```
+```py
 """
 =============
 Unit handling

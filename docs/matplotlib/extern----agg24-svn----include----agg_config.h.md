@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_config.h`
 
-```
+```py
 #ifndef AGG_CONFIG_INCLUDED
 #define AGG_CONFIG_INCLUDED
 

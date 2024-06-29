@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\axes_rgb.py`
 
-```
+```py
 from types import MethodType  # 导入 MethodType 类型，用于动态绑定方法
 
 import numpy as np  # 导入 NumPy 库，用于处理数组和数值计算

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\colormap_normalizations_symlognorm.py`
 
-```
+```py
 # %%
 # 合成数据集，包含两个驼峰形状，一个为负值，一个为正值，正值的振幅是负值的8倍。
 # 在线性情况下，负值的驼峰几乎不可见，很难看到其轮廓的任何细节。

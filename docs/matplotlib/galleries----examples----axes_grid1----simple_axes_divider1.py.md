@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\simple_axes_divider1.py`
 
-```
+```py
 """
 =====================
 Simple Axes Divider 1

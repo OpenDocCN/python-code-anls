@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\set_and_get.py`
 
-```
+```py
 """
 ======================
 Set and get properties

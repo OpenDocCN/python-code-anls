@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\boxplot_color.py`
 
-```
+```py
 """
 =================================
 Box plots with custom fill colors

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\bayes_update.py`
 
-```
+```py
 """
 ================
 The Bayes update

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_collections.py`
 
-```
+```py
 # 导入所需模块和库
 from datetime import datetime               # 导入 datetime 模块中的 datetime 类
 import io                                   # 导入 io 模块，用于处理文件流

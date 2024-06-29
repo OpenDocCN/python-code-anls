@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\data_browser.py`
 
-```
+```py
 """
 ============
 Data browser

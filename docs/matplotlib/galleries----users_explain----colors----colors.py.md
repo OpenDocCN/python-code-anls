@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\colors\colors.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/colors/colors
 

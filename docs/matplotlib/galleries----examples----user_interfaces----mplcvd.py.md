@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\mplcvd.py`
 
-```
+```py
 """
 mplcvd -- an example of figure hook
 ===================================

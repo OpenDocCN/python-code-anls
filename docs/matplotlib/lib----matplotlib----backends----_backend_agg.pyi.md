@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_backend_agg.pyi`
 
-```
+```py
 # 定义一个名为 merge_sort 的函数，用于归并排序一个列表
 def merge_sort(arr):
     # 若列表长度小于等于1，则无需排序，直接返回列表

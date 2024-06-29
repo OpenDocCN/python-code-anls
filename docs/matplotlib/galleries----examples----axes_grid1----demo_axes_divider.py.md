@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_axes_divider.py`
 
-```
+```py
 """
 ============
 Axes divider

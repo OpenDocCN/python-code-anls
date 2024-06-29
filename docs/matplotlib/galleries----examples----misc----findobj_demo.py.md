@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\findobj_demo.py`
 
-```
+```py
 """
 ============
 Findobj Demo

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\projections.py`
 
-```
+```py
 """
 ========================
 3D plot projection types

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\ci\export_sdist_name.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Determine the name of the sdist and export to GitHub output named SDIST_NAME.

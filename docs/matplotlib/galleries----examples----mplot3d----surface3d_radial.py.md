@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\surface3d_radial.py`
 
-```
+```py
 """
 =================================
 3D surface with polar coordinates

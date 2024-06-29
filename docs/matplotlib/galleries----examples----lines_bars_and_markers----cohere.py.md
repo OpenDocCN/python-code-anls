@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\cohere.py`
 
-```
+```py
 """
 =====================================
 Plotting the coherence of two signals

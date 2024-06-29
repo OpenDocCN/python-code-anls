@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_doc.py`
 
-```
+```py
 import pytest  # 导入 pytest 测试框架
 
 

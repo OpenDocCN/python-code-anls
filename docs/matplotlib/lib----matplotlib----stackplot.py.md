@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\stackplot.py`
 
-```
+```py
 """
 Stacked area plot for 1D arrays inspired by Douglas Y'barbo's stackoverflow
 answer:

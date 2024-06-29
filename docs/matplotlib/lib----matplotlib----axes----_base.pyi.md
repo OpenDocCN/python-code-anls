@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_base.pyi`
 
-```
+```py
 # 导入 matplotlib.artist 模块的别名 martist
 import matplotlib.artist as martist
 

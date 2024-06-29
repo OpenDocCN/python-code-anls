@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\colors.pyi`
 
-```
+```py
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from matplotlib import cbook, scale
 import re

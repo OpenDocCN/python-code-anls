@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_triplot.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于数值计算
 from matplotlib.tri._triangulation import Triangulation  # 导入 Triangulation 类，用于处理三角网格
 import matplotlib.cbook as cbook  # 导入 matplotlib 的 cbook 模块，用于杂项功能

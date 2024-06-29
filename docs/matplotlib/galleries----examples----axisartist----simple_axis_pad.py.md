@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\simple_axis_pad.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，并重命名为 plt
 import matplotlib.pyplot as plt
 # 导入 numpy 库，并重命名为 np

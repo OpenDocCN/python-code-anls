@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\quiver3d_simple.py`
 
-```
+```py
 """
 ========================
 quiver(X, Y, Z, U, V, W)

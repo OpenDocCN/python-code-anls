@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\figure.py`
 
-```
+```py
 """
 `matplotlib.figure` implements the following classes:
 

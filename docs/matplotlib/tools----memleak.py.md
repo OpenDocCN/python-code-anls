@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\memleak.py`
 
-```
+```py
 #!/usr/bin/env python
 
 import gc  # 导入垃圾回收模块

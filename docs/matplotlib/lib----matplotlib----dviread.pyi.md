@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\dviread.pyi`
 
-```
+```py
 # 从 pathlib 模块导入 Path 类，用于处理文件路径
 from pathlib import Path
 # 导入 io 模块，用于提供核心的 IO 功能

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\ctrl\agg_rbox_ctrl.h`
 
-```
+```py
 // 定义 AGG 几何图形控件的矩形框控件 rbox_ctrl_impl
 class rbox_ctrl_impl : public ctrl
 {

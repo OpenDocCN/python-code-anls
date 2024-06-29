@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_table.py`
 
-```
+```py
 import datetime  # 导入处理日期和时间的模块
 from unittest.mock import Mock  # 从unittest.mock模块中导入Mock类
 

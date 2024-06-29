@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\nested_pie.py`
 
-```
+```py
 """
 =================
 Nested pie charts

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\sankey_rankine.py`
 
-```
+```py
 """
 ===================
 Rankine power cycle

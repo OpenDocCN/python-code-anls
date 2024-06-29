@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\streamplot.py`
 
-```
+```py
 """
 ======================
 streamplot(X, Y, U, V)

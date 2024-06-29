@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_tightlayout.py`
 
-```
+```py
 # 导入警告模块，用于管理警告信息
 import warnings
 

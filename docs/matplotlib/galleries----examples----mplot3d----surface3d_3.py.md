@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\surface3d_3.py`
 
-```
+```py
 """
 =========================
 3D surface (checkerboard)

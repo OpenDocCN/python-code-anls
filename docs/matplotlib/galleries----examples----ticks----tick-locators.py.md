@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\tick-locators.py`
 
-```
+```py
 """
 =============
 Tick locators

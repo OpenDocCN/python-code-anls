@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_renderer_raster_text.h`
 
-```
+```py
 //==============================================renderer_raster_htext_solid
 // 定义一个模板类 renderer_raster_htext_solid，用于实现基于固定颜色的水平文本渲染器
 template<class BaseRenderer, class GlyphGenerator> 

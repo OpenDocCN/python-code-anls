@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\plot3d_simple.py`
 
-```
+```py
 """
 ================
 plot(xs, ys, zs)

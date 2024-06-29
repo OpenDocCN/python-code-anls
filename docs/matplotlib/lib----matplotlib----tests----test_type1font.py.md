@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_type1font.py`
 
-```
+```py
 # 导入 matplotlib 库中的 _type1font 模块，用于处理 Type1 字体文件
 import matplotlib._type1font as t1f
 # 导入操作系统路径相关模块

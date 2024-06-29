@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\lines.py`
 
-```
+```py
 """
 2D lines with support for a variety of line styles, markers, colors, etc.
 """

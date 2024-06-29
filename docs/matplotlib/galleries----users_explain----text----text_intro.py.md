@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\text_intro.py`
 
-```
+```py
 """
 ==================
 Text in Matplotlib

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_span_allocator.h`
 
-```
+```py
 // 包含必要的头文件和声明命名空间 agg
 #ifndef AGG_SPAN_ALLOCATOR_INCLUDED
 #define AGG_SPAN_ALLOCATOR_INCLUDED

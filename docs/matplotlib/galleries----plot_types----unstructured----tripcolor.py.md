@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\unstructured\tripcolor.py`
 
-```
+```py
 """
 ==================
 tripcolor(x, y, z)

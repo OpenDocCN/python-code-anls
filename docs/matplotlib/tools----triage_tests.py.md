@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\triage_tests.py`
 
-```
+```py
 """
 This is a developer utility to help analyze and triage image
 comparison failures.

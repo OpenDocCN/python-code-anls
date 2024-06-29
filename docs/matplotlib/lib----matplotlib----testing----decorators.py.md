@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\decorators.py`
 
-```
+```py
 # 导入必要的模块和包
 import contextlib  # 提供上下文管理功能的模块
 import functools  # 提供高阶函数的工具，如部分应用（partial application）

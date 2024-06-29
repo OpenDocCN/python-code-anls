@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\grid_finder.py`
 
-```
+```py
 # 导入NumPy库，用于数值计算
 import numpy as np
 

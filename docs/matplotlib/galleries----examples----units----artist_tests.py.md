@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\artist_tests.py`
 
-```
+```py
 """
 ============
 Artist tests

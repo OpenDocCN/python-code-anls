@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\boilerplate.py`
 
-```
+```py
 """
 Script to autogenerate pyplot wrappers.
 

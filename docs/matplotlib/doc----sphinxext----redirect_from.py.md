@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\redirect_from.py`
 
-```
+```py
 """
 Redirecting old docs to new location
 ====================================

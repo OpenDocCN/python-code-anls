@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\custom_legends.py`
 
-```
+```py
 """
 ========================
 Composing Custom Legends

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tricontour.py`
 
-```
+```py
 # 导入NumPy库，并使用别名np
 import numpy as np
 

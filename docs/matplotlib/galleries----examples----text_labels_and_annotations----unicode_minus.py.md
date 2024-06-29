@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\unicode_minus.py`
 
-```
+```py
 """
 =============
 Unicode minus

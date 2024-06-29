@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\tests\test_art3d.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，用于数值计算
 
 import matplotlib.pyplot as plt  # 导入 Matplotlib 库的 pyplot 模块，用于绘图

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\multiprocess_sgskip.py`
 
-```
+```py
 """
 ===============
 Multiprocessing

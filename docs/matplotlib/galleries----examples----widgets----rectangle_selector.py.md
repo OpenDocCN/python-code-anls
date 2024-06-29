@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\rectangle_selector.py`
 
-```
+```py
 """
 ===============================
 Rectangle and ellipse selectors

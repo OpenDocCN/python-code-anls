@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\text_fontdict.py`
 
-```
+```py
 """
 =======================================================
 Controlling style of text and labels using a dictionary

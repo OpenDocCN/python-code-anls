@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\path.py`
 
-```
+```py
 """
 A module for dealing with the polylines used throughout Matplotlib.
 Matplotlib 中用于处理折线的模块。

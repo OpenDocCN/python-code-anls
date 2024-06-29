@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\mplot3d\tests\__init__.py`
 
-```
+```py
 # 导入 Path 类，用于处理文件路径
 from pathlib import Path
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_gtk3agg.py`
 
-```
+```py
 import numpy as np  # 导入 numpy 库，用于数值计算
 
 from .. import cbook, transforms  # 导入当前目录上级的 cbook 和 transforms 模块

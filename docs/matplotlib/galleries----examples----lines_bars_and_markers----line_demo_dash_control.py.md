@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\line_demo_dash_control.py`
 
-```
+```py
 """
 ==============================
 Customizing dashed line styles

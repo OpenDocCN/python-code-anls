@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\pyplot.py`
 
-```
+```py
 # fmt: off
 
 from __future__ import annotations  # 导入未来版本的注释支持，用于类型注释中的类型引用

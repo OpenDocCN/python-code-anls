@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\basic\fill_between.py`
 
-```
+```py
 """
 =======================
 fill_between(x, y1, y2)

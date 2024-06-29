@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_ps.py`
 
-```
+```py
 # 导入必要的模块和库
 import codecs  # 用于编码解码字符串
 import datetime  # 处理日期和时间的模块

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sphinxext\plot_directive.py`
 
-```
+```py
 """
 A directive for including a Matplotlib plot in a Sphinx document
 ================================================================

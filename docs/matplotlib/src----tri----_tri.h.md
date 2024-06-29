@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\tri\_tri.h`
 
-```
+```py
 #ifndef MPL_TRI_H
 #define MPL_TRI_H
 

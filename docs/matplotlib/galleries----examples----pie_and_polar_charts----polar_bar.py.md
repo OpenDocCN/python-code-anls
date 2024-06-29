@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\polar_bar.py`
 
-```
+```py
 """
 =======================
 Bar chart on polar axis

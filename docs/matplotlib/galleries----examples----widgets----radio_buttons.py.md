@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\radio_buttons.py`
 
-```
+```py
 """
 =============
 Radio Buttons

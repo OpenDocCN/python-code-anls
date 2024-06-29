@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\svg_filter_line.py`
 
-```
+```py
 """
 ===============
 SVG Filter Line

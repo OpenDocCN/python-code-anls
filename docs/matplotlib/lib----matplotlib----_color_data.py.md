@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_color_data.py`
 
-```
+```py
 # 基础颜色字典，包含常见颜色的 RGB 值
 BASE_COLORS = {
     'b': (0, 0, 1),        # 蓝色

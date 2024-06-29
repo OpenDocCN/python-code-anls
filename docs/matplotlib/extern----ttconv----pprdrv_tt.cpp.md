@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\ttconv\pprdrv_tt.cpp`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /*

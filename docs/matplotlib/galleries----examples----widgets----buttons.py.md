@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\buttons.py`
 
-```
+```py
 """
 =======
 Buttons

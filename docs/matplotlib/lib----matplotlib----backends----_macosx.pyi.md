@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_macosx.pyi`
 
-```
+```py
 # 导入所需的模块：os 模块用于操作文件系统，sys 模块用于处理系统相关的功能
 import os
 import sys

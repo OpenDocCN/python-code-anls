@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_sphinxext.py`
 
-```
+```py
 """Tests for tinypages build using sphinx extensions."""
 
 import filecmp  # 导入文件比较模块

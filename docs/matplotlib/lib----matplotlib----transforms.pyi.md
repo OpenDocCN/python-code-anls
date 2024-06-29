@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\transforms.pyi`
 
-```
+```py
 # 从路径模块导入 Path 类
 # 注意这里的 . 表示当前模块的路径
 from .path import Path

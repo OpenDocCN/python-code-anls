@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\eventplot.py`
 
-```
+```py
 """
 ============
 eventplot(D)

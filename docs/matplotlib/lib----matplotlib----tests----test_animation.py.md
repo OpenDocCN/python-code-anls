@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_animation.py`
 
-```
+```py
 # 导入标准库和第三方库
 import os  # 操作系统相关功能
 from pathlib import Path  # 处理路径相关操作

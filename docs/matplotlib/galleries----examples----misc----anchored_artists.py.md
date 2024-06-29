@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\anchored_artists.py`
 
-```
+```py
 """
 ================
 Anchored Artists

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\lasso_demo.py`
 
-```
+```py
 """
 ==========
 Lasso Demo

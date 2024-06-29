@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\fancybox_demo.py`
 
-```
+```py
 """
 ===================
 Drawing fancy boxes

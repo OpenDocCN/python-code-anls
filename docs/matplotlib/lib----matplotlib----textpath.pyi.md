@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\textpath.pyi`
 
-```
+```py
 # 导入所需的模块和类
 from matplotlib.font_manager import FontProperties
 from matplotlib.ft2font import FT2Font

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_streamplot.py`
 
-```
+```py
 # 导入 NumPy 库，并将其命名为 np
 import numpy as np
 # 导入 assert_array_almost_equal 函数，用于测试数组近似相等性

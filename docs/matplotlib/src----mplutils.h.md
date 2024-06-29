@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\mplutils.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /* Small utilities that are shared by most extension modules. */

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\collections.pyi`
 
-```
+```py
 # 导入需要的模块和类
 from collections.abc import Callable, Iterable, Sequence
 from typing import Literal

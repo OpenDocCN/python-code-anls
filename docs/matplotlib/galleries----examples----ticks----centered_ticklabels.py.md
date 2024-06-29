@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\centered_ticklabels.py`
 
-```
+```py
 """
 ==============================
 Centering labels between ticks

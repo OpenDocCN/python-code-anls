@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_qt5cairo.py`
 
-```
+```py
 # 从上级目录的 backends 模块中导入 backends 对象
 from .. import backends
 

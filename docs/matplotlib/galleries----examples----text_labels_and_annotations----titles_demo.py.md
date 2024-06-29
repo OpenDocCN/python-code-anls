@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\titles_demo.py`
 
-```
+```py
 """
 =================
 Title positioning

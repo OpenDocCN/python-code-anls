@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\simple_anchored_artists.py`
 
-```
+```py
 """
 =======================
 Simple Anchored Artists

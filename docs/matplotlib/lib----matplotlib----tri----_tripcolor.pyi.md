@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tripcolor.pyi`
 
-```
+```py
 # 导入绘图所需的模块和函数
 from matplotlib.axes import Axes  # 导入 Axes 类，用于创建图表的坐标系
 from matplotlib.collections import PolyCollection, TriMesh  # 导入 PolyCollection 和 TriMesh 类，用于绘制多边形集合和三角网格

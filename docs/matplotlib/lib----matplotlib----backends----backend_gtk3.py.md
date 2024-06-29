@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_gtk3.py`
 
-```
+```py
 import functools  # 导入 functools 模块，用于支持函数式编程的工具
 import logging  # 导入 logging 模块，用于记录日志信息
 import os  # 导入 os 模块，提供与操作系统交互的功能

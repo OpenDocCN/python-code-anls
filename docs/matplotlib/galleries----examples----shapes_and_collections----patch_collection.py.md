@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\patch_collection.py`
 
-```
+```py
 """
 ============================
 Circles, Wedges and Polygons

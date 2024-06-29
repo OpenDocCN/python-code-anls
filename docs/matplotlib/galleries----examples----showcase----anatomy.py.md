@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\anatomy.py`
 
-```
+```py
 """
 ===================
 Anatomy of a figure

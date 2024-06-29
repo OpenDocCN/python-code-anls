@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\cbook.pyi`
 
-```
+```py
 # 导入 collections.abc 模块，包含了抽象基类，用于定义集合和可迭代对象的抽象接口
 import collections.abc
 # 从 collections.abc 模块中导入 Callable、Collection、Generator、Iterable、Iterator 抽象基类

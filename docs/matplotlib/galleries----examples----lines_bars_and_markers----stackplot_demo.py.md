@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\stackplot_demo.py`
 
-```
+```py
 """
 ===========================
 Stackplots and streamgraphs

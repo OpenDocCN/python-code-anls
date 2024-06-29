@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_cbook.py`
 
-```
+```py
 # 从未来版本导入注解功能，用于类型提示
 from __future__ import annotations
 

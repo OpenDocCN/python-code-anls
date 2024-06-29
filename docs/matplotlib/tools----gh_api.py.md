@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\gh_api.py`
 
-```
+```py
 """Functions for GitHub API requests."""
 
 # 导入所需的模块和库

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_index_formatter.py`
 
-```
+```py
 """
 =====================================
 Custom tick formatter for time series

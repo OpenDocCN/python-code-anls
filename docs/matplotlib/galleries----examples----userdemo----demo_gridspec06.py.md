@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\demo_gridspec06.py`
 
-```
+```py
 r"""
 ================
 Nested GridSpecs

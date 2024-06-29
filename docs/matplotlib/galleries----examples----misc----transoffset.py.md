@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\transoffset.py`
 
-```
+```py
 """
 ======================
 transforms.offset_copy

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\zorder_demo.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，用于绘图操作
 import matplotlib.pyplot as plt
 # 导入 numpy 库，用于生成数据

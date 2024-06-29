@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tricontour.pyi`
 
-```
+```py
 # 从 matplotlib 库中导入 Axes 类，用于绘制图形的坐标轴
 from matplotlib.axes import Axes
 # 从 matplotlib.contour 模块中导入 ContourSet 类，用于绘制等高线图

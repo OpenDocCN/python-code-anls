@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sankey.py`
 
-```
+```py
 """
 Module for creating Sankey diagrams using Matplotlib.
 """

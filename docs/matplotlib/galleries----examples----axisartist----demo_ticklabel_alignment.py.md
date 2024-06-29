@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_ticklabel_alignment.py`
 
-```
+```py
 """
 ===================
 Ticklabel alignment

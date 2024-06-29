@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_tools.py`
 
-```
+```py
 """
 Abstract base classes define the primitives for Tools.
 These tools are used by `matplotlib.backend_managers.ToolManager`

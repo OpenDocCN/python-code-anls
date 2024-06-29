@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\fonts.py`
 
-```
+```py
 r"""
 .. redirect-from:: /users/fonts
 .. redirect-from:: /users/explain/fonts

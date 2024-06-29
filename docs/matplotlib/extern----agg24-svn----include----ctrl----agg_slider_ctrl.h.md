@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\ctrl\agg_slider_ctrl.h`
 
-```
+```py
     //--------------------------------------------------------slider_ctrl_impl
     // slider_ctrl_impl 类的实现，继承自 ctrl 类，用于创建滑块控件
     class slider_ctrl_impl : public ctrl

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_png.py`
 
-```
+```py
 # 导入所需的模块和库
 from io import BytesIO
 from pathlib import Path

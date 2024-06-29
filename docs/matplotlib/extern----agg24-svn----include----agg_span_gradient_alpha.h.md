@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_span_gradient_alpha.h`
 
-```
+```py
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // 版权所有 2002-2005 年 Maxim Shemanarev（http://www.antigrain.com）

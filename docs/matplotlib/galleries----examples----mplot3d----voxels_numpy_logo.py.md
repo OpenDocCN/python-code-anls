@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\voxels_numpy_logo.py`
 
-```
+```py
 """
 ===============================
 3D voxel plot of the NumPy logo

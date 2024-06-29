@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\rainbow_text.py`
 
-```
+```py
 """
 ====================================================
 Concatenating text objects with different properties

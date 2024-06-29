@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_ps.py`
 
-```
+```py
 # 导入必要的库
 from collections import Counter
 from pathlib import Path

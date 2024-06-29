@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_mlab.py`
 
-```
+```py
 from numpy.testing import (assert_allclose, assert_almost_equal,
                            assert_array_equal, assert_array_almost_equal_nulp)
 import numpy as np

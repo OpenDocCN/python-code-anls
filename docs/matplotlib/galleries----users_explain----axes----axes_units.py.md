@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\axes_units.py`
 
-```
+```py
 """
 .. _user_axes_units:
 

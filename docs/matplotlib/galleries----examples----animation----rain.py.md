@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\rain.py`
 
-```
+```py
 """
 ===============
 Rain simulation

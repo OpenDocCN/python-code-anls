@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\polar.pyi`
 
-```
+```py
 import matplotlib.axis as maxis
 import matplotlib.ticker as mticker
 import matplotlib.transforms as mtransforms

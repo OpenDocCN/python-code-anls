@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\spines.pyi`
 
-```
+```py
 # 导入必要的模块和类型
 from collections.abc import Callable, Iterator, MutableMapping
 from typing import Any, Literal, TypeVar, overload

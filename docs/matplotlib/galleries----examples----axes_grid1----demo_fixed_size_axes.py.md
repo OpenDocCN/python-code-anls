@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_fixed_size_axes.py`
 
-```
+```py
 """
 ===============================
 Axes with a fixed physical size

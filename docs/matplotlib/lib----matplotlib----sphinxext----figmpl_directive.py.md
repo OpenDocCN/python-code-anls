@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sphinxext\figmpl_directive.py`
 
-```
+```py
 """
 为Sphinx添加一个响应式的``figure-mpl``指令，类似于``figure``指令的实现。
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\errorbar3d.py`
 
-```
+```py
 """
 ============
 3D errorbars

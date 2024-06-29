@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\wire3d_zero_stride.py`
 
-```
+```py
 """
 ===================================
 3D wireframe plots in one direction

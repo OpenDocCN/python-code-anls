@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\annotations.py`
 
-```
+```py
 r"""
 .. redirect-from:: /gallery/userdemo/annotate_simple01
 .. redirect-from:: /gallery/userdemo/annotate_simple02

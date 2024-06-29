@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\connectionstyle_demo.py`
 
-```
+```py
 """
 =================================
 Connection styles for annotations

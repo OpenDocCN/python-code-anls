@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\colormap_reference.py`
 
-```
+```py
 """
 ==================
 Colormap reference

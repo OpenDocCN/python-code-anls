@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_dates.py`
 
-```
+```py
 import datetime  # 导入 datetime 模块，用于处理日期和时间
 
 import dateutil.tz  # 导入 dateutil.tz 模块，支持时区操作

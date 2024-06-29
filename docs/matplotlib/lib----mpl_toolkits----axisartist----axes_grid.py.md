@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axes_grid.py`
 
-```
+```py
 from matplotlib import _api
 
 # 导入了matplotlib中的一个API模块，用于内部警告和废弃功能的处理

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\unstructured\triplot.py`
 
-```
+```py
 """
 =============
 triplot(x, y)

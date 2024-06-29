@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\custom_boxstyle01.py`
 
-```
+```py
 r"""
 =================
 Custom box styles

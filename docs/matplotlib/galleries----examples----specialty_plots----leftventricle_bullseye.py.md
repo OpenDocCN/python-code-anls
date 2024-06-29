@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\leftventricle_bullseye.py`
 
-```
+```py
 """
 =======================
 Left ventricle bullseye

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\legend_picking.py`
 
-```
+```py
 """
 ==============
 Legend picking

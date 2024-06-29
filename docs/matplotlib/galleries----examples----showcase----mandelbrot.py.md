@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\mandelbrot.py`
 
-```
+```py
 """
 ===================================
 Shaded & power normalized rendering

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\ci\schemas\vendor_schemas.py`
 
-```
+```py
 #!/usr/bin/env python3
 """
 Download YAML Schemas for linting and validation.

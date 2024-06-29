@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_formatters_locators.py`
 
-```
+```py
 """
 .. _date_formatters_locators:
 

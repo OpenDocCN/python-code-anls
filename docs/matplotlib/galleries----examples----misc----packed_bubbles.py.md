@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\packed_bubbles.py`
 
-```
+```py
 """
 ===================
 Packed-bubble chart

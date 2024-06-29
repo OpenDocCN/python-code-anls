@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_mathtext_data.py`
 
-```
+```py
 """
 font data tables for truetype and afm computer modern fonts
 """

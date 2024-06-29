@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\fonts_demo_kw.py`
 
-```
+```py
 """
 ==============================
 Fonts demo (keyword arguments)

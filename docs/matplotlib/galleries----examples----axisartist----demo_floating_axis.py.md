@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_floating_axis.py`
 
-```
+```py
 """
 ==================
 floating_axis demo

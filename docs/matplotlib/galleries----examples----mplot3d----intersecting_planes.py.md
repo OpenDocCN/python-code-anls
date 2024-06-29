@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\intersecting_planes.py`
 
-```
+```py
 """
 ===================
 Intersecting planes

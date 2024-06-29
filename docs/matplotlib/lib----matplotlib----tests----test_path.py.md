@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_path.py`
 
-```
+```py
 import platform
 import re
 

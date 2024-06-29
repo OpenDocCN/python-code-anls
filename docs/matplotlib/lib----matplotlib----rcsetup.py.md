@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\rcsetup.py`
 
-```
+```py
 """
 The rcsetup module contains the validation code for customization using
 Matplotlib's rc settings.

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\scatter_with_legend.py`
 
-```
+```py
 """
 ===========================
 Scatter plots with a legend

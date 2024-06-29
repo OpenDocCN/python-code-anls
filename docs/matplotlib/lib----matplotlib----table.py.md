@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\table.py`
 
-```
+```py
 # Original code by:
 #    John Gill <jng@europe.renre.com>
 #    Copyright 2004 John Gill and John Hunter

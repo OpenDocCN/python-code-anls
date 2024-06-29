@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\demo_text_path.py`
 
-```
+```py
 """
 ======================
 Using a text as a Path

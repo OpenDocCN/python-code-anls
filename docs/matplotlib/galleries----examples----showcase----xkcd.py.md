@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\xkcd.py`
 
-```
+```py
 """
 ====
 XKCD

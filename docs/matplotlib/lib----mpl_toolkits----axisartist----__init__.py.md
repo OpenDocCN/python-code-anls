@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\__init__.py`
 
-```
+```py
 # 导入需要的模块和类
 
 from .axislines import Axes

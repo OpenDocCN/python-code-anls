@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\hist_plot.py`
 
-```
+```py
 """
 =======
 hist(x)

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\basic\plot.py`
 
-```
+```py
 """
 ==========
 plot(x, y)

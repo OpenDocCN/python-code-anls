@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\artists\transforms_tutorial.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/advanced/transforms_tutorial
 

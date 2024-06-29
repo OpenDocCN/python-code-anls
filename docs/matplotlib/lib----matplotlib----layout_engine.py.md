@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\layout_engine.py`
 
-```
+```py
 """
 Classes to layout elements in a `.Figure`.
 

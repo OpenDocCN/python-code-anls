@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_axes.py`
 
-```
+```py
 # 导入 contextlib 模块，用于创建上下文管理器和处理上下文相关的功能
 import contextlib
 # 从 collections 模块导入 namedtuple，用于创建命名元组
@@ -4332,7 +4332,7 @@ def _rc_test_bxp_helper(ax, rc_dict):
                   tol=1, style='default')
 # 定义一个测试函数，检查在不同 rc 参数下绘制的箱线图效果
 def test_boxplot_rc_parameters():
-    # 设置```python
+    # 设置```py
 @image_comparison(['boxplot', 'boxplot'], tol=1.28, style='default')
 def test_boxplot():
     # 设置随机种子以保证结果可复现
@@ -11966,7 +11966,7 @@ def test_boxplot_orientation(fig_test, fig_ref):
 
     axs[0].boxplot(all_data)  # Default vertical plot.
     # xticks and yticks should be at their default position.
-    ```
+    ```py
     # 确保第一个子图的 x 轴刻度与给定的数组相同
     assert all(axs[0].get_xticks() == np.array(
         [1, 2, 3, 4]))

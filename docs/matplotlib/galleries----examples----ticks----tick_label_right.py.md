@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\tick_label_right.py`
 
-```
+```py
 """
 ============================================
 Set default y-axis tick labels on the right

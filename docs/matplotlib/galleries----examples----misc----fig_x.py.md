@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\fig_x.py`
 
-```
+```py
 """
 =======================
 Adding lines to figures

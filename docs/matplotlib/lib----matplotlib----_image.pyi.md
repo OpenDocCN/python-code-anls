@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_image.pyi`
 
-```
+```py
 # 导入requests库，用于发送HTTP请求和处理响应
 import requests
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\rotate_axes3d_sgskip.py`
 
-```
+```py
 """
 ==================
 Rotating a 3D plot

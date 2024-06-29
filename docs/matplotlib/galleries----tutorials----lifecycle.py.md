@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\tutorials\lifecycle.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，并使用 plt 别名
 import matplotlib.pyplot as plt
 # 导入 numpy 库，并使用 np 别名

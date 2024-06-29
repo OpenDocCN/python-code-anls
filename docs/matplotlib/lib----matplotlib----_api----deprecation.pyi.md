@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_api\deprecation.pyi`
 
-```
+```py
 # 导入模块 `Callable` 从 `collections.abc` 中
 # 导入模块 `contextlib` 整个模块
 # 从 `typing` 模块导入 `Any`, `TypedDict`, `TypeVar`, `overload`

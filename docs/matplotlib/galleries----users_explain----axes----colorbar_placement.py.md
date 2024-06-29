@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\colorbar_placement.py`
 
-```
+```py
 """
 .. _colorbar_placement:
 

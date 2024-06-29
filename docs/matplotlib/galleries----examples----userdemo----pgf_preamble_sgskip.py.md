@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\pgf_preamble_sgskip.py`
 
-```
+```py
 """
 ============
 PGF preamble

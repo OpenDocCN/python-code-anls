@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axis_artist.py`
 
-```
+```py
 # FIXME :
 # angles are given in data coordinate - need to convert it to canvas coordinate
 

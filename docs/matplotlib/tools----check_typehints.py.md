@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\check_typehints.py`
 
-```
+```py
 #!/usr/bin/env python
 """
 Perform AST checks to validate consistency of type hints with implementation.

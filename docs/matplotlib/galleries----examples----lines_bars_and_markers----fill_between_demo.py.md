@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\fill_between_demo.py`
 
-```
+```py
 """
 ==============================
 Filling the area between lines

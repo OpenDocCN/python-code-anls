@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_gtk4cairo.py`
 
-```
+```py
 from contextlib import nullcontext  # 导入 nullcontext 上下文管理器，用于创建一个空的上下文
 
 from .backend_cairo import FigureCanvasCairo  # 导入 FigureCanvasCairo 类，作为 Cairo 后端的画布

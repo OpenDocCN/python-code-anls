@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_pdf.py`
 
-```
+```py
 # 导入需要的模块和库
 import datetime  # 用于处理日期和时间
 import decimal  # 提供高精度的十进制运算支持

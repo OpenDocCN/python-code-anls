@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\animations\blitting.py`
 
-```
+```py
 # 导入必要的库
 import matplotlib.pyplot as plt  # 导入 Matplotlib 的 pyplot 模块
 import numpy as np  # 导入 NumPy 库，用于生成数组和进行数学运算

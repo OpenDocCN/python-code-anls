@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\check_buttons.py`
 
-```
+```py
 """
 =============
 Check buttons

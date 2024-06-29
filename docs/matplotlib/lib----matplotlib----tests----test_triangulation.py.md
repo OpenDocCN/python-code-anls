@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_triangulation.py`
 
-```
+```py
 import numpy as np  # 导入 NumPy 库，并使用 np 别名
 from numpy.testing import (  # 导入 NumPy 测试工具模块的多个函数
     assert_array_equal, assert_array_almost_equal, assert_array_less)

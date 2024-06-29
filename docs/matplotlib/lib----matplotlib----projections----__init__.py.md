@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\__init__.py`
 
-```
+```py
 """
 Non-separable transforms that map from data space to screen space.
 

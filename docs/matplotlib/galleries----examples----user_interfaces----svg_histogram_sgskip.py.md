@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\svg_histogram_sgskip.py`
 
-```
+```py
 # 导入需要的模块
 from io import BytesIO  # 导入BytesIO类，用于创建内存中的二进制数据流
 import json  # 导入json模块，用于处理JSON格式数据

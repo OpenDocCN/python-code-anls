@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\userdemo\simple_legend02.py`
 
-```
+```py
 """
 ===============
 Simple Legend02

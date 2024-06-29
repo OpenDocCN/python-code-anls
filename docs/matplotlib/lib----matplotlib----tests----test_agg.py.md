@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_agg.py`
 
-```
+```py
 import io  # 导入io模块，用于处理字节流
 
 import numpy as np  # 导入NumPy库，用于数值计算

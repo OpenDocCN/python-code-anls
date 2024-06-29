@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\ellipse_with_units.py`
 
-```
+```py
 """
 ==================
 Ellipse with units

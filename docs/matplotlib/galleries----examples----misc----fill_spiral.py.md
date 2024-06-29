@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\fill_spiral.py`
 
-```
+```py
 """
 ===========
 Fill Spiral

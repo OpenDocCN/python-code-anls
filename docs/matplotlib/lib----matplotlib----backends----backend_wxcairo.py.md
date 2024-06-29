@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_wxcairo.py`
 
-```
+```py
 # 导入 wxcairo 库中的 wxcairo 模块，作为 wxcairo 的别名引入
 import wx.lib.wxcairo as wxcairo
 

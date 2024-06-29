@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\projections\polar.py`
 
-```
+```py
 # 导入数学库
 import math
 # 导入 types 模块

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\auto_subplots_adjust.py`
 
-```
+```py
 """
 ===============================================
 Programmatically controlling subplot adjustment

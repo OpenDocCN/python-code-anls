@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\sphinxext\mathmpl.py`
 
-```
+```py
 r"""
 A role and directive to display mathtext in Sphinx
 ==================================================

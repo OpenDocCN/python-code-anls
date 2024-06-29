@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\image_antialiasing.py`
 
-```
+```py
 # %%
 # 首先生成一个 450x450 像素的图像，其中包含不同频率的内容
 N = 450

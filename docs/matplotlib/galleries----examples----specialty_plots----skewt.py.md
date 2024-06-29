@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\skewt.py`
 
-```
+```py
 """
 ===========================================================
 SkewT-logP diagram: using transforms and custom projections

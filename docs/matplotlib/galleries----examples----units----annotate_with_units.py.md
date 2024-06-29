@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\annotate_with_units.py`
 
-```
+```py
 """
 =====================
 Annotation with units

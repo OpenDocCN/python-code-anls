@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\tick_labels_from_values.py`
 
-```
+```py
 """
 =========================================
 Setting tick labels from a list of values

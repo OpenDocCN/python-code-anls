@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\contours_in_optimization_demo.py`
 
-```
+```py
 """
 ==============================================
 Contouring the solution space of optimizations

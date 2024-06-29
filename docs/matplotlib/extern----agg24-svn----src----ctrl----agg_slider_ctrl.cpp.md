@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\src\ctrl\agg_slider_ctrl.cpp`
 
-```
+```py
     // slider_ctrl_impl 类的构造函数，初始化滑块控件的位置和属性
     slider_ctrl_impl::slider_ctrl_impl(double x1, double y1, 
                                        double x2, double y2, bool flip_y) :

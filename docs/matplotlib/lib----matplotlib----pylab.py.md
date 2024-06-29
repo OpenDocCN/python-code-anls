@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\pylab.py`
 
-```
+```py
 """
 `pylab` is a historic interface and its use is strongly discouraged. The equivalent
 replacement is `matplotlib.pyplot`.  See :ref:`api_interfaces` for a full overview

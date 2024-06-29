@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_contour.py`
 
-```
+```py
 # 导入必要的模块和库
 import datetime  # 导入处理日期和时间的模块
 import platform  # 导入获取平台信息的模块

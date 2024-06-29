@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_patheffects.py`
 
-```
+```py
 # 导入 platform 模块，用于获取操作系统信息
 import platform
 # 导入 numpy 库，并使用 np 别名

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\qt_editor\figureoptions.py`
 
-```
+```py
 # 从 itertools 模块导入 chain 函数，用于将多个可迭代对象连接成一个迭代器
 from itertools import chain
 # 从 matplotlib 库中导入 cbook、cm、mcolors、markers、mimage 模块

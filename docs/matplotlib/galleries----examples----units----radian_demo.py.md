@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\radian_demo.py`
 
-```
+```py
 """
 ============
 Radian ticks

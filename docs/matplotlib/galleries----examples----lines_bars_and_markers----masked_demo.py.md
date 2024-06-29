@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\masked_demo.py`
 
-```
+```py
 """
 ==============================
 Plotting masked and NaN values

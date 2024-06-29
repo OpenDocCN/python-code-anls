@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\axes_divider.py`
 
-```
+```py
         """
         Helper classes to adjust the positions of multiple axes at drawing time.
         """

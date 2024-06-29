@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\symlog_demo.py`
 
-```
+```py
 """
 ===========
 Symlog Demo

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\constrainedlayout_guide.py`
 
-```
+```py
 # 导入需要的库
 import matplotlib.pyplot as plt  # 导入 matplotlib 库中的 pyplot 模块
 import numpy as np  # 导入 numpy 库，并使用 np 别名

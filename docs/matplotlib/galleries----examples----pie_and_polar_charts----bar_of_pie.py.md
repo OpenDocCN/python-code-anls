@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\bar_of_pie.py`
 
-```
+```py
 """
 ==========
 Bar of pie

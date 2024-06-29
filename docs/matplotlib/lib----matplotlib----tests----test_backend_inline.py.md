@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_inline.py`
 
-```
+```py
 import os  # 导入操作系统相关的功能模块
 from pathlib import Path  # 导入路径操作相关的功能模块
 from tempfile import TemporaryDirectory  # 导入临时目录操作相关的功能模块

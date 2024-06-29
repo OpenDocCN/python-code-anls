@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\patheffects.py`
 
-```
+```py
 """
 Defines classes for path effects. The path effects are supported in `.Text`,
 `.Line2D` and `.Patch`.

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_bases.py`
 
-```
+```py
 import importlib  # 导入 Python 的 importlib 库，用于动态加载模块
 
 from matplotlib import path, transforms  # 从 matplotlib 库中导入 path 和 transforms 模块

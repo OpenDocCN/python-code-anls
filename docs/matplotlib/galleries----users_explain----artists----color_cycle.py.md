@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\artists\color_cycle.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/intermediate/color_cycle
 

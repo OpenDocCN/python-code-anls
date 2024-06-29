@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\ft2font.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /* A python interface to FreeType */

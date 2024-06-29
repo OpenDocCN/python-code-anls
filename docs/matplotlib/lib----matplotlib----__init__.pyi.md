@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\__init__.pyi`
 
-```
+```py
 # 定义一个列表，包含了模块中需要被公开的符号名称
 __all__ = [
     "__bibtex__",

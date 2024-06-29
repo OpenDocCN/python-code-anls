@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_managers.py`
 
-```
+```py
 from matplotlib import _api, backend_tools, cbook, widgets
 
 
@@ -346,7 +346,7 @@ class ToolManager:
         self._callbacks.process(s, event)
 
 
-```    
+```py    
     def _key_press(self, event):
         """
         Handle key press events to trigger associated tools.

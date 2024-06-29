@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\bbox_intersect.py`
 
-```
+```py
 """
 ===========================================
 Changing colors of lines intersecting a box

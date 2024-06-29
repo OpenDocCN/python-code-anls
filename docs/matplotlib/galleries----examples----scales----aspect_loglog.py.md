@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\aspect_loglog.py`
 
-```
+```py
 `
 """
 =============

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\usetex.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/text/usetex
 

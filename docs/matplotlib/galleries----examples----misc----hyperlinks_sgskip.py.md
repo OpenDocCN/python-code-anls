@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\hyperlinks_sgskip.py`
 
-```
+```py
 """
 ==========
 Hyperlinks

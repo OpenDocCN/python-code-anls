@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\github.py`
 
-```
+```py
 """
 Define text roles for GitHub.
 

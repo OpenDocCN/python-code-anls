@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\web_backend\.eslintrc.js`
 
-```
+```py
 module.exports = {
   // 根对象导出，定义 ESLint 配置
   root: true,

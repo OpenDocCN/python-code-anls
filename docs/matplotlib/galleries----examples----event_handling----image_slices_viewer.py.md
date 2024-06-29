@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\image_slices_viewer.py`
 
-```
+```py
 """
 ============
 Scroll event

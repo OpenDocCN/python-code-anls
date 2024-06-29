@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\grid_helper_curvelinear.py`
 
-```
+```py
 """
 An experimental support for curvilinear grid.
 """

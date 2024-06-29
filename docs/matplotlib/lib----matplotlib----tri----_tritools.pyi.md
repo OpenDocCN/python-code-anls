@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_tritools.pyi`
 
-```
+```py
 # 导入 matplotlib 的 Triangulation 类
 from matplotlib.tri import Triangulation
 

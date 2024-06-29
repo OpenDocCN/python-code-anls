@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\spines\spine_placement_demo.py`
 
-```
+```py
 """
 ===============
 Spine placement

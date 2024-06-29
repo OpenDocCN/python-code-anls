@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_qt.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入copy模块，用于复制对象
 import importlib  # 导入importlib模块，用于动态加载模块

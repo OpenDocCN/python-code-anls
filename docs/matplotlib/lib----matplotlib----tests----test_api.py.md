@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_api.py`
 
-```
+```py
 # 引入 Python 未来的特性，使得注解支持类型的自引用
 from __future__ import annotations
 

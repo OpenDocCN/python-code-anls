@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\errorbars_and_boxes.py`
 
-```
+```py
 # 导入 matplotlib 的 pyplot 模块，并命名为 plt
 import matplotlib.pyplot as plt
 # 导入 numpy 库，并命名为 np

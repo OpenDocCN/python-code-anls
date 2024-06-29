@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_concise_formatter.py`
 
-```
+```py
 """
 .. _date_concise_formatter:
 

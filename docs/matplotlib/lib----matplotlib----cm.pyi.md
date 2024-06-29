@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\cm.pyi`
 
-```
+```py
 from collections.abc import Iterator, Mapping
 from matplotlib import cbook, colors
 from matplotlib.colorbar import Colorbar

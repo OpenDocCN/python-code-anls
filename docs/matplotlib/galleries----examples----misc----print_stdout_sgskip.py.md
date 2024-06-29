@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\print_stdout_sgskip.py`
 
-```
+```py
 """
 ============
 Print Stdout

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\align_labels_demo.py`
 
-```
+```py
 """
 ==========================
 Aligning Labels and Titles

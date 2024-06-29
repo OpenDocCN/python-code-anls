@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\surface3d.py`
 
-```
+```py
 """
 =====================
 3D surface (colormap)

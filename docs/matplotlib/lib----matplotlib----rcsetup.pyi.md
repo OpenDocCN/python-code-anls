@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\rcsetup.pyi`
 
-```
+```py
 from cycler import Cycler  # 导入 Cycler 类，用于循环参数生成
 
 from collections.abc import Callable, Iterable  # 导入 Callable 和 Iterable 类型

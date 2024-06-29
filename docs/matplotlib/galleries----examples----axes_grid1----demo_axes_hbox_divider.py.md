@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_axes_hbox_divider.py`
 
-```
+```py
 """
 ================================
 HBoxDivider and VBoxDivider demo

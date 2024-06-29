@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\web_backend\js\nbagg_mpl.js`
 
-```
+```py
 /* global mpl */  // 引入全局变量 mpl
 
 var comm_websocket_adapter = function (comm) {

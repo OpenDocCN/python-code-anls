@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\ecdf.py`
 
-```
+```py
 """
 =======
 ecdf(x)

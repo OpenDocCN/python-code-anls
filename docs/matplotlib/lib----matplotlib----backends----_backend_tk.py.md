@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\_backend_tk.py`
 
-```
+```py
 import uuid
 import weakref
 from contextlib import contextmanager

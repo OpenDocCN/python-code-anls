@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\view_planes_3d.py`
 
-```
+```py
 """
 ======================
 Primary 3D view planes

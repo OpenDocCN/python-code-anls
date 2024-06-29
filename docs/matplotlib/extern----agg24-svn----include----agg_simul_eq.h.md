@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_simul_eq.h`
 
-```
+```py
 #ifndef AGG_SIMUL_EQ_INCLUDED
 #define AGG_SIMUL_EQ_INCLUDED
 

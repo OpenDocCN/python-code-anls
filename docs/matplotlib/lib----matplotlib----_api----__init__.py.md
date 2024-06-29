@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_api\__init__.py`
 
-```
+```py
 """
 Helper functions for managing the Matplotlib API.
 

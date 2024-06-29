@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\quiver_simple_demo.py`
 
-```
+```py
 """
 ==================
 Quiver Simple Demo

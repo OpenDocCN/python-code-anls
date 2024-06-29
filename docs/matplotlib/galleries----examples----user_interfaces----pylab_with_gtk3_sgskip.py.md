@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\pylab_with_gtk3_sgskip.py`
 
-```
+```py
 """
 ================
 pyplot with GTK3

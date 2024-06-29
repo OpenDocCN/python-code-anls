@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_conv_adaptor_vpgen.h`
 
-```
+```py
 // 包含必要的基础头文件
 #include "agg_basics.h"
 

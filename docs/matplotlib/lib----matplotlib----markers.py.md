@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\markers.py`
 
-```
+```py
 r"""
 Functions to handle markers; used by the marker functionality of
 `~matplotlib.axes.Axes.plot`, `~matplotlib.axes.Axes.scatter`, and

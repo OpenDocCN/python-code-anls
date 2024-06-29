@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_backend_agg.cpp`
 
-```
+```py
 // 设置 C++ 编译模式为 c++，缩进为 4 个空格
 
 // 导入 Python.h 头文件

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\tests\test_axes_grid1.py`
 
-```
+```py
 # 导入所需模块和函数
 from itertools import product  # 导入 itertools 模块中的 product 函数
 import io  # 导入 io 模块

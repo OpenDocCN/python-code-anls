@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_image.py`
 
-```
+```py
     "img_size, fig_size, interpolation",
     [
         ((100, 100), (1, 1), 'nearest'),

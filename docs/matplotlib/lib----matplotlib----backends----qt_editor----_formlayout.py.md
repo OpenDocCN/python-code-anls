@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\qt_editor\_formlayout.py`
 
-```
+```py
 # 创建一个模块用于生成 Qt 表单对话框/布局，以编辑各种类型的参数
 
 # formLayout 许可协议 (MIT 许可证) 的版权声明和条款

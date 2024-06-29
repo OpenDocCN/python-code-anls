@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\power_norm.py`
 
-```
+```py
 """
 ========================
 Exploring normalizations

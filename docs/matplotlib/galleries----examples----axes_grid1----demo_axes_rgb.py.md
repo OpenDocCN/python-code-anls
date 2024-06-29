@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_axes_rgb.py`
 
-```
+```py
 """
 ==================================
 Showing RGB channels using RGBAxes

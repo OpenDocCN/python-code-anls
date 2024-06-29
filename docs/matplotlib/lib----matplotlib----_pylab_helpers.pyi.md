@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_pylab_helpers.pyi`
 
-```
+```py
 # 导入必要的模块和类
 from collections import OrderedDict  # 导入有序字典类
 from matplotlib.backend_bases import FigureManagerBase  # 导入图形管理基类

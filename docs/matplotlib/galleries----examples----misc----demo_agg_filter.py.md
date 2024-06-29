@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\demo_agg_filter.py`
 
-```
+```py
 """
 ==========
 AGG filter

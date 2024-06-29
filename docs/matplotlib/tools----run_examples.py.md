@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\run_examples.py`
 
-```
+```py
 """
 Run and time some or all examples.
 """

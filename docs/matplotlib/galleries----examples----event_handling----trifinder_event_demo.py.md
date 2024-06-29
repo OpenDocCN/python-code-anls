@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\trifinder_event_demo.py`
 
-```
+```py
 """
 ====================
 Trifinder Event Demo

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\major_minor_demo.py`
 
-```
+```py
 r"""
 =====================
 Major and minor ticks

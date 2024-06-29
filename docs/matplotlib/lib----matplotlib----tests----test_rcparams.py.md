@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_rcparams.py`
 
-```
+```py
 # 导入必要的库
 import copy  # 导入copy模块，用于复制对象
 import os  # 导入os模块，提供与操作系统交互的功能

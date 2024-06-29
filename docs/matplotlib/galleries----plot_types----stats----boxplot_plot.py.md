@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\stats\boxplot_plot.py`
 
-```
+```py
 """
 ==========
 boxplot(X)

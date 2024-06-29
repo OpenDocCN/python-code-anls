@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\Duration.py`
 
-```
+```py
 """Duration module."""
 
 import functools  # 导入 functools 模块，用于函数操作的工具

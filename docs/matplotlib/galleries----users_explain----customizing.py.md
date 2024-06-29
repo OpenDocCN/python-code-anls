@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\customizing.py`
 
-```
+```py
 """
 .. redirect-from:: /users/customizing
 .. redirect-from:: /tutorials/introductory/customizing

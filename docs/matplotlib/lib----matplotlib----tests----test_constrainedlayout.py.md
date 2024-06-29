@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_constrainedlayout.py`
 
-```
+```py
 # 导入垃圾回收模块
 import gc
 # 导入平台信息模块

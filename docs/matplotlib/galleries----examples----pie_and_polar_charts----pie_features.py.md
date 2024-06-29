@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\pie_features.py`
 
-```
+```py
 # %%
 # Label slices
 # ------------

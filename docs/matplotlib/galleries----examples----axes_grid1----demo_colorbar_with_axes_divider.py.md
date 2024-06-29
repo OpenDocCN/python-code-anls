@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_colorbar_with_axes_divider.py`
 
-```
+```py
 # 导入 matplotlib.pyplot 库，用于绘图操作
 import matplotlib.pyplot as plt
 

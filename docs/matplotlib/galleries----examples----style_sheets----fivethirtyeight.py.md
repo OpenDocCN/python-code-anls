@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\style_sheets\fivethirtyeight.py`
 
-```
+```py
 """
 ===========================
 FiveThirtyEight style sheet

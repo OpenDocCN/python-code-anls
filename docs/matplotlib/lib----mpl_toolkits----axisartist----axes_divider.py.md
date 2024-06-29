@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\axes_divider.py`
 
-```
+```py
 # 从 mpl_toolkits.axes_grid1.axes_divider 模块中导入以下类和函数：
 # Divider: 分隔器，用于管理子图的布局
 # AxesLocator: 轴定位器，用于定位子图中坐标轴的位置

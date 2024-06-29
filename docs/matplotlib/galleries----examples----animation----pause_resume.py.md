@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\pause_resume.py`
 
-```
+```py
 """
 =================================
 Pausing and Resuming an Animation

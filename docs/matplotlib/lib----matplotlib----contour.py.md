@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\contour.py`
 
-```
+```py
 """
 Classes to support contour plotting and labelling for the Axes class.
 """

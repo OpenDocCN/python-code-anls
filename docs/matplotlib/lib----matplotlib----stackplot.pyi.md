@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\stackplot.pyi`
 
-```
+```py
 # 从 matplotlib 库中导入 Axes 类，用于图表的坐标轴
 # 从 matplotlib.collections 模块中导入 PolyCollection 类，用于管理多边形集合
 

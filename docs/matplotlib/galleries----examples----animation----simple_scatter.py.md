@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\simple_scatter.py`
 
-```
+```py
 """
 =============================
 Animated scatter saved as GIF

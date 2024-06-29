@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\qt_compat.py`
 
-```
+```py
 """
 Qt binding and backend selector.
 

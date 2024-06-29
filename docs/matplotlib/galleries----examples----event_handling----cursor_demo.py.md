@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\cursor_demo.py`
 
-```
+```py
 # 导入 matplotlib 库用于绘图
 import matplotlib.pyplot as plt
 # 导入 numpy 库用于数值计算

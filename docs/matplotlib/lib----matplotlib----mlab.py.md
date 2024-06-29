@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\mlab.py`
 
-```
+```py
 """
 Numerical Python functions written for compatibility with MATLAB
 commands with the same names. Most numerical Python functions can be found in

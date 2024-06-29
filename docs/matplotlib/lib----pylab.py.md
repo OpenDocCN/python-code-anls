@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\pylab.py`
 
-```
+```py
 # 导入 matplotlib.pylab 中的所有内容（不使用 F401 和 F403 警告）
 from matplotlib.pylab import *  # noqa: F401, F403
 # 导入 matplotlib.pylab 模块

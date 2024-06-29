@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_qt5.py`
 
-```
+```py
 # 导入相对路径下的 backends 模块
 from .. import backends
 

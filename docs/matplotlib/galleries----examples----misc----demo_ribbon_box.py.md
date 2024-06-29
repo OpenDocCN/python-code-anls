@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\demo_ribbon_box.py`
 
-```
+```py
 """
 ==========
 Ribbon Box

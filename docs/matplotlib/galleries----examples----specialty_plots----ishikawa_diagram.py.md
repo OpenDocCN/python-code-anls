@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\ishikawa_diagram.py`
 
-```
+```py
 """
 ================
 Ishikawa Diagram

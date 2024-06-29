@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_pixfmt_amask_adaptor.h`
 
-```
+```py
 // 定义了一个名为 pixfmt_amask_adaptor 的模板类，作为 PixFmt 和 AlphaMask 之间的适配器
 template<class PixFmt, class AlphaMask> class pixfmt_amask_adaptor
 {

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\tests\test_angle_helper.py`
 
-```
+```py
 # 导入 re 模块，用于正则表达式操作
 import re
 

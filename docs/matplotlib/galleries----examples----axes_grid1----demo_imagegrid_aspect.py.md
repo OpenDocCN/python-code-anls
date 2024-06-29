@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\demo_imagegrid_aspect.py`
 
-```
+```py
 """
 =========================================
 Setting a fixed aspect on ImageGrid cells

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\close_event.py`
 
-```
+```py
 """
 ===========
 Close Event

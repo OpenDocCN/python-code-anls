@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\util\agg_color_conv_rgb16.h`
 
-```
+```py
 ```cpp`
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\compare.pyi`
 
-```
+```py
 # 导入需要的模块和类型
 from collections.abc import Callable
 from typing import Literal, overload

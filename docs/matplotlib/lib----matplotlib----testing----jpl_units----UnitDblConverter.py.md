@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\jpl_units\UnitDblConverter.py`
 
-```
+```py
 """UnitDblConverter module containing class UnitDblConverter."""
 
 import numpy as np

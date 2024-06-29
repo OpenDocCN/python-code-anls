@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\embed_js.py`
 
-```
+```py
 """
 Script to embed JavaScript dependencies in mpl.js.
 """

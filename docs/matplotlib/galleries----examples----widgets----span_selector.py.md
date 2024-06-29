@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\span_selector.py`
 
-```
+```py
 """
 =============
 Span Selector

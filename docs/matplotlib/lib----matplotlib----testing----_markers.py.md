@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\_markers.py`
 
-```
+```py
 """
 pytest markers for the internal Matplotlib test suite.
 """

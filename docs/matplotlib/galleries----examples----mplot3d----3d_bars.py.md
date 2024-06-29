@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\3d_bars.py`
 
-```
+```py
 """
 =====================
 Demo of 3D bar charts

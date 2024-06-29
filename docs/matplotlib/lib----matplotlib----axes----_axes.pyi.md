@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\axes\_axes.pyi`
 
-```
+```py
 # 导入必要的类和函数以支持绘图和图形处理
 from matplotlib.axes._base import _AxesBase  # 导入基本坐标轴类
 from matplotlib.axes._secondary_axes import SecondaryAxis  # 导入次坐标轴类

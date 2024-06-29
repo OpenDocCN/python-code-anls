@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_layoutgrid.py`
 
-```
+```py
 """
 A layoutgrid is a nrows by ncols set of boxes, meant to be used by
 `._constrained_layout`, each box is analogous to a subplotspec element of

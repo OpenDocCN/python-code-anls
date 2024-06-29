@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\lines3d.py`
 
-```
+```py
 """
 ================
 Parametric curve

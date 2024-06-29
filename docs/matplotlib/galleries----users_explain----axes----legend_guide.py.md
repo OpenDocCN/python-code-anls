@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\legend_guide.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/intermediate/legend_guide
 

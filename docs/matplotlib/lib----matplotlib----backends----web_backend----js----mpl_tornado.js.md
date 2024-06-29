@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\web_backend\js\mpl_tornado.js`
 
-```
+```py
 /* This .js file contains functions for matplotlib's built-in
    tornado-based server, that are not relevant when embedding WebAgg
    in another web application. */

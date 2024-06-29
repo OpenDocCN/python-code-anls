@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_image_resample.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 #ifndef MPL_RESAMPLE_H

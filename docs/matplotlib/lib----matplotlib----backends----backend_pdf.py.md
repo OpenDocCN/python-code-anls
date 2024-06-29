@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_pdf.py`
 
-```
+```py
 """
 PDF Matplotlib 后端。
 

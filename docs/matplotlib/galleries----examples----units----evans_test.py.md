@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\units\evans_test.py`
 
-```
+```py
 """
 ==========
 Evans test

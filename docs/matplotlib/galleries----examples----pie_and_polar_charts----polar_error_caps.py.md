@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\polar_error_caps.py`
 
-```
+```py
 """
 =================================
 Error bar rendering on polar axis

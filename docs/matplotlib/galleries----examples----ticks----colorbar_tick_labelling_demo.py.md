@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\colorbar_tick_labelling_demo.py`
 
-```
+```py
 """
 =======================
 Colorbar Tick Labelling

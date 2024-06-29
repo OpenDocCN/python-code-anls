@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\errorbar_limits.py`
 
-```
+```py
 """
 ==============================================
 Including upper and lower limits in error bars

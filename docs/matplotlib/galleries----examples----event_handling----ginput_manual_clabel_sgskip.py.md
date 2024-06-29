@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\ginput_manual_clabel_sgskip.py`
 
-```
+```py
 """
 =====================
 Interactive functions

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\slider_demo.py`
 
-```
+```py
 """
 ======
 Slider

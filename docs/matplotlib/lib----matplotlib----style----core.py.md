@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\style\core.py`
 
-```
+```py
 """
 Core functions and attributes for the matplotlib style library:
 

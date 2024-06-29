@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axes_grid1\simple_axisline4.py`
 
-```
+```py
 """
 ================
 Simple Axisline4

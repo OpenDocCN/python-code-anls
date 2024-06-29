@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\text_rotation_relative_to_line.py`
 
-```
+```py
 """
 ==============================
 Text Rotation Relative To Line

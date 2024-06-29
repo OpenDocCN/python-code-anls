@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\py_converters.cpp`
 
-```
+```py
 #define NO_IMPORT_ARRAY
 #define PY_SSIZE_T_CLEAN
 #include "py_converters.h"

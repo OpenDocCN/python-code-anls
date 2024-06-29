@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_ttconv.cpp`
 
-```
+```py
 /*
   _ttconv.c
 

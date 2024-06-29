@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_category.py`
 
-```
+```py
 """Catch all for categorical functions"""
 # 引入警告模块，用于可能出现的警告处理
 import warnings

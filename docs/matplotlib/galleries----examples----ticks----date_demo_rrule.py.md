@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_demo_rrule.py`
 
-```
+```py
 """
 =========================================
 Placing date ticks using recurrence rules

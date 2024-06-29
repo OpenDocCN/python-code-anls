@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_curvelinear_grid.py`
 
-```
+```py
 """
 =====================
 Curvilinear grid demo

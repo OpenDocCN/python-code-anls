@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\tutorials\artists.py`
 
-```
+```py
 # 文档字符串，可能是模块或函数的描述，包含有关如何使用Artist对象在画布上进行渲染的信息
 
 # 引用重定向，指示从/tutorials/intermediate/artists页面重定向到当前页面

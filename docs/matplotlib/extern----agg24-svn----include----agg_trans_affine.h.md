@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_trans_affine.h`
 
-```
+```py
 #ifndef AGG_TRANS_AFFINE_INCLUDED
 #define AGG_TRANS_AFFINE_INCLUDED
 

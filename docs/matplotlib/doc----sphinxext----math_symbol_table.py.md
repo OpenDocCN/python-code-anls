@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\sphinxext\math_symbol_table.py`
 
-```
+```py
 # 导入正则表达式模块
 import re
 # 导入docutils中的Directive类

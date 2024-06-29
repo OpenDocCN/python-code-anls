@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\topographic_hillshading.py`
 
-```
+```py
 """
 =======================
 Topographic hillshading

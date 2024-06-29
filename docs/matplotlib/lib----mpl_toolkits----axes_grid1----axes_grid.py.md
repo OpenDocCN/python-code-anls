@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\axes_grid.py`
 
-```
+```py
 from numbers import Number
 import functools
 from types import MethodType

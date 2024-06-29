@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\specialty_plots\sankey_links.py`
 
-```
+```py
 """
 ======================================
 Long chain of connections using Sankey

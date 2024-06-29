@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_demo_convert.py`
 
-```
+```py
 """
 =================
 Date Demo Convert

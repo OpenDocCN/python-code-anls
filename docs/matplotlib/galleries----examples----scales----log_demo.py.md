@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\log_demo.py`
 
-```
+```py
 """
 ========
 Log Demo

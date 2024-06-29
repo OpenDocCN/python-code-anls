@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axes_grid1\anchored_artists.py`
 
-```
+```py
 # 从 matplotlib 中导入 _api 和 transforms 模块
 from matplotlib import _api, transforms
 # 从 matplotlib.offsetbox 中导入 AnchoredOffsetbox, AuxTransformBox, DrawingArea, TextArea, VPacker 等类

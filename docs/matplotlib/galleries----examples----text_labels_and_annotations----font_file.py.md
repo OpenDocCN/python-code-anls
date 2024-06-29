@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\font_file.py`
 
-```
+```py
 """
 ====================
 Using ttf font files

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_spines.py`
 
-```
+```py
 import numpy as np   # 导入 NumPy 库，用于数值计算
 import pytest       # 导入 Pytest 库，用于单元测试
 

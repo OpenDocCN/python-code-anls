@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_agg.py`
 
-```
+```py
 """
 An `Anti-Grain Geometry`_ (AGG) backend.
 

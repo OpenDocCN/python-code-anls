@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\demo_text_rotation_mode.py`
 
-```
+```py
 r"""
 ==================
 Text Rotation Mode

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\pgf.py`
 
-```
+```py
 r"""
 .. redirect-from:: /tutorials/text/pgf
 

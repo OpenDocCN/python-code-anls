@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\tutorials\pyplot.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/introductory/pyplot
 

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\patheffect_demo.py`
 
-```
+```py
 """
 ===============
 Patheffect Demo

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\date_precision_and_epochs.py`
 
-```
+```py
 """
 =========================
 Date Precision and Epochs

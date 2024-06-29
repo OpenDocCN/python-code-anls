@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\web_application_server_sgskip.py`
 
-```
+```py
 # 导入需要的库
 import base64              # 导入 base64 编码解码库
 from io import BytesIO     # 导入字节流处理库中的 BytesIO 类

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\colors\colorbar_only.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/colors/colorbar_only
 

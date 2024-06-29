@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\svg_tooltip_sgskip.py`
 
-```
+```py
 # 导入所需的模块和库
 from io import BytesIO  # 导入字节流处理模块
 import xml.etree.ElementTree as ET  # 导入 XML 解析模块

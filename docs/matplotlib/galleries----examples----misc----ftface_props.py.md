@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\ftface_props.py`
 
-```
+```py
 """
 ===============
 Font properties

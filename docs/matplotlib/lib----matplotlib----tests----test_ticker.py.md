@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_ticker.py`
 
-```
+```py
 # 导入必要的库：nullcontext 用于创建空的上下文管理器，itertools 提供迭代工具，locale 处理地区设置，logging 提供日志功能，re 提供正则表达式操作，parse_version 用于解析版本号。
 from contextlib import nullcontext
 import itertools

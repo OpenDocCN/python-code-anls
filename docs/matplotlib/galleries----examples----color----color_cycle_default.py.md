@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\color_cycle_default.py`
 
-```
+```py
 """
 ====================================
 Colors in the default property cycle

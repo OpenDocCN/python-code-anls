@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_ttconv.py`
 
-```
+```py
 # 导入路径操作相关模块
 from pathlib import Path
 

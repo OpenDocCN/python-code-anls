@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_line_aa_basics.h`
 
-```
+```py
 #ifndef AGG_LINE_AA_BASICS_INCLUDED
 #define AGG_LINE_AA_BASICS_INCLUDED
 

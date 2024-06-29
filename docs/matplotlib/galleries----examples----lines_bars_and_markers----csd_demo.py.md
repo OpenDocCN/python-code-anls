@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\csd_demo.py`
 
-```
+```py
 """
 ============================
 Cross spectral density (CSD)

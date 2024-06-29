@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\showcase\stock_prices.py`
 
-```
+```py
 """
 ==========================
 Stock prices over 32 years

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\contourf3d.py`
 
-```
+```py
 """
 ===============
 Filled contours

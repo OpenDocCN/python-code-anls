@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_simplification.py`
 
-```
+```py
 # 导入必要的模块和库
 import base64  # 导入 base64 编码相关功能
 import io  # 导入用于处理 IO 的模块

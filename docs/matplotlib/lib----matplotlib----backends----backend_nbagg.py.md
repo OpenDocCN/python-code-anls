@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_nbagg.py`
 
-```
+```py
 """Interactive figures in the IPython notebook."""
 # 导入所需的模块和类
 

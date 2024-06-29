@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\visualize_tests.py`
 
-```
+```py
 # 解析命令行参数模块
 import argparse
 # 操作系统相关的功能模块

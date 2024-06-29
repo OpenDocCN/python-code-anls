@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\multipage_pdf.py`
 
-```
+```py
 """
 =============
 Multipage PDF

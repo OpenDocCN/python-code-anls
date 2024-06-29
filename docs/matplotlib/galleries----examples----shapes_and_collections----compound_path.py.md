@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\compound_path.py`
 
-```
+```py
 """
 =============
 Compound path

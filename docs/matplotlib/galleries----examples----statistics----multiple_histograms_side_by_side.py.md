@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\multiple_histograms_side_by_side.py`
 
-```
+```py
 """
 ==========================================
 Producing multiple histograms side by side

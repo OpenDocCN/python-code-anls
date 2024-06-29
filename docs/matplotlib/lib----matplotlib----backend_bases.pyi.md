@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backend_bases.pyi`
 
-```
+```py
 # 导入枚举和整数枚举
 from enum import Enum, IntEnum
 # 导入操作系统接口

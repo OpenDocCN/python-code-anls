@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\animation_demo.py`
 
-```
+```py
 """
 ================
 pyplot animation

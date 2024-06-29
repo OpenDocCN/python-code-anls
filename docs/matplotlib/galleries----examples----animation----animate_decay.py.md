@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\animate_decay.py`
 
-```
+```py
 """
 =====
 Decay

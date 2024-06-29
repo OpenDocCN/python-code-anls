@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\table_demo.py`
 
-```
+```py
 """
 ==========
 Table Demo

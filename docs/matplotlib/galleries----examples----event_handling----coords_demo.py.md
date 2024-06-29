@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\coords_demo.py`
 
-```
+```py
 """
 ===========================
 Mouse move and click events

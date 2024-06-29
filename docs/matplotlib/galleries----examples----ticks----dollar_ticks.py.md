@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\ticks\dollar_ticks.py`
 
-```
+```py
 """
 ============
 Dollar ticks

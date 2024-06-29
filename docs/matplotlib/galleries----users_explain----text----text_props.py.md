@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\text\text_props.py`
 
-```
+```py
 # 这部分代码似乎是文档或注释，采用 reStructuredText 格式，用于描述 Matplotlib 中文本的属性和布局控制方法。
 # 包含了一些基本的文本属性，如 alpha（透明度）、backgroundcolor（背景颜色）、bbox（文本框）、clip_box（裁剪框）、clip_on（是否裁剪）、clip_path（裁剪路径）、color（颜色）、family（字体族）、fontproperties（字体属性）、horizontalalignment（水平对齐方式）、label（标签）、linespacing（行间距）、multialignment（多行对齐方式）、name or fontname（字体名称）、picker（拾取器）、position（位置）、rotation（旋转角度）、size or fontsize（字体大小）、style or fontstyle（字体风格）、text（文本内容）、transform（变换方式）、variant（字体变体）、verticalalignment（垂直对齐方式）、visible（可见性）、weight or fontweight（字体粗细）、x（x坐标）、y（y坐标）、zorder（堆叠顺序）。
 # 文档还提到可以通过 horizontalalignment、verticalalignment 和 multialignment 参数控制文本的布局方式。

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\legend_handler.py`
 
-```
+```py
 """
 Default legend handlers.
 

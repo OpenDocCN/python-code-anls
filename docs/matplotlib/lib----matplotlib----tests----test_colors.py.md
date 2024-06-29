@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_colors.py`
 
-```
+```py
 # 导入必要的模块和库
 import copy  # 导入 copy 模块，用于复制对象
 import itertools  # 导入 itertools 模块，用于迭代工具函数

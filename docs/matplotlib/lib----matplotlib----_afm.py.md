@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\_afm.py`
 
-```
+```py
 def _parse_header(fh):
     """
     Read the font metrics header (up to the char metrics) and returns

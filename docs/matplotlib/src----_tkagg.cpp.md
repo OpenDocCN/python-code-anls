@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_tkagg.cpp`
 
-```
+```py
 // -*- mode: c++; c-basic-offset: 4 -*-
 
 // Where is PIL?

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\bar3d_simple.py`
 
-```
+```py
 """
 ==========================
 bar3d(x, y, z, dx, dy, dz)

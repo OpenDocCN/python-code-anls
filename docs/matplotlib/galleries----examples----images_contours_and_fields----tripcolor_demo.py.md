@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\images_contours_and_fields\tripcolor_demo.py`
 
-```
+```py
 """
 ==============
 Tripcolor Demo

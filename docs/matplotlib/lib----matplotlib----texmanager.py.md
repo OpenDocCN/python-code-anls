@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\texmanager.py`
 
-```
+```py
 r"""
 Support for embedded TeX expressions in Matplotlib.
 

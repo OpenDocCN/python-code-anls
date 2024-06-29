@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\offsetbox.py`
 
-```
+```py
 # 包含 `.Artist` 的容器类。
 
 # 所有容器艺术家的基类。

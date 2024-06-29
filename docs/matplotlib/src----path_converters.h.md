@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\path_converters.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 #ifndef MPL_PATH_CONVERTERS_H

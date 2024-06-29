@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\shared_axis_demo.py`
 
-```
+```py
 """
 ===========
 Shared axis

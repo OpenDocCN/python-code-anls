@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_conv_adaptor_vcgen.h`
 
-```
+```py
 // 定义一个命名空间agg，用于封装相关的几何计算和图形处理功能
 namespace agg
 {

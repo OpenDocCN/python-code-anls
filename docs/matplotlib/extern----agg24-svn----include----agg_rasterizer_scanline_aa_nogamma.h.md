@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_rasterizer_scanline_aa_nogamma.h`
 
-```
+```py
 #ifndef AGG_RASTERIZER_SCANLINE_AA_NOGAMMA_INCLUDED
 #define AGG_RASTERIZER_SCANLINE_AA_NOGAMMA_INCLUDED
 

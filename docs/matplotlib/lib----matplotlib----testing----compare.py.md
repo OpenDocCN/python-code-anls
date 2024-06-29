@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\compare.py`
 
-```
+```py
 """
 Utilities for comparing image results.
 """

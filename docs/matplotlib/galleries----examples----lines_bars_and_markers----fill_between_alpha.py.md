@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\fill_between_alpha.py`
 
-```
+```py
 """
 Fill Between and Alpha
 ======================

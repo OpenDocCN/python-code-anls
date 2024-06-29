@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tri\_trifinder.py`
 
-```
+```py
 # 导入NumPy库，用于处理数组和数值计算
 import numpy as np
 

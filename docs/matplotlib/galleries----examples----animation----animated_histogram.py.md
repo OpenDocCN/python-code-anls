@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\animation\animated_histogram.py`
 
-```
+```py
 """
 ==================
 Animated histogram

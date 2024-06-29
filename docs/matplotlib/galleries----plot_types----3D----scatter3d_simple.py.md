@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\scatter3d_simple.py`
 
-```
+```py
 """
 ===================
 scatter(xs, ys, zs)

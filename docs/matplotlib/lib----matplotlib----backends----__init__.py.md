@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\__init__.py`
 
-```
+```py
 # 导入模块中的 BackendFilter 和 backend_registry，忽略 F401 类型的导入警告
 from .registry import BackendFilter, backend_registry  # noqa: F401
 

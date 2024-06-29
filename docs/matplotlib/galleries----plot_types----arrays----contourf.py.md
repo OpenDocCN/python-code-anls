@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\arrays\contourf.py`
 
-```
+```py
 """
 =================
 contourf(X, Y, Z)

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\demo_annotation_box.py`
 
-```
+```py
 """
 ===================
 AnnotationBbox demo

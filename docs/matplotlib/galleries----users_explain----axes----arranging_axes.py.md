@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\axes\arranging_axes.py`
 
-```
+```py
 """
 .. redirect-from:: /tutorials/intermediate/gridspec
 .. redirect-from:: /tutorials/intermediate/arranging_axes

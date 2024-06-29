@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_matplotlib.py`
 
-```
+```py
 # 导入必要的标准库和第三方库
 import os  # 导入操作系统接口模块
 import subprocess  # 导入执行外部命令的模块

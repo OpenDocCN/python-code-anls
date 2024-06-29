@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\plot_types\3D\trisurf3d_simple.py`
 
-```
+```py
 """
 =====================
 plot_trisurf(x, y, z)

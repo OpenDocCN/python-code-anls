@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\legend.py`
 
-```
+```py
 """
 ===============================
 Legend using pre-defined labels

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\user_interfaces\embedding_in_gtk4_sgskip.py`
 
-```
+```py
 """
 =================
 Embedding in GTK4

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\violinplot.py`
 
-```
+```py
 """
 ==================
 Violin plot basics

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_gtk4agg.py`
 
-```
+```py
 # 导入NumPy库，用于处理数组和向量化操作
 import numpy as np
 

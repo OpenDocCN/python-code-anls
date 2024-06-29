@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\spines\centered_spines_with_arrows.py`
 
-```
+```py
 """
 ===========================
 Centered spines with arrows

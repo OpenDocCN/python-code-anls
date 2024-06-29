@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\trisurf3d_2.py`
 
-```
+```py
 """
 ===========================
 More triangular 3D surfaces

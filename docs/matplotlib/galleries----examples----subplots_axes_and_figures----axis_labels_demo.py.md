@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\axis_labels_demo.py`
 
-```
+```py
 """
 ===================
 Axis Label Position

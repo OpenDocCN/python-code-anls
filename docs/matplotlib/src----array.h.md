@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\array.h`
 
-```
+```py
 /* -*- mode: c++; c-basic-offset: 4 -*- */
 
 /* Utilities to create scalars and empty arrays that behave like the

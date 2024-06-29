@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_textpath.py`
 
-```
+```py
 # 导入 copy 模块，用于对象的复制操作
 import copy
 

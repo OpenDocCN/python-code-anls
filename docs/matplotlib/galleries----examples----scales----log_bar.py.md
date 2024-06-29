@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\scales\log_bar.py`
 
-```
+```py
 """
 =======
 Log Bar

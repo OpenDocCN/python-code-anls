@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\time_series_histogram.py`
 
-```
+```py
 # 导入必要的库
 import time  # 导入时间模块，用于计时
 

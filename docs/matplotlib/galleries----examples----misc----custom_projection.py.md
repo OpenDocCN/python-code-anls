@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\misc\custom_projection.py`
 
-```
+```py
 """
 =================
 Custom projection

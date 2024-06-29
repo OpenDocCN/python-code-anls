@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\widgets\lasso_selector_demo_sgskip.py`
 
-```
+```py
 """
 ==============
 Lasso Selector

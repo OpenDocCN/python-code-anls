@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\demo_floating_axes.py`
 
-```
+```py
 """
 ==========================
 ``floating_axes`` features

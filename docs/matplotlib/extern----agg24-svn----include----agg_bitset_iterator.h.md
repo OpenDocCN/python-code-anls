@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_bitset_iterator.h`
 
-```
+```py
 // 声明防止重复包含的预处理指令，确保本文件内容仅被编译一次
 #ifndef AGG_BITSET_ITERATOR_INCLUDED
 #define AGG_BITSET_ITERATOR_INCLUDED

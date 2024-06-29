@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\doc\conf.py`
 
-```
+```py
 # 导入必要的库和模块
 from datetime import datetime, timezone  # 导入日期时间处理模块
 import logging  # 导入日志记录模块

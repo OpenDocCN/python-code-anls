@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\bezier.py`
 
-```
+```py
 # 导入必要的模块和库
 """
 A module providing some utility functions regarding Bézier path manipulation.

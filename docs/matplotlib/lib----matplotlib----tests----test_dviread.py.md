@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_dviread.py`
 
-```
+```py
 # 导入必要的模块：json用于处理JSON数据，Path用于处理文件路径，shutil用于文件操作，matplotlib.dviread是一个特定的模块，pytest用于编写和运行测试
 import json
 from pathlib import Path

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\offset.py`
 
-```
+```py
 """
 =========================
 Automatic text offsetting

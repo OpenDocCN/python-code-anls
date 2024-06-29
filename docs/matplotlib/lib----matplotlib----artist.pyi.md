@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\artist.pyi`
 
-```
+```py
 from .axes._base import _AxesBase
 from .backend_bases import RendererBase, MouseEvent
 from .figure import Figure, SubFigure

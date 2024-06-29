@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\testing\decorators.pyi`
 
-```
+```py
 # 从 collections.abc 模块导入 Callable 和 Sequence 类型
 from collections.abc import Callable, Sequence
 # 从 pathlib 模块导入 Path 类型

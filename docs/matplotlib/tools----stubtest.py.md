@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\tools\stubtest.py`
 
-```
+```py
 # 导入 ast 模块，用于处理抽象语法树
 import ast
 # 导入 os 模块，提供与操作系统相关的功能

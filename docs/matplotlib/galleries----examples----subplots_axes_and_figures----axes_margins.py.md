@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\subplots_axes_and_figures\axes_margins.py`
 
-```
+```py
 """
 ======================================================
 Controlling view limits using margins and sticky_edges

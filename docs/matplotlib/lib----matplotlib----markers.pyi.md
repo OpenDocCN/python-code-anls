@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\markers.pyi`
 
-```
+```py
 from typing import Literal  # 引入Literal类型提示
 
 from .path import Path  # 从当前包导入Path类

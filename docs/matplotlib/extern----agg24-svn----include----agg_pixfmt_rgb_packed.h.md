@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\extern\agg24-svn\include\agg_pixfmt_rgb_packed.h`
 
-```
+```py
 // 定义一个命名空间agg，用于封装Anti-Grain Geometry图形库的相关功能和结构
 namespace agg
 {

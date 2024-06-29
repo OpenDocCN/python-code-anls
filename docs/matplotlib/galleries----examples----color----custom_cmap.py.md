@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\color\custom_cmap.py`
 
-```
+```py
 """
 =========================================
 Creating a colormap from a list of colors

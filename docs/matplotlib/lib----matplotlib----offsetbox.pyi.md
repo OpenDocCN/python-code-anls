@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\offsetbox.pyi`
 
-```
+```py
 # 导入需要的模块和类
 import matplotlib.artist as martist
 from matplotlib.backend_bases import RendererBase, Event, FigureCanvasBase

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\parasite_axes.py`
 
-```
+```py
 # 导入 mpl_toolkits.axes_grid1.parasite_axes 模块中的两个函数：
 # host_axes_class_factory 和 parasite_axes_class_factory
 from mpl_toolkits.axes_grid1.parasite_axes import (

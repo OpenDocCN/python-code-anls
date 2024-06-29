@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\event_handling\looking_glass.py`
 
-```
+```py
 """
 =============
 Looking Glass

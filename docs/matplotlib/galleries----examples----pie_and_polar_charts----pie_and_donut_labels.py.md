@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\pie_and_polar_charts\pie_and_donut_labels.py`
 
-```
+```py
 # %%
 # 导入需要的库
 import matplotlib.pyplot as plt  # 导入 matplotlib 库，用于绘图

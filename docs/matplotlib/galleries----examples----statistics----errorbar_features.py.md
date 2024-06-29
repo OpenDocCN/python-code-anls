@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\statistics\errorbar_features.py`
 
-```
+```py
 """
 =======================================
 Different ways of specifying error bars

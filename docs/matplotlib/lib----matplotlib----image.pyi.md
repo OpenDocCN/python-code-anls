@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\image.pyi`
 
-```
+```py
 from collections.abc import Callable, Sequence  # 导入 Callable 和 Sequence 类型定义
 import os  # 导入操作系统相关功能
 import pathlib  # 导入处理路径的模块

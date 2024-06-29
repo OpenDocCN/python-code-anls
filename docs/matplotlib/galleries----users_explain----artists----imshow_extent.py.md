@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\users_explain\artists\imshow_extent.py`
 
-```
+```py
 def set_extent_None_text(ax):
     """
     Add text to the plot when extent is None.

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\placing_text_boxes.py`
 
-```
+```py
 """
 Placing text boxes
 ==================

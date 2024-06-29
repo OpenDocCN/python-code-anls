@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_gridspec.py`
 
-```
+```py
 import matplotlib.gridspec as gridspec  # 导入matplotlib的gridspec模块，用于创建子图网格布局
 import matplotlib.pyplot as plt  # 导入matplotlib的pyplot模块，用于绘图
 import pytest  # 导入pytest模块，用于编写和运行单元测试

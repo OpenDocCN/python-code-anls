@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\lines_bars_and_markers\joinstyle.py`
 
-```
+```py
 """
 =========
 JoinStyle

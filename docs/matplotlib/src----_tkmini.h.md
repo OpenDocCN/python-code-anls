@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\src\_tkmini.h`
 
-```
+```py
 /* Small excerpts from the Tcl / Tk 8.6 headers
  *
  * License terms copied from:

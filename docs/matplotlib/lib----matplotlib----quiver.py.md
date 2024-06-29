@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\quiver.py`
 
-```
+```py
 """
 支持绘制向量场的功能。
 

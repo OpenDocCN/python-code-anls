@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\mplot3d\contour3d.py`
 
-```
+```py
 """
 =================================
 Plot contour (level) curves in 3D

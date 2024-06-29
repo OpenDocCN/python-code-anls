@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\mpl_toolkits\axisartist\tests\test_floating_axes.py`
 
-```
+```py
 # 导入必要的库
 import numpy as np
 

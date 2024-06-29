@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\axisartist\axis_direction.py`
 
-```
+```py
 """
 ==============
 Axis Direction

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_cairo.py`
 
-```
+```py
 """
 A Cairo backend for Matplotlib
 ==============================

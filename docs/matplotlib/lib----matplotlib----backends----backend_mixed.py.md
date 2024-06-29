@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_mixed.py`
 
-```
+```py
 import numpy as np
 
 from matplotlib import cbook

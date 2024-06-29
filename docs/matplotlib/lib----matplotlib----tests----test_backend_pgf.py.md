@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\tests\test_backend_pgf.py`
 
-```
+```py
 # 导入 datetime 模块，用于处理日期和时间
 import datetime
 # 导入 BytesIO 类，用于处理二进制数据的内存缓冲

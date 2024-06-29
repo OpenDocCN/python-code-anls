@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\quiver.pyi`
 
-```
+```py
 # 导入必要的模块和类
 import matplotlib.artist as martist
 import matplotlib.collections as mcollections

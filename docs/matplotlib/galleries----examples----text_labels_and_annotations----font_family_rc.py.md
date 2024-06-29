@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\text_labels_and_annotations\font_family_rc.py`
 
-```
+```py
 """
 ===========================
 Configuring the font family

@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\galleries\examples\shapes_and_collections\ellipse_collection.py`
 
-```
+```py
 """
 ==================
 Ellipse Collection

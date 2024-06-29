@@ -1,6 +1,6 @@
 # `D:\src\scipysrc\matplotlib\lib\matplotlib\backends\backend_svg.py`
 
-```
+```py
 import base64
 import codecs
 import datetime
