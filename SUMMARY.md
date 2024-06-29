@@ -20,6 +20,7 @@
 +   [NumPy 源码解析](docs/numpy/README.md)
 +   [NumPyML 源码解析](docs/numpy-ml-ai/README.md)
 +   [PaddleOCR 源码解析](docs/paddleocr-ai/README.md)
++   [Pandas 源码解析](docs/pandas/README.md)
 +   [PandasTA 源码解析](docs/pandas-ta/README.md)
 +   [PokéLLMon 源码解析](docs/pokellmon/README.md)
 +   [PythonMarkdown 源码解析](docs/python-markdown-ai/README.md)
