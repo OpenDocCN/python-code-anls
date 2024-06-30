@@ -1,0 +1,78 @@
+# `D:\src\scipysrc\scikit-learn\sklearn\_min_dependencies.py`
+
+```
+"""All minimum dependencies for scikit-learn."""
+
+# 导入需要的模块
+import argparse
+from collections import defaultdict
+
+# 定义各个依赖库的最小版本要求
+NUMPY_MIN_VERSION = "1.19.5"
+SCIPY_MIN_VERSION = "1.6.0"
+JOBLIB_MIN_VERSION = "1.2.0"
+THREADPOOLCTL_MIN_VERSION = "3.1.0"
+PYTEST_MIN_VERSION = "7.1.2"
+CYTHON_MIN_VERSION = "3.0.10"
+
+# 'build' and 'install' is included to have structured metadata for CI.
+# It will NOT be included in setup's extras_require
+# The values are (version_spec, comma separated tags)
+
+# 定义依赖的包及其对应的最小版本和附加标签
+dependent_packages = {
+    "numpy": (NUMPY_MIN_VERSION, "build, install"),
+    "scipy": (SCIPY_MIN_VERSION, "build, install"),
+    "joblib": (JOBLIB_MIN_VERSION, "install"),
+    "threadpoolctl": (THREADPOOLCTL_MIN_VERSION, "install"),
+    "cython": (CYTHON_MIN_VERSION, "build"),
+    "meson-python": ("0.16.0", "build"),
+    "matplotlib": ("3.3.4", "benchmark, docs, examples, tests"),
+    "scikit-image": ("0.17.2", "docs, examples, tests"),
+    "pandas": ("1.1.5", "benchmark, docs, examples, tests"),
+    "seaborn": ("0.9.0", "docs, examples"),
+    "memory_profiler": ("0.57.0", "benchmark, docs"),
+    "pytest": (PYTEST_MIN_VERSION, "tests"),
+    "pytest-cov": ("2.9.0", "tests"),
+    "ruff": ("0.2.1", "tests"),
+    "black": ("24.3.0", "tests"),
+    "mypy": ("1.9", "tests"),
+    "pyamg": ("4.0.0", "tests"),
+    "polars": ("0.20.23", "docs, tests"),
+    "pyarrow": ("12.0.0", "tests"),
+    "sphinx": ("7.3.7", "docs"),
+    "sphinx-copybutton": ("0.5.2", "docs"),
+    "sphinx-gallery": ("0.16.0", "docs"),
+    "numpydoc": ("1.2.0", "docs, tests"),
+    "Pillow": ("7.1.2", "docs"),
+    "pooch": ("1.6.0", "docs, examples, tests"),
+    "sphinx-prompt": ("1.4.0", "docs"),
+    "sphinxext-opengraph": ("0.9.1", "docs"),
+    "plotly": ("5.14.0", "docs, examples"),
+    "sphinxcontrib-sass": ("0.3.4", "docs"),
+    "sphinx-remove-toctrees": ("1.0.0.post1", "docs"),
+    "sphinx-design": ("0.5.0", "docs"),
+    "pydata-sphinx-theme": ("0.15.3", "docs"),
+    # XXX: Pin conda-lock to the latest released version (needs manual update
+    # from time to time)
+    "conda-lock": ("2.5.6", "maintenance"),
+}
+
+# create inverse mapping for setuptools
+# 为 setuptools 创建依赖标签到包名的反向映射
+tag_to_packages: dict = defaultdict(list)
+for package, (min_version, extras) in dependent_packages.items():
+    for extra in extras.split(", "):
+        tag_to_packages[extra].append("{}>={}".format(package, min_version))
+
+# Used by CI to get the min dependencies
+# 用于 CI 获取最小依赖版本
+if __name__ == "__main__":
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(description="Get min dependencies for a package")
+    parser.add_argument("package", choices=dependent_packages)
+    args = parser.parse_args()
+    # 获取所选包的最小版本号并输出
+    min_version = dependent_packages[args.package][0]
+    print(min_version)
+```

@@ -1,0 +1,278 @@
+# `D:\src\scipysrc\scikit-learn\examples\linear_model\plot_lasso_model_selection.py`
+
+```
+"""
+=================================================
+Lasso model selection: AIC-BIC / cross-validation
+=================================================
+
+This example focuses on model selection for Lasso models that are
+linear models with an L1 penalty for regression problems.
+
+Indeed, several strategies can be used to select the value of the
+regularization parameter: via cross-validation or using an information
+criterion, namely AIC or BIC.
+
+In what follows, we will discuss in details the different strategies.
+"""
+
+# Authors: The scikit-learn developers
+# SPDX-License-Identifier: BSD-3-Clause
+
+# %%
+# Dataset
+# -------
+# In this example, we will use the diabetes dataset.
+from sklearn.datasets import load_diabetes
+
+X, y = load_diabetes(return_X_y=True, as_frame=True)
+X.head()
+
+# %%
+# In addition, we add some random features to the original data to
+# better illustrate the feature selection performed by the Lasso model.
+import numpy as np
+import pandas as pd
+
+rng = np.random.RandomState(42)
+n_random_features = 14
+X_random = pd.DataFrame(
+    rng.randn(X.shape[0], n_random_features),
+    columns=[f"random_{i:02d}" for i in range(n_random_features)],
+)
+X = pd.concat([X, X_random], axis=1)
+# Show only a subset of the columns
+X[X.columns[::3]].head()
+
+# %%
+# Selecting Lasso via an information criterion
+# --------------------------------------------
+# :class:`~sklearn.linear_model.LassoLarsIC` provides a Lasso estimator that
+# uses the Akaike information criterion (AIC) or the Bayes information
+# criterion (BIC) to select the optimal value of the regularization
+# parameter alpha.
+#
+# Before fitting the model, we will standardize the data with a
+# :class:`~sklearn.preprocessing.StandardScaler`. In addition, we will
+# measure the time to fit and tune the hyperparameter alpha in order to
+# compare with the cross-validation strategy.
+#
+# We will first fit a Lasso model with the AIC criterion.
+import time
+
+from sklearn.linear_model import LassoLarsIC
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+start_time = time.time()
+# 创建一个管道，包括数据标准化和使用 AIC 准则的 LassoLarsIC 模型拟合
+lasso_lars_ic = make_pipeline(StandardScaler(), LassoLarsIC(criterion="aic")).fit(X, y)
+fit_time = time.time() - start_time
+
+# %%
+# We store the AIC metric for each value of alpha used during `fit`.
+# 存储每个 alpha 值在拟合过程中使用的 AIC 指标
+results = pd.DataFrame(
+    {
+        "alphas": lasso_lars_ic[-1].alphas_,
+        "AIC criterion": lasso_lars_ic[-1].criterion_,
+    }
+).set_index("alphas")
+alpha_aic = lasso_lars_ic[-1].alpha_
+
+# %%
+# Now, we perform the same analysis using the BIC criterion.
+# 使用 BIC 准则进行相同的分析
+lasso_lars_ic.set_params(lassolarsic__criterion="bic").fit(X, y)
+results["BIC criterion"] = lasso_lars_ic[-1].criterion_
+alpha_bic = lasso_lars_ic[-1].alpha_
+
+# %%
+# We can check which value of `alpha` leads to the minimum AIC and BIC.
+# 可以检查哪个 `alpha` 值导致 AIC 和 BIC 最小
+def highlight_min(x):
+    x_min = x.min()
+    return ["font-weight: bold" if v == x_min else "" for v in x]
+
+# 使用样式函数标记最小值
+results.style.apply(highlight_min)
+
+# %%
+# Finally, we can plot the AIC and BIC values for the different alpha values.
+# The vertical lines in the plot correspond to the alpha chosen for each
+# criterion. The selected alpha corresponds to the minimum of the AIC or BIC
+# criterion.
+ax = results.plot()
+
+# Plot a vertical line indicating the alpha chosen based on AIC criterion
+ax.vlines(
+    alpha_aic,
+    results["AIC criterion"].min(),
+    results["AIC criterion"].max(),
+    label="alpha: AIC estimate",
+    linestyles="--",
+    color="tab:blue",
+)
+
+# Plot a vertical line indicating the alpha chosen based on BIC criterion
+ax.vlines(
+    alpha_bic,
+    results["BIC criterion"].min(),
+    results["BIC criterion"].max(),
+    label="alpha: BIC estimate",
+    linestyle="--",
+    color="tab:orange",
+)
+
+# Set x-axis label with LaTeX formatting for alpha symbol
+ax.set_xlabel(r"$\alpha$")
+
+# Set y-axis label
+ax.set_ylabel("criterion")
+
+# Set x-axis scale to logarithmic
+ax.set_xscale("log")
+
+# Add legend to the plot
+ax.legend()
+
+# Set title for the plot, including the training time formatted to 2 decimal places
+_ = ax.set_title(
+    f"Information-criterion for model selection (training time {fit_time:.2f}s)"
+)
+
+# %%
+# Model selection with an information-criterion is very fast. It relies on
+# computing the criterion on the in-sample set provided to `fit`. Both criteria
+# estimate the model generalization error based on the training set error and
+# penalize this overly optimistic error. However, this penalty relies on a
+# proper estimation of the degrees of freedom and the noise variance. Both are
+# derived for large samples (asymptotic results) and assume the model is
+# correct, i.e. that the data are actually generated by this model.
+#
+# These models also tend to break when the problem is badly conditioned (more
+# features than samples). It is then required to provide an estimate of the
+# noise variance.
+#
+# Selecting Lasso via cross-validation
+# ------------------------------------
+# The Lasso estimator can be implemented with different solvers: coordinate
+# descent and least angle regression. They differ with regards to their
+# execution speed and sources of numerical errors.
+#
+# In scikit-learn, two different estimators are available with integrated
+# cross-validation: :class:`~sklearn.linear_model.LassoCV` and
+# :class:`~sklearn.linear_model.LassoLarsCV` that respectively solve the
+# problem with coordinate descent and least angle regression.
+#
+# In the remainder of this section, we will present both approaches. For both
+# algorithms, we will use a 20-fold cross-validation strategy.
+#
+# Lasso via coordinate descent
+# ............................
+# Let's start by making the hyperparameter tuning using
+# :class:`~sklearn.linear_model.LassoCV`.
+from sklearn.linear_model import LassoCV
+
+# Start measuring the time for the model fitting process
+start_time = time.time()
+
+# Fit the LassoCV model using a pipeline that includes standard scaling
+# and 20-fold cross-validation
+model = make_pipeline(StandardScaler(), LassoCV(cv=20)).fit(X, y)
+
+# Calculate the time taken for fitting the model
+fit_time = time.time() - start_time
+
+# %%
+import matplotlib.pyplot as plt
+
+# Define ymin and ymax values for y-axis limits in the plot
+ymin, ymax = 2300, 3800
+
+# Access the Lasso estimator from the fitted pipeline model
+lasso = model[-1]
+
+# Plot mean squared error across different alpha values
+plt.semilogx(lasso.alphas_, lasso.mse_path_, linestyle=":")
+
+# Plot the average MSE across folds against alpha
+plt.plot(
+    lasso.alphas_,
+    lasso.mse_path_.mean(axis=-1),
+    color="black",
+    label="Average across the folds",
+    linewidth=2,
+)
+
+# Add a vertical line to indicate the alpha estimated via cross-validation
+plt.axvline(lasso.alpha_, linestyle="--", color="black", label="alpha: CV estimate")
+
+# Set y-axis limits
+plt.ylim(ymin, ymax)
+
+# Set x-axis label with LaTeX formatting for alpha symbol
+plt.xlabel(r"$\alpha$")
+
+# Set y-axis label
+plt.ylabel("Mean square error")
+
+# Add legend to the plot
+plt.legend()
+_ = plt.title(
+    f"Mean square error on each fold: coordinate descent (train time: {fit_time:.2f}s)"
+)
+# 设置图表标题，显示坐标下降法每折的均方误差和训练时间
+
+# %%
+# Lasso via least angle regression
+# ................................
+# 通过使用:class:`~sklearn.linear_model.LassoLarsCV`开始进行超参数调整。
+from sklearn.linear_model import LassoLarsCV
+
+start_time = time.time()
+# 创建管道，包括数据标准化和LassoLarsCV模型的拟合
+model = make_pipeline(StandardScaler(), LassoLarsCV(cv=20)).fit(X, y)
+fit_time = time.time() - start_time
+# 计算拟合模型所需的时间
+
+# %%
+lasso = model[-1]
+plt.semilogx(lasso.cv_alphas_, lasso.mse_path_, ":")
+plt.semilogx(
+    lasso.cv_alphas_,
+    lasso.mse_path_.mean(axis=-1),
+    color="black",
+    label="Average across the folds",
+    linewidth=2,
+)
+plt.axvline(lasso.alpha_, linestyle="--", color="black", label="alpha CV")
+
+plt.ylim(ymin, ymax)
+plt.xlabel(r"$\alpha$")
+plt.ylabel("Mean square error")
+plt.legend()
+_ = plt.title(f"Mean square error on each fold: Lars (train time: {fit_time:.2f}s)")
+
+# %%
+# Summary of cross-validation approach
+# ....................................
+# 两种算法给出了大致相同的结果。
+#
+# Lars仅对每个拐点计算解路径。因此，在特征或样本较少时，效率非常高。
+# 它能够在不设置任何超参数的情况下计算完整的路径。相比之下，坐标下降法在预先指定的网格上计算路径点（这里使用默认设置）。
+# 因此，如果网格点数小于路径中的拐点数，它的效率更高。如果特征数量非常大，并且每个交叉验证折中有足够的样本可供选择，则这种策略可能很有趣。
+# 在数值误差方面，对于高度相关的变量，Lars将累积更多误差，而坐标下降算法仅在网格上采样路径。
+#
+# 请注意，每折的最佳alpha值如何变化。这说明嵌套交叉验证在尝试评估通过交叉验证选择参数的方法的性能时是一种良好的策略：
+# 这种参数选择可能不适用于仅在未见测试集上进行最终评估的情况。
+#
+# 结论
+# ----
+# 在本教程中，我们介绍了两种选择最佳超参数`alpha`的方法：一种策略通过仅使用训练集和一些信息准则来找到最佳的`alpha`值，
+# 另一种策略基于交叉验证。
+#
+# 在本例中，这两种方法的效果类似。在样本数量足够大的情况下，样本内超参数选择甚至表现出了它的效果。然而，它只能在样本数目相对于特征数目足够大时使用。
+#
+# 这就是为什么通过交叉验证进行超参数优化是一种安全策略：它适用于不同的设置。
+```
