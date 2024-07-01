@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\datasource.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\datasource.pyi`
 
 ```py
 # 导入 Path 类从 pathlib 模块，导入 numpy 模块中的 np 对象

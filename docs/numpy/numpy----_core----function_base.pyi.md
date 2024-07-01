@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\function_base.pyi`
+# `.\numpy\numpy\_core\function_base.pyi`
 
 ```py
 # 导入必要的类型和函数，包括字面量类型、重载函数、任意类型、支持索引的类型变量

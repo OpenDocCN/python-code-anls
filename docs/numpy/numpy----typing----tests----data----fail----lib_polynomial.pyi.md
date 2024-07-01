@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\lib_polynomial.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\lib_polynomial.pyi`
 
 ```py
 import numpy as np  # 导入NumPy库，用于科学计算

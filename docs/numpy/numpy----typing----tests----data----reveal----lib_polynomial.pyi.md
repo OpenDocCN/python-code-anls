@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\lib_polynomial.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\lib_polynomial.pyi`
 
 ```py
 import sys

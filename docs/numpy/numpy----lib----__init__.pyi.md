@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\__init__.pyi`
+# `.\numpy\numpy\lib\__init__.pyi`
 
 ```py
 # 导入 math 模块并将其命名为 math

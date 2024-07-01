@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\__init__.pyi`
+# `.\numpy\numpy\random\__init__.pyi`
 
 ```py
 # 从 numpy._pytesttester 模块导入 PytestTester 类

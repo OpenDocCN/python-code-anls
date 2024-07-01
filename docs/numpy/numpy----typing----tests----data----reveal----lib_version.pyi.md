@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\lib_version.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\lib_version.pyi`
 
 ```py
 # 导入 sys 模块，用于获取 Python 解释器的相关信息

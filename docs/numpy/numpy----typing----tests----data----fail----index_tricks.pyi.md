@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\index_tricks.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\index_tricks.pyi`
 
 ```py
 import numpy as np  # 导入 NumPy 库，用于科学计算

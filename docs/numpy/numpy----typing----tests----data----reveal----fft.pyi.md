@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\fft.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\fft.pyi`
 
 ```py
 import sys

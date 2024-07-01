@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\distutils\__init__.pyi`
+# `.\numpy\numpy\distutils\__init__.pyi`
 
 ```py
 # 从 typing 模块导入 Any 类型

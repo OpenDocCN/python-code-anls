@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\__init__.pyi`
+# `.\numpy\numpy\__init__.pyi`
 
 ```py
 # 导入内置模块和第三方库

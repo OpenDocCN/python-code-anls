@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\ma\mrecords.pyi`
+# `.\numpy\numpy\ma\mrecords.pyi`
 
 ```py
 # 导入类型提示的必要模块

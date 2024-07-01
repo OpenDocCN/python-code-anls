@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\nested_sequence.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\nested_sequence.pyi`
 
 ```py
 # 导入Sequence抽象基类，用于声明序列类型变量

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\fromnumeric.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\fromnumeric.pyi`
 
 ```py
 """Tests for :mod:`numpy._core.fromnumeric`."""

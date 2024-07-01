@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\common\half.hpp`
+# `.\numpy\numpy\_core\src\common\half.hpp`
 
 ```py
 #ifndef NUMPY_CORE_SRC_COMMON_HALF_HPP

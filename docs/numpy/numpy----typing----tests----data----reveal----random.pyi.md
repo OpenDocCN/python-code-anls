@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\random.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\random.pyi`
 
 ```py
 import sys

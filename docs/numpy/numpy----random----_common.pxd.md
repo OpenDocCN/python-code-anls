@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_common.pxd`
+# `.\numpy\numpy\random\_common.pxd`
 
 ```py
 # 设置 Cython 语言级别为 Python 3

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\testing\_private\utils.pyi`
+# `.\numpy\numpy\testing\_private\utils.pyi`
 
 ```py
 import os

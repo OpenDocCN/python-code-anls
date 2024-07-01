@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_arrayterator_impl.pyi`
+# `.\numpy\numpy\lib\_arrayterator_impl.pyi`
 
 ```py
 # 导入必要的模块和类型

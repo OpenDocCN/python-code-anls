@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\einsumfunc.pyi`
+# `.\numpy\numpy\_core\einsumfunc.pyi`
 
 ```py
 from collections.abc import Sequence

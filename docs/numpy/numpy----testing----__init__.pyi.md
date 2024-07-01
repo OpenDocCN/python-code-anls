@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\testing\__init__.pyi`
+# `.\numpy\numpy\testing\__init__.pyi`
 
 ```py
 # 导入单个模块中的类 PytestTester

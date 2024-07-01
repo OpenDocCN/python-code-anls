@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\npyio.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\npyio.pyi`
 
 ```py
 import re  # 导入正则表达式模块

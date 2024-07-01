@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\nbit_base_example.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\nbit_base_example.pyi`
 
 ```py
 import sys

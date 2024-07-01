@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\polynomial\polynomial.pyi`
+# `.\numpy\numpy\polynomial\polynomial.pyi`
 
 ```py
 # 从 typing 模块导入 Any 类型

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\strings\__init__.pyi`
+# `.\numpy\numpy\strings\__init__.pyi`
 
 ```py
 # 导入 numpy._core.strings 模块中的字符串操作函数，并重命名为易于理解的名称

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ndarray_conversion.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\ndarray_conversion.pyi`
 
 ```py
 import sys  # 导入sys模块，用于访问系统特定参数和功能

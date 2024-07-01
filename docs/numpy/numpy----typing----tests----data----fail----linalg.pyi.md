@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\linalg.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\linalg.pyi`
 
 ```py
 import numpy as np  # 导入 NumPy 库

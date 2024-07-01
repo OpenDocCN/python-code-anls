@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\tests\examples\limited_api\limited_api2.pyx`
+# `.\numpy\numpy\_core\tests\examples\limited_api\limited_api2.pyx`
 
 ```py
 #cython: language_level=3

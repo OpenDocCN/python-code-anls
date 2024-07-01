@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\ndarray.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\ndarray.pyi`
 
 ```py
 # 导入 NumPy 库

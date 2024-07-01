@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\numerictypes.pyi`
+# `.\numpy\numpy\_core\numerictypes.pyi`
 
 ```py
 ```python`

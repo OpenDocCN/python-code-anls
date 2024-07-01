@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_generator.pyi`
+# `.\numpy\numpy\random\_generator.pyi`
 
 ```py
 # 导入必要的模块和类

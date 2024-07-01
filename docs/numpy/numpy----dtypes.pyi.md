@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\dtypes.pyi`
+# `.\numpy\numpy\dtypes.pyi`
 
 ```py
 # 导入 numpy 库

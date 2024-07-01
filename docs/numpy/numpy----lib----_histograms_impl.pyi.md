@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_histograms_impl.pyi`
+# `.\numpy\numpy\lib\_histograms_impl.pyi`
 
 ```py
 # 从 collections.abc 导入 Sequence 类，用于声明序列类型的抽象基类

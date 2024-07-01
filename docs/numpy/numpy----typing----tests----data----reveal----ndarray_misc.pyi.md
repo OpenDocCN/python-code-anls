@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ndarray_misc.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\ndarray_misc.pyi`
 
 ```py
 """

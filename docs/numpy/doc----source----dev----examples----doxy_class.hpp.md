@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\doc\source\dev\examples\doxy_class.hpp`
+# `.\numpy\doc\source\dev\examples\doxy_class.hpp`
 
 ```py
 /**

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\warnings_and_errors.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\warnings_and_errors.pyi`
 
 ```py
 import numpy.exceptions as ex

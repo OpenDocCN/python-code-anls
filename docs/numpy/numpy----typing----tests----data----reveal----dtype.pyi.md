@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\dtype.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\dtype.pyi`
 
 ```py
 import sys

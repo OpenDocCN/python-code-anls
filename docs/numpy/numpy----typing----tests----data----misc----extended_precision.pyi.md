@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\misc\extended_precision.pyi`
+# `.\numpy\numpy\typing\tests\data\misc\extended_precision.pyi`
 
 ```py
 import sys

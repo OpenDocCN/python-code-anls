@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ufunc_config.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\ufunc_config.pyi`
 
 ```py
 """Typing tests for `_core._ufunc_config`."""

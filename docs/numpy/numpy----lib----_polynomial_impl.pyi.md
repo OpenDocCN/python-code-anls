@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_polynomial_impl.pyi`
+# `.\numpy\numpy\lib\_polynomial_impl.pyi`
 
 ```py
 # 导入需要的类型和函数

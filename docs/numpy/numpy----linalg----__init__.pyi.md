@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\linalg\__init__.pyi`
+# `.\numpy\numpy\linalg\__init__.pyi`
 
 ```py
 # 从 numpy.linalg._linalg 导入多个函数，重命名为相应的本地名称

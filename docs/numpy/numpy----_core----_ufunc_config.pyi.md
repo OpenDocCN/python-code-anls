@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\_ufunc_config.pyi`
+# `.\numpy\numpy\_core\_ufunc_config.pyi`
 
 ```py
 from collections.abc import Callable

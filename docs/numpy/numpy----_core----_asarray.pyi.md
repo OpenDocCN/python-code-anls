@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\_asarray.pyi`
+# `.\numpy\numpy\_core\_asarray.pyi`
 
 ```py
 # 导入所需模块和类型定义

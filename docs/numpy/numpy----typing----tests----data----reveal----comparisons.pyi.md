@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\comparisons.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\comparisons.pyi`
 
 ```py
 import sys  # 导入sys模块，用于访问与Python解释器相关的系统功能

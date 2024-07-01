@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\false_positives.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\false_positives.pyi`
 
 ```py
 `

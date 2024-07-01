@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\lib_utils.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\lib_utils.pyi`
 
 ```py
 # 导入 numpy 库中的 array_utils 模块，用于处理数组相关的实用工具

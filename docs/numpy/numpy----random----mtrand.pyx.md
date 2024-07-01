@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\mtrand.pyx`
+# `.\numpy\numpy\random\mtrand.pyx`
 
 ```py
 # 导入运算符模块，提供了各种运算符的函数实现

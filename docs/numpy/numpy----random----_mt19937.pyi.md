@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_mt19937.pyi`
+# `.\numpy\numpy\random\_mt19937.pyi`
 
 ```py
 # 导入必要的类型定义

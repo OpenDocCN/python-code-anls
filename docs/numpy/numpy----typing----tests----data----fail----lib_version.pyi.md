@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\lib_version.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\lib_version.pyi`
 
 ```py
 # 从 numpy.lib 模块中导入 NumpyVersion 类

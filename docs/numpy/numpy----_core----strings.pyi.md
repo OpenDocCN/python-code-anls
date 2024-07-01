@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\strings.pyi`
+# `.\numpy\numpy\_core\strings.pyi`
 
 ```py
 # 引入类型提示所需的模块和类型定义

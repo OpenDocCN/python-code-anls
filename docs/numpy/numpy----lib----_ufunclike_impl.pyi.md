@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_ufunclike_impl.pyi`
+# `.\numpy\numpy\lib\_ufunclike_impl.pyi`
 
 ```py
 # 引入必要的类型和模块

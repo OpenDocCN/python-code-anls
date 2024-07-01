@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_sfc64.pyx`
+# `.\numpy\numpy\random\_sfc64.pyx`
 
 ```py
 #cython: binding=True

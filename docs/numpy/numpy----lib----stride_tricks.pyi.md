@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\stride_tricks.pyi`
+# `.\numpy\numpy\lib\stride_tricks.pyi`
 
 ```py
 # 从numpy库的_stride_tricks_impl模块中导入as_strided和sliding_window_view函数

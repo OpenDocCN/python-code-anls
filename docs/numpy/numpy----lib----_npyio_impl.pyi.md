@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_npyio_impl.pyi`
+# `.\numpy\numpy\lib\_npyio_impl.pyi`
 
 ```py
 import os

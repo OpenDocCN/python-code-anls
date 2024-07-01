@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\flatiter.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\flatiter.pyi`
 
 ```py
 from typing import Any

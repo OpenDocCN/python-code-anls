@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\polynomial\chebyshev.pyi`
+# `.\numpy\numpy\polynomial\chebyshev.pyi`
 
 ```py
 # 导入必要的类型引用

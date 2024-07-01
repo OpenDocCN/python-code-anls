@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\ctypeslib.pyi`
+# `.\numpy\numpy\ctypeslib.pyi`
 
 ```py
 # NOTE: Numpy's mypy plugin is used for importing the correct

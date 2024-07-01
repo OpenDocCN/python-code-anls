@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\npyio.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\npyio.pyi`
 
 ```py
 import pathlib                      # 导入pathlib模块，用于处理路径

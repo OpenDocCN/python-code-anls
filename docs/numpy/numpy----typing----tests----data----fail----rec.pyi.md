@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\rec.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\rec.pyi`
 
 ```py
 import numpy as np  # 导入 NumPy 库

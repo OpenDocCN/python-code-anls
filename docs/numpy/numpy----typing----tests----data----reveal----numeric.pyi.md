@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\numeric.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\numeric.pyi`
 
 ```py
 """

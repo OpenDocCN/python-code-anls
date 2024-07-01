@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ufunclike.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\ufunclike.pyi`
 
 ```py
 # 导入 sys 模块，用于系统相关操作

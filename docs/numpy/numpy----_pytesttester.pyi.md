@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_pytesttester.pyi`
+# `.\numpy\numpy\_pytesttester.pyi`
 
 ```py
 from collections.abc import Iterable

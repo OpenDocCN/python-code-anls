@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\common\npstd.hpp`
+# `.\numpy\numpy\_core\src\common\npstd.hpp`
 
 ```py
 #ifndef NUMPY_CORE_SRC_COMMON_NPSTD_HPP

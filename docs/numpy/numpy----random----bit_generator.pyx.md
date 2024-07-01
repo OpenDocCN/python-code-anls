@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\bit_generator.pyx`
+# `.\numpy\numpy\random\bit_generator.pyx`
 
 ```py
 #cython: binding=True

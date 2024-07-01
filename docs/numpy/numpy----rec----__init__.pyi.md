@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\rec\__init__.pyi`
+# `.\numpy\numpy\rec\__init__.pyi`
 
 ```py
 # 导入 numpy._core.records 模块中的特定组件

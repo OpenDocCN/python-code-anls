@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\chararray.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\chararray.pyi`
 
 ```py
 import numpy as np

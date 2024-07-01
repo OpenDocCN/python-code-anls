@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\rec.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\rec.pyi`
 
 ```py
 import io  # 导入io模块，用于处理文件和流相关的操作

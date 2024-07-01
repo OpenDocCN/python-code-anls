@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\lib_function_base.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\lib_function_base.pyi`
 
 ```py
 from typing import Any

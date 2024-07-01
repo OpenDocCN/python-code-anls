@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\ma\core.pyi`
+# `.\numpy\numpy\ma\core.pyi`
 
 ```py
 # 导入必要的模块和类型声明

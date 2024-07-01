@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\comparisons.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\comparisons.pyi`
 
 ```py
 # 导入 NumPy 库，并引入 NumPy 类型注解模块

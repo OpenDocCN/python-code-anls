@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\doc\source\reference\random\examples\cython\extending.pyx`
+# `.\numpy\doc\source\reference\random\examples\cython\extending.pyx`
 
 ```py
 # extending.pyx 文件的路径

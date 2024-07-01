@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\__init__.cython-30.pxd`
+# `.\numpy\numpy\__init__.cython-30.pxd`
 
 ```py
 # NumPy static imports for Cython >= 3.0

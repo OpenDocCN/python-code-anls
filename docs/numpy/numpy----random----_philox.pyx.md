@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_philox.pyx`
+# `.\numpy\numpy\random\_philox.pyx`
 
 ```py
 #cython: binding=True

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\memmap.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\memmap.pyi`
 
 ```py
 import sys

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\bit_generator.pyi`
+# `.\numpy\numpy\random\bit_generator.pyi`
 
 ```py
 import abc  # 导入抽象基类模块

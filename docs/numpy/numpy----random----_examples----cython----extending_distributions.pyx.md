@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_examples\cython\extending_distributions.pyx`
+# `.\numpy\numpy\random\_examples\cython\extending_distributions.pyx`
 
 ```py
 #!/usr/bin/env python3

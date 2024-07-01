@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arrayterator.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\arrayterator.pyi`
 
 ```py
 import sys

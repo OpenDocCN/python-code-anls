@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\f2py\__init__.pyi`
+# `.\numpy\numpy\f2py\__init__.pyi`
 
 ```py
 # 导入标准库模块

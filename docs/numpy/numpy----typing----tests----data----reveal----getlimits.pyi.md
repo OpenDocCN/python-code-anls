@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\getlimits.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\getlimits.pyi`
 
 ```py
 # 导入系统模块 sys

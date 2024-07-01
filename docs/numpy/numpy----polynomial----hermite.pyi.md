@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\polynomial\hermite.pyi`
+# `.\numpy\numpy\polynomial\hermite.pyi`
 
 ```py
 # 导入必要的类型注解

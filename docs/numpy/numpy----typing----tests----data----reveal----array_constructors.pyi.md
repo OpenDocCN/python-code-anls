@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\array_constructors.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\array_constructors.pyi`
 
 ```py
 import sys

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\__init__.pxd`
+# `.\numpy\numpy\random\__init__.pxd`
 
 ```py
 # 导入必要的 Cython 模块和类型定义

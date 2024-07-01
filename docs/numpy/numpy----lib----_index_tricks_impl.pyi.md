@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_index_tricks_impl.pyi`
+# `.\numpy\numpy\lib\_index_tricks_impl.pyi`
 
 ```py
 # 导入所需的模块和类型定义

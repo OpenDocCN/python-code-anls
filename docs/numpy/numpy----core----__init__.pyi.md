@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\core\__init__.pyi`
+# `.\numpy\numpy\core\__init__.pyi`
 
 ```py
 # 导入所需的模块：re 用于正则表达式操作，os 用于文件路径操作

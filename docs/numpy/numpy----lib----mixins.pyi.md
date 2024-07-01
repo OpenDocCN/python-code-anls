@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\mixins.pyi`
+# `.\numpy\numpy\lib\mixins.pyi`
 
 ```py
 from abc import ABCMeta, abstractmethod

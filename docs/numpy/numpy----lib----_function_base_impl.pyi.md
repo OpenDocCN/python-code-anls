@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_function_base_impl.pyi`
+# `.\numpy\numpy\lib\_function_base_impl.pyi`
 
 ```py
 # 导入 sys 模块，用于系统相关操作

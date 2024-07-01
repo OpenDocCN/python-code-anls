@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_philox.pyi`
+# `.\numpy\numpy\random\_philox.pyi`
 
 ```py
 from typing import TypedDict  # 导入 TypedDict 类型提示

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\scalars.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\scalars.pyi`
 
 ```py
 import sys

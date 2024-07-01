@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\ma\extras.pyi`
+# `.\numpy\numpy\ma\extras.pyi`
 
 ```py
 from typing import Any

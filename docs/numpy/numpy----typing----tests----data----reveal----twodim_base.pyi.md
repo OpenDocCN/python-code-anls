@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\twodim_base.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\twodim_base.pyi`
 
 ```py
 import sys

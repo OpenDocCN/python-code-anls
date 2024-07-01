@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_twodim_base_impl.pyi`
+# `.\numpy\numpy\lib\_twodim_base_impl.pyi`
 
 ```py
 # 导入内建模块和函数

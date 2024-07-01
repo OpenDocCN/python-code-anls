@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_typing\_ufunc.pyi`
+# `.\numpy\numpy\_typing\_ufunc.pyi`
 
 ```py
 """

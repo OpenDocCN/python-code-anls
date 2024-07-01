@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_examples\cython\extending.pyx`
+# `.\numpy\numpy\random\_examples\cython\extending.pyx`
 
 ```py
 # 使用 Python3 解释器执行该脚本

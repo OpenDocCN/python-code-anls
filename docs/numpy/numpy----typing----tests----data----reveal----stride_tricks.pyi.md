@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\stride_tricks.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\stride_tricks.pyi`
 
 ```py
 import sys

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_type_check_impl.pyi`
+# `.\numpy\numpy\lib\_type_check_impl.pyi`
 
 ```py
 # 从 collections.abc 导入 Container 和 Iterable 接口

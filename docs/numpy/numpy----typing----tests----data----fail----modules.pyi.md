@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\modules.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\modules.pyi`
 
 ```py
 import numpy as np  # 导入 NumPy 库，使用 np 作为别名

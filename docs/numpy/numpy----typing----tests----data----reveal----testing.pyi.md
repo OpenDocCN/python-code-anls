@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\testing.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\testing.pyi`
 
 ```py
 # 导入所需的模块和包

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\exceptions.pyi`
+# `.\numpy\numpy\exceptions.pyi`
 
 ```py
 # 导入typing模块中的overload函数，用于支持函数重载

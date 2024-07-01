@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\polynomial\laguerre.pyi`
+# `.\numpy\numpy\polynomial\laguerre.pyi`
 
 ```py
 # 引入类型提示模块中的Any类型

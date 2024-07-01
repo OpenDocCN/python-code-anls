@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\arrayprint.pyi`
+# `.\numpy\numpy\_core\arrayprint.pyi`
 
 ```py
 # 导入必要的模块和类型

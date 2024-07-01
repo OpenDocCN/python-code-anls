@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\linalg\_linalg.pyi`
+# `.\numpy\numpy\linalg\_linalg.pyi`
 
 ```py
 # 从 collections.abc 导入 Iterable 类，支持可迭代对象的抽象基类

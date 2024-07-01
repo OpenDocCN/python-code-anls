@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\defchararray.pyi`
+# `.\numpy\numpy\_core\defchararray.pyi`
 
 ```py
 # 引入必要的类型提示和函数重载支持

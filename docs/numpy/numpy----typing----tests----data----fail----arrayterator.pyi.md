@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\arrayterator.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\arrayterator.pyi`
 
 ```py
 import numpy as np  # 导入NumPy库

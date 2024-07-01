@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\npysort\highway_qsort.hpp`
+# `.\numpy\numpy\_core\src\npysort\highway_qsort.hpp`
 
 ```py
 #ifndef NUMPY_SRC_COMMON_NPYSORT_HWY_SIMD_QSORT_HPP

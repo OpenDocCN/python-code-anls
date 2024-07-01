@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\stride_tricks.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\stride_tricks.pyi`
 
 ```py
 import numpy as np

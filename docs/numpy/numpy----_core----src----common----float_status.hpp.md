@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\common\float_status.hpp`
+# `.\numpy\numpy\_core\src\common\float_status.hpp`
 
 ```py
 #ifndef NUMPY_CORE_SRC_COMMON_FLOAT_STATUS_HPP

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\c_distributions.pxd`
+# `.\numpy\numpy\random\c_distributions.pxd`
 
 ```py
 # 导入必要的模块和类型定义

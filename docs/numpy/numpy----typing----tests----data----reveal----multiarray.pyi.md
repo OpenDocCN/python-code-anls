@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\multiarray.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\multiarray.pyi`
 
 ```py
 # 导入系统模块 sys

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\scalars.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\scalars.pyi`
 
 ```py
 import sys  # 导入sys模块，用于系统相关的操作

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\fft\_pocketfft.pyi`
+# `.\numpy\numpy\fft\_pocketfft.pyi`
 
 ```py
 # 从 collections.abc 模块中导入 Sequence 类型

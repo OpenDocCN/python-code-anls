@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\_shape_base_impl.pyi`
+# `.\numpy\numpy\lib\_shape_base_impl.pyi`
 
 ```py
 # 导入系统模块 sys

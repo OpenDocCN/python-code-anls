@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\bitwise_ops.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\bitwise_ops.pyi`
 
 ```py
 import numpy as np

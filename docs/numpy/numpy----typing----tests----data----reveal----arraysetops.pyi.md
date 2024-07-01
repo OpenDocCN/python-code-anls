@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\arraysetops.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\arraysetops.pyi`
 
 ```py
 import sys

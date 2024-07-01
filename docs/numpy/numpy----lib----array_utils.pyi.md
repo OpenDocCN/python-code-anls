@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\array_utils.pyi`
+# `.\numpy\numpy\lib\array_utils.pyi`
 
 ```py
 # 从 _array_utils_impl 模块中导入以下几个成员：

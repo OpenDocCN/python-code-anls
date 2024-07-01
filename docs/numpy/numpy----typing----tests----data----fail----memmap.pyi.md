@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\fail\memmap.pyi`
+# `.\numpy\numpy\typing\tests\data\fail\memmap.pyi`
 
 ```py
 import numpy as np  # 导入 NumPy 库，用于科学计算和数组操作

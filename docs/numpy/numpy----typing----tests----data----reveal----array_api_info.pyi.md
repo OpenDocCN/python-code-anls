@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\array_api_info.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\array_api_info.pyi`
 
 ```py
 # 导入系统相关的模块

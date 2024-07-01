@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\npysort\x86_simd_qsort.hpp`
+# `.\numpy\numpy\_core\src\npysort\x86_simd_qsort.hpp`
 
 ```py
 #ifndef NUMPY_SRC_COMMON_NPYSORT_X86_SIMD_QSORT_HPP

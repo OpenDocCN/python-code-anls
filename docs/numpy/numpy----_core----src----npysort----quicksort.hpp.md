@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\src\npysort\quicksort.hpp`
+# `.\numpy\numpy\_core\src\npysort\quicksort.hpp`
 
 ```py
 #ifndef NUMPY_SRC_COMMON_NPYSORT_QUICKSORT_HPP

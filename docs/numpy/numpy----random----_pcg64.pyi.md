@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_pcg64.pyi`
+# `.\numpy\numpy\random\_pcg64.pyi`
 
 ```py
 # 导入必要的类型引用

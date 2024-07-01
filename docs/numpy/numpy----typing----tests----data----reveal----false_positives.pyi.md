@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\false_positives.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\false_positives.pyi`
 
 ```py
 # 导入 sys 模块，用于访问系统相关信息

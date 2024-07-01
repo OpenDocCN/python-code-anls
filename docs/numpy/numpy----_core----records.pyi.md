@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\records.pyi`
+# `.\numpy\numpy\_core\records.pyi`
 
 ```py
 # 导入标准库 os，用于与操作系统交互

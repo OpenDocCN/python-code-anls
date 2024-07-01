@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\datasource.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\datasource.pyi`
 
 ```py
 # 导入系统模块 sys

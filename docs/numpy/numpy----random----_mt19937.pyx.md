@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\_mt19937.pyx`
+# `.\numpy\numpy\random\_mt19937.pyx`
 
 ```py
 #cython: binding=True

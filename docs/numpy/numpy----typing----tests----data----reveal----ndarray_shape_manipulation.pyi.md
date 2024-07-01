@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\ndarray_shape_manipulation.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\ndarray_shape_manipulation.pyi`
 
 ```py
 # 导入系统模块 sys

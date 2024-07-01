@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\fromnumeric.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\fromnumeric.pyi`
 
 ```py
 """Tests for :mod:`_core.fromnumeric`."""

@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\random\mtrand.pyi`
+# `.\numpy\numpy\random\mtrand.pyi`
 
 ```py
 # 导入内置模块 builtins，提供内置函数和异常

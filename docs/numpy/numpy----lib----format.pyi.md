@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\lib\format.pyi`
+# `.\numpy\numpy\lib\format.pyi`
 
 ```py
 # 导入必要的类型声明

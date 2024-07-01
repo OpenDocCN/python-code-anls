@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\tests\examples\cython\checks.pyx`
+# `.\numpy\numpy\_core\tests\examples\cython\checks.pyx`
 
 ```py
 """

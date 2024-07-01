@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\typing\tests\data\reveal\flatiter.pyi`
+# `.\numpy\numpy\typing\tests\data\reveal\flatiter.pyi`
 
 ```py
 # 导入系统模块

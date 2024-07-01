@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\_core\numeric.pyi`
+# `.\numpy\numpy\_core\numeric.pyi`
 
 ```py
 # 从 collections.abc 导入 Callable 和 Sequence 类型

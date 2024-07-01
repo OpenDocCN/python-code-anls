@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\__init__.pxd`
+# `.\numpy\numpy\__init__.pxd`
 
 ```py
 # 导入必要的 Cython 模块和 NumPy 静态声明

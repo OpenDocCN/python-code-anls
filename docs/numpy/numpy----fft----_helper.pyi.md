@@ -1,4 +1,4 @@
-# `D:\src\scipysrc\numpy\numpy\fft\_helper.pyi`
+# `.\numpy\numpy\fft\_helper.pyi`
 
 ```py
 # 导入必要的类型和函数
