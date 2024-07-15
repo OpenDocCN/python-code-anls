@@ -5,6 +5,7 @@
 +   [经典神经网络架构参考](docs/basic_dl_arch/README.md)
 +   [BertVITS2 源码解析](docs/bert-vits2-ai/README.md)
 +   [BitsAndBytes 源码解析](docs/bitsandbytes-ai/README.md)
++   [ChatHaruhi 源码解析](docs/ChatHaruhi/README.md)
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
 +   [Transformers 源码解析](docs/hf-tfm/README.md)
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
