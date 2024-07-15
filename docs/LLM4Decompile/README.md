@@ -67,7 +67,7 @@ Here is an example of how to use our model (Revised for V1.5. For previous model
 Note: **Replace** func0 with the function name you want to decompile.
 
 **Preprocessing:** Compile the C code into binary, and disassemble the binary into assembly instructions.
-```python
+```py
 import subprocess
 import os
 
@@ -111,7 +111,7 @@ Assembly instructions should be in the format:
 <FUNCTION_NAME>:\nOPERATIONS\nOPERATIONS\n
 
 Typical assembly instructions may look like this:
-```
+```py
 <func0>:
 endbr64
 lea    (%rdi,%rsi,1),%eax
@@ -120,7 +120,7 @@ retq
 
 
 **Decompilation:** Use LLM4Decompile to translate the assembly instructions into C:
-```python
+```py
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
@@ -152,14 +152,14 @@ Data are stored in ``llm4decompile/decompile-eval/decompile-eval.json``, using J
 *   ``input_asm_prompt``: assembly instructions with prompts, can be derived as in our [preprocessing example](https://github.com/albertan017/LLM4Decompile/blob/main/README.md#3-how-to-use-the-model).
 
 To run the evaluation on a single GPU and single process:
-```bash
+```py
 cd LLM4Decompile
 python ./evaluation/run_evaluation_llm4decompile_singleGPU.py
 ```
 
 To run the evaluation using TGI (10x faster, support multiple GPUs and multi-process):
 First, please install the text-generation-inference following the official [link](https://github.com/huggingface/text-generation-inference)
-```bash
+```py
 git clone https://github.com/albertan017/LLM4Decompile.git
 cd LLM4Decompile
 pip install -r requirements.txt
@@ -178,7 +178,7 @@ bash ./scripts/run_evaluation_llm4decompile.sh
 This code repository is licensed under the MIT and DeepSeek License.
 
 ## Citation
-```
+```py
 @misc{tan2024llm4decompile,
       title={LLM4Decompile: Decompiling Binary Code with Large Language Models}, 
       author={Hanzhuo Tan and Qi Luo and Jing Li and Yuqun Zhang},

@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\evaluation\run_evaluation_llm4decompile_vllm.py`
 
-```
+```py
 # 导入子进程模块，用于执行外部命令
 import subprocess
 # 导入异步 I/O 模块，用于异步操作

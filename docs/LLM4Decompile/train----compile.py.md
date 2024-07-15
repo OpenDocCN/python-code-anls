@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\train\compile.py`
 
-```
+```py
 import glob  # 导入 glob 模块，用于文件路径的匹配
 import json  # 导入 json 模块，用于 JSON 数据的处理
 import subprocess  # 导入 subprocess 模块，用于执行外部命令

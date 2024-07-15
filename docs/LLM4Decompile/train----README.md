@@ -2,11 +2,11 @@
 
 Before compiling, please clone the [AnghaBench](https://github.com/brenocfg/AnghaBench) dataset.
 
-```bash
+```py
 git clone https://github.com/brenocfg/AnghaBench
 ```
 
 Then use the following script to compile AnghaBench:
-```bash
+```py
 python compile.py --root Anghabench_path --output AnghaBench_compile.jsonl
 ```

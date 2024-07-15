@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\samples\sample.c`
 
-```
+```py
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

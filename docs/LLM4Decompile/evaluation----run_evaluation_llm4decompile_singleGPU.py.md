@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\evaluation\run_evaluation_llm4decompile_singleGPU.py`
 
-```
+```py
 # 导入 subprocess 模块，用于执行外部命令
 # 导入 transformers 库中的 AutoTokenizer 和 AutoModelForCausalLM 类
 import subprocess

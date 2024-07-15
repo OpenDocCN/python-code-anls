@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\evaluation\server\text_generation.py`
 
-```
+```py
 import asyncio  # 引入 asyncio 异步编程库
 import numpy as np  # 引入 numpy 库，用于数值计算
 import os  # 引入 os 库，用于与操作系统交互

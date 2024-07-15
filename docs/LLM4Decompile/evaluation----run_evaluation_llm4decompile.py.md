@@ -1,6 +1,6 @@
 # `.\LLM4Decompile\evaluation\run_evaluation_llm4decompile.py`
 
-```
+```py
 # 导入必要的子模块和库
 import subprocess  # 子进程管理模块，用于执行外部命令
 import asyncio  # 异步编程库，用于异步执行任务
