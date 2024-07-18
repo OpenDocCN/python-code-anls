@@ -7,6 +7,7 @@
 +   [BitsAndBytes 源码解析](docs/bitsandbytes-ai/README.md)
 +   [ChatHaruhi 源码解析](docs/ChatHaruhi/README.md)
 +   [ChatRWKV 源码解析](docs/chatrwkv-ai/README.md)
++   [GraphRAG 源码解析](docs/graphrag/README.md)
 +   [Transformers 源码解析](docs/hf-tfm/README.md)
 +   [Jieba 源码解析](docs/jieba-ai/README.md)
 +   [KubeHunter 源码解析](docs/kubehunter-ai/README.md)
